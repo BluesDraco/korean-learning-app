@@ -92,18 +92,19 @@ export default function Home() {
   return (
     <div className="py-4 space-y-4">
       {/* Cute decoration bar with easter egg bunny */}
-      <div className="flex items-center gap-2 text-xs text-[var(--text-placeholder)] mb-1 relative">
+      <div className="flex items-center gap-2.5 mb-4 relative">
         <span
-          className="animate-float cursor-pointer select-none hover:scale-125 transition-transform"
+          className="animate-float cursor-pointer select-none hover:scale-125 transition-transform text-lg"
           onClick={handleBunnyClick}
           title="点我!"
         >🐰</span>
-        <span className="animate-float">🎀</span>
-        <span className="animate-float">🌸</span>
-        <span className="text-[13px] ml-1">韩语学习手帐</span>
+        <span className="animate-float text-base">🎀</span>
+        <span className="animate-float text-base">🌸</span>
+        <span className="text-xl ml-1 font-extrabold text-[var(--text-primary)]" style={{ fontFamily: "'ZCOOL KuaiLe', 'Nunito', sans-serif" }}>韩语学习日记</span>
+        <span className="text-xs text-[var(--text-muted)] ml-2 bg-[var(--bg-input)] px-2.5 py-1 rounded-full">v0.1 测试版</span>
         {/* Sparkle decorations */}
-        <span className="sparkle absolute -top-1 left-16" style={{ fontSize: '10px', animationDelay: '0s' }}>✨</span>
-        <span className="sparkle absolute top-3 right-4" style={{ fontSize: '8px', animationDelay: '0.7s' }}>✧</span>
+        <span className="sparkle absolute -top-1 left-20" style={{ fontSize: '10px', animationDelay: '0s' }}>✨</span>
+        <span className="sparkle absolute top-4 right-4" style={{ fontSize: '8px', animationDelay: '0.7s' }}>✧</span>
         {showEasterEgg && (
           <div className="absolute top-10 left-1/2 -translate-x-1/2 bg-[var(--bg-card)] border-2 border-[var(--pink-primary)] rounded-2xl px-4 py-2 shadow-lg animate-bounce-achievement z-50 whitespace-nowrap">
             <span className="text-sm font-bold text-[var(--pink-primary)]">🎉 토리가 나타났다! 你发现了隐藏彩蛋!</span>

@@ -13,6 +13,7 @@ import {
   ChevronRight, X, Sun, Moon,
 } from 'lucide-react';
 import { useTheme } from '@/components/ThemeProvider';
+import { getProfile } from '@/lib/gamification';
 
 interface NavChild {
   label: string;
@@ -77,6 +78,11 @@ export function Navbar() {
   const { theme, toggle } = useTheme();
   const [expandedGroup, setExpandedGroup] = useState<number | null>(null);
   const [mobileDrawer, setMobileDrawer] = useState<number | null>(null);
+  const [nickname, setNickname] = useState('');
+
+  useEffect(() => {
+    getProfile().then((p) => setNickname(p.nickname || ''));
+  }, []);
 
   // Auto-expand the group containing current path
   useEffect(() => {
@@ -193,16 +199,19 @@ export function Navbar() {
             {theme === 'light' ? <Moon size={14} /> : <Sun size={14} />}
             <span>{theme === 'light' ? '深色模式' : '亮色模式'}</span>
           </button>
-          <div className="flex items-center gap-2 bg-[var(--bg-soft)] rounded-xl px-3 py-2.5">
+          <Link
+            href="/settings"
+            className="flex items-center gap-2 bg-[var(--bg-soft)] rounded-xl px-3 py-2.5 hover:bg-[var(--bg-accent)] transition-colors cursor-pointer"
+          >
             <div className="relative">
               <span className="text-lg animate-float">🐰</span>
               <span className="status-dot learning absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5" />
             </div>
             <div className="flex flex-col">
-              <span className="text-xs font-medium text-[var(--text-primary)]">토리</span>
-              <span className="text-[13px] text-[var(--text-muted)]">화이팅!</span>
+              <span className="text-xs font-medium text-[var(--text-primary)]">设置</span>
+              <span className="text-[13px] text-[var(--text-muted)]">{nickname || '未设置'}</span>
             </div>
-          </div>
+          </Link>
         </div>
       </nav>
 

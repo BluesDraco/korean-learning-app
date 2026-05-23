@@ -85,6 +85,9 @@
   --shadow-card-hover: 0 4px 20px rgba(0,0,0,0.35);
   --shadow-button:  0 4px 15px rgba(255,143,171,0.25);
   --shadow-sticker: 2px 3px 6px rgba(0,0,0,0.3);
+  --pink-pale:      #4A3050;
+  --pink-light:     #6A4A6A;
+  --purple-soft:    #4A3A6A;
 }
 
 /* ═══════════════════════════════════════════════════════════════
