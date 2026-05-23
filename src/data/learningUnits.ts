@@ -1,0 +1,523 @@
+// 30-unit progressive Korean learning curriculum
+// Units 1-12: Beginner | 13-24: Intermediate | 25-30: Advanced
+
+export interface UnitWord {
+  word: string;
+  pronunciation: string;
+  meaning: string;
+  partOfSpeech: string;
+  example: string;
+  exampleZh: string;
+  emoji: string;
+  note?: string;
+}
+
+export interface LearningUnit {
+  id: number;
+  title: string;
+  titleKo: string;
+  emoji: string;
+  level: 'beginner' | 'intermediate' | 'advanced';
+  description: string;
+  words: UnitWord[];
+  grammarId: string;
+}
+
+export const learningUnits: LearningUnit[] = [
+  // ========================================================
+  // BEGINNER UNITS 1-12
+  // ========================================================
+
+  {
+    id: 1,
+    title: '问候与自我介绍',
+    titleKo: '인사와 자기소개',
+    emoji: '👋',
+    level: 'beginner',
+    description: '学习最基本的韩语问候语和自我介绍，迈出韩语学习第一步',
+    words: [
+      { word: '안녕하세요', pronunciation: 'annyeonghaseyo', meaning: '你好', partOfSpeech: '常用语', example: '안녕하세요, 처음 뵙겠습니다.', exampleZh: '你好，初次见面。', emoji: '👋', note: '最常用的敬语问候' },
+      { word: '감사합니다', pronunciation: 'gamsahamnida', meaning: '谢谢', partOfSpeech: '常用语', example: '도와주셔서 감사합니다.', exampleZh: '谢谢您的帮助。', emoji: '🙏', note: '正式敬语"谢谢"' },
+      { word: '이름', pronunciation: 'ireum', meaning: '名字', partOfSpeech: '名词', example: '이름이 뭐예요?', exampleZh: '你叫什么名字？', emoji: '📛' },
+      { word: '학생', pronunciation: 'haksaeng', meaning: '学生', partOfSpeech: '名词', example: '저는 한국어 학생이에요.', exampleZh: '我是韩语学生。', emoji: '📚' },
+      { word: '처음', pronunciation: 'cheoeum', meaning: '初次/第一次', partOfSpeech: '名词', example: '처음 뵙겠습니다.', exampleZh: '初次见面。', emoji: '🤝' },
+    ],
+    grammarId: 'g1',
+  },
+  {
+    id: 2,
+    title: '基本动作',
+    titleKo: '기본 동작',
+    emoji: '🏃',
+    level: 'beginner',
+    description: '学习表达日常基本动作，掌握韩语基础动词',
+    words: [
+      { word: '가다', pronunciation: 'gada', meaning: '去', partOfSpeech: '动词', example: '학교에 가요.', exampleZh: '去学校。', emoji: '🚶' },
+      { word: '먹다', pronunciation: 'meokda', meaning: '吃', partOfSpeech: '动词', example: '밥을 먹어요.', exampleZh: '吃饭。', emoji: '🍚' },
+      { word: '마시다', pronunciation: 'masida', meaning: '喝', partOfSpeech: '动词', example: '물을 마셔요.', exampleZh: '喝水。', emoji: '💧' },
+      { word: '보다', pronunciation: 'boda', meaning: '看', partOfSpeech: '动词', example: '텔레비전을 봐요.', exampleZh: '看电视。', emoji: '👀' },
+      { word: '자다', pronunciation: 'jada', meaning: '睡觉', partOfSpeech: '动词', example: '일찍 자요.', exampleZh: '早点睡。', emoji: '😴' },
+    ],
+    grammarId: 'g47',
+  },
+  {
+    id: 3,
+    title: '家人与朋友',
+    titleKo: '가족과 친구',
+    emoji: '👨‍👩‍👧‍👦',
+    level: 'beginner',
+    description: '学习描述家人和朋友，掌握称谓和简单介绍',
+    words: [
+      { word: '엄마', pronunciation: 'eomma', meaning: '妈妈', partOfSpeech: '名词', example: '엄마가 요리해요.', exampleZh: '妈妈做饭。', emoji: '👩' },
+      { word: '아빠', pronunciation: 'appa', meaning: '爸爸', partOfSpeech: '名词', example: '아빠는 회사에 가요.', exampleZh: '爸爸去公司。', emoji: '👨' },
+      { word: '친구', pronunciation: 'chingu', meaning: '朋友', partOfSpeech: '名词', example: '친구를 만나요.', exampleZh: '见朋友。', emoji: '👫', note: '不分男女的"朋友"表达' },
+      { word: '언니', pronunciation: 'eonni', meaning: '姐姐(女称)', partOfSpeech: '名词', example: '언니가 예뻐요.', exampleZh: '姐姐很漂亮。', emoji: '👧', note: '女性称呼姐姐' },
+      { word: '오빠', pronunciation: 'oppa', meaning: '哥哥(女称)', partOfSpeech: '名词', example: '오빠가 키가 커요.', exampleZh: '哥哥个子很高。', emoji: '👦', note: '女性称呼哥哥' },
+    ],
+    grammarId: 'g55',
+  },
+  {
+    id: 4,
+    title: '数字与计数',
+    titleKo: '숫자와 세기',
+    emoji: '🔢',
+    level: 'beginner',
+    description: '学习韩语两大数字系统（汉字词/固有词）及基本量词',
+    words: [
+      { word: '하나', pronunciation: 'hana', meaning: '一(固有)', partOfSpeech: '数词', example: '사과 하나 주세요.', exampleZh: '请给我一个苹果。', emoji: '1️⃣', note: '数物品时用固有词' },
+      { word: '일', pronunciation: 'il', meaning: '一(汉字)', partOfSpeech: '数词', example: '일 번 버스 타세요.', exampleZh: '坐1路公交车。', emoji: '🔢', note: '号码/日期用汉字词' },
+      { word: '개', pronunciation: 'gae', meaning: '个(量词)', partOfSpeech: '量词', example: '빵 두 개 주세요.', exampleZh: '请给我两个面包。', emoji: '📦' },
+      { word: '명', pronunciation: 'myeong', meaning: '名(量词)', partOfSpeech: '量词', example: '세 명 왔어요.', exampleZh: '来了三个人。', emoji: '🧑‍🤝‍🧑' },
+      { word: '살', pronunciation: 'sal', meaning: '岁(量词)', partOfSpeech: '量词', example: '스무 살이에요.', exampleZh: '二十岁。', emoji: '🎂', note: '年龄用固有词数字' },
+    ],
+    grammarId: 'g2',
+  },
+  {
+    id: 5,
+    title: '食物与点餐',
+    titleKo: '음식과 주문',
+    emoji: '🍜',
+    level: 'beginner',
+    description: '学习韩国常见食物名称和基本的点餐表达',
+    words: [
+      { word: '김치', pronunciation: 'gimchi', meaning: '泡菜', partOfSpeech: '名词', example: '김치가 맛있어요.', exampleZh: '泡菜很好吃。', emoji: '🥬' },
+      { word: '밥', pronunciation: 'bap', meaning: '饭', partOfSpeech: '名词', example: '밥 먹었어요?', exampleZh: '吃饭了吗？', emoji: '🍚' },
+      { word: '물', pronunciation: 'mul', meaning: '水', partOfSpeech: '名词', example: '물 한 잔 주세요.', exampleZh: '请给我一杯水。', emoji: '💧' },
+      { word: '맛있다', pronunciation: 'masitda', meaning: '好吃', partOfSpeech: '形容词', example: '이거 정말 맛있어요!', exampleZh: '这个真好吃！', emoji: '😋' },
+      { word: '주세요', pronunciation: 'juseyo', meaning: '请给', partOfSpeech: '常用语', example: '김밥 하나 주세요.', exampleZh: '请给我一份紫菜包饭。', emoji: '🛎️', note: '点餐万能句式' },
+    ],
+    grammarId: 'g3',
+  },
+  {
+    id: 6,
+    title: '地点与位置',
+    titleKo: '장소와 위치',
+    emoji: '📍',
+    level: 'beginner',
+    description: '学习描述地点和位置，掌握"在哪里"的问答',
+    words: [
+      { word: '학교', pronunciation: 'hakgyo', meaning: '学校', partOfSpeech: '名词', example: '학교에 가요.', exampleZh: '去学校。', emoji: '🏫' },
+      { word: '집', pronunciation: 'jip', meaning: '家', partOfSpeech: '名词', example: '집에 있어요.', exampleZh: '在家。', emoji: '🏠' },
+      { word: '병원', pronunciation: 'byeongwon', meaning: '医院', partOfSpeech: '名词', example: '병원에 갔어요.', exampleZh: '去了医院。', emoji: '🏥' },
+      { word: '식당', pronunciation: 'sikdang', meaning: '餐厅', partOfSpeech: '名词', example: '식당에서 밥 먹어요.', exampleZh: '在餐厅吃饭。', emoji: '🍽️' },
+      { word: '앞', pronunciation: 'ap', meaning: '前面', partOfSpeech: '名词', example: '학교 앞에서 만나요.', exampleZh: '在学校前面见面。', emoji: '⬆️' },
+    ],
+    grammarId: 'g5',
+  },
+  {
+    id: 7,
+    title: '时间与日期',
+    titleKo: '시간과 날짜',
+    emoji: '⏰',
+    level: 'beginner',
+    description: '学习表达时间、星期、日期，掌握"什么时候"的问答',
+    words: [
+      { word: '오늘', pronunciation: 'oneul', meaning: '今天', partOfSpeech: '名词', example: '오늘 날씨가 좋아요.', exampleZh: '今天天气很好。', emoji: '📅' },
+      { word: '내일', pronunciation: 'naeil', meaning: '明天', partOfSpeech: '名词', example: '내일 만나요!', exampleZh: '明天见！', emoji: '🔜' },
+      { word: '어제', pronunciation: 'eoje', meaning: '昨天', partOfSpeech: '名词', example: '어제 뭐 했어요?', exampleZh: '昨天做了什么？', emoji: '⬅️' },
+      { word: '지금', pronunciation: 'jigeum', meaning: '现在', partOfSpeech: '名词', example: '지금 몇 시예요?', exampleZh: '现在几点了？', emoji: '🕛' },
+      { word: '아침', pronunciation: 'achim', meaning: '早上', partOfSpeech: '名词', example: '아침에 일찍 일어나요.', exampleZh: '早上早起。', emoji: '🌅' },
+    ],
+    grammarId: 'g4',
+  },
+  {
+    id: 8,
+    title: '描述事物',
+    titleKo: '사물 묘사',
+    emoji: '🎨',
+    level: 'beginner',
+    description: '学习用韩语形容词描述事物的特征和状态',
+    words: [
+      { word: '예쁘다', pronunciation: 'yeppeuda', meaning: '漂亮', partOfSpeech: '形容词', example: '꽃이 정말 예뻐요.', exampleZh: '花真漂亮。', emoji: '💐' },
+      { word: '크다', pronunciation: 'keuda', meaning: '大', partOfSpeech: '形容词', example: '이 집이 커요.', exampleZh: '这房子很大。', emoji: '🏢' },
+      { word: '작다', pronunciation: 'jakda', meaning: '小', partOfSpeech: '形容词', example: '강아지가 작아요.', exampleZh: '小狗很小。', emoji: '🐾' },
+      { word: '좋다', pronunciation: 'jota', meaning: '好', partOfSpeech: '形容词', example: '날씨가 좋아요.', exampleZh: '天气好。', emoji: '👍' },
+      { word: '비싸다', pronunciation: 'bissada', meaning: '贵', partOfSpeech: '形容词', example: '이 가방이 너무 비싸요.', exampleZh: '这个包太贵了。', emoji: '💰' },
+    ],
+    grammarId: 'g21',
+  },
+  {
+    id: 9,
+    title: '天气与季节',
+    titleKo: '날씨와 계절',
+    emoji: '🌤️',
+    level: 'beginner',
+    description: '学习表达天气状况和四季变化的词汇',
+    words: [
+      { word: '날씨', pronunciation: 'nalssi', meaning: '天气', partOfSpeech: '名词', example: '오늘 날씨 어때요?', exampleZh: '今天天气怎么样？', emoji: '🌤️' },
+      { word: '비', pronunciation: 'bi', meaning: '雨', partOfSpeech: '名词', example: '비가 와요.', exampleZh: '下雨了。', emoji: '🌧️' },
+      { word: '눈', pronunciation: 'nun', meaning: '雪', partOfSpeech: '名词', example: '눈이 와서 기뻐요.', exampleZh: '下雪了很开心。', emoji: '❄️' },
+      { word: '봄', pronunciation: 'bom', meaning: '春天', partOfSpeech: '名词', example: '봄에 꽃이 피어요.', exampleZh: '春天花开。', emoji: '🌸' },
+      { word: '덥다', pronunciation: 'deopda', meaning: '热', partOfSpeech: '形容词', example: '여름에는 정말 더워요.', exampleZh: '夏天真的很热。', emoji: '🥵' },
+    ],
+    grammarId: 'g23',
+  },
+  {
+    id: 10,
+    title: '兴趣爱好',
+    titleKo: '취미 생활',
+    emoji: '🎯',
+    level: 'beginner',
+    description: '学习表达爱好和休闲活动，掌握"想做……"的表达',
+    words: [
+      { word: '운동', pronunciation: 'undong', meaning: '运动', partOfSpeech: '名词', example: '운동을 좋아해요?', exampleZh: '喜欢运动吗？', emoji: '⚽' },
+      { word: '음악', pronunciation: 'eumak', meaning: '音乐', partOfSpeech: '名词', example: '음악을 자주 들어요.', exampleZh: '经常听音乐。', emoji: '🎵' },
+      { word: '영화', pronunciation: 'yeonghwa', meaning: '电影', partOfSpeech: '名词', example: '주말에 영화 보러 가요.', exampleZh: '周末去看电影。', emoji: '🎬' },
+      { word: '여행', pronunciation: 'yeohaeng', meaning: '旅行', partOfSpeech: '名词', example: '여행을 좋아해요.', exampleZh: '喜欢旅行。', emoji: '✈️' },
+      { word: '요리', pronunciation: 'yori', meaning: '烹饪', partOfSpeech: '名词', example: '요리하는 걸 좋아해요.', exampleZh: '喜欢做饭。', emoji: '🍳' },
+    ],
+    grammarId: 'g66',
+  },
+  {
+    id: 11,
+    title: '购物与价格',
+    titleKo: '쇼핑과 가격',
+    emoji: '🛍️',
+    level: 'beginner',
+    description: '学习购物相关的实用表达，掌握价格询问和比较',
+    words: [
+      { word: '얼마', pronunciation: 'eolma', meaning: '多少钱', partOfSpeech: '疑问词', example: '이거 얼마예요?', exampleZh: '这个多少钱？', emoji: '💵' },
+      { word: '사다', pronunciation: 'sada', meaning: '买', partOfSpeech: '动词', example: '선물을 샀어요.', exampleZh: '买了礼物。', emoji: '🛒' },
+      { word: '옷', pronunciation: 'ot', meaning: '衣服', partOfSpeech: '名词', example: '새 옷을 샀어요.', exampleZh: '买了新衣服。', emoji: '👗' },
+      { word: '싸다', pronunciation: 'ssada', meaning: '便宜', partOfSpeech: '形容词', example: '이건 정말 싸요!', exampleZh: '这个真便宜！', emoji: '🏷️' },
+      { word: '깎아 주세요', pronunciation: 'kkakka juseyo', meaning: '请便宜点', partOfSpeech: '常用语', example: '좀 깎아 주세요.', exampleZh: '请便宜一点。', emoji: '💸', note: '砍价必备表达' },
+    ],
+    grammarId: 'g10',
+  },
+  {
+    id: 12,
+    title: '交通与出行',
+    titleKo: '교통과 이동',
+    emoji: '🚌',
+    level: 'beginner',
+    description: '学习乘坐交通工具和问路的实用表达',
+    words: [
+      { word: '버스', pronunciation: 'beoseu', meaning: '公交车', partOfSpeech: '名词', example: '버스를 타고 가요.', exampleZh: '坐公交去。', emoji: '🚌' },
+      { word: '지하철', pronunciation: 'jihacheol', meaning: '地铁', partOfSpeech: '名词', example: '지하철로 갈게요.', exampleZh: '坐地铁去。', emoji: '🚇' },
+      { word: '택시', pronunciation: 'taeksi', meaning: '出租车', partOfSpeech: '名词', example: '택시를 잡았어요.', exampleZh: '打了出租车。', emoji: '🚕' },
+      { word: '정류장', pronunciation: 'jeongnyujang', meaning: '车站', partOfSpeech: '名词', example: '버스 정류장이 어디예요?', exampleZh: '公交站在哪里？', emoji: '🚏' },
+      { word: '길', pronunciation: 'gil', meaning: '路', partOfSpeech: '名词', example: '길을 몰라요.', exampleZh: '不认识路。', emoji: '🛣️' },
+    ],
+    grammarId: 'g9',
+  },
+
+  // ========================================================
+  // INTERMEDIATE UNITS 13-24
+  // ========================================================
+
+  {
+    id: 13,
+    title: '情感表达',
+    titleKo: '감정 표현',
+    emoji: '💕',
+    level: 'intermediate',
+    description: '学习表达喜怒哀乐等复杂情感的高级词汇',
+    words: [
+      { word: '기쁘다', pronunciation: 'gippeuda', meaning: '高兴/喜悦', partOfSpeech: '形容词', example: '오늘 정말 기뻐요!', exampleZh: '今天真高兴！', emoji: '😊' },
+      { word: '슬프다', pronunciation: 'seulpeuda', meaning: '悲伤', partOfSpeech: '形容词', example: '영화가 너무 슬펐어요.', exampleZh: '电影太伤感了。', emoji: '😢' },
+      { word: '화가 나다', pronunciation: 'hwaga nada', meaning: '生气', partOfSpeech: '动词短语', example: '왜 화가 났어요?', exampleZh: '为什么生气了？', emoji: '😤' },
+      { word: '걱정하다', pronunciation: 'geokjeonghada', meaning: '担心', partOfSpeech: '动词', example: '너무 걱정하지 마세요.', exampleZh: '不要太担心。', emoji: '😟' },
+      { word: '신나다', pronunciation: 'sinnada', meaning: '兴奋', partOfSpeech: '形容词', example: '여행 생각에 신나요!', exampleZh: '想到旅行就很兴奋！', emoji: '🤩' },
+    ],
+    grammarId: 'g26',
+  },
+  {
+    id: 14,
+    title: '身体与健康',
+    titleKo: '몸과 건강',
+    emoji: '💪',
+    level: 'intermediate',
+    description: '学习身体部位和健康相关的表达，掌握就医用语',
+    words: [
+      { word: '건강', pronunciation: 'geongang', meaning: '健康', partOfSpeech: '名词', example: '건강이 제일 중요해요.', exampleZh: '健康最重要。', emoji: '💪' },
+      { word: '아프다', pronunciation: 'apeuda', meaning: '疼/生病', partOfSpeech: '形容词', example: '머리가 아파요.', exampleZh: '头疼。', emoji: '🤒' },
+      { word: '괜찮다', pronunciation: 'gwaenchanta', meaning: '没关系/还好', partOfSpeech: '形容词', example: '이제 괜찮아요.', exampleZh: '现在没事了。', emoji: '🙆' },
+      { word: '약', pronunciation: 'yak', meaning: '药', partOfSpeech: '名词', example: '약을 먹었어요.', exampleZh: '吃药了。', emoji: '💊' },
+      { word: '피곤하다', pronunciation: 'pigonhada', meaning: '疲劳', partOfSpeech: '形容词', example: '요즘 너무 피곤해요.', exampleZh: '最近太累了。', emoji: '😫' },
+    ],
+    grammarId: 'g29',
+  },
+  {
+    id: 15,
+    title: '旅行计划',
+    titleKo: '여행 계획',
+    emoji: '✈️',
+    level: 'intermediate',
+    description: '学习旅行规划和预订相关的实用表达',
+    words: [
+      { word: '예약하다', pronunciation: 'yeyakhada', meaning: '预订', partOfSpeech: '动词', example: '호텔을 예약했어요.', exampleZh: '预订了酒店。', emoji: '📋' },
+      { word: '표', pronunciation: 'pyo', meaning: '票', partOfSpeech: '名词', example: '기차표를 샀어요.', exampleZh: '买了火车票。', emoji: '🎫' },
+      { word: '관광', pronunciation: 'gwangwang', meaning: '观光', partOfSpeech: '名词', example: '서울에서 관광했어요.', exampleZh: '在首尔观光了。', emoji: '📸' },
+      { word: '지도', pronunciation: 'jido', meaning: '地图', partOfSpeech: '名词', example: '지도 좀 보여 주세요.', exampleZh: '请给我看看地图。', emoji: '🗺️' },
+      { word: '짐', pronunciation: 'jim', meaning: '行李', partOfSpeech: '名词', example: '짐이 많아요.', exampleZh: '行李很多。', emoji: '🧳' },
+    ],
+    grammarId: 'g28',
+  },
+  {
+    id: 16,
+    title: '学校生活',
+    titleKo: '학교 생활',
+    emoji: '🎓',
+    level: 'intermediate',
+    description: '学习与学校、学习、考试相关的表达',
+    words: [
+      { word: '공부하다', pronunciation: 'gongbuhada', meaning: '学习', partOfSpeech: '动词', example: '매일 한국어를 공부해요.', exampleZh: '每天学习韩语。', emoji: '📖' },
+      { word: '시험', pronunciation: 'siheom', meaning: '考试', partOfSpeech: '名词', example: '다음 주에 시험이 있어요.', exampleZh: '下周有考试。', emoji: '📝' },
+      { word: '숙제', pronunciation: 'sukje', meaning: '作业', partOfSpeech: '名词', example: '숙제 다 했어요?', exampleZh: '作业都做完了吗？', emoji: '📚' },
+      { word: '질문', pronunciation: 'jilmun', meaning: '提问', partOfSpeech: '名词', example: '질문 있어요!', exampleZh: '有问题！', emoji: '🙋' },
+      { word: '졸업', pronunciation: 'joreop', meaning: '毕业', partOfSpeech: '名词', example: '내년에 졸업해요.', exampleZh: '明年毕业。', emoji: '🎉' },
+    ],
+    grammarId: 'g20',
+  },
+  {
+    id: 17,
+    title: '工作与职场',
+    titleKo: '직장 생활',
+    emoji: '💼',
+    level: 'intermediate',
+    description: '学习职场用语和商务韩语基础',
+    words: [
+      { word: '회사', pronunciation: 'hoesa', meaning: '公司', partOfSpeech: '名词', example: '회사에 다녀요.', exampleZh: '在公司上班。', emoji: '🏢' },
+      { word: '일', pronunciation: 'il', meaning: '工作/事情', partOfSpeech: '名词', example: '일이 많아요.', exampleZh: '工作很多。', emoji: '💻' },
+      { word: '회의', pronunciation: 'hoeui', meaning: '会议', partOfSpeech: '名词', example: '오후에 회의가 있어요.', exampleZh: '下午有会议。', emoji: '📊' },
+      { word: '퇴근', pronunciation: 'toegeun', meaning: '下班', partOfSpeech: '名词', example: '몇 시에 퇴근해요?', exampleZh: '几点下班？', emoji: '🏃' },
+      { word: '월급', pronunciation: 'wolgeup', meaning: '工资', partOfSpeech: '名词', example: '월급이 올랐어요.', exampleZh: '涨工资了。', emoji: '💵' },
+    ],
+    grammarId: 'g30',
+  },
+  {
+    id: 18,
+    title: '恋爱与关系',
+    titleKo: '연애와 관계',
+    emoji: '💕',
+    level: 'intermediate',
+    description: '学习表达恋爱心动和人际关系的词汇',
+    words: [
+      { word: '사랑', pronunciation: 'sarang', meaning: '爱/爱情', partOfSpeech: '名词', example: '사랑해요!', exampleZh: '我爱你！', emoji: '❤️' },
+      { word: '남자친구', pronunciation: 'namjachingu', meaning: '男朋友', partOfSpeech: '名词', example: '남자친구 있어요?', exampleZh: '有男朋友吗？', emoji: '👨' },
+      { word: '여자친구', pronunciation: 'yeojachingu', meaning: '女朋友', partOfSpeech: '名词', example: '여자친구랑 데이트해요.', exampleZh: '和女朋友约会。', emoji: '👩' },
+      { word: '데이트', pronunciation: 'deiteu', meaning: '约会', partOfSpeech: '名词', example: '주말에 데이트해요.', exampleZh: '周末约会。', emoji: '💑' },
+      { word: '헤어지다', pronunciation: 'heeojida', meaning: '分手', partOfSpeech: '动词', example: '어제 헤어졌어요.', exampleZh: '昨天分手了。', emoji: '💔' },
+    ],
+    grammarId: 'g32',
+  },
+  {
+    id: 19,
+    title: '韩国文化',
+    titleKo: '한국 문화',
+    emoji: '🇰🇷',
+    level: 'intermediate',
+    description: '学习与韩国文化、传统、K-POP相关的表达',
+    words: [
+      { word: '한복', pronunciation: 'hanbok', meaning: '韩服', partOfSpeech: '名词', example: '한복이 정말 예뻐요.', exampleZh: '韩服真漂亮。', emoji: '👘' },
+      { word: '전통', pronunciation: 'jeontong', meaning: '传统', partOfSpeech: '名词', example: '한국의 전통 문화를 좋아해요.', exampleZh: '喜欢韩国传统文化。', emoji: '🏮' },
+      { word: '축제', pronunciation: 'chukje', meaning: '节日/庆典', partOfSpeech: '名词', example: '축제에 갔어요.', exampleZh: '去参加庆典了。', emoji: '🎊' },
+      { word: '공연', pronunciation: 'gongyeon', meaning: '演出', partOfSpeech: '名词', example: 'K-pop 공연을 봤어요.', exampleZh: '看了K-pop演出。', emoji: '🎭' },
+      { word: '인기', pronunciation: 'ingi', meaning: '人气', partOfSpeech: '名词', example: '한국 드라마가 인기가 많아요.', exampleZh: '韩剧很有人气。', emoji: '⭐' },
+    ],
+    grammarId: 'g16',
+  },
+  {
+    id: 20,
+    title: '科技与手机',
+    titleKo: '기술과 스마트폰',
+    emoji: '📱',
+    level: 'intermediate',
+    description: '学习科技、互联网、手机相关的现代韩语词汇',
+    words: [
+      { word: '핸드폰', pronunciation: 'haendeupon', meaning: '手机', partOfSpeech: '名词', example: '핸드폰 번호가 뭐예요?', exampleZh: '手机号码是多少？', emoji: '📱' },
+      { word: '인터넷', pronunciation: 'inteonet', meaning: '网络', partOfSpeech: '名词', example: '인터넷이 안 돼요.', exampleZh: '网络不行。', emoji: '🌐' },
+      { word: '메시지', pronunciation: 'mesiji', meaning: '消息', partOfSpeech: '名词', example: '메시지 보냈어요.', exampleZh: '发了消息。', emoji: '💬' },
+      { word: '검색', pronunciation: 'geomsaek', meaning: '搜索', partOfSpeech: '名词', example: '인터넷에서 검색했어요.', exampleZh: '在网上搜索了。', emoji: '🔍' },
+      { word: '사진', pronunciation: 'sajin', meaning: '照片', partOfSpeech: '名词', example: '사진 찍어도 돼요?', exampleZh: '可以拍照吗？', emoji: '📷' },
+    ],
+    grammarId: 'g40',
+  },
+  {
+    id: 21,
+    title: '影视娱乐',
+    titleKo: '영화와 예능',
+    emoji: '🎬',
+    level: 'intermediate',
+    description: '学习讨论电影、电视剧和综艺节目的表达',
+    words: [
+      { word: '드라마', pronunciation: 'deurama', meaning: '电视剧', partOfSpeech: '名词', example: '요즘 무슨 드라마 봐요?', exampleZh: '最近在看什么剧？', emoji: '📺' },
+      { word: '배우', pronunciation: 'baeu', meaning: '演员', partOfSpeech: '名词', example: '그 배우 정말 좋아해요.', exampleZh: '真的很喜欢那个演员。', emoji: '🎭' },
+      { word: '줄거리', pronunciation: 'julgeori', meaning: '剧情', partOfSpeech: '名词', example: '줄거리가 너무 재미있어요.', exampleZh: '剧情太有趣了。', emoji: '📜' },
+      { word: '예고편', pronunciation: 'yegopyeon', meaning: '预告片', partOfSpeech: '名词', example: '예고편만 봐도 재미있어 보여요.', exampleZh: '光看预告片就觉得好看。', emoji: '🎞️' },
+      { word: '추천', pronunciation: 'chucheon', meaning: '推荐', partOfSpeech: '名词', example: '재미있는 드라마 추천해 주세요.', exampleZh: '请推荐好看的剧。', emoji: '👍' },
+    ],
+    grammarId: 'g41',
+  },
+  {
+    id: 22,
+    title: '请求与拜托',
+    titleKo: '부탁과 요청',
+    emoji: '🙏',
+    level: 'intermediate',
+    description: '学习礼貌地提出请求、寻求帮助的表达',
+    words: [
+      { word: '부탁', pronunciation: 'butak', meaning: '拜托/请求', partOfSpeech: '名词', example: '부탁 하나 해도 돼요?', exampleZh: '可以拜托你一件事吗？', emoji: '🙏' },
+      { word: '도와주다', pronunciation: 'dowajuda', meaning: '帮助', partOfSpeech: '动词', example: '도와주셔서 감사합니다.', exampleZh: '谢谢您的帮助。', emoji: '🤝' },
+      { word: '알려주다', pronunciation: 'allyeojuda', meaning: '告诉', partOfSpeech: '动词', example: '전화번호 좀 알려 주세요.', exampleZh: '请告诉我电话号码。', emoji: '📞' },
+      { word: '빌리다', pronunciation: 'billida', meaning: '借', partOfSpeech: '动词', example: '펜 좀 빌릴 수 있을까요?', exampleZh: '能借一下笔吗？', emoji: '🖊️' },
+      { word: '기다리다', pronunciation: 'gidarida', meaning: '等/等待', partOfSpeech: '动词', example: '잠시만 기다려 주세요.', exampleZh: '请稍等一下。', emoji: '⏳' },
+    ],
+    grammarId: 'g56',
+  },
+  {
+    id: 23,
+    title: '表达意见',
+    titleKo: '의견 표현',
+    emoji: '💬',
+    level: 'intermediate',
+    description: '学习表达自己的观点、同意和反对',
+    words: [
+      { word: '생각', pronunciation: 'saenggak', meaning: '想法', partOfSpeech: '名词', example: '어떻게 생각해요?', exampleZh: '你怎么想？', emoji: '💭' },
+      { word: '의견', pronunciation: 'uigyeon', meaning: '意见', partOfSpeech: '名词', example: '의견을 말해 주세요.', exampleZh: '请说说你的意见。', emoji: '🗣️' },
+      { word: '동의하다', pronunciation: 'donguihada', meaning: '同意', partOfSpeech: '动词', example: '동의해요.', exampleZh: '我同意。', emoji: '✅' },
+      { word: '반대하다', pronunciation: 'bandaehada', meaning: '反对', partOfSpeech: '动词', example: '죄송하지만 반대해요.', exampleZh: '抱歉但我反对。', emoji: '❌' },
+      { word: '이유', pronunciation: 'iyu', meaning: '理由', partOfSpeech: '名词', example: '이유가 뭐예요?', exampleZh: '理由是什么？', emoji: '📝' },
+    ],
+    grammarId: 'g69',
+  },
+  {
+    id: 24,
+    title: '计划与梦想',
+    titleKo: '계획과 꿈',
+    emoji: '🌟',
+    level: 'intermediate',
+    description: '学习表达未来的计划、目标和梦想',
+    words: [
+      { word: '계획', pronunciation: 'gyehoek', meaning: '计划', partOfSpeech: '名词', example: '주말 계획 있어요?', exampleZh: '周末有计划吗？', emoji: '📋' },
+      { word: '꿈', pronunciation: 'kkum', meaning: '梦想', partOfSpeech: '名词', example: '제 꿈은 한국어 선생님이에요.', exampleZh: '我的梦想是当韩语老师。', emoji: '✨' },
+      { word: '목표', pronunciation: 'mokpyo', meaning: '目标', partOfSpeech: '名词', example: '올해 목표는 뭐예요?', exampleZh: '今年的目标是什么？', emoji: '🎯' },
+      { word: '준비', pronunciation: 'junbi', meaning: '准备', partOfSpeech: '名词', example: '시험 준비하고 있어요.', exampleZh: '在准备考试。', emoji: '📝' },
+      { word: '성공', pronunciation: 'seonggong', meaning: '成功', partOfSpeech: '名词', example: '꼭 성공할 거예요!', exampleZh: '一定会成功！', emoji: '🏆' },
+    ],
+    grammarId: 'g48',
+  },
+
+  // ========================================================
+  // ADVANCED UNITS 25-30
+  // ========================================================
+
+  {
+    id: 25,
+    title: '新闻与时事',
+    titleKo: '뉴스와 시사',
+    emoji: '📰',
+    level: 'advanced',
+    description: '学习阅读和讨论新闻、时事相关的表达',
+    words: [
+      { word: '뉴스', pronunciation: 'nyuseu', meaning: '新闻', partOfSpeech: '名词', example: '오늘 뉴스 봤어요?', exampleZh: '看今天的新闻了吗？', emoji: '📰' },
+      { word: '정치', pronunciation: 'jeongchi', meaning: '政治', partOfSpeech: '名词', example: '정치 뉴스는 좀 어려워요.', exampleZh: '政治新闻有点难。', emoji: '🏛️' },
+      { word: '경제', pronunciation: 'gyeongje', meaning: '经济', partOfSpeech: '名词', example: '경제가 점점 좋아지고 있어요.', exampleZh: '经济越来越好了。', emoji: '📈' },
+      { word: '사회', pronunciation: 'sahoe', meaning: '社会', partOfSpeech: '名词', example: '사회 문제에 관심이 많아요.', exampleZh: '对社会问题很关心。', emoji: '👥' },
+      { word: '사건', pronunciation: 'sageon', meaning: '事件', partOfSpeech: '名词', example: '큰 사건이 일어났어요.', exampleZh: '发生了大事件。', emoji: '🔔' },
+    ],
+    grammarId: 'g38',
+  },
+  {
+    id: 26,
+    title: '社会话题',
+    titleKo: '사회 토픽',
+    emoji: '🌍',
+    level: 'advanced',
+    description: '学习用韩语讨论社会热点话题和现象',
+    words: [
+      { word: '환경', pronunciation: 'hwangyeong', meaning: '环境', partOfSpeech: '名词', example: '환경 보호가 중요해요.', exampleZh: '环保很重要。', emoji: '🌿' },
+      { word: '교육', pronunciation: 'gyoyuk', meaning: '教育', partOfSpeech: '名词', example: '한국의 교육 열정이 대단해요.', exampleZh: '韩国的教育热情非常厉害。', emoji: '📚' },
+      { word: '문화', pronunciation: 'munhwa', meaning: '文化', partOfSpeech: '名词', example: '다양한 문화를 존중해야 해요.', exampleZh: '应该尊重多样的文化。', emoji: '🎭' },
+      { word: '변화', pronunciation: 'byeonhwa', meaning: '变化', partOfSpeech: '名词', example: '사회가 빠르게 변화하고 있어요.', exampleZh: '社会正快速变化。', emoji: '🔄' },
+      { word: '영향', pronunciation: 'yeonghyang', meaning: '影响', partOfSpeech: '名词', example: 'SNS가 많은 영향을 줘요.', exampleZh: '社交媒体影响很大。', emoji: '💫' },
+    ],
+    grammarId: 'g35',
+  },
+  {
+    id: 27,
+    title: '惯用语与俗语',
+    titleKo: '관용어와 속담',
+    emoji: '💬',
+    level: 'advanced',
+    description: '学习韩语中的惯用表达和常用俗语',
+    words: [
+      { word: '손이 크다', pronunciation: 'soni keuda', meaning: '大方/手大（惯用）', partOfSpeech: '惯用语', example: '우리 엄마는 손이 커서 항상 많이 요리해요.', exampleZh: '我妈很大方，总是做很多菜。', emoji: '🤲', note: '字面"手大"→出手大方' },
+      { word: '눈이 높다', pronunciation: 'nuni nopda', meaning: '眼光高（惯用）', partOfSpeech: '惯用语', example: '눈이 너무 높아서 이상형을 못 찾아요.', exampleZh: '眼光太高找不到理想对象。', emoji: '👁️' },
+      { word: '발이 넓다', pronunciation: 'bari neolda', meaning: '人脉广（惯用）', partOfSpeech: '惯用语', example: '그 분은 발이 넓어서 아는 사람이 많아요.', exampleZh: '他人脉广所以认识的人多。', emoji: '🦶' },
+      { word: '입이 무겁다', pronunciation: 'ibi mugeopda', meaning: '嘴严（惯用）', partOfSpeech: '惯用语', example: '걱정 마세요, 저는 입이 무거워요.', exampleZh: '别担心，我嘴很严。', emoji: '🤐' },
+      { word: '가는 말이 고와야 오는 말이 곱다', pronunciation: 'ganeun mari gowaya oneun mari gopda', meaning: '你说得好听别人才说得好听', partOfSpeech: '俗语', example: '친구한테 예쁘게 말해. 가는 말이 고와야 오는 말이 곱잖아.', exampleZh: '对朋友说话好听点，你怎么说别人，别人就怎么说你。', emoji: '🗣️' },
+    ],
+    grammarId: 'g45',
+  },
+  {
+    id: 28,
+    title: '正式场合用语',
+    titleKo: '공식적인 표현',
+    emoji: '🏛️',
+    level: 'advanced',
+    description: '学习面试、演讲、公告等正式场合的敬语表达',
+    words: [
+      { word: '말씀', pronunciation: 'malsseum', meaning: '话(敬语)', partOfSpeech: '名词', example: '말씀 좀 여쭤봐도 될까요?', exampleZh: '可以问您句话吗？', emoji: '🗣️', note: '敬语名词，替代 말' },
+      { word: '드리다', pronunciation: 'deurida', meaning: '给(敬语)', partOfSpeech: '动词', example: '선물을 드리고 싶어요.', exampleZh: '想送给您礼物。', emoji: '🎁', note: '敬语动词，替代 주다' },
+      { word: '모시다', pronunciation: 'mosida', meaning: '陪/侍奉(敬语)', partOfSpeech: '动词', example: '부모님을 모시고 여행 갔어요.', exampleZh: '陪父母去旅行了。', emoji: '👨‍👩‍👧' },
+      { word: '여쭤보다', pronunciation: 'yeojjwoboda', meaning: '问(敬语)', partOfSpeech: '动词', example: '질문 하나 여쭤봐도 될까요?', exampleZh: '可以问一个问题吗？', emoji: '🙋', note: '묻다的敬语' },
+      { word: '연세', pronunciation: 'yeonse', meaning: '年龄(敬语)', partOfSpeech: '名词', example: '선생님 연세가 어떻게 되세요?', exampleZh: '老师您多大年纪了？', emoji: '🎂', note: '敬语名词，替代 나이' },
+    ],
+    grammarId: 'g54',
+  },
+  {
+    id: 29,
+    title: '复杂情感',
+    titleKo: '복잡한 감정',
+    emoji: '🎭',
+    level: 'advanced',
+    description: '学习表达微妙和复杂情感的精细词汇',
+    words: [
+      { word: '그립다', pronunciation: 'geuripda', meaning: '怀念/想念', partOfSpeech: '形容词', example: '고향이 정말 그리워요.', exampleZh: '真怀念故乡。', emoji: '🏡' },
+      { word: '부럽다', pronunciation: 'bureopda', meaning: '羡慕', partOfSpeech: '形容词', example: '한국어를 잘해서 너무 부러워요.', exampleZh: '你韩语真好，太羡慕了。', emoji: '🥺' },
+      { word: '아쉽다', pronunciation: 'aswipda', meaning: '可惜/遗憾', partOfSpeech: '形容词', example: '파티에 못 가서 아쉬워요.', exampleZh: '不能去聚会很遗憾。', emoji: '😔' },
+      { word: '짜증나다', pronunciation: 'jjajeungnada', meaning: '烦躁/不爽', partOfSpeech: '形容词', example: '너무 더워서 짜증나요.', exampleZh: '太热了好烦躁。', emoji: '😤' },
+      { word: '뿌듯하다', pronunciation: 'ppudeutada', meaning: '自豪/充实', partOfSpeech: '形容词', example: '드디어 해내서 정말 뿌듯해요.', exampleZh: '终于做到了，真自豪。', emoji: '😌' },
+    ],
+    grammarId: 'g71',
+  },
+  {
+    id: 30,
+    title: '韩国文学鉴赏',
+    titleKo: '한국 문학 감상',
+    emoji: '📖',
+    level: 'advanced',
+    description: '学习文学性表达，阅读韩国诗歌和散文片段',
+    words: [
+      { word: '문학', pronunciation: 'munhak', meaning: '文学', partOfSpeech: '名词', example: '한국 문학에 관심이 생겼어요.', exampleZh: '对韩国文学产生了兴趣。', emoji: '📚' },
+      { word: '시', pronunciation: 'si', meaning: '诗', partOfSpeech: '名词', example: '한국 시를 읽는 걸 좋아해요.', exampleZh: '喜欢读韩国诗歌。', emoji: '✍️' },
+      { word: '소설', pronunciation: 'soseol', meaning: '小说', partOfSpeech: '名词', example: '이 소설은 한국에서 베스트셀러예요.', exampleZh: '这本小说在韩国是畅销书。', emoji: '📕' },
+      { word: '감동', pronunciation: 'gamdong', meaning: '感动', partOfSpeech: '名词', example: '이 시를 읽고 정말 감동했어요.', exampleZh: '读了这首诗真的很感动。', emoji: '💗' },
+      { word: '표현', pronunciation: 'pyohyeon', meaning: '表达', partOfSpeech: '名词', example: '한국어에는 예쁜 표현이 정말 많아요.', exampleZh: '韩语里有很多美好的表达。', emoji: '🎨' },
+    ],
+    grammarId: 'g46',
+  },
+];
+
+export const TOTAL_UNITS = learningUnits.length;

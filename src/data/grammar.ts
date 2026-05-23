@@ -9,6 +9,7 @@ export interface GrammarPoint {
   pattern: string;
   level: 'beginner' | 'intermediate' | 'advanced';
   topik: string;
+  category: string;
   usage: string;
   explanation: string;
   conjugation: string;
@@ -18,10 +19,14 @@ export interface GrammarPoint {
 }
 
 export const grammarPoints: GrammarPoint[] = [
-  // ===== BEGINNER (TOPIK 1-2) =====
+
+  // =====================================================================
+  //  CATEGORY: 조사 (Particles / 助词)
+  // =====================================================================
+
   {
     id: 'g1', title: '主语/主题助词', pattern: '은/는',
-    level: 'beginner', topik: 'TOPIK 1级',
+    level: 'beginner', topik: 'TOPIK 1级', category: '조사',
     usage: '表示句子的主题，或用于对比、强调',
     explanation: '은/는 放在名词后面，表示这个名词是句子的话题。与 이/가 不同，은/는 侧重于"关于这个话题……"的意思。当说话人想要对比或强调时使用。',
     conjugation: '有收音的名词 + 은 (如：책은)\n无收音的名词 + 는 (如：나는)',
@@ -35,7 +40,7 @@ export const grammarPoints: GrammarPoint[] = [
   },
   {
     id: 'g2', title: '主格助词', pattern: '이/가',
-    level: 'beginner', topik: 'TOPIK 1级',
+    level: 'beginner', topik: 'TOPIK 1级', category: '조사',
     usage: '表示动作或状态的主体',
     explanation: '이/가 放在名词后面，标记句子的主语。与 은/는 不同，이/가 侧重于"谁/什么做了……"或"谁/什么是……"。',
     conjugation: '有收音 + 이\n无收音 + 가',
@@ -48,8 +53,241 @@ export const grammarPoints: GrammarPoint[] = [
     difference: '이/가 强调主语本身，은/는 强调话题或对比。',
   },
   {
-    id: 'g3', title: '并列连接', pattern: '-고',
-    level: 'beginner', topik: 'TOPIK 1级',
+    id: 'g3', title: '宾格助词', pattern: '을/를',
+    level: 'beginner', topik: 'TOPIK 1级', category: '조사',
+    usage: '表示动作的宾语',
+    explanation: '을/를 放在名词后面，标记动作的对象或目标。在口语中经常被省略。',
+    conjugation: '有收音的名词 + 을 (如：책을)\n无收音的名词 + 를 (如：사과를)',
+    examples: [
+      { ko: '밥을 먹어요.', zh: '吃饭。' },
+      { ko: '저는 한국어를 공부해요.', zh: '我学韩语。' },
+      { ko: '영화를 봤어요.', zh: '看了电影。' },
+    ],
+  },
+  {
+    id: 'g4', title: '时间/地点/方向助词', pattern: '에',
+    level: 'beginner', topik: 'TOPIK 1级', category: '조사',
+    usage: '表示时间点、存在地点、方向目的地',
+    explanation: '에 是最多功能的基础助词之一：①表示动作发生的时间；②与 있다/없다 搭配表示存在的场所；③与 가다/오다 等移动动词搭配表示目的地。',
+    conjugation: '名词 + 에\n注意：动作发生场所用 에서，存在地点用 에',
+    examples: [
+      { ko: '아침 7시에 일어나요.', zh: '早上7点起床。（时间）' },
+      { ko: '책상 위에 책이 있어요.', zh: '书桌上有书。（存在）' },
+      { ko: '내일 학교에 가요.', zh: '明天去学校。（目的地）' },
+    ],
+    similarPatterns: ['에서'],
+    difference: '에 表示存在地点或目的地，에서 表示动作进行的场所。방에 있어요（在房间里）vs 방에서 공부해요（在房间里学习）。',
+  },
+  {
+    id: 'g5', title: '动作场所助词', pattern: '에서',
+    level: 'beginner', topik: 'TOPIK 1级', category: '조사',
+    usage: '表示动作发生的场所或出发点',
+    explanation: '에서 标记动作进行的场所，与表示存在/目的地的 에 形成对比。也可表示"从某地出发"。',
+    conjugation: '名词 + 에서',
+    examples: [
+      { ko: '도서관에서 공부해요.', zh: '在图书馆学习。' },
+      { ko: '회사에서 일해요.', zh: '在公司工作。' },
+      { ko: '서울에서 왔어요.', zh: '从首尔来的。' },
+    ],
+    similarPatterns: ['에'],
+    difference: '에서 = 动作进行场所，에 = 存在/目的地。',
+  },
+  {
+    id: 'g6', title: '包含/也', pattern: '도',
+    level: 'beginner', topik: 'TOPIK 1级', category: '조사',
+    usage: '表示"也"、"还"、"都"',
+    explanation: '도 放在名词后，表示"也"的意思。在否定句中可表示"连……也……"。可以替代 은/는、이/가、을/를。',
+    conjugation: '名词 + 도 (直接加，不受收音影响)',
+    examples: [
+      { ko: '저도 학생이에요.', zh: '我也是学生。' },
+      { ko: '한국어도 배우고 싶어요.', zh: '也想学韩语。' },
+      { ko: '한 명도 안 왔어요.', zh: '一个人也没来。' },
+    ],
+  },
+  {
+    id: 'g7', title: '所属助词', pattern: '의',
+    level: 'beginner', topik: 'TOPIK 1级', category: '조사',
+    usage: '表示所属关系，"……的"',
+    explanation: '의 是韩语的属格助词，相当于中文的"的"。在口语中常读作 [에]。口语中常用 저의 → 제, 나의 → 내, 너의 → 네 的缩略形式。',
+    conjugation: '名词 + 의',
+    examples: [
+      { ko: '이것은 저의 (제) 책이에요.', zh: '这是我的书。' },
+      { ko: '선생님의 설명을 잘 들으세요.', zh: '请好好听老师的说明。' },
+      { ko: '한국의 전통 문화가 정말 아름다워요.', zh: '韩国的传统文化非常美。' },
+    ],
+  },
+  {
+    id: 'g8', title: '给予对象助词', pattern: '에게/한테',
+    level: 'beginner', topik: 'TOPIK 1级', category: '조사',
+    usage: '表示动作的对象（人/动物），"给……"、"对……"',
+    explanation: '에게 用于书面语或正式场合，한테 用于口语。表示给予的对象或动作指向的人/动物。对事物用 -에。',
+    conjugation: '名词 + 에게/한테\n给长辈时 + 께',
+    examples: [
+      { ko: '친구한테 선물을 줬어요.', zh: '给朋友送了礼物。' },
+      { ko: '선생님에게 물어보세요.', zh: '请问老师吧。' },
+      { ko: '엄마한테 전화했어요.', zh: '给妈妈打了电话。' },
+    ],
+  },
+  {
+    id: 'g9', title: '方向/手段/资格', pattern: '-(으)로',
+    level: 'beginner', topik: 'TOPIK 2级', category: '조사',
+    usage: '表示方向（"往……"）、手段（"用……"）、资格（"作为……"）',
+    explanation: '一个多功能的助词，根据语境可以有不同含义：①方向/目的地；②工具/手段；③原因/理由；④资格/身份；⑤选择。',
+    conjugation: '无收音/ㄹ + 로\n有收音 (除ㄹ外) + 으로',
+    examples: [
+      { ko: '오른쪽으로 가세요.', zh: '请往右边走。（方向）' },
+      { ko: '연필로 쓰세요.', zh: '请用铅笔写。（工具）' },
+      { ko: '친구로 좋아해요.', zh: '作为朋友喜欢你。（资格）' },
+      { ko: '감기로 결석했어요.', zh: '因感冒缺席了。（原因）' },
+    ],
+  },
+  {
+    id: 'g10', title: '比较', pattern: '보다',
+    level: 'beginner', topik: 'TOPIK 1级', category: '조사',
+    usage: '表示比较，"比……"',
+    explanation: '用于名词后，表示比较的对象。常与 더（更）搭配使用。',
+    conjugation: '名词 + 보다',
+    examples: [
+      { ko: '이게 저것보다 더 예뻐요.', zh: '这个比那个更好看。' },
+      { ko: '한국어가 생각보다 어려워요.', zh: '韩语比想象中难。' },
+      { ko: '오늘이 어제보다 더워요.', zh: '今天比昨天热。' },
+    ],
+  },
+  {
+    id: 'g11', title: '范围起点/终点', pattern: '부터 / 까지',
+    level: 'beginner', topik: 'TOPIK 1级', category: '조사',
+    usage: '表示时间或空间的起点/终点，"从……到……"',
+    explanation: '-부터 表示时间或空间上的起点（"从……"），-까지 表示终点（"到……"）。两者经常搭配使用。',
+    conjugation: '名词 + 부터 (起点)\n名词 + 까지 (终点)',
+    examples: [
+      { ko: '9시부터 6시까지 일해요.', zh: '从9点到6点工作。' },
+      { ko: '처음부터 끝까지 재미있었어요.', zh: '从头到尾都很有趣。' },
+      { ko: '집부터 학교까지 걸어서 10분 걸려요.', zh: '从家到学校走路需要10分钟。' },
+    ],
+  },
+  {
+    id: 'g12', title: '并列助词', pattern: '와/과 / 하고 / (이)랑',
+    level: 'beginner', topik: 'TOPIK 2级', category: '조사',
+    usage: '连接两个或多个名词，"……和……"',
+    explanation: '韩语有多种"和"的表达：와/과 用于书面和口语；하고 偏口语；(이)랑 最口语化。三者可以互换使用。',
+    conjugation: '와/과：无收音 + 와，有收音 + 과\n하고：统一使用\n(이)랑：无收音 + 랑，有收音 + 이랑',
+    examples: [
+      { ko: '사과와 바나나를 샀어요.', zh: '买了苹果和香蕉。' },
+      { ko: '친구하고 영화 봤어요.', zh: '和朋友看了电影。' },
+      { ko: '선생님이랑 같이 갔어요.', zh: '和老师一起去了。' },
+    ],
+  },
+
+  // =====================================================================
+  //  CATEGORY: 어미 (Verb Endings / 语尾)
+  // =====================================================================
+
+  {
+    id: 'g13', title: '名词化语尾', pattern: '-기',
+    level: 'beginner', topik: 'TOPIK 2级', category: '어미',
+    usage: '将动词/形容词变为名词形式',
+    explanation: '将动作或状态名词化，可以像名词一样使用。常见搭配：-기 좋다（适合做……）、-기 싫다（讨厌做……）、-기 때문에（因为……）。',
+    conjugation: '动词/形容词词干 + 기',
+    examples: [
+      { ko: '한국어 공부하기가 재미있어요.', zh: '学韩语很有趣。' },
+      { ko: '혼자 밥 먹기가 싫어요.', zh: '不喜欢一个人吃饭。' },
+      { ko: '이 영화는 보기가 편해요.', zh: '这部电影看起来轻松。' },
+    ],
+  },
+  {
+    id: 'g14', title: '建议/疑问语尾', pattern: '-ㄹ/을까요?',
+    level: 'beginner', topik: 'TOPIK 2级', category: '어미',
+    usage: '提出建议或表达疑问推测',
+    explanation: '当说话人想征求对方意见或表达推测时使用。"我们……好吗？"或"会不会……呢？"',
+    conjugation: '无收音 + ㄹ까요\n有收音 + 을까요',
+    examples: [
+      { ko: '뭐 먹을까요?', zh: '吃什么呢？' },
+      { ko: '같이 갈까요?', zh: '一起去好吗？' },
+      { ko: '내일 날씨가 좋을까요?', zh: '明天天气会好吗？' },
+    ],
+  },
+  {
+    id: 'g15', title: '否定表达', pattern: '안 / -지 않다',
+    level: 'beginner', topik: 'TOPIK 1级', category: '어미',
+    usage: '表示否定，"不……"/"没……"',
+    explanation: '韩语有两种否定方式：短型（안 + 动词/形容词）和长型（-지 않다）。短型用于口语，长型更正式或用于复杂表达。',
+    conjugation: '短型：안 + 动词/形容词\n长型：词干 + 지 않다',
+    examples: [
+      { ko: '오늘 학교에 안 가요.', zh: '今天不去学校。' },
+      { ko: '이 음식은 맵지 않아요.', zh: '这道菜不辣。' },
+      { ko: '그 영화는 재미없어요. (재미있지 않아요)', zh: '那部电影没意思。' },
+    ],
+  },
+  {
+    id: 'g16', title: '发现/感叹', pattern: '-네요',
+    level: 'beginner', topik: 'TOPIK 2级', category: '어미',
+    usage: '表示即时的发现、感叹或轻微惊讶',
+    explanation: '用于说话人当场发现或意识到某事时的感叹。带有"呢"、"啊"、"原来……啊"的语感。口语中使用频率极高。',
+    conjugation: '动词词干 + 네요\n形容词词干 + 네요\n名词 + (이)네요\n过去时: 았/었네요',
+    examples: [
+      { ko: '오늘 날씨가 참 좋네요!', zh: '今天天气真好啊！' },
+      { ko: '한국어를 정말 잘하시네요.', zh: '韩语说得真好啊。' },
+      { ko: '벌써 10시네요. 얼른 가야겠어요.', zh: '已经10点了啊，得赶紧走了。' },
+    ],
+  },
+  {
+    id: 'g17', title: '领悟/感叹', pattern: '-군요 / -구나',
+    level: 'intermediate', topik: 'TOPIK 3级', category: '어미',
+    usage: '表示新了解到的事实，带感叹语气',
+    explanation: '与 -네요 类似但更正式、更具领悟感。-군요 用于较正式的感叹，-구나 用于自言自语的感叹。',
+    conjugation: '动词词干 + 는군요\n形容词词干 + 군요\n名词 + (이)군요\n过去时 + 았/었군요',
+    examples: [
+      { ko: '그렇군요! 이제 이해했어요.', zh: '原来如此！现在我理解了。' },
+      { ko: '벌써 결혼했군요. 축하해요!', zh: '原来已经结婚了啊，祝贺！' },
+      { ko: '생각보다 어렵구나...', zh: '比想象中难啊……' },
+    ],
+    similarPatterns: ['-네요'],
+    difference: '-군요 是恍然大悟的感叹（"原来……啊"），-네요 是即时感受的感叹（"……呢/啊"）。',
+  },
+  {
+    id: 'g18', title: '反诘/确认', pattern: '-잖아요',
+    level: 'intermediate', topik: 'TOPIK 3级', category: '어미',
+    usage: '表示"不是……嘛"、"你知道的……"',
+    explanation: '用于提醒对方已知的信息，带有"你知道的呀"的语感。可以表示轻微的反驳或确认共识。口语非常高频率使用。',
+    conjugation: '动词词干 + 잖아요\n形容词词干 + 잖아요\n名词 + (이)잖아요',
+    examples: [
+      { ko: '내가 말했잖아요!', zh: '我不是说了嘛！' },
+      { ko: '이 집 진짜 맛있잖아요.', zh: '这家真的很好吃不是吗。' },
+      { ko: '내일이 시험이잖아요. 공부해야죠.', zh: '明天不是考试嘛，得学习吧。' },
+    ],
+  },
+  {
+    id: 'g19', title: '解释/说明', pattern: '-거든요',
+    level: 'intermediate', topik: 'TOPIK 4级', category: '어미',
+    usage: '向对方解释原因或背景，语气柔和',
+    explanation: '用于向对方解释自己的情况或行为的原因。带有"你听我说……"的语感。只用于口语的第二人称对话。',
+    conjugation: '动词/形容词词干 + 거든요\n名词 + (이)거든요',
+    examples: [
+      { ko: '어제 못 갔어요. 갑자기 일이 생겼거든요.', zh: '昨天没去成，因为突然有事。' },
+      { ko: '이거 추천해요. 제가 써 봤거든요.', zh: '推荐这个，因为我用过。' },
+      { ko: '배 고파요. 아직 아침을 안 먹었거든요.', zh: '好饿，因为还没吃早饭呢。' },
+    ],
+  },
+  {
+    id: 'g20', title: '冠形词形', pattern: '-는 것',
+    level: 'intermediate', topik: 'TOPIK 3级', category: '어미',
+    usage: '将动词变为名词形式，表示"……的事/……的东西"',
+    explanation: '将动词或形容词变成冠形词形来修饰 것（东西/事情），形成名词短语。这是一种非常高频的韩语结构，可用于各种语境。',
+    conjugation: '动词现在时 + 는 것\n动词过去时 + (으)ㄴ 것\n动词将来时 + (으)ㄹ 것\n形容词 + (으)ㄴ 것',
+    examples: [
+      { ko: '한국어 배우는 것이 정말 재미있어요.', zh: '学韩语真的很有趣。' },
+      { ko: '어제 산 것이 마음에 들어요.', zh: '昨天买的东西很满意。' },
+      { ko: '제가 하고 싶은 것은 여행이에요.', zh: '我想做的是旅行。' },
+    ],
+  },
+
+  // =====================================================================
+  //  CATEGORY: 연결 (Connectives / 连接语尾)
+  // =====================================================================
+
+  {
+    id: 'g21', title: '并列连接', pattern: '-고',
+    level: 'beginner', topik: 'TOPIK 1级', category: '연결',
     usage: '连接两个动作或状态，表示"……和……"、"……然后……"',
     explanation: '连接动词或形容词，表示并列关系。可以连接两个动作的先后顺序，也可以连接两个并列的状态。',
     conjugation: '动词/形容词词干 + 고',
@@ -60,8 +298,8 @@ export const grammarPoints: GrammarPoint[] = [
     ],
   },
   {
-    id: 'g4', title: '转折连接', pattern: '-지만',
-    level: 'beginner', topik: 'TOPIK 2级',
+    id: 'g22', title: '转折连接', pattern: '-지만',
+    level: 'beginner', topik: 'TOPIK 2级', category: '연결',
     usage: '表示转折，"虽然……但是……"',
     explanation: '连接前后两个分句，表示后句与前句的逻辑相反。相当于中文的"虽然……但是……"。',
     conjugation: '动词/形容词词干 + 지만',
@@ -74,22 +312,22 @@ export const grammarPoints: GrammarPoint[] = [
     difference: '-지만 是明确的转折（= 但是），-는데 更柔和，常用于提供背景信息或隐约对比。',
   },
   {
-    id: 'g5', title: '原因/顺序', pattern: '-아서/어서/여서',
-    level: 'beginner', topik: 'TOPIK 2级',
+    id: 'g23', title: '原因/顺序', pattern: '-아서/어서/여서',
+    level: 'beginner', topik: 'TOPIK 2级', category: '연결',
     usage: '表示原因（"因为……所以……"）或动作先后顺序',
     explanation: '接在动词/形容词后，表示因果关系或时间先后。注意：不能用过去时"았/었서"，不能用命令/请诱句结尾。',
-    conjugation: '词干最后元音 ㅏ/ㅗ → 아서\n其他元音 → 어서\n하다 → 해서（하여서）',
+    conjugation: '词干最后元音 ㅏ/ㅗ → 아서\n其他元音 → 어서\n하다 → 해서 (하여서)',
     examples: [
       { ko: '배가 아파서 병원에 갔어요.', zh: '因为肚子疼所以去了医院。' },
       { ko: '날씨가 좋아서 산책했어요.', zh: '因为天气好所以散了步。' },
       { ko: '한국어를 공부해서 한국 회사에 취직했어요.', zh: '因为学了韩语所以在韩国公司就业了。' },
     ],
     similarPatterns: ['-니까'],
-    difference: '-아서/어서 用于客观、一般性原因；-니까 用于主观原因、命令句/请诱句。不能说"배 아파서 병원에 가세요"（✗），应该说"배 아프니까 병원에 가세요"（✓）。',
+    difference: '-아서/어서 用于客观、一般性原因；-니까 用于主观原因、命令句/请诱句。不能说"배 아파서 병원에 가세요"（X），应该说"배 아프니까 병원에 가세요"（O）。',
   },
   {
-    id: 'g6', title: '原因/根据', pattern: '-니까/으니까',
-    level: 'beginner', topik: 'TOPIK 2级',
+    id: 'g24', title: '原因/根据', pattern: '-니까/으니까',
+    level: 'beginner', topik: 'TOPIK 2级', category: '연결',
     usage: '表示主观原因，或作为命令/请诱的依据',
     explanation: '用于表达说话人的主观判断、发现或命令/请诱的原因。前后主语可以不同，可以用过去时。',
     conjugation: '词干 + (으)니까\n有收音或ㄹ结尾 + 으니까',
@@ -102,59 +340,11 @@ export const grammarPoints: GrammarPoint[] = [
     difference: '命令句、请诱句中只能用 -니까，不能用 -아서/어서。',
   },
   {
-    id: 'g7', title: '过去时', pattern: '-았/었/였-',
-    level: 'beginner', topik: 'TOPIK 1级',
-    usage: '表示过去发生的动作或状态',
-    explanation: '韩语的过去时由词干 + 았/었/였 构成。这是韩语最基本的时态表达之一。',
-    conjugation: '词干元音 ㅏ/ㅗ → 았어요\n其他 → 었어요\n하 → 했어요（하였어요）',
-    examples: [
-      { ko: '어제 뭐 했어요?', zh: '昨天做了什么？' },
-      { ko: '점심에 비빔밥을 먹었어요.', zh: '中午吃了拌饭。' },
-      { ko: '주말에 친구를 만났어요.', zh: '周末见了朋友。' },
-    ],
-  },
-  {
-    id: 'g8', title: '将来/推测', pattern: '-ㄹ/을 거예요',
-    level: 'beginner', topik: 'TOPIK 2级',
-    usage: '表示将来的计划或推测',
-    explanation: '用于表达说话人打算做的事情或对未来情况的推测。在日常口语中非常常用。',
-    conjugation: '无收音 + ㄹ 거예요\n有收音 + 을 거예요\nㄹ结尾词干 + 거예요（如 살다 → 살 거예요）',
-    examples: [
-      { ko: '내일 뭐 할 거예요?', zh: '明天打算做什么？' },
-      { ko: '아마 비가 올 거예요.', zh: '可能会下雨。' },
-      { ko: '한국에 갈 거예요.', zh: '打算去韩国。' },
-    ],
-  },
-  {
-    id: 'g9', title: '名词化', pattern: '-기',
-    level: 'beginner', topik: 'TOPIK 2级',
-    usage: '将动词/形容词变为名词形式',
-    explanation: '将动作或状态名词化，可以像名词一样使用。常见搭配：-기 좋다（适合做……）、-기 싫다（讨厌做……）、-기 때문에（因为……）。',
-    conjugation: '动词/形容词词干 + 기',
-    examples: [
-      { ko: '한국어 공부하기가 재미있어요.', zh: '学韩语很有趣。' },
-      { ko: '혼자 밥 먹기가 싫어요.', zh: '不喜欢一个人吃饭。' },
-      { ko: '이 영화는 보기가 편해요.', zh: '这部电影看起来轻松。' },
-    ],
-  },
-  {
-    id: 'g10', title: '建议/疑问', pattern: '-ㄹ/을까요?',
-    level: 'beginner', topik: 'TOPIK 2级',
-    usage: '提出建议或表达疑问推测',
-    explanation: '当说话人想征求对方意见或表达推测时使用。"我们……好吗？"或"会不会……呢？"',
-    conjugation: '无收音 + ㄹ까요\n有收音 + 을까요',
-    examples: [
-      { ko: '뭐 먹을까요?', zh: '吃什么呢？' },
-      { ko: '같이 갈까요?', zh: '一起去好吗？' },
-      { ko: '내일 날씨가 좋을까요?', zh: '明天天气会好吗？' },
-    ],
-  },
-  {
-    id: 'g11', title: '目的/意图', pattern: '-러/으러',
-    level: 'beginner', topik: 'TOPIK 2级',
+    id: 'g25', title: '目的移动', pattern: '-러/으러',
+    level: 'beginner', topik: 'TOPIK 2级', category: '연결',
     usage: '表示去某处做某事的目的',
     explanation: '接在移动动词（가다, 오다, 다니다 等）前面，表示"为了做……而去/来"。',
-    conjugation: '词干 + 러（无收音）、으러（有收音）',
+    conjugation: '词干 + 러 (无收音)、으러 (有收音)',
     examples: [
       { ko: '밥 먹으러 식당에 가요.', zh: '去餐厅吃饭。' },
       { ko: '친구 만나러 홍대에 갔어요.', zh: '去弘大见朋友。' },
@@ -162,61 +352,11 @@ export const grammarPoints: GrammarPoint[] = [
     ],
   },
   {
-    id: 'g12', title: '尝试', pattern: '-아/어 보다',
-    level: 'beginner', topik: 'TOPIK 2级',
-    usage: '表示尝试做某事',
-    explanation: '表示"试着做……"或"……过"的经历。与过去时连用表示"曾经做过……"。',
-    conjugation: '词干 + 아/어/여 + 보다',
-    examples: [
-      { ko: '이거 먹어 보세요.', zh: '请尝尝这个。' },
-      { ko: '한복을 입어 봤어요.', zh: '穿过韩服。' },
-      { ko: '생각해 볼게요.', zh: '我会考虑的（试着想想）。' },
-    ],
-  },
-  {
-    id: 'g13', title: '否定', pattern: '안 / -지 않다',
-    level: 'beginner', topik: 'TOPIK 1级',
-    usage: '表示否定，"不……"/"没……"',
-    explanation: '韩语有两种否定方式：短型（안 + 动词/形容词）和长型（-지 않다）。短型用于口语，长型更正式或用于复杂表达。',
-    conjugation: '短型：안 + 动词/形容词\n长型：词干 + 지 않다',
-    examples: [
-      { ko: '오늘 학교에 안 가요.', zh: '今天不去学校。' },
-      { ko: '이 음식은 맵지 않아요.', zh: '这道菜不辣。' },
-      { ko: '그 영화는 재미없어요. (재미있지 않아요)', zh: '那部电影没意思。' },
-    ],
-  },
-  {
-    id: 'g14', title: '愿望', pattern: '-고 싶다',
-    level: 'beginner', topik: 'TOPIK 2级',
-    usage: '表示"想做……"的愿望',
-    explanation: '接在动词后，表达说话人的愿望。第三人称使用时需要改为 -고 싶어하다。',
-    conjugation: '动词词干 + 고 싶다',
-    examples: [
-      { ko: '한국에 가고 싶어요.', zh: '想去韩国。' },
-      { ko: '뭐 먹고 싶어요?', zh: '想吃什么？' },
-      { ko: '친구가 한국어를 배우고 싶어해요.', zh: '朋友想学韩语。（第三人称用 싶어하다）' },
-    ],
-  },
-  {
-    id: 'g15', title: '现在进行时', pattern: '-고 있다',
-    level: 'beginner', topik: 'TOPIK 2级',
-    usage: '表示正在进行的动作',
-    explanation: '相当于中文的"正在……"，接在动词后表示动作正在进行中。',
-    conjugation: '动词词干 + 고 있다',
-    examples: [
-      { ko: '지금 뭐 하고 있어요?', zh: '现在在做什么？' },
-      { ko: '한국어를 공부하고 있어요.', zh: '正在学韩语。' },
-      { ko: '밖에 비가 오고 있어요.', zh: '外面正在下雨。' },
-    ],
-  },
-
-  // ===== INTERMEDIATE (TOPIK 3-4) =====
-  {
-    id: 'g16', title: '背景/对比', pattern: '-는데/ㄴ데/은데',
-    level: 'intermediate', topik: 'TOPIK 3级',
+    id: 'g26', title: '背景/对比', pattern: '-는데/ㄴ데/은데',
+    level: 'intermediate', topik: 'TOPIK 3级', category: '연결',
     usage: '提供背景信息，或委婉地表达对比/转折',
     explanation: '韩语中最重要的连接语尾之一。用于：①提供背景后引出后续内容；②委婉转折；③反期待（"居然……"）。用法非常灵活。',
-    conjugation: '动词：词干 + 는데（现在时）、았/었는데（过去时）\n形容词：有收音 + 은데，无收音 + ㄴ데\n名词 + 인데',
+    conjugation: '动词：词干 + 는데 (现在时)、았/었는데 (过去时)\n形容词：有收音 + 은데，无收音 + ㄴ데\n名词 + 인데',
     examples: [
       { ko: '밖에 비가 오는데 우산 있어요?', zh: '外面下雨了，有伞吗？（背景+询问）' },
       { ko: '어제 갔는데 문이 닫혀 있었어요.', zh: '昨天去了，但门关着的。' },
@@ -226,32 +366,8 @@ export const grammarPoints: GrammarPoint[] = [
     difference: '-지만 是明确的"虽然……但是……"，-는데 更柔和、多功能。',
   },
   {
-    id: 'g17', title: '间接引语', pattern: '-다고/라고/냐고/자고',
-    level: 'intermediate', topik: 'TOPIK 3级',
-    usage: '转述他人的话或自己的想法',
-    explanation: '用于引述陈述、疑问、命令、请求等。口语中常缩写为 -대요/-래요/-냬요/-재요。',
-    conjugation: '陈述：动词 + ㄴ/는다고、形容词 + 다고、名词 + (이)라고\n疑问：-냐고/느냐고\n命令：-(으)라고\n请诱：-자고',
-    examples: [
-      { ko: '친구가 내일 온다고 했어요.', zh: '朋友说明天来。' },
-      { ko: '엄마가 뭐 먹었냐고 물어봤어요.', zh: '妈妈问我吃了什么。' },
-      { ko: '선생님이 숙제하라고 하셨어요.', zh: '老师让我们做作业。' },
-    ],
-  },
-  {
-    id: 'g18', title: '推测/可能', pattern: '-ㄹ/을 수 있다/없다',
-    level: 'intermediate', topik: 'TOPIK 3级',
-    usage: '表示能力（"会/能"）或可能性（"可能"）',
-    explanation: '既可以表示人的能力（会做某事），也可以表示客观可能性。其否定形式表示"不会/不能/不可能"。',
-    conjugation: '无收音 + ㄹ 수 있다 → 할 수 있다\n有收音 + 을 수 있다 → 먹을 수 있다',
-    examples: [
-      { ko: '한국어를 할 수 있어요.', zh: '会说韩语。' },
-      { ko: '혼자서는 할 수 없어요.', zh: '一个人做不了。' },
-      { ko: '누구나 실수할 수 있어요.', zh: '谁都有可能犯错。' },
-    ],
-  },
-  {
-    id: 'g19', title: '目的小句', pattern: '-도록',
-    level: 'intermediate', topik: 'TOPIK 3级',
+    id: 'g27', title: '目的小句', pattern: '-도록',
+    level: 'intermediate', topik: 'TOPIK 3级', category: '연결',
     usage: '表示目的（"以便……"）或程度（"到……程度"）',
     explanation: '①表示"为了使……"的目的；②表示达到某种程度。比 -게 更正式、更强调目的性。',
     conjugation: '动词词干 + 도록',
@@ -264,32 +380,8 @@ export const grammarPoints: GrammarPoint[] = [
     difference: '-도록 比 -게 更书面、更强调目的性。',
   },
   {
-    id: 'g20', title: '使动', pattern: '-게 하다',
-    level: 'intermediate', topik: 'TOPIK 3级',
-    usage: '表示使动，"让……做……"',
-    explanation: '接在动词/形容词后，表示使别人做某事或使某物处于某种状态。是非直接使动（-이/히/리/기/우 是直接使动）。',
-    conjugation: '词干 + 게 하다',
-    examples: [
-      { ko: '선생님이 학생들에게 책을 읽게 했어요.', zh: '老师让学生们读书。' },
-      { ko: '엄마가 아이에게 밥을 먹게 했어요.', zh: '妈妈让孩子吃饭。' },
-      { ko: '음악이 나를 행복하게 해요.', zh: '音乐让我幸福。' },
-    ],
-  },
-  {
-    id: 'g21', title: '被动', pattern: '-이/히/리/기-',
-    level: 'intermediate', topik: 'TOPIK 3级',
-    usage: '表示被动，"被……"',
-    explanation: '韩语的被动由词干 + 이/히/리/기 构成。不是所有动词都能变被动。常见被动动词：보다（看）→ 보이다（被看见）、듣다（听）→ 들리다（被听到）、열다（开）→ 열리다（被打开）。',
-    conjugation: '不同词干对应不同的被动后缀：\n이: 보다→보이다, 쓰다→쓰이다\n히: 읽다→읽히다, 먹다→먹히다\n리: 열다→열리다, 듣다→들리다\n기: 끊다→끊기다, 안기다',
-    examples: [
-      { ko: '문이 열렸어요.', zh: '门被打开了。' },
-      { ko: '멀리서 음악 소리가 들려요.', zh: '从远处传来音乐声（音乐被听到）。' },
-      { ko: '이 책은 많이 읽혀요.', zh: '这本书被很多人读。' },
-    ],
-  },
-  {
-    id: 'g22', title: '条件/如果', pattern: '-(으)면',
-    level: 'intermediate', topik: 'TOPIK 3级',
+    id: 'g28', title: '条件/如果', pattern: '-(으)면',
+    level: 'intermediate', topik: 'TOPIK 3级', category: '연결',
     usage: '表示条件，"如果……的话"',
     explanation: '最常用的条件表达。可用于假设、一般条件、或"每当……的时候"。',
     conjugation: '无收音/ㄹ + 면\n有收音 + 으면',
@@ -300,44 +392,8 @@ export const grammarPoints: GrammarPoint[] = [
     ],
   },
   {
-    id: 'g23', title: '许可/禁止', pattern: '-아/어도 되다 / -(으)면 안 되다',
-    level: 'intermediate', topik: 'TOPIK 3级',
-    usage: '表示允许（"可以……"）或禁止（"不可以……"）',
-    explanation: '许可形：아/어도 되다（可以做……）。禁止形：(으)면 안 되다（不可以做……）。注意禁止形不要和中文思维混淆——是"如果做了就不行"。',
-    conjugation: '许可：词干 + 아/어도 되다\n禁止：词干 + (으)면 안 되다',
-    examples: [
-      { ko: '여기 앉아도 돼요?', zh: '可以坐这里吗？' },
-      { ko: '사진 찍어도 돼요.', zh: '可以拍照。' },
-      { ko: '여기서 담배 피우면 안 돼요.', zh: '不可以在这里抽烟。' },
-    ],
-  },
-  {
-    id: 'g24', title: '推测/可能性', pattern: '-ㄹ/을 것 같다',
-    level: 'intermediate', topik: 'TOPIK 3级',
-    usage: '表示推测，"好像……"/"可能……"',
-    explanation: '用于表达说话人基于某种根据的推测。比 -겠- 的语气更柔和、更不确定。口语中使用频率极高。',
-    conjugation: '动词/形容词 + ㄹ/을 것 같다\n过去推测：았/었을 것 같다',
-    examples: [
-      { ko: '내일 비가 올 것 같아요.', zh: '明天好像会下雨。' },
-      { ko: '이 영화 재미있을 것 같아요.', zh: '这部电影看起来应该好看。' },
-      { ko: '그 분은 이미 알고 있을 것 같아요.', zh: '那个人好像已经知道了。' },
-    ],
-  },
-  {
-    id: 'g25', title: '义务/必要', pattern: '-아/어야 하다 / 되다',
-    level: 'intermediate', topik: 'TOPIK 3级',
-    usage: '表示"必须……"、"得……"',
-    explanation: '表达做某事的必要性或义务。-아/어야 하다 更强调主观义务，-아/어야 되다 是客观需要。但在口语中两者经常混用。',
-    conjugation: '词干 + 아/어야 하다/되다',
-    examples: [
-      { ko: '내일까지 숙제를 해야 해요.', zh: '明天之前必须做作业。' },
-      { ko: '한국어를 열심히 공부해야 돼요.', zh: '必须努力学习韩语。' },
-      { ko: '지금 안 가면 늦을 거예요. 가야 해요!', zh: '现在不走会迟到的，必须走了！' },
-    ],
-  },
-  {
-    id: 'g26', title: '理由/原因', pattern: '-기 때문에 / -때문에',
-    level: 'intermediate', topik: 'TOPIK 3级',
+    id: 'g29', title: '强原因', pattern: '-기 때문에 / -때문에',
+    level: 'intermediate', topik: 'TOPIK 3级', category: '연결',
     usage: '表示强烈的因果关系',
     explanation: '比 -아/어서 更正式、更强烈的因果关系。可以用于书面语和正式场合。名词 + 때문에 表示"因为……"，动词/形容词 + 기 때문에 表示"因为做……"。',
     conjugation: '名词 + 때문에\n动词/形容词词干 + 기 때문에',
@@ -348,8 +404,8 @@ export const grammarPoints: GrammarPoint[] = [
     ],
   },
   {
-    id: 'g27', title: '一边……一边……', pattern: '-(으)면서',
-    level: 'intermediate', topik: 'TOPIK 3级',
+    id: 'g30', title: '同时进行', pattern: '-(으)면서',
+    level: 'intermediate', topik: 'TOPIK 3级', category: '연결',
     usage: '表示两个动作同时进行',
     explanation: '连接两个由同一主语进行的动作，表示"一边……一边……"。前后动作必须是同一主语。',
     conjugation: '无收音/ㄹ + 면서\n有收音 + 으면서',
@@ -360,20 +416,8 @@ export const grammarPoints: GrammarPoint[] = [
     ],
   },
   {
-    id: 'g28', title: '经历/回想', pattern: '-던',
-    level: 'intermediate', topik: 'TOPIK 3级',
-    usage: '表示过去持续或反复的动作，带有回想意味',
-    explanation: '用于回忆过去经常做或持续进行的事情。与单纯过去时 -았/었 不同，-던 带有"回想"的语感。',
-    conjugation: '动词词干 + 던',
-    examples: [
-      { ko: '예전에 자주 가던 카페가 문을 닫았어요.', zh: '以前常去的咖啡馆关门了。' },
-      { ko: '어릴 때 살던 동네에 다녀왔어요.', zh: '去了小时候住过的街区。' },
-      { ko: '아까 보던 책이 어디 갔지?', zh: '刚才在看的书去哪了？' },
-    ],
-  },
-  {
-    id: 'g29', title: '原因结果(书面)', pattern: '-아/어서 그런지',
-    level: 'intermediate', topik: 'TOPIK 4级',
+    id: 'g31', title: '推测因果', pattern: '-아/어서 그런지',
+    level: 'intermediate', topik: 'TOPIK 4级', category: '연결',
     usage: '推测因果关系，"可能是因为……"',
     explanation: '表达说话人对某种结果的推测性原因。带有一点不确定的语气。',
     conjugation: '词干 + 아/어서 그런지',
@@ -383,8 +427,8 @@ export const grammarPoints: GrammarPoint[] = [
     ],
   },
   {
-    id: 'g30', title: '让步/即使', pattern: '-아/어도',
-    level: 'intermediate', topik: 'TOPIK 4级',
+    id: 'g32', title: '让步/即使', pattern: '-아/어도',
+    level: 'intermediate', topik: 'TOPIK 4级', category: '연결',
     usage: '表示"即使……也……"',
     explanation: '表示让步条件，前面情况发生或不发生，后面的结果都不变。',
     conjugation: '词干 + 아/어도',
@@ -394,11 +438,9 @@ export const grammarPoints: GrammarPoint[] = [
       { ko: '늦어도 10시까지는 올게요.', zh: '再晚也会十点前到。' },
     ],
   },
-
-  // ===== ADVANCED (TOPIK 5-6) =====
   {
-    id: 'g31', title: '让步(高级)', pattern: '-더라도',
-    level: 'advanced', topik: 'TOPIK 5级',
+    id: 'g33', title: '强让步', pattern: '-더라도',
+    level: 'advanced', topik: 'TOPIK 5级', category: '연결',
     usage: '强调让步，"就算……也……"/"即使……也不……"',
     explanation: '比 -아/어도 更强的让步表达。用于强调"即使某个极端情况发生，结果也不会变"。常见于辩论和书面语。',
     conjugation: '词干 + 더라도',
@@ -409,20 +451,8 @@ export const grammarPoints: GrammarPoint[] = [
     ],
   },
   {
-    id: 'g32', title: '必然/理所当然', pattern: '-기 마련이다',
-    level: 'advanced', topik: 'TOPIK 5级',
-    usage: '表示"必然会……"、"……是理所当然的"',
-    explanation: '用于表达某种普遍真理或必然规律。相当于中文的"自然就会……"、"总是会……的"。',
-    conjugation: '词干 + 기 마련이다',
-    examples: [
-      { ko: '열심히 노력하면 성공하기 마련이에요.', zh: '努力就必然会成功。' },
-      { ko: '시간이 지나면 잊어버리기 마련이죠.', zh: '时间过去自然就会忘记的。' },
-      { ko: '자주 만나면 친해지기 마련이에요.', zh: '经常见面自然就会变亲近。' },
-    ],
-  },
-  {
-    id: 'g33', title: '选择否定', pattern: '-느니',
-    level: 'advanced', topik: 'TOPIK 5级',
+    id: 'g34', title: '取舍否定', pattern: '-느니',
+    level: 'advanced', topik: 'TOPIK 5级', category: '연결',
     usage: '表示"与其……不如……"',
     explanation: '前句提出一个不太好的选择，后句提出更好的替代。"与其做A不如做B"。常与 차라리（干脆）搭配使用。',
     conjugation: '动词词干 + 느니',
@@ -433,8 +463,8 @@ export const grammarPoints: GrammarPoint[] = [
     ],
   },
   {
-    id: 'g34', title: '程度递进', pattern: '-ㄹ/을수록',
-    level: 'advanced', topik: 'TOPIK 5级',
+    id: 'g35', title: '递进变化', pattern: '-ㄹ/을수록',
+    level: 'advanced', topik: 'TOPIK 5级', category: '연결',
     usage: '表示"越……越……"',
     explanation: '表达两个变化成正比的递进关系。常与 -면 搭配使用形成 -(으)면 -(으)ㄹ수록 的强调形式。',
     conjugation: '无收音 + ㄹ수록\n有收音 + 을수록',
@@ -445,8 +475,8 @@ export const grammarPoints: GrammarPoint[] = [
     ],
   },
   {
-    id: 'g35', title: '原因后果(书面)', pattern: '-길래',
-    level: 'advanced', topik: 'TOPIK 5级',
+    id: 'g36', title: '观察因果', pattern: '-길래',
+    level: 'advanced', topik: 'TOPIK 5级', category: '연결',
     usage: '表示"因为看到/发现……所以……"，口语色彩浓',
     explanation: '用于口语中，表达"因为发现/看到/觉得……所以做了……"。说话人以自己观察到的情况为根据做某事。主语通常是第一人称。',
     conjugation: '词干 + 길래',
@@ -457,8 +487,8 @@ export const grammarPoints: GrammarPoint[] = [
     ],
   },
   {
-    id: 'g36', title: '程度比较', pattern: '-ㄹ/을 정도로',
-    level: 'advanced', topik: 'TOPIK 6级',
+    id: 'g37', title: '程度强调', pattern: '-ㄹ/을 정도로',
+    level: 'advanced', topik: 'TOPIK 6级', category: '연결',
     usage: '表示"到了……的程度"',
     explanation: '强调某种情况达到了相当高的程度。可以用来夸张或强调。',
     conjugation: '无收音 + ㄹ 정도로\n有收音 + 을 정도로',
@@ -469,32 +499,8 @@ export const grammarPoints: GrammarPoint[] = [
     ],
   },
   {
-    id: 'g37', title: '立场/观点', pattern: '-는/ㄴ/은 편이다',
-    level: 'advanced', topik: 'TOPIK 5级',
-    usage: '表示"算得上是……一类"、"倾向于是……的"',
-    explanation: '委婉地表达某种倾向或归类。不是绝对的判断，而是"相对来说属于……"的语感。非常符合韩国人委婉表达的交际习惯。',
-    conjugation: '动词：词干 + 는 편이다\n形容词：有收音 + 은 편、无收音 + ㄴ 편',
-    examples: [
-      { ko: '한국어 발음이 좋은 편이에요.', zh: '韩语发音算是不错的。' },
-      { ko: '저는 매운 음식을 잘 먹는 편이에요.', zh: '我算是能吃辣的。' },
-      { ko: '이 동네는 조용한 편이에요.', zh: '这个小区算是安静的。' },
-    ],
-  },
-  {
-    id: 'g38', title: '反事实假设', pattern: '-았/었/였더라면',
-    level: 'advanced', topik: 'TOPIK 6级',
-    usage: '表示"如果当初……了的话（会怎样）"',
-    explanation: '对已经发生且无法改变的事情做反事实假设。"如果那时……的话……"的遗憾或假设语气。常与"았/었/였을 거예요"或"았/었/였을 텐데"搭配。',
-    conjugation: '词干 + 았/었/였더라면',
-    examples: [
-      { ko: '조금만 더 일찍 출발했더라면 늦지 않았을 거예요.', zh: '要是再早一点出发的话就不会迟到了。' },
-      { ko: '그때 그 말을 안 했더라면 좋았을 텐데...', zh: '当时要是没说过那句话就好了……' },
-      { ko: '열심히 공부했더라면 합격했을 거예요.', zh: '要是当时努力学习了的话就会合格的。' },
-    ],
-  },
-  {
-    id: 'g39', title: '递进/不用说', pattern: '-(으)ㄹ 뿐만 아니라',
-    level: 'advanced', topik: 'TOPIK 5级',
+    id: 'g38', title: '递进补充', pattern: '-(으)ㄹ 뿐만 아니라',
+    level: 'advanced', topik: 'TOPIK 5级', category: '연결',
     usage: '表示"不仅……而且……"',
     explanation: '用于补充说明，连接两个都成立的条件或事实。A不仅成立，B也成立。是书面语中的常用递进结构。',
     conjugation: '无收音 + ㄹ 뿐만 아니라\n有收音 + 을 뿐만 아니라\n名词 + 일 뿐만 아니라',
@@ -505,8 +511,8 @@ export const grammarPoints: GrammarPoint[] = [
     ],
   },
   {
-    id: 'g40', title: '时间先后', pattern: '-자마자',
-    level: 'advanced', topik: 'TOPIK 5级',
+    id: 'g39', title: '即刻先后', pattern: '-자마자',
+    level: 'advanced', topik: 'TOPIK 5级', category: '연결',
     usage: '表示"一……就马上……"',
     explanation: '强调前后两个动作几乎同时发生，间隔极短。',
     conjugation: '动词词干 + 자마자',
@@ -514,6 +520,595 @@ export const grammarPoints: GrammarPoint[] = [
       { ko: '집에 오자마자 잤어요.', zh: '一到家就睡了。' },
       { ko: '전화를 받자마자 나갔어요.', zh: '一接电话就出去了。' },
       { ko: '봄이 되자마자 꽃이 피기 시작했어요.', zh: '一到春天花就开始开了。' },
+    ],
+  },
+  {
+    id: 'g40', title: '选择连接', pattern: '-거나',
+    level: 'intermediate', topik: 'TOPIK 3级', category: '연결',
+    usage: '表示"或者"，在两个或多个动作/状态中选择',
+    explanation: '用于连接两个动词或形容词，表示"或"的意思。可以与名词的"或"形式 -(이)나 对比学习。',
+    conjugation: '动词/形容词词干 + 거나',
+    examples: [
+      { ko: '주말에는 보통 책을 읽거나 운동을 해요.', zh: '周末通常读书或者运动。' },
+      { ko: '심심하거나 힘들 때 음악을 들어요.', zh: '无聊或者累的时候听音乐。' },
+      { ko: '아침에는 빵을 먹거나 죽을 먹어요.', zh: '早上吃面包或者喝粥。' },
+    ],
+  },
+  {
+    id: 'g41', title: '中途转换', pattern: '-다가',
+    level: 'intermediate', topik: 'TOPIK 3级', category: '연결',
+    usage: '表示动作进行中转而做另一件事',
+    explanation: '表示正在做A的时候停下来转而做B，或持续做A的过程中发生了B的情况。是口语中非常高频的连接语尾。',
+    conjugation: '动词词干 + 다가',
+    examples: [
+      { ko: '공부하다가 잠들었어요.', zh: '学习着学习着睡着了。' },
+      { ko: '집에 가다가 친구를 만났어요.', zh: '回家路上遇见了朋友。' },
+      { ko: '밥을 먹다가 전화를 받았어요.', zh: '吃饭吃到一半接了电话。' },
+    ],
+  },
+  {
+    id: 'g42', title: '之前', pattern: '-기 전에',
+    level: 'beginner', topik: 'TOPIK 2级', category: '연결',
+    usage: '表示"在……之前"',
+    explanation: '将动词名词化后连接 전에（之前），表示在一个动作发生之前做另一个动作。日常使用频率很高。',
+    conjugation: '动词词干 + 기 전에',
+    examples: [
+      { ko: '밥 먹기 전에 손 씻으세요.', zh: '吃饭前请洗手。' },
+      { ko: '자기 전에 책을 읽어요.', zh: '睡觉前读书。' },
+      { ko: '한국에 오기 전에 한국어를 공부했어요.', zh: '来韩国之前学了韩语。' },
+    ],
+    similarPatterns: ['-(으)ㄴ 후에'],
+  },
+  {
+    id: 'g43', title: '之后', pattern: '-(으)ㄴ 후에',
+    level: 'beginner', topik: 'TOPIK 2级', category: '연결',
+    usage: '表示"在……之后"',
+    explanation: '将动词变为冠形词形式后连接 후에（之后），表示一个动作完成后再做另一个动作。',
+    conjugation: '动词词干 + (으)ㄴ 후에\n无收音/ㄹ + ㄴ 후에\n有收音 + 은 후에',
+    examples: [
+      { ko: '수업이 끝난 후에 만나요.', zh: '下课后见面。' },
+      { ko: '밥을 먹은 후에 약을 드세요.', zh: '饭后请吃药。' },
+      { ko: '대학교 졸업한 후에 유학을 갈 거예요.', zh: '大学毕业后去留学。' },
+    ],
+    similarPatterns: ['-기 전에'],
+  },
+  {
+    id: 'g44', title: '期间', pattern: '-는 동안',
+    level: 'intermediate', topik: 'TOPIK 3级', category: '연결',
+    usage: '表示"在……期间"、"在……的同时"',
+    explanation: '表示某个动作或状态持续的时间段内，发生了另一件事。前后动作的主语可以不同。',
+    conjugation: '动词词干 + 는 동안\n名词 + 동안',
+    examples: [
+      { ko: '제가 없는 동안 잘 지냈어요?', zh: '我不在的时候过得好吗？' },
+      { ko: '비행기를 기다리는 동안 책을 읽었어요.', zh: '等飞机的时候读了书。' },
+      { ko: '방학 동안 한국어를 배웠어요.', zh: '放假期间学了韩语。' },
+    ],
+  },
+  {
+    id: 'g45', title: '比喻/类似', pattern: '-듯이 / -는 듯이',
+    level: 'advanced', topik: 'TOPIK 5级', category: '연결',
+    usage: '表示"好像……一样"、"仿佛……"',
+    explanation: '用于比喻或类比，表示某一行为或状态与另一情况相似。可以搭配 마치（好像）使用。',
+    conjugation: '动词词干 + 는 듯이\n形容词词干 + (으)ㄴ 듯이\n过去 + 았/었듯이',
+    examples: [
+      { ko: '아는 듯이 말하지 마세요.', zh: '不要装作知道的样子说话。' },
+      { ko: '물이 쏟아지듯이 비가 와요.', zh: '雨像泼水一样下着。' },
+      { ko: '그는 마치 모든 것을 다 안다는 듯이 행동해요.', zh: '他表现得好像什么都知道似的。' },
+    ],
+  },
+  {
+    id: 'g46', title: '反事实假设', pattern: '-았/었/였더라면',
+    level: 'advanced', topik: 'TOPIK 6级', category: '연결',
+    usage: '表示"如果当初……了的话（会怎样）"',
+    explanation: '对已经发生且无法改变的事情做反事实假设。"如果那时……的话……"的遗憾或假设语气。常与"았/었/였을 거예요"或"았/었/였을 텐데"搭配。',
+    conjugation: '词干 + 았/었/였더라면',
+    examples: [
+      { ko: '조금만 더 일찍 출발했더라면 늦지 않았을 거예요.', zh: '要是再早一点出发的话就不会迟到了。' },
+      { ko: '그때 그 말을 안 했더라면 좋았을 텐데...', zh: '当时要是没说过那句话就好了……' },
+      { ko: '열심히 공부했더라면 합격했을 거예요.', zh: '要是当时努力学习了的话就会合格的。' },
+    ],
+  },
+
+  // =====================================================================
+  //  CATEGORY: 시제 (Tense / 时制)
+  // =====================================================================
+
+  {
+    id: 'g47', title: '过去时', pattern: '-았/었/였-',
+    level: 'beginner', topik: 'TOPIK 1级', category: '시제',
+    usage: '表示过去发生的动作或状态',
+    explanation: '韩语的过去时由词干 + 았/었/였 构成。这是韩语最基本的时态表达之一。',
+    conjugation: '词干元音 ㅏ/ㅗ → 았어요\n其他 → 었어요\n하 → 했어요 (하였어요)',
+    examples: [
+      { ko: '어제 뭐 했어요?', zh: '昨天做了什么？' },
+      { ko: '점심에 비빔밥을 먹었어요.', zh: '中午吃了拌饭。' },
+      { ko: '주말에 친구를 만났어요.', zh: '周末见了朋友。' },
+    ],
+  },
+  {
+    id: 'g48', title: '将来/推测', pattern: '-ㄹ/을 거예요',
+    level: 'beginner', topik: 'TOPIK 2级', category: '시제',
+    usage: '表示将来的计划或推测',
+    explanation: '用于表达说话人打算做的事情或对未来情况的推测。在日常口语中非常常用。',
+    conjugation: '无收音 + ㄹ 거예요\n有收音 + 을 거예요\nㄹ结尾词干 + 거예요 (如 살다 → 살 거예요)',
+    examples: [
+      { ko: '내일 뭐 할 거예요?', zh: '明天打算做什么？' },
+      { ko: '아마 비가 올 거예요.', zh: '可能会下雨。' },
+      { ko: '한국에 갈 거예요.', zh: '打算去韩国。' },
+    ],
+  },
+  {
+    id: 'g49', title: '现在进行时', pattern: '-고 있다',
+    level: 'beginner', topik: 'TOPIK 2级', category: '시제',
+    usage: '表示正在进行的动作',
+    explanation: '相当于中文的"正在……"，接在动词后表示动作正在进行中。',
+    conjugation: '动词词干 + 고 있다',
+    examples: [
+      { ko: '지금 뭐 하고 있어요?', zh: '现在在做什么？' },
+      { ko: '한국어를 공부하고 있어요.', zh: '正在学韩语。' },
+      { ko: '밖에 비가 오고 있어요.', zh: '外面正在下雨。' },
+    ],
+  },
+  {
+    id: 'g50', title: '回想/持续', pattern: '-던',
+    level: 'intermediate', topik: 'TOPIK 3级', category: '시제',
+    usage: '表示过去持续或反复的动作，带有回想意味',
+    explanation: '用于回忆过去经常做或持续进行的事情。与单纯过去时 -았/었 不同，-던 带有"回想"的语感。',
+    conjugation: '动词词干 + 던',
+    examples: [
+      { ko: '예전에 자주 가던 카페가 문을 닫았어요.', zh: '以前常去的咖啡馆关门了。' },
+      { ko: '어릴 때 살던 동네에 다녀왔어요.', zh: '去了小时候住过的街区。' },
+      { ko: '아까 보던 책이 어디 갔지?', zh: '刚才在看的书去哪了？' },
+    ],
+  },
+  {
+    id: 'g51', title: '推测/意志', pattern: '-겠-',
+    level: 'intermediate', topik: 'TOPIK 3级', category: '시제',
+    usage: '表示说话人的意志（"会/要"）或推测（"应该/会"）',
+    explanation: '-겠- 有两大用法：①意志/承诺（第一人称为主："我会……"）；②推测（基于直觉的推测："应该会……"）。比 -ㄹ 거예요 更正式、更有把握。',
+    conjugation: '动词/形容词词干 + 겠다\n과거: 았/었겠',
+    examples: [
+      { ko: '제가 하겠습니다.', zh: '我来做。（意志/承诺）' },
+      { ko: '내일은 날씨가 좋겠어요.', zh: '明天天气应该会好。' },
+      { ko: '맛있겠다!', zh: '看起来好好吃！（直接判断）' },
+    ],
+    similarPatterns: ['-ㄹ/을 것 같다'],
+    difference: '-겠- 是基于现场感官的直接推测（"看起来好吃"），-ㄹ 것 같다 是基于思考的推测（"（根据经验）应该好吃"）。',
+  },
+  {
+    id: 'g52', title: '回想+背景', pattern: '-던데',
+    level: 'intermediate', topik: 'TOPIK 4级', category: '시제',
+    usage: '回想过去经历 + 为后续内容提供背景',
+    explanation: '-던데 是 -던 + -ㄴ데 的组合，表示"我记得之前……（所以……）"。常用于提供自己过去观察到的信息作为接下来的建议或提问的铺垫。',
+    conjugation: '动词词干 + 던데\n形容词词干 + 던데',
+    examples: [
+      { ko: '어제 봤던데 정말 재미있었어요.', zh: '我昨天看了，真的很有意思。' },
+      { ko: '날씨가 좀 쌀쌀하던데 따뜻하게 입으세요.', zh: '天气好像有点凉，穿暖和点吧。' },
+      { ko: '그 식당 음식이 맛있던데 같이 가 볼래요?', zh: '那家餐厅的食物好像很好吃，一起去试试吗？' },
+    ],
+  },
+
+  // =====================================================================
+  //  CATEGORY: 존대 (Honorifics / 敬语)
+  // =====================================================================
+
+  {
+    id: 'g53', title: '主语敬语后缀', pattern: '-(으)시',
+    level: 'beginner', topik: 'TOPIK 1级', category: '존대',
+    usage: '主语敬语后缀，用于抬高句子主语的身份',
+    explanation: '-(으)시 是韩语最基础的敬语语法。当主语是需要尊敬的人（长辈、上级、陌生人）时，在动词/形容词词干后加上 -(으)시。所有其他敬语形式都基于 -(으)시 衍生。无论句子结尾是什么格式，只要主语是需要尊敬的对象就要加。',
+    conjugation: '无收音词干 + 시 (가다→가시다)\n有收音词干 + 으시 (읽다→읽으시다)\n注意：ㄹ收音脱落 + 시 (살다→사시다)',
+    examples: [
+      { ko: '선생님께서 오셨어요.', zh: '老师来了。（오다 + 시 + 었어요）' },
+      { ko: '할머니께서 김치를 만드세요.', zh: '奶奶在做泡菜。' },
+      { ko: '아버지께서 신문을 읽으세요.', zh: '爸爸在看报纸。' },
+    ],
+    similarPatterns: ['-시겠어요?', '-(으)세요'],
+    difference: '-(으)시 是基础敬语后缀，需要结合终结语尾使用。-(으)세요 是 -(으)시 + 아/어요 的缩写形式，更常用于口语命令句。',
+  },
+  {
+    id: 'g54', title: '正式敬语终结语尾', pattern: '-ㅂ니다/습니다',
+    level: 'beginner', topik: 'TOPIK 1级', category: '존대',
+    usage: '正式场合的敬语终结语尾，用于陈述句',
+    explanation: '用于正式场合（会议、演讲、新闻、军队）的陈述句结尾。表达对听者的最高敬意。疑问句用 -ㅂ니까/습니까，命令句用 -ㅂ시오/으십시오。',
+    conjugation: '无收音词干 + ㅂ니다 (가다→갑니다)\n有收音词干 + 습니다 (먹다→먹습니다)\nㄹ收音脱落 + ㅂ니다 (살다→삽니다)',
+    examples: [
+      { ko: '감사합니다.', zh: '谢谢。' },
+      { ko: '내일 회의가 있겠습니다.', zh: '明天有会议。' },
+      { ko: '저는 한국어를 공부합니다.', zh: '我学习韩语。' },
+    ],
+    similarPatterns: ['-아/어요'],
+    difference: '-ㅂ니다/습니다 是正式敬语（합쇼체），用于正式场合、陌生人、公共场合。-아/어요 是非正式敬语（해요체），用于日常对话、熟人之间。',
+  },
+  {
+    id: 'g55', title: '非正式敬语终结语尾', pattern: '-아/어요',
+    level: 'beginner', topik: 'TOPIK 1级', category: '존대',
+    usage: '日常对话中最常用的敬语终结语尾',
+    explanation: '这是韩语日常对话中最常用的敬语体（해요체）。比 -ㅂ니다/습니다 更亲切自然，但仍保持对听者的尊重。用于熟人之间、一般社交场合。',
+    conjugation: '词干元音 ㅏ/ㅗ → 아요 (가다→가요)\n其他元音 → 어요 (먹다→먹어요)\n하다 → 해요',
+    examples: [
+      { ko: '좋아요.', zh: '好。/喜欢。' },
+      { ko: '오늘 날씨가 정말 좋아요.', zh: '今天天气真好。' },
+      { ko: '같이 점심 드실래요? 네, 좋아요.', zh: '要一起吃午饭吗？好的。' },
+    ],
+    similarPatterns: ['-ㅂ니다/습니다', '-(으)세요'],
+    difference: '-아/어요 是非正式敬语，在日常对话中使用频率最高。-ㅂ니다/습니다 是正式敬语，在公开场合使用。',
+  },
+  {
+    id: 'g56', title: '敬语命令句', pattern: '-(으)세요',
+    level: 'beginner', topik: 'TOPIK 2级', category: '존대',
+    usage: '敬语命令句，表示"请……"',
+    explanation: '-(으)세요 是 -(으)시 + 아/어요 的缩写，用于礼貌地请求或命令对方做某事。是日常口语中使用频率最高的命令句式。',
+    conjugation: '无收音词干 + 세요 (가다→가세요)\n有收音词干 + 으세요 (읽다→읽으세요)\nㄹ收音脱落 + 세요 (만들다→만드세요)',
+    examples: [
+      { ko: '여기 앉으세요.', zh: '请坐这里。' },
+      { ko: '천천히 드세요.', zh: '请慢用。' },
+      { ko: '내일 10시까지 와 주세요.', zh: '请明天10点之前来。' },
+    ],
+    similarPatterns: ['-(으)십시오', '-시지요'],
+    difference: '-(으)세요 是非正式敬语命令，日常使用。-(으)십시오 是正式敬语命令，用于官方场合、书面语。',
+  },
+  {
+    id: 'g57', title: '敬语询问', pattern: '-시겠어요?',
+    level: 'intermediate', topik: 'TOPIK 3级', category: '존대',
+    usage: '礼貌地询问对方的意愿或计划',
+    explanation: '-시겠어요? 由 -(으)시 + 겠 + 어요 构成。用于礼貌地询问对方的意愿、意向或计划。在服务行业、客服场景中非常常用。',
+    conjugation: '无收音词干 + 시겠어요\n有收音词干 + 으시겠어요\nㄹ收音脱落 + 시겠어요',
+    examples: [
+      { ko: '가시겠어요?', zh: '您要走吗？/要出发吗？' },
+      { ko: '뭘 드시겠어요?', zh: '您想吃点什么？' },
+      { ko: '좀 도와주시겠어요?', zh: '能帮我一下吗？' },
+    ],
+    similarPatterns: ['-(으)ㄹ래요?', '-(으)세요'],
+    difference: '-시겠어요? 比 -(으)ㄹ래요 更正式、更客气，常用于服务场合。-(으)ㄹ래요 更偏日常、朋友间的礼貌询问。',
+  },
+  {
+    id: 'g58', title: '正式敬语命令', pattern: '-(으)십시오',
+    level: 'intermediate', topik: 'TOPIK 3级', category: '존대',
+    usage: '正式场合的敬语命令句',
+    explanation: '用于正式场合、公共场所（机场、车站广播、官方告示等）的命令句。比 -(으)세요 更正式、更具权威性。',
+    conjugation: '无收音词干 + 십시오 (가다→가십시오)\n有收音词干 + 으십시오 (앉다→앉으십시오)',
+    examples: [
+      { ko: '들어오십시오.', zh: '请进。' },
+      { ko: '잠시만 기다려 주십시오.', zh: '请稍等。' },
+      { ko: '여권을 준비해 주십시오.', zh: '请准备好护照。' },
+    ],
+    similarPatterns: ['-(으)세요'],
+    difference: '-(으)십시오 是正式敬语命令（합쇼체），用于官方/公共场所。-(으)세요 是非正式敬语命令（해요체），用于日常对话。',
+  },
+  {
+    id: 'g59', title: '敬语助词', pattern: '께서/께/께서는',
+    level: 'intermediate', topik: 'TOPIK 3级', category: '존대',
+    usage: '敬语助词，代替普通助词在敬语语境中使用',
+    explanation: '当主语是需要尊敬的人时，用 께서 代替 이/가（主格），께서는 代替 은/는（主题），께 代替 에게/한테（与格）。这些是韩语敬语体系的重要组成部分。敬语助词必须与敬语谓词 (-(으)시) 搭配使用。',
+    conjugation: '께서 = 敬语主格助词 (替代 이/가)\n께서는 = 敬语主题助词 (替代 은/는)\n께 = 敬语与格助词 (替代 에게/한테)',
+    examples: [
+      { ko: '선생님께서 말씀하셨어요.', zh: '老师说了。' },
+      { ko: '할머니께 꽃을 드렸어요.', zh: '给了奶奶花。' },
+      { ko: '사장님께서는 지금 회의 중이십니다.', zh: '社长现在正在开会中。' },
+    ],
+    similarPatterns: ['-(으)시', '드리다', '이/가', '에게/한테'],
+    difference: '敬语助词必须与敬语谓词 (-(으)시) 搭配使用。说"할머니가 말했어요"在对长辈时是不自然的，应该说"할머니께서 말씀하셨어요"。',
+  },
+  {
+    id: 'g60', title: '敬语名词', pattern: '분/댁/연세/성함/말씀/진지',
+    level: 'intermediate', topik: 'TOPIK 3级', category: '존대',
+    usage: '用于尊称的特殊名词，替代普通名词',
+    explanation: '韩语有一整套敬语名词体系，在提及长辈或尊者的相关事物时必须使用。这些词分别对应普通名词的敬语形式。',
+    conjugation: '분 = 人/位 (替代 사람/명)\n댁 = 家/府上 (替代 집)\n연세 = 年龄/高龄 (替代 나이)\n성함 = 姓名/贵姓 (替代 이름)\n말씀 = 话/言语 (替代 말)\n진지 = 饭/膳食 (替代 밥)',
+    examples: [
+      { ko: '그 분이 누구세요?', zh: '那位是谁？' },
+      { ko: '성함이 어떻게 되세요?', zh: '您贵姓？/请问您叫什么名字？' },
+      { ko: '할아버지, 진지 드세요.', zh: '爷爷，请吃饭。' },
+      { ko: '선생님 연세가 어떻게 되세요?', zh: '老师您的年龄是？' },
+      { ko: '말씀 좀 여쭤봐도 될까요?', zh: '可以问您句话吗？' },
+      { ko: '선생님 댁이 어디세요?', zh: '老师府上在哪里？' },
+    ],
+    similarPatterns: ['드시다/주무시다/계시다'],
+    difference: '敬语名词与敬语动词配合使用，构成完整的敬语表达体系。说"할아버지 밥 드세요"虽然语法正确，但用 진지 更尊敬。',
+  },
+  {
+    id: 'g61', title: '敬语动词', pattern: '드시다/주무시다/계시다',
+    level: 'intermediate', topik: 'TOPIK 3级', category: '존대',
+    usage: '特殊敬语动词，替代普通动词用于尊敬对象',
+    explanation: '某些常用动词有专门的敬语形式，需要整体替换而不是简单加 -(으)시。这些是最常用的敬语动词，必须单独记忆。',
+    conjugation: '드시다 = 吃/喝 (替代 먹다/마시다 的敬语)\n  → 드세요 / 드셨어요 / 드십시오\n주무시다 = 睡 (替代 자다 的敬语)\n  → 주무세요 / 주무셨어요\n계시다 = 在 (替代 있다 的敬语)\n  → 계세요 / 계셨어요',
+    examples: [
+      { ko: '아버지께서 지금 계세요.', zh: '父亲现在在（家）。' },
+      { ko: '할머니, 진지 드세요.', zh: '奶奶，请吃饭。' },
+      { ko: '안녕히 주무셨어요?', zh: '（早上问候）睡得好吗？' },
+    ],
+    similarPatterns: ['분/댁/연세/성함/말씀/진지'],
+    difference: '敬语动词是需要整体替换的特殊词汇，不能通过规则变形得到。먹다 → 먹으시다 的说法不存在，必须用 드시다。있다 → 잇으시다 不存在，用 계시다。',
+  },
+  {
+    id: 'g62', title: '敬语建议', pattern: '-시지요',
+    level: 'intermediate', topik: 'TOPIK 3级', category: '존대',
+    usage: '礼貌地提出建议或劝告',
+    explanation: '-시지요 是 -(으)시 + 지요 的组合，用于礼貌地建议对方做某事。语气比 -(으)세요 更柔和，带有"何不……呢？"的劝说意味。',
+    conjugation: '无收音词干 + 시지요\n有收音词干 + 으시지요\nㄹ收音脱落 + 시지요',
+    examples: [
+      { ko: '어서 드시지요.', zh: '快请吃吧。' },
+      { ko: '이쪽으로 오시지요.', zh: '请往这边走吧。' },
+      { ko: '함께 가시지요.', zh: '一起走吧。（礼貌建议）' },
+    ],
+    similarPatterns: ['-(으)세요', '-시겠어요?'],
+    difference: '-시지요 语气更温和友善，带有劝说/建议意味。-(으)세요 更直接的命令/请求。',
+  },
+  {
+    id: 'g63', title: '礼貌询问意愿', pattern: '-(으)ㄹ래요?',
+    level: 'beginner', topik: 'TOPIK 2级', category: '존대',
+    usage: '礼貌地询问对方的意愿或建议',
+    explanation: '用于询问对方的意愿、计划，或提议一起做某事。在日常会话中使用频率极高，语气亲切自然。',
+    conjugation: '无收音词干 + ㄹ래요 (가다→갈래요?)\n有收音词干 + 을래요 (먹다→먹을래요?)\nㄹ收音 + 래요 (만들다→만들래요?)',
+    examples: [
+      { ko: '뭐 먹을래요?', zh: '想吃什么？' },
+      { ko: '같이 영화 볼래요?', zh: '一起看电影好吗？' },
+      { ko: '커피 마실래요? 아니면 차 마실래요?', zh: '喝咖啡还是喝茶？' },
+    ],
+    similarPatterns: ['-시겠어요?', '-고 싶다'],
+    difference: '-(으)ㄹ래요 在日常对话中更自然亲切，适合朋友或熟悉的人之间。-시겠어요 更正式礼貌，适合服务场合或不太熟的人。',
+  },
+  {
+    id: 'g64', title: '为长辈做某事', pattern: '-아/어 드리다',
+    level: 'intermediate', topik: 'TOPIK 3级', category: '존대',
+    usage: '表示为长辈/尊者做某事（谦让语）',
+    explanation: '드리다 是 주다（给）的敬语形式。将 아/어 주다 中的 주다 替换为 드리다，表示"为您做……"的谦让之意。这是韩语中非常重要的谦让表达。',
+    conjugation: '词干 + 아/어/여 + 드리다\n元音 ㅏ/ㅗ → 아 드리다\n其他元音 → 어 드리다\n하다 → 해 드리다',
+    examples: [
+      { ko: '제가 도와 드릴게요.', zh: '我来帮您吧。' },
+      { ko: '어머니께 선물을 사 드렸어요.', zh: '给妈妈买了礼物。' },
+      { ko: '할아버지께 편지를 읽어 드렸어요.', zh: '给爷爷读了信。' },
+      { ko: '무거워 보이는데 들어 드릴까요?', zh: '看起来很重，我帮您拿吧？' },
+    ],
+    similarPatterns: ['-아/어 주다', '께'],
+    difference: '-아/어 주다 用于平辈或晚辈（"帮你做……"），-아/어 드리다 用于长辈或尊者（"为您做……"）。动作的接受者是长辈时必须用 드리다。',
+  },
+
+  // =====================================================================
+  //  CATEGORY: 문형 (Sentence Patterns / 句型)
+  // =====================================================================
+
+  {
+    id: 'g65', title: '尝试/经验', pattern: '-아/어 보다',
+    level: 'beginner', topik: 'TOPIK 2级', category: '문형',
+    usage: '表示尝试做某事或曾经做过某事',
+    explanation: '表示"试着做……"或"……过"的经历。与过去时连用表示"曾经做过……"。',
+    conjugation: '词干 + 아/어/여 + 보다',
+    examples: [
+      { ko: '이거 먹어 보세요.', zh: '请尝尝这个。' },
+      { ko: '한복을 입어 봤어요.', zh: '穿过韩服。' },
+      { ko: '생각해 볼게요.', zh: '我会考虑的（试着想想）。' },
+    ],
+  },
+  {
+    id: 'g66', title: '愿望表达', pattern: '-고 싶다',
+    level: 'beginner', topik: 'TOPIK 2级', category: '문형',
+    usage: '表示"想做……"的愿望',
+    explanation: '接在动词后，表达说话人的愿望。第三人称使用时需要改为 -고 싶어하다。',
+    conjugation: '动词词干 + 고 싶다',
+    examples: [
+      { ko: '한국에 가고 싶어요.', zh: '想去韩国。' },
+      { ko: '뭐 먹고 싶어요?', zh: '想吃什么？' },
+      { ko: '친구가 한국어를 배우고 싶어해요.', zh: '朋友想学韩语。（第三人称用 싶어하다）' },
+    ],
+  },
+  {
+    id: 'g67', title: '能力/可能性', pattern: '-ㄹ/을 수 있다/없다',
+    level: 'intermediate', topik: 'TOPIK 3级', category: '문형',
+    usage: '表示能力（"会/能"）或可能性（"可能"）',
+    explanation: '既可以表示人的能力（会做某事），也可以表示客观可能性。其否定形式表示"不会/不能/不可能"。',
+    conjugation: '无收音 + ㄹ 수 있다 → 할 수 있다\n有收音 + 을 수 있다 → 먹을 수 있다',
+    examples: [
+      { ko: '한국어를 할 수 있어요.', zh: '会说韩语。' },
+      { ko: '혼자서는 할 수 없어요.', zh: '一个人做不了。' },
+      { ko: '누구나 실수할 수 있어요.', zh: '谁都有可能犯错。' },
+    ],
+  },
+  {
+    id: 'g68', title: '许可/禁止', pattern: '-아/어도 되다 / -(으)면 안 되다',
+    level: 'intermediate', topik: 'TOPIK 3级', category: '문형',
+    usage: '表示允许（"可以……"）或禁止（"不可以……"）',
+    explanation: '许可形：아/어도 되다（可以做……）。禁止形：(으)면 안 되다（不可以做……）。注意禁止形不要和中文思维混淆——是"如果做了就不行"。',
+    conjugation: '许可：词干 + 아/어도 되다\n禁止：词干 + (으)면 안 되다',
+    examples: [
+      { ko: '여기 앉아도 돼요?', zh: '可以坐这里吗？' },
+      { ko: '사진 찍어도 돼요.', zh: '可以拍照。' },
+      { ko: '여기서 담배 피우면 안 돼요.', zh: '不可以在这里抽烟。' },
+    ],
+  },
+  {
+    id: 'g69', title: '推测表达', pattern: '-ㄹ/을 것 같다',
+    level: 'intermediate', topik: 'TOPIK 3级', category: '문형',
+    usage: '表示推测，"好像……"/"可能……"',
+    explanation: '用于表达说话人基于某种根据的推测。比 -겠- 的语气更柔和、更不确定。口语中使用频率极高。',
+    conjugation: '动词/形容词 + ㄹ/을 것 같다\n过去推测：았/었을 것 같다',
+    examples: [
+      { ko: '내일 비가 올 것 같아요.', zh: '明天好像会下雨。' },
+      { ko: '이 영화 재미있을 것 같아요.', zh: '这部电影看起来应该好看。' },
+      { ko: '그 분은 이미 알고 있을 것 같아요.', zh: '那个人好像已经知道了。' },
+    ],
+  },
+  {
+    id: 'g70', title: '义务/必要', pattern: '-아/어야 하다 / 되다',
+    level: 'intermediate', topik: 'TOPIK 3级', category: '문형',
+    usage: '表示"必须……"、"得……"',
+    explanation: '表达做某事的必要性或义务。-아/어야 하다 更强调主观义务，-아/어야 되다 是客观需要。但在口语中两者经常混用。',
+    conjugation: '词干 + 아/어야 하다/되다',
+    examples: [
+      { ko: '내일까지 숙제를 해야 해요.', zh: '明天之前必须做作业。' },
+      { ko: '한국어를 열심히 공부해야 돼요.', zh: '必须努力学习韩语。' },
+      { ko: '지금 안 가면 늦을 거예요. 가야 해요!', zh: '现在不走会迟到的，必须走了！' },
+    ],
+  },
+  {
+    id: 'g71', title: '必然规律', pattern: '-기 마련이다',
+    level: 'advanced', topik: 'TOPIK 5级', category: '문형',
+    usage: '表示"必然会……"、"……是理所当然的"',
+    explanation: '用于表达某种普遍真理或必然规律。相当于中文的"自然就会……"、"总是会……的"。',
+    conjugation: '词干 + 기 마련이다',
+    examples: [
+      { ko: '열심히 노력하면 성공하기 마련이에요.', zh: '努力就必然会成功。' },
+      { ko: '시간이 지나면 잊어버리기 마련이죠.', zh: '时间过去自然就会忘记的。' },
+      { ko: '자주 만나면 친해지기 마련이에요.', zh: '经常见面自然就会变亲近。' },
+    ],
+  },
+  {
+    id: 'g72', title: '倾向归类', pattern: '-는/ㄴ/은 편이다',
+    level: 'advanced', topik: 'TOPIK 5级', category: '문형',
+    usage: '表示"算得上是……一类"、"倾向于是……的"',
+    explanation: '委婉地表达某种倾向或归类。不是绝对的判断，而是"相对来说属于……"的语感。非常符合韩国人委婉表达的交际习惯。',
+    conjugation: '动词：词干 + 는 편이다\n形容词：有收音 + 은 편、无收音 + ㄴ 편',
+    examples: [
+      { ko: '한국어 발음이 좋은 편이에요.', zh: '韩语发音算是不错的。' },
+      { ko: '저는 매운 음식을 잘 먹는 편이에요.', zh: '我算是能吃辣的。' },
+      { ko: '이 동네는 조용한 편이에요.', zh: '这个小区算是安静的。' },
+    ],
+  },
+  {
+    id: 'g73', title: '变得/最终', pattern: '-게 되다',
+    level: 'intermediate', topik: 'TOPIK 3级', category: '문형',
+    usage: '表示"变成……"、"最终……了"',
+    explanation: '表示某种变化的结果或自然的演变过程。语气上弱化了动作的主动性，带有"自然而然地……"或"由于外部原因而……"的微妙语感。',
+    conjugation: '词干 + 게 되다',
+    examples: [
+      { ko: '한국에 오게 됐어요.', zh: '（各种原因导致）来到了韩国。' },
+      { ko: '그 사람을 좋아하게 됐어요.', zh: '（不知不觉）喜欢上了那个人。' },
+      { ko: '열심히 공부해서 한국어를 잘하게 됐어요.', zh: '努力学习后韩语变好了。' },
+    ],
+    similarPatterns: ['-아/어지다'],
+    difference: '-게 되다 强调结果的达成（"最终……了"），-아/어지다 强调状态的自然变化（"变得……"）。',
+  },
+  {
+    id: 'g74', title: '决定/约定', pattern: '-기로 하다',
+    level: 'intermediate', topik: 'TOPIK 3级', category: '문형',
+    usage: '表示"决定做……"、"约定做……"',
+    explanation: '表达自己或团体的决定、约定、计划。通常用于陈述已经做出的决定，语气比 -(으)ㄹ 거예요 更确定。',
+    conjugation: '动词词干 + 기로 하다',
+    examples: [
+      { ko: '내일부터 운동을 시작하기로 했어요.', zh: '决定从明天开始运动。' },
+      { ko: '친구와 주말에 만나기로 했어요.', zh: '和朋友约好周末见面。' },
+      { ko: '한국어를 열심히 공부하기로 마음먹었어요.', zh: '下定决心努力学习韩语。' },
+    ],
+  },
+  {
+    id: 'g75', title: '会不会做', pattern: '-(으)ㄹ 줄 알다/모르다',
+    level: 'intermediate', topik: 'TOPIK 4级', category: '문형',
+    usage: '表示"会/不会做……"（技能）或"知道/不知道将……"（预知）',
+    explanation: '有两种含义：①表示是否掌握某种技能（"会不会做……"）；②表示是否预知某结果（"知道/不知道会……"）。语境决定具体含义。',
+    conjugation: '无收音 + ㄹ 줄 알다\n有收音 + 을 줄 알다\n过去: 았/었을 줄 알다',
+    examples: [
+      { ko: '한국어 할 줄 알아요!', zh: '我会说韩语！（技能）' },
+      { ko: '김치찌개 만들 줄 몰라요.', zh: '不会做泡菜锅。（技能）' },
+      { ko: '비가 올 줄 몰랐어요.', zh: '没想到会下雨。（未预知）' },
+    ],
+  },
+  {
+    id: 'g76', title: '犹豫/打算', pattern: '-(으)ㄹ까 하다',
+    level: 'intermediate', topik: 'TOPIK 4级', category: '문형',
+    usage: '表示正在考虑做某事，还没有完全决定',
+    explanation: '表达说话人正在犹豫、考虑做某事的状态。"我在想是不是要……"的语感。比 -기로 하다 更不确定，比 -고 싶다 更柔和。',
+    conjugation: '无收音 + ㄹ까 하다\n有收音 + 을까 하다',
+    examples: [
+      { ko: '주말에 부산에 갈까 해요.', zh: '我考虑周末去釜山。' },
+      { ko: '이 가방을 살까 하는데 어떡할까요?', zh: '我在想要不要买这个包，怎么办？' },
+      { ko: '그 회사에 지원해 볼까 합니다.', zh: '我在考虑要不要申请那个公司。' },
+    ],
+  },
+  {
+    id: 'g77', title: '途中/顺便', pattern: '-는 길이다',
+    level: 'intermediate', topik: 'TOPIK 3级', category: '문형',
+    usage: '表示"正在去/来的路上"，或"顺便做……"',
+    explanation: '表示正在前往某处的途中。常用表达：가는 길이다（正在去的路上）、오는 길이다（正在来的路上）。也可以表示"顺路顺便……"。',
+    conjugation: '动词词干（移动动词）+ 는 길이다\n가는 길이다 / 오는 길이다 / 돌아가는 길이다',
+    examples: [
+      { ko: '지금 집에 가는 길이에요.', zh: '现在正在回家的路上。' },
+      { ko: '퇴근하는 길에 슈퍼에 들렀어요.', zh: '下班路上顺便去了超市。' },
+      { ko: '마침 오는 길이었어요. 같이 가요.', zh: '正好在来的路上，一起走吧。' },
+    ],
+  },
+
+  // =====================================================================
+  //  CATEGORY: 인용 (Quotation / 引用)
+  // =====================================================================
+
+  {
+    id: 'g78', title: '间接引语', pattern: '-다고/라고/냐고/자고',
+    level: 'intermediate', topik: 'TOPIK 3级', category: '인용',
+    usage: '转述他人的话或自己的想法',
+    explanation: '用于引述陈述、疑问、命令、请求等。口语中常缩写为 -대요/-래요/-냬요/-재요。',
+    conjugation: '陈述：动词 + ㄴ/는다고、形容词 + 다고、名词 + (이)라고\n疑问：-냐고/느냐고\n命令：-(으)라고\n请诱：-자고',
+    examples: [
+      { ko: '친구가 내일 온다고 했어요.', zh: '朋友说明天来。' },
+      { ko: '엄마가 뭐 먹었냐고 물어봤어요.', zh: '妈妈问我吃了什么。' },
+      { ko: '선생님이 숙제하라고 하셨어요.', zh: '老师让我们做作业。' },
+    ],
+  },
+  {
+    id: 'g79', title: '间接引语缩略形', pattern: '-대요 / -래요 / -냬요 / -재요',
+    level: 'intermediate', topik: 'TOPIK 3级', category: '인용',
+    usage: '口语中常用的间接引语缩写形式',
+    explanation: '在口语中 -다고 해요 缩略为 -대요，-라고 해요 缩略为 -래요，-냐고 해요 缩略为 -냬요，-자고 해요 缩略为 -재요。这些缩略形式在日常对话中频率极高。',
+    conjugation: '陈述：-ㄴ/는대요 (动词)、-대요 (形容词)、-(이)래요 (名词)\n疑问：-냬요\n命令：-(으)래요\n请诱：-재요',
+    examples: [
+      { ko: '내일 비 온대요.', zh: '听说明天要下雨。' },
+      { ko: '친구가 같이 밥 먹재요.', zh: '朋友说一起吃饭吧。' },
+      { ko: '엄마가 뭐 하냬요.', zh: '妈妈问我在干嘛。' },
+      { ko: '선생님이 조용하래요.', zh: '老师说要安静。' },
+    ],
+  },
+  {
+    id: 'g80', title: '疑问间接', pattern: '-(으)ㄴ/는지',
+    level: 'intermediate', topik: 'TOPIK 3级', category: '인용',
+    usage: '表示疑问内容的间接引用或不确定',
+    explanation: '用于间接引用疑问句，或表达"不知道/不确定……"的内容。常与 알다/모르다（知道/不知道）、기억나다（记得）等搭配。',
+    conjugation: '动词现在: 는지\n形容词: (으)ㄴ지\n过去: 았/었는지\n名词: 인지',
+    examples: [
+      { ko: '그 사람이 누군지 몰라요.', zh: '不知道那个人是谁。' },
+      { ko: '내일 날씨가 좋을지 모르겠어요.', zh: '不知道明天天气好不好。' },
+      { ko: '이 김치찌개가 너무 매운지 입에서 불이 나요.', zh: '不知道是不是这泡菜锅太辣了，嘴像着了火。' },
+    ],
+  },
+
+  // =====================================================================
+  //  CATEGORY: 사동/피동 (Causative/Passive / 使动被动)
+  // =====================================================================
+
+  {
+    id: 'g81', title: '间接使动', pattern: '-게 하다',
+    level: 'intermediate', topik: 'TOPIK 3级', category: '사동/피동',
+    usage: '表示使动，"让……做……"',
+    explanation: '接在动词/形容词后，表示使别人做某事或使某物处于某种状态。是非直接使动（-이/히/리/기/우 是直接使动）。',
+    conjugation: '词干 + 게 하다',
+    examples: [
+      { ko: '선생님이 학생들에게 책을 읽게 했어요.', zh: '老师让学生们读书。' },
+      { ko: '엄마가 아이에게 밥을 먹게 했어요.', zh: '妈妈让孩子吃饭。' },
+      { ko: '음악이 나를 행복하게 해요.', zh: '音乐让我幸福。' },
+    ],
+  },
+  {
+    id: 'g82', title: '直接被动/使动', pattern: '-이/히/리/기-',
+    level: 'intermediate', topik: 'TOPIK 3级', category: '사동/피동',
+    usage: '表示被动（"被……"）或直接使动',
+    explanation: '韩语的被动/使动由词干 + 이/히/리/기 构成。不是所有动词都能变被动/使动。常见被动动词：보다（看）→ 보이다（被看见）、듣다（听）→ 들리다（被听到）、열다（开）→ 열리다（被打开）。',
+    conjugation: '不同词干对应不同的后缀：\n이: 보다→보이다, 쓰다→쓰이다\n히: 읽다→읽히다, 먹다→먹히다\n리: 열다→열리다, 듣다→들리다\n기: 끊다→끊기다, 안기다',
+    examples: [
+      { ko: '문이 열렸어요.', zh: '门被打开了。' },
+      { ko: '멀리서 음악 소리가 들려요.', zh: '从远处传来音乐声（音乐被听到）。' },
+      { ko: '이 책은 많이 읽혀요.', zh: '这本书被很多人读。' },
+    ],
+  },
+  {
+    id: 'g83', title: '变化/被动结果', pattern: '-아/어지다',
+    level: 'intermediate', topik: 'TOPIK 3级', category: '사동/피동',
+    usage: '表示"变得……"或自然被动的结果',
+    explanation: '-아/어지다 有两个核心用法：①与形容词结合表示"变得……"（状态变化）；②与部分动词结合表示某种自然而然的被动结果。',
+    conjugation: '形容词/动词词干 + 아/어지다',
+    examples: [
+      { ko: '날씨가 따뜻해졌어요.', zh: '天气变暖和了。' },
+      { ko: '이제 한국어가 좀 들려지기 시작했어요.', zh: '现在开始能听懂一些韩语了。' },
+      { ko: '한국 생활이 많이 익숙해졌어요.', zh: '韩国生活变得很习惯了。' },
+      { ko: '이 책은 쉽게 읽혀지지 않아요.', zh: '这本书不容易读。' },
     ],
   },
 ];

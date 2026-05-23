@@ -128,23 +128,23 @@ export default function VideosPage() {
   };
 
   return (
-    <div className="py-6 space-y-6">
+    <div className="py-4 space-y-4">
       <div>
-        <h1 className="text-2xl font-bold text-white">视频库</h1>
-        <p className="text-slate-400 text-sm mt-1">导入你喜欢的 YouTube 视频开始学习</p>
+        <h1 className="text-2xl font-bold text-[var(--text-primary)]">视频库</h1>
+        <p className="text-[var(--text-secondary)] text-sm mt-1">导入你喜欢的 YouTube 视频开始学习</p>
       </div>
 
       {/* Import Form */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
+      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-4 space-y-3">
         <div className="flex gap-3">
           <div className="flex-1 relative">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
             <input
               type="text"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               placeholder="粘贴 YouTube 链接，如 https://youtube.com/watch?v=..."
-              className="w-full bg-slate-800 border border-slate-700 rounded-lg py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500"
+              className="w-full bg-[var(--bg-input)] border border-[var(--pink-pale)] rounded-lg py-2.5 pl-10 pr-4 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--pink-primary)]"
               disabled={importing}
               onKeyDown={(e) => e.key === 'Enter' && handleImport()}
             />
@@ -152,14 +152,14 @@ export default function VideosPage() {
           <button
             onClick={handleImport}
             disabled={importing || !url.trim()}
-            className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:bg-slate-700 disabled:text-slate-500 text-white text-sm font-medium rounded-lg transition-colors"
+            className="flex items-center gap-2 px-5 py-2.5 bg-[var(--pink-primary)] hover:bg-[var(--pink-primary)] disabled:bg-[#FFE0E0] disabled:text-[var(--text-muted)] text-[var(--text-primary)] text-sm font-medium rounded-lg transition-colors"
           >
             {importing ? <Loader2 size={16} className="animate-spin" /> : <Film size={16} />}
             导入
           </button>
         </div>
         {progress && (
-          <div className="flex items-center gap-2 text-xs text-slate-400">
+          <div className="flex items-center gap-2 text-xs text-[var(--text-secondary)]">
             <Loader2 size={12} className="animate-spin" />
             {progress}
           </div>
@@ -170,14 +170,14 @@ export default function VideosPage() {
       {/* Video Grid */}
       {videos.length === 0 ? (
         <div className="text-center py-16">
-          <Film size={48} className="text-slate-600 mx-auto mb-4" />
-          <p className="text-slate-500">还没有视频，粘贴 YouTube 链接开始导入</p>
+          <Film size={48} className="text-[var(--text-placeholder)] mx-auto mb-4" />
+          <p className="text-[var(--text-muted)]">还没有视频，粘贴 YouTube 链接开始导入</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {videos.map((video) => (
-            <div key={video.id} className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden group">
-              <div className="aspect-video bg-slate-800 relative">
+            <div key={video.id} className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl overflow-hidden group">
+              <div className="aspect-video bg-[var(--bg-input)] relative">
                 <img
                   src={video.thumbnail}
                   alt={video.title}
@@ -189,24 +189,24 @@ export default function VideosPage() {
                 />
                 <Link
                   href={`/watch/${video.id}`}
-                  className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute inset-0 flex items-center justify-center bg-[var(--text-primary)]/30 opacity-0 group-hover:opacity-100 transition-opacity"
                 >
-                  <Play size={40} className="text-white" />
+                  <Play size={40} className="text-[var(--text-primary)]" />
                 </Link>
               </div>
               <div className="p-3">
-                <h3 className="text-sm font-medium text-white line-clamp-2 mb-1">{video.title}</h3>
-                <p className="text-xs text-slate-500 mb-3">{video.channelName}</p>
+                <h3 className="text-sm font-medium text-[var(--text-primary)] line-clamp-2 mb-1">{video.title}</h3>
+                <p className="text-xs text-[var(--text-muted)] mb-3">{video.channelName}</p>
                 <div className="flex items-center justify-between">
                   <Link
                     href={`/watch/${video.id}`}
-                    className="text-xs text-blue-400 hover:text-blue-300 transition-colors"
+                    className="text-xs text-[var(--pink-primary)] hover:text-[var(--pink-primary)] transition-colors"
                   >
                     开始学习
                   </Link>
                   <button
                     onClick={() => handleDelete(video)}
-                    className="text-slate-600 hover:text-red-400 transition-colors"
+                    className="text-[var(--text-placeholder)] hover:text-red-400 transition-colors"
                   >
                     <Trash2 size={14} />
                   </button>

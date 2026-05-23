@@ -1,10 +1,11 @@
 'use client';
 
 import { useEffect, useState, useRef, useCallback } from 'react';
-import { Mic, MicOff, Play, Pause, SkipForward, Loader2 } from 'lucide-react';
+import { Mic, MicOff, Play, Pause, SkipForward, Loader2, CheckCircle, Zap, Volume2 } from 'lucide-react';
 import Link from 'next/link';
 import { db } from '@/lib/db';
 import type { Video, Subtitle } from '@/types';
+import { awardXp, XP_REWARDS, updateStreak } from '@/lib/gamification';
 
 export default function ShadowingPage() {
   const [videos, setVideos] = useState<Video[]>([]);
@@ -16,9 +17,13 @@ export default function ShadowingPage() {
   const [feedback, setFeedback] = useState('');
   const [loading, setLoading] = useState(true);
   const [autoPlay, setAutoPlay] = useState(false);
+  const [sessionComplete, setSessionComplete] = useState(false);
+  const [xpIndicator, setXpIndicator] = useState<{ visible: boolean; amount: number }>({ visible: false, amount: 0 });
 
   const recognitionRef = useRef<any>(null);
   const silenceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const xpAwardedForIdxs = useRef<Set<number>>(new Set());
+  const sessionCompletedRef = useRef(false);
 
   useEffect(() => {
     const load = async () => {
@@ -36,6 +41,9 @@ export default function ShadowingPage() {
     setCurrentIdx(0);
     setTranscript('');
     setFeedback('');
+    setSessionComplete(false);
+    sessionCompletedRef.current = false;
+    xpAwardedForIdxs.current = new Set();
   }, [selectedVideoId]);
 
   const speak = useCallback((text: string) => {
@@ -45,6 +53,13 @@ export default function ShadowingPage() {
     utterance.rate = 0.7;
     utterance.pitch = 1;
     window.speechSynthesis.speak(utterance);
+  }, []);
+
+  const showXpIndicator = useCallback((amount: number) => {
+    setXpIndicator({ visible: true, amount });
+    setTimeout(() => {
+      setXpIndicator({ visible: false, amount: 0 });
+    }, 2500);
   }, []);
 
   const startListening = () => {
@@ -67,13 +82,60 @@ export default function ShadowingPage() {
       setTranscript(final);
 
       if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
-      silenceTimerRef.current = setTimeout(() => {
+      silenceTimerRef.current = setTimeout(async () => {
         const currentSub = subtitles[currentIdx];
         if (currentSub && final.trim()) {
           const cleanUser = final.trim().replace(/\s+/g, '');
           const cleanTarget = currentSub.text.trim().replace(/\s+/g, '');
           const similarity = cleanUser === cleanTarget ? 100 : Math.round((1 - levenshteinDistance(cleanUser, cleanTarget) / Math.max(cleanUser.length, cleanTarget.length)) * 100);
-          setFeedback(similarity >= 90 ? `优秀! 匹配度 ${similarity}%` : similarity >= 60 ? `不错，匹配度 ${similarity}%` : `继续加油，匹配度 ${similarity}%`);
+
+          if (similarity >= 90) {
+            setFeedback(`优秀! 匹配度 ${similarity}%`);
+
+            // Award XP if not already awarded for this subtitle
+            if (!xpAwardedForIdxs.current.has(currentIdx)) {
+              xpAwardedForIdxs.current.add(currentIdx);
+
+              // Award XP
+              const result = await awardXp(XP_REWARDS.shadowingGood);
+              showXpIndicator(XP_REWARDS.shadowingGood);
+
+              // Save shadowing record
+              try {
+                await db.shadowingRecords.put({
+                  id: crypto.randomUUID(),
+                  subtitleId: currentSub.id,
+                  date: Date.now(),
+                  score: similarity,
+                });
+              } catch (e) {
+                // Silently handle record save errors
+              }
+
+              // Update daily log shadowing count
+              try {
+                const todayStart = new Date().setHours(0, 0, 0, 0);
+                const logId = `log-${todayStart}`;
+                const log = await db.dailyLogs.get(logId);
+                if (log) {
+                  await db.dailyLogs.update(logId, { shadowingDone: (log.shadowingDone || 0) + 1 });
+                }
+              } catch (e) {
+                // Silently handle
+              }
+            }
+
+            // Check if this is the last subtitle and session should be marked complete
+            if (currentIdx === subtitles.length - 1 && !sessionCompletedRef.current) {
+              sessionCompletedRef.current = true;
+              await updateStreak();
+              setSessionComplete(true);
+            }
+          } else if (similarity >= 60) {
+            setFeedback(`不错，匹配度 ${similarity}%`);
+          } else {
+            setFeedback(`继续加油，匹配度 ${similarity}%`);
+          }
         }
       }, 1500);
     };
@@ -92,13 +154,20 @@ export default function ShadowingPage() {
     setIsListening(false);
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentIdx + 1 < subtitles.length) {
       const next = currentIdx + 1;
       setCurrentIdx(next);
       setTranscript('');
       setFeedback('');
       if (autoPlay) speak(subtitles[next].text);
+    } else {
+      // Last subtitle — complete session
+      if (!sessionCompletedRef.current) {
+        sessionCompletedRef.current = true;
+        await updateStreak();
+        setSessionComplete(true);
+      }
     }
   };
 
@@ -109,26 +178,40 @@ export default function ShadowingPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-32">
-        <Loader2 size={32} className="animate-spin text-slate-400" />
+        <Loader2 size={32} className="animate-spin text-[var(--text-secondary)]" />
       </div>
     );
   }
 
   const currentSub = subtitles[currentIdx];
+  const isLastSubtitle = currentIdx === subtitles.length - 1;
 
   return (
-    <div className="py-6 space-y-6 max-w-2xl mx-auto">
+    <div className="py-4 space-y-4 max-w-2xl mx-auto">
+      {/* XP Indicator Toast */}
+      {xpIndicator.visible && (
+        <div className="fixed top-6 right-6 z-50 animate-slide-down">
+          <div className="flex items-center gap-3 bg-emerald-600/90 backdrop-blur-sm text-[var(--text-primary)] px-5 py-3 rounded-2xl shadow-lg shadow-emerald-500/20 border border-emerald-400/30">
+            <Zap size={20} className="text-emerald-200" />
+            <div>
+              <p className="text-sm font-bold">经验值奖励!</p>
+              <p className="text-xs text-emerald-200">+{xpIndicator.amount} XP</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div>
-        <h1 className="text-2xl font-bold text-white">影子跟读</h1>
-        <p className="text-slate-400 text-sm mt-1">模仿发音，跟读韩语句子</p>
+        <h1 className="text-2xl font-bold text-[var(--text-primary)]">影子跟读</h1>
+        <p className="text-[var(--text-secondary)] text-sm mt-1">模仿发音，跟读韩语句子</p>
       </div>
 
       {/* Video Selector */}
       {videos.length === 0 ? (
         <div className="text-center py-16 space-y-4">
-          <Mic size={48} className="text-slate-600 mx-auto" />
-          <p className="text-slate-500">还没有视频</p>
-          <Link href="/videos" className="text-blue-400 text-sm hover:text-blue-300">
+          <Mic size={48} className="text-[var(--text-placeholder)] mx-auto" />
+          <p className="text-[var(--text-muted)]">还没有视频</p>
+          <Link href="/videos" className="text-[var(--pink-primary)] text-sm hover:text-[var(--pink-primary)]">
             去导入视频
           </Link>
         </div>
@@ -137,7 +220,7 @@ export default function ShadowingPage() {
           <select
             value={selectedVideoId || ''}
             onChange={(e) => setSelectedVideoId(e.target.value)}
-            className="w-full bg-slate-900 border border-slate-800 rounded-lg py-2.5 px-4 text-sm text-white focus:outline-none focus:border-emerald-500"
+            className="w-full bg-[var(--bg-card)] border border-[var(--border-color)] rounded-lg py-2.5 px-4 text-sm text-[var(--text-primary)] focus:outline-none focus:border-emerald-500"
           >
             {videos.map((v) => (
               <option key={v.id} value={v.id}>{v.title}</option>
@@ -145,34 +228,81 @@ export default function ShadowingPage() {
           </select>
 
           {/* Progress */}
-          <div className="flex items-center justify-between text-sm text-slate-500">
+          <div className="flex items-center justify-between text-sm text-[var(--text-muted)]">
             <span>{currentIdx + 1} / {subtitles.length}</span>
             <button
               onClick={() => { setAutoPlay(!autoPlay); }}
-              className={`text-xs px-3 py-1 rounded-lg transition-colors ${autoPlay ? 'bg-emerald-600/20 text-emerald-400' : 'bg-slate-800 text-slate-400'}`}
+              className={`text-xs px-3 py-1 rounded-lg transition-colors ${autoPlay ? 'bg-emerald-600/20 text-[var(--mint-soft)]' : 'bg-[var(--bg-input)] text-[var(--text-secondary)]'}`}
             >
               自动播放
             </button>
           </div>
 
           {currentSub ? (
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 space-y-6">
-              {/* Target text */}
+            <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-8 space-y-6">
+              {/* Session Complete Banner */}
+              {sessionComplete && (
+                <div className="flex items-center justify-center gap-2 bg-[var(--mint-soft)]/15 border border-emerald-500/20 rounded-xl py-3 px-4">
+                  <CheckCircle size={18} className="text-[var(--mint-soft)]" />
+                  <span className="text-[var(--mint-soft)] text-sm font-medium">会话完成! 连续打卡已更新</span>
+                </div>
+              )}
+
+              {/* Target text with syllable coloring */}
               <div className="text-center">
-                <p className="text-xs text-slate-500 mb-2">
+                <p className="text-xs text-[var(--text-muted)] mb-2">
                   {Math.floor(currentSub.start / 60)}:{(Math.floor(currentSub.start) % 60).toString().padStart(2, '0')}
                 </p>
-                <h2 className="text-2xl font-bold text-white leading-relaxed">{currentSub.text}</h2>
-                <p className="text-slate-400 text-sm mt-2">{currentSub.textZh}</p>
+                <div className="flex items-start justify-center gap-2">
+                  <div className="text-2xl font-bold text-[var(--text-primary)] leading-relaxed">
+                    {(() => {
+                      if (!transcript.trim()) {
+                        return <span>{currentSub.text}</span>;
+                      }
+                      // Split into syllable groups for comparison
+                      const targetClean = currentSub.text.trim();
+                      const userClean = transcript.trim();
+                      const targetSyllables = splitKoreanSyllables(targetClean);
+                      const userSyllables = splitKoreanSyllables(userClean);
+
+                      return targetSyllables.map((syl, i) => {
+                        let color = 'text-[var(--text-primary)]';
+                        if (i < userSyllables.length) {
+                          const match = syl === userSyllables[i];
+                          color = match
+                            ? 'text-[var(--mint-soft)]'
+                            : syl.replace(/\s/g, '') === userSyllables[i].replace(/\s/g, '')
+                              ? 'text-[var(--peach-soft)]'
+                              : 'text-[var(--pink-primary)]';
+                        } else {
+                          color = 'text-[var(--text-placeholder)]';
+                        }
+                        return (
+                          <span key={i} className={color}>
+                            {syl}
+                          </span>
+                        );
+                      });
+                    })()}
+                  </div>
+                  <button
+                    onClick={() => speak(currentSub.text)}
+                    className="p-1 rounded-lg bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors shrink-0 mt-0.5"
+                    title="听发音"
+                  >
+                    <Volume2 size={14} />
+                  </button>
+                </div>
+                <p className="text-[var(--text-secondary)] text-sm mt-2">{currentSub.textZh}</p>
               </div>
 
               {/* Play button */}
               <div className="flex justify-center gap-4">
                 <button
                   onClick={handlePlayCurrent}
-                  className="w-16 h-16 rounded-full bg-emerald-500/10 hover:bg-emerald-500/20 flex items-center justify-center transition-colors"
+                  className="w-16 h-16 rounded-full bg-[var(--mint-soft)]/15 hover:bg-emerald-500/20 flex items-center justify-center transition-colors"
                 >
-                  <Play size={28} className="text-emerald-400" />
+                  <Play size={28} className="text-[var(--mint-soft)]" />
                 </button>
               </div>
 
@@ -183,7 +313,7 @@ export default function ShadowingPage() {
                   className={`w-20 h-20 rounded-full flex items-center justify-center transition-all ${
                     isListening
                       ? 'bg-red-500/20 text-red-400 animate-pulse'
-                      : 'bg-slate-800 text-slate-400 hover:text-emerald-400'
+                      : 'bg-[var(--bg-input)] text-[var(--text-secondary)] hover:text-[var(--mint-soft)]'
                   }`}
                 >
                   {isListening ? <MicOff size={32} /> : <Mic size={32} />}
@@ -192,40 +322,80 @@ export default function ShadowingPage() {
 
               {/* Speech transcript */}
               {transcript && (
-                <div className="bg-slate-800 rounded-xl p-4">
-                  <p className="text-sm text-slate-300">{transcript}</p>
+                <div className="bg-[var(--bg-input)] rounded-xl p-4">
+                  <p className="text-sm text-[var(--text-primary)]">{transcript}</p>
                 </div>
               )}
 
               {/* Feedback */}
               {feedback && (
                 <div className={`text-center p-3 rounded-xl ${
-                  feedback.includes('优秀') ? 'bg-emerald-500/10 text-emerald-400' :
-                  feedback.includes('不错') ? 'bg-yellow-500/10 text-yellow-400' :
-                  'bg-orange-500/10 text-orange-400'
+                  feedback.includes('优秀') ? 'bg-[var(--mint-soft)]/15 text-[var(--mint-soft)]' :
+                  feedback.includes('不错') ? 'bg-yellow-500/10 text-[var(--peach-soft)]' :
+                  'bg-[var(--peach-soft)]/15 text-[var(--peach-soft)]'
                 }`}>
                   <p className="font-medium">{feedback}</p>
                 </div>
               )}
 
-              {/* Next */}
+              {/* Next / Complete */}
               <div className="flex justify-center">
                 <button
                   onClick={handleNext}
-                  className="flex items-center gap-2 px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl transition-colors text-sm"
+                  className={`flex items-center gap-2 px-6 py-3 rounded-xl transition-colors text-sm ${
+                    isLastSubtitle
+                      ? 'bg-emerald-600 hover:bg-emerald-500 text-[var(--text-primary)]'
+                      : 'bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] text-[var(--text-primary)]'
+                  }`}
                 >
-                  下一句
+                  {isLastSubtitle ? '完成会话' : '下一句'}
                   <SkipForward size={16} />
                 </button>
               </div>
             </div>
           ) : (
-            <p className="text-slate-500 text-center py-8">该视频暂无字幕</p>
+            <p className="text-[var(--text-muted)] text-center py-8">该视频暂无字幕</p>
           )}
         </>
       )}
+
+      <style jsx>{`
+        @keyframes slideDown {
+          from {
+            opacity: 0;
+            transform: translateY(-12px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .animate-slide-down {
+          animation: slideDown 0.3s ease-out;
+        }
+      `}</style>
     </div>
   );
+}
+
+function splitKoreanSyllables(text: string): string[] {
+  const result: string[] = [];
+  for (const char of text) {
+    if (char === ' ') {
+      result.push(' ');
+    } else if (/[가-힣]/.test(char)) {
+      result.push(char);
+    } else if (/[ㄱ-ㅎㅏ-ㅣ]/.test(char)) {
+      result.push(char);
+    } else {
+      if (result.length > 0 && !result[result.length - 1].match(/[가-힣ㄱ-ㅎㅏ-ㅣ\s]/)) {
+        result[result.length - 1] += char;
+      } else {
+        result.push(char);
+      }
+    }
+  }
+  return result;
 }
 
 function levenshteinDistance(a: string, b: string): number {

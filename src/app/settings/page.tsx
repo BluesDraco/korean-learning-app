@@ -1,0 +1,267 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { ArrowLeft, User, Target, Flame, Save, Loader2, Trophy } from 'lucide-react';
+import { getProfile, updateProfile } from '@/lib/gamification';
+import { db } from '@/lib/db';
+import type { UserProfile, Achievement } from '@/types';
+import { ACHIEVEMENT_DEFS } from '@/types';
+
+export default function SettingsPage() {
+  const router = useRouter();
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [achievements, setAchievements] = useState<Achievement[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    const load = async () => {
+      const p = await getProfile();
+      setProfile(p);
+      const achs = await db.achievements.toArray();
+      setAchievements(achs);
+      setLoading(false);
+    };
+    load();
+  }, []);
+
+  const handleSave = async () => {
+    if (!profile) return;
+    setSaving(true);
+    await updateProfile({
+      nickname: profile.nickname,
+      dailyGoalMinutes: profile.dailyGoalMinutes,
+      dailyGoalWords: profile.dailyGoalWords,
+      targetLevel: profile.targetLevel,
+    });
+    setSaving(false);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-32">
+        <Loader2 size={32} className="animate-spin text-[var(--text-secondary)]" />
+      </div>
+    );
+  }
+
+  if (!profile) return null;
+
+  const earnedAchievements = achievements.filter((a) => ACHIEVEMENT_DEFS[a.type]);
+  const allTypes = Object.keys(ACHIEVEMENT_DEFS) as (keyof typeof ACHIEVEMENT_DEFS)[];
+  const earnedTypes = new Set(achievements.map((a) => a.type));
+
+  return (
+    <div className="py-4 space-y-4 max-w-2xl mx-auto">
+      {/* Header */}
+      <div className="flex items-center gap-4">
+        <button onClick={() => router.back()} className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
+          <ArrowLeft size={20} />
+        </button>
+        <div>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">设置</h1>
+          <p className="text-[var(--text-secondary)] text-sm mt-1">个性化你的学习体验</p>
+        </div>
+      </div>
+
+      {/* Profile Section */}
+      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 space-y-4">
+        <div className="flex items-center gap-3 mb-4">
+          <User size={20} className="text-[var(--pink-primary)]" />
+          <h2 className="text-lg font-medium text-[var(--text-primary)]">个人资料</h2>
+        </div>
+
+        {/* Nickname */}
+        <div>
+          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">昵称</label>
+          <input
+            type="text"
+            value={profile.nickname}
+            onChange={(e) => setProfile({ ...profile, nickname: e.target.value })}
+            className="w-full bg-[var(--bg-input)] border border-[var(--pink-pale)] rounded-xl py-3 px-4 text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--pink-primary)] transition-colors"
+          />
+        </div>
+
+        {/* Level display */}
+        <div className="flex items-center gap-4 bg-[var(--bg-input)] rounded-xl p-4">
+          <div className="w-12 h-12 rounded-full bg-[var(--pink-primary)]/15 flex items-center justify-center">
+            <span className="text-[var(--pink-primary)] font-bold text-lg">{profile.level}</span>
+          </div>
+          <div className="flex-1">
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-sm text-[var(--text-primary)] font-medium">等级 {profile.level}</span>
+              <span className="text-xs text-[var(--text-secondary)]">{profile.xp}/{profile.xpToNextLevel} XP</span>
+            </div>
+            <div className="w-full bg-[var(--bg-accent)] rounded-full h-2">
+              <div
+                className="bg-blue-500 h-2 rounded-full transition-all"
+                style={{ width: `${(profile.xp / profile.xpToNextLevel) * 100}%` }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Streak */}
+        <div className="flex items-center gap-3 bg-[var(--bg-input)] rounded-xl p-4">
+          <Flame size={20} className="text-[var(--peach-soft)]" />
+          <div>
+            <div className="text-sm text-[var(--text-primary)] font-medium">连续学习 {profile.streak} 天</div>
+            <div className="text-xs text-[var(--text-secondary)]">最长记录: {profile.longestStreak} 天</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Goals Section */}
+      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 space-y-4">
+        <div className="flex items-center gap-3 mb-4">
+          <Target size={20} className="text-[var(--mint-soft)]" />
+          <h2 className="text-lg font-medium text-[var(--text-primary)]">学习目标</h2>
+        </div>
+
+        {/* Target Level */}
+        <div>
+          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">当前水平</label>
+          <select
+            value={profile.targetLevel}
+            onChange={(e) => setProfile({ ...profile, targetLevel: e.target.value as UserProfile['targetLevel'] })}
+            className="w-full bg-[var(--bg-input)] border border-[var(--pink-pale)] rounded-xl py-3 px-4 text-[var(--text-primary)] focus:outline-none focus:border-emerald-500 transition-colors"
+          >
+            <option value="beginner">初级 (TOPIK 1-2)</option>
+            <option value="intermediate">中级 (TOPIK 3-4)</option>
+            <option value="advanced">高级 (TOPIK 5-6)</option>
+          </select>
+        </div>
+
+        {/* Daily Goal Words */}
+        <div>
+          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">每日学习单词: {profile.dailyGoalWords} 个</label>
+          <input
+            type="range"
+            min="5"
+            max="50"
+            step="5"
+            value={profile.dailyGoalWords}
+            onChange={(e) => setProfile({ ...profile, dailyGoalWords: Number(e.target.value) })}
+            className="w-full accent-emerald-500"
+          />
+          <div className="flex justify-between text-xs text-[var(--text-placeholder)] mt-1">
+            <span>5</span><span>50</span>
+          </div>
+        </div>
+
+        {/* Daily Goal Minutes */}
+        <div>
+          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">每日学习时间: {profile.dailyGoalMinutes} 分钟</label>
+          <input
+            type="range"
+            min="5"
+            max="120"
+            step="5"
+            value={profile.dailyGoalMinutes}
+            onChange={(e) => setProfile({ ...profile, dailyGoalMinutes: Number(e.target.value) })}
+            className="w-full accent-emerald-500"
+          />
+          <div className="flex justify-between text-xs text-[var(--text-placeholder)] mt-1">
+            <span>5分钟</span><span>2小时</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Preferences Section */}
+      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 space-y-4">
+        <div className="flex items-center gap-3 mb-4">
+          <Flame size={20} className="text-[var(--purple-soft)]" />
+          <h2 className="text-lg font-medium text-[var(--text-primary)]">偏好设置</h2>
+        </div>
+
+        {/* TTS Speed */}
+        <div>
+          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">朗读语速: {(profile as any).ttsSpeed ?? 0.8}x</label>
+          <input
+            type="range"
+            min="0.5"
+            max="1.2"
+            step="0.1"
+            value={(profile as any).ttsSpeed ?? 0.8}
+            onChange={(e) => setProfile({ ...profile, ttsSpeed: parseFloat(e.target.value) } as any)}
+            className="w-full accent-[var(--purple-soft)]"
+          />
+          <div className="flex justify-between text-xs text-[var(--text-placeholder)] mt-1">
+            <span>0.5x 慢</span><span>1.2x 快</span>
+          </div>
+        </div>
+
+        {/* Review batch size */}
+        <div>
+          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">每次复习数量: {(profile as any).reviewBatchSize ?? 10} 个</label>
+          <select
+            value={(profile as any).reviewBatchSize ?? 10}
+            onChange={(e) => setProfile({ ...profile, reviewBatchSize: Number(e.target.value) } as any)}
+            className="w-full bg-[var(--bg-input)] border border-[var(--border-color)] rounded-xl py-3 px-4 text-[var(--text-primary)] focus:outline-none focus:border-[var(--purple-soft)] transition-colors"
+          >
+            <option value={5}>5 个</option>
+            <option value={10}>10 个</option>
+            <option value={15}>15 个</option>
+            <option value={20}>20 个</option>
+            <option value={30}>30 个</option>
+          </select>
+        </div>
+
+        {/* Theme toggle info */}
+        <div className="bg-[var(--bg-input)] rounded-xl p-4">
+          <p className="text-xs text-[var(--text-secondary)]">
+            亮色/暗色主题切换请使用导航栏底部的按钮
+          </p>
+        </div>
+      </div>
+
+      {/* Achievements */}
+      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 space-y-4">
+        <div className="flex items-center gap-3 mb-4">
+          <Trophy size={20} className="text-[var(--peach-soft)]" />
+          <h2 className="text-lg font-medium text-[var(--text-primary)]">
+            成就 ({earnedAchievements.length}/{allTypes.length})
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-3 md:grid-cols-4 gap-3">
+          {allTypes.map((type) => {
+            const def = ACHIEVEMENT_DEFS[type];
+            const earned = earnedTypes.has(type);
+            return (
+              <div
+                key={type}
+                className={`rounded-xl p-3 text-center transition-all ${
+                  earned
+                    ? 'bg-yellow-500/10 border border-yellow-500/20'
+                    : 'bg-[var(--bg-input)] border border-[var(--pink-pale)]/50 opacity-40'
+                }`}
+              >
+                <div className="text-2xl mb-1">{def.icon}</div>
+                <div className="text-xs text-[var(--text-primary)] font-medium">{def.title}</div>
+                <div className="text-[13px] text-[var(--text-secondary)] mt-0.5">{def.description}</div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Save Button */}
+      <button
+        onClick={handleSave}
+        disabled={saving}
+        className={`w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-[var(--text-primary)] font-medium transition-all ${
+          saved
+            ? 'bg-emerald-600'
+            : 'bg-[var(--pink-primary)] hover:bg-[var(--pink-primary)] active:scale-[0.98]'
+        }`}
+      >
+        {saving ? <Loader2 size={18} className="animate-spin" /> : saved ? <><Save size={18} /> 已保存</> : <><Save size={18} /> 保存设置</>}
+      </button>
+    </div>
+  );
+}

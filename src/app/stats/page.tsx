@@ -1,33 +1,62 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { BarChart3, BookOpen, Clock, TrendingUp, Loader2 } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
+import {
+  BarChart3, BookOpen, TrendingUp, Loader2, Flame, Zap, Trophy,
+  Award, Star, Target, Pencil,
+} from 'lucide-react';
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
+  ResponsiveContainer, PieChart, Pie, Cell,
+  RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Legend,
+} from 'recharts';
+import { useRouter } from 'next/navigation';
 import { db } from '@/lib/db';
-import type { Word, ReviewSession, MasteryLevel } from '@/types';
+import { ACHIEVEMENT_DEFS } from '@/types';
+import type { Word, ReviewSession, Achievement, MasteryLevel, UserProfile } from '@/types';
 
 interface Stats {
   totalWords: number;
   masteredWords: number;
   totalReviews: number;
   totalDictations: number;
+  totalShadowings: number;
   todayReviews: number;
   weekReviews: { date: string; count: number }[];
   masteryDistribution: { name: string; value: number }[];
   srsBins: { level: string; count: number }[];
+  totalXp: number;
+  skills: { skill: string; score: number; fullMark: number }[];
 }
 
-const COLORS = ['#64748b', '#eab308', '#3b82f6', '#10b981'];
+const COLORS = ['var(--text-muted)', 'var(--color-highlight)', 'var(--pink-primary)', 'var(--mint-soft)'];
+const RADAR_COLORS = ['var(--pink-primary)', 'var(--purple-soft)', 'var(--mint-soft)', 'var(--peach-soft)', 'var(--peach-soft)', 'var(--blue-soft)'];
+
+function totalXpForLevel(level: number): number {
+  let total = 0;
+  for (let i = 1; i < level; i++) {
+    total += i * 100 + 50;
+  }
+  return total;
+}
 
 export default function StatsPage() {
+  const router = useRouter();
   const [stats, setStats] = useState<Stats | null>(null);
+  const [achievements, setAchievements] = useState<Achievement[]>([]);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const load = async () => {
-      const words: Word[] = await db.words.toArray();
-      const sessions: ReviewSession[] = await db.reviewSessions.orderBy('date').reverse().toArray();
-      const dictationRecords = await db.dictationRecords.toArray();
+      const [words, sessions, dictationRecords, shadowingRecords, achs, p] = await Promise.all([
+        db.words.toArray(),
+        db.reviewSessions.orderBy('date').reverse().toArray(),
+        db.dictationRecords.toArray(),
+        db.shadowingRecords.toArray(),
+        db.achievements.toArray(),
+        db.userProfiles.get('main'),
+      ]);
 
       const now = Date.now();
       const todayStart = new Date().setHours(0, 0, 0, 0);
@@ -37,7 +66,9 @@ export default function StatsPage() {
       const masteredWords = words.filter((w) => w.mastery === 'mastered').length;
       const totalReviews = sessions.reduce((s, r) => s + r.wordsReviewed, 0);
       const totalDictations = dictationRecords.length;
+      const totalShadowings = shadowingRecords.length;
       const todayReviews = sessions.filter((s) => s.date >= todayStart).reduce((s, r) => s + r.wordsReviewed, 0);
+      const totalXp = p ? totalXpForLevel(p.level) + p.xp : 0;
 
       // Weekly review counts
       const weekReviews: { date: string; count: number }[] = [];
@@ -46,10 +77,7 @@ export default function StatsPage() {
         const dayEnd = dayStart + 86400000;
         const count = sessions.filter((s) => s.date >= dayStart && s.date < dayEnd).reduce((s, r) => s + r.wordsReviewed, 0);
         const date = new Date(dayStart);
-        weekReviews.push({
-          date: `${date.getMonth() + 1}/${date.getDate()}`,
-          count,
-        });
+        weekReviews.push({ date: `${date.getMonth() + 1}/${date.getDate()}`, count });
       }
 
       // Mastery distribution
@@ -75,7 +103,25 @@ export default function StatsPage() {
         count: words.filter((w) => w.srsLevel >= min && w.srsLevel <= max).length,
       }));
 
-      setStats({ totalWords, masteredWords, totalReviews, totalDictations, todayReviews, weekReviews, masteryDistribution, srsBins });
+      // Skill scores for radar chart (scale 0-100)
+      const vocabScore = Math.min(100, Math.round((totalWords / 300) * 100));
+      const listeningScore = Math.min(100, Math.round((totalDictations / 100) * 100));
+      const speakingScore = Math.min(100, Math.round((totalShadowings / 50) * 100));
+      const reviewScore = Math.min(100, Math.round((masteredWords / Math.max(1, totalWords)) * 100));
+      const grammarScore = Math.min(100, Math.round((masteredWords / Math.max(1, totalWords)) * 80));
+      const dailyScore = p ? Math.min(100, p.streak * 5) : 0;
+      const skills = [
+        { skill: '词汇量', score: vocabScore, fullMark: 100 },
+        { skill: '听力', score: listeningScore, fullMark: 100 },
+        { skill: '口语', score: speakingScore, fullMark: 100 },
+        { skill: '掌握率', score: reviewScore, fullMark: 100 },
+        { skill: '语法', score: grammarScore, fullMark: 100 },
+        { skill: '坚持', score: dailyScore, fullMark: 100 },
+      ];
+
+      setStats({ totalWords, masteredWords, totalReviews, totalDictations, totalShadowings, todayReviews, weekReviews, masteryDistribution, srsBins, totalXp, skills });
+      setAchievements(achs);
+      setProfile(p || null);
       setLoading(false);
     };
     load();
@@ -84,48 +130,146 @@ export default function StatsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-32">
-        <Loader2 size={32} className="animate-spin text-slate-400" />
+        <Loader2 size={32} className="animate-spin text-[var(--text-secondary)]" />
       </div>
     );
   }
 
   if (!stats) return null;
 
-  const summaryCards = [
-    { label: '总单词', value: stats.totalWords, icon: BookOpen, color: 'text-blue-400', bg: 'bg-blue-500/10' },
-    { label: '已掌握', value: stats.masteredWords, icon: TrendingUp, color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
-    { label: '复习次数', value: stats.totalReviews, icon: Clock, color: 'text-yellow-400', bg: 'bg-yellow-500/10' },
-    { label: '今日复习', value: stats.todayReviews, icon: BarChart3, color: 'text-purple-400', bg: 'bg-purple-500/10' },
-  ];
+  const earnedTypes = new Set<string>(achievements.map((a) => a.type));
+  const achievementEntries = Object.entries(ACHIEVEMENT_DEFS) as [string, { title: string; description: string; icon: string }][];
+
+  const xpPercent = profile
+    ? Math.min(100, Math.round((profile.xp / profile.xpToNextLevel) * 100))
+    : 0;
 
   return (
-    <div className="py-6 space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-white">学习统计</h1>
-        <p className="text-slate-400 text-sm mt-1">追踪你的学习进度</p>
+    <div className="py-4 space-y-4">
+      {/* Header */}
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">学习统计</h1>
+          <p className="text-[var(--text-secondary)] text-sm mt-1">追踪你的学习进度与成就</p>
+        </div>
+        {profile && (
+          <div className="shrink-0 bg-[var(--bg-input)] rounded-xl px-4 py-2 text-center">
+            <div className="text-[var(--pink-primary)] font-bold text-lg">{profile.level}</div>
+            <div className="text-[13px] text-[var(--text-secondary)]">等级</div>
+          </div>
+        )}
       </div>
 
-      {/* Summary Cards */}
+      {/* Profile Summary */}
+      {profile && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Level & XP Card */}
+          <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-5">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <Zap size={18} className="text-[var(--peach-soft)]" />
+                <span className="text-sm font-medium text-[var(--text-primary)]">等级进度</span>
+              </div>
+              <span className="text-xs text-[var(--text-muted)]">Lv.{profile.level}</span>
+            </div>
+            <div className="flex items-baseline gap-2 mb-3">
+              <span className="text-3xl font-bold text-[var(--text-primary)]">{stats.totalXp.toLocaleString()}</span>
+              <span className="text-sm text-[var(--text-muted)]">总 XP</span>
+            </div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-xs text-[var(--text-secondary)]">
+                {xpPercent}% 到等级 {profile.level + 1}
+              </span>
+              <span className="text-xs text-[var(--text-muted)]">{profile.xp}/{profile.xpToNextLevel} XP</span>
+            </div>
+            <div className="w-full bg-[var(--bg-input)] rounded-full h-2.5">
+              <div
+                className="h-2.5 rounded-full bg-gradient-to-r from-[var(--pink-primary)] to-[var(--purple-soft)] transition-all duration-700"
+                style={{ width: `${xpPercent}%` }}
+              />
+            </div>
+          </div>
+
+          {/* Streak Card */}
+          <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-5">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <Flame size={18} className={profile.streak > 0 ? 'text-[var(--peach-soft)]' : 'text-[var(--text-muted)]'} />
+                <span className="text-sm font-medium text-[var(--text-primary)]">学习连续</span>
+              </div>
+              {profile.streak >= 7 && <span className="text-xs text-[var(--peach-soft)] font-medium">火爆!</span>}
+            </div>
+            <div className="flex items-baseline gap-2 mb-1">
+              <span className={`text-3xl font-bold ${profile.streak > 0 ? 'text-[var(--peach-soft)]' : 'text-[var(--text-secondary)]'}`}>
+                {profile.streak}
+              </span>
+              <span className="text-sm text-[var(--text-muted)]">天</span>
+            </div>
+            <p className="text-xs text-[var(--text-muted)]">
+              最长连续 {profile.longestStreak} 天
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Summary Cards - Core Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {summaryCards.map(({ label, value, icon: Icon, color, bg }) => (
+        {[
+          { label: '总单词', value: stats.totalWords, icon: BookOpen, color: 'text-[var(--pink-primary)]', bg: 'bg-[var(--pink-primary)]/10' },
+          { label: '已掌握', value: stats.masteredWords, icon: TrendingUp, color: 'text-[var(--mint-soft)]', bg: 'bg-[var(--mint-soft)]/15' },
+          { label: '连续天数', value: profile?.streak ?? 0, icon: Flame, color: 'text-[var(--peach-soft)]', bg: 'bg-[var(--peach-soft)]/15' },
+          { label: '总 XP', value: stats.totalXp.toLocaleString(), icon: Zap, color: 'text-[var(--peach-soft)]', bg: 'bg-yellow-500/10' },
+        ].map(({ label, value, icon: Icon, color, bg }) => (
           <div key={label} className={`${bg} rounded-xl p-4`}>
             <Icon size={18} className={color} />
             <div className={`text-2xl font-bold mt-2 ${color}`}>{value}</div>
-            <div className="text-slate-400 text-xs mt-1">{label}</div>
+            <div className="text-[var(--text-secondary)] text-xs mt-1">{label}</div>
           </div>
         ))}
       </div>
 
+      {/* Secondary Stats Row */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {[
+          { label: '总复习次数', value: stats.totalReviews, icon: BarChart3, color: 'text-[var(--purple-soft)]' },
+          { label: '今日复习', value: stats.todayReviews, icon: Target, color: 'text-[var(--blue-soft)]', href: '/review' },
+          { label: '听写练习', value: stats.totalDictations, icon: Pencil, color: 'text-[var(--purple-soft)]' },
+          { label: '已获成就', value: achievements.length, icon: Trophy, color: 'text-[var(--peach-soft)]' },
+        ].map(({ label, value, icon: Icon, color, href }) => {
+          const card = (
+            <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-4 text-center">
+              <Icon size={16} className={`${color} mx-auto mb-1`} />
+              <div className={`text-xl font-bold ${color}`}>{value}</div>
+              <div className="text-[13px] text-[var(--text-muted)] mt-0.5">{label}</div>
+            </div>
+          );
+          if (href) {
+            return (
+              <button
+                key={label}
+                onClick={() => router.push(href)}
+                className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-4 text-center hover:border-[var(--pink-pale)] transition-colors w-full cursor-pointer"
+              >
+                <Icon size={16} className={`${color} mx-auto mb-1`} />
+                <div className={`text-xl font-bold ${color}`}>{value}</div>
+                <div className="text-[13px] text-[var(--text-muted)] mt-0.5">{label}</div>
+              </button>
+            );
+          }
+          return <div key={label}>{card}</div>;
+        })}
+      </div>
+
       {/* Weekly Review Chart */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
-        <h3 className="text-sm font-medium text-white mb-4">本周复习</h3>
+      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-5">
+        <h3 className="text-sm font-medium text-[var(--text-primary)] mb-4">本周复习</h3>
         <ResponsiveContainer width="100%" height={200}>
           <BarChart data={stats.weekReviews}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-            <XAxis dataKey="date" tick={{ fill: '#64748b', fontSize: 12 }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fill: '#64748b', fontSize: 12 }} axisLine={false} tickLine={false} allowDecimals={false} />
-            <Tooltip contentStyle={{ background: '#1e293b', border: '1px solid #334155', borderRadius: '8px', color: '#f1f5f9' }} />
-            <Bar dataKey="count" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--border-default)" />
+            <XAxis dataKey="date" tick={{ fill: 'var(--text-muted)', fontSize: 12 }} axisLine={false} tickLine={false} />
+            <YAxis tick={{ fill: 'var(--text-muted)', fontSize: 12 }} axisLine={false} tickLine={false} allowDecimals={false} />
+            <Tooltip contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border-default)', borderRadius: '8px', color: 'var(--text-primary)' }} />
+            <Bar dataKey="count" fill="var(--pink-primary)" radius={[4, 4, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>
@@ -133,8 +277,8 @@ export default function StatsPage() {
       {/* Two-column charts */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Mastery Pie */}
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
-          <h3 className="text-sm font-medium text-white mb-4">掌握分布</h3>
+        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-5">
+          <h3 className="text-sm font-medium text-[var(--text-primary)] mb-4">掌握分布</h3>
           <ResponsiveContainer width="100%" height={220}>
             <PieChart>
               <Pie data={stats.masteryDistribution} cx="50%" cy="50%" innerRadius={50} outerRadius={80} paddingAngle={2} dataKey="value">
@@ -142,12 +286,12 @@ export default function StatsPage() {
                   <Cell key={i} fill={COLORS[i % COLORS.length]} />
                 ))}
               </Pie>
-              <Tooltip contentStyle={{ background: '#1e293b', border: '1px solid #334155', borderRadius: '8px', color: '#f1f5f9' }} />
+              <Tooltip contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border-default)', borderRadius: '8px', color: 'var(--text-primary)' }} />
             </PieChart>
           </ResponsiveContainer>
           <div className="flex flex-wrap gap-3 justify-center mt-2">
             {stats.masteryDistribution.map((item, i) => (
-              <div key={item.name} className="flex items-center gap-1.5 text-xs text-slate-400">
+              <div key={item.name} className="flex items-center gap-1.5 text-xs text-[var(--text-secondary)]">
                 <div className="w-3 h-3 rounded-sm" style={{ background: COLORS[i % COLORS.length] }} />
                 {item.name} ({item.value})
               </div>
@@ -156,17 +300,102 @@ export default function StatsPage() {
         </div>
 
         {/* SRS Level Bars */}
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
-          <h3 className="text-sm font-medium text-white mb-4">SRS 等级分布</h3>
+        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-5">
+          <h3 className="text-sm font-medium text-[var(--text-primary)] mb-4">SRS 等级分布</h3>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={stats.srsBins} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-              <XAxis type="number" tick={{ fill: '#64748b', fontSize: 12 }} axisLine={false} tickLine={false} allowDecimals={false} />
-              <YAxis dataKey="level" type="category" tick={{ fill: '#64748b', fontSize: 12 }} axisLine={false} tickLine={false} width={40} />
-              <Tooltip contentStyle={{ background: '#1e293b', border: '1px solid #334155', borderRadius: '8px', color: '#f1f5f9' }} />
-              <Bar dataKey="count" fill="#8b5cf6" radius={[0, 4, 4, 0]} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border-default)" />
+              <XAxis type="number" tick={{ fill: 'var(--text-muted)', fontSize: 12 }} axisLine={false} tickLine={false} allowDecimals={false} />
+              <YAxis dataKey="level" type="category" tick={{ fill: 'var(--text-muted)', fontSize: 12 }} axisLine={false} tickLine={false} width={40} />
+              <Tooltip contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border-default)', borderRadius: '8px', color: 'var(--text-primary)' }} />
+              <Bar dataKey="count" fill="var(--purple-soft)" radius={[0, 4, 4, 0]} />
             </BarChart>
           </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Skills Radar Chart */}
+      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-5">
+        <h3 className="text-sm font-medium text-[var(--text-primary)] mb-4">能力雷达图</h3>
+        <ResponsiveContainer width="100%" height={320}>
+          <RadarChart data={stats.skills} cx="50%" cy="50%" outerRadius="70%">
+            <PolarGrid stroke="var(--border-color)" strokeDasharray="3 3" />
+            <PolarAngleAxis
+              dataKey="skill"
+              tick={{ fill: 'var(--text-secondary)', fontSize: 12 }}
+            />
+            <PolarRadiusAxis
+              angle={30}
+              domain={[0, 100]}
+              tick={{ fill: 'var(--text-muted)', fontSize: 10 }}
+              axisLine={false}
+            />
+            <Radar
+              name="能力值"
+              dataKey="score"
+              stroke="var(--pink-primary)"
+              fill="var(--pink-primary)"
+              fillOpacity={0.2}
+              strokeWidth={2}
+            />
+          </RadarChart>
+        </ResponsiveContainer>
+        <div className="grid grid-cols-3 gap-2 mt-3">
+          {stats.skills.map((s) => (
+            <div key={s.skill} className="text-center">
+              <div className="text-lg font-bold text-[var(--text-primary)]">{s.score}</div>
+              <div className="text-[13px] text-[var(--text-muted)]">{s.skill}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Achievements Section */}
+      <div>
+        <div className="flex items-center gap-2 mb-4">
+          <Award size={18} className="text-[var(--peach-soft)]" />
+          <h2 className="text-sm font-medium text-[var(--text-primary)] uppercase tracking-wider">成就徽章</h2>
+          <span className="text-xs text-[var(--text-muted)] ml-1">
+            {achievements.length}/{achievementEntries.length}
+          </span>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+          {achievementEntries.map(([type, def]) => {
+            const earned = earnedTypes.has(type as string);
+            const earnedData = achievements.find((a) => (a.type as string) === type);
+            return (
+              <div
+                key={type}
+                className={`rounded-xl p-3 text-center border transition-all ${
+                  earned
+                    ? 'bg-[var(--bg-card)] border-[var(--pink-pale)] hover:border-amber-500/50'
+                    : 'bg-white/40 border-[var(--border-color)]/50 opacity-50'
+                }`}
+              >
+                <div className={`text-2xl mb-1.5 ${earned ? '' : 'grayscale'}`}>
+                  {def.icon}
+                </div>
+                <div className={`text-xs font-medium ${earned ? 'text-[var(--text-primary)]' : 'text-[var(--text-muted)]'}`}>
+                  {def.title}
+                </div>
+                <div className={`text-[13px] mt-0.5 line-clamp-2 ${earned ? 'text-[var(--text-secondary)]' : 'text-[var(--text-placeholder)]'}`}>
+                  {def.description}
+                </div>
+                {earned && earnedData ? (
+                  <div className="flex items-center justify-center gap-1 mt-1.5 text-[13px] text-[var(--peach-soft)]/70">
+                    <Star size={10} className="fill-amber-400/70" />
+                    {new Date(earnedData.earnedAt).toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' })}
+                  </div>
+                ) : (
+                  <div className="mt-1.5">
+                    <span className="inline-block text-[13px] text-[var(--text-placeholder)] w-5 h-5 rounded-full border border-[var(--pink-pale)] leading-5">
+                      ?
+                    </span>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
