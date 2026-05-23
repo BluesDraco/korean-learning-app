@@ -120,6 +120,17 @@ export interface Example {
 
 export type MasteryLevel = 'new' | 'learning' | 'reviewing' | 'mastered';
 
+// ===== Custom Word Book =====
+export interface WordBook {
+  id: string;
+  name: string;
+  description: string;
+  wordIds: string[];
+  color: string;
+  createdAt: number;
+  updatedAt: number;
+}
+
 // ===== SRS Review =====
 export interface ReviewSession {
   id: string;

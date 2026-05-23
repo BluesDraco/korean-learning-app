@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 
 const EMOJIS = ['🌸', '✧', '⋆', '☆', '♡', '◌', '✿', '˚', '·'];
-const PARTICLE_COUNT = 8;
+const PARTICLE_COUNT = 18;
 
 export function FloatingDecorations() {
   const containerRef = useRef<HTMLDivElement>(null);

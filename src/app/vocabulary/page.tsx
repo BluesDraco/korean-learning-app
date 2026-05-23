@@ -5,9 +5,10 @@ import Link from 'next/link';
 import {
   Search, Trash2, X, ChevronDown, ChevronUp,
   BookOpen, GraduationCap, Video, Clock, ArrowRight,
-  Sparkles, Hash, Calendar, Filter, Volume2,
+  Sparkles, Hash, Calendar, Filter, Volume2, BookmarkPlus,
 } from 'lucide-react';
 import { db } from '@/lib/db';
+import { AddToBookModal } from '@/components/AddToBookModal';
 import type { Word, MasteryLevel } from '@/types';
 
 // ── Mastery display config ──────────────────────────────────────────
@@ -87,6 +88,8 @@ export default function VocabularyPage() {
   const [filter, setFilter] = useState<MasteryLevel | 'all'>('all');
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showAddToBook, setShowAddToBook] = useState(false);
+  const [addToBookWordIds, setAddToBookWordIds] = useState<string[]>([]);
 
   // ── Load all words ────────────────────────────────────────────
   const loadAllWords = useCallback(async () => {
@@ -170,13 +173,22 @@ export default function VocabularyPage() {
             )}
           </p>
         </div>
-        <Link
-          href="/learn"
-          className="flex items-center gap-1.5 text-sm px-4 py-2.5 rounded-2xl bg-[var(--pink-primary)]/15 text-[var(--pink-primary)] hover:bg-[var(--pink-primary)]/25 transition-colors"
-        >
-          <GraduationCap size={16} />
-          <span className="hidden sm:inline">去学习</span>
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/vocabulary/books"
+            className="flex items-center gap-1.5 text-sm px-4 py-2.5 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--pink-primary)] transition-colors"
+          >
+            <BookmarkPlus size={16} />
+            <span className="hidden sm:inline">单词本</span>
+          </Link>
+          <Link
+            href="/learn"
+            className="flex items-center gap-1.5 text-sm px-4 py-2.5 rounded-2xl bg-[var(--pink-primary)]/15 text-[var(--pink-primary)] hover:bg-[var(--pink-primary)]/25 transition-colors"
+          >
+            <GraduationCap size={16} />
+            <span className="hidden sm:inline">去学习</span>
+          </Link>
+        </div>
       </div>
 
       {/* ─────── Search Bar ─────── */}
@@ -364,7 +376,29 @@ export default function VocabularyPage() {
 
                 {/* Right controls */}
                 <div className="flex items-center gap-2 ml-3 shrink-0">
+                  {/* Add to book button */}
                   <span
+                      role="button"
+                      tabIndex={0}
+                      aria-label="加入单词本"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setAddToBookWordIds([word.id]);
+                        setShowAddToBook(true);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setAddToBookWordIds([word.id]);
+                          setShowAddToBook(true);
+                        }
+                      }}
+                      className="text-[var(--text-placeholder)] hover:text-[var(--pink-primary)] opacity-0 group-hover:opacity-100 transition-all p-1.5 rounded-lg hover:bg-[var(--pink-primary)]/10 cursor-pointer"
+                    >
+                      <BookmarkPlus size={15} />
+                    </span>
+                    <span
                     role="button"
                     tabIndex={0}
                     aria-label="删除单词"
@@ -469,6 +503,16 @@ export default function VocabularyPage() {
             </div>
           ))}
         </div>
+      )}
+
+      {/* Add to Book Modal */}
+      {showAddToBook && (
+        <AddToBookModal
+          mode="select-books"
+          preSelectedWordIds={addToBookWordIds}
+          onClose={() => setShowAddToBook(false)}
+          onDone={() => {}}
+        />
       )}
     </div>
   );

@@ -5,9 +5,9 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
   Home, BookOpen, Gamepad2, LayoutGrid, Flower2, Bot,
-  GraduationCap, Grid3X3, Waves, FileText,
+  GraduationCap, Grid3X3, Waves, FileText, BookImage,
   RefreshCw, Pencil, Mic, PenLine,
-  Library, Video,
+  Library, Video, Bookmark,
   Palette, Landmark, MapPin, UtensilsCrossed,
   MessageSquare, Lightbulb,
   ChevronRight, X, Sun, Moon,
@@ -35,6 +35,7 @@ const navGroups: NavGroup[] = [
       { label: '四十音', href: '/phonetics', icon: Grid3X3 },
       { label: '连读规则', href: '/phonetics/rules', icon: Waves },
       { label: '语法库', href: '/grammar', icon: FileText },
+      { label: '绘本学习', href: '/learn/picture-books', icon: BookImage },
     ],
   },
   {
@@ -48,6 +49,7 @@ const navGroups: NavGroup[] = [
   {
     icon: LayoutGrid, label: '词汇', href: '/vocabulary', children: [
       { label: '单词库', href: '/vocabulary', icon: BookOpen },
+      { label: '自定义单词本', href: '/vocabulary/books', icon: Bookmark },
       { label: '知识库', href: '/knowledge', icon: Library },
       { label: '视频库', href: '/videos', icon: Video },
     ],
