@@ -98,8 +98,14 @@ export function Navbar() {
 
   return (
     <>
-      {/* Desktop sidebar */}
-      <nav className="hidden md:flex fixed left-0 top-0 bottom-0 w-48 bg-[var(--bg-card)] border-r border-[var(--border-color)] flex-col z-50 shadow-sm">
+      {/* Desktop sidebar — retro journal binder */}
+      <nav className="hidden md:flex fixed left-0 top-0 bottom-0 w-48 bg-[var(--bg-card)] border-r border-[var(--border-color)] flex-col z-50 shadow-sm"
+        style={{
+          borderImage: 'repeating-linear-gradient(180deg, var(--pink-pale, #FFD6E0) 0px, var(--pink-pale, #FFD6E0) 2px, transparent 2px, transparent 8px) 1',
+          borderRightWidth: '3px',
+          borderRightStyle: 'solid',
+        }}
+      >
         {/* Logo */}
         <Link
           href="/"
@@ -186,7 +192,10 @@ export function Navbar() {
             <span>{theme === 'light' ? '深色模式' : '亮色模式'}</span>
           </button>
           <div className="flex items-center gap-2 bg-[var(--bg-soft)] rounded-xl px-3 py-2.5">
-            <span className="text-lg animate-float">🐰</span>
+            <div className="relative">
+              <span className="text-lg animate-float">🐰</span>
+              <span className="status-dot learning absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5" />
+            </div>
             <div className="flex flex-col">
               <span className="text-xs font-medium text-[var(--text-primary)]">토리</span>
               <span className="text-[13px] text-[var(--text-muted)]">화이팅!</span>

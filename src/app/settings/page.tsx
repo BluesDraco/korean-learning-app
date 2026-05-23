@@ -98,7 +98,7 @@ export default function SettingsPage() {
             </div>
             <div className="w-full bg-[var(--bg-accent)] rounded-full h-2">
               <div
-                className="bg-blue-500 h-2 rounded-full transition-all"
+                className="bg-[var(--pink-primary)] h-2 rounded-full transition-all"
                 style={{ width: `${(profile.xp / profile.xpToNextLevel) * 100}%` }}
               />
             </div>
@@ -128,7 +128,7 @@ export default function SettingsPage() {
           <select
             value={profile.targetLevel}
             onChange={(e) => setProfile({ ...profile, targetLevel: e.target.value as UserProfile['targetLevel'] })}
-            className="w-full bg-[var(--bg-input)] border border-[var(--pink-pale)] rounded-xl py-3 px-4 text-[var(--text-primary)] focus:outline-none focus:border-emerald-500 transition-colors"
+            className="w-full bg-[var(--bg-input)] border border-[var(--pink-pale)] rounded-xl py-3 px-4 text-[var(--text-primary)] focus:outline-none focus:border-[var(--pink-primary)] transition-colors"
           >
             <option value="beginner">初级 (TOPIK 1-2)</option>
             <option value="intermediate">中级 (TOPIK 3-4)</option>
@@ -146,7 +146,7 @@ export default function SettingsPage() {
             step="5"
             value={profile.dailyGoalWords}
             onChange={(e) => setProfile({ ...profile, dailyGoalWords: Number(e.target.value) })}
-            className="w-full accent-emerald-500"
+            className="w-full accent-[var(--pink-primary)]"
           />
           <div className="flex justify-between text-xs text-[var(--text-placeholder)] mt-1">
             <span>5</span><span>50</span>
@@ -163,7 +163,7 @@ export default function SettingsPage() {
             step="5"
             value={profile.dailyGoalMinutes}
             onChange={(e) => setProfile({ ...profile, dailyGoalMinutes: Number(e.target.value) })}
-            className="w-full accent-emerald-500"
+            className="w-full accent-[var(--pink-primary)]"
           />
           <div className="flex justify-between text-xs text-[var(--text-placeholder)] mt-1">
             <span>5分钟</span><span>2小时</span>
@@ -237,7 +237,7 @@ export default function SettingsPage() {
                 key={type}
                 className={`rounded-xl p-3 text-center transition-all ${
                   earned
-                    ? 'bg-yellow-500/10 border border-yellow-500/20'
+                    ? 'bg-[var(--yellow-soft)]/20 border border-[var(--yellow-soft)]/30'
                     : 'bg-[var(--bg-input)] border border-[var(--pink-pale)]/50 opacity-40'
                 }`}
               >
@@ -256,7 +256,7 @@ export default function SettingsPage() {
         disabled={saving}
         className={`w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-[var(--text-primary)] font-medium transition-all ${
           saved
-            ? 'bg-emerald-600'
+            ? 'bg-[var(--pink-primary)]'
             : 'bg-[var(--pink-primary)] hover:bg-[var(--pink-primary)] active:scale-[0.98]'
         }`}
       >

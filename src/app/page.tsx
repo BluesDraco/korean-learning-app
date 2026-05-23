@@ -26,6 +26,17 @@ export default function Home() {
   const [todayLog, setTodayLog] = useState<DailyLog | null>(null);
   const [weekStreak, setWeekStreak] = useState<ReturnType<typeof getWeekStreak> extends Promise<infer T> ? T : never>([]);
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [bunnyClicks, setBunnyClicks] = useState(0);
+  const [showEasterEgg, setShowEasterEgg] = useState(false);
+
+  const handleBunnyClick = () => {
+    const next = bunnyClicks + 1;
+    setBunnyClicks(next);
+    if (next >= 10 && !showEasterEgg) {
+      setShowEasterEgg(true);
+      setTimeout(() => setShowEasterEgg(false), 3000);
+    }
+  };
 
   const load = useCallback(async () => {
     const now = Date.now();
@@ -80,12 +91,24 @@ export default function Home() {
 
   return (
     <div className="py-4 space-y-4">
-      {/* Cute decoration bar */}
-      <div className="flex items-center gap-2 text-xs text-[var(--text-placeholder)] mb-1">
-        <span className="animate-float">🐰</span>
+      {/* Cute decoration bar with easter egg bunny */}
+      <div className="flex items-center gap-2 text-xs text-[var(--text-placeholder)] mb-1 relative">
+        <span
+          className="animate-float cursor-pointer select-none hover:scale-125 transition-transform"
+          onClick={handleBunnyClick}
+          title="点我!"
+        >🐰</span>
         <span className="animate-float">🎀</span>
         <span className="animate-float">🌸</span>
         <span className="text-[13px] ml-1">韩语学习手帐</span>
+        {/* Sparkle decorations */}
+        <span className="sparkle absolute -top-1 left-16" style={{ fontSize: '10px', animationDelay: '0s' }}>✨</span>
+        <span className="sparkle absolute top-3 right-4" style={{ fontSize: '8px', animationDelay: '0.7s' }}>✧</span>
+        {showEasterEgg && (
+          <div className="absolute top-10 left-1/2 -translate-x-1/2 bg-[var(--bg-card)] border-2 border-[var(--pink-primary)] rounded-2xl px-4 py-2 shadow-lg animate-bounce-achievement z-50 whitespace-nowrap">
+            <span className="text-sm font-bold text-[var(--pink-primary)]">🎉 토리가 나타났다! 你发现了隐藏彩蛋!</span>
+          </div>
+        )}
       </div>
       {/* Welcome Header */}
       <div className="flex items-start justify-between">
@@ -108,7 +131,7 @@ export default function Home() {
 
       {/* XP Progress Bar */}
       {profile && (
-        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4">
+        <div className="card-sticker p-4">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
               <Zap size={16} className="text-[var(--peach-soft)]" />
@@ -129,7 +152,7 @@ export default function Home() {
 
       {/* Streak Calendar */}
       {profile && (
-        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4">
+        <div className="card-washi p-4" style={{ '--washi-color': 'var(--peach-soft)' } as React.CSSProperties}>
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               <Flame size={18} className={profile.streak > 0 ? 'text-[var(--peach-soft)]' : 'text-[var(--text-muted)]'} />
@@ -164,7 +187,7 @@ export default function Home() {
       {/* Daily Target */}
       {profile && (
         <div className="grid grid-cols-2 gap-3">
-          <div className={`rounded-2xl p-4 border ${goalWordsMet ? 'bg-[var(--mint-soft)]/15 border-[var(--mint-soft)]/30' : 'bg-[var(--bg-card)] border-[var(--border-color)]'}`}>
+          <div className={`card-standard p-4 ${goalWordsMet ? 'bg-[var(--mint-soft)]/15 border-[var(--mint-soft)]/30' : ''}`} style={{ '--card-rotate': '-1deg' } as React.CSSProperties}>
             <div className="flex items-center gap-2 mb-2">
               <Target size={16} className={goalWordsMet ? 'text-[var(--mint-soft)]' : 'text-[var(--text-secondary)]'} />
               <span className="text-xs text-[var(--text-secondary)]">今日单词</span>
@@ -177,7 +200,7 @@ export default function Home() {
               <span className="text-sm text-[var(--text-muted)]">/ {profile.dailyGoalWords}</span>
             </div>
           </div>
-          <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4">
+          <div className="card-standard p-4" style={{ '--card-rotate': '1deg' } as React.CSSProperties}>
             <div className="flex items-center gap-2 mb-2">
               <TrendingUp size={16} className="text-[var(--text-secondary)]" />
               <span className="text-xs text-[var(--text-secondary)]">今日 XP</span>
@@ -192,7 +215,7 @@ export default function Home() {
 
       {/* Smart Study Plan Suggestion */}
       {profile && (
-        <div className="bg-gradient-to-r from-[var(--purple-soft)]/10 to-[var(--pink-primary)]/10 border border-[var(--purple-soft)]/20 rounded-2xl p-5">
+        <div className="card-dashed bg-gradient-to-r from-[var(--purple-soft)]/10 to-[var(--pink-primary)]/10 border-[var(--purple-soft)]/30 rounded-2xl p-5">
           <div className="flex items-center gap-2 mb-3">
             <Lightbulb size={18} className="text-[var(--peach-soft)]" />
             <span className="text-sm font-medium text-[var(--text-primary)]">今日学习建议</span>
@@ -263,7 +286,8 @@ export default function Home() {
           {/* Daily Learning - primary CTA */}
           <Link
             href="/learn"
-            className="col-span-2 flex items-center gap-4 bg-gradient-to-r from-[var(--purple-soft)]/10 to-[var(--pink-primary)]/10 border border-[var(--purple-soft)]/20 rounded-2xl p-5 hover:from-[var(--purple-soft)]/20 hover:to-[var(--pink-primary)]/20 transition-all group"
+            className="col-span-2 flex items-center gap-4 card-washi bg-gradient-to-r from-[var(--purple-soft)]/10 to-[var(--pink-primary)]/10 border-[var(--purple-soft)]/30 rounded-2xl p-5 hover:from-[var(--purple-soft)]/20 hover:to-[var(--pink-primary)]/20 transition-all group"
+            style={{ '--washi-color': 'var(--purple-soft)' } as React.CSSProperties}
           >
             <div className="w-12 h-12 rounded-xl bg-[var(--purple-soft)]/20 flex items-center justify-center">
               <GraduationCap size={24} className="text-[var(--purple-soft)]" />
@@ -347,7 +371,7 @@ export default function Home() {
           { label: '已掌握', value: stats.masteredCount, color: 'text-[var(--mint-soft)]' },
           { label: '今日新增', value: stats.todayNew, color: 'text-[var(--pink-primary)]' },
         ].map(({ label, value, color }) => (
-          <div key={label} className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-3 text-center">
+          <div key={label} className="card-standard rounded-xl p-3 text-center" style={{ '--card-rotate': `${(Math.random() * 2 - 1).toFixed(1)}deg` } as React.CSSProperties}>
             <div className={`text-xl font-bold ${color}`}>{value}</div>
             <div className="text-[13px] text-[var(--text-muted)] mt-0.5">{label}</div>
           </div>

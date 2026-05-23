@@ -293,13 +293,13 @@ export default function AIStudyPlanPage() {
               <div className="flex items-center gap-3 mt-2">
                 <Link
                   href="/dictation"
-                  className="inline-flex items-center gap-1 text-xs text-[var(--mint-soft)] hover:text-[#60B5AC] font-medium"
+                  className="inline-flex items-center gap-1 text-xs text-[var(--mint-soft)] hover:text-[var(--mint-soft)] font-medium"
                 >
                   听写练习 <ArrowRight size={12} />
                 </Link>
                 <Link
                   href="/writing"
-                  className="inline-flex items-center gap-1 text-xs text-[var(--mint-soft)] hover:text-[#60B5AC] font-medium"
+                  className="inline-flex items-center gap-1 text-xs text-[var(--mint-soft)] hover:text-[var(--mint-soft)] font-medium"
                 >
                   写作练习 <ArrowRight size={12} />
                 </Link>
@@ -322,7 +322,7 @@ export default function AIStudyPlanPage() {
               </p>
               <Link
                 href="/shadowing"
-                className="inline-flex items-center gap-1 mt-2 text-xs text-[var(--peach-soft)] hover:text-[#FFA040] font-medium"
+                className="inline-flex items-center gap-1 mt-2 text-xs text-[var(--peach-soft)] hover:text-[var(--peach-soft)] font-medium"
               >
                 开始跟读 <ArrowRight size={12} />
               </Link>
@@ -345,13 +345,13 @@ export default function AIStudyPlanPage() {
               <div className="flex items-center gap-3 mt-2">
                 <Link
                   href="/videos"
-                  className="inline-flex items-center gap-1 text-xs text-[var(--color-danger)] hover:text-[#EF5350] font-medium"
+                  className="inline-flex items-center gap-1 text-xs text-[var(--color-danger)] hover:text-[var(--color-danger)] font-medium"
                 >
                   视频 <ArrowRight size={12} />
                 </Link>
                 <Link
                   href="/vocabulary"
-                  className="inline-flex items-center gap-1 text-xs text-[var(--color-danger)] hover:text-[#EF5350] font-medium"
+                  className="inline-flex items-center gap-1 text-xs text-[var(--color-danger)] hover:text-[var(--color-danger)] font-medium"
                 >
                   词汇 <ArrowRight size={12} />
                 </Link>

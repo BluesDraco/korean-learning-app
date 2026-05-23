@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { Navbar } from '@/components/Navbar';
 import { ThemeProvider } from '@/components/ThemeProvider';
+import { VisitorCounter } from '@/components/VisitorCounter';
+import { FloatingDecorations } from '@/components/FloatingDecorations';
 
 export const metadata: Metadata = {
   title: '한국어 - 韩语学习',
@@ -35,10 +37,25 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="min-h-screen antialiased page-corner-bunny">
         <ThemeProvider>
+          {/* Floating decorative particles */}
+          <FloatingDecorations />
+          {/* Marquee banner */}
+          <div className="marquee-banner fixed top-0 left-0 right-0 z-[60] md:left-48">
+            <span>
+              🌸 한국어 공부하자! ✧ 韩语学习手帐 ✧ 안녕하세요 ✧ 今天也是努力学习的一天 ✧ 화이팅! ✧
+              🌸 한국어 공부하자! ✧ 韩语学习手帐 ✧ 안녕하세요 ✧ 今天也是努力学习的一天 ✧ 화이팅! ✧
+            </span>
+          </div>
+          {/* Offset for marquee banner */}
+          <div className="h-[44px]" />
           <Navbar />
-          <main className="pb-16 md:pb-6 pl-0 md:pl-48 px-3 md:px-5 lg:px-8 page-container">
+          <main className="pb-16 md:pb-6 pl-0 md:pl-48 px-3 md:px-5 lg:px-8 page-container pt-3">
             {children}
           </main>
+          {/* Visitor counter — indie web classic */}
+          <div className="hidden md:block fixed bottom-4 left-[196px] z-40">
+            <VisitorCounter />
+          </div>
         </ThemeProvider>
         <script
           dangerouslySetInnerHTML={{

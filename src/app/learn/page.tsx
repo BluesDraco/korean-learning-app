@@ -530,9 +530,9 @@ export default function LearnPage() {
               let btnStyle = 'bg-[var(--bg-input)] border border-[var(--border-color)] hover:border-[var(--border-hover)]';
               if (quizAnswer !== null) {
                 if (i === currentQ.correct) {
-                  btnStyle = 'bg-[var(--mint-soft)]/15 border-[var(--mint-soft)]/50 text-[#60B5AC]';
+                  btnStyle = 'bg-[var(--mint-soft)]/15 border-[var(--mint-soft)]/50 text-[var(--mint-soft)]';
                 } else if (i === quizAnswer && i !== currentQ.correct) {
-                  btnStyle = 'bg-[var(--color-danger)]/10 border-[var(--color-danger)]/50 text-[#EF5350]';
+                  btnStyle = 'bg-[var(--color-danger)]/10 border-[var(--color-danger)]/50 text-[var(--color-danger)]';
                 } else {
                   btnStyle = 'bg-[var(--bg-input)] border-[var(--border-color)] opacity-50';
                 }

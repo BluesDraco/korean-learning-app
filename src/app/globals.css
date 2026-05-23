@@ -2,6 +2,7 @@
 
 /* ═══════════════════════════════════════════════════════════════
    「奶油手账 × 首尔女生日记」 配色系统
+   indie web × Neocities kawaii aesthetic
    ═══════════════════════════════════════════════════════════════ */
 
 :root {
@@ -24,9 +25,9 @@
   --peach-soft:     #FFBEA8;
 
   /* ── 文字色 ── */
-  --text-primary:   #3D2B1F;
-  --text-secondary: #7A6058;
-  --text-muted:     #B09A90;
+  --text-primary:   #2D1B10;
+  --text-secondary: #4E342E;
+  --text-muted:     #6D4C41;
   --text-on-pink:   #FFFFFF;
 
   /* ── 描边色 ── */
@@ -37,6 +38,7 @@
   --shadow-card:    0 2px 12px rgba(255,143,171,0.08);
   --shadow-card-hover: 0 4px 20px rgba(255,143,171,0.15);
   --shadow-button:  0 4px 15px rgba(255,143,171,0.35);
+  --shadow-sticker: 2px 3px 6px rgba(0,0,0,0.06);
 
   /* ── 圆角规范 ── */
   --radius-card: 16px;
@@ -53,7 +55,7 @@
   --color-ai:       #C9B8E8;
   --color-stats:    #FFE4A0;
 
-  /* ── 语义别名（兼容旧变量名）── */
+  /* ── 语义别名 ── */
   --bg-input:       var(--bg-soft);
   --bg-accent:      var(--bg-muted);
   --bg-card-hover:  var(--bg-soft);
@@ -74,14 +76,15 @@
   --bg-card:        #282440;
   --bg-soft:        #2D2848;
   --bg-muted:       #252040;
-  --text-primary:   #E8E0F0;
-  --text-secondary: #B0A0C0;
-  --text-muted:     #807090;
+  --text-primary:   #F0E8FF;
+  --text-secondary: #D8CCE8;
+  --text-muted:     #B8A8C8;
   --border-default: #3A3060;
   --border-focus:   #FF8FAB;
   --shadow-card:    0 2px 12px rgba(0,0,0,0.25);
   --shadow-card-hover: 0 4px 20px rgba(0,0,0,0.35);
   --shadow-button:  0 4px 15px rgba(255,143,171,0.25);
+  --shadow-sticker: 2px 3px 6px rgba(0,0,0,0.3);
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -108,37 +111,152 @@
   }
 }
 
+/* ── Paper line background ── */
+.bg-paper {
+  position: relative;
+}
+.bg-paper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(var(--border-default) 1px, transparent 1px);
+  background-size: 100% 28px;
+  opacity: 0.4;
+}
+
 /* ═══════════════════════════════════════════════════════════════
-   Scrollbar
+   Scrollbar — thicker, cuter
    ═══════════════════════════════════════════════════════════════ */
 
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--bg-muted); }
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track {
+  background: var(--bg-muted);
+  border-radius: 4px;
+}
 ::-webkit-scrollbar-thumb {
-  background: var(--pink-light);
-  border-radius: 3px;
+  background: linear-gradient(180deg, var(--pink-light), var(--purple-soft));
+  border-radius: 4px;
+  border: 2px solid var(--bg-muted);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--pink-primary), var(--purple-soft));
 }
 [data-theme="dark"] ::-webkit-scrollbar-thumb {
-  background: #5a5a8a;
+  background: linear-gradient(180deg, #5a5a8a, #7a6aaa);
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   Card Design System
+   Click Ripple Effect
    ═══════════════════════════════════════════════════════════════ */
 
+.ripple-container {
+  position: relative;
+  overflow: hidden;
+}
+.ripple-effect {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,143,171,0.3);
+  transform: scale(0);
+  animation: ripple 0.6s ease-out forwards;
+  pointer-events: none;
+}
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Floating Decoration Particles
+   ═══════════════════════════════════════════════════════════════ */
+
+.floating-particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.float-particle {
+  position: absolute;
+  animation: float-particle var(--dur) ease-in-out infinite;
+  animation-delay: var(--delay);
+  opacity: 0.35;
+  font-size: var(--size);
+  filter: blur(0.5px);
+}
+@keyframes float-particle {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.25; }
+  25% { transform: translate(15px, -30px) rotate(90deg); opacity: 0.45; }
+  50% { transform: translate(-10px, -60px) rotate(180deg); opacity: 0.3; }
+  75% { transform: translate(-20px, -30px) rotate(270deg); opacity: 0.4; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Card Design System — journal / scrapbook edition
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Standard card with subtle rotation ("taped in a journal") */
 .card-standard {
   background: var(--bg-card);
   border-radius: var(--radius-card);
-  border: 1.5px solid var(--border-default);
+  border: 1.5px dashed var(--border-default);
   box-shadow: var(--shadow-card);
   transition: all 0.2s ease;
+  transform: rotate(var(--card-rotate, 0deg));
 }
 .card-standard:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: rotate(0deg) translateY(-2px);
+}
+
+/* Card with washi tape strip across top */
+.card-washi {
+  position: relative;
+  background: var(--bg-card);
+  border-radius: var(--radius-card);
+  border: 1.5px solid var(--border-default);
+  box-shadow: var(--shadow-sticker);
+  transition: all 0.2s ease;
+}
+.card-washi::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(var(--tape-rotate, -2deg));
+  width: 70px;
+  height: 22px;
+  background: var(--washi-color, var(--pink-light));
+  opacity: 0.7;
+  border-radius: 2px;
+  z-index: 2;
+}
+.card-washi:hover {
   box-shadow: var(--shadow-card-hover);
   transform: translateY(-2px);
 }
 
-/* Card with left color bar */
+/* Dashed border card (like torn notebook paper) */
+.card-dashed {
+  background: var(--bg-card);
+  border-radius: 2px 16px 16px 2px;
+  border: 2px dashed var(--pink-pale);
+  box-shadow: var(--shadow-sticker);
+  transition: all 0.2s ease;
+}
+.card-dashed:hover {
+  border-color: var(--pink-light);
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-1px);
+}
+
+/* Card with left color bar + stitched line */
 .card-accent-left {
   border-left: 4px solid var(--color-learn);
 }
@@ -146,8 +264,10 @@
 /* Sticky note / washi tape card */
 .card-sticker {
   position: relative;
+  background: var(--bg-card);
   border: 1.5px solid var(--border-default);
-  box-shadow: var(--shadow-card), 0 0 0 4px rgba(255,143,171,0.04);
+  box-shadow: var(--shadow-sticker), 0 0 0 4px rgba(255,143,171,0.04);
+  border-radius: var(--radius-card);
   transition: all 0.2s ease;
 }
 .card-sticker:hover {
@@ -167,8 +287,25 @@
   transform: rotate(-3deg);
 }
 
+/* Journal polaroid card */
+.card-polaroid {
+  background: white;
+  padding: 12px 12px 36px 12px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+  border-radius: 2px;
+  transform: rotate(var(--polaroid-rotate, -0.5deg));
+  transition: all 0.2s ease;
+}
+.card-polaroid:hover {
+  transform: rotate(0deg) scale(1.02);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+[data-theme="dark"] .card-polaroid {
+  background: #2a2a3e;
+}
+
 /* ═══════════════════════════════════════════════════════════════
-   Button Design System
+   Button Design System — pill + retro
    ═══════════════════════════════════════════════════════════════ */
 
 .btn-primary {
@@ -204,14 +341,41 @@
 }
 
 .btn-danger {
-  background: #FFF5F5;
-  border: 1.5px solid #FFB3B3;
-  color: #E57373;
+  background: var(--color-danger-bg);
+  border: 1.5px solid var(--color-danger-light);
+  color: var(--color-danger);
   border-radius: var(--radius-button);
   padding: 10px 24px;
   font-weight: 600;
   transition: all 0.15s ease;
   cursor: pointer;
+}
+
+/* Retro pixel-style button (Neocities inspired) */
+.btn-pixel {
+  background: var(--purple-soft);
+  color: white;
+  font-family: 'Nunito', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 20px;
+  border: none;
+  box-shadow:
+    3px 0 0 0 rgba(0,0,0,0.1),
+    0 3px 0 0 rgba(0,0,0,0.1),
+    2px 2px 0 0 rgba(0,0,0,0.1),
+    2px 0 0 0 rgba(0,0,0,0.1) inset,
+    0 2px 0 0 rgba(255,255,255,0.3) inset;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  image-rendering: pixelated;
+}
+.btn-pixel:active {
+  box-shadow:
+    1px 0 0 0 rgba(0,0,0,0.1),
+    0 1px 0 0 rgba(0,0,0,0.1),
+    1px 1px 0 0 rgba(0,0,0,0.1);
+  transform: translate(2px, 2px);
 }
 
 /* SRS review rating buttons */
@@ -222,7 +386,7 @@
   gap: 4px;
   padding: 12px 8px;
   border-radius: var(--radius-card);
-  border: 1.5px solid var(--border-default);
+  border: 1.5px dashed var(--border-default);
   background: var(--bg-card);
   font-size: 12px;
   color: var(--text-secondary);
@@ -230,16 +394,16 @@
   cursor: pointer;
 }
 .srs-btn .emoji { font-size: 24px; }
-.srs-btn:hover { border-color: var(--pink-light); transform: translateY(-1px); }
-.srs-btn.srs-0:hover { border-color: #E57373; background: #FFF5F5; }
-.srs-btn.srs-1:hover { border-color: #FFBEA8; background: #FFF8F5; }
-.srs-btn.srs-2:hover { border-color: #FFE4A0; background: #FFFEF5; }
-.srs-btn.srs-3:hover { border-color: #A8D8D0; background: #F5FFFD; }
-.srs-btn.srs-4:hover { border-color: #80CBC4; background: #E8F8F5; }
-.srs-btn.srs-5:hover { border-color: #4DB6AC; background: #E0F2F1; }
+.srs-btn:hover { border-style: solid; border-color: var(--pink-light); transform: translateY(-1px); }
+.srs-btn.srs-0:hover { border-color: var(--color-danger); background: var(--color-danger-bg); }
+.srs-btn.srs-1:hover { border-color: var(--peach-soft); background: #FFF8F5; }
+.srs-btn.srs-2:hover { border-color: var(--yellow-soft); background: #FFFEF5; }
+.srs-btn.srs-3:hover { border-color: var(--mint-soft); background: #F5FFFD; }
+.srs-btn.srs-4:hover { border-color: var(--mint-soft); background: #E8F8F5; }
+.srs-btn.srs-5:hover { border-color: var(--mint-soft); background: #E0F2F1; }
 
 /* ═══════════════════════════════════════════════════════════════
-   Progress Bar
+   Progress Bar — heart indicator
    ═══════════════════════════════════════════════════════════════ */
 
 .progress-bar {
@@ -256,7 +420,6 @@
   transition: width 0.5s ease;
   position: relative;
 }
-/* Heart indicator at end of progress */
 .progress-bar-fill::after {
   content: '❤️';
   position: absolute;
@@ -273,7 +436,7 @@
 
 .input-standard {
   background: var(--bg-card);
-  border: 1.5px solid var(--border-default);
+  border: 1.5px dashed var(--border-default);
   border-radius: var(--radius-input);
   padding: 12px 16px;
   color: var(--text-primary);
@@ -282,6 +445,7 @@
 }
 .input-standard:focus {
   outline: none;
+  border-style: solid;
   border-color: var(--border-focus);
   box-shadow: 0 0 0 3px rgba(255,143,171,0.25);
 }
@@ -290,10 +454,10 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   Page Decorations
+   Page Decorations — Neocities style
    ═══════════════════════════════════════════════════════════════ */
 
-/* Corner bunny */
+/* Corner bunny + sparkles */
 .page-corner-bunny::after {
   content: '🐰';
   position: fixed;
@@ -355,6 +519,136 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   Marquee / Scrolling Banner (indie web classic)
+   ═══════════════════════════════════════════════════════════════ */
+
+.marquee-banner {
+  overflow: hidden;
+  white-space: nowrap;
+  background: linear-gradient(90deg, var(--pink-pale), var(--purple-soft), var(--pink-pale));
+  padding: 6px 0;
+  border-top: 2px dashed var(--pink-light);
+  border-bottom: 2px dashed var(--pink-light);
+}
+.marquee-banner span {
+  display: inline-block;
+  animation: marquee 20s linear infinite;
+  font-family: 'ZCOOL KuaiLe', cursive;
+  font-size: 14px;
+  color: var(--text-primary);
+  letter-spacing: 2px;
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Status Indicator (blinking dot)
+   ═══════════════════════════════════════════════════════════════ */
+
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--mint-soft);
+  box-shadow: 0 0 6px rgba(168,216,208,0.6);
+  animation: status-blink 2s ease-in-out infinite;
+}
+.status-dot.learning { background: var(--pink-primary); box-shadow: 0 0 6px rgba(255,143,171,0.6); }
+.status-dot.idle { background: var(--text-muted); box-shadow: none; animation: none; }
+@keyframes status-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   88×31 Pixel Badge (Neocities button style)
+   ═══════════════════════════════════════════════════════════════ */
+
+.pixel-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 88px;
+  height: 31px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: white;
+  text-align: center;
+  border: 1px solid rgba(0,0,0,0.2);
+  box-shadow: 1px 1px 0 rgba(0,0,0,0.15);
+  image-rendering: pixelated;
+  letter-spacing: 0.5px;
+  line-height: 1.1;
+}
+.pixel-badge-pink { background: linear-gradient(180deg, #FFB3C6, #FF8FAB); }
+.pixel-badge-purple { background: linear-gradient(180deg, #D9C8F0, #C9B8E8); }
+.pixel-badge-mint { background: linear-gradient(180deg, #B8E0D8, #A8D8D0); }
+.pixel-badge-gold { background: linear-gradient(180deg, #FFECB0, #FFD180); }
+
+/* ═══════════════════════════════════════════════════════════════
+   Retro Window Frame (Windows 98 style modal)
+   ═══════════════════════════════════════════════════════════════ */
+
+.retro-window {
+  background: var(--bg-card);
+  border: 2px solid var(--border-default);
+  box-shadow:
+    inset 1px 1px 0 rgba(255,255,255,0.8),
+    inset -1px -1px 0 rgba(0,0,0,0.08),
+    2px 2px 0 rgba(0,0,0,0.1);
+  border-radius: 0;
+}
+.retro-window .retro-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 8px;
+  background: linear-gradient(90deg, var(--purple-soft), var(--pink-light));
+  color: white;
+  font-family: 'Nunito', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  user-select: none;
+}
+.retro-window .retro-titlebar button {
+  width: 18px;
+  height: 18px;
+  background: var(--color-danger);
+  color: white;
+  border: 1px solid rgba(0,0,0,0.2);
+  font-size: 10px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: inset 1px 1px 0 rgba(255,255,255,0.3);
+}
+.retro-window .retro-body {
+  padding: 16px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Typewriter Text Effect
+   ═══════════════════════════════════════════════════════════════ */
+
+.typewriter {
+  display: inline-block;
+  border-right: 2px solid var(--pink-primary);
+  animation: blink-caret 0.75s step-end infinite;
+  white-space: nowrap;
+  overflow: hidden;
+}
+@keyframes blink-caret {
+  0%, 100% { border-color: var(--pink-primary); }
+  50% { border-color: transparent; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
    Empty State
    ═══════════════════════════════════════════════════════════════ */
 
@@ -370,6 +664,11 @@
   font-size: 64px;
   margin-bottom: 16px;
   animation: float 3s ease-in-out infinite;
+  cursor: pointer;
+  user-select: none;
+}
+.empty-state .bunny:active {
+  animation: wiggle 0.3s ease-in-out;
 }
 .empty-state .message {
   color: var(--text-muted);
@@ -378,7 +677,7 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   Animations
+   Animations — expanded indie web library
    ═══════════════════════════════════════════════════════════════ */
 
 @keyframes fade-in {
@@ -441,6 +740,23 @@
   0% { transform: translateY(-100%) rotate(0deg); opacity: 1; }
   100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
 }
+@keyframes sticker-peel {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(var(--peel-rotate, 15deg)) scale(1.05); }
+  100% { transform: rotate(0deg) scale(1); }
+}
+
+/* ── Typewriter reveal ── */
+@keyframes typewriter-reveal {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+/* ── Sparkle burst ── */
+@keyframes sparkle-burst {
+  0% { transform: scale(0) rotate(0deg); opacity: 1; }
+  100% { transform: scale(2) rotate(180deg); opacity: 0; }
+}
 
 .animate-fade-in     { animation: fade-in 0.2s ease-out; }
 .animate-slide-up    { animation: slide-up 0.3s ease-out; }
@@ -455,6 +771,7 @@
 }
 .animate-float { animation: float 3s ease-in-out infinite; }
 .animate-wiggle { animation: wiggle 0.5s ease-in-out; }
+.animate-sticker-peel { animation: sticker-peel 2s ease-in-out infinite; }
 
 /* XP float animation */
 .xp-float {
@@ -479,6 +796,18 @@
   animation: confetti-fall 2s ease-out forwards;
   pointer-events: none;
   z-index: 100;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Sparkle/sticker scatter (randomized decorative elements)
+   ═══════════════════════════════════════════════════════════════ */
+
+.sparkle {
+  position: absolute;
+  pointer-events: none;
+  animation: sparkle 1.5s ease-in-out infinite;
+  font-size: 12px;
+  z-index: 0;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -512,7 +841,7 @@
   content: '';
   flex: 1;
   height: 1px;
-  background: var(--border-default);
+  background: repeating-linear-gradient(90deg, var(--border-default), var(--border-default) 4px, transparent 4px, transparent 8px);
 }
 
 /* ── Notebook paper lines ── */
@@ -527,7 +856,7 @@
 .sticky-note {
   background: #FFFDE7;
   border: 1px solid #F0E68C;
-  box-shadow: 2px 3px 6px rgba(0,0,0,0.05);
+  box-shadow: var(--shadow-sticker);
   transform: rotate(1deg);
   padding: 12px 16px;
   border-radius: 2px 12px 12px 2px;
@@ -537,7 +866,7 @@
   border-color: #5a5a3e;
 }
 
-/* ── Polaroid-style card ── */
+/* ── Polaroid effect ── */
 .polaroid {
   background: white;
   padding: 12px 12px 32px 12px;
@@ -655,15 +984,20 @@
   background: var(--bg-soft);
   border: 2px solid var(--pink-light);
   animation: float 3s ease-in-out infinite;
-  cursor: default;
+  cursor: pointer;
   user-select: none;
+  transition: transform 0.1s ease;
+}
+.mascot-tori:active {
+  animation: wiggle 0.3s ease-in-out;
+  transform: scale(1.1);
 }
 
 /* Speech bubble from Tori */
 .tori-speech {
   position: relative;
   background: var(--bg-card);
-  border: 1.5px solid var(--pink-light);
+  border: 1.5px dashed var(--pink-light);
   border-radius: var(--radius-card);
   padding: 10px 16px;
   font-size: 13px;
@@ -678,13 +1012,13 @@
   width: 14px;
   height: 14px;
   background: var(--bg-card);
-  border-right: 1.5px solid var(--pink-light);
-  border-bottom: 1.5px solid var(--pink-light);
+  border-right: 1.5px dashed var(--pink-light);
+  border-bottom: 1.5px dashed var(--pink-light);
   transform: rotate(45deg);
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   Module-specific accent borders
+   Module-specific accent borders & backgrounds
    ═══════════════════════════════════════════════════════════════ */
 
 .border-accent-learn     { border-color: var(--color-learn); }
