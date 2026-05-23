@@ -222,7 +222,7 @@ export function Navbar() {
                 }
                 setMobileDrawer(i);
               }}
-              className={`flex flex-col items-center gap-0.5 py-2 px-3 text-[13px] transition-colors ${
+              className={`flex flex-col items-center gap-0.5 py-2 px-1.5 text-[13px] transition-colors ${
                 isActive ? 'text-[var(--pink-primary)]' : 'text-[var(--text-muted)]'
               }`}
             >

@@ -857,7 +857,7 @@ export default function AIChatPage() {
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-6rem)] md:h-[calc(100vh-4rem)] -mx-4 md:-mx-8 lg:-mx-10">
+    <div className="flex flex-col h-[calc(100vh-7rem)] md:h-[calc(100vh-5rem)] -mx-3 md:-mx-5 lg:-mx-8">
       {/* ── Chat Header ──────────────────────────────────────── */}
       <div className="shrink-0 flex items-center justify-between px-4 py-3 bg-[var(--bg-card)] border-b border-[var(--border-color)] shadow-sm">
         <div className="flex items-center gap-3 min-w-0">

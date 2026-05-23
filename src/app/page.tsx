@@ -364,7 +364,7 @@ export default function Home() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         {[
           { label: '待复习', value: stats.dueCount, color: 'text-[var(--peach-soft)]' },
           { label: '学习中', value: stats.learningCount, color: 'text-[var(--peach-soft)]' },

@@ -77,7 +77,7 @@ export default function GrammarPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] py-4 space-y-3 px-4 sm:px-6">
+    <div className="min-h-screen py-4 space-y-3">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-[var(--text-primary)] section-header">语法库</h1>

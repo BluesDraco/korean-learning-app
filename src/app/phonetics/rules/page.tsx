@@ -269,17 +269,17 @@ export default function PhoneticsRulesPage() {
                     </p>
                     <div className="bg-[var(--bg-primary)] rounded-xl overflow-hidden border border-[var(--border-color)]">
                       {/* Table header */}
-                      <div className="grid grid-cols-[1fr_auto_1fr_1fr] gap-2 px-4 py-2.5 bg-[var(--bg-input)] text-xs font-medium text-[var(--text-secondary)]">
+                      <div className="hidden sm:grid grid-cols-[1fr_auto_1fr_1fr] gap-2 px-4 py-2.5 bg-[var(--bg-input)] text-xs font-medium text-[var(--text-secondary)]">
                         <span>원형 (原形)</span>
                         <span className="text-center px-2">→</span>
                         <span>실제 발음 (实际发音)</span>
                         <span className="text-right">뜻 (含义)</span>
                       </div>
-                      {/* Table rows */}
+                      {/* Table rows — desktop */}
                       {rule.examples.map((ex, idx) => (
                         <div
                           key={idx}
-                          className="grid grid-cols-[1fr_auto_1fr_1fr] gap-2 px-4 py-3 border-t border-[var(--pink-pale)] items-center hover:bg-[var(--bg-input)]/50 transition-colors"
+                          className="hidden sm:grid grid-cols-[1fr_auto_1fr_1fr] gap-2 px-4 py-3 border-t border-[var(--pink-pale)] items-center hover:bg-[var(--bg-input)]/50 transition-colors"
                         >
                           <span className="text-sm font-medium text-[var(--text-primary)]">{ex.original}</span>
                           <span className="text-[var(--text-muted)] text-xs">→</span>
@@ -297,6 +297,32 @@ export default function PhoneticsRulesPage() {
                             </button>
                           </div>
                           <span className="text-sm text-[var(--text-secondary)] text-right">{ex.meaning}</span>
+                        </div>
+                      ))}
+                      {/* Table rows — mobile stacked cards */}
+                      {rule.examples.map((ex, idx) => (
+                        <div
+                          key={`m-${idx}`}
+                          className="sm:hidden flex flex-col gap-1.5 px-4 py-3 border-t border-[var(--pink-pale)]"
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm font-medium text-[var(--text-primary)]">{ex.original}</span>
+                            <span className="text-xs text-[var(--text-muted)]">→</span>
+                            <div className="flex items-center gap-1.5">
+                              <span className="text-sm font-medium text-[var(--pink-primary)]">{ex.originalRead}</span>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  speakKorean(ex.originalRead);
+                                }}
+                                className="p-1 rounded-lg bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] text-[var(--text-secondary)] hover:text-[var(--pink-primary)] transition-colors shrink-0"
+                                title="听发音"
+                              >
+                                <Volume2 size={14} />
+                              </button>
+                            </div>
+                          </div>
+                          <span className="text-xs text-[var(--text-secondary)]">含义: {ex.meaning}</span>
                         </div>
                       ))}
                     </div>

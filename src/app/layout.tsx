@@ -39,12 +39,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProvider>
           {/* Floating decorative particles */}
           <FloatingDecorations />
-          {/* Marquee banner */}
+          {/* Decorative top bar */}
           <div className="marquee-banner fixed top-0 left-0 right-0 z-[60] md:left-48">
-            <span>
-              🌸 한국어 공부하자! ✧ 韩语学习手帐 ✧ 안녕하세요 ✧ 今天也是努力学习的一天 ✧ 화이팅! ✧
-              🌸 한국어 공부하자! ✧ 韩语学习手帐 ✧ 안녕하세요 ✧ 今天也是努力学习的一天 ✧ 화이팅! ✧
-            </span>
+            <span>🌸 한국어 공부하자 ✧ 화이팅!</span>
           </div>
           {/* Offset for marquee banner */}
           <div className="h-[44px]" />

@@ -27,11 +27,11 @@
   /* ── 文字色 ── */
   --text-primary:   #2D1B10;
   --text-secondary: #4E342E;
-  --text-muted:     #6D4C41;
+  --text-muted:     #5D4037;
   --text-on-pink:   #FFFFFF;
 
   /* ── 描边色 ── */
-  --border-default: #F0E6E0;
+  --border-default: #E8D5C8;
   --border-focus:   #FF8FAB;
 
   /* ── 阴影 ── */
@@ -93,13 +93,14 @@
 
 @layer base {
   html {
-    font-size: 18px;
+    font-size: 17px;
   }
   body {
     font-family: 'Nunito', 'LXGW WenKai', 'ZCOOL KuaiLe', system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
     background-color: var(--bg-base);
     color: var(--text-primary);
+    line-height: 1.7;
   }
 
   /* Korean text */
@@ -186,15 +187,15 @@
   position: absolute;
   animation: float-particle var(--dur) ease-in-out infinite;
   animation-delay: var(--delay);
-  opacity: 0.35;
+  opacity: 0.18;
   font-size: var(--size);
   filter: blur(0.5px);
 }
 @keyframes float-particle {
-  0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.25; }
-  25% { transform: translate(15px, -30px) rotate(90deg); opacity: 0.45; }
-  50% { transform: translate(-10px, -60px) rotate(180deg); opacity: 0.3; }
-  75% { transform: translate(-20px, -30px) rotate(270deg); opacity: 0.4; }
+  0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.12; }
+  25% { transform: translate(15px, -30px) rotate(90deg); opacity: 0.22; }
+  50% { transform: translate(-10px, -60px) rotate(180deg); opacity: 0.15; }
+  75% { transform: translate(-20px, -30px) rotate(270deg); opacity: 0.2; }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -532,10 +533,9 @@
 }
 .marquee-banner span {
   display: inline-block;
-  animation: marquee 20s linear infinite;
   font-family: 'ZCOOL KuaiLe', cursive;
-  font-size: 14px;
-  color: var(--text-primary);
+  font-size: 13px;
+  color: var(--text-secondary);
   letter-spacing: 2px;
 }
 @keyframes marquee {
