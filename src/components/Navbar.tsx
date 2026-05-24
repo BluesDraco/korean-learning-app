@@ -3,17 +3,17 @@
 import { useState, useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { useAuth } from '@/components/AuthProvider';
 import {
   Home, BookOpen, Gamepad2, LayoutGrid, Flower2, Bot,
   GraduationCap, Grid3X3, Waves, FileText, BookImage,
   RefreshCw, Pencil, Mic, PenLine,
   Library, Video, Bookmark,
   Palette, Landmark, MapPin, UtensilsCrossed,
-  MessageSquare, Lightbulb,
+  MessageSquare, Lightbulb, MessageCircle, Sparkles,
   ChevronRight, X, Sun, Moon,
 } from 'lucide-react';
 import { useTheme } from '@/components/ThemeProvider';
-import { getProfile } from '@/lib/gamification';
 
 interface NavChild {
   label: string;
@@ -45,12 +45,14 @@ const navGroups: NavGroup[] = [
       { label: '听写', href: '/dictation', icon: Pencil },
       { label: '跟读', href: '/shadowing', icon: Mic },
       { label: '写作', href: '/writing', icon: PenLine },
+      { label: 'TOPIK模拟', href: '/topik', icon: FileText },
     ],
   },
   {
     icon: LayoutGrid, label: '词汇', href: '/vocabulary', children: [
       { label: '单词库', href: '/vocabulary', icon: BookOpen },
       { label: '自定义单词本', href: '/vocabulary/books', icon: Bookmark },
+      { label: '延世教材词书', href: '/vocabulary/yonsei', icon: GraduationCap },
       { label: '知识库', href: '/knowledge', icon: Library },
       { label: '视频库', href: '/videos', icon: Video },
     ],
@@ -61,10 +63,12 @@ const navGroups: NavGroup[] = [
       { label: '历史', href: '/korea/history', icon: Landmark },
       { label: '旅行', href: '/korea/travel', icon: MapPin },
       { label: '美食', href: '/korea/food', icon: UtensilsCrossed },
+      { label: '常用表达', href: '/expressions', icon: MessageCircle },
     ],
   },
   {
-    icon: Bot, label: 'AI助手', href: '/ai/analyze', children: [
+    icon: Bot, label: 'AI助手', href: '/ai', children: [
+      { label: 'AI 总览', href: '/ai', icon: Sparkles },
       { label: '对话拆解', href: '/ai/analyze', icon: MessageSquare },
       { label: '情景对话', href: '/ai/chat', icon: MessageSquare },
       { label: '学习方案', href: '/ai/plan', icon: Lightbulb },
@@ -76,13 +80,9 @@ export function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const { theme, toggle } = useTheme();
+  const { user, logout } = useAuth();
   const [expandedGroup, setExpandedGroup] = useState<number | null>(null);
   const [mobileDrawer, setMobileDrawer] = useState<number | null>(null);
-  const [nickname, setNickname] = useState('');
-
-  useEffect(() => {
-    getProfile().then((p) => setNickname(p.nickname || ''));
-  }, []);
 
   // Auto-expand the group containing current path
   useEffect(() => {
@@ -199,19 +199,44 @@ export function Navbar() {
             {theme === 'light' ? <Moon size={14} /> : <Sun size={14} />}
             <span>{theme === 'light' ? '深色模式' : '亮色模式'}</span>
           </button>
-          <Link
-            href="/settings"
-            className="flex items-center gap-2 bg-[var(--bg-soft)] rounded-xl px-3 py-2.5 hover:bg-[var(--bg-accent)] transition-colors cursor-pointer"
-          >
-            <div className="relative">
-              <span className="text-lg animate-float">🐰</span>
-              <span className="status-dot learning absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5" />
+          {user ? (
+            <div className="space-y-1.5">
+              <Link
+                href="/settings"
+                className="flex items-center gap-2 bg-[var(--bg-soft)] rounded-xl px-3 py-2.5 hover:bg-[var(--bg-accent)] transition-colors cursor-pointer"
+              >
+                <div className="relative">
+                  <span className="text-lg animate-float">🐰</span>
+                  <span className="status-dot learning absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5" />
+                </div>
+                <div className="flex flex-col flex-1 min-w-0">
+                  <span className="text-xs font-medium text-[var(--text-primary)] truncate">{user.nickname || user.username}</span>
+                  <span className="text-[13px] text-[var(--text-muted)]">设置</span>
+                </div>
+              </Link>
+              <button
+                onClick={() => logout()}
+                className="w-full text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors px-2 py-1"
+              >
+                退出登录
+              </button>
             </div>
-            <div className="flex flex-col">
-              <span className="text-xs font-medium text-[var(--text-primary)]">设置</span>
-              <span className="text-[13px] text-[var(--text-muted)]">{nickname || '未设置'}</span>
+          ) : (
+            <div className="space-y-1">
+              <Link
+                href="/auth/login"
+                className="flex items-center gap-2 text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors px-2 py-1.5"
+              >
+                登录
+              </Link>
+              <Link
+                href="/auth/register"
+                className="flex items-center gap-2 text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors px-2 py-1.5"
+              >
+                注册
+              </Link>
             </div>
-          </Link>
+          )}
         </div>
       </nav>
 

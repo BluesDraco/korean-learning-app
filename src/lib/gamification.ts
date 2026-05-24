@@ -123,21 +123,29 @@ export async function awardXp(amount: number): Promise<{ leveledUp: boolean; new
   return { leveledUp, newLevel: lvl };
 }
 
-// Update streak
-export async function updateStreak(): Promise<void> {
+// Update streak — returns info for UI feedback
+export async function updateStreak(): Promise<{
+  streak: number;
+  wasReset: boolean;
+  prevStreak: number;
+  isMilestone: boolean;
+  milestone: number;
+}> {
   const profile = await getProfile();
   const todayStart = new Date().setHours(0, 0, 0, 0);
   const yesterdayStart = todayStart - 86400000;
 
   if (profile.lastStudyDate >= todayStart) {
-    // Already studied today
-    return;
+    return { streak: profile.streak, wasReset: false, prevStreak: 0, isMilestone: false, milestone: 0 };
   }
 
+  const prevStreak = profile.streak;
   let newStreak = profile.streak;
+  let wasReset = false;
   if (profile.lastStudyDate >= yesterdayStart) {
     newStreak = profile.streak + 1;
   } else {
+    wasReset = prevStreak > 1;
     newStreak = 1;
   }
 
@@ -148,17 +156,34 @@ export async function updateStreak(): Promise<void> {
     lastStudyDate: todayStart,
   });
 
+  // Milestones
+  const milestones = [3, 7, 30, 100];
+  const isMilestone = milestones.includes(newStreak);
+
   // Streak-based bonus XP
+  let bonusXp = 0;
   if (newStreak >= 3 && newStreak < 7) {
-    await awardXp(5);
+    bonusXp = 5;
   } else if (newStreak >= 7 && newStreak < 30) {
-    await awardXp(10);
+    bonusXp = 10;
   } else if (newStreak >= 30) {
-    await awardXp(25);
+    bonusXp = 25;
+  }
+
+  if (bonusXp > 0) {
+    await awardXp(bonusXp);
   }
 
   // Check streak achievements
   await checkStreakAchievements(newStreak);
+
+  return {
+    streak: newStreak,
+    wasReset,
+    prevStreak,
+    isMilestone,
+    milestone: newStreak,
+  };
 }
 
 // Update study minutes

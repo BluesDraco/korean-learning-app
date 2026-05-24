@@ -3,13 +3,13 @@
 import { useState, useMemo, useCallback } from 'react';
 import { Volume2, Play, Check, X, ArrowRight, RotateCcw, Trophy, ChevronDown, ChevronUp, Sparkles, BookOpen, Lightbulb } from 'lucide-react';
 import { vowels, consonants, batchimSounds, type PhoneticLetter } from '@/data/phonetics';
+import ProgressivePhonetics from '@/components/ProgressivePhonetics';
 
 type Tab = 'vowel' | 'consonant' | 'batchim';
 type Mode = 'browse' | 'quiz';
-type MainTab = 'alphabet' | 'rules';
+type MainTab = 'progressive' | 'alphabet' | 'rules';
 
 function speakKorean(text: string) {
-  window.speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = 'ko-KR';
   utterance.rate = 0.7;
@@ -185,7 +185,7 @@ function generateRulesQuiz() {
 }
 
 export default function PhoneticsPage() {
-  const [mainTab, setMainTab] = useState<MainTab>('alphabet');
+  const [mainTab, setMainTab] = useState<MainTab>('progressive');
   const [tab, setTab] = useState<Tab>('vowel');
   const [mode, setMode] = useState<Mode>('browse');
   const [quizState, setQuizState] = useState<{
@@ -269,8 +269,19 @@ export default function PhoneticsPage() {
         </p>
       </div>
 
-      {/* Top-level tab switcher: 字母表 | 连读规则 */}
+      {/* Top-level tab switcher: 分步学习 | 字母表 | 连读规则 */}
       <div className="flex gap-2 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-1.5">
+        <button
+          onClick={() => handleMainTabChange('progressive')}
+          className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
+            mainTab === 'progressive'
+              ? 'bg-[var(--pink-primary)] text-white shadow-sm'
+              : 'text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)]'
+          }`}
+        >
+          <span>📝</span>
+          分步学习
+        </button>
         <button
           onClick={() => handleMainTabChange('alphabet')}
           className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
@@ -294,6 +305,9 @@ export default function PhoneticsPage() {
           连读规则
         </button>
       </div>
+
+      {/* ── 分步学习 tab ── */}
+      {mainTab === 'progressive' && <ProgressivePhonetics />}
 
       {/* ── 字母表 tab ── */}
       {mainTab === 'alphabet' && (

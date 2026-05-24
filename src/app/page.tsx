@@ -28,6 +28,8 @@ export default function Home() {
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [bunnyClicks, setBunnyClicks] = useState(0);
   const [showEasterEgg, setShowEasterEgg] = useState(false);
+  const [showReturnMsg, setShowReturnMsg] = useState(false);
+  const [returnDays, setReturnDays] = useState(0);
 
   const handleBunnyClick = () => {
     const next = bunnyClicks + 1;
@@ -55,6 +57,14 @@ export default function Home() {
     const todayNew = allWords.filter((w) => w.createdAt >= todayStart).length;
 
     setStats({ dueCount, learningCount, masteredCount, todayNew });
+
+    // Check if user is returning after a break
+    const yesterdayStart = new Date().setHours(0, 0, 0, 0) - 86400000;
+    if (profileData.lastStudyDate > 0 && profileData.lastStudyDate < yesterdayStart && profileData.longestStreak >= 3) {
+      const daysAway = Math.floor((yesterdayStart - profileData.lastStudyDate) / 86400000) + 1;
+      setReturnDays(daysAway);
+      setShowReturnMsg(true);
+    }
 
     const recent = await db.words.orderBy('createdAt').reverse().limit(5).toArray();
     setRecentWords(recent);
@@ -130,6 +140,65 @@ export default function Home() {
         )}
       </div>
 
+      {/* Return-after-break welcome */}
+      {showReturnMsg && (
+        <div className="bg-[var(--pink-pale)]/20 border border-[var(--pink-pale)]/40 rounded-2xl p-4 flex items-center gap-3 animate-fade-in">
+          <span className="text-2xl">🐰</span>
+          <div className="flex-1">
+            <p className="text-sm font-medium text-[var(--text-primary)]">
+              你回来啦！离开了 <span className="font-bold text-[var(--pink-primary)]">{returnDays}</span> 天
+            </p>
+            <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+              没关系，토리帮你从最重要的几个单词开始复习。重新出发，화이팅!
+            </p>
+          </div>
+          <button
+            onClick={() => setShowReturnMsg(false)}
+            className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors text-lg"
+          >
+            ×
+          </button>
+        </div>
+      )}
+
+      {/* Due Review Alert — primary CTA when words are waiting */}
+      {profile && stats.dueCount > 0 && (
+        <Link
+          href="/review"
+          className="flex items-center gap-4 bg-gradient-to-r from-[var(--peach-soft)]/20 to-[var(--pink-primary)]/15 border-2 border-[var(--peach-soft)]/40 rounded-2xl p-4 hover:border-[var(--peach-soft)]/60 transition-all group animate-fade-in"
+        >
+          <div className="w-12 h-12 rounded-full bg-[var(--peach-soft)]/25 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+            <Flame size={24} className="text-[var(--peach-soft)]" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-1.5">
+              今日待复习
+              <span className="text-[var(--peach-soft)] text-lg">{stats.dueCount}</span>
+              <span className="text-[var(--text-primary)]">个单词</span>
+            </div>
+            <div className="text-xs text-[var(--text-secondary)] mt-0.5">
+              及时复习巩固记忆，现在开始只需几分钟
+            </div>
+          </div>
+          <ArrowRight size={20} className="text-[var(--peach-soft)] shrink-0 group-hover:translate-x-1 transition-transform" />
+        </Link>
+      )}
+
+      {/* Today already done — gentle encouragement */}
+      {profile && stats.dueCount === 0 && stats.learningCount > 0 && (
+        <div className="bg-[var(--mint-soft)]/10 border border-[var(--mint-soft)]/20 rounded-2xl p-4 text-center">
+          <div className="flex items-center justify-center gap-2">
+            <Sparkles size={18} className="text-[var(--mint-soft)]" />
+            <span className="text-sm font-medium text-[var(--text-primary)]">
+              太棒了！所有单词都已复习完毕
+            </span>
+          </div>
+          <div className="text-xs text-[var(--text-secondary)] mt-1">
+            已掌握 <span className="font-bold text-[var(--mint-soft)]">{stats.masteredCount}</span> 个单词，继续学习新的吧
+          </div>
+        </div>
+      )}
+
       {/* XP Progress Bar */}
       {profile && (
         <div className="card-sticker p-4">
@@ -151,18 +220,37 @@ export default function Home() {
         </div>
       )}
 
-      {/* Streak Calendar */}
+      {/* Streak Calendar with 토리 reactions */}
       {profile && (
         <div className="card-washi p-4" style={{ '--washi-color': 'var(--peach-soft)' } as React.CSSProperties}>
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
-              <Flame size={18} className={profile.streak > 0 ? 'text-[var(--peach-soft)]' : 'text-[var(--text-muted)]'} />
-              <span className="text-sm font-medium text-[var(--text-primary)]">
-                连续 {profile.streak} 天
+              <span className="text-xl">
+                {profile.streak >= 100 ? '👑' : profile.streak >= 30 ? '🥇' : profile.streak >= 7 ? '🔥' : profile.streak >= 3 ? '💪' : '🌱'}
               </span>
-              {profile.streak >= 7 && <span className="text-xs text-[var(--peach-soft)] font-medium">🔥</span>}
+              <div>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-sm font-medium text-[var(--text-primary)]">
+                    连续 <span className="text-[var(--peach-soft)] font-bold text-base">{profile.streak}</span> 天
+                  </span>
+                </div>
+                <div className="text-xs text-[var(--text-muted)]">
+                  {profile.streak >= 100
+                    ? '토리가 당신의 왕관을 닦고 있어요! 👑'
+                    : profile.streak >= 30
+                      ? '습관이 되었네요! 토리가 자랑스러워요 🐰'
+                      : profile.streak >= 7
+                        ? '일주일 달성! 토리가 감동했어요 💖'
+                        : profile.streak >= 3
+                          ? '좋아요! 계속 가볼까요?'
+                          : '오늘부터 시작! 꾸준히가 중요해요'}
+                </div>
+              </div>
             </div>
-            <span className="text-xs text-[var(--text-muted)]">最长 {profile.longestStreak} 天</span>
+            <div className="text-right">
+              <div className="text-xs text-[var(--text-muted)]">最长</div>
+              <div className="text-sm font-bold text-[var(--text-primary)]">{profile.longestStreak} 天</div>
+            </div>
           </div>
           <div className="flex gap-2 justify-between">
             {weekStreak.map((day, i) => (

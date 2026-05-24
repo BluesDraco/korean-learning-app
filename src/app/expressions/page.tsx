@@ -2,11 +2,11 @@
 
 import { useState, useMemo } from 'react';
 import { Search, X, Filter, Flame, Volume2 } from 'lucide-react';
-import { idioms, slangs, type Idiom, type Slang } from '@/data/expressions';
+import { idioms, slangs, loanwords, type Idiom, type Slang, type Loanword } from '@/data/expressions';
 
 // ---- Config ----
 
-type Tab = 'idioms' | 'slang';
+type Tab = 'idioms' | 'slang' | 'loanword';
 
 const tagConfig: Record<string, { label: string; color: string }> = {
   '身体': { label: '身体', color: 'bg-[var(--color-danger)]/12 text-[var(--color-danger)] border-[var(--color-danger)]/20' },
@@ -30,6 +30,38 @@ const moodConfig: Record<string, { label: string; color: string }> = {
 };
 
 const moodLabels: string[] = ['调侃', '感叹', '撒娇', '惊讶', '吐槽', '可爱'];
+
+const originConfig: Record<string, { label: string; emoji: string; color: string }> = {
+  chinese:    { label: '中文', emoji: '🀄', color: 'bg-[var(--color-danger)]/10 text-[var(--color-danger)] border-[var(--color-danger)]/20' },
+  english:    { label: '英语', emoji: '🇬🇧', color: 'bg-[var(--blue-soft)]/15 text-[var(--blue-soft)] border-[var(--blue-soft)]/25' },
+  japanese:   { label: '日语', emoji: '🇯🇵', color: 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] border-[var(--pink-primary)]/20' },
+  german:     { label: '德语', emoji: '🇩🇪', color: 'bg-[var(--bg-accent)]/15 text-[var(--text-secondary)] border-[var(--border-color)]' },
+  french:     { label: '法语', emoji: '🇫🇷', color: 'bg-[var(--purple-soft)]/12 text-[var(--purple-soft)] border-[var(--purple-soft)]/20' },
+  portuguese: { label: '葡萄牙语', emoji: '🇵🇹', color: 'bg-[var(--mint-soft)]/12 text-[var(--mint-soft)] border-[var(--mint-soft)]/20' },
+  spanish:    { label: '西班牙语', emoji: '🇪🇸', color: 'bg-[var(--peach-soft)]/12 text-[var(--peach-soft)] border-[var(--peach-soft)]/20' },
+  russian:    { label: '俄语', emoji: '🇷🇺', color: 'bg-[var(--bg-accent)]/15 text-[var(--text-secondary)] border-[var(--border-color)]' },
+  other:      { label: '其他', emoji: '🌍', color: 'bg-[var(--bg-input)] text-[var(--text-secondary)] border-[var(--border-color)]' },
+};
+
+const originKeys: string[] = ['chinese', 'english', 'japanese', 'german', 'french', 'portuguese', 'spanish', 'russian', 'other'];
+
+const categoryConfig: Record<string, { label: string; color: string }> = {
+  '日常': { label: '日常', color: 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] border-[var(--pink-primary)]/20' },
+  '饮食': { label: '饮食', color: 'bg-[var(--peach-soft)]/12 text-[var(--peach-soft)] border-[var(--peach-soft)]/20' },
+  '科技': { label: '科技', color: 'bg-[var(--blue-soft)]/15 text-[var(--blue-soft)] border-[var(--blue-soft)]/25' },
+  '生活': { label: '生活', color: 'bg-[var(--mint-soft)]/12 text-[var(--mint-soft)] border-[var(--mint-soft)]/20' },
+  '娱乐': { label: '娱乐', color: 'bg-[var(--purple-soft)]/12 text-[var(--purple-soft)] border-[var(--purple-soft)]/20' },
+  '交通': { label: '交通', color: 'bg-[var(--yellow-soft)]/20 text-[var(--text-secondary)] border-[var(--yellow-soft)]/30' },
+  '场所': { label: '场所', color: 'bg-[var(--color-danger)]/10 text-[var(--color-danger)] border-[var(--color-danger)]/20' },
+  'SNS':  { label: 'SNS',  color: 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] border-[var(--pink-primary)]/20' },
+  '身体': { label: '身体', color: 'bg-[var(--peach-soft)]/12 text-[var(--peach-soft)] border-[var(--peach-soft)]/20' },
+  '自然': { label: '自然', color: 'bg-[var(--mint-soft)]/12 text-[var(--mint-soft)] border-[var(--mint-soft)]/20' },
+  '抽象': { label: '抽象', color: 'bg-[var(--bg-accent)]/15 text-[var(--text-secondary)] border-[var(--border-color)]' },
+  '社交': { label: '社交', color: 'bg-[var(--purple-soft)]/12 text-[var(--purple-soft)] border-[var(--purple-soft)]/20' },
+  '美容': { label: '美容', color: 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] border-[var(--pink-primary)]/20' },
+  '学习': { label: '学习', color: 'bg-[var(--blue-soft)]/15 text-[var(--blue-soft)] border-[var(--blue-soft)]/25' },
+  '工作': { label: '工作', color: 'bg-[var(--bg-accent)]/15 text-[var(--text-secondary)] border-[var(--border-color)]' },
+};
 
 // ---- Helpers ----
 
@@ -59,6 +91,10 @@ export default function ExpressionsPage() {
   // Slang filters
   const [activeMood, setActiveMood] = useState<string>('all');
   const [activeHotLevel, setActiveHotLevel] = useState<number | 'all'>('all');
+
+  // Loanword filters
+  const [activeOrigin, setActiveOrigin] = useState<string>('all');
+  const [activeCategory, setActiveCategory] = useState<string>('all');
 
   // ---- Filtering ----
 
@@ -111,6 +147,32 @@ export default function ExpressionsPage() {
     return result;
   }, [activeMood, activeHotLevel, searchQuery]);
 
+  const filteredLoanwords = useMemo(() => {
+    let result = loanwords;
+
+    if (activeOrigin !== 'all') {
+      result = result.filter((lw) => lw.origin === activeOrigin);
+    }
+
+    if (activeCategory !== 'all') {
+      result = result.filter((lw) => lw.category === activeCategory);
+    }
+
+    if (searchQuery.trim()) {
+      const q = searchQuery.trim().toLowerCase();
+      result = result.filter(
+        (lw) =>
+          lw.expression.toLowerCase().includes(q) ||
+          lw.original.toLowerCase().includes(q) ||
+          lw.meaning.toLowerCase().includes(q) ||
+          lw.category.toLowerCase().includes(q) ||
+          lw.example.toLowerCase().includes(q),
+      );
+    }
+
+    return result;
+  }, [activeOrigin, activeCategory, searchQuery]);
+
   const clearSearch = () => setSearchQuery('');
 
   // ---- Render ----
@@ -123,7 +185,7 @@ export default function ExpressionsPage() {
           活用表达库
         </h1>
         <p className="text-[var(--text-secondary)] text-sm mt-1">
-          掌握韩语惯用语和网络流行语，让你的韩语更地道、更鲜活
+          掌握惯用语、网络流行语和外来词，让你的韩语更地道、更鲜活
         </p>
       </div>
 
@@ -172,6 +234,16 @@ export default function ExpressionsPage() {
           }`}
         >
           网络用语 (인터넷 용어)
+        </button>
+        <button
+          onClick={() => setActiveTab('loanword')}
+          className={`flex-1 text-sm py-2 rounded-lg transition-colors ${
+            activeTab === 'loanword'
+              ? 'bg-[var(--pink-primary)] text-white font-medium'
+              : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-input)]'
+          }`}
+        >
+          外来词 (외래어)
         </button>
       </div>
 
@@ -341,6 +413,96 @@ export default function ExpressionsPage() {
           )}
         </>
       )}
+
+      {/* ---- LOANWORD TAB ---- */}
+      {activeTab === 'loanword' && (
+        <>
+          {/* Origin filter chips */}
+          <div className="flex gap-2 overflow-x-auto pb-1">
+            <button
+              onClick={() => setActiveOrigin('all')}
+              className={`flex items-center gap-1.5 text-sm px-3.5 py-2 rounded-lg whitespace-nowrap transition-colors shrink-0 ${
+                activeOrigin === 'all'
+                  ? 'bg-[var(--bg-accent)] text-[var(--text-primary)] font-medium'
+                  : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-input)]'
+              }`}
+            >
+              <Filter size={14} />
+              全部来源
+            </button>
+            {originKeys.map((origin) => {
+              const cfg = originConfig[origin];
+              const isActive = activeOrigin === origin;
+              return (
+                <button
+                  key={origin}
+                  onClick={() => setActiveOrigin(isActive ? 'all' : origin)}
+                  className={`text-sm px-3.5 py-2 rounded-lg whitespace-nowrap transition-colors shrink-0 ${
+                    isActive
+                      ? `${cfg.color} font-medium ring-1 ring-[var(--pink-pale)]`
+                      : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-input)]'
+                  }`}
+                >
+                  {cfg.emoji} {cfg.label}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Category filter chips */}
+          <div className="flex gap-2 overflow-x-auto pb-1">
+            <button
+              onClick={() => setActiveCategory('all')}
+              className={`text-sm px-3 py-1.5 rounded-lg whitespace-nowrap transition-colors shrink-0 ${
+                activeCategory === 'all'
+                  ? 'bg-[var(--bg-accent)] text-[var(--text-primary)] font-medium'
+                  : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-input)]'
+              }`}
+            >
+              全部分类
+            </button>
+            {Object.entries(categoryConfig).map(([key, cfg]) => {
+              const isActive = activeCategory === key;
+              return (
+                <button
+                  key={key}
+                  onClick={() => setActiveCategory(isActive ? 'all' : key)}
+                  className={`text-sm px-3 py-1.5 rounded-lg whitespace-nowrap transition-colors shrink-0 ${
+                    isActive
+                      ? `${cfg.color} font-medium`
+                      : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-input)]'
+                  }`}
+                >
+                  {cfg.label}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Result count */}
+          <p className="text-xs text-[var(--text-muted)]">
+            共 {filteredLoanwords.length} 个外来词
+            {activeOrigin !== 'all' && ` / 来源: ${originConfig[activeOrigin]?.label}`}
+            {activeCategory !== 'all' && ` / 分类: ${categoryConfig[activeCategory]?.label}`}
+            {searchQuery && ` / 搜索: "${searchQuery}"`}
+          </p>
+
+          {/* Loanword cards grid */}
+          {filteredLoanwords.length === 0 ? (
+            <div className="text-center py-16">
+              <Filter size={40} className="text-[var(--text-placeholder)] mx-auto mb-3" />
+              <p className="text-[var(--text-secondary)] text-sm">没有找到匹配的外来词</p>
+              <p className="text-[var(--text-placeholder)] text-xs mt-1">尝试调整搜索条件或筛选器</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filteredLoanwords.map((loanword) => (
+                <LoanwordCard key={loanword.id} loanword={loanword} />
+              ))}
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 }
@@ -485,6 +647,63 @@ function SlangCard({ slang }: { slang: Slang }) {
           </button>
         </div>
         <p className="text-xs text-[var(--text-secondary)]">{slang.exampleZh}</p>
+      </div>
+    </div>
+  );
+}
+
+// ---- Loanword Card ----
+
+function LoanwordCard({ loanword }: { loanword: Loanword }) {
+  const originCfg = originConfig[loanword.origin];
+  const catCfg = categoryConfig[loanword.category];
+
+  return (
+    <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 flex flex-col gap-3 hover:border-[var(--blue-soft)] transition-colors">
+      <div className="flex items-start justify-between">
+        <div>
+          <h3 className="text-lg font-bold text-[var(--text-primary)]">{loanword.expression}</h3>
+          <div className="flex items-center gap-2 mt-1">
+            <span className={`text-[13px] px-2 py-0.5 rounded-full border font-medium ${originCfg?.color ?? 'bg-[var(--bg-input)] text-[var(--text-secondary)] border-[var(--border-color)]'}`}>
+              {originCfg?.emoji} {originCfg?.label}
+            </span>
+            <span className={`text-[13px] px-2 py-0.5 rounded-full border font-medium ${catCfg?.color ?? 'bg-[var(--bg-input)] text-[var(--text-secondary)] border-[var(--border-color)]'}`}>
+              {catCfg?.label ?? loanword.category}
+            </span>
+          </div>
+        </div>
+        <button
+          onClick={() => speakKorean(loanword.expression)}
+          className="p-1.5 rounded-lg hover:bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors shrink-0"
+          title="听发音"
+        >
+          <Volume2 size={16} />
+        </button>
+      </div>
+
+      <div className="bg-[var(--bg-input)] rounded-xl p-3 space-y-2">
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-[var(--text-muted)] shrink-0">原词</span>
+          <span className="text-sm text-[var(--text-secondary)]">{loanword.original}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-[var(--text-muted)] shrink-0">含义</span>
+          <span className="text-sm font-medium text-[var(--text-primary)]">{loanword.meaning}</span>
+        </div>
+      </div>
+
+      <div className="bg-[var(--bg-input)] rounded-xl p-3 space-y-2">
+        <div className="flex items-start gap-2">
+          <p className="text-sm text-[var(--text-primary)] flex-1 leading-relaxed">{loanword.example}</p>
+          <button
+            onClick={() => speakKorean(loanword.example)}
+            className="p-1 rounded-lg hover:bg-[var(--bg-accent)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors shrink-0"
+            title="听例句发音"
+          >
+            <Volume2 size={14} />
+          </button>
+        </div>
+        <p className="text-xs text-[var(--text-secondary)]">{loanword.exampleZh}</p>
       </div>
     </div>
   );

@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { Search, X, FileText, ChevronDown, ChevronUp, AlertCircle, Volume2 } from 'lucide-react';
+import { Search, X, FileText, ChevronDown, ChevronUp, AlertCircle, Volume2, Lightbulb, ArrowRight, Sparkles } from 'lucide-react';
 import { grammarPoints, type GrammarPoint } from '@/data/grammar';
+import { beginnerGrammar, type GrammarEntry } from '@/data/grammar-beginner';
 
 const levelConfig: Record<string, { label: string; color: string }> = {
   beginner: { label: '初级', color: 'bg-[var(--mint-soft)]/15 text-[var(--mint-soft)]' },
@@ -43,6 +44,8 @@ export default function GrammarPage() {
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [activeLevel, setActiveLevel] = useState<GrammarPoint['level'] | 'all'>('all');
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [beginnerExpandedId, setBeginnerExpandedId] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<'beginner' | 'all'>('beginner');
 
   const filtered = useMemo(() => {
     let result = grammarPoints;
@@ -85,6 +88,127 @@ export default function GrammarPage() {
           按 TOPIK 等级和分类学习韩语语法，理解用法和对比
         </p>
       </div>
+
+      {/* View mode toggle */}
+      <div className="flex gap-2 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-1.5">
+        <button
+          onClick={() => setViewMode('beginner')}
+          className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
+            viewMode === 'beginner'
+              ? 'bg-[var(--pink-primary)] text-white shadow-sm'
+              : 'text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)]'
+          }`}
+        >
+          <Sparkles size={14} />
+          初级必备30条
+        </button>
+        <button
+          onClick={() => setViewMode('all')}
+          className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
+            viewMode === 'all'
+              ? 'bg-[var(--pink-primary)] text-white shadow-sm'
+              : 'text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)]'
+          }`}
+        >
+          <FileText size={14} />
+          全部语法库
+        </button>
+      </div>
+
+      {/* ── Beginner Grammar 30 ── */}
+      {viewMode === 'beginner' && (
+        <div className="space-y-3">
+          <div className="flex flex-wrap gap-1.5">
+            {['助词', '终结', '时态', '连接', '否定', '意愿', '能力', '命令', '建议', '名词化', '修饰', '比较', '引用', '义务', '进行', '经验', '尝试', '原因', '计划'].map((cat) => {
+              const count = beginnerGrammar.filter((g) => g.category === cat).length;
+              return (
+                <span key={cat} className="text-xs bg-[var(--bg-input)] text-[var(--text-secondary)] px-2 py-1 rounded-full">
+                  {cat} ({count})
+                </span>
+              );
+            })}
+          </div>
+          {beginnerGrammar.map((entry) => (
+            <div key={entry.id} className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl overflow-hidden">
+              <button
+                onClick={() => setBeginnerExpandedId(beginnerExpandedId === entry.id ? null : entry.id)}
+                className="w-full flex items-start gap-3 p-4 text-left hover:bg-[var(--bg-card-hover)] transition-colors"
+              >
+                <div className="w-9 h-9 rounded-xl bg-[var(--pink-primary)]/10 flex items-center justify-center shrink-0 mt-0.5">
+                  <span className="text-sm font-bold text-[var(--pink-primary)]" style={{ fontFamily: "'Nanum Gothic', sans-serif" }}>
+                    {entry.title[0]}
+                  </span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-sm font-bold text-[var(--text-primary)]">{entry.title}</span>
+                    <span className="text-xs text-[var(--text-muted)]">{entry.titleKo}</span>
+                    <span className="text-xs px-1.5 py-0.5 rounded bg-[var(--mint-soft)]/15 text-[var(--mint-soft)]">{entry.category}</span>
+                  </div>
+                  <p className="text-xs text-[var(--text-secondary)] mt-1">{entry.meaning}</p>
+                </div>
+                <ChevronDown
+                  size={16}
+                  className={`text-[var(--text-muted)] shrink-0 transition-transform ${beginnerExpandedId === entry.id ? 'rotate-180' : ''}`}
+                />
+              </button>
+              {beginnerExpandedId === entry.id && (
+                <div className="border-t border-[var(--border-color)] px-4 py-4 space-y-4 animate-fade-in">
+                  {/* Conjugation */}
+                  <div>
+                    <span className="text-xs font-medium text-[var(--text-muted)]">接续法</span>
+                    <p className="text-sm text-[var(--text-secondary)] mt-1 bg-[var(--bg-input)] rounded-xl px-3 py-2">{entry.conjugation}</p>
+                  </div>
+                  {/* Description */}
+                  <div>
+                    <span className="text-xs font-medium text-[var(--text-muted)]">详解</span>
+                    <p className="text-sm text-[var(--text-secondary)] mt-1">{entry.description}</p>
+                  </div>
+                  {/* Examples */}
+                  <div>
+                    <span className="text-xs font-medium text-[var(--text-muted)]">例句</span>
+                    <div className="mt-1 space-y-2">
+                      {entry.examples.map((ex, i) => (
+                        <div key={i} className="bg-[var(--bg-input)] rounded-xl px-3 py-2.5">
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm text-[var(--text-primary)] font-medium">{ex.korean}</span>
+                            <button onClick={() => speakKorean(ex.korean)} className="text-[var(--pink-primary)] hover:text-[var(--pink-primary)]">
+                              <Volume2 size={13} />
+                            </button>
+                          </div>
+                          <p className="text-xs text-[var(--text-muted)] mt-0.5">{ex.romanization}</p>
+                          <p className="text-xs text-[var(--text-secondary)] mt-0.5">{ex.chinese}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  {/* Confused with */}
+                  {entry.confusedWith && (
+                    <div className="flex items-start gap-2 bg-[var(--peach-soft)]/10 border border-[var(--peach-soft)]/20 rounded-xl p-3">
+                      <AlertCircle size={14} className="text-[var(--peach-soft)] shrink-0 mt-0.5" />
+                      <div>
+                        <span className="text-xs font-medium text-[var(--peach-soft)]">易混淆：{entry.confusedWith.grammar}</span>
+                        <p className="text-xs text-[var(--text-secondary)] mt-0.5">{entry.confusedWith.difference}</p>
+                      </div>
+                    </div>
+                  )}
+                  {/* Tip */}
+                  {entry.tips && (
+                    <div className="flex items-start gap-2 bg-[var(--purple-soft)]/10 border border-[var(--purple-soft)]/20 rounded-xl p-3">
+                      <Lightbulb size={14} className="text-[var(--purple-soft)] shrink-0 mt-0.5" />
+                      <p className="text-xs text-[var(--text-secondary)]">{entry.tips}</p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ── All Grammar (existing) ── */}
+      {viewMode === 'all' && (
+        <>
 
       {/* Honorifics Comparison Table */}
       <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl overflow-hidden">
@@ -431,6 +555,8 @@ export default function GrammarPage() {
             );
           })}
         </div>
+      )}
+        </>
       )}
     </div>
   );

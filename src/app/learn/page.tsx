@@ -11,6 +11,7 @@ import { db } from '@/lib/db';
 import { getProfile, updateStreak, awardXp, XP_REWARDS, addStudyMinutes, updateProfile } from '@/lib/gamification';
 import { learningUnits, TOTAL_UNITS } from '@/data/learningUnits';
 import { grammarPoints } from '@/data/grammar';
+import { emitXpFlyout, emitStreakMilestone } from '@/components/XpOverlay';
 import type { Word, UserProfile } from '@/types';
 import type { LearningUnit } from '@/data/learningUnits';
 
@@ -118,11 +119,13 @@ export default function LearnPage() {
 
   const handleQuizNext = async () => {
     if (quizIdx + 1 >= quizQuestions.length) {
-      await updateStreak();
+      const streakResult = await updateStreak();
+      if (streakResult.isMilestone) { emitStreakMilestone(streakResult.milestone); }
       await addStudyMinutes(10);
       const { leveledUp: didLevelUp, newLevel: nl } = await awardXp(XP_REWARDS.dailyLessonComplete);
       setLessonXp((prev) => prev + XP_REWARDS.dailyLessonComplete);
-      if (didLevelUp) { setLeveledUp(true); setNewLevel(nl); }
+      if (didLevelUp) { setLeveledUp(true); setNewLevel(nl); window.dispatchEvent(new CustomEvent('level-up', { detail: { level: nl } })); }
+      emitXpFlyout(XP_REWARDS.dailyLessonComplete);
 
       // Advance to next unit
       if (selectedUnit && profile && selectedUnit.id >= profile.currentUnit) {

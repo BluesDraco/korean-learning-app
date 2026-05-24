@@ -11,6 +11,10 @@ import {
   Trophy,
   Sparkles,
   Star,
+  Mic,
+  Square,
+  Play,
+  Pause,
 } from 'lucide-react';
 
 // ── Types ────────────────────────────────────────────────────────
@@ -622,6 +626,13 @@ export default function AIChatPage() {
   const isProcessingRef = useRef(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const [isRecording, setIsRecording] = useState(false);
+  const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -753,6 +764,64 @@ export default function AIChatPage() {
     setIsTyping(false);
     isProcessingRef.current = false;
   }, []);
+
+  // ── Recording ──────────────────────────────────────────────
+  const startRecording = useCallback(async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream, { mimeType: MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : 'audio/webm' });
+      mediaRecorderRef.current = recorder;
+      audioChunksRef.current = [];
+
+      recorder.ondataavailable = (e) => {
+        if (e.data.size > 0) audioChunksRef.current.push(e.data);
+      };
+
+      recorder.onstop = () => {
+        const blob = new Blob(audioChunksRef.current, { type: recorder.mimeType });
+        const url = URL.createObjectURL(blob);
+        if (audioUrl) URL.revokeObjectURL(audioUrl);
+        setAudioUrl(url);
+        stream.getTracks().forEach((t) => t.stop());
+      };
+
+      recorder.start();
+      setIsRecording(true);
+      setAudioUrl(null);
+    } catch {
+      alert('无法访问麦克风，请检查浏览器权限设置');
+    }
+  }, [audioUrl]);
+
+  const stopRecording = useCallback(() => {
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+      mediaRecorderRef.current.stop();
+    }
+    setIsRecording(false);
+  }, []);
+
+  const togglePlayback = useCallback(() => {
+    if (!audioRef.current || !audioUrl) return;
+    if (isPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.currentTime = 0;
+      audioRef.current.play();
+    }
+  }, [isPlaying, audioUrl]);
+
+  useEffect(() => {
+    if (!audioUrl) return;
+    const audio = new Audio(audioUrl);
+    audioRef.current = audio;
+    audio.onended = () => setIsPlaying(false);
+    audio.onplay = () => setIsPlaying(true);
+    audio.onpause = () => setIsPlaying(false);
+    return () => {
+      audio.pause();
+      audio.src = '';
+    };
+  }, [audioUrl]);
 
   // ── Handle Enter key ────────────────────────────────────────
   const handleKeyDown = useCallback(
@@ -1068,7 +1137,46 @@ export default function AIChatPage() {
       {/* ── Input Area ──────────────────────────────────────────── */}
       {phase === 'chatting' && (
         <div className="shrink-0 bg-[var(--bg-card)] border-t border-[var(--border-color)] px-4 py-3">
+          {/* Audio playback */}
+          {audioUrl && (
+            <div className="flex items-center gap-2 mb-2 px-1">
+              <button
+                onClick={togglePlayback}
+                className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all ${
+                  isPlaying
+                    ? 'bg-[var(--pink-primary)]/15 text-[var(--pink-primary)]'
+                    : 'bg-[var(--bg-input)] text-[var(--text-secondary)] hover:bg-[var(--pink-primary)]/10 hover:text-[var(--pink-primary)]'
+                }`}
+              >
+                {isPlaying ? <Pause size={14} /> : <Play size={14} />}
+              </button>
+              <div className="flex-1 h-1.5 bg-[var(--bg-input)] rounded-full overflow-hidden">
+                <div
+                  className={`h-full rounded-full transition-all ${isPlaying ? 'bg-[var(--pink-primary)] animate-pulse' : 'bg-[var(--purple-soft)]/40'}`}
+                  style={{ width: isPlaying ? '100%' : '0%' }}
+                />
+              </div>
+              <span className="text-[11px] text-[var(--text-muted)] shrink-0">
+                {isPlaying ? '播放中...' : '录音回放'}
+              </span>
+            </div>
+          )}
+
           <div className="flex items-end gap-2 max-w-2xl mx-auto">
+            {/* Mic button */}
+            <button
+              onClick={isRecording ? stopRecording : startRecording}
+              disabled={isTyping || isProcessingRef.current}
+              className={`shrink-0 p-2.5 rounded-xl transition-all ${
+                isRecording
+                  ? 'bg-[var(--color-danger)]/15 text-[var(--color-danger)] animate-pulse'
+                  : 'bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] hover:bg-[var(--pink-primary)]/10'
+              } disabled:opacity-50 disabled:cursor-not-allowed`}
+              title={isRecording ? '停止录音' : '语音输入'}
+            >
+              {isRecording ? <Square size={18} /> : <Mic size={18} />}
+            </button>
+
             <textarea
               ref={inputRef}
               value={inputValue}
