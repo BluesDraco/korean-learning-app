@@ -76,6 +76,7 @@ export default function ArticleReaderPage() {
   const [readSentences, setReadSentences] = useState<Set<number>>(new Set());
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [autoPlaying, setAutoPlaying] = useState(false);
+  const [showFullTranslation, setShowFullTranslation] = useState(false);
   const autoPlayIdxRef = useRef(0);
 
   // Recording
@@ -286,6 +287,22 @@ export default function ArticleReaderPage() {
           <div className="bg-[var(--bg-input)] rounded-xl p-4 leading-loose text-[15px] text-[var(--text-primary)] whitespace-pre-line">
             {article.fullText}
           </div>
+
+          {/* Translation toggle + display */}
+          <button
+            onClick={() => setShowFullTranslation(!showFullTranslation)}
+            className="mt-3 flex items-center gap-1.5 text-xs text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors"
+          >
+            {showFullTranslation ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+            {showFullTranslation ? '收起中文翻译' : '显示中文翻译'}
+          </button>
+
+          {showFullTranslation && (
+            <div className="mt-2 p-4 rounded-xl bg-[var(--purple-soft)]/5 border border-[var(--purple-soft)]/10 leading-loose text-sm text-[var(--text-secondary)] animate-slide-up">
+              {article.fullTextZh}
+            </div>
+          )}
+
           <button
             onClick={handleSpeakFull}
             className={`mt-3 flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
