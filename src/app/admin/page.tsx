@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { ArrowLeft, Users, Shield, Loader2 } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
 
@@ -16,6 +17,7 @@ interface UserRow {
 }
 
 export default function AdminPage() {
+  const router = useRouter();
   const { user, loading: authLoading } = useAuth();
   const [users, setUsers] = useState<UserRow[]>([]);
   const [total, setTotal] = useState(0);
@@ -24,7 +26,11 @@ export default function AdminPage() {
 
   useEffect(() => {
     if (authLoading) return;
-    if (!user || user.role !== 'admin') {
+    if (!user) {
+      router.replace('/auth/login?redirect=/admin');
+      return;
+    }
+    if (user.role !== 'admin') {
       setError('无权限访问');
       setLoading(false);
       return;

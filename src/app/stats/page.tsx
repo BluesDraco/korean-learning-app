@@ -3,16 +3,18 @@
 import { useEffect, useState } from 'react';
 import {
   BarChart3, BookOpen, TrendingUp, Loader2, Flame, Zap, Trophy,
-  Award, Star, Target, Pencil,
+  Award, Star, Target, Pencil, Brain, AlertTriangle, Activity,
 } from 'lucide-react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, PieChart, Pie, Cell,
   RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Legend,
+  LineChart, Line, Area, AreaChart,
 } from 'recharts';
 import { useRouter } from 'next/navigation';
 import { db } from '@/lib/db';
 import { ACHIEVEMENT_DEFS } from '@/types';
+import { memoryHealthScore, retentionDistribution, generateCurvePoints, wordStability, atRiskWords, type RetentionBucket } from '@/lib/forgetting-curve';
 import type { Word, ReviewSession, Achievement, MasteryLevel, UserProfile } from '@/types';
 
 interface Stats {
@@ -27,6 +29,10 @@ interface Stats {
   srsBins: { level: string; count: number }[];
   totalXp: number;
   skills: { skill: string; score: number; fullMark: number }[];
+  healthScore: number;
+  retentionBuckets: RetentionBucket[];
+  curvePoints: { day: number; retention: number }[];
+  atRisk: Word[];
 }
 
 const COLORS = ['var(--text-muted)', 'var(--color-highlight)', 'var(--pink-primary)', 'var(--mint-soft)'];
@@ -119,7 +125,15 @@ export default function StatsPage() {
         { skill: '坚持', score: dailyScore, fullMark: 100 },
       ];
 
-      setStats({ totalWords, masteredWords, totalReviews, totalDictations, totalShadowings, todayReviews, weekReviews, masteryDistribution, srsBins, totalXp, skills });
+      const healthScore = memoryHealthScore(words);
+      const retentionBuckets = retentionDistribution(words);
+      const avgStability = words.filter((w) => w.lastReviewed != null).length > 0
+        ? words.filter((w) => w.lastReviewed != null).reduce((s, w) => s + wordStability(w), 0) / words.filter((w) => w.lastReviewed != null).length
+        : 3;
+      const curvePoints = generateCurvePoints(Math.max(avgStability, 1));
+      const atRisk = atRiskWords(words);
+
+      setStats({ totalWords, masteredWords, totalReviews, totalDictations, totalShadowings, todayReviews, weekReviews, masteryDistribution, srsBins, totalXp, skills, healthScore, retentionBuckets, curvePoints, atRisk });
       setAchievements(achs);
       setProfile(p || null);
       setLoading(false);
@@ -349,6 +363,153 @@ export default function StatsPage() {
           ))}
         </div>
       </div>
+
+      {/* Memory Health & Forgetting Curve */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Memory Health Score */}
+        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-5">
+          <div className="flex items-center gap-2 mb-3">
+            <Brain size={18} className="text-[var(--purple-soft)]" />
+            <span className="text-sm font-medium text-[var(--text-primary)]">记忆健康度</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="relative w-20 h-20 shrink-0">
+              <svg className="w-20 h-20 -rotate-90" viewBox="0 0 80 80">
+                <circle cx="40" cy="40" r="34" fill="none" stroke="var(--bg-input)" strokeWidth="8" />
+                <circle
+                  cx="40" cy="40" r="34"
+                  fill="none"
+                  stroke={stats.healthScore >= 70 ? 'var(--mint-soft)' : stats.healthScore >= 40 ? 'var(--peach-soft)' : 'var(--color-danger)'}
+                  strokeWidth="8"
+                  strokeLinecap="round"
+                  strokeDasharray={`${(stats.healthScore / 100) * 213.6} 213.6`}
+                />
+              </svg>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-lg font-bold text-[var(--text-primary)]">{stats.healthScore}</span>
+              </div>
+            </div>
+            <div className="flex-1 space-y-2">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-sm bg-[var(--mint-soft)]" />
+                <span className="text-xs text-[var(--text-secondary)]">90%+ 牢固记忆</span>
+                <span className="text-xs font-medium text-[var(--text-primary)] ml-auto">{stats.retentionBuckets[0].count} 词</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-sm bg-[var(--blue-soft)]" />
+                <span className="text-xs text-[var(--text-secondary)]">70-90% 正常范围</span>
+                <span className="text-xs font-medium text-[var(--text-primary)] ml-auto">{stats.retentionBuckets[1].count} 词</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-sm bg-[var(--peach-soft)]" />
+                <span className="text-xs text-[var(--text-secondary)]">40-70% 需要复习</span>
+                <span className="text-xs font-medium text-[var(--text-primary)] ml-auto">{stats.retentionBuckets[2].count} 词</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-sm bg-[var(--color-danger)]" />
+                <span className="text-xs text-[var(--text-secondary)]">&lt;40% 即将遗忘</span>
+                <span className="text-xs font-medium text-[var(--text-primary)] ml-auto">{stats.retentionBuckets[3].count} 词</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Retention Distribution Bar */}
+        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-5">
+          <div className="flex items-center gap-2 mb-3">
+            <Activity size={18} className="text-[var(--blue-soft)]" />
+            <span className="text-sm font-medium text-[var(--text-primary)]">记忆保持分布</span>
+          </div>
+          <ResponsiveContainer width="100%" height={180}>
+            <BarChart data={stats.retentionBuckets} layout="vertical">
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border-default)" horizontal={false} />
+              <XAxis type="number" tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
+              <YAxis dataKey="label" type="category" tick={{ fill: 'var(--text-secondary)', fontSize: 11 }} axisLine={false} tickLine={false} width={60} />
+              <Tooltip contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border-default)', borderRadius: '8px', color: 'var(--text-primary)' }} />
+              <Bar dataKey="count" radius={[0, 4, 4, 0]}>
+                {stats.retentionBuckets.map((b, i) => (
+                  <Cell key={i} fill={b.color} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Forgetting Curve Chart */}
+      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-5">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <TrendingUp size={18} className="text-[var(--pink-primary)]" />
+            <span className="text-sm font-medium text-[var(--text-primary)]">艾宾浩斯遗忘曲线</span>
+          </div>
+          <span className="text-xs text-[var(--text-muted)]">基于你的平均记忆稳定度</span>
+        </div>
+        <ResponsiveContainer width="100%" height={220}>
+          <AreaChart data={stats.curvePoints}>
+            <defs>
+              <linearGradient id="retentionGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="var(--pink-primary)" stopOpacity={0.3} />
+                <stop offset="100%" stopColor="var(--pink-primary)" stopOpacity={0} />
+              </linearGradient>
+            </defs>
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--border-default)" />
+            <XAxis
+              dataKey="day"
+              label={{ value: '距上次复习（天）', position: 'insideBottom', offset: -5, fill: 'var(--text-muted)', fontSize: 11 }}
+              tick={{ fill: 'var(--text-muted)', fontSize: 11 }}
+              axisLine={false}
+              tickLine={false}
+            />
+            <YAxis
+              domain={[0, 100]}
+              label={{ value: '记忆保持率 (%)', angle: -90, position: 'insideLeft', fill: 'var(--text-muted)', fontSize: 11 }}
+              tick={{ fill: 'var(--text-muted)', fontSize: 11 }}
+              axisLine={false}
+              tickLine={false}
+            />
+            <Tooltip
+              contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border-default)', borderRadius: '8px', color: 'var(--text-primary)' }}
+              formatter={(v: any) => [`${v}%`, '记忆保持率']}
+            />
+            <Area
+              type="monotone"
+              dataKey="retention"
+              stroke="var(--pink-primary)"
+              strokeWidth={2}
+              fill="url(#retentionGradient)"
+              dot={false}
+              activeDot={{ r: 4, fill: 'var(--pink-primary)' }}
+            />
+          </AreaChart>
+        </ResponsiveContainer>
+        <p className="text-xs text-[var(--text-muted)] mt-2">
+          曲线下方的面积越小、下降越快，说明需要更频繁复习。蓝色区域越大越好。
+        </p>
+      </div>
+
+      {/* At-risk words */}
+      {stats.atRisk.length > 0 && (
+        <div className="bg-[var(--bg-card)] border border-[var(--color-danger)]/20 rounded-2xl p-5">
+          <div className="flex items-center gap-2 mb-3">
+            <AlertTriangle size={18} className="text-[var(--color-danger)]" />
+            <span className="text-sm font-medium text-[var(--text-primary)]">即将遗忘的词汇</span>
+            <span className="text-xs text-[var(--text-muted)]">建议尽快复习</span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {stats.atRisk.map((w) => (
+              <button
+                key={w.id}
+                onClick={() => router.push('/review')}
+                className="px-3 py-2 rounded-xl bg-[var(--color-danger)]/5 border border-[var(--color-danger)]/15 text-sm text-[var(--text-primary)] hover:bg-[var(--color-danger)]/10 transition-colors"
+              >
+                <span className="font-medium">{w.word}</span>
+                <span className="text-[var(--text-muted)] ml-1.5 text-xs">{w.meaning}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Achievements Section */}
       <div>

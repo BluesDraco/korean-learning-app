@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getDb, saveDb } from '@/lib/server/db';
+import { getDb } from '@/lib/server/db';
 import { hashPassword, signToken, setAuthCookie, generateId } from '@/lib/server/auth';
 
 export async function POST(request: Request) {
@@ -20,7 +20,7 @@ export async function POST(request: Request) {
 
     const db = await getDb();
 
-    const existing = db.exec('SELECT id FROM users WHERE username = ?', [username]);
+    const existing = await db.exec('SELECT id FROM users WHERE username = ?', [username]);
     if (existing.length > 0 && existing[0].values.length > 0) {
       return NextResponse.json({ error: '用户名已被注册' }, { status: 409 });
     }
@@ -29,11 +29,10 @@ export async function POST(request: Request) {
     const passwordHash = await hashPassword(password);
     const now = Date.now();
 
-    db.run(
+    await db.run(
       'INSERT INTO users (id, username, password_hash, nickname, email, role, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
       [id, username, passwordHash, username, '', 'user', now, now]
     );
-    saveDb();
 
     const token = await signToken({ userId: id, username, role: 'user' });
     await setAuthCookie(token);

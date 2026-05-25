@@ -1,28 +1,25 @@
-import initSqlJs, { Database } from 'sql.js';
-import fs from 'fs';
+import { createClient, type Client } from '@libsql/client';
 import path from 'path';
 
-let db: Database | null = null;
-const DB_PATH = path.join(process.cwd(), 'data', 'app.db');
+let client: Client | null = null;
 
-async function getDb(): Promise<Database> {
-  if (db) return db;
+function getClient(): Client {
+  if (client) return client;
 
-  const SQL = await initSqlJs();
+  const url = process.env.TURSO_DATABASE_URL;
 
-  try {
-    const dir = path.dirname(DB_PATH);
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-    const buffer = fs.readFileSync(DB_PATH);
-    db = new SQL.Database(buffer);
-  } catch {
-    db = new SQL.Database();
-  }
+  client = createClient({
+    url: url || `file:${path.join(process.cwd(), 'data', 'app.db')}`,
+    ...(url ? { authToken: process.env.TURSO_AUTH_TOKEN } : {}),
+  });
 
-  db.run('PRAGMA journal_mode=WAL');
-  db.run('PRAGMA foreign_keys=ON');
+  return client;
+}
 
-  db.run(`
+export async function getDb() {
+  const c = getClient();
+
+  await c.execute(`
     CREATE TABLE IF NOT EXISTS users (
       id TEXT PRIMARY KEY,
       username TEXT UNIQUE NOT NULL,
@@ -35,7 +32,7 @@ async function getDb(): Promise<Database> {
     )
   `);
 
-  db.run(`
+  await c.execute(`
     CREATE TABLE IF NOT EXISTS study_logs (
       id TEXT PRIMARY KEY,
       user_id TEXT NOT NULL,
@@ -47,16 +44,17 @@ async function getDb(): Promise<Database> {
     )
   `);
 
-  return db;
+  return {
+    exec: async (sql: string, params?: unknown[]) => {
+      const result = await c.execute({ sql, args: params as any[] });
+      const columns = result.columns;
+      const values = result.rows.map((row: any) =>
+        columns.map((col: string) => row[col])
+      );
+      return [{ columns, values }];
+    },
+    run: async (sql: string, params?: unknown[]) => {
+      await c.execute({ sql, args: params as any[] });
+    },
+  };
 }
-
-function saveDb() {
-  if (!db) return;
-  const data = db.export();
-  const buffer = Buffer.from(data);
-  const dir = path.dirname(DB_PATH);
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(DB_PATH, buffer);
-}
-
-export { getDb, saveDb };

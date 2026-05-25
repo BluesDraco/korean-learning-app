@@ -11,7 +11,7 @@ import {
   Library, Video, Bookmark,
   Palette, Landmark, MapPin, UtensilsCrossed,
   MessageSquare, Lightbulb, MessageCircle, Sparkles,
-  ChevronRight, X, Sun, Moon,
+  ChevronRight, X, Sun, Moon, Shield,
 } from 'lucide-react';
 import { useTheme } from '@/components/ThemeProvider';
 
@@ -37,6 +37,7 @@ const navGroups: NavGroup[] = [
       { label: '连读规则', href: '/phonetics/rules', icon: Waves },
       { label: '语法库', href: '/grammar', icon: FileText },
       { label: '绘本学习', href: '/learn/picture-books', icon: BookImage },
+      { label: '文章阅读', href: '/reading', icon: BookOpen },
     ],
   },
   {
@@ -201,6 +202,15 @@ export function Navbar() {
           </button>
           {user ? (
             <div className="space-y-1.5">
+              {user.role === 'admin' && (
+                <Link
+                  href="/admin"
+                  className="flex items-center gap-2 text-xs text-[var(--text-secondary)] hover:text-[var(--pink-primary)] transition-colors px-2 py-1.5 rounded-lg hover:bg-[var(--pink-primary)]/5"
+                >
+                  <Shield size={14} />
+                  <span>管理后台</span>
+                </Link>
+              )}
               <Link
                 href="/settings"
                 className="flex items-center gap-2 bg-[var(--bg-soft)] rounded-xl px-3 py-2.5 hover:bg-[var(--bg-accent)] transition-colors cursor-pointer"

@@ -1,12 +1,13 @@
 'use client';
 
 import { useEffect, useState, useCallback, Suspense } from 'react';
-import { BookOpen, Check, X, Loader2, ArrowLeft, Star, Zap, Flame, Volume2, Brain, TrendingUp, RotateCcw } from 'lucide-react';
+import { BookOpen, Check, X, Loader2, ArrowLeft, Star, Zap, Flame, Volume2, Brain, TrendingUp, RotateCcw, Activity } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { db } from '@/lib/db';
 import { calculateSRS, QUALITY_LABELS } from '@/lib/srs';
 import { updateStreak, awardXp, XP_REWARDS, getProfile } from '@/lib/gamification';
 import { emitXpFlyout, emitStreakMilestone } from '@/components/XpOverlay';
+import { memoryHealthScore, atRiskWords } from '@/lib/forgetting-curve';
 import type { Word, ReviewSession } from '@/types';
 
 function speakKorean(text: string) {
@@ -259,6 +260,41 @@ function ReviewContent() {
               <div className="text-xs text-[var(--text-secondary)]">通过</div>
             </div>
           </div>
+
+          {/* Memory health indicator */}
+          {(() => {
+            const healthScore = memoryHealthScore(words);
+            const atRisk = atRiskWords(words, 3);
+            return (
+              <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 max-w-xs mx-auto w-full space-y-3">
+                <div className="flex items-center gap-2">
+                  <Activity size={16} className="text-[var(--purple-soft)]" />
+                  <span className="text-xs font-medium text-[var(--text-secondary)]">记忆健康度</span>
+                  <span className={`text-sm font-bold ml-auto ${healthScore >= 70 ? 'text-[var(--mint-soft)]' : healthScore >= 40 ? 'text-[var(--peach-soft)]' : 'text-[var(--color-danger)]'}`}>
+                    {healthScore}/100
+                  </span>
+                </div>
+                <div className="w-full bg-[var(--bg-input)] rounded-full h-2">
+                  <div
+                    className={`h-2 rounded-full transition-all duration-700 ${healthScore >= 70 ? 'bg-[var(--mint-soft)]' : healthScore >= 40 ? 'bg-[var(--peach-soft)]' : 'bg-[var(--color-danger)]'}`}
+                    style={{ width: `${healthScore}%` }}
+                  />
+                </div>
+                {atRisk.length > 0 && (
+                  <div>
+                    <p className="text-xs text-[var(--text-muted)] mb-1.5">建议复习：</p>
+                    <div className="flex flex-wrap gap-1">
+                      {atRisk.map((w) => (
+                        <span key={w.id} className="text-xs px-2 py-0.5 rounded-full bg-[var(--color-danger)]/5 border border-[var(--color-danger)]/15 text-[var(--text-secondary)]">
+                          {w.word}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })()}
 
           <div className="flex gap-3 justify-center">
             <button

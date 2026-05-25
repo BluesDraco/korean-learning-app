@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     }
 
     const db = await getDb();
-    const result = db.exec('SELECT id, username, password_hash, role FROM users WHERE username = ?', [username]);
+    const result = await db.exec('SELECT id, username, password_hash, role FROM users WHERE username = ?', [username]);
 
     if (result.length === 0 || result[0].values.length === 0) {
       return NextResponse.json({ error: '用户名或密码错误' }, { status: 401 });

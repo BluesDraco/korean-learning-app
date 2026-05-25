@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import type { SqlValue } from 'sql.js';
 import { getAuthFromCookie } from '@/lib/server/auth';
 import { getDb } from '@/lib/server/db';
 
@@ -10,7 +9,7 @@ export async function GET() {
   }
 
   const db = await getDb();
-  const result = db.exec(
+  const result = await db.exec(
     'SELECT id, username, nickname, email, role, created_at, updated_at FROM users ORDER BY created_at DESC'
   );
 
@@ -26,7 +25,7 @@ export async function GET() {
       }))
     : [];
 
-  const totalResult = db.exec('SELECT COUNT(*) FROM users');
+  const totalResult = await db.exec('SELECT COUNT(*) FROM users');
   const total = totalResult.length > 0 ? (totalResult[0].values[0][0] as number) : 0;
 
   return NextResponse.json({ users, total });

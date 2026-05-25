@@ -9,7 +9,7 @@ export async function GET() {
   }
 
   const db = await getDb();
-  const result = db.exec(
+  const result = await db.exec(
     'SELECT id, username, nickname, email, role, created_at FROM users WHERE id = ?',
     [auth.userId]
   );
