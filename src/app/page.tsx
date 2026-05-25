@@ -106,12 +106,10 @@ export default function Home() {
         <img
           src="/images/tori-poses/tori-pose-01.png"
           alt="Tori"
-          className="w-8 h-8 animate-float cursor-pointer select-none hover:scale-125 transition-transform object-contain"
+          className="w-8 h-8 cursor-pointer select-none hover:scale-125 transition-transform object-contain"
           onClick={handleBunnyClick}
           title="点我!"
         />
-        <img src="/images/tori-poses/tori-pose-05.png" alt="" className="w-5 h-5 object-contain animate-float" />
-        <img src="/images/tori-poses/tori-pose-06.png" alt="" className="w-5 h-5 object-contain animate-float" />
         <span className="text-xl ml-1 font-extrabold text-[var(--text-primary)]" style={{ fontFamily: "'ZCOOL KuaiLe', 'Nunito', sans-serif" }}>韩语学习日记</span>
         <span className="text-xs text-[var(--text-muted)] ml-2 bg-[var(--bg-input)] px-2.5 py-1 rounded-full">v0.1 测试版</span>
         {/* Sparkle decorations */}
@@ -132,7 +130,6 @@ export default function Home() {
             </h1>
             <p className="text-[var(--text-secondary)] text-sm mt-1">{todayGreeting}</p>
           </div>
-          <img src="/images/tori-poses/tori-pose-04.png" alt="Tori" className="w-12 h-12 object-contain hidden sm:block" />
         </div>
         {profile && (
           <Link
@@ -310,7 +307,6 @@ export default function Home() {
       {/* Smart Study Plan Suggestion */}
       {profile && (
         <div className="card-dashed bg-gradient-to-r from-[var(--purple-soft)]/10 to-[var(--pink-primary)]/10 border-[var(--purple-soft)]/30 rounded-2xl p-5 relative overflow-hidden">
-          <img src="/images/tori-poses/tori-pose-07.png" alt="" className="absolute -top-2 -right-1 w-12 h-12 object-contain opacity-40 pointer-events-none" />
           <div className="flex items-center gap-2 mb-3 relative">
             <Lightbulb size={18} className="text-[var(--peach-soft)]" />
             <span className="text-sm font-medium text-[var(--text-primary)]">今日学习建议</span>

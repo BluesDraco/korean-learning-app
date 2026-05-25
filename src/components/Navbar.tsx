@@ -121,7 +121,7 @@ export function Navbar() {
           className="flex items-center gap-1.5 px-4 py-4"
           onClick={() => setExpandedGroup(null)}
         >
-          <img src="/images/tori-poses/tori-pose-01.png" alt="Tori" className="w-8 h-8 animate-float object-contain" />
+          <img src="/images/tori-poses/tori-pose-01.png" alt="Tori" className="w-8 h-8 object-contain" />
           <span
             className="text-xl font-bold bg-gradient-to-r from-[var(--pink-primary)] to-[var(--purple-soft)] bg-clip-text text-transparent"
             style={{ fontFamily: "'ZCOOL KuaiLe', cursive" }}
@@ -216,7 +216,7 @@ export function Navbar() {
                 className="flex items-center gap-2 bg-[var(--bg-soft)] rounded-xl px-3 py-2.5 hover:bg-[var(--bg-accent)] transition-colors cursor-pointer"
               >
                 <div className="relative">
-                  <img src="/images/tori-poses/tori-pose-01.png" alt="Tori" className="w-7 h-7 animate-float object-contain" />
+                  <img src="/images/tori-poses/tori-pose-01.png" alt="Tori" className="w-7 h-7 object-contain" />
                   <span className="status-dot learning absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5" />
                 </div>
                 <div className="flex flex-col flex-1 min-w-0">

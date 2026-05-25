@@ -177,8 +177,8 @@ export default function LearnPage() {
     return (
       <div className="py-4 space-y-4">
         <div className="flex items-center gap-2 text-xs text-[var(--text-placeholder)] mb-1">
-          <img src="/images/tori-poses/tori-pose-08.png" alt="" className="w-6 h-6 object-contain animate-float" />
-          <img src="/images/tori-poses/tori-pose-09.png" alt="" className="w-5 h-5 object-contain animate-float" />
+          <span className="animate-float">📚</span>
+          <span className="animate-float">🎀</span>
           <span className="text-[13px] ml-1">单元制学习 · 循序渐进</span>
         </div>
 
@@ -601,7 +601,7 @@ export default function LearnPage() {
       <div className="py-6 max-w-2xl mx-auto">
         <div className="text-center py-12 space-y-6">
           <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[var(--purple-soft)]/20 to-[var(--pink-primary)]/20 flex items-center justify-center mx-auto border-2 border-[var(--purple-soft)]/30 relative">
-            <img src="/images/tori-poses/tori-pose-10.png" alt="" className="w-16 h-16 object-contain" />
+            <Trophy size={40} className="text-[var(--peach-soft)]" />
           </div>
 
           <div>

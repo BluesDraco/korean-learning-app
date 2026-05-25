@@ -186,7 +186,6 @@ export default function DictationPage() {
           <h1 className="text-2xl font-bold text-[var(--text-primary)] section-header">听写练习</h1>
           <p className="text-[var(--text-secondary)] text-sm mt-1">听发音，输入韩语单词</p>
         </div>
-        <img src="/images/tori-poses/tori-pose-08.png" alt="" className="w-9 h-9 object-contain hidden sm:block" />
       </div>
 
       {/* Progress */}

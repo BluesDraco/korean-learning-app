@@ -167,7 +167,6 @@ export default function StatsPage() {
             <h1 className="text-2xl font-bold text-[var(--text-primary)]">学习统计</h1>
             <p className="text-[var(--text-secondary)] text-sm mt-1">追踪你的学习进度与成就</p>
           </div>
-          <img src="/images/tori-poses/tori-pose-02.png" alt="Tori" className="w-12 h-12 object-contain hidden sm:block" />
         </div>
         {profile && (
           <div className="shrink-0 bg-[var(--bg-input)] rounded-xl px-4 py-2 text-center">

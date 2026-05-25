@@ -206,7 +206,6 @@ export default function ShadowingPage() {
           <h1 className="text-2xl font-bold text-[var(--text-primary)]">影子跟读</h1>
           <p className="text-[var(--text-secondary)] text-sm mt-1">模仿发音，跟读韩语句子</p>
         </div>
-        <img src="/images/tori-poses/tori-pose-09.png" alt="" className="w-9 h-9 object-contain hidden sm:block" />
       </div>
 
       {/* Video Selector */}
