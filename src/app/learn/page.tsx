@@ -75,36 +75,54 @@ export default function LearnPage() {
 
     // Generate quiz questions
     const grammar = grammarPoints.find((g) => g.id === unit.grammarId) || grammarPoints[0];
+
+    // Helper: build 4-option shuffled quiz item, returns {options, correctIndex}
+    function buildQuizItem(correctText: string, distractors: string[]): { options: string[]; correct: number } {
+      const items: { text: string; isCorrect: boolean }[] = [
+        { text: correctText, isCorrect: true },
+        ...distractors.slice(0, 3).map((t) => ({ text: t, isCorrect: false })),
+      ];
+      const shuffled = shuffleArray(items);
+      const idx = shuffled.findIndex((item) => item.isCorrect);
+      return {
+        options: shuffled.map((item) => item.text),
+        correct: idx >= 0 ? idx : 0,
+      };
+    }
+
+    // Q1: word meaning (word[0])
+    const q1 = buildQuizItem(unit.words[0].meaning, [
+      unit.words[1]?.meaning || '香蕉',
+      unit.words[2]?.meaning || '跑步',
+      unit.words[3]?.meaning || '红色',
+    ]);
+
+    // Q2: pronunciation (word[1])
+    const q2 = buildQuizItem(unit.words[1].pronunciation, [
+      unit.words[0].pronunciation,
+      unit.words[3]?.pronunciation || 'sagwa',
+      unit.words[4]?.pronunciation || 'haksaeng',
+    ]);
+
+    // Q3: grammar usage — match pattern to its description
+    const otherGrammars = shuffleArray(grammarPoints.filter((g) => g.id !== grammar.id));
+    const q3 = buildQuizItem(grammar.usage, otherGrammars.slice(0, 3).map((g) => g.usage));
+
     const questions = [
       {
         question: `"${unit.words[0].word}" 的中文意思是？`,
-        options: shuffleArray([
-          unit.words[0].meaning,
-          unit.words[1]?.meaning || '香蕉',
-          unit.words[2]?.meaning || '跑步',
-          unit.words[3]?.meaning || '红色',
-        ]),
-        correct: 0,
+        options: q1.options,
+        correct: q1.correct,
       },
       {
         question: `"${unit.words[1].word}" 的发音是？`,
-        options: shuffleArray([
-          unit.words[1].pronunciation,
-          unit.words[0].pronunciation,
-          unit.words[3]?.pronunciation || 'sagwa',
-          unit.words[4]?.pronunciation || 'haksueng',
-        ]),
-        correct: 0,
+        options: q2.options,
+        correct: q2.correct,
       },
       {
-        question: `"${grammar.title}" (${grammar.pattern}) 的正确用法是？`,
-        options: shuffleArray([
-          grammar.examples[0]?.zh || '正确示例',
-          grammar.examples[1]?.zh || '另一个用法',
-          '与语法无关的句子',
-          '错误的接续方式',
-        ]),
-        correct: 0,
+        question: `"${grammar.pattern}" 的用法是？`,
+        options: q3.options,
+        correct: q3.correct,
       },
     ];
     setQuizQuestions(questions);

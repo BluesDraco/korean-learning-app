@@ -1,5 +1,6 @@
 export interface PictureBookPage {
-  illustration: string;       // emoji 场景组合
+  illustration: string;       // emoji 场景组合（imageUrl 加载失败时的fallback）
+  imageUrl?: string;          // 绘本插图路径，如 /images/picture-books/tori-day-01.png
   bgColor: string;            // 页面背景色
   korean: string;
   pronunciation: string;
@@ -30,6 +31,7 @@ export const pictureBooks: PictureBook[] = [
     pages: [
       {
         illustration: '🌅 🏠 🐰 💤',
+        imageUrl: '/images/picture-books/tori-day-01.png',
         bgColor: '#FFF5F0',
         korean: '아침이에요! 토리는 아직 자고 있어요.',
         pronunciation: 'a-chi-mi-e-yo! to-ri-neun a-jik ja-go i-sseo-yo.',
@@ -41,6 +43,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '⏰ 🐰 🙆 🌞',
+        imageUrl: '/images/picture-books/tori-day-02.png',
         bgColor: '#FFF8E7',
         korean: '일어나요! 토리는 기지개를 켜요.',
         pronunciation: 'i-reo-na-yo! to-ri-neun gi-ji-gae-reul kyeo-yo.',
@@ -52,6 +55,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '🪥 🐰 🚿 ✨',
+        imageUrl: '/images/picture-books/tori-day-03.png',
         bgColor: '#F0F8FF',
         korean: '세수를 하고 이를 닦아요. 깨끗해졌어요!',
         pronunciation: 'se-su-reul ha-go i-reul dak-ka-yo. kkae-kkeu-tae-jyeo-sseo-yo!',
@@ -64,6 +68,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '🍞 🥛 🐰 😋',
+        imageUrl: '/images/picture-books/tori-day-04.png',
         bgColor: '#FFF5F5',
         korean: '아침을 먹어요. 빵과 우유를 마셔요. 맛있어요!',
         pronunciation: 'a-chi-meul meo-geo-yo. ppang-gwa u-yu-reul ma-syeo-yo. ma-si-sseo-yo!',
@@ -78,6 +83,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '🚶 🐰 🌳 🌸 ☀️',
+        imageUrl: '/images/picture-books/tori-day-05.png',
         bgColor: '#F5FFF5',
         korean: '밖에 나가요. 날씨가 정말 좋아요!',
         pronunciation: 'bak-ke na-ga-yo. nal-ssi-ga jeong-mal jo-a-yo!',
@@ -90,6 +96,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '🐱 🐰 👋 💕',
+        imageUrl: '/images/picture-books/tori-day-06.png',
         bgColor: '#FFF0F8',
         korean: '친구 고양이를 만났어요. 안녕하세요! 반가워요!',
         pronunciation: 'chin-gu go-yang-i-reul man-na-sseo-yo. an-nyeong-ha-se-yo! ban-ga-wo-yo!',
@@ -103,6 +110,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '📚 🐰 🐱 ✏️ 📖',
+        imageUrl: '/images/picture-books/tori-day-07.png',
         bgColor: '#F8F5FF',
         korean: '함께 한국어를 공부해요. 토리는 글자를 잘 써요.',
         pronunciation: 'ham-kke han-gu-geo-reul gong-bu-hae-yo. to-ri-neun geul-ja-reul jal sseo-yo.',
@@ -116,6 +124,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '🎮 🐰 🐱 🎉 😆',
+        imageUrl: '/images/picture-books/tori-day-08.png',
         bgColor: '#FFF8F0',
         korean: '공부한 후에 같이 놀아요. 정말 재미있어요!',
         pronunciation: 'gong-bu-han hu-e ga-chi no-ra-yo. jeong-mal jae-mi-i-sseo-yo!',
@@ -128,6 +137,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '🍽️ 🐰 🥕 🍚 😋',
+        imageUrl: '/images/picture-books/tori-day-09.png',
         bgColor: '#FFFFF5',
         korean: '저녁을 먹어요. 토리는 당근을 제일 좋아해요!',
         pronunciation: 'jeo-nyeo-geul meo-geo-yo. to-ri-neun dang-geu-neul je-il jo-a-hae-yo!',
@@ -141,6 +151,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '🌙 ⭐ 🐰 🛏️ 💤',
+        imageUrl: '/images/picture-books/tori-day-10.png',
         bgColor: '#F0F0FF',
         korean: '잘 시간이에요. 토리는 골아떨어졌어요. 잘 자요!',
         pronunciation: 'jal si-ga-ni-e-yo. to-ri-neun go-ra-tteo-reo-jyeo-sseo-yo. jal ja-yo!',

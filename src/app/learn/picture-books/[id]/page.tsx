@@ -7,6 +7,28 @@ import { ArrowLeft, ChevronLeft, ChevronRight, Volume2, Sparkles } from 'lucide-
 import { pictureBooks } from '@/data/pictureBooks';
 import type { PictureBook } from '@/data/pictureBooks';
 
+function PictureBookImage({ src, fallback, alt }: { src: string; fallback: string; alt: string }) {
+  const [error, setError] = useState(false);
+
+  if (error) {
+    return (
+      <span className="text-5xl sm:text-6xl block leading-relaxed whitespace-pre-line">
+        {fallback}
+      </span>
+    );
+  }
+
+  return (
+    <img
+      src={src}
+      alt={alt}
+      onError={() => setError(true)}
+      className="max-w-full max-h-[45vh] object-contain rounded-2xl"
+      loading="lazy"
+    />
+  );
+}
+
 function speakKorean(text: string) {
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
@@ -150,7 +172,7 @@ export default function PictureBookReaderPage() {
         >
           {/* Illustration area */}
           <div
-            className="flex-1 flex flex-col items-center justify-center p-8 text-center min-h-[200px] relative overflow-hidden"
+            className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 text-center min-h-[200px] relative overflow-hidden"
             style={{ backgroundColor: page.bgColor }}
           >
             {/* Decorative dots */}
@@ -160,10 +182,18 @@ export default function PictureBookReaderPage() {
                 backgroundSize: '20px 20px',
               }}
             />
-            <div className="relative z-10">
-              <span className="text-5xl sm:text-6xl block leading-relaxed whitespace-pre-line">
-                {page.illustration}
-              </span>
+            <div className="relative z-10 w-full h-full flex items-center justify-center">
+              {page.imageUrl ? (
+                <PictureBookImage
+                  src={page.imageUrl}
+                  fallback={page.illustration}
+                  alt={page.chinese}
+                />
+              ) : (
+                <span className="text-5xl sm:text-6xl block leading-relaxed whitespace-pre-line">
+                  {page.illustration}
+                </span>
+              )}
               {currentPage === 0 && (
                 <span className="absolute -top-1 right-0 text-lg animate-float">✨</span>
               )}
