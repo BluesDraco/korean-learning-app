@@ -74,7 +74,9 @@ export default function AiPage() {
     <div className="py-4 space-y-6">
       {/* Header */}
       <div className="text-center">
-        <div className="text-5xl mb-3">🤖</div>
+        <div className="text-5xl mb-3">
+          <img src="/images/tori-poses/tori-pose-12.png" alt="Tori AI" className="w-16 h-16 object-contain mx-auto" />
+        </div>
         <h1 className="text-2xl font-bold text-[var(--text-primary)] section-header">AI 学习助手</h1>
         <p className="text-sm text-[var(--text-secondary)] mt-2 max-w-md mx-auto">
           目前使用本地智能分析，未来将接入大语言模型，提供更智能的韩语学习体验

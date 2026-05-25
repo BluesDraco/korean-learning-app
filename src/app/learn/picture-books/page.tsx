@@ -54,10 +54,10 @@ export default function PictureBooksPage() {
             >
               <div className="p-5">
                 <div className="flex items-start gap-4">
-                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shrink-0"
+                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 overflow-hidden"
                     style={{ backgroundColor: `${book.color}20` }}
                   >
-                    {book.emoji}
+                    <img src="/images/tori-poses/tori-pose-11.png" alt={book.title} className="w-12 h-12 object-contain" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">

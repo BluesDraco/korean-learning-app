@@ -211,9 +211,12 @@ export default function WritingPage() {
 
   return (
     <div className="py-4 space-y-3">
-      <div>
-        <h1 className="text-2xl font-bold text-[var(--text-primary)]">写作练习</h1>
-        <p className="text-[var(--text-secondary)] text-sm mt-1">三种模式，从仿写到自由表达，逐步提升韩语写作能力</p>
+      <div className="flex items-center gap-3">
+        <div>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">写作练习</h1>
+          <p className="text-[var(--text-secondary)] text-sm mt-1">三种模式，从仿写到自由表达，逐步提升韩语写作能力</p>
+        </div>
+        <img src="/images/tori-poses/tori-pose-11.png" alt="" className="w-9 h-9 object-contain hidden sm:block" />
       </div>
 
       {/* Mode tabs */}

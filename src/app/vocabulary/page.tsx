@@ -162,6 +162,7 @@ export default function VocabularyPage() {
             单词本
           </h1>
           <p className="text-[var(--text-secondary)] text-sm mt-1">
+            <img src="/images/tori-poses/tori-pose-06.png" alt="" className="w-5 h-5 object-contain inline-block mr-1 align-text-bottom" />
             共{' '}
             <span className="text-[var(--text-primary)] font-medium">{words.length}</span>{' '}
             个单词

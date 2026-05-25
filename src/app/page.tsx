@@ -103,13 +103,15 @@ export default function Home() {
     <div className="py-4 space-y-4">
       {/* Cute decoration bar with easter egg bunny */}
       <div className="flex items-center gap-2.5 mb-4 relative">
-        <span
-          className="animate-float cursor-pointer select-none hover:scale-125 transition-transform text-lg"
+        <img
+          src="/images/tori-poses/tori-pose-01.png"
+          alt="Tori"
+          className="w-8 h-8 animate-float cursor-pointer select-none hover:scale-125 transition-transform object-contain"
           onClick={handleBunnyClick}
           title="点我!"
-        >🐰</span>
-        <span className="animate-float text-base">🎀</span>
-        <span className="animate-float text-base">🌸</span>
+        />
+        <img src="/images/tori-poses/tori-pose-05.png" alt="" className="w-5 h-5 object-contain animate-float" />
+        <img src="/images/tori-poses/tori-pose-06.png" alt="" className="w-5 h-5 object-contain animate-float" />
         <span className="text-xl ml-1 font-extrabold text-[var(--text-primary)]" style={{ fontFamily: "'ZCOOL KuaiLe', 'Nunito', sans-serif" }}>韩语学习日记</span>
         <span className="text-xs text-[var(--text-muted)] ml-2 bg-[var(--bg-input)] px-2.5 py-1 rounded-full">v0.1 测试版</span>
         {/* Sparkle decorations */}
@@ -123,11 +125,14 @@ export default function Home() {
       </div>
       {/* Welcome Header */}
       <div className="flex items-start justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-[var(--text-primary)] section-header">
-            {profile ? `안녕하세요, ${profile.nickname}` : '开始学习'}
-          </h1>
-          <p className="text-[var(--text-secondary)] text-sm mt-1">{todayGreeting}</p>
+        <div className="flex items-center gap-3">
+          <div>
+            <h1 className="text-2xl font-bold text-[var(--text-primary)] section-header">
+              {profile ? `안녕하세요, ${profile.nickname}` : '开始学习'}
+            </h1>
+            <p className="text-[var(--text-secondary)] text-sm mt-1">{todayGreeting}</p>
+          </div>
+          <img src="/images/tori-poses/tori-pose-04.png" alt="Tori" className="w-12 h-12 object-contain hidden sm:block" />
         </div>
         {profile && (
           <Link
@@ -143,7 +148,7 @@ export default function Home() {
       {/* Return-after-break welcome */}
       {showReturnMsg && (
         <div className="bg-[var(--pink-pale)]/20 border border-[var(--pink-pale)]/40 rounded-2xl p-4 flex items-center gap-3 animate-fade-in">
-          <span className="text-2xl">🐰</span>
+          <img src="/images/tori-poses/tori-pose-03.png" alt="Tori" className="w-10 h-10 object-contain" />
           <div className="flex-1">
             <p className="text-sm font-medium text-[var(--text-primary)]">
               你回来啦！离开了 <span className="font-bold text-[var(--pink-primary)]">{returnDays}</span> 天
@@ -304,8 +309,9 @@ export default function Home() {
 
       {/* Smart Study Plan Suggestion */}
       {profile && (
-        <div className="card-dashed bg-gradient-to-r from-[var(--purple-soft)]/10 to-[var(--pink-primary)]/10 border-[var(--purple-soft)]/30 rounded-2xl p-5">
-          <div className="flex items-center gap-2 mb-3">
+        <div className="card-dashed bg-gradient-to-r from-[var(--purple-soft)]/10 to-[var(--pink-primary)]/10 border-[var(--purple-soft)]/30 rounded-2xl p-5 relative overflow-hidden">
+          <img src="/images/tori-poses/tori-pose-07.png" alt="" className="absolute -top-2 -right-1 w-12 h-12 object-contain opacity-40 pointer-events-none" />
+          <div className="flex items-center gap-2 mb-3 relative">
             <Lightbulb size={18} className="text-[var(--peach-soft)]" />
             <span className="text-sm font-medium text-[var(--text-primary)]">今日学习建议</span>
           </div>

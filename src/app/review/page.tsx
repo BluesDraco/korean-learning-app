@@ -320,6 +320,7 @@ function ReviewContent() {
       <div className="py-6 max-w-lg mx-auto">
         <div className="text-center py-16 space-y-6">
           <BookOpen size={48} className="text-[var(--text-placeholder)] mx-auto" />
+          <img src="/images/tori-poses/tori-pose-04.png" alt="" className="w-10 h-10 object-contain mx-auto -mt-4" />
           <div>
             <h1 className="text-xl font-bold text-[var(--text-primary)]">没有待复习的单词</h1>
             <p className="text-[var(--text-secondary)] text-sm mt-2">去学习新单词吧</p>
