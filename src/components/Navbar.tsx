@@ -73,7 +73,6 @@ const navGroups: NavGroup[] = [
       { label: '对话拆解', href: '/ai/analyze', icon: MessageSquare },
       { label: '情景对话', href: '/ai/chat', icon: MessageSquare },
       { label: '学习方案', href: '/ai/plan', icon: Lightbulb },
-      { label: '情景导图', href: '/ai/mindmap', icon: LayoutGrid },
     ],
   },
 ];

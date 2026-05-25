@@ -25,9 +25,16 @@ interface FeedbackData {
   betterWay: string;
 }
 
+interface ResponseHint {
+  label: string;
+  ko: string;
+  zh: string;
+}
+
 interface DialogExchange {
   ai: { ko: string; zh: string };
   feedback: FeedbackData;
+  hints: ResponseHint[];
 }
 
 interface ScenarioData {
@@ -79,6 +86,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '注意 "뭘" 是 "무엇을" 的缩写，用于口语中。',
           betterWay: '可以说 "OO을/를 찾고 있어요" 更礼貌。',
         },
+        hints: [
+          { label: '直接说想买什么', ko: '이거 주세요. 얼마예요?', zh: '请给我这个。多少钱？' },
+          { label: '先问问是什么', ko: '이게 뭐예요? 어떤 맛이에요?', zh: '这是什么？什么味道？' },
+          { label: '礼貌拒绝再看看', ko: '아, 네. 좀 더 둘러볼게요.', zh: '啊好的。我再逛逛。' },
+        ],
       },
       {
         ai: { ko: '몇 개 드릴까요? 하나에 천원이에요.', zh: '要几个？一个一千韩元。' },
@@ -87,6 +99,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '韩语计数要使用固有词数字（하나, 둘, 셋...）哦。',
           betterWay: '可以说 "OO개 주세요" 更自然。',
         },
+        hints: [
+          { label: '痛快下单', ko: '두 개 주세요.', zh: '请给我两个。' },
+          { label: '确认价格再买', ko: '그럼 두 개 주세요. 총 2,000원이에요?', zh: '那给我两个。总共2000韩元吗？' },
+          { label: '先买一个试试', ko: '하나만 주세요.', zh: '先给我一个吧。' },
+        ],
       },
       {
         ai: { ko: '삼각김밥도 있어요. 드실래요?', zh: '也有三角饭团，要来一个吗？' },
@@ -95,6 +112,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '"있어요"表示存在，"있으세요"是敬语但一般不这么用。',
           betterWay: '"OO도 주세요" 可以用来加单。',
         },
+        hints: [
+          { label: '欣然接受推荐', ko: '네, 그럼 삼각김밥도 하나 주세요.', zh: '好的，那三角饭团也给我一个。' },
+          { label: '好奇是什么口味', ko: '삼각김밥은 무슨 맛이에요?', zh: '三角饭团是什么口味的？' },
+          { label: '够了不需要', ko: '아니요, 괜찮아요. 이거면 돼요.', zh: '不用了，没关系。这些就够了。' },
+        ],
       },
       {
         ai: { ko: '더 필요한 거 있으세요? 음료수는요?', zh: '还需要别的吗？饮料呢？' },
@@ -103,6 +125,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '"됐어요" 表示"可以了/够了"，注意语气不要太生硬。',
           betterWay: '可以完整地说 "아니요, 이걸로 됐어요"（不用了，就这些）。',
         },
+        hints: [
+          { label: '顺便买饮料', ko: '아, 그러면 콜라 한 캔도 주세요.', zh: '啊，那再给我一罐可乐。' },
+          { label: '不需要了', ko: '아니요, 이걸로 충분해요.', zh: '不用了，这些足够了。' },
+          { label: '问有没有别的饮品', ko: '음료수는 어떤 게 있어요?', zh: '饮料有哪些？' },
+        ],
       },
       {
         ai: { ko: '네, 총 5,000원입니다. 결제 도와드릴게요.', zh: '好的，总共5000韩元。我来帮您结算。' },
@@ -111,6 +138,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '无语法错误。',
           betterWay: '也可以说 "카드로 결제할게요"（我用卡支付）。',
         },
+        hints: [
+          { label: '刷卡', ko: '카드로 할게요.', zh: '我用卡支付。' },
+          { label: '付现金', ko: '현금으로 할게요. 여기 있어요.', zh: '我用现金。给你。' },
+          { label: '确认后付款', ko: '네, 5,000원이에요? 여기요.', zh: '好的，5000韩元吗？给你。' },
+        ],
       },
     ],
     newWords: ['편의점', '신상품', '삼각김밥', '음료수', '결제'],
@@ -144,6 +176,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '"명"前面要用固有数字词（한, 두, 세...），不是汉字数字。',
           betterWay: '更礼貌可以说 "두 명이요" 省略 "예요"。',
         },
+        hints: [
+          { label: '确认人数', ko: '네, 두 명이에요.', zh: '是的，两位。' },
+          { label: '喜欢窗边位置', ko: '창가 자리 좋아요!', zh: '窗边位置很好！' },
+          { label: '礼貌跟随', ko: '네, 감사합니다.', zh: '好的，谢谢。' },
+        ],
       },
       {
         ai: {
@@ -155,6 +192,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '"OO 주세요" 要加宾格助词 "을/를"——"비빔밥을 주세요"。',
           betterWay: '可以说 "비빔밥 하나 주세요" 加上量词"하나"更自然。',
         },
+        hints: [
+          { label: '直接点菜', ko: '비빔밥 하나 주세요.', zh: '请给我一份拌饭。' },
+          { label: '询问推荐', ko: '여기서 제일 인기 있는 메뉴가 뭐예요?', zh: '这里最受欢迎的菜是什么？' },
+          { label: '先看看再说', ko: '잠시만요, 좀 더 볼게요.', zh: '等一下，我再看看。' },
+        ],
       },
       {
         ai: {
@@ -166,6 +208,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '注意序数词，如果点多份要说 "OO 둘 주세요"。',
           betterWay: '可以说 "그리고 OO도 주세요" 来追加点单。',
         },
+        hints: [
+          { label: '确认就行了', ko: '네, 그걸로 됐어요.', zh: '好的，就这些。' },
+          { label: '再加点东西', ko: '김치 더 주세요.', zh: '再给我一些泡菜。' },
+          { label: '问有没有别的', ko: '혹시 떡볶이도 있어요?', zh: '请问有炒年糕吗？' },
+        ],
       },
       {
         ai: {
@@ -177,6 +224,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '"알겠어요" 稍显生硬，用 "알겠습니다" 更正式。',
           betterWay: '可以说 "네, 알겠습니다. 감사합니다" 更礼貌。',
         },
+        hints: [
+          { label: '表示明白', ko: '네, 알겠습니다.', zh: '好的，明白了。' },
+          { label: '问具体位置', ko: '물은 어디에 있어요?', zh: '水在哪里？' },
+          { label: '感谢说明', ko: '설명해 주셔서 감사합니다.', zh: '谢谢您的说明。' },
+        ],
       },
       {
         ai: {
@@ -188,6 +240,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '"기다리다" 的敬语形式是 "기다리세요" 或 "기다려 주세요"。',
           betterWay: '可以说 "네, 천천히 하세요"（好的，慢慢来）表示不着急。',
         },
+        hints: [
+          { label: '表示不着急', ko: '네, 천천히 하세요.', zh: '好的，慢慢来。' },
+          { label: '问要多久', ko: '얼마나 걸려요?', zh: '要多久？' },
+          { label: '礼貌等候', ko: '네, 기다릴게요.', zh: '好的，我等。' },
+        ],
       },
       {
         ai: {
@@ -199,6 +256,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '"잘 먹겠습니다" 是正确用法，注意不要和 "잘 먹었습니다" 混淆。',
           betterWay: '可以说 "잘 먹겠습니다! 감사합니다" 加上感谢更完整。',
         },
+        hints: [
+          { label: '开动', ko: '잘 먹겠습니다!', zh: '我会好好享用的！' },
+          { label: '赞叹美食', ko: '와, 맛있어 보여요!', zh: '哇，看起来很好吃！' },
+          { label: '感谢服务员', ko: '감사합니다!', zh: '谢谢！' },
+        ],
       },
       {
         ai: {
@@ -210,6 +272,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '"잘 먹었어요" 是过去式，表示"吃好了/吃饱了"。',
           betterWay: '可以说 "잘 먹었습니다. 계산해 주세요" 直接请结账。',
         },
+        hints: [
+          { label: '吃好了要结账', ko: '네, 잘 먹었습니다. 계산해 주세요.', zh: '是的，吃好了。请结账。' },
+          { label: '还想看甜品', ko: '디저트 메뉴 좀 보여 주세요.', zh: '请给我看看甜品菜单。' },
+          { label: '吃饱了结账', ko: '아니요, 배불러요. 계산할게요.', zh: '不用了，饱了。结账吧。' },
+        ],
       },
     ],
     newWords: ['메뉴판', '비빔밥', '된장찌개', '반찬', '셀프', '계산', '디저트'],
@@ -240,6 +307,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '"어디예요?" 是"在哪里？"的正确用法。',
           betterWay: '更礼貌可以说 "OO에 어떻게 가요?"',
         },
+        hints: [
+          { label: '确认目的地', ko: '네, 명동에 가고 싶어요.', zh: '是的，我想去明洞。' },
+          { label: '问大概多远', ko: '여기서 멀어요?', zh: '离这里远吗？' },
+          { label: '问怎么去', ko: '어떻게 가면 돼요?', zh: '怎么去呢？' },
+        ],
       },
       {
         ai: { ko: '두 번째 사거리에서 오른쪽으로 가세요.', zh: '在第二个十字路口右转。' },
@@ -248,6 +320,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '"오른쪽" 是"右边"，注意 "왼쪽(左边)"的区别。',
           betterWay: '可以说 "알겠습니다, 감사합니다" 确认收到了指示。',
         },
+        hints: [
+          { label: '确认方向', ko: '두 번째 사거리에서 오른쪽이요?', zh: '第二个十字路口右转对吗？' },
+          { label: '表示理解', ko: '네, 알겠습니다.', zh: '好的，明白了。' },
+          { label: '问要多远', ko: '거기까지 얼마나 걸어요?', zh: '走到那里要多久？' },
+        ],
       },
       {
         ai: { ko: '저기 파란색 간판 보이시죠? 지하철역은 거기예요.', zh: '那边蓝色招牌看到了吗？地铁站就是那里。' },
@@ -256,6 +333,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '"보여요" 是被动形式"被看到"，"보이다"的用法。',
           betterWay: '可以说 "네, 보여요" 确认看到了。',
         },
+        hints: [
+          { label: '看到了', ko: '네, 보여요! 감사합니다.', zh: '是的，看到了！谢谢。' },
+          { label: '确认标志物', ko: '파란색 간판이요? 네, 보여요.', zh: '蓝色招牌吗？是的，看到了。' },
+          { label: '问还要走多久', ko: '여기서 얼마나 더 가야 해요?', zh: '从这里还要走多久？' },
+        ],
       },
       {
         ai: { ko: '걸어서 한 10분쯤 걸려요. 가깝습니다.', zh: '走路大概10分钟左右。很近的。' },
@@ -264,6 +346,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '韩语中 "쯤" 和 "정도" 都表示"大约"。',
           betterWay: '"알겠습니다, 감사합니다!" 结束问路时说谢谢。',
         },
+        hints: [
+          { label: '感谢指路', ko: '감사합니다! 큰 도움이 됐어요.', zh: '谢谢！帮大忙了。' },
+          { label: '确认时间', ko: '10분이면 금방이네요.', zh: '10分钟很快呢。' },
+          { label: '道别', ko: '네, 감사합니다. 안녕히 계세요!', zh: '好的，谢谢。再见！' },
+        ],
       },
     ],
     newWords: ['직진', '사거리', '오른쪽', '간판', '지하철역'],
@@ -297,6 +384,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '"아메리카노 주세요" 注意名词后要加宾格助词 "를"。',
           betterWay: '可以说 "아메리카노 한 잔 주세요" 加上量词"한 잔"更地道。',
         },
+        hints: [
+          { label: '直接点单', ko: '아메리카노 한 잔 주세요.', zh: '请给我一杯美式咖啡。' },
+          { label: '问推荐', ko: '뭐가 제일 맛있어요?', zh: '什么最好喝？' },
+          { label: '想喝甜的', ko: '달달한 메뉴 있어요?', zh: '有甜的饮品吗？' },
+        ],
       },
       {
         ai: {
@@ -308,6 +400,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '"뜨거운" 是形容词 "뜨겁다(热)" 的定语形式，注意读音变化。',
           betterWay: '口语中说 "따뜻한 걸로요" 或 "아이스로요" 更简洁。',
         },
+        hints: [
+          { label: '要热的', ko: '따뜻한 걸로 주세요.', zh: '请给我热的。' },
+          { label: '要冰的', ko: '아이스로 주세요.', zh: '请给我冰的。' },
+          { label: '随便哪个都行', ko: '아무거나 괜찮아요.', zh: '哪个都行。' },
+        ],
       },
       {
         ai: {
@@ -319,6 +416,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '"~로" 助词表示选择，"톨 사이즈로 주세요"。',
           betterWay: '可以直接说 "톨 사이즈 주세요"，比较口语化。',
         },
+        hints: [
+          { label: '选中杯', ko: '톨 사이즈로 주세요.', zh: '请给我中杯。' },
+          { label: '选大杯', ko: '그란데 사이즈로 주세요.', zh: '请给我大杯。' },
+          { label: '问区别', ko: '톨이랑 그란데 차이가 뭐예요?', zh: '中杯和大杯有什么区别？' },
+        ],
       },
       {
         ai: {
@@ -330,6 +432,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '"괜찮아요" 在这里表示"不用了/没关系"，用法正确。',
           betterWay: '想加单可以说 "그럼 쿠키도 하나 주세요"。',
         },
+        hints: [
+          { label: '不需要别的', ko: '아니요, 괜찮아요. 이거면 돼요.', zh: '不用了，这些就够了。' },
+          { label: '加一块饼干', ko: '그럼 수제 쿠키도 하나 주세요.', zh: '那手工饼干也给我一块。' },
+          { label: '好奇饼干口味', ko: '쿠키는 무슨 맛이에요?', zh: '饼干是什么口味的？' },
+        ],
       },
       {
         ai: {
@@ -341,6 +448,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '"여기서" 表示"在这里"，"가지고 가다" 表示"带走"。',
           betterWay: '说 "여기서 마실게요" 更自然，表示"在这里喝"。',
         },
+        hints: [
+          { label: '在这里喝', ko: '여기서 마실게요.', zh: '在这里喝。' },
+          { label: '打包带走', ko: '테이크아웃으로 할게요.', zh: '我要打包带走。' },
+          { label: '问能否坐楼上', ko: '2층에 앉아도 돼요?', zh: '可以坐二楼吗？' },
+        ],
       },
     ],
     newWords: ['아메리카노', '뜨겁다', '차갑다', '사이즈', '테이크아웃', '수제 쿠키'],
@@ -371,6 +483,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '注意 "타다(乘坐)" 的用法，地铁用 "지하철을 타다"。',
           betterWay: '可以说 "네, 2호선 타고 싶어요" 更礼貌。',
         },
+        hints: [
+          { label: '确认目的地', ko: '네, 홍대입구역에 가고 싶어요.', zh: '是的，我想去弘大入口站。' },
+          { label: '问要坐几号线', ko: '몇 호선 타야 해요?', zh: '要坐几号线？' },
+          { label: '问多少钱', ko: '요금이 얼마예요?', zh: '车费多少钱？' },
+        ],
       },
       {
         ai: { ko: '저쪽 3번 출구로 내려가세요. 2호선은 초록색 라인이에요.', zh: '从那边3号出口下去。2号线是绿色的。' },
@@ -379,6 +496,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '"~로" 助词表示方向，"3번 출구로" 表示"向3号出口"。',
           betterWay: '说 "네, 알겠습니다" 确认理解。',
         },
+        hints: [
+          { label: '确认方向', ko: '네, 3번 출구로 내려가면 돼요?', zh: '好的，从3号出口下去就行吗？' },
+          { label: '问绿色线是哪条', ko: '초록색 라인이 2호선이에요?', zh: '绿色线就是2号线吗？' },
+          { label: '表示感谢', ko: '감사합니다!', zh: '谢谢！' },
+        ],
       },
       {
         ai: { ko: '교통카드 있으세요? 있으면 편해요.', zh: '有交通卡吗？有的话方便很多。' },
@@ -387,6 +509,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '"T-money 카드" 是韩国最常用的交通卡名称。',
           betterWay: '可以说 "네, 있어요" 或 "아니요, 일회용 카드 살게요"。',
         },
+        hints: [
+          { label: '有交通卡', ko: '네, T-money 카드 있어요.', zh: '是的，我有T-money卡。' },
+          { label: '没有卡要买', ko: '아니요, 없어요. 일회용 카드 사야 해요.', zh: '没有，我得买一次性卡。' },
+          { label: '问在哪充值', ko: 'T-money 카드 충전은 어디서 해요?', zh: 'T-money卡在哪里充值？' },
+        ],
       },
       {
         ai: { ko: '일회용 카드는 저기 기계에서 사시면 돼요. 보증금 500원 있어요.', zh: '一次性卡在那边机器上买就可以了。有500韩元押金。' },
@@ -395,6 +522,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '无语法错误。',
           betterWay: '"감사합니다" 加感谢更礼貌。',
         },
+        hints: [
+          { label: '去买卡', ko: '네, 일회용 카드 살게요. 감사합니다.', zh: '好的，我去买一次性卡。谢谢。' },
+          { label: '确认押金', ko: '보증금 500원은 나중에 돌려받아요?', zh: '500韩元押金之后能退吗？' },
+          { label: '问机器怎么用', ko: '기계 사용법 좀 알려주세요.', zh: '请告诉我机器怎么用。' },
+        ],
       },
       {
         ai: { ko: '타는 곳은 지하 2층이에요. 에스컬레이터 타고 내려가세요.', zh: '乘车处在B2层。坐扶梯下去。' },
@@ -403,6 +535,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '方向助词 "~층에" 表示"在X层"。',
           betterWay: '可以说 "네, 지하 2층으로 갈게요" 表示"我会去B2"。',
         },
+        hints: [
+          { label: '明白了去B2', ko: '네, 지하 2층으로 갈게요.', zh: '好的，我去B2层。' },
+          { label: '问哪个方向', ko: '홍대 방향은 어느 쪽이에요?', zh: '弘大方向是哪边？' },
+          { label: '再次感谢', ko: '자세히 알려주셔서 감사합니다!', zh: '谢谢你详细告诉我！' },
+        ],
       },
     ],
     newWords: ['지하철', '호선', '출구', '교통카드', '일회용', '보증금'],
@@ -433,6 +570,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '"이거" 是 "이것" 的口语形式，用于指近处的事物。',
           betterWay: '可以说 "이거 보여 주세요" 请店员展示商品。',
         },
+        hints: [
+          { label: '夸商品好看', ko: '와, 진짜 예뻐요!', zh: '哇，真的很漂亮！' },
+          { label: '问材质', ko: '이거 실크예요? 촉감이 좋네요.', zh: '这是丝绸的吗？手感真好。' },
+          { label: '先问问价格', ko: '이거 얼마예요?', zh: '这个多少钱？' },
+        ],
       },
       {
         ai: { ko: '가격은 3만원이에요. 색깔도 예쁘고 질도 좋아요.', zh: '价格是3万韩元。颜色也漂亮，质量也好。' },
@@ -441,6 +583,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '"비싸다(贵)" 用于口语中要变成 "비싸요"。',
           betterWay: '砍价可以说 "좀 깎아 주실 수 있어요?"（可以便宜一点吗？）',
         },
+        hints: [
+          { label: '觉得有点贵', ko: '좀 비싸요. 깎아 주실 수 있어요?', zh: '有点贵。能便宜一点吗？' },
+          { label: '直接砍一半', ko: '1만 5천원에 안 돼요?', zh: '15000韩元不行吗？' },
+          { label: '再看看别的', ko: '그럼 다른 것도 좀 볼게요.', zh: '那我再看看别的。' },
+        ],
       },
       {
         ai: { ko: '에이~ 좀 비싸다고요? 네, 그럼 조금 깎아 드릴게요. 2만5천원 어때요?', zh: '哎~觉得有点贵吗？好吧，给您便宜一点。2万5千怎么样？' },
@@ -449,6 +596,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '"너무 비싸요" 的 "너무" 表示"太"，语气稍微强了一点。',
           betterWay: '可以说 "조금만 더 깎아 주세요" 更委婉。',
         },
+        hints: [
+          { label: '继续砍价', ko: '2만원에 해 주세요.', zh: '2万韩元吧。' },
+          { label: '接受价格', ko: '네, 2만 5천원 좋아요.', zh: '好的，2万5千可以。' },
+          { label: '说个中间价', ko: '2만 3천원은 어때요?', zh: '2万3千怎么样？' },
+        ],
       },
       {
         ai: { ko: '음... 2만원까지는 좀 어렵고요, 2만2천원에 드릴게요.', zh: '嗯...2万有点困难，2万2千给您吧。' },
@@ -457,6 +609,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '无语法错误，不过注意砍价时的语气不要太生硬。',
           betterWay: '可以说 "네, 그럼 그걸로 할게요" 表示接受。',
         },
+        hints: [
+          { label: '接受成交', ko: '네, 좋아요! 그걸로 할게요.', zh: '好的，就这样吧！' },
+          { label: '再试探一下', ko: '정말 2만원은 안 돼요?', zh: '真的2万不行吗？' },
+          { label: '痛快接受', ko: '네, 2만 2천원에 살게요.', zh: '好的，2万2千我买了。' },
+        ],
       },
       {
         ai: { ko: '네, 포장해 드릴까요? 선물용이세요?', zh: '好的，要帮您包装吗？是送人吗？' },
@@ -465,6 +622,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '"됐어요" 表示"可以了/这样就可以了"。',
           betterWay: '可以说 "네, 그 가격에 살게요" 确认购买。',
         },
+        hints: [
+          { label: '需要包装', ko: '네, 포장해 주세요. 선물이에요.', zh: '是的，请帮我包装。是礼物。' },
+          { label: '不用包装', ko: '아니요, 그냥 주세요.', zh: '不用了，直接给我就好。' },
+          { label: '自用所以不用包', ko: '제가 쓸 거라서 포장은 괜찮아요.', zh: '我自己用的，不用包装。' },
+        ],
       },
     ],
     newWords: ['스카프', '실크', '가격', '깎다', '포장', '선물용'],
@@ -495,6 +657,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '说症状时用 "아파요(疼)" 或 "아픈 것 같아요(好像疼)"。',
           betterWay: '可以详细说明 "어제부터 목이 아팠어요"（从昨天开始嗓子疼）。',
         },
+        hints: [
+          { label: '描述症状', ko: '목이 아프고 열도 있는 것 같아요.', zh: '嗓子疼，好像也有点发烧。' },
+          { label: '说明持续多久', ko: '어제부터 아팠어요.', zh: '从昨天开始疼的。' },
+          { label: '问严重吗', ko: '많이 아픈가요?', zh: '很严重吗？' },
+        ],
       },
       {
         ai: { ko: '목이 많이 부었네요. "아—" 해 보세요.', zh: '嗓子肿得很厉害呢。说"啊——"看看。' },
@@ -503,6 +670,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '无语法错误。',
           betterWay: '可以问 "심각해요?"（严重吗？）。',
         },
+        hints: [
+          { label: '配合检查', ko: '아—', zh: '啊——' },
+          { label: '问严重程度', ko: '심각해요?', zh: '严重吗？' },
+          { label: '先问问是什么病', ko: '무슨 병이에요?', zh: '是什么病？' },
+        ],
       },
       {
         ai: { ko: '감기인 것 같아요. 주사 맞으실래요, 약 드실래요?', zh: '好像是感冒了。要打针还是吃药？' },
@@ -511,6 +683,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '选择问句用 "~ㄹ래요" 结尾表示"要...吗？"',
           betterWay: '"주사 맞기 싫어요" 表示"不想打针"，"약 먹을게요" 表示"我吃药吧"。',
         },
+        hints: [
+          { label: '选择吃药', ko: '약 먹을게요. 주사는 싫어요.', zh: '我吃药吧。不想打针。' },
+          { label: '问打针好得快吗', ko: '주사 맞으면 빨리 나아요?', zh: '打针好得快吗？' },
+          { label: '听医生的', ko: '선생님, 어떻게 하는 게 좋아요?', zh: '医生，怎么做比较好？' },
+        ],
       },
       {
         ai: { ko: '네, 약으로 드릴게요. 식후 30분에 하루 세 번 드세요.', zh: '好的，给您开药。饭后30分钟，一天三次。' },
@@ -519,6 +696,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '无语法错误。',
           betterWay: '确认用法可以说 "식후에 세 번이요?"（饭后三次对吗？）。',
         },
+        hints: [
+          { label: '确认服药方法', ko: '네, 식후 30분에 세 번이요?', zh: '好的，饭后30分钟三次对吗？' },
+          { label: '问有无副作用', ko: '부작용은 없어요?', zh: '没有副作用吗？' },
+          { label: '表示明白', ko: '네, 알겠습니다. 감사합니다.', zh: '好的，明白了。谢谢。' },
+        ],
       },
       {
         ai: { ko: '처방전 여기 있어요. 약국은 1층에 있어요. 보험증 있으세요?', zh: '这是处方，药房在一楼。有保险证吗？' },
@@ -527,6 +709,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '"여기 있어요" 表示"在这里/给你"。',
           betterWay: '可以说 "네, 감사합니다. 1층으로 갈게요"。',
         },
+        hints: [
+          { label: '出示保险证', ko: '네, 여기 보험증이요.', zh: '好的，这是保险证。' },
+          { label: '问药房位置确认', ko: '약국은 1층 어디에 있어요?', zh: '药房在一楼哪里？' },
+          { label: '感谢医生', ko: '감사합니다, 선생님!', zh: '谢谢医生！' },
+        ],
       },
     ],
     newWords: ['체온', '목', '붓다', '주사', '처방전', '약국', '보험증'],
@@ -557,6 +744,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '"제일 좋아하다" 中 "제일" 是副词，放在动词前。',
           betterWay: '可以说 "OO 씨 팬이에요"（我是OO的粉丝）更自然。',
         },
+        hints: [
+          { label: '说出最喜欢的成员', ko: '민수 씨 제일 좋아해요!', zh: '我最喜欢民秀！' },
+          { label: '全都喜欢', ko: '다 좋아해요! 근데 민수 씨가 제일 좋아요.', zh: '全都喜欢！但最喜欢民秀。' },
+          { label: '表达是忠实粉丝', ko: '저는 완전 팬이에요!', zh: '我是忠实粉丝！' },
+        ],
       },
       {
         ai: { ko: '오, 민수 씨요! 민수 씨가 정말 매력적이죠?', zh: '哇，是民秀！民秀真的很有魅力吧？' },
@@ -565,6 +757,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '无语法错误。',
           betterWay: '可以加 "완전 팬이에요（完全是粉丝）" 表达热情。',
         },
+        hints: [
+          { label: '超有魅力', ko: '네, 정말 매력적이에요!', zh: '是的，真的很有魅力！' },
+          { label: '喜欢的原因', ko: '춤도 잘 추고 노래도 잘해서요!', zh: '跳舞好唱歌也好！' },
+          { label: '表达激动', ko: '와, 직접 만나서 너무 기뻐요!', zh: '哇，能直接见到你太开心了！' },
+        ],
       },
       {
         ai: { ko: '사인은 어떻게 해드릴까요? 이름도 적어드릴까요?', zh: '签名要怎么签呢？要写上您的名字吗？' },
@@ -573,6 +770,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '"적다" 在这里是"写"的意思，不是"少"。',
           betterWay: '可以说 "네, 제 이름은 OO이에요" 给出名字。',
         },
+        hints: [
+          { label: '要签名+名字', ko: '네, 이름도 적어 주세요! 제 이름은 지민이에요.', zh: '是的，请也写上名字！我叫지민。' },
+          { label: '只要签名就好', ko: '사인만 해 주세요!', zh: '只要签名就好！' },
+          { label: '想写特别的留言', ko: '특별한 메시지도 써 주세요!', zh: '请也写一段特别的留言！' },
+        ],
       },
       {
         ai: { ko: '중국에서 오셨어요? 한국어 정말 잘하시네요! 발음이 좋아요.', zh: '您是从中国来的吗？韩语说得真好！发音很好。' },
@@ -581,6 +783,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '无语法错误。',
           betterWay: '被夸的时候说 "아직 많이 부족해요"（还差得远呢）是韩国常见的谦虚说法。',
         },
+        hints: [
+          { label: '谦虚回应', ko: '아니에요, 아직 많이 부족해요.', zh: '哪里哪里，还差得远呢。' },
+          { label: '说是为了追星学的', ko: '한국어 공부한 이유가 바로 이거예요!', zh: '学韩语就是为了这个！' },
+          { label: '回夸对方', ko: '감사합니다! 선생님도 중국어 잘하시네요?', zh: '谢谢！您中文也很好吗？' },
+        ],
       },
       {
         ai: { ko: '민수 씨가 5분 후에 나올 거예요. 조금만 기다려 주세요!', zh: '民秀5分钟后出来。请稍等一下！' },
@@ -589,6 +796,11 @@ const scenarios: ScenarioData[] = [
           grammarError: '"기대돼요" 是从 "기대되다（期待）" 来的，注意不是 "기대해요"。',
           betterWay: '可以说 "너무 설레요!"（好激动！）表达兴奋。',
         },
+        hints: [
+          { label: '表示期待', ko: '네, 기대돼요! 너무 설레요!', zh: '好的，好期待！太激动了！' },
+          { label: '耐心等待', ko: '네, 천천히 기다릴게요.', zh: '好的，我会慢慢等。' },
+          { label: '表达感谢', ko: '오늘 정말 감사합니다! 평생 잊지 못할 거예요.', zh: '今天真的非常感谢！永生难忘。' },
+        ],
       },
     ],
     newWords: ['팬사인회', '멤버', '매력적', '사인', '발음', '기대되다', '설레다'],
@@ -633,6 +845,8 @@ export default function AIChatPage() {
   const [isRecording, setIsRecording] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [showHints, setShowHints] = useState(false);
+  const [showChinese, setShowChinese] = useState(false);
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -671,6 +885,7 @@ export default function AIChatPage() {
 
     isProcessingRef.current = true;
     setInputValue('');
+    setShowHints(false);
 
     const userMsg: ChatMessage = {
       id: genId(),
@@ -955,14 +1170,28 @@ export default function AIChatPage() {
           </div>
         </div>
 
-        {phase === 'chatting' && (
-          <button
-            onClick={handleEndConversation}
-            className="shrink-0 text-xs px-3 py-1.5 rounded-lg border border-[var(--color-danger)]/30 text-[var(--color-danger)] hover:bg-[var(--color-danger)]/10 transition-colors"
-          >
-            结束对话
-          </button>
-        )}
+        <div className="flex items-center gap-2">
+          {phase === 'chatting' && (
+            <button
+              onClick={() => setShowChinese(!showChinese)}
+              className={`shrink-0 text-xs px-3 py-1.5 rounded-lg border transition-colors ${
+                showChinese
+                  ? 'bg-[var(--pink-primary)]/10 border-[var(--pink-primary)]/30 text-[var(--pink-primary)]'
+                  : 'border-[var(--border-color)] text-[var(--text-muted)] hover:border-[var(--pink-primary)]/30 hover:text-[var(--pink-primary)]'
+              }`}
+            >
+              显示中文
+            </button>
+          )}
+          {phase === 'chatting' && (
+            <button
+              onClick={handleEndConversation}
+              className="shrink-0 text-xs px-3 py-1.5 rounded-lg border border-[var(--color-danger)]/30 text-[var(--color-danger)] hover:bg-[var(--color-danger)]/10 transition-colors"
+            >
+              结束对话
+            </button>
+          )}
+        </div>
       </div>
 
       {/* ── Messages Area ────────────────────────────────────── */}
@@ -980,7 +1209,7 @@ export default function AIChatPage() {
                     <p className="text-sm text-[var(--text-primary)] leading-relaxed">
                       {msg.text}
                     </p>
-                    {msg.hint && (
+                    {msg.hint && showChinese && (
                       <p className="text-xs text-[var(--text-muted)] mt-1.5 pt-1.5 border-t border-[var(--border-color)]">
                         {msg.hint}
                       </p>
@@ -1000,7 +1229,7 @@ export default function AIChatPage() {
                 </div>
 
                 {/* Feedback card */}
-                {msg.feedback && (
+                {msg.feedback && showChinese && (
                   <div className="mt-2 w-full bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-3 space-y-2 animate-slide-up shadow-sm">
                     <p className="text-[13px] uppercase tracking-wider text-[var(--text-muted)] font-semibold">
                       AI 反馈
@@ -1137,6 +1366,50 @@ export default function AIChatPage() {
       {/* ── Input Area ──────────────────────────────────────────── */}
       {phase === 'chatting' && (
         <div className="shrink-0 bg-[var(--bg-card)] border-t border-[var(--border-color)] px-4 py-3">
+          {/* Hints bottom drawer */}
+          {showHints && (() => {
+            const hintsIndex = currentStep > 0 ? currentStep - 1 : 0;
+            const activeHints = scenario.exchanges[Math.min(hintsIndex, scenario.exchanges.length - 1)]?.hints;
+            if (!activeHints) return null;
+            return (
+              <div className="mb-3 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-2xl p-4 animate-slide-up-drawer shadow-lg">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <Lightbulb size={16} className="text-[var(--peach-soft)]" />
+                    <span className="text-sm font-semibold text-[var(--text-primary)]">回答参考方向</span>
+                  </div>
+                  <button
+                    onClick={() => setShowHints(false)}
+                    className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><line x1="4" y1="4" x2="12" y2="12"/><line x1="12" y1="4" x2="4" y2="12"/></svg>
+                  </button>
+                </div>
+                <div className="space-y-2">
+                  {activeHints.map((hint, i) => (
+                    <button
+                      key={i}
+                      onClick={() => {
+                        setInputValue(hint.ko);
+                        setShowHints(false);
+                        inputRef.current?.focus();
+                      }}
+                      className="w-full text-left bg-[var(--bg-card)] hover:bg-[var(--bg-accent)] border border-[var(--border-color)] hover:border-[var(--pink-primary)]/30 rounded-xl p-3 transition-all group"
+                    >
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-xs font-medium px-1.5 py-0.5 rounded bg-[var(--pink-primary)]/10 text-[var(--pink-primary)]">
+                          {hint.label}
+                        </span>
+                      </div>
+                      <p className="text-sm font-medium text-[var(--text-primary)]">{hint.ko}</p>
+                      {showChinese && <p className="text-xs text-[var(--text-muted)] mt-0.5">{hint.zh}</p>}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            );
+          })()}
+
           {/* Audio playback */}
           {audioUrl && (
             <div className="flex items-center gap-2 mb-2 px-1">
@@ -1175,6 +1448,20 @@ export default function AIChatPage() {
               title={isRecording ? '停止录音' : '语音输入'}
             >
               {isRecording ? <Square size={18} /> : <Mic size={18} />}
+            </button>
+
+            {/* Hints button */}
+            <button
+              onClick={() => setShowHints(!showHints)}
+              disabled={isTyping || isProcessingRef.current}
+              className={`shrink-0 p-2.5 rounded-xl transition-all ${
+                showHints
+                  ? 'bg-[var(--peach-soft)]/15 text-[var(--peach-soft)]'
+                  : 'bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--peach-soft)] hover:bg-[var(--peach-soft)]/10'
+              } disabled:opacity-50 disabled:cursor-not-allowed`}
+              title="回答参考"
+            >
+              <Lightbulb size={18} />
             </button>
 
             <textarea
