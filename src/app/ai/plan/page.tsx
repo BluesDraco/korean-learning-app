@@ -32,6 +32,12 @@ export default function AIStudyPlanPage() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [wordStats, setWordStats] = useState<WordStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [aiPlan, setAiPlan] = useState<{
+    dailyTips: string[];
+    focusArea: string;
+    motivation: string;
+    nextWeekGoal: string;
+  } | null>(null);
 
   const loadData = useCallback(async () => {
     try {
@@ -80,6 +86,34 @@ export default function AIStudyPlanPage() {
         dueWords,
         categoryStrength,
       });
+
+      // Try AI-generated plan
+      try {
+        const res = await fetch('/api/ai/plan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            targetLevel: p.targetLevel,
+            xp: p.xp,
+            streak: p.streak,
+            wordStats: {
+              total: words.length,
+              mastered: masteredWords.length,
+              learning: learningWords.length,
+              reviewing: reviewingWords.length,
+              newCount: newWords.length,
+              weakWords: weakWords.slice(0, 5).map((w) => w.word),
+              categoryStrength,
+            },
+          }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setAiPlan(data);
+        }
+      } catch {
+        // Use local defaults
+      }
     } catch (err) {
       console.error('Failed to load study plan data:', err);
     } finally {
@@ -214,6 +248,34 @@ export default function AIStudyPlanPage() {
               你有 <span className="text-[var(--peach-soft)] font-bold">{wordStats.dueWords.length}</span> 个单词到了复习时间，建议优先完成复习。
             </p>
           </div>
+        </div>
+      )}
+
+      {/* AI-generated insights */}
+      {aiPlan && (
+        <div className="bg-gradient-to-r from-[var(--purple-soft)]/10 to-[var(--pink-primary)]/5 border border-[var(--purple-soft)]/20 rounded-2xl p-5 space-y-3">
+          <div className="flex items-center gap-2">
+            <Sparkles size={18} className="text-[var(--purple-soft)]" />
+            <h3 className="text-sm font-bold text-[var(--text-primary)]">AI 洞察</h3>
+          </div>
+          <div className="flex items-center gap-2 text-sm">
+            <Target size={14} className="text-[var(--pink-primary)] shrink-0" />
+            <span className="text-[var(--text-secondary)]">重点方向：</span>
+            <span className="font-medium text-[var(--text-primary)]">{aiPlan.focusArea}</span>
+          </div>
+          <p className="text-xs text-[var(--text-secondary)] italic">"{aiPlan.motivation}"</p>
+          <div className="space-y-1.5">
+            <p className="text-xs font-medium text-[var(--text-muted)]">今日建议：</p>
+            {aiPlan.dailyTips.map((tip, i) => (
+              <div key={i} className="flex items-start gap-2 text-xs text-[var(--text-secondary)]">
+                <span className="text-[var(--purple-soft)] mt-0.5">•</span>
+                <span>{tip}</span>
+              </div>
+            ))}
+          </div>
+          <p className="text-xs text-[var(--text-muted)]">
+            下周目标：{aiPlan.nextWeekGoal}
+          </p>
         </div>
       )}
 

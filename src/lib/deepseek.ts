@@ -4,6 +4,7 @@
  */
 
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
+const DEEPSEEK_MODEL = 'deepseek-v4-flash'; // 便宜快速，$0.14/M输入
 
 export interface DeepSeekConfig {
   apiKey: string;
@@ -22,7 +23,7 @@ export async function translateKoToZhDeepSeek(text: string, apiKey: string): Pro
       Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      model: 'deepseek-chat',
+      model: DEEPSEEK_MODEL,
       messages: [
         {
           role: 'system',
@@ -97,6 +98,185 @@ export async function lookupWordDeepSeek(
   const json = await res.json();
   const content = json.choices[0].message.content.trim();
   // Handle possible markdown code block
+  const cleanJson = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+  return JSON.parse(cleanJson);
+}
+
+/**
+ * Analyze a Korean sentence — returns full translation, word breakdown, grammar, particles.
+ * Used by /api/ai/analyze.
+ */
+export async function analyzeSentenceDeepSeek(
+  sentence: string,
+  apiKey: string
+): Promise<{
+  fullTranslation: string;
+  words: { text: string; pronunciation: string; meaning: string; partOfSpeech: string }[];
+  grammar: { pattern: string; title: string; usage: string; explanation: string }[];
+  particles: { text: string; explanation: string }[];
+}> {
+  const res = await fetch(DEEPSEEK_API_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model: DEEPSEEK_MODEL,
+      messages: [
+        {
+          role: 'system',
+          content: `你是韩语教学专家。对给定的韩语句子，返回以下JSON格式：
+
+{
+  "fullTranslation": "整句中文翻译",
+  "words": [
+    {"text": "韩文词（保留原形变化）", "pronunciation": "罗马音", "meaning": "中文释义", "partOfSpeech": "词性（动词/形容词/名词/副词/助词/感叹词/冠形词/代词/数词/词尾）"}
+  ],
+  "grammar": [
+    {"pattern": "语法句型", "title": "语法名称", "usage": "用法说明", "explanation": "详细解释"}
+  ],
+  "particles": [
+    {"text": "助词", "explanation": "该助词在此句中的作用"}
+  ]
+}
+
+逐词拆解，包括助词和词尾。语法分析识别句型模式。只返回JSON，不要markdown代码块。`,
+        },
+        { role: 'user', content: `分析这个韩语句子：${sentence}` },
+      ],
+      temperature: 0.3,
+      max_tokens: 1500,
+    }),
+  });
+
+  if (!res.ok) throw new Error(`DeepSeek analyze error: ${res.status}`);
+  const json = await res.json();
+  const content = json.choices[0].message.content.trim();
+  const cleanJson = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+  return JSON.parse(cleanJson);
+}
+
+/**
+ * Chat response for scenario-based conversation practice.
+ * Used by /api/ai/chat.
+ */
+export async function chatResponseDeepSeek(
+  params: {
+    scenario: { nameZh: string; nameKo: string; level: string };
+    context: { role: string; content: string }[];
+    userMessage: string;
+  },
+  apiKey: string
+): Promise<{
+  aiResponse: { ko: string; zh: string };
+  feedback: { natural: string; grammarError: string; betterWay: string };
+}> {
+  const scenarioDesc = `场景：${params.scenario.nameZh}（${params.scenario.nameKo}），难度：${params.scenario.level}`;
+  const history = params.context
+    .map((m) => `${m.role === 'ai' ? '店员/AI' : '用户'}: ${m.content}`)
+    .join('\n');
+
+  const res = await fetch(DEEPSEEK_API_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model: DEEPSEEK_MODEL,
+      messages: [
+        {
+          role: 'system',
+          content: `你是韩语情景对话的AI对手（店员/路人等角色）。${scenarioDesc}
+
+规则：
+1. 用韩语回复用户，保持角色一致
+2. 回复后提供3项中文反馈：表达自然度评价、语法错误提示、更地道的说法
+3. 返回JSON格式：
+{
+  "aiResponse": {"ko": "韩语回复", "zh": "中文翻译"},
+  "feedback": {"natural": "表达自然度评价", "grammarError": "语法错误或'无语法错误'", "betterWay": "更地道的说法"}
+}
+只返回JSON，不要markdown代码块。`,
+        },
+        { role: 'user', content: `对话历史：\n${history}\n\n用户最新消息：${params.userMessage}\n\n请以角色身份回复。` },
+      ],
+      temperature: 0.7,
+      max_tokens: 800,
+    }),
+  });
+
+  if (!res.ok) throw new Error(`DeepSeek chat error: ${res.status}`);
+  const json = await res.json();
+  const content = json.choices[0].message.content.trim();
+  const cleanJson = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+  return JSON.parse(cleanJson);
+}
+
+/**
+ * Generate a personalized study plan based on user stats.
+ * Used by /api/ai/plan.
+ */
+export async function generateStudyPlanDeepSeek(
+  params: {
+    targetLevel: string;
+    xp: number;
+    streak: number;
+    wordStats: {
+      total: number;
+      mastered: number;
+      learning: number;
+      reviewing: number;
+      newCount: number;
+      weakWords: string[];
+      categoryStrength: Record<string, { total: number; mastered: number }>;
+    };
+  },
+  apiKey: string
+): Promise<{
+  dailyTips: string[];
+  focusArea: string;
+  motivation: string;
+  nextWeekGoal: string;
+}> {
+  const res = await fetch(DEEPSEEK_API_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model: DEEPSEEK_MODEL,
+      messages: [
+        {
+          role: 'system',
+          content: `你是韩语学习规划师。根据用户学习数据给出建议。返回JSON：
+{
+  "dailyTips": ["3-5条今日学习建议"],
+  "focusArea": "当前最应专注的领域",
+  "motivation": "一句鼓励的话",
+  "nextWeekGoal": "下周学习目标建议"
+}
+只返回JSON。`,
+        },
+        {
+          role: 'user',
+          content: `目标等级：${params.targetLevel}，XP：${params.xp}，连续学习：${params.streak}天
+词汇：总计${params.wordStats.total}，已掌握${params.wordStats.mastered}，学习中${params.wordStats.learning}，待复习${params.wordStats.reviewing}
+薄弱词：${params.wordStats.weakWords.join(', ') || '无'}
+词类分布：${JSON.stringify(params.wordStats.categoryStrength)}
+请给出学习建议。`,
+        },
+      ],
+      temperature: 0.7,
+      max_tokens: 600,
+    }),
+  });
+
+  if (!res.ok) throw new Error(`DeepSeek plan error: ${res.status}`);
+  const json = await res.json();
+  const content = json.choices[0].message.content.trim();
   const cleanJson = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
   return JSON.parse(cleanJson);
 }

@@ -357,8 +357,31 @@ function AnalyzerForm() {
   const handleAnalyze = async () => {
     if (!input.trim()) return;
     setAnalyzing(true);
-    await new Promise((r) => setTimeout(r, 300));
-    const r = analyzeFull(input);
+
+    let r: AnalysisResult;
+    try {
+      const res = await fetch('/api/ai/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sentence: input.trim() }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        r = {
+          original: input.trim(),
+          fullTranslation: data.fullTranslation || '',
+          words: data.words || [],
+          grammar: data.grammar || [],
+          particles: data.particles || [],
+        };
+      } else {
+        throw new Error('API failed');
+      }
+    } catch {
+      // Fallback to local analysis
+      await new Promise((r2) => setTimeout(r2, 300));
+      r = analyzeFull(input);
+    }
     setResult(r);
 
     // Save to history

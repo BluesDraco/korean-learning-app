@@ -878,7 +878,10 @@ export default function AIChatPage() {
   }, []);
 
   // ── Send message ────────────────────────────────────────────
-  const handleSend = useCallback(() => {
+  const messagesRef = useRef(messages);
+  messagesRef.current = messages;
+
+  const handleSend = useCallback(async () => {
     if (!scenario) return;
     const text = inputValue.trim();
     if (!text || isProcessingRef.current || isTyping) return;
@@ -893,11 +896,61 @@ export default function AIChatPage() {
       text,
     };
     setMessages((prev) => [...prev, userMsg]);
-
-    // Simulate AI analysis delay then show feedback
     setIsTyping(true);
 
-    setTimeout(() => {
+    const context = messagesRef.current.map((m) => ({
+      role: m.sender,
+      content: m.text,
+    }));
+
+    try {
+      const res = await fetch('/api/ai/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          scenario: { nameZh: scenario.nameZh, nameKo: scenario.nameKo, level: scenario.level },
+          context,
+          userMessage: text,
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setMessages((prev) =>
+          prev.map((m) =>
+            m.id === userMsg.id ? { ...m, feedback: data.feedback } : m,
+          ),
+        );
+        setIsTyping(false);
+
+        await new Promise((r) => setTimeout(r, 800));
+        const step = currentStep;
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: genId(),
+            sender: 'ai',
+            text: data.aiResponse.ko,
+            hint: data.aiResponse.zh,
+          },
+        ]);
+        setCurrentStep(step + 1);
+
+        if (step + 1 >= 7) {
+          await new Promise((r) => setTimeout(r, 500));
+          setMessages((prev) =>
+            prev.some((m) => m.text === scenario.closing.ko)
+              ? prev
+              : [...prev, { id: genId(), sender: 'ai', text: scenario.closing.ko, hint: scenario.closing.zh }]
+          );
+          setPhase('finished');
+        }
+      } else {
+        throw new Error('API failed');
+      }
+    } catch {
+      // Fallback to hardcoded mock
+      await new Promise((r) => setTimeout(r, 1200));
       const step = currentStep;
       const exchange = scenario.exchanges[step];
       if (exchange) {
@@ -909,37 +962,24 @@ export default function AIChatPage() {
       }
       setIsTyping(false);
 
-      // After feedback, show next AI message or closing
-      setTimeout(() => {
-        if (step < scenario.exchanges.length) {
-          const nextAi = scenario.exchanges[step].ai;
-          setMessages((prev) => [
-            ...prev,
-            {
-              id: genId(),
-              sender: 'ai',
-              text: nextAi.ko,
-              hint: nextAi.zh,
-            },
-          ]);
-          setCurrentStep(step + 1);
-        } else {
-          // All exchanges done, show closing
-          setMessages((prev) => [
-            ...prev,
-            {
-              id: genId(),
-              sender: 'ai',
-              text: scenario.closing.ko,
-              hint: scenario.closing.zh,
-            },
-          ]);
-          setPhase('finished');
-        }
-        isProcessingRef.current = false;
-        inputRef.current?.focus();
-      }, 1000);
-    }, 1200);
+      await new Promise((r) => setTimeout(r, 1000));
+      if (step < scenario.exchanges.length) {
+        const nextAi = scenario.exchanges[step].ai;
+        setMessages((prev) => [
+          ...prev,
+          { id: genId(), sender: 'ai', text: nextAi.ko, hint: nextAi.zh },
+        ]);
+        setCurrentStep(step + 1);
+      } else {
+        setMessages((prev) => [
+          ...prev,
+          { id: genId(), sender: 'ai', text: scenario.closing.ko, hint: scenario.closing.zh },
+        ]);
+        setPhase('finished');
+      }
+    }
+    isProcessingRef.current = false;
+    inputRef.current?.focus();
   }, [inputValue, scenario, currentStep, isTyping]);
 
   // ── End conversation early ──────────────────────────────────

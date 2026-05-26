@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { translateKoToZhDeepSeek } from '@/lib/deepseek';
 
 export async function POST(req: Request) {
-  const apiKey = process.env.DEEPSEEK_API_KEY;
+  const apiKey = process.env.DEEPSEEK_TRANSLATE_KEY;
   if (!apiKey) {
     // Fallback: return empty translation so client can handle
     return NextResponse.json({ translation: '' });

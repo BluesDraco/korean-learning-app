@@ -72,7 +72,7 @@ export const ACHIEVEMENT_DEFS: Record<AchievementType, { title: string; descript
   level_20: { title: '韩语大师', description: '达到等级 20（满级）', icon: '🧙' },
 };
 
-// ===== Vocabulary Word =====
+// ===== Vocabulary Word (User's learning state, IndexedDB) =====
 export interface Word {
   id: string;
   word: string;
@@ -80,6 +80,7 @@ export interface Word {
   meaning: string;
   partOfSpeech: string;
   examples: Example[];
+  sourceEntryId?: string;        // Link to WordEntry for rich data
   sourceVideoId?: string;
   sourceSubtitleId?: string;
   mastery: MasteryLevel;
@@ -89,6 +90,60 @@ export interface Word {
   interval: number;
   createdAt: number;
   lastReviewed: number | null;
+}
+
+// ===== Unified Vocabulary Entry (static rich data) =====
+export interface WordEntry {
+  id: string;
+  korean: string;
+  romanization: string;
+  baseForm: string;
+  partOfSpeech: string;
+  level: string;                 // TOPIK level: "1"-"6"
+  frequency: number;             // Exam frequency: 1-3 (★)
+  meanings: WordMeaning[];
+  examples: WordEntryExample[];
+  tags: string[];                // Theme tags: "咖啡厅", "追星", "韩剧"...
+  emotionTags: string[];         // Emotion tags: "开心", "生气", "道歉"...
+  relatedWords: string[];        // IDs of related words
+  emoji: string;
+}
+
+export interface WordMeaning {
+  chinese: string;
+  nuance: string;                // "正式", "口语", "书面", "网络"...
+  register: string;              // Use context: "通用", "职场", "日常生活"...
+}
+
+export interface WordEntryExample {
+  korean: string;
+  chinese: string;
+  scene: string;                 // Scene tag matching ThemePack
+}
+
+// ===== Theme Pack =====
+export interface ThemePack {
+  id: string;
+  name: string;
+  emoji: string;
+  toriQuote: string;
+  description: string;
+  category: string;              // "生活场景" | "社交表达" | "韩流场景" | "旅行韩国" | "职场学习"
+  wordIds: string[];
+  sentences: ThemePackSentence[];
+  estimatedMinutes: number;
+}
+
+export interface ThemePackSentence {
+  korean: string;
+  chinese: string;
+}
+
+// ===== Level Word List =====
+export interface LevelWordList {
+  level: number;                 // 1-6
+  wordIds: string[];
+  totalCount: number;
 }
 
 export interface Example {
