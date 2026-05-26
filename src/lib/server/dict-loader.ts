@@ -8,13 +8,13 @@ interface DictMeaning {
 }
 
 interface DictEntry {
-  w: string;        // Korean word
-  h: string;        // Hanja
-  p: string;        // Part of speech (Chinese)
-  d: string;        // Chinese definition
-  kd: string;       // Korean definition
-  m: DictMeaning[]; // Structured meanings
-  pt: string[];     // Sentence patterns
+  w: string;
+  h: string;
+  p: string;
+  d: string;
+  kd: string;
+  m: DictMeaning[];
+  pt: string[];
 }
 
 interface DictData {
@@ -38,7 +38,35 @@ export interface DictSearchResult {
   h: string;
   p: string;
   d: string;
+  m: DictMeaning[];
   pt: string[];
+}
+
+function scoreEntry(entry: DictEntry, q: string): number {
+  let score = 0;
+  let matched = false;
+
+  if (entry.w === q) {
+    score += 1000; matched = true;
+  } else if (entry.w.startsWith(q)) {
+    score += 500; matched = true;
+  } else if (entry.w.includes(q)) {
+    score += 200; matched = true;
+  }
+
+  if (entry.d.includes(q)) { score += 60; matched = true; }
+  if (entry.h && entry.h.includes(q)) { score += 30; matched = true; }
+
+  if (!matched) return 0;
+
+  // Boost by frequency rating (each ⭐ = +10)
+  const stars = (entry.p?.match(/⭐/g) || []).length;
+  score += stars * 10;
+
+  // Slight boost for shorter words
+  if (entry.w.length <= q.length + 2) score += 5;
+
+  return score;
 }
 
 export function searchDictionary(query: string, limit = 20, offset = 0): {
@@ -50,32 +78,32 @@ export function searchDictionary(query: string, limit = 20, offset = 0): {
 
   if (!q) return { results: [], total: 0 };
 
-  const matches: DictSearchResult[] = [];
+  const scored: { entry: DictEntry; score: number }[] = [];
 
   for (const entry of dict.words) {
-    if (
-      entry.w.includes(q) ||
-      entry.d.includes(q) ||
-      (entry.h && entry.h.includes(q))
-    ) {
-      matches.push({
-        w: entry.w,
-        h: entry.h,
-        p: entry.p,
-        d: entry.d.slice(0, 300),
-        pt: entry.pt || [],
-      });
+    const s = scoreEntry(entry, q);
+    if (s > 0) {
+      scored.push({ entry, score: s });
     }
   }
 
-  const total = matches.length;
-  const results = matches.slice(offset, offset + limit);
+  scored.sort((a, b) => b.score - a.score);
+
+  const total = scored.length;
+  const results = scored.slice(offset, offset + limit).map(({ entry }) => ({
+    w: entry.w,
+    h: entry.h,
+    p: entry.p,
+    d: entry.d.slice(0, 300),
+    m: entry.m.slice(0, 5),
+    pt: entry.pt || [],
+  }));
+
   return { results, total };
 }
 
 export function getWordEntry(word: string): DictEntry | null {
   const dict = loadDictionary();
-  // Binary search or linear — with 85K entries sorted, binary is faster
   const words = dict.words;
   let lo = 0;
   let hi = words.length - 1;

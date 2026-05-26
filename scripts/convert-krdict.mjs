@@ -108,9 +108,27 @@ function extractPatterns(defBlocks) {
   return [...new Set(patterns)];
 }
 
-// Main conversion
+// Main conversion. Returns null for entries that should be skipped.
 function parseEntry(entry) {
   const [word, reading, posChinese, posExtra, score, defBlocks] = entry;
+
+  // ── Filters: skip non-word entries ──
+
+  // Multi-word phrases/idioms (e.g. "벌집 쑤시어 놓은 것 같다")
+  if (word.includes(' ')) return null;
+
+  // English/mixed-script entries (e.g. "←air conditioner", "세제곱centimeter", "高速bus")
+  if (/[a-zA-Z]/.test(word)) return null;
+
+  // Entries with ← marker (mixed script, e.g. "高層←apartment")
+  if (word.includes('←')) return null;
+
+  // Hanja variant notation (e.g. "模倣/摸倣/摹倣하다")
+  if (word.includes('/')) return null;
+
+  // Conjugation reference entries (null POS + arrow pointing to base form)
+  // We check after extracting definitions
+  const isConjugationRef = !posChinese;
 
   // Extract hanja from word if present, e.g., "친- 〔親〕"
   let hanja = '';
@@ -120,6 +138,12 @@ function parseEntry(entry) {
     hanja = hanjaMatch[1];
     cleanWord = word.replace(/\s*〔.+?〕/, '').trim();
   }
+
+  // Strip leftover ←/▼ markers from the headword
+  cleanWord = cleanWord.replace(/^[▼←]+/, '');
+
+  // Pure Hanja entries — no Hangul characters (e.g. "價格", "假")
+  if (!/[가-힣]/.test(cleanWord)) return null;
 
   const chineseDefs = extractChineseDefs(defBlocks);
   const koreanDef = extractKoreanDefs(defBlocks);
@@ -139,6 +163,9 @@ function parseEntry(entry) {
 
   // Build clean definition text
   const definitionZh = meanings.map(m => (m.sense ? `${m.sense}. ` : '') + m.zh).join('; ');
+
+  // Filter: conjugation references (null POS + arrow in definition)
+  if (isConjugationRef && definitionZh.includes('→')) return null;
 
   return {
     w: cleanWord,           // Korean word (key for search)
@@ -166,6 +193,7 @@ const files = readdirSync(DICT_DIR)
 console.log(`Found ${files.length} term_bank files`);
 
 let totalEntries = 0;
+let filteredEntries = 0;
 const allWords = [];
 const wordMap = new Map(); // dedup by word
 
@@ -176,6 +204,7 @@ for (const file of files) {
 
   for (const entry of data) {
     const parsed = parseEntry(entry);
+    if (!parsed) { filteredEntries++; continue; }
     if (!parsed.w || parsed.w.length < 1) continue;
 
     // Dedup: merge if same word
@@ -204,6 +233,7 @@ for (const file of files) {
 }
 
 console.log(`Total raw entries: ${totalEntries}`);
+console.log(`Filtered out (non-words): ${filteredEntries}`);
 console.log(`Deduplicated entries: ${allWords.length}`);
 
 // Sort alphabetically (Korean order)
