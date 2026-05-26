@@ -12,7 +12,7 @@ import { FONT_PRESETS, FONT_SIZES } from '@/lib/fontSettings';
 
 export default function SettingsPage() {
   const router = useRouter();
-  const { settings: fontSettings, setPreset, setSize } = useFontSettings();
+  const { settings: fontSettings, previewPreset, previewSize, commitFontSettings } = useFontSettings();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [achievements, setAchievements] = useState<Achievement[]>([]);
   const [loading, setLoading] = useState(true);
@@ -33,6 +33,7 @@ export default function SettingsPage() {
   const handleSave = async () => {
     if (!profile) return;
     setSaving(true);
+    commitFontSettings();
     await updateProfile({
       nickname: profile.nickname,
       dailyGoalMinutes: profile.dailyGoalMinutes,
@@ -236,7 +237,7 @@ export default function SettingsPage() {
             {FONT_PRESETS.map((p) => (
               <button
                 key={p.key}
-                onClick={() => setPreset(p.key)}
+                onClick={() => previewPreset(p.key)}
                 className={`rounded-xl p-3 text-center border transition-all ${
                   fontSettings.preset === p.key
                     ? 'border-[var(--pink-primary)] bg-[var(--pink-primary)]/8 shadow-sm'
@@ -267,7 +268,7 @@ export default function SettingsPage() {
             {FONT_SIZES.map((s) => (
               <button
                 key={s.key}
-                onClick={() => setSize(s.key)}
+                onClick={() => previewSize(s.key)}
                 className={`flex-1 rounded-xl py-2.5 text-center border transition-all ${
                   fontSettings.size === s.key
                     ? 'border-[var(--pink-primary)] bg-[var(--pink-primary)]/8 shadow-sm'
@@ -287,6 +288,20 @@ export default function SettingsPage() {
               </button>
             ))}
           </div>
+        </div>
+
+        {/* Live preview */}
+        <div className="bg-[var(--bg-base)] border border-[var(--border-color)] rounded-xl p-4 space-y-2">
+          <p className="text-[13px] text-[var(--text-muted)] mb-1">预览效果</p>
+          <p className="text-lg font-semibold text-[var(--text-primary)]">
+            안녕하세요! 좋은 아침이에요.
+          </p>
+          <p className="text-sm text-[var(--text-secondary)]">
+            你好！这是一段中文预览文本，用于展示当前字体和字号的实际效果。
+          </p>
+          <p className="text-xs text-[var(--text-muted)]">
+            The quick brown fox jumps over the lazy dog. 12345
+          </p>
         </div>
       </div>
 

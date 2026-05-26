@@ -46,4 +46,5 @@ export function applyFontSettings(settings: FontSettings): void {
   if (typeof document === 'undefined') return;
   document.documentElement.setAttribute('data-font', settings.preset);
   document.documentElement.setAttribute('data-font-size', settings.size);
+  console.log('[fontSettings] Applied:', settings, 'data-font:', document.documentElement.getAttribute('data-font'), 'data-font-size:', document.documentElement.getAttribute('data-font-size'));
 }

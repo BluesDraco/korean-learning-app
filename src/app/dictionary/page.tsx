@@ -80,7 +80,7 @@ export default function DictionaryPage() {
           📖 韩语字典
         </h1>
         <p className="text-sm text-[var(--text-muted)] mt-1">
-          收录 54,000+ 词条，来自国立国语院韩国语基础词典
+          收录 44,000+ 词条，来自国立国语院韩国语基础词典
         </p>
       </div>
 

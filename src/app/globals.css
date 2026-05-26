@@ -95,53 +95,58 @@
    ═══════════════════════════════════════════════════════════════ */
 
 @layer base {
-  /* ── Font Size ── */
-  html { font-size: 17px; }
-  html[data-font-size="small"]  { font-size: 15px; }
-  html[data-font-size="medium"] { font-size: 17px; }
-  html[data-font-size="large"]  { font-size: 19px; }
-  html[data-font-size="xlarge"] { font-size: 21px; }
-
-  /* ── Body Font Presets ── */
   body {
     -webkit-font-smoothing: antialiased;
     background-color: var(--bg-base);
     color: var(--text-primary);
     line-height: 1.7;
-    font-family: 'Nunito', 'LXGW WenKai', 'ZCOOL KuaiLe', system-ui, -apple-system, sans-serif;
   }
+}
 
-  /* Preset: cute (default) — rounded + handwriting Korean */
-  html[data-font="cute"] body,
-  html:not([data-font]) body {
-    font-family: 'Nunito', 'LXGW WenKai', 'ZCOOL KuaiLe', system-ui, -apple-system, sans-serif;
-  }
-  html[data-font="cute"] .ko-text,
-  html:not([data-font]) .ko-text {
-    font-family: 'Nanum Pen Script', 'Nanum Gothic', sans-serif;
-  }
-  html[data-font="cute"] .ko-body,
-  html:not([data-font]) .ko-body {
-    font-family: 'Nanum Gothic', sans-serif;
-  }
+/* ═══════════════════════════════════════════════════════════════
+   Font Settings — unlayered so they override any cascade-layer styles
+   ═══════════════════════════════════════════════════════════════ */
 
-  /* Preset: clean — system sans-serif + Nanum Gothic */
-  html[data-font="clean"] body {
-    font-family: system-ui, -apple-system, 'Segoe UI', 'Nunito', sans-serif;
-  }
-  html[data-font="clean"] .ko-text,
-  html[data-font="clean"] .ko-body {
-    font-family: 'Nanum Gothic', sans-serif;
-  }
+html { font-size: 17px; }
+html[data-font-size="small"]  { font-size: 15px; }
+html[data-font-size="medium"] { font-size: 17px; }
+html[data-font-size="large"]  { font-size: 19px; }
+html[data-font-size="xlarge"] { font-size: 21px; }
 
-  /* Preset: classic — LXGW WenKai body + Nanum Gothic Korean */
-  html[data-font="classic"] body {
-    font-family: 'LXGW WenKai', 'Nanum Gothic', Georgia, 'Times New Roman', serif;
-  }
-  html[data-font="classic"] .ko-text,
-  html[data-font="classic"] .ko-body {
-    font-family: 'Nanum Gothic', Georgia, serif;
-  }
+body {
+  font-family: 'Nunito', 'LXGW WenKai', 'ZCOOL KuaiLe', system-ui, -apple-system, sans-serif;
+}
+
+/* Preset: cute (default) — rounded + handwriting Korean */
+html[data-font="cute"] body,
+html:not([data-font]) body {
+  font-family: 'Nunito', 'LXGW WenKai', 'ZCOOL KuaiLe', system-ui, -apple-system, sans-serif;
+}
+html[data-font="cute"] .ko-text,
+html:not([data-font]) .ko-text {
+  font-family: 'Nanum Pen Script', 'Nanum Gothic', sans-serif;
+}
+html[data-font="cute"] .ko-body,
+html:not([data-font]) .ko-body {
+  font-family: 'Nanum Gothic', sans-serif;
+}
+
+/* Preset: clean — system sans-serif + Nanum Gothic */
+html[data-font="clean"] body {
+  font-family: system-ui, -apple-system, 'Segoe UI', 'Nunito', sans-serif;
+}
+html[data-font="clean"] .ko-text,
+html[data-font="clean"] .ko-body {
+  font-family: 'Nanum Gothic', sans-serif;
+}
+
+/* Preset: classic — LXGW WenKai body + Nanum Gothic Korean */
+html[data-font="classic"] body {
+  font-family: 'LXGW WenKai', 'Nanum Gothic', Georgia, 'Times New Roman', serif;
+}
+html[data-font="classic"] .ko-text,
+html[data-font="classic"] .ko-body {
+  font-family: 'Nanum Gothic', Georgia, serif;
 }
 
 /* ── Paper line background ── */

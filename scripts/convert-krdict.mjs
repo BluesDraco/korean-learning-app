@@ -1,15 +1,22 @@
 import { readFileSync, writeFileSync, readdirSync } from 'fs';
 import { join } from 'path';
+import { Converter } from 'opencc-js';
 
 const DICT_DIR = join(process.cwd(), 'data/dict');
 const OUT_FILE = join(process.cwd(), 'data/krdict-compact.json');
+
+// Traditional Chinese → Simplified Chinese converter
+const t2s = Converter({ from: 'tw', to: 'cn' });
+const toSimplified = (text) => {
+  if (!text) return text;
+  return t2s(text);
+};
 
 // Recursively extract all text from structured-content nodes, flattening tags
 function extractText(node, lang = null) {
   if (typeof node === 'string') return node;
   if (!node) return '';
 
-  // Filter by language if specified
   if (lang && node.lang && node.lang !== lang) return '';
 
   if (node.content) {
@@ -21,31 +28,79 @@ function extractText(node, lang = null) {
   return '';
 }
 
-// Extract Chinese definitions (sense number + translation)
+// Check if a node is a sentence-pattern label (gray background badge "句型")
+function isPatternNode(node) {
+  if (!node || typeof node === 'string') return false;
+  if (node.style?.backgroundColor === '#666666') return true;
+  return false;
+}
+
+// Extract Chinese definitions by walking the structured DOM
 function extractChineseDefs(defBlocks) {
   if (!Array.isArray(defBlocks)) return [];
 
   const results = [];
-  for (const block of defBlocks) {
-    if (block.type !== 'structured-content') continue;
-    // Get all zh-lang text
-    const zhText = extractText(block, 'zh').trim();
-    // Get all ko-lang text (the Korean word/pattern)
-    const koText = extractText(block, 'ko').trim();
 
-    if (zhText || koText) {
-      // Split Chinese text into individual senses
-      const parts = zhText.split(/(?=\d+\.\s*)/);
+  for (const block of defBlocks) {
+    if (block.type !== 'structured-content' || !block.content) continue;
+
+    const children = Array.isArray(block.content) ? block.content : [block.content];
+
+    for (const child of children) {
+      if (!child || typeof child === 'string') continue;
+      if (child.lang === 'ko') continue;       // skip homonym header (e.g. "가다¹")
+      if (child.tag !== 'div') continue;       // only process sense divs
+
+      const parts = Array.isArray(child.content) ? child.content : [child.content];
+
+      let senseNum = '';
+      let senseLabel = '';
+      let senseDef = '';
+
       for (const part of parts) {
-        const trimmed = part.trim();
-        if (trimmed) {
-          results.push({ zh: trimmed, ko: koText });
+        if (!part || typeof part === 'string') continue;
+        if (isPatternNode(part)) continue;     // skip "句型" badge
+
+        if (part.lang === 'zh') {
+          const text = extractText(part).trim();
+          if (!text) continue;
+
+          // Sense header like "1. 去" or "1. 去，开往，飞向"
+          const headerMatch = text.match(/^(\d+)\.\s*(.*)/);
+          if (headerMatch) {
+            if (senseLabel || senseDef) {
+              let zh;
+              if (senseLabel && senseDef) zh = (senseNum ? senseNum + '. ' : '') + senseLabel + '：' + senseDef;
+              else zh = senseLabel || senseDef;
+              results.push({ zh: zh.replace(/。$/,'').trim(), ko: extractText(child, 'ko').trim() });
+            }
+            senseNum = headerMatch[1];
+            senseLabel = headerMatch[2];
+            senseDef = '';
+          } else {
+            // Definition body — accumulate
+            senseDef = (senseDef ? senseDef : '') + text;
+          }
         }
+      }
+
+      if (senseLabel || senseDef) {
+        let zh;
+        if (senseLabel && senseDef) {
+          zh = (senseNum ? senseNum + '. ' : '') + senseLabel + '：' + senseDef;
+        } else if (senseLabel) {
+          zh = (senseNum ? senseNum + '. ' : '') + senseLabel;
+        } else {
+          zh = senseDef;
+        }
+        // Clean punctuation
+        zh = zh.replace(/。$/,'').trim();
+        results.push({ zh, ko: extractText(child, 'ko').trim() });
       }
     }
   }
 
-  // If no structured breakdown, try full text extraction
+  // Fallback for simple entries without structured divs
   if (results.length === 0) {
     const fullZh = defBlocks.map(b => extractText(b, 'zh')).join('; ').trim();
     const fullKo = defBlocks.map(b => extractText(b, 'ko')).join(' ').trim();
@@ -145,14 +200,17 @@ function parseEntry(entry) {
   // Pure Hanja entries — no Hangul characters (e.g. "價格", "假")
   if (!/[가-힣]/.test(cleanWord)) return null;
 
+  // Mixed Hanja+Hangul entries (e.g. "去頭截尾하다", "加工하다")
+  if (/[一-鿿]/.test(cleanWord)) return null;
+
   const chineseDefs = extractChineseDefs(defBlocks);
   const koreanDef = extractKoreanDefs(defBlocks);
   const patterns = extractPatterns(defBlocks);
 
-  // Clean up Chinese definitions: separate sense number from translation
+  // Clean up Chinese definitions: separate sense number from translation, convert to Simplified
   const meanings = chineseDefs.map(d => {
     let sense = '';
-    let zh = d.zh;
+    let zh = toSimplified(d.zh);
     const senseMatch = zh.match(/^(\d+)\.\s*/);
     if (senseMatch) {
       sense = senseMatch[1];
@@ -162,7 +220,7 @@ function parseEntry(entry) {
   });
 
   // Build clean definition text
-  const definitionZh = meanings.map(m => (m.sense ? `${m.sense}. ` : '') + m.zh).join('; ');
+  const definitionZh = toSimplified(meanings.map(m => (m.sense ? `${m.sense}. ` : '') + m.zh).join('; '));
 
   // Filter: conjugation references (null POS + arrow in definition)
   if (isConjugationRef && definitionZh.includes('→')) return null;
