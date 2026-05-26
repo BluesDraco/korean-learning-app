@@ -16,6 +16,7 @@ import {
   Play,
   Pause,
 } from 'lucide-react';
+import { KoreanKeyboard } from '@/components/KoreanKeyboard';
 
 // ── Types ────────────────────────────────────────────────────────
 
@@ -847,6 +848,7 @@ export default function AIChatPage() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [showHints, setShowHints] = useState(false);
   const [showChinese, setShowChinese] = useState(false);
+  const [showKeyboard, setShowKeyboard] = useState(false);
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -1509,12 +1511,25 @@ export default function AIChatPage() {
               value={inputValue}
               onChange={handleInput}
               onKeyDown={handleKeyDown}
+              onFocus={() => setShowKeyboard(true)}
               placeholder="用韩语输入你的回复... Enter发送"
               rows={1}
               disabled={isTyping || isProcessingRef.current}
               className="flex-1 resize-none bg-[var(--bg-input)] border border-[var(--border-color)] rounded-xl px-4 py-2.5 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)] focus:outline-none focus:border-[var(--pink-primary)]/50 focus:ring-1 focus:ring-[var(--pink-primary)]/25 disabled:opacity-50"
               style={{ maxHeight: '120px' }}
             />
+            <button
+              type="button"
+              onClick={() => setShowKeyboard(!showKeyboard)}
+              className={`shrink-0 p-2.5 rounded-xl transition-colors text-sm font-medium ${
+                showKeyboard
+                  ? 'bg-[var(--pink-primary)]/20 text-[var(--pink-primary)]'
+                  : 'bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] hover:bg-[var(--pink-pale)]/20'
+              }`}
+              title="韩文键盘"
+            >
+              한
+            </button>
             <button
               onClick={handleSend}
               disabled={!inputValue.trim() || isTyping || isProcessingRef.current}
@@ -1528,6 +1543,13 @@ export default function AIChatPage() {
           <p className="text-center text-[13px] text-[var(--text-muted)] mt-2">
             Enter 发送 · Shift+Enter 换行 · 输入韩语进行对话
           </p>
+
+          <KoreanKeyboard
+            value={inputValue}
+            onChange={setInputValue}
+            visible={showKeyboard}
+            onClose={() => setShowKeyboard(false)}
+          />
         </div>
       )}
 

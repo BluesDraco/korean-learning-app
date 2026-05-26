@@ -1,10 +1,13 @@
 'use client';
 
 import { useEffect, useState, useRef, useCallback } from 'react';
-import { Volume2, Check, X, ArrowRight, Loader2, RotateCcw, Sparkles, Star, Trophy } from 'lucide-react';
+import { Volume2, Check, X, ArrowRight, Loader2, RotateCcw, Sparkles, Star, Trophy, Pencil, Mic, Eye } from 'lucide-react';
 import { db } from '@/lib/db';
 import { awardXp, XP_REWARDS, updateStreak } from '@/lib/gamification';
+import { KoreanKeyboard } from '@/components/KoreanKeyboard';
 import type { Word } from '@/types';
+
+type Mode = 'listen' | 'write';
 
 function speakKorean(text: string, rate = 0.8) {
   window.speechSynthesis.cancel();
@@ -16,6 +19,7 @@ function speakKorean(text: string, rate = 0.8) {
 }
 
 export default function DictationPage() {
+  const [mode, setMode] = useState<Mode>('listen');
   const [words, setWords] = useState<Word[]>([]);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [userInput, setUserInput] = useState('');
@@ -29,6 +33,8 @@ export default function DictationPage() {
   const [xpGainAmount, setXpGainAmount] = useState(0);
   const [leveledUp, setLeveledUp] = useState(false);
   const [newLevel, setNewLevel] = useState(0);
+  const [hasListened, setHasListened] = useState(false);
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const loadWords = useCallback(async () => {
@@ -37,15 +43,23 @@ export default function DictationPage() {
     setLoading(false);
   }, []);
 
-  const [hasListened, setHasListened] = useState(false);
-
   useEffect(() => { loadWords(); }, [loadWords]);
+
+  const resetRound = useCallback(() => {
+    setUserInput('');
+    setSubmitted(false);
+    setError('');
+    setHasListened(false);
+    setKeyboardVisible(false);
+  }, []);
 
   const handleSubmit = async () => {
     if (!userInput.trim()) return;
     setSubmitted(true);
+    setKeyboardVisible(false);
 
     const currentWord = words[currentIdx];
+    // Normalize: trim whitespace, compare
     const isCorrect = userInput.trim() === currentWord.word;
 
     setStats((prev) => ({
@@ -55,14 +69,12 @@ export default function DictationPage() {
 
     if (isCorrect) {
       setError('');
-      // Award XP for correct dictation answer
       const { leveledUp: didLevelUp, newLevel: lvl } = await awardXp(XP_REWARDS.dictationCorrect);
       setEarnedXp((prev) => prev + XP_REWARDS.dictationCorrect);
       if (didLevelUp) {
         setLeveledUp(true);
         setNewLevel(lvl);
       }
-      // Show sparkle XP gain indicator
       setXpGainAmount(XP_REWARDS.dictationCorrect);
       setShowXpGain(true);
       setTimeout(() => setShowXpGain(false), 2000);
@@ -85,26 +97,32 @@ export default function DictationPage() {
       setComplete(true);
     } else {
       setCurrentIdx(currentIdx + 1);
-      setUserInput('');
-      setSubmitted(false);
-      setError('');
-      setHasListened(false);
+      resetRound();
     }
   };
 
   const handleRestart = () => {
     setWords((prev) => [...prev].sort(() => Math.random() - 0.5));
     setCurrentIdx(0);
-    setUserInput('');
-    setSubmitted(false);
-    setError('');
-    setHasListened(false);
+    resetRound();
     setStats({ correct: 0, total: 0 });
     setComplete(false);
     setEarnedXp(0);
     setLeveledUp(false);
     setShowXpGain(false);
   };
+
+  const handleModeSwitch = (newMode: Mode) => {
+    setMode(newMode);
+    resetRound();
+  };
+
+  // Focus input when mode changes or new word
+  useEffect(() => {
+    if (!submitted && !loading && words.length > 0) {
+      inputRef.current?.focus();
+    }
+  }, [currentIdx, submitted, loading, words.length, mode]);
 
   if (loading) {
     return (
@@ -123,7 +141,9 @@ export default function DictationPage() {
             <Trophy size={36} className="text-[var(--peach-soft)]" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-[var(--text-primary)] section-header">听写完成!</h1>
+            <h1 className="text-2xl font-bold text-[var(--text-primary)] section-header">
+              {mode === 'listen' ? '听写' : '默写'}完成!
+            </h1>
             <p className="text-[var(--text-secondary)] mt-2">
               正确 {stats.correct} / {stats.total}
             </p>
@@ -154,7 +174,7 @@ export default function DictationPage() {
           <div className="flex gap-3 justify-center">
             <button
               onClick={handleRestart}
-              className="flex items-center gap-2 px-5 py-2.5 bg-[var(--pink-primary)] hover:bg-[var(--pink-primary)] text-[var(--text-primary)] text-sm font-medium rounded-lg transition-colors"
+              className="flex items-center gap-2 px-5 py-2.5 bg-[var(--pink-primary)] text-white rounded-xl transition-colors text-sm font-medium hover:opacity-90"
             >
               <RotateCcw size={16} />
               再来一轮
@@ -170,7 +190,7 @@ export default function DictationPage() {
       <div className="py-6 max-w-lg mx-auto">
         <div className="text-center py-16 space-y-6">
           <Volume2 size={48} className="text-[var(--text-placeholder)] mx-auto" />
-          <h1 className="text-xl font-bold text-[var(--text-primary)]">没有可听写的单词</h1>
+          <h1 className="text-xl font-bold text-[var(--text-primary)]">没有可练习的单词</h1>
           <p className="text-[var(--text-secondary)] text-sm">先去导入视频学习单词吧</p>
         </div>
       </div>
@@ -183,9 +203,37 @@ export default function DictationPage() {
     <div className="py-6 max-w-lg mx-auto space-y-6">
       <div className="flex items-center gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-[var(--text-primary)] section-header">听写练习</h1>
-          <p className="text-[var(--text-secondary)] text-sm mt-1">听发音，输入韩语单词</p>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)] section-header">单词练习</h1>
+          <p className="text-[var(--text-secondary)] text-sm mt-1">
+            {mode === 'listen' ? '听发音，输入韩语单词' : '看释义，默写韩语单词'}
+          </p>
         </div>
+      </div>
+
+      {/* Mode tabs */}
+      <div className="flex bg-[var(--bg-input)] rounded-xl p-1 gap-1">
+        <button
+          onClick={() => handleModeSwitch('listen')}
+          className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-all ${
+            mode === 'listen'
+              ? 'bg-[var(--bg-card)] text-[var(--pink-primary)] shadow-sm'
+              : 'text-[var(--text-muted)] hover:text-[var(--text-secondary)]'
+          }`}
+        >
+          <Mic size={16} />
+          听写模式
+        </button>
+        <button
+          onClick={() => handleModeSwitch('write')}
+          className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-all ${
+            mode === 'write'
+              ? 'bg-[var(--bg-card)] text-[var(--pink-primary)] shadow-sm'
+              : 'text-[var(--text-muted)] hover:text-[var(--text-secondary)]'
+          }`}
+        >
+          <Pencil size={16} />
+          默写模式
+        </button>
       </div>
 
       {/* Progress */}
@@ -204,43 +252,83 @@ export default function DictationPage() {
         />
       </div>
 
-      {/* Audio play button */}
+      {/* Main card */}
       <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-8 text-center space-y-6">
-        <button
-          onClick={() => { speakKorean(currentWord.word); setHasListened(true); }}
-          className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto transition-all relative ${
-            hasListened
-              ? 'bg-[var(--mint-soft)]/10 hover:bg-[var(--mint-soft)]/20'
-              : 'bg-[var(--pink-primary)]/10 hover:bg-[var(--pink-primary)]/20 animate-pulse-glow'
-          }`}
-        >
-          <Volume2 size={40} className={hasListened ? 'text-[var(--mint-soft)]' : 'text-[var(--pink-primary)]'} />
-          {!hasListened && (
-            <span className="absolute -top-1 -right-1 w-5 h-5 bg-[var(--pink-primary)] text-white text-[13px] rounded-full flex items-center justify-center animate-bounce-in">
-              1
-            </span>
-          )}
-        </button>
+        {/* Mode: Listen — audio play button */}
+        {mode === 'listen' && (
+          <button
+            onClick={() => { speakKorean(currentWord.word); setHasListened(true); }}
+            className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto transition-all relative ${
+              hasListened
+                ? 'bg-[var(--mint-soft)]/10 hover:bg-[var(--mint-soft)]/20'
+                : 'bg-[var(--pink-primary)]/10 hover:bg-[var(--pink-primary)]/20 animate-pulse-glow'
+            }`}
+          >
+            <Volume2 size={40} className={hasListened ? 'text-[var(--mint-soft)]' : 'text-[var(--pink-primary)]'} />
+            {!hasListened && (
+              <span className="absolute -top-1 -right-1 w-5 h-5 bg-[var(--pink-primary)] text-white text-[13px] rounded-full flex items-center justify-center animate-bounce-in">
+                1
+              </span>
+            )}
+          </button>
+        )}
+
+        {/* Mode: Write — show meaning */}
+        {mode === 'write' && (
+          <div className="space-y-4">
+            <div className="text-center">
+              <p className="text-sm text-[var(--text-muted)] mb-2">请写出对应的韩语单词</p>
+              <p className="text-3xl font-bold text-[var(--text-primary)]">{currentWord.meaning}</p>
+              <p className="text-xs text-[var(--text-muted)] mt-1">{currentWord.partOfSpeech}</p>
+            </div>
+            {/* Hint: show pronunciation on demand */}
+            <button
+              onClick={() => speakKorean(currentWord.word)}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[var(--bg-input)] text-xs text-[var(--text-muted)] hover:text-[var(--pink-primary)] hover:bg-[var(--pink-pale)]/20 transition-colors"
+            >
+              <Eye size={14} />
+              听发音提示
+            </button>
+          </div>
+        )}
 
         <p className="text-[var(--text-secondary)] text-sm">
-          {hasListened ? '点击可重复播放，输入你听到的韩语' : '👆 点击按钮听发音'}
+          {mode === 'listen'
+            ? (hasListened ? '点击可重复播放，输入你听到的韩语' : '👆 点击按钮听发音')
+            : '用韩文键盘输入正确的韩语单词'
+          }
         </p>
 
-        {/* Input */}
-        <div className="flex gap-3 relative">
-          <input
-            ref={inputRef}
-            type="text"
-            value={userInput}
-            onChange={(e) => setUserInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !submitted) handleSubmit();
-              if (e.key === 'Enter' && submitted) handleNext();
-            }}
-            disabled={submitted}
-            placeholder="输入韩语..."
-            className="flex-1 bg-[var(--bg-input)] border border-[var(--pink-pale)] rounded-xl py-3 px-4 text-[var(--text-primary)] text-center text-lg placeholder:text-[var(--text-muted)] focus:outline-none focus:border-purple-500"
-          />
+        {/* Input area */}
+        <div className="space-y-2">
+          <div className="flex gap-3 relative">
+            <input
+              ref={inputRef}
+              type="text"
+              value={userInput}
+              onChange={(e) => setUserInput(e.target.value)}
+              onFocus={() => setKeyboardVisible(true)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !submitted) handleSubmit();
+                if (e.key === 'Enter' && submitted) handleNext();
+              }}
+              disabled={submitted}
+              placeholder={mode === 'listen' ? '输入韩语...' : '默写单词...'}
+              className="flex-1 bg-[var(--bg-input)] border border-[var(--pink-pale)] rounded-xl py-3 px-4 text-[var(--text-primary)] text-center text-lg placeholder:text-[var(--text-muted)] focus:outline-none focus:border-purple-500"
+            />
+            <button
+              type="button"
+              onClick={() => setKeyboardVisible(!keyboardVisible)}
+              className={`self-stretch px-3 rounded-xl transition-colors text-sm font-medium ${
+                keyboardVisible
+                  ? 'bg-[var(--pink-primary)]/20 text-[var(--pink-primary)]'
+                  : 'bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] hover:bg-[var(--pink-pale)]/20'
+              }`}
+              title="韩文键盘"
+            >
+              한
+            </button>
+          </div>
         </div>
 
         {/* XP gain sparkle indicator */}
@@ -264,9 +352,12 @@ export default function DictationPage() {
                 <span>正确!</span>
               </div>
             )}
-            {submitted && (
-              <p className="text-[var(--text-secondary)] text-sm mt-2">{currentWord.meaning}</p>
-            )}
+            <p className="text-[var(--text-secondary)] text-sm mt-2">
+              含义: {currentWord.meaning}
+              {currentWord.pronunciation && (
+                <span className="text-[var(--text-muted)] ml-2">[{currentWord.pronunciation}]</span>
+              )}
+            </p>
           </div>
         )}
 
@@ -281,22 +372,22 @@ export default function DictationPage() {
         {!submitted ? (
           <button
             onClick={handleSubmit}
-            disabled={!userInput.trim() || !hasListened}
+            disabled={!userInput.trim() || (mode === 'listen' && !hasListened)}
             className="px-8 py-3 bg-[var(--purple-soft)] hover:bg-[var(--purple-soft)] disabled:bg-[var(--bg-accent)] disabled:text-[var(--text-muted)] text-white rounded-xl transition-colors text-sm font-medium"
           >
-            {!hasListened ? '请先点击播放' : '确认'}
+            {mode === 'listen' && !hasListened ? '请先点击播放' : '确认'}
           </button>
         ) : (
           <button
             onClick={handleNext}
-            className="flex items-center justify-center gap-2 px-8 py-3 bg-[var(--pink-primary)] hover:bg-[var(--pink-primary)] text-[var(--text-primary)] rounded-xl transition-colors text-sm font-medium mx-auto"
+            className="flex items-center justify-center gap-2 px-8 py-3 bg-[var(--pink-primary)] text-white rounded-xl transition-colors text-sm font-medium mx-auto hover:opacity-90"
           >
             下一题
             <ArrowRight size={16} />
           </button>
         )}
 
-        {/* Keyboard shortcuts hint */}
+        {/* Keyboard shortcut hint */}
         <p className="text-xs text-[var(--text-placeholder)]">Enter 确认 · Enter 下一题</p>
       </div>
 
@@ -307,6 +398,17 @@ export default function DictationPage() {
           <span>本轮获得 <span className="text-[var(--peach-soft)] font-medium">{earnedXp} XP</span></span>
         </div>
       )}
+
+      {/* Virtual Korean keyboard */}
+      <KoreanKeyboard
+        value={userInput}
+        onChange={(val) => {
+          setUserInput(val);
+          if (mode === 'write') setHasListened(true); // don't block submission in write mode
+        }}
+        visible={keyboardVisible}
+        onClose={() => setKeyboardVisible(false)}
+      />
     </div>
   );
 }

@@ -17,6 +17,7 @@ import { useTheme } from '@/components/ThemeProvider';
 
 interface NavChild {
   label: string;
+  ko: string;
   href: string;
   icon: React.ComponentType<{ size?: number; className?: string }>;
 }
@@ -24,56 +25,47 @@ interface NavChild {
 interface NavGroup {
   icon: React.ComponentType<{ size?: number; className?: string }>;
   label: string;
+  ko: string;
   href: string;
   children: NavChild[];
 }
 
 const navGroups: NavGroup[] = [
-  { icon: Home, label: '首页', href: '/', children: [] },
+  { icon: Home, label: '首页', ko: '홈', href: '/', children: [] },
   {
-    icon: BookOpen, label: '学习', href: '/learn', children: [
-      { label: '每日学习', href: '/learn', icon: GraduationCap },
-      { label: '四十音', href: '/phonetics', icon: Grid3X3 },
-      { label: '连读规则', href: '/phonetics/rules', icon: Waves },
-      { label: '语法库', href: '/grammar', icon: FileText },
-      { label: '绘本学习', href: '/learn/picture-books', icon: BookImage },
-      { label: '文章阅读', href: '/reading', icon: BookOpen },
+    icon: BookOpen, label: '学习', ko: '학습', href: '/learn', children: [
+      { label: '每日学习', ko: '매일 학습', href: '/learn', icon: GraduationCap },
+      { label: '发音', ko: '발음', href: '/phonetics', icon: Grid3X3 },
+      { label: '语法库', ko: '문법', href: '/grammar', icon: FileText },
+      { label: '绘本学习', ko: '그림책', href: '/learn/picture-books', icon: BookImage },
+      { label: '文章阅读', ko: '읽기', href: '/reading', icon: BookOpen },
     ],
   },
   {
-    icon: Gamepad2, label: '练习', href: '/review', children: [
-      { label: 'SRS复习', href: '/review', icon: RefreshCw },
-      { label: '听写', href: '/dictation', icon: Pencil },
-      { label: '跟读', href: '/shadowing', icon: Mic },
-      { label: '写作', href: '/writing', icon: PenLine },
-      { label: 'TOPIK模拟', href: '/topik', icon: FileText },
+    icon: Gamepad2, label: '练习', ko: '연습', href: '/review', children: [
+      { label: 'SRS复习', ko: 'SRS 복습', href: '/review', icon: RefreshCw },
+      { label: '听写', ko: '받아쓰기', href: '/dictation', icon: Pencil },
+      { label: '跟读', ko: '쉐도잉', href: '/shadowing', icon: Mic },
+      { label: '写作', ko: '작문', href: '/writing', icon: PenLine },
+      { label: 'TOPIK模拟', ko: 'TOPIK 모의', href: '/topik', icon: FileText },
     ],
   },
   {
-    icon: LayoutGrid, label: '词汇', href: '/vocabulary', children: [
-      { label: '主题词包', href: '/vocabulary/themes', icon: Library },
-      { label: '分级词表', href: '/vocabulary/levels', icon: BarChart3 },
-      { label: '韩语字典', href: '/dictionary', icon: Search },
-      { label: '单词库', href: '/vocabulary', icon: BookOpen },
-      { label: '自定义单词本', href: '/vocabulary/books', icon: Bookmark },
-      { label: '延世教材词书', href: '/vocabulary/yonsei', icon: GraduationCap },
-      { label: '常用表达', href: '/expressions', icon: MessageCircle },
+    icon: LayoutGrid, label: '词汇', ko: '어휘', href: '/vocabulary', children: [
+      { label: '我的单词', ko: '내 단어', href: '/vocabulary', icon: BookOpen },
+      { label: '词库', ko: '단어장', href: '/vocabulary/library', icon: Library },
+      { label: '韩语字典', ko: '사전', href: '/dictionary', icon: Search },
     ],
   },
   {
-    icon: Flower2, label: '韩国', href: '/korea', children: [
-      { label: '文化', href: '/korea/culture', icon: Palette },
-      { label: '历史', href: '/korea/history', icon: Landmark },
-      { label: '旅行', href: '/korea/travel', icon: MapPin },
-      { label: '美食', href: '/korea/food', icon: UtensilsCrossed },
-    ],
+    icon: Flower2, label: '韩国', ko: '한국', href: '/korea', children: [],
   },
   {
-    icon: Bot, label: 'AI助手', href: '/ai', children: [
-      { label: 'AI 总览', href: '/ai', icon: Sparkles },
-      { label: '对话拆解', href: '/ai/analyze', icon: MessageSquare },
-      { label: '情景对话', href: '/ai/chat', icon: MessageSquare },
-      { label: '学习方案', href: '/ai/plan', icon: Lightbulb },
+    icon: Bot, label: 'AI助手', ko: 'AI 도우미', href: '/ai', children: [
+      { label: 'AI 总览', ko: 'AI 개요', href: '/ai', icon: Sparkles },
+      { label: '对话拆解', ko: '대화 분석', href: '/ai/analyze', icon: MessageSquare },
+      { label: '情景对话', ko: '상황 대화', href: '/ai/chat', icon: MessageSquare },
+      { label: '学习方案', ko: '학습 계획', href: '/ai/plan', icon: Lightbulb },
     ],
   },
 ];
@@ -152,7 +144,10 @@ export function Navbar() {
                   }`}
                 >
                   <Icon size={20} />
-                  <span className="flex-1 text-left">{group.label}</span>
+                  <div className="flex-1 text-left">
+                    <span>{group.label}</span>
+                    <span className="block text-[11px] text-[var(--text-muted)]">{group.ko}</span>
+                  </div>
                   {group.children.length > 0 && (
                     <ChevronRight
                       size={14}
@@ -180,7 +175,8 @@ export function Navbar() {
                           }`}
                         >
                           <ChildIcon size={15} />
-                          {child.label}
+                          <span>{child.label}</span>
+                          <span className="text-[11px] text-[var(--text-muted)]">{child.ko}</span>
                         </Link>
                       );
                     })}
@@ -288,6 +284,7 @@ export function Navbar() {
             <div className="flex items-center justify-between px-5 pt-5 pb-3">
               <span className="text-lg font-bold text-[var(--text-primary)]" style={{ fontFamily: "'ZCOOL KuaiLe', cursive" }}>
                 {navGroups[mobileDrawer].label}
+                <span className="text-sm font-normal text-[var(--text-muted)] ml-2">{navGroups[mobileDrawer].ko}</span>
               </span>
               <button onClick={closeMobileDrawer} className="p-1 text-[var(--text-secondary)]">
                 <X size={22} />
@@ -310,7 +307,8 @@ export function Navbar() {
                     }`}
                   >
                     <ChildIcon size={18} />
-                    {child.label}
+                    <span>{child.label}</span>
+                    <span className="text-xs text-[var(--text-muted)]">{child.ko}</span>
                   </Link>
                 );
               })}

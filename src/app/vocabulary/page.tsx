@@ -5,10 +5,11 @@ import Link from 'next/link';
 import {
   Search, Trash2, X, ChevronDown, ChevronUp,
   BookOpen, GraduationCap, Film, Clock, ArrowRight,
-  Sparkles, Hash, Calendar, Filter, Volume2, BookmarkPlus,
+  Sparkles, Hash, Calendar, Filter, Volume2, BookmarkPlus, Library, Bookmark,
 } from 'lucide-react';
 import { db } from '@/lib/db';
 import { AddToBookModal } from '@/components/AddToBookModal';
+import { BooksSection } from '@/components/vocabulary/BooksSection';
 import type { Word, MasteryLevel } from '@/types';
 
 // ── Mastery display config ──────────────────────────────────────────
@@ -83,6 +84,7 @@ const filterOptions: { value: MasteryLevel | 'all'; label: string }[] = [
 //  VocabularyPage
 // ═══════════════════════════════════════════════════════════════════
 export default function VocabularyPage() {
+  const [tab, setTab] = useState<'words' | 'books'>('words');
   const [allWords, setAllWords] = useState<Word[]>([]);
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState<MasteryLevel | 'all'>('all');
@@ -175,11 +177,11 @@ export default function VocabularyPage() {
         </div>
         <div className="flex items-center gap-2">
           <Link
-            href="/vocabulary/books"
+            href="/vocabulary/library"
             className="flex items-center gap-1.5 text-sm px-4 py-2.5 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--pink-primary)] transition-colors"
           >
-            <BookmarkPlus size={16} />
-            <span className="hidden sm:inline">单词本</span>
+            <Library size={16} />
+            <span className="hidden sm:inline">词库</span>
           </Link>
           <Link
             href="/learn"
@@ -191,17 +193,45 @@ export default function VocabularyPage() {
         </div>
       </div>
 
-      {/* ─────── Theme Pack Promo ─────── */}
+      {/* ─────── Tabs ─────── */}
+      <div className="flex gap-2 border-b border-[var(--border-color)]">
+        {([
+          { key: 'words' as const, label: '全部单词', icon: BookOpen },
+          { key: 'books' as const, label: '我的单词本', icon: Bookmark },
+        ]).map((t) => {
+          const Icon = t.icon;
+          const isActive = tab === t.key;
+          return (
+            <button
+              key={t.key}
+              onClick={() => setTab(t.key)}
+              className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-all ${
+                isActive
+                  ? 'border-[var(--pink-primary)] text-[var(--pink-primary)]'
+                  : 'border-transparent text-[var(--text-muted)] hover:text-[var(--text-primary)]'
+              }`}
+            >
+              <Icon size={16} />
+              {t.label}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* ─────── Tab: 全部单词 ─────── */}
+      {tab === 'words' && (
+      <>
+      {/* ─────── Library Promo ─────── */}
       <Link
-        href="/vocabulary/themes"
+        href="/vocabulary/library"
         className="block bg-gradient-to-r from-[var(--pink-primary)]/10 to-[var(--purple-soft)]/10 border border-[var(--pink-pale)] rounded-2xl p-4 hover:border-[var(--pink-primary)]/30 transition-all group"
       >
         <div className="flex items-center gap-3">
-          <span className="text-3xl">🐰</span>
+          <span className="text-3xl">📚</span>
           <div className="flex-1">
-            <p className="text-sm font-bold text-[var(--text-primary)]">主题词包</p>
+            <p className="text-sm font-bold text-[var(--text-primary)]">词库</p>
             <p className="text-xs text-[var(--text-secondary)] mt-0.5">
-              按场景学词：咖啡厅、追星、旅行…토리陪你系统学韩语
+              主题词包 · 分级词表 · 延世教材 — 系统化词汇学习资源
             </p>
           </div>
           <ArrowRight size={18} className="text-[var(--text-muted)] group-hover:translate-x-1 transition-transform" />
@@ -522,6 +552,11 @@ export default function VocabularyPage() {
           onDone={() => {}}
         />
       )}
+      </>
+      )}
+
+      {/* ─────── Tab: 我的单词本 ─────── */}
+      {tab === 'books' && <BooksSection />}
     </div>
   );
 }

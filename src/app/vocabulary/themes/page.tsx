@@ -1,27 +1,14 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Clock, BookOpen, Sparkles, Search } from 'lucide-react';
-import { getAllThemes, getThemeCategories, getThemeWords } from '@/data/vocabulary';
-
-const categoryEmojis: Record<string, string> = {
-  '生活场景': '📍',
-  '社交表达': '💬',
-  '韩流场景': '🎭',
-  '旅行韩国': '✈️',
-  '职场学习': '💼',
-};
+import { ArrowLeft } from 'lucide-react';
+import { ThemesSection } from '@/components/vocabulary/ThemesSection';
 
 export default function ThemesPage() {
-  const themes = getAllThemes();
-  const categories = getThemeCategories();
-
   return (
     <div className="py-4 space-y-6">
-      {/* Header */}
       <div>
-        <Link href="/vocabulary" className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] mb-3">
+        <Link href="/vocabulary/library" className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] mb-3">
           <ArrowLeft size={16} />
           返回词库
         </Link>
@@ -32,59 +19,7 @@ export default function ThemesPage() {
           学一个场景，拿走一套够用的词。토리陪你开口说韩语！
         </p>
       </div>
-
-      {/* Categories */}
-      {categories.map((cat) => {
-        const catThemes = themes.filter((t) => t.category === cat);
-        return (
-          <div key={cat}>
-            <h2 className="text-sm font-medium text-[var(--text-secondary)] uppercase tracking-wider mb-3 flex items-center gap-2">
-              <span>{categoryEmojis[cat] || '📦'}</span>
-              {cat}
-              <span className="text-xs text-[var(--text-muted)] normal-case">({catThemes.length}个词包)</span>
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-              {catThemes.map((theme) => {
-                const wordCount = theme.wordIds.length;
-                return (
-                  <Link
-                    key={theme.id}
-                    href={`/vocabulary/themes/${theme.id}`}
-                    className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 hover:border-[var(--pink-primary)]/40 hover:shadow-[var(--shadow-md)] hover:-translate-y-0.5 transition-all duration-200 group"
-                  >
-                    <div className="text-3xl mb-3">{theme.emoji}</div>
-                    <h3 className="font-semibold text-[var(--text-primary)] text-sm leading-tight mb-1">
-                      {theme.name}
-                    </h3>
-                    <p className="text-xs text-[var(--text-muted)] line-clamp-2 mb-3">
-                      {theme.description}
-                    </p>
-                    <div className="flex items-center gap-3 text-xs text-[var(--text-muted)]">
-                      <span className="flex items-center gap-1">
-                        <BookOpen size={11} />
-                        {wordCount}词
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Clock size={11} />
-                        {theme.estimatedMinutes}分钟
-                      </span>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        );
-      })}
-
-      {/* Empty state if no themes */}
-      {themes.length === 0 && (
-        <div className="text-center py-16">
-          <Sparkles size={40} className="text-[var(--text-placeholder)] mx-auto mb-3" />
-          <p className="text-sm text-[var(--text-secondary)]">暂无主题词包</p>
-          <p className="text-xs text-[var(--text-muted)] mt-1">词包正在陆续制作中</p>
-        </div>
-      )}
+      <ThemesSection />
     </div>
   );
 }

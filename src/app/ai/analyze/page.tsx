@@ -5,6 +5,7 @@ import { Search, Loader2, Volume2, ExternalLink, Lightbulb, Sparkles, Languages,
 import Link from 'next/link';
 import { knowledgeCategories } from '@/data/knowledge';
 import { grammarPoints } from '@/data/grammar';
+import { KoreanKeyboard } from '@/components/KoreanKeyboard';
 
 function speakKorean(text: string) {
   window.speechSynthesis.cancel();
@@ -345,6 +346,7 @@ function AnalyzerForm() {
   const [input, setInput] = useState('');
   const [analyzing, setAnalyzing] = useState(false);
   const [result, setResult] = useState<AnalysisResult | null>(null);
+  const [showKeyboard, setShowKeyboard] = useState(false);
 
   // Word bank state
   const [addedWords, setAddedWords] = useState<Set<string>>(new Set());
@@ -431,15 +433,36 @@ function AnalyzerForm() {
     <>
       {/* Input area */}
       <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 space-y-3 card-sticker corner-decoration">
-        <textarea
+        <div className="flex gap-2">
+          <textarea
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && e.ctrlKey) handleAnalyze();
+            }}
+            onFocus={() => setShowKeyboard(true)}
+            placeholder="粘贴整段韩语对话或句子...&#10;例如: 안녕하세요, 저는 학생입니다&#10;例如: 한국어를 공부하고 있어요&#10;Ctrl+Enter 分析"
+            rows={4}
+            className="flex-1 bg-[var(--bg-input)] border border-[var(--border-color)] rounded-xl p-4 text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)] text-sm resize-none focus:outline-none focus:border-[var(--pink-primary)]/50 focus:ring-1 focus:ring-[var(--pink-primary)]/25"
+          />
+          <button
+            type="button"
+            onClick={() => setShowKeyboard(!showKeyboard)}
+            className={`self-start px-3 py-3 rounded-xl transition-colors text-sm font-medium ${
+              showKeyboard
+                ? 'bg-[var(--pink-primary)]/20 text-[var(--pink-primary)]'
+                : 'bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] hover:bg-[var(--pink-pale)]/20'
+            }`}
+            title="韩文键盘"
+          >
+            한
+          </button>
+        </div>
+        <KoreanKeyboard
           value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' && e.ctrlKey) handleAnalyze();
-          }}
-          placeholder="粘贴整段韩语对话或句子...&#10;例如: 안녕하세요, 저는 학생입니다&#10;例如: 한국어를 공부하고 있어요&#10;Ctrl+Enter 分析"
-          rows={4}
-          className="w-full bg-[var(--bg-input)] border border-[var(--border-color)] rounded-xl p-4 text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)] text-sm resize-none focus:outline-none focus:border-[var(--pink-primary)]/50 focus:ring-1 focus:ring-[var(--pink-primary)]/25"
+          onChange={setInput}
+          visible={showKeyboard}
+          onClose={() => setShowKeyboard(false)}
         />
         <div className="flex items-center justify-between">
           <span className="text-xs text-[var(--text-muted)]">

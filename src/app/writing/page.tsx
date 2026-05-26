@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { PenLine, Check, X, Lightbulb, RefreshCw, Sparkles, BookOpen, Clock, ChevronDown, ChevronUp, Star, History, Trophy } from 'lucide-react';
+import { KoreanKeyboard } from '@/components/KoreanKeyboard';
 
 type WritingMode = 'imitation' | 'free' | 'cloze' | 'history';
 
@@ -252,6 +253,7 @@ function ImitationMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord, '
   const [userInput, setUserInput] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [score, setScore] = useState(0);
+  const [showKeyboard, setShowKeyboard] = useState(false);
 
   const prompt = imitationPrompts[currentIdx];
   const userClean = userInput.trim().replace(/\s/g, '');
@@ -317,15 +319,38 @@ function ImitationMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord, '
         </div>
 
         {/* Input */}
-        <textarea
-          value={userInput}
-          onChange={(e) => setUserInput(e.target.value)}
-          disabled={submitted}
-          placeholder="在这里输入韩语..."
-          rows={2}
-          className="w-full bg-[var(--bg-input)] border border-[var(--pink-pale)] rounded-xl p-4 text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)] text-base text-center resize-none focus:outline-none focus:border-[var(--pink-primary)]/50"
-          style={{ fontFamily: "'system-ui', 'sans-serif'" }}
-        />
+        <div className="space-y-2">
+          <div className="flex gap-2">
+            <textarea
+              value={userInput}
+              onChange={(e) => setUserInput(e.target.value)}
+              onFocus={() => setShowKeyboard(true)}
+              disabled={submitted}
+              placeholder="在这里输入韩语..."
+              rows={2}
+              className="flex-1 bg-[var(--bg-input)] border border-[var(--pink-pale)] rounded-xl p-4 text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)] text-base text-center resize-none focus:outline-none focus:border-[var(--pink-primary)]/50"
+              style={{ fontFamily: "'system-ui', 'sans-serif'" }}
+            />
+            <button
+              type="button"
+              onClick={() => setShowKeyboard(!showKeyboard)}
+              className={`self-start px-3 py-3 rounded-xl transition-colors text-sm font-medium ${
+                showKeyboard
+                  ? 'bg-[var(--pink-primary)]/20 text-[var(--pink-primary)]'
+                  : 'bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] hover:bg-[var(--pink-pale)]/20'
+              }`}
+              title="韩文键盘"
+            >
+              한
+            </button>
+          </div>
+          <KoreanKeyboard
+            value={userInput}
+            onChange={setUserInput}
+            visible={showKeyboard}
+            onClose={() => setShowKeyboard(false)}
+          />
+        </div>
 
         {/* Action button */}
         {!submitted ? (
@@ -440,6 +465,7 @@ function FreeWritingMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord,
   const [wordCount, setWordCount] = useState(0);
   const [uniqueWords, setUniqueWords] = useState(0);
   const [scored, setScored] = useState(false);
+  const [showKeyboard, setShowKeyboard] = useState(false);
   const [scores, setScores] = useState<{ vocabulary: number; grammar: number; naturalness: number; overall: number } | null>(null);
 
   const topic = freeTopics[selectedTopic];
@@ -517,13 +543,34 @@ function FreeWritingMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord,
 
       {/* Writing area */}
       <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4">
-        <textarea
+        <div className="flex gap-2">
+          <textarea
+            value={text}
+            onChange={(e) => updateStats(e.target.value)}
+            onFocus={() => setShowKeyboard(true)}
+            placeholder="在这里自由书写韩语..."
+            rows={8}
+            className="flex-1 bg-transparent text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)] text-sm resize-none focus:outline-none"
+            style={{ fontFamily: "'system-ui', 'sans-serif'" }}
+          />
+          <button
+            type="button"
+            onClick={() => setShowKeyboard(!showKeyboard)}
+            className={`self-start px-3 py-3 rounded-xl transition-colors text-sm font-medium ${
+              showKeyboard
+                ? 'bg-[var(--pink-primary)]/20 text-[var(--pink-primary)]'
+                : 'bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] hover:bg-[var(--pink-pale)]/20'
+            }`}
+            title="韩文键盘"
+          >
+            한
+          </button>
+        </div>
+        <KoreanKeyboard
           value={text}
-          onChange={(e) => updateStats(e.target.value)}
-          placeholder="在这里自由书写韩语..."
-          rows={8}
-          className="w-full bg-transparent text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)] text-sm resize-none focus:outline-none"
-          style={{ fontFamily: "'system-ui', 'sans-serif'" }}
+          onChange={(val) => updateStats(val)}
+          visible={showKeyboard}
+          onClose={() => setShowKeyboard(false)}
         />
         <div className="flex items-center justify-between pt-3 border-t border-[var(--border-color)] text-xs text-[var(--text-muted)]">
           <span>字数: {wordCount}</span>
