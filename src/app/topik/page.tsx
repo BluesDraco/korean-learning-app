@@ -31,7 +31,7 @@ function speakTopik(text: string): Promise<void> {
 
 export default function TopikPage() {
   const [phase, setPhase] = useState<Phase>('selecting');
-  const [section, setSection] = useState<'listening' | 'reading'>('listening');
+  const [section, setSection] = useState('beginner-listening');
   const [questions, setQuestions] = useState<TopikQuestion[]>([]);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [answers, setAnswers] = useState<Map<string, number>>(new Map());
@@ -40,7 +40,7 @@ export default function TopikPage() {
   const [playing, setPlaying] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const sectionInfo = topikSections.find((s) => s.id === section)!;
+  const sectionInfo = topikSections.find((s) => s.id === section) || topikSections[0];
 
   // Timer
   useEffect(() => {
@@ -67,16 +67,18 @@ export default function TopikPage() {
     }
   }, [timeLeft]);
 
-  const startExam = useCallback((sec: 'listening' | 'reading') => {
-    const qs = topikQuestions.filter((q) => q.section === sec);
-    setSection(sec);
+  const startExam = useCallback((secId: string) => {
+    const sec = topikSections.find((s) => s.id === secId);
+    if (!sec) return;
+    const qs = topikQuestions.filter((q) => q.section === sec.section && q.level === sec.level);
+    setSection(secId);
     setQuestions(qs);
     setCurrentIdx(0);
     setAnswers(new Map());
     setShowAnswer(false);
-    setTimeLeft(sectionInfo.timeMinutes * 60);
+    setTimeLeft(sec.timeMinutes * 60);
     setPhase('exam');
-  }, [sectionInfo]);
+  }, []);
 
   const selectAnswer = (optionIdx: number) => {
     if (showAnswer) return;
@@ -114,7 +116,7 @@ export default function TopikPage() {
 
   // Auto-play audio when moving to a new listening question
   useEffect(() => {
-    if (phase === 'exam' && section === 'listening' && questions.length > 0) {
+    if (phase === 'exam' && sectionInfo.section === 'listening' && questions.length > 0) {
       const q = questions[currentIdx];
       if (q.audioText && !showAnswer && !playing) {
         const t = setTimeout(() => handlePlayAudio(), 300);
@@ -132,6 +134,15 @@ export default function TopikPage() {
   const score = questions.length > 0 ? Math.round((correctCount / questions.length) * 100) : 0;
   const passed = score >= 60;
 
+  const levelLabel = (level: string) => {
+    switch (level) {
+      case 'beginner': return { text: '初级', emoji: '🌱', color: 'bg-[var(--mint-soft)]/15 text-[var(--mint-soft)]' };
+      case 'intermediate': return { text: '中级', emoji: '🌿', color: 'bg-[var(--peach-soft)]/15 text-[var(--peach-soft)]' };
+      case 'advanced': return { text: '高级', emoji: '🌳', color: 'bg-[var(--purple-soft)]/15 text-[var(--purple-soft)]' };
+      default: return { text: '', emoji: '', color: '' };
+    }
+  };
+
   const formatTime = (s: number) => {
     const m = Math.floor(s / 60);
     const sec = s % 60;
@@ -140,42 +151,55 @@ export default function TopikPage() {
 
   // ─── Select Phase ──────────────────────────────────────────
   if (phase === 'selecting') {
+    const levels = ['beginner', 'intermediate', 'advanced'] as const;
     return (
       <div className="py-4 space-y-6">
         <div className="text-center">
           <div className="text-5xl mb-3">📝</div>
           <h1 className="text-2xl font-bold text-[var(--text-primary)] section-header">TOPIK 真题模拟</h1>
           <p className="text-sm text-[var(--text-secondary)] mt-2 max-w-md mx-auto">
-            模拟韩国语能力考试 TOPIK I（初级）真实题型和计时环境
+            涵盖 TOPIK I（初级）~ TOPIK II（中高级）300道模拟题，真实题型与计时环境
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {topikSections.map((sec) => (
-            <button
-              key={sec.id}
-              onClick={() => startExam(sec.id as 'listening' | 'reading')}
-              className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 text-left hover:border-[var(--pink-primary)]/40 hover:shadow-lg hover:-translate-y-0.5 transition-all group"
-            >
-              <div className="flex items-start justify-between mb-4">
-                <div className="w-12 h-12 rounded-xl bg-[var(--pink-primary)]/10 flex items-center justify-center">
-                  {sec.id === 'listening' ? (
-                    <Headphones size={24} className="text-[var(--pink-primary)]" />
-                  ) : (
-                    <BookOpen size={24} className="text-[var(--purple-soft)]" />
-                  )}
-                </div>
-                <ChevronRight size={18} className="text-[var(--text-muted)] group-hover:translate-x-1 transition-transform mt-2" />
+        {levels.map((level) => {
+          const levelSections = topikSections.filter((s) => s.level === level);
+          if (levelSections.length === 0) return null;
+          const l = levelLabel(level);
+          return (
+            <div key={level}>
+              <div className="flex items-center gap-2 mb-3">
+                <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${l.color}`}>{l.emoji} {l.text}</span>
               </div>
-              <h3 className="font-bold text-[var(--text-primary)] mb-1">{sec.titleKo} {sec.title}</h3>
-              <p className="text-xs text-[var(--text-secondary)] mb-3">{sec.description}</p>
-              <div className="flex items-center gap-3 text-xs text-[var(--text-muted)]">
-                <span className="flex items-center gap-1"><Clock size={12} /> {sec.timeMinutes}分钟</span>
-                <span>{sec.questionCount}题</span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {levelSections.map((sec) => (
+                  <button
+                    key={sec.id}
+                    onClick={() => startExam(sec.id)}
+                    className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-5 text-left hover:border-[var(--pink-primary)]/40 hover:shadow-lg hover:-translate-y-0.5 transition-all group"
+                  >
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="w-10 h-10 rounded-xl bg-[var(--pink-primary)]/10 flex items-center justify-center">
+                        {sec.section === 'listening' ? (
+                          <Headphones size={20} className="text-[var(--pink-primary)]" />
+                        ) : (
+                          <BookOpen size={20} className="text-[var(--purple-soft)]" />
+                        )}
+                      </div>
+                      <ChevronRight size={16} className="text-[var(--text-muted)] group-hover:translate-x-1 transition-transform mt-1" />
+                    </div>
+                    <h3 className="font-bold text-sm text-[var(--text-primary)] mb-0.5">{sec.titleKo} {sec.title}</h3>
+                    <p className="text-[13px] text-[var(--text-secondary)] mb-2">{sec.description}</p>
+                    <div className="flex items-center gap-3 text-[13px] text-[var(--text-muted)]">
+                      <span className="flex items-center gap-1"><Clock size={12} /> {sec.timeMinutes}分钟</span>
+                      <span>{sec.questionCount}题</span>
+                    </div>
+                  </button>
+                ))}
               </div>
-            </button>
-          ))}
-        </div>
+            </div>
+          );
+        })}
 
         <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-5">
           <h3 className="text-sm font-bold text-[var(--text-primary)] mb-3 flex items-center gap-2">
@@ -185,7 +209,7 @@ export default function TopikPage() {
           <ul className="space-y-2 text-xs text-[var(--text-secondary)]">
             <li className="flex items-start gap-2">
               <span className="text-[var(--mint-soft)] mt-0.5">•</span>
-              模拟 TOPIK I（初级）考试，包含听力和阅读两个部分
+              涵盖初级（1-2급）、中级（3-4급）、高级（5-6급）三个级别
             </li>
             <li className="flex items-start gap-2">
               <span className="text-[var(--mint-soft)] mt-0.5">•</span>
@@ -193,7 +217,7 @@ export default function TopikPage() {
             </li>
             <li className="flex items-start gap-2">
               <span className="text-[var(--mint-soft)] mt-0.5">•</span>
-              每部分限时完成，选择答案后显示解析，点击下一题继续
+              每部分限时完成，选择答案后显示解析和核心词汇
             </li>
             <li className="flex items-start gap-2">
               <span className="text-[var(--mint-soft)] mt-0.5">•</span>
@@ -253,7 +277,7 @@ export default function TopikPage() {
       {phase === 'exam' && currentQ && (
         <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-3xl p-6 space-y-5">
           {/* Audio button for listening */}
-          {section === 'listening' && currentQ.audioText && (
+          {sectionInfo.section === 'listening' && currentQ.audioText && (
             <button
               onClick={handlePlayAudio}
               disabled={playing || showAnswer}
@@ -276,6 +300,14 @@ export default function TopikPage() {
               )}
             </button>
           )}
+
+          {/* Topic tag */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-[13px] font-bold text-[var(--pink-primary)] bg-[var(--pink-primary)]/8 px-2.5 py-0.5 rounded-full">
+              #{currentQ.topic}
+            </span>
+            <span className="text-[13px] text-[var(--text-muted)]">{levelLabel(currentQ.level).emoji} {levelLabel(currentQ.level).text} · 第{currentQ.number}题</span>
+          </div>
 
           {/* Prompt */}
           <div>
@@ -324,10 +356,20 @@ export default function TopikPage() {
             })}
           </div>
 
-          {/* Explanation after answer */}
+          {/* Explanation and vocabulary after answer */}
           {showAnswer && (
-            <div className="bg-[var(--bg-input)] rounded-xl p-4 animate-fade-in">
+            <div className="bg-[var(--bg-input)] rounded-xl p-4 animate-fade-in space-y-3">
               <p className="text-xs text-[var(--text-secondary)] leading-relaxed">{currentQ.explanation}</p>
+              {currentQ.vocabulary.length > 0 && (
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-[13px] text-[var(--text-muted)]">核心词汇:</span>
+                  {currentQ.vocabulary.map((v, vi) => (
+                    <span key={vi} className="text-[13px] bg-[var(--bg-card)] border border-[var(--border-color)] px-2 py-0.5 rounded-lg text-[var(--text-primary)]">
+                      {v}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
