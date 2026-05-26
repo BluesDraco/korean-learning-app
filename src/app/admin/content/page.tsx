@@ -1,9 +1,9 @@
 'use client';
 
 import { useAdminData } from '@/lib/useAdminData';
-import type { ContentResponse, FeedbackItem } from '@/types/admin';
+import type { ContentResponse } from '@/types/admin';
 import { useState } from 'react';
-import { Check, X, Eye } from 'lucide-react';
+import { Check, X } from 'lucide-react';
 
 const statusTabs = [
   { key: 'pending', label: '待处理' },

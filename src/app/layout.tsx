@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/components/ThemeProvider';
 import { VisitorCounter } from '@/components/VisitorCounter';
 import { FloatingDecorations } from '@/components/FloatingDecorations';
 import { AuthProvider } from '@/components/AuthProvider';
+import { FontProvider } from '@/components/FontProvider';
 import { XpOverlay } from '@/components/XpOverlay';
 
 export const metadata: Metadata = {
@@ -36,9 +37,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href="https://fonts.googleapis.com/css2?family=LXGW+WenKai&family=Nanum+Pen+Script&family=Nanum+Gothic:wght@400;700;800&family=Nunito:wght@400;500;600;700;800&family=ZCOOL+KuaiLe&display=swap"
           rel="stylesheet"
         />
+        {/* Anti-FOUC: apply font settings before paint */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var s=JSON.parse(localStorage.getItem('font-settings'));if(s){var d=document.documentElement;if(s.preset)d.setAttribute('data-font',s.preset);if(s.size)d.setAttribute('data-font-size',s.size)}}catch(e){}})()`,
+          }}
+        />
       </head>
       <body className="min-h-screen antialiased page-corner-bunny">
         <ThemeProvider>
+          <FontProvider>
           <AuthProvider>
           {/* Floating decorative particles */}
           <FloatingDecorations />
@@ -60,6 +68,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <VisitorCounter />
           </div>
           </AuthProvider>
+          </FontProvider>
         </ThemeProvider>
         <XpOverlay />
         <script

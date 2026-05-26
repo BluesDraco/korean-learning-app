@@ -7,9 +7,12 @@ import { getProfile, updateProfile } from '@/lib/gamification';
 import { db } from '@/lib/db';
 import type { UserProfile, Achievement } from '@/types';
 import { ACHIEVEMENT_DEFS } from '@/types';
+import { useFontSettings } from '@/components/FontProvider';
+import { FONT_PRESETS, FONT_SIZES } from '@/lib/fontSettings';
 
 export default function SettingsPage() {
   const router = useRouter();
+  const { settings: fontSettings, setPreset, setSize } = useFontSettings();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [achievements, setAchievements] = useState<Achievement[]>([]);
   const [loading, setLoading] = useState(true);
@@ -216,6 +219,74 @@ export default function SettingsPage() {
           <p className="text-xs text-[var(--text-secondary)]">
             亮色/暗色主题切换请使用导航栏底部的按钮
           </p>
+        </div>
+      </div>
+
+      {/* Font Settings */}
+      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 space-y-5">
+        <div className="flex items-center gap-3 mb-4">
+          <span className="text-xl">🔤</span>
+          <h2 className="text-lg font-medium text-[var(--text-primary)]">显示设置</h2>
+        </div>
+
+        {/* Font preset */}
+        <div>
+          <label className="text-xs text-[var(--text-secondary)] mb-2 block">字体风格</label>
+          <div className="grid grid-cols-3 gap-2">
+            {FONT_PRESETS.map((p) => (
+              <button
+                key={p.key}
+                onClick={() => setPreset(p.key)}
+                className={`rounded-xl p-3 text-center border transition-all ${
+                  fontSettings.preset === p.key
+                    ? 'border-[var(--pink-primary)] bg-[var(--pink-primary)]/8 shadow-sm'
+                    : 'border-[var(--border-color)] hover:border-[var(--border-hover)]'
+                }`}
+              >
+                <p className={`text-xs font-semibold mb-1 ${
+                  fontSettings.preset === p.key ? 'text-[var(--pink-primary)]' : 'text-[var(--text-primary)]'
+                }`}>
+                  {p.label}
+                </p>
+                <p className="text-[10px] text-[var(--text-muted)] leading-tight">{p.desc}</p>
+                <p
+                  className="mt-1.5 text-[9px] text-[var(--text-muted)] truncate"
+                  style={{ fontFamily: p.key === 'cute' ? "'Nunito','LXGW WenKai',sans-serif" : p.key === 'clean' ? "system-ui,sans-serif" : "'LXGW WenKai','Nanum Gothic',serif" }}
+                >
+                  {p.preview}
+                </p>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Font size */}
+        <div>
+          <label className="text-xs text-[var(--text-secondary)] mb-2 block">字号大小</label>
+          <div className="flex gap-2">
+            {FONT_SIZES.map((s) => (
+              <button
+                key={s.key}
+                onClick={() => setSize(s.key)}
+                className={`flex-1 rounded-xl py-2.5 text-center border transition-all ${
+                  fontSettings.size === s.key
+                    ? 'border-[var(--pink-primary)] bg-[var(--pink-primary)]/8 shadow-sm'
+                    : 'border-[var(--border-color)] hover:border-[var(--border-hover)]'
+                }`}
+              >
+                <span className={`text-xs ${
+                  fontSettings.size === s.key ? 'text-[var(--pink-primary)] font-semibold' : 'text-[var(--text-primary)]'
+                }`}>
+                  {s.label}
+                </span>
+                <span className={`block ${
+                  fontSettings.size === s.key ? 'text-[var(--pink-primary)]' : 'text-[var(--text-muted)]'
+                }`} style={{ fontSize: `${s.px}px` }}>
+                  Aa
+                </span>
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 

@@ -7,14 +7,16 @@ import Link from 'next/link';
 import { TrendingUp, TrendingDown, Server, Cpu, HardDrive, AlertTriangle } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 
-function MetricCardView({ card, prefix = '' }: { card: MetricCard; prefix?: string }) {
+function MetricCardView({ card, prefix = '', suffix = '' }: { card: MetricCard; prefix?: string; suffix?: string }) {
   const isUp = card.change >= 0;
+  const isPercent = card.label.includes('率');
+  const sfx = suffix || (isPercent ? '%' : '');
+  const formatVal = (v: number) => typeof v === 'number' && !Number.isInteger(v) ? v.toFixed(1) : v;
   return (
     <div className="bg-white rounded-xl p-5 border border-[#F5E6E0]" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
       <p className="text-sm text-gray-400 mb-2">{card.label}</p>
       <p className="text-3xl font-extrabold text-gray-800">
-        {prefix}{typeof card.value === 'number' && !Number.isInteger(card.value) ? card.value.toFixed(1) : card.value}
-        {card.label.includes('率') ? '%' : ''}
+        {prefix}{formatVal(card.value)}{sfx}
       </p>
       <div className="flex items-center gap-1 mt-2">
         {isUp ? (
@@ -25,7 +27,7 @@ function MetricCardView({ card, prefix = '' }: { card: MetricCard; prefix?: stri
         <span className={`text-xs font-semibold ${isUp ? 'text-emerald-500' : 'text-red-400'}`}>
           {isUp ? '+' : ''}{card.change}%
         </span>
-        <span className="text-xs text-gray-400 ml-1">vs 昨日 {card.yesterdayValue}</span>
+        <span className="text-xs text-gray-400 ml-1">vs 昨日 {formatVal(card.yesterdayValue)}{sfx}</span>
       </div>
     </div>
   );

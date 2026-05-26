@@ -95,23 +95,52 @@
    ═══════════════════════════════════════════════════════════════ */
 
 @layer base {
-  html {
-    font-size: 17px;
-  }
+  /* ── Font Size ── */
+  html { font-size: 17px; }
+  html[data-font-size="small"]  { font-size: 15px; }
+  html[data-font-size="medium"] { font-size: 17px; }
+  html[data-font-size="large"]  { font-size: 19px; }
+  html[data-font-size="xlarge"] { font-size: 21px; }
+
+  /* ── Body Font Presets ── */
   body {
-    font-family: 'Nunito', 'LXGW WenKai', 'ZCOOL KuaiLe', system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
     background-color: var(--bg-base);
     color: var(--text-primary);
     line-height: 1.7;
+    font-family: 'Nunito', 'LXGW WenKai', 'ZCOOL KuaiLe', system-ui, -apple-system, sans-serif;
   }
 
-  /* Korean text */
-  .ko-text {
+  /* Preset: cute (default) — rounded + handwriting Korean */
+  html[data-font="cute"] body,
+  html:not([data-font]) body {
+    font-family: 'Nunito', 'LXGW WenKai', 'ZCOOL KuaiLe', system-ui, -apple-system, sans-serif;
+  }
+  html[data-font="cute"] .ko-text,
+  html:not([data-font]) .ko-text {
     font-family: 'Nanum Pen Script', 'Nanum Gothic', sans-serif;
   }
-  .ko-body {
+  html[data-font="cute"] .ko-body,
+  html:not([data-font]) .ko-body {
     font-family: 'Nanum Gothic', sans-serif;
+  }
+
+  /* Preset: clean — system sans-serif + Nanum Gothic */
+  html[data-font="clean"] body {
+    font-family: system-ui, -apple-system, 'Segoe UI', 'Nunito', sans-serif;
+  }
+  html[data-font="clean"] .ko-text,
+  html[data-font="clean"] .ko-body {
+    font-family: 'Nanum Gothic', sans-serif;
+  }
+
+  /* Preset: classic — LXGW WenKai body + Nanum Gothic Korean */
+  html[data-font="classic"] body {
+    font-family: 'LXGW WenKai', 'Nanum Gothic', Georgia, 'Times New Roman', serif;
+  }
+  html[data-font="classic"] .ko-text,
+  html[data-font="classic"] .ko-body {
+    font-family: 'Nanum Gothic', Georgia, serif;
   }
 }
 
@@ -688,6 +717,10 @@
   from { opacity: 0; }
   to { opacity: 1; }
 }
+@keyframes slide-in-left {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
 @keyframes slide-up {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
@@ -764,6 +797,7 @@
 }
 
 .animate-fade-in     { animation: fade-in 0.2s ease-out; }
+.animate-slide-in-left { animation: slide-in-left 0.25s ease-out; }
 .animate-slide-up    { animation: slide-up 0.3s ease-out; }
 .animate-slide-up-drawer { animation: slide-up-drawer 0.3s ease-out; }
 .animate-bounce-in   { animation: bounce-in 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); }

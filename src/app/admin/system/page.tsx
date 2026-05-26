@@ -2,7 +2,7 @@
 
 import { useAdminData } from '@/lib/useAdminData';
 import type { SystemResponse } from '@/types/admin';
-import { Cpu, HardDrive, Zap, AlertTriangle, Coins } from 'lucide-react';
+import { Cpu, Zap, Coins } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
 
 export default function SystemPage() {

@@ -53,7 +53,7 @@ const navGroups: NavGroup[] = [
     icon: LayoutGrid, label: '词汇', href: '/vocabulary', children: [
       { label: '主题词包', href: '/vocabulary/themes', icon: Library },
       { label: '分级词表', href: '/vocabulary/levels', icon: BarChart3 },
-      { label: '情景词典', href: '/vocabulary/dictionary', icon: Search },
+      { label: '韩语字典', href: '/dictionary', icon: Search },
       { label: '单词库', href: '/vocabulary', icon: BookOpen },
       { label: '自定义单词本', href: '/vocabulary/books', icon: Bookmark },
       { label: '延世教材词书', href: '/vocabulary/yonsei', icon: GraduationCap },
