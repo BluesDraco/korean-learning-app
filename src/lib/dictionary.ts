@@ -33,7 +33,7 @@ const jong: Record<string, string> = {
   'ㅌ': 't', 'ㅍ': 'p', 'ㅎ': 't',
 };
 
-function romanize(hangul: string): string {
+export function romanize(hangul: string): string {
   let result = '';
   for (const char of hangul) {
     const code = char.charCodeAt(0);
@@ -55,7 +55,7 @@ function romanize(hangul: string): string {
 
 // ====== DECONJUGATION ======
 
-interface DeconjugateResult {
+export interface DeconjugateResult {
   dictionaryForm: string;
   conjugation: string;
 }
@@ -65,7 +65,7 @@ interface DeconjugateResult {
  * Handles the most common patterns: formal, polite, casual endings,
  * past/present/future, connective endings, and all 7 irregular types.
  */
-function deconjugate(word: string): DeconjugateResult {
+export function deconjugate(word: string): DeconjugateResult {
   // Already a dictionary form (ends in 다)
   if (word.endsWith('다') && word.length >= 2) {
     return { dictionaryForm: word, conjugation: '词典原形' };

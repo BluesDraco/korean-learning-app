@@ -166,3 +166,38 @@ export interface AppSettings {
   defaultPlaybackRate: number;
   theme: 'light' | 'dark';
 }
+
+// ===== Shadowing / Video Study =====
+export type VideoPlatform = 'bilibili' | 'youtube';
+
+export interface StudyVideo {
+  id: string;
+  url: string;
+  platform: VideoPlatform;
+  platformId: string;
+  title: string;
+  thumbnail?: string;
+  subtitleSource: 'manual' | 'whisper';
+  addedAt: number;
+  lastStudiedAt: number;
+}
+
+export interface StudySubtitle {
+  id: string;
+  videoId: string;
+  index: number;
+  start: number;
+  end: number;
+  text: string;
+  textZh: string;
+  tokens: string;
+}
+
+export interface StudyLog {
+  id: string;
+  videoId: string;
+  date: number;
+  durationSec: number;
+  wordsAdded: string[];
+  sentencesLooped: number;
+}

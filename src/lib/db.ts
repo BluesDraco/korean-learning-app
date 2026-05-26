@@ -1,5 +1,5 @@
 import Dexie, { type Table } from 'dexie';
-import type { Video, Subtitle, Word, ReviewSession, DictationRecord, ShadowingRecord, UserProfile, DailyLog, Achievement, AppSettings, WordBook } from '@/types';
+import type { Video, Subtitle, Word, ReviewSession, DictationRecord, ShadowingRecord, UserProfile, DailyLog, Achievement, AppSettings, WordBook, StudyVideo, StudySubtitle, StudyLog } from '@/types';
 
 export class KoreanAppDB extends Dexie {
   videos!: Table<Video, string>;
@@ -13,6 +13,9 @@ export class KoreanAppDB extends Dexie {
   achievements!: Table<Achievement, string>;
   settings!: Table<AppSettings, string>;
   wordBooks!: Table<WordBook, string>;
+  studyVideos!: Table<StudyVideo, string>;
+  studySubtitles!: Table<StudySubtitle, string>;
+  studyLogs!: Table<StudyLog, string>;
 
   constructor() {
     super('koreanLearningApp');
@@ -51,6 +54,23 @@ export class KoreanAppDB extends Dexie {
       achievements: 'id, type',
       settings: 'id',
       wordBooks: 'id, createdAt',
+    });
+
+    this.version(4).stores({
+      videos: 'id, youtubeId, addedAt',
+      subtitles: 'id, videoId, start',
+      words: 'id, word, srsLevel, nextReview, mastery, createdAt',
+      reviewSessions: 'id, date',
+      dictationRecords: 'id, wordId, date',
+      shadowingRecords: 'id, subtitleId, date',
+      userProfiles: 'id',
+      dailyLogs: 'id, date',
+      achievements: 'id, type',
+      settings: 'id',
+      wordBooks: 'id, createdAt',
+      studyVideos: 'id, platformId, addedAt',
+      studySubtitles: 'id, videoId, index',
+      studyLogs: 'id, videoId, date',
     });
   }
 }
