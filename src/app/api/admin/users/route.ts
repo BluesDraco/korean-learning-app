@@ -3,10 +3,6 @@ import { requireAdmin } from '@/lib/server/admin-guard';
 import { getDb } from '@/lib/server/db';
 import type { AdminUser, AdminUsersResponse } from '@/types/admin';
 
-function randAround(base: number, pct: number) {
-  return Math.round(base * (1 + (Math.random() - 0.5) * pct * 2));
-}
-
 export async function GET(request: NextRequest) {
   const adminCheck = await requireAdmin();
   if (!adminCheck.authorized) return adminCheck.response;
@@ -20,7 +16,6 @@ export async function GET(request: NextRequest) {
 
   const db = await getDb();
 
-  // Build query
   let sql = 'SELECT id, username, nickname, email, role, created_at FROM users WHERE 1=1';
   const params: unknown[] = [];
 
@@ -46,19 +41,17 @@ export async function GET(request: NextRequest) {
         }))
       : [];
 
-  // Enrich with simulated membership / study data
-  const memberships = ['free', 'free', 'free', 'monthly', 'yearly'] as const;
+  // Real DB data only — no simulated membership/study stats yet
   const allUsers: AdminUser[] = rawUsers.map((u) => ({
     ...u,
-    membershipType: u.role === 'admin' ? 'yearly' : memberships[Math.floor(Math.random() * memberships.length)],
-    membershipExpiry: Math.random() > 0.6 ? Date.now() + randAround(180, 50) * 86400000 : null,
-    studyDays: randAround(45, 60),
-    totalXp: randAround(3500, 70),
-    wordsLearned: randAround(280, 70),
+    membershipType: 'free' as const,
+    membershipExpiry: null,
+    studyDays: 0,
+    totalXp: 0,
+    wordsLearned: 0,
     banned: false,
   }));
 
-  // Filter by status
   let filtered = allUsers;
   if (status === 'active') filtered = allUsers.filter((u) => !u.banned);
   else if (status === 'vip') filtered = allUsers.filter((u) => u.membershipType !== 'free');

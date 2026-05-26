@@ -145,8 +145,7 @@ export function Navbar() {
                 >
                   <Icon size={20} />
                   <div className="flex-1 text-left min-w-0">
-                    <span>{group.label}</span>
-                    <span className="text-[11px] text-[var(--text-muted)] ml-1">{group.ko}</span>
+                    <span className="whitespace-nowrap">{group.label}<span className="text-[11px] text-[var(--text-muted)] ml-1">{group.ko}</span></span>
                   </div>
                   {group.children.length > 0 && (
                     <ChevronRight
@@ -176,8 +175,7 @@ export function Navbar() {
                         >
                           <ChildIcon size={15} className="shrink-0" />
                           <div className="min-w-0">
-                            <span>{child.label}</span>
-                            <span className="text-[11px] text-[var(--text-muted)] ml-1">{child.ko}</span>
+                            <span className="whitespace-nowrap">{child.label}<span className="text-[11px] text-[var(--text-muted)] ml-1">{child.ko}</span></span>
                           </div>
                         </Link>
                       );

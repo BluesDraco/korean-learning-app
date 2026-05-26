@@ -235,12 +235,15 @@ export default function ThemeDetailPage() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
-                    <button
+                    <span
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); speakKorean(entry.korean); } }}
                       onClick={(e) => { e.stopPropagation(); speakKorean(entry.korean); }}
-                      className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors"
+                      className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors cursor-pointer"
                     >
                       <Volume2 size={14} />
-                    </button>
+                    </span>
                     {isExpanded ? <ChevronUp size={16} className="text-[var(--text-muted)]" /> : <ChevronDown size={16} className="text-[var(--text-muted)]" />}
                   </div>
                 </button>

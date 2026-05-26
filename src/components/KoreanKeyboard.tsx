@@ -209,22 +209,26 @@ export function KoreanKeyboard({ value, onChange, visible, onClose }: KoreanKeyb
   const [mounted, setMounted] = useState(false);
   const longPressRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const backspaceRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const onChangeRef = useRef(onChange);
+  onChangeRef.current = onChange;
+  const bufferRef = useRef(buffer);
+  bufferRef.current = buffer;
 
   useEffect(() => { setMounted(true); }, []);
 
   // Sync buffer when value changes externally (paste, keyboard close/reopen)
   useEffect(() => {
     if (!visible) return;
-    const fromBuffer = composeBuffer(buffer);
-    if (fromBuffer === value) return; // value matches our buffer, no need to sync
+    const fromBuffer = composeBuffer(bufferRef.current);
+    if (fromBuffer === value) return;
     setBuffer(decomposeFull(value));
   }, [visible, value]);
 
   // Sync buffer changes → parent onChange
   useEffect(() => {
     if (!visible) return;
-    onChange(composeBuffer(buffer));
-  }, [buffer, visible, onChange]);
+    onChangeRef.current(composeBuffer(buffer));
+  }, [buffer, visible]);
 
   const handleKey = useCallback((key: KeyDef) => {
     if (key.type === 'shift') {
