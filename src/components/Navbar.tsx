@@ -8,7 +8,7 @@ import {
   Home, BookOpen, Gamepad2, LayoutGrid, Flower2, Bot,
   GraduationCap, Grid3X3, Waves, FileText, BookImage,
   RefreshCw, Pencil, Mic, PenLine,
-  Library, Video, Bookmark,
+  Library, Film, Bookmark,
   Palette, Landmark, MapPin, UtensilsCrossed,
   MessageSquare, Lightbulb, MessageCircle, Sparkles,
   ChevronRight, X, Sun, Moon, Shield,
@@ -55,7 +55,6 @@ const navGroups: NavGroup[] = [
       { label: '自定义单词本', href: '/vocabulary/books', icon: Bookmark },
       { label: '延世教材词书', href: '/vocabulary/yonsei', icon: GraduationCap },
       { label: '知识库', href: '/knowledge', icon: Library },
-      { label: '视频库', href: '/videos', icon: Video },
     ],
   },
   {

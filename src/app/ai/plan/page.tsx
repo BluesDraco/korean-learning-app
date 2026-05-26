@@ -344,7 +344,7 @@ export default function AIStudyPlanPage() {
               </p>
               <div className="flex items-center gap-3 mt-2">
                 <Link
-                  href="/videos"
+                  href="/shadowing"
                   className="inline-flex items-center gap-1 text-xs text-[var(--color-danger)] hover:text-[var(--color-danger)] font-medium"
                 >
                   视频 <ArrowRight size={12} />

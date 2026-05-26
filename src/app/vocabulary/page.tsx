@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback, useMemo } from 'react';
 import Link from 'next/link';
 import {
   Search, Trash2, X, ChevronDown, ChevronUp,
-  BookOpen, GraduationCap, Video, Clock, ArrowRight,
+  BookOpen, GraduationCap, Film, Clock, ArrowRight,
   Sparkles, Hash, Calendar, Filter, Volume2, BookmarkPlus,
 } from 'lucide-react';
 import { db } from '@/lib/db';
@@ -268,11 +268,11 @@ export default function VocabularyPage() {
           </p>
           <div className="flex gap-3 flex-wrap justify-center">
             <Link
-              href="/videos"
+              href="/shadowing"
               className="flex items-center gap-2 text-sm px-5 py-2.5 rounded-xl bg-[var(--bg-input)] text-[var(--text-primary)] hover:bg-[var(--bg-accent)] hover:text-[var(--text-primary)] transition-all"
             >
-              <Video size={16} />
-              <span>浏览视频</span>
+              <Film size={16} />
+              <span>视频跟读</span>
               <ArrowRight size={14} />
             </Link>
             <Link
@@ -488,15 +488,6 @@ export default function VocabularyPage() {
                       下次复习:{' '}
                       {new Date(word.nextReview).toLocaleDateString('zh-CN')}
                     </span>
-                    {word.sourceVideoId && (
-                      <Link
-                        href={`/watch/${word.sourceVideoId}`}
-                        className="flex items-center gap-1.5 text-[var(--pink-primary)] hover:text-[var(--pink-primary)] ml-auto"
-                      >
-                        <Video size={11} />
-                        来源视频
-                      </Link>
-                    )}
                   </div>
                 </div>
               )}

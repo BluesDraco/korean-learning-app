@@ -206,6 +206,7 @@ export default function ShadowingPlayerPage() {
       elapsedRef.current = sub.start;
       playerRef.current?.seekTo(sub.start);
       setIsPlaying(true);
+      setShadowingTarget(sub);
     }
   };
 
@@ -257,6 +258,8 @@ export default function ShadowingPlayerPage() {
 
   const handleExitShadowing = () => {
     setShadowingTarget(null);
+    setLoopIndex(null);
+    setIsPlaying(false);
   };
 
   const handleSrtUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -360,6 +363,42 @@ export default function ShadowingPlayerPage() {
           : `https://www.youtube.com/embed/${video.platformId}?enablejsapi=1&controls=1&modestbranding=1&rel=0`
         } platform={video.platform} />
       </div>
+
+      {/* Subtitle timeline */}
+      {subtitles.length > 0 && (
+        <div className="shrink-0 px-4">
+          <div className="flex items-end gap-[2px] h-8 w-full">
+            {(() => {
+              const totalEnd = subtitles[subtitles.length - 1]?.end || 1;
+              return subtitles.map((sub, i) => {
+                const left = (sub.start / totalEnd) * 100;
+                const width = Math.max(((sub.end - sub.start) / totalEnd) * 100, 0.3);
+                const isActive = activeIndex === i;
+                const isLooping = loopIndex === i;
+                return (
+                  <div
+                    key={sub.id}
+                    className={`h-full rounded-[1px] cursor-pointer transition-colors hover:opacity-80 ${
+                      isLooping
+                        ? 'bg-[var(--peach-soft)]'
+                        : isActive
+                          ? 'bg-[var(--pink-primary)]'
+                          : 'bg-[var(--border-default)]'
+                    }`}
+                    style={{ width: `${width}%` }}
+                    onClick={() => handleSubtitleClick(i)}
+                    title={`${formatSrt(sub.start)} ${sub.text.slice(0, 30)}`}
+                  />
+                );
+              });
+            })()}
+          </div>
+          <div className="flex justify-between text-[10px] text-[var(--text-muted)] mt-1">
+            <span>{formatSrt(0)}</span>
+            <span>{formatSrt(subtitles[subtitles.length - 1]?.end || 0)}</span>
+          </div>
+        </div>
+      )}
 
       {/* Toolbar */}
       <div className="flex items-center gap-2 px-4 py-2 shrink-0 flex-wrap">
@@ -466,4 +505,10 @@ export default function ShadowingPlayerPage() {
       />
     </div>
   );
+}
+
+function formatSrt(sec: number): string {
+  const m = Math.floor(sec / 60);
+  const s = Math.floor(sec % 60);
+  return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
 }

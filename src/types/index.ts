@@ -72,27 +72,6 @@ export const ACHIEVEMENT_DEFS: Record<AchievementType, { title: string; descript
   level_20: { title: '韩语大师', description: '达到等级 20（满级）', icon: '🧙' },
 };
 
-// ===== YouTube Video =====
-export interface Video {
-  id: string;
-  youtubeId: string;
-  title: string;
-  thumbnail: string;
-  channelName: string;
-  addedAt: number;
-  tags: string[];
-}
-
-// ===== Subtitle Entry =====
-export interface Subtitle {
-  id: string;
-  videoId: string;
-  start: number;
-  dur: number;
-  text: string;
-  textZh: string;
-}
-
 // ===== Vocabulary Word =====
 export interface Word {
   id: string;

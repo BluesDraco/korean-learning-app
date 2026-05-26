@@ -1,9 +1,7 @@
 import Dexie, { type Table } from 'dexie';
-import type { Video, Subtitle, Word, ReviewSession, DictationRecord, ShadowingRecord, UserProfile, DailyLog, Achievement, AppSettings, WordBook, StudyVideo, StudySubtitle, StudyLog } from '@/types';
+import type { Word, ReviewSession, DictationRecord, ShadowingRecord, UserProfile, DailyLog, Achievement, AppSettings, WordBook, StudyVideo, StudySubtitle, StudyLog } from '@/types';
 
 export class KoreanAppDB extends Dexie {
-  videos!: Table<Video, string>;
-  subtitles!: Table<Subtitle, string>;
   words!: Table<Word, string>;
   reviewSessions!: Table<ReviewSession, string>;
   dictationRecords!: Table<DictationRecord, string>;

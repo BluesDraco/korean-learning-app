@@ -404,15 +404,15 @@ export default function Home() {
             </Link>
           ) : (
             <Link
-              href="/videos"
+              href="/shadowing"
               className="flex items-center gap-3 bg-[var(--pink-primary)]/10 border border-[var(--pink-primary)]/20 rounded-2xl p-4 hover:bg-[var(--pink-primary)]/15 transition-colors"
             >
               <Film size={20} className="text-[var(--pink-primary)]" />
               <div>
-                <div className="text-sm font-medium text-[var(--text-primary)]">导入视频</div>
-                <div className="text-xs text-[var(--text-secondary)]">YouTube 学韩语</div>
+                <div className="text-sm font-medium text-[var(--text-primary)]">视频跟读</div>
+                <div className="text-xs text-[var(--text-secondary)]">B站 YouTube 韩语跟读</div>
               </div>
-              <Plus size={16} className="text-[var(--pink-primary)] ml-auto" />
+              <ArrowRight size={16} className="text-[var(--pink-primary)] ml-auto" />
             </Link>
           )}
 
