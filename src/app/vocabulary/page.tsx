@@ -191,6 +191,23 @@ export default function VocabularyPage() {
         </div>
       </div>
 
+      {/* ─────── Theme Pack Promo ─────── */}
+      <Link
+        href="/vocabulary/themes"
+        className="block bg-gradient-to-r from-[var(--pink-primary)]/10 to-[var(--purple-soft)]/10 border border-[var(--pink-pale)] rounded-2xl p-4 hover:border-[var(--pink-primary)]/30 transition-all group"
+      >
+        <div className="flex items-center gap-3">
+          <span className="text-3xl">🐰</span>
+          <div className="flex-1">
+            <p className="text-sm font-bold text-[var(--text-primary)]">主题词包</p>
+            <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+              按场景学词：咖啡厅、追星、旅行…토리陪你系统学韩语
+            </p>
+          </div>
+          <ArrowRight size={18} className="text-[var(--text-muted)] group-hover:translate-x-1 transition-transform" />
+        </div>
+      </Link>
+
       {/* ─────── Search Bar ─────── */}
       <div className="relative">
         <Search

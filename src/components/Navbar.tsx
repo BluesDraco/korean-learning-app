@@ -7,10 +7,10 @@ import { useAuth } from '@/components/AuthProvider';
 import {
   Home, BookOpen, Gamepad2, LayoutGrid, Flower2, Bot,
   GraduationCap, Grid3X3, Waves, FileText, BookImage,
-  RefreshCw, Pencil, Mic, PenLine,
+  RefreshCw, Pencil, Mic, PenLine, BarChart3,
   Library, Film, Bookmark,
   Palette, Landmark, MapPin, UtensilsCrossed,
-  MessageSquare, Lightbulb, MessageCircle, Sparkles,
+  MessageSquare, Lightbulb, MessageCircle, Search, Sparkles,
   ChevronRight, X, Sun, Moon, Shield,
 } from 'lucide-react';
 import { useTheme } from '@/components/ThemeProvider';
@@ -51,10 +51,13 @@ const navGroups: NavGroup[] = [
   },
   {
     icon: LayoutGrid, label: '词汇', href: '/vocabulary', children: [
+      { label: '主题词包', href: '/vocabulary/themes', icon: Library },
+      { label: '分级词表', href: '/vocabulary/levels', icon: BarChart3 },
+      { label: '情景词典', href: '/vocabulary/dictionary', icon: Search },
       { label: '单词库', href: '/vocabulary', icon: BookOpen },
       { label: '自定义单词本', href: '/vocabulary/books', icon: Bookmark },
       { label: '延世教材词书', href: '/vocabulary/yonsei', icon: GraduationCap },
-      { label: '知识库', href: '/knowledge', icon: Library },
+      { label: '常用表达', href: '/expressions', icon: MessageCircle },
     ],
   },
   {
@@ -63,7 +66,6 @@ const navGroups: NavGroup[] = [
       { label: '历史', href: '/korea/history', icon: Landmark },
       { label: '旅行', href: '/korea/travel', icon: MapPin },
       { label: '美食', href: '/korea/food', icon: UtensilsCrossed },
-      { label: '常用表达', href: '/expressions', icon: MessageCircle },
     ],
   },
   {
