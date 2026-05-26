@@ -27,6 +27,8 @@ export async function getDb() {
       nickname TEXT DEFAULT '',
       email TEXT DEFAULT '',
       role TEXT DEFAULT 'user',
+      onboarding_completed INTEGER DEFAULT 0,
+      korean_level TEXT DEFAULT '',
       created_at INTEGER NOT NULL,
       updated_at INTEGER NOT NULL
     )

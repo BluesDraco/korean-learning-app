@@ -1,215 +1,322 @@
 'use client';
 
-import { useState } from 'react';
-import { ArrowRight, ArrowLeft, Sparkles, Target, Flame, BookOpen, Mic, Pencil } from 'lucide-react';
-import { getProfile, updateProfile } from '@/lib/gamification';
+import { useState, useCallback, useEffect } from 'react';
+import { Sparkles, Trophy, Volume2, ArrowRight, Star, Zap } from 'lucide-react';
+import { getProfile, updateProfile, awardXp, updateStreak } from '@/lib/gamification';
 import type { UserProfile } from '@/types';
 
-const steps = [
-  {
-    title: '欢迎来到 한국어',
-    description: '你的个性化韩语学习助手',
-    emoji: '🇰🇷',
-    content: '通过 YouTube 视频学韩语、智能背单词、影子跟读练口语，一切都围绕你的学习节奏。',
-  },
-  {
-    title: '设定你的水平',
-    description: '让我们为你定制学习内容',
-    emoji: '📊',
-    content: 'level',
-  },
-  {
-    title: '每日目标',
-    description: '设定每天的学习目标',
-    emoji: '🎯',
-    content: 'goals',
-  },
-  {
-    title: '准备好开始了吗？',
-    description: '每天进步一点点',
-    emoji: '🚀',
-    content: '课程结构一览：',
-    features: [
-      { icon: BookOpen, label: '知识库', desc: '分类单词 + 例句', color: 'text-[var(--pink-primary)]' },
-      { icon: Target, label: '每日学习', desc: '结构化课程', color: 'text-[var(--purple-soft)]' },
-      { icon: Flame, label: '间隔复习', desc: '科学记忆曲线', color: 'text-[var(--peach-soft)]' },
-      { icon: Pencil, label: '听写练习', desc: '听力强化', color: 'text-[var(--purple-soft)]' },
-      { icon: Mic, label: '影子跟读', desc: '口语训练', color: 'text-[var(--mint-soft)]' },
-    ],
-  },
-];
+function speakKorean(text: string) {
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = 'ko-KR';
+  utterance.rate = 0.75;
+  window.speechSynthesis.speak(utterance);
+}
 
 interface Props {
   onComplete: () => void;
 }
 
+const QUIZ_OPTIONS = ['谢谢', '你好', '再见', '对不起'];
+const QUIZ_CORRECT = '你好';
+
 export default function Onboarding({ onComplete }: Props) {
   const [step, setStep] = useState(0);
   const [level, setLevel] = useState<UserProfile['targetLevel']>('beginner');
-  const [wordGoal, setWordGoal] = useState(10);
-  const [minGoal, setMinGoal] = useState(15);
-  const [nickname, setNickname] = useState('');
+  const [animating, setAnimating] = useState(false);
+  const [quizResult, setQuizResult] = useState<boolean | null>(null);
+  const [showConfetti, setShowConfetti] = useState(false);
 
-  const handleNext = async () => {
-    if (step === 1) {
-      // Save level
-      const p = await getProfile();
-      await updateProfile({ targetLevel: level });
-    }
-    if (step === 2) {
-      // Save goals
-      await updateProfile({ dailyGoalWords: wordGoal, dailyGoalMinutes: minGoal });
-    }
-    if (step < steps.length - 1) {
-      setStep(step + 1);
-    } else {
-      await updateProfile({ onboardingComplete: true, nickname: nickname || '学习者' });
+  const totalSteps = 4;
+
+  // Save level to profile
+  const handleLevelSelect = useCallback(async (l: UserProfile['targetLevel']) => {
+    setLevel(l);
+    await updateProfile({ targetLevel: l });
+  }, []);
+
+  // Step 1→2→3→4 progression
+  const next = useCallback(async () => {
+    if (step === 3) {
+      // Complete onboarding
+      await updateProfile({ onboardingComplete: true });
+      try { await awardXp(10); } catch { /* not critical */ }
+      try { await updateStreak(); } catch { /* not critical */ }
       onComplete();
+      return;
+    }
+    setAnimating(true);
+    await new Promise((r) => setTimeout(r, 400));
+    setAnimating(false);
+    setStep((s) => s + 1);
+  }, [step, onComplete]);
+
+  // Quiz handler
+  const handleQuiz = (answer: string) => {
+    const correct = answer === QUIZ_CORRECT;
+    setQuizResult(correct);
+    if (correct) {
+      setShowConfetti(true);
     }
   };
 
-  const handleBack = () => {
-    if (step > 0) setStep(step - 1);
+  const retryQuiz = () => {
+    setQuizResult(null);
+    setShowConfetti(false);
   };
+
+  // Background confetti particles
+  const confettiParticles = Array.from({ length: 30 }, (_, i) => ({
+    id: i,
+    left: `${Math.random() * 100}%`,
+    delay: `${Math.random() * 0.5}s`,
+    color: ['#FF8FAB', '#C9B8E8', '#A8D8D0', '#FFE4A0', '#FFBEA8'][i % 5],
+    size: 6 + Math.random() * 8,
+  }));
 
   return (
     <div className="fixed inset-0 z-[100] bg-[var(--bg-base)] flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Step indicators */}
         <div className="flex justify-center gap-2 mb-8">
-          {steps.map((_, i) => (
+          {Array.from({ length: totalSteps }).map((_, i) => (
             <div
               key={i}
-              className={`h-1 rounded-full transition-all duration-300 ${
-                i === step ? 'w-8 bg-[var(--pink-primary)]' : i < step ? 'w-4 bg-[var(--pink-primary)]/50' : 'w-4 bg-[var(--bg-soft)]'
+              className={`h-1.5 rounded-full transition-all duration-500 ${
+                i === step
+                  ? 'w-10 bg-[var(--pink-primary)]'
+                  : i < step
+                    ? 'w-5 bg-[var(--mint-soft)]'
+                    : 'w-5 bg-[var(--bg-muted)]'
               }`}
             />
           ))}
         </div>
 
         {/* Card */}
-        <div className="bg-[var(--bg-card)] border border-[var(--border-default)] rounded-3xl p-8 text-center animate-slide-up shadow-lg">
-          <div className="text-5xl mb-6">{steps[step].emoji}</div>
-          <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-2">{steps[step].title}</h2>
-          <p className="text-[var(--text-secondary)] text-sm mb-6">{steps[step].description}</p>
-
+        <div
+          className={`bg-[var(--bg-card)] border border-[var(--border-color)] rounded-3xl p-8 text-center shadow-lg transition-all duration-400 ${
+            animating ? 'opacity-0 translate-y-4' : 'opacity-100'
+          }`}
+        >
+          {/* ── Step 0: Tori greeting ── */}
           {step === 0 && (
-            <p className="text-[var(--text-primary)] text-sm leading-relaxed">{steps[step].content}</p>
-          )}
-
-          {step === 1 && (
-            <div className="space-y-3">
-              {([
-                { value: 'beginner' as const, label: '初级', desc: 'TOPIK 1-2 · 刚开始学韩语', emoji: '🌱' },
-                { value: 'intermediate' as const, label: '中级', desc: 'TOPIK 3-4 · 有一定基础', emoji: '🌿' },
-                { value: 'advanced' as const, label: '高级', desc: 'TOPIK 5-6 · 进阶提升', emoji: '🌳' },
-              ]).map((opt) => (
-                <button
-                  key={opt.value}
-                  onClick={() => setLevel(opt.value)}
-                  className={`w-full flex items-center gap-4 p-4 rounded-xl border transition-all text-left ${
-                    level === opt.value
-                      ? 'bg-[var(--pink-primary)]/10 border-[var(--pink-primary)]/50'
-                      : 'bg-[var(--bg-soft)] border-[var(--border-default)] hover:border-[var(--border-hover)]'
-                  }`}
-                >
-                  <span className="text-2xl">{opt.emoji}</span>
-                  <div>
-                    <div className="text-[var(--text-primary)] font-medium text-sm">{opt.label}</div>
-                    <div className="text-[var(--text-secondary)] text-xs">{opt.desc}</div>
-                  </div>
-                  {level === opt.value && (
-                    <div className="ml-auto w-5 h-5 rounded-full bg-[var(--pink-primary)] flex items-center justify-center">
-                      <span className="text-white text-xs">✓</span>
-                    </div>
-                  )}
-                </button>
-              ))}
-            </div>
-          )}
-
-          {step === 2 && (
             <div className="space-y-6">
+              <div className="text-7xl animate-bounce-in">🐰</div>
               <div>
-                <label className="text-xs text-[var(--text-secondary)] mb-2 block text-left">每日学习单词</label>
-                <div className="flex items-center gap-3">
-                  <input
-                    type="range"
-                    min="5"
-                    max="50"
-                    step="5"
-                    value={wordGoal}
-                    onChange={(e) => setWordGoal(Number(e.target.value))}
-                    className="flex-1 accent-[var(--pink-primary)]"
-                  />
-                  <span className="text-[var(--text-primary)] font-bold text-lg w-10">{wordGoal}</span>
-                </div>
+                <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-2">
+                  안녕하세요！
+                </h2>
+                <p className="text-[var(--text-secondary)] leading-relaxed">
+                  我是托里 🐰<br />
+                  你来了，我好开心！<br />
+                  我们一起学韩语吧？
+                </p>
               </div>
-              <div>
-                <label className="text-xs text-[var(--text-secondary)] mb-2 block text-left">每日学习时间（分钟）</label>
-                <div className="flex items-center gap-3">
-                  <input
-                    type="range"
-                    min="5"
-                    max="120"
-                    step="5"
-                    value={minGoal}
-                    onChange={(e) => setMinGoal(Number(e.target.value))}
-                    className="flex-1 accent-[var(--pink-primary)]"
-                  />
-                  <span className="text-[var(--text-primary)] font-bold text-lg w-10">{minGoal}</span>
-                </div>
-              </div>
+              <button
+                onClick={next}
+                className="w-full flex items-center justify-center gap-2 py-3.5 bg-[var(--pink-primary)] hover:brightness-90 text-white rounded-2xl font-bold text-sm transition-all active:scale-95"
+              >
+                我准备好了！
+                <ArrowRight size={18} />
+              </button>
             </div>
           )}
 
-          {step === 3 && (
-            <div className="space-y-4">
-              <p className="text-[var(--text-primary)] text-sm">{steps[step].content}</p>
-              <div className="space-y-2">
-                {steps[step].features?.map((f) => (
-                  <div key={f.label} className="flex items-center gap-3 bg-[var(--bg-soft)] rounded-xl p-3 text-left">
-                    <f.icon size={18} className={f.color} />
-                    <div>
-                      <div className="text-sm text-[var(--text-primary)] font-medium">{f.label}</div>
-                      <div className="text-xs text-[var(--text-secondary)]">{f.desc}</div>
+          {/* ── Step 1: Level selection ── */}
+          {step === 1 && (
+            <div className="space-y-5">
+              <div>
+                <div className="text-5xl mb-4">📊</div>
+                <h2 className="text-xl font-bold text-[var(--text-primary)] mb-2">
+                  你现在的韩语水平是？
+                </h2>
+                <p className="text-sm text-[var(--text-muted)]">
+                  托里会根据你的水平推荐学习内容
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                {([
+                  { value: 'beginner' as const, label: '完全零基础', desc: '从四十音和问候语开始', emoji: '🌱' },
+                  { value: 'beginner' as const, label: '会一点点', desc: '认识字母，能说简单问候', emoji: '🌿' },
+                  { value: 'intermediate' as const, label: '初级水平', desc: 'TOPIK 1-2，能简单对话', emoji: '🌳' },
+                  { value: 'advanced' as const, label: '中级以上', desc: 'TOPIK 3+，能流利表达', emoji: '🌺' },
+                ]).map((opt) => (
+                  <button
+                    key={opt.label}
+                    onClick={() => handleLevelSelect(opt.value)}
+                    className={`w-full flex items-center gap-4 p-4 rounded-xl border transition-all text-left ${
+                      level === opt.value && opt.label === '完全零基础'
+                        ? 'bg-[var(--pink-primary)]/10 border-[var(--pink-primary)]/50'
+                        : level === opt.value && opt.label !== '完全零基础'
+                          ? 'bg-[var(--pink-primary)]/10 border-[var(--pink-primary)]/50'
+                          : 'bg-[var(--bg-soft)] border-[var(--border-color)] hover:border-[var(--border-hover)]'
+                    }`}
+                  >
+                    <span className="text-2xl">{opt.emoji}</span>
+                    <div className="flex-1 text-left">
+                      <div className="text-sm font-medium text-[var(--text-primary)]">{opt.label}</div>
+                      <div className="text-xs text-[var(--text-secondary)]">{opt.desc}</div>
                     </div>
-                  </div>
+                  </button>
                 ))}
               </div>
-              <div className="pt-2">
-                <label className="text-xs text-[var(--text-secondary)] mb-2 block text-left">你的昵称</label>
-                <input
-                  type="text"
-                  value={nickname}
-                  onChange={(e) => setNickname(e.target.value)}
-                  placeholder="学习者"
-                  maxLength={12}
-                  className="w-full bg-[var(--bg-soft)] border border-[var(--border-default)] rounded-xl py-3 px-4 text-[var(--text-primary)] text-center placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--pink-primary)]"
-                />
+
+              <button
+                onClick={next}
+                className="w-full flex items-center justify-center gap-2 py-3.5 bg-[var(--pink-primary)] hover:brightness-90 text-white rounded-2xl font-bold text-sm transition-all active:scale-95"
+              >
+                继续
+                <ArrowRight size={18} />
+              </button>
+            </div>
+          )}
+
+          {/* ── Step 2: First Korean word (activation moment) ── */}
+          {step === 2 && (
+            <div className="space-y-5">
+              <div>
+                <div className="text-xs text-[var(--text-muted)] mb-1 bg-[var(--bg-soft)] inline-block px-3 py-1 rounded-full">
+                  花30秒，学会你的第一个韩语词
+                </div>
+              </div>
+
+              {/* Word card */}
+              <div className="bg-[var(--bg-soft)] border-2 border-[var(--pink-pale)] rounded-2xl p-6 space-y-3">
+                <p className="text-4xl font-bold text-[var(--text-primary)]">안녕하세요</p>
+                <p className="text-sm text-[var(--text-muted)]">an-nyeong-ha-se-yo</p>
+                <button
+                  onClick={() => speakKorean('안녕하세요')}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] hover:bg-[var(--pink-primary)]/20 transition-colors text-sm"
+                >
+                  <Volume2 size={16} />
+                  听发音
+                </button>
+                <div className="border-t border-[var(--border-color)] pt-3 mt-3">
+                  <p className="text-lg font-bold text-[var(--pink-primary)]">你好</p>
+                  <p className="text-xs text-[var(--text-muted)] mt-1">
+                    韩语最常用的问候语
+                  </p>
+                </div>
+                <div className="bg-[var(--pink-primary)]/5 rounded-xl p-3 text-xs text-[var(--text-secondary)]">
+                  🐰 学会这个词，你就能和任何韩国人打招呼了！
+                </div>
+              </div>
+
+              {!quizResult ? (
+                <>
+                  <p className="text-sm font-medium text-[var(--text-secondary)]">
+                    小测验：안녕하세요 是什么意思？
+                  </p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {QUIZ_OPTIONS.map((opt) => (
+                      <button
+                        key={opt}
+                        onClick={() => handleQuiz(opt)}
+                        className="py-3 px-4 bg-[var(--bg-soft)] border border-[var(--border-color)] rounded-xl text-sm font-medium text-[var(--text-primary)] hover:border-[var(--pink-primary)]/40 hover:bg-[var(--pink-primary)]/5 transition-all active:scale-95"
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              ) : quizResult === true ? (
+                <div className="space-y-4 animate-bounce-in">
+                  <div className="text-6xl">🎉</div>
+                  <div>
+                    <p className="text-xl font-bold text-[var(--mint-soft)]">答对了！</p>
+                    <p className="text-sm text-[var(--text-secondary)] mt-1">
+                      토리好骄傲 🐰
+                    </p>
+                  </div>
+                  <button
+                    onClick={next}
+                    className="w-full flex items-center justify-center gap-2 py-3.5 bg-[var(--pink-primary)] hover:brightness-90 text-white rounded-2xl font-bold text-sm transition-all active:scale-95"
+                  >
+                    太棒了！
+                    <Sparkles size={18} />
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-4 animate-slide-up">
+                  <div className="text-5xl">🐰</div>
+                  <p className="text-sm text-[var(--text-secondary)]">
+                    没关系，再看一次
+                  </p>
+                  <button
+                    onClick={retryQuiz}
+                    className="w-full py-3 bg-[var(--bg-soft)] border border-[var(--border-color)] rounded-2xl text-sm font-medium text-[var(--text-primary)] hover:border-[var(--pink-primary)]/30 transition-all"
+                  >
+                    再看一次
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ── Step 3: Achievement celebration ── */}
+          {step === 3 && (
+            <div className="space-y-5">
+              {/* Confetti */}
+              {showConfetti && (
+                <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                  {confettiParticles.map((p) => (
+                    <div
+                      key={p.id}
+                      className="confetti"
+                      style={{
+                        left: p.left,
+                        animationDelay: p.delay,
+                        width: p.size,
+                        height: p.size,
+                        backgroundColor: p.color,
+                        borderRadius: Math.random() > 0.5 ? '50%' : '0',
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
+
+              <div className="text-7xl animate-bounce-achievement">🎉</div>
+              <div>
+                <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-2">
+                  你学会了第一个韩语词！
+                </h2>
+                <p className="text-sm text-[var(--text-secondary)]">
+                  和托里的韩语之旅正式开始了
+                </p>
+              </div>
+
+              {/* Mini stats */}
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-[var(--mint-soft)]/10 border border-[var(--mint-soft)]/20 rounded-xl p-3 text-center">
+                  <div className="text-xl font-bold text-[var(--mint-soft)]">+1</div>
+                  <div className="text-xs text-[var(--text-muted)]">词汇量</div>
+                </div>
+                <div className="bg-[var(--peach-soft)]/10 border border-[var(--peach-soft)]/20 rounded-xl p-3 text-center">
+                  <div className="text-xl font-bold text-[var(--peach-soft)]">+10</div>
+                  <div className="text-xs text-[var(--text-muted)]">经验值</div>
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={next}
+                  className="flex-1 flex items-center justify-center gap-2 py-3.5 bg-[var(--pink-primary)] hover:brightness-90 text-white rounded-2xl font-bold text-sm transition-all active:scale-95"
+                >
+                  继续学习
+                  <ArrowRight size={18} />
+                </button>
+                <button
+                  onClick={next}
+                  className="flex-1 py-3.5 bg-[var(--bg-soft)] border border-[var(--border-color)] rounded-2xl text-sm font-medium text-[var(--text-primary)] hover:border-[var(--pink-primary)]/30 transition-all"
+                >
+                  先逛逛
+                </button>
               </div>
             </div>
           )}
-        </div>
-
-        {/* Navigation */}
-        <div className="flex items-center justify-between mt-6">
-          {step > 0 ? (
-            <button
-              onClick={handleBack}
-              className="flex items-center gap-2 px-4 py-2.5 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors text-sm"
-            >
-              <ArrowLeft size={16} />
-              上一步
-            </button>
-          ) : <div />}
-          <button
-            onClick={handleNext}
-            className="flex items-center gap-2 px-6 py-2.5 bg-[var(--pink-primary)] hover:brightness-90 text-white rounded-xl transition-colors text-sm font-medium"
-          >
-            {step === steps.length - 1 ? '开始学习' : '下一步'}
-            <ArrowRight size={16} />
-          </button>
         </div>
       </div>
     </div>

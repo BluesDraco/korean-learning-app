@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback, Suspense } from 'react';
+import { useEffect, useState, useCallback, useRef, Suspense } from 'react';
 import { BookOpen, Check, X, Loader2, ArrowLeft, Star, Zap, Flame, Volume2, Brain, TrendingUp, RotateCcw, Activity } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { db } from '@/lib/db';
@@ -38,6 +38,9 @@ function ReviewContent() {
   const [allMeanings, setAllMeanings] = useState<string[]>([]);
   const [options, setOptions] = useState<{ text: string; correct: boolean }[]>([]);
   const [showIntro, setShowIntro] = useState(false);
+  const [toriReaction, setToriReaction] = useState<string | null>(null);
+  const touchXRef = useRef<number>(0);
+  const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null);
 
   useEffect(() => {
     const seen = localStorage.getItem('srs-intro-seen');
@@ -108,6 +111,20 @@ function ReviewContent() {
 
   const handleConfirm = async () => {
     const quality = selfAssessment;
+
+    // Tori reaction (0 = 完全忘了, 1-2 = 模糊, 3-4 = 记得, 5-6 = 很熟)
+    const reactions: Record<number, string> = {
+      0: '没关系，下次一定记住 🐰',
+      1: '快想起来了，再来一次！🐰',
+      2: '记起来了！继续加油',
+      3: '不错！越来越熟了',
+      4: '厉害！托里也想学你',
+      5: '满分！토리超骄傲！🎉',
+    };
+    setToriReaction(reactions[quality] || '继续加油！🐰');
+    await new Promise((r) => setTimeout(r, 800));
+    setToriReaction(null);
+
     const word = words[currentIdx];
     const result = calculateSRS(quality, word.srsLevel, word.easeFactor, word.interval);
 
@@ -123,7 +140,6 @@ function ReviewContent() {
     });
 
     const passed = quality >= 3;
-    // Award XP
     const xp = passed ? (quality >= 5 ? XP_REWARDS.perfectReview : XP_REWARDS.wordReviewed) : 0;
     let lvlUp = false;
     let nl = 0;
@@ -230,7 +246,7 @@ function ReviewContent() {
         <div className="text-center py-12 space-y-6">
           <div className="relative">
             <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[var(--mint-soft)]/20 to-[var(--pink-primary)]/20 flex items-center justify-center mx-auto border-2 border-[var(--mint-soft)]/30">
-              <Star size={40} className="text-[var(--peach-soft)] fill-[var(--peach-soft)]/20" />
+              <span className="text-5xl animate-float">🐰</span>
             </div>
             {leveledUp && (
               <div className="absolute -top-2 -right-1/3 bg-[var(--peach-soft)] text-[var(--text-primary)] text-xs font-bold px-3 py-1 rounded-full animate-bounce">
@@ -240,8 +256,8 @@ function ReviewContent() {
           </div>
           <div>
             <h1 className="text-2xl font-bold text-[var(--text-primary)] section-header">复习完成!</h1>
-            <p className="text-[var(--text-secondary)] mt-2">
-              复习了 {sessionStats.reviewed} 个单词，通过 {sessionStats.passed} 个
+            <p className="text-[var(--text-secondary)] text-sm mt-2">
+              🐰 今天的复习全做完了！<br />词汇们已经在脑子里安家了，好好休息，明天再来
             </p>
             <p className={`text-lg font-medium mt-1 ${accuracy >= 80 ? 'text-[var(--mint-soft)]' : accuracy >= 50 ? 'text-[var(--peach-soft)]' : 'text-[var(--peach-soft)]'}`}>
               {accuracy}% 正确率
@@ -318,18 +334,28 @@ function ReviewContent() {
   if (words.length === 0) {
     return (
       <div className="py-6 max-w-lg mx-auto">
-        <div className="text-center py-16 space-y-6">
-          <BookOpen size={48} className="text-[var(--text-placeholder)] mx-auto" />
+        <div className="text-center py-16 space-y-4">
+          <div className="text-7xl animate-float">🐰</div>
           <div>
-            <h1 className="text-xl font-bold text-[var(--text-primary)]">没有待复习的单词</h1>
-            <p className="text-[var(--text-secondary)] text-sm mt-2">去学习新单词吧</p>
+            <h1 className="text-xl font-bold text-[var(--text-primary)]">今天没有要复习的词</h1>
+            <p className="text-[var(--text-secondary)] text-sm mt-2">
+              要不要去学一些新词？🐰
+            </p>
           </div>
-          <button
-            onClick={() => router.push('/learn')}
-            className="px-5 py-2.5 bg-[var(--purple-soft)] hover:bg-[var(--purple-soft)] text-[var(--text-primary)] text-sm font-medium rounded-xl transition-colors"
-          >
-            开始每日学习
-          </button>
+          <div className="flex gap-3 justify-center">
+            <button
+              onClick={() => router.push('/learn')}
+              className="px-5 py-2.5 bg-[var(--pink-primary)] hover:brightness-90 text-white text-sm font-medium rounded-xl transition-all"
+            >
+              去学习
+            </button>
+            <button
+              onClick={() => router.push('/vocabulary')}
+              className="px-5 py-2.5 bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] text-[var(--text-primary)] text-sm font-medium rounded-xl transition-colors"
+            >
+              词汇库
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -359,11 +385,48 @@ function ReviewContent() {
         />
       </div>
 
+      {/* Tori reaction overlay */}
+      {toriReaction && (
+        <div className="fixed inset-0 z-30 flex items-center justify-center pointer-events-none">
+          <div className="bg-[var(--bg-card)] border-2 border-[var(--pink-light)] rounded-2xl px-6 py-4 shadow-xl animate-bounce-achievement text-center">
+            <span className="text-sm font-medium text-[var(--text-primary)]">{toriReaction}</span>
+          </div>
+        </div>
+      )}
+
       {/* Card with flip animation */}
-      <div className="perspective-1000 w-full max-w-md mx-auto">
+      <div
+        className="perspective-1000 w-full max-w-md mx-auto"
+        onTouchStart={(e) => { touchXRef.current = e.touches[0].clientX; }}
+        onTouchEnd={(e) => {
+          if (flipped) return;
+          const delta = e.changedTouches[0].clientX - touchXRef.current;
+          if (Math.abs(delta) > 60 && !showAnswer) {
+            if (delta > 0) {
+              // Swipe right: correct!
+              setSwipeDirection('right');
+              const correctOpt = options.find(o => o.correct);
+              if (correctOpt) {
+                setSelectedCorrect(true);
+                setSelfAssessment(3);
+                setShowAnswer(true);
+                setFlipped(true);
+              }
+            } else {
+              // Swipe left: don't know
+              setSwipeDirection('left');
+              setSelectedCorrect(false);
+              setSelfAssessment(0);
+              setShowAnswer(true);
+              setFlipped(true);
+            }
+            setTimeout(() => setSwipeDirection(null), 400);
+          }
+        }}
+      >
         <div className="relative" style={{ minHeight: '520px' }}>
           <div
-            className={`w-full transition-all duration-500 transform-style-3d ${flipped ? 'rotate-y-180' : ''}`}
+            className={`w-full transition-all duration-500 transform-style-3d ${swipeDirection === 'left' ? '-translate-x-8' : ''} ${swipeDirection === 'right' ? 'translate-x-8' : ''} ${flipped ? 'rotate-y-180' : ''}`}
             style={{ minHeight: '520px' }}
           >
             {/* ── Front: MCQ ── */}

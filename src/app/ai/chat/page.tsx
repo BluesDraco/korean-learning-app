@@ -849,6 +849,23 @@ export default function AIChatPage() {
   const [showHints, setShowHints] = useState(false);
   const [showChinese, setShowChinese] = useState(false);
   const [showKeyboard, setShowKeyboard] = useState(false);
+  const [viewportOffset, setViewportOffset] = useState(0);
+
+  // Handle mobile keyboard via visualViewport API
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.visualViewport) return;
+    const handleResize = () => {
+      const vv = window.visualViewport!;
+      const offset = window.innerHeight - vv.height;
+      setViewportOffset(offset > 0 ? offset : 0);
+    };
+    window.visualViewport.addEventListener('resize', handleResize);
+    window.visualViewport.addEventListener('scroll', handleResize);
+    return () => {
+      window.visualViewport?.removeEventListener('resize', handleResize);
+      window.visualViewport?.removeEventListener('scroll', handleResize);
+    };
+  }, []);
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -1183,7 +1200,10 @@ export default function AIChatPage() {
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-7rem)] md:h-[calc(100vh-5rem)] -mx-3 md:-mx-5 lg:-mx-8">
+    <div
+      className="flex flex-col h-[calc(100vh-7rem)] md:h-[calc(100vh-5rem)] -mx-3 md:-mx-5 lg:-mx-8"
+      style={{ paddingBottom: viewportOffset > 0 ? `${viewportOffset}px` : undefined }}
+    >
       {/* ── Chat Header ──────────────────────────────────────── */}
       <div className="shrink-0 flex items-center justify-between px-4 py-3 bg-[var(--bg-card)] border-b border-[var(--border-color)] shadow-sm">
         <div className="flex items-center gap-3 min-w-0">
@@ -1315,14 +1335,15 @@ export default function AIChatPage() {
         {/* Typing indicator */}
         {isTyping && (
           <div className="flex gap-2 max-w-[85%] animate-slide-up">
-            <div className="shrink-0 w-8 h-8 rounded-full bg-[var(--purple-soft)]/15 flex items-center justify-center text-sm">
-              {scenario.emoji}
+            <div className="shrink-0 w-8 h-8 rounded-full bg-[var(--purple-soft)]/15 flex items-center justify-center text-sm animate-wiggle">
+              🐰
             </div>
             <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
-              <div className="flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-[var(--purple-soft)]/60 animate-bounce" style={{ animationDelay: '0ms' }} />
-                <span className="w-2 h-2 rounded-full bg-[var(--purple-soft)]/60 animate-bounce" style={{ animationDelay: '150ms' }} />
-                <span className="w-2 h-2 rounded-full bg-[var(--purple-soft)]/60 animate-bounce" style={{ animationDelay: '300ms' }} />
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-[var(--text-muted)]">托里在想...</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-[var(--purple-soft)]/60 animate-bounce" style={{ animationDelay: '0ms' }} />
+                <span className="w-1.5 h-1.5 rounded-full bg-[var(--purple-soft)]/60 animate-bounce" style={{ animationDelay: '150ms' }} />
+                <span className="w-1.5 h-1.5 rounded-full bg-[var(--purple-soft)]/60 animate-bounce" style={{ animationDelay: '300ms' }} />
               </div>
             </div>
           </div>

@@ -7,6 +7,7 @@ import { FloatingDecorations } from '@/components/FloatingDecorations';
 import { AuthProvider } from '@/components/AuthProvider';
 import { FontProvider } from '@/components/FontProvider';
 import { XpOverlay } from '@/components/XpOverlay';
+import ScrollToTop from '@/components/ScrollToTop';
 
 export const metadata: Metadata = {
   title: '한국어 - 韩语学习',
@@ -71,6 +72,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </FontProvider>
         </ThemeProvider>
         <XpOverlay />
+        <ScrollToTop />
         <script
           dangerouslySetInnerHTML={{
             __html: `if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js')}`,

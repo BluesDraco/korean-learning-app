@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { X, Delete } from 'lucide-react';
+import { useIsMobile } from '@/lib/useIsMobile';
 
 // ═══════════════════════════════════════════════════════════════
 // Hangul Composition Engine
@@ -204,6 +205,7 @@ interface KoreanKeyboardProps {
 }
 
 export function KoreanKeyboard({ value, onChange, visible, onClose }: KoreanKeyboardProps) {
+  const isMobile = useIsMobile();
   const [shift, setShift] = useState(false);
   const [buffer, setBuffer] = useState<string[]>([]);
   const [mounted, setMounted] = useState(false);
@@ -332,7 +334,7 @@ export function KoreanKeyboard({ value, onChange, visible, onClose }: KoreanKeyb
                     onMouseLeave={key.type === 'backspace' ? stopRepeat : undefined}
                     onTouchStart={key.type === 'backspace' ? startRepeat : undefined}
                     onTouchEnd={key.type === 'backspace' ? stopRepeat : undefined}
-                    className={`${bg} flex items-center justify-center h-10 rounded-lg text-sm font-medium
+                    className={`${bg} flex items-center justify-center ${isMobile ? 'h-11 min-h-[44px]' : 'h-10'} rounded-lg text-sm font-medium
                       text-[var(--text-primary)] shadow-sm
                       active:scale-[0.94] active:bg-[var(--pink-pale)]/40
                       transition-all duration-75 select-none
@@ -354,14 +356,14 @@ export function KoreanKeyboard({ value, onChange, visible, onClose }: KoreanKeyb
           <div className="flex gap-1.5">
             <button
               onClick={() => handleKey({ label: '', type: 'space', flex: 1 })}
-              className="bg-white dark:bg-[var(--bg-card)] flex items-center justify-center h-10 rounded-lg text-xs font-medium text-[var(--text-muted)] shadow-sm active:scale-[0.94] transition-all select-none hover:brightness-95"
+              className={`bg-white dark:bg-[var(--bg-card)] flex items-center justify-center ${isMobile ? 'h-11 min-h-[44px]' : 'h-10'} rounded-lg text-xs font-medium text-[var(--text-muted)] shadow-sm active:scale-[0.94] transition-all select-none hover:brightness-95`}
               style={{ flex: 5 }}
             >
               空格
             </button>
             <button
               onClick={() => handleKey({ label: '', type: 'done', flex: 1 })}
-              className="bg-[var(--pink-primary)] flex items-center justify-center h-10 rounded-lg text-sm font-bold text-white shadow-sm active:scale-[0.94] transition-all select-none hover:opacity-90"
+              className={`bg-[var(--pink-primary)] flex items-center justify-center ${isMobile ? 'h-11 min-h-[44px]' : 'h-10'} rounded-lg text-sm font-bold text-white shadow-sm active:scale-[0.94] transition-all select-none hover:opacity-90`}
               style={{ flex: 2 }}
             >
               完成

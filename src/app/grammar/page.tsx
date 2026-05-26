@@ -199,6 +199,13 @@ export default function GrammarPage() {
                       <p className="text-xs text-[var(--text-secondary)]">{entry.tips}</p>
                     </div>
                   )}
+                  {/* Tori Tip */}
+                  {entry.toriTip && (
+                    <div className="flex items-start gap-2 bg-[var(--pink-primary)]/8 border border-[var(--pink-primary)]/20 rounded-xl p-3">
+                      <span className="text-base shrink-0 mt-0.5">🐰</span>
+                      <p className="text-xs text-[var(--text-secondary)]">{entry.toriTip}</p>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -547,6 +554,13 @@ export default function GrammarPage() {
                             </p>
                           )}
                         </div>
+                      </div>
+                    )}
+                    {/* Tori Tip */}
+                    {grammar.toriTip && (
+                      <div className="flex items-start gap-2 bg-[var(--pink-primary)]/8 border border-[var(--pink-primary)]/20 rounded-xl p-3">
+                        <span className="text-base shrink-0 mt-0.5">🐰</span>
+                        <p className="text-xs text-[var(--text-secondary)]">{grammar.toriTip}</p>
                       </div>
                     )}
                   </div>

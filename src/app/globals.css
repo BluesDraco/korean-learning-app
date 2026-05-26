@@ -1106,3 +1106,59 @@ html[data-font="classic"] .ko-body {
     display: none;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   Mobile Experience Optimizations
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Safe area for notch / home indicator */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 1rem);
+}
+.pt-safe {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+/* Minimum touch target (44x44 per Apple HIG) */
+@media (max-width: 768px) {
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Exceptions for inline elements */
+  .touch-auto button,
+  .touch-auto a {
+    min-height: auto;
+    min-width: auto;
+  }
+
+  /* SRS review buttons */
+  .srs-btn {
+    min-height: 52px;
+    padding: 10px 6px;
+  }
+
+  /* Bottom nav padding for phones */
+  .mobile-nav-pb {
+    padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Mobile grid for quick actions */
+  .mobile-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  /* Full-width cards on mobile */
+  .mobile-full {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Larger text for Korean on mobile */
+  .ko-text {
+    font-size: 1.05em;
+  }
+}

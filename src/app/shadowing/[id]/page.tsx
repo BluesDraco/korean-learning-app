@@ -357,7 +357,7 @@ export default function ShadowingPlayerPage() {
       </div>
 
       {/* Video player */}
-      <div className="shrink-0 px-2">
+      <div className="shrink-0 px-2 max-h-[45vh] md:max-h-none">
         <VideoPlayer ref={playerRef} embedUrl={video.platform === 'bilibili'
           ? `https://player.bilibili.com/player.html?bvid=${video.platformId}&page=1&high_quality=1&autoplay=0`
           : `https://www.youtube.com/embed/${video.platformId}?enablejsapi=1&controls=1&modestbranding=1&rel=0`

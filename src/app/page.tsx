@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { db } from '@/lib/db';
 import { getProfile, getTodayLog, getWeekStreak, updateStreak } from '@/lib/gamification';
+import { getProgress, getTodayTasks } from '@/lib/progress';
 import Onboarding from '@/components/Onboarding';
 import type { Word, UserProfile, DailyLog } from '@/types';
 
@@ -16,6 +17,27 @@ interface DashboardStats {
   learningCount: number;
   masteredCount: number;
   todayNew: number;
+}
+
+interface ProgressData {
+  currentLevel: string;
+  totalWords: number;
+  masteredWords: number;
+  grammarCount: number;
+  totalDays: number;
+  wordsPercent: number;
+  grammarPercent: number;
+  wordsNeeded: number;
+  grammarNeeded: number;
+  nextLevel: string;
+  unlocks: string[];
+}
+
+interface TodayTasks {
+  srsReview: { done: boolean; dueCount: number };
+  newGrammar: { done: boolean };
+  reading: { done: boolean };
+  allDone: boolean;
 }
 
 export default function Home() {
@@ -30,6 +52,8 @@ export default function Home() {
   const [showEasterEgg, setShowEasterEgg] = useState(false);
   const [showReturnMsg, setShowReturnMsg] = useState(false);
   const [returnDays, setReturnDays] = useState(0);
+  const [progress, setProgress] = useState<ProgressData | null>(null);
+  const [tasks, setTasks] = useState<TodayTasks | null>(null);
 
   const handleBunnyClick = () => {
     const next = bunnyClicks + 1;
@@ -50,6 +74,14 @@ export default function Home() {
       getTodayLog(),
       getWeekStreak(),
     ]);
+
+    // Load progress
+    const [progressData, tasksData] = await Promise.all([
+      getProgress(),
+      getTodayTasks(),
+    ]);
+    setProgress(progressData);
+    setTasks(tasksData);
 
     const dueCount = allWords.filter((w) => w.nextReview <= now).length;
     const learningCount = allWords.filter((w) => w.mastery === 'learning' || w.mastery === 'reviewing').length;
@@ -82,7 +114,14 @@ export default function Home() {
     load();
   };
 
-  const todayGreeting = new Date().getHours() < 12 ? '좋은 아침이에요' : new Date().getHours() < 18 ? '좋은 오후예요' : '좋은 저녁이에요';
+  const hour = new Date().getHours();
+  const koGreeting = hour < 12 ? '좋은 아침이에요' : hour < 18 ? '좋은 오후예요' : '좋은 저녁이에요';
+  const toriGreeting =
+    hour >= 6 && hour < 11 ? '早安！🌸 早起学韩语的你最棒了，오늘도 화이팅！' :
+    hour >= 11 && hour < 14 ? '中午好 ☀️ 利用午休时间复习几个词？' :
+    hour >= 14 && hour < 18 ? '下午好 🍵 托里在等你一起学习' :
+    hour >= 18 && hour < 22 ? '晚上好 🌙 今天的打卡还没完成哦' :
+    '这么晚还在学习 💜 注意休息，明天继续';
 
   if (showOnboarding) {
     return <Onboarding onComplete={handleOnboardingComplete} />;
@@ -128,7 +167,8 @@ export default function Home() {
             <h1 className="text-2xl font-bold text-[var(--text-primary)] section-header">
               {profile ? `안녕하세요, ${profile.nickname}` : '开始学习'}
             </h1>
-            <p className="text-[var(--text-secondary)] text-sm mt-1">{todayGreeting}</p>
+            <p className="text-[var(--text-secondary)] text-sm mt-1">{koGreeting}</p>
+            <p className="text-[var(--text-muted)] text-xs mt-0.5">{toriGreeting}</p>
           </div>
         </div>
         {profile && (
@@ -272,6 +312,94 @@ export default function Home() {
               </div>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* ── Progress Map ── */}
+      {progress && (
+        <div className="card-washi p-5" style={{ '--washi-color': 'var(--purple-soft)' } as React.CSSProperties}>
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-lg">🗺️</span>
+            <span className="text-sm font-medium text-[var(--text-primary)]">我的进度</span>
+            <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--purple-soft)]/10 text-[var(--purple-soft)]">
+              {progress.currentLevel}
+            </span>
+          </div>
+
+          {/* Word progress */}
+          <div className="space-y-3">
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-xs text-[var(--text-secondary)]">词汇进度</span>
+                <span className="text-xs text-[var(--text-muted)]">{progress.totalWords} / {progress.totalWords + progress.wordsNeeded} 个</span>
+              </div>
+              <div className="w-full bg-[var(--bg-input)] rounded-full h-2.5">
+                <div
+                  className="h-2.5 rounded-full bg-gradient-to-r from-[var(--pink-primary)] to-[var(--purple-soft)] transition-all duration-700"
+                  style={{ width: `${Math.max(5, progress.wordsPercent)}%` }}
+                />
+              </div>
+            </div>
+
+            {/* Grammar progress */}
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-xs text-[var(--text-secondary)]">语法进度</span>
+                <span className="text-xs text-[var(--text-muted)]">{progress.grammarCount} / {progress.grammarCount + progress.grammarNeeded} 条</span>
+              </div>
+              <div className="w-full bg-[var(--bg-input)] rounded-full h-2.5">
+                <div
+                  className="h-2.5 rounded-full bg-gradient-to-r from-[var(--peach-soft)] to-[var(--pink-primary)] transition-all duration-700"
+                  style={{ width: `${Math.max(5, progress.grammarPercent)}%` }}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Next milestone */}
+          {progress.nextLevel !== progress.currentLevel && (
+            <div className="mt-4 bg-[var(--bg-soft)] rounded-xl p-3 text-center">
+              <p className="text-xs text-[var(--text-secondary)]">
+                🎯 下一个里程碑：<span className="font-bold text-[var(--purple-soft)]">{progress.nextLevel}</span>
+              </p>
+              <p className="text-xs text-[var(--text-muted)] mt-0.5">
+                再学 {progress.wordsNeeded} 个词 + {progress.grammarNeeded} 条语法 → 解锁{progress.unlocks.join('、')}
+              </p>
+            </div>
+          )}
+
+          {/* Today's tasks */}
+          {tasks && (
+            <div className="mt-4 space-y-2">
+              <p className="text-xs font-medium text-[var(--text-secondary)]">今日任务</p>
+              <div className="space-y-1.5">
+                <div className={`flex items-center gap-2 text-xs ${tasks.srsReview.done ? 'text-[var(--mint-soft)]' : tasks.srsReview.dueCount === 0 ? 'text-[var(--mint-soft)]' : 'text-[var(--text-muted)]'}`}>
+                  <span className={`w-4 h-4 rounded-full border flex items-center justify-center text-[10px] ${tasks.srsReview.done || tasks.srsReview.dueCount === 0 ? 'border-[var(--mint-soft)] bg-[var(--mint-soft)]/10' : 'border-[var(--border-color)]'}`}>
+                    {tasks.srsReview.done || tasks.srsReview.dueCount === 0 ? '✓' : ''}
+                  </span>
+                  SRS复习 {tasks.srsReview.done ? '✓' : tasks.srsReview.dueCount > 0 ? `（待复习${tasks.srsReview.dueCount}个词）` : '（已完成）'}
+                </div>
+                <div className={`flex items-center gap-2 text-xs ${tasks.newGrammar.done ? 'text-[var(--mint-soft)]' : 'text-[var(--text-muted)]'}`}>
+                  <span className={`w-4 h-4 rounded-full border flex items-center justify-center text-[10px] ${tasks.newGrammar.done ? 'border-[var(--mint-soft)] bg-[var(--mint-soft)]/10' : 'border-[var(--border-color)]'}`}>
+                    {tasks.newGrammar.done ? '✓' : ''}
+                  </span>
+                  学1条新语法
+                </div>
+                <div className={`flex items-center gap-2 text-xs ${tasks.reading.done ? 'text-[var(--mint-soft)]' : 'text-[var(--text-muted)]'}`}>
+                  <span className={`w-4 h-4 rounded-full border flex items-center justify-center text-[10px] ${tasks.reading.done ? 'border-[var(--mint-soft)] bg-[var(--mint-soft)]/10' : 'border-[var(--border-color)]'}`}>
+                    {tasks.reading.done ? '✓' : ''}
+                  </span>
+                  读5分钟绘本
+                </div>
+              </div>
+              {tasks.allDone && (
+                <div className="bg-[var(--mint-soft)]/10 border border-[var(--mint-soft)]/20 rounded-xl p-3 flex items-center gap-2">
+                  <span className="text-lg">🐰</span>
+                  <span className="text-xs text-[var(--text-secondary)]">全部完成！토리为你骄傲</span>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       )}
 
