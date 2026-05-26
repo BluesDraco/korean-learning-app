@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Delete } from 'lucide-react';
 
 // ═══════════════════════════════════════════════════════════════
@@ -205,17 +206,24 @@ interface KoreanKeyboardProps {
 export function KoreanKeyboard({ value, onChange, visible, onClose }: KoreanKeyboardProps) {
   const [shift, setShift] = useState(false);
   const [buffer, setBuffer] = useState<string[]>([]);
+  const [mounted, setMounted] = useState(false);
   const longPressRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const backspaceRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  useEffect(() => { setMounted(true); }, []);
+
   // Sync buffer when value changes externally (paste, keyboard close/reopen)
   useEffect(() => {
-    if (visible) setBuffer(decomposeFull(value));
+    if (!visible) return;
+    const fromBuffer = composeBuffer(buffer);
+    if (fromBuffer === value) return; // value matches our buffer, no need to sync
+    setBuffer(decomposeFull(value));
   }, [visible, value]);
 
   // Sync buffer changes → parent onChange
   useEffect(() => {
-    if (visible) onChange(composeBuffer(buffer));
+    if (!visible) return;
+    onChange(composeBuffer(buffer));
   }, [buffer, visible, onChange]);
 
   const handleKey = useCallback((key: KeyDef) => {
@@ -269,14 +277,14 @@ export function KoreanKeyboard({ value, onChange, visible, onClose }: KoreanKeyb
     return () => { stopRepeat(); };
   }, [stopRepeat]);
 
-  if (!visible) return null;
+  if (!visible || !mounted) return null;
 
   const composed = composeBuffer(buffer);
   const showRawJamo = buffer.length > 0 && composed !== buffer.join('');
 
-  return (
-    <div className="fixed bottom-0 left-0 right-0 z-[200] animate-slide-up-drawer">
-      <div className="pl-0 md:pl-48 px-3 md:px-5 lg:px-8 w-full max-w-[1280px] mx-auto">
+  return createPortal(
+    <div className="fixed bottom-0 left-0 right-0 z-[200]">
+      <div className="pl-0 md:pl-52 px-3 md:px-5 lg:px-8 w-full max-w-[1280px] mx-auto">
         {/* Preview bar */}
         <div className="flex items-center gap-2 px-3 py-2 bg-[var(--bg-card)] border-t border-x border-[var(--border-color)] rounded-t-2xl">
           <div className="flex-1 min-h-[26px] flex items-center gap-2">
@@ -360,7 +368,7 @@ export function KoreanKeyboard({ value, onChange, visible, onClose }: KoreanKeyb
         </div>
       </div>
     </div>
-  );
+  , document.body);
 }
 
 // ═══════════════════════════════════════════════════════════════

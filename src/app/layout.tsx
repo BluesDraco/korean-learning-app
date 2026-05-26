@@ -51,7 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {/* Floating decorative particles */}
           <FloatingDecorations />
           {/* Marquee banner */}
-          <div className="marquee-banner fixed top-0 left-0 right-0 z-[60] md:left-48">
+          <div className="marquee-banner fixed top-0 left-0 right-0 z-[60] md:left-52">
             <span>
               🌸 한국어 공부하자! ✧ 韩语学习日记 ✧ 안녕하세요 ✧ 今天也是努力学习的一天 ✧ 화이팅! ✧
               🌸 한국어 공부하자! ✧ 韩语学习日记 ✧ 안녕하세요 ✧ 今天也是努力学习的一天 ✧ 화이팅! ✧
@@ -60,11 +60,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {/* Offset for marquee banner */}
           <div className="h-[44px]" />
           <Navbar />
-          <main className="pb-16 md:pb-6 pl-0 md:pl-48 px-3 md:px-5 lg:px-8 page-container pt-3">
+          <main className="pb-16 md:pb-6 pl-0 md:pl-52 px-3 md:px-5 lg:px-8 page-container pt-3">
             {children}
           </main>
           {/* Visitor counter — indie web classic */}
-          <div className="hidden md:block fixed bottom-4 left-[196px] z-40">
+          <div className="hidden md:block fixed bottom-4 left-[212px] z-40">
             <VisitorCounter />
           </div>
           </AuthProvider>

@@ -101,7 +101,7 @@ export function Navbar() {
   return (
     <>
       {/* Desktop sidebar — retro journal binder */}
-      <nav className="hidden md:flex fixed left-0 top-0 bottom-0 w-48 bg-[var(--bg-card)] border-r border-[var(--border-color)] flex-col z-50 shadow-sm"
+      <nav className="hidden md:flex fixed left-0 top-0 bottom-0 w-52 bg-[var(--bg-card)] border-r border-[var(--border-color)] flex-col z-50 shadow-sm"
         style={{
           borderImage: 'repeating-linear-gradient(180deg, var(--pink-pale, #FFD6E0) 0px, var(--pink-pale, #FFD6E0) 2px, transparent 2px, transparent 8px) 1',
           borderRightWidth: '3px',
@@ -144,9 +144,9 @@ export function Navbar() {
                   }`}
                 >
                   <Icon size={20} />
-                  <div className="flex-1 text-left">
+                  <div className="flex-1 text-left min-w-0">
                     <span>{group.label}</span>
-                    <span className="block text-[11px] text-[var(--text-muted)]">{group.ko}</span>
+                    <span className="text-[11px] text-[var(--text-muted)] ml-1">{group.ko}</span>
                   </div>
                   {group.children.length > 0 && (
                     <ChevronRight
@@ -174,9 +174,11 @@ export function Navbar() {
                               : 'text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)] hover:text-[var(--text-primary)]'
                           }`}
                         >
-                          <ChildIcon size={15} />
-                          <span>{child.label}</span>
-                          <span className="text-[11px] text-[var(--text-muted)]">{child.ko}</span>
+                          <ChildIcon size={15} className="shrink-0" />
+                          <div className="min-w-0">
+                            <span>{child.label}</span>
+                            <span className="text-[11px] text-[var(--text-muted)] ml-1">{child.ko}</span>
+                          </div>
                         </Link>
                       );
                     })}
@@ -318,7 +320,7 @@ export function Navbar() {
       )}
 
       {/* Spacer for desktop sidebar */}
-      <div className="hidden md:block w-48 shrink-0" />
+      <div className="hidden md:block w-52 shrink-0" />
     </>
   );
 }
