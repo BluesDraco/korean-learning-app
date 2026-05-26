@@ -213,51 +213,37 @@ export function KoreanKeyboard({ value, onChange, visible, onClose }: KoreanKeyb
     if (visible) setBuffer(decomposeFull(value));
   }, [visible, value]);
 
+  // Sync buffer changes → parent onChange
+  useEffect(() => {
+    if (visible) onChange(composeBuffer(buffer));
+  }, [buffer, visible, onChange]);
+
   const handleKey = useCallback((key: KeyDef) => {
-    // Toggle shift
     if (key.type === 'shift') {
       setShift(s => !s);
       return;
     }
 
-    // Regular keys reset shift
     setShift(false);
 
-    // Backspace
     if (key.type === 'backspace') {
-      setBuffer(prev => {
-        if (prev.length === 0) return prev;
-        const next = prev.slice(0, -1);
-        onChange(composeBuffer(next));
-        return next;
-      });
+      setBuffer(prev => prev.length === 0 ? prev : prev.slice(0, -1));
       return;
     }
 
-    // Space
     if (key.type === 'space') {
-      setBuffer(prev => {
-        const next = [...prev, ' '];
-        onChange(composeBuffer(next));
-        return next;
-      });
+      setBuffer(prev => [...prev, ' ']);
       return;
     }
 
-    // Done
     if (key.type === 'done') {
       onClose();
       return;
     }
 
-    // Jamo key
     const jamo = (shift && key.shiftLabel) ? key.shiftLabel : key.label;
-    setBuffer(prev => {
-      const next = [...prev, jamo];
-      onChange(composeBuffer(next));
-      return next;
-    });
-  }, [shift, onChange, onClose]);
+    setBuffer(prev => [...prev, jamo]);
+  }, [shift, onClose]);
 
   // Long-press backspace for continuous deletion
   const startRepeat = useCallback(() => {
@@ -268,13 +254,11 @@ export function KoreanKeyboard({ value, onChange, visible, onClose }: KoreanKeyb
             if (backspaceRef.current) { clearInterval(backspaceRef.current); backspaceRef.current = null; }
             return prev;
           }
-          const next = prev.slice(0, -1);
-          onChange(composeBuffer(next));
-          return next;
+          return prev.slice(0, -1);
         });
       }, 60);
     }, 400);
-  }, [onChange]);
+  }, []);
 
   const stopRepeat = useCallback(() => {
     if (longPressRef.current) { clearTimeout(longPressRef.current); longPressRef.current = null; }
@@ -291,8 +275,8 @@ export function KoreanKeyboard({ value, onChange, visible, onClose }: KoreanKeyb
   const showRawJamo = buffer.length > 0 && composed !== buffer.join('');
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 md:left-48 z-[200] px-3 md:px-5 lg:px-8 animate-slide-up-drawer">
-      <div className="page-container">
+    <div className="fixed bottom-0 left-0 right-0 z-[200] animate-slide-up-drawer">
+      <div className="pl-0 md:pl-48 px-3 md:px-5 lg:px-8 w-full max-w-[1280px] mx-auto">
         {/* Preview bar */}
         <div className="flex items-center gap-2 px-3 py-2 bg-[var(--bg-card)] border-t border-x border-[var(--border-color)] rounded-t-2xl">
           <div className="flex-1 min-h-[26px] flex items-center gap-2">
