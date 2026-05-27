@@ -7,7 +7,7 @@ import { useAuth } from '@/components/AuthProvider';
 import {
   Home, BookOpen, Gamepad2, LayoutGrid, Flower2, Bot,
   GraduationCap, Grid3X3, Waves, FileText, BookImage,
-  RefreshCw, Pencil, Mic, PenLine, BarChart3,
+  RefreshCw, Pencil, Mic, Keyboard, PenLine, BarChart3,
   Library, Film, Bookmark,
   Palette, Landmark, MapPin, UtensilsCrossed,
   MessageSquare, Lightbulb, MessageCircle, Search, Sparkles,
@@ -46,6 +46,7 @@ const navGroups: NavGroup[] = [
       { label: 'SRS复习', ko: 'SRS 복습', href: '/review', icon: RefreshCw },
       { label: '听写', ko: '받아쓰기', href: '/dictation', icon: Pencil },
       { label: '跟读', ko: '쉐도잉', href: '/shadowing', icon: Mic },
+      { label: '打字', ko: '타자', href: '/typing', icon: Keyboard },
       { label: '写作', ko: '작문', href: '/writing', icon: PenLine },
       { label: 'TOPIK模拟', ko: 'TOPIK 모의', href: '/topik', icon: FileText },
     ],
