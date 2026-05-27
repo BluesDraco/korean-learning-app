@@ -1,0 +1,117 @@
+import { vowels, consonants, batchimSounds, type PhoneticLetter } from '@/data/phonetics';
+
+export interface ProgressiveStep {
+  id: string;
+  title: string;
+  titleKo: string;
+  emoji: string;
+  description: string;
+  letters: PhoneticLetter[];
+  confusedPairs: { id: string; label: string; letters: PhoneticLetter[]; tip: string }[];
+}
+
+export const progressiveSteps: ProgressiveStep[] = [
+  {
+    id: 'basic-vowels',
+    title: '单元音',
+    titleKo: '단모음',
+    emoji: '🔤',
+    description: '10个基础元音，是韩语的发音基石。每个元音都由天、地、人三个元素演化而来。',
+    letters: vowels.filter((v) => v.subtype === 'basic'),
+    confusedPairs: [
+      {
+        id: 'cp-01', label: 'ㅓ vs ㅗ', tip: 'ㅓ嘴型扁平不圆唇，ㅗ嘴型圆拢像在吹小口哨',
+        letters: [
+          { ...vowels.find((v) => v.letter === 'ㅓ')!, id: 'cp-v-03', letter: 'ㅓ', name: '어', romanization: 'eo', type: 'vowel', subtype: 'basic', sound: '嘴型扁平，类似英语"aw"', mnemonic: '嘴不圆，像惊讶时微微张嘴', emoji: '😮' },
+          { ...vowels.find((v) => v.letter === 'ㅗ')!, id: 'cp-v-05', letter: 'ㅗ', name: '오', romanization: 'o', type: 'vowel', subtype: 'basic', sound: '嘴型圆拢，类似中文"哦"', mnemonic: '嘴巴嘟圆，像在吹蜡烛', emoji: '⭕' },
+        ],
+      },
+      {
+        id: 'cp-02', label: 'ㅡ vs ㅜ', tip: 'ㅡ嘴角向两边拉，ㅜ嘴唇向前嘟起',
+        letters: [
+          { ...vowels.find((v) => v.letter === 'ㅡ')!, id: 'cp-v-09', letter: 'ㅡ', name: '으', romanization: 'eu', type: 'vowel', subtype: 'basic', sound: '嘴角向两边拉，类似拼音"e"', mnemonic: '像在微笑，嘴唇平拉', emoji: '😐' },
+          { ...vowels.find((v) => v.letter === 'ㅜ')!, id: 'cp-v-07', letter: 'ㅜ', name: '우', romanization: 'u', type: 'vowel', subtype: 'basic', sound: '嘴唇向前嘟起，类似中文"乌"', mnemonic: '像在撒娇嘟嘴', emoji: '🫦' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'compound-vowels',
+    title: '双元音',
+    titleKo: '이중모음',
+    emoji: '🔠',
+    description: '11个复合元音，由基础元音组合而成。掌握单元音后，双元音就是简单的拼合。',
+    letters: vowels.filter((v) => v.subtype === 'compound'),
+    confusedPairs: [
+      {
+        id: 'cp-03', label: 'ㅐ vs ㅔ', tip: '两者在现代韩语中发音几乎相同。ㅐ嘴张得稍大一点，但日常会话中基本不分',
+        letters: [
+          { ...vowels.find((v) => v.letter === 'ㅐ')!, id: 'cp-v-11', letter: 'ㅐ', name: '애', romanization: 'ae', type: 'vowel', subtype: 'compound', sound: '类似英语"apple"的a，嘴稍大', mnemonic: 'ㅏ+ㅣ=ae，嘴比ㅔ稍大', emoji: '🍎' },
+          { ...vowels.find((v) => v.letter === 'ㅔ')!, id: 'cp-v-13', letter: 'ㅔ', name: '에', romanization: 'e', type: 'vowel', subtype: 'compound', sound: '类似英语"bed"的e，嘴稍小', mnemonic: 'ㅓ+ㅣ=e，嘴比ㅐ稍小', emoji: '🛏️' },
+        ],
+      },
+      {
+        id: 'cp-04', label: 'ㅚ vs ㅙ vs ㅞ', tip: '三者发音非常接近。ㅚ=ㅗ+ㅣ，ㅙ=ㅗ+ㅐ，ㅞ=ㅜ+ㅔ。简化来说都类似英语"way"',
+        letters: [
+          { ...vowels.find((v) => v.letter === 'ㅚ')!, id: 'cp-v-17', letter: 'ㅚ', name: '외', romanization: 'oe', type: 'vowel', subtype: 'compound', sound: '类似英语"way"但嘴更圆', mnemonic: 'ㅗ+ㅣ=oe', emoji: '🔄' },
+          { ...vowels.find((v) => v.letter === 'ㅙ')!, id: 'cp-v-16', letter: 'ㅙ', name: '왜', romanization: 'wae', type: 'vowel', subtype: 'compound', sound: '类似英语"way"', mnemonic: 'ㅗ+ㅐ=wae', emoji: '🛤️' },
+          { ...vowels.find((v) => v.letter === 'ㅞ')!, id: 'cp-v-19', letter: 'ㅞ', name: '웨', romanization: 'we', type: 'vowel', subtype: 'compound', sound: '类似英语"wet"', mnemonic: 'ㅜ+ㅔ=we', emoji: '💧' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'basic-consonants',
+    title: '基础辅音',
+    titleKo: '기본 자음',
+    emoji: '🔡',
+    description: '14个基础辅音（含5个送气音），模仿发音器官的形状创造。韩语辅音的关键是"松紧"和"送气"。',
+    letters: consonants.filter((c) => c.subtype === 'basic' || c.subtype === 'aspirated'),
+    confusedPairs: [
+      {
+        id: 'cp-05', label: 'ㄱ vs ㅋ vs ㄲ', tip: 'ㄱ=轻声g(松音)，ㅋ=强送气k，ㄲ=喉部用力不送气(紧音)',
+        letters: consonants.filter((c) => ['ㄱ', 'ㅋ', 'ㄲ'].includes(c.letter)),
+      },
+      {
+        id: 'cp-06', label: 'ㅂ vs ㅍ vs ㅃ', tip: 'ㅂ=轻声b(松音)，ㅍ=强送气p，ㅃ=喉部用力不送气(紧音)',
+        letters: consonants.filter((c) => ['ㅂ', 'ㅍ', 'ㅃ'].includes(c.letter)),
+      },
+      {
+        id: 'cp-07', label: 'ㅈ vs ㅊ vs ㅉ', tip: 'ㅈ=轻声j(松音)，ㅊ=强送气ch，ㅉ=喉部用力不送气(紧音)',
+        letters: consonants.filter((c) =>['ㅈ', 'ㅊ', 'ㅉ'].includes(c.letter)),
+      },
+      {
+        id: 'cp-08', label: 'ㄷ vs ㅌ vs ㄸ', tip: 'ㄷ=轻声d(松音)，ㅌ=强送气t，ㄸ=喉部用力不送气(紧音)',
+        letters: consonants.filter((c) =>['ㄷ', 'ㅌ', 'ㄸ'].includes(c.letter)),
+      },
+    ],
+  },
+  {
+    id: 'double-consonants',
+    title: '紧音辅音',
+    titleKo: '된소리',
+    emoji: '💪',
+    description: '5个紧音（双写辅音），发音时喉部肌肉紧张、声带紧闭。想象你在用力搬重物时的感觉。',
+    letters: consonants.filter((c) => c.subtype === 'double'),
+    confusedPairs: [
+      {
+        id: 'cp-09', label: '松音 vs 紧音 全对比', tip: '松音=放松、送气；紧音=用力、不送气。把手指放在喉结上感受震动差异',
+        letters: consonants.filter((c) =>['ㄱ', 'ㄲ', 'ㄷ', 'ㄸ', 'ㅂ', 'ㅃ', 'ㅅ', 'ㅆ', 'ㅈ', 'ㅉ'].includes(c.letter)),
+      },
+    ],
+  },
+  {
+    id: 'batchim',
+    title: '收音（终声）',
+    titleKo: '받침',
+    emoji: '🛑',
+    description: '7种收音发音，是韩语区别于中文的重要特征。一个音节末尾的辅音不发全、只做口型。',
+    letters: batchimSounds,
+    confusedPairs: [
+      {
+        id: 'cp-10', label: 'ㄱ系 vs ㄷ系 vs ㅂ系', tip: 'ㄱ系收音=舌根堵住，ㄷ系收音=舌尖堵住，ㅂ系收音=双唇堵住。都是只做口型不爆破',
+        letters: batchimSounds.filter((b) => ['ㄱ/ㄲ/ㅋ', 'ㄷ/ㅅ/ㅆ/ㅈ/ㅊ/ㅌ/ㅎ', 'ㅂ/ㅍ'].includes(b.letter)),
+      },
+    ],
+  },
+];
