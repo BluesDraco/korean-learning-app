@@ -331,7 +331,7 @@ function ReviewContent() {
   return (
     <div className="relative min-h-screen" style={bgStyle}>
       {/* Paper texture */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(#2D1B10 1px, transparent 1px)', backgroundSize: '18px 18px' }} />
+      <div className="absolute inset-0 pointer-events-none opacity-[0.05]" style={{ backgroundImage: 'radial-gradient(#2D1B10 1px, transparent 1px)', backgroundSize: '18px 18px' }} />
 
       {/* Tori reaction */}
       {toriReaction && (
@@ -342,9 +342,9 @@ function ReviewContent() {
         </div>
       )}
 
-      <div className="relative z-10 py-4 max-w-lg mx-auto space-y-4 px-4">
+      <div className="relative z-10 py-4 max-w-lg mx-auto px-4 h-full flex flex-col" style={{ minHeight: '100dvh' }}>
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mb-3">
           <button onClick={() => router.back()} className="p-1.5 -ml-1.5 text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/50 rounded-lg transition-colors">
             <ArrowLeft size={20} />
           </button>
@@ -360,189 +360,195 @@ function ReviewContent() {
         </div>
 
         {/* Progress bar */}
-        <div className="w-full bg-[#E8D5C8]/40 rounded-full h-1 overflow-hidden">
+        <div className="w-full bg-[#E8D5C8]/40 rounded-full h-1.5 overflow-hidden mb-4">
           <div className="h-full rounded-full bg-gradient-to-r from-[var(--pink-primary)] to-[var(--purple-soft)] transition-all duration-500 ease-out"
-            style={{ width: `${progress}%` }} />
+            style={{ width: `${progress}%`, boxShadow: '0 0 6px rgba(255,143,171,0.25)' }} />
         </div>
 
         {/* ══════════════════════════════════════════════════════════
-            3D Flashcard
+            3D Flashcard — flex-1 fills remaining space
             ══════════════════════════════════════════════════════════ */}
-        <div
-          className="perspective-1000 w-full"
-          onTouchStart={(e) => { touchXRef.current = e.touches[0].clientX; }}
-          onTouchEnd={(e) => {
-            if (flipped) return;
-            const delta = e.changedTouches[0].clientX - touchXRef.current;
-            if (Math.abs(delta) > 60) {
-              if (delta > 0) {
-                const correctOpt = options.find(o => o.correct);
-                if (correctOpt) { setSelectedCorrect(true); setSelfAssessment(3); setFlipped(true); }
-              } else {
-                setSelectedCorrect(false); setSelfAssessment(0); setFlipped(true);
+        <div className="flex-1 flex flex-col">
+          <div
+            className="perspective-1000 flex-1"
+            onTouchStart={(e) => { touchXRef.current = e.touches[0].clientX; }}
+            onTouchEnd={(e) => {
+              if (flipped) return;
+              const delta = e.changedTouches[0].clientX - touchXRef.current;
+              if (Math.abs(delta) > 60) {
+                if (delta > 0) {
+                  const correctOpt = options.find(o => o.correct);
+                  if (correctOpt) { setSelectedCorrect(true); setSelfAssessment(3); setFlipped(true); }
+                } else {
+                  setSelectedCorrect(false); setSelfAssessment(0); setFlipped(true);
+                }
               }
-            }
-          }}
-        >
-          <div className="relative" style={{ minHeight: '500px' }}>
-            <div
-              className="w-full transition-all duration-500 transform-style-3d"
-              style={{
-                minHeight: '500px',
-                transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
-              }}
-            >
-              {/* ═══════════════════════════════════════════════════
-                  FRONT — MCQ
-                  ═══════════════════════════════════════════════════ */}
+            }}
+          >
+            <div className="relative w-full h-full">
               <div
-                className={`absolute inset-0 rounded-3xl p-5 flex flex-col items-center justify-center ${
-                  flipped ? 'opacity-0 pointer-events-none' : ''
-                }`}
-                style={{
-                  backfaceVisibility: 'hidden',
-                  minHeight: '500px',
-                  background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF9 100%)',
-                  boxShadow: '0 1px 2px rgba(0,0,0,0.02), 0 4px 12px rgba(0,0,0,0.04), 0 12px 32px rgba(0,0,0,0.05), 0 24px 56px rgba(0,0,0,0.03)',
-                  border: '1px solid #F0E8DD',
-                }}
+                className="w-full h-full transition-transform duration-500 transform-style-3d"
+                style={{ transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }}
               >
-                <p className="text-xs text-[var(--text-muted)] mb-1">{currentWord.partOfSpeech} · {currentWord.pronunciation}</p>
-                <div className="flex items-center gap-3 mb-6">
-                  <h2 className="text-[2.75rem] font-extrabold text-[var(--text-primary)] tracking-tight leading-none">{currentWord.word}</h2>
-                  <button
-                    onClick={(e) => { e.stopPropagation(); speakKorean(currentWord.word); }}
-                    className="p-2 rounded-xl bg-[var(--bg-soft)] hover:bg-[var(--pink-pale)]/40 text-[var(--pink-primary)] transition-colors"
-                  >
-                    <Volume2 size={20} />
-                  </button>
-                </div>
-
-                <div className="grid grid-cols-1 gap-2.5 w-full">
-                  {options.map((opt, i) => {
-                    const isDontKnow = opt.text === '不知道';
-                    return (
-                      <button
-                        key={i}
-                        onClick={() => handlePickOption(i)}
-                        className={`px-4 py-3.5 rounded-2xl border text-[15px] font-medium transition-all duration-150 active:scale-[0.97] ${
-                          isDontKnow
-                            ? 'bg-transparent border-dashed border-[#D0C0B0] text-[var(--text-muted)] hover:bg-[#F5F0EB]/50'
-                            : 'bg-white border-[#F0E8DD] text-[var(--text-primary)] hover:border-[var(--pink-primary)]/30 hover:bg-[var(--pink-pale)]/10 hover:shadow-sm'
-                        }`}
-                      >
-                        {opt.text}
-                      </button>
-                    );
-                  })}
-                </div>
-
-                <p className="text-[10px] text-[var(--text-muted)] mt-4">← 左滑不认识  ·  右滑认识 →</p>
-              </div>
-
-              {/* ═══════════════════════════════════════════════════
-                  BACK — Answer + Rating
-                  ═══════════════════════════════════════════════════ */}
-              <div
-                className={`absolute inset-0 rounded-3xl p-5 flex flex-col items-center rotate-y-180 ${
-                  !flipped ? 'opacity-0 pointer-events-none' : ''
-                }`}
-                style={{
-                  backfaceVisibility: 'hidden',
-                  minHeight: '500px',
-                  background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF9 100%)',
-                  boxShadow: '0 1px 2px rgba(0,0,0,0.02), 0 4px 12px rgba(0,0,0,0.04), 0 12px 32px rgba(0,0,0,0.05), 0 24px 56px rgba(0,0,0,0.03)',
-                  border: '1px solid rgba(255,143,171,0.15)',
-                }}
-              >
-                <div className={`px-4 py-1 rounded-full text-xs font-bold mb-2 ${
-                  selectedCorrect
-                    ? 'bg-[var(--mint-soft)]/10 text-[var(--mint-soft)] border border-[var(--mint-soft)]/20'
-                    : 'bg-[var(--color-danger)]/5 text-[var(--color-danger)] border border-[var(--color-danger)]/10'
-                }`}>
-                  {selectedCorrect ? '✓ 正确' : '✗ 错误'}
-                </div>
-
-                <p className="text-xs text-[var(--text-muted)]">{currentWord.partOfSpeech} · {currentWord.pronunciation}</p>
-                <div className="flex items-center gap-2 mb-2">
-                  <h2 className="text-3xl font-extrabold text-[var(--text-primary)]">{currentWord.word}</h2>
-                  <button
-                    onClick={(e) => { e.stopPropagation(); speakKorean(currentWord.word); }}
-                    className="p-1.5 rounded-lg hover:bg-[var(--bg-soft)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors"
-                  >
-                    <Volume2 size={16} />
-                  </button>
-                </div>
-
-                {/* Meaning */}
-                <div className="bg-[var(--pink-pale)]/10 border border-[var(--pink-primary)]/10 rounded-2xl p-4 w-full mb-2">
-                  <p className="text-[10px] text-[var(--text-muted)] mb-0.5 uppercase tracking-wider">中文意思</p>
-                  <p className="text-[var(--pink-primary)] text-2xl font-bold text-center">{currentWord.meaning}</p>
-                </div>
-
-                {/* Examples */}
-                {currentWord.examples.length > 0 && (
-                  <div className="w-full space-y-1 mb-2">
-                    {currentWord.examples.slice(0, 2).map((ex, i) => (
-                      <div key={i} className="bg-[#FDF8F0] rounded-xl px-3 py-2 border border-[#F0E8DD]/50">
-                        <div className="flex items-start gap-1.5">
-                          <p className="text-[13px] text-[var(--text-primary)] flex-1 leading-snug">{ex.text}</p>
-                          <button onClick={(e) => { e.stopPropagation(); speakKorean(ex.text); }}
-                            className="p-0.5 rounded hover:bg-white/50 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors shrink-0 mt-0.5">
-                            <Volume2 size={12} />
-                          </button>
-                        </div>
-                        <p className="text-[11px] text-[var(--text-muted)]">{ex.translation}</p>
-                      </div>
-                    ))}
+                {/* ═══════════════════════════════════════════════════
+                    FRONT
+                    ═══════════════════════════════════════════════════ */}
+                <div
+                  className={`absolute inset-0 rounded-3xl p-6 flex flex-col ${
+                    flipped ? 'opacity-0 pointer-events-none' : ''
+                  }`}
+                  style={{
+                    backfaceVisibility: 'hidden',
+                    background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF9 100%)',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.03), 0 4px 12px rgba(0,0,0,0.05), 0 16px 40px rgba(0,0,0,0.06)',
+                    border: '1px solid #F0E8DD',
+                  }}
+                >
+                  {/* Top meta */}
+                  <div className="flex items-center justify-between mb-8">
+                    <span className="text-xs text-[var(--text-muted)]">{currentWord.partOfSpeech} · {currentWord.pronunciation}</span>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); speakKorean(currentWord.word); }}
+                      className="p-2 rounded-xl bg-[var(--bg-soft)] hover:bg-[var(--pink-pale)]/50 text-[var(--pink-primary)] transition-colors"
+                    >
+                      <Volume2 size={18} />
+                    </button>
                   </div>
-                )}
 
-                {/* Rating buttons */}
-                <div className="w-full mt-auto">
-                  <p className="text-[10px] font-medium text-[var(--text-muted)] text-center mb-2 uppercase tracking-wider">你记得怎么样？</p>
-                  <div className="flex gap-2 mb-2">
-                    {RATING_BUTTONS.map((btn) => {
-                      const active = selfAssessment === btn.q;
+                  {/* Word — centered hero */}
+                  <div className="flex-1 flex items-center justify-center">
+                    <h2 className="text-4xl font-extrabold text-[var(--text-primary)] tracking-tight">{currentWord.word}</h2>
+                  </div>
+
+                  {/* MCQ options */}
+                  <div className="grid grid-cols-1 gap-3 mt-8">
+                    {options.map((opt, i) => {
+                      const isDontKnow = opt.text === '不知道';
                       return (
                         <button
-                          key={btn.q}
-                          onClick={() => setSelfAssessment(btn.q)}
-                          className="flex-1 py-3 rounded-2xl flex flex-col items-center gap-0.5 transition-all duration-150 active:scale-95"
-                          style={{
-                            backgroundColor: active ? 'var(--pink-pale)' : '#FAFAFA',
-                            border: active ? '2px solid var(--pink-primary)' : '1.5px solid #F0E8DD',
-                            color: active ? 'var(--pink-primary)' : 'var(--text-muted)',
-                            boxShadow: active ? '0 2px 8px rgba(255,143,171,0.2)' : 'none',
-                          }}
+                          key={i}
+                          onClick={() => handlePickOption(i)}
+                          className={`px-4 py-3.5 rounded-2xl border text-sm font-medium transition-all duration-150 active:scale-[0.98] ${
+                            isDontKnow
+                              ? 'bg-transparent border-dashed border-[#D0C0B0] text-[var(--text-muted)] hover:bg-[#F5F0EB]/60'
+                              : 'bg-white border-[#F0E8DD] text-[var(--text-primary)] hover:border-[var(--pink-primary)]/40 hover:bg-[var(--pink-pale)]/15 hover:shadow-sm'
+                          }`}
                         >
-                          <span className="text-xl">{btn.emoji}</span>
-                          <span className="text-[10px] leading-tight">{btn.label}</span>
+                          {opt.text}
                         </button>
                       );
                     })}
                   </div>
-                  <button
-                    onClick={handleConfirm}
-                    className="w-full py-3.5 bg-gradient-to-r from-[var(--pink-primary)] to-[#FF6B95] text-white rounded-2xl font-bold text-sm active:scale-[0.97] transition-all"
-                    style={{ boxShadow: '0 4px 16px rgba(255,143,171,0.25)' }}
-                  >
-                    {currentIdx + 1 >= words.length ? '完成复习' : '确认，下一题'}
-                  </button>
+
+                  {/* Swipe hint */}
+                  <p className="text-xs text-[var(--text-muted)] text-center mt-4">← 左滑不认识  ·  右滑认识 →</p>
+                </div>
+
+                {/* ═══════════════════════════════════════════════════
+                    BACK
+                    ═══════════════════════════════════════════════════ */}
+                <div
+                  className={`absolute inset-0 rounded-3xl p-6 flex flex-col items-center rotate-y-180 ${
+                    !flipped ? 'opacity-0 pointer-events-none' : ''
+                  }`}
+                  style={{
+                    backfaceVisibility: 'hidden',
+                    background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF9 100%)',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.03), 0 4px 12px rgba(0,0,0,0.05), 0 16px 40px rgba(0,0,0,0.06)',
+                    border: '1px solid rgba(255,143,171,0.15)',
+                  }}
+                >
+                  {/* Result badge */}
+                  <div className={`px-4 py-1 rounded-full text-sm font-bold mb-4 ${
+                    selectedCorrect
+                      ? 'bg-[var(--mint-soft)]/12 text-[var(--mint-soft)] border border-[var(--mint-soft)]/25'
+                      : 'bg-[var(--color-danger)]/8 text-[var(--color-danger)] border border-[var(--color-danger)]/12'
+                  }`}>
+                    {selectedCorrect ? '✓ 正确' : '✗ 错误'}
+                  </div>
+
+                  {/* Word */}
+                  <p className="text-xs text-[var(--text-muted)] mb-1">{currentWord.partOfSpeech} · {currentWord.pronunciation}</p>
+                  <div className="flex items-center gap-2 mb-4">
+                    <h2 className="text-2xl font-extrabold text-[var(--text-primary)]">{currentWord.word}</h2>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); speakKorean(currentWord.word); }}
+                      className="p-1.5 rounded-lg hover:bg-[var(--bg-soft)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors"
+                    >
+                      <Volume2 size={16} />
+                    </button>
+                  </div>
+
+                  {/* Meaning box */}
+                  <div className="bg-[var(--pink-pale)]/10 border border-[var(--pink-primary)]/10 rounded-2xl p-4 w-full mb-4">
+                    <p className="text-xs text-[var(--text-muted)] mb-1">中文意思</p>
+                    <p className="text-[var(--pink-primary)] text-lg font-bold text-center">{currentWord.meaning}</p>
+                  </div>
+
+                  {/* Examples — only if present */}
+                  {currentWord.examples.length > 0 && (
+                    <div className="w-full space-y-2 mb-4">
+                      {currentWord.examples.slice(0, 2).map((ex, i) => (
+                        <div key={i} className="bg-[#FDF8F0] rounded-xl px-3 py-2.5 border border-[#F0E8DD]/60">
+                          <div className="flex items-start gap-2">
+                            <p className="text-sm text-[var(--text-primary)] flex-1 leading-snug">{ex.text}</p>
+                            <button onClick={(e) => { e.stopPropagation(); speakKorean(ex.text); }}
+                              className="p-1 rounded-lg hover:bg-white/60 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors shrink-0">
+                              <Volume2 size={13} />
+                            </button>
+                          </div>
+                          <p className="text-xs text-[var(--text-muted)] mt-0.5">{ex.translation}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Rating */}
+                  <div className="w-full mt-auto">
+                    <p className="text-xs font-medium text-[var(--text-muted)] text-center mb-3">你记得怎么样？</p>
+                    <div className="flex gap-2.5 mb-3">
+                      {RATING_BUTTONS.map((btn) => {
+                        const active = selfAssessment === btn.q;
+                        return (
+                          <button
+                            key={btn.q}
+                            onClick={() => setSelfAssessment(btn.q)}
+                            className="flex-1 py-3 rounded-2xl flex flex-col items-center gap-1 transition-all duration-150 active:scale-95"
+                            style={{
+                              backgroundColor: active ? 'var(--pink-pale)' : '#FAFAFA',
+                              border: active ? '2px solid var(--pink-primary)' : '1.5px solid #F0E8DD',
+                              color: active ? 'var(--pink-primary)' : 'var(--text-muted)',
+                              boxShadow: active ? '0 2px 8px rgba(255,143,171,0.2)' : 'none',
+                            }}
+                          >
+                            <span className="text-xl">{btn.emoji}</span>
+                            <span className="text-xs font-medium">{btn.label}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                    <button
+                      onClick={handleConfirm}
+                      className="w-full py-3.5 bg-gradient-to-r from-[var(--pink-primary)] to-[#FF6B95] text-white rounded-2xl font-bold text-sm active:scale-[0.97] transition-all shadow-md"
+                      style={{ boxShadow: '0 4px 16px rgba(255,143,171,0.25)' }}
+                    >
+                      {currentIdx + 1 >= words.length ? '完成复习' : '确认，下一题'}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Session stats */}
-        {sessionStats.reviewed > 0 && (
-          <div className="flex items-center justify-center gap-5 text-[11px] text-[var(--text-muted)]">
-            <span>已复习 {sessionStats.reviewed}</span>
-            <span>通过 {sessionStats.passed}</span>
-            <span>+{xpEarned} XP</span>
-          </div>
-        )}
+          {/* Session stats */}
+          {sessionStats.reviewed > 0 && (
+            <div className="flex items-center justify-center gap-5 text-xs text-[var(--text-muted)] py-2">
+              <span>已复习 {sessionStats.reviewed}</span>
+              <span>通过 {sessionStats.passed}</span>
+              <span>+{xpEarned} XP</span>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
