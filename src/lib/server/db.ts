@@ -46,6 +46,44 @@ export async function getDb() {
     )
   `);
 
+  await c.execute(`
+    CREATE INDEX IF NOT EXISTS idx_study_logs_created_at ON study_logs(created_at)
+  `);
+
+  await c.execute(`
+    CREATE TABLE IF NOT EXISTS page_views (
+      id TEXT PRIMARY KEY,
+      user_id TEXT,
+      path TEXT NOT NULL,
+      referrer TEXT DEFAULT '',
+      user_agent TEXT DEFAULT '',
+      created_at INTEGER NOT NULL,
+      FOREIGN KEY (user_id) REFERENCES users(id)
+    )
+  `);
+
+  await c.execute(`
+    CREATE INDEX IF NOT EXISTS idx_page_views_created_at ON page_views(created_at)
+  `);
+
+  await c.execute(`
+    CREATE TABLE IF NOT EXISTS ai_usage (
+      id TEXT PRIMARY KEY,
+      user_id TEXT NOT NULL,
+      model TEXT NOT NULL DEFAULT 'gpt-4o-mini',
+      endpoint TEXT NOT NULL,
+      prompt_tokens INTEGER DEFAULT 0,
+      completion_tokens INTEGER DEFAULT 0,
+      cost REAL DEFAULT 0,
+      created_at INTEGER NOT NULL,
+      FOREIGN KEY (user_id) REFERENCES users(id)
+    )
+  `);
+
+  await c.execute(`
+    CREATE INDEX IF NOT EXISTS idx_ai_usage_created_at ON ai_usage(created_at)
+  `);
+
   return {
     exec: async (sql: string, params?: unknown[]) => {
       const result = await c.execute({ sql, args: params as any[] });

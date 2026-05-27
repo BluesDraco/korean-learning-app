@@ -14,5 +14,8 @@ export async function GET(request: NextRequest) {
   const offset = (page - 1) * size;
   const { results, total } = searchDictionary(q, size, offset);
 
-  return NextResponse.json({ results, total, page, size });
+  return NextResponse.json(
+    { results, total, page, size },
+    { headers: { 'Cache-Control': 'public, max-age=3600' } }
+  );
 }

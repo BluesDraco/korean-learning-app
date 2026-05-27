@@ -443,8 +443,6 @@ function ReviewContent() {
                   })}
                 </div>
 
-                {/* Swipe hint */}
-                <p className="text-xs text-[var(--text-muted)] text-center mt-3">← 左滑不认识  ·  右滑认识 →</p>
               </div>
 
               {/* ═══════════════════════════════════════════════════

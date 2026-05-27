@@ -86,5 +86,7 @@ export async function GET() {
     activityFeed: activities,
   };
 
-  return NextResponse.json(response);
+  return NextResponse.json(response, {
+    headers: { 'Cache-Control': 'public, max-age=30' },
+  });
 }
