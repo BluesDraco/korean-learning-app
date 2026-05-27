@@ -47,21 +47,6 @@ function ReviewContent() {
   const [toriReaction, setToriReaction] = useState<string | null>(null);
   const [streak, setStreak] = useState(0);
   const touchXRef = useRef<number>(0);
-  const hasSpokenRef = useRef(false);
-
-  // Auto-speak when word changes
-  useEffect(() => {
-    if (words.length > 0 && !flipped && !complete) {
-      hasSpokenRef.current = false;
-      const timer = setTimeout(() => {
-        if (!hasSpokenRef.current) {
-          speakKorean(words[currentIdx].word);
-          hasSpokenRef.current = true;
-        }
-      }, 400);
-      return () => clearTimeout(timer);
-    }
-  }, [currentIdx, words, flipped, complete]);
 
   useEffect(() => {
     if (!localStorage.getItem('srs-intro-seen')) setShowIntro(true);
@@ -357,9 +342,9 @@ function ReviewContent() {
         </div>
       )}
 
-      <div className="relative z-10 py-3 max-w-lg mx-auto px-4 flex flex-col" style={{ height: '100dvh' }}>
+      <div className="relative z-10 py-4 max-w-lg mx-auto space-y-4 px-4">
         {/* Header */}
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center justify-between">
           <button onClick={() => router.back()} className="p-1 -ml-1 text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/50 rounded-lg transition-colors">
             <ArrowLeft size={20} />
           </button>
@@ -375,16 +360,16 @@ function ReviewContent() {
         </div>
 
         {/* Progress bar */}
-        <div className="w-full bg-[#E8D5C8]/40 rounded-full h-1.5 overflow-hidden mb-3 shrink-0">
+        <div className="w-full bg-[#E8D5C8]/40 rounded-full h-1.5 overflow-hidden">
           <div className="h-full rounded-full bg-gradient-to-r from-[var(--pink-primary)] to-[var(--purple-soft)] transition-all duration-500 ease-out"
             style={{ width: `${progress}%`, boxShadow: '0 0 6px rgba(255,143,171,0.25)' }} />
         </div>
 
         {/* ══════════════════════════════════════════════════════════
-            Card area — reliable calc height, no flex-1/h-full chain
+            Card — fixed minHeight, no flex-1 chain
             ══════════════════════════════════════════════════════════ */}
         <div
-          className="flex-1 relative perspective-1000 min-h-0"
+          className="perspective-1000 w-full"
           onTouchStart={(e) => { touchXRef.current = e.touches[0].clientX; }}
           onTouchEnd={(e) => {
             if (flipped) return;
@@ -399,154 +384,161 @@ function ReviewContent() {
             }
           }}
         >
-          <div
-            className="w-full h-full transition-transform duration-500 transform-style-3d"
-            style={{ transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }}
-          >
-            {/* ═══════════════════════════════════════════════════
-                FRONT
-                ═══════════════════════════════════════════════════ */}
+          <div className="relative" style={{ minHeight: '500px' }}>
             <div
-              className={`absolute inset-0 rounded-3xl p-5 flex flex-col ${
-                flipped ? 'opacity-0 pointer-events-none' : ''
-              }`}
+              className="w-full transition-transform duration-500 transform-style-3d"
               style={{
-                backfaceVisibility: 'hidden',
-                background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF9 100%)',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.03), 0 4px 12px rgba(0,0,0,0.05), 0 16px 40px rgba(0,0,0,0.06)',
-                border: '1px solid #F0E8DD',
+                minHeight: '500px',
+                transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
               }}
             >
-              {/* Word — centered hero */}
-              <div className="flex-1 flex items-center justify-center">
-                <h2 className="text-4xl font-extrabold text-[var(--text-primary)] tracking-tight">{currentWord.word}</h2>
-              </div>
-
-              {/* Card footer: meta + speaker inside a framed bar */}
-              <div className="flex items-center justify-between bg-[#FDF8F0] rounded-2xl px-4 py-2.5 border border-[#F0E8DD]/60 mt-4">
-                <span className="text-xs text-[var(--text-muted)]">{currentWord.partOfSpeech} · {currentWord.pronunciation}</span>
-                <button
-                  onClick={(e) => { e.stopPropagation(); speakKorean(currentWord.word); }}
-                  className="p-1.5 rounded-lg hover:bg-white/60 text-[var(--pink-primary)] transition-colors"
-                >
-                  <Volume2 size={16} />
-                </button>
-              </div>
-
-              {/* MCQ options */}
-              <div className="grid grid-cols-1 gap-2.5 mt-4">
-                {options.map((opt, i) => {
-                  const isDontKnow = opt.text === '不知道';
-                  return (
-                    <button
-                      key={i}
-                      onClick={() => handlePickOption(i)}
-                      className={`px-4 py-3 rounded-2xl border text-sm font-medium transition-all duration-150 active:scale-[0.98] ${
-                        isDontKnow
-                          ? 'bg-transparent border-dashed border-[#D0C0B0] text-[var(--text-muted)] hover:bg-[#F5F0EB]/60'
-                          : 'bg-white border-[#F0E8DD] text-[var(--text-primary)] hover:border-[var(--pink-primary)]/40 hover:bg-[var(--pink-pale)]/15 hover:shadow-sm'
-                      }`}
-                    >
-                      {opt.text}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Swipe hint */}
-              <p className="text-xs text-[var(--text-muted)] text-center mt-3">← 左滑不认识  ·  右滑认识 →</p>
-            </div>
-
-            {/* ═══════════════════════════════════════════════════
-                BACK
-                ═══════════════════════════════════════════════════ */}
-            <div
-              className={`absolute inset-0 rounded-3xl p-5 flex flex-col items-center rotate-y-180 ${
-                !flipped ? 'opacity-0 pointer-events-none' : ''
-              }`}
-              style={{
-                backfaceVisibility: 'hidden',
-                background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF9 100%)',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.03), 0 4px 12px rgba(0,0,0,0.05), 0 16px 40px rgba(0,0,0,0.06)',
-                border: '1px solid rgba(255,143,171,0.15)',
-              }}
-            >
-              {/* Result badge */}
-              <div className={`px-4 py-1 rounded-full text-sm font-bold mb-3 ${
-                selectedCorrect
-                  ? 'bg-[var(--mint-soft)]/12 text-[var(--mint-soft)] border border-[var(--mint-soft)]/25'
-                  : 'bg-[var(--color-danger)]/8 text-[var(--color-danger)] border border-[var(--color-danger)]/12'
-              }`}>
-                {selectedCorrect ? '✓ 正确' : '✗ 错误'}
-              </div>
-
-              {/* Word + meta */}
-              <p className="text-xs text-[var(--text-muted)] mb-1">{currentWord.partOfSpeech} · {currentWord.pronunciation}</p>
-              <div className="flex items-center gap-2 mb-3">
-                <h2 className="text-2xl font-extrabold text-[var(--text-primary)]">{currentWord.word}</h2>
-                <button
-                  onClick={(e) => { e.stopPropagation(); speakKorean(currentWord.word); }}
-                  className="p-1.5 rounded-lg hover:bg-[var(--bg-soft)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors"
-                >
-                  <Volume2 size={16} />
-                </button>
-              </div>
-
-              {/* Meaning box */}
-              <div className="bg-[var(--pink-pale)]/10 border border-[var(--pink-primary)]/10 rounded-2xl p-4 w-full mb-3">
-                <p className="text-xs text-[var(--text-muted)] mb-1">中文意思</p>
-                <p className="text-[var(--pink-primary)] text-lg font-bold text-center">{currentWord.meaning}</p>
-              </div>
-
-              {/* Examples */}
-              {currentWord.examples.length > 0 && (
-                <div className="w-full space-y-1.5 mb-3">
-                  {currentWord.examples.slice(0, 2).map((ex, i) => (
-                    <div key={i} className="bg-[#FDF8F0] rounded-xl px-3 py-2.5 border border-[#F0E8DD]/60">
-                      <div className="flex items-start gap-2">
-                        <p className="text-sm text-[var(--text-primary)] flex-1 leading-snug">{ex.text}</p>
-                        <button onClick={(e) => { e.stopPropagation(); speakKorean(ex.text); }}
-                          className="p-1 rounded-lg hover:bg-white/60 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors shrink-0">
-                          <Volume2 size={13} />
-                        </button>
-                      </div>
-                      <p className="text-xs text-[var(--text-muted)] mt-0.5">{ex.translation}</p>
-                    </div>
-                  ))}
+              {/* ═══════════════════════════════════════════════════
+                  FRONT
+                  ═══════════════════════════════════════════════════ */}
+              <div
+                className={`absolute inset-0 rounded-3xl p-5 flex flex-col ${
+                  flipped ? 'opacity-0 pointer-events-none' : ''
+                }`}
+                style={{
+                  backfaceVisibility: 'hidden',
+                  minHeight: '500px',
+                  background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF9 100%)',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.03), 0 4px 12px rgba(0,0,0,0.05), 0 16px 40px rgba(0,0,0,0.06)',
+                  border: '1px solid #F0E8DD',
+                }}
+              >
+                {/* Word — centered hero */}
+                <div className="flex-1 flex items-center justify-center">
+                  <h2 className="text-4xl font-extrabold text-[var(--text-primary)] tracking-tight">{currentWord.word}</h2>
                 </div>
-              )}
 
-              {/* Rating */}
-              <div className="w-full mt-auto">
-                <p className="text-xs font-medium text-[var(--text-muted)] text-center mb-2">你记得怎么样？</p>
-                <div className="flex gap-2.5 mb-2.5">
-                  {RATING_BUTTONS.map((btn) => {
-                    const active = selfAssessment === btn.q;
+                {/* Meta bar inside card */}
+                <div className="flex items-center justify-between bg-[#FDF8F0] rounded-2xl px-4 py-2.5 border border-[#F0E8DD]/60 mt-4">
+                  <span className="text-xs text-[var(--text-muted)]">{currentWord.partOfSpeech} · {currentWord.pronunciation}</span>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); speakKorean(currentWord.word); }}
+                    className="p-1.5 rounded-lg hover:bg-white/60 text-[var(--pink-primary)] transition-colors"
+                  >
+                    <Volume2 size={16} />
+                  </button>
+                </div>
+
+                {/* MCQ options */}
+                <div className="grid grid-cols-1 gap-2.5 mt-4">
+                  {options.map((opt, i) => {
+                    const isDontKnow = opt.text === '不知道';
                     return (
                       <button
-                        key={btn.q}
-                        onClick={() => setSelfAssessment(btn.q)}
-                        className="flex-1 py-3 rounded-2xl flex flex-col items-center gap-1 transition-all duration-150 active:scale-95"
-                        style={{
-                          backgroundColor: active ? 'var(--pink-pale)' : '#FAFAFA',
-                          border: active ? '2px solid var(--pink-primary)' : '1.5px solid #F0E8DD',
-                          color: active ? 'var(--pink-primary)' : 'var(--text-muted)',
-                          boxShadow: active ? '0 2px 8px rgba(255,143,171,0.2)' : 'none',
-                        }}
+                        key={i}
+                        onClick={() => handlePickOption(i)}
+                        className={`px-4 py-3 rounded-2xl border text-sm font-medium transition-all duration-150 active:scale-[0.98] ${
+                          isDontKnow
+                            ? 'bg-transparent border-dashed border-[#D0C0B0] text-[var(--text-muted)] hover:bg-[#F5F0EB]/60'
+                            : 'bg-white border-[#F0E8DD] text-[var(--text-primary)] hover:border-[var(--pink-primary)]/40 hover:bg-[var(--pink-pale)]/15 hover:shadow-sm'
+                        }`}
                       >
-                        <span className="text-xl">{btn.emoji}</span>
-                        <span className="text-xs font-medium">{btn.label}</span>
+                        {opt.text}
                       </button>
                     );
                   })}
                 </div>
-                <button
-                  onClick={handleConfirm}
-                  className="w-full py-3.5 bg-gradient-to-r from-[var(--pink-primary)] to-[#FF6B95] text-white rounded-2xl font-bold text-sm active:scale-[0.97] transition-all shadow-md"
-                  style={{ boxShadow: '0 4px 16px rgba(255,143,171,0.25)' }}
-                >
-                  {currentIdx + 1 >= words.length ? '完成复习' : '确认，下一题'}
-                </button>
+
+                {/* Swipe hint */}
+                <p className="text-xs text-[var(--text-muted)] text-center mt-3">← 左滑不认识  ·  右滑认识 →</p>
+              </div>
+
+              {/* ═══════════════════════════════════════════════════
+                  BACK
+                  ═══════════════════════════════════════════════════ */}
+              <div
+                className={`absolute inset-0 rounded-3xl p-5 flex flex-col items-center rotate-y-180 ${
+                  !flipped ? 'opacity-0 pointer-events-none' : ''
+                }`}
+                style={{
+                  backfaceVisibility: 'hidden',
+                  minHeight: '500px',
+                  background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF9 100%)',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.03), 0 4px 12px rgba(0,0,0,0.05), 0 16px 40px rgba(0,0,0,0.06)',
+                  border: '1px solid rgba(255,143,171,0.15)',
+                }}
+              >
+                {/* Result badge */}
+                <div className={`px-4 py-1 rounded-full text-sm font-bold mb-3 ${
+                  selectedCorrect
+                    ? 'bg-[var(--mint-soft)]/12 text-[var(--mint-soft)] border border-[var(--mint-soft)]/25'
+                    : 'bg-[var(--color-danger)]/8 text-[var(--color-danger)] border border-[var(--color-danger)]/12'
+                }`}>
+                  {selectedCorrect ? '✓ 正确' : '✗ 错误'}
+                </div>
+
+                {/* Word + meta */}
+                <p className="text-xs text-[var(--text-muted)] mb-1">{currentWord.partOfSpeech} · {currentWord.pronunciation}</p>
+                <div className="flex items-center gap-2 mb-3">
+                  <h2 className="text-2xl font-extrabold text-[var(--text-primary)]">{currentWord.word}</h2>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); speakKorean(currentWord.word); }}
+                    className="p-1.5 rounded-lg hover:bg-[var(--bg-soft)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors"
+                  >
+                    <Volume2 size={16} />
+                  </button>
+                </div>
+
+                {/* Meaning box */}
+                <div className="bg-[var(--pink-pale)]/10 border border-[var(--pink-primary)]/10 rounded-2xl p-4 w-full mb-3">
+                  <p className="text-xs text-[var(--text-muted)] mb-1">中文意思</p>
+                  <p className="text-[var(--pink-primary)] text-lg font-bold text-center">{currentWord.meaning}</p>
+                </div>
+
+                {/* Examples */}
+                {currentWord.examples.length > 0 && (
+                  <div className="w-full space-y-1.5 mb-3">
+                    {currentWord.examples.slice(0, 2).map((ex, i) => (
+                      <div key={i} className="bg-[#FDF8F0] rounded-xl px-3 py-2.5 border border-[#F0E8DD]/60">
+                        <div className="flex items-start gap-2">
+                          <p className="text-sm text-[var(--text-primary)] flex-1 leading-snug">{ex.text}</p>
+                          <button onClick={(e) => { e.stopPropagation(); speakKorean(ex.text); }}
+                            className="p-1 rounded-lg hover:bg-white/60 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors shrink-0">
+                            <Volume2 size={13} />
+                          </button>
+                        </div>
+                        <p className="text-xs text-[var(--text-muted)] mt-0.5">{ex.translation}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Rating */}
+                <div className="w-full mt-auto">
+                  <p className="text-xs font-medium text-[var(--text-muted)] text-center mb-2">你记得怎么样？</p>
+                  <div className="flex gap-2.5 mb-2.5">
+                    {RATING_BUTTONS.map((btn) => {
+                      const active = selfAssessment === btn.q;
+                      return (
+                        <button
+                          key={btn.q}
+                          onClick={() => setSelfAssessment(btn.q)}
+                          className="flex-1 py-3 rounded-2xl flex flex-col items-center gap-1 transition-all duration-150 active:scale-95"
+                          style={{
+                            backgroundColor: active ? 'var(--pink-pale)' : '#FAFAFA',
+                            border: active ? '2px solid var(--pink-primary)' : '1.5px solid #F0E8DD',
+                            color: active ? 'var(--pink-primary)' : 'var(--text-muted)',
+                            boxShadow: active ? '0 2px 8px rgba(255,143,171,0.2)' : 'none',
+                          }}
+                        >
+                          <span className="text-xl">{btn.emoji}</span>
+                          <span className="text-xs font-medium">{btn.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <button
+                    onClick={handleConfirm}
+                    className="w-full py-3.5 bg-gradient-to-r from-[var(--pink-primary)] to-[#FF6B95] text-white rounded-2xl font-bold text-sm active:scale-[0.97] transition-all shadow-md"
+                    style={{ boxShadow: '0 4px 16px rgba(255,143,171,0.25)' }}
+                  >
+                    {currentIdx + 1 >= words.length ? '完成复习' : '确认，下一题'}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -554,7 +546,7 @@ function ReviewContent() {
 
         {/* Session stats */}
         {sessionStats.reviewed > 0 && (
-          <div className="flex items-center justify-center gap-5 text-xs text-[var(--text-muted)] py-2 shrink-0">
+          <div className="flex items-center justify-center gap-5 text-xs text-[var(--text-muted)]">
             <span>已复习 {sessionStats.reviewed}</span>
             <span>通过 {sessionStats.passed}</span>
             <span>+{xpEarned} XP</span>
