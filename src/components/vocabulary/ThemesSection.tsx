@@ -10,6 +10,8 @@ const categoryEmojis: Record<string, string> = {
   '韩流场景': '🎭',
   '旅行韩国': '✈️',
   '职场学习': '💼',
+  '职场进阶': '📊',
+  '生活进阶': '🏠',
 };
 
 export function ThemesSection() {

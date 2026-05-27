@@ -234,4 +234,5 @@ export interface StudyLog {
   durationSec: number;
   wordsAdded: string[];
   sentencesLooped: number;
+  action?: string;
 }

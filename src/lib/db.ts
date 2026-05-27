@@ -70,6 +70,23 @@ export class KoreanAppDB extends Dexie {
       studySubtitles: 'id, videoId, index',
       studyLogs: 'id, videoId, date',
     });
+
+    this.version(5).stores({
+      videos: 'id, youtubeId, addedAt',
+      subtitles: 'id, videoId, start',
+      words: 'id, word, srsLevel, nextReview, mastery, createdAt',
+      reviewSessions: 'id, date',
+      dictationRecords: 'id, wordId, date',
+      shadowingRecords: 'id, subtitleId, date',
+      userProfiles: 'id',
+      dailyLogs: 'id, date',
+      achievements: 'id, type',
+      settings: 'id',
+      wordBooks: 'id, createdAt',
+      studyVideos: 'id, platformId, addedAt',
+      studySubtitles: 'id, videoId, index',
+      studyLogs: 'id, videoId, date, action',
+    });
   }
 }
 
