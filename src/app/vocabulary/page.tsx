@@ -10,6 +10,7 @@ import {
 import { db } from '@/lib/db';
 import { AddToBookModal } from '@/components/AddToBookModal';
 import { BooksSection } from '@/components/vocabulary/BooksSection';
+import { WordAudioPlayer } from '@/components/WordAudioPlayer';
 import type { Word, MasteryLevel } from '@/types';
 
 // ── Mastery display config ──────────────────────────────────────────
@@ -92,6 +93,7 @@ export default function VocabularyPage() {
   const [loading, setLoading] = useState(true);
   const [showAddToBook, setShowAddToBook] = useState(false);
   const [addToBookWordIds, setAddToBookWordIds] = useState<string[]>([]);
+  const [showAudioPlayer, setShowAudioPlayer] = useState(false);
 
   // ── Load all words ────────────────────────────────────────────
   const loadAllWords = useCallback(async () => {
@@ -176,6 +178,19 @@ export default function VocabularyPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
+          {words.length > 0 && (
+            <button
+              onClick={() => setShowAudioPlayer(!showAudioPlayer)}
+              className={`flex items-center gap-1.5 text-sm px-4 py-2.5 rounded-2xl transition-colors ${
+                showAudioPlayer
+                  ? 'bg-[var(--pink-primary)]/20 text-[var(--pink-primary)]'
+                  : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--pink-primary)]'
+              }`}
+            >
+              <Volume2 size={16} />
+              <span className="hidden sm:inline">听单词</span>
+            </button>
+          )}
           <Link
             href="/vocabulary/library"
             className="flex items-center gap-1.5 text-sm px-4 py-2.5 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--pink-primary)] transition-colors"
@@ -557,6 +572,13 @@ export default function VocabularyPage() {
 
       {/* ─────── Tab: 我的单词本 ─────── */}
       {tab === 'books' && <BooksSection />}
+
+      {/* ─────── Audio Player ─────── */}
+      {showAudioPlayer && words.length > 0 && (
+        <WordAudioPlayer
+          words={words.map((w) => ({ korean: w.word, chinese: w.meaning }))}
+        />
+      )}
     </div>
   );
 }
