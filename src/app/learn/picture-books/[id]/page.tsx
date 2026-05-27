@@ -194,7 +194,7 @@ function TextPanel({ page, showChinese, onToggleChinese }: { page: PictureBookPa
 
   return (
     <div className="flex flex-col justify-center h-full">
-      <div className="space-y-4 sm:space-y-5">
+      <div className="space-y-3 sm:space-y-3.5">
 
         {/* ── Sentence groups ── */}
         {koLines.map((ko, i) => (
@@ -207,7 +207,7 @@ function TextPanel({ page, showChinese, onToggleChinese }: { page: PictureBookPa
               {String(i + 1).padStart(2, '0')}
             </span>
 
-            <div className="flex-1 min-w-0 space-y-1">
+            <div className="flex-1 min-w-0 space-y-0.5">
               {/* Pronunciation above */}
               <p className="text-xs sm:text-sm text-[var(--text-muted)]/55 leading-relaxed">
                 {proLines[i] ?? '…'}
@@ -387,23 +387,21 @@ export default function PictureBookReaderPage() {
   const enteringTransform = flipActive ? 'rotateY(0deg)' : 'rotateY(180deg)';
 
   return (
-    <div className="h-[100dvh] flex flex-col overflow-hidden" style={{ background: 'linear-gradient(180deg, #f9f5ef 0%, #f2ece3 100%)' }}>
+    <div className="flex flex-col overflow-hidden" style={{ background: 'linear-gradient(180deg, #f9f5ef 0%, #f2ece3 100%)', height: 'calc(100dvh - 96px)' }}>
       {/* Top bar */}
-      <header className="flex items-center gap-3 px-4 sm:px-6 py-2.5 shrink-0">
+      <header className="flex items-center gap-3 px-4 sm:px-6 py-1.5 shrink-0 relative">
         <Link
           href="/learn/picture-books"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/70 hover:bg-white text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-transparent hover:border-[var(--border-color)] hover:shadow-sm transition-all text-sm"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/70 hover:bg-white text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-transparent hover:border-[var(--border-color)] hover:shadow-sm transition-all text-base font-medium"
         >
-          <ArrowLeft size={16} />
+          <ArrowLeft size={18} />
           <span className="hidden sm:inline">绘本列表</span>
         </Link>
-        <div className="flex-1 min-w-0">
-          <h1 className="text-sm font-semibold text-[var(--text-primary)] truncate">{book.title}</h1>
-        </div>
+        <h1 className="absolute left-1/2 -translate-x-1/2 text-base sm:text-lg font-bold text-[var(--text-primary)] truncate max-w-[40%]">{book.title}</h1>
       </header>
 
       {/* Content */}
-      <div className="flex-1 flex items-center justify-center min-h-0 px-3 sm:px-5 relative">
+      <div className="flex-1 flex items-center justify-center min-h-0 px-3 sm:px-4 relative">
         {/* ── Left side nav ── */}
         <button
           onClick={goPrev}
@@ -425,7 +423,7 @@ export default function PictureBookReaderPage() {
         </button>
 
         <div
-          className="flex flex-col md:flex-row items-center md:items-center gap-3 sm:gap-4 md:gap-6 w-full max-w-5xl h-full md:max-h-[78vh]"
+          className="flex flex-col md:flex-row items-center md:items-center gap-3 sm:gap-4 md:gap-6 w-full max-w-5xl h-full overflow-hidden"
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
@@ -435,7 +433,7 @@ export default function PictureBookReaderPage() {
             className="relative shrink-0 transition-transform duration-150 ease-out md:w-[43%] w-full"
             style={{
               aspectRatio: '3/4',
-              maxHeight: 'min(65vh, calc(100dvh - 220px))',
+              maxHeight: 'min(64vh, calc(100dvh - 180px))',
               perspective: '1200px',
               transform: isSwiping && !flip ? `translateX(${swipeOffset}px)` : 'translateX(0)',
             }}
@@ -466,14 +464,14 @@ export default function PictureBookReaderPage() {
           </div>
 
           {/* ── Text ── */}
-          <div className="flex-1 md:min-w-0 md:overflow-y-auto md:max-h-full w-full">
+          <div className="flex-1 md:min-w-0 w-full overflow-hidden">
             <TextPanel page={displayPage} showChinese={showChinese} onToggleChinese={() => setShowChinese((v) => !v)} />
           </div>
         </div>
       </div>
 
       {/* Bottom page numbers */}
-      <nav className="flex items-center justify-center gap-1 pt-1 pb-2 px-4 shrink-0">
+      <nav className="flex items-center justify-center gap-1 pb-1.5 px-4 shrink-0 -mt-3">
         <div className="flex items-center gap-0.5 bg-white/40 backdrop-blur-sm rounded-xl px-2 py-1.5">
           {Array.from({ length: totalPages }).map((_, i) => (
             <button

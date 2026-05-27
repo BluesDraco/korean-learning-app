@@ -60,13 +60,19 @@ function composeBuffer(buf: string[]): string {
       }
       // Only compose into full syllable if a consonant follows
       if (i < buf.length && isC(buf[i])) {
-        let final = '';
-        final = buf[i]; i++;
-        if (i < buf.length && isC(buf[i])) {
-          const fc = FC[final]?.[buf[i]];
-          if (fc) { final = fc; i++; }
+        let maybeFinal = buf[i];
+        let nextI = i + 1;
+        if (nextI < buf.length && isC(buf[nextI])) {
+          const fc = FC[maybeFinal]?.[buf[nextI]];
+          if (fc) { maybeFinal = fc; nextI++; }
         }
-        out.push(buildSyl('ㅇ', vowel, final));
+        // Only commit as final if next char is NOT a vowel
+        if (nextI >= buf.length || !isV(buf[nextI])) {
+          out.push(buildSyl('ㅇ', vowel, maybeFinal));
+          i = nextI;
+        } else {
+          out.push(vowel);
+        }
       } else {
         // No consonant after vowel → keep as raw jamo
         out.push(vowel);
@@ -93,14 +99,19 @@ function composeBuffer(buf: string[]): string {
       if (c) { jung = c; i++; }
     }
 
-    // Try final consonant(s)
+    // Try final consonant(s) — only commit if no vowel follows
     let jong = '';
     if (i < buf.length && isC(buf[i])) {
-      jong = buf[i];
-      i++;
-      if (i < buf.length && isC(buf[i])) {
-        const fc = FC[jong]?.[buf[i]];
-        if (fc) { jong = fc; i++; }
+      let maybeJong = buf[i];
+      let nextI = i + 1;
+      if (nextI < buf.length && isC(buf[nextI])) {
+        const fc = FC[maybeJong]?.[buf[nextI]];
+        if (fc) { maybeJong = fc; nextI++; }
+      }
+      // Only commit as final if next char is NOT a vowel
+      if (nextI >= buf.length || !isV(buf[nextI])) {
+        jong = maybeJong;
+        i = nextI;
       }
     }
 
