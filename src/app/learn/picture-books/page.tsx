@@ -57,7 +57,11 @@ export default function PictureBooksPage() {
                   <div className="w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 overflow-hidden"
                     style={{ backgroundColor: `${book.color}20` }}
                   >
-                    <span className="text-3xl">{book.emoji}</span>
+                    {book.coverImage ? (
+                      <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="text-3xl">{book.emoji}</span>
+                    )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">

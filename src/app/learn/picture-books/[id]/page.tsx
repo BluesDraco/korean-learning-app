@@ -17,83 +17,72 @@ function speakKorean(text: string) {
   window.speechSynthesis.speak(u);
 }
 
-function PageCard({ page, side, pageIdx }: { page: PictureBookPage; side: 'left' | 'right' | 'single'; pageIdx: number }) {
-  const [showTranslation, setShowTranslation] = useState(false);
+function IllustrationImage({ src, fallback, alt }: { src: string; fallback: string; alt: string }) {
+  const [error, setError] = useState(false);
 
-  const radiusClass =
-    side === 'left' ? 'md:rounded-l-2xl md:rounded-r-none md:border-r-0 rounded-2xl' :
-    side === 'right' ? 'md:rounded-r-2xl md:rounded-l-none md:border-l-0 rounded-2xl' :
-    'rounded-2xl';
+  if (error || !src) {
+    return (
+      <span className="text-4xl sm:text-5xl md:text-6xl leading-relaxed whitespace-pre-line text-center p-4">
+        {fallback}
+      </span>
+    );
+  }
 
   return (
-    <div className={`flex flex-col h-full ${radiusClass} border-2 border-[var(--border-color)] overflow-hidden bg-white shadow-lg relative`}>
-      {/* Illustration — 50% */}
-      <div
-        className="flex-[5] flex items-center justify-center p-3 sm:p-4 relative overflow-hidden min-h-0"
-        style={{ backgroundColor: page.bgColor }}
-      >
-        <div
-          className="absolute inset-0 opacity-[0.04]"
-          style={{
-            backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)',
-            backgroundSize: '16px 16px',
-          }}
-        />
-        <span className="relative z-10 text-4xl sm:text-5xl md:text-6xl leading-relaxed whitespace-pre-line text-center">
-          {page.illustration}
-        </span>
+    <img
+      src={src}
+      alt={alt}
+      onError={() => setError(true)}
+      className="w-full h-full object-contain"
+      loading="lazy"
+    />
+  );
+}
+
+function PageInfo({ page, compact }: { page: PictureBookPage; compact?: boolean }) {
+  const [showTranslation, setShowTranslation] = useState(false);
+
+  return (
+    <div className={`space-y-1.5 ${compact ? 'text-center' : 'text-center'}`}>
+      <p className="text-sm sm:text-base md:text-lg font-bold text-[var(--text-primary)] leading-snug whitespace-pre-line">
+        {page.korean}
+      </p>
+      <p className="text-[11px] sm:text-xs text-[var(--text-muted)] italic">{page.pronunciation}</p>
+
+      <div className="flex items-center justify-center gap-2 flex-wrap">
+        <button
+          onClick={() => speakKorean(page.korean)}
+          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] hover:bg-[var(--pink-primary)]/20 transition-colors text-[11px] sm:text-xs font-medium"
+        >
+          <Volume2 size={13} />
+          发音
+        </button>
+
+        <button
+          onClick={() => setShowTranslation(!showTranslation)}
+          className={`text-[11px] sm:text-xs transition-colors ${showTranslation ? 'text-[var(--pink-primary)]' : 'text-[var(--text-muted)] hover:text-[var(--text-secondary)]'}`}
+        >
+          {showTranslation ? '▲ 隐藏译文' : '▼ 显示译文'}
+        </button>
       </div>
 
-      {/* Text area — 50% */}
-      <div className="flex-[5] flex flex-col justify-center p-3 sm:p-4 md:p-5 bg-[var(--bg-card)] space-y-2 sm:space-y-3 min-h-0 overflow-y-auto">
-        <div className="text-center space-y-1">
-          <h2 className="text-lg sm:text-xl md:text-[28px] font-bold text-[var(--text-primary)] leading-relaxed whitespace-pre-line">
-            {page.korean}
-          </h2>
-          <p className="text-[11px] sm:text-[13px] text-[var(--text-muted)] italic">{page.pronunciation}</p>
-        </div>
+      {showTranslation && (
+        <p className="text-[11px] sm:text-xs text-[var(--text-secondary)] bg-[var(--bg-input)] rounded-lg px-3 py-1.5 whitespace-pre-line">
+          {page.chinese}
+        </p>
+      )}
 
-        <div className="flex justify-center">
-          <button
-            onClick={() => speakKorean(page.korean)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] hover:bg-[var(--pink-primary)]/20 transition-colors text-xs font-medium"
+      <div className="flex flex-wrap gap-1 justify-center">
+        {page.vocab.map((v) => (
+          <span
+            key={v.word}
+            className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-[var(--bg-input)] text-[10px] sm:text-[11px]"
           >
-            <Volume2 size={14} />
-            听发音
-          </button>
-        </div>
-
-        <div className="text-center">
-          <button
-            onClick={() => setShowTranslation(!showTranslation)}
-            className={`text-[11px] sm:text-xs transition-colors ${showTranslation ? 'text-[var(--pink-primary)]' : 'text-[var(--text-muted)] hover:text-[var(--text-secondary)]'}`}
-          >
-            {showTranslation ? '▲ 隐藏翻译' : '▼ 显示翻译'}
-          </button>
-          {showTranslation && (
-            <p className="text-[11px] sm:text-xs text-[var(--text-secondary)] mt-1 sm:mt-1.5 bg-[var(--bg-input)] rounded-lg p-2 whitespace-pre-line">
-              {page.chinese}
-            </p>
-          )}
-        </div>
-
-        <div className="flex flex-wrap gap-1 justify-center pt-0.5">
-          {page.vocab.map((v) => (
-            <span
-              key={v.word}
-              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[var(--bg-input)] text-[10px] sm:text-[11px]"
-            >
-              <span className="font-medium text-[var(--text-primary)]">{v.word}</span>
-              <span className="text-[var(--text-muted)]">{v.meaning}</span>
-            </span>
-          ))}
-        </div>
+            <span className="font-medium text-[var(--text-primary)]">{v.word}</span>
+            <span className="text-[var(--text-muted)]">{v.meaning}</span>
+          </span>
+        ))}
       </div>
-
-      {/* Page number in corner */}
-      <span className="absolute bottom-2 right-3 text-[10px] text-[var(--text-muted)]/60 tabular-nums">
-        {pageIdx + 1}
-      </span>
     </div>
   );
 }
@@ -116,7 +105,6 @@ export default function PictureBookReaderPage() {
     return () => window.removeEventListener('resize', check);
   }, []);
 
-  // Align currentPage to left-of-spread on desktop
   useEffect(() => {
     if (isDesktop && currentPage % 2 === 1) {
       setCurrentPage((p) => p - 1);
@@ -140,7 +128,6 @@ export default function PictureBookReaderPage() {
   const totalPages = book.pages.length;
   const pageStep = isDesktop ? 2 : 1;
 
-  // On desktop, currentPage is the left page; right page may be null on last spread
   const leftIdx = isDesktop ? (currentPage % 2 === 0 ? currentPage : currentPage - 1) : currentPage;
   const rightIdx = isDesktop && leftIdx + 1 < totalPages ? leftIdx + 1 : null;
 
@@ -157,7 +144,6 @@ export default function PictureBookReaderPage() {
     setCurrentPage((p) => Math.max(p - pageStep, 0));
   }, [canGoPrev, pageStep]);
 
-  // Touch
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStartX(e.touches[0].clientX);
     setTouchStartY(e.touches[0].clientY);
@@ -181,7 +167,6 @@ export default function PictureBookReaderPage() {
     setSwipeOffset(0);
   };
 
-  // Keyboard
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft') goPrev();
@@ -191,12 +176,10 @@ export default function PictureBookReaderPage() {
     return () => window.removeEventListener('keydown', onKey);
   }, [goNext, goPrev]);
 
-  // Page number label
   const pageLabel = isDesktop
     ? `${leftIdx + 1}${rightIdx !== null ? `–${rightIdx + 1}` : ''} / ${totalPages}`
     : `${currentPage + 1} / ${totalPages}`;
 
-  // Dot indicators
   const numDots = isDesktop ? Math.ceil(totalPages / 2) : totalPages;
   const activeDot = isDesktop ? Math.floor(leftIdx / 2) : currentPage;
 
@@ -206,7 +189,7 @@ export default function PictureBookReaderPage() {
   return (
     <div className="h-[100dvh] flex flex-col bg-[#f5f0eb] overflow-hidden">
       {/* Top bar */}
-      <header className="flex items-center gap-3 px-4 py-2.5 shrink-0">
+      <header className="flex items-center gap-3 px-4 py-2 shrink-0">
         <Link
           href="/learn/picture-books"
           className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
@@ -219,85 +202,118 @@ export default function PictureBookReaderPage() {
         <span className="text-xs text-[var(--text-muted)] tabular-nums shrink-0">{pageLabel}</span>
       </header>
 
-      {/* Book area */}
+      {/* Main content: images + text, scrollable if needed */}
       <div
-        className="flex-1 flex items-center justify-center min-h-0 px-2 sm:px-4 md:px-6"
+        className="flex-1 flex flex-col items-center overflow-y-auto min-h-0"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
         {isDesktop ? (
           /* ===== Desktop: dual-page spread ===== */
-          <div className="flex items-stretch max-w-full" style={{ height: 'min(82vh, 720px)' }}>
-            {/* Left page */}
-            <div className="h-full" style={{ aspectRatio: '3/4' }}>
-              <PageCard key={leftIdx} page={leftPage} side={rightIdx !== null ? 'left' : 'single'} pageIdx={leftIdx} />
-            </div>
-
-            {/* Spine / crease */}
-            <div className="h-full w-3 flex-shrink-0 relative">
-              <div className="absolute inset-y-2 left-1/2 -translate-x-1/2 w-[2px] bg-gray-300/50 rounded-full" />
-              <div className="absolute inset-y-2 left-0 w-[1px] bg-gradient-to-r from-transparent via-gray-200/30 to-gray-300/20" />
-              <div className="absolute inset-y-2 right-0 w-[1px] bg-gradient-to-l from-transparent via-gray-200/30 to-gray-300/20" />
-            </div>
-
-            {/* Right page */}
-            {rightPage ? (
-              <div className="h-full" style={{ aspectRatio: '3/4' }}>
-                <PageCard key={rightIdx!} page={rightPage} side="right" pageIdx={rightIdx!} />
+          <div className="flex flex-col items-center justify-center gap-3 py-3 px-4 min-h-full">
+            {/* Two images side by side */}
+            <div className="flex items-stretch max-w-full shrink-0" style={{ height: 'min(65vh, 600px)' }}>
+              <div className="h-full rounded-l-2xl overflow-hidden shadow-lg bg-white" style={{ aspectRatio: '3/4' }}>
+                {leftPage.imageUrl ? (
+                  <IllustrationImage src={leftPage.imageUrl} fallback={leftPage.illustration} alt={leftPage.chinese} />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center" style={{ backgroundColor: leftPage.bgColor }}>
+                    <span className="text-5xl whitespace-pre-line text-center">{leftPage.illustration}</span>
+                  </div>
+                )}
               </div>
-            ) : (
-              <div className="h-full" style={{ aspectRatio: '3/4' }} aria-hidden />
-            )}
+
+              {/* Spine */}
+              <div className="h-full w-3 flex-shrink-0 relative">
+                <div className="absolute inset-y-2 left-1/2 -translate-x-1/2 w-[2px] bg-gray-300/50 rounded-full" />
+                <div className="absolute inset-y-2 left-0 w-[1px] bg-gradient-to-r from-transparent via-gray-200/30 to-gray-300/20" />
+                <div className="absolute inset-y-2 right-0 w-[1px] bg-gradient-to-l from-transparent via-gray-200/30 to-gray-300/20" />
+              </div>
+
+              {rightPage ? (
+                <div className="h-full rounded-r-2xl overflow-hidden shadow-lg bg-white" style={{ aspectRatio: '3/4' }}>
+                  {rightPage.imageUrl ? (
+                    <IllustrationImage src={rightPage.imageUrl} fallback={rightPage.illustration} alt={rightPage.chinese} />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center" style={{ backgroundColor: rightPage.bgColor }}>
+                      <span className="text-5xl whitespace-pre-line text-center">{rightPage.illustration}</span>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="h-full rounded-r-2xl overflow-hidden" style={{ aspectRatio: '3/4' }} aria-hidden />
+              )}
+            </div>
+
+            {/* Text info for both pages */}
+            <div className="flex gap-3 w-full max-w-[calc(2*min(65vh,600px)*3/4+12px)]">
+              <div className="flex-1 bg-white/70 backdrop-blur rounded-xl px-3 py-2 shadow-sm">
+                <PageInfo page={leftPage} compact />
+              </div>
+              {rightPage ? (
+                <div className="flex-1 bg-white/70 backdrop-blur rounded-xl px-3 py-2 shadow-sm">
+                  <PageInfo page={rightPage} compact />
+                </div>
+              ) : (
+                <div className="flex-1" aria-hidden />
+              )}
+            </div>
           </div>
         ) : (
           /* ===== Tablet / Mobile: single page ===== */
-          <div className="w-full flex items-center justify-center relative h-[calc(100dvh-100px)] md:h-[82vh]">
-            {/* Ambient glow */}
+          <div className="flex flex-col items-center justify-center gap-2 py-2 px-2 min-h-full w-full">
+            {/* Image card */}
             <div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                background: 'radial-gradient(ellipse at center, rgba(255,160,160,0.12) 0%, transparent 60%)',
-              }}
-            />
-
-            <div
-              className="relative h-full max-w-[calc(100vw-16px)] transition-transform duration-150 ease-out"
+              className="relative rounded-2xl overflow-hidden shadow-lg bg-white shrink-0 transition-transform duration-150 ease-out"
               style={{
                 aspectRatio: '3/4',
+                maxHeight: 'min(68vh, calc(100dvh - 200px))',
+                maxWidth: 'calc(100vw - 16px)',
                 transform: isSwiping ? `translateX(${swipeOffset}px)` : 'translateX(0)',
               }}
             >
-              <PageCard key={currentPage} page={leftPage} side="single" pageIdx={leftIdx} />
+              {leftPage.imageUrl ? (
+                <IllustrationImage src={leftPage.imageUrl} fallback={leftPage.illustration} alt={leftPage.chinese} />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center" style={{ backgroundColor: leftPage.bgColor }}>
+                  <span className="text-4xl whitespace-pre-line text-center p-4">{leftPage.illustration}</span>
+                </div>
+              )}
 
-              {/* Swipe arrow hints */}
+              {/* Swipe hints */}
               {canGoPrev && !isSwiping && (
-                <div className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400/25 pointer-events-none">
-                  <ChevronLeft size={24} />
+                <div className="absolute left-2 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none drop-shadow-md">
+                  <ChevronLeft size={22} />
                 </div>
               )}
               {canGoNext && !isSwiping && (
-                <div className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400/25 pointer-events-none">
-                  <ChevronRight size={24} />
+                <div className="absolute right-2 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none drop-shadow-md">
+                  <ChevronRight size={22} />
                 </div>
               )}
+            </div>
+
+            {/* Text info below image */}
+            <div className="w-full max-w-[calc(100vw-16px)] bg-white/70 backdrop-blur rounded-xl px-3 py-2 shadow-sm">
+              <PageInfo page={leftPage} compact />
             </div>
           </div>
         )}
       </div>
 
       {/* Bottom nav */}
-      <nav className="flex items-center justify-center gap-4 py-3 shrink-0">
+      <nav className="flex items-center justify-center gap-3 py-2 shrink-0">
         <button
           onClick={goPrev}
           disabled={!canGoPrev}
-          className="p-2.5 rounded-full bg-white/80 border border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--pink-primary)] disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm"
+          className="p-2 rounded-full bg-white/80 border border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--pink-primary)] disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm"
           aria-label="上一页"
         >
-          <ChevronLeft size={20} />
+          <ChevronLeft size={18} />
         </button>
 
-        <div className="flex items-center gap-1.5 min-w-[60px] justify-center">
+        <div className="flex items-center gap-1.5 min-w-[50px] justify-center">
           {Array.from({ length: numDots }).map((_, i) => (
             <button
               key={i}
@@ -315,10 +331,10 @@ export default function PictureBookReaderPage() {
         <button
           onClick={goNext}
           disabled={!canGoNext}
-          className="p-2.5 rounded-full bg-white/80 border border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--pink-primary)] disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm"
+          className="p-2 rounded-full bg-white/80 border border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--pink-primary)] disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm"
           aria-label="下一页"
         >
-          <ChevronRight size={20} />
+          <ChevronRight size={18} />
         </button>
       </nav>
     </div>
