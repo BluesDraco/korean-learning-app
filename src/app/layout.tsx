@@ -7,6 +7,7 @@ import { FloatingDecorations } from '@/components/FloatingDecorations';
 import { AuthProvider } from '@/components/AuthProvider';
 import { FontProvider } from '@/components/FontProvider';
 import { XpOverlay } from '@/components/XpOverlay';
+import { FeedbackButton } from '@/components/FeedbackButton';
 import ScrollToTop from '@/components/ScrollToTop';
 
 export const metadata: Metadata = {
@@ -51,12 +52,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <AuthProvider>
           {/* Floating decorative particles */}
           <FloatingDecorations />
-          {/* Marquee banner */}
-          <div className="marquee-banner fixed top-0 left-0 right-0 z-[60] md:left-52">
-            <span>
-              🌸 한국어 공부하자! ✧ 韩语学习日记 ✧ 안녕하세요 ✧ 今天也是努力学习的一天 ✧ 화이팅! ✧
-              🌸 한국어 공부하자! ✧ 韩语学习日记 ✧ 안녕하세요 ✧ 今天也是努力学习的一天 ✧ 화이팅! ✧
-            </span>
+          {/* Beta notice banner */}
+          <div className="fixed top-0 left-0 right-0 z-[60] md:left-52 bg-gradient-to-r from-[#FFF5EE] via-[#FFF0F5] to-[#FFF5EE] border-b-2 border-dashed border-pink-200 py-1.5 text-center">
+            <span className="text-sm font-bold tracking-widest bg-gradient-to-r from-[var(--pink-primary)] to-[var(--purple-soft)] bg-clip-text text-transparent" style={{ fontFamily: "'ZCOOL KuaiLe', cursive" }}>🐰 内测阶段，全功能免费体验 · 正式版即将上线</span>
           </div>
           {/* Offset for marquee banner */}
           <div className="h-[44px]" />
@@ -72,6 +70,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </FontProvider>
         </ThemeProvider>
         <XpOverlay />
+        <FeedbackButton />
         <ScrollToTop />
         <script
           dangerouslySetInnerHTML={{

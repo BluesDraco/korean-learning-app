@@ -84,6 +84,20 @@ export async function getDb() {
     CREATE INDEX IF NOT EXISTS idx_ai_usage_created_at ON ai_usage(created_at)
   `);
 
+  await c.execute(`
+    CREATE TABLE IF NOT EXISTS feedbacks (
+      id TEXT PRIMARY KEY,
+      user_id TEXT,
+      path TEXT NOT NULL,
+      type TEXT NOT NULL DEFAULT 'content_error',
+      message TEXT NOT NULL,
+      metadata TEXT DEFAULT '',
+      status TEXT DEFAULT 'pending',
+      created_at INTEGER NOT NULL,
+      FOREIGN KEY (user_id) REFERENCES users(id)
+    )
+  `);
+
   return {
     exec: async (sql: string, params?: unknown[]) => {
       const result = await c.execute({ sql, args: params as any[] });

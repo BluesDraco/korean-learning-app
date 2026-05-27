@@ -19,11 +19,22 @@ function speakKorean(text: string) {
 }
 
 const RATING_BUTTONS = [
-  { q: 0, emoji: '😰', label: '忘了' },
-  { q: 1, emoji: '🤔', label: '模糊' },
-  { q: 2, emoji: '💡', label: '记得' },
-  { q: 3, emoji: '🎯', label: '熟练' },
+  { q: 0, emoji: '😰', label: '完全忘了' },
+  { q: 1, emoji: '😣', label: '有点印象' },
+  { q: 2, emoji: '🤔', label: '模糊记得' },
+  { q: 3, emoji: '💡', label: '记住了' },
+  { q: 4, emoji: '🎯', label: '比较熟练' },
+  { q: 5, emoji: '⚡', label: '完全掌握' },
 ];
+
+const TORI_REACTIONS: Record<number, { text: string; pose: string }> = {
+  0: { text: '没关系！토리 陪你再来一次 🐰💦', pose: 'tori-pose-04.png' },
+  1: { text: '快想起来了，就差一点点！🐰👀', pose: 'tori-pose-03.png' },
+  2: { text: '有印象了！继续加油 💪', pose: 'tori-pose-02.png' },
+  3: { text: '记住了！토리 为你开心 ✨', pose: 'tori-pose-01.png' },
+  4: { text: '很熟练了！토리 好骄傲 🎯', pose: 'tori-pose-05.png' },
+  5: { text: '完美掌握！토리 崇拜你 ⚡💖', pose: 'tori-pose-06.png' },
+};
 
 function ReviewContent() {
   const router = useRouter();
@@ -44,7 +55,7 @@ function ReviewContent() {
   const [allMeanings, setAllMeanings] = useState<string[]>([]);
   const [options, setOptions] = useState<{ text: string; correct: boolean }[]>([]);
   const [showIntro, setShowIntro] = useState(false);
-  const [toriReaction, setToriReaction] = useState<string | null>(null);
+  const [toriReactionKey, setToriReactionKey] = useState<number | null>(null);
   const [streak, setStreak] = useState(0);
   const touchXRef = useRef<number>(0);
 
@@ -107,15 +118,9 @@ function ReviewContent() {
 
   const handleConfirm = async () => {
     const quality = selfAssessment;
-    const reactions: Record<number, string> = {
-      0: '没关系，下次一定记住 🐰',
-      1: '快想起来了，再来一次！🐰',
-      2: '记起来了！继续加油 💪',
-      3: '不错！越来越熟了 ✨',
-    };
-    setToriReaction(reactions[quality] || '继续加油！🐰');
-    await new Promise((r) => setTimeout(r, 800));
-    setToriReaction(null);
+    setToriReactionKey(quality);
+    await new Promise((r) => setTimeout(r, 1200));
+    setToriReactionKey(null);
 
     const word = words[currentIdx];
     const result = calculateSRS(quality, word.srsLevel, word.easeFactor, word.interval);
@@ -312,13 +317,21 @@ function ReviewContent() {
     return (
       <div className="relative min-h-screen flex items-center justify-center" style={bgStyle}>
         <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(#2D1B10 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
-        <div className="text-center py-16 space-y-4 relative z-10">
-          <div className="text-7xl animate-float">🐰</div>
-          <h1 className="text-xl font-bold text-[var(--text-primary)]">今天没有要复习的词</h1>
-          <p className="text-[var(--text-secondary)] text-sm">要不要去学一些新词？</p>
+        <div className="text-center py-16 space-y-5 max-w-sm mx-auto relative z-10">
+          <div className="relative inline-block">
+            <div className="w-28 h-28 rounded-full bg-gradient-to-br from-[var(--mint-soft)]/10 to-[var(--pink-primary)]/10 flex items-center justify-center mx-auto border-2 border-[var(--pink-pale)]/40"
+              style={{ boxShadow: '0 4px 24px rgba(255,143,171,0.08)' }}>
+              <span className="text-6xl animate-float">🐰</span>
+            </div>
+            <span className="absolute -top-1 -right-1 text-2xl">✨</span>
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-[var(--text-primary)] section-header">今日复习全部完成！</h1>
+            <p className="text-[var(--text-secondary)] text-sm mt-2">토리 为你骄傲，明天继续加油</p>
+          </div>
           <div className="flex gap-3 justify-center">
-            <button onClick={() => router.push('/learn')} className="px-5 py-2.5 bg-[var(--pink-primary)] hover:brightness-90 text-white text-sm font-bold rounded-full transition-all active:scale-95 shadow-md">去学习</button>
-            <button onClick={() => router.push('/vocabulary')} className="px-5 py-2.5 bg-white/80 border border-[var(--border-default)] hover:bg-[var(--bg-muted)] text-[var(--text-primary)] text-sm font-medium rounded-full transition-all active:scale-95">词汇库</button>
+            <button onClick={() => router.push('/learn')} className="px-6 py-3 bg-[var(--pink-primary)] hover:brightness-90 text-white text-sm font-bold rounded-full transition-all active:scale-95 shadow-md">去学习新词</button>
+            <button onClick={() => router.push('/')} className="px-6 py-3 bg-white/80 border border-[var(--border-default)] hover:bg-[var(--bg-muted)] text-[var(--text-primary)] text-sm font-medium rounded-full transition-all active:scale-95">返回首页</button>
           </div>
         </div>
       </div>
@@ -334,10 +347,15 @@ function ReviewContent() {
       <div className="absolute inset-0 pointer-events-none opacity-[0.05]" style={{ backgroundImage: 'radial-gradient(#2D1B10 1px, transparent 1px)', backgroundSize: '18px 18px' }} />
 
       {/* Tori reaction */}
-      {toriReaction && (
+      {toriReactionKey !== null && TORI_REACTIONS[toriReactionKey] && (
         <div className="fixed inset-0 z-30 flex items-center justify-center pointer-events-none">
-          <div className="bg-white/95 backdrop-blur-sm border-2 border-[var(--pink-light)] rounded-2xl px-6 py-4 shadow-xl animate-bounce-achievement">
-            <span className="text-sm font-bold text-[var(--text-primary)]">{toriReaction}</span>
+          <div className="bg-white/95 backdrop-blur-sm border-2 border-[var(--pink-light)] rounded-3xl px-6 py-5 shadow-xl animate-bounce-achievement text-center max-w-[240px]">
+            <img
+              src={`/images/tori-poses/${TORI_REACTIONS[toriReactionKey].pose}`}
+              alt="Tori"
+              className="w-16 h-16 object-contain mx-auto mb-2"
+            />
+            <span className="text-sm font-bold text-[var(--text-primary)]">{TORI_REACTIONS[toriReactionKey].text}</span>
           </div>
         </div>
       )}

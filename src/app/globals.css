@@ -572,8 +572,9 @@ html[data-font="classic"] .ko-body {
   display: inline-block;
   animation: marquee 20s linear infinite;
   font-family: 'ZCOOL KuaiLe', cursive;
-  font-size: 13px;
-  color: var(--text-secondary);
+  font-size: 15px;
+  color: var(--foreground);
+  font-weight: 500;
   letter-spacing: 2px;
 }
 @keyframes marquee {
