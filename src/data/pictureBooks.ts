@@ -248,12 +248,17 @@ export const pictureBooks: PictureBook[] = [
         ],
       },
       {
-        illustration: '⏳🐰',
+        illustration: '💪🐰🗣️',
         bgColor: '#FFF5F0',
-        korean: '',
-        pronunciation: '',
-        chinese: '（第四页内容待补充……）',
-        vocab: [],
+        korean: '토리는 심호흡을 하고\n작은 목소리로 말했어요.\n"이거 주세요!"\n해냈어요! 한국어로 샀어요!',
+        pronunciation: 'to-ri-neun sim-ho-heu-beul ha-go\nja-geun mok-so-ri-ro mal-hae-sseo-yo.\n"i-geo ju-se-yo!"\nhae-nae-sseo-yo! han-gu-geo-ro sa-sseo-yo!',
+        chinese: 'Tori深吸一口气，\n小声地说。\n"请给我这个！"\n做到了！用韩语买东西了！',
+        vocab: [
+          { word: '심호흡', meaning: '深呼吸' },
+          { word: '목소리', meaning: '声音' },
+          { word: '주세요', meaning: '请给我' },
+          { word: '사다', meaning: '买' },
+        ],
       },
       {
         illustration: '🍡✨🐰',
