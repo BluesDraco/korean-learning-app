@@ -8,6 +8,7 @@ import { AuthProvider } from '@/components/AuthProvider';
 import { FontProvider } from '@/components/FontProvider';
 import { XpOverlay } from '@/components/XpOverlay';
 import { FeedbackButton } from '@/components/FeedbackButton';
+import { PageViewTracker } from '@/components/PageViewTracker';
 import ScrollToTop from '@/components/ScrollToTop';
 
 export const metadata: Metadata = {
@@ -58,6 +59,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
           {/* Offset for marquee banner */}
           <div className="h-[44px]" />
+          <PageViewTracker />
           <Navbar />
           <main className="pb-16 md:pb-6 pl-0 md:pl-52 px-3 md:px-5 lg:px-8 page-container pt-3">
             {children}

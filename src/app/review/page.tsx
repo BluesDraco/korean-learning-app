@@ -18,6 +18,14 @@ function speakKorean(text: string) {
   window.speechSynthesis.speak(utterance);
 }
 
+function trackStudy(action: string, details: string, xpEarned: number) {
+  fetch('/api/track/study', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action, details, xpEarned }),
+  }).catch(() => {});
+}
+
 const RATING_BUTTONS = [
   { q: 0, emoji: '😰', label: '完全忘了' },
   { q: 1, emoji: '😣', label: '有点印象' },
@@ -146,6 +154,8 @@ function ReviewContent() {
       emitXpFlyout(xp);
       if (lvlUp) window.dispatchEvent(new CustomEvent('level-up', { detail: { level: nl } }));
     }
+
+    trackStudy('srs_review', `复习单词: ${word.word} (质量: ${quality})`, xp);
     setXpEarned((prev) => prev + xp);
     if (lvlUp) { setLeveledUp(true); setNewLevel(nl); }
 

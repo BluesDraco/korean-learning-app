@@ -105,6 +105,11 @@ export default function ShadowingPlayerPage() {
           wordsAdded: [],
           sentencesLooped: 0,
         }).catch(() => {});
+        fetch('/api/track/study', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'shadowing', details: `跟读: ${video.title}`, xpEarned: 0 }),
+        }).catch(() => {});
         // Update lastStudiedAt
         db.studyVideos.update(video.id, { lastStudiedAt: Date.now() });
       }
