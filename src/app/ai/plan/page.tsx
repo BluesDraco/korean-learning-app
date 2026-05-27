@@ -87,6 +87,7 @@ export default function AIStudyPlanPage() {
         categoryStrength,
       });
 
+      fetch('/api/track/study', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'ai_chat', details: '生成学习计划', xpEarned: 0 }) }).catch(() => {});
       // Try AI-generated plan
       try {
         const res = await fetch('/api/ai/plan', {

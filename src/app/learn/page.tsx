@@ -152,6 +152,7 @@ export default function LearnPage() {
         setProfile((prev) => prev ? { ...prev, currentUnit: Math.min(nextUnit, TOTAL_UNITS) } : prev);
       }
 
+      fetch('/api/track/study', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'learn_word', details: `学习单元: ${selectedUnit?.title || 'unknown'}`, xpEarned: lessonXp + XP_REWARDS.dailyLessonComplete }) }).catch(() => {});
       setPhase('complete');
     } else {
       setQuizIdx(quizIdx + 1);

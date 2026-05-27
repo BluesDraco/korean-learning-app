@@ -461,7 +461,13 @@ export default function GrammarPage() {
               >
                 {/* Card header - clickable */}
                 <button
-                  onClick={() => setExpandedId(isExpanded ? null : grammar.id)}
+                  onClick={() => {
+                    const newId = isExpanded ? null : grammar.id;
+                    setExpandedId(newId);
+                    if (newId) {
+                      fetch('/api/track/study', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'grammar', details: `语法学习: ${grammar.pattern}`, xpEarned: 0 }) }).catch(() => {});
+                    }
+                  }}
                   className="w-full flex items-center gap-4 p-4 text-left"
                 >
                   {/* Pattern badge */}

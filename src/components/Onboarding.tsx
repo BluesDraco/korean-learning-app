@@ -40,6 +40,7 @@ export default function Onboarding({ onComplete }: Props) {
     if (step === 3) {
       // Complete onboarding
       await updateProfile({ onboardingComplete: true });
+      fetch('/api/auth/onboarding', { method: 'POST' }).catch(() => {});
       try { await awardXp(10); } catch { /* not critical */ }
       try { await updateStreak(); } catch { /* not critical */ }
       onComplete();

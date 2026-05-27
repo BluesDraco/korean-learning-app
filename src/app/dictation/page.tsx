@@ -94,6 +94,7 @@ export default function DictationPage() {
   const handleNext = async () => {
     if (currentIdx + 1 >= words.length) {
       await updateStreak();
+      fetch('/api/track/study', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'dictation', details: `听写: ${stats.correct}/${stats.total}`, xpEarned: earnedXp }) }).catch(() => {});
       setComplete(true);
     } else {
       setCurrentIdx(currentIdx + 1);

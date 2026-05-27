@@ -10,7 +10,7 @@ export async function GET() {
 
   const db = await getDb();
   const result = await db.exec(
-    'SELECT id, username, nickname, email, role, created_at FROM users WHERE id = ?',
+    'SELECT id, username, nickname, email, role, onboarding_completed, created_at FROM users WHERE id = ?',
     [auth.userId]
   );
 
@@ -26,7 +26,8 @@ export async function GET() {
       nickname: row[2] as string,
       email: row[3] as string,
       role: row[4] as string,
-      createdAt: row[5] as number,
+      onboardingCompleted: !!(row[5] as number),
+      createdAt: row[6] as number,
     },
   });
 }

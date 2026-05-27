@@ -923,6 +923,7 @@ export default function AIChatPage() {
     }));
 
     try {
+      fetch('/api/track/study', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'ai_chat', details: `AI对话: ${scenario.nameZh}`, xpEarned: 0 }) }).catch(() => {});
       const res = await fetch('/api/ai/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
