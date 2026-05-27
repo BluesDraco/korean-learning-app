@@ -161,6 +161,46 @@ function decomposeFull(text: string): string[] {
 }
 
 // ═══════════════════════════════════════════════════════════════
+// QWERTY → Korean Jamo mapping (Dubeolsik)
+// ═══════════════════════════════════════════════════════════════
+
+const QWERTY_TO_JAMO: Record<string, { base: string; shift?: string }> = {
+  q: { base: 'ㅂ', shift: 'ㅃ' },
+  w: { base: 'ㅈ', shift: 'ㅉ' },
+  e: { base: 'ㄷ', shift: 'ㄸ' },
+  r: { base: 'ㄱ', shift: 'ㄲ' },
+  t: { base: 'ㅅ', shift: 'ㅆ' },
+  y: { base: 'ㅛ' },
+  u: { base: 'ㅕ' },
+  i: { base: 'ㅑ' },
+  o: { base: 'ㅐ', shift: 'ㅒ' },
+  p: { base: 'ㅔ', shift: 'ㅖ' },
+  a: { base: 'ㅁ' },
+  s: { base: 'ㄴ' },
+  d: { base: 'ㅇ' },
+  f: { base: 'ㄹ' },
+  g: { base: 'ㅎ' },
+  h: { base: 'ㅗ' },
+  j: { base: 'ㅓ' },
+  k: { base: 'ㅏ' },
+  l: { base: 'ㅣ' },
+  z: { base: 'ㅋ' },
+  x: { base: 'ㅌ' },
+  c: { base: 'ㅊ' },
+  v: { base: 'ㅍ' },
+  b: { base: 'ㅠ' },
+  n: { base: 'ㅜ' },
+  m: { base: 'ㅡ' },
+};
+
+// Reverse: jamo → qwerty key
+const JAMO_TO_QWERTY: Record<string, string> = {};
+for (const [qKey, m] of Object.entries(QWERTY_TO_JAMO)) {
+  JAMO_TO_QWERTY[m.base] = qKey;
+  if (m.shift) JAMO_TO_QWERTY[m.shift] = qKey;
+}
+
+// ═══════════════════════════════════════════════════════════════
 // Keyboard Layout (standard 2-beolsik)
 // ═══════════════════════════════════════════════════════════════
 
@@ -220,6 +260,7 @@ export function KoreanKeyboard({ value, onChange, visible, onClose }: KoreanKeyb
   const [shift, setShift] = useState(false);
   const [buffer, setBuffer] = useState<string[]>([]);
   const [mounted, setMounted] = useState(false);
+  const [activeKeys, setActiveKeys] = useState<Set<string>>(new Set());
   const longPressRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const backspaceRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const onChangeRef = useRef(onChange);
@@ -243,6 +284,14 @@ export function KoreanKeyboard({ value, onChange, visible, onClose }: KoreanKeyb
     onChangeRef.current(composeBuffer(buffer));
   }, [buffer, visible]);
 
+  const addJamo = useCallback((jamo: string) => {
+    setBuffer(prev => [...prev, jamo]);
+  }, []);
+
+  const doBackspace = useCallback(() => {
+    setBuffer(prev => prev.length === 0 ? prev : prev.slice(0, -1));
+  }, []);
+
   const handleKey = useCallback((key: KeyDef) => {
     if (key.type === 'shift') {
       setShift(s => !s);
@@ -252,7 +301,7 @@ export function KoreanKeyboard({ value, onChange, visible, onClose }: KoreanKeyb
     setShift(false);
 
     if (key.type === 'backspace') {
-      setBuffer(prev => prev.length === 0 ? prev : prev.slice(0, -1));
+      doBackspace();
       return;
     }
 
@@ -267,8 +316,88 @@ export function KoreanKeyboard({ value, onChange, visible, onClose }: KoreanKeyb
     }
 
     const jamo = (shift && key.shiftLabel) ? key.shiftLabel : key.label;
-    setBuffer(prev => [...prev, jamo]);
-  }, [shift, onClose]);
+    addJamo(jamo);
+  }, [shift, onClose, addJamo, doBackspace]);
+
+  // ── Physical keyboard sync ───────────────────────────────
+  useEffect(() => {
+    if (!visible) return;
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      const qKey = e.key.toLowerCase();
+
+      // Shift
+      if (qKey === 'shift') {
+        setShift(true);
+        setActiveKeys(prev => new Set(prev).add('⇧'));
+        return;
+      }
+
+      // Backspace
+      if (qKey === 'backspace') {
+        e.preventDefault();
+        doBackspace();
+        setActiveKeys(prev => new Set(prev).add('⌫'));
+        return;
+      }
+
+      // Space
+      if (qKey === ' ') {
+        e.preventDefault();
+        setBuffer(prev => [...prev, ' ']);
+        return;
+      }
+
+      // QWERTY → Jamo mapping
+      const mapping = QWERTY_TO_JAMO[qKey];
+      if (mapping) {
+        e.preventDefault();
+        const jamo = (e.shiftKey && mapping.shift) ? mapping.shift : mapping.base;
+        addJamo(jamo);
+        setActiveKeys(prev => new Set(prev).add(jamo));
+      }
+    };
+
+    const onKeyUp = (e: KeyboardEvent) => {
+      const qKey = e.key.toLowerCase();
+
+      if (qKey === 'shift') {
+        setShift(false);
+        setActiveKeys(prev => {
+          const next = new Set(prev);
+          next.delete('⇧');
+          return next;
+        });
+        return;
+      }
+
+      if (qKey === 'backspace') {
+        setActiveKeys(prev => {
+          const next = new Set(prev);
+          next.delete('⌫');
+          return next;
+        });
+        return;
+      }
+
+      const mapping = QWERTY_TO_JAMO[qKey];
+      if (mapping) {
+        const jamo = (e.shiftKey && mapping.shift) ? mapping.shift : mapping.base;
+        setActiveKeys(prev => {
+          const next = new Set(prev);
+          next.delete(jamo);
+          return next;
+        });
+      }
+    };
+
+    document.addEventListener('keydown', onKeyDown);
+    document.addEventListener('keyup', onKeyUp);
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      document.removeEventListener('keyup', onKeyUp);
+    };
+  }, [visible, addJamo, doBackspace]);
 
   // Long-press backspace for continuous deletion
   const startRepeat = useCallback(() => {
@@ -330,11 +459,14 @@ export function KoreanKeyboard({ value, onChange, visible, onClose }: KoreanKeyb
                   : (shift && key.shiftLabel) ? key.shiftLabel : key.label;
                 const flex = key.flex || 1;
 
+                const isActive = activeKeys.has(key.label) || (shift && key.shiftLabel && activeKeys.has(key.shiftLabel));
+
                 let bg = 'bg-white dark:bg-[var(--bg-card)]';
-                if (key.type === 'shift') bg = shift
+                if (isActive) bg = 'bg-[var(--pink-primary)]/25 ring-2 ring-[var(--pink-primary)]/50 scale-95';
+                else if (key.type === 'shift') bg = shift
                   ? 'bg-[var(--pink-primary)]/15 text-[var(--pink-primary)]'
                   : 'bg-[var(--bg-muted)]/60';
-                if (key.type === 'backspace') bg = 'bg-[var(--bg-muted)]/60';
+                else if (key.type === 'backspace') bg = 'bg-[var(--bg-muted)]/60';
 
                 return (
                   <button
@@ -354,8 +486,15 @@ export function KoreanKeyboard({ value, onChange, visible, onClose }: KoreanKeyb
                   >
                     {key.type === 'backspace' ? (
                       <Delete size={16} />
+                    ) : key.type === 'shift' ? (
+                      <span className="text-xs">{resolvedLabel}</span>
                     ) : (
-                      <span>{resolvedLabel}</span>
+                      <span className="flex flex-col items-center leading-tight">
+                        <span>{resolvedLabel}</span>
+                        <span className="text-[9px] text-[var(--text-muted)]/60 font-normal">
+                          {JAMO_TO_QWERTY[resolvedLabel]?.toUpperCase() || ''}
+                        </span>
+                      </span>
                     )}
                   </button>
                 );
