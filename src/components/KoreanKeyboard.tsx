@@ -2,8 +2,9 @@
 
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Delete } from 'lucide-react';
+import { X, Delete, Pen } from 'lucide-react';
 import { useIsMobile } from '@/lib/useIsMobile';
+import { HandwritingPad } from '@/components/HandwritingPad';
 
 // ═══════════════════════════════════════════════════════════════
 // Hangul Composition Engine
@@ -261,6 +262,7 @@ export function KoreanKeyboard({ value, onChange, visible, onClose }: KoreanKeyb
   const [buffer, setBuffer] = useState<string[]>([]);
   const [mounted, setMounted] = useState(false);
   const [activeKeys, setActiveKeys] = useState<Set<string>>(new Set());
+  const [handwritingMode, setHandwritingMode] = useState(false);
   const longPressRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const backspaceRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const onChangeRef = useRef(onChange);
@@ -442,6 +444,17 @@ export function KoreanKeyboard({ value, onChange, visible, onClose }: KoreanKeyb
             )}
           </div>
           <button
+            onClick={() => setHandwritingMode(!handwritingMode)}
+            className={`p-1.5 rounded-lg transition-colors ${
+              handwritingMode
+                ? 'bg-[var(--pink-primary)]/20 text-[var(--pink-primary)]'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)]'
+            }`}
+            title={handwritingMode ? '切换到键盘' : '手写输入'}
+          >
+            <Pen size={15} />
+          </button>
+          <button
             onClick={onClose}
             className="p-1 text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)] rounded-lg transition-colors"
           >
@@ -449,7 +462,17 @@ export function KoreanKeyboard({ value, onChange, visible, onClose }: KoreanKeyb
           </button>
         </div>
 
-        {/* Key area */}
+        {/* Handwriting pad or Key area */}
+        {handwritingMode ? (
+          <HandwritingPad
+            onInsert={(text) => {
+              const chars = text.split('');
+              setBuffer((prev) => [...prev, ...chars]);
+              setHandwritingMode(false);
+            }}
+            onCancel={() => setHandwritingMode(false)}
+          />
+        ) : (
         <div className="bg-[var(--bg-soft)] border border-[var(--border-color)] rounded-b-2xl px-2 pt-2 pb-1">
           {ROWS.map((row, ri) => (
             <div key={ri} className="flex justify-center gap-1 mb-1.5">
@@ -522,6 +545,7 @@ export function KoreanKeyboard({ value, onChange, visible, onClose }: KoreanKeyb
 
           <div className="pb-safe" />
         </div>
+      )}
       </div>
     </div>
   , document.body);
