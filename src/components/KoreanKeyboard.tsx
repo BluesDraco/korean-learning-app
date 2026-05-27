@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { X, Delete, Pen } from 'lucide-react';
 import { useIsMobile } from '@/lib/useIsMobile';
@@ -326,6 +326,7 @@ export function KoreanKeyboard({ value, onChange, visible, onClose }: KoreanKeyb
     if (!visible) return;
 
     const onKeyDown = (e: KeyboardEvent) => {
+      if (e.repeat) return;
       const qKey = e.key.toLowerCase();
 
       // Shift
@@ -412,7 +413,7 @@ export function KoreanKeyboard({ value, onChange, visible, onClose }: KoreanKeyb
           }
           return prev.slice(0, -1);
         });
-      }, 60);
+      }, 100);
     }, 400);
   }, []);
 
@@ -425,10 +426,10 @@ export function KoreanKeyboard({ value, onChange, visible, onClose }: KoreanKeyb
     return () => { stopRepeat(); };
   }, [stopRepeat]);
 
-  if (!visible || !mounted) return null;
-
-  const composed = composeBuffer(buffer);
+  const composed = useMemo(() => composeBuffer(buffer), [buffer]);
   const showRawJamo = buffer.length > 0 && composed !== buffer.join('');
+
+  if (!visible || !mounted) return null;
 
   return createPortal(
     <div className="fixed bottom-0 left-0 right-0 z-[200]">

@@ -26,6 +26,18 @@ export function WordAudioPlayer({ words }: Props) {
   const speedRef = useRef(0.85);
   const wordsRef = useRef(words);
   wordsRef.current = words;
+  const timeoutIdsRef = useRef<Set<ReturnType<typeof setTimeout>>>(new Set());
+  const mountedRef = useRef(true);
+
+  const safeTimeout = useCallback((fn: () => void, ms: number) => {
+    const id = setTimeout(() => {
+      timeoutIdsRef.current.delete(id);
+      if (!mountedRef.current) return;
+      fn();
+    }, ms);
+    timeoutIdsRef.current.add(id);
+    return id;
+  }, []);
 
   const speak = useCallback((text: string, lang: string, rate: number, onEnd: () => void) => {
     const u = new SpeechSynthesisUtterance(text);
@@ -41,11 +53,10 @@ export function WordAudioPlayer({ words }: Props) {
     if (!playingRef.current) return;
     const w = wordsRef.current[idx];
     if (!w) {
-      // End of list
       if (loopingRef.current) {
         setCurrentIdx(0);
         idxRef.current = 0;
-        setTimeout(() => playWord(0), 500);
+        safeTimeout(() => playWord(0), 500);
       } else {
         setIsPlaying(false);
         playingRef.current = false;
@@ -57,26 +68,22 @@ export function WordAudioPlayer({ words }: Props) {
     setCurrentIdx(idx);
     idxRef.current = idx;
 
-    // Phase 1: speak Chinese
     setPhase('chinese');
     speak(w.chinese, 'zh-CN', speedRef.current, () => {
       if (!playingRef.current) return;
-      // Small pause between Chinese and Korean
-      setTimeout(() => {
+      safeTimeout(() => {
         if (!playingRef.current) return;
-        // Phase 2: speak Korean
         setPhase('korean');
         speak(w.korean, 'ko-KR', speedRef.current, () => {
           if (!playingRef.current) return;
-          // Pause between words
-          setTimeout(() => {
+          safeTimeout(() => {
             if (!playingRef.current) return;
             playWord(idx + 1);
           }, 800);
         });
       }, 400);
     });
-  }, [speak]);
+  }, [speak, safeTimeout]);
 
   const start = useCallback(() => {
     window.speechSynthesis.cancel();
@@ -143,7 +150,10 @@ export function WordAudioPlayer({ words }: Props) {
   // Cleanup on unmount
   useEffect(() => {
     return () => {
+      mountedRef.current = false;
       window.speechSynthesis.cancel();
+      timeoutIdsRef.current.forEach((id) => clearTimeout(id));
+      timeoutIdsRef.current.clear();
     };
   }, []);
 

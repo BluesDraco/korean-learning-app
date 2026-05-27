@@ -12,33 +12,57 @@ interface Stroke {
   points: { x: number; y: number; pressure: number }[];
 }
 
+function drawStroke(ctx: CanvasRenderingContext2D, stroke: Stroke) {
+  if (stroke.points.length < 2) return;
+  ctx.beginPath();
+  ctx.strokeStyle = '#1e293b';
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  for (let i = 0; i < stroke.points.length; i++) {
+    const p = stroke.points[i];
+    const pressure = Math.max(0.3, p.pressure || 0.5);
+    ctx.lineWidth = 2 + pressure * 4;
+    if (i === 0) ctx.moveTo(p.x, p.y);
+    else ctx.lineTo(p.x, p.y);
+  }
+  ctx.stroke();
+}
+
 export function HandwritingPad({ onInsert, onCancel }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [strokes, setStrokes] = useState<Stroke[]>([]);
-  const [currentStroke, setCurrentStroke] = useState<Stroke | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
+  const isDrawingRef = useRef(false);
+  const currentPointsRef = useRef<{ x: number; y: number; pressure: number }[]>([]);
   const [recognized, setRecognized] = useState('');
   const [manualText, setManualText] = useState('');
   const [recognizing, setRecognizing] = useState(false);
   const [error, setError] = useState('');
   const [canvasSize, setCanvasSize] = useState({ w: 400, h: 280 });
+  const resizeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Resize canvas to fit container
+  // Resize canvas to fit container (debounced)
   useEffect(() => {
     const resize = () => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      const w = rect.width - 16; // padding
-      const h = Math.min(280, window.innerHeight * 0.35);
-      setCanvasSize({ w, h });
+      if (resizeTimerRef.current) clearTimeout(resizeTimerRef.current);
+      resizeTimerRef.current = setTimeout(() => {
+        if (!containerRef.current) return;
+        const rect = containerRef.current.getBoundingClientRect();
+        const w = rect.width - 16;
+        const h = Math.min(280, window.innerHeight * 0.35);
+        setCanvasSize({ w, h });
+      }, 100);
     };
     resize();
     window.addEventListener('resize', resize);
-    return () => window.removeEventListener('resize', resize);
+    return () => {
+      window.removeEventListener('resize', resize);
+      if (resizeTimerRef.current) clearTimeout(resizeTimerRef.current);
+    };
   }, []);
 
-  // Redraw all strokes
+  // Redraw background + all completed strokes
   const redraw = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -72,26 +96,10 @@ export function HandwritingPad({ onInsert, onCancel }: Props) {
     ctx.stroke();
     ctx.setLineDash([]);
 
-    const allStrokes = currentStroke ? [...strokes, currentStroke] : strokes;
-    for (const stroke of allStrokes) {
-      if (stroke.points.length < 2) continue;
-      ctx.beginPath();
-      ctx.strokeStyle = '#1e293b';
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-      ctx.lineWidth = 2.5;
-
-      for (let i = 0; i < stroke.points.length; i++) {
-        const p = stroke.points[i];
-        const pressure = Math.max(0.3, p.pressure || 0.5);
-        ctx.lineWidth = 2 + pressure * 4;
-
-        if (i === 0) ctx.moveTo(p.x, p.y);
-        else ctx.lineTo(p.x, p.y);
-      }
-      ctx.stroke();
+    for (const stroke of strokes) {
+      drawStroke(ctx, stroke);
     }
-  }, [strokes, currentStroke]);
+  }, [strokes]);
 
   useEffect(() => { redraw(); }, [redraw, canvasSize]);
 
@@ -107,29 +115,53 @@ export function HandwritingPad({ onInsert, onCancel }: Props) {
 
   const handlePointerDown = useCallback((e: React.PointerEvent) => {
     canvasRef.current?.setPointerCapture(e.pointerId);
+    isDrawingRef.current = true;
     setIsDrawing(true);
+    // Redraw to get a clean background + existing strokes for the new drawing layer
+    redraw();
     const pos = getPos(e);
-    setCurrentStroke({ points: [pos] });
-  }, [getPos]);
+    currentPointsRef.current = [pos];
+    // Draw initial dot
+    const ctx = canvasRef.current?.getContext('2d');
+    if (ctx) {
+      ctx.beginPath();
+      ctx.fillStyle = '#1e293b';
+      ctx.arc(pos.x, pos.y, 1.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }, [getPos, redraw]);
 
   const handlePointerMove = useCallback((e: React.PointerEvent) => {
-    if (!isDrawing) return;
+    if (!isDrawingRef.current) return;
     const pos = getPos(e);
-    setCurrentStroke((prev) => {
-      if (!prev) return null;
-      return { points: [...prev.points, pos] };
-    });
-  }, [isDrawing, getPos]);
+    const points = currentPointsRef.current;
+    const prev = points[points.length - 1];
+    points.push(pos);
+
+    // Draw directly to canvas — no state update per pixel
+    const ctx = canvasRef.current?.getContext('2d');
+    if (ctx && prev) {
+      ctx.beginPath();
+      ctx.strokeStyle = '#1e293b';
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      const pressure = Math.max(0.3, pos.pressure || 0.5);
+      ctx.lineWidth = 2 + pressure * 4;
+      ctx.moveTo(prev.x, prev.y);
+      ctx.lineTo(pos.x, pos.y);
+      ctx.stroke();
+    }
+  }, [getPos]);
 
   const handlePointerUp = useCallback((e: React.PointerEvent) => {
     canvasRef.current?.releasePointerCapture(e.pointerId);
+    isDrawingRef.current = false;
     setIsDrawing(false);
-    setCurrentStroke((cur) => {
-      if (cur && cur.points.length >= 2) {
-        setStrokes((prev) => [...prev, cur]);
-      }
-      return null;
-    });
+    const points = currentPointsRef.current;
+    if (points.length >= 2) {
+      setStrokes((prev) => [...prev, { points: [...points] }]);
+    }
+    currentPointsRef.current = [];
   }, []);
 
   const undo = useCallback(() => {
@@ -152,6 +184,8 @@ export function HandwritingPad({ onInsert, onCancel }: Props) {
     try {
       const canvas = canvasRef.current;
       if (!canvas) return;
+      // Force a redraw first so the canvas is up-to-date
+      redraw();
       const dataUrl = canvas.toDataURL('image/png');
       const res = await fetch('/api/ai/handwriting', {
         method: 'POST',
@@ -167,7 +201,7 @@ export function HandwritingPad({ onInsert, onCancel }: Props) {
     } finally {
       setRecognizing(false);
     }
-  }, [strokes]);
+  }, [strokes, redraw]);
 
   const confirm = useCallback(() => {
     const text = manualText.trim() || recognized.trim();

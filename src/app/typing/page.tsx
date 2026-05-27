@@ -86,7 +86,6 @@ export default function TypingPage() {
   const [cursorPos, setCursorPos] = useState(0); // position in jamo array
   const [errors, setErrors] = useState(0);
   const [totalKeystrokes, setTotalKeystrokes] = useState(0);
-  const [startTime, setStartTime] = useState(0);
   const [elapsed, setElapsed] = useState(0);
   const [recentError, setRecentError] = useState(false);
   const [timeLimit] = useState(300); // 5 min for level 5
@@ -97,18 +96,24 @@ export default function TypingPage() {
 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const errorTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const cursorPosRef = useRef(cursorPos);
+  const targetJamoRef = useRef(targetJamo);
+  cursorPosRef.current = cursorPos;
+  targetJamoRef.current = targetJamo;
+
+  const startTimeRef = useRef(0);
 
   // Timer
   useEffect(() => {
     if (phase === 'typing') {
       timerRef.current = setInterval(() => {
-        setElapsed((Date.now() - startTime) / 1000);
+        setElapsed((Date.now() - startTimeRef.current) / 1000);
       }, 200);
     } else {
       if (timerRef.current) clearInterval(timerRef.current);
     }
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
-  }, [phase, startTime]);
+  }, [phase]);
 
   // Level 5 time limit
   useEffect(() => {
@@ -117,25 +122,28 @@ export default function TypingPage() {
     }
   }, [levelId, phase, elapsed, timeLimit]);
 
-  // Keyboard listener
+  // Keyboard listener (refs avoid re-registration on every keystroke)
   useEffect(() => {
     if (phase !== 'typing') return;
 
     const onKeyDown = (e: KeyboardEvent) => {
+      if (e.repeat) return;
       const qKey = e.key.toLowerCase();
       const mapping = QWERTY_TO_JAMO[qKey];
       if (!mapping) return;
 
       e.preventDefault();
       const typed = (e.shiftKey && mapping.shift) ? mapping.shift : mapping.base;
-      const expected = targetJamo[cursorPos];
+      const jamo = targetJamoRef.current;
+      const pos = cursorPosRef.current;
+      const expected = jamo[pos];
 
       setTotalKeystrokes((prev) => prev + 1);
 
       if (typed === expected) {
         setCursorPos((prev) => {
           const next = prev + 1;
-          if (next >= targetJamo.length) {
+          if (next >= jamo.length) {
             setPhase('done');
           }
           return next;
@@ -151,21 +159,13 @@ export default function TypingPage() {
 
     document.addEventListener('keydown', onKeyDown);
     return () => document.removeEventListener('keydown', onKeyDown);
-  }, [phase, cursorPos, targetJamo]);
-
-  // Cleanup
-  useEffect(() => {
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-      if (errorTimerRef.current) clearTimeout(errorTimerRef.current);
-    };
-  }, []);
+  }, [phase]);
 
   const start = useCallback(() => {
     setCursorPos(0);
     setErrors(0);
     setTotalKeystrokes(0);
-    setStartTime(Date.now());
+    startTimeRef.current = Date.now();
     setElapsed(0);
     setPhase('typing');
   }, []);
@@ -196,6 +196,24 @@ export default function TypingPage() {
   const accuracy = totalKeystrokes > 0 ? Math.round(((totalKeystrokes - errors) / totalKeystrokes) * 100) : 100;
   const cpm = elapsed > 0 ? Math.round((cursorPos / elapsed) * 60) : 0;
   const wpm = Math.round(cpm / 5);
+
+  // Memoized jamo display — only recompute when cursor/error/text change
+  const displayChars = useMemo(() => {
+    if (!text || targetJamo.length === 0) return [];
+    const chars: { char: string; status: 'done' | 'current' | 'pending' | 'error' }[] = [];
+    let jamoIdx = 0;
+    for (const ch of text.text) {
+      const parts = decomposeSyl(ch);
+      for (let pi = 0; pi < parts.length; pi++) {
+        let status: 'done' | 'current' | 'pending' | 'error' = 'pending';
+        if (jamoIdx < cursorPos) status = 'done';
+        else if (jamoIdx === cursorPos) status = recentError ? 'error' : 'current';
+        chars.push({ char: parts[pi], status });
+        jamoIdx++;
+      }
+    }
+    return chars;
+  }, [text, cursorPos, recentError, targetJamo.length]);
 
   // Next key highlight
   const nextJamo = targetJamo[cursorPos] || '';
@@ -256,34 +274,19 @@ export default function TypingPage() {
           <div className="text-center">
             <p className="text-sm text-[var(--text-muted)] mb-2">{text.label}</p>
             <div className="text-4xl font-bold text-[var(--text-primary)] leading-relaxed tracking-wide font-[var(--font-korean)]">
-              {targetJamo.length > 0 && (() => {
-                // Group jamo back into syllables for display
-                const displayChars: { char: string; status: 'done' | 'current' | 'pending' | 'error' }[] = [];
-                let jamoIdx = 0;
-                for (const ch of text.text) {
-                  const parts = decomposeSyl(ch);
-                  for (let pi = 0; pi < parts.length; pi++) {
-                    let status: 'done' | 'current' | 'pending' | 'error' = 'pending';
-                    if (jamoIdx < cursorPos) status = 'done';
-                    else if (jamoIdx === cursorPos) status = recentError ? 'error' : 'current';
-                    displayChars.push({ char: parts[pi], status });
-                    jamoIdx++;
-                  }
-                }
-                return displayChars.map((dc, i) => (
-                  <span
-                    key={i}
-                    className={`transition-colors duration-100 ${
-                      dc.status === 'done' ? 'text-[var(--mint-soft)]' :
-                      dc.status === 'current' ? 'text-[var(--pink-primary)] border-b-2 border-[var(--pink-primary)]' :
-                      dc.status === 'error' ? 'text-red-400 border-b-2 border-red-400' :
-                      'text-[var(--text-muted)]/50'
-                    }`}
-                  >
-                    {dc.char}
-                  </span>
-                ));
-              })()}
+              {displayChars.map((dc, i) => (
+                <span
+                  key={i}
+                  className={`transition-colors duration-100 ${
+                    dc.status === 'done' ? 'text-[var(--mint-soft)]' :
+                    dc.status === 'current' ? 'text-[var(--pink-primary)] border-b-2 border-[var(--pink-primary)]' :
+                    dc.status === 'error' ? 'text-red-400 border-b-2 border-red-400' :
+                    'text-[var(--text-muted)]/50'
+                  }`}
+                >
+                  {dc.char}
+                </span>
+              ))}
             </div>
           </div>
 
