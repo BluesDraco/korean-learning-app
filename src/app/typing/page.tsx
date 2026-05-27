@@ -202,14 +202,14 @@ export default function TypingPage() {
   const nextQwerty = JAMO_TO_QWERTY[nextJamo]?.toUpperCase() || '';
 
   return (
-    <div className="py-4 space-y-4 max-w-2xl mx-auto">
+    <div className="py-4 space-y-5 max-w-4xl mx-auto">
       {/* Header */}
       <div className="flex items-center gap-3">
         <Link href="/" className="text-[var(--text-muted)] hover:text-[var(--text-primary)]">
           <ArrowLeft size={20} />
         </Link>
         <div>
-          <h1 className="text-xl font-bold text-[var(--text-primary)] flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-[var(--text-primary)] flex items-center gap-2">
             <Keyboard size={20} className="text-[var(--pink-primary)]" />
             打字练习
           </h1>
@@ -223,7 +223,7 @@ export default function TypingPage() {
           <button
             key={lv.id}
             onClick={() => { setLevelId(lv.id); setTextIdx(0); reset(); }}
-            className={`text-xs px-3.5 py-2 rounded-xl whitespace-nowrap transition-all shrink-0 ${
+            className={`text-sm px-4 py-2.5 rounded-xl whitespace-nowrap transition-all shrink-0 ${
               levelId === lv.id
                 ? 'bg-[var(--pink-primary)] text-white shadow-lg shadow-[var(--pink-primary)]/25'
                 : 'bg-[var(--bg-input)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
@@ -237,13 +237,13 @@ export default function TypingPage() {
       {/* Text selector */}
       {level && (
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-xs text-[var(--text-muted)]">{level.description}</span>
+          <span className="text-sm text-[var(--text-muted)]">{level.description}</span>
           <div className="flex-1" />
-          <button onClick={prevText} disabled={textIdx === 0} className="text-xs px-2 py-1 rounded-lg bg-[var(--bg-input)] text-[var(--text-muted)] disabled:opacity-30 hover:text-[var(--text-primary)] transition-colors">
+          <button onClick={prevText} disabled={textIdx === 0} className="text-sm px-3 py-1.5 rounded-lg bg-[var(--bg-input)] text-[var(--text-muted)] disabled:opacity-30 hover:text-[var(--text-primary)] transition-colors">
             上一题
           </button>
-          <span className="text-xs text-[var(--text-muted)]">{textIdx + 1}/{level.texts.length}</span>
-          <button onClick={nextText} disabled={textIdx >= level.texts.length - 1} className="text-xs px-2 py-1 rounded-lg bg-[var(--bg-input)] text-[var(--text-muted)] disabled:opacity-30 hover:text-[var(--text-primary)] transition-colors">
+          <span className="text-sm text-[var(--text-muted)]">{textIdx + 1}/{level.texts.length}</span>
+          <button onClick={nextText} disabled={textIdx >= level.texts.length - 1} className="text-sm px-3 py-1.5 rounded-lg bg-[var(--bg-input)] text-[var(--text-muted)] disabled:opacity-30 hover:text-[var(--text-primary)] transition-colors">
             下一题
           </button>
         </div>
@@ -251,11 +251,11 @@ export default function TypingPage() {
 
       {/* Main typing area */}
       {text && (
-        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 space-y-4">
+        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-8 space-y-6">
           {/* Target text display */}
           <div className="text-center">
-            <p className="text-xs text-[var(--text-muted)] mb-2">{text.label}</p>
-            <div className="text-2xl font-bold text-[var(--text-primary)] leading-relaxed tracking-wide font-[var(--font-korean)]">
+            <p className="text-sm text-[var(--text-muted)] mb-2">{text.label}</p>
+            <div className="text-4xl font-bold text-[var(--text-primary)] leading-relaxed tracking-wide font-[var(--font-korean)]">
               {targetJamo.length > 0 && (() => {
                 // Group jamo back into syllables for display
                 const displayChars: { char: string; status: 'done' | 'current' | 'pending' | 'error' }[] = [];
@@ -287,37 +287,49 @@ export default function TypingPage() {
             </div>
           </div>
 
+          {/* Original Korean text + Chinese translation */}
+          <div className="text-center space-y-1.5 py-3 border-y border-[var(--border-color)]/50">
+            <p className="text-xl text-[var(--text-primary)] font-medium font-[var(--font-korean)] leading-relaxed">
+              {text.text}
+            </p>
+            {text.chinese && (
+              <p className="text-base text-[var(--text-muted)]">
+                {text.chinese}
+              </p>
+            )}
+          </div>
+
           {/* Virtual keyboard preview */}
-          <div className="bg-[var(--bg-soft)] rounded-xl p-2.5 border border-[var(--border-color)]/60">
+          <div className="bg-[var(--bg-soft)] rounded-xl p-4 border border-[var(--border-color)]/60">
             {KEYBOARD_ROWS.map((row, ri) => (
-              <div key={ri} className="flex justify-center gap-0.5 mb-0.5 last:mb-0">
-                {ri === 2 && <div className="w-6" />} {/* shift key space */}
+              <div key={ri} className="flex justify-center gap-1 mb-1 last:mb-0">
+                {ri === 2 && <div className="w-8" />} {/* shift key space */}
                 {row.map((jamo) => {
                   const isNext = jamo === nextJamo;
                   const qKey = JAMO_TO_QWERTY[jamo];
                   return (
                     <div
                       key={jamo}
-                      className={`flex flex-col items-center justify-center w-8 h-8 rounded-md text-xs transition-all ${
+                      className={`flex flex-col items-center justify-center w-11 h-11 rounded-lg text-sm transition-all ${
                         isNext
-                          ? 'bg-[var(--pink-primary)]/25 ring-1 ring-[var(--pink-primary)]/50 scale-110 text-[var(--pink-primary)]'
+                          ? 'bg-[var(--pink-primary)]/25 ring-2 ring-[var(--pink-primary)]/50 scale-110 text-[var(--pink-primary)]'
                           : 'bg-[var(--bg-card)] text-[var(--text-muted)]/70'
                       }`}
                     >
-                      <span className="leading-tight font-medium">{jamo}</span>
-                      <span className="text-[8px] leading-tight opacity-50">{qKey?.toUpperCase() || ''}</span>
+                      <span className="leading-tight font-bold">{jamo}</span>
+                      <span className="text-[10px] leading-tight opacity-50">{qKey?.toUpperCase() || ''}</span>
                     </div>
                   );
                 })}
-                {ri === 2 && <div className="w-6" />}
+                {ri === 2 && <div className="w-8" />}
               </div>
             ))}
             {/* Next key hint */}
             {nextJamo && (
-              <div className="text-center mt-2">
-                <span className="text-[11px] text-[var(--text-muted)]">
+              <div className="text-center mt-3">
+                <span className="text-sm text-[var(--text-muted)]">
                   下一个: <span className="text-[var(--pink-primary)] font-bold">{nextJamo}</span>
-                  {nextQwerty && <span className="text-[var(--text-muted)]"> (按 <kbd className="px-1 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-primary)] text-[10px]">{nextQwerty}</kbd>)</span>}
+                  {nextQwerty && <span className="text-[var(--text-muted)]"> (按 <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-primary)] text-xs">{nextQwerty}</kbd>)</span>}
                 </span>
               </div>
             )}
@@ -327,28 +339,28 @@ export default function TypingPage() {
           {phase === 'idle' && (
             <button
               onClick={start}
-              className="w-full py-3.5 rounded-xl bg-[var(--pink-primary)] text-white font-bold text-sm hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-lg shadow-[var(--pink-primary)]/25"
+              className="w-full py-4 rounded-xl bg-[var(--pink-primary)] text-white font-bold text-base hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-lg shadow-[var(--pink-primary)]/25"
             >
-              <Play size={17} />
+              <Play size={20} />
               开始练习
             </button>
           )}
 
           {/* Phase: typing → stats bar */}
           {phase === 'typing' && (
-            <div className="flex items-center gap-4 text-xs">
-              <span className="flex items-center gap-1 text-[var(--text-muted)]">
-                <Clock size={13} />
+            <div className="flex items-center gap-5 text-sm">
+              <span className="flex items-center gap-1.5 text-[var(--text-muted)]">
+                <Clock size={15} />
                 {levelId === 5
                   ? `${Math.max(0, timeLimit - Math.floor(elapsed))}s`
                   : `${Math.floor(elapsed)}s`}
               </span>
-              <span className="flex items-center gap-1 text-[var(--text-muted)]">
-                <Zap size={13} />
+              <span className="flex items-center gap-1.5 text-[var(--text-muted)]">
+                <Zap size={15} />
                 {cpm} 字/分
               </span>
-              <span className="flex items-center gap-1 text-[var(--text-muted)]">
-                <Crosshair size={13} />
+              <span className="flex items-center gap-1.5 text-[var(--text-muted)]">
+                <Crosshair size={15} />
                 {accuracy}%
               </span>
               <div className="flex-1" />
@@ -356,43 +368,43 @@ export default function TypingPage() {
                 {cursorPos}/{targetJamo.length}
               </span>
               <button onClick={reset} className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors">
-                <RotateCcw size={14} />
+                <RotateCcw size={16} />
               </button>
             </div>
           )}
 
           {/* Phase: done → results */}
           {phase === 'done' && (
-            <div className="space-y-4">
+            <div className="space-y-5">
               <div className="text-center">
-                <Trophy size={40} className="mx-auto text-[var(--peach-soft)] mb-2" />
-                <p className="text-lg font-bold text-[var(--text-primary)]">
+                <Trophy size={52} className="mx-auto text-[var(--peach-soft)] mb-3" />
+                <p className="text-xl font-bold text-[var(--text-primary)]">
                   {accuracy >= 95 ? '完美！🎉' : accuracy >= 80 ? '不错！👍' : '继续加油！💪'}
                 </p>
               </div>
 
-              <div className="grid grid-cols-3 gap-3">
-                <div className="bg-[var(--bg-input)] rounded-xl p-3 text-center">
-                  <div className="text-xl font-bold text-[var(--pink-primary)]">{wpm}</div>
-                  <div className="text-[10px] text-[var(--text-muted)]">WPM (字/分)</div>
+              <div className="grid grid-cols-3 gap-4">
+                <div className="bg-[var(--bg-input)] rounded-xl p-4 text-center">
+                  <div className="text-2xl font-bold text-[var(--pink-primary)]">{wpm}</div>
+                  <div className="text-xs text-[var(--text-muted)] mt-1">WPM (字/分)</div>
                 </div>
-                <div className="bg-[var(--bg-input)] rounded-xl p-3 text-center">
-                  <div className="text-xl font-bold text-[var(--mint-soft)]">{accuracy}%</div>
-                  <div className="text-[10px] text-[var(--text-muted)]">准确率</div>
+                <div className="bg-[var(--bg-input)] rounded-xl p-4 text-center">
+                  <div className="text-2xl font-bold text-[var(--mint-soft)]">{accuracy}%</div>
+                  <div className="text-xs text-[var(--text-muted)] mt-1">准确率</div>
                 </div>
-                <div className="bg-[var(--bg-input)] rounded-xl p-3 text-center">
-                  <div className="text-xl font-bold text-[var(--peach-soft)]">{errors}</div>
-                  <div className="text-[10px] text-[var(--text-muted)]">错误数</div>
+                <div className="bg-[var(--bg-input)] rounded-xl p-4 text-center">
+                  <div className="text-2xl font-bold text-[var(--peach-soft)]">{errors}</div>
+                  <div className="text-xs text-[var(--text-muted)] mt-1">错误数</div>
                 </div>
               </div>
 
-              <div className="flex gap-2">
-                <button onClick={start} className="flex-1 py-2.5 rounded-xl bg-[var(--pink-primary)] text-white font-medium text-sm hover:opacity-90 transition-opacity flex items-center justify-center gap-1.5">
-                  <RotateCcw size={15} /> 重新练习
+              <div className="flex gap-3">
+                <button onClick={start} className="flex-1 py-3 rounded-xl bg-[var(--pink-primary)] text-white font-medium text-base hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+                  <RotateCcw size={17} /> 重新练习
                 </button>
                 {level && textIdx + 1 < level.texts.length && (
-                  <button onClick={nextText} className="flex-1 py-2.5 rounded-xl bg-[var(--bg-input)] text-[var(--text-primary)] font-medium text-sm hover:bg-[var(--bg-accent)] transition-colors flex items-center justify-center gap-1.5">
-                    下一题 <ChevronRight size={15} />
+                  <button onClick={nextText} className="flex-1 py-3 rounded-xl bg-[var(--bg-input)] text-[var(--text-primary)] font-medium text-base hover:bg-[var(--bg-accent)] transition-colors flex items-center justify-center gap-2">
+                    下一题 <ChevronRight size={17} />
                   </button>
                 )}
               </div>
