@@ -1,12 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowLeft, BookOpen, Sparkles } from 'lucide-react';
+import { ArrowLeft, Sparkles, BookOpen } from 'lucide-react';
 import { pictureBooks } from '@/data/pictureBooks';
 
 export default function PictureBooksPage() {
   return (
-    <div className="py-4 space-y-4">
+    <div className="py-4 space-y-6">
       {/* Header */}
       <div className="flex items-center gap-4">
         <Link href="/learn" className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
@@ -41,54 +41,73 @@ export default function PictureBooksPage() {
 
       {/* Book list */}
       <div>
-        <h2 className="text-sm font-medium text-[var(--text-secondary)] uppercase tracking-wider mb-3">
+        <h2 className="text-sm font-medium text-[var(--text-secondary)] uppercase tracking-wider mb-4">
           绘本列表
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {pictureBooks.map((book) => (
-            <Link
+            <div
               key={book.id}
-              href={`/learn/picture-books/${book.id}`}
-              className="card-washi group block"
-              style={{ '--washi-color': book.color } as React.CSSProperties}
+              className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl overflow-hidden hover:shadow-lg transition-shadow group"
             >
-              <div className="p-5">
-                <div className="flex items-start gap-4">
-                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 overflow-hidden"
-                    style={{ backgroundColor: `${book.color}20` }}
+              {/* Cover image */}
+              <Link
+                href={`/learn/picture-books/${book.id}`}
+                className="block relative overflow-hidden"
+                style={{ aspectRatio: '3/4' }}
+              >
+                {book.coverImage ? (
+                  <img
+                    src={book.coverImage}
+                    alt={book.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                ) : (
+                  <div
+                    className="w-full h-full flex items-center justify-center"
+                    style={{ background: `linear-gradient(135deg, ${book.color}30, ${book.color}10)` }}
                   >
-                    {book.coverImage ? (
-                      <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover" />
-                    ) : (
-                      <span className="text-3xl">{book.emoji}</span>
-                    )}
+                    <span className="text-6xl">{book.emoji}</span>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="text-base font-bold text-[var(--text-primary)]">{book.title}</h3>
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--pink-primary)]/10 text-[var(--pink-primary)]">
-                        {book.level === 'beginner' ? '初级' : '中级'}
-                      </span>
-                    </div>
-                    <p className="text-xs text-[var(--text-secondary)] line-clamp-2">{book.description}</p>
-                    <div className="flex items-center gap-3 mt-3">
-                      <span className="text-xs text-[var(--text-muted)]">
-                        {book.pages.length} 页
-                      </span>
-                      <span className="flex items-center gap-1 text-xs font-medium text-[var(--pink-primary)] group-hover:translate-x-1 transition-transform">
-                        开始阅读
-                        <Sparkles size={12} />
-                      </span>
-                    </div>
-                  </div>
+                )}
+                {/* Hover overlay */}
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                  <span className="px-6 py-2.5 bg-white/90 text-[var(--pink-primary)] font-bold rounded-full opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0 shadow-lg text-sm">
+                    开始阅读
+                  </span>
+                </div>
+              </Link>
+
+              {/* Info */}
+              <div className="p-4 space-y-2">
+                <div className="flex items-center gap-2">
+                  <h3 className="text-lg font-bold text-[var(--text-primary)]">{book.title}</h3>
+                  <span className={`text-xs px-2 py-0.5 rounded-full ${
+                    book.level === 'beginner'
+                      ? 'bg-[var(--mint-soft)]/10 text-[var(--mint-soft)]'
+                      : 'bg-[var(--peach-soft)]/10 text-[var(--peach-soft)]'
+                  }`}>
+                    {book.level === 'beginner' ? '初级' : '中级'}
+                  </span>
+                </div>
+                <p className="text-sm text-[var(--text-secondary)] line-clamp-2">{book.description}</p>
+                <div className="flex items-center justify-between pt-1">
+                  <span className="text-xs text-[var(--text-muted)]">{book.pages.length} 页</span>
+                  <Link
+                    href={`/learn/picture-books/${book.id}`}
+                    className="flex items-center gap-1 text-sm font-medium text-[var(--pink-primary)] hover:gap-2 transition-all"
+                  >
+                    开始阅读
+                    <Sparkles size={14} />
+                  </Link>
                 </div>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       </div>
 
-      {/* Coming soon hint */}
+      {/* Coming soon */}
       <div className="text-center py-8">
         <p className="text-xs text-[var(--text-muted)]">
           更多绘本故事即将上线...

@@ -6,6 +6,7 @@ export interface PictureBookPage {
   pronunciation: string;
   chinese: string;
   vocab: { word: string; meaning: string }[];
+  isSummary?: boolean;
 }
 
 export interface PictureBook {
@@ -175,6 +176,7 @@ export const pictureBooks: PictureBook[] = [
         illustration: '📝\n🐰✨',
         imageUrl: '/images/picture-books/tori-day/11.png',
         bgColor: '#FFF5FA',
+        isSummary: true,
         korean: '토리가 배운 한국어\n\n한국  ·  편지  ·  공부\n안녕  ·  맛있다  ·  귀엽다\n친구  ·  저는 토리예요\n감사해요\n안녕히 주무세요',
         pronunciation: 'to-ri-ga bae-un han-gu-geo.\n\nhan-guk, pyeon-ji, gong-bu.\nan-nyeong, ma-sit-tta, gwi-yeop-tta.\nchin-gu, jeo-neun to-ri-ye-yo.\ngam-sa-hae-yo.\nan-nyeong-hi ju-mu-se-yo.',
         chinese: 'Tori学到的韩语\n\n韩国 · 信 · 学习\n你好 · 好吃 · 可爱\n朋友 · 我是Tori\n谢谢\n晚安',

@@ -116,43 +116,68 @@ function ImageCard({ page, pageIdx, total, seed }: { page: PictureBookPage; page
 }
 
 /* ═══════════════════════════════════════════════════════
+   Vocab Summary Panel — last page
+   ═══════════════════════════════════════════════════════ */
+function VocabSummaryPanel({ page }: { page: PictureBookPage }) {
+  return (
+    <div className="flex flex-col justify-center h-full">
+      <div className="text-center space-y-5">
+        <h2 className="text-2xl sm:text-3xl font-bold text-[var(--text-primary)]">📝 学到的词汇</h2>
+        <div className="grid grid-cols-2 gap-x-6 gap-y-3 max-w-md mx-auto">
+          {page.vocab.map((v) => (
+            <div key={v.word} className="flex items-center gap-3 bg-white/70 rounded-xl px-4 py-3">
+              <span className="text-lg sm:text-xl font-bold text-[var(--text-primary)]">{v.word}</span>
+              <span className="w-px h-4 bg-[var(--border-color)]" />
+              <span className="text-base sm:text-lg text-[var(--text-secondary)]">{v.meaning}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
    Text Panel — learning-first journal design
    ═══════════════════════════════════════════════════════ */
 function TextPanel({ page }: { page: PictureBookPage }) {
+  if (page.isSummary) {
+    return <VocabSummaryPanel page={page} />;
+  }
+
   const koLines = page.korean.split('\n');
   const proLines = page.pronunciation.split('\n');
   const zhLines = page.chinese.split('\n');
-  // Pad to match Korean line count
   const n = koLines.length;
 
   return (
     <div className="flex flex-col justify-center h-full">
-      <div className="space-y-4 sm:space-y-5">
+      <div className="space-y-5 sm:space-y-6">
 
         {/* ── Sentence groups ── */}
         {koLines.map((ko, i) => (
-          <div key={i} className="flex gap-2 sm:gap-3">
+          <div key={i} className="flex gap-3 sm:gap-4">
             {/* Line number */}
             <span
-              className="text-[11px] sm:text-xs text-[var(--text-muted)]/35 font-medium tabular-nums shrink-0 w-5 text-right select-none pt-0.5"
+              className="text-sm sm:text-base text-[var(--text-muted)]/35 font-medium tabular-nums shrink-0 w-6 text-right select-none pt-1"
               style={{ fontFamily: 'Georgia, serif' }}
             >
               {String(i + 1).padStart(2, '0')}
             </span>
 
-            <div className="flex-1 min-w-0 space-y-0.5">
+            <div className="flex-1 min-w-0 space-y-1">
               {/* Pronunciation above */}
-              <p className="text-[11px] sm:text-[12px] text-[var(--text-muted)]/60 italic leading-relaxed">
+              <p className="text-sm sm:text-base text-[var(--text-muted)]/60 italic leading-relaxed">
                 {proLines[i] ?? '…'}
               </p>
 
               {/* Korean */}
-              <p className="text-[17px] sm:text-[19px] md:text-[21px] font-bold text-[var(--text-primary)] leading-snug">
+              <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-[var(--text-primary)] leading-snug">
                 {ko}
               </p>
 
               {/* Chinese below */}
-              <p className="text-[12px] sm:text-[13px] text-[var(--text-secondary)]/75 leading-relaxed">
+              <p className="text-base sm:text-lg text-[var(--text-secondary)]/75 leading-relaxed">
                 {zhLines[i] ?? '…'}
               </p>
             </div>
@@ -160,20 +185,20 @@ function TextPanel({ page }: { page: PictureBookPage }) {
         ))}
 
         {/* ── Action bar ── */}
-        <div className="flex items-center gap-3 flex-wrap pl-7">
+        <div className="flex items-center gap-3 flex-wrap pl-9">
           <button
             onClick={() => speakKorean(page.korean)}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--pink-primary)] text-white hover:opacity-90 active:scale-95 transition-all text-[13px] font-semibold shadow-md shadow-[var(--pink-primary)]/20"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--pink-primary)] text-white hover:opacity-90 active:scale-95 transition-all text-base font-semibold shadow-md shadow-[var(--pink-primary)]/20"
           >
-            <Volume2 size={15} />
+            <Volume2 size={17} />
             听朗读
           </button>
 
           {/* Vocab chips */}
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-wrap gap-2">
             {page.vocab.map((v) => (
               <span key={v.word}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] sm:text-xs"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm"
                 style={{
                   background: 'white',
                   border: '1px solid var(--border-color)',
@@ -181,7 +206,7 @@ function TextPanel({ page }: { page: PictureBookPage }) {
                 }}
               >
                 <span className="font-bold text-[var(--text-primary)]">{v.word}</span>
-                <span className="w-px h-2.5 bg-[var(--border-color)]" />
+                <span className="w-px h-3 bg-[var(--border-color)]" />
                 <span className="text-[var(--text-muted)]">{v.meaning}</span>
               </span>
             ))}
@@ -193,39 +218,12 @@ function TextPanel({ page }: { page: PictureBookPage }) {
 }
 
 /* ═══════════════════════════════════════════════════════
-   Cover Page
-   ═══════════════════════════════════════════════════════ */
-function CoverPage({ book, onStart }: { book: NonNullable<ReturnType<typeof pictureBooks.find>>; onStart: () => void }) {
-  return (
-    <div className="h-[100dvh] flex flex-col items-center justify-center bg-[#f5f0eb] p-4 gap-4">
-      <div className="relative w-full max-w-sm rounded-2xl overflow-hidden shadow-2xl" style={{ aspectRatio: '3/4' }}>
-        {book.coverImage ? (
-          <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover" />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center"
-            style={{ background: 'linear-gradient(135deg, #FF8FAB, #C9B8E8, #FFE4A0)' }}>
-            <span className="text-[64px]">{book.emoji}</span>
-          </div>
-        )}
-      </div>
-      <button
-        onClick={onStart}
-        className="px-10 py-3 bg-white text-[var(--pink-primary)] font-bold rounded-full shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all text-sm"
-      >
-        开始阅读
-      </button>
-    </div>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════
    Main Reader
    ═══════════════════════════════════════════════════════ */
 export default function PictureBookReaderPage() {
   const { id } = useParams<{ id: string }>();
   const book = pictureBooks.find((b) => b.id === id);
 
-  const [showCover, setShowCover] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
   const [touchStartX, setTouchStartX] = useState(0);
   const [touchStartY, setTouchStartY] = useState(0);
@@ -274,6 +272,13 @@ export default function PictureBookReaderPage() {
     executeFlip('backward');
   }, [canGoPrev, flip, executeFlip]);
 
+  const jumpToPage = useCallback((target: number) => {
+    if (flip || target === currentPage || target < 0 || target >= totalPages) return;
+    if (target === currentPage + 1) { executeFlip('forward'); return; }
+    if (target === currentPage - 1) { executeFlip('backward'); return; }
+    setCurrentPage(target);
+  }, [flip, currentPage, totalPages, executeFlip]);
+
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStartX(e.touches[0].clientX);
     setTouchStartY(e.touches[0].clientY);
@@ -318,10 +323,6 @@ export default function PictureBookReaderPage() {
     );
   }
 
-  if (showCover) {
-    return <CoverPage book={book} onStart={() => setShowCover(false)} />;
-  }
-
   const page = book.pages[currentPage];
   const flipActive = flip?.active ?? false;
   const flipPage = flip ? book.pages[flip.to] : null;
@@ -333,24 +334,50 @@ export default function PictureBookReaderPage() {
   return (
     <div className="h-[100dvh] flex flex-col bg-[#f5f0eb] overflow-hidden">
       {/* Top bar */}
-      <header className="flex items-center gap-3 px-4 py-2 shrink-0">
-        <Link href="/learn/picture-books" className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
-          <ArrowLeft size={20} />
+      <header className="flex items-center gap-3 px-3 sm:px-5 py-3 shrink-0">
+        <Link
+          href="/learn/picture-books"
+          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/80 border border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--pink-primary)] hover:bg-white transition-all shadow-sm text-sm font-medium"
+        >
+          <ArrowLeft size={17} />
+          <span className="hidden sm:inline">返回</span>
         </Link>
-        <div className="flex-1 min-w-0">
-          <h1 className="text-sm font-bold text-[var(--text-primary)] truncate">{book.title}</h1>
+        <div className="flex-1 min-w-0 text-center">
+          <h1 className="text-base font-bold text-[var(--text-primary)] truncate">{book.title}</h1>
         </div>
-        <span className="text-xs text-[var(--text-muted)] tabular-nums shrink-0">{currentPage + 1} / {totalPages}</span>
+        <span className="text-sm text-[var(--text-muted)] tabular-nums shrink-0 font-medium">{currentPage + 1} / {totalPages}</span>
       </header>
 
       {/* Content */}
-      <div
-        className="flex-1 flex items-center justify-center min-h-0 px-3 sm:px-5 py-2"
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      >
-        <div className="flex flex-col md:flex-row items-center md:items-stretch gap-4 sm:gap-5 md:gap-8 w-full max-w-5xl h-full md:max-h-[80vh]">
+      <div className="flex-1 flex items-center justify-center min-h-0 px-3 sm:px-5 py-2 relative">
+        {/* ── Left side nav button ── */}
+        {canGoPrev && !flip && (
+          <button
+            onClick={goPrev}
+            className="absolute left-1 sm:left-3 top-1/2 -translate-y-1/2 z-40 w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center bg-white/60 hover:bg-white/90 text-[var(--text-primary)] hover:text-[var(--pink-primary)] backdrop-blur-sm border border-white/40 hover:border-[var(--pink-primary)]/30 shadow-md hover:shadow-lg transition-all opacity-50 hover:opacity-100"
+            aria-label="上一页"
+          >
+            <ChevronLeft size={20} />
+          </button>
+        )}
+
+        {/* ── Right side nav button ── */}
+        {canGoNext && !flip && (
+          <button
+            onClick={goNext}
+            className="absolute right-1 sm:right-3 top-1/2 -translate-y-1/2 z-40 w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center bg-white/60 hover:bg-white/90 text-[var(--text-primary)] hover:text-[var(--pink-primary)] backdrop-blur-sm border border-white/40 hover:border-[var(--pink-primary)]/30 shadow-md hover:shadow-lg transition-all opacity-50 hover:opacity-100"
+            aria-label="下一页"
+          >
+            <ChevronRight size={20} />
+          </button>
+        )}
+
+        <div
+          className="flex flex-col md:flex-row items-center md:items-stretch gap-4 sm:gap-5 md:gap-8 w-full max-w-5xl h-full md:max-h-[80vh]"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
           {/* ── Image ── */}
           <div
             className="relative shrink-0 transition-transform duration-150 ease-out md:w-[43%] w-full"
@@ -384,16 +411,6 @@ export default function PictureBookReaderPage() {
               </div>
             )}
 
-            {canGoPrev && !isSwiping && !flip && (
-              <div className="absolute left-2 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none drop-shadow-md z-30">
-                <ChevronLeft size={22} />
-              </div>
-            )}
-            {canGoNext && !isSwiping && !flip && (
-              <div className="absolute right-2 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none drop-shadow-md z-30">
-                <ChevronRight size={22} />
-              </div>
-            )}
           </div>
 
           {/* ── Text ── */}
@@ -403,27 +420,23 @@ export default function PictureBookReaderPage() {
         </div>
       </div>
 
-      {/* Bottom nav */}
-      <nav className="flex items-center justify-center gap-3 py-2 shrink-0">
-        <button onClick={goPrev} disabled={!canGoPrev || !!flip}
-          className="p-2 rounded-full bg-white/80 border border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--pink-primary)] disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm"
-          aria-label="上一页">
-          <ChevronLeft size={18} />
-        </button>
-
-        <div className="flex items-center gap-1.5 min-w-[50px] justify-center">
-          {Array.from({ length: totalPages }).map((_, i) => (
-            <button key={i} onClick={() => { if (!flip) setCurrentPage(i); }}
-              className={`rounded-full transition-all ${i === currentPage ? 'w-2.5 h-2.5 bg-[var(--pink-primary)] shadow-sm' : 'w-1.5 h-1.5 bg-[var(--border-color)] hover:bg-[var(--text-muted)]'}`}
-              aria-label={`第 ${i + 1} 页`} />
-          ))}
-        </div>
-
-        <button onClick={goNext} disabled={!canGoNext || !!flip}
-          className="p-2 rounded-full bg-white/80 border border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--pink-primary)] disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm"
-          aria-label="下一页">
-          <ChevronRight size={18} />
-        </button>
+      {/* Bottom page numbers */}
+      <nav className="flex items-center justify-center gap-1.5 py-2.5 px-4 shrink-0 overflow-x-auto">
+        {Array.from({ length: totalPages }).map((_, i) => (
+          <button
+            key={i}
+            onClick={() => jumpToPage(i)}
+            disabled={!!flip}
+            className={`shrink-0 min-w-[28px] h-7 rounded-md text-sm font-medium tabular-nums transition-all ${
+              i === currentPage
+                ? 'bg-[var(--pink-primary)] text-white shadow-sm scale-110'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-white/60'
+            }`}
+            aria-label={`第 ${i + 1} 页`}
+          >
+            {i + 1}
+          </button>
+        ))}
       </nav>
     </div>
   );
