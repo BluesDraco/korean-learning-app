@@ -249,7 +249,6 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '⏳🐰',
-        imageUrl: '/images/picture-books/tori-store/04.png',
         bgColor: '#FFF5F0',
         korean: '',
         pronunciation: '',
@@ -258,7 +257,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '🍡✨🐰',
-        imageUrl: '/images/picture-books/tori-store/05.png',
+        imageUrl: '/images/picture-books/tori-store/04.png',
         bgColor: '#FFF8F0',
         korean: '편의점 앞 작은 의자에 앉았어요.\n봉지를 열고... 한 입!\n"맛있어요!"\n별이 쏟아지는 것 같았어요.',
         pronunciation: 'pyeo-ni-jeom ap ja-geun ui-ja-e an-ja-sseo-yo.\nbong-ji-reul yeol-go... han ip!\n"ma-si-sseo-yo!"\nbyeo-ri sso-da-ji-neun geot ga-ta-sseo-yo.',
@@ -272,7 +271,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '📝🐰🌙',
-        imageUrl: '/images/picture-books/tori-store/06.png',
+        imageUrl: '/images/picture-books/tori-store/05.png',
         bgColor: '#F5F0FF',
         korean: '집으로 돌아온 토리는\n오늘 배운 말을 노트에 적었어요.\n편의점, 얼마예요, 주세요, 감사합니다.\n"또 올게요!"\n토리의 한국어 여행은 계속돼요. 🌙',
         pronunciation: 'ji-beu-ro do-ra-on to-ri-neun\no-neul bae-un ma-reul no-teu-e jeo-geo-sseo-yo.\npyeo-ni-jeom, eol-ma-ye-yo, ju-se-yo, gam-sa-ham-ni-da.\n"tto ol-ge-yo!"\nto-ri-eui han-gu-geo yeo-haeng-eun gye-sok-dwae-yo.',
@@ -286,6 +285,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '📖🐰✨',
+        imageUrl: '/images/picture-books/tori-store/06.png',
         bgColor: '#FFF5FA',
         isSummary: true,
         korean: '토리가 배운 한국어\n\n편의점  ·  얼마예요?\n주세요  ·  감사합니다\n맛있어요  ·  또 올게요',
