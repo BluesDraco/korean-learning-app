@@ -1,9 +1,24 @@
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/server/db';
 import { verifyPassword, signToken, setAuthCookie } from '@/lib/server/auth';
+import { checkRateLimit, resetRateLimit } from '@/lib/server/rate-limit';
+
+function getClientIp(request: Request): string {
+  const forwarded = request.headers.get('x-forwarded-for');
+  return forwarded?.split(',')[0]?.trim() || '127.0.0.1';
+}
 
 export async function POST(request: Request) {
   try {
+    const ip = getClientIp(request);
+    const rateCheck = checkRateLimit(`login:${ip}`);
+    if (!rateCheck.allowed) {
+      return NextResponse.json(
+        { error: `请求过于频繁，请${rateCheck.retryAfterSeconds}秒后重试` },
+        { status: 429 }
+      );
+    }
+
     const { username, password } = await request.json();
 
     if (!username || !password) {
@@ -23,6 +38,8 @@ export async function POST(request: Request) {
     if (!valid) {
       return NextResponse.json({ error: '用户名或密码错误' }, { status: 401 });
     }
+
+    resetRateLimit(`login:${ip}`);
 
     const token = await signToken({ userId: id, username: uname, role });
     await setAuthCookie(token);
