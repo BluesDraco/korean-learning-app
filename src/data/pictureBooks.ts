@@ -188,6 +188,7 @@ export const pictureBooks: PictureBook[] = [
           { word: '맛있다', meaning: '好吃' },
           { word: '귀엽다', meaning: '可爱' },
           { word: '친구', meaning: '朋友' },
+          { word: '저는 ~예요', meaning: '我是~' },
           { word: '감사해요', meaning: '谢谢' },
           { word: '안녕히 주무세요', meaning: '晚安' },
         ],
