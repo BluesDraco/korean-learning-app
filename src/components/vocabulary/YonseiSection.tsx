@@ -87,7 +87,7 @@ export function YonseiSection() {
         <div>
           <p className="text-sm font-medium text-[var(--text-primary)]">延世大学韩国语学堂 官方教材</p>
           <p className="text-xs text-[var(--text-secondary)] mt-1">
-            词汇选自《연세 한국어 1》教材，共10个单元，每个单元涵盖15个核心词汇。
+            词汇选自《연세 한국어 1-4》教材，共22个单元，每个单元涵盖15个核心词汇。
             导入后会自动创建单词本并加入SRS复习系统。
           </p>
         </div>

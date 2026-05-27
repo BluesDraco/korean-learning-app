@@ -23,11 +23,11 @@ export const levelWordLists: LevelWordList[] = [
       // Verbs
       'verb-01', 'verb-02', 'verb-03', 'verb-04', 'verb-05', 'verb-06',
       'verb-07', 'verb-08', 'verb-09', 'verb-10', 'verb-11', 'verb-13',
-      'verb-15', 'verb-16', 'verb-19', 'verb-20', 'verb-21', 'verb-24', 'verb-25',
+      'verb-15', 'verb-16', 'verb-19', 'verb-20', 'verb-21', 'verb-24',
       // Adjectives
       'adj-01', 'adj-02', 'adj-03', 'adj-05', 'adj-06', 'adj-09', 'adj-10', 'adj-12',
       // Adverbs
-      'adv-01', 'adv-02', 'adv-03', 'adv-04', 'adv-06', 'adv-07',
+      'adv-01', 'adv-02', 'adv-03',
       // Health
       'health-01', 'health-02', 'health-03', 'health-04',
       // Work
@@ -35,7 +35,7 @@ export const levelWordLists: LevelWordList[] = [
       // Travel
       'travel-02', 'travel-07',
       // Tech
-      'tech-01', 'tech-02',
+      'tech-01', 'media-06',
       // Kculture
       'kculture-01', 'kculture-02', 'kculture-03',
       // Emotion
@@ -60,14 +60,13 @@ export const levelWordLists: LevelWordList[] = [
       // Adjectives
       'adj-04', 'adj-07', 'adj-08', 'adj-11', 'adj-13',
       // Adverbs
-      'adv-05', 'adv-08',
       // Health
       // Work
       'work-02', 'work-04', 'work-06', 'work-07',
       // Travel
       'travel-01', 'travel-03', 'travel-04', 'travel-05', 'travel-06',
       // Tech
-      'tech-03', 'tech-04',
+      'tech-03', 'media-08',
       // Kculture
       'kculture-04', 'kculture-05', 'kculture-06', 'kculture-10',
       // Emotion
@@ -164,7 +163,7 @@ export const levelWordLists: LevelWordList[] = [
       // Advanced entries - adjectives
       'aadj-04', 'aadj-07', 'aadj-08', 'aadj-14',
       // Advanced entries - nouns
-      'anoun-08', 'anoun-09', 'anoun-11', 'anoun-12', 'anoun-14',
+      'anoun-08', 'anoun-09', 'soc-10', 'anoun-12', 'anoun-14',
       // Advanced entries - adverbs
       'aadv-07',
       // Advanced entries - idioms

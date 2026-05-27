@@ -79,7 +79,7 @@ export const themePacks: ThemePack[] = [
       'adv-01', 'adv-02', 'adv-03',
       'greet-02', 'greet-03', 'greet-04',
       'food-02', 'food-03',
-      'tech-01', 'tech-02',
+      'tech-01', 'media-06',
       'kculture-08',
     ],
     sentences: [
@@ -374,7 +374,7 @@ export const themePacks: ThemePack[] = [
       'greet-02', 'greet-03',
       'time-01', 'time-02', 'time-03', 'time-10',
       'emotion-10',
-      'tech-01', 'tech-02',
+      'tech-01', 'media-06',
     ],
     sentences: [
       { korean: '확인 부탁드립니다.', chinese: '请确认。' },

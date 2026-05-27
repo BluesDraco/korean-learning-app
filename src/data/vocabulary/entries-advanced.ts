@@ -726,16 +726,6 @@ export const advancedEntries: WordEntry[] = [
     tags: ['社会', '日常'], emotionTags: [], relatedWords: [],
   },
   {
-    id: 'anoun-11', korean: '갈등', romanization: 'galdeung', baseForm: '갈등', partOfSpeech: '名词',
-    level: '6', frequency: 3, emoji: '💥',
-    meanings: [{ chinese: '矛盾/冲突', nuance: '负面', register: '通用' }],
-    examples: [
-      { korean: '세대 갈등이 심각해요.', chinese: '世代矛盾很严重。', scene: '社会' },
-      { korean: '갈등을 해결해야 해요.', chinese: '必须解决矛盾。', scene: '社会' },
-    ],
-    tags: ['社会', '日常'], emotionTags: ['不满'], relatedWords: [],
-  },
-  {
     id: 'anoun-12', korean: '측면', romanization: 'cheungmyeon', baseForm: '측면', partOfSpeech: '名词',
     level: '6', frequency: 2, emoji: '🔍',
     meanings: [{ chinese: '侧面/方面', nuance: '正式', register: '通用' }],

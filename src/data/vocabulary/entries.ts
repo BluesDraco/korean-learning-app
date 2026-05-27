@@ -1281,17 +1281,7 @@ export const vocabularyEntries: WordEntry[] = [
       { korean: '핸드폰 번호가 뭐예요?', chinese: '手机号是多少？', scene: '社交' },
       { korean: '핸드폰을 잃어버렸어요.', chinese: '手机丢了。', scene: '日常' },
     ],
-    tags: ['日常', '社交', '网购'], emotionTags: [], relatedWords: ['tech-02', 'tech-04'],
-  },
-  {
-    id: 'tech-02', korean: '인터넷', romanization: 'inteonet', baseForm: '인터넷', partOfSpeech: '名词',
-    level: '4', frequency: 2, emoji: '🌐',
-    meanings: [{ chinese: '互联网', nuance: '外来词（英语internet）', register: '通用' }],
-    examples: [
-      { korean: '인터넷이 안 돼요.', chinese: '网络不行。', scene: '日常' },
-      { korean: '인터넷으로 주문했어요.', chinese: '在网上订购了。', scene: '网购' },
-    ],
-    tags: ['日常', '网购'], emotionTags: [], relatedWords: ['tech-01', 'tech-03'],
+    tags: ['日常', '社交', '网购'], emotionTags: [], relatedWords: ['media-06', 'media-08'],
   },
   {
     id: 'tech-03', korean: '배달', romanization: 'baedal', baseForm: '배달', partOfSpeech: '名词',
@@ -1301,17 +1291,7 @@ export const vocabularyEntries: WordEntry[] = [
       { korean: '배달 시켜 먹을까요?', chinese: '叫外卖吃吗？', scene: '日常' },
       { korean: '배달비가 얼마예요?', chinese: '配送费多少？', scene: '网购' },
     ],
-    tags: ['日常', '网购', '餐厅'], emotionTags: [], relatedWords: ['tech-02', 'food-11'],
-  },
-  {
-    id: 'tech-04', korean: '문자', romanization: 'munja', baseForm: '문자', partOfSpeech: '名词',
-    level: '6', frequency: 3, emoji: '💬',
-    meanings: [{ chinese: '短信/文字', nuance: '中性', register: '通用' }],
-    examples: [
-      { korean: '문자 보내 주세요.', chinese: '请发短信。', scene: '电话沟通' },
-      { korean: '문자 확인했어요?', chinese: '看到短信了吗？', scene: '电话沟通' },
-    ],
-    tags: ['日常', '电话沟通'], emotionTags: [], relatedWords: ['tech-01', 'work-07'],
+    tags: ['日常', '网购', '餐厅'], emotionTags: [], relatedWords: ['media-06', 'food-11'],
   },
 
   // ═══════════════════════════════════════════════════════════════
