@@ -66,6 +66,7 @@ const navGroups: NavGroup[] = [
       { label: 'AI 总览', ko: 'AI 개요', href: '/ai', icon: Sparkles },
       { label: '对话拆解', ko: '대화 분석', href: '/ai/analyze', icon: MessageSquare },
       { label: '情景对话', ko: '상황 대화', href: '/ai/chat', icon: MessageSquare },
+      { label: '语音对话', ko: '음성 대화', href: '/ai/voice', icon: Mic },
       { label: '学习方案', ko: '학습 계획', href: '/ai/plan', icon: Lightbulb },
     ],
   },
