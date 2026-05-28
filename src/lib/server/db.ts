@@ -34,6 +34,11 @@ export async function getDb() {
     )
   `);
 
+  // Migrations for older databases
+  for (const col of ['onboarding_completed', 'korean_level']) {
+    try { await c.execute(`ALTER TABLE users ADD COLUMN ${col} TEXT DEFAULT ''`); } catch { /* already exists */ }
+  }
+
   await c.execute(`
     CREATE TABLE IF NOT EXISTS study_logs (
       id TEXT PRIMARY KEY,
@@ -271,7 +276,7 @@ export async function getDb() {
   await c.execute(`CREATE INDEX IF NOT EXISTS idx_study_subtitles_video ON study_subtitles(user_id, video_id)`);
 
   await c.execute(`
-    CREATE TABLE IF NOT EXISTS study_logs (
+    CREATE TABLE IF NOT EXISTS video_study_logs (
       id TEXT PRIMARY KEY,
       user_id TEXT NOT NULL,
       video_id TEXT NOT NULL,

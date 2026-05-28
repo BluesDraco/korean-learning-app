@@ -80,7 +80,7 @@ export default function ShadowingListPage() {
 
   const handleDelete = async (video: StudyVideo) => {
     await db.studySubtitles.where('videoId').equals(video.id).delete();
-    await db.studyLogs.where('videoId').equals(video.id).delete();
+    await db.videoStudyLogs.where('videoId').equals(video.id).delete();
     await db.studyVideos.delete(video.id);
     await loadVideos();
   };

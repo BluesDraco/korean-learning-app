@@ -11,7 +11,7 @@ import {
   Library, Film, Bookmark,
   Palette, Landmark, MapPin, UtensilsCrossed,
   MessageSquare, Lightbulb, MessageCircle, Search, Sparkles,
-  ChevronRight, X, Sun, Moon, Shield, Mail,
+  ChevronRight, X, Sun, Moon, Shield, Mail, Music,
 } from 'lucide-react';
 import { useTheme } from '@/components/ThemeProvider';
 
@@ -38,6 +38,7 @@ const navGroups: NavGroup[] = [
       { label: '发音', ko: '발음', href: '/phonetics', icon: Grid3X3 },
       { label: '语法库', ko: '문법', href: '/grammar', icon: FileText },
       { label: '绘本学习', ko: '그림책', href: '/learn/picture-books', icon: BookImage },
+      { label: 'KPOP学韩语', ko: 'KPOP', href: '/kpop', icon: Music },
       { label: '文章阅读', ko: '읽기', href: '/reading', icon: BookOpen },
     ],
   },

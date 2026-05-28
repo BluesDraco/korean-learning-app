@@ -2,52 +2,69 @@ import { NextResponse } from 'next/server';
 import { getAuthFromCookie } from '@/lib/server/auth';
 import { getDb } from '@/lib/server/db';
 
-const TABLE_COLS: Record<string, { cols: string[]; pk: string }> = {
+const TABLE_COLS: Record<string, { cols: string[]; pk: string; table: string }> = {
   words: {
+    table: 'user_words',
     cols: ['id', 'user_id', 'word', 'pronunciation', 'meaning', 'part_of_speech', 'examples', 'source_entry_id', 'source_video_id', 'source_subtitle_id', 'mastery', 'srs_level', 'next_review', 'ease_factor', 'interval', 'created_at', 'last_reviewed'],
     pk: 'id',
   },
   reviewSessions: {
+    table: 'review_sessions',
     cols: ['id', 'user_id', 'date', 'words_reviewed', 'words_passed', 'duration', 'xp_earned'],
     pk: 'id',
   },
   dictationRecords: {
+    table: 'dictation_records',
     cols: ['id', 'user_id', 'word_id', 'date', 'correct', 'user_input'],
     pk: 'id',
   },
   shadowingRecords: {
+    table: 'shadowing_records',
     cols: ['id', 'user_id', 'subtitle_id', 'date', 'score'],
     pk: 'id',
   },
   userProfiles: {
+    table: 'user_profiles',
     cols: ['id', 'user_id', 'nickname', 'level', 'xp', 'xp_to_next_level', 'streak', 'longest_streak', 'last_study_date', 'target_level', 'daily_goal_minutes', 'daily_goal_words', 'current_unit', 'onboarding_complete', 'created_at'],
     pk: 'id',
   },
   dailyLogs: {
+    table: 'daily_logs',
     cols: ['id', 'user_id', 'date', 'words_learned', 'words_reviewed', 'dictations_done', 'shadowing_done', 'minutes_studied', 'xp_earned'],
     pk: 'id',
   },
   achievements: {
+    table: 'achievements',
     cols: ['id', 'user_id', 'type', 'earned_at'],
     pk: 'id',
   },
   settings: {
+    table: 'app_settings',
     cols: ['id', 'user_id', 'daily_word_goal', 'review_batch_size', 'default_playback_rate', 'theme'],
     pk: 'id',
   },
   wordBooks: {
+    table: 'word_books',
     cols: ['id', 'user_id', 'name', 'description', 'word_ids', 'color', 'created_at', 'updated_at'],
     pk: 'id',
   },
   studyVideos: {
+    table: 'study_videos',
     cols: ['id', 'user_id', 'url', 'platform', 'platform_id', 'title', 'thumbnail', 'subtitle_source', 'added_at', 'last_studied_at'],
     pk: 'id',
   },
   studySubtitles: {
+    table: 'study_subtitles',
     cols: ['id', 'user_id', 'video_id', 'index', 'start', 'end', 'text', 'text_zh', 'tokens'],
     pk: 'id',
   },
   studyLogs: {
+    table: 'study_logs',
+    cols: ['id', 'user_id', 'action', 'details', 'xp_earned', 'created_at'],
+    pk: 'id',
+  },
+  videoStudyLogs: {
+    table: 'video_study_logs',
     cols: ['id', 'user_id', 'video_id', 'date', 'duration_sec', 'words_added', 'sentences_looped', 'action'],
     pk: 'id',
   },
@@ -100,7 +117,7 @@ export async function POST(req: Request) {
     switch (action) {
       case 'getAll': {
         const result = await db.exec(
-          `SELECT ${cols.join(', ')} FROM ${toSnake(table)} WHERE user_id = ?`,
+          `SELECT ${cols.join(', ')} FROM ${info.table} WHERE user_id = ?`,
           [auth.userId]
         );
         const rows = result[0]?.values.map((r: unknown[]) => rowToObj(cols, r)) ?? [];
@@ -109,7 +126,7 @@ export async function POST(req: Request) {
 
       case 'get': {
         const result = await db.exec(
-          `SELECT ${cols.join(', ')} FROM ${toSnake(table)} WHERE ${pk} = ? AND user_id = ?`,
+          `SELECT ${cols.join(', ')} FROM ${info.table} WHERE ${pk} = ? AND user_id = ?`,
           [id, auth.userId]
         );
         const row = result[0]?.values[0];
@@ -123,7 +140,7 @@ export async function POST(req: Request) {
         const placeholders = colNames.map(() => '?');
         const values = colNames.map((c) => snakeData[c]);
         await db.run(
-          `INSERT INTO ${toSnake(table)} (${colNames.join(', ')}) VALUES (${placeholders.join(', ')})`,
+          `INSERT INTO ${info.table} (${colNames.join(', ')}) VALUES (${placeholders.join(', ')})`,
           values
         );
         return NextResponse.json({ ok: true });
@@ -131,14 +148,14 @@ export async function POST(req: Request) {
 
       case 'put': {
         // Upsert — delete old then insert
-        await db.run(`DELETE FROM ${toSnake(table)} WHERE ${pk} = ? AND user_id = ?`, [data[pk] ?? data.id, auth.userId]);
+        await db.run(`DELETE FROM ${info.table} WHERE ${pk} = ? AND user_id = ?`, [data[pk] ?? data.id, auth.userId]);
         const snakeData = toSnakeObj(data);
         snakeData.user_id = auth.userId;
         const colNames = Object.keys(snakeData);
         const placeholders = colNames.map(() => '?');
         const values = colNames.map((c) => snakeData[c]);
         await db.run(
-          `INSERT INTO ${toSnake(table)} (${colNames.join(', ')}) VALUES (${placeholders.join(', ')})`,
+          `INSERT INTO ${info.table} (${colNames.join(', ')}) VALUES (${placeholders.join(', ')})`,
           values
         );
         return NextResponse.json({ ok: true });
@@ -154,14 +171,14 @@ export async function POST(req: Request) {
         const sets = Object.keys(snakeData).map((c) => `${c} = ?`);
         const values = Object.keys(snakeData).map((c) => snakeData[c]);
         await db.run(
-          `UPDATE ${toSnake(table)} SET ${sets.join(', ')} WHERE ${pk} = ? AND user_id = ?`,
+          `UPDATE ${info.table} SET ${sets.join(', ')} WHERE ${pk} = ? AND user_id = ?`,
           [...values, id, auth.userId]
         );
         return NextResponse.json({ ok: true });
       }
 
       case 'delete': {
-        await db.run(`DELETE FROM ${toSnake(table)} WHERE ${pk} = ? AND user_id = ?`, [id, auth.userId]);
+        await db.run(`DELETE FROM ${info.table} WHERE ${pk} = ? AND user_id = ?`, [id, auth.userId]);
         return NextResponse.json({ ok: true });
       }
 
@@ -169,7 +186,7 @@ export async function POST(req: Request) {
         const { field, op, value, orderBy, reverse, limit } = data || {};
         const snField = toSnake(field || '');
         const opMap: Record<string, string> = { eq: '=', lt: '<', lte: '<=', gt: '>', gte: '>=' };
-        let sql = `SELECT ${cols.join(', ')} FROM ${toSnake(table)} WHERE user_id = ?`;
+        let sql = `SELECT ${cols.join(', ')} FROM ${info.table} WHERE user_id = ?`;
         const params: unknown[] = [auth.userId];
 
         if (op === 'in' && Array.isArray(value)) {
@@ -198,7 +215,7 @@ export async function POST(req: Request) {
 
       case 'list': {
         const { orderBy, reverse, limit } = data || {};
-        let sql = `SELECT ${cols.join(', ')} FROM ${toSnake(table)} WHERE user_id = ?`;
+        let sql = `SELECT ${cols.join(', ')} FROM ${info.table} WHERE user_id = ?`;
         const params: unknown[] = [auth.userId];
         if (orderBy) {
           sql += ` ORDER BY ${toSnake(orderBy)} ${reverse ? 'DESC' : 'ASC'}`;
@@ -214,7 +231,7 @@ export async function POST(req: Request) {
 
       case 'count': {
         const result = await db.exec(
-          `SELECT COUNT(*) FROM ${toSnake(table)} WHERE user_id = ?`,
+          `SELECT COUNT(*) FROM ${info.table} WHERE user_id = ?`,
           [auth.userId]
         );
         return NextResponse.json({ count: result[0]?.values[0]?.[0] ?? 0 });

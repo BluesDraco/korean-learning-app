@@ -97,7 +97,7 @@ export default function ShadowingPlayerPage() {
     return () => {
       const duration = Math.round((Date.now() - studyStartTime) / 1000);
       if (duration > 5 && video) {
-        db.studyLogs.put({
+        db.videoStudyLogs.put({
           id: crypto.randomUUID(),
           videoId: video.id,
           date: Date.now(),

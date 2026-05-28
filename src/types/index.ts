@@ -237,7 +237,28 @@ export interface StudyLog {
   action?: string;
 }
 
-// ===== Announcements / Inbox =====
+// ===== KPOP Song Learning =====
+export interface KpopLyricLine {
+  korean: string;
+  pronunciation: string;
+  chinese: string;
+}
+
+export interface KpopSong {
+  id: string;
+  title: string;
+  artist: string;
+  artistEmoji: string;
+  album: string;
+  year: number;
+  videoId: string;
+  thumbnail: string;
+  level: 'beginner' | 'intermediate';
+  color: string;
+  tags: string[];
+  lyrics: KpopLyricLine[];
+  lyricsKind: 'full' | 'highlight';
+}
 export type AnnouncementType = 'announcement' | 'update_log' | 'private_message';
 
 export interface Announcement {
