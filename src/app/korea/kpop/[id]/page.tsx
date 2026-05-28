@@ -79,7 +79,7 @@ export default function KpopSongPage() {
         <div className="text-center space-y-3">
           <span className="text-5xl">🎵</span>
           <p className="text-[var(--text-secondary)]">未找到该歌曲</p>
-          <Link href="/kpop" className="text-sm text-[var(--pink-primary)] hover:underline">返回曲库</Link>
+          <Link href="/korea/kpop" className="text-sm text-[var(--pink-primary)] hover:underline">韩语歌跟唱</Link>
         </div>
       </div>
     );
@@ -94,11 +94,11 @@ export default function KpopSongPage() {
     <div className="py-4 space-y-5 max-w-2xl mx-auto">
       {/* Back nav */}
       <Link
-        href="/kpop"
+        href="/korea/kpop"
         className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
       >
         <ArrowLeft size={16} />
-        返回曲库
+        韩语歌跟唱
       </Link>
 
       {/* Song hero card */}

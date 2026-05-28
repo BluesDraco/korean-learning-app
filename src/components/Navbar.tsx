@@ -11,7 +11,7 @@ import {
   Library, Film, Bookmark,
   Palette, Landmark, MapPin, UtensilsCrossed,
   MessageSquare, Lightbulb, MessageCircle, Search, Sparkles,
-  ChevronRight, X, Sun, Moon, Shield, Mail, Music,
+  ChevronRight, X, Sun, Moon, Shield, Mail, Music, Radio,
 } from 'lucide-react';
 import { useTheme } from '@/components/ThemeProvider';
 
@@ -42,9 +42,6 @@ const navGroups: NavGroup[] = [
     ],
   },
   {
-    icon: Music, label: 'KPOP', ko: '케이팝', href: '/kpop', children: [],
-  },
-  {
     icon: Gamepad2, label: '练习', ko: '연습', href: '/review', children: [
       { label: 'SRS复习', ko: 'SRS 복습', href: '/review', icon: RefreshCw },
       { label: '听写', ko: '받아쓰기', href: '/dictation', icon: Pencil },
@@ -66,6 +63,12 @@ const navGroups: NavGroup[] = [
       { label: '文化', ko: '문화', href: '/korea/culture', icon: Palette },
       { label: '美食', ko: '음식', href: '/korea/food', icon: UtensilsCrossed },
       { label: '旅行', ko: '여행', href: '/korea/travel', icon: MapPin },
+    ],
+  },
+  {
+    icon: Music, label: 'KPOP', ko: '케이팝', href: '/korea/kpop', children: [
+      { label: '韩语歌', ko: '노래', href: '/korea/kpop', icon: Mic },
+      { label: '热点资讯', ko: '뉴스', href: '/korea/kpop/news', icon: Radio },
     ],
   },
   {
