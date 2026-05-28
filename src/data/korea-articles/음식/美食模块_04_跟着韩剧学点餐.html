@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>跟着韩剧学点餐 · 韩语学习日记</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #FFFDF9; color: #3a3a3a; line-height: 1.7;
+  }
+
+  .hero {
+    background: linear-gradient(160deg, #C9B8E8 0%, #FF8FAB 45%, #FFE4A0 100%);
+    padding: 56px 24px 48px; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: "📺🍗🍺🥢🎬✨";
+    position: absolute; top: 14px; left: 0; right: 0;
+    font-size: 22px; letter-spacing: 18px; opacity: .22;
+  }
+  .hero-tag {
+    display: inline-block; background: rgba(255,255,255,.25);
+    color: #fff; font-size: 11px; font-weight: 700;
+    padding: 4px 14px; border-radius: 20px; margin-bottom: 16px; letter-spacing: 1px;
+  }
+  .hero h1 {
+    font-size: 28px; font-weight: 800; color: #fff;
+    text-shadow: 0 2px 12px rgba(0,0,0,.15); line-height: 1.3; margin-bottom: 12px;
+  }
+  .hero h1 span { font-size: 14px; font-weight: 400; display: block; margin-top: 6px; opacity: .9; }
+  .hero-meta {
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+    font-size: 12px; color: rgba(255,255,255,.85); margin-top: 16px; flex-wrap: wrap;
+  }
+
+  .container { max-width: 780px; margin: 0 auto; padding: 40px 20px 80px; }
+
+  .breadcrumb {
+    font-size: 12px; color: #bbb; display: flex; align-items: center; gap: 6px; margin-bottom: 28px;
+  }
+  .breadcrumb span { color: #ddd; }
+
+  /* 토리引言 */
+  .intro-card {
+    background: #fff; border-radius: 20px; padding: 24px 26px;
+    box-shadow: 0 2px 20px rgba(201,184,232,.15); margin-bottom: 40px;
+    border-left: 4px solid #C9B8E8;
+  }
+  .tori-says { display: flex; gap: 14px; align-items: flex-start; }
+  .tori-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: linear-gradient(135deg, #C9B8E8, #FF8FAB);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+  }
+  .tori-bubble {
+    background: linear-gradient(135deg, #f5f0ff, #fff0f5);
+    border-radius: 0 14px 14px 14px; padding: 14px 16px;
+    font-size: 13px; color: #555; line-height: 1.8; flex: 1; position: relative;
+  }
+  .tori-bubble::before {
+    content: ""; position: absolute; left: -8px; top: 12px;
+    border: 8px solid transparent; border-right-color: #f5f0ff; border-left: none;
+  }
+  .tori-name { font-size: 11px; color: #C9B8E8; font-weight: 700; margin-bottom: 5px; }
+
+  /* 章节标题 */
+  .section-title {
+    font-size: 20px; font-weight: 800; color: #333; margin: 44px 0 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-title .st-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, #C9B8E8, #FF8FAB);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .section-title .st-sub { font-size: 12px; font-weight: 400; color: #aaa; display: block; margin-top: 2px; }
+
+  /* 韩剧场景解码卡 */
+  .drama-card {
+    background: #fff; border-radius: 20px; overflow: hidden;
+    box-shadow: 0 4px 20px rgba(201,184,232,.15); margin: 16px 0;
+  }
+  .drama-header {
+    padding: 16px 22px 12px;
+    background: linear-gradient(135deg, var(--dh1,#C9B8E8), var(--dh2,#FF8FAB));
+    display: flex; align-items: center; gap: 12px;
+  }
+  .drama-emoji { font-size: 36px; flex-shrink: 0; }
+  .drama-title-wrap { flex: 1; }
+  .drama-drama { font-size: 10px; color: rgba(255,255,255,.75); margin-bottom: 3px; font-style: italic; }
+  .drama-title { font-size: 15px; font-weight: 800; color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,.12); }
+  .drama-food-tag {
+    background: rgba(255,255,255,.25); color: #fff;
+    font-size: 11px; font-weight: 700; padding: 3px 12px; border-radius: 20px;
+    white-space: nowrap; align-self: flex-start;
+  }
+  .drama-body { padding: 18px 22px; }
+  .drama-body p { font-size: 13px; color: #555; line-height: 1.85; margin-bottom: 10px; }
+  .drama-body p:last-child { margin-bottom: 0; }
+
+  /* 场景台词框 */
+  .scene-box {
+    background: linear-gradient(135deg, #1e1a2a, #2a1e24);
+    border-radius: 12px; padding: 14px 16px; margin: 12px 0;
+  }
+  .scene-box-title { font-size: 10px; color: #888; margin-bottom: 10px; font-family: monospace; }
+  .scene-line { margin-bottom: 8px; }
+  .scene-line:last-child { margin-bottom: 0; }
+  .scene-speaker { font-size: 10px; font-weight: 700; color: var(--sp,#C9B8E8); margin-bottom: 2px; }
+  .scene-ko { font-size: 14px; font-weight: 600; color: #FDF8F0; }
+  .scene-zh { font-size: 11px; color: #888; margin-top: 1px; font-style: italic; }
+
+  .highlight {
+    background: linear-gradient(135deg, #f5f0ff, #fff0f5);
+    border-radius: 10px; padding: 12px 14px; margin: 12px 0;
+    font-size: 13px; color: #555; line-height: 1.8; border-left: 3px solid #C9B8E8;
+  }
+  .highlight strong { color: #C9B8E8; }
+
+  /* 토리 mini */
+  .tori-mini {
+    display: flex; gap: 10px; align-items: flex-start;
+    background: linear-gradient(135deg, #f5f0ff, #fff0f5);
+    border-radius: 12px; padding: 12px 14px; margin-top: 12px;
+  }
+  .tori-mini-avatar { font-size: 18px; flex-shrink: 0; }
+  .tori-mini-text { font-size: 12px; color: #666; line-height: 1.75; }
+  .tori-mini-text strong { color: #FF8FAB; }
+
+  /* 点餐实战 */
+  .order-card {
+    background: linear-gradient(135deg, #f5f0ff, #fff8fb);
+    border-radius: 18px; padding: 22px 24px; margin: 16px 0;
+    border: 1.5px dashed #C9B8E855;
+  }
+  .order-card h3 { font-size: 14px; font-weight: 700; color: #C9B8E8; margin-bottom: 14px; }
+  .order-row { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+  .order-row:last-child { margin-bottom: 0; }
+  .order-num {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: linear-gradient(135deg, #C9B8E8, #FF8FAB);
+    color: #fff; font-size: 11px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .order-text { font-size: 13px; color: #444; line-height: 1.7; flex: 1; }
+  .order-text strong { color: #C9B8E8; }
+  .korean-phrase {
+    display: inline-block; margin-top: 4px;
+    background: #fff; border-radius: 8px; padding: 3px 10px;
+    font-size: 12px; color: #FF8FAB; font-weight: 600;
+    box-shadow: 0 1px 6px rgba(255,143,171,.15);
+  }
+
+  /* 菜单词汇表 */
+  .menu-section {
+    background: #fff; border-radius: 18px; padding: 20px 22px;
+    box-shadow: 0 2px 14px rgba(201,184,232,.1); margin: 16px 0;
+  }
+  .menu-section h3 { font-size: 14px; font-weight: 700; color: #C9B8E8; margin-bottom: 14px; }
+  .menu-table { width: 100%; border-collapse: collapse; font-size: 13px; border-radius: 10px; overflow: hidden; }
+  .menu-table th { background: linear-gradient(135deg,#C9B8E8,#FF8FAB); color: #fff; font-weight: 700; padding: 9px 12px; text-align: left; }
+  .menu-table td { padding: 10px 12px; border-bottom: 1px solid #f5f0ff; color: #444; vertical-align: top; }
+  .menu-table tr:last-child td { border-bottom: none; }
+  .menu-table tr:nth-child(even) td { background: #fdfaff; }
+  .menu-ko { font-weight: 700; color: #333; }
+  .menu-ro { font-size: 10px; color: #bbb; font-style: italic; display: block; margin-top: 1px; }
+
+  /* 文化深度 */
+  .culture-card {
+    background: #fff; border-radius: 20px; padding: 24px;
+    box-shadow: 0 2px 16px rgba(201,184,232,.1); margin: 16px 0;
+    border: 1px solid rgba(201,184,232,.12);
+  }
+  .culture-card h3 { font-size: 15px; font-weight: 700; color: #333; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .culture-card p { font-size: 13px; color: #555; line-height: 1.85; margin-bottom: 10px; }
+  .culture-card p:last-child { margin-bottom: 0; }
+
+  /* 冷知识 */
+  .trivia-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 20px 0; }
+  .trivia-card {
+    background: #fff; border-radius: 14px; padding: 16px 18px;
+    box-shadow: 0 2px 10px rgba(201,184,232,.1);
+    border-top: 3px solid var(--tc, #C9B8E8);
+  }
+  .trivia-card .tc-tag {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    color: var(--tc,#C9B8E8); background: var(--tbg,#f5f0ff);
+    padding: 2px 8px; border-radius: 10px; margin-bottom: 6px;
+  }
+  .trivia-card .tc-q { font-size: 13px; font-weight: 700; color: #333; margin-bottom: 8px; }
+  .trivia-card .tc-a { font-size: 12px; color: #666; line-height: 1.7; }
+
+  /* 실용 韩语 */
+  .korean-section {
+    background: linear-gradient(135deg, #1e1a2a, #2a1a20);
+    border-radius: 20px; padding: 26px 24px; margin: 32px 0;
+  }
+  .ks-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  .ks-tori { font-size: 28px; }
+  .ks-title { font-size: 15px; font-weight: 700; color: #FDF8F0; }
+  .ks-sub { font-size: 11px; color: #888; margin-top: 2px; }
+  .phrase-list { display: flex; flex-direction: column; gap: 12px; }
+  .phrase-item {
+    background: rgba(255,255,255,.06); border-radius: 12px; padding: 14px 16px;
+    display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  }
+  .phrase-ko { font-size: 15px; font-weight: 700; color: #FDF8F0; }
+  .phrase-ro { font-size: 10px; color: #888; margin-top: 2px; font-style: italic; }
+  .phrase-zh { font-size: 12px; color: #C9B8E8; font-weight: 600; flex-shrink: 0; }
+  .phrase-scene { font-size: 10px; color: #666; margin-top: 3px; }
+  .add-btn {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: linear-gradient(135deg,#C9B8E8,#FF8FAB);
+    color: #fff; font-size: 14px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; cursor: pointer;
+    box-shadow: 0 2px 8px rgba(201,184,232,.4); transition: transform .15s;
+  }
+  .add-btn:hover { transform: scale(1.1); }
+
+  /* 词汇 */
+  .vocab-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+  .vocab-chip {
+    background: #fff; border: 1px solid #ede8ff;
+    border-radius: 20px; padding: 5px 14px;
+    font-size: 12px; color: #555;
+    display: flex; align-items: center; gap: 6px;
+    box-shadow: 0 1px 6px rgba(0,0,0,.04);
+  }
+  .vocab-chip .vko { font-weight: 700; color: #333; }
+  .vocab-chip .vzh { color: #C9B8E8; }
+
+  /* 注意 */
+  .notice-box {
+    background: linear-gradient(135deg, #f5f0ff, #fff0f5);
+    border-radius: 14px; padding: 16px 18px; margin: 16px 0;
+    border: 1.5px solid #C9B8E833; font-size: 13px; color: #666; line-height: 1.8;
+  }
+  .notice-box .nt { font-weight: 700; color: #C9B8E8; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
+
+  .divider { text-align: center; font-size: 18px; letter-spacing: 8px; opacity: .3; margin: 32px 0; }
+
+  /* 결尾 */
+  .ending-card {
+    background: linear-gradient(135deg, #f5f0ff, #fff0f5, #fffdf0);
+    border-radius: 20px; padding: 28px 24px; text-align: center; margin-top: 40px;
+    border: 1.5px solid rgba(201,184,232,.2); position: relative; overflow: hidden;
+  }
+  .ending-card::before {
+    content: "📺🍗🍺🐰✨🎬";
+    position: absolute; top: 8px; left: 0; right: 0;
+    font-size: 16px; letter-spacing: 12px; opacity: .2;
+  }
+  .ending-tori { font-size: 52px; display: block; margin-bottom: 12px; }
+  .ending-title { font-size: 17px; font-weight: 800; color: #C9B8E8; margin-bottom: 6px; }
+  .ending-sub { font-size: 13px; color: #aaa; line-height: 1.8; margin-bottom: 20px; }
+  .next-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #C9B8E8, #FF8FAB);
+    color: #fff; font-size: 13px; font-weight: 700;
+    padding: 10px 28px; border-radius: 24px;
+    box-shadow: 0 4px 16px rgba(201,184,232,.35);
+    text-decoration: none; margin-bottom: 8px;
+  }
+  .next-articles { margin-top: 16px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .next-tag {
+    font-size: 12px; color: #FFE4A0; border: 1px solid #FFE4A0;
+    padding: 4px 14px; border-radius: 20px; cursor: pointer;
+  }
+
+  @media (max-width: 600px) {
+    .trivia-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-tag">🇰🇷 韩国美食 · 每道菜背后都有一个故事</div>
+  <h1>
+    跟着韩剧学点餐
+    <span>드라마 속 음식 — 你在韩剧里看到的，都可以真的点到</span>
+  </h1>
+  <div class="hero-meta">
+    <span>🐰 토리 解码</span>
+    <span>📖 约12分钟读完</span>
+    <span>🗂️ 美食 · 韩剧</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="breadcrumb">
+    🏠 首页 <span>›</span> 🇰🇷 韩国 <span>›</span> 美食 <span>›</span> 跟着韩剧学点餐
+  </div>
+
+  <div class="intro-card">
+    <div class="tori-says">
+      <div class="tori-avatar">🐰</div>
+      <div class="tori-bubble">
+        <div class="tori-name">토리 说</div>
+        토리每次看韩剧，都会在某个场景停下来想："那个是什么？在哪里能吃到？"——《请回答1988》里的炸酱面、《我的大叔》里的烧酒花生、《蓝色大海的传说》里的炸鸡啤酒、《顶楼》里的豪华韩餐……韩剧里的食物不是随便安排的，每一样都有文化原因。今天토리 把最经典的韩剧饮食场景全部解码，学完这篇，下次去首尔你知道该去哪里、该点什么 📺🍽️
+      </div>
+    </div>
+  </div>
+
+  <!-- 场景解码 -->
+  <div class="section-title">
+    <div class="st-icon">🎬</div>
+    <div>
+      经典韩剧饮食场景解码
+      <span class="st-sub">你看了很多遍，但未必知道背后的文化</span>
+    </div>
+  </div>
+
+  <!-- 请回答1988 炸酱面 -->
+  <div class="drama-card">
+    <div class="drama-header" style="--dh1:#C9B8E8;--dh2:#A8D8D0;">
+      <div class="drama-emoji">🍜</div>
+      <div class="drama-title-wrap">
+        <div class="drama-drama">《请回答1988》응답하라 1988</div>
+        <div class="drama-title">搬家那天，一定要吃炸酱面</div>
+      </div>
+      <div class="drama-food-tag">짜장면</div>
+    </div>
+    <div class="drama-body">
+      <p>韩国有一个根深蒂固的传统：搬进新家的第一天，要订一份짜장면（炸酱面）外卖。这个传统起源于1960-70年代——搬家时厨房还没收拾好，没法做饭，又要招待帮忙搬家的人，价格低廉又快速的짜장면就成了默认选择，延续到今天变成了一种仪式感。</p>
+      <p>《请回答1988》里，德善家搬进双门洞后的那碗짜장면，不只是一顿饭，是那个年代整个街区温情的缩影。</p>
+      <div class="scene-box">
+        <div class="scene-box-title"># 韩剧场景台词</div>
+        <div class="scene-line">
+          <div class="scene-speaker" style="--sp:#FFE4A0;">엄마</div>
+          <div class="scene-ko">이사하면 짜장면이지!</div>
+          <div class="scene-zh">搬家就要吃炸酱面！</div>
+        </div>
+      </div>
+      <div class="highlight"><strong>현실에서는：</strong>짜장면在韩国由中国华侨带来，已经完全韩国化——比中国炸酱面更甜、更浓稠、用黄豆酱而非黄豆面酱。与其说它是中餐，不如说它是"韩式中餐"的代表，完全独立的味道。</div>
+      <div class="tori-mini">
+        <div class="tori-mini-avatar">🐰</div>
+        <div class="tori-mini-text">토리推荐：去首尔인천（仁川）차이나타운，那里是韩式짜장면의 발상지（发源地），吃到最正宗的韩版炸酱面。首尔市区的중국집（中餐馆）也很多，<strong>짜장면 하나, 짬뽕 하나（一碗炸酱面一碗辣炒码）</strong>是韩国人最常见的点法。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 我的大叔 烧酒花生 -->
+  <div class="drama-card">
+    <div class="drama-header" style="--dh1:#FF8FAB;--dh2:#C9B8E8;">
+      <div class="drama-emoji">🥜</div>
+      <div class="drama-title-wrap">
+        <div class="drama-drama">《我的大叔》나의 아저씨</div>
+        <div class="drama-title">편의점 소주와 땅콩——人生最朴素的对话</div>
+      </div>
+      <div class="drama-food-tag">소주 + 땅콩</div>
+    </div>
+    <div class="drama-body">
+      <p>《我的大叔》里，동훈和지안最重要的几场对话，都发生在편의점（便利店）门口，一人一瓶소주（烧酒），桌上一包땅콩（花生）。没有精心布置，没有高档餐厅，就是这两样最便宜的东西，承载了整部剧最深沉的情感。</p>
+      <p>소주+땅콩在韩国是最底层的饮食组合——땅콩是소주最便宜的안주（下酒菜），是那些喝不起好酒、吃不起好菜的普通人的选择。韩剧选择这个组合，是在说：<strong style="color:#FF8FAB;">有些对话，只能在最简单的地方才能发生</strong>。</p>
+      <div class="scene-box">
+        <div class="scene-box-title"># 韩剧场景台词</div>
+        <div class="scene-line">
+          <div class="scene-speaker" style="--sp:#FF8FAB;">동훈</div>
+          <div class="scene-ko">한 잔 할래?</div>
+          <div class="scene-zh">喝一杯吗？</div>
+        </div>
+        <div class="scene-line">
+          <div class="scene-speaker" style="--sp:#C9B8E8;">지안</div>
+          <div class="scene-ko">...네.</div>
+          <div class="scene-zh">...好。</div>
+        </div>
+      </div>
+      <div class="tori-mini">
+        <div class="tori-mini-avatar">🐰</div>
+        <div class="tori-mini-text">토리 说：<strong>안주（下酒菜）</strong>是韩国饮酒文化里一个重要概念——喝酒一定要配食物，단순히 술만 마시는 건 한국 문화가 아니에요（单纯喝酒不配菜不是韩国文化）。안주的选择反映你的心情和处境。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 蓝色大海 炸鸡啤酒 -->
+  <div class="drama-card">
+    <div class="drama-header" style="--dh1:#FFE4A0;--dh2:#FF8FAB;">
+      <div class="drama-emoji">🍗</div>
+      <div class="drama-title-wrap">
+        <div class="drama-drama">《蓝色大海的传说》푸른 바다의 전설</div>
+        <div class="drama-title">치맥——炸鸡啤酒，快乐的最简单形式</div>
+      </div>
+      <div class="drama-food-tag">치킨 + 맥주</div>
+    </div>
+    <div class="drama-body">
+      <p>치맥（치킨+맥주）在韩剧里的出现频率，几乎等同于배경음악（背景音乐）。《蓝色大海的传说》里，심청（全智贤饰）第一次体验陆地上的快乐，选择的就是치맥——这个选择不是偶然，치맥代表的是韩国年轻人对"简单快乐"的最大公约数。</p>
+      <p>韩国炸鸡和中国炸鸡是完全不同的食物。韩国치킨用薄薄的面衣包裹，双重炸制——第一次低温炸熟，第二次高温炸脆，外皮极度酥脆而内部多汁。口味有原味、양념（甜辣酱）、간장（酱油蒜香）、치즈（芝士）等多种。</p>
+      <div class="scene-box">
+        <div class="scene-box-title"># 치맥 點單場景</div>
+        <div class="scene-line">
+          <div class="scene-speaker" style="--sp:#FFE4A0;">준재</div>
+          <div class="scene-ko">치킨이랑 맥주 시킬까?</div>
+          <div class="scene-zh">要叫炸鸡和啤酒吗？</div>
+        </div>
+        <div class="scene-line">
+          <div class="scene-speaker" style="--sp:#FF8FAB;">심청</div>
+          <div class="scene-ko">치킨이 뭐예요?</div>
+          <div class="scene-zh">炸鸡是什么？</div>
+        </div>
+      </div>
+      <div class="highlight"><strong>치킨 주문 방법：</strong>韩国炸鸡通常叫外卖，앱（App）점 배달의민족（배민）或쿠팡이츠上下单，配送快且方便。也可以直接去치킨집（炸鸡店）堂食。半半치킨（半半鸡）= 一半原味一半양념，是最受欢迎的搭配。</div>
+    </div>
+  </div>
+
+  <!-- 顶楼 한정식 -->
+  <div class="drama-card">
+    <div class="drama-header" style="--dh1:#A8D8D0;--dh2:#C9B8E8;">
+      <div class="drama-emoji">🍱</div>
+      <div class="drama-title-wrap">
+        <div class="drama-drama">《顶楼》펜트하우스</div>
+        <div class="drama-title">한정식——韩国最高规格的传统餐食</div>
+      </div>
+      <div class="drama-food-tag">한정식</div>
+    </div>
+    <div class="drama-body">
+      <p>财阀剧里的豪华饭局，桌上摆满了小碟子——这就是<strong style="color:#A8D8D0;">한정식（韩国定食）</strong>。한정식是韩国最正式的传统套餐，从古代宫廷料理演变而来，一桌可以有十几道到几十道菜，一道一道端上来，展示食材的多样和厨师的功夫。</p>
+      <p>한정식餐厅通常是韩屋（传统建筑）改造的，服务员穿韩服，菜品从小菜、汤、腌制品、蒸菜、炒菜到甜点依次呈现。价格从5万韩元到20万韩元一位不等，是韩国人接待重要客人、庆祝重要纪念日的选择。</p>
+      <div class="tori-mini">
+        <div class="tori-mini-avatar">🐰</div>
+        <div class="tori-mini-text">토리推荐：想体验한정식，去<strong>인사동（仁寺洞）或북촌（北村）</strong>附近，那里有很多环境绝佳的한정식집。不需要财阀身份，人均6-10万韩元就能体验到真正的한정식文化。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 她的私生活 편의점 라면 -->
+  <div class="drama-card">
+    <div class="drama-header" style="--dh1:#FF8FAB;--dh2:#FFE4A0;">
+      <div class="drama-emoji">🍜</div>
+      <div class="drama-title-wrap">
+        <div class="drama-drama">《她的私生活》그녀의 사생활 / 各类韩剧</div>
+        <div class="drama-title">편의점 라면——深夜的情绪出口</div>
+      </div>
+      <div class="drama-food-tag">컵라면 + 편의점</div>
+    </div>
+    <div class="drama-body">
+      <p>深夜便利店，一个人坐在门口的塑料椅上，面前是一杯热腾腾的컵라면（杯面）——这个画面在韩剧里出现的次数数不清。它代表的不只是饿了要吃东西，而是一种<strong style="color:#FF8FAB;">独处的仪式感</strong>：这个人此刻需要一个人待着，需要一碗热的，需要时间思考。</p>
+      <p>컵라면在韩国便利店门口有专门的热水机，这个设计本身就是为这种"边走边泡、站着吃"的生活方式服务的。烫嘴的面条、辣辣的汤底，是韩国年轻人处理各种情绪的万能解药。</p>
+      <div class="scene-box">
+        <div class="scene-box-title"># 편의점 라면 点单</div>
+        <div class="scene-line">
+          <div class="scene-speaker" style="--sp:#FF8FAB;">직원</div>
+          <div class="scene-ko">뜨거운 물 여기 있어요.</div>
+          <div class="scene-zh">热水在这里。</div>
+        </div>
+        <div class="scene-line">
+          <div class="scene-speaker" style="--sp:#FFE4A0;">손님</div>
+          <div class="scene-ko">감사합니다.</div>
+          <div class="scene-zh">谢谢。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 点餐实战 -->
+  <div class="section-title">
+    <div class="st-icon">🗣️</div>
+    <div>
+      韩国餐厅点餐实战
+      <span class="st-sub">从进门到结账，完整的餐厅用语指南</span>
+    </div>
+  </div>
+
+  <div class="order-card">
+    <h3>🐰 토리 的韩国餐厅点餐全流程</h3>
+    <div class="order-row">
+      <div class="order-num">1</div>
+      <div class="order-text"><strong>进门，告知人数</strong>
+        <div class="korean-phrase">두 명이요（两个人）· 혼자요（我一个人）</div>
+      </div>
+    </div>
+    <div class="order-row">
+      <div class="order-num">2</div>
+      <div class="order-text"><strong>叫服务员</strong>——韩国不要挥手，直接喊
+        <div class="korean-phrase">저기요!（이봐요는 안 돼요，不要说이봐요）</div>
+      </div>
+    </div>
+    <div class="order-row">
+      <div class="order-num">3</div>
+      <div class="order-text"><strong>点餐</strong>——说菜名+수량（数量）
+        <div class="korean-phrase">삼겹살 2인분이랑 된장찌개 하나 주세요</div>
+      </div>
+    </div>
+    <div class="order-row">
+      <div class="order-num">4</div>
+      <div class="order-text"><strong>提出특별 요청（特殊要求）</strong>
+        <div class="korean-phrase">맵지 않게 해주세요（不要辣）</div>
+        <div class="korean-phrase">파 빼주세요（不要葱）</div>
+        <div class="korean-phrase">고수 넣지 마세요（不要香菜）</div>
+      </div>
+    </div>
+    <div class="order-row">
+      <div class="order-num">5</div>
+      <div class="order-text"><strong>追加点餐或续菜</strong>
+        <div class="korean-phrase">이거 하나 더 주세요（再来一份这个）</div>
+        <div class="korean-phrase">반찬 더 주세요（小菜再加一些）</div>
+      </div>
+    </div>
+    <div class="order-row">
+      <div class="order-num">6</div>
+      <div class="order-text"><strong>结账</strong>——韩国通常在收银台结账，不是桌边
+        <div class="korean-phrase">계산해 주세요（请结账）</div>
+        <div class="korean-phrase">카드 돼요?（可以刷卡吗？）</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 菜单词汇 -->
+  <div class="section-title">
+    <div class="st-icon">📋</div>
+    <div>
+      看懂韩国菜单——关键词汇
+      <span class="st-sub">掌握这些词，任何韩国餐厅的菜单都不怕</span>
+    </div>
+  </div>
+
+  <div class="menu-section">
+    <h3>🍽️ 烹饪方式</h3>
+    <table class="menu-table">
+      <tr><th>韩文</th><th>发音</th><th>意思</th><th>例子</th></tr>
+      <tr><td><span class="menu-ko">구이</span><span class="menu-ro">gu-i</span></td><td></td><td>烤制</td><td>삼겹살구이（烤五花肉）</td></tr>
+      <tr><td><span class="menu-ko">찜</span><span class="menu-ro">jjim</span></td><td></td><td>蒸/炖</td><td>갈비찜（炖排骨）</td></tr>
+      <tr><td><span class="menu-ko">볶음</span><span class="menu-ro">bo-keum</span></td><td></td><td>炒</td><td>낙지볶음（炒章鱼）</td></tr>
+      <tr><td><span class="menu-ko">튀김</span><span class="menu-ro">twi-gim</span></td><td></td><td>炸</td><td>새우튀김（炸虾）</td></tr>
+      <tr><td><span class="menu-ko">국 / 탕</span><span class="menu-ro">guk / tang</span></td><td></td><td>汤</td><td>미역국（裙带菜汤）</td></tr>
+      <tr><td><span class="menu-ko">찌개</span><span class="menu-ro">jji-gae</span></td><td></td><td>锅（浓汤）</td><td>된장찌개（大酱汤）</td></tr>
+      <tr><td><span class="menu-ko">비빔</span><span class="menu-ro">bi-bim</span></td><td></td><td>拌</td><td>비빔밥（拌饭）</td></tr>
+      <tr><td><span class="menu-ko">냉</span><span class="menu-ro">naeng</span></td><td></td><td>冷/冰</td><td>냉면（冷面）</td></tr>
+    </table>
+  </div>
+
+  <div class="menu-section" style="margin-top:14px;">
+    <h3>🥩 食材关键词</h3>
+    <table class="menu-table">
+      <tr><th>韩文</th><th>发音</th><th>意思</th><th>常见搭配</th></tr>
+      <tr><td><span class="menu-ko">소고기</span><span class="menu-ro">so-go-gi</span></td><td></td><td>牛肉</td><td>소불고기、소갈비</td></tr>
+      <tr><td><span class="menu-ko">돼지고기</span><span class="menu-ro">dwae-ji-go-gi</span></td><td></td><td>猪肉</td><td>삼겹살、목살</td></tr>
+      <tr><td><span class="menu-ko">닭고기</span><span class="menu-ro">dak-go-gi</span></td><td></td><td>鸡肉</td><td>닭갈비、삼계탕</td></tr>
+      <tr><td><span class="menu-ko">해물 / 해산물</span><span class="menu-ro">hae-mul</span></td><td></td><td>海鲜</td><td>해물파전、해물탕</td></tr>
+      <tr><td><span class="menu-ko">두부</span><span class="menu-ro">du-bu</span></td><td></td><td>豆腐</td><td>순두부찌개</td></tr>
+      <tr><td><span class="menu-ko">채소</span><span class="menu-ro">chae-so</span></td><td></td><td>蔬菜</td><td>채소볶음</td></tr>
+      <tr><td><span class="menu-ko">김치</span><span class="menu-ro">gim-chi</span></td><td></td><td>泡菜</td><td>김치찌개、김치전</td></tr>
+    </table>
+  </div>
+
+  <div class="menu-section" style="margin-top:14px;">
+    <h3>🌶️ 口味描述词</h3>
+    <table class="menu-table">
+      <tr><th>韩文</th><th>发音</th><th>意思</th><th>使用场景</th></tr>
+      <tr><td><span class="menu-ko">맵다</span><span class="menu-ro">maep-da</span></td><td></td><td>辣</td><td>이거 많이 매워요?（这个很辣吗？）</td></tr>
+      <tr><td><span class="menu-ko">달다</span><span class="menu-ro">dal-da</span></td><td></td><td>甜</td><td>달달한 맛（甜甜的味道）</td></tr>
+      <tr><td><span class="menu-ko">짜다</span><span class="menu-ro">jja-da</span></td><td></td><td>咸</td><td>좀 짜네요（有点咸）</td></tr>
+      <tr><td><span class="menu-ko">싱겁다</span><span class="menu-ro">sing-geop-da</span></td><td></td><td>淡</td><td>좀 싱거워요（有点淡）</td></tr>
+      <tr><td><span class="menu-ko">고소하다</span><span class="menu-ro">go-so-ha-da</span></td><td></td><td>香（芝麻/坚果香）</td><td>고소한 맛（香喷喷的味道）</td></tr>
+      <tr><td><span class="menu-ko">담백하다</span><span class="menu-ro">dam-bae-ka-da</span></td><td></td><td>清淡鲜美</td><td>담백한 국물（清淡的汤）</td></tr>
+    </table>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 韩国餐桌礼仪 -->
+  <div class="section-title">
+    <div class="st-icon">🥢</div>
+    <div>
+      韩国餐桌礼仪——这些细节很重要
+      <span class="st-sub">知道这些，你在韩国饭桌上不会失礼</span>
+    </div>
+  </div>
+
+  <div class="culture-card">
+    <h3>🙏 饭桌上的规则</h3>
+    <p><strong style="color:#C9B8E8;">等长辈先动筷</strong>：韩国饮食礼仪中，最重要的一条是长辈先开始吃，晚辈才能动筷子（或勺子）。长辈拿起勺子之前，你不能开始吃——这是基本礼仪，违反了非常失礼。</p>
+    <p><strong style="color:#C9B8E8;">勺子喝汤，筷子夹菜</strong>：如前文所述，韩国筷子和勺子有明确分工。不能用筷子舀汤，不能用勺子夹菜。</p>
+    <p><strong style="color:#C9B8E8;">碗不离桌</strong>：和中国、日本不同，韩国人吃饭时不把碗端起来。碗放在桌上，低头吃或用勺子把食物送到嘴边。把碗端起来是失礼的，因为这看起来像"乞讨的姿势"。</p>
+    <p><strong style="color:#C9B8E8;">不要插筷子进食物</strong>：把筷子插进饭里，是韩国祭祀时的做法，在饭桌上这样做是非常不吉利的禁忌。</p>
+    <div class="tori-mini">
+      <div class="tori-mini-avatar">🐰</div>
+      <div class="tori-mini-text">토리의 경험담：토리 有一次在韩国朋友家，习惯性地把碗端起来吃，朋友妈妈没说什么，但토리 后来知道那是失礼的。<strong>韩国饮食礼仪里，碗放在桌上是基本规范。</strong></div>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 冷知识 -->
+  <div class="section-title">
+    <div class="st-icon">🔍</div>
+    <div>
+      韩国饮食冷知识
+      <span class="st-sub">看韩剧时的加分项</span>
+    </div>
+  </div>
+
+  <div class="trivia-grid">
+    <div class="trivia-card" style="--tc:#C9B8E8;--tbg:#f5f0ff;">
+      <div class="tc-tag">배달 문화</div>
+      <div class="tc-q">韩国的外卖文化有多发达？</div>
+      <div class="tc-a">韩国是全球外卖文化最发达的国家之一。배달의민족（배민）和쿠팡이츠是最大的两个平台，深夜两点依然可以点到热腾腾的炸鸡、烤肉、海鲜汤。韩国的외식(外食)支出比例在全球名列前茅，"叫外卖"是韩国年轻人的日常，不是偶尔为之。</div>
+    </div>
+    <div class="trivia-card" style="--tc:#FF8FAB;--tbg:#fff0f5;">
+      <div class="tc-tag">공기밥 문화</div>
+      <div class="tc-q">为什么韩国餐厅的米饭要额外加钱？</div>
+      <div class="tc-a">韩国很多餐厅，特别是烤肉店和汤类餐厅，主食（공기밥，白米饭）需要额外单点，不随菜附赠。通常1,000–2,000원一碗。第一次去的人常常不知道，吃完才发现没有饭——要主动说 공기밥 하나 주세요（给我一碗米饭）。</div>
+    </div>
+    <div class="trivia-card" style="--tc:#A8D8D0;--tbg:#f0fbf9;">
+      <div class="tc-tag">불고기 역사</div>
+      <div class="tc-q">불고기（韩式烤牛肉）为什么在全球有名？</div>
+      <div class="tc-a">불고기（불=火，고기=肉）是用酱油、梨汁、芝麻油腌制的薄切牛肉，在铁盘上烤制。它是韩国最早被国际市场认知的韩国料理之一——1988年首尔奥运会期间，大量外国运动员和游客第一次接触到불고기，开始了韩国料理走向世界的序幕。</div>
+    </div>
+    <div class="trivia-card" style="--tc:#FFE4A0;--tbg:#fffdf0;">
+      <div class="tc-tag">맛집 문화</div>
+      <div class="tc-q">韩国人为什么那么执着于"맛집"（好吃的店）？</div>
+      <div class="tc-a">맛집（맛=味道，집=店）是韩国饮食文化里的核心词汇，意思是"好吃的店、值得去的餐厅"。韩国人对맛집的探索热情极高——小红书（韩国是Instagram）上的맛집帖子、맛집专门博主、맛집地图App……一家店一旦被认定为맛집，排队一两个小时是常事。麦当劳汉堡和맛집汉堡，韩国人毫不犹豫选맛집。</div>
+    </div>
+  </div>
+
+  <div class="notice-box">
+    <div class="nt">🍽️ 在韩国餐厅用餐前要知道</div>
+    韩国大部分餐厅提供<strong>무료 반찬（免费小菜）</strong>——泡菜、豆芽、海苔等，可以无限续加，直接说 반찬 더 주세요 即可。但这些小菜不能打包带走，是就餐专享。另外，韩国餐厅普遍没有服务小费文化，结账金额就是最终金额，不需要额外给小费。
+  </div>
+
+  <!-- 실용 韩语 -->
+  <div class="korean-section">
+    <div class="ks-header">
+      <div class="ks-tori">🐰</div>
+      <div>
+        <div class="ks-title">토리 教你说——韩国餐厅必备韩语</div>
+        <div class="ks-sub">点击 + 可加入你的词汇本</div>
+      </div>
+    </div>
+    <div class="phrase-list">
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">저기요! 주문할게요.</div>
+          <div class="phrase-ro">jeo-gi-yo! ju-mun-hal-ge-yo</div>
+          <div class="phrase-scene">📣 叫服务员点餐</div>
+        </div>
+        <div class="phrase-zh">服务员！我要点餐</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">이게 뭐예요?</div>
+          <div class="phrase-ro">i-ge mwo-ye-yo?</div>
+          <div class="phrase-scene">❓ 指着菜单问</div>
+        </div>
+        <div class="phrase-zh">这是什么？</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">추천 메뉴가 뭐예요?</div>
+          <div class="phrase-ro">chu-cheon me-nyu-ga mwo-ye-yo?</div>
+          <div class="phrase-scene">⭐ 问推荐菜</div>
+        </div>
+        <div class="phrase-zh">推荐菜是什么？</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">공기밥 하나 더 주세요.</div>
+          <div class="phrase-ro">gong-gi-bap ha-na deo ju-se-yo</div>
+          <div class="phrase-scene">🍚 追加米饭</div>
+        </div>
+        <div class="phrase-zh">再来一碗米饭</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">정말 맛있어요!</div>
+          <div class="phrase-ro">jeong-mal ma-si-sseo-yo!</div>
+          <div class="phrase-scene">😋 称赞食物</div>
+        </div>
+        <div class="phrase-zh">真的太好吃了！</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">포장해 주세요.</div>
+          <div class="phrase-ro">po-jang-hae ju-se-yo</div>
+          <div class="phrase-scene">📦 打包</div>
+        </div>
+        <div class="phrase-zh">请帮我打包</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">따로따로 계산해 주세요.</div>
+          <div class="phrase-ro">tta-ro-tta-ro gye-san-hae ju-se-yo</div>
+          <div class="phrase-scene">💳 AA制结账</div>
+        </div>
+        <div class="phrase-zh">请分开结账</div>
+        <div class="add-btn">+</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 词汇 -->
+  <div class="section-title" style="font-size:16px;margin-top:36px;">
+    <div class="st-icon" style="width:30px;height:30px;font-size:14px;">📖</div>
+    <div>本篇出现的词汇</div>
+  </div>
+  <div class="vocab-row">
+    <div class="vocab-chip"><span class="vko">짜장면</span><span class="vzh">炸酱面</span></div>
+    <div class="vocab-chip"><span class="vko">치맥</span><span class="vzh">炸鸡+啤酒</span></div>
+    <div class="vocab-chip"><span class="vko">안주</span><span class="vzh">下酒菜</span></div>
+    <div class="vocab-chip"><span class="vko">한정식</span><span class="vzh">韩国定食</span></div>
+    <div class="vocab-chip"><span class="vko">불고기</span><span class="vzh">韩式烤牛肉</span></div>
+    <div class="vocab-chip"><span class="vko">맛집</span><span class="vzh">好吃的店</span></div>
+    <div class="vocab-chip"><span class="vko">배달</span><span class="vzh">外卖</span></div>
+    <div class="vocab-chip"><span class="vko">공기밥</span><span class="vzh">一碗米饭</span></div>
+    <div class="vocab-chip"><span class="vko">반찬</span><span class="vzh">小菜</span></div>
+    <div class="vocab-chip"><span class="vko">주문</span><span class="vzh">点餐</span></div>
+    <div class="vocab-chip"><span class="vko">포장</span><span class="vzh">打包</span></div>
+    <div class="vocab-chip"><span class="vko">계산</span><span class="vzh">结账</span></div>
+  </div>
+
+  <!-- 结尾 -->
+  <div class="ending-card">
+    <span class="ending-tori">🐰</span>
+    <div class="ending-title">看完这篇再刷剧，每一顿饭都有了新的意义</div>
+    <div class="ending-sub">
+      韩剧里的食物不是背景，是剧情。<br>
+      搬家的짜장면、深夜的소주땅콩、<br>
+      约会的치맥、豪门的한정식——<br>
+      每一样都在说一个故事。<br>
+      下一篇，토리 带你探索韩国辣文化的起源 🌶️
+    </div>
+    <a class="next-btn" href="#">下一篇：韩国辣文化——辣椒是哪里来的 →</a>
+    <div class="next-articles">
+      <div class="next-tag">🥩 韩国烤肉完全指南</div>
+      <div class="next-tag">🍡 街头小吃地图</div>
+      <div class="next-tag">🍲 韩国人为什么这么爱喝汤</div>
+    </div>
+  </div>
+
+</div>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a02edaaceeab1979',t:'MTc3OTk4ODAzMQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

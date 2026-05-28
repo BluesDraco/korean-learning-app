@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>韩国节日完全手册 · 韩语学习日记</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #FFFDF9;
+    color: #3a3a3a;
+    line-height: 1.7;
+  }
+
+  .hero {
+    background: linear-gradient(160deg, #FFE4A0 0%, #FF8FAB 50%, #C9B8E8 100%);
+    padding: 56px 24px 48px;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: "🎎🌕🎋🧧🎆🎑";
+    position: absolute; top: 14px; left: 0; right: 0;
+    font-size: 22px; letter-spacing: 18px; opacity: .22;
+  }
+  .hero-tag {
+    display: inline-block;
+    background: rgba(255,255,255,.25);
+    color: #fff; font-size: 11px; font-weight: 700;
+    padding: 4px 14px; border-radius: 20px; margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+  .hero h1 {
+    font-size: 28px; font-weight: 800; color: #fff;
+    text-shadow: 0 2px 12px rgba(0,0,0,.15);
+    line-height: 1.3; margin-bottom: 12px;
+  }
+  .hero h1 span { font-size: 14px; font-weight: 400; display: block; margin-top: 6px; opacity: .9; }
+  .hero-meta {
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+    font-size: 12px; color: rgba(255,255,255,.85); margin-top: 16px;
+    flex-wrap: wrap;
+  }
+
+  .container { max-width: 780px; margin: 0 auto; padding: 40px 20px 80px; }
+
+  .breadcrumb {
+    font-size: 12px; color: #bbb;
+    display: flex; align-items: center; gap: 6px;
+    margin-bottom: 28px;
+  }
+  .breadcrumb span { color: #ddd; }
+
+  /* 토리引言 */
+  .intro-card {
+    background: #fff; border-radius: 20px; padding: 24px 26px;
+    box-shadow: 0 2px 20px rgba(255,228,160,.2);
+    margin-bottom: 40px;
+    border-left: 4px solid #FFE4A0;
+  }
+  .tori-says { display: flex; gap: 14px; align-items: flex-start; }
+  .tori-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: linear-gradient(135deg, #FFE4A0, #FF8FAB);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+  }
+  .tori-bubble {
+    background: linear-gradient(135deg, #fffdf0, #fff0f5);
+    border-radius: 0 14px 14px 14px; padding: 14px 16px;
+    font-size: 13px; color: #555; line-height: 1.8; flex: 1;
+    position: relative;
+  }
+  .tori-bubble::before {
+    content: "";
+    position: absolute; left: -8px; top: 12px;
+    border: 8px solid transparent;
+    border-right-color: #fffdf0; border-left: none;
+  }
+  .tori-name { font-size: 11px; color: #d68910; font-weight: 700; margin-bottom: 5px; }
+
+  /* 章节标题 */
+  .section-title {
+    font-size: 20px; font-weight: 800; color: #333;
+    margin: 44px 0 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-title .st-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, #FFE4A0, #FF8FAB);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .section-title .st-sub {
+    font-size: 12px; font-weight: 400; color: #aaa; display: block; margin-top: 2px;
+  }
+
+  /* 年历 */
+  .calendar-grid { display: flex; flex-direction: column; gap: 10px; margin: 20px 0; }
+  .cal-item {
+    background: #fff; border-radius: 14px; padding: 14px 18px;
+    box-shadow: 0 2px 10px rgba(255,228,160,.15);
+    display: flex; gap: 14px; align-items: center;
+    border-left: 4px solid var(--cc, #FFE4A0);
+    transition: transform .15s;
+  }
+  .cal-item:hover { transform: translateX(4px); }
+  .cal-month {
+    min-width: 44px; text-align: center;
+    font-size: 11px; font-weight: 700; color: var(--cc, #d68910);
+    background: var(--cbg, #fffdf0); border-radius: 8px;
+    padding: 4px 6px; flex-shrink: 0;
+  }
+  .cal-name-ko { font-size: 14px; font-weight: 700; color: #333; }
+  .cal-name-zh { font-size: 11px; color: #999; margin-top: 1px; }
+  .cal-tag {
+    margin-left: auto; font-size: 10px; font-weight: 700;
+    padding: 2px 10px; border-radius: 20px; white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .tag-major { background: #FF8FAB22; color: #FF8FAB; }
+  .tag-minor { background: #C9B8E822; color: #C9B8E8; }
+  .tag-modern { background: #A8D8D022; color: #5ca89e; }
+
+  /* 大节日详情卡 */
+  .festival-card {
+    border-radius: 24px; overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,.08); margin: 20px 0;
+  }
+  .festival-header {
+    padding: 24px 26px 20px;
+    background: var(--fhbg, linear-gradient(135deg,#FFE4A0,#FF8FAB));
+    position: relative; overflow: hidden;
+  }
+  .festival-header::before {
+    content: var(--fbg-emoji, "🎎");
+    position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+    font-size: 64px; opacity: .2;
+  }
+  .festival-date { font-size: 11px; color: rgba(255,255,255,.8); margin-bottom: 6px; font-weight: 600; letter-spacing: 1px; }
+  .festival-name-ko { font-size: 26px; font-weight: 800; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,.15); }
+  .festival-name-zh { font-size: 14px; color: rgba(255,255,255,.9); margin-top: 4px; }
+  .festival-body { background: #fff; padding: 22px 26px; }
+
+  /* 文化深度卡 */
+  .culture-card {
+    background: #fff; border-radius: 20px; padding: 24px;
+    box-shadow: 0 2px 16px rgba(255,228,160,.15); margin: 16px 0;
+    border: 1px solid rgba(255,228,160,.3);
+  }
+  .culture-card h3 { font-size: 15px; font-weight: 700; color: #333; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .culture-card p { font-size: 13px; color: #555; line-height: 1.85; margin-bottom: 10px; }
+  .culture-card p:last-child { margin-bottom: 0; }
+
+  .highlight {
+    background: linear-gradient(135deg, #fffdf0, #fff0f5);
+    border-radius: 10px; padding: 12px 14px; margin: 12px 0;
+    font-size: 13px; color: #555; line-height: 1.8;
+    border-left: 3px solid #FFE4A0;
+  }
+  .highlight strong { color: #d68910; }
+
+  /* 食物卡片 */
+  .food-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin: 16px 0; }
+  .food-card {
+    background: #fff; border-radius: 14px; padding: 16px 12px; text-align: center;
+    box-shadow: 0 2px 10px rgba(255,228,160,.15);
+    border-top: 3px solid var(--fc, #FFE4A0);
+  }
+  .food-emoji { font-size: 32px; margin-bottom: 8px; display: block; }
+  .food-name-ko { font-size: 13px; font-weight: 700; color: #333; margin-bottom: 3px; }
+  .food-name-zh { font-size: 11px; color: var(--fc,#d68910); font-weight: 600; margin-bottom: 6px; }
+  .food-desc { font-size: 11px; color: #777; line-height: 1.6; }
+
+  /* 步骤流程 */
+  .flow-steps {
+    background: linear-gradient(135deg, #fffdf0, #fff8fb);
+    border-radius: 18px; padding: 22px 24px; margin: 16px 0;
+    border: 1.5px dashed #FFE4A055;
+  }
+  .flow-steps h3 { font-size: 14px; font-weight: 700; color: #d68910; margin-bottom: 16px; }
+  .step-row { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 14px; }
+  .step-row:last-child { margin-bottom: 0; }
+  .step-circle {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: linear-gradient(135deg, #FFE4A0, #FF8FAB);
+    color: #fff; font-size: 12px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .step-content { flex: 1; }
+  .step-title-text { font-size: 13px; font-weight: 700; color: #333; margin-bottom: 3px; }
+  .step-desc-text { font-size: 12px; color: #666; line-height: 1.7; }
+  .korean-phrase {
+    display: inline-block; margin-top: 5px;
+    background: #fff; border-radius: 8px; padding: 4px 10px;
+    font-size: 12px; color: #d68910; font-weight: 600;
+    box-shadow: 0 1px 6px rgba(255,228,160,.3);
+  }
+
+  /* 冷知识 */
+  .trivia-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 20px 0; }
+  .trivia-card {
+    background: #fff; border-radius: 14px; padding: 16px 18px;
+    box-shadow: 0 2px 10px rgba(255,228,160,.12);
+    border-top: 3px solid var(--tc, #FFE4A0);
+  }
+  .trivia-card .tc-tag {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    color: var(--tc,#d68910); background: var(--tbg,#fffdf0);
+    padding: 2px 8px; border-radius: 10px; margin-bottom: 6px;
+  }
+  .trivia-card .tc-q { font-size: 13px; font-weight: 700; color: #333; margin-bottom: 8px; }
+  .trivia-card .tc-a { font-size: 12px; color: #666; line-height: 1.7; }
+
+  /* 韩中对比 */
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 16px 0; border-radius: 14px; overflow: hidden; }
+  .compare-table th { background: linear-gradient(135deg, #FFE4A0, #FF8FAB); color: #fff; font-weight: 700; padding: 11px 14px; text-align: left; }
+  .compare-table td { padding: 11px 14px; border-bottom: 1px solid #fffdf0; color: #444; vertical-align: top; }
+  .compare-table tr:nth-child(even) td { background: #fffefb; }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* 祝福语卡 */
+  .greet-card {
+    background: var(--gbg, linear-gradient(135deg,#fffdf0,#fff8fb));
+    border-radius: 16px; padding: 18px 20px; margin: 12px 0;
+    border: 1.5px solid var(--gbc, #FFE4A033);
+  }
+  .greet-festival { font-size: 11px; font-weight: 700; color: var(--gc,#d68910); margin-bottom: 8px; }
+  .greet-ko { font-size: 20px; font-weight: 800; color: #333; margin-bottom: 4px; }
+  .greet-ro { font-size: 11px; color: #bbb; font-style: italic; margin-bottom: 6px; }
+  .greet-zh { font-size: 13px; color: #666; margin-bottom: 8px; }
+  .greet-desc { font-size: 12px; color: #999; line-height: 1.7; }
+
+  /* 실용 韩语 */
+  .korean-section {
+    background: linear-gradient(135deg, #2a2218, #1e1a14);
+    border-radius: 20px; padding: 26px 24px; margin: 32px 0;
+  }
+  .ks-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  .ks-tori { font-size: 28px; }
+  .ks-title { font-size: 15px; font-weight: 700; color: #FDF8F0; }
+  .ks-sub { font-size: 11px; color: #888; margin-top: 2px; }
+  .phrase-list { display: flex; flex-direction: column; gap: 12px; }
+  .phrase-item {
+    background: rgba(255,255,255,.06); border-radius: 12px; padding: 14px 16px;
+    display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  }
+  .phrase-ko { font-size: 15px; font-weight: 700; color: #FDF8F0; }
+  .phrase-ro { font-size: 10px; color: #888; margin-top: 2px; font-style: italic; }
+  .phrase-zh { font-size: 12px; color: #FFE4A0; font-weight: 600; flex-shrink: 0; }
+  .phrase-scene { font-size: 10px; color: #666; margin-top: 3px; }
+  .add-btn {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: linear-gradient(135deg,#FFE4A0,#FF8FAB);
+    color: #fff; font-size: 14px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; cursor: pointer;
+    box-shadow: 0 2px 8px rgba(255,228,160,.4);
+    transition: transform .15s;
+  }
+  .add-btn:hover { transform: scale(1.1); }
+
+  /* 词汇 */
+  .vocab-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+  .vocab-chip {
+    background: #fff; border: 1px solid #fff3e0;
+    border-radius: 20px; padding: 5px 14px;
+    font-size: 12px; color: #555;
+    display: flex; align-items: center; gap: 6px;
+    box-shadow: 0 1px 6px rgba(0,0,0,.04);
+  }
+  .vocab-chip .vko { font-weight: 700; color: #333; }
+  .vocab-chip .vzh { color: #d68910; }
+
+  .divider { text-align: center; font-size: 18px; letter-spacing: 8px; opacity: .3; margin: 32px 0; }
+
+  /* 注意事项 */
+  .notice-box {
+    background: linear-gradient(135deg, #fffdf0, #fff8fb);
+    border-radius: 14px; padding: 16px 18px; margin: 16px 0;
+    border: 1.5px solid #FFE4A044;
+    font-size: 13px; color: #666; line-height: 1.8;
+  }
+  .notice-box .nt { font-weight: 700; color: #d68910; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
+
+  /* 结尾 */
+  .ending-card {
+    background: linear-gradient(135deg, #fffdf0, #fff0f5, #f5f0ff);
+    border-radius: 20px; padding: 28px 24px; text-align: center; margin-top: 40px;
+    border: 1.5px solid rgba(255,228,160,.3);
+    position: relative; overflow: hidden;
+  }
+  .ending-card::before {
+    content: "🎎🌕🎋✨🧧🎆";
+    position: absolute; top: 8px; left: 0; right: 0;
+    font-size: 16px; letter-spacing: 12px; opacity: .2;
+  }
+  .ending-tori { font-size: 52px; display: block; margin-bottom: 12px; }
+  .ending-title { font-size: 17px; font-weight: 800; color: #d68910; margin-bottom: 6px; }
+  .ending-sub { font-size: 13px; color: #aaa; line-height: 1.8; margin-bottom: 20px; }
+  .next-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #FFE4A0, #FF8FAB);
+    color: #fff; font-size: 13px; font-weight: 700;
+    padding: 10px 28px; border-radius: 24px;
+    box-shadow: 0 4px 16px rgba(255,228,160,.4);
+    text-decoration: none; margin-bottom: 8px;
+  }
+  .next-articles { margin-top: 16px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .next-tag {
+    font-size: 12px; color: #FF8FAB; border: 1px solid #FF8FAB;
+    padding: 4px 14px; border-radius: 20px; cursor: pointer;
+  }
+
+  @media (max-width: 600px) {
+    .food-grid { grid-template-columns: 1fr; }
+    .trivia-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-tag">🇰🇷 韩国文化 · 首尔女生的日常</div>
+  <h1>
+    韩国节日完全手册
+    <span>한국 명절 가이드 — 설날부터 추석까지, 모든 것을 알려드려요</span>
+  </h1>
+  <div class="hero-meta">
+    <span>🐰 토리 亲历</span>
+    <span>📖 约12分钟读完</span>
+    <span>🗂️ 文化 · 节日</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="breadcrumb">
+    🏠 首页 <span>›</span> 🇰🇷 韩国 <span>›</span> 文化 <span>›</span> 韩国节日完全手册
+  </div>
+
+  <!-- 토리引言 -->
+  <div class="intro-card">
+    <div class="tori-says">
+      <div class="tori-avatar">🐰</div>
+      <div class="tori-bubble">
+        <div class="tori-name">토리 说</div>
+        토리刚到首尔的时候赶上了추석前一天，整个城市突然就空了——地铁上没什么人，餐厅关了大半，就连平时排长队的咖啡厅也早早打烊。后来才知道，추석是韩国一年中最重要的节日之一，所有人都回老家了。节日对韩国人来说不是"放个假"，而是整个民族的情感仪式。今天토리 把韩国主要节日全部整理给你——不只告诉你那天做什么，还告诉你为什么这样做 🎎
+      </div>
+    </div>
+  </div>
+
+  <!-- 年历总览 -->
+  <div class="section-title">
+    <div class="st-icon">📅</div>
+    <div>
+      韩国节日年历总览
+      <span class="st-sub">从正月初一到除夕，一年的节日都在这里</span>
+    </div>
+  </div>
+
+  <div class="calendar-grid">
+    <div class="cal-item" style="--cc:#FF8FAB;--cbg:#fff0f5;">
+      <div class="cal-month">1月<br>음력</div>
+      <div>
+        <div class="cal-name-ko">설날 (설날)</div>
+        <div class="cal-name-zh">韩国春节 · 农历正月初一</div>
+      </div>
+      <div class="cal-tag tag-major">★ 最重要</div>
+    </div>
+    <div class="cal-item" style="--cc:#C9B8E8;--cbg:#f5f0ff;">
+      <div class="cal-month">1月<br>음력</div>
+      <div>
+        <div class="cal-name-ko">정월대보름</div>
+        <div class="cal-name-zh">正月十五 · 大满月节</div>
+      </div>
+      <div class="cal-tag tag-minor">传统节日</div>
+    </div>
+    <div class="cal-item" style="--cc:#A8D8D0;--cbg:#f0fbf9;">
+      <div class="cal-month">3月 1日</div>
+      <div>
+        <div class="cal-name-ko">삼일절</div>
+        <div class="cal-name-zh">三一节 · 独立运动纪念日</div>
+      </div>
+      <div class="cal-tag tag-modern">国家节日</div>
+    </div>
+    <div class="cal-item" style="--cc:#FFE4A0;--cbg:#fffdf0;">
+      <div class="cal-month">5月 5日</div>
+      <div>
+        <div class="cal-name-ko">어린이날</div>
+        <div class="cal-name-zh">儿童节</div>
+      </div>
+      <div class="cal-tag tag-modern">国家节日</div>
+    </div>
+    <div class="cal-item" style="--cc:#C9B8E8;--cbg:#f5f0ff;">
+      <div class="cal-month">5月<br>음력</div>
+      <div>
+        <div class="cal-name-ko">부처님오신날</div>
+        <div class="cal-name-zh">释迦诞辰日 · 农历四月初八</div>
+      </div>
+      <div class="cal-tag tag-minor">传统节日</div>
+    </div>
+    <div class="cal-item" style="--cc:#A8D8D0;--cbg:#f0fbf9;">
+      <div class="cal-month">6月 6日</div>
+      <div>
+        <div class="cal-name-ko">현충일</div>
+        <div class="cal-name-zh">显忠日 · 烈士纪念日</div>
+      </div>
+      <div class="cal-tag tag-modern">国家节日</div>
+    </div>
+    <div class="cal-item" style="--cc:#FFE4A0;--cbg:#fffdf0;">
+      <div class="cal-month">8月 15日</div>
+      <div>
+        <div class="cal-name-ko">광복절</div>
+        <div class="cal-name-zh">光复节 · 独立纪念日</div>
+      </div>
+      <div class="cal-tag tag-modern">国家节日</div>
+    </div>
+    <div class="cal-item" style="--cc:#FF8FAB;--cbg:#fff0f5;">
+      <div class="cal-month">9月<br>음력</div>
+      <div>
+        <div class="cal-name-ko">추석 (秋夕)</div>
+        <div class="cal-name-zh">韩国中秋 · 农历八月十五</div>
+      </div>
+      <div class="cal-tag tag-major">★ 最重要</div>
+    </div>
+    <div class="cal-item" style="--cc:#A8D8D0;--cbg:#f0fbf9;">
+      <div class="cal-month">10月 3日</div>
+      <div>
+        <div class="cal-name-ko">개천절</div>
+        <div class="cal-name-zh">开天节 · 建国神话纪念日</div>
+      </div>
+      <div class="cal-tag tag-modern">国家节日</div>
+    </div>
+    <div class="cal-item" style="--cc:#C9B8E8;--cbg:#f5f0ff;">
+      <div class="cal-month">10月 9日</div>
+      <div>
+        <div class="cal-name-ko">한글날</div>
+        <div class="cal-name-zh">韩文节 · 훈민정음颁布纪念日</div>
+      </div>
+      <div class="cal-tag tag-modern">国家节日</div>
+    </div>
+    <div class="cal-item" style="--cc:#FFE4A0;--cbg:#fffdf0;">
+      <div class="cal-month">12月 25日</div>
+      <div>
+        <div class="cal-name-ko">크리스마스</div>
+        <div class="cal-name-zh">圣诞节</div>
+      </div>
+      <div class="cal-tag tag-modern">节假日</div>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 설날 -->
+  <div class="section-title">
+    <div class="st-icon">🎊</div>
+    <div>
+      설날 — 韩国最重要的节日
+      <span class="st-sub">农历正月初一，全家团聚、祭祖、拜年</span>
+    </div>
+  </div>
+
+  <div class="festival-card">
+    <div class="festival-header" style="--fhbg:linear-gradient(135deg,#FF8FAB,#FFE4A0);--fbg-emoji:'🎊';">
+      <div class="festival-date">農曆 正月初一 · 법정공휴일 3일</div>
+      <div class="festival-name-ko">설날</div>
+      <div class="festival-name-zh">韩国春节 · 一年中最重要的家庭节日</div>
+    </div>
+    <div class="festival-body">
+
+      <div class="culture-card" style="margin-top:0;border:none;box-shadow:none;padding:0;">
+        <h3>🏠 설날是什么感觉</h3>
+        <p>설날前后的首尔，高速公路会出现韩国一年中最严重的堵车——所有人都在往老家赶。韩国有个说法叫 <strong style="color:#FF8FAB;">민족 대이동（民族大迁徙）</strong>，设날前后几天，全国约3000万人在路上移动。</p>
+        <p>전통적으로（传统上），设날是一家人穿上한복（韩服）、进行차례（祭祖仪式）、向长辈行세배（新年大礼）的日子。长辈会给晚辈压岁钱，叫做 <strong style="color:#FF8FAB;">세뱃돈</strong>。</p>
+      </div>
+
+      <div class="food-grid" style="margin-top:16px;">
+        <div class="food-card" style="--fc:#FF8FAB;">
+          <span class="food-emoji">🍜</span>
+          <div class="food-name-ko">떡국</div>
+          <div class="food-name-zh">年糕汤</div>
+          <div class="food-desc">설날必吃，白色年糕切片煮成清汤。吃了一碗떡국就算长了一岁，这是韩国的传统说法。</div>
+        </div>
+        <div class="food-card" style="--fc:#FFE4A0;">
+          <span class="food-emoji">🥟</span>
+          <div class="food-name-ko">만두</div>
+          <div class="food-name-zh">饺子</div>
+          <div class="food-desc">설날期间家家包饺子，有时放进떡국里一起煮，叫做 떡만둣국。形状象征财富和好运。</div>
+        </div>
+        <div class="food-card" style="--fc:#C9B8E8;">
+          <span class="food-emoji">🍱</span>
+          <div class="food-name-ko">전 (煎饼)</div>
+          <div class="food-name-zh">韩式煎饼</div>
+          <div class="food-desc">설날祭祀必备供品之一，有海鲜煎饼、蔬菜煎饼、肉煎饼等，全家一起煎，厨房里热热闹闹。</div>
+        </div>
+      </div>
+
+      <div class="flow-steps" style="margin-top:16px;">
+        <h3>🐰 설날的传统流程</h3>
+        <div class="step-row">
+          <div class="step-circle">1</div>
+          <div class="step-content">
+            <div class="step-title-text">차례（祭祖仪式）</div>
+            <div class="step-desc-text">清晨，全家在祖先牌位前摆放供品、进行祭祀仪式。这是设날最神圣的环节，不能缺席。</div>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-circle">2</div>
+          <div class="step-content">
+            <div class="step-title-text">세배（新年大礼）</div>
+            <div class="step-desc-text">祭祀完毕，晚辈向长辈行大礼（深度鞠躬），说新年祝福语，长辈给세뱃돈（压岁钱）。</div>
+            <div class="korean-phrase">새해 복 많이 받으세요（sae-hae bok ma-ni ba-deu-se-yo）— 新年多福</div>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-circle">3</div>
+          <div class="step-content">
+            <div class="step-title-text">떡국 식사（年糕汤早餐）</div>
+            <div class="step-desc-text">祭祀和拜年结束后，全家一起吃떡국。吃了这碗汤，新的一年正式开始。</div>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-circle">4</div>
+          <div class="step-content">
+            <div class="step-title-text">친척 방문（走亲访友）</div>
+            <div class="step-desc-text">下午开始拜访亲戚，到每家都要重复세배流程。对韩国孩子来说，세뱃돈是설날最期待的事。</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="greet-card" style="--gbg:linear-gradient(135deg,#fff0f5,#fffdf0);--gbc:#FF8FAB33;--gc:#FF8FAB;">
+        <div class="greet-festival">설날 祝福语</div>
+        <div class="greet-ko">새해 복 많이 받으세요.</div>
+        <div class="greet-ro">sae-hae bok ma-ni ba-deu-se-yo</div>
+        <div class="greet-zh">新年多福。</div>
+        <div class="greet-desc">설날最标准的祝福语，任何场合都能用。对长辈说时要配上鞠躬。年轻人之间也可以简化为 새해 복 많이 받아！</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 추석 -->
+  <div class="section-title">
+    <div class="st-icon">🌕</div>
+    <div>
+      추석 — 韩国的中秋节
+      <span class="st-sub">农历八月十五，一年中月亮最圆的夜晚</span>
+    </div>
+  </div>
+
+  <div class="festival-card">
+    <div class="festival-header" style="--fhbg:linear-gradient(135deg,#FFE4A0,#C9B8E8);--fbg-emoji:'🌕';">
+      <div class="festival-date">農曆 八月十五 · 법정공휴일 3일</div>
+      <div class="festival-name-ko">추석 (秋夕)</div>
+      <div class="festival-name-zh">韩国中秋 · 丰收与感恩的节日</div>
+    </div>
+    <div class="festival-body">
+
+      <div class="culture-card" style="margin-top:0;border:none;box-shadow:none;padding:0;">
+        <h3>🌾 추석是什么感觉</h3>
+        <p>如果说설날是"新年的仪式感"，추석就是"丰收的感恩"。农历八月十五，一年的庄稼刚刚收获，韩国人带着新收的粮食、水果、食物回到故乡，祭拜祖先，感谢这一年的恩赐。</p>
+        <p>추석和설날并称韩国两大 <strong style="color:#FFE4A0;">명절（大节日）</strong>，重要程度不相上下。但추석的氛围比设날更轻松——不像设날那样强调礼节，更多是家人聚在一起吃喝玩乐的感觉。</p>
+        <div class="highlight"><strong>토리 亲测：</strong>추석前一周的首尔超市，礼盒区全部爆满。韩国人추석要给长辈、同事、客户送礼，最受欢迎的是SPAM（午餐肉）礼盒、人参、水果礼盒。是的，SPAM在韩国是高档礼品。</div>
+      </div>
+
+      <div class="food-grid" style="margin-top:16px;">
+        <div class="food-card" style="--fc:#FFE4A0;">
+          <span class="food-emoji">🍡</span>
+          <div class="food-name-ko">송편</div>
+          <div class="food-name-zh">松糕</div>
+          <div class="food-desc">추석最具代表性的食物，用松树叶蒸制的半月形米糕，内馅有芝麻、豆沙、板栗。全家一起包송편是추석的重要仪式。</div>
+        </div>
+        <div class="food-card" style="--fc:#FF8FAB;">
+          <span class="food-emoji">🥩</span>
+          <div class="food-name-ko">갈비찜</div>
+          <div class="food-name-zh">炖排骨</div>
+          <div class="food-desc">추석餐桌上几乎必备，用酱油、梨、大蒜慢炖的牛排骨，软烂入味。代表丰盛和团聚。</div>
+        </div>
+        <div class="food-card" style="--fc:#C9B8E8;">
+          <span class="food-emoji">🍶</span>
+          <div class="food-name-ko">햇과일 · 햇곡식</div>
+          <div class="food-name-zh">新鲜水果谷物</div>
+          <div class="food-desc">추석祭桌上必须摆当季新收的水果（梨、柿子、苹果）和谷物，象征对大地和祖先的感谢。</div>
+        </div>
+      </div>
+
+      <div class="culture-card" style="margin-top:16px;">
+        <h3>🌕 강강술래——追月的圆圈舞</h3>
+        <p>추석传统活动中最有名的是<strong style="color:#FFE4A0;">강강술래</strong>——女性们在月光下手拉手绕圈跳舞，唱着同名歌谣，祈求丰收和幸福。这个传统可以追溯到400多年前的朝鲜时代，现在已经是韩国非物质文化遗产。</p>
+        <p>虽然现代城市年轻人很少真正去跳강강술래，但每年추석节目里一定会出现这个画面，是韩国人集体记忆的一部分。</p>
+      </div>
+
+      <div class="greet-card" style="--gbg:linear-gradient(135deg,#fffdf0,#f5f0ff);--gbc:#FFE4A033;--gc:#d68910;">
+        <div class="greet-festival">추석 祝福语</div>
+        <div class="greet-ko">풍성한 추석 보내세요.</div>
+        <div class="greet-ro">pung-seong-han chu-seok bo-nae-se-yo</div>
+        <div class="greet-zh">祝您过个丰盛的추석。</div>
+        <div class="greet-desc">追석最常用的祝福语，풍성하다意思是"丰盛、丰收"，完美契合추석的节日精神。也可以说 즐거운 추석 되세요（祝您추석快乐）。</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 설날 vs 추석 -->
+  <div class="section-title">
+    <div class="st-icon">↔️</div>
+    <div>
+      설날 vs 추석——两大节日有什么不同
+      <span class="st-sub">同样重要，但氛围和意义不一样</span>
+    </div>
+  </div>
+
+  <table class="compare-table">
+    <tr><th>对比</th><th>설날 🎊</th><th>추석 🌕</th></tr>
+    <tr><td>时间</td><td>农历正月初一（1-2月）</td><td>农历八月十五（9-10月）</td></tr>
+    <tr><td>核心含义</td><td>新年开始，祈求新年福祉</td><td>丰收感恩，祭拜祖先</td></tr>
+    <tr><td>代表食物</td><td>떡국（年糕汤）、만두</td><td>송편（松糕）、갈비찜</td></tr>
+    <tr><td>氛围感</td><td>庄重、仪式感强</td><td>轻松、丰收欢庆</td></tr>
+    <tr><td>压岁钱</td><td>세뱃돈（孩子必拿）</td><td>없음（没有压岁钱）</td></tr>
+    <tr><td>特有活动</td><td>세배（新年大礼）</td><td>강강술래（圆圈舞）</td></tr>
+    <tr><td>送礼文化</td><td>有但不如추석普遍</td><td>非常重视，职场礼盒文化</td></tr>
+    <tr><td>中国对应</td><td>春节</td><td>中秋节（但意义更接近感恩节）</td></tr>
+  </table>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 其他重要节日 -->
+  <div class="section-title">
+    <div class="st-icon">🗓️</div>
+    <div>
+      其他值得了解的节日
+      <span class="st-sub">这些节日让韩国文化更立体</span>
+    </div>
+  </div>
+
+  <div class="culture-card">
+    <h3>👶 어린이날 5月5日 · 儿童节</h3>
+    <p>韩国儿童节是正式公众假日，全国所有学校放假。这一天，韩国父母倾尽全力带孩子出去玩，游乐园、动物园、餐厅全部爆满。</p>
+    <p>어린이날的起源来自作家方定焕，他在1923年提倡儿童人权，将这一天定为"儿童节"。如今韩国어린이날比很多国家的儿童节更受重视。</p>
+    <div class="highlight"><strong>토리 说：</strong>어린이날前后去首尔的话，롯데월드（乐天世界）和에버랜드（爱宝乐园）会排到一两个小时的队，要有心理准备。</div>
+  </div>
+
+  <div class="culture-card">
+    <h3>📜 한글날 10月9日 · 韩文节</h3>
+    <p>1446年，朝鲜世宗大王颁布훈민정음（训民正音），也就是今天韩文字母的前身。한글날是纪念这一历史时刻的国家节日。</p>
+    <p>对韩国人来说，한글是民族自豪感的核心——在한글被创造之前，朝鲜半岛用汉字书写，普通百姓无法读写。세종대왕创造한글，就是为了让所有人都能识字。这是韩国历史上最伟大的文化贡献之一。</p>
+    <div class="highlight"><strong>和你学的东西直接相关：</strong>你正在学的韩语字母，就是580年前一位国王专门为普通人发明的。한글날，是感谢세종대왕的日子。</div>
+  </div>
+
+  <div class="culture-card">
+    <h3>🎄 크리스마스 12月25日 · 圣诞节</h3>
+    <p>韩国有约30%的人口是基督徒，圣诞节是韩国为数不多在宗教意义上被广泛认可的西方节日，也是唯一的西方节假日。</p>
+    <p>但韩国的圣诞节更多是情侣节日而非家庭节日——类似西方的情人节。首尔的圣诞节满街圣诞树和彩灯，情侣们出来约会，而不是回家和父母吃火鸡。</p>
+    <div class="highlight"><strong>토리 说：</strong>如果设날和추석是家庭的节日，크리스마스是情侣的节日。韩国的情人节实际上有三个：2月14日（女送男）、3月14日白色情人节（男送女）、11月11日빼빼로데이（互送棒棒糖饼干）。</div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 节日冷知识 -->
+  <div class="section-title">
+    <div class="st-icon">🔍</div>
+    <div>
+      节日文化冷知识
+      <span class="st-sub">这些细节让你看韩剧时更有代入感</span>
+    </div>
+  </div>
+
+  <div class="trivia-grid">
+    <div class="trivia-card" style="--tc:#FFE4A0;--tbg:#fffdf0;">
+      <div class="tc-tag">礼盒文化</div>
+      <div class="tc-q">为什么SPAM午餐肉是韩国명절的豪华礼品？</div>
+      <div class="tc-a">韩战时期，美军把SPAM带进了韩国。在物资匮乏的年代，能吃到罐头肉是极大的奢侈。这种印象延续至今，SPAM礼盒在追석和설날是正经的高档礼品，精心包装，售价不低。这是韩国独有的历史文化印记。</div>
+    </div>
+    <div class="trivia-card" style="--tc:#FF8FAB;--tbg:#fff0f5;">
+      <div class="tc-tag">名节堵车</div>
+      <div class="tc-q">韩国명절堵车有多严重？</div>
+      <div class="tc-a">평소（平时）从首尔到釜山开车约4小时。설날和추석前后，同样的路程可能需要10-15小时。韩国人为了省时间，有的选择凌晨3点出发，有的干脆买一张火车票提前三个月。명절交通是韩国社会每年都要讨论的大话题。</div>
+    </div>
+    <div class="trivia-card" style="--tc:#C9B8E8;--tbg:#f5f0ff;">
+      <div class="tc-tag">세뱃돈经济学</div>
+      <div class="tc-q">韩国孩子能收到多少세뱃돈？</div>
+      <div class="tc-a">首尔的孩子一个설날下来，收到几十万韩元（折合人民币几千元）完全正常。韩国有金融机构专门在설날前推出"세뱃돈 예금（压岁钱存款）"产品，给孩子开账户存압.세뱃돈曾经是韩国人的第一个储蓄概念。</div>
+    </div>
+    <div class="trivia-card" style="--tc:#A8D8D0;--tbg:#f0fbf9;">
+      <div class="tc-tag">现代变化</div>
+      <div class="tc-q">现在的韩国年轻人怎么过명절？</div>
+      <div class="tc-a">越来越多的韩国年轻人选择不回老家，在首尔和朋友一起过节，或者去旅行。명절期间机票酒店反而可能有优惠，因为很多人都出国了。传统명절正在经历转变——仪式感保留，但形式在年轻一代中越来越多元。</div>
+    </div>
+  </div>
+
+  <div class="notice-box">
+    <div class="nt">🗓️ 去韩国前要查一下명절时间</div>
+    <strong>설날和추석前后3天</strong>是韩国法定假日，大量餐厅、商店、景点会关闭，高速公路极度拥堵，火车票和机票需要提前几个月购买。如果不是专门来体验명절文化，建议避开这几天前往韩国。如果想体验，来追석当天的首尔会看到一个完全不同的城市——安静、空旷、有一种平时感受不到的宁静。
+  </div>
+
+  <!-- 실용 韩语 -->
+  <div class="korean-section">
+    <div class="ks-header">
+      <div class="ks-tori">🐰</div>
+      <div>
+        <div class="ks-title">토리 教你说——节日必备韩语</div>
+        <div class="ks-sub">点击 + 可加入你的词汇本</div>
+      </div>
+    </div>
+    <div class="phrase-list">
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">새해 복 많이 받으세요.</div>
+          <div class="phrase-ro">sae-hae bok ma-ni ba-deu-se-yo</div>
+          <div class="phrase-scene">🎊 설날祝福语</div>
+        </div>
+        <div class="phrase-zh">新年多福</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">풍성한 추석 보내세요.</div>
+          <div class="phrase-ro">pung-seong-han chu-seok bo-nae-se-yo</div>
+          <div class="phrase-scene">🌕 추석祝福语</div>
+        </div>
+        <div class="phrase-zh">祝您추석丰盛</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">즐거운 명절 되세요.</div>
+          <div class="phrase-ro">jeul-geo-un myeong-jeol doe-se-yo</div>
+          <div class="phrase-scene">🎉 通用节日祝福</div>
+        </div>
+        <div class="phrase-zh">祝您节日快乐</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">세배 드릴게요.</div>
+          <div class="phrase-ro">se-bae deu-ril-ge-yo</div>
+          <div class="phrase-scene">🙇 向长辈行设날大礼前</div>
+        </div>
+        <div class="phrase-zh">我来向您行新年礼</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">올해도 건강하세요.</div>
+          <div class="phrase-ro">ol-hae-do geon-gang-ha-se-yo</div>
+          <div class="phrase-scene">💚 설날对长辈的祝福</div>
+        </div>
+        <div class="phrase-zh">今年也请保持健康</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">선물을 준비했어요.</div>
+          <div class="phrase-ro">seon-mu-reul jun-bi-haet-seo-yo</div>
+          <div class="phrase-scene">🎁 送礼时</div>
+        </div>
+        <div class="phrase-zh">我准备了礼物</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">잘 먹겠습니다.</div>
+          <div class="phrase-ro">jal meok-get-sseum-ni-da</div>
+          <div class="phrase-scene">🍽️ 节日饭桌上</div>
+        </div>
+        <div class="phrase-zh">我开动了</div>
+        <div class="add-btn">+</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 本篇词汇 -->
+  <div class="section-title" style="font-size:16px;margin-top:36px;">
+    <div class="st-icon" style="width:30px;height:30px;font-size:14px;">📖</div>
+    <div>本篇出现的词汇</div>
+  </div>
+  <div class="vocab-row">
+    <div class="vocab-chip"><span class="vko">명절</span><span class="vzh">大节日</span></div>
+    <div class="vocab-chip"><span class="vko">설날</span><span class="vzh">韩国春节</span></div>
+    <div class="vocab-chip"><span class="vko">추석</span><span class="vzh">韩国中秋</span></div>
+    <div class="vocab-chip"><span class="vko">차례</span><span class="vzh">祭祖仪式</span></div>
+    <div class="vocab-chip"><span class="vko">세배</span><span class="vzh">新年大礼</span></div>
+    <div class="vocab-chip"><span class="vko">세뱃돈</span><span class="vzh">压岁钱</span></div>
+    <div class="vocab-chip"><span class="vko">떡국</span><span class="vzh">年糕汤</span></div>
+    <div class="vocab-chip"><span class="vko">송편</span><span class="vzh">松糕</span></div>
+    <div class="vocab-chip"><span class="vko">한복</span><span class="vzh">韩服</span></div>
+    <div class="vocab-chip"><span class="vko">강강술래</span><span class="vzh">圆圈舞</span></div>
+    <div class="vocab-chip"><span class="vko">선물</span><span class="vzh">礼物</span></div>
+    <div class="vocab-chip"><span class="vko">한글날</span><span class="vzh">韩文节</span></div>
+  </div>
+
+  <!-- 结尾 -->
+  <div class="ending-card">
+    <span class="ending-tori">🐰</span>
+    <div class="ending-title">下次节日，토리 和你一起过</div>
+    <div class="ending-sub">
+      설날吃떡국，추석包송편，<br>
+      向长辈行세배，说새해 복 많이 받으세요——<br>
+      这些不只是仪式，<br>
+      是韩国人和时间、和家人、和土地之间的情感纽带。<br>
+      下一篇，토리 带你解读韩剧里那些你看了但没看懂的文化密码 📺
+    </div>
+    <a class="next-btn" href="#">下一篇：韩剧里的文化密码 →</a>
+    <div class="next-articles">
+      <div class="next-tag">🏪 韩国便利店完全指南</div>
+      <div class="next-tag">☕ 首尔咖啡文化</div>
+      <div class="next-tag">🙏 韩国人的打招呼文化</div>
+    </div>
+  </div>
+
+</div>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a02eda89ffa51979',t:'MTc3OTk4ODAyNQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

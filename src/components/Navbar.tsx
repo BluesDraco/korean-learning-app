@@ -38,9 +38,11 @@ const navGroups: NavGroup[] = [
       { label: '发音', ko: '발음', href: '/phonetics', icon: Grid3X3 },
       { label: '语法库', ko: '문법', href: '/grammar', icon: FileText },
       { label: '绘本学习', ko: '그림책', href: '/learn/picture-books', icon: BookImage },
-      { label: 'KPOP学韩语', ko: 'KPOP', href: '/kpop', icon: Music },
       { label: '文章阅读', ko: '읽기', href: '/reading', icon: BookOpen },
     ],
+  },
+  {
+    icon: Music, label: 'KPOP', ko: '케이팝', href: '/kpop', children: [],
   },
   {
     icon: Gamepad2, label: '练习', ko: '연습', href: '/review', children: [

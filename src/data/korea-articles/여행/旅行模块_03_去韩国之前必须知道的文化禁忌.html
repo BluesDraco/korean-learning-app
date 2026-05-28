@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>去韩国之前必须知道的文化禁忌 · 韩语学习日记</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #FFFDF9; color: #3a3a3a; line-height: 1.7;
+  }
+
+  .hero {
+    background: linear-gradient(160deg, #FF8FAB 0%, #C9B8E8 50%, #FFE4A0 100%);
+    padding: 56px 24px 48px; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: "🚫⚠️🙏💜🐰✨";
+    position: absolute; top: 14px; left: 0; right: 0;
+    font-size: 22px; letter-spacing: 18px; opacity: .22;
+  }
+  .hero-tag {
+    display: inline-block; background: rgba(255,255,255,.25);
+    color: #fff; font-size: 11px; font-weight: 700;
+    padding: 4px 14px; border-radius: 20px; margin-bottom: 16px; letter-spacing: 1px;
+  }
+  .hero h1 {
+    font-size: 26px; font-weight: 800; color: #fff;
+    text-shadow: 0 2px 12px rgba(0,0,0,.15); line-height: 1.3; margin-bottom: 12px;
+  }
+  .hero h1 span { font-size: 14px; font-weight: 400; display: block; margin-top: 6px; opacity: .9; }
+  .hero-meta {
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+    font-size: 12px; color: rgba(255,255,255,.85); margin-top: 16px; flex-wrap: wrap;
+  }
+
+  .container { max-width: 780px; margin: 0 auto; padding: 40px 20px 80px; }
+
+  .breadcrumb {
+    font-size: 12px; color: #bbb; display: flex; align-items: center; gap: 6px; margin-bottom: 28px;
+  }
+  .breadcrumb span { color: #ddd; }
+
+  /* 토리引言 */
+  .intro-card {
+    background: #fff; border-radius: 20px; padding: 24px 26px;
+    box-shadow: 0 2px 20px rgba(255,143,171,.12); margin-bottom: 40px;
+    border-left: 4px solid #FF8FAB;
+  }
+  .tori-says { display: flex; gap: 14px; align-items: flex-start; }
+  .tori-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: linear-gradient(135deg, #FF8FAB, #C9B8E8);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+  }
+  .tori-bubble {
+    background: linear-gradient(135deg, #fff0f5, #f5f0ff);
+    border-radius: 0 14px 14px 14px; padding: 14px 16px;
+    font-size: 13px; color: #555; line-height: 1.8; flex: 1; position: relative;
+  }
+  .tori-bubble::before {
+    content: ""; position: absolute; left: -8px; top: 12px;
+    border: 8px solid transparent; border-right-color: #fff0f5; border-left: none;
+  }
+  .tori-name { font-size: 11px; color: #FF8FAB; font-weight: 700; margin-bottom: 5px; }
+
+  /* 章节标题 */
+  .section-title {
+    font-size: 20px; font-weight: 800; color: #333; margin: 44px 0 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-title .st-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, #FF8FAB, #C9B8E8);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .section-title .st-sub { font-size: 12px; font-weight: 400; color: #aaa; display: block; margin-top: 2px; }
+
+  /* 禁忌大卡片 */
+  .taboo-card {
+    background: #fff; border-radius: 18px; overflow: hidden;
+    box-shadow: 0 2px 16px rgba(0,0,0,.07); margin: 14px 0;
+    border-left: 5px solid var(--tc, #FF8FAB);
+  }
+  .taboo-header {
+    padding: 14px 20px; background: var(--thbg, #fff0f5);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .taboo-icon { font-size: 28px; flex-shrink: 0; }
+  .taboo-title { font-size: 15px; font-weight: 700; color: #333; }
+  .taboo-level {
+    margin-left: auto; font-size: 10px; font-weight: 700;
+    padding: 3px 10px; border-radius: 20px;
+    background: var(--tlbg, #FF8FAB); color: #fff; flex-shrink: 0;
+  }
+  .taboo-body { padding: 16px 20px; }
+  .taboo-body p { font-size: 13px; color: #555; line-height: 1.85; margin-bottom: 10px; }
+  .taboo-body p:last-child { margin-bottom: 0; }
+
+  /* 对比行：错误 vs 正确 */
+  .vs-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0;
+  }
+  .vs-wrong {
+    background: #fff5f5; border-radius: 10px; padding: 10px 12px;
+    border-left: 3px solid #e74c3c; font-size: 12px; color: #555; line-height: 1.7;
+  }
+  .vs-right {
+    background: #f0fbf9; border-radius: 10px; padding: 10px 12px;
+    border-left: 3px solid #2ecc71; font-size: 12px; color: #555; line-height: 1.7;
+  }
+  .vs-label { font-size: 10px; font-weight: 700; margin-bottom: 4px; }
+  .vs-wrong .vs-label { color: #e74c3c; }
+  .vs-right .vs-label { color: #2ecc71; }
+
+  /* 토리 mini */
+  .tori-mini {
+    display: flex; gap: 10px; align-items: flex-start;
+    background: linear-gradient(135deg, #fff0f5, #f5f0ff);
+    border-radius: 12px; padding: 12px 14px; margin-top: 12px;
+  }
+  .tori-mini-avatar { font-size: 18px; flex-shrink: 0; }
+  .tori-mini-text { font-size: 12px; color: #666; line-height: 1.75; }
+  .tori-mini-text strong { color: #FF8FAB; }
+
+  /* highlight */
+  .highlight {
+    background: linear-gradient(135deg, #fff0f5, #f5f0ff);
+    border-radius: 10px; padding: 12px 14px; margin: 12px 0;
+    font-size: 13px; color: #555; line-height: 1.8;
+    border-left: 3px solid #C9B8E8;
+  }
+  .highlight strong { color: #C9B8E8; }
+
+  /* 快速对照表 */
+  .quick-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 16px 0; border-radius: 14px; overflow: hidden; }
+  .quick-table th { background: linear-gradient(135deg,#FF8FAB,#C9B8E8); color: #fff; font-weight: 700; padding: 10px 14px; text-align: left; }
+  .quick-table td { padding: 10px 14px; border-bottom: 1px solid #fff0f5; color: #444; vertical-align: top; }
+  .quick-table tr:nth-child(even) td { background: #fffafc; }
+  .quick-table tr:last-child td { border-bottom: none; }
+  .ok { color: #2ecc71; font-weight: 700; }
+  .no { color: #e74c3c; font-weight: 700; }
+
+  /* 文化深度卡 */
+  .culture-card {
+    background: #fff; border-radius: 20px; padding: 22px;
+    box-shadow: 0 2px 14px rgba(255,143,171,.08); margin: 14px 0;
+    border: 1px solid rgba(255,143,171,.1);
+  }
+  .culture-card h3 { font-size: 14px; font-weight: 700; color: #333; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .culture-card p { font-size: 13px; color: #555; line-height: 1.85; margin-bottom: 8px; }
+  .culture-card p:last-child { margin-bottom: 0; }
+
+  /* 北村提醒 */
+  .notice-box {
+    background: linear-gradient(135deg, #fff0f5, #f5f0ff);
+    border-radius: 14px; padding: 16px 18px; margin: 16px 0;
+    border: 1.5px solid #FF8FAB22; font-size: 13px; color: #666; line-height: 1.8;
+  }
+  .notice-box .nt { font-weight: 700; color: #FF8FAB; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
+
+  /* 실용 韩语 */
+  .korean-section {
+    background: linear-gradient(135deg, #2a1e20, #1e1a28);
+    border-radius: 20px; padding: 26px 24px; margin: 32px 0;
+  }
+  .ks-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  .ks-tori { font-size: 28px; }
+  .ks-title { font-size: 15px; font-weight: 700; color: #FDF8F0; }
+  .ks-sub { font-size: 11px; color: #888; margin-top: 2px; }
+  .phrase-list { display: flex; flex-direction: column; gap: 12px; }
+  .phrase-item {
+    background: rgba(255,255,255,.06); border-radius: 12px; padding: 14px 16px;
+    display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  }
+  .phrase-ko { font-size: 15px; font-weight: 700; color: #FDF8F0; }
+  .phrase-ro { font-size: 10px; color: #888; margin-top: 2px; font-style: italic; }
+  .phrase-zh { font-size: 12px; color: #FF8FAB; font-weight: 600; flex-shrink: 0; }
+  .phrase-scene { font-size: 10px; color: #666; margin-top: 3px; }
+  .add-btn {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: linear-gradient(135deg,#FF8FAB,#C9B8E8);
+    color: #fff; font-size: 14px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; cursor: pointer;
+    box-shadow: 0 2px 8px rgba(255,143,171,.4); transition: transform .15s;
+  }
+  .add-btn:hover { transform: scale(1.1); }
+
+  /* 词汇 */
+  .vocab-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+  .vocab-chip {
+    background: #fff; border: 1px solid #ffe0ea;
+    border-radius: 20px; padding: 5px 14px;
+    font-size: 12px; color: #555;
+    display: flex; align-items: center; gap: 6px;
+    box-shadow: 0 1px 6px rgba(0,0,0,.04);
+  }
+  .vocab-chip .vko { font-weight: 700; color: #333; }
+  .vocab-chip .vzh { color: #FF8FAB; }
+
+  .divider { text-align: center; font-size: 18px; letter-spacing: 8px; opacity: .3; margin: 32px 0; }
+
+  /* 结尾 */
+  .ending-card {
+    background: linear-gradient(135deg, #fff0f5, #f5f0ff, #f0fbf9);
+    border-radius: 20px; padding: 28px 24px; text-align: center; margin-top: 40px;
+    border: 1.5px solid rgba(255,143,171,.15); position: relative; overflow: hidden;
+  }
+  .ending-card::before {
+    content: "🙏💜🐰✨🌸🇰🇷";
+    position: absolute; top: 8px; left: 0; right: 0;
+    font-size: 16px; letter-spacing: 12px; opacity: .2;
+  }
+  .ending-tori { font-size: 52px; display: block; margin-bottom: 12px; }
+  .ending-title { font-size: 17px; font-weight: 800; color: #FF8FAB; margin-bottom: 6px; }
+  .ending-sub { font-size: 13px; color: #aaa; line-height: 1.8; margin-bottom: 20px; }
+  .next-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #FF8FAB, #C9B8E8);
+    color: #fff; font-size: 13px; font-weight: 700;
+    padding: 10px 28px; border-radius: 24px;
+    box-shadow: 0 4px 16px rgba(255,143,171,.3);
+    text-decoration: none; margin-bottom: 8px;
+  }
+  .next-articles { margin-top: 16px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .next-tag {
+    font-size: 12px; color: #A8D8D0; border: 1px solid #A8D8D0;
+    padding: 4px 14px; border-radius: 20px; cursor: pointer;
+  }
+
+  @media (max-width: 600px) {
+    .vs-row { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 21px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-tag">🇰🇷 韩国旅行 · 第一次去首尔，토리 陪你</div>
+  <h1>
+    去韩国之前必须知道的文化禁忌
+    <span>한국에서 조심해야 할 것들 — 不是规矩，是尊重</span>
+  </h1>
+  <div class="hero-meta">
+    <span>🐰 토리 踩坑总结</span>
+    <span>📖 约12分钟读完</span>
+    <span>🗂️ 旅行 · 礼仪</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="breadcrumb">
+    🏠 首页 <span>›</span> 🇰🇷 韩国 <span>›</span> 旅行 <span>›</span> 文化禁忌
+  </div>
+
+  <div class="intro-card">
+    <div class="tori-says">
+      <div class="tori-avatar">🐰</div>
+      <div class="tori-bubble">
+        <div class="tori-name">토리 说</div>
+        토리第一次去韩国，犯了好几个让自己事后很尴尬的错误——在饭桌上把碗端起来吃饭，在长辈面前直接喝酒，在北村大声说话……没有人当场纠正我，但토리 后来知道那些都是失礼的行为。这篇文章不是为了让你如履薄冰，而是让你在享受韩国的同时，不会在不知情的情况下冒犯别人。知道这些规则，旅行会更自在 🙏
+      </div>
+    </div>
+  </div>
+
+  <!-- 饮食禁忌 -->
+  <div class="section-title">
+    <div class="st-icon">🍽️</div>
+    <div>
+      饮食场合——餐桌上的禁忌最多
+      <span class="st-sub">和韩国人一起吃饭时，这些细节很重要</span>
+    </div>
+  </div>
+
+  <div class="taboo-card" style="--tc:#e74c3c;--thbg:#fff5f5;">
+    <div class="taboo-header">
+      <div class="taboo-icon">🥣</div>
+      <div class="taboo-title">不要把碗端起来吃饭</div>
+      <div class="taboo-level" style="--tlbg:#e74c3c;">严重失礼</div>
+    </div>
+    <div class="taboo-body">
+      <p>在中国，端碗吃饭很正常；在日本，端碗是礼仪。但在韩国，把碗端起来吃饭看起来像"乞讨的姿态"，是非常失礼的行为。</p>
+      <div class="vs-row">
+        <div class="vs-wrong">
+          <div class="vs-label">❌ 错误</div>
+          把饭碗或汤碗端起来，低着头吃
+        </div>
+        <div class="vs-right">
+          <div class="vs-label">✓ 正确</div>
+          碗放在桌上，用勺子将食物送入口中，或低头就着桌上的碗吃
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="taboo-card" style="--tc:#e67e22;--thbg:#fff8f0;">
+    <div class="taboo-header">
+      <div class="taboo-icon">⏳</div>
+      <div class="taboo-title">等长辈先动筷子再开始吃</div>
+      <div class="taboo-level" style="--tlbg:#e67e22;">重要礼仪</div>
+    </div>
+    <div class="taboo-body">
+      <p>和韩国人一起吃饭，必须等年纪最长的人拿起勺子（또는 젓가락）之后，其他人才能开始吃。这是韩国儒家饮食礼仪的核心，违反了会让在场所有人感到不舒服。</p>
+      <div class="vs-row">
+        <div class="vs-wrong">
+          <div class="vs-label">❌ 错误</div>
+          食物一上来立刻开始吃，不管长辈有没有动
+        </div>
+        <div class="vs-right">
+          <div class="vs-label">✓ 正确</div>
+          观察一下，等最年长的人先动了，再说"잘 먹겠습니다"然后开始吃
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="taboo-card" style="--tc:#8e44ad;--thbg:#f9f0ff;">
+    <div class="taboo-header">
+      <div class="taboo-icon">🥢</div>
+      <div class="taboo-title">筷子不能插进食物里</div>
+      <div class="taboo-level" style="--tlbg:#8e44ad;">禁忌</div>
+    </div>
+    <div class="taboo-body">
+      <p>把筷子竖着插进米饭或食物里，是韩国祭祀时的专属做法——象征给逝去的人上供。在普通饭桌上这样做，是极其不吉利的禁忌，会让韩国人非常不安。</p>
+      <div class="vs-row">
+        <div class="vs-wrong">
+          <div class="vs-label">❌ 绝对不行</div>
+          把筷子竖直插进饭碗或菜里
+        </div>
+        <div class="vs-right">
+          <div class="vs-label">✓ 正确</div>
+          筷子横放在筷子架上，或搭在碗沿，或放在桌上
+        </div>
+      </div>
+      <div class="tori-mini">
+        <div class="tori-mini-avatar">🐰</div>
+        <div class="tori-mini-text">이건 중국에서도 마찬가지예요. 한중일 모두 이 금기는 공통이에요. <strong>음식에 젓가락을 꽂으면 안 된다</strong>는 건 동아시아 공통 문화예요.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="taboo-card" style="--tc:#FF8FAB;--thbg:#fff0f5;">
+    <div class="taboo-header">
+      <div class="taboo-icon">🥂</div>
+      <div class="taboo-title">在长辈面前喝酒要侧身转头</div>
+      <div class="taboo-level" style="--tlbg:#FF8FAB;">饮酒礼仪</div>
+    </div>
+    <div class="taboo-body">
+      <p>在韩国长辈面前喝酒，不能正对着长辈仰头喝，要侧过身子转开头，用手遮一下再喝。这在韩剧里经常出现，是真实的礼仪，不是夸张。</p>
+      <p>另外：不能给自己倒酒，要互相斟酌；接酒时要用双手或用一只手托住另一只手的手肘表示恭敬；长辈的杯子空了要主动添酒。</p>
+      <div class="highlight">
+        <strong>기억하세요：</strong>한국의 음주 예절은 나이 서열을 중심으로 돌아가요. 술을 따르는 것도, 마시는 것도, 모두 나이 순서가 있어요. 외국인이라도 이 기본 예절을 지키면 한국 사람들이 굉장히 좋아해요.
+      </div>
+    </div>
+  </div>
+
+  <div class="taboo-card" style="--tc:#A8D8D0;--thbg:#f0fbf9;">
+    <div class="taboo-header">
+      <div class="taboo-icon">🎁</div>
+      <div class="taboo-title">收到礼物不要当场拆开</div>
+      <div class="taboo-level" style="--tlbg:#A8D8D0;">文化差异</div>
+    </div>
+    <div class="taboo-body">
+      <p>在中国收到礼物当场打开很正常，甚至是礼貌。但在韩国，当着送礼人的面立刻拆开礼物，有时会显得过于急切，缺乏含蓄。传统礼仪是先道谢收下，之后再打开。</p>
+      <p>当然，现代韩国年轻人之间这个规矩已经不那么严格了——朋友之间当场拆开完全可以。但在正式场合、对长辈，或者商务礼品场合，等回去再开更稳妥。</p>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 公共场合 -->
+  <div class="section-title">
+    <div class="st-icon">🏙️</div>
+    <div>
+      公共场合——不要让人侧目
+      <span class="st-sub">韩国是高度重视公共秩序的社会</span>
+    </div>
+  </div>
+
+  <div class="taboo-card" style="--tc:#C9B8E8;--thbg:#f5f0ff;">
+    <div class="taboo-header">
+      <div class="taboo-icon">🗣️</div>
+      <div class="taboo-title">公共场合不要大声喧哗</div>
+      <div class="taboo-level" style="--tlbg:#C9B8E8;">公共礼仪</div>
+    </div>
+    <div class="taboo-body">
+      <p>韩国的公共场合（地铁、咖啡厅、图书馆、餐厅）整体音量偏低，大声说话会非常显眼，引来周围人侧目。这在首尔尤其明显——越是人多的地方，整体反而越安静。</p>
+      <p>특히（特别是）북촌（北村）韩屋村这样的居住区，有专门的"조용히 해주세요（请保持安静）"标识，那里是真实居民的生活区域，游客大声喧哗会直接影响居民生活。</p>
+      <div class="vs-row">
+        <div class="vs-wrong">
+          <div class="vs-label">❌ 避免</div>
+          在地铁里大声打电话、在北村高声说笑、在咖啡厅外放视频音频
+        </div>
+        <div class="vs-right">
+          <div class="vs-label">✓ 正确</div>
+          保持室内音量，电话小声说，看视频戴耳机
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="taboo-card" style="--tc:#e74c3c;--thbg:#fff5f5;">
+    <div class="taboo-header">
+      <div class="taboo-icon">🚯</div>
+      <div class="taboo-title">不要随手乱扔垃圾</div>
+      <div class="taboo-level" style="--tlbg:#e74c3c;">法律规定</div>
+    </div>
+    <div class="taboo-body">
+      <p>韩国街头垃圾桶很少，这不是因为没人收垃圾，而是因为韩国推行"垃圾自带回家处理"的环保政策。在首尔街头随手丢垃圾，不只是不礼貌，被发现可以被处以罚款。</p>
+      <p>处理方式：吃完街头小吃的包装，带到最近的편의점旁边的垃圾桶扔掉；或者带回酒店处理。편의점（便利店）旁边通常有分类垃圾桶，一般可以使用。</p>
+      <div class="tori-mini">
+        <div class="tori-mini-avatar">🐰</div>
+        <div class="tori-mini-text">토리의 방법：회오리감자나 떡볶이를 먹고 나면, 그 포장지를 들고 편의점을 찾아요. 편의점 앞에 항상 쓰레기통이 있거든요. <strong>이게 서울에서 쓰레기를 버리는 가장 쉬운 방법이에요.</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="taboo-card" style="--tc:#FFE4A0;--thbg:#fffdf0;">
+    <div class="taboo-header">
+      <div class="taboo-icon">📸</div>
+      <div class="taboo-title">拍照前要确认——不是所有地方都能拍</div>
+      <div class="taboo-level" style="--tlbg:#d68910;">需要注意</div>
+    </div>
+    <div class="taboo-body">
+      <p>韩国对拍照有几个需要注意的场景：</p>
+      <p><strong style="color:#d68910;">北村住宅区</strong>：很多韩屋是真实住宅，不能对着别人家门口、窗户随意拍照。有"촬영 금지（禁止拍照）"标识的地方要遵守。</p>
+      <p><strong style="color:#d68910;">商场和咖啡厅内部</strong>：部分高档商场和网红咖啡厅禁止商业拍摄，个人旅游照片通常没问题，但直播或架三脚架拍摄需要提前确认。</p>
+      <p><strong style="color:#d68910;">拍人</strong>：在韩国拍陌生人（特别是近景）需要对方同意，不要偷拍。韩国有专门针对偷拍的法律，处罚严厉。</p>
+      <div class="vs-row">
+        <div class="vs-wrong">
+          <div class="vs-label">❌ 避免</div>
+          对着北村居民家门口拍、未经同意拍陌生人特写、无视禁止拍摄标识
+        </div>
+        <div class="vs-right">
+          <div class="vs-label">✓ 正确</div>
+          进入前先看有无禁止标识，拍人前微笑确认，街景和建筑随意拍
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 社交场合 -->
+  <div class="section-title">
+    <div class="st-icon">🤝</div>
+    <div>
+      社交场合——和韩国人相处时
+      <span class="st-sub">这些细节决定对方对你的第一印象</span>
+    </div>
+  </div>
+
+  <div class="taboo-card" style="--tc:#FF8FAB;--thbg:#fff0f5;">
+    <div class="taboo-header">
+      <div class="taboo-icon">👋</div>
+      <div class="taboo-title">不要随便直呼名字</div>
+      <div class="taboo-level" style="--tlbg:#FF8FAB;">社交礼仪</div>
+    </div>
+    <div class="taboo-body">
+      <p>在韩国，直接叫一个比你年长或职位高的人的名字（特别是不加任何称谓）是非常失礼的。应该用职位称谓（선생님/팀장님/사장님）、关系称谓（언니/오빠/선배）或加"씨"（先生/女士）。</p>
+      <p>作为外国游客，遇到韩国人，称呼对方"성함이 어떻게 되세요?（请问怎么称呼您？）"然后用对方的姓+씨称呼，通常都是安全的。</p>
+    </div>
+  </div>
+
+  <div class="taboo-card" style="--tc:#C9B8E8;--thbg:#f5f0ff;">
+    <div class="taboo-header">
+      <div class="taboo-icon">🤲</div>
+      <div class="taboo-title">用双手递送和接收物品</div>
+      <div class="taboo-level" style="--tlbg:#C9B8E8;">基本礼仪</div>
+    </div>
+    <div class="taboo-body">
+      <p>给韩国人递东西（钱、卡、礼物、名片）或接东西，要用双手，或者右手递/接、左手扶住右前臂。单手递东西，特别是面对长辈，会显得不尊重。</p>
+      <p>在便利店付钱时，双手接找零；在餐厅接菜单时双手接；收到名片时双手接、认真看一眼再放好，不要随手扔进口袋——这些都是韩国日常中真实有意义的细节。</p>
+      <div class="vs-row">
+        <div class="vs-wrong">
+          <div class="vs-label">❌ 避免</div>
+          单手递钱给收银台、接到名片随手揉进口袋
+        </div>
+        <div class="vs-right">
+          <div class="vs-label">✓ 正确</div>
+          双手递接，名片认真看一秒再收好
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="taboo-card" style="--tc:#A8D8D0;--thbg:#f0fbf9;">
+    <div class="taboo-header">
+      <div class="taboo-icon">🚪</div>
+      <div class="taboo-title">进门时让长辈先进</div>
+      <div class="taboo-level" style="--tlbg:#A8D8D0;">礼仪</div>
+    </div>
+    <div class="taboo-body">
+      <p>进入餐厅、电梯、任何门口，应该请年长的人先进。韩国的长幼秩序在进出门这个细节上体现得很明显。抢先走进去，或者让门直接关上、没有为后面的人扶着门，都会被认为是没有礼貌。</p>
+      <p>在电梯里，到了有长辈要下的楼层，应该先侧身让对方出去，而不是自己先冲出去。</p>
+    </div>
+  </div>
+
+  <div class="taboo-card" style="--tc:#e67e22;--thbg:#fff8f0;">
+    <div class="taboo-header">
+      <div class="taboo-icon">🙅</div>
+      <div class="taboo-title">不要用手指着人</div>
+      <div class="taboo-level" style="--tlbg:#e67e22;">社交禁忌</div>
+    </div>
+    <div class="taboo-body">
+      <p>用食指指着一个人，在韩国是非常不礼貌的肢体语言，有攻击性和侮辱的含义。需要指向某人或某处时，用整个手掌朝向、或者用手肘方向示意。</p>
+      <p>同样，呼唤别人时不要用食指弯曲勾动（在某些文化里这是"过来"的意思，但在韩国通常用于对动物），应该用整只手手心朝下挥动。</p>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 特定场所 -->
+  <div class="section-title">
+    <div class="st-icon">🏯</div>
+    <div>
+      特定场所的注意事项
+      <span class="st-sub">这些地方有专属规则</span>
+    </div>
+  </div>
+
+  <div class="culture-card">
+    <h3>🏯 寺庙（사찰）参观礼仪</h3>
+    <p>首尔有多座著名寺庙，如조계사（曹溪寺）。参观时：进入大雄殿前脱鞋（会有指示牌）；在佛像面前拍照请保持静肃；不要随意触摸佛像和法器；穿着不要过于暴露（短裤、无袖可能不被允许入内）。</p>
+    <p>部分寺庙提供"템플스테이（寺庙住宿体验）"，如果参与，有更严格的行为规范，工作人员会提前说明。</p>
+  </div>
+
+  <div class="culture-card">
+    <h3>🏯 景福宫等宫殿参观</h3>
+    <p>参观宫殿时，穿着한복（韩服）可以免费入场——首尔各主要宫殿都有这个政策。主要宫殿附近有한복 대여점（韩服租借店），价格约15,000-30,000韩元，含饰品，拍照效果非常好。</p>
+    <p>宫殿内禁止跑步、禁止在文物上攀爬和触摸，遵守参观区域划分。守卫仪式（수문장 교대식）每天有固定时间，可以免费观看，非常值得等待。</p>
+  </div>
+
+  <div class="culture-card">
+    <h3>🛁 찜질방（汗蒸幕）</h3>
+    <p>찜질방是韩国特有的桑拿文化场所，男女分区入浴，公共区域混合。进入汤池区域必须裸体（只有公共区域穿提供的统一服装）。</p>
+    <p>不能带手机进入浴室区域（有专用储物柜）；洗澡要认真，不只是泡一泡；不能在汤池里游泳或溅水；离开汤池要自己擦干再进入公共区域。这是韩国人真实的生活方式，不是表演给游客看的。</p>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 快速对照表 -->
+  <div class="section-title">
+    <div class="st-icon">📋</div>
+    <div>
+      禁忌快速对照表
+      <span class="st-sub">出发前30秒回顾一遍</span>
+    </div>
+  </div>
+
+  <table class="quick-table">
+    <tr><th>场景</th><th>可以做 ✓</th><th>不可以做 ✗</th></tr>
+    <tr>
+      <td>吃饭时</td>
+      <td class="ok">碗放桌上吃</td>
+      <td class="no">把碗端起来</td>
+    </tr>
+    <tr>
+      <td>饭桌开始</td>
+      <td class="ok">等长辈先动筷</td>
+      <td class="no">抢先开始吃</td>
+    </tr>
+    <tr>
+      <td>放筷子</td>
+      <td class="ok">横放在筷架或碗沿</td>
+      <td class="no">竖插进食物里</td>
+    </tr>
+    <tr>
+      <td>喝酒</td>
+      <td class="ok">长辈面前侧身转头喝</td>
+      <td class="no">正对长辈仰头喝</td>
+    </tr>
+    <tr>
+      <td>递物品</td>
+      <td class="ok">双手递接</td>
+      <td class="no">单手草率地递</td>
+    </tr>
+    <tr>
+      <td>地铁里</td>
+      <td class="ok">安静坐着/戴耳机</td>
+      <td class="no">大声打电话/外放音乐</td>
+    </tr>
+    <tr>
+      <td>북촌</td>
+      <td class="ok">安静参观，小声说话</td>
+      <td class="no">大声喧哗/对着民居拍照</td>
+    </tr>
+    <tr>
+      <td>垃圾</td>
+      <td class="ok">带到편의점旁垃圾桶扔</td>
+      <td class="no">随手丢在街上</td>
+    </tr>
+    <tr>
+      <td>指人</td>
+      <td class="ok">用整只手示意方向</td>
+      <td class="no">用食指指着人</td>
+    </tr>
+    <tr>
+      <td>称呼他人</td>
+      <td class="ok">用职位/씨/선배称呼</td>
+      <td class="no">直接叫长辈名字</td>
+    </tr>
+  </table>
+
+  <div class="notice-box">
+    <div class="nt">💡 最重要的一句话</div>
+    做错了不要慌。韩国人对外国游客普遍非常包容，知道你不了解这些规则。最重要的是：<strong>如果你意识到自己做了不合适的事，真诚地说一句죄송합니다（对不起）</strong>，对方几乎一定会微笑着说没关系。诚意比完美更重要。
+  </div>
+
+  <!-- 실용 韩语 -->
+  <div class="korean-section">
+    <div class="ks-header">
+      <div class="ks-tori">🐰</div>
+      <div>
+        <div class="ks-title">토리 教你说——道歉与礼貌用语</div>
+        <div class="ks-sub">点击 + 可加入你的词汇本</div>
+      </div>
+    </div>
+    <div class="phrase-list">
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">죄송합니다.</div>
+          <div class="phrase-ro">joe-song-ham-ni-da</div>
+          <div class="phrase-scene">🙏 正式道歉，万能</div>
+        </div>
+        <div class="phrase-zh">非常抱歉</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">실례합니다.</div>
+          <div class="phrase-ro">sil-lye-ham-ni-da</div>
+          <div class="phrase-scene">🚶 经过别人身旁时</div>
+        </div>
+        <div class="phrase-zh">打扰了 / 借过</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">사진 찍어도 될까요?</div>
+          <div class="phrase-ro">sa-jin jji-geo-do doel-kka-yo?</div>
+          <div class="phrase-scene">📸 拍照前礼貌确认</div>
+        </div>
+        <div class="phrase-zh">可以拍照吗？</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">감사합니다. 잘 먹겠습니다.</div>
+          <div class="phrase-ro">gam-sa-ham-ni-da. jal meok-get-sseum-ni-da</div>
+          <div class="phrase-scene">🍽️ 饭前感谢</div>
+        </div>
+        <div class="phrase-zh">谢谢，我开动了</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">몰랐어요. 앞으로 조심할게요.</div>
+          <div class="phrase-ro">mol-ra-sseo-yo. ap-eu-ro jo-sim-hal-ge-yo</div>
+          <div class="phrase-scene">😅 做错了解释</div>
+        </div>
+        <div class="phrase-zh">我不知道，以后会注意的</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">조용히 해야 하는 곳인가요?</div>
+          <div class="phrase-ro">jo-yong-hi hae-ya ha-neun got-in-ga-yo?</div>
+          <div class="phrase-scene">🔇 进入不确定的场所时</div>
+        </div>
+        <div class="phrase-zh">这里需要保持安静吗？</div>
+        <div class="add-btn">+</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 词汇 -->
+  <div class="section-title" style="font-size:16px;margin-top:36px;">
+    <div class="st-icon" style="width:30px;height:30px;font-size:14px;">📖</div>
+    <div>本篇出现的词汇</div>
+  </div>
+  <div class="vocab-row">
+    <div class="vocab-chip"><span class="vko">예의</span><span class="vzh">礼仪</span></div>
+    <div class="vocab-chip"><span class="vko">죄송합니다</span><span class="vzh">非常抱歉</span></div>
+    <div class="vocab-chip"><span class="vko">실례합니다</span><span class="vzh">打扰了</span></div>
+    <div class="vocab-chip"><span class="vko">어른</span><span class="vzh">长辈·成人</span></div>
+    <div class="vocab-chip"><span class="vko">촬영 금지</span><span class="vzh">禁止拍照</span></div>
+    <div class="vocab-chip"><span class="vko">조용히</span><span class="vzh">安静地</span></div>
+    <div class="vocab-chip"><span class="vko">쓰레기통</span><span class="vzh">垃圾桶</span></div>
+    <div class="vocab-chip"><span class="vko">한복</span><span class="vzh">韩服</span></div>
+    <div class="vocab-chip"><span class="vko">찜질방</span><span class="vzh">汗蒸幕</span></div>
+    <div class="vocab-chip"><span class="vko">사찰</span><span class="vzh">寺庙</span></div>
+    <div class="vocab-chip"><span class="vko">금기</span><span class="vzh">禁忌</span></div>
+    <div class="vocab-chip"><span class="vko">몰랐어요</span><span class="vzh">我不知道</span></div>
+  </div>
+
+  <!-- 结尾 -->
+  <div class="ending-card">
+    <span class="ending-tori">🐰</span>
+    <div class="ending-title">了解规则，是为了更自在地旅行</div>
+    <div class="ending-sub">
+      这些禁忌不是束缚，<br>
+      是帮你真正进入韩国文化的钥匙。<br>
+      知道这些的你，<br>
+      会比不知道的人更被韩国人接受和喜爱。<br>
+      旅行最美的事，是在他人的规则里<br>
+      找到真正的连接。<br>
+      下一篇，토리 带你去首尔必去的25个地方 📍
+    </div>
+    <a class="next-btn" href="#">下一篇：首尔必去25个地方 →</a>
+    <div class="next-articles">
+      <div class="next-tag">🗺️ 首尔街区性格图鉴</div>
+      <div class="next-tag">🚇 首尔地铁完全攻略</div>
+      <div class="next-tag">🛍️ 韩国购物完全指南</div>
+    </div>
+  </div>
+
+</div>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a02edad60b631979',t:'MTc3OTk4ODAzOA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

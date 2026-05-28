@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>首尔必去25个地方 · 韩语学习日记</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #FFFDF9; color: #3a3a3a; line-height: 1.7;
+  }
+
+  .hero {
+    background: linear-gradient(160deg, #FF8FAB 0%, #C9B8E8 40%, #A8D8D0 100%);
+    padding: 56px 24px 48px; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: "📍🏯🌸☕🛍️✨";
+    position: absolute; top: 14px; left: 0; right: 0;
+    font-size: 22px; letter-spacing: 18px; opacity: .22;
+  }
+  .hero-tag {
+    display: inline-block; background: rgba(255,255,255,.25);
+    color: #fff; font-size: 11px; font-weight: 700;
+    padding: 4px 14px; border-radius: 20px; margin-bottom: 16px; letter-spacing: 1px;
+  }
+  .hero h1 {
+    font-size: 28px; font-weight: 800; color: #fff;
+    text-shadow: 0 2px 12px rgba(0,0,0,.15); line-height: 1.3; margin-bottom: 12px;
+  }
+  .hero h1 span { font-size: 14px; font-weight: 400; display: block; margin-top: 6px; opacity: .9; }
+  .hero-meta {
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+    font-size: 12px; color: rgba(255,255,255,.85); margin-top: 16px; flex-wrap: wrap;
+  }
+
+  .container { max-width: 780px; margin: 0 auto; padding: 40px 20px 80px; }
+
+  .breadcrumb {
+    font-size: 12px; color: #bbb; display: flex; align-items: center; gap: 6px; margin-bottom: 28px;
+  }
+  .breadcrumb span { color: #ddd; }
+
+  /* 토리引言 */
+  .intro-card {
+    background: #fff; border-radius: 20px; padding: 24px 26px;
+    box-shadow: 0 2px 20px rgba(255,143,171,.12); margin-bottom: 40px;
+    border-left: 4px solid #FF8FAB;
+  }
+  .tori-says { display: flex; gap: 14px; align-items: flex-start; }
+  .tori-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: linear-gradient(135deg, #FF8FAB, #C9B8E8);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+  }
+  .tori-bubble {
+    background: linear-gradient(135deg, #fff0f5, #f5f0ff);
+    border-radius: 0 14px 14px 14px; padding: 14px 16px;
+    font-size: 13px; color: #555; line-height: 1.8; flex: 1; position: relative;
+  }
+  .tori-bubble::before {
+    content: ""; position: absolute; left: -8px; top: 12px;
+    border: 8px solid transparent; border-right-color: #fff0f5; border-left: none;
+  }
+  .tori-name { font-size: 11px; color: #FF8FAB; font-weight: 700; margin-bottom: 5px; }
+
+  /* 章节标题（街区分组）*/
+  .zone-title {
+    font-size: 18px; font-weight: 800; color: #fff;
+    margin: 44px 0 16px; padding: 14px 20px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--zc1,#FF8FAB), var(--zc2,#C9B8E8));
+    display: flex; align-items: center; gap: 10px;
+    box-shadow: 0 4px 16px rgba(0,0,0,.1);
+  }
+  .zone-title .zt-icon { font-size: 22px; }
+  .zone-title .zt-sub { font-size: 12px; font-weight: 400; opacity: .85; display: block; margin-top: 2px; }
+
+  /* 地点卡片 */
+  .place-card {
+    background: #fff; border-radius: 18px; padding: 18px 20px;
+    box-shadow: 0 2px 14px rgba(0,0,0,.07); margin: 12px 0;
+    border-left: 4px solid var(--pc, #FF8FAB);
+    display: flex; gap: 14px; align-items: flex-start;
+    transition: transform .15s;
+  }
+  .place-card:hover { transform: translateX(4px); }
+
+  .place-num {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--pc, #FF8FAB); color: #fff;
+    font-size: 13px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,.15);
+  }
+  .place-body { flex: 1; }
+  .place-name-ko { font-size: 16px; font-weight: 800; color: #333; margin-bottom: 1px; }
+  .place-name-zh { font-size: 11px; color: var(--pc,#FF8FAB); font-weight: 600; margin-bottom: 6px; }
+  .place-desc { font-size: 12px; color: #666; line-height: 1.75; margin-bottom: 8px; }
+  .place-meta {
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .place-tag {
+    font-size: 10px; font-weight: 600;
+    padding: 2px 9px; border-radius: 20px;
+    background: var(--ptbg, #fff0f5); color: var(--pc, #FF8FAB);
+  }
+  .place-tip {
+    margin-top: 8px; font-size: 11px; color: #aaa;
+    display: flex; align-items: flex-start; gap: 4px; line-height: 1.6;
+  }
+  .place-tip::before { content: "🐰"; font-size: 11px; flex-shrink: 0; }
+
+  /* 토리 mini */
+  .tori-mini {
+    display: flex; gap: 10px; align-items: flex-start;
+    background: linear-gradient(135deg, #fff0f5, #f5f0ff);
+    border-radius: 12px; padding: 12px 14px; margin: 16px 0;
+  }
+  .tori-mini-avatar { font-size: 18px; flex-shrink: 0; }
+  .tori-mini-text { font-size: 12px; color: #666; line-height: 1.75; }
+  .tori-mini-text strong { color: #FF8FAB; }
+
+  /* 실용 韩语 */
+  .korean-section {
+    background: linear-gradient(135deg, #1e1a2a, #2a1e20);
+    border-radius: 20px; padding: 26px 24px; margin: 32px 0;
+  }
+  .ks-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  .ks-tori { font-size: 28px; }
+  .ks-title { font-size: 15px; font-weight: 700; color: #FDF8F0; }
+  .ks-sub { font-size: 11px; color: #888; margin-top: 2px; }
+  .phrase-list { display: flex; flex-direction: column; gap: 12px; }
+  .phrase-item {
+    background: rgba(255,255,255,.06); border-radius: 12px; padding: 14px 16px;
+    display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  }
+  .phrase-ko { font-size: 15px; font-weight: 700; color: #FDF8F0; }
+  .phrase-ro { font-size: 10px; color: #888; margin-top: 2px; font-style: italic; }
+  .phrase-zh { font-size: 12px; color: #FF8FAB; font-weight: 600; flex-shrink: 0; }
+  .phrase-scene { font-size: 10px; color: #666; margin-top: 3px; }
+  .add-btn {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: linear-gradient(135deg,#FF8FAB,#C9B8E8);
+    color: #fff; font-size: 14px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; cursor: pointer;
+    box-shadow: 0 2px 8px rgba(255,143,171,.4); transition: transform .15s;
+  }
+  .add-btn:hover { transform: scale(1.1); }
+
+  /* 词汇 */
+  .vocab-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+  .vocab-chip {
+    background: #fff; border: 1px solid #ffe0ea;
+    border-radius: 20px; padding: 5px 14px;
+    font-size: 12px; color: #555;
+    display: flex; align-items: center; gap: 6px;
+    box-shadow: 0 1px 6px rgba(0,0,0,.04);
+  }
+  .vocab-chip .vko { font-weight: 700; color: #333; }
+  .vocab-chip .vzh { color: #FF8FAB; }
+
+  /* 章节标题（普通）*/
+  .section-title {
+    font-size: 20px; font-weight: 800; color: #333; margin: 44px 0 16px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-title .st-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, #FF8FAB, #C9B8E8);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .section-title .st-sub { font-size: 12px; font-weight: 400; color: #aaa; display: block; margin-top: 2px; }
+
+  .divider { text-align: center; font-size: 18px; letter-spacing: 8px; opacity: .3; margin: 28px 0; }
+
+  /* 结尾 */
+  .ending-card {
+    background: linear-gradient(135deg, #fff0f5, #f5f0ff, #f0fbf9);
+    border-radius: 20px; padding: 28px 24px; text-align: center; margin-top: 40px;
+    border: 1.5px solid rgba(255,143,171,.15); position: relative; overflow: hidden;
+  }
+  .ending-card::before {
+    content: "📍🏯🌸🐰✨💜";
+    position: absolute; top: 8px; left: 0; right: 0;
+    font-size: 16px; letter-spacing: 12px; opacity: .2;
+  }
+  .ending-tori { font-size: 52px; display: block; margin-bottom: 12px; }
+  .ending-title { font-size: 17px; font-weight: 800; color: #FF8FAB; margin-bottom: 6px; }
+  .ending-sub { font-size: 13px; color: #aaa; line-height: 1.8; margin-bottom: 20px; }
+  .next-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #FF8FAB, #C9B8E8);
+    color: #fff; font-size: 13px; font-weight: 700;
+    padding: 10px 28px; border-radius: 24px;
+    box-shadow: 0 4px 16px rgba(255,143,171,.3);
+    text-decoration: none; margin-bottom: 8px;
+  }
+  .next-articles { margin-top: 16px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .next-tag {
+    font-size: 12px; color: #A8D8D0; border: 1px solid #A8D8D0;
+    padding: 4px 14px; border-radius: 20px; cursor: pointer;
+  }
+
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 22px; }
+    .place-card { flex-direction: column; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-tag">🇰🇷 韩国旅行 · 第一次去首尔，토리 陪你</div>
+  <h1>
+    首尔必去25个地方
+    <span>서울 필수 여행지 25 — 不是景点清单，是25个值得去的理由</span>
+  </h1>
+  <div class="hero-meta">
+    <span>🐰 토리 精选</span>
+    <span>📖 约15分钟读完</span>
+    <span>🗂️ 旅行 · 景点</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="breadcrumb">
+    🏠 首页 <span>›</span> 🇰🇷 韩国 <span>›</span> 旅行 <span>›</span> 首尔必去25个地方
+  </div>
+
+  <div class="intro-card">
+    <div class="tori-says">
+      <div class="tori-avatar">🐰</div>
+      <div class="tori-bubble">
+        <div class="tori-name">토리 说</div>
+        网上的首尔旅游攻略基本上都是同一份——N首尔塔、明洞购物、景福宫、弘大打卡，然后回国。토리 去过首尔很多次，这25个地方都是토리 认为"值得花时间"的，不只因为好看，而是因为去了之后你会真正理解首尔这座城市。按街区整理，可以当作行程参考——同一区域的地方排在一起，减少奔波 📍
+      </div>
+    </div>
+  </div>
+
+  <!-- 종로·중구 -->
+  <div class="zone-title" style="--zc1:#8e6b3e;--zc2:#C9B8E8;">
+    <span class="zt-icon">🏯</span>
+    <div>
+      종로구 · 중구 — 历史的首尔
+      <span class="zt-sub">景福宫 / 北村 / 益善洞 / 明洞 / 广藏市场</span>
+    </div>
+  </div>
+
+  <div class="place-card" style="--pc:#8e6b3e;--ptbg:#fff8f0;">
+    <div class="place-num">1</div>
+    <div class="place-body">
+      <div class="place-name-ko">경복궁 景福宮</div>
+      <div class="place-name-zh">景福宫 · 朝鲜王朝的正宫</div>
+      <div class="place-desc">朝鲜王朝（1392-1897）最重要的宫殿，占地约50万平方米。宫内有근정전（勤政殿）、경회루（庆会楼）等标志建筑。穿한복免费入场，守卫交接仪式每天有固定场次，值得等待。宫内的国立民俗博物馆免费参观。</div>
+      <div class="place-meta">
+        <span class="place-tag">무료（한복）</span>
+        <span class="place-tag">3号线 경복궁역</span>
+        <span class="place-tag">역사</span>
+      </div>
+      <div class="place-tip">한복 입고 가면 무료! 근처 한복 대여점에서 빌려 입고 가세요. 아침 일찍 가면 사람도 적고 사진도 예쁘게 찍혀요.</div>
+    </div>
+  </div>
+
+  <div class="place-card" style="--pc:#8e6b3e;--ptbg:#fff8f0;">
+    <div class="place-num">2</div>
+    <div class="place-body">
+      <div class="place-name-ko">북촌 한옥마을</div>
+      <div class="place-name-zh">北村韩屋村 · 600年前的贵族街区</div>
+      <div class="place-desc">景福宫和昌德宫之间保存最完整的韩屋聚居区，沿石板小巷行走，瓦片屋顶绵延无尽。北村8景（8경）是拍照最佳机位，第2景视角最有名。这里是真实居民区，请保持安静。</div>
+      <div class="place-meta">
+        <span class="place-tag">무료</span>
+        <span class="place-tag">3号线 안국역 2번출구</span>
+        <span class="place-tag">사진</span>
+      </div>
+      <div class="place-tip">아침 9시 전에 가면 사람이 거의 없어요. 주말 낮에는 사람이 너무 많아서 사진 찍기 힘들 수 있어요.</div>
+    </div>
+  </div>
+
+  <div class="place-card" style="--pc:#C9B8E8;--ptbg:#f5f0ff;">
+    <div class="place-num">3</div>
+    <div class="place-body">
+      <div class="place-name-ko">창덕궁 昌德宮</div>
+      <div class="place-name-zh">昌德宫 · UNESCO世界遗产</div>
+      <div class="place-desc">1997年被列入UNESCO世界文化遗产，是朝鲜时代保存最完好的宫殿之一。宫后的후원（秘苑/御苑）是韩国皇室的私人庭园，需要预约参观，值得专程为此来。秋天红叶季是一年中最美的时候。</div>
+      <div class="place-meta">
+        <span class="place-tag">입장료 있음</span>
+        <span class="place-tag">3号线 안국역</span>
+        <span class="place-tag">유네스코</span>
+      </div>
+      <div class="place-tip">후원（秘苑）은 별도 예약이 필요해요. 공식 홈페이지에서 미리 예약하세요. 가을 단풍 시즌이 가장 아름다워요.</div>
+    </div>
+  </div>
+
+  <div class="place-card" style="--pc:#FF8FAB;--ptbg:#fff0f5;">
+    <div class="place-num">4</div>
+    <div class="place-body">
+      <div class="place-name-ko">익선동</div>
+      <div class="place-name-zh">益善洞 · 首尔最有味道的小巷</div>
+      <div class="place-desc">1930年代韩屋改造的文艺街区，独立咖啡厅、复古小店密集。和北村的贵族感不同，这里更有生活气息和探索乐趣。익선다다（多层韩屋咖啡）是必去的标志性空间。旁边的종로3가 곱창거리（羊肠巷）也值得一探。</div>
+      <div class="place-meta">
+        <span class="place-tag">무료 입장</span>
+        <span class="place-tag">1·3·5号线 종로3가역</span>
+        <span class="place-tag">카페·레트로</span>
+      </div>
+      <div class="place-tip">평일 오후에 가면 여유롭게 즐길 수 있어요. 주말에는 줄 서는 카페가 많아요.</div>
+    </div>
+  </div>
+
+  <div class="place-card" style="--pc:#FFE4A0;--ptbg:#fffdf0;">
+    <div class="place-num">5</div>
+    <div class="place-body">
+      <div class="place-name-ko">광장시장</div>
+      <div class="place-name-zh">广藏市场 · 首尔最古老的室内市场</div>
+      <div class="place-desc">1905年开业，首尔历史最悠久的传统市场。마약김밥（迷你紫菜卷）、빈대떡（绿豆煎饼）、육회비빔밥（生牛肉拌饭）是招牌。曾被Netflix美食节目《街头美食斗士》专题报道。白天卖食材，傍晚后街头小吃最热闹。</div>
+      <div class="place-meta">
+        <span class="place-tag">무료 입장</span>
+        <span class="place-tag">1号线 종로5가역</span>
+        <span class="place-tag">길거리 음식</span>
+      </div>
+      <div class="place-tip">마약김밥은 꼭 드세요! 芥末酱油蘸着吃，一口一个，진짜 中毒性 있어요.</div>
+    </div>
+  </div>
+
+  <div class="place-card" style="--pc:#A8D8D0;--ptbg:#f0fbf9;">
+    <div class="place-num">6</div>
+    <div class="place-body">
+      <div class="place-name-ko">인사동</div>
+      <div class="place-name-zh">仁寺洞 · 传统工艺与现代文化的交汇</div>
+      <div class="place-desc">传统工艺品、书画、陶瓷、手工艺品聚集的文化街道。쌈지길（Ssamziegil）是其中最有设计感的综合文化空间，围绕天井的螺旋式走廊布满独立小店和咖啡厅。买韩国传统手工礼物的最佳地点。</div>
+      <div class="place-meta">
+        <span class="place-tag">무료</span>
+        <span class="place-tag">3号线 안국역 6번출구</span>
+        <span class="place-tag">전통·쇼핑</span>
+      </div>
+      <div class="place-tip">쌈지길 안의 작은 가게들이 정말 예뻐요. 전통 과자와 먹거리도 다양하게 있어요.</div>
+    </div>
+  </div>
+
+  <div class="place-card" style="--pc:#FF8FAB;--ptbg:#fff0f5;">
+    <div class="place-num">7</div>
+    <div class="place-body">
+      <div class="place-name-ko">명동</div>
+      <div class="place-name-zh">明洞 · 一站式购物与街头小吃</div>
+      <div class="place-desc">首尔最重要的商业街区，韩国所有主要美妆品牌旗舰店集中于此。傍晚后街头小吃摊全部出动——계란빵、회오리감자、닭꼬치……명동성당（天主教堂）是街区内的历史建筑，值得进去看一看。</div>
+      <div class="place-meta">
+        <span class="place-tag">무료</span>
+        <span class="place-tag">4号线 명동역</span>
+        <span class="place-tag">쇼핑·음식</span>
+      </div>
+      <div class="place-tip">뷰티 쇼핑은 명동에서 한 번에 해결할 수 있어요. 같은 제품도 매장마다 가격이 달라서 비교하고 사세요.</div>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 마포·서대문 -->
+  <div class="zone-title" style="--zc1:#FF8FAB;--zc2:#C9B8E8;">
+    <span class="zt-icon">🎨</span>
+    <div>
+      마포구 — 年轻的首尔
+      <span class="zt-sub">弘大 / 延南洞 / 합정 / 望遠洞</span>
+    </div>
+  </div>
+
+  <div class="place-card" style="--pc:#FF8FAB;--ptbg:#fff0f5;">
+    <div class="place-num">8</div>
+    <div class="place-body">
+      <div class="place-name-ko">홍대 걷고 싶은 거리</div>
+      <div class="place-name-zh">弘大·想走走的街道</div>
+      <div class="place-desc">首尔最有活力的步行街，独立音乐人、街头艺术家、潮流品牌聚集。傍晚后街头表演开始，酒吧和클럽营业到深夜。频道店（아이돌 굿즈 샵）、빈티지샵（古着店）、独立设计品牌密集分布。</div>
+      <div class="place-meta">
+        <span class="place-tag">무료</span>
+        <span class="place-tag">2号线 홍대입구역 9번출구</span>
+        <span class="place-tag">야간·쇼핑</span>
+      </div>
+      <div class="place-tip">저녁 6시 이후에 가면 거리가 살아나요. 주말 밤은 서울에서 가장 활기찬 거리 중 하나예요.</div>
+    </div>
+  </div>
+
+  <div class="place-card" style="--pc:#A8D8D0;--ptbg:#f0fbf9;">
+    <div class="place-num">9</div>
+    <div class="place-body">
+      <div class="place-name-ko">연남동 경의선숲길</div>
+      <div class="place-name-zh">延南洞·轻铁林荫道</div>
+      <div class="place-desc">废弃铁路改造的绿道，两侧种满树木，全年四季各有风景。春天樱花、夏天绿荫、秋天红叶、冬天霜白。散步道两侧是延南洞最精致的独立咖啡厅和小店，是首尔最适合放慢脚步的地方之一。</div>
+      <div class="place-meta">
+        <span class="place-tag">무료</span>
+        <span class="place-tag">2号线 홍대입구역（步行10分钟）</span>
+        <span class="place-tag">산책·사진</span>
+      </div>
+      <div class="place-tip">봄 벚꽃 시즌과 가을 단풍 시즌이 가장 아름다워요. 평일 낮이 가장 한적해요.</div>
+    </div>
+  </div>
+
+  <div class="place-card" style="--pc:#C9B8E8;--ptbg:#f5f0ff;">
+    <div class="place-num">10</div>
+    <div class="place-body">
+      <div class="place-name-ko">상수동·합정동</div>
+      <div class="place-name-zh">上水洞·合井洞 · 弘大旁边更安静的角落</div>
+      <div class="place-desc">弘大喧嚣的对面，这里更宁静也更有质感。汉江边的망원한강공원（望远汉江公园）是首尔人野餐的热门地点，从편의점买好食物直接在汉江边席地而坐，是真实的首尔年轻人生活方式。</div>
+      <div class="place-meta">
+        <span class="place-tag">무료</span>
+        <span class="place-tag">6号线 합정역</span>
+        <span class="place-tag">한강·산책</span>
+      </div>
+      <div class="place-tip">망원한강공원에서 편의점 음식 사서 돗자리 깔고 앉아있는 게 진짜 서울 현지인 느낌이에요.</div>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 성동·광진 -->
+  <div class="zone-title" style="--zc1:#3a3a3a;--zc2:#C9B8E8;">
+    <span class="zt-icon">🏭</span>
+    <div>
+      성동구 — 创意的首尔
+      <span class="zt-sub">圣水洞 / 首尔森林</span>
+    </div>
+  </div>
+
+  <div class="place-card" style="--pc:#555;--ptbg:#f5f5f5;">
+    <div class="place-num">11</div>
+    <div class="place-body">
+      <div class="place-name-ko">성수동 카페거리</div>
+      <div class="place-name-zh">圣水洞咖啡街 · 首尔最潮的工业风街区</div>
+      <div class="place-desc">旧皮革工厂改造成的创意空间聚集地，每家咖啡厅都有独特的工业美学主题。대림창고（大林仓库）是最著名的工业风咖啡厅。韩国新兴品牌和快闪店通常选择在성수动首发，周末常有意外收获。</div>
+      <div class="place-meta">
+        <span class="place-tag">카페 입장료</span>
+        <span class="place-tag">2号线 성수역</span>
+        <span class="place-tag">인스타·카페</span>
+      </div>
+      <div class="place-tip">주말에 팝업스토어가 열리는 경우가 많아요. 인스타그램에서 '성수동 팝업'으로 검색하면 주말 일정을 미리 확인할 수 있어요.</div>
+    </div>
+  </div>
+
+  <div class="place-card" style="--pc:#2ecc71;--ptbg:#e8f8f0;">
+    <div class="place-num">12</div>
+    <div class="place-body">
+      <div class="place-name-ko">서울숲</div>
+      <div class="place-name-zh">首尔森林 · 城市里的大公园</div>
+      <div class="place-desc">首尔市中心面积最大的公园之一，有草坪区、鹿园（사슴공원，可以近距离接触鹿）、自行车道和湿地区。성수동과 연결되어 있어서（和성수동相连），两个地方可以串联来逛。春天银杏大道是首尔最美的秋景之一。</div>
+      <div class="place-meta">
+        <span class="place-tag">무료</span>
+        <span class="place-tag">수인분당선 서울숲역</span>
+        <span class="place-tag">자연·산책</span>
+      </div>
+      <div class="place-tip">사슴공원은 아이들뿐만 아니라 어른들도 정말 좋아해요. 사슴 먹이 주기 체험도 있어요.</div>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 용산·중구 남산 -->
+  <div class="zone-title" style="--zc1:#C9B8E8;--zc2:#A8D8D0;">
+    <span class="zt-icon">🗼</span>
+    <div>
+      용산구 — 眺望首尔的地方
+      <span class="zt-sub">南山 / N首尔塔 / 梨泰院</span>
+    </div>
+  </div>
+
+  <div class="place-card" style="--pc:#C9B8E8;--ptbg:#f5f0ff;">
+    <div class="place-num">13</div>
+    <div class="place-body">
+      <div class="place-name-ko">N서울타워</div>
+      <div class="place-name-zh">N首尔塔 · 俯瞰整个首尔</div>
+      <div class="place-desc">首尔最著名的地标，海拔480米，晴天可以看到首尔全貌。展望台分室内和室外，夜景尤其壮观。情侣锁（커플 자물쇠）是这里的传统——将刻有名字的锁锁在栏杆上，钥匙扔下山。缆车（케이블카）上山是最快的方式。</div>
+      <div class="place-meta">
+        <span class="place-tag">입장료 있음</span>
+        <span class="place-tag">남산 케이블카 또는 버스</span>
+        <span class="place-tag">야경·전망</span>
+      </div>
+      <div class="place-tip">맑은 날 낮에는 멀리까지 보이고, 저녁 노을 무렵이 가장 아름다워요. 주말엔 줄이 길 수 있으니 미리 온라인으로 예약하세요.</div>
+    </div>
+  </div>
+
+  <div class="place-card" style="--pc:#A8D8D0;--ptbg:#f0fbf9;">
+    <div class="place-num">14</div>
+    <div class="place-body">
+      <div class="place-name-ko">남산 둘레길</div>
+      <div class="place-name-zh">南山环山步道 · 首尔的城市山林</div>
+      <div class="place-desc">不坐缆车，徒步上南山的路线，沿途可以看到首尔城墙遗迹。秋天的남산 단풍（红叶）是首尔最美的季节风景之一。不需要任何登山装备，普通运动鞋就可以，单程约40分钟。</div>
+      <div class="place-meta">
+        <span class="place-tag">무료</span>
+        <span class="place-tag">4号线 명동역에서 걸어서</span>
+        <span class="place-tag">등산·자연</span>
+      </div>
+      <div class="place-tip">가을 단풍 시즌(10월 말~11월 초)에 걸으면 정말 예뻐요. 체력이 있다면 걸어 올라가고 내려올 때 케이블카를 타도 좋아요.</div>
+    </div>
+  </div>
+
+  <div class="place-card" style="--pc:#e67e22;--ptbg:#fff8f0;">
+    <div class="place-num">15</div>
+    <div class="place-body">
+      <div class="place-name-ko">이태원·해방촌</div>
+      <div class="place-name-zh">梨泰院·解放村 · 首尔最国际化的角落</div>
+      <div class="place-desc">이태원은 세계 각국의 음식과 문화가 공존하는 거리（梨泰院是全球各地饮食和文化共存的街道）。旁边的해방촌（解放村）是更小众的坡地街区，有大量独立酒吧和创意咖啡厅，视角俯瞰首尔市区，夜景绝佳。</div>
+      <div class="place-meta">
+        <span class="place-tag">무료</span>
+        <span class="place-tag">6号线 이태원역</span>
+        <span class="place-tag">야경·다국적 음식</span>
+      </div>
+      <div class="place-tip">해방촌 골목 야경이 이태원 본거리보다 더 감성적이에요. 저녁에 걸어 올라가면서 야경을 보세요.</div>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 강남 -->
+  <div class="zone-title" style="--zc1:#2c3e50;--zc2:#A8D8D0;">
+    <span class="zt-icon">💎</span>
+    <div>
+      강남구 — 繁华的首尔
+      <span class="zt-sub">COEX / 别马당图书馆 / 압구정 / 청담동</span>
+    </div>
+  </div>
+
+  <div class="place-card" style="--pc:#2c3e50;--ptbg:#f0f4ff;">
+    <div class="place-num">16</div>
+    <div class="place-body">
+      <div class="place-name-ko">별마당 도서관</div>
+      <div class="place-name-zh">星马当图书馆 · 首尔最美的公共空间</div>
+      <div class="place-desc">COEX购物中心内部的巨型开放图书馆，书架从地面延伸到三层楼高的天花板，是首尔最值得去的免费景点之一。不需要会员，任何人都可以入内随意浏览，也可以坐下来读书。Instagram上最多人打卡的首尔室内空间之一。</div>
+      <div class="place-meta">
+        <span class="place-tag">무료</span>
+        <span class="place-tag">2号线 삼성역</span>
+        <span class="place-tag">도서관·인스타</span>
+      </div>
+      <div class="place-tip">COEX 내부에 있어서 길을 잃기 쉬워요. 입구에서 직원에게 '별마당 도서관'이라고 말하면 안내해줘요.</div>
+    </div>
+  </div>
+
+  <div class="place-card" style="--pc:#9b59b6;--ptbg:#f5eeff;">
+    <div class="place-num">17</div>
+    <div class="place-body">
+      <div class="place-name-ko">SM·YG·HYBE 아티스트 팝업</div>
+      <div class="place-name-zh">SM·YG·HYBE 官方周边店</div>
+      <div class="place-desc">首尔有多家官方아이돌 굿즈 매장和体验空간。HYBE INSIGHT（4号线 한성대입구역附近）是BTS等HYBE艺人的沉浸式体验博物馆，门票需要提前预约。SM엔터테인먼트 관련 카페和팝업 스토어通常在강남·성수동一带。</div>
+      <div class="place-meta">
+        <span class="place-tag">입장료 있음（HYBE）</span>
+        <span class="place-tag">위치 다양</span>
+        <span class="place-tag">아이돌·굿즈</span>
+      </div>
+      <div class="place-tip">HYBE INSIGHT는 반드시 사전 예약이 필요해요. 공식 홈페이지에서 예약 가능해요. 아이돌 팬이라면 절대 놓치지 마세요.</div>
+    </div>
+  </div>
+
+  <div class="place-card" style="--pc:#A8D8D0;--ptbg:#f0fbf9;">
+    <div class="place-num">18</div>
+    <div class="place-body">
+      <div class="place-name-ko">압구정 로데오거리</div>
+      <div class="place-name-zh">狎鸥亭罗德欧街 · 首尔的精品时尚区</div>
+      <div class="place-desc">首尔最高端的购物街区，国际奢侈品牌和韩国高端设计师品牌集中。这里也是韩国整形外科医院最密集的地方之一（压구정 성형외과 거리）。不买东西也值得来逛逛，感受首尔上流社会的日常。</div>
+      <div class="place-meta">
+        <span class="place-tag">무료 입장</span>
+        <span class="place-tag">3号线 압구정역</span>
+        <span class="place-tag">명품·패션</span>
+      </div>
+      <div class="place-tip">이 동네는 그냥 걷는 것만으로도 서울의 다른 면을 볼 수 있어요. 카페도 다른 동네보다 훨씬 고급스러워요.</div>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 한강 -->
+  <div class="zone-title" style="--zc1:#3498db;--zc2:#A8D8D0;">
+    <span class="zt-icon">🌊</span>
+    <div>
+      한강 — 流淌的首尔
+      <span class="zt-sub">汉江公园 / 夜游 / 野餐文化</span>
+    </div>
+  </div>
+
+  <div class="place-card" style="--pc:#3498db;--ptbg:#eaf4ff;">
+    <div class="place-num">19</div>
+    <div class="place-body">
+      <div class="place-name-ko">한강공원</div>
+      <div class="place-name-zh">汉江公园 · 首尔的客厅</div>
+      <div class="place-desc">汉江沿岸共有11个公园区，其中망원한강공원（望远，弘大附近）和뚝섬한강공원（纛岛）最受年轻人欢迎。从편의점买好炸鸡、零食、啤酒，铺上돗자리（野餐垫），席地而坐——这是首尔年轻人最日常的休闲方式。</div>
+      <div class="place-meta">
+        <span class="place-tag">무료</span>
+        <span class="place-tag">각 지하철역에서 접근</span>
+        <span class="place-tag">야경·피크닉</span>
+      </div>
+      <div class="place-tip">돗자리는 다이소에서 저렴하게 살 수 있어요. 편의점 치킨이랑 맥주 사서 한강에서 먹는 게 진짜 서울 경험이에요.</div>
+    </div>
+  </div>
+
+  <div class="place-card" style="--pc:#A8D8D0;--ptbg:#f0fbf9;">
+    <div class="place-num">20</div>
+    <div class="place-body">
+      <div class="place-name-ko">한강 유람선</div>
+      <div class="place-name-zh">汉江游船 · 从水面看首尔</div>
+      <div class="place-desc">汉江游船（한강 유람선）提供白天和夜间游览，从水面仰望首尔的天际线是独特视角。여의도（汝矣岛）码头出发，绕行汉江一圈约1小时。夜间游船看汉江大桥的灯光倒影，是首尔浪漫体验之一。</div>
+      <div class="place-meta">
+        <span class="place-tag">입장료 있음</span>
+        <span class="place-tag">5号线 여의나루역</span>
+        <span class="place-tag">야경·낭만</span>
+      </div>
+      <div class="place-tip">야간 유람선이 낮보다 훨씬 아름다워요. 출발 전에 온라인으로 미리 예약하면 할인을 받을 수 있어요.</div>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 기타 특별 -->
+  <div class="zone-title" style="--zc1:#FF8FAB;--zc2:#FFE4A0;">
+    <span class="zt-icon">⭐</span>
+    <div>
+      특별한 서울 — 不能错过的特别体验
+      <span class="zt-sub">찜질방 / 노래방 / 전통차 / 야경 포인트</span>
+    </div>
+  </div>
+
+  <div class="place-card" style="--pc:#FF8FAB;--ptbg:#fff0f5;">
+    <div class="place-num">21</div>
+    <div class="place-body">
+      <div class="place-name-ko">찜질방 체험</div>
+      <div class="place-name-zh">汗蒸幕体验 · 韩国最特别的文化体验</div>
+      <div class="place-desc">찜질방是韩国特有的综合桑拿文化空间，24小时营业，可以在里面睡觉过夜（有공용 수면실）。入场后换上统一服装，在各种温度的汗蒸房里轮流体验，再去大浴池泡澡。价格约10,000-15,000韩元，非常超值。首尔最著名的찜질방包括용산 드래곤힐스파。</div>
+      <div class="place-meta">
+        <span class="place-tag">입장료 약 12,000원</span>
+        <span class="place-tag">위치 다양</span>
+        <span class="place-tag">문화체험</span>
+      </div>
+      <div class="place-tip">한국에 왔으면 찜질방은 꼭 한 번은 가봐야 해요. 처음엔 낯설어도 들어가면 너무 좋아요. 수건과 목욕용품은 제공돼요.</div>
+    </div>
+  </div>
+
+  <div class="place-card" style="--pc:#C9B8E8;--ptbg:#f5f0ff;">
+    <div class="place-num">22</div>
+    <div class="place-body">
+      <div class="place-name-ko">노래방（코인 노래방）</div>
+      <div class="place-name-zh">KTV · 韩国노래방文화</div>
+      <div class="place-desc">韩国노래방和中国KTV不同——是小包厢，价格按时间计费（코인 노래방更便宜，投硬币买时间）。通常深夜朋友聚会后去唱2-3首结束，不是长时间消费的场所。韩国아이돌歌曲曲库非常完整，是练习韩语歌曲的绝佳场合。</div>
+      <div class="place-meta">
+        <span class="place-tag">코인노래방 약 500원/곡</span>
+        <span class="place-tag">전국 어디서나</span>
+        <span class="place-tag">문화체험</span>
+      </div>
+      <div class="place-tip">코인 노래방은 혼자 가도 전혀 이상하지 않아요. 오히려 혼자서 맘껏 부를 수 있어서 더 좋을 수도 있어요.</div>
+    </div>
+  </div>
+
+  <div class="place-card" style="--pc:#8e6b3e;--ptbg:#fff8f0;">
+    <div class="place-num">23</div>
+    <div class="place-body">
+      <div class="place-name-ko">인사동·북촌 전통차 카페</div>
+      <div class="place-name-zh">传统茶咖啡厅 · 用一杯茶穿越时间</div>
+      <div class="place-desc">在인사동或북촌的韩屋改造咖啡厅里，点一杯전통차（传统茶）——쌍화차（双花茶）、유자차（柚子茶）、대추차（大枣茶）……端着青瓷茶杯，坐在有瓦片屋顶的空间里，窗外是600年的宫殿——这是首尔给你的穿越感。</div>
+      <div class="place-meta">
+        <span class="place-tag">차 한 잔 약 7,000원</span>
+        <span class="place-tag">3号线 안국역</span>
+        <span class="place-tag">전통·감성</span>
+      </div>
+      <div class="place-tip">인사동 '귀천' 이나 북촌의 작은 전통 찻집들을 추천해요. 관광지 느낌이 덜한 골목 안 찻집이 더 분위기 있어요.</div>
+    </div>
+  </div>
+
+  <div class="place-card" style="--pc:#FFE4A0;--ptbg:#fffdf0;">
+    <div class="place-num">24</div>
+    <div class="place-body">
+      <div class="place-name-ko">낙산공원 야경</div>
+      <div class="place-name-zh">骆山公园夜景 · 最小众最美的首尔夜景</div>
+      <div class="place-desc">낙산공원은 서울 성곽길을 따라 걸으며 시내를 내려다볼 수 있는 공원（骆山公园是沿首尔城郭可以俯瞰市区的公园）。不如N首尔塔有名，但夜景同样壮观，游客少、氛围好。旁边의 이화마을（梨花村）有著名的花卉壁画，白天也值得来看。</div>
+      <div class="place-meta">
+        <span class="place-tag">무료</span>
+        <span class="place-tag">4号线 혜화역</span>
+        <span class="place-tag">야경·소소한 감성</span>
+      </div>
+      <div class="place-tip">N서울타워보다 덜 알려져 있지만, 서울 야경을 공짜로 볼 수 있는 최고의 장소 중 하나예요. 사람도 적어요.</div>
+    </div>
+  </div>
+
+  <div class="place-card" style="--pc:#A8D8D0;--ptbg:#f0fbf9;">
+    <div class="place-num">25</div>
+    <div class="place-body">
+      <div class="place-name-ko">다이소 쇼핑</div>
+      <div class="place-name-zh">DAISO · 性价比最高的首尔购物体验</div>
+      <div class="place-desc">说다이소（大创）是首尔必去，很多人会笑——但토리 认真的。韩国다이소不只是1,000韩元的杂货店，里面有大量高颜值的韩国本土设计产品、美妆小样、文具、生活用品，价格极低，性价比远超明洞的化妆品店。离开首尔前来一次다이소扫货是必须的。</div>
+      <div class="place-meta">
+        <span class="place-tag">전국 어디서나</span>
+        <span class="place-tag">지하철역 근처</span>
+        <span class="place-tag">쇼핑·가성비</span>
+      </div>
+      <div class="place-tip">화장품 소분 용기, 귀여운 소품, 여행용 필수품들이 1,000~5,000원에 살 수 있어요. 한국 여행 마지막 날 들러보세요.</div>
+    </div>
+  </div>
+
+  <div class="tori-mini">
+    <div class="tori-mini-avatar">🐰</div>
+    <div class="tori-mini-text">25곳 다 가려면 최소 5일은 있어야 해요. 처음 서울 여행이라면 <strong>3-4일에 10-12곳 정도</strong>가 현실적이에요. 무리하게 스케줄을 짜는 것보다, 한 동네를 천천히 즐기는 게 더 서울다운 여행이에요. 서울은 속도가 빠른 도시지만, 여행은 천천히 해도 돼요 🐰</div>
+  </div>
+
+  <!-- 실용 韩语 -->
+  <div class="korean-section">
+    <div class="ks-header">
+      <div class="ks-tori">🐰</div>
+      <div>
+        <div class="ks-title">토리 教你说——观光必备韩语</div>
+        <div class="ks-sub">点击 + 可加入你的词汇本</div>
+      </div>
+    </div>
+    <div class="phrase-list">
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">입장료가 얼마예요?</div>
+          <div class="phrase-ro">ip-jang-nyo-ga eol-ma-ye-yo?</div>
+          <div class="phrase-scene">🎟️ 问门票价格</div>
+        </div>
+        <div class="phrase-zh">门票多少钱？</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">몇 시에 문 닫아요?</div>
+          <div class="phrase-ro">myeot si-e mun da-da-yo?</div>
+          <div class="phrase-scene">⏰ 问关门时间</div>
+        </div>
+        <div class="phrase-zh">几点关门？</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">한복 대여는 어디서 해요?</div>
+          <div class="phrase-ro">han-bok dae-yeo-neun eo-di-seo hae-yo?</div>
+          <div class="phrase-scene">👘 找韩服租借</div>
+        </div>
+        <div class="phrase-zh">在哪里可以租韩服？</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">사진 같이 찍어도 돼요?</div>
+          <div class="phrase-ro">sa-jin ga-chi jji-geo-do dwae-yo?</div>
+          <div class="phrase-scene">📸 请求合照</div>
+        </div>
+        <div class="phrase-zh">可以一起拍照吗？</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">여기서 제일 유명한 게 뭐예요?</div>
+          <div class="phrase-ro">yeo-gi-seo je-il yu-myeong-han ge mwo-ye-yo?</div>
+          <div class="phrase-scene">⭐ 问最有名的是什么</div>
+        </div>
+        <div class="phrase-zh">这里最有名的是什么？</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">화장실이 어디예요?</div>
+          <div class="phrase-ro">hwa-jang-si-ri eo-di-ye-yo?</div>
+          <div class="phrase-scene">🚻 找厕所</div>
+        </div>
+        <div class="phrase-zh">厕所在哪里？</div>
+        <div class="add-btn">+</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 词汇 -->
+  <div class="section-title" style="font-size:16px;margin-top:36px;">
+    <div class="st-icon" style="width:30px;height:30px;font-size:14px;">📖</div>
+    <div>本篇出现的词汇</div>
+  </div>
+  <div class="vocab-row">
+    <div class="vocab-chip"><span class="vko">관광지</span><span class="vzh">旅游景点</span></div>
+    <div class="vocab-chip"><span class="vko">입장료</span><span class="vzh">入场费</span></div>
+    <div class="vocab-chip"><span class="vko">무료</span><span class="vzh">免费</span></div>
+    <div class="vocab-chip"><span class="vko">한복 대여</span><span class="vzh">韩服租借</span></div>
+    <div class="vocab-chip"><span class="vko">야경</span><span class="vzh">夜景</span></div>
+    <div class="vocab-chip"><span class="vko">산책로</span><span class="vzh">步行道</span></div>
+    <div class="vocab-chip"><span class="vko">전통차</span><span class="vzh">传统茶</span></div>
+    <div class="vocab-chip"><span class="vko">찜질방</span><span class="vzh">汗蒸幕</span></div>
+    <div class="vocab-chip"><span class="vko">노래방</span><span class="vzh">KTV</span></div>
+    <div class="vocab-chip"><span class="vko">돗자리</span><span class="vzh">野餐垫</span></div>
+    <div class="vocab-chip"><span class="vko">수문장 교대식</span><span class="vzh">守卫交接仪式</span></div>
+    <div class="vocab-chip"><span class="vko">화장실</span><span class="vzh">厕所</span></div>
+  </div>
+
+  <!-- 结尾 -->
+  <div class="ending-card">
+    <span class="ending-tori">🐰</span>
+    <div class="ending-title">25个地方，25种理解首尔的方式</div>
+    <div class="ending-sub">
+      不需要全部去完，<br>
+      但每一个去过的地方，<br>
+      都会让你对首尔多一点理解。<br>
+      最好的旅行不是打完所有卡，<br>
+      而是在某个地方停下来，<br>
+      真的感受了一下。<br>
+      下一篇，토리 带你搞定首尔购物 🛍️
+    </div>
+    <a class="next-btn" href="#">下一篇：韩国购物完全指南 →</a>
+    <div class="next-articles">
+      <div class="next-tag">🗺️ 街区性格图鉴</div>
+      <div class="next-tag">🚇 地铁完全攻略</div>
+      <div class="next-tag">🚫 文化禁忌</div>
+    </div>
+  </div>
+
+</div>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a02edae8f9d31979',t:'MTc3OTk4ODA0MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

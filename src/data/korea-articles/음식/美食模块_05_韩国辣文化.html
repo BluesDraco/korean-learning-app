@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>韩国辣文化 · 韩语学习日记</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #FFFDF9; color: #3a3a3a; line-height: 1.7;
+  }
+
+  .hero {
+    background: linear-gradient(160deg, #FF8FAB 0%, #e74c3c 40%, #FFE4A0 100%);
+    padding: 56px 24px 48px; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: "🌶️🔥🍜💪✨🥵";
+    position: absolute; top: 14px; left: 0; right: 0;
+    font-size: 22px; letter-spacing: 18px; opacity: .22;
+  }
+  .hero-tag {
+    display: inline-block; background: rgba(255,255,255,.25);
+    color: #fff; font-size: 11px; font-weight: 700;
+    padding: 4px 14px; border-radius: 20px; margin-bottom: 16px; letter-spacing: 1px;
+  }
+  .hero h1 {
+    font-size: 28px; font-weight: 800; color: #fff;
+    text-shadow: 0 2px 12px rgba(0,0,0,.2); line-height: 1.3; margin-bottom: 12px;
+  }
+  .hero h1 span { font-size: 14px; font-weight: 400; display: block; margin-top: 6px; opacity: .9; }
+  .hero-meta {
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+    font-size: 12px; color: rgba(255,255,255,.85); margin-top: 16px; flex-wrap: wrap;
+  }
+
+  .container { max-width: 780px; margin: 0 auto; padding: 40px 20px 80px; }
+
+  .breadcrumb {
+    font-size: 12px; color: #bbb; display: flex; align-items: center; gap: 6px; margin-bottom: 28px;
+  }
+  .breadcrumb span { color: #ddd; }
+
+  /* 토리引言 */
+  .intro-card {
+    background: #fff; border-radius: 20px; padding: 24px 26px;
+    box-shadow: 0 2px 20px rgba(231,76,60,.12); margin-bottom: 40px;
+    border-left: 4px solid #FF8FAB;
+  }
+  .tori-says { display: flex; gap: 14px; align-items: flex-start; }
+  .tori-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: linear-gradient(135deg, #FF8FAB, #FFE4A0);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+  }
+  .tori-bubble {
+    background: linear-gradient(135deg, #fff0f5, #fffdf0);
+    border-radius: 0 14px 14px 14px; padding: 14px 16px;
+    font-size: 13px; color: #555; line-height: 1.8; flex: 1; position: relative;
+  }
+  .tori-bubble::before {
+    content: ""; position: absolute; left: -8px; top: 12px;
+    border: 8px solid transparent; border-right-color: #fff0f5; border-left: none;
+  }
+  .tori-name { font-size: 11px; color: #e74c3c; font-weight: 700; margin-bottom: 5px; }
+
+  /* 章节标题 */
+  .section-title {
+    font-size: 20px; font-weight: 800; color: #333; margin: 44px 0 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-title .st-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, #FF8FAB, #FFE4A0);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .section-title .st-sub { font-size: 12px; font-weight: 400; color: #aaa; display: block; margin-top: 2px; }
+
+  /* 时间轴 */
+  .timeline { position: relative; padding-left: 32px; margin: 20px 0; }
+  .timeline::before {
+    content: ""; position: absolute; left: 10px; top: 8px; bottom: 8px;
+    width: 2px; background: linear-gradient(to bottom, #FF8FAB, #FFE4A0, #A8D8D0);
+    border-radius: 2px;
+  }
+  .tl-item { position: relative; margin-bottom: 20px; }
+  .tl-item:last-child { margin-bottom: 0; }
+  .tl-dot {
+    position: absolute; left: -26px; top: 6px;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--dc, #FF8FAB);
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 2px var(--dc, #FF8FAB);
+  }
+  .tl-year { font-size: 11px; font-weight: 700; color: var(--dc,#FF8FAB); margin-bottom: 3px; }
+  .tl-title { font-size: 14px; font-weight: 700; color: #333; margin-bottom: 4px; }
+  .tl-desc { font-size: 12px; color: #666; line-height: 1.7; }
+
+  /* 辣度对比 */
+  .spice-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin: 20px 0; }
+  .spice-card {
+    background: #fff; border-radius: 14px; padding: 16px 14px; text-align: center;
+    box-shadow: 0 2px 12px rgba(231,76,60,.1);
+    border-top: 3px solid var(--sc,#FF8FAB);
+  }
+  .spice-emoji { font-size: 32px; margin-bottom: 8px; display: block; }
+  .spice-name-ko { font-size: 14px; font-weight: 700; color: #333; margin-bottom: 2px; }
+  .spice-name-zh { font-size: 11px; color: var(--sc,#e74c3c); font-weight: 600; margin-bottom: 6px; }
+  .spice-shu { font-size: 10px; color: #bbb; margin-bottom: 6px; }
+  .spice-desc { font-size: 11px; color: #777; line-height: 1.6; }
+
+  /* 文化深度卡 */
+  .culture-card {
+    background: #fff; border-radius: 20px; padding: 24px;
+    box-shadow: 0 2px 16px rgba(231,76,60,.08); margin: 16px 0;
+    border: 1px solid rgba(255,143,171,.12);
+  }
+  .culture-card h3 { font-size: 15px; font-weight: 700; color: #333; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .culture-card p { font-size: 13px; color: #555; line-height: 1.85; margin-bottom: 10px; }
+  .culture-card p:last-child { margin-bottom: 0; }
+
+  .highlight {
+    background: linear-gradient(135deg, #fff0f5, #fffdf0);
+    border-radius: 10px; padding: 12px 14px; margin: 12px 0;
+    font-size: 13px; color: #555; line-height: 1.8; border-left: 3px solid #FF8FAB;
+  }
+  .highlight strong { color: #e74c3c; }
+
+  /* 토리 mini */
+  .tori-mini {
+    display: flex; gap: 10px; align-items: flex-start;
+    background: linear-gradient(135deg, #fff0f5, #fffdf0);
+    border-radius: 12px; padding: 12px 14px; margin-top: 12px;
+  }
+  .tori-mini-avatar { font-size: 18px; flex-shrink: 0; }
+  .tori-mini-text { font-size: 12px; color: #666; line-height: 1.75; }
+  .tori-mini-text strong { color: #FF8FAB; }
+
+  /* 辣食大卡片 */
+  .spicy-food-card {
+    background: #fff; border-radius: 20px; overflow: hidden;
+    box-shadow: 0 4px 20px rgba(231,76,60,.1); margin: 16px 0;
+  }
+  .sfcard-header {
+    padding: 16px 22px 12px;
+    background: linear-gradient(135deg, var(--sh1,#FF8FAB), var(--sh2,#FFE4A0));
+    display: flex; align-items: center; gap: 12px;
+  }
+  .sfcard-emoji { font-size: 40px; flex-shrink: 0; }
+  .sfcard-info { flex: 1; }
+  .sfcard-name-ko { font-size: 20px; font-weight: 800; color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,.12); }
+  .sfcard-name-zh { font-size: 12px; color: rgba(255,255,255,.9); margin-top: 2px; }
+  .sfcard-spice {
+    background: rgba(255,255,255,.25); color: #fff;
+    font-size: 11px; font-weight: 700; padding: 3px 12px; border-radius: 20px;
+    align-self: flex-start;
+  }
+  .sfcard-body { padding: 16px 22px; }
+  .sfcard-body p { font-size: 13px; color: #555; line-height: 1.85; margin-bottom: 10px; }
+  .sfcard-body p:last-child { margin-bottom: 0; }
+
+  /* 辣度挑战等级 */
+  .challenge-list { display: flex; flex-direction: column; gap: 10px; margin: 16px 0; }
+  .challenge-item {
+    background: #fff; border-radius: 12px; padding: 12px 16px;
+    box-shadow: 0 2px 8px rgba(231,76,60,.08);
+    display: flex; align-items: center; gap: 14px;
+    border-left: 4px solid var(--cc,#FF8FAB);
+  }
+  .ch-level { font-size: 22px; flex-shrink: 0; width: 36px; text-align: center; }
+  .ch-name { font-size: 13px; font-weight: 700; color: #333; margin-bottom: 2px; }
+  .ch-desc { font-size: 12px; color: #666; line-height: 1.6; }
+  .ch-tag {
+    margin-left: auto; font-size: 10px; font-weight: 700;
+    padding: 2px 10px; border-radius: 20px; white-space: nowrap;
+    background: var(--cc,#FF8FAB); color: #fff; opacity: .85; flex-shrink: 0;
+  }
+
+  /* 比较表 */
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 16px 0; border-radius: 14px; overflow: hidden; }
+  .compare-table th { background: linear-gradient(135deg, #FF8FAB, #FFE4A0); color: #fff; font-weight: 700; padding: 11px 14px; text-align: left; }
+  .compare-table td { padding: 11px 14px; border-bottom: 1px solid #fff5f5; color: #444; vertical-align: top; }
+  .compare-table tr:nth-child(even) td { background: #fffbfc; }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* 冷知识 */
+  .trivia-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 20px 0; }
+  .trivia-card {
+    background: #fff; border-radius: 14px; padding: 16px 18px;
+    box-shadow: 0 2px 10px rgba(231,76,60,.08);
+    border-top: 3px solid var(--tc, #FF8FAB);
+  }
+  .trivia-card .tc-tag {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    color: var(--tc,#e74c3c); background: var(--tbg,#fff0f5);
+    padding: 2px 8px; border-radius: 10px; margin-bottom: 6px;
+  }
+  .trivia-card .tc-q { font-size: 13px; font-weight: 700; color: #333; margin-bottom: 8px; }
+  .trivia-card .tc-a { font-size: 12px; color: #666; line-height: 1.7; }
+
+  /* 실용 韩语 */
+  .korean-section {
+    background: linear-gradient(135deg, #2a1a14, #1e1410);
+    border-radius: 20px; padding: 26px 24px; margin: 32px 0;
+  }
+  .ks-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  .ks-tori { font-size: 28px; }
+  .ks-title { font-size: 15px; font-weight: 700; color: #FDF8F0; }
+  .ks-sub { font-size: 11px; color: #888; margin-top: 2px; }
+  .phrase-list { display: flex; flex-direction: column; gap: 12px; }
+  .phrase-item {
+    background: rgba(255,255,255,.06); border-radius: 12px; padding: 14px 16px;
+    display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  }
+  .phrase-ko { font-size: 15px; font-weight: 700; color: #FDF8F0; }
+  .phrase-ro { font-size: 10px; color: #888; margin-top: 2px; font-style: italic; }
+  .phrase-zh { font-size: 12px; color: #FF8FAB; font-weight: 600; flex-shrink: 0; }
+  .phrase-scene { font-size: 10px; color: #666; margin-top: 3px; }
+  .add-btn {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: linear-gradient(135deg,#FF8FAB,#FFE4A0);
+    color: #fff; font-size: 14px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; cursor: pointer;
+    box-shadow: 0 2px 8px rgba(255,143,171,.4); transition: transform .15s;
+  }
+  .add-btn:hover { transform: scale(1.1); }
+
+  /* 词汇 */
+  .vocab-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+  .vocab-chip {
+    background: #fff; border: 1px solid #ffd0d0;
+    border-radius: 20px; padding: 5px 14px;
+    font-size: 12px; color: #555;
+    display: flex; align-items: center; gap: 6px;
+    box-shadow: 0 1px 6px rgba(0,0,0,.04);
+  }
+  .vocab-chip .vko { font-weight: 700; color: #333; }
+  .vocab-chip .vzh { color: #e74c3c; }
+
+  /* 注意 */
+  .notice-box {
+    background: linear-gradient(135deg, #fff0f5, #fffdf0);
+    border-radius: 14px; padding: 16px 18px; margin: 16px 0;
+    border: 1.5px solid #FF8FAB22; font-size: 13px; color: #666; line-height: 1.8;
+  }
+  .notice-box .nt { font-weight: 700; color: #e74c3c; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
+
+  .divider { text-align: center; font-size: 18px; letter-spacing: 8px; opacity: .3; margin: 32px 0; }
+
+  /* 系列结尾 */
+  .ending-card {
+    background: linear-gradient(135deg, #fff0f5, #fffdf0, #f5f0ff);
+    border-radius: 20px; padding: 32px 24px; text-align: center; margin-top: 40px;
+    border: 1.5px solid rgba(255,143,171,.2); position: relative; overflow: hidden;
+  }
+  .ending-card::before {
+    content: "🌶️🔥🐰✨💜🍜";
+    position: absolute; top: 8px; left: 0; right: 0;
+    font-size: 16px; letter-spacing: 12px; opacity: .2;
+  }
+  .ending-tori { font-size: 56px; display: block; margin-bottom: 12px; }
+  .series-badge {
+    display: inline-block; background: linear-gradient(135deg,#FF8FAB,#C9B8E8);
+    color: #fff; font-size: 12px; font-weight: 700;
+    padding: 5px 18px; border-radius: 20px; margin-bottom: 14px;
+  }
+  .ending-title { font-size: 18px; font-weight: 800; color: #FF8FAB; margin-bottom: 8px; }
+  .ending-sub { font-size: 13px; color: #aaa; line-height: 1.9; margin-bottom: 24px; }
+  .all-articles {
+    display: grid; grid-template-columns: repeat(2,1fr); gap: 10px;
+    margin: 16px 0 20px; text-align: left;
+  }
+  .article-link {
+    background: rgba(255,255,255,.7); border-radius: 10px; padding: 10px 14px;
+    font-size: 12px; color: #555; border: 1px solid rgba(255,143,171,.15);
+  }
+  .article-link .al-num { font-size: 10px; color: #FF8FAB; font-weight: 700; margin-bottom: 2px; }
+  .article-link .al-title { font-size: 12px; color: #333; font-weight: 600; }
+  .back-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #FF8FAB, #C9B8E8);
+    color: #fff; font-size: 13px; font-weight: 700;
+    padding: 12px 32px; border-radius: 24px;
+    box-shadow: 0 4px 16px rgba(255,143,171,.35);
+    text-decoration: none;
+  }
+
+  @media (max-width: 600px) {
+    .spice-grid { grid-template-columns: 1fr; }
+    .trivia-grid { grid-template-columns: 1fr; }
+    .all-articles { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-tag">🇰🇷 韩国美食 · 每道菜背后都有一个故事</div>
+  <h1>
+    韩国辣文化——辣椒是哪里来的
+    <span>고추 문화 — 没有辣椒之前，韩国人怎么吃饭的？</span>
+  </h1>
+  <div class="hero-meta">
+    <span>🐰 토리 探究</span>
+    <span>📖 约10分钟读完</span>
+    <span>🗂️ 美食 · 历史</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="breadcrumb">
+    🏠 首页 <span>›</span> 🇰🇷 韩国 <span>›</span> 美食 <span>›</span> 韩国辣文化
+  </div>
+
+  <div class="intro-card">
+    <div class="tori-says">
+      <div class="tori-avatar">🐰</div>
+      <div class="tori-bubble">
+        <div class="tori-name">토리 说</div>
+        토리有一个问题想了很久：韩国人这么爱吃辣，感觉辣是韩国饮食的灵魂，但辣椒是原产于美洲的植物，韩国在400年前才有辣椒——那在辣椒到来之前，韩国人吃什么？泡菜是什么颜色的？이거 진짜 신기하지 않아요？（这不是很神奇吗？）今天토리 带你一起弄清楚韩国辣文化的前世今生，你会对那碗红红的辣椒酱有完全不同的感受 🌶️
+      </div>
+    </div>
+  </div>
+
+  <!-- 辣椒到来之前 -->
+  <div class="section-title">
+    <div class="st-icon">📜</div>
+    <div>
+      辣椒到来之前——韩国人吃什么
+      <span class="st-sub">这是很多人没有想过的问题</span>
+    </div>
+  </div>
+
+  <div class="culture-card">
+    <h3>🥬 没有辣椒的韩国饮食</h3>
+    <p>今天我们看到的韩国饮食——红色的泡菜、鲜红的떡볶이、火红的김치찌개——这些颜色全部来自고추（辣椒）。但고추是原产于中美洲的植物，大约在1600年前后才传入朝鲜半岛，距今不过400年。</p>
+    <p>在辣椒到来之前，朝鲜人用 <strong style="color:#e74c3c;">산초（花椒）、겨자（芥末）、생강（生姜）、마늘（大蒜）</strong> 来增添食物的辛辣刺激感。当时的泡菜（김치의 전신）是白色的，用盐、大蒜、生姜腌制——没有一点红色。</p>
+    <div class="highlight"><strong>생각해봐：</strong>白色的泡菜，没有辣椒的韩国料理……这幅画面很难想象，但那才是400年前朝鲜半岛餐桌的真实样子。辣椒在400年里彻底改变了一个民族的饮食基因。</div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 辣椒的历史 -->
+  <div class="section-title">
+    <div class="st-icon">🗓️</div>
+    <div>
+      고추의 역사——辣椒在朝鲜半岛的400年
+      <span class="st-sub">从"毒物"到"灵魂调料"的漫长旅程</span>
+    </div>
+  </div>
+
+  <div class="timeline">
+    <div class="tl-item" style="--dc:#FF8FAB;">
+      <div class="tl-dot"></div>
+      <div class="tl-year">约1592年前后</div>
+      <div class="tl-title">임진왜란（壬辰倭乱）——辣椒随战争而来</div>
+      <div class="tl-desc">历史上最普遍的说法是：辣椒由日本在壬辰倭乱（1592–1598年，丰臣秀吉入侵朝鲜）期间带入朝鲜半岛。日本此前已从欧洲贸易商处得到辣椒，将其作为毒药或战争工具使用的说法流传至今，但史学界仍有争议。另一说法是辣椒经由中国传入。</div>
+    </div>
+    <div class="tl-item" style="--dc:#FFE4A0;">
+      <div class="tl-dot"></div>
+      <div class="tl-year">1600年代初期</div>
+      <div class="tl-title">처음에는 독초로 여겼다——最初被认为是毒草</div>
+      <div class="tl-desc">辣椒刚进入朝鲜时，朝鲜人对这种陌生的植物充满警惕。当时的文献记载显示，有人认为辣椒是"倭辛（日本的毒药）"，不敢轻易食用。这种植物外来、刺激、陌生，需要时间才能被接受。</div>
+    </div>
+    <div class="tl-item" style="--dc:#A8D8D0;">
+      <div class="tl-dot"></div>
+      <div class="tl-year">1700年代</div>
+      <div class="tl-title">红色김치诞生——历史的转折点</div>
+      <div class="tl-desc">经过约100年的缓慢接受，辣椒开始大规模进入朝鲜饮食。最重要的变化是김치加入了고춧가루（辣椒粉）——白色的김치变成了红色的김치，这一变化彻底重塑了朝鲜饮食的面貌。从此，红色成为韩国饮食最具代表性的颜色。</div>
+    </div>
+    <div class="tl-item" style="--dc:#C9B8E8;">
+      <div class="tl-dot"></div>
+      <div class="tl-year">1800–1900年代</div>
+      <div class="tl-title">고추 문화의 정착——辣文化全面扎根</div>
+      <div class="tl-desc">19世纪，고추已经从舶来品变成了朝鲜半岛最重要的农作物之一。고추장（辣椒酱）作为韩国三大基础酱料之一（与된장、간장并列）正式确立地位。辣椒的种植遍布全国，고추 농사（辣椒农业）成为农民生计的重要来源。</div>
+    </div>
+    <div class="tl-item" style="--dc:#FF8FAB;">
+      <div class="tl-dot"></div>
+      <div class="tl-year">现代</div>
+      <div class="tl-title">韩国成为全球辣椒消耗量最大的国家之一</div>
+      <div class="tl-desc">今天韩国人均年消耗辣椒约4公斤，是全球人均辣椒消耗量最高的国家之一。고추장、고춧가루是韩国家庭厨房里不可缺少的基础调料。辣在韩国人的饮食哲学里不只是味道，是健康、文化和身份认同的一部分。</div>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 三大基础酱料 -->
+  <div class="section-title">
+    <div class="st-icon">🫙</div>
+    <div>
+      韩国三大基础酱料——발효의 미학
+      <span class="st-sub">发酵的美学，韩国饮食的根基</span>
+    </div>
+  </div>
+
+  <div class="culture-card">
+    <h3>🧬 모두 발효로 만들어요——全部由发酵制成</h3>
+    <p>韩国三大基础酱料——<strong style="color:#e74c3c;">고추장（辣椒酱）、된장（大豆酱）、간장（酱油）</strong>——都是发酵食品，而且通常由同一批大豆发酵而来。这三种酱料合称 <strong style="color:#e74c3c;">장（酱）</strong>，是韩国饮食文化的根基，没有这三样，韩国料理就无从谈起。</p>
+    <p>传统上，韩国家庭在每年立冬后制作장，在大缸里发酵整个冬天，到春天取出使用。这个过程叫<strong style="color:#e74c3c;">장 담그기</strong>，是韩国家庭年复一年最重要的烹饪仪式之一，也是韩国非物质文化遗产的重要组成部分。</p>
+  </div>
+
+  <div class="spice-grid">
+    <div class="spice-card" style="--sc:#e74c3c;">
+      <span class="spice-emoji">🌶️</span>
+      <div class="spice-name-ko">고추장</div>
+      <div class="spice-name-zh">辣椒酱</div>
+      <div class="spice-shu">辣度：中辣到辣</div>
+      <div class="spice-desc">糯米、黄豆酱、辣椒粉发酵而成，甜辣咸鲜四味合一。是떡볶이、비빔밥、쌈장的核心原料。韩国最具代表性的调料。</div>
+    </div>
+    <div class="spice-card" style="--sc:#8e6b3e;">
+      <span class="spice-emoji">🫙</span>
+      <div class="spice-name-ko">된장</div>
+      <div class="spice-name-zh">大豆酱</div>
+      <div class="spice-shu">辣度：不辣</div>
+      <div class="spice-desc">黄豆发酵制成的深色酱料，味道浓厚复杂。是된장찌개的灵魂，也是쌈장的主要成分之一。发酵程度越深香气越复杂。</div>
+    </div>
+    <div class="spice-card" style="--sc:#2c1810;">
+      <span class="spice-emoji">🍶</span>
+      <div class="spice-name-ko">간장</div>
+      <div class="spice-name-zh">酱油</div>
+      <div class="spice-shu">辣度：不辣</div>
+      <div class="spice-desc">与된장同源，从发酵大豆提取的液体。韩国간장分为양조간장（酿造酱油）和조선간장（传统朝鲜酱油），后者颜色更淡，味道更咸。</div>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 辣度挑战 -->
+  <div class="section-title">
+    <div class="st-icon">🔥</div>
+    <div>
+      韩国辣度排行——从入门到地狱
+      <span class="st-sub">토리 替你试过了，你只需要知道该点哪个</span>
+    </div>
+  </div>
+
+  <div class="challenge-list">
+    <div class="challenge-item" style="--cc:#FFE4A0;">
+      <div class="ch-level">😊</div>
+      <div>
+        <div class="ch-name">순한맛 / 궁중떡볶이</div>
+        <div class="ch-desc">不辣或极微辣。궁중떡볶이（宫廷炒年糕）酱油底，不放辣椒；순한맛（温和味）是很多辣食的无辣版本。外国人和不吃辣的人放心选。</div>
+      </div>
+      <div class="ch-tag">入门</div>
+    </div>
+    <div class="challenge-item" style="--cc:#FF8FAB;">
+      <div class="ch-level">🌸</div>
+      <div>
+        <div class="ch-name">로제떡볶이 / 간장치킨</div>
+        <div class="ch-desc">奶油粉色炒年糕和酱油炸鸡。前者辣椒酱被奶油中和，微辣甜香；后者完全不辣。适合辣度敏感但想体验韩国味道的人。</div>
+      </div>
+      <div class="ch-tag">微辣</div>
+    </div>
+    <div class="challenge-item" style="--cc:#e67e22;">
+      <div class="ch-level">🌶️</div>
+      <div>
+        <div class="ch-name">일반 떡볶이 / 양념치킨</div>
+        <div class="ch-desc">标准版炒年糕和甜辣炸鸡，这是韩国人日常的辣度。对有辣食经验的中国人来说基本没有压力，但辣度零基础的人可能会流汗。</div>
+      </div>
+      <div class="ch-tag">中辣</div>
+    </div>
+    <div class="challenge-item" style="--cc:#e74c3c;">
+      <div class="ch-level">🔥</div>
+      <div>
+        <div class="ch-name">엽기떡볶이 / 낙지볶음</div>
+        <div class="ch-desc">连锁品牌엽기떡볶이的标准级别，以及辣炒章鱼。韩国辣食爱好者的日常，但对辣度敏感的人会明显感到刺激，需要备好水。</div>
+      </div>
+      <div class="ch-tag">辣</div>
+    </div>
+    <div class="challenge-item" style="--cc:#c0392b;">
+      <div class="ch-level">😵</div>
+      <div>
+        <div class="ch-name">불닭볶음면 / 마라탕（한국식）</div>
+        <div class="ch-desc">火鸡面和韩式麻辣烫。불닭볶음면是韩国出口全球的辣面挑战，辣度极高。即使是韩国辣食爱好者，第一次吃也可能眼泪直流。</div>
+      </div>
+      <div class="ch-tag">极辣</div>
+    </div>
+    <div class="challenge-item" style="--cc:#7b241c;">
+      <div class="ch-level">💀</div>
+      <div>
+        <div class="ch-name">핵불닭 / 엽기 최고매운맛</div>
+        <div class="ch-desc">핵불닭（核辣火鸡）和엽기떡볶이最高辣度版本。在韩国是挑战级别，连很多韩国人都无法完成。尝试之前请确认自己对辣有充分准备。</div>
+      </div>
+      <div class="ch-tag">地狱级</div>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 经典辣食深度 -->
+  <div class="section-title">
+    <div class="st-icon">🌶️</div>
+    <div>
+      三道必须了解的经典辣食
+      <span class="st-sub">辣得有道理，辣得有文化</span>
+    </div>
+  </div>
+
+  <div class="spicy-food-card">
+    <div class="sfcard-header" style="--sh1:#e74c3c;--sh2:#FF8FAB;">
+      <div class="sfcard-emoji">🥬</div>
+      <div class="sfcard-info">
+        <div class="sfcard-name-ko">김치</div>
+        <div class="sfcard-name-zh">泡菜 · 韩国辣文化最重要的符号</div>
+      </div>
+      <div class="sfcard-spice">🌶️ 微辣到中辣</div>
+    </div>
+    <div class="sfcard-body">
+      <p>김치是韩国最重要的发酵食品，用盐腌制白菜后，涂上고춧가루（辣椒粉）、마늘（大蒜）、생강（生姜）、젓갈（鱼露）制成的酱料，发酵数天到数月。김치不只是一道菜，是韩国的文化象征，2013年被列入UNESCO人类非物质文化遗产。</p>
+      <p>韩国家庭每年冬天进行一次大规模的김치腌制活动，叫做 <strong style="color:#e74c3c;">김장（泡菜腌制）</strong>。全家人聚在一起，一次腌制足够一整年吃的김치——这不只是食物储备，是凝聚家人、传承文化的仪式。김장也是UNESCO非遗项目。</p>
+      <div class="tori-mini">
+        <div class="tori-mini-avatar">🐰</div>
+        <div class="tori-mini-text">韩国目前有超过<strong>200种김치</strong>，不同地区、不同食材、不同季节有不同的版本。最常见的배추김치（白菜泡菜）只是其中之一——还有깍두기（萝卜泡菜）、오이소박이（黄瓜泡菜）、열무김치（嫩萝卜叶泡菜）……</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spicy-food-card">
+    <div class="sfcard-header" style="--sh1:#FF8FAB;--sh2:#FFE4A0;">
+      <div class="sfcard-emoji">🍜</div>
+      <div class="sfcard-info">
+        <div class="sfcard-name-ko">불닭볶음면</div>
+        <div class="sfcard-name-zh">火鸡面 · 韩国辣食的全球名片</div>
+      </div>
+      <div class="sfcard-spice">💀 极辣</div>
+    </div>
+    <div class="sfcard-body">
+      <p>2012年三养食品推出불닭볶음면，以当时韩国最辣为卖点。没有人预料到它会成为全球现象——YouTube上的"불닭볶음면 챌린지（火鸡面挑战）"视频爆红，让这款面条成为韩国最广为人知的出口食品之一，甚至超越了김치在某些市场的知名度。</p>
+      <p>불닭볶음면的辣度约4,404–12,000史高维尔单位（SHU），远超普通辣椒。三养不断推出更辣的版本——핵불닭（约超过10,000 SHU）、2배불닭（双倍辣）……把"挑战辣度"变成了一个持续的营销策略和文化现象。</p>
+      <div class="highlight"><strong>토리 说：</strong>불닭볶음면在中国叫"火鸡面"，是因为불닭에서 불（火）+ 닭（鸡）= 火鸡。但这和感恩节的火鸡没有关系，只是字面翻译。</div>
+    </div>
+  </div>
+
+  <div class="spicy-food-card">
+    <div class="sfcard-header" style="--sh1:#FFE4A0;--sh2:#A8D8D0;">
+      <div class="sfcard-emoji">🐙</div>
+      <div class="sfcard-info">
+        <div class="sfcard-name-ko">낙지볶음</div>
+        <div class="sfcard-name-zh">辣炒章鱼 · 不是挑战，是日常</div>
+      </div>
+      <div class="sfcard-spice">🔥 辣</div>
+    </div>
+    <div class="sfcard-body">
+      <p>낙지（章鱼）用고추장、고춧가루、마늘大量炒制，颜色鲜红，辣味十足，是韩国最正宗的辣食之一。和불닭볶음면那种挑战型的辣不同，낙지볶음是韩国人真实的日常辣食——很多韩国人下班后会去낙지집（章鱼店）点一份낙지볶음下饭。</p>
+      <p>낙지볶음有时会和공기밥（米饭）一起做成낙지볶음밥，最后在锅里炒一份볶음밥（炒饭）——这和烤肉餐厅的收尾炒饭一样，是韩国饮食"把锅底用到极致"精神的体现。</p>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 辣对健康的影响 -->
+  <div class="section-title">
+    <div class="st-icon">💪</div>
+    <div>
+      韩国人为什么觉得辣的是健康的
+      <span class="st-sub">고추에 대한 한국인의 믿음</span>
+    </div>
+  </div>
+
+  <div class="culture-card">
+    <h3>🏥 辣椒在韩国的健康地位</h3>
+    <p>韩国传统医学（한의학）认为，고추属于温热性食材，适量食用有助于促进血液循环、增强体力、排出体内寒气。这种观念与韩国人爱吃辣的习惯相互强化——吃辣不只是喜好，而是一种对身体有益的选择。</p>
+    <p>现代科学研究也证实，辣椒中的辣椒素（capsaicin）确实有一定的代谢促进和抗炎效果。韩国人拿这些研究来佐证传统믿음（信仰），让"辣的是健康的"这个概念更加根深蒂固。</p>
+    <div class="highlight"><strong>흥미로운 사실：</strong>韩国는 전 세계적으로 위암（胃癌）발생률이 높은 나라 중 하나이기도 합니다（韩国同时也是胃癌发生率较高的国家之一）。研究者认为这与大量摄入腌制食品和辣椒有一定关联，但具体机制仍在研究中。辣椒是韩国文化的核心，它的利与弊都是真实存在的。</div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 冷知识 -->
+  <div class="section-title">
+    <div class="st-icon">🔍</div>
+    <div>
+      辣文化冷知识
+      <span class="st-sub">这些让你对辣椒和韩国文化的理解更立体</span>
+    </div>
+  </div>
+
+  <div class="trivia-grid">
+    <div class="trivia-card" style="--tc:#e74c3c;--tbg:#fff0f0;">
+      <div class="tc-tag">역사 미스터리</div>
+      <div class="tc-q">辣椒到底是怎么进入朝鲜的？</div>
+      <div class="tc-a">史学界至今没有定论。主流说法有两个：一是壬辰倭乱期间日本传入，二是经由中国贸易传入。朝鲜文献中最早关于고추的记录出现在1614年，但传入时间可能更早。有趣的是，日本的说法在韩国人中引发争议——很多韩国人不愿意接受韩国最重要的食材来自日本这个历史。</div>
+    </div>
+    <div class="trivia-card" style="--tc:#FF8FAB;--tbg:#fff0f5;">
+      <div class="tc-tag">김장 문화</div>
+      <div class="tc-q">韩国的김장到底有多大规模？</div>
+      <div class="tc-a">韩国家庭平均每年김장消耗约20–30棵白菜，制作约40–50公斤김치。城市化之后很多家庭开始买现成的김치，但김장문화并没有消失——很多家庭依然坚持自制，把它视为家庭团聚和文化传承的仪式。2013年김장이 유네스코에 등재됐어요（被联合国教科文组织列入非遗）。</div>
+    </div>
+    <div class="trivia-card" style="--tc:#FFE4A0;--tbg:#fffdf0;">
+      <div class="tc-tag">글로벌 영향</div>
+      <div class="tc-q">韩国辣文化如何影响全球？</div>
+      <div class="tc-a">불닭볶음면的全球爆红是最明显的例子，但韩国辣文化的全球化不止于此。고추장作为调料已经出现在很多国家的超市，韩国泡菜在全球健康食品市场持续增长，"韩式辣"（Korean spicy）成为全球餐饮界的流行标签之一。</div>
+    </div>
+    <div class="trivia-card" style="--tc:#C9B8E8;--tbg:#f5f0ff;">
+      <div class="tc-tag">지역 차이</div>
+      <div class="tc-q">韩国不同地区的辣度不同吗？</div>
+      <div class="tc-a">明显不同。전라도（全罗道，韩国西南部）以饮食最辣最丰盛著称，특히 광주（光州）的음식이 매운 걸로 유명해요（以辣食闻名）。경상도（庆尚道，东南部）口味也重。相比之下，경기도（首都圈）和서울的饮食辣度相对温和，更符合现代都市口味。外地人到전라도吃饭，经常被辣度惊到。</div>
+    </div>
+  </div>
+
+  <div class="notice-box">
+    <div class="nt">🌶️ 在韩国点辣食之前要知道</div>
+    韩国餐厅的辣度没有全国统一标准，同样叫做"보통 맵기（普通辣度）"，在不同餐厅可能差距很大。不确定辣度时，先问一句：<strong>많이 매워요?（很辣吗？）</strong>——如果服务员说 네 많이 매워요（是的很辣），那就做好心理准备；如果说 그냥 조금 매워요（就是有点辣），对有辣食经验的人来说通常没有压力。
+  </div>
+
+  <!-- 실용 韩语 -->
+  <div class="korean-section">
+    <div class="ks-header">
+      <div class="ks-tori">🐰</div>
+      <div>
+        <div class="ks-title">토리 教你说——关于辣的必备韩语</div>
+        <div class="ks-sub">点击 + 可加入你的词汇本</div>
+      </div>
+    </div>
+    <div class="phrase-list">
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">많이 매워요?</div>
+          <div class="phrase-ro">ma-ni mae-wo-yo?</div>
+          <div class="phrase-scene">🌶️ 点菜前确认辣度</div>
+        </div>
+        <div class="phrase-zh">很辣吗？</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">저는 매운 거 못 먹어요.</div>
+          <div class="phrase-ro">jeo-neun mae-un geo mot meok-eo-yo</div>
+          <div class="phrase-scene">😰 说明自己不吃辣</div>
+        </div>
+        <div class="phrase-zh">我不能吃辣的</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">맵지 않은 걸로 주세요.</div>
+          <div class="phrase-ro">maep-ji a-neun geol-lo ju-se-yo</div>
+          <div class="phrase-scene">🥬 要不辣的版本</div>
+        </div>
+        <div class="phrase-zh">请给我不辣的</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">너무 맵지만 맛있어요!</div>
+          <div class="phrase-ro">neo-mu maep-ji-man ma-si-sseo-yo</div>
+          <div class="phrase-scene">🔥 又辣又好吃</div>
+        </div>
+        <div class="phrase-zh">很辣但很好吃！</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">물 한 잔 더 주세요.</div>
+          <div class="phrase-ro">mul han jan deo ju-se-yo</div>
+          <div class="phrase-scene">💧 吃辣时要水</div>
+        </div>
+        <div class="phrase-zh">再给我一杯水</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">입이 얼얼해요.</div>
+          <div class="phrase-ro">i-bi eol-eol-hae-yo</div>
+          <div class="phrase-scene">😵 嘴巴麻了</div>
+        </div>
+        <div class="phrase-zh">嘴巴辣麻了</div>
+        <div class="add-btn">+</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 词汇 -->
+  <div class="section-title" style="font-size:16px;margin-top:36px;">
+    <div class="st-icon" style="width:30px;height:30px;font-size:14px;">📖</div>
+    <div>本篇出现的词汇</div>
+  </div>
+  <div class="vocab-row">
+    <div class="vocab-chip"><span class="vko">고추</span><span class="vzh">辣椒</span></div>
+    <div class="vocab-chip"><span class="vko">고추장</span><span class="vzh">辣椒酱</span></div>
+    <div class="vocab-chip"><span class="vko">고춧가루</span><span class="vzh">辣椒粉</span></div>
+    <div class="vocab-chip"><span class="vko">된장</span><span class="vzh">大豆酱</span></div>
+    <div class="vocab-chip"><span class="vko">간장</span><span class="vzh">酱油</span></div>
+    <div class="vocab-chip"><span class="vko">김장</span><span class="vzh">泡菜腌制</span></div>
+    <div class="vocab-chip"><span class="vko">맵다</span><span class="vzh">辣</span></div>
+    <div class="vocab-chip"><span class="vko">순한맛</span><span class="vzh">温和口味</span></div>
+    <div class="vocab-chip"><span class="vko">불닭볶음면</span><span class="vzh">火鸡面</span></div>
+    <div class="vocab-chip"><span class="vko">낙지볶음</span><span class="vzh">辣炒章鱼</span></div>
+    <div class="vocab-chip"><span class="vko">발효</span><span class="vzh">发酵</span></div>
+    <div class="vocab-chip"><span class="vko">장</span><span class="vzh">酱（总称）</span></div>
+  </div>
+
+  <!-- 系列结尾 -->
+  <div class="ending-card">
+    <span class="ending-tori">🐰</span>
+    <div class="series-badge">🎉 韩国美食系列 · 完结</div>
+    <div class="ending-title">那碗红色的辣，是400年的历史</div>
+    <div class="ending-sub">
+      从美洲来的辣椒，经由战争来到朝鲜半岛，<br>
+      用100年时间慢慢被接受，<br>
+      再用300年变成韩国人的灵魂调料。<br>
+      今天每一口红色的김치、每一碗炒年糕、<br>
+      每一盘辣炒章鱼——<br>
+      都是那段历史留下的味道。<br><br>
+      <strong style="color:#FF8FAB;">오늘도 화이팅！맛있는 한국 음식 많이 드세요 🐰</strong>
+    </div>
+
+    <div class="all-articles">
+      <div class="article-link">
+        <div class="al-num">美食 01</div>
+        <div class="al-title">🥩 韩国烤肉完全指南</div>
+      </div>
+      <div class="article-link">
+        <div class="al-num">美食 02</div>
+        <div class="al-title">🍡 首尔街头小吃地图</div>
+      </div>
+      <div class="article-link">
+        <div class="al-num">美食 03</div>
+        <div class="al-title">🍲 韩国人为什么这么爱喝汤</div>
+      </div>
+      <div class="article-link">
+        <div class="al-num">美食 04</div>
+        <div class="al-title">📺 跟着韩剧学点餐</div>
+      </div>
+      <div class="article-link">
+        <div class="al-num">美食 05</div>
+        <div class="al-title">🌶️ 韩国辣文化——辣椒是哪里来的</div>
+      </div>
+      <div class="article-link">
+        <div class="al-num">文化系列</div>
+        <div class="al-title">🏙️ 首尔女生的日常 · 5篇</div>
+      </div>
+    </div>
+
+    <a class="back-btn" href="#">探索更多内容 →</a>
+  </div>
+
+</div>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a02edab0fc461979',t:'MTc3OTk4ODAzMg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>韩国购物完全指南 · 韩语学习日记</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #FFFDF9; color: #3a3a3a; line-height: 1.7;
+  }
+
+  .hero {
+    background: linear-gradient(160deg, #FF8FAB 0%, #FFE4A0 45%, #C9B8E8 100%);
+    padding: 56px 24px 48px; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: "🛍️💄👗💜🐰✨";
+    position: absolute; top: 14px; left: 0; right: 0;
+    font-size: 22px; letter-spacing: 18px; opacity: .22;
+  }
+  .hero-tag {
+    display: inline-block; background: rgba(255,255,255,.25);
+    color: #fff; font-size: 11px; font-weight: 700;
+    padding: 4px 14px; border-radius: 20px; margin-bottom: 16px; letter-spacing: 1px;
+  }
+  .hero h1 {
+    font-size: 28px; font-weight: 800; color: #fff;
+    text-shadow: 0 2px 12px rgba(0,0,0,.15); line-height: 1.3; margin-bottom: 12px;
+  }
+  .hero h1 span { font-size: 14px; font-weight: 400; display: block; margin-top: 6px; opacity: .9; }
+  .hero-meta {
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+    font-size: 12px; color: rgba(255,255,255,.85); margin-top: 16px; flex-wrap: wrap;
+  }
+
+  .container { max-width: 780px; margin: 0 auto; padding: 40px 20px 80px; }
+
+  .breadcrumb {
+    font-size: 12px; color: #bbb; display: flex; align-items: center; gap: 6px; margin-bottom: 28px;
+  }
+  .breadcrumb span { color: #ddd; }
+
+  /* 토리引言 */
+  .intro-card {
+    background: #fff; border-radius: 20px; padding: 24px 26px;
+    box-shadow: 0 2px 20px rgba(255,143,171,.12); margin-bottom: 40px;
+    border-left: 4px solid #FF8FAB;
+  }
+  .tori-says { display: flex; gap: 14px; align-items: flex-start; }
+  .tori-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: linear-gradient(135deg, #FF8FAB, #FFE4A0);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+  }
+  .tori-bubble {
+    background: linear-gradient(135deg, #fff0f5, #fffdf0);
+    border-radius: 0 14px 14px 14px; padding: 14px 16px;
+    font-size: 13px; color: #555; line-height: 1.8; flex: 1; position: relative;
+  }
+  .tori-bubble::before {
+    content: ""; position: absolute; left: -8px; top: 12px;
+    border: 8px solid transparent; border-right-color: #fff0f5; border-left: none;
+  }
+  .tori-name { font-size: 11px; color: #FF8FAB; font-weight: 700; margin-bottom: 5px; }
+
+  /* 章节标题 */
+  .section-title {
+    font-size: 20px; font-weight: 800; color: #333; margin: 44px 0 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-title .st-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, #FF8FAB, #FFE4A0);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .section-title .st-sub { font-size: 12px; font-weight: 400; color: #aaa; display: block; margin-top: 2px; }
+
+  /* 品牌大卡片 */
+  .brand-section {
+    background: #fff; border-radius: 20px; padding: 22px 24px;
+    box-shadow: 0 2px 16px rgba(255,143,171,.1); margin: 16px 0;
+    border-top: 3px solid var(--bsc, #FF8FAB);
+  }
+  .brand-section h3 {
+    font-size: 15px; font-weight: 700; color: #333; margin-bottom: 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .brand-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+  .brand-item {
+    background: var(--bibg, #fff0f5); border-radius: 12px; padding: 12px 14px;
+    border-left: 3px solid var(--bsc, #FF8FAB);
+  }
+  .brand-name { font-size: 13px; font-weight: 700; color: #333; margin-bottom: 3px; }
+  .brand-type { font-size: 10px; color: var(--bsc,#FF8FAB); font-weight: 600; margin-bottom: 5px; }
+  .brand-desc { font-size: 11px; color: #777; line-height: 1.65; }
+  .brand-price { margin-top: 5px; font-size: 10px; color: #bbb; }
+
+  /* 购物地点卡 */
+  .shop-card {
+    background: #fff; border-radius: 16px; padding: 18px 20px;
+    box-shadow: 0 2px 12px rgba(255,143,171,.1); margin: 12px 0;
+    display: flex; gap: 14px; align-items: flex-start;
+    border-left: 4px solid var(--sc, #FF8FAB);
+    transition: transform .15s;
+  }
+  .shop-card:hover { transform: translateX(4px); }
+  .shop-icon { font-size: 32px; flex-shrink: 0; }
+  .shop-name { font-size: 15px; font-weight: 700; color: #333; margin-bottom: 2px; }
+  .shop-name-zh { font-size: 11px; color: var(--sc,#FF8FAB); font-weight: 600; margin-bottom: 6px; }
+  .shop-desc { font-size: 12px; color: #666; line-height: 1.75; }
+  .shop-tip { margin-top: 8px; font-size: 11px; color: #bbb; display: flex; align-items: flex-start; gap: 4px; }
+  .shop-tip::before { content: "💡"; flex-shrink: 0; }
+  .shop-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+  .shop-tag {
+    font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px;
+    background: var(--stbg,#fff0f5); color: var(--sc,#FF8FAB);
+  }
+
+  /* 退税卡片 */
+  .tax-card {
+    background: linear-gradient(135deg, #1a3a2a, #2a3a1a);
+    border-radius: 20px; padding: 24px; margin: 16px 0; color: #fff;
+    position: relative; overflow: hidden;
+  }
+  .tax-card::before {
+    content: "TAX FREE";
+    position: absolute; right: -20px; top: -10px;
+    font-size: 60px; font-weight: 900; color: rgba(255,255,255,.05);
+    letter-spacing: -2px;
+  }
+  .tax-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .tax-sub { font-size: 11px; color: rgba(255,255,255,.6); margin-bottom: 16px; }
+  .tax-steps { display: flex; flex-direction: column; gap: 10px; }
+  .tax-step { display: flex; gap: 10px; align-items: flex-start; }
+  .tax-num {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: #2ecc71; color: #fff; font-size: 10px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .tax-text { font-size: 12px; color: rgba(255,255,255,.85); line-height: 1.65; flex: 1; }
+  .tax-text strong { color: #2ecc71; }
+
+  /* 토리 mini */
+  .tori-mini {
+    display: flex; gap: 10px; align-items: flex-start;
+    background: linear-gradient(135deg, #fff0f5, #fffdf0);
+    border-radius: 12px; padding: 12px 14px; margin-top: 12px;
+  }
+  .tori-mini-avatar { font-size: 18px; flex-shrink: 0; }
+  .tori-mini-text { font-size: 12px; color: #666; line-height: 1.75; }
+  .tori-mini-text strong { color: #FF8FAB; }
+
+  /* highlight */
+  .highlight {
+    background: linear-gradient(135deg, #fff0f5, #fffdf0);
+    border-radius: 10px; padding: 12px 14px; margin: 12px 0;
+    font-size: 13px; color: #555; line-height: 1.8; border-left: 3px solid #FF8FAB;
+  }
+  .highlight strong { color: #FF8FAB; }
+
+  /* 砍价/注意 */
+  .notice-box {
+    background: linear-gradient(135deg, #fff0f5, #fffdf0);
+    border-radius: 14px; padding: 16px 18px; margin: 16px 0;
+    border: 1.5px solid #FF8FAB22; font-size: 13px; color: #666; line-height: 1.8;
+  }
+  .notice-box .nt { font-weight: 700; color: #FF8FAB; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
+
+  /* 实用 韩语 */
+  .korean-section {
+    background: linear-gradient(135deg, #2a1e14, #1e1a28);
+    border-radius: 20px; padding: 26px 24px; margin: 32px 0;
+  }
+  .ks-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  .ks-tori { font-size: 28px; }
+  .ks-title { font-size: 15px; font-weight: 700; color: #FDF8F0; }
+  .ks-sub { font-size: 11px; color: #888; margin-top: 2px; }
+  .phrase-list { display: flex; flex-direction: column; gap: 12px; }
+  .phrase-item {
+    background: rgba(255,255,255,.06); border-radius: 12px; padding: 14px 16px;
+    display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  }
+  .phrase-ko { font-size: 15px; font-weight: 700; color: #FDF8F0; }
+  .phrase-ro { font-size: 10px; color: #888; margin-top: 2px; font-style: italic; }
+  .phrase-zh { font-size: 12px; color: #FFE4A0; font-weight: 600; flex-shrink: 0; }
+  .phrase-scene { font-size: 10px; color: #666; margin-top: 3px; }
+  .add-btn {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: linear-gradient(135deg,#FF8FAB,#FFE4A0);
+    color: #fff; font-size: 14px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; cursor: pointer;
+    box-shadow: 0 2px 8px rgba(255,143,171,.4); transition: transform .15s;
+  }
+  .add-btn:hover { transform: scale(1.1); }
+
+  /* 词汇 */
+  .vocab-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+  .vocab-chip {
+    background: #fff; border: 1px solid #ffe0ea;
+    border-radius: 20px; padding: 5px 14px;
+    font-size: 12px; color: #555;
+    display: flex; align-items: center; gap: 6px;
+    box-shadow: 0 1px 6px rgba(0,0,0,.04);
+  }
+  .vocab-chip .vko { font-weight: 700; color: #333; }
+  .vocab-chip .vzh { color: #FF8FAB; }
+
+  /* 比较表 */
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 16px 0; border-radius: 14px; overflow: hidden; }
+  .compare-table th { background: linear-gradient(135deg,#FF8FAB,#FFE4A0); color: #fff; font-weight: 700; padding: 10px 14px; text-align: left; }
+  .compare-table td { padding: 10px 14px; border-bottom: 1px solid #fff5f8; color: #444; vertical-align: top; }
+  .compare-table tr:nth-child(even) td { background: #fffbfc; }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  .divider { text-align: center; font-size: 18px; letter-spacing: 8px; opacity: .3; margin: 32px 0; }
+
+  /* 系列结尾 */
+  .ending-card {
+    background: linear-gradient(135deg, #fff0f5, #fffdf0, #f5f0ff);
+    border-radius: 20px; padding: 32px 24px; text-align: center; margin-top: 40px;
+    border: 1.5px solid rgba(255,143,171,.15); position: relative; overflow: hidden;
+  }
+  .ending-card::before {
+    content: "🛍️💄🐰✨💜🇰🇷";
+    position: absolute; top: 8px; left: 0; right: 0;
+    font-size: 16px; letter-spacing: 12px; opacity: .2;
+  }
+  .ending-tori { font-size: 56px; display: block; margin-bottom: 12px; }
+  .series-badge {
+    display: inline-block; background: linear-gradient(135deg,#FF8FAB,#C9B8E8);
+    color: #fff; font-size: 12px; font-weight: 700;
+    padding: 5px 18px; border-radius: 20px; margin-bottom: 14px;
+  }
+  .ending-title { font-size: 18px; font-weight: 800; color: #FF8FAB; margin-bottom: 8px; }
+  .ending-sub { font-size: 13px; color: #aaa; line-height: 1.9; margin-bottom: 24px; }
+  .series-grid {
+    display: grid; grid-template-columns: repeat(2,1fr); gap: 10px;
+    margin: 16px 0 20px; text-align: left;
+  }
+  .series-link {
+    background: rgba(255,255,255,.7); border-radius: 10px; padding: 10px 14px;
+    font-size: 12px; color: #555; border: 1px solid rgba(255,143,171,.15);
+  }
+  .series-link .sl-num { font-size: 10px; color: #FF8FAB; font-weight: 700; margin-bottom: 2px; }
+  .series-link .sl-title { font-size: 12px; color: #333; font-weight: 600; }
+  .back-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #FF8FAB, #C9B8E8);
+    color: #fff; font-size: 13px; font-weight: 700;
+    padding: 12px 32px; border-radius: 24px;
+    box-shadow: 0 4px 16px rgba(255,143,171,.35);
+    text-decoration: none;
+  }
+
+  @media (max-width: 600px) {
+    .brand-grid { grid-template-columns: 1fr; }
+    .series-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-tag">🇰🇷 韩国旅行 · 第一次去首尔，토리 陪你</div>
+  <h1>
+    韩国购物完全指南
+    <span>쇼핑 가이드 — 买什么、在哪买、怎么省钱</span>
+  </h1>
+  <div class="hero-meta">
+    <span>🐰 토리 精选</span>
+    <span>📖 约12分钟读完</span>
+    <span>🗂️ 旅行 · 购物</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="breadcrumb">
+    🏠 首页 <span>›</span> 🇰🇷 韩国 <span>›</span> 旅行 <span>›</span> 韩国购物完全指南
+  </div>
+
+  <div class="intro-card">
+    <div class="tori-says">
+      <div class="tori-avatar">🐰</div>
+      <div class="tori-bubble">
+        <div class="tori-name">토리 说</div>
+        去韩国不购物，就像去日本不吃寿司——当然可以，但你会后悔的。韩国的购物有几个特点：美妆是全球价格洼地、아이돌周边在韩国才齐全、생활용품设计感强且便宜、传统工艺品有文化价值……问题是很多人到了首尔不知道该去哪买、怎么省钱、能不能退税。今天토리 把购物攻略整理清楚，让你每一分钱都花得值 🛍️
+      </div>
+    </div>
+  </div>
+
+  <!-- 美妆 -->
+  <div class="section-title">
+    <div class="st-icon">💄</div>
+    <div>
+      한국 뷰티——美妆是最值得买的品类
+      <span class="st-sub">比国内便宜，比代购直接，品类最全</span>
+    </div>
+  </div>
+
+  <div class="brand-section" style="--bsc:#FF8FAB;--bibg:#fff0f5;">
+    <h3>💄 平价美妆品牌（明洞必扫）</h3>
+    <div class="brand-grid">
+      <div class="brand-item" style="--bsc:#FF8FAB;--bibg:#fff0f5;">
+        <div class="brand-name">이니스프리 innisfree</div>
+        <div class="brand-type">자연주의 스킨케어</div>
+        <div class="brand-desc">济州岛天然成分护肤，绿茶精华系列全球知名。护肤品和面膜性价比超高，套装购买更划算。</div>
+        <div class="brand-price">面膜约 1,000원/片</div>
+      </div>
+      <div class="brand-item" style="--bsc:#FF8FAB;--bibg:#fff0f5;">
+        <div class="brand-name">에뛰드 ETUDE</div>
+        <div class="brand-type">플레이풀 메이크업</div>
+        <div class="brand-desc">可爱少女风彩妆，唇膏、眼影、腮红颜色选择丰富。价格亲民，适合学生和彩妆新手。</div>
+        <div class="brand-price">唇膏约 8,000–15,000원</div>
+      </div>
+      <div class="brand-item" style="--bsc:#FF8FAB;--bibg:#fff0f5;">
+        <div class="brand-name">네이처리퍼블릭</div>
+        <div class="brand-type">자연 성분 뷰티</div>
+        <div class="brand-desc">芦荟胶是网红爆款，多功能保湿修护，大瓶装价格极低。护发素系列也是回购率极高的产品。</div>
+        <div class="brand-price">芦荟胶大瓶约 8,900원</div>
+      </div>
+      <div class="brand-item" style="--bsc:#FF8FAB;--bibg:#fff0f5;">
+        <div class="brand-name">더페이스샵 THE FACE SHOP</div>
+        <div class="brand-type">기초 스킨케어</div>
+        <div class="brand-desc">大米发酵精华系列深受中老年女性喜爱，米粒系列护肤是经典款。气垫BB霜也是热门单品。</div>
+        <div class="brand-price">气垫约 15,000–22,000원</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="brand-section" style="--bsc:#C9B8E8;--bibg:#f5f0ff;">
+    <h3>✨ 中高端美妆（值得投资）</h3>
+    <div class="brand-grid">
+      <div class="brand-item" style="--bsc:#C9B8E8;--bibg:#f5f0ff;">
+        <div class="brand-name">설화수 雪花秀</div>
+        <div class="brand-type">한방 럭셔리 스킨케어</div>
+        <div class="brand-desc">韩方高端护肤品，以人参和草本为核心成分。在韩国购买比国内便宜约20-30%，是送礼首选。윤조에센스是标志性产品。</div>
+        <div class="brand-price">윤조에센스 약 80,000원起</div>
+      </div>
+      <div class="brand-item" style="--bsc:#C9B8E8;--bibg:#f5f0ff;">
+        <div class="brand-name">아모레퍼시픽 AMOREPACIFIC</div>
+        <div class="brand-type">프리미엄 스킨케어</div>
+        <div class="brand-desc">韩国最大美妆集团旗舰品牌，绿茶系列和时光密令精华是招牌。旗舰店在용산IPARK Mall有专门的体验区。</div>
+        <div class="brand-price">精华约 100,000원起</div>
+      </div>
+      <div class="brand-item" style="--bsc:#C9B8E8;--bibg:#f5f0ff;">
+        <div class="brand-name">VT코스메틱</div>
+        <div class="brand-type">콜라겐 · 리들샷</div>
+        <div class="brand-desc">리들샷（Reedle Shot）是近年全球爆红的韩国美容仪器式精华，BTS代言使其知名度爆炸式增长。在韩国买最实惠最正品。</div>
+        <div class="brand-price">리들샷 약 35,000–60,000원</div>
+      </div>
+      <div class="brand-item" style="--bsc:#C9B8E8;--bibg:#f5f0ff;">
+        <div class="brand-name">COSRX</div>
+        <div class="brand-type">기능성 스킨케어</div>
+        <div class="brand-desc">蜗牛精华系列全球知名，主打功效型护肤。痘痘贴、低分子透明质酸精华是全球药妆爱好者必购单品。在韩国比海外便宜。</div>
+        <div class="brand-price">蜗牛精华约 22,000원</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tori-mini">
+    <div class="tori-mini-avatar">🐰</div>
+    <div class="tori-mini-text">뷰티 쇼핑 팁：명동에서 살 때 여러 매장을 비교하세요. 같은 브랜드 제품도 매장마다 가격이 조금씩 달라요. 그리고 <strong>멤버십 앱에 가입하면 추가 할인이나 쿠폰을 받을 수 있어요</strong>. 이니스프리, 에뛰드 모두 앱 회원 가입 시 첫 구매 할인이 있어요.</div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 아이돌 굿즈 -->
+  <div class="section-title">
+    <div class="st-icon">🎤</div>
+    <div>
+      아이돌 굿즈——粉丝必去的购物路线
+      <span class="st-sub">在首尔买，比任何地方都全</span>
+    </div>
+  </div>
+
+  <div class="shop-card" style="--sc:#C9B8E8;--stbg:#f5f0ff;">
+    <div class="shop-icon">🏢</div>
+    <div>
+      <div class="shop-name">HYBE INSIGHT</div>
+      <div class="shop-name-zh">HYBE官方体验博物馆 · BTS粉丝圣地</div>
+      <div class="shop-desc">BTS、SEVENTEEN、NewJeans等HYBE艺人的沉浸式体验博物馆，有展览、互动装置、官方굿즈商店。是全球唯一一个能买到完整HYBE官方周边的地方，BTS联名商品只有这里最全。</div>
+      <div class="shop-tip">반드시 사전 예약 필수! 현장에서는 입장이 어려울 수 있어요. 공식 홈페이지에서 날짜와 시간을 미리 예약하세요.</div>
+      <div class="shop-tags">
+        <span class="shop-tag">예약 필수</span>
+        <span class="shop-tag">4号线 한성대입구역</span>
+        <span class="shop-tag">BTS·하이브</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="shop-card" style="--sc:#FF8FAB;--stbg:#fff0f5;">
+    <div class="shop-icon">🎁</div>
+    <div>
+      <div class="shop-name">SM·JYP·YG 공식 스토어</div>
+      <div class="shop-name-zh">SM·JYP·YG官方周边店</div>
+      <div class="shop-desc">각 기획사의 공식 굿즈 스토어（各大公司官方周边店）。SM의 경우 성수동 근처에 공식 매장과 팝업이 열리는 경우가 많고, JYP·YG도 각각 공식 온라인 스토어와 팝업 스토어를 운영해요. 출발 전에 공식 SNS에서 팝업 일정을 확인하세요.</div>
+      <div class="shop-tip">각 기획사 공식 인스타그램에서 팝업 스토어 일정을 미리 확인하면 놓치지 않아요.</div>
+      <div class="shop-tags">
+        <span class="shop-tag">위치 유동적</span>
+        <span class="shop-tag">SM·JYP·YG</span>
+        <span class="shop-tag">팝업</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="shop-card" style="--sc:#FFE4A0;--stbg:#fffdf0;">
+    <div class="shop-icon">🏪</div>
+    <div>
+      <div class="shop-name">홍대·이태원 굿즈샵</div>
+      <div class="shop-name-zh">弘大·梨泰院周边店街</div>
+      <div class="shop-desc">홍대입구역 주변에 아이돌 굿즈 전문점이 밀집해 있어요（弘大入口站周围有大量아이돌周边专卖店）。비공식 팬메이드 굿즈부터 공식 라이선스 제품까지 다양하게 있어요. 이태원에도 K-POP 굿즈 관련 매장이 있어요.</div>
+      <div class="shop-tip">팬메이드 제품은 품질 확인 후 구매하세요. 공식 제품과 구분이 필요해요.</div>
+      <div class="shop-tags">
+        <span class="shop-tag">2号线 홍대입구역</span>
+        <span class="shop-tag">각종 아이돌</span>
+        <span class="shop-tag">팬메이드</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 购物地点 -->
+  <div class="section-title">
+    <div class="st-icon">🏬</div>
+    <div>
+      어디서 사야 할까——购物地点完全指南
+      <span class="st-sub">不同购物需求去不同的地方</span>
+    </div>
+  </div>
+
+  <table class="compare-table">
+    <tr>
+      <th>购物地点</th>
+      <th>适合买什么</th>
+      <th>价格</th>
+      <th>退税</th>
+    </tr>
+    <tr>
+      <td><strong>명동</strong> 明洞</td>
+      <td>平价美妆、基本款护肤、纪念品</td>
+      <td>정가 / 약간 비쌈</td>
+      <td>✅ 가능</td>
+    </tr>
+    <tr>
+      <td><strong>동대문시장</strong> 东大门</td>
+      <td>衣服、面料、批发价购物</td>
+      <td>도매가 가능</td>
+      <td>일부 가능</td>
+    </tr>
+    <tr>
+      <td><strong>올리브영</strong> OLIVE YOUNG</td>
+      <td>美妆、护肤、健康食品全品类</td>
+      <td>행사가 자주 있음</td>
+      <td>✅ 가능</td>
+    </tr>
+    <tr>
+      <td><strong>다이소</strong> DAISO</td>
+      <td>生活用品、文具、小物件</td>
+      <td>1,000–5,000원</td>
+      <td>❌ 불가</td>
+    </tr>
+    <tr>
+      <td><strong>면세점</strong> 免税店</td>
+      <td>高端美妆、奢侈品、韩国品牌</td>
+      <td>면세 가격</td>
+      <td>이미 면세</td>
+    </tr>
+    <tr>
+      <td><strong>홍대 빈티지샵</strong></td>
+      <td>古着、独立设计师品牌</td>
+      <td>가격 다양</td>
+      <td>❌ 대부분 불가</td>
+    </tr>
+    <tr>
+      <td><strong>이마트·롯데마트</strong></td>
+      <td>食品、零食、生活用品</td>
+      <td>최저가</td>
+      <td>❌ 불가</td>
+    </tr>
+  </table>
+
+  <!-- OLIVE YOUNG 专题 -->
+  <div class="shop-card" style="--sc:#2ecc71;--stbg:#e8f8f0;">
+    <div class="shop-icon">🌿</div>
+    <div>
+      <div class="shop-name">올리브영 OLIVE YOUNG</div>
+      <div class="shop-name-zh">橄榄杨 · 韩国美妆超市，不能错过</div>
+      <div class="shop-desc">올리브영은 한국의 세포라 같은 곳이에요（OLIVE YOUNG就是韩国的Sephora）. 韩国本土美妆品牌、护肤品、健康食品、香薰全部集中在一起，价格比单独品牌店更便宜，经常有买二送一、满减等活动。首尔명동、홍대、강남都有大型门店，24小时营业的门店也有。</div>
+      <div class="shop-tip">올리브영 앱을 미리 다운받고 회원 가입하면 할인 쿠폰과 행사 정보를 받을 수 있어요. 외국인 관광객 특별 할인도 있는 경우가 있어요.</div>
+      <div class="shop-tags">
+        <span class="shop-tag">전국 어디서나</span>
+        <span class="shop-tag">미용·건강</span>
+        <span class="shop-tag">앱 할인</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 东大门 -->
+  <div class="shop-card" style="--sc:#e67e22;--stbg:#fff8f0;">
+    <div class="shop-icon">👗</div>
+    <div>
+      <div class="shop-name">동대문 패션 클러스터</div>
+      <div class="shop-name-zh">东大门时装区 · 韩国批发零售时装圣地</div>
+      <div class="shop-desc">동대문은 한국 최대의 패션 도매·소매 시장이에요（东大门是韩国最大的时装批发零售市场）. 두타（DOOTA）、쇼핑몰 두타면세점、롯데피트인 등 대형 쇼핑몰부터 새벽에만 열리는 도매시장까지 다양해요. 새벽 3-5시에는 진짜 도매가로 살 수 있어요.</div>
+      <div class="shop-tip">쇼핑 목적에 따라 시간대를 맞춰가세요. 소매는 낮에, 도매 가격을 원하면 새벽 2시 이후에 가세요.</div>
+      <div class="shop-tags">
+        <span class="shop-tag">2·4·5号线 동대문역사문화공원역</span>
+        <span class="shop-tag">패션·도매</span>
+        <span class="shop-tag">24시간</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 传统特产 -->
+  <div class="section-title">
+    <div class="st-icon">🎎</div>
+    <div>
+      전통 기념품——送礼最有文化价值的选择
+      <span class="st-sub">不是纪念品店里的那些，是真正值得带走的</span>
+    </div>
+  </div>
+
+  <div class="brand-section" style="--bsc:#8e6b3e;--bibg:#fff8f0;">
+    <h3>🎎 真正值得带走的韩国特产</h3>
+    <div class="brand-grid">
+      <div class="brand-item" style="--bsc:#8e6b3e;--bibg:#fff8f0;">
+        <div class="brand-name">고려인삼 高丽参</div>
+        <div class="brand-type">건강식품</div>
+        <div class="brand-desc">韩国人参品质世界公认，正官庄（정관장）是最权威的品牌。홍삼（红参）比白参更易保存，有粉末、液体、糖片等多种形态，适合送给长辈。</div>
+        <div class="brand-price">인삼정 약 30,000–200,000원不等</div>
+      </div>
+      <div class="brand-item" style="--bsc:#8e6b3e;--bibg:#fff8f0;">
+        <div class="brand-name">전통 공예품</div>
+        <div class="brand-type">한국 전통문화</div>
+        <div class="brand-desc">인사동에 韩国传统工艺品店最集中。青瓷（청자）、白瓷（백자）茶具，传统刺绣（자수），彩绘漆器……有文化底蕴的纪念品，比机场那些印着태극기的马克杯有价值得多。</div>
+        <div class="brand-price">차 문화 관련 제품 약 15,000원起</div>
+      </div>
+      <div class="brand-item" style="--bsc:#8e6b3e;--bibg:#fff8f0;">
+        <div class="brand-name">한과 · 전통과자</div>
+        <div class="brand-type">전통 식품</div>
+        <div class="brand-desc">약과（蜂蜜脆饼）近年成为全球爆红的韩国传统点心，약식（药食）、전통 강정、한과 세트适合作为伴手礼。인사동과 광장시장에서 구입 가능해요.</div>
+        <div class="brand-price">약과 1박스 약 10,000–30,000원</div>
+      </div>
+      <div class="brand-item" style="--bsc:#8e6b3e;--bibg:#fff8f0;">
+        <div class="brand-name">불닭볶음면 / 김 / 간식류</div>
+        <div class="brand-type">식품 기념품</div>
+        <div class="brand-desc">韩国零食是最受欢迎的伴手礼之一。불닭볶음면、허니버터칩（蜂蜜黄油薯片）、꼬북칩、김（海苔）系列……이마트나 롯데마트에서 가장 저렴하게 살 수 있어요.</div>
+        <div class="brand-price">마트에서 구입 시 가장 저렴</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 退税 -->
+  <div class="section-title">
+    <div class="st-icon">💰</div>
+    <div>
+      TAX FREE 退税——买贵的东西必须退
+      <span class="st-sub">退税最高可返回购物金额的10%，不退是白白损失</span>
+    </div>
+  </div>
+
+  <div class="tax-card">
+    <div class="tax-title">🧾 韩国退税完整流程</div>
+    <div class="tax-sub">购物满30,000韩元的单张发票，在贴有TAX FREE标志的商店均可申请退税</div>
+    <div class="tax-steps">
+      <div class="tax-step">
+        <div class="tax-num">1</div>
+        <div class="tax-text">购物时告诉店员<strong>"택스 리펀 해주세요（请帮我办退税）"</strong>，出示护照，店员会打印退税单</div>
+      </div>
+      <div class="tax-step">
+        <div class="tax-num">2</div>
+        <div class="tax-text">离开韩国时在<strong>机场退税窗口</strong>（出境大厅，过安检之前）凭退税单+护照+购物发票办理退税</div>
+      </div>
+      <div class="tax-step">
+        <div class="tax-num">3</div>
+        <div class="tax-text">选择退税方式：<strong>현금（现金）</strong>当场领取，或退回到信用卡（需要几个星期到账）</div>
+      </div>
+      <div class="tax-step">
+        <div class="tax-num">4</div>
+        <div class="tax-text">部分商场有<strong>즉시환급（即时退税）</strong>服务，购物时直接扣除税额，不需要机场退税，更方便</div>
+      </div>
+      <div class="tax-step">
+        <div class="tax-num">5</div>
+        <div class="tax-text"><strong>Global Blue、KTO Tax Free</strong>等退税公司App可以预先登记，机场退税更快</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight">
+    <strong>환급 금액：</strong>韩国VAT税率为10%，退税后实际退还约7-9%（扣除手续费）。购买15万韩元的化妆品，大约可以退回约10,000-13,000韩元。金额不大，但值得做——机场办理只需要5分钟。
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 省钱技巧 -->
+  <div class="section-title">
+    <div class="st-icon">💡</div>
+    <div>
+      토리 的省钱技巧
+      <span class="st-sub">同样的东西，用这些方法可以少花20-30%</span>
+    </div>
+  </div>
+
+  <div class="brand-section" style="--bsc:#A8D8D0;--bibg:#f0fbf9;">
+    <h3>💡 省钱方法大集合</h3>
+    <div class="brand-grid">
+      <div class="brand-item" style="--bsc:#A8D8D0;--bibg:#f0fbf9;">
+        <div class="brand-name">올리브영 앱 쿠폰</div>
+        <div class="brand-type">즉시 할인</div>
+        <div class="brand-desc">출발 전 앱 설치 후 회원 가입하면 첫 구매 할인 쿠폰이 있어요. 올리브영 행사 기간에 가면 1+1, 2+1 등 할인이 매우 많아요. 가장 쉬운 절약 방법이에요.</div>
+      </div>
+      <div class="brand-item" style="--bsc:#A8D8D0;--bibg:#f0fbf9;">
+        <div class="brand-name">이마트·롯데마트</div>
+        <div class="brand-type">최저가 식품</div>
+        <div class="brand-desc">한국 과자, 라면, 커피믹스 등 식품 관련 기념품은 편의점이나 명동보다 마트에서 사는 게 훨씬 저렴해요. 같은 제품이 2배 이상 가격 차이 나는 경우도 있어요.</div>
+      </div>
+      <div class="brand-item" style="--bsc:#A8D8D0;--bibg:#f0fbf9;">
+        <div class="brand-name">면세점 사전 예약</div>
+        <div class="brand-type">면세 쇼핑</div>
+        <div class="brand-desc">인터넷 면세점에서 미리 주문하고 공항에서 수령하면 추가 할인 쿠폰이 붙어요. 롯데면세점·신라면세점 앱에서 확인해보세요. 설화수 같은 고가 브랜드는 면세점이 가장 저렴해요.</div>
+      </div>
+      <div class="brand-item" style="--bsc:#A8D8D0;--bibg:#f0fbf9;">
+        <div class="brand-name">카카오페이·네이버페이</div>
+        <div class="brand-type">결제 할인</div>
+        <div class="brand-desc">한국에서 카카오페이나 네이버페이로 결제하면 추가 포인트나 할인이 붙는 경우가 많아요. 외국인도 신청 가능한 경우가 있으니 미리 확인해보세요.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="notice-box">
+    <div class="nt">⚠️ 购物时要注意的事</div>
+    한국은 대부분 영수증 없이는 환불이 어려워요（韩国大部分情况下没有收据很难退货）。购物时一定要保留收据，特别是美妆产品。另外，开封后的美妆一般不可退换，所以在店里要仔细确认颜色和产品后再购买。<strong>피부 트러블이 걱정된다면（如果担心皮肤问题），先买小样试用再买正装。</strong>
+  </div>
+
+  <!-- 실용 韩语 -->
+  <div class="korean-section">
+    <div class="ks-header">
+      <div class="ks-tori">🐰</div>
+      <div>
+        <div class="ks-title">토리 教你说——购物必备韩语</div>
+        <div class="ks-sub">点击 + 可加入你的词汇本</div>
+      </div>
+    </div>
+    <div class="phrase-list">
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">이거 한번 써봐도 돼요?</div>
+          <div class="phrase-ro">i-geo han-beon sseo-bwa-do dwae-yo?</div>
+          <div class="phrase-scene">💄 试用美妆品</div>
+        </div>
+        <div class="phrase-zh">可以试用一下这个吗？</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">이거랑 비슷한 색 있어요?</div>
+          <div class="phrase-ro">i-geo-rang bi-seu-tan saek i-sseo-yo?</div>
+          <div class="phrase-scene">🎨 找相似颜色</div>
+        </div>
+        <div class="phrase-zh">有和这个相似的颜色吗？</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">택스 리펀 해주세요.</div>
+          <div class="phrase-ro">taek-seu ri-peun hae-ju-se-yo</div>
+          <div class="phrase-scene">🧾 申请退税</div>
+        </div>
+        <div class="phrase-zh">请帮我办退税</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">더 싼 거 있어요?</div>
+          <div class="phrase-ro">deo ssan geo i-sseo-yo?</div>
+          <div class="phrase-scene">💰 找更便宜的</div>
+        </div>
+        <div class="phrase-zh">有更便宜的吗？</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">선물 포장 해주실 수 있어요?</div>
+          <div class="phrase-ro">seon-mul po-jang hae-ju-sil su i-sseo-yo?</div>
+          <div class="phrase-scene">🎁 礼品包装</div>
+        </div>
+        <div class="phrase-zh">可以帮我做礼品包装吗？</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">환불 되나요?</div>
+          <div class="phrase-ro">hwan-bul doe-na-yo?</div>
+          <div class="phrase-scene">↩️ 确认退货政策</div>
+        </div>
+        <div class="phrase-zh">可以退货吗？</div>
+        <div class="add-btn">+</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 词汇 -->
+  <div class="section-title" style="font-size:16px;margin-top:36px;">
+    <div class="st-icon" style="width:30px;height:30px;font-size:14px;">📖</div>
+    <div>本篇出现的词汇</div>
+  </div>
+  <div class="vocab-row">
+    <div class="vocab-chip"><span class="vko">쇼핑</span><span class="vzh">购物</span></div>
+    <div class="vocab-chip"><span class="vko">할인</span><span class="vzh">打折</span></div>
+    <div class="vocab-chip"><span class="vko">면세점</span><span class="vzh">免税店</span></div>
+    <div class="vocab-chip"><span class="vko">환불</span><span class="vzh">退款</span></div>
+    <div class="vocab-chip"><span class="vko">영수증</span><span class="vzh">收据</span></div>
+    <div class="vocab-chip"><span class="vko">택스 리펀</span><span class="vzh">退税</span></div>
+    <div class="vocab-chip"><span class="vko">굿즈</span><span class="vzh">周边商品</span></div>
+    <div class="vocab-chip"><span class="vko">샘플</span><span class="vzh">小样</span></div>
+    <div class="vocab-chip"><span class="vko">선물 포장</span><span class="vzh">礼品包装</span></div>
+    <div class="vocab-chip"><span class="vko">약과</span><span class="vzh">蜂蜜脆饼</span></div>
+    <div class="vocab-chip"><span class="vko">홍삼</span><span class="vzh">红参</span></div>
+    <div class="vocab-chip"><span class="vko">행사</span><span class="vzh">促销活动</span></div>
+  </div>
+
+  <!-- 系列结尾 -->
+  <div class="ending-card">
+    <span class="ending-tori">🐰</span>
+    <div class="series-badge">🎉 韩国旅行系列 · 完结</div>
+    <div class="ending-title">首尔，토리 等你来</div>
+    <div class="ending-sub">
+      五篇走完，你已经知道了<br>
+      首尔的八个街区性格、地铁怎么坐、<br>
+      什么礼仪不能犯、25个值得去的地方、<br>
+      以及在哪里买什么最划算。<br>
+      但首尔最好的部分，<br>
+      永远是那些攻略里写不到的瞬间——<br>
+      一杯咖啡、一条小巷、一个陌生人的微笑。<br><br>
+      <strong style="color:#FF8FAB;">언제든지 서울에 오면, 토리가 기다리고 있을게요 🐰</strong>
+    </div>
+
+    <div class="series-grid">
+      <div class="series-link">
+        <div class="sl-num">旅行 01</div>
+        <div class="sl-title">🗺️ 首尔街区性格图鉴</div>
+      </div>
+      <div class="series-link">
+        <div class="sl-num">旅行 02</div>
+        <div class="sl-title">🚇 首尔地铁完全攻略</div>
+      </div>
+      <div class="series-link">
+        <div class="sl-num">旅行 03</div>
+        <div class="sl-title">🚫 文化禁忌完全指南</div>
+      </div>
+      <div class="series-link">
+        <div class="sl-num">旅行 04</div>
+        <div class="sl-title">📍 首尔必去25个地方</div>
+      </div>
+      <div class="series-link">
+        <div class="sl-num">旅行 05</div>
+        <div class="sl-title">🛍️ 韩国购物完全指南</div>
+      </div>
+      <div class="series-link">
+        <div class="sl-num">文化系列</div>
+        <div class="sl-title">🏙️ 首尔女生的日常 · 5篇</div>
+      </div>
+    </div>
+
+    <a class="back-btn" href="#">探索更多内容 →</a>
+  </div>
+
+</div>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a02edaed9efb1979',t:'MTc3OTk4ODA0MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

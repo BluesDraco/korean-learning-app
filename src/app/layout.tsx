@@ -1,8 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
-import { Navbar } from '@/components/Navbar';
+import { AppShell } from '@/components/AppShell';
 import { ThemeProvider } from '@/components/ThemeProvider';
-import { VisitorCounter } from '@/components/VisitorCounter';
 import { FloatingDecorations } from '@/components/FloatingDecorations';
 import { AuthProvider } from '@/components/AuthProvider';
 import { FontProvider } from '@/components/FontProvider';
@@ -51,23 +50,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProvider>
           <FontProvider>
           <AuthProvider>
-          {/* Floating decorative particles */}
           <FloatingDecorations />
-          {/* Beta notice banner */}
-          <div className="fixed top-0 left-0 right-0 z-[60] md:left-52 bg-gradient-to-r from-[#FFF5EE] via-[#FFF0F5] to-[#FFF5EE] border-b-2 border-dashed border-pink-200 py-1.5 text-center">
-            <span className="text-sm font-bold tracking-widest bg-gradient-to-r from-[var(--pink-primary)] to-[var(--purple-soft)] bg-clip-text text-transparent" style={{ fontFamily: "'ZCOOL KuaiLe', cursive" }}>🐰 内测阶段，全功能免费体验 · 正式版即将上线</span>
-          </div>
-          {/* Offset for marquee banner */}
-          <div className="h-[44px]" />
           <PageViewTracker />
-          <Navbar />
-          <main className="pb-16 md:pb-6 pl-0 md:pl-52 px-3 md:px-5 lg:px-8 page-container pt-3">
-            {children}
-          </main>
-          {/* Visitor counter — indie web classic */}
-          <div className="hidden md:block fixed bottom-4 left-[212px] z-40">
-            <VisitorCounter />
-          </div>
+          <AppShell>{children}</AppShell>
           </AuthProvider>
           </FontProvider>
         </ThemeProvider>

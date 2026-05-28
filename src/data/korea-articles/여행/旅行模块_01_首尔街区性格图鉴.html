@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>首尔街区性格图鉴 · 韩语学习日记</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #FFFDF9; color: #3a3a3a; line-height: 1.7;
+  }
+
+  .hero {
+    background: linear-gradient(160deg, #A8D8D0 0%, #C9B8E8 45%, #FF8FAB 100%);
+    padding: 56px 24px 48px; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: "🗺️🏙️✈️🌸💜🐰";
+    position: absolute; top: 14px; left: 0; right: 0;
+    font-size: 22px; letter-spacing: 18px; opacity: .22;
+  }
+  .hero-tag {
+    display: inline-block; background: rgba(255,255,255,.25);
+    color: #fff; font-size: 11px; font-weight: 700;
+    padding: 4px 14px; border-radius: 20px; margin-bottom: 16px; letter-spacing: 1px;
+  }
+  .hero h1 {
+    font-size: 28px; font-weight: 800; color: #fff;
+    text-shadow: 0 2px 12px rgba(0,0,0,.15); line-height: 1.3; margin-bottom: 12px;
+  }
+  .hero h1 span { font-size: 14px; font-weight: 400; display: block; margin-top: 6px; opacity: .9; }
+  .hero-meta {
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+    font-size: 12px; color: rgba(255,255,255,.85); margin-top: 16px; flex-wrap: wrap;
+  }
+
+  .container { max-width: 780px; margin: 0 auto; padding: 40px 20px 80px; }
+
+  .breadcrumb {
+    font-size: 12px; color: #bbb; display: flex; align-items: center; gap: 6px; margin-bottom: 28px;
+  }
+  .breadcrumb span { color: #ddd; }
+
+  /* 토리引言 */
+  .intro-card {
+    background: #fff; border-radius: 20px; padding: 24px 26px;
+    box-shadow: 0 2px 20px rgba(168,216,208,.18); margin-bottom: 40px;
+    border-left: 4px solid #A8D8D0;
+  }
+  .tori-says { display: flex; gap: 14px; align-items: flex-start; }
+  .tori-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: linear-gradient(135deg, #A8D8D0, #C9B8E8);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+  }
+  .tori-bubble {
+    background: linear-gradient(135deg, #f0fbf9, #f5f0ff);
+    border-radius: 0 14px 14px 14px; padding: 14px 16px;
+    font-size: 13px; color: #555; line-height: 1.8; flex: 1; position: relative;
+  }
+  .tori-bubble::before {
+    content: ""; position: absolute; left: -8px; top: 12px;
+    border: 8px solid transparent; border-right-color: #f0fbf9; border-left: none;
+  }
+  .tori-name { font-size: 11px; color: #5ca89e; font-weight: 700; margin-bottom: 5px; }
+
+  /* 章节标题 */
+  .section-title {
+    font-size: 20px; font-weight: 800; color: #333; margin: 44px 0 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-title .st-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, #A8D8D0, #C9B8E8);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .section-title .st-sub { font-size: 12px; font-weight: 400; color: #aaa; display: block; margin-top: 2px; }
+
+  /* 街区大卡片 */
+  .district-card {
+    background: #fff; border-radius: 22px; overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,.08); margin: 20px 0;
+  }
+  .dc-header {
+    padding: 24px 26px 18px;
+    background: linear-gradient(135deg, var(--dh1,#A8D8D0), var(--dh2,#C9B8E8));
+    position: relative; overflow: hidden;
+  }
+  .dc-header::after {
+    content: var(--de,"🏙️");
+    position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+    font-size: 72px; opacity: .15;
+  }
+  .dc-tag { font-size: 10px; color: rgba(255,255,255,.8); font-weight: 700; letter-spacing: 1px; margin-bottom: 6px; }
+  .dc-name-ko { font-size: 28px; font-weight: 800; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,.12); }
+  .dc-name-zh { font-size: 14px; color: rgba(255,255,255,.9); margin-top: 3px; margin-bottom: 10px; }
+  .dc-vibe {
+    display: inline-block; background: rgba(255,255,255,.25);
+    color: #fff; font-size: 12px; font-weight: 700;
+    padding: 4px 14px; border-radius: 20px;
+  }
+  .dc-body { padding: 22px 26px; }
+  .dc-body p { font-size: 13px; color: #555; line-height: 1.85; margin-bottom: 12px; }
+  .dc-body p:last-child { margin-bottom: 0; }
+
+  /* 街区信息行 */
+  .dc-info-row {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 10px;
+    margin: 14px 0; padding: 14px;
+    background: linear-gradient(135deg, #f8f8ff, #f5fffd);
+    border-radius: 12px;
+  }
+  .dc-info-item { text-align: center; }
+  .dc-info-label { font-size: 10px; color: #bbb; margin-bottom: 3px; }
+  .dc-info-val { font-size: 12px; font-weight: 700; color: #333; }
+
+  /* 必去/必吃/必做 */
+  .dc-must-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 14px 0; }
+  .dc-must-card {
+    border-radius: 12px; padding: 12px 12px;
+    background: var(--mbc, #f0fbf9);
+    border-top: 2px solid var(--mbc2, #A8D8D0);
+  }
+  .dc-must-title { font-size: 10px; font-weight: 700; color: var(--mbc2,#5ca89e); margin-bottom: 6px; }
+  .dc-must-items { font-size: 11px; color: #555; line-height: 1.8; }
+
+  /* 토리 mini */
+  .tori-mini {
+    display: flex; gap: 10px; align-items: flex-start;
+    background: linear-gradient(135deg, #f0fbf9, #f5f0ff);
+    border-radius: 12px; padding: 12px 14px; margin-top: 12px;
+  }
+  .tori-mini-avatar { font-size: 18px; flex-shrink: 0; }
+  .tori-mini-text { font-size: 12px; color: #666; line-height: 1.75; }
+  .tori-mini-text strong { color: #5ca89e; }
+
+  /* 适合你吗 */
+  .suitable-row {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px;
+  }
+  .suitable-tag {
+    font-size: 11px; font-weight: 600;
+    padding: 3px 12px; border-radius: 20px;
+    background: var(--stbg,#f0fbf9); color: var(--stc,#5ca89e);
+  }
+
+  /* 快速对比表 */
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 16px 0; border-radius: 14px; overflow: hidden; }
+  .compare-table th { background: linear-gradient(135deg, #A8D8D0, #C9B8E8); color: #fff; font-weight: 700; padding: 10px 12px; text-align: left; }
+  .compare-table td { padding: 10px 12px; border-bottom: 1px solid #f0f8ff; color: #444; vertical-align: top; }
+  .compare-table tr:nth-child(even) td { background: #f8fffe; }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* 实用 韩语 */
+  .korean-section {
+    background: linear-gradient(135deg, #1a2420, #1e1a2a);
+    border-radius: 20px; padding: 26px 24px; margin: 32px 0;
+  }
+  .ks-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  .ks-tori { font-size: 28px; }
+  .ks-title { font-size: 15px; font-weight: 700; color: #FDF8F0; }
+  .ks-sub { font-size: 11px; color: #888; margin-top: 2px; }
+  .phrase-list { display: flex; flex-direction: column; gap: 12px; }
+  .phrase-item {
+    background: rgba(255,255,255,.06); border-radius: 12px; padding: 14px 16px;
+    display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  }
+  .phrase-ko { font-size: 15px; font-weight: 700; color: #FDF8F0; }
+  .phrase-ro { font-size: 10px; color: #888; margin-top: 2px; font-style: italic; }
+  .phrase-zh { font-size: 12px; color: #A8D8D0; font-weight: 600; flex-shrink: 0; }
+  .phrase-scene { font-size: 10px; color: #666; margin-top: 3px; }
+  .add-btn {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: linear-gradient(135deg,#A8D8D0,#C9B8E8);
+    color: #fff; font-size: 14px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; cursor: pointer;
+    box-shadow: 0 2px 8px rgba(168,216,208,.4); transition: transform .15s;
+  }
+  .add-btn:hover { transform: scale(1.1); }
+
+  /* 词汇 */
+  .vocab-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+  .vocab-chip {
+    background: #fff; border: 1px solid #d8f0ec;
+    border-radius: 20px; padding: 5px 14px;
+    font-size: 12px; color: #555;
+    display: flex; align-items: center; gap: 6px;
+    box-shadow: 0 1px 6px rgba(0,0,0,.04);
+  }
+  .vocab-chip .vko { font-weight: 700; color: #333; }
+  .vocab-chip .vzh { color: #5ca89e; }
+
+  /* highlight */
+  .highlight {
+    background: linear-gradient(135deg, #f0fbf9, #f5f0ff);
+    border-radius: 10px; padding: 12px 14px; margin: 12px 0;
+    font-size: 13px; color: #555; line-height: 1.8; border-left: 3px solid #A8D8D0;
+  }
+  .highlight strong { color: #5ca89e; }
+
+  .divider { text-align: center; font-size: 18px; letter-spacing: 8px; opacity: .3; margin: 32px 0; }
+
+  /* 结尾 */
+  .ending-card {
+    background: linear-gradient(135deg, #f0fbf9, #f5f0ff, #fff0f5);
+    border-radius: 20px; padding: 28px 24px; text-align: center; margin-top: 40px;
+    border: 1.5px solid rgba(168,216,208,.2); position: relative; overflow: hidden;
+  }
+  .ending-card::before {
+    content: "🗺️🏙️✈️🐰✨💜";
+    position: absolute; top: 8px; left: 0; right: 0;
+    font-size: 16px; letter-spacing: 12px; opacity: .2;
+  }
+  .ending-tori { font-size: 52px; display: block; margin-bottom: 12px; }
+  .ending-title { font-size: 17px; font-weight: 800; color: #5ca89e; margin-bottom: 6px; }
+  .ending-sub { font-size: 13px; color: #aaa; line-height: 1.8; margin-bottom: 20px; }
+  .next-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #A8D8D0, #C9B8E8);
+    color: #fff; font-size: 13px; font-weight: 700;
+    padding: 10px 28px; border-radius: 24px;
+    box-shadow: 0 4px 16px rgba(168,216,208,.35);
+    text-decoration: none; margin-bottom: 8px;
+  }
+  .next-articles { margin-top: 16px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .next-tag {
+    font-size: 12px; color: #FF8FAB; border: 1px solid #FF8FAB;
+    padding: 4px 14px; border-radius: 20px; cursor: pointer;
+  }
+
+  @media (max-width: 600px) {
+    .dc-info-row { grid-template-columns: 1fr 1fr; }
+    .dc-must-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 22px; }
+    .dc-name-ko { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-tag">🇰🇷 韩国旅行 · 第一次去首尔，토리 陪你</div>
+  <h1>
+    首尔街区性格图鉴
+    <span>서울 동네 가이드 — 不同街区，完全不同的首尔</span>
+  </h1>
+  <div class="hero-meta">
+    <span>🐰 토리 走遍</span>
+    <span>📖 约15分钟读完</span>
+    <span>🗂️ 旅行 · 街区</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="breadcrumb">
+    🏠 首页 <span>›</span> 🇰🇷 韩国 <span>›</span> 旅行 <span>›</span> 首尔街区性格图鉴
+  </div>
+
+  <div class="intro-card">
+    <div class="tori-says">
+      <div class="tori-avatar">🐰</div>
+      <div class="tori-bubble">
+        <div class="tori-name">토리 说</div>
+        很多人去首尔，行程就是明洞、南山、景福宫三点一线，然后说"首尔就这样"。토리 想说：你只看到了首尔的皮肤。首尔是一座有强烈性格分化的城市——弘大是永远18岁的大学生，성수动是想破圈的艺术家，강남是穿西装的精英，북촌是600年前的贵族……每个街区都是不同的宇宙。今天토리 带你认识首尔八个最值得去的街区，找到属于你的那个首尔 🗺️
+      </div>
+    </div>
+  </div>
+
+  <!-- 全览对比 -->
+  <div class="section-title">
+    <div class="st-icon">🗺️</div>
+    <div>
+      快速对比——哪个街区适合你
+      <span class="st-sub">先看这个，再决定去哪里</span>
+    </div>
+  </div>
+
+  <table class="compare-table">
+    <tr>
+      <th>街区</th>
+      <th>性格关键词</th>
+      <th>最适合</th>
+      <th>最佳时间</th>
+    </tr>
+    <tr>
+      <td><strong>홍대</strong> 弘大</td>
+      <td>年轻、街头、艺术、夜生活</td>
+      <td>第一次来首尔的年轻人</td>
+      <td>傍晚到深夜</td>
+    </tr>
+    <tr>
+      <td><strong>성수동</strong> 圣水洞</td>
+      <td>工业风、网红、创意、咖啡</td>
+      <td>追求独特体验的潮人</td>
+      <td>周末下午</td>
+    </tr>
+    <tr>
+      <td><strong>강남</strong> 江南</td>
+      <td>繁华、时尚、购物、精英</td>
+      <td>喜欢高档购物和夜生活</td>
+      <td>全天均可</td>
+    </tr>
+    <tr>
+      <td><strong>북촌</strong> 北村</td>
+      <td>传统、韩屋、宁静、历史</td>
+      <td>喜欢历史文化和拍照</td>
+      <td>早上（人少）</td>
+    </tr>
+    <tr>
+      <td><strong>익선동</strong> 益善洞</td>
+      <td>复古、小众、仪式感、韩屋咖啡</td>
+      <td>喜欢小众文艺感的人</td>
+      <td>平日下午</td>
+    </tr>
+    <tr>
+      <td><strong>연남동</strong> 延南洞</td>
+      <td>安静、文艺、独立咖啡、散步</td>
+      <td>想逃离人群的旅行者</td>
+      <td>午后任何时间</td>
+    </tr>
+    <tr>
+      <td><strong>명동</strong> 明洞</td>
+      <td>热闹、购物、街头小吃、游客</td>
+      <td>想一站购物扫货的人</td>
+      <td>下午到夜晚</td>
+    </tr>
+    <tr>
+      <td><strong>이태원</strong> 梨泰院</td>
+      <td>国际、多元、美食、酒吧</td>
+      <td>想吃异国料理或体验多元文化</td>
+      <td>晚上</td>
+    </tr>
+  </table>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 홍대 -->
+  <div class="district-card">
+    <div class="dc-header" style="--dh1:#FF8FAB;--dh2:#C9B8E8;--de:'🎨';">
+      <div class="dc-tag">강북 · 마포구</div>
+      <div class="dc-name-ko">홍대 앞</div>
+      <div class="dc-name-zh">弘大 · 永远18岁的首尔</div>
+      <div class="dc-vibe">✨ 젊음 · 예술 · 자유</div>
+    </div>
+    <div class="dc-body">
+      <div class="dc-info-row">
+        <div class="dc-info-item">
+          <div class="dc-info-label">地铁</div>
+          <div class="dc-info-val">2号线 홍대입구역</div>
+        </div>
+        <div class="dc-info-item">
+          <div class="dc-info-label">氛围</div>
+          <div class="dc-info-val">活力 · 街头</div>
+        </div>
+        <div class="dc-info-item">
+          <div class="dc-info-label">最佳时间</div>
+          <div class="dc-info-val">傍晚 → 深夜</div>
+        </div>
+      </div>
+
+      <p>弘大（홍익대학교周边）是首尔最具青春气息的街区，韩国最顶尖的艺术设计大学弘益大学就在这里，周边聚集了无数独立艺术家、音乐人、设计师。街头涂鸦、独立唱片店、小剧场、地下乐队——这里是首尔最有创作能量的地方。</p>
+      <p>但弘大不只是艺术。它同时是首尔夜生活最活跃的区域之一——클럽（Club）、포장마차（路边摊酒馆）、24小时营业的편의점……深夜的弘大和白天的弘大是两个完全不同的世界。傍晚之后，街头表演者开始出现，音乐声从每一个角落飘出来。</p>
+
+      <div class="dc-must-grid">
+        <div class="dc-must-card" style="--mbc:#fff0f5;--mbc2:#FF8FAB;">
+          <div class="dc-must-title">🏃 必去地点</div>
+          <div class="dc-must-items">
+            홍대 걷고 싶은 거리<br>
+            상상마당（创意文化中心）<br>
+            연남동 골목（周边小巷）
+          </div>
+        </div>
+        <div class="dc-must-card" style="--mbc:#f0fbf9;--mbc2:#A8D8D0;">
+          <div class="dc-must-title">🍽️ 必吃必喝</div>
+          <div class="dc-must-items">
+            분식집 떡볶이<br>
+            닭꼬치（烤鸡串）<br>
+            독립 카페 커피
+          </div>
+        </div>
+        <div class="dc-must-card" style="--mbc:#f5f0ff;--mbc2:#C9B8E8;">
+          <div class="dc-must-title">🛍️ 必买</div>
+          <div class="dc-must-items">
+            독립 브랜드 옷<br>
+            빈티지 숍（古着店）<br>
+            아이돌 굿즈
+          </div>
+        </div>
+      </div>
+
+      <div class="tori-mini">
+        <div class="tori-mini-avatar">🐰</div>
+        <div class="tori-mini-text">토리의 홍대 루트：지하철 2호선 홍대입구역 9번 출구 나와서 → 걷고 싶은 거리 → 연남동 골목 → 포장마차에서 오뎅과 소주 한 잔. 이 코스면 충분해요. <strong>주말 저녁은 사람이 정말 많으니, 평일 저녁을 추천해요.</strong></div>
+      </div>
+
+      <div class="suitable-row">
+        <span class="suitable-tag" style="--stbg:#fff0f5;--stc:#FF8FAB;">✓ 처음 서울 여행</span>
+        <span class="suitable-tag" style="--stbg:#f5f0ff;--stc:#C9B8E8;">✓ 아이돌 팬</span>
+        <span class="suitable-tag" style="--stbg:#f0fbf9;--stc:#5ca89e;">✓ 야간 활동</span>
+        <span class="suitable-tag" style="--stbg:#fffdf0;--stc:#d68910;">✓ 쇼핑</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 성수동 -->
+  <div class="district-card">
+    <div class="dc-header" style="--dh1:#3a3a3a;--dh2:#C9B8E8;--de:'🏭';">
+      <div class="dc-tag">강북 · 성동구</div>
+      <div class="dc-name-ko">성수동</div>
+      <div class="dc-name-zh">圣水洞 · 首尔的Brooklyn</div>
+      <div class="dc-vibe">🏭 공장 · 감성 · 힙</div>
+    </div>
+    <div class="dc-body">
+      <div class="dc-info-row">
+        <div class="dc-info-item">
+          <div class="dc-info-label">地铁</div>
+          <div class="dc-info-val">2号线 성수역</div>
+        </div>
+        <div class="dc-info-item">
+          <div class="dc-info-label">氛围</div>
+          <div class="dc-info-val">工业 · 创意</div>
+        </div>
+        <div class="dc-info-item">
+          <div class="dc-info-label">最佳时间</div>
+          <div class="dc-info-val">周末下午</div>
+        </div>
+      </div>
+
+      <p>성수동曾经是首尔的皮革制品工业区，旧工厂、仓库遍布街道。2010年代开始，艺术家和创业者发现了这里的工业美学潜力，把旧厂房改造成咖啡厅、画廊、品牌快闪店——首尔的Brooklyn就此诞生。</p>
+      <p>每一家성수동的咖啡厅都有自己的视觉主题：裸露管道和水泥墙的工业风、用旧机器做装置艺术的复古风、大量绿植的丛林风……韩国所有走在最前沿的品牌，第一家店几乎都开在성수동。</p>
+
+      <div class="dc-must-grid">
+        <div class="dc-must-card" style="--mbc:#f5f5f5;--mbc2:#555;">
+          <div class="dc-must-title">🏃 必去</div>
+          <div class="dc-must-items">
+            대림창고（工业风咖啡）<br>
+            서울숲（首尔森林公园）<br>
+            팝업스토어 골목
+          </div>
+        </div>
+        <div class="dc-must-card" style="--mbc:#f0fbf9;--mbc2:#A8D8D0;">
+          <div class="dc-must-title">☕ 必喝</div>
+          <div class="dc-must-items">
+            성수동 카페들<br>
+            아인슈페너（维也纳咖啡）<br>
+            精品手冲咖啡
+          </div>
+        </div>
+        <div class="dc-must-card" style="--mbc:#f5f0ff;--mbc2:#C9B8E8;">
+          <div class="dc-must-title">📸 必拍</div>
+          <div class="dc-must-items">
+            공장 벽면 그래피티<br>
+            카페 내부 인테리어<br>
+            서울숲 자전거길
+          </div>
+        </div>
+      </div>
+
+      <div class="tori-mini">
+        <div class="tori-mini-avatar">🐰</div>
+        <div class="tori-mini-text">성수동의 가장 좋은 점：주말에 팝업스토어가 정말 많아요. 한국 브랜드들이 새 제품을 성수동에서 먼저 선보이는 경우가 많아서, <strong>주말에 가면 예상 못 한 특별한 것을 발견할 수 있어요.</strong></div>
+      </div>
+
+      <div class="suitable-row">
+        <span class="suitable-tag" style="--stbg:#f5f5f5;--stc:#555;">✓ 인스타그램 감성</span>
+        <span class="suitable-tag" style="--stbg:#f0fbf9;--stc:#5ca89e;">✓ 카페 투어</span>
+        <span class="suitable-tag" style="--stbg:#f5f0ff;--stc:#C9B8E8;">✓ 한국 로컬 브랜드</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 강남 -->
+  <div class="district-card">
+    <div class="dc-header" style="--dh1:#2c3e50;--dh2:#C9B8E8;--de:'💎';">
+      <div class="dc-tag">강남구</div>
+      <div class="dc-name-ko">강남</div>
+      <div class="dc-name-zh">江南 · PSY那首歌不是夸张的</div>
+      <div class="dc-vibe">💼 부유 · 세련 · 럭셔리</div>
+    </div>
+    <div class="dc-body">
+      <div class="dc-info-row">
+        <div class="dc-info-item">
+          <div class="dc-info-label">地铁</div>
+          <div class="dc-info-val">2号线 강남역</div>
+        </div>
+        <div class="dc-info-item">
+          <div class="dc-info-label">氛围</div>
+          <div class="dc-info-val">精英 · 繁华</div>
+        </div>
+        <div class="dc-info-item">
+          <div class="dc-info-label">最佳时间</div>
+          <div class="dc-info-val">全天均可</div>
+        </div>
+      </div>
+
+      <p>汉江以南的강남区是首尔最富裕的区域，全球奢侈品牌在这里的密度堪比巴黎香榭丽舍大街。PSY的《江南Style》之所以成为文化现象，是因为강남在韩国文化里本身就是"富贵"的代名词。</p>
+      <p>강남的核心商业区압구정（狎鸥亭）和청담동（清潭洞）是韩国最高端的购物区，整形外科医院也密集分布在这一带（这不是巧合）。에서 삼성동（三成洞）的COEX购物中心是全亚洲最大的地下购物中心之一。</p>
+
+      <div class="dc-must-grid">
+        <div class="dc-must-card" style="--mbc:#f5f5f5;--mbc2:#2c3e50;">
+          <div class="dc-must-title">🏃 必去</div>
+          <div class="dc-must-items">
+            COEX 아쿠아리움<br>
+            별마당 도서관<br>
+            압구정 로데오거리
+          </div>
+        </div>
+        <div class="dc-must-card" style="--mbc:#f0fbf9;--mbc2:#A8D8D0;">
+          <div class="dc-must-title">🍽️ 必吃</div>
+          <div class="dc-must-items">
+            한우 전문점<br>
+            파인다이닝 한정식<br>
+            청담동 베이커리
+          </div>
+        </div>
+        <div class="dc-must-card" style="--mbc:#f5f0ff;--mbc2:#C9B8E8;">
+          <div class="dc-must-title">🛍️ 必逛</div>
+          <div class="dc-must-items">
+            명품 브랜드 매장<br>
+            한국 고급 뷰티 브랜드<br>
+            COEX 쇼핑몰
+          </div>
+        </div>
+      </div>
+
+      <div class="highlight">
+        <strong>별마당 도서관이란：</strong>COEX商城内部的大型开放图书馆，巨大的书墙从地面延伸到天花板，是강남最值得去的免费景点。不需要会员也可以入内，随意浏览，是首尔最美的公共空间之一。
+      </div>
+
+      <div class="suitable-row">
+        <span class="suitable-tag" style="--stbg:#f5f5f5;--stc:#2c3e50;">✓ 고급 쇼핑</span>
+        <span class="suitable-tag" style="--stbg:#f0fbf9;--stc:#5ca89e;">✓ 파인다이닝</span>
+        <span class="suitable-tag" style="--stbg:#f5f0ff;--stc:#C9B8E8;">✓ 클럽 야경</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 북촌 -->
+  <div class="district-card">
+    <div class="dc-header" style="--dh1:#8e6b3e;--dh2:#A8D8D0;--de:'🏯';">
+      <div class="dc-tag">종로구 · 경복궁 옆</div>
+      <div class="dc-name-ko">북촌 한옥마을</div>
+      <div class="dc-name-zh">北村韩屋村 · 走进600年前的首尔</div>
+      <div class="dc-vibe">🏯 전통 · 고요 · 역사</div>
+    </div>
+    <div class="dc-body">
+      <div class="dc-info-row">
+        <div class="dc-info-item">
+          <div class="dc-info-label">地铁</div>
+          <div class="dc-info-val">3号线 안국역</div>
+        </div>
+        <div class="dc-info-item">
+          <div class="dc-info-label">氛围</div>
+          <div class="dc-info-val">宁静 · 历史</div>
+        </div>
+        <div class="dc-info-item">
+          <div class="dc-info-label">最佳时间</div>
+          <div class="dc-info-val">早上9点前（人少）</div>
+        </div>
+      </div>
+
+      <p>北村是首尔保存最完好的韩屋（传统建筑）聚居区，位于景福宫和昌德宫之间，朝鲜时代贵族和王室官员曾居住于此。瓦片屋顶、木制门框、蜿蜒的石板小巷——在这里你会感觉时间突然慢下来。</p>
+      <p>现在北村的韩屋已经有很多改造成了咖啡厅、工艺品店、博物馆。坐在有瓦片屋顶的空间里喝一杯传统차（茶），窗外就是景福宫的屋脊——这种视觉冲击是首尔独有的。</p>
+
+      <div class="dc-must-grid">
+        <div class="dc-must-card" style="--mbc:#fff8f0;--mbc2:#8e6b3e;">
+          <div class="dc-must-title">🏃 必去</div>
+          <div class="dc-must-items">
+            북촌8경（八处美景）<br>
+            경복궁 관람<br>
+            인사동 갤러리
+          </div>
+        </div>
+        <div class="dc-must-card" style="--mbc:#f0fbf9;--mbc2:#5ca89e;">
+          <div class="dc-must-title">☕ 必体验</div>
+          <div class="dc-must-items">
+            한옥 카페에서 전통차<br>
+            한복 체험（韩服体验）<br>
+            전통 공예 체험
+          </div>
+        </div>
+        <div class="dc-must-card" style="--mbc:#f5f0ff;--mbc2:#C9B8E8;">
+          <div class="dc-must-title">📸 最佳拍照点</div>
+          <div class="dc-must-items">
+            북촌 8경 2경（最有名）<br>
+            경복궁 돌담길<br>
+            새벽 빈 골목
+          </div>
+        </div>
+      </div>
+
+      <div class="tori-mini">
+        <div class="tori-mini-avatar">🐰</div>
+        <div class="tori-mini-text">중요한 주의사항：북촌은 실제로 사람들이 사는 주거지예요. <strong>조용히 걷고, 큰 소리로 말하지 말고, 사진 찍을 때 개인 집 안을 찍지 마세요.</strong> 관광지이기도 하지만, 먼저 주민의 생활 공간이에요. 이른 아침에 가면 사람도 적고 가장 아름다워요.</div>
+      </div>
+
+      <div class="suitable-row">
+        <span class="suitable-tag" style="--stbg:#fff8f0;--stc:#8e6b3e;">✓ 역사 문화 좋아하는 사람</span>
+        <span class="suitable-tag" style="--stbg:#f5f0ff;--stc:#C9B8E8;">✓ 사진 찍기 좋아하는 사람</span>
+        <span class="suitable-tag" style="--stbg:#f0fbf9;--stc:#5ca89e;">✓ 조용한 여행</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 익선동 -->
+  <div class="district-card">
+    <div class="dc-header" style="--dh1:#FF8FAB;--dh2:#FFE4A0;--de:'🌸';">
+      <div class="dc-tag">종로구 · 종로3가역 근처</div>
+      <div class="dc-name-ko">익선동</div>
+      <div class="dc-name-zh">益善洞 · 首尔最有味道的小巷</div>
+      <div class="dc-vibe">🌸 레트로 · 감성 · 소확행</div>
+    </div>
+    <div class="dc-body">
+      <div class="dc-info-row">
+        <div class="dc-info-item">
+          <div class="dc-info-label">地铁</div>
+          <div class="dc-info-val">1·3·5号线 종로3가역</div>
+        </div>
+        <div class="dc-info-item">
+          <div class="dc-info-label">氛围</div>
+          <div class="dc-info-val">复古 · 小众</div>
+        </div>
+        <div class="dc-info-item">
+          <div class="dc-info-label">最佳时间</div>
+          <div class="dc-info-val">平日下午（人少）</div>
+        </div>
+      </div>
+
+      <p>익선동是首尔保留最好的1930年代韩屋街区之一，和북촌的贵族气质不同，这里曾经是普通市民居住的地方，老旧韩屋挨着挨着，小巷狭窄弯曲。近年独立设计师和咖啡厅老板们发现了这里，把旧韩屋改造成了各种有意思的空间。</p>
+      <p>익선동的魅力在于"还没被过度开发"的真实感——比弘大安静，比북촌更有生活气息，更多的是探索的乐趣而不是打卡的仪式。</p>
+
+      <div class="dc-must-grid">
+        <div class="dc-must-card" style="--mbc:#fff0f5;--mbc2:#FF8FAB;">
+          <div class="dc-must-title">🏃 必去</div>
+          <div class="dc-must-items">
+            익선다다（多层韩屋咖啡）<br>
+            隐藏在小巷的独立书店<br>
+            빈티지 소품샵
+          </div>
+        </div>
+        <div class="dc-must-card" style="--mbc:#fffdf0;--mbc2:#d68910;">
+          <div class="dc-must-title">🍽️ 必吃</div>
+          <div class="dc-must-items">
+            종로3가 곱창거리<br>
+            낙지볶음 골목<br>
+            한옥 카페 전통 음료
+          </div>
+        </div>
+        <div class="dc-must-card" style="--mbc:#f5f0ff;--mbc2:#C9B8E8;">
+          <div class="dc-must-title">📸 必拍</div>
+          <div class="dc-must-items">
+            골목 사이 한옥 지붕<br>
+            카페 내부（风格各异）<br>
+            빈티지 소품 디테일
+          </div>
+        </div>
+      </div>
+
+      <div class="suitable-row">
+        <span class="suitable-tag" style="--stbg:#fff0f5;--stc:#FF8FAB;">✓ 소확행 여행자</span>
+        <span class="suitable-tag" style="--stbg:#f5f0ff;--stc:#C9B8E8;">✓ 사진 감성</span>
+        <span class="suitable-tag" style="--stbg:#fffdf0;--stc:#d68910;">✓ 레트로 좋아하는 사람</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 연남동 -->
+  <div class="district-card">
+    <div class="dc-header" style="--dh1:#A8D8D0;--dh2:#FFE4A0;--de:'🌿';">
+      <div class="dc-tag">마포구 · 홍대 옆</div>
+      <div class="dc-name-ko">연남동</div>
+      <div class="dc-name-zh">延南洞 · 首尔最安静的文艺角落</div>
+      <div class="dc-vibe">🌿 조용 · 감성 · 동네</div>
+    </div>
+    <div class="dc-body">
+      <div class="dc-info-row">
+        <div class="dc-info-item">
+          <div class="dc-info-label">地铁</div>
+          <div class="dc-info-val">2号线 홍대입구역（步行）</div>
+        </div>
+        <div class="dc-info-item">
+          <div class="dc-info-label">氛围</div>
+          <div class="dc-info-val">平静 · 文艺</div>
+        </div>
+        <div class="dc-info-item">
+          <div class="dc-info-label">最佳时间</div>
+          <div class="dc-info-val">午后任何时候</div>
+        </div>
+      </div>
+
+      <p>연남동就在弘大旁边，但和弘大的喧嚣形成鲜明对比。这里是首尔设计师、插画师、独立音乐人最喜欢居住的街区，小路两侧是独立咖啡厅、精品花店、手工艺品店，以及大量对外开放的艺术家工作室。</p>
+      <p>贯穿연남동的연남동 경의선숲길（轻铁林荫道）是废弃铁路改造的绿道，两侧种满树木，是首尔最适合散步的地方之一。春天樱花开，夏天绿荫蔽日，每一个季节来都不一样。</p>
+
+      <div class="dc-must-grid">
+        <div class="dc-must-card" style="--mbc:#f0fbf9;--mbc2:#5ca89e;">
+          <div class="dc-must-title">🚶 必做</div>
+          <div class="dc-must-items">
+            경의선숲길 산책<br>
+            독립 카페 탐방<br>
+            골목 탐험
+          </div>
+        </div>
+        <div class="dc-must-card" style="--mbc:#fffdf0;--mbc2:#d68910;">
+          <div class="dc-must-title">☕ 必喝</div>
+          <div class="dc-must-items">
+            동네 작은 카페<br>
+            수제 음료 전문점<br>
+            핸드드립 커피
+          </div>
+        </div>
+        <div class="dc-must-card" style="--mbc:#fff0f5;--mbc2:#FF8FAB;">
+          <div class="dc-must-title">🌸 应季推荐</div>
+          <div class="dc-must-items">
+            봄：벚꽃 산책<br>
+            여름：초록 나무 그늘<br>
+            가을：단풍길 걷기
+          </div>
+        </div>
+      </div>
+
+      <div class="tori-mini">
+        <div class="tori-mini-avatar">🐰</div>
+        <div class="tori-mini-text">연남동은 목적지가 아니라 <strong>과정</strong>이에요. 어디 가야겠다는 계획 없이, 그냥 걷다가 예쁜 카페 보이면 들어가고, 작은 가게 보이면 구경하는 게 이 동네를 즐기는 방법이에요.</div>
+      </div>
+
+      <div class="suitable-row">
+        <span class="suitable-tag" style="--stbg:#f0fbf9;--stc:#5ca89e;">✓ 혼자 여행</span>
+        <span class="suitable-tag" style="--stbg:#fff0f5;--stc:#FF8FAB;">✓ 조용한 카페 좋아하는 사람</span>
+        <span class="suitable-tag" style="--stbg:#fffdf0;--stc:#d68910;">✓ 산책</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 명동 -->
+  <div class="district-card">
+    <div class="dc-header" style="--dh1:#e74c3c;--dh2:#FF8FAB;--de:'🛍️';">
+      <div class="dc-tag">중구 · 서울의 중심</div>
+      <div class="dc-name-ko">명동</div>
+      <div class="dc-name-zh">明洞 · 来了首尔就一定会来的地方</div>
+      <div class="dc-vibe">🛍️ 쇼핑 · 길거리 음식 · 관광</div>
+    </div>
+    <div class="dc-body">
+      <div class="dc-info-row">
+        <div class="dc-info-item">
+          <div class="dc-info-label">地铁</div>
+          <div class="dc-info-val">4号线 명동역</div>
+        </div>
+        <div class="dc-info-item">
+          <div class="dc-info-label">氛围</div>
+          <div class="dc-info-val">热闹 · 游客</div>
+        </div>
+        <div class="dc-info-item">
+          <div class="dc-info-label">最佳时间</div>
+          <div class="dc-info-val">下午 → 夜晚</div>
+        </div>
+      </div>
+
+      <p>명동是首尔最重要的商业街区，也是游客密度最高的地方。아모레퍼시픽、이니스프리、에뛰드、네이처리퍼블릭……韩国所有主要美妆品牌都在명동有旗舰店。傍晚时分，街道两侧的小吃摊全部出动，계란빵、회오리감자、닭꼬치……</p>
+      <p>坦白说，명동因为游客太多，已经有点失去了本地人的生活气息。但作为第一次来首尔的人，명동还是值得来一次——集中购买韩国美妆、吃街头小吃、感受首尔的商业活力，一两个小时就能搞定。</p>
+
+      <div class="dc-must-grid">
+        <div class="dc-must-card" style="--mbc:#fff0f0;--mbc2:#e74c3c;">
+          <div class="dc-must-title">🛍️ 必买</div>
+          <div class="dc-must-items">
+            한국 뷰티 브랜드<br>
+            면세점 화장품<br>
+            韩国限定商品
+          </div>
+        </div>
+        <div class="dc-must-card" style="--mbc:#fff0f5;--mbc2:#FF8FAB;">
+          <div class="dc-must-title">🍡 必吃</div>
+          <div class="dc-must-items">
+            계란빵（鸡蛋面包）<br>
+            회오리감자<br>
+            닭꼬치
+          </div>
+        </div>
+        <div class="dc-must-card" style="--mbc:#f5f0ff;--mbc2:#C9B8E8;">
+          <div class="dc-must-title">📍 必到</div>
+          <div class="dc-must-items">
+            명동성당（天主教堂）<br>
+            남산타워 가는 길<br>
+            면세점 투어
+          </div>
+        </div>
+      </div>
+
+      <div class="highlight">
+        <strong>토리의 명동 팁：</strong>명동에서 美妆을 살 때, 먼저 한 매장에서 구경하고 가격을 확인한 후, 다른 매장에서도 비교해보세요. 같은 제품이 매장마다 가격이 다를 수 있어요. 그리고 중국어, 일본어 가능한 직원이 많으니 걱정 없이 들어가도 돼요.
+      </div>
+
+      <div class="suitable-row">
+        <span class="suitable-tag" style="--stbg:#fff0f0;--stc:#e74c3c;">✓ 한국 뷰티 쇼핑</span>
+        <span class="suitable-tag" style="--stbg:#fff0f5;--stc:#FF8FAB;">✓ 길거리 음식</span>
+        <span class="suitable-tag" style="--stbg:#f5f0ff;--stc:#C9B8E8;">✓ 처음 서울 방문</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 이태원 -->
+  <div class="district-card">
+    <div class="dc-header" style="--dh1:#1a2a4a;--dh2:#A8D8D0;--de:'🌍';">
+      <div class="dc-tag">용산구 · 글로벌 서울</div>
+      <div class="dc-name-ko">이태원</div>
+      <div class="dc-name-zh">梨泰院 · 首尔最国际化的街区</div>
+      <div class="dc-vibe">🌍 다양성 · 이국적 · 활기</div>
+    </div>
+    <div class="dc-body">
+      <div class="dc-info-row">
+        <div class="dc-info-item">
+          <div class="dc-info-label">地铁</div>
+          <div class="dc-info-val">6号线 이태원역</div>
+        </div>
+        <div class="dc-info-item">
+          <div class="dc-info-label">氛围</div>
+          <div class="dc-info-val">国际 · 多元</div>
+        </div>
+        <div class="dc-info-item">
+          <div class="dc-info-label">最佳时间</div>
+          <div class="dc-info-val">夜晚</div>
+        </div>
+      </div>
+
+      <p>이태원的国际化基因来自驻韩美军——이태원附近曾有大型美军基地，带来了大量国际文化和饮食。今天이태원是首尔唯一一个可以找到全球各地美食的街区：멕시코 타코（墨西哥塔可）、이탈리아 파스타（意大利面）、중동 음식（中东料理）、한국식 버거（韩式汉堡）……同一条街上可以吃遍全球。</p>
+      <p>이태원也是首尔最开放包容的街区，LGBTQ+友好，外国人聚集，各种奇装异服在这里都不奇怪。해방촌（解放村）和경리단길（경리단길）是이태원旁边两个更有味道的小街区，比主街更有探索乐趣。</p>
+
+      <div class="dc-must-grid">
+        <div class="dc-must-card" style="--mbc:#f0f4ff;--mbc2:#1a2a4a;">
+          <div class="dc-must-title">🌍 必体验</div>
+          <div class="dc-must-items">
+            세계 각국 음식<br>
+            이국적인 바（酒吧）<br>
+            해방촌 산책
+          </div>
+        </div>
+        <div class="dc-must-card" style="--mbc:#f0fbf9;--mbc2:#5ca89e;">
+          <div class="dc-must-title">🍽️ 必吃</div>
+          <div class="dc-must-items">
+            멕시코 타코<br>
+            이탈리안 파스타<br>
+            한국식 수제 버거
+          </div>
+        </div>
+        <div class="dc-must-card" style="--mbc:#f5f0ff;--mbc2:#C9B8E8;">
+          <div class="dc-must-title">🌙 必去</div>
+          <div class="dc-must-items">
+            경리단길 야경<br>
+            루프탑 바（屋顶酒吧）<br>
+            해방촌 야경
+          </div>
+        </div>
+      </div>
+
+      <div class="suitable-row">
+        <span class="suitable-tag" style="--stbg:#f0f4ff;--stc:#1a2a4a;">✓ 이국적인 음식</span>
+        <span class="suitable-tag" style="--stbg:#f0fbf9;--stc:#5ca89e;">✓ 야경과 술자리</span>
+        <span class="suitable-tag" style="--stbg:#f5f0ff;--stc:#C9B8E8;">✓ 다양한 문화 경험</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 실용 韩语 -->
+  <div class="korean-section">
+    <div class="ks-header">
+      <div class="ks-tori">🐰</div>
+      <div>
+        <div class="ks-title">토리 教你说——问路必备韩语</div>
+        <div class="ks-sub">点击 + 可加入你的词汇本</div>
+      </div>
+    </div>
+    <div class="phrase-list">
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">홍대 어떻게 가요?</div>
+          <div class="phrase-ro">hong-dae eo-tteo-ke ga-yo?</div>
+          <div class="phrase-scene">🗺️ 问怎么去弘大</div>
+        </div>
+        <div class="phrase-zh">请问怎么去弘大？</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">여기서 걸어서 얼마나 걸려요?</div>
+          <div class="phrase-ro">yeo-gi-seo geo-reo-seo eol-ma-na geol-lyeo-yo?</div>
+          <div class="phrase-scene">🚶 问步行距离</div>
+        </div>
+        <div class="phrase-zh">从这里走过去要多久？</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">지하철역이 어디예요?</div>
+          <div class="phrase-ro">ji-ha-cheol-yeok-i eo-di-ye-yo?</div>
+          <div class="phrase-scene">🚇 找地铁站</div>
+        </div>
+        <div class="phrase-zh">地铁站在哪里？</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">이 근처에 좋은 카페 있어요?</div>
+          <div class="phrase-ro">i geun-cheo-e jo-eun ka-pe i-sseo-yo?</div>
+          <div class="phrase-scene">☕ 找附近咖啡厅</div>
+        </div>
+        <div class="phrase-zh">附近有好的咖啡厅吗？</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">사진 찍어도 돼요?</div>
+          <div class="phrase-ro">sa-jin jji-geo-do dwae-yo?</div>
+          <div class="phrase-scene">📸 拍照前确认</div>
+        </div>
+        <div class="phrase-zh">可以拍照吗？</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">맛집 추천해 주세요.</div>
+          <div class="phrase-ro">mat-jip chu-cheon-hae ju-se-yo</div>
+          <div class="phrase-scene">🍽️ 请当地人推荐</div>
+        </div>
+        <div class="phrase-zh">请给我推荐好吃的地方</div>
+        <div class="add-btn">+</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 词汇 -->
+  <div class="section-title" style="font-size:16px;margin-top:36px;">
+    <div class="st-icon" style="width:30px;height:30px;font-size:14px;">📖</div>
+    <div>本篇出现的词汇</div>
+  </div>
+  <div class="vocab-row">
+    <div class="vocab-chip"><span class="vko">동네</span><span class="vzh">街区·小区</span></div>
+    <div class="vocab-chip"><span class="vko">골목</span><span class="vzh">小巷·胡同</span></div>
+    <div class="vocab-chip"><span class="vko">카페</span><span class="vzh">咖啡厅</span></div>
+    <div class="vocab-chip"><span class="vko">한옥</span><span class="vzh">韩国传统建筑</span></div>
+    <div class="vocab-chip"><span class="vko">지하철</span><span class="vzh">地铁</span></div>
+    <div class="vocab-chip"><span class="vko">출구</span><span class="vzh">出口</span></div>
+    <div class="vocab-chip"><span class="vko">맛집</span><span class="vzh">好吃的店</span></div>
+    <div class="vocab-chip"><span class="vko">쇼핑</span><span class="vzh">购物</span></div>
+    <div class="vocab-chip"><span class="vko">야경</span><span class="vzh">夜景</span></div>
+    <div class="vocab-chip"><span class="vko">산책</span><span class="vzh">散步</span></div>
+    <div class="vocab-chip"><span class="vko">사진</span><span class="vzh">照片</span></div>
+    <div class="vocab-chip"><span class="vko">근처</span><span class="vzh">附近</span></div>
+  </div>
+
+  <!-- 结尾 -->
+  <div class="ending-card">
+    <span class="ending-tori">🐰</span>
+    <div class="ending-title">首尔不是一个地方，是八个世界</div>
+    <div class="ending-sub">
+      弘大的年轻、성수动的创意、강남的繁华、<br>
+      北村的历史、益善洞的复古、延南洞的宁静、<br>
+      明洞的热闹、梨泰院的国际——<br>
+      每个街区都是不同的首尔，<br>
+      去哪里，取决于今天你想成为哪种人。<br>
+      下一篇，토리 带你搞懂首尔地铁 🚇
+    </div>
+    <a class="next-btn" href="#">下一篇：首尔地铁完全攻略 →</a>
+    <div class="next-articles">
+      <div class="next-tag">🚫 文化禁忌</div>
+      <div class="next-tag">📍 必去25个地方</div>
+      <div class="next-tag">🛍️ 购物完全指南</div>
+    </div>
+  </div>
+
+</div>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a02edace7a0c1979',t:'MTc3OTk4ODAzNg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
