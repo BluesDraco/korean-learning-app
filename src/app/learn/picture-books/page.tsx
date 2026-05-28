@@ -44,7 +44,7 @@ export default function PictureBooksPage() {
         <h2 className="text-sm font-medium text-[var(--text-secondary)] uppercase tracking-wider mb-4">
           绘本列表
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {pictureBooks.map((book) => (
             <div
               key={book.id}

@@ -11,7 +11,7 @@ import {
   Library, Film, Bookmark,
   Palette, Landmark, MapPin, UtensilsCrossed,
   MessageSquare, Lightbulb, MessageCircle, Search, Sparkles,
-  ChevronRight, X, Sun, Moon, Shield,
+  ChevronRight, X, Sun, Moon, Shield, Mail,
 } from 'lucide-react';
 import { useTheme } from '@/components/ThemeProvider';
 
@@ -79,6 +79,16 @@ export function Navbar() {
   const { user, logout } = useAuth();
   const [expandedGroup, setExpandedGroup] = useState<number | null>(null);
   const [mobileDrawer, setMobileDrawer] = useState<number | null>(null);
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  // Fetch unread message count
+  useEffect(() => {
+    if (!user) return;
+    fetch('/api/announcements/unread')
+      .then((r) => r.json())
+      .then((d) => setUnreadCount(d.count ?? 0))
+      .catch(() => {});
+  }, [user]);
 
   // Auto-expand the group containing current path
   useEffect(() => {
@@ -189,8 +199,25 @@ export function Navbar() {
           })}
         </div>
 
-        {/* Bottom: theme toggle + mascot */}
+        {/* Bottom: messages + theme toggle + mascot */}
         <div className="px-3 py-3 border-t border-[var(--border-default)] space-y-2.5">
+          {user && (
+            <Link
+              href="/messages"
+              className="w-full flex items-center gap-2 text-xs text-[var(--text-secondary)] hover:text-[var(--pink-primary)] transition-colors px-2 py-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] relative"
+            >
+              <span className="relative">
+                <img src="/images/tori-poses/tori-pose-01.png" alt="Tori" className="w-6 h-6 object-contain" />
+                <span className="absolute -top-0.5 -right-1.5 text-sm">✉️</span>
+              </span>
+              <span>我的私信</span>
+              {unreadCount > 0 && (
+                <span className="ml-auto bg-[var(--pink-primary)] text-white text-[11px] font-bold min-w-[18px] h-[18px] rounded-full flex items-center justify-center px-1">
+                  {unreadCount > 99 ? '99+' : unreadCount}
+                </span>
+              )}
+            </Link>
+          )}
           <button
             onClick={toggle}
             className="w-full flex items-center gap-2 text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors px-2 py-1.5 rounded-lg hover:bg-[var(--bg-card-hover)]"
@@ -276,6 +303,24 @@ export function Navbar() {
             </button>
           );
         })}
+        {user && (
+          <Link
+            href="/messages"
+            className={`flex flex-col items-center gap-0.5 py-2 px-1.5 text-[13px] transition-colors relative ${
+              pathname.startsWith('/messages') ? 'text-[var(--pink-primary)]' : 'text-[var(--text-muted)]'
+            }`}
+          >
+            <span className="relative">
+              <img src="/images/tori-poses/tori-pose-01.png" alt="Tori" className="w-[22px] h-[22px] object-contain" />
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-2 bg-[var(--pink-primary)] text-white text-[10px] font-bold min-w-[16px] h-[16px] rounded-full flex items-center justify-center px-0.5">
+                  {unreadCount > 99 ? '99+' : unreadCount}
+                </span>
+              )}
+            </span>
+            私信
+          </Link>
+        )}
       </nav>
 
       {/* Mobile drawer overlay */}

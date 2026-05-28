@@ -236,3 +236,15 @@ export interface StudyLog {
   sentencesLooped: number;
   action?: string;
 }
+
+// ===== Announcements / Inbox =====
+export type AnnouncementType = 'announcement' | 'update_log' | 'private_message';
+
+export interface Announcement {
+  id: string;
+  title: string;
+  content: string;
+  type: AnnouncementType;
+  targetUserId: string | null;
+  createdAt: number;
+}

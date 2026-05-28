@@ -213,10 +213,19 @@ function TextPanel({ page, showChinese, onToggleChinese }: { page: PictureBookPa
                 {proLines[i] ?? '…'}
               </p>
 
-              {/* Korean */}
-              <p className="text-xl sm:text-2xl md:text-[26px] font-bold text-[var(--text-primary)] leading-snug tracking-tight">
-                {ko}
-              </p>
+              {/* Korean + per-sentence朗读 */}
+              <div className="flex items-center gap-1.5">
+                <p className="text-xl sm:text-2xl md:text-[26px] font-bold text-[var(--text-primary)] leading-snug tracking-tight">
+                  {ko}
+                </p>
+                <button
+                  onClick={(e) => { e.stopPropagation(); speakKorean(ko); }}
+                  className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center hover:bg-[var(--pink-primary)]/10 text-[var(--text-muted)] hover:text-[var(--pink-primary)] active:scale-90 transition-all"
+                  title="朗读本句"
+                >
+                  <Volume2 size={15} />
+                </button>
+              </div>
 
               {/* Chinese below */}
               {showChinese && (
@@ -230,14 +239,6 @@ function TextPanel({ page, showChinese, onToggleChinese }: { page: PictureBookPa
 
         {/* ── Action bar ── */}
         <div className="flex items-center gap-3 flex-wrap pl-8 pt-1">
-          <button
-            onClick={() => speakKorean(page.korean)}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[var(--pink-primary)] text-white hover:opacity-90 active:scale-95 transition-all text-sm font-semibold shadow-sm"
-          >
-            <Volume2 size={15} />
-            听朗读
-          </button>
-
           <button
             onClick={onToggleChinese}
             className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full border text-sm font-medium transition-all ${
