@@ -239,6 +239,9 @@ export interface StudyLog {
 
 // ===== KPOP Song Learning =====
 export interface KpopLyricLine {
+  section?: string;
+  start: number;
+  end: number;
   korean: string;
   pronunciation: string;
   chinese: string;
