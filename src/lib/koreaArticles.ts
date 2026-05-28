@@ -201,20 +201,221 @@ export function getArticleHtml(slug: string): string | null {
   const styleMatch = raw.match(/<style>([\s\S]*?)<\/style>/);
   let styles = styleMatch ? styleMatch[1] : '';
 
-  // Strip global selectors that would conflict
+  // Strip global selectors
   styles = styles.replace(/^\s*\*\s*\{[^}]*\}\s*/gm, '');
   styles = styles.replace(/body\s*\{[^}]*\}/g, '.korea-article-body {}');
 
-  // Scope all CSS under .korea-article
+  // Strip ALL font-size and line-height to prevent tiny text
+  styles = styles.replace(/font-size\s*:\s*[^;!]+[!;]/gi, '');
+  styles = styles.replace(/line-height\s*:\s*[^;!]+[!;]/gi, '');
+
+  // Scope remaining CSS (colors, padding, borders, etc.)
   styles = `.korea-article { ${styles} }`;
 
   // Extract <body> content, stripping the CF challenge script
   const bodyMatch = raw.match(/<body>([\s\S]*?)<\/body>/);
   let body = bodyMatch ? bodyMatch[1] : raw;
-  // Remove the CF challenge script
   body = body.replace(/<script>\(function[\s\S]*?<\/script>/g, '');
 
-  return `<style>${styles}</style><div class="korea-article-body">${body}</div>`;
+  // Replace next-btn hrefs: match "下一篇：XXX →" to article slugs
+  const titleToSlug = new Map(ARTICLES.map((a) => [a.title, a.slug]));
+  const titleToCategory = new Map(ARTICLES.map((a) => [a.title, a.category]));
+  body = body.replace(/<a class="next-btn" href="#">下一篇：([^→]+) →<\/a>/g, (_, title: string) => {
+    const t = title.trim();
+    const s = titleToSlug.get(t);
+    const c = titleToCategory.get(t);
+    if (s && c) {
+      return `<a class="next-btn" href="/korea/${c}/${s}">下一篇：${t} →</a>`;
+    }
+    return `<a class="next-btn" href="/korea">探索更多韩国文化内容 →</a>`;
+  });
+
+  // Replace next-tag divs: match article titles and turn into links
+  body = body.replace(/<div class="next-tag">([^<]+)<\/div>/g, (_: string, text: string) => {
+    // text may have emoji prefix like "🍜 韩国街头小吃地图"
+    const cleaned = text.replace(/^[\p{Emoji}\s]+/u, '').trim();
+    const s = titleToSlug.get(cleaned);
+    const c = titleToCategory.get(cleaned);
+    if (s && c) {
+      return `<a class="next-tag" href="/korea/${c}/${s}">${text}</a>`;
+    }
+    return `<span class="next-tag">${text}</span>`;
+  });
+
+  // Add sound icon to phrase items that don't have one
+  body = body.replace(
+    /(<div class="phrase-ko">[^<]*<\/div>)/g,
+    '$1<span class="phrase-speak" title="听发音">🔊</span>'
+  );
+
+  const overrides = `
+    .korea-article-body {
+      font-size: 18px;
+      line-height: 2;
+    }
+    .korea-article-body .container {
+      max-width: 100% !important;
+      padding: 28px 0 64px;
+    }
+
+    .korea-article-body .hero { padding: 72px 40px 64px; }
+    .korea-article-body .hero h1 { font-size: 38px; line-height: 1.35; }
+    .korea-article-body .hero h1 span { font-size: 18px; }
+    .korea-article-body .hero-tag { font-size: 14px; padding: 6px 20px; }
+
+    .korea-article-body .breadcrumb { font-size: 15px; }
+    .korea-article-body .intro-card { padding: 32px 32px; }
+    .korea-article-body .tori-bubble { font-size: 18px; line-height: 2; }
+    .korea-article-body .tori-name { font-size: 14px; }
+    .korea-article-body .hero-meta { font-size: 16px; }
+
+    .korea-article-body .section-title { font-size: 26px; margin: 56px 0 30px; }
+    .korea-article-body .section-title .st-icon { width: 46px; height: 46px; font-size: 23px; }
+    .korea-article-body .section-title .st-sub { font-size: 16px; }
+
+    /* Make ALL text content at least 16px */
+    .korea-article-body p,
+    .korea-article-body li,
+    .korea-article-body .brand-desc,
+    .korea-article-body .must-desc,
+    .korea-article-body .must-tip,
+    .korea-article-body .brand-must,
+    .korea-article-body .step-desc-text,
+    .korea-article-body .step-title-text,
+    .korea-article-body .korean-phrase,
+    .korea-article-body .time-desc,
+    .korea-article-body .time-title,
+    .korea-article-body .tc-a,
+    .korea-article-body .tc-q,
+    .korea-article-body .highlight,
+    .korea-article-body .notice-box,
+    .korea-article-body .culture-card p,
+    .korea-article-body .scene-card p,
+    .korea-article-body .ending-sub,
+    .korea-article-body .level-desc,
+    .korea-article-body .next-tag,
+    .korea-article-body .next-btn,
+    .korea-article-body .compare-table th,
+    .korea-article-body .compare-table td,
+    .korea-article-body .brand-name-zh,
+    .korea-article-body .phrase-ro,
+    .korea-article-body .phrase-scene,
+    .korea-article-body .ks-sub,
+    .korea-article-body .tc-tag,
+    .korea-article-body .time-label,
+    .korea-article-body .vocab-chip {
+      font-size: 16px;
+      line-height: 1.95;
+    }
+
+    .korea-article-body .tori-bubble p,
+    .korea-article-body .intro-card p { font-size: 18px; }
+
+    .korea-article-body .culture-card,
+    .korea-article-body .scene-card { padding: 28px 30px; font-size: 18px; }
+    .korea-article-body .culture-card h3,
+    .korea-article-body .scene-card h3 { font-size: 19px; }
+
+    .korea-article-body .phrase-ko { font-size: 20px; font-weight: 700; }
+    .korea-article-body .phrase-zh { font-size: 16px; }
+
+    .korea-article-body .brand-name-ko { font-size: 21px; }
+    .korea-article-body .must-name-ko { font-size: 18px; }
+    .korea-article-body .must-name-zh { font-size: 15px; }
+    .korea-article-body .ks-title { font-size: 19px; }
+
+    .korea-article-body .ending-title { font-size: 21px; }
+
+    .korea-article-body .brand-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 18px; }
+    .korea-article-body .brand-card { padding: 26px 22px; }
+    .korea-article-body .brand-emoji { font-size: 44px; }
+    .korea-article-body .brand-tag { font-size: 13px; }
+
+    .korea-article-body .must-buy-grid { gap: 18px; }
+    .korea-article-body .must-card { padding: 24px; }
+    .korea-article-body .must-icon { font-size: 38px; }
+
+    .korea-article-body .highlight { padding: 18px 22px; }
+    .korea-article-body .notice-box { padding: 22px 24px; }
+
+    .korea-article-body .food-steps { padding: 28px 30px; }
+    .korea-article-body .food-steps h3 { font-size: 18px; }
+
+    .korea-article-body .time-grid { gap: 16px; }
+    .korea-article-body .time-card { padding: 22px 18px; }
+    .korea-article-body .time-emoji { font-size: 34px; }
+
+    .korea-article-body .korean-section { padding: 38px 32px; }
+    .korea-article-body .trivia-grid { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px; }
+    .korea-article-body .trivia-card { padding: 22px 24px; }
+
+    .korea-article-body .compare-table th,
+    .korea-article-body .compare-table td { padding: 15px 20px; }
+
+    .korea-article-body .vocab-chip { padding: 8px 20px; }
+    .korea-article-body .vocab-row { gap: 10px; }
+
+    .korea-article-body .ending-card { padding: 38px 32px; }
+    .korea-article-body .ending-tori { font-size: 58px; }
+    .korea-article-body .next-btn { padding: 13px 34px; }
+
+    .korea-article-body .level-card { padding: 24px 28px; }
+
+    .korea-article-body .bow-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+    .korea-article-body .vs-grid { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+
+    .korea-article-body .divider { font-size: 24px; margin: 40px 0; }
+
+    /* Interactive: phrase speak button */
+    .korea-article-body .phrase-speak {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(255,143,171,.12); cursor: pointer;
+      font-size: 16px; margin-left: 10px; vertical-align: middle;
+      transition: all .15s; user-select: none; flex-shrink: 0;
+    }
+    .korea-article-body .phrase-speak:hover { background: rgba(255,143,171,.25); transform: scale(1.1); }
+    .korea-article-body .phrase-speak.speaking { background: #FF8FAB; animation: pulse-speak .6s infinite; }
+    @keyframes pulse-speak { 0%,100% { box-shadow: 0 0 0 0 rgba(255,143,171,.4); } 50% { box-shadow: 0 0 0 8px rgba(255,143,171,0); } }
+
+    /* Interactive: add button states */
+    .korea-article-body .add-btn {
+      cursor: pointer; transition: all .15s;
+    }
+    .korea-article-body .add-btn:hover { transform: scale(1.15); }
+    .korea-article-body .add-btn.saved {
+      background: linear-gradient(135deg, #A8D8D0, #81C784) !important;
+      box-shadow: 0 2px 8px rgba(168,216,208,.5) !important;
+    }
+
+    /* Toast */
+    .korea-article-body .ka-toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      background: #333; color: #fff; font-size: 15px; padding: 12px 24px;
+      border-radius: 24px; z-index: 9999; opacity: 0; transition: opacity .3s;
+      pointer-events: none; box-shadow: 0 4px 20px rgba(0,0,0,.3);
+      font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    .korea-article-body .ka-toast.show { opacity: 1; }
+
+    @media (max-width: 640px) {
+      .korea-article-body { font-size: 17px; }
+      .korea-article-body .hero { padding: 48px 20px 40px; }
+      .korea-article-body .hero h1 { font-size: 28px; }
+      .korea-article-body .hero h1 span { font-size: 16px; }
+      .korea-article-body .container { padding: 20px 0 40px; }
+      .korea-article-body .section-title { font-size: 21px; }
+      .korea-article-body p,
+      .korea-article-body .brand-desc,
+      .korea-article-body .must-desc,
+      .korea-article-body .culture-card p,
+      .korea-article-body .scene-card p { font-size: 15px; }
+      .korea-article-body .culture-card,
+      .korea-article-body .scene-card { padding: 20px 22px; }
+    }
+  `;
+
+  return `<style>${styles} ${overrides}</style><div class="korea-article-body">${body}</div>`;
 }
 
 export function getArticleMeta(slug: string): ArticleMeta | null {

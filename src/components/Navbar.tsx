@@ -62,7 +62,11 @@ const navGroups: NavGroup[] = [
     ],
   },
   {
-    icon: Flower2, label: '韩国', ko: '한국', href: '/korea', children: [],
+    icon: Flower2, label: '韩国', ko: '한국', href: '/korea', children: [
+      { label: '文化', ko: '문화', href: '/korea/culture', icon: Palette },
+      { label: '美食', ko: '음식', href: '/korea/food', icon: UtensilsCrossed },
+      { label: '旅行', ko: '여행', href: '/korea/travel', icon: MapPin },
+    ],
   },
   {
     icon: Bot, label: 'AI助手', ko: 'AI 도우미', href: '/ai', children: [

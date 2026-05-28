@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { getArticleHtml, getArticleMeta, getArticlesByCategory } from '@/lib/koreaArticles';
 import Link from 'next/link';
+import ArticleContent from '@/components/ArticleContent';
 
 export function generateStaticParams() {
   return getArticlesByCategory('travel').map((a) => ({ slug: a.slug }));
@@ -17,27 +18,27 @@ export default async function TravelArticlePage({ params }: { params: Promise<{ 
   const relatedArticles = getArticlesByCategory('travel').filter((a) => a.slug !== slug);
 
   return (
-    <div className="py-4 max-w-[780px] mx-auto">
-      <div className="flex items-center gap-1.5 text-xs text-[var(--text-muted)] mb-6">
+    <div className="py-4 mx-auto">
+      <div className="flex items-center gap-1.5 text-sm text-[var(--text-muted)] mb-6">
         <Link href="/korea/travel" className="hover:text-[var(--text-primary)] transition-colors">🇰🇷 韩国旅行</Link>
         <span className="text-[var(--text-placeholder)]">›</span>
         <span className="text-[var(--text-secondary)]">{meta?.title}</span>
       </div>
 
-      <div className="korea-article" dangerouslySetInnerHTML={{ __html: html }} />
+      <ArticleContent html={html} basePath="/korea/travel" />
 
       {relatedArticles.length > 0 && (
         <div className="mt-10 pt-8 border-t border-[var(--border-color)]">
-          <h3 className="text-sm font-bold text-[var(--text-primary)] mb-4">✈️ 更多旅行文章</h3>
+          <h3 className="text-base font-bold text-[var(--text-primary)] mb-4">✈️ 更多旅行文章</h3>
           <div className="grid grid-cols-2 gap-3">
             {relatedArticles.map((a) => (
               <Link
                 key={a.slug}
                 href={`/korea/travel/${a.slug}`}
-                className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-3 hover:border-[var(--pink-pale)] transition-colors"
+                className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-4 hover:border-[var(--pink-pale)] transition-colors"
               >
-                <div className="text-xs font-medium text-[var(--text-primary)] line-clamp-1">{a.title}</div>
-                <div className="text-[11px] text-[var(--text-muted)] mt-0.5 line-clamp-1">{a.subtitle}</div>
+                <div className="text-sm font-medium text-[var(--text-primary)] line-clamp-1">{a.title}</div>
+                <div className="text-xs text-[var(--text-muted)] mt-0.5 line-clamp-1">{a.subtitle}</div>
               </Link>
             ))}
           </div>

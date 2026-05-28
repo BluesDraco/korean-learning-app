@@ -6,7 +6,7 @@ import { VisitorCounter } from '@/components/VisitorCounter';
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isStandalone = pathname.startsWith('/kpop') || pathname.startsWith('/korea');
+  const isStandalone = pathname.startsWith('/kpop');
 
   if (isStandalone) {
     return (
