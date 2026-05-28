@@ -76,9 +76,9 @@ export function ScenesSection() {
                   </div>
                   <div className="text-xs text-[var(--text-secondary)] mt-1">{entry.meanings.map((m) => m.chinese).join('；')}</div>
                 </div>
-                <button onClick={(e) => { e.stopPropagation(); speakKorean(entry.korean); }}
-                  className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)]"
-                ><Volume2 size={14} /></button>
+                <span onClick={(e) => { e.stopPropagation(); speakKorean(entry.korean); }}
+                  className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] cursor-pointer inline-flex"
+                ><Volume2 size={14} /></span>
                 {isExpanded ? <ChevronUp size={16} className="text-[var(--text-muted)]" /> : <ChevronDown size={16} className="text-[var(--text-muted)]" />}
               </button>
               {isExpanded && (

@@ -5,9 +5,7 @@ import { ArrowLeft, RotateCcw, ChevronRight, Play, Trophy, Zap, Clock, Crosshair
 import Link from 'next/link';
 import { typingLevels, type TypingText } from '@/data/typingLevels';
 
-// ═══════════════════════════════════════════════════════════════
-// Hangul decomposition engine (same as KoreanKeyboard)
-// ═══════════════════════════════════════════════════════════════
+// Hangul decomposition
 const CHO = ['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
 const JUNG = ['ㅏ','ㅐ','ㅑ','ㅒ','ㅓ','ㅔ','ㅕ','ㅖ','ㅗ','ㅘ','ㅙ','ㅚ','ㅛ','ㅜ','ㅝ','ㅞ','ㅟ','ㅠ','ㅡ','ㅢ','ㅣ'];
 const JONG = ['','ㄱ','ㄲ','ㄳ','ㄴ','ㄵ','ㄶ','ㄷ','ㄹ','ㄺ','ㄻ','ㄼ','ㄽ','ㄾ','ㄿ','ㅀ','ㅁ','ㅂ','ㅄ','ㅅ','ㅆ','ㅇ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
@@ -44,9 +42,13 @@ function decomposeFull(text: string): string[] {
   return out;
 }
 
-// ═══════════════════════════════════════════════════════════════
-// QWERTY → Jamo mapping
-// ═══════════════════════════════════════════════════════════════
+// Split text into sentences (by Korean/English sentence-ending punctuation)
+function splitSentences(text: string): string[] {
+  const parts = text.split(/(?<=[.!?])\s*/);
+  return parts.filter(Boolean);
+}
+
+// QWERTY → Jamo
 const QWERTY_TO_JAMO: Record<string, { base: string; shift?: string }> = {
   q: { base: 'ㅂ', shift: 'ㅃ' }, w: { base: 'ㅈ', shift: 'ㅉ' },
   e: { base: 'ㄷ', shift: 'ㄸ' }, r: { base: 'ㄱ', shift: 'ㄲ' },
@@ -67,39 +69,43 @@ for (const [qKey, m] of Object.entries(QWERTY_TO_JAMO)) {
   if (m.shift) JAMO_TO_QWERTY[m.shift] = qKey;
 }
 
-// Virtual keyboard layout
 const KEYBOARD_ROWS = [
   ['ㅂ','ㅈ','ㄷ','ㄱ','ㅅ','ㅛ','ㅕ','ㅑ','ㅐ','ㅔ'],
   ['ㅁ','ㄴ','ㅇ','ㄹ','ㅎ','ㅗ','ㅓ','ㅏ','ㅣ'],
   ['ㅋ','ㅌ','ㅊ','ㅍ','ㅠ','ㅜ','ㅡ'],
 ];
 
-// ═══════════════════════════════════════════════════════════════
-// Typing Page
-// ═══════════════════════════════════════════════════════════════
-type Phase = 'idle' | 'typing' | 'done';
+type Phase = 'idle' | 'typing' | 'sentenceDone' | 'done';
 
 export default function TypingPage() {
   const [levelId, setLevelId] = useState(1);
   const [textIdx, setTextIdx] = useState(0);
+  const [sentenceIdx, setSentenceIdx] = useState(0);
   const [phase, setPhase] = useState<Phase>('idle');
-  const [cursorPos, setCursorPos] = useState(0); // position in jamo array
+  const [cursorPos, setCursorPos] = useState(0);
   const [errors, setErrors] = useState(0);
   const [totalKeystrokes, setTotalKeystrokes] = useState(0);
   const [elapsed, setElapsed] = useState(0);
   const [recentError, setRecentError] = useState(false);
-  const [timeLimit] = useState(300); // 5 min for level 5
+  const [timeLimit] = useState(300);
 
   const level = typingLevels[levelId - 1];
   const text: TypingText | undefined = level?.texts[textIdx];
-  const targetJamo = useMemo(() => text ? decomposeFull(text.text) : [], [text]);
+
+  // Split into sentences
+  const sentences = useMemo(() => (text ? splitSentences(text.text) : []), [text]);
+  const currentSentence = sentences[sentenceIdx] || '';
+  const targetJamo = useMemo(() => decomposeFull(currentSentence), [currentSentence]);
 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const errorTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const autoAdvTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const cursorPosRef = useRef(cursorPos);
   const targetJamoRef = useRef(targetJamo);
+  const phaseRef = useRef(phase);
   cursorPosRef.current = cursorPos;
   targetJamoRef.current = targetJamo;
+  phaseRef.current = phase;
 
   const startTimeRef = useRef(0);
 
@@ -117,12 +123,28 @@ export default function TypingPage() {
 
   // Level 5 time limit
   useEffect(() => {
-    if (levelId === 5 && phase === 'typing' && elapsed >= timeLimit) {
+    if (levelId === 5 && (phase === 'typing' || phase === 'sentenceDone') && elapsed >= timeLimit) {
       setPhase('done');
     }
   }, [levelId, phase, elapsed, timeLimit]);
 
-  // Keyboard listener (refs avoid re-registration on every keystroke)
+  // Auto-advance to next sentence
+  useEffect(() => {
+    if (phase === 'sentenceDone') {
+      autoAdvTimerRef.current = setTimeout(() => {
+        if (sentenceIdx + 1 < sentences.length) {
+          setSentenceIdx((prev) => prev + 1);
+          setCursorPos(0);
+          setPhase('typing');
+        } else {
+          setPhase('done');
+        }
+      }, 1000);
+    }
+    return () => { if (autoAdvTimerRef.current) clearTimeout(autoAdvTimerRef.current); };
+  }, [phase, sentenceIdx, sentences.length]);
+
+  // Keyboard listener
   useEffect(() => {
     if (phase !== 'typing') return;
 
@@ -144,7 +166,7 @@ export default function TypingPage() {
         setCursorPos((prev) => {
           const next = prev + 1;
           if (next >= jamo.length) {
-            setPhase('done');
+            setPhase('sentenceDone');
           }
           return next;
         });
@@ -165,6 +187,7 @@ export default function TypingPage() {
     setCursorPos(0);
     setErrors(0);
     setTotalKeystrokes(0);
+    setSentenceIdx(0);
     startTimeRef.current = Date.now();
     setElapsed(0);
     setPhase('typing');
@@ -175,12 +198,14 @@ export default function TypingPage() {
     setCursorPos(0);
     setErrors(0);
     setTotalKeystrokes(0);
+    setSentenceIdx(0);
     setElapsed(0);
   }, []);
 
   const nextText = useCallback(() => {
     if (level && textIdx + 1 < level.texts.length) {
       setTextIdx((prev) => prev + 1);
+      setSentenceIdx(0);
       reset();
     }
   }, [level, textIdx, reset]);
@@ -188,21 +213,21 @@ export default function TypingPage() {
   const prevText = useCallback(() => {
     if (textIdx > 0) {
       setTextIdx((prev) => prev - 1);
+      setSentenceIdx(0);
       reset();
     }
   }, [textIdx, reset]);
 
-  // Stats
+  // Stats (per sentence)
   const accuracy = totalKeystrokes > 0 ? Math.round(((totalKeystrokes - errors) / totalKeystrokes) * 100) : 100;
   const cpm = elapsed > 0 ? Math.round((cursorPos / elapsed) * 60) : 0;
-  const wpm = Math.round(cpm / 5);
 
-  // Memoized jamo display — only recompute when cursor/error/text change
+  // Jamo display
   const displayChars = useMemo(() => {
-    if (!text || targetJamo.length === 0) return [];
+    if (!currentSentence || targetJamo.length === 0) return [];
     const chars: { char: string; status: 'done' | 'current' | 'pending' | 'error' }[] = [];
     let jamoIdx = 0;
-    for (const ch of text.text) {
+    for (const ch of currentSentence) {
       const parts = decomposeSyl(ch);
       for (let pi = 0; pi < parts.length; pi++) {
         let status: 'done' | 'current' | 'pending' | 'error' = 'pending';
@@ -213,14 +238,13 @@ export default function TypingPage() {
       }
     }
     return chars;
-  }, [text, cursorPos, recentError, targetJamo.length]);
+  }, [currentSentence, cursorPos, recentError, targetJamo.length]);
 
-  // Next key highlight
   const nextJamo = targetJamo[cursorPos] || '';
   const nextQwerty = JAMO_TO_QWERTY[nextJamo]?.toUpperCase() || '';
 
   return (
-    <div className="py-4 space-y-5 max-w-4xl mx-auto">
+    <div className="py-4 space-y-4 max-w-4xl mx-auto">
       {/* Header */}
       <div className="flex items-center gap-3">
         <Link href="/" className="text-[var(--text-muted)] hover:text-[var(--text-primary)]">
@@ -231,7 +255,7 @@ export default function TypingPage() {
             <Keyboard size={20} className="text-[var(--pink-primary)]" />
             打字练习
           </h1>
-          <p className="text-xs text-[var(--text-muted)] mt-0.5">韩文盲打训练 · TOPIK 机考准备</p>
+          <p className="text-xs text-[var(--text-muted)] mt-0.5">韩文盲打训练 · 逐句练习，键盘始终可见</p>
         </div>
       </div>
 
@@ -269,144 +293,127 @@ export default function TypingPage() {
 
       {/* Main typing area */}
       {text && (
-        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-8 space-y-6">
-          {/* Target text display */}
-          <div className="text-center">
-            <p className="text-sm text-[var(--text-muted)] mb-2">{text.label}</p>
-            <div className="text-4xl font-bold text-[var(--text-primary)] leading-relaxed tracking-wide font-[var(--font-korean)]">
-              {displayChars.map((dc, i) => (
-                <span
+        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-5 md:p-6 space-y-5">
+          {/* Sentence progress */}
+          {sentences.length > 1 && (
+            <div className="flex items-center gap-1.5">
+              {sentences.map((_, i) => (
+                <div
                   key={i}
-                  className={`transition-colors duration-100 ${
-                    dc.status === 'done' ? 'text-[var(--mint-soft)]' :
-                    dc.status === 'current' ? 'text-[var(--pink-primary)] border-b-2 border-[var(--pink-primary)]' :
-                    dc.status === 'error' ? 'text-red-400 border-b-2 border-red-400' :
-                    'text-[var(--text-muted)]/50'
+                  className={`h-1.5 rounded-full flex-1 transition-all ${
+                    i < sentenceIdx ? 'bg-[var(--mint-soft)]' :
+                    i === sentenceIdx ? 'bg-[var(--pink-primary)]' :
+                    'bg-[var(--border-color)]'
                   }`}
-                >
-                  {dc.char}
-                </span>
+                />
               ))}
+              <span className="text-xs text-[var(--text-muted)] ml-2 shrink-0">{sentenceIdx + 1}/{sentences.length}</span>
             </div>
-          </div>
+          )}
 
-          {/* Original Korean text + Chinese translation */}
-          <div className="text-center space-y-1.5 py-3 border-y border-[var(--border-color)]/50">
-            <p className="text-xl text-[var(--text-primary)] font-medium font-[var(--font-korean)] leading-relaxed">
-              {text.text}
-            </p>
+          {/* Target text: label + sentence reference */}
+          <div>
+            <p className="text-xs text-[var(--text-muted)] mb-1">{text.label}</p>
+            {/* Full text with current sentence highlighted */}
+            {sentences.length > 1 ? (
+              <div className="text-base text-[var(--text-primary)] leading-relaxed font-[var(--font-korean)]">
+                {sentences.map((s, i) => (
+                  <span key={i} className={i === sentenceIdx ? 'text-[var(--pink-primary)] font-bold' : 'text-[var(--text-muted)]/60'}>
+                    {s}{i < sentences.length - 1 ? ' ' : ''}
+                  </span>
+                ))}
+              </div>
+            ) : (
+              <p className="text-base text-[var(--text-primary)] font-medium font-[var(--font-korean)]">{currentSentence}</p>
+            )}
             {text.chinese && (
-              <p className="text-base text-[var(--text-muted)]">
-                {text.chinese}
-              </p>
+              <p className="text-sm text-[var(--text-muted)] mt-1">{text.chinese}</p>
             )}
           </div>
 
-          {/* Virtual keyboard preview */}
-          <div className="bg-[var(--bg-soft)] rounded-xl p-4 border border-[var(--border-color)]/60">
-            {KEYBOARD_ROWS.map((row, ri) => (
-              <div key={ri} className="flex justify-center gap-1 mb-1 last:mb-0">
-                {ri === 2 && <div className="w-8" />} {/* shift key space */}
-                {row.map((jamo) => {
-                  const isNext = jamo === nextJamo;
-                  const qKey = JAMO_TO_QWERTY[jamo];
-                  return (
-                    <div
-                      key={jamo}
-                      className={`flex flex-col items-center justify-center w-11 h-11 rounded-lg text-sm transition-all ${
-                        isNext
-                          ? 'bg-[var(--pink-primary)]/25 ring-2 ring-[var(--pink-primary)]/50 scale-110 text-[var(--pink-primary)]'
-                          : 'bg-[var(--bg-card)] text-[var(--text-muted)]/70'
-                      }`}
-                    >
-                      <span className="leading-tight font-bold">{jamo}</span>
-                      <span className="text-[10px] leading-tight opacity-50">{qKey?.toUpperCase() || ''}</span>
-                    </div>
-                  );
-                })}
-                {ri === 2 && <div className="w-8" />}
+          {/* Jamo decomposition display */}
+          <div className="bg-[var(--bg-input)] rounded-xl p-4 md:p-6 min-h-[80px] flex items-center justify-center">
+            {currentSentence ? (
+              <div className="text-3xl md:text-4xl font-bold text-center leading-relaxed tracking-wide font-[var(--font-korean)] flex flex-wrap justify-center gap-x-[2px]">
+                {displayChars.map((dc, i) => (
+                  <span
+                    key={i}
+                    className={`transition-colors duration-100 ${
+                      dc.status === 'done' ? 'text-[var(--mint-soft)]' :
+                      dc.status === 'current' ? 'text-[var(--pink-primary)] border-b-2 border-[var(--pink-primary)]' :
+                      dc.status === 'error' ? 'text-red-400 border-b-2 border-red-400' :
+                      'text-[var(--text-muted)]/50'
+                    }`}
+                  >
+                    {dc.char}
+                  </span>
+                ))}
               </div>
-            ))}
-            {/* Next key hint */}
-            {nextJamo && (
-              <div className="text-center mt-3">
-                <span className="text-sm text-[var(--text-muted)]">
-                  下一个: <span className="text-[var(--pink-primary)] font-bold">{nextJamo}</span>
-                  {nextQwerty && <span className="text-[var(--text-muted)]"> (按 <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-primary)] text-xs">{nextQwerty}</kbd>)</span>}
-                </span>
-              </div>
+            ) : (
+              <p className="text-[var(--text-muted)] text-sm">加载中...</p>
             )}
           </div>
 
-          {/* Phase: idle → start button */}
+          {/* Phase: idle */}
           {phase === 'idle' && (
             <button
               onClick={start}
               className="w-full py-4 rounded-xl bg-[var(--pink-primary)] text-white font-bold text-base hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-lg shadow-[var(--pink-primary)]/25"
             >
-              <Play size={20} />
-              开始练习
+              <Play size={20} /> 开始练习
             </button>
           )}
 
-          {/* Phase: typing → stats bar */}
-          {phase === 'typing' && (
-            <div className="flex items-center gap-5 text-sm">
+          {/* Phase: typing / sentenceDone — stats bar */}
+          {(phase === 'typing' || phase === 'sentenceDone') && (
+            <div className="flex items-center gap-4 text-sm">
               <span className="flex items-center gap-1.5 text-[var(--text-muted)]">
                 <Clock size={15} />
-                {levelId === 5
-                  ? `${Math.max(0, timeLimit - Math.floor(elapsed))}s`
-                  : `${Math.floor(elapsed)}s`}
+                {levelId === 5 ? `${Math.max(0, timeLimit - Math.floor(elapsed))}s` : `${Math.floor(elapsed)}s`}
               </span>
               <span className="flex items-center gap-1.5 text-[var(--text-muted)]">
-                <Zap size={15} />
-                {cpm} 字/分
+                <Zap size={15} /> {cpm} 字/分
               </span>
               <span className="flex items-center gap-1.5 text-[var(--text-muted)]">
-                <Crosshair size={15} />
-                {accuracy}%
+                <Crosshair size={15} /> {accuracy}%
               </span>
               <div className="flex-1" />
-              <span className="text-[var(--text-muted)]">
-                {cursorPos}/{targetJamo.length}
-              </span>
-              <button onClick={reset} className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors">
+              <span className="text-[var(--text-muted)]">{cursorPos}/{targetJamo.length}</span>
+              <button onClick={reset} className="text-[var(--text-muted)] hover:text-[var(--text-primary)]">
                 <RotateCcw size={16} />
               </button>
             </div>
           )}
 
-          {/* Phase: done → results */}
+          {/* Phase: done */}
           {phase === 'done' && (
-            <div className="space-y-5">
+            <div className="space-y-4">
               <div className="text-center">
-                <Trophy size={52} className="mx-auto text-[var(--peach-soft)] mb-3" />
-                <p className="text-xl font-bold text-[var(--text-primary)]">
-                  {accuracy >= 95 ? '完美！🎉' : accuracy >= 80 ? '不错！👍' : '继续加油！💪'}
+                <Trophy size={44} className="mx-auto text-[var(--peach-soft)] mb-2" />
+                <p className="text-lg font-bold text-[var(--text-primary)]">
+                  {accuracy >= 95 ? '完美！' : accuracy >= 80 ? '不错！' : '继续加油！'}
                 </p>
               </div>
-
-              <div className="grid grid-cols-3 gap-4">
-                <div className="bg-[var(--bg-input)] rounded-xl p-4 text-center">
-                  <div className="text-2xl font-bold text-[var(--pink-primary)]">{wpm}</div>
-                  <div className="text-xs text-[var(--text-muted)] mt-1">WPM (字/分)</div>
+              <div className="grid grid-cols-3 gap-3">
+                <div className="bg-[var(--bg-input)] rounded-xl p-3 text-center">
+                  <div className="text-xl font-bold text-[var(--pink-primary)]">{cpm}</div>
+                  <div className="text-xs text-[var(--text-muted)] mt-0.5">字/分</div>
                 </div>
-                <div className="bg-[var(--bg-input)] rounded-xl p-4 text-center">
-                  <div className="text-2xl font-bold text-[var(--mint-soft)]">{accuracy}%</div>
-                  <div className="text-xs text-[var(--text-muted)] mt-1">准确率</div>
+                <div className="bg-[var(--bg-input)] rounded-xl p-3 text-center">
+                  <div className="text-xl font-bold text-[var(--mint-soft)]">{accuracy}%</div>
+                  <div className="text-xs text-[var(--text-muted)] mt-0.5">准确率</div>
                 </div>
-                <div className="bg-[var(--bg-input)] rounded-xl p-4 text-center">
-                  <div className="text-2xl font-bold text-[var(--peach-soft)]">{errors}</div>
-                  <div className="text-xs text-[var(--text-muted)] mt-1">错误数</div>
+                <div className="bg-[var(--bg-input)] rounded-xl p-3 text-center">
+                  <div className="text-xl font-bold text-[var(--peach-soft)]">{errors}</div>
+                  <div className="text-xs text-[var(--text-muted)] mt-0.5">错误数</div>
                 </div>
               </div>
-
               <div className="flex gap-3">
-                <button onClick={start} className="flex-1 py-3 rounded-xl bg-[var(--pink-primary)] text-white font-medium text-base hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+                <button onClick={start} className="flex-1 py-3 rounded-xl bg-[var(--pink-primary)] text-white font-medium hover:opacity-90 flex items-center justify-center gap-2">
                   <RotateCcw size={17} /> 重新练习
                 </button>
                 {level && textIdx + 1 < level.texts.length && (
-                  <button onClick={nextText} className="flex-1 py-3 rounded-xl bg-[var(--bg-input)] text-[var(--text-primary)] font-medium text-base hover:bg-[var(--bg-accent)] transition-colors flex items-center justify-center gap-2">
+                  <button onClick={nextText} className="flex-1 py-3 rounded-xl bg-[var(--bg-input)] text-[var(--text-primary)] font-medium hover:bg-[var(--bg-accent)] flex items-center justify-center gap-2">
                     下一题 <ChevronRight size={17} />
                   </button>
                 )}
@@ -415,6 +422,41 @@ export default function TypingPage() {
           )}
         </div>
       )}
+
+      {/* Virtual keyboard — always visible, auto-stick to bottom */}
+      <div className="sticky bottom-2 bg-[var(--bg-card)] rounded-2xl p-4 border border-[var(--border-color)] shadow-lg z-10">
+        {KEYBOARD_ROWS.map((row, ri) => (
+          <div key={ri} className="flex justify-center gap-1 mb-1 last:mb-0">
+            {ri === 2 && <div className="w-8" />}
+            {row.map((jamo) => {
+              const isNext = jamo === nextJamo;
+              const qKey = JAMO_TO_QWERTY[jamo];
+              return (
+                <div
+                  key={jamo}
+                  className={`flex flex-col items-center justify-center w-11 h-11 rounded-lg text-sm transition-all ${
+                    isNext
+                      ? 'bg-[var(--pink-primary)]/25 ring-2 ring-[var(--pink-primary)]/50 scale-110 text-[var(--pink-primary)]'
+                      : 'bg-[var(--bg-input)] text-[var(--text-muted)]/70'
+                  }`}
+                >
+                  <span className="leading-tight font-bold">{jamo}</span>
+                  <span className="text-[10px] leading-tight opacity-50">{qKey?.toUpperCase() || ''}</span>
+                </div>
+              );
+            })}
+            {ri === 2 && <div className="w-8" />}
+          </div>
+        ))}
+        {nextJamo && phase === 'typing' && (
+          <div className="text-center mt-2">
+            <span className="text-sm text-[var(--text-muted)]">
+              下一个: <span className="text-[var(--pink-primary)] font-bold">{nextJamo}</span>
+              {nextQwerty && <span className="text-[var(--text-muted)]"> (按 <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-input)] border border-[var(--border-color)] text-[var(--text-primary)] text-xs">{nextQwerty}</kbd>)</span>}
+            </span>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

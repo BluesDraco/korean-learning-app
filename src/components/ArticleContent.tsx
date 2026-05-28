@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { speak as speakKorean } from '@/lib/tts';
 
 const STORAGE_KEY = 'korea-saved-words';
 
@@ -17,16 +18,6 @@ function saveWord(korean: string, chinese: string): boolean {
     return true;
   }
   return false;
-}
-
-function speakKorean(text: string) {
-  if (!window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'ko-KR';
-  u.rate = 0.75;
-  u.pitch = 1;
-  window.speechSynthesis.speak(u);
 }
 
 export default function ArticleContent({
