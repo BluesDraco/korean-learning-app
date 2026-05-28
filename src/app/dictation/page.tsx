@@ -1,13 +1,15 @@
 'use client';
 
 import { useEffect, useState, useRef, useCallback } from 'react';
-import { Volume2, Check, X, ArrowRight, Loader2, RotateCcw, Sparkles, Star, Trophy, Pencil, Mic, Eye } from 'lucide-react';
+import { Volume2, Check, X, ArrowRight, Loader2, RotateCcw, Sparkles, Star, Trophy, Pencil, Mic, Eye, Pen, Keyboard } from 'lucide-react';
 import { db } from '@/lib/db';
 import { awardXp, XP_REWARDS, updateStreak } from '@/lib/gamification';
 import { KoreanKeyboard } from '@/components/KoreanKeyboard';
+import { HandwritingPad } from '@/components/HandwritingPad';
 import type { Word } from '@/types';
 
 type Mode = 'listen' | 'write';
+type InputMode = 'type' | 'handwrite';
 
 function speakKorean(text: string, rate = 0.8) {
   window.speechSynthesis.cancel();
@@ -35,6 +37,7 @@ export default function DictationPage() {
   const [newLevel, setNewLevel] = useState(0);
   const [hasListened, setHasListened] = useState(false);
   const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const [inputMode, setInputMode] = useState<InputMode>('type');
   const inputRef = useRef<HTMLInputElement>(null);
 
   const loadWords = useCallback(async () => {
@@ -300,36 +303,73 @@ export default function DictationPage() {
           }
         </p>
 
+        {/* Input mode toggle */}
+        <div className="flex bg-[var(--bg-input)] rounded-xl p-1 gap-1 max-w-[200px] mx-auto">
+          <button
+            onClick={() => { setInputMode('type'); setKeyboardVisible(true); }}
+            className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-medium transition-all ${
+              inputMode === 'type'
+                ? 'bg-[var(--bg-card)] text-[var(--pink-primary)] shadow-sm'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-secondary)]'
+            }`}
+          >
+            <Keyboard size={14} />
+            打字
+          </button>
+          <button
+            onClick={() => { setInputMode('handwrite'); setKeyboardVisible(false); }}
+            className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-medium transition-all ${
+              inputMode === 'handwrite'
+                ? 'bg-[var(--bg-card)] text-[var(--pink-primary)] shadow-sm'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-secondary)]'
+            }`}
+          >
+            <Pen size={14} />
+            手写
+          </button>
+        </div>
+
         {/* Input area */}
         <div className="space-y-2">
-          <div className="flex gap-3 relative">
-            <input
-              ref={inputRef}
-              type="text"
-              value={userInput}
-              onChange={(e) => setUserInput(e.target.value)}
-              onFocus={() => setKeyboardVisible(true)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && !submitted) handleSubmit();
-                if (e.key === 'Enter' && submitted) handleNext();
+          {inputMode === 'type' ? (
+            <div className="flex gap-3 relative">
+              <input
+                ref={inputRef}
+                type="text"
+                value={userInput}
+                onChange={(e) => setUserInput(e.target.value)}
+                onFocus={() => setKeyboardVisible(true)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !submitted) handleSubmit();
+                  if (e.key === 'Enter' && submitted) handleNext();
+                }}
+                disabled={submitted}
+                placeholder={mode === 'listen' ? '输入韩语...' : '默写单词...'}
+                className="flex-1 bg-[var(--bg-input)] border border-[var(--pink-pale)] rounded-xl py-3 px-4 text-[var(--text-primary)] text-center text-lg placeholder:text-[var(--text-muted)] focus:outline-none focus:border-purple-500"
+              />
+              <button
+                type="button"
+                onClick={() => setKeyboardVisible(!keyboardVisible)}
+                className={`self-stretch px-3 rounded-xl transition-colors text-sm font-medium ${
+                  keyboardVisible
+                    ? 'bg-[var(--pink-primary)]/20 text-[var(--pink-primary)]'
+                    : 'bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] hover:bg-[var(--pink-pale)]/20'
+                }`}
+                title="韩文键盘"
+              >
+                한
+              </button>
+            </div>
+          ) : (
+            <HandwritingPad
+              onInsert={(text) => {
+                setUserInput(text);
+                setHasListened(true);
+                setInputMode('type');
               }}
-              disabled={submitted}
-              placeholder={mode === 'listen' ? '输入韩语...' : '默写单词...'}
-              className="flex-1 bg-[var(--bg-input)] border border-[var(--pink-pale)] rounded-xl py-3 px-4 text-[var(--text-primary)] text-center text-lg placeholder:text-[var(--text-muted)] focus:outline-none focus:border-purple-500"
+              onCancel={() => setInputMode('type')}
             />
-            <button
-              type="button"
-              onClick={() => setKeyboardVisible(!keyboardVisible)}
-              className={`self-stretch px-3 rounded-xl transition-colors text-sm font-medium ${
-                keyboardVisible
-                  ? 'bg-[var(--pink-primary)]/20 text-[var(--pink-primary)]'
-                  : 'bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] hover:bg-[var(--pink-pale)]/20'
-              }`}
-              title="韩文键盘"
-            >
-              한
-            </button>
-          </div>
+          )}
         </div>
 
         {/* XP gain sparkle indicator */}
