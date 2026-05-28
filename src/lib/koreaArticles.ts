@@ -242,6 +242,9 @@ export function getArticleHtml(slug: string): string | null {
     return `<span class="next-tag">${text}</span>`;
   });
 
+  // Lazy-load all images
+  body = body.replace(/<img /g, '<img loading="lazy" ');
+
   // Add sound icon to phrase items that don't have one
   body = body.replace(
     /(<div class="phrase-ko">[^<]*<\/div>)/g,

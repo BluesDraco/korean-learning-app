@@ -205,7 +205,6 @@ export const db = {
   studySubtitles: new CloudTable<StudySubtitle>('studySubtitles'),
   studyLogs: new CloudTable<StudyLog>('studyLogs'),
   videoStudyLogs: new CloudTable<StudyLog>('videoStudyLogs'),
-  videoStudySubtitles: new CloudTable<StudySubtitle>('studySubtitles'),
 };
 
 export async function initSettings(): Promise<AppSettings> {

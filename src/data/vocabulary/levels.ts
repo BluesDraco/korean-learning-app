@@ -163,7 +163,7 @@ export const levelWordLists: LevelWordList[] = [
       // Advanced entries - adjectives
       'aadj-04', 'aadj-07', 'aadj-08', 'aadj-14',
       // Advanced entries - nouns
-      'anoun-08', 'anoun-09', 'soc-10', 'anoun-12', 'anoun-14',
+      'anoun-08', 'anoun-09', 'anoun-12', 'anoun-14',
       // Advanced entries - adverbs
       'aadv-07',
       // Advanced entries - idioms

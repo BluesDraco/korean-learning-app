@@ -8,9 +8,9 @@ import {
   Home, BookOpen, Gamepad2, LayoutGrid, Flower2, Bot,
   GraduationCap, Grid3X3, Waves, FileText, BookImage,
   RefreshCw, Pencil, Mic, Keyboard, PenLine, BarChart3,
-  Library, Film, Bookmark,
-  Palette, Landmark, MapPin, UtensilsCrossed,
-  MessageSquare, Lightbulb, MessageCircle, Search, Sparkles,
+  Library, Film,
+  Palette, MapPin, UtensilsCrossed,
+  MessageSquare, Lightbulb, Search, Sparkles,
   ChevronRight, X, Sun, Moon, Shield, Mail, Music, Radio,
 } from 'lucide-react';
 import { useTheme } from '@/components/ThemeProvider';
@@ -49,6 +49,7 @@ const navGroups: NavGroup[] = [
       { label: '打字', ko: '타자', href: '/typing', icon: Keyboard },
       { label: '写作', ko: '작문', href: '/writing', icon: PenLine },
       { label: 'TOPIK模拟', ko: 'TOPIK 모의', href: '/topik', icon: FileText },
+      { label: '学习统计', ko: '통계', href: '/stats', icon: BarChart3 },
     ],
   },
   {
@@ -74,8 +75,7 @@ const navGroups: NavGroup[] = [
   {
     icon: Bot, label: 'AI助手', ko: 'AI 도우미', href: '/ai', children: [
       { label: 'AI 总览', ko: 'AI 개요', href: '/ai', icon: Sparkles },
-      { label: '对话拆解', ko: '대화 분석', href: '/ai/analyze', icon: MessageSquare },
-      { label: '情景对话', ko: '상황 대화', href: '/ai/chat', icon: MessageSquare },
+      { label: 'AI 对话', ko: 'AI 대화', href: '/ai/chat', icon: MessageSquare },
       { label: '语音对话', ko: '음성 대화', href: '/ai/voice', icon: Mic },
       { label: '学习方案', ko: '학습 계획', href: '/ai/plan', icon: Lightbulb },
     ],

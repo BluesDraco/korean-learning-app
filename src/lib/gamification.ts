@@ -92,10 +92,7 @@ export async function updateTodayLog(updates: Partial<DailyLog>): Promise<void> 
 // Award XP and update profile
 export async function awardXp(amount: number): Promise<{ leveledUp: boolean; newLevel: number }> {
   const profile = await getProfile();
-  const newTotalXp = profile.xp + (profile.level - 1) * 100 + amount; // approximate
-  const { level, currentXp, xpToNext } = levelFromXp(totalXpForLevel(profile.level) + amount - profile.xp + profile.xp);
-
-  // More accurate calculation
+  // Calculate XP and level
   let xp = profile.xp + amount;
   let lvl = profile.level;
   let xpToNxt = profile.xpToNextLevel;

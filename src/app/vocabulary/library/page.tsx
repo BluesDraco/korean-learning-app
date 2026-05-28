@@ -2,15 +2,21 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Library, BarChart3, GraduationCap } from 'lucide-react';
+import { ArrowLeft, Library, BarChart3, GraduationCap, Lightbulb, MessageCircle, Hash } from 'lucide-react';
 import { ThemesSection } from '@/components/vocabulary/ThemesSection';
 import { LevelsSection } from '@/components/vocabulary/LevelsSection';
 import { YonseiSection } from '@/components/vocabulary/YonseiSection';
+import { KnowledgeSection } from '@/components/vocabulary/KnowledgeSection';
+import { ExpressionsSection } from '@/components/vocabulary/ExpressionsSection';
+import { ScenesSection } from '@/components/vocabulary/ScenesSection';
 
 const tabs = [
   { key: 'themes', label: '主题词包', icon: Library },
   { key: 'levels', label: '分级词表', icon: BarChart3 },
   { key: 'yonsei', label: '延世教材', icon: GraduationCap },
+  { key: 'knowledge', label: '知识分类', icon: Lightbulb },
+  { key: 'expressions', label: '活用表达', icon: MessageCircle },
+  { key: 'scenes', label: '情景词典', icon: Hash },
 ] as const;
 
 type TabKey = (typeof tabs)[number]['key'];
@@ -61,6 +67,9 @@ export default function LibraryPage() {
         {tab === 'themes' && <ThemesSection />}
         {tab === 'levels' && <LevelsSection />}
         {tab === 'yonsei' && <YonseiSection />}
+        {tab === 'knowledge' && <KnowledgeSection />}
+        {tab === 'expressions' && <ExpressionsSection />}
+        {tab === 'scenes' && <ScenesSection />}
       </div>
     </div>
   );
