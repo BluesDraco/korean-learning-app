@@ -1,57 +1,141 @@
-let audioEl: HTMLAudioElement | null = null;
+let audioCtx: AudioContext | null = null;
 
-const TTS_BASE = 'https://fanyi.sogou.com/reventondc/tts';
+function getCtx(): AudioContext {
+  if (!audioCtx) audioCtx = new AudioContext();
+  return audioCtx;
+}
 
-export function speak(text: string, rate: number = 1.0) {
+export async function speak(text: string, rate: number = 1.0) {
   if (typeof window === 'undefined') return;
   if (!text) return;
 
-  if (audioEl) {
-    audioEl.pause();
-    audioEl = null;
+  try {
+    await speakViaEdge(text, rate);
+  } catch {
+    try {
+      await speakViaBaidu(text, rate);
+    } catch {
+      fallbackSpeak(text, rate);
+    }
   }
-
-  const url = `${TTS_BASE}?text=${encodeURIComponent(text)}&lang=ko-KR`;
-  const audio = new Audio(url);
-  audioEl = audio;
-  audio.playbackRate = rate;
-
-  audio.play().catch(() => {
-    fallbackViaApi(text, rate);
-  });
-
-  audio.onended = () => { audioEl = null; };
-  audio.onerror = () => {
-    audioEl = null;
-    fallbackViaApi(text, rate);
-  };
 }
 
-async function fallbackViaApi(text: string, rate: number) {
-  try {
-    const res = await fetch('/api/tts', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text, rate: String(rate) }),
-    });
-    if (!res.ok) throw new Error('API failed');
-    const blob = await res.blob();
-    const url = URL.createObjectURL(blob);
-    const audio = new Audio(url);
-    audioEl = audio;
-    audio.playbackRate = rate;
-    audio.play();
-    audio.onended = () => { URL.revokeObjectURL(url); audioEl = null; };
-  } catch {
-    window.speechSynthesis.cancel();
-    const voices = window.speechSynthesis.getVoices();
-    const koVoice = voices.find((v) => v.lang.startsWith('ko')) || null;
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'ko-KR';
-    u.rate = rate;
-    u.pitch = 1;
-    u.volume = 1;
-    if (koVoice) u.voice = koVoice;
-    window.speechSynthesis.speak(u);
+async function speakViaEdge(text: string, rate: number) {
+  // Edge TTS requires rate as percentage, e.g. "+0%", "-30%", "+50%"
+  const pct = Math.round((rate - 1) * 100);
+  const rateStr = pct >= 0 ? `+${pct}%` : `${pct}%`;
+  const ssml = `<speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" version="1.0" xml:lang="ko-KR">
+    <voice name="ko-KR-SunHiNeural">
+      <prosody rate="${rateStr}" pitch="0%">
+        ${escXml(text)}
+      </prosody>
+    </voice>
+  </speak>`;
+
+  const ws = new WebSocket(
+    'wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud?TrustedClientToken=6A5AA1D4EAFF4E9FB37E23D68491D6F4'
+  );
+
+  const ctx = getCtx();
+  const chunks: Uint8Array[] = [];
+
+  await new Promise<void>((resolve, reject) => {
+    const timer = setTimeout(() => { ws.close(); reject(new Error('timeout')); }, 12000);
+
+    ws.onopen = () => {
+      const cfg = [
+        `X-RequestId:${crypto.randomUUID()}`,
+        'Content-Type:application/ssml+xml',
+        `X-Timestamp:${new Date().toISOString()}`,
+        'Path:ssml',
+        'X-OutputFormat:raw-24khz-16bit-mono-pcm',
+      ].join('\r\n');
+      ws.send(cfg);
+      ws.send(ssml);
+    };
+
+    ws.onmessage = (evt) => {
+      if (typeof evt.data === 'string') {
+        if (evt.data.includes('turn.end')) {
+          clearTimeout(timer);
+          ws.close();
+          playPcm24k(ctx, chunks);
+          resolve();
+        }
+      } else if (evt.data instanceof ArrayBuffer) {
+        const raw = new Uint8Array(evt.data);
+        const marker = new TextEncoder().encode('Path:audio\r\n');
+        const idx = indexOfBytes(raw, marker);
+        if (idx >= 0) {
+          chunks.push(raw.slice(idx + marker.length));
+        }
+      }
+    };
+
+    ws.onerror = () => { clearTimeout(timer); ws.close(); reject(new Error('Edge unreachable')); };
+    ws.onclose = () => { clearTimeout(timer); if (chunks.length === 0) reject(new Error('no data')); };
+  });
+}
+
+function playPcm24k(ctx: AudioContext, chunks: Uint8Array[]) {
+  const totalLen = chunks.reduce((s, c) => s + c.length, 0);
+  const buf = new ArrayBuffer(totalLen);
+  const view = new Uint8Array(buf);
+  let off = 0;
+  for (const c of chunks) { view.set(c, off); off += c.length; }
+
+  // 16-bit signed PCM → 32-bit float
+  const samples = totalLen / 2;
+  const audioBuf = ctx.createBuffer(1, samples, 24000);
+  const chan = audioBuf.getChannelData(0);
+  const dv = new DataView(buf);
+  for (let i = 0; i < samples; i++) {
+    chan[i] = dv.getInt16(i * 2, true) / 32768;
   }
+
+  const src = ctx.createBufferSource();
+  src.buffer = audioBuf;
+  src.connect(ctx.destination);
+  src.start();
+}
+
+async function speakViaBaidu(text: string, rate: number) {
+  const res = await fetch('/api/tts', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text, rate: String(rate) }),
+  });
+  if (!res.ok) throw new Error('Baidu failed');
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  const audio = new Audio(url);
+  audio.play();
+  audio.onended = () => URL.revokeObjectURL(url);
+}
+
+function fallbackSpeak(text: string, rate: number) {
+  window.speechSynthesis.cancel();
+  const voices = window.speechSynthesis.getVoices();
+  const koVoice = voices.find((v) => v.lang.startsWith('ko')) || null;
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'ko-KR';
+  u.rate = rate;
+  u.pitch = 1;
+  u.volume = 1;
+  if (koVoice) u.voice = koVoice;
+  window.speechSynthesis.speak(u);
+}
+
+function escXml(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function indexOfBytes(haystack: Uint8Array, needle: Uint8Array): number {
+  outer: for (let i = 0; i <= haystack.length - needle.length; i++) {
+    for (let j = 0; j < needle.length; j++) {
+      if (haystack[i + j] !== needle[j]) continue outer;
+    }
+    return i;
+  }
+  return -1;
 }

@@ -84,6 +84,7 @@ export default function DictationPage() {
   const [inputMode, setInputMode] = useState<InputMode>('type');
   const [dailyState, setDailyState] = useState<DailyState | null>(null);
   const [dailyDone, setDailyDone] = useState(false);
+  const [speed, setSpeed] = useState(1.0);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Load word dictation data
@@ -235,7 +236,7 @@ export default function DictationPage() {
   useEffect(() => {
     if (!submitted && !loading && currentItem && mode !== 'sentence') {
       const text = isWord(currentItem) ? currentItem.korean : (currentItem as DictationSentence).korean;
-      speak(text);
+      speak(text, speed);
       setHasListened(true);
     }
   }, [currentIdx, mode, submitted, loading]);
@@ -397,7 +398,7 @@ export default function DictationPage() {
       <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 text-center space-y-5">
         {/* Play button */}
         <button
-          onClick={() => { speak(currentKorean, mode === 'sentence' ? 0.65 : 0.75); setHasListened(true); }}
+          onClick={() => { speak(currentKorean, speed); setHasListened(true); }}
           className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto transition-all ${
             hasListened ? 'bg-[var(--mint-soft)]/10 hover:bg-[var(--mint-soft)]/20' : 'bg-[var(--pink-primary)]/10 hover:bg-[var(--pink-primary)]/20'
           }`}
@@ -408,6 +409,20 @@ export default function DictationPage() {
         <p className="text-sm text-[var(--text-muted)]">
           {hasListened ? '点击可重复播放' : '👆 点击按钮听发音'} · 输入你听到的内容
         </p>
+
+        {/* Speed slider */}
+        <div className="flex items-center gap-3 max-w-[240px] mx-auto">
+          <span className="text-xs text-[var(--text-muted)] shrink-0">0.5x</span>
+          <input
+            type="range" min="0.5" max="1.0" step="0.1" value={speed}
+            onChange={(e) => setSpeed(parseFloat(e.target.value))}
+            className="flex-1 h-1.5 rounded-full appearance-none bg-[var(--bg-input)] cursor-pointer
+              [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4
+              [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[var(--pink-primary)]"
+          />
+          <span className="text-xs text-[var(--text-muted)] shrink-0">1x</span>
+          <span className="text-xs font-medium text-[var(--pink-primary)] w-9 text-right">{speed.toFixed(1)}x</span>
+        </div>
 
         {/* Hint: meaning shown in sentence mode or after submission */}
         {mode === 'sentence' && (

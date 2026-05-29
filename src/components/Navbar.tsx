@@ -10,7 +10,7 @@ import {
   RefreshCw, Pencil, Mic, Keyboard, PenLine, BarChart3,
   Library, Film,
   Palette, MapPin, UtensilsCrossed,
-  MessageSquare, Lightbulb, Search, Sparkles,
+  MessageSquare, Search, Sparkles,
   ChevronRight, X, Sun, Moon, Shield, Mail, Music, Radio,
 } from 'lucide-react';
 import { useTheme } from '@/components/ThemeProvider';
@@ -77,7 +77,6 @@ const navGroups: NavGroup[] = [
       { label: 'AI 总览', ko: 'AI 개요', href: '/ai', icon: Sparkles },
       { label: 'AI 对话', ko: 'AI 대화', href: '/ai/chat', icon: MessageSquare },
       { label: '语音对话', ko: '음성 대화', href: '/ai/voice', icon: Mic },
-      { label: '学习方案', ko: '학습 계획', href: '/ai/plan', icon: Lightbulb },
     ],
   },
 ];

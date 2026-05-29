@@ -23,15 +23,6 @@ const features = [
     status: '可用',
     statusColor: 'bg-[var(--mint-soft)]/15 text-[var(--mint-soft)]',
   },
-  {
-    icon: Lightbulb,
-    title: '智能学习方案',
-    description: '根据你当前的词汇掌握情况和学习进度，生成个性化学习路径',
-    href: '/ai/plan',
-    color: 'var(--peach-soft)',
-    status: '可用',
-    statusColor: 'bg-[var(--mint-soft)]/15 text-[var(--mint-soft)]',
-  },
 ];
 
 const upcomingFeatures = [
