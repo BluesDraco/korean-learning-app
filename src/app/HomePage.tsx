@@ -65,46 +65,49 @@ export default function Home() {
   };
 
   const load = useCallback(async () => {
-    const now = Date.now();
-    const todayStart = new Date().setHours(0, 0, 0, 0);
+    try {
+      const now = Date.now();
+      const todayStart = new Date().setHours(0, 0, 0, 0);
 
-    const [allWords, profileData, tLog, wStreak] = await Promise.all([
-      db.words.toArray(),
-      getProfile(),
-      getTodayLog(),
-      getWeekStreak(),
-    ]);
+      const [allWords, profileData, tLog, wStreak] = await Promise.all([
+        db.words.toArray(),
+        getProfile(),
+        getTodayLog(),
+        getWeekStreak(),
+      ]);
 
-    // Load progress
-    const [progressData, tasksData] = await Promise.all([
-      getProgress(),
-      getTodayTasks(),
-    ]);
-    setProgress(progressData);
-    setTasks(tasksData);
+      const [progressData, tasksData] = await Promise.all([
+        getProgress(),
+        getTodayTasks(),
+      ]);
+      setProgress(progressData);
+      setTasks(tasksData);
 
-    const dueCount = allWords.filter((w) => w.nextReview <= now).length;
-    const learningCount = allWords.filter((w) => w.mastery === 'learning' || w.mastery === 'reviewing').length;
-    const masteredCount = allWords.filter((w) => w.mastery === 'mastered').length;
-    const todayNew = allWords.filter((w) => w.createdAt >= todayStart).length;
+      const dueCount = allWords.filter((w) => w.nextReview <= now).length;
+      const learningCount = allWords.filter((w) => w.mastery === 'learning' || w.mastery === 'reviewing').length;
+      const masteredCount = allWords.filter((w) => w.mastery === 'mastered').length;
+      const todayNew = allWords.filter((w) => w.createdAt >= todayStart).length;
 
-    setStats({ dueCount, learningCount, masteredCount, todayNew });
+      setStats({ dueCount, learningCount, masteredCount, todayNew });
 
-    // Check if user is returning after a break
-    const yesterdayStart = new Date().setHours(0, 0, 0, 0) - 86400000;
-    if (profileData.lastStudyDate > 0 && profileData.lastStudyDate < yesterdayStart && profileData.longestStreak >= 3) {
-      const daysAway = Math.floor((yesterdayStart - profileData.lastStudyDate) / 86400000) + 1;
-      setReturnDays(daysAway);
-      setShowReturnMsg(true);
+      const yesterdayStart = new Date().setHours(0, 0, 0, 0) - 86400000;
+      if (profileData.lastStudyDate > 0 && profileData.lastStudyDate < yesterdayStart && profileData.longestStreak >= 3) {
+        const daysAway = Math.floor((yesterdayStart - profileData.lastStudyDate) / 86400000) + 1;
+        setReturnDays(daysAway);
+        setShowReturnMsg(true);
+      }
+
+      const recent = await db.words.orderBy('createdAt').reverse().limit(5).toArray();
+      setRecentWords(recent);
+      setProfile(profileData);
+      setTodayLog(tLog);
+      setWeekStreak(wStreak);
+      setShowOnboarding(!profileData.onboardingComplete);
+    } catch {
+      // Not logged in or error — show empty state
+    } finally {
+      setLoading(false);
     }
-
-    const recent = await db.words.orderBy('createdAt').reverse().limit(5).toArray();
-    setRecentWords(recent);
-    setProfile(profileData);
-    setTodayLog(tLog);
-    setWeekStreak(wStreak);
-    setShowOnboarding(!profileData.onboardingComplete);
-    setLoading(false);
   }, []);
 
   useEffect(() => { load(); }, [load]);
