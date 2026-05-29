@@ -512,13 +512,18 @@ html[data-font="classic"] .ko-body {
   content: '🌸';
   position: fixed;
   top: 60px;
-  left: 240px;
+  left: 70px;
   font-size: 24px;
   z-index: 1;
   opacity: 0.35;
   animation: float 3.5s ease-in-out 0.5s infinite;
   pointer-events: none;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.06));
+}
+@media (min-width: 1024px) {
+  .page-corner-bunny::before {
+    left: 240px;
+  }
 }
 [data-theme="dark"] .page-corner-bunny::after {
   content: '🐱';
@@ -1105,6 +1110,10 @@ html[data-font="classic"] .ko-body {
   }
   .page-corner-bunny::before {
     display: none;
+  }
+  /* Prevent horizontal overflow on mobile */
+  .page-container {
+    overflow-x: hidden;
   }
 }
 

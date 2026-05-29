@@ -27,7 +27,7 @@ export function FeedbackButton() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="fixed right-4 bottom-20 z-50 w-11 h-11 rounded-full bg-white/90 backdrop-blur-sm border border-[var(--border-color)] shadow-lg flex items-center justify-center hover:shadow-xl hover:border-[var(--pink-primary)]/40 transition-all text-[var(--text-muted)] hover:text-[var(--pink-primary)]"
+        className="fixed right-4 bottom-24 md:bottom-20 z-50 w-11 h-11 rounded-full bg-white/90 backdrop-blur-sm border border-[var(--border-color)] shadow-lg flex items-center justify-center hover:shadow-xl hover:border-[var(--pink-primary)]/40 transition-all text-[var(--text-muted)] hover:text-[var(--pink-primary)]"
         title="报告错误"
       >
         <MessageSquare size={18} />

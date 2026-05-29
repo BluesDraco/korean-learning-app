@@ -9,6 +9,7 @@ import {
 import { db } from '@/lib/db';
 import { getProfile, getTodayLog, getWeekStreak, updateStreak } from '@/lib/gamification';
 import { getProgress, getTodayTasks } from '@/lib/progress';
+import { useAuth } from '@/components/AuthProvider';
 import Onboarding from '@/components/Onboarding';
 import type { Word, UserProfile, DailyLog } from '@/types';
 
@@ -54,6 +55,7 @@ export default function Home() {
   const [returnDays, setReturnDays] = useState(0);
   const [progress, setProgress] = useState<ProgressData | null>(null);
   const [tasks, setTasks] = useState<TodayTasks | null>(null);
+  const { user } = useAuth();
 
   const handleBunnyClick = () => {
     const next = bunnyClicks + 1;
@@ -110,7 +112,7 @@ export default function Home() {
     }
   }, []);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { load(); }, [load, user]);
 
   const handleOnboardingComplete = () => {
     setShowOnboarding(false);

@@ -8,55 +8,39 @@ const JWT_SECRET = (() => {
   return new TextEncoder().encode(secret);
 })();
 
-const PUBLIC_PATHS = [
+// Only auth pages are accessible without login
+const AUTH_PATHS = [
   '/auth/login',
   '/auth/register',
   '/api/auth/login',
   '/api/auth/register',
-  '/api/track',
 ];
 
-const PUBLIC_PAGE_PATHS = [
-  '/',
-  '/learn',
-  '/phonetics',
-  '/grammar',
-  '/korea',
-  '/vocabulary',
-  '/dictionary',
-  '/reading',
-  '/expressions',
-  '/buddy',
-  '/ai',
-  '/review',
-  '/dictation',
-  '/shadowing',
-  '/typing',
-  '/writing',
-  '/topik',
-  '/stats',
-  '/knowledge',
-  '/achievement',
-];
-
-function isPublic(pathname: string): boolean {
-  if (PUBLIC_PATHS.some((p) => pathname.startsWith(p))) return true;
-  if (PUBLIC_PAGE_PATHS.some((p) => pathname === p || pathname.startsWith(p + '/'))) return true;
-  return false;
+function isAuthPath(pathname: string): boolean {
+  return AUTH_PATHS.some((p) => pathname === p || pathname.startsWith(p + '?'));
 }
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Static assets, API routes except auth
-  if (pathname.startsWith('/_next') || pathname.startsWith('/images') || pathname.startsWith('/favicon.ico') || pathname === '/sw.js' || pathname === '/manifest.json') {
+  // Always allow static assets
+  if (
+    pathname.startsWith('/_next') ||
+    pathname.startsWith('/images') ||
+    pathname.startsWith('/favicon.ico') ||
+    pathname === '/sw.js' ||
+    pathname === '/manifest.json'
+  ) {
     return NextResponse.next();
   }
+
+  // Allow non-auth APIs to pass through (they handle auth internally via getAuthFromCookie)
   if (pathname.startsWith('/api/') && !pathname.startsWith('/api/auth')) {
     return NextResponse.next();
   }
 
-  if (isPublic(pathname)) {
+  // Auth pages: redirect logged-in users away, let others through
+  if (isAuthPath(pathname)) {
     const token = request.cookies.get('token')?.value;
     if (token) {
       try {
@@ -67,14 +51,20 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // All other pages: require login
   const token = request.cookies.get('token')?.value;
   if (!token) {
-    return NextResponse.redirect(new URL('/auth/login', request.url));
+    const loginUrl = new URL('/auth/login', request.url);
+    if (pathname !== '/') {
+      loginUrl.searchParams.set('redirect', pathname);
+    }
+    return NextResponse.redirect(loginUrl);
   }
 
   try {
     const { payload } = await jose.jwtVerify(token, JWT_SECRET);
 
+    // Admin routes: require admin role
     if (pathname.startsWith('/admin') && payload.role !== 'admin') {
       return NextResponse.redirect(new URL('/', request.url));
     }

@@ -123,7 +123,7 @@ export function Navbar() {
   return (
     <>
       {/* Desktop sidebar — retro journal binder */}
-      <nav className="hidden md:flex fixed left-0 top-0 bottom-0 w-52 bg-[var(--bg-card)] border-r border-[var(--border-color)] flex-col z-50 shadow-sm"
+      <nav className="hidden md:flex fixed left-0 top-0 bottom-0 md:w-14 lg:w-52 bg-[var(--bg-card)] border-r border-[var(--border-color)] flex-col z-50 shadow-sm transition-[width] duration-200"
         style={{
           borderImage: 'repeating-linear-gradient(180deg, var(--pink-pale, #FFD6E0) 0px, var(--pink-pale, #FFD6E0) 2px, transparent 2px, transparent 8px) 1',
           borderRightWidth: '3px',
@@ -133,12 +133,12 @@ export function Navbar() {
         {/* Logo */}
         <Link
           href="/"
-          className="flex items-center gap-1.5 px-4 py-4"
+          className="flex items-center gap-1.5 md:justify-center lg:justify-start md:px-2 lg:px-4 py-4"
           onClick={() => setExpandedGroup(null)}
         >
-          <img src="/images/tori-poses/tori-pose-01.png" alt="Tori" className="w-8 h-8 object-contain" />
+          <img src="/images/tori-poses/tori-pose-01.png" alt="Tori" className="w-8 h-8 object-contain shrink-0" />
           <span
-            className="text-xl font-bold bg-gradient-to-r from-[var(--pink-primary)] to-[var(--purple-soft)] bg-clip-text text-transparent"
+            className="hidden lg:inline text-xl font-bold bg-gradient-to-r from-[var(--pink-primary)] to-[var(--purple-soft)] bg-clip-text text-transparent"
             style={{ fontFamily: "'KaiTi', 'STKaiti', cursive" }}
           >
             한국어
@@ -146,7 +146,7 @@ export function Navbar() {
         </Link>
 
         {/* Nav groups */}
-        <div className="flex-1 px-3 space-y-1 overflow-y-auto">
+        <div className="flex-1 px-1.5 lg:px-3 space-y-1 overflow-y-auto">
           {navGroups.map((group, i) => {
             const Icon = group.icon;
             const isExpanded = expandedGroup === i;
@@ -159,49 +159,76 @@ export function Navbar() {
                 {/* Group header */}
                 <button
                   onClick={() => handleGroupClick(group, i)}
-                  className={`w-full flex items-center gap-2 px-2.5 py-2 rounded-xl text-sm font-medium transition-all ${
+                  title={`${group.label} ${group.ko}`}
+                  className={`w-full flex items-center gap-2 md:justify-center lg:justify-start md:px-1.5 lg:px-2.5 py-2 rounded-xl text-sm font-medium transition-all ${
                     isGroupActive || isExpanded
                       ? 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)]'
                       : 'text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)] hover:text-[var(--text-primary)]'
                   }`}
                 >
                   <Icon size={20} />
-                  <div className="flex-1 text-left min-w-0">
+                  <div className="hidden lg:flex flex-1 text-left min-w-0">
                     <span className="whitespace-nowrap">{group.label}<span className="text-[11px] text-[var(--text-muted)] ml-1">{group.ko}</span></span>
                   </div>
                   {group.children.length > 0 && (
                     <ChevronRight
                       size={14}
-                      className={`transition-transform ${isExpanded ? 'rotate-90' : ''}`}
+                      className={`hidden lg:block transition-transform ${isExpanded ? 'rotate-90' : ''}`}
                     />
                   )}
                 </button>
 
-                {/* Children */}
+                {/* Children — inline on desktop, popover on tablet */}
                 {isExpanded && group.children.length > 0 && (
-                  <div className="ml-7 mt-1 space-y-0.5">
-                    {group.children.map((child, j) => {
-                      const ChildIcon = child.icon;
-                      const isActive = pathname.startsWith(child.href) &&
-                        (child.href !== '/' || pathname === '/');
-                      return (
-                        <Link
-                          key={j}
-                          href={child.href}
-                          onClick={() => setExpandedGroup(i)}
-                          className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-sm transition-all ${
-                            isActive
-                              ? 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] font-medium'
-                              : 'text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)] hover:text-[var(--text-primary)]'
-                          }`}
-                        >
-                          <ChildIcon size={15} className="shrink-0" />
-                          <div className="min-w-0">
-                            <span className="whitespace-nowrap">{child.label}<span className="text-[11px] text-[var(--text-muted)] ml-1">{child.ko}</span></span>
-                          </div>
-                        </Link>
-                      );
-                    })}
+                  <div className="lg:ml-7 mt-1 space-y-0.5 lg:relative">
+                    {/* On tablet: popover card */}
+                    <div className="lg:hidden fixed left-[56px] z-50 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl shadow-xl p-2 space-y-0.5 min-w-[180px] animate-fade-in">
+                      {group.children.map((child, j) => {
+                        const ChildIcon = child.icon;
+                        const isActive = pathname.startsWith(child.href) &&
+                          (child.href !== '/' || pathname === '/');
+                        return (
+                          <Link
+                            key={j}
+                            href={child.href}
+                            onClick={() => setExpandedGroup(i)}
+                            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
+                              isActive
+                                ? 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] font-medium'
+                                : 'text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)] hover:text-[var(--text-primary)]'
+                            }`}
+                          >
+                            <ChildIcon size={15} className="shrink-0" />
+                            <span>{child.label}</span>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                    {/* On desktop: inline */}
+                    <div className="hidden lg:block">
+                      {group.children.map((child, j) => {
+                        const ChildIcon = child.icon;
+                        const isActive = pathname.startsWith(child.href) &&
+                          (child.href !== '/' || pathname === '/');
+                        return (
+                          <Link
+                            key={j}
+                            href={child.href}
+                            onClick={() => setExpandedGroup(i)}
+                            className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-sm transition-all ${
+                              isActive
+                                ? 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] font-medium'
+                                : 'text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)] hover:text-[var(--text-primary)]'
+                            }`}
+                          >
+                            <ChildIcon size={15} className="shrink-0" />
+                            <div className="min-w-0">
+                              <span className="whitespace-nowrap">{child.label}<span className="text-[11px] text-[var(--text-muted)] ml-1">{child.ko}</span></span>
+                            </div>
+                          </Link>
+                        );
+                      })}
+                    </div>
                   </div>
                 )}
               </div>
@@ -210,19 +237,20 @@ export function Navbar() {
         </div>
 
         {/* Bottom: messages + theme toggle + mascot */}
-        <div className="px-3 py-3 border-t border-[var(--border-default)] space-y-2.5">
+        <div className="px-1.5 lg:px-3 py-3 border-t border-[var(--border-default)] space-y-2.5">
           {user && (
             <Link
               href="/messages"
-              className="w-full flex items-center gap-2 text-xs text-[var(--text-secondary)] hover:text-[var(--pink-primary)] transition-colors px-2 py-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] relative"
+              title="我的私信"
+              className="w-full flex items-center justify-center lg:justify-start gap-2 text-xs text-[var(--text-secondary)] hover:text-[var(--pink-primary)] transition-colors md:px-1 lg:px-2 py-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] relative"
             >
               <span className="relative">
                 <img src="/images/tori-poses/tori-pose-01.png" alt="Tori" className="w-6 h-6 object-contain" />
                 <span className="absolute -top-0.5 -right-1.5 text-sm">✉️</span>
               </span>
-              <span>我的私信</span>
+              <span className="hidden lg:inline">我的私信</span>
               {unreadCount > 0 && (
-                <span className="ml-auto bg-[var(--pink-primary)] text-white text-[11px] font-bold min-w-[18px] h-[18px] rounded-full flex items-center justify-center px-1">
+                <span className="hidden lg:flex ml-auto bg-[var(--pink-primary)] text-white text-[11px] font-bold min-w-[18px] h-[18px] rounded-full items-center justify-center px-1">
                   {unreadCount > 99 ? '99+' : unreadCount}
                 </span>
               )}
@@ -230,56 +258,62 @@ export function Navbar() {
           )}
           <button
             onClick={toggle}
-            className="w-full flex items-center gap-2 text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors px-2 py-1.5 rounded-lg hover:bg-[var(--bg-card-hover)]"
+            className="w-full flex items-center justify-center lg:justify-start gap-2 text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors md:px-1 lg:px-2 py-1.5 rounded-lg hover:bg-[var(--bg-card-hover)]"
             title={theme === 'light' ? '切换深色模式' : '切换亮色模式'}
           >
             {theme === 'light' ? <Moon size={14} /> : <Sun size={14} />}
-            <span>{theme === 'light' ? '深色模式' : '亮色模式'}</span>
+            <span className="hidden lg:inline">{theme === 'light' ? '深色模式' : '亮色模式'}</span>
           </button>
           {user ? (
             <div className="space-y-1.5">
               {user.role === 'admin' && (
                 <Link
                   href="/admin"
-                  className="flex items-center gap-2 text-xs text-[var(--text-secondary)] hover:text-[var(--pink-primary)] transition-colors px-2 py-1.5 rounded-lg hover:bg-[var(--pink-primary)]/5"
+                  title="管理后台"
+                  className="flex items-center justify-center lg:justify-start gap-2 text-xs text-[var(--text-secondary)] hover:text-[var(--pink-primary)] transition-colors md:px-1 lg:px-2 py-1.5 rounded-lg hover:bg-[var(--pink-primary)]/5"
                 >
                   <Shield size={14} />
-                  <span>管理后台</span>
+                  <span className="hidden lg:inline">管理后台</span>
                 </Link>
               )}
               <Link
                 href="/settings"
-                className="flex items-center gap-2 bg-[var(--bg-soft)] rounded-xl px-3 py-2.5 hover:bg-[var(--bg-accent)] transition-colors cursor-pointer"
+                title="设置"
+                className="flex items-center justify-center lg:justify-start gap-2 bg-[var(--bg-soft)] rounded-xl md:px-2 lg:px-3 py-2.5 hover:bg-[var(--bg-accent)] transition-colors cursor-pointer"
               >
                 <div className="relative">
                   <img src="/images/tori-poses/tori-pose-01.png" alt="Tori" className="w-7 h-7 object-contain" />
                   <span className="status-dot learning absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5" />
                 </div>
-                <div className="flex flex-col flex-1 min-w-0">
+                <div className="hidden lg:flex flex-col flex-1 min-w-0">
                   <span className="text-xs font-medium text-[var(--text-primary)] truncate">{user.nickname || user.username}</span>
                   <span className="text-[13px] text-[var(--text-muted)]">设置</span>
                 </div>
               </Link>
               <button
                 onClick={() => logout()}
-                className="w-full text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors px-2 py-1"
+                title="退出登录"
+                className="w-full text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors md:px-1 lg:px-2 py-1"
               >
-                退出登录
+                <span className="hidden lg:inline">退出登录</span>
+                <span className="lg:hidden">退出</span>
               </button>
             </div>
           ) : (
             <div className="space-y-1">
               <Link
                 href="/auth/login"
-                className="flex items-center gap-2 text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors px-2 py-1.5"
+                title="登录"
+                className="flex items-center justify-center lg:justify-start gap-2 text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors md:px-1 lg:px-2 py-1.5"
               >
-                登录
+                <span className="hidden lg:inline">登录</span>
               </Link>
               <Link
                 href="/auth/register"
-                className="flex items-center gap-2 text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors px-2 py-1.5"
+                title="注册"
+                className="flex items-center justify-center lg:justify-start gap-2 text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors md:px-1 lg:px-2 py-1.5"
               >
-                注册
+                <span className="hidden lg:inline">注册</span>
               </Link>
             </div>
           )}
@@ -384,8 +418,8 @@ export function Navbar() {
         </div>
       )}
 
-      {/* Spacer for desktop sidebar */}
-      <div className="hidden md:block w-52 shrink-0" />
+      {/* Spacer for desktop sidebar — matches sidebar width */}
+      <div className="hidden md:block md:w-14 lg:w-52 shrink-0 transition-[width] duration-200" />
     </>
   );
 }
