@@ -29,7 +29,7 @@ export const pictureBooks: PictureBook[] = [
     emoji: '🐰',
     level: 'beginner',
     description: '跟Tori一起学习韩语，从一封神秘信件开始。适合零基础学习者。',
-    coverImage: '/images/picture-books/tori-day/封面.png',
+    coverImage: '/images/picture-books/tori-day/cover.png',
     color: 'var(--pink-primary)',
     pages: [
       {
@@ -202,7 +202,7 @@ export const pictureBooks: PictureBook[] = [
     emoji: '🏪',
     level: 'beginner',
     description: 'Tori第一次走进韩国便利店！认识价格、点单、品尝韩国零食，学习实用的便利店韩语。',
-    coverImage: '/images/picture-books/tori-store/封面.png',
+    coverImage: '/images/picture-books/tori-store/cover.png',
     color: 'var(--mint-soft)',
     pages: [
       {
@@ -315,7 +315,7 @@ export const pictureBooks: PictureBook[] = [
     emoji: '☕',
     level: 'beginner',
     description: 'Tori第一次走进韩国咖啡厅！学习点单、报名字、等取餐，掌握咖啡厅必备韩语。',
-    coverImage: '/images/picture-books/tori-3/封面.png',
+    coverImage: '/images/picture-books/tori-3/cover.png',
     color: 'var(--pink-primary)',
     pages: [
       {
@@ -428,7 +428,7 @@ export const pictureBooks: PictureBook[] = [
     emoji: '🚇',
     level: 'beginner',
     description: 'Tori第一次独自坐地铁去弘大！学习交通卡、换乘、问路，掌握地铁必备韩语。',
-    coverImage: '/images/picture-books/tori-4/封面.png',
+    coverImage: '/images/picture-books/tori-4/cover.png',
     color: 'var(--purple-soft)',
     pages: [
       {
@@ -540,7 +540,7 @@ export const pictureBooks: PictureBook[] = [
     emoji: '🍚',
     level: 'beginner',
     description: 'Tori第一次走进韩餐厅！从入座、点单、要求少辣、到结账离开，掌握餐厅必备韩语对话。',
-    coverImage: '/images/picture-books/tori-5/封面.png',
+    coverImage: '/images/picture-books/tori-5/cover.png',
     color: 'var(--mint-soft)',
     pages: [
       {
@@ -653,7 +653,7 @@ export const pictureBooks: PictureBook[] = [
     emoji: '📺',
     level: 'beginner',
     description: 'Tori第一次看韩剧学韩语！跟着剧情学习진짜、대박、어떡해等地道韩语口语表达。',
-    coverImage: '/images/picture-books/tori-6/封面.png',
+    coverImage: '/images/picture-books/tori-6/cover.png',
     color: 'var(--pink-primary)',
     pages: [
       {

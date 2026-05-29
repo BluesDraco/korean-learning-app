@@ -120,12 +120,25 @@ function toSnakeObj(obj: Record<string, unknown>): Record<string, unknown> {
   return out;
 }
 
+function normalizeSqlValue(value: unknown): unknown {
+  if (value === undefined) return null;
+  if (typeof value === 'boolean') return value ? 1 : 0;
+  if (Array.isArray(value) || (value !== null && typeof value === 'object')) {
+    return JSON.stringify(value);
+  }
+  return value;
+}
+
+function normalizeSqlValues(values: unknown[]): unknown[] {
+  return values.map(normalizeSqlValue);
+}
+
 function rowToObj(cols: string[], row: unknown[]): Record<string, unknown> {
   const obj: Record<string, unknown> = {};
   for (let i = 0; i < cols.length; i++) {
     const camelKey = cols[i].replace(/_([a-z])/g, (_, c) => c.toUpperCase());
     let val = row[i];
-    if (['examples', 'word_ids', 'wordIds'].includes(cols[i]) || camelKey === 'wordIds' || camelKey === 'examples') {
+    if (['examples', 'word_ids', 'tokens', 'words_added'].includes(cols[i]) || ['examples', 'wordIds', 'tokens', 'wordsAdded'].includes(camelKey)) {
       try { val = JSON.parse(val as string); } catch { /* keep raw */ }
     }
     obj[camelKey] = val;
@@ -138,7 +151,7 @@ function buildUserClause(scope: UserScope, userId: string): { clause: string; pa
   if (!scope) return { clause: '', params: [] };
   if (Array.isArray(scope)) {
     return {
-      clause: `(${scope.map(() => '?').join(' OR ')})`,
+      clause: `(${scope.map((col) => `${col} = ?`).join(' OR ')})`,
       params: scope.map(() => userId),
     };
   }
@@ -206,7 +219,7 @@ export async function POST(req: Request) {
         validateColumns(snakeData, cols);
         const colNames = Object.keys(snakeData);
         const placeholders = colNames.map(() => '?');
-        const values = colNames.map((c) => snakeData[c]);
+        const values = normalizeSqlValues(colNames.map((c) => snakeData[c]));
         await db.run(
           `INSERT INTO ${info.table} (${colNames.join(', ')}) VALUES (${placeholders.join(', ')})`,
           values
@@ -238,7 +251,7 @@ export async function POST(req: Request) {
         validateColumns(snakeData, cols);
         const colNames = Object.keys(snakeData);
         const placeholders = colNames.map(() => '?');
-        const values = colNames.map((c) => snakeData[c]);
+        const values = normalizeSqlValues(colNames.map((c) => snakeData[c]));
         await db.run(
           `INSERT INTO ${info.table} (${colNames.join(', ')}) VALUES (${placeholders.join(', ')})`,
           values
@@ -262,7 +275,7 @@ export async function POST(req: Request) {
           return NextResponse.json({ ok: true });
         }
         const sets = Object.keys(snakeData).map((c) => `${c} = ?`);
-        const values = Object.keys(snakeData).map((c) => snakeData[c]);
+        const values = normalizeSqlValues(Object.keys(snakeData).map((c) => snakeData[c]));
         const u = buildUserClause(userScope, auth.userId);
         await db.run(
           `UPDATE ${info.table} SET ${sets.join(', ')} WHERE ${pk} = ?${u.clause ? ` AND ${u.clause}` : ''}`,
@@ -312,7 +325,11 @@ export async function POST(req: Request) {
           sql += ` WHERE ${conditions.join(' AND ')}`;
         }
         if (orderBy) {
-          sql += ` ORDER BY ${toSnake(orderBy)} ${reverse ? 'DESC' : 'ASC'}`;
+          const snOrderBy = toSnake(orderBy);
+          if (!cols.includes(snOrderBy)) {
+            return NextResponse.json({ error: `Unknown orderBy field: ${orderBy}` }, { status: 400 });
+          }
+          sql += ` ORDER BY ${snOrderBy} ${reverse ? 'DESC' : 'ASC'}`;
         }
         if (limit) {
           sql += ` LIMIT ?`;
@@ -333,7 +350,11 @@ export async function POST(req: Request) {
           params.push(...u.params);
         }
         if (orderBy) {
-          sql += ` ORDER BY ${toSnake(orderBy)} ${reverse ? 'DESC' : 'ASC'}`;
+          const snOrderBy = toSnake(orderBy);
+          if (!cols.includes(snOrderBy)) {
+            return NextResponse.json({ error: `Unknown orderBy field: ${orderBy}` }, { status: 400 });
+          }
+          sql += ` ORDER BY ${snOrderBy} ${reverse ? 'DESC' : 'ASC'}`;
         }
         if (limit) {
           sql += ` LIMIT ?`;
