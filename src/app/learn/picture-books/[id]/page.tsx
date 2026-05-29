@@ -6,16 +6,9 @@ import { useParams } from 'next/navigation';
 import { ArrowLeft, ChevronLeft, ChevronRight, Volume2 } from 'lucide-react';
 import { pictureBooks } from '@/data/pictureBooks';
 import type { PictureBookPage } from '@/data/pictureBooks';
+import { speak } from '@/lib/tts';
 
 const FLIP_DURATION = 600;
-
-function speakKorean(text: string) {
-  window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'ko-KR';
-  u.rate = 0.75;
-  window.speechSynthesis.speak(u);
-}
 
 /* ═══════════════════════════════════════════════════════
    Seeded random decorations
@@ -162,11 +155,7 @@ function VocabSummaryPanel({ page }: { page: PictureBookPage }) {
           <button
             onClick={() => {
               const words = page.vocab.map((v) => v.word).join(', ');
-              const u = new SpeechSynthesisUtterance(words);
-              u.lang = 'ko-KR';
-              u.rate = 0.7;
-              window.speechSynthesis.cancel();
-              window.speechSynthesis.speak(u);
+              speak(words, 0.7);
             }}
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/70 border border-[var(--border-color)] text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--pink-primary)] hover:border-[var(--pink-primary)]/30 transition-all"
           >
@@ -219,7 +208,7 @@ function TextPanel({ page, showChinese, onToggleChinese }: { page: PictureBookPa
                   {ko}
                 </p>
                 <button
-                  onClick={(e) => { e.stopPropagation(); speakKorean(ko); }}
+                  onClick={(e) => { e.stopPropagation(); speak(ko, 0.75); }}
                   className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center hover:bg-[var(--pink-primary)]/10 text-[var(--text-muted)] hover:text-[var(--pink-primary)] active:scale-90 transition-all"
                   title="朗读本句"
                 >

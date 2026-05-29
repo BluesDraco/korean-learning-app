@@ -43,6 +43,7 @@ function ReviewContent() {
   const videoId = searchParams.get('videoId');
 
   const [words, setWords] = useState<Word[]>([]);
+  const [allWords, setAllWords] = useState<Word[]>([]);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -84,6 +85,7 @@ function ReviewContent() {
     if (dueWords.length === 0) setComplete(true);
 
     const all = await db.words.toArray();
+    setAllWords(all);
     setAllMeanings(all.map((w) => w.meaning).filter(Boolean));
 
     const profile = await getProfile();
@@ -271,8 +273,8 @@ function ReviewContent() {
           </div>
 
           {(() => {
-            const healthScore = memoryHealthScore(words);
-            const atRisk = atRiskWords(words, 3);
+            const healthScore = memoryHealthScore(allWords);
+            const atRisk = atRiskWords(allWords, 3);
             return (
               <div className="bg-white/70 backdrop-blur-sm border border-[var(--border-default)] rounded-2xl p-4 space-y-3">
                 <div className="flex items-center gap-2">

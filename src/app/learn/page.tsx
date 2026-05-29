@@ -141,7 +141,8 @@ export default function LearnPage() {
       );
       questions.push({ type: 'grammar-form', question: '以下哪个是正确的接续方式？', options: opts2, correct: ci2 });
     } else {
-      questions.push({ type: 'grammar-form', question: grammar.conjugation ? `"${grammar.conjugation}" 属于哪种接续？` : '以下哪个是正确的韩语表达？', options: shuffle([...(otherG.slice(0, 3).map(g => g.pattern)), grammar.pattern]), correct: 3 });
+      const qOpts = shuffle([...(otherG.slice(0, 3).map(g => g.pattern)), grammar.pattern]);
+      questions.push({ type: 'grammar-form', question: grammar.conjugation ? `"${grammar.conjugation}" 属于哪种接续？` : '以下哪个是正确的韩语表达？', options: qOpts, correct: qOpts.indexOf(grammar.pattern) });
     }
 
     // Q13-15: 选正确拼写 (spelling, 3 questions) — show pronunciation, pick correct hangul

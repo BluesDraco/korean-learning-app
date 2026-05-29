@@ -10,6 +10,7 @@ type Mode = 'browse' | 'quiz';
 type MainTab = 'progressive' | 'alphabet' | 'rules';
 
 function speakKorean(text: string) {
+  window.speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = 'ko-KR';
   utterance.rate = 0.7;
