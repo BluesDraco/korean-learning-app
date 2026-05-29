@@ -7,8 +7,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Text too long or empty' }, { status: 400 });
     }
 
-    const spd = Math.round(parseFloat(rate) * 5);
-    const url = `https://fanyi.baidu.com/gettts?lan=kor&text=${encodeURIComponent(text)}&spd=${spd}&source=web`;
+    const url = `https://fanyi.sogou.com/reventondc/tts?text=${encodeURIComponent(text)}&lang=ko-KR`;
 
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 8000);
