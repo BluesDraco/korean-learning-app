@@ -11,7 +11,7 @@ import {
   Library, Film,
   Palette, MapPin, UtensilsCrossed,
   MessageSquare, Search, Sparkles,
-  ChevronRight, X, Sun, Moon, Shield, Mail, Music, Radio,
+  ChevronRight, X, Sun, Moon, Shield, Mail, Music, Radio, LogIn,
 } from 'lucide-react';
 import { useTheme } from '@/components/ThemeProvider';
 
@@ -313,7 +313,7 @@ export function Navbar() {
             </button>
           );
         })}
-        {user && (
+        {user ? (
           <Link
             href="/messages"
             className={`flex flex-col items-center gap-0.5 py-2 px-1.5 text-[13px] transition-colors relative ${
@@ -329,6 +329,16 @@ export function Navbar() {
               )}
             </span>
             私信
+          </Link>
+        ) : (
+          <Link
+            href="/auth/login"
+            className={`flex flex-col items-center gap-0.5 py-2 px-1.5 text-[13px] transition-colors ${
+              pathname.startsWith('/auth') ? 'text-[var(--pink-primary)]' : 'text-[var(--text-muted)]'
+            }`}
+          >
+            <LogIn size={22} />
+            登录
           </Link>
         )}
       </nav>
