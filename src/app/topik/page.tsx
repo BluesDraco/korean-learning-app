@@ -341,7 +341,7 @@ export default function TopikPage() {
                     <span className="w-6 h-6 rounded-full bg-[var(--bg-primary)] border border-[var(--border-color)] flex items-center justify-center text-xs font-bold text-[var(--text-secondary)]">
                       {String.fromCharCode(65 + i)}
                     </span>
-                    <span style={{ fontFamily: i === currentQ.correctIdx ? "'Nanum Gothic', sans-serif" : undefined }}>
+                    <span style={{ fontFamily: i === currentQ.correctIdx ? "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif" : undefined }}>
                       {opt}
                     </span>
                   </div>

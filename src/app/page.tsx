@@ -149,7 +149,7 @@ export default function Home() {
           onClick={handleBunnyClick}
           title="点我!"
         />
-        <span className="text-xl ml-1 font-extrabold text-[var(--text-primary)]" style={{ fontFamily: "'ZCOOL KuaiLe', 'Nunito', sans-serif" }}>韩语学习日记</span>
+        <span className="text-xl ml-1 font-extrabold text-[var(--text-primary)]" style={{ fontFamily: "'KaiTi', 'STKaiti', system-ui, sans-serif" }}>韩语学习日记</span>
         <span className="text-xs text-[var(--text-muted)] ml-2 bg-[var(--bg-input)] px-2.5 py-1 rounded-full">v0.1 测试版</span>
         {/* Sparkle decorations */}
         <span className="sparkle absolute -top-1 left-20" style={{ fontSize: '10px', animationDelay: '0s' }}>✨</span>

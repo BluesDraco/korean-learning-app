@@ -128,7 +128,7 @@ export default function GrammarPage() {
                 className="w-full flex items-start gap-3 p-4 text-left hover:bg-[var(--bg-card-hover)] transition-colors"
               >
                 <div className="w-9 h-9 rounded-xl bg-[var(--pink-primary)]/10 flex items-center justify-center shrink-0 mt-0.5">
-                  <span className="text-sm font-bold text-[var(--pink-primary)]" style={{ fontFamily: "'Nanum Gothic', sans-serif" }}>
+                  <span className="text-sm font-bold text-[var(--pink-primary)]" style={{ fontFamily: "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif" }}>
                     {entry.title[0]}
                   </span>
                 </div>

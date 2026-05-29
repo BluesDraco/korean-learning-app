@@ -252,7 +252,7 @@ export default function SettingsPage() {
                 <p className="text-[10px] text-[var(--text-muted)] leading-tight">{p.desc}</p>
                 <p
                   className="mt-1.5 text-[9px] text-[var(--text-muted)] truncate"
-                  style={{ fontFamily: p.key === 'cute' ? "'Nunito','LXGW WenKai',sans-serif" : p.key === 'clean' ? "system-ui,sans-serif" : "'LXGW WenKai','Nanum Gothic',serif" }}
+                  style={{ fontFamily: p.key === 'cute' ? "system-ui,'PingFang SC','Microsoft YaHei',sans-serif" : p.key === 'clean' ? "system-ui,sans-serif" : "'KaiTi','STKaiti','Malgun Gothic',serif" }}
                 >
                   {p.preview}
                 </p>

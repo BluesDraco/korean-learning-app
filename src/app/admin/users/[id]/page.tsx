@@ -60,7 +60,7 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
       {/* Header */}
       <div className="flex items-start justify-between flex-wrap gap-4">
         <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-full bg-[#FFF0F4] flex items-center justify-center text-2xl font-bold text-[#FF8FAB]" style={{ fontFamily: '"Nunito", sans-serif' }}>
+          <div className="w-14 h-14 rounded-full bg-[#FFF0F4] flex items-center justify-center text-2xl font-bold text-[#FF8FAB]" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
             {(data.nickname || data.username).charAt(0)}
           </div>
           <div>

@@ -139,7 +139,7 @@ export function Navbar() {
           <img src="/images/tori-poses/tori-pose-01.png" alt="Tori" className="w-8 h-8 object-contain" />
           <span
             className="text-xl font-bold bg-gradient-to-r from-[var(--pink-primary)] to-[var(--purple-soft)] bg-clip-text text-transparent"
-            style={{ fontFamily: "'ZCOOL KuaiLe', cursive" }}
+            style={{ fontFamily: "'KaiTi', 'STKaiti', cursive" }}
           >
             한국어
           </span>
@@ -339,7 +339,7 @@ export function Navbar() {
           <div className="absolute inset-0 bg-black/20" onClick={closeMobileDrawer} />
           <div className="absolute bottom-0 left-0 right-0 bg-[var(--bg-card)] rounded-t-3xl shadow-xl animate-slide-up-drawer max-h-[60vh] overflow-y-auto">
             <div className="flex items-center justify-between px-5 pt-5 pb-3">
-              <span className="text-lg font-bold text-[var(--text-primary)]" style={{ fontFamily: "'ZCOOL KuaiLe', cursive" }}>
+              <span className="text-lg font-bold text-[var(--text-primary)]" style={{ fontFamily: "'KaiTi', 'STKaiti', cursive" }}>
                 {navGroups[mobileDrawer].label}
                 <span className="text-sm font-normal text-[var(--text-muted)] ml-2">{navGroups[mobileDrawer].ko}</span>
               </span>

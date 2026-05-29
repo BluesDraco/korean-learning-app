@@ -76,7 +76,7 @@ export default function DictionaryPage() {
   return (
     <div className="max-w-2xl mx-auto py-4 space-y-4">
       <div className="text-center mb-6">
-        <h1 className="text-2xl font-bold text-[var(--text-primary)]" style={{ fontFamily: "'Nunito', sans-serif" }}>
+        <h1 className="text-2xl font-bold text-[var(--text-primary)]" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
           📖 韩语字典
         </h1>
         <p className="text-sm text-[var(--text-muted)] mt-1">

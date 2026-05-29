@@ -196,7 +196,7 @@ export default function ProgressivePhonetics() {
                   <div className="mb-2">
                     <span className="text-2xl">{letter.emoji}</span>
                   </div>
-                  <div className="text-3xl font-extrabold text-[var(--text-primary)] mb-1 text-center" style={{ fontFamily: "'Nanum Gothic', sans-serif" }}>
+                  <div className="text-3xl font-extrabold text-[var(--text-primary)] mb-1 text-center" style={{ fontFamily: "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif" }}>
                     {letter.letter}
                   </div>
                   <div className="text-sm text-[var(--text-secondary)] text-center mb-2">
@@ -254,7 +254,7 @@ export default function ProgressivePhonetics() {
                           key={l.id}
                           className="flex items-center gap-2 bg-[var(--bg-input)] rounded-xl px-3 py-2"
                         >
-                          <span className="text-lg font-bold text-[var(--text-primary)]" style={{ fontFamily: "'Nanum Gothic', sans-serif" }}>
+                          <span className="text-lg font-bold text-[var(--text-primary)]" style={{ fontFamily: "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif" }}>
                             {l.letter}
                           </span>
                           <span className="text-xs text-[var(--text-secondary)]">[{l.romanization}]</span>
@@ -323,7 +323,7 @@ export default function ProgressivePhonetics() {
                     onClick={() => quizAnswer === null && handleQuizAnswer(i)}
                     disabled={quizAnswer !== null}
                     className={`w-full p-4 rounded-xl text-left text-sm transition-all ${btnClass} font-bold`}
-                    style={{ fontFamily: quizQuestions[quizIdx].prompt.includes('发音') ? "'Nanum Gothic', sans-serif" : undefined }}
+                    style={{ fontFamily: quizQuestions[quizIdx].prompt.includes('发音') ? "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif" : undefined }}
                   >
                     {opt}
                     {quizAnswer !== null && i === correctIdx && (
