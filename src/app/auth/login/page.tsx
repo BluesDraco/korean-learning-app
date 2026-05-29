@@ -101,7 +101,28 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <Suspense>
+    <Suspense fallback={
+      <div className="min-h-[calc(100vh-10rem)] flex items-center justify-center py-8">
+        <div className="w-full max-w-sm space-y-3">
+          <p className="text-center text-sm text-[var(--text-muted)]">加载中...</p>
+          <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 space-y-5 animate-pulse">
+            <div className="flex flex-col items-center gap-3">
+              <div className="w-16 h-16 rounded-full bg-[var(--bg-input)]" />
+              <div className="h-6 w-16 bg-[var(--bg-input)] rounded" />
+            </div>
+            <div className="space-y-3">
+              <div className="h-4 w-12 bg-[var(--bg-input)] rounded" />
+              <div className="h-10 w-full bg-[var(--bg-input)] rounded-xl" />
+            </div>
+            <div className="space-y-3">
+              <div className="h-4 w-12 bg-[var(--bg-input)] rounded" />
+              <div className="h-10 w-full bg-[var(--bg-input)] rounded-xl" />
+            </div>
+            <div className="h-10 w-full bg-[var(--bg-input)] rounded-xl" />
+          </div>
+        </div>
+      </div>
+    }>
       <LoginForm />
     </Suspense>
   );

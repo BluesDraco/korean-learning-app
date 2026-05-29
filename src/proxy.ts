@@ -8,17 +8,51 @@ const JWT_SECRET = (() => {
   return new TextEncoder().encode(secret);
 })();
 
-const PUBLIC_PATHS = ['/auth/login', '/auth/register', '/api/auth/login', '/api/auth/register'];
+const PUBLIC_PATHS = [
+  '/auth/login',
+  '/auth/register',
+  '/api/auth/login',
+  '/api/auth/register',
+  '/api/track',
+];
+
+const PUBLIC_PAGE_PATHS = [
+  '/',
+  '/learn',
+  '/phonetics',
+  '/grammar',
+  '/korea',
+  '/vocabulary',
+  '/dictionary',
+  '/reading',
+  '/expressions',
+  '/buddy',
+  '/ai',
+  '/review',
+  '/dictation',
+  '/shadowing',
+  '/typing',
+  '/writing',
+  '/topik',
+  '/stats',
+  '/knowledge',
+  '/achievement',
+];
 
 function isPublic(pathname: string): boolean {
-  return PUBLIC_PATHS.some((p) => pathname.startsWith(p));
+  if (PUBLIC_PATHS.some((p) => pathname.startsWith(p))) return true;
+  if (PUBLIC_PAGE_PATHS.some((p) => pathname === p || pathname.startsWith(p + '/'))) return true;
+  return false;
 }
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Static assets and public auth pages
-  if (pathname.startsWith('/_next') || pathname.startsWith('/api/') && !pathname.startsWith('/api/auth')) {
+  // Static assets, API routes except auth
+  if (pathname.startsWith('/_next') || pathname.startsWith('/images') || pathname.startsWith('/favicon.ico') || pathname === '/sw.js' || pathname === '/manifest.json') {
+    return NextResponse.next();
+  }
+  if (pathname.startsWith('/api/') && !pathname.startsWith('/api/auth')) {
     return NextResponse.next();
   }
 

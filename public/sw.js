@@ -1,15 +1,7 @@
-const CACHE_NAME = 'korean-learn-v1';
-const ASSETS = [
-  '/',
-  '/manifest.json',
-  '/icon-192.png',
-  '/icon-512.png',
-];
+const CACHE_NAME = 'korean-learn-v2';
+const STATIC_EXTS = /\.(js|css|png|jpg|svg|ico|woff2?|ttf)$/;
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
-  );
   self.skipWaiting();
 });
 
@@ -25,14 +17,18 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
-  // Network-first for API / dynamic content, cache fallback
-  event.respondWith(
-    fetch(event.request)
-      .then((response) => {
-        const clone = response.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
-        return response;
+  // Only cache static assets; network-first for everything else
+  const url = new URL(event.request.url);
+  if (STATIC_EXTS.test(url.pathname)) {
+    event.respondWith(
+      caches.match(event.request).then((cached) => {
+        return cached || fetch(event.request).then((response) => {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          return response;
+        });
       })
-      .catch(() => caches.match(event.request))
-  );
+    );
+  }
+  // API / HTML / RSC always go to network, never cached
 });
