@@ -239,7 +239,7 @@ export default function DictationPage() {
       speak(text, speed);
       setHasListened(true);
     }
-  }, [currentIdx, mode, submitted, loading]);
+  }, [currentIdx, mode, submitted, loading, speed]);
 
   // Completion screen
   if ((complete || dailyDone) && !loading) {

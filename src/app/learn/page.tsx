@@ -180,38 +180,44 @@ export default function LearnPage() {
       // Fallback: use vocab words
       for (let i = 0; i < 3; i++) {
         const word = w[i % w.length];
+        const fbCorrect = word.exampleZh;
+        const fbOpts = shuffle([fbCorrect, w[(i + 1) % w.length].exampleZh, w[(i + 2) % w.length].exampleZh, '今天天气很好']);
         questions.push({
           type: 'listening',
           question: `听短句，选择正确的中文翻译`,
-          options: shuffle([word.exampleZh, w[(i + 1) % w.length].exampleZh, w[(i + 2) % w.length].exampleZh, '今天天气很好']),
-          correct: 0,
+          options: fbOpts,
+          correct: fbOpts.indexOf(fbCorrect),
           audioText: word.example,
         });
       }
     }
 
     // Q19-20: 综合判断 (comprehensive, 2 questions)
+    const q19correct = w[0]?.example || '...';
+    const q19opts = shuffle([
+      q19correct,
+      w[1]?.example.replace(w[1]?.word, w[0]?.word || '') || '...',
+      (w[2]?.example || '...').replace(w[2]?.word || '', w[0]?.word || ''),
+      w[3]?.example || '...',
+    ]);
     questions.push({
       type: 'comprehensive',
       question: `以下哪个句子中"${w[0]?.word || ''}"的用法是正确的？`,
-      options: shuffle([
-        w[0]?.example || '...',
-        w[1]?.example.replace(w[1]?.word, w[0]?.word || '') || '...',
-        (w[2]?.example || '...').replace(w[2]?.word || '', w[0]?.word || ''),
-        w[3]?.example || '...',
-      ]),
-      correct: 0,
+      options: q19opts,
+      correct: q19opts.indexOf(q19correct),
     });
+    const q20correct = s[0]?.chinese || w[0]?.exampleZh;
+    const q20opts = shuffle([
+      q20correct,
+      s[1]?.chinese || w[1]?.exampleZh,
+      s[2]?.chinese || w[2]?.exampleZh || '今天很高兴',
+      w[3]?.exampleZh || '谢谢你的帮助',
+    ]);
     questions.push({
       type: 'comprehensive',
       question: `"${s[0]?.korean || w[0]?.example || '...'}" 的正确翻译是？`,
-      options: shuffle([
-        s[0]?.chinese || w[0]?.exampleZh,
-        s[1]?.chinese || w[1]?.exampleZh,
-        s[2]?.chinese || w[2]?.exampleZh || '今天很高兴',
-        w[3]?.exampleZh || '谢谢你的帮助',
-      ]),
-      correct: 0,
+      options: q20opts,
+      correct: q20opts.indexOf(q20correct),
     });
 
     return shuffle(questions);
@@ -308,10 +314,9 @@ export default function LearnPage() {
     }
   };
 
-  const handleListeningAnswer = (idx: number) => {
+  const handleListeningAnswer = (idx: number, correctIdx: number) => {
     setListeningAnswer(idx);
-    const sent = selectedUnit?.listeningSentences?.[listeningIdx];
-    if (sent && idx === 0) setListeningCorrect((p) => p + 1); // options[0] is always correct
+    if (idx === correctIdx) setListeningCorrect((p) => p + 1);
   };
 
   const handleListeningNext = () => {
@@ -833,7 +838,7 @@ export default function LearnPage() {
               return (
                 <button
                   key={i}
-                  onClick={() => listeningAnswer === null && handleListeningAnswer(i)}
+                  onClick={() => listeningAnswer === null && handleListeningAnswer(i, correctIdx)}
                   disabled={listeningAnswer !== null}
                   className={`w-full p-4 rounded-xl text-sm transition-all ${btnStyle}`}
                 >

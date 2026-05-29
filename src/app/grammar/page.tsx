@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react';
 import { Search, X, FileText, ChevronDown, ChevronUp, AlertCircle, Volume2, Lightbulb, ArrowRight, Sparkles } from 'lucide-react';
 import { grammarPoints, type GrammarPoint } from '@/data/grammar';
 import { beginnerGrammar, type GrammarEntry } from '@/data/grammar-beginner';
+import { speak } from '@/lib/tts';
 
 const levelConfig: Record<string, { label: string; color: string }> = {
   beginner: { label: '初级', color: 'bg-[var(--mint-soft)]/15 text-[var(--mint-soft)]' },
@@ -22,15 +23,7 @@ const categoryLabels: Record<string, string> = {
   '사동/피동': '사동/피동',
 };
 
-const categories = ['조사', '어미', '연결', '시제', '존대', '문형', '인용', '사동/피동'] as const;
-
-function speakKorean(text: string) {
-  window.speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = 'ko-KR';
-  utterance.rate = 0.8;
-  window.speechSynthesis.speak(utterance);
-}
+const categories = ['조사', '어미', '연결', '시제', '존대', '문형', '인용', '사동/피동'];
 
 const levels: Array<{ value: GrammarPoint['level'] | 'all'; label: string }> = [
   { value: 'all', label: '全部' },
@@ -172,7 +165,7 @@ export default function GrammarPage() {
                         <div key={i} className="bg-[var(--bg-input)] rounded-xl px-3 py-2.5">
                           <div className="flex items-center gap-2">
                             <span className="text-sm text-[var(--text-primary)] font-medium">{ex.korean}</span>
-                            <button onClick={() => speakKorean(ex.korean)} className="text-[var(--pink-primary)] hover:text-[var(--pink-primary)]">
+                            <button onClick={() => speak(ex.korean)} className="text-[var(--pink-primary)] hover:text-[var(--pink-primary)]">
                               <Volume2 size={13} />
                             </button>
                           </div>
@@ -534,7 +527,7 @@ export default function GrammarPage() {
                           <div className="flex items-start gap-2">
                             <p className="text-sm text-[var(--text-primary)]">{ex.ko}</p>
                             <button
-                              onClick={(e) => { e.stopPropagation(); speakKorean(ex.ko); }}
+                              onClick={(e) => { e.stopPropagation(); speak(ex.ko); }}
                               className="p-1 rounded-lg bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors shrink-0"
                               title="听例句发音"
                             >

@@ -8,15 +8,8 @@ import { calculateSRS } from '@/lib/srs';
 import { updateStreak, awardXp, XP_REWARDS, getProfile } from '@/lib/gamification';
 import { emitXpFlyout, emitStreakMilestone } from '@/components/XpOverlay';
 import { memoryHealthScore, atRiskWords } from '@/lib/forgetting-curve';
+import { speak } from '@/lib/tts';
 import type { Word } from '@/types';
-
-function speakKorean(text: string) {
-  window.speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = 'ko-KR';
-  utterance.rate = 0.8;
-  window.speechSynthesis.speak(utterance);
-}
 
 function trackStudy(action: string, details: string, xpEarned: number) {
   fetch('/api/track/study', {
@@ -444,7 +437,7 @@ function ReviewContent() {
                 <div className="flex items-center justify-between bg-[#FDF8F0] rounded-2xl px-4 py-2.5 border border-[#F0E8DD]/60 mt-4">
                   <span className="text-xs text-[var(--text-muted)]">{currentWord.partOfSpeech} · {currentWord.pronunciation}</span>
                   <button
-                    onClick={(e) => { e.stopPropagation(); speakKorean(currentWord.word); }}
+                    onClick={(e) => { e.stopPropagation(); speak(currentWord.word); }}
                     className="p-1.5 rounded-lg hover:bg-white/60 text-[var(--pink-primary)] transition-colors"
                   >
                     <Volume2 size={16} />
@@ -502,7 +495,7 @@ function ReviewContent() {
                 <div className="flex items-center gap-2 mb-3">
                   <h2 className="text-2xl font-extrabold text-[var(--text-primary)]">{currentWord.word}</h2>
                   <button
-                    onClick={(e) => { e.stopPropagation(); speakKorean(currentWord.word); }}
+                    onClick={(e) => { e.stopPropagation(); speak(currentWord.word); }}
                     className="p-1.5 rounded-lg hover:bg-[var(--bg-soft)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors"
                   >
                     <Volume2 size={16} />
@@ -522,7 +515,7 @@ function ReviewContent() {
                       <div key={i} className="bg-[#FDF8F0] rounded-xl px-3 py-2.5 border border-[#F0E8DD]/60">
                         <div className="flex items-start gap-2">
                           <p className="text-sm text-[var(--text-primary)] flex-1 leading-snug">{ex.text}</p>
-                          <button onClick={(e) => { e.stopPropagation(); speakKorean(ex.text); }}
+                          <button onClick={(e) => { e.stopPropagation(); speak(ex.text); }}
                             className="p-1 rounded-lg hover:bg-white/60 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors shrink-0">
                             <Volume2 size={13} />
                           </button>

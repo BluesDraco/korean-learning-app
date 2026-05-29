@@ -49,7 +49,9 @@ export default function ShadowingPlayerPage() {
 
   // Timer ref for subtitle sync
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const elapsedRef = useRef(0); // track elapsed seconds
+  const elapsedRef = useRef(0);
+  const playStartWallRef = useRef(0);
+  const playBaseTimeRef = useRef(0);
 
   // Load video + subtitles
   useEffect(() => {
@@ -66,22 +68,27 @@ export default function ShadowingPlayerPage() {
     })();
   }, [id, router]);
 
-  // Timer for subtitle sync
+  // Timer for subtitle sync — uses performance.now() to avoid drift
   useEffect(() => {
     if (isPlaying) {
+      playStartWallRef.current = performance.now();
+      playBaseTimeRef.current = elapsedRef.current;
+
       timerRef.current = setInterval(() => {
-        elapsedRef.current += 0.1;
-        // Find matching subtitle
+        const elapsed = playBaseTimeRef.current + (performance.now() - playStartWallRef.current) / 1000;
+        elapsedRef.current = elapsed;
+
         const idx = subtitles.findIndex(
-          (s) => elapsedRef.current >= s.start && elapsedRef.current < s.end
+          (s) => elapsed >= s.start && elapsed < s.end
         );
         setActiveIndex((prev) => (idx !== prev ? idx : prev));
 
-        // Loop mode: restart sentence
         if (loopIndex !== null && loopIndex < subtitles.length) {
           const loopSub = subtitles[loopIndex];
-          if (elapsedRef.current >= loopSub.end) {
+          if (elapsed >= loopSub.end) {
             elapsedRef.current = loopSub.start;
+            playBaseTimeRef.current = loopSub.start;
+            playStartWallRef.current = performance.now();
             playerRef.current?.seekTo(loopSub.start);
           }
         }

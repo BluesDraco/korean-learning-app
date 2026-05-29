@@ -8,7 +8,6 @@ import {
 } from 'lucide-react';
 import { articles, levelLabel, levelColor } from '@/data/articles';
 import { speak, cancelSpeech } from '@/lib/tts';
-import type { Article } from '@/data/articles';
 
 export default function ArticleReaderPage() {
   const router = useRouter();
@@ -22,8 +21,8 @@ export default function ArticleReaderPage() {
   const [readSet, setReadSet] = useState<Set<number>>(new Set());
   const [speed, setSpeed] = useState(0.75);
   const autoAbortRef = useRef(false);
+  const autoPlayingRef = useRef(false);
   const sentenceRefs = useRef<(HTMLSpanElement | null)[]>([]);
-  const detailRef = useRef<HTMLDivElement>(null);
 
   // Recording
   const [recording, setRecording] = useState(false);
@@ -31,14 +30,17 @@ export default function ArticleReaderPage() {
   const [playingRec, setPlayingRec] = useState<number | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
+  const recordingIdxRef = useRef(0);
 
   const total = article?.sentences.length ?? 0;
+
+  // Sync ref for autoPlaying so callbacks always read the latest value
+  useEffect(() => { autoPlayingRef.current = autoPlaying; }, [autoPlaying]);
 
   // ── Speak single sentence ──
   const speakSentence = useCallback(async (idx: number) => {
     if (!article) return;
-    // Interrupt auto-play if running
-    if (autoPlaying) {
+    if (autoPlayingRef.current) {
       autoAbortRef.current = true;
       setAutoPlaying(false);
     }
@@ -50,24 +52,21 @@ export default function ArticleReaderPage() {
       await speak(article.sentences[idx].ko, speed);
     } catch { /* tts error */ }
     setIsSpeaking(false);
-  }, [article, speed, autoPlaying]);
+  }, [article, speed]);
 
-  // ── Auto-play: per-sentence for tracking, Edge TTS is fast enough to feel continuous ──
+  // ── Auto-play ──
   const startAutoPlay = useCallback(async () => {
-    if (!article || autoPlaying) return;
+    if (!article || autoPlayingRef.current) return;
     setAutoPlaying(true);
     autoAbortRef.current = false;
     setIsSpeaking(true);
-
-    // Mark all as read upfront
-    setReadSet(new Set(article.sentences.map((_, i) => i)));
 
     for (let i = 0; i < article.sentences.length; i++) {
       if (autoAbortRef.current) break;
 
       setCurrentIdx(i);
-      sentenceRefs.current[i]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      detailRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setReadSet((prev) => new Set(prev).add(i));
+      sentenceRefs.current[i]?.scrollIntoView({ behavior: 'auto', block: 'nearest' });
 
       try {
         await speak(article.sentences[i].ko, speed);
@@ -78,7 +77,7 @@ export default function ArticleReaderPage() {
 
     setIsSpeaking(false);
     setAutoPlaying(false);
-  }, [article, autoPlaying, speed]);
+  }, [article, speed]);
 
   const stopAutoPlay = useCallback(() => {
     autoAbortRef.current = true;
@@ -90,6 +89,7 @@ export default function ArticleReaderPage() {
   // ── Recording ──
   const startRecording = useCallback(async () => {
     try {
+      recordingIdxRef.current = currentIdx;
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const mime = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : 'audio/webm';
       const rec = new MediaRecorder(stream, { mimeType: mime });
@@ -98,12 +98,13 @@ export default function ArticleReaderPage() {
 
       rec.ondataavailable = (e) => { if (e.data.size > 0) chunksRef.current.push(e.data); };
       rec.onstop = () => {
+        const idx = recordingIdxRef.current;
         const blob = new Blob(chunksRef.current, { type: rec.mimeType });
         const url = URL.createObjectURL(blob);
         setRecordings((prev) => {
           const next = { ...prev };
-          if (next[currentIdx]) URL.revokeObjectURL(next[currentIdx]);
-          next[currentIdx] = url;
+          if (next[idx]) URL.revokeObjectURL(next[idx]);
+          next[idx] = url;
           return next;
         });
         stream.getTracks().forEach((t) => t.stop());
@@ -213,7 +214,7 @@ export default function ArticleReaderPage() {
         </div>
       </div>
 
-      {/* Speed slider — always visible on mobile */}
+      {/* Speed slider — mobile */}
       <div className="sm:hidden flex items-center gap-2 text-xs text-[var(--text-muted)]">
         <Gauge size={13} />
         <span>语速</span>
@@ -248,13 +249,13 @@ export default function ArticleReaderPage() {
               key={idx}
               ref={(el) => { sentenceRefs.current[idx] = el; }}
               onClick={() => {
-                if (autoPlaying) {
+                if (autoPlayingRef.current) {
                   autoAbortRef.current = true;
                   setAutoPlaying(false);
                 }
                 speakSentence(idx);
               }}
-              className={`cursor-pointer rounded px-1 py-0.5 transition-all duration-200 ${
+              className={`cursor-pointer rounded px-1 py-0.5 transition-colors duration-200 ${
                 idx === currentIdx
                   ? 'bg-[var(--pink-primary)]/20 text-[var(--pink-primary)] font-medium ring-1 ring-[var(--pink-primary)]/30'
                   : readSet.has(idx)
@@ -269,10 +270,7 @@ export default function ArticleReaderPage() {
       </div>
 
       {/* ── Detail panel ── */}
-      <div
-        ref={detailRef}
-        className="bg-[var(--bg-card)] border-2 border-[var(--pink-primary)]/20 rounded-2xl p-5 space-y-4 transition-all"
-      >
+      <div className="bg-[var(--bg-card)] border-2 border-[var(--pink-primary)]/20 rounded-2xl p-5 space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <BookOpen size={16} className="text-[var(--pink-primary)]" />
@@ -283,7 +281,7 @@ export default function ArticleReaderPage() {
               onClick={() => {
                 const prev = Math.max(0, currentIdx - 1);
                 setCurrentIdx(prev);
-                sentenceRefs.current[prev]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                sentenceRefs.current[prev]?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
               }}
               disabled={currentIdx === 0}
               className="p-1.5 rounded-lg hover:bg-[var(--bg-input)] text-[var(--text-muted)] disabled:opacity-30"
@@ -295,7 +293,7 @@ export default function ArticleReaderPage() {
               onClick={() => {
                 const next = Math.min(total - 1, currentIdx + 1);
                 setCurrentIdx(next);
-                sentenceRefs.current[next]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                sentenceRefs.current[next]?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
               }}
               disabled={currentIdx >= total - 1}
               className="p-1.5 rounded-lg hover:bg-[var(--bg-input)] text-[var(--text-muted)] disabled:opacity-30"
