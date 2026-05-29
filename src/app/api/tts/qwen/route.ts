@@ -11,7 +11,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json().catch(() => ({}));
     const text: string = body.text || '';
-    const voice: string = body.voice || 'Cherry';
+    const voice: string = body.voice || 'Sohee';
 
     if (!text || text.length > 600) {
       return NextResponse.json({ error: 'Text required (max 600 chars)' }, { status: 400 });
