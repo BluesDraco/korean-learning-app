@@ -21,6 +21,7 @@ export interface LearningUnit {
   description: string;
   words: UnitWord[];
   grammarId: string;
+  listeningSentences: { korean: string; chinese: string }[];
 }
 
 export const learningUnits: LearningUnit[] = [
@@ -43,6 +44,11 @@ export const learningUnits: LearningUnit[] = [
       { word: '처음', pronunciation: 'cheoeum', meaning: '初次/第一次', partOfSpeech: '名词', example: '처음 뵙겠습니다.', exampleZh: '初次见面。', emoji: '🤝' },
     ],
     grammarId: 'g1',
+    listeningSentences: [
+      { korean: '안녕하세요, 저는 학생이에요.', chinese: '你好，我是学生。' },
+      { korean: '처음 뵙겠습니다. 제 이름은 민수예요.', chinese: '初次见面，我叫民秀。' },
+      { korean: '도와주셔서 정말 감사합니다.', chinese: '非常感谢您的帮助。' },
+    ],
   },
   {
     id: 2,
@@ -59,6 +65,11 @@ export const learningUnits: LearningUnit[] = [
       { word: '자다', pronunciation: 'jada', meaning: '睡觉', partOfSpeech: '动词', example: '일찍 자요.', exampleZh: '早点睡。', emoji: '😴' },
     ],
     grammarId: 'g47',
+    listeningSentences: [
+      { korean: '학교에 가요. 그리고 밥을 먹어요.', chinese: '去学校，然后吃饭。' },
+      { korean: '친구가 텔레비전을 봐요.', chinese: '朋友在看电视。' },
+      { korean: '물을 마시고 일찍 자요.', chinese: '喝水然后早点睡。' },
+    ],
   },
   {
     id: 3,
@@ -75,6 +86,11 @@ export const learningUnits: LearningUnit[] = [
       { word: '오빠', pronunciation: 'oppa', meaning: '哥哥(女称)', partOfSpeech: '名词', example: '오빠가 키가 커요.', exampleZh: '哥哥个子很高。', emoji: '👦', note: '女性称呼哥哥' },
     ],
     grammarId: 'g55',
+    listeningSentences: [
+      { korean: '우리 엄마는 요리를 정말 잘해요.', chinese: '我妈妈做菜很棒。' },
+      { korean: '오빠가 키가 크고 친구가 많아요.', chinese: '哥哥个子高，朋友也多。' },
+      { korean: '언니는 정말 예뻐요. 친구도 많아요.', chinese: '姐姐很漂亮，朋友也很多。' },
+    ],
   },
   {
     id: 4,
@@ -91,6 +107,7 @@ export const learningUnits: LearningUnit[] = [
       { word: '살', pronunciation: 'sal', meaning: '岁(量词)', partOfSpeech: '量词', example: '스무 살이에요.', exampleZh: '二十岁。', emoji: '🎂', note: '年龄用固有词数字' },
     ],
     grammarId: 'g2',
+    listeningSentences: [{"korean":"사과 하나 주세요.","chinese":"请给我一个苹果。"},{"korean":"두 명이 왔어요.","chinese":"两个人来了。"},{"korean":"저는 스무 살이에요.","chinese":"我二十岁。"}],
   },
   {
     id: 5,
@@ -107,6 +124,7 @@ export const learningUnits: LearningUnit[] = [
       { word: '주세요', pronunciation: 'juseyo', meaning: '请给', partOfSpeech: '常用语', example: '김밥 하나 주세요.', exampleZh: '请给我一份紫菜包饭。', emoji: '🛎️', note: '点餐万能句式' },
     ],
     grammarId: 'g3',
+    listeningSentences: [{"korean":"김치가 정말 맛있어요!","chinese":"泡菜真好吃！"},{"korean":"김밥 하나 주세요.","chinese":"请给我一份紫菜包饭。"},{"korean":"밥 먹었어요? 물 마실래요?","chinese":"吃饭了吗？要喝水吗？"}],
   },
   {
     id: 6,
@@ -123,6 +141,7 @@ export const learningUnits: LearningUnit[] = [
       { word: '앞', pronunciation: 'ap', meaning: '前面', partOfSpeech: '名词', example: '학교 앞에서 만나요.', exampleZh: '在学校前面见面。', emoji: '⬆️' },
     ],
     grammarId: 'g5',
+    listeningSentences: [{"korean":"학교 앞에서 친구를 만나요.","chinese":"在学校前面见朋友。"},{"korean":"집에 가고 싶어요.","chinese":"想回家。"},{"korean":"식당에서 밥을 먹어요.","chinese":"在餐厅吃饭。"}],
   },
   {
     id: 7,
@@ -139,6 +158,7 @@ export const learningUnits: LearningUnit[] = [
       { word: '아침', pronunciation: 'achim', meaning: '早上', partOfSpeech: '名词', example: '아침에 일찍 일어나요.', exampleZh: '早上早起。', emoji: '🌅' },
     ],
     grammarId: 'g4',
+    listeningSentences: [{"korean":"오늘 날씨가 정말 좋아요.","chinese":"今天天气真好。"},{"korean":"내일 학교에서 만나요.","chinese":"明天在学校见。"},{"korean":"지금 몇 시예요? 아침이에요?","chinese":"现在几点了？是早上吗？"}],
   },
   {
     id: 8,
@@ -155,6 +175,7 @@ export const learningUnits: LearningUnit[] = [
       { word: '비싸다', pronunciation: 'bissada', meaning: '贵', partOfSpeech: '形容词', example: '이 가방이 너무 비싸요.', exampleZh: '这个包太贵了。', emoji: '💰' },
     ],
     grammarId: 'g21',
+    listeningSentences: [{"korean":"이 꽃이 정말 예뻐요.","chinese":"这花真漂亮。"},{"korean":"강아지가 너무 작아요.","chinese":"小狗太小了。"},{"korean":"이 집은 크지만 너무 비싸요.","chinese":"这房子大但是太贵了。"}],
   },
   {
     id: 9,
@@ -171,6 +192,7 @@ export const learningUnits: LearningUnit[] = [
       { word: '덥다', pronunciation: 'deopda', meaning: '热', partOfSpeech: '形容词', example: '여름에는 정말 더워요.', exampleZh: '夏天真的很热。', emoji: '🥵' },
     ],
     grammarId: 'g23',
+    listeningSentences: [{"korean":"오늘 날씨 어때요? 비가 와요.","chinese":"今天天气怎么样？下雨了。"},{"korean":"봄에 꽃이 정말 예뻐요.","chinese":"春天花很漂亮。"},{"korean":"여름에는 너무 더워요.","chinese":"夏天太热了。"}],
   },
   {
     id: 10,
@@ -187,6 +209,7 @@ export const learningUnits: LearningUnit[] = [
       { word: '요리', pronunciation: 'yori', meaning: '烹饪', partOfSpeech: '名词', example: '요리하는 걸 좋아해요.', exampleZh: '喜欢做饭。', emoji: '🍳' },
     ],
     grammarId: 'g66',
+    listeningSentences: [{"korean":"저는 운동하고 음악 듣는 걸 좋아해요.","chinese":"我喜欢运动和听音乐。"},{"korean":"주말에 영화 보러 갈래요?","chinese":"周末要去看电影吗？"},{"korean":"요리하는 걸 배우고 싶어요.","chinese":"想学做饭。"}],
   },
   {
     id: 11,
@@ -203,6 +226,7 @@ export const learningUnits: LearningUnit[] = [
       { word: '깎아 주세요', pronunciation: 'kkakka juseyo', meaning: '请便宜点', partOfSpeech: '常用语', example: '좀 깎아 주세요.', exampleZh: '请便宜一点。', emoji: '💸', note: '砍价必备表达' },
     ],
     grammarId: 'g10',
+    listeningSentences: [{"korean":"이거 얼마예요? 너무 비싸요.","chinese":"这个多少钱？太贵了。"},{"korean":"새 옷을 싸게 샀어요.","chinese":"新衣服买得很便宜。"},{"korean":"좀 깎아 주세요. 학생이에요.","chinese":"请便宜点，我是学生。"}],
   },
   {
     id: 12,
@@ -219,6 +243,7 @@ export const learningUnits: LearningUnit[] = [
       { word: '길', pronunciation: 'gil', meaning: '路', partOfSpeech: '名词', example: '길을 몰라요.', exampleZh: '不认识路。', emoji: '🛣️' },
     ],
     grammarId: 'g9',
+    listeningSentences: [{"korean":"버스를 타고 학교에 가요.","chinese":"坐公交去学校。"},{"korean":"지하철역이 어디예요? 길을 몰라요.","chinese":"地铁站在哪里？我不认识路。"},{"korean":"택시 정류장에서 기다려요.","chinese":"在出租车站等。"}],
   },
 
   // ========================================================
@@ -240,6 +265,7 @@ export const learningUnits: LearningUnit[] = [
       { word: '신나다', pronunciation: 'sinnada', meaning: '兴奋', partOfSpeech: '形容词', example: '여행 생각에 신나요!', exampleZh: '想到旅行就很兴奋！', emoji: '🤩' },
     ],
     grammarId: 'g26',
+    listeningSentences: [{"korean":"오늘 정말 기뻐요! 친구를 만났어요.","chinese":"今天真高兴！见到朋友了。"},{"korean":"영화가 너무 슬펐어요. 눈물이 났어요.","chinese":"电影太伤感了，流眼泪了。"},{"korean":"왜 화가 났어요? 걱정하지 마세요.","chinese":"为什么生气了？别担心。"}],
   },
   {
     id: 14,
@@ -256,6 +282,7 @@ export const learningUnits: LearningUnit[] = [
       { word: '피곤하다', pronunciation: 'pigonhada', meaning: '疲劳', partOfSpeech: '形容词', example: '요즘 너무 피곤해요.', exampleZh: '最近太累了。', emoji: '😫' },
     ],
     grammarId: 'g29',
+    listeningSentences: [{"korean":"머리가 아파요. 약을 먹었어요.","chinese":"头疼，吃了药。"},{"korean":"요즘 너무 피곤해요. 건강을 챙기세요.","chinese":"最近太累了，请注意健康。"},{"korean":"이제 괜찮아요. 감사합니다.","chinese":"现在没事了，谢谢。"}],
   },
   {
     id: 15,
@@ -272,6 +299,7 @@ export const learningUnits: LearningUnit[] = [
       { word: '짐', pronunciation: 'jim', meaning: '行李', partOfSpeech: '名词', example: '짐이 많아요.', exampleZh: '行李很多。', emoji: '🧳' },
     ],
     grammarId: 'g28',
+    listeningSentences: [{"korean":"호텔을 예약했어요. 표도 샀어요.","chinese":"预订了酒店，票也买了。"},{"korean":"서울에서 관광했어요. 정말 재미있었어요.","chinese":"在首尔观光了，真的很有趣。"},{"korean":"지도 좀 보여 주세요. 길을 잃었어요.","chinese":"请给我看看地图，我迷路了。"}],
   },
   {
     id: 16,
@@ -288,6 +316,7 @@ export const learningUnits: LearningUnit[] = [
       { word: '졸업', pronunciation: 'joreop', meaning: '毕业', partOfSpeech: '名词', example: '내년에 졸업해요.', exampleZh: '明年毕业。', emoji: '🎉' },
     ],
     grammarId: 'g20',
+    listeningSentences: [{"korean":"매일 한국어를 공부해요. 숙제도 많아요.","chinese":"每天学习韩语，作业也很多。"},{"korean":"다음 주에 시험이 있어요. 열심히 공부할게요.","chinese":"下周有考试，我会努力学习的。"},{"korean":"질문 있어요! 이 문법을 설명해 주세요.","chinese":"有问题！请解释一下这个语法。"}],
   },
   {
     id: 17,
@@ -304,6 +333,7 @@ export const learningUnits: LearningUnit[] = [
       { word: '월급', pronunciation: 'wolgeup', meaning: '工资', partOfSpeech: '名词', example: '월급이 올랐어요.', exampleZh: '涨工资了。', emoji: '💵' },
     ],
     grammarId: 'g30',
+    listeningSentences: [{"korean":"회사에 다녀요. 일이 정말 많아요.","chinese":"在公司上班，工作真的很多。"},{"korean":"오후에 회의가 있어요. 준비해야 해요.","chinese":"下午有会议，需要准备。"},{"korean":"몇 시에 퇴근해요? 월급이 올랐어요.","chinese":"几点下班？涨工资了。"}],
   },
   {
     id: 18,
@@ -320,6 +350,7 @@ export const learningUnits: LearningUnit[] = [
       { word: '헤어지다', pronunciation: 'heeojida', meaning: '分手', partOfSpeech: '动词', example: '어제 헤어졌어요.', exampleZh: '昨天分手了。', emoji: '💔' },
     ],
     grammarId: 'g32',
+    listeningSentences: [{"korean":"사랑해요! 정말 행복해요.","chinese":"我爱你！真的很幸福。"},{"korean":"남자친구랑 주말에 데이트해요.","chinese":"周末和男朋友约会。"},{"korean":"어제 헤어졌어요. 너무 슬퍼요.","chinese":"昨天分手了，太伤心了。"}],
   },
   {
     id: 19,
@@ -336,6 +367,7 @@ export const learningUnits: LearningUnit[] = [
       { word: '인기', pronunciation: 'ingi', meaning: '人气', partOfSpeech: '名词', example: '한국 드라마가 인기가 많아요.', exampleZh: '韩剧很有人气。', emoji: '⭐' },
     ],
     grammarId: 'g16',
+    listeningSentences: [{"korean":"한복이 정말 예뻐요. 전통 문화를 좋아해요.","chinese":"韩服真漂亮，喜欢传统文化。"},{"korean":"축제에 갔어요. 공연도 봤어요.","chinese":"去了庆典，也看了演出。"},{"korean":"한국 드라마가 인기가 많아요.","chinese":"韩剧很有人气。"}],
   },
   {
     id: 20,
@@ -352,6 +384,7 @@ export const learningUnits: LearningUnit[] = [
       { word: '사진', pronunciation: 'sajin', meaning: '照片', partOfSpeech: '名词', example: '사진 찍어도 돼요?', exampleZh: '可以拍照吗？', emoji: '📷' },
     ],
     grammarId: 'g40',
+    listeningSentences: [{"korean":"핸드폰 번호가 뭐예요? 메시지 보냈어요.","chinese":"手机号码是多少？发消息了。"},{"korean":"인터넷에서 검색했어요. 사진도 찍었어요.","chinese":"在网上搜索了，也拍了照片。"},{"korean":"인터넷이 안 돼요. 다시 시도해 주세요.","chinese":"网络不行，请再试一次。"}],
   },
   {
     id: 21,
@@ -368,6 +401,7 @@ export const learningUnits: LearningUnit[] = [
       { word: '추천', pronunciation: 'chucheon', meaning: '推荐', partOfSpeech: '名词', example: '재미있는 드라마 추천해 주세요.', exampleZh: '请推荐好看的剧。', emoji: '👍' },
     ],
     grammarId: 'g41',
+    listeningSentences: [{"korean":"요즘 무슨 드라마 봐요? 추천해 주세요.","chinese":"最近在看什么剧？请推荐一下。"},{"korean":"그 배우 정말 좋아해요. 연기를 잘해요.","chinese":"真的很喜欢那个演员，演技很好。"},{"korean":"줄거리가 너무 재미있어요. 예고편도 봤어요.","chinese":"剧情太有趣了，预告片也看了。"}],
   },
   {
     id: 22,
@@ -384,6 +418,7 @@ export const learningUnits: LearningUnit[] = [
       { word: '기다리다', pronunciation: 'gidarida', meaning: '等/等待', partOfSpeech: '动词', example: '잠시만 기다려 주세요.', exampleZh: '请稍等一下。', emoji: '⏳' },
     ],
     grammarId: 'g56',
+    listeningSentences: [{"korean":"부탁 하나 해도 돼요? 도와주실 수 있어요?","chinese":"可以拜托一件事吗？能帮忙吗？"},{"korean":"전화번호 좀 알려 주세요. 잠시만 기다려 주세요.","chinese":"请告诉我电话号码，请稍等。"},{"korean":"펜 좀 빌릴 수 있을까요?","chinese":"能借一下笔吗？"}],
   },
   {
     id: 23,
@@ -400,6 +435,7 @@ export const learningUnits: LearningUnit[] = [
       { word: '이유', pronunciation: 'iyu', meaning: '理由', partOfSpeech: '名词', example: '이유가 뭐예요?', exampleZh: '理由是什么？', emoji: '📝' },
     ],
     grammarId: 'g69',
+    listeningSentences: [{"korean":"어떻게 생각해요? 의견을 말해 주세요.","chinese":"你怎么想？请说说你的意见。"},{"korean":"저는 동의해요. 좋은 생각이에요.","chinese":"我同意，是个好主意。"},{"korean":"죄송하지만 반대해요. 이유를 설명할게요.","chinese":"抱歉但我反对，我来解释理由。"}],
   },
   {
     id: 24,
@@ -416,6 +452,7 @@ export const learningUnits: LearningUnit[] = [
       { word: '성공', pronunciation: 'seonggong', meaning: '成功', partOfSpeech: '名词', example: '꼭 성공할 거예요!', exampleZh: '一定会成功！', emoji: '🏆' },
     ],
     grammarId: 'g48',
+    listeningSentences: [{"korean":"주말 계획 있어요? 같이 영화 볼래요?","chinese":"周末有计划吗？一起看电影吗？"},{"korean":"제 꿈은 한국어 선생님이에요.","chinese":"我的梦想是当韩语老师。"},{"korean":"올해 목표는 한국어 능력 시험에 합격하는 거예요.","chinese":"今年的目标是考过韩语能力考试。"}],
   },
 
   // ========================================================
@@ -437,6 +474,7 @@ export const learningUnits: LearningUnit[] = [
       { word: '사건', pronunciation: 'sageon', meaning: '事件', partOfSpeech: '名词', example: '큰 사건이 일어났어요.', exampleZh: '发生了大事件。', emoji: '🔔' },
     ],
     grammarId: 'g38',
+    listeningSentences: [{"korean":"오늘 뉴스 봤어요? 큰 사건이 일어났어요.","chinese":"看今天的新闻了吗？发生了大事件。"},{"korean":"정치 뉴스는 좀 어렵지만 알아야 해요.","chinese":"政治新闻有点难，但应该了解。"},{"korean":"경제가 점점 좋아지고 있어요. 사회가 변화하고 있어요.","chinese":"经济越来越好了，社会在变化。"}],
   },
   {
     id: 26,
@@ -453,6 +491,7 @@ export const learningUnits: LearningUnit[] = [
       { word: '영향', pronunciation: 'yeonghyang', meaning: '影响', partOfSpeech: '名词', example: 'SNS가 많은 영향을 줘요.', exampleZh: '社交媒体影响很大。', emoji: '💫' },
     ],
     grammarId: 'g35',
+    listeningSentences: [{"korean":"환경 보호가 정말 중요해요. 모두 노력해야 해요.","chinese":"环保真的很重要，大家都要努力。"},{"korean":"다양한 문화를 존중해야 해요.","chinese":"应该尊重多样的文化。"},{"korean":"SNS가 많은 영향을 줘요. 변화가 빨라요.","chinese":"社交媒体影响很大，变化很快。"}],
   },
   {
     id: 27,
@@ -469,6 +508,7 @@ export const learningUnits: LearningUnit[] = [
       { word: '가는 말이 고와야 오는 말이 곱다', pronunciation: 'ganeun mari gowaya oneun mari gopda', meaning: '你说得好听别人才说得好听', partOfSpeech: '俗语', example: '친구한테 예쁘게 말해. 가는 말이 고와야 오는 말이 곱잖아.', exampleZh: '对朋友说话好听点，你怎么说别人，别人就怎么说你。', emoji: '🗣️' },
     ],
     grammarId: 'g45',
+    listeningSentences: [{"korean":"우리 엄마는 손이 커서 항상 많이 요리해요.","chinese":"我妈很大方，总是做很多菜。"},{"korean":"걱정 마세요, 저는 입이 무거워요.","chinese":"别担心，我嘴很严。"},{"korean":"그 분은 발이 넓어서 아는 사람이 많아요.","chinese":"他人脉广所以认识的人多。"}],
   },
   {
     id: 28,
@@ -485,6 +525,7 @@ export const learningUnits: LearningUnit[] = [
       { word: '연세', pronunciation: 'yeonse', meaning: '年龄(敬语)', partOfSpeech: '名词', example: '선생님 연세가 어떻게 되세요?', exampleZh: '老师您多大年纪了？', emoji: '🎂', note: '敬语名词，替代 나이' },
     ],
     grammarId: 'g54',
+    listeningSentences: [{"korean":"말씀 좀 여쭤봐도 될까요?","chinese":"可以问您句话吗？"},{"korean":"선생님께 선물을 드리고 싶어요.","chinese":"想送给老师礼物。"},{"korean":"부모님을 모시고 여행 갔어요.","chinese":"陪父母去旅行了。"}],
   },
   {
     id: 29,
@@ -501,6 +542,7 @@ export const learningUnits: LearningUnit[] = [
       { word: '뿌듯하다', pronunciation: 'ppudeutada', meaning: '自豪/充实', partOfSpeech: '形容词', example: '드디어 해내서 정말 뿌듯해요.', exampleZh: '终于做到了，真自豪。', emoji: '😌' },
     ],
     grammarId: 'g71',
+    listeningSentences: [{"korean":"고향이 정말 그리워요. 가족이 보고 싶어요.","chinese":"真怀念故乡，想家人了。"},{"korean":"한국어를 잘해서 너무 부러워요!","chinese":"你韩语真好，太羡慕了！"},{"korean":"드디어 해내서 정말 뿌듯해요.","chinese":"终于做到了，真自豪。"}],
   },
   {
     id: 30,
@@ -517,6 +559,7 @@ export const learningUnits: LearningUnit[] = [
       { word: '표현', pronunciation: 'pyohyeon', meaning: '表达', partOfSpeech: '名词', example: '한국어에는 예쁜 표현이 정말 많아요.', exampleZh: '韩语里有很多美好的表达。', emoji: '🎨' },
     ],
     grammarId: 'g46',
+    listeningSentences: [{"korean":"한국 문학에 관심이 생겼어요. 시를 읽는 걸 좋아해요.","chinese":"对韩国文学产生了兴趣，喜欢读诗。"},{"korean":"이 소설은 한국에서 베스트셀러예요.","chinese":"这本小说在韩国是畅销书。"},{"korean":"이 시를 읽고 정말 감동했어요. 한국어에는 예쁜 표현이 많아요.","chinese":"读了这首诗真的很感动，韩语里有很多美好的表达。"}],
   },
 ];
 

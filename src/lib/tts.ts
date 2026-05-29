@@ -1,13 +1,31 @@
 let audioCtx: AudioContext | null = null;
+let currentSource: AudioBufferSourceNode | null = null;
+let currentAudio: HTMLAudioElement | null = null;
 
 function getCtx(): AudioContext {
   if (!audioCtx) audioCtx = new AudioContext();
   return audioCtx;
 }
 
+export function cancelSpeech() {
+  if (currentSource) {
+    try { currentSource.stop(); } catch { /* already stopped */ }
+    currentSource = null;
+  }
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.onended = null;
+    currentAudio.src = '';
+    currentAudio = null;
+  }
+  window.speechSynthesis?.cancel();
+}
+
 export async function speak(text: string, rate: number = 1.0) {
   if (typeof window === 'undefined') return;
   if (!text) return;
+
+  cancelSpeech();
 
   try {
     await speakViaEdge(text, rate);
@@ -15,13 +33,12 @@ export async function speak(text: string, rate: number = 1.0) {
     try {
       await speakViaBaidu(text, rate);
     } catch {
-      fallbackSpeak(text, rate);
+      await fallbackSpeak(text, rate);
     }
   }
 }
 
-async function speakViaEdge(text: string, rate: number) {
-  // Edge TTS requires rate as percentage, e.g. "+0%", "-30%", "+50%"
+async function speakViaEdge(text: string, rate: number): Promise<void> {
   const pct = Math.round((rate - 1) * 100);
   const rateStr = pct >= 0 ? `+${pct}%` : `${pct}%`;
   const ssml = `<speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" version="1.0" xml:lang="ko-KR">
@@ -40,7 +57,7 @@ async function speakViaEdge(text: string, rate: number) {
   const chunks: Uint8Array[] = [];
 
   await new Promise<void>((resolve, reject) => {
-    const timer = setTimeout(() => { ws.close(); reject(new Error('timeout')); }, 12000);
+    const timer = setTimeout(() => { ws.close(); reject(new Error('timeout')); }, 15000);
 
     ws.onopen = () => {
       const cfg = [
@@ -59,8 +76,8 @@ async function speakViaEdge(text: string, rate: number) {
         if (evt.data.includes('turn.end')) {
           clearTimeout(timer);
           ws.close();
-          playPcm24k(ctx, chunks);
-          resolve();
+          // Wait for audio playback to finish before resolving
+          playPcm24k(ctx, chunks).then(resolve);
         }
       } else if (evt.data instanceof ArrayBuffer) {
         const raw = new Uint8Array(evt.data);
@@ -77,14 +94,13 @@ async function speakViaEdge(text: string, rate: number) {
   });
 }
 
-function playPcm24k(ctx: AudioContext, chunks: Uint8Array[]) {
+function playPcm24k(ctx: AudioContext, chunks: Uint8Array[]): Promise<void> {
   const totalLen = chunks.reduce((s, c) => s + c.length, 0);
   const buf = new ArrayBuffer(totalLen);
   const view = new Uint8Array(buf);
   let off = 0;
   for (const c of chunks) { view.set(c, off); off += c.length; }
 
-  // 16-bit signed PCM → 32-bit float
   const samples = totalLen / 2;
   const audioBuf = ctx.createBuffer(1, samples, 24000);
   const chan = audioBuf.getChannelData(0);
@@ -93,13 +109,20 @@ function playPcm24k(ctx: AudioContext, chunks: Uint8Array[]) {
     chan[i] = dv.getInt16(i * 2, true) / 32768;
   }
 
-  const src = ctx.createBufferSource();
-  src.buffer = audioBuf;
-  src.connect(ctx.destination);
-  src.start();
+  return new Promise<void>((resolve) => {
+    const src = ctx.createBufferSource();
+    src.buffer = audioBuf;
+    src.connect(ctx.destination);
+    currentSource = src;
+    src.onended = () => {
+      currentSource = null;
+      resolve();
+    };
+    src.start();
+  });
 }
 
-async function speakViaBaidu(text: string, rate: number) {
+async function speakViaBaidu(text: string, rate: number): Promise<void> {
   const res = await fetch('/api/tts', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -108,22 +131,47 @@ async function speakViaBaidu(text: string, rate: number) {
   if (!res.ok) throw new Error('Baidu failed');
   const blob = await res.blob();
   const url = URL.createObjectURL(blob);
-  const audio = new Audio(url);
-  audio.play();
-  audio.onended = () => URL.revokeObjectURL(url);
+
+  await new Promise<void>((resolve, reject) => {
+    const audio = new Audio(url);
+    currentAudio = audio;
+    audio.onended = () => {
+      URL.revokeObjectURL(url);
+      currentAudio = null;
+      resolve();
+    };
+    audio.onerror = () => {
+      URL.revokeObjectURL(url);
+      currentAudio = null;
+      reject(new Error('audio playback failed'));
+    };
+    audio.play().catch((e) => {
+      if (e.name === 'AbortError') {
+        URL.revokeObjectURL(url);
+        currentAudio = null;
+        resolve(); // cancelled, not a real error
+      } else {
+        reject(e);
+      }
+    });
+  });
 }
 
-function fallbackSpeak(text: string, rate: number) {
-  window.speechSynthesis.cancel();
-  const voices = window.speechSynthesis.getVoices();
-  const koVoice = voices.find((v) => v.lang.startsWith('ko')) || null;
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'ko-KR';
-  u.rate = rate;
-  u.pitch = 1;
-  u.volume = 1;
-  if (koVoice) u.voice = koVoice;
-  window.speechSynthesis.speak(u);
+async function fallbackSpeak(text: string, rate: number): Promise<void> {
+  return new Promise<void>((resolve) => {
+    window.speechSynthesis.cancel();
+    const voices = window.speechSynthesis.getVoices();
+    const koVoice = voices.find((v) => v.lang.startsWith('ko')) || null;
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'ko-KR';
+    u.rate = rate;
+    u.pitch = 1;
+    u.volume = 1;
+    if (koVoice) u.voice = koVoice;
+    u.onend = () => resolve();
+    u.onerror = () => resolve(); // cancelled = resolve silently
+    window.speechSynthesis.speak(u);
+  });
 }
 
 function escXml(s: string): string {
