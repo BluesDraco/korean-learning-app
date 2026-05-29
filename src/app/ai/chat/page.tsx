@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
+import Link from 'next/link';
 import {
   MessageSquare,
   Send,
@@ -15,8 +16,10 @@ import {
   Square,
   Play,
   Pause,
+  LogIn,
 } from 'lucide-react';
 import { KoreanKeyboard } from '@/components/KoreanKeyboard';
+import { useAuth } from '@/components/AuthProvider';
 
 // ── Types ────────────────────────────────────────────────────────
 
@@ -830,6 +833,7 @@ const levelColor: Record<ScenarioData['level'], string> = {
 // ── Main Page Component ──────────────────────────────────────────
 
 export default function AIChatPage() {
+  const { user, loading } = useAuth();
   const [phase, setPhase] = useState<'selecting' | 'chatting' | 'finished'>('selecting');
   const [scenario, setScenario] = useState<ScenarioData | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -1120,6 +1124,63 @@ export default function AIChatPage() {
 
   // ── Completed exchanges for stats ───────────────────────────
   const completedExchanges = currentStep;
+
+  // ── Auth guard ────────────────────────────────────────────────
+  if (!loading && !user) {
+    return (
+      <div className="py-4">
+        <div className="text-center mb-6">
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">情景对话</h1>
+          <p className="text-[var(--text-secondary)] text-sm mt-1">
+            选择情景，开启沉浸式韩语对话练习
+          </p>
+        </div>
+        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-8 text-center max-w-md mx-auto">
+          <div className="text-5xl mb-4">🐰</div>
+          <h2 className="text-lg font-bold text-[var(--text-primary)] mb-2">需要登录才能使用AI对话</h2>
+          <p className="text-sm text-[var(--text-secondary)] mb-6">
+            登录后可使用DeepSeek AI进行实时韩语情景对话，获得发音纠正和语法反馈
+          </p>
+          <div className="flex gap-3 justify-center">
+            <Link
+              href="/auth/login?redirect=/ai/chat"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--pink-primary)] text-white rounded-xl text-sm font-medium hover:opacity-90 transition-opacity"
+            >
+              <LogIn size={16} />
+              登录
+            </Link>
+            <Link
+              href="/auth/register"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--bg-input)] border border-[var(--border-color)] text-[var(--text-primary)] rounded-xl text-sm font-medium hover:border-[var(--pink-primary)]/30 transition-colors"
+            >
+              注册
+            </Link>
+          </div>
+        </div>
+
+        {/* Show scenarios as teaser (read-only) */}
+        <div className="mt-8 opacity-40 pointer-events-none">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+            {scenarios.slice(0, 4).map((s) => (
+              <div key={s.id} className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4">
+                <div className="text-3xl mb-3">{s.emoji}</div>
+                <h3 className="font-semibold text-[var(--text-primary)] text-sm leading-tight mb-1">{s.nameZh}</h3>
+                <p className="text-xs text-[var(--text-muted)]">{s.nameKo}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="py-20 text-center">
+        <p className="text-sm text-[var(--text-muted)]">加载中...</p>
+      </div>
+    );
+  }
 
   // ═══════════════════════════════════════════════════════════════
   // PHASE 1: Scenario Selection

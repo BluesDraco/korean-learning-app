@@ -7,6 +7,7 @@ import {
   Sparkles, RotateCcw, ChevronRight, Headphones, BookOpen,
 } from 'lucide-react';
 import { topikQuestions, topikSections, type TopikQuestion } from '@/data/topik-questions';
+import { speak, cancelSpeech } from '@/lib/tts';
 
 type Phase = 'selecting' | 'exam' | 'result';
 
@@ -17,16 +18,7 @@ interface AnswerRecord {
 }
 
 function speakTopik(text: string): Promise<void> {
-  return new Promise((resolve) => {
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'ko-KR';
-    u.rate = 0.85;
-    u.pitch = 1.0;
-    u.onend = () => resolve();
-    u.onerror = () => resolve();
-    window.speechSynthesis.speak(u);
-  });
+  return speak(text, 0.85);
 }
 
 export default function TopikPage() {
@@ -96,14 +88,14 @@ export default function TopikPage() {
       setCurrentIdx((prev) => prev + 1);
       setShowAnswer(false);
       setPlaying(false);
-      window.speechSynthesis.cancel();
+      cancelSpeech();
     }
   };
 
   const finishExam = useCallback(() => {
     setPhase('result');
     if (timerRef.current) clearInterval(timerRef.current);
-    window.speechSynthesis.cancel();
+    cancelSpeech();
   }, []);
 
   const handlePlayAudio = async () => {

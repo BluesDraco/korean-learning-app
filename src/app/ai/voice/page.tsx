@@ -3,10 +3,12 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import {
   ArrowLeft, Mic, MicOff, Volume2, VolumeX, Languages,
-  Sparkles, Lightbulb, Send, ChevronRight, AlertCircle, Loader2,
+  Sparkles, Lightbulb, Send, ChevronRight, AlertCircle, Loader2, LogIn,
 } from 'lucide-react';
 import Link from 'next/link';
 import { KoreanKeyboard } from '@/components/KoreanKeyboard';
+import { useAuth } from '@/components/AuthProvider';
+import { speak, cancelSpeech } from '@/lib/tts';
 
 // ── Types ────────────────────────────────────────────────────────
 
@@ -65,6 +67,7 @@ function createRecognition(lang: string): any {
 // ═══════════════════════════════════════════════════════════════════
 
 export default function VoiceChatPage() {
+  const { user, loading } = useAuth();
   const [messages, setMessages] = useState<ChatMsg[]>([]);
   const [isRecording, setIsRecording] = useState(false);
   const [interimText, setInterimText] = useState('');
@@ -97,12 +100,7 @@ export default function VoiceChatPage() {
   // ── TTS ──────────────────────────────────────────────────────
   const speakKorean = useCallback((text: string) => {
     if (!autoTTS) return;
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'ko-KR';
-    u.rate = 0.85;
-    u.pitch = 1;
-    window.speechSynthesis.speak(u);
+    speak(text, 0.85);
   }, [autoTTS]);
 
   // ── Send message to AI ───────────────────────────────────────
@@ -245,7 +243,7 @@ export default function VoiceChatPage() {
         r.onend = null;
         try { r.stop(); } catch {}
       }
-      window.speechSynthesis.cancel();
+      cancelSpeech();
     };
   }, []);
 
@@ -264,7 +262,7 @@ export default function VoiceChatPage() {
 
   // ── Clear conversation ───────────────────────────────────────
   const handleClear = useCallback(() => {
-    window.speechSynthesis.cancel();
+    cancelSpeech();
     setMessages([]);
     setInterimText('');
     setError('');
@@ -275,6 +273,68 @@ export default function VoiceChatPage() {
   // ═══════════════════════════════════════════════════════════════
 
   const hasMessages = messages.length > 0;
+
+  // ── Auth guard ────────────────────────────────────────────────
+  if (!loading && !user) {
+    return (
+      <div className="flex flex-col h-[calc(100vh-5rem)] -mx-3 md:-mx-5 lg:-mx-8">
+        <div className="shrink-0 flex items-center justify-between px-4 py-3 bg-[var(--bg-card)] border-b border-[var(--border-color)]">
+          <div className="flex items-center gap-3">
+            <Link href="/ai" className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors">
+              <ArrowLeft size={20} />
+            </Link>
+            <div className="flex items-center gap-2">
+              <span className="text-xl">🐰</span>
+              <h1 className="text-base font-bold text-[var(--text-primary)]">语音对话</h1>
+            </div>
+          </div>
+        </div>
+        <div className="flex-1 flex items-center justify-center">
+          <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-8 text-center max-w-md mx-4">
+            <div className="text-5xl mb-4">🎤</div>
+            <h2 className="text-lg font-bold text-[var(--text-primary)] mb-2">需要登录才能使用语音对话</h2>
+            <p className="text-sm text-[var(--text-secondary)] mb-6">
+              登录后可与AI进行实时韩语语音对话，获得发音纠正和语法反馈
+            </p>
+            <div className="flex gap-3 justify-center">
+              <Link
+                href="/auth/login?redirect=/ai/voice"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--pink-primary)] text-white rounded-xl text-sm font-medium hover:opacity-90 transition-opacity"
+              >
+                <LogIn size={16} />
+                登录
+              </Link>
+              <Link
+                href="/auth/register"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--bg-input)] border border-[var(--border-color)] text-[var(--text-primary)] rounded-xl text-sm font-medium hover:border-[var(--pink-primary)]/30 transition-colors"
+              >
+                注册
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="flex flex-col h-[calc(100vh-5rem)] -mx-3 md:-mx-5 lg:-mx-8">
+        <div className="shrink-0 flex items-center px-4 py-3 bg-[var(--bg-card)] border-b border-[var(--border-color)]">
+          <div className="flex items-center gap-3">
+            <Link href="/ai" className="p-1.5 rounded-lg text-[var(--text-muted)]">
+              <ArrowLeft size={20} />
+            </Link>
+            <span className="text-xl">🐰</span>
+            <h1 className="text-base font-bold text-[var(--text-primary)]">语音对话</h1>
+          </div>
+        </div>
+        <div className="flex-1 flex items-center justify-center">
+          <p className="text-sm text-[var(--text-muted)]">加载中...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col h-[calc(100vh-5rem)] -mx-3 md:-mx-5 lg:-mx-8">
@@ -433,13 +493,7 @@ export default function VoiceChatPage() {
               {/* Speak button for Tori messages */}
               {msg.sender === 'tori' && (
                 <button
-                  onClick={() => {
-                    window.speechSynthesis.cancel();
-                    const u = new SpeechSynthesisUtterance(msg.ko);
-                    u.lang = 'ko-KR';
-                    u.rate = 0.85;
-                    window.speechSynthesis.speak(u);
-                  }}
+                  onClick={() => speak(msg.ko, 0.85)}
                   className="text-xs text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors flex items-center gap-1 ml-1"
                 >
                   <Volume2 size={11} />

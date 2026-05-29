@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { Play, Pause, SkipBack, SkipForward, Repeat, Volume2, X, ChevronUp, ChevronDown } from 'lucide-react';
+import { speak, cancelSpeech } from '@/lib/tts';
 
 interface WordItem {
   korean: string;
@@ -39,14 +40,20 @@ export function WordAudioPlayer({ words }: Props) {
     return id;
   }, []);
 
-  const speak = useCallback((text: string, lang: string, rate: number, onEnd: () => void) => {
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = lang;
-    u.rate = rate;
-    u.pitch = 1;
-    u.onend = onEnd;
-    u.onerror = onEnd; // skip on error
-    window.speechSynthesis.speak(u);
+  const speakLocal = useCallback((text: string, lang: string, rate: number, onEnd: () => void) => {
+    if (lang === 'ko-KR') {
+      speak(text, rate, onEnd);
+    } else {
+      // Chinese — use browser TTS directly (Azure only does Korean)
+      cancelSpeech();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'zh-CN';
+      u.rate = rate;
+      u.pitch = 1;
+      u.onend = onEnd;
+      u.onerror = onEnd;
+      window.speechSynthesis.speak(u);
+    }
   }, []);
 
   const playWord = useCallback((idx: number) => {
@@ -69,12 +76,12 @@ export function WordAudioPlayer({ words }: Props) {
     idxRef.current = idx;
 
     setPhase('chinese');
-    speak(w.chinese, 'zh-CN', speedRef.current, () => {
+    speakLocal(w.chinese, 'zh-CN', speedRef.current, () => {
       if (!playingRef.current) return;
       safeTimeout(() => {
         if (!playingRef.current) return;
         setPhase('korean');
-        speak(w.korean, 'ko-KR', speedRef.current, () => {
+        speakLocal(w.korean, 'ko-KR', speedRef.current, () => {
           if (!playingRef.current) return;
           safeTimeout(() => {
             if (!playingRef.current) return;
@@ -86,14 +93,14 @@ export function WordAudioPlayer({ words }: Props) {
   }, [speak, safeTimeout]);
 
   const start = useCallback(() => {
-    window.speechSynthesis.cancel();
+    cancelSpeech();
     playingRef.current = true;
     setIsPlaying(true);
     playWord(idxRef.current);
   }, [playWord]);
 
   const pause = useCallback(() => {
-    window.speechSynthesis.cancel();
+    cancelSpeech();
     playingRef.current = false;
     setIsPlaying(false);
     setPhase('idle');
@@ -108,7 +115,7 @@ export function WordAudioPlayer({ words }: Props) {
   }, [isPlaying, start, pause]);
 
   const skipBack = useCallback(() => {
-    window.speechSynthesis.cancel();
+    cancelSpeech();
     const prev = Math.max(0, idxRef.current - 1);
     idxRef.current = prev;
     setCurrentIdx(prev);
@@ -118,7 +125,7 @@ export function WordAudioPlayer({ words }: Props) {
   }, [playWord]);
 
   const skipForward = useCallback(() => {
-    window.speechSynthesis.cancel();
+    cancelSpeech();
     const next = (idxRef.current + 1) % words.length;
     idxRef.current = next;
     setCurrentIdx(next);
@@ -142,7 +149,7 @@ export function WordAudioPlayer({ words }: Props) {
     });
     // Restart current word with new speed
     if (playingRef.current) {
-      window.speechSynthesis.cancel();
+      cancelSpeech();
       playWord(idxRef.current);
     }
   }, [playWord]);
@@ -151,7 +158,7 @@ export function WordAudioPlayer({ words }: Props) {
   useEffect(() => {
     return () => {
       mountedRef.current = false;
-      window.speechSynthesis.cancel();
+      cancelSpeech();
       timeoutIdsRef.current.forEach((id) => clearTimeout(id));
       timeoutIdsRef.current.clear();
     };
@@ -276,7 +283,7 @@ export function WordAudioPlayer({ words }: Props) {
                   <button
                     key={i}
                     onClick={() => {
-                      window.speechSynthesis.cancel();
+                      cancelSpeech();
                       idxRef.current = i;
                       setCurrentIdx(i);
                       if (playingRef.current) playWord(i);

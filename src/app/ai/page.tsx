@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { MessageSquare, Lightbulb, Search, Sparkles, ArrowRight, Mail, Check, Bot, Globe, Clock } from 'lucide-react';
+import { MessageSquare, Lightbulb, Search, Sparkles, ArrowRight, Mail, Check, Bot, Globe, Clock, LogIn } from 'lucide-react';
+import { useAuth } from '@/components/AuthProvider';
 
 const features = [
   {
@@ -47,6 +48,7 @@ const upcomingFeatures = [
 ];
 
 export default function AiPage() {
+  const { user } = useAuth();
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
@@ -73,6 +75,26 @@ export default function AiPage() {
           目前使用本地智能分析，未来将接入大语言模型，提供更智能的韩语学习体验
         </p>
       </div>
+
+      {/* Login prompt for unauthenticated users */}
+      {!user && (
+        <div className="bg-gradient-to-r from-[var(--pink-primary)]/10 to-[var(--purple-soft)]/10 border border-[var(--pink-primary)]/20 rounded-2xl p-4 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">🔑</span>
+            <div>
+              <p className="text-sm font-medium text-[var(--text-primary)]">登录后体验完整AI功能</p>
+              <p className="text-xs text-[var(--text-secondary)]">情景对话需要登录，句子拆解可免登录使用</p>
+            </div>
+          </div>
+          <Link
+            href="/auth/login?redirect=/ai"
+            className="shrink-0 inline-flex items-center gap-1.5 px-4 py-2 bg-[var(--pink-primary)] text-white rounded-xl text-sm font-medium hover:opacity-90 transition-opacity"
+          >
+            <LogIn size={14} />
+            登录
+          </Link>
+        </div>
+      )}
 
       {/* Current features */}
       <div>

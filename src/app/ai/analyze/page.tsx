@@ -1,11 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Search, Loader2, Volume2, ExternalLink, Lightbulb, Sparkles, Languages, BookOpen, Clock, Trash2, Plus, Pencil, Check } from 'lucide-react';
+import { Search, Loader2, Volume2, ExternalLink, Lightbulb, Sparkles, Languages, BookOpen, Clock, Trash2, Plus, Pencil, Check, LogIn, X } from 'lucide-react';
 import Link from 'next/link';
 import { knowledgeCategories } from '@/data/knowledge';
 import { grammarPoints } from '@/data/grammar';
 import { KoreanKeyboard } from '@/components/KoreanKeyboard';
+import { useAuth } from '@/components/AuthProvider';
 import { speak } from '@/lib/tts';
 
 interface AnalyzedWord {
@@ -292,7 +293,9 @@ function formatTimestamp(ts: string): string {
 }
 
 export default function AIAnalyzePage() {
+  const { user } = useAuth();
   const [tab, setTab] = useState<'analyze' | 'history'>('analyze');
+  const [bannerDismissed, setBannerDismissed] = useState(false);
 
   return (
     <div className="py-4 space-y-3">
@@ -302,6 +305,33 @@ export default function AIAnalyzePage() {
           输入韩语句子，获得整句翻译、逐词拆解和语法分析
         </p>
       </div>
+
+      {/* AI enhancement banner for unauthenticated users */}
+      {!user && !bannerDismissed && (
+        <div className="bg-gradient-to-r from-[var(--purple-soft)]/8 to-[var(--pink-primary)]/8 border border-[var(--purple-soft)]/15 rounded-xl px-4 py-2.5 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <Sparkles size={14} className="text-[var(--purple-soft)] shrink-0" />
+            <span className="text-xs text-[var(--text-secondary)]">
+              当前使用离线词典分析，<span className="font-medium text-[var(--text-primary)]">登录后可使用DeepSeek AI增强分析</span>
+            </span>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <Link
+              href="/auth/login?redirect=/ai/analyze"
+              className="inline-flex items-center gap-1 px-3 py-1.5 bg-[var(--pink-primary)] text-white rounded-lg text-xs font-medium hover:opacity-90 transition-opacity"
+            >
+              <LogIn size={12} />
+              登录
+            </Link>
+            <button
+              onClick={() => setBannerDismissed(true)}
+              className="p-1 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
+            >
+              <X size={14} />
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Tab bar */}
       <div className="flex gap-2 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-1.5">
