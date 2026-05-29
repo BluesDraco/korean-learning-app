@@ -16,9 +16,9 @@ const nextConfig: NextConfig = {
             value: [
               "default-src 'self'",
               "script-src 'self' 'unsafe-inline'",
-              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+              "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: blob: https:",
-              "font-src 'self' https://fonts.gstatic.com data:",
+              "font-src 'self' data:",
               "connect-src 'self' https://api.deepseek.com https://fanyi.baidu.com wss://speech.platform.bing.com",
               "media-src 'self' data: blob:",
               "frame-src 'self' https://www.bilibili.com",

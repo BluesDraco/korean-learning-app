@@ -114,39 +114,39 @@ html[data-font-size="large"]  { font-size: 19px; }
 html[data-font-size="xlarge"] { font-size: 21px; }
 
 body {
-  font-family: 'Nunito', 'LXGW WenKai', 'ZCOOL KuaiLe', system-ui, -apple-system, sans-serif;
+  font-family: system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
 }
 
-/* Preset: cute (default) — rounded + handwriting Korean */
+/* Preset: cute (default) — rounded system fonts + Korean */
 html[data-font="cute"] body,
 html:not([data-font]) body {
-  font-family: 'Nunito', 'LXGW WenKai', 'ZCOOL KuaiLe', system-ui, -apple-system, sans-serif;
+  font-family: system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
 }
 html[data-font="cute"] .ko-text,
 html:not([data-font]) .ko-text {
-  font-family: 'Nanum Pen Script', 'Nanum Gothic', sans-serif;
+  font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
 }
 html[data-font="cute"] .ko-body,
 html:not([data-font]) .ko-body {
-  font-family: 'Nanum Gothic', sans-serif;
+  font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
 }
 
-/* Preset: clean — system sans-serif + Nanum Gothic */
+/* Preset: clean — system sans-serif */
 html[data-font="clean"] body {
-  font-family: system-ui, -apple-system, 'Segoe UI', 'Nunito', sans-serif;
+  font-family: system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
 }
 html[data-font="clean"] .ko-text,
 html[data-font="clean"] .ko-body {
-  font-family: 'Nanum Gothic', sans-serif;
+  font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
 }
 
-/* Preset: classic — LXGW WenKai body + Nanum Gothic Korean */
+/* Preset: classic — serif body */
 html[data-font="classic"] body {
-  font-family: 'LXGW WenKai', 'Nanum Gothic', Georgia, 'Times New Roman', serif;
+  font-family: Georgia, 'Times New Roman', 'KaiTi', 'STKaiti', 'Noto Serif KR', serif;
 }
 html[data-font="classic"] .ko-text,
 html[data-font="classic"] .ko-body {
-  font-family: 'Nanum Gothic', Georgia, serif;
+  font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', serif;
 }
 
 /* ── Paper line background ── */
@@ -349,7 +349,7 @@ html[data-font="classic"] .ko-body {
 .btn-primary {
   background: linear-gradient(135deg, #FF8FAB, #FF6B95);
   color: var(--text-on-pink);
-  font-family: 'Nunito', sans-serif;
+  font-family: system-ui, -apple-system, sans-serif;
   font-weight: 700;
   font-size: 16px;
   border-radius: var(--radius-button);
@@ -393,7 +393,7 @@ html[data-font="classic"] .ko-body {
 .btn-pixel {
   background: var(--purple-soft);
   color: white;
-  font-family: 'Nunito', monospace;
+  font-family: 'Courier New', monospace;
   font-size: 13px;
   font-weight: 700;
   padding: 8px 20px;
@@ -571,7 +571,7 @@ html[data-font="classic"] .ko-body {
 .marquee-banner span {
   display: inline-block;
   animation: marquee 20s linear infinite;
-  font-family: 'ZCOOL KuaiLe', cursive;
+  font-family: 'KaiTi', 'STKaiti', cursive;
   font-size: 15px;
   color: var(--foreground);
   font-weight: 500;
@@ -612,7 +612,7 @@ html[data-font="classic"] .ko-body {
   justify-content: center;
   width: 88px;
   height: 31px;
-  font-family: 'Nunito', sans-serif;
+  font-family: system-ui, -apple-system, sans-serif;
   font-size: 10px;
   font-weight: 700;
   color: white;
@@ -648,7 +648,7 @@ html[data-font="classic"] .ko-body {
   padding: 4px 8px;
   background: linear-gradient(90deg, var(--purple-soft), var(--pink-light));
   color: white;
-  font-family: 'Nunito', sans-serif;
+  font-family: system-ui, -apple-system, sans-serif;
   font-size: 12px;
   font-weight: 700;
   user-select: none;
@@ -821,7 +821,7 @@ html[data-font="classic"] .ko-body {
 /* XP float animation */
 .xp-float {
   animation: xp-float 1.2s ease-out forwards;
-  font-family: 'Nunito', sans-serif;
+  font-family: system-ui, -apple-system, sans-serif;
   font-weight: 700;
   color: var(--pink-primary);
   pointer-events: none;
@@ -954,7 +954,7 @@ html[data-font="classic"] .ko-body {
   animation: float 2s ease-in-out infinite;
 }
 .achievement-popup .title {
-  font-family: 'Nunito', sans-serif;
+  font-family: system-ui, -apple-system, sans-serif;
   font-weight: 800;
   font-size: 20px;
   color: var(--text-primary);
@@ -972,7 +972,7 @@ html[data-font="classic"] .ko-body {
   gap: 4px;
   background: linear-gradient(135deg, var(--peach-soft), var(--pink-primary));
   color: white;
-  font-family: 'Nunito', sans-serif;
+  font-family: system-ui, -apple-system, sans-serif;
   font-weight: 700;
   font-size: 12px;
   padding: 4px 10px;
