@@ -1,4 +1,3 @@
-let audioCtx: AudioContext | null = null;
 let currentAudio: HTMLAudioElement | null = null;
 
 export function cancelSpeech() {
@@ -23,12 +22,9 @@ export async function speak(text: string, rate: number = 1.0, onEnd?: () => void
 
   cancelSpeech();
 
-  const pct = Math.round((rate - 1) * 100);
-  const rateStr = pct >= 0 ? `+${pct}%` : `${pct}%`;
-
-  // 1. Azure Neural TTS (best Korean pronunciation)
+  // 1. Qwen3-TTS (阿里云 — best Korean pronunciation)
   try {
-    await speakViaAzure(text, rateStr);
+    await speakViaQwen(text);
     onEnd?.();
     return;
   } catch { /* fall through */ }
@@ -45,13 +41,13 @@ export async function speak(text: string, rate: number = 1.0, onEnd?: () => void
   onEnd?.();
 }
 
-async function speakViaAzure(text: string, rateStr: string): Promise<void> {
-  const res = await fetch('/api/tts/azure', {
+async function speakViaQwen(text: string): Promise<void> {
+  const res = await fetch('/api/tts/qwen', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text, rate: rateStr }),
+    body: JSON.stringify({ text }),
   });
-  if (!res.ok) throw new Error('Azure failed');
+  if (!res.ok) throw new Error('Qwen failed');
   const blob = await res.blob();
   const url = URL.createObjectURL(blob);
 
