@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { kpopSongs } from '@/data/kpopSongs';
 import type { KpopSong, KpopLyricLine } from '@/types';
+import { speak } from '@/lib/tts';
 
 const LEVEL_CONFIG: Record<string, { label: string; color: string }> = {
   beginner: { label: '初级', color: 'var(--mint-soft)' },
@@ -21,16 +22,6 @@ function uniqueKoreanWords(lyrics: KpopSong['lyrics']): string[] {
     .flatMap((l) => l.korean.split(/[\s,.'"!?\-…]+/))
     .filter((w) => /[가-힣]/.test(w) && w.length > 1);
   return Array.from(new Set(all));
-}
-
-function speakKorean(text: string) {
-  if (typeof window === 'undefined') return;
-  window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'ko-KR';
-  u.rate = 0.75;
-  u.pitch = 1;
-  window.speechSynthesis.speak(u);
 }
 
 function groupBySection(lyrics: KpopLyricLine[]): { section: string; lines: KpopLyricLine[] }[] {
@@ -209,7 +200,7 @@ export default function KpopSongPage() {
           罗马音
         </button>
         <button
-          onClick={() => speakKorean(song.lyrics.map((l) => l.korean).join(' '))}
+          onClick={() => speak(song.lyrics.map((l) => l.korean).join(' '), 0.75)}
           className="flex items-center gap-1 text-[11px] px-2.5 py-1.5 rounded-lg bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] hover:bg-[var(--pink-primary)]/20 transition-colors"
         >
           <Play size={12} />
@@ -232,7 +223,7 @@ export default function KpopSongPage() {
               <span
                 key={word}
                 className="px-2 py-1 rounded-lg bg-[var(--bg-input)] text-xs text-[var(--text-primary)] font-medium hover:bg-[var(--pink-primary)]/10 hover:text-[var(--pink-primary)] cursor-pointer transition-colors"
-                onClick={() => speakKorean(word)}
+                onClick={() => speak(word, 0.75)}
                 title="点击发音"
               >
                 {word}
@@ -334,7 +325,7 @@ function LyricLine({
             {line.korean}
           </p>
           <button
-            onClick={(e) => { e.stopPropagation(); speakKorean(line.korean); }}
+            onClick={(e) => { e.stopPropagation(); speak(line.korean, 0.75); }}
             className="shrink-0 w-6 h-6 rounded-full flex items-center justify-center hover:bg-[var(--pink-primary)]/10 text-[var(--text-muted)] hover:text-[var(--pink-primary)] active:scale-90 transition-all opacity-0 group-hover:opacity-100"
             title="朗读本句"
           >

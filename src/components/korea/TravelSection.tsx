@@ -2,14 +2,7 @@
 
 import { Volume2, MapPin as MapPinIcon } from 'lucide-react';
 import { travelCities } from '@/data/korea';
-
-function speakKorean(text: string) {
-  window.speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = 'ko-KR';
-  utterance.rate = 0.8;
-  window.speechSynthesis.speak(utterance);
-}
+import { speak } from '@/lib/tts';
 
 export function TravelSection() {
   return (
@@ -53,7 +46,7 @@ export function TravelSection() {
                       <p className="text-xs text-[var(--text-secondary)] mt-0.5">{phrase.zh}</p>
                     </div>
                     <button
-                      onClick={() => speakKorean(phrase.ko)}
+                      onClick={() => speak(phrase.ko, 0.8)}
                       className="p-1.5 rounded-lg bg-[var(--bg-card)] hover:bg-[var(--bg-accent)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors shrink-0"
                       title="听发音"
                     >

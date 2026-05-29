@@ -6,15 +6,8 @@ import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, BookOpen, Plus, Trash2, Volume2, Search, Loader2 } from 'lucide-react';
 import { db } from '@/lib/db';
 import { AddToBookModal } from '@/components/AddToBookModal';
+import { speak } from '@/lib/tts';
 import type { WordBook, Word } from '@/types';
-
-function speakKorean(text: string) {
-  window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'ko-KR';
-  u.rate = 0.8;
-  window.speechSynthesis.speak(u);
-}
 
 export default function BookDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -148,7 +141,7 @@ export default function BookDetailPage() {
                     <div className="text-xs text-[var(--text-secondary)] truncate mt-0.5">{word.meaning}</div>
                   </div>
                   <button
-                    onClick={(e) => { e.stopPropagation(); speakKorean(word.word); }}
+                    onClick={(e) => { e.stopPropagation(); speak(word.word, 0.8); }}
                     className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] shrink-0"
                   >
                     <Volume2 size={15} />
@@ -179,7 +172,7 @@ export default function BookDetailPage() {
                               <p className="text-xs text-[var(--text-secondary)] mt-0.5">{ex.translation}</p>
                             </div>
                             <button
-                              onClick={(e) => { e.stopPropagation(); speakKorean(ex.text); }}
+                              onClick={(e) => { e.stopPropagation(); speak(ex.text, 0.8); }}
                               className="p-1 rounded-lg hover:bg-[var(--bg-accent)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] shrink-0"
                             >
                               <Volume2 size={14} />

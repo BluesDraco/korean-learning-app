@@ -10,14 +10,7 @@ import {
 import { getTheme, getThemeWords } from '@/data/vocabulary';
 import { db } from '@/lib/db';
 import type { WordEntry, ThemePack } from '@/types';
-
-function speakKorean(text: string) {
-  window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'ko-KR';
-  u.rate = 0.75;
-  window.speechSynthesis.speak(u);
-}
+import { speak } from '@/lib/tts';
 
 export default function ThemeDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -173,7 +166,7 @@ export default function ThemeDetailPage() {
                   <p className="text-xs text-[var(--text-secondary)] mt-0.5">{s.chinese}</p>
                 </div>
                 <button
-                  onClick={() => speakKorean(s.korean)}
+                  onClick={() => speak(s.korean, 0.75)}
                   className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors shrink-0 opacity-0 group-hover:opacity-100"
                 >
                   <Volume2 size={14} />
@@ -238,8 +231,8 @@ export default function ThemeDetailPage() {
                     <span
                       role="button"
                       tabIndex={0}
-                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); speakKorean(entry.korean); } }}
-                      onClick={(e) => { e.stopPropagation(); speakKorean(entry.korean); }}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); speak(entry.korean, 0.75); } }}
+                      onClick={(e) => { e.stopPropagation(); speak(entry.korean, 0.75); }}
                       className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors cursor-pointer"
                     >
                       <Volume2 size={14} />
@@ -282,7 +275,7 @@ export default function ThemeDetailPage() {
                               )}
                             </div>
                             <button
-                              onClick={() => speakKorean(ex.korean)}
+                              onClick={() => speak(ex.korean, 0.75)}
                               className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors shrink-0"
                             >
                               <Volume2 size={14} />

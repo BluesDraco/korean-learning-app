@@ -5,15 +5,8 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { ArrowLeft, Volume2, ChevronLeft, ChevronRight, BookOpen, Loader2 } from 'lucide-react';
 import { db } from '@/lib/db';
+import { speak } from '@/lib/tts';
 import type { WordBook, Word } from '@/types';
-
-function speakKorean(text: string) {
-  window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'ko-KR';
-  u.rate = 0.8;
-  window.speechSynthesis.speak(u);
-}
 
 export default function FlashcardStudyPage() {
   const { id } = useParams<{ id: string }>();
@@ -203,7 +196,7 @@ export default function FlashcardStudyPage() {
                   {word.partOfSpeech}
                 </span>
                 <button
-                  onClick={(e) => { e.stopPropagation(); speakKorean(word.word); }}
+                  onClick={(e) => { e.stopPropagation(); speak(word.word, 0.8); }}
                   className="flex items-center gap-2 px-5 py-3 rounded-full bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] hover:bg-[var(--pink-primary)]/20 transition-colors font-medium text-sm"
                 >
                   <Volume2 size={18} />
@@ -239,7 +232,7 @@ export default function FlashcardStudyPage() {
                         <div className="flex items-start justify-between gap-2">
                           <p className="text-sm text-[var(--text-primary)] leading-relaxed flex-1">{ex.text}</p>
                           <button
-                            onClick={(e) => { e.stopPropagation(); speakKorean(ex.text); }}
+                            onClick={(e) => { e.stopPropagation(); speak(ex.text, 0.8); }}
                             className="p-1.5 rounded-lg hover:bg-[var(--bg-accent)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] shrink-0"
                           >
                             <Volume2 size={14} />

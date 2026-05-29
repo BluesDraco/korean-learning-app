@@ -6,14 +6,7 @@ import Link from 'next/link';
 import { knowledgeCategories } from '@/data/knowledge';
 import { grammarPoints } from '@/data/grammar';
 import { KoreanKeyboard } from '@/components/KoreanKeyboard';
-
-function speakKorean(text: string) {
-  window.speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = 'ko-KR';
-  utterance.rate = 0.8;
-  window.speechSynthesis.speak(utterance);
-}
+import { speak } from '@/lib/tts';
 
 interface AnalyzedWord {
   text: string;
@@ -497,7 +490,7 @@ function AnalyzerForm() {
                 {result.original}
               </p>
               <button
-                onClick={() => speakKorean(result.original)}
+                onClick={() => speak(result.original, 0.75)}
                 className="p-2 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors shrink-0"
                 title="听整句发音"
               >
@@ -586,7 +579,7 @@ function AnalyzerForm() {
                       {/* Action buttons */}
                       <div className="flex flex-col gap-1 shrink-0">
                         <button
-                          onClick={() => speakKorean(w.text)}
+                          onClick={() => speak(w.text, 0.75)}
                           className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors shrink-0"
                           title="听发音"
                         >
@@ -697,7 +690,7 @@ function AnalyzerForm() {
                               <p className="text-xs text-[var(--text-secondary)] mt-0.5">{ex.zh}</p>
                             </div>
                             <button
-                              onClick={() => speakKorean(ex.ko)}
+                              onClick={() => speak(ex.ko, 0.75)}
                               className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors shrink-0"
                             >
                               <Volume2 size={14} />
@@ -858,7 +851,7 @@ function HistoryTab() {
                 {loadedResult.original}
               </p>
               <button
-                onClick={() => speakKorean(loadedResult.original)}
+                onClick={() => speak(loadedResult.original, 0.75)}
                 className="p-2 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors shrink-0"
               >
                 <Volume2 size={18} />
@@ -897,7 +890,7 @@ function HistoryTab() {
                       <p className="text-sm text-[var(--text-secondary)]">→ {w.meaning}</p>
                     </div>
                     <button
-                      onClick={() => speakKorean(w.text)}
+                      onClick={() => speak(w.text, 0.75)}
                       className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors shrink-0"
                     >
                       <Volume2 size={14} />

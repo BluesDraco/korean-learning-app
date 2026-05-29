@@ -5,14 +5,7 @@ import Link from 'next/link';
 import { ArrowLeft, ChevronDown, ChevronUp, Lightbulb, Volume2, Languages } from 'lucide-react';
 import { useState } from 'react';
 import { knowledgeCategories } from '@/data/knowledge';
-
-function speakKorean(text: string) {
-  window.speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = 'ko-KR';
-  utterance.rate = 0.8;
-  window.speechSynthesis.speak(utterance);
-}
+import { speak } from '@/lib/tts';
 
 export default function KnowledgeCategoryPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -84,7 +77,7 @@ export default function KnowledgeCategoryPage() {
                 {/* Actions */}
                 <div className="flex items-center gap-2 shrink-0">
                   <button
-                    onClick={(e) => { e.stopPropagation(); speakKorean(word.word); }}
+                    onClick={(e) => { e.stopPropagation(); speak(word.word, 0.8); }}
                     className="p-2 rounded-xl bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
                     title="听发音"
                   >
@@ -106,7 +99,7 @@ export default function KnowledgeCategoryPage() {
                     <div className="flex items-start gap-2">
                       <p className="text-base text-[var(--text-primary)] leading-relaxed">{word.example}</p>
                       <button
-                        onClick={(e) => { e.stopPropagation(); speakKorean(word.example); }}
+                        onClick={(e) => { e.stopPropagation(); speak(word.example, 0.8); }}
                         className="p-1 rounded-lg bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors shrink-0"
                         title="听例句发音"
                       >

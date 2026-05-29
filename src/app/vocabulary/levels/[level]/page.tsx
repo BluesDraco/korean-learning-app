@@ -10,14 +10,7 @@ import {
 import { getLevel, getLevelWords } from '@/data/vocabulary';
 import { db } from '@/lib/db';
 import type { WordEntry, LevelWordList } from '@/types';
-
-function speakKorean(text: string) {
-  window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'ko-KR';
-  u.rate = 0.75;
-  window.speechSynthesis.speak(u);
-}
+import { speak } from '@/lib/tts';
 
 const levelNames: Record<number, string> = {
   1: '1级 · 入门', 2: '2级 · 基础', 3: '3级 · 进阶',
@@ -245,11 +238,11 @@ export default function LevelDetailPage() {
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   <span
-                    onClick={(e) => { e.stopPropagation(); speakKorean(entry.korean); }}
+                    onClick={(e) => { e.stopPropagation(); speak(entry.korean, 0.75); }}
                     className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors cursor-pointer"
                     role="button"
                     tabIndex={0}
-                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); speakKorean(entry.korean); } }}
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); speak(entry.korean, 0.75); } }}
                   >
                     <Volume2 size={14} />
                   </span>
@@ -281,7 +274,7 @@ export default function LevelDetailPage() {
                         <p className="text-xs text-[var(--text-secondary)] mt-0.5">{ex.chinese}</p>
                       </div>
                       <button
-                        onClick={() => speakKorean(ex.korean)}
+                        onClick={() => speak(ex.korean, 0.75)}
                         className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors shrink-0"
                       >
                         <Volume2 size={14} />

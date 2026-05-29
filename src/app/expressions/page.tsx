@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react';
 import { Search, X, Filter, Flame, Volume2 } from 'lucide-react';
 import { idioms, slangs, loanwords, type Idiom, type Slang, type Loanword } from '@/data/expressions';
+import { speak } from '@/lib/tts';
 
 // ---- Config ----
 
@@ -65,13 +66,6 @@ const categoryConfig: Record<string, { label: string; color: string }> = {
 
 // ---- Helpers ----
 
-function speakKorean(text: string) {
-  window.speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = 'ko-KR';
-  utterance.rate = 0.7;
-  window.speechSynthesis.speak(utterance);
-}
 
 function hotStars(level: number) {
   return Array.from({ length: level }, (_, i) => (
@@ -516,7 +510,7 @@ function IdiomCard({ idiom }: { idiom: Idiom }) {
       <div className="flex items-start justify-between">
         <h3 className="text-lg font-bold text-[var(--text-primary)]">{idiom.expression}</h3>
         <button
-          onClick={() => speakKorean(idiom.expression)}
+          onClick={() => speak(idiom.expression, 0.7)}
           className="p-1.5 rounded-lg hover:bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors shrink-0"
           title="听发音"
         >
@@ -569,7 +563,7 @@ function IdiomCard({ idiom }: { idiom: Idiom }) {
         <div className="flex items-start gap-2">
           <p className="text-sm text-[var(--text-primary)] flex-1 leading-relaxed">{idiom.example}</p>
           <button
-            onClick={() => speakKorean(idiom.example)}
+            onClick={() => speak(idiom.example, 0.7)}
             className="p-1 rounded-lg hover:bg-[var(--bg-accent)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors shrink-0"
             title="听例句发音"
           >
@@ -593,7 +587,7 @@ function SlangCard({ slang }: { slang: Slang }) {
         <div className="flex items-center gap-1.5">
           <span className="flex items-center gap-0.5">{hotStars(slang.hotLevel)}</span>
           <button
-            onClick={() => speakKorean(slang.expression)}
+            onClick={() => speak(slang.expression, 0.7)}
             className="p-1 rounded-lg hover:bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors shrink-0"
             title="听发音"
           >
@@ -639,7 +633,7 @@ function SlangCard({ slang }: { slang: Slang }) {
         <div className="flex items-start gap-2">
           <p className="text-sm text-[var(--text-primary)] flex-1 leading-relaxed">{slang.example}</p>
           <button
-            onClick={() => speakKorean(slang.example)}
+            onClick={() => speak(slang.example, 0.7)}
             className="p-1 rounded-lg hover:bg-[var(--bg-accent)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors shrink-0"
             title="听例句发音"
           >
@@ -673,7 +667,7 @@ function LoanwordCard({ loanword }: { loanword: Loanword }) {
           </div>
         </div>
         <button
-          onClick={() => speakKorean(loanword.expression)}
+          onClick={() => speak(loanword.expression, 0.7)}
           className="p-1.5 rounded-lg hover:bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors shrink-0"
           title="听发音"
         >
@@ -696,7 +690,7 @@ function LoanwordCard({ loanword }: { loanword: Loanword }) {
         <div className="flex items-start gap-2">
           <p className="text-sm text-[var(--text-primary)] flex-1 leading-relaxed">{loanword.example}</p>
           <button
-            onClick={() => speakKorean(loanword.example)}
+            onClick={() => speak(loanword.example, 0.7)}
             className="p-1 rounded-lg hover:bg-[var(--bg-accent)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors shrink-0"
             title="听例句发音"
           >

@@ -3,13 +3,8 @@
 import { useState, useMemo } from 'react';
 import { Search, X, Volume2, Hash, Smile, ChevronDown, ChevronUp } from 'lucide-react';
 import { vocabularyEntries } from '@/data/vocabulary/entries';
+import { speak } from '@/lib/tts';
 
-function speakKorean(text: string) {
-  window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'ko-KR'; u.rate = 0.75;
-  window.speechSynthesis.speak(u);
-}
 
 export function ScenesSection() {
   const [search, setSearch] = useState('');
@@ -76,7 +71,7 @@ export function ScenesSection() {
                   </div>
                   <div className="text-xs text-[var(--text-secondary)] mt-1">{entry.meanings.map((m) => m.chinese).join('；')}</div>
                 </div>
-                <span onClick={(e) => { e.stopPropagation(); speakKorean(entry.korean); }}
+                <span onClick={(e) => { e.stopPropagation(); speak(entry.korean, 0.75); }}
                   className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] cursor-pointer inline-flex"
                 ><Volume2 size={14} /></span>
                 {isExpanded ? <ChevronUp size={16} className="text-[var(--text-muted)]" /> : <ChevronDown size={16} className="text-[var(--text-muted)]" />}

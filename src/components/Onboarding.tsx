@@ -4,14 +4,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { Sparkles, Trophy, Volume2, ArrowRight, Star, Zap } from 'lucide-react';
 import { getProfile, updateProfile, awardXp, updateStreak } from '@/lib/gamification';
 import type { UserProfile } from '@/types';
-
-function speakKorean(text: string) {
-  window.speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = 'ko-KR';
-  utterance.rate = 0.75;
-  window.speechSynthesis.speak(utterance);
-}
+import { speak } from '@/lib/tts';
 
 interface Props {
   onComplete: () => void;
@@ -188,7 +181,7 @@ export default function Onboarding({ onComplete }: Props) {
                 <p className="text-4xl font-bold text-[var(--text-primary)]">안녕하세요</p>
                 <p className="text-sm text-[var(--text-muted)]">an-nyeong-ha-se-yo</p>
                 <button
-                  onClick={() => speakKorean('안녕하세요')}
+                  onClick={() => speak('안녕하세요', 0.75)}
                   className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] hover:bg-[var(--pink-primary)]/20 transition-colors text-sm"
                 >
                   <Volume2 size={16} />

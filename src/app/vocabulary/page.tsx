@@ -11,6 +11,7 @@ import { db } from '@/lib/db';
 import { AddToBookModal } from '@/components/AddToBookModal';
 import { BooksSection } from '@/components/vocabulary/BooksSection';
 import { WordAudioPlayer } from '@/components/WordAudioPlayer';
+import { speak } from '@/lib/tts';
 import type { Word, MasteryLevel } from '@/types';
 
 // ── Mastery display config ──────────────────────────────────────────
@@ -36,13 +37,6 @@ const masteryDot: Record<MasteryLevel, string> = {
 };
 
 // ── Helpers ─────────────────────────────────────────────────────────
-function speakKorean(text: string) {
-  window.speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = 'ko-KR';
-  utterance.rate = 0.8;
-  window.speechSynthesis.speak(utterance);
-}
 
 function escapeRegExp(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -509,7 +503,7 @@ export default function VocabularyPage() {
                               <HighlightText text={ex.text} highlight={search} />
                             </p>
                             <button
-                              onClick={(e) => { e.stopPropagation(); speakKorean(ex.text); }}
+                              onClick={(e) => { e.stopPropagation(); speak(ex.text, 0.8); }}
                               className="p-1 rounded-lg bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors shrink-0"
                               title="听例句发音"
                             >

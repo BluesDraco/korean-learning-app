@@ -4,13 +4,8 @@ import { useState, useMemo } from 'react';
 import { Search, X, Flame, Volume2 } from 'lucide-react';
 import { idioms, slangs, loanwords } from '@/data/expressions';
 import type { Idiom, Slang, Loanword } from '@/data/expressions';
+import { speak } from '@/lib/tts';
 
-function speakKorean(text: string) {
-  window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'ko-KR'; u.rate = 0.7;
-  window.speechSynthesis.speak(u);
-}
 
 const tagColors: Record<string, string> = {
   '身体': 'bg-red-500/10 text-red-500', '食物': 'bg-orange-500/10 text-orange-500',
@@ -78,7 +73,7 @@ export function ExpressionsSection() {
             <div key={item.id} className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-4 hover:border-[var(--pink-pale)] transition-colors">
               <div className="flex items-center justify-between mb-2">
                 <h4 className="font-bold text-[var(--text-primary)]">{item.expression}</h4>
-                <button onClick={() => speakKorean(item.expression)} className="p-1 rounded-lg hover:bg-[var(--bg-input)] text-[var(--text-muted)]"><Volume2 size={14} /></button>
+                <button onClick={() => speak(item.expression, 0.7)} className="p-1 rounded-lg hover:bg-[var(--bg-input)] text-[var(--text-muted)]"><Volume2 size={14} /></button>
               </div>
               <div className="bg-[var(--bg-input)] rounded-lg p-2.5 mb-2 text-sm">
                 <span className="text-[var(--text-muted)]">字面: </span>{item.literalMeaning}
@@ -101,7 +96,7 @@ export function ExpressionsSection() {
                   <h4 className="font-bold text-[var(--text-primary)]">{item.expression}</h4>
                   <span className="flex">{Array.from({ length: item.hotLevel }, (_, i) => <Flame key={i} size={11} className="text-[var(--pink-primary)] fill-[var(--pink-primary)]" />)}</span>
                 </div>
-                <button onClick={() => speakKorean(item.expression)} className="p-1 rounded-lg hover:bg-[var(--bg-input)] text-[var(--text-muted)]"><Volume2 size={14} /></button>
+                <button onClick={() => speak(item.expression, 0.7)} className="p-1 rounded-lg hover:bg-[var(--bg-input)] text-[var(--text-muted)]"><Volume2 size={14} /></button>
               </div>
               <p className="text-sm text-[var(--text-primary)] mb-1.5">{item.meaning}</p>
               <p className="text-xs text-[var(--text-secondary)] mb-2">{item.usage}</p>
@@ -118,7 +113,7 @@ export function ExpressionsSection() {
             <div key={item.id} className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-4 hover:border-[var(--blue-soft)] transition-colors">
               <div className="flex items-center justify-between mb-2">
                 <h4 className="font-bold text-[var(--text-primary)]">{item.expression}</h4>
-                <button onClick={() => speakKorean(item.expression)} className="p-1 rounded-lg hover:bg-[var(--bg-input)] text-[var(--text-muted)]"><Volume2 size={14} /></button>
+                <button onClick={() => speak(item.expression, 0.7)} className="p-1 rounded-lg hover:bg-[var(--bg-input)] text-[var(--text-muted)]"><Volume2 size={14} /></button>
               </div>
               <div className="text-sm mb-2"><span className="text-[var(--text-muted)]">{item.original}</span><span className="mx-2">→</span><span className="font-medium">{item.meaning}</span></div>
               <p className="text-xs text-[var(--text-placeholder)]">{item.example}</p>

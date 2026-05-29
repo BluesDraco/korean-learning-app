@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { Volume2, ChevronDown, ChevronUp, ArrowRight, Sparkles, Check, X, BookOpen, Lightbulb } from 'lucide-react';
+import { speak } from '@/lib/tts';
 
 const ruleCategories = [
   {
@@ -95,13 +96,6 @@ const ruleCategories = [
   },
 ];
 
-function speakKorean(text: string) {
-  window.speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = 'ko-KR';
-  utterance.rate = 0.7;
-  window.speechSynthesis.speak(utterance);
-}
 
 // Shuffle utility
 function shuffleArray<T>(arr: T[]): T[] {
@@ -288,7 +282,7 @@ export default function PhoneticsRulesPage() {
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                speakKorean(ex.originalRead);
+                                speak(ex.originalRead, 0.7);
                               }}
                               className="p-1 rounded-lg bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] text-[var(--text-secondary)] hover:text-[var(--pink-primary)] transition-colors shrink-0"
                               title="听发音"
@@ -313,7 +307,7 @@ export default function PhoneticsRulesPage() {
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  speakKorean(ex.originalRead);
+                                  speak(ex.originalRead, 0.7);
                                 }}
                                 className="p-1 rounded-lg bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] text-[var(--text-secondary)] hover:text-[var(--pink-primary)] transition-colors shrink-0"
                                 title="听发音"
@@ -395,7 +389,7 @@ export default function PhoneticsRulesPage() {
                   {quizQuestions[quizIdx].original}
                 </span>
                 <button
-                  onClick={() => speakKorean(quizQuestions[quizIdx].original)}
+                  onClick={() => speak(quizQuestions[quizIdx].original, 0.7)}
                   className="p-2 rounded-xl bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] text-[var(--text-secondary)] hover:text-[var(--pink-primary)] transition-colors"
                   title="听单词发音"
                 >
@@ -432,7 +426,7 @@ export default function PhoneticsRulesPage() {
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          speakKorean(opt);
+                          speak(opt, 0.7);
                         }}
                         className="p-1 rounded-lg bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] text-[var(--text-secondary)] hover:text-[var(--pink-primary)] transition-colors"
                         title="听发音"
