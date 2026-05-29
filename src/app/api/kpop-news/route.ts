@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 import { DEEPSEEK_MODEL } from '@/lib/deepseek';
+import { getAuthFromCookie } from '@/lib/server/auth';
+import { checkAiRateLimit } from '@/lib/server/rate-limit';
 
 const DEEPSEEK_API = 'https://api.deepseek.com/v1/chat/completions';
 const CACHE_FILE = path.join(process.cwd(), 'data', 'kpop-daily.json');
@@ -193,7 +195,18 @@ export async function GET() {
   }
 }
 
-export async function POST() {
+export async function POST(req: Request) {
+  const auth = await getAuthFromCookie();
+  if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+  const limit = await checkAiRateLimit(auth.userId, 'kpop-news');
+  if (!limit.allowed) {
+    return NextResponse.json(
+      { error: '每日AI调用次数已达上限（30次），请明天再试' },
+      { status: 429, headers: { 'X-RateLimit-Limit': '30', 'Retry-After': '86400' } },
+    );
+  }
+
   try {
     const posts = await fetchFromAI();
     writeCache(posts);

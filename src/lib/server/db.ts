@@ -90,6 +90,18 @@ export async function getDb() {
   `);
 
   await c.execute(`
+    CREATE TABLE IF NOT EXISTS login_attempts (
+      id TEXT PRIMARY KEY,
+      ip TEXT NOT NULL,
+      attempted_at TEXT DEFAULT (datetime('now'))
+    )
+  `);
+
+  await c.execute(`
+    CREATE INDEX IF NOT EXISTS idx_login_attempts_ip_at ON login_attempts(ip, attempted_at)
+  `);
+
+  await c.execute(`
     CREATE TABLE IF NOT EXISTS feedbacks (
       id TEXT PRIMARY KEY,
       user_id TEXT,

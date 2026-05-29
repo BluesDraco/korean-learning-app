@@ -1,9 +1,22 @@
 import { NextResponse } from 'next/server';
 import { DEEPSEEK_MODEL } from '@/lib/deepseek';
+import { getAuthFromCookie } from '@/lib/server/auth';
+import { checkAiRateLimit } from '@/lib/server/rate-limit';
 
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
 
 export async function POST(req: Request) {
+  const auth = await getAuthFromCookie();
+  if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+  const limit = await checkAiRateLimit(auth.userId, 'voice');
+  if (!limit.allowed) {
+    return NextResponse.json(
+      { error: '每日AI调用次数已达上限（30次），请明天再试' },
+      { status: 429, headers: { 'X-RateLimit-Limit': '30', 'Retry-After': '86400' } },
+    );
+  }
+
   const apiKey = process.env.DEEPSEEK_VOICE_KEY;
   if (!apiKey) {
     return NextResponse.json({ error: 'API key not configured' }, { status: 503 });

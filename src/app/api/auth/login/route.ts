@@ -11,7 +11,7 @@ function getClientIp(request: Request): string {
 export async function POST(request: Request) {
   try {
     const ip = getClientIp(request);
-    const rateCheck = checkRateLimit(`login:${ip}`);
+    const rateCheck = await checkRateLimit(`login:${ip}`);
     if (!rateCheck.allowed) {
       return NextResponse.json(
         { error: `请求过于频繁，请${rateCheck.retryAfterSeconds}秒后重试` },
@@ -39,7 +39,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: '用户名或密码错误' }, { status: 401 });
     }
 
-    resetRateLimit(`login:${ip}`);
+    await resetRateLimit(`login:${ip}`);
 
     const token = await signToken({ userId: id, username: uname, role });
     await setAuthCookie(token);
