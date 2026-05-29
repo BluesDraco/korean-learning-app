@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { DEEPSEEK_MODEL } from '@/lib/deepseek';
 
 export async function POST(req: Request) {
   const apiKey = process.env.DEEPSEEK_CHAT_KEY;
@@ -19,7 +20,7 @@ export async function POST(req: Request) {
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: 'deepseek-chat',
+        model: DEEPSEEK_MODEL,
         messages: [
           {
             role: 'system',

@@ -4,7 +4,7 @@
  */
 
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
-const DEEPSEEK_MODEL = 'deepseek-v4-flash'; // 便宜快速，$0.14/M输入
+export const DEEPSEEK_MODEL = 'deepseek-v4-flash';
 
 export interface DeepSeekConfig {
   apiKey: string;
@@ -65,7 +65,7 @@ export async function lookupWordDeepSeek(
       Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      model: 'deepseek-chat',
+      model: DEEPSEEK_MODEL,
       messages: [
         {
           role: 'system',
@@ -230,7 +230,7 @@ export async function translateBatchDeepSeek(
       Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      model: 'deepseek-chat',
+      model: DEEPSEEK_MODEL,
       messages: [
         {
           role: 'system',

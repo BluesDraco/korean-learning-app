@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Copy, Check, Download } from 'lucide-react';
 import { db } from '@/lib/db';
@@ -19,6 +19,7 @@ export default function BuddyInvitePage() {
   const [token, setToken] = useState('');
   const [copied, setCopied] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const cardDataRef = useRef<{ nickname: string; goal: string; level: string; daily: string; intro: string } | null>(null);
 
   const handleCreate = async () => {
     const profile = await getProfile();
@@ -36,52 +37,59 @@ export default function BuddyInvitePage() {
       expiresAt: Date.now() + 30 * 86400000, // 30 days
     };
     await db.buddyInvites.add(invite);
-    setToken(inviteToken);
 
-    // Draw invite card
+    cardDataRef.current = { nickname: profile.nickname || '학습자', goal, level, daily, intro };
+    setToken(inviteToken);
+  };
+
+  // Draw card after canvas mounts
+  useEffect(() => {
+    if (!token) return;
+    const data = cardDataRef.current;
+    if (!data) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const W = 1080; const H = 1080;
-    canvas.width = W; canvas.height = H;
-    const ctx = canvas.getContext('2d')!;
-    ctx.fillStyle = '#FFFDF9';
-    ctx.fillRect(0, 0, W, H);
-    ctx.fillStyle = '#FF8FAB';
-    ctx.fillRect(0, 0, W, 8);
-    ctx.fillRect(0, H - 8, W, 8);
 
-    // Tori
-    ctx.font = '120px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('🐰', W / 2, 180);
+    // Delay one frame to ensure canvas is in DOM and sized
+    const raf = requestAnimationFrame(() => {
+      const W = 1080; const H = 1080;
+      canvas.width = W; canvas.height = H;
+      const ctx = canvas.getContext('2d')!;
+      ctx.fillStyle = '#FFFDF9';
+      ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = '#FF8FAB';
+      ctx.fillRect(0, 0, W, 8);
+      ctx.fillRect(0, H - 8, W, 8);
 
-    // Title
-    ctx.fillStyle = '#5C4B51';
-    ctx.font = 'bold 48px "Noto Sans SC", sans-serif';
-    ctx.fillText('找个学习搭子', W / 2, 300);
+      ctx.font = '120px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('🐰', W / 2, 180);
 
-    // User info
-    ctx.font = '32px "Noto Sans SC", sans-serif';
-    ctx.fillText(`${profile.nickname || '학습자'} 想找个搭子一起学韩语`, W / 2, 380);
+      ctx.fillStyle = '#5C4B51';
+      ctx.font = 'bold 48px "Noto Sans SC", sans-serif';
+      ctx.fillText('找个学习搭子', W / 2, 300);
 
-    // Details
-    ctx.fillStyle = '#8B7E82';
-    ctx.font = '28px "Noto Sans SC", sans-serif';
-    const details = [
-      `🎯 目标：${goal}`,
-      `📊 水平：${level}`,
-      `⏰ 每天：${daily}`,
-    ];
-    details.forEach((d, i) => ctx.fillText(d, W / 2, 460 + i * 50));
-    if (intro) ctx.fillText(`💬 "${intro}"`, W / 2, 460 + details.length * 50);
+      ctx.font = '32px "Noto Sans SC", sans-serif';
+      ctx.fillText(`${data.nickname} 想找个搭子一起学韩语`, W / 2, 380);
 
-    // Footer
-    ctx.fillStyle = '#C4B5B9';
-    ctx.font = '22px "Noto Sans SC", sans-serif';
-    ctx.fillText('扫描二维码或点击链接，和托里一起学习吧', W / 2, H - 120);
-    ctx.font = '18px "Noto Sans SC", sans-serif';
-    ctx.fillText('korean-learning.app', W / 2, H - 70);
-  };
+      ctx.fillStyle = '#8B7E82';
+      ctx.font = '28px "Noto Sans SC", sans-serif';
+      const details = [
+        `🎯 目标：${data.goal}`,
+        `📊 水平：${data.level}`,
+        `⏰ 每天：${data.daily}`,
+      ];
+      details.forEach((d, i) => ctx.fillText(d, W / 2, 460 + i * 50));
+      if (data.intro) ctx.fillText(`💬 "${data.intro}"`, W / 2, 460 + details.length * 50);
+
+      ctx.fillStyle = '#C4B5B9';
+      ctx.font = '22px "Noto Sans SC", sans-serif';
+      ctx.fillText('扫描二维码或点击链接，和托里一起学习吧', W / 2, H - 120);
+      ctx.font = '18px "Noto Sans SC", sans-serif';
+      ctx.fillText('korean-learning.app', W / 2, H - 70);
+    });
+    return () => cancelAnimationFrame(raf);
+  }, [token]);
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(`${window.location.origin}/buddy/invite?token=${token}`);

@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { DEEPSEEK_MODEL } from '@/lib/deepseek';
 
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
 
@@ -27,7 +28,7 @@ export async function POST(req: Request) {
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: 'deepseek-v4-flash',
+        model: DEEPSEEK_MODEL,
         messages: [
           {
             role: 'system',

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import { DEEPSEEK_MODEL } from '@/lib/deepseek';
 
 const DEEPSEEK_API = 'https://api.deepseek.com/v1/chat/completions';
 const CACHE_FILE = path.join(process.cwd(), 'data', 'kpop-daily.json');
@@ -150,7 +151,7 @@ async function fetchFromAI(): Promise<NewsPost[]> {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
     body: JSON.stringify({
-      model: 'deepseek-chat',
+      model: DEEPSEEK_MODEL,
       messages: [
         { role: 'system', content: AI_SYSTEM_PROMPT },
         { role: 'user', content: context },
