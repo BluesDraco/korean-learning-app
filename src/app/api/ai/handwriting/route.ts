@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { DEEPSEEK_MODEL } from '@/lib/deepseek';
 
 export async function POST(req: Request) {
-  const apiKey = process.env.DEEPSEEK_CHAT_KEY;
+  const apiKey = process.env.DEEPSEEK_HANDWRITING_KEY;
   if (!apiKey) {
     return NextResponse.json({ error: 'API key not configured' }, { status: 503 });
   }

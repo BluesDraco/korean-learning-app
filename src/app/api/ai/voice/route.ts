@@ -4,7 +4,7 @@ import { DEEPSEEK_MODEL } from '@/lib/deepseek';
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
 
 export async function POST(req: Request) {
-  const apiKey = process.env.DEEPSEEK_CHAT_KEY;
+  const apiKey = process.env.DEEPSEEK_VOICE_KEY;
   if (!apiKey) {
     return NextResponse.json({ error: 'API key not configured' }, { status: 503 });
   }
