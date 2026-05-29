@@ -475,6 +475,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '🚃\n🐰❓',
+        imageUrl: '/images/picture-books/tori-4/4.png',
         bgColor: '#FFF5F0',
         korean: '지하철이 들어왔어요!\n문이 열리자 토리가 물었어요.\n"저기요, 이 열차\n홍대 가요?"\n옆 아저씨가 고개를 끄덕였어요.',
         pronunciation: 'ji-ha-cheo-ri deu-reo-wa-sseo-yo!\nmu-ni yeol-li-ja to-ri-ga mu-reo-sseo-yo.\n"jeo-gi-yo, i yeol-cha\nhong-dae ga-yo?"\nyeop a-jeo-ssi-ga go-gae-reul kkeu-deo-gyeo-sseo-yo.',
@@ -488,7 +489,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '🏙️\n🐰🚇',
-        imageUrl: '/images/picture-books/tori-4/4.png',
+        imageUrl: '/images/picture-books/tori-4/5.png',
         bgColor: '#FFF8F0',
         korean: '창밖으로 서울이 지나갔어요.\n안내 방송이 흘러나왔어요.\n"다음 역은, 홍대입구역입니다."\n토리는 자리에서 벌떡 일어났어요.\n"내 역이다!"',
         pronunciation: 'chang-ba-kkeu-ro seo-u-ri ji-na-ga-sseo-yo.\nan-nae bang-song-i heul-leo-na-wa-sseo-yo.\n"da-eum yeo-geun, hong-dae-ip-gu-yeong-nim-ni-da."\nto-ri-neun ja-ri-e-seo beol-tteok i-reo-na-sseo-yo.\n"nae yeo-gi-da!"',
@@ -502,7 +503,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '🌟\n🐰🎉',
-        imageUrl: '/images/picture-books/tori-4/5.png',
+        imageUrl: '/images/picture-books/tori-4/6.png',
         bgColor: '#F5F0FF',
         korean: '개찰구를 나오자\n홍대 거리가 펼쳐졌어요.\n토리는 두 팔을 번쩍 들었어요.\n"해냈어요! 혼자서 지하철 탔어요!"\n오늘도 한국어가 한 걸음 늘었어요. 🌟',
         pronunciation: 'gae-chal-gu-reul na-o-ja\nhong-dae geo-ri-ga pyeol-chyeo-jyeo-sseo-yo.\nto-ri-neun du pa-reul beon-jjeok deu-reo-sseo-yo.\n"hae-nae-sseo-yo! hon-ja-seo ji-ha-cheol ta-sseo-yo!"\no-neul-do han-gu-geo-ga han geo-reum neu-reo-sseo-yo.',

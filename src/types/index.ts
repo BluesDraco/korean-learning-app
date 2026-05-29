@@ -14,6 +14,11 @@ export interface UserProfile {
   currentUnit: number;
   onboardingComplete: boolean;
   createdAt: number;
+  isAmbassador?: boolean;
+  ambassadorSince?: number | null;
+  ambassadorReason?: string | null;
+  shareEnabled?: boolean;
+  shareToken?: string | null;
 }
 
 export interface DailyLog {
@@ -271,4 +276,86 @@ export interface Announcement {
   type: AnnouncementType;
   targetUserId: string | null;
   createdAt: number;
+}
+
+// ===== Achievement Card & Milestones =====
+export type MilestoneType =
+  | 'phonetics_complete'    // 完成四十音学习
+  | 'streak_7'              // 连续打卡7天
+  | 'streak_30'             // 连续打卡30天
+  | 'streak_100'            // 连续打卡100天
+  | 'reviews_100'           // SRS复习累计100个词
+  | 'reviews_500'           // SRS复习累计500个词
+  | 'first_picture_book'    // 完成第一本绘本阅读
+  | 'ai_chat_10'            // AI对话首次达到10轮
+  | 'topik_perfect'         // TOPIK练习首次满分
+  | 'days_100';             // 学习满100天
+
+export interface UserAchievement {
+  id: string;
+  achievementType: MilestoneType;
+  achievedAt: number;
+  isCardGenerated: boolean;
+}
+
+// ===== Share Links & Public Diary =====
+export interface UserShareLink {
+  id: string;
+  token: string;
+  expiresAt: number | null;  // null = permanent
+  isActive: boolean;
+  createdAt: number;
+}
+
+// ===== Sticker Packs =====
+export interface StickerPack {
+  id: string;
+  name: string;
+  description: string;
+  coverImage: string;
+  publishedAt: number;
+  isActive: boolean;
+}
+
+export interface Sticker {
+  id: string;
+  packId: string;
+  imageUrl: string;
+  captionZh: string;
+  captionKo: string;
+  sortOrder: number;
+}
+
+export interface StickerDownload {
+  id: string;
+  packId: string;
+  userId: string | null;
+  downloadedAt: number;
+}
+
+// ===== Study Buddy =====
+export interface BuddyRelation {
+  id: string;
+  userAId: string;
+  userBId: string;
+  status: 'active' | 'broken';
+  createdAt: number;
+}
+
+export interface BuddyInvite {
+  id: string;
+  userId: string;
+  inviteToken: string;
+  learningGoal: string;
+  level: string;
+  dailyMinutes: string;
+  intro: string;
+  expiresAt: number;
+}
+
+// ===== Ambassador =====
+export interface AmbassadorInfo {
+  isAmbassador: boolean;
+  ambassadorSince: number | null;
+  ambassadorReason: string | null;
 }

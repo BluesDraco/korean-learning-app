@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/components/AuthProvider';
 import {
-  Home, BookOpen, Gamepad2, LayoutGrid, Flower2, Bot,
+  Home, BookOpen, Gamepad2, LayoutGrid, Flower2, Bot, Users2,
   GraduationCap, Grid3X3, Waves, FileText, BookImage,
   RefreshCw, Pencil, Mic, Keyboard, PenLine, BarChart3,
   Library, Film,
@@ -49,6 +49,7 @@ const navGroups: NavGroup[] = [
       { label: '打字', ko: '타자', href: '/typing', icon: Keyboard },
       { label: '写作', ko: '작문', href: '/writing', icon: PenLine },
       { label: 'TOPIK模拟', ko: 'TOPIK 모의', href: '/topik', icon: FileText },
+      { label: '学习搭子', ko: '학습 친구', href: '/buddy', icon: Users2 },
       { label: '学习统计', ko: '통계', href: '/stats', icon: BarChart3 },
     ],
   },

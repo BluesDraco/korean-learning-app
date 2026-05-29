@@ -315,6 +315,98 @@ export async function getDb() {
   `);
   await c.execute(`CREATE INDEX IF NOT EXISTS idx_announcement_reads_user ON announcement_reads(user_id, announcement_id)`);
 
+  // ── New tables for stickers, buddy, achievements, ambassador ──
+
+  await c.execute(`
+    CREATE TABLE IF NOT EXISTS user_achievements (
+      id TEXT PRIMARY KEY,
+      user_id TEXT NOT NULL,
+      achievement_type TEXT NOT NULL,
+      achieved_at INTEGER NOT NULL,
+      is_card_generated INTEGER DEFAULT 0,
+      FOREIGN KEY (user_id) REFERENCES users(id)
+    )
+  `);
+
+  await c.execute(`
+    CREATE TABLE IF NOT EXISTS user_share_links (
+      id TEXT PRIMARY KEY,
+      user_id TEXT NOT NULL,
+      token TEXT NOT NULL,
+      expires_at INTEGER,
+      is_active INTEGER DEFAULT 1,
+      created_at INTEGER NOT NULL,
+      FOREIGN KEY (user_id) REFERENCES users(id)
+    )
+  `);
+
+  await c.execute(`
+    CREATE TABLE IF NOT EXISTS sticker_packs (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      description TEXT DEFAULT '',
+      cover_image TEXT DEFAULT '',
+      published_at INTEGER,
+      is_active INTEGER DEFAULT 1
+    )
+  `);
+
+  await c.execute(`
+    CREATE TABLE IF NOT EXISTS stickers (
+      id TEXT PRIMARY KEY,
+      pack_id TEXT NOT NULL,
+      image_url TEXT NOT NULL,
+      caption_zh TEXT DEFAULT '',
+      caption_ko TEXT DEFAULT '',
+      sort_order INTEGER DEFAULT 0,
+      FOREIGN KEY (pack_id) REFERENCES sticker_packs(id)
+    )
+  `);
+
+  await c.execute(`
+    CREATE TABLE IF NOT EXISTS sticker_downloads (
+      id TEXT PRIMARY KEY,
+      pack_id TEXT NOT NULL,
+      user_id TEXT NOT NULL,
+      downloaded_at INTEGER NOT NULL,
+      FOREIGN KEY (pack_id) REFERENCES sticker_packs(id),
+      FOREIGN KEY (user_id) REFERENCES users(id)
+    )
+  `);
+
+  await c.execute(`
+    CREATE TABLE IF NOT EXISTS buddy_relations (
+      id TEXT PRIMARY KEY,
+      user_a_id TEXT NOT NULL,
+      user_b_id TEXT NOT NULL,
+      status TEXT DEFAULT 'active',
+      created_at INTEGER NOT NULL,
+      FOREIGN KEY (user_a_id) REFERENCES users(id),
+      FOREIGN KEY (user_b_id) REFERENCES users(id)
+    )
+  `);
+
+  await c.execute(`
+    CREATE TABLE IF NOT EXISTS buddy_invites (
+      id TEXT PRIMARY KEY,
+      user_id TEXT NOT NULL,
+      invite_token TEXT NOT NULL,
+      learning_goal TEXT DEFAULT '',
+      level TEXT DEFAULT '',
+      daily_minutes INTEGER DEFAULT 15,
+      intro TEXT DEFAULT '',
+      expires_at INTEGER,
+      FOREIGN KEY (user_id) REFERENCES users(id)
+    )
+  `);
+
+  // ── Migrations for older user_profiles ──
+  try { await c.execute(`ALTER TABLE user_profiles ADD COLUMN is_ambassador INTEGER DEFAULT 0`); } catch { /* already exists */ }
+  try { await c.execute(`ALTER TABLE user_profiles ADD COLUMN ambassador_since INTEGER DEFAULT 0`); } catch { /* already exists */ }
+  try { await c.execute(`ALTER TABLE user_profiles ADD COLUMN ambassador_reason TEXT DEFAULT ''`); } catch { /* already exists */ }
+  try { await c.execute(`ALTER TABLE user_profiles ADD COLUMN share_enabled INTEGER DEFAULT 0`); } catch { /* already exists */ }
+  try { await c.execute(`ALTER TABLE user_profiles ADD COLUMN share_token TEXT DEFAULT ''`); } catch { /* already exists */ }
+
   return {
     exec: async (sql: string, params?: unknown[]) => {
       const result = await c.execute({ sql, args: params as any[] });

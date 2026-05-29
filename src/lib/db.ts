@@ -1,4 +1,4 @@
-import type { Word, ReviewSession, DictationRecord, ShadowingRecord, UserProfile, DailyLog, Achievement, AppSettings, WordBook, StudyVideo, StudySubtitle, StudyLog } from '@/types';
+import type { Word, ReviewSession, DictationRecord, ShadowingRecord, UserProfile, DailyLog, Achievement, AppSettings, WordBook, StudyVideo, StudySubtitle, StudyLog, UserAchievement, UserShareLink, StickerPack, Sticker, StickerDownload, BuddyRelation, BuddyInvite } from '@/types';
 
 const API = '/api/user-data';
 
@@ -205,6 +205,13 @@ export const db = {
   studySubtitles: new CloudTable<StudySubtitle>('studySubtitles'),
   studyLogs: new CloudTable<StudyLog>('studyLogs'),
   videoStudyLogs: new CloudTable<StudyLog>('videoStudyLogs'),
+  userAchievements: new CloudTable<UserAchievement>('userAchievements'),
+  userShareLinks: new CloudTable<UserShareLink>('userShareLinks'),
+  stickerPacks: new CloudTable<StickerPack>('stickerPacks'),
+  stickers: new CloudTable<Sticker>('stickers'),
+  stickerDownloads: new CloudTable<StickerDownload>('stickerDownloads'),
+  buddyRelations: new CloudTable<BuddyRelation>('buddyRelations'),
+  buddyInvites: new CloudTable<BuddyInvite>('buddyInvites'),
 };
 
 export async function initSettings(): Promise<AppSettings> {

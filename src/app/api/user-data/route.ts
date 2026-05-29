@@ -25,7 +25,7 @@ const TABLE_COLS: Record<string, { cols: string[]; pk: string; table: string }> 
   },
   userProfiles: {
     table: 'user_profiles',
-    cols: ['id', 'user_id', 'nickname', 'level', 'xp', 'xp_to_next_level', 'streak', 'longest_streak', 'last_study_date', 'target_level', 'daily_goal_minutes', 'daily_goal_words', 'current_unit', 'onboarding_complete', 'created_at'],
+    cols: ['id', 'user_id', 'nickname', 'level', 'xp', 'xp_to_next_level', 'streak', 'longest_streak', 'last_study_date', 'target_level', 'daily_goal_minutes', 'daily_goal_words', 'current_unit', 'onboarding_complete', 'created_at', 'is_ambassador', 'ambassador_since', 'ambassador_reason', 'share_enabled', 'share_token'],
     pk: 'id',
   },
   dailyLogs: {
@@ -66,6 +66,41 @@ const TABLE_COLS: Record<string, { cols: string[]; pk: string; table: string }> 
   videoStudyLogs: {
     table: 'video_study_logs',
     cols: ['id', 'user_id', 'video_id', 'date', 'duration_sec', 'words_added', 'sentences_looped', 'action'],
+    pk: 'id',
+  },
+  userAchievements: {
+    table: 'user_achievements',
+    cols: ['id', 'user_id', 'achievement_type', 'achieved_at', 'is_card_generated'],
+    pk: 'id',
+  },
+  userShareLinks: {
+    table: 'user_share_links',
+    cols: ['id', 'user_id', 'token', 'expires_at', 'is_active', 'created_at'],
+    pk: 'id',
+  },
+  stickerPacks: {
+    table: 'sticker_packs',
+    cols: ['id', 'name', 'description', 'cover_image', 'published_at', 'is_active'],
+    pk: 'id',
+  },
+  stickers: {
+    table: 'stickers',
+    cols: ['id', 'pack_id', 'image_url', 'caption_zh', 'caption_ko', 'sort_order'],
+    pk: 'id',
+  },
+  stickerDownloads: {
+    table: 'sticker_downloads',
+    cols: ['id', 'pack_id', 'user_id', 'downloaded_at'],
+    pk: 'id',
+  },
+  buddyRelations: {
+    table: 'buddy_relations',
+    cols: ['id', 'user_a_id', 'user_b_id', 'status', 'created_at'],
+    pk: 'id',
+  },
+  buddyInvites: {
+    table: 'buddy_invites',
+    cols: ['id', 'user_id', 'invite_token', 'learning_goal', 'level', 'daily_minutes', 'intro', 'expires_at'],
     pk: 'id',
   },
 };
