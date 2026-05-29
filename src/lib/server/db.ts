@@ -35,9 +35,9 @@ export async function getDb() {
   `);
 
   // Migrations for older databases
-  for (const col of ['onboarding_completed', 'korean_level']) {
-    try { await c.execute(`ALTER TABLE users ADD COLUMN ${col} TEXT DEFAULT ''`); } catch { /* already exists */ }
-  }
+  // onboarding_completed is a boolean flag (0/1), korean_level is a text label
+  try { await c.execute(`ALTER TABLE users ADD COLUMN onboarding_completed INTEGER DEFAULT 0`); } catch { /* already exists */ }
+  try { await c.execute(`ALTER TABLE users ADD COLUMN korean_level TEXT DEFAULT ''`); } catch { /* already exists */ }
 
   await c.execute(`
     CREATE TABLE IF NOT EXISTS study_logs (

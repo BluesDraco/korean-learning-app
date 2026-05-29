@@ -60,6 +60,7 @@ export async function POST(req: Request) {
 
     if (!res.ok) {
       const errText = await res.text();
+      console.error('Handwriting API error:', res.status, errText.slice(0, 500));
       // If vision not supported, fall back gracefully
       return NextResponse.json({ text: '', error: `API error: ${res.status}` }, { status: 200 });
     }

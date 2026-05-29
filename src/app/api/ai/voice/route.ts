@@ -76,7 +76,8 @@ export async function POST(req: Request) {
 
     if (!res.ok) {
       const errText = await res.text();
-      return NextResponse.json({ error: `API error: ${res.status}` }, { status: 502 });
+      console.error('Voice API error:', res.status, errText.slice(0, 500));
+      return NextResponse.json({ error: `Voice API error: ${res.status}` }, { status: 502 });
     }
 
     const json = await res.json();

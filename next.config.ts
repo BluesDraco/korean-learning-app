@@ -1,6 +1,19 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Exclude large authoring assets from build tracing to prevent build hangs
+  outputFileTracingExcludes: {
+    'next-server': [
+      './public/images/picture-books/**',
+      './data/dict/**',
+      './reference/**',
+    ],
+    '/**/*': [
+      './public/images/picture-books/**',
+      './data/dict/**',
+      './reference/**',
+    ],
+  },
   images: {
     minimumCacheTTL: 86400,
   },
