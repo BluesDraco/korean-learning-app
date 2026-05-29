@@ -27,23 +27,23 @@ export async function POST(req: Request) {
     });
   }
 
+  let word: string;
   try {
-    const { word } = await req.json();
+    const body = await req.json();
+    word = body.word;
     if (!word || typeof word !== 'string') {
       return NextResponse.json({ error: 'Missing word' }, { status: 400 });
     }
 
     const result = await lookupWordDeepSeek(word, apiKey);
 
-    // Add romanization if not provided by DeepSeek
     if (!result.pronunciation) {
       result.pronunciation = romanize(result.dictionaryForm || word);
     }
 
     return NextResponse.json(result);
   } catch (err: any) {
-    // Fallback: local deconjugate + empty translation
-    const { dictionaryForm, conjugation } = deconjugate((await req.clone().json()).word);
+    const { dictionaryForm, conjugation } = deconjugate(word!);
     return NextResponse.json({
       dictionaryForm,
       pronunciation: romanize(dictionaryForm),
