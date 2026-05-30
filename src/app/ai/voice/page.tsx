@@ -126,10 +126,13 @@ export default function VoiceChatPage() {
         body: JSON.stringify({ action: 'voice_chat', details: '语音对话', xpEarned: 5 }),
       }).catch(() => {});
 
-      const context = messagesRef.current.map((m) => ({
-        role: m.sender === 'tori' ? 'ai' : 'user',
-        content: m.ko,
-      }));
+      const context = [
+        ...messagesRef.current.map((m) => ({
+          role: m.sender === 'tori' ? 'ai' : 'user',
+          content: m.ko,
+        })),
+        { role: 'user', content: userText },
+      ];
 
       const res = await fetch('/api/ai/voice', {
         method: 'POST',
@@ -264,6 +267,12 @@ export default function VoiceChatPage() {
     setTextInput('');
     sendToAI(text);
   }, [textInput, sendToAI]);
+
+  const handleKeyboardSend = useCallback((text: string) => {
+    if (!text.trim() || isProcessingRef.current) return;
+    setTextInput('');
+    sendToAI(text);
+  }, [sendToAI]);
 
   // ── Topic suggestion click ───────────────────────────────────
   const handleTopic = useCallback((prompt: string) => {
@@ -617,7 +626,8 @@ export default function VoiceChatPage() {
             <ChevronRight size={12} className={`transition-transform ${showKeyboard ? 'rotate-90' : ''}`} />
           </button>
 
-          {showKeyboard && (
+          {/* Text input row — hidden when keyboard is open since keyboard covers it */}
+          {!showKeyboard && (
             <div className="space-y-2">
               <div className="flex items-end gap-2">
                 <textarea
@@ -657,6 +667,7 @@ export default function VoiceChatPage() {
           onChange={setTextInput}
           visible={showKeyboard}
           onClose={() => setShowKeyboard(false)}
+          onSend={handleKeyboardSend}
         />
       </div>
     </div>

@@ -147,9 +147,14 @@ export default function LearnPage() {
     const spellPool = shuffle([...w]);
     for (let i = 0; i < 3; i++) {
       const word = spellPool[i];
-      // Generate fake spellings by slightly modifying the word
-      const fake1 = word.word.slice(0, -1) + (word.word.length > 0 ? String.fromCharCode(word.word.charCodeAt(word.word.length - 1) + 1) : '');
-      const fake2 = word.word.length > 1 ? word.word.slice(0, -2) + word.word.slice(-1) + word.word.slice(-2, -1) : word.word + 'ㅏ';
+      // Generate fake spellings: swap last 2 chars, duplicate first char, or use pronunciation
+      const chars = [...word.word];
+      const fake1 = chars.length >= 2
+        ? chars.slice(0, -2).join('') + chars[chars.length - 1] + chars[chars.length - 2]
+        : word.word + 'ㅏ';
+      const fake2 = chars.length >= 2
+        ? chars[0] + word.word
+        : word.word + 'ㅓ';
       const fake3 = word.pronunciation;
       const [opts, ci] = buildOptions(word.word, [fake1, fake2, fake3].filter((f) => f !== word.word), 3);
       questions.push({

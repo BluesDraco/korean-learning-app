@@ -56,6 +56,7 @@ export default function Home() {
   const [returnDays, setReturnDays] = useState(0);
   const [progress, setProgress] = useState<ProgressData | null>(null);
   const [tasks, setTasks] = useState<TodayTasks | null>(null);
+  const [error, setError] = useState(false);
   const { user } = useAuth();
 
   const handleBunnyClick = () => {
@@ -110,7 +111,7 @@ export default function Home() {
       setWeekStreak(wStreak);
       setShowOnboarding(!profileData.onboardingComplete);
     } catch {
-      // Not logged in or error — show empty state
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -158,6 +159,24 @@ export default function Home() {
         <div className="grid grid-cols-2 gap-3">
           <div className="h-28 bg-[var(--bg-card)] rounded-2xl border border-[var(--border-color)]" />
           <div className="h-28 bg-[var(--bg-card)] rounded-2xl border border-[var(--border-color)]" />
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="py-4 space-y-4">
+        <div className="text-center py-12 bg-[var(--bg-card)] rounded-2xl border border-[var(--border-color)]">
+          <p className="text-4xl mb-3">😵</p>
+          <p className="text-sm font-medium text-[var(--text-primary)] mb-1">加载失败</p>
+          <p className="text-xs text-[var(--text-muted)] mb-4">请检查网络连接后重试</p>
+          <button
+            onClick={() => { setError(false); setLoading(true); load(); }}
+            className="px-4 py-2 bg-[var(--pink-primary)] text-white text-sm rounded-xl hover:opacity-90 transition-opacity"
+          >
+            重新加载
+          </button>
         </div>
       </div>
     );
@@ -619,12 +638,15 @@ export default function Home() {
           { label: '学习中', value: stats.learningCount, color: 'text-[var(--peach-soft)]' },
           { label: '已掌握', value: stats.masteredCount, color: 'text-[var(--mint-soft)]' },
           { label: '今日新增', value: stats.todayNew, color: 'text-[var(--pink-primary)]' },
-        ].map(({ label, value, color }) => (
-          <div key={label} className="card-standard rounded-xl p-3 text-center" style={{ '--card-rotate': `${(Math.random() * 2 - 1).toFixed(1)}deg` } as React.CSSProperties}>
+        ].map(({ label, value, color }, i) => {
+          const rotations = ['-0.8deg', '0.6deg', '-0.5deg', '0.9deg'];
+          return (
+          <div key={label} className="card-standard rounded-xl p-3 text-center" style={{ '--card-rotate': rotations[i] } as React.CSSProperties}>
             <div className={`text-xl font-bold ${color}`}>{value}</div>
             <div className="text-[13px] text-[var(--text-muted)] mt-0.5">{label}</div>
           </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Recent Words */}

@@ -88,6 +88,24 @@
   --pink-pale:      #4A3050;
   --pink-light:     #6A4A6A;
   --purple-soft:    #4A3A6A;
+  --mint-soft:      #4A6058;
+  --yellow-soft:    #6A6040;
+  --blue-soft:      #4A5870;
+  --peach-soft:     #6A4A40;
+  --color-danger:    #FF6B6B;
+  --color-danger-light: #B05050;
+  --color-danger-bg: #3A2020;
+  --color-highlight: #B09830;
+  --text-on-pink:   #F0E8FF;
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════

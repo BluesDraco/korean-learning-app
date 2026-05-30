@@ -254,9 +254,10 @@ interface KoreanKeyboardProps {
   onChange: (value: string) => void;
   visible: boolean;
   onClose: () => void;
+  onSend?: (text: string) => void;
 }
 
-export function KoreanKeyboard({ value, onChange, visible, onClose }: KoreanKeyboardProps) {
+export function KoreanKeyboard({ value, onChange, visible, onClose, onSend }: KoreanKeyboardProps) {
   const isMobile = useIsMobile();
   const [shift, setShift] = useState(false);
   const [buffer, setBuffer] = useState<string[]>([]);
@@ -429,6 +430,13 @@ export function KoreanKeyboard({ value, onChange, visible, onClose }: KoreanKeyb
   const composed = useMemo(() => composeBuffer(buffer), [buffer]);
   const showRawJamo = buffer.length > 0 && composed !== buffer.join('');
 
+  const handleSend = useCallback(() => {
+    const text = composeBuffer(buffer);
+    if (!text.trim()) return;
+    onSend?.(text);
+    onClose();
+  }, [buffer, onSend, onClose]);
+
   if (!visible || !mounted) return null;
 
   return createPortal(
@@ -437,11 +445,11 @@ export function KoreanKeyboard({ value, onChange, visible, onClose }: KoreanKeyb
         {/* Preview bar */}
         <div className="flex items-center gap-2 px-3 py-2 bg-[var(--bg-card)] border-t border-x border-[var(--border-color)] rounded-t-2xl">
           <div className="flex-1 min-h-[26px] flex items-center gap-2">
-            <span className="text-base font-bold text-[var(--text-primary)]">
-              {composed || <span className="text-[var(--text-muted)] font-normal text-xs">输入韩文...</span>}
+            <span className="text-base font-bold text-gray-900 dark:text-gray-100">
+              {composed || <span className="text-gray-400 dark:text-gray-500 font-normal text-xs">输入韩文...</span>}
             </span>
             {showRawJamo && (
-              <span className="text-[11px] text-[var(--text-muted)] font-mono">{buffer.join(' ')}</span>
+              <span className="text-[11px] text-gray-400 dark:text-gray-500 font-mono">{buffer.join(' ')}</span>
             )}
           </div>
           <button
@@ -526,7 +534,7 @@ export function KoreanKeyboard({ value, onChange, visible, onClose }: KoreanKeyb
             </div>
           ))}
 
-          {/* Bottom row: space + done */}
+          {/* Bottom row: space + send/done */}
           <div className="flex gap-1.5">
             <button
               onClick={() => handleKey({ label: '', type: 'space', flex: 1 })}
@@ -535,13 +543,23 @@ export function KoreanKeyboard({ value, onChange, visible, onClose }: KoreanKeyb
             >
               空格
             </button>
-            <button
-              onClick={() => handleKey({ label: '', type: 'done', flex: 1 })}
-              className={`bg-[var(--pink-primary)] flex items-center justify-center ${isMobile ? 'h-11 min-h-[44px]' : 'h-10'} rounded-lg text-sm font-bold text-white shadow-sm active:scale-[0.94] transition-all select-none hover:opacity-90`}
-              style={{ flex: 2 }}
-            >
-              完成
-            </button>
+            {onSend ? (
+              <button
+                onClick={handleSend}
+                className={`bg-[var(--pink-primary)] flex items-center justify-center ${isMobile ? 'h-11 min-h-[44px]' : 'h-10'} rounded-lg text-sm font-bold text-white shadow-sm active:scale-[0.94] transition-all select-none hover:opacity-90`}
+                style={{ flex: 2 }}
+              >
+                发送
+              </button>
+            ) : (
+              <button
+                onClick={() => handleKey({ label: '', type: 'done', flex: 1 })}
+                className={`bg-[var(--pink-primary)] flex items-center justify-center ${isMobile ? 'h-11 min-h-[44px]' : 'h-10'} rounded-lg text-sm font-bold text-white shadow-sm active:scale-[0.94] transition-all select-none hover:opacity-90`}
+                style={{ flex: 2 }}
+              >
+                完成
+              </button>
+            )}
           </div>
 
           <div className="pb-safe" />
