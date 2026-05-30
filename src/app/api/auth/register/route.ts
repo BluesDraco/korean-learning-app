@@ -1,9 +1,24 @@
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/server/db';
 import { hashPassword, signToken, setAuthCookie, generateId } from '@/lib/server/auth';
+import { checkRateLimit } from '@/lib/server/rate-limit';
+
+function getClientIp(request: Request): string {
+  const forwarded = request.headers.get('x-forwarded-for');
+  return forwarded?.split(',')[0]?.trim() || '127.0.0.1';
+}
 
 export async function POST(request: Request) {
   try {
+    const ip = getClientIp(request);
+    const rateCheck = await checkRateLimit(`register:${ip}`);
+    if (!rateCheck.allowed) {
+      return NextResponse.json(
+        { error: '注册请求过于频繁，请稍后再试' },
+        { status: 429 },
+      );
+    }
+
     const { username, password } = await request.json();
 
     if (!username || !password) {

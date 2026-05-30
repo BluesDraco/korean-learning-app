@@ -181,16 +181,17 @@ export async function POST(req: Request) {
   }
 
   const db = await getDb();
-  const { action, table, id, data } = await req.json();
-
-  const info = TABLE_COLS[table];
-  if (!info) {
-    return NextResponse.json({ error: `Unknown table: ${table}` }, { status: 400 });
-  }
-
-  const { cols, pk, userScope } = info;
 
   try {
+    const { action, table, id, data } = await req.json();
+
+    const info = TABLE_COLS[table];
+    if (!info) {
+      return NextResponse.json({ error: `Unknown table: ${table}` }, { status: 400 });
+    }
+
+    const { cols, pk, userScope } = info;
+
     switch (action) {
       case 'getAll': {
         const u = buildUserClause(userScope, auth.userId);

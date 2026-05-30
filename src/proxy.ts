@@ -27,6 +27,7 @@ export async function proxy(request: NextRequest) {
   if (
     pathname.startsWith('/_next') ||
     pathname.startsWith('/images') ||
+    pathname.startsWith('/stickers') ||
     pathname.startsWith('/favicon.ico') ||
     pathname === '/sw.js' ||
     pathname === '/manifest.json'

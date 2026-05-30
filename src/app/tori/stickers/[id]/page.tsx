@@ -127,9 +127,14 @@ export default function StickerDetailPage() {
             key={s.id}
             className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 text-center space-y-2 hover:scale-105 transition-transform"
           >
-            <span className="text-4xl">
-              {['🐰', '🌟', '✨', '💕', '📚', '🎓', '💪', '🌸'][s.sortOrder % 8]}
-            </span>
+            <img
+              src={s.imageUrl}
+              alt={s.captionZh}
+              className="w-full aspect-square object-contain"
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.display = 'none';
+              }}
+            />
             <p className="text-xs font-medium text-[var(--text-primary)]">{s.captionKo}</p>
             <p className="text-xs text-[var(--text-muted)]">{s.captionZh}</p>
           </div>

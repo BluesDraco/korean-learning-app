@@ -32,7 +32,7 @@ const nextConfig: NextConfig = {
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: blob: https:",
               "font-src 'self' data:",
-              "connect-src 'self' https://api.deepseek.com https://fanyi.baidu.com wss://speech.platform.bing.com",
+              "connect-src 'self' https://api.deepseek.com",
               "media-src 'self' data: blob:",
               "frame-src 'self' https://www.bilibili.com",
               "frame-ancestors 'none'",
