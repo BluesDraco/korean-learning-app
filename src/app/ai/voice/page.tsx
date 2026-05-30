@@ -5,6 +5,7 @@ import {
   ArrowLeft, Mic, MicOff, Volume2, VolumeX, Languages,
   Lightbulb, Send, ChevronRight, AlertCircle, LogIn,
 } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { KoreanKeyboard } from '@/components/KoreanKeyboard';
 import { useAuth } from '@/components/AuthProvider';
@@ -404,10 +405,12 @@ export default function VoiceChatPage() {
             {/* Tori greeting */}
             <div className="text-center space-y-3">
               <div className="relative inline-block">
-                <img
+                <Image
                   src="/images/tori-poses/tori-pose-01.png"
                   alt="Tori"
-                  className="w-20 h-20 object-contain mx-auto"
+                  width={80}
+                  height={80}
+                  className="object-contain mx-auto"
                 />
                 <span className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-[var(--mint-soft)] border-2 border-[var(--bg-primary)]" />
               </div>

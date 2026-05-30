@@ -1,21 +1,14 @@
 'use client';
 
 import { useState, useCallback, useEffect, useRef } from 'react';
-import Link from 'next/link';
 import {
-  ArrowLeft, Clock, Play, Volume2, Check, X, Trophy,
+  ArrowLeft, Clock, Volume2, Check, X, Trophy,
   Sparkles, RotateCcw, ChevronRight, Headphones, BookOpen,
 } from 'lucide-react';
 import { topikQuestions, topikSections, type TopikQuestion } from '@/data/topik-questions';
 import { speak, cancelSpeech } from '@/lib/tts';
 
 type Phase = 'selecting' | 'exam' | 'result';
-
-interface AnswerRecord {
-  questionId: string;
-  selected: number;
-  correct: boolean;
-}
 
 function speakTopik(text: string): Promise<void> {
   return speak(text, 0.85);
@@ -52,12 +45,18 @@ export default function TopikPage() {
     };
   }, [phase]);
 
+  const finishExam = useCallback(() => {
+    setPhase('result');
+    if (timerRef.current) clearInterval(timerRef.current);
+    cancelSpeech();
+  }, []);
+
   // Auto-submit on time up
   useEffect(() => {
     if (phase === 'exam' && timeLeft === 0 && questions.length > 0) {
       finishExam();
     }
-  }, [timeLeft]);
+  }, [timeLeft, finishExam, questions.length, phase]);
 
   const startExam = useCallback((secId: string) => {
     const sec = topikSections.find((s) => s.id === secId);
@@ -92,19 +91,13 @@ export default function TopikPage() {
     }
   };
 
-  const finishExam = useCallback(() => {
-    setPhase('result');
-    if (timerRef.current) clearInterval(timerRef.current);
-    cancelSpeech();
-  }, []);
-
-  const handlePlayAudio = async () => {
+  const handlePlayAudio = useCallback(async () => {
     const q = questions[currentIdx];
     if (!q.audioText || playing) return;
     setPlaying(true);
     await speakTopik(q.audioText);
     setPlaying(false);
-  };
+  }, [questions, currentIdx, playing]);
 
   // Auto-play audio when moving to a new listening question
   useEffect(() => {
@@ -115,7 +108,7 @@ export default function TopikPage() {
         return () => clearTimeout(t);
       }
     }
-  }, [currentIdx, phase, section, questions]);
+  }, [currentIdx, phase, section, questions, showAnswer, playing, handlePlayAudio, sectionInfo.section]);
 
   const correctCount = Array.from(answers.entries()).reduce((acc, [qid, sel]) => {
     const q = questions.find((x) => x.id === qid);

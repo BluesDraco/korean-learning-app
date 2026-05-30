@@ -11,14 +11,6 @@ interface Props {
   onDelete: (id: string) => void;
 }
 
-const COLORS: Record<string, string> = {
-  'var(--color-vocab)': 'from-[var(--yellow-soft)] to-[var(--peach-soft)]',
-  'var(--pink-primary)': 'from-[var(--pink-light)] to-[var(--pink-primary)]',
-  'var(--mint-soft)': 'from-[var(--mint-soft)]/60 to-[var(--mint-soft)]',
-  'var(--purple-soft)': 'from-[var(--purple-soft)]/60 to-[var(--purple-soft)]',
-  'var(--blue-soft)': 'from-[var(--blue-soft)]/60 to-[var(--blue-soft)]',
-};
-
 export function WordBookCard({ book, wordCount, onRename, onDelete }: Props) {
   return (
     <div className="card-washi group relative" style={{ '--washi-color': book.color } as React.CSSProperties}>

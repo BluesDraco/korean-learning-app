@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { BookOpen, BookImage, Filter, ChevronRight, ArrowLeft } from 'lucide-react';
+import { BookOpen, Filter, ChevronRight, ArrowLeft } from 'lucide-react';
 import { articles, levelLabel, levelColor } from '@/data/articles';
 import type { Article } from '@/data/articles';
 

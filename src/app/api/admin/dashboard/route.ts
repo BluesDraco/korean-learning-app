@@ -17,29 +17,26 @@ export async function GET() {
   if (!admin.authorized) return admin.response;
 
   const db = await getDb();
-  const now = Date.now();
   const todayStart = new Date().setHours(0, 0, 0, 0);
   const yesterdayStart = todayStart - 86400000;
   const yesterdayEnd = todayStart;
 
   // ── Users ──
-  const [[totalUsersRow], [todayUsersRow], [yesterdayUsersRow]] = await Promise.all([
+  const [[_totalUsersRow], [todayUsersRow], [yesterdayUsersRow]] = await Promise.all([
     db.exec('SELECT COUNT(*) as c FROM users'),
     db.exec(`SELECT COUNT(*) as c FROM users WHERE created_at > ${todayStart}`),
     db.exec(`SELECT COUNT(*) as c FROM users WHERE created_at BETWEEN ${yesterdayStart} AND ${yesterdayEnd}`),
   ]);
-  const totalUsers = safeNum(totalUsersRow?.values?.[0]?.[0]);
   const todayUsers = safeNum(todayUsersRow?.values?.[0]?.[0]);
   const yesterdayUsers = safeNum(yesterdayUsersRow?.values?.[0]?.[0]);
 
   // ── Page views ──
-  const [[todayPvRow], [yesterdayPvRow], [todayDistinctRow]] = await Promise.all([
+  const [[todayPvRow], [_yesterdayPvRow], [todayDistinctRow]] = await Promise.all([
     db.exec(`SELECT COUNT(*) as c FROM page_views WHERE created_at > ${todayStart}`),
     db.exec(`SELECT COUNT(*) as c FROM page_views WHERE created_at BETWEEN ${yesterdayStart} AND ${yesterdayEnd}`),
     db.exec(`SELECT COUNT(DISTINCT COALESCE(user_id, id)) as c FROM page_views WHERE created_at > ${todayStart}`),
   ]);
   const todayPageViews = safeNum(todayPvRow?.values?.[0]?.[0]);
-  const yesterdayPageViews = safeNum(yesterdayPvRow?.values?.[0]?.[0]);
   const todayVisitors = safeNum(todayDistinctRow?.values?.[0]?.[0]);
 
   // ── AI usage ──
@@ -51,11 +48,10 @@ export async function GET() {
   const yesterdayAiCalls = safeNum(yesterdayAiRow?.values?.[0]?.[0]);
 
   // ── Study logs ──
-  const [[todayStudyRow], [yesterdayStudyRow]] = await Promise.all([
+  await Promise.all([
     db.exec(`SELECT COUNT(*) as c FROM study_logs WHERE created_at > ${todayStart}`),
     db.exec(`SELECT COUNT(*) as c FROM study_logs WHERE created_at BETWEEN ${yesterdayStart} AND ${yesterdayEnd}`),
   ]);
-  const todayStudyCount = safeNum(todayStudyRow?.values?.[0]?.[0]);
 
   // ── Feature usage from study_logs ──
   const featureResults = await db.exec(

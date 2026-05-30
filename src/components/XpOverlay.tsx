@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import { Star, Flame, Award } from 'lucide-react';
+import { Star } from 'lucide-react';
 
 interface Flyout {
   id: number;

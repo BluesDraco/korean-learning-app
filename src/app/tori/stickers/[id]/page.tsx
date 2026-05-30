@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
+import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, Download, Loader2 } from 'lucide-react';
 import { db } from '@/lib/db';
@@ -37,10 +38,10 @@ const SEED_STICKERS: Record<string, { captionZh: string; captionKo: string }[]> 
 
 export default function StickerDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const router = useRouter();
   const [pack, setPack] = useState<StickerPack | null>(null);
   const [stickers, setStickers] = useState<Sticker[]>([]);
   const [loading, setLoading] = useState(true);
+  const [imgErrors, setImgErrors] = useState<Set<string>>(new Set());
   const [downloading, setDownloading] = useState(false);
 
   useEffect(() => {
@@ -127,14 +128,16 @@ export default function StickerDetailPage() {
             key={s.id}
             className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 text-center space-y-2 hover:scale-105 transition-transform"
           >
-            <img
-              src={s.imageUrl}
-              alt={s.captionZh}
-              className="w-full aspect-square object-contain"
-              onError={(e) => {
-                (e.target as HTMLImageElement).style.display = 'none';
-              }}
-            />
+            <div className="relative aspect-square">
+              <Image
+                src={s.imageUrl}
+                alt={s.captionZh}
+                fill
+                className="object-contain"
+                onError={() => setImgErrors(prev => new Set(prev).add(s.id))}
+              />
+              {imgErrors.has(s.id) && <div className="absolute inset-0 flex items-center justify-center text-[var(--text-muted)] text-xs">暂无图片</div>}
+            </div>
             <p className="text-xs font-medium text-[var(--text-primary)]">{s.captionKo}</p>
             <p className="text-xs text-[var(--text-muted)]">{s.captionZh}</p>
           </div>

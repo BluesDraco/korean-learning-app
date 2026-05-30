@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { Search, X, FileText, ChevronDown, ChevronUp, AlertCircle, Volume2, Lightbulb, ArrowRight, Sparkles } from 'lucide-react';
+import { Search, X, FileText, ChevronDown, ChevronUp, AlertCircle, Volume2, Lightbulb, Sparkles } from 'lucide-react';
 import { grammarPoints, type GrammarPoint } from '@/data/grammar';
-import { beginnerGrammar, type GrammarEntry } from '@/data/grammar-beginner';
+import { beginnerGrammar } from '@/data/grammar-beginner';
 import { speak } from '@/lib/tts';
 
 const levelConfig: Record<string, { label: string; color: string }> = {
@@ -445,7 +445,6 @@ export default function GrammarPage() {
         <div className="space-y-3">
           {filtered.map((grammar) => {
             const isExpanded = expandedId === grammar.id;
-            const lv = levelConfig[grammar.level];
 
             return (
               <div

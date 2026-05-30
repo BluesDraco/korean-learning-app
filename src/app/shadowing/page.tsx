@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Film, Loader2, Trash2, Play, Link2, AlertCircle } from 'lucide-react';
@@ -150,9 +151,9 @@ export default function ShadowingListPage() {
               key={video.id}
               className="flex items-center gap-3 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-3 hover:border-[var(--border-hover)] transition-colors"
             >
-              <div className="w-20 h-12 rounded-lg bg-[var(--bg-input)] overflow-hidden shrink-0">
+              <div className="w-20 h-12 rounded-lg bg-[var(--bg-input)] overflow-hidden shrink-0 relative">
                 {video.thumbnail ? (
-                  <img src={video.thumbnail} alt="" className="w-full h-full object-cover" />
+                  <Image src={video.thumbnail} alt="" fill className="object-cover" unoptimized />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-[var(--text-muted)]">
                     <Film size={18} />

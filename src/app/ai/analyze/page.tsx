@@ -779,7 +779,7 @@ function AnalyzerForm() {
 function HistoryTab() {
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [loadedResult, setLoadedResult] = useState<AnalysisResult | null>(null);
-  const [loadedInput, setLoadedInput] = useState('');
+  const [, setLoadedInput] = useState('');
 
   useEffect(() => {
     setHistory(loadHistory());

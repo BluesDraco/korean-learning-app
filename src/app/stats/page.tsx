@@ -8,14 +8,14 @@ import {
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, PieChart, Pie, Cell,
-  RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Legend,
-  LineChart, Line, Area, AreaChart,
+  RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar,
+  Area, AreaChart,
 } from 'recharts';
 import { useRouter } from 'next/navigation';
 import { db } from '@/lib/db';
 import { ACHIEVEMENT_DEFS } from '@/types';
 import { memoryHealthScore, retentionDistribution, generateCurvePoints, wordStability, atRiskWords, type RetentionBucket } from '@/lib/forgetting-curve';
-import type { Word, ReviewSession, Achievement, MasteryLevel, UserProfile } from '@/types';
+import type { Word, Achievement, MasteryLevel, UserProfile } from '@/types';
 
 interface Stats {
   totalWords: number;
@@ -36,7 +36,6 @@ interface Stats {
 }
 
 const COLORS = ['var(--text-muted)', 'var(--color-highlight)', 'var(--pink-primary)', 'var(--mint-soft)'];
-const RADAR_COLORS = ['var(--pink-primary)', 'var(--purple-soft)', 'var(--mint-soft)', 'var(--peach-soft)', 'var(--peach-soft)', 'var(--blue-soft)'];
 
 function totalXpForLevel(level: number): number {
   let total = 0;
@@ -64,7 +63,6 @@ export default function StatsPage() {
         db.userProfiles.get('main'),
       ]);
 
-      const now = Date.now();
       const todayStart = new Date().setHours(0, 0, 0, 0);
       const weekStart = todayStart - 6 * 86400000;
 

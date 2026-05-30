@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useCallback, useRef, Suspense } from 'react';
+import Image from 'next/image';
 import { Loader2, ArrowLeft, Zap, Flame, Volume2, Brain, TrendingUp, RotateCcw, Star, Activity } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { db } from '@/lib/db';
@@ -355,10 +356,12 @@ function ReviewContent() {
       {toriReactionKey !== null && TORI_REACTIONS[toriReactionKey] && (
         <div className="fixed inset-0 z-30 flex items-center justify-center pointer-events-none">
           <div className="bg-white/95 backdrop-blur-sm border-2 border-[var(--pink-light)] rounded-3xl px-6 py-5 shadow-xl animate-bounce-achievement text-center max-w-[240px]">
-            <img
+            <Image
               src={`/images/tori-poses/${TORI_REACTIONS[toriReactionKey].pose}`}
               alt="Tori"
-              className="w-16 h-16 object-contain mx-auto mb-2"
+              width={64}
+              height={64}
+              className="object-contain mx-auto mb-2"
             />
             <span className="text-sm font-bold text-[var(--text-primary)]">{TORI_REACTIONS[toriReactionKey].text}</span>
           </div>

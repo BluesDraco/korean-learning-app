@@ -701,7 +701,6 @@ function ClozeMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord, 'id' 
   const handleNext = () => {
     if (isLastQuestion) {
       // Add record and show completion
-      const finalScore = score + (selectedAnswer === exercise.correct && !answered ? 0 : 0);
       // We already incremented score in handleSelect
       const finalPercentage = Math.round((score / clozeExercises.length) * 100);
 

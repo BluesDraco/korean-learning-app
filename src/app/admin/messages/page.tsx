@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { Send, Loader2, Check, Users, User, Megaphone, FileText, Bell } from 'lucide-react';
+import { Send, Loader2, Check, User, Megaphone, FileText, Bell } from 'lucide-react';
 import type { AnnouncementType } from '@/types';
 
 const TYPE_OPTIONS: { value: AnnouncementType; label: string; icon: React.ComponentType<{ size?: number; className?: string }> }[] = [

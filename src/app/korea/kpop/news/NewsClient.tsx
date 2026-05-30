@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { ExternalLink, BookOpen, RefreshCw, Sparkles, AlertCircle, Play, Eye, User } from 'lucide-react';
+import Image from 'next/image';
+import { ExternalLink, BookOpen, RefreshCw, Sparkles, AlertCircle, Play, User } from 'lucide-react';
 
 interface NewsPost {
   id: string;
@@ -162,12 +163,12 @@ export function NewsClient() {
                       onClick={() => setActiveVideo(post.bvid!)}
                     >
                       {post.pic ? (
-                        <img
+                        <Image
                           src={post.pic}
                           alt={post.title}
-                          className="w-full h-full object-cover"
-                          loading="lazy"
-                          referrerPolicy="no-referrer"
+                          fill
+                          className="object-cover"
+                          unoptimized
                         />
                       ) : (
                         <div className="w-full h-full bg-gradient-to-br from-purple-900 to-pink-900 flex items-center justify-center" />

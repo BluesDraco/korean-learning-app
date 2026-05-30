@@ -37,7 +37,7 @@ export default function DictionaryPage() {
   useEffect(() => {
     const t = setTimeout(() => { if (query.trim()) doSearch(1); }, 300);
     return () => clearTimeout(t);
-  }, [query]);
+  }, [query, doSearch]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') doSearch(1);

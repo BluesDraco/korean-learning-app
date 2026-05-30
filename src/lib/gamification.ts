@@ -1,5 +1,5 @@
 import { db } from '@/lib/db';
-import type { UserProfile, DailyLog, Achievement, AchievementType, ACHIEVEMENT_DEFS } from '@/types';
+import type { UserProfile, DailyLog, Achievement, AchievementType } from '@/types';
 
 // XP rewards for each action
 export const XP_REWARDS = {
@@ -115,7 +115,7 @@ export async function awardXp(amount: number): Promise<{ leveledUp: boolean; new
   await updateTodayLog({ xpEarned: (await getTodayLog()).xpEarned + amount });
 
   // Check achievements
-  await checkAchievements(lvl, amount);
+  await checkAchievements(lvl);
 
   return { leveledUp, newLevel: lvl };
 }
@@ -190,14 +190,13 @@ export async function addStudyMinutes(minutes: number): Promise<void> {
 }
 
 // Achievement checking
-export async function checkAchievements(level: number, _xpJustAwarded: number): Promise<Achievement[]> {
+export async function checkAchievements(level: number): Promise<Achievement[]> {
   const newAchievements: Achievement[] = [];
   const existing = await db.achievements.toArray();
   const existingTypes = new Set(existing.map((a) => a.type));
 
   const words = await db.words.toArray();
   const totalWords = words.length;
-  const masteredWords = words.filter((w) => w.mastery === 'mastered').length;
   const reviews = await db.reviewSessions.toArray();
   const totalReviews = reviews.reduce((s, r) => s + r.wordsReviewed, 0);
   const dictations = await db.dictationRecords.toArray();

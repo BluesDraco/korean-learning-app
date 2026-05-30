@@ -5,7 +5,7 @@ import type { UserDetail, UpdateUserBody } from '@/types/admin';
 import { useState, use } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Crown, ShieldBan, MessageSquare, Sparkles } from 'lucide-react';
+import { ArrowLeft, Sparkles } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip } from 'recharts';
 
 export default function UserDetailPage({ params }: { params: Promise<{ id: string }> }) {

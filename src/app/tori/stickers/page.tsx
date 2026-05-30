@@ -1,10 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { Loader2, Download, ArrowRight } from 'lucide-react';
 import { db } from '@/lib/db';
-import type { StickerPack, StickerDownload } from '@/types';
+import type { StickerPack } from '@/types';
 
 const SEED_PACKS: StickerPack[] = [
   {
@@ -37,6 +38,7 @@ export default function StickersPage() {
   const [packs, setPacks] = useState<StickerPack[]>([]);
   const [downloads, setDownloads] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
+  const [imgErrors, setImgErrors] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     (async () => {
@@ -87,15 +89,15 @@ export default function StickersPage() {
             href={`/tori/stickers/${pack.id}`}
             className="group bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl overflow-hidden hover:scale-105 hover:shadow-lg transition-all"
           >
-            <div className="aspect-square bg-gradient-to-br from-[#FFFDF9] to-[#FFD4E0]/20 flex items-center justify-center">
-              <img
+            <div className="aspect-square bg-gradient-to-br from-[#FFFDF9] to-[#FFD4E0]/20 flex items-center justify-center relative">
+              <Image
                 src={pack.coverImage}
                 alt={pack.name}
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).style.display = 'none';
-                }}
+                fill
+                className="object-cover"
+                onError={() => setImgErrors(prev => new Set(prev).add(pack.id))}
               />
+              {imgErrors.has(pack.id) && <div className="absolute inset-0 bg-gradient-to-br from-[#FFFDF9] to-[#FFD4E0]/20" />}
             </div>
             <div className="p-3 space-y-1">
               <h3 className="text-sm font-bold text-[var(--text-primary)]">{pack.name}</h3>

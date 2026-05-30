@@ -2,9 +2,10 @@
 
 import { useState, useMemo } from 'react';
 import { useParams } from 'next/navigation';
+import Image from 'next/image';
 import Link from 'next/link';
 import {
-  ArrowLeft, BookOpen, Hash, Volume2, Eye, EyeOff,
+  ArrowLeft, BookOpen, Volume2, Eye, EyeOff,
   Languages, Play, ChevronDown, ExternalLink, Search,
 } from 'lucide-react';
 import { kpopSongs } from '@/data/kpopSongs';
@@ -54,6 +55,7 @@ export default function KpopSongPage() {
   const [showPronunciation, setShowPronunciation] = useState(true);
   const [expandedVocab, setExpandedVocab] = useState(false);
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set());
+  const [imgError, setImgError] = useState(false);
 
   const toggleSection = (section: string) => {
     setExpandedSections((prev) => {
@@ -96,15 +98,14 @@ export default function KpopSongPage() {
       <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl overflow-hidden">
         {/* Cover image */}
         <div className="relative h-48 bg-black/40 overflow-hidden">
-          <img
+          <Image
             src={thumbnailUrl}
             alt={song.title}
-            className="w-full h-full object-cover opacity-80"
-            onError={(e) => {
-              // Hide broken image, show gradient fallback
-              (e.target as HTMLImageElement).style.display = 'none';
-            }}
+            fill
+            className="object-cover opacity-80"
+            onError={() => setImgError(true)}
           />
+          {imgError && <div className="absolute inset-0 bg-gradient-to-br from-purple-900 to-pink-900" />}
           <div
             className="absolute inset-0"
             style={{

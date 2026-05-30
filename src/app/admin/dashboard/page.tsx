@@ -5,7 +5,7 @@ import type { DashboardResponse, TrendGranularity, ActivityFeedItem, FeatureUsag
 import { useState } from 'react';
 import Link from 'next/link';
 import { TrendingUp, TrendingDown, Server, Cpu, HardDrive, AlertTriangle } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 function MetricCardView({ card, prefix = '', suffix = '' }: { card: MetricCard; prefix?: string; suffix?: string }) {
   const isUp = card.change >= 0;

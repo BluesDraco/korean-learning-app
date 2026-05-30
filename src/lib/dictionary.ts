@@ -88,7 +88,7 @@ export function deconjugate(word: string): DeconjugateResult {
     const root = pastMatch[1];
     const suffix = pastMatch[2]; // 았/었/였
     // Reconstruct: 았/었 → ㅏ/ㅓ + ㅆ
-    let stem = root;
+    const stem = root;
     // Try to reverse: root + 았/었/였 comes from stem + vowel merge
     // Simplest approach: root + suffix vowel + ㅆ다
     // But the stem reconstruction depends on whether the vowel merged
@@ -293,7 +293,7 @@ function reverseYeoMerge(stem: string): string {
 }
 
 /** Try to reconstruct dictionary form from stem after suffix removal */
-function tryStemToDictionary(stem: string, suffix: string): string {
+function tryStemToDictionary(stem: string, _suffix: string): string {
   if (!stem) return '하다'; // fallback
 
   const lastChar = stem.charAt(stem.length - 1);

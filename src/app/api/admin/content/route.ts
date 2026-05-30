@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/server/admin-guard';
 import { getDb } from '@/lib/server/db';
 import type { ContentResponse, ContentModuleStats, FeedbackItem } from '@/types/admin';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   const admin = await requireAdmin();
   if (!admin.authorized) return admin.response;
 

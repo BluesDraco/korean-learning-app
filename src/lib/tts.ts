@@ -10,7 +10,7 @@ export function cancelSpeech() {
   window.speechSynthesis?.cancel();
 }
 
-export async function speak(text: string, rate: number = 1.0, onEnd?: () => void) {
+export async function speak(text: string, _rate: number = 1.0, onEnd?: () => void) {
   if (typeof window === 'undefined') {
     onEnd?.();
     return;

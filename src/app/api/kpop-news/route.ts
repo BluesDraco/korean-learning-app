@@ -195,7 +195,7 @@ export async function GET() {
   }
 }
 
-export async function POST(req: Request) {
+export async function POST() {
   const auth = await getAuthFromCookie();
   if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 

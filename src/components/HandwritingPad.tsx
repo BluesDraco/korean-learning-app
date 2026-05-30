@@ -32,7 +32,6 @@ export function HandwritingPad({ onInsert, onCancel }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [strokes, setStrokes] = useState<Stroke[]>([]);
-  const [isDrawing, setIsDrawing] = useState(false);
   const isDrawingRef = useRef(false);
   const currentPointsRef = useRef<{ x: number; y: number; pressure: number }[]>([]);
   const [recognized, setRecognized] = useState('');
@@ -116,7 +115,6 @@ export function HandwritingPad({ onInsert, onCancel }: Props) {
   const handlePointerDown = useCallback((e: React.PointerEvent) => {
     canvasRef.current?.setPointerCapture(e.pointerId);
     isDrawingRef.current = true;
-    setIsDrawing(true);
     // Redraw to get a clean background + existing strokes for the new drawing layer
     redraw();
     const pos = getPos(e);
@@ -156,7 +154,6 @@ export function HandwritingPad({ onInsert, onCancel }: Props) {
   const handlePointerUp = useCallback((e: React.PointerEvent) => {
     canvasRef.current?.releasePointerCapture(e.pointerId);
     isDrawingRef.current = false;
-    setIsDrawing(false);
     const points = currentPointsRef.current;
     if (points.length >= 2) {
       setStrokes((prev) => [...prev, { points: [...points] }]);

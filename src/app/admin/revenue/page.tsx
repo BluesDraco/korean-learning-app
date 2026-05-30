@@ -3,7 +3,7 @@
 import { useAdminData } from '@/lib/useAdminData';
 import type { RevenueResponse } from '@/types/admin';
 import { useState } from 'react';
-import { Download, Filter } from 'lucide-react';
+import { Download } from 'lucide-react';
 
 const typeLabels: Record<string, string> = { all: '全部', monthly: '月付', yearly: '年付', donation: '打赏' };
 

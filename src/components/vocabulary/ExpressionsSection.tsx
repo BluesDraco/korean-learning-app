@@ -3,22 +3,7 @@
 import { useState, useMemo } from 'react';
 import { Search, X, Flame, Volume2 } from 'lucide-react';
 import { idioms, slangs, loanwords } from '@/data/expressions';
-import type { Idiom, Slang, Loanword } from '@/data/expressions';
 import { speak } from '@/lib/tts';
-
-
-const tagColors: Record<string, string> = {
-  '身体': 'bg-red-500/10 text-red-500', '食物': 'bg-orange-500/10 text-orange-500',
-  '情感': 'bg-pink-500/10 text-pink-500', '动作': 'bg-emerald-500/10 text-emerald-500',
-  '生活': 'bg-purple-500/10 text-purple-500', '性格': 'bg-rose-500/10 text-rose-500',
-  '社交': 'bg-blue-500/10 text-blue-500',
-};
-
-const moodColors: Record<string, string> = {
-  '调侃': 'bg-orange-500/10 text-orange-500', '感叹': 'bg-purple-500/10 text-purple-500',
-  '撒娇': 'bg-pink-500/10 text-pink-500', '惊讶': 'bg-red-500/10 text-red-500',
-  '吐槽': 'bg-emerald-500/10 text-emerald-500', '可爱': 'bg-pink-500/10 text-pink-500',
-};
 
 type SubTab = 'idioms' | 'slang' | 'loanword';
 

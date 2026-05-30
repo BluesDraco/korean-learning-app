@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
-  ArrowLeft, Loader2, Eye, EyeOff, Upload, Plus, Check,
+  ArrowLeft, Loader2, Eye, EyeOff, Upload,
 } from 'lucide-react';
 import { db } from '@/lib/db';
 import { tokenizeKorean, romanize, lookupWord, type TokenInfo } from '@/lib/dictionary';
@@ -14,7 +14,7 @@ import { SubtitlePanel } from '@/components/SubtitlePanel';
 import { SpeedSelector } from '@/components/SpeedSelector';
 import { ShadowingBar } from '@/components/ShadowingBar';
 import { WordCard, type WordCardData } from '@/components/WordCard';
-import type { StudyVideo, StudySubtitle, StudyLog, Word } from '@/types';
+import type { StudyVideo, StudySubtitle, Word } from '@/types';
 
 type SubtitleMode = 'bilingual' | 'korean' | 'chinese' | 'hidden';
 const MODE_LABELS: Record<SubtitleMode, string> = { bilingual: '韩中', korean: '韩', chinese: '中', hidden: '隐藏' };
@@ -100,13 +100,17 @@ export default function ShadowingPlayerPage() {
   }, [isPlaying, subtitles, loopIndex]);
 
   // Save study log on unmount
+  const videoRef = useRef(video);
+  videoRef.current = video;
+
   useEffect(() => {
     return () => {
+      const currentVideo = videoRef.current;
       const duration = Math.round((Date.now() - studyStartTime) / 1000);
-      if (duration > 5 && video) {
+      if (duration > 5 && currentVideo) {
         db.videoStudyLogs.put({
           id: crypto.randomUUID(),
-          videoId: video.id,
+          videoId: currentVideo.id,
           date: Date.now(),
           durationSec: duration,
           wordsAdded: [],
@@ -115,13 +119,13 @@ export default function ShadowingPlayerPage() {
         fetch('/api/track/study', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'shadowing', details: `跟读: ${video.title}`, xpEarned: 0 }),
+          body: JSON.stringify({ action: 'shadowing', details: `跟读: ${currentVideo.title}`, xpEarned: 0 }),
         }).catch(() => {});
         // Update lastStudiedAt
-        db.studyVideos.update(video.id, { lastStudiedAt: Date.now() });
+        db.studyVideos.update(currentVideo.id, { lastStudiedAt: Date.now() });
       }
     };
-  }, []);
+  }, [studyStartTime]);
 
   // ── Handlers ──────────────────────────────────────
 
@@ -133,7 +137,7 @@ export default function ShadowingPlayerPage() {
     playerRef.current?.seekTo(sub.start);
   };
 
-  const handleWordClick = async (token: TokenInfo, _subIdx: number) => {
+  const handleWordClick = async (token: TokenInfo) => {
     if (!token.isKoreanWord) return;
     setWordLoading(true);
     setWordData(null);
@@ -220,11 +224,6 @@ export default function ShadowingPlayerPage() {
       setIsPlaying(true);
       setShadowingTarget(sub);
     }
-  };
-
-  const handleStartShadowing = () => {
-    if (loopIndex === null || !subtitles[loopIndex]) return;
-    setShadowingTarget(subtitles[loopIndex]);
   };
 
   const handleListen = () => {
@@ -383,7 +382,6 @@ export default function ShadowingPlayerPage() {
             {(() => {
               const totalEnd = subtitles[subtitles.length - 1]?.end || 1;
               return subtitles.map((sub, i) => {
-                const left = (sub.start / totalEnd) * 100;
                 const width = Math.max(((sub.end - sub.start) / totalEnd) * 100, 0.3);
                 const isActive = activeIndex === i;
                 const isLooping = loopIndex === i;

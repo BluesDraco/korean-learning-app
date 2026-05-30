@@ -5,7 +5,7 @@ import Link from 'next/link';
 import {
   Search, Trash2, X, ChevronDown, ChevronUp,
   BookOpen, GraduationCap, Film, Clock, ArrowRight,
-  Sparkles, Hash, Calendar, Filter, Volume2, BookmarkPlus, Library, Bookmark,
+  Sparkles, Hash, Calendar, Volume2, BookmarkPlus, Library, Bookmark,
 } from 'lucide-react';
 import { db } from '@/lib/db';
 import { AddToBookModal } from '@/components/AddToBookModal';

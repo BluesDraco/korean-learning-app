@@ -38,7 +38,7 @@ export function LevelsSection() {
       }
       setLevelProgress(progress);
     })();
-  }, []);
+  }, [levels]);
 
   const topikI = levels.filter((l) => l.level <= 2);
   const topikII = levels.filter((l) => l.level >= 3);

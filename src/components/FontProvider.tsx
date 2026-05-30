@@ -23,12 +23,10 @@ export function useFontSettings() {
 
 export function FontProvider({ children }: { children: ReactNode }) {
   const [settings, setSettings] = useState<FontSettings>({ preset: 'cute', size: 'medium' });
-  const [committed, setCommitted] = useState<FontSettings>({ preset: 'cute', size: 'medium' });
 
   useEffect(() => {
     const s = getFontSettings();
     setSettings(s);
-    setCommitted(s);
     applyFontSettings(s);
   }, []);
 
@@ -52,7 +50,6 @@ export function FontProvider({ children }: { children: ReactNode }) {
   // Save current preview state to localStorage
   const commitFontSettings = () => {
     saveFontSettings(settings);
-    setCommitted(settings);
   };
 
   return (

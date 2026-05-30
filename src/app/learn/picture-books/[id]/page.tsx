@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { ArrowLeft, ChevronLeft, ChevronRight, Volume2 } from 'lucide-react';
@@ -76,13 +77,17 @@ function IllustrationImage({ src, fallback, alt }: { src: string; fallback: stri
   if (error || !src) {
     return <span className="text-4xl sm:text-5xl leading-relaxed whitespace-pre-line text-center p-4">{fallback}</span>;
   }
-  return <img src={src} alt={alt} onError={() => setError(true)} className="w-full h-full object-contain" loading="lazy" />;
+  return (
+    <div className="relative w-full h-full">
+      <Image src={src} alt={alt} fill className="object-contain" onError={() => setError(true)} />
+    </div>
+  );
 }
 
 /* ═══════════════════════════════════════════════════════
    Image card
    ═══════════════════════════════════════════════════════ */
-function ImageCard({ page, pageIdx, total, seed }: { page: PictureBookPage; pageIdx: number; total: number; seed: number }) {
+function ImageCard({ page, pageIdx, seed }: { page: PictureBookPage; pageIdx: number; seed: number }) {
   return (
     <div className="w-full h-full rounded-2xl overflow-hidden shadow-lg relative" style={{ backgroundColor: '#FDF8F0' }}>
       <div className="absolute inset-0 pointer-events-none z-10" style={{
@@ -179,7 +184,6 @@ function TextPanel({ page, showChinese, onToggleChinese }: { page: PictureBookPa
   const koLines = page.korean.split('\n');
   const proLines = page.pronunciation.split('\n');
   const zhLines = page.chinese.split('\n');
-  const n = koLines.length;
 
   return (
     <div className="flex flex-col justify-center h-full">
@@ -435,19 +439,19 @@ export default function PictureBookReaderPage() {
                   transition: flipActive ? `transform ${FLIP_DURATION}ms ease-in-out` : 'none',
                   backfaceVisibility: 'hidden', backgroundColor: '#FDF8F0',
                 }}>
-                  <ImageCard page={book.pages[flip.dir === 'forward' ? currentPage : flip.to]} pageIdx={flip.dir === 'forward' ? currentPage : flip.to} total={totalPages} seed={decoSeed} />
+                  <ImageCard page={book.pages[flip.dir === 'forward' ? currentPage : flip.to]} pageIdx={flip.dir === 'forward' ? currentPage : flip.to} seed={decoSeed} />
                 </div>
                 <div className="absolute inset-0 z-10 rounded-2xl overflow-hidden shadow-lg" style={{
                   transformOrigin: 'left center', transform: enteringTransform,
                   transition: flipActive ? `transform ${FLIP_DURATION}ms ease-in-out` : 'none',
                   backfaceVisibility: 'hidden', backgroundColor: '#FDF8F0',
                 }}>
-                  <ImageCard page={book.pages[flip.to]} pageIdx={flip.to} total={totalPages} seed={decoSeed} />
+                  <ImageCard page={book.pages[flip.to]} pageIdx={flip.to} seed={decoSeed} />
                 </div>
               </>
             ) : (
               <div className="absolute inset-0 rounded-2xl overflow-hidden shadow-lg">
-                <ImageCard page={page} pageIdx={currentPage} total={totalPages} seed={decoSeed} />
+                <ImageCard page={page} pageIdx={currentPage} seed={decoSeed} />
               </div>
             )}
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import {
   BookOpen, Film, Mic, Pencil, BarChart3, ArrowRight, Loader2,
@@ -147,10 +148,12 @@ export default function Home() {
     <div className="py-4 space-y-4">
       {/* Cute decoration bar with easter egg bunny */}
       <div className="flex items-center gap-2.5 mb-4 relative">
-        <img
+        <Image
           src="/images/tori-poses/tori-pose-01.png"
           alt="Tori"
-          className="w-8 h-8 cursor-pointer select-none hover:scale-125 transition-transform object-contain"
+          width={32}
+          height={32}
+          className="cursor-pointer select-none hover:scale-125 transition-transform object-contain"
           onClick={handleBunnyClick}
           title="点我!"
         />
@@ -190,7 +193,7 @@ export default function Home() {
       {/* Return-after-break welcome */}
       {showReturnMsg && (
         <div className="bg-[var(--pink-pale)]/20 border border-[var(--pink-pale)]/40 rounded-2xl p-4 flex items-center gap-3 animate-fade-in">
-          <img src="/images/tori-poses/tori-pose-03.png" alt="Tori" className="w-10 h-10 object-contain" />
+          <Image src="/images/tori-poses/tori-pose-03.png" alt="Tori" width={40} height={40} className="object-contain" />
           <div className="flex-1">
             <p className="text-sm font-medium text-[var(--text-primary)]">
               你回来啦！离开了 <span className="font-bold text-[var(--pink-primary)]">{returnDays}</span> 天

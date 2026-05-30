@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
-import { Volume2, Check, X, ArrowRight, Loader2, RotateCcw, Sparkles, Star, Trophy, Mic, Eye, Pen, Keyboard, Headphones, Calendar } from 'lucide-react';
+import { Volume2, Check, X, ArrowRight, Loader2, RotateCcw, Sparkles, Star, Trophy, Mic, Pen, Keyboard, Headphones, Calendar } from 'lucide-react';
 import { db } from '@/lib/db';
 import { awardXp, XP_REWARDS, updateStreak } from '@/lib/gamification';
 import { KoreanKeyboard } from '@/components/KoreanKeyboard';
@@ -239,7 +239,7 @@ export default function DictationPage() {
       speak(text, speed);
       setHasListened(true);
     }
-  }, [currentIdx, mode, submitted, loading, speed]);
+  }, [currentIdx, mode, submitted, loading, speed, currentItem, isWord]);
 
   // Completion screen
   if ((complete || dailyDone) && !loading) {

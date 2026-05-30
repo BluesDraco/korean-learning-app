@@ -138,20 +138,6 @@ function extractKoreanDefs(defBlocks) {
 // Extract sentence patterns
 function extractPatterns(defBlocks) {
   const patterns = [];
-  function findPatternNodes(node) {
-    if (!node || typeof node === 'string') return;
-    if (node.content === '句型' || node.content === '문형') {
-      // The next sibling might have the pattern
-      return;
-    }
-    if (node.style?.backgroundColor === '#666666') {
-      // This is a pattern label, get parent's next content
-      return;
-    }
-    if (Array.isArray(node.content)) {
-      node.content.forEach(findPatternNodes);
-    }
-  }
   // Actually patterns are ko text within specific divs
   defBlocks.forEach(b => {
     if (b.type !== 'structured-content') return;
@@ -165,7 +151,7 @@ function extractPatterns(defBlocks) {
 
 // Main conversion. Returns null for entries that should be skipped.
 function parseEntry(entry) {
-  const [word, reading, posChinese, posExtra, score, defBlocks] = entry;
+  const [word, , posChinese, , , defBlocks] = entry;
 
   // ── Filters: skip non-word entries ──
 
@@ -314,7 +300,6 @@ const dictionary = {
 // Build initial consonant index
 for (let i = 0; i < allWords.length; i++) {
   const initial = allWords[i].w.charCodeAt(0);
-  const rangeStart = String.fromCharCode(initial);
   // Group by Unicode block: 가(AC00)~깋, 나~닣, etc.
   const blockIndex = Math.floor((initial - 0xAC00) / 588); // 0-18 for modern Korean
   const blockChar = String.fromCharCode(0xAC00 + blockIndex * 588);

@@ -1,4 +1,5 @@
 import { getArticlesByCategory } from '@/lib/koreaArticles';
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function TravelPage() {
@@ -21,10 +22,12 @@ export default function TravelPage() {
             className="group bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
           >
             <div className="h-40 relative overflow-hidden">
-              <img
+              <Image
                 src={a.bannerImage}
                 alt={a.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-300"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               />
             </div>
 

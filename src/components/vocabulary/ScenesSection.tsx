@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { Search, X, Volume2, Hash, Smile, ChevronDown, ChevronUp } from 'lucide-react';
+import { Search, X, Volume2, ChevronDown, ChevronUp } from 'lucide-react';
 import { vocabularyEntries } from '@/data/vocabulary/entries';
 import { speak } from '@/lib/tts';
 
@@ -9,18 +9,11 @@ import { speak } from '@/lib/tts';
 export function ScenesSection() {
   const [search, setSearch] = useState('');
   const [sceneFilter, setSceneFilter] = useState('全部');
-  const [emotionFilter, setEmotionFilter] = useState('全部');
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const allSceneTags = useMemo(() => {
     const tags = new Set<string>();
     vocabularyEntries.forEach((e) => e.tags.forEach((t) => tags.add(t)));
-    return ['全部', ...Array.from(tags).sort()];
-  }, []);
-
-  const allEmotionTags = useMemo(() => {
-    const tags = new Set<string>();
-    vocabularyEntries.forEach((e) => e.emotionTags.forEach((t) => tags.add(t)));
     return ['全部', ...Array.from(tags).sort()];
   }, []);
 
@@ -31,9 +24,8 @@ export function ScenesSection() {
       r = r.filter((e) => e.korean.includes(q) || e.romanization.toLowerCase().includes(q) || e.meanings.some((m) => m.chinese.includes(q)) || e.tags.some((t) => t.toLowerCase().includes(q)));
     }
     if (sceneFilter !== '全部') r = r.filter((e) => e.tags.includes(sceneFilter));
-    if (emotionFilter !== '全部') r = r.filter((e) => e.emotionTags.includes(emotionFilter));
     return r;
-  }, [search, sceneFilter, emotionFilter]);
+  }, [search, sceneFilter]);
 
   return (
     <div className="space-y-3">

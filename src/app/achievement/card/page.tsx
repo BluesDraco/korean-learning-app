@@ -3,11 +3,9 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { ArrowLeft, Download, Copy, Check, Loader2, Palette, X } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { db } from '@/lib/db';
 import { getProfile } from '@/lib/gamification';
 import type { MilestoneType, UserAchievement } from '@/types';
-import { speak } from '@/lib/tts';
 
 // ── Milestone Definitions ─────────────────────────────────────────
 
@@ -161,7 +159,6 @@ function drawCard(
 // ── Main Component ─────────────────────────────────────────────────
 
 export default function AchievementCardPage() {
-  const router = useRouter();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [loading, setLoading] = useState(true);
   const [milestone, setMilestone] = useState<MilestoneType | null>(null);
@@ -171,7 +168,7 @@ export default function AchievementCardPage() {
   const [stats, setStats] = useState({ reviews: 0, days: 0, chats: 0 });
   const [copied, setCopied] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [savedId, setSavedId] = useState<string | null>(null);
+  const [, setSavedId] = useState<string | null>(null);
 
   // Check for milestone achievement
   useEffect(() => {
@@ -182,7 +179,6 @@ export default function AchievementCardPage() {
       // Gather stats
       const allWords = await db.words.toArray();
       const reviewed = allWords.filter((w) => w.lastReviewed).length;
-      const streak = profile?.streak || 0;
       const longestStreak = profile?.longestStreak || 0;
 
       // Count AI chat rounds
@@ -300,8 +296,6 @@ export default function AchievementCardPage() {
   }
 
   const def = MILESTONES[milestone];
-  const c = COLORS[scheme];
-
   return (
     <div className="py-4 max-w-lg mx-auto space-y-4">
       {/* Header */}

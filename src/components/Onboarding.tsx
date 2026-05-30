@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
-import { Sparkles, Trophy, Volume2, ArrowRight, Star, Zap } from 'lucide-react';
-import { getProfile, updateProfile, awardXp, updateStreak } from '@/lib/gamification';
+import { useState, useCallback } from 'react';
+import { Sparkles, Volume2, ArrowRight } from 'lucide-react';
+import { updateProfile, awardXp, updateStreak } from '@/lib/gamification';
 import type { UserProfile } from '@/types';
 import { speak } from '@/lib/tts';
 

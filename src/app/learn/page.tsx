@@ -3,9 +3,9 @@
 import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import {
-  GraduationCap, ArrowRight, ArrowLeft, Check, X, Loader2, Sparkles,
-  Star, Zap, BookOpen, Lightbulb, Volume2, Trophy, Lock, ChevronRight,
-  Play, Award, Mic, Headphones, Edit3, Target,
+  ArrowRight, ArrowLeft, Check, X, Loader2, Sparkles,
+  BookOpen, Lightbulb, Volume2, Trophy, Lock, ChevronRight,
+  Play, Mic, Headphones, Edit3, Target,
 } from 'lucide-react';
 import { db } from '@/lib/db';
 import { getProfile, updateStreak, awardXp, XP_REWARDS, addStudyMinutes, updateProfile } from '@/lib/gamification';
@@ -51,8 +51,6 @@ export default function LearnPage() {
   // Listening phase
   const [listeningIdx, setListeningIdx] = useState(0);
   const [listeningAnswer, setListeningAnswer] = useState<number | null>(null);
-  const [listeningCorrect, setListeningCorrect] = useState(0);
-
   // Test phase
   const [testQuestions, setTestQuestions] = useState<TestQuestion[]>([]);
   const [testIdx, setTestIdx] = useState(0);
@@ -265,8 +263,7 @@ export default function LearnPage() {
     // Prepare listening
     setListeningIdx(0);
     setListeningAnswer(null);
-    setListeningCorrect(0);
-
+    
     // Generate test
     setTestQuestions(generateTest(unit));
     setTestIdx(0);
@@ -315,9 +312,8 @@ export default function LearnPage() {
     }
   };
 
-  const handleListeningAnswer = (idx: number, correctIdx: number) => {
+  const handleListeningAnswer = (idx: number, _correctIdx: number) => {
     setListeningAnswer(idx);
-    if (idx === correctIdx) setListeningCorrect((p) => p + 1);
   };
 
   const handleListeningNext = () => {
@@ -1024,8 +1020,7 @@ export default function LearnPage() {
                   setLessonXp(0); setLeveledUp(false);
                   setTestIdx(0); setTestAnswer(null); setTestCorrect(0);
                   setVocabIdx(0); setDictationIdx(0); setDictationInput(''); setDictationResult('idle'); setDictationCorrect(0);
-                  setListeningIdx(0); setListeningAnswer(null); setListeningCorrect(0);
-                  startUnit(nextUnit);
+                  setListeningIdx(0); setListeningAnswer(null);                   startUnit(nextUnit);
                 }}
                 className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--purple-soft)] to-[var(--pink-primary)] text-[var(--text-primary)] rounded-2xl transition-colors text-sm font-medium"
               >
@@ -1037,8 +1032,7 @@ export default function LearnPage() {
                 setLessonXp(0); setLeveledUp(false);
                 setTestIdx(0); setTestAnswer(null); setTestCorrect(0);
                 setVocabIdx(0); setDictationIdx(0); setDictationInput(''); setDictationResult('idle'); setDictationCorrect(0);
-                setListeningIdx(0); setListeningAnswer(null); setListeningCorrect(0);
-                setSelectedUnit(null); setPhase('select');
+                setListeningIdx(0); setListeningAnswer(null);                 setSelectedUnit(null); setPhase('select');
               }}
               className="flex items-center gap-2 px-6 py-3 bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] text-[var(--text-primary)] rounded-2xl transition-colors text-sm font-medium"
             >

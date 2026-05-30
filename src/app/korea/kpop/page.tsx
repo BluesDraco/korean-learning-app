@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { Music, Search, BookOpen, Hash, Newspaper } from 'lucide-react';
+import { Search, BookOpen, Hash, Newspaper } from 'lucide-react';
 import { kpopSongs } from '@/data/kpopSongs';
 import type { KpopSong } from '@/types';
 

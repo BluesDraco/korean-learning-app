@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { Play, Pause, SkipBack, SkipForward, Repeat, Volume2, X, ChevronUp, ChevronDown } from 'lucide-react';
+import { Play, Pause, SkipBack, SkipForward, Repeat, Volume2, ChevronUp, ChevronDown } from 'lucide-react';
 import { speak, cancelSpeech } from '@/lib/tts';
 
 interface WordItem {
@@ -90,7 +90,7 @@ export function WordAudioPlayer({ words }: Props) {
         });
       }, 400);
     });
-  }, [speak, safeTimeout]);
+  }, [safeTimeout, speakLocal]);
 
   const start = useCallback(() => {
     cancelSpeech();
@@ -156,11 +156,12 @@ export function WordAudioPlayer({ words }: Props) {
 
   // Cleanup on unmount
   useEffect(() => {
+    const ids = timeoutIdsRef.current;
     return () => {
       mountedRef.current = false;
       cancelSpeech();
-      timeoutIdsRef.current.forEach((id) => clearTimeout(id));
-      timeoutIdsRef.current.clear();
+      ids.forEach((id) => clearTimeout(id));
+      ids.clear();
     };
   }, []);
 

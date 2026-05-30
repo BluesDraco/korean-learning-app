@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { ArrowLeft, Volume2, ChevronLeft, ChevronRight, BookOpen, Loader2 } from 'lucide-react';
+import { ArrowLeft, Volume2, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import { db } from '@/lib/db';
 import { speak } from '@/lib/tts';
 import type { WordBook, Word } from '@/types';

@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import {
-  MessageSquare,
   Send,
   Check,
   AlertTriangle,

@@ -23,7 +23,6 @@ function BuddyInviteContent() {
   const [inviterName, setInviterName] = useState('');
   const [acceptError, setAcceptError] = useState('');
   const [accepting, setAccepting] = useState(false);
-  const [accepted, setAccepted] = useState(false);
 
   // ── Create flow state ──
   const [goal, setGoal] = useState(GOALS[0]);
@@ -58,7 +57,7 @@ function BuddyInviteContent() {
         const p = profiles.find((pr) => pr.id.includes(inv.userId.slice(0, 8)));
         setInviterName(p?.nickname || '학습자');
         setAcceptLoading(false);
-      } catch (e: any) {
+      } catch {
         setAcceptError('加载邀请失败');
         setAcceptLoading(false);
       }
@@ -80,7 +79,6 @@ function BuddyInviteContent() {
            (r.userAId === invite.userId && r.userBId === profile.id))
       );
       if (existing.length > 0) {
-        setAccepted(true);
         router.push(`/buddy/${existing[0].id}`);
         return;
       }
@@ -95,10 +93,9 @@ function BuddyInviteContent() {
       await db.buddyRelations.add(rel);
       await db.buddyInvites.delete(invite.id);
 
-      setAccepted(true);
       router.push(`/buddy/${rel.id}`);
-    } catch (e: any) {
-      setAcceptError(e.message || '接受失败');
+    } catch (_e: any) {
+      setAcceptError(_e.message || '接受失败');
       setAccepting(false);
     }
   };

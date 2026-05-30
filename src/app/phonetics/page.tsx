@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo, useCallback } from 'react';
-import { Volume2, Play, Check, X, ArrowRight, RotateCcw, Trophy, ChevronDown, ChevronUp, Sparkles, BookOpen, Lightbulb } from 'lucide-react';
+import { Volume2, Play, Check, X, ArrowRight, RotateCcw, Trophy, ChevronDown, ChevronUp, Sparkles, Lightbulb } from 'lucide-react';
 import { vowels, consonants, batchimSounds, type PhoneticLetter } from '@/data/phonetics';
 import { speak } from '@/lib/tts';
 import ProgressivePhonetics from '@/components/ProgressivePhonetics';

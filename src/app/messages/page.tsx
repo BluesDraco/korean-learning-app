@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
+import Image from 'next/image';
 import { Mail, Sparkles, Bell, Megaphone, FileText, ChevronDown, Loader2 } from 'lucide-react';
 import type { Announcement, AnnouncementType } from '@/types';
 
@@ -59,10 +60,12 @@ export default function MessagesPage() {
       {/* Header */}
       <div className="text-center space-y-3">
         <div className="relative inline-block">
-          <img
+          <Image
             src="/images/tori-poses/tori-pose-01.png"
             alt="Tori"
-            className="w-20 h-20 object-contain mx-auto"
+            width={80}
+            height={80}
+            className="object-contain mx-auto"
           />
           <span className="absolute -top-1 -right-2 text-2xl">✉️</span>
         </div>

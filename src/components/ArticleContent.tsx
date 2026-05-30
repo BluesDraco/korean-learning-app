@@ -22,10 +22,9 @@ function saveWord(korean: string, chinese: string): boolean {
 
 export default function ArticleContent({
   html,
-  basePath,
 }: {
   html: string;
-  basePath: string; // e.g. '/korea/culture'
+  basePath?: string;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();

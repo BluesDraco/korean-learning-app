@@ -10,7 +10,6 @@ export default function AdminAmbassadorsPage() {
   const [ambassadors, setAmbassadors] = useState<UserProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [scanning, setScanning] = useState(false);
-  const [message, setMessage] = useState('');
 
   const loadAmbassadors = async () => {
     const all = await db.userProfiles.filter((p) => p.isAmbassador === true);

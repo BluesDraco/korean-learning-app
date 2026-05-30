@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useCallback, useEffect } from 'react';
-import { ChevronDown, ChevronUp, Check, X, ArrowRight, RotateCcw, Trophy, Sparkles, Star, Lock } from 'lucide-react';
-import { progressiveSteps, type ProgressiveStep } from '@/data/phonetics-steps';
+import { ChevronDown, ChevronUp, Check, X, ArrowRight, RotateCcw, Trophy, Sparkles, Lock } from 'lucide-react';
+import { progressiveSteps } from '@/data/phonetics-steps';
 import type { PhoneticLetter } from '@/data/phonetics';
 import { emitXpFlyout } from '@/components/XpOverlay';
 
@@ -66,7 +66,6 @@ export default function ProgressivePhonetics() {
   useEffect(() => { setCompletedSteps(loadCompletedSteps()); }, []);
 
   const activeStep = progressiveSteps[activeStepIdx];
-  const prevCompleted = activeStepIdx > 0 ? completedSteps.has(progressiveSteps[activeStepIdx - 1].id) : true;
   const allDone = progressiveSteps.every((s) => completedSteps.has(s.id));
 
   const toggleCard = (id: string) => {
@@ -97,8 +96,6 @@ export default function ProgressivePhonetics() {
   const handleQuizNext = () => {
     if (quizIdx + 1 >= quizQuestions.length) {
       setQuizComplete(true);
-      const passed = quizCorrect + (quizAnswer !== null && quizAnswer === quizQuestions[quizIdx].options.indexOf(quizQuestions[quizIdx].correctAnswer) ? 0 : 0) >= Math.ceil(quizQuestions.length / 2);
-      // Actually, recount the correct count properly
       const totalCorrect = quizAnswer === quizQuestions[quizIdx].options.indexOf(quizQuestions[quizIdx].correctAnswer) ? quizCorrect : quizCorrect;
       if (totalCorrect >= Math.ceil(quizQuestions.length * 0.6)) {
         const newCompleted = new Set(completedSteps);

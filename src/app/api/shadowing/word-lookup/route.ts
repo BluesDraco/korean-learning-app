@@ -42,7 +42,7 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json(result);
-  } catch (err: any) {
+  } catch {
     const { dictionaryForm, conjugation } = deconjugate(word!);
     return NextResponse.json({
       dictionaryForm,

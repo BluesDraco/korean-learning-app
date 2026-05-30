@@ -1,6 +1,6 @@
 'use client';
 
-import { Plus, Check, Loader2, X } from 'lucide-react';
+import { Plus, Check, Loader2 } from 'lucide-react';
 
 export interface WordCardData {
   originalText: string;
