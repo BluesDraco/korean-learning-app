@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
-  BookOpen, Film, Mic, Pencil, BarChart3, ArrowRight, Loader2,
+  BookOpen, Film, Mic, Pencil, BarChart3, ArrowRight,
   Flame, Star, TrendingUp, Target, Zap, GraduationCap, Sparkles, Lightbulb,
 } from 'lucide-react';
 import { db } from '@/lib/db';
@@ -72,11 +72,14 @@ export default function Home() {
       const now = Date.now();
       const todayStart = new Date().setHours(0, 0, 0, 0);
 
+      const timeout = <T,>(p: Promise<T>, ms: number): Promise<T> =>
+        Promise.race([p, new Promise<T>((_, reject) => setTimeout(() => reject(new Error('timeout')), ms))]);
+
       const [allWords, profileData, tLog, wStreak] = await Promise.all([
-        db.words.toArray(),
-        getProfile(),
-        getTodayLog(),
-        getWeekStreak(),
+        timeout(db.words.toArray(), 10000),
+        timeout(getProfile(), 10000),
+        timeout(getTodayLog(), 10000),
+        timeout(getWeekStreak(), 10000),
       ]);
 
       const [progressData, tasksData] = await Promise.all([
@@ -135,8 +138,27 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-32">
-        <Loader2 size={32} className="animate-spin text-[var(--text-secondary)]" />
+      <div className="py-4 space-y-4 animate-pulse">
+        <div className="flex items-center gap-2.5 mb-4">
+          <div className="w-8 h-8 rounded-full bg-[var(--bg-input)]" />
+          <div className="h-6 w-40 bg-[var(--bg-input)] rounded" />
+        </div>
+        <div className="flex items-start justify-between">
+          <div className="space-y-2">
+            <div className="h-8 w-48 bg-[var(--bg-input)] rounded" />
+            <div className="h-4 w-32 bg-[var(--bg-input)] rounded" />
+          </div>
+          <div className="h-16 w-16 bg-[var(--bg-input)] rounded-xl" />
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <div className="h-24 bg-[var(--bg-card)] rounded-2xl border border-[var(--border-color)]" />
+          <div className="h-24 bg-[var(--bg-card)] rounded-2xl border border-[var(--border-color)]" />
+        </div>
+        <div className="h-36 bg-[var(--bg-card)] rounded-2xl border border-[var(--border-color)]" />
+        <div className="grid grid-cols-2 gap-3">
+          <div className="h-28 bg-[var(--bg-card)] rounded-2xl border border-[var(--border-color)]" />
+          <div className="h-28 bg-[var(--bg-card)] rounded-2xl border border-[var(--border-color)]" />
+        </div>
       </div>
     );
   }

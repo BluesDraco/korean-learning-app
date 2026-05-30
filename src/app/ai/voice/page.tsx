@@ -84,6 +84,7 @@ export default function VoiceChatPage() {
   const finalTranscriptRef = useRef('');
   const isProcessingRef = useRef(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const messagesRef = useRef(messages);
   messagesRef.current = messages;
 
@@ -247,6 +248,14 @@ export default function VoiceChatPage() {
       cancelSpeech();
     };
   }, []);
+
+  // Auto-resize textarea when textInput changes (e.g. from keyboard)
+  useEffect(() => {
+    const ta = textareaRef.current;
+    if (!ta) return;
+    ta.style.height = 'auto';
+    ta.style.height = Math.min(ta.scrollHeight, 100) + 'px';
+  }, [textInput]);
 
   // ── Text input send ──────────────────────────────────────────
   const handleTextSend = useCallback(() => {
@@ -545,9 +554,12 @@ export default function VoiceChatPage() {
       <div className="shrink-0 bg-[var(--bg-card)] border-t border-[var(--border-color)] px-4 py-4 space-y-3">
         {/* Speech not supported warning */}
         {!speechSupported && (
-          <div className="flex items-center gap-2 bg-amber-500/8 border border-amber-500/20 rounded-xl px-3 py-2 text-xs text-amber-500">
-            <AlertCircle size={12} />
-            当前浏览器不支持语音识别。请使用 Chrome 或 Edge 浏览器，或使用下方键盘输入。
+          <div className="flex items-center gap-2 bg-amber-500/8 border border-amber-500/20 rounded-xl px-4 py-3 text-sm text-amber-600 dark:text-amber-400">
+            <AlertCircle size={16} />
+            <div>
+              <p className="font-medium">语音识别不可用</p>
+              <p className="text-xs mt-0.5 text-amber-500">请使用 Chrome 或 Edge 浏览器。如已使用但仍不可用，可能是网络限制导致（语音识别依赖 Google 服务）。</p>
+            </div>
           </div>
         )}
 
@@ -609,6 +621,7 @@ export default function VoiceChatPage() {
             <div className="space-y-2">
               <div className="flex items-end gap-2">
                 <textarea
+                  ref={textareaRef}
                   value={textInput}
                   onChange={(e) => {
                     setTextInput(e.target.value);
@@ -624,7 +637,7 @@ export default function VoiceChatPage() {
                   placeholder="输入韩语..."
                   rows={1}
                   disabled={isThinking || isProcessingRef.current}
-                  className="flex-1 resize-none bg-[var(--bg-input)] border border-[var(--border-color)] rounded-xl px-4 py-2.5 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)] focus:outline-none focus:border-[var(--pink-primary)]/50 disabled:opacity-50"
+                  className="flex-1 resize-none bg-[var(--bg-input)] border border-[var(--border-color)] rounded-xl px-4 py-2.5 text-sm text-gray-900 dark:text-gray-100 placeholder:text-[var(--text-placeholder)] focus:outline-none focus:border-[var(--pink-primary)]/50 disabled:opacity-50"
                   style={{ maxHeight: '100px' }}
                 />
                 <button

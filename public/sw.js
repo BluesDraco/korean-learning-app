@@ -1,4 +1,4 @@
-const CACHE_NAME = 'korean-learn-v4';
+const CACHE_NAME = 'korean-learn-v5';
 const STATIC_EXTS = /\.(js|css|png|jpg|svg|ico|woff2?|ttf)$/;
 
 self.addEventListener('install', (event) => {

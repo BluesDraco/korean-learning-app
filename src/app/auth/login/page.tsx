@@ -21,12 +21,17 @@ function LoginForm() {
     e.preventDefault();
     setError('');
     setSubmitting(true);
-    const result = await login(username, password);
-    setSubmitting(false);
-    if (result.error) {
-      setError(result.error);
-    } else {
-      router.push(redirect);
+    try {
+      const result = await login(username, password);
+      if (result.error) {
+        setError(result.error);
+      } else {
+        router.push(redirect);
+      }
+    } catch {
+      setError('网络错误，请检查网络连接后重试');
+    } finally {
+      setSubmitting(false);
     }
   };
 

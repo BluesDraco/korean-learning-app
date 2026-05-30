@@ -26,12 +26,17 @@ export default function RegisterPage() {
     }
 
     setSubmitting(true);
-    const result = await register(username, password);
-    setSubmitting(false);
-    if (result.error) {
-      setError(result.error);
-    } else {
-      router.push('/');
+    try {
+      const result = await register(username, password);
+      if (result.error) {
+        setError(result.error);
+      } else {
+        router.push('/');
+      }
+    } catch {
+      setError('网络错误，请检查网络连接后重试');
+    } finally {
+      setSubmitting(false);
     }
   };
 
