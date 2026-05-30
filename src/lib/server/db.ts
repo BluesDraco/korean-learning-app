@@ -12,9 +12,7 @@ function getClient(): Client {
   const localDbDir = path.join(process.cwd(), 'data');
   const localDbPath = path.join(localDbDir, 'app.db');
 
-  if (!url) {
-    mkdirSync(localDbDir, { recursive: true });
-  }
+  mkdirSync(localDbDir, { recursive: true });
 
   client = createClient({
     url: url || `file:${localDbPath}`,

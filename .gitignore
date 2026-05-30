@@ -10,3 +10,5 @@ next-env.d.ts
 /data/
 # But keep source code data
 !/src/data/
+
+data/*.db
