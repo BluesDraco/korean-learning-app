@@ -3,11 +3,11 @@
 import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import {
-  BookOpen, Film, Mic, Pencil, BarChart3, ArrowRight, Plus, Loader2,
-  Flame, Star, TrendingUp, Target, Zap, Trophy, GraduationCap, Sparkles, Lightbulb,
+  BookOpen, Film, Mic, Pencil, BarChart3, ArrowRight, Loader2,
+  Flame, Star, TrendingUp, Target, Zap, GraduationCap, Sparkles, Lightbulb,
 } from 'lucide-react';
 import { db } from '@/lib/db';
-import { getProfile, getTodayLog, getWeekStreak, updateStreak } from '@/lib/gamification';
+import { getProfile, getTodayLog, getWeekStreak } from '@/lib/gamification';
 import { getProgress, getTodayTasks } from '@/lib/progress';
 import { useAuth } from '@/components/AuthProvider';
 import Onboarding from '@/components/Onboarding';

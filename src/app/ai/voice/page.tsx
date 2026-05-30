@@ -3,7 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import {
   ArrowLeft, Mic, MicOff, Volume2, VolumeX, Languages,
-  Sparkles, Lightbulb, Send, ChevronRight, AlertCircle, Loader2, LogIn,
+  Lightbulb, Send, ChevronRight, AlertCircle, LogIn,
 } from 'lucide-react';
 import Link from 'next/link';
 import { KoreanKeyboard } from '@/components/KoreanKeyboard';
