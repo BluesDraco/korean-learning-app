@@ -2,12 +2,19 @@ import bcrypt from 'bcryptjs';
 import * as jose from 'jose';
 import { cookies } from 'next/headers';
 
-const JWT_SECRET = (() => {
-  const secret = process.env.JWT_SECRET;
-  if (!secret) throw new Error('JWT_SECRET environment variable is required');
-  return new TextEncoder().encode(secret);
-})();
 const COOKIE_NAME = 'token';
+const DEV_JWT_SECRET = 'dev-only-korean-learning-app-secret-change-me';
+
+function getJwtSecret(): Uint8Array {
+  const secret = process.env.JWT_SECRET;
+  if (secret) return new TextEncoder().encode(secret);
+
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('JWT_SECRET environment variable is required in production');
+  }
+
+  return new TextEncoder().encode(DEV_JWT_SECRET);
+}
 
 export async function hashPassword(password: string): Promise<string> {
   return bcrypt.hash(password, 10);
@@ -22,12 +29,12 @@ export async function signToken(payload: { userId: string; username: string; rol
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime('7d')
-    .sign(JWT_SECRET);
+    .sign(getJwtSecret());
 }
 
 export async function verifyToken(token: string): Promise<{ userId: string; username: string; role: string } | null> {
   try {
-    const { payload } = await jose.jwtVerify(token, JWT_SECRET);
+    const { payload } = await jose.jwtVerify(token, getJwtSecret());
     return payload as { userId: string; username: string; role: string };
   } catch {
     return null;

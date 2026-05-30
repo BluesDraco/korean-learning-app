@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 
-export const dynamic = 'force-dynamic';
 import { AppShell } from '@/components/AppShell';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { FloatingDecorations } from '@/components/FloatingDecorations';

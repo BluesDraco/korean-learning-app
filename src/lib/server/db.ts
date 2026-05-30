@@ -1,15 +1,23 @@
 import { createClient, type Client } from '@libsql/client';
 import path from 'path';
+import { mkdirSync } from 'fs';
 
 let client: Client | null = null;
+let initialized = false;
 
 function getClient(): Client {
   if (client) return client;
 
   const url = process.env.TURSO_DATABASE_URL;
+  const localDbDir = path.join(process.cwd(), 'data');
+  const localDbPath = path.join(localDbDir, 'app.db');
+
+  if (!url) {
+    mkdirSync(localDbDir, { recursive: true });
+  }
 
   client = createClient({
-    url: url || `file:${path.join(process.cwd(), 'data', 'app.db')}`,
+    url: url || `file:${localDbPath}`,
     ...(url ? { authToken: process.env.TURSO_AUTH_TOKEN } : {}),
   });
 
@@ -18,6 +26,8 @@ function getClient(): Client {
 
 export async function getDb() {
   const c = getClient();
+
+  if (!initialized) {
 
   await c.execute(`
     CREATE TABLE IF NOT EXISTS users (
@@ -418,6 +428,9 @@ export async function getDb() {
   try { await c.execute(`ALTER TABLE user_profiles ADD COLUMN ambassador_reason TEXT DEFAULT ''`); } catch { /* already exists */ }
   try { await c.execute(`ALTER TABLE user_profiles ADD COLUMN share_enabled INTEGER DEFAULT 0`); } catch { /* already exists */ }
   try { await c.execute(`ALTER TABLE user_profiles ADD COLUMN share_token TEXT DEFAULT ''`); } catch { /* already exists */ }
+
+    initialized = true;
+  }
 
   return {
     exec: async (sql: string, params?: unknown[]) => {

@@ -36,8 +36,9 @@ export default function BuddyDetailPage() {
 
       // Check if already cheered today
       const today = new Date().toISOString().slice(0, 10);
+      const cheerId = `buddy-cheer-${today}-${rel.id}`;
       const cheers = await db.studyLogs.filter(
-        (l) => l.action === 'buddy_cheer' && l.id.includes(today)
+        (l) => l.action === 'buddy_cheer' && l.id === cheerId
       );
       setCheeredToday(cheers.length > 0);
 
@@ -49,16 +50,15 @@ export default function BuddyDetailPage() {
     if (!relation || cheeredToday) return;
     setCheered(true);
     setCheeredToday(true);
-    // Record cheer
+    // Record cheer in the study_logs schema
+    const today = new Date().toISOString().slice(0, 10);
     await db.studyLogs.add({
-      id: crypto.randomUUID(),
-      videoId: '',
-      date: Date.now(),
-      durationSec: 0,
-      wordsAdded: [],
-      sentencesLooped: 0,
+      id: `buddy-cheer-${today}-${relation.id}`,
       action: 'buddy_cheer',
-    }).catch(() => {});
+      details: relation.id,
+      xpEarned: 0,
+      createdAt: Date.now(),
+    } as any).catch(() => {});
     setTimeout(() => setCheered(false), 2000);
   };
 

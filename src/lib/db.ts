@@ -226,5 +226,5 @@ export async function initSettings(): Promise<AppSettings> {
     theme: 'dark',
   };
   await db.settings.put(defaults);
-  return defaults;
+  return (await db.settings.get('main')) || defaults;
 }

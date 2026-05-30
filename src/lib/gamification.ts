@@ -57,7 +57,7 @@ export async function getProfile(): Promise<UserProfile> {
     createdAt: Date.now(),
   };
   await db.userProfiles.put(defaults);
-  return defaults;
+  return (await db.userProfiles.get('main')) || defaults;
 }
 
 export async function updateProfile(updates: Partial<UserProfile>): Promise<void> {

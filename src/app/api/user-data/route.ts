@@ -174,6 +174,57 @@ function requireWritable(info: { writable: Writable; table: string }) {
   }
 }
 
+const LOGICAL_SINGLETON_TABLES = new Set(['userProfiles', 'settings']);
+const USER_OWNED_DETERMINISTIC_TABLES = new Set(['words', 'dailyLogs']);
+
+function resolveStorageId(tableKey: string, id: unknown, userId: string): unknown {
+  if (typeof id !== 'string') return id;
+
+  if (LOGICAL_SINGLETON_TABLES.has(tableKey) && id === 'main') {
+    return userId;
+  }
+
+  if (USER_OWNED_DETERMINISTIC_TABLES.has(tableKey) && !id.startsWith(`${userId}:`)) {
+    return `${userId}:${id}`;
+  }
+
+  return id;
+}
+
+function applyStorageIds(tableKey: string, data: Record<string, unknown>, pk: string, userId: string) {
+  if (LOGICAL_SINGLETON_TABLES.has(tableKey)) {
+    data[pk] = userId;
+    return;
+  }
+
+  if (USER_OWNED_DETERMINISTIC_TABLES.has(tableKey) && typeof data[pk] === 'string') {
+    data[pk] = resolveStorageId(tableKey, data[pk], userId);
+  }
+}
+
+function applyUserScopeForWrite(
+  tableKey: string,
+  data: Record<string, unknown>,
+  scope: UserScope,
+  userId: string,
+) {
+  if (scope === 'user_id') {
+    data.user_id = userId;
+    return;
+  }
+
+  if (Array.isArray(scope)) {
+    const hasCurrentUser = scope.some((col) => data[col] === userId);
+    if (!hasCurrentUser) {
+      throw new Error(`Current user must be part of ${tableKey}`);
+    }
+  }
+}
+
+function canReadInviteByToken(tableKey: string, field: string, op: unknown): boolean {
+  return tableKey === 'buddyInvites' && field === 'invite_token' && (op === 'eq' || op === undefined || op === null);
+}
+
 export async function POST(req: Request) {
   const auth = await getAuthFromCookie();
   if (!auth) {
@@ -204,7 +255,8 @@ export async function POST(req: Request) {
       case 'get': {
         const u = buildUserClause(userScope, auth.userId);
         const sql = `SELECT ${cols.join(', ')} FROM ${info.table} WHERE ${pk} = ?${u.clause ? ` AND ${u.clause}` : ''}`;
-        const result = await db.exec(sql, [id, ...u.params]);
+        const storageId = resolveStorageId(table, id, auth.userId);
+        const result = await db.exec(sql, [storageId, ...u.params]);
         const row = result[0]?.values[0];
         return NextResponse.json(row ? rowToObj(cols, row) : null);
       }
@@ -212,11 +264,8 @@ export async function POST(req: Request) {
       case 'add': {
         requireWritable(info);
         const snakeData = toSnakeObj(data);
-        if (userScope === 'user_id') {
-          snakeData.user_id = auth.userId;
-        } else if (Array.isArray(userScope)) {
-          snakeData[userScope[0]] = auth.userId;
-        }
+        applyStorageIds(table, snakeData, pk, auth.userId);
+        applyUserScopeForWrite(table, snakeData, userScope, auth.userId);
         validateColumns(snakeData, cols);
         const colNames = Object.keys(snakeData);
         const placeholders = colNames.map(() => '?');
@@ -230,7 +279,7 @@ export async function POST(req: Request) {
 
       case 'put': {
         requireWritable(info);
-        const idVal = data[pk] ?? data.id;
+        const idVal = resolveStorageId(table, data[pk] ?? data.id, auth.userId);
         let deleteSql: string;
         let deleteParams: unknown[];
         const u = buildUserClause(userScope, auth.userId);
@@ -244,11 +293,8 @@ export async function POST(req: Request) {
         await db.run(deleteSql, deleteParams);
 
         const snakeData = toSnakeObj(data);
-        if (userScope === 'user_id') {
-          snakeData.user_id = auth.userId;
-        } else if (Array.isArray(userScope)) {
-          snakeData[userScope[0]] = auth.userId;
-        }
+        applyStorageIds(table, snakeData, pk, auth.userId);
+        applyUserScopeForWrite(table, snakeData, userScope, auth.userId);
         validateColumns(snakeData, cols);
         const colNames = Object.keys(snakeData);
         const placeholders = colNames.map(() => '?');
@@ -280,16 +326,18 @@ export async function POST(req: Request) {
         const u = buildUserClause(userScope, auth.userId);
         await db.run(
           `UPDATE ${info.table} SET ${sets.join(', ')} WHERE ${pk} = ?${u.clause ? ` AND ${u.clause}` : ''}`,
-          [...values, id, ...u.params]
+          [...values, resolveStorageId(table, id, auth.userId), ...u.params]
         );
         return NextResponse.json({ ok: true });
       }
 
       case 'delete': {
         requireWritable(info);
-        const u = buildUserClause(userScope, auth.userId);
+        const u = table === 'buddyInvites'
+          ? { clause: '', params: [] as unknown[] }
+          : buildUserClause(userScope, auth.userId);
         const sql = `DELETE FROM ${info.table} WHERE ${pk} = ?${u.clause ? ` AND ${u.clause}` : ''}`;
-        await db.run(sql, [id, ...u.params]);
+        await db.run(sql, [resolveStorageId(table, id, auth.userId), ...u.params]);
         return NextResponse.json({ ok: true });
       }
 
@@ -300,26 +348,33 @@ export async function POST(req: Request) {
           return NextResponse.json({ error: `Unknown field: ${field}` }, { status: 400 });
         }
         const opMap: Record<string, string> = { eq: '=', lt: '<', lte: '<=', gt: '>', gte: '>=' };
-        const u = buildUserClause(userScope, auth.userId);
+        const skipUserScope = canReadInviteByToken(table, snField, op);
+        const u = skipUserScope ? { clause: '', params: [] as unknown[] } : buildUserClause(userScope, auth.userId);
         let sql = `SELECT ${cols.join(', ')} FROM ${info.table}`;
         const params: unknown[] = [];
         const conditions: string[] = [];
+        const scopedValue = snField === pk
+          ? resolveStorageId(table, value, auth.userId)
+          : value;
 
         if (u.clause) {
           conditions.push(u.clause);
           params.push(...u.params);
         }
 
-        if (op === 'in' && Array.isArray(value)) {
-          const placeholders = value.map(() => '?').join(', ');
+        if (op === 'in' && Array.isArray(scopedValue)) {
+          const resolvedValues = snField === pk
+            ? scopedValue.map((v) => resolveStorageId(table, v, auth.userId))
+            : scopedValue;
+          const placeholders = resolvedValues.map(() => '?').join(', ');
           conditions.push(`${snField} IN (${placeholders})`);
-          params.push(...value);
+          params.push(...resolvedValues);
         } else if (op && op in opMap) {
           conditions.push(`${snField} ${opMap[op]} ?`);
-          params.push(value);
+          params.push(scopedValue);
         } else {
           conditions.push(`${snField} = ?`);
-          params.push(value);
+          params.push(scopedValue);
         }
 
         if (conditions.length > 0) {

@@ -25,8 +25,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: '用户名和密码不能为空' }, { status: 400 });
     }
 
-    if (username.length < 2 || username.length > 20) {
-      return NextResponse.json({ error: '用户名长度需在2-20个字符之间' }, { status: 400 });
+    const USERNAME_RE = /^[a-zA-Z0-9一-龥_-]{2,20}$/;
+    if (!USERNAME_RE.test(username)) {
+      return NextResponse.json({ error: '用户名只能包含字母、数字、中文、下划线和横线' }, { status: 400 });
     }
 
     if (password.length < 6) {

@@ -73,25 +73,37 @@ export interface AiRateLimitResult {
 export async function checkAiRateLimit(
   userId: string,
   endpoint: string,
-  model: string = 'deepseek-v4-flash',
+  model: string = 'deepseek-chat',
 ): Promise<AiRateLimitResult> {
   const db = await getDb();
 
+  const dayStart = new Date();
+  dayStart.setHours(0, 0, 0, 0);
+  const dayStartTs = dayStart.getTime();
+
+  // Atomic INSERT: only insert if under the daily limit
+  try {
+    await db.run(
+      `INSERT INTO ai_usage (id, user_id, model, endpoint, prompt_tokens, completion_tokens, created_at)
+       SELECT ?, ?, ?, ?, 0, 0, ?
+       WHERE (SELECT COUNT(*) FROM ai_usage
+              WHERE user_id = ? AND endpoint = ?
+              AND created_at >= ?) < ?`,
+      [generateId(), userId, model, endpoint, Date.now(), userId, endpoint, dayStartTs, AI_DAILY_LIMIT],
+    );
+  } catch {
+    // INSERT rejected by WHERE clause — over limit
+  }
+
   const result = await db.exec(
-    `SELECT COUNT(*) FROM ai_usage WHERE user_id = ? AND endpoint = ? AND date(created_at) = date('now')`,
-    [userId, endpoint],
+    `SELECT COUNT(*) FROM ai_usage WHERE user_id = ? AND endpoint = ? AND created_at >= ?`,
+    [userId, endpoint, dayStartTs],
   );
   const count = (result[0]?.values[0]?.[0] ?? 0) as number;
 
   if (count >= AI_DAILY_LIMIT) {
     return { allowed: false, remaining: 0, limit: AI_DAILY_LIMIT };
   }
-
-  await db.run(
-    `INSERT INTO ai_usage (id, user_id, model, endpoint, prompt_tokens, completion_tokens, created_at)
-     VALUES (?, ?, ?, ?, ?, ?, datetime('now'))`,
-    [generateId(), userId, model, endpoint, 0, 0],
-  );
 
   return { allowed: true, remaining: AI_DAILY_LIMIT - count - 1, limit: AI_DAILY_LIMIT };
 }
