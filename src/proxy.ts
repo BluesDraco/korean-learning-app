@@ -18,8 +18,6 @@ function getJwtSecret(): Uint8Array {
 const AUTH_PATHS = [
   '/auth/login',
   '/auth/register',
-  '/api/auth/login',
-  '/api/auth/register',
 ];
 
 const PUBLIC_PATHS = [
@@ -75,7 +73,12 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Auth pages: redirect logged-in users away, let others through
+  // API auth endpoints: always pass through (they handle their own auth logic)
+  if (pathname.startsWith('/api/auth')) {
+    return NextResponse.next();
+  }
+
+  // Auth pages (login/register): redirect logged-in users away, let others through
   if (isAuthPath(pathname)) {
     const token = request.cookies.get('token')?.value;
     if (token) {
