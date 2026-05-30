@@ -356,7 +356,7 @@ export default function ShadowingPlayerPage() {
   if (!video) return null;
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)]">
+    <div className="flex flex-col h-[calc(100dvh-4rem)]">
       {/* Top bar */}
       <div className="flex items-center gap-3 px-4 py-3 shrink-0">
         <Link href="/shadowing" className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]">

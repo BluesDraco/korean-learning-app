@@ -233,7 +233,7 @@ export default function SettingsPage() {
         {/* Font preset */}
         <div>
           <label className="text-xs text-[var(--text-secondary)] mb-2 block">字体风格</label>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
             {FONT_PRESETS.map((p) => (
               <button
                 key={p.key}
@@ -314,7 +314,7 @@ export default function SettingsPage() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-3 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
           {allTypes.map((type) => {
             const def = ACHIEVEMENT_DEFS[type];
             const earned = earnedTypes.has(type);

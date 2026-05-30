@@ -121,7 +121,7 @@ export default function KnowledgeCategoryPage() {
                   )}
 
                   {/* Quick info bar */}
-                  <div className="flex items-center gap-4 text-xs text-[var(--text-placeholder)]">
+                  <div className="flex items-center gap-2 sm:gap-4 flex-wrap text-xs text-[var(--text-placeholder)]">
                     <span>韩语: {word.word}</span>
                     <span>罗马音: {word.pronunciation}</span>
                     <span>词性: {word.partOfSpeech}</span>

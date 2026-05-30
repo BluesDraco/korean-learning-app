@@ -534,7 +534,7 @@ function ReviewContent() {
                 {/* Rating */}
                 <div className="w-full mt-auto">
                   <p className="text-xs font-medium text-[var(--text-muted)] text-center mb-2">你记得怎么样？</p>
-                  <div className="flex gap-2.5 mb-2.5">
+                  <div className="grid grid-cols-3 sm:flex gap-2 mb-2.5">
                     {RATING_BUTTONS.map((btn) => {
                       const active = selfAssessment === btn.q;
                       return (

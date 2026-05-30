@@ -424,7 +424,7 @@ export default function TypingPage() {
       )}
 
       {/* Virtual keyboard — always visible, auto-stick to bottom */}
-      <div className="sticky bottom-2 bg-[var(--bg-card)] rounded-2xl p-4 border border-[var(--border-color)] shadow-lg z-10">
+      <div className="sticky bottom-2 bg-[var(--bg-card)] rounded-2xl p-4 border border-[var(--border-color)] shadow-lg z-30">
         {KEYBOARD_ROWS.map((row, ri) => (
           <div key={ri} className="flex justify-center gap-1 mb-1 last:mb-0">
             {ri === 2 && <div className="w-8" />}

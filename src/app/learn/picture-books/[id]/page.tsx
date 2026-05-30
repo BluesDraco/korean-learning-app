@@ -466,7 +466,7 @@ export default function PictureBookReaderPage() {
 
       {/* Bottom page numbers */}
       <nav className="flex items-center justify-center gap-1 pb-1.5 px-4 shrink-0 -mt-3">
-        <div className="flex items-center gap-0.5 bg-white/40 backdrop-blur-sm rounded-xl px-2 py-1.5">
+        <div className="flex items-center gap-0.5 bg-white/40 backdrop-blur-sm rounded-xl px-2 py-1.5 overflow-x-auto max-w-full">
           {Array.from({ length: totalPages }).map((_, i) => (
             <button
               key={i}

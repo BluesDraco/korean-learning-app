@@ -41,7 +41,7 @@ export default function LibraryPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 border-b border-[var(--border-color)]">
+      <div className="flex gap-2 border-b border-[var(--border-color)] overflow-x-auto flex-nowrap">
         {tabs.map((t) => {
           const Icon = t.icon;
           const isActive = tab === t.key;

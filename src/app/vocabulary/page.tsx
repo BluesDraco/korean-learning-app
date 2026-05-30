@@ -450,7 +450,7 @@ export default function VocabularyPage() {
                           setShowAddToBook(true);
                         }
                       }}
-                      className="text-[var(--text-placeholder)] hover:text-[var(--pink-primary)] opacity-0 group-hover:opacity-100 transition-all p-1.5 rounded-lg hover:bg-[var(--pink-primary)]/10 cursor-pointer"
+                      className="text-[var(--text-placeholder)] hover:text-[var(--pink-primary)] sm:opacity-0 sm:group-hover:opacity-100 transition-all p-1.5 rounded-lg hover:bg-[var(--pink-primary)]/10 cursor-pointer"
                     >
                       <BookmarkPlus size={15} />
                     </span>
@@ -469,7 +469,7 @@ export default function VocabularyPage() {
                         handleDelete(word.id);
                       }
                     }}
-                    className="text-[var(--text-placeholder)] hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all p-1.5 rounded-lg hover:bg-red-500/10 cursor-pointer"
+                    className="text-[var(--text-placeholder)] hover:text-red-400 sm:opacity-0 sm:group-hover:opacity-100 transition-all p-1.5 rounded-lg hover:bg-red-500/10 cursor-pointer"
                   >
                     <Trash2 size={15} />
                   </span>

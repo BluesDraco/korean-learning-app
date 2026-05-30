@@ -1262,7 +1262,7 @@ export default function AIChatPage() {
 
   return (
     <div
-      className="flex flex-col h-[calc(100vh-7rem)] md:h-[calc(100vh-5rem)] -mx-3 md:-mx-5 lg:-mx-8"
+      className="flex flex-col h-[calc(100dvh-7rem)] md:h-[calc(100dvh-5rem)] -mx-3 md:-mx-4 lg:-mx-8"
       style={{ paddingBottom: viewportOffset > 0 ? `${viewportOffset}px` : undefined }}
     >
       {/* ── Chat Header ──────────────────────────────────────── */}

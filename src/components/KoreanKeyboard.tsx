@@ -441,7 +441,7 @@ export function KoreanKeyboard({ value, onChange, visible, onClose, onSend }: Ko
 
   return createPortal(
     <div className="fixed bottom-0 left-0 right-0 z-[200]">
-      <div className="pl-0 md:pl-52 px-3 md:px-5 lg:px-8 w-full max-w-[1280px] mx-auto">
+      <div className="pl-0 md:pl-14 lg:pl-52 px-3 md:px-4 lg:px-8 w-full max-w-[1280px] mx-auto">
         {/* Preview bar */}
         <div className="flex items-center gap-2 px-3 py-2 bg-[var(--bg-card)] border-t border-x border-[var(--border-color)] rounded-t-2xl">
           <div className="flex-1 min-h-[26px] flex items-center gap-2">
