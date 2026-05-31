@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import {
   ArrowRight, ArrowLeft, Check, X, Loader2, Sparkles,
@@ -35,6 +35,7 @@ export default function LearnPage() {
 
   // Vocab phase
   const [vocabIdx, setVocabIdx] = useState(0);
+  const lastVocabIdxRef = useRef(0);
 
   // Grammar phase
   const [grammarExpanded, setGrammarExpanded] = useState(false);
@@ -475,7 +476,7 @@ export default function LearnPage() {
             <ArrowLeft size={20} />
           </button>
           <span className="text-sm text-[var(--text-muted)]">单词 {vocabIdx + 1}/{words.length}</span>
-          <button onClick={() => { setVocabIdx(0); setPhase('grammar'); }} className="text-xs text-[var(--pink-primary)]">
+          <button onClick={() => { lastVocabIdxRef.current = vocabIdx; setVocabIdx(0); setPhase('grammar'); }} className="text-xs text-[var(--pink-primary)]">
             跳过
           </button>
         </div>
@@ -538,7 +539,7 @@ export default function LearnPage() {
           </button>
           <button
             onClick={() => {
-              if (vocabIdx + 1 >= words.length) { setVocabIdx(0); setPhase('grammar'); }
+              if (vocabIdx + 1 >= words.length) { lastVocabIdxRef.current = vocabIdx; setVocabIdx(0); setPhase('grammar'); }
               else setVocabIdx(vocabIdx + 1);
             }}
             className="flex-1 py-3.5 bg-[var(--purple-soft)] text-[var(--text-primary)] rounded-2xl font-medium text-sm active:scale-95"
@@ -584,7 +585,7 @@ export default function LearnPage() {
         </div>
 
         <div className="flex items-center justify-between">
-          <button onClick={() => { setPhase('vocab'); setVocabIdx(words.length - 1); }} className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
+          <button onClick={() => { setPhase('vocab'); setVocabIdx(lastVocabIdxRef.current); }} className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
             <ArrowLeft size={20} />
           </button>
           <span className="text-xs px-3 py-1 rounded-full bg-[var(--peach-soft)]/10 text-[var(--peach-soft)] font-medium">

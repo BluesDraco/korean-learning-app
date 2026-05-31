@@ -135,7 +135,13 @@ export default function ArticleReaderPage() {
   }, [recordings, playingRec]);
 
   useEffect(() => {
-    return () => { cancelSpeech(); };
+    return () => {
+      cancelSpeech();
+      for (const url of Object.values(recordings)) {
+        URL.revokeObjectURL(url);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!article) {
@@ -204,7 +210,7 @@ export default function ArticleReaderPage() {
           <input
             type="range"
             min="0.5"
-            max="1"
+            max="2"
             step="0.05"
             value={speed}
             onChange={(e) => setSpeed(parseFloat(e.target.value))}
@@ -221,7 +227,7 @@ export default function ArticleReaderPage() {
         <input
           type="range"
           min="0.5"
-          max="1"
+          max="2"
           step="0.05"
           value={speed}
           onChange={(e) => setSpeed(parseFloat(e.target.value))}

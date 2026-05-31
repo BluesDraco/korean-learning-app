@@ -32,6 +32,7 @@ export default function TravelPage() {
             </div>
 
             <div className="px-5 py-3">
+              <h3 className="font-semibold text-[var(--text-primary)] mb-1">{a.title}</h3>
               <span className="text-xs text-[var(--text-muted)]">{a.readTime}</span>
               <p className="text-sm text-[var(--text-muted)] mt-1.5 line-clamp-2 leading-relaxed">
                 {a.subtitle}
