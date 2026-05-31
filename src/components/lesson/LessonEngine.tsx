@@ -277,7 +277,6 @@ export default function LessonEngine({ course, dayNum }: Props) {
 
   const cardLabel = () => {
     switch (card.type) {
-      case 'goal': return `今日目标`;
       case 'word-intro': return `单词 · ${currentCard + 1}/${totalCards}`;
       case 'grammar-intro': return `语法 · ${currentCard + 1}/${totalCards}`;
       case 'sentence-intro': return `实用句 · ${currentCard + 1}/${totalCards}`;
@@ -285,7 +284,6 @@ export default function LessonEngine({ course, dayNum }: Props) {
       case 'speak-repeat': return `影子跟读 · ${currentCard + 1}/${totalCards}`;
       case 'match-pairs': return `${card.matchDirection === 'zh-to-ko' ? '中翻韩' : '韩翻中'} · ${currentCard + 1}/${totalCards}`;
       case 'output': return `输出练习 · ${currentCard + 1}/${totalCards}`;
-      case 'summary': return `学习总结`;
     }
   };
 

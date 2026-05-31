@@ -22,18 +22,58 @@ function adjustOutputHint(course: DailyCourse, difficulty: number): { prompt: st
   }
 }
 
-/** Split Korean sentence into meaningful chunks for sentence reorder */
-function sentenceToChunks(s: DailySentence): { ko: string[]; zh: string[] } {
-  const koParts = s.korean.replace(/[.!?~]/g, '').split(/\s+/).filter(Boolean);
-  const zhParts = s.chinese.split(/\s+/).filter(Boolean);
-  if (koParts.length === zhParts.length) {
-    return { ko: koParts, zh: zhParts };
+/** Split a Korean word into stem + detached particles */
+function splitKoreanWord(word: string): string[] {
+  const particles = [
+    '께서', '에서', '에게', '한테', '부터', '까지', '처럼', '보다',
+    '이랑', '하고', '으로', '이라', '세요', '네요', '입니다',
+    '습니다', 'ㅂ니다', '니다',
+    '은', '는', '이', '가', '을', '를', '에', '도', '만', '의',
+    '와', '과', '랑', '로', '고', '서', '다', '어', '요', '야',
+    '지', '죠', '네', '여', '아', '게',
+  ].sort((a, b) => b.length - a.length);
+
+  const detached: string[] = [];
+  let stem = word;
+
+  let changed = true;
+  while (changed && stem.length > 1) {
+    changed = false;
+    for (const p of particles) {
+      if (stem.endsWith(p) && stem.length > p.length) {
+        detached.unshift(p);
+        stem = stem.slice(0, -p.length);
+        changed = true;
+        break;
+      }
+    }
   }
-  const koHalf = Math.ceil(s.korean.length / 2);
-  const zhHalf = Math.ceil(s.chinese.length / 2);
+
+  return stem ? [stem, ...detached] : detached;
+}
+
+/** Split Korean sentence into stem+particle chunks */
+function splitKoreanChunks(korean: string): string[] {
+  const cleaned = korean.replace(/[.!?~!?,，。！？]/g, '').trim();
+  const words = cleaned.split(/\s+/).filter(Boolean);
+  const chunks: string[] = [];
+  for (const word of words) {
+    chunks.push(...splitKoreanWord(word));
+  }
+  return chunks.filter(Boolean);
+}
+
+/** Split Chinese sentence into individual characters (for 韩翻中 exercise) */
+function splitChineseChunks(chinese: string): string[] {
+  const cleaned = chinese.replace(/[\s,，。！？!?\.]/g, '').trim();
+  return [...cleaned];
+}
+
+/** Split a sentence into Korean chunks and Chinese chunks for sentence reorder */
+function sentenceToChunks(s: DailySentence): { ko: string[]; zh: string[] } {
   return {
-    ko: [s.korean.slice(0, koHalf), s.korean.slice(koHalf)],
-    zh: [s.chinese.slice(0, zhHalf), s.chinese.slice(zhHalf)],
+    ko: splitKoreanChunks(s.korean),
+    zh: splitChineseChunks(s.chinese),
   };
 }
 
