@@ -89,7 +89,7 @@ export default function StickersPage() {
             href={`/tori/stickers/${pack.id}`}
             className="group bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl overflow-hidden hover:scale-105 hover:shadow-lg transition-all"
           >
-            <div className="aspect-square bg-gradient-to-br from-[#FFFDF9] to-[#FFD4E0]/20 flex items-center justify-center relative">
+            <div className="aspect-square bg-gradient-to-br from-[var(--bg-soft)] to-[var(--pink-pale)]/20 flex items-center justify-center relative">
               <Image
                 src={pack.coverImage}
                 alt={pack.name}
@@ -97,7 +97,7 @@ export default function StickersPage() {
                 className="object-cover"
                 onError={() => setImgErrors(prev => new Set(prev).add(pack.id))}
               />
-              {imgErrors.has(pack.id) && <div className="absolute inset-0 bg-gradient-to-br from-[#FFFDF9] to-[#FFD4E0]/20" />}
+              {imgErrors.has(pack.id) && <div className="absolute inset-0 bg-gradient-to-br from-[var(--bg-soft)] to-[var(--pink-pale)]/20" />}
             </div>
             <div className="p-3 space-y-1">
               <h3 className="text-sm font-bold text-[var(--text-primary)]">{pack.name}</h3>

@@ -11,6 +11,68 @@ import { dictationSentences, type DictationSentence } from '@/data/dictationSent
 import { speak } from '@/lib/tts';
 import type { Word } from '@/types';
 
+// ---- Character-level diff for Korean dictation ----
+
+const INITIALS = ['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+const MEDIALS  = ['ㅏ','ㅐ','ㅑ','ㅒ','ㅓ','ㅔ','ㅕ','ㅖ','ㅗ','ㅘ','ㅙ','ㅚ','ㅛ','ㅜ','ㅝ','ㅞ','ㅟ','ㅠ','ㅡ','ㅢ','ㅣ'];
+const FINALS   = ['','ㄱ','ㄲ','ㄳ','ㄴ','ㄵ','ㄶ','ㄷ','ㄹ','ㄺ','ㄻ','ㄼ','ㄽ','ㄾ','ㄿ','ㅀ','ㅁ','ㅂ','ㅄ','ㅅ','ㅆ','ㅇ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+
+function isKorean(ch: string) {
+  const c = ch.charCodeAt(0);
+  return c >= 0xAC00 && c <= 0xD7A3;
+}
+
+function decompose(syllable: string) {
+  const code = syllable.charCodeAt(0) - 0xAC00;
+  const init = Math.floor(code / (21 * 28));
+  const med  = Math.floor((code % (21 * 28)) / 28);
+  const fin  = code % 28;
+  return { initial: INITIALS[init], medial: MEDIALS[med], final: FINALS[fin] };
+}
+
+interface DiffSegment { char: string; status: 'correct' | 'wrong' | 'extra' | 'missing'; }
+
+function getCharDiff(userInput: string, correct: string) {
+  const userDiff: DiffSegment[] = [];
+  const correctDiff: DiffSegment[] = [];
+  const notes: string[] = [];
+  const maxLen = Math.max(userInput.length, correct.length);
+
+  for (let i = 0; i < maxLen; i++) {
+    const uc = userInput[i] || '';
+    const cc = correct[i] || '';
+
+    if (!uc) {
+      correctDiff.push({ char: cc, status: 'missing' });
+      notes.push(`缺少第${i + 1}个字: "${cc}"`);
+    } else if (!cc) {
+      userDiff.push({ char: uc, status: 'extra' });
+      notes.push(`多余: "${uc}"`);
+    } else if (uc === cc) {
+      userDiff.push({ char: uc, status: 'correct' });
+      correctDiff.push({ char: cc, status: 'correct' });
+    } else {
+      userDiff.push({ char: uc, status: 'wrong' });
+      correctDiff.push({ char: cc, status: 'wrong' });
+
+      if (isKorean(uc) && isKorean(cc)) {
+        const dU = decompose(uc);
+        const dC = decompose(cc);
+        const parts: string[] = [];
+        if (dU.initial !== dC.initial) parts.push(`辅音 ${dU.initial}→${dC.initial}`);
+        if (dU.medial  !== dC.medial)  parts.push(`元音 ${dU.medial}→${dC.medial}`);
+        if (dU.final   !== dC.final)   parts.push(`尾音 ${dU.final || '无'}→${dC.final || '无'}`);
+        if (parts.length) notes.push(`"${uc}"→"${cc}": ${parts.join('，')}`);
+        else notes.push(`"${uc}" 应为 "${cc}"`);
+      } else {
+        notes.push(`"${uc}" 应为 "${cc}"`);
+      }
+    }
+  }
+
+  return { userDiff, correctDiff, notes };
+}
+
 type Mode = 'word' | 'sentence' | 'daily';
 type WordSource = 'builtin' | 'mywords';
 type InputMode = 'type' | 'handwrite';
@@ -481,12 +543,50 @@ export default function DictationPage() {
 
         {submitted && (
           <div className={`p-3 rounded-xl ${error ? 'bg-red-500/10' : 'bg-[var(--mint-soft)]/15'}`}>
-            {error ? (
-              <div className="space-y-1">
-                <div className="flex items-center justify-center gap-2 text-red-400"><X size={18} /><span>答错了</span></div>
-                <p className="text-[var(--text-primary)] font-bold text-lg">{error.replace('正确答案: ', '')}</p>
-              </div>
-            ) : (
+            {error ? (() => {
+              const diff = getCharDiff(userInput.trim(), currentKorean);
+              return (
+                <div className="space-y-3">
+                  <div className="flex items-center justify-center gap-2 text-red-400"><X size={18} /><span>答错了</span></div>
+                  {/* Visual diff */}
+                  <div className="space-y-2 text-sm">
+                    <div>
+                      <span className="text-[var(--text-muted)] text-xs">你的输入: </span>
+                      <span className="font-mono text-base">
+                        {diff.userDiff.map((s, i) => (
+                          <span key={i} className={
+                            s.status === 'correct' ? 'text-[var(--mint-soft)]' :
+                            s.status === 'wrong' ? 'text-red-400 line-through decoration-red-400' :
+                            'text-yellow-400 underline decoration-yellow-400'
+                          }>{s.char}</span>
+                        ))}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-[var(--text-muted)] text-xs">正确答案: </span>
+                      <span className="font-mono text-base">
+                        {diff.correctDiff.map((s, i) => (
+                          <span key={i} className={
+                            s.status === 'correct' ? 'text-[var(--mint-soft)]' :
+                            s.status === 'wrong' ? 'text-[var(--pink-primary)] font-bold' :
+                            'text-red-400'
+                          }>{s.char}</span>
+                        ))}
+                      </span>
+                    </div>
+                  </div>
+                  {/* Error analysis */}
+                  {diff.notes.length > 0 && (
+                    <div className="bg-[var(--bg-input)] rounded-lg p-2.5 text-left space-y-0.5">
+                      <p className="text-xs text-[var(--text-muted)] mb-1">错误分析:</p>
+                      {diff.notes.map((n, i) => (
+                        <p key={i} className="text-xs text-[var(--text-secondary)]">• {n}</p>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })() : (
               <div className="flex items-center justify-center gap-2 text-[var(--mint-soft)]"><Check size={18} /><span>正确!</span></div>
             )}
             <p className="text-[var(--text-secondary)] text-sm mt-1.5">{currentMeaning}</p>

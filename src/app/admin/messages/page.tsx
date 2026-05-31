@@ -77,14 +77,14 @@ export default function AdminMessagesPage() {
   return (
     <div className="max-w-2xl space-y-6">
       <div>
-        <h1 className="text-xl font-bold text-gray-800">消息中心</h1>
-        <p className="text-sm text-gray-500 mt-1">编辑消息并发送给用户</p>
+        <h1 className="text-xl font-bold text-[var(--text-primary)]">消息中心</h1>
+        <p className="text-sm text-[var(--text-muted)] mt-1">编辑消息并发送给用户</p>
       </div>
 
-      <div className="bg-white border border-[#F5E6E0] rounded-2xl p-6 space-y-5">
+      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 space-y-5">
         {/* Type selector */}
         <div>
-          <label className="text-sm font-medium text-gray-700 mb-2 block">消息类型</label>
+          <label className="text-sm font-medium text-[var(--text-primary)] mb-2 block">消息类型</label>
           <div className="grid grid-cols-3 gap-2">
             {TYPE_OPTIONS.map((opt) => {
               const Icon = opt.icon;
@@ -94,8 +94,8 @@ export default function AdminMessagesPage() {
                   onClick={() => { setType(opt.value); setTargetUserId(''); }}
                   className={`flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium transition-all ${
                     type === opt.value
-                      ? 'bg-[#FFF0F4] text-[#FF8FAB] border border-[#FF8FAB]/30'
-                      : 'bg-gray-50 text-gray-500 border border-transparent hover:bg-gray-100'
+                      ? 'bg-[var(--bg-soft)] text-[var(--pink-primary)] border border-[var(--pink-primary)]/30'
+                      : 'bg-[var(--bg-input)] text-[var(--text-muted)] border border-transparent hover:bg-[var(--bg-input)]'
                   }`}
                 >
                   <Icon size={15} />
@@ -109,15 +109,15 @@ export default function AdminMessagesPage() {
         {/* Target user selector (only for private messages) */}
         {type === 'private_message' && (
           <div ref={dropdownRef} className="relative">
-            <label className="text-sm font-medium text-gray-700 mb-2 block">目标用户</label>
+            <label className="text-sm font-medium text-[var(--text-primary)] mb-2 block">目标用户</label>
             {selectedUser ? (
-              <div className="flex items-center gap-2 p-3 bg-[#FFF0F4] border border-[#FF8FAB]/20 rounded-xl">
-                <User size={16} className="text-[#FF8FAB]" />
-                <span className="text-sm font-medium text-gray-700">{selectedUser.nickname || selectedUser.username}</span>
-                <span className="text-xs text-gray-400">@{selectedUser.username}</span>
+              <div className="flex items-center gap-2 p-3 bg-[var(--bg-soft)] border border-[var(--pink-primary)]/20 rounded-xl">
+                <User size={16} className="text-[var(--pink-primary)]" />
+                <span className="text-sm font-medium text-[var(--text-primary)]">{selectedUser.nickname || selectedUser.username}</span>
+                <span className="text-xs text-[var(--text-muted)]">@{selectedUser.username}</span>
                 <button
                   onClick={() => { setTargetUserId(''); setUserSearch(''); }}
-                  className="ml-auto text-xs text-gray-400 hover:text-red-400"
+                  className="ml-auto text-xs text-[var(--text-muted)] hover:text-red-400"
                 >
                   取消
                 </button>
@@ -130,19 +130,19 @@ export default function AdminMessagesPage() {
                   onChange={(e) => { setUserSearch(e.target.value); setShowUserDropdown(true); }}
                   onFocus={() => setShowUserDropdown(true)}
                   placeholder="搜索用户..."
-                  className="w-full bg-gray-50 border border-[#F5E6E0] rounded-xl py-2.5 px-4 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none focus:border-[#FF8FAB]"
+                  className="w-full bg-[var(--bg-input)] border border-[var(--border-color)] rounded-xl py-2.5 px-4 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--pink-primary)]"
                 />
                 {showUserDropdown && filteredUsers.length > 0 && (
-                  <div className="absolute z-30 top-full left-0 right-0 mt-1 bg-white border border-[#F5E6E0] rounded-xl shadow-lg max-h-48 overflow-y-auto">
+                  <div className="absolute z-30 top-full left-0 right-0 mt-1 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl shadow-lg max-h-48 overflow-y-auto">
                     {filteredUsers.slice(0, 20).map((u) => (
                       <button
                         key={u.id}
                         onClick={() => { setTargetUserId(u.id); setUserSearch(''); setShowUserDropdown(false); }}
-                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left hover:bg-[#FFF0F4] transition-colors"
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left hover:bg-[var(--bg-soft)] transition-colors"
                       >
-                        <User size={15} className="text-gray-400" />
-                        <span className="text-gray-700 font-medium">{u.nickname || u.username}</span>
-                        <span className="text-gray-400 text-xs">@{u.username}</span>
+                        <User size={15} className="text-[var(--text-muted)]" />
+                        <span className="text-[var(--text-primary)] font-medium">{u.nickname || u.username}</span>
+                        <span className="text-[var(--text-muted)] text-xs">@{u.username}</span>
                       </button>
                     ))}
                   </div>
@@ -154,25 +154,25 @@ export default function AdminMessagesPage() {
 
         {/* Title */}
         <div>
-          <label className="text-sm font-medium text-gray-700 mb-2 block">标题</label>
+          <label className="text-sm font-medium text-[var(--text-primary)] mb-2 block">标题</label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="输入消息标题..."
-            className="w-full bg-gray-50 border border-[#F5E6E0] rounded-xl py-2.5 px-4 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none focus:border-[#FF8FAB]"
+            className="w-full bg-[var(--bg-input)] border border-[var(--border-color)] rounded-xl py-2.5 px-4 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--pink-primary)]"
           />
         </div>
 
         {/* Content */}
         <div>
-          <label className="text-sm font-medium text-gray-700 mb-2 block">内容</label>
+          <label className="text-sm font-medium text-[var(--text-primary)] mb-2 block">内容</label>
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder="输入消息内容（支持换行）..."
             rows={6}
-            className="w-full bg-gray-50 border border-[#F5E6E0] rounded-xl py-3 px-4 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none focus:border-[#FF8FAB] resize-none"
+            className="w-full bg-[var(--bg-input)] border border-[var(--border-color)] rounded-xl py-3 px-4 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--pink-primary)] resize-none"
           />
         </div>
 
@@ -183,7 +183,7 @@ export default function AdminMessagesPage() {
           className={`w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold transition-all ${
             sent
               ? 'bg-green-500 text-white'
-              : 'bg-[#FF8FAB] text-white hover:bg-[#FF7A9A] disabled:bg-gray-200 disabled:text-gray-400'
+              : 'bg-[var(--pink-primary)] text-white hover:brightness-90 disabled:bg-[var(--bg-input)] disabled:text-[var(--text-muted)]'
           }`}
         >
           {sending ? (
@@ -202,7 +202,7 @@ export default function AdminMessagesPage() {
         </button>
 
         {/* Info */}
-        <p className="text-xs text-gray-400 text-center">
+        <p className="text-xs text-[var(--text-muted)] text-center">
           {type === 'private_message'
             ? '私信仅目标用户可见'
             : type === 'update_log'

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { DEEPSEEK_MODEL } from '@/lib/deepseek';
 import { getAuthFromCookie } from '@/lib/server/auth';
 import { checkAiRateLimit } from '@/lib/server/rate-limit';
+import { fetchWithTimeout } from '@/lib/fetch';
 
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
 
@@ -34,7 +35,8 @@ export async function POST(req: Request) {
       )
       .join('\n');
 
-    const res = await fetch(DEEPSEEK_API_URL, {
+    const res = await fetchWithTimeout(DEEPSEEK_API_URL, {
+      timeoutMs: 30_000,
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

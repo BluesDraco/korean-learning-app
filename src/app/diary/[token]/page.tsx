@@ -57,11 +57,11 @@ export default async function DiaryPage(
 
   if (!data) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#FFFDF9]">
+      <div className="min-h-screen flex items-center justify-center bg-[var(--bg-soft)]">
         <div className="text-center space-y-4">
           <span className="text-6xl">🐰</span>
-          <h1 className="text-xl font-bold text-[#5C4B51]">页面不存在或已过期</h1>
-          <p className="text-sm text-[#8B7E82]">托里找不到这个成长日记了</p>
+          <h1 className="text-xl font-bold text-[var(--text-primary)]">页面不存在或已过期</h1>
+          <p className="text-sm text-[var(--text-secondary)]">托里找不到这个成长日记了</p>
         </div>
       </div>
     );

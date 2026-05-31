@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { fetchWithTimeout } from '@/lib/fetch';
 
 const DASHSCOPE_KEY = process.env.DASHSCOPE_API_KEY;
 const ENDPOINT = 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation';
@@ -18,10 +19,8 @@ export async function POST(req: Request) {
     }
 
     // Step 1: Call Qwen3-TTS to generate audio
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 15000);
-
-    const ttsRes = await fetch(ENDPOINT, {
+    const ttsRes = await fetchWithTimeout(ENDPOINT, {
+      timeoutMs: 15_000,
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${DASHSCOPE_KEY}`,
@@ -35,8 +34,7 @@ export async function POST(req: Request) {
           language_type: 'Korean',
         },
       }),
-      signal: controller.signal,
-    }).finally(() => clearTimeout(timeout));
+    });
 
     if (!ttsRes.ok) {
       const err = await ttsRes.text().catch(() => 'unknown');
@@ -51,10 +49,9 @@ export async function POST(req: Request) {
     }
 
     // Step 2: Download the audio from the OSS URL
-    const dlController = new AbortController();
-    const dlTimeout = setTimeout(() => dlController.abort(), 10000);
-
-    const audioRes = await fetch(audioUrl, { signal: dlController.signal }).finally(() => clearTimeout(dlTimeout));
+    const audioRes = await fetchWithTimeout(audioUrl, {
+      timeoutMs: 10_000,
+    });
 
     if (!audioRes.ok) {
       return NextResponse.json({ error: `Audio download failed: ${audioRes.status}` }, { status: 502 });
@@ -69,7 +66,7 @@ export async function POST(req: Request) {
       },
     });
   } catch (e: any) {
-    if (e.name === 'AbortError') {
+    if (e.name === 'AbortError' || e.name === 'FetchTimeoutError') {
       return NextResponse.json({ error: 'Qwen TTS timeout' }, { status: 504 });
     }
     return NextResponse.json({ error: e.message }, { status: 500 });

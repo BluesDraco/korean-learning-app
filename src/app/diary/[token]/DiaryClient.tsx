@@ -32,14 +32,14 @@ export function DiaryClient({ data }: { data: DiaryData }) {
   const maxWeight = Math.max(...data.topWords.map((w) => w.weight), 1);
 
   return (
-    <div className="min-h-screen bg-[#FFFDF9]">
+    <div className="min-h-screen bg-[var(--bg-soft)]">
       <div className="max-w-lg mx-auto px-4 py-8 space-y-8">
         {/* Header */}
         <div className="text-center space-y-3">
           <div className="text-5xl animate-bounce">🐰</div>
-          <h1 className="text-2xl font-bold text-[#5C4B51]">韩语学习日记</h1>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">韩语学习日记</h1>
           {data.isAmbassador && (
-            <div className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#FF8FAB]/10 text-[#FF8FAB] text-sm font-medium">
+            <div className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] text-sm font-medium">
               <Star size={14} className="fill-current" /> 深度学习者
             </div>
           )}
@@ -47,8 +47,8 @@ export function DiaryClient({ data }: { data: DiaryData }) {
 
         {/* User info */}
         <div className="text-center space-y-1">
-          <h2 className="text-xl font-bold text-[#5C4B51]">{data.nickname}</h2>
-          <p className="text-sm text-[#8B7E82]">
+          <h2 className="text-xl font-bold text-[var(--text-primary)]">{data.nickname}</h2>
+          <p className="text-sm text-[var(--text-secondary)]">
             {startDate} 加入 · 已学习 {data.studyDays} 天
           </p>
         </div>
@@ -65,19 +65,19 @@ export function DiaryClient({ data }: { data: DiaryData }) {
           ].map((s) => (
             <div
               key={s.label}
-              className="bg-white/80 border border-[#E8DFF5] rounded-2xl p-4 text-center"
+              className="bg-[var(--bg-card)]/80 border border-[var(--border-color)] rounded-2xl p-4 text-center"
             >
               <span className="text-2xl">{s.icon}</span>
-              <div className="text-lg font-bold text-[#5C4B51] mt-1">{s.value}</div>
-              <div className="text-xs text-[#8B7E82]">{s.label}</div>
+              <div className="text-lg font-bold text-[var(--text-primary)] mt-1">{s.value}</div>
+              <div className="text-xs text-[var(--text-secondary)]">{s.label}</div>
             </div>
           ))}
         </div>
 
         {/* Word cloud */}
         {data.topWords.length > 0 && (
-          <div className="bg-white/80 border border-[#FFD4E0] rounded-2xl p-6">
-            <h3 className="text-sm font-medium text-[#5C4B51] mb-4 text-center">
+          <div className="bg-[var(--bg-card)]/80 border border-[var(--pink-pale)] rounded-2xl p-6">
+            <h3 className="text-sm font-medium text-[var(--text-primary)] mb-4 text-center">
               最常复习的词汇
             </h3>
             <div className="flex flex-wrap justify-center gap-2">
@@ -85,7 +85,7 @@ export function DiaryClient({ data }: { data: DiaryData }) {
                 const ratio = w.weight / maxWeight;
                 const size = 0.75 + ratio * 1.25; // 0.75rem - 2rem
                 const opacity = 0.4 + ratio * 0.6;
-                const colors = ['#FF8FAB', '#C9B8E8', '#A8D8D0', '#FFB8C6', '#B8C6E8'];
+                const colors = ['var(--pink-primary)', 'var(--purple-soft)', 'var(--mint-soft)', '#FFB8C6', '#B8C6E8'];
                 const color = colors[Math.floor(ratio * (colors.length - 1))];
                 return (
                   <span
@@ -106,26 +106,26 @@ export function DiaryClient({ data }: { data: DiaryData }) {
         )}
 
         {/* Tori's message */}
-        <div className="bg-white/80 border border-[#D4EFEA] rounded-2xl p-6 text-center space-y-3">
+        <div className="bg-[var(--bg-card)]/80 border border-[var(--border-color)] rounded-2xl p-6 text-center space-y-3">
           <span className="text-4xl">🐰</span>
-          <p className="text-sm text-[#5C4B51] leading-relaxed">
+          <p className="text-sm text-[var(--text-primary)] leading-relaxed">
             {getToriMessage(data.studyDays)}
           </p>
         </div>
 
         {/* CTA */}
         <div className="text-center space-y-4">
-          <p className="text-sm text-[#8B7E82]">想和托里一起学韩语吗？</p>
+          <p className="text-sm text-[var(--text-secondary)]">想和托里一起学韩语吗？</p>
           <Link
             href="/auth/register"
-            className="inline-block px-8 py-3 bg-[#FF8FAB] text-white rounded-2xl font-medium hover:bg-[#FF7A9A] transition-colors shadow-lg shadow-[#FF8FAB]/20"
+            className="inline-block px-8 py-3 bg-[var(--pink-primary)] text-white rounded-2xl font-medium hover:brightness-90 transition-colors shadow-lg shadow-[var(--pink-primary)]/20"
           >
             我也要开始学韩语
           </Link>
         </div>
 
         {/* Footer */}
-        <p className="text-center text-xs text-[#C4B5B9] pb-8">
+        <p className="text-center text-xs text-[var(--text-placeholder)] pb-8">
           韩语学习日记 · 和托里一起成长
         </p>
       </div>

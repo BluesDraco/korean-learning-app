@@ -3,8 +3,11 @@
  * Client code calls the Next.js API routes, which proxy to DeepSeek.
  */
 
+import { fetchWithTimeout } from './fetch';
+
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
 export const DEEPSEEK_MODEL = 'deepseek-v4-flash';
+const AI_TIMEOUT = 30_000; // 30 seconds for AI requests
 
 export interface DeepSeekConfig {
   apiKey: string;
@@ -16,7 +19,8 @@ export interface DeepSeekConfig {
  * Used from API route (server-side) to keep API key secure.
  */
 export async function translateKoToZhDeepSeek(text: string, apiKey: string): Promise<string> {
-  const res = await fetch(DEEPSEEK_API_URL, {
+  const res = await fetchWithTimeout(DEEPSEEK_API_URL, {
+    timeoutMs: AI_TIMEOUT,
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -58,7 +62,8 @@ export async function lookupWordDeepSeek(
   partOfSpeech: string;
   example: { text: string; translation: string };
 }> {
-  const res = await fetch(DEEPSEEK_API_URL, {
+  const res = await fetchWithTimeout(DEEPSEEK_API_URL, {
+    timeoutMs: AI_TIMEOUT,
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -115,7 +120,8 @@ export async function analyzeSentenceDeepSeek(
   grammar: { pattern: string; title: string; usage: string; explanation: string }[];
   particles: { text: string; explanation: string }[];
 }> {
-  const res = await fetch(DEEPSEEK_API_URL, {
+  const res = await fetchWithTimeout(DEEPSEEK_API_URL, {
+    timeoutMs: AI_TIMEOUT,
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -177,7 +183,8 @@ export async function chatResponseDeepSeek(
     .map((m) => `${m.role === 'ai' ? '店员/AI' : '用户'}: ${m.content}`)
     .join('\n');
 
-  const res = await fetch(DEEPSEEK_API_URL, {
+  const res = await fetchWithTimeout(DEEPSEEK_API_URL, {
+    timeoutMs: AI_TIMEOUT,
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -223,7 +230,8 @@ export async function translateBatchDeepSeek(
   const delimiter = '\n---\n';
   const combined = sentences.join(delimiter);
 
-  const res = await fetch(DEEPSEEK_API_URL, {
+  const res = await fetchWithTimeout(DEEPSEEK_API_URL, {
+    timeoutMs: AI_TIMEOUT,
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

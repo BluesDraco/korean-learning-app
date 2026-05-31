@@ -184,14 +184,14 @@ function ReviewContent() {
   // ═══════════════════════════════════════════════════════════════
   // Shared background wrapper
   // ═══════════════════════════════════════════════════════════════
-  const bgStyle = { background: 'linear-gradient(180deg, #FDF8F0 0%, #FFF5F2 40%, #FFF0F3 100%)' };
+  const bgStyle = { background: 'linear-gradient(180deg, var(--bg-soft) 0%, var(--bg-soft) 40%, var(--bg-soft) 100%)' };
 
   // ── Intro modal ──
   if (showIntro) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
         <div className="absolute inset-0 bg-black/30" onClick={dismissIntro} />
-        <div className="relative bg-white border border-[var(--border-default)] rounded-3xl shadow-2xl w-full max-w-sm p-6 space-y-5 animate-bounce-in">
+        <div className="relative bg-[var(--bg-card)] border border-[var(--border-default)] rounded-3xl shadow-2xl w-full max-w-sm p-6 space-y-5 animate-bounce-in">
           <div className="text-center">
             <div className="w-14 h-14 rounded-2xl bg-[var(--pink-pale)]/30 flex items-center justify-center mx-auto mb-3">
               <Brain size={28} className="text-[var(--pink-primary)]" />
@@ -261,12 +261,12 @@ function ReviewContent() {
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            <div className="bg-white/70 backdrop-blur-sm border border-[var(--border-default)] rounded-2xl p-4">
+            <div className="bg-[var(--bg-card)]/70 backdrop-blur-sm border border-[var(--border-default)] rounded-2xl p-4">
               <Zap size={20} className="text-[var(--peach-soft)] mx-auto mb-1" />
               <div className="text-xl font-bold text-[var(--text-primary)]">+{xpEarned}</div>
               <div className="text-xs text-[var(--text-muted)]">XP</div>
             </div>
-            <div className="bg-white/70 backdrop-blur-sm border border-[var(--border-default)] rounded-2xl p-4">
+            <div className="bg-[var(--bg-card)]/70 backdrop-blur-sm border border-[var(--border-default)] rounded-2xl p-4">
               <Flame size={20} className="text-[var(--peach-soft)] mx-auto mb-1" />
               <div className="text-xl font-bold text-[var(--text-primary)]">{sessionStats.passed}</div>
               <div className="text-xs text-[var(--text-muted)]">通过</div>
@@ -277,7 +277,7 @@ function ReviewContent() {
             const healthScore = memoryHealthScore(allWords);
             const atRisk = atRiskWords(allWords, 3);
             return (
-              <div className="bg-white/70 backdrop-blur-sm border border-[var(--border-default)] rounded-2xl p-4 space-y-3">
+              <div className="bg-[var(--bg-card)]/70 backdrop-blur-sm border border-[var(--border-default)] rounded-2xl p-4 space-y-3">
                 <div className="flex items-center gap-2">
                   <Activity size={16} className="text-[var(--purple-soft)]" />
                   <span className="text-xs font-medium text-[var(--text-secondary)]">记忆健康度</span>
@@ -309,7 +309,7 @@ function ReviewContent() {
               再来一轮
             </button>
             <button onClick={() => router.push('/')}
-              className="px-6 py-2.5 bg-white/80 border border-[var(--border-default)] hover:bg-[var(--bg-muted)] text-[var(--text-primary)] text-sm font-medium rounded-full transition-all active:scale-95">
+              className="px-6 py-2.5 bg-[var(--bg-card)]/80 border border-[var(--border-default)] hover:bg-[var(--bg-muted)] text-[var(--text-primary)] text-sm font-medium rounded-full transition-all active:scale-95">
               返回首页
             </button>
           </div>
@@ -337,7 +337,7 @@ function ReviewContent() {
           </div>
           <div className="flex gap-3 justify-center">
             <button onClick={() => router.push('/learn')} className="px-6 py-3 bg-[var(--pink-primary)] hover:brightness-90 text-white text-sm font-bold rounded-full transition-all active:scale-95 shadow-md">去学习新词</button>
-            <button onClick={() => router.push('/')} className="px-6 py-3 bg-white/80 border border-[var(--border-default)] hover:bg-[var(--bg-muted)] text-[var(--text-primary)] text-sm font-medium rounded-full transition-all active:scale-95">返回首页</button>
+            <button onClick={() => router.push('/')} className="px-6 py-3 bg-[var(--bg-card)]/80 border border-[var(--border-default)] hover:bg-[var(--bg-muted)] text-[var(--text-primary)] text-sm font-medium rounded-full transition-all active:scale-95">返回首页</button>
           </div>
         </div>
       </div>
@@ -355,7 +355,7 @@ function ReviewContent() {
       {/* Tori reaction */}
       {toriReactionKey !== null && TORI_REACTIONS[toriReactionKey] && (
         <div className="fixed inset-0 z-30 flex items-center justify-center pointer-events-none">
-          <div className="bg-white/95 backdrop-blur-sm border-2 border-[var(--pink-light)] rounded-3xl px-6 py-5 shadow-xl animate-bounce-achievement text-center max-w-[240px]">
+          <div className="bg-[var(--bg-card)]/95 backdrop-blur-sm border-2 border-[var(--pink-light)] rounded-3xl px-6 py-5 shadow-xl animate-bounce-achievement text-center max-w-[240px]">
             <Image
               src={`/images/tori-poses/${TORI_REACTIONS[toriReactionKey].pose}`}
               alt="Tori"
@@ -371,12 +371,12 @@ function ReviewContent() {
       <div className="relative z-10 py-4 max-w-lg mx-auto space-y-4 px-4">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <button onClick={() => router.back()} className="p-1 -ml-1 text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/50 rounded-lg transition-colors">
+          <button onClick={() => router.back()} className="p-1 -ml-1 text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card)]/50 rounded-lg transition-colors">
             <ArrowLeft size={20} />
           </button>
           <div className="flex items-center gap-3">
             {streak >= 3 && (
-              <div className="flex items-center gap-1 text-xs font-bold text-[var(--peach-soft)] bg-white/60 backdrop-blur-sm px-2 py-0.5 rounded-full border border-[var(--peach-soft)]/15">
+              <div className="flex items-center gap-1 text-xs font-bold text-[var(--peach-soft)] bg-[var(--bg-card)]/60 backdrop-blur-sm px-2 py-0.5 rounded-full border border-[var(--peach-soft)]/15">
                 <Flame size={11} fill="currentColor" /> {streak}天
               </div>
             )}
@@ -386,7 +386,7 @@ function ReviewContent() {
         </div>
 
         {/* Progress bar */}
-        <div className="w-full bg-[#E8D5C8]/40 rounded-full h-1.5 overflow-hidden">
+        <div className="w-full bg-[var(--border-color)]/40 rounded-full h-1.5 overflow-hidden">
           <div className="h-full rounded-full bg-gradient-to-r from-[var(--pink-primary)] to-[var(--purple-soft)] transition-all duration-500 ease-out"
             style={{ width: `${progress}%`, boxShadow: '0 0 6px rgba(255,143,171,0.25)' }} />
         </div>
@@ -428,9 +428,9 @@ function ReviewContent() {
                 style={{
                   backfaceVisibility: 'hidden',
                   minHeight: '500px',
-                  background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF9 100%)',
+                  background: 'linear-gradient(180deg, var(--bg-card) 0%, var(--bg-card) 100%)',
                   boxShadow: '0 1px 3px rgba(0,0,0,0.03), 0 4px 12px rgba(0,0,0,0.05), 0 16px 40px rgba(0,0,0,0.06)',
-                  border: '1px solid #F0E8DD',
+                  border: '1px solid var(--border-color)',
                 }}
               >
                 {/* Word — centered hero */}
@@ -439,11 +439,11 @@ function ReviewContent() {
                 </div>
 
                 {/* Meta bar inside card */}
-                <div className="flex items-center justify-between bg-[#FDF8F0] rounded-2xl px-4 py-2.5 border border-[#F0E8DD]/60 mt-4">
+                <div className="flex items-center justify-between bg-[var(--bg-soft)] rounded-2xl px-4 py-2.5 border border-[var(--border-color)]/60 mt-4">
                   <span className="text-xs text-[var(--text-muted)]">{currentWord.partOfSpeech} · {currentWord.pronunciation}</span>
                   <button
                     onClick={(e) => { e.stopPropagation(); speak(currentWord.word); }}
-                    className="p-1.5 rounded-lg hover:bg-white/60 text-[var(--pink-primary)] transition-colors"
+                    className="p-1.5 rounded-lg hover:bg-[var(--bg-card)]/60 text-[var(--pink-primary)] transition-colors"
                   >
                     <Volume2 size={16} />
                   </button>
@@ -459,8 +459,8 @@ function ReviewContent() {
                         onClick={() => handlePickOption(i)}
                         className={`px-4 py-3 rounded-2xl border text-sm font-medium transition-all duration-150 active:scale-[0.98] ${
                           isDontKnow
-                            ? 'bg-transparent border-dashed border-[#D0C0B0] text-[var(--text-muted)] hover:bg-[#F5F0EB]/60'
-                            : 'bg-white border-[#F0E8DD] text-[var(--text-primary)] hover:border-[var(--pink-primary)]/40 hover:bg-[var(--pink-pale)]/15 hover:shadow-sm'
+                            ? 'bg-transparent border-dashed border-[var(--border-color)] text-[var(--text-muted)] hover:bg-[var(--bg-input)]/60'
+                            : 'bg-[var(--bg-card)] border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--pink-primary)]/40 hover:bg-[var(--pink-pale)]/15 hover:shadow-sm'
                         }`}
                       >
                         {opt.text}
@@ -481,7 +481,7 @@ function ReviewContent() {
                 style={{
                   backfaceVisibility: 'hidden',
                   minHeight: '500px',
-                  background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF9 100%)',
+                  background: 'linear-gradient(180deg, var(--bg-card) 0%, var(--bg-card) 100%)',
                   boxShadow: '0 1px 3px rgba(0,0,0,0.03), 0 4px 12px rgba(0,0,0,0.05), 0 16px 40px rgba(0,0,0,0.06)',
                   border: '1px solid rgba(255,143,171,0.15)',
                 }}
@@ -517,11 +517,11 @@ function ReviewContent() {
                 {currentWord.examples.length > 0 && (
                   <div className="w-full space-y-1.5 mb-3">
                     {currentWord.examples.slice(0, 2).map((ex, i) => (
-                      <div key={i} className="bg-[#FDF8F0] rounded-xl px-3 py-2.5 border border-[#F0E8DD]/60">
+                      <div key={i} className="bg-[var(--bg-soft)] rounded-xl px-3 py-2.5 border border-[var(--border-color)]/60">
                         <div className="flex items-start gap-2">
                           <p className="text-sm text-[var(--text-primary)] flex-1 leading-snug">{ex.text}</p>
                           <button onClick={(e) => { e.stopPropagation(); speak(ex.text); }}
-                            className="p-1 rounded-lg hover:bg-white/60 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors shrink-0">
+                            className="p-1 rounded-lg hover:bg-[var(--bg-card)]/60 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors shrink-0">
                             <Volume2 size={13} />
                           </button>
                         </div>
@@ -543,8 +543,8 @@ function ReviewContent() {
                           onClick={() => setSelfAssessment(btn.q)}
                           className="flex-1 py-3 rounded-2xl flex flex-col items-center gap-1 transition-all duration-150 active:scale-95"
                           style={{
-                            backgroundColor: active ? 'var(--pink-pale)' : '#FAFAFA',
-                            border: active ? '2px solid var(--pink-primary)' : '1.5px solid #F0E8DD',
+                            backgroundColor: active ? 'var(--pink-pale)' : 'var(--bg-input)',
+                            border: active ? '2px solid var(--pink-primary)' : '1.5px solid var(--border-color)',
                             color: active ? 'var(--pink-primary)' : 'var(--text-muted)',
                             boxShadow: active ? '0 2px 8px rgba(255,143,171,0.2)' : 'none',
                           }}

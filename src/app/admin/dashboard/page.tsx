@@ -13,9 +13,9 @@ function MetricCardView({ card, prefix = '', suffix = '' }: { card: MetricCard; 
   const sfx = suffix || (isPercent ? '%' : '');
   const formatVal = (v: number) => typeof v === 'number' && !Number.isInteger(v) ? v.toFixed(1) : v;
   return (
-    <div className="bg-white rounded-xl p-5 border border-[#F5E6E0]" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-      <p className="text-sm text-gray-400 mb-2">{card.label}</p>
-      <p className="text-3xl font-extrabold text-gray-800">
+    <div className="bg-[var(--bg-card)] rounded-xl p-5 border border-[var(--border-color)]" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
+      <p className="text-sm text-[var(--text-muted)] mb-2">{card.label}</p>
+      <p className="text-3xl font-extrabold text-[var(--text-primary)]">
         {prefix}{formatVal(card.value)}{sfx}
       </p>
       <div className="flex items-center gap-1 mt-2">
@@ -27,7 +27,7 @@ function MetricCardView({ card, prefix = '', suffix = '' }: { card: MetricCard; 
         <span className={`text-xs font-semibold ${isUp ? 'text-emerald-500' : 'text-red-400'}`}>
           {isUp ? '+' : ''}{card.change}%
         </span>
-        <span className="text-xs text-gray-400 ml-1">vs 昨日 {formatVal(card.yesterdayValue)}{sfx}</span>
+        <span className="text-xs text-[var(--text-muted)] ml-1">vs 昨日 {formatVal(card.yesterdayValue)}{sfx}</span>
       </div>
     </div>
   );
@@ -41,16 +41,16 @@ function RevenueTrend({ data, granularity, setGranularity }: { data: RevenueTren
   ];
 
   return (
-    <div className="bg-white rounded-xl p-5 border border-[#F5E6E0]" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
+    <div className="bg-[var(--bg-card)] rounded-xl p-5 border border-[var(--border-color)]" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-semibold text-gray-700">30天收入趋势</h3>
-        <div className="flex gap-1 bg-gray-100 rounded-lg p-0.5">
+        <h3 className="text-sm font-semibold text-[var(--text-primary)]">30天收入趋势</h3>
+        <div className="flex gap-1 bg-[var(--bg-input)] rounded-lg p-0.5">
           {tabs.map((t) => (
             <button
               key={t.key}
               onClick={() => setGranularity(t.key)}
               className={`px-3 py-1 text-xs rounded-md transition-colors ${
-                granularity === t.key ? 'bg-white text-[#FF8FAB] font-semibold shadow-sm' : 'text-gray-500'
+                granularity === t.key ? 'bg-[var(--bg-card)] text-[var(--pink-primary)] font-semibold shadow-sm' : 'text-[var(--text-muted)]'
               }`}
             >
               {t.label}
@@ -77,17 +77,17 @@ function RevenueTrend({ data, granularity, setGranularity }: { data: RevenueTren
 
 function ServerStatus({ realtime }: { realtime: ServerRealtime }) {
   return (
-    <div className="bg-white rounded-xl p-5 border border-[#F5E6E0]" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-      <h3 className="text-sm font-semibold text-gray-700 mb-4">实时服务器状态</h3>
+    <div className="bg-[var(--bg-card)] rounded-xl p-5 border border-[var(--border-color)]" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
+      <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">实时服务器状态</h3>
 
       <div className="space-y-4">
         <div>
           <div className="flex items-center gap-2 mb-1.5">
-            <Cpu size={14} className="text-gray-400" />
-            <span className="text-xs text-gray-500">CPU</span>
-            <span className="text-xs font-semibold text-gray-700 ml-auto">{realtime.cpuPercent}%</span>
+            <Cpu size={14} className="text-[var(--text-muted)]" />
+            <span className="text-xs text-[var(--text-muted)]">CPU</span>
+            <span className="text-xs font-semibold text-[var(--text-primary)] ml-auto">{realtime.cpuPercent}%</span>
           </div>
-          <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+          <div className="h-2 bg-[var(--bg-input)] rounded-full overflow-hidden">
             <div
               className="h-full rounded-full transition-all duration-500"
               style={{ width: `${realtime.cpuPercent}%`, background: realtime.cpuPercent > 80 ? '#EF4444' : realtime.cpuPercent > 60 ? '#F59E0B' : '#34D399' }}
@@ -97,11 +97,11 @@ function ServerStatus({ realtime }: { realtime: ServerRealtime }) {
 
         <div>
           <div className="flex items-center gap-2 mb-1.5">
-            <HardDrive size={14} className="text-gray-400" />
-            <span className="text-xs text-gray-500">内存</span>
-            <span className="text-xs font-semibold text-gray-700 ml-auto">{realtime.memoryPercent}%</span>
+            <HardDrive size={14} className="text-[var(--text-muted)]" />
+            <span className="text-xs text-[var(--text-muted)]">内存</span>
+            <span className="text-xs font-semibold text-[var(--text-primary)] ml-auto">{realtime.memoryPercent}%</span>
           </div>
-          <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+          <div className="h-2 bg-[var(--bg-input)] rounded-full overflow-hidden">
             <div
               className="h-full rounded-full transition-all duration-500"
               style={{ width: `${realtime.memoryPercent}%`, background: realtime.memoryPercent > 80 ? '#EF4444' : realtime.memoryPercent > 60 ? '#F59E0B' : '#34D399' }}
@@ -109,21 +109,21 @@ function ServerStatus({ realtime }: { realtime: ServerRealtime }) {
           </div>
         </div>
 
-        <div className="flex items-center justify-between pt-2 border-t border-[#F5E6E0]">
+        <div className="flex items-center justify-between pt-2 border-t border-[var(--border-color)]">
           <div className="flex items-center gap-2">
-            <Server size={14} className="text-gray-400" />
-            <span className="text-xs text-gray-500">今日API请求</span>
+            <Server size={14} className="text-[var(--text-muted)]" />
+            <span className="text-xs text-[var(--text-muted)]">今日API请求</span>
           </div>
-          <span className="text-sm font-bold text-gray-700">{realtime.apiRequestsToday.toLocaleString()}</span>
+          <span className="text-sm font-bold text-[var(--text-primary)]">{realtime.apiRequestsToday.toLocaleString()}</span>
         </div>
 
         <Link
           href="/admin/content?feedbackStatus=pending"
-          className="flex items-center justify-between pt-2 border-t border-[#F5E6E0] hover:bg-[#FFF5F7] -mx-2 px-2 py-1 rounded-lg transition-colors"
+          className="flex items-center justify-between pt-2 border-t border-[var(--border-color)] hover:bg-[var(--bg-soft)] -mx-2 px-2 py-1 rounded-lg transition-colors"
         >
           <div className="flex items-center gap-2">
             <AlertTriangle size={14} className="text-amber-400" />
-            <span className="text-xs text-gray-500">待处理纠错</span>
+            <span className="text-xs text-[var(--text-muted)]">待处理纠错</span>
           </div>
           <span className="text-sm font-bold text-amber-500">{realtime.pendingFeedbackCount}</span>
         </Link>
@@ -141,16 +141,16 @@ function Funnel({ funnel }: { funnel: UserFunnel }) {
   ];
 
   return (
-    <div className="bg-white rounded-xl p-5 border border-[#F5E6E0]" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-      <h3 className="text-sm font-semibold text-gray-700 mb-4">今日用户漏斗</h3>
+    <div className="bg-[var(--bg-card)] rounded-xl p-5 border border-[var(--border-color)]" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
+      <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">今日用户漏斗</h3>
       <div className="space-y-3">
         {stages.map((s, i) => (
           <div key={s.label}>
             <div className="flex items-center justify-between mb-1">
-              <span className="text-xs text-gray-500">{s.label}</span>
-              <span className="text-xs font-semibold text-gray-700">{s.total.toLocaleString()}</span>
+              <span className="text-xs text-[var(--text-muted)]">{s.label}</span>
+              <span className="text-xs font-semibold text-[var(--text-primary)]">{s.total.toLocaleString()}</span>
             </div>
-            <div className="h-4 bg-gray-100 rounded-full overflow-hidden">
+            <div className="h-4 bg-[var(--bg-input)] rounded-full overflow-hidden">
               <div
                 className="h-full rounded-full"
                 style={{
@@ -160,7 +160,7 @@ function Funnel({ funnel }: { funnel: UserFunnel }) {
                 }}
               />
             </div>
-            <p className="text-[10px] text-gray-400 mt-0.5">{s.rate}% 转化</p>
+            <p className="text-[10px] text-[var(--text-muted)] mt-0.5">{s.rate}% 转化</p>
           </div>
         ))}
       </div>
@@ -170,16 +170,16 @@ function Funnel({ funnel }: { funnel: UserFunnel }) {
 
 function FeatureRanking({ features }: { features: FeatureUsage[] }) {
   return (
-    <div className="bg-white rounded-xl p-5 border border-[#F5E6E0]" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-      <h3 className="text-sm font-semibold text-gray-700 mb-4">功能使用热度</h3>
+    <div className="bg-[var(--bg-card)] rounded-xl p-5 border border-[var(--border-color)]" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
+      <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">功能使用热度</h3>
       <div className="space-y-3">
         {features.map((f) => (
           <div key={f.feature}>
             <div className="flex items-center justify-between mb-1">
-              <span className="text-xs text-gray-600">{f.icon} {f.feature}</span>
-              <span className="text-xs text-gray-400">{f.count.toLocaleString()}次</span>
+              <span className="text-xs text-[var(--text-secondary)]">{f.icon} {f.feature}</span>
+              <span className="text-xs text-[var(--text-muted)]">{f.count.toLocaleString()}次</span>
             </div>
-            <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+            <div className="h-2 bg-[var(--bg-input)] rounded-full overflow-hidden">
               <div
                 className="h-full rounded-full"
                 style={{ width: `${f.totalPercent}%`, background: 'linear-gradient(90deg, #FF8FAB, #FFB8C9)' }}
@@ -201,8 +201,8 @@ function ActivityFeed({ activities }: { activities: ActivityFeedItem[] }) {
   };
 
   return (
-    <div className="bg-white rounded-xl p-5 border border-[#F5E6E0]" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-      <h3 className="text-sm font-semibold text-gray-700 mb-4">最近动态</h3>
+    <div className="bg-[var(--bg-card)] rounded-xl p-5 border border-[var(--border-color)]" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
+      <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">最近动态</h3>
       <div className="space-y-3 max-h-[320px] overflow-y-auto">
         {activities.map((a) => {
           const config = typeConfig[a.type];
@@ -213,13 +213,13 @@ function ActivityFeed({ activities }: { activities: ActivityFeedItem[] }) {
                 style={{ backgroundColor: config.color }}
               />
               <div className="flex-1 min-w-0">
-                <p className="text-xs text-gray-600">{a.message}</p>
-                <p className="text-[10px] text-gray-400 mt-0.5">
+                <p className="text-xs text-[var(--text-secondary)]">{a.message}</p>
+                <p className="text-[10px] text-[var(--text-muted)] mt-0.5">
                   {new Date(a.timestamp).toLocaleString('zh-CN', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                 </p>
               </div>
               {a.link && (
-                <Link href={a.link} className="text-[10px] text-[#FF8FAB] hover:underline shrink-0 mt-0.5">
+                <Link href={a.link} className="text-[10px] text-[var(--pink-primary)] hover:underline shrink-0 mt-0.5">
                   查看
                 </Link>
               )}
@@ -249,8 +249,8 @@ export default function DashboardPage() {
       <div className="flex items-center gap-3 mb-2">
         <span className="text-3xl">🐰</span>
         <div>
-          <h1 className="text-xl font-bold text-gray-800">仪表盘</h1>
-          <p className="text-sm text-gray-400">今天的数据都在这里，토리帮你看着</p>
+          <h1 className="text-xl font-bold text-[var(--text-primary)]">仪表盘</h1>
+          <p className="text-sm text-[var(--text-muted)]">今天的数据都在这里，토리帮你看着</p>
         </div>
       </div>
 

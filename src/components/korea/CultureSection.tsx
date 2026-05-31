@@ -46,6 +46,12 @@ export function CultureSection() {
                 <div className="bg-[var(--bg-input)] rounded-xl p-3">
                   <p className="text-sm text-[var(--text-primary)] leading-relaxed">{item.description}</p>
                 </div>
+                {(item.updatedAt || item.source) && (
+                  <div className="flex items-center gap-3 text-[14px] text-[var(--text-muted)]">
+                    {item.updatedAt && <span>更新: {item.updatedAt}</span>}
+                    {item.source && <span>来源: {item.source}</span>}
+                  </div>
+                )}
                 {item.relatedWords && item.relatedWords.length > 0 && (
                   <div>
                     <h4 className="text-xs font-medium text-[var(--text-muted)] mb-2 flex items-center gap-1.5">

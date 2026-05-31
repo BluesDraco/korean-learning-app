@@ -639,7 +639,7 @@ export default function LearnPage() {
                 <div className="space-y-2">
                   {gc.options.map((opt, oi) => {
                     const isChosen = grammarCheckIdx === qi && grammarCheckAnswer !== null;
-                    let btnStyle = 'bg-white dark:bg-[var(--bg-card)] border border-[var(--border-color)]';
+                    let btnStyle = 'bg-[var(--bg-card)] border border-[var(--border-color)]';
                     if (isChosen) {
                       if (oi === gc.correct) btnStyle = 'bg-[var(--mint-soft)]/15 border-[var(--mint-soft)]/50 text-[var(--mint-soft)]';
                       else if (oi === grammarCheckAnswer) btnStyle = 'bg-[var(--color-danger)]/10 border-[var(--color-danger)]/50 text-[var(--color-danger)]';

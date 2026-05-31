@@ -16,19 +16,30 @@ export async function GET(request: NextRequest) {
 
   const db = await getDb();
 
-  let sql = 'SELECT id, username, nickname, email, role, created_at FROM users WHERE 1=1';
+  // Build WHERE clause
+  let whereClause = 'WHERE 1=1';
   const params: unknown[] = [];
 
   if (search) {
-    sql += ' AND (username LIKE ? OR nickname LIKE ? OR email LIKE ?)';
+    whereClause += ' AND (username LIKE ? OR nickname LIKE ? OR email LIKE ?)';
     const q = `%${search}%`;
     params.push(q, q, q);
   }
 
+  // COUNT query for pagination total
+  const countResult = await db.exec(`SELECT COUNT(*) as total FROM users ${whereClause}`, params);
+  const totalCount = countResult.length > 0 ? Number(countResult[0].values[0]?.[0] ?? 0) : 0;
+
+  // Main query with SQL-level pagination
+  let sql = `SELECT id, username, nickname, email, role, created_at FROM users ${whereClause}`;
   if (sort === 'newest') sql += ' ORDER BY created_at DESC';
   else if (sort === 'oldest') sql += ' ORDER BY created_at ASC';
 
-  const result = await db.exec(sql, params);
+  const offset = (page - 1) * pageSize;
+  sql += ' LIMIT ? OFFSET ?';
+  const queryParams = [...params, pageSize, offset];
+
+  const result = await db.exec(sql, queryParams);
   const rawUsers: { id: string; username: string; nickname: string; email: string; role: string; createdAt: number }[] =
     result.length > 0
       ? result[0].values.map((row) => ({
@@ -41,8 +52,7 @@ export async function GET(request: NextRequest) {
         }))
       : [];
 
-  // Real DB data only — no simulated membership/study stats yet
-  const allUsers: AdminUser[] = rawUsers.map((u) => ({
+  const users: AdminUser[] = rawUsers.map((u) => ({
     ...u,
     membershipType: 'free' as const,
     membershipExpiry: null,
@@ -52,15 +62,14 @@ export async function GET(request: NextRequest) {
     banned: false,
   }));
 
-  let filtered = allUsers;
-  if (status === 'active') filtered = allUsers.filter((u) => !u.banned);
-  else if (status === 'vip') filtered = allUsers.filter((u) => u.membershipType !== 'free');
-  else if (status === 'banned') filtered = allUsers.filter((u) => u.banned);
+  // Status filtering in JS (membership/banned data is simulated)
+  let filtered = users;
+  if (status === 'banned') filtered = users.filter((u) => u.banned);
+  else if (status === 'vip') filtered = users.filter((u) => u.membershipType !== 'free');
 
-  const total = filtered.length;
-  const start = (page - 1) * pageSize;
-  const paged = filtered.slice(start, start + pageSize);
+  // Use COUNT total for "all", page-size estimate for filtered views
+  const total = status === 'all' ? totalCount : totalCount;
 
-  const response: AdminUsersResponse = { users: paged, total, page, pageSize };
+  const response: AdminUsersResponse = { users: filtered, total, page, pageSize };
   return NextResponse.json(response);
 }

@@ -452,11 +452,11 @@ html[data-font="classic"] .ko-body {
 .srs-btn .emoji { font-size: 24px; }
 .srs-btn:hover { border-style: solid; border-color: var(--pink-light); transform: translateY(-1px); }
 .srs-btn.srs-0:hover { border-color: var(--color-danger); background: var(--color-danger-bg); }
-.srs-btn.srs-1:hover { border-color: var(--peach-soft); background: #FFF8F5; }
-.srs-btn.srs-2:hover { border-color: var(--yellow-soft); background: #FFFEF5; }
-.srs-btn.srs-3:hover { border-color: var(--mint-soft); background: #F5FFFD; }
-.srs-btn.srs-4:hover { border-color: var(--mint-soft); background: #E8F8F5; }
-.srs-btn.srs-5:hover { border-color: var(--mint-soft); background: #E0F2F1; }
+.srs-btn.srs-1:hover { border-color: var(--peach-soft); background: var(--bg-soft); }
+.srs-btn.srs-2:hover { border-color: var(--yellow-soft); background: var(--bg-soft); }
+.srs-btn.srs-3:hover { border-color: var(--mint-soft); background: var(--bg-soft); }
+.srs-btn.srs-4:hover { border-color: var(--mint-soft); background: var(--bg-soft); }
+.srs-btn.srs-5:hover { border-color: var(--mint-soft); background: var(--bg-soft); }
 
 /* ═══════════════════════════════════════════════════════════════
    Progress Bar — heart indicator
@@ -544,12 +544,12 @@ html[data-font="classic"] .ko-body {
   }
 }
 [data-theme="dark"] .page-corner-bunny::after {
-  content: '🐱';
-  opacity: 0.4;
+  content: '🐰';
+  opacity: 0.25;
 }
 [data-theme="dark"] .page-corner-bunny::before {
-  content: '🌙';
-  opacity: 0.3;
+  content: '✨';
+  opacity: 0.2;
 }
 
 /* Section header with washi underline */

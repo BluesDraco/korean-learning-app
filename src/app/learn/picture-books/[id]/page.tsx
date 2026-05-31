@@ -89,7 +89,7 @@ function IllustrationImage({ src, fallback, alt }: { src: string; fallback: stri
    ═══════════════════════════════════════════════════════ */
 function ImageCard({ page, pageIdx, seed }: { page: PictureBookPage; pageIdx: number; seed: number }) {
   return (
-    <div className="w-full h-full rounded-2xl overflow-hidden shadow-lg relative" style={{ backgroundColor: '#FDF8F0' }}>
+    <div className="w-full h-full rounded-2xl overflow-hidden shadow-lg relative" style={{ backgroundColor: 'var(--bg-soft)' }}>
       <div className="absolute inset-0 pointer-events-none z-10" style={{
         backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E")`,
         backgroundRepeat: 'repeat',
@@ -129,7 +129,7 @@ function VocabSummaryPanel({ page }: { page: PictureBookPage }) {
           {page.vocab.map((v, i) => (
             <div
               key={v.word}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/40 transition-colors group"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[var(--bg-card)]/40 transition-colors group"
             >
               {/* Number */}
               <span
@@ -162,7 +162,7 @@ function VocabSummaryPanel({ page }: { page: PictureBookPage }) {
               const words = page.vocab.map((v) => v.word).join(', ');
               speak(words, 0.7);
             }}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/70 border border-[var(--border-color)] text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--pink-primary)] hover:border-[var(--pink-primary)]/30 transition-all"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[var(--bg-card)]/70 border border-[var(--border-color)] text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--pink-primary)] hover:border-[var(--pink-primary)]/30 transition-all"
           >
             <Volume2 size={14} />
             朗读全部词汇
@@ -237,7 +237,7 @@ function TextPanel({ page, showChinese, onToggleChinese }: { page: PictureBookPa
             className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full border text-sm font-medium transition-all ${
               showChinese
                 ? 'bg-[var(--pink-primary)]/10 border-[var(--pink-primary)]/30 text-[var(--pink-primary)]'
-                : 'bg-white/60 border-[var(--border-color)] text-[var(--text-muted)] hover:border-[var(--pink-primary)]/30 hover:text-[var(--pink-primary)]'
+                : 'bg-[var(--bg-card)]/60 border-[var(--border-color)] text-[var(--text-muted)] hover:border-[var(--pink-primary)]/30 hover:text-[var(--pink-primary)]'
             }`}
           >
             {showChinese ? '隐藏译文' : '显示译文'}
@@ -381,12 +381,12 @@ export default function PictureBookReaderPage() {
   const enteringTransform = flipActive ? 'rotateY(0deg)' : 'rotateY(180deg)';
 
   return (
-    <div className="flex flex-col overflow-hidden" style={{ background: 'linear-gradient(180deg, #f9f5ef 0%, #f2ece3 100%)', height: 'calc(100dvh - 96px)' }}>
+    <div className="flex flex-col overflow-hidden" style={{ background: 'linear-gradient(180deg, var(--bg-soft) 0%, var(--bg-input) 100%)', height: 'calc(100dvh - 96px)' }}>
       {/* Top bar */}
       <header className="flex items-center gap-3 px-4 sm:px-6 py-1.5 shrink-0 relative">
         <Link
           href="/learn/picture-books"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/70 hover:bg-white text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-transparent hover:border-[var(--border-color)] hover:shadow-sm transition-all text-base font-medium"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[var(--bg-card)]/70 hover:bg-[var(--bg-card)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-transparent hover:border-[var(--border-color)] hover:shadow-sm transition-all text-base font-medium"
         >
           <ArrowLeft size={18} />
           <span className="hidden sm:inline">绘本列表</span>
@@ -400,7 +400,7 @@ export default function PictureBookReaderPage() {
         <button
           onClick={goPrev}
           disabled={!canGoPrev || !!flip}
-          className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-40 w-9 h-9 rounded-full flex items-center justify-center bg-white/50 hover:bg-[var(--pink-primary)] text-[var(--text-muted)] hover:text-white backdrop-blur-sm shadow-sm hover:shadow-md transition-all opacity-0 md:opacity-100 disabled:opacity-0 disabled:pointer-events-none"
+          className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-40 w-9 h-9 rounded-full flex items-center justify-center bg-[var(--bg-card)]/50 hover:bg-[var(--pink-primary)] text-[var(--text-muted)] hover:text-white backdrop-blur-sm shadow-sm hover:shadow-md transition-all opacity-0 md:opacity-100 disabled:opacity-0 disabled:pointer-events-none"
           aria-label="上一页"
         >
           <ChevronLeft size={18} />
@@ -410,7 +410,7 @@ export default function PictureBookReaderPage() {
         <button
           onClick={goNext}
           disabled={!canGoNext || !!flip}
-          className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-40 w-9 h-9 rounded-full flex items-center justify-center bg-white/50 hover:bg-[var(--pink-primary)] text-[var(--text-muted)] hover:text-white backdrop-blur-sm shadow-sm hover:shadow-md transition-all opacity-0 md:opacity-100 disabled:opacity-0 disabled:pointer-events-none"
+          className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-40 w-9 h-9 rounded-full flex items-center justify-center bg-[var(--bg-card)]/50 hover:bg-[var(--pink-primary)] text-[var(--text-muted)] hover:text-white backdrop-blur-sm shadow-sm hover:shadow-md transition-all opacity-0 md:opacity-100 disabled:opacity-0 disabled:pointer-events-none"
           aria-label="下一页"
         >
           <ChevronRight size={18} />
@@ -437,14 +437,14 @@ export default function PictureBookReaderPage() {
                 <div className="absolute inset-0 z-20 rounded-2xl overflow-hidden shadow-lg" style={{
                   transformOrigin: 'left center', transform: leavingTransform,
                   transition: flipActive ? `transform ${FLIP_DURATION}ms ease-in-out` : 'none',
-                  backfaceVisibility: 'hidden', backgroundColor: '#FDF8F0',
+                  backfaceVisibility: 'hidden', backgroundColor: 'var(--bg-soft)',
                 }}>
                   <ImageCard page={book.pages[flip.dir === 'forward' ? currentPage : flip.to]} pageIdx={flip.dir === 'forward' ? currentPage : flip.to} seed={decoSeed} />
                 </div>
                 <div className="absolute inset-0 z-10 rounded-2xl overflow-hidden shadow-lg" style={{
                   transformOrigin: 'left center', transform: enteringTransform,
                   transition: flipActive ? `transform ${FLIP_DURATION}ms ease-in-out` : 'none',
-                  backfaceVisibility: 'hidden', backgroundColor: '#FDF8F0',
+                  backfaceVisibility: 'hidden', backgroundColor: 'var(--bg-soft)',
                 }}>
                   <ImageCard page={book.pages[flip.to]} pageIdx={flip.to} seed={decoSeed} />
                 </div>
@@ -466,7 +466,7 @@ export default function PictureBookReaderPage() {
 
       {/* Bottom page numbers */}
       <nav className="flex items-center justify-center gap-1 pb-1.5 px-4 shrink-0 -mt-3">
-        <div className="flex items-center gap-0.5 bg-white/40 backdrop-blur-sm rounded-xl px-2 py-1.5 overflow-x-auto max-w-full">
+        <div className="flex items-center gap-0.5 bg-[var(--bg-card)]/40 backdrop-blur-sm rounded-xl px-2 py-1.5 overflow-x-auto max-w-full">
           {Array.from({ length: totalPages }).map((_, i) => (
             <button
               key={i}
@@ -475,7 +475,7 @@ export default function PictureBookReaderPage() {
               className={`shrink-0 min-w-[30px] h-7 rounded-lg text-[13px] font-medium tabular-nums transition-all ${
                 i === currentPage
                   ? 'bg-[var(--pink-primary)] text-white shadow-sm'
-                  : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-white/70'
+                  : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card)]/70'
               }`}
               aria-label={`第 ${i + 1} 页`}
             >

@@ -45,19 +45,19 @@ export default function ContentPage() {
       <div className="flex items-center gap-3 mb-2">
         <span className="text-3xl">🐰</span>
         <div>
-          <h1 className="text-xl font-bold text-gray-800">内容管理</h1>
-          <p className="text-sm text-gray-400">模块统计与纠错反馈</p>
+          <h1 className="text-xl font-bold text-[var(--text-primary)]">内容管理</h1>
+          <p className="text-sm text-[var(--text-muted)]">模块统计与纠错反馈</p>
         </div>
       </div>
 
       {/* Module stats */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
         {data.moduleStats.map((m) => (
-          <div key={m.module} className="bg-white rounded-xl p-4 text-center border border-[#F5E6E0]" style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
+          <div key={m.module} className="bg-[var(--bg-card)] rounded-xl p-4 text-center border border-[var(--border-color)]" style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
             <p className="text-2xl mb-1">{m.icon}</p>
-            <p className="text-lg font-extrabold text-gray-800">{m.totalItems}</p>
-            <p className="text-xs text-gray-400">{m.module}</p>
-            <p className="text-[10px] text-gray-300 mt-1">
+            <p className="text-lg font-extrabold text-[var(--text-primary)]">{m.totalItems}</p>
+            <p className="text-xs text-[var(--text-muted)]">{m.module}</p>
+            <p className="text-[10px] text-[var(--text-placeholder)] mt-1">
               更新于 {new Date(m.lastUpdated).toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' })}
             </p>
           </div>
@@ -65,19 +65,19 @@ export default function ContentPage() {
       </div>
 
       {/* Feedback */}
-      <div className="bg-white rounded-xl border border-[#F5E6E0]" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-        <div className="flex items-center justify-between px-5 py-4 border-b border-[#F5E6E0]">
-          <h3 className="text-sm font-semibold text-gray-700">
+      <div className="bg-[var(--bg-card)] rounded-xl border border-[var(--border-color)]" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
+        <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border-color)]">
+          <h3 className="text-sm font-semibold text-[var(--text-primary)]">
             纠错反馈
-            <span className="ml-2 text-xs font-normal text-gray-400">共 {data.total} 条</span>
+            <span className="ml-2 text-xs font-normal text-[var(--text-muted)]">共 {data.total} 条</span>
           </h3>
-          <div className="flex gap-1 bg-gray-100 rounded-lg p-0.5">
+          <div className="flex gap-1 bg-[var(--bg-input)] rounded-lg p-0.5">
             {statusTabs.map((t) => (
               <button
                 key={t.key}
                 onClick={() => setStatus(t.key)}
                 className={`px-3 py-1 text-xs rounded-md transition-colors ${
-                  status === t.key ? 'bg-white text-[#FF8FAB] font-semibold shadow-sm' : 'text-gray-500'
+                  status === t.key ? 'bg-[var(--bg-card)] text-[var(--pink-primary)] font-semibold shadow-sm' : 'text-[var(--text-muted)]'
                 }`}
               >
                 {t.label}
@@ -88,10 +88,10 @@ export default function ContentPage() {
 
         <div className="divide-y divide-[#F5E6E0]">
           {data.feedbacks.length === 0 && (
-            <div className="px-5 py-12 text-center text-sm text-gray-400">暂无{statusTabs.find((t) => t.key === status)?.label}反馈</div>
+            <div className="px-5 py-12 text-center text-sm text-[var(--text-muted)]">暂无{statusTabs.find((t) => t.key === status)?.label}反馈</div>
           )}
           {data.feedbacks.map((f) => (
-            <div key={f.id} className="px-5 py-4 hover:bg-[#FFFDF9] transition-colors">
+            <div key={f.id} className="px-5 py-4 hover:bg-[var(--bg-soft)] transition-colors">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1.5">
@@ -99,29 +99,29 @@ export default function ContentPage() {
                       f.type === 'word_error' ? 'bg-amber-50 text-amber-500' :
                       f.type === 'translation_error' ? 'bg-blue-50 text-blue-500' :
                       f.type === 'audio_error' ? 'bg-purple-50 text-purple-500' :
-                      'bg-gray-50 text-gray-400'
+                      'bg-[var(--bg-input)] text-[var(--text-muted)]'
                     }`}>
                       {typeLabels[f.type]}
                     </span>
                     <span className={`text-xs px-2 py-0.5 rounded-full ${
                       f.status === 'pending' ? 'bg-red-50 text-red-400' :
                       f.status === 'resolved' ? 'bg-emerald-50 text-emerald-500' :
-                      'bg-gray-50 text-gray-400'
+                      'bg-[var(--bg-input)] text-[var(--text-muted)]'
                     }`}>
                       {f.status === 'pending' ? '待处理' : f.status === 'resolved' ? '已修复' : '已忽略'}
                     </span>
                     {f.targetEntryName && (
-                      <span className="text-xs text-gray-400">关联: {f.targetEntryName}</span>
+                      <span className="text-xs text-[var(--text-muted)]">关联: {f.targetEntryName}</span>
                     )}
                   </div>
-                  <p className="text-sm text-gray-700">{f.content}</p>
+                  <p className="text-sm text-[var(--text-primary)]">{f.content}</p>
                   <div className="flex items-center gap-3 mt-2">
-                    <span className="text-xs text-gray-400">{f.username}</span>
-                    <span className="text-xs text-gray-300">
+                    <span className="text-xs text-[var(--text-muted)]">{f.username}</span>
+                    <span className="text-xs text-[var(--text-placeholder)]">
                       {new Date(f.createdAt).toLocaleString('zh-CN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                     </span>
                     {f.resolvedAt && (
-                      <span className="text-xs text-gray-300">
+                      <span className="text-xs text-[var(--text-placeholder)]">
                         处理于 {new Date(f.resolvedAt).toLocaleDateString('zh-CN')}
                       </span>
                     )}
@@ -131,14 +131,14 @@ export default function ContentPage() {
                   <div className="flex items-center gap-1.5 shrink-0">
                     <button
                       onClick={() => handleResolve(f.id, 'resolved')}
-                      className="p-1.5 rounded-lg hover:bg-emerald-50 text-gray-400 hover:text-emerald-500 transition-colors"
+                      className="p-1.5 rounded-lg hover:bg-emerald-50 text-[var(--text-muted)] hover:text-emerald-500 transition-colors"
                       title="标记已修复"
                     >
                       <Check size={16} />
                     </button>
                     <button
                       onClick={() => handleResolve(f.id, 'ignored')}
-                      className="p-1.5 rounded-lg hover:bg-gray-50 text-gray-400 hover:text-gray-500 transition-colors"
+                      className="p-1.5 rounded-lg hover:bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--text-muted)] transition-colors"
                       title="忽略"
                     >
                       <X size={16} />

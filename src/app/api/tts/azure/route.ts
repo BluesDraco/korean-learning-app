@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { fetchWithTimeout } from '@/lib/fetch';
 
 const AZURE_KEY = process.env.AZURE_TTS_KEY;
 const AZURE_REGION = process.env.AZURE_TTS_REGION || 'eastus';
@@ -43,10 +44,8 @@ export async function POST(req: Request) {
 
     const url = `https://${AZURE_REGION}.tts.speech.microsoft.com/cognitiveservices/v1`;
 
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 15000);
-
-    const res = await fetch(url, {
+    const res = await fetchWithTimeout(url, {
+      timeoutMs: 15_000,
       method: 'POST',
       headers: {
         'Ocp-Apim-Subscription-Key': AZURE_KEY,
@@ -54,8 +53,7 @@ export async function POST(req: Request) {
         'X-Microsoft-OutputFormat': 'audio-24khz-48kbitrate-mono-mp3',
       },
       body: ssml,
-      signal: controller.signal,
-    }).finally(() => clearTimeout(timeout));
+    });
 
     if (!res.ok) {
       const err = await res.text().catch(() => 'unknown');
@@ -70,7 +68,7 @@ export async function POST(req: Request) {
       },
     });
   } catch (e: any) {
-    if (e.name === 'AbortError') {
+    if (e.name === 'AbortError' || e.name === 'FetchTimeoutError') {
       return NextResponse.json({ error: 'Azure TTS timeout' }, { status: 504 });
     }
     return NextResponse.json({ error: e.message }, { status: 500 });

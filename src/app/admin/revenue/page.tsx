@@ -39,8 +39,8 @@ export default function RevenuePage() {
       <div className="flex items-center gap-3 mb-2">
         <span className="text-3xl">🐰</span>
         <div>
-          <h1 className="text-xl font-bold text-gray-800">收入中心</h1>
-          <p className="text-sm text-gray-400">收入概览和订单明细</p>
+          <h1 className="text-xl font-bold text-[var(--text-primary)]">收入中心</h1>
+          <p className="text-sm text-[var(--text-muted)]">收入概览和订单明细</p>
         </div>
       </div>
 
@@ -52,26 +52,26 @@ export default function RevenuePage() {
           { label: '本月收入', value: data.summary.thisMonth },
           { label: '累计收入', value: data.summary.total },
         ].map((s) => (
-          <div key={s.label} className="bg-white rounded-xl p-5 border border-[#F5E6E0]" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-            <p className="text-sm text-gray-400 mb-1">{s.label}</p>
-            <p className="text-2xl font-extrabold text-gray-800">¥{s.value.toLocaleString()}</p>
+          <div key={s.label} className="bg-[var(--bg-card)] rounded-xl p-5 border border-[var(--border-color)]" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
+            <p className="text-sm text-[var(--text-muted)] mb-1">{s.label}</p>
+            <p className="text-2xl font-extrabold text-[var(--text-primary)]">¥{s.value.toLocaleString()}</p>
           </div>
         ))}
       </div>
 
       {/* Orders table */}
-      <div className="bg-white rounded-xl border border-[#F5E6E0]" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-        <div className="flex items-center justify-between px-5 py-4 border-b border-[#F5E6E0]">
-          <h3 className="text-sm font-semibold text-gray-700">订单明细</h3>
+      <div className="bg-[var(--bg-card)] rounded-xl border border-[var(--border-color)]" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
+        <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border-color)]">
+          <h3 className="text-sm font-semibold text-[var(--text-primary)]">订单明细</h3>
           <div className="flex items-center gap-3">
             {/* Type filter */}
-            <div className="flex gap-1 bg-gray-100 rounded-lg p-0.5">
+            <div className="flex gap-1 bg-[var(--bg-input)] rounded-lg p-0.5">
               {Object.entries(typeLabels).map(([k, v]) => (
                 <button
                   key={k}
                   onClick={() => { setType(k); setPage(1); }}
                   className={`px-3 py-1 text-xs rounded-md transition-colors ${
-                    type === k ? 'bg-white text-[#FF8FAB] font-semibold shadow-sm' : 'text-gray-500'
+                    type === k ? 'bg-[var(--bg-card)] text-[var(--pink-primary)] font-semibold shadow-sm' : 'text-[var(--text-muted)]'
                   }`}
                 >
                   {v}
@@ -80,7 +80,7 @@ export default function RevenuePage() {
             </div>
             <button
               onClick={exportCSV}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-lg border border-[#F5E6E0] text-gray-500 hover:text-[#FF8FAB] hover:border-[#FF8FAB] transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-lg border border-[var(--border-color)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] hover:border-[#FF8FAB] transition-colors"
             >
               <Download size={14} />
               导出CSV
@@ -91,20 +91,20 @@ export default function RevenuePage() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-[#F5E6E0] bg-[#FFFDF9]">
-                <th className="text-left px-5 py-3 text-xs text-gray-400 font-medium">订单ID</th>
-                <th className="text-left px-5 py-3 text-xs text-gray-400 font-medium">用户</th>
-                <th className="text-left px-5 py-3 text-xs text-gray-400 font-medium">类型</th>
-                <th className="text-right px-5 py-3 text-xs text-gray-400 font-medium">金额</th>
-                <th className="text-right px-5 py-3 text-xs text-gray-400 font-medium">时间</th>
-                <th className="text-right px-5 py-3 text-xs text-gray-400 font-medium">状态</th>
+              <tr className="border-b border-[var(--border-color)] bg-[var(--bg-soft)]">
+                <th className="text-left px-5 py-3 text-xs text-[var(--text-muted)] font-medium">订单ID</th>
+                <th className="text-left px-5 py-3 text-xs text-[var(--text-muted)] font-medium">用户</th>
+                <th className="text-left px-5 py-3 text-xs text-[var(--text-muted)] font-medium">类型</th>
+                <th className="text-right px-5 py-3 text-xs text-[var(--text-muted)] font-medium">金额</th>
+                <th className="text-right px-5 py-3 text-xs text-[var(--text-muted)] font-medium">时间</th>
+                <th className="text-right px-5 py-3 text-xs text-[var(--text-muted)] font-medium">状态</th>
               </tr>
             </thead>
             <tbody>
               {data.orders.map((o) => (
-                <tr key={o.id} className="border-b border-[#F5E6E0] hover:bg-[#FFFDF9] transition-colors">
-                  <td className="px-5 py-3 text-xs text-gray-500 font-mono">{o.id}</td>
-                  <td className="px-5 py-3 text-xs text-gray-700">{o.username}</td>
+                <tr key={o.id} className="border-b border-[var(--border-color)] hover:bg-[var(--bg-soft)] transition-colors">
+                  <td className="px-5 py-3 text-xs text-[var(--text-muted)] font-mono">{o.id}</td>
+                  <td className="px-5 py-3 text-xs text-[var(--text-primary)]">{o.username}</td>
                   <td className="px-5 py-3">
                     <span className={`text-xs px-2 py-0.5 rounded-full ${
                       o.type === 'monthly' ? 'bg-blue-50 text-blue-500' :
@@ -114,8 +114,8 @@ export default function RevenuePage() {
                       {typeLabels[o.type]}
                     </span>
                   </td>
-                  <td className="px-5 py-3 text-right text-xs font-semibold text-gray-700">¥{o.amount}</td>
-                  <td className="px-5 py-3 text-right text-xs text-gray-400">
+                  <td className="px-5 py-3 text-right text-xs font-semibold text-[var(--text-primary)]">¥{o.amount}</td>
+                  <td className="px-5 py-3 text-right text-xs text-[var(--text-muted)]">
                     {new Date(o.createdAt).toLocaleDateString('zh-CN')}
                   </td>
                   <td className="px-5 py-3 text-right">
@@ -132,21 +132,21 @@ export default function RevenuePage() {
         </div>
 
         {/* Pagination */}
-        <div className="flex items-center justify-between px-5 py-3 border-t border-[#F5E6E0]">
-          <span className="text-xs text-gray-400">共 {data.total} 条</span>
+        <div className="flex items-center justify-between px-5 py-3 border-t border-[var(--border-color)]">
+          <span className="text-xs text-[var(--text-muted)]">共 {data.total} 条</span>
           <div className="flex gap-2">
             <button
               onClick={() => setPage(Math.max(1, page - 1))}
               disabled={page === 1}
-              className="px-3 py-1 text-xs rounded-lg border border-[#F5E6E0] text-gray-500 disabled:opacity-30 hover:border-[#FF8FAB] transition-colors"
+              className="px-3 py-1 text-xs rounded-lg border border-[var(--border-color)] text-[var(--text-muted)] disabled:opacity-30 hover:border-[#FF8FAB] transition-colors"
             >
               上一页
             </button>
-            <span className="px-3 py-1 text-xs text-gray-500">第 {page} 页</span>
+            <span className="px-3 py-1 text-xs text-[var(--text-muted)]">第 {page} 页</span>
             <button
               onClick={() => setPage(page + 1)}
               disabled={page * 15 >= data.total}
-              className="px-3 py-1 text-xs rounded-lg border border-[#F5E6E0] text-gray-500 disabled:opacity-30 hover:border-[#FF8FAB] transition-colors"
+              className="px-3 py-1 text-xs rounded-lg border border-[var(--border-color)] text-[var(--text-muted)] disabled:opacity-30 hover:border-[#FF8FAB] transition-colors"
             >
               下一页
             </button>

@@ -8,6 +8,8 @@ export interface CultureItem {
   emoji: string;
   tags: string[];
   relatedWords?: { word: string; meaning: string }[];
+  updatedAt?: string;
+  source?: string;
 }
 
 export interface HistoryPeriod {
@@ -19,6 +21,8 @@ export interface HistoryPeriod {
   emoji: string;
   keyEvents: string[];
   relatedWords: { word: string; meaning: string }[];
+  updatedAt?: string;
+  source?: string;
 }
 
 export interface TravelCity {
@@ -29,6 +33,8 @@ export interface TravelCity {
   emoji: string;
   attractions: { name: string; nameKo: string; desc: string }[];
   phrases: { ko: string; zh: string }[];
+  updatedAt?: string;
+  source?: string;
 }
 
 export interface FoodItem {
@@ -40,6 +46,8 @@ export interface FoodItem {
   category: 'main' | 'side' | 'soup' | 'snack' | 'drink' | 'dessert';
   phrases: { ko: string; zh: string }[];
   ingredients: string[];
+  updatedAt?: string;
+  source?: string;
 }
 
 // ── Culture ─────────────────────────────────────────────────────
@@ -48,6 +56,7 @@ export const cultureItems: CultureItem[] = [
     id: 'c-01', title: '韩服', titleKo: '한복', emoji: '👘',
     description: '韩服是韩国传统服饰，以线条优美、色彩艳丽著称。女性韩服由短上衣(저고리)和高腰裙(치마)组成，男性由短上衣和宽松裤(바지)组成。现代韩服在生活中较少穿着，但在节日(설날, 추석)、婚礼等重要场合仍有穿着传统。',
     tags: ['传统', '服饰', '节日'],
+    updatedAt: '2026-05-30', source: '韩国文化财厅',
     relatedWords: [
       { word: '한복', meaning: '韩服' },
       { word: '저고리', meaning: '短上衣' },
@@ -60,6 +69,7 @@ export const cultureItems: CultureItem[] = [
     id: 'c-02', title: '韩文节', titleKo: '한글날', emoji: '📜',
     description: '每年10月9日是韩文节(한글날)，纪念世宗大王于1443年创制训民正音(훈민정음)。韩文被公认为世界上最科学的文字之一，其字母形状模仿发音器官。韩国是唯一一个为文字设立国定假日的国家。',
     tags: ['节日', '文字', '历史'],
+    updatedAt: '2026-05-30', source: '国立韩文博物馆',
     relatedWords: [
       { word: '한글날', meaning: '韩文节' },
       { word: '세종대왕', meaning: '世宗大王' },
@@ -70,6 +80,7 @@ export const cultureItems: CultureItem[] = [
     id: 'c-03', title: '春节（韩国）', titleKo: '설날', emoji: '🎊',
     description: '※ 春节起源于中国，后传入朝鲜半岛并本土化。在韩国，설날（农历1月1日）是重要传统节日之一。韩国人穿韩服、祭祀祖先(차례)、吃年糕汤(떡국)、给长辈拜年(세배)、玩传统游戏如掷柶(윷놀이)。韩国的春节习俗与中国有所不同，如吃年糕汤（而非饺子）、行礼方式等体现了韩民族特色。',
     tags: ['节日', '传统', '美食', '源自中国'],
+    updatedAt: '2026-05-30', source: '韩国民俗博物馆',
     relatedWords: [
       { word: '설날', meaning: '春节（韩式）' },
       { word: '세배', meaning: '韩式拜年' },
@@ -82,6 +93,7 @@ export const cultureItems: CultureItem[] = [
     id: 'c-04', title: '秋夕（韩国）', titleKo: '추석', emoji: '🌕',
     description: '※ 秋夕的农耕祭祖传统在古代东亚农耕文化圈中普遍存在，中国的中秋节与韩国的秋夕在农历8月15日这一时间点重合，但各自发展出不同的习俗。韩国的추석是感恩丰收、祭拜祖先的节日，家人团聚制作松饼(송편)、扫墓(성묘)、跳圆圈舞(강강술래)，具有独特的韩民族特色。',
     tags: ['节日', '传统', '美食', '家庭', '东亚共有'],
+    updatedAt: '2026-05-30', source: '韩国民俗博物馆',
     relatedWords: [
       { word: '추석', meaning: '秋夕（韩式中秋）' },
       { word: '송편', meaning: '松饼（秋夕食物）' },
@@ -93,6 +105,7 @@ export const cultureItems: CultureItem[] = [
     id: 'c-05', title: 'K-POP', titleKo: '케이팝', emoji: '🎵',
     description: 'K-POP是韩国流行音乐，自90年代开始蓬勃发展，21世纪通过BTS、BLACKPINK等团体风靡全球。K-POP以精良的制作、同步的群舞(칼군무)、华丽的MV和粉丝文化(팬덤)著称。韩流(한류)不仅包括音乐，还涵盖了韩剧、电影、美妆、时尚等领域。',
     tags: ['现代', '音乐', '娱乐'],
+    updatedAt: '2026-05-30', source: '韩国文化产业振兴院',
     relatedWords: [
       { word: '케이팝', meaning: 'K-POP' },
       { word: '한류', meaning: '韩流' },
@@ -105,6 +118,7 @@ export const cultureItems: CultureItem[] = [
     id: 'c-06', title: '韩国年龄', titleKo: '한국 나이', emoji: '🎂',
     description: '韩国传统年龄算法比较特别：出生即算1岁，每年1月1日（非生日）增加1岁。所以12月31日出生的婴儿次日就变成2岁。从2023年6月起，韩国正式在行政和法律上改用国际年龄算法（만 나이），但日常对话中"韩国年龄"的习惯仍很普遍。',
     tags: ['社会', '习俗'],
+    updatedAt: '2026-05-30', source: '韩国法制处',
     relatedWords: [
       { word: '나이', meaning: '年龄' },
       { word: '만 나이', meaning: '满岁/国际年龄' },
@@ -116,6 +130,7 @@ export const cultureItems: CultureItem[] = [
     id: 'c-07', title: '韩国礼仪', titleKo: '한국 예절', emoji: '🙇',
     description: '韩国是礼仪之邦(동방예의지국)。鞠躬是最基本的问候方式，度数越深表示越尊重。与长辈喝酒时要侧身转头。递接物品用双手或右手托左臂。进韩国家庭要脱鞋。在公共交通工具上不占用老弱病残孕专座(교통약자석)。',
     tags: ['礼仪', '社会'],
+    updatedAt: '2026-05-30', source: '韩国文化观光研究院',
     relatedWords: [
       { word: '예절', meaning: '礼仪' },
       { word: '존댓말', meaning: '敬语' },
@@ -127,6 +142,7 @@ export const cultureItems: CultureItem[] = [
     id: 'c-08', title: '汗蒸房', titleKo: '찜질방', emoji: '🧖',
     description: '汗蒸房(찜질방)是韩国特有的大众洗浴休息场所。有不同温度的汗蒸房（如盐房、黄土房、冰房），配备公共休息区、食堂和游戏区。韩国人常常和朋友、家人甚至约会去汗蒸房。必吃美食：烤鸡蛋(구운 계란)和甜米露(식혜)，必做造型：羊角毛巾头巾(양머리)。',
     tags: ['生活', '休闲'],
+    updatedAt: '2026-05-30', source: '韩国观光公社',
     relatedWords: [
       { word: '찜질방', meaning: '汗蒸房' },
       { word: '구운 계란', meaning: '烤鸡蛋' },

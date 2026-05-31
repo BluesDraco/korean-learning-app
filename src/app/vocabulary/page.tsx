@@ -371,7 +371,7 @@ export default function VocabularyPage() {
           {words.map((word) => (
             <div
               key={word.id}
-              className="bg-white/80 border border-[var(--border-color)]/80 rounded-2xl overflow-hidden hover:border-[var(--pink-pale)]/60 transition-all duration-200"
+              className="bg-[var(--bg-card)]/80 border border-[var(--border-color)]/80 rounded-2xl overflow-hidden hover:border-[var(--pink-pale)]/60 transition-all duration-200"
             >
               {/* ── Card Header (collapsed row) ── */}
               <button

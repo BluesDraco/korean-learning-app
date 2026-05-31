@@ -530,7 +530,7 @@ export default function StatsPage() {
                 className={`rounded-xl p-3 text-center border transition-all ${
                   earned
                     ? 'bg-[var(--bg-card)] border-[var(--pink-pale)] hover:border-amber-500/50'
-                    : 'bg-white/40 border-[var(--border-color)]/50 opacity-50'
+                    : 'bg-[var(--bg-card)]/40 border-[var(--border-color)]/50 opacity-50'
                 }`}
               >
                 <div className={`text-2xl mb-1.5 ${earned ? '' : 'grayscale'}`}>

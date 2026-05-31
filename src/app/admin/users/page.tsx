@@ -37,7 +37,7 @@ export default function AdminUsersPage() {
   if (loading || !data) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#FF8FAB] border-t-transparent" />
+        <div className="animate-spin rounded-full h-8 w-8 border-2 border-[var(--pink-primary)] border-t-transparent" />
       </div>
     );
   }
@@ -47,31 +47,31 @@ export default function AdminUsersPage() {
       <div className="flex items-center gap-3 mb-2">
         <span className="text-3xl">🐰</span>
         <div>
-          <h1 className="text-xl font-bold text-gray-800">用户管理</h1>
-          <p className="text-sm text-gray-400">共 {data.total} 位用户</p>
+          <h1 className="text-xl font-bold text-[var(--text-primary)]">用户管理</h1>
+          <p className="text-sm text-[var(--text-muted)]">共 {data.total} 位用户</p>
         </div>
       </div>
 
       {/* Search & filters */}
       <div className="flex flex-wrap items-center gap-3">
-        <div className="flex items-center gap-2 bg-white border border-[#F5E6E0] rounded-lg px-3 py-2 flex-1 max-w-xs">
-          <Search size={14} className="text-gray-400" />
+        <div className="flex items-center gap-2 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-lg px-3 py-2 flex-1 max-w-xs">
+          <Search size={14} className="text-[var(--text-muted)]" />
           <input
             type="text"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
             placeholder="搜索用户名/昵称/邮箱..."
-            className="bg-transparent text-sm outline-none text-gray-700 placeholder-gray-400 flex-1"
+            className="bg-transparent text-sm outline-none text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)] flex-1"
           />
         </div>
-        <div className="flex gap-1 bg-gray-100 rounded-lg p-0.5">
+        <div className="flex gap-1 bg-[var(--bg-input)] rounded-lg p-0.5">
           {statusTabs.map((t) => (
             <button
               key={t.key}
               onClick={() => { setStatus(t.key); setPage(1); }}
               className={`px-3 py-1.5 text-xs rounded-md transition-colors ${
-                status === t.key ? 'bg-white text-[#FF8FAB] font-semibold shadow-sm' : 'text-gray-500'
+                status === t.key ? 'bg-[var(--bg-card)] text-[var(--pink-primary)] font-semibold shadow-sm' : 'text-[var(--text-muted)]'
               }`}
             >
               {t.label}
@@ -81,7 +81,7 @@ export default function AdminUsersPage() {
         <select
           value={sort}
           onChange={(e) => { setSort(e.target.value); setPage(1); }}
-          className="text-xs border border-[#F5E6E0] rounded-lg px-3 py-2 text-gray-500 bg-white outline-none"
+          className="text-xs border border-[var(--border-color)] rounded-lg px-3 py-2 text-[var(--text-muted)] bg-[var(--bg-card)] outline-none"
         >
           <option value="newest">最新注册</option>
           <option value="oldest">最早注册</option>
@@ -89,55 +89,55 @@ export default function AdminUsersPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-xl border border-[#F5E6E0] overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
+      <div className="bg-[var(--bg-card)] rounded-xl border border-[var(--border-color)] overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-[#F5E6E0] bg-[#FFFDF9]">
-                <th className="text-left px-4 py-3 text-xs text-gray-400 font-medium">用户</th>
-                <th className="text-left px-4 py-3 text-xs text-gray-400 font-medium">邮箱</th>
-                <th className="text-center px-4 py-3 text-xs text-gray-400 font-medium">会员</th>
-                <th className="text-center px-4 py-3 text-xs text-gray-400 font-medium">学习天数</th>
-                <th className="text-center px-4 py-3 text-xs text-gray-400 font-medium">经验值</th>
-                <th className="text-center px-4 py-3 text-xs text-gray-400 font-medium">单词量</th>
-                <th className="text-right px-4 py-3 text-xs text-gray-400 font-medium">注册时间</th>
-                <th className="text-right px-4 py-3 text-xs text-gray-400 font-medium">操作</th>
+              <tr className="border-b border-[var(--border-color)] bg-[var(--bg-soft)]">
+                <th className="text-left px-4 py-3 text-xs text-[var(--text-muted)] font-medium">用户</th>
+                <th className="text-left px-4 py-3 text-xs text-[var(--text-muted)] font-medium">邮箱</th>
+                <th className="text-center px-4 py-3 text-xs text-[var(--text-muted)] font-medium">会员</th>
+                <th className="text-center px-4 py-3 text-xs text-[var(--text-muted)] font-medium">学习天数</th>
+                <th className="text-center px-4 py-3 text-xs text-[var(--text-muted)] font-medium">经验值</th>
+                <th className="text-center px-4 py-3 text-xs text-[var(--text-muted)] font-medium">单词量</th>
+                <th className="text-right px-4 py-3 text-xs text-[var(--text-muted)] font-medium">注册时间</th>
+                <th className="text-right px-4 py-3 text-xs text-[var(--text-muted)] font-medium">操作</th>
               </tr>
             </thead>
             <tbody>
               {data.users.map((u) => (
-                <tr key={u.id} className="border-b border-[#F5E6E0] hover:bg-[#FFFDF9] transition-colors">
+                <tr key={u.id} className="border-b border-[var(--border-color)] hover:bg-[var(--bg-soft)] transition-colors">
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full bg-[#FFF0F4] flex items-center justify-center text-xs font-semibold text-[#FF8FAB]">
+                      <div className="w-7 h-7 rounded-full bg-[var(--bg-soft)] flex items-center justify-center text-xs font-semibold text-[var(--pink-primary)]">
                         {(u.nickname || u.username).charAt(0)}
                       </div>
                       <div>
-                        <p className="text-xs font-semibold text-gray-700">{u.nickname || u.username}</p>
-                        <p className="text-[10px] text-gray-400">@{u.username}</p>
+                        <p className="text-xs font-semibold text-[var(--text-primary)]">{u.nickname || u.username}</p>
+                        <p className="text-[10px] text-[var(--text-muted)]">@{u.username}</p>
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-xs text-gray-500 max-w-[140px] truncate">{u.email || '-'}</td>
+                  <td className="px-4 py-3 text-xs text-[var(--text-muted)] max-w-[140px] truncate">{u.email || '-'}</td>
                   <td className="px-4 py-3 text-center">
                     <span className={`text-xs px-2 py-0.5 rounded-full ${
                       u.membershipType === 'yearly' ? 'bg-purple-50 text-purple-500' :
                       u.membershipType === 'monthly' ? 'bg-blue-50 text-blue-500' :
-                      'bg-gray-50 text-gray-400'
+                      'bg-[var(--bg-input)] text-[var(--text-muted)]'
                     }`}>
                       {u.membershipType === 'yearly' ? '年付' : u.membershipType === 'monthly' ? '月付' : '免费'}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-center text-xs text-gray-600">{u.studyDays}天</td>
-                  <td className="px-4 py-3 text-center text-xs font-semibold text-gray-700">{u.totalXp.toLocaleString()}</td>
-                  <td className="px-4 py-3 text-center text-xs text-gray-600">{u.wordsLearned}</td>
-                  <td className="px-4 py-3 text-right text-xs text-gray-400">
+                  <td className="px-4 py-3 text-center text-xs text-[var(--text-secondary)]">{u.studyDays}天</td>
+                  <td className="px-4 py-3 text-center text-xs font-semibold text-[var(--text-primary)]">{u.totalXp.toLocaleString()}</td>
+                  <td className="px-4 py-3 text-center text-xs text-[var(--text-secondary)]">{u.wordsLearned}</td>
+                  <td className="px-4 py-3 text-right text-xs text-[var(--text-muted)]">
                     {new Date(u.createdAt).toLocaleDateString('zh-CN')}
                   </td>
                   <td className="px-4 py-3 text-right">
                     <Link
                       href={`/admin/users/${u.id}`}
-                      className="text-xs text-[#FF8FAB] hover:underline"
+                      className="text-xs text-[var(--pink-primary)] hover:underline"
                     >
                       详情
                     </Link>
@@ -149,21 +149,21 @@ export default function AdminUsersPage() {
         </div>
 
         {/* Pagination */}
-        <div className="flex items-center justify-between px-5 py-3 border-t border-[#F5E6E0]">
-          <span className="text-xs text-gray-400">共 {data.total} 条</span>
+        <div className="flex items-center justify-between px-5 py-3 border-t border-[var(--border-color)]">
+          <span className="text-xs text-[var(--text-muted)]">共 {data.total} 条</span>
           <div className="flex gap-2">
             <button
               onClick={() => setPage(Math.max(1, page - 1))}
               disabled={page === 1}
-              className="px-3 py-1 text-xs rounded-lg border border-[#F5E6E0] text-gray-500 disabled:opacity-30 hover:border-[#FF8FAB] transition-colors"
+              className="px-3 py-1 text-xs rounded-lg border border-[var(--border-color)] text-[var(--text-muted)] disabled:opacity-30 hover:border-[var(--pink-primary)] transition-colors"
             >
               上一页
             </button>
-            <span className="px-3 py-1 text-xs text-gray-500">第 {page} 页</span>
+            <span className="px-3 py-1 text-xs text-[var(--text-muted)]">第 {page} 页</span>
             <button
               onClick={() => setPage(page + 1)}
               disabled={page * 20 >= data.total}
-              className="px-3 py-1 text-xs rounded-lg border border-[#F5E6E0] text-gray-500 disabled:opacity-30 hover:border-[#FF8FAB] transition-colors"
+              className="px-3 py-1 text-xs rounded-lg border border-[var(--border-color)] text-[var(--text-muted)] disabled:opacity-30 hover:border-[var(--pink-primary)] transition-colors"
             >
               下一页
             </button>

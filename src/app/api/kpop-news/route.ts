@@ -4,6 +4,7 @@ import path from 'path';
 import { DEEPSEEK_MODEL } from '@/lib/deepseek';
 import { getAuthFromCookie } from '@/lib/server/auth';
 import { checkAiRateLimit } from '@/lib/server/rate-limit';
+import { fetchWithTimeout } from '@/lib/fetch';
 
 const DEEPSEEK_API = 'https://api.deepseek.com/v1/chat/completions';
 const CACHE_FILE = path.join(process.cwd(), 'data', 'kpop-daily.json');
@@ -62,7 +63,7 @@ function writeCache(posts: NewsPost[]) {
 // Fetch real Bilibili KPOP videos
 async function fetchBilibiliVideos(): Promise<BilibiliVideo[]> {
   try {
-    const res = await fetch(
+    const res = await fetchWithTimeout(
       'https://api.bilibili.com/x/web-interface/search/type?search_type=video&keyword=KPOP&order=pubdate&page=1&page_size=10',
       { headers: { 'User-Agent': 'Mozilla/5.0', Referer: 'https://www.bilibili.com' } }
     );
@@ -85,7 +86,7 @@ async function fetchBilibiliVideos(): Promise<BilibiliVideo[]> {
 // Fetch Weibo KPOP hot search
 async function fetchWeiboTrends(): Promise<WeiboPost[]> {
   try {
-    const res = await fetch(
+    const res = await fetchWithTimeout(
       'https://weibo.com/ajax/side/hotSearch',
       { headers: { 'User-Agent': 'Mozilla/5.0', Referer: 'https://weibo.com' } }
     );
@@ -149,7 +150,8 @@ async function fetchFromAI(): Promise<NewsPost[]> {
     context += '请根据最新KPOP动态生成今日热门帖子。';
   }
 
-  const dsRes = await fetch(DEEPSEEK_API, {
+  const dsRes = await fetchWithTimeout(DEEPSEEK_API, {
+    timeoutMs: 30_000,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
     body: JSON.stringify({
