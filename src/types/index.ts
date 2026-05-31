@@ -268,6 +268,14 @@ export interface KpopSong {
   tags: string[];
   lyrics: KpopLyricLine[];
   lyricsKind: 'full' | 'highlight';
+  learning?: KpopLearning;
+}
+
+export interface KpopLearning {
+  highFreqWords: { korean: string; pronunciation: string; chinese: string; source: string }[];
+  emotionExpressions: { korean: string; pronunciation: string; chinese: string; context: string }[];
+  grammarPoint: { name: string; pattern: string; explanation: string; example: string; exampleZh: string };
+  dailyExpression: { korean: string; pronunciation: string; chinese: string; usage: string };
 }
 export type AnnouncementType = 'announcement' | 'update_log' | 'private_message';
 

@@ -296,6 +296,112 @@ export default function KpopSongPage() {
           })
         )}
       </div>
+
+      {/* Learning modules */}
+      {song.learning && <KpopLearningSection learning={song.learning} color={song.color} />}
+    </div>
+  );
+}
+
+// ── Kpop learning section ─────────────────────────────────────
+
+function KpopLearningSection({ learning, color }: { learning: import('@/types').KpopLearning; color: string }) {
+  const [expanded, setExpanded] = useState(true);
+
+  return (
+    <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl overflow-hidden mt-5">
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="w-full flex items-center gap-2 px-5 py-4 hover:bg-[var(--bg-card-hover)] transition-colors"
+      >
+        <span className="text-lg">📖</span>
+        <span className="font-semibold text-[var(--text-primary)]">这首歌学什么？</span>
+        <ChevronDown
+          size={16}
+          className={`ml-auto text-[var(--text-muted)] transition-transform ${expanded ? '' : '-rotate-90'}`}
+        />
+      </button>
+
+      {expanded && (
+        <div className="px-5 pb-5 space-y-4">
+          {/* High-freq words */}
+          <div>
+            <h4 className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider mb-2">高频词</h4>
+            <div className="grid grid-cols-3 gap-2">
+              {learning.highFreqWords.map((w) => (
+                <div
+                  key={w.korean}
+                  className="bg-[var(--bg-input)]/60 rounded-xl p-3 cursor-pointer hover:bg-[var(--pink-primary)]/8 transition-colors"
+                  onClick={() => speak(w.korean, 0.75)}
+                  title="点击听发音"
+                >
+                  <div className="text-sm font-bold text-[var(--text-primary)] mb-0.5">{w.korean}</div>
+                  <div className="text-[10px] text-[var(--text-muted)]">{w.pronunciation}</div>
+                  <div className="text-[11px] text-[var(--text-secondary)] mt-0.5">{w.chinese}</div>
+                  <div className="text-[10px] text-[var(--text-placeholder)] mt-1 italic">"{w.source}"</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Emotion expressions */}
+          <div>
+            <h4 className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider mb-2">情绪表达</h4>
+            <div className="grid grid-cols-2 gap-2">
+              {learning.emotionExpressions.map((e) => (
+                <div
+                  key={e.korean}
+                  className="bg-[var(--bg-input)]/60 rounded-xl p-3 cursor-pointer hover:bg-[var(--purple-soft)]/8 transition-colors"
+                  onClick={() => speak(e.korean, 0.75)}
+                  title="点击听发音"
+                >
+                  <div className="text-sm font-bold text-[var(--text-primary)] mb-0.5">{e.korean}</div>
+                  <div className="text-[10px] text-[var(--text-muted)]">{e.pronunciation}</div>
+                  <div className="text-[11px] text-[var(--text-secondary)] mt-0.5">{e.chinese}</div>
+                  <div className="text-[10px] text-[var(--text-placeholder)] mt-1">{e.context}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Grammar point */}
+          <div>
+            <h4 className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider mb-2">语法结构</h4>
+            <div className="bg-[var(--bg-input)]/60 rounded-xl p-4 space-y-2">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold px-2 py-0.5 rounded-md text-white" style={{ backgroundColor: color }}>
+                  {learning.grammarPoint.name}
+                </span>
+                <span className="text-[11px] text-[var(--text-muted)] font-mono">{learning.grammarPoint.pattern}</span>
+              </div>
+              <p className="text-xs text-[var(--text-secondary)]">{learning.grammarPoint.explanation}</p>
+              <div className="bg-[var(--bg-card)] rounded-lg p-3 border border-[var(--border-color)]">
+                <p className="text-sm font-bold text-[var(--text-primary)]">{learning.grammarPoint.example}</p>
+                <p className="text-[11px] text-[var(--text-muted)] mt-0.5">{learning.grammarPoint.exampleZh}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Daily expression */}
+          <div>
+            <h4 className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider mb-2">日常可用表达</h4>
+            <div className="bg-gradient-to-r from-[var(--pink-primary)]/5 to-[var(--purple-soft)]/5 rounded-xl p-4 border border-[var(--border-color)]">
+              <div
+                className="text-base font-bold text-[var(--text-primary)] mb-1 cursor-pointer hover:text-[var(--pink-primary)] transition-colors"
+                onClick={() => speak(learning.dailyExpression.korean, 0.75)}
+                title="点击听发音"
+              >
+                {learning.dailyExpression.korean}
+              </div>
+              <div className="text-[11px] text-[var(--text-muted)] mb-1">{learning.dailyExpression.pronunciation}</div>
+              <div className="text-sm text-[var(--text-secondary)] mb-2">{learning.dailyExpression.chinese}</div>
+              <div className="text-[11px] text-[var(--text-muted)] leading-relaxed">
+                <span className="text-[var(--text-placeholder)]">用法：</span>{learning.dailyExpression.usage}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -29,7 +29,8 @@ export const navGroups: NavGroup[] = [
   { icon: Home, label: '首页', ko: '홈', href: '/', children: [] },
   {
     icon: BookOpen, label: '学习', ko: '학습', href: '/learn', children: [
-      { label: '每日学习', ko: '매일 학습', href: '/learn', icon: GraduationCap },
+      { label: '30天课程', ko: '30일 과정', href: '/course', icon: GraduationCap },
+      { label: '每日学习', ko: '매일 학습', href: '/learn', icon: BookOpen },
       { label: '发音', ko: '발음', href: '/phonetics', icon: Grid3X3 },
       { label: '语法库', ko: '문법', href: '/grammar', icon: FileText },
       { label: '绘本学习', ko: '그림책', href: '/learn/picture-books', icon: BookImage },
@@ -51,22 +52,17 @@ export const navGroups: NavGroup[] = [
       { label: '我的单词', ko: '내 단어', href: '/vocabulary', icon: BookOpen },
       { label: '词库', ko: '단어장', href: '/vocabulary/library', icon: Library },
       { label: '按等级', ko: '등급별', href: '/vocabulary/levels', icon: TrendingUp },
-      { label: '韩语字典', ko: '사전', href: '/dictionary', icon: Search },
       { label: '口语表达', ko: '구어 표현', href: '/expressions', icon: MessageCircle },
+      { label: '韩语字典', ko: '사전', href: '/dictionary', icon: Search },
     ],
   },
   {
-    icon: Flower2, label: '韩国', ko: '한국', href: '/korea', children: [
-      { label: '文化', ko: '문화', href: '/korea/culture', icon: Palette },
+    icon: Flower2, label: '兴趣', ko: '취미', href: '/korea', children: [
+      { label: '韩国文化', ko: '문화', href: '/korea/culture', icon: Palette },
+      { label: 'KPOP', ko: '케이팝', href: '/korea/kpop', icon: Music },
       { label: '美食', ko: '음식', href: '/korea/food', icon: UtensilsCrossed },
       { label: '旅行', ko: '여행', href: '/korea/travel', icon: MapPin },
       { label: '知识百科', ko: '지식', href: '/knowledge', icon: Lightbulb },
-    ],
-  },
-  {
-    icon: Music, label: 'KPOP', ko: '케이팝', href: '/korea/kpop', children: [
-      { label: '韩语歌', ko: '노래', href: '/korea/kpop', icon: Mic },
-      { label: '热点资讯', ko: '뉴스', href: '/korea/kpop/news', icon: Radio },
     ],
   },
   {

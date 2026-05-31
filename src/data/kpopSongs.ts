@@ -60,6 +60,30 @@ export const kpopSongs: KpopSong[] = [
       _(t(2,52), t(2,56), '뚜두두두두 뚜두두', 'ttu-du-du-du-du ttu-du-du', '嘟嘟嘟嘟嘟 嘟嘟嘟'),
       L('OUTRO',              t(2,56), t(3,0), 'How you like that?', 'How you like that?', '你觉得怎么样？'),
     ],
+    learning: {
+      highFreqWords: [
+        { korean: '자신', pronunciation: 'ja-sin', chinese: '自信', source: '자신 있게 (自信地)' },
+        { korean: '하늘', pronunciation: 'ha-neul', chinese: '天空', source: '하늘 높이 (高高地飞向天空)' },
+        { korean: '보다', pronunciation: 'bo-da', chinese: '看', source: '봐봐 / Look at me' },
+      ],
+      emotionExpressions: [
+        { korean: '자신 있게', pronunciation: 'ja-sin it-ge', chinese: '自信地', context: '表达自信、不畏惧的态度' },
+        { korean: '아파하다', pronunciation: 'a-pa-ha-da', chinese: '感到痛苦', context: '表达内心伤痛，常用于分手/背叛情境' },
+      ],
+      grammarPoint: {
+        name: '-ㄹ/을까 (推测疑问)',
+        pattern: '动词词干 + ㄹ/을까',
+        explanation: '表示推测或疑问，相当于"会不会…呢？"或"要…吗？"。常用于自言自语或征求对方意见。',
+        example: '어떻게 넌 나를 볼까',
+        exampleZh: '你会怎么看我呢？',
+      },
+      dailyExpression: {
+        korean: '어떻게 생각해?',
+        pronunciation: 'eo-tteo-ke saeng-gak-hae?',
+        chinese: '你觉得怎么样？',
+        usage: '口语中常用的询问意见的表达。曲中 "How you like that?" 就是这种感觉。对朋友说 "이거 어때?" 更随意。',
+      },
+    },
   },
 
   // ============================================================
@@ -135,6 +159,30 @@ export const kpopSongs: KpopSong[] = [
       _(t(4,16), t(4,20), '그곳에 좀 더 머물러줘', 'geu-go-se jom deo meo-mul-leo-jwo', '请在那里再多停留一会'),
       _(t(4,20), t(4,24), '머물러줘', 'meo-mul-leo-jwo', '再停留一会'),
     ],
+    learning: {
+      highFreqWords: [
+        { korean: '보고 싶다', pronunciation: 'bo-go sip-da', chinese: '想念', source: '多次出现在歌词中' },
+        { korean: '겨울', pronunciation: 'gyeo-ul', chinese: '冬天', source: '겨울 끝을 지나 (度过寒冬)' },
+        { korean: '눈꽃', pronunciation: 'nun-kkot', chinese: '雪花', source: '눈꽃이 떨어져요 (雪花飘落)' },
+      ],
+      emotionExpressions: [
+        { korean: '그리움', pronunciation: 'geu-ri-um', chinese: '思念', context: '表达对远方之人深深的思念之情' },
+        { korean: '밉다', pronunciation: 'mip-da', chinese: '讨厌/恨', context: '不是真的恨，而是爱恨交织的复杂情感' },
+      ],
+      grammarPoint: {
+        name: '-고 싶다 (愿望)',
+        pattern: '动词词干 + 고 싶다',
+        explanation: '韩语最基本的愿望表达，相当于"想要…"。보고 싶다 是最常用的表达之一，意为"想见/想念"。',
+        example: '보고 싶다',
+        exampleZh: '我好想你。',
+      },
+      dailyExpression: {
+        korean: '보고 싶어요.',
+        pronunciation: 'bo-go si-peo-yo.',
+        chinese: '我想你。',
+        usage: '对恋人、家人、朋友都可以说。更正式的场合说 "보고 싶습니다"。这是韩剧里出现最多的台词之一。',
+      },
+    },
   },
 
   // ============================================================
@@ -190,6 +238,30 @@ export const kpopSongs: KpopSong[] = [
       _(t(2,43), t(2,47), 'You\'re my chemical hype boy', 'You\'re my chemical hype boy', '你是让我上瘾的男孩'),
       _(t(2,47), t(2,51), '누가 내게 뭐래든', 'nu-ga nae-ge mwo-rae-deun', '不管别人说什么'),
     ],
+    learning: {
+      highFreqWords: [
+        { korean: '말하다', pronunciation: 'mal-ha-da', chinese: '说/告诉', source: '너도 말해줄래 (你也告诉我吧)' },
+        { korean: '믿다', pronunciation: 'mit-da', chinese: '相信', source: '날 믿어봐 한 번 (相信我一次吧)' },
+        { korean: '예민하다', pronunciation: 'ye-min-ha-da', chinese: '敏感', source: '예민하대 나 lately (听说我最近很敏感)' },
+      ],
+      emotionExpressions: [
+        { korean: '빠져버리다', pronunciation: 'ppa-jyeo-beo-ri-da', chinese: '彻底沉迷', context: '表达坠入爱河无法自拔的感觉' },
+        { korean: '재미없다', pronunciation: 'jae-mi-eop-da', chinese: '无聊/没意思', context: '没有对方在身边就觉得一切都无聊' },
+      ],
+      grammarPoint: {
+        name: '-ㄹ/을래 (意志/提议)',
+        pattern: '动词词干 + ㄹ/을래',
+        explanation: '口语中表达意愿或请求的终结词尾。말해줄래 = "可以告诉我吗？"，既表达请求又带有亲密感。',
+        example: '너도 말해줄래',
+        exampleZh: '你也告诉我吧。',
+      },
+      dailyExpression: {
+        korean: '나 좀 믿어봐.',
+        pronunciation: 'na jom mi-deo-bwa.',
+        chinese: '相信我一下吧。',
+        usage: '朋友间常用的撒娇式表达。좀 让语气更柔和。加上 한 번 (一次) 更显恳切：나 한 번만 믿어봐.',
+      },
+    },
   },
 
   // ============================================================
@@ -246,6 +318,30 @@ export const kpopSongs: KpopSong[] = [
       L('OUTRO',              t(2,45), t(2,49),  'Woo lalalalalalala', 'Woo lalalalalalala', 'Woo lalalalalalala'),
       _(t(2,49), t(2,53),  '숨 참고 love dive', 'sum cham-go love dive', '屏住呼吸 爱情跳水'),
     ],
+    learning: {
+      highFreqWords: [
+        { korean: '궁금하다', pronunciation: 'gung-geum-ha-da', chinese: '好奇', source: '네가 참 궁금해 (我真的很好奇你)' },
+        { korean: '마음', pronunciation: 'ma-eum', chinese: '心/内心', source: '너의 마음 속으로 (向着你的心里)' },
+        { korean: '숨', pronunciation: 'sum', chinese: '呼吸', source: '숨 참고 love dive (屏住呼吸)' },
+      ],
+      emotionExpressions: [
+        { korean: '이끌림', pronunciation: 'i-kkeul-lim', chinese: '吸引/牵引', context: '描述无法抗拒的被吸引感，比"喜欢"更强烈' },
+        { korean: '아찔하다', pronunciation: 'a-jjil-ha-da', chinese: '晕眩/目眩神迷', context: '表达心动到让人晕眩的感觉' },
+      ],
+      grammarPoint: {
+        name: '-고 싶다 (愿望/渴望)',
+        pattern: '动词词干 + 고 싶다',
+        explanation: '表达想要做某事的愿望。알고 싶어 = 想知道，比 궁금해 更主动地表达"想知道"的意愿。',
+        example: '비밀을 알고 싶어',
+        exampleZh: '好想知道那个秘密。',
+      },
+      dailyExpression: {
+        korean: '네가 궁금해.',
+        pronunciation: 'ne-ga gung-geum-hae.',
+        chinese: '我很好奇你。/ 我想了解你。',
+        usage: '表达对某人感兴趣时的自然说法。对朋友可以说 "진짜 궁금해!"（真的好好奇！），语气随意友好。',
+      },
+    },
   },
 
   // ============================================================
@@ -304,5 +400,29 @@ export const kpopSongs: KpopSong[] = [
       _(t(3,28), t(3,32), '또 다른 나를 만나', 'tto da-reun na-reul man-na', '遇见另一个我'),
       L('OUTRO',              t(3,32), t(3,37),  'I\'m on the next level', 'I\'m on the next level', '我在新的次元'),
     ],
+    learning: {
+      highFreqWords: [
+        { korean: '세계', pronunciation: 'se-gye', chinese: '世界', source: '새로운 세계로 (向着新世界)' },
+        { korean: '완벽하다', pronunciation: 'wan-byeok-ha-da', chinese: '完美', source: '더 완벽해진 나를 (更加完美的我)' },
+        { korean: '약속하다', pronunciation: 'yak-sok-ha-da', chinese: '约定', source: '지키기로 약속해 (约定好要守护)' },
+      ],
+      emotionExpressions: [
+        { korean: '흔들리지 않다', pronunciation: 'heun-deul-li-ji an-ta', chinese: '不动摇', context: '表达意志坚定、不受外界影响的强大心态' },
+        { korean: '자유롭다', pronunciation: 'ja-yu-rop-da', chinese: '自由', context: '渴望突破束缚、变得更自由的强烈愿望' },
+      ],
+      grammarPoint: {
+        name: '-기로 하다 (决定/约定)',
+        pattern: '动词词干 + 기로 하다',
+        explanation: '表示决定或约定做某事。지키기로 약속해 = 约定好要守护。常用在表达决心或承诺的情境。',
+        example: '지키기로 약속해',
+        exampleZh: '约定好要守护。',
+      },
+      dailyExpression: {
+        korean: '약속할게.',
+        pronunciation: 'yak-sok-kal-ge.',
+        chinese: '我答应你。/ 我保证。',
+        usage: '对朋友或恋人表达承诺时的日常说法。比 약속해 更柔和，带有亲切的承诺感。正式场合用 약속드립니다。',
+      },
+    },
   },
 ];

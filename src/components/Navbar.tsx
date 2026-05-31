@@ -8,7 +8,7 @@ import { useAuth } from '@/components/AuthProvider';
 import {
   Home, BookOpen, LayoutGrid, RefreshCw,
   ChevronRight, X, Sun, Moon, Shield, MessageSquare,
-  Ellipsis, User,
+  Ellipsis, User, Sparkles, Gamepad2,
 } from 'lucide-react';
 import { useTheme } from '@/components/ThemeProvider';
 import { navGroups, type NavGroup } from '@/data/navigation';
@@ -109,11 +109,14 @@ export function Navbar() {
                   )}
                 </button>
 
-                {/* Children — inline on desktop, popover on tablet */}
+                {/* Children — inline on desktop, drawer on tablet */}
                 {isExpanded && group.children.length > 0 && (
                   <div className="lg:ml-7 mt-1 space-y-0.5 lg:relative">
-                    {/* On tablet: popover card */}
-                    <div className="lg:hidden fixed left-[56px] z-50 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl shadow-xl p-2 space-y-0.5 min-w-[180px] animate-fade-in">
+                    {/* On tablet: full-height drawer */}
+                    <div className="lg:hidden fixed left-14 top-0 bottom-0 w-52 z-40 bg-[var(--bg-card)] border-r border-[var(--border-color)] shadow-2xl py-16 px-3 space-y-0.5 overflow-y-auto animate-slide-in-left">
+                      <div className="text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider px-2 pb-2 border-b border-[var(--border-color)] mb-2">
+                        {group.label}<span className="ml-1 font-normal normal-case text-[var(--text-placeholder)]">{group.ko}</span>
+                      </div>
                       {group.children.map((child, j) => {
                         const ChildIcon = child.icon;
                         const isActive = pathname.startsWith(child.href) &&
@@ -122,19 +125,24 @@ export function Navbar() {
                           <Link
                             key={j}
                             href={child.href}
-                            onClick={() => setExpandedGroup(i)}
-                            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
+                            onClick={() => setExpandedGroup(null)}
+                            className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm transition-all ${
                               isActive
                                 ? 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] font-medium'
                                 : 'text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)] hover:text-[var(--text-primary)]'
                             }`}
                           >
-                            <ChildIcon size={15} className="shrink-0" />
-                            <span>{child.label}</span>
+                            <ChildIcon size={16} className="shrink-0" />
+                            <div className="min-w-0">
+                              <span>{child.label}</span>
+                              <span className="text-[11px] text-[var(--text-muted)] ml-1">{child.ko}</span>
+                            </div>
                           </Link>
                         );
                       })}
                     </div>
+                    {/* On tablet: backdrop */}
+                    <div className="lg:hidden fixed inset-0 z-30 bg-black/10" onClick={() => setExpandedGroup(null)} />
                     {/* On desktop: inline */}
                     <div className="hidden lg:block">
                       {group.children.map((child, j) => {
@@ -274,7 +282,7 @@ export function Navbar() {
           <BookOpen size={22} />学习
         </button>
 
-        {/* 复习 */}
+        {/* 练习 */}
         <button
           onClick={() => setMobileDrawer(2)}
           className={`flex flex-col items-center gap-0.5 py-2 px-1.5 text-[13px] transition-colors ${
@@ -282,7 +290,7 @@ export function Navbar() {
               ? 'text-[var(--pink-primary)]' : 'text-[var(--text-muted)]'
           }`}
         >
-          <RefreshCw size={22} />复习
+          <Gamepad2 size={22} />练习
         </button>
 
         {/* 词汇 */}
@@ -372,12 +380,25 @@ export function Navbar() {
                   })}
                   {/* Settings & Messages quick links */}
                   <div className="border-t border-[var(--border-color)] pt-3 space-y-1">
-                    {user && (
+                    {user ? (
                       <Link href="/messages" onClick={closeMobileDrawer}
                         className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)]"
                       >
                         <MessageSquare size={18} />私信
                       </Link>
+                    ) : (
+                      <>
+                        <Link href="/auth/login" onClick={closeMobileDrawer}
+                          className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-[var(--pink-primary)] hover:bg-[var(--pink-primary)]/5"
+                        >
+                          <User size={18} />登录
+                        </Link>
+                        <Link href="/auth/register" onClick={closeMobileDrawer}
+                          className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)]"
+                        >
+                          <Sparkles size={18} />注册
+                        </Link>
+                      </>
                     )}
                     <Link href="/settings" onClick={closeMobileDrawer}
                       className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)]"

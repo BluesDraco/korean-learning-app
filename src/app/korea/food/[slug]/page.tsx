@@ -1,7 +1,9 @@
 import { notFound } from 'next/navigation';
 import { getArticleHtml, getArticleMeta, getArticlesByCategory } from '@/lib/koreaArticles';
+import { getArticleLearning } from '@/data/articleLearning';
 import Link from 'next/link';
 import ArticleContent from '@/components/ArticleContent';
+import ArticleLearningModules from '@/components/ArticleLearningModules';
 
 export function generateStaticParams() {
   return getArticlesByCategory('food').map((a) => ({ slug: a.slug }));
@@ -15,6 +17,7 @@ export default async function FoodArticlePage({ params }: { params: Promise<{ sl
   const html = getArticleHtml(slug);
   if (!html) notFound();
 
+  const learning = getArticleLearning(slug);
   const relatedArticles = getArticlesByCategory('food').filter((a) => a.slug !== slug);
 
   return (
@@ -26,6 +29,8 @@ export default async function FoodArticlePage({ params }: { params: Promise<{ sl
       </div>
 
       <ArticleContent html={html} basePath="/korea/food" />
+
+      {learning && <ArticleLearningModules data={learning} />}
 
       {relatedArticles.length > 0 && (
         <div className="mt-10 pt-8 border-t border-[var(--border-color)]">
