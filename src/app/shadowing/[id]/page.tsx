@@ -127,7 +127,7 @@ export default function ShadowingPlayerPage() {
         fetch('/api/track/study', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'shadowing', details: `跟读: ${currentVideo.title}`, xpEarned: 0 }),
+          body: JSON.stringify({ action: 'shadowing', details: `影子跟读: ${currentVideo.title}`, xpEarned: 0 }),
         }).catch(() => {});
         // Update lastStudiedAt
         db.studyVideos.update(currentVideo.id, { lastStudiedAt: Date.now() });

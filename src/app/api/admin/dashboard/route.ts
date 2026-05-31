@@ -70,7 +70,7 @@ export async function GET() {
 
   const actionToFeature: Record<string, { feature: string; icon: string }> = {
     srs_review: { feature: '单词复习', icon: '📝' },
-    shadowing: { feature: '跟读训练', icon: '🎤' },
+    shadowing: { feature: '影子跟读训练', icon: '🎤' },
     dictation: { feature: '听写练习', icon: '🎧' },
     ai_chat: { feature: 'AI对话', icon: '🤖' },
     flashcard: { feature: '闪卡学习', icon: '🃏' },
@@ -163,7 +163,7 @@ export async function GET() {
     userFunnel: funnel,
     featureUsage: features.length > 0 ? features : [
       { feature: '单词复习', icon: '📝', count: 0, totalPercent: 0 },
-      { feature: '跟读训练', icon: '🎤', count: 0, totalPercent: 0 },
+      { feature: '影子跟读训练', icon: '🎤', count: 0, totalPercent: 0 },
       { feature: '听写练习', icon: '🎧', count: 0, totalPercent: 0 },
       { feature: 'AI对话', icon: '🤖', count: 0, totalPercent: 0 },
     ],

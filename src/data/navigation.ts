@@ -41,7 +41,7 @@ export const navGroups: NavGroup[] = [
     icon: Gamepad2, label: '练习', ko: '연습', href: '/review', children: [
       { label: 'SRS复习', ko: 'SRS 복습', href: '/review', icon: RefreshCw },
       { label: '听写', ko: '받아쓰기', href: '/dictation', icon: Pencil },
-      { label: '跟读', ko: '쉐도잉', href: '/shadowing', icon: Mic },
+      { label: '影子跟读', ko: '쉐도잉', href: '/shadowing', icon: Mic },
       { label: '打字', ko: '타자', href: '/typing', icon: Keyboard },
       { label: '写作', ko: '작문', href: '/writing', icon: PenLine },
       { label: 'TOPIK模拟', ko: 'TOPIK 모의', href: '/topik', icon: FileText },

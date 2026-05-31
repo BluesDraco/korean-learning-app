@@ -23,6 +23,7 @@ export default function TopikPage() {
   const [showAnswer, setShowAnswer] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
   const [playing, setPlaying] = useState(false);
+  const [showTranslation, setShowTranslation] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const sectionInfo = topikSections.find((s) => s.id === section) || topikSections[0];
@@ -86,6 +87,7 @@ export default function TopikPage() {
     } else {
       setCurrentIdx((prev) => prev + 1);
       setShowAnswer(false);
+      setShowTranslation(false);
       setPlaying(false);
       cancelSpeech();
     }
@@ -263,27 +265,23 @@ export default function TopikPage() {
         <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-3xl p-6 space-y-5">
           {/* Audio button for listening */}
           {sectionInfo.section === 'listening' && currentQ.audioText && (
-            <button
-              onClick={handlePlayAudio}
-              disabled={playing || showAnswer}
-              className={`flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
-                playing
-                  ? 'bg-[var(--pink-primary)]/15 text-[var(--pink-primary)]'
-                  : 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] hover:bg-[var(--pink-primary)]/20'
-              } disabled:opacity-50`}
-            >
-              {playing ? (
-                <>
-                  <span className="w-2 h-2 rounded-full bg-[var(--pink-primary)] animate-pulse" />
-                  正在播放...
-                </>
-              ) : (
-                <>
-                  <Volume2 size={16} />
-                  播放录音
-                </>
+            <div className="flex items-center gap-2">
+              {!playing && showAnswer && (
+                <button
+                  onClick={handlePlayAudio}
+                  className="p-1.5 rounded-lg hover:bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors"
+                  title="重新播放"
+                >
+                  <Volume2 size={18} />
+                </button>
               )}
-            </button>
+              {playing && (
+                <span className="flex items-center gap-1.5 text-xs text-[var(--pink-primary)]">
+                  <span className="w-2 h-2 rounded-full bg-[var(--pink-primary)] animate-pulse" />
+                  播放中...
+                </span>
+              )}
+            </div>
           )}
 
           {/* Topic tag */}
@@ -299,7 +297,22 @@ export default function TopikPage() {
             <p className="text-base font-bold text-[var(--text-primary)] leading-relaxed whitespace-pre-wrap">
               {currentQ.prompt}
             </p>
-            <p className="text-xs text-[var(--text-muted)] mt-1">{currentQ.promptZh}</p>
+            {sectionInfo.section === 'listening' ? (
+              <div className="mt-2">
+                {!showTranslation ? (
+                  <button
+                    onClick={() => setShowTranslation(true)}
+                    className="text-xs text-[var(--text-muted)] hover:text-[var(--pink-primary)] underline underline-offset-2 transition-colors"
+                  >
+                    显示翻译
+                  </button>
+                ) : (
+                  <p className="text-xs text-[var(--text-muted)]">{currentQ.promptZh}</p>
+                )}
+              </div>
+            ) : (
+              <p className="text-xs text-[var(--text-muted)] mt-1">{currentQ.promptZh}</p>
+            )}
           </div>
 
           {/* Options */}
@@ -344,6 +357,12 @@ export default function TopikPage() {
           {/* Explanation and vocabulary after answer */}
           {showAnswer && (
             <div className="bg-[var(--bg-input)] rounded-xl p-4 animate-fade-in space-y-3">
+              {sectionInfo.section === 'listening' && currentQ.audioText && (
+                <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-lg p-3">
+                  <p className="text-[13px] text-[var(--text-muted)] font-medium mb-1">听力原文</p>
+                  <p className="text-sm text-[var(--text-primary)] leading-relaxed">{currentQ.audioText}</p>
+                </div>
+              )}
               <p className="text-xs text-[var(--text-secondary)] leading-relaxed">{currentQ.explanation}</p>
               {currentQ.vocabulary.length > 0 && (
                 <div className="flex items-center gap-2 flex-wrap">

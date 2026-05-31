@@ -37,7 +37,7 @@ export function ShadowingBar({
     <div className="bg-[var(--bg-card)] border-t border-[var(--border-color)] rounded-t-2xl p-4 space-y-3 animate-slide-up">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <span className="text-xs font-medium text-[var(--peach-soft)] uppercase tracking-wider">跟读模式</span>
+        <span className="text-xs font-medium text-[var(--peach-soft)] uppercase tracking-wider">影子跟读</span>
         <button onClick={onExit} className="text-[var(--text-muted)] hover:text-[var(--text-primary)] p-1">
           <X size={16} />
         </button>
@@ -113,7 +113,7 @@ export function ShadowingBar({
           }`}
         >
           <Mic size={16} />
-          {isRecording ? '录音中...' : '我来跟读'}
+          {isRecording ? '录音中...' : '开始跟读'}
         </button>
         <button
           onClick={onNext}

@@ -359,7 +359,7 @@ export default function ArticleReaderPage() {
               onClick={startRecording}
               className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-[var(--border-color)] text-xs text-[var(--text-muted)] hover:text-[var(--pink-primary)] hover:border-[var(--pink-primary)]/30"
             >
-              <Mic size={13} /> 跟读录音
+              <Mic size={13} /> 影子跟读录音
             </button>
           ) : (
             <button

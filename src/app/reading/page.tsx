@@ -23,7 +23,7 @@ export default function ReadingListPage() {
         </Link>
         <h1 className="text-2xl font-bold text-[var(--text-primary)] section-header">文章阅读</h1>
         <p className="text-[var(--text-secondary)] text-sm mt-1">
-          逐句阅读韩语文章，音频跟读，中韩双语解析
+          逐句阅读韩语文章，音频影子跟读，中韩双语解析
         </p>
       </div>
 

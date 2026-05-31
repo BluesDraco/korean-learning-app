@@ -83,7 +83,7 @@ export function SubtitlePanel({
                     ? 'bg-[var(--peach-soft)]/15 text-[var(--peach-soft)]'
                     : 'text-[var(--text-muted)] hover:text-[var(--peach-soft)] opacity-0 group-hover:opacity-100'
                 }`}
-                title={isLooping ? '退出循环' : '循环跟读此句'}
+                title={isLooping ? '退出循环' : '循环影子跟读此句'}
               >
                 <RefreshCw size={12} className={isLooping ? 'animate-spin' : ''} />
               </button>

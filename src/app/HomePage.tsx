@@ -552,8 +552,8 @@ export default function Home() {
             >
               <Film size={20} className="text-[var(--pink-primary)]" />
               <div>
-                <div className="text-sm font-medium text-[var(--text-primary)]">视频跟读</div>
-                <div className="text-xs text-[var(--text-secondary)]">B站 YouTube 韩语跟读</div>
+                <div className="text-sm font-medium text-[var(--text-primary)]">影子跟读</div>
+                <div className="text-xs text-[var(--text-secondary)]">B站 YouTube 韩语影子跟读</div>
               </div>
               <ArrowRight size={16} className="text-[var(--pink-primary)] ml-auto" />
             </Link>

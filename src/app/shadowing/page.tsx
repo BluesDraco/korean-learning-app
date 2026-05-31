@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Film, Loader2, Trash2, Play, Link2, AlertCircle } from 'lucide-react';
 import { db } from '@/lib/db';
-import { detectPlatform } from '@/lib/platform-detector';
 import type { StudyVideo } from '@/types';
 
 export default function ShadowingListPage() {
@@ -27,43 +26,29 @@ export default function ShadowingListPage() {
 
   const handleAdd = async () => {
     setError('');
-    const detected = detectPlatform(url.trim());
-    if (detected.platform === 'unknown') {
-      setError('暂不支持此平台，请使用B站或YouTube链接');
-      return;
-    }
-
     setAdding(true);
     try {
-      // Try to get video title via oEmbed or page info
-      let title = '';
-      let thumbnail = '';
-      if (detected.platform === 'bilibili') {
-        try {
-          const res = await fetch(`https://api.bilibili.com/x/web-interface/view?bvid=${detected.platformId}`);
-          const json = await res.json();
-          if (json.code === 0) {
-            title = json.data.title;
-            thumbnail = json.data.pic;
-          }
-        } catch {}
-      }
-      if (detected.platform === 'youtube') {
-        try {
-          const res = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${detected.platformId}&format=json`);
-          const json = await res.json();
-          title = json.title;
-          thumbnail = json.thumbnail_url;
-        } catch {}
+      // Use server-side proxy to detect platform and fetch video info (avoids CORS)
+      const infoRes = await fetch('/api/video-info', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: url.trim() }),
+      });
+      const info = await infoRes.json();
+
+      if (info.platform === 'unknown') {
+        setError('暂不支持此平台，请使用B站或YouTube链接');
+        setAdding(false);
+        return;
       }
 
       const newVideo: StudyVideo = {
         id: crypto.randomUUID(),
         url: url.trim(),
-        platform: detected.platform,
-        platformId: detected.platformId,
-        title: title || `${detected.platform === 'bilibili' ? 'B站' : 'YouTube'}视频 (${detected.platformId})`,
-        thumbnail,
+        platform: info.platform,
+        platformId: info.platformId,
+        title: info.title || `${info.platform === 'bilibili' ? 'B站' : 'YouTube'}视频 (${info.platformId})`,
+        thumbnail: info.thumbnail || '',
         subtitleSource: 'manual',
         addedAt: Date.now(),
         lastStudiedAt: Date.now(),
@@ -97,8 +82,8 @@ export default function ShadowingListPage() {
   return (
     <div className="py-4 space-y-5">
       <div>
-        <h1 className="text-2xl font-bold text-[var(--text-primary)]">视频跟读</h1>
-        <p className="text-[var(--text-secondary)] text-sm mt-1">粘贴视频链接，导入字幕，逐句跟读学习</p>
+        <h1 className="text-2xl font-bold text-[var(--text-primary)]">影子跟读</h1>
+        <p className="text-[var(--text-secondary)] text-sm mt-1">粘贴视频链接，导入字幕，逐句影子跟读学习</p>
       </div>
 
       {/* Add video */}
@@ -132,7 +117,7 @@ export default function ShadowingListPage() {
           </div>
         )}
         <p className="text-[11px] text-[var(--text-muted)]">
-          支持 B站 (bilibili.com) 和 YouTube 链接。首次打开后上传SRT字幕即可开始跟读。
+          支持 B站 (bilibili.com) 和 YouTube 链接。首次打开后上传SRT字幕即可开始影子跟读。
         </p>
       </div>
 
@@ -141,7 +126,7 @@ export default function ShadowingListPage() {
         <div className="text-center py-16 space-y-3">
           <Film size={48} className="text-[var(--text-placeholder)] mx-auto" />
           <p className="text-[var(--text-muted)] text-sm">还没有学习过的视频</p>
-          <p className="text-[var(--text-muted)] text-xs">粘贴链接开始你的第一次视频跟读</p>
+          <p className="text-[var(--text-muted)] text-xs">粘贴链接开始你的第一次影子跟读</p>
         </div>
       ) : (
         <div className="space-y-2">

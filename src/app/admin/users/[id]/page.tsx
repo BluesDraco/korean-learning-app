@@ -139,7 +139,7 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
             <h4 className="text-xs font-semibold text-[var(--text-muted)] mb-2">其他数据</h4>
             <div className="grid grid-cols-2 gap-2 text-xs text-[var(--text-muted)]">
               <span>听写完成: {data.dictationsDone}次</span>
-              <span>跟读完成: {data.shadowingDone}次</span>
+              <span>影子跟读完成: {data.shadowingDone}次</span>
             </div>
           </div>
         </div>
