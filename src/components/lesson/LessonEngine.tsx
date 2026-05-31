@@ -380,8 +380,10 @@ export default function LessonEngine({ course, dayNum }: Props) {
         )}
         {card.type === 'match-pairs' && (
           <MatchPairsCard
-            koreanChunks={card.koreanChunks!}
-            chineseChunks={card.chineseChunks!}
+            direction={card.matchDirection!}
+            promptText={card.matchDirection === 'zh-to-ko' ? (card.data as DailySentence).chinese : (card.data as DailySentence).korean}
+            chunks={card.matchChunks!}
+            correctOrder={card.matchCorrectOrder!}
             onCorrect={handleMatchPairsCorrect}
             onWrong={handleMatchPairsWrong}
           />

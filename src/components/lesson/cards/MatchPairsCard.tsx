@@ -1,134 +1,102 @@
-import { useState, useCallback } from 'react';
-import { CheckCircle, RefreshCw } from 'lucide-react';
+import { useState, useCallback, useEffect } from 'react';
+import { ArrowLeftRight, CheckCircle } from 'lucide-react';
 
 interface Props {
-  koreanChunks: string[];
-  chineseChunks: string[];
+  direction: 'zh-to-ko' | 'ko-to-zh';
+  promptText: string;
+  chunks: string[];
+  correctOrder: string[];
   onCorrect: () => void;
   onWrong: () => void;
 }
 
-export function MatchPairsCard({ koreanChunks, chineseChunks, onCorrect, onWrong }: Props) {
-  const [selectedKo, setSelectedKo] = useState<number | null>(null);
-  const [selectedZh, setSelectedZh] = useState<number | null>(null);
-  const [matched, setMatched] = useState<Set<number>>(new Set()); // indices of matched Korean chunks
-  const [result, setResult] = useState<'correct' | 'wrong' | null>(null);
+export function MatchPairsCard({ direction, promptText, chunks: initialChunks, correctOrder, onCorrect, onWrong }: Props) {
+  const [items, setItems] = useState<string[]>(initialChunks);
+  const [selected, setSelected] = useState<number | null>(null);
+  const [passed, setPassed] = useState(false);
   const [attempts, setAttempts] = useState(0);
 
-  const handleSelectKo = useCallback((idx: number) => {
-    if (matched.has(idx) || result === 'correct') return;
-    setSelectedKo(idx);
-    if (selectedZh !== null) {
-      // Check if this pair is correct (same index = correct pair)
-      checkPair(idx, selectedZh);
-    }
-  }, [selectedZh, matched, result]);
-
-  const handleSelectZh = useCallback((idx: number) => {
-    if (result === 'correct') return;
-    // Check if this Chinese chunk is already matched
-    const alreadyMatched = matched.has(idx);
-    if (alreadyMatched) return;
-    setSelectedZh(idx);
-    if (selectedKo !== null) {
-      checkPair(selectedKo, idx);
-    }
-  }, [selectedKo, matched, result]);
-
-  const checkPair = useCallback((koIdx: number, zhIdx: number) => {
-    setAttempts((p) => p + 1);
-    if (koIdx === zhIdx) {
-      // Correct pair!
-      const next = new Set(matched);
-      next.add(koIdx);
-      setMatched(next);
-      setSelectedKo(null);
-      setSelectedZh(null);
-      // Check if all matched
-      if (next.size >= koreanChunks.length) {
-        setResult('correct');
-        onCorrect();
-      }
-    } else {
-      // Wrong pair
-      setResult('wrong');
-      onWrong();
-      setTimeout(() => {
-        setResult(null);
-        setSelectedKo(null);
-        setSelectedZh(null);
-      }, 800);
-    }
-  }, [matched, koreanChunks.length, onCorrect, onWrong]);
-
-  const resetAll = useCallback(() => {
-    setSelectedKo(null);
-    setSelectedZh(null);
-    setMatched(new Set());
-    setResult(null);
+  // Reset when chunks change (new card instance)
+  useEffect(() => {
+    setItems(initialChunks);
+    setSelected(null);
+    setPassed(false);
     setAttempts(0);
-  }, []);
+  }, [initialChunks]);
+
+  const checkCorrect = useCallback((ordered: string[]) => {
+    const isCorrect = ordered.length === correctOrder.length &&
+      ordered.every((chunk, i) => chunk === correctOrder[i]);
+    if (isCorrect) {
+      setPassed(true);
+      onCorrect();
+    }
+    return isCorrect;
+  }, [correctOrder, onCorrect]);
+
+  const handleClick = useCallback((idx: number) => {
+    if (passed) return;
+    if (selected === null) {
+      setSelected(idx);
+    } else if (selected === idx) {
+      setSelected(null);
+    } else {
+      // Swap the two positions
+      setAttempts((p) => p + 1);
+      const next = [...items];
+      [next[selected], next[idx]] = [next[idx], next[selected]];
+      setItems(next);
+      setSelected(null);
+      const isCorrect = checkCorrect(next);
+      if (!isCorrect) {
+        onWrong();
+      }
+    }
+  }, [selected, items, passed, checkCorrect, onWrong]);
+
+  const label = direction === 'zh-to-ko' ? '中翻韩' : '韩翻中';
+  const sourceLabel = direction === 'zh-to-ko' ? '中文' : '韩文';
 
   return (
     <div className="w-full space-y-5">
-      <p className="text-sm text-[var(--text-muted)]">把韩文词组和对应的中文意思配对</p>
-      <p className="text-xs text-[var(--text-muted)]">点击韩文 → 点击中文</p>
+      <div className="flex items-center justify-center gap-2">
+        <ArrowLeftRight size={16} className="text-[var(--pink-primary)]" />
+        <span className="text-sm font-bold text-[var(--pink-primary)]">{label}</span>
+      </div>
 
-      {result === 'correct' && (
+      {/* Source sentence */}
+      <div className="bg-[var(--bg-input)] rounded-2xl p-4 w-full max-w-xs mx-auto">
+        <p className="text-[10px] text-[var(--text-muted)] mb-1">{sourceLabel}</p>
+        <p className="text-lg font-bold text-[var(--text-primary)]">{promptText}</p>
+      </div>
+
+      {passed ? (
         <div className="flex items-center justify-center gap-2 text-sm text-[var(--mint-soft)]">
           <CheckCircle size={16} />
-          全部正确! (尝试 {attempts} 次)
+          排列正确! (尝试 {attempts} 次)
         </div>
+      ) : (
+        <p className="text-xs text-[var(--text-muted)]">点击两个词组交换位置，排列成正确的句子</p>
       )}
 
-      {result === 'wrong' && (
-        <div className="text-xs text-red-400 animate-pulse">不对，再试一次</div>
-      )}
-
-      {/* Korean chunks — top row */}
+      {/* Reorderable chunks */}
       <div className="flex flex-wrap justify-center gap-2">
-        {koreanChunks.map((chunk, i) => {
-          const isMatched = matched.has(i);
-          const isSelected = selectedKo === i;
+        {items.map((chunk, i) => {
+          const isSelected = selected === i;
+          const isCorrectPos = passed || (correctOrder[i] === chunk);
           return (
             <button
-              key={`ko-${i}`}
-              onClick={() => handleSelectKo(i)}
-              disabled={isMatched || result === 'correct'}
+              key={`${i}-${chunk}`}
+              onClick={() => handleClick(i)}
+              disabled={passed}
               className={`px-3 py-2 rounded-xl text-sm font-medium transition-all ${
-                isMatched
+                passed
                   ? 'bg-[var(--mint-soft)]/15 text-[var(--mint-soft)] border-2 border-[var(--mint-soft)]/30 cursor-default'
                   : isSelected
-                    ? 'bg-[var(--pink-primary)]/15 text-[var(--pink-primary)] border-2 border-[var(--pink-primary)]/40 scale-105'
-                    : 'bg-[var(--bg-input)] border border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--pink-pale)]'
-              }`}
-            >
-              {isMatched && <CheckCircle size={12} className="inline mr-1" />}
-              {chunk}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Divider */}
-      <div className="border-t border-dashed border-[var(--border-color)]" />
-
-      {/* Chinese chunks — bottom row */}
-      <div className="flex flex-wrap justify-center gap-2">
-        {chineseChunks.map((chunk, i) => {
-          const isMatched = matched.has(i);
-          const isSelected = selectedZh === i;
-          return (
-            <button
-              key={`zh-${i}`}
-              onClick={() => handleSelectZh(i)}
-              disabled={isMatched || result === 'correct'}
-              className={`px-3 py-2 rounded-xl text-sm font-medium transition-all ${
-                isMatched
-                  ? 'bg-[var(--mint-soft)]/10 text-[var(--mint-soft)] border-2 border-[var(--mint-soft)]/20 cursor-default'
-                  : isSelected
-                    ? 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] border-2 border-[var(--pink-primary)]/30 scale-105'
-                    : 'bg-[var(--bg-input)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:border-[var(--pink-pale)]'
+                    ? 'bg-[var(--pink-primary)]/20 text-[var(--pink-primary)] border-2 border-[var(--pink-primary)]/50 scale-105 ring-2 ring-[var(--pink-primary)]/20'
+                    : isCorrectPos
+                      ? 'bg-[var(--mint-soft)]/10 text-[var(--text-primary)] border border-[var(--mint-soft)]/30'
+                      : 'bg-[var(--bg-input)] border border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--pink-pale)] active:scale-95'
               }`}
             >
               {chunk}
@@ -137,15 +105,11 @@ export function MatchPairsCard({ koreanChunks, chineseChunks, onCorrect, onWrong
         })}
       </div>
 
-      {/* Reset button */}
-      {matched.size > 0 && result !== 'correct' && (
-        <button
-          onClick={(e) => { e.stopPropagation(); resetAll(); }}
-          className="flex items-center gap-1.5 text-xs text-[var(--text-muted)] hover:text-[var(--pink-primary)]"
-        >
-          <RefreshCw size={12} />
-          重新配对
-        </button>
+      {/* Hint: show correct positions count */}
+      {!passed && (
+        <p className="text-[10px] text-[var(--text-muted)]">
+          {items.filter((c, i) => c === correctOrder[i]).length} / {items.length} 个位置正确
+        </p>
       )}
     </div>
   );

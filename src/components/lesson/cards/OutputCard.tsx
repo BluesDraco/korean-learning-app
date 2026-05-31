@@ -29,14 +29,12 @@ export function OutputCard({ output, text, setText, showKeyboard, setShowKeyboar
           rows={3}
           className="w-full bg-[var(--bg-input)] border border-[var(--border-color)] rounded-xl p-3 pr-10 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)] resize-none focus:outline-none focus:border-[var(--pink-pale)]"
         />
-        {isMobile && (
-          <button
-            onClick={() => setShowKeyboard(!showKeyboard)}
-            className={`absolute right-2 bottom-2 p-1.5 rounded-lg transition-colors ${showKeyboard ? 'bg-[var(--pink-primary)]/15 text-[var(--pink-primary)]' : 'text-[var(--text-muted)] hover:text-[var(--pink-primary)]'}`}
-          >
-            <Keyboard size={16} />
-          </button>
-        )}
+        <button
+          onClick={() => setShowKeyboard(!showKeyboard)}
+          className={`absolute right-2 bottom-2 p-1.5 rounded-lg transition-colors ${showKeyboard ? 'bg-[var(--pink-primary)]/15 text-[var(--pink-primary)]' : 'text-[var(--text-muted)] hover:text-[var(--pink-primary)]'}`}
+        >
+          <Keyboard size={16} />
+        </button>
       </div>
       <KoreanKeyboard value={text} onChange={setText} visible={showKeyboard} onClose={() => setShowKeyboard(false)} />
       {text && (

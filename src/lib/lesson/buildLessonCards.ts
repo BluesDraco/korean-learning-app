@@ -109,17 +109,20 @@ export function buildLessonCards(course: DailyCourse, outputDifficulty: number =
     cards.push({ type: 'speak-repeat', data: sentences[i], speakText: sentences[i].korean, masteryKey: `sentence-repeat-${i}` });
   }
 
-  // 7. Match-pairs (韩中词组配对)
+  // 7. Sentence reorder (中翻韩 / 韩翻中)
   if (sentences.length > 0) {
     const s = sentences[0];
     const chunks = sentenceToChunks(s);
+    const direction = (Math.random() > 0.5 ? 'zh-to-ko' : 'ko-to-zh') as 'zh-to-ko' | 'ko-to-zh';
+    const targetChunks = direction === 'zh-to-ko' ? [...chunks.ko] : [...chunks.zh];
     cards.push({
       type: 'match-pairs',
       data: s,
       speakText: s.korean,
       masteryKey: 'match-pairs-0',
-      koreanChunks: chunks.ko,
-      chineseChunks: chunks.zh,
+      matchDirection: direction,
+      matchChunks: shuffle([...targetChunks]),
+      matchCorrectOrder: targetChunks,
       maxRetries: 2,
     });
   }

@@ -2,6 +2,8 @@ import type { DailyWord, DailySentence, DailyGrammar, DailyDictation, OutputTask
 
 export type CardType = 'goal' | 'word-intro' | 'sentence-intro' | 'grammar-intro' | 'listen-choice' | 'speak-repeat' | 'match-pairs' | 'output' | 'summary';
 
+export type MatchDirection = 'zh-to-ko' | 'ko-to-zh';
+
 export type MasteryStatus = 'new' | 'learning' | 'reviewing' | 'mastered';
 
 export interface LessonCard {
@@ -14,6 +16,12 @@ export interface LessonCard {
   /** For match-pairs: Korean chunks and Chinese chunks to pair */
   koreanChunks?: string[];
   chineseChunks?: string[];
+  /** For sentence reorder: translation direction */
+  matchDirection?: MatchDirection;
+  /** For sentence reorder: shuffled chunks the user rearranges */
+  matchChunks?: string[];
+  /** For sentence reorder: chunks in correct order (for validation) */
+  matchCorrectOrder?: string[];
   /** Max retry attempts for this specific card instance (0 = no retry, default 2) */
   maxRetries?: number;
   /** How many times this card has been retried already */
