@@ -31,11 +31,13 @@ export async function POST(req: Request) {
         model: 'qwen3-tts-flash',
         input: {
           text,
+          text_type: 'PlainText',
           voice,
           language_type: 'Korean',
         },
         parameters: {
           speech_rate: speechRate,
+          repetition_penalty: 1.2,
         },
       }),
     });

@@ -29,13 +29,22 @@ export function cancelSpeech() {
   window.speechSynthesis?.cancel();
 }
 
+function cleanText(text: string): string {
+  return text
+    .replace(/🔊/g, '')
+    .replace(/[●◉○◈◇◆▸►▻]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 export async function speak(text: string, explicitRate?: number, onEnd?: () => void) {
   const rate = explicitRate ?? getSpeechRate();
   if (typeof window === 'undefined') {
     onEnd?.();
     return;
   }
-  if (!text) {
+  const cleaned = cleanText(text);
+  if (!cleaned) {
     onEnd?.();
     return;
   }
@@ -44,7 +53,7 @@ export async function speak(text: string, explicitRate?: number, onEnd?: () => v
 
   // Qwen3-TTS (阿里云 — best Korean pronunciation)
   try {
-    await speakViaQwen(text, rate);
+    await speakViaQwen(cleaned, rate);
     onEnd?.();
     return;
   } catch {
@@ -53,7 +62,7 @@ export async function speak(text: string, explicitRate?: number, onEnd?: () => v
 
   // Browser speechSynthesis fallback
   try {
-    await speakViaBrowser(text, rate);
+    await speakViaBrowser(cleaned, rate);
   } catch {
     // both failed, give up silently
   }
