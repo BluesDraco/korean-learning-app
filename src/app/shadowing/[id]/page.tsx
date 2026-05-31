@@ -14,6 +14,7 @@ import { SubtitlePanel } from '@/components/SubtitlePanel';
 import { SpeedSelector } from '@/components/SpeedSelector';
 import { ShadowingBar } from '@/components/ShadowingBar';
 import { WordCard, type WordCardData } from '@/components/WordCard';
+import { getCharDiff } from '@/lib/koreanDiff';
 import type { StudyVideo, StudySubtitle, Word } from '@/types';
 
 type SubtitleMode = 'bilingual' | 'korean' | 'chinese' | 'hidden';
@@ -42,6 +43,13 @@ export default function ShadowingPlayerPage() {
   // Shadowing
   const [isRecording, setIsRecording] = useState(false);
   const [shadowingTarget, setShadowingTarget] = useState<StudySubtitle | null>(null);
+  const [shadowingFeedback, setShadowingFeedback] = useState<{
+    userDiff: { char: string; status: 'correct' | 'wrong' | 'extra' | 'missing' }[];
+    correctDiff: { char: string; status: 'correct' | 'wrong' | 'extra' | 'missing' }[];
+    notes: string[];
+    transcript: string;
+  } | null>(null);
+  const recognitionRef = useRef<any>(null);
 
   // SRT upload
   const [showSrtUpload, setShowSrtUpload] = useState(false);
@@ -235,29 +243,51 @@ export default function ShadowingPlayerPage() {
 
   const handleRecord = async () => {
     if (isRecording) {
+      recognitionRef.current?.stop();
       setIsRecording(false);
       return;
     }
+
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      setShadowingFeedback({ userDiff: [], correctDiff: [], notes: ['浏览器不支持语音识别，请使用Chrome'], transcript: '' });
+      return;
+    }
+
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      setIsRecording(true);
-      const mediaRecorder = new MediaRecorder(stream);
-      const chunks: Blob[] = [];
-      mediaRecorder.ondataavailable = (e) => chunks.push(e.data);
-      mediaRecorder.onstop = () => {
-        stream.getTracks().forEach((t) => t.stop());
-        // Recording saved — comparison will be v2
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'ko-KR';
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+      recognitionRef.current = recognition;
+
+      recognition.onresult = (event: any) => {
+        const transcript = event.results[0][0].transcript.trim();
+        if (shadowingTarget) {
+          const diff = getCharDiff(transcript, shadowingTarget.text);
+          setShadowingFeedback({ ...diff, transcript });
+        }
       };
-      mediaRecorder.start();
-      setTimeout(() => mediaRecorder.stop(), 5000); // 5 second recording
+
+      recognition.onerror = () => {
+        setIsRecording(false);
+      };
+
+      recognition.onend = () => {
+        setIsRecording(false);
+      };
+
+      recognition.start();
+      setIsRecording(true);
     } catch {
-      // Microphone access denied
+      setIsRecording(false);
     }
   };
 
   const handleShadowingNext = () => {
     if (loopIndex === null) return;
     const nextIdx = loopIndex + 1;
+    setShadowingFeedback(null);
     if (nextIdx < subtitles.length) {
       handleLoopClick(nextIdx);
       setShadowingTarget(subtitles[nextIdx]);
@@ -271,6 +301,7 @@ export default function ShadowingPlayerPage() {
     setShadowingTarget(null);
     setLoopIndex(null);
     setIsPlaying(false);
+    setShadowingFeedback(null);
   };
 
   const handleSrtUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -478,6 +509,7 @@ export default function ShadowingPlayerPage() {
             onRecord={handleRecord}
             onNext={handleShadowingNext}
             onExit={handleExitShadowing}
+            feedback={shadowingFeedback}
           />
         </div>
       )}
