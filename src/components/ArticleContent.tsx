@@ -14,20 +14,13 @@ function sanitizeHtml(dirty: string): string {
     .replace(/<iframe[\s\S]*?<\/iframe>/gi, '');
 }
 
-const STORAGE_KEY = 'korea-saved-words';
-
-function getSaved(): { ko: string; zh: string; addedAt: number }[] {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch { return []; }
-}
-
-function saveLocal(korean: string, chinese: string): boolean {
-  const words = getSaved();
-  if (!words.some((w) => w.ko === korean)) {
-    words.push({ ko: korean, zh: chinese, addedAt: Date.now() });
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(words));
-    return true;
+async function loadSavedKoreanWords(): Promise<Set<string>> {
+  try {
+    const all = await db.words.toArray();
+    return new Set(all.map((w) => w.word));
+  } catch {
+    return new Set();
   }
-  return false;
 }
 
 async function saveToDb(korean: string, chinese: string): Promise<boolean> {
@@ -71,16 +64,19 @@ export default function ArticleContent({
     const container = containerRef.current;
     if (!container) return;
 
-    // Restore saved word state
-    const words = getSaved();
-    const phraseItems = container.querySelectorAll('.phrase-item');
-    phraseItems.forEach((item) => {
-      const ko = item.querySelector('.phrase-ko');
-      const addBtn = item.querySelector<HTMLElement>('.add-btn');
-      if (ko && addBtn && words.some((w) => w.ko === ko.textContent?.replace('🔊', '').trim())) {
-        addBtn.classList.add('saved');
-        addBtn.textContent = '✓';
-      }
+    // Restore saved word state from db
+    let savedWords = new Set<string>();
+    loadSavedKoreanWords().then((words) => {
+      savedWords = words;
+      const phraseItems = container.querySelectorAll('.phrase-item');
+      phraseItems.forEach((item) => {
+        const ko = item.querySelector('.phrase-ko');
+        const addBtn = item.querySelector<HTMLElement>('.add-btn');
+        if (ko && addBtn && savedWords.has(ko.textContent?.replace('🔊', '').trim() || '')) {
+          addBtn.classList.add('saved');
+          addBtn.textContent = '✓';
+        }
+      });
     });
 
     function showToast(msg: string) {
@@ -143,7 +139,6 @@ export default function ArticleContent({
         if (ko && zh) {
           const korean = ko.textContent?.replace('🔊', '').trim() || '';
           const chinese = zh.textContent?.trim() || '';
-          saveLocal(korean, chinese);
           saveToDb(korean, chinese);
           addBtn.classList.add('saved');
           addBtn.textContent = '✓';

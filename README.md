@@ -51,16 +51,56 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 | Variable | Description |
 |----------|-------------|
+| `JWT_SECRET` | Secret key for JWT signing (required, min 32 chars) |
 | `DEEPSEEK_CHAT_KEY` | DeepSeek API key for AI chat |
-| `DEEPSEEK_NEWS_KEY` | DeepSeek API key for K-pop news |
+| `DEEPSEEK_ANALYZE_KEY` | DeepSeek API key for grammar/word analysis |
+| `DEEPSEEK_TRANSLATE_KEY` | DeepSeek API key for translation |
 | `DEEPSEEK_VOICE_KEY` | DeepSeek API key for voice conversation |
+| `DEEPSEEK_HANDWRITING_KEY` | DeepSeek API key for handwriting recognition |
+| `DEEPSEEK_LOOKUP_KEY` | DeepSeek API key for dictionary lookup |
+| `DEEPSEEK_NEWS_KEY` | DeepSeek API key for K-pop news generation |
 | `DASHSCOPE_API_KEY` | Alibaba DashScope key for Qwen TTS |
-| `AZURE_TTS_KEY` | Azure Cognitive Services key for TTS |
-| `AZURE_TTS_REGION` | Azure region (default: eastus) |
-| `TURSO_URL` | Turso database URL |
+| `TURSO_DATABASE_URL` | Turso database URL (leave empty for local SQLite) |
 | `TURSO_AUTH_TOKEN` | Turso auth token |
-| `JWT_SECRET` | Secret key for JWT signing |
-| `ADMIN_USER_ID` | Admin user ID (auto-set on register) |
+| `ADMIN_USER_ID` | (Optional) User ID to auto-promote to admin |
+
+## Database
+
+The app supports two database modes:
+
+- **Local SQLite** (default): Leave `TURSO_DATABASE_URL` empty. Data is stored at `data/app.db`.
+- **Turso** (production): Set `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN`. Run `npm run db:migrate` to initialize schema.
+
+## Creating an Admin User
+
+1. Register a normal account via the sign-up page
+2. Copy your user ID from the admin users page or database
+3. Set `ADMIN_USER_ID=<your-id>` in `.env.local` and restart the dev server
+4. The admin panel is accessible at `/admin`
+
+## Common Issues
+
+| Symptom | Likely Cause | Fix |
+|---------|-------------|-----|
+| Home page keeps spinning | Database connection failed | Check TURSO_URL / local SQLite |
+| AI chat returns error | Missing DeepSeek API key | Set `DEEPSEEK_CHAT_KEY` in `.env.local` |
+| No sound on click | TTS not configured | Falls back to browser speechSynthesis; ensure `ko-KR` voice is installed |
+| API key not configured | `.env.example` keys not copied | Run `cp .env.example .env.local` and fill in values |
+| Service Worker caches old version | Cache version mismatch | Hard-refresh (Ctrl+Shift+R) or clear site data |
+
+## Deploying to Vercel
+
+```bash
+# Install Vercel CLI
+npm i -g vercel
+
+# Deploy
+vercel --prod
+```
+
+**Important:** Set all environment variables in the Vercel dashboard (Settings → Environment Variables). For Turso, ensure the database URL and token are set. The build command is `npm run build` (Next.js default).
+
+For file-based storage (local SQLite), note that Vercel's serverless functions have an ephemeral filesystem. Use Turso for production deployments.
 
 ## Project Structure
 

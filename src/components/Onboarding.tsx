@@ -15,7 +15,7 @@ const QUIZ_CORRECT = '你好';
 
 export default function Onboarding({ onComplete }: Props) {
   const [step, setStep] = useState(0);
-  const [level, setLevel] = useState<UserProfile['targetLevel']>('beginner');
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [animating, setAnimating] = useState(false);
   const [quizResult, setQuizResult] = useState<boolean | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -23,9 +23,9 @@ export default function Onboarding({ onComplete }: Props) {
   const totalSteps = 4;
 
   // Save level to profile
-  const handleLevelSelect = useCallback(async (l: UserProfile['targetLevel']) => {
-    setLevel(l);
-    await updateProfile({ targetLevel: l });
+  const handleLevelSelect = useCallback(async (optionKey: string, targetLevel: UserProfile['targetLevel']) => {
+    setSelectedOption(optionKey);
+    await updateProfile({ targetLevel });
   }, []);
 
   // Step 1→2→3→4 progression
@@ -132,16 +132,16 @@ export default function Onboarding({ onComplete }: Props) {
 
               <div className="space-y-3">
                 {([
-                  { value: 'beginner' as const, label: '完全零基础', desc: '从四十音和问候语开始', emoji: '🌱' },
-                  { value: 'beginner' as const, label: '会一点点', desc: '认识字母，能说简单问候', emoji: '🌿' },
-                  { value: 'intermediate' as const, label: '初级水平', desc: 'TOPIK 1-2，能简单对话', emoji: '🌳' },
-                  { value: 'advanced' as const, label: '中级以上', desc: 'TOPIK 3+，能流利表达', emoji: '🌺' },
+                  { key: 'absolute_beginner', level: 'beginner' as const, label: '完全零基础', desc: '从四十音和问候语开始', emoji: '🌱' },
+                  { key: 'some_beginner', level: 'beginner' as const, label: '会一点点', desc: '认识字母，能说简单问候', emoji: '🌿' },
+                  { key: 'intermediate', level: 'intermediate' as const, label: '初级水平', desc: 'TOPIK 1-2，能简单对话', emoji: '🌳' },
+                  { key: 'advanced', level: 'advanced' as const, label: '中级以上', desc: 'TOPIK 3+，能流利表达', emoji: '🌺' },
                 ]).map((opt) => (
                   <button
-                    key={opt.label}
-                    onClick={() => handleLevelSelect(opt.value)}
+                    key={opt.key}
+                    onClick={() => handleLevelSelect(opt.key, opt.level)}
                     className={`w-full flex items-center gap-4 p-4 rounded-xl border transition-all text-left ${
-                      level === opt.value
+                      selectedOption === opt.key
                         ? 'bg-[var(--pink-primary)]/10 border-[var(--pink-primary)]/50'
                         : 'bg-[var(--bg-soft)] border-[var(--border-color)] hover:border-[var(--border-hover)]'
                     }`}
