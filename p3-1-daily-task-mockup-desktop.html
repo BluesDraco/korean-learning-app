@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>한국어 - 首页 · Desktop</title>
+<style>
+  :root {
+    --bg-base: #FFF9FB;
+    --bg-card: #FFFFFF;
+    --bg-soft: #FFF0F3;
+    --bg-input: #F5F0FF;
+    --text-primary: #2D1B2E;
+    --text-secondary: #6B5B6E;
+    --text-muted: #A89BAB;
+    --pink-primary: #FF8FAB;
+    --pink-pale: #FFD6E0;
+    --purple-soft: #C9B8E8;
+    --mint-soft: #68C9B2;
+    --peach-soft: #FFB88C;
+    --border-color: #F0E6EF;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'KaiTi', 'STKaiti', 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+    background: var(--bg-base); color: var(--text-primary);
+    min-height: 100vh;
+  }
+
+  /* ── Layout shell: sidebar + main ── */
+  .app-layout { display: flex; min-height: 100vh; }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    width: 56px; background: var(--bg-card);
+    border-right: 3px solid var(--pink-pale);
+    display: flex; flex-direction: column; align-items: center;
+    padding: 20px 0 16px; gap: 4px; flex-shrink: 0;
+  }
+  .sidebar .logo { font-size: 28px; margin-bottom: 24px; }
+  .sidebar .nav-icon {
+    width: 40px; height: 40px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; color: var(--text-muted); cursor: pointer;
+    transition: background 0.15s, color 0.15s; text-decoration: none;
+  }
+  .sidebar .nav-icon:hover, .sidebar .nav-icon.active {
+    background: rgba(255,143,171,0.1); color: var(--pink-primary);
+  }
+  .sidebar .spacer { flex: 1; }
+  .sidebar .bottom-icons { display: flex; flex-direction: column; gap: 4px; }
+
+  /* ── Main content ── */
+  .main { flex: 1; padding: 24px 32px 32px; max-width: 960px; }
+
+  /* ── Header ── */
+  .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+  .header-left { display: flex; align-items: center; gap: 12px; }
+  .mascot { font-size: 40px; }
+  .greeting h1 { font-size: 20px; font-weight: 700; color: var(--text-primary); }
+  .greeting p  { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+  .streak-badge {
+    display: flex; align-items: center; gap: 6px;
+    background: linear-gradient(135deg, #FFF0F3, #FFF5FA);
+    border: 1px solid var(--pink-pale); border-radius: 24px;
+    padding: 10px 18px; font-size: 14px; font-weight: 600; color: var(--pink-primary);
+  }
+
+  /* ── Two-column body ── */
+  .content-grid { display: grid; grid-template-columns: 1fr 340px; gap: 24px; }
+
+  /* ── Left column ── */
+  .left-col { display: flex; flex-direction: column; gap: 16px; }
+
+  /* Daily task row */
+  .daily-task-row {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--bg-card); border: 1.5px solid var(--pink-pale);
+    border-radius: 16px; padding: 16px 20px; cursor: pointer;
+    transition: box-shadow 0.15s;
+  }
+  .daily-task-row:hover { box-shadow: 0 4px 16px rgba(255,143,171,0.1); }
+  .task-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--pink-pale); flex-shrink: 0; }
+  .task-dot.done { background: var(--mint-soft); }
+  .task-info { flex: 1; }
+  .task-info .tag { font-size: 11px; color: var(--pink-primary); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+  .task-info .desc { font-size: 15px; font-weight: 700; color: var(--text-primary); margin-top: 2px; }
+  .task-info .meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .task-btn {
+    padding: 10px 24px; border-radius: 22px; border: none;
+    background: var(--pink-primary); color: white;
+    font-size: 14px; font-weight: 600; cursor: pointer; flex-shrink: 0;
+    transition: transform 0.1s;
+  }
+  .task-btn:active { transform: scale(0.95); }
+  .task-btn.done { background: var(--mint-soft); }
+
+  /* Section label */
+  .section-hdr {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 700; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.05em;
+    margin-bottom: 2px;
+  }
+
+  /* Continue cards */
+  .continue-card {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--bg-card); border: 1px solid var(--border-color);
+    border-radius: 14px; padding: 14px 16px; cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .continue-card:hover { border-color: var(--pink-pale); }
+  .continue-card .c-emoji { font-size: 24px; width: 36px; text-align: center; flex-shrink: 0; }
+  .continue-card .c-info { flex: 1; min-width: 0; }
+  .continue-card .c-title { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+  .continue-card .c-sub  { font-size: 12px; color: var(--text-secondary); margin-top: 1px; }
+  .continue-card .c-arrow { color: var(--text-muted); font-size: 15px; flex-shrink: 0; opacity: 0.5; }
+  .c-badge {
+    font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 10px; flex-shrink: 0;
+  }
+  .c-badge.warn { background: #FFF3E0; color: var(--peach-soft); }
+  .c-badge.info { background: #F0F8FF; color: #68A0C9; }
+  .c-badge.go   { background: #F0FFF8; color: var(--mint-soft); }
+  .c-badge.new  { background: #FFF0F5; color: var(--pink-primary); }
+
+  /* Feature tags */
+  .feature-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .feature-tag {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 7px 15px; border-radius: 20px;
+    background: var(--bg-card); border: 1px solid var(--border-color);
+    font-size: 12px; font-weight: 500; color: var(--text-secondary);
+    cursor: pointer; transition: border-color 0.15s; text-decoration: none;
+  }
+  .feature-tag:hover { border-color: var(--pink-pale); color: var(--text-primary); }
+  .feature-tag .ft-emoji { font-size: 14px; }
+
+  .divider { height: 1px; background: var(--border-color); }
+
+  /* ── Right column ── */
+  .right-col { display: flex; flex-direction: column; gap: 16px; }
+
+  .stats-card {
+    background: var(--bg-card); border: 1px solid var(--border-color);
+    border-radius: 18px; padding: 20px;
+  }
+  .stats-card .s-title {
+    font-size: 12px; font-weight: 700; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 14px;
+  }
+  .stat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .stat-row .s-label { font-size: 13px; color: var(--text-secondary); }
+  .stat-row .s-val   { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+  .xp-bar-outer { background: var(--bg-input); border-radius: 8px; height: 6px; margin-top: 4px; overflow: hidden; }
+  .xp-bar-inner {
+    background: linear-gradient(90deg, var(--pink-primary), var(--purple-soft));
+    height: 100%; border-radius: 8px;
+  }
+  .stats-card .xp-label { display: flex; justify-content: space-between; margin-top: 6px; font-size: 11px; color: var(--text-muted); }
+
+  .streak-card {
+    background: linear-gradient(135deg, #FFF0F3, #FFF5FA);
+    border: 1px solid var(--pink-pale); border-radius: 18px;
+    padding: 20px; text-align: center;
+  }
+  .streak-card .big-fire { font-size: 40px; margin-bottom: 4px; }
+  .streak-card .big-num  { font-size: 32px; font-weight: 800; color: var(--pink-primary); }
+  .streak-card .big-lbl  { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+
+  .quote-card {
+    background: var(--bg-card); border: 1px solid var(--border-color);
+    border-radius: 18px; padding: 18px 20px; text-align: center;
+  }
+  .quote-card .q-text { font-size: 15px; color: var(--text-primary); font-weight: 600; line-height: 1.5; }
+  .quote-card .q-from { font-size: 11px; color: var(--text-muted); margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<div class="app-layout">
+
+  <!-- ═══════════ Sidebar ═══════════ -->
+  <nav class="sidebar">
+    <div class="logo">🐰</div>
+    <a href="#" class="nav-icon active" title="首页">🏠</a>
+    <a href="#" class="nav-icon" title="学习">📖</a>
+    <a href="#" class="nav-icon" title="复习">🔄</a>
+    <a href="#" class="nav-icon" title="词汇">📋</a>
+    <a href="#" class="nav-icon" title="写作">📝</a>
+    <a href="#" class="nav-icon" title="TOPIK">📄</a>
+    <a href="#" class="nav-icon" title="AI">💬</a>
+    <div class="spacer"></div>
+    <div class="bottom-icons">
+      <a href="#" class="nav-icon" title="消息">✉️</a>
+      <a href="#" class="nav-icon" title="设置">⚙️</a>
+    </div>
+  </nav>
+
+  <!-- ═══════════ Main ═══════════ -->
+  <main class="main">
+
+    <!-- Header -->
+    <div class="header">
+      <div class="header-left">
+        <div class="mascot">🐰</div>
+        <div class="greeting">
+          <h1>안녕하세요, 小明</h1>
+          <p>保持节奏，你已经连续 7 天打卡了 ✨</p>
+        </div>
+      </div>
+      <div class="streak-badge">🔥 连续 7 天</div>
+    </div>
+
+    <!-- Content grid -->
+    <div class="content-grid">
+
+      <!-- ── Left: main flow ── -->
+      <div class="left-col">
+
+        <!-- Daily task -->
+        <div class="daily-task-row">
+          <div class="task-dot" id="taskDot"></div>
+          <div class="task-info">
+            <span class="tag">📌 今日任务</span>
+            <div class="desc">学 5 个餐厅用语 — 물 주세요, 계산서 주세요…</div>
+            <div class="meta">预计 8 分钟 · 奖励 +25 XP</div>
+          </div>
+          <button class="task-btn" id="taskBtn" onclick="toggleTask()">开始学习</button>
+        </div>
+
+        <!-- Continue learning -->
+        <div class="section-hdr">📍 继续学习</div>
+
+        <div class="continue-card">
+          <div class="c-emoji">🔄</div>
+          <div class="c-info">
+            <div class="c-title">SRS 间隔复习</div>
+            <div class="c-sub">8 个单词记忆健康度下降，建议现在复习</div>
+          </div>
+          <span class="c-badge warn">8 个待复习</span>
+          <span class="c-arrow">→</span>
+        </div>
+
+        <div class="continue-card">
+          <div class="c-emoji">📖</div>
+          <div class="c-info">
+            <div class="c-title">绘本 · 토리의 편의점</div>
+            <div class="c-sub">上次看到第 3 页 · 还剩 4 页</div>
+          </div>
+          <span class="c-badge go">初级</span>
+          <span class="c-arrow">→</span>
+        </div>
+
+        <div class="continue-card">
+          <div class="c-emoji">🎬</div>
+          <div class="c-info">
+            <div class="c-title">跟读 · "Run BTS" 综艺片段</div>
+            <div class="c-sub">上次练习到第 12 / 45 句</div>
+          </div>
+          <span class="c-badge info">进行中</span>
+          <span class="c-arrow">→</span>
+        </div>
+
+        <div class="continue-card">
+          <div class="c-emoji">📝</div>
+          <div class="c-info">
+            <div class="c-title">写作练习 · 自我介绍</div>
+            <div class="c-sub">草稿未完成，继续写完它</div>
+          </div>
+          <span class="c-badge new">草稿</span>
+          <span class="c-arrow">→</span>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Feature tags -->
+        <div class="section-hdr">🧩 功能入口</div>
+        <div class="feature-tags">
+          <a class="feature-tag"><span class="ft-emoji">🎧</span>听写</a>
+          <a class="feature-tag"><span class="ft-emoji">📝</span>写作</a>
+          <a class="feature-tag"><span class="ft-emoji">📋</span>TOPIK</a>
+          <a class="feature-tag"><span class="ft-emoji">🇰🇷</span>韩国文化</a>
+          <a class="feature-tag"><span class="ft-emoji">🎵</span>KPOP资讯</a>
+          <a class="feature-tag"><span class="ft-emoji">💬</span>AI对话</a>
+          <a class="feature-tag"><span class="ft-emoji">👥</span>学习搭子</a>
+          <a class="feature-tag"><span class="ft-emoji">📊</span>学习统计</a>
+          <a class="feature-tag"><span class="ft-emoji">📓</span>语法库</a>
+          <a class="feature-tag"><span class="ft-emoji">🔊</span>发音表</a>
+        </div>
+      </div>
+
+      <!-- ── Right: stats sidebar ── -->
+      <div class="right-col">
+
+        <!-- Streak -->
+        <div class="streak-card">
+          <div class="big-fire">🔥</div>
+          <div class="big-num">7 天</div>
+          <div class="big-lbl">连续学习</div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-card">
+          <div class="s-title">📊 学习数据</div>
+          <div class="stat-row">
+            <span class="s-label">已学单词</span>
+            <span class="s-val">42</span>
+          </div>
+          <div class="stat-row">
+            <span class="s-label">当前等级</span>
+            <span class="s-val" style="color:var(--purple-soft)">Lv.6</span>
+          </div>
+          <div class="stat-row" style="margin-bottom:4px">
+            <span class="s-label">今日学习</span>
+            <span class="s-val">18 分钟</span>
+          </div>
+          <div class="xp-bar-outer">
+            <div class="xp-bar-inner" style="width:62%"></div>
+          </div>
+          <div class="xp-label">
+            <span>Lv.6</span><span>310 / 500 XP</span><span>Lv.7</span>
+          </div>
+        </div>
+
+        <!-- Quote -->
+        <div class="quote-card">
+          <div class="q-text">"한국어는 생각보다<br>어렵지 않아.<br>읽고 싶은 이유만 있으면 돼."</div>
+          <div class="q-from">— 토리 🐰</div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  let done = false;
+  function toggleTask() {
+    done = !done;
+    document.getElementById('taskDot').className = 'task-dot' + (done ? ' done' : '');
+    const btn = document.getElementById('taskBtn');
+    btn.className = 'task-btn' + (done ? ' done' : '');
+    btn.textContent = done ? '✓ 已完成' : '开始学习';
+  }
+</script>
+
+</body>
+</html>

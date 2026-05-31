@@ -15,8 +15,12 @@ interface NewsPost {
   bvid?: string;
   pic?: string;
   author?: string;
+  pubdate?: number;
+  play?: number;
   vocab: { ko: string; zh: string }[];
 }
+
+type SortMode = 'latest' | 'popular';
 
 interface CacheData {
   date: string;
@@ -32,6 +36,7 @@ export function NewsClient() {
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState('');
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
+  const [sortMode, setSortMode] = useState<SortMode>('latest');
 
   async function fetchNews() {
     try {
@@ -99,14 +104,41 @@ export function NewsClient() {
             </span>
           )}
         </div>
-        <button
-          onClick={handleRefresh}
-          disabled={refreshing}
-          className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] hover:bg-[var(--pink-primary)]/20 disabled:opacity-50 transition-all border border-[var(--pink-primary)]/20"
-        >
-          {refreshing ? <RefreshCw size={13} className="animate-spin" /> : <Sparkles size={13} />}
-          {refreshing ? '整理中...' : '手动刷新'}
-        </button>
+        <div className="flex items-center gap-2">
+          {/* Sort toggle */}
+          {data && data.posts.length > 0 && (
+            <div className="flex items-center rounded-lg border border-[var(--border-color)] overflow-hidden">
+              <button
+                onClick={() => setSortMode('latest')}
+                className={`text-xs px-2.5 py-1.5 transition-colors ${
+                  sortMode === 'latest'
+                    ? 'bg-[var(--pink-primary)]/15 text-[var(--pink-primary)] font-medium'
+                    : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
+                }`}
+              >
+                最新
+              </button>
+              <button
+                onClick={() => setSortMode('popular')}
+                className={`text-xs px-2.5 py-1.5 transition-colors ${
+                  sortMode === 'popular'
+                    ? 'bg-[var(--pink-primary)]/15 text-[var(--pink-primary)] font-medium'
+                    : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
+                }`}
+              >
+                最热
+              </button>
+            </div>
+          )}
+          <button
+            onClick={handleRefresh}
+            disabled={refreshing}
+            className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] hover:bg-[var(--pink-primary)]/20 disabled:opacity-50 transition-all border border-[var(--pink-primary)]/20"
+          >
+            {refreshing ? <RefreshCw size={13} className="animate-spin" /> : <Sparkles size={13} />}
+            {refreshing ? '整理中...' : '手动刷新'}
+          </button>
+        </div>
       </div>
 
       {error && !data && (
@@ -117,16 +149,25 @@ export function NewsClient() {
         </div>
       )}
 
-      {/* Post feed — single column chronological */}
+      {/* Post feed — single column, sorted */}
       <div className="space-y-5">
-        {data?.posts.map((post) => (
+        {data?.posts
+          .slice()
+          .sort((a, b) => {
+            if (sortMode === 'popular') {
+              return (b.play || 0) - (a.play || 0);
+            }
+            // latest: sort by pubdate descending, then by date string
+            return (b.pubdate || 0) - (a.pubdate || 0) || b.date.localeCompare(a.date);
+          })
+          .map((post) => (
           <article
             key={post.id}
             className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl overflow-hidden hover:border-[var(--pink-pale)]/50 transition-all"
           >
             <div className="p-5">
               {/* Meta row */}
-              <div className="flex items-center gap-2 mb-3">
+              <div className="flex items-center gap-2 mb-3 flex-wrap">
                 <span
                   className={`text-xs font-bold px-2.5 py-1 rounded-full ${
                     post.source === 'bilibili'
@@ -143,6 +184,9 @@ export function NewsClient() {
                   <span className="text-xs text-[var(--text-muted)] flex items-center gap-1">
                     <User size={11} />{post.author}
                   </span>
+                )}
+                {post.play != null && post.play > 0 && (
+                  <span className="text-xs text-[var(--text-muted)]">{post.play.toLocaleString()} 播放</span>
                 )}
                 <span className="text-xs text-[var(--text-muted)] ml-auto">{post.date}</span>
               </div>

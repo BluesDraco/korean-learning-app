@@ -1,5 +1,24 @@
 let currentAudio: HTMLAudioElement | null = null;
 
+const TTS_SPEED_KEY = 'tts-speed';
+
+export function getSpeechRate(): number {
+  if (typeof window === 'undefined') return 0.8;
+  try {
+    const v = localStorage.getItem(TTS_SPEED_KEY);
+    return v ? parseFloat(v) : 0.8;
+  } catch {
+    return 0.8;
+  }
+}
+
+export function setSpeechRate(rate: number): void {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(TTS_SPEED_KEY, String(rate));
+  } catch { /* ignore */ }
+}
+
 export function cancelSpeech() {
   if (currentAudio) {
     currentAudio.pause();
@@ -10,7 +29,8 @@ export function cancelSpeech() {
   window.speechSynthesis?.cancel();
 }
 
-export async function speak(text: string, _rate: number = 1.0, onEnd?: () => void) {
+export async function speak(text: string, explicitRate?: number, onEnd?: () => void) {
+  const rate = explicitRate ?? getSpeechRate();
   if (typeof window === 'undefined') {
     onEnd?.();
     return;
@@ -24,7 +44,7 @@ export async function speak(text: string, _rate: number = 1.0, onEnd?: () => voi
 
   // Qwen3-TTS (阿里云 — best Korean pronunciation)
   try {
-    await speakViaQwen(text);
+    await speakViaQwen(text, rate);
     onEnd?.();
     return;
   } catch {
@@ -33,7 +53,7 @@ export async function speak(text: string, _rate: number = 1.0, onEnd?: () => voi
 
   // Browser speechSynthesis fallback
   try {
-    await speakViaBrowser(text, _rate);
+    await speakViaBrowser(text, rate);
   } catch {
     // both failed, give up silently
   }
@@ -57,11 +77,11 @@ async function speakViaBrowser(text: string, rate: number): Promise<void> {
   });
 }
 
-async function speakViaQwen(text: string): Promise<void> {
+async function speakViaQwen(text: string, rate: number): Promise<void> {
   const res = await fetch('/api/tts/qwen', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text }),
+    body: JSON.stringify({ text, speechRate: rate }),
   });
   if (!res.ok) throw new Error('Qwen failed');
   const blob = await res.blob();

@@ -16,10 +16,12 @@ import {
   Play,
   Pause,
   LogIn,
+  Volume2,
 } from 'lucide-react';
 import { KoreanKeyboard } from '@/components/KoreanKeyboard';
 import { useAuth } from '@/components/AuthProvider';
 import { scenarios, type ScenarioData, type ChatMessage } from '@/data/aiScenarios';
+import { speak } from '@/lib/tts';
 
 // ── Helpers ──────────────────────────────────────────────────────
 
@@ -548,6 +550,13 @@ export default function AIChatPage() {
                       </p>
                     )}
                   </div>
+                  <button
+                    onClick={() => speak(msg.text, 0.85)}
+                    className="flex items-center gap-1 text-xs text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors mt-1 ml-1"
+                  >
+                    <Volume2 size={12} />
+                    听发音
+                  </button>
                 </div>
               </div>
             )}
@@ -560,6 +569,13 @@ export default function AIChatPage() {
                     {msg.text}
                   </p>
                 </div>
+                <button
+                  onClick={() => speak(msg.text, 0.85)}
+                  className="flex items-center gap-1 text-xs text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors mt-1 mr-1"
+                >
+                  <Volume2 size={12} />
+                  听发音
+                </button>
 
                 {/* Feedback card */}
                 {msg.feedback && showChinese && (

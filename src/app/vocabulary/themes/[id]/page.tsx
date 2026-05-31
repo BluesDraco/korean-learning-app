@@ -27,7 +27,7 @@ export default function ThemeDetailPage() {
 
   useEffect(() => {
     const t = getTheme(id);
-    if (!t) { router.push('/vocabulary/themes'); return; }
+    if (!t) { router.push('/vocabulary/library'); return; }
     setTheme(t);
 
     const w = getThemeWords(id);
@@ -106,7 +106,7 @@ export default function ThemeDetailPage() {
     <div className="py-4 space-y-5 pb-24">
       {/* Header */}
       <div>
-        <Link href="/vocabulary/themes" className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] mb-3">
+        <Link href="/vocabulary/library" className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] mb-3">
           <ArrowLeft size={16} />
           返回词包列表
         </Link>

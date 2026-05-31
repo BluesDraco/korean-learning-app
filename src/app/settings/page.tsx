@@ -8,6 +8,7 @@ import { db } from '@/lib/db';
 import type { UserProfile, Achievement } from '@/types';
 import { ACHIEVEMENT_DEFS } from '@/types';
 import { useFontSettings } from '@/components/FontProvider';
+import { setSpeechRate, getSpeechRate } from '@/lib/tts';
 import { FONT_PRESETS, FONT_SIZES } from '@/lib/fontSettings';
 
 export default function SettingsPage() {
@@ -22,7 +23,7 @@ export default function SettingsPage() {
   useEffect(() => {
     const load = async () => {
       const p = await getProfile();
-      setProfile(p);
+      setProfile({ ...p, ttsSpeed: getSpeechRate() } as any);
       const achs = await db.achievements.toArray();
       setAchievements(achs);
       setLoading(false);
@@ -191,7 +192,7 @@ export default function SettingsPage() {
             max="1.2"
             step="0.1"
             value={(profile as any).ttsSpeed ?? 0.8}
-            onChange={(e) => setProfile({ ...profile, ttsSpeed: parseFloat(e.target.value) } as any)}
+            onChange={(e) => { const v = parseFloat(e.target.value); setSpeechRate(v); setProfile({ ...profile, ttsSpeed: v } as any); }}
             className="w-full accent-[var(--purple-soft)]"
           />
           <div className="flex justify-between text-xs text-[var(--text-placeholder)] mt-1">
@@ -252,7 +253,7 @@ export default function SettingsPage() {
                 <p className="text-[10px] text-[var(--text-muted)] leading-tight">{p.desc}</p>
                 <p
                   className="mt-1.5 text-[9px] text-[var(--text-muted)] truncate"
-                  style={{ fontFamily: p.key === 'cute' ? "system-ui,'PingFang SC','Microsoft YaHei',sans-serif" : p.key === 'clean' ? "system-ui,sans-serif" : "'KaiTi','STKaiti','Malgun Gothic',serif" }}
+                  style={{ fontFamily: p.key === 'cute' ? "'KaiTi','STKaiti','Malgun Gothic',sans-serif" : p.key === 'clean' ? "system-ui,'Segoe UI','PingFang SC',sans-serif" : "Georgia,'KaiTi','STKaiti',serif" }}
                 >
                   {p.preview}
                 </p>

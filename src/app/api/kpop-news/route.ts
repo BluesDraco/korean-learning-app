@@ -17,6 +17,7 @@ interface BilibiliVideo {
   description: string;
   play: number;
   pic: string;
+  pubdate: number;  // Unix timestamp from Bilibili API
 }
 
 interface WeiboPost {
@@ -33,9 +34,11 @@ interface NewsPost {
   tag: string;
   source: 'bilibili' | 'weibo';
   sourceUrl: string;
-  bvid?: string;       // Bilibili video ID for embed
-  pic?: string;         // thumbnail
+  bvid?: string;
+  pic?: string;
   author?: string;
+  pubdate?: number;    // Unix timestamp of video upload
+  play?: number;        // view count
   vocab: { ko: string; zh: string }[];
 }
 
@@ -64,7 +67,7 @@ function writeCache(posts: NewsPost[]) {
 async function fetchBilibiliVideos(): Promise<BilibiliVideo[]> {
   try {
     const res = await fetchWithTimeout(
-      'https://api.bilibili.com/x/web-interface/search/type?search_type=video&keyword=KPOP&order=pubdate&page=1&page_size=10',
+      'https://api.bilibili.com/x/web-interface/search/type?search_type=video&keyword=KPOP&order=pubdate&page=1&page_size=6',
       { headers: { 'User-Agent': 'Mozilla/5.0', Referer: 'https://www.bilibili.com' } }
     );
     if (!res.ok) return [];
@@ -77,6 +80,7 @@ async function fetchBilibiliVideos(): Promise<BilibiliVideo[]> {
       description: v.description?.replace(/<[^>]+>/g, '').slice(0, 200) || '',
       play: v.play || 0,
       pic: v.pic || '',
+      pubdate: v.pubdate || 0,
     }));
   } catch {
     return [];
@@ -133,9 +137,9 @@ async function fetchFromAI(): Promise<NewsPost[]> {
   let context = `当前日期：${new Date().toISOString().slice(0, 10)}\n\n`;
 
   if (biliVideos.length > 0) {
-    context += '【B站最新KPOP视频】\n';
+    context += '【B站KPOP视频】\n';
     biliVideos.forEach((v, i) => {
-      context += `${i + 1}. [bvid:${v.bvid}] ${v.title}\n   作者:${v.author} | 播放:${v.play} | 简介:${v.description}\n   封面:${v.pic}\n   链接:https://www.bilibili.com/video/${v.bvid}\n\n`;
+      context += `${i + 1}. [bvid:${v.bvid}] ${v.title}\n   作者:${v.author} | 播放:${v.play} | 上传:${v.pubdate ? new Date(v.pubdate * 1000).toISOString().slice(0, 10) : '?'}\n   封面:${v.pic}\n   链接:https://www.bilibili.com/video/${v.bvid}\n\n`;
     });
   }
 
@@ -151,7 +155,7 @@ async function fetchFromAI(): Promise<NewsPost[]> {
   }
 
   const dsRes = await fetchWithTimeout(DEEPSEEK_API, {
-    timeoutMs: 30_000,
+    timeoutMs: 15_000,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
     body: JSON.stringify({
@@ -161,7 +165,7 @@ async function fetchFromAI(): Promise<NewsPost[]> {
         { role: 'user', content: context },
       ],
       temperature: 0.7,
-      max_tokens: 6000,
+      max_tokens: 4000,
     }),
   });
 
@@ -174,7 +178,22 @@ async function fetchFromAI(): Promise<NewsPost[]> {
   const content = dsData.choices?.[0]?.message?.content || '';
   const jsonMatch = content.match(/\[[\s\S]*\]/);
   if (!jsonMatch) throw new Error('Failed to parse: ' + content.slice(0, 300));
-  return JSON.parse(jsonMatch[0]);
+  const posts: NewsPost[] = JSON.parse(jsonMatch[0]);
+
+  // Merge real Bilibili metadata (pubdate, play) into AI posts by matching bvid
+  const biliMap = new Map(biliVideos.map((v) => [v.bvid, v]));
+  for (const post of posts) {
+    if (post.bvid && biliMap.has(post.bvid)) {
+      const real = biliMap.get(post.bvid)!;
+      post.pubdate = real.pubdate;
+      post.play = real.play;
+      if (real.pubdate) {
+        post.date = new Date(real.pubdate * 1000).toISOString().slice(0, 10);
+      }
+    }
+  }
+
+  return posts;
 }
 
 export async function GET() {

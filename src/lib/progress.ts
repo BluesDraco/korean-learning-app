@@ -70,8 +70,14 @@ export function getKoreanLevel(
   return { level: LEVELS[Math.max(0, idx)].level, idx: Math.max(0, idx) };
 }
 
-// Get today's tasks
-export async function getTodayTasks() {
+export interface TodayTasks {
+  srsReview: { done: boolean; dueCount: number };
+  newGrammar: { done: boolean };
+  reading: { done: boolean };
+  allDone: boolean;
+}
+
+export async function getTodayTasks(): Promise<TodayTasks> {
   const words = await db.words.toArray();
   const now = Date.now();
   const dueCount = words.filter((w) => w.nextReview <= now).length;

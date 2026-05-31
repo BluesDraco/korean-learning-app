@@ -99,6 +99,18 @@
   --text-on-pink:   #F0E8FF;
 }
 
+/* Tori mascot visibility in dark mode — transparent areas need a light backdrop */
+[data-theme="dark"] img[src*="tori-pose"],
+[data-theme="dark"] img[src*="tori-front"],
+[data-theme="dark"] img[src*="tori-sticker"] {
+  background: rgba(255, 248, 240, 0.92);
+  border-radius: 50%;
+}
+[data-theme="dark"] img[src*="tori-day-"] {
+  background: rgba(255, 248, 240, 0.92);
+  border-radius: 8px;
+}
+
 /* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -135,10 +147,10 @@ body {
   font-family: system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
 }
 
-/* Preset: cute (default) — rounded system fonts + Korean */
+/* Preset: cute (default) — 手账风: handwritten Chinese + rounded Korean */
 html[data-font="cute"] body,
 html:not([data-font]) body {
-  font-family: system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+  font-family: system-ui, -apple-system, 'KaiTi', 'STKaiti', 'PingFang SC', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
 }
 html[data-font="cute"] .ko-text,
 html:not([data-font]) .ko-text {
@@ -149,22 +161,22 @@ html:not([data-font]) .ko-body {
   font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
 }
 
-/* Preset: clean — system sans-serif */
+/* Preset: clean — 清晰风: pure sans-serif, no handwritten font */
 html[data-font="clean"] body {
   font-family: system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
 }
 html[data-font="clean"] .ko-text,
 html[data-font="clean"] .ko-body {
-  font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
 }
 
-/* Preset: classic — serif body */
+/* Preset: classic — 经典风: serif body with KaiTi */
 html[data-font="classic"] body {
   font-family: Georgia, 'Times New Roman', 'KaiTi', 'STKaiti', 'Noto Serif KR', serif;
 }
 html[data-font="classic"] .ko-text,
 html[data-font="classic"] .ko-body {
-  font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', serif;
+  font-family: 'Apple SD Gothic Neo', 'Noto Serif KR', serif;
 }
 
 /* ── Paper line background ── */

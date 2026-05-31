@@ -53,7 +53,6 @@ export const navGroups: NavGroup[] = [
       { label: '我的单词', ko: '내 단어', href: '/vocabulary', icon: BookOpen },
       { label: '词库', ko: '단어장', href: '/vocabulary/library', icon: Library },
       { label: '按等级', ko: '등급별', href: '/vocabulary/levels', icon: TrendingUp },
-      { label: '主题词', ko: '주제별', href: '/vocabulary/themes', icon: LayoutGrid },
       { label: '韩语字典', ko: '사전', href: '/dictionary', icon: Search },
     ],
   },

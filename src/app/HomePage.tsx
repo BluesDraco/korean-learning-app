@@ -12,7 +12,9 @@ import { getProfile, getTodayLog, getWeekStreak } from '@/lib/gamification';
 import { getProgress, getTodayTasks } from '@/lib/progress';
 import { useAuth } from '@/components/AuthProvider';
 import Onboarding from '@/components/Onboarding';
+import DailyTasksBar from '@/components/DailyTasksBar';
 import type { Word, UserProfile, DailyLog } from '@/types';
+import type { TodayTasks } from '@/lib/progress';
 
 interface DashboardStats {
   dueCount: number;
@@ -33,13 +35,6 @@ interface ProgressData {
   grammarNeeded: number;
   nextLevel: string;
   unlocks: string[];
-}
-
-interface TodayTasks {
-  srsReview: { done: boolean; dueCount: number };
-  newGrammar: { done: boolean };
-  reading: { done: boolean };
-  allDone: boolean;
 }
 
 export default function Home() {
@@ -290,6 +285,9 @@ export default function Home() {
         </div>
       )}
 
+      {/* Daily Tasks Bar */}
+      {profile && tasks && <DailyTasksBar tasks={tasks} />}
+
       {/* XP Progress Bar */}
       {profile && (
         <div className="card-sticker p-4">
@@ -417,38 +415,6 @@ export default function Home() {
             </div>
           )}
 
-          {/* Today's tasks */}
-          {tasks && (
-            <div className="mt-4 space-y-2">
-              <p className="text-xs font-medium text-[var(--text-secondary)]">今日任务</p>
-              <div className="space-y-1.5">
-                <div className={`flex items-center gap-2 text-xs ${tasks.srsReview.done ? 'text-[var(--mint-soft)]' : tasks.srsReview.dueCount === 0 ? 'text-[var(--mint-soft)]' : 'text-[var(--text-muted)]'}`}>
-                  <span className={`w-4 h-4 rounded-full border flex items-center justify-center text-[10px] ${tasks.srsReview.done || tasks.srsReview.dueCount === 0 ? 'border-[var(--mint-soft)] bg-[var(--mint-soft)]/10' : 'border-[var(--border-color)]'}`}>
-                    {tasks.srsReview.done || tasks.srsReview.dueCount === 0 ? '✓' : ''}
-                  </span>
-                  SRS复习 {tasks.srsReview.done ? '✓' : tasks.srsReview.dueCount > 0 ? `（待复习${tasks.srsReview.dueCount}个词）` : '（已完成）'}
-                </div>
-                <div className={`flex items-center gap-2 text-xs ${tasks.newGrammar.done ? 'text-[var(--mint-soft)]' : 'text-[var(--text-muted)]'}`}>
-                  <span className={`w-4 h-4 rounded-full border flex items-center justify-center text-[10px] ${tasks.newGrammar.done ? 'border-[var(--mint-soft)] bg-[var(--mint-soft)]/10' : 'border-[var(--border-color)]'}`}>
-                    {tasks.newGrammar.done ? '✓' : ''}
-                  </span>
-                  学1条新语法
-                </div>
-                <div className={`flex items-center gap-2 text-xs ${tasks.reading.done ? 'text-[var(--mint-soft)]' : 'text-[var(--text-muted)]'}`}>
-                  <span className={`w-4 h-4 rounded-full border flex items-center justify-center text-[10px] ${tasks.reading.done ? 'border-[var(--mint-soft)] bg-[var(--mint-soft)]/10' : 'border-[var(--border-color)]'}`}>
-                    {tasks.reading.done ? '✓' : ''}
-                  </span>
-                  读5分钟绘本
-                </div>
-              </div>
-              {tasks.allDone && (
-                <div className="bg-[var(--mint-soft)]/10 border border-[var(--mint-soft)]/20 rounded-xl p-3 flex items-center gap-2">
-                  <span className="text-lg">🐰</span>
-                  <span className="text-xs text-[var(--text-secondary)]">全部完成！토리为你骄傲</span>
-                </div>
-              )}
-            </div>
-          )}
         </div>
       )}
 

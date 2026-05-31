@@ -11,9 +11,9 @@ export interface FontSettings {
 const STORAGE_KEY = 'font-settings';
 
 export const FONT_PRESETS: { key: FontPreset; label: string; desc: string; preview: string }[] = [
-  { key: 'cute', label: '手账风', desc: '圆体 + 手写韩文，活泼可爱', preview: '안녕하세요 你好世界' },
-  { key: 'clean', label: '清晰风', desc: '系统黑体 + 高丽体，简洁清晰', preview: '안녕하세요 你好世界' },
-  { key: 'classic', label: '经典风', desc: '霞鹜文楷 + 高丽体，温润典雅', preview: '안녕하세요 你好世界' },
+  { key: 'cute', label: '手账风', desc: '楷体中文 + 圆润韩文，手账手写感', preview: '안녕하세요 你好世界' },
+  { key: 'clean', label: '清晰风', desc: '系统黑体，极简无衬线，干净利落', preview: '안녕하세요 你好世界' },
+  { key: 'classic', label: '经典风', desc: '衬线中文 + 韩文，温润典雅书卷气', preview: '안녕하세요 你好世界' },
 ];
 
 export const FONT_SIZES: { key: FontSize; label: string; px: number }[] = [

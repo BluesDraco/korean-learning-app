@@ -13,6 +13,7 @@ export async function POST(req: Request) {
     const body = await req.json().catch(() => ({}));
     const text: string = body.text || '';
     const voice: string = body.voice || 'Sohee';
+    const speechRate: number = body.speechRate || 1.0;
 
     if (!text || text.length > 600) {
       return NextResponse.json({ error: 'Text required (max 600 chars)' }, { status: 400 });
@@ -32,6 +33,9 @@ export async function POST(req: Request) {
           text,
           voice,
           language_type: 'Korean',
+        },
+        parameters: {
+          speech_rate: speechRate,
         },
       }),
     });
