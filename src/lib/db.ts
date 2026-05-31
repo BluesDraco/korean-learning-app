@@ -1,4 +1,5 @@
 import type { Word, ReviewSession, DictationRecord, ShadowingRecord, UserProfile, DailyLog, Achievement, AppSettings, WordBook, StudyVideo, StudySubtitle, StudyLog, UserAchievement, UserShareLink, StickerPack, Sticker, StickerDownload, BuddyRelation, BuddyInvite } from '@/types';
+import type { LessonMastery, LearningEvent } from '@/lib/lesson/types';
 
 const API = '/api/user-data';
 
@@ -212,6 +213,8 @@ export const db = {
   stickerDownloads: new CloudTable<StickerDownload>('stickerDownloads'),
   buddyRelations: new CloudTable<BuddyRelation>('buddyRelations'),
   buddyInvites: new CloudTable<BuddyInvite>('buddyInvites'),
+  lessonMastery: new CloudTable<LessonMastery>('lessonMastery'),
+  learningEvents: new CloudTable<LearningEvent>('learningEvents'),
 };
 
 export async function initSettings(): Promise<AppSettings> {
