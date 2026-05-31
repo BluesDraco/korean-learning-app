@@ -6,11 +6,7 @@ out
 dist
 *.tsbuildinfo
 next-env.d.ts
-# Runtime data (app database, etc.)
-/data/
-# But keep source code data
-!/src/data/
+*.tar.gz
 
+# Runtime SQLite data
 data/*.db
-*.tar.gz
-*.tar.gz

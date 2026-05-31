@@ -16,9 +16,9 @@ export interface NavGroup {
 }
 
 import {
-  Home, BookOpen, Gamepad2, LayoutGrid, Flower2, Bot, Users2,
+  Home, BookOpen, Gamepad2, LayoutGrid, Flower2, Bot,
   GraduationCap, Grid3X3, FileText, BookImage,
-  RefreshCw, Pencil, Mic, Keyboard, PenLine, BarChart3,
+  RefreshCw, Pencil, Mic, Keyboard, PenLine,
   Library,
   Palette, MapPin, UtensilsCrossed,
   MessageSquare, MessageCircle, Search, Sparkles,
@@ -44,8 +44,6 @@ export const navGroups: NavGroup[] = [
       { label: '打字', ko: '타자', href: '/typing', icon: Keyboard },
       { label: '写作', ko: '작문', href: '/writing', icon: PenLine },
       { label: 'TOPIK模拟', ko: 'TOPIK 모의', href: '/topik', icon: FileText },
-      { label: '学习搭子', ko: '학습 친구', href: '/buddy', icon: Users2 },
-      { label: '学习统计', ko: '통계', href: '/stats', icon: BarChart3 },
     ],
   },
   {
@@ -54,10 +52,6 @@ export const navGroups: NavGroup[] = [
       { label: '词库', ko: '단어장', href: '/vocabulary/library', icon: Library },
       { label: '按等级', ko: '등급별', href: '/vocabulary/levels', icon: TrendingUp },
       { label: '韩语字典', ko: '사전', href: '/dictionary', icon: Search },
-    ],
-  },
-  {
-    icon: MessageCircle, label: '表达', ko: '표현', href: '/expressions', children: [
       { label: '口语表达', ko: '구어 표현', href: '/expressions', icon: MessageCircle },
     ],
   },
