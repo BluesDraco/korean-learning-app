@@ -4,6 +4,7 @@ import { mkdirSync } from 'fs';
 
 let client: Client | null = null;
 let initialized = false;
+let initPromise: Promise<void> | null = null;
 
 function getClient(): Client {
   if (client) return client;
@@ -26,8 +27,9 @@ export async function getDb() {
   const c = getClient();
 
   if (!initialized) {
-
-  await c.execute(`
+    if (!initPromise) {
+      initPromise = (async () => {
+        await c.execute(`
     CREATE TABLE IF NOT EXISTS users (
       id TEXT PRIMARY KEY,
       username TEXT UNIQUE NOT NULL,
@@ -427,7 +429,10 @@ export async function getDb() {
   try { await c.execute(`ALTER TABLE user_profiles ADD COLUMN share_enabled INTEGER DEFAULT 0`); } catch { /* already exists */ }
   try { await c.execute(`ALTER TABLE user_profiles ADD COLUMN share_token TEXT DEFAULT ''`); } catch { /* already exists */ }
 
-    initialized = true;
+        initialized = true;
+      })();
+    }
+    await initPromise;
   }
 
   return {

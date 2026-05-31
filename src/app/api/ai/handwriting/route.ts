@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { DEEPSEEK_MODEL } from '@/lib/deepseek';
 import { getAuthFromCookie } from '@/lib/server/auth';
-import { checkAiRateLimit } from '@/lib/server/rate-limit';
+import { checkAiRateLimit, recordAiUsage } from '@/lib/server/rate-limit';
 import { fetchWithTimeout } from '@/lib/fetch';
 
 export async function POST(req: Request) {
@@ -69,6 +69,7 @@ export async function POST(req: Request) {
 
     const json = await res.json();
     const text = json.choices?.[0]?.message?.content?.trim() || '';
+    await recordAiUsage(auth.userId, 'handwriting');
     return NextResponse.json({ text });
   } catch (err: any) {
     return NextResponse.json({ text: '', error: err.message }, { status: 200 });

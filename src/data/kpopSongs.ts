@@ -13,7 +13,7 @@ export const kpopSongs: KpopSong[] = [
   // ============================================================
   {
     id: 'blackpink-hylt', title: 'How You Like That', artist: 'BLACKPINK', artistEmoji: '🖤💗',
-    album: 'THE ALBUM', year: 2020, videoId: 'ioNng23DkIM', thumbnail: '/images/kpop/blackpink-hylt.jpg',
+    album: 'THE ALBUM', year: 2020, videoId: 'ioNng23DkIM', thumbnail: 'https://img.youtube.com/vi/ioNng23DkIM/hqdefault.jpg',
     level: 'beginner', color: '#FF69B4', tags: ['女团', 'EDM', '霸气'], lyricsKind: 'full',
     lyrics: [
       L('INTRO',              t(0,8), t(0,12),  '보란 듯이 난 또 자신 있게', 'bo-ran deu-si nan tto ja-sin it-ge', '像在炫耀般 我又自信地'),
@@ -68,7 +68,7 @@ export const kpopSongs: KpopSong[] = [
   {
     id: 'bts-spring-day', title: '봄날 (Spring Day)', artist: 'BTS', artistEmoji: '💜',
     album: 'WINGS 외전: You Never Walk Alone', year: 2017, videoId: 'xEeFrLSkMm8',
-    thumbnail: '/images/kpop/bts-spring-day.jpg', level: 'intermediate', color: '#9B59B6',
+    thumbnail: 'https://img.youtube.com/vi/xEeFrLSkMm8/hqdefault.jpg', level: 'intermediate', color: '#9B59B6',
     tags: ['男团', '抒情', '治愈'], lyricsKind: 'full',
     lyrics: [
       L('VERSE 1 — RM',       t(0,15), t(0,18), '보고 싶다', 'bo-go sip-da', '我好想你'),
@@ -142,7 +142,7 @@ export const kpopSongs: KpopSong[] = [
   // ============================================================
   {
     id: 'newjeans-hype-boy', title: 'Hype Boy', artist: 'NewJeans', artistEmoji: '🐰',
-    album: 'New Jeans', year: 2022, videoId: '11cta61wi0g', thumbnail: '/images/kpop/newjeans-hype-boy.jpg',
+    album: 'New Jeans', year: 2022, videoId: '11cta61wi0g', thumbnail: 'https://img.youtube.com/vi/11cta61wi0g/hqdefault.jpg',
     level: 'beginner', color: '#4ECDC4', tags: ['女团', '清新', 'Y2K'], lyricsKind: 'full',
     lyrics: [
       L('INTRO',              t(0,3), t(0,6),  '1, 2, 3, 4', '1, 2, 3, 4', '一 二 三 四'),
@@ -197,7 +197,7 @@ export const kpopSongs: KpopSong[] = [
   // ============================================================
   {
     id: 'ive-love-dive', title: 'LOVE DIVE', artist: 'IVE', artistEmoji: '💖',
-    album: 'LOVE DIVE', year: 2022, videoId: 'Y8JFxS1HlDo', thumbnail: '/images/kpop/ive-love-dive.jpg',
+    album: 'LOVE DIVE', year: 2022, videoId: 'Y8JFxS1HlDo', thumbnail: 'https://img.youtube.com/vi/Y8JFxS1HlDo/hqdefault.jpg',
     level: 'beginner', color: '#FF6B6B', tags: ['女团', '舞曲', '自爱'], lyricsKind: 'full',
     lyrics: [
       L('INTRO',              t(0,5), t(0,8),  '네가 참 궁금해', 'ne-ga cham gung-geum-hae', '我真的很好奇你'),
@@ -253,7 +253,7 @@ export const kpopSongs: KpopSong[] = [
   // ============================================================
   {
     id: 'aespa-next-level', title: 'Next Level', artist: 'aespa', artistEmoji: '🌟',
-    album: 'Next Level', year: 2021, videoId: '4TWR90KJl84', thumbnail: '/images/kpop/aespa-next-level.jpg',
+    album: 'Next Level', year: 2021, videoId: '4TWR90KJl84', thumbnail: 'https://img.youtube.com/vi/4TWR90KJl84/hqdefault.jpg',
     level: 'intermediate', color: '#00D2D3', tags: ['女团', '电子', '元宇宙'], lyricsKind: 'full',
     lyrics: [
       L('INTRO',              t(0,10), t(0,14),  'I\'m on the next level', 'I\'m on the next level', '我在新的次元'),

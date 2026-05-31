@@ -67,7 +67,7 @@ export function Navbar() {
           className="flex items-center gap-1.5 md:justify-center lg:justify-start md:px-2 lg:px-4 py-4"
           onClick={() => setExpandedGroup(null)}
         >
-          <Image src="/images/tori-poses/tori-pose-01.png" alt="Tori" width={32} height={32} className="object-contain shrink-0" />
+          <Image src="/images/tori-poses/tori-pose-01.webp" alt="Tori" width={32} height={32} className="object-contain shrink-0" />
           <span
             className="hidden lg:inline text-xl font-bold bg-gradient-to-r from-[var(--pink-primary)] to-[var(--purple-soft)] bg-clip-text text-transparent"
             style={{ fontFamily: "'KaiTi', 'STKaiti', cursive" }}
@@ -176,7 +176,7 @@ export function Navbar() {
               className="w-full flex items-center justify-center lg:justify-start gap-2 text-xs text-[var(--text-secondary)] hover:text-[var(--pink-primary)] transition-colors md:px-1 lg:px-2 py-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] relative"
             >
               <span className="relative">
-                <Image src="/images/tori-poses/tori-pose-01.png" alt="Tori" width={24} height={24} className="object-contain" />
+                <Image src="/images/tori-poses/tori-pose-01.webp" alt="Tori" width={24} height={24} className="object-contain" />
                 <span className="absolute -top-0.5 -right-1.5 text-sm">✉️</span>
               </span>
               <span className="hidden lg:inline">我的私信</span>
@@ -213,7 +213,7 @@ export function Navbar() {
                 className="flex items-center justify-center lg:justify-start gap-2 bg-[var(--bg-soft)] rounded-xl md:px-2 lg:px-3 py-2.5 hover:bg-[var(--bg-accent)] transition-colors cursor-pointer"
               >
                 <div className="relative">
-                  <Image src="/images/tori-poses/tori-pose-01.png" alt="Tori" width={28} height={28} className="object-contain" />
+                  <Image src="/images/tori-poses/tori-pose-01.webp" alt="Tori" width={28} height={28} className="object-contain" />
                   <span className="status-dot learning absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5" />
                 </div>
                 <div className="hidden lg:flex flex-col flex-1 min-w-0">

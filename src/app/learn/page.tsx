@@ -668,6 +668,59 @@ export default function LearnPage() {
               <p className="text-sm text-[var(--text-primary)]">{grammar.similarPatterns.join(' · ')}</p>
             </div>
           )}
+
+          {grammar.exercises && (
+            <div className="space-y-4 border-t border-[var(--border-color)] pt-4">
+              <p className="text-xs font-medium text-[var(--text-secondary)] flex items-center gap-1.5">
+                <Edit3 size={14} /> 专项练习
+              </p>
+
+              {/* MCQ */}
+              {grammar.exercises.mcq.length > 0 && (
+                <div className="space-y-3">
+                  <p className="text-xs text-[var(--text-muted)] uppercase tracking-wider">选择题</p>
+                  {grammar.exercises.mcq.map((q, qi) => (
+                    <div key={qi} className="bg-[var(--bg-input)] rounded-xl p-4 space-y-2">
+                      <p className="text-sm text-[var(--text-primary)]">{q.question}</p>
+                      <div className="space-y-1.5">
+                        {q.options.map((opt, oi) => (
+                          <div key={oi} className="text-xs text-[var(--text-muted)] pl-3">
+                            {String.fromCharCode(65 + oi)}. {opt}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Fill in blank */}
+              {grammar.exercises.fillBlank.length > 0 && (
+                <div className="space-y-3">
+                  <p className="text-xs text-[var(--text-muted)] uppercase tracking-wider">填空题</p>
+                  {grammar.exercises.fillBlank.map((q, qi) => (
+                    <div key={qi} className="bg-[var(--bg-input)] rounded-xl p-4 space-y-2">
+                      <p className="text-sm text-[var(--text-primary)] font-mono">{q.sentence}</p>
+                      <p className="text-xs text-[var(--peach-soft)]">提示: {q.hint}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Sentence creation */}
+              {grammar.exercises.sentenceCreate.length > 0 && (
+                <div className="space-y-3">
+                  <p className="text-xs text-[var(--text-muted)] uppercase tracking-wider">造句练习</p>
+                  {grammar.exercises.sentenceCreate.map((q, qi) => (
+                    <div key={qi} className="bg-[var(--bg-input)] rounded-xl p-4 space-y-2">
+                      <p className="text-sm text-[var(--text-primary)]">{q.prompt}</p>
+                      <p className="text-xs text-[var(--text-muted)]">参考: {q.hint}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         <button

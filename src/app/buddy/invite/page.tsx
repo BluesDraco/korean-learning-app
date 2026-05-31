@@ -172,7 +172,7 @@ function BuddyInviteContent() {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const a = document.createElement('a');
-    a.download = 'tori-buddy-invite.png';
+    a.download = 'tori-buddy-invite.webp';
     a.href = canvas.toDataURL('image/png');
     a.click();
   };

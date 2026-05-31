@@ -29,12 +29,12 @@ export const pictureBooks: PictureBook[] = [
     emoji: '🐰',
     level: 'beginner',
     description: '跟Tori一起学习韩语，从一封神秘信件开始。适合零基础学习者。',
-    coverImage: '/images/picture-books/tori-day/cover.png',
+    coverImage: '/images/picture-books/tori-day/cover.webp',
     color: 'var(--pink-primary)',
     pages: [
       {
         illustration: '📦\n🐰✨',
-        imageUrl: '/images/picture-books/tori-day/01.png',
+        imageUrl: '/images/picture-books/tori-day/01.webp',
         bgColor: '#FFF0F3',
         korean: '토리가 가장 좋아하는 것은\n이불 속에서 간식 먹기예요.\n어느 날 아침, 문 앞에\n신비로운 소포가 생겼어요.',
         pronunciation: 'to-ri-ga ga-jang jo-a-ha-neun geo-seun\ni-bul so-ge-seo gan-sik meok-gi-ye-yo.\neo-neu nal a-chim, mun a-pe\nsin-bi-ro-un so-po-ga saeng-gyeo-sseo-yo.',
@@ -48,7 +48,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '🍬\n✉️🐰',
-        imageUrl: '/images/picture-books/tori-day/02.png',
+        imageUrl: '/images/picture-books/tori-day/02.webp',
         bgColor: '#FFF8F0',
         korean: '소포 안에는 알록달록한\n한국 간식들이 가득했어요.\n그리고 손으로 쓴 편지도 있었어요.\n"아, 무슨 내용인지 알고 싶다!"',
         pronunciation: 'so-po a-ne-neun al-lok-dal-lo-kan\nhan-guk gan-sik-deu-ri ga-deu-kae-sseo-yo.\ngeu-ri-go so-neu-ro sseun pyeon-ji-do i-sseo-sseo-yo.\n"a, mu-seun nae-yong-in-ji al-go sip-tta!"',
@@ -62,7 +62,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '📚\n🍬🐰',
-        imageUrl: '/images/picture-books/tori-day/03.png',
+        imageUrl: '/images/picture-books/tori-day/03.webp',
         bgColor: '#FFF8E7',
         korean: '"한국어를 배워서\n이 편지를 읽을 거야!"\n두꺼운 책을 가져왔어요.\n그런데... 첫 페이지도 다 읽기 전에\n간식을 먹기 시작했어요.',
         pronunciation: '"han-gu-geo-reul bae-wo-seo\ni pyeon-ji-reul il-geul geo-ya!"\ndu-kkeo-un chae-geul ga-jyeo-wa-sseo-yo.\ngeu-reon-de... cheot pe-i-ji-do da il-gi jeo-ne\n gan-si-geul meok-gi si-ja-kae-sseo-yo.',
@@ -76,7 +76,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '✏️\n📝🐰',
-        imageUrl: '/images/picture-books/tori-day/04.png',
+        imageUrl: '/images/picture-books/tori-day/04.webp',
         bgColor: '#F0F8FF',
         korean: '삐뚤빼뚤, 다시 써요.\n또 삐뚤빼뚤, 다시 써요.\n열 번째에 드디어!\n삐뚤빼뚤하지만\n"안녕"을 썼어요!',
         pronunciation: 'ppi-ttul-ppae-ttul, da-si sseo-yo.\ntto ppi-ttul-ppae-ttul, da-si sseo-yo.\nyeol beon-jjae-e deu-di-eo!\nppi-ttul-ppae-ttul-ha-ji-man\n"an-nyeong"-eul sseo-sseo-yo!',
@@ -90,7 +90,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '🍡\n😋🐰',
-        imageUrl: '/images/picture-books/tori-day/05.png',
+        imageUrl: '/images/picture-books/tori-day/05.webp',
         bgColor: '#FFF5F5',
         korean: '토리가 떡 한 조각을 베어 물었어요.\n달콤하고 부드러웠어요.\n참지 못하고 외쳤어요.\n"맛있다!"\n잠깐, 그건 편지의 첫 번째 문장이었어요!',
         pronunciation: 'to-ri-ga tteok han jo-ga-geul be-eo mu-reo-sseo-yo.\ndal-ko-ma-go bu-deu-reo-wo-sseo-yo.\ncham-ji mo-ta-go oe-chyeo-sseo-yo.\n"ma-sit-tta!"\njam-kkan, geu-geon pyeon-ji-eui cheot beon-jjae mun-jang-i-eo-sseo-yo!',
@@ -104,7 +104,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '✏️\n⭕🐰',
-        imageUrl: '/images/picture-books/tori-day/06.png',
+        imageUrl: '/images/picture-books/tori-day/06.webp',
         bgColor: '#FFF8F0',
         korean: '토리는 연필을 들고\n아는 단어마다 동그라미를 쳤어요.\n맛있다, 귀엽다, 친구...\n편지 속에는 작은 마음들이\n가득 담겨 있었어요.',
         pronunciation: 'to-ri-neun yeon-pi-reul deul-go\na-neun da-neo-ma-da dong-geu-ra-mi-reul chyeo-sseo-yo.\nma-sit-tta, gwi-yeop-tta, chin-gu...\npyeon-ji so-ge-neun ja-geun ma-eum-deu-ri\nga-deuk dam-gyeo i-sseo-sseo-yo.',
@@ -118,7 +118,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '🪞\n🐰💬',
-        imageUrl: '/images/picture-books/tori-day/07.png',
+        imageUrl: '/images/picture-books/tori-day/07.webp',
         bgColor: '#FFF5FA',
         korean: '토리는 거울 앞으로 달려갔어요.\n진지하게 말했어요.\n"저는 토리예요."\n거울 속의 작은 토끼가\n눈을 깜빡였어요.',
         pronunciation: 'to-ri-neun geo-ul a-peu-ro dal-lyeo-ga-sseo-yo.\njin-ji-ha-ge mal-hae-sseo-yo.\n"jeo-neun to-ri-ye-yo."\ngeo-ul so-ge ja-geun to-kki-ga\nnu-neul kkam-ppa-gyeo-sseo-yo.',
@@ -132,7 +132,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '🖊️\n💌🐰',
-        imageUrl: '/images/picture-books/tori-day/08.png',
+        imageUrl: '/images/picture-books/tori-day/08.webp',
         bgColor: '#FFF5EE',
         korean: '토리는 펜을 들고\n친구에게 답장을 쓰기 시작했어요.\n천천히, 한 글자 한 글자.\n한 줄 쓸 때마다\n방긋 웃었어요.',
         pronunciation: 'to-ri-neun pe-neul deul-go\nchin-gu-e-ge dap-jang-eul sseu-gi si-ja-kae-sseo-yo.\ncheon-cheo-ni, han geul-ja han geul-ja.\nhan jul sseul ttae-ma-da\nbang-geu u-seo-sseo-yo.',
@@ -146,7 +146,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '✉️\n🐰🎀',
-        imageUrl: '/images/picture-books/tori-day/09.png',
+        imageUrl: '/images/picture-books/tori-day/09.webp',
         bgColor: '#F0F0FF',
         korean: '다 썼어요!\n봉투에 삐뚤빼뚤한 한국어로 썼어요.\n"감사해요. 나의 친구에게."\n그리고 귀여운 토끼 스티커를 붙였어요.',
         pronunciation: 'da sseo-sseo-yo!\nbong-tu-e ppi-ttul-ppae-ttul-han han-gu-geo-ro sseo-sseo-yo.\n"gam-sa-hae-yo. na-eui chin-gu-e-ge."\ngeu-ri-go gwi-yeo-un to-kki seu-ti-keo-reul bu-chyeo-sseo-yo.',
@@ -160,7 +160,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '🌙\n🐰💤',
-        imageUrl: '/images/picture-books/tori-day/10.png',
+        imageUrl: '/images/picture-books/tori-day/10.webp',
         bgColor: '#F5F0FF',
         korean: '그날 밤, 토리는 이불 속에 폭 파묻혀\n마지막 떡을 먹으며\n창밖의 별을 바라봤어요.\n\'한국어는 생각보다 어렵지 않아.\n읽고 싶은 이유만 있으면 돼.\'\n안녕히 주무세요, 토리. 🌙',
         pronunciation: 'geu-nal bam, to-ri-neun i-bul so-ge pok pa-mu-chyeo\nma-ji-mak tteo-geul meo-geu-myeo\nchang-bak-keu-i byeol-eu-ra-bwa-sseo-yo.\n\'han-gu-geo-neun saeng-gak-bo-da eo-ryeop-ji a-na.\nil-go si-peun i-yu-man i-sseu-myeon dwae.\'\nan-nyeong-hi ju-mu-se-yo, to-ri.',
@@ -174,7 +174,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '📝\n🐰✨',
-        imageUrl: '/images/picture-books/tori-day/11.png',
+        imageUrl: '/images/picture-books/tori-day/11.webp',
         bgColor: '#FFF5FA',
         isSummary: true,
         korean: '토리가 배운 한국어\n\n한국  ·  편지  ·  공부\n안녕  ·  맛있다  ·  귀엽다\n친구  ·  저는 토리예요\n감사해요\n안녕히 주무세요',
@@ -202,12 +202,12 @@ export const pictureBooks: PictureBook[] = [
     emoji: '🏪',
     level: 'beginner',
     description: 'Tori第一次走进韩国便利店！认识价格、点单、品尝韩国零食，学习实用的便利店韩语。',
-    coverImage: '/images/picture-books/tori-store/cover.png',
+    coverImage: '/images/picture-books/tori-store/cover.webp',
     color: 'var(--mint-soft)',
     pages: [
       {
         illustration: '✨🏪🐰',
-        imageUrl: '/images/picture-books/tori-store/01.png',
+        imageUrl: '/images/picture-books/tori-store/01.webp',
         bgColor: '#FFF8E7',
         korean: '어느 날 토리는\n반짝반짝 빛나는 가게를 발견했어요.\n유리창 너머로 간식들이 가득!\n"저기가 편의점이구나!"',
         pronunciation: 'eo-neu nal to-ri-neun\nban-jjak-ban-jjak bin-na-neun ga-ge-reul bal-gyeon-hae-sseo-yo.\nyu-ri-chang neo-meo-ro gan-sik-deu-ri ga-deuk!\n"jeo-gi-ga pyeo-ni-jeo-mi-gu-na!"',
@@ -221,7 +221,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '🔍🐰',
-        imageUrl: '/images/picture-books/tori-store/02.png',
+        imageUrl: '/images/picture-books/tori-store/02.webp',
         bgColor: '#F0F8FF',
         korean: '안으로 들어갔어요.\n와, 모르는 것들이 너무 많아요!\n토리는 두리번두리번.\n뭘 골라야 할지 모르겠어요.',
         pronunciation: 'a-neu-ro deu-reo-ga-sseo-yo.\nwa, mo-reu-neun geot-deu-ri neo-mu ma-na-yo!\nto-ri-neun du-ri-beon-du-ri-beon.\nmwol gol-la-ya hal-ji mo-reu-ge-sseo-yo.',
@@ -235,7 +235,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '💬🐰👩',
-        imageUrl: '/images/picture-books/tori-store/03.png',
+        imageUrl: '/images/picture-books/tori-store/03.webp',
         bgColor: '#FFF5FA',
         korean: '용기를 내서 점원 언니에게 물었어요.\n"이거... 얼마예요?"\n점원 언니가 방긋 웃으며 말했어요.\n"천오백 원이에요!"',
         pronunciation: 'yong-gi-reul nae-seo jeom-won eon-ni-e-ge mu-reo-sseo-yo.\n"i-geo... eol-ma-ye-yo?"\njeom-won eon-ni-ga bang-geu-sseu-myeo mal-hae-sseo-yo.\n"cheon-o-baek wo-ni-e-yo!"',
@@ -249,7 +249,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '💪🐰🗣️',
-        imageUrl: '/images/picture-books/tori-store/page4.png',
+        imageUrl: '/images/picture-books/tori-store/page4.webp',
         bgColor: '#FFF5F0',
         korean: '토리는 심호흡을 하고\n작은 목소리로 말했어요.\n"이거 주세요!"\n해냈어요! 한국어로 샀어요!',
         pronunciation: 'to-ri-neun sim-ho-heu-beul ha-go\nja-geun mok-so-ri-ro mal-hae-sseo-yo.\n"i-geo ju-se-yo!"\nhae-nae-sseo-yo! han-gu-geo-ro sa-sseo-yo!',
@@ -263,7 +263,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '🍡✨🐰',
-        imageUrl: '/images/picture-books/tori-store/04.png',
+        imageUrl: '/images/picture-books/tori-store/04.webp',
         bgColor: '#FFF8F0',
         korean: '편의점 앞 작은 의자에 앉았어요.\n봉지를 열고... 한 입!\n"맛있어요!"\n별이 쏟아지는 것 같았어요.',
         pronunciation: 'pyeo-ni-jeom ap ja-geun ui-ja-e an-ja-sseo-yo.\nbong-ji-reul yeol-go... han ip!\n"ma-si-sseo-yo!"\nbyeo-ri sso-da-ji-neun geot ga-ta-sseo-yo.',
@@ -277,7 +277,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '📝🐰🌙',
-        imageUrl: '/images/picture-books/tori-store/05.png',
+        imageUrl: '/images/picture-books/tori-store/05.webp',
         bgColor: '#F5F0FF',
         korean: '집으로 돌아온 토리는\n오늘 배운 말을 노트에 적었어요.\n편의점, 얼마예요, 주세요, 감사합니다.\n"또 올게요!"\n토리의 한국어 여행은 계속돼요. 🌙',
         pronunciation: 'ji-beu-ro do-ra-on to-ri-neun\no-neul bae-un ma-reul no-teu-e jeo-geo-sseo-yo.\npyeo-ni-jeom, eol-ma-ye-yo, ju-se-yo, gam-sa-ham-ni-da.\n"tto ol-ge-yo!"\nto-ri-eui han-gu-geo yeo-haeng-eun gye-sok-dwae-yo.',
@@ -291,7 +291,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '📖🐰✨',
-        imageUrl: '/images/picture-books/tori-store/06.png',
+        imageUrl: '/images/picture-books/tori-store/06.webp',
         bgColor: '#FFF5FA',
         isSummary: true,
         korean: '토리가 배운 한국어\n\n편의점  ·  얼마예요?\n주세요  ·  감사합니다\n맛있어요  ·  또 올게요',
@@ -315,12 +315,12 @@ export const pictureBooks: PictureBook[] = [
     emoji: '☕',
     level: 'beginner',
     description: 'Tori第一次走进韩国咖啡厅！学习点单、报名字、等取餐，掌握咖啡厅必备韩语。',
-    coverImage: '/images/picture-books/tori-3/cover.png',
+    coverImage: '/images/picture-books/tori-3/cover.webp',
     color: 'var(--pink-primary)',
     pages: [
       {
         illustration: '☕\n🐰🚪',
-        imageUrl: '/images/picture-books/tori-3/01.png',
+        imageUrl: '/images/picture-books/tori-3/01.webp',
         bgColor: '#FFF8E7',
         korean: '토리는 오늘 처음으로\n한국 카페에 왔어요.\n문을 열자 커피 향기가 솔솔.\n"와, 너무 예쁘다!"',
         pronunciation: 'to-ri-neun o-neul cheo-eu-meu-ro\nhan-guk ka-pe-e wa-sseo-yo.\nmu-neul yeol-ja keo-pi hyang-gi-ga sol-sol.\n"wa, neo-mu ye-ppeu-da!"',
@@ -334,7 +334,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '📋\n🐰❓',
-        imageUrl: '/images/picture-books/tori-3/02.png',
+        imageUrl: '/images/picture-books/tori-3/02.webp',
         bgColor: '#F0F8FF',
         korean: '카운터 앞에 서자\n점원 오빠가 물었어요.\n"뭐 드릴까요?"\n토리는 메뉴판을 빤히 봤어요.\n글자가 너무 많아요!',
         pronunciation: 'ka-un-teo a-pe seo-ja\njeo-mwon o-ppa-ga mu-reo-sseo-yo.\n"mwo deu-ril-kka-yo?"\nto-ri-neun me-nyu-pa-neul ppan-hi bwa-sseo-yo.\ngeul-ja-ga neo-mu ma-na-yo!',
@@ -348,7 +348,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '🍓\n🐰💪',
-        imageUrl: '/images/picture-books/tori-3/03.png',
+        imageUrl: '/images/picture-books/tori-3/03.webp',
         bgColor: '#FFF5FA',
         korean: '토리는 용기를 내서 말했어요.\n"저... 딸기 라떼 주세요!"\n점원 오빠가 웃으며 말했어요.\n"이름이 뭐예요?"\n이름을요?!',
         pronunciation: 'to-ri-neun yong-gi-reul nae-seo mal-hae-sseo-yo.\n"jeo... ttal-gi lat-te ju-se-yo!"\njeo-mwon o-ppa-ga u-seu-myeo mal-hae-sseo-yo.\n"i-reu-mi mwo-ye-yo?"\ni-reu-meul-lyo?!',
@@ -362,7 +362,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '✍️\n🐰🪟',
-        imageUrl: '/images/picture-books/tori-3/04.png',
+        imageUrl: '/images/picture-books/tori-3/04.webp',
         bgColor: '#FFF5F0',
         korean: '"저는 토리예요!"\n점원 오빠가 컵에 이름을 적었어요.\n토리는 창가 자리를 찾아 앉았어요.\n이제 기다리는 일만 남았어요.',
         pronunciation: '"jeo-neun to-ri-ye-yo!"\njeo-mwon o-ppa-ga keo-be i-reu-meul jeo-geo-sseo-yo.\nto-ri-neun chang-ga ja-ri-reul cha-ja an-ja-sseo-yo.\ni-je gi-da-ri-neun il-man na-ma-sseo-yo.',
@@ -376,7 +376,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '🎀\n🐰🥤',
-        imageUrl: '/images/picture-books/tori-3/05.png',
+        imageUrl: '/images/picture-books/tori-3/05.webp',
         bgColor: '#FFF8F0',
         korean: '"토리 님!"\n토리는 깜짝 놀라 달려갔어요.\n분홍색 딸기 라떼!\n컵에는 \'토리\'라고 쓰여 있었어요.\n"제 이름이다!"',
         pronunciation: '"to-ri nim!"\nto-ri-neun kkam-jjak nol-la dal-lyeo-ga-sseo-yo.\nbu-nong-saek ttal-gi lat-te!\nkeo-be-neun \'to-ri\'-ra-go sseu-yeo i-sseo-sseo-yo.\n"je i-reu-mi-da!"',
@@ -390,7 +390,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '🌸\n🐰📝',
-        imageUrl: '/images/picture-books/tori-3/06.png',
+        imageUrl: '/images/picture-books/tori-3/06.webp',
         bgColor: '#F5F0FF',
         korean: '창가에서 한 모금 마셨어요.\n달콤하고 시원해요.\n토리는 노트를 펼쳐 적었어요.\n"카페는 정말 좋은 곳이야."\n오늘도 한국어가 늘었어요. 🌸',
         pronunciation: 'chang-ga-e-seo han mo-geum ma-syeo-sseo-yo.\ndal-kom-ha-go si-won-hae-yo.\nto-ri-neun no-teu-reul pyeol-chyeo jeo-geo-sseo-yo.\n"ka-pe-neun jeong-mal jo-eun go-si-ya."\no-neul-do han-gu-geo-ga neu-reo-sseo-yo.',
@@ -404,7 +404,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '📚\n✨🐰',
-        imageUrl: '/images/picture-books/tori-3/07.png',
+        imageUrl: '/images/picture-books/tori-3/07.webp',
         bgColor: '#FFF5FA',
         korean: '오늘의 표현',
         pronunciation: 'o-neul-eui pyo-hyeon',
@@ -428,12 +428,12 @@ export const pictureBooks: PictureBook[] = [
     emoji: '🚇',
     level: 'beginner',
     description: 'Tori第一次独自坐地铁去弘大！学习交通卡、换乘、问路，掌握地铁必备韩语。',
-    coverImage: '/images/picture-books/tori-4/cover.png',
+    coverImage: '/images/picture-books/tori-4/cover.webp',
     color: 'var(--purple-soft)',
     pages: [
       {
         illustration: '🚇\n🐰🚶',
-        imageUrl: '/images/picture-books/tori-4/1.png',
+        imageUrl: '/images/picture-books/tori-4/1.webp',
         bgColor: '#FFF8E7',
         korean: '토리는 오늘 혼자서\n지하철을 타기로 했어요.\n지하철역 입구 앞에서\n두 발이 멈췄어요.\n"할 수 있어!"',
         pronunciation: 'to-ri-neun o-neul hon-ja-seo\nji-ha-cheo-reul ta-gi-ro hae-sseo-yo.\nji-ha-cheo-ryeok ip-gu a-pe-seo\ndu ba-ri meom-chwo-sseo-yo.\n"hal su i-sseo!"',
@@ -447,7 +447,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '💳\n🐰🔊',
-        imageUrl: '/images/picture-books/tori-4/2.png',
+        imageUrl: '/images/picture-books/tori-4/2.webp',
         bgColor: '#F0F8FF',
         korean: '개찰구 앞에서 토리는\n작은 카드를 꺼냈어요.\n삑! 소리와 함께 문이 열렸어요.\n"이게 바로 티머니구나!"',
         pronunciation: 'gae-chal-gu a-pe-seo to-ri-neun\nja-geun ka-deu-reul kkeo-nae-sseo-yo.\nppik! so-ri-wa ham-kke mu-ni yeol-lyeo-sseo-yo.\n"i-ge ba-ro ti-meo-ni-gu-na!"',
@@ -461,7 +461,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '🗺️\n🐰🔍',
-        imageUrl: '/images/picture-books/tori-4/3.png',
+        imageUrl: '/images/picture-books/tori-4/3.webp',
         bgColor: '#FFF5FA',
         korean: '플랫폼에 내려왔어요.\n벽에 큰 노선도가 있었어요.\n토리는 손가락으로 쭉 따라가며\n찾았어요, 찾았어요!\n"여기서 갈아타면 되겠다!"',
         pronunciation: 'peul-laet-po-me nae-ryeo-wa-sseo-yo.\nbyeo-ge keun no-seon-do-ga i-sseo-sseo-yo.\nto-ri-neun son-ga-ra-geu-ro jjuk tta-ra-ga-myeo\ncha-ja-sseo-yo, cha-ja-sseo-yo!\n"yeo-gi-seo ga-ra-ta-myeon doe-get-tta!"',
@@ -475,7 +475,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '🚃\n🐰❓',
-        imageUrl: '/images/picture-books/tori-4/4.png',
+        imageUrl: '/images/picture-books/tori-4/4.webp',
         bgColor: '#FFF5F0',
         korean: '지하철이 들어왔어요!\n문이 열리자 토리가 물었어요.\n"저기요, 이 열차\n홍대 가요?"\n옆 아저씨가 고개를 끄덕였어요.',
         pronunciation: 'ji-ha-cheo-ri deu-reo-wa-sseo-yo!\nmu-ni yeol-li-ja to-ri-ga mu-reo-sseo-yo.\n"jeo-gi-yo, i yeol-cha\nhong-dae ga-yo?"\nyeop a-jeo-ssi-ga go-gae-reul kkeu-deo-gyeo-sseo-yo.',
@@ -489,7 +489,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '🏙️\n🐰🚇',
-        imageUrl: '/images/picture-books/tori-4/5.png',
+        imageUrl: '/images/picture-books/tori-4/5.webp',
         bgColor: '#FFF8F0',
         korean: '창밖으로 서울이 지나갔어요.\n안내 방송이 흘러나왔어요.\n"다음 역은, 홍대입구역입니다."\n토리는 자리에서 벌떡 일어났어요.\n"내 역이다!"',
         pronunciation: 'chang-ba-kkeu-ro seo-u-ri ji-na-ga-sseo-yo.\nan-nae bang-song-i heul-leo-na-wa-sseo-yo.\n"da-eum yeo-geun, hong-dae-ip-gu-yeong-nim-ni-da."\nto-ri-neun ja-ri-e-seo beol-tteok i-reo-na-sseo-yo.\n"nae yeo-gi-da!"',
@@ -503,7 +503,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '🌟\n🐰🎉',
-        imageUrl: '/images/picture-books/tori-4/6.png',
+        imageUrl: '/images/picture-books/tori-4/6.webp',
         bgColor: '#F5F0FF',
         korean: '개찰구를 나오자\n홍대 거리가 펼쳐졌어요.\n토리는 두 팔을 번쩍 들었어요.\n"해냈어요! 혼자서 지하철 탔어요!"\n오늘도 한국어가 한 걸음 늘었어요. 🌟',
         pronunciation: 'gae-chal-gu-reul na-o-ja\nhong-dae geo-ri-ga pyeol-chyeo-jyeo-sseo-yo.\nto-ri-neun du pa-reul beon-jjeok deu-reo-sseo-yo.\n"hae-nae-sseo-yo! hon-ja-seo ji-ha-cheol ta-sseo-yo!"\no-neul-do han-gu-geo-ga han geo-reum neu-reo-sseo-yo.',
@@ -540,12 +540,12 @@ export const pictureBooks: PictureBook[] = [
     emoji: '🍚',
     level: 'beginner',
     description: 'Tori第一次走进韩餐厅！从入座、点单、要求少辣、到结账离开，掌握餐厅必备韩语对话。',
-    coverImage: '/images/picture-books/tori-5/cover.png',
+    coverImage: '/images/picture-books/tori-5/cover.webp',
     color: 'var(--mint-soft)',
     pages: [
       {
         illustration: '🪑\n🐰🍽️',
-        imageUrl: '/images/picture-books/tori-5/1.png',
+        imageUrl: '/images/picture-books/tori-5/1.webp',
         bgColor: '#FFF8E7',
         korean: '토리는 한식당에 들어갔어요.\n사장님이 반갑게 물었어요.\n"몇 분이세요?"\n"저... 저 혼자요."\n"어서 오세요! 이쪽으로 오세요."',
         pronunciation: 'to-ri-neun han-sik-dang-e deu-reo-ga-sseo-yo.\nsa-jang-ni-mi ban-gap-ge mu-reo-sseo-yo.\n"myeot bu-ni-se-yo?"\n"jeo... jeo hon-ja-yo."\n"eo-seo o-se-yo! i-jjo-geu-ro o-se-yo."',
@@ -559,7 +559,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '📋\n🐰🔍',
-        imageUrl: '/images/picture-books/tori-5/2.png',
+        imageUrl: '/images/picture-books/tori-5/2.webp',
         bgColor: '#F0F8FF',
         korean: '자리에 앉자 메뉴판이 왔어요.\n한국어로만 쓰여 있어요.\n토리는 천천히 읽었어요.\n비빔밥... 삼겹살... 순두부찌개...\n"이거다! 비빔밥 먹어볼게요!"',
         pronunciation: 'ja-ri-e an-ja me-nyu-pa-ni wa-sseo-yo.\nhan-gu-geo-ro-man sseu-yeo i-sseo-yo.\nto-ri-neun cheon-cheo-ni il-geo-sseo-yo.\nbi-bim-bap... sam-gyeop-sal... sun-du-bu-jji-gae...\n"i-geo-da! bi-bim-bap meo-geo-bol-ge-yo!"',
@@ -573,7 +573,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '🌶️\n🐰💬',
-        imageUrl: '/images/picture-books/tori-5/3.png',
+        imageUrl: '/images/picture-books/tori-5/3.webp',
         bgColor: '#FFF5FA',
         korean: '사장님이 주문을 받으러 왔어요.\n토리는 깊게 숨을 들이쉬고 말했어요.\n"비빔밥 하나 주세요.\n그리고... 덜 맵게 해주실 수 있어요?"\n"물론이죠! 잠깐만요."',
         pronunciation: 'sa-jang-ni-mi ju-mu-neul ba-deu-reo wa-sseo-yo.\nto-ri-neun gip-ge su-meul deu-ri-swi-go mal-hae-sseo-yo.\n"bi-bim-bap ha-na ju-se-yo.\ngeu-ri-go... deol maep-ge hae-ju-sil su i-sseo-yo?"\n"mul-lo-ni-jyo! jam-kkan-man-yo."',
@@ -587,7 +587,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '🥢\n🐰✨',
-        imageUrl: '/images/picture-books/tori-5/4.png',
+        imageUrl: '/images/picture-books/tori-5/4.webp',
         bgColor: '#FFF5F0',
         korean: '드디어 비빔밥이 나왔어요!\n형형색색 예쁜 나물들.\n반찬도 다섯 가지나!\n한 숟갈 먹자마자 눈이 커졌어요.\n"세상에... 너무 맛있어요!"',
         pronunciation: 'deu-di-eo bi-bim-ba-bi na-wa-sseo-yo!\nhyeong-hyeong-saek-saek ye-ppeun na-mul-deul.\nban-chan-do da-seot ga-ji-na!\nhan sut-gal meok-ja-ma-ja nu-ni keo-jyeo-sseo-yo.\n"se-sang-e... neo-mu ma-si-sseo-yo!"',
@@ -601,7 +601,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '💳\n🐰🙋',
-        imageUrl: '/images/picture-books/tori-5/5.png',
+        imageUrl: '/images/picture-books/tori-5/5.webp',
         bgColor: '#FFF8F0',
         korean: '다 먹고 나서 토리는\n손을 들어 불렀어요.\n"저기요! 여기 계산서 주세요."\n사장님이 웃으며 말했어요.\n"카드 되세요? 현금이세요?"\n"카드요!"',
         pronunciation: 'da meok-go na-seo to-ri-neun\nso-neul deu-reo bul-leo-sseo-yo.\n"jeo-gi-yo! yeo-gi gye-san-seo ju-se-yo."\nsa-jang-ni-mi u-seu-myeo mal-hae-sseo-yo.\n"ka-deu doe-se-yo? hyeon-geu-mi-se-yo?"\n"ka-deu-yo!"',
@@ -615,7 +615,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '🙇\n🐰🌟',
-        imageUrl: '/images/picture-books/tori-5/6.png',
+        imageUrl: '/images/picture-books/tori-5/6.webp',
         bgColor: '#F5F0FF',
         korean: '식당을 나오며 토리가 말했어요.\n"사장님, 잘 먹었습니다!"\n사장님이 환하게 웃었어요.\n"또 오세요!"\n오늘 토리는 한 문장이 아니라\n진짜 대화를 했어요. 🌟',
         pronunciation: 'sik-dang-eul na-o-myeo to-ri-ga mal-hae-sseo-yo.\n"sa-jang-nim, jal meo-geo-sseum-ni-da!"\nsa-jang-ni-mi hwan-ha-ge u-seo-sseo-yo.\n"tto o-se-yo!"\no-neul to-ri-neun han mun-jang-i a-ni-ra\njin-jja dae-hwa-reul hae-sseo-yo.',
@@ -629,7 +629,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '📚\n✨🐰',
-        imageUrl: '/images/picture-books/tori-5/7.png',
+        imageUrl: '/images/picture-books/tori-5/7.webp',
         bgColor: '#FFF5FA',
         korean: '오늘의 표현',
         pronunciation: 'o-neul-eui pyo-hyeon',
@@ -653,12 +653,12 @@ export const pictureBooks: PictureBook[] = [
     emoji: '📺',
     level: 'beginner',
     description: 'Tori第一次看韩剧学韩语！跟着剧情学习진짜、대박、어떡해等地道韩语口语表达。',
-    coverImage: '/images/picture-books/tori-6/cover.png',
+    coverImage: '/images/picture-books/tori-6/cover.webp',
     color: 'var(--pink-primary)',
     pages: [
       {
         illustration: '📺\n🐰🍿',
-        imageUrl: '/images/picture-books/tori-6/1.png',
+        imageUrl: '/images/picture-books/tori-6/1.webp',
         bgColor: '#FFF8E7',
         korean: '토리는 오늘 밤\n처음으로 한국 드라마를 보기로 했어요.\n담요를 두르고, 간식을 챙기고...\n준비 완료!',
         pronunciation: 'to-ri-neun o-neul bam\ncheo-eu-meu-ro han-guk deu-ra-ma-reul bo-gi-ro hae-sseo-yo.\ndam-yo-reul du-reu-go, gan-si-geul chaeng-gi-go...\njun-bi wal-lyo!',
@@ -672,7 +672,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '😮\n🐰👂',
-        imageUrl: '/images/picture-books/tori-6/2.png',
+        imageUrl: '/images/picture-books/tori-6/2.webp',
         bgColor: '#F0F8FF',
         korean: '드라마가 시작됐어요.\n첫 대사가 나왔어요.\n"오빠! 진짜?!"\n토리는 귀를 쫑긋 세웠어요.\n"진짜... 진짜가 뭐지?"',
         pronunciation: 'deu-ra-ma-ga si-jak-dwae-sseo-yo.\ncheot dae-sa-ga na-wa-sseo-yo.\n"o-ppa! jin-jja?!"\nto-ri-neun gwi-reul jjong-geut se-wo-sseo-yo.\n"jin-jja... jin-jja-ga mwo-ji?"',
@@ -686,7 +686,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '🤩\n🐰📝',
-        imageUrl: '/images/picture-books/tori-6/3.png',
+        imageUrl: '/images/picture-books/tori-6/3.webp',
         bgColor: '#FFF5FA',
         korean: '토리는 드라마를 잠깐 멈췄어요.\n노트를 펼치고 적었어요.\n"진짜 = 真的/真的吗"\n다시 재생!\n이번엔 또 다른 말이 나왔어요.\n"대박!"',
         pronunciation: 'to-ri-neun deu-ra-ma-reul jam-kkan meom-chwo-sseo-yo.\nno-teu-reul pyeol-chi-go jeo-geo-sseo-yo.\n"jin-jja = 真的/真的吗"\nda-si jae-saeng!\ni-beo-nen tto da-reun ma-ri na-wa-sseo-yo.\n"dae-bak!"',
@@ -700,7 +700,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '😢\n🐰💧',
-        imageUrl: '/images/picture-books/tori-6/4.png',
+        imageUrl: '/images/picture-books/tori-6/4.webp',
         bgColor: '#FFF5F0',
         korean: '드라마 속 주인공이 울기 시작했어요.\n토리도 모르게 눈물이 났어요.\n"어떡해... 어떡해!"\n잠깐, 그것도 한국어였어요.\n토리는 울면서 노트에 적었어요.',
         pronunciation: 'deu-ra-ma sok ju-in-gong-i ul-gi si-ja-kae-sseo-yo.\nto-ri-do mo-reu-ge nun-mu-ri na-sseo-yo.\n"eo-tteo-kae... eo-tteo-kae!"\njam-kkan, geu-geot-do han-gu-geo-yeot-eo-yo.\nto-ri-neun ul-myeon-seo no-teu-e jeo-geo-sseo-yo.',
@@ -714,7 +714,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '💡\n🐰📒',
-        imageUrl: '/images/picture-books/tori-6/5.png',
+        imageUrl: '/images/picture-books/tori-6/5.webp',
         bgColor: '#FFF8F0',
         korean: '드라마가 끝났어요.\n토리의 노트에는\n오늘 배운 말들이 가득했어요.\n진짜, 대박, 어떡해, 맞아, 왜?\n"드라마로도 공부가 되네!"',
         pronunciation: 'deu-ra-ma-ga kkeun-na-sseo-yo.\nto-ri-eui no-teu-e-neun\no-neul bae-un mal-deu-ri ga-deu-kae-sseo-yo.\njin-jja, dae-bak, eo-tteo-kae, ma-ja, wae?\n"deu-ra-ma-ro-do gong-bu-ga doe-ne!"',
@@ -728,7 +728,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '🌙\n🐰💤',
-        imageUrl: '/images/picture-books/tori-6/6.png',
+        imageUrl: '/images/picture-books/tori-6/6.webp',
         bgColor: '#F5F0FF',
         korean: '토리는 이불 속에 들어가며 생각했어요.\n\'한국어 공부가 이렇게 재미있을 줄이야.\'\n내일도 한 편 더 봐야지!\n진짜로. 대박이야.\n안녕히 주무세요, 토리. 🌙',
         pronunciation: 'to-ri-neun i-bul so-ge deu-reo-ga-myeo saeng-ga-kae-sseo-yo.\n\'han-gu-geo gong-bu-ga i-reo-ke jae-mi-i-sseul ju-ri-ya.\'\nnae-il-do han pyeon deo bwa-ya-ji!\njin-jja-ro. dae-ba-gi-ya.\nan-nyeong-hi ju-mu-se-yo, to-ri.',
@@ -742,7 +742,7 @@ export const pictureBooks: PictureBook[] = [
       },
       {
         illustration: '📚\n✨🐰',
-        imageUrl: '/images/picture-books/tori-6/7.png',
+        imageUrl: '/images/picture-books/tori-6/7.webp',
         bgColor: '#FFF5FA',
         korean: '오늘의 표현',
         pronunciation: 'o-neul-eui pyo-hyeon',

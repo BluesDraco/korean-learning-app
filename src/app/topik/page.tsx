@@ -141,9 +141,9 @@ export default function TopikPage() {
       <div className="py-4 space-y-6">
         <div className="text-center">
           <div className="text-5xl mb-3">📝</div>
-          <h1 className="text-2xl font-bold text-[var(--text-primary)] section-header">TOPIK 真题模拟</h1>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)] section-header">TOPIK 模拟练习</h1>
           <p className="text-sm text-[var(--text-secondary)] mt-2 max-w-md mx-auto">
-            涵盖 TOPIK I（初级）~ TOPIK II（中高级）300道模拟题，真实题型与计时环境
+            TOPIK I（初级）~ TOPIK II（中高级）300道模拟题，TOPIK风格题型与计时环境
           </p>
         </div>
 
@@ -420,6 +420,55 @@ export default function TopikPage() {
               </div>
             )}
           </div>
+
+          {/* Error analysis */}
+          {correctCount < questions.length && (
+            <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-5 space-y-4">
+              <h3 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
+                <BookOpen size={16} className="text-[var(--purple-soft)]" />
+                错题分析
+              </h3>
+
+              {/* Wrong question list */}
+              <div className="space-y-3 max-h-80 overflow-y-auto">
+                {questions.filter(q => {
+                  const sel = answers.get(q.id);
+                  return sel !== undefined && sel !== q.correctIdx;
+                }).map((q) => (
+                  <div key={q.id} className="bg-[var(--bg-input)] rounded-xl p-4 space-y-2">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-xs font-bold text-[var(--pink-primary)]">#{q.topic}</span>
+                      {q.difficulty && (
+                        <span className={`text-[11px] px-1.5 py-0.5 rounded-full ${
+                          q.difficulty === 'easy' ? 'bg-[var(--mint-soft)]/10 text-[var(--mint-soft)]' :
+                          q.difficulty === 'medium' ? 'bg-[var(--peach-soft)]/10 text-[var(--peach-soft)]' :
+                          'bg-[var(--color-danger)]/10 text-[var(--color-danger)]'
+                        }`}>
+                          {q.difficulty === 'easy' ? '简单' : q.difficulty === 'medium' ? '中等' : '困难'}
+                        </span>
+                      )}
+                      {q.testPoint && (
+                        <span className="text-[11px] text-[var(--text-muted)]">考点: {q.testPoint}</span>
+                      )}
+                    </div>
+                    <p className="text-sm text-[var(--text-primary)]">{q.prompt}</p>
+                    {q.errorCategory && (
+                      <p className="text-xs text-[var(--text-muted)]">
+                        错误类型: {q.errorCategory}
+                      </p>
+                    )}
+                    <p className="text-xs text-[var(--text-secondary)] leading-relaxed">{q.explanation}</p>
+                    {q.reviewGrammarId && (
+                      <div className="flex items-center gap-1.5">
+                        <BookOpen size={12} className="text-[var(--purple-soft)]" />
+                        <span className="text-xs text-[var(--purple-soft)]">建议复习相关语法</span>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Actions */}
           <div className="flex gap-3">

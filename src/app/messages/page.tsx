@@ -61,7 +61,7 @@ export default function MessagesPage() {
       <div className="text-center space-y-3">
         <div className="relative inline-block">
           <Image
-            src="/images/tori-poses/tori-pose-01.png"
+            src="/images/tori-poses/tori-pose-01.webp"
             alt="Tori"
             width={80}
             height={80}

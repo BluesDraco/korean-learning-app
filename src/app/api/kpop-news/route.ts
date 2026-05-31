@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { DEEPSEEK_MODEL } from '@/lib/deepseek';
 import { getAuthFromCookie } from '@/lib/server/auth';
-import { checkAiRateLimit } from '@/lib/server/rate-limit';
+import { checkAiRateLimit, recordAiUsage } from '@/lib/server/rate-limit';
 import { fetchWithTimeout } from '@/lib/fetch';
 
 const DEEPSEEK_API = 'https://api.deepseek.com/v1/chat/completions';
@@ -227,6 +227,7 @@ export async function POST() {
   try {
     const posts = await fetchFromAI();
     writeCache(posts);
+    await recordAiUsage(auth.userId, 'kpop-news');
     return NextResponse.json({ ok: true, count: posts.length, posts });
   } catch (e: any) {
     return NextResponse.json({ error: e.message }, { status: 500 });

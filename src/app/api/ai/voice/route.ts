@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { DEEPSEEK_MODEL } from '@/lib/deepseek';
 import { getAuthFromCookie } from '@/lib/server/auth';
-import { checkAiRateLimit } from '@/lib/server/rate-limit';
+import { checkAiRateLimit, recordAiUsage } from '@/lib/server/rate-limit';
 import { fetchWithTimeout } from '@/lib/fetch';
 
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
@@ -87,6 +87,7 @@ export async function POST(req: Request) {
     const cleanJson = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
     const data = JSON.parse(cleanJson);
 
+    await recordAiUsage(auth.userId, 'voice');
     return NextResponse.json({
       ko: data.ko || '',
       zh: data.zh || '',

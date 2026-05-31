@@ -44,7 +44,7 @@ export async function generateMetadata(
       title: `${data.nickname}的韩语学习日记`,
       description: `已学习${data.studyDays}天 · ${data.totalWords}个单词 · 和托里一起成长`,
       type: 'website',
-      images: [{ url: '/tori-og.png', width: 1080, height: 1080 }],
+      images: [{ url: '/tori-og.webp', width: 1080, height: 1080 }],
     },
   };
 }

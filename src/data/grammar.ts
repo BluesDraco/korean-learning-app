@@ -3,6 +3,12 @@ export interface GrammarExample {
   zh: string;
 }
 
+export interface GrammarExercise {
+  mcq: { question: string; options: string[]; correctIdx: number }[];
+  fillBlank: { sentence: string; answer: string; hint: string }[];
+  sentenceCreate: { prompt: string; hint: string }[];
+}
+
 export interface GrammarPoint {
   id: string;
   title: string;
@@ -17,6 +23,7 @@ export interface GrammarPoint {
   similarPatterns?: string[];
   difference?: string;
   toriTip?: string;
+  exercises?: GrammarExercise;
 }
 
 export const grammarPoints: GrammarPoint[] = [
@@ -39,6 +46,22 @@ export const grammarPoints: GrammarPoint[] = [
     similarPatterns: ['이/가'],
     difference: '은/는 是主题助词（大话题），이/가 是主格助词（主语）。"코끼리는 코가 길다"（大象鼻子长）—은/는 引出话题，이/가 标记具体主语。',
     toriTip: '🐰 最简单的判断法：第一次提到某人/物用 이/가，再次提到或大家都知道的话题用 은/는。"저는 토리예요"（我是托里，大家都看到我了）vs "토리가 왔어요"（托里来了，第一次出现）。',
+    exercises: {
+      mcq: [
+        { question: '"저___ 학생입니다." 空格中应填入？', options: ['는', '가', '를', '도'], correctIdx: 0 },
+        { question: '"오늘___ 날씨가 좋아요."（强调"今天"）空格中应填入？', options: ['이', '은', '을', '에'], correctIdx: 1 },
+        { question: '"책___ 재미있어요."（책 有收音）空格中应填入？', options: ['는', '가', '은', '를'], correctIdx: 2 },
+      ],
+      fillBlank: [
+        { sentence: '저___ 토리예요.', answer: '는', hint: '无收音，主题助词' },
+        { sentence: '이것___ 사과예요.', answer: '은', hint: '有收音，主题助词' },
+        { sentence: '저___ 학생이고, 친구___ 선생님이에요.', answer: '는|는', hint: '对比两个主语，都无收音' },
+      ],
+      sentenceCreate: [
+        { prompt: '用 은/는 介绍自己的名字', hint: '저는 [이름]입니다' },
+        { prompt: '用 은/는 对比两样东西', hint: 'A은/는 ~고 B은/는 ~' },
+      ],
+    },
   },
   {
     id: 'g2', title: '主格助词', pattern: '이/가',
@@ -54,6 +77,21 @@ export const grammarPoints: GrammarPoint[] = [
     similarPatterns: ['은/는'],
     difference: '이/가 强调主语本身，은/는 强调话题或对比。',
     toriTip: '🐰 问"谁做的？"用 이/가："누가 했어요?"。回答"我做的"也用 이/가："제가 했어요"。이/가 把焦点放在"谁"上面。',
+    exercises: {
+      mcq: [
+        { question: '"날씨___ 좋아요." 空格中应填入？', options: ['는', '가', '를', '도'], correctIdx: 1 },
+        { question: '"누___ 왔어요?"（谁来...）空格中应填入？', options: ['가', '는', '를', '에'], correctIdx: 0 },
+        { question: '"친구___ 선물을 줬어요."（친구 无收音）空格中应填入？', options: ['은', '이', '가', '을'], correctIdx: 2 },
+      ],
+      fillBlank: [
+        { sentence: '날씨___ 좋아요.', answer: '가', hint: '无收音，主格助词' },
+        { sentence: '책___ 재미있어요.', answer: '이', hint: '有收音，主格助词' },
+      ],
+      sentenceCreate: [
+        { prompt: '用 이/가 描述天气', hint: '날씨가 [形容词]' },
+        { prompt: '用 이/가 问谁做了什么', hint: '누가 [动词]?' },
+      ],
+    },
   },
   {
     id: 'g3', title: '宾格助词', pattern: '을/를',

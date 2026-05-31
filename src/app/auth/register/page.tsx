@@ -50,7 +50,7 @@ export default function RegisterPage() {
 
         <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 space-y-5">
           <div className="text-center">
-            <Image src="/images/tori-poses/tori-pose-03.png" alt="Tori" width={56} height={56} className="object-contain mx-auto mb-2" />
+            <Image src="/images/tori-poses/tori-pose-03.webp" alt="Tori" width={56} height={56} className="object-contain mx-auto mb-2" />
             <h1 className="text-xl font-bold text-[var(--text-primary)]">注册</h1>
             <p className="text-xs text-[var(--text-muted)] mt-1">创建你的学习账户</p>
           </div>

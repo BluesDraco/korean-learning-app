@@ -262,7 +262,7 @@ export default function AchievementCardPage() {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const link = document.createElement('a');
-    link.download = `tori-milestone-${milestone}.png`;
+    link.download = `tori-milestone-${milestone}.webp`;
     link.href = canvas.toDataURL('image/png');
     link.click();
   };

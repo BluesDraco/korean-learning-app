@@ -45,7 +45,7 @@ function LoginForm() {
 
         <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 space-y-5">
           <div className="text-center">
-            <Image src="/images/tori-poses/tori-pose-02.png" alt="Tori" width={64} height={64} className="object-contain mx-auto mb-2" />
+            <Image src="/images/tori-poses/tori-pose-02.webp" alt="Tori" width={64} height={64} className="object-contain mx-auto mb-2" />
             <h1 className="text-xl font-bold text-[var(--text-primary)]">登录</h1>
             <p className="text-xs text-[var(--text-muted)] mt-1">登录你的学习账户</p>
           </div>

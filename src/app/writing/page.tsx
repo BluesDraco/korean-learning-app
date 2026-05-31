@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { PenLine, Check, X, Lightbulb, RefreshCw, Sparkles, BookOpen, Clock, ChevronDown, ChevronUp, Star, History, Trophy } from 'lucide-react';
+import { PenLine, Check, X, Lightbulb, RefreshCw, Sparkles, BookOpen, Clock, ChevronDown, ChevronUp, Star, Trophy } from 'lucide-react';
 import { KoreanKeyboard } from '@/components/KoreanKeyboard';
-import { MOCK_HISTORY, modeConfig, imitationPrompts, freeTopics, clozeExercises, type WritingMode, type HistoryRecord, type ImitationPrompt, type FreeTopic, type ClozeExercise } from '@/data/writingExercises';
+import { MOCK_HISTORY, modeConfig, imitationPrompts, freeTopics, clozeExercises, type WritingMode, type HistoryRecord } from '@/data/writingExercises';
 
 // Character diff helper
 function getCharDiff(user: string, answer: string) {
@@ -439,7 +439,8 @@ function FreeWritingMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord,
           <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-5 space-y-4 animate-fade-in">
             <h3 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
               <Star size={16} className="text-[var(--peach-soft)]" />
-              写作评分
+              示例评分
+              <span className="text-[11px] font-normal text-[var(--text-muted)] bg-[var(--bg-input)] px-2 py-0.5 rounded-full">演示</span>
             </h3>
 
             {/* Score bars */}
@@ -781,7 +782,7 @@ function HistoryMode({ records }: { records: HistoryRecord[] }) {
             </div>
             {d.scores && (
               <div>
-                <p className="text-xs text-[var(--text-muted)] mb-2">评分详情</p>
+                <p className="text-xs text-[var(--text-muted)] mb-2">评分详情（演示）</p>
                 <div className="grid grid-cols-3 gap-2">
                   {[
                     { label: '词汇多样性', value: d.scores.vocabulary },

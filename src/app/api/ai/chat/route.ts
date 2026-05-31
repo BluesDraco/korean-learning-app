@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { chatResponseDeepSeek } from '@/lib/deepseek';
 import { getAuthFromCookie } from '@/lib/server/auth';
-import { checkAiRateLimit } from '@/lib/server/rate-limit';
+import { checkAiRateLimit, recordAiUsage } from '@/lib/server/rate-limit';
 
 export async function POST(req: Request) {
   const auth = await getAuthFromCookie();
@@ -30,6 +30,7 @@ export async function POST(req: Request) {
       { scenario, context, userMessage },
       apiKey
     );
+    await recordAiUsage(auth.userId, 'chat');
     return NextResponse.json(result);
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });

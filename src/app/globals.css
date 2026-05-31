@@ -99,16 +99,14 @@
   --text-on-pink:   #F0E8FF;
 }
 
-/* Tori mascot visibility in dark mode — transparent areas need a light backdrop */
+/* Tori mascot visibility in dark mode — subtle glow instead of hard backdrop */
 [data-theme="dark"] img[src*="tori-pose"],
 [data-theme="dark"] img[src*="tori-front"],
 [data-theme="dark"] img[src*="tori-sticker"] {
-  background: rgba(255, 248, 240, 0.92);
-  border-radius: 50%;
+  filter: drop-shadow(0 0 4px rgba(255, 248, 240, 0.3));
 }
 [data-theme="dark"] img[src*="tori-day-"] {
-  background: rgba(255, 248, 240, 0.92);
-  border-radius: 8px;
+  filter: drop-shadow(0 0 3px rgba(255, 248, 240, 0.25));
 }
 
 /* ── Reduced motion ── */

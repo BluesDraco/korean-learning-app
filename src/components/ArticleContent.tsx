@@ -1,18 +1,10 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { speak as speakKorean } from '@/lib/tts';
 import { db } from '@/lib/db';
-
-function sanitizeHtml(dirty: string): string {
-  return dirty
-    .replace(/<script[\s\S]*?<\/script>/gi, '')
-    .replace(/\son\w+\s*=\s*["'][^"']*["']/gi, '')
-    .replace(/\son\w+\s*=\s*[^\s>]*/gi, '')
-    .replace(/javascript\s*:/gi, 'blocked:')
-    .replace(/<iframe[\s\S]*?<\/iframe>/gi, '');
-}
+import DOMPurify from 'dompurify';
 
 async function loadSavedKoreanWords(): Promise<Set<string>> {
   try {
@@ -58,7 +50,7 @@ export default function ArticleContent({
   const containerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
-  const safeHtml = sanitizeHtml(html);
+  const safeHtml = useMemo(() => DOMPurify.sanitize(html), [html]);
 
   useEffect(() => {
     const container = containerRef.current;

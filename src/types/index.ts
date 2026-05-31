@@ -112,6 +112,8 @@ export interface WordEntry {
   emotionTags: string[];         // Emotion tags: "开心", "生气", "道歉"...
   relatedWords: string[];        // IDs of related words
   emoji: string;
+  conjugations?: string[];       // Verb/adjective conjugations
+  commonMistake?: string;        // Common learner mistakes
 }
 
 export interface WordMeaning {

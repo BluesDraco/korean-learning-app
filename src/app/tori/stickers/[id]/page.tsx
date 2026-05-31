@@ -58,7 +58,7 @@ export default function StickerDetailPage() {
           const sticker: Sticker = {
             id: `${id}-${i}`,
             packId: id,
-            imageUrl: `/stickers/${id}/${i + 1}.png`,
+            imageUrl: `/stickers/${id}/${i + 1}.webp`,
             captionZh: seed[i].captionZh,
             captionKo: seed[i].captionKo,
             sortOrder: i,

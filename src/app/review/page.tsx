@@ -30,12 +30,12 @@ const RATING_BUTTONS = [
 ];
 
 const TORI_REACTIONS: Record<number, { text: string; pose: string }> = {
-  0: { text: '没关系！토리 陪你再来一次 🐰💦', pose: 'tori-pose-04.png' },
-  1: { text: '快想起来了，就差一点点！🐰👀', pose: 'tori-pose-03.png' },
-  2: { text: '有印象了！继续加油 💪', pose: 'tori-pose-02.png' },
-  3: { text: '记住了！토리 为你开心 ✨', pose: 'tori-pose-01.png' },
-  4: { text: '很熟练了！토리 好骄傲 🎯', pose: 'tori-pose-05.png' },
-  5: { text: '完美掌握！토리 崇拜你 ⚡💖', pose: 'tori-pose-06.png' },
+  0: { text: '没关系！토리 陪你再来一次 🐰💦', pose: 'tori-pose-04.webp' },
+  1: { text: '快想起来了，就差一点点！🐰👀', pose: 'tori-pose-03.webp' },
+  2: { text: '有印象了！继续加油 💪', pose: 'tori-pose-02.webp' },
+  3: { text: '记住了！토리 为你开心 ✨', pose: 'tori-pose-01.webp' },
+  4: { text: '很熟练了！토리 好骄傲 🎯', pose: 'tori-pose-05.webp' },
+  5: { text: '完美掌握！토리 崇拜你 ⚡💖', pose: 'tori-pose-06.webp' },
 };
 
 function ReviewContent() {
