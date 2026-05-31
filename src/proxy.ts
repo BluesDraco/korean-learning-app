@@ -24,6 +24,8 @@ const PUBLIC_PATHS = [
   '/',
   '/learn',
   '/learn/picture-books',
+  '/course',
+  '/reading',
   '/phonetics',
   '/phonetics/rules',
   '/grammar',
