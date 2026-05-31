@@ -3,9 +3,9 @@
 import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, Volume2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Volume2, AlertTriangle } from 'lucide-react';
 import type { DailyCourse } from '@/data/thirtyDayCourse';
-import type { LessonCard } from '@/lib/lesson/types';
+import type { LessonCard, GoalData, AbilitySummary } from '@/lib/lesson/types';
 import { buildLessonCards } from '@/lib/lesson/buildLessonCards';
 import { recordLessonComplete } from '@/lib/lesson/recordLesson';
 import { scoreAnswer } from '@/lib/lesson/scoreAnswer';
@@ -17,8 +17,15 @@ import { SentenceIntroCard } from './cards/SentenceIntroCard';
 import { GrammarIntroCard } from './cards/GrammarIntroCard';
 import { ListenChoiceCard } from './cards/ListenChoiceCard';
 import { OutputCard } from './cards/OutputCard';
+import { GoalCard } from './cards/GoalCard';
+import { SpeakRepeatCard } from './cards/SpeakRepeatCard';
+import { MatchPairsCard } from './cards/MatchPairsCard';
+import { SummaryCard } from './cards/SummaryCard';
 import { BrowseDrawer } from './BrowseDrawer';
 import { CompletionView } from './CompletionView';
+import { LessonProgressDots } from './LessonProgressDots';
+import { MicroFeedbackToast, getMicroFeedback } from './MicroFeedback';
+import type { MicroFeedback } from '@/lib/lesson/types';
 import type { DailyWord, DailySentence, DailyGrammar, DailyDictation, OutputTask } from '@/data/thirtyDayCourse';
 
 interface Props {
@@ -26,20 +33,27 @@ interface Props {
   dayNum: number;
 }
 
+const CARD_TRANSITION_MS = 200;
+
 export default function LessonEngine({ course, dayNum }: Props) {
   const router = useRouter();
   const isMobile = useIsMobile();
 
   const [outputDifficulty, setOutputDifficulty] = useState(2);
-  const cards = useMemo(() => buildLessonCards(course, outputDifficulty), [course, outputDifficulty]);
+  const [cards, setCards] = useState<LessonCard[]>(() => buildLessonCards(course, outputDifficulty));
 
-  // Load progressive difficulty on mount
   useEffect(() => {
-    getOutputDifficulty().then(setOutputDifficulty);
-  }, []);
+    getOutputDifficulty().then((d) => {
+      if (d !== 2) {
+        setOutputDifficulty(d);
+        setCards(buildLessonCards(course, d));
+      }
+    });
+  }, [course]);
 
+  const cardsRef = useRef(cards);
+  cardsRef.current = cards;
   const totalCards = cards.length;
-
   const [currentCard, setCurrentCard] = useState(0);
   const [revealed, setRevealed] = useState(false);
   const [completed, setCompleted] = useState(false);
@@ -48,36 +62,48 @@ export default function LessonEngine({ course, dayNum }: Props) {
   const [outputText, setOutputText] = useState('');
   const [showKeyboard, setShowKeyboard] = useState(false);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
+  const [autoPlayFailed, setAutoPlayFailed] = useState(false);
+  const [loadingAudio, setLoadingAudio] = useState(false);
+  const [transitioning, setTransitioning] = useState(false);
+  // Request sequence counter to reject stale audio
+  const speakSeqRef = useRef(0);
 
-  // Event log for analytics
+  // Micro-feedback
+  const [feedback, setFeedback] = useState<MicroFeedback | null>(null);
+
   const eventsRef = useRef<{ card: LessonCard; action: string; detail: string }[]>([]);
-  // Track which cards have been scored already to avoid double-counting
   const scoredRef = useRef<Set<number>>(new Set());
-
   const [result, setResult] = useState<{ leveledUp: boolean; newLevel: number; streak: number; xpAwarded: number } | null>(null);
 
   const card = cards[currentCard];
   const autoPlayingRef = useRef(false);
 
-  // Log a view event when card changes
   const logEvent = useCallback((c: LessonCard, action: string, detail: string) => {
     eventsRef.current.push({ card: c, action, detail });
   }, []);
 
-  // Auto-speak on card change
+  // ── Auto-speak on card change ──
   useEffect(() => {
-    if (!card || card.type === 'output') return;
+    if (!card || card.type === 'output' || card.type === 'goal' || card.type === 'summary' || card.type === 'match-pairs') return;
     const text = card.speakText;
     if (!text) return;
 
+    const seq = ++speakSeqRef.current;
     autoPlayingRef.current = true;
-    const t = setTimeout(() => {
-      if (!autoPlayingRef.current) return;
-      setPlaying(true);
-      lessonSpeak(text, 0.75).then(() => setPlaying(false));
-    }, 400);
+    setAutoPlayFailed(false);
 
-    // Log view event
+    const t = setTimeout(async () => {
+      if (!autoPlayingRef.current || seq !== speakSeqRef.current) return;
+      setPlaying(true);
+      setLoadingAudio(true);
+      const ok = await lessonSpeak(text, 0.75);
+      if (seq === speakSeqRef.current) {
+        setPlaying(false);
+        setLoadingAudio(false);
+        if (!ok) setAutoPlayFailed(true);
+      }
+    }, 200);
+
     logEvent(card, 'view', `查看卡片 ${currentCard + 1}/${totalCards}`);
 
     return () => {
@@ -89,53 +115,101 @@ export default function LessonEngine({ course, dayNum }: Props) {
 
   const speakCard = useCallback(async () => {
     if (playing || !card?.speakText) return;
+    const seq = ++speakSeqRef.current;
     setPlaying(true);
+    setLoadingAudio(true);
     const ok = await lessonSpeak(card.speakText, 0.75);
-    if (!ok) setPlaying(false);
+    if (seq === speakSeqRef.current) {
+      setPlaying(false);
+      setLoadingAudio(false);
+      if (ok) setAutoPlayFailed(false);
+      else setAutoPlayFailed(true);
+    }
   }, [playing, card?.speakText]);
 
+  // ── Navigation ──
   const goNext = useCallback(() => {
-    if (!card) return;
+    if (transitioning || !card) return;
 
-    // Score and update mastery for the current card before advancing
     if (!scoredRef.current.has(currentCard)) {
       scoredRef.current.add(currentCard);
-
       const answerResult = scoreAnswer(card, selectedOption, revealed, outputText);
-      logEvent(card, answerResult.detail.includes('正确') ? 'answer_correct' : answerResult.detail.includes('错误') ? 'answer_wrong' : 'reveal', answerResult.detail);
+      const isCorrect = answerResult.correct;
+      logEvent(card, isCorrect ? 'answer_correct' : answerResult.detail.includes('错误') ? 'answer_wrong' : 'reveal', answerResult.detail);
 
-      // Update mastery in background
-      const itemType = card.type.replace('-intro', '').replace('listen-choice', 'dictation');
+      // Update mastery
+      const itemType = card.type.replace('-intro', '').replace('listen-choice', 'dictation').replace('speak-repeat', 'sentence').replace('sentence-build', 'sentence').replace('match-pairs', 'sentence');
       const itemIdx = card.masteryKey ? parseInt(card.masteryKey.split('-')[1]) || 0 : 0;
       const source = (card.data as any).korean || (card.data as any).name || (card.data as any).prompt || '';
       updateMastery({ dayNum: course.day, itemType, itemIdx, source, quality: answerResult.quality });
+
+      // Show micro-feedback
+      if (card.type === 'listen-choice' || card.type === 'match-pairs') {
+        setFeedback(getMicroFeedback(isCorrect ? 'correct' : 'wrong'));
+      } else if (card.type === 'output') {
+        if (isCorrect) setFeedback(getMicroFeedback('correct'));
+      } else {
+        setFeedback(getMicroFeedback('reveal'));
+      }
+
+      // Retry insertion: on wrong answer, insert a duplicate card 5 positions ahead
+      if (!isCorrect && (card.type === 'listen-choice' || card.type === 'match-pairs')) {
+        const currentRetries = card.retryCount || 0;
+        const maxRetries = card.maxRetries ?? 0;
+        if (currentRetries < maxRetries) {
+          const insertPos = Math.min(currentCard + 5, cardsRef.current.length);
+          const retryCard: LessonCard = {
+            ...card,
+            retryCount: currentRetries + 1,
+            originalIndex: card.originalIndex ?? currentCard,
+            masteryKey: card.masteryKey ? `${card.masteryKey}-retry${currentRetries + 1}` : undefined,
+          };
+          setCards((prev) => {
+            const next = [...prev];
+            next.splice(insertPos, 0, retryCard);
+            return next;
+          });
+        }
+      }
     }
 
-    if (currentCard + 1 >= totalCards) {
-      setCompleted(true);
-    } else {
-      setCurrentCard((p) => p + 1);
-      setRevealed(false);
-      setSelectedOption(null);
-      setPlaying(false);
-      lessonCancelSpeech();
-    }
-  }, [currentCard, totalCards, card, selectedOption, revealed, outputText, course.day, logEvent]);
+    setTransitioning(true);
+    setTimeout(() => {
+      if (currentCard + 1 >= cardsRef.current.length) {
+        setCompleted(true);
+      } else {
+        setCurrentCard((p) => p + 1);
+        setRevealed(false);
+        setSelectedOption(null);
+        setPlaying(false);
+        setAutoPlayFailed(false);
+        lessonCancelSpeech();
+      }
+      setTransitioning(false);
+    }, CARD_TRANSITION_MS);
+  }, [transitioning, currentCard, totalCards, card, selectedOption, revealed, outputText, course.day, logEvent]);
 
   const goPrev = useCallback(() => {
-    if (currentCard > 0) {
+    if (transitioning || currentCard === 0) return;
+    setTransitioning(true);
+    setTimeout(() => {
       setCurrentCard((p) => p - 1);
       setRevealed(false);
       setSelectedOption(null);
       setPlaying(false);
+      setAutoPlayFailed(false);
       lessonCancelSpeech();
-    }
-  }, [currentCard]);
+      setTransitioning(false);
+    }, CARD_TRANSITION_MS);
+  }, [transitioning, currentCard]);
 
   const reveal = useCallback(() => {
     if (!revealed && card) {
       setRevealed(true);
       logEvent(card, 'reveal', '显示答案');
+      if (card.type === 'speak-repeat') {
+        setFeedback(getMicroFeedback('correct'));
+      }
     }
   }, [revealed, card, logEvent]);
 
@@ -143,14 +217,44 @@ export default function LessonEngine({ course, dayNum }: Props) {
     if (selectedOption !== null || !card) return;
     setSelectedOption(idx);
     setRevealed(true);
-    logEvent(card, idx === card.correctOption ? 'answer_correct' : 'answer_wrong', `选项${idx + 1}`);
+    const isCorrect = idx === card.correctOption;
+    logEvent(card, isCorrect ? 'answer_correct' : 'answer_wrong', `选项${idx + 1}`);
+    setFeedback(getMicroFeedback(isCorrect ? 'correct' : 'wrong'));
   }, [selectedOption, card, logEvent]);
+
+  const handleMatchPairsCorrect = useCallback(() => {
+    setRevealed(true);
+    setFeedback(getMicroFeedback('correct'));
+    if (card) logEvent(card, 'answer_correct', '配对正确');
+  }, [card, logEvent]);
+
+  const handleMatchPairsWrong = useCallback(() => {
+    setFeedback(getMicroFeedback('wrong'));
+    if (card) logEvent(card, 'answer_wrong', '配对错误');
+  }, [card, logEvent]);
+
+  const handleSpeakScore = useCallback((score: number, transcript: string) => {
+    if (card) logEvent(card, 'speak', `发音评分 ${score}分: ${transcript}`);
+  }, [card, logEvent]);
 
   const handleComplete = useCallback(async () => {
     if (result) return;
+    if (card && !scoredRef.current.has(currentCard)) {
+      scoredRef.current.add(currentCard);
+      const answerResult = scoreAnswer(card, selectedOption, revealed, outputText);
+      const itemType = card.type.replace('-intro', '');
+      const itemIdx = card.masteryKey ? parseInt(card.masteryKey.split('-')[1]) || 0 : 0;
+      const source = (card.data as any).korean || '';
+      updateMastery({ dayNum: course.day, itemType, itemIdx, source, quality: answerResult.quality });
+    }
     const r = await recordLessonComplete(course, eventsRef.current);
     setResult(r);
-  }, [course, result]);
+  }, [result, card, currentCard, course, selectedOption, revealed, outputText]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => { lessonCancelSpeech(); };
+  }, []);
 
   const goNextDay = () => { if (dayNum < 30) router.push(`/course/${dayNum + 1}`); };
   const goPrevDay = () => { if (dayNum > 1) router.push(`/course/${dayNum - 1}`); };
@@ -175,20 +279,30 @@ export default function LessonEngine({ course, dayNum }: Props) {
 
   const cardLabel = () => {
     switch (card.type) {
+      case 'goal': return `今日目标`;
       case 'word-intro': return `单词 · ${currentCard + 1}/${totalCards}`;
       case 'grammar-intro': return `语法 · ${currentCard + 1}/${totalCards}`;
       case 'sentence-intro': return `实用句 · ${currentCard + 1}/${totalCards}`;
       case 'listen-choice': return `听力选择 · ${currentCard + 1}/${totalCards}`;
+      case 'speak-repeat': return `影子跟读 · ${currentCard + 1}/${totalCards}`;
+      case 'match-pairs': return `词组配对 · ${currentCard + 1}/${totalCards}`;
       case 'output': return `输出练习 · ${currentCard + 1}/${totalCards}`;
+      case 'summary': return `学习总结`;
     }
   };
 
-  const showSpeaker = card.type !== 'output';
+  const showSpeaker = card.type !== 'output' && card.type !== 'goal' && card.type !== 'summary' && card.type !== 'match-pairs';
+  const isPassiveCard = card.type === 'goal' || card.type === 'summary';
+  const isInteractive = card.type === 'listen-choice' || card.type === 'match-pairs' || card.type === 'speak-repeat' || card.type === 'output';
+  const showRevealBtn = !revealed && !isInteractive && !isPassiveCard;
   const canGoNext = card.type === 'listen-choice' ? selectedOption !== null : true;
-  const showRevealBtn = !revealed && card.type !== 'listen-choice' && card.type !== 'output';
 
   return (
     <div className="py-4 mx-auto max-w-lg space-y-4">
+      {/* Micro-feedback toast */}
+      <MicroFeedbackToast feedback={feedback} onDone={() => setFeedback(null)} />
+
+      {/* Top bar */}
       <div className="flex items-center justify-between">
         <Link href="/course" className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors">
           <ArrowLeft size={20} />
@@ -202,40 +316,44 @@ export default function LessonEngine({ course, dayNum }: Props) {
         </button>
       </div>
 
-      <div className="flex justify-center gap-1">
-        {cards.map((_, i) => (
-          <div
-            key={i}
-            className={`h-1 rounded-full transition-all ${
-              i < currentCard ? 'w-4 bg-[var(--mint-soft)]' :
-              i === currentCard ? 'w-4 bg-[var(--pink-primary)]' :
-              'w-1.5 bg-[var(--border-color)]'
-            }`}
-          />
-        ))}
-      </div>
+      {/* Stage progress */}
+      <LessonProgressDots cards={cards} currentCard={currentCard} />
 
+      {/* Card label */}
       <p className="text-center text-[11px] text-[var(--text-muted)] font-medium">{cardLabel()}</p>
 
       {/* Flashcard */}
       <div
-        onClick={card.type === 'listen-choice' || card.type === 'output' ? undefined : reveal}
+        onClick={!isInteractive && !isPassiveCard ? reveal : undefined}
         className={`relative bg-[var(--bg-card)] border border-[var(--border-color)] rounded-3xl p-8 min-h-[340px] flex flex-col items-center justify-center text-center transition-all select-none ${
-          card.type !== 'listen-choice' && card.type !== 'output' ? 'cursor-pointer hover:border-[var(--pink-pale)]/50' : ''
+          !isInteractive && !isPassiveCard ? 'cursor-pointer hover:border-[var(--pink-pale)]/50' : ''
         }`}
       >
+        {/* Speaker button */}
         {showSpeaker && (
           <button
             onClick={(e) => { e.stopPropagation(); speakCard(); }}
             disabled={playing}
             className={`absolute top-4 right-4 p-2 rounded-xl transition-all ${
-              playing ? 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)]' : 'text-[var(--text-muted)] hover:text-[var(--pink-primary)] hover:bg-[var(--bg-input)]'
+              loadingAudio ? 'bg-amber-500/10 text-amber-500 animate-pulse' :
+              playing ? 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)]' :
+              'text-[var(--text-muted)] hover:text-[var(--pink-primary)] hover:bg-[var(--bg-input)]'
             }`}
+            title={loadingAudio ? '加载中...' : playing ? '播放中' : '点击播放'}
           >
-            <Volume2 size={playing ? 18 : 20} className={playing ? 'animate-pulse' : ''} />
+            <Volume2 size={playing ? 18 : 20} className={playing || loadingAudio ? 'animate-pulse' : ''} />
           </button>
         )}
 
+        {/* Auto-play failure indicator */}
+        {autoPlayFailed && showSpeaker && (
+          <div className="absolute top-16 right-4 flex items-center gap-1 text-[10px] text-amber-500 bg-amber-500/10 rounded-lg px-2 py-1">
+            <AlertTriangle size={12} />
+            点击喇叭收听
+          </div>
+        )}
+
+        {card.type === 'goal' && <GoalCard goal={card.data as GoalData} />}
         {card.type === 'word-intro' && <WordIntroCard word={card.data as DailyWord} revealed={revealed} />}
         {card.type === 'grammar-intro' && <GrammarIntroCard grammar={card.data as DailyGrammar} revealed={revealed} />}
         {card.type === 'sentence-intro' && <SentenceIntroCard sentence={card.data as DailySentence} revealed={revealed} />}
@@ -250,6 +368,24 @@ export default function LessonEngine({ course, dayNum }: Props) {
             playing={playing}
           />
         )}
+        {card.type === 'speak-repeat' && (
+          <SpeakRepeatCard
+            korean={(card.data as DailySentence).korean}
+            pronunciation={(card.data as DailySentence).pronunciation}
+            chinese={(card.data as DailySentence).chinese}
+            playing={playing}
+            onSpeak={speakCard}
+            onScore={handleSpeakScore}
+          />
+        )}
+        {card.type === 'match-pairs' && (
+          <MatchPairsCard
+            koreanChunks={card.koreanChunks!}
+            chineseChunks={card.chineseChunks!}
+            onCorrect={handleMatchPairsCorrect}
+            onWrong={handleMatchPairsWrong}
+          />
+        )}
         {card.type === 'output' && (
           <OutputCard
             output={card.data as OutputTask}
@@ -258,13 +394,14 @@ export default function LessonEngine({ course, dayNum }: Props) {
             isMobile={isMobile}
           />
         )}
+        {card.type === 'summary' && <SummaryCard summary={card.data as AbilitySummary} />}
       </div>
 
       {/* Bottom controls */}
       <div className="flex items-center justify-between">
         <button
           onClick={goPrev}
-          disabled={currentCard === 0}
+          disabled={currentCard === 0 || transitioning}
           className="flex items-center gap-1 text-sm px-4 py-2.5 rounded-xl bg-[var(--bg-input)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] disabled:opacity-30 transition-colors"
         >
           <ArrowLeft size={16} />
@@ -287,7 +424,8 @@ export default function LessonEngine({ course, dayNum }: Props) {
         ) : (
           <button
             onClick={goNext}
-            className="flex items-center gap-1 text-sm px-4 py-2.5 rounded-xl bg-[var(--pink-primary)] text-white font-medium hover:opacity-90 transition-colors"
+            disabled={transitioning}
+            className="flex items-center gap-1 text-sm px-4 py-2.5 rounded-xl bg-[var(--pink-primary)] text-white font-medium hover:opacity-90 transition-colors disabled:opacity-50"
           >
             {currentCard + 1 >= totalCards ? '完成' : '下一张'}
             <ArrowRight size={16} />

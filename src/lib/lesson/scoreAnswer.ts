@@ -31,12 +31,28 @@ export function scoreAnswer(
       };
     }
 
+    case 'speak-repeat': {
+      // User completed speak-repeat if they revealed (listened + attempted)
+      const quality = revealed ? 4 : 2;
+      return { correct: true, quality, detail: revealed ? '已完成跟读' : '未跟读' };
+    }
+
+    case 'match-pairs': {
+      const quality = revealed ? 5 : 1;
+      return { correct: revealed, quality, detail: revealed ? '配对正确' : '未完成配对' };
+    }
+
+    case 'goal':
+    case 'summary': {
+      // Goal/summary cards are passive — just pass through
+      return { correct: true, quality: 3, detail: '已查看' };
+    }
+
     case 'output': {
       const d = card.data as { prompt: string; hint: string; exampleAnswer: string };
       if (!outputText || outputText.trim().length < 2) {
         return { correct: false, quality: 0, detail: '未提交输出' };
       }
-      // Heuristic: check if the output contains key Korean characters
       const hasKorean = /[가-힣]/.test(outputText);
       const len = outputText.trim().length;
       if (hasKorean && len > 5) {

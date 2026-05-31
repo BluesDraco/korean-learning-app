@@ -1,17 +1,41 @@
 import type { DailyWord, DailySentence, DailyGrammar, DailyDictation, OutputTask } from '@/data/thirtyDayCourse';
 
-export type CardType = 'word-intro' | 'sentence-intro' | 'grammar-intro' | 'listen-choice' | 'output';
+export type CardType = 'goal' | 'word-intro' | 'sentence-intro' | 'grammar-intro' | 'listen-choice' | 'speak-repeat' | 'match-pairs' | 'output' | 'summary';
 
 export type MasteryStatus = 'new' | 'learning' | 'reviewing' | 'mastered';
 
 export interface LessonCard {
   type: CardType;
-  data: DailyWord | DailySentence | DailyGrammar | DailyDictation | OutputTask;
+  data: DailyWord | DailySentence | DailyGrammar | DailyDictation | OutputTask | GoalData | AbilitySummary;
   speakText?: string;
   options?: string[];
   correctOption?: number;
-  /** Item key for mastery tracking: `${type}-${idx}` */
   masteryKey?: string;
+  /** For match-pairs: Korean chunks and Chinese chunks to pair */
+  koreanChunks?: string[];
+  chineseChunks?: string[];
+  /** Max retry attempts for this specific card instance (0 = no retry, default 2) */
+  maxRetries?: number;
+  /** How many times this card has been retried already */
+  retryCount?: number;
+  /** Original card index this was cloned from (for retry tracking) */
+  originalIndex?: number;
+}
+
+export interface GoalData {
+  day: number;
+  title: string;
+  emoji: string;
+  goals: string[];
+}
+
+export interface AbilitySummary {
+  day: number;
+  title: string;
+  emoji: string;
+  abilities: string[];
+  wordCount: number;
+  sentenceCount: number;
 }
 
 export interface LessonMastery {
@@ -30,7 +54,7 @@ export interface LessonMastery {
   source: string;
 }
 
-export type EventAction = 'view' | 'reveal' | 'answer_correct' | 'answer_wrong' | 'output_submit' | 'complete';
+export type EventAction = 'view' | 'reveal' | 'answer_correct' | 'answer_wrong' | 'output_submit' | 'complete' | 'speak' | 'build' | 'match';
 
 export interface LearningEvent {
   id: string;
@@ -48,8 +72,12 @@ export interface AnswerResult {
 }
 
 export interface LessonProgress {
-  /** Overall mastery across all items in the 30-day course (0-100) */
   overallMastery: number;
-  /** Current progressive output difficulty level (1-5) */
   outputDifficulty: number;
+}
+
+export interface MicroFeedback {
+  icon: string;
+  text: string;
+  color: string;
 }
