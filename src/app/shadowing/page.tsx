@@ -15,6 +15,7 @@ export default function ShadowingListPage() {
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState(false);
   const [error, setError] = useState('');
+  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
   const loadVideos = useCallback(async () => {
     const list = await db.studyVideos.orderBy('addedAt').reverse().toArray();
@@ -65,9 +66,14 @@ export default function ShadowingListPage() {
   };
 
   const handleDelete = async (video: StudyVideo) => {
+    if (deleteConfirm !== video.id) {
+      setDeleteConfirm(video.id);
+      return;
+    }
     await db.studySubtitles.where('videoId').equals(video.id).delete();
     await db.videoStudyLogs.where('videoId').equals(video.id).delete();
     await db.studyVideos.delete(video.id);
+    setDeleteConfirm(null);
     await loadVideos();
   };
 
@@ -161,8 +167,13 @@ export default function ShadowingListPage() {
                   <Play size={16} />
                 </Link>
                 <button
-                  onClick={() => handleDelete(video)}
-                  className="p-2 text-[var(--text-muted)] hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
+                  onClick={(e) => { e.stopPropagation(); handleDelete(video); }}
+                  className={`p-2 rounded-lg transition-colors ${
+                    deleteConfirm === video.id
+                      ? 'text-white bg-red-500 hover:bg-red-600'
+                      : 'text-[var(--text-muted)] hover:text-[var(--color-danger)] hover:bg-[var(--color-danger-bg)]'
+                  }`}
+                  title={deleteConfirm === video.id ? '再次点击确认删除' : '删除'}
                 >
                   <Trash2 size={14} />
                 </button>

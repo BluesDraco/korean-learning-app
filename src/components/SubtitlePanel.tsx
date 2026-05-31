@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { memo, useRef, useEffect } from 'react';
 import { RefreshCw } from 'lucide-react';
 import type { TokenInfo } from '@/lib/dictionary';
 import type { StudySubtitle } from '@/types';
@@ -15,7 +15,7 @@ interface SubtitlePanelProps {
   loopIndex: number | null;
 }
 
-export function SubtitlePanel({
+export const SubtitlePanel = memo(function SubtitlePanel({
   subtitles,
   activeIndex,
   subtitleMode,
@@ -124,7 +124,7 @@ export function SubtitlePanel({
       })}
     </div>
   );
-}
+});
 
 function formatTime(sec: number): string {
   const m = Math.floor(sec / 60);

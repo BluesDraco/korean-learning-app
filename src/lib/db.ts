@@ -1,4 +1,4 @@
-import type { Word, ReviewSession, DictationRecord, ShadowingRecord, UserProfile, DailyLog, Achievement, AppSettings, WordBook, StudyVideo, StudySubtitle, StudyLog, UserAchievement, UserShareLink, StickerPack, Sticker, StickerDownload, BuddyRelation, BuddyInvite } from '@/types';
+import type { Word, ReviewSession, DictationRecord, ShadowingRecord, UserProfile, DailyLog, Achievement, AppSettings, WordBook, StudyVideo, StudySubtitle, StudyLog, UserAchievement, UserShareLink, StickerPack, Sticker, StickerDownload, BuddyRelation, BuddyInvite, PronunciationAttempt, UserGrammarState, UserArticleProgress, ArticleLearningEvent } from '@/types';
 import type { LessonMastery, LearningEvent } from '@/lib/lesson/types';
 
 const API = '/api/user-data';
@@ -92,8 +92,11 @@ class WhereClause<T> {
 
   async delete(): Promise<void> {
     const rows = await this.toArray();
-    for (const row of rows) {
-      await call('delete', this.parent.name, (row as any).id);
+    const ids = rows.map((r) => (r as any).id).filter(Boolean);
+    const limit = 8;
+    for (let i = 0; i < ids.length; i += limit) {
+      const batch = ids.slice(i, i + limit);
+      await Promise.allSettled(batch.map((id) => call('delete', this.parent.name, id)));
     }
   }
 }
@@ -145,15 +148,22 @@ class CloudTable<T> {
   }
 
   async bulkPut(items: T[]): Promise<void> {
-    for (const item of items) {
-      await this.put(item);
+    // Parallel with concurrency limit of 8
+    const limit = 8;
+    for (let i = 0; i < items.length; i += limit) {
+      const batch = items.slice(i, i + limit);
+      await Promise.allSettled(batch.map((item) => this.put(item)));
     }
   }
 
   async bulkGet(ids: string[]): Promise<(T | undefined)[]> {
+    // Parallel with concurrency limit of 8
+    const limit = 8;
     const results: (T | undefined)[] = [];
-    for (const id of ids) {
-      results.push(await this.get(id));
+    for (let i = 0; i < ids.length; i += limit) {
+      const batch = ids.slice(i, i + limit);
+      const batchResults = await Promise.allSettled(batch.map((id) => this.get(id)));
+      results.push(...batchResults.map((r) => (r.status === 'fulfilled' ? r.value : undefined)));
     }
     return results;
   }
@@ -173,8 +183,11 @@ class CloudTable<T> {
 
   async clear(): Promise<void> {
     const all = await this.toArray();
-    for (const item of all) {
-      await this.delete((item as any).id);
+    const ids = all.map((item) => (item as any).id).filter(Boolean);
+    const limit = 8;
+    for (let i = 0; i < ids.length; i += limit) {
+      const batch = ids.slice(i, i + limit);
+      await Promise.allSettled(batch.map((id) => this.delete(id)));
     }
   }
 
@@ -215,6 +228,10 @@ export const db = {
   buddyInvites: new CloudTable<BuddyInvite>('buddyInvites'),
   lessonMastery: new CloudTable<LessonMastery>('lessonMastery'),
   learningEvents: new CloudTable<LearningEvent>('learningEvents'),
+  pronunciationAttempts: new CloudTable<PronunciationAttempt>('pronunciationAttempts'),
+  userGrammarStates: new CloudTable<UserGrammarState>('userGrammarStates'),
+  userArticleProgress: new CloudTable<UserArticleProgress>('userArticleProgress'),
+  articleLearningEvents: new CloudTable<ArticleLearningEvent>('articleLearningEvents'),
 };
 
 export async function initSettings(): Promise<AppSettings> {

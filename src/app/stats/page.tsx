@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import {
-  BarChart3, BookOpen, TrendingUp, Loader2, Flame, Zap, Trophy,
+  BarChart3, BookOpen, Bookmark, TrendingUp, Loader2, Flame, Zap, Trophy,
   Award, Star, Target, Pencil, Brain, AlertTriangle, Activity,
 } from 'lucide-react';
 import {
@@ -33,6 +33,8 @@ interface Stats {
   retentionBuckets: RetentionBucket[];
   curvePoints: { day: number; retention: number }[];
   atRisk: Word[];
+  totalRead: number;
+  totalSavedItems: number;
 }
 
 const COLORS = ['var(--text-muted)', 'var(--color-highlight)', 'var(--pink-primary)', 'var(--mint-soft)'];
@@ -54,13 +56,14 @@ export default function StatsPage() {
 
   useEffect(() => {
     const load = async () => {
-      const [words, sessions, dictationRecords, shadowingRecords, achs, p] = await Promise.all([
+      const [words, sessions, dictationRecords, shadowingRecords, achs, p, articleProgress] = await Promise.all([
         db.words.toArray(),
         db.reviewSessions.orderBy('date').reverse().toArray(),
         db.dictationRecords.toArray(),
         db.shadowingRecords.toArray(),
         db.achievements.toArray(),
         db.userProfiles.get('main'),
+        db.userArticleProgress.toArray(),
       ]);
 
       const todayStart = new Date().setHours(0, 0, 0, 0);
@@ -131,7 +134,11 @@ export default function StatsPage() {
       const curvePoints = generateCurvePoints(Math.max(avgStability, 1));
       const atRisk = atRiskWords(words);
 
-      setStats({ totalWords, masteredWords, totalReviews, totalDictations, totalShadowings, todayReviews, weekReviews, masteryDistribution, srsBins, totalXp, skills, healthScore, retentionBuckets, curvePoints, atRisk });
+      // Reading stats
+      const totalRead = articleProgress.filter((ap) => ap.status === 'completed').length;
+      const totalSavedItems = articleProgress.reduce((sum, ap) => sum + ap.savedSentenceIds.length + ap.savedWordIds.length, 0);
+
+      setStats({ totalWords, masteredWords, totalReviews, totalDictations, totalShadowings, todayReviews, weekReviews, masteryDistribution, srsBins, totalXp, skills, healthScore, retentionBuckets, curvePoints, atRisk, totalRead, totalSavedItems });
       setAchievements(achs);
       setProfile(p || null);
       setLoading(false);
@@ -247,8 +254,8 @@ export default function StatsPage() {
         {[
           { label: '总复习次数', value: stats.totalReviews, icon: BarChart3, color: 'text-[var(--purple-soft)]' },
           { label: '今日复习', value: stats.todayReviews, icon: Target, color: 'text-[var(--blue-soft)]', href: '/review' },
-          { label: '听写练习', value: stats.totalDictations, icon: Pencil, color: 'text-[var(--purple-soft)]' },
-          { label: '已获成就', value: achievements.length, icon: Trophy, color: 'text-[var(--peach-soft)]' },
+          { label: '已读文章', value: stats.totalRead, icon: BookOpen, color: 'text-[var(--mint-soft)]', href: '/reading' },
+          { label: '收藏词句', value: stats.totalSavedItems, icon: Bookmark, color: 'text-[var(--purple-soft)]' },
         ].map(({ label, value, icon: Icon, color, href }) => {
           const card = (
             <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-4 text-center">

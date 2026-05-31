@@ -1,10 +1,14 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
-import { ChevronDown, ChevronUp, Check, X, ArrowRight, RotateCcw, Trophy, Sparkles, Lock } from 'lucide-react';
+import { useState, useCallback, useEffect, useRef } from 'react';
+import { ChevronDown, ChevronUp, Check, X, ArrowRight, RotateCcw, Trophy, Sparkles, Lock, Volume2, Ear } from 'lucide-react';
 import { progressiveSteps } from '@/data/phonetics-steps';
 import type { PhoneticLetter } from '@/data/phonetics';
+import { speak } from '@/lib/tts';
 import { emitXpFlyout } from '@/components/XpOverlay';
+import ReadingPractice from '@/components/ReadingPractice';
+import { getFocusForLetter } from '@/data/pronunciation/letter-map';
+import Link from 'next/link';
 
 function shuffleArray<T>(arr: T[]): T[] {
   const s = [...arr];
@@ -38,6 +42,22 @@ function generateStepQuiz(letters: PhoneticLetter[]) {
   });
 }
 
+function generateListenQuiz(letters: PhoneticLetter[]) {
+  const pool = [...letters].sort(() => Math.random() - 0.5).slice(0, Math.min(6, letters.length));
+  return pool.map((item) => {
+    const wrongOptions = pool
+      .filter((l) => l.id !== item.id)
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 3);
+    return {
+      id: item.id,
+      correctAnswer: item.letter,
+      options: shuffleArray([item.letter, ...wrongOptions.map((w) => w.letter)]),
+      item,
+    };
+  });
+}
+
 const COMPLETED_KEY = 'phonetics-completed-steps';
 
 function loadCompletedSteps(): Set<string> {
@@ -52,21 +72,26 @@ function saveCompletedSteps(steps: Set<string>) {
   localStorage.setItem(COMPLETED_KEY, JSON.stringify([...steps]));
 }
 
+type Mode = 'browse' | 'quiz' | 'listen';
+
 export default function ProgressivePhonetics() {
   const [activeStepIdx, setActiveStepIdx] = useState(0);
   const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
-  const [mode, setMode] = useState<'browse' | 'quiz'>('browse');
+  const [mode, setMode] = useState<Mode>('browse');
   const [quizQuestions, setQuizQuestions] = useState<ReturnType<typeof generateStepQuiz>>([]);
+  const [listenQuestions, setListenQuestions] = useState<ReturnType<typeof generateListenQuiz>>([]);
   const [quizIdx, setQuizIdx] = useState(0);
   const [quizAnswer, setQuizAnswer] = useState<number | null>(null);
   const [quizCorrect, setQuizCorrect] = useState(0);
   const [quizComplete, setQuizComplete] = useState(false);
   const [completedSteps, setCompletedSteps] = useState<Set<string>>(new Set());
+  const audioPlayedRef = useRef(false);
 
   useEffect(() => { setCompletedSteps(loadCompletedSteps()); }, []);
 
   const activeStep = progressiveSteps[activeStepIdx];
   const allDone = progressiveSteps.every((s) => completedSteps.has(s.id));
+  const doneCount = progressiveSteps.filter((s) => completedSteps.has(s.id)).length;
 
   const toggleCard = (id: string) => {
     setExpandedCards((prev) => {
@@ -86,18 +111,39 @@ export default function ProgressivePhonetics() {
     setMode('quiz');
   }, [activeStep]);
 
+  const startListen = useCallback(() => {
+    const questions = generateListenQuiz(activeStep.letters);
+    setListenQuestions(questions);
+    setQuizIdx(0);
+    setQuizAnswer(null);
+    setQuizCorrect(0);
+    setQuizComplete(false);
+    audioPlayedRef.current = false;
+    setMode('listen');
+  }, [activeStep]);
+
+  // Auto-play audio for listen mode
+  useEffect(() => {
+    if (mode === 'listen' && listenQuestions.length > 0 && !audioPlayedRef.current && quizAnswer === null && !quizComplete) {
+      audioPlayedRef.current = true;
+      const item = listenQuestions[quizIdx];
+      speak(item.item.letter, 0.7);
+    }
+  }, [mode, listenQuestions, quizIdx, quizAnswer, quizComplete]);
+
   const handleQuizAnswer = (idx: number) => {
     setQuizAnswer(idx);
-    if (idx === quizQuestions[quizIdx].options.indexOf(quizQuestions[quizIdx].correctAnswer)) {
+    const questions = mode === 'listen' ? listenQuestions : quizQuestions;
+    if (idx === questions[quizIdx].options.indexOf(questions[quizIdx].correctAnswer)) {
       setQuizCorrect((prev) => prev + 1);
     }
   };
 
   const handleQuizNext = () => {
-    if (quizIdx + 1 >= quizQuestions.length) {
+    const questions = mode === 'listen' ? listenQuestions : quizQuestions;
+    if (quizIdx + 1 >= questions.length) {
       setQuizComplete(true);
-      const totalCorrect = quizAnswer === quizQuestions[quizIdx].options.indexOf(quizQuestions[quizIdx].correctAnswer) ? quizCorrect : quizCorrect;
-      if (totalCorrect >= Math.ceil(quizQuestions.length * 0.6)) {
+      if (quizCorrect >= Math.ceil(questions.length * 0.6)) {
         const newCompleted = new Set(completedSteps);
         newCompleted.add(activeStep.id);
         setCompletedSteps(newCompleted);
@@ -107,6 +153,14 @@ export default function ProgressivePhonetics() {
     } else {
       setQuizIdx((prev) => prev + 1);
       setQuizAnswer(null);
+      audioPlayedRef.current = false;
+    }
+  };
+
+  const replayAudio = () => {
+    const questions = mode === 'listen' ? listenQuestions : quizQuestions;
+    if (questions[quizIdx]) {
+      speak(questions[quizIdx].item.letter, 0.7);
     }
   };
 
@@ -117,6 +171,8 @@ export default function ProgressivePhonetics() {
     setQuizIdx(0);
     setQuizComplete(false);
   };
+
+  const questions = mode === 'listen' ? listenQuestions : quizQuestions;
 
   return (
     <div className="py-4 space-y-6">
@@ -151,19 +207,69 @@ export default function ProgressivePhonetics() {
         })}
       </div>
 
+      {/* Progress summary */}
+      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-3 flex items-center gap-3">
+        <div className="flex-1">
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="text-xs text-[var(--text-secondary)]">学习进度</span>
+            <span className="text-xs font-bold text-[var(--text-primary)]">{doneCount}/{progressiveSteps.length}</span>
+          </div>
+          <div className="w-full bg-[var(--bg-input)] rounded-full h-1.5">
+            <div
+              className="bg-gradient-to-r from-[var(--purple-soft)] to-[var(--pink-primary)] h-1.5 rounded-full transition-all"
+              style={{ width: `${(doneCount / progressiveSteps.length) * 100}%` }}
+            />
+          </div>
+        </div>
+        {doneCount >= 3 && (
+          <Link
+            href="/course"
+            className="shrink-0 text-xs text-[var(--pink-primary)] hover:underline font-medium"
+          >
+            开始学课程 →
+          </Link>
+        )}
+      </div>
+
       {/* All done celebration */}
       {allDone && (
-        <div className="bg-gradient-to-r from-[var(--mint-soft)]/15 to-[var(--purple-soft)]/15 border border-[var(--mint-soft)]/30 rounded-2xl p-4 text-center animate-fade-in">
-          <div className="text-3xl mb-2">🏆</div>
-          <p className="text-sm font-bold text-[var(--text-primary)]">축하합니다! 四十音全部学习完毕！</p>
-          <p className="text-xs text-[var(--text-secondary)] mt-1">
-            你已经掌握了所有韩文字母，可以开始学习单词了
-          </p>
+        <div className="bg-gradient-to-r from-[var(--mint-soft)]/15 to-[var(--purple-soft)]/15 border border-[var(--mint-soft)]/30 rounded-2xl p-5 text-center animate-fade-in space-y-3">
+          <div className="text-3xl">🏆</div>
+          <div>
+            <p className="text-sm font-bold text-[var(--text-primary)]">축하합니다! 韩语40音全部学习完毕！</p>
+            <p className="text-xs text-[var(--text-secondary)] mt-1">
+              你已经掌握了所有韩文字母 — 现在任何韩文你都能读出来了！
+            </p>
+          </div>
+          <div className="flex gap-2 justify-center">
+            <Link
+              href="/course"
+              className="inline-flex items-center gap-1.5 px-4 py-2 bg-[var(--pink-primary)] text-white rounded-xl text-xs font-bold transition-colors hover:shadow-lg hover:shadow-[var(--pink-primary)]/25"
+            >
+              开始三十天课程 <ArrowRight size={14} />
+            </Link>
+            <Link
+              href="/phonetics"
+              onClick={() => {
+                setActiveStepIdx(0);
+                setMode('browse');
+              }}
+              className="inline-flex items-center gap-1.5 px-4 py-2 bg-[var(--bg-input)] text-[var(--text-primary)] rounded-xl text-xs font-medium transition-colors hover:bg-[var(--bg-accent)]"
+            >
+              去音节拼装器 <Sparkles size={14} />
+            </Link>
+          </div>
         </div>
       )}
 
       {/* Step header */}
-      {mode === 'browse' && (
+      {/* Reading step browse */}
+      {mode === 'browse' && activeStep.isReadingStep && (
+        <ReadingPractice words={activeStep.readingWords || []} step={activeStep} />
+      )}
+
+      {/* Normal step browse */}
+      {mode === 'browse' && !activeStep.isReadingStep && (
         <>
           <div className="text-center">
             <div className="text-5xl mb-3">{activeStep.emoji}</div>
@@ -189,13 +295,17 @@ export default function ProgressivePhonetics() {
                     isExpanded ? 'ring-2 ring-[var(--pink-primary)]/30 shadow-lg' : 'hover:border-[var(--border-hover)]'
                   }`}
                 >
-                  {/* Header */}
                   <div className="mb-2">
                     <span className="text-2xl">{letter.emoji}</span>
                   </div>
-                  <div className="text-3xl font-extrabold text-[var(--text-primary)] mb-1 text-center" style={{ fontFamily: "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif" }}>
+                  <button
+                    onClick={() => speak(letter.letter, 0.7)}
+                    className="w-full text-3xl font-extrabold text-[var(--text-primary)] mb-1 text-center block hover:text-[var(--pink-primary)] transition-colors"
+                    style={{ fontFamily: "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif" }}
+                    title="点击听发音"
+                  >
                     {letter.letter}
-                  </div>
+                  </button>
                   <div className="text-sm text-[var(--text-secondary)] text-center mb-2">
                     {letter.name} <span className="text-[var(--text-muted)]">[{letter.romanization}]</span>
                   </div>
@@ -206,7 +316,6 @@ export default function ProgressivePhonetics() {
                     {isExpanded ? '收起' : '详情'}
                     {isExpanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
                   </button>
-                  {/* Expanded detail */}
                   {isExpanded && (
                     <div className="mt-2 pt-2 border-t border-[var(--border-color)] space-y-2 animate-fade-in">
                       <div className="text-xs text-[var(--text-secondary)]">
@@ -226,6 +335,14 @@ export default function ProgressivePhonetics() {
                             ))}
                           </div>
                         </div>
+                      )}
+                      {getFocusForLetter(letter.letter) && (
+                        <Link
+                          href={`/pronunciation?focus=${encodeURIComponent(getFocusForLetter(letter.letter)!)}`}
+                          className="flex items-center justify-center gap-1.5 w-full py-2 mt-1 rounded-xl bg-[var(--mint-soft)]/10 border border-[var(--mint-soft)]/20 text-xs font-medium text-[var(--mint-soft)] hover:bg-[var(--mint-soft)]/20 transition-colors"
+                        >
+                          练习发音 <ArrowRight size={12} />
+                        </Link>
                       )}
                     </div>
                   )}
@@ -247,15 +364,18 @@ export default function ProgressivePhonetics() {
                     <div className="text-xs text-[var(--text-muted)] mb-3">{pair.tip}</div>
                     <div className="flex flex-wrap gap-2">
                       {pair.letters.map((l) => (
-                        <div
+                        <button
                           key={l.id}
-                          className="flex items-center gap-2 bg-[var(--bg-input)] rounded-xl px-3 py-2"
+                          onClick={() => speak(l.letter, 0.7)}
+                          className="flex items-center gap-2 bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] rounded-xl px-3 py-2 transition-colors"
+                          title="点击听发音"
                         >
                           <span className="text-lg font-bold text-[var(--text-primary)]" style={{ fontFamily: "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif" }}>
                             {l.letter}
                           </span>
                           <span className="text-xs text-[var(--text-secondary)]">[{l.romanization}]</span>
-                        </div>
+                          <Volume2 size={12} className="text-[var(--text-muted)]" />
+                        </button>
                       ))}
                     </div>
                   </div>
@@ -264,19 +384,28 @@ export default function ProgressivePhonetics() {
             </div>
           )}
 
-          {/* Start quiz button */}
-          <button
-            onClick={startQuiz}
-            className="w-full flex items-center justify-center gap-2 py-4 bg-gradient-to-r from-[var(--purple-soft)] to-[var(--pink-primary)] text-[var(--text-primary)] rounded-2xl transition-all font-bold text-sm hover:shadow-lg hover:shadow-[var(--pink-primary)]/25 active:scale-[0.98]"
-          >
-            开始测验
-            <ArrowRight size={18} />
-          </button>
+          {/* Quiz CTA buttons */}
+          <div className="space-y-3">
+            <button
+              onClick={startQuiz}
+              className="w-full flex items-center justify-center gap-2 py-4 bg-gradient-to-r from-[var(--purple-soft)] to-[var(--pink-primary)] text-[var(--text-primary)] rounded-2xl transition-all font-bold text-sm hover:shadow-lg hover:shadow-[var(--pink-primary)]/25 active:scale-[0.98]"
+            >
+              看字选音测验
+              <ArrowRight size={18} />
+            </button>
+            <button
+              onClick={startListen}
+              className="w-full flex items-center justify-center gap-2 py-4 bg-gradient-to-r from-[var(--peach-soft)] to-[var(--pink-primary)] text-[var(--text-primary)] rounded-2xl transition-all font-bold text-sm hover:shadow-lg hover:shadow-[var(--pink-primary)]/25 active:scale-[0.98]"
+            >
+              <Ear size={18} />
+              听音选字测验
+            </button>
+          </div>
         </>
       )}
 
-      {/* Quiz mode */}
-      {mode === 'quiz' && !quizComplete && quizQuestions.length > 0 && (
+      {/* Quiz / Listen mode (shared) */}
+      {(mode === 'quiz' || mode === 'listen') && !quizComplete && questions.length > 0 && (
         <div className="py-2 space-y-6">
           <div className="flex items-center justify-between">
             <button
@@ -285,25 +414,44 @@ export default function ProgressivePhonetics() {
             >
               ← 返回浏览
             </button>
-            <span className="text-sm font-medium text-[var(--text-primary)]">测验 {quizIdx + 1}/{quizQuestions.length}</span>
+            <span className="text-sm font-medium text-[var(--text-primary)]">
+              {mode === 'listen' ? '听力' : '测验'} {quizIdx + 1}/{questions.length}
+            </span>
             <span className="text-xs text-[var(--text-muted)]">正确: {quizCorrect}</span>
           </div>
 
           <div className="w-full bg-[var(--bg-input)] rounded-full h-1.5">
             <div
               className="bg-[var(--pink-primary)] h-1.5 rounded-full transition-all"
-              style={{ width: `${((quizIdx + 1) / quizQuestions.length) * 100}%` }}
+              style={{ width: `${((quizIdx + 1) / questions.length) * 100}%` }}
             />
           </div>
 
           <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-3xl p-6 space-y-6">
-            <h2 className="text-lg font-bold text-[var(--text-primary)] text-center">
-              {quizQuestions[quizIdx].prompt}
-            </h2>
+            {/* Listen mode: show speaker button + prompt */}
+            {mode === 'listen' && (
+              <div className="text-center space-y-3">
+                <p className="text-sm text-[var(--text-secondary)]">听发音，选择对应的字母</p>
+                <button
+                  onClick={replayAudio}
+                  className="inline-flex items-center gap-2 px-6 py-4 bg-[var(--pink-primary)]/10 border-2 border-[var(--pink-primary)]/30 rounded-3xl hover:bg-[var(--pink-primary)]/20 transition-colors"
+                >
+                  <Volume2 size={28} className="text-[var(--pink-primary)]" />
+                  <span className="text-sm font-bold text-[var(--pink-primary)]">点击播放发音</span>
+                </button>
+              </div>
+            )}
+
+            {/* Quiz mode: show text prompt */}
+            {mode === 'quiz' && (
+              <h2 className="text-lg font-bold text-[var(--text-primary)] text-center">
+                {quizQuestions[quizIdx].prompt}
+              </h2>
+            )}
 
             <div className="space-y-3">
-              {quizQuestions[quizIdx].options.map((opt, i) => {
-                const correctIdx = quizQuestions[quizIdx].options.indexOf(quizQuestions[quizIdx].correctAnswer);
+              {questions[quizIdx].options.map((opt, i) => {
+                const correctIdx = questions[quizIdx].options.indexOf(questions[quizIdx].correctAnswer);
                 let btnClass = 'bg-[var(--bg-input)] border border-[var(--border-color)] hover:border-[var(--border-hover)]';
                 if (quizAnswer !== null) {
                   if (i === correctIdx) {
@@ -314,15 +462,16 @@ export default function ProgressivePhonetics() {
                     btnClass = 'bg-[var(--bg-input)] border-[var(--border-color)] opacity-50';
                   }
                 }
+                const isKoreanChar = mode === 'listen' || (mode === 'quiz' && quizQuestions[quizIdx].prompt.includes('发音'));
                 return (
                   <button
                     key={i}
                     onClick={() => quizAnswer === null && handleQuizAnswer(i)}
                     disabled={quizAnswer !== null}
                     className={`w-full p-4 rounded-xl text-left text-sm transition-all ${btnClass} font-bold`}
-                    style={{ fontFamily: quizQuestions[quizIdx].prompt.includes('发音') ? "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif" : undefined }}
+                    style={{ fontFamily: isKoreanChar ? "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif" : undefined }}
                   >
-                    {opt}
+                    <span className={isKoreanChar ? 'text-2xl' : ''}>{opt}</span>
                     {quizAnswer !== null && i === correctIdx && (
                       <Check size={16} className="text-[var(--mint-soft)] inline ml-2" />
                     )}
@@ -335,23 +484,34 @@ export default function ProgressivePhonetics() {
             </div>
 
             {quizAnswer !== null && (
-              <button
-                onClick={handleQuizNext}
-                className="w-full flex items-center justify-center gap-2 py-3.5 bg-[var(--pink-primary)] hover:bg-[var(--pink-primary)] text-[var(--text-primary)] rounded-2xl transition-colors font-medium active:scale-95"
-              >
-                {quizIdx + 1 >= quizQuestions.length ? '查看结果' : '下一题'}
-                <ArrowRight size={18} />
-              </button>
+              <div className="space-y-3 pt-2 border-t border-[var(--border-color)]">
+                {mode === 'listen' && (
+                  <button
+                    onClick={replayAudio}
+                    className="flex items-center gap-1.5 text-xs text-[var(--text-secondary)] hover:text-[var(--pink-primary)] transition-colors"
+                  >
+                    <Volume2 size={14} />
+                    再听一次
+                  </button>
+                )}
+                <button
+                  onClick={handleQuizNext}
+                  className="w-full flex items-center justify-center gap-2 py-3.5 bg-[var(--pink-primary)] hover:bg-[var(--pink-primary)] text-[var(--text-primary)] rounded-2xl transition-colors font-medium active:scale-95"
+                >
+                  {quizIdx + 1 >= questions.length ? '查看结果' : '下一题'}
+                  <ArrowRight size={18} />
+                </button>
+              </div>
             )}
           </div>
         </div>
       )}
 
-      {/* Quiz complete */}
-      {mode === 'quiz' && quizComplete && (
+      {/* Quiz / Listen complete */}
+      {(mode === 'quiz' || mode === 'listen') && quizComplete && (
         <div className="py-6 text-center space-y-6">
           <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[var(--purple-soft)]/20 to-[var(--pink-primary)]/20 flex items-center justify-center mx-auto border-2 border-[var(--purple-soft)]/30">
-            {quizCorrect >= Math.ceil(quizQuestions.length * 0.6) ? (
+            {quizCorrect >= Math.ceil(questions.length * 0.6) ? (
               <Trophy size={36} className="text-[var(--peach-soft)]" />
             ) : (
               <RotateCcw size={36} className="text-[var(--text-muted)]" />
@@ -360,17 +520,17 @@ export default function ProgressivePhonetics() {
 
           <div>
             <h2 className="text-xl font-bold text-[var(--text-primary)]">
-              {quizCorrect >= Math.ceil(quizQuestions.length * 0.6)
+              {quizCorrect >= Math.ceil(questions.length * 0.6)
                 ? `${activeStep.title} 完成！`
                 : '再试一次？'}
             </h2>
             <p className="text-sm text-[var(--text-secondary)] mt-1">
-              正确 {quizCorrect}/{quizQuestions.length}
-              （{Math.round((quizCorrect / quizQuestions.length) * 100)}%）
+              正确 {quizCorrect}/{questions.length}
+              （{Math.round((quizCorrect / questions.length) * 100)}%）
             </p>
           </div>
 
-          {quizCorrect >= Math.ceil(quizQuestions.length * 0.6) && (
+          {quizCorrect >= Math.ceil(questions.length * 0.6) && (
             <div className="bg-[var(--mint-soft)]/10 border border-[var(--mint-soft)]/20 rounded-2xl p-3">
               <div className="flex items-center gap-2 justify-center">
                 <Sparkles size={16} className="text-[var(--mint-soft)]" />
@@ -379,19 +539,17 @@ export default function ProgressivePhonetics() {
             </div>
           )}
 
-          <div className="flex gap-3 justify-center">
+          <div className="flex gap-3 justify-center flex-wrap">
             <button
-              onClick={startQuiz}
+              onClick={mode === 'listen' ? startListen : startQuiz}
               className="flex items-center gap-2 px-5 py-3 bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] text-[var(--text-primary)] rounded-2xl transition-colors text-sm font-medium"
             >
               <RotateCcw size={16} />
               重新测验
             </button>
-            {activeStepIdx < progressiveSteps.length - 1 && quizCorrect >= Math.ceil(quizQuestions.length * 0.6) && (
+            {activeStepIdx < progressiveSteps.length - 1 && quizCorrect >= Math.ceil(questions.length * 0.6) && (
               <button
-                onClick={() => {
-                  goToStep(activeStepIdx + 1);
-                }}
+                onClick={() => goToStep(activeStepIdx + 1)}
                 className="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-[var(--purple-soft)] to-[var(--pink-primary)] text-[var(--text-primary)] rounded-2xl transition-colors text-sm font-medium"
               >
                 下一步: {progressiveSteps[activeStepIdx + 1].title}

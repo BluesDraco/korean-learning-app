@@ -144,7 +144,7 @@ export function SpeakRepeatCard({ korean, pronunciation, chinese, playing, onSpe
           ) : (
             <button
               onClick={(e) => { e.stopPropagation(); stopRecording(); }}
-              className="flex items-center gap-2 px-5 py-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-sm font-medium animate-pulse"
+              className="flex items-center gap-2 px-5 py-3 rounded-xl bg-[var(--color-danger)]/10 border border-[var(--color-danger)]/20 text-[var(--color-danger)] text-sm font-medium animate-pulse"
             >
               <Square size={16} />
               停止录音
@@ -156,13 +156,13 @@ export function SpeakRepeatCard({ korean, pronunciation, chinese, playing, onSpe
         {score !== null && (
           <div className={`p-3 rounded-xl text-center ${
             score >= 80 ? 'bg-[var(--mint-soft)]/10 border border-[var(--mint-soft)]/20' :
-            score >= 50 ? 'bg-amber-500/10 border border-amber-500/20' :
-            'bg-red-50 border border-red-500/10'
+            score >= 50 ? 'bg-[var(--peach-soft)]/10 border border-[var(--peach-soft)]/20' :
+            'bg-[var(--color-danger-bg)] border border-[var(--color-danger)]/10'
           }`}>
             <p className={`text-2xl font-extrabold ${
               score >= 80 ? 'text-[var(--mint-soft)]' :
-              score >= 50 ? 'text-amber-500' :
-              'text-red-400'
+              score >= 50 ? 'text-[var(--peach-soft)]' :
+              'text-[var(--color-danger)]'
             }`}>
               {score}分
             </p>
@@ -170,13 +170,13 @@ export function SpeakRepeatCard({ korean, pronunciation, chinese, playing, onSpe
               识别结果: {transcript || '(无)'}
             </p>
             {score >= 80 && <p className="text-xs text-[var(--mint-soft)] mt-0.5">发音很好!</p>}
-            {score >= 50 && score < 80 && <p className="text-xs text-amber-500 mt-0.5">还不错，再练练</p>}
-            {score < 50 && <p className="text-xs text-red-400 mt-0.5">多听几遍再试</p>}
+            {score >= 50 && score < 80 && <p className="text-xs text-[var(--peach-soft)] mt-0.5">还不错，再练练</p>}
+            {score < 50 && <p className="text-xs text-[var(--color-danger)] mt-0.5">多听几遍再试</p>}
           </div>
         )}
 
         {error && (
-          <p className="text-xs text-red-400 text-center">{error}</p>
+          <p className="text-xs text-[var(--color-danger)] text-center">{error}</p>
         )}
       </div>
     </div>

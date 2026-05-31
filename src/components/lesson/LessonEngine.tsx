@@ -29,11 +29,12 @@ import type { DailyWord, DailySentence, DailyGrammar, DailyDictation, OutputTask
 interface Props {
   course: DailyCourse;
   dayNum: number;
+  source?: 'daily' | 'course';
 }
 
 const CARD_TRANSITION_MS = 200;
 
-export default function LessonEngine({ course, dayNum }: Props) {
+export default function LessonEngine({ course, dayNum, source }: Props) {
   const router = useRouter();
   const isMobile = useIsMobile();
 
@@ -254,8 +255,8 @@ export default function LessonEngine({ course, dayNum }: Props) {
     return () => { lessonCancelSpeech(); };
   }, []);
 
-  const goNextDay = () => { if (dayNum < 30) router.push(`/course/${dayNum + 1}`); };
-  const goPrevDay = () => { if (dayNum > 1) router.push(`/course/${dayNum - 1}`); };
+  const goNextDay = () => { if (dayNum < 30) router.push(`/course/${dayNum + 1}${source ? `?source=${source}` : ''}`); };
+  const goPrevDay = () => { if (dayNum > 1) router.push(`/course/${dayNum - 1}${source ? `?source=${source}` : ''}`); };
 
   if (showBrowse) {
     return <BrowseDrawer course={course} dayNum={dayNum} onClose={() => setShowBrowse(false)} goNextDay={goNextDay} goPrevDay={goPrevDay} />;
@@ -270,6 +271,7 @@ export default function LessonEngine({ course, dayNum }: Props) {
           showKeyboard={showKeyboard} setShowKeyboard={setShowKeyboard}
           isMobile={isMobile} result={result} onComplete={handleComplete}
           goPrevDay={goPrevDay} goNextDay={goNextDay}
+          source={source}
         />
       </div>
     );
@@ -300,7 +302,7 @@ export default function LessonEngine({ course, dayNum }: Props) {
 
       {/* Top bar */}
       <div className="flex items-center justify-between">
-        <Link href="/course" className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors">
+        <Link href={source === 'daily' ? '/daily' : '/course'} className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors">
           <ArrowLeft size={20} />
         </Link>
         <div className="text-center">
@@ -331,7 +333,7 @@ export default function LessonEngine({ course, dayNum }: Props) {
             onClick={(e) => { e.stopPropagation(); speakCard(); }}
             disabled={playing}
             className={`absolute top-4 right-4 p-2 rounded-xl transition-all ${
-              loadingAudio ? 'bg-amber-500/10 text-amber-500 animate-pulse' :
+              loadingAudio ? 'bg-[var(--peach-soft)]/10 text-[var(--peach-soft)] animate-pulse' :
               playing ? 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)]' :
               'text-[var(--text-muted)] hover:text-[var(--pink-primary)] hover:bg-[var(--bg-input)]'
             }`}
@@ -343,7 +345,7 @@ export default function LessonEngine({ course, dayNum }: Props) {
 
         {/* Auto-play failure indicator */}
         {autoPlayFailed && showSpeaker && (
-          <div className="absolute top-16 right-4 flex items-center gap-1 text-[10px] text-amber-500 bg-amber-500/10 rounded-lg px-2 py-1">
+          <div className="absolute top-16 right-4 flex items-center gap-1 text-[10px] text-[var(--peach-soft)] bg-[var(--peach-soft)]/10 rounded-lg px-2 py-1">
             <AlertTriangle size={12} />
             点击喇叭收听
           </div>

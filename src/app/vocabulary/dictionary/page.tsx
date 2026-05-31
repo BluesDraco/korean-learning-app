@@ -45,6 +45,11 @@ export default function DictionaryPage() {
     })();
   }, []);
 
+  // Reset addedCount when results change (filters/search changed)
+  useEffect(() => {
+    setAddedCount(0);
+  }, [searchQuery, sceneFilter, emotionFilter]);
+
   // Filter results
   const results = useMemo(() => {
     let r = vocabularyEntries;
@@ -105,6 +110,7 @@ export default function DictionaryPage() {
   const handleAddAll = async () => {
     setAddingAll(true);
     let count = 0;
+    const newIds = new Set(addedIds);
     for (const entry of results) {
       const exists = await db.words.where('word').equals(entry.korean).first();
       if (!exists) {
@@ -130,7 +136,9 @@ export default function DictionaryPage() {
         });
         count++;
       }
+      newIds.add(entry.id);
     }
+    setAddedIds(newIds);
     setAddedCount(count);
     setAddingAll(false);
   };

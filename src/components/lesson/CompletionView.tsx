@@ -1,10 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Edit3, Keyboard, Trophy, Target } from 'lucide-react';
+import { Edit3, Keyboard, Trophy, Target, Mic, FileText, ArrowRight } from 'lucide-react';
 import type { DailyCourse } from '@/data/thirtyDayCourse';
 import { KoreanKeyboard } from '@/components/KoreanKeyboard';
 import { generateAbilities } from '@/lib/lesson/buildLessonCards';
+import { COURSE_GRAMMAR_MAP } from '@/lib/lesson/recordLesson';
+import { sentencePatterns } from '@/data/grammar-new';
+import Link from 'next/link';
 
 interface Props {
   course: DailyCourse;
@@ -18,6 +21,7 @@ interface Props {
   onComplete: () => void;
   goPrevDay: () => void;
   goNextDay: () => void;
+  source?: 'daily' | 'course';
 }
 
 function StatCard({ value, label, color, delay, icon }: { value: string; label: string; color: string; delay: number; icon: React.ReactNode }) {
@@ -43,7 +47,7 @@ function StatCard({ value, label, color, delay, icon }: { value: string; label: 
 
 export function CompletionView({
   course, dayNum, outputText, setOutputText, showKeyboard, setShowKeyboard, isMobile,
-  result, onComplete, goPrevDay, goNextDay,
+  result, onComplete, goPrevDay, goNextDay, source,
 }: Props) {
   const abilities = generateAbilities(course);
   const [showAbilities, setShowAbilities] = useState(false);
@@ -149,22 +153,76 @@ export function CompletionView({
         )}
       </div>
 
+      {/* Pronunciation practice */}
+      <div className="bg-gradient-to-r from-[var(--mint-soft)]/5 to-[var(--pink-primary)]/5 rounded-2xl p-5 border border-[var(--border-color)] text-left">
+        <div className="flex items-center gap-2 mb-2">
+          <Mic size={16} className="text-[var(--mint-soft)]" />
+          <span className="text-sm font-bold text-[var(--text-primary)]">发音练习</span>
+        </div>
+        <p className="text-xs text-[var(--text-muted)] mb-3">
+          练一练今天学的 {course.words.length} 个单词的发音，听标准音、录音、对比
+        </p>
+        <Link
+          href={`/pronunciation?day=${course.day}`}
+          className="block w-full py-2.5 rounded-xl bg-[var(--mint-soft)]/10 border border-[var(--mint-soft)]/20 text-sm font-medium text-[var(--mint-soft)] text-center hover:bg-[var(--mint-soft)]/20 transition-colors"
+        >
+          练发音
+        </Link>
+      </div>
+
+      {/* Grammar practice */}
+      {(() => {
+        const grammarId = COURSE_GRAMMAR_MAP[course.day];
+        const pattern = grammarId ? sentencePatterns.find((g) => g.id === grammarId) : null;
+        return (
+          <div className="bg-gradient-to-r from-[var(--purple-soft)]/5 to-[var(--pink-primary)]/5 rounded-2xl p-5 border border-[var(--border-color)] text-left">
+            <div className="flex items-center gap-2 mb-2">
+              <FileText size={16} className="text-[var(--purple-soft)]" />
+              <span className="text-sm font-bold text-[var(--text-primary)]">句型练习</span>
+            </div>
+            <p className="text-xs text-[var(--text-muted)] mb-1">
+              今天学的句型：{course.grammar.name}
+            </p>
+            {pattern && (
+              <p className="text-xs text-[var(--purple-soft)] mb-3">
+                对应句型卡：{pattern.displayTitle} — {pattern.shortExplanation}
+              </p>
+            )}
+            <Link
+              href={grammarId ? `/grammar?pattern=${grammarId}` : '/grammar'}
+              className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-xl bg-[var(--purple-soft)]/10 border border-[var(--purple-soft)]/20 text-sm font-medium text-[var(--purple-soft)] text-center hover:bg-[var(--purple-soft)]/20 transition-colors"
+            >
+              {pattern ? `练「${pattern.displayTitle}」` : '练句型'}
+              <ArrowRight size={14} />
+            </Link>
+          </div>
+        );
+      })()}
+
       {/* Navigation */}
-      <div className="flex gap-3">
-        <button
-          onClick={goPrevDay}
-          disabled={dayNum <= 1}
-          className="flex-1 py-3 rounded-xl bg-[var(--bg-input)] text-[var(--text-secondary)] font-medium text-sm disabled:opacity-30"
+      <div className="space-y-3">
+        <div className="flex gap-3">
+          <button
+            onClick={goPrevDay}
+            disabled={dayNum <= 1}
+            className="flex-1 py-3 rounded-xl bg-[var(--bg-input)] text-[var(--text-secondary)] font-medium text-sm disabled:opacity-30"
+          >
+            上一课
+          </button>
+          <button
+            onClick={goNextDay}
+            disabled={dayNum >= 30}
+            className="flex-1 py-3 rounded-xl bg-[var(--pink-primary)] text-white font-medium text-sm disabled:opacity-30"
+          >
+            下一课
+          </button>
+        </div>
+        <Link
+          href={source === 'daily' ? '/daily' : '/course'}
+          className="block w-full py-3 rounded-xl bg-[var(--bg-input)] text-[var(--text-secondary)] font-medium text-sm text-center hover:bg-[var(--bg-accent)] transition-colors"
         >
-          上一课
-        </button>
-        <button
-          onClick={goNextDay}
-          disabled={dayNum >= 30}
-          className="flex-1 py-3 rounded-xl bg-[var(--pink-primary)] text-white font-medium text-sm disabled:opacity-30"
-        >
-          下一课
-        </button>
+          {source === 'daily' ? '返回今日学习' : '返回课程地图'}
+        </Link>
       </div>
     </div>
   );

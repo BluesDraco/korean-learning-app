@@ -99,7 +99,7 @@ function PostReadingQuiz({ quiz }: { quiz: ArticleLearningData['quiz'] }) {
         <span className="font-semibold text-[var(--text-primary)]">读后 · 理解测验</span>
         <span className="text-xs text-[var(--text-muted)] ml-1">({quiz.length}题)</span>
         {submitted && (
-          <span className={`text-xs font-bold ml-2 ${correctCount === quiz.length ? 'text-green-500' : 'text-[var(--pink-primary)]'}`}>
+          <span className={`text-xs font-bold ml-2 ${correctCount === quiz.length ? 'text-[var(--mint-soft)]' : 'text-[var(--pink-primary)]'}`}>
             {correctCount}/{quiz.length}
           </span>
         )}
@@ -133,17 +133,17 @@ function PostReadingQuiz({ quiz }: { quiz: ArticleLearningData['quiz'] }) {
                         disabled={submitted}
                         className={`text-left text-xs px-3 py-2.5 rounded-xl border transition-all ${
                           isRightAnswer
-                            ? 'border-green-400 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300'
+                            ? 'border-[var(--mint-soft)] bg-[var(--mint-soft)]/10 text-[var(--mint-soft)]'
                             : isWrongSelected
-                            ? 'border-red-400 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300'
+                            ? 'border-[var(--color-danger-light)] bg-[var(--color-danger-bg)] text-[var(--color-danger)]'
                             : isSelected
                             ? 'border-[var(--pink-primary)] bg-[var(--pink-primary)]/8 text-[var(--pink-primary)]'
                             : 'border-[var(--border-color)] bg-[var(--bg-input)]/60 text-[var(--text-secondary)] hover:border-[var(--pink-pale)]'
                         } ${submitted ? 'cursor-default' : 'cursor-pointer'}`}
                       >
                         <span className="flex items-center gap-1.5">
-                          {isRightAnswer && <Check size={12} className="text-green-500 shrink-0" />}
-                          {isWrongSelected && <X size={12} className="text-red-500 shrink-0" />}
+                          {isRightAnswer && <Check size={12} className="text-[var(--mint-soft)] shrink-0" />}
+                          {isWrongSelected && <X size={12} className="text-[var(--color-danger)] shrink-0" />}
                           {opt}
                         </span>
                       </button>
@@ -221,9 +221,9 @@ function OutputTask({ prompt, example }: { prompt: string; example: string }) {
           </button>
 
           {showExample && (
-            <div className="bg-green-50 dark:bg-green-900/15 border border-green-200 dark:border-green-800/30 rounded-xl p-4">
+            <div className="bg-[var(--mint-soft)]/10 border border-[var(--mint-soft)]/20 rounded-xl p-4">
               <p className="text-xs text-[var(--text-muted)] mb-1">参考例句：</p>
-              <p className="text-sm text-green-700 dark:text-green-300 leading-relaxed whitespace-pre-line">{example}</p>
+              <p className="text-sm text-[var(--mint-soft)] leading-relaxed whitespace-pre-line">{example}</p>
             </div>
           )}
         </div>

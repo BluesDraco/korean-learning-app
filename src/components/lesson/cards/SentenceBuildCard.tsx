@@ -72,7 +72,7 @@ export function SentenceBuildCard({ pieces, correctSentence, chinese, onCorrect 
           </div>
         )}
         {result === 'wrong' && (
-          <div className="w-full text-center text-xs text-red-400 mt-1">
+          <div className="w-full text-center text-xs text-[var(--color-danger)] mt-1">
             不对哦，答案应该是：{correctSentence}
           </div>
         )}

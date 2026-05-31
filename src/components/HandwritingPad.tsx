@@ -228,7 +228,7 @@ export function HandwritingPad({ onInsert, onCancel }: Props) {
         <button
           onClick={clear}
           disabled={strokes.length === 0}
-          className="p-1.5 rounded-lg text-[var(--text-muted)] hover:text-red-400 hover:bg-red-500/10 disabled:opacity-30 transition-colors"
+          className="p-1.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--color-danger)] hover:bg-[var(--color-danger-bg)] disabled:opacity-30 transition-colors"
           title="清除"
         >
           <Trash2 size={16} />
@@ -273,7 +273,7 @@ export function HandwritingPad({ onInsert, onCancel }: Props) {
         </button>
 
         {error && (
-          <div className="flex items-center gap-1.5 text-xs text-amber-500">
+          <div className="flex items-center gap-1.5 text-xs text-[var(--peach-soft)]">
             <AlertCircle size={12} />
             {error}，请手动输入
           </div>

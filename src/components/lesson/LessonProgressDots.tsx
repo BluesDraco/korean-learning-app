@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import type { LessonCard } from '@/lib/lesson/types';
 
 interface Props {
@@ -5,7 +6,7 @@ interface Props {
   currentCard: number;
 }
 
-export function LessonProgressDots({ cards, currentCard }: Props) {
+export const LessonProgressDots = memo(function LessonProgressDots({ cards, currentCard }: Props) {
   return (
     <div className="flex justify-center gap-1">
       {cards.map((_, i) => (
@@ -20,4 +21,4 @@ export function LessonProgressDots({ cards, currentCard }: Props) {
       ))}
     </div>
   );
-}
+});

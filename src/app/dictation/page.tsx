@@ -8,7 +8,7 @@ import { KoreanKeyboard } from '@/components/KoreanKeyboard';
 import { HandwritingPad } from '@/components/HandwritingPad';
 import { dictationWordPacks, type DictationWord } from '@/data/dictationWords';
 import { dictationSentences, type DictationSentence } from '@/data/dictationSentences';
-import { speak } from '@/lib/tts';
+import { speakBrowser, cancelSpeech } from '@/lib/tts';
 import type { Word } from '@/types';
 import { getCharDiff } from '@/lib/koreanDiff';
 
@@ -126,6 +126,11 @@ export default function DictationPage() {
     if (mode === 'word') loadWords();
     else if (mode === 'sentence') loadSentences();
     else loadDaily();
+    setCurrentIdx(0);
+    resetRound();
+    setStats({ correct: 0, total: 0 });
+    setComplete(false);
+    setEarnedXp(0);
   }, [mode, loadWords, loadSentences, loadDaily]);
 
   const resetRound = useCallback(() => {
@@ -237,7 +242,7 @@ export default function DictationPage() {
   useEffect(() => {
     if (!submitted && !loading && currentItem && mode !== 'sentence') {
       const text = isWord(currentItem) ? currentItem.korean : (currentItem as DictationSentence).korean;
-      speak(text, speed);
+      speakBrowser(text, speed);
       setHasListened(true);
     }
   }, [currentIdx, mode, submitted, loading, speed, currentItem, isWord]);
@@ -257,7 +262,7 @@ export default function DictationPage() {
             <p className="text-lg font-medium text-[var(--purple-soft)] mt-1">{accuracy}% 正确率</p>
           </div>
           {leveledUp && (
-            <div className="bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 rounded-2xl p-4">
+            <div className="bg-gradient-to-r from-[var(--peach-soft)]/10 to-[var(--pink-primary)]/10 border border-[var(--peach-soft)]/20 rounded-2xl p-4">
               <p className="text-[var(--peach-soft)] font-bold text-lg">升级了! 达到等级 {newLevel}</p>
             </div>
           )}
@@ -399,7 +404,7 @@ export default function DictationPage() {
       <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 text-center space-y-5">
         {/* Play button */}
         <button
-          onClick={() => { speak(currentKorean, speed); setHasListened(true); }}
+          onClick={() => { speakBrowser(currentKorean, speed); setHasListened(true); }}
           className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto transition-all ${
             hasListened ? 'bg-[var(--mint-soft)]/10 hover:bg-[var(--mint-soft)]/20' : 'bg-[var(--pink-primary)]/10 hover:bg-[var(--pink-primary)]/20'
           }`}
@@ -474,19 +479,19 @@ export default function DictationPage() {
         </div>
 
         {showXpGain && (
-          <div className="flex items-center justify-center gap-2 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 rounded-xl py-2 px-4">
+          <div className="flex items-center justify-center gap-2 bg-gradient-to-r from-[var(--peach-soft)]/10 to-[var(--pink-primary)]/10 border border-[var(--peach-soft)]/20 rounded-xl py-2 px-4">
             <Sparkles size={16} className="text-[var(--peach-soft)]" />
             <span className="text-[var(--peach-soft)] font-bold text-sm">+{xpGainAmount} XP</span>
           </div>
         )}
 
         {submitted && (
-          <div className={`p-3 rounded-xl ${error ? 'bg-red-500/10' : 'bg-[var(--mint-soft)]/15'}`}>
+          <div className={`p-3 rounded-xl ${error ? 'bg-[var(--color-danger-bg)]' : 'bg-[var(--mint-soft)]/15'}`}>
             {error ? (() => {
               const diff = getCharDiff(userInput.trim(), currentKorean);
               return (
                 <div className="space-y-3">
-                  <div className="flex items-center justify-center gap-2 text-red-400"><X size={18} /><span>答错了</span></div>
+                  <div className="flex items-center justify-center gap-2 text-[var(--color-danger)]"><X size={18} /><span>答错了</span></div>
                   {/* Visual diff */}
                   <div className="space-y-2 text-sm">
                     <div>
@@ -495,8 +500,8 @@ export default function DictationPage() {
                         {diff.userDiff.map((s, i) => (
                           <span key={i} className={
                             s.status === 'correct' ? 'text-[var(--mint-soft)]' :
-                            s.status === 'wrong' ? 'text-red-400 line-through decoration-red-400' :
-                            'text-yellow-400 underline decoration-yellow-400'
+                            s.status === 'wrong' ? 'text-[var(--color-danger)] line-through decoration-[var(--color-danger)]' :
+                            'text-[var(--peach-soft)] underline decoration-[var(--peach-soft)]'
                           }>{s.char}</span>
                         ))}
                       </span>
@@ -508,7 +513,7 @@ export default function DictationPage() {
                           <span key={i} className={
                             s.status === 'correct' ? 'text-[var(--mint-soft)]' :
                             s.status === 'wrong' ? 'text-[var(--pink-primary)] font-bold' :
-                            'text-red-400'
+                            'text-[var(--color-danger)]'
                           }>{s.char}</span>
                         ))}
                       </span>
@@ -533,7 +538,7 @@ export default function DictationPage() {
         )}
 
         {leveledUp && (
-          <div className="bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 rounded-2xl p-3">
+          <div className="bg-gradient-to-r from-[var(--peach-soft)]/10 to-[var(--pink-primary)]/10 border border-[var(--peach-soft)]/20 rounded-2xl p-3">
             <p className="text-[var(--peach-soft)] font-bold text-sm">升级了! 达到等级 {newLevel}</p>
           </div>
         )}
@@ -553,7 +558,7 @@ export default function DictationPage() {
 
       {earnedXp > 0 && (
         <div className="flex items-center justify-center gap-2 text-sm text-[var(--text-muted)]">
-          <Sparkles size={14} className="text-yellow-500" />
+          <Sparkles size={14} className="text-[var(--peach-soft)]" />
           <span>本轮获得 <span className="text-[var(--peach-soft)] font-medium">{earnedXp} XP</span></span>
         </div>
       )}

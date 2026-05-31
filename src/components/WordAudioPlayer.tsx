@@ -270,7 +270,7 @@ export function WordAudioPlayer({ words }: Props) {
                 {phase !== 'idle' && (
                   <span className={`text-xs px-2 py-1 rounded-full shrink-0 ${
                     phase === 'chinese'
-                      ? 'bg-amber-500/15 text-amber-500'
+                      ? 'bg-[var(--peach-soft)]/15 text-[var(--peach-soft)]'
                       : 'bg-[var(--pink-primary)]/15 text-[var(--pink-primary)]'
                   }`}>
                     {phase === 'chinese' ? '🇨🇳 中文' : '🇰🇷 韩语'}

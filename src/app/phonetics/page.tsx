@@ -1,14 +1,16 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { Volume2, Play, Check, X, ArrowRight, RotateCcw, Trophy, ChevronDown, ChevronUp, Sparkles, Lightbulb } from 'lucide-react';
 import { vowels, consonants, batchimSounds, type PhoneticLetter } from '@/data/phonetics';
 import { speak } from '@/lib/tts';
 import ProgressivePhonetics from '@/components/ProgressivePhonetics';
+import SyllableComposer from '@/components/SyllableComposer';
+import PhoneticsWelcome, { hasSeenWelcome } from '@/components/PhoneticsWelcome';
 
 type Tab = 'vowel' | 'consonant' | 'batchim';
 type Mode = 'browse' | 'quiz';
-type MainTab = 'progressive' | 'alphabet' | 'rules';
+type MainTab = 'progressive' | 'alphabet' | 'rules' | 'composer';
 
 
 function shuffleArray<T>(arr: T[]): T[] {
@@ -180,7 +182,14 @@ function generateRulesQuiz() {
 }
 
 export default function PhoneticsPage() {
+  const [showWelcome, setShowWelcome] = useState(false);
+  const [welcomeChecked, setWelcomeChecked] = useState(false);
   const [mainTab, setMainTab] = useState<MainTab>('progressive');
+
+  useEffect(() => {
+    setShowWelcome(!hasSeenWelcome());
+    setWelcomeChecked(true);
+  }, []);
   const [tab, setTab] = useState<Tab>('vowel');
   const [mode, setMode] = useState<Mode>('browse');
   const [quizState, setQuizState] = useState<{
@@ -255,12 +264,16 @@ export default function PhoneticsPage() {
     }
   };
 
+  if (!welcomeChecked) return null;
+
   return (
-    <div className="py-4 space-y-3">
+    <>
+      {showWelcome && <PhoneticsWelcome onDone={() => setShowWelcome(false)} />}
+      <div className="py-4 space-y-3">
       <div>
-        <h1 className="text-2xl font-bold text-[var(--text-primary)]">四十音</h1>
+        <h1 className="text-2xl font-bold text-[var(--text-primary)]">韩语40音</h1>
         <p className="text-[var(--text-secondary)] text-sm mt-1">
-          韩语由40个字母组成（21个元音 + 19个辅音），掌握它们是学习韩语的第一步
+          21个元音 + 19个辅音，科学分步学习。15分钟看懂所有韩文 — 这是你韩语学习的地基模块
         </p>
       </div>
 
@@ -298,6 +311,17 @@ export default function PhoneticsPage() {
         >
           <span>📖</span>
           连读规则
+        </button>
+        <button
+          onClick={() => handleMainTabChange('composer')}
+          className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
+            mainTab === 'composer'
+              ? 'bg-[var(--pink-primary)] text-white shadow-sm'
+              : 'text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)]'
+          }`}
+        >
+          <span>🧩</span>
+          音节拼装
         </button>
       </div>
 
@@ -574,7 +598,11 @@ export default function PhoneticsPage() {
 
       {/* ── 连读规则 tab ── */}
       {mainTab === 'rules' && <RulesTab />}
+
+      {/* ── 音节拼装 tab ── */}
+      {mainTab === 'composer' && <SyllableComposer />}
     </div>
+    </>
   );
 }
 

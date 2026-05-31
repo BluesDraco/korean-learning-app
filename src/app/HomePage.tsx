@@ -13,6 +13,7 @@ import { getProgress, getTodayTasks } from '@/lib/progress';
 import { useAuth } from '@/components/AuthProvider';
 import Onboarding from '@/components/Onboarding';
 import DailyTasksBar from '@/components/DailyTasksBar';
+import HangulProgressBadge from '@/components/HangulProgressBadge';
 import type { Word, UserProfile, DailyLog } from '@/types';
 import type { TodayTasks } from '@/lib/progress';
 
@@ -226,6 +227,25 @@ export default function Home() {
         )}
       </div>
 
+      {/* Main CTA — 开始今日学习 */}
+      {profile && (
+        <Link
+          href="/daily"
+          className="flex items-center gap-4 bg-gradient-to-r from-[var(--purple-soft)] to-[var(--pink-primary)] rounded-2xl p-5 hover:from-[var(--purple-soft)] hover:to-[var(--pink-primary)] transition-all group shadow-lg shadow-[var(--purple-soft)]/20 active:scale-[0.98]"
+        >
+          <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+            <GraduationCap size={28} className="text-white" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="text-lg font-bold text-white">开始今日学习</div>
+            <div className="text-sm text-white/80 mt-0.5">
+              {tasks?.allDone ? '今日任务已全部完成，查看明日计划' : '课程 · 复习 · 发音 · 阅读 · 输出'}
+            </div>
+          </div>
+          <ArrowRight size={24} className="text-white shrink-0 group-hover:translate-x-1 transition-transform" />
+        </Link>
+      )}
+
       {/* Return-after-break welcome */}
       {showReturnMsg && (
         <div className="bg-[var(--pink-pale)]/20 border border-[var(--pink-pale)]/40 rounded-2xl p-4 flex items-center gap-3 animate-fade-in">
@@ -287,6 +307,9 @@ export default function Home() {
 
       {/* Daily Tasks Bar */}
       {profile && tasks && <DailyTasksBar tasks={tasks} />}
+
+      {/* Hangul Progress */}
+      <HangulProgressBadge />
 
       {/* XP Progress Bar */}
       {profile && (
@@ -472,7 +495,7 @@ export default function Home() {
                 suggestions.push({
                   text: `今日还需学习 ${wordsLeft} 个单词才能完成目标（${todayLog?.wordsLearned || 0}/${profile.dailyGoalWords}）`,
                   action: '去学习',
-                  href: '/learn',
+                  href: '/daily',
                   color: 'var(--purple-soft)',
                 });
               }
@@ -490,7 +513,7 @@ export default function Home() {
                 suggestions.push({
                   text: '今天表现很棒！继续保持，挑战下一个单元吧',
                   action: '去学习',
-                  href: '/learn',
+                  href: '/daily',
                   color: 'var(--purple-soft)',
                 });
               }
@@ -517,21 +540,6 @@ export default function Home() {
       <div>
         <h2 className="text-sm font-medium text-[var(--text-secondary)] uppercase tracking-wider mb-3">快捷操作</h2>
         <div className="grid grid-cols-2 gap-3">
-          {/* Daily Learning - primary CTA */}
-          <Link
-            href="/learn"
-            className="col-span-2 flex items-center gap-4 card-washi bg-gradient-to-r from-[var(--purple-soft)]/10 to-[var(--pink-primary)]/10 border-[var(--purple-soft)]/30 rounded-2xl p-5 hover:from-[var(--purple-soft)]/20 hover:to-[var(--pink-primary)]/20 transition-all group"
-            style={{ '--washi-color': 'var(--purple-soft)' } as React.CSSProperties}
-          >
-            <div className="w-12 h-12 rounded-xl bg-[var(--purple-soft)]/20 flex items-center justify-center">
-              <GraduationCap size={24} className="text-[var(--purple-soft)]" />
-            </div>
-            <div className="flex-1">
-              <div className="text-base font-bold text-[var(--text-primary)] group-hover:text-[var(--purple-soft)] transition-colors">每日学习</div>
-              <div className="text-xs text-[var(--text-secondary)]">结构化课程 · 单词 + 语法</div>
-            </div>
-            <ArrowRight size={20} className="text-[var(--purple-soft)] opacity-0 group-hover:opacity-100 transition-opacity" />
-          </Link>
 
           {stats.dueCount > 0 ? (
             <Link
@@ -572,12 +580,12 @@ export default function Home() {
           </Link>
 
           <Link
-            href="/shadowing"
+            href="/pronunciation"
             className="flex items-center gap-3 bg-[var(--mint-soft)]/15 border border-[var(--mint-soft)]/20 rounded-2xl p-4 hover:bg-[var(--mint-soft)]/20 transition-colors"
           >
             <Mic size={20} className="text-[var(--mint-soft)]" />
             <div>
-              <div className="text-sm font-medium text-[var(--text-primary)]">影子跟读</div>
+              <div className="text-sm font-medium text-[var(--text-primary)]">发音练习</div>
               <div className="text-xs text-[var(--text-secondary)]">口语训练</div>
             </div>
             <ArrowRight size={16} className="text-[var(--mint-soft)] ml-auto" />

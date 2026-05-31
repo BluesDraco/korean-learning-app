@@ -496,6 +496,31 @@ function FreeWritingMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord,
               </div>
             )}
 
+            {/* Grammar suggestions */}
+            <div className="bg-[var(--purple-soft)]/5 border border-[var(--purple-soft)]/10 rounded-xl p-4">
+              <p className="text-xs font-medium text-[var(--purple-soft)] mb-2 flex items-center gap-1.5">
+                <BookOpen size={12} />
+                建议练习的句型
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {[
+                  { id: 'gp-01', label: '이에요/예요' },
+                  { id: 'gp-13', label: '아/어요' },
+                  { id: 'gp-23', label: '过去时' },
+                  { id: 'gp-24', label: '将来时' },
+                  { id: 'gp-27', label: '原因表达' },
+                ].map((g) => (
+                  <a
+                    key={g.id}
+                    href={`/grammar?pattern=${g.id}`}
+                    className="px-2.5 py-1 rounded-lg bg-[var(--bg-card)] border border-[var(--border-color)] text-xs text-[var(--text-secondary)] hover:text-[var(--pink-primary)] hover:border-[var(--pink-primary)]/30 transition-colors"
+                  >
+                    {g.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+
             {/* Re-score button */}
             <button
               onClick={handleScore}

@@ -8,6 +8,8 @@ export interface ProgressiveStep {
   description: string;
   letters: PhoneticLetter[];
   confusedPairs: { id: string; label: string; letters: PhoneticLetter[]; tip: string }[];
+  isReadingStep?: boolean;
+  readingWords?: { korean: string; pronunciation: string; meaning: string }[];
 }
 
 export const progressiveSteps: ProgressiveStep[] = [
@@ -112,6 +114,48 @@ export const progressiveSteps: ProgressiveStep[] = [
         id: 'cp-10', label: 'ㄱ系 vs ㄷ系 vs ㅂ系', tip: 'ㄱ系收音=舌根堵住，ㄷ系收音=舌尖堵住，ㅂ系收音=双唇堵住。都是只做口型不爆破',
         letters: batchimSounds.filter((b) => ['ㄱ/ㄲ/ㅋ', 'ㄷ/ㅅ/ㅆ/ㅈ/ㅊ/ㅌ/ㅎ', 'ㅂ/ㅍ'].includes(b.letter)),
       },
+    ],
+  },
+  {
+    id: 'reading',
+    title: '综合拼读',
+    titleKo: '읽기 연습',
+    emoji: '📖',
+    description: '把前面学的字母拼起来，读真正的韩文单词。看到词 → 试着读 → 听发音验证。读完这些你就真的能用韩文了！',
+    letters: [],
+    confusedPairs: [],
+    isReadingStep: true,
+    readingWords: [
+      { korean: '네', pronunciation: 'ne', meaning: '是/好的' },
+      { korean: '말', pronunciation: 'mal', meaning: '话/语言' },
+      { korean: '눈', pronunciation: 'nun', meaning: '眼睛/雪' },
+      { korean: '문', pronunciation: 'mun', meaning: '门' },
+      { korean: '집', pronunciation: 'jip', meaning: '家' },
+      { korean: '책', pronunciation: 'chaek', meaning: '书' },
+      { korean: '돈', pronunciation: 'don', meaning: '钱' },
+      { korean: '산', pronunciation: 'san', meaning: '山' },
+      { korean: '강', pronunciation: 'gang', meaning: '江' },
+      { korean: '꽃', pronunciation: 'kkot', meaning: '花' },
+      { korean: '밥', pronunciation: 'bap', meaning: '饭' },
+      { korean: '옷', pronunciation: 'ot', meaning: '衣服' },
+      { korean: '가방', pronunciation: 'ga-bang', meaning: '包' },
+      { korean: '사람', pronunciation: 'sa-ram', meaning: '人' },
+      { korean: '우유', pronunciation: 'u-yu', meaning: '牛奶' },
+      { korean: '학교', pronunciation: 'hak-gyo', meaning: '学校' },
+      { korean: '친구', pronunciation: 'chin-gu', meaning: '朋友' },
+      { korean: '고기', pronunciation: 'go-gi', meaning: '肉' },
+      { korean: '나무', pronunciation: 'na-mu', meaning: '树' },
+      { korean: '바다', pronunciation: 'ba-da', meaning: '海' },
+      { korean: '지금', pronunciation: 'ji-geum', meaning: '现在' },
+      { korean: '오늘', pronunciation: 'o-neul', meaning: '今天' },
+      { korean: '내일', pronunciation: 'nae-il', meaning: '明天' },
+      { korean: '마음', pronunciation: 'ma-eum', meaning: '心' },
+      { korean: '한국어', pronunciation: 'han-gu-geo', meaning: '韩语' },
+      { korean: '안녕하세요', pronunciation: 'an-nyeong-ha-se-yo', meaning: '您好' },
+      { korean: '감사합니다', pronunciation: 'gam-sa-ham-ni-da', meaning: '谢谢' },
+      { korean: '반갑습니다', pronunciation: 'ban-gap-seum-ni-da', meaning: '很高兴见到你' },
+      { korean: '사랑해요', pronunciation: 'sa-rang-hae-yo', meaning: '我爱你' },
+      { korean: '미안해요', pronunciation: 'mi-a-nae-yo', meaning: '对不起' },
     ],
   },
 ];

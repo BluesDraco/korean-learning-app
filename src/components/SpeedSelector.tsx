@@ -9,6 +9,8 @@ interface SpeedSelectorProps {
 }
 
 export function SpeedSelector({ current, onSelect, platform }: SpeedSelectorProps) {
+  const isBilibili = platform === 'bilibili';
+
   return (
     <div className="flex items-center gap-1 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-1">
       {SPEEDS.map((s) => {
@@ -16,19 +18,22 @@ export function SpeedSelector({ current, onSelect, platform }: SpeedSelectorProp
         return (
           <button
             key={s}
-            onClick={() => onSelect(s)}
+            onClick={() => !isBilibili && onSelect(s)}
+            disabled={isBilibili}
             className={`relative px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
-              isActive
-                ? 'bg-[var(--pink-primary)] text-[var(--text-primary)]'
-                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)]'
+              isBilibili
+                ? 'opacity-30 cursor-not-allowed'
+                : isActive
+                  ? 'bg-[var(--pink-primary)] text-[var(--text-primary)]'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)]'
             }`}
           >
             {s}x
           </button>
         );
       })}
-      {platform === 'bilibili' && (
-        <span className="text-[10px] text-[var(--text-muted)] ml-1">（需用播放器控件调倍速）</span>
+      {isBilibili && (
+        <span className="text-[10px] text-[var(--text-muted)] ml-1">需用播放器控件调倍速</span>
       )}
     </div>
   );

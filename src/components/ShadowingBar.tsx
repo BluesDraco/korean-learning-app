@@ -66,8 +66,8 @@ export function ShadowingBar({
                     {feedback.userDiff.map((s, i) => (
                       <span key={i} className={
                         s.status === 'correct' ? 'text-[var(--mint-soft)]' :
-                        s.status === 'wrong' ? 'text-red-400 line-through' :
-                        'text-yellow-400 underline'
+                        s.status === 'wrong' ? 'text-[var(--color-danger)] line-through' :
+                        'text-[var(--peach-soft)] underline'
                       }>{s.char}</span>
                     ))}
                   </span>
@@ -79,7 +79,7 @@ export function ShadowingBar({
                       <span key={i} className={
                         s.status === 'correct' ? 'text-[var(--mint-soft)]' :
                         s.status === 'wrong' ? 'text-[var(--pink-primary)] font-bold' :
-                        'text-red-400'
+                        'text-[var(--color-danger)]'
                       }>{s.char}</span>
                     ))}
                   </span>
@@ -108,7 +108,7 @@ export function ShadowingBar({
           onClick={onRecord}
           className={`flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-medium transition-all ${
             isRecording
-              ? 'bg-red-500 text-white animate-pulse'
+              ? 'bg-[var(--color-danger)] text-white animate-pulse'
               : 'bg-[var(--pink-primary)] text-[var(--text-primary)] hover:bg-[var(--pink-primary)]'
           }`}
         >

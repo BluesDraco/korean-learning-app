@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
   const totalCount = countResult.length > 0 ? Number(countResult[0].values[0]?.[0] ?? 0) : 0;
 
   // Main query with SQL-level pagination
-  let sql = `SELECT id, username, nickname, email, role, created_at FROM users ${whereClause}`;
+  let sql = `SELECT id, username, nickname, email, role, membership_type, membership_expiry, banned, created_at FROM users ${whereClause}`;
   if (sort === 'newest') sql += ' ORDER BY created_at DESC';
   else if (sort === 'oldest') sql += ' ORDER BY created_at ASC';
 
@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
   const queryParams = [...params, pageSize, offset];
 
   const result = await db.exec(sql, queryParams);
-  const rawUsers: { id: string; username: string; nickname: string; email: string; role: string; createdAt: number }[] =
+  const rawUsers: { id: string; username: string; nickname: string; email: string; role: string; membershipType: string; membershipExpiry: number | null; banned: number; createdAt: number }[] =
     result.length > 0
       ? result[0].values.map((row) => ({
           id: row[0] as string,
@@ -48,21 +48,24 @@ export async function GET(request: NextRequest) {
           nickname: row[2] as string,
           email: row[3] as string,
           role: row[4] as string,
-          createdAt: row[5] as number,
+          membershipType: (row[5] as string) || 'free',
+          membershipExpiry: row[6] as number | null,
+          banned: row[7] as number,
+          createdAt: row[8] as number,
         }))
       : [];
 
   const users: AdminUser[] = rawUsers.map((u) => ({
     ...u,
-    membershipType: 'free' as const,
-    membershipExpiry: null,
+    membershipType: u.membershipType as AdminUser['membershipType'],
+    membershipExpiry: u.membershipExpiry ?? null,
+    banned: u.banned === 1,
     studyDays: 0,
     totalXp: 0,
     wordsLearned: 0,
-    banned: false,
   }));
 
-  // Status filtering in JS (membership/banned data is simulated)
+  // Status filtering in JS
   let filtered = users;
   if (status === 'banned') filtered = users.filter((u) => u.banned);
   else if (status === 'vip') filtered = users.filter((u) => u.membershipType !== 'free');

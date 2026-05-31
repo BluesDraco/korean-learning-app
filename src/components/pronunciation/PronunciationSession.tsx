@@ -1,0 +1,459 @@
+'use client';
+
+import { useState, useCallback, useEffect, useRef } from 'react';
+import {
+  ArrowLeft, Volume2, Mic, MicOff, Play, RefreshCw,
+  ChevronRight, Sparkles, Zap, RotateCcw, AlertTriangle,
+} from 'lucide-react';
+import type { PronunciationItem } from '@/types';
+import { AudioRecorder, isRecordingSupported, requestMicPermission, revokeRecording } from '@/lib/audio/recorder';
+import { globalPlayer } from '@/lib/audio/player';
+import { db } from '@/lib/db';
+import { awardXp, XP_REWARDS } from '@/lib/gamification';
+
+interface Props {
+  items: PronunciationItem[];
+  onClose: () => void;
+}
+
+type StepType = 'target' | 'listen' | 'segments' | 'record' | 'compare' | 'settlement';
+
+export function PronunciationSession({ items, onClose }: Props) {
+  const [itemIdx, setItemIdx] = useState(0);
+  const [step, setStep] = useState<StepType>('target');
+  const [slowMode, setSlowMode] = useState(false);
+  const [recorder] = useState(() => new AudioRecorder(10000));
+  const [recording, setRecording] = useState(false);
+  const [recordingUrl, setRecordingUrl] = useState<string | null>(null);
+  const [micError, setMicError] = useState<string | null>(null);
+  const [completedItems, setCompletedItems] = useState(0);
+  const [totalAttempts, setTotalAttempts] = useState(0);
+  const [playerState, setPlayerState] = useState<string>('idle');
+  const cleanupRef = useRef<string | null>(null);
+
+  const item = items[itemIdx];
+  if (!item) {
+    return (
+      <div className="py-12 max-w-lg mx-auto text-center space-y-4">
+        <div className="text-5xl">📭</div>
+        <h2 className="text-lg font-bold text-[var(--text-primary)]">暂无发音练习内容</h2>
+        <p className="text-sm text-[var(--text-muted)]">请先添加一些发音练习项目</p>
+        <button onClick={onClose} className="px-6 py-2.5 rounded-xl bg-[var(--pink-primary)] text-white text-sm font-medium">
+          返回
+        </button>
+      </div>
+    );
+  }
+
+  // Listen to global player state
+  useEffect(() => {
+    globalPlayer.setStateChange(setPlayerState);
+    return () => { globalPlayer.stop(); };
+  }, []);
+
+  // Cleanup recording URL on unmount or item change
+  useEffect(() => {
+    return () => {
+      if (cleanupRef.current) {
+        revokeRecording(cleanupRef.current);
+        cleanupRef.current = null;
+      }
+    };
+  }, [itemIdx]);
+
+  const rate = slowMode ? 0.6 : 0.85;
+
+  // ── Play standard audio ──
+  const playStandard = useCallback(() => {
+    globalPlayer.speakTTS(item.textKo, rate);
+  }, [item.textKo, rate]);
+
+  const playSegment = useCallback((text: string) => {
+    globalPlayer.speakTTS(text, rate);
+  }, [rate]);
+
+  // ── Recording ──
+  const startRecording = useCallback(async () => {
+    setMicError(null);
+    if (!isRecordingSupported()) {
+      setMicError('此浏览器不支持录音');
+      return;
+    }
+    const perm = await requestMicPermission();
+    if (perm !== 'granted') {
+      setMicError(perm === 'denied' ? '麦克风权限未开启，请在浏览器设置中允许' : '无法访问麦克风');
+      return;
+    }
+    const result = await recorder.start();
+    if (result.error) {
+      setMicError(result.error);
+      return;
+    }
+    setRecording(true);
+  }, [recorder]);
+
+  const stopRecording = useCallback(async () => {
+    const result = await recorder.stop();
+    setRecording(false);
+    if (result) {
+      if (cleanupRef.current) revokeRecording(cleanupRef.current);
+      setRecordingUrl(result.url);
+      cleanupRef.current = result.url;
+      setTotalAttempts((p) => p + 1);
+      globalPlayer.stop();
+
+      // Save attempt
+      try {
+        await db.pronunciationAttempts.put({
+          id: crypto.randomUUID(),
+          itemId: item.id,
+          durationMs: result.durationMs,
+          createdAt: Date.now(),
+        });
+        await awardXp(XP_REWARDS.wordReviewed);
+      } catch (_) {}
+    }
+  }, [recorder, item]);
+
+  const playRecording = useCallback(() => {
+    if (recordingUrl) globalPlayer.play(recordingUrl, 1);
+  }, [recordingUrl]);
+
+  // ── Navigation ──
+  const goNextStep = useCallback(() => {
+    const seq: StepType[] = item.segments?.length
+      ? ['target', 'listen', 'segments', 'record', 'compare']
+      : ['target', 'listen', 'record', 'compare'];
+
+    const idx = seq.indexOf(step);
+    if (idx >= 0 && idx < seq.length - 1) {
+      setStep(seq[idx + 1]);
+    } else {
+      // Move to next item or settlement
+      if (itemIdx + 1 < items.length) {
+        setItemIdx(itemIdx + 1);
+        setStep('target');
+        setRecordingUrl(null);
+        setMicError(null);
+      } else {
+        setCompletedItems(items.length);
+        setStep('settlement');
+      }
+    }
+  }, [step, itemIdx, items.length, item.segments]);
+
+  const handleReRecord = useCallback(() => {
+    setRecordingUrl(null);
+    setMicError(null);
+    setStep('record');
+  }, []);
+
+  const handleRestart = useCallback(() => {
+    setItemIdx(0);
+    setStep('target');
+    setSlowMode(false);
+    setRecordingUrl(null);
+    setMicError(null);
+    setCompletedItems(0);
+    setTotalAttempts(0);
+  }, []);
+
+  const isPlaying = playerState === 'playing' || playerState === 'loading';
+
+  // ── Render helpers ──
+  const StepBadge = ({ label }: { label: string }) => (
+    <span className="text-[10px] px-2.5 py-1 rounded-full font-medium bg-[var(--pink-primary)]/10 text-[var(--pink-primary)]">
+      {label}
+    </span>
+  );
+
+  const PlayBtn = ({ onClick, size = 22, label }: { onClick: () => void; size?: number; label?: string }) => (
+    <button
+      onClick={onClick}
+      disabled={isPlaying}
+      className={`p-4 rounded-2xl transition-all ${
+        isPlaying
+          ? 'bg-[var(--pink-primary)]/20 text-[var(--pink-primary)] animate-pulse'
+          : 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] hover:bg-[var(--pink-primary)]/20'
+      }`}
+    >
+      <Volume2 size={size} />
+      {label && <span className="block text-xs mt-1">{label}</span>}
+    </button>
+  );
+
+  // ═══════════════════════════════════════════
+  // SETTLEMENT
+  // ═══════════════════════════════════════════
+  if (step === 'settlement') {
+    return (
+      <div className="py-4 max-w-lg mx-auto space-y-6 text-center">
+        <div className="text-6xl">🐰</div>
+        <div>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">发音练习完成!</h1>
+          <p className="text-sm text-[var(--text-muted)] mt-1">
+            完成了 {completedItems} 个内容，开口练习 {totalAttempts} 次
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4">
+            <Zap size={20} className="text-[var(--peach-soft)] mx-auto mb-1" />
+            <div className="text-xl font-bold text-[var(--text-primary)]">{totalAttempts}</div>
+            <div className="text-xs text-[var(--text-muted)]">开口次数</div>
+          </div>
+          <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4">
+            <Sparkles size={20} className="text-[var(--mint-soft)] mx-auto mb-1" />
+            <div className="text-xl font-bold text-[var(--text-primary)]">{completedItems}</div>
+            <div className="text-xs text-[var(--text-muted)]">练习内容</div>
+          </div>
+        </div>
+
+        {items.slice(0, completedItems).map((it) => (
+          <div key={it.id} className="bg-[var(--mint-soft)]/10 border border-[var(--mint-soft)]/20 rounded-2xl p-4 text-left">
+            <p className="text-sm font-bold text-[var(--text-primary)]">{it.textKo}</p>
+            <p className="text-xs text-[var(--text-muted)]">{it.textZh}</p>
+            <p className="text-[10px] text-[var(--mint-soft)] mt-1">已练习</p>
+          </div>
+        ))}
+
+        <div className="flex gap-3">
+          <button onClick={onClose} className="flex-1 py-3 rounded-xl bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-secondary)] font-medium text-sm">
+            返回发音页
+          </button>
+          <button onClick={handleRestart} className="flex-1 py-3 rounded-xl bg-[var(--pink-primary)] text-white font-medium text-sm">
+            再来一轮
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // ═══════════════════════════════════════════
+  // PRACTICE STEPS
+  // ═══════════════════════════════════════════
+  const stepNames: Record<StepType, string> = {
+    target: '了解目标', listen: '听标准音', segments: '分段练习',
+    record: '开口录音', compare: '回放对比', settlement: '',
+  };
+
+  const progress = ((itemIdx * 5 + ['target', 'listen', 'segments', 'record', 'compare'].indexOf(step)) / (items.length * 5)) * 100;
+
+  return (
+    <div className="py-4 max-w-lg mx-auto space-y-4">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <button onClick={onClose} className="p-1 text-[var(--text-muted)] hover:text-[var(--text-primary)]">
+          <ArrowLeft size={20} />
+        </button>
+        <div className="flex flex-col items-center">
+          <span className="text-xs font-medium text-[var(--text-primary)]">{stepNames[step]}</span>
+          <span className="text-[10px] text-[var(--text-muted)]">{itemIdx + 1} / {items.length}</span>
+        </div>
+        <div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
+          <Mic size={12} />{totalAttempts}
+        </div>
+      </div>
+
+      {/* Progress bar */}
+      <div className="w-full bg-[var(--border-color)]/40 rounded-full h-1.5 overflow-hidden">
+        <div className="h-full rounded-full bg-gradient-to-r from-[var(--mint-soft)] to-[var(--pink-primary)] transition-all duration-500 ease-out"
+          style={{ width: `${progress}%` }} />
+      </div>
+
+      {/* Card */}
+      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-3xl p-8 min-h-[460px] flex flex-col items-center justify-center text-center space-y-5">
+        {/* ── TARGET ── */}
+        {step === 'target' && (
+          <>
+            <StepBadge label="今日目标" />
+            <div className="text-4xl">{item.type === 'sound' ? '🔤' : item.type === 'word' ? '📝' : '💬'}</div>
+            <h2 className="text-2xl font-extrabold text-[var(--text-primary)]">{item.textKo}</h2>
+            {item.textZh && <p className="text-sm text-[var(--text-muted)]">{item.textZh}</p>}
+            {item.focus.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 justify-center">
+                {item.focus.map((f) => (
+                  <span key={f} className="text-[10px] px-2 py-0.5 rounded-full bg-[var(--purple-soft)]/10 text-[var(--purple-soft)]">{f}</span>
+                ))}
+              </div>
+            )}
+            {item.tips && (
+              <div className="bg-[var(--bg-input)] rounded-2xl p-4 text-left space-y-1 w-full">
+                {item.tips.map((t, i) => (
+                  <p key={i} className="text-xs text-[var(--text-secondary)]">💡 {t}</p>
+                ))}
+              </div>
+            )}
+            <button onClick={goNextStep} className="w-full py-3 bg-[var(--pink-primary)] text-white rounded-2xl font-bold text-sm">
+              开始练习
+            </button>
+          </>
+        )}
+
+        {/* ── LISTEN ── */}
+        {step === 'listen' && (
+          <>
+            <StepBadge label="听标准音" />
+            <p className="text-xs text-[var(--text-muted)]">先仔细听一遍标准发音</p>
+            <h2 className="text-2xl font-extrabold text-[var(--text-primary)]">{item.textKo}</h2>
+            {item.romanization && (
+              <p className="text-sm text-[var(--text-muted)] font-mono">[{item.romanization}]</p>
+            )}
+            <div className="flex items-center gap-4">
+              <PlayBtn onClick={playStandard} size={28} label="标准" />
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setSlowMode(!slowMode)}
+                className={`text-xs px-3 py-1.5 rounded-full transition-colors ${
+                  slowMode ? 'bg-[var(--peach-soft)]/15 text-[var(--peach-soft)]' : 'bg-[var(--bg-input)] text-[var(--text-muted)]'
+                }`}
+              >
+                {slowMode ? '🐢 慢速' : '慢速'}
+              </button>
+            </div>
+            <button onClick={goNextStep} className="w-full py-3 bg-[var(--pink-primary)] text-white rounded-2xl font-bold text-sm">
+              听好了，下一步
+            </button>
+          </>
+        )}
+
+        {/* ── SEGMENTS ── */}
+        {step === 'segments' && item.segments && (
+          <>
+            <StepBadge label="分段练习" />
+            <p className="text-xs text-[var(--text-muted)]">跟着分段读，注意每个发音</p>
+            <div className="space-y-2 w-full">
+              {item.segments.map((seg, i) => (
+                <div key={i} className="flex items-center justify-between bg-[var(--bg-input)] rounded-xl px-4 py-3">
+                  <div className="text-left">
+                    <span className="text-lg font-bold text-[var(--text-primary)]">{seg.text}</span>
+                    {seg.hint && <span className="text-xs text-[var(--text-muted)] ml-2">{seg.hint}</span>}
+                  </div>
+                  <button
+                    onClick={() => playSegment(seg.text)}
+                    className="p-2 rounded-xl text-[var(--pink-primary)] hover:bg-[var(--pink-primary)]/10 transition-colors"
+                  >
+                    <Volume2 size={18} />
+                  </button>
+                </div>
+              ))}
+            </div>
+            <button onClick={goNextStep} className="w-full py-3 bg-[var(--pink-primary)] text-white rounded-2xl font-bold text-sm">
+              准备好了，录音
+            </button>
+          </>
+        )}
+
+        {/* ── RECORD ── */}
+        {step === 'record' && (
+          <>
+            <StepBadge label="开口录音" />
+            <p className="text-sm text-[var(--text-primary)] font-bold">轮到你了</p>
+            <h2 className="text-2xl font-extrabold text-[var(--text-primary)]">{item.textKo}</h2>
+
+            {!recording ? (
+              <button
+                onClick={startRecording}
+                className="p-6 rounded-full bg-[var(--pink-primary)] text-white hover:opacity-90 transition-all active:scale-95"
+              >
+                <Mic size={32} />
+              </button>
+            ) : (
+              <button
+                onClick={stopRecording}
+                className="p-6 rounded-full bg-[var(--color-danger)] text-white animate-pulse active:scale-95 transition-all"
+              >
+                <MicOff size={32} />
+              </button>
+            )}
+            <p className="text-xs text-[var(--text-muted)]">
+              {recording ? '正在听你说... 再点一次结束' : '点击开始录音'}
+            </p>
+
+            {micError && (
+              <div className="flex items-center gap-2 text-xs text-[var(--peach-soft)] bg-[var(--peach-soft)]/10 rounded-xl px-3 py-2">
+                <AlertTriangle size={14} />
+                {micError}
+              </div>
+            )}
+
+            {!recording && (
+              <button
+                onClick={goNextStep}
+                disabled={!recordingUrl}
+                className={`w-full py-3 rounded-2xl font-bold text-sm transition-colors ${
+                  recordingUrl
+                    ? 'bg-[var(--pink-primary)] text-white'
+                    : 'bg-[var(--bg-input)] text-[var(--text-muted)]'
+                }`}
+              >
+                {recordingUrl ? '听我的录音' : '请先录音'}
+              </button>
+            )}
+
+            {recording && (
+              <p className="text-[10px] text-[var(--text-muted)]">最长 10 秒，说完请手动结束</p>
+            )}
+          </>
+        )}
+
+        {/* ── COMPARE ── */}
+        {step === 'compare' && (
+          <>
+            <StepBadge label="回放对比" />
+            <p className="text-xs text-[var(--text-muted)]">听听你的发音，和标准音对比</p>
+
+            <div className="grid grid-cols-2 gap-4 w-full">
+              {/* Standard */}
+              <div className="bg-[var(--bg-input)] rounded-2xl p-5 text-center space-y-3">
+                <p className="text-xs text-[var(--text-muted)]">标准音</p>
+                <h3 className="text-lg font-bold text-[var(--text-primary)]">{item.textKo}</h3>
+                <button onClick={playStandard} className="p-3 rounded-xl bg-[var(--mint-soft)]/10 text-[var(--mint-soft)] hover:bg-[var(--mint-soft)]/20 transition-colors">
+                  <Play size={22} />
+                </button>
+              </div>
+              {/* Mine */}
+              <div className="bg-[var(--bg-input)] rounded-2xl p-5 text-center space-y-3">
+                <p className="text-xs text-[var(--text-muted)]">我的录音</p>
+                <h3 className="text-lg font-bold text-[var(--pink-primary)]">{item.textKo}</h3>
+                <button
+                  onClick={playRecording}
+                  disabled={!recordingUrl || isPlaying}
+                  className={`p-3 rounded-xl transition-colors ${
+                    recordingUrl
+                      ? 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] hover:bg-[var(--pink-primary)]/20'
+                      : 'bg-[var(--bg-card)] text-[var(--text-muted)]'
+                  }`}
+                >
+                  <Play size={22} />
+                </button>
+              </div>
+            </div>
+
+            {/* Tips reminder */}
+            {item.tips && (
+              <div className="bg-[var(--pink-pale)]/10 border border-[var(--pink-primary)]/10 rounded-2xl p-4 text-left w-full">
+                <p className="text-xs font-bold text-[var(--text-primary)] mb-1">重点检查</p>
+                {item.tips.map((t, i) => (
+                  <p key={i} className="text-xs text-[var(--text-secondary)]">• {t}</p>
+                ))}
+              </div>
+            )}
+
+            <div className="flex gap-3 w-full">
+              <button onClick={handleReRecord} className="flex-1 flex items-center justify-center gap-1.5 py-3 rounded-xl bg-[var(--bg-input)] text-[var(--text-secondary)] font-medium text-sm hover:text-[var(--text-primary)] transition-colors">
+                <RotateCcw size={14} />
+                再读一次
+              </button>
+              <button onClick={goNextStep} className="flex-1 flex items-center justify-center gap-1.5 py-3 rounded-xl bg-[var(--pink-primary)] text-white font-medium text-sm">
+                {itemIdx + 1 >= items.length ? '完成练习' : '下一题'}
+                <ChevronRight size={16} />
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}

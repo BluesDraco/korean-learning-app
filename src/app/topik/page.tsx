@@ -6,12 +6,12 @@ import {
   Sparkles, RotateCcw, ChevronRight, Headphones, BookOpen,
 } from 'lucide-react';
 import { topikQuestions, topikSections, type TopikQuestion } from '@/data/topik-questions';
-import { speak, cancelSpeech } from '@/lib/tts';
+import { speakBrowser, cancelSpeech } from '@/lib/tts';
 
 type Phase = 'selecting' | 'exam' | 'result';
 
 function speakTopik(text: string): Promise<void> {
-  return speak(text, 0.85);
+  return speakBrowser(text, 0.85);
 }
 
 export default function TopikPage() {
@@ -25,6 +25,7 @@ export default function TopikPage() {
   const [playing, setPlaying] = useState(false);
   const [showTranslation, setShowTranslation] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const autoPlayedRef = useRef<number>(-1); // prevent re-trigger loop
 
   const sectionInfo = topikSections.find((s) => s.id === section) || topikSections[0];
 
@@ -70,6 +71,7 @@ export default function TopikPage() {
     setShowAnswer(false);
     setTimeLeft(sec.timeMinutes * 60);
     setPhase('exam');
+    autoPlayedRef.current = -1;
   }, []);
 
   const selectAnswer = (optionIdx: number) => {
@@ -95,22 +97,22 @@ export default function TopikPage() {
 
   const handlePlayAudio = useCallback(async () => {
     const q = questions[currentIdx];
-    if (!q.audioText || playing) return;
+    if (!q?.audioText || playing) return;
     setPlaying(true);
-    await speakTopik(q.audioText);
+    try { await speakTopik(q.audioText); } catch { /* ignore */ }
     setPlaying(false);
   }, [questions, currentIdx, playing]);
 
-  // Auto-play audio when moving to a new listening question
+  // Auto-play audio once per listening question
   useEffect(() => {
-    if (phase === 'exam' && sectionInfo.section === 'listening' && questions.length > 0) {
-      const q = questions[currentIdx];
-      if (q.audioText && !showAnswer && !playing) {
-        const t = setTimeout(() => handlePlayAudio(), 300);
-        return () => clearTimeout(t);
-      }
-    }
-  }, [currentIdx, phase, section, questions, showAnswer, playing, handlePlayAudio, sectionInfo.section]);
+    if (phase !== 'exam' || sectionInfo.section !== 'listening' || !questions.length) return;
+    const q = questions[currentIdx];
+    if (!q?.audioText || showAnswer) return;
+    if (autoPlayedRef.current === currentIdx) return; // already auto-played this question
+    autoPlayedRef.current = currentIdx;
+    const t = setTimeout(() => handlePlayAudio(), 400);
+    return () => clearTimeout(t);
+  }, [currentIdx, phase, sectionInfo.section, questions, showAnswer, handlePlayAudio]);
 
   const correctCount = Array.from(answers.entries()).reduce((acc, [qid, sel]) => {
     const q = questions.find((x) => x.id === qid);
@@ -478,10 +480,13 @@ export default function TopikPage() {
                     )}
                     <p className="text-xs text-[var(--text-secondary)] leading-relaxed">{q.explanation}</p>
                     {q.reviewGrammarId && (
-                      <div className="flex items-center gap-1.5">
-                        <BookOpen size={12} className="text-[var(--purple-soft)]" />
-                        <span className="text-xs text-[var(--purple-soft)]">建议复习相关语法</span>
-                      </div>
+                      <a
+                        href={`/grammar?pattern=${q.reviewGrammarId}`}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 mt-1 rounded-lg bg-[var(--purple-soft)]/10 border border-[var(--purple-soft)]/20 text-xs text-[var(--purple-soft)] hover:bg-[var(--purple-soft)]/20 transition-colors"
+                      >
+                        <BookOpen size={12} />
+                        去练习这个句型 →
+                      </a>
                     )}
                   </div>
                 ))}

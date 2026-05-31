@@ -88,11 +88,15 @@ export interface Word {
   sourceEntryId?: string;        // Link to WordEntry for rich data
   sourceVideoId?: string;
   sourceSubtitleId?: string;
+  source?: string;               // Where this word came from: 'course', 'library', 'manual'
+  sourceDetail?: string;         // e.g. 'Day 3', '咖啡厅主题包'
   mastery: MasteryLevel;
   srsLevel: number;
   nextReview: number;
   easeFactor: number;
   interval: number;
+  correctCount?: number;
+  wrongCount?: number;
   createdAt: number;
   lastReviewed: number | null;
 }
@@ -368,4 +372,175 @@ export interface AmbassadorInfo {
   isAmbassador: boolean;
   ambassadorSince: number | null;
   ambassadorReason: string | null;
+}
+
+// ===== Pronunciation Practice =====
+export type PronunciationItemType = 'sound' | 'syllable' | 'word' | 'phrase' | 'sentence';
+
+export interface PronunciationItem {
+  id: string;
+  textKo: string;
+  textZh?: string;
+  romanization?: string;
+  type: PronunciationItemType;
+  level: 'beginner' | 'elementary' | 'intermediate';
+  focus: string[];
+  source?: string;
+  sourceId?: string;
+  tips?: string[];
+  segments?: { text: string; hint?: string }[];
+}
+
+export interface PronunciationAttempt {
+  id: string;
+  itemId: string;
+  durationMs: number;
+  score?: number;
+  feedback?: string;
+  createdAt: number;
+}
+
+// ===== Grammar (Sentence Pattern) Practice =====
+export interface GrammarPracticeTemplate {
+  id: string;
+  type: 'substitution' | 'choice' | 'fill_blank' | 'output';
+  prompt: string;
+  template?: string;
+  slots?: string[];
+  options?: string[];
+  answer?: string;
+  explanation?: string;
+}
+
+export interface CommonMistake {
+  wrong: string;
+  correct: string;
+  reason: string;
+}
+
+export interface GrammarExample {
+  ko: string;
+  zh: string;
+  romanization?: string;
+  highlight?: string;
+}
+
+export interface GrammarPoint {
+  id: string;
+  title: string;
+  displayTitle: string;
+  functionZh: string;
+  shortExplanation: string;
+  structure: string[];
+  pattern: string;
+  level: 'absolute_beginner' | 'beginner' | 'elementary' | 'intermediate';
+  topikLevel?: 1 | 2 | 3 | 4 | 5 | 6;
+  category: string;
+  tags: string[];
+  useCases: string[];
+  examples: GrammarExample[];
+  practiceTemplates: GrammarPracticeTemplate[];
+  commonMistakes: CommonMistake[];
+  compareWith?: string[];
+  difference?: string;
+  toriTip?: string;
+  sourceCourseDay?: number;
+}
+
+export interface UserGrammarState {
+  id: string;
+  status: 'new' | 'learning' | 'familiar' | 'mastered' | 'difficult';
+  seenCount: number;
+  correctCount: number;
+  wrongCount: number;
+  lastSeenAt?: number;
+  nextReviewAt?: number;
+  source?: string;
+  createdAt: number;
+  updatedAt: number;
+}
+
+// ═══════════════════════════════════════════
+// Reading module types
+// ═══════════════════════════════════════════
+
+export interface ArticleSentence {
+  id: string;
+  ko: string;
+  zh: string;
+  pronunciation?: string;
+  audioUrl?: string;
+  words: ArticleWord[];
+  grammarIds: string[];
+  note?: string;
+  difficulty?: 'easy' | 'medium' | 'hard';
+}
+
+export interface ArticleWord {
+  word: string;
+  meaning: string;
+  pronunciation?: string;
+}
+
+export interface ArticleQuestion {
+  id: string;
+  type: 'main_idea' | 'detail' | 'vocab' | 'grammar' | 'true_false';
+  prompt: string;
+  options?: string[];
+  answer: string;
+  explanation: string;
+}
+
+export interface ArticleOutputTask {
+  type: 'fill_blank' | 'complete_sentence' | 'choose_and_say';
+  template: string;
+  slots?: string[];
+  example?: string;
+}
+
+export interface Article {
+  id: string;
+  title: string;
+  titleKo: string;
+  emoji: string;
+  level: 'A0' | 'A1' | 'A2' | 'B1' | 'TOPIK';
+  topic: string;
+  estimatedMinutes: number;
+  learningGoals: string[];
+  coreWords: ArticleWord[];
+  grammarIds: string[];
+  sentences: ArticleSentence[];
+  keySentence?: {
+    ko: string;
+    zh: string;
+    grammarNote: string;
+  };
+  questions: ArticleQuestion[];
+  outputTask?: ArticleOutputTask;
+  createdAt: number;
+}
+
+export interface UserArticleProgress {
+  id: string;
+  articleId: string;
+  status: 'not_started' | 'reading' | 'completed';
+  readSentenceIds: string[];
+  savedSentenceIds: string[];
+  savedWordIds: string[];
+  quizScore?: number;
+  quizAnswers?: Record<string, string>;
+  outputAnswer?: string;
+  completedAt?: number;
+  lastReadAt: number;
+  createdAt: number;
+  updatedAt: number;
+}
+
+export interface ArticleLearningEvent {
+  id: string;
+  articleId: string;
+  sentenceId?: string;
+  action: 'view_article' | 'play_sentence' | 'reveal_translation' | 'save_word' | 'save_sentence' | 'answer_question' | 'complete_article' | 'complete_output';
+  payload?: unknown;
+  createdAt: number;
 }

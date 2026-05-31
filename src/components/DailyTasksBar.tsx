@@ -1,10 +1,11 @@
 'use client';
 
+import { memo } from 'react';
 import Link from 'next/link';
 import { BookOpen, Languages, BookMarked, ArrowRight, Sparkles } from 'lucide-react';
 import type { TodayTasks } from '@/lib/progress';
 
-export default function DailyTasksBar({ tasks }: { tasks: TodayTasks }) {
+export default memo(function DailyTasksBar({ tasks }: { tasks: TodayTasks }) {
   const items = [
     {
       key: 'srsReview',
@@ -22,9 +23,9 @@ export default function DailyTasksBar({ tasks }: { tasks: TodayTasks }) {
     {
       key: 'newGrammar',
       icon: Languages,
-      label: '学语法',
+      label: '今日课程',
       detail: tasks.newGrammar.done ? '已完成' : '学1条新语法',
-      href: '/learn',
+      href: '/daily',
       done: tasks.newGrammar.done,
       color: 'var(--purple-soft)',
     },
@@ -84,4 +85,4 @@ export default function DailyTasksBar({ tasks }: { tasks: TodayTasks }) {
       </div>
     </div>
   );
-}
+});

@@ -28,11 +28,12 @@ import {
 export const navGroups: NavGroup[] = [
   { icon: Home, label: '首页', ko: '홈', href: '/', children: [] },
   {
-    icon: BookOpen, label: '学习', ko: '학습', href: '/learn', children: [
-      { label: '30天课程', ko: '30일 과정', href: '/course', icon: GraduationCap },
-      { label: '每日学习', ko: '매일 학습', href: '/learn', icon: BookOpen },
-      { label: '发音', ko: '발음', href: '/phonetics', icon: Grid3X3 },
-      { label: '语法库', ko: '문법', href: '/grammar', icon: FileText },
+    icon: BookOpen, label: '学习', ko: '학습', href: '/daily', children: [
+      { label: '今日学习', ko: '오늘의 학습', href: '/daily', icon: Sparkles },
+      { label: '30天入门路线', ko: '30일 과정', href: '/course', icon: GraduationCap },
+      { label: '发音练习', ko: '발음 연습', href: '/pronunciation', icon: Mic },
+      { label: '韩语40音', ko: '한글', href: '/phonetics', icon: Grid3X3 },
+      { label: '句型', ko: '문형', href: '/grammar', icon: FileText },
       { label: '绘本学习', ko: '그림책', href: '/learn/picture-books', icon: BookImage },
       { label: '文章阅读', ko: '읽기', href: '/reading', icon: BookOpen },
     ],

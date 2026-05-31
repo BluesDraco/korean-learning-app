@@ -264,14 +264,37 @@ export function KoreanKeyboard({ value, onChange, visible, onClose, onSend }: Ko
   const [mounted, setMounted] = useState(false);
   const [activeKeys, setActiveKeys] = useState<Set<string>>(new Set());
   const [handwritingMode, setHandwritingMode] = useState(false);
+  const [animState, setAnimState] = useState<'entering' | 'visible' | 'exiting'>('entering');
   const longPressRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const backspaceRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const exitTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const onChangeRef = useRef(onChange);
   onChangeRef.current = onChange;
   const bufferRef = useRef(buffer);
   bufferRef.current = buffer;
 
   useEffect(() => { setMounted(true); }, []);
+
+  useEffect(() => {
+    if (!visible) return;
+    setAnimState('entering');
+    const raf = requestAnimationFrame(() => {
+      requestAnimationFrame(() => setAnimState('visible'));
+    });
+    return () => cancelAnimationFrame(raf);
+  }, [visible]);
+
+  const animateOut = useCallback(() => {
+    setAnimState('exiting');
+    if (exitTimerRef.current) clearTimeout(exitTimerRef.current);
+    exitTimerRef.current = setTimeout(() => {
+      onClose();
+    }, 200);
+  }, [onClose]);
+
+  useEffect(() => {
+    return () => { if (exitTimerRef.current) clearTimeout(exitTimerRef.current); };
+  }, []);
 
   // Sync buffer when value changes externally (paste, keyboard close/reopen)
   useEffect(() => {
@@ -314,13 +337,13 @@ export function KoreanKeyboard({ value, onChange, visible, onClose, onSend }: Ko
     }
 
     if (key.type === 'done') {
-      onClose();
+      animateOut();
       return;
     }
 
     const jamo = (shift && key.shiftLabel) ? key.shiftLabel : key.label;
     addJamo(jamo);
-  }, [shift, onClose, addJamo, doBackspace]);
+  }, [shift, animateOut, addJamo, doBackspace]);
 
   // ── Physical keyboard sync ───────────────────────────────
   useEffect(() => {
@@ -434,13 +457,19 @@ export function KoreanKeyboard({ value, onChange, visible, onClose, onSend }: Ko
     const text = composeBuffer(buffer);
     if (!text.trim()) return;
     onSend?.(text);
-    onClose();
-  }, [buffer, onSend, onClose]);
+    animateOut();
+  }, [buffer, onSend, animateOut]);
 
   if (!visible || !mounted) return null;
 
   return createPortal(
-    <div className="fixed bottom-0 left-0 right-0 z-[200]">
+    <div
+      className="fixed bottom-0 left-0 right-0 z-[200]"
+      style={{
+        transform: animState === 'visible' ? 'translateY(0)' : 'translateY(100%)',
+        transition: 'transform 200ms ease-out',
+      }}
+    >
       <div className="pl-0 md:pl-14 lg:pl-52 px-3 md:px-4 lg:px-8 w-full max-w-[1280px] mx-auto">
         {/* Preview bar */}
         <div className="flex items-center gap-2 px-3 py-2 bg-[var(--bg-card)] border-t border-x border-[var(--border-color)] rounded-t-2xl">
@@ -464,7 +493,7 @@ export function KoreanKeyboard({ value, onChange, visible, onClose, onSend }: Ko
             <Pen size={15} />
           </button>
           <button
-            onClick={onClose}
+            onClick={animateOut}
             className="p-1 text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)] rounded-lg transition-colors"
           >
             <X size={16} />

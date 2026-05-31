@@ -13,6 +13,7 @@ export interface DailyGrammar {
   pattern: string;
   example: string;
   exampleZh: string;
+  grammarId?: string;  // links to GrammarPoint.id in grammar-new.ts
 }
 
 export interface DailySentence {
@@ -47,6 +48,16 @@ export interface DailyCourse {
   output: OutputTask;
 }
 
+// Map grammarId → { day, title } for cross-reference
+export function getCourseDayForGrammar(grammarId: string): { day: number; title: string } | null {
+  for (const day of thirtyDayCourse) {
+    if (day.grammar.grammarId === grammarId) {
+      return { day: day.day, title: day.title };
+    }
+  }
+  return null;
+}
+
 export const thirtyDayCourse: DailyCourse[] = [
   // ── WEEK 1: 日常问候与自我介绍 (Days 1-7) ──
   {
@@ -68,6 +79,7 @@ export const thirtyDayCourse: DailyCourse[] = [
       pattern: '名词 + 입니다 / 입니까?',
       example: '학생입니다. / 학생입니까?',
       exampleZh: '我是学生。/ 你是学生吗？',
+      grammarId: 'gp-02',
     },
     sentences: [
       { korean: '안녕하세요! 저는 민수입니다.', pronunciation: 'an-nyeong-ha-se-yo! jeo-neun min-su-im-ni-da.', chinese: '您好！我是敏秀。', scene: '初次见面' },
@@ -107,6 +119,7 @@ export const thirtyDayCourse: DailyCourse[] = [
       pattern: '名词 + 은/는 (有收音用은，无收音用는)',
       example: '저는 중국 사람입니다.',
       exampleZh: '我是中国人。',
+      grammarId: 'gp-19',
     },
     sentences: [
       { korean: '제 이름은 지민입니다.', pronunciation: 'je i-reu-meun ji-mi-nim-ni-da.', chinese: '我的名字是智敏。', scene: '自我介绍' },
@@ -146,6 +159,7 @@ export const thirtyDayCourse: DailyCourse[] = [
       pattern: '名词 + 주세요',
       example: '아메리카노 하나 주세요.',
       exampleZh: '请给我一杯美式咖啡。',
+      grammarId: 'gp-04',
     },
     sentences: [
       { korean: '아메리카노 하나 주세요.', pronunciation: 'a-me-ri-ka-no ha-na ju-se-yo.', chinese: '请给我一杯美式咖啡。', scene: '咖啡厅点单' },
@@ -185,6 +199,7 @@ export const thirtyDayCourse: DailyCourse[] = [
       pattern: '名词 + 이/가 (有收音用이，无收音用가)',
       example: '라면이 어디에 있어요?',
       exampleZh: '拉面在哪里？',
+      grammarId: 'gp-20',
     },
     sentences: [
       { korean: '삼각김밥이 어디에 있어요?', pronunciation: 'sam-gak-gim-ba-bi eo-di-e i-sseo-yo?', chinese: '三角饭团在哪里？', scene: '找商品' },
@@ -224,6 +239,7 @@ export const thirtyDayCourse: DailyCourse[] = [
       pattern: '场所 + 에 + 있어요',
       example: '화장실이 어디에 있어요?',
       exampleZh: '洗手间在哪里？',
+      grammarId: 'gp-08',
     },
     sentences: [
       { korean: '화장실이 어디에 있어요?', pronunciation: 'hwa-jang-si-ri eo-di-e i-sseo-yo?', chinese: '洗手间在哪里？', scene: '问路' },
@@ -302,6 +318,7 @@ export const thirtyDayCourse: DailyCourse[] = [
       pattern: '各种动词/形容词词干 + 아/어요',
       example: '공부해요. / 말해요. / 들어요.',
       exampleZh: '学习。/ 说话。/ 听。',
+      grammarId: 'gp-13',
     },
     sentences: [
       { korean: '오늘은 복습하는 날이에요!', pronunciation: 'o-neu-reun bok-sseu-pa-neun na-ri-e-yo!', chinese: '今天是复习日！', scene: '确认计划' },
@@ -342,6 +359,7 @@ export const thirtyDayCourse: DailyCourse[] = [
       pattern: '形容词词干 + 아요/어요/해요',
       example: '날씨가 좋아요. / 더워요. / 추워요.',
       exampleZh: '天气很好。/ 很热。/ 很冷。',
+      grammarId: 'gp-13',
     },
     sentences: [
       { korean: '오늘 날씨가 좋아요!', pronunciation: 'o-neul nal-ssi-ga jo-a-yo!', chinese: '今天天气很好！', scene: '日常对话' },
@@ -459,6 +477,7 @@ export const thirtyDayCourse: DailyCourse[] = [
       pattern: '名词 + 을/를 + 좋아해요',
       example: '저는 음악을 좋아해요.',
       exampleZh: '我喜欢音乐。',
+      grammarId: 'gp-10',
     },
     sentences: [
       { korean: '취미가 뭐예요?', pronunciation: 'chwi-mi-ga mwo-ye-yo?', chinese: '你的爱好是什么？', scene: '初次聊天' },
@@ -616,6 +635,7 @@ export const thirtyDayCourse: DailyCourse[] = [
       pattern: '词干 + 지만',
       example: '미안하지만 지금 통화할 수 없어요.',
       exampleZh: '不好意思，但现在不方便通话。',
+      grammarId: 'gp-26',
     },
     sentences: [
       { korean: '여보세요? 지민 씨 있어요?', pronunciation: 'yeo-bo-se-yo? ji-min ssi i-sseo-yo?', chinese: '喂？智敏在吗？', scene: '打电话找人' },
@@ -655,6 +675,7 @@ export const thirtyDayCourse: DailyCourse[] = [
       pattern: '词干 + 아서/어서/해서',
       example: '피곤해서 집에 가고 싶어요.',
       exampleZh: '因为累了，所以想回家。',
+      grammarId: 'gp-27',
     },
     sentences: [
       { korean: '오늘 기분이 어때요?', pronunciation: 'o-neul gi-bu-ni eo-ttae-yo?', chinese: '今天心情怎么样？', scene: '关心朋友' },
@@ -694,6 +715,7 @@ export const thirtyDayCourse: DailyCourse[] = [
       pattern: '动词词干 + 아/어 주세요',
       example: '한국어를 가르쳐 주세요.',
       exampleZh: '请教我韩语。',
+      grammarId: 'gp-30',
     },
     sentences: [
       { korean: '도와주세요!', pronunciation: 'do-wa-ju-se-yo!', chinese: '请帮帮我！', scene: '紧急求助' },
@@ -733,6 +755,7 @@ export const thirtyDayCourse: DailyCourse[] = [
       pattern: '动词词干 + 지 못했어요',
       example: '약속을 지키지 못해서 미안해요.',
       exampleZh: '没能遵守约定，对不起。',
+      grammarId: 'gp-15',
     },
     sentences: [
       { korean: '늦어서 죄송합니다.', pronunciation: 'neu-jeo-seo joe-song-ham-ni-da.', chinese: '迟到了很抱歉。', scene: '正式道歉' },
@@ -772,6 +795,7 @@ export const thirtyDayCourse: DailyCourse[] = [
       pattern: '场所 + 에서 + 场所 + 까지',
       example: '집에서 학교까지 버스로 가요.',
       exampleZh: '从家到学校坐公交去。',
+      grammarId: 'gp-09',
     },
     sentences: [
       { korean: '버스 정류장이 어디예요?', pronunciation: 'beo-seu jeong-nyu-jang-i eo-di-ye-yo?', chinese: '公交站在哪里？', scene: '找车站' },
@@ -811,6 +835,7 @@ export const thirtyDayCourse: DailyCourse[] = [
       pattern: '症状词干 + 아서/어서 + 后续',
       example: '머리가 아파서 병원에 왔어요.',
       exampleZh: '因为头疼所以来医院了。',
+      grammarId: 'gp-27',
     },
     sentences: [
       { korean: '머리가 아파요.', pronunciation: 'meo-ri-ga a-pa-yo.', chinese: '我头疼。', scene: '描述症状' },
@@ -850,6 +875,7 @@ export const thirtyDayCourse: DailyCourse[] = [
       pattern: '动词词干 + 을/ㄹ 수 있다',
       example: '이제 한국어로 주문할 수 있어요!',
       exampleZh: '现在可以用韩语点餐了！',
+      grammarId: 'gp-29',
     },
     sentences: [
       { korean: '이제 한국어로 주문할 수 있어요!', pronunciation: 'i-je han-gu-geo-ro ju-mun-hal su i-sseo-yo!', chinese: '现在可以用韩语点餐了！', scene: '展示成果' },
@@ -890,6 +916,7 @@ export const thirtyDayCourse: DailyCourse[] = [
       pattern: '动词词干 + 을/ㄹ 거예요',
       example: '내년에 한국에 갈 거예요.',
       exampleZh: '明年要去韩国。',
+      grammarId: 'gp-24',
     },
     sentences: [
       { korean: '내년에 한국에 갈 거예요.', pronunciation: 'nae-nyeo-ne han-gu-ge gal geo-ye-yo.', chinese: '明年我要去韩国。', scene: '旅行计划' },
@@ -968,6 +995,7 @@ export const thirtyDayCourse: DailyCourse[] = [
       pattern: '词干 + 았어요/었어요/했어요',
       example: '작년에 한국에 갔어요.',
       exampleZh: '去年去了韩国。',
+      grammarId: 'gp-23',
     },
     sentences: [
       { korean: '작년에 한국에 갔어요.', pronunciation: 'jang-nyeo-ne han-gu-ge ga-sseo-yo.', chinese: '去年去了韩国。', scene: '分享经历' },
@@ -1007,6 +1035,7 @@ export const thirtyDayCourse: DailyCourse[] = [
       pattern: '动词词干 + 아/어 보세요',
       example: '이거 한번 먹어 보세요!',
       exampleZh: '请尝尝这个！',
+      grammarId: 'gp-30',
     },
     sentences: [
       { korean: '이거 한번 먹어 보세요!', pronunciation: 'i-geo han-beon meo-geo bo-se-yo!', chinese: '请尝尝这个！', scene: '推荐食物' },
@@ -1085,6 +1114,7 @@ export const thirtyDayCourse: DailyCourse[] = [
       pattern: '词干 + 으면/면',
       example: '한국에 가면 한복을 입어 보세요.',
       exampleZh: '如果去韩国的话，试试穿韩服吧。',
+      grammarId: 'gp-28',
     },
     sentences: [
       { korean: '한국에서는 어른께 두 손으로 물건을 드려요.', pronunciation: 'han-gu-ge-seo-neun eo-reun-kke du so-neu-ro mul-geo-neul deu-ryeo-yo.', chinese: '在韩国给长辈递东西要用双手。', scene: '文化礼仪' },

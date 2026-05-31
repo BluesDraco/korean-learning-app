@@ -259,23 +259,28 @@ async function checkStreakAchievements(streak: number): Promise<void> {
 // Get streak data for the last 7 days
 export async function getWeekStreak(): Promise<{ date: string; dayLabel: string; studied: boolean; isToday: boolean }[]> {
   const todayStart = new Date().setHours(0, 0, 0, 0);
-  const days: { date: string; dayLabel: string; studied: boolean; isToday: boolean }[] = [];
   const dayNames = ['日', '一', '二', '三', '四', '五', '六'];
-
+  const ids: string[] = [];
+  const dayStarts: number[] = [];
   for (let i = 6; i >= 0; i--) {
-    const dayStart = todayStart - i * 86400000;
+    dayStarts.push(todayStart - i * 86400000);
+    ids.push(`log-${dayStarts[dayStarts.length - 1]}`);
+  }
+
+  // Batch-fetch all 7 logs in one request
+  const logs = await db.dailyLogs.where('id').anyOf(ids).toArray();
+  const logMap = new Map(logs.map((l: any) => [l.id, l]));
+
+  return dayStarts.map((dayStart, i) => {
     const d = new Date(dayStart);
-    const logId = `log-${dayStart}`;
-    const log = await db.dailyLogs.get(logId);
-    days.push({
+    const log = logMap.get(`log-${dayStart}`);
+    return {
       date: `${d.getMonth() + 1}/${d.getDate()}`,
       dayLabel: dayNames[d.getDay()],
       studied: log ? log.wordsLearned > 0 || log.wordsReviewed > 0 : false,
-      isToday: i === 0,
-    });
-  }
-
-  return days;
+      isToday: i === 6,
+    };
+  });
 }
 
 // Check if all goals met for the perfect week achievement

@@ -61,6 +61,10 @@ function ReviewContent() {
   const [toriReactionKey, setToriReactionKey] = useState<number | null>(null);
   const [streak, setStreak] = useState(0);
   const touchXRef = useRef<number>(0);
+  // Refs for running totals — avoids stale closure in handleConfirm
+  const reviewedRef = useRef(0);
+  const passedRef = useRef(0);
+  const xpRef = useRef(0);
 
   useEffect(() => {
     if (!localStorage.getItem('srs-intro-seen')) setShowIntro(true);
@@ -92,6 +96,9 @@ function ReviewContent() {
     const profile = await getProfile();
     setStreak(profile.streak);
     setSessionStats({ reviewed: 0, passed: 0, startTime: Date.now() });
+    reviewedRef.current = 0;
+    passedRef.current = 0;
+    xpRef.current = 0;
     setLoading(false);
   }, [videoId]);
 
@@ -160,6 +167,9 @@ function ReviewContent() {
       reviewed: prev.reviewed + 1,
       passed: prev.passed + (passed ? 1 : 0),
     }));
+    reviewedRef.current += 1;
+    if (passed) passedRef.current += 1;
+    xpRef.current += xp;
 
     if (currentIdx + 1 >= words.length) {
       const streakResult = await updateStreak();
@@ -167,10 +177,10 @@ function ReviewContent() {
       await db.reviewSessions.put({
         id: crypto.randomUUID(),
         date: Date.now(),
-        wordsReviewed: sessionStats.reviewed + 1,
-        wordsPassed: sessionStats.passed + (passed ? 1 : 0),
+        wordsReviewed: reviewedRef.current,
+        wordsPassed: passedRef.current,
         duration: Math.round((Date.now() - sessionStats.startTime) / 1000),
-        xpEarned: xpEarned + xp,
+        xpEarned: xpRef.current,
       });
       setComplete(true);
     } else {
@@ -304,7 +314,7 @@ function ReviewContent() {
           })()}
 
           <div className="flex gap-3 justify-center">
-            <button onClick={() => { setComplete(false); setCurrentIdx(0); setFlipped(false); setSelfAssessment(0); setSelectedCorrect(null); setXpEarned(0); setSessionStats({ reviewed: 0, passed: 0, startTime: Date.now() }); setLeveledUp(false); loadWords(); }}
+            <button onClick={() => { setComplete(false); setCurrentIdx(0); setFlipped(false); setSelfAssessment(0); setSelectedCorrect(null); setXpEarned(0); setSessionStats({ reviewed: 0, passed: 0, startTime: Date.now() }); setLeveledUp(false); reviewedRef.current = 0; passedRef.current = 0; xpRef.current = 0; loadWords(); }}
               className="px-6 py-2.5 bg-[var(--pink-primary)] hover:brightness-95 text-white text-sm font-bold rounded-full transition-all active:scale-95 shadow-md">
               再来一轮
             </button>

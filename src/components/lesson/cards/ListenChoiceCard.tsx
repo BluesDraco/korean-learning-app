@@ -37,7 +37,7 @@ export function ListenChoiceCard({ dictation, options, correctOption, selectedOp
             if (i === correctOption) {
               btnStyle = 'border-2 border-[var(--mint-soft)] bg-[var(--mint-soft)]/10 text-[var(--mint-soft)]';
             } else if (i === selectedOption) {
-              btnStyle = 'border-2 border-red-300 bg-red-50 text-red-400';
+              btnStyle = 'border-2 border-[var(--color-danger-light)] bg-[var(--color-danger-bg)] text-[var(--color-danger)]';
             } else {
               btnStyle = 'border border-[var(--border-color)] text-[var(--text-muted)] opacity-50';
             }
@@ -58,7 +58,7 @@ export function ListenChoiceCard({ dictation, options, correctOption, selectedOp
       </div>
 
       {selectedOption !== null && (
-        <div className={`p-3 rounded-xl text-sm ${isCorrect ? 'bg-[var(--mint-soft)]/10 text-[var(--mint-soft)]' : 'bg-red-50 text-red-400'}`}>
+        <div className={`p-3 rounded-xl text-sm ${isCorrect ? 'bg-[var(--mint-soft)]/10 text-[var(--mint-soft)]' : 'bg-[var(--color-danger-bg)] text-[var(--color-danger)]'}`}>
           <p className="font-bold text-lg mb-0.5">{dictation.korean}</p>
           <p className="text-xs opacity-80">{dictation.pronunciation}</p>
         </div>
