@@ -3,575 +3,243 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import Link from 'next/link';
 import {
-  Search, Trash2, X, ChevronDown, ChevronUp,
-  BookOpen, GraduationCap, Film, Clock, ArrowRight,
-  Sparkles, Hash, Calendar, Volume2, BookmarkPlus, Library, Bookmark,
+  BookOpen, Zap, Clock, ArrowRight, Library, Bookmark,
+  GraduationCap, Sparkles, Target, TrendingUp,
 } from 'lucide-react';
 import { db } from '@/lib/db';
-import { AddToBookModal } from '@/components/AddToBookModal';
+import { ThemesSection } from '@/components/vocabulary/ThemesSection';
 import { BooksSection } from '@/components/vocabulary/BooksSection';
-import { WordAudioPlayer } from '@/components/WordAudioPlayer';
-import { speak } from '@/lib/tts';
+import { VocabularySession } from '@/components/vocabulary/VocabularySession';
 import type { Word, MasteryLevel } from '@/types';
 
-// ── Mastery display config ──────────────────────────────────────────
-const masteryLabel: Record<MasteryLevel, string> = {
-  new: '新词',
-  learning: '学习中',
-  reviewing: '复习中',
-  mastered: '已掌握',
-};
-
 const masteryColor: Record<MasteryLevel, string> = {
-  new: 'bg-[var(--bg-accent)]/60 text-[var(--text-secondary)]',
-  learning: 'bg-yellow-500/15 text-[var(--peach-soft)]',
-  reviewing: 'bg-blue-500/15 text-[var(--pink-primary)]',
-  mastered: 'bg-emerald-500/15 text-[var(--mint-soft)]',
-};
-
-const masteryDot: Record<MasteryLevel, string> = {
   new: 'bg-slate-500',
   learning: 'bg-yellow-400',
   reviewing: 'bg-blue-400',
   mastered: 'bg-emerald-400',
 };
 
-// ── Helpers ─────────────────────────────────────────────────────────
-
-function escapeRegExp(s: string): string {
-  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-/** Splits text by the search string and wraps matches in a highlighted <mark>. */
-function HighlightText({ text, highlight }: { text: string; highlight: string }) {
-  if (!highlight.trim()) return <span>{text}</span>;
-  const escaped = escapeRegExp(highlight.trim());
-  const regex = new RegExp(`(${escaped})`, 'gi');
-  const parts = text.split(regex);
-  return (
-    <>
-      {parts.map((part, i) =>
-        regex.test(part) ? (
-          <mark
-            key={i}
-            className="bg-yellow-500/25 text-yellow-200 rounded-sm px-0.5 -mx-0.5"
-          >
-            {part}
-          </mark>
-        ) : (
-          <span key={i}>{part}</span>
-        ),
-      )}
-    </>
-  );
-}
-
-// ── Filter option definitions ───────────────────────────────────────
-const filterOptions: { value: MasteryLevel | 'all'; label: string }[] = [
-  { value: 'all', label: '全部' },
-  { value: 'new', label: '新词' },
-  { value: 'learning', label: '学习中' },
-  { value: 'reviewing', label: '复习中' },
-  { value: 'mastered', label: '已掌握' },
-];
-
-// ═══════════════════════════════════════════════════════════════════
-//  VocabularyPage
-// ═══════════════════════════════════════════════════════════════════
 export default function VocabularyPage() {
-  const [tab, setTab] = useState<'words' | 'books'>('words');
   const [allWords, setAllWords] = useState<Word[]>([]);
-  const [search, setSearch] = useState('');
-  const [filter, setFilter] = useState<MasteryLevel | 'all'>('all');
-  const [expandedId, setExpandedId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [showAddToBook, setShowAddToBook] = useState(false);
-  const [addToBookWordIds, setAddToBookWordIds] = useState<string[]>([]);
-  const [showAudioPlayer, setShowAudioPlayer] = useState(false);
+  const [showSession, setShowSession] = useState(false);
+  const [tab, setTab] = useState<'home' | 'library' | 'books'>('home');
 
-  // ── Load all words ────────────────────────────────────────────
-  const loadAllWords = useCallback(async () => {
+  const loadWords = useCallback(async () => {
     setLoading(true);
     const list = await db.words.orderBy('createdAt').reverse().toArray();
     setAllWords(list);
     setLoading(false);
   }, []);
 
-  useEffect(() => {
-    loadAllWords();
-  }, [loadAllWords]);
+  useEffect(() => { loadWords(); }, [loadWords]);
 
-  // ── Mastery-level word counts (always from full dataset) ──────
-  const masteryCounts = useMemo(() => {
-    const counts: Record<string, number> = { all: allWords.length };
-    for (const level of ['new', 'learning', 'reviewing', 'mastered'] as MasteryLevel[]) {
-      counts[level] = allWords.filter((w) => w.mastery === level).length;
-    }
-    return counts;
+  // Stats
+  const stats = useMemo(() => {
+    const now = Date.now();
+    const dueReview = allWords.filter((w) => w.nextReview <= now && w.mastery !== 'mastered').length;
+    const mastered = allWords.filter((w) => w.mastery === 'mastered').length;
+    const learning = allWords.filter((w) => w.mastery === 'learning' || w.mastery === 'reviewing').length;
+    const difficult = allWords.filter((w) => w.mastery === 'new' && w.srsLevel > 0 && w.easeFactor < 2.0).length;
+    const newWords = allWords.filter((w) => w.mastery === 'new').length;
+    return { dueReview, mastered, learning, difficult, newWords, total: allWords.length };
   }, [allWords]);
 
-  // ── Filter + search ───────────────────────────────────────────
-  const words = useMemo(() => {
-    let result = allWords;
-    if (filter !== 'all') {
-      result = result.filter((w) => w.mastery === filter);
-    }
-    if (search.trim()) {
-      const q = search.trim().toLowerCase();
-      result = result.filter(
-        (w) =>
-          w.word.toLowerCase().includes(q) ||
-          w.meaning.toLowerCase().includes(q) ||
-          w.pronunciation?.toLowerCase().includes(q) ||
-          w.examples.some(
-            (ex) =>
-              ex.text.toLowerCase().includes(q) ||
-              ex.translation.toLowerCase().includes(q),
-          ),
-      );
-    }
-    return result;
-  }, [allWords, search, filter]);
+  const progressPct = stats.total > 0 ? Math.round((stats.mastered / stats.total) * 100) : 0;
 
-  // ── Delete handler ────────────────────────────────────────────
-  const handleDelete = async (id: string) => {
-    await db.words.delete(id);
-    await loadAllWords();
-  };
+  if (showSession) {
+    return (
+      <VocabularySession
+        words={allWords}
+        onClose={() => { setShowSession(false); loadWords(); }}
+      />
+    );
+  }
 
-  // ── Clear all filters ─────────────────────────────────────────
-  const clearFilters = () => {
-    setSearch('');
-    setFilter('all');
-  };
+  // ── Library tab ──
+  if (tab === 'library') {
+    return (
+      <div className="py-4 space-y-4">
+        <div className="flex items-center gap-3">
+          <button onClick={() => setTab('home')} className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)]">← 返回</button>
+          <h1 className="text-xl font-bold text-[var(--text-primary)]">全部词库</h1>
+        </div>
+        <Link href="/vocabulary/library" className="block bg-gradient-to-r from-[var(--pink-primary)]/10 to-[var(--purple-soft)]/10 border border-[var(--pink-pale)] rounded-2xl p-4 hover:border-[var(--pink-primary)]/30 transition-all group">
+          <div className="flex items-center gap-3">
+            <span className="text-3xl">📚</span>
+            <div className="flex-1">
+              <p className="text-sm font-bold text-[var(--text-primary)]">词库</p>
+              <p className="text-xs text-[var(--text-secondary)]">主题词包 · 分级词表 · 延世教材 · 情景词典</p>
+            </div>
+            <ArrowRight size={18} className="text-[var(--text-muted)] group-hover:translate-x-1 transition-transform" />
+          </div>
+        </Link>
+        {/* Show all words with search/filter — simplified from original */}
+        <p className="text-sm text-[var(--text-muted)] mt-4">
+          共 {allWords.length} 个单词 ·
+          已掌握 {stats.mastered} · 学习中 {stats.learning} · 新词 {stats.newWords}
+        </p>
+        <div className="space-y-2 mt-3">
+          {allWords.slice(0, 50).map((w) => (
+            <div key={w.id} className="flex items-center justify-between bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl px-4 py-3">
+              <div>
+                <span className="font-medium text-[var(--text-primary)]">{w.word}</span>
+                <span className="text-xs text-[var(--text-muted)] ml-2">{w.meaning}</span>
+              </div>
+              <span className={`w-2 h-2 rounded-full ${masteryColor[w.mastery]}`} />
+            </div>
+          ))}
+          {allWords.length > 50 && (
+            <p className="text-center text-xs text-[var(--text-muted)] py-4">
+              还有 {allWords.length - 50} 个单词...
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
 
-  const hasActiveFilters = search !== '' || filter !== 'all';
+  // ── Books tab ──
+  if (tab === 'books') {
+    return (
+      <div className="py-4 space-y-4">
+        <div className="flex items-center gap-3">
+          <button onClick={() => setTab('home')} className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)]">← 返回</button>
+          <h1 className="text-xl font-bold text-[var(--text-primary)]">我的单词本</h1>
+        </div>
+        <BooksSection />
+      </div>
+    );
+  }
 
   // ═══════════════════════════════════════════════════════════════
-  //  Render
+  //  Home tab — "Today's Task" view
   // ═══════════════════════════════════════════════════════════════
   return (
-    <div className="py-4 space-y-4">
-      {/* ─────── Header ─────── */}
+    <div className="py-4 space-y-5">
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-[var(--text-primary)] flex items-center gap-2">
             <BookOpen size={22} className="text-[var(--pink-primary)]" />
-            单词本
+            词汇学习
           </h1>
-          <p className="text-[var(--text-secondary)] text-sm mt-1">
-            共{' '}
-            <span className="text-[var(--text-primary)] font-medium">{words.length}</span>{' '}
-            个单词
-            {words.length !== allWords.length && (
-              <span className="text-[var(--text-muted)]">
-                {' '}
-                / 总计 {allWords.length}
-              </span>
-            )}
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          {words.length > 0 && (
-            <button
-              onClick={() => setShowAudioPlayer(!showAudioPlayer)}
-              className={`flex items-center gap-1.5 text-sm px-4 py-2.5 rounded-2xl transition-colors ${
-                showAudioPlayer
-                  ? 'bg-[var(--pink-primary)]/20 text-[var(--pink-primary)]'
-                  : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--pink-primary)]'
-              }`}
-            >
-              <Volume2 size={16} />
-              <span className="hidden sm:inline">听单词</span>
-            </button>
+          {!loading && allWords.length > 0 && (
+            <div className="flex items-center gap-3 mt-1.5 text-xs text-[var(--text-muted)]">
+              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-[var(--pink-primary)]" />待复习 {stats.dueReview}</span>
+              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-400" />已掌握 {stats.mastered}</span>
+              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-yellow-400" />学习中 {stats.learning}</span>
+            </div>
           )}
-          <Link
-            href="/vocabulary/library"
-            className="flex items-center gap-1.5 text-sm px-4 py-2.5 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--pink-primary)] transition-colors"
-          >
-            <Library size={16} />
-            <span className="hidden sm:inline">词库</span>
-          </Link>
-          <Link
-            href="/learn"
-            className="flex items-center gap-1.5 text-sm px-4 py-2.5 rounded-2xl bg-[var(--pink-primary)]/15 text-[var(--pink-primary)] hover:bg-[var(--pink-primary)]/25 transition-colors"
-          >
-            <GraduationCap size={16} />
-            <span className="hidden sm:inline">去学习</span>
-          </Link>
         </div>
+        <Link href="/review" className="flex items-center gap-1.5 text-xs px-3 py-2 rounded-xl bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:text-[var(--pink-primary)] transition-colors">
+          <Clock size={14} />
+          自由复习
+        </Link>
       </div>
-
-      {/* ─────── Tabs ─────── */}
-      <div className="flex gap-2 border-b border-[var(--border-color)]">
-        {([
-          { key: 'words' as const, label: '全部单词', icon: BookOpen },
-          { key: 'books' as const, label: '我的单词本', icon: Bookmark },
-        ]).map((t) => {
-          const Icon = t.icon;
-          const isActive = tab === t.key;
-          return (
-            <button
-              key={t.key}
-              onClick={() => setTab(t.key)}
-              className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-all ${
-                isActive
-                  ? 'border-[var(--pink-primary)] text-[var(--pink-primary)]'
-                  : 'border-transparent text-[var(--text-muted)] hover:text-[var(--text-primary)]'
-              }`}
-            >
-              <Icon size={16} />
-              {t.label}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* ─────── Tab: 全部单词 ─────── */}
-      {tab === 'words' && (
-      <>
-      {/* ─────── Library Promo ─────── */}
-      <Link
-        href="/vocabulary/library"
-        className="block bg-gradient-to-r from-[var(--pink-primary)]/10 to-[var(--purple-soft)]/10 border border-[var(--pink-pale)] rounded-2xl p-4 hover:border-[var(--pink-primary)]/30 transition-all group"
-      >
-        <div className="flex items-center gap-3">
-          <span className="text-3xl">📚</span>
-          <div className="flex-1">
-            <p className="text-sm font-bold text-[var(--text-primary)]">词库</p>
-            <p className="text-xs text-[var(--text-secondary)] mt-0.5">
-              主题词包 · 分级词表 · 延世教材 — 系统化词汇学习资源
-            </p>
-          </div>
-          <ArrowRight size={18} className="text-[var(--text-muted)] group-hover:translate-x-1 transition-transform" />
-        </div>
-      </Link>
-
-      {/* ─────── Search Bar ─────── */}
-      <div className="relative">
-        <Search
-          size={18}
-          className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-muted)] pointer-events-none"
-        />
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="搜索单词、释义、发音或例句..."
-          className="w-full bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl py-3 pl-11 pr-12 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--pink-primary)]/60 focus:ring-2 focus:ring-blue-500/10 transition-all"
-        />
-        {search && (
-          <button
-            onClick={() => setSearch('')}
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
-          >
-            <X size={16} />
-          </button>
-        )}
-      </div>
-
-      {/* ─────── Filter Pills ─────── */}
-      <div className="flex gap-2 overflow-x-auto pb-1">
-        {filterOptions.map((opt) => {
-          const count = masteryCounts[opt.value];
-          const isActive = filter === opt.value;
-          return (
-            <button
-              key={opt.value}
-              onClick={() => setFilter(opt.value)}
-              className={`flex items-center gap-2 text-xs px-3.5 py-2 rounded-xl whitespace-nowrap transition-all ${
-                isActive
-                  ? 'bg-[var(--pink-primary)] text-[var(--text-primary)] shadow-lg shadow-blue-600/25'
-                  : 'bg-[var(--bg-input)]/80 text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-accent)]/80'
-              }`}
-            >
-              <span>{opt.label}</span>
-              <span
-                className={`text-[13px] px-1.5 py-0.5 rounded-md font-mono font-medium tabular-nums ${
-                  isActive
-                    ? 'bg-white/20 text-[var(--text-primary)]'
-                    : 'bg-[var(--bg-accent)] text-[var(--text-muted)]'
-                }`}
-              >
-                {count}
-              </span>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* ═══════ Content Area ═══════ */}
 
       {/* Loading */}
       {loading ? (
         <div className="flex items-center justify-center py-20">
-          <div className="flex flex-col items-center gap-3">
-            <div className="w-8 h-8 border-2 border-slate-600 border-t-blue-400 rounded-full animate-spin" />
-            <p className="text-sm text-[var(--text-muted)]">加载中...</p>
-          </div>
+          <div className="w-8 h-8 border-2 border-slate-600 border-t-blue-400 rounded-full animate-spin" />
         </div>
       ) : allWords.length === 0 ? (
-        /* ─────── Empty: no words at all ─────── */
-        <div className="flex flex-col items-center justify-center py-16 px-4">
+        /* Empty state */
+        <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
           <div className="w-20 h-20 rounded-2xl bg-[var(--bg-input)]/60 flex items-center justify-center mb-5">
             <BookOpen size={36} className="text-[var(--text-placeholder)]" />
           </div>
-          <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-2">
-            还没有单词
-          </h2>
-          <p className="text-sm text-[var(--text-muted)] text-center max-w-xs mb-6">
-            开始你的韩语学习之旅，从视频中提取单词，或在学习页面添加新词
-          </p>
-          <div className="flex gap-3 flex-wrap justify-center">
-            <Link
-              href="/shadowing"
-              className="flex items-center gap-2 text-sm px-5 py-2.5 rounded-xl bg-[var(--bg-input)] text-[var(--text-primary)] hover:bg-[var(--bg-accent)] hover:text-[var(--text-primary)] transition-all"
-            >
-              <Film size={16} />
-              <span>影子跟读</span>
-              <ArrowRight size={14} />
-            </Link>
-            <Link
-              href="/learn"
-              className="flex items-center gap-2 text-sm px-5 py-2.5 rounded-xl bg-[var(--pink-primary)] text-[var(--text-primary)] hover:bg-[var(--pink-primary)] transition-all shadow-lg shadow-blue-600/25"
-            >
-              <GraduationCap size={16} />
-              <span>开始学习</span>
-              <ArrowRight size={14} />
-            </Link>
-          </div>
-        </div>
-      ) : words.length === 0 ? (
-        /* ─────── Empty: filtered / search yielded no results ─────── */
-        <div className="flex flex-col items-center justify-center py-16 px-4">
-          <div className="w-20 h-20 rounded-2xl bg-[var(--bg-input)]/60 flex items-center justify-center mb-5">
-            <Search size={36} className="text-[var(--text-placeholder)]" />
-          </div>
-          <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-2">
-            没有找到匹配的单词
-          </h2>
-          <p className="text-sm text-[var(--text-muted)] text-center max-w-xs mb-6">
-            {search
-              ? `没有找到包含"${search}"的单词，试试其他关键词`
-              : '当前筛选条件下没有单词'}
-          </p>
-          {hasActiveFilters && (
-            <button
-              onClick={clearFilters}
-              className="flex items-center gap-2 text-sm px-5 py-2.5 rounded-xl bg-[var(--bg-input)] text-[var(--text-primary)] hover:bg-[var(--bg-accent)] hover:text-[var(--text-primary)] transition-all"
-            >
-              <X size={16} />
-              <span>清除筛选</span>
-            </button>
-          )}
+          <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-2">还没有单词</h2>
+          <p className="text-sm text-[var(--text-muted)] max-w-xs mb-6">从场景词包或课程开始你的韩语学习之旅</p>
+          <Link href="/vocabulary/library" className="flex items-center gap-2 text-sm px-5 py-2.5 rounded-xl bg-[var(--pink-primary)] text-white font-medium">
+            浏览词库 <ArrowRight size={14} />
+          </Link>
         </div>
       ) : (
-        /* ─────── Word List ─────── */
-        <div className="space-y-3">
-          {words.map((word) => (
-            <div
-              key={word.id}
-              className="bg-[var(--bg-card)]/80 border border-[var(--border-color)]/80 rounded-2xl overflow-hidden hover:border-[var(--pink-pale)]/60 transition-all duration-200"
-            >
-              {/* ── Card Header (collapsed row) ── */}
-              <button
-                onClick={() =>
-                  setExpandedId(expandedId === word.id ? null : word.id)
-                }
-                className="w-full flex items-start justify-between p-4 text-left hover:bg-[var(--bg-input)]/40 transition-colors group"
-              >
-                <div className="min-w-0 flex-1 pr-2">
-                  {/* Word + pronunciation + POS */}
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-[var(--text-primary)] font-semibold text-base">
-                      <HighlightText text={word.word} highlight={search} />
-                    </span>
-                    {word.pronunciation && (
-                      <span className="text-[var(--text-muted)] text-xs font-mono">
-                        [<HighlightText text={word.pronunciation} highlight={search} />]
-                      </span>
-                    )}
-                    {word.partOfSpeech && (
-                      <span className="text-[13px] px-1.5 py-0.5 rounded-md bg-[var(--bg-input)] text-[var(--text-muted)] font-medium uppercase tracking-wide">
-                        {word.partOfSpeech}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Meaning */}
-                  <div className="text-[var(--text-secondary)] text-sm mt-1.5 line-clamp-1">
-                    <HighlightText text={word.meaning} highlight={search} />
-                  </div>
-
-                  {/* Badges */}
-                  <div className="flex items-center gap-2 mt-2 flex-wrap">
-                    <span
-                      className={`inline-flex items-center gap-1.5 text-[14px] px-2 py-0.5 rounded-lg font-medium ${masteryColor[word.mastery]}`}
-                    >
-                      <span
-                        className={`w-1.5 h-1.5 rounded-full ${masteryDot[word.mastery]}`}
-                      />
-                      {masteryLabel[word.mastery]}
-                    </span>
-
-                    {word.srsLevel > 0 && (
-                      <span className="inline-flex items-center gap-1 text-[14px] px-2 py-0.5 rounded-lg bg-purple-500/15 text-[var(--purple-soft)] font-medium">
-                        <Hash size={10} />
-                        SR {word.srsLevel}
-                      </span>
-                    )}
-
-                    {word.lastReviewed && (
-                      <span className="inline-flex items-center gap-1 text-[14px] px-2 py-0.5 rounded-lg bg-[var(--bg-input)] text-[var(--text-muted)]">
-                        <Clock size={10} />
-                        {new Date(word.lastReviewed).toLocaleDateString('zh-CN')}
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Right controls */}
-                <div className="flex items-center gap-2 ml-3 shrink-0">
-                  {/* Add to book button */}
-                  <span
-                      role="button"
-                      tabIndex={0}
-                      aria-label="加入单词本"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setAddToBookWordIds([word.id]);
-                        setShowAddToBook(true);
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setAddToBookWordIds([word.id]);
-                          setShowAddToBook(true);
-                        }
-                      }}
-                      className="text-[var(--text-placeholder)] hover:text-[var(--pink-primary)] sm:opacity-0 sm:group-hover:opacity-100 transition-all p-1.5 rounded-lg hover:bg-[var(--pink-primary)]/10 cursor-pointer"
-                    >
-                      <BookmarkPlus size={15} />
-                    </span>
-                    <span
-                    role="button"
-                    tabIndex={0}
-                    aria-label="删除单词"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDelete(word.id);
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        handleDelete(word.id);
-                      }
-                    }}
-                    className="text-[var(--text-placeholder)] hover:text-red-400 sm:opacity-0 sm:group-hover:opacity-100 transition-all p-1.5 rounded-lg hover:bg-red-500/10 cursor-pointer"
-                  >
-                    <Trash2 size={15} />
-                  </span>
-                  <div className="text-[var(--text-placeholder)]">
-                    {expandedId === word.id ? (
-                      <ChevronUp size={18} />
-                    ) : (
-                      <ChevronDown size={18} />
-                    )}
-                  </div>
-                </div>
-              </button>
-
-              {/* ── Expanded Details ── */}
-              {expandedId === word.id && (
-                <div className="px-4 pb-4 border-t border-[var(--border-color)]/60 pt-4 space-y-3">
-                  {/* Examples */}
-                  {word.examples.length > 0 && (
-                    <div className="space-y-2">
-                      <p className="text-[14px] text-[var(--text-placeholder)] font-medium uppercase tracking-wide flex items-center gap-1.5">
-                        <Sparkles size={11} />
-                        例句
-                      </p>
-                      {word.examples.map((ex, i) => (
-                        <div
-                          key={i}
-                          className="bg-[var(--bg-input)]/60 rounded-xl p-3 border border-[var(--pink-pale)]/40"
-                        >
-                          <div className="flex items-start gap-2">
-                            <p className="text-sm text-[var(--text-primary)] leading-relaxed">
-                              <HighlightText text={ex.text} highlight={search} />
-                            </p>
-                            <button
-                              onClick={(e) => { e.stopPropagation(); speak(ex.text, 0.8); }}
-                              className="p-1 rounded-lg bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors shrink-0"
-                              title="听例句发音"
-                            >
-                              <Volume2 size={14} />
-                            </button>
-                          </div>
-                          <p className="text-xs text-[var(--text-muted)] mt-1.5 leading-relaxed">
-                            <HighlightText
-                              text={ex.translation}
-                              highlight={search}
-                            />
-                          </p>
-                          {ex.source && (
-                            <span className="inline-block mt-2 text-[13px] text-[var(--text-placeholder)] bg-[var(--bg-accent)]/50 px-1.5 py-0.5 rounded">
-                              {ex.source === 'dictionary'
-                                ? '词典'
-                                : ex.source === 'video'
-                                  ? '视频'
-                                  : '手动'}
-                            </span>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* SRS Metadata */}
-                  <div className="flex items-center gap-4 text-xs text-[var(--text-placeholder)] pt-1 flex-wrap">
-                    <span className="flex items-center gap-1.5">
-                      <Clock size={11} />
-                      间隔:{' '}
-                      {word.interval < 1
-                        ? `${Math.round(word.interval * 1440)}分钟`
-                        : `${word.interval}天`}
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <Calendar size={11} />
-                      下次复习:{' '}
-                      {new Date(word.nextReview).toLocaleDateString('zh-CN')}
-                    </span>
-                  </div>
-                </div>
-              )}
+        <>
+          {/* Today's Task Card */}
+          <div className="bg-gradient-to-br from-[var(--pink-primary)]/10 to-[var(--purple-soft)]/10 border-2 border-[var(--pink-pale)] rounded-3xl p-6 space-y-4">
+            <div className="flex items-center gap-2">
+              <Target size={20} className="text-[var(--pink-primary)]" />
+              <span className="text-sm font-bold text-[var(--text-primary)]">今日词汇任务</span>
             </div>
-          ))}
-        </div>
-      )}
 
-      {/* Add to Book Modal */}
-      {showAddToBook && (
-        <AddToBookModal
-          mode="select-books"
-          preSelectedWordIds={addToBookWordIds}
-          onClose={() => setShowAddToBook(false)}
-          onDone={() => {}}
-        />
-      )}
-      </>
-      )}
+            <div className="grid grid-cols-3 gap-3">
+              <div className="bg-[var(--bg-card)]/80 rounded-2xl p-3 text-center">
+                <p className="text-2xl font-extrabold text-[var(--pink-primary)]">{stats.dueReview}</p>
+                <p className="text-[10px] text-[var(--text-muted)]">待复习</p>
+              </div>
+              <div className="bg-[var(--bg-card)]/80 rounded-2xl p-3 text-center">
+                <p className="text-2xl font-extrabold text-[var(--purple-soft)]">{Math.min(stats.newWords, 5)}</p>
+                <p className="text-[10px] text-[var(--text-muted)]">推荐新词</p>
+              </div>
+              <div className="bg-[var(--bg-card)]/80 rounded-2xl p-3 text-center">
+                <p className="text-2xl font-extrabold text-[var(--text-muted)]">~3</p>
+                <p className="text-[10px] text-[var(--text-muted)]">分钟</p>
+              </div>
+            </div>
 
-      {/* ─────── Tab: 我的单词本 ─────── */}
-      {tab === 'books' && <BooksSection />}
+            <button
+              onClick={() => setShowSession(true)}
+              disabled={stats.dueReview === 0 && stats.newWords === 0}
+              className="w-full py-3.5 bg-[var(--pink-primary)] text-white rounded-2xl font-bold text-sm active:scale-[0.97] transition-all disabled:opacity-40"
+            >
+              {stats.dueReview === 0 && stats.newWords === 0 ? '暂无待复习词汇' : '开始今日词汇练习'}
+            </button>
+          </div>
 
-      {/* ─────── Audio Player ─────── */}
-      {showAudioPlayer && words.length > 0 && (
-        <WordAudioPlayer
-          words={words.map((w) => ({ korean: w.word, chinese: w.meaning }))}
-        />
+          {/* Progress */}
+          <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4">
+            <div className="flex items-center gap-2 mb-3">
+              <TrendingUp size={16} className="text-[var(--mint-soft)]" />
+              <span className="text-sm font-bold text-[var(--text-primary)]">我的词汇进度</span>
+            </div>
+            <div className="flex justify-between text-xs text-[var(--text-muted)] mb-1.5">
+              <span>已掌握 {stats.mastered}</span>
+              <span>学习中 {stats.learning}</span>
+              <span>易错 {stats.difficult}</span>
+            </div>
+            <div className="w-full bg-[var(--bg-input)] rounded-full h-2 overflow-hidden">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-[var(--mint-soft)] to-[var(--pink-primary)] transition-all duration-500"
+                style={{ width: `${progressPct}%` }}
+              />
+            </div>
+            <p className="text-[10px] text-[var(--text-muted)] mt-1.5">{progressPct}% 掌握率</p>
+          </div>
+
+          {/* Scene Packs */}
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <Sparkles size={16} className="text-[var(--peach-soft)]" />
+                <span className="text-sm font-bold text-[var(--text-primary)]">场景词包</span>
+              </div>
+              <Link href="/vocabulary/library" className="text-xs text-[var(--pink-primary)] hover:underline">
+                查看全部
+              </Link>
+            </div>
+            <ThemesSection />
+          </div>
+
+          {/* Bottom links */}
+          <div className="flex gap-3">
+            <button
+              onClick={() => setTab('library')}
+              className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-[var(--bg-card)] border border-[var(--border-color)] text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+            >
+              <Library size={16} />
+              全部词库
+            </button>
+            <button
+              onClick={() => setTab('books')}
+              className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-[var(--bg-card)] border border-[var(--border-color)] text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+            >
+              <Bookmark size={16} />
+              我的单词本
+            </button>
+          </div>
+        </>
       )}
     </div>
   );
