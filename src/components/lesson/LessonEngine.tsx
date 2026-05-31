@@ -17,10 +17,8 @@ import { SentenceIntroCard } from './cards/SentenceIntroCard';
 import { GrammarIntroCard } from './cards/GrammarIntroCard';
 import { ListenChoiceCard } from './cards/ListenChoiceCard';
 import { OutputCard } from './cards/OutputCard';
-import { GoalCard } from './cards/GoalCard';
 import { SpeakRepeatCard } from './cards/SpeakRepeatCard';
 import { MatchPairsCard } from './cards/MatchPairsCard';
-import { SummaryCard } from './cards/SummaryCard';
 import { BrowseDrawer } from './BrowseDrawer';
 import { CompletionView } from './CompletionView';
 import { LessonProgressDots } from './LessonProgressDots';
@@ -285,13 +283,13 @@ export default function LessonEngine({ course, dayNum }: Props) {
       case 'sentence-intro': return `实用句 · ${currentCard + 1}/${totalCards}`;
       case 'listen-choice': return `听力选择 · ${currentCard + 1}/${totalCards}`;
       case 'speak-repeat': return `影子跟读 · ${currentCard + 1}/${totalCards}`;
-      case 'match-pairs': return `词组配对 · ${currentCard + 1}/${totalCards}`;
+      case 'match-pairs': return `${card.matchDirection === 'zh-to-ko' ? '中翻韩' : '韩翻中'} · ${currentCard + 1}/${totalCards}`;
       case 'output': return `输出练习 · ${currentCard + 1}/${totalCards}`;
       case 'summary': return `学习总结`;
     }
   };
 
-  const showSpeaker = card.type !== 'output' && card.type !== 'goal' && card.type !== 'summary' && card.type !== 'match-pairs';
+  const showSpeaker = card.type !== 'output';
   const isPassiveCard = card.type === 'goal' || card.type === 'summary';
   const isInteractive = card.type === 'listen-choice' || card.type === 'match-pairs' || card.type === 'speak-repeat' || card.type === 'output';
   const showRevealBtn = !revealed && !isInteractive && !isPassiveCard;
@@ -353,7 +351,6 @@ export default function LessonEngine({ course, dayNum }: Props) {
           </div>
         )}
 
-        {card.type === 'goal' && <GoalCard goal={card.data as GoalData} />}
         {card.type === 'word-intro' && <WordIntroCard word={card.data as DailyWord} revealed={revealed} />}
         {card.type === 'grammar-intro' && <GrammarIntroCard grammar={card.data as DailyGrammar} revealed={revealed} />}
         {card.type === 'sentence-intro' && <SentenceIntroCard sentence={card.data as DailySentence} revealed={revealed} />}
@@ -396,7 +393,6 @@ export default function LessonEngine({ course, dayNum }: Props) {
             isMobile={isMobile}
           />
         )}
-        {card.type === 'summary' && <SummaryCard summary={card.data as AbilitySummary} />}
       </div>
 
       {/* Bottom controls */}

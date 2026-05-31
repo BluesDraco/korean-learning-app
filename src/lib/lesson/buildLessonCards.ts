@@ -1,5 +1,5 @@
 import type { DailyCourse, DailySentence } from '@/data/thirtyDayCourse';
-import type { LessonCard, GoalData, AbilitySummary } from './types';
+import type { LessonCard } from './types';
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -22,16 +22,13 @@ function adjustOutputHint(course: DailyCourse, difficulty: number): { prompt: st
   }
 }
 
-/** Split Korean sentence into meaningful chunks for match-pairs */
+/** Split Korean sentence into meaningful chunks for sentence reorder */
 function sentenceToChunks(s: DailySentence): { ko: string[]; zh: string[] } {
-  // Split by particle/word boundaries
   const koParts = s.korean.replace(/[.!?~]/g, '').split(/\s+/).filter(Boolean);
   const zhParts = s.chinese.split(/\s+/).filter(Boolean);
-  // If word counts don't match, fall back to pairing by common delimiters
   if (koParts.length === zhParts.length) {
     return { ko: koParts, zh: zhParts };
   }
-  // Simple 2-part split as fallback
   const koHalf = Math.ceil(s.korean.length / 2);
   const zhHalf = Math.ceil(s.chinese.length / 2);
   return {
@@ -40,7 +37,7 @@ function sentenceToChunks(s: DailySentence): { ko: string[]; zh: string[] } {
   };
 }
 
-function generateAbilities(course: DailyCourse): string[] {
+export function generateAbilities(course: DailyCourse): string[] {
   const abilities: string[] = [];
   if (course.words.length > 0) {
     abilities.push(`听懂并说出 "${course.words[0].korean}"（${course.words[0].chinese}）`);
@@ -60,105 +57,65 @@ function generateAbilities(course: DailyCourse): string[] {
   return abilities.slice(0, 5);
 }
 
-/** Build a lesson card deck: introduce → practice → produce → review */
+/** Build a lesson card deck: introduce → practice → produce */
 export function buildLessonCards(course: DailyCourse, outputDifficulty: number = 2): LessonCard[] {
   const cards: LessonCard[] = [];
   const words = course.words;
   const sentences = course.sentences;
-  const dictations = course.dictations;
-  const allChinese = words.map((w) => w.chinese).concat(sentences.map((s) => s.chinese));
 
-  // 1. Goal card
-  const abilities = generateAbilities(course);
-  cards.push({
-    type: 'goal',
-    data: { day: course.day, title: course.title, emoji: course.emoji, goals: abilities } as GoalData,
-  });
-
-  // 2. Word intro batch 1 (first half)
+  // 1. Word intro batch 1 (first half)
   const midWord = Math.ceil(words.length / 2);
   for (let i = 0; i < midWord; i++) {
     cards.push({ type: 'word-intro', data: words[i], speakText: words[i].korean, masteryKey: `word-${i}` });
   }
 
-  // 3. Grammar intro
+  // 2. Grammar intro
   cards.push({ type: 'grammar-intro', data: course.grammar, speakText: course.grammar.example, masteryKey: 'grammar-0' });
 
-  // 4. Word intro batch 2
+  // 3. Word intro batch 2
   for (let i = midWord; i < words.length; i++) {
     cards.push({ type: 'word-intro', data: words[i], speakText: words[i].korean, masteryKey: `word-${i}` });
   }
 
-  // 5. Listen-choice for first few dictation words (practice recognition)
-  const lcCount = Math.min(3, dictations.length);
-  for (let i = 0; i < lcCount; i++) {
-    const d = dictations[i];
-    const correct = d.chinese;
-    const pool = allChinese.filter((c) => c !== correct);
-    const distractors = shuffle(pool).slice(0, 3);
-    const options = shuffle([correct, ...distractors]);
-    cards.push({
-      type: 'listen-choice', data: d, speakText: d.korean, masteryKey: `dictation-${i}`,
-      options, correctOption: options.indexOf(correct), maxRetries: 2,
-    });
-  }
-
-  // 6. Sentence intro + speak-repeat
-  for (let i = 0; i < Math.min(2, sentences.length); i++) {
+  // 4. Sentence intro + speak-repeat (all sentences)
+  for (let i = 0; i < sentences.length; i++) {
     cards.push({ type: 'sentence-intro', data: sentences[i], speakText: sentences[i].korean, masteryKey: `sentence-${i}` });
     cards.push({ type: 'speak-repeat', data: sentences[i], speakText: sentences[i].korean, masteryKey: `sentence-repeat-${i}` });
   }
 
-  // 7. Sentence reorder (中翻韩 / 韩翻中)
-  if (sentences.length > 0) {
-    const s = sentences[0];
+  // 5. Sentence reorder practice — both directions for each sentence
+  for (let i = 0; i < sentences.length; i++) {
+    const s = sentences[i];
     const chunks = sentenceToChunks(s);
-    const direction = (Math.random() > 0.5 ? 'zh-to-ko' : 'ko-to-zh') as 'zh-to-ko' | 'ko-to-zh';
-    const targetChunks = direction === 'zh-to-ko' ? [...chunks.ko] : [...chunks.zh];
+
+    // 中翻韩：看中文 → 排列韩文词组
     cards.push({
       type: 'match-pairs',
       data: s,
       speakText: s.korean,
-      masteryKey: 'match-pairs-0',
-      matchDirection: direction,
-      matchChunks: shuffle([...targetChunks]),
-      matchCorrectOrder: targetChunks,
+      masteryKey: `reorder-zh2ko-${i}`,
+      matchDirection: 'zh-to-ko',
+      matchChunks: shuffle([...chunks.ko]),
+      matchCorrectOrder: [...chunks.ko],
+      maxRetries: 2,
+    });
+
+    // 韩翻中：看韩文 → 排列中文词组
+    cards.push({
+      type: 'match-pairs',
+      data: s,
+      speakText: s.korean,
+      masteryKey: `reorder-ko2zh-${i}`,
+      matchDirection: 'ko-to-zh',
+      matchChunks: shuffle([...chunks.zh]),
+      matchCorrectOrder: [...chunks.zh],
       maxRetries: 2,
     });
   }
 
-  // 8. Remaining listen-choice dictations
-  for (let i = lcCount; i < dictations.length; i++) {
-    const d = dictations[i];
-    const correct = d.chinese;
-    const pool = allChinese.filter((c) => c !== correct);
-    const distractors = shuffle(pool).slice(0, 3);
-    const options = shuffle([correct, ...distractors]);
-    cards.push({
-      type: 'listen-choice', data: d, speakText: d.korean, masteryKey: `dictation-${i}`,
-      options, correctOption: options.indexOf(correct), maxRetries: 2,
-    });
-  }
-
-  // 9. Remaining sentences
-  for (let i = 2; i < sentences.length; i++) {
-    cards.push({ type: 'sentence-intro', data: sentences[i], speakText: sentences[i].korean, masteryKey: `sentence-${i}` });
-  }
-
-  // 10. Output
+  // 6. Output
   const adjustedOutput = adjustOutputHint(course, outputDifficulty);
   cards.push({ type: 'output', data: adjustedOutput as any, masteryKey: 'output-0' });
-
-  // 11. Summary
-  cards.push({
-    type: 'summary',
-    data: {
-      day: course.day, title: course.title, emoji: course.emoji,
-      abilities,
-      wordCount: words.length,
-      sentenceCount: sentences.length,
-    } as AbilitySummary,
-  });
 
   return cards;
 }

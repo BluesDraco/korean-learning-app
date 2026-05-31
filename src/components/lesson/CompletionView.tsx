@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect } from 'react';
-import { Edit3, Keyboard } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Edit3, Keyboard, Trophy, Target } from 'lucide-react';
 import type { DailyCourse } from '@/data/thirtyDayCourse';
 import { KoreanKeyboard } from '@/components/KoreanKeyboard';
+import { generateAbilities } from '@/lib/lesson/buildLessonCards';
 
 interface Props {
   course: DailyCourse;
@@ -19,40 +20,104 @@ interface Props {
   goNextDay: () => void;
 }
 
+function StatCard({ value, label, color, delay, icon }: { value: string; label: string; color: string; delay: number; icon: React.ReactNode }) {
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setShow(true), delay);
+    return () => clearTimeout(t);
+  }, [delay]);
+
+  return (
+    <div
+      className={`rounded-2xl px-5 py-3 text-center transition-all duration-500 ${
+        show ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-4 scale-90'
+      }`}
+      style={{ backgroundColor: `${color}10`, transitionDelay: `${delay}ms` }}
+    >
+      <div className="flex justify-center mb-1">{icon}</div>
+      <p className="text-2xl font-extrabold" style={{ color }}>{value}</p>
+      <p className="text-[10px] text-[var(--text-muted)]">{label}</p>
+    </div>
+  );
+}
+
 export function CompletionView({
   course, dayNum, outputText, setOutputText, showKeyboard, setShowKeyboard, isMobile,
   result, onComplete, goPrevDay, goNextDay,
 }: Props) {
-  useEffect(() => { onComplete(); }, []);
+  const abilities = generateAbilities(course);
+  const [showAbilities, setShowAbilities] = useState(false);
+  const [showOutput, setShowOutput] = useState(false);
+
+  useEffect(() => {
+    onComplete();
+    // Staggered reveal
+    const t1 = setTimeout(() => setShowAbilities(true), 400);
+    const t2 = setTimeout(() => setShowOutput(true), 800);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
+  }, []);
 
   return (
     <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-3xl p-8 text-center space-y-5">
-      <div className="text-6xl">{course.emoji}</div>
-      <div>
-        <h1 className="text-2xl font-bold text-[var(--text-primary)]">Day {course.day} 完成!</h1>
+      {/* Header */}
+      <div className="animate-[fadeIn_0.5s_ease-out]">
+        <div className="text-6xl">{course.emoji}</div>
+        <h1 className="text-2xl font-bold text-[var(--text-primary)] mt-2">Day {course.day} 完成!</h1>
         <p className="text-sm text-[var(--text-muted)] mt-1">{course.title} · {course.titleKo}</p>
       </div>
 
+      {/* XP / Streak / Level */}
       {result && (
-        <div className="flex items-center justify-center gap-4">
-          <div className="bg-[var(--pink-primary)]/10 rounded-2xl px-5 py-3">
-            <p className="text-2xl font-extrabold text-[var(--pink-primary)]">+{result.xpAwarded}</p>
-            <p className="text-[10px] text-[var(--text-muted)]">经验值</p>
-          </div>
-          <div className="bg-[var(--purple-soft)]/10 rounded-2xl px-5 py-3">
-            <p className="text-2xl font-extrabold text-[var(--purple-soft)]">{result.streak}天</p>
-            <p className="text-[10px] text-[var(--text-muted)]">连续学习</p>
-          </div>
+        <div className="flex items-center justify-center gap-3 flex-wrap">
+          <StatCard
+            value={`+${result.xpAwarded}`}
+            label="经验值"
+            color="var(--pink-primary)"
+            delay={100}
+            icon={<Trophy size={18} color="var(--pink-primary)" />}
+          />
+          <StatCard
+            value={`${result.streak}天`}
+            label="连续学习"
+            color="var(--purple-soft)"
+            delay={250}
+            icon={<Target size={18} color="var(--purple-soft)" />}
+          />
           {result.leveledUp && (
-            <div className="bg-[var(--mint-soft)]/10 rounded-2xl px-5 py-3">
-              <p className="text-2xl font-extrabold text-[var(--mint-soft)]">Lv.{result.newLevel}</p>
-              <p className="text-[10px] text-[var(--text-muted)]">升级!</p>
-            </div>
+            <StatCard
+              value={`Lv.${result.newLevel}`}
+              label="升级!"
+              color="var(--mint-soft)"
+              delay={400}
+              icon={<span className="text-lg">🎉</span>}
+            />
           )}
         </div>
       )}
 
-      <div className="bg-gradient-to-r from-[var(--pink-primary)]/5 to-[var(--purple-soft)]/5 rounded-2xl p-5 border border-[var(--border-color)] text-left">
+      {/* Abilities summary */}
+      <div
+        className={`bg-[var(--bg-input)] rounded-2xl p-5 border border-[var(--border-color)] text-left transition-all duration-500 ${
+          showAbilities ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+        }`}
+      >
+        <p className="text-sm font-bold text-[var(--text-primary)] mb-3">今日收获</p>
+        <ul className="space-y-2">
+          {abilities.map((a, i) => (
+            <li key={i} className="flex items-start gap-2 text-sm text-[var(--text-secondary)]">
+              <span className="text-[var(--mint-soft)] mt-0.5">✓</span>
+              {a}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Output exercise */}
+      <div
+        className={`bg-gradient-to-r from-[var(--pink-primary)]/5 to-[var(--purple-soft)]/5 rounded-2xl p-5 border border-[var(--border-color)] text-left transition-all duration-500 ${
+          showOutput ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+        }`}
+      >
         <div className="flex items-center gap-2 mb-3">
           <Edit3 size={16} className="text-[var(--pink-primary)]" />
           <span className="text-sm font-bold text-[var(--text-primary)]">输出练习</span>
@@ -68,14 +133,12 @@ export function CompletionView({
             rows={3}
             className="w-full bg-[var(--bg-input)] border border-[var(--border-color)] rounded-xl p-3 pr-10 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)] resize-none focus:outline-none focus:border-[var(--pink-pale)]"
           />
-          {isMobile && (
-            <button
-              onClick={() => setShowKeyboard(!showKeyboard)}
-              className={`absolute right-2 bottom-2 p-1.5 rounded-lg transition-colors ${showKeyboard ? 'bg-[var(--pink-primary)]/15 text-[var(--pink-primary)]' : 'text-[var(--text-muted)] hover:text-[var(--pink-primary)]'}`}
-            >
-              <Keyboard size={16} />
-            </button>
-          )}
+          <button
+            onClick={() => setShowKeyboard(!showKeyboard)}
+            className={`absolute right-2 bottom-2 p-1.5 rounded-lg transition-colors ${showKeyboard ? 'bg-[var(--pink-primary)]/15 text-[var(--pink-primary)]' : 'text-[var(--text-muted)] hover:text-[var(--pink-primary)]'}`}
+          >
+            <Keyboard size={16} />
+          </button>
         </div>
         <KoreanKeyboard value={outputText} onChange={setOutputText} visible={showKeyboard} onClose={() => setShowKeyboard(false)} />
         {outputText && (
@@ -86,6 +149,7 @@ export function CompletionView({
         )}
       </div>
 
+      {/* Navigation */}
       <div className="flex gap-3">
         <button
           onClick={goPrevDay}
