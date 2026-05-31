@@ -33,9 +33,8 @@ export function VisitorCounter() {
   return (
     <div className="flex items-center gap-1 text-xs text-[var(--text-muted)]">
       <span>🐰</span>
-      <span>第</span>
+      <span>今日学习氛围值</span>
       <span className="font-bold text-[var(--pink-primary)]">{count.toLocaleString()}</span>
-      <span>位访客</span>
     </div>
   );
 }

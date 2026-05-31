@@ -177,27 +177,23 @@ async function fetchFromAI(): Promise<NewsPost[]> {
 
 export async function GET() {
   const cached = readCache();
-  const isStale = !cached || (Date.now() - cached.updatedAt) > CACHE_TTL;
 
-  if (!isStale && cached) {
-    return NextResponse.json({ ...cached, stale: false });
+  if (cached) {
+    const isStale = (Date.now() - cached.updatedAt) > CACHE_TTL;
+    return NextResponse.json({ ...cached, stale: isStale });
   }
 
-  try {
-    const posts = await fetchFromAI();
-    writeCache(posts);
-    return NextResponse.json({ date: new Date().toISOString().slice(0, 10), updatedAt: Date.now(), posts, stale: false });
-  } catch (e: any) {
-    if (cached) {
-      return NextResponse.json({ ...cached, stale: true, error: e.message });
-    }
-    return NextResponse.json({ error: e.message }, { status: 500 });
-  }
+  return NextResponse.json({ date: '', updatedAt: 0, posts: [], stale: true });
 }
 
 export async function POST() {
   const auth = await getAuthFromCookie();
   if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+  const apiKey = process.env.DEEPSEEK_NEWS_KEY;
+  if (!apiKey) {
+    return NextResponse.json({ error: 'DEEPSEEK_NEWS_KEY not configured' }, { status: 503 });
+  }
 
   const limit = await checkAiRateLimit(auth.userId, 'kpop-news');
   if (!limit.allowed) {

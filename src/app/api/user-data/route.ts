@@ -233,9 +233,22 @@ export async function POST(req: Request) {
 
   const db = await getDb();
 
+  let body: { action?: string; table?: string; id?: string; data?: any };
   try {
-    const { action, table, id, data } = await req.json();
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+  }
+  const { action, table, id, data } = body;
 
+  if (!table || !TABLE_COLS[table]) {
+    return NextResponse.json({ error: `Unknown table: ${table}` }, { status: 400 });
+  }
+  if (!action) {
+    return NextResponse.json({ error: 'Missing action' }, { status: 400 });
+  }
+
+  try {
     const info = TABLE_COLS[table];
     if (!info) {
       return NextResponse.json({ error: `Unknown table: ${table}` }, { status: 400 });
@@ -333,9 +346,7 @@ export async function POST(req: Request) {
 
       case 'delete': {
         requireWritable(info);
-        const u = table === 'buddyInvites'
-          ? { clause: '', params: [] as unknown[] }
-          : buildUserClause(userScope, auth.userId);
+        const u = buildUserClause(userScope, auth.userId);
         const sql = `DELETE FROM ${info.table} WHERE ${pk} = ?${u.clause ? ` AND ${u.clause}` : ''}`;
         await db.run(sql, [resolveStorageId(table, id, auth.userId), ...u.params]);
         return NextResponse.json({ ok: true });
@@ -388,8 +399,12 @@ export async function POST(req: Request) {
           sql += ` ORDER BY ${snOrderBy} ${reverse ? 'DESC' : 'ASC'}`;
         }
         if (limit) {
+          const n = Number(limit);
+          if (!Number.isFinite(n) || n < 1 || n > 200) {
+            return NextResponse.json({ error: 'limit must be 1-200' }, { status: 400 });
+          }
           sql += ` LIMIT ?`;
-          params.push(limit);
+          params.push(n);
         }
         const result = await db.exec(sql, params);
         const rows = result[0]?.values.map((r: unknown[]) => rowToObj(cols, r)) ?? [];
@@ -413,8 +428,12 @@ export async function POST(req: Request) {
           sql += ` ORDER BY ${snOrderBy} ${reverse ? 'DESC' : 'ASC'}`;
         }
         if (limit) {
+          const n = Number(limit);
+          if (!Number.isFinite(n) || n < 1 || n > 200) {
+            return NextResponse.json({ error: 'limit must be 1-200' }, { status: 400 });
+          }
           sql += ` LIMIT ?`;
-          params.push(limit);
+          params.push(n);
         }
         const result = await db.exec(sql, params);
         const rows = result[0]?.values.map((r: unknown[]) => rowToObj(cols, r)) ?? [];

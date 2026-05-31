@@ -5,10 +5,11 @@ import { createContext, useContext, useState, useEffect, useCallback, type React
 interface User {
   id: string;
   username: string;
-  nickname: string;
-  email: string;
+  nickname?: string;
+  email?: string;
   role: string;
-  createdAt: number;
+  onboardingCompleted?: boolean;
+  createdAt?: number;
 }
 
 interface AuthContextType {
@@ -51,31 +52,55 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [fetchUser]);
 
   const login = async (username: string, password: string) => {
-    const res = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password }),
-    });
-    const data = await res.json();
-    if (data.error) return { error: data.error };
-    setUser(data.user);
-    return {};
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+      let data: any;
+      try {
+        data = await res.json();
+      } catch {
+        return { error: '服务器响应异常，请稍后重试' };
+      }
+      if (!res.ok) return { error: data.error || `登录失败 (${res.status})` };
+      // Fetch full user profile after login
+      await fetchUser();
+      return {};
+    } catch {
+      return { error: '网络错误，请检查网络连接后重试' };
+    }
   };
 
   const register = async (username: string, password: string) => {
-    const res = await fetch('/api/auth/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password }),
-    });
-    const data = await res.json();
-    if (data.error) return { error: data.error };
-    setUser(data.user);
-    return {};
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+      let data: any;
+      try {
+        data = await res.json();
+      } catch {
+        return { error: '服务器响应异常，请稍后重试' };
+      }
+      if (!res.ok) return { error: data.error || `注册失败 (${res.status})` };
+      // Fetch full user profile after register
+      await fetchUser();
+      return {};
+    } catch {
+      return { error: '网络错误，请检查网络连接后重试' };
+    }
   };
 
   const logout = async () => {
-    await fetch('/api/auth/logout', { method: 'POST' });
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+    } catch {
+      // ignore network errors on logout
+    }
     setUser(null);
   };
 

@@ -141,11 +141,9 @@ export default function Onboarding({ onComplete }: Props) {
                     key={opt.label}
                     onClick={() => handleLevelSelect(opt.value)}
                     className={`w-full flex items-center gap-4 p-4 rounded-xl border transition-all text-left ${
-                      level === opt.value && opt.label === '完全零基础'
+                      level === opt.value
                         ? 'bg-[var(--pink-primary)]/10 border-[var(--pink-primary)]/50'
-                        : level === opt.value && opt.label !== '完全零基础'
-                          ? 'bg-[var(--pink-primary)]/10 border-[var(--pink-primary)]/50'
-                          : 'bg-[var(--bg-soft)] border-[var(--border-color)] hover:border-[var(--border-hover)]'
+                        : 'bg-[var(--bg-soft)] border-[var(--border-color)] hover:border-[var(--border-hover)]'
                     }`}
                   >
                     <span className="text-2xl">{opt.emoji}</span>
@@ -285,8 +283,8 @@ export default function Onboarding({ onComplete }: Props) {
               {/* Mini stats */}
               <div className="grid grid-cols-2 gap-3">
                 <div className="bg-[var(--mint-soft)]/10 border border-[var(--mint-soft)]/20 rounded-xl p-3 text-center">
-                  <div className="text-xl font-bold text-[var(--mint-soft)]">+1</div>
-                  <div className="text-xs text-[var(--text-muted)]">词汇量</div>
+                  <div className="text-xl font-bold text-[var(--mint-soft)]">🎉</div>
+                  <div className="text-xs text-[var(--text-muted)]">首词解锁</div>
                 </div>
                 <div className="bg-[var(--peach-soft)]/10 border border-[var(--peach-soft)]/20 rounded-xl p-3 text-center">
                   <div className="text-xl font-bold text-[var(--peach-soft)]">+10</div>

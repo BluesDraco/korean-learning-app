@@ -171,6 +171,6 @@ export async function GET() {
   };
 
   return NextResponse.json(response, {
-    headers: { 'Cache-Control': 'public, max-age=30' },
+    headers: { 'Cache-Control': 'private, no-store' },
   });
 }

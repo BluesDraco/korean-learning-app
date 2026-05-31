@@ -43,7 +43,7 @@ class WhereClause<T> {
 
   anyOf(...values: unknown[]) {
     this.op = 'in';
-    this.value = values;
+    this.value = values.length === 1 && Array.isArray(values[0]) ? values[0] : values;
     return this;
   }
 

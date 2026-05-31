@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { ArrowLeft, Copy, Check, Download, Loader2, UserPlus } from 'lucide-react';
 import { db } from '@/lib/db';
 import { getProfile } from '@/lib/gamification';
-import type { BuddyInvite, BuddyRelation } from '@/types';
+import type { BuddyInvite } from '@/types';
 
 const GOALS = ['TOPIK备考', '日常口语', '追星追剧', '旅行备用', '其他'];
 const LEVELS = ['零基础', '初级', '中级', '高级'];
@@ -71,29 +71,22 @@ function BuddyInviteContent() {
     try {
       const profile = await getProfile();
       if (!profile) { setAcceptError('请先登录'); setAccepting(false); return; }
-      if (profile.id === invite.userId) { setAcceptError('不能接受自己的邀请'); setAccepting(false); return; }
 
-      const existing = await db.buddyRelations.filter(
+      const res = await fetch('/api/buddy/invites/consume', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ inviteToken: receivedToken }),
+      });
+      const data = await res.json();
+      if (!res.ok) { setAcceptError(data.error || '接受失败'); setAccepting(false); return; }
+
+      // Find the newly created relation
+      const relations = await db.buddyRelations.filter(
         (r) => r.status === 'active' &&
           ((r.userAId === profile.id && r.userBId === invite.userId) ||
            (r.userAId === invite.userId && r.userBId === profile.id))
       );
-      if (existing.length > 0) {
-        router.push(`/buddy/${existing[0].id}`);
-        return;
-      }
-
-      const rel: BuddyRelation = {
-        id: crypto.randomUUID(),
-        userAId: invite.userId,
-        userBId: profile.id,
-        status: 'active',
-        createdAt: Date.now(),
-      };
-      await db.buddyRelations.add(rel);
-      await db.buddyInvites.delete(invite.id);
-
-      router.push(`/buddy/${rel.id}`);
+      router.push(`/buddy/${relations[0]?.id || ''}`);
     } catch (_e: any) {
       setAcceptError(_e.message || '接受失败');
       setAccepting(false);

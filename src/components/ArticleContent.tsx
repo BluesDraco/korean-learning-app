@@ -3,6 +3,16 @@
 import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { speak as speakKorean } from '@/lib/tts';
+import { db } from '@/lib/db';
+
+function sanitizeHtml(dirty: string): string {
+  return dirty
+    .replace(/<script[\s\S]*?<\/script>/gi, '')
+    .replace(/\son\w+\s*=\s*["'][^"']*["']/gi, '')
+    .replace(/\son\w+\s*=\s*[^\s>]*/gi, '')
+    .replace(/javascript\s*:/gi, 'blocked:')
+    .replace(/<iframe[\s\S]*?<\/iframe>/gi, '');
+}
 
 const STORAGE_KEY = 'korea-saved-words';
 
@@ -10,7 +20,7 @@ function getSaved(): { ko: string; zh: string; addedAt: number }[] {
   try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch { return []; }
 }
 
-function saveWord(korean: string, chinese: string): boolean {
+function saveLocal(korean: string, chinese: string): boolean {
   const words = getSaved();
   if (!words.some((w) => w.ko === korean)) {
     words.push({ ko: korean, zh: chinese, addedAt: Date.now() });
@@ -18,6 +28,32 @@ function saveWord(korean: string, chinese: string): boolean {
     return true;
   }
   return false;
+}
+
+async function saveToDb(korean: string, chinese: string): Promise<boolean> {
+  try {
+    const existing = await db.words.where('word').equals(korean).first();
+    if (existing) return false;
+    await db.words.add({
+      id: crypto.randomUUID(),
+      word: korean,
+      pronunciation: '',
+      meaning: chinese,
+      partOfSpeech: '',
+      examples: [],
+      sourceEntryId: undefined,
+      mastery: 'new',
+      srsLevel: 0,
+      nextReview: 0,
+      easeFactor: 2.5,
+      interval: 0,
+      createdAt: Date.now(),
+      lastReviewed: null,
+    });
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 export default function ArticleContent({
@@ -28,6 +64,8 @@ export default function ArticleContent({
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+
+  const safeHtml = sanitizeHtml(html);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -105,13 +143,11 @@ export default function ArticleContent({
         if (ko && zh) {
           const korean = ko.textContent?.replace('🔊', '').trim() || '';
           const chinese = zh.textContent?.trim() || '';
-          if (saveWord(korean, chinese)) {
-            addBtn.classList.add('saved');
-            addBtn.textContent = '✓';
-            showToast('已加入单词本：' + korean);
-          } else {
-            showToast('该单词已在单词本中');
-          }
+          saveLocal(korean, chinese);
+          saveToDb(korean, chinese);
+          addBtn.classList.add('saved');
+          addBtn.textContent = '✓';
+          showToast('已加入单词本：' + korean);
         }
         return;
       }
@@ -136,7 +172,7 @@ export default function ArticleContent({
     <div
       ref={containerRef}
       className="korea-article"
-      dangerouslySetInnerHTML={{ __html: html }}
+      dangerouslySetInnerHTML={{ __html: safeHtml }}
     />
   );
 }
