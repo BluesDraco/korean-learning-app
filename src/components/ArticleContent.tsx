@@ -4,7 +4,7 @@ import { useEffect, useRef, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { speak as speakKorean } from '@/lib/tts';
 import { db } from '@/lib/db';
-import DOMPurify from 'dompurify';
+import DOMPurify from 'isomorphic-dompurify';
 
 async function loadSavedKoreanWords(): Promise<Set<string>> {
   try {

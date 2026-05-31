@@ -1,17 +1,15 @@
 import type { Metadata, Viewport } from 'next';
-import dynamic from 'next/dynamic';
 import './globals.css';
 
 import { AppShell } from '@/components/AppShell';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { AuthProvider } from '@/components/AuthProvider';
 import { FontProvider } from '@/components/FontProvider';
+import { FloatingDecorations } from '@/components/FloatingDecorations';
 import { PageViewTracker } from '@/components/PageViewTracker';
-
-const FloatingDecorations = dynamic(() => import('@/components/FloatingDecorations').then((m) => ({ default: m.FloatingDecorations })), { ssr: false });
-const XpOverlay = dynamic(() => import('@/components/XpOverlay').then((m) => ({ default: m.XpOverlay })), { ssr: false });
-const FeedbackButton = dynamic(() => import('@/components/FeedbackButton').then((m) => ({ default: m.FeedbackButton })), { ssr: false });
-const ScrollToTop = dynamic(() => import('@/components/ScrollToTop'), { ssr: false });
+import { XpOverlay } from '@/components/XpOverlay';
+import { FeedbackButton } from '@/components/FeedbackButton';
+import ScrollToTop from '@/components/ScrollToTop';
 
 export const metadata: Metadata = {
   title: '한국어 - 韩语学习',
