@@ -308,7 +308,7 @@ export function Navbar() {
         <button
           onClick={() => setMobileDrawer(-1)}
           className={`flex flex-col items-center gap-0.5 py-2 px-1.5 text-[13px] transition-colors ${
-            pathname.startsWith('/settings') || pathname.startsWith('/messages') || pathname.startsWith('/korea') || pathname.startsWith('/ai') || pathname.startsWith('/expressions')
+            pathname.startsWith('/settings') || pathname.startsWith('/messages') || pathname.startsWith('/korea') || pathname.startsWith('/ai')
               ? 'text-[var(--pink-primary)]' : 'text-[var(--text-muted)]'
           }`}
         >

@@ -21,7 +21,7 @@ import {
   RefreshCw, Pencil, Mic, Keyboard, PenLine,
   Library,
   Palette, MapPin, UtensilsCrossed,
-  MessageSquare, MessageCircle, Search, Sparkles,
+  MessageSquare, Search, Sparkles,
   Music, Radio, TrendingUp, Lightbulb,
 } from 'lucide-react';
 
@@ -52,7 +52,6 @@ export const navGroups: NavGroup[] = [
       { label: '我的单词', ko: '내 단어', href: '/vocabulary', icon: BookOpen },
       { label: '词库', ko: '단어장', href: '/vocabulary/library', icon: Library },
       { label: '按等级', ko: '등급별', href: '/vocabulary/levels', icon: TrendingUp },
-      { label: '口语表达', ko: '구어 표현', href: '/expressions', icon: MessageCircle },
       { label: '韩语字典', ko: '사전', href: '/dictionary', icon: Search },
     ],
   },

@@ -37,7 +37,6 @@ const PUBLIC_PATHS = [
   '/korea/kpop/news',
   '/korea/travel',
   '/dictionary',
-  '/expressions',
   '/topik',
   '/tori/stickers',
 ];
