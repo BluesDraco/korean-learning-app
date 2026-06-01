@@ -10,7 +10,7 @@ import type { MilestoneType, UserAchievement } from '@/types';
 // ── Milestone Definitions ─────────────────────────────────────────
 
 const MILESTONES: Record<MilestoneType, { title: string; subtitle: string; icon: string }> = {
-  phonetics_complete: { title: '四十音毕业', subtitle: '托里和你一起学完了发音', icon: '🎓' },
+  phonetics_complete: { title: '韩文字母毕业', subtitle: '托里和你一起学完了发音', icon: '🎓' },
   streak_7: { title: '和托里一起坚持了7天', subtitle: '一周的陪伴刚刚开始', icon: '🔥' },
   streak_30: { title: '和托里一起坚持了30天', subtitle: '一个月的成长看得见', icon: '⭐' },
   streak_100: { title: '和托里一起坚持了100天', subtitle: '百天的坚持是奇迹', icon: '👑' },

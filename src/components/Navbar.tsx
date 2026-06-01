@@ -1,17 +1,24 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/components/AuthProvider';
 import {
-  Home, BookOpen, LayoutGrid, RefreshCw,
   ChevronRight, X, Sun, Moon, Shield, MessageSquare,
-  Ellipsis, User, Sparkles, Gamepad2,
+  User, Sparkles, Wrench, GraduationCap, Compass,
 } from 'lucide-react';
 import { useTheme } from '@/components/ThemeProvider';
 import { navGroups, type NavGroup } from '@/data/navigation';
+
+const mobileTabs = [
+  { label: '今日', href: '/daily',   icon: Sparkles },
+  { label: '我的', href: '/mine',     icon: User },
+  { label: '工具', href: '/tools',    icon: Wrench },
+  { label: '学习', href: '/learning', icon: GraduationCap },
+  { label: '探索', href: '/explore',  icon: Compass },
+];
 
 export function Navbar() {
   const pathname = usePathname();
@@ -19,7 +26,6 @@ export function Navbar() {
   const { theme, toggle } = useTheme();
   const { user, logout } = useAuth();
   const [expandedGroup, setExpandedGroup] = useState<number | null>(null);
-  const [mobileDrawer, setMobileDrawer] = useState<number | null>(null);
   const [unreadCount, setUnreadCount] = useState(0);
 
   // Fetch unread message count
@@ -40,8 +46,6 @@ export function Navbar() {
     );
     if (idx >= 0) setExpandedGroup(idx);
   }, [pathname]);
-
-  const closeMobileDrawer = useCallback(() => setMobileDrawer(null), []);
 
   const handleGroupClick = (group: NavGroup, i: number) => {
     if (group.children.length === 0) {
@@ -259,194 +263,27 @@ export function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile bottom bar — 5 core items: 首页 / 学习 / 复习 / 词汇 / 更多 */}
+      {/* Mobile bottom bar — 5 tabs: 今日｜我的｜工具｜学习｜探索 */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-[var(--bg-card)] border-t border-[var(--border-color)] flex justify-around z-50 pb-safe shadow-lg">
-        {/* 首页 */}
-        <Link
-          href="/"
-          className={`flex flex-col items-center gap-0.5 py-2 px-1.5 text-[13px] transition-colors ${
-            pathname === '/' ? 'text-[var(--pink-primary)]' : 'text-[var(--text-muted)]'
-          }`}
-        >
-          <Home size={22} />首页
-        </Link>
-
-        {/* 学习 */}
-        <button
-          onClick={() => setMobileDrawer(1)}
-          className={`flex flex-col items-center gap-0.5 py-2 px-1.5 text-[13px] transition-colors ${
-            navGroups[1].children.some((c) => pathname.startsWith(c.href))
-              ? 'text-[var(--pink-primary)]' : 'text-[var(--text-muted)]'
-          }`}
-        >
-          <BookOpen size={22} />学习
-        </button>
-
-        {/* 练习 */}
-        <button
-          onClick={() => setMobileDrawer(2)}
-          className={`flex flex-col items-center gap-0.5 py-2 px-1.5 text-[13px] transition-colors ${
-            navGroups[2].children.some((c) => pathname.startsWith(c.href))
-              ? 'text-[var(--pink-primary)]' : 'text-[var(--text-muted)]'
-          }`}
-        >
-          <Gamepad2 size={22} />练习
-        </button>
-
-        {/* 词汇 */}
-        <button
-          onClick={() => setMobileDrawer(3)}
-          className={`flex flex-col items-center gap-0.5 py-2 px-1.5 text-[13px] transition-colors ${
-            navGroups[3].children.some((c) => pathname.startsWith(c.href))
-              ? 'text-[var(--pink-primary)]' : 'text-[var(--text-muted)]'
-          }`}
-        >
-          <LayoutGrid size={22} />词汇
-        </button>
-
-        {/* 更多 — shows all groups as drawer */}
-        <button
-          onClick={() => setMobileDrawer(-1)}
-          className={`flex flex-col items-center gap-0.5 py-2 px-1.5 text-[13px] transition-colors ${
-            pathname.startsWith('/settings') || pathname.startsWith('/messages') || pathname.startsWith('/korea') || pathname.startsWith('/ai')
-              ? 'text-[var(--pink-primary)]' : 'text-[var(--text-muted)]'
-          }`}
-        >
-          <Ellipsis size={22} />更多
-        </button>
+        {mobileTabs.map((tab) => {
+          const active = tab.href === '/daily'
+            ? pathname === '/daily' || pathname === '/'
+            : pathname.startsWith(tab.href);
+          const Icon = tab.icon;
+          return (
+            <Link
+              key={tab.href}
+              href={tab.href}
+              className={`flex flex-col items-center gap-0.5 py-2 px-1.5 text-[13px] transition-colors ${
+                active ? 'text-[var(--pink-primary)]' : 'text-[var(--text-muted)]'
+              }`}
+            >
+              <Icon size={22} />
+              <span className="text-[11px]">{tab.label}</span>
+            </Link>
+          );
+        })}
       </nav>
-
-      {/* Mobile drawer overlay */}
-      {mobileDrawer !== null && (
-        <div className="md:hidden fixed inset-0 z-50">
-          <div className="absolute inset-0 bg-black/20" onClick={closeMobileDrawer} />
-          <div className="absolute bottom-0 left-0 right-0 bg-[var(--bg-card)] rounded-t-3xl shadow-xl animate-slide-up-drawer max-h-[65vh] overflow-y-auto">
-            {/* "更多" mode: show all groups */}
-            {mobileDrawer === -1 ? (
-              <>
-                <div className="flex items-center justify-between px-5 pt-5 pb-3">
-                  <span className="text-lg font-bold text-[var(--text-primary)]" style={{ fontFamily: "'KaiTi', 'STKaiti', cursive" }}>
-                    更多
-                  </span>
-                  <button onClick={closeMobileDrawer} className="p-1 text-[var(--text-secondary)]">
-                    <X size={22} />
-                  </button>
-                </div>
-                <div className="px-3 pb-6 space-y-4">
-                  {navGroups.map((group, i) => {
-                    const GroupIcon = group.icon;
-                    return (
-                      <div key={i}>
-                        <div className="flex items-center gap-2 px-4 py-1 text-xs text-[var(--text-muted)]">
-                          <GroupIcon size={14} />
-                          <span>{group.label}</span>
-                        </div>
-                        <div className="space-y-0.5 mt-1">
-                          {group.children.length === 0 ? (
-                            <Link
-                              href={group.href}
-                              onClick={closeMobileDrawer}
-                              className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)]"
-                            >
-                              <GroupIcon size={18} />
-                              <span>{group.label}</span>
-                            </Link>
-                          ) : (
-                            group.children.map((child, j) => {
-                              const ChildIcon = child.icon;
-                              const isActive = pathname === child.href ||
-                                (child.href !== '/' && pathname.startsWith(child.href));
-                              return (
-                                <Link
-                                  key={j}
-                                  href={child.href}
-                                  onClick={closeMobileDrawer}
-                                  className={`flex items-center gap-3 px-4 py-3 rounded-2xl text-sm transition-all ${
-                                    isActive
-                                      ? 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] font-medium'
-                                      : 'text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)]'
-                                  }`}
-                                >
-                                  <ChildIcon size={18} />
-                                  <span>{child.label}</span>
-                                  <span className="text-xs text-[var(--text-muted)]">{child.ko}</span>
-                                </Link>
-                              );
-                            })
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                  {/* Settings & Messages quick links */}
-                  <div className="border-t border-[var(--border-color)] pt-3 space-y-1">
-                    {user ? (
-                      <Link href="/messages" onClick={closeMobileDrawer}
-                        className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)]"
-                      >
-                        <MessageSquare size={18} />私信
-                      </Link>
-                    ) : (
-                      <>
-                        <Link href="/auth/login" onClick={closeMobileDrawer}
-                          className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-[var(--pink-primary)] hover:bg-[var(--pink-primary)]/5"
-                        >
-                          <User size={18} />登录
-                        </Link>
-                        <Link href="/auth/register" onClick={closeMobileDrawer}
-                          className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)]"
-                        >
-                          <Sparkles size={18} />注册
-                        </Link>
-                      </>
-                    )}
-                    <Link href="/settings" onClick={closeMobileDrawer}
-                      className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)]"
-                    >
-                      <User size={18} />设置
-                    </Link>
-                  </div>
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="flex items-center justify-between px-5 pt-5 pb-3">
-                  <span className="text-lg font-bold text-[var(--text-primary)]" style={{ fontFamily: "'KaiTi', 'STKaiti', cursive" }}>
-                    {navGroups[mobileDrawer].label}
-                    <span className="text-sm font-normal text-[var(--text-muted)] ml-2">{navGroups[mobileDrawer].ko}</span>
-                  </span>
-                  <button onClick={closeMobileDrawer} className="p-1 text-[var(--text-secondary)]">
-                    <X size={22} />
-                  </button>
-                </div>
-                <div className="px-3 pb-6 space-y-1">
-                  {navGroups[mobileDrawer].children.map((child, j) => {
-                    const ChildIcon = child.icon;
-                    const isActive = pathname === child.href ||
-                      (child.href !== '/' && pathname.startsWith(child.href));
-                    return (
-                      <Link
-                        key={j}
-                        href={child.href}
-                        onClick={closeMobileDrawer}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-2xl text-sm transition-all ${
-                          isActive
-                            ? 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] font-medium'
-                            : 'text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)]'
-                        }`}
-                      >
-                        <ChildIcon size={18} />
-                        <span>{child.label}</span>
-                        <span className="text-xs text-[var(--text-muted)]">{child.ko}</span>
-                      </Link>
-                    );
-                  })}
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-      )}
 
       {/* Spacer for desktop sidebar — matches sidebar width */}
       <div className="hidden md:block md:w-14 lg:w-52 shrink-0 transition-[width] duration-200" />

@@ -1,0 +1,11 @@
+src/app/achievement/card/page.tsx:  phonetics_complete: { title: '四十音毕业', subtitle: '托里和你一起学完了发音', icon: '🎓' },
+src/app/daily/page.tsx:          查看30天课程路线
+src/app/learning/page.tsx:    desc: '从四十音开始，系统认识韩文字母和拼读规则',
+src/components/Onboarding.tsx:                  { key: 'absolute_beginner', level: 'beginner' as const, label: '完全零基础', desc: '从四十音和问候语开始', emoji: '🌱' },
+src/components/ReadingPractice.tsx:            sourceDetail: '四十音综合拼读',
+src/data/pronunciation/content.ts:    tips: ['来自30天课程', '先听标准音，再跟读'],
+src/data/pronunciation/letter-map.ts: * Used to bridge the Hangul module (四十音) with the Pronunciation module.
+src/data/thirtyDayCourse.ts:    description: '后15天内容测试及30天课程毕业',
+src/data/thirtyDayCourse.ts:      explanation: '恭喜完成30天课程！你已掌握：敬语体系(해요체)、时态(现在/过去/将来)、助词(은/는/이/가/을/를/에/에서/까지/보다/도/의)、连接词(지만/아서/으면/면서)和句式(주세요/주다/있다/보다/주다/수 있다/거예요)。这是韩语的坚实基础。',
+src/data/thirtyDayCourse.ts:      prompt: '恭喜完成30天课程！写一段话给自己，回顾收获并展望未来。',
+src/types/index.ts:  | 'phonetics_complete'    // 完成四十音学习

@@ -1,0 +1,1452 @@
+src/app/achievement/card/page.tsx:  phonetics_complete: { title: '四十音毕业', subtitle: '托里和你一起学完了发音', icon: '🎓' },
+src/app/achievement/card/page.tsx:  days_100: { title: '学习满100天', subtitle: '和托里相伴走过百天', icon: '🌈' },
+src/app/achievement/card/page.tsx:  ctx.fillText('韩语学习日记', W / 2, 100);
+src/app/achievement/card/page.tsx:  const statsText = `复习 ${stats.reviews} 词  ·  学习 ${stats.days} 天  ·  AI对话 ${stats.chats} 次`;
+src/app/achievement/card/page.tsx:        <p className="text-sm text-[var(--text-secondary)]">继续学习，托里会在这里等你！</p>
+src/app/achievement/card/page.tsx:          去学习
+src/app/achievement/card/page.tsx:          <span>学习 {stats.days} 天</span>
+src/app/admin/ambassadors/page.tsx:          <h1 className="text-2xl font-bold text-[var(--text-primary)]">学习大使</h1>
+src/app/admin/ambassadors/page.tsx:            <p className="text-sm text-[var(--text-muted)]">还没有学习大使</p>
+src/app/admin/layout.tsx:          返回首页
+src/app/admin/users/page.tsx:                <th className="text-center px-4 py-3 text-xs text-[var(--text-muted)] font-medium">学习天数</th>
+src/app/admin/users/[id]/page.tsx:          { label: '学习天数', value: data.totalStudyDays, unit: '天' },
+src/app/admin/users/[id]/page.tsx:          { label: '学习时长', value: Math.round(data.totalMinutesStudied / 60), unit: '小时' },
+src/app/admin/users/[id]/page.tsx:          <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">最近7天学习时长</h3>
+src/app/ai/analyze/page.tsx:              <p className="text-sm text-[var(--text-secondary)]">未能识别到词汇或语法</p>
+src/app/ai/analyze/page.tsx:            支持识别词典词汇、助词语法和句型模式
+src/app/ai/chat/page.tsx:            选择情景，开启沉浸式韩语对话练习
+src/app/ai/chat/page.tsx:            选择情景，开启沉浸式韩语对话练习
+src/app/ai/chat/page.tsx:            选择一个情景开始对话练习
+src/app/ai/chat/page.tsx:            每次对话结束后，新词汇将自动加入你的单词库
+src/app/ai/page.tsx:    description: '8个生活场景的沉浸式对话练习（便利店、餐厅、问路、咖啡厅等）',
+src/app/ai/page.tsx:    description: '根据你的兴趣和水平，AI 自动生成新的绘本故事和练习题',
+src/app/ai/page.tsx:        <h1 className="text-2xl font-bold text-[var(--text-primary)] section-header">AI 学习助手</h1>
+src/app/ai/page.tsx:          目前使用本地智能分析，未来将接入大语言模型，提供更智能的韩语学习体验
+src/app/ai/voice/page.tsx:  { emoji: '🍜', label: '韩国美食', prompt: '한국 음식 중에 뭐가 제일 맛있어요?' },
+src/app/ai/voice/page.tsx:  { emoji: '✈️', label: '去韩国旅行', prompt: '한국 여행 가면 어디에 가야 돼요?' },
+src/app/api/admin/content/route.ts:    { module: '词汇库', icon: '📖', totalItems: 0, lastUpdated: 0 },
+src/app/api/admin/dashboard/route.ts:    dictation: { feature: '听写练习', icon: '🎧' },
+src/app/api/admin/dashboard/route.ts:    flashcard: { feature: '闪卡学习', icon: '🃏' },
+src/app/api/admin/dashboard/route.ts:    video_study: { feature: '视频学习', icon: '🎬' },
+src/app/api/admin/dashboard/route.ts:    learn_word: { feature: '学习新词', icon: '📖' },
+src/app/api/admin/dashboard/route.ts:    grammar: { feature: '语法学习', icon: '📐' },
+src/app/api/admin/dashboard/route.ts:      { feature: '听写练习', icon: '🎧', count: 0, totalPercent: 0 },
+src/app/api/ai/voice/route.ts:            content: `你是 토리(Tori)，一只可爱的兔子，也是用户的韩语口语练习伙伴。用户是正在学习韩语的中国学生。
+src/app/api/ai/voice/route.ts:6. 可以聊日常生活、韩国文化、学习心得等话题
+src/app/api/buddy/invites/consume/route.ts:    return NextResponse.json({ error: '不能添加自己为学习搭子' }, { status: 400 });
+src/app/api/buddy/invites/consume/route.ts:    return NextResponse.json({ error: '你们已经是学习搭子了' }, { status: 409 });
+src/app/api/kpop-news/route.ts:1. 每条返回：id(英文)、title(吸引眼球的标题，可优化原标题)、summary(2-4句中文概述视频/话题内容)、tag(回归/新歌/演唱会/OST/颁奖/趋势/粉丝/综艺/直拍)、source(bilibili或weibo)、sourceUrl(原始链接)、bvid(仅B站视频需要)、pic(仅B站视频需要)、author(仅B站视频需要)、vocab(3-5个韩语关键词汇)
+src/app/api/kpop-news/route.ts:3. 词汇选和内容相关的核心韩语词
+src/app/auth/login/page.tsx:          返回首页
+src/app/auth/login/page.tsx:            <p className="text-xs text-[var(--text-muted)] mt-1">登录你的学习账户</p>
+src/app/auth/register/page.tsx:          返回首页
+src/app/auth/register/page.tsx:            <p className="text-xs text-[var(--text-muted)] mt-1">创建你的学习账户</p>
+src/app/buddy/invite/page.tsx:      ctx.fillText('找个学习搭子', W / 2, 300);
+src/app/buddy/invite/page.tsx:      ctx.fillText('扫描二维码或点击链接，和托里一起学习吧', W / 2, H - 120);
+src/app/buddy/invite/page.tsx:              <h1 className="text-lg font-bold text-[var(--text-primary)]">接受学习搭子邀请</h1>
+src/app/buddy/invite/page.tsx:            <h1 className="text-lg font-bold text-[var(--text-primary)]">发起学习搭子</h1>
+src/app/buddy/invite/page.tsx:                <p className="text-sm font-medium text-[var(--text-primary)] mb-2">学习目标</p>
+src/app/buddy/invite/page.tsx:                <p className="text-sm font-medium text-[var(--text-primary)] mb-2">每天学习时间</p>
+src/app/buddy/page.tsx:        <h1 className="text-xl font-bold text-[var(--text-primary)]">找个一起学习的朋友吧</h1>
+src/app/buddy/[id]/page.tsx:        <h1 className="text-lg font-bold text-[var(--text-primary)]">学习搭子</h1>
+src/app/course/page.tsx:          <span className="text-sm font-medium text-[var(--text-primary)]">学习进度</span>
+src/app/daily/page.tsx:          <h1 className="text-2xl font-bold text-[var(--text-primary)] section-header">今日学习</h1>
+src/app/daily/page.tsx:          查看30天课程路线
+src/app/diary/[token]/DiaryClient.tsx:  if (days < 7) return '刚开始学习的每一天都是闪亮的！托里会一直陪着你 🌱';
+src/app/diary/[token]/DiaryClient.tsx:  if (days < 100) return '学习成为了一种习惯，托里最喜欢和你一起学习的时光 ✨';
+src/app/diary/[token]/DiaryClient.tsx:  return '百天的坚持，你已经是托里心中最棒的学习伙伴了！未来还要一起走 🌟';
+src/app/diary/[token]/DiaryClient.tsx:          <h1 className="text-2xl font-bold text-[var(--text-primary)]">韩语学习日记</h1>
+src/app/diary/[token]/DiaryClient.tsx:              <Star size={14} className="fill-current" /> 深度学习者
+src/app/diary/[token]/DiaryClient.tsx:            {startDate} 加入 · 已学习 {data.studyDays} 天
+src/app/diary/[token]/DiaryClient.tsx:            { label: '学习单词', value: data.totalWords, icon: '📚' },
+src/app/diary/[token]/DiaryClient.tsx:              最常复习的词汇
+src/app/diary/[token]/DiaryClient.tsx:          韩语学习日记 · 和托里一起成长
+src/app/diary/[token]/page.tsx:    return { title: '页面不存在 - 韩语学习日记' };
+src/app/diary/[token]/page.tsx:    title: `${data.nickname} 的学习日记 - 韩语学习日记`,
+src/app/diary/[token]/page.tsx:    description: `${data.nickname} 已经坚持学习 ${data.studyDays} 天，掌握了 ${data.totalWords} 个韩语单词！`,
+src/app/diary/[token]/page.tsx:      title: `${data.nickname}的韩语学习日记`,
+src/app/diary/[token]/page.tsx:      description: `已学习${data.studyDays}天 · ${data.totalWords}个单词 · 和托里一起成长`,
+src/app/dictation/page.tsx:              {mode === 'daily' ? '今日挑战完成!' : '练习完成!'}
+src/app/dictation/page.tsx:          <h1 className="text-xl font-bold text-[var(--text-primary)]">没有可练习的内容</h1>
+src/app/dictation/page.tsx:        <h1 className="text-2xl font-bold text-[var(--text-primary)]">听写练习</h1>
+src/app/dictionary/page.tsx:          收录 44,000+ 词条，来自国立国语院韩国语基础词典
+src/app/grammar/page.tsx:        { prompt: '"在学校学习"', options: ['학교에 공부해요.', '학교에서 공부해요.'], answer: '학교에서 공부해요.', explanation: '공부하다 是动作，用 에서。' },
+src/app/grammar/page.tsx:              <p className="text-[10px] text-[var(--text-muted)]">学习中</p>
+src/app/grammar/page.tsx:            开始 3 分钟练习
+src/app/grammar/page.tsx:            <p className="text-sm font-bold text-[var(--text-primary)] mb-3">继续学习</p>
+src/app/grammar/page.tsx:                      {state.status === 'mastered' ? '已掌握' : state.status === 'difficult' ? '易错' : '学习中'}
+src/app/grammar/page.tsx:        <p className="text-[var(--text-secondary)] text-sm mt-1">按 TOPIK 等级和分类学习韩语语法</p>
+src/app/HomePage.tsx:    hour >= 14 && hour < 18 ? '下午好 🍵 托里在等你一起学习' :
+src/app/HomePage.tsx:    '这么晚还在学习 💜 注意休息，明天继续';
+src/app/HomePage.tsx:        <span className="text-xl ml-1 font-extrabold text-[var(--text-primary)]" style={{ fontFamily: "'KaiTi', 'STKaiti', system-ui, sans-serif" }}>韩语学习日记</span>
+src/app/HomePage.tsx:              {profile ? `안녕하세요, ${profile.nickname}` : '开始学习'}
+src/app/HomePage.tsx:      {/* Main CTA — 开始今日学习 */}
+src/app/HomePage.tsx:            <div className="text-lg font-bold text-white">开始今日学习</div>
+src/app/HomePage.tsx:            已掌握 <span className="font-bold text-[var(--mint-soft)]">{stats.masteredCount}</span> 个单词，继续学习新的吧
+src/app/HomePage.tsx:                <span className="text-xs text-[var(--text-secondary)]">词汇进度</span>
+src/app/HomePage.tsx:            <span className="text-sm font-medium text-[var(--text-primary)]">今日学习建议</span>
+src/app/HomePage.tsx:                  text: `今日还需学习 ${wordsLeft} 个单词才能完成目标（${todayLog?.wordsLearned || 0}/${profile.dailyGoalWords}）`,
+src/app/HomePage.tsx:                  action: '去学习',
+src/app/HomePage.tsx:                  action: '去学习',
+src/app/HomePage.tsx:              <div className="text-sm font-medium text-[var(--text-primary)]">听写练习</div>
+src/app/HomePage.tsx:              <div className="text-sm font-medium text-[var(--text-primary)]">发音练习</div>
+src/app/HomePage.tsx:              <div className="text-sm font-medium text-[var(--text-primary)]">学习统计</div>
+src/app/HomePage.tsx:          { label: '学习中', value: stats.learningCount, color: 'text-[var(--peach-soft)]' },
+src/app/HomePage.tsx:            <p className="text-[var(--text-muted)] text-sm">还没有单词，去导入视频或开始每日学习吧</p>
+src/app/HomePage.tsx:              const masteryLabels = { new: '新词', learning: '学习中', reviewing: '复习中', mastered: '已掌握' };
+src/app/knowledge/page.tsx:          按分类学习韩语单词 · {knowledgeCategories.length} 个分类 · 每个单词配有罗马音、例句和用法提示
+src/app/korea/culture/page.tsx:        <h1 className="text-2xl font-bold text-[var(--text-primary)]">👘 韩国文化</h1>
+src/app/korea/culture/page.tsx:          从传统韩服到现代K-POP，了解丰富多彩的韩国文化
+src/app/korea/culture/[slug]/page.tsx:        <Link href="/korea/culture" className="hover:text-[var(--text-primary)] transition-colors">🇰🇷 韩国文化</Link>
+src/app/korea/food/page.tsx:        <h1 className="text-2xl font-bold text-[var(--text-primary)]">🍖 韩国美食</h1>
+src/app/korea/food/page.tsx:          从街头小吃到宫廷料理，探索韩国饮食文化
+src/app/korea/food/[slug]/page.tsx:        <Link href="/korea/food" className="hover:text-[var(--text-primary)] transition-colors">🇰🇷 韩国美食</Link>
+src/app/korea/kpop/page.tsx:            <div className="text-sm text-[var(--text-muted)]">{totalWords}+ 韩语词汇等你学</div>
+src/app/korea/travel/page.tsx:        <h1 className="text-2xl font-bold text-[var(--text-primary)]">✈️ 韩国旅行</h1>
+src/app/korea/travel/page.tsx:          探索韩国热门城市，学实用的旅行韩语
+src/app/korea/travel/[slug]/page.tsx:        <Link href="/korea/travel" className="hover:text-[var(--text-primary)] transition-colors">🇰🇷 韩国旅行</Link>
+src/app/layout.tsx:  title: '한국어 - 韩语学习',
+src/app/layout.tsx:    title: '韩语学习',
+src/app/learn/page.tsx:          <span className="text-[13px] ml-1">词汇 · 语法 · 默写 · 听力 · 测试</span>
+src/app/learn/page.tsx:          <h1 className="text-2xl font-bold text-[var(--text-primary)] section-header">每日学习</h1>
+src/app/learn/page.tsx:            <span className="text-xs text-[var(--text-secondary)]">学习进度</span>
+src/app/learn/page.tsx:            继续学习第 {profile.currentUnit} 单元
+src/app/learn/page.tsx:          {['词汇', '语法', '默写', '听力', '测试'].map((label, i) => (
+src/app/learn/page.tsx:          {['词汇', '语法', '默写', '听力', '测试'].map((label, i) => (
+src/app/learn/page.tsx:                <Edit3 size={14} /> 专项练习
+src/app/learn/page.tsx:                  <p className="text-xs text-[var(--text-muted)] uppercase tracking-wider">造句练习</p>
+src/app/learn/page.tsx:          {['词汇', '语法', '默写', '听力', '测试'].map((label, i) => (
+src/app/learn/page.tsx:          {['词汇', '语法', '默写', '听力', '测试'].map((label, i) => (
+src/app/learn/page.tsx:          {['词汇', '语法', '默写', '听力', '测试'].map((label, i) => (
+src/app/learn/page.tsx:            {currentQ.type === 'vocab-ko' ? '词汇·韩→中' :
+src/app/learn/page.tsx:             currentQ.type === 'vocab-zh' ? '词汇·中→韩' :
+src/app/learn/picture-books/page.tsx:          <h1 className="text-2xl font-bold text-[var(--text-primary)] section-header">绘本学习</h1>
+src/app/learn/picture-books/page.tsx:          <span className="text-sm font-medium text-[var(--text-primary)]">为什么选择绘本学习？</span>
+src/app/learn/picture-books/[id]/page.tsx:            学到的词汇
+src/app/learn/picture-books/[id]/page.tsx:            朗读全部词汇
+src/app/phonetics/page.tsx:          { original: '한국어', originalRead: '한구거', meaning: '韩国语' },
+src/app/phonetics/page.tsx:          21个元音 + 19个辅音，科学分步学习。15分钟看懂所有韩文 — 这是你韩语学习的地基模块
+src/app/phonetics/page.tsx:      {/* Top-level tab switcher: 分步学习 | 字母表 | 连读规则 */}
+src/app/phonetics/page.tsx:          分步学习
+src/app/phonetics/page.tsx:      {/* ── 分步学习 tab ── */}
+src/app/phonetics/page.tsx:        <span className="text-xs text-[var(--text-muted)] font-medium">测验练习</span>
+src/app/phonetics/rules/page.tsx:          { original: '한국어', originalRead: '한구거', meaning: '韩国语' },
+src/app/phonetics/rules/page.tsx:        <span className="text-xs text-[var(--text-muted)] font-medium">测验练习</span>
+src/app/pronunciation/page.tsx:    key: 'syllable', title: '音节练习', subtitle: '基础音节 · 送气音节 · 紧音音节',
+src/app/pronunciation/page.tsx:          发音练习
+src/app/pronunciation/page.tsx:            <p className="text-[10px] text-[var(--text-muted)]">练习内容</p>
+src/app/pronunciation/page.tsx:            练习你刚学过的 {courseItems.items.length} 个单词发音
+src/app/pronunciation/page.tsx:            练习课程单词发音
+src/app/pronunciation/page.tsx:          <span className="text-sm font-bold text-[var(--text-primary)]">今日发音练习</span>
+src/app/pronunciation/page.tsx:          开始今日发音练习
+src/app/reading/[id]/page.tsx:  goals: '学习目标', vocab: '核心词汇', reading: '分段阅读',
+src/app/reading/[id]/page.tsx:  key_sentence: '重点句型', quiz: '理解检测', output: '输出练习',
+src/app/reading/[id]/page.tsx:            开始预习词汇 <ChevronRight size={18} />
+src/app/reading/[id]/page.tsx:              核心词汇 · 读前预热
+src/app/reading/[id]/page.tsx:              返回词汇
+src/app/reading/[id]/page.tsx:                    {q.type === 'main_idea' ? '主旨' : q.type === 'vocab' ? '词汇' : q.type === 'grammar' ? '语法' : '细节'}
+src/app/reading/[id]/page.tsx:                  {quizIdx + 1 >= article.questions.length ? '进入输出练习' : '下一题'}
+src/app/reading/[id]/page.tsx:              <span className="text-sm font-bold text-[var(--text-primary)]">输出练习</span>
+src/app/reading/[id]/page.tsx:              <span className="text-[var(--text-muted)]">核心词汇</span>
+src/app/review/page.tsx:              返回首页
+src/app/review/page.tsx:            <button onClick={() => router.push('/learn')} className="px-6 py-3 bg-[var(--pink-primary)] hover:brightness-90 text-white text-sm font-bold rounded-full transition-all active:scale-95 shadow-md">去学习新词</button>
+src/app/review/page.tsx:            <button onClick={() => router.push('/')} className="px-6 py-3 bg-[var(--bg-card)]/80 border border-[var(--border-default)] hover:bg-[var(--bg-muted)] text-[var(--text-primary)] text-sm font-medium rounded-full transition-all active:scale-95">返回首页</button>
+src/app/settings/page.tsx:          <p className="text-[var(--text-secondary)] text-sm mt-1">个性化你的学习体验</p>
+src/app/settings/page.tsx:            <div className="text-sm text-[var(--text-primary)] font-medium">连续学习 {profile.streak} 天</div>
+src/app/settings/page.tsx:          <h2 className="text-lg font-medium text-[var(--text-primary)]">学习目标</h2>
+src/app/settings/page.tsx:          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">每日学习单词: {profile.dailyGoalWords} 个</label>
+src/app/settings/page.tsx:          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">每日学习时间: {profile.dailyGoalMinutes} 分钟</label>
+src/app/shadowing/page.tsx:        <p className="text-[var(--text-secondary)] text-sm mt-1">粘贴视频链接，导入字幕，逐句影子跟读学习</p>
+src/app/shadowing/page.tsx:            开始学习
+src/app/shadowing/page.tsx:          <p className="text-[var(--text-muted)] text-sm">还没有学习过的视频</p>
+src/app/shadowing/page.tsx:          <h2 className="text-sm font-medium text-[var(--text-secondary)] uppercase tracking-wider">学习记录</h2>
+src/app/shadowing/[id]/page.tsx:          {isPlaying ? '暂停同步' : '开始学习'}
+src/app/stats/page.tsx:        { name: '学习中', value: masteryCount.learning },
+src/app/stats/page.tsx:        { skill: '词汇量', score: vocabScore, fullMark: 100 },
+src/app/stats/page.tsx:            <h1 className="text-2xl font-bold text-[var(--text-primary)]">学习统计</h1>
+src/app/stats/page.tsx:            <p className="text-[var(--text-secondary)] text-sm mt-1">追踪你的学习进度与成就</p>
+src/app/stats/page.tsx:                <span className="text-sm font-medium text-[var(--text-primary)]">学习连续</span>
+src/app/stats/page.tsx:            <span className="text-sm font-medium text-[var(--text-primary)]">即将遗忘的词汇</span>
+src/app/topik/page.tsx:          <h1 className="text-2xl font-bold text-[var(--text-primary)] section-header">TOPIK 模拟练习</h1>
+src/app/topik/page.tsx:              每部分限时完成，选择答案后显示解析和核心词汇
+src/app/topik/page.tsx:                  <span className="text-[13px] text-[var(--text-muted)]">核心词汇:</span>
+src/app/topik/page.tsx:                        去练习这个句型 →
+src/app/topik/page.tsx:              重新练习
+src/app/tori/stickers/page.tsx:    description: '托里的日常生活，学习韩语必备表情包',
+src/app/tori/stickers/page.tsx:    name: '托里学习',
+src/app/tori/stickers/page.tsx:    description: '学习中的托里，加油打气超可爱',
+src/app/tori/stickers/page.tsx:    description: '韩语学习专属表情，每个都有韩文配音',
+src/app/tori/stickers/[id]/page.tsx:    { captionZh: '学习中', captionKo: '공부 중' },
+src/app/typing/page.tsx:            打字练习
+src/app/typing/page.tsx:          <p className="text-xs text-[var(--text-muted)] mt-0.5">韩文盲打训练 · 逐句练习，键盘始终可见</p>
+src/app/typing/page.tsx:              <Play size={20} /> 开始练习
+src/app/typing/page.tsx:                  <RotateCcw size={17} /> 重新练习
+src/app/vocabulary/books/[id]/flashcards/page.tsx:          <p className="text-xs text-[var(--text-muted)]">闪卡学习</p>
+src/app/vocabulary/books/[id]/page.tsx:          开始学习
+src/app/vocabulary/books/[id]/page.tsx:              new: '新词', learning: '学习中', reviewing: '复习中', mastered: '已掌握',
+src/app/vocabulary/levels/page.tsx:          系统打通词汇盲区，逐级攻克 TOPIK 考试词汇
+src/app/vocabulary/levels/[level]/page.tsx:              TOPIK {level <= 2 ? 'I' : 'II'} · 核心词汇 {lvl.totalCount.toLocaleString()} 词
+src/app/vocabulary/levels/[level]/page.tsx:            <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: 'var(--peach-soft)' }} /> 学习 {learning}
+src/app/vocabulary/levels/[level]/page.tsx:                      <span className="text-xs px-1.5 py-0.5 rounded-full bg-[var(--peach-soft)]/10 text-[var(--peach-soft)]">学习中</span>
+src/app/vocabulary/library/page.tsx:          系统化词汇学习资源，按场景、分级或教材探索
+src/app/vocabulary/page.tsx:          已掌握 {stats.mastered} · 学习中 {stats.learning} · 新词 {stats.newWords}
+src/app/vocabulary/page.tsx:            词汇学习
+src/app/vocabulary/page.tsx:              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-yellow-400" />学习中 {stats.learning}</span>
+src/app/vocabulary/page.tsx:          <p className="text-sm text-[var(--text-muted)] max-w-xs mb-6">从场景词包或课程开始你的韩语学习之旅</p>
+src/app/vocabulary/page.tsx:              <span className="text-sm font-bold text-[var(--text-primary)]">今日词汇任务</span>
+src/app/vocabulary/page.tsx:              {stats.dueReview === 0 && stats.newWords === 0 ? '暂无待复习词汇' : '开始今日词汇练习'}
+src/app/vocabulary/page.tsx:              <span className="text-sm font-bold text-[var(--text-primary)]">我的词汇进度</span>
+src/app/vocabulary/page.tsx:              <span>学习中 {stats.learning}</span>
+src/app/vocabulary/themes/[id]/page.tsx:          <p className="text-xs text-[var(--text-muted)]">已学习</p>
+src/app/vocabulary/themes/[id]/page.tsx:                        <span className="text-xs px-1.5 py-0.5 rounded-full bg-[var(--peach-soft)]/10 text-[var(--peach-soft)]">学习中</span>
+src/app/vocabulary/themes/[id]/page.tsx:              {addedCount > 0 ? `已添加 ${addedCount} 个新词到复习队列` : `${masteredCount} 掌握 · ${learningCount} 学习中 · ${totalWords - masteredCount - learningCount} 未接触`}
+src/app/vocabulary/themes/[id]/page.tsx:            {addedCount > 0 ? '已加入复习' : addingAll ? '添加中...' : '开始闪卡学习'}
+src/app/vocabulary/yonsei/page.tsx:          <p className="text-sm text-[var(--text-secondary)] mt-1">연세 한국어 教材同步词汇表，按单元导入学习</p>
+src/app/writing/page.tsx:          <h1 className="text-2xl font-bold text-[var(--text-primary)]">写作练习</h1>
+src/app/writing/page.tsx:                { label: '词汇多样性', key: 'vocabulary' as const },
+src/app/writing/page.tsx:                 scores.overall >= 60 ? '还有提升空间，加油！' : '需要多加练习，别灰心！'}
+src/app/writing/page.tsx:                建议练习的句型
+src/app/writing/page.tsx:                    { label: '词汇多样性', value: d.scores.vocabulary },
+src/app/writing/page.tsx:          <p className="text-xs text-[var(--text-muted)] mt-1">完成写作练习后，记录将显示在这里</p>
+src/components/ArticleLearningModules.tsx:        <span className="text-xs font-medium text-[var(--text-muted)] tracking-wider">📚 深度学习模块</span>
+src/components/ArticleLearningModules.tsx:// ── 输出练习 ──────────────────────────────────────────────
+src/components/grammar/GrammarSession.tsx:  substitution: '替换练习', choice: '判断对错', output: '造句输出',
+src/components/grammar/GrammarSession.tsx:              开始学习
+src/components/grammar/GrammarSession.tsx:              {subTemplates.length > 0 ? '开始练习' : '继续'}
+src/components/grammar/GrammarSession.tsx:            <Badge text="替换练习" />
+src/components/korea/CultureSection.tsx:                      <BookOpen size={14} /> 相关词汇
+src/components/korea/HistorySection.tsx:                          <BookOpen size={14} /> 相关词汇
+src/components/lesson/BrowseDrawer.tsx:            <h3 className="text-sm font-bold text-[var(--text-primary)] mb-3">✍️ 输出练习</h3>
+src/components/lesson/cards/OutputCard.tsx:        <span className="text-sm font-bold text-[var(--text-primary)]">输出练习</span>
+src/components/lesson/cards/SummaryCard.tsx:        <span className="text-sm font-bold text-[var(--text-primary)]">学习总结</span>
+src/components/lesson/CompletionView.tsx:            label="连续学习"
+src/components/lesson/CompletionView.tsx:          <span className="text-sm font-bold text-[var(--text-primary)]">输出练习</span>
+src/components/lesson/CompletionView.tsx:          <span className="text-sm font-bold text-[var(--text-primary)]">发音练习</span>
+src/components/lesson/CompletionView.tsx:              <span className="text-sm font-bold text-[var(--text-primary)]">句型练习</span>
+src/components/lesson/CompletionView.tsx:          {source === 'daily' ? '返回今日学习' : '返回课程地图'}
+src/components/lesson/LessonEngine.tsx:      case 'output': return `输出练习 · ${currentCard + 1}/${totalCards}`;
+src/components/lesson/MicroFeedback.tsx:    '学习中，很正常',
+src/components/Navbar.tsx:      {/* Mobile bottom bar — 5 core items: 首页 / 学习 / 复习 / 词汇 / 更多 */}
+src/components/Navbar.tsx:        {/* 首页 */}
+src/components/Navbar.tsx:          <Home size={22} />首页
+src/components/Navbar.tsx:        {/* 学习 */}
+src/components/Navbar.tsx:          <BookOpen size={22} />学习
+src/components/Navbar.tsx:        {/* 练习 */}
+src/components/Navbar.tsx:          <Gamepad2 size={22} />练习
+src/components/Navbar.tsx:        {/* 词汇 */}
+src/components/Navbar.tsx:          <LayoutGrid size={22} />词汇
+src/components/Onboarding.tsx:                  托里会根据你的水平推荐学习内容
+src/components/Onboarding.tsx:                  { key: 'absolute_beginner', level: 'beginner' as const, label: '完全零基础', desc: '从四十音和问候语开始', emoji: '🌱' },
+src/components/Onboarding.tsx:                  🐰 学会这个词，你就能和任何韩国人打招呼了！
+src/components/Onboarding.tsx:                  继续学习
+src/components/PhoneticsWelcome.tsx:              开始学习
+src/components/ProgressivePhonetics.tsx:            <span className="text-xs text-[var(--text-secondary)]">学习进度</span>
+src/components/ProgressivePhonetics.tsx:            <p className="text-sm font-bold text-[var(--text-primary)]">축하합니다! 韩语40音全部学习完毕！</p>
+src/components/ProgressivePhonetics.tsx:                          练习发音 <ArrowRight size={12} />
+src/components/pronunciation/PronunciationSession.tsx:        <h2 className="text-lg font-bold text-[var(--text-primary)]">暂无发音练习内容</h2>
+src/components/pronunciation/PronunciationSession.tsx:        <p className="text-sm text-[var(--text-muted)]">请先添加一些发音练习项目</p>
+src/components/pronunciation/PronunciationSession.tsx:          <h1 className="text-2xl font-bold text-[var(--text-primary)]">发音练习完成!</h1>
+src/components/pronunciation/PronunciationSession.tsx:            完成了 {completedItems} 个内容，开口练习 {totalAttempts} 次
+src/components/pronunciation/PronunciationSession.tsx:            <div className="text-xs text-[var(--text-muted)]">练习内容</div>
+src/components/pronunciation/PronunciationSession.tsx:            <p className="text-[10px] text-[var(--mint-soft)] mt-1">已练习</p>
+src/components/pronunciation/PronunciationSession.tsx:    target: '了解目标', listen: '听标准音', segments: '分段练习',
+src/components/pronunciation/PronunciationSession.tsx:              开始练习
+src/components/pronunciation/PronunciationSession.tsx:            <StepBadge label="分段练习" />
+src/components/pronunciation/PronunciationSession.tsx:                {itemIdx + 1 >= items.length ? '完成练习' : '下一题'}
+src/components/ReadingPractice.tsx:            sourceDetail: '四十音综合拼读',
+src/components/ReadingPractice.tsx:            开始拼读练习（闪卡模式）
+src/components/ReadingPractice.tsx:                ? '拼读练习完成！'
+src/components/ReadingPractice.tsx:              重新练习
+src/components/VisitorCounter.tsx:      <span>今日学习氛围值</span>
+src/components/vocabulary/LevelsSection.tsx:                      <span className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--peach-soft)' }} /> 学习 {progress.learning}
+src/components/vocabulary/LevelsSection.tsx:                      <span className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--peach-soft)' }} /> 学习 {progress.learning}
+src/components/vocabulary/ThemesSection.tsx:  '旅行韩国': '✈️',
+src/components/vocabulary/ThemesSection.tsx:  '职场学习': '💼',
+src/components/vocabulary/VocabularySession.tsx:  'intro': '新词学习',
+src/components/vocabulary/VocabularySession.tsx:          <h1 className="text-2xl font-bold text-[var(--text-primary)]">练习完成!</h1>
+src/components/vocabulary/VocabularySession.tsx:              连续学习 {streakInfo.streak} 天
+src/components/vocabulary/VocabularySession.tsx:            <div className="text-xs text-[var(--text-muted)]">新学词汇</div>
+src/components/vocabulary/VocabularySession.tsx:            返回词汇页
+src/components/vocabulary/VocabularySession.tsx:              开始练习
+src/components/vocabulary/YonseiSection.tsx:          <p className="text-sm font-medium text-[var(--text-primary)]">延世大学韩国语学堂 官方教材</p>
+src/components/vocabulary/YonseiSection.tsx:            词汇选自《연세 한국어 1-4》教材，共22个单元，每个单元涵盖15个核心词汇。
+src/components/WordBookCard.tsx:            开始学习
+src/components/WordCard.tsx:                  已加入词汇本
+src/components/WordCard.tsx:                  加入词汇本
+src/components/XpOverlay.tsx:                ? '100天连续学习！你是真正的王者！'
+src/components/XpOverlay.tsx:                    ? '连续一周学习！토리为你感到骄傲！'
+src/data/aiScenarios.ts:          natural: '回应很自然！韩国人用餐前常说这句话。',
+src/data/aiScenarios.ts:          betterWay: '被夸的时候说 "아직 많이 부족해요"（还差得远呢）是韩国常见的谦虚说法。',
+src/data/articleLearning.ts:        question: '韩国的便利店可以做什么？',
+src/data/articleLearning.ts:        question: '韩国便利店最有代表性的饭团是什么形状？',
+src/data/articleLearning.ts:        question: '韩国便利店的韩语叫什么？',
+src/data/articleLearning.ts:        question: '韩国人平均每天喝几杯咖啡？',
+src/data/articleLearning.ts:        question: '韩国咖啡文化兴起的主要原因是？',
+src/data/articleLearning.ts:        question: '对长辈打招呼时，韩国人通常会怎么做？',
+src/data/articleLearning.ts:        question: '韩国人初次见面时常说什么？',
+src/data/articleLearning.ts:        question: '韩国最重要的两个传统节日是什么？',
+src/data/articleLearning.ts:        question: '추석（秋夕）时韩国人吃什么传统食物？',
+src/data/articleLearning.ts:        question: '韩国春节时，晚辈给长辈行礼后会得到什么？',
+src/data/articleLearning.ts:        question: '韩国烤肉最经典的肉类是什么？',
+src/data/articleLearning.ts:        question: '韩国烤肉店通常免费提供的配菜叫什么？',
+src/data/articleLearning.ts:        question: '韩国的"떡볶이"是什么？',
+src/data/articleLearning.ts:        question: '韩国冬天的街头小吃代表是什么？',
+src/data/articleLearning.ts:    outputPrompt: '用韩语写2句话，说说你想尝试的韩国街头小吃。',
+src/data/articleLearning.ts:        question: '韩国人过生日时通常会喝什么汤？',
+src/data/articleLearning.ts:        question: '韩国夏天最滋补的汤是什么？',
+src/data/articleLearning.ts:        question: '在韩国餐厅叫服务员时喊什么？',
+src/data/articleLearning.ts:    outputPrompt: '用韩语写2句话，模拟在韩国餐厅点餐。',
+src/data/articleLearning.ts:        question: '韩国料理"辣"的核心调味料是什么？',
+src/data/articleLearning.ts:        question: '韩国人为什么喜欢吃辣？',
+src/data/articleLearning.ts:        question: '在韩国，给长辈递东西时应该怎么做？',
+src/data/articleLearning.ts:        question: '进韩国家庭时，首先应该做什么？',
+src/data/articleLearning.ts:        question: '在韩国和长辈喝酒时应该怎么做？',
+src/data/articleLearning.ts:    outputPrompt: '用韩语写2句话，说说你在韩国要注意的礼节。',
+src/data/articleLearning.ts:        question: '在韩国免税店购物需要出示什么？',
+src/data/articleLearning.ts:        question: '韩国最著名的化妆品购物街是？',
+src/data/articles.ts:    description: '从起床到睡觉，一个韩国大学生的日常一天',
+src/data/articles.ts:    fullTextZh: '早上7点起床。洗脸刷牙。早餐吃吐司和牛奶。8点半坐地铁去学校。地铁上人真的特别多，所以总是边听音乐边赶路。上午上韩语课，下课后去图书馆。午饭和朋友们一起在学校食堂吃，最近经常吃拌饭。下午在图书馆努力学习，有时也去咖啡厅学习。晚上回到家休息，洗完澡看看手机。睡前读一会儿书，通常11点左右睡觉。明天会是更好的一天！',
+src/data/articles.ts:      { ko: '오후에는 도서관에서 공부를 열심히 해요.', zh: '下午在图书馆努力学习。', pronunciation: 'o-hu-e-neun do-seo-gwa-ne-seo gong-bu-reul yeol-ssi-mi hae-yo', vocab: [{ word: '오후', meaning: '下午' }, { word: '열심히', meaning: '努力地' }], grammar: '~에서: 表示动作发生的场所' },
+src/data/articles.ts:      { ko: '가끔은 카페에 가서 공부하기도 해요.', zh: '有时也去咖啡厅学习。', pronunciation: 'ga-kkeu-meun ka-pe-e ga-seo gong-bu-ha-gi-do hae-yo', vocab: [{ word: '가끔', meaning: '有时' }, { word: '카페', meaning: '咖啡厅' }], grammar: '~기도 하다: 表示"有时也做某事"' },
+src/data/articles.ts:    fullTextZh: '首尔是韩国的首都，也是最大的城市，是一个传统与现代共存的充满魅力的地方。我上周末和朋友一起去首尔旅行了。第一天去了景福宫和仁寺洞，在景福宫穿了韩服拍了很多美照，在仁寺洞逛了传统工艺品和有趣的纪念品。第二天去了明洞和南山塔，在明洞吃了辣炒年糕和鸡肉串等各种街头美食，在南山塔看了首尔美丽的夜景，真的非常浪漫。第三天逛了弘大和延南洞，在弘大看了街头表演，还去了特色咖啡厅，延南洞那些漂亮的杂货小店也非常令人印象深刻。首尔地铁真的很方便，哪里都容易到达。这次旅行真的很开心，下次还想再来！',
+src/data/articles.ts:      { ko: '서울은 한국의 수도이자 가장 큰 도시예요.', zh: '首尔是韩国的首都，也是最大的城市。', pronunciation: 'seo-u-reun han-gu-gui su-do-i-ja ga-jang keun do-si-ye-yo', vocab: [{ word: '수도', meaning: '首都' }, { word: '도시', meaning: '城市' }], grammar: '~이자: "是…同时也是…"，书面连接词' },
+src/data/articles.ts:  // ── 4. 韩国饮食文化 (Intermediate) ──
+src/data/articles.ts:    title: '韩国饮食文化',
+src/data/articles.ts:    description: '从泡菜到烤肉，了解韩国人的饭桌文化',
+src/data/articles.ts:    fullTextZh: '提起韩国饮食，首先想到的就是泡菜。泡菜是韩国人餐桌上绝对不能缺少的食物，每天三餐总会有泡菜上桌。韩国餐桌上，米饭、汤和各种小菜会一起端上来。烤肉是最受外国人欢迎的韩国料理，甜美的调味酱真的很好吃。辣炒年糕是甜辣的街头美食，特别受年轻人欢迎。拌饭是在米饭里放入各种蔬菜和辣酱搅拌着吃的健康食品。五花肉是韩国人最爱的聚餐菜单，用生菜包着吃更美味。在韩国，不能在长辈之前先拿起餐具，等长辈先用之后再用餐才是礼仪。遵守这样的用餐礼仪很重要。韩国菜既好吃又健康，所以在全世界越来越受欢迎。',
+src/data/articles.ts:      { ko: '한국 음식 하면 가장 먼저 김치가 떠올라요.', zh: '提到韩国饮食，最先想到的是泡菜。', pronunciation: 'han-guk eum-sik ha-myeon ga-jang meon-jeo gim-chi-ga tteo-ol-la-yo', vocab: [{ word: '가장', meaning: '最' }, { word: '먼저', meaning: '首先' }, { word: '떠오르다', meaning: '想起来' }], grammar: '~(으)면: 条件假设"如果…的话"' },
+src/data/articles.ts:      { ko: '김치는 한국인의 식탁에서 절대 빠질 수 없는 음식이에요.', zh: '泡菜是韩国人餐桌上绝对不能缺少的食物。', pronunciation: 'gim-chi-neun han-gu-gi-ne sik-ta-ge-seo jeol-ttae ppa-jil su eom-neun eum-si-gi-e-yo', vocab: [{ word: '식탁', meaning: '餐桌' }, { word: '절대', meaning: '绝对' }, { word: '빠지다', meaning: '缺少' }], grammar: '~ㄹ/을 수 없다: "不能…/无法…"表示不可能' },
+src/data/articles.ts:      { ko: '한국 식사에는 밥과 국, 그리고 여러 가지 반찬이 함께 나와요.', zh: '韩国餐桌上饭、汤和各种小菜一起上。', pronunciation: 'han-guk sik-ssa-e-neun bap-gwa guk, geu-ri-go yeo-reo ga-ji ban-cha-ni ham-kke na-wa-yo', vocab: [{ word: '반찬', meaning: '小菜' }, { word: '여러 가지', meaning: '各种各样的' }, { word: '나오다', meaning: '出来、端上' }], grammar: '~(이)랑: 口语"和…一起"' },
+src/data/articles.ts:      { ko: '불고기는 외국인들에게 가장 인기 있는 한국 요리예요.', zh: '烤肉是最受外国人欢迎的韩国料理。', pronunciation: 'bul-go-gi-neun we-guk-kin-deu-re-ge ga-jang in-gi in-neun han-guk yo-ri-ye-yo', vocab: [{ word: '외국인', meaning: '外国人' }, { word: '인기 있다', meaning: '受欢迎' }], grammar: '~에게: 给予格助词"对…来说"' },
+src/data/articles.ts:      { ko: '삼겹살은 한국 사람들이 가장 사랑하는 회식 메뉴예요.', zh: '五花肉是韩国人最爱的聚餐菜单。', pronunciation: 'sam-gyeop-ssa-reun han-guk sa-ram-deu-ri ga-jang sa-rang-ha-neun hwe-sik me-nyu-ye-yo', vocab: [{ word: '삼겹살', meaning: '五花肉' }, { word: '회식', meaning: '聚餐' }, { word: '사랑하다', meaning: '爱' }], grammar: '~하는: 动词定语形现在时' },
+src/data/articles.ts:      { ko: '한국에서는 어른보다 먼저 수저를 들면 안 돼요.', zh: '在韩国，不能在长辈之前先拿餐具。', pronunciation: 'han-gu-ge-seo-neun eo-reun-bo-da meon-jeo su-jeo-reul deul-myeon an dwae-yo', vocab: [{ word: '어른', meaning: '长辈' }, { word: '수저', meaning: '勺筷' }], grammar: '~(으)면 안 되다: "不可以…/不能…"表示禁止' },
+src/data/articles.ts:      { ko: '한국 음식은 맛도 좋고 건강에도 좋아서 세계적으로 인기가 많아지고 있어요.', zh: '韩国菜味道好又健康，所以在全世界越来越受欢迎。', pronunciation: 'han-guk eum-si-geun mat-do jo-ko geon-gang-e-do jo-a-seo se-gye-jeo-geu-ro in-gi-ga ma-na-ji-go i-sseo-yo', vocab: [{ word: '건강', meaning: '健康' }, { word: '세계적', meaning: '世界性的' }, { word: '많아지다', meaning: '变多' }], grammar: '~아/어지고 있다: "正在变得越来越…"变化进行时' },
+src/data/articles.ts:  // ── 5. 韩国教育 (Advanced) ──
+src/data/articles.ts:    title: '韩国教育制度',
+src/data/articles.ts:    description: '深入了解韩国教育体系，从入学考试到多文化背景学生的故事',
+src/data/articles.ts:    fullTextZh: '韩国的教育制度由小学6年、初中3年、高中3年和大学组成。韩国学生为了大学入学考试非常努力地学习。被称为"修能"的大学修学能力考试每年11月举行，是韩国社会最重要的考试之一。考试当天，很多人为考生加油助威，连警车和出租车都会帮忙送考生，因为根据考试结果，能上的大学会不一样。所以很多高中生放学后还要去补习班，一直学习到深夜。虽然竞争如此激烈，但最近选择多样化出路的学生也在增加，例如选择艺术或体育专业，或者准备创业的学生也变多了。另一方面，韩国的多文化家庭学生也在逐渐增多，针对这些学生的特别韩语教育项目也在出现。毕竟，教育的机会应该对任何人都平等。',
+src/data/articles.ts:      { ko: '한국의 교육 제도는 초등학교 6년, 중학교 3년, 고등학교 3년, 그리고 대학교로 구성되어 있어요.', zh: '韩国的教育制度由小学6年、初中3年、高中3年和大学组成。', pronunciation: 'han-gu-gui gyo-yuk je-do-neun cho-deung-hak-gyo yung-nyeon, jung-hak-gyo sam-nyeon, go-deung-hak-gyo sam-nyeon, geu-ri-go dae-hak-gyo-ro gu-seong-dwe-eo i-sseo-yo', vocab: [{ word: '교육 제도', meaning: '教育制度' }, { word: '초등학교', meaning: '小学' }, { word: '구성되다', meaning: '构成' }], grammar: '~로 구성되다: "由…构成"，书面表达' },
+src/data/articles.ts:      { ko: '한국 학생들은 대학 입시를 위해 아주 열심히 공부해요.', zh: '韩国学生们为了大学入学考试非常努力地学习。', pronunciation: 'han-guk hak-ssaeng-deu-reun dae-hak ip-ssi-reul wi-hae a-ju yeol-ssim-hi gong-bu-hae-yo', vocab: [{ word: '대학', meaning: '大学' }, { word: '입시', meaning: '入学考试' }, { word: '~를 위해', meaning: '为了~' }], grammar: '~를/을 위해: "为了…"表示目的' },
+src/data/articles.ts:      { ko: '수능이라고 불리는 대학수학능력시험은 매년 11월에 치러져요.', zh: '被称为"修能"的大学修学能力考试每年11月举行。', pronunciation: 'su-neung-i-ra-go bul-li-neun dae-hak su-hak neung-ryeok si-heo-meun mae-nyeon si-bi-rweo-re chi-reo-jyeo-yo', vocab: [{ word: '수능', meaning: '韩国高考' }, { word: '불리다', meaning: '被称为' }, { word: '매년', meaning: '每年' }], grammar: '~(이)라고 불리다: "被称为…"被动表达' },
+src/data/articles.ts:      { ko: '수능은 한국 사회에서 가장 중요한 시험 중 하나예요.', zh: '修能是韩国社会中最重要的考试之一。', pronunciation: 'su-neung-eun han-guk sa-hwe-e-seo ga-jang jung-yo-han si-heom jung ha-na-ye-yo', vocab: [{ word: '사회', meaning: '社会' }, { word: '중요하다', meaning: '重要' }, { word: '~ 중 하나', meaning: '…之一' }], grammar: '~ 중 하나: "…中之一"常用表达式' },
+src/data/articles.ts:      { ko: '그래서 많은 고등학생들은 방과 후에도 학원에 가서 밤늦게까지 공부를 계속해요.', zh: '所以很多高中生放学后还去补习班，学习到深夜。', pronunciation: 'geu-rae-seo ma-neun go-deung-hak-ssaeng-deu-reun bang-gwa hu-e-do ha-gweo-ne ga-seo bam-neut-ge-kka-ji gong-bu-reul gye-so-kae-yo', vocab: [{ word: '방과 후', meaning: '放学后' }, { word: '학원', meaning: '补习班' }, { word: '밤늦게', meaning: '深夜' }], grammar: '~까지: "到…为止"时间范围' },
+src/data/articles.ts:      { ko: '한편 한국에는 다문화 가정의 학생들도 점점 늘어나고 있어요.', zh: '另一方面，韩国的多文化家庭学生也在逐渐增多。', pronunciation: 'han-pyeon han-gu-ge-neun da-mun-hwa ga-jeo-ngui hak-ssaeng-deul-do jeom-jeom neu-reo-na-go i-sseo-yo', vocab: [{ word: '한편', meaning: '另一方面' }, { word: '다문화', meaning: '多文化' }, { word: '가정', meaning: '家庭' }, { word: '점점', meaning: '逐渐' }], grammar: '~아/어지고 있다: 变化进行时"正在逐渐变得…"' },
+src/data/dictationSentences.ts:  { id: 'ds01', korean: '안녕하세요? 저는 한국어를 공부하고 있습니다.', chinese: '你好？我正在学习韩国语。', level: 'beginner', tag: '自我介绍' },
+src/data/dictationSentences.ts:  { id: 'ds06', korean: '한국 음식을 좋아해요.', chinese: '我喜欢韩国菜。', level: 'beginner', tag: '饮食' },
+src/data/dictationSentences.ts:  { id: 'ds11', korean: '한국 드라마를 보면서 한국어를 배우고 있어요.', chinese: '我一边看韩剧一边学韩语。', level: 'intermediate', tag: '学习' },
+src/data/dictationSentences.ts:  { id: 'ds12', korean: '한국에 가 본 적이 없지만 언젠가 꼭 가 보고 싶어요.', chinese: '虽然没去过韩国，但总有一天一定要去看看。', level: 'intermediate', tag: '愿望' },
+src/data/dictationSentences.ts:  { id: 'ds13', korean: '한국어는 배우면 배울수록 재미있는 것 같아요.', chinese: '韩语越学越觉得有趣。', level: 'intermediate', tag: '学习' },
+src/data/dictationSentences.ts:  { id: 'ds18', korean: '한국 음식 중에서 떡볶이를 제일 좋아합니다.', chinese: '韩国菜中我最喜欢炒年糕。', level: 'intermediate', tag: '饮食' },
+src/data/dictationSentences.ts:  { id: 'ds19', korean: '일주일에 두 번 정도 한국어 수업을 들어요.', chinese: '一周上两次左右的韩语课。', level: 'intermediate', tag: '学习' },
+src/data/dictationSentences.ts:  { id: 'ds23', korean: '앞으로 더 열심히 공부해서 한국 회사에서 일하고 싶습니다.', chinese: '以后想更努力学习，在韩国公司工作。', level: 'advanced', tag: '目标' },
+src/data/dictationWords.ts:    description: '最常用的韩语基础词汇，适合零基础入门',
+src/data/dictationWords.ts:    description: 'TOPIK高频词汇，抽象概念和书面用语',
+src/data/expressions.ts:    exampleZh: '韩国菜很合我胃口，天天吃也不腻。',
+src/data/expressions.ts:    exampleZh: '妈妈让我学习的话我都听得耳朵起茧了。',
+src/data/expressions.ts:    exampleZh: '考砸了之后再学习，已经是亡羊补牢为时已晚了。',
+src/data/expressions.ts:    actualMeaning: '考试落榜/被炒鱿鱼（韩国生日喝海带汤，考试前喝不吉利）',
+src/data/expressions.ts:    meaning: '学习与生活平衡 (= Study-Life Balance)',
+src/data/expressions.ts:    usage: '学生讨论学习与休息的平衡',
+src/data/expressions.ts:    exampleZh: '考试期间根本没有什么学习生活平衡...',
+src/data/expressions.ts:    meaning: '努力学习 (= 열심히 + 공부)',
+src/data/expressions.ts:    usage: '表达正在认真努力学习',
+src/data/expressions.ts:    exampleZh: '明天考试，今晚必须爆肝学习！',
+src/data/expressions.ts:    exampleZh: '在图书馆学习了。',
+src/data/expressions.ts:    expression: '연습 (练习)',
+src/data/expressions.ts:    original: '练习',
+src/data/expressions.ts:    meaning: '练习',
+src/data/expressions.ts:    category: '学习',
+src/data/expressions.ts:    exampleZh: '每天练习韩语发音。',
+src/data/expressions.ts:    exampleZh: '正在学习韩国文化。',
+src/data/expressions.ts:    exampleZh: '韩国化妆品很有名。',
+src/data/grammar-beginner.ts:      { korean: '한국어를 공부해요.', romanization: 'hangugeo-reul gongbuhaeyo', chinese: '学习韩语。' },
+src/data/grammar-beginner.ts:    toriTip: '🐰 口诀：있다/없다/가다/오다 前面用 에；공부하다/먹다/만나다 前面用 에서。"집에 가요"（回家，目的地用 에）vs "집에서 공부해요"（在家学习，动作用 에서）。',
+src/data/grammar-beginner.ts:      { korean: '학교에서 공부해요.', romanization: 'hakgyo-eseo gongbuhaeyo', chinese: '在学校学习。' },
+src/data/grammar-beginner.ts:      { korean: '한국에서 왔어요.', romanization: 'hangugeseo wasseoyo', chinese: '从韩国来的。' },
+src/data/grammar-beginner.ts:      { korean: '공부하다 → 공부해요', romanization: 'gongbuhada → gongbuhaeyo', chinese: '学习 → 学习' },
+src/data/grammar-beginner.ts:      { korean: '열심히 공부하겠습니다.', romanization: 'yeolsimhi gongbuhagesseumnida', chinese: '我会努力学习的。' },
+src/data/grammar-beginner.ts:    toriTip: '🐰 -겠- 最常用的场景是看到食物说"맛있겠다!"（看起来好好吃！）。你还可以说"힘들겠다"（看起来好累）、"춥겠다"（看着就冷），韩国人天天挂在嘴边！',
+src/data/grammar-beginner.ts:      { korean: '피곤하지만 공부해야 해요.', romanization: 'pigonhajiman gongbuhaeya haeyo', chinese: '虽然累但是得学习。' },
+src/data/grammar-beginner.ts:      { korean: '학교에 가서 공부해요.', romanization: 'hakgyoe gaseo gongbuhaeyo', chinese: '去学校学习。' },
+src/data/grammar-beginner.ts:      { korean: '한국에 가면 뭐 할 거예요?', romanization: 'hanguge gamyeon mwo hal geoyeyo?', chinese: '去韩国的话要做什么？' },
+src/data/grammar-beginner.ts:      { korean: '한국에 가고 싶어요.', romanization: 'hanguge gago sipeoyo', chinese: '想去韩国。' },
+src/data/grammar-beginner.ts:      { korean: '열심히 공부해야 해요.', romanization: 'yeolsimhi gongbuhaeya haeyo', chinese: '必须努力学习。' },
+src/data/grammar-beginner.ts:      { korean: '한국에 가 본 적이 있어요.', romanization: 'hanguge ga bon jeogi isseoyo', chinese: '去过韩国。' },
+src/data/grammar-new.ts:      { ko: '저는 한국 사람이에요.', zh: '我是韩国人。' },
+src/data/grammar-new.ts:    toriTip: '주세요 是最实用的句型之一。去韩国咖啡厅、便利店、餐厅第一句就靠它！',
+src/data/grammar-new.ts:      { ko: '한국에 가요.', zh: '去韩国。' },
+src/data/grammar-new.ts:      { ko: '집에서 공부해요.', zh: '在家学习。' },
+src/data/grammar-new.ts:        prompt: '"在学校学习"选哪个？',
+src/data/grammar-new.ts:      { ko: '한국 음식 좋아해요.', zh: '喜欢韩国料理。' },
+src/data/grammar-new.ts:        explanation: '좋아해요 = 喜欢，싫어해요 = 不喜欢，배워요 = 学习。',
+src/data/grammar-new.ts:      { ko: '한국에 가고 싶어요.', zh: '想去韩国。' },
+src/data/grammar-new.ts:      { ko: '공부해요.', zh: '学习。' },
+src/data/grammar-new.ts:      { ko: '한국 사람이 아니에요.', zh: '不是韩国人。' },
+src/data/grammar-new.ts:    shortExplanation: '이에요/예요 的疑问形式。韩国语里疑问句和陈述句的语尾一样，靠语调上扬来区分。',
+src/data/grammar-new.ts:      { ko: '한국 사람이에요?', zh: '你是韩国人吗？' },
+src/data/grammar-new.ts:      { ko: '집에서 공부해요.', zh: '在家学习。（动作）' },
+src/data/grammar-new.ts:      { ko: '피곤하지만 공부해요.', zh: '虽然累但是学习。' },
+src/data/grammar-new.ts:      { ko: '한국에 가면 뭐 할 거예요?', zh: '如果去韩国要做什么？' },
+src/data/grammar-new.ts:      { ko: '한국에 가 보고 싶어요.', zh: '想去韩国看看。' },
+src/data/grammar.ts:    difference: '에 表示存在地点或目的地，에서 表示动作进行的场所。방에 있어요（在房间里）vs 방에서 공부해요（在房间里学习）。',
+src/data/grammar.ts:    toriTip: '🐰 记住这个口诀："에 是静止的（在/去），에서 是动态的（做）"。있다（在）/ 없다（不在）/ 가다（去）/ 오다（来）前面用 에；공부하다（学习）/ 먹다（吃）/ 일하다（工作）前面用 에서。',
+src/data/grammar.ts:      { ko: '도서관에서 공부해요.', zh: '在图书馆学习。' },
+src/data/grammar.ts:      { ko: '한국의 전통 문화가 정말 아름다워요.', zh: '韩国的传统文化非常美。' },
+src/data/grammar.ts:    toriTip: '🐰 日常口语最推荐 하고 和 (이)랑！와/과 偏书面，说出来有点正式。和韩国朋友聊天时用"친구랑"比"친구와"自然得多。',
+src/data/grammar.ts:    toriTip: '🐰 -기 是把动词变名词的魔法！"공부하다"（学习）→"공부하기"（学习这件事）。和 -는 것 用法类似但 -기 更常用于搭配：-기 좋다（适合做）、-기 싫다（讨厌做）、-기 때문에（因为做）。',
+src/data/grammar.ts:      { ko: '내일이 시험이잖아요. 공부해야죠.', zh: '明天不是考试嘛，得学习吧。' },
+src/data/grammar.ts:    toriTip: '🐰 这是韩国人日常最高频的语尾之一！"좋잖아요"（这不挺好的嘛）、"알잖아요"（你知道的呀）、"내가 말했잖아요"（我不是说了嘛）。学会它，说话马上更像韩国人。',
+src/data/grammar.ts:    toriTip: '🐰 想强烈对比时用 -지만："비싸지만 맛있어요"（虽然贵但好吃）。想委婉表达或铺垫时用 -는데："비싼데 맛있어요"（有点贵，不过挺好吃的）。韩国人更爱用 -는데，因为更柔和。',
+src/data/grammar.ts:      { ko: '한국어를 공부해서 한국 회사에 취직했어요.', zh: '因为学了韩语所以在韩国公司就业了。' },
+src/data/grammar.ts:      { ko: '밤새도록 공부했어요.', zh: '熬夜学习了一整夜（到深夜的程度）。' },
+src/data/grammar.ts:      { ko: '열심히 공부했기 때문에 합격했어요.', zh: '因为努力学习了所以合格了。' },
+src/data/grammar.ts:      { ko: '한국어를 좋아하기 때문에 매일 공부해요.', zh: '因为喜欢韩语所以每天学习。' },
+src/data/grammar.ts:      { ko: '음악을 들으면서 공부해요.', zh: '一边听音乐一边学习。' },
+src/data/grammar.ts:    toriTip: '🐰 -(으)면서 必须是同一个主语在做两件事！"我"一边听音乐一边学习 ✓。"我吃饭妈妈说话"不能用 -(으)면서 ✗。注意前后动作必须是同一个人做的。',
+src/data/grammar.ts:    toriTip: '🐰 그런지 让"因为"带上了"好像是因为……吧"的不确定语气。韩国人很爱这种委婉表达！"감기 걸려서 그런지 머리가 아파요"（可能是感冒了所以头疼）— 不铁定说死，留有余地。',
+src/data/grammar.ts:    toriTip: '🐰 -길래 是口语中表达"看到……所以……"的超自然表达。主语一般是"我"，因为"我看到了/感觉到了所以做了某事"。韩国人日常说话超爱用。"배 고파 보이길래 김밥 사줬어"（看你饿了就给你买了紫菜包饭）。',
+src/data/grammar.ts:    toriTip: '🐰 -ㄹ 정도로 是韩语的"到了……的程度"。夸张表达的神器！"죽을 정도로 힘들어"（累到要死的程度）、"말로 표현할 수 없을 정도로 예뻐"（漂亮到无法用语言形容）。韩国人很爱这个夸张句型。',
+src/data/grammar.ts:    explanation: '用于连接两个动词或形容词，表示"或"的意思。可以与名词的"或"形式 -(이)나 对比学习。',
+src/data/grammar.ts:      { ko: '공부하다가 잠들었어요.', zh: '学习着学习着睡着了。' },
+src/data/grammar.ts:    toriTip: '🐰 -다가 是口语中的高频连接词！表示"正做A的过程中，转而做B/发生了B"。韩国人日常对话离不开它。"가다가"（走着走着）、"보다가"（看着看着）、"먹다가"（吃着吃着）— 都是真实的生活场景。',
+src/data/grammar.ts:      { ko: '한국에 오기 전에 한국어를 공부했어요.', zh: '来韩国之前学了韩语。' },
+src/data/grammar.ts:      { ko: '열심히 공부했더라면 합격했을 거예요.', zh: '要是当时努力学习了的话就会合格的。' },
+src/data/grammar.ts:      { ko: '한국에 갈 거예요.', zh: '打算去韩国。' },
+src/data/grammar.ts:    difference: '-ㄹ 거예요 是有计划的"打算做"（事先决定），-겠어요 是当场决定的"会做/要做"（即时表态）。\n例："한국에 갈 거예요"（已经计划好去韩国）vs "제가 하겠습니다"（当场表态"我来做"）。',
+src/data/grammar.ts:    toriTip: '🐰 韩国人说"我会做"时，-ㄹ 거예요 和 -겠어요 都能用，但有微妙区别！计划好的事情用 -ㄹ 거예요，当场拍胸脯用 -겠어요。面试时说"열심히 하겠습니다!"（我会努力的！）就是当场表态。',
+src/data/grammar.ts:    toriTip: '🐰 "지금 뭐 하고 있어요?" 是你在韩剧里听到最多的句子之一！等于英文的 "What are you doing now?"。回答只要动词 + 고 있어요："밥 먹고 있어요"（在吃饭）、"공부하고 있어요"（在学习）。',
+src/data/grammar.ts:      { ko: '저는 한국어를 공부합니다.', zh: '我学习韩语。' },
+src/data/grammar.ts:    toriTip: '🐰 -(으)세요 是"请……"的最常用表达！餐馆点餐、问路、请人帮忙都用它。"여기 앉으세요"（请坐）、"조금만 기다리세요"（请稍等）— 韩国人每天都在说。',
+src/data/grammar.ts:    toriTip: '🐰 去韩国咖啡厅必用！"주문하시겠어요?"（您要点单吗？）是店员标准用语。你回应时用客气一点的 -(으)ㄹ래요："아메리카노 마실래요"（我想喝美式）。一个收一个放，完美配合。',
+src/data/grammar.ts:    toriTip: '🐰 记住6个敬语名词活用场景：问名字→성함、问年龄→연세、提到家→댁、说话→말씀、吃饭→진지、称呼人→분。对长辈用这6个词，韩国人会对你刮目相看！',
+src/data/grammar.ts:    difference: '敬语动词是需要整体替换的特殊词汇，不能通过规则变形得到。먹다 → 먹으시다 的说法不存在，必须用 드시다。있다 → 잇으시다 不存在，用 계시다。',
+src/data/grammar.ts:    toriTip: '🐰 -시지요 是韩国长辈最爱的温和建议说法。"어서 드시지요"（快请吃吧）— 比"드세요"多了份亲切的劝说感。对长辈回话时用它："이쪽으로 오시지요"（请往这边走）。',
+src/data/grammar.ts:      { ko: '한국에 가고 싶어요.', zh: '想去韩国。' },
+src/data/grammar.ts:    toriTip: '🐰 韩国人说话爱留余地，所以 -ㄹ 것 같다 比 -ㄹ 거예요 更常用！"맛있을 것 같아요"（好像很好吃）比"맛있을 거예요"（会好吃的）更自然、更谦虚。不确定时就用 -ㄹ 것 같다！',
+src/data/grammar.ts:      { ko: '한국어를 열심히 공부해야 돼요.', zh: '必须努力学习韩语。' },
+src/data/grammar.ts:    toriTip: '🐰 -아/어야 해요 和 -아/어야 돼요 在日常对话中可以互换！但有个小差别：해야 해요 更偏"我有义务做"，해야 돼요 更偏"情况要求我必须做"。不用纠结，用哪个韩国人都听得懂。',
+src/data/grammar.ts:    explanation: '委婉地表达某种倾向或归类。不是绝对的判断，而是"相对来说属于……"的语感。非常符合韩国人委婉表达的交际习惯。',
+src/data/grammar.ts:      { ko: '한국에 오게 됐어요.', zh: '（各种原因导致）来到了韩国。' },
+src/data/grammar.ts:      { ko: '열심히 공부해서 한국어를 잘하게 됐어요.', zh: '努力学习后韩语变好了。' },
+src/data/grammar.ts:    toriTip: '🐰 -게 되다 是韩国人的万能"甩锅"句型！不用强调主观意志，而是"各种原因导致了……的结果"。"한국에 오게 됐어요"（就来了韩国）— 比"한국에 왔어요"（我来了韩国）听起来更谦虚、更自然。',
+src/data/grammar.ts:      { ko: '한국어를 열심히 공부하기로 마음먹었어요.', zh: '下定决心努力学习韩语。' },
+src/data/grammar.ts:    toriTip: '🐰 -(으)ㄹ까 하다 表达"我在犹豫要不要……"。韩国人委婉表达计划的最佳选择。比"할 거예요"（要做）更柔和，给自己留了改变主意的余地。"갈까 해요"= 我琢磨着要去（但还没完全定）。',
+src/data/grammar.ts:    toriTip: '🐰 -는 길이다 专用于"路上"场景。"가는 길이에요"（在去的路上）、"오는 길이에요"（在来的路上）。接电话时说"지금 가는 길이에요!"（在路上了！）— 韩国人催朋友时的标配表达。',
+src/data/grammar.ts:    toriTip: '🐰 日常口语中，韩国人几乎不用 -다고 해요 全称，直接说缩略版！"비 온대"（听说要下雨）、"밥 먹재"（说一起吃饭）、"뭐 하냬"（问在干嘛）。学会缩略版，听力瞬间提升一个档次。',
+src/data/grammar.ts:      { ko: '한국 생활이 많이 익숙해졌어요.', zh: '韩国生活变得很习惯了。' },
+src/data/knowledge.ts:    description: '韩语中表达时间、日期、星期、季节等概念的常用词汇',
+src/data/knowledge.ts:      { id: 't16', word: '작년', pronunciation: 'jangnyeon', meaning: '去年', partOfSpeech: '名词', example: '작년에 한국에 갔어요.', exampleZh: '去年去了韩国。', emoji: '📆' },
+src/data/knowledge.ts:    description: '常见的体育运动项目相关词汇，包含韩语固有词和外来词',
+src/data/knowledge.ts:      { id: 'sp3', word: '야구', pronunciation: 'yagu', meaning: '棒球', partOfSpeech: '名词', example: '한국에서 야구가 인기 많아요.', exampleZh: '棒球在韩国很有人气。', emoji: '⚾' },
+src/data/knowledge.ts:    description: '日常生活中各种兴趣爱好相关的词汇表达',
+src/data/knowledge.ts:      { id: 'h3', word: '음악', pronunciation: 'eumak', meaning: '音乐', partOfSpeech: '名词', example: '음악 들으면서 공부해요.', exampleZh: '边听音乐边学习。', emoji: '🎵' },
+src/data/knowledge.ts:    description: '韩语中称呼家人亲属的词汇，注意存在敬语和平语的区别',
+src/data/knowledge.ts:    description: '韩国的代表性食物和日常饮食相关词汇，是了解韩国文化的必备内容',
+src/data/knowledge.ts:    description: '基础颜色词汇，韩语中大部分颜色词由颜色名+색(色)构成',
+src/data/knowledge.ts:      { id: 'an5', word: '호랑이', pronunciation: 'horangi', meaning: '老虎', partOfSpeech: '名词', example: '호랑이는 한국의 상징이에요.', exampleZh: '老虎是韩国的象征。', emoji: '🐯' },
+src/data/knowledge.ts:    description: '描述天气状况和气候现象的相关词汇，日常会话中非常常用',
+src/data/knowledge.ts:    description: '人体各部位的韩语名称，是基本的生存词汇',
+src/data/knowledge.ts:    description: '各种交通工具和交通相关场所词汇，在韩国旅行生活必备',
+src/data/knowledge.ts:      { id: 'tr14', word: '교통카드', pronunciation: 'gyotongkadeu', meaning: '交通卡', partOfSpeech: '名词', example: '교통카드 충전해야 돼요.', exampleZh: '交通卡需要充值了。', emoji: '💳', note: '韩国常用T-money卡' },
+src/data/knowledge.ts:      { id: 'tr18', word: 'KTX', pronunciation: 'KTX', meaning: '韩国高铁', partOfSpeech: '名词', example: 'KTX가 정말 빠르고 편해요.', exampleZh: 'KTX真的又快又方便。', emoji: '🚄', note: 'Korea Train eXpress' },
+src/data/knowledge.ts:    description: '日常服装、鞋帽和配饰相关的韩语词汇',
+src/data/knowledge.ts:    description: '房屋房间和家居家具相关的韩语词汇，日常生活必备',
+src/data/knowledge.ts:      { id: 'ho10', word: '책상', pronunciation: 'chaeksang', meaning: '书桌', partOfSpeech: '名词', example: '책상에서 공부해요.', exampleZh: '在书桌学习。', emoji: '🪑' },
+src/data/knowledge.ts:      { id: 'ho18', word: '텔레비전', pronunciation: 'tellebijeon', meaning: '电视', partOfSpeech: '名词', example: '텔레비전 보지 말고 공부하세요.', exampleZh: '不要看电视，学习吧。', emoji: '📺' },
+src/data/knowledge.ts:    description: '学校生活和教育相关的常用词汇',
+src/data/knowledge.ts:      { id: 'sc15', word: '도서관', pronunciation: 'doseogwan', meaning: '图书馆', partOfSpeech: '名词', example: '도서관에서 조용히 공부해요.', exampleZh: '在图书馆安静地学习。', emoji: '📚' },
+src/data/knowledge.ts:    description: '职场生活和工作相关的基础词汇，适用于商务和日常办公场景',
+src/data/knowledge.ts:    description: '表达情绪和感受的核心词汇，韩语中大量使用形容词和动词表达情感',
+src/data/knowledge.ts:    description: '健康和医疗相关的基础词汇，看病和日常健康管理必备',
+src/data/knowledge.ts:    description: '大自然中的各种元素和景观相关词汇',
+src/data/knowledge.ts:      { id: 'pl12', word: '수영장', pronunciation: 'suyeongjang', meaning: '游泳池', partOfSpeech: '名词', example: '수영장에 가서 수영 연습했어요.', exampleZh: '去游泳池练习游泳了。', emoji: '🏊' },
+src/data/knowledge.ts:      { id: 'pl16', word: '박물관', pronunciation: 'bangmulgwan', meaning: '博物馆', partOfSpeech: '名词', example: '박물관에서 역사를 배웠어요.', exampleZh: '在博物馆学习了历史。', emoji: '🏛️' },
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:<title>韩国便利店完全指南 · 韩语学习日记</title>
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:  <div class="hero-tag">🇰🇷 韩国文化 · 首尔女生的日常</div>
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:    韩国便利店完全指南
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:    🏠 首页 <span>›</span> 🇰🇷 韩国 <span>›</span> 文化 <span>›</span> 便利店完全指南
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:        토리上周去首尔，一共去了 <strong style="color:#FF8FAB;">23次便利店</strong>。不是夸张——韩国的便利店真的是另一个世界。你以为便利店只是买个水、买包薯片的地方？在韩国，它是早餐店、咖啡馆、热食餐厅、ATM机、快递站、自习室……有时候还是朋友聚会的地方。今天토리把所有踩过的坑、发现的宝藏，全部整理给你 🌸
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:      <div class="brand-desc">韩国便利店之王，门店数量第一。自有品牌产品最丰富，联名款最多，经常和韩国本土IP推出限定商品。想找最新网红零食，来这里。</div>
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:      <div class="brand-tag">最暖 · 最有韩国味</div>
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:      <div class="brand-desc">前身是Family Mart，现在完全韩国化。自有品牌HereO系列性价比超高。热食区最扎实，关东煮选择多，冬天必来。整体风格最接地气。</div>
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:        <div class="must-desc">韩国便利店的灵魂单品。金枪鱼沙拉、辣白菜、牛肉是经典口味。打开方式有讲究：按数字顺序拉，1→2→3，拉错了海苔会破。价格约1,200-1,500韩元。</div>
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:        <div class="must-desc">韩国便利店有专门的热水机，就是为了泡杯面。신라면（辛拉面）是经典，육개장（牛肉汤）是传统，불닭볶음면（火鸡面）挑战你的辣度极限。约1,000-1,500韩元。</div>
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:        <div class="must-desc">韩国便利店的现磨咖啡性价比超高，约1,500-2,000韩元，比咖啡厅便宜5倍。GS25的"카페25"、CU的"HEYCAFE"都是自家品牌。味道认真，不是自动贩卖机那种。</div>
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:        <div class="must-desc">韩国便利店三明治比日本还好吃，这不是玩笑。蛋沙拉、BLT、鸡胸肉款都是经典。切成三角形装在透明盒子里，约2,000-3,000韩元，随手一拿就是好早餐。</div>
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:        <div class="must-desc">비타500是韩国版维C饮料，박카스是韩国传说中的功能饮料。韩国年轻人考前、熬夜前必喝박카스，上班族人手一瓶비타500。约600-1,500韩元。</div>
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:        <div class="must-tip">박카스是在韩国药店也能买到的药用饮料，很特别</div>
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:      <span class="st-sub">第一次在韩国便利店点热食，照着这个流程走</span>
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:        <div class="step-desc-text">旁边通常有免费的小纸杯，可以盛一杯汤底喝，这是韩国便利店的文化，不需要额外付费。</div>
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:      <span class="st-sub">你可能不知道，在韩国便利店还能做这些</span>
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:    <p>韩国便利店是最重要的快递节点。在网上购物，可以选"편의점 택배"（便利店快递）送到指定便利店取货，比送到家更安全，因为韩国很多公寓没有门卫代收。</p>
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:    <p>离开韩国前，大件行李可以从便利店寄到机场。比打车便宜，比拖着行李坐地铁体面。</p>
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:    <p>韩国便利店里都有ATM机，支持国际银行卡（Visa/Mastercard）。在明洞等旅游区，很多地方只收现金或韩国本地卡，便利店ATM是最方便的取现渠道。</p>
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:    <p>在韩国，深夜的便利店是一种特殊的社交空间。喝着啤酒、吃着炸鸡，坐在便利店门口的塑料椅上聊天——这是韩国年轻人最常见的夜晚形态。</p>
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:    <div class="highlight"><strong>토리 说：</strong>韩国便利店的塑料椅文化，是理解韩国年轻人生活的一把钥匙。价格不高，但人情味很浓。</div>
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:      <div class="time-desc">三明治、咖啡、饭团刚补货，最新鲜。跟着韩国上班族一起排队，有种奇妙的本地感。</div>
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:      <div class="time-desc">韩国年轻人下班聚集，门口塑料椅坐满了人。买瓶맥주坐下来，感受真实的首尔夜晚。</div>
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:      <div class="tc-q">韩国为什么到处都是便利店？</div>
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:      <div class="tc-a">韩国人口约5,100万，便利店约5万家，平均每1,000人就有一家。首尔江南区的某些街道，走100米就能看到3家不同品牌。韩国的城市密度和长时间工作文化，让便利店成了刚需。</div>
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:      <div class="tc-a">편의（便宜）= 方便，점（店）= 店铺。韩国第一家便利店是1982年在首尔开业的Lotte七-Eleven，但真正的爆发是1990年代经济腾飞之后。</div>
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:      <div class="tc-a">便利店是韩国城市里少数24小时开着、不需要理由就能进去的地方。在便利店买一罐咖啡，然后在角落站一会儿——这是被默许的城市人情绪出口。</div>
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:    <div class="nt">⚠️ 去韩国便利店之前要知道</div>
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:    大多数韩国便利店已经支持信用卡，但<strong>关东煮等热食可能只收现金</strong>，建议随身备一些韩元。另外，韩国便利店没有免费袋子——自带袋子，或在收银台付费购买（约50-100韩元）。
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:        <div class="ks-sub">点击 + 可加入你的词汇本</div>
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:  <!-- 本篇词汇 -->
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:    <div>本篇出现的词汇</div>
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:      韩国便利店是理解首尔生活的一扇窗。<br>
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:      但更重要的是——它是韩国文化的缩影。<br>
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:      <div class="next-tag">🍜 韩国街头小吃地图</div>
+src/data/korea-articles/문화/文化模块_01_韩国便利店完全指南.html:      <div class="next-tag">🎎 韩国节日完全手册</div>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:<title>首尔咖啡文化 · 韩语学习日记</title>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:  /* 词汇 */
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:  <div class="hero-tag">🇰🇷 韩国文化 · 首尔女生的日常</div>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:    🏠 首页 <span>›</span> 🇰🇷 韩国 <span>›</span> 文化 <span>›</span> 首尔咖啡文化
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:        토리在首尔的时候做了一件事：从住的地方出门，走100步，数咖啡厅。结果数到了 <strong style="color:#C9B8E8;">4家</strong>。这不是特别繁华的街道，就是普通的住宅区。韩国人均咖啡消耗量是世界第一，首尔的咖啡厅密度更是让每一个第一次来的人目瞪口呆。但咖啡厅在韩国不只是"喝咖啡的地方"，它是办公室、是约会场所、是独处的避难所、是拍照的舞台……今天토리 带你彻底搞懂首尔的咖啡文化 ☕
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:      <span class="st-sub">你以为自己懂咖啡，直到看到韩国的数据</span>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:      <div class="stat-label">韩国人均咖啡消耗量</div>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:      <div class="stat-label">韩国咖啡厅数量</div>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:      <div class="stat-desc">约合人民币8元，韩国咖啡价格跨度极大，从这里到8万韩元都有</div>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:      <span class="st-sub">不是因为韩国人特别爱喝咖啡，而是因为咖啡厅承担了更多功能</span>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:    <p>韩国的城市结构里，公共休闲空间相对有限。图书馆少，公园不够大，咖啡厅成了城市人最重要的"第三空间"——不是家，不是公司，但可以长时间待着的地方。</p>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:    <p>在首尔，你会看到很多人一个人坐在咖啡厅里对着电脑工作好几个小时。这不是借用空间，这是韩国人普遍接受的生活方式。一杯美式咖啡，换一个下午的位置，完全正常。</p>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:    <p>韩国有一个词叫做 <strong style="color:#C9B8E8;">인스타감성（Instagram 感性）</strong>，意思是"适合发Instagram的氛围感"。首尔的咖啡厅创业者深知这一点，每一家独立咖啡厅几乎都有自己的视觉主题。</p>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:    <p>复古相机装饰、落地窗、木质书架、多肉植物墙、手写菜单板……这些不是随便摆的，是经过精心设计的"出片背景"。用户来喝咖啡，也来拍照，来发小红书（在韩国是发Instagram），这就是韩国咖啡厅的双重价值。</p>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:    <p>韩国有一种文化叫 <strong style="color:#C9B8E8;">혼카（혼자 카페）</strong>，意思是"一个人去咖啡厅"。这在中国可能让人觉得有点孤独，但在韩国，一个人去咖啡厅是完全正常的社会现象，甚至是一种享受独处的方式。</p>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:      <div class="ct-desc">猫咖、图书馆咖啡厅、复古胶片咖啡厅、IP联名限定店……韩国人把咖啡厅玩出了无数花样，不去体验一次说不过去。</div>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:      韩国本土连锁品牌，不只有스타벅스
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:      <span class="st-sub">这几个才是韩国人自己天天喝的</span>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:        <div class="coffee-desc">韩国本土最大连锁咖啡品牌，门店数量超过스타벅스。主打高性价比，美式约2,500韩元，是很多上班族的日常选择。没有华丽的设计，但韩国人信任它。</div>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:        <div class="coffee-desc">以超大杯量和低价格（美式约1,500韩元）快速崛起。杯子比一般连锁大一圈，性价比极高。近几年在韩国大学生和年轻上班族里爆红，排队是常态。</div>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:        <div class="coffee-desc">韩国最便宜的连锁咖啡之一，美式约1,500韩元。主要分布在住宅区和大学周边，是韩国学生的口粮咖啡。走简约清新风，没有豪华装修，但喝完觉得合理。</div>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:        <div class="coffee-tip">第一次来韩国想省钱喝咖啡，来这里不会错</div>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:        <div class="coffee-name-zh">韩国星巴克 · 限定款圣地</div>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:        <div class="coffee-desc">韩国的星巴克和全球其他国家不太一样——它有大量韩国限定款周边，每季度推出限定杯，排队抢购是韩国星巴克特有的文化现象。来韩国必须看看当季有什么限定。</div>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:        <div class="district-desc">旧工厂改造成的咖啡厅聚集地，韩国"Brooklyn"。高天花板、裸露管道、水泥墙——工业风美学在这里发挥到极致。韩国所有走在最前沿的咖啡品牌，第一家店几乎都开在성수동。</div>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:        <div class="district-desc">首尔保存最好的韩屋（韩国传统建筑）街区，旧韩屋被改造成个性咖啡厅。坐在有瓦片屋顶和木门的空间里喝一杯手冲咖啡，穿越感极强。来这里的人很多都会穿韩服来拍照。</div>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:      韩国咖啡厅点单完全指南
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:        <div class="step-desc-text">大部分韩国咖啡厅的菜单在收银台上方的黑板或电子屏上。先看好再排队，不要排到了再慢慢看。</div>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:        <div class="step-desc-text">韩国咖啡厅默认问你冷热，冰的叫 아이스（iced），热的叫 따뜻하게（温热）或 핫（hot）。</div>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:        <div class="step-desc-text">韩国几乎所有咖啡厅都支持信用卡，三星Pay、카카오페이也很普遍。现金反而越来越少用。</div>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:        <div class="step-desc-text">韩国咖啡厅通常是自助收盘制度，喝完要把杯子送回收餐台。这是礼貌，不这样做会显得很不入乡随俗。</div>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:      <td>韩国最受欢迎的咖啡，没有之一。很多韩国人一天两三杯아이스 아메리카노</td>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:      <td>韩国发明，疫情期间风靡全球。打发的咖啡泡沫浮在牛奶上，好喝好拍</td>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:      <div class="tc-q">韩国人从什么时候开始喝咖啡？</div>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:      <div class="tc-a">1896年，朝鲜高宗在俄国公使馆避难时第一次喝到咖啡，从此爱上。早期咖啡在朝鲜是皇室和贵族的专属，被称为"양탕국"（洋汤）。1950年代韩战后，美军把速溶咖啡带进了普通韩国家庭。</div>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:      <div class="tc-q">为什么韩国人那么爱아이스 아메리카노？</div>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:      <div class="tc-a">韩国人有个绰号叫"아아인"（아이스 아메리카노人），意思是无论冬夏都喝冰美式的人。即使零下十度的冬天，便利店热食旁边的冷饮柜里，아이스 아메리카노依然是最畅销的。这成了韩国人的一个性格标签。</div>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:      <div class="tc-q">在韩国咖啡厅坐多久才算合适？</div>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:      <div class="tc-a">韩国咖啡厅默认可以长时间坐，只要你买了东西。没有催促，没有翻桌压力。很多学生在考试季会从开门坐到关门。唯一的潜规则是：高峰期（周末下午）如果座位很紧张，注意周围情况，不要占着两个位置放东西。</div>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:      <div class="tc-a">완전 진짜（完全是真的）。韩国办公室文化里，给前辈买咖啡是一种约定俗成的礼仪。很多公司会在下午有专门的"커피타임"，后辈去买咖啡回来，大家一起喝。카카오톡（韩国版微信）上有专门的咖啡送餐服务，连外卖都可以。</div>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:    <div class="nt">☕ 去韩国咖啡厅前要知道</div>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:    韩国大部分咖啡厅有 <strong>텀블러 할인（自带杯折扣）</strong>，带自己的保温杯来可以少付100-300韩元，也更环保。另外，很多独立咖啡厅不接受信用卡，只收现金或특定 카드，进门前可以先问一下 <strong>카드 되나요？（可以刷卡吗？）</strong>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:        <div class="ks-sub">点击 + 可加入你的词汇本</div>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:  <!-- 本篇词汇 -->
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:    <div>本篇出现的词汇</div>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:      下一篇，토리 带你认识韩国人为什么这样打招呼 🙏
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:    <a class="next-btn" href="#">下一篇：韩国人的打招呼文化 →</a>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:      <div class="next-tag">🏪 韩国便利店完全指南</div>
+src/data/korea-articles/문화/文化模块_02_首尔咖啡文化.html:      <div class="next-tag">🎎 韩国节日完全手册</div>
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:<title>韩国人的打招呼文化 · 韩语学习日记</title>
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:  /* 词汇 */
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:  <div class="hero-tag">🇰🇷 韩国文化 · 首尔女生的日常</div>
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:    韩国人的打招呼文化
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:    🏠 首页 <span>›</span> 🇰🇷 韩国 <span>›</span> 文化 <span>›</span> 韩国人的打招呼文化
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:        토리第一次去韩国的时候，走进一家小餐厅，对着老板说了一句 <strong style="color:#A8D8D0;">안녕하세요</strong>，老板立刻抬起头，笑着说 어서오세요，整个氛围一下子就不一样了。韩国人对"打招呼"这件事极其重视——它不只是一句客套话，而是判断一个人有没有礼貌、值不值得交往的第一信号。今天토리 带你搞懂韩国打招呼文化背后的那些规则，学完这篇，你在韩国遇到任何人都不会尴尬 🙏
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:      <span class="st-sub">理解这一点，你就理解了韩国打招呼文化的核心</span>
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:    <h3>🏗️ 韩国社会是垂直结构的</h3>
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:    <p>中国文化里，人与人之间的关系可以相对平等，打招呼的方式变化不大。但韩国社会有一套非常明确的<strong style="color:#A8D8D0;">垂直等级结构</strong>——年龄、职位、入职时间，这些都决定了你和对方的"位置关系"，而位置关系直接决定了你说什么、用什么语气说、要不要鞠躬、鞠多少度。</p>
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:    <p>这不是刻板的压迫，而是一套让所有人都知道"该怎么相处"的社会规则。对韩国人来说，遵守这套规则是一种尊重，不遵守才是失礼。</p>
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:    <div class="highlight"><strong>토리 说：</strong>你在韩剧里看到的那些主角对前辈毕恭毕敬、对晚辈随意说话的场景，不是夸张——那是真实的韩国日常。</div>
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:        <div class="level-desc">对陌生人、长辈、上司使用。这是韩语学习者最先学的语体，也是最安全的选择。不确定该用什么体，用这个准没错。</div>
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:        <div class="level-desc">对同龄人、亲近的朋友、比自己小的人使用。注意：必须是双方都同意"말 놓다（说非正式语）"之后才能用，不能单方面切换。在韩国，随便对人说반말是非常失礼的行为。</div>
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:        <div class="level-desc">新闻播报员、总统演讲、军队里使用的最正式语体。日常生活很少用到，但在韩国综艺或新闻里经常听到。作为外国学习者，知道它存在就好。</div>
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:    <p>韩国人之间，从正式体切换到반말，是一个需要明确"协商"的时刻。通常由年长的一方提出："우리 말 놓자（我们说反语吧）"，年轻的一方同意后，关系就进了一个新阶段。</p>
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:    <p>这个时刻在韩剧里经常出现，是两个人关系突破的标志性场景。对中国人来说可能觉得奇怪——为什么要专门说？但在韩国，这就是礼仪，也是一种尊重。</p>
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:    <div class="highlight"><strong>중요：</strong>作为外国学习者，在韩国遇到任何人，先用해요체，等对方说"말 놓자"再切换。永远不要主动用반말，除非你们已经是很熟的朋友。</div>
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:    <h3>👀 鞠躬时的细节，韩国人都在看</h3>
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:    <p>鞠躬不只是低头，还有几个细节韩国人会注意：</p>
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:    <div class="highlight"><strong>토리 亲测：</strong>在韩国买东西，结账完对店员说声 감사합니다 并轻微点头，几乎每次都会收到比刚才更热情的回应。这个细节，比任何韩语口语技巧都管用。</div>
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:      韩国 vs 中国打招呼文化对比
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:      <div class="vs-title">🇰🇷 韩国的习惯</div>
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:      <div class="tc-q">韩国人真的会问"밥 먹었어요？"打招呼吗？</div>
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:      <div class="tc-q">为什么韩国人下班前要跟所有人打招呼？</div>
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:      <div class="tc-a">在韩国职场，先离开的人必须向每个人说"먼저 들어가겠습니다（我先走了）"，留下来的人回应"수고하셨습니다（辛苦了）"。这是职场礼仪的核心，跳过任何一个人都可能造成关系紧张。很多韩国剧场景里都有这个细节。</div>
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:      <div class="tc-q">韩国人为什么不直接叫名字？</div>
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:      <div class="tc-a">在韩国，直接叫一个人的名字（特别是比你年长的人）是非常失礼的行为。通常用职位称呼（팀장님、사장님）、关系称谓（언니、오빠、선생님），或者加上"씨"（类似"先生/女士"）。연下의 직원에게도 함부로 이름만 부르지 않아요。</div>
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:      <div class="tc-q">为什么韩国人见面就问年龄？</div>
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:      <div class="tc-a">因为语体的使用取决于年龄关系。两个陌生人见面，不知道对方年龄就不知道该用什么体说话——这在韩国是一个实际的语言问题，不只是好奇。问年龄是为了确定"我们是什么关系"，是敬语体系驱动的社会行为。</div>
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:    <div class="nt">🙏 去韩国之前要知道</div>
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:    在韩国遇到任何人，<strong>先用해요체（안녕하세요）</strong>，这是最安全的选择。不要因为对方年纪看起来差不多就直接用반말——除非对方明确说"말 놓자"。另外，收到"수고하셨습니다"时，正确回应是同样的"수고하셨습니다"或者"네, 감사합니다"，不是点头就走。
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:        <div class="ks-sub">点击 + 可加入你的词汇本</div>
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:  <!-- 本篇词汇 -->
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:    <div>本篇出现的词汇</div>
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:    <div class="ending-title">打招呼是通向韩国人心里的第一扇门</div>
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:      才是真正懂韩国的人。<br>
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:      下一篇，토리 带你认识韩国最重要的两个节日 🎎
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:    <a class="next-btn" href="#">下一篇：韩国节日完全手册 →</a>
+src/data/korea-articles/문화/文化模块_03_韩国人的打招呼文化.html:      <div class="next-tag">🏪 韩国便利店完全指南</div>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:<title>韩国节日完全手册 · 韩语学习日记</title>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:  /* 词汇 */
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:  <div class="hero-tag">🇰🇷 韩国文化 · 首尔女生的日常</div>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:    韩国节日完全手册
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:    🏠 首页 <span>›</span> 🇰🇷 韩国 <span>›</span> 文化 <span>›</span> 韩国节日完全手册
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:        토리刚到首尔的时候赶上了추석前一天，整个城市突然就空了——地铁上没什么人，餐厅关了大半，就连平时排长队的咖啡厅也早早打烊。后来才知道，추석是韩国一年中最重要的节日之一，所有人都回老家了。节日对韩国人来说不是"放个假"，而是整个民族的情感仪式。今天토리 把韩国主要节日全部整理给你——不只告诉你那天做什么，还告诉你为什么这样做 🎎
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:      韩国节日年历总览
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:        <div class="cal-name-zh">韩国春节 · 农历正月初一</div>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:        <div class="cal-name-zh">韩国中秋 · 农历八月十五</div>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:      설날 — 韩国最重要的节日
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:      <div class="festival-name-zh">韩国春节 · 一年中最重要的家庭节日</div>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:        <p>설날前后的首尔，高速公路会出现韩国一年中最严重的堵车——所有人都在往老家赶。韩国有个说法叫 <strong style="color:#FF8FAB;">민족 대이동（民族大迁徙）</strong>，设날前后几天，全国约3000万人在路上移动。</p>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:          <div class="food-desc">설날必吃，白色年糕切片煮成清汤。吃了一碗떡국就算长了一岁，这是韩国的传统说法。</div>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:            <div class="step-desc-text">下午开始拜访亲戚，到每家都要重复세배流程。对韩国孩子来说，세뱃돈是설날最期待的事。</div>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:      추석 — 韩国的中秋节
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:      <div class="festival-name-zh">韩国中秋 · 丰收与感恩的节日</div>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:        <p>如果说설날是"新年的仪式感"，추석就是"丰收的感恩"。农历八月十五，一年的庄稼刚刚收获，韩国人带着新收的粮食、水果、食物回到故乡，祭拜祖先，感谢这一年的恩赐。</p>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:        <p>추석和설날并称韩国两大 <strong style="color:#FFE4A0;">명절（大节日）</strong>，重要程度不相上下。但추석的氛围比设날更轻松——不像设날那样强调礼节，更多是家人聚在一起吃喝玩乐的感觉。</p>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:        <div class="highlight"><strong>토리 亲测：</strong>추석前一周的首尔超市，礼盒区全部爆满。韩国人추석要给长辈、同事、客户送礼，最受欢迎的是SPAM（午餐肉）礼盒、人参、水果礼盒。是的，SPAM在韩国是高档礼品。</div>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:        <p>추석传统活动中最有名的是<strong style="color:#FFE4A0;">강강술래</strong>——女性们在月光下手拉手绕圈跳舞，唱着同名歌谣，祈求丰收和幸福。这个传统可以追溯到400多年前的朝鲜时代，现在已经是韩国非物质文化遗产。</p>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:        <p>虽然现代城市年轻人很少真正去跳강강술래，但每年추석节目里一定会出现这个画面，是韩国人集体记忆的一部分。</p>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:      <span class="st-sub">这些节日让韩国文化更立体</span>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:    <p>韩国儿童节是正式公众假日，全国所有学校放假。这一天，韩国父母倾尽全力带孩子出去玩，游乐园、动物园、餐厅全部爆满。</p>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:    <p>어린이날的起源来自作家方定焕，他在1923年提倡儿童人权，将这一天定为"儿童节"。如今韩国어린이날比很多国家的儿童节更受重视。</p>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:    <p>对韩国人来说，한글是民族自豪感的核心——在한글被创造之前，朝鲜半岛用汉字书写，普通百姓无法读写。세종대왕创造한글，就是为了让所有人都能识字。这是韩国历史上最伟大的文化贡献之一。</p>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:    <p>韩国有约30%的人口是基督徒，圣诞节是韩国为数不多在宗教意义上被广泛认可的西方节日，也是唯一的西方节假日。</p>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:    <p>但韩国的圣诞节更多是情侣节日而非家庭节日——类似西方的情人节。首尔的圣诞节满街圣诞树和彩灯，情侣们出来约会，而不是回家和父母吃火鸡。</p>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:    <div class="highlight"><strong>토리 说：</strong>如果设날和추석是家庭的节日，크리스마스是情侣的节日。韩国的情人节实际上有三个：2月14日（女送男）、3月14日白色情人节（男送女）、11月11日빼빼로데이（互送棒棒糖饼干）。</div>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:      <div class="tc-q">为什么SPAM午餐肉是韩国명절的豪华礼品？</div>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:      <div class="tc-a">韩战时期，美军把SPAM带进了韩国。在物资匮乏的年代，能吃到罐头肉是极大的奢侈。这种印象延续至今，SPAM礼盒在追석和설날是正经的高档礼品，精心包装，售价不低。这是韩国独有的历史文化印记。</div>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:      <div class="tc-q">韩国명절堵车有多严重？</div>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:      <div class="tc-a">평소（平时）从首尔到釜山开车约4小时。설날和추석前后，同样的路程可能需要10-15小时。韩国人为了省时间，有的选择凌晨3点出发，有的干脆买一张火车票提前三个月。명절交通是韩国社会每年都要讨论的大话题。</div>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:      <div class="tc-q">韩国孩子能收到多少세뱃돈？</div>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:      <div class="tc-a">首尔的孩子一个설날下来，收到几十万韩元（折合人民币几千元）完全正常。韩国有金融机构专门在설날前推出"세뱃돈 예금（压岁钱存款）"产品，给孩子开账户存압.세뱃돈曾经是韩国人的第一个储蓄概念。</div>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:      <div class="tc-q">现在的韩国年轻人怎么过명절？</div>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:      <div class="tc-a">越来越多的韩国年轻人选择不回老家，在首尔和朋友一起过节，或者去旅行。명절期间机票酒店反而可能有优惠，因为很多人都出国了。传统명절正在经历转变——仪式感保留，但形式在年轻一代中越来越多元。</div>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:    <div class="nt">🗓️ 去韩国前要查一下명절时间</div>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:    <strong>설날和추석前后3天</strong>是韩国法定假日，大量餐厅、商店、景点会关闭，高速公路极度拥堵，火车票和机票需要提前几个月购买。如果不是专门来体验명절文化，建议避开这几天前往韩国。如果想体验，来追석当天的首尔会看到一个完全不同的城市——安静、空旷、有一种平时感受不到的宁静。
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:        <div class="ks-sub">点击 + 可加入你的词汇本</div>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:  <!-- 本篇词汇 -->
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:    <div>本篇出现的词汇</div>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:    <div class="vocab-chip"><span class="vko">설날</span><span class="vzh">韩国春节</span></div>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:    <div class="vocab-chip"><span class="vko">추석</span><span class="vzh">韩国中秋</span></div>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:      是韩国人和时间、和家人、和土地之间的情感纽带。<br>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:      <div class="next-tag">🏪 韩国便利店完全指南</div>
+src/data/korea-articles/문화/文化模块_04_韩国节日完全手册.html:      <div class="next-tag">🙏 韩国人的打招呼文化</div>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:<title>韩剧里的文化密码 · 韩语学习日记</title>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:  /* 韩剧词汇解析 */
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:  /* 词汇 */
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:  <div class="hero-tag">🇰🇷 韩国文化 · 首尔女生的日常</div>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:    🏠 首页 <span>›</span> 🇰🇷 韩国 <span>›</span> 文化 <span>›</span> 韩剧里的文化密码
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:        토리认识很多人，她们看了几百集韩剧，却不知道为什么男主角下跪道歉、为什么女主角一生气就去汉江边、为什么喝酒的时候要把头转开……这些细节不是导演随便加的，是真实的韩国文化在剧里的呈现。今天토리 把最经典的韩剧文化场景全部解密给你——看完这篇再刷剧，每一幕都会有新的理解 📺
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:          <div class="vs-content">在韩国，下跪确实是表达极度歉意和悔恨的方式，不只在剧里，现实中也发生。</div>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:        韩国有很深的儒家传统，身体语言承载着巨大的情感重量。一般道歉说<strong>죄송합니다</strong>配合鞠躬就够了，但当错误极其严重、或对象是非常重要的长辈时，下跪是表示"我把自己放到最低"的极致姿态。<br><br>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:        在韩国职场剧里，员工向老板下跪认错；在家庭剧里，儿子向父母下跪求原谅——这些都来自真实文化土壤，不是编剧的想象。
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:          <div class="tori-mini-text">토리 说：看到男主下跪的时候，不要觉得夸张。在韩国文化里，这是一个人能做的最低姿态，意味着<strong>我愿意放下所有尊严来弥补这个错误</strong>。</div>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:          <div class="vs-content">汉江公园是首尔人真实的情绪出口，去汉江发呆、哭泣是韩国年轻人的日常行为。</div>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:          <div class="vs-content">韩国礼仪：在长辈面前喝酒，要侧身、把头转开，不能正对长辈喝。</div>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:        这是韩国饮酒礼仪的核心规则之一。晚辈在长辈面前直接仰头喝酒是非常失礼的，必须转身90度或侧对长辈，用手遮一下杯子再喝。这个动作在韩国职场聚餐和家庭饭桌上每天都在发生。<br><br>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:        另外：长辈给你倒酒，你要用双手接住杯子；轮到你给长辈倒酒，要用右手拿瓶，左手轻托右前臂——这些细节都是真实的韩国酒桌礼仪。
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:          <div class="tori-mini-text">토리 第一次在韩国朋友家吃饭时忘了转头，朋友的妈妈没说什么，但토리 后来知道那是很失礼的。<strong>这个细节，外国人最容易忽略。</strong></div>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:          <div class="vs-content">치맥（炸鸡+啤酒）是韩国真实的国民组合，任何情绪都可以用它解决。</div>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:        <strong>치맥（치킨+맥주）</strong>是韩国饮食文化的一个符号，地位类似中国的火锅或日本的居酒屋。韩国的炸鸡不是肯德基那种，是用特殊酱料腌制后炸出来的，外皮极酥，有原味、甜辣、大蒜奶油等十多种口味。<br><br>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:        在韩国，晚上11点点炸鸡外卖完全正常，很多炸鸡店营业到凌晨2-3点。《请回答1988》《我的大叔》《蓝色海洋的传说》……几乎每部韩剧都有치맥场景，因为它就是韩国日常生活的一部分。
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:          <div class="vs-content">这些称谓在韩国被广泛用于非亲属关系，代表一种亲密的上下级情感。</div>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:        韩国的称谓系统不只用于家庭。女生叫比自己年长的女性朋友<strong>언니</strong>，叫比自己年长的男性朋友或男友<strong>오빠</strong>。男生叫年长的男性<strong>형</strong>，叫年长的女性<strong>누나</strong>。<br><br>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:          <div class="vs-content">韩国文化里，雨有特殊的情感象征意义，淋雨是一种对痛苦的具身体验。</div>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:        在韩国文化和文学传统里，雨代表悲伤、思念、无法控制的命运。淋雨不撑伞，是用身体感受情绪、不逃避的象征。韩语里有个表达<strong>비를 맞다（淋雨）</strong>，有时被用来比喻一个人接受痛苦而不躲避。<br><br>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:        这不只是韩剧的视觉语言，在韩国诗歌、歌词中也大量出现。BTS、IU等歌手的歌词里，雨几乎都承载着情感重量。
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:  <!-- 韩剧高频词汇解析 -->
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:      韩剧高频词汇——你听到了但不知道意思
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:      <span class="st-sub">这些词反复出现，因为它们是韩国文化的关键词</span>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:      <div class="dw-desc">韩国文化里极重要的社交能力，指能迅速读懂场合氛围和他人情绪，并做出恰当反应。눈치가 없다（没有눈치）是很严重的批评，眈치가 빠르다（눈치敏锐）是极高赞美。</div>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:      <div class="dw-desc">韩国独特的"速度文化"，意思是"快一点、再快一点"。韩国人做任何事都追求速度——快餐快速、快递快速、工作快速、恋爱快速。这种文化和韩国的高速经济发展密切相关。</div>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:      <div class="dw-desc">韩剧之所以催泪，和韩国文化对情感表达的态度有关。韩国人并不认为在他人面前流泪是软弱，哭泣是情感真实的体现。눈물이 나다（流出眼泪）是一种诗意的表达。</div>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:      <div class="dw-drama">几乎每部韩剧都有눈물场景，因为이건 真实的韩国情感文化</div>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:      <div class="dw-zh">韩国特有的情感概念</div>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:      <div class="dw-desc">한是韩国文化中独有的、无法用中文精确翻译的情感——是长期积压的悲伤、遗憾、委屈和对命运的无奈混合在一起的感觉。韩国人相信한是韩国文化艺术创作力的来源。</div>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:      <div class="dw-zh">韩国式的情感纽带</div>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:      <div class="dw-desc">정也是韩国特有的概念，指人与人之间因为长时间相处而产生的深厚情感连接，不完全是爱情也不完全是友情，是一种"在一起久了就分不开"的羁绊。정이 들다（产生정）是韩剧里的核心情感逻辑。</div>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:      <div class="dw-desc">来自英文"Fighting"，但韩国人的용법完全韩国化了。不是"打架"的意思，而是"加油、打起精神、你可以的"。韩国人在任何需要鼓励的场合都会喊화이팅，举起拳头是标准动作。</div>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:    <p>最经典的해장국是<strong>뼈해장국（猪骨解酒汤）</strong>和<strong>콩나물국밥（豆芽汤饭）</strong>。韩国人相信解酒汤能"唤醒"肠胃，让身体从酒精里恢复过来。韩剧里这个场景几乎是一种关心的表达——准备해장국，是照顾对方的方式。</p>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:    <div class="highlight"><strong>토리 说：</strong>韩国的解酒文化本身就值得专门写一篇。韩国人喝酒喝得豪爽，解酒喝得也认真——这两件事都是文化，不是偶然。</div>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:    <p>韩剧里，深夜一起煮泡面是一个非常有分量的场景。字面上是吃面，实际上在韩国文化里有一个众所周知的潜台词——<strong>라면 먹고 갈래？（要不要留下来吃泡面？）</strong>是邀请对方多待一会儿的暗语。</p>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:    <p>但抛开这个层面，韩国人对泡面（라면）的感情是真实的。韩国是全球人均泡面消耗量最高的国家，신라면（辛拉面）是韩国文化输出的重要符号之一。在深夜煮一碗泡面，是韩国人处理情绪的方式。</p>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:    <h3>🥃 소주 — 韩国的国民酒</h3>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:    <p>소주（烧酒）在韩剧里的出现频率，比任何其他食物都高。它在韩国的地位，类似中国的白酒，但更亲民——价格约1,500-2,000韩元一瓶，几乎每家餐厅都有。</p>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:    <div class="highlight"><strong>한 가지 더：</strong>韩国人喝酒时，给自己倒酒是不礼貌的。要互相给对方倒，自己的杯子空了，要等旁边的人帮你添。这个细节在韩剧里经常出现，是真实的酒桌礼仪。</div>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:      <span class="st-sub">这些真相让你对韩国文化的理解更立体</span>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:      <div class="tc-a">韩国大部分剧集采用"동시제작（同步制作）"模式——一边拍一边播出。编剧会根据观众实时反馈调整剧情走向，这就是为什么有时候韩剧结局会突然改变。这种模式让韩剧和观众有了独特的互动关系，但也让演员极度疲惫——有时候播出当天才拍完那集。</div>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:      <div class="tc-a">韩国前30大财阀集团控制了国家GDP的约60%，财阀家族在韩国是真实存在的权力阶层。三星、现代、LG、롯데的家族故事本身就是韩剧素材。韩国人对财阀既有批判又有幻想，这种矛盾情绪直接催生了无数财阀题材韩剧。</div>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:      <div class="tc-a">韩国娱乐业对外貌有极高要求，双眼皮手术、鼻梁整形是非常普遍的医美项目，很多人大学毕业前就做了。韩国首尔的江南区是全球整形手术密度最高的地区之一。韩剧演员的"完美外貌"背后，是韩国社会对颜值的高度重视——这既是文化现象也是产业现象。</div>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:      <div class="tc-a">SKY（서울대학교、고려대학교、연세대학교）是韩国最顶尖的三所大学，进这三所学校是韩国家庭最重要的教育目标之一。韩国高考（수능）是全国性大事，考试当天飞机减少航班避免噪音、警察护送迟到考生——这是真实发生的事，不是韩剧夸张。</div>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:    看韩剧不只是娱乐——它是了解韩国文化最直观的窗口。下次刷剧时，带着这些文化知识去看：<strong>为什么他们这样说话？为什么在这个场合鞠躬？为什么吃这个食物？</strong>每一个你看懂的细节，都是你真正进入韩国文化的一步。
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:        <div class="ks-sub">点击 + 可加入你的词汇本</div>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:  <!-- 本篇词汇 -->
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:    <div>本篇出现的词汇</div>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:    <div class="vocab-chip"><span class="vko">한</span><span class="vzh">韩国特有的恨/悲伤</span></div>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:    <div class="vocab-chip"><span class="vko">소주</span><span class="vzh">韩国烧酒</span></div>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:    <div class="ending-title">看剧不只是消遣，是了解韩国的窗口</div>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:      五篇走完，토리 希望你对韩国的感受不只是"好看"，<br>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:    <a class="next-btn" href="#">探索更多韩国文化内容 →</a>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:      <div class="next-tag">🏪 韩国便利店完全指南</div>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:      <div class="next-tag">🙏 韩国打招呼文化</div>
+src/data/korea-articles/문화/文化模块_05_韩剧里的文化密码.html:      <div class="next-tag">🎎 韩国节日完全手册</div>
+src/data/korea-articles/여행/旅行模块_01_首尔街区性格图鉴.html:<title>首尔街区性格图鉴 · 韩语学习日记</title>
+src/data/korea-articles/여행/旅行模块_01_首尔街区性格图鉴.html:  /* 词汇 */
+src/data/korea-articles/여행/旅行模块_01_首尔街区性格图鉴.html:  <div class="hero-tag">🇰🇷 韩国旅行 · 第一次去首尔，토리 陪你</div>
+src/data/korea-articles/여행/旅行模块_01_首尔街区性格图鉴.html:    🏠 首页 <span>›</span> 🇰🇷 韩国 <span>›</span> 旅行 <span>›</span> 首尔街区性格图鉴
+src/data/korea-articles/여행/旅行模块_01_首尔街区性格图鉴.html:      <p>弘大（홍익대학교周边）是首尔最具青春气息的街区，韩国最顶尖的艺术设计大学弘益大学就在这里，周边聚集了无数独立艺术家、音乐人、设计师。街头涂鸦、独立唱片店、小剧场、地下乐队——这里是首尔最有创作能量的地方。</p>
+src/data/korea-articles/여행/旅行模块_01_首尔街区性格图鉴.html:      <p>每一家성수동的咖啡厅都有自己的视觉主题：裸露管道和水泥墙的工业风、用旧机器做装置艺术的复古风、大量绿植的丛林风……韩国所有走在最前沿的品牌，第一家店几乎都开在성수동。</p>
+src/data/korea-articles/여행/旅行模块_01_首尔街区性格图鉴.html:      <p>汉江以南的강남区是首尔最富裕的区域，全球奢侈品牌在这里的密度堪比巴黎香榭丽舍大街。PSY的《江南Style》之所以成为文化现象，是因为강남在韩国文化里本身就是"富贵"的代名词。</p>
+src/data/korea-articles/여행/旅行模块_01_首尔街区性格图鉴.html:      <p>강남的核心商业区압구정（狎鸥亭）和청담동（清潭洞）是韩国最高端的购物区，整形外科医院也密集分布在这一带（这不是巧合）。에서 삼성동（三成洞）的COEX购物中心是全亚洲最大的地下购物中心之一。</p>
+src/data/korea-articles/여행/旅行模块_01_首尔街区性格图鉴.html:      <p>명동是首尔最重要的商业街区，也是游客密度最高的地方。아모레퍼시픽、이니스프리、에뛰드、네이처리퍼블릭……韩国所有主要美妆品牌都在명동有旗舰店。傍晚时分，街道两侧的小吃摊全部出动，계란빵、회오리감자、닭꼬치……</p>
+src/data/korea-articles/여행/旅行模块_01_首尔街区性格图鉴.html:      <p>坦白说，명동因为游客太多，已经有点失去了本地人的生活气息。但作为第一次来首尔的人，명동还是值得来一次——集中购买韩国美妆、吃街头小吃、感受首尔的商业活力，一两个小时就能搞定。</p>
+src/data/korea-articles/여행/旅行模块_01_首尔街区性格图鉴.html:            韩国限定商品
+src/data/korea-articles/여행/旅行模块_01_首尔街区性格图鉴.html:        <div class="ks-sub">点击 + 可加入你的词汇本</div>
+src/data/korea-articles/여행/旅行模块_01_首尔街区性格图鉴.html:  <!-- 词汇 -->
+src/data/korea-articles/여행/旅行模块_01_首尔街区性格图鉴.html:    <div>本篇出现的词汇</div>
+src/data/korea-articles/여행/旅行模块_01_首尔街区性格图鉴.html:    <div class="vocab-chip"><span class="vko">한옥</span><span class="vzh">韩国传统建筑</span></div>
+src/data/korea-articles/여행/旅行模块_02_首尔地铁完全攻略.html:<title>首尔地铁完全攻略 · 韩语学习日记</title>
+src/data/korea-articles/여행/旅行模块_02_首尔地铁完全攻略.html:  /* 词汇 */
+src/data/korea-articles/여행/旅行模块_02_首尔地铁完全攻略.html:  <div class="hero-tag">🇰🇷 韩国旅行 · 第一次去首尔，토리 陪你</div>
+src/data/korea-articles/여행/旅行模块_02_首尔地铁完全攻略.html:    🏠 首页 <span>›</span> 🇰🇷 韩国 <span>›</span> 旅行 <span>›</span> 首尔地铁完全攻略
+src/data/korea-articles/여행/旅行模块_02_首尔地铁完全攻略.html:      首尔地铁礼仪——这些细节韩国人都在看
+src/data/korea-articles/여행/旅行模块_02_首尔地铁完全攻略.html:        <div class="etiquette-desc">老弱病残孕专座（通常是蓝/深色）绝对不坐。即使车厢空无一人，也不坐。这是韩国地铁最基本的社会规范，违反会引来白眼。</div>
+src/data/korea-articles/여행/旅行模块_02_首尔地铁完全攻略.html:        <div class="etiquette-desc">打电话要小声，不要大声讲话。韩国地铁里非常安静，大声说话会非常显眼。如果必须接电话，捂着嘴小声说话是礼仪。</div>
+src/data/korea-articles/여행/旅行模块_02_首尔地铁完全攻略.html:        <div class="etiquette-desc">听音乐或看视频必须戴耳机，外放是非常不礼貌的行为，会引来明显的不满。韩国地铁里几乎所有人都戴着耳机。</div>
+src/data/korea-articles/여행/旅行模块_02_首尔地铁完全攻略.html:        <div class="etiquette-desc">首尔地铁很多座位旁边有USB充电口，可以免费给手机充电。这是真的，不是陷阱——韩国地铁的服务真的很好。</div>
+src/data/korea-articles/여행/旅行模块_02_首尔地铁完全攻略.html:    <p>韩国本地最准确的地图App，支持中文界面。输入目的地，自动规划最优地铁路线，显示换乘站、所需时间、票价。比Google Maps对韩国地铁的覆盖更完整，特别是换乘路线的规划更准确。</p>
+src/data/korea-articles/여행/旅行模块_02_首尔地铁完全攻略.html:    <p>另一款韩国主流地图App，和Naver Map功能相似。优势是和카카오택시（叫出租车）整合，如果地铁不方便，直接在同一个App里叫택시很方便。两款都装，相互备用。</p>
+src/data/korea-articles/여행/旅行模块_02_首尔地铁完全攻略.html:      <div class="tori-mini-text">토리 팁：坐地铁时把目的地站名截图存好，没有网络也能看。另外，<strong>韩国地铁站内WiFi是免费的</strong>，连接"Metro WiFi"，在站台等车时可以刷地图不消耗流量。</div>
+src/data/korea-articles/여행/旅行模块_02_首尔地铁完全攻略.html:      <div class="ta">首尔地铁1号线于1974年8月15日开通，距今已超过50年。选择8月15日这天是有意义的——那天是韩国광복절（光复节），独立纪念日。第一条线路只有9个站，现在已经发展成覆盖全首尔的庞大网络。</div>
+src/data/korea-articles/여행/旅行模块_02_首尔地铁完全攻略.html:      <div class="ta">韩国地铁全程有LTE/5G信号，不会因为进入隧道就断网（这在很多国家是奢侈的）。韩国人对手机依赖度极高，地铁里每个人都在刷手机是真实现象。네이버웹툰（漫画）和유튜브（YouTube）是最常见的活动。</div>
+src/data/korea-articles/여행/旅行模块_02_首尔地铁完全攻略.html:        <div class="ks-sub">点击 + 可加入你的词汇本</div>
+src/data/korea-articles/여행/旅行模块_02_首尔地铁完全攻略.html:  <!-- 词汇 -->
+src/data/korea-articles/여행/旅行模块_02_首尔地铁完全攻略.html:    <div>本篇出现的词汇</div>
+src/data/korea-articles/여행/旅行模块_02_首尔地铁完全攻略.html:      下一篇，토리 带你了解去韩国之前必须知道的文化禁忌 🚫
+src/data/korea-articles/여행/旅行模块_02_首尔地铁完全攻略.html:    <a class="next-btn" href="#">下一篇：去韩国之前必须知道的文化禁忌 →</a>
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:<title>去韩国之前必须知道的文化禁忌 · 韩语学习日记</title>
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:  /* 词汇 */
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:  <div class="hero-tag">🇰🇷 韩国旅行 · 第一次去首尔，토리 陪你</div>
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:    去韩国之前必须知道的文化禁忌
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:    🏠 首页 <span>›</span> 🇰🇷 韩国 <span>›</span> 旅行 <span>›</span> 文化禁忌
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:        토리第一次去韩国，犯了好几个让自己事后很尴尬的错误——在饭桌上把碗端起来吃饭，在长辈面前直接喝酒，在北村大声说话……没有人当场纠正我，但토리 后来知道那些都是失礼的行为。这篇文章不是为了让你如履薄冰，而是让你在享受韩国的同时，不会在不知情的情况下冒犯别人。知道这些规则，旅行会更自在 🙏
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:      <span class="st-sub">和韩国人一起吃饭时，这些细节很重要</span>
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:      <p>在中国，端碗吃饭很正常；在日本，端碗是礼仪。但在韩国，把碗端起来吃饭看起来像"乞讨的姿态"，是非常失礼的行为。</p>
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:      <p>和韩国人一起吃饭，必须等年纪最长的人拿起勺子（또는 젓가락）之后，其他人才能开始吃。这是韩国儒家饮食礼仪的核心，违反了会让在场所有人感到不舒服。</p>
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:      <p>把筷子竖着插进米饭或食物里，是韩国祭祀时的专属做法——象征给逝去的人上供。在普通饭桌上这样做，是极其不吉利的禁忌，会让韩国人非常不安。</p>
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:      <p>在韩国长辈面前喝酒，不能正对着长辈仰头喝，要侧过身子转开头，用手遮一下再喝。这在韩剧里经常出现，是真实的礼仪，不是夸张。</p>
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:      <p>在中国收到礼物当场打开很正常，甚至是礼貌。但在韩国，当着送礼人的面立刻拆开礼物，有时会显得过于急切，缺乏含蓄。传统礼仪是先道谢收下，之后再打开。</p>
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:      <p>当然，现代韩国年轻人之间这个规矩已经不那么严格了——朋友之间当场拆开完全可以。但在正式场合、对长辈，或者商务礼品场合，等回去再开更稳妥。</p>
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:      <span class="st-sub">韩国是高度重视公共秩序的社会</span>
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:      <p>韩国的公共场合（地铁、咖啡厅、图书馆、餐厅）整体音量偏低，大声说话会非常显眼，引来周围人侧目。这在首尔尤其明显——越是人多的地方，整体反而越安静。</p>
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:      <p>韩国街头垃圾桶很少，这不是因为没人收垃圾，而是因为韩国推行"垃圾自带回家处理"的环保政策。在首尔街头随手丢垃圾，不只是不礼貌，被发现可以被处以罚款。</p>
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:      <p>韩国对拍照有几个需要注意的场景：</p>
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:      <p><strong style="color:#d68910;">拍人</strong>：在韩国拍陌生人（特别是近景）需要对方同意，不要偷拍。韩国有专门针对偷拍的法律，处罚严厉。</p>
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:      社交场合——和韩国人相处时
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:      <p>在韩国，直接叫一个比你年长或职位高的人的名字（特别是不加任何称谓）是非常失礼的。应该用职位称谓（선생님/팀장님/사장님）、关系称谓（언니/오빠/선배）或加"씨"（先生/女士）。</p>
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:      <p>作为外国游客，遇到韩国人，称呼对方"성함이 어떻게 되세요?（请问怎么称呼您？）"然后用对方的姓+씨称呼，通常都是安全的。</p>
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:      <p>给韩国人递东西（钱、卡、礼物、名片）或接东西，要用双手，或者右手递/接、左手扶住右前臂。单手递东西，特别是面对长辈，会显得不尊重。</p>
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:      <p>在便利店付钱时，双手接找零；在餐厅接菜单时双手接；收到名片时双手接、认真看一眼再放好，不要随手扔进口袋——这些都是韩国日常中真实有意义的细节。</p>
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:      <p>进入餐厅、电梯、任何门口，应该请年长的人先进。韩国的长幼秩序在进出门这个细节上体现得很明显。抢先走进去，或者让门直接关上、没有为后面的人扶着门，都会被认为是没有礼貌。</p>
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:      <p>用食指指着一个人，在韩国是非常不礼貌的肢体语言，有攻击性和侮辱的含义。需要指向某人或某处时，用整个手掌朝向、或者用手肘方向示意。</p>
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:      <p>同样，呼唤别人时不要用食指弯曲勾动（在某些文化里这是"过来"的意思，但在韩国通常用于对动物），应该用整只手手心朝下挥动。</p>
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:    <p>찜질방是韩国特有的桑拿文化场所，男女分区入浴，公共区域混合。进入汤池区域必须裸体（只有公共区域穿提供的统一服装）。</p>
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:    <p>不能带手机进入浴室区域（有专用储物柜）；洗澡要认真，不只是泡一泡；不能在汤池里游泳或溅水；离开汤池要自己擦干再进入公共区域。这是韩国人真实的生活方式，不是表演给游客看的。</p>
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:    做错了不要慌。韩国人对外国游客普遍非常包容，知道你不了解这些规则。最重要的是：<strong>如果你意识到自己做了不合适的事，真诚地说一句죄송합니다（对不起）</strong>，对方几乎一定会微笑着说没关系。诚意比完美更重要。
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:        <div class="ks-sub">点击 + 可加入你的词汇本</div>
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:  <!-- 词汇 -->
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:    <div>本篇出现的词汇</div>
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:      是帮你真正进入韩国文化的钥匙。<br>
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:      会比不知道的人更被韩国人接受和喜爱。<br>
+src/data/korea-articles/여행/旅行模块_03_去韩国之前必须知道的文化禁忌.html:      <div class="next-tag">🛍️ 韩国购物完全指南</div>
+src/data/korea-articles/여행/旅行模块_04_首尔必去25个地方.html:<title>首尔必去25个地方 · 韩语学习日记</title>
+src/data/korea-articles/여행/旅行模块_04_首尔必去25个地方.html:  /* 词汇 */
+src/data/korea-articles/여행/旅行模块_04_首尔必去25个地方.html:  <div class="hero-tag">🇰🇷 韩国旅行 · 第一次去首尔，토리 陪你</div>
+src/data/korea-articles/여행/旅行模块_04_首尔必去25个地方.html:    🏠 首页 <span>›</span> 🇰🇷 韩国 <span>›</span> 旅行 <span>›</span> 首尔必去25个地方
+src/data/korea-articles/여행/旅行模块_04_首尔必去25个地方.html:      <div class="place-desc">1997年被列入UNESCO世界文化遗产，是朝鲜时代保存最完好的宫殿之一。宫后的후원（秘苑/御苑）是韩国皇室的私人庭园，需要预约参观，值得专程为此来。秋天红叶季是一年中最美的时候。</div>
+src/data/korea-articles/여행/旅行模块_04_首尔必去25个地方.html:      <div class="place-desc">传统工艺品、书画、陶瓷、手工艺品聚集的文化街道。쌈지길（Ssamziegil）是其中最有设计感的综合文化空间，围绕天井的螺旋式走廊布满独立小店和咖啡厅。买韩国传统手工礼物的最佳地点。</div>
+src/data/korea-articles/여행/旅行模块_04_首尔必去25个地方.html:      <div class="place-desc">首尔最重要的商业街区，韩国所有主要美妆品牌旗舰店集中于此。傍晚后街头小吃摊全部出动——계란빵、회오리감자、닭꼬치……명동성당（天主教堂）是街区内的历史建筑，值得进去看一看。</div>
+src/data/korea-articles/여행/旅行模块_04_首尔必去25个地方.html:      <div class="place-desc">旧皮革工厂改造成的创意空间聚集地，每家咖啡厅都有独特的工业美学主题。대림창고（大林仓库）是最著名的工业风咖啡厅。韩国新兴品牌和快闪店通常选择在성수动首发，周末常有意外收获。</div>
+src/data/korea-articles/여행/旅行模块_04_首尔必去25个地方.html:      <div class="place-desc">首尔最高端的购物街区，国际奢侈品牌和韩国高端设计师品牌集中。这里也是韩国整形外科医院最密集的地方之一（压구정 성형외과 거리）。不买东西也值得来逛逛，感受首尔上流社会的日常。</div>
+src/data/korea-articles/여행/旅行模块_04_首尔必去25个地方.html:      <div class="place-name-zh">汗蒸幕体验 · 韩国最特别的文化体验</div>
+src/data/korea-articles/여행/旅行模块_04_首尔必去25个地方.html:      <div class="place-desc">찜질방是韩国特有的综合桑拿文化空间，24小时营业，可以在里面睡觉过夜（有공용 수면실）。入场后换上统一服装，在各种温度的汗蒸房里轮流体验，再去大浴池泡澡。价格约10,000-15,000韩元，非常超值。首尔最著名的찜질방包括용산 드래곤힐스파。</div>
+src/data/korea-articles/여행/旅行模块_04_首尔必去25个地方.html:      <div class="place-name-zh">KTV · 韩国노래방文화</div>
+src/data/korea-articles/여행/旅行模块_04_首尔必去25个地方.html:      <div class="place-desc">韩国노래방和中国KTV不同——是小包厢，价格按时间计费（코인 노래방更便宜，投硬币买时间）。通常深夜朋友聚会后去唱2-3首结束，不是长时间消费的场所。韩国아이돌歌曲曲库非常完整，是练习韩语歌曲的绝佳场合。</div>
+src/data/korea-articles/여행/旅行模块_04_首尔必去25个地方.html:      <div class="place-desc">说다이소（大创）是首尔必去，很多人会笑——但토리 认真的。韩国다이소不只是1,000韩元的杂货店，里面有大量高颜值的韩国本土设计产品、美妆小样、文具、生活用品，价格极低，性价比远超明洞的化妆品店。离开首尔前来一次다이소扫货是必须的。</div>
+src/data/korea-articles/여행/旅行模块_04_首尔必去25个地方.html:        <div class="ks-sub">点击 + 可加入你的词汇本</div>
+src/data/korea-articles/여행/旅行模块_04_首尔必去25个地方.html:  <!-- 词汇 -->
+src/data/korea-articles/여행/旅行模块_04_首尔必去25个地方.html:    <div>本篇出现的词汇</div>
+src/data/korea-articles/여행/旅行模块_04_首尔必去25个地方.html:    <a class="next-btn" href="#">下一篇：韩国购物完全指南 →</a>
+src/data/korea-articles/여행/旅行模块_05_韩国购物完全指南.html:<title>韩国购物完全指南 · 韩语学习日记</title>
+src/data/korea-articles/여행/旅行模块_05_韩国购物完全指南.html:  /* 词汇 */
+src/data/korea-articles/여행/旅行模块_05_韩国购物完全指南.html:  <div class="hero-tag">🇰🇷 韩国旅行 · 第一次去首尔，토리 陪你</div>
+src/data/korea-articles/여행/旅行模块_05_韩国购物完全指南.html:    韩国购物完全指南
+src/data/korea-articles/여행/旅行模块_05_韩国购物完全指南.html:    🏠 首页 <span>›</span> 🇰🇷 韩国 <span>›</span> 旅行 <span>›</span> 韩国购物完全指南
+src/data/korea-articles/여행/旅行模块_05_韩国购物完全指南.html:        去韩国不购物，就像去日本不吃寿司——当然可以，但你会后悔的。韩国的购物有几个特点：美妆是全球价格洼地、아이돌周边在韩国才齐全、생활용품设计感强且便宜、传统工艺品有文化价值……问题是很多人到了首尔不知道该去哪买、怎么省钱、能不能退税。今天토리 把购物攻略整理清楚，让你每一分钱都花得值 🛍️
+src/data/korea-articles/여행/旅行模块_05_韩国购物完全指南.html:        <div class="brand-desc">韩方高端护肤品，以人参和草本为核心成分。在韩国购买比国内便宜约20-30%，是送礼首选。윤조에센스是标志性产品。</div>
+src/data/korea-articles/여행/旅行模块_05_韩国购物完全指南.html:        <div class="brand-desc">韩国最大美妆集团旗舰品牌，绿茶系列和时光密令精华是招牌。旗舰店在용산IPARK Mall有专门的体验区。</div>
+src/data/korea-articles/여행/旅行模块_05_韩国购物完全指南.html:        <div class="brand-desc">리들샷（Reedle Shot）是近年全球爆红的韩国美容仪器式精华，BTS代言使其知名度爆炸式增长。在韩国买最实惠最正品。</div>
+src/data/korea-articles/여행/旅行模块_05_韩国购物完全指南.html:        <div class="brand-desc">蜗牛精华系列全球知名，主打功效型护肤。痘痘贴、低分子透明质酸精华是全球药妆爱好者必购单品。在韩国比海外便宜。</div>
+src/data/korea-articles/여행/旅行模块_05_韩国购物完全指南.html:      <td>高端美妆、奢侈品、韩国品牌</td>
+src/data/korea-articles/여행/旅行模块_05_韩国购物完全指南.html:      <div class="shop-name-zh">橄榄杨 · 韩国美妆超市，不能错过</div>
+src/data/korea-articles/여행/旅行模块_05_韩国购物完全指南.html:      <div class="shop-desc">올리브영은 한국의 세포라 같은 곳이에요（OLIVE YOUNG就是韩国的Sephora）. 韩国本土美妆品牌、护肤品、健康食品、香薰全部集中在一起，价格比单独品牌店更便宜，经常有买二送一、满减等活动。首尔명동、홍대、강남都有大型门店，24小时营业的门店也有。</div>
+src/data/korea-articles/여행/旅行模块_05_韩国购物完全指南.html:      <div class="shop-name-zh">东大门时装区 · 韩国批发零售时装圣地</div>
+src/data/korea-articles/여행/旅行模块_05_韩国购物完全指南.html:      <div class="shop-desc">동대문은 한국 최대의 패션 도매·소매 시장이에요（东大门是韩国最大的时装批发零售市场）. 두타（DOOTA）、쇼핑몰 두타면세점、롯데피트인 등 대형 쇼핑몰부터 새벽에만 열리는 도매시장까지 다양해요. 새벽 3-5시에는 진짜 도매가로 살 수 있어요.</div>
+src/data/korea-articles/여행/旅行模块_05_韩国购物完全指南.html:    <h3>🎎 真正值得带走的韩国特产</h3>
+src/data/korea-articles/여행/旅行模块_05_韩国购物完全指南.html:        <div class="brand-desc">韩国人参品质世界公认，正官庄（정관장）是最权威的品牌。홍삼（红参）比白参更易保存，有粉末、液体、糖片等多种形态，适合送给长辈。</div>
+src/data/korea-articles/여행/旅行模块_05_韩国购物完全指南.html:        <div class="brand-desc">인사동에 韩国传统工艺品店最集中。青瓷（청자）、白瓷（백자）茶具，传统刺绣（자수），彩绘漆器……有文化底蕴的纪念品，比机场那些印着태극기的马克杯有价值得多。</div>
+src/data/korea-articles/여행/旅行模块_05_韩国购物完全指南.html:        <div class="brand-desc">약과（蜂蜜脆饼）近年成为全球爆红的韩国传统点心，약식（药食）、전통 강정、한과 세트适合作为伴手礼。인사동과 광장시장에서 구입 가능해요.</div>
+src/data/korea-articles/여행/旅行模块_05_韩国购物完全指南.html:        <div class="brand-desc">韩国零食是最受欢迎的伴手礼之一。불닭볶음면、허니버터칩（蜂蜜黄油薯片）、꼬북칩、김（海苔）系列……이마트나 롯데마트에서 가장 저렴하게 살 수 있어요.</div>
+src/data/korea-articles/여행/旅行模块_05_韩国购物完全指南.html:    <div class="tax-title">🧾 韩国退税完整流程</div>
+src/data/korea-articles/여행/旅行模块_05_韩国购物完全指南.html:        <div class="tax-text">离开韩国时在<strong>机场退税窗口</strong>（出境大厅，过安检之前）凭退税单+护照+购物发票办理退税</div>
+src/data/korea-articles/여행/旅行模块_05_韩国购物完全指南.html:    <strong>환급 금액：</strong>韩国VAT税率为10%，退税后实际退还约7-9%（扣除手续费）。购买15万韩元的化妆品，大约可以退回约10,000-13,000韩元。金额不大，但值得做——机场办理只需要5分钟。
+src/data/korea-articles/여행/旅行模块_05_韩国购物完全指南.html:    한국은 대부분 영수증 없이는 환불이 어려워요（韩国大部分情况下没有收据很难退货）。购物时一定要保留收据，特别是美妆产品。另外，开封后的美妆一般不可退换，所以在店里要仔细确认颜色和产品后再购买。<strong>피부 트러블이 걱정된다면（如果担心皮肤问题），先买小样试用再买正装。</strong>
+src/data/korea-articles/여행/旅行模块_05_韩国购物完全指南.html:        <div class="ks-sub">点击 + 可加入你的词汇本</div>
+src/data/korea-articles/여행/旅行模块_05_韩国购物完全指南.html:  <!-- 词汇 -->
+src/data/korea-articles/여행/旅行模块_05_韩国购物完全指南.html:    <div>本篇出现的词汇</div>
+src/data/korea-articles/여행/旅行模块_05_韩国购物完全指南.html:    <div class="series-badge">🎉 韩国旅行系列 · 完结</div>
+src/data/korea-articles/여행/旅行模块_05_韩国购物完全指南.html:        <div class="sl-title">🛍️ 韩国购物完全指南</div>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:<title>韩国烤肉完全指南 · 韩语学习日记</title>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:  /* 词汇 */
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:  <div class="hero-tag">🇰🇷 韩国美食 · 每道菜背后都有一个故事</div>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:    韩国烤肉完全指南
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:    <span>고기 문화 — 不只是烤肉，是韩国人聚在一起的方式</span>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:    🏠 首页 <span>›</span> 🇰🇷 韩国 <span>›</span> 美食 <span>›</span> 韩国烤肉完全指南
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:        토리在韩国吃过很多顿烤肉，每次都觉得"这不只是在吃肉"。韩国烤肉餐厅里，烟雾弥漫，大家围着炭火，互相夹肉、互相倒酒，声音很响，但气氛很暖。韩国人不单独去吃烤肉——烤肉是一件需要一群人一起做的事。今天토리 把烤肉文化从头到尾讲给你听，包括你去餐厅不知道该怎么点、肉怎么烤、生菜包肉怎么包——全部都在这里 🥩🔥
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:      烤肉在韩国是一种社交仪式
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:    <p>在中国，一个人去吃火锅正在变得普遍。但在韩国，一个人去烤肉餐厅依然是非常少见的行为——不是因为餐厅不欢迎，而是因为<strong style="color:#FF8FAB;">烤肉在文化上就是一件集体行为</strong>。</p>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:    <p>韩国职场文化里，회식（聚餐）几乎等于去烤肉。新人入职、项目完成、季度庆功——烤肉是韩国人庆祝一切事情的方式。大家围在一起，炭火升起，第一杯소주倒上，这个仪式开始了。</p>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:    <h3>📜 韩国烤肉的历史——从宫廷到街边</h3>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:    <p>韩国烤肉最早的记载可以追溯到고구려（高句丽）时代，当时叫<strong style="color:#FF8FAB;">맥적（貊炙）</strong>，是把肉串在铁签上烤的做法，类似今天的烤串。后来传入宫廷，成为宴席菜肴，做法逐渐精细化，演变成用酱料腌制后烤的风格。</p>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:    <p>近代的韩国烤肉文化真正普及是在1950年代之后。韩战结束、经济重建，烤肉从贵族食物变成了街边小馆，任何人都能围着炭炉吃一顿。今天韩国全国有超过8万家烤肉餐厅——平均每600个人就有一家烤肉店。</p>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:      <span class="st-sub">第一次去韩国烤肉餐厅，照着这个点</span>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:      <div class="meat-name-zh">五花肉 · 韩国烤肉之王</div>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:      <div class="meat-desc">韩国最受欢迎的烤肉部位，没有之一。厚切猪五花，油脂丰富，在炭火上烤到边缘焦脆、中间多汁，蘸一点참기름（芝麻油）盐，用생채소（生蔬菜）包着吃。简单但极致。</div>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:      <div class="meat-desc">猪颈部的肉，脂肪分布均匀，肉质有弹性比五花肉更有嚼头。在韩国，삼겹살和목살经常被同时点——两种口感搭配，吃完一轮再换另一种，是很多本地人的固定点法。</div>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:      <div class="meat-desc">用酱油、梨汁、大蒜、芝麻油腌制后烤的牛肋排。LA갈비是横切带骨的薄切排骨，是韩裔美国人发展出来的切法，现在在韩国也非常流行。甜咸鲜香，肉嫩入味，是很多人的最爱。</div>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:      <div class="meat-desc">꽃등심（肋眼）和채끝（西冷）是韩国高级烤肉的代表部位。雪花纹路丰富，只需轻轻在炭火上过一下，外层熟了就可以吃，保留粉红色内部的鲜嫩多汁。配上생채소和마늘（大蒜）一起吃。</div>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:      韩国烤肉全流程——从进门到结账
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:        <div class="step-desc-text">韩国烤肉餐厅通常有무한리필（无限续菜）的小菜——泡菜、豆芽、菠菜、鸡蛋卷等，都是免费的，吃完可以再要。肉要另外点，按份计费。</div>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:        <div class="step-desc-text">烤肉配소주是韩国标准组合。不喝酒可以点물（矿泉水）或사이다（雪碧）。很多餐厅不主动问，要主动说。</div>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:        <div class="step-desc-text">大多数餐厅的服务员会帮你点火并开始烤第一轮肉，之后你自己烤。炭火烤肉要比煤气炉香，但现在煤气炉更普遍。烤好的肉用剪刀剪成小块，这是韩国特有的习惯，不用刀。</div>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:        <div class="step-desc-text">烤好的肉配上蘸料，用생채소（生蔬菜）包起来一口吃掉。这个动作叫쌈 먹기，是韩国烤肉的灵魂。</div>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:        <div class="step-desc-text">韩国烤肉有一个收尾传统：最后用烤肉剩余的油脂在炉上炒饭，加泡菜、海苔碎、芝麻，锅气十足。这叫볶음밥（炒饭），很多餐厅需要额外点，问一句就知道。</div>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:      <span class="st-sub">韩国烤肉的灵魂动作，有讲究</span>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:    <div class="tori-mini-text">토리 第一次吃的时候包太大，一口塞不下，非常尴尬。<strong>宁可包小一点，保证一口吃完。</strong>韩国人在帮你包的时候，这是一种关心的表达，收下就好，不用自己动手。</div>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:      <div class="sauce-desc">烤肉餐厅几乎必点的汤，大豆发酵酱做底，加豆腐、蔬菜炖煮。和烤肉交替吃，解腻又暖胃，是韩国人烤肉的固定搭配。</div>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:      <div class="sauce-desc">整瓣大蒜放在炉边一起烤，烤到软糯甜香。韩国人吃烤肉时会一起吃大量大蒜，这不是坏习惯，是健康的文化习俗。</div>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:      <div class="rc-desc">用真实木炭烤肉，香气是煤气炉无法复制的。通常价格更高，环境更正式，适合想吃一顿正宗韩国烤肉的场合。在首尔弘大、梨泰院、江南有很多。</div>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:      <div class="rc-desc">用蜂窝煤烤肉，是韩国老式烤肉店的代表。价格亲民，氛围接地气，通常在老城区或市场附近找到。烟气很重，衣服会有味道，但味道绝对真实。</div>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:      <div class="rc-desc">专卖韩国本土牛肉（한우）的高级烤肉餐厅。한우是韩国国宝级食材，价格是普通牛肉的3-5倍，但雪花丰富、香气浓郁，是在韩国必须体验一次的奢侈。</div>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:      <div class="tc-q">韩国人一年吃多少猪肉？</div>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:      <div class="tc-a">韩国人均猪肉消耗量约27公斤/年，位居亚洲前列。其中삼겹살（五花肉）占了猪肉消耗量的相当大比例。韩国甚至有一个"삼겹살데이"——每年3月3日，因为3월3일谐音삼삼，专门吃삼겹살的非正式节日。</div>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:      <div class="tc-a">在餐桌上用刀切肉，在韩国文化里有一种攻击性的感觉，不够优雅。剪刀（가위）反而更安全、更方便——在炉子上直接剪，不需要额外的砧板，也不烫手。这个习惯已经成为韩国烤肉文化的标志性符号之一。</div>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:      <div class="tc-q">为什么韩国烤肉餐厅通常有备用衣物？</div>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:      <div class="tc-a">一些高档烤肉餐厅会在入口处准备围裙或备用外套，让顾客换上再烤肉——因为烤肉的油烟会让衣服沾满味道。这在年轻一代韩国人中也催生了一个习惯：去吃烤肉之前不穿贵的衣服，专门穿"烤肉服"。</div>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:    <div class="nt">🥩 去韩国烤肉餐厅之前要知道</div>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:    <strong>고기는 최소 2인분부터（肉最少点两人份）</strong>——几乎所有韩国烤肉餐厅的最低起点是两人份，一个人去通常会被礼貌地拒绝或安排特定座位。如果是一个人，可以去무한리필店，通常允许单独入座。另外，韩国烤肉餐厅普遍不接受拆分结账，大家AA制的话要自己算好再付给一个人。
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:        <div class="ks-sub">点击 + 可加入你的词汇本</div>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:  <!-- 本篇词汇 -->
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:    <div>本篇出现的词汇</div>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:      韩国烤肉不只是一顿饭，<br>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:      <div class="next-tag">🍜 韩国人为什么这么爱喝汤</div>
+src/data/korea-articles/음식/美食模块_01_韩国烤肉完全指南.html:      <div class="next-tag">🌶️ 韩国辣文化</div>
+src/data/korea-articles/음식/美食模块_02_街头小吃地图.html:<title>首尔街头小吃地图 · 韩语学习日记</title>
+src/data/korea-articles/음식/美食模块_02_街头小吃地图.html:  /* 词汇 */
+src/data/korea-articles/음식/美食模块_02_街头小吃地图.html:  <div class="hero-tag">🇰🇷 韩国美食 · 每道菜背后都有一个故事</div>
+src/data/korea-articles/음식/美食模块_02_街头小吃地图.html:    <span>길거리 음식 — 最真实的韩国味道，藏在街边摊上</span>
+src/data/korea-articles/음식/美食模块_02_街头小吃地图.html:    🏠 首页 <span>›</span> 🇰🇷 韩国 <span>›</span> 美食 <span>›</span> 街头小吃地图
+src/data/korea-articles/음식/美食模块_02_街头小吃地图.html:      떡볶이——韩国街头的灵魂
+src/data/korea-articles/음식/美食模块_02_街头小吃地图.html:        <div class="snack-name-zh">炒年糕 · 韩国街头第一小吃</div>
+src/data/korea-articles/음식/美食模块_02_街头小吃地图.html:      <p>年糕条（떡）加上辣椒酱（고추장）炒制而成，是韩国街头出现频率最高的食物。你在任何분식집（小吃店）门口都能看到它，在便利店里有杯装版，在高档餐厅里有精致版，甚至有整条街专门卖떡볶이。</p>
+src/data/korea-articles/음식/美食模块_02_街头小吃地图.html:        <div class="smc-desc">辣椒酱加奶油调成玫瑰色酱汁，近年韩国最流行的新版本。奶香中带微辣，不那么刺激，适合辣度低的人。</div>
+src/data/korea-articles/음식/美食模块_02_街头小吃地图.html:        <div class="smc-desc">连锁品牌"엽기떡볶이"出品，辣度分级，最高级别是韩国辣度天花板。有粉丝专门去挑战，但토리 不太推荐初次体验。</div>
+src/data/korea-articles/음식/美食模块_02_街头小吃地图.html:      순대——韩国版血肠，比你想象的好吃
+src/data/korea-articles/음식/美食模块_02_街头小吃地图.html:        <div class="snack-name-zh">韩国血肠 · 你一定要试一次</div>
+src/data/korea-articles/음식/美食模块_02_街头小吃地图.html:      <p>순대通常和떡볶이、튀김放在同一个摊位上，是韩国分식（小吃）文化的三位一体。한国사람들은 순대를 먹을 때 반드시 소금에 찍어 먹어요——吃순대一定要蘸盐，这是本地人的吃法，不要蘸辣酱。</p>
+src/data/korea-articles/음식/美食模块_02_街头小吃地图.html:      <div class="highlight"><strong>托里推荐：</strong>순대국밥（순대汤饭）是把순대切块放进猪骨汤里煮成的汤饭，是韩国人最爱的宿醉解酒食物之一，也是冬天最暖心的一碗。</div>
+src/data/korea-articles/음식/美食模块_02_街头小吃地图.html:        <div class="smc-name-zh">호떡·韩国糖饼</div>
+src/data/korea-articles/음식/美食模块_02_街头小吃地图.html:        <div class="smc-desc">鱼形铁模烤出来的饼，内馅传统上是红豆，现在有奶油、地瓜等多种口味。韩国人对붕어빵有极深的情感记忆，是"爸爸的味道"。</div>
+src/data/korea-articles/음식/美食模块_02_街头小吃地图.html:        <div class="street-desc">韩国大学文化聚集地，주변에 분식집과 포차（路边摊酒馆）最多。这里的떡볶이和튀김是大学生的日常，价格比명동便宜，更接地气。深夜还有포장마차（小摊酒馆）开着。</div>
+src/data/korea-articles/음식/美食模块_02_街头小吃地图.html:      <div class="season-items">팥빙수（刨冰+红豆）韩国夏天必吃<br>옥수수 아이스크림（玉米冰淇淋）<br>수박주스（西瓜汁）街边现榨<br>냉면 (冷面) 流行于夏日</div>
+src/data/korea-articles/음식/美食模块_02_街头小吃地图.html:      <div class="tc-a">분식（分食）字面意思是"分粮食"，起源于1960–70年代韩国粮食匮乏时期，政府推广용 减少大米消耗的运动，鼓励用面粉制品代替米饭。떡볶이、순대、라면都是这个时代的产物。从政策变成了一种深入人心的饮食文化，如今분식집是韩国最亲民的餐厅类型。</div>
+src/data/korea-articles/음식/美食模块_02_街头小吃地图.html:      <div class="tc-a">어묵是鱼饼的正式韩语名，오뎅是从日语おでん（关东煮）借来的词。两个词在韩国都在用——어묵更正式、更书面，오뎅更口语、更像街头说法。在분식집摊位上的价格牌写的通常是어묵，但很多韩国人说오뎅하나 주세요（给我一串오뎅）。</div>
+src/data/korea-articles/음식/美食模块_02_街头小吃地图.html:      <div class="tc-q">포장마차在韩国有什么特殊意义？</div>
+src/data/korea-articles/음식/美食模块_02_街头小吃地图.html:      <div class="tc-a">포장마차（包装马车，即帐篷摊位）在1980–90年代的首尔是重要的社会空间——劳动者、学生、普通市民在这里喝酒聊天。后来城市化管理让许多포장마차消失，但它在韩剧中的出现让它成为了"真实韩国"的文化符号。现在부산 포장마차（釜山路边摊）和首尔东大门一带仍然有保留。</div>
+src/data/korea-articles/음식/美食模块_02_街头小吃地图.html:      <div class="tc-q">韩国街头小吃为什么这么便宜？</div>
+src/data/korea-articles/음식/美食模块_02_街头小吃地图.html:      <div class="tc-a">韩国政府长期对基本食品价格有补贴和管控传统，특히（特别是）아래로 떡볶이, 라면, 순대 这类平民食物的价格增幅远低于其他物价。一碗떡볶이几十年来价格变化幅度极小，这是韩国政府对"서민 음식（平民食物）"的一种隐性保护。</div>
+src/data/korea-articles/음식/美食模块_02_街头小吃地图.html:    街头小吃摊<strong>通常不提供湿纸巾</strong>，建议自己带。另外，很多小摊位不提供垃圾桶，韩国街头垃圾桶很少，要把包装带到便利店旁边的垃圾桶扔掉，或者找最近的分类垃圾桶。吃完东西在街上随手乱扔，会被认为非常没有素质。
+src/data/korea-articles/음식/美食模块_02_街头小吃地图.html:        <div class="ks-sub">点击 + 可加入你的词汇本</div>
+src/data/korea-articles/음식/美食模块_02_街头小吃地图.html:  <!-- 词汇 -->
+src/data/korea-articles/음식/美食模块_02_街头小吃地图.html:    <div>本篇出现的词汇</div>
+src/data/korea-articles/음식/美食模块_02_街头小吃地图.html:      下一篇，토리 带你探索韩国人为什么这么爱喝汤 🍲
+src/data/korea-articles/음식/美食模块_02_街头小吃地图.html:    <a class="next-btn" href="#">下一篇：韩国人为什么这么爱喝汤 →</a>
+src/data/korea-articles/음식/美食模块_02_街头小吃地图.html:      <div class="next-tag">🥩 韩国烤肉完全指南</div>
+src/data/korea-articles/음식/美食模块_02_街头小吃地图.html:      <div class="next-tag">🌶️ 韩国辣文化</div>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:<title>韩国人为什么这么爱喝汤 · 韩语学习日记</title>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:  /* 词汇 */
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:  <div class="hero-tag">🇰🇷 韩国美食 · 每道菜背后都有一个故事</div>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:    韩国人为什么这么爱喝汤
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:    🏠 首页 <span>›</span> 🇰🇷 韩国 <span>›</span> 美食 <span>›</span> 韩国人为什么这么爱喝汤
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:        토리在韩国朋友家吃过很多顿饭，发现一件事：无论吃什么，桌上一定有一碗汤。烤肉旁边是된장찌개，白米饭旁边是미역국，解酒早晨是해장국，生日当天是미역국……韩国人和汤的关系，不只是"好喝"，是一种文化里的情感连接。今天토리 把韩国汤文化从头到尾讲给你听，让你看见那碗汤背后的故事 🍲
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:    <p>韩国的汤文化根植于农耕传统。在农耕社会里，劳动量大、消耗高，需要食物既能填饱肚子又能快速补充水分和盐分。汤完美地满足了这个需求——米饭提供碳水，汤提供水分和矿物质，泡菜提供发酵益生菌，这三样构成了韩国饮食的铁三角。</p>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:    <p>韩语里有个说法叫 <strong style="color:#5ca89e;">국밥 한 그릇</strong>（一碗汤饭），意思是把米饭泡进汤里吃。这是韩国最朴素、最有历史感的饮食方式，也是韩国人在疲惫或生病时本能选择的食物形态。</p>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:      <strong>토리 说：</strong>韩语里"국물도 없다"（连汤都没有）是一句惯用语，意思是"什么都没有，彻底落空"。汤在韩国文化里是最基本的存在——连最基本的都没有了，那真的是一无所有。
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:    <p>在韩国文化里，给人做一碗汤，是一种深沉的关心表达。妈妈给生病的孩子煮死太米역국，奶奶给回家过节的孙子煮一锅大骨汤，老婆给醉酒回来的丈夫端出一碗해장국——这些场景在韩剧里反复出现，因为它们就是真实的韩国生活。</p>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:    <p>汤不需要语言，它本身就是一句"我想到你了，我在乎你"。这是韩国饮食文化里最温柔的部分。</p>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:      <span class="st-sub">韩国人的汤，有精确的场合对应关系</span>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:        <div class="oc-reason">韩国人生日当天一定喝미역국，来自"妈妈生我们那天喝裙带菜汤"的传统。不喝미역국就像没过生日。考试失败有时会说"오늘 미역국 먹었다"（今天喝了裙带菜汤）——因为미역（裙带菜）滑，象征"滑倒/失败"。</div>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:        <div class="oc-reason">뼈해장국（猪骨汤）、콩나물국밥（豆芽汤饭）、북엇국（明太鱼汤）……解酒汤种类繁多，但功能一致：补充酒精消耗的盐分和水分，帮助肠胃恢复。韩国有专门的해장국餐厅，从凌晨就开始营业。</div>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:        <div class="oc-reason">整只小鸡里塞入人参、糯米、红枣、大蒜慢炖而成。韩国人相信삼계탕有强身健体、补充元气的功效。夏天三伏天（복날）反而要吃삼계탕——"以热攻热"，这是韩国传统养生哲学。</div>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:        <div class="oc-reason">韩国家庭餐桌的日常汤，几乎每天都有。된장찌개（大豆酱汤）是最家常的，豆腐、蔬菜、豆酱慢煮；김치찌개（泡菜锅）是泡菜和猪肉煮成的酸辣汤，是韩国人最思念家的味道之一。</div>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:        <div class="oc-situation">설날 · 韩国春节</div>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:        <div class="oc-reason">설날必喝，白色年糕片象征新年、纯洁、长寿。吃了一碗떡국就算过了一岁。这碗汤在韩国文化里承载了时间的流逝和对新年的期望，是设날最重要的仪式食物。</div>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:      六碗必须了解的韩国经典汤
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:        <div class="soup-name-zh">参鸡汤 · 韩国最有名的养生汤</div>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:      <p>韩国人在<strong style="color:#5ca89e;">복날（三伏天）</strong>——夏天最热的三天——专门吃삼계탕。这是韩国传统"이열치열（以热攻热）"养生哲学的体现：在最热的天气里吃最热的汤，通过大量出汗排出体内湿气，反而帮助身体适应酷暑。</p>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:        <div class="soup-name-zh">大酱汤 · 韩国家庭的味道</div>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:      <p>된장（大豆酱）是韩国传统发酵食品，用黄豆发酵制成，含有大量益生菌。된장찌개就是以된장为底料，加入豆腐、蔬菜、蘑菇、辣椒等食材炖煮的汤。</p>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:      <p>된장찌개没有固定配方，每家的味道都不一样——这正是它的魅力。韩国人对된장찌개有极深的情感认同，离家在外的人最想念的往往是"<strong style="color:#5ca89e;">엄마가 끓여준 된장찌개</strong>"（妈妈煮的된장찌개）。这碗汤的味道，就是家的味道。</p>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:      <div class="highlight"><strong>된장 vs 미소：</strong>很多人觉得된장찌개和日本味噌汤（みそ汁）很像，但两者的发酵工艺不同，된장的味道更浓厚、更复杂、发酵程度更深。韩国人对把된장찌개和味噌汤混为一谈这件事，非常在意。</div>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:        <div class="smc-desc">裙带菜（미역）富含碘和矿物质，韩国产后妈妈必喝，生日当天必喝。味道清淡鲜美，汤色透明。也有用牛肉或蛤蜊熬制的版本，鲜味更浓。</div>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:        <div class="smc-desc">熟成的泡菜和猪肉（或金枪鱼罐头）一起炖，酸辣鲜香，是韩国人最思乡的味道。发酵过的老泡菜味道更深沉，是做김치찌개的最佳原料。</div>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:      <span class="st-sub">把饭泡进汤里，这是韩国人最自然的吃法</span>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:    <p>韩国有一种独特的饮食习惯叫做<strong style="color:#5ca89e;">밥을 말아 먹다</strong>（把饭泡进汤里吃）。白米饭直接放进汤碗里，用勺子搅拌，让饭吸饱汤汁再吃。这种吃法在西方饮食礼仪里是不雅观的，但在韩国完全正常。</p>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:    <p>국밥专门店是韩国最亲民的餐厅类型，通常从早上就开始营业，价格低廉，一碗完整的热汤饭让人从早上到下午都有力气。在韩国，국밥不只是食物，是<strong style="color:#5ca89e;">"平民的尊严"</strong>——任何人都能用很少的钱吃一顿热乎乎的、有肉有汤有饭的正餐。</p>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:      <div class="tori-mini-text">토리最喜欢的国밥是<strong>돼지국밥（猪肉汤饭）</strong>，부산이 원조（起源于釜山）。猪骨汤加切片猪肉，配上葱花和虾酱，是韩国最有地域特色的国밥之一。去釜산에 가면 꼭 먹어봐요。</div>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:      韩国 vs 中国的汤文化
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:      <div class="vs-title">🇰🇷 韩国的汤</div>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:      <div class="vs-item">广东人饭前先喝汤，与韩国顺序不同</div>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:      <span class="st-sub">这些让你对韩国汤的理解更立体</span>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:      <div class="tc-a">미역（裙带菜）表面滑溜，在韩语里被引申为"滑倒、落榜"。考试失败会说"오늘 미역국 먹었다（今天喝了裙带菜汤）"，意思是"落榜了"。反过来，生日喝미역국是祝福；考前千万不要喝，会带来坏运气——这是韩国人真实相信的迷信。</div>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:      <div class="tc-q">韩国人用勺子喝汤，筷子吃菜？</div>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:      <div class="tc-a">是的，这是韩国饮食礼仪的一个特点——勺子（숟가락）专门用来喝汤和盛饭，筷子（젓가락）用来夹菜。不能用筷子喝汤，也不能用勺子夹菜，这是礼仪。韩国筷子通常是金属材质（不是木质），因为金属不会被汤汁浸泡变形。</div>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:      <div class="tc-a">韩国传统医学（한의학）认为，夏天人体内部虚寒，需要用温热的食物来补充阳气。"이열치열（以热攻热）"不是让身体更热，而是通过热汤引导体内气血循环，通过出汗排出体内积聚的湿气。삼계탕的人参和鸡肉恰好是温热属性食材，非常符合这个理论。</div>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:    韩国的찌개（锅类汤）通常是<strong>一锅供所有人分享</strong>，不像日本那样每人一碗独立的味噌汤。一锅찌개放在桌子中间，大家用各自的勺子从锅里舀着喝——第一次去韩国餐厅可能会觉得奇怪，但这完全正常。如果你的文化习惯里这样不卫生，可以要求각자 따로（各自分开），但在韩国聚餐文化里，共享一锅汤是亲密感的象征。
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:        <div class="ks-sub">点击 + 可加入你的词汇本</div>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:  <!-- 词汇 -->
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:    <div>本篇出现的词汇</div>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:    <div class="ending-title">那碗汤里，装的是韩国人的心意</div>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:      下次在韩国餐桌上看到那碗汤，<br>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:      <div class="next-tag">🥩 韩国烤肉完全指南</div>
+src/data/korea-articles/음식/美食模块_03_韩国人为什么这么爱喝汤.html:      <div class="next-tag">🌶️ 韩国辣文化</div>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:<title>跟着韩剧学点餐 · 韩语学习日记</title>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:  /* 菜单词汇表 */
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:  /* 词汇 */
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:  <div class="hero-tag">🇰🇷 韩国美食 · 每道菜背后都有一个故事</div>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:    🏠 首页 <span>›</span> 🇰🇷 韩国 <span>›</span> 美食 <span>›</span> 跟着韩剧学点餐
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:      <p>韩国有一个根深蒂固的传统：搬进新家的第一天，要订一份짜장면（炸酱面）外卖。这个传统起源于1960-70年代——搬家时厨房还没收拾好，没法做饭，又要招待帮忙搬家的人，价格低廉又快速的짜장면就成了默认选择，延续到今天变成了一种仪式感。</p>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:      <div class="highlight"><strong>현실에서는：</strong>짜장면在韩国由中国华侨带来，已经完全韩国化——比中国炸酱面更甜、更浓稠、用黄豆酱而非黄豆面酱。与其说它是中餐，不如说它是"韩式中餐"的代表，完全独立的味道。</div>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:        <div class="tori-mini-text">토리推荐：去首尔인천（仁川）차이나타운，那里是韩式짜장면의 발상지（发源地），吃到最正宗的韩版炸酱面。首尔市区的중국집（中餐馆）也很多，<strong>짜장면 하나, 짬뽕 하나（一碗炸酱面一碗辣炒码）</strong>是韩国人最常见的点法。</div>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:      <p>소주+땅콩在韩国是最底层的饮食组合——땅콩是소주最便宜的안주（下酒菜），是那些喝不起好酒、吃不起好菜的普通人的选择。韩剧选择这个组合，是在说：<strong style="color:#FF8FAB;">有些对话，只能在最简单的地方才能发生</strong>。</p>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:        <div class="tori-mini-text">토리 说：<strong>안주（下酒菜）</strong>是韩国饮酒文化里一个重要概念——喝酒一定要配食物，단순히 술만 마시는 건 한국 문화가 아니에요（单纯喝酒不配菜不是韩国文化）。안주的选择反映你的心情和处境。</div>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:      <p>치맥（치킨+맥주）在韩剧里的出现频率，几乎等同于배경음악（背景音乐）。《蓝色大海的传说》里，심청（全智贤饰）第一次体验陆地上的快乐，选择的就是치맥——这个选择不是偶然，치맥代表的是韩国年轻人对"简单快乐"的最大公约数。</p>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:      <p>韩国炸鸡和中国炸鸡是完全不同的食物。韩国치킨用薄薄的面衣包裹，双重炸制——第一次低温炸熟，第二次高温炸脆，外皮极度酥脆而内部多汁。口味有原味、양념（甜辣酱）、간장（酱油蒜香）、치즈（芝士）等多种。</p>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:      <div class="highlight"><strong>치킨 주문 방법：</strong>韩国炸鸡通常叫外卖，앱（App）점 배달의민족（배민）或쿠팡이츠上下单，配送快且方便。也可以直接去치킨집（炸鸡店）堂食。半半치킨（半半鸡）= 一半原味一半양념，是最受欢迎的搭配。</div>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:        <div class="drama-title">한정식——韩国最高规格的传统餐食</div>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:      <p>财阀剧里的豪华饭局，桌上摆满了小碟子——这就是<strong style="color:#A8D8D0;">한정식（韩国定食）</strong>。한정식是韩国最正式的传统套餐，从古代宫廷料理演变而来，一桌可以有十几道到几十道菜，一道一道端上来，展示食材的多样和厨师的功夫。</p>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:      <p>한정식餐厅通常是韩屋（传统建筑）改造的，服务员穿韩服，菜品从小菜、汤、腌制品、蒸菜、炒菜到甜点依次呈现。价格从5万韩元到20万韩元一位不等，是韩国人接待重要客人、庆祝重要纪念日的选择。</p>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:      <p>컵라면在韩国便利店门口有专门的热水机，这个设计本身就是为这种"边走边泡、站着吃"的生活方式服务的。烫嘴的面条、辣辣的汤底，是韩国年轻人处理各种情绪的万能解药。</p>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:      韩国餐厅点餐实战
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:    <h3>🐰 토리 的韩国餐厅点餐全流程</h3>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:      <div class="order-text"><strong>叫服务员</strong>——韩国不要挥手，直接喊
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:      <div class="order-text"><strong>结账</strong>——韩国通常在收银台结账，不是桌边
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:  <!-- 菜单词汇 -->
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:      看懂韩国菜单——关键词汇
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:      <span class="st-sub">掌握这些词，任何韩国餐厅的菜单都不怕</span>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:  <!-- 韩国餐桌礼仪 -->
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:      韩国餐桌礼仪——这些细节很重要
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:      <span class="st-sub">知道这些，你在韩国饭桌上不会失礼</span>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:    <p><strong style="color:#C9B8E8;">等长辈先动筷</strong>：韩国饮食礼仪中，最重要的一条是长辈先开始吃，晚辈才能动筷子（或勺子）。长辈拿起勺子之前，你不能开始吃——这是基本礼仪，违反了非常失礼。</p>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:    <p><strong style="color:#C9B8E8;">勺子喝汤，筷子夹菜</strong>：如前文所述，韩国筷子和勺子有明确分工。不能用筷子舀汤，不能用勺子夹菜。</p>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:    <p><strong style="color:#C9B8E8;">碗不离桌</strong>：和中国、日本不同，韩国人吃饭时不把碗端起来。碗放在桌上，低头吃或用勺子把食物送到嘴边。把碗端起来是失礼的，因为这看起来像"乞讨的姿势"。</p>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:    <p><strong style="color:#C9B8E8;">不要插筷子进食物</strong>：把筷子插进饭里，是韩国祭祀时的做法，在饭桌上这样做是非常不吉利的禁忌。</p>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:      <div class="tori-mini-text">토리의 경험담：토리 有一次在韩国朋友家，习惯性地把碗端起来吃，朋友妈妈没说什么，但토리 后来知道那是失礼的。<strong>韩国饮食礼仪里，碗放在桌上是基本规范。</strong></div>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:      韩国饮食冷知识
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:      <div class="tc-q">韩国的外卖文化有多发达？</div>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:      <div class="tc-a">韩国是全球外卖文化最发达的国家之一。배달의민족（배민）和쿠팡이츠是最大的两个平台，深夜两点依然可以点到热腾腾的炸鸡、烤肉、海鲜汤。韩国的외식(外食)支出比例在全球名列前茅，"叫外卖"是韩国年轻人的日常，不是偶尔为之。</div>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:      <div class="tc-q">为什么韩国餐厅的米饭要额外加钱？</div>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:      <div class="tc-a">韩国很多餐厅，特别是烤肉店和汤类餐厅，主食（공기밥，白米饭）需要额外单点，不随菜附赠。通常1,000–2,000원一碗。第一次去的人常常不知道，吃完才发现没有饭——要主动说 공기밥 하나 주세요（给我一碗米饭）。</div>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:      <div class="tc-a">불고기（불=火，고기=肉）是用酱油、梨汁、芝麻油腌制的薄切牛肉，在铁盘上烤制。它是韩国最早被国际市场认知的韩国料理之一——1988年首尔奥运会期间，大量外国运动员和游客第一次接触到불고기，开始了韩国料理走向世界的序幕。</div>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:      <div class="tc-q">韩国人为什么那么执着于"맛집"（好吃的店）？</div>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:      <div class="tc-a">맛집（맛=味道，집=店）是韩国饮食文化里的核心词汇，意思是"好吃的店、值得去的餐厅"。韩国人对맛집的探索热情极高——小红书（韩国是Instagram）上的맛집帖子、맛집专门博主、맛집地图App……一家店一旦被认定为맛집，排队一两个小时是常事。麦当劳汉堡和맛집汉堡，韩国人毫不犹豫选맛집。</div>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:    <div class="nt">🍽️ 在韩国餐厅用餐前要知道</div>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:    韩国大部分餐厅提供<strong>무료 반찬（免费小菜）</strong>——泡菜、豆芽、海苔等，可以无限续加，直接说 반찬 더 주세요 即可。但这些小菜不能打包带走，是就餐专享。另外，韩国餐厅普遍没有服务小费文化，结账金额就是最终金额，不需要额外给小费。
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:        <div class="ks-title">토리 教你说——韩国餐厅必备韩语</div>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:        <div class="ks-sub">点击 + 可加入你的词汇本</div>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:  <!-- 词汇 -->
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:    <div>本篇出现的词汇</div>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:    <div class="vocab-chip"><span class="vko">한정식</span><span class="vzh">韩国定食</span></div>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:      下一篇，토리 带你探索韩国辣文化的起源 🌶️
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:    <a class="next-btn" href="#">下一篇：韩国辣文化——辣椒是哪里来的 →</a>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:      <div class="next-tag">🥩 韩国烤肉完全指南</div>
+src/data/korea-articles/음식/美食模块_04_跟着韩剧学点餐.html:      <div class="next-tag">🍲 韩国人为什么这么爱喝汤</div>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:<title>韩国辣文化 · 韩语学习日记</title>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:  /* 词汇 */
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:  <div class="hero-tag">🇰🇷 韩国美食 · 每道菜背后都有一个故事</div>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:    韩国辣文化——辣椒是哪里来的
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:    <span>고추 문화 — 没有辣椒之前，韩国人怎么吃饭的？</span>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:    🏠 首页 <span>›</span> 🇰🇷 韩国 <span>›</span> 美食 <span>›</span> 韩国辣文化
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:        토리有一个问题想了很久：韩国人这么爱吃辣，感觉辣是韩国饮食的灵魂，但辣椒是原产于美洲的植物，韩国在400年前才有辣椒——那在辣椒到来之前，韩国人吃什么？泡菜是什么颜色的？이거 진짜 신기하지 않아요？（这不是很神奇吗？）今天토리 带你一起弄清楚韩国辣文化的前世今生，你会对那碗红红的辣椒酱有完全不同的感受 🌶️
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:      辣椒到来之前——韩国人吃什么
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:    <h3>🥬 没有辣椒的韩国饮食</h3>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:    <p>今天我们看到的韩国饮食——红色的泡菜、鲜红的떡볶이、火红的김치찌개——这些颜色全部来自고추（辣椒）。但고추是原产于中美洲的植物，大约在1600年前后才传入朝鲜半岛，距今不过400年。</p>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:    <div class="highlight"><strong>생각해봐：</strong>白色的泡菜，没有辣椒的韩国料理……这幅画面很难想象，但那才是400年前朝鲜半岛餐桌的真实样子。辣椒在400年里彻底改变了一个民族的饮食基因。</div>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:      <div class="tl-desc">经过约100年的缓慢接受，辣椒开始大规模进入朝鲜饮食。最重要的变化是김치加入了고춧가루（辣椒粉）——白色的김치变成了红色的김치，这一变化彻底重塑了朝鲜饮食的面貌。从此，红色成为韩国饮食最具代表性的颜色。</div>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:      <div class="tl-desc">19世纪，고추已经从舶来品变成了朝鲜半岛最重要的农作物之一。고추장（辣椒酱）作为韩国三大基础酱料之一（与된장、간장并列）正式确立地位。辣椒的种植遍布全国，고추 농사（辣椒农业）成为农民生计的重要来源。</div>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:      <div class="tl-title">韩国成为全球辣椒消耗量最大的国家之一</div>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:      <div class="tl-desc">今天韩国人均年消耗辣椒约4公斤，是全球人均辣椒消耗量最高的国家之一。고추장、고춧가루是韩国家庭厨房里不可缺少的基础调料。辣在韩国人的饮食哲学里不只是味道，是健康、文化和身份认同的一部分。</div>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:      韩国三大基础酱料——발효의 미학
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:      <span class="st-sub">发酵的美学，韩国饮食的根基</span>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:    <p>韩国三大基础酱料——<strong style="color:#e74c3c;">고추장（辣椒酱）、된장（大豆酱）、간장（酱油）</strong>——都是发酵食品，而且通常由同一批大豆发酵而来。这三种酱料合称 <strong style="color:#e74c3c;">장（酱）</strong>，是韩国饮食文化的根基，没有这三样，韩国料理就无从谈起。</p>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:    <p>传统上，韩国家庭在每年立冬后制作장，在大缸里发酵整个冬天，到春天取出使用。这个过程叫<strong style="color:#e74c3c;">장 담그기</strong>，是韩国家庭年复一年最重要的烹饪仪式之一，也是韩国非物质文化遗产的重要组成部分。</p>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:      <div class="spice-desc">糯米、黄豆酱、辣椒粉发酵而成，甜辣咸鲜四味合一。是떡볶이、비빔밥、쌈장的核心原料。韩国最具代表性的调料。</div>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:      <div class="spice-desc">与된장同源，从发酵大豆提取的液体。韩国간장分为양조간장（酿造酱油）和조선간장（传统朝鲜酱油），后者颜色更淡，味道更咸。</div>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:      韩国辣度排行——从入门到地狱
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:        <div class="ch-desc">奶油粉色炒年糕和酱油炸鸡。前者辣椒酱被奶油中和，微辣甜香；后者完全不辣。适合辣度敏感但想体验韩国味道的人。</div>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:        <div class="ch-desc">标准版炒年糕和甜辣炸鸡，这是韩国人日常的辣度。对有辣食经验的中国人来说基本没有压力，但辣度零基础的人可能会流汗。</div>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:        <div class="ch-desc">连锁品牌엽기떡볶이的标准级别，以及辣炒章鱼。韩国辣食爱好者的日常，但对辣度敏感的人会明显感到刺激，需要备好水。</div>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:        <div class="ch-desc">火鸡面和韩式麻辣烫。불닭볶음면是韩国出口全球的辣面挑战，辣度极高。即使是韩国辣食爱好者，第一次吃也可能眼泪直流。</div>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:        <div class="ch-desc">핵불닭（核辣火鸡）和엽기떡볶이最高辣度版本。在韩国是挑战级别，连很多韩国人都无法完成。尝试之前请确认自己对辣有充分准备。</div>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:        <div class="sfcard-name-zh">泡菜 · 韩国辣文化最重要的符号</div>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:      <p>김치是韩国最重要的发酵食品，用盐腌制白菜后，涂上고춧가루（辣椒粉）、마늘（大蒜）、생강（生姜）、젓갈（鱼露）制成的酱料，发酵数天到数月。김치不只是一道菜，是韩国的文化象征，2013年被列入UNESCO人类非物质文化遗产。</p>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:      <p>韩国家庭每年冬天进行一次大规模的김치腌制活动，叫做 <strong style="color:#e74c3c;">김장（泡菜腌制）</strong>。全家人聚在一起，一次腌制足够一整年吃的김치——这不只是食物储备，是凝聚家人、传承文化的仪式。김장也是UNESCO非遗项目。</p>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:        <div class="tori-mini-text">韩国目前有超过<strong>200种김치</strong>，不同地区、不同食材、不同季节有不同的版本。最常见的배추김치（白菜泡菜）只是其中之一——还有깍두기（萝卜泡菜）、오이소박이（黄瓜泡菜）、열무김치（嫩萝卜叶泡菜）……</div>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:        <div class="sfcard-name-zh">火鸡面 · 韩国辣食的全球名片</div>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:      <p>2012年三养食品推出불닭볶음면，以当时韩国最辣为卖点。没有人预料到它会成为全球现象——YouTube上的"불닭볶음면 챌린지（火鸡面挑战）"视频爆红，让这款面条成为韩国最广为人知的出口食品之一，甚至超越了김치在某些市场的知名度。</p>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:      <p>낙지（章鱼）用고추장、고춧가루、마늘大量炒制，颜色鲜红，辣味十足，是韩国最正宗的辣食之一。和불닭볶음면那种挑战型的辣不同，낙지볶음是韩国人真实的日常辣食——很多韩国人下班后会去낙지집（章鱼店）点一份낙지볶음下饭。</p>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:      <p>낙지볶음有时会和공기밥（米饭）一起做成낙지볶음밥，最后在锅里炒一份볶음밥（炒饭）——这和烤肉餐厅的收尾炒饭一样，是韩国饮食"把锅底用到极致"精神的体现。</p>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:      韩国人为什么觉得辣的是健康的
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:    <h3>🏥 辣椒在韩国的健康地位</h3>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:    <p>韩国传统医学（한의학）认为，고추属于温热性食材，适量食用有助于促进血液循环、增强体力、排出体内寒气。这种观念与韩国人爱吃辣的习惯相互强化——吃辣不只是喜好，而是一种对身体有益的选择。</p>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:    <p>现代科学研究也证实，辣椒中的辣椒素（capsaicin）确实有一定的代谢促进和抗炎效果。韩国人拿这些研究来佐证传统믿음（信仰），让"辣的是健康的"这个概念更加根深蒂固。</p>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:    <div class="highlight"><strong>흥미로운 사실：</strong>韩国는 전 세계적으로 위암（胃癌）발생률이 높은 나라 중 하나이기도 합니다（韩国同时也是胃癌发生率较高的国家之一）。研究者认为这与大量摄入腌制食品和辣椒有一定关联，但具体机制仍在研究中。辣椒是韩国文化的核心，它的利与弊都是真实存在的。</div>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:      <span class="st-sub">这些让你对辣椒和韩国文化的理解更立体</span>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:      <div class="tc-a">史学界至今没有定论。主流说法有两个：一是壬辰倭乱期间日本传入，二是经由中国贸易传入。朝鲜文献中最早关于고추的记录出现在1614年，但传入时间可能更早。有趣的是，日本的说法在韩国人中引发争议——很多韩国人不愿意接受韩国最重要的食材来自日本这个历史。</div>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:      <div class="tc-q">韩国的김장到底有多大规模？</div>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:      <div class="tc-a">韩国家庭平均每年김장消耗约20–30棵白菜，制作约40–50公斤김치。城市化之后很多家庭开始买现成的김치，但김장문화并没有消失——很多家庭依然坚持自制，把它视为家庭团聚和文化传承的仪式。2013年김장이 유네스코에 등재됐어요（被联合国教科文组织列入非遗）。</div>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:      <div class="tc-q">韩国辣文化如何影响全球？</div>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:      <div class="tc-a">불닭볶음면的全球爆红是最明显的例子，但韩国辣文化的全球化不止于此。고추장作为调料已经出现在很多国家的超市，韩国泡菜在全球健康食品市场持续增长，"韩式辣"（Korean spicy）成为全球餐饮界的流行标签之一。</div>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:      <div class="tc-q">韩国不同地区的辣度不同吗？</div>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:      <div class="tc-a">明显不同。전라도（全罗道，韩国西南部）以饮食最辣最丰盛著称，특히 광주（光州）的음식이 매운 걸로 유명해요（以辣食闻名）。경상도（庆尚道，东南部）口味也重。相比之下，경기도（首都圈）和서울的饮食辣度相对温和，更符合现代都市口味。外地人到전라도吃饭，经常被辣度惊到。</div>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:    <div class="nt">🌶️ 在韩国点辣食之前要知道</div>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:    韩国餐厅的辣度没有全国统一标准，同样叫做"보통 맵기（普通辣度）"，在不同餐厅可能差距很大。不确定辣度时，先问一句：<strong>많이 매워요?（很辣吗？）</strong>——如果服务员说 네 많이 매워요（是的很辣），那就做好心理准备；如果说 그냥 조금 매워요（就是有点辣），对有辣食经验的人来说通常没有压力。
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:        <div class="ks-sub">点击 + 可加入你的词汇本</div>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:  <!-- 词汇 -->
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:    <div>本篇出现的词汇</div>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:    <div class="series-badge">🎉 韩国美食系列 · 完结</div>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:      再用300年变成韩国人的灵魂调料。<br>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:        <div class="al-title">🥩 韩国烤肉完全指南</div>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:        <div class="al-title">🍲 韩国人为什么这么爱喝汤</div>
+src/data/korea-articles/음식/美食模块_05_韩国辣文化.html:        <div class="al-title">🌶️ 韩国辣文化——辣椒是哪里来的</div>
+src/data/korea.ts:    description: '韩服是韩国传统服饰，以线条优美、色彩艳丽著称。女性韩服由短上衣(저고리)和高腰裙(치마)组成，男性由短上衣和宽松裤(바지)组成。现代韩服在生活中较少穿着，但在节日(설날, 추석)、婚礼等重要场合仍有穿着传统。',
+src/data/korea.ts:    updatedAt: '2026-05-30', source: '韩国文化财厅',
+src/data/korea.ts:    description: '每年10月9日是韩文节(한글날)，纪念世宗大王于1443年创制训民正音(훈민정음)。韩文被公认为世界上最科学的文字之一，其字母形状模仿发音器官。韩国是唯一一个为文字设立国定假日的国家。',
+src/data/korea.ts:    id: 'c-03', title: '春节（韩国）', titleKo: '설날', emoji: '🎊',
+src/data/korea.ts:    description: '※ 春节起源于中国，后传入朝鲜半岛并本土化。在韩国，설날（农历1月1日）是重要传统节日之一。韩国人穿韩服、祭祀祖先(차례)、吃年糕汤(떡국)、给长辈拜年(세배)、玩传统游戏如掷柶(윷놀이)。韩国的春节习俗与中国有所不同，如吃年糕汤（而非饺子）、行礼方式等体现了韩民族特色。',
+src/data/korea.ts:    updatedAt: '2026-05-30', source: '韩国民俗博物馆',
+src/data/korea.ts:    id: 'c-04', title: '秋夕（韩国）', titleKo: '추석', emoji: '🌕',
+src/data/korea.ts:    description: '※ 秋夕的农耕祭祖传统在古代东亚农耕文化圈中普遍存在，中国的中秋节与韩国的秋夕在农历8月15日这一时间点重合，但各自发展出不同的习俗。韩国的추석是感恩丰收、祭拜祖先的节日，家人团聚制作松饼(송편)、扫墓(성묘)、跳圆圈舞(강강술래)，具有独特的韩民族特色。',
+src/data/korea.ts:    updatedAt: '2026-05-30', source: '韩国民俗博物馆',
+src/data/korea.ts:      { word: '강강술래', meaning: '圆圈舞（韩国非遗）' },
+src/data/korea.ts:    description: 'K-POP是韩国流行音乐，自90年代开始蓬勃发展，21世纪通过BTS、BLACKPINK等团体风靡全球。K-POP以精良的制作、同步的群舞(칼군무)、华丽的MV和粉丝文化(팬덤)著称。韩流(한류)不仅包括音乐，还涵盖了韩剧、电影、美妆、时尚等领域。',
+src/data/korea.ts:    updatedAt: '2026-05-30', source: '韩国文化产业振兴院',
+src/data/korea.ts:    id: 'c-06', title: '韩国年龄', titleKo: '한국 나이', emoji: '🎂',
+src/data/korea.ts:    description: '韩国传统年龄算法比较特别：出生即算1岁，每年1月1日（非生日）增加1岁。所以12月31日出生的婴儿次日就变成2岁。从2023年6月起，韩国正式在行政和法律上改用国际年龄算法（만 나이），但日常对话中"韩国年龄"的习惯仍很普遍。',
+src/data/korea.ts:    updatedAt: '2026-05-30', source: '韩国法制处',
+src/data/korea.ts:    id: 'c-07', title: '韩国礼仪', titleKo: '한국 예절', emoji: '🙇',
+src/data/korea.ts:    description: '韩国是礼仪之邦(동방예의지국)。鞠躬是最基本的问候方式，度数越深表示越尊重。与长辈喝酒时要侧身转头。递接物品用双手或右手托左臂。进韩国家庭要脱鞋。在公共交通工具上不占用老弱病残孕专座(교통약자석)。',
+src/data/korea.ts:    updatedAt: '2026-05-30', source: '韩国文化观光研究院',
+src/data/korea.ts:    description: '汗蒸房(찜질방)是韩国特有的大众洗浴休息场所。有不同温度的汗蒸房（如盐房、黄土房、冰房），配备公共休息区、食堂和游戏区。韩国人常常和朋友、家人甚至约会去汗蒸房。必吃美食：烤鸡蛋(구운 계란)和甜米露(식혜)，必做造型：羊角毛巾头巾(양머리)。',
+src/data/korea.ts:    updatedAt: '2026-05-30', source: '韩国观光公社',
+src/data/korea.ts:    description: '古朝鲜(고조선)是韩国历史上第一个王朝，由檀君(단군)建立。据《三国遗事》记载，檀君是天神桓因之子桓雄与熊女所生。公元前108年被中国汉朝灭亡，随后进入原三国时代。',
+src/data/korea.ts:    description: '朝鲜王朝(조선)以儒教(유교)立国，持续了518年，是韩国历史上最长的王朝。世宗大王创制了训民正音(한글)。经历了壬辰倭乱(임진왜란, 1592-1598)、丙子胡乱(병자호란, 1636-1637)等外侵。后期实行锁国政策(Hermit Kingdom)。',
+src/data/korea.ts:    description: '1910年日本吞并韩国，开始了35年的殖民统治。期间韩国人民发起三一独立运动(3.1운동, 1919年)，建立了大韩民国临时政府(대한민국 임시정부, 1919年，上海)。1945年8月15日日本投降后韩国光复(광복)。',
+src/data/korea.ts:    description: '1948年大韩民国政府成立。1950-1953年经历了韩国战争(한국전쟁)，此后韩国创造了举世瞩目的"汉江奇迹"(한강의 기적)，从战后废墟迅速发展为世界经济强国。1987年实现民主化(민주화)，如今韩国在科技、文化、经济等领域都处于世界前列。',
+src/data/korea.ts:    keyEvents: ['大韩民国政府成立 (1948.8.15)', '韩国战争 (1950-1953)', '4.19革命 (1960)', '5.18光州民主化运动 (1980)', '6月民主抗争 (1987)', '汉江奇迹 (1960s-1990s)', '韩流兴起 (2000s)'],
+src/data/korea.ts:      { word: '한국전쟁', meaning: '韩国战争' },
+src/data/korea.ts:    description: '首尔是韩国的首都和最大城市，拥有超过1000万人口。传统与现代在这里完美融合——景福宫(경복궁)紧邻现代摩天大楼，北村韩屋村(북촌한옥마을)的巷子通往咖啡馆林立的仁寺洞(인사동)。',
+src/data/korea.ts:    description: '韩国第二大城市和最大港口，以美丽的海滩、海鲜市场和国际电影节著称。釜山方言(부산 사투리)语调独特，相比首尔标准语更有抑扬顿挫。',
+src/data/korea.ts:      { name: '海云台', nameKo: '해운대', desc: '韩国最著名的海水浴场，夏季人山人海' },
+src/data/korea.ts:      { name: '甘川文化村', nameKo: '감천문화마을', desc: '彩色房屋错落有致的山坡村庄，被称为"韩国的圣托里尼"' },
+src/data/korea.ts:      { name: '札嘎其市场', nameKo: '자갈치시장', desc: '韩国最大的海鲜市场，可现场品尝活鱼生鱼片(회)' },
+src/data/korea.ts:    description: '济州岛是韩国最大的岛屿，也是著名的蜜月胜地。以三多(风多、石头多、女人多)和三无(无乞丐、无小偷、无大门)著称。济州方言与大陆差异很大，有独特的海女(해녀)文化。',
+src/data/korea.ts:      { name: '汉拿山', nameKo: '한라산', desc: '韩国最高峰(1947m)，世界自然遗产，四季景色各异' },
+src/data/korea.ts:    description: '韩式烤肉是最具代表性的韩国料理。불고기(薄切调味烤牛肉)用酱油、梨汁、蒜、芝麻油等腌制后烤制，口感甜嫩。삼겹살(烤五花肉)则直接烤制后蘸酱(쌈장)包生菜吃(쌈)。',
+src/data/korea.ts:    description: '韩国炸鸡(치킨)文化全球知名——外酥里嫩，酱料多样：原味(후라이드)、甜辣酱(양념)、酱油味(간장)、蜂蜜黄油(허니버터)等。치맥(炸鸡+啤酒)是韩国最受欢迎的夜宵搭配。',
+src/data/korea.ts:    description: '김치（泡菜）是韩国餐桌上不可或缺的配菜(반찬)，有超过200种。最常见的是辣白菜泡菜(배추김치)，用辣椒粉(고춧가루)、鱼露(젓갈)、蒜、姜等腌制发酵。富含乳酸菌，2013年"越冬泡菜文化(김장문화)"列入UNESCO非遗。',
+src/data/korea.ts:    description: '삼계탕（参鸡汤）是在整只童子鸡腹中塞入糯米(찹쌀)、人参(인삼)、红枣(대추)、蒜等，慢炖而成的滋补料理。韩国人在三伏天(복날, 一年中最热的日子)"以热治热(이열치열)"，排队吃参鸡汤补身体。',
+src/data/korea.ts:    description: '김밥（紫菜包饭）是用紫菜(김)将米饭、各种蔬菜、鸡蛋、火腿等卷起切段。与日本寿司不同，韩国紫菜包饭的米饭用芝麻油和盐调味（不加醋），口感更香醇，是野餐(소풍)和便当的必备。',
+src/data/korea.ts:    description: '떡볶이（辣炒年糕）是韩国最具代表性的街头小吃(길거리 음식)，在辣椒酱(고추장)调味的甜辣酱汁中煮入圆柱形年糕(가래떡)和鱼饼(어묵)。常在路边摊(포장마차)售卖，是韩国人的童年味道。',
+src/data/learningUnits.ts:    description: '学习最基本的韩语问候语和自我介绍，迈出韩语学习第一步',
+src/data/learningUnits.ts:    description: '学习表达日常基本动作，掌握韩语基础动词',
+src/data/learningUnits.ts:    description: '学习描述家人和朋友，掌握称谓和简单介绍',
+src/data/learningUnits.ts:    description: '学习韩语两大数字系统（汉字词/固有词）及基本量词',
+src/data/learningUnits.ts:    description: '学习韩国常见食物名称和基本的点餐表达',
+src/data/learningUnits.ts:    description: '学习描述地点和位置，掌握"在哪里"的问答',
+src/data/learningUnits.ts:    description: '学习表达时间、星期、日期，掌握"什么时候"的问答',
+src/data/learningUnits.ts:    description: '学习用韩语形容词描述事物的特征和状态',
+src/data/learningUnits.ts:    description: '学习表达天气状况和四季变化的词汇',
+src/data/learningUnits.ts:    description: '学习表达爱好和休闲活动，掌握"想做……"的表达',
+src/data/learningUnits.ts:    description: '学习购物相关的实用表达，掌握价格询问和比较',
+src/data/learningUnits.ts:    description: '学习乘坐交通工具和问路的实用表达',
+src/data/learningUnits.ts:    description: '学习表达喜怒哀乐等复杂情感的高级词汇',
+src/data/learningUnits.ts:    description: '学习身体部位和健康相关的表达，掌握就医用语',
+src/data/learningUnits.ts:    description: '学习旅行规划和预订相关的实用表达',
+src/data/learningUnits.ts:    description: '学习与学校、学习、考试相关的表达',
+src/data/learningUnits.ts:      { word: '공부하다', pronunciation: 'gongbuhada', meaning: '学习', partOfSpeech: '动词', example: '매일 한국어를 공부해요.', exampleZh: '每天学习韩语。', emoji: '📖' },
+src/data/learningUnits.ts:    listeningSentences: [{"korean":"매일 한국어를 공부해요. 숙제도 많아요.","chinese":"每天学习韩语，作业也很多。"},{"korean":"다음 주에 시험이 있어요. 열심히 공부할게요.","chinese":"下周有考试，我会努力学习的。"},{"korean":"질문 있어요! 이 문법을 설명해 주세요.","chinese":"有问题！请解释一下这个语法。"}],
+src/data/learningUnits.ts:    description: '学习职场用语和商务韩语基础',
+src/data/learningUnits.ts:    description: '学习表达恋爱心动和人际关系的词汇',
+src/data/learningUnits.ts:    title: '韩国文化',
+src/data/learningUnits.ts:    description: '学习与韩国文化、传统、K-POP相关的表达',
+src/data/learningUnits.ts:      { word: '전통', pronunciation: 'jeontong', meaning: '传统', partOfSpeech: '名词', example: '한국의 전통 문화를 좋아해요.', exampleZh: '喜欢韩国传统文化。', emoji: '🏮' },
+src/data/learningUnits.ts:    description: '学习科技、互联网、手机相关的现代韩语词汇',
+src/data/learningUnits.ts:    description: '学习讨论电影、电视剧和综艺节目的表达',
+src/data/learningUnits.ts:    description: '学习礼貌地提出请求、寻求帮助的表达',
+src/data/learningUnits.ts:    description: '学习表达自己的观点、同意和反对',
+src/data/learningUnits.ts:    description: '学习表达未来的计划、目标和梦想',
+src/data/learningUnits.ts:    description: '学习阅读和讨论新闻、时事相关的表达',
+src/data/learningUnits.ts:    description: '学习用韩语讨论社会热点话题和现象',
+src/data/learningUnits.ts:      { word: '교육', pronunciation: 'gyoyuk', meaning: '教育', partOfSpeech: '名词', example: '한국의 교육 열정이 대단해요.', exampleZh: '韩国的教育热情非常厉害。', emoji: '📚' },
+src/data/learningUnits.ts:    description: '学习韩语中的惯用表达和常用俗语',
+src/data/learningUnits.ts:    description: '学习面试、演讲、公告等正式场合的敬语表达',
+src/data/learningUnits.ts:    description: '学习表达微妙和复杂情感的精细词汇',
+src/data/learningUnits.ts:    title: '韩国文学鉴赏',
+src/data/learningUnits.ts:    description: '学习文学性表达，阅读韩国诗歌和散文片段',
+src/data/learningUnits.ts:      { word: '문학', pronunciation: 'munhak', meaning: '文学', partOfSpeech: '名词', example: '한국 문학에 관심이 생겼어요.', exampleZh: '对韩国文学产生了兴趣。', emoji: '📚' },
+src/data/learningUnits.ts:      { word: '시', pronunciation: 'si', meaning: '诗', partOfSpeech: '名词', example: '한국 시를 읽는 걸 좋아해요.', exampleZh: '喜欢读韩国诗歌。', emoji: '✍️' },
+src/data/learningUnits.ts:      { word: '소설', pronunciation: 'soseol', meaning: '小说', partOfSpeech: '名词', example: '이 소설은 한국에서 베스트셀러예요.', exampleZh: '这本小说在韩国是畅销书。', emoji: '📕' },
+src/data/learningUnits.ts:    listeningSentences: [{"korean":"한국 문학에 관심이 생겼어요. 시를 읽는 걸 좋아해요.","chinese":"对韩国文学产生了兴趣，喜欢读诗。"},{"korean":"이 소설은 한국에서 베스트셀러예요.","chinese":"这本小说在韩国是畅销书。"},{"korean":"이 시를 읽고 정말 감동했어요. 한국어에는 예쁜 표현이 많아요.","chinese":"读了这首诗真的很感动，韩语里有很多美好的表达。"}],
+src/data/navigation.ts:  { icon: Home, label: '首页', ko: '홈', href: '/', children: [] },
+src/data/navigation.ts:    icon: BookOpen, label: '学习', ko: '학습', href: '/daily', children: [
+src/data/navigation.ts:      { label: '今日学习', ko: '오늘의 학습', href: '/daily', icon: Sparkles },
+src/data/navigation.ts:      { label: '发音练习', ko: '발음 연습', href: '/pronunciation', icon: Mic },
+src/data/navigation.ts:      { label: '绘本学习', ko: '그림책', href: '/learn/picture-books', icon: BookImage },
+src/data/navigation.ts:    icon: Gamepad2, label: '练习', ko: '연습', href: '/review', children: [
+src/data/navigation.ts:    icon: LayoutGrid, label: '词汇', ko: '어휘', href: '/vocabulary', children: [
+src/data/navigation.ts:      { label: '韩国文化', ko: '문화', href: '/korea/culture', icon: Palette },
+src/data/navigation.ts:    icon: Bot, label: 'AI助手', ko: 'AI 도우미', href: '/ai', children: [
+src/data/pictureBooks.ts:    description: '跟Tori一起学习韩语，从一封神秘信件开始。适合零基础学习者。',
+src/data/pictureBooks.ts:        chinese: '包裹里装满了\n五颜六色的韩国零食。\n还有一封手写的信。\n"啊，好想知道里面写了什么！"',
+src/data/pictureBooks.ts:          { word: '배우다', meaning: '学习' },
+src/data/pictureBooks.ts:        chinese: 'Tori学到的韩语\n\n韩国 · 信 · 学习\n你好 · 好吃 · 可爱\n朋友 · 我是Tori\n谢谢\n晚安',
+src/data/pictureBooks.ts:          { word: '한국', meaning: '韩国' },
+src/data/pictureBooks.ts:          { word: '공부', meaning: '学习' },
+src/data/pictureBooks.ts:    description: 'Tori第一次走进韩国便利店！认识价格、点单、品尝韩国零食，学习实用的便利店韩语。',
+src/data/pictureBooks.ts:          { word: '배우다', meaning: '学习' },
+src/data/pictureBooks.ts:    description: 'Tori第一次走进韩国咖啡厅！学习点单、报名字、等取餐，掌握咖啡厅必备韩语。',
+src/data/pictureBooks.ts:        chinese: 'Tori今天第一次\n来到了韩国咖啡厅。\n一开门，咖啡的香气扑鼻而来。\n"哇，太漂亮了！"',
+src/data/pictureBooks.ts:    description: 'Tori第一次独自坐地铁去弘大！学习交通卡、换乘、问路，掌握地铁必备韩语。',
+src/data/pictureBooks.ts:    description: 'Tori第一次看韩剧学韩语！跟着剧情学习진짜、대박、어떡해等地道韩语口语表达。',
+src/data/pictureBooks.ts:        chinese: '电视剧结束了。\nTori的笔记本上\n记满了今天学到的词。\n진짜, 대박, 어떡해, 맞아, 왜？\n"看电视剧也能学习啊！"',
+src/data/pictureBooks.ts:        chinese: 'Tori钻进被窝里想：\n"韩语学习竟然这么有趣。"\n明天也要再看一集！\n真的。太棒了。\n晚安，Tori。',
+src/data/pronunciation/content.ts:    id: 'syl-ga-na-da', textKo: '가 나 다 라 마 바 사', textZh: '基础音节练习',
+src/data/pronunciation/content.ts:    id: 'syl-ka-ta-pa', textKo: '카 타 파 차', textZh: '送气音节练习',
+src/data/pronunciation/content.ts:    id: 'syl-kka-tta-ppa', textKo: '까 따 빠 짜', textZh: '紧音音节练习',
+src/data/pronunciation/content.ts:    id: 'batchim-hanguk', textKo: '한국', textZh: '韩国 — 双收音',
+src/data/pronunciation/content.ts:    tips: ['来自30天课程', '先听标准音，再跟读'],
+src/data/pronunciation/letter-map.ts: * Used to bridge the Hangul module (四十音) with the Pronunciation module.
+src/data/reading-new.ts:      '认识5个日常词汇',
+src/data/reading-new.ts:      '认识便利店相关词汇',
+src/data/reading-new.ts:        options: ['在咖啡店点单', '制作咖啡的方法', '咖啡的历史', '韩国的天气'],
+src/data/reading-new.ts:      '认识天气相关词汇',
+src/data/reading-new.ts:        options: ['今天的天气', '韩国的四季', '如何穿衣服', '天气预报'],
+src/data/reading-new.ts:  // 5. 我想去韩国 (A0-A1)
+src/data/reading-new.ts:    title: '我想去韩国',
+src/data/reading-new.ts:      '认识旅行相关词汇',
+src/data/reading-new.ts:      { word: '한국', meaning: '韩国', pronunciation: 'han-guk' },
+src/data/reading-new.ts:        id: 's1', ko: '저는 한국에 가고 싶어요.', zh: '我想去韩国。',
+src/data/reading-new.ts:          { word: '한국', meaning: '韩国' },
+src/data/reading-new.ts:        id: 's2', ko: '한국에서 김밥을 먹고 싶어요.', zh: '想在韩国吃紫菜包饭。',
+src/data/reading-new.ts:        id: 's3', ko: '한국 친구를 만나고 싶어요.', zh: '想见韩国朋友。',
+src/data/reading-new.ts:        id: 's5', ko: '한국 여행이 정말 기대돼요!', zh: '好期待韩国旅行！',
+src/data/reading-new.ts:      zh: '我想去韩国。',
+src/data/reading-new.ts:        options: ['去韩国旅行', '学习中文', '买房子', '找工作'],
+src/data/reading-new.ts:        answer: '去韩国旅行',
+src/data/reading-new.ts:        explanation: '整篇文章表达 Tori 对去韩国旅行的期待。',
+src/data/reading-new.ts:        options: ['吃饭', '购物', '学习', '工作'],
+src/data/reading-new.ts:      example: '저는 한국에 가고 싶어요. 我想去韩国。',
+src/data/thirtyDayCourse.ts:      { korean: '한국', pronunciation: 'han-guk', chinese: '韩国', partOfSpeech: '名词', emoji: '🇰🇷' },
+src/data/thirtyDayCourse.ts:      { korean: '한국 사람이에요?', pronunciation: 'han-guk sa-ra-mi-e-yo?', chinese: '你是韩国人吗？' },
+src/data/thirtyDayCourse.ts:    description: '在韩国便利店买东西，学会提问和表达需求',
+src/data/thirtyDayCourse.ts:      { korean: '공부하다', pronunciation: 'gong-bu-ha-da', chinese: '学习', partOfSpeech: '动词', emoji: '📚' },
+src/data/thirtyDayCourse.ts:      exampleZh: '学习。/ 说话。/ 听。',
+src/data/thirtyDayCourse.ts:      { korean: '오후에 공부해요', pronunciation: 'o-hu-e gong-bu-hae-yo', chinese: '下午学习' },
+src/data/thirtyDayCourse.ts:    description: '在韩国餐厅用韩语点餐',
+src/data/thirtyDayCourse.ts:      prompt: '在韩国餐厅点一份拌饭，并评价食物。',
+src/data/thirtyDayCourse.ts:    description: '在韩国购物，学会问价格和讲价',
+src/data/thirtyDayCourse.ts:      prompt: '在韩国商店看中一件衣服，问价格并尝试讲价。',
+src/data/thirtyDayCourse.ts:      { korean: '자주 연습할게요', pronunciation: 'ja-ju yeon-seu-pal-ge-yo', chinese: '我会经常练习的' },
+src/data/thirtyDayCourse.ts:    description: '在韩国乘坐公共交通工具的基本用语',
+src/data/thirtyDayCourse.ts:    description: '在韩国看医生时的基本表达',
+src/data/thirtyDayCourse.ts:    description: '回顾前三周内容，检验学习成果',
+src/data/thirtyDayCourse.ts:      { korean: '연습하다', pronunciation: 'yeon-seu-pa-da', chinese: '练习', partOfSpeech: '动词', emoji: '🏋️' },
+src/data/thirtyDayCourse.ts:      { korean: '매일 연습할게요', pronunciation: 'mae-il yeon-seu-pal-ge-yo', chinese: '我会每天练习的' },
+src/data/thirtyDayCourse.ts:      exampleZh: '明年要去韩国。',
+src/data/thirtyDayCourse.ts:      { korean: '내년에 한국에 갈 거예요.', pronunciation: 'nae-nyeo-ne han-gu-ge gal geo-ye-yo.', chinese: '明年我要去韩国。', scene: '旅行计划' },
+src/data/thirtyDayCourse.ts:      { korean: '한국어를 계속 공부할 거예요.', pronunciation: 'han-gu-geo-reul gye-sok gong-bu-hal geo-ye-yo.', chinese: '我会继续学韩语。', scene: '学习计划' },
+src/data/thirtyDayCourse.ts:      { korean: '한국에 갈 거예요', pronunciation: 'han-gu-ge gal geo-ye-yo', chinese: '会去韩国' },
+src/data/thirtyDayCourse.ts:      { korean: '열심히 공부할 거예요', pronunciation: 'yeol-sim-hi gong-bu-hal geo-ye-yo', chinese: '会努力学习' },
+src/data/thirtyDayCourse.ts:      { korean: '한국이 더 추워요', pronunciation: 'han-gu-gi deo chu-wo-yo', chinese: '韩国更冷' },
+src/data/thirtyDayCourse.ts:      exampleZh: '去年去了韩国。',
+src/data/thirtyDayCourse.ts:      { korean: '작년에 한국에 갔어요.', pronunciation: 'jang-nyeo-ne han-gu-ge ga-sseo-yo.', chinese: '去年去了韩国。', scene: '分享经历' },
+src/data/thirtyDayCourse.ts:      { korean: '한국에 갔어요', pronunciation: 'han-gu-ge ga-sseo-yo', chinese: '去了韩国' },
+src/data/thirtyDayCourse.ts:    day: 27, title: '韩国文化', titleKo: '한국 문화', emoji: '🇰🇷',
+src/data/thirtyDayCourse.ts:    description: '了解韩国文化礼仪，学会相关韩语表达',
+src/data/thirtyDayCourse.ts:      exampleZh: '如果去韩国的话，试试穿韩服吧。',
+src/data/thirtyDayCourse.ts:      { korean: '한국에서는 어른께 두 손으로 물건을 드려요.', pronunciation: 'han-gu-ge-seo-neun eo-reun-kke du so-neu-ro mul-geo-neul deu-ryeo-yo.', chinese: '在韩国给长辈递东西要用双手。', scene: '文化礼仪' },
+src/data/thirtyDayCourse.ts:      { korean: '한국에 가면 한복을 꼭 입어 보세요.', pronunciation: 'han-gu-ge ga-myeon han-bo-geul kkok i-beo bo-se-yo.', chinese: '去韩国的话一定要试试穿韩服。', scene: '文化推荐' },
+src/data/thirtyDayCourse.ts:    description: '全面复习并检验30天学习成果',
+src/data/thirtyDayCourse.ts:      prompt: '用韩语写一段话总结这30天的学习，并鼓励自己继续前进。',
+src/data/thirtyDayCourse.ts:    description: '后15天内容测试及30天课程毕业',
+src/data/thirtyDayCourse.ts:      explanation: '恭喜完成30天课程！你已掌握：敬语体系(해요체)、时态(现在/过去/将来)、助词(은/는/이/가/을/를/에/에서/까지/보다/도/의)、连接词(지만/아서/으면/면서)和句式(주세요/주다/있다/보다/주다/수 있다/거예요)。这是韩语的坚实基础。',
+src/data/thirtyDayCourse.ts:      prompt: '恭喜完成30天课程！写一段话给自己，回顾收获并展望未来。',
+src/data/topik-questions.ts:    description: '基础词汇、语法填空、简单短文理解',
+src/data/topik-questions.ts:  { id:'BL02', section:'listening', level:'beginner', topic:'인사', number:2, type:'multiple-choice', difficulty:'easy', testPoint:'国籍/来源听力理解', errorCategory:'关键信息漏听', reviewGrammarId:'gp-01', audioText:'안녕하세요? 저는 한국 사람이에요. 중국에서 한국어를 가르치고 있어요.', prompt:'이 사람은 어디에서 왔습니까?', promptZh:'这个人来自哪里？', options:['중국','일본','한국','미국'], correctIdx:2, explanation:'"저는 한국 사람이에요" 明确说"我是韩国人"。陷阱：后文提到"중국에서"（在中国），但这是工作地点而非国籍。', vocabulary:['한국','사람','가르치다'] },
+src/data/topik-questions.ts:  { id:'BL04', section:'listening', level:'beginner', topic:'직업', number:4, type:'multiple-choice', difficulty:'easy', testPoint:'职业词汇听力', errorCategory:'职业词汇混淆', audioText:'저는 회사원이에요. 매일 아침 8시에 출근해서 저녁 6시에 퇴근해요.', prompt:'이 사람의 직업은 무엇입니까?', promptZh:'这个人的职业是什么？', options:['학생','선생님','회사원','의사'], correctIdx:2, explanation:'"회사원이에요" 明确说"我是公司职员"。关键词 출근/퇴근（上班/下班）也指向职场。', vocabulary:['회사원','출근','퇴근'] },
+src/data/topik-questions.ts:  { id:'BL09', section:'listening', level:'beginner', topic:'계절', number:9, type:'multiple-choice', difficulty:'medium', testPoint:'季节推理', errorCategory:'季节词汇混淆', audioText:'봄이 되니까 꽃이 많이 피었어요. 날씨도 따뜻해지고 기분이 정말 좋아요.', prompt:'지금은 무슨 계절입니까?', promptZh:'现在是什么季节？', options:['겨울','여름','가을','봄'], correctIdx:3, explanation:'"봄이 되니까 꽃이 피었어요" = 春天到了花开了。关键词：봄(春天)、꽃이 피다(花开)、따뜻해지다(变暖)。', vocabulary:['봄','꽃','피다'] },
+src/data/topik-questions.ts:  { id:'BL39', section:'listening', level:'beginner', topic:'학교', number:39, type:'multiple-choice', audioText:'이번 방학에 한국에 어학연수를 갈 거예요. 그래서 요즘 한국어를 더 열심히 공부하고 있어요.', prompt:'왜 한국어를 열심히 공부합니까?', promptZh:'为什么努力学习韩语？', options:['시험 때문에','한국에 갈 예정이라서','취미로','친구 때문에'], correctIdx:1, explanation:'방학에 한국 어학연수 예정 → 한국어 열심히 공부。', vocabulary:['방학','어학연수','열심히'] },
+src/data/topik-questions.ts:  { id:'BL50', section:'listening', level:'beginner', topic:'감정', number:50, type:'multiple-choice', audioText:'처음 한국에 왔을 때는 모든 게 낯설고 힘들었지만 이제는 정말 좋아요. 한국 생활에 익숙해졌어요.', prompt:'지금 이 사람의 한국 생활에 대한 느낌은?', promptZh:'现在这个人对韩国生活的感觉是？', options:['여전히 힘들다','적응했다','떠나고 싶다','잘 모르겠다'], correctIdx:1, explanation:'"이제는 정말 좋아요. 익숙해졌어요" = 已经适应了。', vocabulary:['낯설다','익숙하다','생활'] },
+src/data/topik-questions.ts:  { id:'BR01', section:'reading', level:'beginner', topic:'어휘', number:1, type:'multiple-choice', prompt:'저는 한국에서 온 _____입니다.', promptZh:'我是从韩国来的_____。', options:['사람','날씨','음식','나무'], correctIdx:0, explanation:'한국에서 온 사람 = 从韩国来的人。"사람"是"人"。', vocabulary:['한국','사람','오다'] },
+src/data/topik-questions.ts:  { id:'BR12', section:'reading', level:'beginner', topic:'문법', number:12, type:'multiple-choice', prompt:'저는 매일 학교_____ 공부를 해요.', promptZh:'我每天都在学校学习。', options:['에','에서','을','의'], correctIdx:1, explanation:'에서 = 动作进行的场所。학교에서 공부하다 在校学习。', vocabulary:['학교','에서','공부하다'] },
+src/data/topik-questions.ts:  { id:'BR16', section:'reading', level:'beginner', topic:'문법', number:16, type:'multiple-choice', prompt:'한국에 _____ 한국어를 더 잘하고 싶어요.', promptZh:'去了韩国的话想把韩语说得更好。', options:['가면','가서','가니까','가지만'], correctIdx:0, explanation:'-(으)면 = 如果/……的话。表示假设条件。', vocabulary:['한국','-면','잘하다'] },
+src/data/topik-questions.ts:  { id:'BR26', section:'reading', level:'beginner', topic:'독해', number:26, type:'multiple-choice', prompt:'다음 주 월요일부터 방학입니다. 이번 방학 때는 한국에 있는 친구를 만나러 갈 겁니다. 비행기 표를 벌써 예약했습니다.', promptZh:'下周一放假，要去韩国见朋友，机票已订。', options:['방학이 시작되지 않았다','표를 아직 안 샀다','한국 친구가 여기로 온다','방학이 끝났다'], correctIdx:0, explanation:'"다음 주 월요일부터" = 下周一才开始，还没开始。', vocabulary:['방학','비행기','예약하다'] },
+src/data/topik-questions.ts:  { id:'BR27', section:'reading', level:'beginner', topic:'독해', number:27, type:'multiple-choice', prompt:'비빔밥은 한국의 전통 음식입니다. 밥 위에 여러 가지 나물과 계란을 올려서 먹습니다. 고추장을 넣어서 비벼 먹으면 더 맛있습니다.', promptZh:'短文：拌饭是韩国传统食物，饭上放各种蔬菜鸡蛋，拌辣椒酱吃。', options:['비빔밥에 고기가 들어간다','비빔밥은 비벼서 먹는다','비빔밥은 중국 음식이다','비빔밥에 나물을 안 넣는다'], correctIdx:1, explanation:'비벼 먹다 = 拌着吃。비빔밥的비비다就是"拌"的意思。', vocabulary:['비빔밥','나물','비비다'] },
+src/data/topik-questions.ts:  { id:'BR31', section:'reading', level:'beginner', topic:'독해', number:31, type:'multiple-choice', prompt:'김치는 한국 사람들이 매일 먹는 음식입니다. 배추로 만들고 고춧가루와 마늘을 넣습니다. 김치찌개도 있고 김치볶음밥도 있습니다.', promptZh:'短文：泡菜是韩国人每天吃的，用白菜、辣椒粉、大蒜做的。有泡菜汤和泡菜炒饭。', options:['김치는 고기로 만든다','한국 사람들은 김치를 안 먹는다','김치로 만든 요리가 여러 가지다','김치에는 설탕이 많이 들어간다'], correctIdx:2, explanation:'김치찌개, 김치볶음밥 등 = 泡菜做的料理有很多种。', vocabulary:['김치','배추','고춧가루'] },
+src/data/topik-questions.ts:  { id:'BR33', section:'reading', level:'beginner', topic:'독해', number:33, type:'multiple-choice', prompt:'제 꿈은 의사가 되는 것입니다. 그래서 열심히 공부하고 있습니다. 의사가 되어서 아픈 사람들을 돕고 싶습니다.', promptZh:'短文：我的梦想是成为医生，所以在努力学习，想帮助生病的人。', options:['공부를 안 하고 있다','선생님이 되고 싶다','아픈 사람을 돕고 싶다','의사가 싫다'], correctIdx:2, explanation:'"아픈 사람들을 돕고 싶습니다" = 想帮助生病的人。', vocabulary:['꿈','의사','돕다'] },
+src/data/topik-questions.ts:  { id:'BR46', section:'reading', level:'beginner', topic:'독해', number:46, type:'multiple-choice', prompt:'요즘 한국에는 혼자 사는 사람들이 많아지고 있습니다. 그래서 1인 가구를 위한 제품들도 많이 나오고 있습니다. 작은 냉장고, 작은 밥솥 등이 인기가 많습니다.', promptZh:'短文：最近韩国独居的人增多，一人用家电很受欢迎。', options:['한국에 혼자 사는 사람이 줄고 있다','1인 가구 제품이 인기가 없다','작은 가전제품의 수요가 늘고 있다','모든 사람이 대가족으로 산다'], correctIdx:2, explanation:'1인 가구 증가 → 작은 제품 인기 → 소형 가전 수요 증가。', vocabulary:['1인 가구','제품','인기'] },
+src/data/topik-questions.ts:  { id:'BR47', section:'reading', level:'beginner', topic:'독해', number:47, type:'multiple-choice', prompt:'한국 사람들은 보통 설날에 떡국을 먹습니다. 추석에는 송편을 만들어 먹습니다. 이 음식들은 오랜 역사를 가지고 있습니다.', promptZh:'短文：韩国人春节吃年糕汤，中秋吃松饼，这些食物有悠久的历史。', options:['설날에 송편을 먹는다','추석에 떡국을 먹는다','설날에 떡국을 먹는다','떡국과 송편은 같은 음식이다'], correctIdx:2, explanation:'"설날에 떡국을 먹습니다" = 春节吃年糕汤。', vocabulary:['설날','떡국','송편'] },
+src/data/topik-questions.ts:  { id:'ML05', section:'listening', level:'intermediate', topic:'교육', number:5, type:'multiple-choice', audioText:'저는 외국어를 배울 때 가장 중요한 건 꾸준함이라고 생각해요. 하루에 10분이라도 매일 하는 게 일주일에 한 번 몇 시간씩 하는 것보다 훨씬 효과적이에요.', prompt:'이 사람이 외국어 학습에서 가장 중요하게 생각하는 것은?', promptZh:'说话人认为外语学习中最重要的是什么？', options:['좋은 교재 선택','원어민과의 대화 기회','매일 꾸준히 하는 습관','한 번에 오래 공부하는 것'], correctIdx:2, explanation:'"가장 중요한 건 꾸준함" = 坚持不懈最重要。', vocabulary:['외국어','꾸준함','효과적'] },
+src/data/topik-questions.ts:  { id:'ML16', section:'listening', level:'intermediate', topic:'일상대화', number:16, type:'multiple-choice', audioText:'남자: 다음 주에 있을 면접 때문에 너무 긴장돼요.\n여자: 면접관들도 다 사람이에요. 너무 떨지 말고 평소대로만 하면 잘 될 거예요.\n남자: 그렇긴 한데... 면접 준비는 많이 하셨어요?\n여자: 네, 예상 질문 리스트 만들어서 연습 많이 했어요. 그래도 떨리는 건 어쩔 수 없더라고요.', prompt:'여자가 면접을 준비한 방법은 무엇입니까?', promptZh:'女生准备面试的方法是什么？', options:['면접 학원에 다녔다','예상 질문을 만들어 연습했다','인터넷으로 모의 면접을 봤다','친구에게 면접을 대신 부탁했다'], correctIdx:1, explanation:'"예상 질문 리스트 만들어서 연습 많이 했어요" = 制作预期问题列表并大量练习。', vocabulary:['면접','긴장','예상'] },
+src/data/topik-questions.ts:  { id:'ML45', section:'listening', level:'intermediate', topic:'일상대화', number:45, type:'multiple-choice', audioText:'남자: 요즘 한국어 공부가 너무 어려워서 그만둘까 생각 중이에요. 문법도 어렵고 단어도 외우기 힘들고...\n여자: 배움의 정체기는 누구에게나 오는 거예요. 조금만 더 버텨 보는 건 어때요? 저도 중급 때 포기하고 싶었는데, 그 고비를 넘기니까 확실히 달라지더라고요.\n남자: 그 고비가 얼마나 걸렸어요?', prompt:'여자의 경험에 따르면 중급 학습 단계의 특징은?', promptZh:'按女生的经验，中级学习阶段的特点是什么？', options:['가장 쉬운 단계이다','정체기가 있지만 넘으면 달라진다','문법을 전혀 배우지 않는다','혼자서는 절대 못 넘는다'], correctIdx:1, explanation:'"그 고비를 넘기니까 확실히 달라지더라고요" = 度过瓶颈期后会质变。', vocabulary:['정체기','고비','버티다'] },
+src/data/topik-questions.ts:  { id:'MR02', section:'reading', level:'intermediate', topic:'어휘', number:2, type:'multiple-choice', prompt:'빈칸에 가장 알맞은 것을 고르십시오.\n\n열심히 공부한 ( ㉠ ) 시험에 떨어졌다.', promptZh:'虽然努力学习了但考试落榜了。', options:['덕분에','데다가','에도 불구하고','만큼'], correctIdx:2, explanation:'"-에도 불구하고" = "虽然...但是"。열심히 공부했지만 결과는 나쁨 → 转折。', vocabulary:['열심히','시험','떨어지다'] },
+src/data/topik-questions.ts:  { id:'MR14', section:'reading', level:'intermediate', topic:'중심내용', number:14, type:'multiple-choice', prompt:'다음 글의 중심 생각으로 가장 알맞은 것을 고르십시오.\n\n실패를 두려워하는 사람은 새로운 도전을 하지 못한다. 하지만 세상에 처음부터 성공한 사람은 아무도 없다. 에디슨은 전구를 발명하기까지 수천 번의 실패를 경험했다고 한다. 중요한 것은 실패 자체가 아니라 그 실패에서 무엇을 배우느냐이다.', promptZh:'文章主旨：害怕失败就无法挑战新事物，关键是从失败中学到什么。', options:['에디슨은 천재였다','실패는 부끄러운 일이다','실패에서 배우는 자세가 중요하다','새로운 도전은 위험하다'], correctIdx:2, explanation:'마지막 문장 "실패에서 무엇을 배우느냐" = 从失败中学习的态度很重要。', vocabulary:['실패','도전','경험'] },
+src/data/topik-questions.ts:  { id:'MR22', section:'reading', level:'intermediate', topic:'세부내용', number:22, type:'multiple-choice', prompt:'다음 글의 내용과 일치하는 것을 고르십시오.\n\n한국에서는 음식점에서 주문할 때 반찬은 보통 무료로 제공되며, 리필도 가능한 경우가 많다. 단, 일부 고급 식당에서는 반찬 추가에 별도 요금이 있을 수 있다. 또한 한국에서는 식사 후에 계산은 보통 카운터에서 직접 한다.', promptZh:'韩国饭店小菜通常免费可续，个别高级餐厅例外，饭后在柜台结账。', options:['모든 식당에서 반찬 추가는 무조건 무료다','한국 식당에서는 테이블에서 계산한다','반찬 리필은 절대 불가능하다','일부 고급 식당은 반찬 추가 시 요금이 있을 수 있다'], correctIdx:3, explanation:'"일부 고급 식당에서는 반찬 추가에 별도 요금" = 个别高级餐厅追加小菜可能收费。', vocabulary:['반찬','리필','계산'] },
+src/data/topik-questions.ts:  { id:'MR42', section:'reading', level:'intermediate', topic:'실용문', number:42, type:'multiple-choice', prompt:'다음 글의 내용과 일치하는 것을 고르십시오.\n\n한국에서는 김장철이 되면 많은 가정에서 대량의 김치를 담급니다. 보통 11월 중순부터 12월 초까지가 김장철이며, 가족이나 이웃이 모여 함께 담그는 풍습이 있습니다. 최근에는 1인 가구 증가로 소량 김장을 원하는 사람들을 위한 \'소포장 김장 키트\'도 인기입니다.', promptZh:'韩国泡菜季11月中-12月初，家人邻居一起腌制，现流行小包装套装。', options:['김장은 보통 여름에 한다','김장은 혼자만 하는 풍습이다','1인 가구를 위한 소량 김장 제품이 인기다','김장 키트는 전혀 팔리지 않는다'], correctIdx:2, explanation:'"소포장 김장 키트도 인기" = 小包装泡菜套装很受欢迎。', vocabulary:['김장','담그다','풍습'] },
+src/data/topik-questions.ts:  { id:'MR48', section:'reading', level:'intermediate', topic:'장문', number:48, type:'multiple-choice', prompt:'다음 글의 내용과 일치하지 않는 것을 고르십시오.\n\n한국은 OECD 국가 중에서 노인 빈곤율이 가장 높은 나라 중 하나이다. 65세 이상 노인 인구의 약 40%가 상대적 빈곤선 아래에 있다는 통계가 있다. 이는 급속한 고령화와 불충분한 노후 소득 보장 체계가 주요 원인으로 지적된다. 정부는 기초연금 인상과 노인 일자리 확대 등의 대책을 내놓고 있지만 아직 갈 길이 멀다.', promptZh:'韩国老年人贫困率约40%在相对贫困线下，老龄化+收入保障不足是主因。', options:['한국의 노인 빈곤율은 OECD 내에서 낮은 편에 속한다','고령화가 노인 빈곤의 원인 중 하나다','정부는 기초연금 인상 등의 대책을 시행 중이다','노인 일자리 확대도 대책 중 하나다'], correctIdx:0, explanation:'"노인 빈곤율이 가장 높은 나라 중 하나" → A说"낮은 편"은 틀림。', vocabulary:['빈곤율','고령화','기초연금'] },
+src/data/topik-questions.ts:  { id:'MR50', section:'reading', level:'intermediate', topic:'장문', number:50, type:'multiple-choice', prompt:'다음 글의 필자가 주장하는 바로 가장 적절한 것은?\n\n\'배움의 즐거움\'이라는 말이 있다. 하지만 진짜 배움은 즐겁기만 한 과정이 아니다. 모르는 것을 마주했을 때의 당혹감, 익숙한 생각이 깨질 때의 불편함, 끝없는 연습의 지루함까지가 모두 배움의 일부이다. 그럼에도 불구하고 우리가 배움을 계속해야 하는 이유는, 그 힘든 과정을 통과한 후에야 비로소 세상이 더 넓고 깊게 보이기 때문이다.', promptZh:'学习并不总是快乐的，困惑+不适+枯燥都是过程的一部分，但坚持后世界会变宽广。', options:['배움은 항상 즐겁고 쉬운 과정이다','힘든 과정이 있지만 배움은 결국 세상을 넓혀 준다','배움에는 전혀 노력이 필요 없다','어려운 공부는 포기하는 것이 낫다'], correctIdx:1, explanation:'"힘든 과정을 통과한 후에야...세상이 더 넓고 깊게 보이기 때문" = 虽苦但最终拓宽世界。', vocabulary:['당혹감','불편함','과정'] },
+src/data/topik-questions.ts:  { id:'AR13', section:'reading', level:'advanced', topic:'의도', number:13, type:'multiple-choice', prompt:'다음 글을 쓴 목적으로 가장 알맞은 것을 고르십시오.\n\n본 논문은 20세기 초 식민지 시기 한국 문학에 나타난 \'근대성\'의 문제를 재고찰한다. 기존 연구가 근대성을 서구적 보편 개념으로 전제하고 한국 문학을 그 수용의 관점에서만 바라본 데 비해, 본고는 당시 한국 문인들이 근대성을 어떻게 비판적으로 변용하고 재구성했는지에 초점을 맞춘다.', promptZh:'论文目的：重新审视韩国文学中的"近代性"，聚焦韩国文人如何批判性转化近代性。', options:['한국 근대 문학의 우수성을 자랑하려고','기존 연구의 한계를 지적하고 대안적 접근을 제시하려고','식민지 시기의 모든 문학을 부정하려고','서구 근대성 개념을 그대로 적용하려고'], correctIdx:1, explanation:'기존 연구와 차별화 + "비판적으로 변용하고 재구성했는지에 초점" = 指出既有研究局限并提示新的研究视角。', vocabulary:['근대성','재고찰','변용'] },
+src/data/topik-questions.ts:  { id:'AR24', section:'reading', level:'advanced', topic:'세부내용', number:24, type:'multiple-choice', prompt:'다음 글의 내용과 일치하지 않는 것을 고르십시오.\n\n한국의 가계 부채는 GDP 대비 105%를 넘어서며 주요국 중 최상위권에 속한다. 문제의 심각성은 부채의 질에 있다. 전체 가계 부채 중 변동 금리 대출 비중이 60%를 넘으며, 이는 금리 인상기에 가계의 이자 부담을 급격히 증가시킬 수 있다. 또한 자영업자 대출 연체율이 최근 3년간 꾸준히 상승하고 있어 금융권의 건전성 우려가 커지고 있다.', promptZh:'韩国家庭负债GDP比超105%，浮动利率占60%以上，个体户贷款逾期率持续上升。', options:['가계 부채 중 변동 금리 대출 비중이 절반 이상이다','자영업자 대출 연체율이 하락세에 있다','한국의 가계 부채는 GDP 대비 100%를 초과했다','금리 인상은 가계의 이자 부담을 증가시킬 수 있다'], correctIdx:1, explanation:'"자영업자 대출 연체율이 최근 3년간 꾸준히 상승" → B说"하락세"는 틀림。', vocabulary:['가계','변동','연체율'] },
+src/data/topik-questions.ts:  { id:'AR28', section:'reading', level:'advanced', topic:'세부내용', number:28, type:'multiple-choice', prompt:'다음 글의 내용과 일치하지 않는 것을 고르십시오.\n\n한국의 합계출산율은 0.72로 OECD 국가 중 최저 수준이며, 이러한 추세는 단순한 인구 감소를 넘어 경제·사회 전반에 걸친 구조적 변화를 예고한다. 특히 학령인구 감소에 따른 지방 대학의 위기, 생산연령인구 감소에 따른 잠재성장률 하락, 그리고 연금 및 건강보험의 재정 지속 가능성에 대한 우려가 심화되고 있다.', promptZh:'韩国总和生育率0.72，OECD最低，引发学龄人口减少、地方大学危机等结构性问题。', options:['한국의 합계출산율은 OECD 국가 중 가장 낮은 편이다','학령인구 감소는 지방 대학의 위기로 이어질 수 있다','생산연령인구 증가가 예상된다','연금의 재정 지속 가능성에 대한 우려가 있다'], correctIdx:2, explanation:'"생산연령인구 감소" → C说"증가"는 틀림。', vocabulary:['출산율','학령','잠재성장률'] },
+src/data/topik-questions.ts:  { id:'AR46', section:'reading', level:'advanced', topic:'장문', number:46, type:'multiple-choice', prompt:'다음 글을 읽고 답할 수 있는 질문으로 가장 적절하지 않은 것은?\n\n한국 영화 산업의 매출은 2019년 정점을 찍은 후 팬데믹을 거치며 큰 폭으로 감소했다. 그러나 2025년에 이르러 관객 수는 팬데믹 이전의 80%까지 회복되었다. 특이할 만한 점은, 관객 수는 회복되었지만 중소 규모 영화의 개봉 편수는 오히려 감소했다는 사실이다. 대작 블록버스터로의 쏠림 현상이 더욱 심화된 것이다. 이는 다양성 측면에서는 우려할 만한 신호로 받아들여진다.', promptZh:'韩国电影：2025年观众恢复到疫情前80%，但中小规模电影减少，大片集中度加剧，多样性令人担忧。', options:['2025년 관객 수는 어느 정도 회복되었나?','중소 규모 영화의 개봉 편수는 어떻게 변화했나?','OTT 구독자 수의 변화 추이는 어떠한가?','대작 블록버스터로의 쏠림 현상은 심화되었나?'], correctIdx:2, explanation:'글에서 OTT 구독자 수에 대한 언급은 전혀 없음。', vocabulary:['매출','정점','쏠림'] },
+src/data/typingLevels.ts:    description: '练习最常见的韩文音节，建立肌肉记忆',
+src/data/typingLevels.ts:    description: '打你最常用的词汇，开始有意义的输入',
+src/data/typingLevels.ts:      { id: 'l3-1', text: '사랑 친구 가족 학교 회사 한국', label: '生活基础词', chinese: '爱情 朋友 家人 学校 公司 韩国' },
+src/data/typingLevels.ts:      { id: 'l3-2', text: '공부하다 배우다 먹다 가다 오다 보다', label: '常用动词', chinese: '学习 学 吃 去 来 看' },
+src/data/typingLevels.ts:      { id: 'l4-1', text: '안녕하세요? 저는 한국어를 공부하고 있습니다.', label: '自我介绍', chinese: '你好？我正在学习韩国语。' },
+src/data/typingLevels.ts:      { id: 'l4-2', text: '한국 드라마를 보면서 한국어를 배우고 있어요.', label: '学习动机', chinese: '我一边看韩剧一边学韩语。' },
+src/data/typingLevels.ts:      { id: 'l4-3', text: '한국에 가 본 적이 없지만 언젠가 꼭 가 보고 싶어요.', label: '愿望表达', chinese: '虽然没去过韩国，但总有一天一定要去看看。' },
+src/data/typingLevels.ts:      { id: 'l4-4', text: '한국어는 배우면 배울수록 재미있는 것 같아요.', label: '学习感受', chinese: '韩语越学越觉得有趣。' },
+src/data/typingLevels.ts:      { id: 'l4-5', text: '저는 일 년 후에 한국에 유학을 가려고 계획하고 있습니다.', label: '留学计划', chinese: '我计划一年后去韩国留学。' },
+src/data/typingLevels.ts:      { id: 'l4-6', text: '한국 음식 중에서 떡볶이를 제일 좋아합니다.', label: '韩国饮食', chinese: '韩国菜中我最喜欢炒年糕。' },
+src/data/typingLevels.ts:      { id: 'l4-8', text: '한국어를 잘 하게 되면 한국 회사에서 일하고 싶습니다.', label: '职业目标', chinese: '如果韩语学好了，我想在韩国公司工作。' },
+src/data/typingLevels.ts:        label: '学习经历 (TOPIK 初级)',
+src/data/typingLevels.ts:        chinese: '我学韩语已经6个月了。一开始连读韩文都很难，但现在可以进行简单的对话了。以后想更加努力学习，和韩国朋友自由地聊天。',
+src/data/vocabulary/entries-advanced.ts:      { korean: '한국 경제가 성장하고 있어요.', chinese: '韩国经济在增长。', scene: '社会' },
+src/data/vocabulary/entries-advanced.ts:      { korean: '새로운 기술을 배우고 싶어요.', chinese: '想学习新技术。', scene: '职场' },
+src/data/vocabulary/entries-advanced.ts:      { korean: '공부도 하고 친구도 만나고, 꿩 먹고 알 먹기예요.', chinese: '既学习又见朋友，一举两得。', scene: '日常' },
+src/data/vocabulary/entries-intermediate.ts:  // EDUCATION 教育学习
+src/data/vocabulary/entries-intermediate.ts:      { korean: '한국어 교육을 연구해요.', chinese: '研究韩国语教育。', scene: '学术' },
+src/data/vocabulary/entries-intermediate.ts:      { korean: '한국에 유학 왔어요.', chinese: '来韩国留学了。', scene: '学校' },
+src/data/vocabulary/entries-intermediate.ts:    meanings: [{ chinese: '补习班/培训学校', nuance: '韩国文化特色词', register: '通用' }],
+src/data/vocabulary/entries-intermediate.ts:      { korean: '한국 뉴스를 이해할 수 있어요.', chinese: '能理解韩国新闻了。', scene: '日常' },
+src/data/vocabulary/entries-intermediate.ts:      { korean: '한국 문화를 경험하고 싶어요.', chinese: '想体验韩国文化。', scene: '旅行' },
+src/data/vocabulary/entries-intermediate.ts:      { korean: '이제 한국 생활에 익숙해졌어요.', chinese: '现在习惯了韩国生活。', scene: '日常' },
+src/data/vocabulary/entries-intermediate.ts:      { korean: '한국은 밤에도 안전해요.', chinese: '韩国晚上也很安全。', scene: '日常' },
+src/data/vocabulary/entries-intermediate.ts:      { korean: '한국은 산이 많아요.', chinese: '韩国山很多。', scene: '旅行' },
+src/data/vocabulary/entries-intermediate.ts:    meanings: [{ chinese: '练习', nuance: '中性', register: '通用' }],
+src/data/vocabulary/entries-intermediate.ts:      { korean: '매일 피아노 연습해요.', chinese: '每天练习钢琴。', scene: '日常' },
+src/data/vocabulary/entries-intermediate.ts:      { korean: '연습하면 늘 거예요.', chinese: '练习就会进步的。', scene: '学校' },
+src/data/vocabulary/entries-intermediate.ts:      { korean: '한국 전통 문화를 배우고 있어요.', chinese: '在学习韩国传统文化。', scene: '文化' },
+src/data/vocabulary/entries.ts:      { korean: '늦은 밤까지 공부했어요.', chinese: '学习到深夜。', scene: '学习' },
+src/data/vocabulary/entries.ts:      { korean: '매일 한국어를 공부해요.', chinese: '每天学韩语。', scene: '学习' },
+src/data/vocabulary/entries.ts:    tags: ['日常', '学习'], emotionTags: [], relatedWords: ['time-01'],
+src/data/vocabulary/entries.ts:      { korean: '한국 겨울은 정말 추워요.', chinese: '韩国冬天真的很冷。', scene: '旅行' },
+src/data/vocabulary/entries.ts:    meanings: [{ chinese: '泡菜/辛奇', nuance: '韩国文化标志词', register: '通用' }],
+src/data/vocabulary/entries.ts:      { korean: '한국 사람은 매일 김치를 먹어요.', chinese: '韩国人每天吃泡菜。', scene: '日常' },
+src/data/vocabulary/entries.ts:      { chinese: '砍价/削', nuance: '口语，韩国市场常用', register: '通用' },
+src/data/vocabulary/entries.ts:      { korean: '한국어가 좋아요.', chinese: '我喜欢韩语。', scene: '学习' },
+src/data/vocabulary/entries.ts:      { korean: '시험 때문에 걱정돼요.', chinese: '因为考试而担心。', scene: '学习' },
+src/data/vocabulary/entries.ts:    tags: ['日常', '学习', '社交'], emotionTags: ['担心'], relatedWords: ['emotion-11'],
+src/data/vocabulary/entries.ts:    meanings: [{ chinese: '前辈/学长/学姐', nuance: '韩国文化特色词', register: '通用' }],
+src/data/vocabulary/entries.ts:      { korean: '선배님, 질문 있어요.', chinese: '前辈，我有问题。', scene: '学习' },
+src/data/vocabulary/entries.ts:    tags: ['社交', '学习', '韩流'], emotionTags: [], relatedWords: ['family-06'],
+src/data/vocabulary/entries.ts:    meanings: [{ chinese: '后辈/学弟/学妹', nuance: '韩国文化特色词', register: '通用' }],
+src/data/vocabulary/entries.ts:      { korean: '후배가 열심히 하네요.', chinese: '后辈很努力呢。', scene: '学习' },
+src/data/vocabulary/entries.ts:    tags: ['社交', '学习'], emotionTags: [], relatedWords: ['family-05'],
+src/data/vocabulary/entries.ts:      { korean: '공부하고 있어요.', chinese: '在学习。', scene: '学习' },
+src/data/vocabulary/entries.ts:      { korean: '한국에 가고 싶어요.', chinese: '想去韩国。', scene: '旅行' },
+src/data/vocabulary/entries.ts:      { korean: '한국 음식을 먹어 봤어요?', chinese: '吃过韩国料理吗？', scene: '餐厅' },
+src/data/vocabulary/entries.ts:      { korean: '음악을 들으면서 공부해요.', chinese: '边听音乐边学习。', scene: '日常' },
+src/data/vocabulary/entries.ts:    tags: ['日常', '社交', '学习'], emotionTags: [], relatedWords: ['verb-07', 'verb-09'],
+src/data/vocabulary/entries.ts:    tags: ['日常', '社交', '学习'], emotionTags: [], relatedWords: ['verb-10'],
+src/data/vocabulary/entries.ts:    tags: ['日常', '学习'], emotionTags: [], relatedWords: ['verb-09'],
+src/data/vocabulary/entries.ts:    meanings: [{ chinese: '学习', nuance: '中性', register: '通用' }],
+src/data/vocabulary/entries.ts:      { korean: '한국어를 공부하고 있어요.', chinese: '在学韩语。', scene: '学习' },
+src/data/vocabulary/entries.ts:      { korean: '열심히 공부하세요!', chinese: '请努力学习！', scene: '学习' },
+src/data/vocabulary/entries.ts:    tags: ['学习', '日常'], emotionTags: [], relatedWords: ['verb-01'],
+src/data/vocabulary/entries.ts:      { korean: '한국어가 어려워요.', chinese: '韩语很难。', scene: '学习' },
+src/data/vocabulary/entries.ts:      { korean: '이 문제는 너무 어려워요.', chinese: '这个问题太难了。', scene: '学习' },
+src/data/vocabulary/entries.ts:    tags: ['学习', '日常'], emotionTags: [], relatedWords: ['adj-08'],
+src/data/vocabulary/entries.ts:      { korean: '이 책은 쉬워요.', chinese: '这本书很容易。', scene: '学习' },
+src/data/vocabulary/entries.ts:      { korean: '한국어 발음이 생각보다 쉬워요.', chinese: '韩语发音比想象中容易。', scene: '学习' },
+src/data/vocabulary/entries.ts:    tags: ['学习'], emotionTags: [], relatedWords: ['adj-07'],
+src/data/vocabulary/entries.ts:      { korean: '한국 여름은 너무 더워요.', chinese: '韩国夏天太热了。', scene: '旅行' },
+src/data/vocabulary/entries.ts:      { korean: '한국어 공부가 재미있어요.', chinese: '学韩语很有趣。', scene: '学习' },
+src/data/vocabulary/entries.ts:    tags: ['日常', '学习', '韩流', '韩剧'], emotionTags: ['开心'], relatedWords: ['adj-13'],
+src/data/vocabulary/entries.ts:  // 11. WORK & STUDY 职场学习
+src/data/vocabulary/entries.ts:      { korean: '학교에 가요.', chinese: '去学校。', scene: '学习' },
+src/data/vocabulary/entries.ts:    tags: ['学习', '日常'], emotionTags: [], relatedWords: ['work-04'],
+src/data/vocabulary/entries.ts:      { korean: '다음 주에 시험이 있어요.', chinese: '下周有考试。', scene: '学习' },
+src/data/vocabulary/entries.ts:      { korean: 'TOPIK 시험을 준비하고 있어요.', chinese: '在准备TOPIK考试。', scene: '学习' },
+src/data/vocabulary/entries.ts:    tags: ['学习', 'TOPIK'], emotionTags: ['担心'], relatedWords: ['verb-15'],
+src/data/vocabulary/entries.ts:  // 12. K-CULTURE 韩流词汇
+src/data/vocabulary/entries.ts:      { chinese: '哥哥（女称）/欧巴', nuance: '韩国文化标志词，粉丝常用', register: '口语' },
+src/data/vocabulary/entries.ts:    meanings: [{ chinese: '姐姐（女称）', nuance: '韩国文化标志词', register: '口语' }],
+src/data/vocabulary/entries.ts:    meanings: [{ chinese: '姐姐（男称）', nuance: '韩国文化标志词', register: '口语' }],
+src/data/vocabulary/entries.ts:    meanings: [{ chinese: '偶像/爱豆', nuance: '韩国娱乐文化核心词', register: '通用' }],
+src/data/vocabulary/entries.ts:      { korean: '아이돌 연습생이었어요.', chinese: '曾经是偶像练习生。', scene: '追星' },
+src/data/vocabulary/entries.ts:    meanings: [{ chinese: '综艺节目', nuance: '韩国放送术语', register: '通用' }],
+src/data/vocabulary/entries.ts:      { korean: '한국 예능을 보면서 한국어를 배워요.', chinese: '看韩国综艺学韩语。', scene: '综艺' },
+src/data/vocabulary/entries.ts:      { korean: '한국 화장품 정말 좋아요.', chinese: '韩国化妆品真的很好。', scene: '美妆' },
+src/data/vocabulary/entries.ts:      { korean: '한국 스킨케어 루틴 따라 해 봤어요.', chinese: '试了韩国护肤流程。', scene: '美妆' },
+src/data/vocabulary/entries.ts:  // 13. TRAVEL KOREA 旅行韩国
+src/data/vocabulary/entries.ts:      { korean: '한국 여행 가고 싶어요.', chinese: '想去韩国旅行。', scene: '旅行' },
+src/data/vocabulary/entries.ts:    meanings: [{ chinese: '外卖/配送', nuance: '韩国生活高频词', register: '通用' }],
+src/data/vocabulary/entries.ts:      { korean: '한국을 사랑해요.', chinese: '我爱韩国。', scene: '日常' },
+src/data/vocabulary/themes.ts:    description: '从进门问候到下单付款，覆盖咖啡厅全流程所需词汇和句型',
+src/data/vocabulary/themes.ts:    description: '韩国餐厅从进门到结账全流程词汇，含烤肉/炸鸡/汤饭等常见场景',
+src/data/vocabulary/themes.ts:    toriQuote: '토리带你去逛韩国超市！学会砍价和询问尺码，逛街再也不尴尬🛍️',
+src/data/vocabulary/themes.ts:    description: '韩国地铁从买票到换乘全流程，含交通卡、问路等相关词汇',
+src/data/vocabulary/themes.ts:    toriQuote: '토리今天有点不舒服…学会这些词，在韩国看医生不再害怕💊',
+src/data/vocabulary/themes.ts:    description: '医院就诊常用词汇，含挂号、描述症状、取药等场景',
+src/data/vocabulary/themes.ts:    description: '酒店入住、退房、客房服务等场景的必备词汇',
+src/data/vocabulary/themes.ts:    description: '韩国日常社交最核心的问候语、礼貌用语和基础社交表达',
+src/data/vocabulary/themes.ts:    description: '韩国追星文化核心词汇，从粉丝见面会到打榜应援全覆盖',
+src/data/vocabulary/themes.ts:    description: '韩剧中出现频率最高的词汇和表达，帮你从追剧中学韩语',
+src/data/vocabulary/themes.ts:    name: '韩国美妆词汇',
+src/data/vocabulary/themes.ts:    description: '韩国美妆护肤常用词汇，Olive Young购物和韩妆教程必备',
+src/data/vocabulary/themes.ts:  // CATEGORY: 旅行韩国
+src/data/vocabulary/themes.ts:    description: '韩国自由行全场景词汇，从机场到景点，从问路到打卡一站搞定',
+src/data/vocabulary/themes.ts:    category: '旅行韩国',
+src/data/vocabulary/themes.ts:  // CATEGORY: 职场学习
+src/data/vocabulary/themes.ts:    description: '韩国职场必备的正式用语、邮件常用句和商务沟通词汇',
+src/data/vocabulary/themes.ts:    category: '职场学习',
+src/data/vocabulary/themes.ts:    description: '课堂学习常用词汇，提问、回答、讨论等场景表达',
+src/data/vocabulary/themes.ts:    category: '职场学习',
+src/data/vocabulary/themes.ts:    description: '韩国求职面试必备表达，从自我介绍到回答提问的完整流程',
+src/data/vocabulary/themes.ts:      { korean: '열심히 배우겠습니다.', chinese: '我会努力学习的。' },
+src/data/vocabulary/themes.ts:    description: '韩国职场会议用语，从开场到总结的全流程表达',
+src/data/vocabulary/themes.ts:    description: '韩国银行常用词汇，开户、转账、换钱等场景全覆盖',
+src/data/vocabulary/themes.ts:    toriQuote: '토리要搬家了！学会这些词，在韩国租房签合同不再头疼🔑',
+src/data/vocabulary/themes.ts:    description: '韩国租房全流程词汇，从看房到签约再到水电煤开通',
+src/data/vocabulary/themes.ts:    description: '健身房、运动比赛、户外活动相关词汇',
+src/data/vocabulary/themes.ts:    name: '韩国节日',
+src/data/vocabulary/themes.ts:    toriQuote: '토리过节啦！学会这些词，和韩国朋友一起过설날和추석🏮',
+src/data/vocabulary/themes.ts:    description: '韩国传统节日和现代纪念日的必备词汇',
+src/data/vocabulary/themes.ts:    description: '韩国社交网络常用词汇和网络用语',
+src/data/vocabulary/themes.ts:    description: '韩国约会文化词汇，从表白到纪念日必备表达',
+src/data/vocabulary/themes.ts:    name: '韩国留学',
+src/data/vocabulary/themes.ts:    toriQuote: '토리来留学了！学会这些词，韩国留学生活轻松搞定📚',
+src/data/vocabulary/themes.ts:    description: '韩国留学生活全场景词汇，从选课到考试到毕业',
+src/data/vocabulary/themes.ts:      { korean: '한국 친구를 사귀고 싶어요.', chinese: '想交韩国朋友。' },
+src/data/writingExercises.ts:  { zh: '我想吃韩国料理。', ko: '한국 요리를 먹고 싶어요.', hint: '~고 싶어요 (想做~)', grammarPoint: 'V고 싶다 — 表示"想做~"，用于表达愿望' },
+src/data/writingExercises.ts:    meaning: '在图书馆学习。',
+src/data/yonsei-books.ts:    bookTitle: '延世韩国语 1',
+src/data/yonsei-books.ts:      { word: '한국', pronunciation: 'han-guk', meaning: '韩国', partOfSpeech: '名词' },
+src/data/yonsei-books.ts:    bookTitle: '延世韩国语 1',
+src/data/yonsei-books.ts:    description: '校园场所、课程相关词汇',
+src/data/yonsei-books.ts:      { word: '공부하다', pronunciation: 'gong-bu-ha-da', meaning: '学习', partOfSpeech: '动词' },
+src/data/yonsei-books.ts:    bookTitle: '延世韩国语 1',
+src/data/yonsei-books.ts:    bookTitle: '延世韩国语 1',
+src/data/yonsei-books.ts:    bookTitle: '延世韩国语 1',
+src/data/yonsei-books.ts:    description: '食物、餐厅点餐相关词汇',
+src/data/yonsei-books.ts:    bookTitle: '延世韩国语 1',
+src/data/yonsei-books.ts:    bookTitle: '延世韩国语 1',
+src/data/yonsei-books.ts:    bookTitle: '延世韩国语 1',
+src/data/yonsei-books.ts:    description: '天气、季节、服装相关词汇',
+src/data/yonsei-books.ts:    bookTitle: '延世韩国语 1',
+src/data/yonsei-books.ts:    bookTitle: '延世韩国语 1',
+src/data/yonsei-books.ts:    bookTitle: '延世韩国语 2',
+src/data/yonsei-books.ts:    bookTitle: '延世韩国语 2',
+src/data/yonsei-books.ts:    description: '韩国饮食文化、料理方法、口味偏好表达',
+src/data/yonsei-books.ts:    bookTitle: '延世韩国语 2',
+src/data/yonsei-books.ts:    description: '网购、退货、价格比较等消费场景词汇',
+src/data/yonsei-books.ts:    bookTitle: '延世韩国语 2',
+src/data/yonsei-books.ts:    description: '旅行计划、交通工具、住宿预订等词汇',
+src/data/yonsei-books.ts:    bookTitle: '延世韩国语 2',
+src/data/yonsei-books.ts:    bookTitle: '延世韩国语 2',
+src/data/yonsei-books.ts:    bookTitle: '延世韩国语 2',
+src/data/yonsei-books.ts:    description: '韩国传统节日、家庭活动、纪念日相关词汇',
+src/data/yonsei-books.ts:    bookTitle: '延世韩国语 2',
+src/data/yonsei-books.ts:    description: '公司文化、业务处理、上下级关系相关词汇',
+src/data/yonsei-books.ts:    bookTitle: '延世韩国语 3',
+src/data/yonsei-books.ts:    title: '韩国生活适应',
+src/data/yonsei-books.ts:    description: '外国人适应韩国生活所需的中级词汇',
+src/data/yonsei-books.ts:    bookTitle: '延世韩国语 3',
+src/data/yonsei-books.ts:    description: '讨论社会问题所需的中级词汇',
+src/data/yonsei-books.ts:    bookTitle: '延世韩国语 3',
+src/data/yonsei-books.ts:    description: '新闻、广告、社交媒体相关中级词汇',
+src/data/yonsei-books.ts:    bookTitle: '延世韩国语 4',
+src/data/yonsei-books.ts:    description: '职业规划、就业准备、自我发展高级词汇',
+src/data/yonsei-books.ts:    bookTitle: '延世韩国语 4',
+src/data/yonsei-books.ts:    title: '韩国文化深度',
+src/data/yonsei-books.ts:    description: '韩国历史、艺术、社会现象高级词汇',
+src/lib/daily/buildDailyPlan.ts:    label: '词汇复习',
+src/lib/daily/buildDailyPlan.ts:    label: '发音练习',
+src/lib/daily/buildDailyPlan.ts:    detail: pronunciationDone ? '已完成今日发音练习' : '巩固韩语发音',
+src/lib/daily/buildDailyPlan.ts:    label: '输出练习',
+src/lib/daily/buildDailyPlan.ts:      ? '已完成输出练习'
+src/lib/gamification.ts:    nickname: '学习者',
+src/lib/koreaArticles.ts:    filename: '文化模块_01_韩国便利店完全指南.html',
+src/lib/koreaArticles.ts:    title: '韩国便利店完全指南', subtitle: '편의점 — 不只是一家店，是韩国人的生活方式',
+src/lib/koreaArticles.ts:    tag: '🇰🇷 韩国文化 · 生活方式', readTime: '约10分钟读完', color: '#FF8FAB',
+src/lib/koreaArticles.ts:    tag: '🇰🇷 韩国文化 · 生活方式', readTime: '约10分钟读完', color: '#C9B8E8',
+src/lib/koreaArticles.ts:    filename: '文化模块_03_韩国人的打招呼文化.html',
+src/lib/koreaArticles.ts:    title: '韩国人的打招呼文化', subtitle: '인사 문화 — 一个"안녕하세요"背后藏着多少学问',
+src/lib/koreaArticles.ts:    tag: '🇰🇷 韩国文化 · 礼仪', readTime: '约10分钟读完', color: '#A8D8D0',
+src/lib/koreaArticles.ts:    filename: '文化模块_04_韩国节日完全手册.html',
+src/lib/koreaArticles.ts:    title: '韩国节日完全手册', subtitle: '명절과 기념일 — 从春节到Pepero Day，一年都在过节',
+src/lib/koreaArticles.ts:    tag: '🇰🇷 韩国文化 · 节日', readTime: '约10分钟读完', color: '#FF8FAB',
+src/lib/koreaArticles.ts:    tag: '🇰🇷 韩国文化 · 韩剧', readTime: '约10分钟读完', color: '#C9B8E8',
+src/lib/koreaArticles.ts:    filename: '美食模块_01_韩国烤肉完全指南.html',
+src/lib/koreaArticles.ts:    title: '韩国烤肉完全指南', subtitle: '고기 — 从点单到吃法，一篇搞懂',
+src/lib/koreaArticles.ts:    tag: '🇰🇷 韩国美食 · 烤肉', readTime: '约10分钟读完', color: '#FF8FAB',
+src/lib/koreaArticles.ts:    tag: '🇰🇷 韩国美食 · 小吃', readTime: '约10分钟读完', color: '#FFE4A0',
+src/lib/koreaArticles.ts:    filename: '美食模块_03_韩国人为什么这么爱喝汤.html',
+src/lib/koreaArticles.ts:    title: '韩国人为什么这么爱喝汤', subtitle: '국과 찌개 — 一碗汤的哲学',
+src/lib/koreaArticles.ts:    tag: '🇰🇷 韩国美食 · 汤文化', readTime: '约10分钟读完', color: '#A8D8D0',
+src/lib/koreaArticles.ts:    tag: '🇰🇷 韩国美食 · 点餐', readTime: '约10分钟读完', color: '#FF8FAB',
+src/lib/koreaArticles.ts:    filename: '美食模块_05_韩国辣文化.html',
+src/lib/koreaArticles.ts:    title: '韩国辣文化', subtitle: '매운맛 — 韩国人对辣的执着',
+src/lib/koreaArticles.ts:    tag: '🇰🇷 韩国美食 · 辣', readTime: '约10分钟读完', color: '#FF6B6B',
+src/lib/koreaArticles.ts:    tag: '🇰🇷 韩国旅行 · 首尔', readTime: '约10分钟读完', color: '#A8D8D0',
+src/lib/koreaArticles.ts:    tag: '🇰🇷 韩国旅行 · 交通', readTime: '约10分钟读完', color: '#C9B8E8',
+src/lib/koreaArticles.ts:    filename: '旅行模块_03_去韩国之前必须知道的文化禁忌.html',
+src/lib/koreaArticles.ts:    title: '去韩国之前必须知道的文化禁忌', subtitle: '금기사항 — 这些事千万不能做',
+src/lib/koreaArticles.ts:    tag: '🇰🇷 韩国旅行 · 禁忌', readTime: '约10分钟读完', color: '#FF8FAB',
+src/lib/koreaArticles.ts:    tag: '🇰🇷 韩国旅行 · 景点', readTime: '约10分钟读完', color: '#FFE4A0',
+src/lib/koreaArticles.ts:    filename: '旅行模块_05_韩国购物完全指南.html',
+src/lib/koreaArticles.ts:    title: '韩国购物完全指南', subtitle: '쇼핑 — 明洞、弘大、江南、免税店全攻略',
+src/lib/koreaArticles.ts:    tag: '🇰🇷 韩国旅行 · 购物', readTime: '约10分钟读完', color: '#FF8FAB',
+src/lib/koreaArticles.ts:    return `<a class="next-btn" href="/korea">探索更多韩国文化内容 →</a>`;
+src/lib/koreaArticles.ts:    // text may have emoji prefix like "🍜 韩国街头小吃地图"
+src/lib/lesson/buildLessonCards.ts:    case 5: return { prompt: `${o.prompt}（自由发挥，可结合已学内容）`, hint: '自由输出练习', exampleAnswer: o.exampleAnswer };
+src/lib/progress.ts:  { level: '初级', minWords: 300, minGrammar: 40, unlocks: ['解锁TOPIK练习（年度会员）'] },
+src/lib/progress.ts:  { level: '中级', minWords: 800, minGrammar: 100, unlocks: ['解锁AI学习报告（年度会员）'] },
+src/lib/server/db.ts:      nickname TEXT DEFAULT '学习者',
+src/types/index.ts:  first_word: { title: '初识韩语', description: '学习第一个韩语单词', icon: '🌱' },
+src/types/index.ts:  words_10: { title: '韩语入门', description: '学习 10 个单词', icon: '📚' },
+src/types/index.ts:  words_50: { title: '词汇积累', description: '学习 50 个单词', icon: '📖' },
+src/types/index.ts:  words_100: { title: '百词斩', description: '学习 100 个单词', icon: '⚔️' },
+src/types/index.ts:  words_500: { title: '词汇达人', description: '学习 500 个单词', icon: '🏆' },
+src/types/index.ts:  streak_3: { title: '三天打鱼', description: '连续学习 3 天', icon: '🔥' },
+src/types/index.ts:  streak_7: { title: '一周坚持', description: '连续学习 7 天', icon: '🌟' },
+src/types/index.ts:  streak_30: { title: '月度之星', description: '连续学习 30 天', icon: '⭐' },
+src/types/index.ts:  streak_100: { title: '百天王者', description: '连续学习 100 天', icon: '👑' },
+src/types/index.ts:  category: string;              // "生活场景" | "社交表达" | "韩流场景" | "旅行韩国" | "职场学习"
+src/types/index.ts:  | 'phonetics_complete'    // 完成四十音学习
+src/types/index.ts:  | 'topik_perfect'         // TOPIK练习首次满分
+src/types/index.ts:  | 'days_100';             // 学习满100天

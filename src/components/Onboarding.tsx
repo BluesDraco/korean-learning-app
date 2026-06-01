@@ -132,7 +132,7 @@ export default function Onboarding({ onComplete }: Props) {
 
               <div className="space-y-3">
                 {([
-                  { key: 'absolute_beginner', level: 'beginner' as const, label: '完全零基础', desc: '从四十音和问候语开始', emoji: '🌱' },
+                  { key: 'absolute_beginner', level: 'beginner' as const, label: '完全零基础', desc: '从韩文字母和问候语开始', emoji: '🌱' },
                   { key: 'some_beginner', level: 'beginner' as const, label: '会一点点', desc: '认识字母，能说简单问候', emoji: '🌿' },
                   { key: 'intermediate', level: 'intermediate' as const, label: '初级水平', desc: 'TOPIK 1-2，能简单对话', emoji: '🌳' },
                   { key: 'advanced', level: 'advanced' as const, label: '中级以上', desc: 'TOPIK 3+，能流利表达', emoji: '🌺' },

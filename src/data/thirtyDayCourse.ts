@@ -1216,7 +1216,7 @@ export const thirtyDayCourse: DailyCourse[] = [
 
   {
     day: 30, title: '综合测试（下）& 毕业', titleKo: '종합 테스트 (2) & 졸업', emoji: '🎉',
-    description: '后15天内容测试及30天课程毕业',
+    description: '后15天内容测试及30天入门毕业',
     words: [
       { korean: '졸업', pronunciation: 'jo-reop', chinese: '毕业', partOfSpeech: '名词', emoji: '🎓' },
       { korean: '수료증', pronunciation: 'su-ryo-jeung', chinese: '结业证', partOfSpeech: '名词', emoji: '📜' },
@@ -1229,7 +1229,7 @@ export const thirtyDayCourse: DailyCourse[] = [
     ],
     grammar: {
       name: '最终语法总结', nameKo: '문법 총정리',
-      explanation: '恭喜完成30天课程！你已掌握：敬语体系(해요체)、时态(现在/过去/将来)、助词(은/는/이/가/을/를/에/에서/까지/보다/도/의)、连接词(지만/아서/으면/면서)和句式(주세요/주다/있다/보다/주다/수 있다/거예요)。这是韩语的坚实基础。',
+      explanation: '恭喜完成30天入门！你已掌握：敬语体系(해요체)、时态(现在/过去/将来)、助词(은/는/이/가/을/를/에/에서/까지/보다/도/의)、连接词(지만/아서/으면/면서)和句式(주세요/주다/있다/보다/주다/수 있다/거예요)。这是韩语的坚实基础。',
       pattern: '综合运用所有句型',
       example: '30일 동안 한국어 기초를 다 배웠어요. 이제 중급으로 도전할 수 있어요!',
       exampleZh: '这30天已经学完了韩语基础。现在可以挑战中级了！',
@@ -1247,7 +1247,7 @@ export const thirtyDayCourse: DailyCourse[] = [
       { korean: '할 수 있어요!', pronunciation: 'hal su i-sseo-yo!', chinese: '你可以的！' },
     ],
     output: {
-      prompt: '恭喜完成30天课程！写一段话给自己，回顾收获并展望未来。',
+      prompt: '恭喜完成30天入门！写一段话给自己，回顾收获并展望未来。',
       hint: '30일 동안... + 이제... + 앞으로... + 화이팅!',
       exampleAnswer: '30일 동안 정말 많이 배웠어요. 처음에는 "안녕하세요"도 몰랐는데, 이제 한국어로 대화할 수 있어요! 이게 끝이 아니에요. 앞으로 중급도 도전할 거예요. 모두 화이팅!',
     },

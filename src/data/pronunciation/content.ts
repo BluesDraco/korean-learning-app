@@ -325,6 +325,6 @@ export function itemsFromCourseWords(words: { korean: string; chinese: string; p
     focus: ['课程单词', `Day ${dayNum}`],
     source: 'course',
     sourceId: `day-${dayNum}`,
-    tips: ['来自30天课程', '先听标准音，再跟读'],
+    tips: ['来自30天入门模板', '先听标准音，再跟读'],
   }));
 }

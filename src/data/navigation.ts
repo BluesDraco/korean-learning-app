@@ -16,60 +16,66 @@ export interface NavGroup {
 }
 
 import {
-  Home, BookOpen, Gamepad2, LayoutGrid, Flower2, Bot,
-  GraduationCap, Grid3X3, FileText, BookImage,
-  RefreshCw, Pencil, Mic, Keyboard, PenLine,
-  Library,
+  Sparkles, Library, Wrench, GraduationCap, Compass,
+  BookOpen, Play, TrendingUp,
+  MessageSquare, BookMarked, FileText, Mic, BookImage,
+  PenLine, Search, Keyboard, RefreshCw, Pencil,
+  Grid3X3, Languages, Lightbulb, Music, Radio,
   Palette, MapPin, UtensilsCrossed,
-  MessageSquare, Search, Sparkles,
-  Music, Radio, TrendingUp, Lightbulb,
+  Tv,
 } from 'lucide-react';
 
 export const navGroups: NavGroup[] = [
-  { icon: Home, label: '首页', ko: '홈', href: '/', children: [] },
   {
-    icon: BookOpen, label: '学习', ko: '학습', href: '/daily', children: [
-      { label: '今日学习', ko: '오늘의 학습', href: '/daily', icon: Sparkles },
-      { label: '30天入门路线', ko: '30일 과정', href: '/course', icon: GraduationCap },
-      { label: '发音练习', ko: '발음 연습', href: '/pronunciation', icon: Mic },
-      { label: '韩语40音', ko: '한글', href: '/phonetics', icon: Grid3X3 },
-      { label: '句型', ko: '문형', href: '/grammar', icon: FileText },
-      { label: '绘本学习', ko: '그림책', href: '/learn/picture-books', icon: BookImage },
-      { label: '文章阅读', ko: '읽기', href: '/reading', icon: BookOpen },
+    icon: Sparkles, label: '今日', ko: '오늘', href: '/daily', children: [
+      { label: '今日工作台', ko: '오늘의 학습', href: '/daily', icon: Sparkles },
+      { label: '继续学习', ko: '이어서', href: '/course', icon: Play },
+      { label: '学习概览', ko: '학습 개요', href: '/stats', icon: TrendingUp },
     ],
   },
   {
-    icon: Gamepad2, label: '练习', ko: '연습', href: '/review', children: [
-      { label: 'SRS复习', ko: 'SRS 복습', href: '/review', icon: RefreshCw },
-      { label: '听写', ko: '받아쓰기', href: '/dictation', icon: Pencil },
-      { label: '影子跟读', ko: '쉐도잉', href: '/shadowing', icon: Mic },
-      { label: '打字', ko: '타자', href: '/typing', icon: Keyboard },
-      { label: '写作', ko: '작문', href: '/writing', icon: PenLine },
-      { label: 'TOPIK模拟', ko: 'TOPIK 모의', href: '/topik', icon: FileText },
+    icon: Library, label: '我的', ko: '내 정보', href: '/mine', children: [
+      { label: '我的词', ko: '내 단어', href: '/vocabulary', icon: BookOpen },
+      { label: '我的句子', ko: '내 문장', href: '/vocabulary?tab=sentences', icon: MessageSquare },
+      { label: '我的文章', ko: '내 글', href: '/reading', icon: FileText },
+      { label: '我的录音', ko: '내 녹음', href: '/shadowing', icon: Mic },
+      { label: '我的跟唱', ko: '내 노래', href: '/korea/kpop?tab=my', icon: Music },
+      { label: '我的日记', ko: '내 일기', href: '/diary', icon: PenLine },
+      { label: '我的成就', ko: '내 성과', href: '/stats', icon: TrendingUp },
+      { label: '消息', ko: '메시지', href: '/messages', icon: MessageSquare },
     ],
   },
   {
-    icon: LayoutGrid, label: '词汇', ko: '어휘', href: '/vocabulary', children: [
-      { label: '我的单词', ko: '내 단어', href: '/vocabulary', icon: BookOpen },
-      { label: '词库', ko: '단어장', href: '/vocabulary/library', icon: Library },
-      { label: '按等级', ko: '등급별', href: '/vocabulary/levels', icon: TrendingUp },
-      { label: '韩语字典', ko: '사전', href: '/dictionary', icon: Search },
+    icon: Wrench, label: '工具', ko: '도구', href: '/tools', children: [
+      { label: '内容拆解', ko: '내용 분석', href: '/ai', icon: Sparkles },
+      { label: '查词翻译', ko: '사전', href: '/dictionary', icon: Search },
+      { label: '发音跟读', ko: '발음 연습', href: '/pronunciation', icon: Mic },
+      { label: '听写练习', ko: '받아쓰기', href: '/dictation', icon: Pencil },
+      { label: '闪卡复习', ko: 'SRS 복습', href: '/review', icon: RefreshCw },
+      { label: '文章拆解', ko: '읽기 분석', href: '/reading', icon: FileText },
+      { label: '语法解释', ko: '문법 설명', href: '/grammar', icon: Languages },
+      { label: '韩文打字', ko: '한글 타자', href: '/typing', icon: Keyboard },
+      { label: '写作练习', ko: '작문', href: '/writing', icon: PenLine },
+      { label: 'AI场景陪练', ko: 'AI 대화', href: '/ai/chat', icon: MessageSquare },
     ],
   },
   {
-    icon: Flower2, label: '兴趣', ko: '취미', href: '/korea', children: [
-      { label: '韩国文化', ko: '문화', href: '/korea/culture', icon: Palette },
-      { label: 'KPOP', ko: '케이팝', href: '/korea/kpop', icon: Music },
-      { label: '美食', ko: '음식', href: '/korea/food', icon: UtensilsCrossed },
-      { label: '旅行', ko: '여행', href: '/korea/travel', icon: MapPin },
-      { label: '知识百科', ko: '지식', href: '/knowledge', icon: Lightbulb },
+    icon: GraduationCap, label: '学习', ko: '학습', href: '/learning', children: [
+      { label: '30天入门模板', ko: '30일 입문', href: '/course', icon: GraduationCap },
+      { label: '韩文字母入门', ko: '한글 입문', href: '/phonetics', icon: Grid3X3 },
+      { label: 'TOPIK备考模板', ko: 'TOPIK', href: '/topik', icon: FileText },
+      { label: '发音入门模板', ko: '발음 입문', href: '/pronunciation', icon: Mic },
+      { label: '阅读入门模板', ko: '읽기 입문', href: '/reading', icon: BookOpen },
+      { label: '写作入门模板', ko: '작문 입문', href: '/writing', icon: PenLine },
     ],
   },
   {
-    icon: Bot, label: 'AI助手', ko: 'AI 도우미', href: '/ai', children: [
-      { label: 'AI 总览', ko: 'AI 개요', href: '/ai', icon: Sparkles },
-      { label: 'AI 对话', ko: 'AI 대화', href: '/ai/chat', icon: MessageSquare },
-      { label: '语音对话', ko: '음성 대화', href: '/ai/voice', icon: Mic },
+    icon: Compass, label: '探索', ko: '탐색', href: '/explore', children: [
+      { label: 'KPOP歌词跟唱', ko: 'KPOP 따라부르기', href: '/korea/kpop', icon: Music },
+      { label: '韩娱热帖', ko: 'K-pop 핫이슈', href: '/korea/kpop/news', icon: Radio },
+      { label: 'Tori绘本馆', ko: '토리 그림책', href: '/learn/picture-books', icon: BookImage },
+      { label: '韩国小知识', ko: '한국 지식', href: '/knowledge', icon: Lightbulb },
+      { label: '韩剧表达', ko: '드라마 표현', href: '/korea/drama', icon: Tv },
     ],
   },
 ];

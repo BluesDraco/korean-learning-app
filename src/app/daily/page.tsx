@@ -163,7 +163,7 @@ export default function DailyPage() {
           href="/course"
           className="text-xs text-[var(--text-muted)] hover:text-[var(--purple-soft)] transition-colors px-3 py-1.5 rounded-lg bg-[var(--bg-input)]"
         >
-          查看30天课程路线
+          查看30天入门模板
         </Link>
         <Link
           href="/learn"

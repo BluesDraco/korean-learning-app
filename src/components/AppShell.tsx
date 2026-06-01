@@ -10,7 +10,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <div className="h-[44px]" />
       <Navbar />
       <main className="min-h-dvh pb-16 md:pb-6 pl-0 md:pl-14 lg:pl-52 px-3 md:px-4 lg:px-8 page-container pt-3 transition-[padding] duration-200"
-        style={{ paddingBottom: 'calc(64px + env(safe-area-inset-bottom, 0px))' }}
+        style={{ paddingBottom: 'calc(72px + env(safe-area-inset-bottom, 0px))' }}
       >
         {children}
       </main>

@@ -70,7 +70,7 @@ export async function buildDailyPlan(): Promise<DailyPlan> {
   if (course && stage !== 'completed') {
     tasks.push({
       key: 'course',
-      label: '今日课程',
+      label: '继续学习',
       detail: `Day ${course.day} · ${course.title} — ${course.words.length} 单词 · 1 语法 · ${course.sentences.length} 句子`,
       href: `/course/${course.day}?source=daily`,
       done: false,
