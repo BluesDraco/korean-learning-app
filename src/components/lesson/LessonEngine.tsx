@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight, Volume2, AlertTriangle } from 'lucide-react';
 import type { DailyCourse } from '@/data/thirtyDayCourse';
-import type { LessonCard, GoalData, AbilitySummary } from '@/lib/lesson/types';
+import type { LessonCard } from '@/lib/lesson/types';
 import { buildLessonCards } from '@/lib/lesson/buildLessonCards';
 import { recordLessonComplete } from '@/lib/lesson/recordLesson';
 import { scoreAnswer } from '@/lib/lesson/scoreAnswer';
@@ -25,6 +25,7 @@ import { LessonProgressDots } from './LessonProgressDots';
 import { MicroFeedbackToast, getMicroFeedback } from './MicroFeedback';
 import type { MicroFeedback } from '@/lib/lesson/types';
 import type { DailyWord, DailySentence, DailyGrammar, DailyDictation, OutputTask } from '@/data/thirtyDayCourse';
+import { playClick, playSuccess, playError } from '@/lib/soundManager';
 
 interface Props {
   course: DailyCourse;
@@ -110,10 +111,12 @@ export default function LessonEngine({ course, dayNum, source }: Props) {
       autoPlayingRef.current = false;
       lessonCancelSpeech();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentCard]);
 
   const speakCard = useCallback(async () => {
     if (playing || !card?.speakText) return;
+    playClick();
     const seq = ++speakSeqRef.current;
     setPlaying(true);
     setLoadingAudio(true);
@@ -186,7 +189,7 @@ export default function LessonEngine({ course, dayNum, source }: Props) {
       }
       setTransitioning(false);
     }, CARD_TRANSITION_MS);
-  }, [transitioning, currentCard, totalCards, card, selectedOption, revealed, outputText, course.day, logEvent]);
+  }, [transitioning, currentCard, card, selectedOption, revealed, outputText, course.day, logEvent]);
 
   const goPrev = useCallback(() => {
     if (transitioning || currentCard === 0) return;
@@ -205,6 +208,7 @@ export default function LessonEngine({ course, dayNum, source }: Props) {
   const reveal = useCallback(() => {
     if (!revealed && card) {
       setRevealed(true);
+      playClick();
       logEvent(card, 'reveal', '显示答案');
       if (card.type === 'speak-repeat') {
         setFeedback(getMicroFeedback('correct'));
@@ -219,16 +223,19 @@ export default function LessonEngine({ course, dayNum, source }: Props) {
     const isCorrect = idx === card.correctOption;
     logEvent(card, isCorrect ? 'answer_correct' : 'answer_wrong', `选项${idx + 1}`);
     setFeedback(getMicroFeedback(isCorrect ? 'correct' : 'wrong'));
+    if (isCorrect) playSuccess(); else playError();
   }, [selectedOption, card, logEvent]);
 
   const handleMatchPairsCorrect = useCallback(() => {
     setRevealed(true);
     setFeedback(getMicroFeedback('correct'));
+    playSuccess();
     if (card) logEvent(card, 'answer_correct', '配对正确');
   }, [card, logEvent]);
 
   const handleMatchPairsWrong = useCallback(() => {
     setFeedback(getMicroFeedback('wrong'));
+    playError();
     if (card) logEvent(card, 'answer_wrong', '配对错误');
   }, [card, logEvent]);
 
@@ -250,9 +257,35 @@ export default function LessonEngine({ course, dayNum, source }: Props) {
     setResult(r);
   }, [result, card, currentCard, course, selectedOption, revealed, outputText]);
 
-  // Cleanup on unmount
+  // Cleanup on unmount — save partial progress if user exits mid-lesson
   useEffect(() => {
-    return () => { lessonCancelSpeech(); };
+    return () => {
+      lessonCancelSpeech();
+      const events = eventsRef.current;
+      if (events.length === 0) return;
+      // Save words/XP/streak if user saw at least a few cards before exiting
+      if (events.length >= 3) {
+        import('@/lib/lesson/recordLesson').then(({ recordLessonComplete }) => {
+          // Use the live cards ref to get the current course object
+          recordLessonComplete(course, events).catch(() => {});
+        }).catch(() => {});
+      } else {
+        // Too few events — just persist the raw events
+        import('@/lib/db').then(({ db }) => {
+          const now = Date.now();
+          const learningEvents = events.map((e) => ({
+            id: crypto.randomUUID(),
+            dayNum: course.day,
+            cardType: e.card.type,
+            action: e.action as import('@/lib/lesson/types').LearningEvent['action'],
+            detail: e.detail,
+            timestamp: now,
+          }));
+          db.learningEvents.bulkPut(learningEvents).catch(() => {});
+        }).catch(() => {});
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const goNextDay = () => { if (dayNum < 30) router.push(`/course/${dayNum + 1}${source ? `?source=${source}` : ''}`); };

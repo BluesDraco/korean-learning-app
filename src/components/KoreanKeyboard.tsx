@@ -2,9 +2,10 @@
 
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Delete, Pen } from 'lucide-react';
+import { X, Delete } from 'lucide-react';
 import { useIsMobile } from '@/lib/useIsMobile';
-import { HandwritingPad } from '@/components/HandwritingPad';
+// Handwriting entry hidden — unreliable recognition API; re-enable with feature flag when stable
+// import { HandwritingPad } from '@/components/HandwritingPad';
 
 // ═══════════════════════════════════════════════════════════════
 // Hangul Composition Engine
@@ -263,7 +264,6 @@ export function KoreanKeyboard({ value, onChange, visible, onClose, onSend }: Ko
   const [buffer, setBuffer] = useState<string[]>([]);
   const [mounted, setMounted] = useState(false);
   const [activeKeys, setActiveKeys] = useState<Set<string>>(new Set());
-  const [handwritingMode, setHandwritingMode] = useState(false);
   const [animState, setAnimState] = useState<'entering' | 'visible' | 'exiting'>('entering');
   const longPressRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const backspaceRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -462,140 +462,175 @@ export function KoreanKeyboard({ value, onChange, visible, onClose, onSend }: Ko
 
   if (!visible || !mounted) return null;
 
+  // ── Layout constants ──────────────────────────────────────────
+  // Mobile: full-width sheet anchored to bottom (above BottomTabBar)
+  // Desktop (md+): centred panel max 560px, sitting above the sidebar gap
+  //   Sidebar is 112px wide; we shift right by half that so the keyboard
+  //   visually centres over the main content rail.
+  const keyH = isMobile ? 'h-[46px] min-h-[46px]' : 'h-[40px] min-h-[40px]';
+  const keyTextSize = isMobile ? 'text-[15px]' : 'text-[13px]';
+  const hintTextSize = isMobile ? 'text-[9px]' : 'text-[8px]';
+
   return createPortal(
-    <div
-      className="fixed bottom-0 left-0 right-0 z-[200]"
-      style={{
-        transform: animState === 'visible' ? 'translateY(0)' : 'translateY(100%)',
-        transition: 'transform 200ms ease-out',
-      }}
-    >
-      <div className="pl-0 md:pl-14 lg:pl-52 px-3 md:px-4 lg:px-8 w-full max-w-[1280px] mx-auto">
-        {/* Preview bar */}
-        <div className="flex items-center gap-2 px-3 py-2 bg-[var(--bg-card)] border-t border-x border-[var(--border-color)] rounded-t-2xl">
-          <div className="flex-1 min-h-[26px] flex items-center gap-2">
-            <span className="text-base font-bold text-gray-900 dark:text-gray-100">
-              {composed || <span className="text-gray-400 dark:text-gray-500 font-normal text-xs">输入韩文...</span>}
-            </span>
-            {showRawJamo && (
-              <span className="text-[11px] text-gray-400 dark:text-gray-500 font-mono">{buffer.join(' ')}</span>
-            )}
-          </div>
-          <button
-            onClick={() => setHandwritingMode(!handwritingMode)}
-            className={`p-1.5 rounded-lg transition-colors ${
-              handwritingMode
-                ? 'bg-[var(--pink-primary)]/20 text-[var(--pink-primary)]'
-                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)]'
-            }`}
-            title={handwritingMode ? '切换到键盘' : '手写输入'}
-          >
-            <Pen size={15} />
-          </button>
-          <button
-            onClick={animateOut}
-            className="p-1 text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)] rounded-lg transition-colors"
-          >
-            <X size={16} />
-          </button>
-        </div>
-
-        {/* Handwriting pad or Key area */}
-        {handwritingMode ? (
-          <HandwritingPad
-            onInsert={(text) => {
-              const chars = text.split('');
-              setBuffer((prev) => [...prev, ...chars]);
-              setHandwritingMode(false);
-            }}
-            onCancel={() => setHandwritingMode(false)}
-          />
-        ) : (
-        <div className="bg-[var(--bg-soft)] border border-[var(--border-color)] rounded-b-2xl px-2 pt-2 pb-1">
-          {ROWS.map((row, ri) => (
-            <div key={ri} className="flex justify-center gap-1 mb-1.5">
-              {row.map((key, ki) => {
-                const resolvedLabel = key.type
-                  ? key.label
-                  : (shift && key.shiftLabel) ? key.shiftLabel : key.label;
-                const flex = key.flex || 1;
-
-                const isActive = activeKeys.has(key.label) || (shift && key.shiftLabel && activeKeys.has(key.shiftLabel));
-
-                let bg = 'bg-white dark:bg-[var(--bg-card)]';
-                if (isActive) bg = 'bg-[var(--pink-primary)]/25 ring-2 ring-[var(--pink-primary)]/50 scale-95';
-                else if (key.type === 'shift') bg = shift
-                  ? 'bg-[var(--pink-primary)]/15 text-[var(--pink-primary)]'
-                  : 'bg-[var(--bg-muted)]/60';
-                else if (key.type === 'backspace') bg = 'bg-[var(--bg-muted)]/60';
-
-                return (
-                  <button
-                    key={`${ri}-${ki}`}
-                    onClick={() => handleKey(key)}
-                    onMouseDown={key.type === 'backspace' ? startRepeat : undefined}
-                    onMouseUp={key.type === 'backspace' ? stopRepeat : undefined}
-                    onMouseLeave={key.type === 'backspace' ? stopRepeat : undefined}
-                    onTouchStart={key.type === 'backspace' ? startRepeat : undefined}
-                    onTouchEnd={key.type === 'backspace' ? stopRepeat : undefined}
-                    className={`${bg} flex items-center justify-center ${isMobile ? 'h-11 min-h-[44px]' : 'h-10'} rounded-lg text-sm font-medium
-                      text-[var(--text-primary)] shadow-sm
-                      active:scale-[0.94] active:bg-[var(--pink-pale)]/40
-                      transition-all duration-75 select-none
-                      hover:brightness-95`}
-                    style={{ flex }}
-                  >
-                    {key.type === 'backspace' ? (
-                      <Delete size={16} />
-                    ) : key.type === 'shift' ? (
-                      <span className="text-xs">{resolvedLabel}</span>
-                    ) : (
-                      <span className="flex flex-col items-center leading-tight">
-                        <span>{resolvedLabel}</span>
-                        <span className="text-[9px] text-[var(--text-muted)]/60 font-normal">
-                          {JAMO_TO_QWERTY[resolvedLabel]?.toUpperCase() || ''}
-                        </span>
-                      </span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-          ))}
-
-          {/* Bottom row: space + send/done */}
-          <div className="flex gap-1.5">
-            <button
-              onClick={() => handleKey({ label: '', type: 'space', flex: 1 })}
-              className={`bg-white dark:bg-[var(--bg-card)] flex items-center justify-center ${isMobile ? 'h-11 min-h-[44px]' : 'h-10'} rounded-lg text-xs font-medium text-[var(--text-muted)] shadow-sm active:scale-[0.94] transition-all select-none hover:brightness-95`}
-              style={{ flex: 5 }}
-            >
-              空格
-            </button>
-            {onSend ? (
-              <button
-                onClick={handleSend}
-                className={`bg-[var(--pink-primary)] flex items-center justify-center ${isMobile ? 'h-11 min-h-[44px]' : 'h-10'} rounded-lg text-sm font-bold text-white shadow-sm active:scale-[0.94] transition-all select-none hover:opacity-90`}
-                style={{ flex: 2 }}
-              >
-                发送
-              </button>
-            ) : (
-              <button
-                onClick={() => handleKey({ label: '', type: 'done', flex: 1 })}
-                className={`bg-[var(--pink-primary)] flex items-center justify-center ${isMobile ? 'h-11 min-h-[44px]' : 'h-10'} rounded-lg text-sm font-bold text-white shadow-sm active:scale-[0.94] transition-all select-none hover:opacity-90`}
-                style={{ flex: 2 }}
-              >
-                完成
-              </button>
-            )}
-          </div>
-
-          <div className="pb-safe" />
-        </div>
+    <>
+      {/* Backdrop (desktop only) — clicking outside closes the keyboard */}
+      {!isMobile && (
+        <div
+          className="fixed inset-0 z-[199]"
+          onClick={animateOut}
+        />
       )}
+
+      <div
+        className={[
+          'fixed z-[200]',
+          isMobile
+            // Mobile: full width, above BottomTabBar (56px) + safe area
+            ? 'left-0 right-0'
+            // Desktop: centred panel, max 560px, shifts right to clear sidebar
+            : 'left-1/2 -translate-x-1/2 w-full max-w-[560px]',
+        ].join(' ')}
+        style={{
+          bottom: isMobile
+            ? 'calc(56px + env(safe-area-inset-bottom, 0px))'
+            : '24px',
+          // Cap height so keyboard never overflows on small screens
+          maxHeight: isMobile ? 'calc(100dvh - 56px - env(safe-area-inset-bottom, 0px) - 8px)' : undefined,
+          overflowY: isMobile ? 'auto' : undefined,
+          // Desktop: nudge right by half the sidebar width so keyboard sits
+          // over the main content column rather than the sidebar
+          marginLeft: isMobile ? undefined : '56px',
+          transform: isMobile
+            ? animState === 'visible' ? 'translateY(0)' : 'translateY(110%)'
+            : animState === 'visible'
+              ? 'translateX(-50%) translateY(0) scale(1)'
+              : 'translateX(-50%) translateY(20px) scale(0.97)',
+          opacity: isMobile ? 1 : animState === 'visible' ? 1 : 0,
+          transition: 'transform 200ms ease-out, opacity 180ms ease-out',
+        }}
+      >
+        <div className={isMobile ? 'px-0 w-full' : 'px-3 w-full'}>
+          {/* Preview bar */}
+          <div
+            className="flex items-center gap-2 px-3 py-2 bg-[var(--bg-card)] border-t border-x border-[var(--border-color)]"
+            style={{ borderRadius: isMobile ? '16px 16px 0 0' : '16px 16px 0 0' }}
+          >
+            <div className="flex-1 min-h-[26px] flex items-center gap-2">
+              <span className={`${isMobile ? 'text-base' : 'text-sm'} font-bold text-gray-900 dark:text-gray-100`}>
+                {composed || <span className="text-gray-400 dark:text-gray-500 font-normal text-xs">输入韩文...</span>}
+              </span>
+              {showRawJamo && (
+                <span className="text-[11px] text-gray-400 dark:text-gray-500 font-mono">{buffer.join(' ')}</span>
+              )}
+            </div>
+            <button
+              onClick={animateOut}
+              className="p-1 text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)] rounded-lg transition-colors"
+            >
+              <X size={16} />
+            </button>
+          </div>
+
+          {/* Key area */}
+          <div
+            className="bg-[var(--bg-soft)] border border-[var(--border-color)] px-2 pt-2 pb-2"
+            style={{ borderRadius: '0 0 16px 16px' }}
+          >
+            {ROWS.map((row, ri) => (
+              <div key={ri} className="flex justify-center gap-[5px] mb-[5px]">
+                {row.map((key, ki) => {
+                  const resolvedLabel = key.type
+                    ? key.label
+                    : (shift && key.shiftLabel) ? key.shiftLabel : key.label;
+                  const flex = key.flex || 1;
+
+                  const isActive = activeKeys.has(key.label) || (shift && key.shiftLabel && activeKeys.has(key.shiftLabel));
+
+                  let bg = 'bg-white dark:bg-[var(--bg-card)]';
+                  if (isActive) bg = 'bg-[var(--pink-primary)]/25 ring-2 ring-[var(--pink-primary)]/50 scale-95';
+                  else if (key.type === 'shift') bg = shift
+                    ? 'bg-[var(--pink-primary)]/15 text-[var(--pink-primary)]'
+                    : 'bg-[#ddd]/60';
+                  else if (key.type === 'backspace') bg = 'bg-[#ddd]/60';
+
+                  return (
+                    <button
+                      key={`${ri}-${ki}`}
+                      type="button"
+                      onClick={() => handleKey(key)}
+                      onMouseDown={(e) => { e.preventDefault(); if (key.type === 'backspace') startRepeat(); }}
+                      onMouseUp={key.type === 'backspace' ? stopRepeat : undefined}
+                      onMouseLeave={key.type === 'backspace' ? stopRepeat : undefined}
+                      onTouchStart={(e) => { e.preventDefault(); if (key.type === 'backspace') startRepeat(); }}
+                      onTouchEnd={key.type === 'backspace' ? stopRepeat : undefined}
+                      className={`${bg} ${keyH} flex items-center justify-center rounded-[8px] font-medium
+                        text-[var(--text-primary)] shadow-[0_1px_2px_rgba(0,0,0,.15)]
+                        active:scale-[0.92] active:brightness-90
+                        transition-all duration-75 select-none`}
+                      style={{ flex }}
+                    >
+                      {key.type === 'backspace' ? (
+                        <Delete size={isMobile ? 17 : 15} />
+                      ) : key.type === 'shift' ? (
+                        <span className={isMobile ? 'text-sm' : 'text-xs'}>{resolvedLabel}</span>
+                      ) : (
+                        <span className="flex flex-col items-center leading-tight">
+                          <span className={keyTextSize}>{resolvedLabel}</span>
+                          {!isMobile && (
+                            <span className={`${hintTextSize} text-[var(--text-muted)]/50 font-normal mt-px`}>
+                              {JAMO_TO_QWERTY[resolvedLabel]?.toUpperCase() || ''}
+                            </span>
+                          )}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            ))}
+
+            {/* Bottom row: space + send/done */}
+            <div className="flex gap-[5px] mt-[2px]">
+              <button
+                type="button"
+                onClick={() => handleKey({ label: '', type: 'space', flex: 1 })}
+                onMouseDown={(e) => e.preventDefault()}
+                onTouchStart={(e) => e.preventDefault()}
+                className={`bg-white dark:bg-[var(--bg-card)] flex items-center justify-center ${keyH} rounded-[8px] text-xs font-medium text-[var(--text-muted)] shadow-[0_1px_2px_rgba(0,0,0,.15)] active:scale-[0.96] transition-all select-none`}
+                style={{ flex: 5 }}
+              >
+                空格
+              </button>
+              {onSend ? (
+                <button
+                  type="button"
+                  onClick={handleSend}
+                  onMouseDown={(e) => e.preventDefault()}
+                  onTouchStart={(e) => e.preventDefault()}
+                  className={`bg-[var(--pink-primary)] flex items-center justify-center ${keyH} rounded-[8px] text-sm font-bold text-white shadow-[0_1px_2px_rgba(0,0,0,.15)] active:scale-[0.96] transition-all select-none`}
+                  style={{ flex: 2 }}
+                >
+                  发送
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => handleKey({ label: '', type: 'done', flex: 1 })}
+                  onMouseDown={(e) => e.preventDefault()}
+                  onTouchStart={(e) => e.preventDefault()}
+                  className={`bg-[var(--pink-primary)] flex items-center justify-center ${keyH} rounded-[8px] text-sm font-bold text-white shadow-[0_1px_2px_rgba(0,0,0,.15)] active:scale-[0.96] transition-all select-none`}
+                  style={{ flex: 2 }}
+                >
+                  完成
+                </button>
+              )}
+            </div>
+
+            {isMobile && <div className="pb-safe" />}
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   , document.body);
 }
 
