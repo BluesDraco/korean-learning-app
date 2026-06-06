@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { ArrowLeft, ChevronDown, ChevronUp, Lightbulb, Volume2, Languages } from 'lucide-react';
 import { useState } from 'react';
 import { knowledgeCategories } from '@/data/knowledge';
-import { speak } from '@/lib/tts';
+import { speak, speakWord } from '@/lib/tts';
 
 export default function KnowledgeCategoryPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -77,7 +77,7 @@ export default function KnowledgeCategoryPage() {
                 {/* Actions */}
                 <div className="flex items-center gap-2 shrink-0">
                   <button
-                    onClick={(e) => { e.stopPropagation(); speak(word.word, 0.8); }}
+                    onClick={(e) => { e.stopPropagation(); speakWord(word.word, 0.8); }}
                     className="p-2 rounded-xl bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
                     title="听发音"
                   >

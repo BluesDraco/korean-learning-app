@@ -120,6 +120,15 @@ export default function KpopPage() {
 
   return (
     <div className="py-4 space-y-5 max-w-3xl mx-auto">
+      {/* Demo notice banner */}
+      <div className="flex items-start gap-3 px-4 py-3 rounded-2xl bg-[#fff8f0] border border-[#f5d9b0]">
+        <span className="text-[18px] mt-0.5">🎵</span>
+        <div>
+          <p className="text-[12px] font-black text-[#b07030]">演示模式 · 暂不开放</p>
+          <p className="text-[11px] text-[#c09060] mt-0.5 leading-relaxed">歌词跟唱功能正在内测中，内容尚未实装，仅供演示参考。</p>
+        </div>
+      </div>
+
       {/* Hero — dark gradient matching demo */}
       <div className="rounded-[32px] bg-gradient-to-br from-[#201815] via-[#47342f] to-[#ff8eb0] p-5 border border-white/10 shadow-[0_26px_70px_rgba(78,52,46,0.18)]">
         <span className="inline-flex items-center gap-2 h-[34px] px-3.5 rounded-full bg-white/15 border border-white/15 text-[12px] font-black text-white">

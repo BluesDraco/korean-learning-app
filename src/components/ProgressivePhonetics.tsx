@@ -4,7 +4,7 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { ChevronDown, ChevronUp, Check, X, ArrowRight, RotateCcw, Trophy, Sparkles, Lock, Volume2, Ear } from 'lucide-react';
 import { progressiveSteps } from '@/data/phonetics-steps';
 import type { PhoneticLetter } from '@/data/phonetics';
-import { speak } from '@/lib/tts';
+import { speak, speakWord } from '@/lib/tts';
 import { emitXpFlyout } from '@/components/XpOverlay';
 import ReadingPractice from '@/components/ReadingPractice';
 import { getFocusForLetter } from '@/data/pronunciation/letter-map';
@@ -127,7 +127,7 @@ export default function ProgressivePhonetics() {
     if (mode === 'listen' && listenQuestions.length > 0 && !audioPlayedRef.current && quizAnswer === null && !quizComplete) {
       audioPlayedRef.current = true;
       const item = listenQuestions[quizIdx];
-      speak(item.item.name, 0.7);
+      speakWord(item.item.name, 0.7);
     }
   }, [mode, listenQuestions, quizIdx, quizAnswer, quizComplete]);
 
@@ -160,7 +160,7 @@ export default function ProgressivePhonetics() {
   const replayAudio = () => {
     const questions = mode === 'listen' ? listenQuestions : quizQuestions;
     if (questions[quizIdx]) {
-      speak(questions[quizIdx].item.name, 0.7);
+      speakWord(questions[quizIdx].item.name, 0.7);
     }
   };
 
@@ -295,7 +295,7 @@ export default function ProgressivePhonetics() {
                   }`}
                 >
                   <button
-                    onClick={() => speak(letter.name, 0.7)}
+                    onClick={() => speakWord(letter.name, 0.7)}
                     className="w-full text-3xl font-extrabold text-[var(--text-primary)] mb-1 text-center block hover:text-[var(--pink-primary)] transition-colors"
                     style={{ fontFamily: "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif" }}
                     title="点击听发音"
@@ -362,7 +362,7 @@ export default function ProgressivePhonetics() {
                       {pair.letters.map((l) => (
                         <button
                           key={l.id}
-                          onClick={() => speak(l.name, 0.7)}
+                          onClick={() => speakWord(l.name, 0.7)}
                           className="flex items-center gap-2 bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] rounded-xl px-3 py-2 transition-colors"
                           title="点击听发音"
                         >

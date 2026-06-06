@@ -5,7 +5,7 @@ import { ArrowLeft, Volume2, Zap, Star, Sparkles, CheckCircle, XCircle, Flame } 
 import { db } from '@/lib/db';
 import { calculateSRS } from '@/lib/srs';
 import { awardXp, XP_REWARDS, updateStreak } from '@/lib/gamification';
-import { speak } from '@/lib/tts';
+import { speak, speakWord } from '@/lib/tts';
 import type { Word, MasteryLevel } from '@/types';
 
 interface Props {
@@ -136,7 +136,7 @@ export function VocabularySession({ words, onClose }: Props) {
     // Auto-speak first step if intro
     const first = built[0];
     if (first && first.stepType === 'intro') {
-      setTimeout(() => speak(first.word.word, 0.75), 300);
+      setTimeout(() => speakWord(first.word.word, 0.75), 300);
     }
   }, [words, sessionKey]);
 
@@ -162,7 +162,7 @@ export function VocabularySession({ words, onClose }: Props) {
 
     // Auto-speak for listen-choice
     if (step.stepType === 'listen-choice') {
-      setTimeout(() => speak(step.word.word, 0.75), 200);
+      setTimeout(() => speakWord(step.word.word, 0.75), 200);
     }
   }, [currentStep, step]);
 
@@ -232,7 +232,7 @@ export function VocabularySession({ words, onClose }: Props) {
         const nextStep = steps[currentStep + 1];
         setCurrentStep(currentStep + 1);
         if (nextStep.stepType === 'intro') {
-          setTimeout(() => speak(nextStep.word.word, 0.75), 300);
+          setTimeout(() => speakWord(nextStep.word.word, 0.75), 300);
         }
       }
       return;
@@ -252,7 +252,7 @@ export function VocabularySession({ words, onClose }: Props) {
 
   // ── Handle speak ──
   const handleSpeak = useCallback(() => {
-    if (step) speak(step.word.word, 0.75);
+    if (step) speakWord(step.word.word, 0.75);
   }, [step]);
 
   const handleSpeakFillBlank = useCallback(() => {

@@ -43,6 +43,15 @@ export function setSpeechRate(rate: number): void {
   } catch { /* ignore */ }
 }
 
+/** Word TTS — always uses browser speech synthesis for consistent pronunciation of single words/syllables. */
+export async function speakWord(text: string, rate?: number): Promise<void> {
+  if (typeof window === 'undefined') return;
+  const cleaned = cleanText(text);
+  if (!cleaned) return;
+  cancelSpeech();
+  await speakViaBrowser(cleaned, rate ?? getSpeechRate());
+}
+
 /** Browser-only TTS — bypasses Qwen entirely. Use for practice/exam modes where quality isn't critical. */
 export async function speakBrowser(text: string, rate?: number): Promise<void> {
   if (typeof window === 'undefined') return;

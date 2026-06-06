@@ -3,7 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { Search, Volume2, BookmarkPlus, ExternalLink, Loader2 } from 'lucide-react';
-import { speak } from '@/lib/tts';
+import { speak, speakWord } from '@/lib/tts';
 import { db } from '@/lib/db';
 import { useFeedback } from '@/hooks/useFeedback';
 
@@ -49,7 +49,7 @@ export default function DictionaryPage() {
   const handleSpeak = (word: string, e: React.MouseEvent) => {
     e.stopPropagation();
     feedbackClick();
-    speak(word);
+    speakWord(word);
   };
 
   const handleAddWord = async (entry: SearchResult, e: React.MouseEvent) => {

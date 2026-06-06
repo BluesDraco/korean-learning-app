@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Volume2, Eye, EyeOff, ArrowRight, RotateCcw, Trophy, Sparkles, BookOpen } from 'lucide-react';
-import { speak } from '@/lib/tts';
+import { speak, speakWord } from '@/lib/tts';
 import { emitXpFlyout } from '@/components/XpOverlay';
 import { db } from '@/lib/db';
 import Link from 'next/link';
@@ -149,7 +149,7 @@ export default function ReadingPractice({ words, step }: { words: ReadingWord[];
                       >
                         <div className="text-center space-y-3">
                           <button
-                            onClick={() => speak(w.korean, 0.7)}
+                            onClick={() => speakWord(w.korean, 0.7)}
                             className="text-2xl font-extrabold text-[var(--text-primary)] hover:text-[var(--pink-primary)] transition-colors"
                             style={{ fontFamily: "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif" }}
                             title="点击听发音"
@@ -158,7 +158,7 @@ export default function ReadingPractice({ words, step }: { words: ReadingWord[];
                           </button>
                           <div className="flex items-center justify-center gap-2">
                             <button
-                              onClick={() => speak(w.korean, 0.7)}
+                              onClick={() => speakWord(w.korean, 0.7)}
                               className="p-1.5 rounded-lg hover:bg-[var(--bg-accent)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors"
                               title="听发音"
                             >
@@ -243,7 +243,7 @@ export default function ReadingPractice({ words, step }: { words: ReadingWord[];
 
             {/* Listen button */}
             <button
-              onClick={() => speak(words[practiceIdx].korean, 0.7)}
+              onClick={() => speakWord(words[practiceIdx].korean, 0.7)}
               className="inline-flex items-center gap-2 px-8 py-4 bg-[var(--pink-primary)]/10 border-2 border-[var(--pink-primary)]/30 rounded-3xl hover:bg-[var(--pink-primary)]/20 transition-colors"
             >
               <Volume2 size={24} className="text-[var(--pink-primary)]" />

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { ArrowLeft, Volume2, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import { db } from '@/lib/db';
-import { speak } from '@/lib/tts';
+import { speak, speakWord } from '@/lib/tts';
 import type { WordBook, Word } from '@/types';
 
 export default function FlashcardStudyPage() {
@@ -208,7 +208,7 @@ export default function FlashcardStudyPage() {
                   {word.partOfSpeech}
                 </span>
                 <button
-                  onClick={(e) => { e.stopPropagation(); speak(word.word, 0.8); }}
+                  onClick={(e) => { e.stopPropagation(); speakWord(word.word, 0.8); }}
                   className="flex items-center gap-2 px-5 py-3 rounded-full bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] hover:bg-[var(--pink-primary)]/20 transition-colors font-medium text-sm"
                 >
                   <Volume2 size={18} />

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { X, Volume2, Keyboard } from 'lucide-react';
 import type { DailyCourse } from '@/data/thirtyDayCourse';
-import { speak } from '@/lib/tts';
+import { speak, speakWord } from '@/lib/tts';
 import { KoreanKeyboard } from '@/components/KoreanKeyboard';
 import { useIsMobile } from '@/lib/useIsMobile';
 
@@ -47,7 +47,7 @@ export function BrowseDrawer({ course, dayNum, onClose, goNextDay, goPrevDay }: 
             <div className="grid grid-cols-2 gap-2">
               {course.words.map((w, i) => (
                 <div key={i} className="bg-[var(--bg-input)]/60 rounded-xl p-3 cursor-pointer hover:bg-[var(--pink-primary)]/6 transition-colors"
-                  onClick={() => { speak(w.korean, 0.75); setShowWord((p) => ({ ...p, [i]: !p[i] })); }}>
+                  onClick={() => { speakWord(w.korean, 0.75); setShowWord((p) => ({ ...p, [i]: !p[i] })); }}>
                   <div className="flex items-center gap-1.5 mb-1">
                     <span>{w.emoji}</span>
                     <span className="text-sm font-bold text-[var(--text-primary)]">{w.korean}</span>

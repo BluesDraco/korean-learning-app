@@ -9,7 +9,7 @@ import {
 import { vocabularyEntries } from '@/data/vocabulary/entries';
 import { db } from '@/lib/db';
 import type { WordEntry } from '@/types';
-import { speak } from '@/lib/tts';
+import { speak, speakWord } from '@/lib/tts';
 
 export default function DictionaryPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -292,7 +292,7 @@ export default function DictionaryPage() {
                 </div>
                 <div className="flex items-center gap-1.5 shrink-0">
                   <button
-                    onClick={(e) => { e.stopPropagation(); speak(entry.korean, 0.75); }}
+                    onClick={(e) => { e.stopPropagation(); speakWord(entry.korean, 0.75); }}
                     className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors"
                   >
                     <Volume2 size={14} />

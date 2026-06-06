@@ -10,7 +10,7 @@ import {
 import { getLevel, getLevelWords } from '@/data/vocabulary';
 import { db } from '@/lib/db';
 import type { WordEntry, LevelWordList } from '@/types';
-import { speak } from '@/lib/tts';
+import { speak, speakWord } from '@/lib/tts';
 
 const levelNames: Record<number, string> = {
   1: '1级 · 入门', 2: '2级 · 基础', 3: '3级 · 进阶',
@@ -238,11 +238,11 @@ export default function LevelDetailPage() {
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   <span
-                    onClick={(e) => { e.stopPropagation(); speak(entry.korean, 0.75); }}
+                    onClick={(e) => { e.stopPropagation(); speakWord(entry.korean, 0.75); }}
                     className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors cursor-pointer"
                     role="button"
                     tabIndex={0}
-                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); speak(entry.korean, 0.75); } }}
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); speakWord(entry.korean, 0.75); } }}
                   >
                     <Volume2 size={14} />
                   </span>

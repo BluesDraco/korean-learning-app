@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { ArrowRight, X, Volume2, Sparkles, Compass } from 'lucide-react';
-import { speak } from '@/lib/tts';
+import { speak, speakWord } from '@/lib/tts';
 
 const WELCOME_KEY = 'phonetics-welcome-seen';
 
@@ -107,7 +107,7 @@ export default function PhoneticsWelcome({ onDone }: { onDone: () => void }) {
               <span className="bg-[var(--purple-soft)]/10 text-[var(--purple-soft)] px-4 py-3 rounded-2xl">ㅏ</span>
               <span className="text-[var(--text-muted)]">=</span>
               <button
-                onClick={() => speak('가', 0.7)}
+                onClick={() => speakWord('가', 0.7)}
                 className="bg-gradient-to-br from-[var(--pink-primary)]/20 to-[var(--purple-soft)]/20 text-[var(--text-primary)] px-6 py-3 rounded-2xl text-3xl hover:scale-105 transition-transform"
               >
                 加
@@ -122,7 +122,7 @@ export default function PhoneticsWelcome({ onDone }: { onDone: () => void }) {
               <span className="bg-[var(--mint-soft)]/10 text-[var(--mint-soft)] px-4 py-3 rounded-2xl">ㄴ</span>
               <span className="text-[var(--text-muted)]">=</span>
               <button
-                onClick={() => speak('한', 0.7)}
+                onClick={() => speakWord('한', 0.7)}
                 className="bg-gradient-to-br from-[var(--pink-primary)]/20 to-[var(--purple-soft)]/20 text-[var(--text-primary)] px-6 py-3 rounded-2xl text-3xl hover:scale-105 transition-transform"
               >
                 한
@@ -256,7 +256,7 @@ function QuickComposeDemo() {
           <div className="inline-flex items-center gap-3 bg-gradient-to-br from-[var(--pink-primary)]/10 to-[var(--purple-soft)]/10 border-2 border-[var(--pink-primary)]/20 rounded-3xl px-8 py-5 animate-fade-in">
             <span className="text-4xl font-extrabold text-[var(--text-primary)]">{syllable}</span>
             <button
-              onClick={() => speak(syllable, 0.7)}
+              onClick={() => speakWord(syllable, 0.7)}
               className="p-2 rounded-xl bg-[var(--pink-primary)]/10 hover:bg-[var(--pink-primary)]/20 text-[var(--pink-primary)] transition-colors"
             >
               <Volume2 size={22} />

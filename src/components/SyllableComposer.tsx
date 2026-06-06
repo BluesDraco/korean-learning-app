@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { Volume2, Shuffle, X, Sparkles } from 'lucide-react';
-import { speak } from '@/lib/tts';
+import { speak, speakWord } from '@/lib/tts';
 
 const INITIALS = [
   { letter: 'ㄱ', name: '기역', rom: 'g' },
@@ -162,7 +162,7 @@ export default function SyllableComposer() {
               <>
                 <span className="text-3xl font-extrabold text-[var(--text-primary)]">{syllable}</span>
                 <button
-                  onClick={() => speak(syllable, 0.7)}
+                  onClick={() => speakWord(syllable, 0.7)}
                   className="p-1 rounded-lg hover:bg-[var(--bg-accent)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors"
                   title="听发音"
                 >
@@ -301,7 +301,7 @@ export default function SyllableComposer() {
           ].map((item) => (
             <button
               key={item.syl}
-              onClick={() => speak(item.syl, 0.7)}
+              onClick={() => speakWord(item.syl, 0.7)}
               className="flex items-center gap-2 p-2.5 bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] rounded-xl transition-colors text-left group"
             >
               <span className="text-xl font-bold text-[var(--text-primary)]">{item.syl}</span>

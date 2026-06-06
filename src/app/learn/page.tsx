@@ -13,7 +13,7 @@ import { learningUnits, TOTAL_UNITS } from '@/data/learningUnits';
 import { grammarPoints } from '@/data/grammar';
 import { emitXpFlyout, emitStreakMilestone } from '@/components/XpOverlay';
 import { KoreanInput } from '@/components/KoreanKeyboard';
-import { speak } from '@/lib/tts';
+import { speak, speakWord } from '@/lib/tts';
 import type { Word, UserProfile } from '@/types';
 import type { LearningUnit } from '@/data/learningUnits';
 
@@ -525,7 +525,7 @@ export default function LearnPage() {
           )}
 
           <button
-            onClick={() => speak(currentWord.word)}
+            onClick={() => speakWord(currentWord.word)}
             className="p-3 rounded-full bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
           >
             <Volume2 size={22} />
@@ -773,7 +773,7 @@ export default function LearnPage() {
           <p className="text-lg text-[var(--text-muted)]">意思：{current.meaning}</p>
 
           <button
-            onClick={() => speak(current.word)}
+            onClick={() => speakWord(current.word)}
             className="mx-auto flex items-center gap-2 px-6 py-4 bg-[var(--pink-primary)]/10 border border-[var(--pink-primary)]/20 rounded-2xl text-[var(--pink-primary)] font-bold text-lg hover:bg-[var(--pink-primary)]/20 transition-colors"
           >
             <Volume2 size={24} /> 点击听发音

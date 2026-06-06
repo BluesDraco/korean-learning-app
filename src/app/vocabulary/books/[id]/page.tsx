@@ -6,7 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, BookOpen, Plus, Trash2, Volume2, Search, Loader2 } from 'lucide-react';
 import { db } from '@/lib/db';
 import { AddToBookModal } from '@/components/AddToBookModal';
-import { speak } from '@/lib/tts';
+import { speak, speakWord } from '@/lib/tts';
 import type { WordBook, Word } from '@/types';
 
 export default function BookDetailPage() {
@@ -141,7 +141,7 @@ export default function BookDetailPage() {
                     <div className="text-xs text-[var(--text-secondary)] truncate mt-0.5">{word.meaning}</div>
                   </div>
                   <button
-                    onClick={(e) => { e.stopPropagation(); speak(word.word, 0.8); }}
+                    onClick={(e) => { e.stopPropagation(); speakWord(word.word, 0.8); }}
                     className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] shrink-0"
                   >
                     <Volume2 size={15} />

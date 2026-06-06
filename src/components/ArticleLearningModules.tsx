@@ -3,7 +3,7 @@
 import { useState, useCallback } from 'react';
 import { Volume2, Check, X, Lightbulb, BookOpen, Edit3, ChevronDown } from 'lucide-react';
 import type { ArticleLearningData } from '@/data/articleLearning';
-import { speak } from '@/lib/tts';
+import { speak, speakWord } from '@/lib/tts';
 
 export default function ArticleLearningModules({ data }: { data: ArticleLearningData }) {
   return (
@@ -48,7 +48,7 @@ function PreReadingKeywords({ keywords }: { keywords: ArticleLearningData['keywo
             <div
               key={kw.korean}
               className="bg-[var(--bg-input)]/60 rounded-xl p-3 group cursor-pointer hover:bg-[var(--pink-primary)]/8 transition-colors"
-              onClick={() => speak(kw.korean, 0.75)}
+              onClick={() => speakWord(kw.korean, 0.75)}
               title="点击听发音"
             >
               <div className="flex items-center gap-1.5 mb-1">

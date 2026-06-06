@@ -11,7 +11,7 @@ import { db } from '@/lib/db';
 import { ThemesSection } from '@/components/vocabulary/ThemesSection';
 import { BooksSection } from '@/components/vocabulary/BooksSection';
 import { VocabularySession } from '@/components/vocabulary/VocabularySession';
-import { speak } from '@/lib/tts';
+import { speak, speakWord } from '@/lib/tts';
 import type { Word, MasteryLevel } from '@/types';
 
 interface SavedSentence {
@@ -184,7 +184,7 @@ function VocabularyContent() {
                   </p>
                   <div className="flex items-center gap-1 shrink-0">
                     <button
-                      onClick={() => speak(s.korean, 0.75)}
+                      onClick={() => speakWord(s.korean, 0.75)}
                       className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors"
                       title="听发音"
                     >

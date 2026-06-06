@@ -3,7 +3,7 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { Volume2, Play, Check, X, ArrowRight, RotateCcw, Trophy, ChevronDown, ChevronUp, Sparkles, Lightbulb } from 'lucide-react';
 import { vowels, consonants, batchimSounds, type PhoneticLetter } from '@/data/phonetics';
-import { speak } from '@/lib/tts';
+import { speak, speakWord } from '@/lib/tts';
 import ProgressivePhonetics from '@/components/ProgressivePhonetics';
 import SyllableComposer from '@/components/SyllableComposer';
 import PhoneticsWelcome, { hasSeenWelcome } from '@/components/PhoneticsWelcome';
@@ -378,7 +378,7 @@ export default function PhoneticsPage() {
                       {letters.map((letter) => (
                         <button
                           key={letter.id}
-                          onClick={() => speak(getSpeakText(letter), 0.7)}
+                          onClick={() => speakWord(getSpeakText(letter), 0.7)}
                           className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 text-center hover:border-[var(--pink-primary)]/30 hover:shadow-md hover:shadow-[var(--pink-primary)]/5 transition-all group"
                         >
                           <span className="text-3xl font-bold text-[var(--text-primary)] block mb-0.5" style={{ fontFamily: "'system-ui', 'sans-serif'" }}>
@@ -408,7 +408,7 @@ export default function PhoneticsPage() {
                     className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 flex items-start gap-4"
                   >
                     <button
-                      onClick={() => speak(getSpeakText(letter), 0.7)}
+                      onClick={() => speakWord(getSpeakText(letter), 0.7)}
                       className="shrink-0 w-16 h-16 rounded-xl bg-[var(--bg-input)] flex items-center justify-center hover:bg-[var(--bg-accent)] transition-colors"
                     >
                       <span className="text-2xl font-bold text-[var(--text-primary)]" style={{ fontFamily: "'system-ui', 'sans-serif'" }}>
@@ -431,7 +431,7 @@ export default function PhoneticsPage() {
                       <p className="text-xs text-[var(--text-muted)] mt-1">{letter.mnemonic}</p>
                     </div>
                     <button
-                      onClick={() => speak(getSpeakText(letter), 0.7)}
+                      onClick={() => speakWord(getSpeakText(letter), 0.7)}
                       className="p-2 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-placeholder)] hover:text-[var(--pink-primary)] transition-colors shrink-0"
                       title="听发音"
                     >
@@ -538,7 +538,7 @@ export default function PhoneticsPage() {
                           [{q.item.romanization}]
                         </span>
                         <button
-                          onClick={() => speak(getSpeakText(q.item), 0.7)}
+                          onClick={() => speakWord(getSpeakText(q.item), 0.7)}
                           className="ml-2 p-2 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-placeholder)] hover:text-[var(--pink-primary)] transition-colors inline-flex align-middle"
                           title="听发音"
                         >
@@ -585,7 +585,7 @@ export default function PhoneticsPage() {
                     {quizState.selectedAnswer !== null && (
                       <div className="flex items-center justify-between pt-2 border-t border-[var(--border-color)]">
                         <button
-                          onClick={() => speak(getSpeakText(q.item), 0.7)}
+                          onClick={() => speakWord(getSpeakText(q.item), 0.7)}
                           className="text-xs text-[var(--text-secondary)] hover:text-[var(--pink-primary)] flex items-center gap-1"
                         >
                           <Volume2 size={12} />
@@ -752,7 +752,7 @@ function RulesTab() {
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                speak(ex.originalRead, 0.7);
+                                speakWord(ex.originalRead, 0.7);
                               }}
                               className="p-1 rounded-lg bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] text-[var(--text-secondary)] hover:text-[var(--pink-primary)] transition-colors shrink-0"
                               title="听发音"
@@ -777,7 +777,7 @@ function RulesTab() {
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  speak(ex.originalRead, 0.7);
+                                  speakWord(ex.originalRead, 0.7);
                                 }}
                                 className="p-1 rounded-lg bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] text-[var(--text-secondary)] hover:text-[var(--pink-primary)] transition-colors shrink-0"
                                 title="听发音"
@@ -859,7 +859,7 @@ function RulesTab() {
                   {quizQuestions[quizIdx].original}
                 </span>
                 <button
-                  onClick={() => speak(quizQuestions[quizIdx].original, 0.7)}
+                  onClick={() => speakWord(quizQuestions[quizIdx].original, 0.7)}
                   className="p-2 rounded-xl bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] text-[var(--text-secondary)] hover:text-[var(--pink-primary)] transition-colors"
                   title="听单词发音"
                 >
@@ -896,7 +896,7 @@ function RulesTab() {
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          speak(opt, 0.7);
+                          speakWord(opt, 0.7);
                         }}
                         className="p-1 rounded-lg bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] text-[var(--text-secondary)] hover:text-[var(--pink-primary)] transition-colors"
                         title="听发音"
