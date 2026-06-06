@@ -9,7 +9,7 @@ import { getHotPostById, getHotPosts } from '@/data/koreanHotPosts';
 import type { KoreanReadingToken, KoreanGrammarNote, KoreanReadingSentence } from '@/types';
 import { useAuth } from '@/components/AuthProvider';
 import { db } from '@/lib/db';
-import { speak } from '@/lib/tts';
+import { speak, speakWord } from '@/lib/tts';
 
 // ── Design tokens (matches Tori_HotReading_Detail_UI_Demo.html) ──
 const C = {
@@ -56,9 +56,17 @@ function WordModal({ token, onClose, onSave, saved }: {
         padding: '24px 20px 36px',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
-          <h2 style={{ fontSize: 22, fontWeight: 900, color: C.ink, letterSpacing: -0.3 }}>
-            {token.surface}
-          </h2>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <h2 style={{ fontSize: 22, fontWeight: 900, color: C.ink, letterSpacing: -0.3 }}>
+              {token.surface}
+            </h2>
+            <button
+              onClick={() => speakWord(token.surface, 0.75)}
+              style={{ width: 32, height: 32, borderRadius: 999, border: `1px solid ${C.line}`, background: C.cream, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}
+            >
+              🔊
+            </button>
+          </div>
           <button onClick={onClose} style={{ padding: 6, borderRadius: 999, border: 'none', background: '#f0e8e4', cursor: 'pointer', display: 'flex' }}>
             <X size={16} color={C.muted} />
           </button>
@@ -172,6 +180,12 @@ function SentenceCard({ sentence, index, postId, sourceName, titleKo, onTokenCli
             {levelLabel}
           </span>
         )}
+        <button
+          onClick={() => speak(sentence.korean, 0.8)}
+          style={{ marginLeft: 'auto', height: 28, padding: '0 10px', borderRadius: 999, border: `1px solid ${C.line}`, background: C.cream, cursor: 'pointer', fontSize: 12, fontWeight: 800, color: C.muted, display: 'inline-flex', alignItems: 'center', gap: 4 }}
+        >
+          🔊 朗读
+        </button>
       </div>
 
       {/* Korean tokens */}
