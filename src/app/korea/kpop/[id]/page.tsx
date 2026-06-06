@@ -202,15 +202,14 @@ export default function KpopSongPage() {
     // Play from 0 to a time far beyond the actual song length (audio ends naturally)
     sp.playSegment(0, 9999999, false, slowMode);
     setIsFullPlaying(true);
-    // Start time-tracking RAF
+    // Start time-tracking RAF using actual audio currentTime
     const offset = timingOffset ?? 0;
-    const startTime = performance.now();
     const tick = () => {
       if (!sp.isPlaying) { setIsFullPlaying(false); rafRef.current = null; return; }
-      const elapsed = (performance.now() - startTime) / 1000;
+      const elapsed = sp.currentTimeMs / 1000;
       setFullCurrentTime(elapsed);
       // Sync line using corrected timings (global offset + per-line calibration)
-      const t = elapsed * 1000 - offset;
+      const t = sp.currentTimeMs - offset;
       const idx = lyrics.findIndex((l, i) => {
         const correctedStart = l.startMs + (lineCalibrations[i]?.startOffsetMs ?? 0);
         const nextL = lyrics[i + 1];
@@ -443,18 +442,26 @@ export default function KpopSongPage() {
                 {slowMode ? '0.75x' : '1.0x'}
               </button>
             </div>
-            {/* Progress bar */}
-            <div style={{
-              height: '8px', borderRadius: '999px', background: C.barBg,
-              marginTop: '12px', overflow: 'hidden',
-            }}>
-              <div style={{
-                display: 'block', width: `${Math.min(100, progressPct)}%`, height: '100%',
-                borderRadius: '999px',
-                background: `linear-gradient(90deg, ${C.mint}, ${C.pink})`,
-                transition: 'width 200ms',
-              }} />
-            </div>
+            {/* Progress bar — draggable */}
+            <input
+              type="range"
+              min={0}
+              max={fullDuration || totalDurationSec || 100}
+              step={0.5}
+              value={fullCurrentTime}
+              onChange={(e) => {
+                const t = parseFloat(e.target.value);
+                setFullCurrentTime(t);
+                const sp = segmentPlayerRef.current;
+                if (sp && isFullPlaying) sp.seekToMs(t * 1000);
+              }}
+              style={{
+                width: '100%', height: '8px', borderRadius: '999px',
+                appearance: 'none', WebkitAppearance: 'none',
+                background: `linear-gradient(90deg, ${C.mint} ${Math.min(100, progressPct)}%, ${C.barBg} ${Math.min(100, progressPct)}%)`,
+                cursor: 'pointer', marginTop: '12px', outline: 'none', border: 'none',
+              }}
+            />
           </div>
         </div>
       </div>

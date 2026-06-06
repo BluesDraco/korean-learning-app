@@ -8,10 +8,20 @@ interface Props {
   onCorrect: () => void;
 }
 
+function shuffleUntilDifferent(pieces: string[]): string[] {
+  if (pieces.length <= 1) return [...pieces];
+  const original = pieces.join('|');
+  let result: string[];
+  let attempts = 0;
+  do {
+    result = [...pieces].sort(() => Math.random() - 0.5);
+    attempts++;
+  } while (result.join('|') === original && attempts < 10);
+  return result;
+}
+
 export function SentenceBuildCard({ pieces, correctSentence, chinese, onCorrect }: Props) {
-  const [available, setAvailable] = useState<string[]>(() =>
-    [...pieces].sort(() => Math.random() - 0.5)
-  );
+  const [available, setAvailable] = useState<string[]>(() => shuffleUntilDifferent(pieces));
   const [selected, setSelected] = useState<string[]>([]);
   const [result, setResult] = useState<'correct' | 'wrong' | null>(null);
 
@@ -29,7 +39,7 @@ export function SentenceBuildCard({ pieces, correctSentence, chinese, onCorrect 
   }, [result, selected]);
 
   const resetBuild = useCallback(() => {
-    setAvailable([...pieces].sort(() => Math.random() - 0.5));
+    setAvailable(shuffleUntilDifferent(pieces));
     setSelected([]);
     setResult(null);
   }, [pieces]);

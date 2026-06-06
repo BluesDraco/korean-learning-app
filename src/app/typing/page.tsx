@@ -215,7 +215,11 @@ export default function TypingPage() {
   const [startTime, setStartTime] = useState<number | null>(null);
   const [elapsed, setElapsed] = useState(0);
   const [finished, setFinished] = useState(false);
-  const [showKeyboard, setShowKeyboard] = useState(true);
+  const [showKeymap, setShowKeymap] = useState(false);
+  const [showKeyboard, setShowKeyboard] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.innerWidth < 768; // mobile default: show keyboard; desktop: hide
+  });
   const [keyboardBottom, setKeyboardBottom] = useState(0);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -366,13 +370,45 @@ export default function TypingPage() {
 
   return (
     <div style={{ paddingBottom: 160 }}>
-            {/* Back bar */}
+      {/* Keymap modal */}
+      {showKeymap && (
+        <div
+          style={{ position: 'fixed', inset: 0, zIndex: 200, background: 'rgba(36,25,23,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}
+          onClick={() => setShowKeymap(false)}
+        >
+          <div style={{ background: '#fff', borderRadius: 28, padding: 20, maxWidth: 480, width: '100%', boxShadow: '0 20px 60px rgba(36,25,23,.25)' }} onClick={e => e.stopPropagation()}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+              <span style={{ fontSize: 15, fontWeight: 900, color: C.ink }}>韩文键盘对照表</span>
+              <button onClick={() => setShowKeymap(false)} style={{ width: 32, height: 32, borderRadius: 10, border: '1px solid ' + C.line, background: C.cream, cursor: 'pointer', fontSize: 16, color: C.muted }}>✕</button>
+            </div>
+            {/* Keymap rows */}
+            {[
+              [['Q','ㅂ'],['W','ㅈ'],['E','ㄷ'],['R','ㄱ'],['T','ㅅ'],['Y','ㅛ'],['U','ㅕ'],['I','ㅑ'],['O','ㅐ'],['P','ㅔ']],
+              [['A','ㅁ'],['S','ㄴ'],['D','ㅇ'],['F','ㄹ'],['G','ㅎ'],['H','ㅗ'],['J','ㅓ'],['K','ㅏ'],['L','ㅣ']],
+              [['Z','ㅋ'],['X','ㅌ'],['C','ㅊ'],['V','ㅍ'],['B','ㅠ'],['N','ㅜ'],['M','ㅡ']],
+            ].map((row, ri) => (
+              <div key={ri} style={{ display: 'flex', gap: 4, justifyContent: 'center', marginBottom: 6 }}>
+                {row.map(([en, ko]) => (
+                  <div key={en} style={{ flex: '1 1 0', maxWidth: 42, background: C.cream, border: '1px solid ' + C.line, borderRadius: 10, padding: '6px 2px', textAlign: 'center' }}>
+                    <div style={{ fontSize: 11, color: C.muted, fontWeight: 700 }}>{en}</div>
+                    <div style={{ fontSize: 16, color: C.ink, fontWeight: 900 }}>{ko}</div>
+                  </div>
+                ))}
+              </div>
+            ))}
+            <p style={{ fontSize: 11, color: C.muted, textAlign: 'center', marginTop: 12 }}>Shift + 键 = 双字音/双字母（ㄲ ㄸ ㅃ ㅆ ㅉ ㅒ ㅖ）</p>
+          </div>
+        </div>
+      )}
+
+      {/* Back bar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, marginBottom: 14 }}>
         <button onClick={() => router.back()} style={{ width: 38, height: 38, borderRadius: 16, background: '#fff', border: '1px solid ' + C.line, fontSize: 20, color: '#4d3933', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}>‹</button>
         <div style={{ flex: 1 }}>
           <div style={{ fontSize: 17, fontWeight: 800, color: C.ink }}>韩文打字</div>
           <div style={{ fontSize: 12, color: C.muted, fontWeight: 700, marginTop: 2 }}>系统输入 + 内嵌键盘</div>
         </div>
+        <button onClick={() => setShowKeymap(true)} style={{ height: 30, padding: '0 11px', borderRadius: 999, background: '#fff', color: C.ink, fontSize: 11, fontWeight: 800, border: '1px solid ' + C.line, cursor: 'pointer', flexShrink: 0 }}>键位图</button>
         <div style={{ height: 30, padding: '0 11px', borderRadius: 999, background: C.pinkSoft, color: '#f0799b', fontSize: 11, fontWeight: 800, border: '1px solid rgba(255,127,168,.16)', display: 'flex', alignItems: 'center', flexShrink: 0 }}>练习</div>
       </div>
 

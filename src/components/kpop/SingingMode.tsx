@@ -301,8 +301,8 @@ export default function SingingMode({ song, startIndex, onClose, audioType = 'kp
     <div className="fixed inset-0 bg-[var(--bg-page)] z-50 flex flex-col" onClick={onClose}>
       {/* Header */}
       <div className="flex items-center gap-3 px-4 py-3 shrink-0 bg-[var(--bg-card)] border-b border-[var(--border-color)]/50" onClick={(e) => e.stopPropagation()}>
-        <button onClick={onClose} className="p-2 -ml-2 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center">
-          <X size={24} />
+        <button onClick={onClose} className="p-2 -ml-2 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full bg-[var(--bg-input)] border border-[var(--border-color)] text-[var(--text-primary)] hover:bg-[var(--pink-primary)]/10 transition-colors">
+          <X size={20} />
         </button>
         <div className="flex-1 min-w-0">
           <p className="text-[14px] font-black text-[var(--text-primary)] truncate">{song.title}</p>
