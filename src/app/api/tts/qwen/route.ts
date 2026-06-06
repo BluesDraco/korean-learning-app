@@ -29,10 +29,11 @@ export async function POST(req: Request) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'qwen-tts',
+        model: 'qwen3-tts-flash',
         input: {
           text,
           voice,
+          language_type: 'Korean',
         },
         parameters: {
           speech_rate: speechRate,

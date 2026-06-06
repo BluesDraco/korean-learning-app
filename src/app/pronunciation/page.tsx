@@ -81,6 +81,10 @@ function PageContent() {
   const [sessionItems, setSessionItems] = useState<PronunciationItem[] | null>(null);
   const [courseItems, setCourseItems] = useState<{ dayNum: number; title: string; items: PronunciationItem[] } | null>(null);
   const [stats, setStats] = useState<{ totalAttempts: number; recentItems: string[] } | null>(null);
+  const [showNotice, setShowNotice] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return !sessionStorage.getItem('pronunciation-notice-seen');
+  });
 
   // Handle ?day=X — direct course pronunciation from lesson completion
   useEffect(() => {
@@ -175,6 +179,33 @@ function PageContent() {
 
   return (
     <div className="py-4 space-y-5 max-w-2xl mx-auto md:max-w-3xl">
+      {/* Voice notice modal */}
+      {showNotice && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-5" style={{ background: 'rgba(36,25,23,0.5)', backdropFilter: 'blur(4px)' }}>
+          <div className="bg-white rounded-[32px] p-6 max-w-sm w-full shadow-2xl">
+            <div className="w-12 h-12 rounded-2xl bg-[var(--mint-soft)]/15 flex items-center justify-center mb-4">
+              <Volume2 size={24} className="text-[var(--mint-soft)]" />
+            </div>
+            <h2 className="text-[18px] font-black text-[var(--text-primary)] leading-snug">关于发音音频</h2>
+            <p className="text-[13px] text-[var(--text-secondary)] mt-2.5 leading-relaxed">
+              目前所有跟读音频均为电子合成语音，后续会逐步替换为真人配音，音质会更自然。
+            </p>
+            <p className="text-[12px] text-[var(--text-muted)] mt-2 leading-relaxed">
+              建议配合耳机使用，效果更佳。
+            </p>
+            <button
+              onClick={() => {
+                sessionStorage.setItem('pronunciation-notice-seen', '1');
+                setShowNotice(false);
+              }}
+              className="w-full mt-5 h-12 rounded-full bg-[#201815] text-white text-[14px] font-black"
+            >
+              知道了，开始练习
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-[var(--text-primary)] flex items-center gap-2">

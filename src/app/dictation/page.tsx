@@ -72,6 +72,10 @@ export default function DictationPage() {
   const [wordSource, setWordSource] = useState<WordSource>('builtin');
   const [packId, setPackId] = useState('beginner');
   const [sentenceLevel, setSentenceLevel] = useState<'beginner' | 'intermediate' | 'advanced'>('beginner');
+  const [showNotice, setShowNotice] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return !sessionStorage.getItem('dictation-notice-seen');
+  });
 
   // Game state
   const [words, setWords] = useState<DictationWord[]>([]);
@@ -335,6 +339,30 @@ export default function DictationPage() {
 
   return (
     <div className="py-4 max-w-lg mx-auto space-y-4">
+      {/* Adjustment notice modal */}
+      {showNotice && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-5" style={{ background: 'rgba(36,25,23,0.5)', backdropFilter: 'blur(4px)' }}>
+          <div className="bg-white rounded-[32px] p-6 max-w-sm w-full shadow-2xl">
+            <div className="w-12 h-12 rounded-2xl bg-[var(--pink-primary)]/10 flex items-center justify-center mb-4">
+              <Headphones size={24} className="text-[var(--pink-primary)]" />
+            </div>
+            <h2 className="text-[18px] font-black text-[var(--text-primary)] leading-snug">该板块正在调整中</h2>
+            <p className="text-[13px] text-[var(--text-secondary)] mt-2.5 leading-relaxed">
+              听写练习模块目前正在优化升级，部分内容和功能可能不稳定，敬请谅解。
+            </p>
+            <button
+              onClick={() => {
+                sessionStorage.setItem('dictation-notice-seen', '1');
+                setShowNotice(false);
+              }}
+              className="w-full mt-5 h-12 rounded-full bg-[#201815] text-white text-[14px] font-black"
+            >
+              知道了，继续
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Title */}
       <div>
         <h1 className="text-2xl font-bold text-[var(--text-primary)]">听写练习</h1>
