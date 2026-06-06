@@ -14,15 +14,17 @@ export default function ExplorePage() {
         variant="pink"
       />
 
-      {/* KPOP singing — big entrance */}
-      <ToriHeroCard
-        label="KPOP歌词跟唱"
-        desc="一句一句听，一句一句唱。用喜欢的歌学韩语。"
-        href="/korea/kpop"
-        actionLabel="开始跟唱"
-        gradient="from-[#ffe4ec] to-[#fff0bd]"
-        ctaVariant="pill"
-      />
+      {/* KPOP singing — temporarily closed */}
+      <div className="relative rounded-[28px] overflow-hidden bg-gradient-to-br from-[#ffe4ec] to-[#fff0bd] p-5 border border-[var(--border-color)] opacity-70">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="text-[12px] font-black text-[var(--text-primary)]">KPOP歌词跟唱</span>
+          <span className="h-[22px] px-2.5 rounded-full bg-[#201815]/10 text-[10px] font-black text-[#201815]">暂时关闭</span>
+        </div>
+        <p className="text-[13px] text-[var(--text-secondary)] leading-relaxed mb-3">该功能正在优化升级，稍后上线，敬请期待。</p>
+        <div className="h-9 px-4 rounded-full bg-[var(--text-muted)]/20 text-[var(--text-muted)] text-[13px] font-black inline-flex items-center cursor-not-allowed">
+          即将上线
+        </div>
+      </div>
 
       {/* Hot posts — big entrance */}
       <ToriHeroCard
@@ -65,8 +67,8 @@ export default function ExplorePage() {
         <div className="space-y-2">
           <ToriFeedCard
             label="推荐歌曲"
-            desc="NewJeans — Hype Boy"
-            href="/korea/kpop"
+            desc="KPOP跟唱即将上线"
+            href="/korea/kpop/news"
           />
           <ToriFeedCard
             label="今日热帖"
