@@ -1,241 +1,293 @@
 'use client';
 
 import { useEffect, useState, useCallback, useRef, Suspense } from 'react';
-import Image from 'next/image';
-import { Loader2, ArrowLeft, Zap, Flame, Volume2, Brain, TrendingUp, RotateCcw, Star, Activity } from 'lucide-react';
+import { Loader2, ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { db } from '@/lib/db';
 import { calculateSRS } from '@/lib/srs';
-import { updateStreak, awardXp, XP_REWARDS, getProfile } from '@/lib/gamification';
-import { emitXpFlyout, emitStreakMilestone } from '@/components/XpOverlay';
-import { memoryHealthScore, atRiskWords } from '@/lib/forgetting-curve';
-import { speak } from '@/lib/tts';
-import type { Word } from '@/types';
+import { speak, speakBrowser } from '@/lib/tts';
 
-function trackStudy(action: string, details: string, xpEarned: number) {
-  fetch('/api/track/study', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ action, details, xpEarned }),
-  }).catch(() => {});
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+type CardType = 'word' | 'sentence' | 'grammar';
+type RatingType = 'forgot' | 'fuzzy' | 'remember';
+type FilterType = 'all' | 'words' | 'sentences' | 'grammar' | 'kpop' | 'reading';
+
+interface FlashCard {
+  id: string;
+  type: CardType;
+  typeLabel: string;
+  source: string;         // 来自：韩娱热点 / KPOP / 影子跟读 / 内容拆解
+  reviewCount: number;    // 第 N 次复习
+  front: string;          // 韩文词 / 句子 / 语法点
+  sub: string;            // 罗马音 / 简短提示
+  meaning: string;        // 中文意思
+  note: string;           // 用法说明
+  example: string;        // 例句（韩文 + 中文，\n 分隔）
+  audioUrl?: string;
+  slowAudioUrl?: string;
+  sourceUrl?: string;
+  // DB metadata
+  dbId?: number;
+  srsLevel?: number;
+  easeFactor?: number;
+  interval?: number;
 }
 
-const RATING_BUTTONS = [
-  { q: 0, emoji: '😰', label: '完全忘了' },
-  { q: 1, emoji: '😣', label: '有点印象' },
-  { q: 2, emoji: '🤔', label: '模糊记得' },
-  { q: 3, emoji: '💡', label: '记住了' },
-  { q: 4, emoji: '🎯', label: '比较熟练' },
-  { q: 5, emoji: '⚡', label: '完全掌握' },
+// ─── Mock data (used when DB is empty / not logged in) ────────────────────────
+
+const MOCK_CARDS: FlashCard[] = [
+  {
+    id: 'mock-1',
+    type: 'word',
+    typeLabel: '单词卡',
+    source: '来自：韩娱热点',
+    reviewCount: 4,
+    front: '기대감',
+    sub: 'gi-dae-gam',
+    meaning: '期待感',
+    note: '韩娱新闻里常见，表示对回归、舞台、作品的期待。',
+    example: '컴백 기대감이 높아졌다。\n回归期待感提高了。',
+  },
+  {
+    id: 'mock-2',
+    type: 'sentence',
+    typeLabel: '句子卡',
+    source: '来自：KPOP',
+    reviewCount: 2,
+    front: '숨 참고 love dive',
+    sub: 'sum chamgo love dive',
+    meaning: '屏住呼吸，坠入爱里。',
+    note: '숨을 참다 表示屏住呼吸，歌词里常被压缩成 숨 참고。',
+    example: '숨 참고 시작해 봐。\n屏住呼吸试着开始吧。',
+  },
+  {
+    id: 'mock-3',
+    type: 'grammar',
+    typeLabel: '语法卡',
+    source: '来自：内容拆解',
+    reviewCount: 3,
+    front: '-고 있다',
+    sub: '正在……',
+    meaning: '正在进行',
+    note: '表示动作或状态正在持续，不要把 있다 单独理解成"有"。',
+    example: '한국어를 배우고 있어요。\n我正在学韩语。',
+  },
+  {
+    id: 'mock-4',
+    type: 'word',
+    typeLabel: '单词卡',
+    source: '来自：影子跟读',
+    reviewCount: 1,
+    front: '기분',
+    sub: 'gi-bun',
+    meaning: '心情 / 感觉',
+    note: '常见搭配：기분이 좋아요、기분이 이상해。',
+    example: '오늘은 기분이 좋아요。\n今天心情很好。',
+  },
 ];
 
-const TORI_REACTIONS: Record<number, { text: string; pose: string }> = {
-  0: { text: '没关系！토리 陪你再来一次 🐰💦', pose: 'tori-pose-04.webp' },
-  1: { text: '快想起来了，就差一点点！🐰👀', pose: 'tori-pose-03.webp' },
-  2: { text: '有印象了！继续加油 💪', pose: 'tori-pose-02.webp' },
-  3: { text: '记住了！토리 为你开心 ✨', pose: 'tori-pose-01.webp' },
-  4: { text: '很熟练了！토리 好骄傲 🎯', pose: 'tori-pose-05.webp' },
-  5: { text: '完美掌握！토리 崇拜你 ⚡💖', pose: 'tori-pose-06.webp' },
-};
+// ─── DB → FlashCard mapper ────────────────────────────────────────────────────
+
+function dbWordToCard(w: any): FlashCard {
+  const sourceMap: Record<string, string> = {
+    kpop: '来自：KPOP',
+    reading: '来自：韩娱热点',
+    shadowing: '来自：影子跟读',
+    analyze: '来自：内容拆解',
+  };
+  const src = w.source || w.sourceType || '';
+  return {
+    id: String(w.id),
+    type: 'word',
+    typeLabel: '单词卡',
+    source: sourceMap[src] || '来自：我的词汇',
+    reviewCount: (w.srsLevel || 0) + 1,
+    front: w.word || w.korean || '',
+    sub: w.pronunciation || w.romanization || '',
+    meaning: w.meaning || w.chinese || '',
+    note: w.usage || w.note || '',
+    example: w.examples?.[0]
+      ? `${w.examples[0].text}\n${w.examples[0].translation}`
+      : '',
+    audioUrl: w.audioUrl,
+    slowAudioUrl: w.slowAudioUrl,
+    dbId: w.id,
+    srsLevel: w.srsLevel,
+    easeFactor: w.easeFactor,
+    interval: w.interval,
+  };
+}
+
+// ─── Filter chips ─────────────────────────────────────────────────────────────
+
+const FILTERS: { key: FilterType; label: string }[] = [
+  { key: 'all', label: '全部' },
+  { key: 'words', label: '我的词' },
+  { key: 'sentences', label: '我的句子' },
+  { key: 'grammar', label: '语法卡' },
+  { key: 'kpop', label: 'KPOP' },
+  { key: 'reading', label: '热点阅读' },
+];
+
+// ─── Main content ─────────────────────────────────────────────────────────────
 
 function ReviewContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const videoId = searchParams.get('videoId');
 
-  const [words, setWords] = useState<Word[]>([]);
-  const [allWords, setAllWords] = useState<Word[]>([]);
+  const [cards, setCards] = useState<FlashCard[]>([]);
   const [currentIdx, setCurrentIdx] = useState(0);
-  const [flipped, setFlipped] = useState(false);
+  const [revealed, setRevealed] = useState(false);
   const [loading, setLoading] = useState(true);
   const [complete, setComplete] = useState(false);
-  const [sessionStats, setSessionStats] = useState({ reviewed: 0, passed: 0, startTime: 0 });
-  const [xpEarned, setXpEarned] = useState(0);
-  const [leveledUp, setLeveledUp] = useState(false);
-  const [newLevel, setNewLevel] = useState(0);
-  const [selfAssessment, setSelfAssessment] = useState(0);
-  const [selectedCorrect, setSelectedCorrect] = useState<boolean | null>(null);
-  const [allMeanings, setAllMeanings] = useState<string[]>([]);
-  const [options, setOptions] = useState<{ text: string; correct: boolean }[]>([]);
-  const [showIntro, setShowIntro] = useState(false);
-  const [toriReactionKey, setToriReactionKey] = useState<number | null>(null);
-  const [streak, setStreak] = useState(0);
-  const touchXRef = useRef<number>(0);
-  // Refs for running totals — avoids stale closure in handleConfirm
-  const reviewedRef = useRef(0);
-  const passedRef = useRef(0);
-  const xpRef = useRef(0);
+  const [filter, setFilter] = useState<FilterType>('all');
+  const [done, setDone] = useState(0);
+  const [playingAudio, setPlayingAudio] = useState<'normal' | 'slow' | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  useEffect(() => {
-    if (!localStorage.getItem('srs-intro-seen')) setShowIntro(true);
-  }, []);
+  // ── Load cards from DB ──
+  const loadCards = useCallback(async () => {
+    setLoading(true);
+    try {
+      const now = Date.now();
+      let dueWords: any[] = [];
 
-  const dismissIntro = () => {
-    localStorage.setItem('srs-intro-seen', '1');
-    setShowIntro(false);
-  };
-
-  const loadWords = useCallback(async () => {
-    const now = Date.now();
-    let dueWords: Word[];
-    if (videoId) {
-      dueWords = await db.words.where('sourceVideoId').equals(videoId).toArray();
-    } else {
-      dueWords = await db.words.where('nextReview').belowOrEqual(now).sortBy('nextReview');
-      if (dueWords.length === 0) {
-        dueWords = await db.words.where('mastery').anyOf('new', 'learning', 'reviewing').limit(10).toArray();
+      if (videoId) {
+        dueWords = await db.words.where('sourceVideoId').equals(videoId).toArray();
+      } else {
+        dueWords = await db.words.where('nextReview').belowOrEqual(now).sortBy('nextReview');
+        if (dueWords.length === 0) {
+          dueWords = await db.words
+            .where('mastery')
+            .anyOf('new', 'learning', 'reviewing')
+            .limit(20)
+            .toArray();
+        }
       }
+
+      if (dueWords.length > 0) {
+        setCards(dueWords.map(dbWordToCard));
+      } else {
+        setCards([]);
+      }
+      setDone(0);
+      setCurrentIdx(0);
+      setRevealed(false);
+      setComplete(false);
+    } catch {
+      setCards([]);
+    } finally {
+      setLoading(false);
     }
-    setWords(dueWords);
-    if (dueWords.length === 0) setComplete(true);
-
-    const all = await db.words.toArray();
-    setAllWords(all);
-    setAllMeanings(all.map((w) => w.meaning).filter(Boolean));
-
-    const profile = await getProfile();
-    setStreak(profile.streak);
-    setSessionStats({ reviewed: 0, passed: 0, startTime: Date.now() });
-    reviewedRef.current = 0;
-    passedRef.current = 0;
-    xpRef.current = 0;
-    setLoading(false);
   }, [videoId]);
 
-  useEffect(() => { loadWords(); }, [loadWords]);
+  useEffect(() => { loadCards(); }, [loadCards]);
 
-  useEffect(() => {
-    if (words.length === 0 || allMeanings.length === 0) return;
-    const correct = words[currentIdx].meaning;
-    const pool = allMeanings.filter((m) => m !== correct && m.trim().length > 0);
-    const shuffled = [...pool].sort(() => Math.random() - 0.5);
-    const distractors = shuffled.slice(0, 3);
-    const opts = [
-      { text: correct, correct: true },
-      ...distractors.map((d) => ({ text: d, correct: false })),
-      { text: '不知道', correct: false },
-    ];
-    const dontKnow = opts.find((o) => o.text === '不知道')!;
-    const rest = opts.filter((o) => o.text !== '不知道');
-    setOptions([...rest.sort(() => Math.random() - 0.5), dontKnow]);
-  }, [currentIdx, words, allMeanings]);
+  // ── Filter cards ──
+  const filteredCards = cards.filter(c => {
+    if (filter === 'all') return true;
+    if (filter === 'words') return c.type === 'word';
+    if (filter === 'sentences') return c.type === 'sentence';
+    if (filter === 'grammar') return c.type === 'grammar';
+    if (filter === 'kpop') return c.source.includes('KPOP');
+    if (filter === 'reading') return c.source.includes('韩娱热点');
+    return true;
+  });
 
-  const handlePickOption = (idx: number) => {
-    const opt = options[idx];
-    setSelectedCorrect(opt.correct);
-    setSelfAssessment(opt.correct ? 3 : 0);
-    setFlipped(true);
+  const total = filteredCards.length;
+  const current = filteredCards[currentIdx];
+  const progress = total > 0 ? Math.round((done / total) * 100) : 0;
+
+  // ── Audio ──
+  const playAudio = async (slow = false) => {
+    if (!current) return;
+    const type = slow ? 'slow' : 'normal';
+    setPlayingAudio(type);
+
+    try {
+      if (slow && current.slowAudioUrl) {
+        const a = new Audio(current.slowAudioUrl);
+        a.playbackRate = 1;
+        audioRef.current = a;
+        a.play();
+        a.onended = () => setPlayingAudio(null);
+      } else if (!slow && current.audioUrl) {
+        const a = new Audio(current.audioUrl);
+        audioRef.current = a;
+        a.play();
+        a.onended = () => setPlayingAudio(null);
+      } else if (slow) {
+        // Slow mode: use browser TTS at 0.75x so playback rate actually applies
+        await speakBrowser(current.front, 0.75);
+        setPlayingAudio(null);
+      } else {
+        await speak(current.front, 1);
+        setPlayingAudio(null);
+      }
+    } catch {
+      setPlayingAudio(null);
+    }
   };
 
-  const handleConfirm = async () => {
-    const quality = selfAssessment;
-    setToriReactionKey(quality);
-    await new Promise((r) => setTimeout(r, 1200));
-    setToriReactionKey(null);
+  // ── Rating ──
+  const handleRate = async (rate: RatingType) => {
+    if (!current) return;
 
-    const word = words[currentIdx];
-    const result = calculateSRS(quality, word.srsLevel, word.easeFactor, word.interval);
-    const newMastery = result.srsLevel >= 5 ? 'mastered' : result.srsLevel >= 3 ? 'reviewing' : 'learning';
-
-    await db.words.update(word.id, {
-      srsLevel: result.srsLevel,
-      easeFactor: result.easeFactor,
-      interval: result.interval,
-      nextReview: result.nextReview,
-      lastReviewed: Date.now(),
-      mastery: newMastery as Word['mastery'],
-    });
-
-    const passed = quality >= 2;
-    const xp = passed ? XP_REWARDS.wordReviewed : 0;
-    let lvlUp = false;
-    let nl = 0;
-    if (xp > 0) {
-      const r = await awardXp(xp);
-      lvlUp = r.leveledUp;
-      nl = r.newLevel;
-      emitXpFlyout(xp);
-      if (lvlUp) window.dispatchEvent(new CustomEvent('level-up', { detail: { level: nl } }));
+    // SRS update for DB words
+    if (current.dbId) {
+      const qualityMap: Record<RatingType, number> = { forgot: 0, fuzzy: 2, remember: 5 };
+      const q = qualityMap[rate];
+      const result = calculateSRS(q, current.srsLevel ?? 0, current.easeFactor ?? 2.5, current.interval ?? 1);
+      const newMastery = result.srsLevel >= 5 ? 'mastered' : result.srsLevel >= 3 ? 'reviewing' : 'learning';
+      await db.words.update(current.dbId as any, {
+        srsLevel: result.srsLevel,
+        easeFactor: result.easeFactor,
+        interval: result.interval,
+        nextReview: result.nextReview,
+        lastReviewed: Date.now(),
+        mastery: newMastery,
+      }).catch(() => {});
     }
 
-    trackStudy('srs_review', `复习单词: ${word.word} (质量: ${quality})`, xp);
-    setXpEarned((prev) => prev + xp);
-    if (lvlUp) { setLeveledUp(true); setNewLevel(nl); }
+    setDone(d => d + 1);
 
-    setSessionStats((prev) => ({
-      ...prev,
-      reviewed: prev.reviewed + 1,
-      passed: prev.passed + (passed ? 1 : 0),
-    }));
-    reviewedRef.current += 1;
-    if (passed) passedRef.current += 1;
-    xpRef.current += xp;
-
-    if (currentIdx + 1 >= words.length) {
-      const streakResult = await updateStreak();
-      if (streakResult.isMilestone) emitStreakMilestone(streakResult.milestone);
-      await db.reviewSessions.put({
-        id: crypto.randomUUID(),
-        date: Date.now(),
-        wordsReviewed: reviewedRef.current,
-        wordsPassed: passedRef.current,
-        duration: Math.round((Date.now() - sessionStats.startTime) / 1000),
-        xpEarned: xpRef.current,
+    if (rate === 'forgot') {
+      // Re-queue at end
+      setCards(prev => {
+        const copy = [...prev];
+        const item = copy.splice(currentIdx, 1)[0];
+        copy.push(item);
+        return copy;
       });
-      setComplete(true);
+      // Stay at same index (next card slides in)
+      setTimeout(() => setRevealed(false), 260);
     } else {
-      setCurrentIdx(currentIdx + 1);
-      setFlipped(false);
-      setSelfAssessment(0);
-      setSelectedCorrect(null);
+      if (currentIdx + 1 >= filteredCards.length) {
+        setComplete(true);
+      } else {
+        setCurrentIdx(i => i + 1);
+        setTimeout(() => setRevealed(false), 260);
+      }
     }
   };
 
-  // ═══════════════════════════════════════════════════════════════
-  // Shared background wrapper
-  // ═══════════════════════════════════════════════════════════════
-  const bgStyle = { background: 'linear-gradient(180deg, var(--bg-soft) 0%, var(--bg-soft) 40%, var(--bg-soft) 100%)' };
+  const handleSkip = () => {
+    if (currentIdx + 1 < filteredCards.length) {
+      setCurrentIdx(i => i + 1);
+      setRevealed(false);
+    }
+  };
 
-  // ── Intro modal ──
-  if (showIntro) {
-    return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="absolute inset-0 bg-black/30" onClick={dismissIntro} />
-        <div className="relative bg-[var(--bg-card)] border border-[var(--border-default)] rounded-3xl shadow-2xl w-full max-w-sm p-6 space-y-5 animate-bounce-in">
-          <div className="text-center">
-            <div className="w-14 h-14 rounded-2xl bg-[var(--pink-pale)]/30 flex items-center justify-center mx-auto mb-3">
-              <Brain size={28} className="text-[var(--pink-primary)]" />
-            </div>
-            <h2 className="text-lg font-bold text-[var(--text-primary)]">SRS 间隔重复</h2>
-            <p className="text-xs text-[var(--text-secondary)] mt-1">比普通背诵效率高 2-3 倍的科学记忆法</p>
-          </div>
-          <div className="space-y-3">
-            {[
-              { icon: TrendingUp, color: 'text-[var(--mint-soft)]', title: '在你快忘的时候提醒你', desc: '系统根据遗忘曲线自动计算最佳复习时机' },
-              { icon: RotateCcw, color: 'text-[var(--peach-soft)]', title: '忘记的多练，记住的少练', desc: '每个单词有自己的复习节奏，不再一刀切' },
-              { icon: Star, color: 'text-[var(--purple-soft)]', title: '诚实评分效果最好', desc: '你的评分决定下次见到这个词的时间' },
-            ].map(item => (
-              <div key={item.title} className="flex items-start gap-3">
-                <item.icon size={16} className={`${item.color} shrink-0 mt-0.5`} />
-                <div>
-                  <p className="text-sm font-medium text-[var(--text-primary)]">{item.title}</p>
-                  <p className="text-xs text-[var(--text-muted)]">{item.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-          <button onClick={dismissIntro} className="w-full py-3 bg-[var(--pink-primary)] hover:brightness-95 text-white rounded-2xl font-bold text-sm transition-all active:scale-[0.97]">
-            知道了
-          </button>
-        </div>
-      </div>
-    );
-  }
+  const handleReveal = () => setRevealed(true);
+  const handleAgain = () => setRevealed(true);
 
   // ── Loading ──
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen" style={bgStyle}>
+      <div className="flex items-center justify-center min-h-[60vh]">
         <Loader2 size={32} className="animate-spin text-[var(--text-muted)]" />
       </div>
     );
@@ -243,349 +295,333 @@ function ReviewContent() {
 
   // ── Complete ──
   if (complete) {
-    const accuracy = sessionStats.reviewed > 0 ? Math.round((sessionStats.passed / sessionStats.reviewed) * 100) : 0;
     return (
-      <div className="relative min-h-screen flex items-center justify-center" style={bgStyle}>
-        <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(#2D1B10 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
-        <div className="absolute top-6 left-6 text-3xl opacity-25 select-none pointer-events-none">📖 📚</div>
-        <div className="absolute bottom-6 right-6 text-3xl opacity-20 select-none pointer-events-none animate-float">🐰</div>
-
-        <div className="text-center py-12 px-4 space-y-6 max-w-sm mx-auto relative z-10">
-          <div className="relative inline-block">
-            <div className="w-28 h-28 rounded-full bg-gradient-to-br from-[var(--mint-soft)]/10 to-[var(--pink-primary)]/10 flex items-center justify-center mx-auto border-2 border-[var(--pink-pale)]/40"
-              style={{ boxShadow: '0 4px 24px rgba(255,143,171,0.08)' }}>
-              <span className="text-6xl animate-float">🐰</span>
-            </div>
-            {leveledUp && (
-              <div className="absolute -top-2 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[var(--peach-soft)] to-[var(--pink-primary)] text-white text-xs font-bold px-4 py-1.5 rounded-full animate-bounce-achievement shadow-lg whitespace-nowrap">
-                Level Up! {newLevel}
-              </div>
-            )}
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold text-[var(--text-primary)] section-header">复习完成</h1>
-            <p className="text-[var(--text-secondary)] text-sm mt-2">今天的复习全做完了，明天再来吧 🐰</p>
-            <p className={`text-lg font-bold mt-2 ${accuracy >= 80 ? 'text-[var(--mint-soft)]' : accuracy >= 50 ? 'text-[var(--peach-soft)]' : 'text-[var(--color-danger)]'}`}>
-              {accuracy}% 正确率
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div className="bg-[var(--bg-card)]/70 backdrop-blur-sm border border-[var(--border-default)] rounded-2xl p-4">
-              <Zap size={20} className="text-[var(--peach-soft)] mx-auto mb-1" />
-              <div className="text-xl font-bold text-[var(--text-primary)]">+{xpEarned}</div>
-              <div className="text-xs text-[var(--text-muted)]">XP</div>
-            </div>
-            <div className="bg-[var(--bg-card)]/70 backdrop-blur-sm border border-[var(--border-default)] rounded-2xl p-4">
-              <Flame size={20} className="text-[var(--peach-soft)] mx-auto mb-1" />
-              <div className="text-xl font-bold text-[var(--text-primary)]">{sessionStats.passed}</div>
-              <div className="text-xs text-[var(--text-muted)]">通过</div>
-            </div>
-          </div>
-
-          {(() => {
-            const healthScore = memoryHealthScore(allWords);
-            const atRisk = atRiskWords(allWords, 3);
-            return (
-              <div className="bg-[var(--bg-card)]/70 backdrop-blur-sm border border-[var(--border-default)] rounded-2xl p-4 space-y-3">
-                <div className="flex items-center gap-2">
-                  <Activity size={16} className="text-[var(--purple-soft)]" />
-                  <span className="text-xs font-medium text-[var(--text-secondary)]">记忆健康度</span>
-                  <span className={`text-sm font-bold ml-auto ${healthScore >= 70 ? 'text-[var(--mint-soft)]' : healthScore >= 40 ? 'text-[var(--peach-soft)]' : 'text-[var(--color-danger)]'}`}>
-                    {healthScore}/100
-                  </span>
-                </div>
-                <div className="w-full bg-[var(--bg-muted)] rounded-full h-2 overflow-hidden">
-                  <div className={`h-full rounded-full transition-all duration-700 ${healthScore >= 70 ? 'bg-[var(--mint-soft)]' : healthScore >= 40 ? 'bg-[var(--peach-soft)]' : 'bg-[var(--color-danger)]'}`}
-                    style={{ width: `${healthScore}%` }} />
-                </div>
-                {atRisk.length > 0 && (
-                  <div>
-                    <p className="text-xs text-[var(--text-muted)] mb-1.5">建议复习：</p>
-                    <div className="flex flex-wrap gap-1">
-                      {atRisk.map((w) => (
-                        <span key={w.id} className="text-xs px-2 py-0.5 rounded-full bg-[var(--color-danger)]/5 border border-[var(--color-danger)]/10 text-[var(--text-secondary)]">{w.word}</span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          })()}
-
-          <div className="flex gap-3 justify-center">
-            <button onClick={() => { setComplete(false); setCurrentIdx(0); setFlipped(false); setSelfAssessment(0); setSelectedCorrect(null); setXpEarned(0); setSessionStats({ reviewed: 0, passed: 0, startTime: Date.now() }); setLeveledUp(false); reviewedRef.current = 0; passedRef.current = 0; xpRef.current = 0; loadWords(); }}
-              className="px-6 py-2.5 bg-[var(--pink-primary)] hover:brightness-95 text-white text-sm font-bold rounded-full transition-all active:scale-95 shadow-md">
-              再来一轮
-            </button>
-            <button onClick={() => router.push('/')}
-              className="px-6 py-2.5 bg-[var(--bg-card)]/80 border border-[var(--border-default)] hover:bg-[var(--bg-muted)] text-[var(--text-primary)] text-sm font-medium rounded-full transition-all active:scale-95">
-              返回首页
-            </button>
-          </div>
+      <div className="flex flex-col items-center justify-center min-h-[60vh] px-4 gap-5">
+        <div className="w-20 h-20 rounded-full bg-[#eaf8f5] flex items-center justify-center text-4xl">🎉</div>
+        <div className="text-center">
+          <h2 className="text-xl font-black text-[var(--text-primary)]">复习完成</h2>
+          <p className="text-sm text-[var(--text-muted)] mt-1">今天的复习全做完了，明天再来吧</p>
+        </div>
+        <div className="flex gap-3">
+          <button
+            onClick={loadCards}
+            className="px-6 py-2.5 rounded-full bg-[#201815] text-white text-sm font-black"
+          >
+            再来一轮
+          </button>
+          <button
+            onClick={() => router.push('/daily')}
+            className="px-6 py-2.5 rounded-full bg-white border border-[#eee0d8] text-[#5a4640] text-sm font-black"
+          >
+            返回首页
+          </button>
         </div>
       </div>
     );
   }
 
   // ── Empty ──
-  if (words.length === 0) {
+  if (!current) {
     return (
-      <div className="relative min-h-screen flex items-center justify-center" style={bgStyle}>
-        <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(#2D1B10 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
-        <div className="text-center py-16 space-y-5 max-w-sm mx-auto relative z-10">
-          <div className="relative inline-block">
-            <div className="w-28 h-28 rounded-full bg-gradient-to-br from-[var(--mint-soft)]/10 to-[var(--pink-primary)]/10 flex items-center justify-center mx-auto border-2 border-[var(--pink-pale)]/40"
-              style={{ boxShadow: '0 4px 24px rgba(255,143,171,0.08)' }}>
-              <span className="text-6xl animate-float">🐰</span>
-            </div>
-            <span className="absolute -top-1 -right-1 text-2xl">✨</span>
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold text-[var(--text-primary)] section-header">今日复习全部完成！</h1>
-            <p className="text-[var(--text-secondary)] text-sm mt-2">토리 为你骄傲，明天继续加油</p>
-          </div>
-          <div className="flex gap-3 justify-center">
-            <button onClick={() => router.push('/learn')} className="px-6 py-3 bg-[var(--pink-primary)] hover:brightness-90 text-white text-sm font-bold rounded-full transition-all active:scale-95 shadow-md">去学习新词</button>
-            <button onClick={() => router.push('/')} className="px-6 py-3 bg-[var(--bg-card)]/80 border border-[var(--border-default)] hover:bg-[var(--bg-muted)] text-[var(--text-primary)] text-sm font-medium rounded-full transition-all active:scale-95">返回首页</button>
-          </div>
+      <div className="flex flex-col items-center justify-center min-h-[60vh] px-4 gap-5">
+        <div className="text-4xl">📚</div>
+        <div className="text-center">
+          <h2 className="text-xl font-black text-[var(--text-primary)]">还没有复习内容</h2>
+          <p className="text-sm text-[var(--text-muted)] mt-1">去拆解句子、跟读视频、保存你的第一个词吧</p>
+        </div>
+        <div className="flex gap-3">
+          <button onClick={() => router.push('/ai/analyze')}
+            className="px-6 py-3 rounded-full bg-[#201815] text-white text-sm font-black">
+            去拆解内容
+          </button>
+          <button onClick={() => router.push('/daily')}
+            className="px-6 py-3 rounded-full bg-white border border-[#eee0d8] text-[#5a4640] text-sm font-black">
+            返回首页
+          </button>
         </div>
       </div>
     );
   }
 
-  const currentWord = words[currentIdx];
-  const progress = (currentIdx / words.length) * 100;
+  // ── Example lines ──
+  const [exKo, exZh] = current.example.split('\n');
 
   return (
-    <div className="relative min-h-screen" style={bgStyle}>
-      {/* Paper texture */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.05]" style={{ backgroundImage: 'radial-gradient(#2D1B10 1px, transparent 1px)', backgroundSize: '18px 18px' }} />
-
-      {/* Tori reaction */}
-      {toriReactionKey !== null && TORI_REACTIONS[toriReactionKey] && (
-        <div className="fixed inset-0 z-30 flex items-center justify-center pointer-events-none">
-          <div className="bg-[var(--bg-card)]/95 backdrop-blur-sm border-2 border-[var(--pink-light)] rounded-3xl px-6 py-5 shadow-xl animate-bounce-achievement text-center max-w-[240px]">
-            <Image
-              src={`/images/tori-poses/${TORI_REACTIONS[toriReactionKey].pose}`}
-              alt="Tori"
-              width={64}
-              height={64}
-              className="object-contain mx-auto mb-2"
-            />
-            <span className="text-sm font-bold text-[var(--text-primary)]">{TORI_REACTIONS[toriReactionKey].text}</span>
-          </div>
-        </div>
-      )}
-
-      <div className="relative z-10 py-4 max-w-lg mx-auto space-y-4 px-4">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <button onClick={() => router.back()} className="p-1 -ml-1 text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card)]/50 rounded-lg transition-colors">
-            <ArrowLeft size={20} />
+    <div
+      className="flex flex-col pb-[80px]"
+      style={{ minHeight: 'calc(100dvh - 60px)' }}
+    >
+      {/* ── Top bar ── */}
+      <div className="flex items-center justify-between gap-3 px-4 pt-4 mb-3">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <button
+            onClick={() => router.back()}
+            className="w-9 h-9 shrink-0 rounded-2xl bg-white border border-[#eee0d8] flex items-center justify-center text-[#4d3933]"
+            style={{ boxShadow: '0 8px 20px rgba(78,52,46,.06)' }}
+          >
+            <ArrowLeft size={18} />
           </button>
-          <div className="flex items-center gap-3">
-            {streak >= 3 && (
-              <div className="flex items-center gap-1 text-xs font-bold text-[var(--peach-soft)] bg-[var(--bg-card)]/60 backdrop-blur-sm px-2 py-0.5 rounded-full border border-[var(--peach-soft)]/15">
-                <Flame size={11} fill="currentColor" /> {streak}天
-              </div>
-            )}
-            <span className="text-xs text-[var(--text-muted)] tabular-nums">{currentIdx + 1}/{words.length}</span>
+          <div>
+            <div className="text-[17px] font-black text-[var(--text-primary)] leading-tight">闪卡复习</div>
+            <div className="text-[12px] font-black text-[var(--text-muted)] mt-0.5">轻量复习</div>
           </div>
-          <div className="w-5" />
         </div>
+        <span
+          className="h-[30px] inline-flex items-center px-3 rounded-full bg-[#fff0f5] text-[#f0799b] text-[11px] font-black border border-[rgba(255,127,168,.16)] whitespace-nowrap"
+        >
+          SRS
+        </span>
+      </div>
 
-        {/* Progress bar */}
-        <div className="w-full bg-[var(--border-color)]/40 rounded-full h-1.5 overflow-hidden">
-          <div className="h-full rounded-full bg-gradient-to-r from-[var(--pink-primary)] to-[var(--purple-soft)] transition-all duration-500 ease-out"
-            style={{ width: `${progress}%`, boxShadow: '0 0 6px rgba(255,143,171,0.25)' }} />
+      <div className="flex-1 px-4 flex flex-col gap-0">
+        {/* ── Filter chips ── */}
+        <div className="flex items-end justify-between mb-2 mt-1">
+          <h2 className="text-[18px] font-black text-[var(--text-primary)] tracking-tight">复习范围</h2>
+          <span className="text-[12px] font-black text-[#f0799b]">来源筛选</span>
         </div>
-
-        {/* ══════════════════════════════════════════════════════════
-            Card — fixed minHeight, no flex-1 chain
-            ══════════════════════════════════════════════════════════ */}
-        <div
-          className="perspective-1000 w-full"
-          onTouchStart={(e) => { touchXRef.current = e.touches[0].clientX; }}
-          onTouchEnd={(e) => {
-            if (flipped) return;
-            const delta = e.changedTouches[0].clientX - touchXRef.current;
-            if (Math.abs(delta) > 60) {
-              if (delta > 0) {
-                const correctOpt = options.find(o => o.correct);
-                if (correctOpt) { setSelectedCorrect(true); setSelfAssessment(3); setFlipped(true); }
-              } else {
-                setSelectedCorrect(false); setSelfAssessment(0); setFlipped(true);
+        <div className="flex gap-2 overflow-x-auto pb-1 mb-3" style={{ scrollbarWidth: 'none' }}>
+          {FILTERS.map(f => (
+            <button
+              key={f.key}
+              onClick={() => { setFilter(f.key); setCurrentIdx(0); setRevealed(false); }}
+              className="h-9 whitespace-nowrap rounded-full px-3 text-[12px] font-black border transition-all shrink-0"
+              style={
+                filter === f.key
+                  ? { background: '#201815', color: '#fff', border: '1px solid #201815' }
+                  : { background: '#fff', color: '#7b665f', border: '1px solid #eee0d8' }
               }
-            }
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+
+        {/* ── Progress ── */}
+        <div
+          className="rounded-[28px] p-3.5 bg-white border border-[#eee0d8] mb-3"
+          style={{ boxShadow: '0 16px 42px rgba(78,52,46,.10)' }}
+        >
+          <div className="flex justify-between items-center text-[12px] font-black text-[var(--text-muted)] mb-2.5">
+            <span>今日进度</span>
+            <span>{done} / {total}</span>
+          </div>
+          <div className="h-[9px] rounded-full bg-[#eadcd5] overflow-hidden">
+            <div
+              className="h-full rounded-full transition-all duration-500"
+              style={{
+                width: `${progress}%`,
+                background: 'linear-gradient(90deg, #aee3d8, #ff7fa8)',
+              }}
+            />
+          </div>
+        </div>
+
+        {/* ── Card section header ── */}
+        <div className="flex items-end justify-between mb-2">
+          <h2 className="text-[18px] font-black text-[var(--text-primary)] tracking-tight">当前闪卡</h2>
+          <span className="text-[12px] font-black text-[#f0799b]">{current.typeLabel}</span>
+        </div>
+
+        {/* ── Flashcard ── */}
+        <article
+          className="rounded-[36px] bg-white border border-[#eee0d8] p-[18px] flex flex-col transition-all duration-300 mb-3"
+          style={{
+            minHeight: 430,
+            boxShadow: '0 28px 72px rgba(78,52,46,.18)',
+            background: revealed
+              ? 'linear-gradient(180deg,#fff,#fffaf7)'
+              : '#fff',
           }}
         >
-          <div className="relative" style={{ minHeight: '500px' }}>
-            <div
-              className="w-full transition-transform duration-500 transform-style-3d"
-              style={{
-                minHeight: '500px',
-                transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
-              }}
+          {/* Card head */}
+          <div className="flex justify-between items-center gap-2.5">
+            <span
+              className="h-7 inline-flex items-center px-2.5 rounded-full text-[11px] font-black border"
+              style={{ background: '#fff0f5', color: '#f0799b', borderColor: 'rgba(255,127,168,.16)' }}
             >
-              {/* ═══════════════════════════════════════════════════
-                  FRONT
-                  ═══════════════════════════════════════════════════ */}
-              <div
-                className={`absolute inset-0 rounded-3xl p-5 flex flex-col ${
-                  flipped ? 'opacity-0 pointer-events-none' : ''
-                }`}
-                style={{
-                  backfaceVisibility: 'hidden',
-                  minHeight: '500px',
-                  background: 'linear-gradient(180deg, var(--bg-card) 0%, var(--bg-card) 100%)',
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.03), 0 4px 12px rgba(0,0,0,0.05), 0 16px 40px rgba(0,0,0,0.06)',
-                  border: '1px solid var(--border-color)',
-                }}
-              >
-                {/* Word — centered hero */}
-                <div className="flex-1 flex items-center justify-center">
-                  <h2 className="text-4xl font-extrabold text-[var(--text-primary)] tracking-tight">{currentWord.word}</h2>
-                </div>
+              {current.source}
+            </span>
+            <span
+              className="h-7 inline-flex items-center px-2.5 rounded-full text-[11px] font-black"
+              style={{ background: '#eaf8f5', color: '#4e746d' }}
+            >
+              第 {current.reviewCount} 次复习
+            </span>
+          </div>
 
-                {/* Meta bar inside card */}
-                <div className="flex items-center justify-between bg-[var(--bg-soft)] rounded-2xl px-4 py-2.5 border border-[var(--border-color)]/60 mt-4">
-                  <span className="text-xs text-[var(--text-muted)]">{currentWord.partOfSpeech} · {currentWord.pronunciation}</span>
-                  <button
-                    onClick={(e) => { e.stopPropagation(); speak(currentWord.word); }}
-                    className="p-1.5 rounded-lg hover:bg-[var(--bg-card)]/60 text-[var(--pink-primary)] transition-colors"
-                  >
-                    <Volume2 size={16} />
-                  </button>
-                </div>
-
-                {/* MCQ options */}
-                <div className="grid grid-cols-1 gap-2.5 mt-4">
-                  {options.map((opt, i) => {
-                    const isDontKnow = opt.text === '不知道';
-                    return (
-                      <button
-                        key={i}
-                        onClick={() => handlePickOption(i)}
-                        className={`px-4 py-3 rounded-2xl border text-sm font-medium transition-all duration-150 active:scale-[0.98] ${
-                          isDontKnow
-                            ? 'bg-transparent border-dashed border-[var(--border-color)] text-[var(--text-muted)] hover:bg-[var(--bg-input)]/60'
-                            : 'bg-[var(--bg-card)] border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--pink-primary)]/40 hover:bg-[var(--pink-pale)]/15 hover:shadow-sm'
-                        }`}
-                      >
-                        {opt.text}
-                      </button>
-                    );
-                  })}
-                </div>
-
-              </div>
-
-              {/* ═══════════════════════════════════════════════════
-                  BACK
-                  ═══════════════════════════════════════════════════ */}
-              <div
-                className={`absolute inset-0 rounded-3xl p-5 flex flex-col items-center rotate-y-180 ${
-                  !flipped ? 'opacity-0 pointer-events-none' : ''
-                }`}
-                style={{
-                  backfaceVisibility: 'hidden',
-                  minHeight: '500px',
-                  background: 'linear-gradient(180deg, var(--bg-card) 0%, var(--bg-card) 100%)',
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.03), 0 4px 12px rgba(0,0,0,0.05), 0 16px 40px rgba(0,0,0,0.06)',
-                  border: '1px solid rgba(255,143,171,0.15)',
-                }}
-              >
-                {/* Result badge */}
-                <div className={`px-4 py-1 rounded-full text-sm font-bold mb-3 ${
-                  selectedCorrect
-                    ? 'bg-[var(--mint-soft)]/12 text-[var(--mint-soft)] border border-[var(--mint-soft)]/25'
-                    : 'bg-[var(--color-danger)]/8 text-[var(--color-danger)] border border-[var(--color-danger)]/12'
-                }`}>
-                  {selectedCorrect ? '✓ 正确' : '✗ 错误'}
-                </div>
-
-                {/* Word + meta */}
-                <p className="text-xs text-[var(--text-muted)] mb-1">{currentWord.partOfSpeech} · {currentWord.pronunciation}</p>
-                <div className="flex items-center gap-2 mb-3">
-                  <h2 className="text-2xl font-extrabold text-[var(--text-primary)]">{currentWord.word}</h2>
-                  <button
-                    onClick={(e) => { e.stopPropagation(); speak(currentWord.word); }}
-                    className="p-1.5 rounded-lg hover:bg-[var(--bg-soft)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors"
-                  >
-                    <Volume2 size={16} />
-                  </button>
-                </div>
-
-                {/* Meaning box */}
-                <div className="bg-[var(--pink-pale)]/10 border border-[var(--pink-primary)]/10 rounded-2xl p-4 w-full mb-3">
-                  <p className="text-xs text-[var(--text-muted)] mb-1">中文意思</p>
-                  <p className="text-[var(--pink-primary)] text-lg font-bold text-center">{currentWord.meaning}</p>
-                </div>
-
-                {/* Examples */}
-                {currentWord.examples.length > 0 && (
-                  <div className="w-full space-y-1.5 mb-3">
-                    {currentWord.examples.slice(0, 2).map((ex, i) => (
-                      <div key={i} className="bg-[var(--bg-soft)] rounded-xl px-3 py-2.5 border border-[var(--border-color)]/60">
-                        <div className="flex items-start gap-2">
-                          <p className="text-sm text-[var(--text-primary)] flex-1 leading-snug">{ex.text}</p>
-                          <button onClick={(e) => { e.stopPropagation(); speak(ex.text); }}
-                            className="p-1 rounded-lg hover:bg-[var(--bg-card)]/60 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors shrink-0">
-                            <Volume2 size={13} />
-                          </button>
-                        </div>
-                        <p className="text-xs text-[var(--text-muted)] mt-0.5">{ex.translation}</p>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {/* Rating */}
-                <div className="w-full mt-auto">
-                  <p className="text-xs font-medium text-[var(--text-muted)] text-center mb-2">你记得怎么样？</p>
-                  <div className="grid grid-cols-3 sm:flex gap-2 mb-2.5">
-                    {RATING_BUTTONS.map((btn) => {
-                      const active = selfAssessment === btn.q;
-                      return (
-                        <button
-                          key={btn.q}
-                          onClick={() => setSelfAssessment(btn.q)}
-                          className="flex-1 py-3 rounded-2xl flex flex-col items-center gap-1 transition-all duration-150 active:scale-95"
-                          style={{
-                            backgroundColor: active ? 'var(--pink-pale)' : 'var(--bg-input)',
-                            border: active ? '2px solid var(--pink-primary)' : '1.5px solid var(--border-color)',
-                            color: active ? 'var(--pink-primary)' : 'var(--text-muted)',
-                            boxShadow: active ? '0 2px 8px rgba(255,143,171,0.2)' : 'none',
-                          }}
-                        >
-                          <span className="text-xl">{btn.emoji}</span>
-                          <span className="text-xs font-medium">{btn.label}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                  <button
-                    onClick={handleConfirm}
-                    className="w-full py-3.5 bg-gradient-to-r from-[var(--pink-primary)] to-[#FF6B95] text-white rounded-2xl font-bold text-sm active:scale-[0.97] transition-all shadow-md"
-                    style={{ boxShadow: '0 4px 16px rgba(255,143,171,0.25)' }}
-                  >
-                    {currentIdx + 1 >= words.length ? '完成复习' : '确认，下一题'}
-                  </button>
-                </div>
-              </div>
+          {/* Front text */}
+          <div
+            className="text-center"
+            style={{ marginTop: revealed ? 34 : 58 }}
+          >
+            <div
+              className="text-[42px] font-black leading-tight tracking-tight"
+              style={{ wordBreak: 'keep-all', color: '#241917' }}
+            >
+              {current.front}
+            </div>
+            <div className="mt-3 text-[13px] font-black" style={{ color: '#a08f87' }}>
+              {current.sub}
             </div>
           </div>
-        </div>
 
-        {/* Session stats */}
-        {sessionStats.reviewed > 0 && (
-          <div className="flex items-center justify-center gap-5 text-xs text-[var(--text-muted)]">
-            <span>已复习 {sessionStats.reviewed}</span>
-            <span>通过 {sessionStats.passed}</span>
-            <span>+{xpEarned} XP</span>
+          {/* Audio buttons */}
+          <div
+            className="grid gap-2 mx-auto w-full mt-[34px]"
+            style={{ gridTemplateColumns: '1fr 1fr', maxWidth: 280 }}
+          >
+            <button
+              onClick={() => playAudio(false)}
+              disabled={playingAudio === 'normal'}
+              className="h-[42px] rounded-full text-[12px] font-black text-white transition-opacity"
+              style={{ background: '#201815', boxShadow: '0 10px 22px rgba(32,24,21,.14)' }}
+            >
+              {playingAudio === 'normal' ? '播放中…' : '播放读音'}
+            </button>
+            <button
+              onClick={() => playAudio(true)}
+              disabled={playingAudio === 'slow'}
+              className="h-[42px] rounded-full text-[12px] font-black border transition-opacity"
+              style={{ background: '#fff0f5', color: '#f0799b', borderColor: 'rgba(255,127,168,.18)' }}
+            >
+              {playingAudio === 'slow' ? '播放中…' : '慢速跟读'}
+            </button>
+          </div>
+
+          {/* Answer (revealed) */}
+          {revealed && (
+            <div className="mt-auto pt-[26px]">
+              {/* Meaning */}
+              <div
+                className="rounded-[26px] p-[15px] border"
+                style={{ background: '#fff8f4', borderColor: 'rgba(239,224,217,.92)' }}
+              >
+                <strong className="block text-[18px] font-black text-[#241917]">{current.meaning}</strong>
+                <span className="block mt-1.5 text-[13px] leading-relaxed" style={{ color: '#7e6b64' }}>
+                  {current.note}
+                </span>
+              </div>
+
+              {/* Example */}
+              {current.example && (
+                <div
+                  className="mt-2.5 rounded-[22px] p-[13px] text-[13px] leading-relaxed"
+                  style={{ background: '#eaf8f5', color: '#416b63' }}
+                >
+                  {exKo && <div>{exKo}</div>}
+                  {exZh && <div style={{ color: '#6b9e96', marginTop: 2 }}>{exZh}</div>}
+                </div>
+              )}
+
+              {/* Card actions */}
+              <div className="grid gap-2 mt-3.5" style={{ gridTemplateColumns: '1fr 1fr' }}>
+                <button
+                  className="h-[42px] rounded-full text-[12px] font-black text-white border"
+                  style={{ background: '#201815', borderColor: '#201815' }}
+                >
+                  保存例句
+                </button>
+                {current.sourceUrl ? (
+                  <Link
+                    href={current.sourceUrl}
+                    className="h-[42px] rounded-full text-[12px] font-black border flex items-center justify-center"
+                    style={{ background: '#fff', color: '#5a4640', borderColor: '#eee0d8' }}
+                  >
+                    查看来源
+                  </Link>
+                ) : (
+                  <button
+                    className="h-[42px] rounded-full text-[12px] font-black border"
+                    style={{ background: '#fff', color: '#5a4640', borderColor: '#eee0d8' }}
+                  >
+                    查看来源
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+        </article>
+
+        {/* ── Reveal button ── */}
+        {!revealed && (
+          <button
+            onClick={handleReveal}
+            className="w-full h-12 rounded-full text-white text-[14px] font-black mb-3"
+            style={{
+              background: '#201815',
+              boxShadow: '0 14px 28px rgba(32,24,21,.18)',
+              border: 'none',
+            }}
+          >
+            查看答案
+          </button>
+        )}
+
+        {/* ── Rating buttons ── */}
+        {revealed && (
+          <div className="grid gap-2 mb-3" style={{ gridTemplateColumns: '1fr 1fr 1fr' }}>
+            <button
+              onClick={() => handleRate('forgot')}
+              className="min-h-[58px] rounded-[22px] flex flex-col items-center justify-center gap-1.5 text-[12px] font-black border"
+              style={{ background: '#fff0f5', color: '#f0799b', borderColor: 'rgba(255,127,168,.18)' }}
+            >
+              <b className="text-[15px] font-black">忘了</b>
+              <span>马上再见</span>
+            </button>
+            <button
+              onClick={() => handleRate('fuzzy')}
+              className="min-h-[58px] rounded-[22px] flex flex-col items-center justify-center gap-1.5 text-[12px] font-black border"
+              style={{ background: '#fff8f4', color: '#7d6860', borderColor: '#eee0d8' }}
+            >
+              <b className="text-[15px] font-black">模糊</b>
+              <span>稍后复习</span>
+            </button>
+            <button
+              onClick={() => handleRate('remember')}
+              className="min-h-[58px] rounded-[22px] flex flex-col items-center justify-center gap-1.5 text-[12px] font-black border"
+              style={{ background: '#eaf8f5', color: '#4e746d', borderColor: 'rgba(174,227,216,.55)' }}
+            >
+              <b className="text-[15px] font-black">记得</b>
+              <span>延后复习</span>
+            </button>
           </div>
         )}
+      </div>
+
+      {/* ── Bottom bar ── */}
+      <div
+        className="fixed left-0 right-0 px-[18px] pb-4 pt-3 md:hidden"
+        style={{
+          bottom: 'calc(56px + env(safe-area-inset-bottom, 0px))',
+          height: '80px',
+          background: 'rgba(255,255,255,.96)',
+          backdropFilter: 'blur(20px)',
+          borderTop: '1px solid #eee0d8',
+        }}
+      >
+        <div className="grid h-full gap-2" style={{ gridTemplateColumns: '1fr 1fr 1fr' }}>
+          <button
+            onClick={handleSkip}
+            className="rounded-[20px] text-[12px] font-black border"
+            style={{ background: '#fff8f4', color: '#6b5851', borderColor: '#eee0d8' }}
+          >
+            跳过
+          </button>
+          <button
+            onClick={handleAgain}
+            className="rounded-[20px] text-[12px] font-black text-white"
+            style={{ background: '#201815' }}
+          >
+            再看答案
+          </button>
+          <button
+            onClick={() => setComplete(true)}
+            className="rounded-[20px] text-[12px] font-black border"
+            style={{ background: '#fff8f4', color: '#6b5851', borderColor: '#eee0d8' }}
+          >
+            结束复习
+          </button>
+        </div>
       </div>
     </div>
   );
