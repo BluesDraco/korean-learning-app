@@ -7,6 +7,7 @@ import { KoreanKeyboard } from '@/components/KoreanKeyboard';
 import { generateAbilities } from '@/lib/lesson/buildLessonCards';
 import { COURSE_GRAMMAR_MAP } from '@/lib/lesson/recordLesson';
 import { sentencePatterns } from '@/data/grammar-new';
+import { playComplete } from '@/lib/soundManager';
 import Link from 'next/link';
 
 interface Props {
@@ -55,10 +56,12 @@ export function CompletionView({
 
   useEffect(() => {
     onComplete();
+    playComplete();
     // Staggered reveal
     const t1 = setTimeout(() => setShowAbilities(true), 400);
     const t2 = setTimeout(() => setShowOutput(true), 800);
     return () => { clearTimeout(t1); clearTimeout(t2); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

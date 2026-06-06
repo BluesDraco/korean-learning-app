@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { Volume2, Shuffle, X, ArrowRight, Sparkles } from 'lucide-react';
+import { Volume2, Shuffle, X, Sparkles } from 'lucide-react';
 import { speak } from '@/lib/tts';
 
 const INITIALS = [

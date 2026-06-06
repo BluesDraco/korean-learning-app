@@ -1,107 +1,89 @@
-import Link from 'next/link';
-import {
-  Compass, Music, Radio, BookImage, Lightbulb, Tv,
-  ChevronRight, Sparkles,
-} from 'lucide-react';
-
-const featuredItems = [
-  {
-    label: 'KPOP歌词跟唱',
-    desc: '用喜欢的歌，一句一句学韩语。听歌、看歌词、逐句跟唱、录音对比。',
-    href: '/korea/kpop',
-    icon: Music,
-    color: 'var(--pink-primary)',
-  },
-  {
-    label: '韩娱热帖',
-    desc: '像刷帖子一样看韩娱热点，每帖逐句看懂韩语原文。',
-    href: '/korea/kpop/news',
-    icon: Radio,
-    color: 'var(--purple-soft)',
-  },
-];
-
-const exploreGrid = [
-  {
-    label: 'Tori绘本馆',
-    desc: '韩语绘本故事，边看边学',
-    href: '/learn/picture-books',
-    icon: BookImage,
-    color: 'var(--mint-soft)',
-  },
-  {
-    label: '韩国小知识',
-    desc: '文化、美食、旅行',
-    href: '/knowledge',
-    icon: Lightbulb,
-    color: 'var(--peach-soft)',
-  },
-  {
-    label: '韩剧表达',
-    desc: '经典韩剧台词学韩语',
-    href: '/korea/drama',
-    icon: Tv,
-    color: 'var(--purple-soft)',
-  },
-];
+import { BookImage, Lightbulb, Tv } from 'lucide-react';
+import { MobilePageHero } from '@/components/mobile/MobilePageHero';
+import { ToriHeroCard } from '@/components/mobile/ToriHeroCard';
+import { ToriIconCard } from '@/components/mobile/ToriIconCard';
+import { ToriFeedCard } from '@/components/mobile/ToriFeedCard';
+import { ToriSectionHeader } from '@/components/mobile/ToriSectionHeader';
 
 export default function ExplorePage() {
   return (
-    <div className="py-4 space-y-5">
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-[var(--text-primary)]">探索</h1>
-        <p className="text-xs text-[var(--text-muted)] mt-1">用感兴趣的内容学韩语</p>
-      </div>
+    <div className="py-4 space-y-5 max-w-2xl mx-auto md:max-w-3xl">
+      <MobilePageHero
+        title="探索"
+        description="用喜欢的内容学韩语。"
+        variant="pink"
+      />
 
-      {/* Featured cards */}
-      <div className="space-y-3">
-        {featuredItems.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className="block bg-[var(--bg-card)] border-2 border-[var(--border-color)] rounded-3xl p-5 hover:border-[var(--border-hover)] transition-all group"
-          >
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0" style={{ backgroundColor: `${item.color}15` }}>
-                <item.icon size={28} style={{ color: item.color }} />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-lg font-bold text-[var(--text-primary)]">{item.label}</p>
-                <p className="text-xs text-[var(--text-muted)] mt-0.5">{item.desc}</p>
-              </div>
-              <ChevronRight size={20} className="text-[var(--text-muted)] group-hover:translate-x-0.5 transition-transform" />
-            </div>
-          </Link>
-        ))}
-      </div>
+      {/* KPOP singing — big entrance */}
+      <ToriHeroCard
+        label="KPOP歌词跟唱"
+        desc="一句一句听，一句一句唱。用喜欢的歌学韩语。"
+        href="/korea/kpop"
+        actionLabel="开始跟唱"
+        gradient="from-[#ffe4ec] to-[#fff0bd]"
+        ctaVariant="pill"
+      />
 
-      {/* Explore grid */}
+      {/* Hot posts — big entrance */}
+      <ToriHeroCard
+        label="韩娱热帖"
+        desc="刷热点，顺便看懂韩语。每帖逐句拆解。"
+        href="/korea/kpop/news"
+        actionLabel="看今日热帖"
+        gradient="from-[#eee7ff] to-[#e6f3ff]"
+        ctaVariant="pill"
+      />
+
+      {/* Interest grid */}
       <div>
-        <h2 className="text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider mb-2 px-1">更多发现</h2>
-        <div className="grid grid-cols-3 gap-2.5">
-          {exploreGrid.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 text-center hover:border-[var(--border-hover)] transition-colors group"
-            >
-              <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-2" style={{ backgroundColor: `${item.color}15` }}>
-                <item.icon size={24} style={{ color: item.color }} />
-              </div>
-              <p className="text-sm font-medium text-[var(--text-primary)]">{item.label}</p>
-              <p className="text-[10px] text-[var(--text-muted)] mt-0.5">{item.desc}</p>
-            </Link>
-          ))}
+        <ToriSectionHeader title="按兴趣探索" className="mb-2.5" />
+        <div className="grid grid-cols-2 gap-2.5">
+          <ToriIconCard
+            icon={<BookImage size={20} className="text-[#81b5a1]" />}
+            label="Tori绘本馆"
+            desc="韩语绘本故事"
+            href="/learn/picture-books"
+          />
+          <ToriIconCard
+            icon={<Lightbulb size={20} className="text-[#e8a87c]" />}
+            label="韩国小知识"
+            desc="文化·美食·旅行"
+            href="/knowledge"
+          />
+          <ToriIconCard
+            icon={<Tv size={20} className="text-[#b49ccf]" />}
+            label="韩剧表达"
+            desc="经典台词学韩语"
+            href="/korea/drama"
+          />
         </div>
       </div>
 
-      {/* Bottom */}
-      <div className="bg-[var(--bg-input)] rounded-2xl p-4 text-center">
-        <Sparkles size={16} className="text-[var(--pink-primary)] mx-auto mb-1" />
-        <p className="text-xs text-[var(--text-secondary)]">
-          更多内容正在添加中，包括更多KPOP歌曲、热帖和韩剧台词。
-        </p>
+      {/* Recommended feed */}
+      <div>
+        <ToriSectionHeader title="今日推荐" className="mb-2.5" />
+        <div className="space-y-2">
+          <ToriFeedCard
+            label="推荐歌曲"
+            desc="NewJeans — Hype Boy"
+            href="/korea/kpop"
+          />
+          <ToriFeedCard
+            label="今日热帖"
+            desc="IVE 回归新闻热帖"
+            href="/korea/kpop/news"
+          />
+          <ToriFeedCard
+            label="今日绘本"
+            desc="토리와 첫 만남"
+            href="/learn/picture-books"
+          />
+          <ToriFeedCard
+            label="今日韩剧表达"
+            desc="《眼泪女王》经典台词"
+            href="/korea/drama"
+          />
+        </div>
       </div>
     </div>
   );

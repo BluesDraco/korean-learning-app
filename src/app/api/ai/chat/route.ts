@@ -33,6 +33,7 @@ export async function POST(req: Request) {
     await recordAiUsage(auth.userId, 'chat');
     return NextResponse.json(result);
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    console.error('[ai/chat]', err);
+    return NextResponse.json({ error: 'AI服务异常，请稍后重试' }, { status: 500 });
   }
 }

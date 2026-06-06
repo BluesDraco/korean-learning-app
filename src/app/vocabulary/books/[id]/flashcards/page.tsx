@@ -25,12 +25,17 @@ export default function FlashcardStudyPage() {
 
   useEffect(() => {
     const load = async () => {
-      const b = await db.wordBooks.get(id);
-      if (!b) return;
-      setBook(b);
-      const loaded = await db.words.bulkGet(b.wordIds);
-      setWords(loaded.filter((w): w is Word => w != null));
-      setLoading(false);
+      try {
+        const b = await db.wordBooks.get(id);
+        if (!b) { setLoading(false); return; }
+        setBook(b);
+        const loaded = await db.words.bulkGet(b.wordIds);
+        setWords(loaded.filter((w): w is Word => w != null));
+      } catch {
+        // ignore auth/network errors, show empty state
+      } finally {
+        setLoading(false);
+      }
     };
     load();
   }, [id]);
@@ -141,7 +146,7 @@ export default function FlashcardStudyPage() {
   };
 
   return (
-    <div className="py-4 space-y-4 flex flex-col min-h-[calc(100vh-10rem)]">
+    <div className="py-4 flex flex-col gap-4" style={{ minHeight: 'calc(100dvh - 160px)' }}>
       {/* Header */}
       <div className="flex items-center gap-3 shrink-0">
         <Link href={`/vocabulary/books/${id}`} className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
@@ -163,10 +168,11 @@ export default function FlashcardStudyPage() {
       </div>
 
       {/* Flashcard */}
-      <div className="flex-1 flex items-center justify-center px-2">
+      <div className="flex-1 flex items-center justify-center px-2" style={{ minHeight: '360px' }}>
         <div
           ref={cardRef}
-          className="perspective-1000 w-full max-w-sm"
+          className="w-full max-w-sm"
+          style={{ perspective: '1000px', position: 'relative' }}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
@@ -174,18 +180,24 @@ export default function FlashcardStudyPage() {
           onTransitionEnd={handleTransitionEnd}
         >
           <div
-            className="relative w-full aspect-[4/5] transition-all duration-300"
+            className="relative w-full"
             style={{
+              aspectRatio: '4/5',
               transform: getCardTransform(),
               transition: isSwiping ? 'none' : 'transform 0.35s ease-out',
             }}
           >
-            <div className={`relative w-full h-full transition-all duration-500 transform-style-3d ${isFlipped ? 'rotate-y-180' : ''}`}>
+            <div
+              className="relative w-full h-full"
+              style={{
+                transformStyle: 'preserve-3d',
+                transition: 'transform 0.5s ease',
+                transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+              }}
+            >
               {/* ── FRONT ── */}
               <div
-                className={`absolute inset-0 bg-[var(--bg-card)] rounded-2xl border-2 border-[var(--border-color)] flex flex-col items-center justify-center p-6 ${
-                  isFlipped ? 'opacity-0 pointer-events-none' : ''
-                }`}
+                className="absolute inset-0 bg-[var(--bg-card)] rounded-2xl border-2 border-[var(--border-color)] flex flex-col items-center justify-center p-6"
                 style={{ backfaceVisibility: 'hidden' }}
               >
                 <span className="text-4xl font-bold text-[var(--text-primary)] mb-3 text-center leading-relaxed">
@@ -207,10 +219,8 @@ export default function FlashcardStudyPage() {
 
               {/* ── BACK ── */}
               <div
-                className={`absolute inset-0 bg-[var(--bg-card)] rounded-2xl border-2 border-[var(--pink-pale)] flex flex-col p-6 overflow-y-auto rotate-y-180 ${
-                  !isFlipped ? 'opacity-0 pointer-events-none' : ''
-                }`}
-                style={{ backfaceVisibility: 'hidden' }}
+                className="absolute inset-0 bg-[var(--bg-card)] rounded-2xl border-2 border-[var(--pink-pale)] flex flex-col p-6 overflow-y-auto"
+                style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
               >
                 <div className="text-center mb-4">
                   <span className="text-xl font-bold text-[var(--text-primary)]">{word.word}</span>

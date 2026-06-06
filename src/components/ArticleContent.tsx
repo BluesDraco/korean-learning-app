@@ -4,6 +4,7 @@ import { useEffect, useRef, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { speak as speakKorean } from '@/lib/tts';
 import { db } from '@/lib/db';
+import { playClick, playSuccess } from '@/lib/soundManager';
 import DOMPurify from 'isomorphic-dompurify';
 
 async function loadSavedKoreanWords(): Promise<Set<string>> {
@@ -50,7 +51,15 @@ export default function ArticleContent({
   const containerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
-  const safeHtml = useMemo(() => DOMPurify.sanitize(html), [html]);
+  const safeHtml = useMemo(() => {
+    // DOMPurify strips <style> as a "head" element even with ADD_TAGS.
+    // Extract it before sanitization, sanitize only the body, then recombine.
+    const styleMatch = html.match(/<style>[\s\S]*?<\/style>/);
+    const styleTag = styleMatch ? styleMatch[0] : '';
+    const bodyOnly = html.replace(/<style>[\s\S]*?<\/style>/, '');
+    const cleanBody = DOMPurify.sanitize(bodyOnly);
+    return styleTag + cleanBody;
+  }, [html]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -99,6 +108,7 @@ export default function ArticleContent({
         if (koEl) {
           const text = koEl.textContent?.replace('🔊', '').trim() || '';
           speakBtn.classList.add('speaking');
+          playClick();
           speakKorean(text);
           setTimeout(() => speakBtn.classList.remove('speaking'), 800);
         }
@@ -111,6 +121,7 @@ export default function ArticleContent({
         const text = koText.textContent?.replace('🔊', '').trim() || '';
         const sb = koText.parentElement?.querySelector('.phrase-speak');
         if (sb) sb.classList.add('speaking');
+        playClick();
         speakKorean(text);
         setTimeout(() => { if (sb) sb.classList.remove('speaking'); }, 800);
         return;
@@ -132,6 +143,7 @@ export default function ArticleContent({
           const korean = ko.textContent?.replace('🔊', '').trim() || '';
           const chinese = zh.textContent?.trim() || '';
           saveToDb(korean, chinese);
+          playSuccess();
           addBtn.classList.add('saved');
           addBtn.textContent = '✓';
           showToast('已加入单词本：' + korean);

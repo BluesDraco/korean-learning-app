@@ -86,7 +86,7 @@ export default function StickerDetailPage() {
       await db.stickerDownloads.add(dl);
       // Simulate a brief loading state
       await new Promise((r) => setTimeout(r, 800));
-      alert('表情包下载功能即将上线！图片文件准备好后即可下载ZIP');
+      alert('表情包图片准备中，请稍后再试');
     } catch { /* ignore */ }
     setDownloading(false);
   };

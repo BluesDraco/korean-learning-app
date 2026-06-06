@@ -1,11 +1,19 @@
 'use client';
 
 import { useState } from 'react';
-import { PenLine, Check, X, Lightbulb, RefreshCw, Sparkles, BookOpen, Clock, ChevronDown, ChevronUp, Star, Trophy } from 'lucide-react';
+import { PenLine, Check, X, Lightbulb, RefreshCw, Sparkles, BookOpen, Clock, ChevronDown, ChevronUp, Trophy, Loader2, BookmarkCheck, Bookmark } from 'lucide-react';
 import { KoreanKeyboard } from '@/components/KoreanKeyboard';
-import { MOCK_HISTORY, modeConfig, imitationPrompts, freeTopics, clozeExercises, type WritingMode, type HistoryRecord } from '@/data/writingExercises';
+import { useIsMobile } from '@/lib/useIsMobile';
+import { useFeedback } from '@/hooks/useFeedback';
+import { useAuth } from '@/components/AuthProvider';
+import { db } from '@/lib/db';
+import { useToast } from '@/hooks/useToast';
+import { modeConfig, imitationPrompts, freeTopics, clozeExercises, type WritingMode, type HistoryRecord } from '@/data/writingExercises';
 
-// Character diff helper
+function normalizeKorean(v: string): string {
+  return v.normalize('NFC').trim().replace(/\s+/g, ' ');
+}
+
 function getCharDiff(user: string, answer: string) {
   const result: { char: string; status: 'correct' | 'incorrect' | 'extra' | 'missing' }[] = [];
   const maxLen = Math.max(user.length, answer.length);
@@ -21,30 +29,16 @@ function getCharDiff(user: string, answer: string) {
   return result;
 }
 
-// Generate mock scores for free writing
-function generateMockScores() {
-  const vocabulary = Math.floor(Math.random() * 41) + 60; // 60-100
-  const grammar = Math.floor(Math.random() * 41) + 60;
-  const naturalness = Math.floor(Math.random() * 41) + 60;
-  const overall = Math.round((vocabulary + grammar + naturalness) / 3);
-  return { vocabulary, grammar, naturalness, overall };
-}
-
 function getScoreColor(score: number) {
   if (score >= 80) return 'text-[var(--mint-soft)]';
   if (score >= 60) return 'text-[var(--peach-soft)]';
   return 'text-[var(--color-danger)]';
 }
 
-function getScoreBgColor(score: number) {
-  if (score >= 80) return 'bg-[var(--mint-soft)]/10 border-[var(--mint-soft)]/20';
-  if (score >= 60) return 'bg-[var(--peach-soft)]/10 border-[var(--peach-soft)]/20';
-  return 'bg-[var(--color-danger)]/10 border-[var(--color-danger)]/20';
-}
 
 export default function WritingPage() {
   const [mode, setMode] = useState<WritingMode>('imitation');
-  const [history, setHistory] = useState<HistoryRecord[]>(MOCK_HISTORY);
+  const [history, setHistory] = useState<HistoryRecord[]>([]);
 
   const addRecord = (record: Omit<HistoryRecord, 'id' | 'date'>) => {
     const newRecord: HistoryRecord = {
@@ -56,7 +50,7 @@ export default function WritingPage() {
   };
 
   return (
-    <div className="py-4 space-y-3">
+    <div className="py-4 space-y-3 max-w-2xl mx-auto md:max-w-3xl">
       <div className="flex items-center gap-3">
         <div>
           <h1 className="text-2xl font-bold text-[var(--text-primary)]">写作练习</h1>
@@ -94,6 +88,8 @@ export default function WritingPage() {
 }
 
 function ImitationMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord, 'id' | 'date'>) => void }) {
+  const isMobile = useIsMobile();
+  const { success: feedbackSuccess, error: feedbackError, click: feedbackClick } = useFeedback();
   const [currentIdx, setCurrentIdx] = useState(0);
   const [userInput, setUserInput] = useState('');
   const [submitted, setSubmitted] = useState(false);
@@ -101,16 +97,17 @@ function ImitationMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord, '
   const [showKeyboard, setShowKeyboard] = useState(false);
 
   const prompt = imitationPrompts[currentIdx];
-  const userClean = userInput.trim().replace(/\s/g, '');
-  const answerClean = prompt.ko.replace(/\s/g, '');
+  const userClean = normalizeKorean(userInput);
+  const answerClean = normalizeKorean(prompt.ko);
   const isCorrect = userClean === answerClean;
-  const charDiff = submitted ? getCharDiff(userInput.trim(), prompt.ko) : null;
+  const charDiff = submitted ? getCharDiff(normalizeKorean(userInput), normalizeKorean(prompt.ko)) : null;
 
   const handleSubmit = () => {
     if (!userInput.trim()) return;
     setSubmitted(true);
     const correct = userClean === answerClean;
-    if (correct) setScore((s) => s + 1);
+    if (correct) { setScore((s) => s + 1); feedbackSuccess('完全正确!'); }
+    else feedbackError('再看看标准答案');
 
     onAddRecord({
       mode: 'imitation',
@@ -169,22 +166,27 @@ function ImitationMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord, '
             <textarea
               value={userInput}
               onChange={(e) => setUserInput(e.target.value)}
-              onFocus={() => setShowKeyboard(true)}
+              onFocus={() => { if (isMobile) setShowKeyboard(true); }}
               disabled={submitted}
+              readOnly={isMobile}
               placeholder="在这里输入韩语..."
               rows={2}
               className="flex-1 bg-[var(--bg-input)] border border-[var(--pink-pale)] rounded-xl p-4 text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)] text-base text-center resize-none focus:outline-none focus:border-[var(--pink-primary)]/50"
               style={{ fontFamily: "'system-ui', 'sans-serif'" }}
+              inputMode={isMobile ? 'none' : 'text'}
             />
             <button
               type="button"
               onClick={() => setShowKeyboard(!showKeyboard)}
+              onMouseDown={(e) => e.preventDefault()}
+              onTouchStart={(e) => e.preventDefault()}
               className={`self-start px-3 py-3 rounded-xl transition-colors text-sm font-medium ${
                 showKeyboard
                   ? 'bg-[var(--pink-primary)]/20 text-[var(--pink-primary)]'
                   : 'bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] hover:bg-[var(--pink-pale)]/20'
               }`}
-              title="韩文键盘"
+              title={showKeyboard ? '关闭韩文键盘' : '打开韩文键盘'}
+              aria-label={showKeyboard ? '关闭韩文键盘' : '打开韩文键盘'}
             >
               한
             </button>
@@ -305,13 +307,19 @@ function ImitationMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord, '
 }
 
 function FreeWritingMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord, 'id' | 'date'>) => void }) {
+  const isMobile = useIsMobile();
+  const { user } = useAuth();
+  const { showToast } = useToast();
   const [selectedTopic, setSelectedTopic] = useState(0);
   const [text, setText] = useState('');
   const [wordCount, setWordCount] = useState(0);
   const [uniqueWords, setUniqueWords] = useState(0);
-  const [scored, setScored] = useState(false);
+  const [scoring, setScoring] = useState(false);
+  const [feedback, setFeedback] = useState<{
+    original: string; corrected: string; reason: string; isCorrect: boolean; saveExpression: string;
+  } | null>(null);
+  const [expressionSaved, setExpressionSaved] = useState(false);
   const [showKeyboard, setShowKeyboard] = useState(false);
-  const [scores, setScores] = useState<{ vocabulary: number; grammar: number; naturalness: number; overall: number } | null>(null);
 
   const topic = freeTopics[selectedTopic];
 
@@ -327,27 +335,59 @@ function FreeWritingMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord,
     setText('');
     setWordCount(0);
     setUniqueWords(0);
-    setScored(false);
-    setScores(null);
+    setFeedback(null);
+    setExpressionSaved(false);
   };
 
-  const handleScore = () => {
-    const mockScores = generateMockScores();
-    setScores(mockScores);
-    setScored(true);
+  const handleScore = async () => {
+    if (!text.trim()) return;
+    setScoring(true);
+    setFeedback(null);
 
-    onAddRecord({
-      mode: 'free',
-      modeLabel: '自由写',
-      score: `${mockScores.overall}分`,
-      snippet: text.trim().slice(0, 50),
-      details: {
-        type: 'free',
-        topic: topic.title,
-        text: text.trim(),
-        scores: mockScores,
-      },
-    });
+    try {
+      const res = await fetch('/api/ai/writing', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: text.trim(), topic: topic.title }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setFeedback(data);
+        onAddRecord({
+          mode: 'free', modeLabel: '自由写',
+          score: data.isCorrect ? '✓ 自然' : '已批改',
+          snippet: text.trim().slice(0, 50),
+          details: { type: 'free', topic: topic.title, text: text.trim(), corrected: data.corrected, reason: data.reason },
+        });
+      } else if (res.status === 401) {
+        showToast('请登录后使用 AI 批改', 'error');
+      } else {
+        throw new Error('failed');
+      }
+    } catch {
+      showToast('AI 批改暂时不可用，请稍后重试', 'error');
+    } finally {
+      setScoring(false);
+    }
+  };
+
+  const handleSaveExpression = async () => {
+    if (!feedback?.saveExpression || expressionSaved || !user) return;
+    try {
+      await db.sentences.put({
+        id: `writing-expr-${Date.now()}`,
+        userId: user.id,
+        korean: feedback.saveExpression.split('—')[0]?.trim() || feedback.saveExpression,
+        chinese: feedback.saveExpression.split('—')[1]?.trim() || '',
+        sourceType: 'writing',
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+      });
+      setExpressionSaved(true);
+      showToast('已保存到我的句子', 'success');
+    } catch {
+      showToast('保存失败', 'error');
+    }
   };
 
   return (
@@ -355,9 +395,7 @@ function FreeWritingMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord,
       {/* Topic selector */}
       <div className="flex gap-2 overflow-x-auto pb-1">
         {freeTopics.map((t, i) => (
-          <button
-            key={i}
-            onClick={() => handleTopicChange(i)}
+          <button key={i} onClick={() => handleTopicChange(i)}
             className={`shrink-0 px-4 py-2 rounded-xl text-sm transition-colors ${
               i === selectedTopic
                 ? 'bg-[var(--pink-primary)] text-white font-medium'
@@ -379,9 +417,7 @@ function FreeWritingMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord,
         <div className="flex gap-2 flex-wrap">
           <span className="text-xs text-[var(--text-muted)]">关键词：</span>
           {topic.keywords.map((kw) => (
-            <span key={kw} className="text-xs px-2 py-0.5 rounded-full bg-[var(--bg-input)] text-[var(--pink-primary)]">
-              {kw}
-            </span>
+            <span key={kw} className="text-xs px-2 py-0.5 rounded-full bg-[var(--bg-input)] text-[var(--pink-primary)]">{kw}</span>
           ))}
         </div>
       </div>
@@ -389,168 +425,99 @@ function FreeWritingMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord,
       {/* Writing area */}
       <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4">
         <div className="flex gap-2">
-          <textarea
-            value={text}
-            onChange={(e) => updateStats(e.target.value)}
-            onFocus={() => setShowKeyboard(true)}
-            placeholder="在这里自由书写韩语..."
-            rows={8}
+          <textarea value={text} onChange={(e) => updateStats(e.target.value)}
+            onFocus={() => { if (isMobile) setShowKeyboard(true); }}
+            placeholder="在这里自由书写韩语（1-3句即可）..."
+            rows={6} readOnly={isMobile}
             className="flex-1 bg-transparent text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)] text-sm resize-none focus:outline-none"
             style={{ fontFamily: "'system-ui', 'sans-serif'" }}
+            inputMode={isMobile ? 'none' : 'text'}
           />
-          <button
-            type="button"
-            onClick={() => setShowKeyboard(!showKeyboard)}
+          <button type="button" onClick={() => setShowKeyboard(!showKeyboard)}
+            onMouseDown={(e) => e.preventDefault()} onTouchStart={(e) => e.preventDefault()}
             className={`self-start px-3 py-3 rounded-xl transition-colors text-sm font-medium ${
-              showKeyboard
-                ? 'bg-[var(--pink-primary)]/20 text-[var(--pink-primary)]'
+              showKeyboard ? 'bg-[var(--pink-primary)]/20 text-[var(--pink-primary)]'
                 : 'bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] hover:bg-[var(--pink-pale)]/20'
             }`}
-            title="韩文键盘"
           >
             한
           </button>
         </div>
-        <KoreanKeyboard
-          value={text}
-          onChange={(val) => updateStats(val)}
-          visible={showKeyboard}
-          onClose={() => setShowKeyboard(false)}
-        />
+        <KoreanKeyboard value={text} onChange={(val) => updateStats(val)} visible={showKeyboard} onClose={() => setShowKeyboard(false)} />
         <div className="flex items-center justify-between pt-3 border-t border-[var(--border-color)] text-xs text-[var(--text-muted)]">
-          <span>字数: {wordCount}</span>
-          <span>不重复词: {uniqueWords}</span>
-          <span>韩语水平: {wordCount === 0 ? '-' : uniqueWords >= 20 ? '丰富' : uniqueWords >= 10 ? '良好' : '基础'}</span>
+          <span>{wordCount} 词</span>
+          {!user && <span className="text-[var(--pink-primary)]">登录后可使用 AI 批改</span>}
         </div>
       </div>
 
-      {/* Scoring section */}
-      <div className="space-y-3">
-        {!scored ? (
-          <button
-            onClick={handleScore}
-            disabled={!text.trim()}
-            className="w-full py-3 bg-gradient-to-r from-[var(--pink-primary)] to-[var(--purple-soft)] hover:from-[var(--pink-primary)] hover:to-[var(--purple-soft)] disabled:from-[var(--bg-accent)] disabled:to-[var(--bg-accent)] disabled:text-[var(--text-muted)] text-white rounded-xl font-medium transition-all flex items-center justify-center gap-2"
-          >
-            <Sparkles size={16} />
-            提交评分
-          </button>
-        ) : scores && (
-          <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-5 space-y-4 animate-fade-in">
-            <h3 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
-              <Star size={16} className="text-[var(--peach-soft)]" />
-              示例评分
-              <span className="text-[11px] font-normal text-[var(--text-muted)] bg-[var(--bg-input)] px-2 py-0.5 rounded-full">演示</span>
-            </h3>
+      {/* Submit button */}
+      {!feedback && (
+        <button onClick={handleScore} disabled={!text.trim() || scoring}
+          className="w-full py-3 bg-gradient-to-r from-[var(--pink-primary)] to-[var(--purple-soft)] disabled:from-[var(--bg-accent)] disabled:to-[var(--bg-accent)] disabled:text-[var(--text-muted)] text-white rounded-xl font-medium transition-all flex items-center justify-center gap-2"
+        >
+          {scoring ? <><Loader2 size={16} className="animate-spin" />Tori 批改中...</> : <><Sparkles size={16} />提交，Tori 帮我改</>}
+        </button>
+      )}
 
-            {/* Score bars */}
-            <div className="space-y-3">
-              {[
-                { label: '词汇多样性', key: 'vocabulary' as const },
-                { label: '语法正确性', key: 'grammar' as const },
-                { label: '表达自然度', key: 'naturalness' as const },
-              ].map((item) => (
-                <div key={item.key}>
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-sm text-[var(--text-secondary)]">{item.label}</span>
-                    <span className={`text-sm font-bold ${getScoreColor(scores[item.key])}`}>
-                      {scores[item.key]}/100
-                    </span>
-                  </div>
-                  <div className="w-full bg-[var(--bg-input)] rounded-full h-2">
-                    <div
-                      className="h-2 rounded-full transition-all duration-700"
-                      style={{
-                        width: `${scores[item.key]}%`,
-                        backgroundColor: scores[item.key] >= 80 ? 'var(--mint-soft)' : scores[item.key] >= 60 ? 'var(--peach-soft)' : 'var(--color-danger)',
-                      }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
+      {/* AI Feedback */}
+      {feedback && (
+        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-5 space-y-4 animate-fade-in">
+          <h3 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
+            <Sparkles size={16} className="text-[var(--pink-primary)]" />
+            Tori 的批改
+          </h3>
 
-            {/* Overall score */}
-            <div className={`rounded-xl p-4 border ${getScoreBgColor(scores.overall)}`}>
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-[var(--text-secondary)]">综合评分</span>
-                <span className={`text-2xl font-bold ${getScoreColor(scores.overall)}`}>
-                  {scores.overall}/100
-                </span>
-              </div>
-              <p className="text-xs text-[var(--text-muted)] mt-1">
-                {scores.overall >= 80 ? '写得很好！继续保持！' :
-                 scores.overall >= 60 ? '还有提升空间，加油！' : '需要多加练习，别灰心！'}
-              </p>
-            </div>
-
-            {/* XP reward notice */}
-            {scores.overall >= 80 && (
-              <div className="bg-gradient-to-r from-[var(--peach-soft)]/10 to-[var(--pink-primary)]/10 border border-[var(--peach-soft)]/20 rounded-xl p-4 flex items-center gap-3 animate-fade-in">
-                <Trophy size={24} className="text-[var(--peach-soft)]" />
-                <div>
-                  <p className="text-sm font-bold text-[var(--peach-soft)]">已获得XP</p>
-                  <p className="text-xs text-[var(--text-secondary)]">写作评分达到80分以上，经验值 +50</p>
-                </div>
-                <span className="ml-auto text-lg font-bold text-[var(--peach-soft)]">+50 XP</span>
-              </div>
-            )}
-
-            {/* Grammar suggestions */}
-            <div className="bg-[var(--purple-soft)]/5 border border-[var(--purple-soft)]/10 rounded-xl p-4">
-              <p className="text-xs font-medium text-[var(--purple-soft)] mb-2 flex items-center gap-1.5">
-                <BookOpen size={12} />
-                建议练习的句型
-              </p>
-              <div className="flex flex-wrap gap-1.5">
-                {[
-                  { id: 'gp-01', label: '이에요/예요' },
-                  { id: 'gp-13', label: '아/어요' },
-                  { id: 'gp-23', label: '过去时' },
-                  { id: 'gp-24', label: '将来时' },
-                  { id: 'gp-27', label: '原因表达' },
-                ].map((g) => (
-                  <a
-                    key={g.id}
-                    href={`/grammar?pattern=${g.id}`}
-                    className="px-2.5 py-1 rounded-lg bg-[var(--bg-card)] border border-[var(--border-color)] text-xs text-[var(--text-secondary)] hover:text-[var(--pink-primary)] hover:border-[var(--pink-primary)]/30 transition-colors"
-                  >
-                    {g.label}
-                  </a>
-                ))}
-              </div>
-            </div>
-
-            {/* Re-score button */}
-            <button
-              onClick={handleScore}
-              className="w-full py-2.5 bg-[var(--bg-card-hover)] border border-[var(--border-color)] hover:border-[var(--purple-soft)]/30 text-[var(--text-secondary)] rounded-xl text-sm font-medium transition-colors flex items-center justify-center gap-2"
-            >
-              <RefreshCw size={14} />
-              重新评分
-            </button>
+          <div className="bg-[var(--bg-input)] rounded-xl p-4">
+            <p className="text-xs text-[var(--text-muted)] mb-1">你写的</p>
+            <p className="text-sm text-[var(--text-primary)]" style={{ fontFamily: "'system-ui', 'sans-serif'" }}>{feedback.original}</p>
           </div>
-        )}
-      </div>
 
-      {/* Tips */}
-      <div className="bg-[var(--purple-soft)]/5 border border-[var(--purple-soft)]/10 rounded-2xl p-4">
-        <h4 className="text-sm font-medium text-[var(--purple-soft)] mb-2 flex items-center gap-1.5">
-          <Lightbulb size={14} />
-          写作小贴士
-        </h4>
-        <ul className="space-y-1 text-xs text-[var(--text-secondary)]">
-          <li>· 先用简单句写出大意，再逐步丰富</li>
-          <li>· 不确定的单词可以先用中文标注，写完再查</li>
-          <li>· 写完大声朗读一遍，检查流畅度</li>
-          <li>· 尝试使用最近学到的语法点和单词</li>
-        </ul>
-      </div>
+          {feedback.isCorrect ? (
+            <div className="bg-[var(--mint-soft)]/8 border border-[var(--mint-soft)]/20 rounded-xl p-4 flex items-center gap-3">
+              <Check size={20} className="text-[var(--mint-soft)] shrink-0" />
+              <p className="text-sm text-[var(--mint-soft)] font-medium">表达很自然！</p>
+            </div>
+          ) : (
+            <div className="bg-[var(--mint-soft)]/5 border border-[var(--mint-soft)]/15 rounded-xl p-4">
+              <p className="text-xs text-[var(--mint-soft)] mb-1.5 font-medium">更自然的写法</p>
+              <p className="text-sm text-[var(--text-primary)] font-medium" style={{ fontFamily: "'system-ui', 'sans-serif'" }}>{feedback.corrected}</p>
+            </div>
+          )}
+
+          <div className="bg-[var(--purple-soft)]/5 border border-[var(--purple-soft)]/10 rounded-xl p-4">
+            <p className="text-xs text-[var(--purple-soft)] mb-1 font-medium">原因</p>
+            <p className="text-sm text-[var(--text-secondary)]">{feedback.reason}</p>
+          </div>
+
+          {feedback.saveExpression && (
+            <div className="bg-[var(--pink-primary)]/5 border border-[var(--pink-primary)]/10 rounded-xl p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs text-[var(--pink-primary)] mb-1 font-medium">可保存表达</p>
+                  <p className="text-sm text-[var(--text-primary)]" style={{ fontFamily: "'system-ui', 'sans-serif'" }}>{feedback.saveExpression}</p>
+                </div>
+                <button onClick={handleSaveExpression} disabled={expressionSaved || !user}
+                  className={`p-2 rounded-lg transition-colors shrink-0 ${expressionSaved ? 'text-[var(--mint-soft)]' : 'text-[var(--text-muted)] hover:text-[var(--mint-soft)]'}`}
+                >
+                  {expressionSaved ? <BookmarkCheck size={16} /> : <Bookmark size={16} />}
+                </button>
+              </div>
+            </div>
+          )}
+
+          <button onClick={() => { setFeedback(null); setText(''); setWordCount(0); setUniqueWords(0); setExpressionSaved(false); }}
+            className="w-full py-2.5 border border-[var(--border-color)] rounded-xl text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)] transition-colors flex items-center justify-center gap-2"
+          >
+            <RefreshCw size={14} />再写一段
+          </button>
+        </div>
+      )}
     </div>
   );
 }
 
 function ClozeMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord, 'id' | 'date'>) => void }) {
+  const { success: feedbackSuccess, error: feedbackError, click: feedbackClick } = useFeedback();
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [score, setScore] = useState(0);
@@ -564,9 +531,11 @@ function ClozeMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord, 'id' 
 
   const handleSelect = (idx: number) => {
     if (answered) return;
+    feedbackClick();
     setSelectedAnswer(idx);
     setAnswered(true);
-    if (idx === exercise.correct) setScore((s) => s + 1);
+    if (idx === exercise.correct) { setScore((s) => s + 1); feedbackSuccess('正确!'); }
+    else feedbackError('不对哦');
   };
 
   const handleNext = () => {
@@ -805,27 +774,16 @@ function HistoryMode({ records }: { records: HistoryRecord[] }) {
                 {d.text}
               </p>
             </div>
-            {d.scores && (
-              <div>
-                <p className="text-xs text-[var(--text-muted)] mb-2">评分详情（演示）</p>
-                <div className="grid grid-cols-3 gap-2">
-                  {[
-                    { label: '词汇多样性', value: d.scores.vocabulary },
-                    { label: '语法正确性', value: d.scores.grammar },
-                    { label: '表达自然度', value: d.scores.naturalness },
-                  ].map((s) => (
-                    <div key={s.label} className="bg-[var(--bg-input)] rounded-lg p-2 text-center">
-                      <p className="text-[13px] text-[var(--text-muted)]">{s.label}</p>
-                      <p className={`text-sm font-bold ${getScoreColor(s.value)}`}>{s.value}</p>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-3 flex items-center justify-between bg-[var(--bg-input)] rounded-lg p-3">
-                  <span className="text-sm text-[var(--text-secondary)]">综合评分</span>
-                  <span className={`text-lg font-bold ${getScoreColor(d.scores.overall)}`}>
-                    {d.scores.overall}/100
-                  </span>
-                </div>
+            {d.corrected && (
+              <div className="bg-[var(--mint-soft)]/5 border border-[var(--mint-soft)]/15 rounded-xl p-3">
+                <p className="text-xs text-[var(--mint-soft)] mb-1 font-medium">批改建议</p>
+                <p className="text-sm text-[var(--text-primary)]" style={{ fontFamily: "'system-ui', 'sans-serif'" }}>{d.corrected}</p>
+              </div>
+            )}
+            {d.reason && (
+              <div className="bg-[var(--purple-soft)]/5 border border-[var(--purple-soft)]/10 rounded-xl p-3">
+                <p className="text-xs text-[var(--purple-soft)] mb-1 font-medium">批改原因</p>
+                <p className="text-xs text-[var(--text-secondary)]">{d.reason}</p>
               </div>
             )}
           </div>

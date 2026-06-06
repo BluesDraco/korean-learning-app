@@ -10,7 +10,6 @@ export interface DictationWordPack {
   id: string;
   name: string;
   description: string;
-  emoji: string;
   words: DictationWord[];
 }
 
@@ -19,7 +18,6 @@ export const dictationWordPacks: DictationWordPack[] = [
     id: 'beginner',
     name: '初级日常',
     description: '最常用的韩语基础词汇，适合零基础入门',
-    emoji: '🌱',
     words: [
       { id: 'b01', korean: '안녕하세요', meaning: '你好', pronunciation: 'annyeonghaseyo' },
       { id: 'b02', korean: '감사합니다', meaning: '谢谢', pronunciation: 'gamsahamnida' },
@@ -62,7 +60,6 @@ export const dictationWordPacks: DictationWordPack[] = [
     id: 'intermediate',
     name: '中级生活',
     description: '日常生活场景高频词，餐厅/购物/出行必备',
-    emoji: '🌿',
     words: [
       { id: 'm01', korean: '주문하다', meaning: '点单', pronunciation: 'jumunhada' },
       { id: 'm02', korean: '계산하다', meaning: '结账', pronunciation: 'gyesanhada' },
@@ -105,7 +102,6 @@ export const dictationWordPacks: DictationWordPack[] = [
     id: 'advanced',
     name: '高级进阶',
     description: 'TOPIK高频词汇，抽象概念和书面用语',
-    emoji: '🌳',
     words: [
       { id: 'a01', korean: '경험', meaning: '经验', pronunciation: 'gyeongheom' },
       { id: 'a02', korean: '관계', meaning: '关系', pronunciation: 'gwangye' },

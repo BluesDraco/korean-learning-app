@@ -1,9 +1,11 @@
 'use client';
 
 import { useState, useCallback, useRef, useEffect } from 'react';
+import Link from 'next/link';
 import { Search, Volume2, BookmarkPlus, ExternalLink, Loader2 } from 'lucide-react';
 import { speak } from '@/lib/tts';
 import { db } from '@/lib/db';
+import { useFeedback } from '@/hooks/useFeedback';
 
 interface DictMeaning { sense: string; zh: string; ko: string; }
 
@@ -19,6 +21,7 @@ export default function DictionaryPage() {
   const [loading, setLoading] = useState(false);
   const [addedWord, setAddedWord] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { success: feedbackSuccess, error: feedbackError, click: feedbackClick } = useFeedback();
 
   const doSearch = useCallback(async (p = 1) => {
     if (!query.trim()) { setResults([]); setTotal(0); return; }
@@ -45,29 +48,35 @@ export default function DictionaryPage() {
 
   const handleSpeak = (word: string, e: React.MouseEvent) => {
     e.stopPropagation();
+    feedbackClick();
     speak(word);
   };
 
   const handleAddWord = async (entry: SearchResult, e: React.MouseEvent) => {
     e.stopPropagation();
-    await db.words.put({
-      id: `dict-${entry.w}`,
-      word: entry.w,
-      pronunciation: '',
-      meaning: entry.d,
-      partOfSpeech: entry.p,
-      examples: [],
-      sourceEntryId: entry.w,
-      mastery: 'new' as const,
-      srsLevel: 0,
-      nextReview: Date.now(),
-      easeFactor: 2.5,
-      interval: 0,
-      createdAt: Date.now(),
-      lastReviewed: null,
-    });
-    setAddedWord(entry.w);
-    setTimeout(() => setAddedWord(null), 2000);
+    try {
+      await db.words.put({
+        id: `dict-${entry.w}`,
+        word: entry.w,
+        pronunciation: '',
+        meaning: entry.d,
+        partOfSpeech: entry.p,
+        examples: [],
+        sourceEntryId: entry.w,
+        mastery: 'new' as const,
+        srsLevel: 0,
+        nextReview: Date.now(),
+        easeFactor: 2.5,
+        interval: 0,
+        createdAt: Date.now(),
+        lastReviewed: null,
+      });
+      setAddedWord(entry.w);
+      feedbackSuccess('已加入单词本');
+      setTimeout(() => setAddedWord(null), 2000);
+    } catch {
+      feedbackError('保存失败，请重试');
+    }
   };
 
   const cleanPos = (p: string) => (p || '').replace(/[⭐]/g, '').trim() || '';
@@ -77,7 +86,7 @@ export default function DictionaryPage() {
     <div className="max-w-2xl mx-auto py-4 space-y-4">
       <div className="text-center mb-6">
         <h1 className="text-2xl font-bold text-[var(--text-primary)]" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
-          📖 韩语字典
+          韩语字典
         </h1>
         <p className="text-sm text-[var(--text-muted)] mt-1">
           收录 44,000+ 词条，来自国立国语院韩国语基础词典
@@ -104,9 +113,20 @@ export default function DictionaryPage() {
 
       {/* Results count */}
       {query.trim() && !loading && (
-        <p className="text-xs text-[var(--text-muted)]">
-          {total > 0 ? `找到 ${total} 个结果` : '未找到匹配词条'}
-        </p>
+        <div>
+          <p className="text-xs text-[var(--text-muted)]">
+            {total > 0 ? `找到 ${total} 个结果` : '未找到匹配词条'}
+          </p>
+          {total === 0 && (
+            <div className="mt-3 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-4 text-center">
+              <p className="text-sm text-[var(--text-secondary)]">词典中没找到这个词。</p>
+              <p className="text-xs text-[var(--text-muted)] mt-1 mb-3">试试把整句韩语粘贴到内容拆解，Tori 帮你逐词分析。</p>
+              <Link href="/ai/analyze" className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--pink-primary)] hover:underline">
+                去内容拆解 <ExternalLink size={13} />
+              </Link>
+            </div>
+          )}
+        </div>
       )}
 
       {/* Results list */}

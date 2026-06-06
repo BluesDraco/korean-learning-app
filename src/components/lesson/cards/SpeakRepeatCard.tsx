@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from 'react';
-import { Mic, Volume2, Square, Play } from 'lucide-react';
+import { Mic, Volume2, Square } from 'lucide-react';
 
 interface Props {
   korean: string;
@@ -22,7 +22,6 @@ export function SpeakRepeatCard({ korean, pronunciation, chinese, playing, onSpe
   const [transcript, setTranscript] = useState('');
   const [error, setError] = useState('');
   const recognitionRef = useRef<any>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const startRecording = useCallback(async () => {
     if (!hasSpeechRecognition()) {

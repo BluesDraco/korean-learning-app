@@ -6,7 +6,7 @@ import {
   BookOpen, Sparkles, Clock, Target, ChevronRight,
   Hash, Bookmark, TrendingUp,
 } from 'lucide-react';
-import { readingArticles, getTodayArticle, levelLabel, levelColor, topics } from '@/data/reading-new';
+import { readingArticles, getTodayArticle, levelLabel, levelColor } from '@/data/reading-new';
 import { db } from '@/lib/db';
 import type { Article, UserArticleProgress } from '@/types';
 
@@ -43,7 +43,7 @@ export default function ReadingPage() {
   const savedCount = [...progress.values()].reduce((sum, p) => sum + p.savedSentenceIds.length + p.savedWordIds.length, 0);
 
   return (
-    <div className="py-4 space-y-5">
+    <div className="py-4 space-y-5 max-w-2xl mx-auto md:max-w-3xl">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-[var(--text-primary)] flex items-center gap-2">

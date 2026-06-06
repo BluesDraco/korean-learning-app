@@ -295,7 +295,7 @@ export default function LevelDetailPage() {
       )}
 
       {/* Bottom action */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-[var(--bg-primary)] border-t border-[var(--border-color)]">
+      <div className="fixed left-0 right-0 z-30 px-4 pt-3 bg-[var(--bg-card)] border-t border-[var(--border-color)]" style={{ bottom: "calc(56px + env(safe-area-inset-bottom, 0px))" }}>
         <div className="max-w-2xl mx-auto flex items-center gap-3">
           <div className="flex-1">
             <p className="text-sm font-medium text-[var(--text-primary)]">

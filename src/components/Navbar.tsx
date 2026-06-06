@@ -6,19 +6,10 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/components/AuthProvider';
 import {
-  ChevronRight, X, Sun, Moon, Shield, MessageSquare,
-  User, Sparkles, Wrench, GraduationCap, Compass,
+  ChevronRight, Sun, Moon, Shield,
 } from 'lucide-react';
 import { useTheme } from '@/components/ThemeProvider';
 import { navGroups, type NavGroup } from '@/data/navigation';
-
-const mobileTabs = [
-  { label: '今日', href: '/daily',   icon: Sparkles },
-  { label: '我的', href: '/mine',     icon: User },
-  { label: '工具', href: '/tools',    icon: Wrench },
-  { label: '学习', href: '/learning', icon: GraduationCap },
-  { label: '探索', href: '/explore',  icon: Compass },
-];
 
 export function Navbar() {
   const pathname = usePathname();
@@ -67,7 +58,7 @@ export function Navbar() {
       >
         {/* Logo */}
         <Link
-          href="/"
+          href="/daily"
           className="flex items-center gap-1.5 md:justify-center lg:justify-start md:px-2 lg:px-4 py-4"
           onClick={() => setExpandedGroup(null)}
         >
@@ -102,8 +93,9 @@ export function Navbar() {
                   }`}
                 >
                   <Icon size={20} />
-                  <div className="hidden lg:flex flex-1 text-left min-w-0">
-                    <span className="whitespace-nowrap">{group.label}<span className="text-[11px] text-[var(--text-muted)] ml-1">{group.ko}</span></span>
+                  <div className="hidden lg:flex flex-col flex-1 text-left min-w-0">
+                    <span className="text-sm font-medium leading-tight">{group.label}</span>
+                    <span className="text-[11px] text-[var(--text-muted)] leading-tight">{group.ko}</span>
                   </div>
                   {group.children.length > 0 && (
                     <ChevronRight
@@ -125,6 +117,20 @@ export function Navbar() {
                         const ChildIcon = child.icon;
                         const isActive = pathname.startsWith(child.href) &&
                           (child.href !== '/' || pathname === '/');
+                        if (child.comingSoon) {
+                          return (
+                            <div
+                              key={j}
+                              className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm cursor-not-allowed opacity-40"
+                            >
+                              <ChildIcon size={16} className="shrink-0" />
+                              <div className="min-w-0 flex items-center gap-1.5">
+                                <span className="text-[var(--text-muted)]">{child.label}</span>
+                                <span className="text-[10px] bg-[var(--bg-soft)] text-[var(--text-muted)] px-1.5 py-0.5 rounded-full">即将开放</span>
+                              </div>
+                            </div>
+                          );
+                        }
                         return (
                           <Link
                             key={j}
@@ -138,8 +144,8 @@ export function Navbar() {
                           >
                             <ChildIcon size={16} className="shrink-0" />
                             <div className="min-w-0">
-                              <span>{child.label}</span>
-                              <span className="text-[11px] text-[var(--text-muted)] ml-1">{child.ko}</span>
+                              <div className="text-sm leading-tight">{child.label}</div>
+                              <div className="text-[11px] text-[var(--text-muted)] leading-tight">{child.ko}</div>
                             </div>
                           </Link>
                         );
@@ -153,6 +159,20 @@ export function Navbar() {
                         const ChildIcon = child.icon;
                         const isActive = pathname.startsWith(child.href) &&
                           (child.href !== '/' || pathname === '/');
+                        if (child.comingSoon) {
+                          return (
+                            <div
+                              key={j}
+                              className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-sm cursor-not-allowed opacity-40"
+                            >
+                              <ChildIcon size={15} className="shrink-0" />
+                              <div className="min-w-0 flex items-center gap-1.5">
+                                <span className="text-[var(--text-muted)] text-sm leading-tight">{child.label}</span>
+                                <span className="text-[10px] bg-[var(--bg-soft)] text-[var(--text-muted)] px-1.5 py-0.5 rounded-full shrink-0">即将开放</span>
+                              </div>
+                            </div>
+                          );
+                        }
                         return (
                           <Link
                             key={j}
@@ -166,7 +186,8 @@ export function Navbar() {
                           >
                             <ChildIcon size={15} className="shrink-0" />
                             <div className="min-w-0">
-                              <span className="whitespace-nowrap">{child.label}<span className="text-[11px] text-[var(--text-muted)] ml-1">{child.ko}</span></span>
+                              <div className="text-sm leading-tight">{child.label}</div>
+                              <div className="text-[11px] text-[var(--text-muted)] leading-tight">{child.ko}</div>
                             </div>
                           </Link>
                         );
@@ -261,28 +282,6 @@ export function Navbar() {
             </div>
           )}
         </div>
-      </nav>
-
-      {/* Mobile bottom bar — 5 tabs: 今日｜我的｜工具｜学习｜探索 */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-[var(--bg-card)] border-t border-[var(--border-color)] flex justify-around z-50 pb-safe shadow-lg">
-        {mobileTabs.map((tab) => {
-          const active = tab.href === '/daily'
-            ? pathname === '/daily' || pathname === '/'
-            : pathname.startsWith(tab.href);
-          const Icon = tab.icon;
-          return (
-            <Link
-              key={tab.href}
-              href={tab.href}
-              className={`flex flex-col items-center gap-0.5 py-2 px-1.5 text-[13px] transition-colors ${
-                active ? 'text-[var(--pink-primary)]' : 'text-[var(--text-muted)]'
-              }`}
-            >
-              <Icon size={22} />
-              <span className="text-[11px]">{tab.label}</span>
-            </Link>
-          );
-        })}
       </nav>
 
       {/* Spacer for desktop sidebar — matches sidebar width */}

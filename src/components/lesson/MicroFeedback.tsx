@@ -43,11 +43,15 @@ export function MicroFeedbackToast({ feedback, onDone }: Props) {
   useEffect(() => {
     if (!feedback) return;
     setVisible(true);
+    let inner: ReturnType<typeof setTimeout>;
     const t = setTimeout(() => {
       setVisible(false);
-      setTimeout(onDone, 150);
+      inner = setTimeout(onDone, 150);
     }, 1200);
-    return () => clearTimeout(t);
+    return () => {
+      clearTimeout(t);
+      clearTimeout(inner);
+    };
   }, [feedback, onDone]);
 
   if (!feedback || !visible) return null;

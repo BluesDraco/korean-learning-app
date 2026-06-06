@@ -1,5 +1,4 @@
 import type { LessonCard, AnswerResult } from './types';
-import type { DailyWord, DailySentence, DailyGrammar, DailyDictation } from '@/data/thirtyDayCourse';
 
 /** Score a user's answer for a lesson card. Returns quality 0-5 for SM-2. */
 export function scoreAnswer(
@@ -49,7 +48,6 @@ export function scoreAnswer(
     }
 
     case 'output': {
-      const d = card.data as { prompt: string; hint: string; exampleAnswer: string };
       if (!outputText || outputText.trim().length < 2) {
         return { correct: false, quality: 0, detail: '未提交输出' };
       }

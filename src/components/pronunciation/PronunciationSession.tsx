@@ -2,14 +2,15 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react';
 import {
-  ArrowLeft, Volume2, Mic, MicOff, Play, RefreshCw,
-  ChevronRight, Sparkles, Zap, RotateCcw, AlertTriangle,
+  ArrowLeft, Volume2, Mic, MicOff, Play,
+  ChevronRight, Sparkles, Zap, RotateCcw, AlertTriangle
 } from 'lucide-react';
 import type { PronunciationItem } from '@/types';
 import { AudioRecorder, isRecordingSupported, requestMicPermission, revokeRecording } from '@/lib/audio/recorder';
 import { globalPlayer } from '@/lib/audio/player';
 import { db } from '@/lib/db';
 import { awardXp, XP_REWARDS } from '@/lib/gamification';
+import { playClick, playSuccess, playComplete } from '@/lib/soundManager';
 
 interface Props {
   items: PronunciationItem[];
@@ -17,6 +18,41 @@ interface Props {
 }
 
 type StepType = 'target' | 'listen' | 'segments' | 'record' | 'compare' | 'settlement';
+
+function StepBadge({ label }: { label: string }) {
+  return (
+    <span className="text-[11px] px-2.5 py-1 rounded-full font-medium bg-[var(--pink-primary)]/10 text-[var(--pink-primary)]">
+      {label}
+    </span>
+  );
+}
+
+function PlayBtn({
+  onClick,
+  size = 22,
+  label,
+  isPlaying,
+}: {
+  onClick: () => void;
+  size?: number;
+  label?: string;
+  isPlaying: boolean;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={isPlaying}
+      className={`p-4 rounded-2xl transition-all ${
+        isPlaying
+          ? 'bg-[var(--pink-primary)]/20 text-[var(--pink-primary)] animate-pulse'
+          : 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] hover:bg-[var(--pink-primary)]/20'
+      }`}
+    >
+      <Volume2 size={size} />
+      {label && <span className="block text-xs mt-1">{label}</span>}
+    </button>
+  );
+}
 
 export function PronunciationSession({ items, onClose }: Props) {
   const [itemIdx, setItemIdx] = useState(0);
@@ -32,26 +68,13 @@ export function PronunciationSession({ items, onClose }: Props) {
   const cleanupRef = useRef<string | null>(null);
 
   const item = items[itemIdx];
-  if (!item) {
-    return (
-      <div className="py-12 max-w-lg mx-auto text-center space-y-4">
-        <div className="text-5xl">📭</div>
-        <h2 className="text-lg font-bold text-[var(--text-primary)]">暂无发音练习内容</h2>
-        <p className="text-sm text-[var(--text-muted)]">请先添加一些发音练习项目</p>
-        <button onClick={onClose} className="px-6 py-2.5 rounded-xl bg-[var(--pink-primary)] text-white text-sm font-medium">
-          返回
-        </button>
-      </div>
-    );
-  }
 
-  // Listen to global player state
+  // All hooks must be called unconditionally (before any early return)
   useEffect(() => {
     globalPlayer.setStateChange(setPlayerState);
     return () => { globalPlayer.stop(); };
   }, []);
 
-  // Cleanup recording URL on unmount or item change
   useEffect(() => {
     return () => {
       if (cleanupRef.current) {
@@ -62,17 +85,16 @@ export function PronunciationSession({ items, onClose }: Props) {
   }, [itemIdx]);
 
   const rate = slowMode ? 0.6 : 0.85;
+  const currentItemId = item?.id ?? '';
 
-  // ── Play standard audio ──
   const playStandard = useCallback(() => {
-    globalPlayer.speakTTS(item.textKo, rate);
-  }, [item.textKo, rate]);
+    if (item) globalPlayer.speakTTS(item.textKo, rate);
+  }, [item, rate]);
 
   const playSegment = useCallback((text: string) => {
     globalPlayer.speakTTS(text, rate);
   }, [rate]);
 
-  // ── Recording ──
   const startRecording = useCallback(async () => {
     setMicError(null);
     if (!isRecordingSupported()) {
@@ -89,38 +111,39 @@ export function PronunciationSession({ items, onClose }: Props) {
       setMicError(result.error);
       return;
     }
+    playClick();
     setRecording(true);
   }, [recorder]);
 
   const stopRecording = useCallback(async () => {
     const result = await recorder.stop();
     setRecording(false);
-    if (result) {
+    playSuccess();
+    if (result && item) {
       if (cleanupRef.current) revokeRecording(cleanupRef.current);
       setRecordingUrl(result.url);
       cleanupRef.current = result.url;
       setTotalAttempts((p) => p + 1);
       globalPlayer.stop();
 
-      // Save attempt
       try {
         await db.pronunciationAttempts.put({
           id: crypto.randomUUID(),
-          itemId: item.id,
+          itemId: currentItemId,
           durationMs: result.durationMs,
           createdAt: Date.now(),
         });
         await awardXp(XP_REWARDS.wordReviewed);
-      } catch (_) {}
+      } catch (_e) {}
     }
-  }, [recorder, item]);
+  }, [recorder, item, currentItemId]);
 
   const playRecording = useCallback(() => {
     if (recordingUrl) globalPlayer.play(recordingUrl, 1);
   }, [recordingUrl]);
 
-  // ── Navigation ──
   const goNextStep = useCallback(() => {
+    if (!item) return;
     const seq: StepType[] = item.segments?.length
       ? ['target', 'listen', 'segments', 'record', 'compare']
       : ['target', 'listen', 'record', 'compare'];
@@ -129,7 +152,6 @@ export function PronunciationSession({ items, onClose }: Props) {
     if (idx >= 0 && idx < seq.length - 1) {
       setStep(seq[idx + 1]);
     } else {
-      // Move to next item or settlement
       if (itemIdx + 1 < items.length) {
         setItemIdx(itemIdx + 1);
         setStep('target');
@@ -140,7 +162,7 @@ export function PronunciationSession({ items, onClose }: Props) {
         setStep('settlement');
       }
     }
-  }, [step, itemIdx, items.length, item.segments]);
+  }, [step, itemIdx, items.length, item]);
 
   const handleReRecord = useCallback(() => {
     setRecordingUrl(null);
@@ -160,27 +182,23 @@ export function PronunciationSession({ items, onClose }: Props) {
 
   const isPlaying = playerState === 'playing' || playerState === 'loading';
 
-  // ── Render helpers ──
-  const StepBadge = ({ label }: { label: string }) => (
-    <span className="text-[10px] px-2.5 py-1 rounded-full font-medium bg-[var(--pink-primary)]/10 text-[var(--pink-primary)]">
-      {label}
-    </span>
-  );
+  useEffect(() => {
+    if (step === 'settlement') playComplete();
+  }, [step]);
 
-  const PlayBtn = ({ onClick, size = 22, label }: { onClick: () => void; size?: number; label?: string }) => (
-    <button
-      onClick={onClick}
-      disabled={isPlaying}
-      className={`p-4 rounded-2xl transition-all ${
-        isPlaying
-          ? 'bg-[var(--pink-primary)]/20 text-[var(--pink-primary)] animate-pulse'
-          : 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] hover:bg-[var(--pink-primary)]/20'
-      }`}
-    >
-      <Volume2 size={size} />
-      {label && <span className="block text-xs mt-1">{label}</span>}
-    </button>
-  );
+  // Early returns happen AFTER all hooks
+  if (!item) {
+    return (
+      <div className="py-12 max-w-lg mx-auto text-center space-y-4">
+        <div className="text-5xl">📭</div>
+        <h2 className="text-lg font-bold text-[var(--text-primary)]">暂无发音练习内容</h2>
+        <p className="text-sm text-[var(--text-muted)]">请先添加一些发音练习项目</p>
+        <button onClick={onClose} className="px-6 py-2.5 rounded-xl bg-[var(--pink-primary)] text-white text-sm font-medium">
+          返回
+        </button>
+      </div>
+    );
+  }
 
   // ═══════════════════════════════════════════
   // SETTLEMENT
@@ -300,7 +318,7 @@ export function PronunciationSession({ items, onClose }: Props) {
               <p className="text-sm text-[var(--text-muted)] font-mono">[{item.romanization}]</p>
             )}
             <div className="flex items-center gap-4">
-              <PlayBtn onClick={playStandard} size={28} label="标准" />
+              <PlayBtn onClick={playStandard} size={28} label="标准" isPlaying={isPlaying} />
             </div>
             <div className="flex items-center gap-2">
               <button

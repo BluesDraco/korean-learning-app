@@ -4,7 +4,9 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Check, Play, Lock, Loader2 } from 'lucide-react';
 import { db } from '@/lib/db';
+import { useFeedback } from '@/hooks/useFeedback';
 import { thirtyDayCourse } from '@/data/thirtyDayCourse';
+import { ToriCardMascot } from '@/components/mobile/ToriCardMascot';
 
 const weeks = [
   { label: '第一周', sub: '日常问候与自我介绍', days: [1, 2, 3, 4, 5, 6, 7], color: '#FF8FAB' },
@@ -16,6 +18,7 @@ const weeks = [
 export default function CoursePage() {
   const [completedDays, setCompletedDays] = useState<Set<number>>(new Set());
   const [loading, setLoading] = useState(true);
+  const { click: feedbackClick } = useFeedback();
 
   useEffect(() => {
     db.words.toArray().then((words) => {
@@ -55,35 +58,38 @@ export default function CoursePage() {
       </div>
 
       {/* Progress overview */}
-      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-5 mb-6">
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-sm font-medium text-[var(--text-primary)]">学习进度</span>
-          <span className="text-xs text-[var(--text-muted)]">{completedCount} / 30 天已完成</span>
+      <div className="relative overflow-visible bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-5 pr-28 mb-6">
+        <div className="relative z-10">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-sm font-medium text-[var(--text-primary)]">学习进度</span>
+            <span className="text-xs text-[var(--text-muted)]">{completedCount} / 30 天已完成</span>
+          </div>
+          <div className="w-full bg-[var(--bg-input)] rounded-full h-2.5 mb-4">
+            <div
+              className="h-2.5 rounded-full bg-gradient-to-r from-[var(--pink-primary)] to-[var(--purple-soft)] transition-all duration-700"
+              style={{ width: `${Math.max(3, Math.round((completedCount / 30) * 100))}%` }}
+            />
+          </div>
+          <div className="grid grid-cols-4 gap-3 text-center">
+            <div>
+              <div className="text-xl font-bold text-[var(--pink-primary)]">240</div>
+              <div className="text-[11px] text-[var(--text-muted)] mt-0.5">单词</div>
+            </div>
+            <div>
+              <div className="text-xl font-bold text-[var(--purple-soft)]">30</div>
+              <div className="text-[11px] text-[var(--text-muted)] mt-0.5">语法点</div>
+            </div>
+            <div>
+              <div className="text-xl font-bold text-[var(--mint-soft)]">90</div>
+              <div className="text-[11px] text-[var(--text-muted)] mt-0.5">实用句</div>
+            </div>
+            <div>
+              <div className="text-xl font-bold text-[var(--amber-soft)]">30</div>
+              <div className="text-[11px] text-[var(--text-muted)] mt-0.5">输出任务</div>
+            </div>
+          </div>
         </div>
-        <div className="w-full bg-[var(--bg-input)] rounded-full h-2.5 mb-4">
-          <div
-            className="h-2.5 rounded-full bg-gradient-to-r from-[var(--pink-primary)] to-[var(--purple-soft)] transition-all duration-700"
-            style={{ width: `${Math.max(3, Math.round((completedCount / 30) * 100))}%` }}
-          />
-        </div>
-        <div className="grid grid-cols-4 gap-3 text-center">
-          <div>
-            <div className="text-xl font-bold text-[var(--pink-primary)]">240</div>
-            <div className="text-[11px] text-[var(--text-muted)] mt-0.5">单词</div>
-          </div>
-          <div>
-            <div className="text-xl font-bold text-[var(--purple-soft)]">30</div>
-            <div className="text-[11px] text-[var(--text-muted)] mt-0.5">语法点</div>
-          </div>
-          <div>
-            <div className="text-xl font-bold text-[var(--mint-soft)]">90</div>
-            <div className="text-[11px] text-[var(--text-muted)] mt-0.5">实用句</div>
-          </div>
-          <div>
-            <div className="text-xl font-bold text-[var(--amber-soft)]">30</div>
-            <div className="text-[11px] text-[var(--text-muted)] mt-0.5">输出任务</div>
-          </div>
-        </div>
+        <ToriCardMascot pose="sit" size="md" />
       </div>
 
       {/* Course timeline */}
@@ -106,6 +112,7 @@ export default function CoursePage() {
                   <Link
                     key={dayNum}
                     href={`/course/${dayNum}?source=course`}
+                    onClick={feedbackClick}
                     className={`rounded-xl p-3 text-center transition-all group border ${
                       isCompleted
                         ? 'bg-[var(--mint-soft)]/5 border-[var(--mint-soft)]/20 hover:border-[var(--mint-soft)]/40'

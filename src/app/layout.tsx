@@ -5,20 +5,21 @@ import { AppShell } from '@/components/AppShell';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { AuthProvider } from '@/components/AuthProvider';
 import { FontProvider } from '@/components/FontProvider';
-import { FloatingDecorations } from '@/components/FloatingDecorations';
 import { PageViewTracker } from '@/components/PageViewTracker';
 import { XpOverlay } from '@/components/XpOverlay';
 import { FeedbackButton } from '@/components/FeedbackButton';
+import { ToastProvider } from '@/hooks/useToast';
+import { ToriToastContainer } from '@/components/ToriToast';
 import ScrollToTop from '@/components/ScrollToTop';
 
 export const metadata: Metadata = {
-  title: '한국어 - 韩语学习',
-  description: 'YouTube学韩语，智能背单词，影子跟读练口语',
+  title: '토리的 韩语日记',
+  description: '用喜欢的内容学韩语 — KPOP、韩娱热点、绘本、韩剧表达',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: '韩语学习',
+    title: '토리的 韩语日记',
   },
 };
 
@@ -26,6 +27,7 @@ export const viewport: Viewport = {
   themeColor: '#FFFBF7',
   width: 'device-width',
   initialScale: 1,
+  viewportFit: 'cover',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -43,9 +45,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProvider>
           <FontProvider>
           <AuthProvider>
-          <FloatingDecorations />
+          <ToastProvider>
           <PageViewTracker />
           <AppShell>{children}</AppShell>
+          <ToriToastContainer />
+          </ToastProvider>
           </AuthProvider>
           </FontProvider>
         </ThemeProvider>

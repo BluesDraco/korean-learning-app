@@ -139,7 +139,7 @@ export default function ReadingPractice({ words, step }: { words: ReadingWord[];
                   <span className="text-[var(--text-placeholder)]">({sectionWords.length}个)</span>
                 </h3>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                  {sectionWords.map((w, i) => {
+                  {sectionWords.map((w, _i) => {
                     const globalIdx = words.indexOf(w);
                     const isRevealed = revealed.has(globalIdx);
                     return (

@@ -6,11 +6,18 @@ import { db } from '@/lib/db';
 import { awardXp, XP_REWARDS, updateStreak } from '@/lib/gamification';
 import { KoreanKeyboard } from '@/components/KoreanKeyboard';
 import { HandwritingPad } from '@/components/HandwritingPad';
+import { useIsMobile } from '@/lib/useIsMobile';
 import { dictationWordPacks, type DictationWord } from '@/data/dictationWords';
 import { dictationSentences, type DictationSentence } from '@/data/dictationSentences';
-import { speakBrowser, cancelSpeech } from '@/lib/tts';
+import { speakBrowser } from '@/lib/tts';
+import { useFeedback } from '@/hooks/useFeedback';
 import type { Word } from '@/types';
 import { getCharDiff } from '@/lib/koreanDiff';
+
+/** Normalize Korean input for comparison — NFC normalization + trim + collapse whitespace */
+function normalizeKorean(v: string): string {
+  return v.normalize('NFC').trim().replace(/\s+/g, ' ');
+}
 
 type Mode = 'word' | 'sentence' | 'daily';
 type WordSource = 'builtin' | 'mywords';
@@ -60,6 +67,7 @@ const allBuiltinWords = new Map<string, DictationWord>();
 dictationWordPacks.forEach((p) => p.words.forEach((w) => allBuiltinWords.set(w.id, w)));
 
 export default function DictationPage() {
+  const isMobile = useIsMobile();
   const [mode, setMode] = useState<Mode>('word');
   const [wordSource, setWordSource] = useState<WordSource>('builtin');
   const [packId, setPackId] = useState('beginner');
@@ -87,6 +95,7 @@ export default function DictationPage() {
   const [dailyDone, setDailyDone] = useState(false);
   const [speed, setSpeed] = useState(1.0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { success: feedbackSuccess, error: feedbackError, click: feedbackClick } = useFeedback();
 
   // Load word dictation data
   const loadWords = useCallback(async () => {
@@ -131,6 +140,7 @@ export default function DictationPage() {
     setStats({ correct: 0, total: 0 });
     setComplete(false);
     setEarnedXp(0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode, loadWords, loadSentences, loadDaily]);
 
   const resetRound = useCallback(() => {
@@ -166,12 +176,13 @@ export default function DictationPage() {
     setKeyboardVisible(false);
 
     const correctAnswer = isWord(currentItem) ? currentItem.korean : (currentItem as DictationSentence).korean;
-    const isCorrect = userInput.trim() === correctAnswer;
+    const isCorrect = normalizeKorean(userInput) === normalizeKorean(correctAnswer);
 
     setStats((prev) => ({ correct: prev.correct + (isCorrect ? 1 : 0), total: prev.total + 1 }));
 
     if (isCorrect) {
       setError('');
+      feedbackSuccess('正确!');
       const { leveledUp: didLevelUp, newLevel: lvl } = await awardXp(XP_REWARDS.dictationCorrect);
       setEarnedXp((prev) => prev + XP_REWARDS.dictationCorrect);
       if (didLevelUp) { setLeveledUp(true); setNewLevel(lvl); }
@@ -180,6 +191,7 @@ export default function DictationPage() {
       setTimeout(() => setShowXpGain(false), 2000);
     } else {
       setError(`正确答案: ${correctAnswer}`);
+      feedbackError('再试试');
     }
 
     // Daily: save answer
@@ -364,7 +376,7 @@ export default function DictationPage() {
                 <button key={p.id} onClick={() => { setPackId(p.id); loadWords(); setCurrentIdx(0); resetRound(); }}
                   className={`flex-1 text-xs py-2 rounded-lg transition-colors ${packId === p.id ? 'bg-[var(--bg-accent)] text-[var(--text-primary)] font-medium ring-1 ring-[var(--pink-pale)]' : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-muted)]'}`}
                 >
-                  {p.emoji} {p.name}
+                  {p.name}
                 </button>
               ))}
             </div>
@@ -378,7 +390,7 @@ export default function DictationPage() {
             <button key={lv} onClick={() => { setSentenceLevel(lv); loadSentences(); setCurrentIdx(0); resetRound(); }}
               className={`flex-1 text-xs py-2 rounded-lg transition-colors ${sentenceLevel === lv ? 'bg-[var(--bg-accent)] text-[var(--text-primary)] font-medium ring-1 ring-[var(--pink-pale)]' : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-muted)]'}`}
             >
-              {lv === 'beginner' ? '🌱 初级' : lv === 'intermediate' ? '🌿 中级' : '🌳 高级'}
+              {lv === 'beginner' ? '初级' : lv === 'intermediate' ? '中级' : '高级'}
             </button>
           ))}
         </div>
@@ -404,7 +416,7 @@ export default function DictationPage() {
       <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 text-center space-y-5">
         {/* Play button */}
         <button
-          onClick={() => { speakBrowser(currentKorean, speed); setHasListened(true); }}
+          onClick={() => { feedbackClick(); speakBrowser(currentKorean, speed); setHasListened(true); }}
           className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto transition-all ${
             hasListened ? 'bg-[var(--mint-soft)]/10 hover:bg-[var(--mint-soft)]/20' : 'bg-[var(--pink-primary)]/10 hover:bg-[var(--pink-primary)]/20'
           }`}
@@ -413,7 +425,7 @@ export default function DictationPage() {
         </button>
 
         <p className="text-sm text-[var(--text-muted)]">
-          {hasListened ? '点击可重复播放' : '👆 点击按钮听发音'} · 输入你听到的内容
+          {hasListened ? '点击可重复播放' : '点击按钮听发音'} · 输入你听到的内容
         </p>
 
         {/* Speed slider */}
@@ -460,13 +472,15 @@ export default function DictationPage() {
               <input
                 ref={inputRef} type="text" value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
-                onFocus={() => setKeyboardVisible(true)}
+                onFocus={() => { if (isMobile) setKeyboardVisible(true); }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && !submitted) handleSubmit();
                   if (e.key === 'Enter' && submitted) handleNext();
                 }}
                 disabled={submitted}
+                readOnly={isMobile}
                 placeholder={mode === 'sentence' ? '输入韩语句子...' : '输入韩语...'}
+                inputMode={isMobile ? 'none' : 'text'}
                 className="flex-1 bg-[var(--bg-input)] border border-[var(--pink-pale)] rounded-xl py-3 px-4 text-[var(--text-primary)] text-center text-lg placeholder:text-[var(--text-muted)] focus:outline-none focus:border-purple-500"
               />
               <button onClick={() => setKeyboardVisible(!keyboardVisible)}
@@ -488,7 +502,7 @@ export default function DictationPage() {
         {submitted && (
           <div className={`p-3 rounded-xl ${error ? 'bg-[var(--color-danger-bg)]' : 'bg-[var(--mint-soft)]/15'}`}>
             {error ? (() => {
-              const diff = getCharDiff(userInput.trim(), currentKorean);
+              const diff = getCharDiff(normalizeKorean(userInput), normalizeKorean(currentKorean));
               return (
                 <div className="space-y-3">
                   <div className="flex items-center justify-center gap-2 text-[var(--color-danger)]"><X size={18} /><span>答错了</span></div>

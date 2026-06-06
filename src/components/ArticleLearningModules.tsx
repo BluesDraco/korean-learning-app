@@ -113,7 +113,6 @@ function PostReadingQuiz({ quiz }: { quiz: ArticleLearningData['quiz'] }) {
         <div className="px-5 pb-5 space-y-4">
           {quiz.map((q, qIdx) => {
             const selected = answers[qIdx];
-            const isCorrect = submitted && selected === q.correct;
 
             return (
               <div key={qIdx} className="space-y-2">

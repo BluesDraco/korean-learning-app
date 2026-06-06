@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import {
   ArrowLeft, Volume2, ChevronRight, Check, Sparkles,
@@ -10,15 +10,27 @@ import { readingArticles, levelLabel, levelColor } from '@/data/reading-new';
 import { speak, cancelSpeech } from '@/lib/tts';
 import { db } from '@/lib/db';
 import { awardXp, addStudyMinutes } from '@/lib/gamification';
-import type { Article, ArticleQuestion } from '@/types';
+import { useFeedback } from '@/hooks/useFeedback';
+import type { ArticleQuestion } from '@/types';
 
 type Step = 'goals' | 'vocab' | 'reading' | 'key_sentence' | 'quiz' | 'output' | 'settlement';
 
-const stepLabels: Record<Step, string> = {
-  goals: '学习目标', vocab: '核心词汇', reading: '分段阅读',
-  key_sentence: '重点句型', quiz: '理解检测', output: '输出练习',
-  settlement: '完成',
-};
+function hasBatchim(word: string): boolean {
+  if (!word) return false;
+  const lastChar = word[word.length - 1];
+  const code = lastChar.charCodeAt(0);
+  if (code < 0xAC00 || code > 0xD7A3) return false;
+  return (code - 0xAC00) % 28 !== 0;
+}
+
+function resolveParticle(template: string, word: string): string {
+  const batchim = hasBatchim(word);
+  return template
+    .replace('___', word)
+    .replace('을/를', batchim ? '을' : '를')
+    .replace('은/는', batchim ? '은' : '는')
+    .replace('이/가', batchim ? '이' : '가');
+}
 
 export default function ArticleReaderPage() {
   const router = useRouter();
@@ -38,6 +50,7 @@ export default function ArticleReaderPage() {
   const [outputValue, setOutputValue] = useState('');
   const [outputDone, setOutputDone] = useState(false);
   const completedRef = useRef(false);
+  const { success: feedbackSuccess, complete: feedbackComplete, click: feedbackClick } = useFeedback();
 
   useEffect(() => {
     if (!article || completedRef.current) return;
@@ -68,6 +81,17 @@ export default function ArticleReaderPage() {
     })();
     return () => { cancelSpeech(); };
   }, [article]);
+
+  // Auto-skip steps that have no data
+  useEffect(() => {
+    if (step === 'key_sentence' && article && !article.keySentence) {
+      setStep('quiz');
+    }
+    if (step === 'output' && article && !article.outputTask) {
+      handleComplete();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step, article]);
 
   if (!article) {
     return (
@@ -100,11 +124,14 @@ export default function ArticleReaderPage() {
   };
 
   const toggleSaveSentence = async (sId: string) => {
+    const wasSaved = savedSentences.has(sId);
     setSavedSentences((prev) => {
       const next = new Set(prev);
       if (next.has(sId)) next.delete(sId); else next.add(sId);
       return next;
     });
+    feedbackClick();
+    if (!wasSaved) feedbackSuccess('已收藏句子');
     try {
       const p = await db.userArticleProgress.get(article.id);
       const ids = new Set(p?.savedSentenceIds || []);
@@ -116,11 +143,14 @@ export default function ArticleReaderPage() {
   };
 
   const toggleSaveWord = async (word: string) => {
+    const wasSaved = savedWords.has(word);
     setSavedWords((prev) => {
       const next = new Set(prev);
       if (next.has(word)) next.delete(word); else next.add(word);
       return next;
     });
+    feedbackClick();
+    if (!wasSaved) feedbackSuccess('已加入单词本');
     try {
       const p = await db.userArticleProgress.get(article.id);
       const ids = new Set(p?.savedWordIds || []);
@@ -149,11 +179,11 @@ export default function ArticleReaderPage() {
 
   const handleQuizAnswer = (q: ArticleQuestion, answer: string) => {
     setQuizAnswers((prev) => ({ ...prev, [q.id]: answer }));
-    if (answer === q.answer) setQuizCorrect((prev) => prev + 1);
+    if (answer === (q.options?.[q.answer] ?? '')) setQuizCorrect((prev) => prev + 1);
     setQuizRevealed((prev) => ({ ...prev, [q.id]: true }));
     db.articleLearningEvents.put({
       id: crypto.randomUUID(), articleId: article.id,
-      action: 'answer_question', payload: { questionId: q.id, answer, correct: answer === q.answer },
+      action: 'answer_question', payload: { questionId: q.id, answer, correct: answer === (q.options?.[q.answer] ?? '') },
       createdAt: Date.now(),
     }).catch(() => {});
   };
@@ -186,6 +216,7 @@ export default function ArticleReaderPage() {
       awardXp(10);
       addStudyMinutes(article.estimatedMinutes);
     } catch {}
+    feedbackComplete('阅读完成!');
     setStep('settlement');
   };
 
@@ -419,7 +450,18 @@ export default function ArticleReaderPage() {
         </div>
       )}
 
-      {/* ── Step: Key Sentence ── */}
+      {/* ── Step: Key Sentence ── auto-skip if no data */}
+      {step === 'key_sentence' && !article.keySentence && (
+        <div className="py-8 text-center">
+          <p className="text-sm text-[var(--text-muted)] mb-4">暂无重点句型</p>
+          <button
+            onClick={() => setStep('quiz')}
+            className="flex items-center justify-center gap-2 mx-auto px-6 py-3 bg-gradient-to-r from-[var(--mint-soft)] to-[var(--purple-soft)] text-white rounded-2xl font-bold text-sm"
+          >
+            继续做理解检测 <ChevronRight size={18} />
+          </button>
+        </div>
+      )}
       {step === 'key_sentence' && article.keySentence && (
         <div className="space-y-4 animate-fade-in">
           <div className="bg-[var(--bg-card)] border-2 border-[var(--mint-soft)]/20 rounded-2xl p-5 space-y-4">
@@ -494,7 +536,7 @@ export default function ArticleReaderPage() {
                   {q.options?.map((opt) => {
                     const isAnswered = quizAnswers[q.id];
                     const isSelected = isAnswered === opt;
-                    const isCorrect = opt === q.answer;
+                    const isCorrect = opt === (q.options?.[q.answer] ?? '');
                     let btnClass = 'bg-[var(--bg-input)] border border-[var(--border-color)] hover:border-[var(--border-hover)]';
                     if (isAnswered && quizRevealed[q.id]) {
                       if (isCorrect) btnClass = 'bg-[var(--mint-soft)]/15 border-[var(--mint-soft)]/50 text-[var(--mint-soft)]';
@@ -541,7 +583,18 @@ export default function ArticleReaderPage() {
         </div>
       )}
 
-      {/* ── Step: Output ── */}
+      {/* ── Step: Output ── auto-skip if no data */}
+      {step === 'output' && !article.outputTask && (
+        <div className="py-8 text-center">
+          <p className="text-sm text-[var(--text-muted)] mb-4">暂无输出练习</p>
+          <button
+            onClick={handleComplete}
+            className="flex items-center justify-center gap-2 mx-auto px-6 py-3 bg-gradient-to-r from-[var(--mint-soft)] to-[var(--purple-soft)] text-white rounded-2xl font-bold text-sm"
+          >
+            完成阅读 <Trophy size={18} />
+          </button>
+        </div>
+      )}
       {step === 'output' && article.outputTask && (
         <div className="space-y-4 animate-fade-in">
           <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-5 space-y-4">
@@ -566,7 +619,7 @@ export default function ArticleReaderPage() {
                   {article.outputTask.slots.map((slot) => (
                     <button
                       key={slot}
-                      onClick={() => setOutputValue((prev) => prev ? '' : article.outputTask!.template.replace('___', slot))}
+                      onClick={() => setOutputValue((prev) => prev ? '' : resolveParticle(article.outputTask!.template, slot))}
                       className={`text-xs px-3 py-1.5 rounded-lg border transition-colors ${
                         outputValue.includes(slot)
                           ? 'bg-[var(--mint-soft)]/15 border-[var(--mint-soft)]/50 text-[var(--mint-soft)]'
@@ -589,9 +642,10 @@ export default function ArticleReaderPage() {
             </div>
 
             {outputDone && (
-              <div className="bg-[var(--mint-soft)]/10 border border-[var(--mint-soft)]/20 rounded-xl p-3 text-center animate-fade-in">
-                <Check size={16} className="text-[var(--mint-soft)] mx-auto mb-1" />
-                <p className="text-xs text-[var(--mint-soft)]">你的句子：{outputValue}</p>
+              <div className="bg-[var(--mint-soft)]/15 border border-[var(--mint-soft)]/30 rounded-xl p-4 text-center animate-fade-in">
+                <Check size={18} className="text-[var(--mint-soft)] mx-auto mb-1.5" />
+                <p className="text-sm font-medium text-[var(--mint-soft)]">已提交</p>
+                <p className="text-base font-bold text-[var(--text-primary)] mt-1">{outputValue}</p>
               </div>
             )}
           </div>
@@ -609,7 +663,7 @@ export default function ArticleReaderPage() {
               onClick={handleComplete}
               className="w-full flex items-center justify-center gap-2 py-4 bg-gradient-to-r from-[var(--mint-soft)] to-[var(--purple-soft)] text-white rounded-2xl font-bold text-sm active:scale-[0.97] transition-all"
             >
-              完成阅读 <Trophy size={18} />
+              完成输出 <Trophy size={18} />
             </button>
           )}
         </div>
@@ -625,7 +679,7 @@ export default function ArticleReaderPage() {
           <div>
             <h2 className="text-xl font-bold text-[var(--text-primary)]">阅读完成！</h2>
             <p className="text-sm text-[var(--text-secondary)] mt-1">
-              你读完了第一篇韩语短文
+              你读完了《{article.title}》
             </p>
           </div>
 

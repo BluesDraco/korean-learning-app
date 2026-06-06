@@ -1,187 +1,92 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Film, Loader2, Trash2, Play, Link2, AlertCircle } from 'lucide-react';
-import { db } from '@/lib/db';
-import type { StudyVideo } from '@/types';
+import { shadowingClips } from '@/data/shadowingClips';
+
+const C = {
+  ink: '#241917', muted: '#89756e', line: '#eee0d8', pink: '#ff7fa8',
+  pinkSoft: '#fff0f5', mint: '#aee3d8', cream: '#fff8f4', black: '#201815',
+  mintBg: '#eaf8f5', mintText: '#4e746d',
+  shadow: '0 16px 42px rgba(78,52,46,.10)',
+  strong: '0 28px 72px rgba(78,52,46,.18)',
+};
 
 export default function ShadowingListPage() {
   const router = useRouter();
-  const [videos, setVideos] = useState<StudyVideo[]>([]);
-  const [url, setUrl] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [adding, setAdding] = useState(false);
-  const [error, setError] = useState('');
-  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
-
-  const loadVideos = useCallback(async () => {
-    const list = await db.studyVideos.orderBy('addedAt').reverse().toArray();
-    setVideos(list);
-    setLoading(false);
-  }, []);
-
-  useEffect(() => { loadVideos(); }, [loadVideos]);
-
-  const handleAdd = async () => {
-    setError('');
-    setAdding(true);
-    try {
-      // Use server-side proxy to detect platform and fetch video info (avoids CORS)
-      const infoRes = await fetch('/api/video-info', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: url.trim() }),
-      });
-      const info = await infoRes.json();
-
-      if (info.platform === 'unknown') {
-        setError('暂不支持此平台，请使用B站或YouTube链接');
-        setAdding(false);
-        return;
-      }
-
-      const newVideo: StudyVideo = {
-        id: crypto.randomUUID(),
-        url: url.trim(),
-        platform: info.platform,
-        platformId: info.platformId,
-        title: info.title || `${info.platform === 'bilibili' ? 'B站' : 'YouTube'}视频 (${info.platformId})`,
-        thumbnail: info.thumbnail || '',
-        subtitleSource: 'manual',
-        addedAt: Date.now(),
-        lastStudiedAt: Date.now(),
-      };
-
-      await db.studyVideos.put(newVideo);
-      setUrl('');
-      router.push(`/shadowing/${newVideo.id}`);
-    } catch (err: any) {
-      setError(err.message || '添加失败');
-    } finally {
-      setAdding(false);
-    }
-  };
-
-  const handleDelete = async (video: StudyVideo) => {
-    if (deleteConfirm !== video.id) {
-      setDeleteConfirm(video.id);
-      return;
-    }
-    await db.studySubtitles.where('videoId').equals(video.id).delete();
-    await db.videoStudyLogs.where('videoId').equals(video.id).delete();
-    await db.studyVideos.delete(video.id);
-    setDeleteConfirm(null);
-    await loadVideos();
-  };
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center py-32">
-        <Loader2 size={32} className="animate-spin text-[var(--text-secondary)]" />
-      </div>
-    );
-  }
 
   return (
-    <div className="py-4 space-y-5">
-      <div>
-        <h1 className="text-2xl font-bold text-[var(--text-primary)]">影子跟读</h1>
-        <p className="text-[var(--text-secondary)] text-sm mt-1">粘贴视频链接，导入字幕，逐句影子跟读学习</p>
+    <div style={{ paddingBottom: 24 }}>
+
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, marginBottom: 14 }}>
+        <button onClick={() => router.back()} style={{ width: 38, height: 38, borderRadius: 16, background: '#fff', border: '1px solid ' + C.line, fontSize: 20, color: '#4d3933', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}>{'‹'}</button>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontSize: 17, fontWeight: 800, color: C.ink }}>{'影子跟读'}</div>
+          <div style={{ fontSize: 12, color: C.muted, fontWeight: 700, marginTop: 2 }}>{'韩剧 / 综艺 / YouTube 片段'}</div>
+        </div>
+        <div style={{ height: 30, padding: '0 11px', borderRadius: 999, background: C.pinkSoft, color: '#f0799b', fontSize: 11, fontWeight: 800, border: '1px solid rgba(255,127,168,.16)', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+          {'核心功能'}
+        </div>
       </div>
 
-      {/* Add video */}
-      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-4 space-y-3">
-        <div className="flex gap-3">
-          <div className="flex-1 relative">
-            <Link2 size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
-            <input
-              type="text"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              placeholder="粘贴B站或YouTube视频链接..."
-              className="w-full bg-[var(--bg-input)] border border-[var(--pink-pale)] rounded-lg py-2.5 pl-10 pr-4 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--pink-primary)]"
-              disabled={adding}
-              onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
-            />
-          </div>
-          <button
-            onClick={handleAdd}
-            disabled={adding || !url.trim()}
-            className="flex items-center gap-2 px-5 py-2.5 bg-[var(--pink-primary)] hover:opacity-90 disabled:opacity-40 text-[var(--text-primary)] text-sm font-medium rounded-lg transition-opacity"
-          >
-            {adding ? <Loader2 size={16} className="animate-spin" /> : <Play size={16} />}
-            开始学习
-          </button>
+      <div style={{
+        borderRadius: 32, padding: 20,
+        background: 'radial-gradient(circle at 88% 78%, rgba(255,255,255,.58), transparent 24%), linear-gradient(135deg, #201815, #4d3934 46%, #ff8daf 132%)',
+        color: '#fff', boxShadow: C.strong, border: '1px solid rgba(255,255,255,.92)',
+        marginBottom: 20, overflow: 'hidden', position: 'relative', minHeight: 202,
+      }}>
+        <div style={{ height: 34, padding: '0 13px', borderRadius: 999, background: 'rgba(255,255,255,.14)', color: '#fff', fontWeight: 800, fontSize: 12, border: '1px solid rgba(255,255,255,.18)', display: 'inline-flex', alignItems: 'center' }}>
+          {'🎬 影子跟读'}
         </div>
-        {error && (
-          <div className="flex items-center gap-1.5 text-xs text-[var(--color-danger)]">
-            <AlertCircle size={12} />
-            {error}
-          </div>
-        )}
-        <p className="text-[11px] text-[var(--text-muted)]">
-          支持 B站 (bilibili.com) 和 YouTube 链接。首次打开后上传SRT字幕即可开始影子跟读。
+        <h1 style={{ margin: '14px 0 0', maxWidth: 245, fontSize: 27, lineHeight: 1.1, letterSpacing: '-.8px', fontWeight: 800 }}>
+          {'边看视频，边跟着真实语速说韩语'}
+        </h1>
+        <p style={{ margin: '10px 0 0', maxWidth: 242, fontSize: 13, lineHeight: 1.55, color: 'rgba(255,255,255,.74)' }}>
+          {'字幕自动滚动，点击单词看中文。暂停、循环、录音、保存词句，一次完成听说读。'}
         </p>
+        <div style={{ position: 'absolute', right: -42, bottom: -68, width: 210, height: 210, borderRadius: '50%', background: 'rgba(255,255,255,.12)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', right: 24, bottom: 8, width: 112, height: 132, pointerEvents: 'none' }}>
+          <div style={{ position: 'absolute', left: 38, top: 0, width: 25, height: 66, borderRadius: 999, background: 'linear-gradient(180deg,#fff,#fff4f8)', transform: 'rotate(-12deg)' }} />
+          <div style={{ position: 'absolute', right: 22, top: 0, width: 25, height: 66, borderRadius: 999, background: 'linear-gradient(180deg,#fff,#fff4f8)', transform: 'rotate(14deg)' }} />
+          <div style={{ position: 'absolute', top: 48, right: 10, width: 90, height: 78, borderRadius: 40, background: 'linear-gradient(180deg,#fff,#fff8fa)' }}>
+            <div style={{ position: 'absolute', top: 34, left: 30, width: 7, height: 7, borderRadius: '50%', background: '#241917' }} />
+            <div style={{ position: 'absolute', top: 34, right: 30, width: 7, height: 7, borderRadius: '50%', background: '#241917' }} />
+          </div>
+        </div>
       </div>
 
-      {/* Video list */}
-      {videos.length === 0 ? (
-        <div className="text-center py-16 space-y-3">
-          <Film size={48} className="text-[var(--text-placeholder)] mx-auto" />
-          <p className="text-[var(--text-muted)] text-sm">还没有学习过的视频</p>
-          <p className="text-[var(--text-muted)] text-xs">粘贴链接开始你的第一次影子跟读</p>
-        </div>
-      ) : (
-        <div className="space-y-2">
-          <h2 className="text-sm font-medium text-[var(--text-secondary)] uppercase tracking-wider">学习记录</h2>
-          {videos.map((video) => (
+      <h2 style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-.3px', color: C.ink, margin: '0 2px 14px' }}>{'精选片段'}</h2>
+
+      <div style={{ display: 'grid', gap: 12 }}>
+        {shadowingClips.map((clip, i) => {
+          const isActive = i === 0;
+          return (
             <div
-              key={video.id}
-              className="flex items-center gap-3 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-3 hover:border-[var(--border-hover)] transition-colors"
+              key={clip.id}
+              onClick={() => router.push('/shadowing/clip/' + clip.id)}
+              style={{
+                display: 'flex', gap: 14, alignItems: 'center', borderRadius: 28,
+                padding: 14, background: isActive ? C.mintBg : '#fff',
+                border: '1px solid ' + (isActive ? 'rgba(174,227,216,.5)' : C.line),
+                boxShadow: C.shadow, cursor: 'pointer',
+              }}
             >
-              <div className="w-20 h-12 rounded-lg bg-[var(--bg-input)] overflow-hidden shrink-0 relative">
-                {video.thumbnail ? (
-                  <Image src={video.thumbnail} alt="" fill className="object-cover" unoptimized />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-[var(--text-muted)]">
-                    <Film size={18} />
-                  </div>
-                )}
-              </div>
-              <div className="flex-1 min-w-0">
-                <h3 className="text-sm font-medium text-[var(--text-primary)] truncate">{video.title}</h3>
-                <div className="flex items-center gap-2 mt-0.5">
-                  <span className="text-[11px] text-[var(--text-muted)]">
-                    {video.platform === 'bilibili' ? 'B站' : 'YouTube'}
-                  </span>
+              <img src={clip.coverUrl} alt={clip.title} style={{ width: 88, height: 88, borderRadius: 22, flexShrink: 0, objectFit: 'cover' }} />
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <h3 style={{ fontSize: 15, fontWeight: 800, color: C.ink, margin: 0 }}>{clip.title}</h3>
+                {'speaker' in clip && clip.speaker && <div style={{ fontSize: 12, color: '#f0799b', fontWeight: 700, marginTop: 1 }}>{clip.speaker}</div>}
+                <p style={{ color: C.muted, fontSize: 12, lineHeight: 1.4, marginTop: 5 }}>{clip.description}</p>
+                <div style={{ display: 'flex', gap: 6, marginTop: 8, flexWrap: 'wrap' }}>
+                  <span style={{ height: 22, padding: '0 8px', borderRadius: 999, background: C.cream, border: '1px solid ' + C.line, color: '#7a665f', fontSize: 10, fontWeight: 800, display: 'inline-flex', alignItems: 'center' }}>{clip.durationLabel}</span>
+                  <span style={{ height: 22, padding: '0 8px', borderRadius: 999, background: C.cream, border: '1px solid ' + C.line, color: '#7a665f', fontSize: 10, fontWeight: 800, display: 'inline-flex', alignItems: 'center' }}>{clip.difficulty}</span>
+                  <span style={{ height: 22, padding: '0 8px', borderRadius: 999, background: C.cream, border: '1px solid ' + C.line, color: '#7a665f', fontSize: 10, fontWeight: 800, display: 'inline-flex', alignItems: 'center' }}>{clip.subtitleCount}{'句'}</span>
+                  {isActive && <span style={{ height: 22, padding: '0 8px', borderRadius: 999, background: C.mint, color: C.mintText, fontSize: 10, fontWeight: 800, display: 'inline-flex', alignItems: 'center' }}>{'当前'}</span>}
                 </div>
               </div>
-              <div className="flex items-center gap-1">
-                <Link
-                  href={`/shadowing/${video.id}`}
-                  className="p-2 text-[var(--pink-primary)] hover:bg-[var(--pink-primary)]/10 rounded-lg transition-colors"
-                >
-                  <Play size={16} />
-                </Link>
-                <button
-                  onClick={(e) => { e.stopPropagation(); handleDelete(video); }}
-                  className={`p-2 rounded-lg transition-colors ${
-                    deleteConfirm === video.id
-                      ? 'text-white bg-red-500 hover:bg-red-600'
-                      : 'text-[var(--text-muted)] hover:text-[var(--color-danger)] hover:bg-[var(--color-danger-bg)]'
-                  }`}
-                  title={deleteConfirm === video.id ? '再次点击确认删除' : '删除'}
-                >
-                  <Trash2 size={14} />
-                </button>
-              </div>
+              <div style={{ width: 32, height: 32, borderRadius: '50%', background: C.black, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, flexShrink: 0 }}>{'▶'}</div>
             </div>
-          ))}
-        </div>
-      )}
+          );
+        })}
+      </div>
     </div>
   );
 }

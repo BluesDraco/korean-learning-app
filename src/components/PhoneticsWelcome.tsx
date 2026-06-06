@@ -51,12 +51,13 @@ export default function PhoneticsWelcome({ onDone }: { onDone: () => void }) {
   const isLast = step === STEPS.length - 1;
 
   return (
-    <div className="fixed inset-0 z-50 bg-[var(--bg-primary)] flex items-center justify-center p-4 animate-fade-in">
-      <div className="max-w-lg w-full space-y-8">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#fff7fa]/90 backdrop-blur-md">
+      {/* White card */}
+      <div className="relative w-full max-w-[380px] max-h-[calc(100dvh-48px)] overflow-y-auto rounded-[32px] bg-white border border-pink-100 shadow-[0_18px_48px_rgba(120,70,90,0.16)] p-6 space-y-6">
         {/* Dismiss button */}
         <button
           onClick={() => setDismissed(true)}
-          className="absolute top-4 right-4 p-2 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
+          className="absolute top-4 right-4 p-2 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors z-10"
         >
           <X size={20} />
         </button>
@@ -109,7 +110,7 @@ export default function PhoneticsWelcome({ onDone }: { onDone: () => void }) {
                 onClick={() => speak('가', 0.7)}
                 className="bg-gradient-to-br from-[var(--pink-primary)]/20 to-[var(--purple-soft)]/20 text-[var(--text-primary)] px-6 py-3 rounded-2xl text-3xl hover:scale-105 transition-transform"
               >
-                가
+                加
                 <Volume2 size={14} className="inline ml-2 text-[var(--text-muted)]" />
               </button>
             </div>
@@ -276,6 +277,6 @@ export function hasSeenWelcome(): boolean {
   try {
     return localStorage.getItem(WELCOME_KEY) === '1';
   } catch {
-    return true; // If localStorage fails, skip welcome
+    return true;
   }
 }

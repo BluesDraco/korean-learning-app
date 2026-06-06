@@ -1,7 +1,11 @@
 import { NextResponse } from 'next/server';
 import { fetchWithTimeout } from '@/lib/fetch';
+import { getAuthFromCookie } from '@/lib/server/auth';
 
 export async function POST(req: Request) {
+  const auth = await getAuthFromCookie();
+  if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
   try {
     const body = await req.json().catch(() => ({}));
     const url: string = body.url || '';
@@ -93,6 +97,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ platform, platformId, title, thumbnail });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: 500 });
+    console.error('[video-info]', e);
+    return NextResponse.json({ error: '视频信息获取失败，请检查链接后重试' }, { status: 500 });
   }
 }

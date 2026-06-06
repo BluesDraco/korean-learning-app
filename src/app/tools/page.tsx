@@ -1,72 +1,91 @@
-import Link from 'next/link';
-import {
-  Wrench, Sparkles, Search, Mic, Pencil, RefreshCw,
-  FileText, Languages, Keyboard, PenLine, MessageSquare,
-  ChevronRight,
-} from 'lucide-react';
+'use client';
 
-const featuredTool = {
-  label: '内容拆解',
-  desc: '输入任意韩语句子，AI 帮你逐词拆解、分析语法、翻译中文',
-  href: '/ai',
-  icon: Sparkles,
-  color: 'var(--pink-primary)',
-};
+import Link from 'next/link';
+import { useState, useEffect } from 'react';
+import { Sparkles, Search, Mic, Pencil, RefreshCw, FileText, Languages, Keyboard, PenLine, MessageSquare, Dumbbell } from 'lucide-react';
+import { MobilePageHero } from '@/components/mobile/MobilePageHero';
+import { ToriPrimaryButton } from '@/components/mobile/ToriPrimaryButton';
+import { ToriSectionHeader } from '@/components/mobile/ToriSectionHeader';
+import { ToriIconCard } from '@/components/mobile/ToriIconCard';
+import { DesktopToolsPage } from '@/components/desktop/DesktopToolsPage';
 
 const toolGrid = [
-  { label: '查词翻译', desc: '韩语字典查词', href: '/dictionary', icon: Search, color: 'var(--purple-soft)' },
-  { label: '发音跟读', desc: '录音对比标准音', href: '/pronunciation', icon: Mic, color: 'var(--pink-primary)' },
-  { label: '听写练习', desc: '听韩语写出来', href: '/dictation', icon: Pencil, color: 'var(--peach-soft)' },
-  { label: '闪卡复习', desc: 'SRS间隔复习', href: '/review', icon: RefreshCw, color: 'var(--mint-soft)' },
-  { label: '文章拆解', desc: '韩语文章分析', href: '/reading', icon: FileText, color: 'var(--purple-soft)' },
-  { label: '语法解释', desc: '句型分析和例句', href: '/grammar', icon: Languages, color: 'var(--pink-primary)' },
-  { label: '韩文打字', desc: '韩文键盘练习', href: '/typing', icon: Keyboard, color: 'var(--peach-soft)' },
-  { label: '写作练习', desc: '韩语写作输出', href: '/writing', icon: PenLine, color: 'var(--mint-soft)' },
-  { label: 'AI场景陪练', desc: '情景对话练习', href: '/ai/chat', icon: MessageSquare, color: 'var(--purple-soft)' },
+  { label: '查词翻译', desc: '点词释义', href: '/dictionary', icon: Search, color: '#b49ccf' },
+  { label: '发音跟读', desc: '标准对比', href: '/pronunciation', icon: Mic, color: '#e47a94' },
+  { label: '听写练习', desc: '听音默写', href: '/dictation', icon: Pencil, color: '#e8a87c' },
+  { label: '闪卡复习', desc: '快速复习', href: '/review', icon: RefreshCw, color: '#81b5a1' },
+  { label: '文章拆解', desc: '翻译拆句', href: '/reading', icon: FileText, color: '#b49ccf' },
+  { label: '语法解释', desc: '例句讲透', href: '/grammar', icon: Languages, color: '#e47a94' },
+  { label: '韩文打字', desc: '键盘入门', href: '/typing', icon: Keyboard, color: '#e8a87c' },
+  { label: '写作练习', desc: '短句改写', href: '/writing', icon: PenLine, color: '#81b5a1' },
+  { label: 'AI 场景陪练', desc: '情景开口', href: '/ai/chat', icon: MessageSquare, color: '#b49ccf' },
 ];
 
 export default function ToolsPage() {
-  return (
-    <div className="py-4 space-y-5">
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-[var(--text-primary)]">工具</h1>
-        <p className="text-xs text-[var(--text-muted)] mt-1">我现在要用什么工具学习？</p>
-      </div>
+  const [isDesktop, setIsDesktop] = useState(false);
 
-      {/* Featured tool */}
-      <Link
-        href={featuredTool.href}
-        className="block bg-[var(--bg-card)] border-2 border-[var(--pink-primary)]/20 rounded-3xl p-6 hover:border-[var(--pink-primary)]/40 transition-all group"
-      >
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0" style={{ backgroundColor: `${featuredTool.color}15` }}>
-            <featuredTool.icon size={28} style={{ color: featuredTool.color }} />
+  useEffect(() => {
+    setIsDesktop(window.innerWidth >= 768);
+    const onResize = () => setIsDesktop(window.innerWidth >= 768);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
+  if (isDesktop) return <DesktopToolsPage />;
+
+  return (
+    <div className="py-4 space-y-5 max-w-2xl mx-auto md:max-w-3xl">
+      <MobilePageHero
+        title="工具"
+        description="把你看到的韩文，变成可以学的内容。"
+        variant="green"
+      />
+
+      {/* Featured cards */}
+      <div className="space-y-2.5">
+        {/* Content breakdown */}
+        <div className="rounded-[28px] bg-gradient-to-br from-[#ffe4ec] to-[#fff4dc] p-5 shadow-[0_8px_24px_rgba(92,64,38,0.06)]">
+          <div className="relative z-10">
+            <p className="text-[17px] font-bold text-[#2f2a26]">内容拆解</p>
+            <p className="text-[13px] text-[#8c8177] mt-1 leading-relaxed">粘贴一句韩语，Tori 帮你翻译、拆词、解释句子。</p>
+            <div className="mt-3">
+              <Link href="/ai/analyze">
+                <ToriPrimaryButton>开始拆解</ToriPrimaryButton>
+              </Link>
+            </div>
           </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-lg font-bold text-[var(--text-primary)]">{featuredTool.label}</p>
-            <p className="text-xs text-[var(--text-muted)] mt-0.5">{featuredTool.desc}</p>
-          </div>
-          <ChevronRight size={20} className="text-[var(--pink-primary)] group-hover:translate-x-0.5 transition-transform" />
         </div>
-      </Link>
+
+        {/* Shadowing */}
+        <div className="rounded-[28px] bg-gradient-to-br from-[#e0f0ff] to-[#f0e8ff] p-5 shadow-[0_8px_24px_rgba(92,64,38,0.06)]">
+          <div className="relative z-10">
+            <p className="text-[17px] font-bold text-[#2f2a26]">影音跟读</p>
+            <p className="text-[13px] text-[#8c8177] mt-1 leading-relaxed">跟着原声逐句模仿，录音对比，提升发音和语调。</p>
+            <div className="mt-3">
+              <Link href="/shadowing">
+                <ToriPrimaryButton>开始跟读</ToriPrimaryButton>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Tool grid */}
-      <div className="grid grid-cols-3 gap-2.5">
-        {toolGrid.map((tool) => (
-          <Link
-            key={tool.href}
-            href={tool.href}
-            className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-3.5 text-center hover:border-[var(--border-hover)] transition-colors group"
-          >
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center mx-auto mb-2" style={{ backgroundColor: `${tool.color}15` }}>
-              <tool.icon size={20} style={{ color: tool.color }} />
-            </div>
-            <p className="text-xs font-medium text-[var(--text-primary)]">{tool.label}</p>
-            <p className="text-[10px] text-[var(--text-muted)] mt-0.5 leading-tight">{tool.desc}</p>
-          </Link>
-        ))}
+      <div>
+        <ToriSectionHeader title="全部工具" className="mb-2.5" />
+        <div className="grid grid-cols-3 gap-2.5">
+          {toolGrid.map((tool) => (
+            <ToriIconCard
+              key={tool.href}
+              icon={<tool.icon size={20} style={{ color: tool.color }} />}
+              label={tool.label}
+              desc={tool.desc}
+              href={tool.href}
+            />
+          ))}
+        </div>
       </div>
+
     </div>
   );
 }

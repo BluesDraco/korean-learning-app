@@ -67,6 +67,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!res.ok) return { error: data.error || `登录失败 (${res.status})` };
       // Fetch full user profile after login
       await fetchUser();
+      // Migrate guest data if any
+      try {
+        const { hasGuestData, migrateGuestData } = await import('@/lib/guest-migration');
+        if (hasGuestData()) await migrateGuestData();
+      } catch { /* non-critical */ }
       return {};
     } catch {
       return { error: '网络错误，请检查网络连接后重试' };
@@ -89,6 +94,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!res.ok) return { error: data.error || `注册失败 (${res.status})` };
       // Fetch full user profile after register
       await fetchUser();
+      // Migrate guest data if any
+      try {
+        const { hasGuestData, migrateGuestData } = await import('@/lib/guest-migration');
+        if (hasGuestData()) await migrateGuestData();
+      } catch { /* non-critical */ }
       return {};
     } catch {
       return { error: '网络错误，请检查网络连接后重试' };

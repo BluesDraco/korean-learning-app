@@ -1,6 +1,20 @@
 // Global audio singleton — prevents overlapping playback and supports rate control.
 'use client';
 
+/** Strip non-Korean markers (vs, /, etc.) so TTS only reads Korean text. */
+function sanitizeTTSText(text: string): string {
+  return text
+    .replace(/🔊/g, '')
+    .replace(/[●◉○◈◇◆▸►▻]/g, '')
+    .replace(/\bvs\.?\b/gi, ',')
+    .replace(/\s*\/\s*/g, ', ')
+    .replace(/,+/g, ',')
+    .replace(/\s{2,}/g, ' ')
+    .replace(/^,\s*/, '')
+    .replace(/,\s*$/, '')
+    .trim();
+}
+
 type PlayerState = 'idle' | 'loading' | 'playing' | 'paused';
 
 class AudioPlayer {
@@ -33,11 +47,14 @@ class AudioPlayer {
     this.setState('loading');
   }
 
-  /** Play TTS for Korean text using browser speechSynthesis (fast, offline). */
+  /** Play TTS for Korean text using browser speechSynthesis (fast, offline).
+   *  Text is sanitized to remove non-Korean markers like "vs", "/" etc. */
   speakTTS(text: string, rate: number = 0.75): void {
     this.stop();
     if (typeof speechSynthesis === 'undefined') return;
-    const u = new SpeechSynthesisUtterance(text);
+    const sanitized = sanitizeTTSText(text);
+    if (!sanitized) return;
+    const u = new SpeechSynthesisUtterance(sanitized);
     u.lang = 'ko-KR';
     u.rate = rate;
     u.onstart = () => this.setState('playing');

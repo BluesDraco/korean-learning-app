@@ -1,9 +1,16 @@
 'use client';
 
 import Link from 'next/link';
-import { Library, ArrowRight, Search, X } from 'lucide-react';
+import { Library, ArrowRight, Search, X, BookOpen, UtensilsCrossed, Plane } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import { knowledgeCategories } from '@/data/knowledge';
+import { ARTICLES } from '@/data/articleMeta';
+
+const TOPIC_TABS = [
+  { key: 'culture', label: '韩国文化', icon: BookOpen, color: 'var(--pink-primary)', href: '/korea/culture', count: ARTICLES.filter((a) => a.category === 'culture').length },
+  { key: 'food', label: '韩国美食', icon: UtensilsCrossed, color: 'var(--peach-soft)', href: '/korea/food', count: ARTICLES.filter((a) => a.category === 'food').length },
+  { key: 'travel', label: '韩国旅行', icon: Plane, color: 'var(--mint-soft)', href: '/korea/travel', count: ARTICLES.filter((a) => a.category === 'travel').length },
+];
 
 export default function KnowledgePage() {
   const [search, setSearch] = useState('');
@@ -21,11 +28,72 @@ export default function KnowledgePage() {
   }, [search]);
 
   return (
-    <div className="py-4 space-y-4">
+    <div className="py-4 space-y-5">
+      {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-[var(--text-primary)]">知识库</h1>
+        <h1 className="text-2xl font-bold text-[var(--text-primary)]">韩国小知识</h1>
         <p className="text-[var(--text-secondary)] text-sm mt-1">
-          按分类学习韩语单词 · {knowledgeCategories.length} 个分类 · 每个单词配有罗马音、例句和用法提示
+          文化 · 美食 · 旅行 · 词汇，从感兴趣的话题了解韩国
+        </p>
+      </div>
+
+      {/* Topic cards — culture, food, travel */}
+      <div className="grid grid-cols-3 gap-3">
+        {TOPIC_TABS.map((tab) => (
+          <Link
+            key={tab.key}
+            href={tab.href}
+            className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 hover:border-[var(--pink-pale)] hover:shadow-md transition-all text-center group"
+          >
+            <tab.icon size={24} className="mx-auto mb-2" style={{ color: tab.color }} />
+            <div className="text-sm font-bold text-[var(--text-primary)] group-hover:text-[var(--pink-primary)] transition-colors">
+              {tab.label}
+            </div>
+            <div className="text-[11px] text-[var(--text-muted)] mt-0.5">{tab.count} 篇文章</div>
+          </Link>
+        ))}
+      </div>
+
+      {/* Featured articles */}
+      <div>
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-sm font-bold text-[var(--text-primary)]">近期文章</h2>
+          <Link href="/korea/culture" className="text-[11px] text-[var(--pink-primary)] hover:underline flex items-center gap-0.5">
+            全部文章 <ArrowRight size={11} />
+          </Link>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {ARTICLES.slice(0, 4).map((article) => (
+            <Link
+              key={article.slug}
+              href={`/korea/${article.category}/${article.slug}`}
+              className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-4 hover:border-[var(--pink-pale)] hover:shadow-sm transition-all group"
+            >
+              <div className="flex items-center gap-2 mb-1.5">
+                <span
+                  className="text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+                  style={{ backgroundColor: article.color + '18', color: article.color }}
+                >
+                  {article.tag.slice(0, 3)}
+                </span>
+                <span className="text-[10px] text-[var(--text-muted)]">{article.readTime}</span>
+              </div>
+              <h3 className="text-sm font-bold text-[var(--text-primary)] group-hover:text-[var(--pink-primary)] transition-colors leading-snug">
+                {article.title}
+              </h3>
+              <p className="text-xs text-[var(--text-secondary)] mt-1 line-clamp-1">{article.subtitle}</p>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      <div className="border-t border-[var(--border-color)]" />
+
+      {/* Original vocabulary knowledge base */}
+      <div>
+        <h2 className="text-sm font-bold text-[var(--text-primary)] mb-1">分类词汇</h2>
+        <p className="text-xs text-[var(--text-muted)] mb-3">
+          {knowledgeCategories.length} 个分类 · 每个单词配有罗马音、例句和用法提示
         </p>
       </div>
 
@@ -53,7 +121,7 @@ export default function KnowledgePage() {
         </div>
       )}
 
-      {/* Category Grid - 2 cols mobile, 3 md, 4 lg */}
+      {/* Category Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {filtered.map((cat) => (
           <Link

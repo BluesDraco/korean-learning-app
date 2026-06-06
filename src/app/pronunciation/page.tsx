@@ -136,7 +136,7 @@ function PageContent() {
           }
         }
         setStats({ totalAttempts: attempts.length, recentItems: recentIds });
-      } catch (_) {}
+      } catch (_e) {}
     })();
   }, []);
 
@@ -163,7 +163,7 @@ function PageContent() {
           latestDay,
         );
         setCourseItems({ dayNum: latestDay, title: course.title, items });
-      } catch (_) {}
+      } catch (_e2) {}
     })();
   }, []);
 
@@ -174,7 +174,7 @@ function PageContent() {
   const todayItems = getTodayItems(3);
 
   return (
-    <div className="py-4 space-y-5">
+    <div className="py-4 space-y-5 max-w-2xl mx-auto md:max-w-3xl">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-[var(--text-primary)] flex items-center gap-2">

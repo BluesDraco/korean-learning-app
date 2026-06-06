@@ -2,30 +2,50 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, User, Target, Flame, Save, Loader2, Trophy } from 'lucide-react';
+import { ArrowLeft, User, Target, Flame, Save, Loader2, Trophy, Volume2, VolumeX, Zap, Type, LogOut } from 'lucide-react';
+import { useAuth } from '@/components/AuthProvider';
 import { getProfile, updateProfile } from '@/lib/gamification';
 import { db } from '@/lib/db';
 import type { UserProfile, Achievement } from '@/types';
 import { ACHIEVEMENT_DEFS } from '@/types';
 import { useFontSettings } from '@/components/FontProvider';
 import { setSpeechRate, getSpeechRate } from '@/lib/tts';
+import { isSoundEnabled, setSoundEnabled } from '@/lib/soundManager';
 import { FONT_PRESETS, FONT_SIZES } from '@/lib/fontSettings';
+
+const REDUCE_MOTION_KEY = 'tori_reduce_motion';
+
+function getReduceMotion(): boolean {
+  if (typeof window === 'undefined') return false;
+  return localStorage.getItem(REDUCE_MOTION_KEY) === 'true';
+}
+
+function setReduceMotion(v: boolean): void {
+  if (typeof window === 'undefined') return;
+  localStorage.setItem(REDUCE_MOTION_KEY, String(v));
+  document.documentElement.setAttribute('data-reduce-motion', v ? 'true' : 'false');
+}
 
 export default function SettingsPage() {
   const router = useRouter();
+  const { user } = useAuth();
   const { settings: fontSettings, previewPreset, previewSize, commitFontSettings } = useFontSettings();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [achievements, setAchievements] = useState<Achievement[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [soundOn, setSoundOn] = useState(true);
+  const [reduceMotion, setReduceMotionState] = useState(false);
 
   useEffect(() => {
     const load = async () => {
       const p = await getProfile();
-      setProfile({ ...p, ttsSpeed: getSpeechRate() } as any);
+      setProfile({ ...p, ttsSpeed: getSpeechRate() });
       const achs = await db.achievements.toArray();
       setAchievements(achs);
+      setSoundOn(isSoundEnabled());
+      setReduceMotionState(getReduceMotion());
       setLoading(false);
     };
     load();
@@ -185,14 +205,14 @@ export default function SettingsPage() {
 
         {/* TTS Speed */}
         <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">朗读语速: {(profile as any).ttsSpeed ?? 0.8}x</label>
+          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">朗读语速: {profile.ttsSpeed ?? 0.8}x</label>
           <input
             type="range"
             min="0.5"
             max="1.2"
             step="0.1"
-            value={(profile as any).ttsSpeed ?? 0.8}
-            onChange={(e) => { const v = parseFloat(e.target.value); setSpeechRate(v); setProfile({ ...profile, ttsSpeed: v } as any); }}
+            value={profile.ttsSpeed ?? 0.8}
+            onChange={(e) => { const v = parseFloat(e.target.value); setSpeechRate(v); setProfile({ ...profile, ttsSpeed: v }); }}
             className="w-full accent-[var(--purple-soft)]"
           />
           <div className="flex justify-between text-xs text-[var(--text-placeholder)] mt-1">
@@ -202,10 +222,10 @@ export default function SettingsPage() {
 
         {/* Review batch size */}
         <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">每次复习数量: {(profile as any).reviewBatchSize ?? 10} 个</label>
+          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">每次复习数量: {profile.reviewBatchSize ?? 10} 个</label>
           <select
-            value={(profile as any).reviewBatchSize ?? 10}
-            onChange={(e) => setProfile({ ...profile, reviewBatchSize: Number(e.target.value) } as any)}
+            value={profile.reviewBatchSize ?? 10}
+            onChange={(e) => setProfile({ ...profile, reviewBatchSize: Number(e.target.value) })}
             className="w-full bg-[var(--bg-input)] border border-[var(--border-color)] rounded-xl py-3 px-4 text-[var(--text-primary)] focus:outline-none focus:border-[var(--purple-soft)] transition-colors"
           >
             <option value={5}>5 个</option>
@@ -214,6 +234,40 @@ export default function SettingsPage() {
             <option value={20}>20 个</option>
             <option value={30}>30 个</option>
           </select>
+        </div>
+
+        {/* Sound toggle */}
+        <div className="flex items-center justify-between bg-[var(--bg-input)] rounded-xl p-4">
+          <div className="flex items-center gap-3">
+            {soundOn ? <Volume2 size={20} className="text-[var(--purple-soft)]" /> : <VolumeX size={20} className="text-[var(--text-muted)]" />}
+            <div>
+              <p className="text-sm text-[var(--text-primary)] font-medium">音效</p>
+              <p className="text-xs text-[var(--text-secondary)]">轻量操作反馈音效（音量很低）</p>
+            </div>
+          </div>
+          <button
+            onClick={() => { const v = !soundOn; setSoundOn(v); setSoundEnabled(v); }}
+            className={`relative w-12 h-7 rounded-full transition-colors ${soundOn ? 'bg-[var(--purple-soft)]' : 'bg-[var(--bg-accent)]'}`}
+          >
+            <div className={`absolute top-0.5 w-6 h-6 rounded-full bg-white shadow transition-transform ${soundOn ? 'translate-x-6' : 'translate-x-0.5'}`} />
+          </button>
+        </div>
+
+        {/* Reduce motion toggle */}
+        <div className="flex items-center justify-between bg-[var(--bg-input)] rounded-xl p-4">
+          <div className="flex items-center gap-3">
+            <Zap size={20} className={reduceMotion ? 'text-[var(--text-muted)]' : 'text-[var(--peach-soft)]'} />
+            <div>
+              <p className="text-sm text-[var(--text-primary)] font-medium">减少动效</p>
+              <p className="text-xs text-[var(--text-secondary)]">关闭弹跳、呼吸等动画效果</p>
+            </div>
+          </div>
+          <button
+            onClick={() => { const v = !reduceMotion; setReduceMotionState(v); setReduceMotion(v); }}
+            className={`relative w-12 h-7 rounded-full transition-colors ${reduceMotion ? 'bg-[var(--bg-accent)]' : 'bg-[var(--peach-soft)]'}`}
+          >
+            <div className={`absolute top-0.5 w-6 h-6 rounded-full bg-white shadow transition-transform ${reduceMotion ? 'translate-x-0.5' : 'translate-x-6'}`} />
+          </button>
         </div>
 
         {/* Theme toggle info */}
@@ -227,7 +281,7 @@ export default function SettingsPage() {
       {/* Font Settings */}
       <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 space-y-5">
         <div className="flex items-center gap-3 mb-4">
-          <span className="text-xl">🔤</span>
+          <Type size={28} className="text-[var(--text-primary)]" />
           <h2 className="text-lg font-medium text-[var(--text-primary)]">显示设置</h2>
         </div>
 
@@ -349,6 +403,26 @@ export default function SettingsPage() {
       >
         {saving ? <Loader2 size={18} className="animate-spin" /> : saved ? <><Save size={18} /> 已保存</> : <><Save size={18} /> 保存设置</>}
       </button>
+
+      {/* Logout */}
+      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm font-medium text-[var(--text-primary)]">当前账号</p>
+            <p className="text-xs text-[var(--text-muted)] mt-0.5">{user?.nickname ?? '未登录'}</p>
+          </div>
+          <button
+            onClick={async () => {
+              await fetch('/api/auth/logout', { method: 'POST' });
+              window.location.href = '/auth/login';
+            }}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl border border-red-200 text-red-500 text-sm hover:bg-red-50 transition-colors"
+          >
+            <LogOut size={15} />
+            退出登录
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

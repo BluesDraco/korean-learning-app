@@ -19,6 +19,8 @@ export interface UserProfile {
   ambassadorReason?: string | null;
   shareEnabled?: boolean;
   shareToken?: string | null;
+  ttsSpeed?: number;
+  reviewBatchSize?: number;
 }
 
 export interface DailyLog {
@@ -487,13 +489,14 @@ export interface ArticleQuestion {
   type: 'main_idea' | 'detail' | 'vocab' | 'grammar' | 'true_false';
   prompt: string;
   options?: string[];
-  answer: string;
-  explanation: string;
+  answer: number;
+  explanation?: string;
 }
 
 export interface ArticleOutputTask {
   type: 'fill_blank' | 'complete_sentence' | 'choose_and_say';
   template: string;
+  hint?: string;
   slots?: string[];
   example?: string;
 }
@@ -543,4 +546,81 @@ export interface ArticleLearningEvent {
   action: 'view_article' | 'play_sentence' | 'reveal_translation' | 'save_word' | 'save_sentence' | 'answer_question' | 'complete_article' | 'complete_output';
   payload?: unknown;
   createdAt: number;
+}
+
+// ===== 韩娱热点阅读 (Korean Entertainment Hot Topic Reading) =====
+
+export interface KoreanReadingToken {
+  surface: string;       // surface form as it appears in the sentence
+  baseForm: string;      // dictionary/base form
+  meaning: string;       // Chinese meaning
+  partOfSpeech?: string; // e.g. '명사', '동사', '형용사', '부사', '조사', '어미'
+  note?: string;         // usage note (optional)
+}
+
+export interface KoreanGrammarNote {
+  pattern: string;           // grammar pattern, e.g. '-고 있다', '-면'
+  meaning: string;           // short meaning, e.g. '正在做...'
+  explanation: string;       // detailed explanation
+  exampleInSentence: string; // the phrase from THIS sentence that exemplifies the pattern
+}
+
+export interface KoreanReadingSentence {
+  id: string;
+  korean: string;
+  chinese: string;
+  tokens: KoreanReadingToken[];
+  grammarNotes: KoreanGrammarNote[];
+}
+
+export interface KoreanReadingParagraph {
+  id: string;
+  korean: string;
+  chinese: string;
+  sentences: KoreanReadingSentence[];
+}
+
+export interface KoreanReadingStatus {
+  sourceReady: boolean;      // body parsed from source
+  translationReady: boolean; // full Chinese translation done
+  tokenReady: boolean;       // per-word token breakdown done
+  grammarReady: boolean;     // grammar notes done
+  imageReady: boolean;       // image resolved
+  readingReady: boolean;     // all above + quality check passed
+}
+
+export interface KoreanHotReading {
+  id: string;
+
+  // Source
+  sourceName: string;
+  sourceUrl: string;
+  originalPublishedAt: number;
+  fetchedAt: number;
+
+  // Image
+  imageUrl?: string;
+
+  // Title
+  originalTitleKo: string;
+  titleZh: string;
+
+  // Keywords
+  keywords: string[];
+
+  // Body
+  originalBodyKo: string;
+  bodyZh: string;
+
+  // Paragraphs with sentences
+  paragraphs: KoreanReadingParagraph[];
+
+  // Computed stats
+  totalSentences: number;
+  totalTokens: number;
+  totalGrammar: number;
+
+  // Status gates
+  readingStatus: KoreanReadingStatus;
+  publishStatus: 'draft' | 'review' | 'published';
 }

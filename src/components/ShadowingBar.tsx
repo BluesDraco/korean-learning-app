@@ -1,7 +1,8 @@
 'use client';
 
-import { Volume2, Mic, SkipForward, X, Check } from 'lucide-react';
+import { Volume2, Mic, SkipForward, X, Check, Play, RotateCcw, Bookmark, BookmarkCheck, Save } from 'lucide-react';
 import type { DiffSegment } from '@/lib/koreanDiff';
+import { ToriCardMascot } from '@/components/mobile/ToriCardMascot';
 
 interface ShadowingFeedback {
   userDiff: DiffSegment[];
@@ -14,9 +15,16 @@ interface ShadowingBarProps {
   korean: string;
   pronunciation: string;
   chinese: string;
-  isRecording: boolean;
+  recordState: 'idle' | 'recording' | 'recorded';
+  recordedAudioUrl: string | null;
+  isPlayingRecording: boolean;
+  isSentenceSaved: boolean;
+  isAuthenticated: boolean;
   onListen: () => void;
   onRecord: () => void;
+  onPlayRecording: () => void;
+  onSaveSentence: () => void;
+  onSaveRecording: () => void;
   onNext: () => void;
   onExit: () => void;
   feedback?: ShadowingFeedback | null;
@@ -26,9 +34,16 @@ export function ShadowingBar({
   korean,
   pronunciation,
   chinese,
-  isRecording,
+  recordState,
+  recordedAudioUrl,
+  isPlayingRecording,
+  isSentenceSaved,
+  isAuthenticated,
   onListen,
   onRecord,
+  onPlayRecording,
+  onSaveSentence,
+  onSaveRecording,
   onNext,
   onExit,
   feedback,
@@ -44,10 +59,11 @@ export function ShadowingBar({
       </div>
 
       {/* Korean sentence */}
-      <div className="text-center space-y-1">
+      <div className="relative overflow-visible text-center space-y-1">
         <p className="text-xl font-bold text-[var(--text-primary)] leading-relaxed">{korean}</p>
         <p className="text-xs text-[var(--text-muted)]">{pronunciation}</p>
         <p className="text-sm text-[var(--text-secondary)]">{chinese}</p>
+        <ToriCardMascot customSrc="/images/tori-kpop-lyric.png" size="sm" className="-right-1 -bottom-2" />
       </div>
 
       {/* Feedback display */}
@@ -95,6 +111,56 @@ export function ShadowingBar({
         </div>
       )}
 
+      {/* Playback bar — shown after recording */}
+      {recordState === 'recorded' && recordedAudioUrl && (
+        <div className="flex items-center justify-center gap-3">
+          <button
+            onClick={onPlayRecording}
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+              isPlayingRecording
+                ? 'bg-[var(--mint-soft)]/20 text-[var(--mint-soft)]'
+                : 'bg-[var(--bg-input)] text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)]'
+            }`}
+          >
+            <Play size={16} />
+            {isPlayingRecording ? '播放中...' : '播放我的录音'}
+          </button>
+          <button
+            onClick={onRecord}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[var(--bg-input)] text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)] transition-colors text-sm font-medium"
+          >
+            <RotateCcw size={16} />
+            重录
+          </button>
+        </div>
+      )}
+
+      {/* Save buttons — shown after recording */}
+      {recordState === 'recorded' && (
+        <div className="flex items-center justify-center gap-2">
+          <button
+            onClick={onSaveSentence}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+              isSentenceSaved
+                ? 'bg-[var(--mint-soft)]/15 text-[var(--mint-soft)]'
+                : 'bg-[var(--bg-input)] text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)]'
+            }`}
+          >
+            {isSentenceSaved ? <BookmarkCheck size={14} /> : <Bookmark size={14} />}
+            {isSentenceSaved ? '已保存句子' : '保存句子'}
+          </button>
+          {isAuthenticated && (
+            <button
+              onClick={onSaveRecording}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--bg-input)] text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)] transition-colors"
+            >
+              <Save size={14} />
+              保存录音
+            </button>
+          )}
+        </div>
+      )}
+
       {/* Action buttons */}
       <div className="flex items-center justify-center gap-3">
         <button
@@ -104,17 +170,21 @@ export function ShadowingBar({
           <Volume2 size={16} />
           听一遍
         </button>
-        <button
-          onClick={onRecord}
-          className={`flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-medium transition-all ${
-            isRecording
-              ? 'bg-[var(--color-danger)] text-white animate-pulse'
-              : 'bg-[var(--pink-primary)] text-[var(--text-primary)] hover:bg-[var(--pink-primary)]'
-          }`}
-        >
-          <Mic size={16} />
-          {isRecording ? '录音中...' : '开始跟读'}
-        </button>
+
+        {recordState !== 'recorded' && (
+          <button
+            onClick={onRecord}
+            className={`flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-medium transition-all ${
+              recordState === 'recording'
+                ? 'bg-[var(--color-danger)] text-white animate-pulse'
+                : 'bg-[var(--pink-primary)] text-[var(--text-primary)] hover:bg-[var(--pink-primary)]'
+            }`}
+          >
+            <Mic size={16} />
+            {recordState === 'recording' ? '录音中...' : '开始跟读'}
+          </button>
+        )}
+
         <button
           onClick={onNext}
           className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[var(--bg-input)] text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)] transition-colors text-sm font-medium"

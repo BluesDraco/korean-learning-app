@@ -67,6 +67,8 @@ export default function LearnPage() {
     getProfile().then((p) => {
       setProfile(p);
       setLoading(false);
+    }).catch(() => {
+      setLoading(false);
     });
   }, []);
 

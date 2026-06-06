@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { fetchWithTimeout } from '@/lib/fetch';
+import { getAuthFromCookie } from '@/lib/server/auth';
 
 const DASHSCOPE_KEY = process.env.DASHSCOPE_API_KEY;
 const ENDPOINT = 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation';
@@ -12,7 +13,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json().catch(() => ({}));
     const text: string = body.text || '';
-    const voice: string = body.voice || 'Sohee';
+    const voice: string = body.voice || 'Cherry';
     const speechRate: number = body.speechRate || 1.0;
 
     if (!text || text.length > 600) {
@@ -28,16 +29,13 @@ export async function POST(req: Request) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'qwen3-tts-flash',
+        model: 'qwen-tts',
         input: {
           text,
-          text_type: 'PlainText',
           voice,
-          language_type: 'Korean',
         },
         parameters: {
           speech_rate: speechRate,
-          repetition_penalty: 1.2,
         },
       }),
     });

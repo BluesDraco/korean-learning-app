@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import {
   FileText, BookOpen, TrendingUp, Target, ChevronRight, Sparkles,
@@ -77,7 +77,7 @@ function buildComparePairs(): ComparePair[] {
 
 const comparePairsData = buildComparePairs();
 
-export default function GrammarPage() {
+function GrammarContent() {
   const [sessionGrammar, setSessionGrammar] = useState<GrammarPoint | null>(null);
   const [reviewQueue, setReviewQueue] = useState<GrammarPoint[]>([]);
   const [viewMode, setViewMode] = useState<'home' | 'library' | 'comparison'>('home');
@@ -104,7 +104,7 @@ export default function GrammarPage() {
         const map: Record<string, import('@/types').UserGrammarState> = {};
         for (const s of states) map[s.id] = s;
         setGrammarStates(map);
-      } catch (_) {}
+      } catch (_e) {}
     })();
   }, []);
 
@@ -209,7 +209,7 @@ export default function GrammarPage() {
   // ═══════════════════════════════ HOME ═══════════════════════════════
   if (viewMode === 'home') {
     return (
-      <div className="py-4 space-y-5">
+      <div className="py-4 space-y-5 max-w-2xl mx-auto md:max-w-3xl">
         {/* Header */}
         <div>
           <h1 className="text-2xl font-bold text-[var(--text-primary)] flex items-center gap-2">
@@ -442,7 +442,7 @@ export default function GrammarPage() {
     };
 
     return (
-      <div className="py-4 space-y-4">
+      <div className="py-4 space-y-4 max-w-2xl mx-auto md:max-w-3xl">
         <div className="flex items-center gap-2">
           <button onClick={() => { setViewMode('home'); setComparePair(null); setCompareQIdx(0); setCompareResult(null); setSelectedCompareOption(null); }} className="text-[var(--text-muted)] hover:text-[var(--text-primary)]">
             <ArrowRight size={18} className="rotate-180" />
@@ -533,7 +533,7 @@ export default function GrammarPage() {
 
   // ═══════════════════════════════ LIBRARY ═══════════════════════════════
   return (
-    <div className="min-h-screen py-4 space-y-3">
+    <div className="py-4 space-y-3 max-w-2xl mx-auto md:max-w-3xl">
       {/* Header */}
       <div>
         <div className="flex items-center gap-2">
@@ -624,29 +624,41 @@ export default function GrammarPage() {
               </button>
 
               {isOpen && (
-                <div className="px-4 pb-4 space-y-3 border-t border-[var(--border-color)] pt-4">
-                  <p className="text-sm text-[var(--text-secondary)]">{gp.explanation}</p>
-
-                  {gp.conjugation && (
-                    <div className="bg-[var(--bg-input)] rounded-xl p-3">
-                      <p className="text-[10px] text-[var(--text-muted)] mb-1">接续方式</p>
-                      <p className="text-xs text-[var(--text-secondary)] whitespace-pre-line">{gp.conjugation}</p>
+                <div className="px-4 pb-4 space-y-3 border-t border-[var(--border-color)] pt-4 animate-fade-in">
+                  {/* 结构 + 意思 + 场景 */}
+                  <div className="bg-[var(--bg-soft)] rounded-2xl p-4 space-y-2.5">
+                    <div className="flex items-start gap-3">
+                      <span className="text-[10px] font-bold text-[var(--text-muted)] w-8 shrink-0 pt-0.5">结构</span>
+                      <span className="text-sm font-mono font-bold text-[var(--purple-soft)]">{gp.pattern}</span>
                     </div>
-                  )}
+                    <div className="flex items-start gap-3">
+                      <span className="text-[10px] font-bold text-[var(--text-muted)] w-8 shrink-0 pt-0.5">意思</span>
+                      <span className="text-sm text-[var(--text-primary)]">{gp.explanation}</span>
+                    </div>
+                    {gp.conjugation && (
+                      <div className="flex items-start gap-3">
+                        <span className="text-[10px] font-bold text-[var(--text-muted)] w-8 shrink-0 pt-0.5">接续</span>
+                        <span className="text-xs text-[var(--text-secondary)] whitespace-pre-line">{gp.conjugation}</span>
+                      </div>
+                    )}
+                    <div className="flex items-start gap-3">
+                      <span className="text-[10px] font-bold text-[var(--text-muted)] w-8 shrink-0 pt-0.5">场景</span>
+                      <span className="text-xs text-[var(--text-secondary)]">{gp.usage}</span>
+                    </div>
+                  </div>
 
+                  {/* 例句 */}
                   {gp.examples.length > 0 && (
-                    <div className="space-y-2">
-                      <p className="text-[10px] text-[var(--text-muted)]">例句</p>
+                    <div className="space-y-1.5">
+                      <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider px-1">例句</p>
                       {gp.examples.map((ex, i) => (
-                        <div key={i} className="flex items-center justify-between bg-[var(--bg-input)] rounded-xl px-3 py-2">
-                          <div>
-                            <p className="text-xs text-[var(--text-primary)]">{ex.ko}</p>
-                            <p className="text-[10px] text-[var(--text-muted)]">{ex.zh}</p>
+                        <div key={i} className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl px-4 py-3 flex items-center justify-between gap-3">
+                          <div className="min-w-0 flex-1">
+                            <p className="text-sm text-[var(--text-primary)] font-medium" style={{ fontFamily: 'system-ui, sans-serif' }}>{ex.ko}</p>
+                            <p className="text-xs text-[var(--text-muted)] mt-0.5">{ex.zh}</p>
                           </div>
-                          <button
-                            onClick={(e) => { e.stopPropagation(); speak(ex.ko); }}
-                            className="p-1.5 rounded-lg text-[var(--pink-primary)] hover:bg-[var(--pink-primary)]/10"
-                          >
+                          <button onClick={(e) => { e.stopPropagation(); speak(ex.ko); }}
+                            className="p-1.5 rounded-lg text-[var(--pink-primary)] hover:bg-[var(--pink-primary)]/10 shrink-0">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" /></svg>
                           </button>
                         </div>
@@ -654,20 +666,24 @@ export default function GrammarPage() {
                     </div>
                   )}
 
-                  {gp.difference && gp.similarPatterns && (
-                    <div className="flex items-start gap-2 bg-[var(--purple-soft)]/10 border border-[var(--purple-soft)]/20 rounded-xl p-3">
-                      <AlertCircle size={14} className="text-[var(--purple-soft)] shrink-0 mt-0.5" />
-                      <div>
-                        <p className="text-[10px] text-[var(--text-muted)] mb-0.5">与 {gp.similarPatterns.join(', ')} 的区别</p>
-                        <p className="text-xs text-[var(--text-secondary)]">{gp.difference}</p>
-                      </div>
+                  {/* 替换练习 (toriTip) */}
+                  {gp.toriTip && (
+                    <div className="bg-[var(--peach-soft)]/8 border border-[var(--peach-soft)]/20 rounded-xl p-4">
+                      <p className="text-[10px] font-bold text-[var(--peach-soft)] mb-1.5 flex items-center gap-1.5">
+                        <Lightbulb size={11} />替换练习
+                      </p>
+                      <p className="text-xs text-[var(--text-secondary)]">{gp.toriTip}</p>
                     </div>
                   )}
 
-                  {gp.toriTip && (
-                    <div className="flex items-start gap-2 bg-[var(--peach-soft)]/10 border border-[var(--peach-soft)]/20 rounded-xl p-3">
-                      <Lightbulb size={14} className="text-[var(--peach-soft)] shrink-0 mt-0.5" />
-                      <p className="text-xs text-[var(--text-secondary)]">{gp.toriTip}</p>
+                  {/* 易混辨析 */}
+                  {gp.difference && gp.similarPatterns && (
+                    <div className="flex items-start gap-2 bg-[var(--purple-soft)]/8 border border-[var(--purple-soft)]/15 rounded-xl p-3">
+                      <AlertCircle size={13} className="text-[var(--purple-soft)] shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-[10px] font-bold text-[var(--purple-soft)] mb-0.5">与 {gp.similarPatterns.join(', ')} 的区别</p>
+                        <p className="text-xs text-[var(--text-secondary)]">{gp.difference}</p>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -677,5 +693,13 @@ export default function GrammarPage() {
         })}
       </div>
     </div>
+  );
+}
+
+export default function GrammarPage() {
+  return (
+    <Suspense>
+      <GrammarContent />
+    </Suspense>
   );
 }

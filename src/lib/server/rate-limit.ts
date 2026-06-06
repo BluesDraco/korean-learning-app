@@ -73,8 +73,10 @@ export interface AiRateLimitResult {
 export async function checkAiRateLimit(
   userId: string,
   endpoint: string,
+  customLimit?: number,
 ): Promise<AiRateLimitResult> {
   const db = await getDb();
+  const effectiveLimit = customLimit ?? AI_DAILY_LIMIT;
 
   const dayStart = new Date();
   dayStart.setHours(0, 0, 0, 0);
@@ -86,11 +88,11 @@ export async function checkAiRateLimit(
   );
   const count = (result[0]?.values[0]?.[0] ?? 0) as number;
 
-  if (count >= AI_DAILY_LIMIT) {
-    return { allowed: false, remaining: 0, limit: AI_DAILY_LIMIT };
+  if (count >= effectiveLimit) {
+    return { allowed: false, remaining: 0, limit: effectiveLimit };
   }
 
-  return { allowed: true, remaining: AI_DAILY_LIMIT - count, limit: AI_DAILY_LIMIT };
+  return { allowed: true, remaining: effectiveLimit - count, limit: effectiveLimit };
 }
 
 export async function recordAiUsage(

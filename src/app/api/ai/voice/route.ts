@@ -94,6 +94,7 @@ export async function POST(req: Request) {
       correction: data.correction || null,
     });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    console.error('[ai/voice]', err);
+    return NextResponse.json({ error: 'AI服务异常，请稍后重试' }, { status: 500 });
   }
 }

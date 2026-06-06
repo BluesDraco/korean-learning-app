@@ -299,7 +299,7 @@ export default function VoiceChatPage() {
       <div className="flex flex-col h-[calc(100dvh-5rem)] -mx-3 md:-mx-4 lg:-mx-8">
         <div className="shrink-0 flex items-center justify-between px-4 py-3 bg-[var(--bg-card)] border-b border-[var(--border-color)]">
           <div className="flex items-center gap-3">
-            <Link href="/ai" className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors">
+            <Link href="/ai/analyze" className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors">
               <ArrowLeft size={20} />
             </Link>
             <div className="flex items-center gap-2">
@@ -341,7 +341,7 @@ export default function VoiceChatPage() {
       <div className="flex flex-col h-[calc(100dvh-5rem)] -mx-3 md:-mx-4 lg:-mx-8">
         <div className="shrink-0 flex items-center px-4 py-3 bg-[var(--bg-card)] border-b border-[var(--border-color)]">
           <div className="flex items-center gap-3">
-            <Link href="/ai" className="p-1.5 rounded-lg text-[var(--text-muted)]">
+            <Link href="/ai/analyze" className="p-1.5 rounded-lg text-[var(--text-muted)]">
               <ArrowLeft size={20} />
             </Link>
             <span className="text-xl">🐰</span>
@@ -361,7 +361,7 @@ export default function VoiceChatPage() {
       <div className="shrink-0 flex items-center justify-between px-4 py-3 bg-[var(--bg-card)] border-b border-[var(--border-color)]">
         <div className="flex items-center gap-3">
           <Link
-            href="/ai"
+            href="/ai/analyze"
             className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
           >
             <ArrowLeft size={20} />

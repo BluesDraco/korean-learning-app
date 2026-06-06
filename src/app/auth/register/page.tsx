@@ -4,8 +4,9 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, UserPlus, Loader2 } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
+import { ToriPrimaryButton } from '@/components/mobile/ToriPrimaryButton';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -31,7 +32,7 @@ export default function RegisterPage() {
       if (result.error) {
         setError(result.error);
       } else {
-        router.push('/');
+        router.push('/daily');
       }
     } catch {
       setError('网络错误，请检查网络连接后重试');
@@ -43,7 +44,7 @@ export default function RegisterPage() {
   return (
     <div className="min-h-[calc(100vh-10rem)] flex items-center justify-center py-8">
       <div className="w-full max-w-sm">
-        <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] mb-6">
+        <Link href="/daily" className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] mb-6">
           <ArrowLeft size={16} />
           返回首页
         </Link>
@@ -52,7 +53,8 @@ export default function RegisterPage() {
           <div className="text-center">
             <Image src="/images/tori-poses/tori-pose-03.webp" alt="Tori" width={56} height={56} className="object-contain mx-auto mb-2" />
             <h1 className="text-xl font-bold text-[var(--text-primary)]">注册</h1>
-            <p className="text-xs text-[var(--text-muted)] mt-1">创建你的学习账户</p>
+            <p className="text-xs text-[var(--text-muted)] mt-1">用户名是你的登录账号，登录后可以保存学习记录</p>
+            <p className="text-[11px] text-[var(--text-muted)] mt-2 opacity-70">暂时使用用户名注册，后续会支持绑定邮箱和手机号。</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -102,14 +104,13 @@ export default function RegisterPage() {
               <p className="text-xs text-[var(--color-danger)] bg-[var(--color-danger-bg)] rounded-lg px-3 py-2">{error}</p>
             )}
 
-            <button
+            <ToriPrimaryButton
               type="submit"
-              disabled={submitting}
-              className="btn-primary w-full flex items-center justify-center gap-2"
+              loading={submitting}
+              loadingText="注册中..."
             >
-              {submitting ? <Loader2 size={18} className="animate-spin" /> : <UserPlus size={18} />}
               注册
-            </button>
+            </ToriPrimaryButton>
           </form>
 
           <p className="text-center text-xs text-[var(--text-muted)]">

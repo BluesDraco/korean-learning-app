@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
   LayoutDashboard, DollarSign, Users, FileText, Activity, Mail,
-  ShieldAlert, LogOut, Home, Menu, X,
+  ShieldAlert, LogOut, Home, Menu, X, Music,
 } from 'lucide-react';
 
 const navItems = [
@@ -16,6 +16,7 @@ const navItems = [
   { href: '/admin/content', label: '内容管理', icon: FileText },
   { href: '/admin/messages', label: '消息中心', icon: Mail },
   { href: '/admin/system', label: '系统监控', icon: Activity },
+  { href: '/admin/kpop-calibration', label: 'KPOP 校准', icon: Music },
 ];
 
 function SidebarContent({ pathname, onNavClick }: { pathname: string; onNavClick?: () => void }) {
@@ -60,14 +61,14 @@ function SidebarContent({ pathname, onNavClick }: { pathname: string; onNavClick
       </nav>
 
       <div className="px-3 py-4 border-t border-[var(--border-color)] space-y-1">
-        <Link href="/" onClick={onNavClick} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[var(--text-muted)] hover:bg-[var(--bg-input)] hover:text-[var(--text-primary)] transition-colors">
+        <Link href="/daily" onClick={onNavClick} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[var(--text-muted)] hover:bg-[var(--bg-input)] hover:text-[var(--text-primary)] transition-colors">
           <Home size={18} />
           返回首页
         </Link>
         <button
           onClick={async () => {
             await fetch('/api/auth/logout', { method: 'POST' });
-            window.location.href = '/';
+            window.location.href = '/daily';
           }}
           className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[var(--text-muted)] hover:bg-[var(--bg-input)] hover:text-red-400 transition-colors w-full text-left"
         >
@@ -87,7 +88,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   useEffect(() => {
     if (!loading && (!user || user.role !== 'admin')) {
-      router.replace('/');
+      router.replace('/daily');
     }
   }, [user, loading, router]);
 

@@ -15,9 +15,9 @@ export interface ProgressiveStep {
 export const progressiveSteps: ProgressiveStep[] = [
   {
     id: 'basic-vowels',
-    title: '单元音',
+    title: '基础元音（10个）',
     titleKo: '단모음',
-    emoji: '🔤',
+    emoji: '',
     description: '10个基础元音，是韩语的发音基石。每个元音都由天、地、人三个元素演化而来。',
     letters: vowels.filter((v) => v.subtype === 'basic'),
     confusedPairs: [
@@ -39,10 +39,10 @@ export const progressiveSteps: ProgressiveStep[] = [
   },
   {
     id: 'compound-vowels',
-    title: '双元音',
+    title: '复合元音（11个）',
     titleKo: '이중모음',
-    emoji: '🔠',
-    description: '11个复合元音，由基础元音组合而成。掌握单元音后，双元音就是简单的拼合。',
+    emoji: '',
+    description: '11个复合元音，由基础元音组合而成。掌握基础元音后，复合元音就是简单的拼合。',
     letters: vowels.filter((v) => v.subtype === 'compound'),
     confusedPairs: [
       {
@@ -64,9 +64,9 @@ export const progressiveSteps: ProgressiveStep[] = [
   },
   {
     id: 'basic-consonants',
-    title: '基础辅音',
+    title: '基础辅音（14个）',
     titleKo: '기본 자음',
-    emoji: '🔡',
+    emoji: '',
     description: '14个基础辅音（含5个送气音），模仿发音器官的形状创造。韩语辅音的关键是"松紧"和"送气"。',
     letters: consonants.filter((c) => c.subtype === 'basic' || c.subtype === 'aspirated'),
     confusedPairs: [
@@ -90,9 +90,9 @@ export const progressiveSteps: ProgressiveStep[] = [
   },
   {
     id: 'double-consonants',
-    title: '紧音辅音',
+    title: '紧音（5个）',
     titleKo: '된소리',
-    emoji: '💪',
+    emoji: '',
     description: '5个紧音（双写辅音），发音时喉部肌肉紧张、声带紧闭。想象你在用力搬重物时的感觉。',
     letters: consonants.filter((c) => c.subtype === 'double'),
     confusedPairs: [
@@ -106,7 +106,7 @@ export const progressiveSteps: ProgressiveStep[] = [
     id: 'batchim',
     title: '收音（终声）',
     titleKo: '받침',
-    emoji: '🛑',
+    emoji: '',
     description: '7种收音发音，是韩语区别于中文的重要特征。一个音节末尾的辅音不发全、只做口型。',
     letters: batchimSounds,
     confusedPairs: [
@@ -120,7 +120,7 @@ export const progressiveSteps: ProgressiveStep[] = [
     id: 'reading',
     title: '综合拼读',
     titleKo: '읽기 연습',
-    emoji: '📖',
+    emoji: '',
     description: '把前面学的字母拼起来，读真正的韩文单词。看到词 → 试着读 → 听发音验证。读完这些你就真的能用韩文了！',
     letters: [],
     confusedPairs: [],

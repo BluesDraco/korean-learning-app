@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import {
-  BarChart3, BookOpen, Bookmark, TrendingUp, Loader2, Flame, Zap, Trophy,
-  Award, Star, Target, Pencil, Brain, AlertTriangle, Activity,
+  BarChart3, BookOpen, Bookmark, TrendingUp, Loader2, Flame, Zap,
+  Award, Star, Target, Brain, AlertTriangle, Activity,
 } from 'lucide-react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -164,7 +164,7 @@ export default function StatsPage() {
     : 0;
 
   return (
-    <div className="py-4 space-y-4">
+    <div className="py-4 space-y-4 max-w-2xl mx-auto md:max-w-3xl">
       {/* Header */}
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">

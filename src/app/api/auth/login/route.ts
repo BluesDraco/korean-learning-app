@@ -41,6 +41,9 @@ export async function POST(request: Request) {
 
     await resetRateLimit(`login:${ip}`);
 
+    // Record last login time
+    await db.run('UPDATE users SET last_login_at = ? WHERE id = ?', [Date.now(), id]);
+
     const token = await signToken({ userId: id, username: uname, role });
     await setAuthCookie(token);
 

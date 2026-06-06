@@ -10,13 +10,17 @@ function getClient(): Client {
   if (client) return client;
 
   const url = process.env.TURSO_DATABASE_URL;
-  const localDbDir = path.join(process.cwd(), 'data');
-  const localDbPath = path.join(localDbDir, 'app.db');
+  const localDbDir = path.resolve(process.cwd(), 'data');
+  const localDbPath = path.resolve(localDbDir, 'app.db');
 
   mkdirSync(localDbDir, { recursive: true });
 
+  // Use file: + absolute path so libsql resolves the file correctly regardless of CWD
+  const dbUrl = url || `file:${localDbPath}`;
+  console.log('[db] Connecting to:', dbUrl);
+
   client = createClient({
-    url: url || `file:${localDbPath}`,
+    url: dbUrl,
     ...(url ? { authToken: process.env.TURSO_AUTH_TOKEN } : {}),
   });
 
@@ -429,7 +433,395 @@ export async function getDb() {
   try { await c.execute(`ALTER TABLE user_profiles ADD COLUMN share_enabled INTEGER DEFAULT 0`); } catch { /* already exists */ }
   try { await c.execute(`ALTER TABLE user_profiles ADD COLUMN share_token TEXT DEFAULT ''`); } catch { /* already exists */ }
 
-        initialized = true;
+  // ── User table field migrations ──
+  try { await c.execute(`ALTER TABLE users ADD COLUMN email_verified_at INTEGER DEFAULT 0`); } catch { /* already exists */ }
+  try { await c.execute(`ALTER TABLE users ADD COLUMN phone TEXT DEFAULT ''`); } catch { /* already exists */ }
+  try { await c.execute(`ALTER TABLE users ADD COLUMN phone_verified_at INTEGER DEFAULT 0`); } catch { /* already exists */ }
+  try { await c.execute(`ALTER TABLE users ADD COLUMN last_login_at INTEGER DEFAULT 0`); } catch { /* already exists */ }
+  try { await c.execute(`ALTER TABLE users ADD COLUMN status TEXT DEFAULT 'active'`); } catch { /* already exists */ }
+
+  // Migration: add source / source_detail to user_words
+	  try { await c.execute(`ALTER TABLE user_words ADD COLUMN source TEXT DEFAULT ''`); } catch { /* already exists */ }
+	  try { await c.execute(`ALTER TABLE user_words ADD COLUMN source_detail TEXT DEFAULT ''`); } catch { /* already exists */ }
+
+	  // ── User sentences ──
+  await c.execute(`
+    CREATE TABLE IF NOT EXISTS user_sentences (
+      id TEXT PRIMARY KEY,
+      user_id TEXT NOT NULL,
+      korean TEXT NOT NULL,
+      chinese TEXT DEFAULT '',
+      source_type TEXT DEFAULT 'manual',
+      source_id TEXT,
+      note TEXT DEFAULT '',
+      created_at INTEGER NOT NULL,
+      updated_at INTEGER NOT NULL,
+      FOREIGN KEY (user_id) REFERENCES users(id)
+    )
+  `);
+  await c.execute(`CREATE INDEX IF NOT EXISTS idx_user_sentences_user ON user_sentences(user_id)`);
+
+  // ── User articles ──
+  await c.execute(`
+    CREATE TABLE IF NOT EXISTS user_articles (
+      id TEXT PRIMARY KEY,
+      user_id TEXT NOT NULL,
+      title TEXT NOT NULL,
+      original_text TEXT DEFAULT '',
+      translated_text TEXT DEFAULT '',
+      source_type TEXT DEFAULT 'manual',
+      source_url TEXT DEFAULT '',
+      created_at INTEGER NOT NULL,
+      updated_at INTEGER NOT NULL,
+      FOREIGN KEY (user_id) REFERENCES users(id)
+    )
+  `);
+  await c.execute(`CREATE INDEX IF NOT EXISTS idx_user_articles_user ON user_articles(user_id)`);
+
+  // ── User notes ──
+  await c.execute(`
+    CREATE TABLE IF NOT EXISTS user_notes (
+      id TEXT PRIMARY KEY,
+      user_id TEXT NOT NULL,
+      title TEXT NOT NULL,
+      content TEXT DEFAULT '',
+      source_type TEXT DEFAULT '',
+      source_id TEXT,
+      created_at INTEGER NOT NULL,
+      updated_at INTEGER NOT NULL,
+      FOREIGN KEY (user_id) REFERENCES users(id)
+    )
+  `);
+  await c.execute(`CREATE INDEX IF NOT EXISTS idx_user_notes_user ON user_notes(user_id)`);
+
+  // ── User recordings ──
+  await c.execute(`
+    CREATE TABLE IF NOT EXISTS user_recordings (
+      id TEXT PRIMARY KEY,
+      user_id TEXT NOT NULL,
+      type TEXT NOT NULL DEFAULT 'pronunciation',
+      source_id TEXT,
+      line_id TEXT,
+      audio_url TEXT NOT NULL,
+      duration_ms INTEGER DEFAULT 0,
+      created_at INTEGER NOT NULL,
+      updated_at INTEGER DEFAULT 0,
+      FOREIGN KEY (user_id) REFERENCES users(id)
+    )
+  `);
+  await c.execute(`CREATE INDEX IF NOT EXISTS idx_user_recordings_user ON user_recordings(user_id)`);
+
+  // Migration: add updated_at if missing
+  try { await c.execute(`ALTER TABLE user_recordings ADD COLUMN updated_at INTEGER DEFAULT 0`); } catch { /* already exists */ }
+  try { await c.execute(`ALTER TABLE user_recordings ADD COLUMN korean TEXT DEFAULT ''`); } catch { /* already exists */ }
+  try { await c.execute(`ALTER TABLE user_recordings ADD COLUMN audio_data TEXT DEFAULT ''`); } catch { /* already exists */ }
+  try { await c.execute(`ALTER TABLE user_recordings ADD COLUMN source_type TEXT DEFAULT ''`); } catch { /* already exists */ }
+
+  // Migration: add tracking columns to user_sentences
+  try { await c.execute(`ALTER TABLE user_sentences ADD COLUMN source_title TEXT DEFAULT ''`); } catch { /* already exists */ }
+  try { await c.execute(`ALTER TABLE user_sentences ADD COLUMN start_time REAL DEFAULT 0`); } catch { /* already exists */ }
+  try { await c.execute(`ALTER TABLE user_sentences ADD COLUMN end_time REAL DEFAULT 0`); } catch { /* already exists */ }
+
+  // ── User KPOP progress ──
+  await c.execute(`
+    CREATE TABLE IF NOT EXISTS user_kpop_progress (
+      id TEXT PRIMARY KEY,
+      user_id TEXT NOT NULL,
+      song_id TEXT NOT NULL,
+      current_line_index INTEGER DEFAULT 0,
+      practiced_lines TEXT DEFAULT '[]',
+      completed_lines TEXT DEFAULT '[]',
+      total_lines INTEGER DEFAULT 0,
+      total_recordings INTEGER DEFAULT 0,
+      total_practice_seconds INTEGER DEFAULT 0,
+      last_practiced_at INTEGER DEFAULT 0,
+      status TEXT DEFAULT 'not_started',
+      created_at INTEGER NOT NULL,
+      updated_at INTEGER NOT NULL,
+      FOREIGN KEY (user_id) REFERENCES users(id)
+    )
+  `);
+  await c.execute(`CREATE INDEX IF NOT EXISTS idx_user_kpop_progress_user ON user_kpop_progress(user_id, song_id)`);
+
+  // Migration: add total_lines if missing
+  try { await c.execute(`ALTER TABLE user_kpop_progress ADD COLUMN total_lines INTEGER DEFAULT 0`); } catch { /* already exists */ }
+
+  // ── User diary ──
+  await c.execute(`
+    CREATE TABLE IF NOT EXISTS user_diary (
+      id TEXT PRIMARY KEY,
+      user_id TEXT NOT NULL,
+      title TEXT DEFAULT '',
+      content TEXT NOT NULL,
+      mood TEXT DEFAULT '',
+      created_at INTEGER NOT NULL,
+      updated_at INTEGER NOT NULL,
+      FOREIGN KEY (user_id) REFERENCES users(id)
+    )
+  `);
+  await c.execute(`CREATE INDEX IF NOT EXISTS idx_user_diary_user ON user_diary(user_id)`);
+
+	  // ── KPOP lyric sessions ──
+	  await c.execute(`
+	    CREATE TABLE IF NOT EXISTS kpop_lyric_sessions (
+	      id TEXT PRIMARY KEY,
+	      user_id TEXT NOT NULL,
+	      song_id TEXT NOT NULL,
+	      total_lines INTEGER NOT NULL DEFAULT 0,
+	      practiced_lines INTEGER NOT NULL DEFAULT 0,
+	      completed_lines INTEGER NOT NULL DEFAULT 0,
+	      current_line_index INTEGER DEFAULT 0,
+	      last_practiced_at INTEGER,
+	      total_practice_seconds INTEGER DEFAULT 0,
+	      status TEXT DEFAULT 'not_started',
+	      created_at INTEGER NOT NULL,
+	      updated_at INTEGER NOT NULL,
+	      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+	      UNIQUE(user_id, song_id)
+	    )
+	  `);
+	  await c.execute(`CREATE INDEX IF NOT EXISTS idx_kpop_lyric_sessions_user ON kpop_lyric_sessions(user_id, song_id)`);
+
+	  // ── KPOP line progress ──
+	  await c.execute(`
+	    CREATE TABLE IF NOT EXISTS kpop_line_progress (
+	      id TEXT PRIMARY KEY,
+	      user_id TEXT NOT NULL,
+	      song_id TEXT NOT NULL,
+	      line_index INTEGER NOT NULL,
+	      status TEXT DEFAULT 'untouched',
+	      practiced_count INTEGER DEFAULT 0,
+	      last_practiced_at INTEGER,
+	      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+	      UNIQUE(user_id, song_id, line_index)
+	    )
+	  `);
+	  await c.execute(`CREATE INDEX IF NOT EXISTS idx_kpop_line_progress_user ON kpop_line_progress(user_id, song_id)`);
+
+	  // ── KPOP recordings ──
+	  await c.execute(`
+	    CREATE TABLE IF NOT EXISTS kpop_recordings (
+	      id TEXT PRIMARY KEY,
+	      user_id TEXT NOT NULL,
+	      song_id TEXT NOT NULL,
+	      line_id TEXT NOT NULL,
+	      line_index INTEGER NOT NULL,
+	      recording_url TEXT,
+	      duration_ms INTEGER DEFAULT 0,
+	      attempt_index INTEGER DEFAULT 1,
+	      user_note TEXT,
+	      created_at INTEGER NOT NULL,
+	      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+	    )
+	  `);
+	  await c.execute(`CREATE INDEX IF NOT EXISTS idx_kpop_recordings_user ON kpop_recordings(user_id, song_id, line_index)`);
+
+	  // ── KPOP hot posts ──
+	  await c.execute(`
+	    CREATE TABLE IF NOT EXISTS kpop_hot_posts (
+	      id TEXT PRIMARY KEY,
+	      title_zh TEXT NOT NULL,
+	      title_ko TEXT,
+	      summary_zh TEXT,
+	      category TEXT DEFAULT 'general',
+	      image_url TEXT,
+	      source_url TEXT,
+	      source_name TEXT,
+	      artists TEXT DEFAULT '[]',
+	      groups TEXT DEFAULT '[]',
+	      tags TEXT DEFAULT '[]',
+	      hot_score INTEGER DEFAULT 0,
+	      learning_score INTEGER DEFAULT 0,
+	      published_at INTEGER,
+	      fetched_at INTEGER,
+	      created_at INTEGER NOT NULL,
+	      is_published INTEGER DEFAULT 1
+	    )
+	  `);
+
+	  // ── KPOP import jobs ──
+	  await c.execute(`
+	    CREATE TABLE IF NOT EXISTS kpop_import_jobs (
+	      id TEXT PRIMARY KEY,
+	      user_id TEXT NOT NULL,
+	      url TEXT NOT NULL,
+	      status TEXT DEFAULT 'queued',
+	      track_id TEXT,
+	      title TEXT DEFAULT '',
+	      error TEXT,
+	      created_at INTEGER NOT NULL,
+	      updated_at INTEGER NOT NULL,
+	      FOREIGN KEY (user_id) REFERENCES users(id)
+	    )
+	  `);
+	  await c.execute(`CREATE INDEX IF NOT EXISTS idx_kpop_import_jobs_user ON kpop_import_jobs(user_id)`);
+
+	  // ── KPOP hot sentences ──
+	  await c.execute(`
+	    CREATE TABLE IF NOT EXISTS kpop_hot_sentences (
+	      id TEXT PRIMARY KEY,
+	      post_id TEXT NOT NULL,
+	      sort_index INTEGER NOT NULL DEFAULT 0,
+	      korean TEXT NOT NULL,
+	      chinese TEXT NOT NULL,
+	      breakdown TEXT DEFAULT '[]',
+	      expression_note TEXT,
+	      reusable_expression TEXT,
+	      audio_url TEXT,
+	      FOREIGN KEY (post_id) REFERENCES kpop_hot_posts(id) ON DELETE CASCADE
+	    )
+	  `);
+	  await c.execute(`CREATE INDEX IF NOT EXISTS idx_kpop_hot_sentences_post ON kpop_hot_sentences(post_id)`);
+
+	      // Kpop track calibration
+	      await c.execute(`
+	        CREATE TABLE IF NOT EXISTS kpop_track_calibration (
+	          id TEXT PRIMARY KEY,
+	          song_id TEXT NOT NULL UNIQUE,
+	          timing_offset_ms INTEGER NOT NULL DEFAULT 0,
+	          timing_verified INTEGER NOT NULL DEFAULT 0,
+	          timing_source TEXT DEFAULT 'manual',
+	          created_at INTEGER NOT NULL DEFAULT (unixepoch() * 1000),
+	          updated_at INTEGER NOT NULL DEFAULT (unixepoch() * 1000)
+	        )
+	      `);
+	      await c.execute(`CREATE INDEX IF NOT EXISTS idx_kpop_calibration_song ON kpop_track_calibration(song_id)`);
+
+      // Kpop line calibration — per-line timing adjustments
+      await c.execute(`
+        CREATE TABLE IF NOT EXISTS kpop_line_calibration (
+          id TEXT PRIMARY KEY,
+          song_id TEXT NOT NULL,
+          line_index INTEGER NOT NULL,
+          start_offset_ms INTEGER NOT NULL DEFAULT 0,
+          end_offset_ms INTEGER NOT NULL DEFAULT 0,
+          updated_at INTEGER NOT NULL DEFAULT (unixepoch() * 1000),
+          UNIQUE(song_id, line_index)
+        )
+      `);
+      await c.execute(`CREATE INDEX IF NOT EXISTS idx_kpop_line_cal_song ON kpop_line_calibration(song_id)`);
+
+      // ── Pronunciation attempts ──
+      await c.execute(`
+        CREATE TABLE IF NOT EXISTS user_pronunciation_attempts (
+          id TEXT PRIMARY KEY,
+          user_id TEXT NOT NULL,
+          item_id TEXT NOT NULL,
+          duration_ms INTEGER NOT NULL DEFAULT 0,
+          score REAL,
+          feedback TEXT,
+          created_at INTEGER NOT NULL DEFAULT (unixepoch()),
+          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        )
+      `);
+      await c.execute(`CREATE INDEX IF NOT EXISTS idx_pronunciation_attempts_user ON user_pronunciation_attempts(user_id)`);
+
+      // ── Lesson mastery (30-day course) ──
+      await c.execute(`
+        CREATE TABLE IF NOT EXISTS lesson_mastery (
+          id TEXT PRIMARY KEY,
+          user_id TEXT NOT NULL,
+          day_num INTEGER NOT NULL,
+          item_type TEXT NOT NULL,
+          item_idx INTEGER NOT NULL,
+          status TEXT NOT NULL DEFAULT 'new',
+          seen_count INTEGER DEFAULT 0,
+          correct_count INTEGER DEFAULT 0,
+          wrong_count INTEGER DEFAULT 0,
+          last_seen_at INTEGER,
+          next_review_at INTEGER,
+          interval INTEGER DEFAULT 0,
+          ease REAL DEFAULT 2.5,
+          source TEXT DEFAULT '',
+          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        )
+      `);
+      await c.execute(`CREATE INDEX IF NOT EXISTS idx_lesson_mastery_user ON lesson_mastery(user_id)`);
+
+      // ── Learning events (30-day course) ──
+      await c.execute(`
+        CREATE TABLE IF NOT EXISTS learning_events (
+          id TEXT PRIMARY KEY,
+          user_id TEXT NOT NULL,
+          day_num INTEGER NOT NULL,
+          card_type TEXT NOT NULL,
+          action TEXT NOT NULL,
+          detail TEXT DEFAULT '',
+          timestamp INTEGER NOT NULL,
+          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        )
+      `);
+      await c.execute(`CREATE INDEX IF NOT EXISTS idx_learning_events_user ON learning_events(user_id)`);
+
+      // ── Grammar states ──
+      await c.execute(`
+        CREATE TABLE IF NOT EXISTS user_grammar_states (
+          id TEXT PRIMARY KEY,
+          user_id TEXT NOT NULL,
+          status TEXT DEFAULT 'new',
+          seen_count INTEGER DEFAULT 0,
+          correct_count INTEGER DEFAULT 0,
+          wrong_count INTEGER DEFAULT 0,
+          last_seen_at INTEGER,
+          next_review_at INTEGER,
+          source TEXT,
+          created_at INTEGER NOT NULL,
+          updated_at INTEGER NOT NULL,
+          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        )
+      `);
+      await c.execute(`CREATE INDEX IF NOT EXISTS idx_grammar_states_user ON user_grammar_states(user_id)`);
+
+      // ── Article progress ──
+      await c.execute(`
+        CREATE TABLE IF NOT EXISTS user_article_progress (
+          id TEXT PRIMARY KEY,
+          user_id TEXT NOT NULL,
+          article_id TEXT NOT NULL,
+          status TEXT DEFAULT 'not_started',
+          read_sentence_ids TEXT DEFAULT '[]',
+          saved_sentence_ids TEXT DEFAULT '[]',
+          saved_word_ids TEXT DEFAULT '[]',
+          quiz_score INTEGER,
+          quiz_answers TEXT DEFAULT '{}',
+          output_answer TEXT,
+          completed_at INTEGER,
+          last_read_at INTEGER NOT NULL,
+          created_at INTEGER NOT NULL,
+          updated_at INTEGER NOT NULL,
+          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        )
+      `);
+      await c.execute(`CREATE INDEX IF NOT EXISTS idx_article_progress_user ON user_article_progress(user_id)`);
+
+      // ── Article learning events ──
+      await c.execute(`
+        CREATE TABLE IF NOT EXISTS article_learning_events (
+          id TEXT PRIMARY KEY,
+          user_id TEXT NOT NULL,
+          article_id TEXT NOT NULL,
+          sentence_id TEXT,
+          action TEXT NOT NULL,
+          payload TEXT,
+          created_at INTEGER NOT NULL,
+          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        )
+      `);
+      await c.execute(`CREATE INDEX IF NOT EXISTS idx_article_learning_events_user ON article_learning_events(user_id)`);
+
+      // ── Reading progress (hot posts / reading articles) ──
+      await c.execute(`
+        CREATE TABLE IF NOT EXISTS reading_progress (
+          id TEXT PRIMARY KEY,
+          user_id TEXT NOT NULL,
+          post_id TEXT NOT NULL,
+          read_at INTEGER NOT NULL,
+          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        )
+      `);
+      await c.execute(`CREATE INDEX IF NOT EXISTS idx_reading_progress_user ON reading_progress(user_id)`);
+
+  initialized = true;
       })();
     }
     await initPromise;
@@ -446,6 +838,9 @@ export async function getDb() {
     },
     run: async (sql: string, params?: unknown[]) => {
       await c.execute({ sql, args: params as any[] });
+    },
+    batch: async (statements: { sql: string; args: unknown[] }[]) => {
+      await c.batch(statements as any);
     },
   };
 }

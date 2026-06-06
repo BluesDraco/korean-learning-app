@@ -8,7 +8,7 @@ type Writable = 'all' | 'readonly';
 const TABLE_COLS: Record<string, { cols: string[]; pk: string; table: string; userScope: UserScope; writable: Writable }> = {
   words: {
     table: 'user_words',
-    cols: ['id', 'user_id', 'word', 'pronunciation', 'meaning', 'part_of_speech', 'examples', 'source_entry_id', 'source_video_id', 'source_subtitle_id', 'mastery', 'srs_level', 'next_review', 'ease_factor', 'interval', 'created_at', 'last_reviewed'],
+    cols: ['id', 'user_id', 'word', 'pronunciation', 'meaning', 'part_of_speech', 'examples', 'source_entry_id', 'source_video_id', 'source_subtitle_id', 'source', 'source_detail', 'mastery', 'srs_level', 'next_review', 'ease_factor', 'interval', 'created_at', 'last_reviewed'],
     pk: 'id', userScope: 'user_id', writable: 'all',
   },
   reviewSessions: {
@@ -106,6 +106,71 @@ const TABLE_COLS: Record<string, { cols: string[]; pk: string; table: string; us
     cols: ['id', 'user_id', 'invite_token', 'learning_goal', 'level', 'daily_minutes', 'intro', 'expires_at'],
     pk: 'id', userScope: 'user_id', writable: 'all',
   },
+  sentences: {
+    table: 'user_sentences',
+    cols: ['id', 'user_id', 'korean', 'chinese', 'source_type', 'source_id', 'source_title', 'start_time', 'end_time', 'note', 'created_at', 'updated_at'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
+  articles: {
+    table: 'user_articles',
+    cols: ['id', 'user_id', 'title', 'original_text', 'translated_text', 'source_type', 'source_url', 'created_at', 'updated_at'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
+  notes: {
+    table: 'user_notes',
+    cols: ['id', 'user_id', 'title', 'content', 'source_type', 'source_id', 'created_at', 'updated_at'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
+  recordings: {
+    table: 'user_recordings',
+    cols: ['id', 'user_id', 'type', 'source_id', 'line_id', 'audio_url', 'korean', 'audio_data', 'source_type', 'duration_ms', 'created_at', 'updated_at'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
+  kpopProgress: {
+    table: 'user_kpop_progress',
+    cols: ['id', 'user_id', 'song_id', 'current_line_index', 'practiced_lines', 'completed_lines', 'total_lines', 'total_recordings', 'total_practice_seconds', 'last_practiced_at', 'status', 'created_at', 'updated_at'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
+  diary: {
+    table: 'user_diary',
+    cols: ['id', 'user_id', 'title', 'content', 'mood', 'created_at', 'updated_at'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
+  pronunciationAttempts: {
+    table: 'user_pronunciation_attempts',
+    cols: ['id', 'user_id', 'item_id', 'duration_ms', 'score', 'feedback', 'created_at'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
+  lessonMastery: {
+    table: 'lesson_mastery',
+    cols: ['id', 'user_id', 'day_num', 'item_type', 'item_idx', 'status', 'seen_count', 'correct_count', 'wrong_count', 'last_seen_at', 'next_review_at', 'interval', 'ease', 'source'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
+  learningEvents: {
+    table: 'learning_events',
+    cols: ['id', 'user_id', 'day_num', 'card_type', 'action', 'detail', 'timestamp'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
+  userGrammarStates: {
+    table: 'user_grammar_states',
+    cols: ['id', 'user_id', 'status', 'seen_count', 'correct_count', 'wrong_count', 'last_seen_at', 'next_review_at', 'source', 'created_at', 'updated_at'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
+  userArticleProgress: {
+    table: 'user_article_progress',
+    cols: ['id', 'user_id', 'article_id', 'status', 'read_sentence_ids', 'saved_sentence_ids', 'saved_word_ids', 'quiz_score', 'quiz_answers', 'output_answer', 'completed_at', 'last_read_at', 'created_at', 'updated_at'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
+  articleLearningEvents: {
+    table: 'article_learning_events',
+    cols: ['id', 'user_id', 'article_id', 'sentence_id', 'action', 'payload', 'created_at'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
+  readingProgress: {
+    table: 'reading_progress',
+    cols: ['id', 'user_id', 'post_id', 'read_at'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
 };
 
 function toSnake(s: string) {
@@ -138,7 +203,7 @@ function rowToObj(cols: string[], row: unknown[]): Record<string, unknown> {
   for (let i = 0; i < cols.length; i++) {
     const camelKey = cols[i].replace(/_([a-z])/g, (_, c) => c.toUpperCase());
     let val = row[i];
-    if (['examples', 'word_ids', 'tokens', 'words_added'].includes(cols[i]) || ['examples', 'wordIds', 'tokens', 'wordsAdded'].includes(camelKey)) {
+    if (['examples', 'word_ids', 'tokens', 'words_added', 'practiced_lines', 'completed_lines', 'read_sentence_ids', 'saved_sentence_ids', 'saved_word_ids', 'quiz_answers'].includes(cols[i]) || ['examples', 'wordIds', 'tokens', 'wordsAdded', 'practicedLines', 'completedLines', 'readSentenceIds', 'savedSentenceIds', 'savedWordIds', 'quizAnswers'].includes(camelKey)) {
       try { val = JSON.parse(val as string); } catch { /* keep raw */ }
     }
     obj[camelKey] = val;
@@ -293,17 +358,11 @@ export async function POST(req: Request) {
       case 'put': {
         requireWritable(info);
         const idVal = resolveStorageId(table, data[pk] ?? data.id, auth.userId);
-        let deleteSql: string;
-        let deleteParams: unknown[];
         const u = buildUserClause(userScope, auth.userId);
-        if (u.clause) {
-          deleteSql = `DELETE FROM ${info.table} WHERE ${pk} = ? AND ${u.clause}`;
-          deleteParams = [idVal, ...u.params];
-        } else {
-          deleteSql = `DELETE FROM ${info.table} WHERE ${pk} = ?`;
-          deleteParams = [idVal];
-        }
-        await db.run(deleteSql, deleteParams);
+        const deleteSql = u.clause
+          ? `DELETE FROM ${info.table} WHERE ${pk} = ? AND ${u.clause}`
+          : `DELETE FROM ${info.table} WHERE ${pk} = ?`;
+        const deleteParams: unknown[] = u.clause ? [idVal, ...u.params] : [idVal];
 
         const snakeData = toSnakeObj(data);
         applyStorageIds(table, snakeData, pk, auth.userId);
@@ -312,10 +371,11 @@ export async function POST(req: Request) {
         const colNames = Object.keys(snakeData);
         const placeholders = colNames.map(() => '?');
         const values = normalizeSqlValues(colNames.map((c) => snakeData[c]));
-        await db.run(
-          `INSERT INTO ${info.table} (${colNames.join(', ')}) VALUES (${placeholders.join(', ')})`,
-          values
-        );
+
+        await db.batch([
+          { sql: deleteSql, args: deleteParams },
+          { sql: `INSERT INTO ${info.table} (${colNames.join(', ')}) VALUES (${placeholders.join(', ')})`, args: values as unknown[] },
+        ]);
         return NextResponse.json({ ok: true });
       }
 

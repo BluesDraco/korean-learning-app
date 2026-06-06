@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { ExternalLink, BookOpen, RefreshCw, Sparkles, AlertCircle, Play, User } from 'lucide-react';
+import { useFeedback } from '@/hooks/useFeedback';
 
 interface NewsPost {
   id: string;
@@ -37,6 +38,7 @@ export function NewsClient() {
   const [error, setError] = useState('');
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
   const [sortMode, setSortMode] = useState<SortMode>('latest');
+  const { click: feedbackClick, success: feedbackSuccess, error: feedbackError } = useFeedback();
 
   async function fetchNews() {
     try {
@@ -60,6 +62,7 @@ export function NewsClient() {
   }, []);
 
   async function handleRefresh() {
+    feedbackClick();
     setRefreshing(true);
     try {
       const res = await fetch('/api/kpop-news', { method: 'POST' });
@@ -67,11 +70,14 @@ export function NewsClient() {
       if (json.ok) {
         setData({ date: new Date().toISOString().slice(0, 10), updatedAt: Date.now(), posts: json.posts });
         setError('');
+        feedbackSuccess('已刷新');
       } else {
         setError(json.error || '刷新失败');
+        feedbackError(json.error || '刷新失败');
       }
     } catch {
       setError('网络错误');
+      feedbackError('网络错误');
     } finally {
       setRefreshing(false);
     }

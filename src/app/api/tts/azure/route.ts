@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { fetchWithTimeout } from '@/lib/fetch';
+import { getAuthFromCookie } from '@/lib/server/auth';
 
 const AZURE_KEY = process.env.AZURE_TTS_KEY;
 const AZURE_REGION = process.env.AZURE_TTS_REGION || 'eastus';
@@ -18,6 +19,9 @@ function escXml(s: string): string {
 }
 
 export async function POST(req: Request) {
+  const auth = await getAuthFromCookie();
+  if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
   if (!AZURE_KEY) {
     return NextResponse.json({ error: 'Azure TTS not configured' }, { status: 500 });
   }

@@ -627,7 +627,7 @@ export default function AIChatPage() {
             </div>
             <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
               <div className="flex items-center gap-2">
-                <span className="text-xs text-[var(--text-muted)]">托里在想...</span>
+                <span className="text-xs text-[var(--text-muted)]">토리 생각 중...</span>
                 <span className="w-1.5 h-1.5 rounded-full bg-[var(--purple-soft)]/60 animate-bounce" style={{ animationDelay: '0ms' }} />
                 <span className="w-1.5 h-1.5 rounded-full bg-[var(--purple-soft)]/60 animate-bounce" style={{ animationDelay: '150ms' }} />
                 <span className="w-1.5 h-1.5 rounded-full bg-[var(--purple-soft)]/60 animate-bounce" style={{ animationDelay: '300ms' }} />

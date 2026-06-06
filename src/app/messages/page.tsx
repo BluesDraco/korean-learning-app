@@ -67,7 +67,7 @@ export default function MessagesPage() {
             height={80}
             className="object-contain mx-auto"
           />
-          <span className="absolute -top-1 -right-2 text-2xl">✉️</span>
+          {unreadCount > 0 && <span className="absolute -top-1 -right-2 bg-[var(--pink-primary)] text-white w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold">{unreadCount}</span>}
         </div>
         <h1 className="text-2xl font-bold text-[var(--text-primary)] section-header">
           내 편지함
@@ -96,7 +96,7 @@ export default function MessagesPage() {
       {/* Messages list */}
       {messages.length === 0 ? (
         <div className="text-center py-16 space-y-4">
-          <span className="text-5xl">📮</span>
+          <Mail size={48} className="text-[var(--text-placeholder)] mx-auto" />
           <p className="text-[var(--text-secondary)] text-sm">还没有收到任何消息</p>
           <p className="text-[var(--text-muted)] text-xs">管理员发布公告或更新日志后会出现在这里</p>
         </div>

@@ -72,6 +72,7 @@ export async function POST(req: Request) {
     await recordAiUsage(auth.userId, 'handwriting');
     return NextResponse.json({ text });
   } catch (err: any) {
-    return NextResponse.json({ text: '', error: err.message }, { status: 200 });
+    console.error('[ai/handwriting]', err);
+    return NextResponse.json({ text: '', error: '识别失败，请重试' }, { status: 200 });
   }
 }

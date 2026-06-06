@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
   const totalCount = countResult.length > 0 ? Number(countResult[0].values[0]?.[0] ?? 0) : 0;
 
   // Main query with SQL-level pagination
-  let sql = `SELECT id, username, nickname, email, role, membership_type, membership_expiry, banned, created_at FROM users ${whereClause}`;
+  let sql = `SELECT id, username, nickname, email, role, created_at FROM users ${whereClause}`;
   if (sort === 'newest') sql += ' ORDER BY created_at DESC';
   else if (sort === 'oldest') sql += ' ORDER BY created_at ASC';
 
@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
   const queryParams = [...params, pageSize, offset];
 
   const result = await db.exec(sql, queryParams);
-  const rawUsers: { id: string; username: string; nickname: string; email: string; role: string; membershipType: string; membershipExpiry: number | null; banned: number; createdAt: number }[] =
+  const rawUsers: { id: string; username: string; nickname: string; email: string; role: string; createdAt: number }[] =
     result.length > 0
       ? result[0].values.map((row) => ({
           id: row[0] as string,
@@ -48,30 +48,83 @@ export async function GET(request: NextRequest) {
           nickname: row[2] as string,
           email: row[3] as string,
           role: row[4] as string,
-          membershipType: (row[5] as string) || 'free',
-          membershipExpiry: row[6] as number | null,
-          banned: row[7] as number,
-          createdAt: row[8] as number,
+          createdAt: row[5] as number,
         }))
       : [];
 
+  // Batch-query real stats
+  const userIds = rawUsers.map((u) => u.id);
+  const statsMap: Record<string, { words: number; sentences: number; recordings: number; kpop: number; diary: number; studyDays: number; xp: number }> = {};
+
+  if (userIds.length > 0) {
+    try {
+      const idsPlaceholders = userIds.map(() => '?').join(',');
+
+      const batchStats = async (table: string) => {
+        const r = await db.exec(
+          `SELECT user_id, COUNT(*) as cnt FROM ${table} WHERE user_id IN (${idsPlaceholders}) GROUP BY user_id`,
+          userIds
+        );
+        const map: Record<string, number> = {};
+        for (const row of r[0]?.values ?? []) {
+          map[row[0] as string] = Number(row[1]);
+        }
+        return map;
+      };
+
+      const [wordsMap, sentencesMap, recordingsMap, kpopMap, diaryMap] = await Promise.all([
+        batchStats('user_words'),
+        batchStats('user_sentences'),
+        batchStats('user_recordings'),
+        batchStats('user_kpop_progress'),
+        batchStats('user_diary'),
+      ]);
+
+      const profileMap: Record<string, { studyDays: number; xp: number }> = {};
+      try {
+        const pRes = await db.exec(
+          `SELECT user_id, streak, xp FROM user_profiles WHERE user_id IN (${idsPlaceholders})`,
+          userIds
+        );
+        for (const row of pRes[0]?.values ?? []) {
+          profileMap[row[0] as string] = { studyDays: Number(row[1]), xp: Number(row[2]) };
+        }
+      } catch { /* profiles may not exist */ }
+
+      for (const id of userIds) {
+        statsMap[id] = {
+          words: wordsMap[id] || 0,
+          sentences: sentencesMap[id] || 0,
+          recordings: recordingsMap[id] || 0,
+          kpop: kpopMap[id] || 0,
+          diary: diaryMap[id] || 0,
+          studyDays: profileMap[id]?.studyDays || 0,
+          xp: profileMap[id]?.xp || 0,
+        };
+      }
+    } catch { /* best effort */ }
+  }
+
   const users: AdminUser[] = rawUsers.map((u) => ({
     ...u,
-    membershipType: u.membershipType as AdminUser['membershipType'],
-    membershipExpiry: u.membershipExpiry ?? null,
-    banned: u.banned === 1,
-    studyDays: 0,
-    totalXp: 0,
-    wordsLearned: 0,
-  }));
+    membershipType: 'free' as AdminUser['membershipType'],
+    membershipExpiry: null,
+    banned: false,
+    studyDays: statsMap[u.id]?.studyDays ?? 0,
+    totalXp: statsMap[u.id]?.xp ?? 0,
+    wordsLearned: statsMap[u.id]?.words ?? 0,
+    sentencesCount: statsMap[u.id]?.sentences ?? 0,
+    recordingsCount: statsMap[u.id]?.recordings ?? 0,
+    kpopCount: statsMap[u.id]?.kpop ?? 0,
+    diaryCount: statsMap[u.id]?.diary ?? 0,
+  } as AdminUser));
 
   // Status filtering in JS
   let filtered = users;
   if (status === 'banned') filtered = users.filter((u) => u.banned);
   else if (status === 'vip') filtered = users.filter((u) => u.membershipType !== 'free');
 
-  // Use COUNT total for "all", page-size estimate for filtered views
-  const total = status === 'all' ? totalCount : totalCount;
+  const total = totalCount;
 
   const response: AdminUsersResponse = { users: filtered, total, page, pageSize };
   return NextResponse.json(response);

@@ -171,7 +171,7 @@ export function WordAudioPlayer({ words }: Props) {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-[150]">
-      <div className="pl-0 md:pl-52 px-3 md:px-5 lg:px-8 w-full max-w-[1280px] mx-auto">
+      <div className="px-4 md:pl-52 md:pr-5 lg:pr-8 w-full max-w-[1280px] mx-auto">
         <div className={`bg-[var(--bg-card)] border border-[var(--border-color)] ${collapsed ? 'rounded-2xl' : 'rounded-t-2xl'} shadow-xl shadow-black/10 transition-all`}>
           {/* Header bar */}
           <div className="flex items-center gap-3 px-4 py-2.5">

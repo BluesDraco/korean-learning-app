@@ -127,7 +127,7 @@ export default function ProgressivePhonetics() {
     if (mode === 'listen' && listenQuestions.length > 0 && !audioPlayedRef.current && quizAnswer === null && !quizComplete) {
       audioPlayedRef.current = true;
       const item = listenQuestions[quizIdx];
-      speak(item.item.letter, 0.7);
+      speak(item.item.name, 0.7);
     }
   }, [mode, listenQuestions, quizIdx, quizAnswer, quizComplete]);
 
@@ -160,7 +160,7 @@ export default function ProgressivePhonetics() {
   const replayAudio = () => {
     const questions = mode === 'listen' ? listenQuestions : quizQuestions;
     if (questions[quizIdx]) {
-      speak(questions[quizIdx].item.letter, 0.7);
+      speak(questions[quizIdx].item.name, 0.7);
     }
   };
 
@@ -197,7 +197,7 @@ export default function ProgressivePhonetics() {
                       : 'bg-[var(--bg-input)] text-[var(--text-secondary)] border border-[var(--border-color)]'
               }`}
             >
-              {isDone ? <Check size={12} /> : isLocked ? <Lock size={10} /> : <span>{step.emoji}</span>}
+              {isDone ? <Check size={12} /> : isLocked ? <Lock size={10} /> : <span>{i + 1}</span>}
               {step.title}
               {i < progressiveSteps.length - 1 && (
                 <span className="text-[var(--text-muted)] ml-0.5">›</span>
@@ -272,7 +272,6 @@ export default function ProgressivePhonetics() {
       {mode === 'browse' && !activeStep.isReadingStep && (
         <>
           <div className="text-center">
-            <div className="text-5xl mb-3">{activeStep.emoji}</div>
             <h2 className="text-xl font-bold text-[var(--text-primary)]">
               {activeStep.title} <span className="text-[var(--text-muted)] text-base font-normal">({activeStep.titleKo})</span>
             </h2>
@@ -295,11 +294,8 @@ export default function ProgressivePhonetics() {
                     isExpanded ? 'ring-2 ring-[var(--pink-primary)]/30 shadow-lg' : 'hover:border-[var(--border-hover)]'
                   }`}
                 >
-                  <div className="mb-2">
-                    <span className="text-2xl">{letter.emoji}</span>
-                  </div>
                   <button
-                    onClick={() => speak(letter.letter, 0.7)}
+                    onClick={() => speak(letter.name, 0.7)}
                     className="w-full text-3xl font-extrabold text-[var(--text-primary)] mb-1 text-center block hover:text-[var(--pink-primary)] transition-colors"
                     style={{ fontFamily: "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif" }}
                     title="点击听发音"
@@ -366,7 +362,7 @@ export default function ProgressivePhonetics() {
                       {pair.letters.map((l) => (
                         <button
                           key={l.id}
-                          onClick={() => speak(l.letter, 0.7)}
+                          onClick={() => speak(l.name, 0.7)}
                           className="flex items-center gap-2 bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] rounded-xl px-3 py-2 transition-colors"
                           title="点击听发音"
                         >

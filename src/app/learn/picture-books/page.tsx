@@ -113,7 +113,7 @@ export default function PictureBooksPage() {
       {/* Coming soon */}
       <div className="text-center py-8">
         <p className="text-xs text-[var(--text-muted)]">
-          更多绘本故事即将上线...
+          更多绘本故事持续更新中...
         </p>
       </div>
     </div>

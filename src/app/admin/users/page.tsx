@@ -99,7 +99,9 @@ export default function AdminUsersPage() {
                 <th className="text-center px-4 py-3 text-xs text-[var(--text-muted)] font-medium">会员</th>
                 <th className="text-center px-4 py-3 text-xs text-[var(--text-muted)] font-medium">学习天数</th>
                 <th className="text-center px-4 py-3 text-xs text-[var(--text-muted)] font-medium">经验值</th>
-                <th className="text-center px-4 py-3 text-xs text-[var(--text-muted)] font-medium">单词量</th>
+                <th className="text-center px-4 py-3 text-xs text-[var(--text-muted)] font-medium">单词</th>
+                <th className="text-center px-4 py-3 text-xs text-[var(--text-muted)] font-medium">录音</th>
+                <th className="text-center px-4 py-3 text-xs text-[var(--text-muted)] font-medium">KPOP</th>
                 <th className="text-right px-4 py-3 text-xs text-[var(--text-muted)] font-medium">注册时间</th>
                 <th className="text-right px-4 py-3 text-xs text-[var(--text-muted)] font-medium">操作</th>
               </tr>
@@ -131,6 +133,8 @@ export default function AdminUsersPage() {
                   <td className="px-4 py-3 text-center text-xs text-[var(--text-secondary)]">{u.studyDays}天</td>
                   <td className="px-4 py-3 text-center text-xs font-semibold text-[var(--text-primary)]">{u.totalXp.toLocaleString()}</td>
                   <td className="px-4 py-3 text-center text-xs text-[var(--text-secondary)]">{u.wordsLearned}</td>
+                  <td className="px-4 py-3 text-center text-xs text-[var(--text-secondary)]">{u.recordingsCount ?? 0}</td>
+                  <td className="px-4 py-3 text-center text-xs text-[var(--text-secondary)]">{u.kpopCount ?? 0}</td>
                   <td className="px-4 py-3 text-right text-xs text-[var(--text-muted)]">
                     {new Date(u.createdAt).toLocaleDateString('zh-CN')}
                   </td>

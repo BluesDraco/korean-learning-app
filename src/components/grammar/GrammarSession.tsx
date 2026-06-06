@@ -43,7 +43,6 @@ export function GrammarSession({ grammar, onClose, reviewQueue, onNextReview }: 
   const [choiceResult, setChoiceResult] = useState<'correct' | 'wrong' | null>(null);
   const [selectedChoiceOption, setSelectedChoiceOption] = useState<string | null>(null);
   const [correctCount, setCorrectCount] = useState(0);
-  const [wrongCount, setWrongCount] = useState(0);
   const [playerState, setPlayerState] = useState<string>('idle');
   const [nextReviewDays, setNextReviewDays] = useState(1);
   const correctRef = useRef(0);
@@ -126,7 +125,7 @@ export function GrammarSession({ grammar, onClose, reviewQueue, onNextReview }: 
         });
       }
       await awardXp(XP_REWARDS.wordReviewed);
-    } catch (_) {}
+    } catch (_e) {}
   }, [grammar.id]);
 
   const goNextStep = useCallback(() => {
@@ -180,7 +179,6 @@ export function GrammarSession({ grammar, onClose, reviewQueue, onNextReview }: 
     } else {
       setChoiceResult('wrong');
       wrongRef.current += 1;
-      setWrongCount((c) => c + 1);
     }
   };
 
@@ -211,7 +209,6 @@ export function GrammarSession({ grammar, onClose, reviewQueue, onNextReview }: 
     setChoiceResult(null);
     setSelectedChoiceOption(null);
     setCorrectCount(0);
-    setWrongCount(0);
     setNextReviewDays(1);
     correctRef.current = 0;
     wrongRef.current = 0;

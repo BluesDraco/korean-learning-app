@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { GripHorizontal, RefreshCw, CheckCircle } from 'lucide-react';
+import { RefreshCw, CheckCircle } from 'lucide-react';
 
 interface Props {
   pieces: string[];

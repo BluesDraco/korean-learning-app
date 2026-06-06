@@ -313,6 +313,7 @@ export function VocabularySession({ words, onClose }: Props) {
       tomorrowReview: sw.length,
       sessionCount: sw.length,
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase]);
 
   // Derived step counts for progress

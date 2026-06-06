@@ -115,6 +115,10 @@ export interface AdminUser {
   studyDays: number;
   totalXp: number;
   wordsLearned: number;
+  sentencesCount: number;
+  recordingsCount: number;
+  kpopCount: number;
+  diaryCount: number;
   createdAt: number;
   banned: boolean;
 }

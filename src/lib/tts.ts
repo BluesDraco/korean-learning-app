@@ -1,3 +1,6 @@
+import { classifyContent, resolveAudioPolicy, sanitizeTTSText, type AudioContentType } from '@/lib/audio/audioPolicy';
+import { getStaticAudio } from '@/lib/audio/audioRegistry';
+
 let currentAudio: HTMLAudioElement | null = null;
 let qwenFailedUntil = 0;
 let speakSeq = 0;
@@ -68,6 +71,24 @@ function cleanText(text: string): string {
     .trim();
 }
 
+// Detect if text is jamo, minimal pair, or very short Korean that Qwen can't handle reliably.
+// These must use browser speechSynthesis — NEVER generative AI TTS.
+function isShortKoreanText(text: string): boolean {
+  const cleaned = text.replace(/\s/g, '');
+  if (!cleaned) return false;
+  // Single jamo character (consonant or vowel) — Qwen hallucinates on these
+  if (/^[ㄱ-ㅎㅏ-ㅣ]$/.test(cleaned)) return true;
+  // 1-3 Hangul syllables — short words that Qwen may over-extend
+  if (/^[가-힣]{1,3}$/.test(cleaned)) return true;
+  // Minimal pair patterns like "으 vs 우", "어 vs 오"
+  if (/vs/i.test(text)) return true;
+  // Text with "/" separator — likely comparative phonetics like "ㄱ/ㅋ/ㄲ"
+  if (/\//.test(text)) return true;
+  // Text containing single jamo mixed with separators
+  if (/[ㄱ-ㅎㅏ-ㅣ]/.test(cleaned) && cleaned.length <= 6) return true;
+  return false;
+}
+
 // Detect if text is primarily Chinese (not Korean)
 function isChineseText(text: string): boolean {
   const cleaned = text.replace(/\s/g, '');
@@ -102,7 +123,26 @@ export async function speak(
   cancelSpeech();
   const seq = ++speakSeq;
 
-  // Check cache first
+  // Classify content and resolve audio policy
+  const contentType: AudioContentType = classifyContent(cleaned);
+  const policy = resolveAudioPolicy(contentType);
+
+  // For static-only types (jamo, hangul letter, minimal pair),
+  // prefer fixed static audio; if not available, fall back to browser TTS
+  if (policy.source === 'static_audio') {
+    const audio = getStaticAudio(cleaned);
+    if (audio) {
+      try { await playUrl(audio.url, seq); } catch { /* silent */ }
+      onEnd?.();
+      return;
+    }
+    // No static audio — fall back to browser TTS rather than silent failure
+    try { await speakViaBrowser(sanitizeTTSText(cleaned), rate); } catch { /* silent */ }
+    onEnd?.();
+    return;
+  }
+
+  // Check cache first (for Qwen-allowed content types)
   const cacheKey = `${rate}:${cleaned}`;
   const cached = audioCache.get(cacheKey);
   if (cached && Date.now() - cached.ts < CACHE_TTL) {
@@ -112,7 +152,6 @@ export async function speak(
       onEnd?.();
       return;
     } catch {
-      // cache miss on playback, fall through
       audioCache.delete(cacheKey);
     }
   }
@@ -120,7 +159,7 @@ export async function speak(
   // If text is Chinese, skip Qwen and go straight to browser TTS
   if (isChineseText(cleaned)) {
     try {
-      await speakViaBrowser(cleaned, rate);
+      await speakViaBrowser(sanitizeTTSText(cleaned), rate);
       onEnd?.();
     } catch {
       // both failed
@@ -155,7 +194,7 @@ export async function speak(
 
   // Browser speechSynthesis fallback
   try {
-    await speakViaBrowser(cleaned, rate);
+    await speakViaBrowser(sanitizeTTSText(cleaned), rate);
   } catch {
     // both failed, give up silently
   }
@@ -199,7 +238,7 @@ async function speakViaQwen(text: string, rate: number, seq: number): Promise<st
   return url;
 }
 
-async function playUrl(url: string, seq: number): Promise<void> {
+async function playUrl(url: string, _seq: number): Promise<void> {
   await new Promise<void>((resolve, reject) => {
     const audio = new Audio(url);
     currentAudio = audio;

@@ -1,16 +1,29 @@
 'use client';
 
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useState, useCallback, useMemo, Suspense } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import {
-  BookOpen, Zap, Clock, ArrowRight, Library, Bookmark,
-  GraduationCap, Sparkles, Target, TrendingUp,
+  BookOpen, Clock, ArrowRight, Library, Bookmark,
+  Sparkles, Target, TrendingUp, MessageSquare, Trash2, Volume2,
 } from 'lucide-react';
 import { db } from '@/lib/db';
 import { ThemesSection } from '@/components/vocabulary/ThemesSection';
 import { BooksSection } from '@/components/vocabulary/BooksSection';
 import { VocabularySession } from '@/components/vocabulary/VocabularySession';
+import { speak } from '@/lib/tts';
 import type { Word, MasteryLevel } from '@/types';
+
+interface SavedSentence {
+  id: string;
+  userId?: string;
+  korean: string;
+  chinese: string;
+  source?: string;
+  sourceType?: string;
+  clipId?: string;
+  createdAt?: number;
+}
 
 const masteryColor: Record<MasteryLevel, string> = {
   new: 'bg-slate-500',
@@ -19,11 +32,17 @@ const masteryColor: Record<MasteryLevel, string> = {
   mastered: 'bg-emerald-400',
 };
 
-export default function VocabularyPage() {
+function VocabularyContent() {
+  const searchParams = useSearchParams();
+  const urlTab = searchParams.get('tab');
   const [allWords, setAllWords] = useState<Word[]>([]);
   const [loading, setLoading] = useState(true);
   const [showSession, setShowSession] = useState(false);
-  const [tab, setTab] = useState<'home' | 'library' | 'books'>('home');
+  const [tab, setTab] = useState<'home' | 'library' | 'books' | 'sentences'>(
+    urlTab === 'sentences' ? 'sentences' : 'home'
+  );
+  const [sentences, setSentences] = useState<SavedSentence[]>([]);
+  const [sentencesLoading, setSentencesLoading] = useState(false);
 
   const loadWords = useCallback(async () => {
     setLoading(true);
@@ -33,6 +52,14 @@ export default function VocabularyPage() {
   }, []);
 
   useEffect(() => { loadWords(); }, [loadWords]);
+
+  useEffect(() => {
+    if (tab !== 'sentences') return;
+    setSentencesLoading(true);
+    db.sentences.orderBy('createdAt').reverse().toArray()
+      .then((list) => { setSentences(list as SavedSentence[]); setSentencesLoading(false); })
+      .catch(() => setSentencesLoading(false));
+  }, [tab]);
 
   // Stats
   const stats = useMemo(() => {
@@ -66,7 +93,7 @@ export default function VocabularyPage() {
         </div>
         <Link href="/vocabulary/library" className="block bg-gradient-to-r from-[var(--pink-primary)]/10 to-[var(--purple-soft)]/10 border border-[var(--pink-pale)] rounded-2xl p-4 hover:border-[var(--pink-primary)]/30 transition-all group">
           <div className="flex items-center gap-3">
-            <span className="text-3xl">📚</span>
+            <Library size={28} className="text-[var(--pink-primary)]" />
             <div className="flex-1">
               <p className="text-sm font-bold text-[var(--text-primary)]">词库</p>
               <p className="text-xs text-[var(--text-secondary)]">主题词包 · 分级词表 · 延世教材 · 情景词典</p>
@@ -112,11 +139,92 @@ export default function VocabularyPage() {
     );
   }
 
+  // ── Sentences tab ──
+  if (tab === 'sentences') {
+    const handleDeleteSentence = async (id: string) => {
+      await db.sentences.delete(id);
+      setSentences((prev) => prev.filter((s) => s.id !== id));
+    };
+
+    return (
+      <div className="py-4 space-y-4">
+        <div className="flex items-center gap-3">
+          <button onClick={() => setTab('home')} className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)]">← 返回</button>
+          <h1 className="text-xl font-bold text-[var(--text-primary)]">我的句子</h1>
+        </div>
+
+        {sentencesLoading ? (
+          <div className="flex items-center justify-center py-20">
+            <div className="w-8 h-8 border-2 border-slate-600 border-t-blue-400 rounded-full animate-spin" />
+          </div>
+        ) : sentences.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
+            <div className="w-20 h-20 rounded-2xl bg-[var(--bg-input)]/60 flex items-center justify-center mb-5">
+              <MessageSquare size={36} className="text-[var(--text-placeholder)]" />
+            </div>
+            <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-2">还没有保存句子</h2>
+            <p className="text-sm text-[var(--text-muted)] max-w-xs mb-6">
+              在内容拆解、影子跟读或阅读中保存句子，会出现在这里
+            </p>
+            <Link href="/ai/analyze" className="flex items-center gap-2 text-sm px-5 py-2.5 rounded-xl bg-[var(--pink-primary)] text-white font-medium">
+              去拆解韩语句子 <ArrowRight size={14} />
+            </Link>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            <p className="text-xs text-[var(--text-muted)]">共 {sentences.length} 条句子</p>
+            {sentences.map((s) => (
+              <div
+                key={s.id}
+                className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-4 space-y-2"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <p className="text-[15px] font-bold text-[var(--text-primary)] leading-relaxed flex-1" style={{ fontFamily: "system-ui, sans-serif" }}>
+                    {s.korean}
+                  </p>
+                  <div className="flex items-center gap-1 shrink-0">
+                    <button
+                      onClick={() => speak(s.korean, 0.75)}
+                      className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors"
+                      title="听发音"
+                    >
+                      <Volume2 size={14} />
+                    </button>
+                    <button
+                      onClick={() => handleDeleteSentence(s.id)}
+                      className="p-1.5 rounded-lg hover:bg-red-50 text-[var(--text-muted)] hover:text-red-500 transition-colors"
+                      title="删除"
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
+                </div>
+                <p className="text-sm text-[var(--text-secondary)]">{s.chinese}</p>
+                <div className="flex items-center gap-2 text-[10px] text-[var(--text-muted)]">
+                  {s.sourceType && (
+                    <span className="px-1.5 py-0.5 rounded bg-[var(--bg-input)]">
+                      {s.sourceType === 'analysis' ? '内容拆解' :
+                       s.sourceType === 'shadowing' ? '影子跟读' :
+                       s.sourceType === 'reading' ? '阅读' : s.sourceType}
+                    </span>
+                  )}
+                  {s.createdAt && (
+                    <span>{new Date(s.createdAt).toLocaleDateString('zh-CN')}</span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
+
   // ═══════════════════════════════════════════════════════════════
   //  Home tab — "Today's Task" view
   // ═══════════════════════════════════════════════════════════════
   return (
-    <div className="py-4 space-y-5">
+    <div className="py-4 space-y-5 max-w-2xl mx-auto md:max-w-3xl">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -238,9 +346,24 @@ export default function VocabularyPage() {
               <Bookmark size={16} />
               我的单词本
             </button>
+            <button
+              onClick={() => setTab('sentences')}
+              className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-[var(--bg-card)] border border-[var(--border-color)] text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+            >
+              <MessageSquare size={16} />
+              我的句子
+            </button>
           </div>
         </>
       )}
     </div>
+  );
+}
+
+export default function VocabularyPage() {
+  return (
+    <Suspense>
+      <VocabularyContent />
+    </Suspense>
   );
 }

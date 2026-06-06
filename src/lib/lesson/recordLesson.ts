@@ -118,7 +118,7 @@ export async function recordLessonComplete(
           updatedAt: now,
         });
       }
-    } catch (_) {}
+    } catch (_e) {}
   }
 
   // Update daily log counts

@@ -232,6 +232,13 @@ export const db = {
   userGrammarStates: new CloudTable<UserGrammarState>('userGrammarStates'),
   userArticleProgress: new CloudTable<UserArticleProgress>('userArticleProgress'),
   articleLearningEvents: new CloudTable<ArticleLearningEvent>('articleLearningEvents'),
+  sentences: new CloudTable<any>('sentences'),
+  articles: new CloudTable<any>('articles'),
+  notes: new CloudTable<any>('notes'),
+  recordings: new CloudTable<any>('recordings'),
+  kpopProgress: new CloudTable<any>('kpopProgress'),
+  diary: new CloudTable<any>('diary'),
+  readingProgress: new CloudTable<any>('readingProgress'),
 };
 
 export async function initSettings(): Promise<AppSettings> {

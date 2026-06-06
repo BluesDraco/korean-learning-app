@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  serverExternalPackages: ['@libsql/client'],
   // Exclude large authoring assets from build tracing to prevent build hangs
   outputFileTracingExcludes: {
     'next-server': [
@@ -16,6 +17,34 @@ const nextConfig: NextConfig = {
   },
   images: {
     minimumCacheTTL: 86400,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'imgnews.pstatic.net',
+      },
+      {
+        protocol: 'https',
+        hostname: 'ssl.pstatic.net',
+      },
+      {
+        protocol: 'https',
+        hostname: 'img.youtube.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.ytimg.com',
+      },
+    ],
+  },
+
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/daily',
+        permanent: false,
+      },
+    ];
   },
 
   async headers() {
@@ -33,8 +62,8 @@ const nextConfig: NextConfig = {
               "img-src 'self' data: blob: https:",
               "font-src 'self' data:",
               "connect-src 'self' https://api.deepseek.com",
-              "media-src 'self' data: blob:",
-              "frame-src 'self' https://www.bilibili.com",
+              "media-src 'self' data: blob: https://torikorean-1436752408.cos.ap-hongkong.myqcloud.com",
+              "frame-src 'self' https://www.bilibili.com https://www.youtube.com https://www.youtube-nocookie.com",
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'",
@@ -62,6 +91,15 @@ const nextConfig: NextConfig = {
       {
         source: '/korea/:path*',
         headers: [{ key: 'Cache-Control', value: 'public, max-age=3600, stale-while-revalidate=86400' }],
+      },
+      // Override for dynamic KPOP pages — short cache to avoid stale UI after deploy
+      {
+        source: '/korea/kpop/news/(.*)',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=300, stale-while-revalidate=3600' }],
+      },
+      {
+        source: '/korea/kpop/:path*',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=60, stale-while-revalidate=300' }],
       },
       {
         source: '/knowledge/:path*',

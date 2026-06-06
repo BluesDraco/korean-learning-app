@@ -4,8 +4,9 @@ import { useState, Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { ArrowLeft, LogIn, Loader2 } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
+import { ToriPrimaryButton } from '@/components/mobile/ToriPrimaryButton';
 
 function LoginForm() {
   const router = useRouter();
@@ -24,7 +25,7 @@ function LoginForm() {
     try {
       const result = await login(username, password);
       if (result.error) {
-        setError(result.error);
+        setError('请检查用户名和密码。忘记密码功能将在后续版本开放。');
       } else {
         router.push(redirect);
       }
@@ -38,7 +39,7 @@ function LoginForm() {
   return (
     <div className="min-h-[calc(100vh-10rem)] flex items-center justify-center py-8">
       <div className="w-full max-w-sm">
-        <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] mb-6">
+        <Link href="/daily" className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] mb-6">
           <ArrowLeft size={16} />
           返回首页
         </Link>
@@ -47,7 +48,7 @@ function LoginForm() {
           <div className="text-center">
             <Image src="/images/tori-poses/tori-pose-02.webp" alt="Tori" width={64} height={64} className="object-contain mx-auto mb-2" />
             <h1 className="text-xl font-bold text-[var(--text-primary)]">登录</h1>
-            <p className="text-xs text-[var(--text-muted)] mt-1">登录你的学习账户</p>
+            <p className="text-xs text-[var(--text-muted)] mt-1">登录后可以保存你的生词、跟唱记录和学习进度</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -83,14 +84,13 @@ function LoginForm() {
               <p className="text-xs text-[var(--color-danger)] bg-[var(--color-danger-bg)] rounded-lg px-3 py-2">{error}</p>
             )}
 
-            <button
+            <ToriPrimaryButton
               type="submit"
-              disabled={submitting}
-              className="btn-primary w-full flex items-center justify-center gap-2"
+              loading={submitting}
+              loadingText="登录中..."
             >
-              {submitting ? <Loader2 size={18} className="animate-spin" /> : <LogIn size={18} />}
               登录
-            </button>
+            </ToriPrimaryButton>
           </form>
 
           <p className="text-center text-xs text-[var(--text-muted)]">

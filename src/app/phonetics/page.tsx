@@ -45,27 +45,45 @@ function generateQuiz(letters: PhoneticLetter[]) {
   });
 }
 
-const tabConfig: { key: Tab; label: string; emoji: string }[] = [
-  { key: 'vowel', label: '元音', emoji: '🔤' },
-  { key: 'consonant', label: '辅音', emoji: '🔡' },
-  { key: 'batchim', label: '收音', emoji: '🛑' },
+const tabConfig: { key: Tab; label: string }[] = [
+  { key: 'vowel', label: '元音' },
+  { key: 'consonant', label: '辅音' },
+  { key: 'batchim', label: '收音' },
 ];
 
 const subtypeLabels: Record<string, string> = {
-  basic: '基本',
+  basic: '基础',
   compound: '复合',
-  aspirated: '送气',
   double: '紧音',
   stop: '塞音',
   nasal: '鼻音',
   liquid: '流音',
 };
 
+function getSubtypeLabel(subtype: string, tab: Tab): string {
+  if (tab === 'vowel') {
+    if (subtype === 'basic') return '基础元音';
+    if (subtype === 'compound') return '复合元音';
+  }
+  if (tab === 'consonant') {
+    if (subtype === 'basic') return '基础辅音';
+    if (subtype === 'double') return '紧音';
+  }
+  return subtypeLabels[subtype] || subtype;
+}
+
+function getSpeakText(letter: PhoneticLetter): string {
+  if (letter.type === 'vowel') return letter.name;
+  if (letter.type === 'batchim') return letter.name;
+  // consonant: speak letter name for reliable TTS
+  return letter.name;
+}
+
 // ── Rules data (merged from phonetics/rules) ──────────────────
 
 const ruleCategories = [
   {
-    id: 'linking', label: '连读化', icon: '🔗',
+    id: 'linking', label: '连读化',
     description: '当前音节有终声且后音节以元音开头时，终声移到后音节作初声',
     rules: [
       {
@@ -90,7 +108,7 @@ const ruleCategories = [
     ],
   },
   {
-    id: 'nasal', label: '鼻音化', icon: '👃',
+    id: 'nasal', label: '鼻音化',
     description: '终声ㄱㄷㅂ遇到初声ㅁㄴ时，分别变为ㅇㄴㅁ',
     rules: [
       {
@@ -106,7 +124,7 @@ const ruleCategories = [
     ],
   },
   {
-    id: 'liquid', label: '流音化', icon: '👅',
+    id: 'liquid', label: '流音化',
     description: 'ㄴ与ㄹ相遇时互相影响，ㄴ+ㄹ→ㄹ+ㄹ, ㄹ+ㄴ→ㄹ+ㄹ',
     rules: [
       {
@@ -122,7 +140,7 @@ const ruleCategories = [
     ],
   },
   {
-    id: 'aspiration', label: '送气化', icon: '💨',
+    id: 'aspiration', label: '送气化',
     description: 'ㅎ与ㄱㄷㅂㅈ相遇时互相结合为送气音ㅋㅌㅍㅊ',
     rules: [
       {
@@ -138,7 +156,7 @@ const ruleCategories = [
     ],
   },
   {
-    id: 'palatalization', label: '腭化', icon: '😊',
+    id: 'palatalization', label: '腭化',
     description: '终声ㄷㅌ遇到后缀이时变为ㅈㅊ',
     rules: [
       {
@@ -287,7 +305,6 @@ export default function PhoneticsPage() {
               : 'text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)]'
           }`}
         >
-          <span>📝</span>
           分步学习
         </button>
         <button
@@ -298,7 +315,6 @@ export default function PhoneticsPage() {
               : 'text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)]'
           }`}
         >
-          <span>🔤</span>
           字母表
         </button>
         <button
@@ -309,7 +325,6 @@ export default function PhoneticsPage() {
               : 'text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)]'
           }`}
         >
-          <span>📖</span>
           连读规则
         </button>
         <button
@@ -320,7 +335,6 @@ export default function PhoneticsPage() {
               : 'text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)]'
           }`}
         >
-          <span>🧩</span>
           音节拼装
         </button>
       </div>
@@ -343,7 +357,6 @@ export default function PhoneticsPage() {
                     : 'text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)]'
                 }`}
               >
-                <span>{t.emoji}</span>
                 {t.label}
               </button>
             ))}
@@ -358,17 +371,16 @@ export default function PhoneticsPage() {
                   <div key={subtype}>
                     <h3 className="text-sm font-medium text-[var(--text-muted)] mb-2 flex items-center gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-[var(--pink-primary)]" />
-                      {subtypeLabels[subtype] || subtype}
+                      {getSubtypeLabel(subtype, tab)}
                       <span className="text-[var(--text-placeholder)] font-normal">({letters.length}个)</span>
                     </h3>
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
                       {letters.map((letter) => (
                         <button
                           key={letter.id}
-                          onClick={() => speak(letter.letter, 0.7)}
+                          onClick={() => speak(getSpeakText(letter), 0.7)}
                           className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 text-center hover:border-[var(--pink-primary)]/30 hover:shadow-md hover:shadow-[var(--pink-primary)]/5 transition-all group"
                         >
-                          <span className="text-3xl block mb-1">{letter.emoji}</span>
                           <span className="text-3xl font-bold text-[var(--text-primary)] block mb-0.5" style={{ fontFamily: "'system-ui', 'sans-serif'" }}>
                             {letter.letter}
                           </span>
@@ -396,7 +408,7 @@ export default function PhoneticsPage() {
                     className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 flex items-start gap-4"
                   >
                     <button
-                      onClick={() => speak(letter.letter, 0.7)}
+                      onClick={() => speak(getSpeakText(letter), 0.7)}
                       className="shrink-0 w-16 h-16 rounded-xl bg-[var(--bg-input)] flex items-center justify-center hover:bg-[var(--bg-accent)] transition-colors"
                     >
                       <span className="text-2xl font-bold text-[var(--text-primary)]" style={{ fontFamily: "'system-ui', 'sans-serif'" }}>
@@ -416,10 +428,10 @@ export default function PhoneticsPage() {
                         )}
                       </div>
                       <p className="text-sm text-[var(--text-secondary)]">{letter.sound}</p>
-                      <p className="text-xs text-[var(--text-muted)] mt-1">💡 {letter.mnemonic}</p>
+                      <p className="text-xs text-[var(--text-muted)] mt-1">{letter.mnemonic}</p>
                     </div>
                     <button
-                      onClick={() => speak(letter.letter, 0.7)}
+                      onClick={() => speak(getSpeakText(letter), 0.7)}
                       className="p-2 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-placeholder)] hover:text-[var(--pink-primary)] transition-colors shrink-0"
                       title="听发音"
                     >
@@ -526,7 +538,7 @@ export default function PhoneticsPage() {
                           [{q.item.romanization}]
                         </span>
                         <button
-                          onClick={() => speak(q.item.letter, 0.7)}
+                          onClick={() => speak(getSpeakText(q.item), 0.7)}
                           className="ml-2 p-2 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-placeholder)] hover:text-[var(--pink-primary)] transition-colors inline-flex align-middle"
                           title="听发音"
                         >
@@ -573,7 +585,7 @@ export default function PhoneticsPage() {
                     {quizState.selectedAnswer !== null && (
                       <div className="flex items-center justify-between pt-2 border-t border-[var(--border-color)]">
                         <button
-                          onClick={() => speak(q.item.letter, 0.7)}
+                          onClick={() => speak(getSpeakText(q.item), 0.7)}
                           className="text-xs text-[var(--text-secondary)] hover:text-[var(--pink-primary)] flex items-center gap-1"
                         >
                           <Volume2 size={12} />
@@ -662,7 +674,6 @@ function RulesTab() {
                 : 'text-[var(--text-secondary)] hover:bg-[var(--bg-input)]'
             }`}
           >
-            <span className="text-base">{cat.icon}</span>
             <span>{cat.label}</span>
           </button>
         ))}
@@ -671,7 +682,7 @@ function RulesTab() {
       {/* Category description */}
       <div className="bg-gradient-to-r from-[var(--pink-primary)]/5 to-[var(--purple-soft)]/5 border border-[var(--border-color)] rounded-2xl p-4">
         <p className="text-sm text-[var(--text-primary)] leading-relaxed">
-          <span className="font-medium text-[var(--pink-primary)]">{activeCategory.icon} {activeCategory.label}</span>
+          <span className="font-medium text-[var(--pink-primary)]">{activeCategory.label}</span>
           {' — '}{activeCategory.description}
         </p>
       </div>
