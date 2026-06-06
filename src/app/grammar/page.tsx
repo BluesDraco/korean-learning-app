@@ -481,52 +481,6 @@ function GrammarContent() {
           <p className="text-xs text-[var(--text-secondary)]">{comparePair.difference}</p>
         </div>
 
-        {/* Quiz */}
-        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-5 space-y-3">
-          <p className="text-xs font-medium text-[var(--text-muted)]">判断题 {compareQIdx + 1}/{comparePair.questions.length}</p>
-          <p className="text-sm font-bold text-[var(--text-primary)]">{q.prompt}</p>
-          <div className="space-y-2">
-            {q.options.map((opt, i) => {
-              let btnStyle = 'bg-[var(--bg-input)] text-[var(--text-primary)]';
-              if (compareResult) {
-                if (opt === q.answer) {
-                  btnStyle = 'bg-[var(--mint-soft)]/15 border-[var(--mint-soft)] text-[var(--mint-soft)]';
-                } else if (opt === selectedCompareOption) {
-                  btnStyle = 'bg-[var(--color-danger-bg)] border-[var(--color-danger-light)] text-[var(--color-danger)]';
-                }
-              }
-              return (
-                <button
-                  key={i}
-                  onClick={() => handleCompareAnswer(opt)}
-                  disabled={compareResult !== null}
-                  className={`w-full p-3 rounded-xl border text-sm text-left transition-all ${btnStyle} ${compareResult ? 'border' : 'border-transparent hover:border-[var(--pink-primary)]/30'}`}
-                >
-                  {opt}
-                </button>
-              );
-            })}
-          </div>
-
-          {compareResult && (
-            <div className={`rounded-xl p-3 text-left ${
-              compareResult === 'correct'
-                ? 'bg-[var(--mint-soft)]/10 border border-[var(--mint-soft)]/20'
-                : 'bg-[var(--color-danger-bg)] border border-[var(--color-danger-light)]'
-            }`}>
-              <p className="text-xs font-medium text-[var(--text-primary)]">
-                {compareResult === 'correct' ? '正确!' : '再想想'}
-              </p>
-              <p className="text-xs text-[var(--text-muted)] mt-0.5">{q.explanation}</p>
-            </div>
-          )}
-
-          {compareResult && (
-            <button onClick={handleCompareNext} className="w-full py-3 bg-[var(--pink-primary)] text-white rounded-2xl font-bold text-sm">
-              {isLastQ ? '完成' : '下一题'}
-            </button>
-          )}
-        </div>
       </div>
     );
   }

@@ -59,6 +59,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <main className="relative min-h-dvh mx-auto w-full max-w-screen-sm px-4 pt-3 overflow-x-hidden bg-[var(--bg-base)] pb-[calc(72px+env(safe-area-inset-bottom,0px))]">
           <FloatingDecorations />
           <div className="relative z-[1]">{children}</div>
+          {/* Contact footer */}
+          <div className="text-center py-5 mt-4 border-t border-[var(--border-color)]">
+            <p className="text-[10px] text-[var(--text-muted)] leading-relaxed">
+              联系我：微信 13817498530 · 929989569@qq.com
+            </p>
+          </div>
         </main>
         <BottomTabBar />
       </div>
@@ -81,6 +87,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             ))}
             {/* User entry at bottom */}
             <div style={{ marginTop: 'auto', borderTop: '1px solid var(--desktop-line)' }}>
+              {/* Contact info */}
+              <div style={{ padding: '10px 16px 6px', fontSize: 10, color: 'var(--text-muted)', lineHeight: 1.7 }}>
+                <div style={{ fontWeight: 700, marginBottom: 2 }}>联系我</div>
+                <div>微信：13817498530</div>
+                <div>邮件：929989569@qq.com</div>
+              </div>
               {user?.role === 'admin' && (
                 <button
                   onClick={() => navigate('/admin')}

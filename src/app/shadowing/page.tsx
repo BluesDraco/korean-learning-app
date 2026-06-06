@@ -70,7 +70,14 @@ export default function ShadowingListPage() {
                 boxShadow: C.shadow, cursor: 'pointer',
               }}
             >
-              <img src={clip.coverUrl} alt={clip.title} style={{ width: 88, height: 88, borderRadius: 22, flexShrink: 0, objectFit: 'cover' }} />
+              <div style={{ width: 88, height: 88, borderRadius: 22, flexShrink: 0, overflow: 'hidden', background: 'linear-gradient(135deg,#201815,#ff8daf)' }}>
+                <img
+                  src={clip.coverUrl}
+                  alt={clip.title}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                  onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                />
+              </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <h3 style={{ fontSize: 15, fontWeight: 800, color: C.ink, margin: 0 }}>{clip.title}</h3>
                 {'speaker' in clip && clip.speaker && <div style={{ fontSize: 12, color: '#f0799b', fontWeight: 700, marginTop: 1 }}>{clip.speaker}</div>}

@@ -527,24 +527,24 @@ export default function TypingPage() {
           borderTop: '1px solid ' + C.line,
         }}>
           {/* Row 1 */}
-          <div style={{ display: 'flex', gap: 4, justifyContent: 'center', marginBottom: 4 }}>
+          <div style={{ display: 'flex', gap: 3, justifyContent: 'center', marginBottom: 4 }}>
             {KEY_ROWS[0].map(j => (
-              <button key={j} onClick={() => handleJamoClick(j)} style={{ width: 32, height: 38, borderRadius: 10, background: C.cream, border: '1px solid ' + C.line, color: C.ink, fontSize: 14, fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{j}</button>
+              <button key={j} onClick={() => handleJamoClick(j)} style={{ flex: '1 1 0', minWidth: 0, maxWidth: 38, height: 38, borderRadius: 10, background: C.cream, border: '1px solid ' + C.line, color: C.ink, fontSize: 14, fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{j}</button>
             ))}
           </div>
           {/* Row 2 */}
-          <div style={{ display: 'flex', gap: 4, justifyContent: 'center', marginBottom: 4 }}>
+          <div style={{ display: 'flex', gap: 3, justifyContent: 'center', marginBottom: 4, paddingLeft: '4%', paddingRight: '4%' }}>
             {KEY_ROWS[1].map(j => (
-              <button key={j} onClick={() => handleJamoClick(j)} style={{ width: 32, height: 38, borderRadius: 10, background: C.cream, border: '1px solid ' + C.line, color: C.ink, fontSize: 14, fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{j}</button>
+              <button key={j} onClick={() => handleJamoClick(j)} style={{ flex: '1 1 0', minWidth: 0, maxWidth: 38, height: 38, borderRadius: 10, background: C.cream, border: '1px solid ' + C.line, color: C.ink, fontSize: 14, fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{j}</button>
             ))}
           </div>
           {/* Row 3 */}
-          <div style={{ display: 'flex', gap: 4, justifyContent: 'center', marginBottom: 6 }}>
-            <div style={{ width: 52 }} />
+          <div style={{ display: 'flex', gap: 3, justifyContent: 'center', marginBottom: 6 }}>
+            <div style={{ flex: '1.5 1 0' }} />
             {KEY_ROWS[2].map(j => (
-              <button key={j} onClick={() => handleJamoClick(j)} style={{ width: 32, height: 38, borderRadius: 10, background: C.cream, border: '1px solid ' + C.line, color: C.ink, fontSize: 14, fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{j}</button>
+              <button key={j} onClick={() => handleJamoClick(j)} style={{ flex: '1 1 0', minWidth: 0, maxWidth: 38, height: 38, borderRadius: 10, background: C.cream, border: '1px solid ' + C.line, color: C.ink, fontSize: 14, fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{j}</button>
             ))}
-            <div style={{ width: 52 }} />
+            <div style={{ flex: '1.5 1 0' }} />
           </div>
           {/* Compound jamo row */}
           <div style={{ display: 'flex', gap: 4, justifyContent: 'center', marginBottom: 6 }}>
