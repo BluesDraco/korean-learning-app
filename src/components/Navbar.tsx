@@ -49,7 +49,7 @@ export function Navbar() {
   return (
     <>
       {/* Desktop sidebar — retro journal binder */}
-      <nav className="hidden md:flex fixed left-0 top-0 bottom-0 md:w-14 lg:w-52 bg-[var(--bg-card)] border-r border-[var(--border-color)] flex-col z-50 shadow-sm transition-[width] duration-200"
+      <nav className="hidden lg:flex fixed left-0 top-0 bottom-0 lg:w-52 bg-[var(--bg-card)] border-r border-[var(--border-color)] flex-col z-50 shadow-sm transition-[width] duration-200"
         style={{
           borderImage: 'repeating-linear-gradient(180deg, var(--pink-pale, #FFD6E0) 0px, var(--pink-pale, #FFD6E0) 2px, transparent 2px, transparent 8px) 1',
           borderRightWidth: '3px',

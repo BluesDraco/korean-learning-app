@@ -110,8 +110,8 @@ export default function KpopPage() {
   const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
-    setIsDesktop(window.innerWidth >= 768);
-    const onResize = () => setIsDesktop(window.innerWidth >= 768);
+    setIsDesktop(window.innerWidth >= 1024);
+    const onResize = () => setIsDesktop(window.innerWidth >= 1024);
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, []);

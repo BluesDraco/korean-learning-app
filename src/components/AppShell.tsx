@@ -48,7 +48,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <>
       {/* ═══ Mobile ═══ */}
-      <div className="block md:hidden">
+      <div className="block lg:hidden">
         <div className="fixed top-0 left-0 right-0 z-[60] bg-[var(--bg-card)]/90 backdrop-blur border-b border-[var(--border-color)] py-1.5 text-center pt-safe px-4">
           <span className="text-[11px] font-bold tracking-wider text-[var(--pink-primary)]" style={{ fontFamily: "'KaiTi', 'STKaiti', cursive" }}>
             内测期间全功能免费体验
@@ -70,7 +70,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </div>
 
       {/* ═══ Desktop ═══ */}
-      <div className="hidden md:block desktop-body">
+      <div className="hidden lg:block desktop-body">
         <div className="desktop-app" style={meta.hidePanel ? { gridTemplateColumns: 'var(--desktop-sidebar) minmax(0, 1fr)' } : undefined}>
           {/* Sidebar */}
           <aside className="desktop-sidebar">
