@@ -533,8 +533,8 @@ export function KoreanKeyboard({ value, onChange, visible, onClose, onSend }: Ko
 
           {/* Key area */}
           <div
-            className="bg-[var(--bg-soft)] border border-[var(--border-color)] px-2 pt-2 pb-2"
-            style={{ borderRadius: '0 0 16px 16px' }}
+            className="bg-[var(--bg-soft)] border border-[var(--border-color)] px-2 pt-2"
+            style={{ borderRadius: '0 0 16px 16px', paddingBottom: isMobile ? 'calc(env(safe-area-inset-bottom, 0px) + 10px)' : '8px' }}
           >
             {ROWS.map((row, ri) => (
               <div key={ri} className="flex justify-center gap-[5px] mb-[5px]">
