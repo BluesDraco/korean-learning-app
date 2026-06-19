@@ -1,4 +1,4 @@
-const CACHE_NAME = 'korean-learn-v6';
+const CACHE_NAME = 'korean-learn-v8';
 const STATIC_EXTS = /\.(js|css|png|jpg|svg|ico|woff2?|ttf)$/;
 const OFFLINE_URL = '/offline.html';
 

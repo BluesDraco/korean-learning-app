@@ -1,11 +1,13 @@
 'use client';
 
 import { useEffect, useState, useCallback, useRef } from 'react';
+import { TappableText } from '@/components/TappableText';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { ArrowLeft, Volume2, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
-import { db } from '@/lib/db';
-import { speak, speakWord } from '@/lib/tts';
+import { ArrowLeft, Volume2, ChevronLeft, ChevronRight, Loader2, Star, Shuffle } from 'lucide-react';
+import { db, ensureFavoritesBook, FAVORITES_BOOK_ID } from '@/lib/db';
+import { speakWord, speak } from '@/lib/tts';
+import { getEntryByKorean } from '@/data/vocabulary/index';
 import type { WordBook, Word } from '@/types';
 
 export default function FlashcardStudyPage() {
@@ -14,13 +16,15 @@ export default function FlashcardStudyPage() {
   const [words, setWords] = useState<Word[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentIdx, setCurrentIdx] = useState(0);
-  const [isFlipped, setIsFlipped] = useState(false);
+  const [shuffled, setShuffled] = useState(false);
+  const [displayWords, setDisplayWords] = useState<typeof words>([]);
+  const [revealed, setRevealed] = useState(false);
   const [swipeOffset, setSwipeOffset] = useState(0);
   const [isSwiping, setIsSwiping] = useState(false);
   const [exiting, setExiting] = useState<'left' | 'right' | null>(null);
-  const [touchStartX, setTouchStartX] = useState(0);
-  const [touchStartY, setTouchStartY] = useState(0);
-
+  const [favoritedIds, setFavoritedIds] = useState<Set<string>>(new Set());
+  const touchStartX = useRef(0);
+  const touchStartY = useRef(0);
   const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -29,10 +33,16 @@ export default function FlashcardStudyPage() {
         const b = await db.wordBooks.get(id);
         if (!b) { setLoading(false); return; }
         setBook(b);
-        const loaded = await db.words.bulkGet(b.wordIds);
-        setWords(loaded.filter((w): w is Word => w != null));
-      } catch {
-        // ignore auth/network errors, show empty state
+        const loaded = await db.words.where('id').anyOf(b.wordIds).toArray();
+        const wordList = loaded.filter((w): w is Word => w != null);
+        setWords(wordList);
+        // Load favorites state
+        const favBook = await db.wordBooks.get(FAVORITES_BOOK_ID);
+        if (favBook) {
+          const favWordIds = new Set(favBook.wordIds);
+          const favSet = new Set(wordList.filter(w => favWordIds.has(w.id)).map(w => w.id));
+          setFavoritedIds(favSet);
+        }
       } finally {
         setLoading(false);
       }
@@ -40,40 +50,128 @@ export default function FlashcardStudyPage() {
     load();
   }, [id]);
 
-  const goTo = useCallback((idx: number) => {
-    if (idx < 0 || idx >= words.length) return;
-    setIsFlipped(false);
+  // sync displayWords with words, restoring session progress if available
+  useEffect(() => {
+    if (words.length === 0) return;
+    const SESSION_KEY = `fc-progress-book-${id}`;
+    try {
+      const saved = sessionStorage.getItem(SESSION_KEY);
+      if (saved) {
+        const { idx, order } = JSON.parse(saved) as { idx: number; order?: string[] };
+        if (order && order.length === words.length) {
+          const map = new Map(words.map(w => [w.id, w]));
+          const restored = order.map(k => map.get(k)).filter(Boolean) as typeof words;
+          if (restored.length === words.length) {
+            setDisplayWords(restored);
+            setShuffled(true);
+            setCurrentIdx(Math.min(idx, restored.length - 1));
+            return;
+          }
+        }
+        setDisplayWords([...words]);
+        setCurrentIdx(Math.min(idx, words.length - 1));
+        return;
+      }
+    } catch { /* ignore */ }
+    setDisplayWords(words);
+    setCurrentIdx(0);
+  }, [words]);
+
+  // persist progress on every card change
+  useEffect(() => {
+    if (displayWords.length === 0) return;
+    const SESSION_KEY = `fc-progress-book-${id}`;
+    try {
+      const order = shuffled ? displayWords.map(w => w.id) : undefined;
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify({ idx: currentIdx, order }));
+    } catch { /* ignore */ }
+  }, [currentIdx, displayWords, shuffled]);
+
+  const toggleShuffle = () => {
+    if (shuffled) {
+      setDisplayWords([...words]);
+    } else {
+      const arr = [...words];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      setDisplayWords(arr);
+    }
+    setShuffled(v => !v);
+    setCurrentIdx(0);
+    setRevealed(false);
+  };
+
+  const goTo = useCallback((idx: number, list: Word[]) => {
+    if (idx < 0 || idx >= list.length) return;
+    setRevealed(false);
     setSwipeOffset(0);
     setExiting(null);
     setCurrentIdx(idx);
-  }, [words.length]);
+  }, []);
 
-  const goNext = useCallback(() => goTo(currentIdx + 1), [currentIdx, goTo]);
-  const goPrev = useCallback(() => goTo(currentIdx - 1), [currentIdx, goTo]);
+  const toggleFavorite = useCallback(async (w: Word) => {
+    const isFav = favoritedIds.has(w.id);
+    const bookId = await ensureFavoritesBook();
+    const favBook = await db.wordBooks.get(bookId);
+    if (!favBook) return;
+    const now = Date.now();
+    if (isFav) {
+      await db.wordBooks.update(bookId, { wordIds: favBook.wordIds.filter(id => id !== w.id), updatedAt: now });
+      setFavoritedIds(prev => { const s = new Set(prev); s.delete(w.id); return s; });
+    } else {
+      if (!favBook.wordIds.includes(w.id)) {
+        await db.wordBooks.update(bookId, { wordIds: [...favBook.wordIds, w.id], updatedAt: now });
+      }
+      setFavoritedIds(prev => new Set(prev).add(w.id));
+    }
+  }, [favoritedIds]);
 
-  // Keyboard support
+  // Auto-play on card change
   useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft') goPrev();
-      else if (e.key === 'ArrowRight') goNext();
-      else if (e.key === ' ') { e.preventDefault(); setIsFlipped((f) => !f); }
+    if (!loading && displayWords[currentIdx]) {
+      const t = setTimeout(() => speakWord(displayWords[currentIdx].word, 0.85), 300);
+      return () => clearTimeout(t);
+    }
+  }, [currentIdx, loading, displayWords]);
+
+  // Keyboard
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') goTo(currentIdx - 1, displayWords);
+      else if (e.key === 'ArrowRight') goTo(currentIdx + 1, displayWords);
+      else if (e.key === ' ') { e.preventDefault(); setRevealed(r => !r); }
     };
-    window.addEventListener('keydown', handleKey);
-    return () => window.removeEventListener('keydown', handleKey);
-  }, [goPrev, goNext]);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [currentIdx, goTo, displayWords]);
 
   const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStartX(e.touches[0].clientX);
-    setTouchStartY(e.touches[0].clientY);
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
     setSwipeOffset(0);
     setIsSwiping(false);
     setExiting(null);
   };
 
+  useEffect(() => {
+    const el = cardRef.current;
+    if (!el) return;
+    const onTouchMove = (e: TouchEvent) => {
+      const dx = e.touches[0].clientX - touchStartX.current;
+      const dy = e.touches[0].clientY - touchStartY.current;
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 5) {
+        e.preventDefault();
+      }
+    };
+    el.addEventListener('touchmove', onTouchMove, { passive: false });
+    return () => el.removeEventListener('touchmove', onTouchMove);
+  }, []);
+
   const handleTouchMove = (e: React.TouchEvent) => {
-    const dx = e.touches[0].clientX - touchStartX;
-    const dy = e.touches[0].clientY - touchStartY;
-    // Only horizontal swipe
+    const dx = e.touches[0].clientX - touchStartX.current;
+    const dy = e.touches[0].clientY - touchStartY.current;
     if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 5) {
       setIsSwiping(true);
       setSwipeOffset(dx);
@@ -83,33 +181,25 @@ export default function FlashcardStudyPage() {
   const handleTouchEnd = () => {
     if (!isSwiping) return;
     setIsSwiping(false);
-
-    const SWIPE_THRESHOLD = 80;
-    if (swipeOffset > SWIPE_THRESHOLD && currentIdx > 0) {
-      setExiting('right');
-    } else if (swipeOffset < -SWIPE_THRESHOLD && currentIdx < words.length - 1) {
-      setExiting('left');
-    } else {
-      setSwipeOffset(0);
-    }
+    if (swipeOffset > 80 && currentIdx > 0) setExiting('right');
+    else if (swipeOffset < -80 && currentIdx < displayWords.length - 1) setExiting('left');
+    else setSwipeOffset(0);
   };
 
-  const handleClick = () => {
-    if (!isSwiping && Math.abs(swipeOffset) < 10) {
-      setIsFlipped(!isFlipped);
-    }
-  };
-
-  // On exiting animation end, advance card
   const handleTransitionEnd = () => {
-    if (exiting === 'left') goNext();
-    else if (exiting === 'right') goPrev();
+    if (exiting === 'left') goTo(currentIdx + 1, displayWords);
+    else if (exiting === 'right') goTo(currentIdx - 1, displayWords);
+  };
+
+  const handleCardClick = (e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).closest('button')) return;
+    if (!isSwiping && Math.abs(swipeOffset) < 10) setRevealed(r => !r);
   };
 
   if (loading) {
     return (
       <div className="flex items-center justify-center py-32">
-        <Loader2 size={32} className="animate-spin text-[var(--text-secondary)]" />
+        <Loader2 size={32} className="animate-spin" style={{ color: '#89756e' }} />
       </div>
     );
   }
@@ -117,18 +207,13 @@ export default function FlashcardStudyPage() {
   if (!book || words.length === 0) {
     return (
       <div className="py-4 space-y-4">
-        <Link href={`/vocabulary/books/${id}`} className="flex items-center gap-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
-          <ArrowLeft size={20} />
-          <span className="text-sm">返回</span>
+        <Link href={`/vocabulary/books/${id}`} className="flex items-center gap-2 text-sm" style={{ color: '#89756e' }}>
+          <ArrowLeft size={18} /> 返回
         </Link>
         <div className="text-center py-20">
-          <span className="text-6xl block mb-4">📝</span>
-          <p className="text-[var(--text-secondary)] text-sm mb-1">这个单词本还是空的</p>
-          <p className="text-[var(--text-muted)] text-xs mb-4">先去添加一些单词吧</p>
-          <Link
-            href={`/vocabulary/books/${id}`}
-            className="btn-primary inline-flex"
-          >
+          <span className="text-5xl block mb-4">📝</span>
+          <p className="text-sm mb-4" style={{ color: '#89756e' }}>这个单词本还是空的</p>
+          <Link href={`/vocabulary/books/${id}`} className="inline-flex items-center px-5 py-2.5 rounded-full text-white text-sm font-bold" style={{ background: '#ff7fa8' }}>
             去添加单词
           </Link>
         </div>
@@ -136,159 +221,200 @@ export default function FlashcardStudyPage() {
     );
   }
 
-  const word = words[currentIdx];
+  const word = displayWords[currentIdx];
+  if (!word) return null;
+  const progress = ((currentIdx + 1) / displayWords.length) * 100;
 
-  const getCardTransform = () => {
-    if (exiting === 'left') return 'translateX(-120%) rotate(-10deg)';
-    if (exiting === 'right') return 'translateX(120%) rotate(10deg)';
-    if (isSwiping) return `translateX(${swipeOffset}px) rotate(${swipeOffset * 0.05}deg)`;
+  const getTransform = () => {
+    if (exiting === 'left') return 'translateX(-120%) rotate(-8deg)';
+    if (exiting === 'right') return 'translateX(120%) rotate(8deg)';
+    if (isSwiping) return `translateX(${swipeOffset}px) rotate(${swipeOffset * 0.04}deg)`;
     return 'translateX(0) rotate(0deg)';
   };
 
   return (
-    <div className="py-4 flex flex-col gap-4" style={{ minHeight: 'calc(100dvh - 160px)' }}>
+    <div
+      className="flex flex-col px-4 pt-4"
+      style={{ minHeight: 'calc(100dvh - 56px - env(safe-area-inset-bottom, 0px))', paddingBottom: 'calc(16px + env(safe-area-inset-bottom, 0px))' }}
+    >
       {/* Header */}
-      <div className="flex items-center gap-3 shrink-0">
-        <Link href={`/vocabulary/books/${id}`} className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
+      <div className="flex items-center gap-3 mb-4 shrink-0">
+        <Link href={`/vocabulary/books/${id}`} style={{ color: '#89756e' }}>
           <ArrowLeft size={20} />
         </Link>
-        <div className="flex-1">
-          <h1 className="text-lg font-bold text-[var(--text-primary)] truncate">{book.name}</h1>
-          <p className="text-xs text-[var(--text-muted)]">闪卡学习</p>
+        <div className="flex-1 min-w-0">
+          <h1 className="text-[15px] font-bold truncate" style={{ color: 'var(--fc-meaning-color)' }}>{book.name}</h1>
         </div>
-        <span className="text-xs text-[var(--text-muted)]">{currentIdx + 1} / {words.length}</span>
+        <button
+          onClick={toggleShuffle}
+          className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+          style={{ border: '1px solid var(--fc-nav-border)', background: shuffled ? 'var(--fc-dot-active)' : 'var(--fc-nav-bg)', color: shuffled ? '#fff' : 'var(--fc-nav-color)' }}
+          title={shuffled ? '取消乱序' : '随机乱序'}
+        >
+          <Shuffle size={14} />
+        </button>
+        <button
+          onClick={e => { e.stopPropagation(); toggleFavorite(word); }}
+          className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+          style={{ border: '1px solid var(--fc-card-border)', color: favoritedIds.has(word.id) ? '#f5a623' : '#89756e', background: favoritedIds.has(word.id) ? 'rgba(245,166,35,0.08)' : 'transparent' }}
+          title={favoritedIds.has(word.id) ? '取消收藏' : '收藏'}
+        >
+          <Star size={14} fill={favoritedIds.has(word.id) ? '#f5a623' : 'none'} />
+        </button>
+        <span className="text-[12px] font-black tabular-nums" style={{ color: '#a08f87' }}>
+          {currentIdx + 1} / {displayWords.length}
+        </span>
       </div>
 
       {/* Progress bar */}
-      <div className="w-full bg-[var(--bg-input)] rounded-full h-1.5 shrink-0">
+      <div className="h-[5px] rounded-full mb-5 shrink-0 overflow-hidden" style={{ background: 'var(--fc-progress-bg)' }}>
         <div
-          className="h-1.5 rounded-full bg-gradient-to-r from-[var(--pink-primary)] to-[var(--purple-soft)] transition-all duration-300"
-          style={{ width: `${((currentIdx + 1) / words.length) * 100}%` }}
+          className="h-full rounded-full transition-all duration-500"
+          style={{ width: `${progress}%`, background: 'linear-gradient(90deg, #aee3d8, #ff7fa8)' }}
         />
       </div>
 
-      {/* Flashcard */}
-      <div className="flex-1 flex items-center justify-center px-2" style={{ minHeight: '360px' }}>
+      {/* Card */}
+      <div className="flex justify-center">
         <div
-          ref={cardRef}
           className="w-full max-w-sm"
-          style={{ perspective: '1000px', position: 'relative' }}
+          style={{ cursor: 'pointer', userSelect: 'none' }}
+          ref={cardRef}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
-          onClick={handleClick}
+          onClick={handleCardClick}
           onTransitionEnd={handleTransitionEnd}
         >
           <div
-            className="relative w-full"
+            className="rounded-[28px] flex flex-col"
             style={{
-              aspectRatio: '4/5',
-              transform: getCardTransform(),
-              transition: isSwiping ? 'none' : 'transform 0.35s ease-out',
+              background: 'var(--fc-card-bg)',
+              border: '1px solid var(--fc-card-border)',
+              boxShadow: '0 20px 60px var(--fc-card-shadow)',
+              transform: getTransform(),
+              transition: isSwiping ? 'none' : 'transform 0.32s ease-out',
+              minHeight: '360px',
+              padding: '24px',
             }}
           >
-            <div
-              className="relative w-full h-full"
-              style={{
-                transformStyle: 'preserve-3d',
-                transition: 'transform 0.5s ease',
-                transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
-              }}
-            >
-              {/* ── FRONT ── */}
-              <div
-                className="absolute inset-0 bg-[var(--bg-card)] rounded-2xl border-2 border-[var(--border-color)] flex flex-col items-center justify-center p-6"
-                style={{ backfaceVisibility: 'hidden' }}
+            {/* Audio button */}
+            <div className="flex justify-end mb-2">
+              <button
+                onClick={e => { e.stopPropagation(); speakWord(word.word, 0.85); }}
+                className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+                style={{ border: '1px solid var(--fc-audio-border)', color: 'var(--fc-audio-color)' }}
               >
-                <span className="text-4xl font-bold text-[var(--text-primary)] mb-3 text-center leading-relaxed">
-                  {word.word}
-                </span>
-                <span className="text-sm text-[var(--text-muted)] mb-4">{word.pronunciation}</span>
-                <span className="text-xs px-2.5 py-1 rounded-full bg-[var(--bg-input)] text-[var(--text-secondary)] mb-6">
-                  {word.partOfSpeech}
-                </span>
-                <button
-                  onClick={(e) => { e.stopPropagation(); speakWord(word.word, 0.8); }}
-                  className="flex items-center gap-2 px-5 py-3 rounded-full bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] hover:bg-[var(--pink-primary)]/20 transition-colors font-medium text-sm"
-                >
-                  <Volume2 size={18} />
-                  听发音
-                </button>
-                <p className="text-xs text-[var(--text-muted)] mt-8">点击翻转卡片</p>
+                <Volume2 size={14} />
+              </button>
+            </div>
+
+            {/* Front: Korean word */}
+            <div className="flex-1 flex flex-col items-center justify-center text-center py-4">
+              <div className="text-[44px] font-black leading-tight tracking-tight mb-3" style={{ color: 'var(--fc-word-color)', wordBreak: 'keep-all' }}>
+                {word.word}
               </div>
-
-              {/* ── BACK ── */}
-              <div
-                className="absolute inset-0 bg-[var(--bg-card)] rounded-2xl border-2 border-[var(--pink-pale)] flex flex-col p-6 overflow-y-auto"
-                style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
-              >
-                <div className="text-center mb-4">
-                  <span className="text-xl font-bold text-[var(--text-primary)]">{word.word}</span>
-                  <span className="text-xs text-[var(--text-muted)] ml-2">{word.pronunciation}</span>
+              {!revealed && (
+                <div className="text-[13px] font-semibold mt-1" style={{ color: 'var(--fc-hint-color)' }}>
+                  点击查看答案
                 </div>
+              )}
+            </div>
 
-                <div className="text-center mb-6">
-                  <span className="text-2xl font-bold text-[var(--pink-primary)]">{word.meaning}</span>
-                  <span className="text-xs px-2 py-0.5 rounded bg-[var(--bg-input)] text-[var(--text-secondary)] ml-2">
-                    {word.partOfSpeech}
-                  </span>
-                </div>
-
-                {word.examples.length > 0 && (
-                  <div className="space-y-3">
-                    <p className="text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider">例句</p>
-                    {word.examples.slice(0, 3).map((ex, i) => (
-                      <div key={i} className="bg-[var(--bg-input)] rounded-xl p-3">
-                        <div className="flex items-start justify-between gap-2">
-                          <p className="text-sm text-[var(--text-primary)] leading-relaxed flex-1">{ex.text}</p>
-                          <button
-                            onClick={(e) => { e.stopPropagation(); speak(ex.text, 0.8); }}
-                            className="p-1.5 rounded-lg hover:bg-[var(--bg-accent)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] shrink-0"
-                          >
-                            <Volume2 size={14} />
-                          </button>
-                        </div>
-                        <p className="text-xs text-[var(--text-secondary)] mt-1">{ex.translation}</p>
-                      </div>
-                    ))}
+            {/* Back: revealed content */}
+            {revealed && (
+              <div className="border-t pt-4 space-y-3" style={{ borderColor: 'var(--fc-divider)' }}>
+                {/* Romanization */}
+                {word.pronunciation && (
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-xs font-semibold px-2 py-0.5 rounded" style={{ background: 'var(--fc-roman-bg)', color: 'var(--fc-roman-color)' }}>
+                      [{word.pronunciation}]
+                    </span>
                   </div>
                 )}
 
-                <p className="text-xs text-[var(--text-muted)] text-center mt-auto pt-4">点击翻转回去</p>
-              </div>
-            </div>
-          </div>
+                {/* Meaning */}
+                <div className="rounded-[16px] p-3.5" style={{ background: 'var(--fc-meaning-bg)', border: '1px solid var(--fc-meaning-border)' }}>
+                  <div className="flex items-baseline gap-2 flex-wrap">
+                    {word.partOfSpeech && (
+                      <span className="text-[11px] font-medium px-1.5 py-0.5 rounded shrink-0" style={{ background: 'var(--fc-pos-bg)', color: 'var(--fc-pos-color)' }}>{word.partOfSpeech}</span>
+                    )}
+                    <strong className="text-[17px] font-black" style={{ color: 'var(--fc-meaning-color)' }}>{word.meaning}</strong>
+                  </div>
+                </div>
 
-          {/* Swipe hints */}
-          {currentIdx > 0 && !isSwiping && !exiting && (
-            <div className="absolute left-2 top-1/2 -translate-y-1/2 text-[var(--text-muted)]/40 pointer-events-none">
-              <ChevronLeft size={24} />
-            </div>
-          )}
-          {currentIdx < words.length - 1 && !isSwiping && !exiting && (
-            <div className="absolute right-2 top-1/2 -translate-y-1/2 text-[var(--text-muted)]/40 pointer-events-none">
-              <ChevronRight size={24} />
-            </div>
-          )}
+                {/* Examples */}
+                {(() => {
+                  const validExamples = word.examples.filter(ex => ex.text && ex.text !== '[object Object]');
+                  const entry = validExamples.length === 0 ? getEntryByKorean(word.word) : null;
+                  const examples = validExamples.length > 0
+                    ? validExamples
+                    : entry?.examples.slice(0, 2).map(ex => ({ text: ex.korean, translation: ex.chinese, source: 'dictionary' as const })) ?? [];
+                  if (examples.length === 0) return null;
+                  return (
+                  <div className="space-y-2">
+                    {examples.slice(0, 2).map((ex, i) => (
+                      <div
+                        key={i}
+                        className="rounded-[14px] px-3.5 py-2.5 flex items-start gap-2"
+                        style={{ background: 'var(--fc-example-bg)' }}
+                      >
+                        <div className="flex-1 min-w-0">
+                          <p className="text-[13px] leading-relaxed" style={{ color: 'var(--fc-example-ko)' }}><TappableText text={ex.text} highlightWord={word.word} source="闪卡" highlightColor="var(--fc-example-hi-color)" underlineColor="var(--fc-example-hi-color)" /></p>
+                          <p className="text-[12px] mt-0.5" style={{ color: 'var(--fc-example-zh)' }}>{ex.translation}</p>
+                        </div>
+                        <button
+                          onClick={e => { e.stopPropagation(); speak(ex.text, 0.85); }}
+                          className="shrink-0 mt-0.5"
+                          style={{ color: 'var(--fc-example-zh)' }}
+                        >
+                          <Volume2 size={13} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  );
+                })()}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
-      {/* Bottom navigation */}
-      <div className="flex items-center justify-center gap-4 shrink-0 pb-2">
+      {/* Navigation */}
+      <div className="flex items-center justify-center gap-6 mt-4">
         <button
-          onClick={goPrev}
+          onClick={() => goTo(currentIdx - 1, displayWords)}
           disabled={currentIdx === 0}
-          className="p-3 rounded-full bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--pink-primary)] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+          className="w-11 h-11 rounded-full flex items-center justify-center transition-all disabled:opacity-25"
+          style={{ background: 'var(--fc-nav-bg)', border: '1px solid var(--fc-nav-border)', color: 'var(--fc-nav-color)', boxShadow: '0 4px 12px rgba(78,52,46,.08)' }}
         >
           <ChevronLeft size={20} />
         </button>
-        <span className="text-sm text-[var(--text-muted)] min-w-[60px] text-center">
-          {currentIdx + 1} / {words.length}
-        </span>
+
+        {/* Dot indicators (max 7) */}
+        <div className="flex items-center gap-1.5">
+          {displayWords.slice(Math.max(0, currentIdx - 3), Math.min(displayWords.length, currentIdx + 4)).map((_, i) => {
+            const realIdx = Math.max(0, currentIdx - 3) + i;
+            return (
+              <div
+                key={realIdx}
+                className="rounded-full transition-all"
+                style={{
+                  width: realIdx === currentIdx ? 20 : 6,
+                  height: 6,
+                  background: realIdx === currentIdx ? 'var(--fc-dot-active)' : 'var(--fc-dot-inactive)',
+                }}
+              />
+            );
+          })}
+        </div>
+
         <button
-          onClick={goNext}
-          disabled={currentIdx === words.length - 1}
-          className="p-3 rounded-full bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--pink-primary)] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+          onClick={() => goTo(currentIdx + 1, displayWords)}
+          disabled={currentIdx === displayWords.length - 1}
+          className="w-11 h-11 rounded-full flex items-center justify-center transition-all disabled:opacity-25"
+          style={{ background: 'var(--fc-nav-bg)', border: '1px solid var(--fc-nav-border)', color: 'var(--fc-nav-color)', boxShadow: '0 4px 12px rgba(78,52,46,.08)' }}
         >
           <ChevronRight size={20} />
         </button>

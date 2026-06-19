@@ -7,7 +7,7 @@ export const vocabularyEntries: WordEntry[] = [
   // ═══════════════════════════════════════════════════════════════
   {
     id: 'time-01', korean: '시간', romanization: 'sigan', baseForm: '시간', partOfSpeech: '名词',
-    level: '1', frequency: 3, emoji: '⏰',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '时间', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '시간이 없어요.', chinese: '没有时间。', scene: '日常' },
@@ -17,7 +17,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'time-02', korean: '오늘', romanization: 'oneul', baseForm: '오늘', partOfSpeech: '名词',
-    level: '1', frequency: 3, emoji: '📅',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '今天', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '오늘 날씨가 좋아요.', chinese: '今天天气很好。', scene: '日常' },
@@ -27,7 +27,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'time-03', korean: '내일', romanization: 'naeil', baseForm: '내일', partOfSpeech: '名词',
-    level: '1', frequency: 3, emoji: '🔜',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '明天', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '내일 만나요.', chinese: '明天见。', scene: '日常' },
@@ -37,7 +37,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'time-04', korean: '어제', romanization: 'eoje', baseForm: '어제', partOfSpeech: '名词',
-    level: '1', frequency: 3, emoji: '⬅️',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '昨天', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '어제 뭐 했어요?', chinese: '昨天做了什么？', scene: '日常' },
@@ -47,7 +47,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'time-05', korean: '지금', romanization: 'jigeum', baseForm: '지금', partOfSpeech: '名词',
-    level: '1', frequency: 3, emoji: '🕛',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '现在', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '지금 몇 시예요?', chinese: '现在几点了？', scene: '日常' },
@@ -57,7 +57,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'time-06', korean: '아침', romanization: 'achim', baseForm: '아침', partOfSpeech: '名词',
-    level: '1', frequency: 3, emoji: '🌅',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '早上；早餐', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '아침에 일찍 일어나요.', chinese: '早上早起。', scene: '日常' },
@@ -67,7 +67,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'time-07', korean: '저녁', romanization: 'jeonyeok', baseForm: '저녁', partOfSpeech: '名词',
-    level: '1', frequency: 2, emoji: '🌆',
+    level: '1', frequency: 2,
     meanings: [{ chinese: '傍晚；晚餐', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '저녁에 뭐 먹을까요?', chinese: '晚上吃什么？', scene: '日常' },
@@ -77,7 +77,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'time-08', korean: '밤', romanization: 'bam', baseForm: '밤', partOfSpeech: '名词',
-    level: '1', frequency: 2, emoji: '🌙',
+    level: '1', frequency: 2,
     meanings: [{ chinese: '夜晚', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '밤에 별이 예뻐요.', chinese: '夜晚星星很美。', scene: '日常' },
@@ -87,7 +87,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'time-09', korean: '주말', romanization: 'jumal', baseForm: '주말', partOfSpeech: '名词',
-    level: '1', frequency: 3, emoji: '🎉',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '周末', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '주말에 뭐 할 거예요?', chinese: '周末打算做什么？', scene: '日常' },
@@ -97,7 +97,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'time-10', korean: '평일', romanization: 'pyeongil', baseForm: '평일', partOfSpeech: '名词',
-    level: '2', frequency: 2, emoji: '💼',
+    level: '2', frequency: 2,
     meanings: [{ chinese: '平日/工作日', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '평일에는 바빠요.', chinese: '工作日很忙。', scene: '职场' },
@@ -107,7 +107,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'time-11', korean: '매일', romanization: 'maeil', baseForm: '매일', partOfSpeech: '副词',
-    level: '1', frequency: 3, emoji: '🔄',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '每天', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '매일 운동해요.', chinese: '每天运动。', scene: '日常' },
@@ -117,7 +117,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'time-12', korean: '봄', romanization: 'bom', baseForm: '봄', partOfSpeech: '名词',
-    level: '2', frequency: 2, emoji: '🌸',
+    level: '2', frequency: 2,
     meanings: [{ chinese: '春天', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '봄에 꽃이 피어요.', chinese: '春天花开。', scene: '日常' },
@@ -127,7 +127,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'time-13', korean: '여름', romanization: 'yeoreum', baseForm: '여름', partOfSpeech: '名词',
-    level: '2', frequency: 2, emoji: '🏖️',
+    level: '2', frequency: 2,
     meanings: [{ chinese: '夏天', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '여름에는 더워요.', chinese: '夏天很热。', scene: '日常' },
@@ -137,7 +137,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'time-14', korean: '가을', romanization: 'gaeul', baseForm: '가을', partOfSpeech: '名词',
-    level: '2', frequency: 2, emoji: '🍂',
+    level: '2', frequency: 2,
     meanings: [{ chinese: '秋天', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '가을 하늘이 예뻐요.', chinese: '秋天的天空很美。', scene: '日常' },
@@ -147,7 +147,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'time-15', korean: '겨울', romanization: 'gyeoul', baseForm: '겨울', partOfSpeech: '名词',
-    level: '2', frequency: 2, emoji: '❄️',
+    level: '2', frequency: 2,
     meanings: [{ chinese: '冬天', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '겨울에는 눈이 와요.', chinese: '冬天下雪。', scene: '日常' },
@@ -161,7 +161,7 @@ export const vocabularyEntries: WordEntry[] = [
   // ═══════════════════════════════════════════════════════════════
   {
     id: 'greet-01', korean: '안녕하세요', romanization: 'annyeonghaseyo', baseForm: '안녕하다', partOfSpeech: '常用语',
-    level: '1', frequency: 3, emoji: '👋',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '你好', nuance: '敬语', register: '通用' }],
     examples: [
       { korean: '안녕하세요, 처음 뵙겠습니다.', chinese: '你好，初次见面。', scene: '社交' },
@@ -171,7 +171,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'greet-02', korean: '감사합니다', romanization: 'gamsahamnida', baseForm: '감사하다', partOfSpeech: '常用语',
-    level: '1', frequency: 3, emoji: '🙏',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '谢谢', nuance: '正式敬语', register: '通用' }],
     examples: [
       { korean: '도와주셔서 감사합니다.', chinese: '感谢您的帮助。', scene: '社交' },
@@ -181,7 +181,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'greet-03', korean: '죄송합니다', romanization: 'joesonghamnida', baseForm: '죄송하다', partOfSpeech: '常用语',
-    level: '1', frequency: 3, emoji: '😔',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '对不起', nuance: '正式敬语', register: '通用' }],
     examples: [
       { korean: '늦어서 죄송합니다.', chinese: '迟到了对不起。', scene: '社交' },
@@ -191,7 +191,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'greet-04', korean: '괜찮아요', romanization: 'gwaenchanayo', baseForm: '괜찮다', partOfSpeech: '常用语',
-    level: '1', frequency: 3, emoji: '😊',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '没关系/还可以', nuance: '口语', register: '通用' }],
     examples: [
       { korean: '괜찮아요, 걱정하지 마세요.', chinese: '没关系，别担心。', scene: '社交' },
@@ -201,7 +201,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'greet-05', korean: '안녕히 가세요', romanization: 'annyeonghi gaseyo', baseForm: '안녕하다', partOfSpeech: '常用语',
-    level: '1', frequency: 2, emoji: '👋',
+    level: '1', frequency: 2,
     meanings: [{ chinese: '再见（对离开的人）', nuance: '敬语', register: '通用' }],
     examples: [
       { korean: '안녕히 가세요, 내일 봐요.', chinese: '再见，明天见。', scene: '社交' },
@@ -210,7 +210,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'greet-06', korean: '안녕히 계세요', romanization: 'annyeonghi gyeseyo', baseForm: '안녕하다', partOfSpeech: '常用语',
-    level: '1', frequency: 2, emoji: '👋',
+    level: '1', frequency: 2,
     meanings: [{ chinese: '再见（对留下的人）', nuance: '敬语', register: '通用' }],
     examples: [
       { korean: '안녕히 계세요, 다음에 또 올게요.', chinese: '再见，下次再来。', scene: '社交' },
@@ -223,7 +223,7 @@ export const vocabularyEntries: WordEntry[] = [
   // ═══════════════════════════════════════════════════════════════
   {
     id: 'food-01', korean: '밥', romanization: 'bap', baseForm: '밥', partOfSpeech: '名词',
-    level: '1', frequency: 3, emoji: '🍚',
+    level: '1', frequency: 3,
     meanings: [
       { chinese: '饭；餐', nuance: '中性，韩语中最核心的饮食词', register: '通用' },
     ],
@@ -235,7 +235,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'food-02', korean: '물', romanization: 'mul', baseForm: '물', partOfSpeech: '名词',
-    level: '1', frequency: 3, emoji: '💧',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '水', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '물 한 잔 주세요.', chinese: '请给我一杯水。', scene: '餐厅' },
@@ -245,7 +245,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'food-03', korean: '커피', romanization: 'keopi', baseForm: '커피', partOfSpeech: '名词',
-    level: '1', frequency: 3, emoji: '☕',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '咖啡', nuance: '外来词（英语）', register: '通用' }],
     examples: [
       { korean: '커피 한 잔 주세요.', chinese: '请给我一杯咖啡。', scene: '咖啡厅' },
@@ -255,7 +255,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'food-04', korean: '김치', romanization: 'gimchi', baseForm: '김치', partOfSpeech: '名词',
-    level: '2', frequency: 3, emoji: '🥬',
+    level: '2', frequency: 3,
     meanings: [{ chinese: '泡菜/辛奇', nuance: '韩国文化标志词', register: '通用' }],
     examples: [
       { korean: '한국 사람은 매일 김치를 먹어요.', chinese: '韩国人每天吃泡菜。', scene: '日常' },
@@ -265,7 +265,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'food-05', korean: '맛있다', romanization: 'masitda', baseForm: '맛있다', partOfSpeech: '形容词',
-    level: '1', frequency: 3, emoji: '😋',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '好吃', nuance: '口语高频', register: '通用' }],
     examples: [
       { korean: '이거 정말 맛있어요!', chinese: '这个真的很好吃！', scene: '餐厅' },
@@ -275,7 +275,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'food-06', korean: '맛없다', romanization: 'madeopda', baseForm: '맛없다', partOfSpeech: '形容词',
-    level: '2', frequency: 2, emoji: '😖',
+    level: '2', frequency: 2,
     meanings: [{ chinese: '不好吃', nuance: '口语', register: '通用' }],
     examples: [
       { korean: '이거 너무 맛없어요.', chinese: '这个太难吃了。', scene: '餐厅' },
@@ -284,7 +284,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'food-07', korean: '배고프다', romanization: 'baegopeuda', baseForm: '배고프다', partOfSpeech: '形容词',
-    level: '2', frequency: 3, emoji: '😫',
+    level: '2', frequency: 3,
     meanings: [{ chinese: '肚子饿', nuance: '口语高频', register: '通用' }],
     examples: [
       { korean: '배고파요. 밥 먹으러 가요.', chinese: '肚子饿了，去吃饭吧。', scene: '日常' },
@@ -294,7 +294,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'food-08', korean: '배부르다', romanization: 'baebureuda', baseForm: '배부르다', partOfSpeech: '形容词',
-    level: '2', frequency: 2, emoji: '😊',
+    level: '2', frequency: 2,
     meanings: [{ chinese: '饱了', nuance: '口语', register: '通用' }],
     examples: [
       { korean: '배불러요, 더 못 먹겠어요.', chinese: '饱了，吃不下了。', scene: '餐厅' },
@@ -304,7 +304,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'food-09', korean: '차', romanization: 'cha', baseForm: '차', partOfSpeech: '名词',
-    level: '2', frequency: 2, emoji: '🍵',
+    level: '2', frequency: 2,
     meanings: [{ chinese: '茶', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '차 한 잔 드릴까요?', chinese: '来一杯茶吗？', scene: '咖啡厅' },
@@ -314,7 +314,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'food-10', korean: '주스', romanization: 'juseu', baseForm: '주스', partOfSpeech: '名词',
-    level: '2', frequency: 2, emoji: '🧃',
+    level: '2', frequency: 2,
     meanings: [{ chinese: '果汁', nuance: '外来词（英语）', register: '通用' }],
     examples: [
       { korean: '오렌지 주스 한 잔 주세요.', chinese: '请给我一杯橙汁。', scene: '咖啡厅' },
@@ -323,7 +323,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'food-11', korean: '주문하다', romanization: 'jumunhada', baseForm: '주문하다', partOfSpeech: '动词',
-    level: '2', frequency: 2, emoji: '📝',
+    level: '2', frequency: 2,
     meanings: [{ chinese: '点单/订购', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '주문하시겠어요?', chinese: '请问要点单吗？', scene: '咖啡厅' },
@@ -333,7 +333,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'food-12', korean: '계산하다', romanization: 'gyesanhada', baseForm: '계산하다', partOfSpeech: '动词',
-    level: '3', frequency: 3, emoji: '💳',
+    level: '3', frequency: 3,
     meanings: [{ chinese: '结账', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '계산해 주세요.', chinese: '请结账。', scene: '餐厅' },
@@ -343,7 +343,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'food-13', korean: '메뉴', romanization: 'menyu', baseForm: '메뉴', partOfSpeech: '名词',
-    level: '2', frequency: 2, emoji: '📋',
+    level: '2', frequency: 2,
     meanings: [{ chinese: '菜单', nuance: '外来词（英语）', register: '通用' }],
     examples: [
       { korean: '메뉴 좀 보여 주세요.', chinese: '请给我看看菜单。', scene: '餐厅' },
@@ -357,7 +357,7 @@ export const vocabularyEntries: WordEntry[] = [
   // ═══════════════════════════════════════════════════════════════
   {
     id: 'shop-01', korean: '얼마', romanization: 'eolma', baseForm: '얼마', partOfSpeech: '名词',
-    level: '1', frequency: 3, emoji: '💰',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '多少钱', nuance: '口语高频', register: '通用' }],
     examples: [
       { korean: '이거 얼마예요?', chinese: '这个多少钱？', scene: '购物' },
@@ -367,7 +367,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'shop-02', korean: '비싸다', romanization: 'bissada', baseForm: '비싸다', partOfSpeech: '形容词',
-    level: '2', frequency: 3, emoji: '💸',
+    level: '2', frequency: 3,
     meanings: [{ chinese: '贵', nuance: '口语', register: '通用' }],
     examples: [
       { korean: '너무 비싸요!', chinese: '太贵了！', scene: '购物' },
@@ -377,7 +377,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'shop-03', korean: '싸다', romanization: 'ssada', baseForm: '싸다', partOfSpeech: '形容词',
-    level: '2', frequency: 2, emoji: '🤑',
+    level: '2', frequency: 2,
     meanings: [{ chinese: '便宜', nuance: '口语', register: '通用' }],
     examples: [
       { korean: '여기는 정말 싸네요!', chinese: '这里真便宜啊！', scene: '购物' },
@@ -387,7 +387,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'shop-04', korean: '깎다', romanization: 'kkakda', baseForm: '깎다', partOfSpeech: '动词',
-    level: '3', frequency: 2, emoji: '✂️',
+    level: '3', frequency: 2,
     meanings: [
       { chinese: '砍价/削', nuance: '口语，韩国市场常用', register: '通用' },
     ],
@@ -399,7 +399,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'shop-05', korean: '사이즈', romanization: 'saijeu', baseForm: '사이즈', partOfSpeech: '名词',
-    level: '2', frequency: 2, emoji: '📏',
+    level: '2', frequency: 2,
     meanings: [{ chinese: '尺寸/大小', nuance: '外来词（英语）', register: '通用' }],
     examples: [
       { korean: '다른 사이즈 있어요?', chinese: '有其他尺寸吗？', scene: '购物' },
@@ -409,7 +409,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'shop-06', korean: '입다', romanization: 'ipda', baseForm: '입다', partOfSpeech: '动词',
-    level: '3', frequency: 3, emoji: '👕',
+    level: '3', frequency: 3,
     meanings: [{ chinese: '穿（衣服）', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '한복을 입어 보고 싶어요.', chinese: '想试试穿韩服。', scene: '旅行' },
@@ -423,7 +423,7 @@ export const vocabularyEntries: WordEntry[] = [
   // ═══════════════════════════════════════════════════════════════
   {
     id: 'trans-01', korean: '지하철', romanization: 'jihacheol', baseForm: '지하철', partOfSpeech: '名词',
-    level: '1', frequency: 3, emoji: '🚇',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '地铁', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '지하철역이 어디예요?', chinese: '地铁站在哪里？', scene: '出行' },
@@ -433,7 +433,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'trans-02', korean: '버스', romanization: 'beoseu', baseForm: '버스', partOfSpeech: '名词',
-    level: '2', frequency: 3, emoji: '🚌',
+    level: '2', frequency: 3,
     meanings: [{ chinese: '公交车', nuance: '外来词（英语）', register: '通用' }],
     examples: [
       { korean: '버스 정류장이 어디예요?', chinese: '公交站在哪里？', scene: '出行' },
@@ -443,7 +443,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'trans-03', korean: '택시', romanization: 'taeksi', baseForm: '택시', partOfSpeech: '名词',
-    level: '2', frequency: 2, emoji: '🚕',
+    level: '2', frequency: 2,
     meanings: [{ chinese: '出租车', nuance: '外来词（英语）', register: '通用' }],
     examples: [
       { korean: '택시 타고 갈게요.', chinese: '坐出租车去。', scene: '出行' },
@@ -453,7 +453,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'trans-04', korean: '타다', romanization: 'tada', baseForm: '타다', partOfSpeech: '动词',
-    level: '1', frequency: 3, emoji: '🚶',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '乘坐/搭乘', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '지하철을 타고 왔어요.', chinese: '坐地铁来的。', scene: '出行' },
@@ -463,7 +463,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'trans-05', korean: '내리다', romanization: 'naerida', baseForm: '내리다', partOfSpeech: '动词',
-    level: '3', frequency: 2, emoji: '⬇️',
+    level: '3', frequency: 2,
     meanings: [{ chinese: '下车/下来', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '다음 역에서 내려요.', chinese: '下一站下车。', scene: '地铁' },
@@ -473,7 +473,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'trans-06', korean: '길', romanization: 'gil', baseForm: '길', partOfSpeech: '名词',
-    level: '2', frequency: 3, emoji: '🛣️',
+    level: '2', frequency: 3,
     meanings: [{ chinese: '路/道路', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '길을 잃어버렸어요.', chinese: '迷路了。', scene: '出行' },
@@ -483,7 +483,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'trans-07', korean: '오른쪽', romanization: 'oreunjjok', baseForm: '오른쪽', partOfSpeech: '名词',
-    level: '3', frequency: 2, emoji: '👉',
+    level: '3', frequency: 2,
     meanings: [{ chinese: '右边', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '오른쪽으로 가세요.', chinese: '请向右走。', scene: '问路' },
@@ -493,7 +493,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'trans-08', korean: '왼쪽', romanization: 'oenjjok', baseForm: '왼쪽', partOfSpeech: '名词',
-    level: '3', frequency: 2, emoji: '👈',
+    level: '3', frequency: 2,
     meanings: [{ chinese: '左边', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '왼쪽으로 도세요.', chinese: '请左转。', scene: '问路' },
@@ -507,7 +507,7 @@ export const vocabularyEntries: WordEntry[] = [
   // ═══════════════════════════════════════════════════════════════
   {
     id: 'emotion-01', korean: '좋다', romanization: 'jota', baseForm: '좋다', partOfSpeech: '形容词',
-    level: '1', frequency: 3, emoji: '😊',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '好；喜欢', nuance: '口语高频', register: '通用' }],
     examples: [
       { korean: '오늘 기분이 좋아요.', chinese: '今天心情很好。', scene: '日常' },
@@ -517,7 +517,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'emotion-02', korean: '싫다', romanization: 'silta', baseForm: '싫다', partOfSpeech: '形容词',
-    level: '2', frequency: 2, emoji: '😞',
+    level: '2', frequency: 2,
     meanings: [{ chinese: '讨厌/不喜欢', nuance: '口语', register: '通用' }],
     examples: [
       { korean: '비 오는 날이 싫어요.', chinese: '讨厌下雨天。', scene: '日常' },
@@ -527,7 +527,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'emotion-03', korean: '행복하다', romanization: 'haengbokhada', baseForm: '행복하다', partOfSpeech: '形容词',
-    level: '1', frequency: 3, emoji: '🥰',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '幸福', nuance: '正式/书面', register: '通用' }],
     examples: [
       { korean: '너랑 있으면 행복해요.', chinese: '跟你在一起很幸福。', scene: '表白情感' },
@@ -537,7 +537,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'emotion-04', korean: '슬프다', romanization: 'seulpeuda', baseForm: '슬프다', partOfSpeech: '形容词',
-    level: '2', frequency: 3, emoji: '😢',
+    level: '2', frequency: 3,
     meanings: [{ chinese: '悲伤', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '이 노래가 너무 슬퍼요.', chinese: '这首歌太悲伤了。', scene: '日常' },
@@ -547,7 +547,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'emotion-05', korean: '화나다', romanization: 'hwanada', baseForm: '화나다', partOfSpeech: '动词',
-    level: '3', frequency: 3, emoji: '😤',
+    level: '3', frequency: 3,
     meanings: [
       { chinese: '生气', nuance: '一般生气，最常用', register: '通用' },
     ],
@@ -559,7 +559,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'emotion-06', korean: '짜증나다', romanization: 'jjajeungnada', baseForm: '짜증나다', partOfSpeech: '动词',
-    level: '3', frequency: 3, emoji: '😠',
+    level: '3', frequency: 3,
     meanings: [
       { chinese: '烦躁/不耐烦', nuance: '口语，比화나다更日常', register: '口语' },
     ],
@@ -571,7 +571,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'emotion-07', korean: '열받다', romanization: 'yeolbatda', baseForm: '열받다', partOfSpeech: '动词',
-    level: '3', frequency: 2, emoji: '🤬',
+    level: '3', frequency: 2,
     meanings: [
       { chinese: '火大/气炸了', nuance: '网络用语，年轻人常用', register: '口语/网络' },
     ],
@@ -583,7 +583,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'emotion-08', korean: '분하다', romanization: 'bunhada', baseForm: '분하다', partOfSpeech: '形容词',
-    level: '4', frequency: 1, emoji: '😣',
+    level: '4', frequency: 1,
     meanings: [
       { chinese: '委屈而愤怒', nuance: '带有不甘的情绪', register: '通用' },
     ],
@@ -595,7 +595,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'emotion-09', korean: '부끄럽다', romanization: 'bukkeureopda', baseForm: '부끄럽다', partOfSpeech: '形容词',
-    level: '3', frequency: 2, emoji: '😳',
+    level: '3', frequency: 2,
     meanings: [{ chinese: '害羞/不好意思', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '칭찬 받아서 부끄러워요.', chinese: '被夸了不好意思。', scene: '社交' },
@@ -605,7 +605,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'emotion-10', korean: '걱정하다', romanization: 'geokjeonghada', baseForm: '걱정하다', partOfSpeech: '动词',
-    level: '4', frequency: 3, emoji: '😟',
+    level: '4', frequency: 3,
     meanings: [{ chinese: '担心', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '걱정하지 마세요.', chinese: '别担心。', scene: '日常' },
@@ -615,7 +615,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'emotion-11', korean: '기쁘다', romanization: 'gippeuda', baseForm: '기쁘다', partOfSpeech: '形容词',
-    level: '3', frequency: 2, emoji: '🥳',
+    level: '3', frequency: 2,
     meanings: [{ chinese: '高兴/喜悦', nuance: '正式/书面', register: '通用' }],
     examples: [
       { korean: '만나서 정말 기뻐요.', chinese: '见到你真的很高兴。', scene: '社交' },
@@ -629,7 +629,7 @@ export const vocabularyEntries: WordEntry[] = [
   // ═══════════════════════════════════════════════════════════════
   {
     id: 'family-01', korean: '엄마', romanization: 'eomma', baseForm: '엄마', partOfSpeech: '名词',
-    level: '1', frequency: 3, emoji: '👩',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '妈妈', nuance: '口语，最常用称呼', register: '口语' }],
     examples: [
       { korean: '엄마, 사랑해요.', chinese: '妈妈，我爱你。', scene: '日常' },
@@ -639,7 +639,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'family-02', korean: '아빠', romanization: 'appa', baseForm: '아빠', partOfSpeech: '名词',
-    level: '1', frequency: 3, emoji: '👨',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '爸爸', nuance: '口语，最常用称呼', register: '口语' }],
     examples: [
       { korean: '아빠는 회사에 가셨어요.', chinese: '爸爸去公司了。', scene: '日常' },
@@ -648,7 +648,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'family-03', korean: '친구', romanization: 'chingu', baseForm: '친구', partOfSpeech: '名词',
-    level: '1', frequency: 3, emoji: '👫',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '朋友', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '제일 친한 친구예요.', chinese: '是最好的朋友。', scene: '社交' },
@@ -658,7 +658,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'family-04', korean: '가족', romanization: 'gajok', baseForm: '가족', partOfSpeech: '名词',
-    level: '1', frequency: 3, emoji: '👨‍👩‍👧‍👦',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '家人/家庭', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '가족이 몇 명이에요?', chinese: '家里有几口人？', scene: '社交' },
@@ -668,7 +668,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'family-05', korean: '선배', romanization: 'seonbae', baseForm: '선배', partOfSpeech: '名词',
-    level: '2', frequency: 3, emoji: '🧑‍🎓',
+    level: '2', frequency: 3,
     meanings: [{ chinese: '前辈/学长/学姐', nuance: '韩国文化特色词', register: '通用' }],
     examples: [
       { korean: '선배님, 질문 있어요.', chinese: '前辈，我有问题。', scene: '学习' },
@@ -678,7 +678,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'family-06', korean: '후배', romanization: 'hubae', baseForm: '후배', partOfSpeech: '名词',
-    level: '2', frequency: 2, emoji: '🧑‍🎓',
+    level: '2', frequency: 2,
     meanings: [{ chinese: '后辈/学弟/学妹', nuance: '韩国文化特色词', register: '通用' }],
     examples: [
       { korean: '후배가 열심히 하네요.', chinese: '后辈很努力呢。', scene: '学习' },
@@ -691,7 +691,7 @@ export const vocabularyEntries: WordEntry[] = [
   // ═══════════════════════════════════════════════════════════════
   {
     id: 'verb-01', korean: '하다', romanization: 'hada', baseForm: '하다', partOfSpeech: '动词',
-    level: '1', frequency: 3, emoji: '🔧',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '做', nuance: '最核心动词', register: '通用' }],
     examples: [
       { korean: '뭐 해요?', chinese: '在做什么？', scene: '日常' },
@@ -701,7 +701,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'verb-02', korean: '가다', romanization: 'gada', baseForm: '가다', partOfSpeech: '动词',
-    level: '1', frequency: 3, emoji: '🚶',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '去', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '학교에 가요.', chinese: '去学校。', scene: '日常' },
@@ -711,7 +711,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'verb-03', korean: '오다', romanization: 'oda', baseForm: '오다', partOfSpeech: '动词',
-    level: '1', frequency: 3, emoji: '🚶‍♂️',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '来', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '여기로 오세요.', chinese: '请过来。', scene: '日常' },
@@ -721,7 +721,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'verb-04', korean: '먹다', romanization: 'meokda', baseForm: '먹다', partOfSpeech: '动词',
-    level: '1', frequency: 3, emoji: '🍽️',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '吃', nuance: '口语高频', register: '通用' }],
     examples: [
       { korean: '뭐 먹을까요?', chinese: '吃什么？', scene: '日常' },
@@ -731,7 +731,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'verb-05', korean: '마시다', romanization: 'masida', baseForm: '마시다', partOfSpeech: '动词',
-    level: '1', frequency: 3, emoji: '🥤',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '喝', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '커피 마실래요?', chinese: '喝咖啡吗？', scene: '咖啡厅' },
@@ -741,7 +741,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'verb-06', korean: '보다', romanization: 'boda', baseForm: '보다', partOfSpeech: '动词',
-    level: '2', frequency: 3, emoji: '👀',
+    level: '2', frequency: 3,
     meanings: [{ chinese: '看', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '영화 보러 갈래요?', chinese: '去看电影吗？', scene: '日常' },
@@ -751,7 +751,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'verb-07', korean: '듣다', romanization: 'deutda', baseForm: '듣다', partOfSpeech: '动词',
-    level: '2', frequency: 3, emoji: '👂',
+    level: '2', frequency: 3,
     meanings: [{ chinese: '听', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '음악을 들으면서 공부해요.', chinese: '边听音乐边学习。', scene: '日常' },
@@ -761,7 +761,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'verb-08', korean: '말하다', romanization: 'malhada', baseForm: '말하다', partOfSpeech: '动词',
-    level: '2', frequency: 3, emoji: '🗣️',
+    level: '2', frequency: 3,
     meanings: [{ chinese: '说/讲话', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '한국어로 말해 주세요.', chinese: '请用韩语说。', scene: '社交' },
@@ -771,7 +771,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'verb-09', korean: '알다', romanization: 'alda', baseForm: '알다', partOfSpeech: '动词',
-    level: '2', frequency: 3, emoji: '💡',
+    level: '2', frequency: 3,
     meanings: [{ chinese: '知道/认识', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '알겠습니다.', chinese: '我知道了/明白了。', scene: '日常' },
@@ -781,7 +781,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'verb-10', korean: '모르다', romanization: 'moreuda', baseForm: '모르다', partOfSpeech: '动词',
-    level: '2', frequency: 3, emoji: '🤷',
+    level: '2', frequency: 3,
     meanings: [{ chinese: '不知道/不认识', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '모르겠어요.', chinese: '我不知道。', scene: '日常' },
@@ -791,7 +791,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'verb-11', korean: '사다', romanization: 'sada', baseForm: '사다', partOfSpeech: '动词',
-    level: '3', frequency: 3, emoji: '🛒',
+    level: '3', frequency: 3,
     meanings: [{ chinese: '买', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '이거 살게요.', chinese: '我买这个。', scene: '购物' },
@@ -801,7 +801,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'verb-12', korean: '팔다', romanization: 'palda', baseForm: '팔다', partOfSpeech: '动词',
-    level: '3', frequency: 2, emoji: '🏪',
+    level: '3', frequency: 2,
     meanings: [{ chinese: '卖', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '여기서 뭐 팔아요?', chinese: '这里卖什么？', scene: '购物' },
@@ -811,7 +811,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'verb-13', korean: '주다', romanization: 'juda', baseForm: '주다', partOfSpeech: '动词',
-    level: '3', frequency: 3, emoji: '🤲',
+    level: '3', frequency: 3,
     meanings: [{ chinese: '给', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '물 좀 주세요.', chinese: '请给我水。', scene: '日常' },
@@ -821,7 +821,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'verb-14', korean: '기다리다', romanization: 'gidarida', baseForm: '기다리다', partOfSpeech: '动词',
-    level: '2', frequency: 3, emoji: '⏳',
+    level: '2', frequency: 3,
     meanings: [{ chinese: '等待', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '잠시만 기다려 주세요.', chinese: '请稍等。', scene: '日常' },
@@ -831,7 +831,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'verb-15', korean: '공부하다', romanization: 'gongbuhada', baseForm: '공부하다', partOfSpeech: '动词',
-    level: '3', frequency: 3, emoji: '📚',
+    level: '3', frequency: 3,
     meanings: [{ chinese: '学习', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '한국어를 공부하고 있어요.', chinese: '在学韩语。', scene: '学习' },
@@ -845,7 +845,7 @@ export const vocabularyEntries: WordEntry[] = [
   // ═══════════════════════════════════════════════════════════════
   {
     id: 'adj-01', korean: '크다', romanization: 'keuda', baseForm: '크다', partOfSpeech: '形容词',
-    level: '1', frequency: 3, emoji: '📐',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '大', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '이거 너무 커요.', chinese: '这个太大了。', scene: '购物' },
@@ -855,7 +855,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'adj-02', korean: '작다', romanization: 'jakda', baseForm: '작다', partOfSpeech: '形容词',
-    level: '1', frequency: 3, emoji: '📏',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '小', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '방이 좀 작아요.', chinese: '房间有点小。', scene: '日常' },
@@ -865,7 +865,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'adj-03', korean: '많다', romanization: 'manta', baseForm: '많다', partOfSpeech: '形容词',
-    level: '2', frequency: 3, emoji: '📊',
+    level: '2', frequency: 3,
     meanings: [{ chinese: '多', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '사람이 많아요.', chinese: '人很多。', scene: '日常' },
@@ -875,7 +875,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'adj-04', korean: '적다', romanization: 'jeokda', baseForm: '적다', partOfSpeech: '形容词',
-    level: '2', frequency: 2, emoji: '📉',
+    level: '2', frequency: 2,
     meanings: [{ chinese: '少', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '시간이 적게 남았어요.', chinese: '时间剩得很少。', scene: '日常' },
@@ -884,7 +884,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'adj-05', korean: '예쁘다', romanization: 'yeppeuda', baseForm: '예쁘다', partOfSpeech: '形容词',
-    level: '1', frequency: 3, emoji: '✨',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '漂亮', nuance: '口语高频', register: '通用' }],
     examples: [
       { korean: '오늘 정말 예뻐요!', chinese: '今天真漂亮！', scene: '社交' },
@@ -894,7 +894,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'adj-06', korean: '멋있다', romanization: 'meositda', baseForm: '멋있다', partOfSpeech: '形容词',
-    level: '2', frequency: 3, emoji: '😎',
+    level: '2', frequency: 3,
     meanings: [{ chinese: '帅/酷/棒', nuance: '口语高频', register: '通用' }],
     examples: [
       { korean: '오빠 정말 멋있어요!', chinese: '欧巴真的很帅！', scene: '追星' },
@@ -904,7 +904,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'adj-07', korean: '어렵다', romanization: 'eoryeopda', baseForm: '어렵다', partOfSpeech: '形容词',
-    level: '3', frequency: 3, emoji: '🤔',
+    level: '3', frequency: 3,
     meanings: [{ chinese: '难', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '한국어가 어려워요.', chinese: '韩语很难。', scene: '学习' },
@@ -914,7 +914,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'adj-08', korean: '쉽다', romanization: 'swipda', baseForm: '쉽다', partOfSpeech: '形容词',
-    level: '3', frequency: 2, emoji: '😌',
+    level: '3', frequency: 2,
     meanings: [{ chinese: '容易', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '이 책은 쉬워요.', chinese: '这本书很容易。', scene: '学习' },
@@ -924,7 +924,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'adj-09', korean: '덥다', romanization: 'deopda', baseForm: '덥다', partOfSpeech: '形容词',
-    level: '3', frequency: 2, emoji: '🥵',
+    level: '3', frequency: 2,
     meanings: [{ chinese: '热', nuance: '口语', register: '通用' }],
     examples: [
       { korean: '오늘 진짜 더워요.', chinese: '今天真热。', scene: '日常' },
@@ -934,7 +934,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'adj-10', korean: '춥다', romanization: 'chupda', baseForm: '춥다', partOfSpeech: '形容词',
-    level: '3', frequency: 2, emoji: '🥶',
+    level: '3', frequency: 2,
     meanings: [{ chinese: '冷', nuance: '口语', register: '通用' }],
     examples: [
       { korean: '밖에 너무 추워요.', chinese: '外面太冷了。', scene: '日常' },
@@ -944,7 +944,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'adj-11', korean: '바쁘다', romanization: 'bappeuda', baseForm: '바쁘다', partOfSpeech: '形容词',
-    level: '4', frequency: 3, emoji: '🏃',
+    level: '4', frequency: 3,
     meanings: [{ chinese: '忙', nuance: '口语高频', register: '通用' }],
     examples: [
       { korean: '요즘 너무 바빠요.', chinese: '最近太忙了。', scene: '日常' },
@@ -954,7 +954,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'adj-12', korean: '재미있다', romanization: 'jaemiitda', baseForm: '재미있다', partOfSpeech: '形容词',
-    level: '4', frequency: 3, emoji: '😄',
+    level: '4', frequency: 3,
     meanings: [{ chinese: '有趣/好玩', nuance: '口语高频', register: '通用' }],
     examples: [
       { korean: '한국어 공부가 재미있어요.', chinese: '学韩语很有趣。', scene: '学习' },
@@ -964,7 +964,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'adj-13', korean: '심심하다', romanization: 'simsimhada', baseForm: '심심하다', partOfSpeech: '形容词',
-    level: '4', frequency: 2, emoji: '😴',
+    level: '4', frequency: 2,
     meanings: [{ chinese: '无聊', nuance: '口语', register: '通用' }],
     examples: [
       { korean: '심심해요, 뭐 할까요?', chinese: '好无聊，做什么呢？', scene: '日常' },
@@ -978,7 +978,7 @@ export const vocabularyEntries: WordEntry[] = [
   // ═══════════════════════════════════════════════════════════════
   {
     id: 'health-01', korean: '아프다', romanization: 'apeuda', baseForm: '아프다', partOfSpeech: '形容词',
-    level: '1', frequency: 3, emoji: '🤒',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '疼/生病', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '배가 아파요.', chinese: '肚子疼。', scene: '医院' },
@@ -988,7 +988,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'health-02', korean: '병원', romanization: 'byeongwon', baseForm: '병원', partOfSpeech: '名词',
-    level: '2', frequency: 3, emoji: '🏥',
+    level: '2', frequency: 3,
     meanings: [{ chinese: '医院', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '병원에 가야 해요.', chinese: '得去医院。', scene: '医院' },
@@ -998,7 +998,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'health-03', korean: '약', romanization: 'yak', baseForm: '약', partOfSpeech: '名词',
-    level: '2', frequency: 3, emoji: '💊',
+    level: '2', frequency: 3,
     meanings: [{ chinese: '药', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '약을 먹었어요.', chinese: '吃药了。', scene: '医院' },
@@ -1008,7 +1008,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'health-04', korean: '감기', romanization: 'gamgi', baseForm: '감기', partOfSpeech: '名词',
-    level: '3', frequency: 3, emoji: '😷',
+    level: '3', frequency: 3,
     meanings: [{ chinese: '感冒', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '감기에 걸렸어요.', chinese: '感冒了。', scene: '医院' },
@@ -1022,7 +1022,7 @@ export const vocabularyEntries: WordEntry[] = [
   // ═══════════════════════════════════════════════════════════════
   {
     id: 'work-01', korean: '일', romanization: 'il', baseForm: '일', partOfSpeech: '名词',
-    level: '2', frequency: 3, emoji: '💼',
+    level: '2', frequency: 3,
     meanings: [{ chinese: '工作/事情', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '무슨 일을 하세요?', chinese: '做什么工作？', scene: '职场' },
@@ -1032,7 +1032,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'work-02', korean: '회사', romanization: 'hoesa', baseForm: '회사', partOfSpeech: '名词',
-    level: '3', frequency: 3, emoji: '🏢',
+    level: '3', frequency: 3,
     meanings: [{ chinese: '公司', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '회사에 다녀요.', chinese: '上班。', scene: '职场' },
@@ -1042,7 +1042,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'work-03', korean: '학교', romanization: 'hakgyo', baseForm: '학교', partOfSpeech: '名词',
-    level: '3', frequency: 3, emoji: '🏫',
+    level: '3', frequency: 3,
     meanings: [{ chinese: '学校', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '학교에 가요.', chinese: '去学校。', scene: '学习' },
@@ -1052,7 +1052,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'work-04', korean: '시험', romanization: 'siheom', baseForm: '시험', partOfSpeech: '名词',
-    level: '4', frequency: 3, emoji: '📝',
+    level: '4', frequency: 3,
     meanings: [{ chinese: '考试', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '다음 주에 시험이 있어요.', chinese: '下周有考试。', scene: '学习' },
@@ -1062,7 +1062,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'work-05', korean: '돈', romanization: 'don', baseForm: '돈', partOfSpeech: '名词',
-    level: '5', frequency: 3, emoji: '💵',
+    level: '5', frequency: 3,
     meanings: [{ chinese: '钱', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '돈이 없어요.', chinese: '没钱。', scene: '日常' },
@@ -1072,7 +1072,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'work-06', korean: '이메일', romanization: 'imeil', baseForm: '이메일', partOfSpeech: '名词',
-    level: '6', frequency: 2, emoji: '📧',
+    level: '6', frequency: 2,
     meanings: [{ chinese: '邮件', nuance: '外来词（英语）', register: '通用' }],
     examples: [
       { korean: '이메일 보내 주세요.', chinese: '请发邮件。', scene: '职场' },
@@ -1082,7 +1082,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'work-07', korean: '연락하다', romanization: 'yeollakhada', baseForm: '연락하다', partOfSpeech: '动词',
-    level: '4', frequency: 3, emoji: '📞',
+    level: '4', frequency: 3,
     meanings: [{ chinese: '联系', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '나중에 연락할게요.', chinese: '之后联系你。', scene: '社交' },
@@ -1096,7 +1096,7 @@ export const vocabularyEntries: WordEntry[] = [
   // ═══════════════════════════════════════════════════════════════
   {
     id: 'kculture-01', korean: '오빠', romanization: 'oppa', baseForm: '오빠', partOfSpeech: '名词',
-    level: '3', frequency: 3, emoji: '💕',
+    level: '3', frequency: 3,
     meanings: [
       { chinese: '哥哥（女称）/欧巴', nuance: '韩国文化标志词，粉丝常用', register: '口语' },
     ],
@@ -1108,7 +1108,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'kculture-02', korean: '언니', romanization: 'eonni', baseForm: '언니', partOfSpeech: '名词',
-    level: '4', frequency: 3, emoji: '👩‍🦰',
+    level: '4', frequency: 3,
     meanings: [{ chinese: '姐姐（女称）', nuance: '韩国文化标志词', register: '口语' }],
     examples: [
       { korean: '언니, 오늘 진짜 예뻐요!', chinese: '姐姐，今天真漂亮！', scene: '社交' },
@@ -1117,7 +1117,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'kculture-03', korean: '누나', romanization: 'nuna', baseForm: '누나', partOfSpeech: '名词',
-    level: '4', frequency: 2, emoji: '🧑‍🦰',
+    level: '4', frequency: 2,
     meanings: [{ chinese: '姐姐（男称）', nuance: '韩国文化标志词', register: '口语' }],
     examples: [
       { korean: '누나가 해 줄게.', chinese: '姐姐给你做。', scene: '日常' },
@@ -1126,7 +1126,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'kculture-04', korean: '팬', romanization: 'paen', baseForm: '팬', partOfSpeech: '名词',
-    level: '5', frequency: 3, emoji: '⭐',
+    level: '5', frequency: 3,
     meanings: [{ chinese: '粉丝', nuance: '外来词（英语fan）', register: '通用' }],
     examples: [
       { korean: '저는 완전 팬이에요!', chinese: '我是忠实粉丝！', scene: '追星' },
@@ -1136,7 +1136,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'kculture-05', korean: '아이돌', romanization: 'aidol', baseForm: '아이돌', partOfSpeech: '名词',
-    level: '5', frequency: 3, emoji: '🌟',
+    level: '5', frequency: 3,
     meanings: [{ chinese: '偶像/爱豆', nuance: '韩国娱乐文化核心词', register: '通用' }],
     examples: [
       { korean: '좋아하는 아이돌이 누구예요?', chinese: '喜欢的偶像是谁？', scene: '追星' },
@@ -1146,7 +1146,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'kculture-06', korean: '드라마', romanization: 'deurama', baseForm: '드라마', partOfSpeech: '名词',
-    level: '5', frequency: 3, emoji: '📺',
+    level: '5', frequency: 3,
     meanings: [{ chinese: '电视剧/韩剧', nuance: '外来词（英语drama）', register: '通用' }],
     examples: [
       { korean: '요즘 무슨 드라마 봐요?', chinese: '最近看什么韩剧？', scene: '韩剧' },
@@ -1156,7 +1156,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'kculture-07', korean: '예능', romanization: 'yeneung', baseForm: '예능', partOfSpeech: '名词',
-    level: '3', frequency: 2, emoji: '📺',
+    level: '3', frequency: 2,
     meanings: [{ chinese: '综艺节目', nuance: '韩国放送术语', register: '通用' }],
     examples: [
       { korean: '한국 예능을 보면서 한국어를 배워요.', chinese: '看韩国综艺学韩语。', scene: '综艺' },
@@ -1166,7 +1166,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'kculture-08', korean: '화장품', romanization: 'hwajangpum', baseForm: '화장품', partOfSpeech: '名词',
-    level: '6', frequency: 2, emoji: '💄',
+    level: '6', frequency: 2,
     meanings: [{ chinese: '化妆品', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '한국 화장품 정말 좋아요.', chinese: '韩国化妆品真的很好。', scene: '美妆' },
@@ -1176,7 +1176,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'kculture-09', korean: '스킨케어', romanization: 'seukinkeeo', baseForm: '스킨케어', partOfSpeech: '名词',
-    level: '5', frequency: 1, emoji: '🧴',
+    level: '5', frequency: 1,
     meanings: [{ chinese: '护肤', nuance: '外来词（英语skincare）', register: '通用' }],
     examples: [
       { korean: '한국 스킨케어 루틴 따라 해 봤어요.', chinese: '试了韩国护肤流程。', scene: '美妆' },
@@ -1185,7 +1185,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'kculture-10', korean: '대박', romanization: 'daebak', baseForm: '대박', partOfSpeech: '感叹词',
-    level: '6', frequency: 3, emoji: '🤯',
+    level: '6', frequency: 3,
     meanings: [
       { chinese: '太厉害了/太棒了/天啊', nuance: '口语感叹词，综艺高频', register: '口语' },
     ],
@@ -1195,13 +1195,243 @@ export const vocabularyEntries: WordEntry[] = [
     ],
     tags: ['日常', '综艺', '韩流'], emotionTags: ['开心', '惊讶'], relatedWords: [],
   },
+  {
+    id: 'kculture-11', korean: '콘서트', romanization: 'konseuteu', baseForm: '콘서트', partOfSpeech: '名词',
+    level: '3', frequency: 3,
+    meanings: [{ chinese: '演唱会/音乐会', nuance: '外来词（英语concert）', register: '通用' }],
+    examples: [
+      { korean: '콘서트 티켓을 샀어요.', chinese: '买了演唱会门票。', scene: '追星' },
+      { korean: '콘서트가 너무 감동적이었어요.', chinese: '演唱会太感人了。', scene: '追星' },
+    ],
+    tags: ['追星', '韩流', '音乐'], emotionTags: ['开心', '感动'], relatedWords: ['kculture-04', 'kculture-21'],
+  },
+  {
+    id: 'kculture-12', korean: '앨범', romanization: 'aelbeom', baseForm: '앨범', partOfSpeech: '名词',
+    level: '3', frequency: 3,
+    meanings: [{ chinese: '专辑', nuance: '外来词（英语album）', register: '通用' }],
+    examples: [
+      { korean: '새 앨범이 나왔어요.', chinese: '新专辑出来了。', scene: '追星' },
+      { korean: '앨범을 예약 구매했어요.', chinese: '预购了专辑。', scene: '追星' },
+    ],
+    tags: ['追星', '韩流', '音乐'], emotionTags: ['开心'], relatedWords: ['kculture-05', 'kculture-13'],
+  },
+  {
+    id: 'kculture-13', korean: '노래', romanization: 'norae', baseForm: '노래', partOfSpeech: '名词',
+    level: '1', frequency: 3,
+    meanings: [{ chinese: '歌曲/歌', nuance: '中性，日常高频词', register: '通用' }],
+    examples: [
+      { korean: '이 노래 정말 좋아요.', chinese: '这首歌真的很好听。', scene: '日常' },
+      { korean: '노래방에 같이 가요!', chinese: '一起去KTV吧！', scene: '社交' },
+    ],
+    tags: ['音乐', '日常', '追星'], emotionTags: ['开心'], relatedWords: ['kculture-12'],
+  },
+  {
+    id: 'kculture-14', korean: '무대', romanization: 'mudae', baseForm: '무대', partOfSpeech: '名词',
+    level: '3', frequency: 2,
+    meanings: [{ chinese: '舞台/演出', nuance: '中性', register: '通用' }],
+    examples: [
+      { korean: '무대 위에서 정말 빛났어요.', chinese: '在舞台上真的很闪耀。', scene: '追星' },
+      { korean: '오늘 무대 너무 완벽해요.', chinese: '今天的舞台太完美了。', scene: '追星' },
+    ],
+    tags: ['追星', '韩流', '音乐'], emotionTags: ['感动', '开心'], relatedWords: ['kculture-15', 'kculture-11'],
+  },
+  {
+    id: 'kculture-15', korean: '안무', romanization: 'anmu', baseForm: '안무', partOfSpeech: '名词',
+    level: '4', frequency: 2,
+    meanings: [{ chinese: '编舞/舞蹈动作', nuance: '专业用语', register: '通用' }],
+    examples: [
+      { korean: '이번 안무가 너무 어려워요.', chinese: '这次的编舞太难了。', scene: '追星' },
+      { korean: '안무 연습 열심히 했어요.', chinese: '认真练习了编舞。', scene: '追星' },
+    ],
+    tags: ['追星', '韩流', '舞蹈'], emotionTags: [], relatedWords: ['kculture-28', 'kculture-14'],
+  },
+  {
+    id: 'kculture-16', korean: '데뷔', romanization: 'debwi', baseForm: '데뷔', partOfSpeech: '名词',
+    level: '4', frequency: 2,
+    meanings: [{ chinese: '出道/首秀', nuance: '外来词（法语début）', register: '通用' }],
+    examples: [
+      { korean: '데뷔 몇 년 됐어요?', chinese: '出道几年了？', scene: '追星' },
+      { korean: '데뷔 무대가 너무 떨렸어요.', chinese: '出道舞台好紧张。', scene: '追星' },
+    ],
+    tags: ['追星', '韩流'], emotionTags: [], relatedWords: ['kculture-17', 'kculture-05'],
+  },
+  {
+    id: 'kculture-17', korean: '컴백', romanization: 'keombaek', baseForm: '컴백', partOfSpeech: '名词',
+    level: '4', frequency: 3,
+    meanings: [{ chinese: '回归/新专辑回归', nuance: '追星常用，外来词（英语comeback）', register: '口语' }],
+    examples: [
+      { korean: '컴백 준비 중이에요.', chinese: '正在准备回归。', scene: '追星' },
+      { korean: '이번 컴백 진짜 대박이에요!', chinese: '这次回归真的太棒了！', scene: '追星' },
+    ],
+    tags: ['追星', '韩流'], emotionTags: ['开心', '期待'], relatedWords: ['kculture-12', 'kculture-16'],
+  },
+  {
+    id: 'kculture-18', korean: '뮤직비디오', romanization: 'myujikbideo', baseForm: '뮤직비디오', partOfSpeech: '名词',
+    level: '3', frequency: 3,
+    meanings: [{ chinese: 'MV/音乐视频', nuance: '常简称MV，外来词', register: '通用' }],
+    examples: [
+      { korean: '뮤직비디오 조회수가 1억을 넘었어요.', chinese: 'MV播放量超过了一亿。', scene: '追星' },
+      { korean: '뮤직비디오 찍는 장소가 어디예요?', chinese: 'MV拍摄地点在哪里？', scene: '追星' },
+    ],
+    tags: ['追星', '韩流', '音乐'], emotionTags: [], relatedWords: ['kculture-12'],
+  },
+  {
+    id: 'kculture-19', korean: '멤버', romanization: 'membeо', baseForm: '멤버', partOfSpeech: '名词',
+    level: '3', frequency: 3,
+    meanings: [{ chinese: '成员', nuance: '外来词（英语member）', register: '通用' }],
+    examples: [
+      { korean: '몇 명의 멤버예요?', chinese: '有几个成员？', scene: '追星' },
+      { korean: '제 최애 멤버예요.', chinese: '是我最爱的成员。', scene: '追星' },
+    ],
+    tags: ['追星', '韩流'], emotionTags: [], relatedWords: ['kculture-20', 'kculture-05'],
+  },
+  {
+    id: 'kculture-20', korean: '그룹', romanization: 'geurup', baseForm: '그룹', partOfSpeech: '名词',
+    level: '3', frequency: 3,
+    meanings: [{ chinese: '组合/团体', nuance: '外来词（英语group）', register: '通用' }],
+    examples: [
+      { korean: '좋아하는 그룹이 있어요?', chinese: '有喜欢的组合吗？', scene: '追星' },
+      { korean: '그 그룹은 7명이에요.', chinese: '那个组合有7名成员。', scene: '追星' },
+    ],
+    tags: ['追星', '韩流'], emotionTags: [], relatedWords: ['kculture-19', 'kculture-21'],
+  },
+  {
+    id: 'kculture-21', korean: '솔로', romanization: 'sollo', baseForm: '솔로', partOfSpeech: '名词',
+    level: '3', frequency: 2,
+    meanings: [{ chinese: '单人/独唱', nuance: '外来词（英语solo）', register: '通用' }],
+    examples: [
+      { korean: '솔로 활동도 해요?', chinese: '也有solo活动吗？', scene: '追星' },
+      { korean: '솔로 앨범이 나왔어요.', chinese: '出了solo专辑。', scene: '追星' },
+    ],
+    tags: ['追星', '韩流', '音乐'], emotionTags: [], relatedWords: ['kculture-20'],
+  },
+  {
+    id: 'kculture-22', korean: '응원', romanization: 'eungwon', baseForm: '응원', partOfSpeech: '名词',
+    level: '3', frequency: 3,
+    meanings: [{ chinese: '应援/加油', nuance: '中性，追星和日常都用', register: '通用' }],
+    examples: [
+      { korean: '응원봉을 흔들었어요.', chinese: '挥舞了应援棒。', scene: '演唱会' },
+      { korean: '항상 응원할게요!', chinese: '永远支持你！', scene: '追星' },
+    ],
+    tags: ['追星', '韩流', '社交'], emotionTags: ['开心', '感动'], relatedWords: ['kculture-24', 'kculture-11'],
+  },
+  {
+    id: 'kculture-23', korean: '팬클럽', romanization: 'paenkeullеob', baseForm: '팬클럽', partOfSpeech: '名词',
+    level: '4', frequency: 2,
+    meanings: [{ chinese: '粉丝团/官方粉丝会', nuance: '外来词，官方粉丝团专用', register: '通用' }],
+    examples: [
+      { korean: '팬클럽에 가입했어요.', chinese: '加入了粉丝团。', scene: '追星' },
+      { korean: '팬클럽 이름이 뭐예요?', chinese: '粉丝团名字叫什么？', scene: '追星' },
+    ],
+    tags: ['追星', '韩流'], emotionTags: [], relatedWords: ['kculture-04', 'kculture-22'],
+  },
+  {
+    id: 'kculture-24', korean: '사인회', romanization: 'sainhoе', baseForm: '사인회', partOfSpeech: '名词',
+    level: '5', frequency: 2,
+    meanings: [{ chinese: '签名会/见面签售会', nuance: '粉丝福利活动', register: '通用' }],
+    examples: [
+      { korean: '사인회 당첨됐어요!', chinese: '抽中签名会了！', scene: '追星' },
+      { korean: '사인회에서 직접 만났어요.', chinese: '在签名会上直接见到了。', scene: '追星' },
+    ],
+    tags: ['追星', '韩流'], emotionTags: ['开心', '激动'], relatedWords: ['kculture-04', 'kculture-23'],
+  },
+  {
+    id: 'kculture-25', korean: '직캠', romanization: 'jikkaem', baseForm: '직캠', partOfSpeech: '名词',
+    level: '5', frequency: 2,
+    meanings: [{ chinese: '直拍/固定机位粉丝拍摄', nuance: '네티즌 용어，专拍某位成员的视频', register: '口语' }],
+    examples: [
+      { korean: '직캠 영상이 너무 좋아요.', chinese: '直拍视频太好了。', scene: '追星' },
+      { korean: '직캠 조회수가 폭발했어요.', chinese: '直拍播放量爆了。', scene: '追星' },
+    ],
+    tags: ['追星', '韩流', '网络用语'], emotionTags: [], relatedWords: ['kculture-18'],
+  },
+  {
+    id: 'kculture-26', korean: '티켓팅', romanization: 'tikeseutting', baseForm: '티켓팅', partOfSpeech: '名词',
+    level: '4', frequency: 2,
+    meanings: [{ chinese: '抢票', nuance: '网络用语，指在线抢购演唱会门票', register: '口语' }],
+    examples: [
+      { korean: '티켓팅에 성공했어요!', chinese: '抢票成功了！', scene: '追星' },
+      { korean: '티켓팅이 너무 어려워요.', chinese: '抢票太难了。', scene: '追星' },
+    ],
+    tags: ['追星', '韩流'], emotionTags: ['紧张', '开心'], relatedWords: ['kculture-11'],
+  },
+  {
+    id: 'kculture-27', korean: '최애', romanization: 'choeae', baseForm: '최애', partOfSpeech: '名词',
+    level: '4', frequency: 3,
+    meanings: [{ chinese: '最爱/最喜欢的成员', nuance: '追星圈用语，最喜欢的偶像或成员', register: '口语' }],
+    examples: [
+      { korean: '최애가 누구예요?', chinese: '最爱是谁？', scene: '追星' },
+      { korean: '제 최애는 이 그룹 리더예요.', chinese: '我的最爱是这个组合的队长。', scene: '追星' },
+    ],
+    tags: ['追星', '韩流', '网络用语'], emotionTags: ['喜欢'], relatedWords: ['kculture-04', 'kculture-19'],
+  },
+  {
+    id: 'kculture-28', korean: '덕질', romanization: 'deokjil', baseForm: '덕질', partOfSpeech: '名词',
+    level: '5', frequency: 2,
+    meanings: [{ chinese: '粉丝活动/追星日常', nuance: '오타쿠+질 합성어，指追星、收藏周边等粉丝行为', register: '口语' }],
+    examples: [
+      { korean: '덕질하는 데 돈을 많이 써요.', chinese: '追星花了很多钱。', scene: '追星' },
+      { korean: '덕질이 취미예요.', chinese: '追星是爱好。', scene: '日常' },
+    ],
+    tags: ['追星', '韩流', '网络用语'], emotionTags: ['开心'], relatedWords: ['kculture-29', 'kculture-30'],
+  },
+  {
+    id: 'kculture-29', korean: '입덕', romanization: 'ipdеok', baseForm: '입덕하다', partOfSpeech: '动词',
+    level: '5', frequency: 2,
+    meanings: [{ chinese: '入坑/开始追星', nuance: '开始成为某偶像粉丝的行为', register: '口语' }],
+    examples: [
+      { korean: '언제 입덕했어요?', chinese: '什么时候入坑的？', scene: '追星' },
+      { korean: '그 뮤직비디오 보고 입덕했어요.', chinese: '看了那个MV之后入坑了。', scene: '追星' },
+    ],
+    tags: ['追星', '韩流', '网络用语'], emotionTags: ['喜欢'], relatedWords: ['kculture-28', 'kculture-30'],
+  },
+  {
+    id: 'kculture-30', korean: '탈덕', romanization: 'taldeok', baseForm: '탈덕하다', partOfSpeech: '动词',
+    level: '5', frequency: 1,
+    meanings: [{ chinese: '脱坑/不再追某偶像', nuance: '与입덕相对，指退出粉丝圈', register: '口语' }],
+    examples: [
+      { korean: '탈덕하고 싶지 않아요.', chinese: '不想脱坑。', scene: '追星' },
+      { korean: '탈덕해도 노래는 좋아해요.', chinese: '就算脱坑了，歌还是喜欢的。', scene: '追星' },
+    ],
+    tags: ['追星', '韩流', '网络用语'], emotionTags: [], relatedWords: ['kculture-29', 'kculture-28'],
+  },
+  {
+    id: 'kculture-31', korean: '칼군무', romanization: 'kalgunmu', baseForm: '칼군무', partOfSpeech: '名词',
+    level: '5', frequency: 2,
+    meanings: [{ chinese: '刀群舞/整齐划一的集体舞', nuance: '칼(刀)+군무(群舞)，形容整齐度极高的团体舞蹈', register: '口语' }],
+    examples: [
+      { korean: '칼군무로 유명한 그룹이에요.', chinese: '是以刀群舞闻名的组合。', scene: '追星' },
+      { korean: '칼군무 연습이 엄청 힘들었겠다.', chinese: '刀群舞练习一定很累吧。', scene: '追星' },
+    ],
+    tags: ['追星', '韩流', '舞蹈'], emotionTags: ['惊讶'], relatedWords: ['kculture-15', 'kculture-14'],
+  },
+  {
+    id: 'kculture-32', korean: '떼창', romanization: 'ttaechang', baseForm: '떼창', partOfSpeech: '名词',
+    level: '5', frequency: 2,
+    meanings: [{ chinese: '集体大合唱/粉丝齐唱', nuance: '떼(一群人)+창(唱)，演唱会粉丝集体唱歌的行为', register: '口语' }],
+    examples: [
+      { korean: '떼창 구간에서 소름 돋았어요.', chinese: '集体合唱的部分起鸡皮疙瘩了。', scene: '演唱会' },
+      { korean: '팬들의 떼창이 감동적이었어요.', chinese: '粉丝们的大合唱太感人了。', scene: '演唱会' },
+    ],
+    tags: ['追星', '韩流', '演唱会'], emotionTags: ['感动', '激动'], relatedWords: ['kculture-22', 'kculture-11'],
+  },
+  {
+    id: 'kculture-33', korean: '공방', romanization: 'gongbang', baseForm: '공방', partOfSpeech: '名词',
+    level: '5', frequency: 2,
+    meanings: [{ chinese: '音乐节目现场直播表演', nuance: '공개방송(公开广播)的缩写，指在音乐节目上的现场表演', register: '口语' }],
+    examples: [
+      { korean: '공방 직캠 올라왔어요!', chinese: '音乐节目直拍上传了！', scene: '追星' },
+      { korean: '공방 티켓 어떻게 구해요?', chinese: '音乐节目观众票怎么弄？', scene: '追星' },
+    ],
+    tags: ['追星', '韩流', '网络用语'], emotionTags: [], relatedWords: ['kculture-25', 'kculture-14'],
+  },
 
   // ═══════════════════════════════════════════════════════════════
   // 13. TRAVEL KOREA 旅行韩国
   // ═══════════════════════════════════════════════════════════════
   {
     id: 'travel-01', korean: '여행', romanization: 'yeohaeng', baseForm: '여행', partOfSpeech: '名词',
-    level: '4', frequency: 3, emoji: '✈️',
+    level: '4', frequency: 3,
     meanings: [{ chinese: '旅行', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '한국 여행 가고 싶어요.', chinese: '想去韩国旅行。', scene: '旅行' },
@@ -1211,7 +1441,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'travel-02', korean: '호텔', romanization: 'hotel', baseForm: '호텔', partOfSpeech: '名词',
-    level: '3', frequency: 3, emoji: '🏨',
+    level: '3', frequency: 3,
     meanings: [{ chinese: '酒店', nuance: '外来词（英语hotel）', register: '通用' }],
     examples: [
       { korean: '호텔을 예약했어요.', chinese: '预订了酒店。', scene: '酒店入住' },
@@ -1221,7 +1451,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'travel-03', korean: '예약하다', romanization: 'yeyakhada', baseForm: '예약하다', partOfSpeech: '动词',
-    level: '4', frequency: 3, emoji: '📅',
+    level: '4', frequency: 3,
     meanings: [{ chinese: '预约/预订', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '미리 예약했어요.', chinese: '提前预约了。', scene: '旅行' },
@@ -1231,7 +1461,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'travel-04', korean: '여권', romanization: 'yeogwon', baseForm: '여권', partOfSpeech: '名词',
-    level: '5', frequency: 2, emoji: '📘',
+    level: '5', frequency: 2,
     meanings: [{ chinese: '护照', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '여권 좀 보여 주세요.', chinese: '请出示护照。', scene: '入境海关' },
@@ -1241,7 +1471,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'travel-05', korean: '비행기', romanization: 'bihaenggi', baseForm: '비행기', partOfSpeech: '名词',
-    level: '5', frequency: 3, emoji: '🛫',
+    level: '5', frequency: 3,
     meanings: [{ chinese: '飞机', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '비행기 표를 샀어요.', chinese: '买了机票。', scene: '旅行' },
@@ -1251,7 +1481,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'travel-06', korean: '관광', romanization: 'gwangwang', baseForm: '관광', partOfSpeech: '名词',
-    level: '5', frequency: 2, emoji: '📸',
+    level: '5', frequency: 2,
     meanings: [{ chinese: '观光/旅游', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '서울 관광 명소 추천해 주세요.', chinese: '请推荐首尔观光景点。', scene: '旅行' },
@@ -1261,7 +1491,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'travel-07', korean: '사진', romanization: 'sajin', baseForm: '사진', partOfSpeech: '名词',
-    level: '3', frequency: 3, emoji: '📷',
+    level: '3', frequency: 3,
     meanings: [{ chinese: '照片', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '사진 찍어 주세요.', chinese: '请帮我拍照。', scene: '景点打卡' },
@@ -1275,7 +1505,7 @@ export const vocabularyEntries: WordEntry[] = [
   // ═══════════════════════════════════════════════════════════════
   {
     id: 'tech-01', korean: '핸드폰', romanization: 'haendeupon', baseForm: '핸드폰', partOfSpeech: '名词',
-    level: '4', frequency: 3, emoji: '📱',
+    level: '4', frequency: 3,
     meanings: [{ chinese: '手机', nuance: '外来词（英语handphone）', register: '通用' }],
     examples: [
       { korean: '핸드폰 번호가 뭐예요?', chinese: '手机号是多少？', scene: '社交' },
@@ -1285,7 +1515,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'tech-03', korean: '배달', romanization: 'baedal', baseForm: '배달', partOfSpeech: '名词',
-    level: '5', frequency: 3, emoji: '🛵',
+    level: '5', frequency: 3,
     meanings: [{ chinese: '外卖/配送', nuance: '韩国生活高频词', register: '通用' }],
     examples: [
       { korean: '배달 시켜 먹을까요?', chinese: '叫外卖吃吗？', scene: '日常' },
@@ -1299,7 +1529,7 @@ export const vocabularyEntries: WordEntry[] = [
   // ═══════════════════════════════════════════════════════════════
   {
     id: 'verb-16', korean: '만나다', romanization: 'mannada', baseForm: '만나다', partOfSpeech: '动词',
-    level: '3', frequency: 3, emoji: '🤝',
+    level: '3', frequency: 3,
     meanings: [{ chinese: '见面', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '반갑습니다, 만나서.', chinese: '见到你很开心。', scene: '社交' },
@@ -1309,7 +1539,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'verb-17', korean: '웃다', romanization: 'utda', baseForm: '웃다', partOfSpeech: '动词',
-    level: '3', frequency: 2, emoji: '😄',
+    level: '3', frequency: 2,
     meanings: [{ chinese: '笑', nuance: '口语', register: '通用' }],
     examples: [
       { korean: '크게 웃으세요!', chinese: '大笑吧！', scene: '日常' },
@@ -1319,7 +1549,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'verb-18', korean: '울다', romanization: 'ulda', baseForm: '울다', partOfSpeech: '动词',
-    level: '4', frequency: 2, emoji: '😭',
+    level: '4', frequency: 2,
     meanings: [{ chinese: '哭', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '슬퍼서 울었어요.', chinese: '因为伤心哭了。', scene: '日常' },
@@ -1329,7 +1559,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'verb-19', korean: '자다', romanization: 'jada', baseForm: '자다', partOfSpeech: '动词',
-    level: '4', frequency: 3, emoji: '😴',
+    level: '4', frequency: 3,
     meanings: [{ chinese: '睡觉', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '잘 자요!', chinese: '晚安！', scene: '日常' },
@@ -1339,7 +1569,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'verb-20', korean: '일어나다', romanization: 'ireonada', baseForm: '일어나다', partOfSpeech: '动词',
-    level: '3', frequency: 3, emoji: '⏰',
+    level: '3', frequency: 3,
     meanings: [{ chinese: '起床/起来', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '아침에 일찍 일어났어요.', chinese: '早上起得早。', scene: '日常' },
@@ -1349,7 +1579,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'verb-21', korean: '앉다', romanization: 'anda', baseForm: '앉다', partOfSpeech: '动词',
-    level: '3', frequency: 2, emoji: '🪑',
+    level: '3', frequency: 2,
     meanings: [{ chinese: '坐', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '여기 앉으세요.', chinese: '请坐这里。', scene: '餐厅' },
@@ -1359,7 +1589,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'verb-22', korean: '쉬다', romanization: 'swida', baseForm: '쉬다', partOfSpeech: '动词',
-    level: '4', frequency: 2, emoji: '🛋️',
+    level: '4', frequency: 2,
     meanings: [{ chinese: '休息', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '좀 쉬세요.', chinese: '休息一下吧。', scene: '日常' },
@@ -1369,7 +1599,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'verb-23', korean: '찾다', romanization: 'chatda', baseForm: '찾다', partOfSpeech: '动词',
-    level: '4', frequency: 3, emoji: '🔍',
+    level: '4', frequency: 3,
     meanings: [{ chinese: '找/寻找', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '뭘 찾으세요?', chinese: '您找什么？', scene: '购物' },
@@ -1379,7 +1609,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'verb-24', korean: '도와주다', romanization: 'dowajuda', baseForm: '도와주다', partOfSpeech: '动词',
-    level: '2', frequency: 3, emoji: '🆘',
+    level: '2', frequency: 3,
     meanings: [{ chinese: '帮助', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '도와주세요!', chinese: '请帮帮我！', scene: '日常' },
@@ -1389,7 +1619,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'verb-25', korean: '사랑하다', romanization: 'saranghada', baseForm: '사랑하다', partOfSpeech: '动词',
-    level: '3', frequency: 3, emoji: '❤️',
+    level: '3', frequency: 3,
     meanings: [{ chinese: '爱', nuance: '韩剧高频', register: '通用' }],
     examples: [
       { korean: '사랑해요.', chinese: '我爱你。', scene: '表白情感' },
@@ -1403,7 +1633,7 @@ export const vocabularyEntries: WordEntry[] = [
   // ═══════════════════════════════════════════════════════════════
   {
     id: 'adv-01', korean: '정말', romanization: 'jeongmal', baseForm: '정말', partOfSpeech: '副词',
-    level: '1', frequency: 3, emoji: '💯',
+    level: '1', frequency: 3,
     meanings: [{ chinese: '真的/非常', nuance: '口语高频', register: '通用' }],
     examples: [
       { korean: '정말 맛있어요!', chinese: '真的很好吃！', scene: '餐厅' },
@@ -1413,7 +1643,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'adv-02', korean: '너무', romanization: 'neomu', baseForm: '너무', partOfSpeech: '副词',
-    level: '2', frequency: 3, emoji: '📈',
+    level: '2', frequency: 3,
     meanings: [{ chinese: '太/过于', nuance: '口语高频，可表正面或负面', register: '通用' }],
     examples: [
       { korean: '너무 좋아요!', chinese: '太好了！', scene: '日常' },
@@ -1423,7 +1653,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'adv-03', korean: '조금', romanization: 'jogeum', baseForm: '조금', partOfSpeech: '副词',
-    level: '2', frequency: 3, emoji: '🤏',
+    level: '2', frequency: 3,
     meanings: [{ chinese: '一点/稍微', nuance: '口语高频', register: '通用' }],
     examples: [
       { korean: '조금만 기다려 주세요.', chinese: '请稍等一下。', scene: '日常' },
@@ -1433,7 +1663,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'adv-04', korean: '빨리', romanization: 'ppalli', baseForm: '빨리', partOfSpeech: '副词',
-    level: '3', frequency: 3, emoji: '⚡',
+    level: '3', frequency: 3,
     meanings: [{ chinese: '快点/赶快', nuance: '口语高频', register: '通用' }],
     examples: [
       { korean: '빨리 와요!', chinese: '快来！', scene: '日常' },
@@ -1443,7 +1673,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'adv-05', korean: '천천히', romanization: 'cheoncheonhi', baseForm: '천천히', partOfSpeech: '副词',
-    level: '3', frequency: 2, emoji: '🐢',
+    level: '3', frequency: 2,
     meanings: [{ chinese: '慢慢地', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '천천히 말씀해 주세요.', chinese: '请说慢一点。', scene: '社交' },
@@ -1453,7 +1683,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'adv-06', korean: '같이', romanization: 'gachi', baseForm: '같이', partOfSpeech: '副词',
-    level: '4', frequency: 3, emoji: '👥',
+    level: '4', frequency: 3,
     meanings: [{ chinese: '一起', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '같이 갈래요?', chinese: '一起去吗？', scene: '日常' },
@@ -1463,7 +1693,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'adv-07', korean: '혼자', romanization: 'honja', baseForm: '혼자', partOfSpeech: '副词',
-    level: '4', frequency: 2, emoji: '🧍',
+    level: '4', frequency: 2,
     meanings: [{ chinese: '独自/一个人', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '혼자 살아요.', chinese: '一个人住。', scene: '日常' },
@@ -1473,7 +1703,7 @@ export const vocabularyEntries: WordEntry[] = [
   },
   {
     id: 'adv-08', korean: '항상', romanization: 'hangsang', baseForm: '항상', partOfSpeech: '副词',
-    level: '4', frequency: 3, emoji: '🔄',
+    level: '4', frequency: 3,
     meanings: [{ chinese: '总是/一直', nuance: '中性', register: '通用' }],
     examples: [
       { korean: '항상 감사합니다.', chinese: '一直很感谢。', scene: '社交' },

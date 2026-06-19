@@ -4,40 +4,24 @@ import { useState, useMemo } from 'react';
 import { Search, X, Flame, Volume2, BookmarkPlus, BookmarkCheck } from 'lucide-react';
 import { idioms, slangs, loanwords } from '@/data/expressions';
 import { speak } from '@/lib/tts';
-import { db } from '@/lib/db';
+import { TappableText } from '@/components/TappableText';
+import { AddToBookSheet } from '@/components/vocabulary/AddToBookSheet';
 
 type SubTab = 'idioms' | 'slang' | 'loanword';
+
+interface SheetTarget {
+  id: string;
+  korean: string;
+  meaning: string;
+  example: string;
+  exampleZh: string;
+}
 
 export function ExpressionsSection() {
   const [subTab, setSubTab] = useState<SubTab>('idioms');
   const [search, setSearch] = useState('');
-
   const [addedExprIds, setAddedExprIds] = useState<Set<string>>(new Set());
-  const [addingExprId, setAddingExprId] = useState<string | null>(null);
-
-  const handleSaveExpr = async (exprId: string, expression: string, meaning: string, example: string, exampleZh: string) => {
-    setAddingExprId(exprId);
-    const exists = await db.words.where('word').equals(expression).first();
-    if (!exists) {
-      await db.words.put({
-        id: crypto.randomUUID(),
-        word: expression,
-        pronunciation: '',
-        meaning,
-        partOfSpeech: 'expression',
-        examples: [{ text: example, translation: exampleZh, source: 'manual' as const }],
-        mastery: 'new',
-        srsLevel: 0,
-        easeFactor: 2.5,
-        interval: 0,
-        createdAt: Date.now(),
-        lastReviewed: null,
-        nextReview: Date.now(),
-      });
-    }
-    setAddedExprIds((prev) => new Set(prev).add(exprId));
-    setAddingExprId(null);
-  };
+  const [sheetTarget, setSheetTarget] = useState<SheetTarget | null>(null);
 
   const filteredIdioms = useMemo(() => {
     if (!search.trim()) return idioms;
@@ -56,6 +40,11 @@ export function ExpressionsSection() {
     const q = search.toLowerCase();
     return loanwords.filter((l) => l.expression.includes(q) || l.original.includes(q) || l.meaning.includes(q));
   }, [search]);
+
+  const handleSheetClose = () => {
+    if (sheetTarget) setAddedExprIds(prev => new Set(prev).add(sheetTarget.id));
+    setSheetTarget(null);
+  };
 
   return (
     <div className="space-y-4">
@@ -84,18 +73,14 @@ export function ExpressionsSection() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {filteredIdioms.map((item) => {
             const isAdded = addedExprIds.has(item.id);
-            const isAdding = addingExprId === item.id;
             return (
             <div key={item.id} className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-4 hover:border-[var(--pink-pale)] transition-colors">
               <div className="flex items-center justify-between mb-2">
                 <h4 className="font-bold text-[var(--text-primary)]">{item.expression}</h4>
                 <div className="flex items-center gap-1">
                   <button
-                    onClick={() => handleSaveExpr(item.id, item.expression, item.actualMeaning, item.example, item.exampleZh)}
-                    disabled={isAdding}
-                    className={`p-1 rounded-lg transition-colors ${
-                      isAdded ? 'text-[var(--mint-soft)] bg-[var(--mint-soft)]/10' : 'text-[var(--text-muted)] hover:text-[var(--pink-primary)] hover:bg-[var(--bg-input)]'
-                    }`}
+                    onClick={() => !isAdded && setSheetTarget({ id: item.id, korean: item.expression, meaning: item.actualMeaning, example: item.example, exampleZh: item.exampleZh })}
+                    className={`p-1 rounded-lg transition-colors ${isAdded ? 'text-[var(--mint-soft)] bg-[var(--mint-soft)]/10' : 'text-[var(--text-muted)] hover:text-[var(--pink-primary)] hover:bg-[var(--bg-input)]'}`}
                     title={isAdded ? '已添加' : '加入单词本'}
                   >
                     {isAdded ? <BookmarkCheck size={14} /> : <BookmarkPlus size={14} />}
@@ -108,7 +93,7 @@ export function ExpressionsSection() {
                 <span className="text-[var(--pink-primary)] mx-2">→</span>
                 <span className="font-medium">{item.actualMeaning}</span>
               </div>
-              <p className="text-xs text-[var(--text-placeholder)]">{item.example}</p>
+              <TappableText text={item.example} className="text-xs text-[var(--text-placeholder)]" source="表达用法" />
               <p className="text-xs text-[var(--text-muted)] mt-0.5">{item.exampleZh}</p>
             </div>
             );
@@ -120,7 +105,6 @@ export function ExpressionsSection() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {filteredSlangs.map((item) => {
             const isAdded = addedExprIds.has(item.id);
-            const isAdding = addingExprId === item.id;
             return (
             <div key={item.id} className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-4 hover:border-[var(--purple-soft)] transition-colors">
               <div className="flex items-center justify-between mb-2">
@@ -130,11 +114,8 @@ export function ExpressionsSection() {
                 </div>
                 <div className="flex items-center gap-1">
                   <button
-                    onClick={() => handleSaveExpr(item.id, item.expression, item.meaning, item.example, item.exampleZh)}
-                    disabled={isAdding}
-                    className={`p-1 rounded-lg transition-colors ${
-                      isAdded ? 'text-[var(--mint-soft)] bg-[var(--mint-soft)]/10' : 'text-[var(--text-muted)] hover:text-[var(--pink-primary)] hover:bg-[var(--bg-input)]'
-                    }`}
+                    onClick={() => !isAdded && setSheetTarget({ id: item.id, korean: item.expression, meaning: item.meaning, example: item.example, exampleZh: item.exampleZh })}
+                    className={`p-1 rounded-lg transition-colors ${isAdded ? 'text-[var(--mint-soft)] bg-[var(--mint-soft)]/10' : 'text-[var(--text-muted)] hover:text-[var(--pink-primary)] hover:bg-[var(--bg-input)]'}`}
                     title={isAdded ? '已添加' : '加入单词本'}
                   >
                     {isAdded ? <BookmarkCheck size={14} /> : <BookmarkPlus size={14} />}
@@ -144,7 +125,7 @@ export function ExpressionsSection() {
               </div>
               <p className="text-sm text-[var(--text-primary)] mb-1.5">{item.meaning}</p>
               <p className="text-xs text-[var(--text-secondary)] mb-2">{item.usage}</p>
-              <p className="text-xs text-[var(--text-placeholder)]">{item.example}</p>
+              <TappableText text={item.example} className="text-xs text-[var(--text-placeholder)]" source="表达用法" />
               <p className="text-xs text-[var(--text-muted)] mt-0.5">{item.exampleZh}</p>
             </div>
             );
@@ -156,18 +137,14 @@ export function ExpressionsSection() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {filteredLoanwords.map((item) => {
             const isAdded = addedExprIds.has(item.id);
-            const isAdding = addingExprId === item.id;
             return (
             <div key={item.id} className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-4 hover:border-[var(--blue-soft)] transition-colors">
               <div className="flex items-center justify-between mb-2">
                 <h4 className="font-bold text-[var(--text-primary)]">{item.expression}</h4>
                 <div className="flex items-center gap-1">
                   <button
-                    onClick={() => handleSaveExpr(item.id, item.expression, item.meaning, item.example, item.exampleZh)}
-                    disabled={isAdding}
-                    className={`p-1 rounded-lg transition-colors ${
-                      isAdded ? 'text-[var(--mint-soft)] bg-[var(--mint-soft)]/10' : 'text-[var(--text-muted)] hover:text-[var(--pink-primary)] hover:bg-[var(--bg-input)]'
-                    }`}
+                    onClick={() => !isAdded && setSheetTarget({ id: item.id, korean: item.expression, meaning: item.meaning, example: item.example, exampleZh: item.exampleZh })}
+                    className={`p-1 rounded-lg transition-colors ${isAdded ? 'text-[var(--mint-soft)] bg-[var(--mint-soft)]/10' : 'text-[var(--text-muted)] hover:text-[var(--pink-primary)] hover:bg-[var(--bg-input)]'}`}
                     title={isAdded ? '已添加' : '加入单词本'}
                   >
                     {isAdded ? <BookmarkCheck size={14} /> : <BookmarkPlus size={14} />}
@@ -176,12 +153,19 @@ export function ExpressionsSection() {
                 </div>
               </div>
               <div className="text-sm mb-2"><span className="text-[var(--text-muted)]">{item.original}</span><span className="mx-2">→</span><span className="font-medium">{item.meaning}</span></div>
-              <p className="text-xs text-[var(--text-placeholder)]">{item.example}</p>
+              <TappableText text={item.example} className="text-xs text-[var(--text-placeholder)]" source="表达用法" />
               <p className="text-xs text-[var(--text-muted)] mt-0.5">{item.exampleZh}</p>
             </div>
             );
           })}
         </div>
+      )}
+
+      {sheetTarget && (
+        <AddToBookSheet
+          word={{ korean: sheetTarget.korean, pronunciation: '', meaning: sheetTarget.meaning, partOfSpeech: 'expression', examples: [{ text: sheetTarget.example, translation: sheetTarget.exampleZh }] }}
+          onClose={handleSheetClose}
+        />
       )}
     </div>
   );

@@ -4,7 +4,7 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { ChevronDown, ChevronUp, Check, X, ArrowRight, RotateCcw, Trophy, Sparkles, Lock, Volume2, Ear } from 'lucide-react';
 import { progressiveSteps } from '@/data/phonetics-steps';
 import type { PhoneticLetter } from '@/data/phonetics';
-import { speak, speakWord } from '@/lib/tts';
+import { speak, speakWord, unlockAudioContext } from '@/lib/tts';
 import { emitXpFlyout } from '@/components/XpOverlay';
 import ReadingPractice from '@/components/ReadingPractice';
 import { getFocusForLetter } from '@/data/pronunciation/letter-map';
@@ -19,24 +19,58 @@ function shuffleArray<T>(arr: T[]): T[] {
   return s;
 }
 
+function getQuizRomanization(l: PhoneticLetter) {
+  return (l as PhoneticLetter & { quizRomanization?: string }).quizRomanization ?? l.romanization;
+}
+
+function getQuizLetter(l: PhoneticLetter) {
+  return (l as PhoneticLetter & { quizLetter?: string }).quizLetter ?? l.letter;
+}
+
+const CONSONANT_DEMO: Record<string, string> = {
+  'ㄱ': '가', 'ㄴ': '나', 'ㄷ': '다', 'ㄹ': '라', 'ㅁ': '마',
+  'ㅂ': '바', 'ㅅ': '사', 'ㅇ': '아', 'ㅈ': '자', 'ㅊ': '차',
+  'ㅋ': '카', 'ㅌ': '타', 'ㅍ': '파', 'ㅎ': '하',
+  'ㄲ': '까', 'ㄸ': '따', 'ㅃ': '빠', 'ㅆ': '싸', 'ㅉ': '짜',
+};
+
+const BATCHIM_DEMO: Record<string, string> = {
+  'ㄱ': '악', 'ㄴ': '안', 'ㄷ': '앋', 'ㄹ': '알', 'ㅁ': '암',
+  'ㅂ': '압', 'ㅇ': '앙',
+};
+
+function getSpeakText(l: PhoneticLetter): string {
+  if (l.type === 'vowel') return l.name;
+  if (l.type === 'consonant' || l.type === 'double') {
+    const jamo = l.letter.split('/')[0];
+    return CONSONANT_DEMO[jamo] ?? l.name;
+  }
+  if (l.type === 'batchim') {
+    const jamo = l.letter.split('/')[0];
+    return BATCHIM_DEMO[jamo] ?? CONSONANT_DEMO[jamo] ?? l.name;
+  }
+  return l.name;
+}
+
 function generateStepQuiz(letters: PhoneticLetter[]) {
   const pool = [...letters].sort(() => Math.random() - 0.5).slice(0, Math.min(6, letters.length));
   return pool.map((item) => {
     const isLetterQ = Math.random() > 0.5;
-    const wrongOptions = pool
-      .filter((l) => l.id !== item.id)
-      .sort(() => Math.random() - 0.5)
-      .slice(0, 3);
+    const correctAnswer = isLetterQ ? getQuizRomanization(item) : getQuizLetter(item);
+    const wrongPool = pool.filter((l) => l.id !== item.id).sort(() => Math.random() - 0.5);
+    const wrongOptions: string[] = [];
+    for (const w of wrongPool) {
+      if (wrongOptions.length >= 3) break;
+      const val = isLetterQ ? getQuizRomanization(w) : getQuizLetter(w);
+      if (val !== correctAnswer && !wrongOptions.includes(val)) wrongOptions.push(val);
+    }
     return {
       id: item.id,
       prompt: isLetterQ
-        ? `"${item.letter}" 的发音是？`
-        : `发音 "${item.romanization}" 对应哪个字母？`,
-      correctAnswer: isLetterQ ? item.romanization : item.letter,
-      options: shuffleArray([
-        isLetterQ ? item.romanization : item.letter,
-        ...wrongOptions.map((w) => (isLetterQ ? w.romanization : w.letter)),
-      ]),
+        ? `"${getQuizLetter(item)}" 的发音是？`
+        : `发音 "${getQuizRomanization(item)}" 对应哪个字母？`,
+      correctAnswer,
+      options: shuffleArray([correctAnswer, ...wrongOptions]),
       item,
     };
   });
@@ -45,14 +79,18 @@ function generateStepQuiz(letters: PhoneticLetter[]) {
 function generateListenQuiz(letters: PhoneticLetter[]) {
   const pool = [...letters].sort(() => Math.random() - 0.5).slice(0, Math.min(6, letters.length));
   return pool.map((item) => {
-    const wrongOptions = pool
-      .filter((l) => l.id !== item.id)
-      .sort(() => Math.random() - 0.5)
-      .slice(0, 3);
+    const correctAnswer = getQuizLetter(item);
+    const wrongPool = pool.filter((l) => l.id !== item.id).sort(() => Math.random() - 0.5);
+    const wrongOptions: string[] = [];
+    for (const w of wrongPool) {
+      if (wrongOptions.length >= 3) break;
+      const val = getQuizLetter(w);
+      if (val !== correctAnswer && !wrongOptions.includes(val)) wrongOptions.push(val);
+    }
     return {
       id: item.id,
-      correctAnswer: item.letter,
-      options: shuffleArray([item.letter, ...wrongOptions.map((w) => w.letter)]),
+      correctAnswer,
+      options: shuffleArray([correctAnswer, ...wrongOptions]),
       item,
     };
   });
@@ -81,7 +119,7 @@ export default function ProgressivePhonetics() {
   const [quizQuestions, setQuizQuestions] = useState<ReturnType<typeof generateStepQuiz>>([]);
   const [listenQuestions, setListenQuestions] = useState<ReturnType<typeof generateListenQuiz>>([]);
   const [quizIdx, setQuizIdx] = useState(0);
-  const [quizAnswer, setQuizAnswer] = useState<number | null>(null);
+  const [quizAnswer, setQuizAnswer] = useState<string | null>(null);
   const [quizCorrect, setQuizCorrect] = useState(0);
   const [quizComplete, setQuizComplete] = useState(false);
   const [completedSteps, setCompletedSteps] = useState<Set<string>>(new Set());
@@ -127,14 +165,14 @@ export default function ProgressivePhonetics() {
     if (mode === 'listen' && listenQuestions.length > 0 && !audioPlayedRef.current && quizAnswer === null && !quizComplete) {
       audioPlayedRef.current = true;
       const item = listenQuestions[quizIdx];
-      speakWord(item.item.name, 0.7);
+      speakWord(getSpeakText(item.item), 0.7);
     }
-  }, [mode, listenQuestions, quizIdx, quizAnswer, quizComplete]);
+  }, [mode, listenQuestions, quizIdx, quizComplete]); // quizAnswer intentionally excluded — resetting it must not retrigger playback
 
-  const handleQuizAnswer = (idx: number) => {
-    setQuizAnswer(idx);
+  const handleQuizAnswer = (opt: string) => {
+    setQuizAnswer(opt);
     const questions = mode === 'listen' ? listenQuestions : quizQuestions;
-    if (idx === questions[quizIdx].options.indexOf(questions[quizIdx].correctAnswer)) {
+    if (opt === questions[quizIdx].correctAnswer) {
       setQuizCorrect((prev) => prev + 1);
     }
   };
@@ -151,16 +189,17 @@ export default function ProgressivePhonetics() {
         emitXpFlyout(15);
       }
     } else {
+      audioPlayedRef.current = false; // reset before state updates so the effect sees it false on next render
       setQuizIdx((prev) => prev + 1);
       setQuizAnswer(null);
-      audioPlayedRef.current = false;
     }
   };
 
   const replayAudio = () => {
     const questions = mode === 'listen' ? listenQuestions : quizQuestions;
     if (questions[quizIdx]) {
-      speakWord(questions[quizIdx].item.name, 0.7);
+      unlockAudioContext();
+      speakWord(getSpeakText(questions[quizIdx].item), 0.7);
     }
   };
 
@@ -181,7 +220,7 @@ export default function ProgressivePhonetics() {
         {progressiveSteps.map((step, i) => {
           const isCurrent = i === activeStepIdx;
           const isDone = completedSteps.has(step.id);
-          const isLocked = i > 0 && !completedSteps.has(progressiveSteps[i - 1].id);
+          const isLocked = false;
           return (
             <button
               key={step.id}
@@ -295,16 +334,23 @@ export default function ProgressivePhonetics() {
                   }`}
                 >
                   <button
-                    onClick={() => speakWord(letter.name, 0.7)}
+                    onClick={() => { unlockAudioContext(); speakWord(getSpeakText(letter), 0.7); }}
                     className="w-full text-3xl font-extrabold text-[var(--text-primary)] mb-1 text-center block hover:text-[var(--pink-primary)] transition-colors"
                     style={{ fontFamily: "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif" }}
                     title="点击听发音"
                   >
                     {letter.letter}
                   </button>
-                  <div className="text-sm text-[var(--text-secondary)] text-center mb-2">
+                  <div className="text-sm text-[var(--text-secondary)] text-center mb-1">
                     {letter.name} <span className="text-[var(--text-muted)]">[{letter.romanization}]</span>
                   </div>
+                  <button
+                    onClick={() => { unlockAudioContext(); speakWord(getSpeakText(letter), 0.7); }}
+                    className="flex items-center justify-center gap-1 w-full py-1 rounded-lg text-[var(--pink-primary)] hover:bg-[var(--pink-primary)]/10 transition-colors text-xs mb-1"
+                  >
+                    <Volume2 size={12} />
+                    听发音
+                  </button>
                   <button
                     onClick={() => toggleCard(letter.id)}
                     className="w-full flex items-center justify-center gap-1 text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors py-1"
@@ -353,24 +399,24 @@ export default function ProgressivePhonetics() {
               <h3 className="text-sm font-bold text-[var(--text-primary)] mb-3 flex items-center gap-2">
                 <span>⚠️</span> 易混淆发音对比
               </h3>
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {activeStep.confusedPairs.map((pair) => (
-                  <div key={pair.id} className="bg-[var(--bg-card)] border border-[var(--peach-soft)]/20 rounded-2xl p-4">
-                    <div className="text-sm font-medium text-[var(--text-primary)] mb-1">{pair.label}</div>
-                    <div className="text-xs text-[var(--text-muted)] mb-3">{pair.tip}</div>
+                  <div key={pair.id}>
+                    <div className="text-xs text-[var(--text-muted)] mb-2 px-1">{pair.tip}</div>
                     <div className="flex flex-wrap gap-2">
                       {pair.letters.map((l) => (
                         <button
                           key={l.id}
-                          onClick={() => speakWord(l.name, 0.7)}
-                          className="flex items-center gap-2 bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] rounded-xl px-3 py-2 transition-colors"
+                          onClick={() => { unlockAudioContext(); speakWord(getSpeakText(l), 0.7); }}
+                          className="flex flex-col items-center gap-1.5 bg-[var(--bg-card)] border border-[var(--peach-soft)]/30 hover:border-[var(--pink-primary)]/50 hover:bg-[var(--bg-accent)] active:scale-95 rounded-2xl px-5 py-4 transition-all min-w-[80px] shadow-sm"
                           title="点击听发音"
                         >
-                          <span className="text-lg font-bold text-[var(--text-primary)]" style={{ fontFamily: "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif" }}>
+                          <span className="text-3xl font-bold text-[var(--text-primary)]" style={{ fontFamily: "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif" }}>
                             {l.letter}
                           </span>
-                          <span className="text-xs text-[var(--text-secondary)]">[{l.romanization}]</span>
-                          <Volume2 size={12} className="text-[var(--text-muted)]" />
+                          <span className="text-xs text-[var(--text-secondary)]">{l.name}</span>
+                          <span className="text-[10px] text-[var(--text-muted)]">[{l.romanization}]</span>
+                          <Volume2 size={12} className="text-[var(--pink-primary)]" />
                         </button>
                       ))}
                     </div>
@@ -445,33 +491,49 @@ export default function ProgressivePhonetics() {
               </h2>
             )}
 
-            <div className="space-y-3">
+            <div className={`${mode === 'listen' ? 'flex flex-wrap gap-3 justify-center' : 'space-y-3'}`}>
               {questions[quizIdx].options.map((opt, i) => {
-                const correctIdx = questions[quizIdx].options.indexOf(questions[quizIdx].correctAnswer);
+                const isCorrect = opt === questions[quizIdx].correctAnswer;
+                const isSelected = opt === quizAnswer;
                 let btnClass = 'bg-[var(--bg-input)] border border-[var(--border-color)] hover:border-[var(--border-hover)]';
                 if (quizAnswer !== null) {
-                  if (i === correctIdx) {
+                  if (isCorrect) {
                     btnClass = 'bg-[var(--mint-soft)]/15 border-[var(--mint-soft)]/50 text-[var(--mint-soft)]';
-                  } else if (i === quizAnswer && i !== correctIdx) {
+                  } else if (isSelected && !isCorrect) {
                     btnClass = 'bg-[var(--color-danger)]/10 border-[var(--color-danger)]/50 text-[var(--color-danger)]';
                   } else {
                     btnClass = 'bg-[var(--bg-input)] border-[var(--border-color)] opacity-50';
                   }
                 }
                 const isKoreanChar = mode === 'listen' || (mode === 'quiz' && quizQuestions[quizIdx].prompt.includes('发音'));
+                if (mode === 'listen') {
+                  return (
+                    <button
+                      key={i}
+                      onClick={() => quizAnswer === null && handleQuizAnswer(opt)}
+                      disabled={quizAnswer !== null}
+                      className={`flex flex-col items-center gap-1.5 rounded-2xl px-5 py-4 transition-all active:scale-95 min-w-[80px] ${btnClass} font-bold`}
+                      style={{ fontFamily: "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif" }}
+                    >
+                      <span className="text-3xl">{opt}</span>
+                      {quizAnswer !== null && isCorrect && <Check size={16} className="text-[var(--mint-soft)]" />}
+                      {quizAnswer !== null && isSelected && !isCorrect && <X size={16} className="text-[var(--color-danger)]" />}
+                    </button>
+                  );
+                }
                 return (
                   <button
                     key={i}
-                    onClick={() => quizAnswer === null && handleQuizAnswer(i)}
+                    onClick={() => quizAnswer === null && handleQuizAnswer(opt)}
                     disabled={quizAnswer !== null}
                     className={`w-full p-4 rounded-xl text-left text-sm transition-all ${btnClass} font-bold`}
                     style={{ fontFamily: isKoreanChar ? "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif" : undefined }}
                   >
                     <span className={isKoreanChar ? 'text-2xl' : ''}>{opt}</span>
-                    {quizAnswer !== null && i === correctIdx && (
+                    {quizAnswer !== null && isCorrect && (
                       <Check size={16} className="text-[var(--mint-soft)] inline ml-2" />
                     )}
-                    {quizAnswer !== null && i === quizAnswer && i !== correctIdx && (
+                    {quizAnswer !== null && isSelected && !isCorrect && (
                       <X size={16} className="text-[var(--color-danger)] inline ml-2" />
                     )}
                   </button>

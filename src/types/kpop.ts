@@ -3,6 +3,15 @@
 
 export type KpopLineStatus = 'untouched' | 'practiced' | 'completed';
 
+export interface LocalLyricLine {
+  korean: string;
+  romanization?: string;
+  chinese?: string;
+  keywords: { korean: string; meaning: string }[];
+  startMs: number;
+  endMs: number;
+}
+
 // ── V2 Track / Line model ──
 
 export type KpopAssetStatus = 'ready' | 'processing' | 'missing_audio' | 'missing_lyrics';

@@ -6,7 +6,7 @@
 import { fetchWithTimeout } from './fetch';
 
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
-export const DEEPSEEK_MODEL = 'deepseek-v4-flash';
+export const DEEPSEEK_MODEL = 'deepseek-chat';
 const AI_TIMEOUT = 30_000; // 30 seconds for AI requests
 
 export interface DeepSeekConfig {
@@ -169,16 +169,18 @@ export async function analyzeSentenceDeepSeek(
  */
 export async function chatResponseDeepSeek(
   params: {
-    scenario: { nameZh: string; nameKo: string; level: string };
+    scenario: { nameZh: string; nameKo: string; level: string; systemHint?: string };
     context: { role: string; content: string }[];
     userMessage: string;
   },
   apiKey: string
 ): Promise<{
   aiResponse: { ko: string; zh: string };
-  feedback: { natural: string; grammarError: string; betterWay: string };
+  feedback: { natural: string; grammarError: string; betterWay: string; wrongPart: string; correctPart: string };
+  newWords: { ko: string; zh: string; partOfSpeech: string }[];
 }> {
   const scenarioDesc = `场景：${params.scenario.nameZh}（${params.scenario.nameKo}），难度：${params.scenario.level}`;
+  const extraHint = params.scenario.systemHint ? `\n角色补充说明：${params.scenario.systemHint}` : '';
   const history = params.context
     .map((m) => `${m.role === 'ai' ? '店员/AI' : '用户'}: ${m.content}`)
     .join('\n');
@@ -195,22 +197,30 @@ export async function chatResponseDeepSeek(
       messages: [
         {
           role: 'system',
-          content: `你是韩语情景对话的AI对手（店员/路人等角色）。${scenarioDesc}
+          content: `你是韩语情景对话的AI对手（店员/路人等角色）。${scenarioDesc}${extraHint}
 
 规则：
-1. 用韩语回复用户，保持角色一致
-2. 回复后提供3项中文反馈：表达自然度评价、语法错误提示、更地道的说法
-3. 返回JSON格式：
+1. 用韩语回复用户，保持角色一致，语气自然口语化
+2. 回复后提供中文反馈和新词，返回以下JSON格式：
 {
   "aiResponse": {"ko": "韩语回复", "zh": "中文翻译"},
-  "feedback": {"natural": "表达自然度评价", "grammarError": "语法错误或'无语法错误'", "betterWay": "更地道的说法"}
+  "feedback": {
+    "natural": "对用户表达自然度的一句评价",
+    "grammarError": "若有语法错误简要说明，无则返回空字符串",
+    "betterWay": "更地道的说法，无则返回空字符串",
+    "wrongPart": "用户原句中错误的精确子串，无错误返回空字符串",
+    "correctPart": "对应正确写法，无错误返回空字符串"
+  },
+  "newWords": [{"ko": "단어", "zh": "中文义", "partOfSpeech": "名词/动词/形容词/副词"}]
 }
-只返回JSON，不要markdown代码块。`,
+newWords 填写本轮AI回复中对中级以下学习者可能陌生的词，1-3个，无则返回空数组。
+wrongPart 必须是用户原句的精确子串，不能改写。
+只返回JSON，不要markdown代码块，不要任何其他文字。`,
         },
         { role: 'user', content: `对话历史：\n${history}\n\n用户最新消息：${params.userMessage}\n\n请以角色身份回复。` },
       ],
       temperature: 0.7,
-      max_tokens: 800,
+      max_tokens: 1000,
     }),
   });
 
@@ -218,7 +228,12 @@ export async function chatResponseDeepSeek(
   const json = await res.json();
   const content = json.choices[0].message.content.trim();
   const cleanJson = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-  return JSON.parse(cleanJson);
+  const parsed = JSON.parse(cleanJson);
+  // Ensure newWords and wrongPart/correctPart always exist
+  if (!parsed.newWords) parsed.newWords = [];
+  if (!parsed.feedback.wrongPart) parsed.feedback.wrongPart = '';
+  if (!parsed.feedback.correctPart) parsed.feedback.correctPart = '';
+  return parsed;
 }
 /**
  * Translate an array of Korean sentences in bulk.

@@ -67,21 +67,19 @@ export default function MineKpopPage() {
           <p className="text-[13px] text-[#8b766e] max-w-xs leading-relaxed mb-6">
             在 KPOP 跟唱中练习的歌曲和进度，会出现在这里
           </p>
-          <Link
-            href="/korea/kpop"
-            className="inline-flex items-center gap-1.5 text-[13px] px-4 py-2 bg-[#e47a94] text-white rounded-xl font-medium active:scale-95 transition-transform"
+          <div
+            className="inline-flex items-center gap-1.5 text-[13px] px-4 py-2 bg-[#c7b7b0] text-white rounded-xl font-medium cursor-not-allowed opacity-50"
           >
-            去跟唱 <ArrowRight size={14} />
-          </Link>
+            跟唱优化中
+          </div>
         </div>
       ) : (
         <div className="space-y-2">
           <p className="text-[12px] text-[#8c8177]">{entries.length} 首歌曲有练习记录</p>
           {entries.map((entry) => (
-            <Link
+            <div
               key={entry.id}
-              href={`/korea/kpop`}
-              className="flex items-center gap-3 rounded-[18px] bg-white border border-[#efe4d8] px-4 py-3.5 shadow-[0_2px_8px_rgba(92,64,38,0.03)] active:bg-[#fdfaf5] transition-all"
+              className="flex items-center gap-3 rounded-[18px] bg-white border border-[#efe4d8] px-4 py-3.5 shadow-[0_2px_8px_rgba(92,64,38,0.03)] opacity-60"
             >
               <div className="w-10 h-10 rounded-[14px] bg-[#fbf7f0] flex items-center justify-center shrink-0">
                 <Music size={18} className="text-[#e47a94]" />
@@ -95,7 +93,7 @@ export default function MineKpopPage() {
                 </p>
               </div>
               <span className="text-[#c7b7b0] text-sm">{'>'}</span>
-            </Link>
+            </div>
           ))}
         </div>
       )}

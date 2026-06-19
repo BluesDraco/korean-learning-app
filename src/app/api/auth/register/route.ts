@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/server/db';
 import { hashPassword, signToken, setAuthCookie, generateId } from '@/lib/server/auth';
 import { checkRateLimit } from '@/lib/server/rate-limit';
+import { filterContent } from '@/lib/contentFilter';
 
 function getClientIp(request: Request): string {
   const forwarded = request.headers.get('x-forwarded-for');
@@ -28,6 +29,11 @@ export async function POST(request: Request) {
     const USERNAME_RE = /^[a-zA-Z0-9一-龥_-]{2,20}$/;
     if (!USERNAME_RE.test(username)) {
       return NextResponse.json({ error: '用户名只能包含字母、数字、中文、下划线和横线' }, { status: 400 });
+    }
+
+    const usernameCheck = filterContent(username, 'username');
+    if (!usernameCheck.ok) {
+      return NextResponse.json({ error: usernameCheck.reason }, { status: 400 });
     }
 
     if (password.length < 6) {

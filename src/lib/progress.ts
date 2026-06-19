@@ -19,9 +19,10 @@ export const LEVELS: LevelThreshold[] = [
 ];
 
 export async function getProgress() {
-  const words = await db.words.toArray();
-  const totalWords = words.length;
-  const masteredWords = words.filter((w) => w.mastery === 'mastered').length;
+  const [totalWords, masteredWords] = await Promise.all([
+    db.words.count(),
+    db.words.where('mastery').equals('mastered').count(),
+  ]);
   const grammarCount = await db.studyLogs
     .where('action')
     .equals('grammar_view')
@@ -78,9 +79,9 @@ export interface TodayTasks {
 }
 
 export async function getTodayTasks(): Promise<TodayTasks> {
-  const words = await db.words.toArray();
   const now = Date.now();
-  const dueCount = words.filter((w) => w.nextReview <= now).length;
+  const dueWords = await db.words.where('nextReview').belowOrEqual(now).toArray();
+  const dueCount = dueWords.filter((w) => w.mastery !== 'mastered').length;
 
   const todayStart = new Date().setHours(0, 0, 0, 0);
   const todayLog = await db.dailyLogs.get(`log-${todayStart}`);

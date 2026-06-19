@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
-import { RefreshCw, CheckCircle } from 'lucide-react';
+import { RefreshCw, CheckCircle, Volume2 } from 'lucide-react';
+import { speak } from '@/lib/tts';
 
 interface Props {
   pieces: string[];
@@ -82,8 +83,11 @@ export function SentenceBuildCard({ pieces, correctSentence, chinese, onCorrect 
           </div>
         )}
         {result === 'wrong' && (
-          <div className="w-full text-center text-xs text-[var(--color-danger)] mt-1">
-            不对哦，答案应该是：{correctSentence}
+          <div className="w-full text-center text-xs text-[var(--color-danger)] mt-1 flex items-center justify-center gap-1.5">
+            <span>不对哦，答案应该是：{correctSentence}</span>
+            <button onClick={() => speak(correctSentence, 0.8)} className="p-1 text-[var(--text-muted)] hover:text-[var(--pink-primary)]">
+              <Volume2 size={12} />
+            </button>
           </div>
         )}
       </div>

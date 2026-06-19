@@ -138,7 +138,7 @@ function buildClips(): ShadowingClip[] {
       speaker: cfg.speaker,
       description: cfg.description,
       sourceType: 'tedx',
-      videoUrl: 'https://torikorean-1436752408.cos.ap-hongkong.myqcloud.com/video/tedx/' + cfg.videoId + '.mp4',
+      videoUrl: '',
       audioUrl: '/audio/tedx/' + cfg.videoId + '.webm',
       coverUrl: 'https://i.ytimg.com/vi/' + cfg.videoId + '/hqdefault.jpg',
       durationMs: durMs,

@@ -1,9 +1,11 @@
 'use client';
 
 import { useState, useMemo, useCallback, useEffect } from 'react';
-import { Volume2, Play, Check, X, ArrowRight, RotateCcw, Trophy, ChevronDown, ChevronUp, Sparkles, Lightbulb } from 'lucide-react';
+import Link from 'next/link';
+import { Volume2, Play, Check, X, ArrowRight, RotateCcw, Trophy, ChevronDown, ChevronUp, Sparkles, Lightbulb, ArrowLeft } from 'lucide-react';
 import { vowels, consonants, batchimSounds, type PhoneticLetter } from '@/data/phonetics';
-import { speak, speakWord } from '@/lib/tts';
+import { speak, speakWord, unlockAudioContext } from '@/lib/tts';
+import { playSuccess, playError } from '@/lib/soundManager';
 import ProgressivePhonetics from '@/components/ProgressivePhonetics';
 import SyllableComposer from '@/components/SyllableComposer';
 import PhoneticsWelcome, { hasSeenWelcome } from '@/components/PhoneticsWelcome';
@@ -22,24 +24,38 @@ function shuffleArray<T>(arr: T[]): T[] {
   return s;
 }
 
+function getQuizRomanization(l: PhoneticLetter) {
+  return l.quizRomanization ?? l.romanization;
+}
+
+function getQuizLetter(l: PhoneticLetter) {
+  return l.quizLetter ?? l.letter;
+}
+
 function generateQuiz(letters: PhoneticLetter[]) {
   const pool = [...letters].sort(() => Math.random() - 0.5).slice(0, 10);
   return pool.map((item) => {
     const isLetterQ = Math.random() > 0.5;
-    const wrongOptions = pool
+    const correctAnswer = isLetterQ ? getQuizRomanization(item) : getQuizLetter(item);
+    const wrongPool = pool
       .filter((l) => l.id !== item.id)
-      .sort(() => Math.random() - 0.5)
-      .slice(0, 3);
+      .sort(() => Math.random() - 0.5);
+    // Pick 3 wrong options with unique values different from correctAnswer
+    const wrongOptions: string[] = [];
+    for (const w of wrongPool) {
+      if (wrongOptions.length >= 3) break;
+      const val = isLetterQ ? getQuizRomanization(w) : getQuizLetter(w);
+      if (val !== correctAnswer && !wrongOptions.includes(val)) {
+        wrongOptions.push(val);
+      }
+    }
     return {
       id: item.id,
       prompt: isLetterQ
-        ? `这个字母 "${item.letter}" 的发音是？`
-        : `这个发音 "${item.romanization}" 对应哪个字母？`,
-      correctAnswer: isLetterQ ? item.romanization : item.letter,
-      options: shuffleArray([
-        isLetterQ ? item.romanization : item.letter,
-        ...wrongOptions.map((w) => (isLetterQ ? w.romanization : w.letter)),
-      ]),
+        ? `这个字母 "${getQuizLetter(item)}" 的发音是？`
+        : `这个发音 "${getQuizRomanization(item)}" 对应哪个字母？`,
+      correctAnswer,
+      options: shuffleArray([correctAnswer, ...wrongOptions]),
       item,
     };
   });
@@ -72,10 +88,29 @@ function getSubtypeLabel(subtype: string, tab: Tab): string {
   return subtypeLabels[subtype] || subtype;
 }
 
+const CONSONANT_DEMO: Record<string, string> = {
+  'ㄱ': '가', 'ㄴ': '나', 'ㄷ': '다', 'ㄹ': '라', 'ㅁ': '마',
+  'ㅂ': '바', 'ㅅ': '사', 'ㅇ': '아', 'ㅈ': '자', 'ㅊ': '차',
+  'ㅋ': '카', 'ㅌ': '타', 'ㅍ': '파', 'ㅎ': '하',
+  'ㄲ': '까', 'ㄸ': '따', 'ㅃ': '빠', 'ㅆ': '싸', 'ㅉ': '짜',
+};
+
+// Batchim demo: use a syllable ending with the batchim so TTS produces the correct final consonant sound
+const BATCHIM_DEMO: Record<string, string> = {
+  'ㄱ': '악', 'ㄴ': '안', 'ㄷ': '앋', 'ㄹ': '알', 'ㅁ': '암',
+  'ㅂ': '압', 'ㅇ': '앙',
+};
+
 function getSpeakText(letter: PhoneticLetter): string {
   if (letter.type === 'vowel') return letter.name;
-  if (letter.type === 'batchim') return letter.name;
-  // consonant: speak letter name for reliable TTS
+  if (letter.type === 'consonant' || letter.type === 'double') {
+    const jamo = letter.letter.split('/')[0];
+    return CONSONANT_DEMO[jamo] ?? letter.name;
+  }
+  if (letter.type === 'batchim') {
+    const jamo = letter.letter.split('/')[0];
+    return BATCHIM_DEMO[jamo] ?? CONSONANT_DEMO[jamo] ?? letter.name;
+  }
   return letter.name;
 }
 
@@ -101,7 +136,7 @@ const ruleCategories = [
         explanation: '双终声(겹받침)中，连读时第一个终声留在原音节，第二个终声移到后音节。但ㄺ, ㄻ, ㄿ等例外情况中第一个终声作为代表音保留。',
         examples: [
           { original: '읽어요', originalRead: '일거요', meaning: '读' },
-          { original: '없어요', originalRead: '업서요', meaning: '没有' },
+          { original: '없어요', originalRead: '업써요', meaning: '没有' },
           { original: '밟아요', originalRead: '발바요', meaning: '踩' },
         ],
       },
@@ -249,6 +284,7 @@ export default function PhoneticsPage() {
   const handleQuizAnswer = (answer: string) => {
     if (!quizState || quizState.selectedAnswer !== null) return;
     const isCorrect = answer === quizState.questions[quizState.currentIdx].correctAnswer;
+    if (isCorrect) playSuccess(); else playError();
     setQuizState({
       ...quizState,
       selectedAnswer: answer,
@@ -289,10 +325,19 @@ export default function PhoneticsPage() {
       {showWelcome && <PhoneticsWelcome onDone={() => setShowWelcome(false)} />}
       <div className="py-4 space-y-3">
       <div>
+        <Link href="/learning" className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] mb-2">
+          <ArrowLeft size={16} /> 返回
+        </Link>
         <h1 className="text-2xl font-bold text-[var(--text-primary)]">韩语40音</h1>
         <p className="text-[var(--text-secondary)] text-sm mt-1">
           21个元音 + 19个辅音，科学分步学习。15分钟看懂所有韩文 — 这是你韩语学习的地基模块
         </p>
+      </div>
+
+      {/* Accuracy notice */}
+      <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-2xl px-4 py-3 text-xs text-amber-700 leading-relaxed">
+        <span className="shrink-0">📋</span>
+        <span>目前音标读音不准确，正式上线将换成真人读音，此页面仅供参考。</span>
       </div>
 
       {/* Top-level tab switcher: 分步学习 | 字母表 | 连读规则 */}
@@ -378,7 +423,7 @@ export default function PhoneticsPage() {
                       {letters.map((letter) => (
                         <button
                           key={letter.id}
-                          onClick={() => speakWord(getSpeakText(letter), 0.7)}
+                          onClick={() => { unlockAudioContext(); speakWord(getSpeakText(letter), 0.7); }}
                           className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 text-center hover:border-[var(--pink-primary)]/30 hover:shadow-md hover:shadow-[var(--pink-primary)]/5 transition-all group"
                         >
                           <span className="text-3xl font-bold text-[var(--text-primary)] block mb-0.5" style={{ fontFamily: "'system-ui', 'sans-serif'" }}>
@@ -408,7 +453,7 @@ export default function PhoneticsPage() {
                     className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 flex items-start gap-4"
                   >
                     <button
-                      onClick={() => speakWord(getSpeakText(letter), 0.7)}
+                      onClick={() => { unlockAudioContext(); speakWord(getSpeakText(letter), 0.7); }}
                       className="shrink-0 w-16 h-16 rounded-xl bg-[var(--bg-input)] flex items-center justify-center hover:bg-[var(--bg-accent)] transition-colors"
                     >
                       <span className="text-2xl font-bold text-[var(--text-primary)]" style={{ fontFamily: "'system-ui', 'sans-serif'" }}>
@@ -431,7 +476,7 @@ export default function PhoneticsPage() {
                       <p className="text-xs text-[var(--text-muted)] mt-1">{letter.mnemonic}</p>
                     </div>
                     <button
-                      onClick={() => speakWord(getSpeakText(letter), 0.7)}
+                      onClick={() => { unlockAudioContext(); speakWord(getSpeakText(letter), 0.7); }}
                       className="p-2 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-placeholder)] hover:text-[var(--pink-primary)] transition-colors shrink-0"
                       title="听发音"
                     >
@@ -526,7 +571,7 @@ export default function PhoneticsPage() {
                     {q.prompt.includes('字母') && (
                       <div className="text-center">
                         <span className="text-5xl font-bold text-[var(--text-primary)] inline-block bg-[var(--bg-input)] rounded-2xl px-8 py-4" style={{ fontFamily: "'system-ui', 'sans-serif'" }}>
-                          {q.item.letter}
+                          {getQuizLetter(q.item)}
                         </span>
                       </div>
                     )}
@@ -535,10 +580,10 @@ export default function PhoneticsPage() {
                     {q.prompt.includes('发音') && (
                       <div className="text-center">
                         <span className="text-2xl font-bold text-[var(--pink-primary)] inline-block bg-[var(--bg-input)] rounded-2xl px-8 py-4">
-                          [{q.item.romanization}]
+                          [{getQuizRomanization(q.item)}]
                         </span>
                         <button
-                          onClick={() => speakWord(getSpeakText(q.item), 0.7)}
+                          onClick={() => { unlockAudioContext(); speakWord(getSpeakText(q.item), 0.7); }}
                           className="ml-2 p-2 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-placeholder)] hover:text-[var(--pink-primary)] transition-colors inline-flex align-middle"
                           title="听发音"
                         >
@@ -585,7 +630,7 @@ export default function PhoneticsPage() {
                     {quizState.selectedAnswer !== null && (
                       <div className="flex items-center justify-between pt-2 border-t border-[var(--border-color)]">
                         <button
-                          onClick={() => speakWord(getSpeakText(q.item), 0.7)}
+                          onClick={() => { unlockAudioContext(); speakWord(getSpeakText(q.item), 0.7); }}
                           className="text-xs text-[var(--text-secondary)] hover:text-[var(--pink-primary)] flex items-center gap-1"
                         >
                           <Volume2 size={12} />
@@ -625,6 +670,7 @@ function RulesTab() {
   const [quizIdx, setQuizIdx] = useState(0);
   const [quizAnswer, setQuizAnswer] = useState<number | null>(null);
   const [quizCorrect, setQuizCorrect] = useState(0);
+  const [quizFinished, setQuizFinished] = useState(false);
   const [quizQuestions] = useState(() => generateRulesQuiz());
 
   const toggleRule = useCallback((ruleId: string) => {
@@ -645,19 +691,27 @@ function RulesTab() {
     setQuizAnswer(idx);
     if (idx === quizQuestions[quizIdx].correct) {
       setQuizCorrect((prev) => prev + 1);
+      playSuccess();
+    } else {
+      playError();
     }
   };
 
   const handleQuizNext = () => {
     if (quizIdx + 1 >= quizQuestions.length) {
-      setQuizStarted(false);
-      setQuizIdx(0);
-      setQuizAnswer(null);
-      setQuizCorrect(0);
+      setQuizFinished(true);
     } else {
       setQuizIdx((prev) => prev + 1);
       setQuizAnswer(null);
     }
+  };
+
+  const handleQuizRestart = () => {
+    setQuizFinished(false);
+    setQuizStarted(false);
+    setQuizIdx(0);
+    setQuizAnswer(null);
+    setQuizCorrect(0);
   };
 
   return (
@@ -806,7 +860,27 @@ function RulesTab() {
       </div>
 
       {/* Quiz section */}
-      {!quizStarted ? (
+      {quizFinished ? (
+        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 text-center space-y-4">
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[var(--pink-primary)]/15 to-[var(--purple-soft)]/15 flex items-center justify-center mx-auto border border-[var(--pink-pale)]">
+            <Trophy size={28} className="text-[var(--pink-primary)]" />
+          </div>
+          <div>
+            <h3 className="text-lg font-bold text-[var(--text-primary)]">测验完成！</h3>
+            <p className="text-3xl font-extrabold text-[var(--pink-primary)] mt-2">{quizCorrect} / {quizQuestions.length}</p>
+            <p className="text-sm text-[var(--text-secondary)] mt-1">
+              {quizCorrect === quizQuestions.length ? '全部答对，太棒了！' : quizCorrect >= Math.ceil(quizQuestions.length / 2) ? '不错，继续加油！' : '再练练，你可以的！'}
+            </p>
+          </div>
+          <button
+            onClick={handleQuizRestart}
+            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--purple-soft)] to-[var(--pink-primary)] text-white rounded-2xl transition-all text-sm font-medium mx-auto shadow-lg shadow-[var(--purple-soft)]/15 active:scale-95"
+          >
+            再来一次
+            <ArrowRight size={16} />
+          </button>
+        </div>
+      ) : !quizStarted ? (
         <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 text-center space-y-4">
           <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[var(--pink-primary)]/15 to-[var(--purple-soft)]/15 flex items-center justify-center mx-auto border border-[var(--pink-pale)]">
             <Sparkles size={28} className="text-[var(--pink-primary)]" />

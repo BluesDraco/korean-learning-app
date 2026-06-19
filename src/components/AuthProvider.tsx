@@ -28,20 +28,49 @@ const AuthContext = createContext<AuthContextType>({
   logout: async () => {},
 });
 
+function getCachedUser(): User | null {
+  try {
+    const s = localStorage.getItem('auth_user');
+    if (!s) return null;
+    return JSON.parse(s) as User;
+  } catch { return null; }
+}
+
+function setCachedUser(user: User | null) {
+  try {
+    if (user) localStorage.setItem('auth_user', JSON.stringify(user));
+    else localStorage.removeItem('auth_user');
+  } catch { /* ignore */ }
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(() => {
+    if (typeof window === 'undefined') return null;
+    return getCachedUser();
+  });
+  const [loading, setLoading] = useState(false);
 
   const fetchUser = useCallback(async () => {
     try {
       const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), 8000);
+      const timer = setTimeout(() => controller.abort(), 3000);
       const res = await fetch('/api/auth/me', { signal: controller.signal });
       clearTimeout(timer);
-      const data = await res.json();
-      setUser(data.user || null);
+      let data: any;
+      try {
+        data = await Promise.race([
+          res.json(),
+          new Promise<never>((_, reject) => setTimeout(() => reject(new Error('json timeout')), 3000)),
+        ]);
+      } catch {
+        // json parse failed — keep cached user, don't change state
+        return;
+      }
+      const freshUser = data.user || null;
+      setUser(freshUser);
+      setCachedUser(freshUser);
     } catch {
-      setUser(null);
+      // Network error — keep cached user, don't clear
     } finally {
       setLoading(false);
     }
@@ -53,11 +82,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (username: string, password: string) => {
     try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
-      });
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 10000);
+      let res: Response;
+      try {
+        res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password }),
+          signal: controller.signal,
+        });
+      } catch (e: any) {
+        if (e.name === 'AbortError') return { error: '请求超时，请检查网络后重试' };
+        throw e;
+      } finally {
+        clearTimeout(timeout);
+      }
       let data: any;
       try {
         data = await res.json();
@@ -65,9 +105,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return { error: '服务器响应异常，请稍后重试' };
       }
       if (!res.ok) return { error: data.error || `登录失败 (${res.status})` };
-      // Fetch full user profile after login
       await fetchUser();
-      // Migrate guest data if any
       try {
         const { hasGuestData, migrateGuestData } = await import('@/lib/guest-migration');
         if (hasGuestData()) await migrateGuestData();
@@ -80,11 +118,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const register = async (username: string, password: string) => {
     try {
-      const res = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
-      });
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 10000);
+      let res: Response;
+      try {
+        res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password }),
+          signal: controller.signal,
+        });
+      } catch (e: any) {
+        if (e.name === 'AbortError') return { error: '请求超时，请检查网络后重试' };
+        throw e;
+      } finally {
+        clearTimeout(timeout);
+      }
       let data: any;
       try {
         data = await res.json();
@@ -92,9 +141,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return { error: '服务器响应异常，请稍后重试' };
       }
       if (!res.ok) return { error: data.error || `注册失败 (${res.status})` };
-      // Fetch full user profile after register
       await fetchUser();
-      // Migrate guest data if any
       try {
         const { hasGuestData, migrateGuestData } = await import('@/lib/guest-migration');
         if (hasGuestData()) await migrateGuestData();
@@ -112,6 +159,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // ignore network errors on logout
     }
     setUser(null);
+    setCachedUser(null);
   };
 
   return (

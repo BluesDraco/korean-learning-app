@@ -4,13 +4,11 @@ import { useEffect, useRef, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { db } from '@/lib/db';
 import { shadowingClips, ShadowingToken } from '@/data/shadowingClips';
+import { detectMimeType } from '@/lib/audio/recorder';
+import { useTheme } from '@/components/ThemeProvider';
 
-const C = {
-  ink: '#241917', muted: '#89756e', line: '#eee0d8', pink: '#ff7fa8',
-  pinkSoft: '#fff0f5', mint: '#aee3d8', cream: '#fff8f4', black: '#201815',
-  mintBg: '#eaf8f5', mintText: '#4e746d', rowLabel: '#a08f87', zhText: '#7e6b64',
-  roman: '#6a5750', shadow: '0 16px 42px rgba(78,52,46,.10)', strong: '0 28px 72px rgba(78,52,46,.18)',
-};
+const LIGHT_C = { ink: '#241917', muted: '#89756e', line: '#eee0d8', pink: '#ff7fa8', pinkSoft: '#fff0f5', mint: '#aee3d8', cream: '#fff8f4', black: '#201815', mintBg: '#eaf8f5', mintText: '#4e746d', rowLabel: '#a08f87', zhText: '#7e6b64', roman: '#6a5750', shadow: '0 16px 42px rgba(78,52,46,.10)', strong: '0 28px 72px rgba(78,52,46,.18)' };
+const DARK_C  = { ink: '#F0E8FF', muted: '#B8A8C8', line: '#3A3060', pink: '#ff7fa8', pinkSoft: '#2D2848', mint: '#4A6058', cream: '#252040', black: '#3A3060', mintBg: '#1E3530', mintText: '#5ecfb8', rowLabel: '#9A8AB0', zhText: '#9A8AB0', roman: '#8A7AA0', shadow: '0 16px 42px rgba(0,0,0,.30)', strong: '0 28px 72px rgba(0,0,0,.40)' };
 
 function msToTime(ms: number) {
   const s = Math.floor(ms / 1000);
@@ -18,6 +16,8 @@ function msToTime(ms: number) {
 }
 
 export default function ShadowingClipPage() {
+  const { theme } = useTheme();
+  const C = theme === 'dark' ? DARK_C : LIGHT_C;
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const clip = shadowingClips.find(c => c.id === id) ?? shadowingClips[0];
@@ -104,12 +104,14 @@ export default function ShadowingClipPage() {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       chunksRef.current = [];
-      const mr = new MediaRecorder(stream);
+      const mimeType = detectMimeType();
+      const mr = mimeType ? new MediaRecorder(stream, { mimeType }) : new MediaRecorder(stream);
       mediaRecorderRef.current = mr;
       mr.ondataavailable = e => { if (e.data.size > 0) chunksRef.current.push(e.data); };
       mr.onstop = async () => {
         stream.getTracks().forEach(t => t.stop());
-        const blob = new Blob(chunksRef.current, { type: 'audio/webm' });
+        const actualType = mr.mimeType || 'audio/webm';
+        const blob = new Blob(chunksRef.current, { type: actualType });
         setRecordedUrl(URL.createObjectURL(blob));
         setRecordState('recorded');
         try {
@@ -140,7 +142,7 @@ export default function ShadowingClipPage() {
   }
 
   async function handleSaveSentence(sub: typeof activeSub) {
-    if (savedSentences.has(sub.id)) { showToast('已保存'); return; }
+    if (savedSentences.has(sub.id)) { showToast('已保存到我的句子'); return; }
     try {
       await db.sentences.add({
         korean: sub.korean, chinese: sub.chinese, source_type: 'shadowing',
@@ -154,16 +156,19 @@ export default function ShadowingClipPage() {
   }
 
   async function handleSaveWord(token: ShadowingToken) {
-    if (savedWords.has(token.surface)) { showToast('已保存'); return; }
+    if (savedWords.has(token.surface)) { showToast('已保存到我的词库'); return; }
     try {
-      await db.words.add({
-        id: 'shadowing-' + token.surface + '-' + Date.now(),
-        word: token.surface, pronunciation: '', meaning: token.meaning,
-        partOfSpeech: token.partOfSpeech,
-        examples: token.note ? [{ text: token.note, translation: '', source: 'manual' as const }] : [],
-        mastery: 'new' as const, srsLevel: 0, nextReview: Date.now(),
-        easeFactor: 2.5, interval: 1, createdAt: Date.now(), lastReviewed: null
-      });
+      const existing = await db.words.where('word').equals(token.surface).first();
+      if (!existing) {
+        await db.words.add({
+          id: 'shadowing-' + token.surface,
+          word: token.surface, pronunciation: '', meaning: token.meaning,
+          partOfSpeech: token.partOfSpeech,
+          examples: token.note ? [{ text: token.note, translation: '', source: 'manual' as const }] : [],
+          mastery: 'new' as const, srsLevel: 0, nextReview: Date.now(),
+          easeFactor: 2.5, interval: 1, createdAt: Date.now(), lastReviewed: null
+        });
+      }
       setSavedWords(prev => new Set([...prev, token.surface]));
       showToast('已保存到我的词库'); setWordModal(null);
     } catch { showToast('保存失败，请先登录'); }
@@ -182,7 +187,7 @@ export default function ShadowingClipPage() {
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
         <button onClick={() => router.push('/shadowing')} style={{
-          width: 38, height: 38, borderRadius: 16, background: '#fff',
+          width: 38, height: 38, borderRadius: 16, background: C.cream,
           border: '1px solid ' + C.line, fontSize: 20, color: '#4d3933',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           cursor: 'pointer', flexShrink: 0
@@ -228,12 +233,12 @@ export default function ShadowingClipPage() {
             </span>
           </div>
           <button onClick={cycleSpeed} style={{
-            height: 34, borderRadius: 999, padding: '0 11px', background: '#fff',
+            height: 34, borderRadius: 999, padding: '0 11px', background: C.cream,
             color: '#5a4640', border: '1px solid ' + C.line, fontSize: 12,
             fontWeight: 800, cursor: 'pointer'
           }}>{speed}</button>
         </div>
-        <div style={{ height: 8, borderRadius: 999, background: '#eadcd5', marginTop: 12, overflow: 'hidden' }}>
+        <div style={{ height: 8, borderRadius: 999, background: C.line, marginTop: 12, overflow: 'hidden' }}>
           <div style={{
             width: ((activeIdx + 1) / totalSubs * 100) + '%', height: '100%',
             borderRadius: 999, background: 'linear-gradient(90deg, ' + C.mint + ', ' + C.pink + ')',
@@ -251,7 +256,7 @@ export default function ShadowingClipPage() {
         const isActive = i === activeIdx;
         return (
           <div key={sub.id} ref={el => { cardRefs.current[i] = el; }} onClick={() => setActiveIdx(i)} style={{
-            borderRadius: 30, background: '#fff',
+            borderRadius: 30, background: C.cream,
             border: '1px solid ' + (isActive ? 'rgba(255,127,168,.40)' : C.line),
             boxShadow: isActive ? '0 18px 48px rgba(255,127,168,.16)' : C.shadow,
             marginBottom: 12, overflow: 'hidden', cursor: 'pointer'
@@ -295,7 +300,7 @@ export default function ShadowingClipPage() {
               </div> : null}
               {isActive && (
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, marginTop: 13 }}>
-                  <button onClick={e => { e.stopPropagation(); if (sub.tokens?.[0]) setWordModal(sub.tokens[0]); else showToast('词汇解析仅限精选片段'); }} style={{ height: 40, borderRadius: 999, border: '1px solid ' + C.line, background: '#fff', fontSize: 12, fontWeight: 800, color: '#5a4640', cursor: 'pointer' }}>{'🔑'} {'关键词'}</button>
+                  <button onClick={e => { e.stopPropagation(); if (sub.tokens?.[0]) setWordModal(sub.tokens[0]); else showToast('词汇解析仅限精选片段'); }} style={{ height: 40, borderRadius: 999, border: '1px solid ' + C.line, background: C.cream, fontSize: 12, fontWeight: 800, color: '#5a4640', cursor: 'pointer' }}>{'🔑'} {'关键词'}</button>
                   <button onClick={e => { e.stopPropagation(); handleRecord(); }} style={{ height: 40, borderRadius: 999, border: 'none', background: recordState === 'recording' ? '#e47a94' : C.black, color: '#fff', fontSize: 12, fontWeight: 800, cursor: 'pointer' }}>{recordState === 'recording' ? '⏹ 停止' : '🎤 录音'}</button>
                   <button onClick={e => { e.stopPropagation(); handleSaveSentence(sub); }} style={{ height: 40, borderRadius: 999, border: '1px solid ' + C.line, background: savedSentences.has(sub.id) ? C.mintBg : '#fff', fontSize: 12, fontWeight: 800, color: savedSentences.has(sub.id) ? C.mintText : '#5a4640', cursor: 'pointer' }}>{savedSentences.has(sub.id) ? '✓ 已保存' : '💾 保存句'}</button>
                 </div>
@@ -320,7 +325,7 @@ export default function ShadowingClipPage() {
         </div>
       </div>
 
-      <div style={{ position: 'fixed', left: 0, right: 0, bottom: 'calc(56px + env(safe-area-inset-bottom, 0px))', height: 72, padding: '10px 18px', background: 'rgba(255,255,255,.95)', backdropFilter: 'blur(20px)', borderTop: '1px solid ' + C.line, zIndex: 100 }}>
+      <div className="md:left-[108px] md:!bottom-0" style={{ position: 'fixed', left: 0, right: 0, bottom: 'calc(56px + env(safe-area-inset-bottom, 0px))', height: 72, padding: '10px 18px', background: C.cream, borderTop: '1px solid ' + C.line, zIndex: 100 }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, height: '100%', maxWidth: 640, margin: '0 auto' }}>
           <button onClick={() => { loopingRef.current = false; setLooping(false); setActiveIdx(i => Math.max(i - 1, 0)); }} style={{ borderRadius: 20, fontSize: 12, fontWeight: 800, background: C.cream, color: '#6b5851', border: '1px solid ' + C.line, cursor: 'pointer' }}>{'‹'} {'上一句'}</button>
           <button onClick={toggleLoop} style={{ borderRadius: 20, fontSize: 12, fontWeight: 800, background: looping ? C.pink : C.black, color: '#fff', border: 'none', cursor: 'pointer' }}>{looping ? '⏹ 停止循环' : '🔁 循环当前句'}</button>
@@ -331,7 +336,7 @@ export default function ShadowingClipPage() {
       {wordModal && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 200, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }} onClick={() => setWordModal(null)}>
           <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,.35)' }} />
-          <div style={{ position: 'relative', width: '100%', maxWidth: 480, borderRadius: '32px 32px 0 0', padding: '22px 22px 36px', background: 'rgba(255,255,255,.96)', backdropFilter: 'blur(20px)', boxShadow: '0 24px 72px rgba(32,24,21,.24)', zIndex: 10 }} onClick={e => e.stopPropagation()}>
+          <div style={{ position: 'relative', width: '100%', maxWidth: 480, borderRadius: '32px 32px 0 0', padding: '22px 22px 36px', background: C.cream, backdropFilter: 'blur(20px)', boxShadow: '0 24px 72px rgba(32,24,21,.24)', zIndex: 10 }} onClick={e => e.stopPropagation()}>
             <div style={{ width: 40, height: 4, borderRadius: 999, background: C.line, margin: '0 auto 16px' }} />
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
               <div>

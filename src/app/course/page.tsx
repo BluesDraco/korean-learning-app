@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Check, Play, Lock, Loader2 } from 'lucide-react';
+import { Check, Play, Lock, Loader2, ArrowLeft } from 'lucide-react';
 import { db } from '@/lib/db';
 import { useFeedback } from '@/hooks/useFeedback';
 import { thirtyDayCourse } from '@/data/thirtyDayCourse';
@@ -21,16 +21,23 @@ export default function CoursePage() {
   const { click: feedbackClick } = useFeedback();
 
   useEffect(() => {
-    db.words.toArray().then((words) => {
+    // Primary: read completion events (set by recordLessonComplete)
+    db.learningEvents.where('action').equals('complete').toArray().then((events) => {
       const days = new Set<number>();
-      for (const w of words) {
-        if (w.source === 'course' && w.sourceDetail) {
-          const m = w.sourceDetail.match(/Day (\d+)/);
-          if (m) days.add(parseInt(m[1], 10));
-        }
+      for (const e of events) {
+        if (e.dayNum) days.add(e.dayNum);
       }
-      setCompletedDays(days);
-      setLoading(false);
+      // Fallback: also read words with source='course' in case events are missing
+      return db.words.where('source').equals('course').toArray().then((words) => {
+        for (const w of words) {
+          if (w.sourceDetail) {
+            const m = w.sourceDetail.match(/Day (\d+)/);
+            if (m) days.add(parseInt(m[1], 10));
+          }
+        }
+        setCompletedDays(days);
+        setLoading(false);
+      });
     }).catch(() => setLoading(false));
   }, []);
 
@@ -47,6 +54,9 @@ export default function CoursePage() {
 
   return (
     <div className="py-4 mx-auto max-w-2xl">
+      <Link href="/learning" className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] mb-4">
+        <ArrowLeft size={16} /> 返回
+      </Link>
       {/* Header */}
       <div className="text-center mb-6">
         <h1 className="text-2xl font-bold text-[var(--text-primary)]" style={{ fontFamily: "'KaiTi', 'STKaiti', cursive" }}>
@@ -108,7 +118,17 @@ export default function CoursePage() {
                 const isCurrent = dayNum === currentDay && !isCompleted;
                 const isLocked = dayNum > currentDay && !isCompleted;
 
-                return (
+                return isLocked ? (
+                  <div
+                    key={dayNum}
+                    className="rounded-xl p-3 text-center border bg-[var(--bg-input)] border-[var(--border-color)] opacity-40 cursor-not-allowed"
+                  >
+                    <div className="text-2xl mb-1">{day.emoji}</div>
+                    <div className="text-[11px] font-bold text-[var(--text-primary)]">Day {dayNum}</div>
+                    <div className="text-[10px] text-[var(--text-muted)] truncate">{day.title}</div>
+                    <div className="mt-1.5"><Lock size={12} className="text-[var(--text-placeholder)] mx-auto" /></div>
+                  </div>
+                ) : (
                   <Link
                     key={dayNum}
                     href={`/course/${dayNum}?source=course`}
@@ -118,27 +138,17 @@ export default function CoursePage() {
                         ? 'bg-[var(--mint-soft)]/5 border-[var(--mint-soft)]/20 hover:border-[var(--mint-soft)]/40'
                         : isCurrent
                           ? 'bg-gradient-to-br from-[var(--purple-soft)]/10 to-[var(--pink-primary)]/10 border-[var(--purple-soft)]/30 hover:border-[var(--purple-soft)]/50 hover:shadow-md'
-                          : isLocked
-                            ? 'bg-[var(--bg-input)] border-[var(--border-color)] opacity-40'
-                            : 'bg-[var(--bg-card)] border-[var(--border-color)] hover:border-[var(--pink-pale)]'
+                          : 'bg-[var(--bg-card)] border-[var(--border-color)] hover:border-[var(--pink-pale)]'
                     }`}
                   >
-                    <div className="text-2xl mb-1 group-hover:scale-110 transition-transform">
-                      {day.emoji}
-                    </div>
-                    <div className="text-[11px] font-bold text-[var(--text-primary)]">
-                      Day {dayNum}
-                    </div>
-                    <div className="text-[10px] text-[var(--text-muted)] truncate">
-                      {day.title}
-                    </div>
+                    <div className="text-2xl mb-1 group-hover:scale-110 transition-transform">{day.emoji}</div>
+                    <div className="text-[11px] font-bold text-[var(--text-primary)]">Day {dayNum}</div>
+                    <div className="text-[10px] text-[var(--text-muted)] truncate">{day.title}</div>
                     <div className="mt-1.5">
                       {isCompleted ? (
                         <Check size={14} className="text-[var(--mint-soft)] mx-auto" />
                       ) : isCurrent ? (
                         <Play size={14} className="text-[var(--purple-soft)] mx-auto" />
-                      ) : isLocked ? (
-                        <Lock size={12} className="text-[var(--text-placeholder)] mx-auto" />
                       ) : null}
                     </div>
                   </Link>

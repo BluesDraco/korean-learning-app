@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/server/db';
 import { verifyPassword, signToken, setAuthCookie } from '@/lib/server/auth';
-import { checkRateLimit, resetRateLimit } from '@/lib/server/rate-limit';
+import { checkLoginRateLimit, resetLoginRateLimit } from '@/lib/server/rate-limit';
 
 function getClientIp(request: Request): string {
   const forwarded = request.headers.get('x-forwarded-for');
@@ -10,19 +10,19 @@ function getClientIp(request: Request): string {
 
 export async function POST(request: Request) {
   try {
+    const { username, password } = await request.json();
+
+    if (!username || !password) {
+      return NextResponse.json({ error: '用户名和密码不能为空' }, { status: 400 });
+    }
+
     const ip = getClientIp(request);
-    const rateCheck = await checkRateLimit(`login:${ip}`);
+    const rateCheck = await checkLoginRateLimit(ip, username);
     if (!rateCheck.allowed) {
       return NextResponse.json(
         { error: `请求过于频繁，请${rateCheck.retryAfterSeconds}秒后重试` },
         { status: 429 }
       );
-    }
-
-    const { username, password } = await request.json();
-
-    if (!username || !password) {
-      return NextResponse.json({ error: '用户名和密码不能为空' }, { status: 400 });
     }
 
     const db = await getDb();
@@ -39,7 +39,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: '用户名或密码错误' }, { status: 401 });
     }
 
-    await resetRateLimit(`login:${ip}`);
+    await resetLoginRateLimit(ip, username);
 
     // Record last login time
     await db.run('UPDATE users SET last_login_at = ? WHERE id = ?', [Date.now(), id]);

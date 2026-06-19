@@ -12,8 +12,8 @@ export default function YonseiBooksPage() {
           <ArrowLeft size={20} />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-[var(--text-primary)] section-header">延世教材词书</h1>
-          <p className="text-sm text-[var(--text-secondary)] mt-1">연세 한국어 教材同步词汇表，按单元导入学习</p>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)] section-header">教材词汇</h1>
+          <p className="text-sm text-[var(--text-secondary)] mt-1">延世・首尔韩国语官方教材同步词汇，按单元学习</p>
         </div>
       </div>
       <YonseiSection />

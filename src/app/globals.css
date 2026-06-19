@@ -1181,6 +1181,7 @@ html[data-font="classic"] .ko-body {
   button, a, [role="button"] {
     min-height: 44px;
     min-width: 44px;
+    touch-action: manipulation; /* eliminate 300ms tap delay */
   }
 
   /* Exceptions for inline elements */
@@ -1246,8 +1247,8 @@ html[data-reduce-motion="true"] *::after {
    ═══════════════════════════════════════════════════════════════ */
 
 :root {
-  --desktop-sidebar: 112px;
-  --desktop-panel: 324px;
+  --desktop-sidebar: 108px;
+  --desktop-panel: 280px;
   --desktop-main-rail: 1088px;
   --desktop-bg: #fff7f4;
   --desktop-card: #fff;
@@ -1258,8 +1259,8 @@ html[data-reduce-motion="true"] *::after {
   --desktop-mint: #aee3d8;
   --desktop-cream: #fff8f4;
   --desktop-black: #201815;
-  --desktop-shadow: 0 16px 42px rgba(78,52,46,.10);
-  --desktop-shadow2: 0 26px 70px rgba(78,52,46,.16);
+  --desktop-shadow: none;
+  --desktop-shadow2: none;
   --desktop-radius: 34px;
   --desktop-radius-inner: 32px;
   --desktop-gap: 44px;
@@ -1278,7 +1279,7 @@ html[data-reduce-motion="true"] *::after {
   display: grid;
   grid-template-columns: var(--desktop-sidebar) minmax(0, 1fr) var(--desktop-panel);
   gap: var(--desktop-gap);
-  padding: 26px;
+  padding: 20px;
   overflow: hidden;
 }
 
@@ -1371,17 +1372,18 @@ html[data-reduce-motion="true"] *::after {
 /* ── Main content area ── */
 .desktop-main {
   height: 100%;
-  overflow: hidden;
+  overflow-y: auto;
   display: flex;
   justify-content: center;
 }
 
 .desktop-main-rail {
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  padding-bottom: 32px;
 }
 
 .desktop-topbar {
@@ -1456,7 +1458,7 @@ html[data-reduce-motion="true"] *::after {
 .desktop-content {
   min-height: 0;
   flex: 1;
-  overflow-y: auto;
+  overflow-y: visible;
   scrollbar-width: none;
   padding-right: 4px;
 }
@@ -2312,11 +2314,11 @@ html[data-reduce-motion="true"] *::after {
    Tablet / small desktop (≤1100px)
    ═══════════════════════════════════════════════════════════════ */
 
-@media (max-width: 1100px) {
+@media (max-width: 1280px) {
   .desktop-app {
     grid-template-columns: 92px minmax(0, 1fr);
-    padding: 18px;
-    gap: 18px;
+    padding: 16px;
+    gap: 16px;
   }
 
   .desktop-panel {
@@ -2350,20 +2352,20 @@ html[data-reduce-motion="true"] *::after {
 }
 
 /* Hide desktop shell on mobile (< 768px) — mobile uses existing layout */
-@media (max-width: 1023px) {
+@media (max-width: 767px) {
   .desktop-app {
     display: none;
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
   /* On tablet+, hide mobile elements */
   .mobile-only {
     display: none !important;
   }
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 767px) {
   .desktop-only {
     display: none !important;
   }
@@ -2385,4 +2387,160 @@ html[data-reduce-motion="true"] *::after {
 /* Remove mobile-only bottom tab bar spacing in desktop content */
 .desktop-content .pb-\[calc\(88px\+env\(safe-area-inset-bottom\2c 0px\)\)\] {
   padding-bottom: 0 !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   闪卡主题系统 (data-fc-theme)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* 默认 / 方案A: 奶油暖白 */
+:root {
+  --fc-card-bg: #fffbf7;
+  --fc-card-border: #e4e0db;
+  --fc-card-shadow: rgba(78,52,46,.10);
+  --fc-word-color: #18120e;
+  --fc-hint-color: #b8b0a8;
+  --fc-divider: #e4e0db;
+  --fc-roman-bg: #fff0f4;
+  --fc-roman-color: #c86080;
+  --fc-pos-bg: #f2f0ec;
+  --fc-pos-color: #807870;
+  --fc-meaning-bg: #fff;
+  --fc-meaning-border: #e4e0db;
+  --fc-meaning-color: #18120e;
+  --fc-example-bg: #fff0f5;
+  --fc-example-ko: #241917;
+  --fc-example-zh: #89756e;
+  --fc-example-hi-color: #ff7fa8;
+  --fc-example-hi-bg: transparent;
+  --fc-btn-mastered-bg: #eef8f4;
+  --fc-btn-mastered-color: #4a9880;
+  --fc-btn-mastered-border: #c8e0d8;
+  --fc-btn-unmastered-bg: #fff0f4;
+  --fc-btn-unmastered-color: #c86080;
+  --fc-btn-unmastered-border: #f0c8d8;
+  --fc-badge-bg: #eef8f4;
+  --fc-badge-color: #4a9880;
+  --fc-audio-border: #e4e0db;
+  --fc-audio-color: #807870;
+  --fc-nav-bg: #fff;
+  --fc-nav-border: #e4e0db;
+  --fc-nav-color: #18120e;
+  --fc-dot-active: #c86080;
+  --fc-dot-inactive: #e4e0db;
+  --fc-progress-bg: #e4e0db;
+}
+
+/* 方案B: 深夜墨绿 */
+[data-fc-theme="dark"] {
+  --fc-card-bg: #1a2820;
+  --fc-card-border: rgba(174,227,216,.14);
+  --fc-card-shadow: rgba(0,0,0,.35);
+  --fc-word-color: #e8f0ec;
+  --fc-hint-color: rgba(232,240,236,.30);
+  --fc-divider: rgba(174,227,216,.10);
+  --fc-roman-bg: rgba(174,227,216,.12);
+  --fc-roman-color: #aee3d8;
+  --fc-pos-bg: rgba(255,255,255,.07);
+  --fc-pos-color: rgba(232,240,236,.55);
+  --fc-meaning-bg: rgba(255,255,255,.05);
+  --fc-meaning-border: rgba(174,227,216,.12);
+  --fc-meaning-color: #e8f0ec;
+  --fc-example-bg: rgba(174,227,216,.08);
+  --fc-example-ko: #aee3d8;
+  --fc-example-zh: rgba(174,227,216,.55);
+  --fc-example-hi-color: #aee3d8;
+  --fc-example-hi-bg: rgba(174,227,216,.18);
+  --fc-btn-mastered-bg: rgba(174,227,216,.1);
+  --fc-btn-mastered-color: #aee3d8;
+  --fc-btn-mastered-border: rgba(174,227,216,.22);
+  --fc-btn-unmastered-bg: rgba(255,127,168,.10);
+  --fc-btn-unmastered-color: #ff8fab;
+  --fc-btn-unmastered-border: rgba(255,127,168,.22);
+  --fc-badge-bg: rgba(174,227,216,.15);
+  --fc-badge-color: #aee3d8;
+  --fc-audio-border: rgba(174,227,216,.2);
+  --fc-audio-color: rgba(230,240,235,.5);
+  --fc-nav-bg: rgba(255,255,255,.06);
+  --fc-nav-border: rgba(174,227,216,.15);
+  --fc-nav-color: #aee3d8;
+  --fc-dot-active: #aee3d8;
+  --fc-dot-inactive: rgba(174,227,216,.2);
+  --fc-progress-bg: rgba(174,227,216,.15);
+}
+
+/* 方案C: 纸张米白 */
+[data-fc-theme="paper"] {
+  --fc-card-bg: #fdf9f4;
+  --fc-card-border: #ddd4c8;
+  --fc-card-shadow: rgba(60,40,20,.10);
+  --fc-word-color: #1c1208;
+  --fc-hint-color: #b8a898;
+  --fc-divider: #ddd4c8;
+  --fc-roman-bg: #fce8d8;
+  --fc-roman-color: #b05030;
+  --fc-pos-bg: #ede8e0;
+  --fc-pos-color: #7a6a5e;
+  --fc-meaning-bg: #fff8f0;
+  --fc-meaning-border: #ddd4c8;
+  --fc-meaning-color: #1c1208;
+  --fc-example-bg: #e8f0ec;
+  --fc-example-ko: #2e5c50;
+  --fc-example-zh: #5a8878;
+  --fc-example-hi-color: #2e5c50;
+  --fc-example-hi-bg: rgba(46,92,80,.12);
+  --fc-btn-mastered-bg: #e8f0ec;
+  --fc-btn-mastered-color: #2e5c50;
+  --fc-btn-mastered-border: #b8d8cc;
+  --fc-btn-unmastered-bg: #fce8d8;
+  --fc-btn-unmastered-color: #b05030;
+  --fc-btn-unmastered-border: #e8c8b0;
+  --fc-badge-bg: #e8f0ec;
+  --fc-badge-color: #2e5c50;
+  --fc-audio-border: #ddd4c8;
+  --fc-audio-color: #7a6a5e;
+  --fc-nav-bg: #fdf9f4;
+  --fc-nav-border: #ddd4c8;
+  --fc-nav-color: #1c1208;
+  --fc-dot-active: #b05030;
+  --fc-dot-inactive: #ddd4c8;
+  --fc-progress-bg: #ddd4c8;
+}
+
+/* 方案D: 纯白极简 */
+[data-fc-theme="pure"] {
+  --fc-card-bg: #ffffff;
+  --fc-card-border: #e8e8e8;
+  --fc-card-shadow: rgba(0,0,0,.06);
+  --fc-word-color: #111111;
+  --fc-hint-color: #bbbbbb;
+  --fc-divider: #ebebeb;
+  --fc-roman-bg: #f5f0ff;
+  --fc-roman-color: #7050c0;
+  --fc-pos-bg: #f5f5f5;
+  --fc-pos-color: #888888;
+  --fc-meaning-bg: #fafafa;
+  --fc-meaning-border: #e8e8e8;
+  --fc-meaning-color: #111111;
+  --fc-example-bg: #f0f5ff;
+  --fc-example-ko: #3050a0;
+  --fc-example-zh: #7090c0;
+  --fc-example-hi-color: #3050a0;
+  --fc-example-hi-bg: rgba(48,80,160,.10);
+  --fc-btn-mastered-bg: #eef8f4;
+  --fc-btn-mastered-color: #4a9880;
+  --fc-btn-mastered-border: #c8e0d8;
+  --fc-btn-unmastered-bg: #f5f0ff;
+  --fc-btn-unmastered-color: #7050c0;
+  --fc-btn-unmastered-border: #d8c8f0;
+  --fc-badge-bg: #eef8f4;
+  --fc-badge-color: #4a9880;
+  --fc-audio-border: #e8e8e8;
+  --fc-audio-color: #888888;
+  --fc-nav-bg: #ffffff;
+  --fc-nav-border: #e8e8e8;
+  --fc-nav-color: #111111;
+  --fc-dot-active: #7050c0;
+  --fc-dot-inactive: #e0e0e0;
+  --fc-progress-bg: #e8e8e8;
 }

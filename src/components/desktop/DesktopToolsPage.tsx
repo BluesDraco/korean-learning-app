@@ -10,22 +10,19 @@ const FEATURED = [
     gradient: 'linear-gradient(135deg, #ffe4ec 0%, #fff4dc 100%)',
   },
   {
-    label: '影音跟读',
-    desc: '跟着原声逐句模仿，录音对比，提升发音和语调。',
-    href: '/shadowing',
-    gradient: 'linear-gradient(135deg, #e0f0ff 0%, #f0e8ff 100%)',
+    label: '韩语词库',
+    desc: '按主题、等级整理的韩语词汇，随时查阅、加入单词本、开始复习。',
+    href: '/vocabulary?tab=library',
+    gradient: 'linear-gradient(135deg, #e8f4ff 0%, #f0e8ff 100%)',
   },
 ];
 
 const TOOL_GRID = [
   { icon: '🔍', label: '查词翻译', desc: '韩语字典', href: '/dictionary', color: '#b49ccf' },
-  { icon: '🎤', label: '发音跟读', desc: '对比标准音', href: '/pronunciation', color: '#e47a94' },
-  { icon: '✏️', label: '听写练习', desc: '听力训练', href: '/dictation', color: '#e8a87c' },
   { icon: '🔄', label: '闪卡复习', desc: 'SRS 复习', href: '/review', color: '#81b5a1' },
   { icon: '📄', label: '文章拆解', desc: '文章分析', href: '/reading', color: '#b49ccf' },
   { icon: '📖', label: '语法解释', desc: '句型例句', href: '/grammar', color: '#e47a94' },
   { icon: '⌨️', label: '韩文打字', desc: '键盘练习', href: '/typing', color: '#e8a87c' },
-  { icon: '✍️', label: '写作练习', desc: '韩语写作', href: '/writing', color: '#81b5a1' },
   { icon: '💬', label: 'AI 场景陪练', desc: '情景对话', href: '/ai/chat', color: '#b49ccf' },
 ];
 
@@ -36,7 +33,7 @@ export function DesktopToolsPage() {
     <div style={{ animation: 'fade-in .18s ease-out' }}>
       {/* Hero */}
       <div className="desktop-hero tools">
-        <span className="desktop-label">⚙ 工具</span>
+        <span className="desktop-label">⚙︎ 工具</span>
         <h2>把你看到的韩文，变成可以学的内容</h2>
         <p>内容拆解、影音跟读、查词翻译、发音跟读、闪卡复习……全部工具都在这里。</p>
       </div>
@@ -45,7 +42,7 @@ export function DesktopToolsPage() {
       <div className="desktop-grid-2" style={{ marginTop: 16 }}>
         {FEATURED.map((item) => (
           <div
-            key={item.href}
+            key={item.label}
             style={{
               borderRadius: 28,
               background: item.gradient,

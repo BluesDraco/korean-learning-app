@@ -1,11 +1,26 @@
 import { NextResponse } from 'next/server';
-import { analyzeSentenceDeepSeek } from '@/lib/deepseek';
 import { getAuthFromCookie } from '@/lib/server/auth';
 import { checkAiRateLimit, recordAiUsage } from '@/lib/server/rate-limit';
 import { fetchWithTimeout } from '@/lib/fetch';
+import { getDb } from '@/lib/server/db';
+import { filterContent } from '@/lib/contentFilter';
 
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
-const DEEPSEEK_MODEL = 'deepseek-v4-flash';
+const DEEPSEEK_MODEL = 'deepseek-chat';
+
+// In-memory guest rate limit: key = "ip:date", value = call count
+const guestAnalyzeCount = new Map<string, number>();
+
+// Prune yesterday's entries once per day
+let lastPruneDate = '';
+function pruneGuestCount() {
+  const today = new Date().toISOString().slice(0, 10);
+  if (today === lastPruneDate) return;
+  lastPruneDate = today;
+  for (const key of guestAnalyzeCount.keys()) {
+    if (!key.endsWith(today)) guestAnalyzeCount.delete(key);
+  }
+}
 
 async function analyzeModeTranslate(sentence: string, apiKey: string): Promise<Record<string, unknown>> {
   const res = await fetchWithTimeout(DEEPSEEK_API_URL, {
@@ -139,21 +154,30 @@ export async function POST(req: Request) {
     if (!sentence || typeof sentence !== 'string') {
       return NextResponse.json({ error: 'Missing sentence' }, { status: 400 });
     }
+    if (sentence.length > 500) {
+      return NextResponse.json({ error: '输入不能超过500个字符' }, { status: 400 });
+    }
+    const analyzeCheck = filterContent(sentence, 'ai_input');
+    if (!analyzeCheck.ok) {
+      return NextResponse.json({ error: analyzeCheck.reason }, { status: 400 });
+    }
 
     const userId = auth?.userId;
 
-    // Guest rate limit: 5 calls per day (tracked by IP)
+    // Guest rate limit: 10 calls per day tracked by IP in memory
     if (!userId) {
+      pruneGuestCount();
       const ip = (req.headers.get('x-forwarded-for') || 'unknown').split(',')[0].trim();
-      const guestKey = `guest_analyze_${ip}_${new Date().toISOString().slice(0, 10)}`;
-      const guestLimit = await checkAiRateLimit(guestKey, 'analyze', 5);
-      if (!guestLimit.allowed) {
+      const today = new Date().toISOString().slice(0, 10);
+      const key = `${ip}:${today}`;
+      const count = guestAnalyzeCount.get(key) ?? 0;
+      if (count >= 10) {
         return NextResponse.json(
-          { error: '游客每日AI分析限5次，登录后可享受30次' },
-          { status: 429 },
+          { error: '今日免费次数已用完（10次），请登录后继续使用' },
+          { status: 429, headers: { 'Retry-After': '86400' } },
         );
       }
-      await recordAiUsage(guestKey, 'analyze');
+      guestAnalyzeCount.set(key, count + 1);
     } else {
       const limit = await checkAiRateLimit(userId, 'analyze');
       if (!limit.allowed) {
@@ -166,30 +190,46 @@ export async function POST(req: Request) {
 
     const effectiveMode = mode || 'learn';
     const isLong = sentence.replace(/\s/g, '').length >= 50;
+    const resolvedMode = (effectiveMode === 'deep' && !isLong) ? 'learn' : effectiveMode;
+    const TTL_MS = 30 * 24 * 60 * 60 * 1000;
+
+    // Check analyze cache
+    try {
+      const db = await getDb();
+      const cached = await db.exec(
+        'SELECT result FROM analyze_cache WHERE text = ? AND mode = ? AND created_at > ?',
+        [sentence.trim(), resolvedMode, Date.now() - TTL_MS]
+      );
+      const row = cached[0]?.values?.[0]?.[0];
+      if (row) {
+        if (userId) await recordAiUsage(userId, 'analyze');
+        const parsed = JSON.parse(row as string);
+        return NextResponse.json(resolvedMode !== effectiveMode ? { ...parsed, _downgraded: true } : parsed);
+      }
+    } catch { /* cache read failed, continue */ }
+
+    let result: Record<string, unknown>;
 
     // Deep mode requires 50+ chars; downgrade to learn if too short
-    if (effectiveMode === 'deep' && !isLong) {
-      const result = await analyzeModeLearn(sentence, apiKey);
-      if (userId) await recordAiUsage(userId, 'analyze');
-      return NextResponse.json({ ...result, mode: 'learn', _downgraded: true });
+    if (resolvedMode === 'learn' && effectiveMode === 'deep') {
+      result = await analyzeModeLearn(sentence, apiKey);
+    } else if (resolvedMode === 'translate') {
+      result = await analyzeModeTranslate(sentence, apiKey);
+    } else if (resolvedMode === 'deep') {
+      result = await analyzeModeDeep(sentence, apiKey);
+    } else {
+      result = await analyzeModeLearn(sentence, apiKey);
     }
 
-    if (effectiveMode === 'translate') {
-      const result = await analyzeModeTranslate(sentence, apiKey);
-      if (userId) await recordAiUsage(userId, 'analyze');
-      return NextResponse.json(result);
-    }
-
-    if (effectiveMode === 'deep') {
-      const result = await analyzeModeDeep(sentence, apiKey);
-      if (userId) await recordAiUsage(userId, 'analyze');
-      return NextResponse.json(result);
-    }
-
-    // Default: learn mode (sentence-level breakdown)
-    const result = await analyzeModeLearn(sentence, apiKey);
     if (userId) await recordAiUsage(userId, 'analyze');
-    return NextResponse.json(result);
+
+    // Write to cache (fire and forget)
+    getDb().then(db => db.run(
+      'INSERT OR REPLACE INTO analyze_cache (id, text, mode, result, created_at) VALUES (?, ?, ?, ?, ?)',
+      [crypto.randomUUID(), sentence.trim(), resolvedMode, JSON.stringify(result), Date.now()]
+    )).catch(() => {});
+
+    return NextResponse.json(resolvedMode !== effectiveMode ? { ...result, _downgraded: true } : result);
   } catch (err: any) {
     console.error('[ai/analyze]', err);
     return NextResponse.json({ error: 'AI服务异常，请稍后重试' }, { status: 500 });

@@ -7,8 +7,8 @@ import {
   Trophy, BookOpen, Target, Lightbulb, Bookmark, Star, X,
 } from 'lucide-react';
 import { readingArticles, levelLabel, levelColor } from '@/data/reading-new';
-import { speak, cancelSpeech } from '@/lib/tts';
-import { db } from '@/lib/db';
+import { speak, speakWord, cancelSpeech } from '@/lib/tts';
+import { db, ensureFavoritesBook } from '@/lib/db';
 import { awardXp, addStudyMinutes } from '@/lib/gamification';
 import { useFeedback } from '@/hooks/useFeedback';
 import type { ArticleQuestion } from '@/types';
@@ -52,9 +52,35 @@ export default function ArticleReaderPage() {
   const completedRef = useRef(false);
   const { success: feedbackSuccess, complete: feedbackComplete, click: feedbackClick } = useFeedback();
 
+  const SESSION_KEY = `reading-progress-${articleId}`;
+
+  // restore session progress on mount
+  useEffect(() => {
+    try {
+      const saved = sessionStorage.getItem(SESSION_KEY);
+      if (!saved) return;
+      const { s, qi, qa, qr, qc } = JSON.parse(saved) as { s: Step; qi: number; qa: Record<string, string>; qr: Record<string, boolean>; qc: number };
+      if (s && s !== 'goals' && s !== 'settlement') {
+        setStep(s);
+        setQuizIdx(qi ?? 0);
+        setQuizAnswers(qa ?? {});
+        setQuizRevealed(qr ?? {});
+        setQuizCorrect(qc ?? 0);
+      }
+    } catch { /* ignore */ }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // persist step progress
+  useEffect(() => {
+    if (step === 'settlement') { try { sessionStorage.removeItem(SESSION_KEY); } catch { /* ignore */ } return; }
+    try {
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify({ s: step, qi: quizIdx, qa: quizAnswers, qr: quizRevealed, qc: quizCorrect }));
+    } catch { /* ignore */ }
+  }, [step, quizIdx, quizAnswers, quizRevealed, quizCorrect]);
+
   useEffect(() => {
     if (!article || completedRef.current) return;
-    completedRef.current = true;
     // Record view event
     (async () => {
       try {
@@ -139,6 +165,23 @@ export default function ArticleReaderPage() {
       await db.userArticleProgress.update(article.id, {
         savedSentenceIds: [...ids], updatedAt: Date.now(),
       });
+      // 同步写入 db.sentences，方便"我的句子"页面展示
+      if (!wasSaved) {
+        const sentence = article.sentences.find((s) => s.id === sId);
+        if (sentence) {
+          const existing = await db.sentences.where('korean').equals(sentence.ko).first().catch(() => null);
+          if (!existing) {
+            await db.sentences.add({
+              korean: sentence.ko,
+              chinese: sentence.zh ?? '',
+              source_type: 'reading',
+              source_id: article.id,
+              source_title: article.title,
+              created_at: new Date().toISOString(),
+            });
+          }
+        }
+      }
     } catch {}
   };
 
@@ -163,15 +206,27 @@ export default function ArticleReaderPage() {
         || article.sentences.flatMap((s) => s.words).find((w) => w.word === word);
       if (wordInfo) {
         const exists = await db.words.where('word').equals(word).first();
+        let wordId: string;
         if (!exists) {
+          wordId = crypto.randomUUID();
           await db.words.put({
-            id: crypto.randomUUID(), word: wordInfo.word,
+            id: wordId, word: wordInfo.word,
             pronunciation: wordInfo.pronunciation || '', meaning: wordInfo.meaning,
             partOfSpeech: '单词', examples: [], source: 'reading',
             sourceDetail: article.title, mastery: 'new', srsLevel: 0,
             easeFactor: 2.5, interval: 0, nextReview: Date.now(),
             correctCount: 0, wrongCount: 0, createdAt: Date.now(), lastReviewed: null,
           });
+        } else {
+          wordId = exists.id;
+        }
+        // 加入收藏夹单词本
+        if (!wasSaved) {
+          const bookId = await ensureFavoritesBook();
+          const book = await db.wordBooks.get(bookId);
+          if (book && !book.wordIds.includes(wordId)) {
+            await db.wordBooks.update(bookId, { wordIds: [...book.wordIds, wordId], updatedAt: Date.now() });
+          }
         }
       }
     } catch {}
@@ -232,7 +287,10 @@ export default function ArticleReaderPage() {
     <div className="py-4 space-y-4">
       {/* Top bar */}
       <div className="flex items-center justify-between">
-        <button onClick={() => router.push('/reading')} className="flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
+        <button onClick={() => {
+          if (step !== 'goals' && !confirm('确定退出？当前进度不会保存')) return;
+          router.push('/reading');
+        }} className="flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
           <ArrowLeft size={16} /> 文章列表
         </button>
         <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${levelColor[article.level]}`}>
@@ -300,7 +358,7 @@ export default function ArticleReaderPage() {
               {article.coreWords.map((w) => (
                 <div key={w.word} className="flex items-center gap-3 bg-[var(--bg-input)] rounded-xl p-3">
                   <button
-                    onClick={() => speakSentence(`vocab-${w.word}`, w.word)}
+                    onClick={() => { cancelSpeech(); setSpeakingId(`vocab-${w.word}`); speakWord(w.word).finally(() => setSpeakingId(null)); }}
                     className={`p-2 rounded-lg transition-colors ${
                       speakingId === `vocab-${w.word}`
                         ? 'bg-[var(--mint-soft)]/20 text-[var(--mint-soft)]'
@@ -510,7 +568,18 @@ export default function ArticleReaderPage() {
       )}
 
       {/* ── Step: Quiz ── */}
-      {step === 'quiz' && (
+      {step === 'quiz' && article.questions.length === 0 && (
+        <div className="py-8 text-center space-y-4 animate-fade-in">
+          <p className="text-sm text-[var(--text-muted)]">暂无理解检测题</p>
+          <button
+            onClick={() => setStep('output')}
+            className="flex items-center justify-center gap-2 mx-auto px-6 py-3 bg-gradient-to-r from-[var(--mint-soft)] to-[var(--purple-soft)] text-white rounded-2xl font-bold text-sm"
+          >
+            继续输出练习 <ChevronRight size={18} />
+          </button>
+        </div>
+      )}
+      {step === 'quiz' && article.questions.length > 0 && (
         <div className="space-y-4 animate-fade-in">
           <div className="flex items-center justify-between text-sm">
             <span className="font-bold text-[var(--text-primary)]">理解检测</span>
@@ -636,6 +705,7 @@ export default function ArticleReaderPage() {
                 type="text"
                 value={outputValue}
                 onChange={(e) => setOutputValue(e.target.value)}
+                onFocus={(e) => setTimeout(() => e.target.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300)}
                 placeholder="用句型写一句韩语……"
                 className="w-full bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl px-4 py-3 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)] focus:outline-none focus:border-[var(--mint-soft)]/50"
               />

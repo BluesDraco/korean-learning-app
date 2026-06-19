@@ -175,6 +175,7 @@ export async function getDb() {
       id TEXT PRIMARY KEY,
       user_id TEXT NOT NULL,
       word_id TEXT NOT NULL,
+      meaning TEXT DEFAULT '',
       date INTEGER NOT NULL,
       correct INTEGER DEFAULT 0,
       user_input TEXT DEFAULT '',
@@ -439,6 +440,9 @@ export async function getDb() {
   try { await c.execute(`ALTER TABLE users ADD COLUMN phone_verified_at INTEGER DEFAULT 0`); } catch { /* already exists */ }
   try { await c.execute(`ALTER TABLE users ADD COLUMN last_login_at INTEGER DEFAULT 0`); } catch { /* already exists */ }
   try { await c.execute(`ALTER TABLE users ADD COLUMN status TEXT DEFAULT 'active'`); } catch { /* already exists */ }
+
+  // Migration: add meaning to dictation_records
+  try { await c.execute(`ALTER TABLE dictation_records ADD COLUMN meaning TEXT DEFAULT ''`); } catch { /* already exists */ }
 
   // Migration: add source / source_detail to user_words
 	  try { await c.execute(`ALTER TABLE user_words ADD COLUMN source TEXT DEFAULT ''`); } catch { /* already exists */ }
@@ -820,6 +824,115 @@ export async function getDb() {
         )
       `);
       await c.execute(`CREATE INDEX IF NOT EXISTS idx_reading_progress_user ON reading_progress(user_id)`);
+
+      // ── Word lookup cache (global, shared across all users) ──
+      await c.execute(`
+        CREATE TABLE IF NOT EXISTS word_lookup_cache (
+          word TEXT PRIMARY KEY,
+          result TEXT NOT NULL,
+          created_at INTEGER NOT NULL
+        )
+      `);
+
+      // ── Analyze cache (global, 30-day TTL) ──
+      await c.execute(`
+        CREATE TABLE IF NOT EXISTS analyze_cache (
+          id TEXT PRIMARY KEY,
+          text TEXT NOT NULL,
+          mode TEXT NOT NULL,
+          result TEXT NOT NULL,
+          created_at INTEGER NOT NULL,
+          UNIQUE(text, mode)
+        )
+      `);
+      await c.execute(`CREATE INDEX IF NOT EXISTS idx_analyze_cache_text_mode ON analyze_cache(text, mode)`);
+
+      // ── TOPIK sessions ──
+      await c.execute(`
+        CREATE TABLE IF NOT EXISTS topik_sessions (
+          id TEXT PRIMARY KEY,
+          user_id TEXT NOT NULL,
+          mode TEXT NOT NULL,
+          exam_set_id TEXT,
+          section TEXT NOT NULL,
+          score INTEGER,
+          correct_count INTEGER,
+          total_count INTEGER,
+          duration_sec INTEGER,
+          completed_at INTEGER,
+          created_at INTEGER NOT NULL,
+          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        )
+      `);
+      await c.execute(`CREATE INDEX IF NOT EXISTS idx_topik_sessions_user ON topik_sessions(user_id)`);
+
+      // ── TOPIK mistakes ──
+      await c.execute(`
+        CREATE TABLE IF NOT EXISTS topik_mistakes (
+          id TEXT PRIMARY KEY,
+          user_id TEXT NOT NULL,
+          question_id TEXT NOT NULL,
+          session_id TEXT,
+          wrong_count INTEGER DEFAULT 1,
+          last_wrong_at INTEGER NOT NULL,
+          mastered INTEGER DEFAULT 0,
+          created_at INTEGER NOT NULL,
+          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        )
+      `);
+      await c.execute(`CREATE INDEX IF NOT EXISTS idx_topik_mistakes_user ON topik_mistakes(user_id)`);
+
+      await c.execute(`
+        CREATE TABLE IF NOT EXISTS spelling_mistakes (
+          id TEXT PRIMARY KEY,
+          user_id TEXT NOT NULL,
+          word_id TEXT,
+          word TEXT NOT NULL,
+          meaning TEXT NOT NULL,
+          user_input TEXT NOT NULL,
+          correct_answer TEXT NOT NULL,
+          mistake_type TEXT NOT NULL DEFAULT 'spelling',
+          created_at INTEGER NOT NULL,
+          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        )
+      `);
+      await c.execute(`CREATE INDEX IF NOT EXISTS idx_spelling_mistakes_user ON spelling_mistakes(user_id)`);
+
+      await c.execute(`
+        CREATE TABLE IF NOT EXISTS ai_chat_mistakes (
+          id TEXT PRIMARY KEY,
+          user_id TEXT NOT NULL,
+          scenario_id TEXT NOT NULL DEFAULT '',
+          scenario_name TEXT NOT NULL DEFAULT '',
+          user_input TEXT NOT NULL,
+          wrong_part TEXT NOT NULL DEFAULT '',
+          correct_part TEXT NOT NULL DEFAULT '',
+          grammar_error TEXT NOT NULL DEFAULT '',
+          reviewed INTEGER DEFAULT 0,
+          created_at INTEGER NOT NULL,
+          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        )
+      `);
+      await c.execute(`CREATE INDEX IF NOT EXISTS idx_ai_chat_mistakes_user ON ai_chat_mistakes(user_id, created_at DESC)`);
+
+      await c.execute(`
+        CREATE TABLE IF NOT EXISTS ai_chat_new_words (
+          id TEXT PRIMARY KEY,
+          user_id TEXT NOT NULL,
+          ko TEXT NOT NULL,
+          zh TEXT NOT NULL,
+          part_of_speech TEXT DEFAULT '',
+          scenario_id TEXT DEFAULT '',
+          created_at INTEGER NOT NULL,
+          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+          UNIQUE(user_id, ko)
+        )
+      `);
+      await c.execute(`CREATE INDEX IF NOT EXISTS idx_ai_chat_new_words_user ON ai_chat_new_words(user_id)`);
+
+  // Migration: add correct_count / wrong_count to user_words
+  try { await c.execute(`ALTER TABLE user_words ADD COLUMN correct_count INTEGER DEFAULT 0`); } catch { /* already exists */ }
+  try { await c.execute(`ALTER TABLE user_words ADD COLUMN wrong_count INTEGER DEFAULT 0`); } catch { /* already exists */ }
 
   initialized = true;
       })();

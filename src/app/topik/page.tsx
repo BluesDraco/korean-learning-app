@@ -1,518 +1,258 @@
 'use client';
 
-import { useState, useCallback, useEffect, useRef } from 'react';
-import {
-  ArrowLeft, Clock, Volume2, Check, X, Trophy,
-  Sparkles, RotateCcw, ChevronRight, Headphones, BookOpen,
-} from 'lucide-react';
-import { topikQuestions, topikSections, type TopikQuestion } from '@/data/topik-questions';
-import { speakBrowser, cancelSpeech } from '@/lib/tts';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { ArrowLeft, BookOpen, Headphones, ChevronRight, Trophy, AlertCircle } from 'lucide-react';
+import { topikSections, topikExamSets, topikQuestions } from '@/data/topik-questions';
+import { db } from '@/lib/db';
+import type { TopikSession, TopikMistake } from '@/types';
+import Link from 'next/link';
+import { useTheme } from '@/components/ThemeProvider';
 
-type Phase = 'selecting' | 'exam' | 'result';
+const LIGHT_C = { ink: '#241917', muted: '#89756e', line: '#eee0d8', pink: '#ff7fa8', pinkSoft: '#fff0f5', bg: '#fffbf7', mint: '#aee3d8', mintBg: '#eaf8f5', card: '#fff', tagBg: '#f0ece8', disabledBtn: '#c4a89e' };
+const DARK_C  = { ink: '#F0E8FF', muted: '#B8A8C8', line: '#3A3060', pink: '#ff7fa8', pinkSoft: '#2D2848', bg: '#1E1B2E', mint: '#4A6058', mintBg: '#1E3530', card: '#282440', tagBg: '#252040', disabledBtn: '#4A3A5A' };
 
-function speakTopik(text: string): Promise<void> {
-  return speakBrowser(text, 0.85);
-}
+type Tab = 'exam' | 'simulate' | 'practice' | 'mine';
+
+const levelGroups = [
+  { key: 'beginner' as const, label: 'TOPIK I · 初级', topikLevel: 'I' },
+  { key: 'intermediate' as const, label: 'TOPIK II · 中级', topikLevel: 'II' },
+  { key: 'advanced' as const, label: 'TOPIK II · 高级', topikLevel: 'II' },
+];
 
 export default function TopikPage() {
-  const [phase, setPhase] = useState<Phase>('selecting');
-  const [section, setSection] = useState('beginner-listening');
-  const [questions, setQuestions] = useState<TopikQuestion[]>([]);
-  const [currentIdx, setCurrentIdx] = useState(0);
-  const [answers, setAnswers] = useState<Map<string, number>>(new Map());
-  const [showAnswer, setShowAnswer] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(0);
-  const [playing, setPlaying] = useState(false);
-  const [showTranslation, setShowTranslation] = useState(false);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const autoPlayedRef = useRef<number>(-1); // prevent re-trigger loop
+  const { theme } = useTheme();
+  const C = theme === 'dark' ? DARK_C : LIGHT_C;
+  const router = useRouter();
+  const [tab, setTab] = useState<Tab>('exam');
+  const [mistakeCount, setMistakeCount] = useState(0);
+  const [recentSessions, setRecentSessions] = useState<TopikSession[]>([]);
+  const [practiceLevel, setPracticeLevel] = useState<'all' | 'beginner' | 'intermediate' | 'advanced'>('all');
+  const [practiceSection, setPracticeSection] = useState<'all' | 'listening' | 'reading'>('all');
 
-  const sectionInfo = topikSections.find((s) => s.id === section) || topikSections[0];
-
-  // Timer
   useEffect(() => {
-    if (phase !== 'exam') return;
-    if (timerRef.current) clearInterval(timerRef.current);
-    timerRef.current = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          if (timerRef.current) clearInterval(timerRef.current);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, [phase]);
-
-  const finishExam = useCallback(() => {
-    setPhase('result');
-    if (timerRef.current) clearInterval(timerRef.current);
-    cancelSpeech();
+    db.topikMistakes.filter((m: TopikMistake) => m.mastered === 0).then(items => setMistakeCount(items.length)).catch(() => {});
+    db.topikSessions.toArray().then(sessions => {
+      const sorted = [...sessions].sort((a, b) => b.completedAt - a.completedAt).slice(0, 3);
+      setRecentSessions(sorted);
+    }).catch(() => {});
   }, []);
 
-  // Auto-submit on time up
-  useEffect(() => {
-    if (phase === 'exam' && timeLeft === 0 && questions.length > 0) {
-      finishExam();
-    }
-  }, [timeLeft, finishExam, questions.length, phase]);
+  // Filtered questions for practice
+  const practiceQuestions = topikQuestions.filter(q => {
+    if (practiceLevel !== 'all' && q.level !== practiceLevel) return false;
+    if (practiceSection !== 'all' && q.section !== practiceSection) return false;
+    return true;
+  });
 
-  const startExam = useCallback((secId: string) => {
-    const sec = topikSections.find((s) => s.id === secId);
-    if (!sec) return;
-    const qs = topikQuestions.filter((q) => q.section === sec.section && q.level === sec.level);
-    setSection(secId);
-    setQuestions(qs);
-    setCurrentIdx(0);
-    setAnswers(new Map());
-    setShowAnswer(false);
-    setTimeLeft(sec.timeMinutes * 60);
-    setPhase('exam');
-    autoPlayedRef.current = -1;
-  }, []);
+  // Exam year groups
+  const examYears = Array.from(new Set(topikExamSets.map(s => s.year))).sort((a, b) => b - a);
 
-  const selectAnswer = (optionIdx: number) => {
-    if (showAnswer) return;
-    const q = questions[currentIdx];
-    const newAnswers = new Map(answers);
-    newAnswers.set(q.id, optionIdx);
-    setAnswers(newAnswers);
-    setShowAnswer(true);
-  };
-
-  const goNext = () => {
-    if (currentIdx + 1 >= questions.length) {
-      finishExam();
-    } else {
-      setCurrentIdx((prev) => prev + 1);
-      setShowAnswer(false);
-      setShowTranslation(false);
-      setPlaying(false);
-      cancelSpeech();
-    }
-  };
-
-  const handlePlayAudio = useCallback(async () => {
-    const q = questions[currentIdx];
-    if (!q?.audioText || playing) return;
-    setPlaying(true);
-    try { await speakTopik(q.audioText); } catch { /* ignore */ }
-    setPlaying(false);
-  }, [questions, currentIdx, playing]);
-
-  // Auto-play audio once per listening question
-  useEffect(() => {
-    if (phase !== 'exam' || sectionInfo.section !== 'listening' || !questions.length) return;
-    const q = questions[currentIdx];
-    if (!q?.audioText || showAnswer) return;
-    if (autoPlayedRef.current === currentIdx) return; // already auto-played this question
-    autoPlayedRef.current = currentIdx;
-    const t = setTimeout(() => handlePlayAudio(), 400);
-    return () => clearTimeout(t);
-  }, [currentIdx, phase, sectionInfo.section, questions, showAnswer, handlePlayAudio]);
-
-  const correctCount = Array.from(answers.entries()).reduce((acc, [qid, sel]) => {
-    const q = questions.find((x) => x.id === qid);
-    return q && sel === q.correctIdx ? acc + 1 : acc;
-  }, 0);
-
-  const totalAnswered = answers.size;
-  const score = questions.length > 0 ? Math.round((correctCount / questions.length) * 100) : 0;
-  const passed = score >= 60;
-
-  const levelLabel = (level: string) => {
-    switch (level) {
-      case 'beginner': return { text: '初级', emoji: '🌱', color: 'bg-[var(--mint-soft)]/15 text-[var(--mint-soft)]' };
-      case 'intermediate': return { text: '中级', emoji: '🌿', color: 'bg-[var(--peach-soft)]/15 text-[var(--peach-soft)]' };
-      case 'advanced': return { text: '高级', emoji: '🌳', color: 'bg-[var(--purple-soft)]/15 text-[var(--purple-soft)]' };
-      default: return { text: '', emoji: '', color: '' };
-    }
-  };
-
-  const formatTime = (s: number) => {
-    const m = Math.floor(s / 60);
-    const sec = s % 60;
-    return `${m}:${sec.toString().padStart(2, '0')}`;
-  };
-
-  // ─── Select Phase ──────────────────────────────────────────
-  if (phase === 'selecting') {
-    const levels = ['beginner', 'intermediate', 'advanced'] as const;
-    return (
-      <div className="py-4 space-y-6">
-        <div className="text-center">
-          <div className="text-5xl mb-3">📝</div>
-          <h1 className="text-2xl font-bold text-[var(--text-primary)] section-header">TOPIK 模拟练习</h1>
-          <p className="text-sm text-[var(--text-secondary)] mt-2 max-w-md mx-auto">
-            TOPIK I（初级）~ TOPIK II（中高级）300道模拟题，TOPIK风格题型与计时环境
-          </p>
-        </div>
-
-        {levels.map((level) => {
-          const levelSections = topikSections.filter((s) => s.level === level);
-          if (levelSections.length === 0) return null;
-          const l = levelLabel(level);
-          return (
-            <div key={level}>
-              <div className="flex items-center gap-2 mb-3">
-                <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${l.color}`}>{l.emoji} {l.text}</span>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {levelSections.map((sec) => (
-                  <button
-                    key={sec.id}
-                    onClick={() => startExam(sec.id)}
-                    className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-5 text-left hover:border-[var(--pink-primary)]/40 hover:shadow-lg hover:-translate-y-0.5 transition-all group"
-                  >
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="w-10 h-10 rounded-xl bg-[var(--pink-primary)]/10 flex items-center justify-center">
-                        {sec.section === 'listening' ? (
-                          <Headphones size={20} className="text-[var(--pink-primary)]" />
-                        ) : (
-                          <BookOpen size={20} className="text-[var(--purple-soft)]" />
-                        )}
-                      </div>
-                      <ChevronRight size={16} className="text-[var(--text-muted)] group-hover:translate-x-1 transition-transform mt-1" />
-                    </div>
-                    <h3 className="font-bold text-sm text-[var(--text-primary)] mb-0.5">{sec.titleKo} {sec.title}</h3>
-                    <p className="text-[13px] text-[var(--text-secondary)] mb-2">{sec.description}</p>
-                    <div className="flex items-center gap-3 text-[13px] text-[var(--text-muted)]">
-                      <span className="flex items-center gap-1"><Clock size={12} /> {sec.timeMinutes}分钟</span>
-                      <span>{sec.questionCount}题</span>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          );
-        })}
-
-        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-5">
-          <h3 className="text-sm font-bold text-[var(--text-primary)] mb-3 flex items-center gap-2">
-            <Sparkles size={16} className="text-[var(--peach-soft)]" />
-            考试说明
-          </h3>
-          <ul className="space-y-2 text-xs text-[var(--text-secondary)]">
-            <li className="flex items-start gap-2">
-              <span className="text-[var(--mint-soft)] mt-0.5">•</span>
-              涵盖初级（1-2급）、中级（3-4급）、高级（5-6급）三个级别
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-[var(--mint-soft)] mt-0.5">•</span>
-              听力部分会自动播放音频，每题只播放一次
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-[var(--mint-soft)] mt-0.5">•</span>
-              每部分限时完成，选择答案后显示解析和核心词汇
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-[var(--mint-soft)] mt-0.5">•</span>
-              60% 以上正确率为通过，完成后可查看详细成绩
-            </li>
-          </ul>
-        </div>
-      </div>
-    );
+  function startSimulate(sectionId: string) {
+    const sessionId = crypto.randomUUID();
+    try { sessionStorage.setItem(`topik-exam-${sessionId}`, JSON.stringify({ sectionId, mode: 'practice', timeLeft: -1, idx: 0, answers: [], startedAt: Date.now() })); } catch { /* ignore */ }
+    router.push(`/topik/exam/${sessionId}`);
   }
 
-  // ─── Exam Phase ────────────────────────────────────────────
-  const currentQ = questions[currentIdx];
+  function startPractice() {
+    if (practiceQuestions.length === 0) return;
+    const sessionId = crypto.randomUUID();
+    const ids = practiceQuestions.map(q => q.id);
+    try { sessionStorage.setItem(`topik-exam-${sessionId}`, JSON.stringify({ questionIds: ids, mode: 'practice', timeLeft: -1, idx: 0, answers: [], startedAt: Date.now() })); } catch { /* ignore */ }
+    router.push(`/topik/exam/${sessionId}`);
+  }
+
+  function formatDate(ts: number) {
+    const d = new Date(ts);
+    return `${d.getMonth() + 1}/${d.getDate()}`;
+  }
+
+  function sectionLabel(section: string) {
+    const s = topikSections.find(x => x.id === section);
+    return s ? `${s.title}` : section;
+  }
 
   return (
-    <div className="py-4 space-y-4">
-      {/* Header bar */}
-      <div className="flex items-center justify-between bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl px-4 py-3">
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => { finishExam(); }}
-            className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
-          >
-            <ArrowLeft size={18} />
+    <div style={{ minHeight: '100vh', background: C.bg, paddingBottom: 40 }}>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '16px 16px 0' }}>
+        <button onClick={() => router.back()} style={{ width: 36, height: 36, borderRadius: '50%', border: `1px solid ${C.line}`, background: C.card, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+          <ArrowLeft size={16} style={{ color: C.muted }} />
+        </button>
+        <div>
+          <h1 style={{ fontSize: 18, fontWeight: 900, color: C.ink, margin: 0 }}>TOPIK 备考</h1>
+          <p style={{ fontSize: 12, color: C.muted, margin: 0 }}>한국어능력시험 · 历年真题 + 专项练习</p>
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div style={{ display: 'flex', gap: 6, padding: '14px 16px 0' }}>
+        {([['exam', '历年真题'], ['simulate', '模拟练习'], ['practice', '专项练习'], ['mine', '我的']] as [Tab, string][]).map(([key, label]) => (
+          <button key={key} onClick={() => setTab(key)} style={{ flex: 1, padding: '8px 4px', borderRadius: 10, border: 'none', background: tab === key ? C.ink : 'transparent', color: tab === key ? '#fff' : C.muted, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
+            {label}
           </button>
-          <div>
-            <span className="font-bold text-[var(--text-primary)] text-sm">
-              {sectionInfo.titleKo} {sectionInfo.title}
-            </span>
-          </div>
-        </div>
-        <div className={`flex items-center gap-1.5 text-sm font-mono font-bold ${timeLeft <= 60 ? 'text-[var(--color-danger)] animate-pulse' : 'text-[var(--text-primary)]'}`}>
-          <Clock size={14} />
-          {formatTime(timeLeft)}
-        </div>
+        ))}
       </div>
 
-      {/* Progress bar */}
-      <div className="flex items-center gap-1.5">
-        <div className="flex-1 bg-[var(--bg-input)] rounded-full h-1.5">
-          <div
-            className="bg-[var(--pink-primary)] h-1.5 rounded-full transition-all"
-            style={{ width: `${((currentIdx + 1) / questions.length) * 100}%` }}
-          />
-        </div>
-        <span className="text-xs text-[var(--text-muted)] shrink-0">
-          {currentIdx + 1}/{questions.length}
-        </span>
-        {phase === 'result' && (
-          <span className="text-xs text-[var(--mint-soft)] shrink-0 ml-1">
-            完成
-          </span>
-        )}
-      </div>
+      <div style={{ padding: '16px 16px 0' }}>
 
-      {/* Question card */}
-      {phase === 'exam' && currentQ && (
-        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-3xl p-6 space-y-5">
-          {/* Audio button for listening */}
-          {sectionInfo.section === 'listening' && currentQ.audioText && (
-            <div className="flex items-center gap-2">
-              {!playing && showAnswer && (
-                <button
-                  onClick={handlePlayAudio}
-                  className="p-1.5 rounded-lg hover:bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors"
-                  title="重新播放"
-                >
-                  <Volume2 size={18} />
-                </button>
-              )}
-              {playing && (
-                <span className="flex items-center gap-1.5 text-xs text-[var(--pink-primary)]">
-                  <span className="w-2 h-2 rounded-full bg-[var(--pink-primary)] animate-pulse" />
-                  播放中...
-                </span>
-              )}
-            </div>
-          )}
-
-          {/* Topic tag */}
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-[13px] font-bold text-[var(--pink-primary)] bg-[var(--pink-primary)]/8 px-2.5 py-0.5 rounded-full">
-              #{currentQ.topic}
-            </span>
-            <span className="text-[13px] text-[var(--text-muted)]">{levelLabel(currentQ.level).emoji} {levelLabel(currentQ.level).text} · 第{currentQ.number}题</span>
-          </div>
-
-          {/* Prompt */}
-          <div>
-            <p className="text-base font-bold text-[var(--text-primary)] leading-relaxed whitespace-pre-wrap">
-              {currentQ.prompt}
-            </p>
-            {sectionInfo.section === 'listening' ? (
-              <div className="mt-2">
-                {!showTranslation ? (
-                  <button
-                    onClick={() => setShowTranslation(true)}
-                    className="text-xs text-[var(--text-muted)] hover:text-[var(--pink-primary)] underline underline-offset-2 transition-colors"
-                  >
-                    显示翻译
-                  </button>
-                ) : (
-                  <p className="text-xs text-[var(--text-muted)]">{currentQ.promptZh}</p>
-                )}
-              </div>
-            ) : (
-              <p className="text-xs text-[var(--text-muted)] mt-1">{currentQ.promptZh}</p>
-            )}
-          </div>
-
-          {/* Options */}
-          <div className="space-y-2.5">
-            {currentQ.options.map((opt, i) => {
-              let btnClass = 'bg-[var(--bg-input)] border border-[var(--border-color)] hover:border-[var(--border-hover)] text-[var(--text-primary)]';
-              if (showAnswer) {
-                if (i === currentQ.correctIdx) {
-                  btnClass = 'bg-[var(--mint-soft)]/15 border-[var(--mint-soft)]/50 text-[var(--text-primary)]';
-                } else if (i === answers.get(currentQ.id) && i !== currentQ.correctIdx) {
-                  btnClass = 'bg-[var(--color-danger)]/10 border-[var(--color-danger)]/50 text-[var(--text-primary)]';
-                } else {
-                  btnClass = 'bg-[var(--bg-input)] border-[var(--border-color)] opacity-50';
-                }
-              }
-              return (
-                <button
-                  key={i}
-                  onClick={() => selectAnswer(i)}
-                  disabled={showAnswer}
-                  className={`w-full flex items-center justify-between p-4 rounded-xl text-sm transition-all ${btnClass}`}
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="w-6 h-6 rounded-full bg-[var(--bg-primary)] border border-[var(--border-color)] flex items-center justify-center text-xs font-bold text-[var(--text-secondary)]">
-                      {String.fromCharCode(65 + i)}
-                    </span>
-                    <span style={{ fontFamily: i === currentQ.correctIdx ? "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif" : undefined }}>
-                      {opt}
-                    </span>
-                  </div>
-                  {showAnswer && i === currentQ.correctIdx && (
-                    <Check size={18} className="text-[var(--mint-soft)] shrink-0" />
-                  )}
-                  {showAnswer && i === answers.get(currentQ.id) && i !== currentQ.correctIdx && (
-                    <X size={18} className="text-[var(--color-danger)] shrink-0" />
-                  )}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Explanation and vocabulary after answer */}
-          {showAnswer && (
-            <div className="bg-[var(--bg-input)] rounded-xl p-4 animate-fade-in space-y-3">
-              {sectionInfo.section === 'listening' && currentQ.audioText && (
-                <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-lg p-3">
-                  <p className="text-[13px] text-[var(--text-muted)] font-medium mb-1">听力原文</p>
-                  <p className="text-sm text-[var(--text-primary)] leading-relaxed">{currentQ.audioText}</p>
-                </div>
-              )}
-              <p className="text-xs text-[var(--text-secondary)] leading-relaxed">{currentQ.explanation}</p>
-              {currentQ.vocabulary.length > 0 && (
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-[13px] text-[var(--text-muted)]">核心词汇:</span>
-                  {currentQ.vocabulary.map((v, vi) => (
-                    <span key={vi} className="text-[13px] bg-[var(--bg-card)] border border-[var(--border-color)] px-2 py-0.5 rounded-lg text-[var(--text-primary)]">
-                      {v}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Next button */}
-          {showAnswer && (
-            <button
-              onClick={goNext}
-              className="w-full flex items-center justify-center gap-2 py-3.5 bg-[var(--pink-primary)] text-white rounded-2xl font-medium text-sm hover:shadow-lg hover:shadow-[var(--pink-primary)]/25 active:scale-95 transition-all"
-            >
-              {currentIdx + 1 >= questions.length ? '查看结果' : '下一题'}
-              <ChevronRight size={18} />
-            </button>
-          )}
-        </div>
-      )}
-
-      {/* ─── Result Phase ─────────────────────────────────────── */}
-      {phase === 'result' && (
-        <div className="space-y-4 animate-fade-in">
-          {/* Score circle */}
-          <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-3xl p-6 text-center space-y-4">
-            <div className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto border-4 ${
-              passed
-                ? 'border-[var(--mint-soft)]/40 bg-[var(--mint-soft)]/10'
-                : 'border-[var(--peach-soft)]/40 bg-[var(--peach-soft)]/10'
-            }`}>
-              {passed ? (
-                <Trophy size={40} className="text-[var(--mint-soft)]" />
-              ) : (
-                <RotateCcw size={40} className="text-[var(--peach-soft)]" />
-              )}
-            </div>
-
-            <div>
-              <h2 className="text-xl font-bold text-[var(--text-primary)]">
-                {passed ? '축하합니다! 恭喜通过！' : '继续加油！'}
-              </h2>
-              <p className="text-sm text-[var(--text-secondary)] mt-1">
-                {sectionInfo.titleKo} {sectionInfo.title} · 得分 {score}%
-              </p>
-            </div>
-
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-3">
-              <div className="bg-[var(--mint-soft)]/8 rounded-xl p-3">
-                <div className="text-xl font-bold text-[var(--mint-soft)]">{correctCount}</div>
-                <div className="text-[13px] text-[var(--text-muted)]">正确</div>
-              </div>
-              <div className="bg-[var(--color-danger)]/8 rounded-xl p-3">
-                <div className="text-xl font-bold text-[var(--color-danger)]">{questions.length - correctCount}</div>
-                <div className="text-[13px] text-[var(--text-muted)]">错误</div>
-              </div>
-              <div className="bg-[var(--purple-soft)]/8 rounded-xl p-3">
-                <div className="text-xl font-bold text-[var(--purple-soft)]">{totalAnswered}</div>
-                <div className="text-[13px] text-[var(--text-muted)]">已答</div>
-              </div>
-            </div>
-
-            {passed && (
-              <div className="bg-[var(--mint-soft)]/10 border border-[var(--mint-soft)]/20 rounded-xl p-3 flex items-center gap-2 justify-center">
-                <Sparkles size={16} className="text-[var(--mint-soft)]" />
-                <span className="text-sm text-[var(--text-primary)]">+20 XP</span>
-              </div>
-            )}
-          </div>
-
-          {/* Error analysis */}
-          {correctCount < questions.length && (
-            <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-5 space-y-4">
-              <h3 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
-                <BookOpen size={16} className="text-[var(--purple-soft)]" />
-                错题分析
-              </h3>
-
-              {/* Wrong question list */}
-              <div className="space-y-3 max-h-80 overflow-y-auto">
-                {questions.filter(q => {
-                  const sel = answers.get(q.id);
-                  return sel !== undefined && sel !== q.correctIdx;
-                }).map((q) => (
-                  <div key={q.id} className="bg-[var(--bg-input)] rounded-xl p-4 space-y-2">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-xs font-bold text-[var(--pink-primary)]">#{q.topic}</span>
-                      {q.difficulty && (
-                        <span className={`text-[11px] px-1.5 py-0.5 rounded-full ${
-                          q.difficulty === 'easy' ? 'bg-[var(--mint-soft)]/10 text-[var(--mint-soft)]' :
-                          q.difficulty === 'medium' ? 'bg-[var(--peach-soft)]/10 text-[var(--peach-soft)]' :
-                          'bg-[var(--color-danger)]/10 text-[var(--color-danger)]'
-                        }`}>
-                          {q.difficulty === 'easy' ? '简单' : q.difficulty === 'medium' ? '中等' : '困难'}
-                        </span>
-                      )}
-                      {q.testPoint && (
-                        <span className="text-[11px] text-[var(--text-muted)]">考点: {q.testPoint}</span>
+        {/* ── 历年真题 ── */}
+        {tab === 'exam' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+            {examYears.map(year => (
+              <div key={year}>
+                <p style={{ fontSize: 13, fontWeight: 900, color: C.ink, marginBottom: 8 }}>{year}年</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {topikExamSets.filter(s => s.year === year).map(set => (
+                    <div key={set.id} style={{ background: C.card, borderRadius: 14, border: `1px solid ${C.line}`, padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 12, opacity: set.available ? 1 : 0.55 }}>
+                      <div style={{ width: 40, height: 40, borderRadius: 12, background: set.level === 'I' ? C.mintBg : C.pinkSoft, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 18 }}>
+                        {set.level === 'I' ? '📄' : '📋'}
+                      </div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <p style={{ fontSize: 14, fontWeight: 800, color: C.ink, margin: 0 }}>第{set.round}回 TOPIK {set.level}</p>
+                        <p style={{ fontSize: 11, color: C.muted, margin: '2px 0 0' }}>
+                          {set.level === 'I' ? '初级 · 听力 + 阅读 · 100题' : '中高级 · 听力 + 阅读 + 写作 · 104题'}
+                        </p>
+                      </div>
+                      {set.available ? (
+                        <button onClick={() => router.push(`/topik/exam/${crypto.randomUUID()}?examSetId=${set.id}`)} style={{ padding: '6px 14px', borderRadius: 10, background: C.ink, color: '#fff', fontSize: 12, fontWeight: 700, border: 'none', cursor: 'pointer' }}>
+                          开始
+                        </button>
+                      ) : (
+                        <span style={{ fontSize: 10, fontWeight: 700, padding: '3px 8px', borderRadius: 6, background: C.tagBg, color: C.muted }}>即将上线</span>
                       )}
                     </div>
-                    <p className="text-sm text-[var(--text-primary)]">{q.prompt}</p>
-                    {q.errorCategory && (
-                      <p className="text-xs text-[var(--text-muted)]">
-                        错误类型: {q.errorCategory}
-                      </p>
-                    )}
-                    <p className="text-xs text-[var(--text-secondary)] leading-relaxed">{q.explanation}</p>
-                    {q.reviewGrammarId && (
-                      <a
-                        href={`/grammar?pattern=${q.reviewGrammarId}`}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 mt-1 rounded-lg bg-[var(--purple-soft)]/10 border border-[var(--purple-soft)]/20 text-xs text-[var(--purple-soft)] hover:bg-[var(--purple-soft)]/20 transition-colors"
-                      >
-                        <BookOpen size={12} />
-                        去练习这个句型 →
-                      </a>
-                    )}
-                  </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* ── 模拟练习 ── */}
+        {tab === 'simulate' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            {levelGroups.map(group => (
+              <div key={group.key} style={{ marginBottom: 12 }}>
+                <p style={{ fontSize: 12, fontWeight: 800, color: C.muted, marginBottom: 8 }}>{group.label}</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {topikSections.filter(s => s.level === group.key).map(sec => (
+                    <button key={sec.id} onClick={() => startSimulate(sec.id)} style={{ background: C.card, borderRadius: 14, border: `1px solid ${C.line}`, padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer', width: '100%', textAlign: 'left' }}>
+                      <div style={{ width: 40, height: 40, borderRadius: 12, background: sec.section === 'listening' ? C.mintBg : C.pinkSoft, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        {sec.section === 'listening' ? <Headphones size={18} color={C.mint} /> : <BookOpen size={18} color={C.pink} />}
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <p style={{ fontSize: 14, fontWeight: 800, color: C.ink, margin: 0 }}>{sec.title}</p>
+                        <p style={{ fontSize: 11, color: C.muted, margin: '2px 0 0' }}>{sec.timeMinutes}分钟 · {sec.questionCount}题</p>
+                      </div>
+                      <ChevronRight size={16} color={C.muted} />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* ── 专项练习 ── */}
+        {tab === 'practice' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+            {/* 级别筛选 */}
+            <div style={{ marginBottom: 14 }}>
+              <p style={{ fontSize: 11, fontWeight: 700, color: C.muted, marginBottom: 8 }}>级别</p>
+              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                {([['all', '全部'], ['beginner', 'TOPIK I'], ['intermediate', '中级'], ['advanced', '高级']] as const).map(([key, label]) => (
+                  <button key={key} onClick={() => setPracticeLevel(key)} style={{ padding: '6px 14px', borderRadius: 20, border: `1px solid ${practiceLevel === key ? C.ink : C.line}`, background: practiceLevel === key ? C.ink : C.card, color: practiceLevel === key ? '#fff' : C.muted, fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
+                    {label}
+                  </button>
                 ))}
               </div>
             </div>
-          )}
 
-          {/* Actions */}
-          <div className="flex gap-3">
-            <button
-              onClick={() => startExam(section)}
-              className="flex-1 flex items-center justify-center gap-2 py-3 bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] text-[var(--text-primary)] rounded-2xl transition-colors text-sm font-medium"
-            >
-              <RotateCcw size={16} />
-              重新练习
-            </button>
-            <button
-              onClick={() => setPhase('selecting')}
-              className="flex-1 flex items-center justify-center gap-2 py-3 bg-[var(--pink-primary)] text-white rounded-2xl transition-colors text-sm font-medium"
-            >
-              返回选择
-              <ArrowLeft size={16} />
+            {/* 科目筛选 */}
+            <div style={{ marginBottom: 14 }}>
+              <p style={{ fontSize: 11, fontWeight: 700, color: C.muted, marginBottom: 8 }}>科目</p>
+              <div style={{ display: 'flex', gap: 6 }}>
+                {([['all', '全部'], ['listening', '🎧 听力'], ['reading', '📖 阅读']] as const).map(([key, label]) => (
+                  <button key={key} onClick={() => setPracticeSection(key)} style={{ padding: '6px 14px', borderRadius: 20, border: `1px solid ${practiceSection === key ? C.ink : C.line}`, background: practiceSection === key ? C.ink : C.card, color: practiceSection === key ? '#fff' : C.muted, fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <button onClick={startPractice} disabled={practiceQuestions.length === 0} style={{ width: '100%', padding: '14px 0', borderRadius: 14, background: practiceQuestions.length === 0 ? C.disabledBtn : C.ink, color: '#fff', fontSize: 14, fontWeight: 700, border: 'none', cursor: practiceQuestions.length === 0 ? 'not-allowed' : 'pointer' }}>
+              开始练习 · 共 {practiceQuestions.length} 题
             </button>
           </div>
-        </div>
-      )}
+        )}
+
+        {/* ── 我的 ── */}
+        {tab === 'mine' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {/* 统计卡 */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 4 }}>
+              <div style={{ background: C.card, borderRadius: 14, border: `1px solid ${C.line}`, padding: 14 }}>
+                <div style={{ fontSize: 28, fontWeight: 900, color: C.ink, lineHeight: 1 }}>{recentSessions.length}</div>
+                <div style={{ fontSize: 11, color: C.muted, marginTop: 4 }}>累计练习次数</div>
+              </div>
+              <div style={{ background: C.card, borderRadius: 14, border: `1px solid ${C.line}`, padding: 14 }}>
+                <div style={{ fontSize: 28, fontWeight: 900, color: C.ink, lineHeight: 1 }}>{recentSessions[0]?.score ?? '—'}</div>
+                <div style={{ fontSize: 11, color: C.muted, marginTop: 4 }}>最近得分</div>
+              </div>
+            </div>
+
+            {/* 导航卡 */}
+            <Link href="/topik/mistakes" style={{ background: C.card, borderRadius: 14, border: `1px solid ${C.line}`, padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
+              <div style={{ width: 40, height: 40, borderRadius: 12, background: C.pinkSoft, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 18 }}>❌</div>
+              <div style={{ flex: 1 }}>
+                <p style={{ fontSize: 14, fontWeight: 800, color: C.ink, margin: 0 }}>错题本</p>
+                <p style={{ fontSize: 11, color: C.muted, margin: '2px 0 0' }}>记录答错的题，专项攻克</p>
+              </div>
+              {mistakeCount > 0 && <span style={{ fontSize: 11, fontWeight: 700, background: C.pink, color: '#fff', borderRadius: 10, padding: '2px 8px' }}>{mistakeCount}</span>}
+            </Link>
+
+            <Link href="/topik/history" style={{ background: C.card, borderRadius: 14, border: `1px solid ${C.line}`, padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
+              <div style={{ width: 40, height: 40, borderRadius: 12, background: C.mintBg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 18 }}>📊</div>
+              <div style={{ flex: 1 }}>
+                <p style={{ fontSize: 14, fontWeight: 800, color: C.ink, margin: 0 }}>成绩历史</p>
+                <p style={{ fontSize: 11, color: C.muted, margin: '2px 0 0' }}>查看历次练习记录</p>
+              </div>
+              <ChevronRight size={16} color={C.muted} />
+            </Link>
+
+            {/* 最近练习 */}
+            {recentSessions.length > 0 && (
+              <>
+                <p style={{ fontSize: 11, fontWeight: 700, color: C.muted, marginTop: 6 }}>最近练习</p>
+                {recentSessions.map(s => (
+                  <div key={s.id} style={{ background: C.card, borderRadius: 12, border: `1px solid ${C.line}`, padding: '12px 14px', display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <div style={{ width: 44, height: 44, borderRadius: 12, background: s.score >= 60 ? C.mintBg : C.pinkSoft, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, fontWeight: 900, color: s.score >= 60 ? '#2db89b' : C.pink, flexShrink: 0 }}>
+                      {s.score}
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <p style={{ fontSize: 13, fontWeight: 700, color: C.ink, margin: 0 }}>{sectionLabel(s.section)} · {s.mode === 'practice' ? '模拟' : s.mode === 'mistakes' ? '错题' : '专项'}</p>
+                      <p style={{ fontSize: 11, color: C.muted, margin: '2px 0 0' }}>{formatDate(s.completedAt)} · {s.correctCount}/{s.totalCount}</p>
+                    </div>
+                    {s.score >= 60 ? <Trophy size={16} color={C.mint} /> : <AlertCircle size={16} color={C.pink} />}
+                  </div>
+                ))}
+              </>
+            )}
+
+            {recentSessions.length === 0 && (
+              <div style={{ textAlign: 'center', paddingTop: 32, color: C.muted }}>
+                <p style={{ fontSize: 14, fontWeight: 700 }}>还没有练习记录</p>
+                <p style={{ fontSize: 12, marginTop: 4 }}>完成一次练习后，成绩将显示在这里</p>
+                <button onClick={() => setTab('simulate')} style={{ marginTop: 16, padding: '10px 24px', borderRadius: 12, background: C.ink, color: '#fff', fontSize: 13, fontWeight: 700, border: 'none', cursor: 'pointer' }}>
+                  去练习
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+      </div>
     </div>
   );
 }

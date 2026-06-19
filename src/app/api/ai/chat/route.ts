@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { chatResponseDeepSeek } from '@/lib/deepseek';
 import { getAuthFromCookie } from '@/lib/server/auth';
 import { checkAiRateLimit, recordAiUsage } from '@/lib/server/rate-limit';
+import { filterContent } from '@/lib/contentFilter';
 
 export async function POST(req: Request) {
   const auth = await getAuthFromCookie();
@@ -16,6 +17,13 @@ export async function POST(req: Request) {
     const { scenario, context, userMessage } = await req.json();
     if (!userMessage || typeof userMessage !== 'string') {
       return NextResponse.json({ error: 'Missing userMessage' }, { status: 400 });
+    }
+    if (userMessage.length > 200) {
+      return NextResponse.json({ error: '输入不能超过200个字符' }, { status: 400 });
+    }
+    const chatCheck = filterContent(userMessage, 'ai_input');
+    if (!chatCheck.ok) {
+      return NextResponse.json({ error: chatCheck.reason }, { status: 400 });
     }
 
     const limit = await checkAiRateLimit(auth.userId, 'chat');

@@ -1,18 +1,29 @@
-import type { Word, ReviewSession, DictationRecord, ShadowingRecord, UserProfile, DailyLog, Achievement, AppSettings, WordBook, StudyVideo, StudySubtitle, StudyLog, UserAchievement, UserShareLink, StickerPack, Sticker, StickerDownload, BuddyRelation, BuddyInvite, PronunciationAttempt, UserGrammarState, UserArticleProgress, ArticleLearningEvent } from '@/types';
+import type { Word, ReviewSession, DictationRecord, ShadowingRecord, UserProfile, DailyLog, Achievement, AppSettings, WordBook, StudyVideo, StudySubtitle, StudyLog, UserAchievement, UserShareLink, StickerPack, Sticker, StickerDownload, BuddyRelation, BuddyInvite, PronunciationAttempt, UserGrammarState, UserArticleProgress, ArticleLearningEvent, TopikSession, TopikMistake, SpellingMistake, AiChatMistake, AiChatNewWord } from '@/types';
 import type { LessonMastery, LearningEvent } from '@/lib/lesson/types';
 
 const API = '/api/user-data';
 
 async function call(action: string, table: string, id?: string, data?: unknown): Promise<any> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 8000);
   const body: Record<string, unknown> = { action, table };
   if (id !== undefined) body.id = id;
   if (data !== undefined) body.data = data;
-  const res = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({ error: 'Network error' }));
-    throw new Error(err.error || `API error ${res.status}`);
+  try {
+    const res = await fetch(API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      signal: controller.signal,
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: 'Network error' }));
+      throw new Error(err.error || `API error ${res.status}`);
+    }
+    return await res.json();
+  } finally {
+    clearTimeout(timer);
   }
-  return res.json();
 }
 
 class WhereClause<T> {
@@ -148,11 +159,10 @@ class CloudTable<T> {
   }
 
   async bulkPut(items: T[]): Promise<void> {
-    // Parallel with concurrency limit of 8
-    const limit = 8;
-    for (let i = 0; i < items.length; i += limit) {
-      const batch = items.slice(i, i + limit);
-      await Promise.allSettled(batch.map((item) => this.put(item)));
+    if (items.length === 0) return;
+    const CHUNK = 20;
+    for (let i = 0; i < items.length; i += CHUNK) {
+      await call('bulkPut', this.name, undefined, items.slice(i, i + CHUNK));
     }
   }
 
@@ -166,6 +176,22 @@ class CloudTable<T> {
       results.push(...batchResults.map((r) => (r.status === 'fulfilled' ? r.value : undefined)));
     }
     return results;
+  }
+
+  async bulkUpdate(items: { id: string; [key: string]: unknown }[]): Promise<void> {
+    if (items.length === 0) return;
+    const CHUNK = 20;
+    for (let i = 0; i < items.length; i += CHUNK) {
+      await call('bulkUpdate', this.name, undefined, items.slice(i, i + CHUNK));
+    }
+  }
+
+  async bulkDelete(ids: string[]): Promise<void> {
+    if (ids.length === 0) return;
+    const CHUNK = 20;
+    for (let i = 0; i < ids.length; i += CHUNK) {
+      await call('bulkDelete', this.name, undefined, ids.slice(i, i + CHUNK));
+    }
   }
 
   async update(id: string, changes: Partial<T>): Promise<void> {
@@ -239,7 +265,30 @@ export const db = {
   kpopProgress: new CloudTable<any>('kpopProgress'),
   diary: new CloudTable<any>('diary'),
   readingProgress: new CloudTable<any>('readingProgress'),
+  topikSessions: new CloudTable<TopikSession>('topikSessions'),
+  topikMistakes: new CloudTable<TopikMistake>('topikMistakes'),
+  spellingMistakes: new CloudTable<SpellingMistake>('spelling_mistakes'),
+  aiChatMistakes: new CloudTable<AiChatMistake>('aiChatMistakes'),
+  aiChatNewWords: new CloudTable<AiChatNewWord>('aiChatNewWords'),
 };
+
+export const FAVORITES_BOOK_ID = 'default-favorites';
+
+export async function ensureFavoritesBook(): Promise<string> {
+  const existing = await db.wordBooks.get(FAVORITES_BOOK_ID);
+  if (existing) return FAVORITES_BOOK_ID;
+  const now = Date.now();
+  await db.wordBooks.put({
+    id: FAVORITES_BOOK_ID,
+    name: '我的收藏',
+    description: '收藏的单词',
+    wordIds: [],
+    color: 'var(--color-vocab)',
+    createdAt: now,
+    updatedAt: now,
+  });
+  return FAVORITES_BOOK_ID;
+}
 
 export async function initSettings(): Promise<AppSettings> {
   const existing = await db.settings.get('main');

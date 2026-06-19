@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useEffect, useRef } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Send, Loader2, Check, User, Megaphone, FileText, Bell } from 'lucide-react';
 import type { AnnouncementType } from '@/types';
 
@@ -11,6 +12,7 @@ const TYPE_OPTIONS: { value: AnnouncementType; label: string; icon: React.Compon
 ];
 
 export default function AdminMessagesPage() {
+  const searchParams = useSearchParams();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [type, setType] = useState<AnnouncementType>('announcement');
@@ -23,13 +25,33 @@ export default function AdminMessagesPage() {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    fetch('/api/admin/users')
+    const userId = searchParams.get('userId');
+
+    // Load user list
+    fetch('/api/admin/users?pageSize=50')
       .then((r) => r.json())
       .then((data) => {
         if (data.users) setUsers(data.users);
       })
       .catch(() => {});
-  }, []);
+
+    // If coming from feedback reply, fetch the specific user directly
+    if (userId) {
+      setType('private_message');
+      setTargetUserId(userId);
+      fetch(`/api/admin/users/${userId}`)
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.id) {
+            setUsers((prev) => {
+              const exists = prev.some((u) => u.id === data.id);
+              return exists ? prev : [{ id: data.id, username: data.username, nickname: data.nickname }, ...prev];
+            });
+          }
+        })
+        .catch(() => {});
+    }
+  }, [searchParams]);
 
   // Close dropdown on outside click
   useEffect(() => {

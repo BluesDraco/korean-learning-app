@@ -1,6 +1,49 @@
 import { NextResponse } from 'next/server';
 import { getAuthFromCookie } from '@/lib/server/auth';
 import { getDb } from '@/lib/server/db';
+import { filterContent } from '@/lib/contentFilter';
+
+// Field-level length limits for user-generated text fields
+const FIELD_MAX_LENGTH: Record<string, Record<string, number>> = {
+  diary: { title: 100, content: 5000 },
+  notes: { content: 2000, title: 100 },
+  articles: { original_text: 10000, title: 200 },
+  buddyInvites: { intro: 200, learning_goal: 200 },
+  sentences: { korean: 500, note: 500 },
+};
+
+function checkFieldLengths(table: string, data: Record<string, unknown>): string | null {
+  const limits = FIELD_MAX_LENGTH[table];
+  if (!limits) return null;
+  for (const [field, max] of Object.entries(limits)) {
+    const val = data[field];
+    if (typeof val === 'string' && val.length > max) {
+      return `${field} 超过最大长度限制（${max}字符）`;
+    }
+  }
+  return null;
+}
+
+// Tables and fields that should be checked for political sensitive content
+const POLITICAL_CHECK_FIELDS: Record<string, string[]> = {
+  diary: ['title', 'content'],
+  notes: ['title', 'content'],
+  sentences: ['korean', 'note'],
+  buddyInvites: ['intro', 'learning_goal'],
+};
+
+function checkPoliticalFields(table: string, data: Record<string, unknown>): string | null {
+  const fields = POLITICAL_CHECK_FIELDS[table];
+  if (!fields) return null;
+  for (const field of fields) {
+    const val = data[field];
+    if (typeof val === 'string') {
+      const result = filterContent(val, 'user_content');
+      if (!result.ok) return result.reason;
+    }
+  }
+  return null;
+}
 
 type UserScope = string | string[] | null;
 type Writable = 'all' | 'readonly';
@@ -8,7 +51,7 @@ type Writable = 'all' | 'readonly';
 const TABLE_COLS: Record<string, { cols: string[]; pk: string; table: string; userScope: UserScope; writable: Writable }> = {
   words: {
     table: 'user_words',
-    cols: ['id', 'user_id', 'word', 'pronunciation', 'meaning', 'part_of_speech', 'examples', 'source_entry_id', 'source_video_id', 'source_subtitle_id', 'source', 'source_detail', 'mastery', 'srs_level', 'next_review', 'ease_factor', 'interval', 'created_at', 'last_reviewed'],
+    cols: ['id', 'user_id', 'word', 'pronunciation', 'meaning', 'part_of_speech', 'examples', 'source_entry_id', 'source_video_id', 'source_subtitle_id', 'source', 'source_detail', 'mastery', 'srs_level', 'next_review', 'ease_factor', 'interval', 'correct_count', 'wrong_count', 'created_at', 'last_reviewed'],
     pk: 'id', userScope: 'user_id', writable: 'all',
   },
   reviewSessions: {
@@ -18,7 +61,7 @@ const TABLE_COLS: Record<string, { cols: string[]; pk: string; table: string; us
   },
   dictationRecords: {
     table: 'dictation_records',
-    cols: ['id', 'user_id', 'word_id', 'date', 'correct', 'user_input'],
+    cols: ['id', 'user_id', 'word_id', 'meaning', 'date', 'correct', 'user_input'],
     pk: 'id', userScope: 'user_id', writable: 'all',
   },
   shadowingRecords: {
@@ -169,6 +212,26 @@ const TABLE_COLS: Record<string, { cols: string[]; pk: string; table: string; us
   readingProgress: {
     table: 'reading_progress',
     cols: ['id', 'user_id', 'post_id', 'read_at'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
+  topikSessions: {
+    table: 'topik_sessions',
+    cols: ['id', 'user_id', 'mode', 'exam_set_id', 'section', 'score', 'correct_count', 'total_count', 'duration_sec', 'completed_at', 'created_at'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
+  topikMistakes: {
+    table: 'topik_mistakes',
+    cols: ['id', 'user_id', 'question_id', 'session_id', 'wrong_count', 'last_wrong_at', 'mastered', 'created_at'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
+  aiChatMistakes: {
+    table: 'ai_chat_mistakes',
+    cols: ['id', 'user_id', 'scenario_id', 'scenario_name', 'user_input', 'wrong_part', 'correct_part', 'grammar_error', 'reviewed', 'created_at'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
+  aiChatNewWords: {
+    table: 'ai_chat_new_words',
+    cols: ['id', 'user_id', 'ko', 'zh', 'part_of_speech', 'scenario_id', 'created_at'],
     pk: 'id', userScope: 'user_id', writable: 'all',
   },
 };
@@ -345,6 +408,10 @@ export async function POST(req: Request) {
         applyStorageIds(table, snakeData, pk, auth.userId);
         applyUserScopeForWrite(table, snakeData, userScope, auth.userId);
         validateColumns(snakeData, cols);
+        const lenErr = checkFieldLengths(table, snakeData);
+        if (lenErr) return NextResponse.json({ error: lenErr }, { status: 400 });
+        const addFilterErr = checkPoliticalFields(table, snakeData);
+        if (addFilterErr) return NextResponse.json({ error: addFilterErr }, { status: 400 });
         const colNames = Object.keys(snakeData);
         const placeholders = colNames.map(() => '?');
         const values = normalizeSqlValues(colNames.map((c) => snakeData[c]));
@@ -391,6 +458,10 @@ export async function POST(req: Request) {
           }
         }
         validateColumns(snakeData, cols);
+        const updateLenErr = checkFieldLengths(table, snakeData);
+        if (updateLenErr) return NextResponse.json({ error: updateLenErr }, { status: 400 });
+        const updateFilterErr = checkPoliticalFields(table, snakeData);
+        if (updateFilterErr) return NextResponse.json({ error: updateFilterErr }, { status: 400 });
         if (Object.keys(snakeData).length === 0) {
           return NextResponse.json({ ok: true });
         }
@@ -409,6 +480,73 @@ export async function POST(req: Request) {
         const u = buildUserClause(userScope, auth.userId);
         const sql = `DELETE FROM ${info.table} WHERE ${pk} = ?${u.clause ? ` AND ${u.clause}` : ''}`;
         await db.run(sql, [resolveStorageId(table, id, auth.userId), ...u.params]);
+        return NextResponse.json({ ok: true });
+      }
+
+      case 'bulkPut': {
+        requireWritable(info);
+        if (!Array.isArray(data)) {
+          return NextResponse.json({ error: 'data must be an array' }, { status: 400 });
+        }
+        const statements: { sql: string; args: unknown[] }[] = [];
+        for (const item of data) {
+          const snakeData = toSnakeObj(item);
+          applyStorageIds(table, snakeData, pk, auth.userId);
+          applyUserScopeForWrite(table, snakeData, userScope, auth.userId);
+          validateColumns(snakeData, cols);
+          const idVal = resolveStorageId(table, snakeData[pk] ?? snakeData.id, auth.userId);
+          const u = buildUserClause(userScope, auth.userId);
+          const deleteSql = u.clause
+            ? `DELETE FROM ${info.table} WHERE ${pk} = ? AND ${u.clause}`
+            : `DELETE FROM ${info.table} WHERE ${pk} = ?`;
+          const deleteParams: unknown[] = u.clause ? [idVal, ...u.params] : [idVal];
+          const colNames = Object.keys(snakeData);
+          const placeholders = colNames.map(() => '?');
+          const values = normalizeSqlValues(colNames.map((c) => snakeData[c]));
+          statements.push({ sql: deleteSql, args: deleteParams });
+          statements.push({ sql: `INSERT INTO ${info.table} (${colNames.join(', ')}) VALUES (${placeholders.join(', ')})`, args: values as unknown[] });
+        }
+        await db.batch(statements);
+        return NextResponse.json({ ok: true });
+      }
+
+      case 'bulkUpdate': {
+        requireWritable(info);
+        if (!Array.isArray(data)) {
+          return NextResponse.json({ error: 'data must be an array' }, { status: 400 });
+        }
+        const statements: { sql: string; args: unknown[] }[] = [];
+        for (const item of data) {
+          const snakeData = toSnakeObj(item);
+          const itemId = resolveStorageId(table, snakeData[pk] ?? snakeData.id, auth.userId);
+          delete snakeData[pk];
+          if (userScope === 'user_id') delete snakeData.user_id;
+          if (Object.keys(snakeData).length === 0) continue;
+          validateColumns(snakeData, cols);
+          const sets = Object.keys(snakeData).map((c) => `${c} = ?`);
+          const values = normalizeSqlValues(Object.keys(snakeData).map((c) => snakeData[c]));
+          const u = buildUserClause(userScope, auth.userId);
+          statements.push({
+            sql: `UPDATE ${info.table} SET ${sets.join(', ')} WHERE ${pk} = ?${u.clause ? ` AND ${u.clause}` : ''}`,
+            args: [...values, itemId, ...u.params],
+          });
+        }
+        if (statements.length > 0) await db.batch(statements);
+        return NextResponse.json({ ok: true });
+      }
+
+      case 'bulkDelete': {
+        requireWritable(info);
+        if (!Array.isArray(data)) {
+          return NextResponse.json({ error: 'data must be an array' }, { status: 400 });
+        }
+        const u = buildUserClause(userScope, auth.userId);
+        const delSql = `DELETE FROM ${info.table} WHERE ${pk} = ?${u.clause ? ` AND ${u.clause}` : ''}`;
+        const statements = data.map((itemId: unknown) => ({
+          sql: delSql,
+          args: [resolveStorageId(table, itemId, auth.userId), ...u.params],
+        }));
+        if (statements.length > 0) await db.batch(statements);
         return NextResponse.json({ ok: true });
       }
 
@@ -434,6 +572,7 @@ export async function POST(req: Request) {
         }
 
         if (op === 'in' && Array.isArray(scopedValue)) {
+          if (scopedValue.length === 0) return NextResponse.json([]);
           const resolvedValues = snField === pk
             ? scopedValue.map((v) => resolveStorageId(table, v, auth.userId))
             : scopedValue;

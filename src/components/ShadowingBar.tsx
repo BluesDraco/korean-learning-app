@@ -187,7 +187,11 @@ export function ShadowingBar({
 
         <button
           onClick={onNext}
-          className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[var(--bg-input)] text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)] transition-colors text-sm font-medium"
+          className={`flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
+            recordState === 'recorded'
+              ? 'bg-[var(--pink-primary)] text-white'
+              : 'bg-[var(--bg-input)] text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)]'
+          }`}
         >
           <SkipForward size={16} />
           下一句

@@ -1,6 +1,7 @@
 'use client';
 
 import { Plus, Check, Loader2 } from 'lucide-react';
+import { HighlightedExample } from '@/components/vocabulary/HighlightedExample';
 
 export interface WordCardData {
   originalText: string;
@@ -24,10 +25,10 @@ export function WordCard({ data, loading, onClose, onAdd }: WordCardProps) {
   if (!data && !loading) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center" style={{ paddingBottom: 'calc(56px + env(safe-area-inset-bottom, 0px))' }} onClick={onClose}>
       <div className="absolute inset-0 bg-black/70" />
       <div
-        className="relative bg-[var(--bg-card)] border border-[var(--border-color)] rounded-t-2xl md:rounded-2xl p-5 w-full md:w-96 max-h-[80vh] overflow-y-auto mx-0 md:mx-4 animate-slide-up"
+        className="relative bg-[var(--bg-card)] border border-[var(--border-color)] rounded-t-2xl md:rounded-2xl p-5 pb-[calc(20px+env(safe-area-inset-bottom,0px))] md:pb-5 w-full md:w-96 max-h-[80dvh] overflow-y-auto mx-0 md:mx-4 animate-slide-up"
         onClick={(e) => e.stopPropagation()}
       >
         {loading ? (
@@ -71,7 +72,7 @@ export function WordCard({ data, loading, onClose, onAdd }: WordCardProps) {
               <div className="space-y-2 mb-4">
                 <p className="text-xs text-[var(--text-muted)] font-medium">例句</p>
                 <div className="bg-[var(--bg-input)] rounded-lg p-3">
-                  <p className="text-sm text-[var(--text-primary)]">{data.example.text}</p>
+                  <HighlightedExample text={data.example.text} word={data.dictionaryForm} className="text-sm text-[var(--text-primary)]" />
                   <p className="text-xs text-[var(--text-secondary)] mt-1">{data.example.translation}</p>
                 </div>
               </div>

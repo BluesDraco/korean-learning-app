@@ -2,9 +2,10 @@ import { NextResponse } from 'next/server';
 import { getAuthFromCookie } from '@/lib/server/auth';
 import { checkAiRateLimit, recordAiUsage } from '@/lib/server/rate-limit';
 import { fetchWithTimeout } from '@/lib/fetch';
+import { filterContent } from '@/lib/contentFilter';
 
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
-const DEEPSEEK_MODEL = 'deepseek-v4-flash';
+const DEEPSEEK_MODEL = 'deepseek-chat';
 
 export async function POST(req: Request) {
   const auth = await getAuthFromCookie();
@@ -17,6 +18,13 @@ export async function POST(req: Request) {
     const { text, topic } = await req.json();
     if (!text || typeof text !== 'string' || !text.trim()) {
       return NextResponse.json({ error: 'Missing text' }, { status: 400 });
+    }
+    if (text.length > 1000) {
+      return NextResponse.json({ error: '输入不能超过1000个字符' }, { status: 400 });
+    }
+    const writingCheck = filterContent(text, 'ai_input');
+    if (!writingCheck.ok) {
+      return NextResponse.json({ error: writingCheck.reason }, { status: 400 });
     }
 
     const limit = await checkAiRateLimit(auth.userId, 'analyze');

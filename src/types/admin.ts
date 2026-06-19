@@ -65,6 +65,26 @@ export interface ActivityFeedItem {
   link?: string;
 }
 
+// ── User Registration Stats ──
+export interface RegTrendPoint {
+  date: string;
+  count: number;
+  cumulative: number;
+}
+
+export interface RegUser {
+  id: string;
+  username: string;
+  createdAt: number;
+}
+
+export interface UserRegStats {
+  daily: RegTrendPoint[];
+  allDaily: RegTrendPoint[];
+  monthly: RegTrendPoint[];
+  recentUsers: RegUser[];
+}
+
 // ── Dashboard Response ──
 export interface DashboardResponse {
   overview: DashboardOverview;
@@ -73,6 +93,7 @@ export interface DashboardResponse {
   userFunnel: UserFunnel;
   featureUsage: FeatureUsage[];
   activityFeed: ActivityFeedItem[];
+  userRegStats: UserRegStats;
 }
 
 // ===== Revenue =====
@@ -163,6 +184,7 @@ export interface UpdateUserBody {
   membershipExpiry?: number | null;
   banned?: boolean;
   adminNote?: string;
+  role?: 'user' | 'admin';
 }
 
 // ===== Content =====

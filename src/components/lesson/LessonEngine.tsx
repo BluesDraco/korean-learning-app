@@ -54,7 +54,19 @@ export default function LessonEngine({ course, dayNum, source }: Props) {
   const cardsRef = useRef(cards);
   cardsRef.current = cards;
   const totalCards = cards.length;
-  const [currentCard, setCurrentCard] = useState(0);
+  const SESSION_KEY = `lesson-progress-day-${dayNum}`;
+
+  const [currentCard, setCurrentCard] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem(`lesson-progress-day-${dayNum}`);
+      if (saved) {
+        const { idx, total } = JSON.parse(saved) as { idx: number; total: number };
+        const builtTotal = buildLessonCards(course, 2).length;
+        if (idx > 0 && idx < builtTotal && total === builtTotal) return idx;
+      }
+    } catch { /* ignore */ }
+    return 0;
+  });
   const [revealed, setRevealed] = useState(false);
   const [completed, setCompleted] = useState(false);
   const [playing, setPlaying] = useState(false);
@@ -73,6 +85,7 @@ export default function LessonEngine({ course, dayNum, source }: Props) {
 
   const eventsRef = useRef<{ card: LessonCard; action: string; detail: string }[]>([]);
   const scoredRef = useRef<Set<number>>(new Set());
+  const completedRef = useRef(false);
   const [result, setResult] = useState<{ leveledUp: boolean; newLevel: number; streak: number; xpAwarded: number } | null>(null);
 
   const card = cards[currentCard];
@@ -81,6 +94,14 @@ export default function LessonEngine({ course, dayNum, source }: Props) {
   const logEvent = useCallback((c: LessonCard, action: string, detail: string) => {
     eventsRef.current.push({ card: c, action, detail });
   }, []);
+
+  // persist lesson progress
+  useEffect(() => {
+    if (completed) { try { sessionStorage.removeItem(SESSION_KEY); } catch { /* ignore */ } return; }
+    try {
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify({ idx: currentCard, total: totalCards }));
+    } catch { /* ignore */ }
+  }, [currentCard, completed, totalCards]);
 
   // ── Auto-speak on card change ──
   useEffect(() => {
@@ -183,6 +204,8 @@ export default function LessonEngine({ course, dayNum, source }: Props) {
         setCurrentCard((p) => p + 1);
         setRevealed(false);
         setSelectedOption(null);
+        setOutputText('');
+        setShowKeyboard(false);
         setPlaying(false);
         setAutoPlayFailed(false);
         lessonCancelSpeech();
@@ -198,6 +221,8 @@ export default function LessonEngine({ course, dayNum, source }: Props) {
       setCurrentCard((p) => p - 1);
       setRevealed(false);
       setSelectedOption(null);
+      setOutputText('');
+      setShowKeyboard(false);
       setPlaying(false);
       setAutoPlayFailed(false);
       lessonCancelSpeech();
@@ -254,6 +279,7 @@ export default function LessonEngine({ course, dayNum, source }: Props) {
       updateMastery({ dayNum: course.day, itemType, itemIdx, source, quality: answerResult.quality });
     }
     const r = await recordLessonComplete(course, eventsRef.current);
+    completedRef.current = true;
     setResult(r);
   }, [result, card, currentCard, course, selectedOption, revealed, outputText]);
 
@@ -263,6 +289,8 @@ export default function LessonEngine({ course, dayNum, source }: Props) {
       lessonCancelSpeech();
       const events = eventsRef.current;
       if (events.length === 0) return;
+      // Skip if lesson was already fully recorded by handleComplete
+      if (completedRef.current) return;
       // Save words/XP/streak if user saw at least a few cards before exiting
       if (events.length >= 3) {
         import('@/lib/lesson/recordLesson').then(({ recordLessonComplete }) => {
@@ -292,7 +320,7 @@ export default function LessonEngine({ course, dayNum, source }: Props) {
   const goPrevDay = () => { if (dayNum > 1) router.push(`/course/${dayNum - 1}${source ? `?source=${source}` : ''}`); };
 
   if (showBrowse) {
-    return <BrowseDrawer course={course} dayNum={dayNum} onClose={() => setShowBrowse(false)} goNextDay={goNextDay} goPrevDay={goPrevDay} />;
+    return <BrowseDrawer course={course} dayNum={dayNum} onClose={() => setShowBrowse(false)} goNextDay={goNextDay} goPrevDay={goPrevDay} outputText={outputText} setOutputText={setOutputText} />;
   }
 
   if (completed) {
@@ -301,8 +329,7 @@ export default function LessonEngine({ course, dayNum, source }: Props) {
         <CompletionView
           course={course} dayNum={dayNum}
           outputText={outputText} setOutputText={setOutputText}
-          showKeyboard={showKeyboard} setShowKeyboard={setShowKeyboard}
-          isMobile={isMobile} result={result} onComplete={handleComplete}
+          result={result} onComplete={handleComplete}
           goPrevDay={goPrevDay} goNextDay={goNextDay}
           source={source}
         />
@@ -311,15 +338,19 @@ export default function LessonEngine({ course, dayNum, source }: Props) {
   }
 
   const cardLabel = () => {
-    switch (card.type) {
-      case 'word-intro': return `单词 · ${currentCard + 1}/${totalCards}`;
-      case 'grammar-intro': return `语法 · ${currentCard + 1}/${totalCards}`;
-      case 'sentence-intro': return `实用句 · ${currentCard + 1}/${totalCards}`;
-      case 'listen-choice': return `听力选择 · ${currentCard + 1}/${totalCards}`;
-      case 'speak-repeat': return `影子跟读 · ${currentCard + 1}/${totalCards}`;
-      case 'match-pairs': return `${card.matchDirection === 'zh-to-ko' ? '中翻韩' : '韩翻中'} · ${currentCard + 1}/${totalCards}`;
-      case 'output': return `输出练习 · ${currentCard + 1}/${totalCards}`;
-    }
+    const typeLabels: Record<string, string> = {
+      'word-intro': '单词学习',
+      'grammar-intro': '语法',
+      'sentence-intro': '实用句',
+      'listen-choice': '听力选择',
+      'speak-repeat': '跟读',
+      'match-pairs': card.matchDirection === 'zh-to-ko' ? '中翻韩' : '韩翻中',
+      'output': '输出练习',
+    };
+    const label = typeLabels[card.type] ?? card.type;
+    const sameType = cards.filter(c => c.type === card.type);
+    const idxInType = cards.slice(0, currentCard + 1).filter(c => c.type === card.type).length;
+    return `${label} ${idxInType}/${sameType.length}`;
   };
 
   const showSpeaker = card.type !== 'output';
@@ -335,9 +366,17 @@ export default function LessonEngine({ course, dayNum, source }: Props) {
 
       {/* Top bar */}
       <div className="flex items-center justify-between">
-        <Link href={source === 'daily' ? '/daily' : '/course'} className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors">
+        <button
+          onClick={() => {
+            if (currentCard === 0) { router.push(source === 'daily' ? '/daily' : '/course'); return; }
+            if (confirm('课程还未完成，确定退出？已学内容会自动保存。')) {
+              router.push(source === 'daily' ? '/daily' : '/course');
+            }
+          }}
+          className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
+        >
           <ArrowLeft size={20} />
-        </Link>
+        </button>
         <div className="text-center">
           <span className="text-xs font-bold text-[var(--text-primary)]">Day {course.day}</span>
           <span className="text-[11px] text-[var(--text-muted)] ml-1">{course.title}</span>
@@ -355,10 +394,7 @@ export default function LessonEngine({ course, dayNum, source }: Props) {
 
       {/* Flashcard */}
       <div
-        onClick={!isInteractive && !isPassiveCard ? reveal : undefined}
-        className={`relative bg-[var(--bg-card)] border border-[var(--border-color)] rounded-3xl p-8 min-h-[340px] flex flex-col items-center justify-center text-center transition-all select-none ${
-          !isInteractive && !isPassiveCard ? 'cursor-pointer hover:border-[var(--pink-pale)]/50' : ''
-        }`}
+        className="relative bg-[var(--bg-card)] border border-[var(--border-color)] rounded-3xl p-8 min-h-[340px] flex flex-col items-center justify-center text-center transition-all select-none"
       >
         {/* Speaker button */}
         {showSpeaker && (
@@ -453,14 +489,19 @@ export default function LessonEngine({ course, dayNum, source }: Props) {
         ) : !canGoNext ? (
           <span className="text-xs text-[var(--text-muted)]">请选择一个选项</span>
         ) : (
-          <button
-            onClick={goNext}
-            disabled={transitioning}
-            className="flex items-center gap-1 text-sm px-4 py-2.5 rounded-xl bg-[var(--pink-primary)] text-white font-medium hover:opacity-90 transition-colors disabled:opacity-50"
-          >
-            {currentCard + 1 >= totalCards ? '完成' : '下一张'}
-            <ArrowRight size={16} />
-          </button>
+          <div className="flex flex-col items-end gap-1">
+            {selectedOption !== null && selectedOption !== card.correctOption && (
+              <span className="text-[10px] text-[var(--peach-soft)]">答错了，稍后会再出现</span>
+            )}
+            <button
+              onClick={goNext}
+              disabled={transitioning}
+              className="flex items-center gap-1 text-sm px-4 py-2.5 rounded-xl bg-[var(--pink-primary)] text-white font-medium hover:opacity-90 transition-colors disabled:opacity-50"
+            >
+              {currentCard + 1 >= totalCards ? '完成' : '下一张'}
+              <ArrowRight size={16} />
+            </button>
+          </div>
         )}
       </div>
     </div>

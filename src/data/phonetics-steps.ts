@@ -155,7 +155,7 @@ export const progressiveSteps: ProgressiveStep[] = [
       { korean: '감사합니다', pronunciation: 'gam-sa-ham-ni-da', meaning: '谢谢' },
       { korean: '반갑습니다', pronunciation: 'ban-gap-seum-ni-da', meaning: '很高兴见到你' },
       { korean: '사랑해요', pronunciation: 'sa-rang-hae-yo', meaning: '我爱你' },
-      { korean: '미안해요', pronunciation: 'mi-a-nae-yo', meaning: '对不起' },
+      { korean: '미안해요', pronunciation: 'mi-an-hae-yo', meaning: '对不起' },
     ],
   },
 ];

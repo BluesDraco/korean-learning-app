@@ -12,7 +12,7 @@ export function MobileAppShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden bg-[#fbf7f0]">
+    <div className="min-h-screen w-full overflow-x-hidden bg-[var(--bg-base)]">
       <MobilePageContainer>{children}</MobilePageContainer>
       <BottomTabBar />
     </div>

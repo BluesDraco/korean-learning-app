@@ -2,19 +2,38 @@
 
 import { useState, useEffect } from 'react';
 
+function checkMobile() {
+  if (typeof window === 'undefined') return false;
+  return window.innerWidth < 768;
+}
+
+function checkDesktop() {
+  if (typeof window === 'undefined') return false;
+  return window.innerWidth >= 768;
+}
+
 export function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(checkMobile);
 
   useEffect(() => {
-    const check = () => {
-      const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-      const isSmall = window.innerWidth < 768;
-      setIsMobile(hasTouch && isSmall);
-    };
-    check();
-    window.addEventListener('resize', check);
-    return () => window.removeEventListener('resize', check);
+    const check = () => setIsMobile(checkMobile());
+    const ro = new ResizeObserver(check);
+    ro.observe(document.documentElement);
+    return () => ro.disconnect();
   }, []);
 
   return isMobile;
+}
+
+export function useIsDesktop() {
+  const [isDesktop, setIsDesktop] = useState(checkDesktop);
+
+  useEffect(() => {
+    const check = () => setIsDesktop(checkDesktop());
+    const ro = new ResizeObserver(check);
+    ro.observe(document.documentElement);
+    return () => ro.disconnect();
+  }, []);
+
+  return isDesktop;
 }

@@ -41,7 +41,7 @@ export default function BuddySquarePage() {
       }
 
       setLoading(false);
-    })();
+    })().catch(() => setLoading(false));
   }, []);
 
   return (

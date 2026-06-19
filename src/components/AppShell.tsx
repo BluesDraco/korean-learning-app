@@ -7,19 +7,48 @@ import { BottomTabBar } from '@/components/mobile/BottomTabBar';
 import { FloatingDecorations } from '@/components/FloatingDecorations';
 import { useAuth } from '@/components/AuthProvider';
 
+const SHORTCUT_KEY = 'tori_shortcuts';
+
+const ALL_SHORTCUTS = [
+  { id: 'kpop',     label: '♪  KPOP 跟唱',  href: '/korea/kpop',      style: { background: '#201815', color: '#fff', border: 'none' } },
+  { id: 'news',     label: '◈  热点阅读',    href: '/korea/kpop/news', style: { background: '#fff0f5', color: '#f0799b', border: '1px solid rgba(255,127,168,.18)' } },
+  { id: 'analyze',  label: '⚙  文章拆解',    href: '/ai/analyze',      style: { background: '#fff', color: '#5a4640', border: '1px solid var(--desktop-line)' } },
+  { id: 'review',   label: '◇  闪卡复习',    href: '/review',          style: { background: '#eaf8f5', color: '#4e746d', border: 'none' } },
+  { id: 'dict',     label: '🔍  查词翻译',    href: '/dictionary',      style: { background: '#fff', color: '#5a4640', border: '1px solid var(--desktop-line)' } },
+  { id: 'typing',   label: '⌨  韩文打字',    href: '/typing',          style: { background: '#fff', color: '#5a4640', border: '1px solid var(--desktop-line)' } },
+  { id: 'reading',  label: '📖  文章阅读',    href: '/reading',         style: { background: '#fff', color: '#5a4640', border: '1px solid var(--desktop-line)' } },
+  { id: 'shadow',   label: '🎬  影子跟读',    href: '/shadowing',       style: { background: '#fff', color: '#5a4640', border: '1px solid var(--desktop-line)' } },
+  { id: 'pronounce',label: '🎤  发音练习',    href: '/pronunciation',   style: { background: '#fff', color: '#5a4640', border: '1px solid var(--desktop-line)' } },
+  { id: 'writing',  label: '✏  写作练习',    href: '/writing',         style: { background: '#fff', color: '#5a4640', border: '1px solid var(--desktop-line)' } },
+];
+
+const DEFAULT_IDS = ['kpop', 'news', 'analyze', 'review'];
+
+function loadShortcuts(): string[] {
+  if (typeof window === 'undefined') return DEFAULT_IDS;
+  try {
+    const v = localStorage.getItem(SHORTCUT_KEY);
+    return v ? JSON.parse(v) : DEFAULT_IDS;
+  } catch { return DEFAULT_IDS; }
+}
+
+function saveShortcuts(ids: string[]) {
+  try { localStorage.setItem(SHORTCUT_KEY, JSON.stringify(ids)); } catch {}
+}
+
 const NAV_ITEMS = [
-  { id: 'today',    icon: '⌂', label: '今日', href: '/daily' },
-  { id: 'mine',     icon: '●', label: '我的', href: '/mine' },
-  { id: 'tools',    icon: '⚙', label: '工具', href: '/tools' },
-  { id: 'learn',    icon: '▣', label: '学习', href: '/learning' },
-  { id: 'explore',  icon: '◉', label: '探索', href: '/explore' },
+  { id: 'today',    icon: '⌂︎', label: '今日', href: '/daily' },
+  { id: 'vocabulary', icon: '◈︎', label: '词汇', href: '/vocabulary' },
+  { id: 'tools',    icon: '⚙︎', label: '工具', href: '/tools' },
+  { id: 'learn',    icon: '▣︎', label: '学习', href: '/learning' },
+  { id: 'explore',  icon: '◉︎', label: '探索', href: '/explore' },
 ] as const;
 
 function resolvePageMeta(pathname: string | null) {
   const p = pathname || '/daily';
   if (p.startsWith('/admin')) return { title: '管理后台', activeId: 'today', hidePanel: true };
   if (p === '/daily') return { title: '今日', activeId: 'today', hidePanel: false };
-  if (p.startsWith('/mine')) return { title: '我的', activeId: 'mine', hidePanel: false };
+  if (p.startsWith('/mine') || p.startsWith('/vocabulary')) return { title: '词汇', activeId: 'vocabulary', hidePanel: false };
   if (p === '/tools' || p.startsWith('/tools/')
     || p.startsWith('/typing') || p.startsWith('/writing')
     || p.startsWith('/pronunciation') || p.startsWith('/shadowing')
@@ -30,8 +59,8 @@ function resolvePageMeta(pathname: string | null) {
   if (p.startsWith('/explore')
     || p.startsWith('/korea/kpop/news')
     || p.startsWith('/korea/kpop')
-    || p.startsWith('/korea/')
-    || p.startsWith('/vocabulary')) return { title: '探索', activeId: 'explore', hidePanel: false };
+    || p.startsWith('/korea/')) return { title: '探索', activeId: 'explore', hidePanel: false };
+  if (p === '/settings') return { title: '设置', activeId: '', hidePanel: true };
   return { title: 'Tori Korean', activeId: 'today', hidePanel: false };
 }
 
@@ -48,15 +77,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <>
       {/* ═══ Mobile ═══ */}
-      <div className="block lg:hidden">
-        <div className="fixed top-0 left-0 right-0 z-[60] bg-[var(--bg-card)]/90 backdrop-blur border-b border-[var(--border-color)] py-1.5 text-center pt-safe px-4">
+      <div className="block md:hidden">
+        <div className="fixed top-0 left-0 right-0 z-[60] bg-[var(--bg-card)] border-b border-[var(--border-color)] py-1.5 text-center pt-safe px-4">
           <span className="text-[11px] font-bold tracking-wider text-[var(--pink-primary)]" style={{ fontFamily: "'KaiTi', 'STKaiti', cursive" }}>
             内测期间全功能免费体验
           </span>
         </div>
         <div className="h-[36px] pt-safe" />
         <Navbar />
-        <main className="relative min-h-dvh mx-auto w-full max-w-screen-sm px-4 pt-3 overflow-x-hidden bg-[var(--bg-base)] pb-[calc(72px+env(safe-area-inset-bottom,0px))]">
+        <main className="relative min-h-screen min-h-dvh mx-auto w-full max-w-screen-sm px-4 pt-3 overflow-x-hidden bg-[var(--bg-base)] pb-[calc(72px+env(safe-area-inset-bottom,0px))]">
           <FloatingDecorations />
           <div className="relative z-[1]">{children}</div>
           {/* Contact footer */}
@@ -70,7 +99,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </div>
 
       {/* ═══ Desktop ═══ */}
-      <div className="hidden lg:block desktop-body">
+      <div className="hidden md:block desktop-body">
         <div className="desktop-app" style={meta.hidePanel ? { gridTemplateColumns: 'var(--desktop-sidebar) minmax(0, 1fr)' } : undefined}>
           {/* Sidebar */}
           <aside className="desktop-sidebar">
@@ -87,12 +116,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             ))}
             {/* User entry at bottom */}
             <div style={{ marginTop: 'auto', borderTop: '1px solid var(--desktop-line)' }}>
-              {/* Contact info */}
-              <div style={{ padding: '10px 16px 6px', fontSize: 10, color: 'var(--text-muted)', lineHeight: 1.7 }}>
-                <div style={{ fontWeight: 700, marginBottom: 2 }}>联系我</div>
-                <div>微信：13817498530</div>
-                <div>邮件：929989569@qq.com</div>
-              </div>
               {user?.role === 'admin' && (
                 <button
                   onClick={() => navigate('/admin')}
@@ -122,21 +145,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   width: '100%',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: 8,
+                  justifyContent: 'center',
                   padding: '10px 16px',
                   background: 'none',
                   border: 'none',
                   cursor: 'pointer',
-                  color: 'var(--text-secondary)',
-                  fontSize: 12,
-                  textAlign: 'left',
                 }}
               >
-                <span style={{ width: 28, height: 28, borderRadius: '50%', background: 'var(--pink-pale)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, flexShrink: 0 }}>
+                <span style={{ width: 32, height: 32, borderRadius: '50%', background: 'var(--pink-pale)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16 }}>
                   🐰
-                </span>
-                <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                  {user?.nickname ?? '未登录'}
                 </span>
               </button>
             </div>
@@ -148,8 +165,16 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <header className="desktop-topbar">
                 <div>
                   <h1>{meta.title}</h1>
+                  {meta.activeId === 'today' && (
+                    <p style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 2 }}>
+                      {user ? `@${user.nickname}` : '未登录'}
+                    </p>
+                  )}
                 </div>
-                <span className="desktop-badge">内测体验</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>微信 13817498530</span>
+                  <span className="desktop-badge">内测体验</span>
+                </div>
               </header>
               <section className="desktop-content">
                 {children}
@@ -171,36 +196,78 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 }
 
 function PanelContent({ activeId, navigate }: { activeId: string; navigate: (href: string) => void }) {
+  const [selectedIds, setSelectedIds] = useState<string[]>(DEFAULT_IDS);
+  const [editing, setEditing] = useState(false);
+
+  useEffect(() => {
+    setSelectedIds(loadShortcuts());
+  }, []);
+
+  const toggleItem = (id: string) => {
+    setSelectedIds(prev => {
+      const next = prev.includes(id)
+        ? prev.filter(x => x !== id)
+        : prev.length < 4 ? [...prev, id] : prev;
+      saveShortcuts(next);
+      return next;
+    });
+  };
+
+  const shortcuts = ALL_SHORTCUTS.filter(s => selectedIds.includes(s.id));
+
   return (
     <>
       <div className="panel-card">
-        <h3>快捷入口</h3>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginTop: 8 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+          <h3 style={{ margin: 0 }}>快捷入口</h3>
           <button
-            onClick={() => navigate('/korea/kpop')}
-            style={{ background: '#201815', color: '#fff', border: 'none', borderRadius: 999, padding: '8px 14px', fontSize: 12, fontWeight: 700, cursor: 'pointer', textAlign: 'left' }}
+            onClick={() => setEditing(!editing)}
+            style={{ fontSize: 11, color: editing ? '#f0799b' : 'var(--text-muted)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 700, padding: '2px 4px' }}
           >
-            {'♪  KPOP 跟唱'}
-          </button>
-          <button
-            onClick={() => navigate('/korea/kpop/news')}
-            style={{ background: '#fff0f5', color: '#f0799b', border: '1px solid rgba(255,127,168,.18)', borderRadius: 999, padding: '8px 14px', fontSize: 12, fontWeight: 700, cursor: 'pointer', textAlign: 'left' }}
-          >
-            {'◈  热点阅读'}
-          </button>
-          <button
-            onClick={() => navigate('/ai/analyze')}
-            style={{ background: '#fff', color: '#5a4640', border: '1px solid var(--desktop-line)', borderRadius: 999, padding: '8px 14px', fontSize: 12, fontWeight: 700, cursor: 'pointer', textAlign: 'left' }}
-          >
-            {'⚙  文章拆解'}
-          </button>
-          <button
-            onClick={() => navigate('/review')}
-            style={{ background: '#eaf8f5', color: '#4e746d', border: 'none', borderRadius: 999, padding: '8px 14px', fontSize: 12, fontWeight: 700, cursor: 'pointer', textAlign: 'left' }}
-          >
-            {'◇  闪卡复习'}
+            {editing ? '完成' : '编辑'}
           </button>
         </div>
+
+        {editing ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+            <p style={{ fontSize: 11, color: 'var(--text-muted)', margin: '0 0 4px' }}>最多选 4 个</p>
+            {ALL_SHORTCUTS.map(s => {
+              const checked = selectedIds.includes(s.id);
+              const disabled = !checked && selectedIds.length >= 4;
+              return (
+                <button
+                  key={s.id}
+                  onClick={() => toggleItem(s.id)}
+                  disabled={disabled}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 8,
+                    padding: '7px 12px', borderRadius: 999, fontSize: 12, fontWeight: 700,
+                    cursor: disabled ? 'not-allowed' : 'pointer', textAlign: 'left',
+                    background: checked ? '#201815' : '#f5ece7',
+                    color: checked ? '#fff' : '#89756e',
+                    border: 'none', opacity: disabled ? 0.4 : 1,
+                    transition: 'all 0.15s',
+                  }}
+                >
+                  <span style={{ width: 14, height: 14, borderRadius: '50%', background: checked ? '#ff7fa8' : 'rgba(0,0,0,0.15)', flexShrink: 0, display: 'inline-block' }} />
+                  {s.label}
+                </button>
+              );
+            })}
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            {shortcuts.map(s => (
+              <button
+                key={s.id}
+                onClick={() => navigate(s.href)}
+                style={{ ...s.style, borderRadius: 999, padding: '8px 14px', fontSize: 12, fontWeight: 700, cursor: 'pointer', textAlign: 'left' }}
+              >
+                {s.label}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
       {activeId === 'today' && <TodayPanel />}
     </>

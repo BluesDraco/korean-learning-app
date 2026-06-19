@@ -1,9 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Edit3, Keyboard, Trophy, Target, Mic, FileText, ArrowRight } from 'lucide-react';
+import { Edit3, Trophy, Target, Mic, FileText, ArrowRight } from 'lucide-react';
 import type { DailyCourse } from '@/data/thirtyDayCourse';
-import { KoreanKeyboard } from '@/components/KoreanKeyboard';
 import { generateAbilities } from '@/lib/lesson/buildLessonCards';
 import { COURSE_GRAMMAR_MAP } from '@/lib/lesson/recordLesson';
 import { sentencePatterns } from '@/data/grammar-new';
@@ -15,9 +14,6 @@ interface Props {
   dayNum: number;
   outputText: string;
   setOutputText: (v: string) => void;
-  showKeyboard: boolean;
-  setShowKeyboard: (v: boolean) => void;
-  isMobile: boolean;
   result: { leveledUp: boolean; newLevel: number; streak: number; xpAwarded: number } | null;
   onComplete: () => void;
   goPrevDay: () => void;
@@ -47,7 +43,7 @@ function StatCard({ value, label, color, delay, icon }: { value: string; label: 
 }
 
 export function CompletionView({
-  course, dayNum, outputText, setOutputText, showKeyboard, setShowKeyboard, isMobile,
+  course, dayNum, outputText, setOutputText,
   result, onComplete, goPrevDay, goNextDay, source,
 }: Props) {
   const abilities = generateAbilities(course);
@@ -135,19 +131,12 @@ export function CompletionView({
           <textarea
             value={outputText}
             onChange={(e) => setOutputText(e.target.value)}
-            onFocus={() => isMobile && setShowKeyboard(true)}
+            onFocus={(e) => setTimeout(() => e.target.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300)}
             placeholder="写下你的韩语句子..."
             rows={3}
-            className="w-full bg-[var(--bg-input)] border border-[var(--border-color)] rounded-xl p-3 pr-10 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)] resize-none focus:outline-none focus:border-[var(--pink-pale)]"
+            className="w-full bg-[var(--bg-input)] border border-[var(--border-color)] rounded-xl p-3 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)] resize-none focus:outline-none focus:border-[var(--pink-pale)]"
           />
-          <button
-            onClick={() => setShowKeyboard(!showKeyboard)}
-            className={`absolute right-2 bottom-2 p-1.5 rounded-lg transition-colors ${showKeyboard ? 'bg-[var(--pink-primary)]/15 text-[var(--pink-primary)]' : 'text-[var(--text-muted)] hover:text-[var(--pink-primary)]'}`}
-          >
-            <Keyboard size={16} />
-          </button>
         </div>
-        <KoreanKeyboard value={outputText} onChange={setOutputText} visible={showKeyboard} onClose={() => setShowKeyboard(false)} />
         {outputText && (
           <div className="mt-3 p-3 bg-[var(--mint-soft)]/10 border border-[var(--mint-soft)]/20 rounded-xl">
             <p className="text-[11px] text-[var(--text-muted)] mb-1">参考例句</p>
@@ -220,6 +209,9 @@ export function CompletionView({
             下一课
           </button>
         </div>
+        {dayNum >= 30 && (
+          <p className="text-xs text-center text-[var(--text-muted)]">已完成全部 30 天课程，继续用词汇和复习功能巩固吧</p>
+        )}
         <Link
           href={source === 'daily' ? '/daily' : '/course'}
           className="block w-full py-3 rounded-xl bg-[var(--bg-input)] text-[var(--text-secondary)] font-medium text-sm text-center hover:bg-[var(--bg-accent)] transition-colors"

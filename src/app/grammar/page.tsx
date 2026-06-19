@@ -1,122 +1,2234 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect, Suspense, createContext, useContext, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
-import {
-  FileText, BookOpen, TrendingUp, Target, ChevronRight, Sparkles,
-  ArrowRight, GitCompare, Lightbulb, Search, X, AlertCircle,
-} from 'lucide-react';
+import { ArrowLeft, Search, X, AlertCircle, Volume2, Lightbulb, ChevronDown, ChevronRight, Lock } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { sentencePatterns, getTodayPattern, getRecommendedPatterns } from '@/data/grammar-new';
 import { grammarPoints, type GrammarPoint as LegacyPoint } from '@/data/grammar';
+import { grammarParts } from '@/data/grammar-parts';
 import { GrammarSession } from '@/components/grammar/GrammarSession';
 import { db } from '@/lib/db';
 import { speak } from '@/lib/tts';
-import type { GrammarPoint } from '@/types';
+import { useAuth } from '@/components/AuthProvider';
+import type { GrammarPoint, GrammarCard, UserGrammarState, ConnectionRule } from '@/types';
+import { useTheme } from '@/components/ThemeProvider';
 
-const levelConfig: Record<string, string> = {
-  absolute_beginner: 'bg-[var(--mint-soft)]/15 text-[var(--mint-soft)]',
-  beginner: 'bg-[var(--mint-soft)]/15 text-[var(--mint-soft)]',
-  elementary: 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)]',
-  intermediate: 'bg-[var(--purple-soft)]/15 text-[var(--purple-soft)]',
+// grammar-cards 按 Part 动态加载，避免 1MB 数据阻塞首屏
+const partLoaders: Record<string, () => Promise<{ [key: string]: GrammarCard[] }>> = {
+  p1: () => import('@/data/grammar-cards-p1') as any,
+  p2: () => import('@/data/grammar-cards-p2') as any,
+  p3: () => import('@/data/grammar-cards-p3') as any,
+  p4: () => import('@/data/grammar-cards-p4') as any,
+  p5: () => import('@/data/grammar-cards-p5') as any,
+  p6: () => import('@/data/grammar-cards-p6') as any,
+  p7: () => import('@/data/grammar-cards-p7') as any,
+  p8: () => import('@/data/grammar-cards-p8') as any,
+  p9: () => import('@/data/grammar-cards-p9') as any,
+  p10: () => import('@/data/grammar-cards-p10') as any,
+  p11: () => import('@/data/grammar-cards-p11') as any,
+  p12: () => import('@/data/grammar-cards-p12') as any,
 };
 
-// Comparison pairs for 易混语法对比
-interface ComparePair {
-  id: string;
-  title: string;
-  a: GrammarPoint;
-  b: GrammarPoint;
-  difference: string;
-  questions: { prompt: string; options: string[]; answer: string; explanation: string }[];
+const partCache: Record<string, GrammarCard[]> = {};
+
+async function loadPartCards(part: string): Promise<GrammarCard[]> {
+  if (partCache[part]) return partCache[part];
+  const mod = await partLoaders[part]();
+  const key = Object.keys(mod)[0];
+  partCache[part] = mod[key] as GrammarCard[];
+  return partCache[part];
 }
 
-function buildComparePairs(): ComparePair[] {
-  const find = (id: string) => sentencePatterns.find((g) => g.id === id);
-  const makePair = (id: string, title: string, aid: string, bid: string, difference: string, questions: ComparePair['questions']): ComparePair | null => {
-    const a = find(aid);
-    const b = find(bid);
-    if (!a || !b) return null;
-    return { id, title, a, b, difference, questions };
+async function loadGrammarCard(cardId: string): Promise<GrammarCard | null> {
+  const match = cardId.match(/^card-(p\d+)-/);
+  if (!match) return null;
+  const cards = await loadPartCards(match[1]);
+  return cards.find(c => c.id === cardId) ?? null;
+}
+
+const PART_ORDER = ['p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8', 'p9', 'p10', 'p11', 'p12'];
+
+async function loadNextCard(cardId: string): Promise<GrammarCard | null> {
+  const match = cardId.match(/^card-(p\d+)-l(\d+)$/);
+  if (!match) return null;
+  const part = match[1];
+  const lesson = parseInt(match[2], 10);
+  const nextId = `card-${part}-l${String(lesson + 1).padStart(2, '0')}`;
+  const cards = await loadPartCards(part);
+  const next = cards.find(c => c.id === nextId);
+  if (next) return next;
+  // Try first card of next part
+  const nextPartIdx = PART_ORDER.indexOf(part) + 1;
+  if (nextPartIdx >= PART_ORDER.length) return null;
+  const nextPart = PART_ORDER[nextPartIdx];
+  const nextPartCards = await loadPartCards(nextPart);
+  return nextPartCards[0] ?? null;
+}
+
+const LIGHT_C = { ink: '#241917', muted: '#89756e', line: '#eee0d8', pink: '#ff7fa8', pinkSoft: '#fff0f5', mint: '#aee3d8', mintBg: '#eaf8f5', purple: '#b49ccf', purpleBg: '#f3eefb', bg: '#fffbf7', card: '#fff' };
+const DARK_C  = { ink: '#F0E8FF', muted: '#B8A8C8', line: '#3A3060', pink: '#ff7fa8', pinkSoft: '#2D2848', mint: '#4A6058', mintBg: '#1E3530', purple: '#8a7ab0', purpleBg: '#2A2040', bg: '#1E1B2E', card: '#282440' };
+
+const ColorCtx = createContext<typeof LIGHT_C>(LIGHT_C);
+const useC = () => useContext(ColorCtx);
+
+const GRAMMAR_STYLES = `
+    /* L1-L5 design system */
+    .hook-box { background: linear-gradient(135deg,color-mix(in srgb,var(--pink-primary) 12%,var(--bg-card)),color-mix(in srgb,var(--mint-soft) 20%,var(--bg-card))); border-radius: 22px; padding: 20px; margin-bottom: 16px; }
+    .reminder-box { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; padding: 16px 18px; font-size: 15px; color: var(--text-secondary); line-height: 1.75; }
+    .reminder-box .hl, .reminder-box b { color: #ff7fa8; font-weight: 700; }
+    .compare-grid { display: grid; grid-template-columns: 1fr 1fr; border-radius: 18px; overflow: hidden; border: 1px solid var(--border-color); margin-bottom: 16px; }
+    .cc { padding: 18px 16px; }
+    .cc.formal { background: color-mix(in srgb,#6b7ff0 12%,var(--bg-card)); }
+    .cc.daily { background: color-mix(in srgb,#ff7fa8 10%,var(--bg-card)); }
+    .cc-lang { font-size: 12px; font-weight: 800; letter-spacing: .1em; color: var(--text-muted); margin-bottom: 10px; }
+    .compare-note { background: var(--bg-soft); border-radius: 14px; padding: 16px 18px; font-size: 15px; color: var(--text-secondary); line-height: 1.75; }
+    .compare-note .hl { color: #ff7fa8; font-weight: 700; }
+    .pill { display: inline-block; padding: 4px 10px; border-radius: 8px; font-size: 16px; font-weight: 800; }
+    .p-s { background: #ddf5ef; color: #2db89b; }
+    .p-o { background: #f3eefb; color: #b49ccf; }
+    .p-v { background: #ff7fa8; color: white; }
+    .p-n { background: #e8e8ff; color: #6b7ff0; }
+    .p-q { background: #fff8d0; color: #b89020; }
+    .tok-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+    .tok { padding: 7px 13px; border-radius: 9px; font-size: 14px; font-weight: 700; }
+    .t-s { background: #ddf5ef; color: #2db89b; }
+    .t-o { background: #f3eefb; color: #b49ccf; }
+    .t-v { background: #ff7fa8; color: white; }
+    .t-p { background: #fef3c7; color: #92400e; }
+    .t-n { background: #e8e8ff; color: #6b7ff0; }
+    .t-q { background: #fff8d0; color: #b89020; }
+    .word-col { display: flex; flex-direction: column; gap: 10px; }
+    /* L6-L10 design system */
+    .block { background: var(--bg-card); border-radius: 14px; padding: 18px; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+    .block .h2 { font-size: .95rem; font-weight: 700; margin-bottom: 10px; color: #2db89b; }
+    .ko { font-size: 17px; font-weight: 700; color: var(--text-primary); }
+    .zh { font-size: 15px; color: var(--text-muted); margin-top: 4px; line-height: 1.6; }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+    .chip { padding: 6px 13px; border-radius: 20px; font-size: .88rem; font-weight: 600; cursor: pointer; border: 2px solid transparent; transition: all .15s; }
+    .chip.s { background: #d4f5e2; color: #1a7a4a; border-color: #b2e8c8; }
+    .chip.o { background: #ede0f7; color: #6b21a8; border-color: #d8b4fe; }
+    .chip.v { background: #ffe0ea; color: #be185d; border-color: #fca5c0; }
+    .chip.p { background: #fef3c7; color: #92400e; border-color: #fcd34d; }
+    .chip.t { background: #dbeafe; color: #1e40af; border-color: #93c5fd; }
+    .chip.n { background: #f1f5f9; color: #475569; border-color: #cbd5e1; }
+    table { width: 100%; border-collapse: collapse; font-size: .86rem; }
+    th { background: color-mix(in srgb,#ff7fa8 15%,var(--bg-card)); color: #be185d; padding: 7px 10px; text-align: left; font-weight: 700; }
+    td { padding: 7px 10px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); }
+    tr:last-child td { border-bottom: none; }
+    .card-title { font-size: 21px; font-weight: 900; color: var(--text-primary); line-height: 1.3; margin: 0 0 10px 0; }
+    .card-body { font-size: 15px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 12px; }
+    .card-body b { color: var(--text-primary); }
+    /* Overview / completion page design systems */
+    .overview { padding: 0 2px; }
+    .ov-hero { background: linear-gradient(135deg,color-mix(in srgb,#ff7fa8 15%,var(--bg-card)),color-mix(in srgb,#aee3d8 20%,var(--bg-card))); border-radius: 24px; padding: 22px 20px; margin-bottom: 16px; }
+    .ov-hero-label { font-size: 12px; font-weight: 800; color: #ff7fa8; letter-spacing: .08em; margin-bottom: 6px; }
+    .ov-hero-title { font-size: 22px; font-weight: 900; color: var(--text-primary); margin-bottom: 6px; }
+    .ov-hero-sub { font-size: 15px; color: var(--text-secondary); line-height: 1.6; }
+    .ov-section { margin-bottom: 14px; }
+    .ov-section-hd { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; padding: 0 2px; }
+    .ov-section-line { width: 3px; height: 16px; border-radius: 99px; flex-shrink: 0; }
+    .ov-section-title { font-size: 15px; font-weight: 800; letter-spacing: .05em; color: var(--text-primary); }
+    .ov-block { background: var(--bg-card); border-radius: 18px; padding: 16px 18px; border: 1px solid var(--border-color); box-shadow: 0 2px 8px rgba(78,52,46,.05); margin-bottom: 14px; }
+    .struct-zh { font-size: 15px; color: var(--text-muted); margin-top: 3px; }
+    .t-t { background: #fff8d0; color: #b89020; padding: 5px 11px; border-radius: 9px; font-size: 14px; font-weight: 700; }
+    .mistake { border-radius: 14px; overflow: hidden; border: 1px solid var(--border-color); margin-bottom: 16px; }
+    .m-w { background: color-mix(in srgb,#e05555 8%,var(--bg-card)); padding: 13px 16px; display: flex; align-items: center; gap: 10px; }
+    .m-r { background: color-mix(in srgb,#2db89b 8%,var(--bg-card)); padding: 13px 16px; display: flex; align-items: center; gap: 10px; }
+    .m-txt { font-size: 15px; color: var(--text-primary); line-height: 1.6; }
+    .m-note { font-size: 15px; color: var(--text-muted); margin-top: 6px; line-height: 1.7; }
+    .bx { background: #e05555; color: white; font-size: 12px; font-weight: 800; padding: 2px 7px; border-radius: 99px; flex-shrink: 0; }
+    .bo { background: #2db89b; color: white; font-size: 12px; font-weight: 800; padding: 2px 7px; border-radius: 99px; flex-shrink: 0; }
+    .table-wrap { border-radius: 10px; overflow: hidden; border: 1px solid var(--border-color); }
+    .tbl-row { display: flex; }
+    .tbl-row.hd .tc { background: color-mix(in srgb,#ff7fa8 12%,var(--bg-card)); color: #be185d; font-weight: 800; font-size: 13px; }
+    .tc { flex: 1; padding: 10px 12px; font-size: 15px; color: var(--text-primary); border-bottom: 1px solid var(--border-color); }
+    .tbl-row:last-child .tc { border-bottom: none; }
+    /* L6-L10 overview */
+    .ov-title { font-size: 22px; font-weight: 900; color: var(--text-primary); margin: 8px 0 4px; }
+    .ov-sub { font-size: 15px; color: var(--text-muted); margin-bottom: 14px; }
+    .ov-sec { background: var(--bg-card); border-radius: 14px; padding: 16px 18px; margin-bottom: 14px; border: 1px solid var(--border-color); box-shadow: 0 2px 6px rgba(78,52,46,.05); }
+    .ov-sec h3 { font-size: 15px; font-weight: 800; color: #2db89b; margin: 0 0 10px 0; }
+    .badge { display: inline-block; background: color-mix(in srgb,#ff7fa8 15%,var(--bg-card)); color: #ff7fa8; font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 99px; letter-spacing: .05em; margin-bottom: 4px; }
+    .relearn-btn { width: 100%; padding: 13px; border-radius: 16px; border: 1.5px solid var(--border-color); background: var(--bg-card); color: var(--text-muted); font-size: 13px; font-weight: 700; cursor: pointer; margin-top: 8px; }
+    /* 三端响应式 */
+    @media (min-width: 768px) {
+      .ov-hero-title { font-size: 24px; }
+      .ov-title { font-size: 24px; }
+      .ov-block { padding: 18px 22px; }
+      .ov-sec { padding: 18px 22px; }
+    }
+    @media (min-width: 1024px) {
+      .ov-hero-title { font-size: 26px; }
+      .ov-title { font-size: 26px; }
+    }
+    /* 桌面两列布局 */
+    .overview-desktop .overview { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+    .overview-desktop .ov-hero { grid-column: 1 / -1; }
+    .overview-desktop .badge { grid-column: 1 / -1; }
+    .overview-desktop .ov-title { grid-column: 1 / -1; }
+    .overview-desktop .ov-sub { grid-column: 1 / -1; }
+`;
+
+type Tab = 'chapters' | 'practice' | 'library';
+type LessonStatus = 'done' | 'started' | 'todo';
+
+// ── localStorage helpers ──────────────────────────────────────────────────────
+
+function loadLessonStates(): Record<string, LessonStatus> {
+  if (typeof window === 'undefined') return {};
+  try {
+    return JSON.parse(localStorage.getItem('grammar_lesson_states') || '{}');
+  } catch {
+    return {};
+  }
+}
+
+function saveLessonState(cardId: string, status: LessonStatus) {
+  if (typeof window === 'undefined') return;
+  const states = loadLessonStates();
+  states[cardId] = status;
+  localStorage.setItem('grammar_lesson_states', JSON.stringify(states));
+}
+
+// ── GrammarCardView ───────────────────────────────────────────────────────────
+
+function WordBlockEl({ role, text }: { role: string; text: string }) {
+  const styles: Record<string, React.CSSProperties> = {
+    subject: { background: '#ddf5ef', color: '#2db89b' },
+    object:  { background: '#f3eefb', color: '#b49ccf' },
+    verb:    { background: '#ff7fa8', color: 'white' },
+    place:   { background: '#fff8d0', color: '#b89020' },
+    time:    { background: '#e8e8ff', color: '#6b7ff0' },
+    plain:   { background: 'var(--bg-muted)', color: 'var(--text-primary)' },
   };
-  const pairs = [
-    makePair('compare-eun-ga', '은/는 vs 이/가', 'gp-19', 'gp-20',
-      '은/는 = 主题（"至于…的话"），이/가 = 主语（"谁/什么"）。问 누가/뭐가 → 答 이/가；展开新话题/对比 → 用 은/는。',
-      [
-        { prompt: '"누가 왔어요?"（谁来了？）— 回答应该用哪个？', options: ['친구는 왔어요.', '친구가 왔어요.'], answer: '친구가 왔어요.', explanation: '回答"谁"的问题用 이/가，因为聚焦在"谁"上。' },
-        { prompt: '自我介绍时说"我是学生"，用哪个？', options: ['저는 학생이에요.', '제가 학생이에요.'], answer: '저는 학생이에요.', explanation: '自我介绍是引出话题，用 은/는。저는 = "（至于）我嘛…"。' },
-        { prompt: '"오늘___ 날씨가 좋아요"（强调"今天"）', options: ['오늘은', '오늘이'], answer: '오늘은', explanation: '对比/强调"今天"（跟其他日子对比），用 은/는。' },
-      ]),
-    makePair('compare-e-eseo', '에 vs 에서', 'gp-08', 'gp-09',
-      '에 = 位置/方向（있다/가다 用 에），에서 = 动作发生地（动作动词用 에서）。记住：에 있어요（在那里），에서 해요（在那里做）。',
-      [
-        { prompt: '"在咖啡厅喝咖啡"', options: ['카페에 커피 마셔요.', '카페에서 커피 마셔요.'], answer: '카페에서 커피 마셔요.', explanation: '마시다 是动作动词，动作发生地用 에서。' },
-        { prompt: '"在家"（说位置）', options: ['집에 있어요.', '집에서 있어요.'], answer: '집에 있어요.', explanation: '있다 表示存在，永远用 에。' },
-        { prompt: '"在学校学习"', options: ['학교에 공부해요.', '학교에서 공부해요.'], answer: '학교에서 공부해요.', explanation: '공부하다 是动作，用 에서。' },
-      ]),
-    makePair('compare-ieyo-imnida', '이에요/예요 vs 입니다', 'gp-01', 'gp-02',
-      '이에요/예요 = 礼貌体（日常用），입니다 = 正式体（面试/演讲/对长辈）。日常对话用 이에요/예요 就够了。',
-      [
-        { prompt: '面试时自我介绍，用哪个？', options: ['저는 김민수입니다.', '저는 김민수예요.'], answer: '저는 김민수입니다.', explanation: '正式场合用 입니다。' },
-        { prompt: '跟朋友说"我是学生"，用哪个？', options: ['저는 학생이에요.', '저는 학생입니다.'], answer: '저는 학생이에요.', explanation: '朋友之间用 이에요/예요 更自然。' },
-      ]),
-    makePair('compare-an-anieyo', '안 vs 아니에요', 'gp-15', 'gp-16',
-      '안 = 否定动作（"不做"），아니에요 = 否定身份（"不是"）。안 가요（不去），학생이 아니에요（不是学生）。',
-      [
-        { prompt: '"不去学校"', options: ['학교에 안 가요.', '학교가 아니에요.'], answer: '학교에 안 가요.', explanation: '否定动作"去"用 안。' },
-        { prompt: '"我不是学生"', options: ['저는 학생 안 해요.', '저는 학생이 아니에요.'], answer: '저는 학생이 아니에요.', explanation: '否定身份用 아니에요。' },
-      ]),
-    makePair('compare-isseoyo-eopseoyo', '있어요 vs 없어요', 'gp-05', 'gp-18',
-      '있어요 = 有/在，없어요 = 没有/不在。一对反义词，口语最高频。',
-      [
-        { prompt: '"有时间"', options: ['시간 있어요.', '시간 없어요.'], answer: '시간 있어요.', explanation: '있어요 = 有。' },
-        { prompt: '"没有钱"', options: ['돈 있어요.', '돈 없어요.'], answer: '돈 없어요.', explanation: '없어요 = 没有。' },
-      ]),
-  ];
-  return pairs.filter((p): p is ComparePair => p !== null);
+  const s = styles[role] || styles.plain;
+  return (
+    <span style={{ display: 'inline-flex', alignItems: 'center', padding: '4px 10px', borderRadius: 8, fontSize: 17, fontWeight: 800, whiteSpace: 'nowrap', ...s }}>
+      {text}
+    </span>
+  );
 }
 
-const comparePairsData = buildComparePairs();
+function TokenEl({ role }: { role: string }) {
+  const styles: Record<string, React.CSSProperties> = {
+    subject: { background: '#ddf5ef', color: '#2db89b' },
+    object:  { background: '#f3eefb', color: '#b49ccf' },
+    verb:    { background: '#ff7fa8', color: 'white' },
+    place:   { background: '#fff8d0', color: '#b89020' },
+    time:    { background: '#e8e8ff', color: '#6b7ff0' },
+  };
+  const roleLabel: Record<string, string> = {
+    subject: '主语', object: '宾语', verb: '谓语', place: '地点', time: '时间',
+  };
+  if (role === 'plain') return null;
+  const s = styles[role] || {};
+  return (
+    <span style={{ fontSize: 14, padding: '4px 12px', borderRadius: 8, fontWeight: 800, ...s }}>
+      {roleLabel[role] || role}
+    </span>
+  );
+}
 
-function GrammarContent() {
-  const [sessionGrammar, setSessionGrammar] = useState<GrammarPoint | null>(null);
-  const [reviewQueue, setReviewQueue] = useState<GrammarPoint[]>([]);
-  const [viewMode, setViewMode] = useState<'home' | 'library' | 'comparison'>('home');
-  const [grammarStates, setGrammarStates] = useState<Record<string, import('@/types').UserGrammarState>>({});
-  const [comparePair, setComparePair] = useState<ComparePair | null>(null);
-  const [compareQIdx, setCompareQIdx] = useState(0);
-  const [compareResult, setCompareResult] = useState<'correct' | 'wrong' | null>(null);
-  const [selectedCompareOption, setSelectedCompareOption] = useState<string | null>(null);
+// ── GrammarCardView sub-components ───────────────────────────────────────────
 
-  // Legacy library state
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activeCategory, setActiveCategory] = useState<string>('all');
-  const [activeLevel, setActiveLevel] = useState<string>('all');
-  const [expandedId, setExpandedId] = useState<string | null>(null);
+function CardSortStep({ examples }: { examples: GrammarCard['cardExamples'] }) {
+  const C = useC();
+  const quizzes = React.useMemo(() => examples.map(eg => ({
+    words: eg.wordBlocks.map(wb => wb.text),
+    answer: eg.wordBlocks.map(wb => wb.text),
+    zh: eg.zh,
+  })), [examples]);
 
-  const searchParams = useSearchParams();
-  const patternParam = searchParams.get('pattern');
+  const [qIdx, setQIdx] = React.useState(0);
+  const [order, setOrder] = React.useState<string[]>([]);
+  const [answers, setAnswers] = React.useState<string[]>([]);
+  const [used, setUsed] = React.useState<number[]>([]);
+  const [checked, setChecked] = React.useState(false);
+  const [result, setResult] = React.useState<'ok' | 'ng' | null>(null);
+  const [allDone, setAllDone] = React.useState(false);
+  const timerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Load user grammar states
-  useEffect(() => {
-    (async () => {
-      try {
-        const states = await db.userGrammarStates.toArray();
-        const map: Record<string, import('@/types').UserGrammarState> = {};
-        for (const s of states) map[s.id] = s;
-        setGrammarStates(map);
-      } catch (_e) {}
-    })();
+  React.useEffect(() => {
+    return () => { if (timerRef.current) clearTimeout(timerRef.current); };
   }, []);
 
-  // Auto-open grammar session from ?pattern= query param
-  useEffect(() => {
-    if (patternParam) {
-      const pattern = sentencePatterns.find((g) => g.id === patternParam);
-      if (pattern) {
-        setSessionGrammar(pattern);
-      }
+  React.useEffect(() => {
+    const words = quizzes[qIdx]?.words ?? [];
+    setOrder([...words].sort(() => Math.random() - 0.5));
+    setAnswers([]); setUsed([]); setChecked(false); setResult(null);
+  }, [qIdx, quizzes]);
+
+  const pick = (word: string, idx: number) => {
+    if (checked || used.includes(idx)) return;
+    setUsed(u => [...u, idx]);
+    setAnswers(a => [...a, word]);
+  };
+
+  const remove = (i: number) => {
+    if (checked) return;
+    const newAns = answers.filter((_, j) => j !== i);
+    setAnswers(newAns);
+    const newUsed: number[] = [];
+    for (const w of newAns) {
+      const j = order.findIndex((ww, k) => ww === w && !newUsed.includes(k));
+      if (j >= 0) newUsed.push(j);
     }
-  }, [patternParam]);
+    setUsed(newUsed);
+  };
+
+  const check = () => {
+    const q = quizzes[qIdx];
+    if (!q || answers.length < q.answer.length) return;
+    setChecked(true);
+    const ok = answers.join('|') === q.answer.join('|');
+    setResult(ok ? 'ok' : 'ng');
+    if (ok && qIdx < quizzes.length - 1) {
+      timerRef.current = setTimeout(() => setQIdx(i => i + 1), 900);
+    } else if (ok) {
+      setAllDone(true);
+    }
+  };
+
+  const reset = () => {
+    setOrder([...(quizzes[qIdx]?.words ?? [])].sort(() => Math.random() - 0.5));
+    setAnswers([]); setUsed([]); setChecked(false); setResult(null);
+  };
+
+  if (!quizzes.length) return null;
+  const q = quizzes[qIdx];
+  const trackBorder = result === 'ok' ? '#2db89b' : result === 'ng' ? '#e05555' : C.line;
+  const trackBg = result === 'ok' ? '#f0fff8' : result === 'ng' ? '#fff5f5' : '#fafafa';
+
+  return (
+    <div>
+      <div style={{ fontSize: 15, color: C.muted, marginBottom: 10 }}>第 {qIdx + 1} / {quizzes.length} 题</div>
+      <div style={{ background: C.bg, borderRadius: 14, padding: '14px 16px', fontSize: 15, color: C.muted, lineHeight: 1.7, marginBottom: 14 }}>{q.zh}</div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 16 }}>
+        {order.map((w, i) => (
+          <button key={i} onClick={() => pick(w, i)} disabled={used.includes(i)}
+            style={{ padding: '12px 18px', borderRadius: 14, background: C.card, border: `1.5px solid ${C.line}`, fontSize: 17, fontWeight: 700, color: used.includes(i) ? '#ccc' : C.ink, cursor: used.includes(i) ? 'default' : 'pointer', opacity: used.includes(i) ? 0.3 : 1, whiteSpace: 'nowrap' }}>{w}</button>
+        ))}
+      </div>
+      <div style={{ minHeight: 60, border: `2px dashed ${trackBorder}`, borderRadius: 18, padding: '12px 16px', display: 'flex', flexWrap: 'wrap', gap: 10, alignItems: 'center', background: trackBg, marginBottom: 12 }}>
+        {answers.length === 0
+          ? <span style={{ fontSize: 14, color: '#ccc' }}>点击词块拼句...</span>
+          : answers.map((w, i) => <button key={i} onClick={() => remove(i)} style={{ padding: '10px 16px', borderRadius: 12, background: C.pink, color: 'white', fontSize: 17, fontWeight: 700, border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>{w}</button>)}
+      </div>
+      {result && (
+        <div style={{ fontSize: 15, fontWeight: 700, color: result === 'ok' ? '#2db89b' : '#e05555', marginBottom: 10 }}>
+          {result === 'ok' ? (allDone ? '✓ 全部完成！' : '✓ 正确！') : `✗ 正确：${q.answer.join(' ')}　再试试？`}
+        </div>
+      )}
+      <div style={{ display: 'flex', gap: 8 }}>
+        <button onClick={reset} style={{ padding: '13px 18px', borderRadius: 16, border: `1.5px solid ${C.line}`, background: C.card, color: C.muted, fontSize: 15, cursor: 'pointer' }}>↺ 重置</button>
+        <button onClick={check} style={{ flex: 1, padding: 13, borderRadius: 16, border: 'none', background: '#201815', color: 'white', fontSize: 15, fontWeight: 800, cursor: 'pointer' }}>检查答案</button>
+      </div>
+    </div>
+  );
+}
+
+function CardJudgeStep({ mistakes }: { mistakes: GrammarCard['mistakes'] }) {
+  const C = useC();
+  const judges = React.useMemo(() => mistakes.map(m => {
+    const swap = Math.random() < 0.5;
+    return {
+      A: swap ? m.wrong : m.correct,
+      B: swap ? m.correct : m.wrong,
+      ans: swap ? 'B' as const : 'A' as const,
+      why: m.note,
+    };
+  }), [mistakes]);
+  const [states, setStates] = React.useState(() => judges.map(() => ({ done: false, ok: false, picked: '' })));
+
+  const pick = (i: number, choice: string) => {
+    if (states[i].done) return;
+    setStates(s => s.map((item, j) => j === i ? { done: true, ok: choice === judges[i].ans, picked: choice } : item));
+  };
+
+  if (!judges.length) return null;
+
+  return (
+    <div>
+      {judges.map((q, i) => {
+        const s = states[i];
+        const btnStyle = (ch: string): React.CSSProperties => {
+          if (!s.done) return { border: `1.5px solid ${C.line}`, background: C.card };
+          if (ch === q.ans) return { border: '1.5px solid #2db89b', background: '#eaf8f5' };
+          if (ch === s.picked && s.picked !== q.ans) return { border: '1.5px solid #e05555', background: '#fff0f0' };
+          return { border: `1.5px solid ${C.line}`, background: C.card };
+        };
+        return (
+          <div key={i} style={{ marginBottom: 20 }}>
+            <div style={{ fontSize: 15, color: C.muted, fontWeight: 700, marginBottom: 10 }}>第 {i + 1} 题 · 选出正确的句子</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 8 }}>
+              {(['A', 'B'] as const).map(ch => (
+                <button key={ch} onClick={() => pick(i, ch)}
+                  style={{ padding: '11px 14px', borderRadius: 14, fontSize: 17, fontWeight: 700, color: C.ink, cursor: 'pointer', textAlign: 'left', ...btnStyle(ch) }}>
+                  {ch}. {ch === 'A' ? q.A : q.B}
+                </button>
+              ))}
+            </div>
+            {s.done && (
+              <div>
+                <div style={{ fontSize: 16, color: s.ok ? '#2db89b' : '#e05555', fontWeight: 700, marginBottom: 2 }}>{s.ok ? '✓ 正确！' : `✗ 正确答案：${q.ans}`}</div>
+                <div style={{ fontSize: 15, color: C.muted }}>{q.why}</div>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function SpecialQuizStep({ quiz }: { quiz: NonNullable<GrammarCard['specialQuiz']> }) {
+  const C = useC();
+  const [states, setStates] = React.useState(() => quiz.questions.map(() => ({ done: false, ok: false, picked: '' })));
+
+  const pick = (qi: number, optIdx: number) => {
+    if (states[qi].done) return;
+    setStates(s => s.map((item, j) => j === qi ? { done: true, ok: optIdx === quiz.questions[qi].answer, picked: quiz.questions[qi].options[optIdx] } : item));
+  };
+
+  const allDone = states.every(s => s.done);
+  const correctCount = states.filter(s => s.ok).length;
+
+  return (
+    <div>
+      <h2 style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 8 }}>{quiz.title}</h2>
+      <p style={{ fontSize: 15, color: C.muted, marginBottom: 16 }}>{quiz.body}</p>
+      {allDone && (
+        <div style={{ background: C.mintBg, borderRadius: 14, padding: '12px 16px', marginBottom: 16, fontSize: 15, fontWeight: 700, color: C.ink }}>
+          完成 {correctCount}/{quiz.questions.length} 题
+        </div>
+      )}
+      {quiz.questions.map((q, qi) => {
+        const s = states[qi];
+        const btnStyle = (optIdx: number): React.CSSProperties => {
+          if (!s.done) return { border: `1.5px solid ${C.line}`, background: C.card };
+          if (optIdx === q.answer) return { border: '1.5px solid #2db89b', background: '#eaf8f5' };
+          if (s.picked === q.options[optIdx] && optIdx !== q.answer) return { border: '1.5px solid #e05555', background: '#fff0f0' };
+          return { border: `1.5px solid ${C.line}`, background: C.card };
+        };
+        return (
+          <div key={qi} style={{ marginBottom: 16 }}>
+            <div style={{ fontSize: 15, fontWeight: 700, color: C.muted, marginBottom: 8 }}>
+              第 {qi + 1} 题{q.prompt ? ` · ${q.prompt}` : ''}
+            </div>
+            {/* sentence with blank for fill type */}
+            {(q.pre !== undefined || q.post !== undefined) ? (
+              <div style={{ fontSize: 17, fontWeight: 700, color: C.ink, marginBottom: 10 }}>
+                {q.pre}
+                {s.done ? (
+                  <span style={{ color: s.ok ? '#2db89b' : '#e05555' }}>{s.picked}</span>
+                ) : (
+                  <span style={{ display: 'inline-block', width: 36, height: 20, borderBottom: `2px solid ${C.mint}`, verticalAlign: 'bottom' }} />
+                )}
+                {q.post}
+              </div>
+            ) : null}
+            <div>
+              {q.options.map((opt, optIdx) => (
+                <button key={optIdx} onClick={() => pick(qi, optIdx)}
+                  style={{ display: 'inline-block', padding: '10px 18px', borderRadius: 14, ...btnStyle(optIdx), fontSize: 17, fontWeight: 700, color: C.ink, cursor: 'pointer', margin: '0 8px 8px 0' }}>
+                  {quiz.type === 'judge' ? `${optIdx === 0 ? 'A' : 'B'}. ${opt}` : opt}
+                </button>
+              ))}
+            </div>
+            {s.done && (
+              <div>
+                <div style={{ fontSize: 15, color: s.ok ? '#2db89b' : '#e05555', fontWeight: 700, marginTop: 4 }}>{s.ok ? '✓ 正确！' : `✗ 正确答案：${q.options[q.answer]}`}</div>
+                <div style={{ fontSize: 15, color: C.muted, marginTop: 2 }}>{q.explanation}</div>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function CardSwapStep({ examples }: { examples: GrammarCard['cardExamples'] }) {
+  const C = useC();
+  const [exIdx, setExIdx] = React.useState(0);
+  const [swapIdx, setSwapIdx] = React.useState<number | null>(null);
+
+  if (!examples.length) return null;
+  const eg = examples[exIdx];
+  const hasSwaps = eg.swapWords && eg.swapWords.length > 0;
+  const role = eg.swapRole ?? 'subject';
+  const roleLabel: Record<string, string> = { subject: '主语', verb: '谓语', object: '宾语', place: '地点', time: '时间', plain: '修饰语' };
+  const targetIdx = eg.wordBlocks.findIndex(b => b.role === role);
+
+  // Guard: 如果数据配置错误导致 targetIdx === -1，显示提示而不渲染无意义的替换按钮
+  if (targetIdx === -1) {
+    return (
+      <div>
+        <div style={{ background: C.pinkSoft, borderRadius: 12, padding: '13px 16px', marginBottom: 16, fontSize: 15, color: C.muted, lineHeight: 1.65 }}>
+          替换练习：点击下方词语，替换句中高亮部分。
+        </div>
+        <div style={{ fontSize: 15, color: C.muted, marginBottom: 8 }}>第 {exIdx + 1} / {examples.length} 句</div>
+        <div style={{ background: C.bg, borderRadius: 16, padding: '16px 14px' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'flex-start' }}>
+            {eg.wordBlocks.map((wb, j) => <WordBlockEl key={j} role={wb.role} text={wb.text} />)}
+          </div>
+          <p style={{ fontSize: 15, color: C.muted, marginTop: 8, lineHeight: 1.6 }}>{eg.zh}</p>
+        </div>
+        {examples.length > 1 && (
+          <div style={{ display: 'flex', gap: 8, marginTop: 14 }}>
+            <button onClick={() => { setExIdx(i => Math.max(0, i - 1)); setSwapIdx(null); }} disabled={exIdx === 0}
+              style={{ padding: '9px 16px', borderRadius: 12, border: `1.5px solid ${C.line}`, background: C.card, color: C.muted, fontSize: 15, cursor: exIdx === 0 ? 'default' : 'pointer', opacity: exIdx === 0 ? 0.4 : 1 }}>← 上一句</button>
+            <button onClick={() => { setExIdx(i => Math.min(examples.length - 1, i + 1)); setSwapIdx(null); }} disabled={exIdx === examples.length - 1}
+              style={{ flex: 1, padding: '9px 16px', borderRadius: 12, border: 'none', background: '#201815', color: 'white', fontSize: 15, fontWeight: 700, cursor: exIdx === examples.length - 1 ? 'default' : 'pointer', opacity: exIdx === examples.length - 1 ? 0.4 : 1 }}>下一句 →</button>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  const displayBlocks = eg.wordBlocks.map((wb, i) => {
+    if (hasSwaps && swapIdx !== null && i === targetIdx && eg.swapWords) {
+      return { ...wb, text: eg.swapWords[swapIdx] };
+    }
+    return wb;
+  });
+
+  return (
+    <div>
+      <div style={{ background: C.mintBg, borderRadius: 12, padding: '13px 16px', marginBottom: 16, fontSize: 15, color: C.muted, lineHeight: 1.65 }}>
+        点击下方词语，替换句中高亮部分，观察句子如何变化。
+      </div>
+      <div style={{ fontSize: 15, color: C.muted, marginBottom: 10 }}>第 {exIdx + 1} / {examples.length} 句</div>
+      <div style={{ background: C.bg, borderRadius: 16, padding: '18px 16px', marginBottom: 14 }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 10, alignItems: 'flex-start' }}>
+          {displayBlocks.map((wb, j) => (
+            <div key={j} style={j === targetIdx && hasSwaps ? { outline: swapIdx !== null ? 'none' : '2px dashed #ff7fa8', borderRadius: 8 } : {}}>
+              <WordBlockEl role={wb.role} text={wb.text} />
+            </div>
+          ))}
+        </div>
+        <p style={{ fontSize: 15, color: C.muted, marginTop: 8, lineHeight: 1.6 }}>{eg.zh}</p>
+      </div>
+      {hasSwaps && (
+        <div>
+          <p style={{ fontSize: 15, color: C.muted, marginBottom: 8 }}>换一换{roleLabel[role] ?? role}：</p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+            {eg.swapWords!.map((w, i) => (
+              <button key={i} onClick={() => setSwapIdx(swapIdx === i ? null : i)}
+                style={{ padding: '10px 16px', borderRadius: 12, fontSize: 17, fontWeight: 700, border: `1.5px solid ${swapIdx === i ? C.pink : C.line}`, background: swapIdx === i ? C.pinkSoft : C.card, color: swapIdx === i ? C.pink : C.ink, cursor: 'pointer' }}>{w}</button>
+            ))}
+          </div>
+        </div>
+      )}
+      {examples.length > 1 && (
+        <div style={{ display: 'flex', gap: 8, marginTop: 14 }}>
+          <button onClick={() => { setExIdx(i => Math.max(0, i - 1)); setSwapIdx(null); }} disabled={exIdx === 0}
+            style={{ padding: '9px 16px', borderRadius: 12, border: `1.5px solid ${C.line}`, background: C.card, color: C.muted, fontSize: 15, cursor: exIdx === 0 ? 'default' : 'pointer', opacity: exIdx === 0 ? 0.4 : 1 }}>← 上一句</button>
+          <button onClick={() => { setExIdx(i => Math.min(examples.length - 1, i + 1)); setSwapIdx(null); }} disabled={exIdx === examples.length - 1}
+            style={{ flex: 1, padding: '9px 16px', borderRadius: 12, border: 'none', background: '#201815', color: 'white', fontSize: 15, fontWeight: 700, cursor: exIdx === examples.length - 1 ? 'default' : 'pointer', opacity: exIdx === examples.length - 1 ? 0.4 : 1 }}>下一句 →</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── GrammarCardView (step-by-step flip card) ──────────────────────────────────
+
+function GrammarCardView({
+  card,
+  partTitle,
+  totalInPart,
+  onBack,
+  onComplete,
+  onStartGrammar,
+}: {
+  card: GrammarCard;
+  partTitle: string;
+  totalInPart: number;
+  onBack: () => void;
+  onComplete: () => void;
+  onStartGrammar: (gp: GrammarPoint) => void;
+}) {
+  const C = useC();
+  const [step, setStep] = React.useState(0);
+  const [isMobile, setIsMobile] = React.useState(false);
+  const [isTablet, setIsTablet] = React.useState(false);
+  const [isDesktop, setIsDesktop] = React.useState(true);
+  const [lessonStates, setLessonStates] = React.useState<Record<string, string>>({});
+  React.useEffect(() => {
+    setLessonStates(loadLessonStates());
+  }, [card.id]);
+  React.useEffect(() => {
+    const check = () => {
+      const w = window.innerWidth;
+      setIsMobile(w < 768);
+      setIsTablet(w >= 768 && w < 1024);
+      setIsDesktop(w >= 1024);
+    };
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+  const linkedGps = card.linkedGrammarIds
+    .map(id => sentencePatterns.find(p => p.id === id))
+    .filter(Boolean) as GrammarPoint[];
+
+  const hasStructures = card.structures.length > 0;
+  const hasRules = card.connectionRules.length > 0;
+  const hasExamples = card.cardExamples.length > 0;
+  const hasScenarios = card.scenarios.length > 0;
+  const hasMistakes = card.mistakes.length > 0;
+  const hasReadingGuide = !!card.readingGuide;
+  const hasQuickTable = !!card.quickTable;
+  const hasSpecialQuiz = !!card.specialQuiz;
+
+  type StepDef = { badge: string; emoji: string; label: string; color: string };
+  const steps: StepDef[] = [
+    { badge: '💡', emoji: '💡', label: '今天学什么', color: C.pink },
+    ...(card.conceptCompare || card.compareHtml ? [{ badge: '🔀', emoji: '🔀', label: card.compareLabel || '和中文比一比', color: '#b49ccf' }] : []),
+    ...(hasStructures ? [{ badge: '📐', emoji: '📐', label: '语法结构', color: '#6b7ff0' }] : []),
+    ...(hasRules ? [{ badge: '🔗', emoji: '🔗', label: '接续规则', color: '#b49ccf' }] : []),
+    ...(hasReadingGuide ? [{ badge: '👁️', emoji: '👁️', label: '阅读方法', color: '#6b7ff0' }] : []),
+    ...(hasQuickTable ? [{ badge: '📊', emoji: '📊', label: '速记表', color: '#6b7ff0' }] : []),
+    ...(hasExamples ? [{ badge: '✏️', emoji: '✏️', label: '替换练习', color: '#2db89b' }] : []),
+    ...(hasScenarios ? [{ badge: '🌏', emoji: '🌏', label: '真实场景', color: '#e8a87c' }] : []),
+    ...(hasMistakes ? [{ badge: '⚠️', emoji: '⚠️', label: '别踩坑', color: '#e05555' }] : []),
+    ...(hasExamples ? [{ badge: '🎯', emoji: '🎯', label: '排序练习', color: '#2db89b' }] : []),
+    ...(hasSpecialQuiz ? [{ badge: '🧠', emoji: '🧠', label: '特殊练习', color: '#c89020' }] : []),
+    ...(hasMistakes && !hasSpecialQuiz ? [{ badge: '🧐', emoji: '🧐', label: '判断对错', color: '#c89020' }] : []),
+    { badge: '🎉', emoji: '🎉', label: '完成', color: C.pink },
+  ];
+
+  const total = steps.length;
+  const cfg = steps[step];
+  const progress = ((step + 1) / total) * 100;
+
+  const isEmpty = !card.whatItDoes;
+
+  const goNext = () => {
+    const next = Math.min(total - 1, step + 1);
+    if (next === total - 1) saveLessonState(card.id, 'done');
+    setStep(next);
+    window.scrollTo(0, 0);
+  };
+  const goPrev = () => { setStep(s => Math.max(0, s - 1)); window.scrollTo(0, 0); };
+
+  let conceptCompareStepIdx = -1;
+  let structureStepIdx = -1;
+  let rulesStepIdx = -1;
+  let readingGuideStepIdx = -1;
+  let quickTableStepIdx = -1;
+  let swapStepIdx = -1;
+  let scenarioStepIdx = -1;
+  let mistakeStepIdx = -1;
+  let sortStepIdx = -1;
+  let specialQuizStepIdx = -1;
+  let judgeStepIdx = -1;
+  let doneStepIdx = -1;
+
+  let cursor = 1;
+  if (card.conceptCompare || card.compareHtml) { conceptCompareStepIdx = cursor++; }
+  if (hasStructures) { structureStepIdx = cursor++; }
+  if (hasRules) { rulesStepIdx = cursor++; }
+  if (hasReadingGuide) { readingGuideStepIdx = cursor++; }
+  if (hasQuickTable) { quickTableStepIdx = cursor++; }
+  if (hasExamples) { swapStepIdx = cursor++; }
+  if (hasScenarios) { scenarioStepIdx = cursor++; }
+  if (hasMistakes) { mistakeStepIdx = cursor++; }
+  if (hasExamples) { sortStepIdx = cursor++; }
+  if (hasSpecialQuiz) { specialQuizStepIdx = cursor++; }
+  if (hasMistakes && !hasSpecialQuiz) { judgeStepIdx = cursor++; }
+  doneStepIdx = cursor;
+
+  if (isEmpty) {
+    return (
+      <div style={{ minHeight: '100vh', background: C.bg }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 20px', background: C.card, borderBottom: `1px solid ${C.line}`, position: 'sticky', top: 0, zIndex: 10 }}>
+          <button onClick={onBack} style={{ width: 38, height: 38, borderRadius: 13, background: C.bg, border: 'none', cursor: 'pointer', fontSize: 22, color: C.ink, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>‹</button>
+          <div style={{ flex: 1, fontSize: 16, fontWeight: 800, color: C.ink }}>第{card.partNumber}部分 · 第{card.lessonNumber}课</div>
+        </div>
+        <div style={{ padding: 24, textAlign: 'center' }}>
+          <div style={{ fontSize: 36, marginBottom: 12 }}>📝</div>
+          <p style={{ fontSize: 16, fontWeight: 800, color: C.ink, marginBottom: 8 }}>内容准备中</p>
+          <p style={{ fontSize: 15, color: C.muted }}>这一课的内容正在整理，稍后更新。</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ minHeight: '100vh', background: C.bg }}>
+      {/* 顶部进度导航 */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 20px', background: C.card, borderBottom: `1px solid ${C.line}`, position: 'sticky', top: 0, zIndex: 10 }}>
+        <button onClick={onBack} style={{ width: 38, height: 38, borderRadius: 13, background: C.bg, border: 'none', cursor: 'pointer', fontSize: 22, color: C.ink, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>‹</button>
+        <div style={{ flex: 1 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+            <span style={{ fontSize: 14, fontWeight: 800, color: C.ink }}>第{card.partNumber}部分 · 第{card.lessonNumber}课 {card.title}</span>
+            <span style={{ fontSize: 13, color: C.muted, fontWeight: 700 }}>{step + 1} / {total}</span>
+          </div>
+          <div style={{ height: 6, background: C.line, borderRadius: 99, overflow: 'hidden' }}>
+            <div style={{ height: '100%', background: `linear-gradient(90deg, ${C.mint}, ${C.pink})`, borderRadius: 99, width: `${progress}%`, transition: 'width .35s' }} />
+          </div>
+        </div>
+      </div>
+
+      {/* 内容区 */}
+      <div style={{
+        maxWidth: isDesktop ? 760 : isTablet ? 680 : 560,
+        margin: '0 auto',
+        padding: isMobile ? `0 0 calc(90px + 56px + env(safe-area-inset-bottom, 0px))` : `16px 24px 40px`
+      }}>
+        <style>{GRAMMAR_STYLES}</style>
+
+        {/* Badge */}
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12, fontWeight: 800, padding: '3px 10px', borderRadius: 99, letterSpacing: '.07em', background: `${cfg.color}18`, color: cfg.color, marginBottom: 8, marginTop: isMobile ? 12 : 0, marginLeft: isMobile ? 16 : 0 }}>
+          {cfg.emoji} {cfg.label}
+        </span>
+
+        {/* Step 0: 今天学什么 */}
+        {step === 0 && (
+          <div style={{ background: C.card, borderRadius: isMobile ? 16 : 22, border: `1px solid ${C.line}`, boxShadow: '0 4px 20px rgba(78,52,46,.09)', padding: isMobile ? '24px 20px' : '32px 32px' }}>
+            {card.step0Html ? (
+              <div dangerouslySetInnerHTML={{ __html: card.step0Html }} />
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                <div>
+                  <div style={{ fontSize: 24, fontWeight: 900, color: C.ink, marginBottom: 8 }}>{card.whatItDoes}</div>
+                  <div style={{ fontSize: 16, color: C.muted, lineHeight: 1.7, whiteSpace: 'pre-line' }}>{card.whatItDoesBody}</div>
+                </div>
+                {card.conceptCompare && (() => {
+                  const zhParts = card.conceptCompare!.zh.split(' · ').map((t, i) => ({
+                    text: t, role: (['subject','verb','object'][i] || 'plain')
+                  }));
+                  const koParts = card.structures[0]?.tokens.map(t => {
+                    const zh = zhParts.find(z => z.role === t.role);
+                    return { text: zh ? `${t.text}（${zh.text}）` : t.text, role: t.role };
+                  }) ?? [];
+                  return <>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                      <div style={{ background: `color-mix(in srgb, #aee3d8 15%, ${C.card})`, borderRadius: 14, padding: '14px 16px' }}>
+                        <div style={{ fontSize: 12, fontWeight: 800, color: '#2db89b', letterSpacing: '.06em', marginBottom: 10 }}>中文说法</div>
+                        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                          {zhParts.map((p, i) => <WordBlockEl key={i} role={p.role} text={p.text} />)}
+                        </div>
+                      </div>
+                      <div style={{ background: `color-mix(in srgb, #ff7fa8 10%, ${C.card})`, borderRadius: 14, padding: '14px 16px' }}>
+                        <div style={{ fontSize: 12, fontWeight: 800, color: C.pink, letterSpacing: '.06em', marginBottom: 10 }}>韩语说法</div>
+                        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 8 }}>
+                          {koParts.map((p, i) => <WordBlockEl key={i} role={p.role} text={p.text} />)}
+                        </div>
+                        <div style={{ fontSize: 13, color: C.pink, fontWeight: 700 }}>👆 动词跑到最后面去了</div>
+                      </div>
+                    </div>
+                    <div style={{ background: C.card, border: `1px solid ${C.line}`, borderRadius: 14, padding: '13px 15px' }}>
+                      <p style={{ fontSize: 15, color: C.muted, lineHeight: 1.65, margin: 0 }} dangerouslySetInnerHTML={{ __html: card.conceptCompare!.note }} />
+                    </div>
+                  </>;
+                })()}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* 和中文比一比 */}
+        {step === conceptCompareStepIdx && (
+          <div style={{ background: C.card, borderRadius: isMobile ? 16 : 22, border: `1px solid ${C.line}`, boxShadow: '0 4px 20px rgba(78,52,46,.09)', padding: isMobile ? '24px 20px' : '32px 32px' }}>
+            {card.compareHtml ? (
+              <div dangerouslySetInnerHTML={{ __html: card.compareHtml }} />
+            ) : card.conceptCompare ? (
+              <div>
+                <div style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 8 }}>语序不一样</div>
+                <div style={{ fontSize: 15, color: C.muted, lineHeight: 1.7, marginBottom: 20 }}>
+                  中文「{card.conceptCompare.zh}」，韩语变成「{card.conceptCompare.ko}」——动作永远压轴。
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }}>
+                  <div style={{ background: '#eaf8f5', borderRadius: 14, padding: '14px 16px' }}>
+                    <div style={{ fontSize: 12, fontWeight: 800, letterSpacing: '.1em', color: '#2db89b', marginBottom: 10 }}>中文顺序</div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                      {card.conceptCompare.zh.split(' · ').map((text, i) => (
+                        <WordBlockEl key={i} role={(['subject','verb','object'][i] || 'plain')} text={text} />
+                      ))}
+                    </div>
+                  </div>
+                  <div style={{ background: `color-mix(in srgb, #ff7fa8 10%, ${C.card})`, borderRadius: 14, padding: '14px 16px' }}>
+                    <div style={{ fontSize: 12, fontWeight: 800, letterSpacing: '.1em', color: C.pink, marginBottom: 10 }}>韩语顺序</div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                      {card.structures[0]?.tokens.map((t, i) => (
+                        <WordBlockEl key={i} role={t.role} text={t.text} />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <div style={{ background: C.bg, borderRadius: 14, padding: '13px 15px' }}>
+                  <p style={{ fontSize: 15, color: C.muted, lineHeight: 1.65, margin: 0 }}>
+                    先说「谁」→ 再说「什么/哪里」→ <span style={{ color: C.pink, fontWeight: 700 }}>动作/状态放最后</span>
+                    <br /><br />
+                    韩语不是按中文逐字翻译的，遇到长句先<span style={{ color: C.pink, fontWeight: 700 }}>跳到句尾</span>判断"在做什么"，再往前拆成分。
+                  </p>
+                </div>
+              </div>
+            ) : null}
+          </div>
+        )}
+
+          {/* 语法结构 */}
+          {step === structureStepIdx && (
+            <div style={{ background: C.card, borderRadius: isMobile ? 16 : 22, border: `1px solid ${C.line}`, boxShadow: '0 4px 20px rgba(78,52,46,.09)', padding: isMobile ? '24px 20px' : '32px 32px' }}>
+              <h2 style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 12 }}>语法结构</h2>
+              {card.structureNote && (
+                <div style={{ background: `linear-gradient(135deg, color-mix(in srgb, #aee3d8 20%, ${C.card}), color-mix(in srgb, #6b7ff0 15%, ${C.card}))`, borderRadius: 14, padding: '12px 16px', marginBottom: 16, border: `1px solid ${C.line}` }}>
+                  <div style={{ fontSize: 12, fontWeight: 800, color: '#2db89b', marginBottom: 4 }}>📐 这一步在干什么？</div>
+                  <div style={{ fontSize: 15, color: C.muted, lineHeight: 1.7, whiteSpace: 'pre-line' }}>{card.structureNote}</div>
+                </div>
+              )}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                {card.structures.map((s, i) => (
+                  <div key={i} style={{ background: C.bg, borderRadius: 18, padding: '16px 18px' }}>
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 10 }}>
+                      <p style={{ fontSize: 17, fontWeight: 800, lineHeight: 1.4, flex: 1 }}>{s.ko}</p>
+                      <button onClick={e => { e.stopPropagation(); speak(s.ko); }} style={{ padding: 4, borderRadius: 8, background: 'rgba(255,127,168,.08)', border: 'none', cursor: 'pointer', color: C.pink, flexShrink: 0, marginTop: 2 }}><Volume2 size={13} /></button>
+                    </div>
+                    {s.zh && <p style={{ fontSize: 15, color: C.muted, marginBottom: 10 }}>{s.zh}</p>}
+                    <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'flex-start' }}>
+                      {s.tokens.map((tk, j) => (
+                        <span key={j} style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                          <WordBlockEl role={tk.role} text={tk.text} />
+                          <TokenEl role={tk.role} />
+                          {j < s.tokens.length - 1 && <span style={{ color: '#ccc', fontSize: 16 }}>+</span>}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 接续规则 */}
+          {step === rulesStepIdx && (() => {
+            const rules = card.connectionRules;
+            const isLegacy = rules.length > 0 && typeof rules[0] === 'string';
+            if (isLegacy) {
+              // 旧版：纯列表（P2-P6 兼容）
+              return (
+                <div style={{ background: C.card, borderRadius: isMobile ? 16 : 22, border: `1px solid ${C.line}`, boxShadow: '0 4px 20px rgba(78,52,46,.09)', padding: isMobile ? '24px 20px' : '32px 32px' }}>
+                  <h2 style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 12 }}>接续规则</h2>
+                  {card.rulesNote && (
+                    <div style={{ background: `linear-gradient(135deg, color-mix(in srgb, #fff8d0 30%, ${C.card}), color-mix(in srgb, #ff7fa8 10%, ${C.card}))`, borderRadius: 14, padding: '12px 16px', marginBottom: 16, border: `1px solid ${C.line}` }}>
+                      <div style={{ fontSize: 12, fontWeight: 800, color: C.pink, marginBottom: 4 }}>📌 为什么需要这些规则？</div>
+                      <div style={{ fontSize: 15, color: C.muted, lineHeight: 1.7, whiteSpace: 'pre-line' }}>{card.rulesNote}</div>
+                    </div>
+                  )}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                    {(rules as string[]).map((rule, i) => {
+                      const dashIdx = rule.indexOf(' — ');
+                      const head = dashIdx >= 0 ? rule.slice(0, dashIdx) : rule;
+                      const tail = dashIdx >= 0 ? rule.slice(dashIdx) : '';
+                      return (
+                        <div key={i} style={{ display: 'flex', gap: 14, alignItems: 'flex-start', fontSize: 15, lineHeight: 1.75, background: C.bg, borderRadius: 14, padding: '14px 16px' }}>
+                          <div style={{ width: 28, height: 28, background: C.pink, color: '#fff', borderRadius: '50%', fontSize: 13, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 2 }}>{i + 1}</div>
+                          <div><span style={{ color: C.pink, fontWeight: 800 }}>{head}</span>{tail}</div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            }
+            // 新版：分类卡片式（P1）
+            const typed = rules as ConnectionRule[];
+            const ORDER: ConnectionRule['type'][] = ['rule', 'usage', 'compare', 'note', 'vocab', 'example'];
+            const grouped: Partial<Record<ConnectionRule['type'], ConnectionRule[]>> = {};
+            typed.forEach(r => { (grouped[r.type] = grouped[r.type] || []).push(r); });
+            const META: Record<ConnectionRule['type'], { icon: string; label: string; bg: string; border: string; titleColor: string }> = {
+              rule:    { icon: '🔗', label: '接续规则',   bg: '#eaf8f5', border: '#2db89b', titleColor: '#1a9e85' },
+              usage:   { icon: '💡', label: '使用场景',   bg: '#eaf8f5', border: '#2db89b', titleColor: '#1a9e85' },
+              compare: { icon: '↔️', label: '对比辨析',   bg: '#f0f4ff', border: '#6b7ff0', titleColor: '#5568d4' },
+              note:    { icon: '⚠️', label: '注意事项',   bg: '#fff8ee', border: '#e0960a', titleColor: '#c89020' },
+              vocab:   { icon: '📋', label: '词汇补充',   bg: '#f5f0fa', border: '#b49ccf', titleColor: '#9370b8' },
+              example: { icon: '📝', label: '教材例句',   bg: '#f8f4f0', border: '#eee0d8', titleColor: '#89756e' },
+            };
+            return (
+              <div style={{ background: C.card, borderRadius: isMobile ? 16 : 22, border: `1px solid ${C.line}`, boxShadow: '0 4px 20px rgba(78,52,46,.09)', padding: isMobile ? '24px 20px' : '32px 32px' }}>
+                <h2 style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 12 }}>接续规则</h2>
+                {card.rulesNote && (
+                  <div style={{ background: 'linear-gradient(135deg,#fff8d0,#fff0f5)', borderRadius: 14, padding: '12px 16px', marginBottom: 16, border: '1px solid #f0e0c0' }}>
+                    <div style={{ fontSize: 12, fontWeight: 800, color: C.pink, marginBottom: 4 }}>📌 为什么需要这些规则？</div>
+                    <div style={{ fontSize: 15, color: C.muted, lineHeight: 1.7, whiteSpace: 'pre-line' }}>{card.rulesNote}</div>
+                  </div>
+                )}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                  {ORDER.filter(t => grouped[t]?.length).map(t => {
+                    const items = grouped[t]!;
+                    const m = META[t];
+                    return (
+                      <div key={t} style={{ background: m.bg, borderRadius: 16, border: `1.5px solid ${m.border}`, padding: '14px 16px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
+                          <span style={{ fontSize: 15 }}>{m.icon}</span>
+                          <span style={{ fontSize: 15, fontWeight: 800, color: m.titleColor, letterSpacing: '.04em' }}>{m.label}</span>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                          {items.map((item, i) => (
+                            <div key={i} style={{ fontSize: 15, lineHeight: 1.75, color: C.ink, whiteSpace: 'pre-line' }}>
+                              <span style={{ fontWeight: 700 }}>{item.text}</span>
+                              {item.examples && (
+                                <span style={{ display: 'inline-block', background: 'rgba(0,0,0,.05)', borderRadius: 6, padding: '1px 7px', marginLeft: 6, fontSize: 15, color: C.muted, fontFamily: 'monospace' }}>
+                                  {item.examples}
+                                </span>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })()}
+
+          {/* 阅读方法 */}
+          {step === readingGuideStepIdx && card.readingGuide && (
+            <div style={{ background: C.card, borderRadius: isMobile ? 16 : 22, border: `1px solid ${C.line}`, boxShadow: '0 4px 20px rgba(78,52,46,.09)', padding: isMobile ? '24px 20px' : '32px 32px' }}>
+              <h2 style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 8 }}>{card.readingGuide.title}</h2>
+              <p style={{ fontSize: 15, color: C.muted, marginBottom: 16 }}>{card.readingGuide.body}</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }}>
+                {card.readingGuide.steps.map(s => (
+                  <div key={s.num} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', background: C.bg, borderRadius: 14, padding: '12px 14px' }}>
+                    <div style={{ width: 22, height: 22, borderRadius: 99, background: C.pink, color: '#fff', fontSize: 11, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>{s.num}</div>
+                    <div style={{ fontSize: 15, color: C.ink, fontWeight: 600, lineHeight: 1.5 }} dangerouslySetInnerHTML={{ __html: s.text }} />
+                  </div>
+                ))}
+              </div>
+              {card.readingGuide.demo && (
+                <div style={{ background: C.pinkSoft, borderRadius: 14, padding: '13px 15px' }}>
+                  <p style={{ fontSize: 15, fontWeight: 800, color: C.ink, marginBottom: 10 }}>{card.readingGuide.demo.ko}</p>
+                  {card.readingGuide.demo.rows.map((row, i) => (
+                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 5 }}>
+                      <span style={{ fontSize: 12, color: C.muted, whiteSpace: 'nowrap' }}>{row.label}</span>
+                      <span style={{ fontSize: 15, fontWeight: 700 }} dangerouslySetInnerHTML={{ __html: row.text }} />
+                    </div>
+                  ))}
+                  <p style={{ fontSize: 15, color: C.ink, fontWeight: 600, marginTop: 8 }}>{card.readingGuide.demo.result}</p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* 速记表 */}
+          {step === quickTableStepIdx && card.quickTable && (() => {
+            const { title, body, headers, rows } = card.quickTable!;
+            type TCell = string | { ko: string; zh: string };
+            const renderCell = (cell: TCell) => {
+              if (typeof cell === 'string') return <>{cell}</>;
+              return (
+                <>
+                  <span style={{ display: 'block', fontWeight: 700 }}>{cell.ko}</span>
+                  <span style={{ display: 'block', fontSize: 11, color: C.muted, marginTop: 2 }}>{cell.zh}</span>
+                </>
+              );
+            };
+            return (
+              <div style={{ background: C.card, borderRadius: isMobile ? 16 : 22, border: `1px solid ${C.line}`, boxShadow: '0 4px 20px rgba(78,52,46,.09)', padding: isMobile ? '24px 20px' : '32px 32px' }}>
+                <h2 style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 8 }}>{title}</h2>
+                {body && <p style={{ fontSize: 15, color: C.muted, marginBottom: 16 }}>{body}</p>}
+                {isMobile ? (
+                  // 移动端：卡片堆叠式
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    {rows.map((row, ri) => (
+                      <div key={ri} style={{ background: ri % 2 === 0 ? C.bg : C.card, borderRadius: 14, padding: '14px 16px', border: `1px solid ${C.line}` }}>
+                        <div style={{ fontSize: 17, fontWeight: 800, color: C.ink, marginBottom: 8 }}>{renderCell(row[0])}</div>
+                        {headers.length === 4 ? (
+                          <>
+                            <div style={{ marginBottom: 6 }}>
+                              <div style={{ fontSize: 11, color: C.muted, fontWeight: 700 }}>{headers[1]}</div>
+                              <div style={{ fontSize: 15, color: C.ink, fontWeight: 600 }}>{renderCell(row[1])}</div>
+                            </div>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
+                              {[2, 3].map(i => (
+                                <div key={i}>
+                                  <div style={{ fontSize: 11, color: C.muted, fontWeight: 700 }}>{headers[i]}</div>
+                                  <div style={{ fontSize: 15, color: C.ink, fontWeight: 600 }}>{renderCell(row[i])}</div>
+                                </div>
+                              ))}
+                            </div>
+                          </>
+                        ) : (
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                            {headers.slice(1).map((h, i) => (
+                              <div key={i}>
+                                <div style={{ fontSize: 11, color: C.muted, fontWeight: 700 }}>{h}</div>
+                                <div style={{ fontSize: 15, color: C.ink, fontWeight: 600 }}>{renderCell(row[i + 1])}</div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  // 桌面端：表格式（字号/padding 微调）
+                  <div style={{ borderRadius: 14, overflow: 'hidden', border: `1px solid ${C.line}` }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: `repeat(${headers.length}, 1fr)`, background: C.ink }}>
+                      {headers.map((h, i) => (
+                        <div key={i} style={{ padding: '10px 14px', fontSize: 13, color: '#fff', fontWeight: 800, borderRight: i < headers.length - 1 ? `1px solid rgba(255,255,255,.15)` : 'none' }}>{h}</div>
+                      ))}
+                    </div>
+                    {rows.map((row, ri) => (
+                      <div key={ri} style={{ display: 'grid', gridTemplateColumns: `repeat(${headers.length}, 1fr)`, background: ri % 2 === 0 ? C.bg : C.card }}>
+                        {row.map((cell, ci) => (
+                          <div key={ci} style={{ padding: '10px 14px', fontSize: 15, color: C.ink, fontWeight: 600, borderRight: ci < headers.length - 1 ? `1px solid ${C.line}` : 'none', borderTop: `1px solid ${C.line}` }}>{renderCell(cell)}</div>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })()}
+
+          {/* 替换练习 */}
+          {step === swapStepIdx && (
+            <div style={{ background: C.card, borderRadius: isMobile ? 16 : 22, border: `1px solid ${C.line}`, boxShadow: '0 4px 20px rgba(78,52,46,.09)', padding: isMobile ? '24px 20px' : '32px 32px' }}>
+              <h2 style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 8 }}>替换练习</h2>
+              <p style={{ fontSize: 15, color: C.muted, marginBottom: 16 }}>观察句子结构，点击词块换换主语试试看。</p>
+              <CardSwapStep key={card.id + '-swap'} examples={card.cardExamples} />
+            </div>
+          )}
+
+          {/* 真实场景 */}
+          {step === scenarioStepIdx && (
+            <div style={{ background: C.card, borderRadius: isMobile ? 16 : 22, border: `1px solid ${C.line}`, boxShadow: '0 4px 20px rgba(78,52,46,.09)', padding: isMobile ? '24px 20px' : '32px 32px' }}>
+              <h2 style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 12 }}>真实场景</h2>
+              {card.scenarioNote && (
+                <div style={{ background: `linear-gradient(135deg, color-mix(in srgb, #6b7ff0 12%, ${C.card}), color-mix(in srgb, #aee3d8 15%, ${C.card}))`, borderRadius: 14, padding: '12px 16px', marginBottom: 16, border: `1px solid ${C.line}` }}>
+                  <div style={{ fontSize: 12, fontWeight: 800, color: '#6b7ff0', marginBottom: 4 }}>🌏 什么时候用？</div>
+                  <div style={{ fontSize: 15, color: C.muted, lineHeight: 1.7, whiteSpace: 'pre-line' }}>{card.scenarioNote}</div>
+                </div>
+              )}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                {card.scenarios.map((sc, i) => (
+                  <div key={i} style={{ background: C.bg, borderRadius: 18, padding: '20px 18px', display: 'flex', gap: 16, alignItems: 'flex-start' }}>
+                    <span style={{ fontSize: 26, flexShrink: 0, marginTop: 2 }}>{sc.icon}</span>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p style={{ fontSize: 15, fontWeight: 700, color: C.ink, marginBottom: 10 }}>{sc.context}</p>
+                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 8 }}>
+                        <p style={{ fontSize: 17, fontWeight: 800, lineHeight: 1.5, flex: 1 }}>{sc.ko}</p>
+                        <button onClick={e => { e.stopPropagation(); speak(sc.ko); }} style={{ padding: 4, borderRadius: 8, background: 'rgba(255,127,168,.08)', border: 'none', cursor: 'pointer', color: C.pink, flexShrink: 0, marginTop: 2 }}><Volume2 size={13} /></button>
+                      </div>
+                      <p style={{ fontSize: 15, color: C.muted, lineHeight: 1.65 }}>{sc.zh}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 别踩坑 */}
+          {step === mistakeStepIdx && (
+            <div style={{ background: C.card, borderRadius: isMobile ? 16 : 22, border: `1px solid ${C.line}`, boxShadow: '0 4px 20px rgba(78,52,46,.09)', padding: isMobile ? '24px 20px' : '32px 32px' }}>
+              <h2 style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 16 }}>别踩坑</h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                {card.mistakes.map((m, i) => (
+                  <div key={i} style={{ borderRadius: 18, overflow: 'hidden', border: `1px solid ${C.line}` }}>
+                    <div style={{ background: `color-mix(in srgb, #e05555 8%, ${C.card})`, padding: '14px 16px', display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                      <span style={{ fontSize: 13, fontWeight: 800, padding: '3px 8px', borderRadius: 6, background: '#ffc0c0', color: '#c00', whiteSpace: 'nowrap', marginTop: 2 }}>✗ 错</span>
+                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, flex: 1 }}>
+                        <span style={{ fontSize: 17, lineHeight: 1.65, flex: 1 }}>{m.wrong}</span>
+                        <button onClick={e => { e.stopPropagation(); speak(m.wrong); }} style={{ padding: 4, borderRadius: 8, background: 'rgba(255,127,168,.08)', border: 'none', cursor: 'pointer', color: C.pink, flexShrink: 0, marginTop: 2 }}><Volume2 size={13} /></button>
+                      </div>
+                    </div>
+                    <div style={{ background: `color-mix(in srgb, #2db89b 8%, ${C.card})`, padding: '14px 16px', display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                      <span style={{ fontSize: 13, fontWeight: 800, padding: '3px 8px', borderRadius: 6, background: '#b8f0d0', color: '#007a40', whiteSpace: 'nowrap', marginTop: 2 }}>✓ 对</span>
+                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, flex: 1 }}>
+                        <span style={{ fontSize: 17, lineHeight: 1.65, flex: 1 }}>{m.correct}</span>
+                        <button onClick={e => { e.stopPropagation(); speak(m.correct); }} style={{ padding: 4, borderRadius: 8, background: 'rgba(255,127,168,.08)', border: 'none', cursor: 'pointer', color: C.pink, flexShrink: 0, marginTop: 2 }}><Volume2 size={13} /></button>
+                      </div>
+                    </div>
+                    <div style={{ padding: '13px 16px', background: C.bg, fontSize: 15, color: C.muted, lineHeight: 1.7 }}>{m.note}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 排序练习 */}
+          {step === sortStepIdx && (
+            <div style={{ background: C.card, borderRadius: isMobile ? 16 : 22, border: `1px solid ${C.line}`, boxShadow: '0 4px 20px rgba(78,52,46,.09)', padding: isMobile ? '24px 20px' : '32px 32px' }}>
+              <h2 style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 8 }}>排序练习</h2>
+              <p style={{ fontSize: 15, color: C.muted, marginBottom: 16 }}>把词块按正确语序排成句子。</p>
+              <CardSortStep key={card.id + '-sort'} examples={card.cardExamples} />
+            </div>
+          )}
+
+          {/* 特殊练习 */}
+          {step === specialQuizStepIdx && card.specialQuiz && (
+            <div style={{ background: C.card, borderRadius: isMobile ? 16 : 22, border: `1px solid ${C.line}`, boxShadow: '0 4px 20px rgba(78,52,46,.09)', padding: isMobile ? '24px 20px' : '32px 32px' }}>
+              <SpecialQuizStep quiz={card.specialQuiz} />
+            </div>
+          )}
+
+          {/* 判断对错 */}
+          {step === judgeStepIdx && (
+            <div style={{ background: C.card, borderRadius: isMobile ? 16 : 22, border: `1px solid ${C.line}`, boxShadow: '0 4px 20px rgba(78,52,46,.09)', padding: isMobile ? '24px 20px' : '32px 32px' }}>
+              <h2 style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 8 }}>判断对错</h2>
+              <p style={{ fontSize: 15, color: C.muted, marginBottom: 16 }}>两个句子选出正确的那个。</p>
+              <CardJudgeStep key={card.id + '-judge'} mistakes={card.mistakes} />
+            </div>
+          )}
+
+          {/* 完成 */}
+          {step === doneStepIdx && (
+            <div style={{ background: C.card, borderRadius: isMobile ? 16 : 22, border: `1px solid ${C.line}`, boxShadow: '0 4px 20px rgba(78,52,46,.09)', padding: isMobile ? '24px 20px' : '32px 32px' }}>
+              {card.overviewHtml ? (
+                <>
+                  {/* L10 第一章全部完成横幅（React读localStorage，不依赖HTML原型JS） */}
+                  {card.lessonNumber === 10 && card.partNumber === 1 && (() => {
+                    const chapterKeys = ['card-p1-l01','card-p1-l02','card-p1-l03','card-p1-l04','card-p1-l05','card-p1-l06','card-p1-l07','card-p1-l08','card-p1-l09','card-p1-l10'];
+                    const freshStates = loadLessonStates();
+                    const allDone = chapterKeys.every(k => freshStates[k] === 'done');
+                    return allDone ? (
+                      <div style={{ background: 'linear-gradient(135deg,#ff7fa8,#aee3d8)', borderRadius: 16, padding: 20, textAlign: 'center', marginBottom: 16 }}>
+                        <h2 style={{ fontSize: 20, fontWeight: 900, color: 'white', margin: 0 }}>🎉 第一章全部完成！</h2>
+                        <p style={{ fontSize: 15, color: 'rgba(255,255,255,.9)', marginTop: 6, marginBottom: 0 }}>你已经掌握了韩语最基础的10个语法点，可以开始说出完整的韩语句子了。</p>
+                      </div>
+                    ) : null;
+                  })()}
+                  <div className={isDesktop ? 'overview-desktop' : ''} dangerouslySetInnerHTML={{ __html: card.overviewHtml }} />
+                </>
+              ) : (
+                <>
+                  {/* L10 第一章全部完成横幅 */}
+                  {card.lessonNumber === 10 && card.partNumber === 1 && (() => {
+                    const chapterKeys = ['card-p1-l01','card-p1-l02','card-p1-l03','card-p1-l04','card-p1-l05','card-p1-l06','card-p1-l07','card-p1-l08','card-p1-l09','card-p1-l10'];
+                    const freshStates = loadLessonStates();
+                    const allDone = chapterKeys.every(k => freshStates[k] === 'done');
+                    return allDone ? (
+                      <div style={{ background: 'linear-gradient(135deg,#ff7fa8,#aee3d8)', borderRadius: 16, padding: 20, textAlign: 'center', marginBottom: 16 }}>
+                        <h2 style={{ fontSize: 20, fontWeight: 900, color: 'white', marginBottom: 6, margin: 0 }}>🎉 第一章全部完成！</h2>
+                        <p style={{ fontSize: 15, color: 'rgba(255,255,255,.9)', marginTop: 6 }}>你已经掌握了韩语最基础的10个语法点，可以开始说出完整的韩语句子了。</p>
+                      </div>
+                    ) : null;
+                  })()}
+                  <div style={{ marginBottom: 18 }}>
+                    <h2 style={{ fontSize: 24, fontWeight: 900, color: C.ink, marginBottom: 4, margin: 0 }}>{card.title}</h2>
+                    <p style={{ fontSize: 15, color: C.muted, marginTop: 6, marginBottom: 0 }}>{card.whatItDoes}</p>
+                  </div>
+                  {card.connectionRules.length > 0 && (
+                    <div style={{ background: C.mintBg, borderRadius: 14, padding: 16, marginBottom: 14 }}>
+                      <h3 style={{ fontSize: 15, fontWeight: 800, color: '#2db89b', marginBottom: 10, margin: '0 0 10px 0' }}>核心规律</h3>
+                      <div style={{ fontSize: 15, lineHeight: 2, color: C.ink }}>
+                        {card.connectionRules.map((rule, i) => (
+                          <div key={i}>{typeof rule === 'string' ? rule : `${rule.text}${rule.examples ? '　' + rule.examples : ''}`}</div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {card.quickTable && (
+                    <div style={{ background: C.card, border: `1px solid ${C.line}`, borderRadius: 14, padding: 16, marginBottom: 14 }}>
+                      <h3 style={{ fontSize: 15, fontWeight: 800, color: '#2db89b', marginBottom: 10, margin: '0 0 10px 0' }}>{card.quickTable.title}</h3>
+                      <div style={{ overflowX: 'auto' }}>
+                        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 15 }}>
+                          <thead><tr>{card.quickTable.headers.map((h, i) => (
+                            <th key={i} style={{ background: C.pinkSoft, color: C.pink, padding: '7px 10px', textAlign: 'left', fontWeight: 700, fontSize: 13, whiteSpace: 'nowrap' }}>{h}</th>
+                          ))}</tr></thead>
+                          <tbody>{card.quickTable.rows.map((row, ri) => (
+                            <tr key={ri}>{row.map((cell, ci) => (
+                              <td key={ci} style={{ padding: '7px 10px', borderBottom: `1px solid ${C.line}`, color: C.ink, fontSize: 15 }}>
+                                {typeof cell === 'object' && cell !== null && 'ko' in cell
+                                  ? <><span style={{ display: 'block', fontWeight: 700 }}>{(cell as { ko: string; zh: string }).ko}</span><span style={{ display: 'block', fontSize: 11, color: C.muted }}>{(cell as { ko: string; zh: string }).zh}</span></>
+                                  : cell}
+                              </td>
+                            ))}</tr>
+                          ))}</tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )}
+                  {card.mistakes.length > 0 && (
+                    <div style={{ background: C.pinkSoft, borderRadius: 14, padding: 16, marginBottom: 14 }}>
+                      <h3 style={{ fontSize: 15, fontWeight: 800, color: C.pink, marginBottom: 10, margin: '0 0 10px 0' }}>常见错误</h3>
+                      {card.mistakes.slice(0, 4).map((m, i) => (
+                        <div key={i} style={{ fontSize: 15, lineHeight: 1.8, marginBottom: 4 }}>
+                          <span style={{ color: '#be185d', textDecoration: 'line-through' }}>{m.wrong}</span>{' → '}
+                          <span style={{ color: '#1a7a4a' }}>{m.correct}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {linkedGps.length > 0 && (
+                    <div style={{ background: C.bg, borderRadius: 14, padding: 16, marginBottom: 14 }}>
+                      <p style={{ fontSize: 15, fontWeight: 800, color: C.muted, marginBottom: 12, margin: '0 0 12px 0' }}>继续练习关联语法：</p>
+                      {linkedGps.map(gp => (
+                        <button key={gp.id} onClick={() => onStartGrammar(gp)}
+                          style={{ display: 'block', width: '100%', padding: '12px 16px', background: C.pinkSoft, border: `1px solid rgba(255,127,168,.2)`, borderRadius: 14, fontSize: 15, fontWeight: 700, color: C.pink, cursor: 'pointer', marginBottom: 8, textAlign: 'left' }}>
+                          ▶ 练习：{gp.displayTitle}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </>
+              )}
+
+              {/* 关联语法（overviewHtml 模式下也显示） */}
+              {card.overviewHtml && linkedGps.length > 0 && (
+                <div style={{ background: C.bg, borderRadius: 14, padding: 16, marginBottom: 14 }}>
+                  <p style={{ fontSize: 15, fontWeight: 800, color: C.muted, marginBottom: 12, margin: '0 0 12px 0' }}>继续练习关联语法：</p>
+                  {linkedGps.map(gp => (
+                    <button key={gp.id} onClick={() => onStartGrammar(gp)}
+                      style={{ display: 'block', width: '100%', padding: '12px 16px', background: C.pinkSoft, border: `1px solid rgba(255,127,168,.2)`, borderRadius: 14, fontSize: 15, fontWeight: 700, color: C.pink, cursor: 'pointer', marginBottom: 8, textAlign: 'left' }}>
+                      ▶ 练习：{gp.displayTitle}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* 完成按钮（overviewHtml 有自己的重新学习按钮，这里只放完成） */}
+              {!card.overviewHtml && (
+                <button onClick={() => { setStep(0); window.scrollTo(0, 0); }}
+                  style={{ width: '100%', padding: 14, borderRadius: 14, border: `1.5px solid ${C.line}`, background: C.card, color: C.muted, fontSize: 15, fontWeight: 700, cursor: 'pointer', marginBottom: 10 }}>
+                  ↺ 重新学习一遍
+                </button>
+              )}
+              <div style={{ borderTop: `1px solid ${C.line}`, paddingTop: 20, marginTop: 20 }}>
+                <button onClick={onComplete}
+                  style={{ width: '100%', padding: 17, borderRadius: 99, border: 'none', background: `linear-gradient(135deg, ${C.mint}, ${C.pink})`, color: 'white', fontSize: 16, fontWeight: 800, cursor: 'pointer' }}>
+                  完成这一课 ✓
+                </button>
+              </div>
+            </div>
+          )}
+      </div>
+
+      {/* 底部翻页导航 */}
+      <div style={isMobile ? {
+        position: 'fixed',
+        bottom: 'calc(56px + env(safe-area-inset-bottom, 0px))',
+        left: 0, right: 0,
+        padding: '12px 20px', background: 'rgba(255,251,247,.95)', backdropFilter: 'blur(12px)', borderTop: `1px solid ${C.line}`, display: 'flex', gap: 10, zIndex: 70
+      } : {
+        padding: '14px 0 0', display: 'flex', gap: 10
+      }}>
+        {step > 0 && (
+          <button onClick={goPrev} style={{ padding: '15px 18px', borderRadius: 18, border: `1.5px solid ${C.line}`, background: C.card, color: C.muted, fontSize: 16, fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' }}>← 上一页</button>
+        )}
+        {step < doneStepIdx && (
+          <button onClick={goNext} style={{ flex: 1, padding: 15, borderRadius: 18, border: 'none', background: '#201815', color: 'white', fontSize: 16, fontWeight: 800, cursor: 'pointer' }}>
+            下一页 →
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── ComprehensivePractice (第一章综合练习) ────────────────────────────────────
+
+const SORT_Q = [
+  { words: ['저는','밥을','먹어요'], answer: ['저는','밥을','먹어요'], hint: '主语→宾语→谓语，动词放句末' },
+  { words: ['저는','학교에','가요'], answer: ['저는','학교에','가요'], hint: '방향助词 에，动词放句末' },
+  { words: ['저는','한국어를','공부해요'], answer: ['저는','한국어를','공부해요'], hint: '宾语助词 를，动词放句末' },
+  { words: ['저는','카페에서','커피를','마셔요'], answer: ['저는','카페에서','커피를','마셔요'], hint: '에서=动作发生地点，마셔요 放句末' },
+  { words: ['저는','지금','이 노래를','듣고 있어요'], answer: ['저는','지금','이 노래를','듣고 있어요'], hint: '进行时 -고 있어요，放句末' },
+];
+
+const FILL3_DATA = [
+  { pre: '학생', post: '', opts: ['예요','이에요'], ans: '이에요', why: '학생 有收音ㅇ→이에요' },
+  { pre: '학교', post: '', opts: ['예요','이에요'], ans: '예요', why: '학교 无收音→예요' },
+  { pre: '선생님', post: '', opts: ['예요','이에요'], ans: '이에요', why: '선생님 有收音ㅁ→이에요' },
+  { pre: '카페', post: '', opts: ['예요','이에요'], ans: '예요', why: '카페 无收音→예요' },
+  { pre: '저', post: '학생이에요', opts: ['은','는'], ans: '는', why: '저 无收音→는' },
+  { pre: '밥', post: '맛있어요', opts: ['은','는'], ans: '은', why: '밥 有收音ㅂ→은' },
+  { pre: '한국어', post: '재미있어요', opts: ['은','는'], ans: '는', why: '어 无收音→는' },
+  { pre: '선생님', post: '바빠요', opts: ['은','는'], ans: '은', why: '님 有收音ㅁ→은' },
+];
+
+const FILL4_DATA = [
+  { pre: '한국어', post: '공부해요', opts: ['을','를'], ans: '를', why: '어 无收音→를' },
+  { pre: '밥', post: '먹어요', opts: ['을','를'], ans: '을', why: '밥 有收音ㅂ→을' },
+  { pre: '음악', post: '들어요', opts: ['을','를'], ans: '을', why: '악 有收音ㄱ→을' },
+  { pre: '커피', post: '마셔요', opts: ['을','를'], ans: '를', why: '피 无收音→를' },
+  { pre: '학교', post: '공부해요', opts: ['에','에서'], ans: '에서', why: '공부하다 是动作→에서' },
+  { pre: '집', post: '가요', opts: ['에','에서'], ans: '에', why: '가다 是方向→에' },
+  { pre: '카페', post: '친구를 만나요', opts: ['에','에서'], ans: '에서', why: '만나다 是动作→에서' },
+  { pre: '집', post: '있어요', opts: ['에','에서'], ans: '에', why: '있다 是存在→에' },
+  { pre: '세 시', post: '만나요', opts: ['에','에서'], ans: '에', why: '时间点用 에' },
+];
+
+const MORPH_DATA = [
+  { label: '가다 → 합니다体', opts: ['갑니다','가습니다','가ㅂ니다'], ans: '갑니다', why: '词干가 无收音→ㅂ니다' },
+  { label: '먹다 → 합니다体', opts: ['먹ㅂ니다','먹이다','먹습니다'], ans: '먹습니다', why: '词干먹 有收音→습니다' },
+  { label: '하다 → 합니다体', opts: ['하ㅂ니다','합니다','하습니다'], ans: '합니다', why: '하다固定变합니다' },
+  { label: '읽다 → 합니다体', opts: ['읽어요','읽습니다','읽ㅂ니다'], ans: '읽습니다', why: '词干읽 有收音→습니다' },
+  { label: '갑니다 → 疑问句', opts: ['갑니까?','갑니다?','가니다?'], ans: '갑니까?', why: '陈述→疑问：-ㅂ니다 → -ㅂ니까?' },
+  { label: '먹습니다 → 疑问句', opts: ['먹습니까?','먹ㅂ니까?','먹니까?'], ans: '먹습니까?', why: '陈述→疑问：-습니다 → -습니까?' },
+];
+
+const JUDGE_DATA = [
+  { A: '어제 공부했어요', B: '어제 공부해요', ans: 'A', why: '어제(昨天) 是过去→-았/었어요' },
+  { A: '내일 공부할 거예요', B: '내일 공부했어요', ans: 'A', why: '내일(明天) 是将来→-을 거예요' },
+  { A: '지금 밥을 먹고 있어요', B: '지금 밥을 먹었어요', ans: 'A', why: '지금(现在) 进行中→-고 있어요' },
+  { A: '지난주에 영화를 봤어요', B: '지난주에 영화를 볼 거예요', ans: 'A', why: '지난주(上周) 是过去→-았/었어요' },
+  { A: '오늘 학교에 가요', B: '오늘에 학교에 가요', ans: 'A', why: '오늘/내일/어제 不加 에' },
+  { A: '집에 있어요', B: '집에서 있어요', ans: 'A', why: '있다 是存在→地点用 에' },
+];
+
+const ERR_DATA = [
+  { wrong: '저은 학생이에요', right: '저는 학생이에요', why: '저 无收音→는' },
+  { wrong: '저는 밥를 먹어요', right: '저는 밥을 먹어요', why: '밥 有收音ㅂ→을' },
+  { wrong: '학교에 공부해요', right: '학교에서 공부해요', why: '공부하다 是动作→에서' },
+  { wrong: '집에서 있어요', right: '집에 있어요', why: '있다 是存在→에' },
+  { wrong: '내일 공부했어요', right: '내일 공부할 거예요', why: '내일 是将来→将来时' },
+  { wrong: '학생습니다', right: '학생입니다', why: '학생 是名词→입니다' },
+];
+
+type FillState = { done: boolean; ok: boolean | null; picked: string | null };
+type JudgeState = { done: boolean; ok: boolean | null; picked: string | null };
+type ErrState = { revealed: boolean };
+
+function SortStep({ onDone }: { onDone: () => void }) {
+  const C = useC();
+  const [qIdx, setQIdx] = React.useState(0);
+  const [order, setOrder] = React.useState<string[]>([]);
+  const [answers, setAnswers] = React.useState<string[]>([]);
+  const [used, setUsed] = React.useState<number[]>([]);
+  const [checked, setChecked] = React.useState(false);
+  const [result, setResult] = React.useState<'ok'|'ng'|null>(null);
+  const [allDone, setAllDone] = React.useState(false);
+  const timerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  React.useEffect(() => {
+    return () => { if (timerRef.current) clearTimeout(timerRef.current); };
+  }, []);
+
+  React.useEffect(() => {
+    const q = SORT_Q[qIdx];
+    setOrder([...q.words].sort(() => Math.random() - 0.5));
+    setAnswers([]); setUsed([]); setChecked(false); setResult(null);
+  }, [qIdx]);
+
+  const pick = (word: string, idx: number) => {
+    if (checked || used.includes(idx)) return;
+    setUsed(u => [...u, idx]);
+    setAnswers(a => [...a, word]);
+  };
+
+  const remove = (i: number) => {
+    if (checked) return;
+    const newAns = answers.filter((_, j) => j !== i);
+    setAnswers(newAns);
+    const newUsed: number[] = [];
+    for (const w of newAns) {
+      const j = order.findIndex((ww, k) => ww === w && !newUsed.includes(k));
+      if (j >= 0) newUsed.push(j);
+    }
+    setUsed(newUsed);
+  };
+
+  const check = () => {
+    const q = SORT_Q[qIdx];
+    if (answers.length < q.answer.length) return;
+    setChecked(true);
+    const ok = answers.join('|') === q.answer.join('|');
+    setResult(ok ? 'ok' : 'ng');
+    if (ok && qIdx < SORT_Q.length - 1) {
+      timerRef.current = setTimeout(() => setQIdx(i => i + 1), 900);
+    } else if (ok) {
+      setAllDone(true);
+    }
+  };
+
+  const reset = () => {
+    const q = SORT_Q[qIdx];
+    setOrder([...q.words].sort(() => Math.random() - 0.5));
+    setAnswers([]); setUsed([]); setChecked(false); setResult(null);
+  };
+
+  const q = SORT_Q[qIdx];
+  const trackBg = result === 'ok' ? '#f0fff8' : result === 'ng' ? '#fff5f5' : '#fafafa';
+  const trackBorder = result === 'ok' ? '#2db89b' : result === 'ng' ? '#e05555' : '#eee0d8';
+
+  return (
+    <div>
+      <div style={{ fontSize: 15, color: C.muted, marginBottom: 4 }}>第 {qIdx + 1} / {SORT_Q.length} 题</div>
+      <div style={{ fontSize: 15, background: C.bg, borderRadius: 10, padding: '8px 12px', color: C.muted, marginBottom: 10 }}>{q.hint}</div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
+        {order.map((w, i) => (
+          <button key={i} onClick={() => pick(w, i)} disabled={used.includes(i)} style={{ padding: '8px 14px', borderRadius: 12, background: C.card, border: `1.5px solid ${C.line}`, fontSize: 17, fontWeight: 700, color: used.includes(i) ? '#ccc' : C.ink, cursor: used.includes(i) ? 'default' : 'pointer', opacity: used.includes(i) ? 0.3 : 1 }}>{w}</button>
+        ))}
+      </div>
+      <div onClick={() => {}} style={{ minHeight: 50, border: `2px dashed ${trackBorder}`, borderRadius: 14, padding: '8px 12px', display: 'flex', flexWrap: 'wrap', gap: 6, alignItems: 'center', background: trackBg, marginBottom: 8 }}>
+        {answers.length === 0
+          ? <span style={{ fontSize: 16, color: '#ccc' }}>点击词块拼句...</span>
+          : answers.map((w, i) => <button key={i} onClick={() => remove(i)} style={{ padding: '6px 12px', borderRadius: 10, background: C.pink, color: 'white', fontSize: 17, fontWeight: 700, border: 'none', cursor: 'pointer' }}>{w}</button>)
+        }
+      </div>
+      {result && <div style={{ fontSize: 15, fontWeight: 700, color: result === 'ok' ? '#2db89b' : '#e05555', marginBottom: 8 }}>
+        {result === 'ok' ? (allDone ? '✓ 全部完成！点「下一页」继续。' : '✓ 正确！') : `✗ 正确顺序：${q.answer.join(' ')}。再试试？`}
+      </div>}
+      <div style={{ display: 'flex', gap: 8 }}>
+        <button onClick={reset} style={{ padding: '12px 16px', borderRadius: 14, border: `1.5px solid ${C.line}`, background: C.card, color: C.muted, fontSize: 16, cursor: 'pointer' }}>↺ 重置</button>
+        <button onClick={check} style={{ flex: 1, padding: 12, borderRadius: 14, border: 'none', background: '#201815', color: 'white', fontSize: 16, fontWeight: 800, cursor: 'pointer' }}>检查答案</button>
+      </div>
+    </div>
+  );
+}
+
+function FillStep({ data, onScore }: { data: typeof FILL3_DATA; onScore?: (s: { correct: number; total: number }) => void }) {
+  const C = useC();
+  const [states, setStates] = React.useState<FillState[]>(() => data.map(() => ({ done: false, ok: null, picked: null })));
+
+  const pick = (i: number, opt: string) => {
+    if (states[i].done) return;
+    const ok = opt === data[i].ans;
+    const newStates = states.map((item, j) => j === i ? { done: true, ok, picked: opt } : item);
+    setStates(newStates);
+    const correct = newStates.filter(s => s.ok).length;
+    const answered = newStates.filter(s => s.done).length;
+    onScore?.({ correct, total: answered });
+  };
+
+  return (
+    <div>
+      {data.map((q, i) => {
+        const s = states[i];
+        const blank = s.done
+          ? <span style={{ color: s.ok ? '#2db89b' : '#e05555', fontWeight: 800 }}>{s.picked}</span>
+          : <span style={{ display: 'inline-block', width: 32, height: 18, borderBottom: '2px solid #aee3d8', verticalAlign: 'bottom' }} />;
+        const sentence = q.post ? <>{q.pre}{blank} {q.post}</> : <>{q.pre}{blank}</>;
+        return (
+          <div key={i} style={{ marginBottom: 20 }}>
+            <div style={{ fontSize: 15, color: C.muted, fontWeight: 700, marginBottom: 10 }}>第 {i + 1} 题</div>
+            <div style={{ fontSize: 17, fontWeight: 700, color: C.ink, marginBottom: 10 }}>{sentence}</div>
+            {q.opts.map(opt => {
+              let border = '1.5px solid #eee0d8', bg = 'white';
+              if (s.done) {
+                if (opt === q.ans) { border = '1.5px solid #2db89b'; bg = '#eaf8f5'; }
+                else if (opt === s.picked && s.picked !== q.ans) { border = '1.5px solid #e05555'; bg = '#fff0f0'; }
+              }
+              return (
+                <button key={opt} onClick={() => pick(i, opt)} style={{ display: 'inline-block', padding: '10px 20px', borderRadius: 14, border, background: bg, fontSize: 17, fontWeight: 700, color: C.ink, cursor: 'pointer', margin: '0 8px 8px 0' }}>{opt}</button>
+              );
+            })}
+            {s.done && (
+              <div style={{ marginBottom: 14 }}>
+                <div style={{ fontSize: 16, color: s.ok ? '#2db89b' : '#e05555', fontWeight: 700, margin: '6px 0 2px' }}>{s.ok ? '✓ 正确！' : `✗ 正确答案：${q.ans}`}</div>
+                <div style={{ fontSize: 15, color: C.muted }}>{q.why}</div>
+              </div>
+            )}
+            {!s.done && <div style={{ marginBottom: 14 }} />}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function MorphStep({ onScore }: { onScore?: (s: { correct: number; total: number }) => void }) {
+  const C = useC();
+  const [states, setStates] = React.useState<FillState[]>(() => MORPH_DATA.map(() => ({ done: false, ok: null, picked: null })));
+
+  const pick = (i: number, opt: string) => {
+    if (states[i].done) return;
+    const ok = opt === MORPH_DATA[i].ans;
+    const newStates = states.map((item, j) => j === i ? { done: true, ok, picked: opt } : item);
+    setStates(newStates);
+    const correct = newStates.filter(s => s.ok).length;
+    const answered = newStates.filter(s => s.done).length;
+    onScore?.({ correct, total: answered });
+  };
+
+  return (
+    <div>
+      {MORPH_DATA.map((q, i) => {
+        const s = states[i];
+        return (
+          <div key={i} style={{ marginBottom: 20 }}>
+            <div style={{ fontSize: 15, color: C.muted, fontWeight: 700, marginBottom: 10 }}>第 {i + 1} 题</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: C.ink, marginBottom: 12 }}>{q.label}</div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 8 }}>
+              {q.opts.map(opt => {
+                let border = '1.5px solid #eee0d8', bg = 'white';
+                if (s.done) {
+                  if (opt === q.ans) { border = '1.5px solid #2db89b'; bg = '#eaf8f5'; }
+                  else if (opt === s.picked && s.picked !== q.ans) { border = '1.5px solid #e05555'; bg = '#fff0f0'; }
+                }
+                return (
+                  <button key={opt} onClick={() => pick(i, opt)} style={{ padding: '10px 16px', borderRadius: 14, border, background: bg, fontSize: 17, fontWeight: 700, color: C.ink, cursor: 'pointer' }}>{opt}</button>
+                );
+              })}
+            </div>
+            {s.done && (
+              <div style={{ marginBottom: 12 }}>
+                <div style={{ fontSize: 16, color: s.ok ? '#2db89b' : '#e05555', fontWeight: 700, margin: '6px 0 2px' }}>{s.ok ? '✓ 正确！' : `✗ 正确答案：${q.ans}`}</div>
+                <div style={{ fontSize: 15, color: C.muted }}>{q.why}</div>
+              </div>
+            )}
+            {!s.done && <div style={{ marginBottom: 12 }} />}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function JudgeStep({ onScore }: { onScore?: (s: { correct: number; total: number }) => void }) {
+  const C = useC();
+  const [states, setStates] = React.useState<JudgeState[]>(() => JUDGE_DATA.map(() => ({ done: false, ok: null, picked: null })));
+
+  const pick = (i: number, choice: string) => {
+    if (states[i].done) return;
+    const ok = choice === JUDGE_DATA[i].ans;
+    const newStates = states.map((item, j) => j === i ? { done: true, ok, picked: choice } : item);
+    setStates(newStates);
+    const correct = newStates.filter(s => s.ok).length;
+    const answered = newStates.filter(s => s.done).length;
+    onScore?.({ correct, total: answered });
+  };
+
+  return (
+    <div>
+      {JUDGE_DATA.map((q, i) => {
+        const s = states[i];
+        const btnStyle = (choice: string): React.CSSProperties => {
+          if (!s.done) return { border: `1.5px solid ${C.line}`, background: C.card };
+          if (choice === q.ans) return { border: '1.5px solid #2db89b', background: '#eaf8f5' };
+          if (choice === s.picked && s.picked !== q.ans) return { border: '1.5px solid #e05555', background: '#fff0f0' };
+          return { border: `1.5px solid ${C.line}`, background: C.card };
+        };
+        return (
+          <div key={i} style={{ marginBottom: 20 }}>
+            <div style={{ fontSize: 15, color: C.muted, fontWeight: 700, marginBottom: 10 }}>第 {i + 1} 题 · 选出更自然的句子</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 8 }}>
+              {(['A', 'B'] as const).map(ch => (
+                <button key={ch} onClick={() => pick(i, ch)} style={{ padding: '11px 14px', borderRadius: 14, fontSize: 17, fontWeight: 700, color: C.ink, cursor: 'pointer', textAlign: 'left', ...btnStyle(ch) }}>
+                  {ch}. {ch === 'A' ? q.A : q.B}
+                </button>
+              ))}
+            </div>
+            {s.done && (
+              <div style={{ marginBottom: 12 }}>
+                <div style={{ fontSize: 16, color: s.ok ? '#2db89b' : '#e05555', fontWeight: 700, margin: '6px 0 2px' }}>{s.ok ? '✓ 正确！' : `✗ 正确答案：${q.ans}`}</div>
+                <div style={{ fontSize: 15, color: C.muted }}>{q.why}</div>
+              </div>
+            )}
+            {!s.done && <div style={{ marginBottom: 12 }} />}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function ErrStep() {
+  const C = useC();
+  const [states, setStates] = React.useState<ErrState[]>(() => ERR_DATA.map(() => ({ revealed: false })));
+
+  const reveal = (i: number) => setStates(s => s.map((item, j) => j === i ? { revealed: true } : item));
+
+  return (
+    <div>
+      {ERR_DATA.map((q, i) => (
+        <div key={i} style={{ marginBottom: 20 }}>
+          <div style={{ fontSize: 15, color: C.muted, fontWeight: 700, marginBottom: 10 }}>第 {i + 1} 题 · 找出错误并改正</div>
+          <div style={{ borderRadius: 16, overflow: 'hidden', border: `1px solid ${C.line}` }}>
+            <div style={{ background: `color-mix(in srgb, #e05555 8%, ${C.card})`, padding: '11px 14px', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ background: '#e05555', color: 'white', fontSize: 13, fontWeight: 800, padding: '2px 7px', borderRadius: 99, flexShrink: 0 }}>错</span>
+              <span style={{ fontSize: 17, fontWeight: 600 }}>{q.wrong}</span>
+            </div>
+            {states[i].revealed ? (
+              <>
+                <div style={{ background: `color-mix(in srgb, #2db89b 8%, ${C.card})`, padding: '11px 14px', display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ background: '#2db89b', color: 'white', fontSize: 13, fontWeight: 800, padding: '2px 7px', borderRadius: 99, flexShrink: 0 }}>正</span>
+                  <span style={{ fontSize: 17, fontWeight: 600 }}>{q.right}</span>
+                </div>
+                <div style={{ background: C.bg, borderTop: `1px solid ${C.line}`, padding: '8px 14px', fontSize: 15, color: C.muted, lineHeight: 1.5 }}>{q.why}</div>
+              </>
+            ) : (
+              <div style={{ padding: '10px 14px' }}>
+                <button onClick={() => reveal(i)} style={{ padding: '8px 16px', borderRadius: 12, border: '1.5px solid #aee3d8', background: '#eaf8f5', color: '#2db89b', fontSize: 16, fontWeight: 800, cursor: 'pointer' }}>显示答案</button>
+              </div>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ScoreStep({ onComplete, scores }: { onComplete: () => void; scores?: { fill3: number; fill3max: number; fill4: number; fill4max: number; morph: number; morphmax: number; judge: number; judgemax: number } }) {
+  const C = useC();
+  const total = (scores?.fill3 ?? 0) + (scores?.fill4 ?? 0) + (scores?.morph ?? 0) + (scores?.judge ?? 0);
+  const max = (scores?.fill3max ?? FILL3_DATA.length) + (scores?.fill4max ?? FILL4_DATA.length) + (scores?.morphmax ?? MORPH_DATA.length) + (scores?.judgemax ?? JUDGE_DATA.length);
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+      <div style={{ background: 'linear-gradient(135deg,#fff0f5,#eaf8f5)', borderRadius: 20, padding: 20, textAlign: 'center' }}>
+        <div style={{ fontSize: 42, fontWeight: 900, color: C.pink }}>{total}<span style={{ fontSize: 18, color: C.muted }}> / {max}</span></div>
+        <div style={{ fontSize: 16, color: C.muted, marginTop: 4 }}>选择题答对数</div>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+        <div style={{ background: C.bg, borderRadius: 14, padding: 12, textAlign: 'center' }}>
+          <div style={{ fontSize: 22, fontWeight: 900, color: C.pink }}>{scores?.fill3 ?? 0}/{scores?.fill3max ?? FILL3_DATA.length}</div>
+          <div style={{ fontSize: 15, color: C.muted, marginTop: 3 }}>助词填空①</div>
+        </div>
+        <div style={{ background: C.bg, borderRadius: 14, padding: 12, textAlign: 'center' }}>
+          <div style={{ fontSize: 22, fontWeight: 900, color: C.pink }}>{scores?.fill4 ?? 0}/{scores?.fill4max ?? FILL4_DATA.length}</div>
+          <div style={{ fontSize: 15, color: C.muted, marginTop: 3 }}>助词填空②</div>
+        </div>
+        <div style={{ background: C.bg, borderRadius: 14, padding: 12, textAlign: 'center' }}>
+          <div style={{ fontSize: 22, fontWeight: 900, color: C.pink }}>{scores?.morph ?? 0}/{scores?.morphmax ?? MORPH_DATA.length}</div>
+          <div style={{ fontSize: 15, color: C.muted, marginTop: 3 }}>变形练习</div>
+        </div>
+        <div style={{ background: C.bg, borderRadius: 14, padding: 12, textAlign: 'center', gridColumn: 'span 3' }}>
+          <div style={{ fontSize: 22, fontWeight: 900, color: C.pink }}>{scores?.judge ?? 0}/{scores?.judgemax ?? JUDGE_DATA.length}</div>
+          <div style={{ fontSize: 15, color: C.muted, marginTop: 3 }}>判断正误</div>
+        </div>
+      </div>
+      <div style={{ background: C.card, border: `1px solid ${C.line}`, borderRadius: 16, padding: '14px 16px' }}>
+        <div style={{ fontSize: 15, fontWeight: 800, color: C.muted, marginBottom: 10 }}>本章掌握的7项能力</div>
+        {[
+          '韩语基本语序：谓语放句末',
+          '正式体 합니다/습니다，日常体 아요/어요',
+          '话题助词 은/는（有收音→은，无收音→는）',
+          '宾语助词 을/를（有收音→을，无收音→를）',
+          '地点助词 에（方向·存在·时间）vs 에서（动作地点）',
+          '过去时 -았/었어요，将来时 -을/ㄹ 거예요',
+          '进行时 -고 있어요',
+        ].map((item, i) => (
+          <div key={i} style={{ fontSize: 15, color: C.ink, lineHeight: 1.8 }}>✓ {item}</div>
+        ))}
+      </div>
+      <div style={{ background: C.bg, borderRadius: 16, padding: '14px 16px' }}>
+        <div style={{ fontSize: 15, fontWeight: 800, color: C.muted, marginBottom: 4 }}>下一阶段</div>
+        <div style={{ fontSize: 15, fontWeight: 700, color: C.ink }}>02｜常用固定句型及助词</div>
+        <div style={{ fontSize: 15, color: C.muted, marginTop: 3 }}>去哪里、和谁、有/没有、请求命令、数词量词……</div>
+      </div>
+      <button onClick={onComplete} style={{ width: '100%', padding: 14, borderRadius: 16, border: 'none', background: 'linear-gradient(135deg,#aee3d8,#ff7fa8)', color: 'white', fontSize: 15, fontWeight: 800, cursor: 'pointer' }}>
+        完成练习 ✓
+      </button>
+    </div>
+  );
+}
+
+const STEP_CONFIG = [
+  { badge: '📋', label: '练习说明', color: '#ff7fa8' },
+  { badge: '🎯', label: '句子排序', color: '#2db89b' },
+  { badge: '✏️', label: '助词填空①', color: '#6b7ff0' },
+  { badge: '✏️', label: '助词填空②', color: '#b49ccf' },
+  { badge: '🔄', label: '变形练习', color: '#2db89b' },
+  { badge: '✅', label: '判断正误', color: '#c89020' },
+  { badge: '⚠️', label: '改错练习', color: '#e05555' },
+  { badge: '🏆', label: '练习完成', color: '#e07a30' },
+];
+const STEPS_TOTAL = STEP_CONFIG.length;
+
+function ComprehensivePractice({ card, onBack, onComplete }: { card: GrammarCard; onBack: () => void; onComplete: () => void }) {
+  const C = useC();
+  const [step, setStep] = React.useState(0);
+  const [isMobile, setIsMobile] = React.useState(false);
+  const [scores, setScores] = React.useState({ fill3: 0, fill3max: FILL3_DATA.length, fill4: 0, fill4max: FILL4_DATA.length, morph: 0, morphmax: MORPH_DATA.length, judge: 0, judgemax: JUDGE_DATA.length });
+  React.useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
+  const cfg = STEP_CONFIG[step];
+  const progress = ((step + 1) / STEPS_TOTAL) * 100;
+
+  return (
+    <div style={{ minHeight: '100vh', background: C.bg }}>
+      {/* 顶部 */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 16px', background: C.card, borderBottom: `1px solid ${C.line}`, position: 'sticky', top: 0, zIndex: 10 }}>
+        <button onClick={onBack} style={{ width: 34, height: 34, borderRadius: 10, background: C.bg, border: 'none', cursor: 'pointer', fontSize: 18, color: C.ink, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>‹</button>
+        <div style={{ flex: 1 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
+            <span style={{ fontSize: 15, fontWeight: 800, color: C.ink }}>综合练习①｜韩语基本句型</span>
+            <span style={{ fontSize: 15, color: C.muted, fontWeight: 700 }}>{step + 1} / {STEPS_TOTAL}</span>
+          </div>
+          <div style={{ height: 5, background: C.line, borderRadius: 99, overflow: 'hidden' }}>
+            <div style={{ height: '100%', background: 'linear-gradient(90deg,#aee3d8,#ff7fa8)', borderRadius: 99, width: `${progress}%`, transition: 'width .45s' }} />
+          </div>
+        </div>
+      </div>
+
+      <div style={{ maxWidth: 560, margin: '0 auto', padding: isMobile ? `0 0 calc(90px + 56px + env(safe-area-inset-bottom, 0px))` : '16px 24px 40px' }}>
+        {/* Badge */}
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 16, fontWeight: 800, padding: '3px 10px', borderRadius: 99, background: `${cfg.color}18`, color: cfg.color, alignSelf: 'flex-start', marginTop: isMobile ? 12 : 0, marginLeft: isMobile ? 16 : 0, marginBottom: 8 }}>
+          {cfg.badge} {cfg.label}
+        </span>
+        <div style={{ background: C.card, border: `1px solid ${C.line}`, borderRadius: isMobile ? 16 : 22, padding: isMobile ? '24px 20px' : '32px 32px', boxShadow: '0 4px 20px rgba(78,52,46,.09)', display: 'flex', flexDirection: 'column', gap: 16 }}>
+
+          {/* Step 0: 说明 */}
+          {step === 0 && (
+            <>
+              <div style={{ fontSize: 21, fontWeight: 900, color: C.ink }}>第一章综合练习</div>
+              <div style={{ fontSize: 16, color: C.muted, lineHeight: 1.7 }}>完成这份练习，检验前 10 课是否掌握。</div>
+              <div style={{ background: 'linear-gradient(135deg,#fff0f5,#eaf8f5)', borderRadius: 22, padding: 20 }}>
+                <div style={{ fontSize: 16, fontWeight: 800, color: C.muted, marginBottom: 12 }}>本次练习覆盖的知识点</div>
+                {[
+                  ['🔤','韩语基本语序','谓语放句末'],
+                  ['🎙️','正式礼貌体','합니다 / 습니다 / 입니다'],
+                  ['💬','日常礼貌体','아요 / 어요 / 예요 / 이에요'],
+                  ['🏷️','话题助词','은 / 는'],
+                  ['🎯','宾语助词','을 / 를'],
+                  ['📍','地点与时间','에 / 에서'],
+                  ['⏳','时态','过去 / 将来 / 进行时'],
+                ].map(([icon, title, sub]) => (
+                  <div key={title} style={{ display: 'flex', alignItems: 'center', gap: 10, background: C.card, borderRadius: 14, padding: '10px 14px', marginBottom: 6 }}>
+                    <span style={{ fontSize: 18 }}>{icon}</span>
+                    <div>
+                      <div style={{ fontSize: 15, fontWeight: 800, color: C.ink }}>{title}</div>
+                      <div style={{ fontSize: 15, color: C.muted }}>{sub}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div style={{ background: C.card, border: `1px solid ${C.line}`, borderRadius: 14, padding: '13px 15px', fontSize: 15, color: C.muted, lineHeight: 1.65 }}>
+                共 <span style={{ color: C.pink, fontWeight: 700 }}>7 组练习</span>，包含排序、填空、变形、判断和改错。<br />选错了会显示正确答案，可以继续往下做。
+              </div>
+            </>
+          )}
+
+          {/* Step 1: 排序 */}
+          {step === 1 && (
+            <>
+              <div style={{ fontSize: 21, fontWeight: 900, color: C.ink }}>拼出正确的句子</div>
+              <div style={{ fontSize: 16, color: C.muted, lineHeight: 1.65 }}>韩语谓语放句末！注意助词的位置。</div>
+              <SortStep onDone={() => {}} />
+            </>
+          )}
+
+          {/* Step 2: 填空① */}
+          {step === 2 && (
+            <>
+              <div style={{ fontSize: 21, fontWeight: 900, color: C.ink }}>예요/이에요 · 은/는</div>
+              <div style={{ fontSize: 16, color: C.muted, lineHeight: 1.7 }}>根据名词末尾有无收音选择正确形式。</div>
+              <FillStep data={FILL3_DATA} onScore={s => setScores(prev => ({ ...prev, fill3: s.correct }))} />
+            </>
+          )}
+
+          {/* Step 3: 填空② */}
+          {step === 3 && (
+            <>
+              <div style={{ fontSize: 21, fontWeight: 900, color: C.ink }}>을/를 · 에/에서</div>
+              <div style={{ fontSize: 16, color: C.muted, lineHeight: 1.7 }}>宾语助词和地点助词，选对它！</div>
+              <FillStep data={FILL4_DATA} onScore={s => setScores(prev => ({ ...prev, fill4: s.correct }))} />
+            </>
+          )}
+
+          {/* Step 4: 变形 */}
+          {step === 4 && (
+            <>
+              <div style={{ fontSize: 21, fontWeight: 900, color: C.ink }}>选出正确变形结果</div>
+              <div style={{ fontSize: 16, color: C.muted, lineHeight: 1.7 }}>합니다体和疑问句变换，注意有无收音！</div>
+              <MorphStep onScore={s => setScores(prev => ({ ...prev, morph: s.correct }))} />
+            </>
+          )}
+
+          {/* Step 5: 判断 */}
+          {step === 5 && (
+            <>
+              <div style={{ fontSize: 21, fontWeight: 900, color: C.ink }}>选出更自然的句子</div>
+              <div style={{ fontSize: 16, color: C.muted, lineHeight: 1.7 }}>结合时间词判断时态，注意 에 / 에서 的用法。</div>
+              <JudgeStep onScore={s => setScores(prev => ({ ...prev, judge: s.correct }))} />
+            </>
+          )}
+
+          {/* Step 6: 改错 */}
+          {step === 6 && (
+            <>
+              <div style={{ fontSize: 21, fontWeight: 900, color: C.ink }}>找出错误并改正</div>
+              <div style={{ fontSize: 16, color: C.muted, lineHeight: 1.7 }}>这些都是初学者最常犯的错误，检查自己有没有！</div>
+              <ErrStep />
+            </>
+          )}
+
+          {/* Step 7: 完成 */}
+          {step === 7 && <ScoreStep onComplete={onComplete} scores={scores} />}
+        </div>
+      </div>
+
+      {/* 底部导航 */}
+      {step < 7 && (
+        <div style={isMobile ? { position: 'fixed', bottom: 'calc(56px + env(safe-area-inset-bottom, 0px))', left: 0, right: 0, padding: '12px 16px', background: C.card, borderTop: `1px solid ${C.line}`, display: 'flex', gap: 10, zIndex: 70 } : { padding: '12px 0 0', display: 'flex', gap: 10 }}>
+          {step > 0 && (
+            <button onClick={() => { setStep(s => s - 1); window.scrollTo(0, 0); }} style={{ padding: '14px 16px', borderRadius: 16, border: `1.5px solid ${C.line}`, background: C.card, color: C.muted, fontSize: 15, fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' }}>← 上一页</button>
+          )}
+          <button onClick={() => { setStep(s => s + 1); window.scrollTo(0, 0); }} style={{ flex: 1, padding: 14, borderRadius: 16, border: 'none', background: '#201815', color: 'white', fontSize: 15, fontWeight: 800, cursor: 'pointer' }}>
+            {step === 6 ? '查看结果 →' : '下一页 →'}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── ChaptersTab ───────────────────────────────────────────────────────────────
+
+function ChaptersTab({ onOpenCard, isAdmin }: { onOpenCard: (card: GrammarCard) => void; isAdmin: boolean }) {
+  const C = useC();
+  const [lessonStates, setLessonStates] = useState<Record<string, LessonStatus>>({});
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [expanded, setExpanded] = useState<Set<number>>(new Set([1]));
+
+  useEffect(() => {
+    setLessonStates(loadLessonStates());
+    setIsLoaded(true);
+  }, []);
+
+  const toggle = (partNumber: number) => setExpanded(prev => {
+    const next = new Set(prev);
+    next.has(partNumber) ? next.delete(partNumber) : next.add(partNumber);
+    return next;
+  });
+
+  const totalLessons = grammarParts.reduce((sum, p) => sum + p.lessons.length, 0);
+  const doneLessons = Object.values(lessonStates).filter(s => s === 'done').length;
+
+  const [continueCard, setContinueCard] = useState<GrammarCard | null>(null);
+  const [continuePartTitle, setContinuePartTitle] = useState('');
+  const partNums = ['一', '二', '三', '四', '五', '六', '七'];
+
+  useEffect(() => {
+    if (!isLoaded) return;
+    let cancelled = false;
+    (async () => {
+      for (const part of grammarParts) {
+        for (const lesson of part.lessons) {
+          if (lessonStates[lesson.cardId] !== 'done') {
+            const card = await loadGrammarCard(lesson.cardId);
+            if (!cancelled && card) {
+              setContinueCard(card);
+              setContinuePartTitle(`第${partNums[part.partNumber - 1]}部分 · ${part.title}`);
+            }
+            return;
+          }
+        }
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [isLoaded, lessonStates]);
+
+  return (
+    <div>
+      {/* Stats */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, marginBottom: 12 }}>
+        {[
+          { n: doneLessons, l: '已完成课', c: '#2db89b' },
+          { n: doneLessons > 0 && doneLessons < totalLessons ? 1 : 0, l: '进行中', c: C.pink },
+          { n: totalLessons, l: '共课次', c: C.ink },
+        ].map(({ n, l, c }) => (
+          <div key={l} style={{ background: C.card, border: `1px solid ${C.line}`, borderRadius: 20, padding: '14px 10px', textAlign: 'center' }}>
+            <div style={{ fontSize: 26, fontWeight: 900, color: c, lineHeight: 1 }}>{n}</div>
+            <div style={{ fontSize: 13, color: C.muted, marginTop: 5 }}>{l}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* 整体进度 */}
+      <div style={{ background: C.card, border: `1px solid ${C.line}`, borderRadius: 24, padding: '16px 18px', marginBottom: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+          <span style={{ fontSize: 15, fontWeight: 800 }}>整体进度</span>
+          <span style={{ fontSize: 13, color: C.muted }}>{continueCard ? continuePartTitle : doneLessons === totalLessons ? '全部完成 🎉' : '从第一部分开始'}</span>
+        </div>
+        <div style={{ height: 8, background: C.line, borderRadius: 999, overflow: 'hidden', marginBottom: 8 }}>
+          <div style={{ height: '100%', borderRadius: 999, background: `linear-gradient(90deg, ${C.mint}, ${C.pink})`, width: `${(doneLessons / totalLessons) * 100}%`, transition: 'width .4s' }} />
+        </div>
+        <p style={{ fontSize: 13, color: C.muted }}>已完成 {doneLessons} / {totalLessons} 课</p>
+      </div>
+
+      {/* 继续学习 */}
+      {continueCard && (
+        <div
+          onClick={() => onOpenCard(continueCard!)}
+          style={{ background: `linear-gradient(135deg, rgba(255,127,168,.07), rgba(180,156,207,.07))`, border: `1.5px solid rgba(255,127,168,.2)`, borderRadius: 28, padding: 20, marginBottom: 16, cursor: 'pointer', boxShadow: '0 8px 32px rgba(255,127,168,.1)' }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+            <span style={{ fontSize: 15, fontWeight: 800 }}>继续学习</span>
+            <span style={{ fontSize: 13, fontWeight: 800, background: C.pinkSoft, color: C.pink, borderRadius: 999, padding: '4px 12px' }}>进行中</span>
+          </div>
+          <p style={{ fontSize: 18, fontWeight: 900, marginBottom: 4 }}>第 {continueCard.lessonNumber} 课</p>
+          <p style={{ fontSize: 15, color: C.ink, fontWeight: 800, marginBottom: 2 }}>{continueCard.title}</p>
+          {continueCard.whatItDoes && !continueCard.isPractice && (
+            <p style={{ fontSize: 15, color: C.muted, marginBottom: 16 }}>{continueCard.whatItDoes}</p>
+          )}
+          <div style={{ marginBottom: (!continueCard.whatItDoes || continueCard.isPractice) ? 16 : 0 }} />
+          <button
+            onClick={e => { e.stopPropagation(); onOpenCard(continueCard!); }}
+            style={{ width: '100%', padding: '14px 0', borderRadius: 99, background: C.pink, color: '#fff', fontSize: 16, fontWeight: 800, border: 'none', cursor: 'pointer' }}
+          >
+            继续学习
+          </button>
+        </div>
+      )}
+
+      <p style={{ fontSize: 13, fontWeight: 800, color: C.muted, letterSpacing: '.6px', textTransform: 'uppercase', margin: '18px 0 10px' }}>全部部分</p>
+
+      {grammarParts.map(part => {
+        const isPartLocked = !isAdmin && part.partNumber >= 7;
+        const isOpen = !isPartLocked && expanded.has(part.partNumber);
+        const doneInPart = part.lessons.filter(l => lessonStates[l.cardId] === 'done').length;
+        const isActive = doneInPart > 0 && doneInPart < part.lessons.length;
+        const isDone = doneInPart === part.lessons.length;
+
+        return (
+          <div key={part.partNumber} style={{ background: C.card, border: `1px solid ${isActive ? 'rgba(255,127,168,.35)' : C.line}`, borderRadius: 24, marginBottom: 10, overflow: 'hidden', boxShadow: isActive ? '0 4px 16px rgba(255,127,168,.08)' : '0 4px 16px rgba(78,52,46,.06)', opacity: isPartLocked ? 0.6 : 1 }}>
+            <button
+              onClick={() => !isPartLocked && toggle(part.partNumber)}
+              style={{ width: '100%', padding: '16px 18px', display: 'flex', alignItems: 'center', gap: 14, cursor: isPartLocked ? 'default' : 'pointer', background: 'transparent', border: 'none', textAlign: 'left' }}
+            >
+              <div style={{ width: 44, height: 44, borderRadius: 15, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: isDone ? 20 : 16, fontWeight: 900, flexShrink: 0, background: isPartLocked ? '#f0ece8' : isDone ? C.mintBg : isActive ? C.pinkSoft : '#f0ece8', color: isPartLocked ? C.muted : isDone ? '#2db89b' : isActive ? C.pink : C.muted }}>
+                {isPartLocked ? <Lock size={16} /> : isDone ? '✓' : partNums[part.partNumber - 1]}
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                  <p style={{ fontSize: 16, fontWeight: 800, color: isDone || isActive ? C.ink : C.muted, margin: 0 }}>第{partNums[part.partNumber - 1]}部分 · {part.title}</p>
+                  {part.partNumber >= 7 && <span style={{ fontSize: 11, fontWeight: 800, background: 'linear-gradient(135deg,#6b7ff0,#a78bfa)', color: 'white', borderRadius: 999, padding: '2px 8px', flexShrink: 0 }}>中级</span>}
+                </div>
+                <p style={{ fontSize: 13, color: C.muted, marginTop: 3 }}>{isPartLocked ? '即将开放' : `${part.lessons.length} 课${doneInPart > 0 ? ` · ${doneInPart}/${part.lessons.length} 已完成` : ''}`}</p>
+              </div>
+              <div style={{ width: 56, height: 6, background: C.line, borderRadius: 999, overflow: 'hidden', flexShrink: 0 }}>
+                <div style={{ height: '100%', borderRadius: 999, background: `linear-gradient(90deg, ${C.mint}, ${C.pink})`, width: `${(doneInPart / part.lessons.length) * 100}%` }} />
+              </div>
+              {!isPartLocked && (isOpen ? <ChevronDown size={16} color={C.muted} /> : <ChevronRight size={16} color={C.muted} />)}
+            </button>
+
+            {isOpen && (
+              <div style={{ borderTop: `1px solid ${C.line}` }}>
+                {part.lessons.map(lesson => {
+                  const status = lessonStates[lesson.cardId] || 'todo';
+                  const isCurrent = continueCard?.id === lesson.cardId;
+                  const isLocked = isAdmin ? false : part.partNumber !== 1;
+
+                  return (
+                    <div
+                      key={lesson.cardId}
+                      onClick={async () => {
+                        if (isLocked) return;
+                        const card = await loadGrammarCard(lesson.cardId);
+                        if (card) onOpenCard(card);
+                      }}
+                      style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 18px', borderBottom: `1px solid ${C.line}`, background: isLocked ? 'transparent' : isCurrent ? C.pinkSoft : 'transparent', cursor: isLocked ? 'default' : 'pointer', opacity: isLocked ? 0.45 : 1 }}
+                    >
+                      <div style={{ width: 36, height: 36, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, fontWeight: 800, flexShrink: 0, background: isLocked ? '#f0ece8' : status === 'done' ? C.mintBg : isCurrent ? C.pinkSoft : '#f0ece8', border: `1px solid ${isLocked ? C.line : status === 'done' ? C.mint : isCurrent ? C.pink : C.line}`, color: isLocked ? C.muted : status === 'done' ? '#2db89b' : isCurrent ? C.pink : C.muted }}>
+                        {isLocked ? <Lock size={12} /> : status === 'done' ? '✓' : isCurrent ? '▶' : lesson.lessonNumber}
+                      </div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <p style={{ fontSize: 12, color: C.muted, margin: 0 }}>第 {lesson.lessonNumber} 课</p>
+                        <p style={{ fontSize: 16, fontWeight: 800, color: isLocked ? C.muted : status === 'done' ? C.ink : isCurrent ? C.ink : C.muted, margin: 0 }}>{lesson.title}</p>
+                      </div>
+                      {!isLocked && status === 'done' && <span style={{ fontSize: 12, fontWeight: 800, background: C.mintBg, color: '#2db89b', borderRadius: 999, padding: '3px 10px', flexShrink: 0 }}>已完成</span>}
+                      {!isLocked && isCurrent && status !== 'done' && (
+                        <button onClick={async e => { e.stopPropagation(); const c = await loadGrammarCard(lesson.cardId); if (c) onOpenCard(c); }} style={{ padding: '6px 14px', borderRadius: 10, background: C.pink, color: '#fff', fontSize: 13, fontWeight: 800, border: 'none', cursor: 'pointer', flexShrink: 0 }}>
+                          学习
+                        </button>
+                      )}
+                      {!isLocked && !isCurrent && status === 'todo' && <span style={{ fontSize: 12, fontWeight: 800, background: C.bg, color: C.muted, borderRadius: 999, padding: '3px 10px', flexShrink: 0 }}>未开始</span>}
+                      {isLocked && <span style={{ fontSize: 12, fontWeight: 800, background: C.bg, color: C.muted, borderRadius: 999, padding: '3px 10px', flexShrink: 0 }}>即将开放</span>}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        );
+      })}
+
+      <p style={{ fontSize: 13, color: C.muted, textAlign: 'center', padding: '16px 0 0' }}>共 {totalLessons} 课 · 内容陆续更新中</p>
+    </div>
+  );
+}
+
+// ── Practice Tab ──────────────────────────────────────────────────────────────
+
+function PracticeTab({
+  grammarStates,
+  onStartGrammar,
+  onStartReview,
+}: {
+  grammarStates: Record<string, UserGrammarState>;
+  onStartGrammar: (gp: GrammarPoint) => void;
+  onStartReview: (patterns: GrammarPoint[]) => void;
+}) {
+  const C = useC();
+  const learnedCount = Object.values(grammarStates).filter(s => s.status === 'mastered' || s.status === 'familiar').length;
+  const learningCount = Object.values(grammarStates).filter(s => s.status === 'learning').length;
+  const difficultCount = Object.values(grammarStates).filter(s => s.status === 'difficult').length;
+  const studiedIds = Object.keys(grammarStates);
+  const todayPattern = getTodayPattern(studiedIds);
+  const now = Date.now();
+
+  const reviewDue = Object.values(grammarStates).filter(s =>
+    s.status === 'difficult' || (s.nextReviewAt && s.nextReviewAt <= now),
+  );
+  const reviewPatterns = reviewDue.map(s => sentencePatterns.find(g => g.id === s.id)).filter(Boolean) as GrammarPoint[];
+  const recommended = getRecommendedPatterns(studiedIds, 4);
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      {(learnedCount > 0 || learningCount > 0) && (
+        <div style={{ background: C.card, border: `1px solid ${C.line}`, borderRadius: 20, display: 'flex', justifyContent: 'space-around', padding: '14px 0' }}>
+          {[{ n: learnedCount, l: '已掌握', c: '#2db89b' }, { n: learningCount, l: '学习中', c: C.pink }, { n: difficultCount, l: '易错', c: '#e8a87c' }].map(({ n, l, c }, i, arr) => (
+            <div key={l} style={{ display: 'flex', alignItems: 'center' }}>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: 22, fontWeight: 900, color: c }}>{n}</div>
+                <div style={{ fontSize: 16, color: C.muted, marginTop: 2 }}>{l}</div>
+              </div>
+              {i < arr.length - 1 && <div style={{ width: 1, height: 32, background: C.line, margin: '0 16px' }} />}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {reviewPatterns.length > 0 && (
+        <div style={{ background: 'linear-gradient(135deg, rgba(232,168,124,.08), rgba(255,127,168,.08))', border: '1.5px solid rgba(232,168,124,.2)', borderRadius: 20, padding: 16 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+            <span style={{ fontSize: 16 }}>✨</span>
+            <span style={{ fontSize: 15, fontWeight: 700, color: C.ink }}>需要复习</span>
+            <span style={{ fontSize: 15, color: C.muted }}>{reviewPatterns.length} 个句型待巩固</span>
+          </div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 10 }}>
+            {reviewPatterns.slice(0, 4).map(gp => (
+              <button key={gp.id} onClick={() => onStartGrammar(gp)} style={{ padding: '6px 12px', borderRadius: 8, background: C.card, border: `1px solid ${C.line}`, fontSize: 16, color: C.ink, cursor: 'pointer' }}>
+                {gp.displayTitle}
+              </button>
+            ))}
+          </div>
+          <button onClick={() => onStartReview(reviewPatterns)} style={{ width: '100%', padding: '10px 0', background: 'rgba(232,168,124,.1)', border: '1px solid rgba(232,168,124,.2)', borderRadius: 12, fontSize: 15, fontWeight: 600, color: '#e8a87c', cursor: 'pointer' }}>
+            复习 {reviewPatterns.length} 个句型
+          </button>
+        </div>
+      )}
+
+      <div style={{ background: 'linear-gradient(135deg, rgba(255,127,168,.08), rgba(180,156,207,.08))', border: '1.5px solid rgba(255,127,168,.18)', borderRadius: 24, padding: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+          <span style={{ fontSize: 16 }}>🎯</span>
+          <span style={{ fontSize: 15, fontWeight: 700, color: C.ink }}>今日句型</span>
+          <span style={{ fontSize: 15, color: C.muted, marginLeft: 'auto' }}>~3 分钟</span>
+        </div>
+        <div style={{ textAlign: 'center', marginBottom: 14 }}>
+          <p style={{ fontSize: 15, color: C.muted, marginBottom: 4 }}>今天学会：</p>
+          <h2 style={{ fontSize: 20, fontWeight: 900, color: C.ink, margin: 0 }}>{todayPattern.displayTitle}</h2>
+          <p style={{ fontSize: 16, color: C.muted, fontFamily: 'monospace', marginTop: 4 }}>{todayPattern.pattern}</p>
+        </div>
+        <p style={{ fontSize: 16, color: C.muted, marginBottom: 14 }}>{todayPattern.functionZh}</p>
+        <button onClick={() => onStartGrammar(todayPattern)} style={{ width: '100%', padding: '13px 0', borderRadius: 14, background: C.pink, color: '#fff', fontSize: 16, fontWeight: 700, border: 'none', cursor: 'pointer' }}>
+          开始 3 分钟练习
+        </button>
+      </div>
+
+      {recommended.length > 0 && (
+        <div>
+          <p style={{ fontSize: 15, fontWeight: 700, color: C.ink, marginBottom: 8 }}>推荐学习</p>
+          {recommended.map(gp => (
+            <button key={gp.id} onClick={() => onStartGrammar(gp)} style={{ width: '100%', background: C.card, border: `1px solid ${C.line}`, borderRadius: 16, padding: '12px 14px', display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer', marginBottom: 8, textAlign: 'left' }}>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <p style={{ fontSize: 15, fontWeight: 700, color: C.ink, margin: 0 }}>{gp.displayTitle}</p>
+                <p style={{ fontSize: 15, color: C.muted, marginTop: 2 }}>{gp.functionZh}</p>
+              </div>
+              <ChevronRight size={16} color={C.muted} />
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Library Tab ───────────────────────────────────────────────────────────────
+
+function LibraryTab({ onStartGrammar }: { onStartGrammar: (gp: GrammarPoint) => void }) {
+  const C = useC();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeCategory, setActiveCategory] = useState('all');
+  const [activeLevel, setActiveLevel] = useState('all');
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  const legacyCategories = ['조사', '어미', '연결', '시제', '존대', '문형', '인용', '사동/피동'];
+  const legacyCategoryLabels: Record<string, string> = {
+    '조사': '조사 (助词)', '어미': '어미 (语尾)', '연결': '연결 (连接)',
+    '시제': '시제 (时制)', '존대': '존대 (敬语)', '문형': '문형 (句型)',
+    '인용': '인용 (引用)', '사동/피동': '사동/피동',
+  };
+  const legacyLevels = [
+    { value: 'all', label: '全部' },
+    { value: 'beginner', label: '初级' },
+    { value: 'intermediate', label: '中级' },
+    { value: 'advanced', label: '高级' },
+  ];
+  const legacyLevelConfig: Record<string, { label: string; color: string }> = {
+    beginner: { label: '初级', color: 'bg-[#eaf8f5] text-[#2db89b]' },
+    intermediate: { label: '中级', color: 'bg-[#fff0f5] text-[#ff7fa8]' },
+    advanced: { label: '高级', color: 'bg-[#f3eefb] text-[#b49ccf]' },
+  };
+
+  const filtered = useMemo(() => {
+    let result = grammarPoints;
+    if (activeLevel !== 'all') result = result.filter(g => g.level === activeLevel);
+    if (activeCategory !== 'all') result = result.filter(g => g.category === activeCategory);
+    if (searchQuery.trim()) {
+      const q = searchQuery.trim().toLowerCase();
+      result = result.filter(g =>
+        g.title.toLowerCase().includes(q) ||
+        g.pattern.toLowerCase().includes(q) ||
+        g.usage.toLowerCase().includes(q) ||
+        g.explanation.toLowerCase().includes(q),
+      );
+    }
+    return result;
+  }, [activeLevel, activeCategory, searchQuery]);
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+      <div style={{ position: 'relative' }}>
+        <Search size={16} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: C.muted }} />
+        <input
+          value={searchQuery}
+          onChange={e => setSearchQuery(e.target.value)}
+          placeholder="搜索语法..."
+          style={{ width: '100%', background: C.card, border: `1px solid ${C.line}`, borderRadius: 12, padding: '10px 36px', fontSize: 16, color: C.ink, outline: 'none' }}
+        />
+        {searchQuery && (
+          <button onClick={() => setSearchQuery('')} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: C.muted }}>
+            <X size={14} />
+          </button>
+        )}
+      </div>
+
+      <div style={{ display: 'flex', gap: 6, overflowX: 'auto', paddingBottom: 4 }}>
+        <button onClick={() => setActiveCategory('all')} style={{ flexShrink: 0, padding: '6px 14px', borderRadius: 999, fontSize: 16, fontWeight: 600, border: 'none', cursor: 'pointer', background: activeCategory === 'all' ? C.pink : C.card, color: activeCategory === 'all' ? '#fff' : C.muted }}>全部</button>
+        {legacyCategories.map(cat => (
+          <button key={cat} onClick={() => setActiveCategory(cat)} style={{ flexShrink: 0, padding: '6px 14px', borderRadius: 999, fontSize: 16, fontWeight: 600, border: 'none', cursor: 'pointer', background: activeCategory === cat ? C.pink : C.card, color: activeCategory === cat ? '#fff' : C.muted }}>
+            {legacyCategoryLabels[cat] || cat}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ display: 'flex', gap: 6 }}>
+        {legacyLevels.map(l => (
+          <button key={l.value} onClick={() => setActiveLevel(l.value)} style={{ padding: '6px 14px', borderRadius: 8, fontSize: 16, fontWeight: 600, border: 'none', cursor: 'pointer', background: activeLevel === l.value ? 'rgba(255,127,168,.1)' : 'transparent', color: activeLevel === l.value ? C.pink : C.muted }}>
+            {l.label}
+          </button>
+        ))}
+      </div>
+
+      <p style={{ fontSize: 16, color: C.muted }}>{filtered.length} 个语法点</p>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        {filtered.map((gp: LegacyPoint) => {
+          const isOpen = expandedId === gp.id;
+          const level = legacyLevelConfig[gp.level] || legacyLevelConfig.beginner;
+          return (
+            <div key={gp.id} style={{ background: C.card, border: `1px solid ${C.line}`, borderRadius: 20, overflow: 'hidden' }}>
+              <button onClick={() => setExpandedId(isOpen ? null : gp.id)} style={{ width: '100%', padding: 16, display: 'flex', alignItems: 'center', gap: 12, background: 'transparent', border: 'none', cursor: 'pointer', textAlign: 'left' }}>
+                <span className={`px-2 py-1 rounded-lg text-[10px] font-medium shrink-0 ${level.color}`}>{level.label}</span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{ fontSize: 15, fontWeight: 700, color: C.ink, margin: 0 }}>{gp.title}</p>
+                  <p style={{ fontSize: 15, color: C.muted, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{gp.pattern} · {gp.topik} · {gp.usage}</p>
+                </div>
+              </button>
+
+              {isOpen && (
+                <div style={{ padding: '16px', borderTop: `1px solid ${C.line}`, display: 'flex', flexDirection: 'column', gap: 12 }}>
+                  <div style={{ background: C.card, borderRadius: 16, padding: 14, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    {[
+                      { l: '结构', v: gp.pattern, mono: true },
+                      { l: '意思', v: gp.explanation },
+                      gp.conjugation ? { l: '接续', v: gp.conjugation } : null,
+                      { l: '场景', v: gp.usage },
+                    ].filter(Boolean).map(item => (
+                      <div key={item!.l} style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
+                        <span style={{ fontSize: 16, fontWeight: 700, color: C.muted, width: 28, flexShrink: 0, paddingTop: 2 }}>{item!.l}</span>
+                        <span style={{ fontSize: 15, fontFamily: item!.mono ? 'monospace' : undefined, fontWeight: item!.mono ? 700 : undefined, color: item!.mono ? C.purple : C.ink }}>{item!.v}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {gp.examples.length > 0 && (
+                    <div>
+                      <p style={{ fontSize: 16, fontWeight: 700, color: C.muted, textTransform: 'uppercase', letterSpacing: '.5px', marginBottom: 6 }}>例句</p>
+                      {gp.examples.map((ex, i) => (
+                        <div key={i} style={{ background: C.card, border: `1px solid ${C.line}`, borderRadius: 12, padding: '10px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginBottom: 6 }}>
+                          <div style={{ minWidth: 0, flex: 1 }}>
+                            <p style={{ fontSize: 17, fontWeight: 600, color: C.ink, margin: 0 }}>{ex.ko}</p>
+                            <p style={{ fontSize: 15, color: C.muted, marginTop: 2 }}>{ex.zh}</p>
+                          </div>
+                          <button onClick={e => { e.stopPropagation(); speak(ex.ko); }} style={{ padding: 6, borderRadius: 8, background: 'rgba(255,127,168,.08)', border: 'none', cursor: 'pointer', color: C.pink, flexShrink: 0 }}>
+                            <Volume2 size={13} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {gp.toriTip && (
+                    <div style={{ background: 'rgba(232,168,124,.08)', border: '1px solid rgba(232,168,124,.2)', borderRadius: 12, padding: 12 }}>
+                      <p style={{ fontSize: 16, fontWeight: 700, color: '#e8a87c', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 4 }}><Lightbulb size={11} />替换练习</p>
+                      <p style={{ fontSize: 16, color: C.muted }}>{gp.toriTip}</p>
+                    </div>
+                  )}
+
+                  {gp.difference && gp.similarPatterns && (
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, background: 'rgba(180,156,207,.08)', border: '1px solid rgba(180,156,207,.15)', borderRadius: 12, padding: 12 }}>
+                      <AlertCircle size={13} style={{ color: C.purple, flexShrink: 0, marginTop: 2 }} />
+                      <div>
+                        <p style={{ fontSize: 16, fontWeight: 700, color: C.purple, marginBottom: 4 }}>与 {gp.similarPatterns.join(', ')} 的区别</p>
+                        <p style={{ fontSize: 16, color: C.muted }}>{gp.difference}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {(() => {
+                    const sp = sentencePatterns.find(p => p.id === gp.id);
+                    return sp ? (
+                      <button onClick={() => onStartGrammar(sp)} style={{ width: '100%', padding: '10px 0', borderRadius: 12, background: 'rgba(255,127,168,.1)', border: '1px solid rgba(255,127,168,.2)', fontSize: 15, fontWeight: 700, color: C.pink, cursor: 'pointer' }}>
+                        练习这个句型
+                      </button>
+                    ) : null;
+                  })()}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ── Main ──────────────────────────────────────────────────────────────────────
+
+function GrammarContent() {
+  const { theme } = useTheme();
+  const C = theme === 'dark' ? DARK_C : LIGHT_C;
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { user } = useAuth();
+  const isAdmin = user?.role === 'admin';
+  const [tab, setTab] = useState<Tab>('chapters');
+  const [grammarStates, setGrammarStates] = useState<Record<string, UserGrammarState>>({});
+  const [sessionGrammar, setSessionGrammar] = useState<GrammarPoint | null>(null);
+  const [reviewQueue, setReviewQueue] = useState<GrammarPoint[]>([]);
+  const [activeCard, setActiveCard] = useState<GrammarCard | null>(null);
+
+  useEffect(() => {
+    db.userGrammarStates.toArray().then(states => {
+      const map: Record<string, UserGrammarState> = {};
+      for (const s of states) map[s.id] = s;
+      setGrammarStates(map);
+    }).catch((err) => console.warn('IndexedDB error:', err));
+  }, []);
+
+  useEffect(() => {
+    const patternParam = searchParams.get('pattern');
+    if (patternParam) {
+      const gp = sentencePatterns.find(g => g.id === patternParam);
+      if (gp) setSessionGrammar(gp);
+    }
+  }, [searchParams]);
 
   const startReview = (patterns: GrammarPoint[]) => {
     if (patterns.length === 0) return;
@@ -124,14 +2236,32 @@ function GrammarContent() {
     setReviewQueue(patterns.slice(1));
   };
 
-  const handleNextReview = (next: GrammarPoint) => {
-    setSessionGrammar(next);
-    setReviewQueue((q) => q.slice(1));
-  };
-
   const handleCloseSession = () => {
+    db.userGrammarStates.toArray().then(states => {
+      const map: Record<string, UserGrammarState> = {};
+      for (const s of states) map[s.id] = s;
+      setGrammarStates(map);
+    }).catch((err) => console.warn('IndexedDB error:', err));
     setSessionGrammar(null);
     setReviewQueue([]);
+  };
+
+  const handleCompleteCard = async (card: GrammarCard) => {
+    try {
+      saveLessonState(card.id, 'done');
+    } catch (e) {
+      console.warn('Failed to save lesson state:', e);
+    }
+    const next = await loadNextCard(card.id);
+    if (next && (isAdmin || next.partNumber === 1)) {
+      setActiveCard(next);
+      window.scrollTo(0, 0);
+    } else {
+      setActiveCard(null);
+      if (!isAdmin && next && next.partNumber !== 1) {
+        setTimeout(() => alert('第 ' + next.partNumber + ' 部分即将开放，敬请期待！'), 100);
+      }
+    }
   };
 
   if (sessionGrammar) {
@@ -141,512 +2271,63 @@ function GrammarContent() {
         grammar={sessionGrammar}
         onClose={handleCloseSession}
         reviewQueue={reviewQueue}
-        onNextReview={reviewQueue.length > 0 ? handleNextReview : undefined}
+        onNextReview={reviewQueue.length > 0 ? (next) => { setSessionGrammar(next); setReviewQueue(q => q.slice(1)); } : undefined}
       />
     );
   }
 
-  const learnedCount = Object.values(grammarStates).filter((s) => s.status === 'mastered' || s.status === 'familiar').length;
-  const learningCount = Object.values(grammarStates).filter((s) => s.status === 'learning').length;
-  const difficultCount = Object.values(grammarStates).filter((s) => s.status === 'difficult').length;
-  const studiedIds = Object.keys(grammarStates);
-
-  const todayPattern = getTodayPattern(studiedIds);
-  const now = Date.now();
-
-  // Grammars due for review
-  const reviewDue = Object.values(grammarStates).filter((s) =>
-    s.status === 'difficult' || (s.nextReviewAt && s.nextReviewAt <= now),
-  );
-  const reviewPatterns = reviewDue
-    .map((s) => sentencePatterns.find((g) => g.id === s.id))
-    .filter(Boolean) as GrammarPoint[];
-
-  const recommended = getRecommendedPatterns(studiedIds, 4);
-
-  // Legacy search/filter
-  const filtered = (() => {
-    let result = grammarPoints;
-    if (activeLevel !== 'all') {
-      result = result.filter((g) => g.level === activeLevel);
-    }
-    if (activeCategory !== 'all') {
-      result = result.filter((g) => g.category === activeCategory);
-    }
-    if (searchQuery.trim()) {
-      const q = searchQuery.trim().toLowerCase();
-      result = result.filter((g) =>
-        g.title.toLowerCase().includes(q) ||
-        g.pattern.toLowerCase().includes(q) ||
-        g.usage.toLowerCase().includes(q) ||
-        g.explanation.toLowerCase().includes(q),
+  if (activeCard) {
+    const part = grammarParts.find(p => p.partNumber === activeCard.partNumber);
+    const partNums = ['一', '二', '三', '四', '五', '六', '七'];
+    if (activeCard.isPractice) {
+      return (
+        <ComprehensivePractice
+          card={activeCard}
+          onBack={() => setActiveCard(null)}
+          onComplete={() => handleCompleteCard(activeCard)}
+        />
       );
     }
-    return result;
-  })();
-
-  const legacyCategories = ['조사', '어미', '연결', '시제', '존대', '문형', '인용', '사동/피동'];
-
-  const legacyLevels: Array<{ value: string; label: string }> = [
-    { value: 'all', label: '全部' },
-    { value: 'beginner', label: '初级' },
-    { value: 'intermediate', label: '中级' },
-    { value: 'advanced', label: '高级' },
-  ];
-
-  const legacyLevelConfig: Record<string, { label: string; color: string }> = {
-    beginner: { label: '初级', color: 'bg-[var(--mint-soft)]/15 text-[var(--mint-soft)]' },
-    intermediate: { label: '中级', color: 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)]' },
-    advanced: { label: '高级', color: 'bg-[var(--purple-soft)]/15 text-[var(--purple-soft)]' },
-  };
-
-  const legacyCategoryLabels: Record<string, string> = {
-    '조사': '조사 (助词)', '어미': '어미 (语尾)', '연결': '연결 (连接)',
-    '시제': '시제 (时制)', '존대': '존대 (敬语)', '문형': '문형 (句型)',
-    '인용': '인용 (引用)', '사동/피동': '사동/피동',
-  };
-
-  // ═══════════════════════════════ HOME ═══════════════════════════════
-  if (viewMode === 'home') {
     return (
-      <div className="py-4 space-y-5 max-w-2xl mx-auto md:max-w-3xl">
-        {/* Header */}
-        <div>
-          <h1 className="text-2xl font-bold text-[var(--text-primary)] flex items-center gap-2">
-            <FileText size={22} className="text-[var(--pink-primary)]" />
-            句型
-          </h1>
-          <p className="text-xs text-[var(--text-muted)] mt-1">学会用韩语表达，而不只是看懂语法</p>
-        </div>
-
-        {/* Stats */}
-        {(learnedCount > 0 || learningCount > 0) && (
-          <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 flex items-center justify-around">
-            <div className="text-center">
-              <p className="text-lg font-extrabold text-[var(--mint-soft)]">{learnedCount}</p>
-              <p className="text-[10px] text-[var(--text-muted)]">已掌握</p>
-            </div>
-            <div className="w-px h-8 bg-[var(--border-color)]" />
-            <div className="text-center">
-              <p className="text-lg font-extrabold text-[var(--pink-primary)]">{learningCount}</p>
-              <p className="text-[10px] text-[var(--text-muted)]">学习中</p>
-            </div>
-            <div className="w-px h-8 bg-[var(--border-color)]" />
-            <div className="text-center">
-              <p className="text-lg font-extrabold text-[var(--peach-soft)]">{difficultCount}</p>
-              <p className="text-[10px] text-[var(--text-muted)]">易错</p>
-            </div>
-          </div>
-        )}
-
-        {/* Review due */}
-        {reviewPatterns.length > 0 && (
-          <div className="bg-gradient-to-br from-[var(--peach-soft)]/10 to-[var(--pink-primary)]/10 border-2 border-[var(--peach-soft)]/20 rounded-2xl p-4 space-y-3">
-            <div className="flex items-center gap-2">
-              <Sparkles size={16} className="text-[var(--peach-soft)]" />
-              <span className="text-sm font-bold text-[var(--text-primary)]">需要复习</span>
-              <span className="text-[10px] text-[var(--text-muted)]">{reviewPatterns.length} 个句型待巩固</span>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {reviewPatterns.slice(0, 4).map((gp) => (
-                <button
-                  key={gp.id}
-                  onClick={() => setSessionGrammar(gp)}
-                  className="px-3 py-1.5 rounded-lg bg-[var(--bg-card)] text-xs text-[var(--text-primary)] font-medium hover:bg-[var(--pink-primary)]/10 transition-colors"
-                >
-                  {gp.displayTitle}
-                </button>
-              ))}
-            </div>
-            {reviewPatterns.length > 0 && (
-              <button
-                onClick={() => startReview(reviewPatterns)}
-                className="w-full py-2.5 bg-[var(--peach-soft)]/10 border border-[var(--peach-soft)]/20 rounded-xl text-sm font-medium text-[var(--peach-soft)]"
-              >
-                复习 {reviewPatterns.length} 个句型
-              </button>
-            )}
-          </div>
-        )}
-
-        {/* Today's task */}
-        <div className="bg-gradient-to-br from-[var(--pink-primary)]/10 to-[var(--purple-soft)]/10 border-2 border-[var(--pink-primary)]/20 rounded-3xl p-6 space-y-4">
-          <div className="flex items-center gap-2">
-            <Target size={20} className="text-[var(--pink-primary)]" />
-            <span className="text-sm font-bold text-[var(--text-primary)]">今日句型</span>
-            <span className="text-[10px] text-[var(--text-muted)] ml-auto">~3 分钟</span>
-          </div>
-          <div className="text-center">
-            <p className="text-xs text-[var(--text-secondary)] mb-1">今天学会：</p>
-            <h2 className="text-xl font-extrabold text-[var(--text-primary)]">{todayPattern.displayTitle}</h2>
-            <p className="text-sm text-[var(--text-muted)] mt-1 font-mono">{todayPattern.pattern}</p>
-          </div>
-          <p className="text-xs text-[var(--text-secondary)]">{todayPattern.functionZh}</p>
-          <button
-            onClick={() => setSessionGrammar(todayPattern)}
-            className="w-full py-3.5 bg-[var(--pink-primary)] text-white rounded-2xl font-bold text-sm active:scale-[0.97] transition-all"
-          >
-            开始 3 分钟练习
-          </button>
-        </div>
-
-        {/* Progress */}
-        {studiedIds.length > 0 && (
-          <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-5 space-y-3">
-            <div className="flex items-center gap-2">
-              <TrendingUp size={16} className="text-[var(--mint-soft)]" />
-              <span className="text-sm font-bold text-[var(--text-primary)]">我的句型进度</span>
-            </div>
-            <div className="w-full bg-[var(--border-color)]/40 rounded-full h-2 overflow-hidden">
-              <div
-                className="h-full rounded-full bg-gradient-to-r from-[var(--mint-soft)] to-[var(--pink-primary)] transition-all duration-500"
-                style={{ width: `${Math.min((learnedCount / 30) * 100, 100)}%` }}
-              />
-            </div>
-            <p className="text-xs text-[var(--text-muted)]">已学 {studiedIds.length}/30 个高频句型</p>
-          </div>
-        )}
-
-        {/* Recommended next patterns */}
-        {recommended.length > 0 && (
-          <div>
-            <p className="text-sm font-bold text-[var(--text-primary)] mb-3">继续学习</p>
-            <div className="space-y-2">
-              {recommended.map((gp) => (
-                <button
-                  key={gp.id}
-                  onClick={() => setSessionGrammar(gp)}
-                  className="w-full bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 flex items-center gap-4 hover:border-[var(--pink-primary)]/30 transition-all group text-left"
-                >
-                  <div className={`px-2.5 py-1 rounded-lg text-[10px] font-medium ${levelConfig[gp.level]}`}>
-                    {gp.level === 'absolute_beginner' ? '零基础' : gp.level === 'beginner' ? '初级' : gp.level === 'elementary' ? '初级+' : '中级'}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-bold text-[var(--text-primary)]">{gp.displayTitle}</p>
-                    <p className="text-xs text-[var(--text-muted)] truncate">{gp.functionZh}</p>
-                  </div>
-                  <ChevronRight size={16} className="text-[var(--text-muted)] group-hover:translate-x-1 transition-transform" />
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* High-frequency grid */}
-        <div>
-          <p className="text-sm font-bold text-[var(--text-primary)] mb-3">高频句型</p>
-          <div className="grid grid-cols-2 gap-2">
-            {sentencePatterns.slice(0, 10).map((gp) => {
-              const state = grammarStates[gp.id];
-              return (
-                <button
-                  key={gp.id}
-                  onClick={() => setSessionGrammar(gp)}
-                  className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-3 text-left hover:border-[var(--pink-primary)]/30 transition-all group"
-                >
-                  <p className="text-sm font-bold text-[var(--text-primary)] truncate">{gp.displayTitle}</p>
-                  <p className="text-[10px] text-[var(--text-muted)] truncate mt-0.5">{gp.pattern}</p>
-                  {state && (
-                    <span className={`inline-block text-[9px] px-1.5 py-0.5 rounded-full mt-1 ${
-                      state.status === 'mastered' ? 'bg-[var(--mint-soft)]/10 text-[var(--mint-soft)]' :
-                      state.status === 'difficult' ? 'bg-[var(--color-danger-bg)] text-[var(--color-danger)]' :
-                      'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)]'
-                    }`}>
-                      {state.status === 'mastered' ? '已掌握' : state.status === 'difficult' ? '易错' : '学习中'}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Comparison section */}
-        {comparePairsData.length > 0 && (
-          <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-5 space-y-3">
-            <div className="flex items-center gap-2">
-              <GitCompare size={16} className="text-[var(--purple-soft)]" />
-              <span className="text-sm font-bold text-[var(--text-primary)]">易混语法对比</span>
-            </div>
-            <div className="space-y-2">
-              {comparePairsData.slice(0, 3).map((pair) => (
-                <button
-                  key={pair.id}
-                  onClick={() => { setComparePair(pair); setCompareQIdx(0); setCompareResult(null); setViewMode('comparison'); }}
-                  className="w-full bg-[var(--bg-input)] rounded-xl p-3 text-left flex items-center gap-3 hover:bg-[var(--bg-card)] transition-colors group"
-                >
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-bold text-[var(--text-primary)]">{pair.title}</p>
-                    <p className="text-[10px] text-[var(--text-muted)] truncate mt-0.5">{pair.difference}</p>
-                  </div>
-                  <ArrowRight size={14} className="text-[var(--text-muted)] group-hover:translate-x-1 transition-transform shrink-0" />
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Library entry */}
-        <button
-          onClick={() => setViewMode('library')}
-          className="w-full bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 flex items-center gap-4 hover:border-[var(--mint-soft)]/30 transition-all group text-left"
-        >
-          <div className="p-2.5 rounded-xl bg-[var(--bg-input)] text-[var(--mint-soft)]">
-            <BookOpen size={20} />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-bold text-[var(--text-primary)]">全部句型</p>
-            <p className="text-xs text-[var(--text-muted)] truncate">83 个语法点，按 TOPIK 分类</p>
-          </div>
-          <ChevronRight size={16} className="text-[var(--text-muted)] group-hover:translate-x-1 transition-transform" />
-        </button>
-
-        {/* Beginner tip */}
-        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4">
-          <p className="text-sm font-bold text-[var(--text-primary)] mb-1">新手建议</p>
-          <p className="text-xs text-[var(--text-muted)]">
-            不需要一天记住所有语法。每天 3 分钟练一个句型，每个句型能说出 3 句话，比背 100 条规则更有用。
-          </p>
-        </div>
-      </div>
+      <GrammarCardView
+        key={activeCard.id}
+        card={activeCard}
+        partTitle={part ? `第${partNums[part.partNumber - 1]}部分 · ${part.title}` : ''}
+        totalInPart={part?.lessons.length ?? 10}
+        onBack={() => setActiveCard(null)}
+        onComplete={() => handleCompleteCard(activeCard)}
+        onStartGrammar={gp => { setActiveCard(null); setSessionGrammar(gp); }}
+      />
     );
   }
 
-  // ═══════════════════════════════ COMPARISON ═══════════════════════════════
-  if (viewMode === 'comparison' && comparePair) {
-    const q = comparePair.questions[compareQIdx];
-    const isLastQ = compareQIdx >= comparePair.questions.length - 1;
-
-    const handleCompareAnswer = (opt: string) => {
-      if (compareResult) return;
-      setSelectedCompareOption(opt);
-      if (opt === q.answer) {
-        setCompareResult('correct');
-      } else {
-        setCompareResult('wrong');
-      }
-    };
-
-    const handleCompareNext = () => {
-      if (isLastQ) {
-        setViewMode('home');
-        setComparePair(null);
-        setCompareQIdx(0);
-        setCompareResult(null);
-        setSelectedCompareOption(null);
-      } else {
-        setCompareQIdx(compareQIdx + 1);
-        setCompareResult(null);
-        setSelectedCompareOption(null);
-      }
-    };
-
-    return (
-      <div className="py-4 space-y-4 max-w-2xl mx-auto md:max-w-3xl">
-        <div className="flex items-center gap-2">
-          <button onClick={() => { setViewMode('home'); setComparePair(null); setCompareQIdx(0); setCompareResult(null); setSelectedCompareOption(null); }} className="text-[var(--text-muted)] hover:text-[var(--text-primary)]">
-            <ArrowRight size={18} className="rotate-180" />
-          </button>
-          <h1 className="text-xl font-bold text-[var(--text-primary)]">{comparePair.title}</h1>
-        </div>
-
-        {/* Side-by-side cards */}
-        <div className="grid grid-cols-2 gap-3">
-          <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4">
-            <p className="text-[10px] text-[var(--text-muted)] mb-1">语法 A</p>
-            <p className="text-sm font-bold text-[var(--text-primary)]">{comparePair.a.displayTitle}</p>
-            <p className="text-xs text-[var(--text-muted)] mt-1 font-mono">{comparePair.a.pattern}</p>
-            <p className="text-xs text-[var(--text-secondary)] mt-2">{comparePair.a.shortExplanation}</p>
-            {comparePair.a.examples.slice(0, 2).map((ex, i) => (
-              <p key={i} className="text-[10px] text-[var(--text-muted)] mt-1">{ex.ko} — {ex.zh}</p>
-            ))}
-          </div>
-          <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4">
-            <p className="text-[10px] text-[var(--text-muted)] mb-1">语法 B</p>
-            <p className="text-sm font-bold text-[var(--text-primary)]">{comparePair.b.displayTitle}</p>
-            <p className="text-xs text-[var(--text-muted)] mt-1 font-mono">{comparePair.b.pattern}</p>
-            <p className="text-xs text-[var(--text-secondary)] mt-2">{comparePair.b.shortExplanation}</p>
-            {comparePair.b.examples.slice(0, 2).map((ex, i) => (
-              <p key={i} className="text-[10px] text-[var(--text-muted)] mt-1">{ex.ko} — {ex.zh}</p>
-            ))}
-          </div>
-        </div>
-
-        {/* Key difference */}
-        <div className="bg-[var(--purple-soft)]/10 border border-[var(--purple-soft)]/20 rounded-2xl p-4">
-          <div className="flex items-center gap-2 mb-1">
-            <Lightbulb size={14} className="text-[var(--purple-soft)]" />
-            <span className="text-xs font-bold text-[var(--text-primary)]">一句话区别</span>
-          </div>
-          <p className="text-xs text-[var(--text-secondary)]">{comparePair.difference}</p>
-        </div>
-
-      </div>
-    );
-  }
-
-  // ═══════════════════════════════ LIBRARY ═══════════════════════════════
   return (
-    <div className="py-4 space-y-3 max-w-2xl mx-auto md:max-w-3xl">
-      {/* Header */}
-      <div>
-        <div className="flex items-center gap-2">
-          <button onClick={() => setViewMode('home')} className="text-[var(--text-muted)] hover:text-[var(--text-primary)]">
-            <ArrowRight size={18} className="rotate-180" />
-          </button>
-          <h1 className="text-2xl font-bold text-[var(--text-primary)]">全部句型</h1>
+    <ColorCtx.Provider value={C}>
+    <div style={{ minHeight: '100vh', background: C.bg, paddingBottom: 40 }}>
+      <div style={{ maxWidth: 680, margin: '0 auto', padding: '20px 16px 0' }}>
+        <div style={{ marginBottom: 18 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 6 }}>
+            <button onClick={() => router.back()} style={{ width: 38, height: 38, borderRadius: 13, border: `1px solid ${C.line}`, background: C.card, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}>
+              <ArrowLeft size={16} color={C.muted} />
+            </button>
+            <h1 style={{ fontSize: 28, fontWeight: 900, color: C.ink, margin: 0 }}>语法</h1>
+          </div>
+          <p style={{ fontSize: 15, color: C.muted, marginLeft: 50 }}>按教材章节系统学习，从零基础到中级</p>
         </div>
-        <p className="text-[var(--text-secondary)] text-sm mt-1">按 TOPIK 等级和分类学习韩语语法</p>
-      </div>
 
-      {/* Search */}
-      <div className="relative">
-        <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
-        <input
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="搜索语法..."
-          className="w-full bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl pl-10 pr-10 py-2.5 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)] focus:outline-none focus:border-[var(--pink-pale)]"
-        />
-        {searchQuery && (
-          <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)] hover:text-[var(--text-primary)]">
-            <X size={14} />
-          </button>
-        )}
-      </div>
+        <div style={{ display: 'flex', background: C.bg, borderRadius: 16, padding: 4, gap: 3, marginBottom: 18 }}>
+          {([['chapters', '章节学习'], ['library', '语法库']] as [Tab, string][]).map(([key, label]) => (
+            <button key={key} onClick={() => setTab(key)} style={{ flex: 1, padding: '10px 4px', borderRadius: 13, border: 'none', background: tab === key ? C.card : 'transparent', color: tab === key ? C.ink : C.muted, fontSize: 15, fontWeight: 800, cursor: 'pointer', boxShadow: tab === key ? '0 2px 8px rgba(0,0,0,.08)' : 'none' }}>
+              {label}
+            </button>
+          ))}
+        </div>
 
-      {/* Category tabs */}
-      <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-hide">
-        <button
-          onClick={() => setActiveCategory('all')}
-          className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
-            activeCategory === 'all' ? 'bg-[var(--pink-primary)] text-white' : 'bg-[var(--bg-card)] text-[var(--text-muted)]'
-          }`}
-        >
-          全部
-        </button>
-        {legacyCategories.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setActiveCategory(cat)}
-            className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
-              activeCategory === cat ? 'bg-[var(--pink-primary)] text-white' : 'bg-[var(--bg-card)] text-[var(--text-muted)]'
-            }`}
-          >
-            {legacyCategoryLabels[cat] || cat}
-          </button>
-        ))}
-      </div>
-
-      {/* Level filter */}
-      <div className="flex gap-2">
-        {legacyLevels.map((l) => (
-          <button
-            key={l.value}
-            onClick={() => setActiveLevel(l.value)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-              activeLevel === l.value ? 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)]' : 'text-[var(--text-muted)]'
-            }`}
-          >
-            {l.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Results count */}
-      <p className="text-xs text-[var(--text-muted)]">{filtered.length} 个语法点</p>
-
-      {/* Grammar list */}
-      <div className="space-y-2">
-        {filtered.map((gp: LegacyPoint) => {
-          const isOpen = expandedId === gp.id;
-          const level = legacyLevelConfig[gp.level] || legacyLevelConfig.beginner;
-
-          return (
-            <div key={gp.id} className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl overflow-hidden">
-              <button
-                onClick={() => setExpandedId(isOpen ? null : gp.id)}
-                className="w-full p-4 flex items-center gap-3 text-left"
-              >
-                <div className={`px-2 py-1 rounded-lg text-[10px] font-medium shrink-0 ${level.color}`}>
-                  {level.label}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-bold text-[var(--text-primary)]">{gp.title}</p>
-                  <p className="text-xs text-[var(--text-muted)] truncate">{gp.pattern} · {gp.topik} · {gp.usage}</p>
-                </div>
-              </button>
-
-              {isOpen && (
-                <div className="px-4 pb-4 space-y-3 border-t border-[var(--border-color)] pt-4 animate-fade-in">
-                  {/* 结构 + 意思 + 场景 */}
-                  <div className="bg-[var(--bg-soft)] rounded-2xl p-4 space-y-2.5">
-                    <div className="flex items-start gap-3">
-                      <span className="text-[10px] font-bold text-[var(--text-muted)] w-8 shrink-0 pt-0.5">结构</span>
-                      <span className="text-sm font-mono font-bold text-[var(--purple-soft)]">{gp.pattern}</span>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <span className="text-[10px] font-bold text-[var(--text-muted)] w-8 shrink-0 pt-0.5">意思</span>
-                      <span className="text-sm text-[var(--text-primary)]">{gp.explanation}</span>
-                    </div>
-                    {gp.conjugation && (
-                      <div className="flex items-start gap-3">
-                        <span className="text-[10px] font-bold text-[var(--text-muted)] w-8 shrink-0 pt-0.5">接续</span>
-                        <span className="text-xs text-[var(--text-secondary)] whitespace-pre-line">{gp.conjugation}</span>
-                      </div>
-                    )}
-                    <div className="flex items-start gap-3">
-                      <span className="text-[10px] font-bold text-[var(--text-muted)] w-8 shrink-0 pt-0.5">场景</span>
-                      <span className="text-xs text-[var(--text-secondary)]">{gp.usage}</span>
-                    </div>
-                  </div>
-
-                  {/* 例句 */}
-                  {gp.examples.length > 0 && (
-                    <div className="space-y-1.5">
-                      <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider px-1">例句</p>
-                      {gp.examples.map((ex, i) => (
-                        <div key={i} className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl px-4 py-3 flex items-center justify-between gap-3">
-                          <div className="min-w-0 flex-1">
-                            <p className="text-sm text-[var(--text-primary)] font-medium" style={{ fontFamily: 'system-ui, sans-serif' }}>{ex.ko}</p>
-                            <p className="text-xs text-[var(--text-muted)] mt-0.5">{ex.zh}</p>
-                          </div>
-                          <button onClick={(e) => { e.stopPropagation(); speak(ex.ko); }}
-                            className="p-1.5 rounded-lg text-[var(--pink-primary)] hover:bg-[var(--pink-primary)]/10 shrink-0">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" /></svg>
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* 替换练习 (toriTip) */}
-                  {gp.toriTip && (
-                    <div className="bg-[var(--peach-soft)]/8 border border-[var(--peach-soft)]/20 rounded-xl p-4">
-                      <p className="text-[10px] font-bold text-[var(--peach-soft)] mb-1.5 flex items-center gap-1.5">
-                        <Lightbulb size={11} />替换练习
-                      </p>
-                      <p className="text-xs text-[var(--text-secondary)]">{gp.toriTip}</p>
-                    </div>
-                  )}
-
-                  {/* 易混辨析 */}
-                  {gp.difference && gp.similarPatterns && (
-                    <div className="flex items-start gap-2 bg-[var(--purple-soft)]/8 border border-[var(--purple-soft)]/15 rounded-xl p-3">
-                      <AlertCircle size={13} className="text-[var(--purple-soft)] shrink-0 mt-0.5" />
-                      <div>
-                        <p className="text-[10px] font-bold text-[var(--purple-soft)] mb-0.5">与 {gp.similarPatterns.join(', ')} 的区别</p>
-                        <p className="text-xs text-[var(--text-secondary)]">{gp.difference}</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          );
-        })}
+        {tab === 'chapters' && <ChaptersTab onOpenCard={setActiveCard} isAdmin={isAdmin} />}
+        {tab === 'library' && <LibraryTab onStartGrammar={setSessionGrammar} />}
       </div>
     </div>
+    </ColorCtx.Provider>
   );
 }
 

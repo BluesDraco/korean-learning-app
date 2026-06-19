@@ -7,25 +7,23 @@ const MAX_ATTEMPTS = 10;
 const WINDOW_MIN = 5;   // 5 minutes
 const BLOCK_MIN = 15;   // 15 minutes
 
-export async function checkRateLimit(key: string): Promise<{ allowed: boolean; retryAfterSeconds?: number }> {
+async function checkRateLimitByKey(key: string): Promise<{ allowed: boolean; retryAfterSeconds?: number }> {
   const db = await getDb();
-  const ip = key.startsWith('login:') ? key.slice(6) : key;
 
   // Clean up attempts older than the block window
-  await db.run(`DELETE FROM login_attempts WHERE attempted_at < datetime('now', '-${BLOCK_MIN} minutes')`);
+  await db.run(`DELETE FROM login_attempts WHERE ip = ? AND attempted_at < datetime('now', '-${BLOCK_MIN} minutes')`, [key]);
 
   // Count attempts in the sliding window
   const countResult = await db.exec(
     `SELECT COUNT(*) FROM login_attempts WHERE ip = ? AND attempted_at > datetime('now', '-${WINDOW_MIN} minutes')`,
-    [ip],
+    [key],
   );
   const count = (countResult[0]?.values[0]?.[0] ?? 0) as number;
 
   if (count >= MAX_ATTEMPTS) {
-    // Check if the 10th attempt (the one that triggered the block) is within the block period
     const blockResult = await db.exec(
       `SELECT attempted_at FROM login_attempts WHERE ip = ? ORDER BY attempted_at DESC LIMIT 1 OFFSET ?`,
-      [ip, MAX_ATTEMPTS - 1],
+      [key, MAX_ATTEMPTS - 1],
     );
     const triggerAt = blockResult[0]?.values[0]?.[0] as string | undefined;
     if (triggerAt) {
@@ -40,10 +38,9 @@ export async function checkRateLimit(key: string): Promise<{ allowed: boolean; r
   // Record this attempt
   await db.run(
     `INSERT INTO login_attempts (id, ip, attempted_at) VALUES (?, ?, datetime('now'))`,
-    [generateId(), ip],
+    [generateId(), key],
   );
 
-  // Re-count after insert
   const newCount = count + 1;
   if (newCount >= MAX_ATTEMPTS) {
     const blockUntil = Date.now() + BLOCK_MIN * 60 * 1000;
@@ -54,10 +51,37 @@ export async function checkRateLimit(key: string): Promise<{ allowed: boolean; r
   return { allowed: true };
 }
 
+// Check both IP and username dimensions; record attempt only if not already blocked
+export async function checkRateLimit(key: string): Promise<{ allowed: boolean; retryAfterSeconds?: number }> {
+  // key format: "login:{ip}" (legacy) or checked directly
+  const normalized = key.startsWith('login:') ? key.slice(6) : key;
+  return checkRateLimitByKey(normalized);
+}
+
+// Check login by both IP and username — serial to avoid double-recording on blocked requests
+export async function checkLoginRateLimit(
+  ip: string,
+  username: string,
+): Promise<{ allowed: boolean; retryAfterSeconds?: number }> {
+  const ipResult = await checkRateLimitByKey(`ip:${ip}`);
+  if (!ipResult.allowed) return ipResult;
+  const userResult = await checkRateLimitByKey(`user:${username.toLowerCase()}`);
+  if (!userResult.allowed) return userResult;
+  return { allowed: true };
+}
+
 export async function resetRateLimit(key: string): Promise<void> {
   const db = await getDb();
-  const ip = key.startsWith('login:') ? key.slice(6) : key;
-  await db.run(`DELETE FROM login_attempts WHERE ip = ?`, [ip]);
+  const normalized = key.startsWith('login:') ? key.slice(6) : key;
+  await db.run(`DELETE FROM login_attempts WHERE ip = ?`, [normalized]);
+}
+
+export async function resetLoginRateLimit(ip: string, username: string): Promise<void> {
+  const db = await getDb();
+  await Promise.all([
+    db.run(`DELETE FROM login_attempts WHERE ip = ?`, [`ip:${ip}`]),
+    db.run(`DELETE FROM login_attempts WHERE ip = ?`, [`user:${username.toLowerCase()}`]),
+  ]);
 }
 
 // ─── AI daily rate limit (per-user, per-endpoint, 30/day) ───

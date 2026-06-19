@@ -33,25 +33,36 @@ const entries: LearningEntry[] = [
     color: '#e47a94',
   },
   {
-    label: '常用场景模板',
-    desc: '从点餐、旅行、聊天和追星等真实场景开始。',
-    available: false,
-    icon: '景',
-    color: '#81b5a1',
-  },
-  {
     label: 'TOPIK 备考模板',
     desc: '按题型整理词汇、阅读和写作练习路线。',
-    available: false,
+    href: '/topik',
+    available: true,
     icon: '考',
     color: '#b49ccf',
   },
   {
-    label: '发音 / 阅读 / 写作入门模板',
-    desc: '正式版会分模块提供更完整的自学路径。',
-    available: false,
-    icon: '学',
+    label: '发音跟读',
+    desc: '录音对比标准发音，练习韩语语调和单音。',
+    href: '/pronunciation',
+    available: true,
+    icon: '音',
+    color: '#e47a94',
+  },
+  {
+    label: '听写练习',
+    desc: '听韩语单词和句子，用打字或手写完成听写。',
+    href: '/dictation',
+    available: true,
+    icon: '听',
     color: '#e8a87c',
+  },
+  {
+    label: '写作练习',
+    desc: '用韩语写句子，AI 给出参考例句对照。',
+    href: '/writing',
+    available: true,
+    icon: '写',
+    color: '#81b5a1',
   },
 ];
 
@@ -78,13 +89,13 @@ export default function LearningPage() {
   return (
     <div className="py-4 space-y-3 max-w-2xl mx-auto md:max-w-3xl">
       {/* Compact header card */}
-      <div className="rounded-[30px] bg-gradient-to-br from-white via-[#fff2f6] to-[#effaf6] border border-[#efe0d9] shadow-[0_16px_40px_rgba(78,52,46,.10)] p-4 relative overflow-hidden mb-4">
+      <div className="rounded-[30px] bg-gradient-to-br from-white via-[#fff2f6] to-[#effaf6] border border-[var(--border-default)] shadow-[0_16px_40px_rgba(78,52,46,.10)] p-4 relative overflow-hidden mb-4">
         <div className="absolute -right-7 -top-7 w-[120px] h-[120px] rounded-full bg-[rgba(255,127,168,.08)]" />
         <div className="flex items-center gap-3.5 relative z-[1]">
           <div className="w-[58px] h-[58px] rounded-3xl bg-[#fff0f5] text-[#f0799b] grid place-items-center text-[18px] font-extrabold shrink-0">路</div>
           <div>
-            <h1 className="text-[23px] font-bold text-[#241917] tracking-[-.5px] leading-tight">学习路线</h1>
-            <p className="mt-1.5 text-[13px] text-[#8b766e] leading-snug">入口保留，完整模板将在正式版上线后陆续推出。</p>
+            <h1 className="text-[23px] font-bold text-[var(--text-primary)] tracking-[-.5px] leading-tight">学习路线</h1>
+            <p className="mt-1.5 text-[13px] text-[var(--text-muted)] leading-snug">入口保留，完整模板将在正式版上线后陆续推出。</p>
           </div>
         </div>
       </div>
@@ -92,9 +103,9 @@ export default function LearningPage() {
       {/* Learning entries */}
       {entries.map((entry) => {
         const inner = (
-          <div className="rounded-[28px] p-4 bg-white border border-[#efe0d9] shadow-[0_16px_40px_rgba(78,52,46,.10)]">
+          <div className="rounded-[28px] p-4 bg-[var(--bg-card)] border border-[var(--border-default)] shadow-[0_16px_40px_rgba(78,52,46,.10)]">
             <div className="flex items-start justify-between gap-2.5">
-              <h3 className="text-[16px] font-bold text-[#241917]">{entry.label}</h3>
+              <h3 className="text-[16px] font-bold text-[var(--text-primary)]">{entry.label}</h3>
               <span className={`inline-flex items-center h-[26px] px-2.5 rounded-full text-[11px] font-extrabold border shrink-0 whitespace-nowrap ${
                 entry.available
                   ? 'bg-[#fff0f5] text-[#f0799b] border-[rgba(255,127,168,.16)]'
@@ -103,7 +114,7 @@ export default function LearningPage() {
                 {entry.available ? '可体验' : '即将推出'}
               </span>
             </div>
-            <p className="mt-1.5 text-[13px] text-[#8b766e] leading-snug">{entry.desc}</p>
+            <p className="mt-1.5 text-[13px] text-[var(--text-muted)] leading-snug">{entry.desc}</p>
             {entry.available && entry.progress !== undefined && (
               <div className="mt-3.5 h-[9px] rounded-full bg-[#f6ece7] overflow-hidden">
                 <div className="h-full rounded-full bg-gradient-to-r from-[#aee3d8] to-[#ff7fa8]" style={{ width: `${entry.progress}%` }} />
@@ -133,33 +144,33 @@ export default function LearningPage() {
 
       {/* Coming Soon Modal */}
       {modalOpen && modalEntry && (
-        <div className="fixed inset-0 z-[300] flex items-end sm:items-center justify-center" onClick={() => setModalOpen(false)}>
+        <div className="fixed inset-0 z-[300] flex items-end sm:items-center justify-center" style={{ paddingBottom: 'calc(56px + env(safe-area-inset-bottom, 0px))' }} onClick={() => setModalOpen(false)}>
           <div className="absolute inset-0 bg-black/40" />
           <div
-            className="relative bg-white rounded-t-[28px] sm:rounded-[28px] w-full sm:max-w-sm p-6 space-y-5 animate-slide-up shadow-[0_-8px_40px_rgba(0,0,0,0.12)]"
+            className="relative bg-[var(--bg-card)] rounded-t-[28px] sm:rounded-[28px] w-full sm:max-w-sm p-6 pb-[calc(24px+env(safe-area-inset-bottom,0px))] sm:pb-6 space-y-5 animate-slide-up shadow-[0_-8px_40px_rgba(0,0,0,0.12)]"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Handle bar */}
-            <div className="w-10 h-1 rounded-full bg-[#e0d8cf] mx-auto sm:hidden" />
+            <div className="w-10 h-1 rounded-full bg-[var(--border-default)] mx-auto sm:hidden" />
 
             <div className="text-center space-y-3">
               <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto" style={{ backgroundColor: `${modalEntry.color}18` }}>
                 <span className="text-[22px] font-extrabold" style={{ color: modalEntry.color }}>{modalEntry.icon}</span>
               </div>
               <div>
-                <p className="text-[17px] font-bold text-[#2f2a26]">{modalEntry.label}</p>
+                <p className="text-[17px] font-bold text-[var(--text-primary)]">{modalEntry.label}</p>
                 <p className="text-[13px] text-[#e47a94] font-medium mt-1">正式版上线后推出</p>
               </div>
             </div>
 
-            <div className="bg-[#fdfaf5] rounded-2xl p-4 text-center space-y-2">
-              <p className="text-[13px] text-[#2f2a26] leading-relaxed">
+            <div className="bg-[var(--bg-muted)] rounded-2xl p-4 text-center space-y-2">
+              <p className="text-[13px] text-[var(--text-primary)] leading-relaxed">
                 这个学习路线会在正式版上线后开放。
               </p>
-              <p className="text-[12px] text-[#8c8177] leading-relaxed">
-                内测阶段你可以先使用内容拆解、影音跟读、KPOP 跟唱和复习功能开始学习。
+              <p className="text-[12px] text-[var(--text-muted)] leading-relaxed">
+                内测阶段你可以先去词汇模块，按级别和场景学习常用韩语单词。
               </p>
-              <p className="text-[12px] text-[#8c8177] leading-relaxed">
+              <p className="text-[12px] text-[var(--text-muted)] leading-relaxed">
                 正式版中，这里会提供更完整的自学路径和每日学习任务。
               </p>
             </div>
@@ -173,19 +184,11 @@ export default function LearningPage() {
               </button>
               <div className="flex gap-2">
                 <Link
-                  href="/ai/analyze"
+                  href="/vocabulary"
                   onClick={() => setModalOpen(false)}
-                  className="flex-1 flex items-center justify-center gap-1 py-2.5 border border-[#efe4d8] text-[#2f2a26] rounded-2xl text-[13px] font-medium active:scale-95 transition-transform"
+                  className="flex-1 flex items-center justify-center gap-1 py-2.5 border border-[var(--border-default)] text-[var(--text-primary)] rounded-2xl text-[13px] font-medium active:scale-95 transition-transform"
                 >
-                  先去内容拆解
-                  <ArrowRight size={14} />
-                </Link>
-                <Link
-                  href="/shadowing"
-                  onClick={() => setModalOpen(false)}
-                  className="flex-1 flex items-center justify-center gap-1 py-2.5 border border-[#efe4d8] text-[#2f2a26] rounded-2xl text-[13px] font-medium active:scale-95 transition-transform"
-                >
-                  先去影音跟读
+                  先去词汇模块
                   <ArrowRight size={14} />
                 </Link>
               </div>
@@ -193,7 +196,7 @@ export default function LearningPage() {
 
             <button
               onClick={() => setModalOpen(false)}
-              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#f5f0ea] flex items-center justify-center text-[#8c8177] hover:bg-[#e8e0d5] transition-colors"
+              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-[var(--bg-muted)] flex items-center justify-center text-[var(--text-muted)] hover:bg-[var(--bg-accent)] transition-colors"
             >
               <X size={16} />
             </button>

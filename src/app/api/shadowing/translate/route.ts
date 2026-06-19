@@ -1,18 +1,32 @@
 import { NextResponse } from 'next/server';
-import { translateKoToZhDeepSeek } from '@/lib/deepseek';
+import { translateKoToZhDeepSeek, translateBatchDeepSeek } from '@/lib/deepseek';
 import { getAuthFromCookie } from '@/lib/server/auth';
 import { checkAiRateLimit, recordAiUsage } from '@/lib/server/rate-limit';
+import { filterContent } from '@/lib/contentFilter';
 
 export async function POST(req: Request) {
   const auth = await getAuthFromCookie();
   if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  let text: string;
+  let text: string | undefined;
+  let texts: string[] | undefined;
   try {
     const body = await req.json();
     text = body.text;
-    if (!text || typeof text !== 'string') {
-      return NextResponse.json({ error: 'Missing text' }, { status: 400 });
+    texts = body.texts;
+    if (!text && !texts) {
+      return NextResponse.json({ error: 'Missing text or texts' }, { status: 400 });
+    }
+    const inputToCheck = text ?? (texts && texts[0]) ?? '';
+    const translateCheck = filterContent(inputToCheck, 'ai_input');
+    if (!translateCheck.ok) {
+      return NextResponse.json({ error: translateCheck.reason }, { status: 400 });
+    }
+    if (texts) {
+      for (const t of texts) {
+        const batchCheck = filterContent(t, 'ai_input');
+        if (!batchCheck.ok) return NextResponse.json({ error: batchCheck.reason }, { status: 400 });
+      }
     }
   } catch {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
@@ -20,6 +34,7 @@ export async function POST(req: Request) {
 
   const apiKey = process.env.DEEPSEEK_TRANSLATE_KEY;
   if (!apiKey) {
+    if (texts) return NextResponse.json({ translations: texts.map(() => '') });
     return NextResponse.json({ translation: '' });
   }
 
@@ -32,10 +47,16 @@ export async function POST(req: Request) {
   }
 
   try {
-    const translation = await translateKoToZhDeepSeek(text, apiKey);
+    if (texts && texts.length > 0) {
+      const translations = await translateBatchDeepSeek(texts, apiKey);
+      await recordAiUsage(auth.userId, 'translate');
+      return NextResponse.json({ translations });
+    }
+    const translation = await translateKoToZhDeepSeek(text!, apiKey);
     await recordAiUsage(auth.userId, 'translate');
     return NextResponse.json({ translation });
   } catch (err: any) {
+    if (texts) return NextResponse.json({ translations: texts.map(() => ''), error: err.message }, { status: 500 });
     return NextResponse.json({ translation: '', error: err.message }, { status: 500 });
   }
 }

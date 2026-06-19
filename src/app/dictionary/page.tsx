@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, Volume2, BookmarkPlus, ExternalLink, Loader2 } from 'lucide-react';
+import { Search, Volume2, BookmarkPlus, ExternalLink, Loader2, ArrowLeft } from 'lucide-react';
 import { speak, speakWord } from '@/lib/tts';
 import { db } from '@/lib/db';
 import { useFeedback } from '@/hooks/useFeedback';
@@ -55,6 +55,8 @@ export default function DictionaryPage() {
   const handleAddWord = async (entry: SearchResult, e: React.MouseEvent) => {
     e.stopPropagation();
     try {
+      const existing = await db.words.get(`dict-${entry.w}`);
+      if (existing) { feedbackSuccess('已在单词本中'); setAddedWord(entry.w); setTimeout(() => setAddedWord(null), 2000); return; }
       await db.words.put({
         id: `dict-${entry.w}`,
         word: entry.w,
@@ -84,6 +86,9 @@ export default function DictionaryPage() {
 
   return (
     <div className="max-w-2xl mx-auto py-4 space-y-4">
+      <div className="flex items-center gap-2 -mb-2">
+        <Link href="/tools" className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"><ArrowLeft size={20} /></Link>
+      </div>
       <div className="text-center mb-6">
         <h1 className="text-2xl font-bold text-[var(--text-primary)]" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
           韩语字典

@@ -1,599 +1,771 @@
 'use client';
 
 import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { Eye, EyeOff, ChevronRight, Trophy, Lock, Check, Flame, Volume2, ArrowLeft } from 'lucide-react';
+import { getTheme, getThemeWords, getAllThemes, getThemeCategories } from '@/data/vocabulary';
+import { awardXp, updateStreak, getProfile } from '@/lib/gamification';
+import { speakWord } from '@/lib/tts';
+import { useIsDesktop } from '@/lib/useIsMobile';
+import { DiffFeedback } from '@/components/dictation/DiffFeedback';
+import { KoreanKeyboardDisplay } from '@/components/dictation/KoreanKeyboardDisplay';
+import type { ThemePack } from '@/types';
+import { db } from '@/lib/db';
+import type { WordBook } from '@/types';
+import { useAuth } from '@/components/AuthProvider';
+import { normalizeKorean } from '@/lib/koreanDiff';
 
-const C = {
-  ink: '#241917', muted: '#89756e', line: '#eee0d8', pink: '#ff7fa8',
-  pinkSoft: '#fff0f5', mint: '#aee3d8', cream: '#fff8f4', black: '#201815',
-  mintBg: '#eaf8f5', mintText: '#4e746d',
-  shadow: '0 16px 42px rgba(78,52,46,.10)',
-  strong: '0 28px 72px rgba(78,52,46,.18)',
-};
+// ── Types ────────────────────────────────────────────────
 
-// ── Exercise data ──────────────────────────────────────
-
-interface TypingExercise {
+interface TypingItem {
   id: string;
   korean: string;
   chinese: string;
-  tags: string[];
+  type: 'word' | 'sentence';
 }
 
-const CATEGORIES = [
-  { id: 'syllables', name: '基础音节', desc: '熟悉辅音 + 元音组合' },
-  { id: 'words', name: '常用单词', desc: '练习词和空格' },
-  { id: 'short-sentences', name: '空格短句', desc: '开始练完整句' },
-  { id: 'daily', name: '日常表达', desc: '真实可用表达' },
-  { id: 'kpop', name: '韩娱表达', desc: '和 Tori 内容结合' },
-] as const;
-
-const EXERCISES: TypingExercise[] = [
-  { id: 's1', korean: '가 나 다 라 마', chinese: '基础辅音 + 元音组合', tags: ['基础音节'] },
-  { id: 's2', korean: '고 구 기 게 개', chinese: '不同元音的组合', tags: ['基础音节'] },
-  { id: 's3', korean: '바 사 아 자 차', chinese: 'ㅂㅅㅇㅈㅊ 系列', tags: ['基础音节'] },
-  { id: 's4', korean: '터 포 허 커 머', chinese: 'ㅌㅍㅎㅋㅁ 系列', tags: ['基础音节'] },
-  { id: 's5', korean: '까 따 빠 싸 짜', chinese: '紧音练习', tags: ['基础音节'] },
-  { id: 'w1', korean: '한국어 공부 친구', chinese: '韩语 学习 朋友', tags: ['常用单词', '学韩语'] },
-  { id: 'w2', korean: '오늘 내일 지금', chinese: '今天 明天 现在', tags: ['常用单词', '时间'] },
-  { id: 'w3', korean: '노래 가사 무대', chinese: '歌 歌词 舞台', tags: ['常用单词', '韩娱'] },
-  { id: 'w4', korean: '사랑 행복 우정', chinese: '爱 幸福 友情', tags: ['常用单词'] },
-  { id: 'w5', korean: '커피 음식 물', chinese: '咖啡 食物 水', tags: ['常用单词', '日常'] },
-  { id: 'ss1', korean: '저는 한국어를 공부해요.', chinese: '我正在学习韩语。', tags: ['空格短句', '完整句'] },
-  { id: 'ss2', korean: '오늘은 날씨가 좋아요.', chinese: '今天天气很好。', tags: ['空格短句', '完整句'] },
-  { id: 'ss3', korean: '커피 한 잔 주세요.', chinese: '请给我一杯咖啡。', tags: ['空格短句', '完整句'] },
-  { id: 'ss4', korean: '저는 학생입니다.', chinese: '我是学生。', tags: ['空格短句', '完整句'] },
-  { id: 'd1', korean: '오늘은 기분이 정말 좋아요.', chinese: '今天心情真的很好。', tags: ['日常表达', '空格练习'] },
-  { id: 'd2', korean: '요즘 한국어가 재미있어요.', chinese: '最近觉得韩语很有趣。', tags: ['日常表达'] },
-  { id: 'd3', korean: '저는 이 노래를 좋아해요.', chinese: '我喜欢这首歌。', tags: ['日常表达', '韩娱表达'] },
-  { id: 'd4', korean: '내일 친구를 만날 거예요.', chinese: '明天要见朋友。', tags: ['日常表达'] },
-  { id: 'k1', korean: '이번 무대 진짜 멋있었어요.', chinese: '这次舞台真的太帅了。', tags: ['韩娱表达'] },
-  { id: 'k2', korean: '노래가 계속 생각나요.', chinese: '一直想起这首歌。', tags: ['韩娱表达'] },
-  { id: 'k3', korean: '가사가 너무 좋아요.', chinese: '歌词太好了。', tags: ['韩娱表达'] },
-  { id: 'k4', korean: '다음 콘서트 꼭 갈 거예요.', chinese: '下次演唱会一定要去。', tags: ['韩娱表达'] },
-];
-
-// ── Hangul composition (for virtual keyboard) ──────────
-
-const CHO = ['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
-const JUNG = ['ㅏ','ㅐ','ㅑ','ㅒ','ㅓ','ㅔ','ㅕ','ㅖ','ㅗ','ㅘ','ㅙ','ㅚ','ㅛ','ㅜ','ㅝ','ㅞ','ㅟ','ㅠ','ㅡ','ㅢ','ㅣ'];
-const JONG = ['','ㄱ','ㄲ','ㄳ','ㄴ','ㄵ','ㄶ','ㄷ','ㄹ','ㄺ','ㄻ','ㄼ','ㄽ','ㄾ','ㄿ','ㅀ','ㅁ','ㅂ','ㅄ','ㅅ','ㅆ','ㅇ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
-
-const JUNG_COMPOUND: Record<string, [string, string]> = {
-  'ㅘ': ['ㅗ','ㅏ'], 'ㅙ': ['ㅗ','ㅐ'], 'ㅚ': ['ㅗ','ㅣ'],
-  'ㅝ': ['ㅜ','ㅓ'], 'ㅞ': ['ㅜ','ㅔ'], 'ㅟ': ['ㅜ','ㅣ'], 'ㅢ': ['ㅡ','ㅣ'],
-};
-const JUNG_SPLIT: Record<string, string> = {};
-for (const [com, parts] of Object.entries(JUNG_COMPOUND)) {
-  JUNG_SPLIT[parts[0] + parts[1]] = com;
+interface PackProgress {
+  completedAt: number;
+  bestWpm: number;
+  bestAccuracy: number;
+  practiceCount: number;
 }
 
-const JONG_COMPOUND: Record<string, [string, string]> = {
-  'ㄳ': ['ㄱ','ㅅ'], 'ㄵ': ['ㄴ','ㅈ'], 'ㄶ': ['ㄴ','ㅎ'],
-  'ㄺ': ['ㄹ','ㄱ'], 'ㄻ': ['ㄹ','ㅁ'], 'ㄼ': ['ㄹ','ㅂ'],
-  'ㄽ': ['ㄹ','ㅅ'], 'ㄾ': ['ㄹ','ㅌ'], 'ㄿ': ['ㄹ','ㅍ'], 'ㅀ': ['ㄹ','ㅎ'], 'ㅄ': ['ㅂ','ㅅ'],
-};
+type PageState = 'home' | 'intro' | 'session' | 'result';
 
-function findCho(s: string): number { return CHO.indexOf(s); }
-function findJung(s: string): number { return JUNG.indexOf(s); }
-function findJong(s: string): number { return JONG.indexOf(s); }
+// ── Sound effects via Web Audio API ──────────────────────
 
-/** Try to compose jamo at the end of a string into a Hangul syllable. Returns composed string. */
-function tryComposeEnd(text: string): string {
-  const chars = Array.from(text);
-  if (chars.length < 2) return text;
+function playCorrectSound() {
+  try {
+    const ctx = new AudioContext();
+    const now = ctx.currentTime;
+    [523.25, 783.99].forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0, now + i * 0.1);
+      gain.gain.linearRampToValueAtTime(0.18, now + i * 0.1 + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.1 + 0.18);
+      osc.start(now + i * 0.1);
+      osc.stop(now + i * 0.1 + 0.18);
+    });
+    setTimeout(() => ctx.close(), 500);
+  } catch { /* ignore */ }
+}
 
-  // Case 1: Compose CHO + JUNG [+ JONG] from the end
-  for (let start = Math.max(0, chars.length - 5); start < chars.length; start++) {
-    const seq = chars.slice(start);
-    if (seq.length < 2) continue;
-    const choIdx = findCho(seq[0]);
-    if (choIdx === -1) continue;
+function playWrongSound() {
+  try {
+    const ctx = new AudioContext();
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(220, now);
+    osc.frequency.linearRampToValueAtTime(150, now + 0.15);
+    gain.gain.setValueAtTime(0.12, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+    osc.start(now); osc.stop(now + 0.22);
+    setTimeout(() => ctx.close(), 500);
+  } catch { /* ignore */ }
+}
 
-    let jungIdx = findJung(seq[1]);
-    let jungConsumed = 0;
+// ── Storage helpers ───────────────────────────────────────
 
-    if (jungIdx === -1) {
-      // Try compound medial: ㅗ/ㅜ/ㅡ + another vowel
-      if (seq[1] === 'ㅗ' && seq[2] === 'ㅏ') { jungIdx = findJung('ㅘ'); jungConsumed = 1; }
-      else if (seq[1] === 'ㅗ' && seq[2] === 'ㅐ') { jungIdx = findJung('ㅙ'); jungConsumed = 1; }
-      else if (seq[1] === 'ㅗ' && seq[2] === 'ㅣ') { jungIdx = findJung('ㅚ'); jungConsumed = 1; }
-      else if (seq[1] === 'ㅜ' && seq[2] === 'ㅓ') { jungIdx = findJung('ㅝ'); jungConsumed = 1; }
-      else if (seq[1] === 'ㅜ' && seq[2] === 'ㅔ') { jungIdx = findJung('ㅞ'); jungConsumed = 1; }
-      else if (seq[1] === 'ㅜ' && seq[2] === 'ㅣ') { jungIdx = findJung('ㅟ'); jungConsumed = 1; }
-      else if (seq[1] === 'ㅡ' && seq[2] === 'ㅣ') { jungIdx = findJung('ㅢ'); jungConsumed = 1; }
-      if (jungIdx === -1) continue;
-    }
+function getPackProgress(themeId: string): PackProgress | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = localStorage.getItem(`typing-pack-${themeId}`);
+    return raw ? JSON.parse(raw) : null;
+  } catch { return null; }
+}
 
-    let consumed = 2 + jungConsumed;
-    let jongIdx = 0;
+function savePackProgress(themeId: string, p: PackProgress) {
+  try { localStorage.setItem(`typing-pack-${themeId}`, JSON.stringify(p)); } catch { /* ignore */ }
+}
 
-    // Check for final consonant after medial
-    const jongPos = 2 + jungConsumed;
-    if (seq.length > jongPos) {
-      const j = findJong(seq[jongPos]);
-      if (j > 0) {
-        jongIdx = j;
-        consumed = jongPos + 1;
-        // Try compound final: e.g. ㄱ+ㅅ=ㄳ
-        if (seq.length > jongPos + 1) {
-          const pair = seq[jongPos] + seq[jongPos + 1];
-          if (JONG_COMPOUND[pair]) {
-            jongIdx = findJong(pair);
-            consumed = jongPos + 2;
+function getShowTranslation(): boolean {
+  try { return localStorage.getItem('typing-show-translation') !== 'false'; } catch { return true; }
+}
+
+function setShowTranslationPref(v: boolean) {
+  try { localStorage.setItem('typing-show-translation', String(v)); } catch { /* ignore */ }
+}
+
+// ── Build items from theme ────────────────────────────────
+
+function buildTypingItems(themeId: string): TypingItem[] {
+  const theme = getTheme(themeId);
+  if (!theme) return [];
+  const words = getThemeWords(themeId).slice(0, 8).map((e, i) => ({
+    id: `w-${i}`, korean: e.korean,
+    chinese: e.meanings[0]?.chinese ?? '', type: 'word' as const,
+  }));
+  const sentences = (theme.sentences ?? []).slice(0, 6).map((s, i) => ({
+    id: `s-${i}`, korean: s.korean, chinese: s.chinese, type: 'sentence' as const,
+  }));
+  return [...words, ...sentences];
+}
+
+// ── Unlock logic ──────────────────────────────────────────
+
+function isPackUnlocked(theme: ThemePack, allThemes: ThemePack[]): boolean {
+  const inCategory = allThemes.filter(t => t.category === theme.category);
+  const idx = inCategory.findIndex(t => t.id === theme.id);
+  if (idx === 0) return true;
+  return getPackProgress(inCategory[idx - 1].id) !== null;
+}
+
+// ── WPM ──────────────────────────────────────────────────
+
+function calcWpm(chars: number, ms: number): number {
+  if (ms <= 0) return 0;
+  return Math.round((chars / 5) / (ms / 60000));
+}
+
+// ── Char-level target display ─────────────────────────────
+
+function TargetChars({ target, input }: { target: string; input: string }) {
+  const chars = Array.from(target);
+  const typed = Array.from(input);
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5, alignItems: 'flex-end', flex: 1 }}>
+      {chars.map((ch, i) => {
+        let charColor = '#d4c5be';
+        let underColor = '#eee0d8';
+        let isCurrent = false;
+        let strikethrough = false;
+        let glow = '';
+
+        if (i < typed.length) {
+          if (typed[i] === ch) {
+            charColor = '#3aafa9';
+            underColor = '#aee3d8';
+            glow = '0 0 8px #aee3d870';
+          } else {
+            charColor = '#e04a6a';
+            underColor = '#ff7fa8';
+            strikethrough = true;
           }
+        } else if (i === typed.length) {
+          charColor = '#241917';
+          underColor = '#ff7fa8';
+          isCurrent = true;
         }
-      }
-    }
 
-    const code = 0xAC00 + choIdx * 588 + jungIdx * 28 + jongIdx;
-    const before = chars.slice(0, start).join('');
-    const after = chars.slice(start + consumed).join('');
-    return before + String.fromCharCode(code) + after;
-  }
-
-  // Case 2: Last char is a valid jong (받침), attach to preceding syllable
-  const lastChar = chars[chars.length - 1];
-  const jongIdx = findJong(lastChar);
-  if (jongIdx > 0 && chars.length >= 2) {
-    const prevChar = chars[chars.length - 2];
-    const prevCode = prevChar.charCodeAt(0);
-    if (prevCode >= 0xAC00 && prevCode <= 0xD7A3) {
-      const rel = prevCode - 0xAC00;
-      const prevCho = Math.floor(rel / 588);
-      const prevJung = Math.floor((rel % 588) / 28);
-      const prevJong = rel % 28;
-      if (prevJong === 0) {
-        const newCode = 0xAC00 + prevCho * 588 + prevJung * 28 + jongIdx;
-        return chars.slice(0, -1).join('') + String.fromCharCode(newCode);
-      }
-    }
-  }
-
-  return text;
-}
-// ── Keyboard layout ────────────────────────────────────
-
-const COMPOUND_KEYS = ['ㄲ','ㄸ','ㅃ','ㅆ','ㅉ','ㅘ','ㅙ','ㅚ','ㅝ','ㅞ','ㅟ','ㅢ'];
-
-const KEY_ROWS = [
-  ['ㅂ','ㅈ','ㄷ','ㄱ','ㅅ','ㅛ','ㅕ','ㅑ','ㅐ','ㅔ'],
-  ['ㅁ','ㄴ','ㅇ','ㄹ','ㅎ','ㅗ','ㅓ','ㅏ','ㅣ'],
-  ['ㅋ','ㅌ','ㅊ','ㅍ','ㅠ','ㅜ','ㅡ'],
-];
-
-// ── Comparison ─────────────────────────────────────────
-
-function compareText(target: string, input: string) {
-  const t = target.normalize('NFC');
-  const i = input.normalize('NFC');
-  let matched = 0;
-  let errors = 0;
-  const maxLen = Math.min(t.length, i.length);
-  for (let pos = 0; pos < maxLen; pos++) {
-    if (t[pos] === i[pos]) matched++;
-    else errors++;
-  }
-  // Extra chars in input beyond target length = errors
-  if (i.length > t.length) errors += i.length - t.length;
-  return { matched, errors, total: t.length, done: matched === t.length && i.length === t.length };
+        const isSpace = ch === ' ';
+        return (
+          <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3 }}>
+            <span style={{
+              fontSize: isSpace ? 11 : 30,
+              fontWeight: 800,
+              fontFamily: "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif",
+              color: charColor,
+              textShadow: glow,
+              textDecoration: strikethrough ? 'line-through' : 'none',
+              lineHeight: 1,
+              minWidth: isSpace ? 10 : undefined,
+            }}>
+              {isSpace ? '·' : ch}
+            </span>
+            <div style={{
+              height: 2,
+              minWidth: isSpace ? 10 : 18,
+              borderRadius: 1,
+              background: underColor,
+              animation: isCurrent ? 'blink-underline 0.75s infinite' : 'none',
+            }} />
+          </div>
+        );
+      })}
+    </div>
+  );
 }
 
-function renderComparison(target: string, input: string) {
-  const t = target.normalize('NFC');
-  const i = input.normalize('NFC');
-  const maxLen = Math.max(t.length, i.length);
-  const items: { char: string; status: 'correct' | 'wrong' | 'pending' | 'extra' }[] = [];
-  for (let pos = 0; pos < maxLen; pos++) {
-    if (pos < t.length && pos < i.length) {
-      items.push({ char: t[pos], status: t[pos] === i[pos] ? 'correct' : 'wrong' });
-    } else if (pos < t.length) {
-      items.push({ char: t[pos], status: 'pending' });
-    } else {
-      items.push({ char: i[pos], status: 'extra' });
-    }
-  }
-  return items;
-}
-
-function feedbackText(matched: number, total: number, errors: number): string {
-  if (total === 0) return '输入目标文字开始练习。';
-  if (matched === total) return '输入完成，全部正确！';
-  if (matched > total * 0.7) return '输入稳定，注意剩余字符和空格。';
-  if (errors > 0) return '有字符不一致，重点检查空格、받침 和元音组合。';
-  return '继续输入，注意词与词之间的空格。';
-}
-
-// ── Page ────────────────────────────────────────────────
+// ── Page ─────────────────────────────────────────────────
 
 export default function TypingPage() {
-  const router = useRouter();
-  const [categoryIdx, setCategoryIdx] = useState(0);
-  const [exerciseIdx, setExerciseIdx] = useState(0);
+  const { user, loading: authLoading } = useAuth();
+  const [pageState, setPageState] = useState<PageState>('home');
+  const [activeThemeId, setActiveThemeId] = useState('');
+  const [items, setItems] = useState<TypingItem[]>([]);
+  const [streak, setStreak] = useState(0);
+
+  const [index, setIndex] = useState(0);
   const [input, setInput] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+  const [lastCorrect, setLastCorrect] = useState<boolean | null>(null);
+  const [combo, setCombo] = useState(0);
   const [isComposing, setIsComposing] = useState(false);
   const [startTime, setStartTime] = useState<number | null>(null);
   const [elapsed, setElapsed] = useState(0);
-  const [finished, setFinished] = useState(false);
-  const [showKeymap, setShowKeymap] = useState(false);
-  const [showKeyboard, setShowKeyboard] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return window.innerWidth < 768; // mobile default: show keyboard; desktop: hide
-  });
-  const [keyboardBottom, setKeyboardBottom] = useState(0);
-  const inputRef = useRef<HTMLTextAreaElement>(null);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [correctCount, setCorrectCount] = useState(0);
+  const [xpTotal, setXpTotal] = useState(0);
+  const [showTranslation, setShowTranslation] = useState(true);
+  const [resultData, setResultData] = useState<{ wpm: number; accuracy: number; elapsed: number; xp: number } | null>(null);
 
-  // Lift virtual keyboard above system keyboard on mobile
+  const inputRef = useRef<HTMLInputElement>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const correctCountRef = useRef(0);
+  const xpTotalRef = useRef(0);
+  const startTimeRef = useRef<number | null>(null);
+  const comboRef = useRef(0);
+  const autoAdvancingRef = useRef(false);
+
+  const isDesktop = useIsDesktop();
+
   useEffect(() => {
-    const vv = window.visualViewport;
-    if (!vv) return;
-    function onResize() {
-      const offset = window.innerHeight - (vv!.height + vv!.offsetTop);
-      setKeyboardBottom(Math.max(0, offset));
-    }
-    vv.addEventListener('resize', onResize);
-    vv.addEventListener('scroll', onResize);
-    return () => { vv.removeEventListener('resize', onResize); vv.removeEventListener('scroll', onResize); };
+    getProfile().then(p => setStreak(p.streak)).catch(() => {});
+    setShowTranslation(getShowTranslation());
   }, []);
 
-  const currentCategory = CATEGORIES[categoryIdx];
-  const categoryExercises = useMemo(
-    () => EXERCISES.filter(ex => {
-      const catName = currentCategory.name;
-      return ex.tags.includes(catName);
-    }),
-    [categoryIdx]
-  );
-  const exercise = categoryExercises[exerciseIdx] ?? categoryExercises[0] ?? EXERCISES[0];
-  const target = exercise.korean;
-
-  const comparison = useMemo(() => compareText(target, input), [target, input]);
-  const displayItems = useMemo(() => renderComparison(target, input), [target, input]);
-  const feedback = useMemo(() => feedbackText(comparison.matched, comparison.total, comparison.errors), [comparison]);
-
-  // Timer
   useEffect(() => {
-    if (startTime && !finished) {
-      timerRef.current = setInterval(() => {
-        setElapsed(Date.now() - startTime);
-      }, 200);
+    if (startTime && pageState === 'session') {
+      timerRef.current = setInterval(() => setElapsed(Date.now() - startTime), 300);
     } else {
       if (timerRef.current) clearInterval(timerRef.current);
     }
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
-  }, [startTime, finished]);
+  }, [startTime, pageState]);
 
-  // Auto-finish when all matched
+  // Auto-play TTS on item change
   useEffect(() => {
-    if (comparison.done && startTime && !finished) {
-      setFinished(true);
+    if (pageState === 'session' && items[index]) {
+      const t = setTimeout(() => speakWord(items[index].korean, 0.85), 300);
+      return () => clearTimeout(t);
     }
-  }, [comparison.done, startTime, finished]);
+  }, [index, pageState, items]);
 
-  // Scroll input into view on mobile keyboard
+  const allThemes = useMemo(() => getAllThemes(), []);
+  const categories = useMemo(() => getThemeCategories(), []);
+  const [wordBooks, setWordBooks] = useState<WordBook[]>([]);
+  const [mySentenceCount, setMySentenceCount] = useState<number | null>(null);
+
   useEffect(() => {
-    if (input.length > 0) {
-      inputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  }, [input.length]);
+    if (authLoading || !user) return;
+    db.wordBooks.toArray().then(books => setWordBooks(books.filter(b => b.wordIds.length > 0 && !b.id.startsWith('yonsei-') && !b.id.startsWith('seoul-')))).catch(() => {});
+    db.sentences.count().then(n => setMySentenceCount(n)).catch(() => setMySentenceCount(0));
+  }, [user, authLoading]);
 
-  function handleInputChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    if (isComposing) return;
-    const val = e.target.value;
-    if (!startTime && val.length > 0) setStartTime(Date.now());
-    setInput(val);
+  function openIntro(themeId: string, prebuilt?: TypingItem[]) {
+    const built = prebuilt ?? buildTypingItems(themeId);
+    if (built.length === 0) return;
+    setActiveThemeId(themeId);
+    setItems(built);
+    setPageState('intro');
   }
 
-  function handleCompositionStart() {
-    setIsComposing(true);
-  }
-
-  function handleCompositionEnd(e: React.CompositionEvent<HTMLTextAreaElement>) {
-    setIsComposing(false);
-    const val = (e.target as HTMLTextAreaElement).value;
-    if (!startTime && val.length > 0) setStartTime(Date.now());
-    setInput(val);
-  }
-
-  // Virtual keyboard
-  function handleJamoClick(jamo: string) {
-    if (finished) return;
-    if (!startTime) setStartTime(Date.now());
-    setInput(prev => {
-      const next = tryComposeEnd(prev + jamo);
-      return next;
+  async function openWordBook(book: WordBook) {
+    const words = await db.words.where('id').anyOf(book.wordIds).toArray();
+    if (words.length === 0) return;
+    const builtItems: TypingItem[] = [];
+    words.forEach((w, i) => {
+      builtItems.push({ id: `wb-w-${i}`, korean: w!.word, chinese: w!.meaning, type: 'word' });
+      (w!.examples ?? []).forEach((ex, j) => {
+        if (ex.text) builtItems.push({ id: `wb-s-${i}-${j}`, korean: ex.text, chinese: ex.translation ?? '', type: 'sentence' });
+      });
     });
+    openIntro(`wb-${book.id}`, builtItems);
   }
 
-  function handleSpace() {
-    if (finished) return;
-    if (!startTime) setStartTime(Date.now());
-    setInput(prev => prev + ' ');
+  async function openMySentences() {
+    const sentences = await db.sentences.toArray().catch(() => []);
+    if (sentences.length === 0) return;
+    const builtItems: TypingItem[] = sentences.map((s: any, i: number) => ({
+      id: `ms-${i}`,
+      korean: s.korean,
+      chinese: s.chinese ?? '',
+      type: 'sentence' as const,
+    }));
+    openIntro('my-sentences', builtItems);
   }
 
-  function handleBackspace() {
-    if (finished) return;
-    setInput(prev => prev.slice(0, -1));
+  function startPack() {
+    setIndex(0); setInput(''); setSubmitted(false); setLastCorrect(null);
+    setStartTime(null); setElapsed(0); setCorrectCount(0); setXpTotal(0); setCombo(0);
+    correctCountRef.current = 0; xpTotalRef.current = 0;
+    startTimeRef.current = null; comboRef.current = 0;
+    setPageState('session');
   }
 
-  function handleClear() {
-    setInput('');
-    setStartTime(null);
-    setElapsed(0);
-    setFinished(false);
+  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    if (submitted) return;
+    const val = e.target.value;
+    if (!startTimeRef.current && val.length > 0) {
+      const now = Date.now();
+      startTimeRef.current = now;
+      setStartTime(now);
+    }
+    setInput(val);
   }
 
-  function handleRetry() {
-    setInput('');
-    setStartTime(null);
-    setElapsed(0);
-    setFinished(false);
-    inputRef.current?.focus();
+  function handleCompositionStart() { setIsComposing(true); }
+  function handleCompositionEnd(e: React.CompositionEvent<HTMLInputElement>) {
+    setIsComposing(false);
+    const val = (e.target as HTMLInputElement).value;
+    if (!startTimeRef.current && val.length > 0) {
+      const now = Date.now();
+      startTimeRef.current = now;
+      setStartTime(now);
+    }
+    setInput(val);
   }
+
+  const current = items[index];
+
+  const handleSubmit = useCallback(() => {
+    if (!current || !input.trim() || submitted || isComposing) return;
+    const isCorrect = normalizeKorean(input) === normalizeKorean(current.korean);
+    setSubmitted(true);
+    setLastCorrect(isCorrect);
+    if (isCorrect) {
+      playCorrectSound();
+      correctCountRef.current += 1;
+      setCorrectCount(correctCountRef.current);
+      awardXp(5).catch(() => {});
+      xpTotalRef.current += 5;
+      setXpTotal(xpTotalRef.current);
+      comboRef.current += 1;
+      setCombo(comboRef.current);
+      autoAdvancingRef.current = true;
+      setTimeout(() => { autoAdvancingRef.current = false; handleNext(); }, 600);
+    } else {
+      playWrongSound();
+      comboRef.current = 0;
+      setCombo(0);
+    }
+  }, [input, submitted, isComposing, current]);
 
   function handleNext() {
-    if (exerciseIdx + 1 < categoryExercises.length) {
-      setExerciseIdx(i => i + 1);
-    } else if (categoryIdx + 1 < CATEGORIES.length) {
-      setCategoryIdx(i => i + 1);
-      setExerciseIdx(0);
+    if (index + 1 >= items.length) {
+      finishSession();
     } else {
-      setExerciseIdx(0);
+      setIndex(i => i + 1);
+      setInput(''); setSubmitted(false); setLastCorrect(null);
     }
-    setInput('');
-    setStartTime(null);
-    setElapsed(0);
-    setFinished(false);
   }
 
-  function handlePrev() {
-    if (exerciseIdx > 0) {
-      setExerciseIdx(i => i - 1);
-    } else if (categoryIdx > 0) {
-      setCategoryIdx(i => i - 1);
-      const prevCat = CATEGORIES[categoryIdx - 1];
-      const prevExercises = EXERCISES.filter(ex => ex.tags.includes(prevCat.name));
-      setExerciseIdx(prevExercises.length - 1);
-    }
-    setInput('');
-    setStartTime(null);
-    setElapsed(0);
-    setFinished(false);
+  function finishSession() {
+    const ms = startTimeRef.current ? Date.now() - startTimeRef.current : 0;
+    const totalChars = items.reduce((s, it) => s + it.korean.replace(/\s/g, '').length, 0);
+    const wpm = calcWpm(totalChars, ms);
+    const accuracy = items.length > 0 ? Math.round((correctCountRef.current / items.length) * 100) : 0;
+    const xp = xpTotalRef.current;
+    const prev = getPackProgress(activeThemeId);
+    savePackProgress(activeThemeId, {
+      completedAt: Date.now(),
+      bestWpm: Math.max(wpm, prev?.bestWpm ?? 0),
+      bestAccuracy: Math.max(accuracy, prev?.bestAccuracy ?? 0),
+      practiceCount: (prev?.practiceCount ?? 0) + 1,
+    });
+    updateStreak().catch(() => {});
+    getProfile().then(p => setStreak(p.streak)).catch(() => {});
+    setResultData({ wpm, accuracy, elapsed: ms, xp });
+    setPageState('result');
   }
 
-  const accuracy = comparison.total > 0 ? Math.round((comparison.matched / comparison.total) * 100) : 0;
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (e.key === 'Enter') {
+      if (!submitted) handleSubmit();
+      else if (!autoAdvancingRef.current) handleNext();
+    }
+  }
+
+  function toggleTranslation() {
+    const next = !showTranslation;
+    setShowTranslation(next);
+    setShowTranslationPref(next);
+  }
+
   const elapsedSec = Math.floor(elapsed / 1000);
   const elapsedDisplay = `${Math.floor(elapsedSec / 60)}:${String(elapsedSec % 60).padStart(2, '0')}`;
-  const exerciseTotal = categoryExercises.length;
-  const exerciseNum = exerciseIdx + 1;
 
-  return (
-    <div style={{ paddingBottom: 160 }}>
-      {/* Keymap modal */}
-      {showKeymap && (
-        <div
-          style={{ position: 'fixed', inset: 0, zIndex: 200, background: 'rgba(36,25,23,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}
-          onClick={() => setShowKeymap(false)}
-        >
-          <div style={{ background: '#fff', borderRadius: 28, padding: 20, maxWidth: 480, width: '100%', boxShadow: '0 20px 60px rgba(36,25,23,.25)' }} onClick={e => e.stopPropagation()}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-              <span style={{ fontSize: 15, fontWeight: 900, color: C.ink }}>韩文键盘对照表</span>
-              <button onClick={() => setShowKeymap(false)} style={{ width: 32, height: 32, borderRadius: 10, border: '1px solid ' + C.line, background: C.cream, cursor: 'pointer', fontSize: 16, color: C.muted }}>✕</button>
+  // ── Intro ─────────────────────────────────────────────────
+  if (pageState === 'intro') {
+    const theme = getTheme(activeThemeId);
+    const displayEmoji = theme?.emoji ?? '📖';
+    const displayName = theme?.name ?? wordBooks.find(b => `wb-${b.id}` === activeThemeId)?.name ?? (activeThemeId === 'my-sentences' ? '我的句子' : '我的单词本');
+    const displayDesc = theme?.description ?? '来自单词本的词汇与例句';
+    const previewWords = items.filter(i => i.type === 'word').slice(0, 6);
+    const previewSents = items.filter(i => i.type === 'sentence').slice(0, 3);
+    return (
+      <div style={{ maxWidth: 560, margin: '0 auto', padding: '8px 0 100px' }}>
+        <div style={{ background: 'linear-gradient(135deg, #ff7fa8, #b49ccf)', borderRadius: 24, padding: '28px 24px', marginBottom: 20, textAlign: 'center' }}>
+          <div style={{ fontSize: 52, marginBottom: 10 }}>{displayEmoji}</div>
+          <h1 style={{ fontSize: 22, fontWeight: 900, color: 'white', margin: '0 0 8px' }}>{displayName}</h1>
+          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.85)', margin: 0, lineHeight: 1.6 }}>{displayDesc}</p>
+        </div>
+        <div style={{ display: 'flex', gap: 10, marginBottom: 20 }}>
+          {[{ label: '单词', value: previewWords.length }, { label: '句子', value: previewSents.length }, { label: '合计', value: items.length }].map(s => (
+            <div key={s.label} style={{ flex: 1, background: 'white', borderRadius: 14, border: '1px solid #eee0d8', padding: '12px 8px', textAlign: 'center' }}>
+              <p style={{ fontSize: 20, fontWeight: 900, color: '#241917', margin: 0 }}>{s.value}</p>
+              <p style={{ fontSize: 11, color: '#89756e', margin: '2px 0 0' }}>{s.label}</p>
             </div>
-            {/* Keymap rows */}
-            {[
-              [['Q','ㅂ'],['W','ㅈ'],['E','ㄷ'],['R','ㄱ'],['T','ㅅ'],['Y','ㅛ'],['U','ㅕ'],['I','ㅑ'],['O','ㅐ'],['P','ㅔ']],
-              [['A','ㅁ'],['S','ㄴ'],['D','ㅇ'],['F','ㄹ'],['G','ㅎ'],['H','ㅗ'],['J','ㅓ'],['K','ㅏ'],['L','ㅣ']],
-              [['Z','ㅋ'],['X','ㅌ'],['C','ㅊ'],['V','ㅍ'],['B','ㅠ'],['N','ㅜ'],['M','ㅡ']],
-            ].map((row, ri) => (
-              <div key={ri} style={{ display: 'flex', gap: 4, justifyContent: 'center', marginBottom: 6 }}>
-                {row.map(([en, ko]) => (
-                  <div key={en} style={{ flex: '1 1 0', maxWidth: 42, background: C.cream, border: '1px solid ' + C.line, borderRadius: 10, padding: '6px 2px', textAlign: 'center' }}>
-                    <div style={{ fontSize: 11, color: C.muted, fontWeight: 700 }}>{en}</div>
-                    <div style={{ fontSize: 16, color: C.ink, fontWeight: 900 }}>{ko}</div>
-                  </div>
-                ))}
-              </div>
-            ))}
-            <p style={{ fontSize: 11, color: C.muted, textAlign: 'center', marginTop: 12 }}>Shift + 键 = 双字音/双字母（ㄲ ㄸ ㅃ ㅆ ㅉ ㅒ ㅖ）</p>
+          ))}
+        </div>
+        {previewWords.length > 0 && (
+          <div style={{ background: 'white', borderRadius: 16, border: '1px solid #eee0d8', padding: '16px', marginBottom: 14 }}>
+            <p style={{ fontSize: 11, fontWeight: 700, color: '#89756e', margin: '0 0 12px', letterSpacing: '0.05em' }}>将要练习的单词</p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+              {previewWords.map((item, i) => (
+                <div key={i} style={{ background: '#fff0f5', borderRadius: 10, padding: '6px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+                  <span style={{ fontSize: 15, fontWeight: 700, color: '#241917', fontFamily: "'Malgun Gothic', sans-serif" }}>{item.korean}</span>
+                  <span style={{ fontSize: 10, color: '#89756e' }}>{item.chinese}</span>
+                </div>
+              ))}
+            </div>
           </div>
+        )}
+        {previewSents.length > 0 && (
+          <div style={{ background: 'white', borderRadius: 16, border: '1px solid #eee0d8', padding: '16px', marginBottom: 20 }}>
+            <p style={{ fontSize: 11, fontWeight: 700, color: '#89756e', margin: '0 0 12px', letterSpacing: '0.05em' }}>将要练习的句子</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {previewSents.map((item, i) => (
+                <div key={i} style={{ borderLeft: '3px solid #aee3d8', paddingLeft: 10 }}>
+                  <p style={{ fontSize: 14, fontWeight: 700, color: '#241917', margin: '0 0 2px', fontFamily: "'Malgun Gothic', sans-serif" }}>{item.korean}</p>
+                  <p style={{ fontSize: 12, color: '#89756e', margin: 0 }}>{item.chinese}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        <div style={{ background: '#f5ede8', borderRadius: 12, padding: '10px 14px', marginBottom: 20, display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+          <span style={{ fontSize: 16 }}>💡</span>
+          <p style={{ fontSize: 12, color: '#5a4640', margin: 0, lineHeight: 1.6 }}>
+            每题自动播放发音，可点 🔊 重听。答对得 5 XP，连续答对有连击奖励！
+            {isDesktop && ' 电脑端提供虚拟键盘高亮对照。'}
+          </p>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <button onClick={startPack} style={{ padding: '14px 0', borderRadius: 16, background: '#241917', color: '#fff', fontSize: 15, fontWeight: 800, border: 'none', cursor: 'pointer' }}>
+            开始打字 →
+          </button>
+          <button onClick={() => setPageState('home')} style={{ padding: '12px 0', borderRadius: 16, background: '#f5ede8', color: '#5a4640', fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer' }}>
+            返回
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Result ────────────────────────────────────────────────
+  if (pageState === 'result' && resultData) {
+    const theme = getTheme(activeThemeId);
+    const resEmoji = theme?.emoji ?? '📖';
+    const resName = theme?.name ?? wordBooks.find(b => `wb-${b.id}` === activeThemeId)?.name ?? (activeThemeId === 'my-sentences' ? '我的句子' : '我的单词本');
+    const resSec = Math.floor(resultData.elapsed / 1000);
+    const resDisplay = `${Math.floor(resSec / 60)}:${String(resSec % 60).padStart(2, '0')}`;
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', gap: 20, padding: '20px' }}>
+        <div style={{ background: '#fff0f5', borderRadius: '50%', width: 80, height: 80, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Trophy size={36} style={{ color: '#ff7fa8' }} />
+        </div>
+        <div style={{ textAlign: 'center' }}>
+          <p style={{ fontSize: 13, color: '#89756e', margin: '0 0 4px' }}>完成主题包</p>
+          <p style={{ fontSize: 22, fontWeight: 900, color: '#241917', margin: 0 }}>{resEmoji} {resName}</p>
+        </div>
+        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', justifyContent: 'center' }}>
+          {[{ label: '正确率', value: `${resultData.accuracy}%` }, { label: 'WPM', value: String(resultData.wpm) }, { label: '用时', value: resDisplay }].map(stat => (
+            <div key={stat.label} style={{ background: 'white', borderRadius: 14, border: '1px solid #eee0d8', padding: '12px 20px', textAlign: 'center', minWidth: 80 }}>
+              <p style={{ fontSize: 22, fontWeight: 900, color: '#241917', margin: 0 }}>{stat.value}</p>
+              <p style={{ fontSize: 11, color: '#89756e', margin: '2px 0 0' }}>{stat.label}</p>
+            </div>
+          ))}
+        </div>
+        <div style={{ background: '#eaf8f5', borderRadius: 14, padding: '10px 20px' }}>
+          <span style={{ fontSize: 13, color: '#3aafa9', fontWeight: 700 }}>+{resultData.xp} XP 已获得</span>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, width: '100%', maxWidth: 340, marginTop: 8 }}>
+          <button onClick={startPack} style={{ padding: '13px 0', borderRadius: 14, background: '#241917', color: '#fff', fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer' }}>
+            再练一次
+          </button>
+          <button onClick={() => setPageState('home')} style={{ padding: '13px 0', borderRadius: 14, background: '#f5ede8', color: '#5a4640', fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer' }}>
+            返回主题
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Session ───────────────────────────────────────────────
+  if (pageState === 'session' && current) {
+    const cardBorderColor = submitted ? (lastCorrect ? '#aee3d8' : '#ff7fa8') : '#eee0d8';
+    const cardBg = submitted ? (lastCorrect ? '#f0faf8' : '#fff5f7') : 'white';
+    const cardShadow = submitted
+      ? lastCorrect ? '0 4px 24px #aee3d840' : '0 4px 24px #ff7fa830'
+      : '0 2px 16px rgba(78,52,46,.06)';
+
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 14, paddingBottom: 40, maxWidth: 600, margin: '0 auto' }}>
+        <style>{`
+          @keyframes pulse-block { 0%,100%{opacity:1} 50%{opacity:.5} }
+          @keyframes combo-pop { from{transform:scale(.6);opacity:0} to{transform:scale(1);opacity:1} }
+          @keyframes blink-underline { 0%,100%{opacity:1} 50%{opacity:0} }
+        `}</style>
+
+        {/* Pixel progress + combo row */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ display: 'flex', gap: 3, flex: 1 }}>
+            {items.map((_, i) => (
+              <div key={i} style={{
+                flex: 1, height: 8, borderRadius: 3,
+                background: i < index ? '#ff7fa8' : i === index ? '#ffb8cf' : '#eee0d8',
+                boxShadow: i < index ? '0 0 5px #ff7fa840' : 'none',
+                animation: i === index ? 'pulse-block 1s infinite' : 'none',
+              }} />
+            ))}
+          </div>
+          <span style={{ fontSize: 12, color: '#89756e', whiteSpace: 'nowrap' }}>{index + 1} / {items.length}</span>
+          <span style={{ fontSize: 12, color: '#89756e', fontVariantNumeric: 'tabular-nums' }}>{elapsedDisplay}</span>
+        </div>
+
+        {/* Combo badge */}
+        {combo >= 2 && (
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <div style={{
+              background: 'linear-gradient(135deg, #ff7fa8, #b49ccf)',
+              borderRadius: 20, padding: '4px 14px',
+              fontSize: 13, fontWeight: 800, color: 'white',
+              display: 'flex', alignItems: 'center', gap: 6,
+              boxShadow: '0 4px 14px #ff7fa840',
+              animation: 'combo-pop 0.3s cubic-bezier(0.175,0.885,0.32,1.275)',
+            }}>
+              <span>🔥 连击</span>
+              <span style={{ fontSize: 18 }}>{combo}</span>
+            </div>
+          </div>
+        )}
+
+        {/* Card */}
+        <div style={{
+          background: cardBg, borderRadius: 20,
+          border: `1.5px solid ${cardBorderColor}`,
+          padding: '22px 20px', display: 'flex', flexDirection: 'column', gap: 14,
+          boxShadow: cardShadow,
+          transition: 'background 0.2s, border-color 0.2s, box-shadow 0.2s',
+          position: 'relative', overflow: 'hidden',
+        }}>
+          {/* Top accent line */}
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: 'linear-gradient(90deg, transparent, #ff7fa8, #b49ccf, transparent)', opacity: 0.5 }} />
+
+          {/* Translation row */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span style={{
+              fontSize: 14, fontWeight: 500,
+              color: showTranslation ? '#5a4640' : 'transparent',
+              background: showTranslation ? 'transparent' : '#eee0d8',
+              borderRadius: 6, transition: 'all 0.15s', padding: showTranslation ? 0 : '2px 8px',
+            }}>
+              {current.chinese}
+            </span>
+            <button onClick={toggleTranslation} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, color: '#89756e', background: 'transparent', border: 'none', cursor: 'pointer', padding: '4px 8px', borderRadius: 8 }}>
+              {showTranslation ? <Eye size={13} /> : <EyeOff size={13} />}
+              {showTranslation ? '隐藏' : '显示'}
+            </button>
+          </div>
+
+          {/* Target chars + speaker */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <TargetChars target={current.korean} input={input} />
+            <button
+              onClick={() => speakWord(current.korean, 0.85)}
+              style={{ flexShrink: 0, width: 42, height: 42, borderRadius: '50%', background: '#fff0f5', border: '1.5px solid #ffd6e5', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.15s' }}
+            >
+              <Volume2 size={17} style={{ color: '#ff7fa8' }} />
+            </button>
+          </div>
+
+          {/* Type badge */}
+          <span style={{
+            fontSize: 11, fontWeight: 700, padding: '3px 10px', borderRadius: 20, alignSelf: 'flex-start',
+            color: current.type === 'word' ? '#ff7fa8' : '#3aafa9',
+            background: current.type === 'word' ? '#fff0f5' : '#eaf8f5',
+            border: `1px solid ${current.type === 'word' ? '#ffd6e5' : '#aee3d860'}`,
+          }}>
+            {current.type === 'word' ? '单词' : '句子'}
+          </span>
+        </div>
+
+        {/* Input or diff feedback */}
+        {!submitted ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <div style={{ position: 'relative' }}>
+              <input
+                ref={inputRef}
+                value={input}
+                onChange={handleInputChange}
+                onCompositionStart={handleCompositionStart}
+                onCompositionEnd={handleCompositionEnd}
+                onKeyDown={handleKeyDown}
+                placeholder="用韩语键盘输入..."
+                style={{
+                  width: '100%', padding: '15px 52px 15px 18px', borderRadius: 14,
+                  border: '2px solid #eee0d8', fontSize: 20, color: '#241917',
+                  outline: 'none', fontFamily: "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif",
+                  boxSizing: 'border-box', background: 'white', caretColor: '#ff7fa8',
+                  transition: 'border-color 0.2s, box-shadow 0.2s',
+                }}
+                onFocus={e => { e.target.style.borderColor = '#ff7fa8'; e.target.style.boxShadow = '0 0 0 4px #ff7fa815'; }}
+                onBlur={e => { e.target.style.borderColor = '#eee0d8'; e.target.style.boxShadow = 'none'; }}
+              />
+              <span style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)', background: '#f5ede8', borderRadius: 6, padding: '3px 7px', fontSize: 10, color: '#89756e' }}>↵</span>
+            </div>
+            <p style={{ fontSize: 11, color: '#89756e', marginTop: 2 }}>请切换系统键盘为韩语后输入</p>
+
+            {/* Desktop keyboard */}
+            {isDesktop && <KoreanKeyboardDisplay value={input} />}
+
+            <button
+              onClick={handleSubmit}
+              disabled={!input.trim()}
+              style={{
+                padding: '13px 0', borderRadius: 14,
+                background: input.trim() ? '#241917' : '#eee0d8',
+                color: input.trim() ? '#fff' : '#89756e',
+                fontSize: 14, fontWeight: 700, border: 'none',
+                cursor: input.trim() ? 'pointer' : 'not-allowed',
+                boxShadow: input.trim() ? '0 4px 16px rgba(36,25,23,.18)' : 'none',
+                transition: 'background 0.2s, box-shadow 0.2s',
+              }}
+            >
+              提交
+            </button>
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <DiffFeedback userInput={input.replace(/\s/g, '')} correct={current.korean.replace(/\s/g, '')} />
+            <button
+              onClick={handleNext}
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                padding: '13px 0', borderRadius: 14,
+                background: 'linear-gradient(135deg, #ff7fa8, #b49ccf)',
+                color: '#fff', fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer',
+                boxShadow: '0 4px 16px #ff7fa840',
+              }}
+            >
+              {index + 1 >= items.length ? '查看结果' : '下一条'}
+              <ChevronRight size={16} />
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // ── Home ─────────────────────────────────────────────────
+  return (
+    <div style={{ paddingBottom: 100 }}>
+      <div style={{ marginBottom: 16 }}>
+        <Link href="/tools" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, color: '#89756e', textDecoration: 'none', marginBottom: 10 }}>
+          <ArrowLeft size={15} /> 返回
+        </Link>
+        <h1 style={{ fontSize: 20, fontWeight: 900, color: '#241917', margin: 0 }}>韩文打字</h1>
+        <p style={{ fontSize: 13, color: '#89756e', marginTop: 4, marginBottom: 0 }}>选择主题包，边打字边学词汇</p>
+      </div>
+
+      {streak > 0 && (
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#fff0f5', borderRadius: 20, padding: '6px 14px', marginBottom: 20 }}>
+          <Flame size={14} style={{ color: '#ff7fa8' }} />
+          <span style={{ fontSize: 13, color: '#ff7fa8', fontWeight: 700 }}>连续练习 {streak} 天</span>
         </div>
       )}
 
-      {/* Back bar */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, marginBottom: 14 }}>
-        <button onClick={() => router.back()} style={{ width: 38, height: 38, borderRadius: 16, background: '#fff', border: '1px solid ' + C.line, fontSize: 20, color: '#4d3933', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}>‹</button>
-        <div style={{ flex: 1 }}>
-          <div style={{ fontSize: 17, fontWeight: 800, color: C.ink }}>韩文打字</div>
-          <div style={{ fontSize: 12, color: C.muted, fontWeight: 700, marginTop: 2 }}>系统输入 + 内嵌键盘</div>
-        </div>
-        <button onClick={() => setShowKeymap(true)} style={{ height: 30, padding: '0 11px', borderRadius: 999, background: '#fff', color: C.ink, fontSize: 11, fontWeight: 800, border: '1px solid ' + C.line, cursor: 'pointer', flexShrink: 0 }}>键位图</button>
-        <div style={{ height: 30, padding: '0 11px', borderRadius: 999, background: C.pinkSoft, color: '#f0799b', fontSize: 11, fontWeight: 800, border: '1px solid rgba(255,127,168,.16)', display: 'flex', alignItems: 'center', flexShrink: 0 }}>练习</div>
+      {categories.map(cat => {
+        const themes = allThemes.filter(t => t.category === cat);
+        return (
+          <div key={cat} style={{ marginBottom: 28 }}>
+            <h2 style={{ fontSize: 13, fontWeight: 700, color: '#89756e', margin: '0 0 10px', letterSpacing: '0.05em' }}>{cat}</h2>
+            <div style={{ display: 'flex', gap: 10, overflowX: 'auto', paddingBottom: 6 }}>
+              {themes.map(theme => {
+                const progress = getPackProgress(theme.id);
+                const unlocked = isPackUnlocked(theme, allThemes);
+                const wordCount = getThemeWords(theme.id).slice(0, 8).length;
+                const sentCount = (theme.sentences ?? []).slice(0, 6).length;
+                return (
+                  <button
+                    key={theme.id}
+                    onClick={() => unlocked && openIntro(theme.id)}
+                    style={{
+                      flexShrink: 0, width: 140, padding: '14px 12px', borderRadius: 16,
+                      border: `1.5px solid ${progress ? '#aee3d8' : unlocked ? '#eee0d8' : '#eee0d8'}`,
+                      background: progress ? '#eaf8f5' : unlocked ? 'white' : '#f9f4f0',
+                      cursor: unlocked ? 'pointer' : 'not-allowed',
+                      textAlign: 'left', position: 'relative', opacity: unlocked ? 1 : 0.6,
+                      boxShadow: unlocked ? '0 2px 12px rgba(78,52,46,.06)' : 'none',
+                    }}
+                  >
+                    {progress && (
+                      <div style={{ position: 'absolute', top: 8, right: 8, width: 18, height: 18, borderRadius: '50%', background: '#3aafa9', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <Check size={10} style={{ color: 'white' }} />
+                      </div>
+                    )}
+                    {!unlocked && (
+                      <div style={{ position: 'absolute', top: 8, right: 8 }}>
+                        <Lock size={12} style={{ color: '#89756e' }} />
+                      </div>
+                    )}
+                    <div style={{ fontSize: 26, marginBottom: 6 }}>{theme.emoji}</div>
+                    <p style={{ fontSize: 13, fontWeight: 700, color: '#241917', margin: '0 0 4px', lineHeight: 1.3 }}>{theme.name}</p>
+                    <p style={{ fontSize: 11, color: '#89756e', margin: 0 }}>{wordCount}词 · {sentCount}句</p>
+                    {progress && (
+                      <p style={{ fontSize: 11, color: '#3aafa9', margin: '4px 0 0', fontWeight: 600 }}>
+                        最佳 {progress.bestWpm} WPM
+                      </p>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
+
+      {/* 我的单词本 */}
+      <div style={{ marginBottom: 28 }}>
+        <h2 style={{ fontSize: 13, fontWeight: 700, color: '#89756e', margin: '0 0 10px', letterSpacing: '0.05em' }}>我的单词本</h2>
+        {wordBooks.length === 0 ? (
+          <p style={{ fontSize: 13, color: '#89756e' }}>暂无单词本，请先在词汇页添加单词。</p>
+        ) : (
+          <div style={{ display: 'flex', gap: 10, overflowX: 'auto', paddingBottom: 6 }}>
+            {wordBooks.map(book => (
+              <button
+                key={book.id}
+                onClick={() => openWordBook(book)}
+                style={{
+                  flexShrink: 0, width: 140, padding: '14px 12px', borderRadius: 16,
+                  border: '1.5px solid #eee0d8', background: 'white', cursor: 'pointer',
+                  textAlign: 'left', boxShadow: '0 2px 12px rgba(78,52,46,.06)',
+                }}
+              >
+                <div style={{ fontSize: 26, marginBottom: 6 }}>📖</div>
+                <p style={{ fontSize: 13, fontWeight: 700, color: '#241917', margin: '0 0 4px', lineHeight: 1.3 }}>{book.name}</p>
+                <p style={{ fontSize: 11, color: '#89756e', margin: 0 }}>{book.wordIds.length} 个词</p>
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* Hero */}
-      <div style={{
-        borderRadius: 32, padding: 20,
-        background: 'radial-gradient(circle at 88% 78%, rgba(255,255,255,.58), transparent 24%), linear-gradient(135deg, #201815, #4d3934 46%, #ff8daf 132%)',
-        color: '#fff', boxShadow: C.strong, border: '1px solid rgba(255,255,255,.92)',
-        marginBottom: 20, overflow: 'hidden', position: 'relative',
-      }}>
-        <div style={{ height: 34, padding: '0 13px', borderRadius: 999, background: 'rgba(255,255,255,.14)', color: '#fff', fontWeight: 800, fontSize: 12, border: '1px solid rgba(255,255,255,.18)', display: 'inline-flex', alignItems: 'center' }}>
-          ⌨️ 韩文打字
-        </div>
-        <h1 style={{ margin: '14px 0 0', maxWidth: 260, fontSize: 27, lineHeight: 1.1, letterSpacing: '-.8px', fontWeight: 800 }}>
-          用短词短句，把韩文打顺
-        </h1>
-        <p style={{ margin: '10px 0 0', maxWidth: 260, fontSize: 13, lineHeight: 1.55, color: 'rgba(255,255,255,.74)' }}>
-          可以用系统输入法直接输入，也可以点下面的内嵌键盘辅助。空格和 받침 都会计入判断。
-        </p>
-        <div style={{ position: 'absolute', right: -32, bottom: -64, width: 190, height: 190, borderRadius: '50%', background: 'rgba(255,255,255,.10)', pointerEvents: 'none' }} />
-      </div>
-
-      {/* Category tabs */}
-      <div style={{ display: 'flex', gap: 6, marginBottom: 14, overflowX: 'auto', paddingBottom: 2 }}>
-        {CATEGORIES.map((cat, i) => (
-          <button
-            key={cat.id}
-            onClick={() => { setCategoryIdx(i); setExerciseIdx(0); handleClear(); }}
-            style={{
-              height: 34, padding: '0 12px', borderRadius: 999, whiteSpace: 'nowrap',
-              background: i === categoryIdx ? C.black : '#fff',
-              color: i === categoryIdx ? '#fff' : C.muted,
-              border: '1px solid ' + (i === categoryIdx ? C.black : C.line),
-              fontSize: 12, fontWeight: 800, cursor: 'pointer',
-            }}
-          >
-            {cat.name}
-          </button>
-        ))}
-      </div>
-
-      {/* Exercise header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-        <div style={{ fontSize: 12, color: C.muted, fontWeight: 700 }}>
-          {exerciseNum} / {exerciseTotal} · {currentCategory.desc}
-        </div>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          {exercise.tags.map(tag => (
-            <span key={tag} style={{ height: 22, padding: '0 8px', borderRadius: 999, background: C.pinkSoft, color: '#f0799b', fontSize: 10, fontWeight: 800, display: 'inline-flex', alignItems: 'center' }}>{tag}</span>
-          ))}
-        </div>
-      </div>
-
-      {/* Target text card */}
-      <div style={{ borderRadius: 30, padding: 18, background: '#fff', border: '1px solid ' + C.line, boxShadow: C.shadow, marginBottom: 14 }}>
-        <div style={{ fontSize: 12, color: C.muted, fontWeight: 700, marginBottom: 10 }}>目标文本</div>
-        <div style={{ fontSize: 22, lineHeight: 1.55, fontWeight: 800, letterSpacing: '-.35px', color: C.ink, wordBreak: 'keep-all' }}>
-          {exercise.korean}
-        </div>
-        <div style={{ fontSize: 14, color: C.muted, marginTop: 8, fontWeight: 700 }}>
-          {exercise.chinese}
-        </div>
-      </div>
-
-      {/* Comparison display */}
-      <div style={{ borderRadius: 30, padding: 16, background: '#fff', border: '1px solid ' + C.line, boxShadow: C.shadow, marginBottom: 14 }}>
-        <div style={{ fontSize: 19, lineHeight: 1.7, fontWeight: 800, letterSpacing: '-.2px', wordBreak: 'keep-all', minHeight: 32 }}>
-          {displayItems.map((item, i) => (
-            <span
-              key={i}
+      {/* 我的句子 */}
+      {user && mySentenceCount !== null && mySentenceCount > 0 && (
+        <div style={{ marginBottom: 28 }}>
+          <h2 style={{ fontSize: 13, fontWeight: 700, color: '#89756e', margin: '0 0 10px', letterSpacing: '0.05em' }}>我的句子</h2>
+          <div style={{ display: 'flex', gap: 10, paddingBottom: 6 }}>
+            <button
+              onClick={openMySentences}
               style={{
-                color: item.status === 'correct' ? C.mintText :
-                       item.status === 'wrong' ? '#e06a6a' :
-                       item.status === 'extra' ? '#e06a6a' :
-                       C.muted,
-                opacity: item.status === 'pending' ? 0.55 : 1,
-                textDecoration: item.status === 'extra' ? 'line-through' : 'none',
+                flexShrink: 0, width: 140, padding: '14px 12px', borderRadius: 16,
+                border: '1.5px solid #aee3d8', background: '#eaf8f5', cursor: 'pointer',
+                textAlign: 'left', boxShadow: '0 2px 12px rgba(78,52,46,.06)',
               }}
             >
-              {item.char}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* Input area */}
-      <div style={{ borderRadius: 30, padding: 16, background: '#fff', border: '1px solid ' + C.line, boxShadow: C.shadow, marginBottom: 14 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-          <span style={{ fontSize: 12, color: C.muted, fontWeight: 700 }}>
-            {showKeyboard ? '内嵌键盘模式 Beta' : '系统输入模式'}
-          </span>
-          <button
-            onClick={() => { const next = !showKeyboard; setShowKeyboard(next); if (next) inputRef.current?.blur(); else inputRef.current?.focus(); }}
-            style={{ height: 26, padding: '0 9px', borderRadius: 999, border: '1px solid ' + C.line, background: '#fff', color: C.muted, fontSize: 10, fontWeight: 800, cursor: 'pointer' }}
-          >
-            {showKeyboard ? '关闭键盘' : '显示键盘'}
-          </button>
-        </div>
-        <textarea
-          ref={inputRef}
-          value={input}
-          onChange={handleInputChange}
-          onCompositionStart={handleCompositionStart}
-          onCompositionEnd={handleCompositionEnd}
-          onFocus={() => setShowKeyboard(false)}
-          placeholder="在此输入韩文..."
-          rows={2}
-          autoFocus
-          style={{
-            width: '100%', boxSizing: 'border-box', minHeight: 80, borderRadius: 22,
-            padding: 14, background: C.cream, border: '1px solid rgba(239,224,217,.92)',
-            color: '#6f5c55', fontSize: 18, lineHeight: 1.7, fontWeight: 700,
-            outline: 'none', fontFamily: 'inherit', resize: 'none',
-          }}
-        />
-      </div>
-
-      {/* Feedback */}
-      <div style={{ borderRadius: 24, padding: 16, background: '#fff', border: '1px solid ' + C.line, boxShadow: C.shadow, marginBottom: 14 }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, marginBottom: 12 }}>
-          <div style={{ borderRadius: 18, padding: 12, background: C.mintBg, textAlign: 'center' }}>
-            <div style={{ fontSize: 22, fontWeight: 800, color: C.mintText }}>{accuracy}%</div>
-            <div style={{ fontSize: 11, color: C.mintText, fontWeight: 700, marginTop: 2 }}>正确率</div>
-          </div>
-          <div style={{ borderRadius: 18, padding: 12, background: C.cream, textAlign: 'center' }}>
-            <div style={{ fontSize: 22, fontWeight: 800, color: C.ink }}>{elapsedDisplay}</div>
-            <div style={{ fontSize: 11, color: C.muted, fontWeight: 700, marginTop: 2 }}>用时</div>
-          </div>
-          <div style={{ borderRadius: 18, padding: 12, background: C.pinkSoft, textAlign: 'center' }}>
-            <div style={{ fontSize: 22, fontWeight: 800, color: '#e06a6a' }}>{comparison.errors}</div>
-            <div style={{ fontSize: 11, color: '#e06a6a', fontWeight: 700, marginTop: 2 }}>错误字符</div>
-          </div>
-        </div>
-        <div style={{ fontSize: 13, lineHeight: 1.5, color: C.muted, textAlign: 'center', fontWeight: 700 }}>
-          {finished ? '全部完成！' : feedback}
-        </div>
-      </div>
-
-      {/* Bottom actions */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, marginBottom: 14 }}>
-        <button onClick={handlePrev} style={{ height: 40, borderRadius: 999, border: '1px solid ' + C.line, background: '#fff', color: '#5a4640', fontSize: 12, fontWeight: 800, cursor: 'pointer' }}>上一题</button>
-        <button onClick={handleRetry} style={{ height: 40, borderRadius: 999, border: '1px solid ' + C.line, background: '#fff', color: '#5a4640', fontSize: 12, fontWeight: 800, cursor: 'pointer' }}>再练一次</button>
-        <button onClick={handleNext} style={{ height: 40, borderRadius: 999, border: 'none', background: C.black, color: '#fff', fontSize: 12, fontWeight: 800, cursor: 'pointer', boxShadow: '0 10px 22px rgba(32,24,21,.16)' }}>下一题</button>
-      </div>
-
-      {/* Inline keyboard */}
-      {showKeyboard && (
-        <div style={{
-          position: 'fixed', left: 0, right: 0, bottom: keyboardBottom, zIndex: 50,
-          padding: '10px 14px 16px',
-          background: 'rgba(255,255,255,.96)', backdropFilter: 'blur(20px)',
-          borderTop: '1px solid ' + C.line,
-        }}>
-          {/* Row 1 */}
-          <div style={{ display: 'flex', gap: 3, justifyContent: 'center', marginBottom: 4 }}>
-            {KEY_ROWS[0].map(j => (
-              <button key={j} onClick={() => handleJamoClick(j)} style={{ flex: '1 1 0', minWidth: 0, maxWidth: 38, height: 38, borderRadius: 10, background: C.cream, border: '1px solid ' + C.line, color: C.ink, fontSize: 14, fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{j}</button>
-            ))}
-          </div>
-          {/* Row 2 */}
-          <div style={{ display: 'flex', gap: 3, justifyContent: 'center', marginBottom: 4, paddingLeft: '4%', paddingRight: '4%' }}>
-            {KEY_ROWS[1].map(j => (
-              <button key={j} onClick={() => handleJamoClick(j)} style={{ flex: '1 1 0', minWidth: 0, maxWidth: 38, height: 38, borderRadius: 10, background: C.cream, border: '1px solid ' + C.line, color: C.ink, fontSize: 14, fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{j}</button>
-            ))}
-          </div>
-          {/* Row 3 */}
-          <div style={{ display: 'flex', gap: 3, justifyContent: 'center', marginBottom: 6 }}>
-            <div style={{ flex: '1.5 1 0' }} />
-            {KEY_ROWS[2].map(j => (
-              <button key={j} onClick={() => handleJamoClick(j)} style={{ flex: '1 1 0', minWidth: 0, maxWidth: 38, height: 38, borderRadius: 10, background: C.cream, border: '1px solid ' + C.line, color: C.ink, fontSize: 14, fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{j}</button>
-            ))}
-            <div style={{ flex: '1.5 1 0' }} />
-          </div>
-          {/* Compound jamo row */}
-          <div style={{ display: 'flex', gap: 4, justifyContent: 'center', marginBottom: 6 }}>
-            {COMPOUND_KEYS.map(j => (
-              <button key={j} onClick={() => handleJamoClick(j)} style={{ width: 32, height: 38, borderRadius: 10, background: C.pinkSoft, border: '1px solid rgba(255,127,168,.16)', color: '#f0799b', fontSize: 13, fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{j}</button>
-            ))}
-          </div>
-
-          {/* Space / Backspace / Clear row */}
-          <div style={{ display: 'flex', gap: 6, justifyContent: 'center' }}>
-            <button onClick={handleBackspace} style={{ height: 38, padding: '0 14px', borderRadius: 999, background: C.cream, border: '1px solid ' + C.line, color: C.ink, fontSize: 12, fontWeight: 800, cursor: 'pointer' }}>⌫</button>
-            <button onClick={handleSpace} style={{ flex: 1, maxWidth: 180, height: 38, borderRadius: 999, background: C.black, color: '#fff', fontSize: 12, fontWeight: 800, cursor: 'pointer', border: 'none' }}>Space</button>
-            <button onClick={handleClear} style={{ height: 38, padding: '0 14px', borderRadius: 999, background: C.cream, border: '1px solid ' + C.line, color: C.ink, fontSize: 12, fontWeight: 800, cursor: 'pointer' }}>Clear</button>
+              <div style={{ fontSize: 26, marginBottom: 6 }}>🔖</div>
+              <p style={{ fontSize: 13, fontWeight: 700, color: '#241917', margin: '0 0 4px', lineHeight: 1.3 }}>我收藏的句子</p>
+              <p style={{ fontSize: 11, color: '#3aafa9', margin: 0, fontWeight: 600 }}>{mySentenceCount} 条句子</p>
+            </button>
           </div>
         </div>
       )}

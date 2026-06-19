@@ -1,9 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { PenLine, Check, X, Lightbulb, RefreshCw, Sparkles, BookOpen, Clock, ChevronDown, ChevronUp, Trophy, Loader2, BookmarkCheck, Bookmark } from 'lucide-react';
-import { KoreanKeyboard } from '@/components/KoreanKeyboard';
+import Link from 'next/link';
+import { PenLine, Check, X, Lightbulb, RefreshCw, Sparkles, BookOpen, Clock, ChevronDown, ChevronUp, Trophy, Loader2, BookmarkCheck, Bookmark, ArrowLeft } from 'lucide-react';
 import { useIsMobile } from '@/lib/useIsMobile';
+import { KoreanKeyboard } from '@/components/KoreanKeyboard';
+import { useIsDesktop } from '@/lib/useIsMobile';
 import { useFeedback } from '@/hooks/useFeedback';
 import { useAuth } from '@/components/AuthProvider';
 import { db } from '@/lib/db';
@@ -52,6 +54,7 @@ export default function WritingPage() {
   return (
     <div className="py-4 space-y-3 max-w-2xl mx-auto md:max-w-3xl">
       <div className="flex items-center gap-3">
+        <Link href="/tools" className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors shrink-0"><ArrowLeft size={20} /></Link>
         <div>
           <h1 className="text-2xl font-bold text-[var(--text-primary)]">写作练习</h1>
           <p className="text-[var(--text-secondary)] text-sm mt-1">三种模式，从仿写到自由表达，逐步提升韩语写作能力</p>
@@ -90,11 +93,12 @@ export default function WritingPage() {
 function ImitationMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord, 'id' | 'date'>) => void }) {
   const isMobile = useIsMobile();
   const { success: feedbackSuccess, error: feedbackError, click: feedbackClick } = useFeedback();
+  const isDesktop = useIsDesktop();
   const [currentIdx, setCurrentIdx] = useState(0);
   const [userInput, setUserInput] = useState('');
   const [submitted, setSubmitted] = useState(false);
-  const [score, setScore] = useState(0);
   const [showKeyboard, setShowKeyboard] = useState(false);
+  const [score, setScore] = useState(0);
 
   const prompt = imitationPrompts[currentIdx];
   const userClean = normalizeKorean(userInput);
@@ -166,37 +170,31 @@ function ImitationMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord, '
             <textarea
               value={userInput}
               onChange={(e) => setUserInput(e.target.value)}
-              onFocus={() => { if (isMobile) setShowKeyboard(true); }}
-              disabled={submitted}
-              readOnly={isMobile}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  if (!submitted && userInput.trim()) handleSubmit();
+                  else if (submitted) handleNext();
+                }
+              }}
+              readOnly={submitted}
               placeholder="在这里输入韩语..."
               rows={2}
-              className="flex-1 bg-[var(--bg-input)] border border-[var(--pink-pale)] rounded-xl p-4 text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)] text-base text-center resize-none focus:outline-none focus:border-[var(--pink-primary)]/50"
+              className={`flex-1 bg-[var(--bg-input)] border border-[var(--pink-pale)] rounded-xl p-4 text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)] text-base text-center resize-none focus:outline-none focus:border-[var(--pink-primary)]/50 ${submitted ? 'opacity-60 cursor-default' : ''}`}
               style={{ fontFamily: "'system-ui', 'sans-serif'" }}
-              inputMode={isMobile ? 'none' : 'text'}
             />
-            <button
-              type="button"
-              onClick={() => setShowKeyboard(!showKeyboard)}
-              onMouseDown={(e) => e.preventDefault()}
-              onTouchStart={(e) => e.preventDefault()}
-              className={`self-start px-3 py-3 rounded-xl transition-colors text-sm font-medium ${
-                showKeyboard
-                  ? 'bg-[var(--pink-primary)]/20 text-[var(--pink-primary)]'
-                  : 'bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] hover:bg-[var(--pink-pale)]/20'
-              }`}
-              title={showKeyboard ? '关闭韩文键盘' : '打开韩文键盘'}
-              aria-label={showKeyboard ? '关闭韩文键盘' : '打开韩文键盘'}
-            >
-              한
-            </button>
+            {isDesktop && (
+              <button
+                type="button"
+                onClick={() => setShowKeyboard(!showKeyboard)}
+                className={`self-start px-3 py-3 rounded-xl transition-colors text-sm font-medium ${showKeyboard ? 'bg-[var(--pink-primary)]/20 text-[var(--pink-primary)]' : 'bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--pink-primary)]'}`}
+              >한</button>
+            )}
           </div>
-          <KoreanKeyboard
-            value={userInput}
-            onChange={setUserInput}
-            visible={showKeyboard}
-            onClose={() => setShowKeyboard(false)}
-          />
+          <p className="text-[11px] text-[var(--text-muted)] mt-1">请切换系统键盘为韩语后输入</p>
+          {isDesktop && (
+            <KoreanKeyboard value={userInput} onChange={setUserInput} visible={showKeyboard} onClose={() => setShowKeyboard(false)} />
+          )}
         </div>
 
         {/* Action button */}
@@ -308,18 +306,19 @@ function ImitationMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord, '
 
 function FreeWritingMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord, 'id' | 'date'>) => void }) {
   const isMobile = useIsMobile();
+  const isDesktop = useIsDesktop();
   const { user } = useAuth();
   const { showToast } = useToast();
   const [selectedTopic, setSelectedTopic] = useState(0);
   const [text, setText] = useState('');
   const [wordCount, setWordCount] = useState(0);
   const [uniqueWords, setUniqueWords] = useState(0);
+  const [showKeyboard, setShowKeyboard] = useState(false);
   const [scoring, setScoring] = useState(false);
   const [feedback, setFeedback] = useState<{
     original: string; corrected: string; reason: string; isCorrect: boolean; saveExpression: string;
   } | null>(null);
   const [expressionSaved, setExpressionSaved] = useState(false);
-  const [showKeyboard, setShowKeyboard] = useState(false);
 
   const topic = freeTopics[selectedTopic];
 
@@ -426,29 +425,26 @@ function FreeWritingMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord,
       <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4">
         <div className="flex gap-2">
           <textarea value={text} onChange={(e) => updateStats(e.target.value)}
-            onFocus={() => { if (isMobile) setShowKeyboard(true); }}
             placeholder="在这里自由书写韩语（1-3句即可）..."
-            rows={6} readOnly={isMobile}
+            rows={6}
             className="flex-1 bg-transparent text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)] text-sm resize-none focus:outline-none"
             style={{ fontFamily: "'system-ui', 'sans-serif'" }}
-            inputMode={isMobile ? 'none' : 'text'}
           />
-          <button type="button" onClick={() => setShowKeyboard(!showKeyboard)}
-            onMouseDown={(e) => e.preventDefault()} onTouchStart={(e) => e.preventDefault()}
-            className={`self-start px-3 py-3 rounded-xl transition-colors text-sm font-medium ${
-              showKeyboard ? 'bg-[var(--pink-primary)]/20 text-[var(--pink-primary)]'
-                : 'bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] hover:bg-[var(--pink-pale)]/20'
-            }`}
-          >
-            한
-          </button>
+          {isDesktop && (
+            <button type="button" onClick={() => setShowKeyboard(!showKeyboard)}
+              className={`self-start px-3 py-3 rounded-xl transition-colors text-sm font-medium ${showKeyboard ? 'bg-[var(--pink-primary)]/20 text-[var(--pink-primary)]' : 'bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--pink-primary)]'}`}
+            >한</button>
+          )}
         </div>
-        <KoreanKeyboard value={text} onChange={(val) => updateStats(val)} visible={showKeyboard} onClose={() => setShowKeyboard(false)} />
+        {isDesktop && (
+          <KoreanKeyboard value={text} onChange={(val) => updateStats(val)} visible={showKeyboard} onClose={() => setShowKeyboard(false)} />
+        )}
         <div className="flex items-center justify-between pt-3 border-t border-[var(--border-color)] text-xs text-[var(--text-muted)]">
           <span>{wordCount} 词</span>
           {!user && <span className="text-[var(--pink-primary)]">登录后可使用 AI 批改</span>}
         </div>
       </div>
+      <p className="text-[11px] text-[var(--text-muted)]">请切换系统键盘为韩语后输入</p>
 
       {/* Submit button */}
       {!feedback && (
@@ -560,7 +556,7 @@ function ClozeMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord, 'id' 
       if (xpQualified) {
         setAllDone(true);
       } else {
-        // Reset for retry
+        feedbackError(`得分 ${Math.round((score / clozeExercises.length) * 100)}%，需要 80% 才能通关，重新来过`);
         setCurrentIdx(0);
         setScore(0);
         setSelectedAnswer(null);

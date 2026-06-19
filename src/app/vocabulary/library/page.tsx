@@ -1,28 +1,30 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Library, BarChart3, GraduationCap, Lightbulb, MessageCircle, Hash } from 'lucide-react';
+import { ArrowLeft, BarChart3, GraduationCap, Library, MessageCircle } from 'lucide-react';
 import { ThemesSection } from '@/components/vocabulary/ThemesSection';
 import { LevelsSection } from '@/components/vocabulary/LevelsSection';
 import { YonseiSection } from '@/components/vocabulary/YonseiSection';
-import { KnowledgeSection } from '@/components/vocabulary/KnowledgeSection';
 import { ExpressionsSection } from '@/components/vocabulary/ExpressionsSection';
-import { ScenesSection } from '@/components/vocabulary/ScenesSection';
 
 const tabs = [
-  { key: 'themes', label: '主题词包', icon: Library },
-  { key: 'levels', label: '分级词表', icon: BarChart3 },
-  { key: 'yonsei', label: '延世教材', icon: GraduationCap },
-  { key: 'knowledge', label: '知识分类', icon: Lightbulb },
-  { key: 'expressions', label: '活用表达', icon: MessageCircle },
-  { key: 'scenes', label: '情景词典', icon: Hash },
+  { key: 'levels',      label: 'TOPIK词表', icon: BarChart3 },
+  { key: 'yonsei',      label: '教材词汇',  icon: GraduationCap },
+  { key: 'themes',      label: '主题词包',  icon: Library },
+  { key: 'expressions', label: '活用表达',  icon: MessageCircle },
 ] as const;
 
 type TabKey = (typeof tabs)[number]['key'];
+const validKeys = tabs.map(t => t.key) as string[];
 
-export default function LibraryPage() {
-  const [tab, setTab] = useState<TabKey>('themes');
+function LibraryContent() {
+  const searchParams = useSearchParams();
+  const urlTab = searchParams.get('tab');
+  const [tab, setTab] = useState<TabKey>(() =>
+    validKeys.includes(urlTab ?? '') ? (urlTab as TabKey) : 'levels'
+  );
 
   return (
     <div className="py-4 space-y-5">
@@ -49,7 +51,7 @@ export default function LibraryPage() {
             <button
               key={t.key}
               onClick={() => setTab(t.key)}
-              className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-all ${
+              className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-all whitespace-nowrap ${
                 isActive
                   ? 'border-[var(--pink-primary)] text-[var(--pink-primary)]'
                   : 'border-transparent text-[var(--text-muted)] hover:text-[var(--text-primary)]'
@@ -64,13 +66,19 @@ export default function LibraryPage() {
 
       {/* Tab content */}
       <div>
-        {tab === 'themes' && <ThemesSection />}
-        {tab === 'levels' && <LevelsSection />}
-        {tab === 'yonsei' && <YonseiSection />}
-        {tab === 'knowledge' && <KnowledgeSection />}
+        {tab === 'levels'      && <LevelsSection />}
+        {tab === 'yonsei'      && <YonseiSection />}
+        {tab === 'themes'      && <ThemesSection />}
         {tab === 'expressions' && <ExpressionsSection />}
-        {tab === 'scenes' && <ScenesSection />}
       </div>
     </div>
+  );
+}
+
+export default function LibraryPage() {
+  return (
+    <Suspense fallback={<div className="flex-1 flex items-center justify-center py-20"><div className="w-6 h-6 rounded-full border-2 border-[var(--pink-primary)] border-t-transparent animate-spin" /></div>}>
+      <LibraryContent />
+    </Suspense>
   );
 }

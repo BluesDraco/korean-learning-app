@@ -1,18 +1,19 @@
 'use client';
 
-import { useEffect, useState, useCallback, useMemo, Suspense } from 'react';
+import React, { useEffect, useState, useCallback, useMemo, useRef, Suspense } from 'react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import {
-  BookOpen, Clock, ArrowRight, Library, Bookmark,
-  Sparkles, Target, TrendingUp, MessageSquare, Trash2, Volume2,
+  BookOpen, ArrowRight, ArrowLeft, Library,
+  Target, MessageSquare, Trash2, Volume2, CheckSquare, Square, FolderInput, X, Plus, Settings2, Check, Bookmark, BookmarkCheck, Copy, ChevronRight, ChevronDown, Loader2,
 } from 'lucide-react';
 import { db } from '@/lib/db';
-import { ThemesSection } from '@/components/vocabulary/ThemesSection';
 import { BooksSection } from '@/components/vocabulary/BooksSection';
-import { VocabularySession } from '@/components/vocabulary/VocabularySession';
-import { speak, speakWord } from '@/lib/tts';
-import type { Word, MasteryLevel } from '@/types';
+import { speakWord, speak } from '@/lib/tts';
+import { TappableText } from '@/components/TappableText';
+import { getEntry, getEntryByKorean } from '@/data/vocabulary/index';
+import { updateProfile } from '@/lib/gamification';
+import type { Word, WordBook, MasteryLevel } from '@/types';
 
 interface SavedSentence {
   id: string;
@@ -21,9 +22,22 @@ interface SavedSentence {
   chinese: string;
   source?: string;
   sourceType?: string;
+  source_type?: string;
   clipId?: string;
   createdAt?: number;
+  created_at?: string;
 }
+
+const SOURCE_LABELS: Record<string, string> = {
+  analysis: '内容拆解',
+  shadowing: '影子跟读',
+  reading: '阅读',
+  review: '闪卡复习',
+  kpop: 'KPOP',
+  news_reading: '韩娱热帖',
+  writing: '写作练习',
+  vocabulary: '词汇例句',
+};
 
 const masteryColor: Record<MasteryLevel, string> = {
   new: 'bg-slate-500',
@@ -32,54 +46,475 @@ const masteryColor: Record<MasteryLevel, string> = {
   mastered: 'bg-emerald-400',
 };
 
-function VocabularyContent() {
-  const searchParams = useSearchParams();
-  const urlTab = searchParams.get('tab');
-  const [allWords, setAllWords] = useState<Word[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [showSession, setShowSession] = useState(false);
-  const [tab, setTab] = useState<'home' | 'library' | 'books' | 'sentences'>(
-    urlTab === 'sentences' ? 'sentences' : 'home'
-  );
-  const [sentences, setSentences] = useState<SavedSentence[]>([]);
-  const [sentencesLoading, setSentencesLoading] = useState(false);
+const GOAL_OPTIONS = [5, 10, 15, 20, 25, 30, 40, 50];
+const ITEM_H = 52;
 
-  const loadWords = useCallback(async () => {
-    setLoading(true);
-    const list = await db.words.orderBy('createdAt').reverse().toArray();
-    setAllWords(list);
-    setLoading(false);
+function GoalWheelPicker({ current, unmastered, onClose, onConfirm }: {
+  current: number;
+  unmastered: number;
+  onClose: () => void;
+  onConfirm: (n: number) => Promise<void>;
+}) {
+  const initIdx = Math.max(0, GOAL_OPTIONS.indexOf(current));
+  const [selectedIdx, setSelectedIdx] = useState(initIdx);
+  const wheelRef = useRef<HTMLDivElement>(null);
+  const itemsRef = useRef<HTMLDivElement>(null);
+  const touchStartY = useRef(0);
+  const currentOffset = useRef(-initIdx * ITEM_H);
+  const isDragging = useRef(false);
+  const mouseStartY = useRef(0);
+
+  function snapToIndex(raw: number) {
+    const min = -(GOAL_OPTIONS.length - 1) * ITEM_H;
+    const clamped = Math.max(min, Math.min(0, raw));
+    const idx = Math.max(0, Math.min(GOAL_OPTIONS.length - 1, Math.round(-clamped / ITEM_H)));
+    const snapped = -idx * ITEM_H;
+    currentOffset.current = snapped;
+    if (itemsRef.current) {
+      itemsRef.current.style.transition = 'transform 0.2s ease-out';
+      itemsRef.current.style.transform = `translateY(${ITEM_H * 2 + snapped}px)`;
+      setTimeout(() => { if (itemsRef.current) itemsRef.current.style.transition = 'none'; }, 200);
+    }
+    setSelectedIdx(idx);
+  }
+
+  useEffect(() => {
+    const wheelEl = wheelRef.current;
+    if (!wheelEl) return;
+
+    const preventOutside = (e: TouchEvent) => {
+      if (!wheelEl.contains(e.target as Node)) e.preventDefault();
+    };
+    document.addEventListener('touchmove', preventOutside, { passive: false });
+
+    const handleTouchMove = (e: TouchEvent) => {
+      e.preventDefault();
+      const dy = e.touches[0].clientY - touchStartY.current;
+      const raw = currentOffset.current + dy;
+      const min = -(GOAL_OPTIONS.length - 1) * ITEM_H;
+      const clamped = Math.max(min, Math.min(0, raw));
+      if (itemsRef.current) {
+        itemsRef.current.style.transform = `translateY(${ITEM_H * 2 + clamped}px)`;
+      }
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      const dy = e.changedTouches[0].clientY - touchStartY.current;
+      snapToIndex(currentOffset.current + dy);
+    };
+
+    // Mouse drag
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isDragging.current) return;
+      const dy = e.clientY - mouseStartY.current;
+      const raw = currentOffset.current + dy;
+      const min = -(GOAL_OPTIONS.length - 1) * ITEM_H;
+      const clamped = Math.max(min, Math.min(0, raw));
+      if (itemsRef.current) {
+        itemsRef.current.style.transform = `translateY(${ITEM_H * 2 + clamped}px)`;
+      }
+    };
+
+    const handleMouseUp = (e: MouseEvent) => {
+      if (!isDragging.current) return;
+      isDragging.current = false;
+      const dy = e.clientY - mouseStartY.current;
+      snapToIndex(currentOffset.current + dy);
+    };
+
+    // Wheel scroll
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      const delta = e.deltaY > 0 ? -ITEM_H : ITEM_H;
+      snapToIndex(currentOffset.current + delta);
+    };
+
+    wheelEl.addEventListener('touchmove', handleTouchMove, { passive: false });
+    wheelEl.addEventListener('touchend', handleTouchEnd);
+    wheelEl.addEventListener('wheel', handleWheel, { passive: false });
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+
+    const prevBody = document.body.style.overflow;
+    const prevHtml = document.documentElement.style.overflow;
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+
+    return () => {
+      document.removeEventListener('touchmove', preventOutside);
+      wheelEl.removeEventListener('touchmove', handleTouchMove);
+      wheelEl.removeEventListener('touchend', handleTouchEnd);
+      wheelEl.removeEventListener('wheel', handleWheel);
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.body.style.overflow = prevBody;
+      document.documentElement.style.overflow = prevHtml;
+    };
   }, []);
 
-  useEffect(() => { loadWords(); }, [loadWords]);
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    isDragging.current = true;
+    mouseStartY.current = e.clientY;
+  };
+
+  const days = unmastered > 0 ? Math.ceil(unmastered / GOAL_OPTIONS[selectedIdx]) : 0;
+
+  return (
+    <div
+      className="fixed inset-0 z-[100] flex items-end justify-center"
+      style={{ paddingBottom: 'calc(56px + env(safe-area-inset-bottom, 0px))' }}
+      onClick={onClose}
+    >
+      <div className="absolute inset-0 bg-black/20" />
+      <div
+        className="relative w-full max-w-md rounded-t-3xl"
+        style={{ background: '#fff', borderTop: '1px solid #eee0d8' }}
+        onClick={e => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between px-5 pt-5 pb-3">
+          <h3 className="text-base font-black" style={{ color: '#241917' }}>设置复习计划</h3>
+          <button onClick={onClose} style={{ color: '#89756e' }}><X size={20} /></button>
+        </div>
+        <p className="text-xs px-5 pb-4" style={{ color: '#89756e' }}>
+          共 {unmastered} 个未掌握单词 · 每天复习 {GOAL_OPTIONS[selectedIdx]} 个 · 约需 {days > 0 ? `${days} 天` : '—'}
+        </p>
+
+        <div
+          ref={wheelRef}
+          className="relative mx-auto overflow-hidden"
+          style={{ height: ITEM_H * 5, width: '100%', userSelect: 'none' }}
+          onTouchStart={handleTouchStart}
+          onMouseDown={handleMouseDown}
+        >
+          <div className="absolute left-0 right-0 pointer-events-none z-10" style={{
+            top: ITEM_H * 2, height: ITEM_H,
+            background: 'rgba(255,127,168,.1)',
+            borderTop: '1.5px solid rgba(255,127,168,.4)',
+            borderBottom: '1.5px solid rgba(255,127,168,.4)',
+          }} />
+          <div className="absolute inset-x-0 top-0 pointer-events-none z-10" style={{ height: ITEM_H * 2, background: 'linear-gradient(to bottom, #fff, rgba(255,255,255,0))' }} />
+          <div className="absolute inset-x-0 bottom-0 pointer-events-none z-10" style={{ height: ITEM_H * 2, background: 'linear-gradient(to top, #fff, rgba(255,255,255,0))' }} />
+          <div ref={itemsRef} style={{ transform: `translateY(${ITEM_H * 2 + (-initIdx * ITEM_H)}px)`, transition: 'none' }}>
+            {GOAL_OPTIONS.map((n, i) => (
+              <div key={n} style={{
+                height: ITEM_H, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: i === selectedIdx ? 28 : 20, fontWeight: 900,
+                color: i === selectedIdx ? '#ff7fa8' : '#c4a89e',
+                transition: 'font-size 0.15s, color 0.15s',
+              }}>
+                {n} 个/天
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="px-5 pt-3 pb-[calc(20px+env(safe-area-inset-bottom,0px))]">
+          <button
+            onClick={() => onConfirm(GOAL_OPTIONS[selectedIdx])}
+            className="w-full py-3.5 rounded-2xl text-white font-black text-sm"
+            style={{ background: '#ff7fa8', boxShadow: '0 8px 20px rgba(255,127,168,.35)' }}
+          >
+            确认
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DueWordRoman({ word }: { word: Word }) {
+  const roman = word.pronunciation && word.pronunciation !== word.word
+    ? word.pronunciation
+    : (word.sourceEntryId ? getEntry(word.sourceEntryId) : getEntryByKorean(word.word))?.romanization;
+  if (!roman) return null;
+  return <span className="text-xs text-[var(--text-muted)]">{roman}</span>;
+}
+
+function DueWordExpanded({ word, savedExamples, setSavedExamples }: {
+  word: Word;
+  savedExamples: Set<string>;
+  setSavedExamples: (fn: (prev: Set<string>) => Set<string>) => void;
+}) {
+  const entry = word.sourceEntryId ? getEntry(word.sourceEntryId) : getEntryByKorean(word.word);
+  const validExamples = word.examples.filter(ex => ex.text && ex.text !== '[object Object]');
+  const examples = validExamples.length > 0
+    ? validExamples.map(ex => ({ korean: ex.text, chinese: ex.translation }))
+    : entry?.examples.slice(0, 3).map(ex => ({ korean: ex.korean, chinese: ex.chinese })) ?? [];
+  return (
+    <div className="px-4 pb-3 space-y-2 border-t border-[var(--border-color)]">
+      {examples.length > 0 ? examples.map((ex, i) => (
+        <div key={i} className="flex items-start gap-2 pt-2">
+          <div className="flex-1 min-w-0">
+            <TappableText text={ex.korean} className="text-sm text-[var(--text-primary)]" source="我的词库" highlightWord={word.word} />
+            <p className="text-xs text-[var(--text-secondary)] mt-0.5">{ex.chinese}</p>
+          </div>
+          <div className="flex items-center gap-1 shrink-0">
+            <button onClick={() => speak(ex.korean, 0.85)} className="p-1 rounded-lg text-[var(--text-muted)] hover:text-[var(--pink-primary)] shrink-0">
+              <Volume2 size={13} />
+            </button>
+            <button
+              onClick={async e => {
+                e.stopPropagation();
+                if (savedExamples.has(ex.korean)) return;
+                const existing = await db.sentences.where('korean').equals(ex.korean).first().catch(() => null);
+                if (!existing) {
+                  await db.sentences.add({ korean: ex.korean, chinese: ex.chinese, source_type: 'vocabulary', source_id: 'word-' + word.word, source_title: word.word, created_at: new Date().toISOString() });
+                }
+                setSavedExamples(prev => new Set([...prev, ex.korean]));
+              }}
+              className="p-1 rounded-lg shrink-0"
+              style={{ color: savedExamples.has(ex.korean) ? 'var(--pink-primary)' : 'var(--text-muted)', cursor: savedExamples.has(ex.korean) ? 'default' : 'pointer' }}
+            >
+              {savedExamples.has(ex.korean) ? <BookmarkCheck size={13} /> : <Bookmark size={13} />}
+            </button>
+          </div>
+        </div>
+      )) : (
+        <p className="text-xs text-[var(--text-muted)] pt-2">暂无例句</p>
+      )}
+    </div>
+  );
+}
+
+function VocabularyContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const urlTab = searchParams.get('tab');
+  const [allWords, setAllWords] = useState<Word[]>([]);
+  const [allWordsLoaded, setAllWordsLoaded] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [tab, setTab] = useState<'home' | 'library' | 'books' | 'sentences' | 'mastered'>(() => {
+    if (urlTab === 'sentences') return 'sentences';
+    if (urlTab === 'library') return 'library';
+    if (urlTab === 'books') return 'books';
+    if (urlTab === 'mastered') return 'mastered';
+    return 'home';
+  });
+  const [sentences, setSentences] = useState<SavedSentence[]>([]);
+  const [sentencesLoading, setSentencesLoading] = useState(false);
+  const [managing, setManaging] = useState(false);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [wordBooks, setWordBooks] = useState<WordBook[]>([]);
+  const [showMoveSheet, setShowMoveSheet] = useState(false);
+  const [wordListLimit, setWordListLimit] = useState(50);
+  const [showDueSheet, setShowDueSheet] = useState(false);
+  const [dueExpandedId, setDueExpandedId] = useState<string | null>(null);
+  const [dailyGoal, setDailyGoal] = useState(20);
+  const [showGoalPicker, setShowGoalPicker] = useState(false);
+  const [savedExamples, setSavedExamples] = useState<Set<string>>(new Set());
+  const [copiedSentenceId, setCopiedSentenceId] = useState<string | null>(null);
+  const analysisCache = useRef<Map<string, any>>(new Map());
+  const [expandedSentenceId, setExpandedSentenceId] = useState<string | null>(null);
+  const [expandedAnalysis, setExpandedAnalysis] = useState<Map<string, any>>(new Map());
+  const [expandedLoading, setExpandedLoading] = useState<string | null>(null);
+
+  // Fast stats for home tab (counts only)
+  const [quickStats, setQuickStats] = useState<{ total: number; mastered: number; learning: number; newWords: number; dueReview: number }>({ total: 0, mastered: 0, learning: 0, newWords: 0, dueReview: 0 });
+
+  const switchTab = useCallback((t: 'home' | 'library' | 'books' | 'sentences' | 'mastered') => {
+    setTab(t);
+    setManaging(false);
+    setSelected(new Set());
+  }, []);
+
+  // Fast initial load: counts + wordBooks + profile in parallel, no full word array
+  useEffect(() => {
+    (async () => {
+      try {
+        const now = Date.now();
+        const [total, mastered, learning, dueReview, books, profile] = await Promise.all([
+          db.words.count(),
+          db.words.where('mastery').equals('mastered').count(),
+          db.words.where('mastery').anyOf('learning', 'reviewing').count(),
+          db.words.where('nextReview').belowOrEqual(now).toArray().then(ws => ws.filter(w => w.mastery !== 'mastered').length),
+          db.wordBooks.toArray(),
+          db.userProfiles.get('main'),
+        ]);
+        setQuickStats({ total, mastered, learning, newWords: Math.max(0, total - mastered - learning), dueReview });
+        setWordBooks(books);
+        if (profile?.dailyGoalWords) setDailyGoal(profile.dailyGoalWords);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
+  // Lazy-load full word list only when library tab or due-words sheet needs it
+  const loadAllWords = useCallback(async () => {
+    if (allWordsLoaded) return;
+    const list = await db.words.orderBy('createdAt').reverse().toArray();
+    setAllWords(list);
+    setAllWordsLoaded(true);
+  }, [allWordsLoaded]);
+
+  useEffect(() => {
+    if (tab === 'library' || tab === 'mastered') loadAllWords();
+  }, [tab, loadAllWords]);
+
+  const handleOpenDueSheet = useCallback(async () => {
+    if (quickStats.dueReview === 0) return;
+    await loadAllWords();
+    setShowDueSheet(true);
+  }, [quickStats.dueReview, loadAllWords]);
+
+  const toggleSelect = (id: string) => {
+    setSelected(prev => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  };
+
+  const toggleSelectAll = () => {
+    if (selected.size === allWords.length) {
+      setSelected(new Set());
+    } else {
+      setSelected(new Set(allWords.map(w => w.id)));
+    }
+  };
+
+  const handleBatchDelete = async () => {
+    if (selected.size === 0) return;
+    if (!confirm(`确定删除这 ${selected.size} 个单词？此操作不可撤销。`)) return;
+    await Promise.all([...selected].map(id => db.words.delete(id)));
+    setAllWords(prev => prev.filter(w => !selected.has(w.id)));
+    setSelected(new Set());
+    setManaging(false);
+  };
+
+  const handleBatchUnmaster = async () => {
+    if (selected.size === 0) return;
+    await Promise.all([...selected].map(id =>
+      db.words.update(id, { mastery: 'learning' as MasteryLevel, srsLevel: 1, interval: 1 })
+    ));
+    setAllWords(prev => prev.map(w => selected.has(w.id) ? { ...w, mastery: 'learning' as MasteryLevel } : w));
+    setSelected(new Set());
+    setManaging(false);
+  };
+
+  const handleMoveToBook = async (bookId: string) => {
+    if (selected.size === 0) return;
+    try {
+      const book = await db.wordBooks.get(bookId);
+      if (!book) return;
+      const newIds = [...new Set([...book.wordIds, ...[...selected]])];
+      await db.wordBooks.update(bookId, { wordIds: newIds, updatedAt: Date.now() });
+      setShowMoveSheet(false);
+      setSelected(new Set());
+      setManaging(false);
+    } catch {
+      setShowMoveSheet(false);
+    }
+  };
 
   useEffect(() => {
     if (tab !== 'sentences') return;
     setSentencesLoading(true);
-    db.sentences.orderBy('createdAt').reverse().toArray()
-      .then((list) => { setSentences(list as SavedSentence[]); setSentencesLoading(false); })
+    db.sentences.toArray()
+      .then((list) => {
+        list.sort((a: any, b: any) => {
+          const ta = a.createdAt ?? (a.created_at ? new Date(a.created_at).getTime() : 0);
+          const tb = b.createdAt ?? (b.created_at ? new Date(b.created_at).getTime() : 0);
+          return tb - ta;
+        });
+        setSentences(list as SavedSentence[]);
+        setSentencesLoading(false);
+      })
       .catch(() => setSentencesLoading(false));
   }, [tab]);
 
-  // Stats
+  // allWords-based stats (for library tab)
   const stats = useMemo(() => {
     const now = Date.now();
     const dueReview = allWords.filter((w) => w.nextReview <= now && w.mastery !== 'mastered').length;
     const mastered = allWords.filter((w) => w.mastery === 'mastered').length;
     const learning = allWords.filter((w) => w.mastery === 'learning' || w.mastery === 'reviewing').length;
-    const difficult = allWords.filter((w) => w.mastery === 'new' && w.srsLevel > 0 && w.easeFactor < 2.0).length;
     const newWords = allWords.filter((w) => w.mastery === 'new').length;
-    return { dueReview, mastered, learning, difficult, newWords, total: allWords.length };
+    return { dueReview, mastered, learning, newWords, total: allWords.length };
   }, [allWords]);
 
-  const progressPct = stats.total > 0 ? Math.round((stats.mastered / stats.total) * 100) : 0;
-
-  if (showSession) {
+  // ── Mastered tab ──
+  if (tab === 'mastered') {
+    const masteredWords = allWords.filter(w => w.mastery === 'mastered');
     return (
-      <VocabularySession
-        words={allWords}
-        onClose={() => { setShowSession(false); loadWords(); }}
-      />
+      <div className="py-4 space-y-4">
+        <div className="flex items-center gap-3">
+          <button onClick={() => switchTab('home')} className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)]">← 返回</button>
+          <h1 className="text-xl font-bold text-[var(--text-primary)]">已掌握单词</h1>
+        </div>
+        {!allWordsLoaded ? (
+          <div className="flex items-center justify-center py-10">
+            <div className="w-6 h-6 rounded-full border-2 border-[var(--pink-primary)] border-t-transparent animate-spin" />
+          </div>
+        ) : (
+          <>
+            <p className="text-sm text-[var(--text-muted)]">共 {masteredWords.length} 个已掌握单词，不再出现在闪卡复习中</p>
+            <div className="flex items-center justify-between">
+              {managing ? (
+                <>
+                  <button onClick={() => { setManaging(false); setSelected(new Set()); }} className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)]">取消</button>
+                  <button onClick={() => setSelected(new Set(masteredWords.map(w => w.id)))} className="text-sm text-[var(--pink-primary)] font-medium">全选</button>
+                </>
+              ) : (
+                <button onClick={() => setManaging(true)} className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)] ml-auto">批量管理</button>
+              )}
+            </div>
+            <div className="space-y-2">
+              {masteredWords.slice(0, wordListLimit).map((w) => (
+                <div key={w.id} className={`relative flex items-center bg-[var(--bg-card)] border rounded-xl px-4 py-3 group transition-colors ${selected.has(w.id) ? 'border-[var(--mint-soft)] bg-[var(--mint-soft)]/5' : 'border-[var(--border-color)]'}`}
+                  onClick={managing ? () => toggleSelect(w.id) : undefined}
+                >
+                  {managing && (
+                    <div className="mr-3 shrink-0 text-[var(--mint-soft)]">
+                      {selected.has(w.id) ? <CheckSquare size={18} /> : <Square size={18} className="text-[var(--text-muted)]" />}
+                    </div>
+                  )}
+                  <div className="flex-1 min-w-0 pointer-events-none">
+                    <span className="font-medium text-[var(--text-primary)]">{w.word}</span>
+                    <span className="text-xs text-[var(--text-muted)] ml-2">
+                      {w.partOfSpeech && <span className="text-[10px] px-1 py-0.5 rounded bg-[var(--bg-accent)] text-[var(--text-muted)] mr-1 align-middle">{w.partOfSpeech}</span>}
+                      {w.meaning}
+                    </span>
+                  </div>
+                  {!managing && (
+                    <div className="relative z-10 flex items-center gap-1 shrink-0">
+                      <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); speakWord(w.word, 0.8); }} className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors">
+                        <Volume2 size={14} />
+                      </button>
+                      <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-[var(--mint-soft)]/10 text-[var(--mint-soft)] font-medium">已掌握</span>
+                    </div>
+                  )}
+                </div>
+              ))}
+              {masteredWords.length > wordListLimit && (
+                <button onClick={() => setWordListLimit(l => l + 50)} className="w-full py-3 text-xs text-[var(--pink-primary)] font-medium text-center">
+                  加载更多（还有 {masteredWords.length - wordListLimit} 个）
+                </button>
+              )}
+              {masteredWords.length === 0 && (
+                <div className="text-center py-12 text-[var(--text-muted)] text-sm">还没有已掌握的单词</div>
+              )}
+            </div>
+            {managing && selected.size > 0 && (
+              <div className="fixed bottom-[calc(56px+env(safe-area-inset-bottom,0px))] left-0 right-0 z-50 px-4 pb-3 md:left-[108px] md:bottom-0 md:pb-4">
+                <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-3 shadow-lg flex items-center gap-2">
+                  <span className="text-sm font-medium text-[var(--text-primary)] flex-1">已选 {selected.size} 个</span>
+                  <button onClick={handleBatchUnmaster} className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--mint-soft)]/10 text-[var(--mint-soft)] text-sm font-medium">
+                    <Check size={14} />取消掌握
+                  </button>
+                  <button onClick={handleBatchDelete} className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--color-danger-bg)] text-[var(--color-danger)] text-sm font-medium">
+                    <Trash2 size={14} />删除
+                  </button>
+                </div>
+              </div>
+            )}
+          </>
+        )}
+      </div>
     );
   }
 
@@ -88,7 +523,7 @@ function VocabularyContent() {
     return (
       <div className="py-4 space-y-4">
         <div className="flex items-center gap-3">
-          <button onClick={() => setTab('home')} className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)]">← 返回</button>
+          <button onClick={() => switchTab('home')} className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)]">← 返回</button>
           <h1 className="text-xl font-bold text-[var(--text-primary)]">全部词库</h1>
         </div>
         <Link href="/vocabulary/library" className="block bg-gradient-to-r from-[var(--pink-primary)]/10 to-[var(--purple-soft)]/10 border border-[var(--pink-pale)] rounded-2xl p-4 hover:border-[var(--pink-primary)]/30 transition-all group">
@@ -96,32 +531,126 @@ function VocabularyContent() {
             <Library size={28} className="text-[var(--pink-primary)]" />
             <div className="flex-1">
               <p className="text-sm font-bold text-[var(--text-primary)]">词库</p>
-              <p className="text-xs text-[var(--text-secondary)]">主题词包 · 分级词表 · 延世教材 · 情景词典</p>
+              <p className="text-xs text-[var(--text-secondary)]">主题词包 · 分级词表 · 教材词汇 · 情景词典</p>
             </div>
             <ArrowRight size={18} className="text-[var(--text-muted)] group-hover:translate-x-1 transition-transform" />
           </div>
         </Link>
-        {/* Show all words with search/filter — simplified from original */}
-        <p className="text-sm text-[var(--text-muted)] mt-4">
-          共 {allWords.length} 个单词 ·
-          已掌握 {stats.mastered} · 学习中 {stats.learning} · 新词 {stats.newWords}
-        </p>
-        <div className="space-y-2 mt-3">
-          {allWords.slice(0, 50).map((w) => (
-            <div key={w.id} className="flex items-center justify-between bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl px-4 py-3">
-              <div>
-                <span className="font-medium text-[var(--text-primary)]">{w.word}</span>
-                <span className="text-xs text-[var(--text-muted)] ml-2">{w.meaning}</span>
-              </div>
-              <span className={`w-2 h-2 rounded-full ${masteryColor[w.mastery]}`} />
-            </div>
-          ))}
-          {allWords.length > 50 && (
-            <p className="text-center text-xs text-[var(--text-muted)] py-4">
-              还有 {allWords.length - 50} 个单词...
+        {!allWordsLoaded ? (
+          <div className="flex items-center justify-center py-10">
+            <div className="w-6 h-6 rounded-full border-2 border-[var(--pink-primary)] border-t-transparent animate-spin" />
+          </div>
+        ) : (
+          <>
+            <p className="text-sm text-[var(--text-muted)] mt-4">
+              共 {allWords.length} 个单词 · 已掌握 {stats.mastered} · 学习中 {stats.learning} · 新词 {stats.newWords}
             </p>
-          )}
-        </div>
+            <div className="flex items-center justify-between mt-3 mb-2">
+              {managing ? (
+                <>
+                  <button onClick={toggleSelectAll} className="text-xs text-[var(--pink-primary)] font-medium">
+                    {selected.size === allWords.length ? '取消全选' : `全选 (${allWords.length})`}
+                  </button>
+                  <button onClick={() => { setManaging(false); setSelected(new Set()); }} className="text-xs text-[var(--text-muted)]">
+                    <X size={14} className="inline mr-1" />取消
+                  </button>
+                </>
+              ) : (
+                <button onClick={() => setManaging(true)} className="text-xs text-[var(--pink-primary)] font-medium ml-auto">批量管理</button>
+              )}
+            </div>
+            <div className="space-y-2">
+              {allWords.slice(0, wordListLimit).map((w) => (
+                <div key={w.id} className={`relative flex items-center bg-[var(--bg-card)] border rounded-xl px-4 py-3 group transition-colors ${selected.has(w.id) ? 'border-[var(--pink-primary)] bg-[var(--pink-primary)]/5' : 'border-[var(--border-color)]'}`}
+                  onClick={managing ? () => toggleSelect(w.id) : undefined}
+                >
+                  {managing && (
+                    <div className="mr-3 shrink-0 text-[var(--pink-primary)]">
+                      {selected.has(w.id) ? <CheckSquare size={18} /> : <Square size={18} className="text-[var(--text-muted)]" />}
+                    </div>
+                  )}
+                  {!managing ? (
+                    <Link href={`/dictionary?q=${encodeURIComponent(w.word)}`} className="absolute inset-0 rounded-xl" aria-label={w.word} />
+                  ) : null}
+                  <div className="flex-1 min-w-0 relative pointer-events-none">
+                    <span className="font-medium text-[var(--text-primary)]">{w.word}</span>
+                    <span className="text-xs text-[var(--text-muted)] ml-2 truncate">
+                      {w.partOfSpeech && <span className="text-[10px] px-1 py-0.5 rounded bg-[var(--bg-accent)] text-[var(--text-muted)] mr-1 align-middle">{w.partOfSpeech}</span>}
+                      {w.meaning}
+                    </span>
+                  </div>
+                  {!managing && (
+                    <div className="relative z-10 flex items-center gap-1 shrink-0">
+                      <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); speakWord(w.word, 0.8); }} className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors">
+                        <Volume2 size={14} />
+                      </button>
+                      <button
+                        onClick={async (e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          if (!confirm(`删除「${w.word}」？`)) return;
+                          await db.words.delete(w.id);
+                          setAllWords(prev => prev.filter(x => x.id !== w.id));
+                        }}
+                        className="p-1.5 rounded-lg hover:bg-[var(--color-danger-bg)] text-[var(--text-muted)] hover:text-[var(--color-danger)] transition-all"
+                        title="删除"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                      <span className={`w-2 h-2 rounded-full ml-1 ${masteryColor[w.mastery]}`} />
+                    </div>
+                  )}
+                </div>
+              ))}
+              {allWords.length > wordListLimit && (
+                <button
+                  onClick={() => setWordListLimit(l => l + 50)}
+                  className="w-full py-3 text-xs text-[var(--pink-primary)] font-medium text-center hover:text-[var(--text-primary)] transition-colors"
+                >
+                  加载更多（还有 {allWords.length - wordListLimit} 个）
+                </button>
+              )}
+            </div>
+
+            {managing && selected.size > 0 && (
+              <div className="fixed bottom-[calc(56px+env(safe-area-inset-bottom,0px))] left-0 right-0 z-50 px-4 pb-3 md:left-[108px] md:bottom-0 md:pb-4">
+                <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-3 shadow-lg flex items-center gap-2">
+                  <span className="text-sm font-medium text-[var(--text-primary)] flex-1">已选 {selected.size} 个</span>
+                  <button onClick={() => setShowMoveSheet(true)} className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--bg-soft)] text-[var(--text-primary)] text-sm font-medium">
+                    <FolderInput size={14} />移到单词本
+                  </button>
+                  <button onClick={handleBatchDelete} className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--color-danger-bg)] text-[var(--color-danger)] text-sm font-medium">
+                    <Trash2 size={14} />删除
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {showMoveSheet && (
+              <div className="fixed inset-0 z-[60] flex items-end lg:items-center justify-center" style={{ paddingBottom: 'calc(56px + env(safe-area-inset-bottom, 0px))' }}>
+                <div className="absolute inset-0 bg-black/40" onClick={() => setShowMoveSheet(false)} />
+                <div className="relative bg-[var(--bg-card)] rounded-t-3xl lg:rounded-3xl w-full lg:max-w-sm px-5 pt-5 pb-[calc(20px+env(safe-area-inset-bottom,0px))] z-10 flex flex-col max-h-[70dvh]">
+                  <div className="flex items-center justify-between mb-4 shrink-0">
+                    <h3 className="font-bold text-[var(--text-primary)]">移到单词本</h3>
+                    <button onClick={() => setShowMoveSheet(false)} className="text-[var(--text-muted)]"><X size={18} /></button>
+                  </div>
+                  {wordBooks.length === 0 ? (
+                    <p className="text-sm text-[var(--text-muted)] text-center py-6">还没有单词本，先去创建一个</p>
+                  ) : (
+                    <div className="space-y-2 overflow-y-auto flex-1 min-h-0" style={{ WebkitOverflowScrolling: 'touch' }}>
+                      {wordBooks.map(book => (
+                        <button key={book.id} onClick={() => handleMoveToBook(book.id)} className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-[var(--bg-soft)] hover:bg-[var(--bg-card-hover)] text-left transition-colors">
+                          <BookOpen size={16} className="text-[var(--pink-primary)] shrink-0" />
+                          <span className="text-sm font-medium text-[var(--text-primary)]">{book.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </>
+        )}
       </div>
     );
   }
@@ -131,7 +660,7 @@ function VocabularyContent() {
     return (
       <div className="py-4 space-y-4">
         <div className="flex items-center gap-3">
-          <button onClick={() => setTab('home')} className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)]">← 返回</button>
+          <button onClick={() => switchTab('home')} className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)]">← 返回</button>
           <h1 className="text-xl font-bold text-[var(--text-primary)]">我的单词本</h1>
         </div>
         <BooksSection />
@@ -141,15 +670,58 @@ function VocabularyContent() {
 
   // ── Sentences tab ──
   if (tab === 'sentences') {
-    const handleDeleteSentence = async (id: string) => {
+    const handleDeleteSentence = async (id: string, korean: string) => {
+      if (!confirm(`删除这条句子？\n${korean}`)) return;
       await db.sentences.delete(id);
       setSentences((prev) => prev.filter((s) => s.id !== id));
+    };
+
+    const handleCopy = (id: string, korean: string) => {
+      navigator.clipboard.writeText(korean).then(() => {
+        setCopiedSentenceId(id);
+        setTimeout(() => setCopiedSentenceId(null), 2000);
+      }).catch(() => {});
+    };
+
+    const handleToggleExpand = async (s: SavedSentence) => {
+      // collapse if already open and not failed (failed = allow retry)
+      if (expandedSentenceId === s.id && expandedAnalysis.get(s.id) !== 'error') {
+        setExpandedSentenceId(null);
+        return;
+      }
+      // prevent concurrent requests
+      if (expandedLoading) return;
+      setExpandedSentenceId(s.id);
+      // already cached (skip failed cache)
+      if (analysisCache.current.has(s.korean)) {
+        setExpandedAnalysis(prev => new Map(prev).set(s.id, analysisCache.current.get(s.korean)));
+        return;
+      }
+      setExpandedLoading(s.id);
+      try {
+        const res = await fetch('/api/ai/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sentence: s.korean, mode: 'learn' }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          analysisCache.current.set(s.korean, data);
+          setExpandedAnalysis(prev => new Map(prev).set(s.id, data));
+        } else {
+          setExpandedAnalysis(prev => new Map(prev).set(s.id, 'error'));
+        }
+      } catch {
+        setExpandedAnalysis(prev => new Map(prev).set(s.id, 'error'));
+      } finally {
+        setExpandedLoading(null);
+      }
     };
 
     return (
       <div className="py-4 space-y-4">
         <div className="flex items-center gap-3">
-          <button onClick={() => setTab('home')} className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)]">← 返回</button>
+          <button onClick={() => switchTab('home')} className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)]">← 返回</button>
           <h1 className="text-xl font-bold text-[var(--text-primary)]">我的句子</h1>
         </div>
 
@@ -172,197 +744,337 @@ function VocabularyContent() {
           </div>
         ) : (
           <div className="space-y-3">
-            <p className="text-xs text-[var(--text-muted)]">共 {sentences.length} 条句子</p>
-            {sentences.map((s) => (
-              <div
-                key={s.id}
-                className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-4 space-y-2"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <p className="text-[15px] font-bold text-[var(--text-primary)] leading-relaxed flex-1" style={{ fontFamily: "system-ui, sans-serif" }}>
-                    {s.korean}
-                  </p>
-                  <div className="flex items-center gap-1 shrink-0">
-                    <button
-                      onClick={() => speakWord(s.korean, 0.75)}
-                      className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors"
-                      title="听发音"
-                    >
-                      <Volume2 size={14} />
-                    </button>
-                    <button
-                      onClick={() => handleDeleteSentence(s.id)}
-                      className="p-1.5 rounded-lg hover:bg-red-50 text-[var(--text-muted)] hover:text-red-500 transition-colors"
-                      title="删除"
-                    >
-                      <Trash2 size={14} />
-                    </button>
-                  </div>
-                </div>
-                <p className="text-sm text-[var(--text-secondary)]">{s.chinese}</p>
-                <div className="flex items-center gap-2 text-[10px] text-[var(--text-muted)]">
-                  {s.sourceType && (
-                    <span className="px-1.5 py-0.5 rounded bg-[var(--bg-input)]">
-                      {s.sourceType === 'analysis' ? '内容拆解' :
-                       s.sourceType === 'shadowing' ? '影子跟读' :
-                       s.sourceType === 'reading' ? '阅读' : s.sourceType}
-                    </span>
-                  )}
-                  {s.createdAt && (
-                    <span>{new Date(s.createdAt).toLocaleDateString('zh-CN')}</span>
-                  )}
-                </div>
+            {/* 打字练习快捷入口 */}
+            <button
+              onClick={() => router.push('/typing')}
+              style={{ width: '100%', padding: '12px 16px', borderRadius: 16, background: '#eaf8f5', border: '1.5px solid #aee3d8', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}
+            >
+              <div style={{ textAlign: 'left' }}>
+                <p style={{ fontSize: 14, fontWeight: 700, color: '#241917', margin: 0 }}>用这些句子练打字</p>
+                <p style={{ fontSize: 12, color: '#3aafa9', margin: '2px 0 0' }}>{sentences.length} 条句子已可用</p>
               </div>
-            ))}
+              <ChevronRight size={18} style={{ color: '#3aafa9', flexShrink: 0 }} />
+            </button>
+
+            <p className="text-xs text-[var(--text-muted)]">共 {sentences.length} 条句子</p>
+            {sentences.map((s) => {
+              const srcType = s.sourceType ?? s.source_type;
+              const srcLabel = srcType ? (SOURCE_LABELS[srcType] ?? srcType) : null;
+              const ts = s.createdAt ?? (s.created_at ? new Date(s.created_at).getTime() : null);
+              const isExpanded = expandedSentenceId === s.id;
+              const isLoadingThis = expandedLoading === s.id;
+              const analysis = expandedAnalysis.get(s.id);
+              return (
+                <div key={s.id} className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl overflow-hidden">
+                  <div className="p-4 space-y-2">
+                    <button
+                      onClick={() => handleToggleExpand(s)}
+                      className="text-[17px] font-bold text-[var(--text-primary)] leading-relaxed w-full text-left flex items-center gap-2 hover:text-[var(--pink-primary)] transition-colors"
+                      style={{ fontFamily: 'system-ui, sans-serif', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                    >
+                      <span className="flex-1">{s.korean}</span>
+                      <ChevronDown size={14} className={`shrink-0 transition-transform duration-200 text-[var(--text-muted)] ${isExpanded ? 'rotate-180' : ''}`} />
+                    </button>
+                    <p className="text-[15px] text-[var(--text-secondary)]">{s.chinese}</p>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-[10px] text-[var(--text-muted)]">
+                        {srcLabel && (
+                          <span className="px-1.5 py-0.5 rounded bg-[var(--bg-input)]">{srcLabel}</span>
+                        )}
+                        {ts ? <span>{new Date(ts).toLocaleDateString('zh-CN')}</span> : null}
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <button onClick={() => speakWord(s.korean, 0.75)} className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors" title="听发音">
+                          <Volume2 size={14} />
+                        </button>
+                        <button onClick={() => handleCopy(s.id, s.korean)} className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] transition-colors" style={{ color: copiedSentenceId === s.id ? '#3aafa9' : 'var(--text-muted)' }} title="复制">
+                          {copiedSentenceId === s.id ? <Check size={14} /> : <Copy size={14} />}
+                        </button>
+                        <button onClick={() => handleDeleteSentence(s.id, s.korean)} className="p-1.5 rounded-lg hover:bg-red-50 text-[var(--text-muted)] hover:text-red-500 transition-colors" title="删除">
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Inline grammar expand */}
+                  {isExpanded && (
+                    <div className="border-t border-[var(--border-color)] px-4 pt-3 pb-4">
+                      {isLoadingThis ? (
+                        <div className="flex items-center justify-center py-4">
+                          <Loader2 size={18} className="animate-spin" style={{ color: '#ff7fa8' }} />
+                        </div>
+                      ) : analysis && analysis !== 'error' ? (
+                        <div className="space-y-3">
+                          {/* 点击查词 */}
+                          <div>
+                            <p className="text-[10px] font-bold text-[var(--text-muted)] mb-1.5 tracking-wider">点击词语查释义</p>
+                            <TappableText
+                              text={s.korean}
+                              source="我的句子"
+                              style={{ fontSize: 17, lineHeight: 1.7, color: 'var(--text-primary)' }}
+                            />
+                          </div>
+                          {/* 语法 — 左竖线，无背景 */}
+                          {(analysis.grammar ?? []).length > 0 && (
+                            <div>
+                              <p className="text-[10px] font-bold text-[var(--text-muted)] mb-1.5 tracking-wider">语法</p>
+                              <div className="space-y-2">
+                                {(analysis.grammar as any[]).map((g: any, i: number) => (
+                                  <div key={i} className="pl-2 border-l-2 border-[#aee3d8]">
+                                    <p className="text-[15px] font-bold text-[var(--text-primary)]">{g.pattern}</p>
+                                    <p className="text-[14px] text-[var(--text-muted)] leading-relaxed">{g.usage}</p>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                          {/* 助词 — inline，无方框 */}
+                          {(analysis.particles ?? []).length > 0 && (
+                            <div>
+                              <p className="text-[10px] font-bold text-[var(--text-muted)] mb-1.5 tracking-wider">助词</p>
+                              <div className="flex flex-wrap gap-x-4 gap-y-1">
+                                {(analysis.particles as any[]).map((p: any, i: number) => (
+                                  <span key={i} className="text-[14px]">
+                                    <span className="font-bold text-[var(--text-primary)]">{p.text}</span>
+                                    <span className="text-[var(--text-muted)] ml-1">{p.explanation}</span>
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <p className="text-xs text-[var(--text-muted)] text-center py-2">拆解失败，点击句子重试</p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         )}
+
       </div>
     );
   }
 
-  // ═══════════════════════════════════════════════════════════════
-  //  Home tab — "Today's Task" view
-  // ═══════════════════════════════════════════════════════════════
+  // ── Home tab ──
+  const s = quickStats;
   return (
+    <>
     <div className="py-4 space-y-5 max-w-2xl mx-auto md:max-w-3xl">
-      {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between px-1">
         <div>
-          <h1 className="text-2xl font-bold text-[var(--text-primary)] flex items-center gap-2">
-            <BookOpen size={22} className="text-[var(--pink-primary)]" />
-            词汇学习
-          </h1>
-          {!loading && allWords.length > 0 && (
-            <div className="flex items-center gap-3 mt-1.5 text-xs text-[var(--text-muted)]">
-              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-[var(--pink-primary)]" />待复习 {stats.dueReview}</span>
-              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-400" />已掌握 {stats.mastered}</span>
-              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-yellow-400" />学习中 {stats.learning}</span>
-            </div>
-          )}
+          <h1 className="text-[26px] font-black text-[var(--text-primary)] tracking-tight leading-none">词汇</h1>
+          <p className="text-xs text-[var(--text-muted)] mt-1">我的单词与词库</p>
         </div>
-        <Link href="/review" className="flex items-center gap-1.5 text-xs px-3 py-2 rounded-xl bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:text-[var(--pink-primary)] transition-colors">
-          <Clock size={14} />
-          自由复习
+      </div>
+
+      {/* Today task card */}
+      <div className="rounded-[28px] p-5 relative overflow-hidden bg-[var(--bg-card)] border border-[var(--border-default)]">
+        <div className="absolute -right-5 -top-5 w-[100px] h-[100px] rounded-full" style={{ background: 'rgba(255,127,168,.1)' }} />
+        <div className="absolute right-5 -bottom-8 w-[70px] h-[70px] rounded-full" style={{ background: 'rgba(174,227,216,.15)' }} />
+        <div className="flex items-center justify-between gap-2 mb-4 relative z-[1]">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-[var(--pink-primary)] inline-block" />
+            <span className="text-xs font-bold text-[var(--pink-primary)]">今日闪卡复习</span>
+          </div>
+          <button
+            onClick={() => setShowGoalPicker(true)}
+            className="flex items-center gap-1 text-[11px] font-bold px-3 py-1.5 rounded-full transition-colors"
+            style={{ background: 'var(--pink-primary)', color: '#fff' }}
+          >
+            <Target size={11} />
+            设置复习计划
+          </button>
+        </div>
+        <div className="grid grid-cols-3 gap-2 mb-4 relative z-[1]">
+          <button
+            onClick={handleOpenDueSheet}
+            className="rounded-2xl p-3 text-center transition-all active:scale-95"
+            style={{ background: 'var(--bg-muted)' }}
+          >
+            {loading ? <div className="h-8 w-8 mx-auto rounded bg-white/60 animate-pulse" /> : (
+              <p className="text-[26px] font-black text-[var(--pink-primary)] leading-none">{s.dueReview}</p>
+            )}
+            <p className="text-[10px] text-[var(--text-muted)] mt-1">待复习{s.dueReview > 0 ? ' →' : ''}</p>
+          </button>
+          <div className="rounded-2xl p-3 text-center" style={{ background: 'var(--bg-muted)' }}>
+            {loading ? <div className="h-8 w-8 mx-auto rounded bg-white/60 animate-pulse" /> : (
+              <p className="text-[26px] font-black leading-none" style={{ color: '#A78BFA' }}>{Math.min(s.newWords, 5)}</p>
+            )}
+            <p className="text-[10px] text-[var(--text-muted)] mt-1">推荐新词</p>
+          </div>
+          <div className="rounded-2xl p-3 text-center" style={{ background: 'var(--bg-muted)' }}>
+            {loading ? <div className="h-8 w-8 mx-auto rounded bg-white/60 animate-pulse" /> : (
+              <p className="text-[26px] font-black text-[var(--text-muted)] leading-none">
+                {dailyGoal > 0 && s.total > 0 ? Math.ceil((s.total - s.mastered) / dailyGoal) : '—'}
+              </p>
+            )}
+            <p className="text-[10px] text-[var(--text-muted)] mt-1">预计天数</p>
+          </div>
+        </div>
+        <Link
+          href="/review"
+          className="block w-full py-3.5 text-white text-center rounded-[18px] font-bold text-sm transition-all relative z-[1]"
+          style={{ background: 'var(--pink-primary)', boxShadow: '0 8px 20px rgba(255,127,168,.35)' }}
+        >
+          {s.total === 0 ? '先去词库导入单词' : s.dueReview === 0 && s.newWords === 0 ? '今日已全部完成 ✓' : '开始闪卡复习'}
         </Link>
       </div>
 
-      {/* Loading */}
-      {loading ? (
-        <div className="flex items-center justify-center py-20">
-          <div className="w-8 h-8 border-2 border-slate-600 border-t-blue-400 rounded-full animate-spin" />
+      {showGoalPicker && (
+        <GoalWheelPicker
+          current={dailyGoal}
+          unmastered={s.total - s.mastered}
+          onClose={() => setShowGoalPicker(false)}
+          onConfirm={async (n) => {
+            setDailyGoal(n);
+            setShowGoalPicker(false);
+            await updateProfile({ dailyGoalWords: n });
+          }}
+        />
+      )}
+
+      {/* Library entry */}
+      <Link
+        href="/vocabulary/library"
+        className="flex items-center gap-4 rounded-[20px] bg-[var(--bg-card)] border border-[var(--border-color)] px-4 py-4 hover:border-[var(--pink-primary)] hover:shadow-sm transition-all group"
+      >
+        <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-[22px] shrink-0" style={{ background: 'linear-gradient(135deg, #FFE4EC, #EAF8F5)' }}>
+          📖
         </div>
-      ) : allWords.length === 0 ? (
-        /* Empty state */
-        <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
-          <div className="w-20 h-20 rounded-2xl bg-[var(--bg-input)]/60 flex items-center justify-center mb-5">
-            <BookOpen size={36} className="text-[var(--text-placeholder)]" />
+        <div className="flex-1">
+          <p className="text-sm font-bold text-[var(--text-primary)]">韩语词库</p>
+          <p className="text-[11px] text-[var(--text-muted)] mt-0.5">主题词包 · 分级词表 · 延世教材 · 情景词典</p>
+          <p className="text-[10px] text-[var(--pink-primary)] mt-1 font-medium">本周持续补全中 ✦</p>
+        </div>
+        <div className="w-7 h-7 rounded-full bg-[var(--bg-input)] flex items-center justify-center text-[var(--text-muted)] group-hover:bg-[var(--pink-primary)] group-hover:text-white transition-all shrink-0 text-lg">
+          ›
+        </div>
+      </Link>
+
+      {/* Word books */}
+      <div>
+        <div className="flex items-center justify-between mb-3 px-1">
+          <div className="flex items-center gap-2">
+            <span className="w-[22px] h-[22px] rounded-[8px] bg-[var(--pink-pale)] flex items-center justify-center text-xs">📚</span>
+            <span className="text-[15px] font-black text-[var(--text-primary)]">我的单词本</span>
           </div>
-          <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-2">还没有单词</h2>
-          <p className="text-sm text-[var(--text-muted)] max-w-xs mb-6">从场景词包或课程开始你的韩语学习之旅</p>
-          <Link href="/vocabulary/library" className="flex items-center gap-2 text-sm px-5 py-2.5 rounded-xl bg-[var(--pink-primary)] text-white font-medium">
-            浏览词库 <ArrowRight size={14} />
+          <Link href="/vocabulary/books" className="flex items-center gap-1 text-xs px-3 py-1.5 rounded-full bg-[var(--pink-pale)] text-[var(--pink-primary)] font-bold hover:bg-[#FFD0E0] transition-colors">
+            <Plus size={11} />新建
           </Link>
         </div>
-      ) : (
-        <>
-          {/* Today's Task Card */}
-          <div className="bg-gradient-to-br from-[var(--pink-primary)]/10 to-[var(--purple-soft)]/10 border-2 border-[var(--pink-pale)] rounded-3xl p-6 space-y-4">
-            <div className="flex items-center gap-2">
-              <Target size={20} className="text-[var(--pink-primary)]" />
-              <span className="text-sm font-bold text-[var(--text-primary)]">今日词汇任务</span>
-            </div>
 
-            <div className="grid grid-cols-3 gap-3">
-              <div className="bg-[var(--bg-card)]/80 rounded-2xl p-3 text-center">
-                <p className="text-2xl font-extrabold text-[var(--pink-primary)]">{stats.dueReview}</p>
-                <p className="text-[10px] text-[var(--text-muted)]">待复习</p>
+        <div className="space-y-2">
+          {loading ? (
+            <div className="h-16 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-color)] animate-pulse" />
+          ) : wordBooks.length === 0 ? (
+            <Link href="/vocabulary/books" className="flex items-center justify-center gap-2 rounded-[20px] border-[1.5px] border-dashed border-[#D9CBC3] py-5 text-[var(--text-muted)] text-sm font-semibold hover:border-[var(--pink-primary)] hover:text-[var(--pink-primary)] hover:bg-[var(--pink-pale)] transition-all">
+              <span className="w-[22px] h-[22px] rounded-full bg-[var(--bg-card)] border border-[var(--border-color)] flex items-center justify-center text-sm font-bold">+</span>
+              新建第一个单词本
+            </Link>
+          ) : (
+            <>
+              {wordBooks.slice(0, 4).map((book) => (
+                <Link
+                  key={book.id}
+                  href={`/vocabulary/books/${book.id}`}
+                  className="flex items-center gap-3 rounded-[20px] bg-[var(--bg-card)] border border-[var(--border-color)] px-4 py-3.5 hover:border-[var(--pink-primary)] hover:shadow-sm transition-all"
+                >
+                  <div className="w-1 h-11 rounded-full shrink-0" style={{ background: book.color || 'var(--pink-primary)' }} />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-bold text-[var(--text-primary)] truncate">{book.name}</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="text-[11px] text-[var(--text-muted)]">{book.wordIds.length} 个单词</span>
+                    </div>
+                  </div>
+                  <span className="text-[var(--text-muted)] text-xl font-light">›</span>
+                </Link>
+              ))}
+              {wordBooks.length > 4 && (
+                <Link href="/vocabulary/books" className="flex items-center justify-center gap-1 py-2.5 text-xs text-[var(--pink-primary)] font-bold">
+                  查看全部 {wordBooks.length} 个单词本 <ArrowRight size={12} />
+                </Link>
+              )}
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* My sentences entry */}
+      <button
+        onClick={() => switchTab('sentences')}
+        className="flex items-center gap-4 rounded-[20px] bg-[var(--bg-card)] border border-[var(--border-color)] px-4 py-4 hover:border-[var(--pink-primary)] hover:shadow-sm transition-all group w-full text-left"
+      >
+        <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-[22px] shrink-0" style={{ background: 'linear-gradient(135deg, #eaf8f5, #fff0f5)' }}>
+          🔖
+        </div>
+        <div className="flex-1">
+          <p className="text-sm font-bold text-[var(--text-primary)]">我的句子</p>
+          <p className="text-[11px] text-[var(--text-muted)] mt-0.5">保存的句子 · 语法拆解 · 打字练习</p>
+        </div>
+        <div className="w-7 h-7 rounded-full bg-[var(--bg-input)] flex items-center justify-center text-[var(--text-muted)] group-hover:bg-[var(--pink-primary)] group-hover:text-white transition-all shrink-0 text-lg">
+          ›
+        </div>
+      </button>
+    </div>
+
+      {showDueSheet && (
+        <div className="fixed inset-0 z-[100] flex items-end justify-center" style={{ paddingBottom: 'calc(56px + env(safe-area-inset-bottom, 0px))' }}>
+          <div className="absolute inset-0 bg-black/30" onClick={() => setShowDueSheet(false)} />
+          <div className="relative w-full max-w-lg bg-[var(--bg-card)] rounded-t-3xl flex flex-col" style={{ maxHeight: 'calc(80dvh - 56px)' }}>
+            <div className="flex items-center justify-between px-5 pt-5 pb-3 shrink-0">
+              <div>
+                <h2 className="text-base font-bold text-[var(--text-primary)]">待复习单词</h2>
+                <p className="text-xs text-[var(--text-muted)] mt-0.5">{s.dueReview} 个单词到期，点击展开例句</p>
               </div>
-              <div className="bg-[var(--bg-card)]/80 rounded-2xl p-3 text-center">
-                <p className="text-2xl font-extrabold text-[var(--purple-soft)]">{Math.min(stats.newWords, 5)}</p>
-                <p className="text-[10px] text-[var(--text-muted)]">推荐新词</p>
-              </div>
-              <div className="bg-[var(--bg-card)]/80 rounded-2xl p-3 text-center">
-                <p className="text-2xl font-extrabold text-[var(--text-muted)]">~3</p>
-                <p className="text-[10px] text-[var(--text-muted)]">分钟</p>
-              </div>
-            </div>
-
-            <button
-              onClick={() => setShowSession(true)}
-              disabled={stats.dueReview === 0 && stats.newWords === 0}
-              className="w-full py-3.5 bg-[var(--pink-primary)] text-white rounded-2xl font-bold text-sm active:scale-[0.97] transition-all disabled:opacity-40"
-            >
-              {stats.dueReview === 0 && stats.newWords === 0 ? '暂无待复习词汇' : '开始今日词汇练习'}
-            </button>
-          </div>
-
-          {/* Progress */}
-          <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4">
-            <div className="flex items-center gap-2 mb-3">
-              <TrendingUp size={16} className="text-[var(--mint-soft)]" />
-              <span className="text-sm font-bold text-[var(--text-primary)]">我的词汇进度</span>
-            </div>
-            <div className="flex justify-between text-xs text-[var(--text-muted)] mb-1.5">
-              <span>已掌握 {stats.mastered}</span>
-              <span>学习中 {stats.learning}</span>
-              <span>易错 {stats.difficult}</span>
-            </div>
-            <div className="w-full bg-[var(--bg-input)] rounded-full h-2 overflow-hidden">
-              <div
-                className="h-full rounded-full bg-gradient-to-r from-[var(--mint-soft)] to-[var(--pink-primary)] transition-all duration-500"
-                style={{ width: `${progressPct}%` }}
-              />
-            </div>
-            <p className="text-[10px] text-[var(--text-muted)] mt-1.5">{progressPct}% 掌握率</p>
-          </div>
-
-          {/* Scene Packs */}
-          <div>
-            <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <Sparkles size={16} className="text-[var(--peach-soft)]" />
-                <span className="text-sm font-bold text-[var(--text-primary)]">场景词包</span>
+                <Link href="/vocabulary/review-pool" onClick={() => setShowDueSheet(false)} className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-[var(--bg-input)] text-xs text-[var(--text-secondary)] hover:text-[var(--pink-primary)] hover:bg-[var(--pink-primary)]/8 transition-colors">
+                  <Settings2 size={13} />管理词库
+                </Link>
+                <button onClick={() => setShowDueSheet(false)} className="p-1 text-[var(--text-muted)]"><X size={20} /></button>
               </div>
-              <Link href="/vocabulary/library" className="text-xs text-[var(--pink-primary)] hover:underline">
-                查看全部
+            </div>
+            <div className="flex-1 min-h-0 overflow-y-auto px-4 pb-4 space-y-2">
+              {allWords.filter(w => w.nextReview <= Date.now() && w.mastery !== 'mastered').map(word => {
+                const isExpanded = dueExpandedId === word.id;
+                return (
+                  <div key={word.id} className="bg-[var(--bg-input)] rounded-2xl overflow-hidden">
+                    <div className="flex items-center gap-3 px-4 py-3 cursor-pointer" onClick={() => setDueExpandedId(isExpanded ? null : word.id)}>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-bold text-[var(--text-primary)]">{word.word}</span>
+                          <DueWordRoman word={word} />
+                        </div>
+                        <p className="text-xs text-[var(--text-secondary)] truncate mt-0.5">{word.meaning}</p>
+                      </div>
+                      <button onClick={e => { e.stopPropagation(); speakWord(word.word, 0.85); }} className="p-1.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--pink-primary)] shrink-0">
+                        <Volume2 size={15} />
+                      </button>
+                      <span className="text-xs text-[var(--text-muted)]">{isExpanded ? '▲' : '▼'}</span>
+                    </div>
+                    {isExpanded && <DueWordExpanded word={word} savedExamples={savedExamples} setSavedExamples={setSavedExamples} />}
+                  </div>
+                );
+              })}
+            </div>
+            <div className="px-4 pt-3 pb-3 border-t border-[var(--border-color)] shrink-0">
+              <Link href="/review" onClick={() => setShowDueSheet(false)} className="block w-full py-3 text-center text-white text-sm font-bold rounded-2xl" style={{ background: 'var(--pink-primary)' }}>
+                开始复习这 {s.dueReview} 个单词
               </Link>
             </div>
-            <ThemesSection />
           </div>
-
-          {/* Bottom links */}
-          <div className="flex gap-3">
-            <button
-              onClick={() => setTab('library')}
-              className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-[var(--bg-card)] border border-[var(--border-color)] text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
-            >
-              <Library size={16} />
-              全部词库
-            </button>
-            <button
-              onClick={() => setTab('books')}
-              className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-[var(--bg-card)] border border-[var(--border-color)] text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
-            >
-              <Bookmark size={16} />
-              我的单词本
-            </button>
-            <button
-              onClick={() => setTab('sentences')}
-              className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-[var(--bg-card)] border border-[var(--border-color)] text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
-            >
-              <MessageSquare size={16} />
-              我的句子
-            </button>
-          </div>
-        </>
+        </div>
       )}
-    </div>
+    </>
   );
 }
 
 export default function VocabularyPage() {
   return (
-    <Suspense>
+    <Suspense fallback={<div className="flex-1 flex items-center justify-center py-20"><div className="w-6 h-6 rounded-full border-2 border-[var(--pink-primary)] border-t-transparent animate-spin" /></div>}>
       <VocabularyContent />
     </Suspense>
   );

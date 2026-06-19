@@ -7,8 +7,9 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { KoreanKeyboard } from '@/components/KoreanKeyboard';
 import { useAuth } from '@/components/AuthProvider';
+import { KoreanKeyboard } from '@/components/KoreanKeyboard';
+import { useIsDesktop } from '@/lib/useIsMobile';
 import { speak, cancelSpeech } from '@/lib/tts';
 
 // ── Types ────────────────────────────────────────────────────────
@@ -76,6 +77,7 @@ export default function VoiceChatPage() {
   const [showChinese, setShowChinese] = useState(true);
   const [autoTTS, setAutoTTS] = useState(true);
   const [showKeyboard, setShowKeyboard] = useState(false);
+  const isDesktop = useIsDesktop();
   const [textInput, setTextInput] = useState('');
   const [error, setError] = useState('');
   const [speechSupported, setSpeechSupported] = useState(true);
@@ -281,6 +283,7 @@ export default function VoiceChatPage() {
 
   // ── Clear conversation ───────────────────────────────────────
   const handleClear = useCallback(() => {
+    if (!confirm('清空全部对话记录？')) return;
     cancelSpeech();
     setMessages([]);
     setInterimText('');
@@ -456,14 +459,6 @@ export default function VoiceChatPage() {
               ))}
             </div>
 
-            {/* Keyboard toggle hint */}
-            <button
-              onClick={() => setShowKeyboard(!showKeyboard)}
-              className="text-xs text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors flex items-center gap-1"
-            >
-              <Send size={12} />
-              {showKeyboard ? '收起键盘' : '不想说话？用键盘输入'}
-            </button>
           </div>
         )}
 
@@ -613,62 +608,46 @@ export default function VoiceChatPage() {
 
         {/* Keyboard toggle + text input */}
         <div className="space-y-2">
-          <button
-            onClick={() => setShowKeyboard(!showKeyboard)}
-            className={`w-full text-xs flex items-center justify-center gap-1 py-1.5 rounded-lg transition-colors ${
-              showKeyboard
-                ? 'text-[var(--pink-primary)] bg-[var(--pink-primary)]/5'
-                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
-            }`}
-          >
-            <Send size={12} />
-            {showKeyboard ? '收起键盘' : '打字输入'}
-            <ChevronRight size={12} className={`transition-transform ${showKeyboard ? 'rotate-90' : ''}`} />
-          </button>
-
-          {/* Text input row — hidden when keyboard is open since keyboard covers it */}
-          {!showKeyboard && (
-            <div className="space-y-2">
-              <div className="flex items-end gap-2">
-                <textarea
-                  ref={textareaRef}
-                  value={textInput}
-                  onChange={(e) => {
-                    setTextInput(e.target.value);
-                    e.target.style.height = 'auto';
-                    e.target.style.height = Math.min(e.target.scrollHeight, 100) + 'px';
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                      e.preventDefault();
-                      handleTextSend();
-                    }
-                  }}
-                  placeholder="输入韩语..."
-                  rows={1}
-                  disabled={isThinking || isProcessingRef.current}
-                  className="flex-1 resize-none bg-[var(--bg-input)] border border-[var(--border-color)] rounded-xl px-4 py-2.5 text-sm text-gray-900 dark:text-gray-100 placeholder:text-[var(--text-placeholder)] focus:outline-none focus:border-[var(--pink-primary)]/50 disabled:opacity-50"
-                  style={{ maxHeight: '100px' }}
-                />
-                <button
-                  onClick={handleTextSend}
-                  disabled={!textInput.trim() || isThinking || isProcessingRef.current}
-                  className="shrink-0 p-2.5 rounded-xl bg-[var(--pink-primary)] text-white hover:opacity-90 disabled:opacity-40 transition-opacity"
-                >
-                  <Send size={18} />
-                </button>
-              </div>
+          <div className="space-y-2">
+            <div className="flex items-end gap-2">
+              <textarea
+                ref={textareaRef}
+                value={textInput}
+                onChange={(e) => {
+                  setTextInput(e.target.value);
+                  e.target.style.height = 'auto';
+                  e.target.style.height = Math.min(e.target.scrollHeight, 100) + 'px';
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleTextSend();
+                  }
+                }}
+                placeholder="输入韩语..."
+                rows={1}
+                disabled={isThinking || isProcessingRef.current}
+                className="flex-1 resize-none bg-[var(--bg-input)] border border-[var(--border-color)] rounded-xl px-4 py-2.5 text-sm text-gray-900 dark:text-gray-100 placeholder:text-[var(--text-placeholder)] focus:outline-none focus:border-[var(--pink-primary)]/50 disabled:opacity-50"
+                style={{ maxHeight: '100px' }}
+              />
+              {isDesktop && (
+                <button type="button" onClick={() => setShowKeyboard(!showKeyboard)}
+                  className={`shrink-0 p-2.5 rounded-xl transition-colors text-sm font-medium ${showKeyboard ? 'bg-[var(--pink-primary)]/20 text-[var(--pink-primary)]' : 'bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--pink-primary)]'}`}
+                >한</button>
+              )}
+              <button
+                onClick={handleTextSend}
+                disabled={!textInput.trim() || isThinking || isProcessingRef.current}
+                className="shrink-0 p-2.5 rounded-xl bg-[var(--pink-primary)] text-white hover:opacity-90 disabled:opacity-40 transition-opacity"
+              >
+                <Send size={18} />
+              </button>
             </div>
-          )}
+          </div>
         </div>
-
-        <KoreanKeyboard
-          value={textInput}
-          onChange={setTextInput}
-          visible={showKeyboard}
-          onClose={() => setShowKeyboard(false)}
-          onSend={handleKeyboardSend}
-        />
+        {isDesktop && (
+          <KoreanKeyboard value={textInput} onChange={setTextInput} visible={showKeyboard} onClose={() => setShowKeyboard(false)} onSend={handleKeyboardSend} />
+        )}
       </div>
     </div>
   );

@@ -2,9 +2,10 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import {
   Mic, Volume2, BookOpen, ChevronRight, Headphones, Sparkles,
-  GraduationCap, Zap,
+  GraduationCap, Zap, ArrowLeft,
   type LucideIcon,
 } from 'lucide-react';
 import { PronunciationSession } from '@/components/pronunciation/PronunciationSession';
@@ -179,6 +180,10 @@ function PageContent() {
 
   return (
     <div className="py-4 space-y-5 max-w-2xl mx-auto md:max-w-3xl">
+      {/* Back button */}
+      <div className="flex items-center gap-2 -mb-1">
+        <Link href="/tools" className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"><ArrowLeft size={20} /></Link>
+      </div>
       {/* Voice notice modal */}
       {showNotice && (
         <div className="fixed inset-0 z-50 flex items-center justify-center px-5" style={{ background: 'rgba(36,25,23,0.5)', backdropFilter: 'blur(4px)' }}>

@@ -338,7 +338,7 @@ export default function ShadowingPlayerPage() {
       return;
     }
 
-    // Start SpeechRecognition for transcript comparison
+    // Start SpeechRecognition for transcript comparison (best-effort, mobile may not support)
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (SpeechRecognition) {
       try {
@@ -349,14 +349,16 @@ export default function ShadowingPlayerPage() {
         recognitionRef.current = recognition;
 
         recognition.onresult = (event: any) => {
-          const transcript = event.results[0][0].transcript.trim();
-          if (shadowingTarget) {
-            const diff = getCharDiff(transcript, shadowingTarget.text);
-            setShadowingFeedback({ ...diff, transcript });
-          }
+          try {
+            const transcript = event.results[0][0].transcript.trim();
+            if (shadowingTarget) {
+              const diff = getCharDiff(transcript, shadowingTarget.text);
+              setShadowingFeedback({ ...diff, transcript });
+            }
+          } catch { /* ignore parse errors */ }
         };
 
-        recognition.onerror = () => {};
+        recognition.onerror = () => { /* silent — recognition is optional */ };
         recognition.onend = () => {};
         recognition.start();
       } catch {}
@@ -421,7 +423,7 @@ export default function ShadowingPlayerPage() {
           createdAt: Date.now(),
           updatedAt: Date.now(),
         });
-        feedbackSuccess('已保存句子');
+        feedbackSuccess('已保存到「我的句子」');
       } catch {
         feedbackError('保存失败');
       }
@@ -514,36 +516,30 @@ export default function ShadowingPlayerPage() {
       const text = await file.text();
       const entries = parseSrt(text);
 
-      const subsToSave: StudySubtitle[] = [];
-      for (let i = 0; i < entries.length; i++) {
-        const entry = entries[i];
-        let textZh = '';
-
-        try {
-          const res = await fetch('/api/shadowing/translate', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text: entry.text }),
-          });
-          if (res.ok) {
-            const data = await res.json();
-            textZh = data.translation;
-          }
-        } catch {}
-
-        const tokens = tokenizeKorean(entry.text);
-
-        subsToSave.push({
-          id: crypto.randomUUID(),
-          videoId: video.id,
-          index: i,
-          start: entry.start,
-          end: entry.end,
-          text: entry.text,
-          textZh,
-          tokens: JSON.stringify(tokens),
+      // Batch translate all entries in one API call
+      let translations: string[] = entries.map(() => '');
+      try {
+        const res = await fetch('/api/shadowing/translate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ texts: entries.map(e => e.text) }),
         });
-      }
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data.translations)) translations = data.translations;
+        }
+      } catch {}
+
+      const subsToSave: StudySubtitle[] = entries.map((entry, i) => ({
+        id: crypto.randomUUID(),
+        videoId: video.id,
+        index: i,
+        start: entry.start,
+        end: entry.end,
+        text: entry.text,
+        textZh: translations[i] ?? '',
+        tokens: JSON.stringify(tokenizeKorean(entry.text)),
+      }));
 
       await db.studySubtitles.bulkPut(subsToSave);
       await db.studyVideos.update(video.id, { subtitleSource: 'manual' });
@@ -598,9 +594,12 @@ export default function ShadowingPlayerPage() {
     <div className="flex flex-col h-[calc(100dvh-4rem)]">
       {/* Top bar */}
       <div className="flex items-center gap-3 px-4 py-3 shrink-0">
-        <Link href="/shadowing" className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
+        <button
+          onClick={() => { feedbackSuccess('进度已保存'); setTimeout(() => router.push('/shadowing'), 800); }}
+          className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+        >
           <ArrowLeft size={20} />
-        </Link>
+        </button>
         <div className="flex-1 min-w-0">
           <h1 className="text-sm font-bold text-[var(--text-primary)] truncate">{video.title}</h1>
           {subtitles.length > 0 && (
@@ -610,6 +609,17 @@ export default function ShadowingPlayerPage() {
             </p>
           )}
         </div>
+        {completedCount > 0 && completedCount < subtitles.length && (
+          <button
+            onClick={() => {
+              const firstIncomplete = subtitles.findIndex((_, i) => !completedSegments.has(i));
+              if (firstIncomplete >= 0) handleSubtitleClick(firstIncomplete);
+            }}
+            className="shrink-0 text-[11px] px-2.5 py-1 rounded-full bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] font-medium"
+          >
+            继续上次
+          </button>
+        )}
       </div>
 
       {/* Video player */}

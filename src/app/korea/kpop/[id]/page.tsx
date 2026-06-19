@@ -8,15 +8,17 @@ import {
   Mic, Play, Pause,
 } from 'lucide-react';
 import { kpopSongs } from '@/data/kpopSongs';
+import { speak, cancelSpeech } from '@/lib/tts';
 import type { KpopLine } from '@/types/kpop';
 import SingingMode from '@/components/kpop/SingingMode';
 import { getSongProgress, loadSongProgress } from '@/lib/kpop/progress';
 import { getTrackById } from '@/data/kpopTracks';
 import { SegmentPlayer } from '@/lib/kpop/audioSegmentPlayer';
 import { db } from '@/lib/db';
+import { useTheme } from '@/components/ThemeProvider';
 
 // ── Demo-exact design tokens ──
-const C = {
+const LIGHT_C = {
   ink: '#241917',
   muted: '#89756e',
   line: '#eee0d8',
@@ -47,6 +49,37 @@ const C = {
   shadowAudioPill: '0 10px 22px rgba(32,24,21,.14)',
 };
 
+const DARK_C = {
+  ink: '#F0E8FF',
+  muted: '#B8A8C8',
+  line: '#3A3060',
+  lineRow: 'rgba(58,48,96,0.76)',
+  linePlayer: 'rgba(58,48,96,0.9)',
+  pink: '#ff7fa8',
+  pinkText: '#ff7fa8',
+  pinkSoft: '#2D2848',
+  mint: '#4A6058',
+  mintText: '#5ecfb8',
+  mintBg: '#1E3530',
+  black: '#3A3060',
+  white: '#282440',
+  inputBg: '#252040',
+  disabledBg: '#252040',
+  disabledText: '#6A5A80',
+  tagText: '#9A8AB0',
+  rowLabel: '#9A8AB0',
+  roman: '#8A7AA0',
+  chinese: '#9A8AB0',
+  btnLight: '#8A7AA0',
+  btnDarkText: '#C8B8E0',
+  barBg: '#3A3060',
+  shadow: '0 16px 42px rgba(0,0,0,.30)',
+  shadow2: '0 28px 72px rgba(0,0,0,.40)',
+  shadowActive: '0 18px 48px rgba(255,127,168,.16)',
+  shadowPlayBtn: '0 12px 26px rgba(0,0,0,.35)',
+  shadowAudioPill: '0 10px 22px rgba(0,0,0,.30)',
+};
+
 const LEVEL_CONFIG: Record<string, { label: string }> = {
   beginner: { label: '入门' },
   intermediate: { label: '中级' },
@@ -60,11 +93,17 @@ function fmtTimestamp(sec: number): string {
 }
 
 export default function KpopSongPage() {
+  const { theme } = useTheme();
+  const C = theme === 'dark' ? DARK_C : LIGHT_C;
   const { id } = useParams<{ id: string }>();
   const track = useMemo(() => getTrackById(id), [id]);
   const oldSong = useMemo(() => kpopSongs.find((s) => s.id === id), [id]);
 
   const [selectedLineIndex, setSelectedLineIndex] = useState<number | null>(null);
+  const setSelectedLine = useCallback((idx: number | null) => {
+    selectedLineIndexRef.current = idx;
+    setSelectedLineIndex(idx);
+  }, []);
   const [completedIndices, setCompletedIndices] = useState<number[]>([]);
   const [showSingingMode, setShowSingingMode] = useState(false);
   const [singStartIndex, setSingStartIndex] = useState(0);
@@ -80,13 +119,16 @@ export default function KpopSongPage() {
     e.stopPropagation();
     if (savedWords.has(word)) { showWordToast('已保存'); return; }
     try {
-      await db.words.add({
-        id: 'kpop-' + word + '-' + Date.now(),
-        word, pronunciation: '', meaning,
-        partOfSpeech: '', examples: [], mastery: 'new' as const,
-        srsLevel: 0, nextReview: Date.now(), easeFactor: 2.5, interval: 1,
-        createdAt: Date.now(), lastReviewed: null,
-      });
+      const existing = await db.words.where('word').equals(word).first();
+      if (!existing) {
+        await db.words.add({
+          id: 'kpop-' + word,
+          word, pronunciation: '', meaning,
+          partOfSpeech: '', examples: [], mastery: 'new' as const,
+          srsLevel: 0, nextReview: Date.now(), easeFactor: 2.5, interval: 1,
+          createdAt: Date.now(), lastReviewed: null,
+        });
+      }
       setSavedWords(prev => new Set([...prev, word]));
       showWordToast('已保存到词库');
     } catch { showWordToast('保存失败'); }
@@ -103,6 +145,7 @@ export default function KpopSongPage() {
 
   const rafRef = useRef<number | null>(null);
   const lineCardRefs = useRef<Map<number, HTMLElement>>(new Map());
+  const selectedLineIndexRef = useRef<number | null>(null);
 
   const lyrics = track?.lyrics ?? [];
   const totalLines = lyrics.length;
@@ -216,17 +259,17 @@ export default function KpopSongPage() {
         const correctedNextStart = nextL ? nextL.startMs + (lineCalibrations[i + 1]?.startOffsetMs ?? 0) : Infinity;
         return t >= correctedStart && t < correctedNextStart;
       });
-      if (idx >= 0 && idx !== selectedLineIndex) setSelectedLineIndex(idx);
+      if (idx >= 0 && idx !== selectedLineIndexRef.current) setSelectedLine(idx);
       rafRef.current = requestAnimationFrame(tick);
     };
     rafRef.current = requestAnimationFrame(tick);
-  }, [slowMode, timingOffset, lyrics, selectedLineIndex, lineCalibrations]);
+  }, [slowMode, timingOffset, lyrics, lineCalibrations, setSelectedLine]);
 
   const playLineOriginal = useCallback((lineIdx: number) => {
     const line = lyrics[lineIdx];
     if (!line) return;
     stopAll();
-    setSelectedLineIndex(lineIdx);
+    setSelectedLine(lineIdx);
 
     // Priority 1: per-line audio file
     if (line.lineAudioUrl) {
@@ -236,41 +279,40 @@ export default function KpopSongPage() {
 
     // Priority 2: segment player from full audio
     const sp = segmentPlayerRef.current;
-    if (!sp || !(segmentStatus === 'ready')) return;
-    const offset = timingOffset ?? 0;
-    const lineCal = lineCalibrations[lineIdx];
-    const startMs = line.startMs + offset + (lineCal?.startOffsetMs ?? 0);
-    const endMs = line.endMs + offset + (lineCal?.endOffsetMs ?? 0);
-    sp.playSegment(startMs, endMs, false, slowMode);
+    if (sp && segmentStatus === 'ready') {
+      const offset = timingOffset ?? 0;
+      const lineCal = lineCalibrations[lineIdx];
+      const startMs = line.startMs + offset + (lineCal?.startOffsetMs ?? 0);
+      const endMs = line.endMs + offset + (lineCal?.endOffsetMs ?? 0);
+      sp.playSegment(startMs, endMs, false, slowMode);
+      return;
+    }
+
+    // Priority 3: NLS TTS fallback (iOS/iPad where webm not supported)
+    if (line.korean) speak(line.korean, slowMode ? 0.6 : 0.85);
   }, [lyrics, stopAll, timingOffset, slowMode, lineCalibrations, segmentStatus]);
 
   const playLineSpoken = useCallback((lineIdx: number) => {
-    const sp = segmentPlayerRef.current;
-    if (!sp || !(segmentStatus === 'ready')) return;
     const line = lyrics[lineIdx];
     if (!line) return;
     if (line.spokenAudioUrl) {
-      // Play actual spoken audio if available
       stopAll();
       new Audio(line.spokenAudioUrl).play().catch(() => {});
       return;
     }
-    // No spoken audio available — do nothing (button will show "读音暂缺")
-  }, [lyrics, stopAll, (segmentStatus === 'ready')]);
+    // NLS TTS at slow rate for "读音" effect
+    if (line.korean) { cancelSpeech(); speak(line.korean, 0.6); }
+  }, [lyrics, stopAll]);
 
   const goPrevLine = useCallback(() => {
-    setSelectedLineIndex((prev) => {
-      if (prev === null) return totalLines - 1;
-      return Math.max(0, prev - 1);
-    });
-  }, [totalLines]);
+    const prev = selectedLineIndexRef.current;
+    setSelectedLine(prev === null ? totalLines - 1 : Math.max(0, prev - 1));
+  }, [totalLines, setSelectedLine]);
 
   const goNextLine = useCallback(() => {
-    setSelectedLineIndex((prev) => {
-      if (prev === null) return 0;
-      return Math.min(totalLines - 1, prev + 1);
-    });
-  }, [totalLines]);
+    const prev = selectedLineIndexRef.current;
+    setSelectedLine(prev === null ? 0 : Math.min(totalLines - 1, prev + 1));
+  }, [totalLines, setSelectedLine]);
 
   const openSingingMode = useCallback(() => {
     stopAll();
@@ -297,7 +339,7 @@ export default function KpopSongPage() {
   const progressPct = fullDuration > 0 ? (fullCurrentTime / fullDuration) * 100 : 0;
 
   return (
-    <div style={{ paddingBottom: '100px' }}>
+    <div style={{ paddingBottom: 'calc(100px + env(safe-area-inset-bottom, 0px))' }}>
       {/* Word save toast */}
       {wordToast && (
         <div style={{ position: 'fixed', top: 60, left: '50%', transform: 'translateX(-50%)', background: '#201815', color: '#fff', borderRadius: 999, padding: '9px 20px', fontSize: 13, fontWeight: 700, zIndex: 300, whiteSpace: 'nowrap', boxShadow: '0 28px 72px rgba(78,52,46,.18)' }}>
@@ -495,7 +537,7 @@ export default function KpopSongPage() {
               <article
                 key={i}
                 ref={(el) => { if (el) lineCardRefs.current.set(i, el); }}
-                onClick={() => setSelectedLineIndex(i)}
+                onClick={() => setSelectedLine(i)}
                 style={{
                   borderRadius: '30px', background: C.white,
                   border: isActive ? '1px solid rgba(255,127,168,.40)' : `1px solid ${C.line}`,
@@ -552,13 +594,12 @@ export default function KpopSongPage() {
                     </div>
                     <button
                       onClick={(e) => { e.stopPropagation(); playLineOriginal(i); }}
-                      disabled={!(segmentStatus === 'ready')}
                       style={{
                         height: '36px', minWidth: '58px', border: 'none', borderRadius: '999px',
                         background: C.black, color: C.white, fontSize: '12px', fontWeight: 1000,
                         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                        gap: '5px', cursor: (segmentStatus === 'ready') ? 'pointer' : 'default',
-                        boxShadow: C.shadowAudioPill, opacity: (segmentStatus === 'ready') ? 1 : 0.35,
+                        gap: '5px', cursor: 'pointer',
+                        boxShadow: C.shadowAudioPill,
                       }}
                     >
                       🔊 原唱
@@ -584,7 +625,7 @@ export default function KpopSongPage() {
                           {line.pronunciation}
                         </p>
                       </div>
-                      {line.spokenAudioUrl && (
+                      {line.korean && (
                       <button
                         onClick={(e) => { e.stopPropagation(); playLineSpoken(i); }}
                         style={{
@@ -651,6 +692,7 @@ export default function KpopSongPage() {
                       songId={track.id} lineIndex={i}
                       korean={displayKorean} chinese={displayChinese}
                       title={track.title} artist={track.artist}
+                      C={C}
                     />
                     <button
                       onClick={(e) => handleSaveWord(e, displayKorean, displayChinese)}
@@ -673,15 +715,13 @@ export default function KpopSongPage() {
       )}
 
       {/* ── Learning section ── */}
-      {oldSong?.learning && <KpopLearningSection learning={oldSong.learning} color={track.color} />}
+      {oldSong?.learning && <KpopLearningSection learning={oldSong.learning} color={track.color} C={C} />}
 
       {/* ── Bottom fixed bar — matches demo exactly ── */}
-      <div style={{
+      <div className="md:left-[108px] md:!bottom-0" style={{
         position: 'fixed', left: 0, right: 0, bottom: 'calc(56px + env(safe-area-inset-bottom, 0px))', height: '88px',
         padding: '12px 18px 16px',
-        background: 'rgba(255,255,255,.92)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
+        background: C.white,
         borderTop: `1px solid ${C.line}`,
         zIndex: 20,
       }}>
@@ -740,8 +780,8 @@ export default function KpopSongPage() {
 }
 
 // ── Save sentence button (with state) ──
-function SaveSentenceButton({ songId, lineIndex, korean, chinese, title, artist }: {
-  songId: string; lineIndex: number; korean: string; chinese: string; title: string; artist: string;
+function SaveSentenceButton({ songId, lineIndex, korean, chinese, title, artist, C }: {
+  songId: string; lineIndex: number; korean: string; chinese: string; title: string; artist: string; C: typeof LIGHT_C;
 }) {
   const [saved, setSaved] = useState(false);
 
@@ -791,7 +831,7 @@ function MusicIcon({ size }: { size: number }) {
 }
 
 // ── Learning section ──
-function KpopLearningSection({ learning, color }: { learning: import('@/types').KpopLearning; color: string }) {
+function KpopLearningSection({ learning, color, C }: { learning: import('@/types').KpopLearning; color: string; C: typeof LIGHT_C }) {
   const [expanded, setExpanded] = useState(true);
   return (
     <div style={{
@@ -826,7 +866,7 @@ function KpopLearningSection({ learning, color }: { learning: import('@/types').
                 }}>
                   <div style={{ fontSize: '0.875rem', fontWeight: 1000, color: C.ink, marginBottom: '2px' }}>{w.korean}</div>
                   <div style={{ fontSize: '10px', color: C.muted }}>{w.pronunciation}</div>
-                  <div style={{ fontSize: '12px', color: '#7e6b64', marginTop: '2px' }}>{w.chinese}</div>
+                  <div style={{ fontSize: '12px', color: C.chinese, marginTop: '2px' }}>{w.chinese}</div>
                   <div style={{ fontSize: '10px', color: 'rgba(137,117,110,0.5)', marginTop: '4px', fontStyle: 'italic' }}>"{w.source}"</div>
                 </div>
               ))}
@@ -842,7 +882,7 @@ function KpopLearningSection({ learning, color }: { learning: import('@/types').
                 }}>
                   <div style={{ fontSize: '0.875rem', fontWeight: 1000, color: C.ink, marginBottom: '2px' }}>{e.korean}</div>
                   <div style={{ fontSize: '10px', color: C.muted }}>{e.pronunciation}</div>
-                  <div style={{ fontSize: '12px', color: '#7e6b64', marginTop: '2px' }}>{e.chinese}</div>
+                  <div style={{ fontSize: '12px', color: C.chinese, marginTop: '2px' }}>{e.chinese}</div>
                   <div style={{ fontSize: '10px', color: 'rgba(137,117,110,0.5)', marginTop: '4px' }}>{e.context}</div>
                 </div>
               ))}
@@ -861,13 +901,13 @@ function KpopLearningSection({ learning, color }: { learning: import('@/types').
                 }}>{learning.grammarPoint.name}</span>
                 <span style={{ fontSize: '11px', color: C.muted, fontFamily: 'monospace', fontWeight: 800 }}>{learning.grammarPoint.pattern}</span>
               </div>
-              <p style={{ fontSize: '12px', color: '#7e6b64', marginTop: '8px' }}>{learning.grammarPoint.explanation}</p>
+              <p style={{ fontSize: '12px', color: C.chinese, marginTop: '8px' }}>{learning.grammarPoint.explanation}</p>
               <div style={{
                 background: C.white, borderRadius: '12px', padding: '12px',
                 border: `1px solid rgba(239,224,217,.5)`, marginTop: '8px',
               }}>
                 <p style={{ fontSize: '0.875rem', fontWeight: 1000, color: C.ink, margin: 0 }}>{learning.grammarPoint.example}</p>
-                <p style={{ fontSize: '11px', color: '#7e6b64', marginTop: '2px' }}>{learning.grammarPoint.exampleZh}</p>
+                <p style={{ fontSize: '11px', color: C.chinese, marginTop: '2px' }}>{learning.grammarPoint.exampleZh}</p>
               </div>
             </div>
           </div>
@@ -879,7 +919,7 @@ function KpopLearningSection({ learning, color }: { learning: import('@/types').
             }}>
               <div style={{ fontSize: '1rem', fontWeight: 1000, color: C.ink, marginBottom: '4px' }}>{learning.dailyExpression.korean}</div>
               <div style={{ fontSize: '11px', color: C.muted, marginBottom: '4px' }}>{learning.dailyExpression.pronunciation}</div>
-              <div style={{ fontSize: '0.875rem', color: '#7e6b64', marginBottom: '8px' }}>{learning.dailyExpression.chinese}</div>
+              <div style={{ fontSize: '0.875rem', color: C.chinese, marginBottom: '8px' }}>{learning.dailyExpression.chinese}</div>
               <div style={{ fontSize: '11px', color: C.muted, lineHeight: 1.6 }}>
                 <span style={{ opacity: 0.5 }}>用法：</span>{learning.dailyExpression.usage}
               </div>

@@ -46,26 +46,16 @@ function extractKeywords(korean: string): KpopWord[] {
   return result.slice(0, 5);
 }
 
-const COS_BASE = 'https://torikorean-1436752408.cos.ap-hongkong.myqcloud.com';
-const AUDIO_PREFIX = 'audio/kpop';
-
-function buildAudioUrl(videoId: string): string {
-  return `${COS_BASE}/${AUDIO_PREFIX}/${videoId}.webm`;
-}
-
 function buildCoverUrl(videoId: string): string {
   return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
 }
 
-const LINE_AUDIO_PREFIX = 'audio/kpop/lines';
-const SPOKEN_AUDIO_PREFIX = 'audio/kpop/spoken';
-
-function buildLineAudioUrl(videoId: string, lineIndex: number): string {
-  return `${COS_BASE}/${LINE_AUDIO_PREFIX}/${videoId}/${lineIndex}.webm`;
+function buildLineAudioUrl(_videoId: string, _lineIndex: number): string {
+  return '';
 }
 
-function buildSpokenAudioUrl(videoId: string, lineIndex: number): string {
-  return `${COS_BASE}/${SPOKEN_AUDIO_PREFIX}/${videoId}/${lineIndex}.webm`;
+function buildSpokenAudioUrl(_videoId: string, _lineIndex: number): string {
+  return '';
 }
 
 function toTrack(song: (typeof kpopSongs)[number]): KpopTrack {
@@ -93,7 +83,7 @@ function toTrack(song: (typeof kpopSongs)[number]): KpopTrack {
     album: song.album,
     year: song.year,
     coverUrl: buildCoverUrl(song.videoId),
-    audioUrl: buildAudioUrl(song.videoId),
+    audioUrl: '',
     assetStatus: 'ready',
     sourceType: 'curated' as const,
     level: song.level as 'beginner' | 'intermediate',

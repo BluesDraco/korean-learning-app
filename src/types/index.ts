@@ -117,7 +117,7 @@ export interface WordEntry {
   tags: string[];                // Theme tags: "咖啡厅", "追星", "韩剧"...
   emotionTags: string[];         // Emotion tags: "开心", "生气", "道歉"...
   relatedWords: string[];        // IDs of related words
-  emoji: string;
+  emoji?: string;
   conjugations?: string[];       // Verb/adjective conjugations
   commonMistake?: string;        // Common learner mistakes
 }
@@ -150,6 +150,9 @@ export interface ThemePack {
 export interface ThemePackSentence {
   korean: string;
   chinese: string;
+  situation?: string;
+  situationNote?: string;
+  breakdown?: { text: string; meaning: string; partOfSpeech: string }[];
 }
 
 // ===== Level Word List =====
@@ -192,6 +195,7 @@ export interface ReviewSession {
 export interface DictationRecord {
   id: string;
   wordId: string;
+  meaning?: string;
   date: number;
   correct: boolean;
   userInput: string;
@@ -449,6 +453,99 @@ export interface GrammarPoint {
   sourceCourseDay?: number;
 }
 
+// ═══════════════════════════════════════════
+// Grammar Card types (教材课次卡片)
+// ═══════════════════════════════════════════
+
+export interface GrammarWordBlock {
+  text: string;
+  role: 'subject' | 'object' | 'verb' | 'place' | 'plain' | 'time';
+}
+
+export interface ConnectionRule {
+  type: 'rule' | 'note' | 'compare' | 'example' | 'vocab' | 'usage';
+  text: string;
+  examples?: string;
+}
+
+export interface GrammarCardExample {
+  wordBlocks: GrammarWordBlock[];
+  zh: string;
+  swapWords?: string[];
+  swapRole?: 'subject' | 'verb' | 'object' | 'place' | 'time' | 'plain';
+}
+
+export interface GrammarScenario {
+  icon: string;
+  context: string;
+  ko: string;
+  zh: string;
+  tip?: string;
+}
+
+export interface SpecialQuizQuestion {
+  prompt?: string;
+  pre?: string;
+  post?: string;
+  /** 建议恰好 4 个选项，不能有占位符 '—'（由 lint-grammar-cards 脚本强制检查） */
+  options: string[];
+  /** 0-3，对应 options 索引 */
+  answer: 0 | 1 | 2 | 3;
+  explanation: string;
+}
+
+export interface GrammarCard {
+  id: string;
+  partNumber: number;
+  lessonNumber: number;
+  title: string;
+  whatItDoes: string;
+  whatItDoesBody: string;
+  isPractice?: boolean;
+  structureNote?: string;
+  rulesNote?: string;
+  scenarioNote?: string;
+  conceptCompare?: {
+    zh: string;
+    ko: string;
+    note: string;
+  };
+  readingGuide?: {
+    title: string;
+    body: string;
+    steps: { num: number; text: string }[];
+    demo: { ko: string; rows: { label: string; text: string }[]; result: string };
+  };
+  quickTable?: {
+    title: string;
+    body?: string;
+    headers: string[];
+    rows: (string | { ko: string; zh: string })[][];
+  };
+  structures: {
+    ko: string;
+    zh?: string;
+    tokens: { text: string; role: 'subject' | 'object' | 'verb' | 'place' | 'time' | 'plain' }[];
+  }[];
+  /** 不允许裸字符串，必须用 ConnectionRule 对象（由 lint-grammar-cards 脚本强制检查） */
+  connectionRules: (ConnectionRule | string)[];
+  cardExamples: GrammarCardExample[];
+  scenarios: GrammarScenario[];
+  /** wrong 和 correct 不得填写相同内容 */
+  mistakes: { wrong: string; correct: string; note: string }[];
+  specialQuiz?: {
+    type: 'morph' | 'judge' | 'fill';
+    title: string;
+    body: string;
+    questions: SpecialQuizQuestion[];
+  };
+  linkedGrammarIds: string[];
+  step0Html?: string;
+  compareHtml?: string;
+  compareLabel?: string;
+  overviewHtml?: string;
+}
+
 export interface UserGrammarState {
   id: string;
   status: 'new' | 'learning' | 'familiar' | 'mastered' | 'difficult';
@@ -548,6 +645,33 @@ export interface ArticleLearningEvent {
   createdAt: number;
 }
 
+// ===== TOPIK =====
+
+export interface TopikSession {
+  id: string;
+  userId: string;
+  mode: 'exam' | 'practice' | 'mistakes';
+  examSetId?: string;
+  section: string;
+  score: number;
+  correctCount: number;
+  totalCount: number;
+  durationSec: number;
+  completedAt: number;
+  createdAt: number;
+}
+
+export interface TopikMistake {
+  id: string;
+  userId: string;
+  questionId: string;
+  sessionId?: string;
+  wrongCount: number;
+  lastWrongAt: number;
+  mastered: number;
+  createdAt: number;
+}
+
 // ===== 韩娱热点阅读 (Korean Entertainment Hot Topic Reading) =====
 
 export interface KoreanReadingToken {
@@ -623,4 +747,39 @@ export interface KoreanHotReading {
   // Status gates
   readingStatus: KoreanReadingStatus;
   publishStatus: 'draft' | 'review' | 'published';
+}
+
+export interface SpellingMistake {
+  id: string;
+  wordId?: string;
+  word: string;
+  meaning: string;
+  userInput: string;
+  correctAnswer: string;
+  mistakeType: 'spelling' | 'sentence';
+  createdAt: number;
+}
+
+// ===== AI Chat =====
+export interface AiChatMistake {
+  id: string;
+  userId?: string;
+  scenarioId: string;
+  scenarioName: string;
+  userInput: string;
+  wrongPart: string;
+  correctPart: string;
+  grammarError: string;
+  createdAt: number;
+  reviewed: number; // 0=未复习, 1=已复习
+}
+
+export interface AiChatNewWord {
+  id: string;
+  userId?: string;
+  ko: string;
+  zh: string;
+  partOfSpeech: string;
+  scenarioId: string;
+  createdAt: number;
 }

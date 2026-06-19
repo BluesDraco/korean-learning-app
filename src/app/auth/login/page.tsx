@@ -20,12 +20,17 @@ function LoginForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    await doLogin();
+  };
+
+  const doLogin = async () => {
+    if (submitting) return;
     setError('');
     setSubmitting(true);
     try {
       const result = await login(username, password);
       if (result.error) {
-        setError('请检查用户名和密码。忘记密码功能将在后续版本开放。');
+        setError(result.error === 'Invalid credentials' ? '用户名或密码错误' : (result.error || '登录失败，请稍后重试'));
       } else {
         router.push(redirect);
       }
@@ -85,7 +90,8 @@ function LoginForm() {
             )}
 
             <ToriPrimaryButton
-              type="submit"
+              type="button"
+              onClick={doLogin}
               loading={submitting}
               loadingText="登录中..."
             >

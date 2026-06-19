@@ -1,104 +1,153 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { Check, Plus, Loader2, GraduationCap } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { GraduationCap, BookOpen, BookMarked } from 'lucide-react';
+import Link from 'next/link';
 import { db } from '@/lib/db';
-import { yonseiUnits, type YonseiUnit } from '@/data/yonsei-books';
+import { yonseiUnits } from '@/data/yonsei-books';
+import { seoulUnits } from '@/data/seoul-books';
 
-const YONSEI_COLORS = [
+const YONSEI_BOOK_COLORS = [
+  'var(--mint-soft)',
   'var(--pink-primary)',
   'var(--purple-soft)',
-  'var(--mint-soft)',
   'var(--peach-soft)',
   'var(--blue-soft)',
   'var(--color-vocab)',
-  '#FF8FAB',
-  '#A8D8D0',
-  '#C9B8E8',
-  '#FFBEA8',
 ];
 
-export function YonseiSection() {
-  const [installedIds, setInstalledIds] = useState<Set<string>>(new Set());
-  const [loading, setLoading] = useState(true);
-  const [installing, setInstalling] = useState<string | null>(null);
+const SEOUL_BOOK_COLORS = [
+  'var(--peach-soft)',
+  'var(--blue-soft)',
+  'var(--color-vocab)',
+  'var(--purple-soft)',
+];
 
-  const loadInstalled = useCallback(async () => {
-    const all = await db.wordBooks.toArray();
-    const ids = new Set(all.filter((b) => b.id.startsWith('yonsei-')).map((b) => b.id));
-    setInstalledIds(ids);
-    setLoading(false);
+const YONSEI_LABELS = ['延世 1', '延世 2', '延世 3', '延世 4', '延世 5', '延世 6'];
+const SEOUL_LABELS = ['首尔 1', '首尔 2', '首尔 3', '首尔 4'];
+
+type TextbookType = 'yonsei' | 'seoul';
+
+export function YonseiSection() {
+  const [textbook, setTextbook] = useState<TextbookType>('yonsei');
+  const [selectedBook, setSelectedBook] = useState(1);
+
+  useEffect(() => {
+    // One-time migration: remove old yonsei words imported before v2 data correction
+    const migrated = localStorage.getItem('yonsei_v2_migrated');
+    if (!migrated) {
+      (async () => {
+        try {
+          const allWords = await db.words.toArray();
+          const oldWords = allWords.filter((w) => w.source === 'yonsei');
+          if (oldWords.length > 0) {
+            const oldIds = oldWords.map((w) => w.id);
+            await Promise.all(oldIds.map((id) => db.words.delete(id)));
+            const books = await db.wordBooks.toArray();
+            for (const book of books) {
+              const filtered = book.wordIds.filter((id) => !oldIds.includes(id));
+              if (filtered.length !== book.wordIds.length) {
+                await db.wordBooks.update(book.id, { wordIds: filtered });
+              }
+            }
+          }
+          const allBooks = await db.wordBooks.toArray();
+          for (const book of allBooks.filter((b) => b.id.startsWith('yonsei-'))) {
+            await db.wordBooks.delete(book.id);
+          }
+        } catch (e) {
+          console.warn('yonsei migration error', e);
+        }
+        localStorage.setItem('yonsei_v2_migrated', '1');
+      })();
+    }
   }, []);
 
-  useEffect(() => { loadInstalled(); }, [loadInstalled]);
-
-  const handleInstall = async (unit: YonseiUnit) => {
-    setInstalling(unit.id);
-    const now = Date.now();
-
-    const wordIds: string[] = [];
-    for (const w of unit.words) {
-      const wordId = crypto.randomUUID();
-      await db.words.put({
-        id: wordId,
-        word: w.word,
-        pronunciation: w.pronunciation,
-        meaning: w.meaning,
-        partOfSpeech: w.partOfSpeech,
-        examples: [],
-        mastery: 'new' as const,
-        srsLevel: 0,
-        easeFactor: 2.5,
-        interval: 0,
-        nextReview: now,
-        createdAt: now,
-        lastReviewed: null,
-      });
-      wordIds.push(wordId);
-    }
-
-    const colorIdx = parseInt(unit.id.split('-')[2]) - 1;
-    await db.wordBooks.put({
-      id: unit.id,
-      name: `${unit.title} (${unit.bookTitle} 第${unit.unitNumber}课)`,
-      description: unit.description,
-      wordIds,
-      color: YONSEI_COLORS[colorIdx % YONSEI_COLORS.length],
-      createdAt: now,
-      updatedAt: now,
-    });
-
-    setInstalledIds((prev) => new Set(prev).add(unit.id));
-    setInstalling(null);
+  // Reset book selection when switching textbook
+  const handleTextbookSwitch = (t: TextbookType) => {
+    setTextbook(t);
+    setSelectedBook(1);
   };
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center py-16">
-        <Loader2 size={24} className="animate-spin text-[var(--text-secondary)]" />
-      </div>
-    );
-  }
+  const units = textbook === 'yonsei' ? yonseiUnits : seoulUnits;
+  const bookLabels = textbook === 'yonsei' ? YONSEI_LABELS : SEOUL_LABELS;
+  const bookColors = textbook === 'yonsei' ? YONSEI_BOOK_COLORS : SEOUL_BOOK_COLORS;
+  const routePrefix = textbook === 'yonsei' ? 'yonsei' : 'seoul';
+  const idPrefix = textbook === 'yonsei' ? 'yonsei' : 'seoul';
+
+  const visibleUnits = units.filter(u => u.id.startsWith(`${idPrefix}-${selectedBook}-`));
 
   return (
     <div className="space-y-4">
+      {/* Textbook tab switcher */}
+      <div className="flex gap-2 p-1 rounded-xl bg-[var(--bg-input)]">
+        <button
+          onClick={() => handleTextbookSwitch('yonsei')}
+          className="flex-1 py-2 rounded-lg text-sm font-semibold transition-all"
+          style={textbook === 'yonsei'
+            ? { background: '#fff', color: '#241917', boxShadow: '0 1px 4px rgba(78,52,46,.10)' }
+            : { color: 'var(--text-secondary)' }
+          }
+        >
+          延世韩国语
+        </button>
+        <button
+          onClick={() => handleTextbookSwitch('seoul')}
+          className="flex-1 py-2 rounded-lg text-sm font-semibold transition-all"
+          style={textbook === 'seoul'
+            ? { background: '#fff', color: '#241917', boxShadow: '0 1px 4px rgba(78,52,46,.10)' }
+            : { color: 'var(--text-secondary)' }
+          }
+        >
+          首尔韩国语
+        </button>
+      </div>
+
       <div className="bg-gradient-to-r from-[var(--purple-soft)]/10 to-[var(--pink-primary)]/10 border border-[var(--purple-soft)]/20 rounded-2xl p-4 flex items-start gap-3">
         <GraduationCap size={20} className="text-[var(--purple-soft)] shrink-0 mt-0.5" />
         <div>
-          <p className="text-sm font-medium text-[var(--text-primary)]">延世大学韩国语学堂 官方教材</p>
+          <p className="text-sm font-medium text-[var(--text-primary)]">
+            {textbook === 'yonsei' ? '延世大学韩国语学堂 官方教材' : '首尔大学语言教育院 官方教材'}
+          </p>
           <p className="text-xs text-[var(--text-secondary)] mt-1">
-            词汇选自《연세 한국어 1-4》教材，共22个单元，每个单元涵盖15个核心词汇。
-            导入后会自动创建单词本并加入SRS复习系统。
+            {textbook === 'yonsei'
+              ? '词汇选自《연세 한국어 1-6》教材，按单元学习，可加入单词本复习。'
+              : '词汇选自《서울대 한국어 1-4》教材，按单元学习，可加入单词本复习。'
+            }
           </p>
         </div>
       </div>
 
+      {/* Book selector */}
+      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+        {bookLabels.map((label, i) => {
+          const bookNum = i + 1;
+          const isActive = selectedBook === bookNum;
+          return (
+            <button
+              key={bookNum}
+              onClick={() => setSelectedBook(bookNum)}
+              className="flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-all"
+              style={isActive
+                ? { backgroundColor: bookColors[i], color: '#241917' }
+                : { backgroundColor: 'var(--bg-input)', color: 'var(--text-secondary)' }
+              }
+            >
+              {label}
+            </button>
+          );
+        })}
+      </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {yonseiUnits.map((unit) => {
-          const isInstalled = installedIds.has(unit.id);
-          const isCurrent = installing === unit.id;
-          const colorIdx = parseInt(unit.id.split('-')[2]) - 1;
-          const color = YONSEI_COLORS[colorIdx % YONSEI_COLORS.length];
+        {visibleUnits.length === 0 ? (
+          <div className="col-span-2 py-12 text-center text-sm text-[var(--text-muted)]">
+            暂无数据，词汇即将上线，敬请期待
+          </div>
+        ) : visibleUnits.map((unit) => {
+          const bookIdx = parseInt(unit.id.split('-')[1]) - 1;
+          const color = bookColors[bookIdx % bookColors.length];
+          const isEmpty = unit.words.length === 0;
 
           return (
             <div
@@ -112,14 +161,12 @@ export function YonseiSection() {
                 >
                   {unit.unitNumber}
                 </div>
-                {isInstalled ? (
-                  <span className="flex items-center gap-1 text-xs text-[var(--mint-soft)] bg-[var(--mint-soft)]/10 px-2 py-0.5 rounded-full font-medium">
-                    <Check size={12} />
-                    已导入
-                  </span>
-                ) : (
-                  <span className="text-xs text-[var(--text-muted)] bg-[var(--bg-input)] px-2 py-0.5 rounded-full">
-                    {unit.words.length}词
+                {isEmpty && (
+                  <span
+                    className="flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full opacity-50"
+                    style={{ background: 'rgba(255,127,168,0.1)', color: 'var(--pink-primary)' }}
+                  >
+                    <BookMarked size={11} />整理中
                   </span>
                 )}
               </div>
@@ -134,45 +181,38 @@ export function YonseiSection() {
                 {unit.description}
               </p>
 
-              <div className="flex flex-wrap gap-1 mb-4">
-                {unit.words.slice(0, 6).map((w) => (
-                  <span
-                    key={w.word}
-                    className="text-[11px] px-2 py-0.5 rounded-full bg-[var(--bg-input)] text-[var(--text-secondary)]"
-                  >
-                    {w.word}
-                  </span>
-                ))}
-                {unit.words.length > 6 && (
-                  <span className="text-[11px] px-2 py-0.5 rounded-full bg-[var(--bg-input)] text-[var(--text-muted)]">
-                    +{unit.words.length - 6}
-                  </span>
-                )}
-              </div>
+              {unit.words.length > 0 && (
+                <div className="flex flex-wrap gap-1 mb-4">
+                  {unit.words.slice(0, 6).map((w, wi) => (
+                    <span
+                      key={wi}
+                      className="text-[11px] px-2 py-0.5 rounded-full bg-[var(--bg-input)] text-[var(--text-secondary)]"
+                    >
+                      {w.word}
+                    </span>
+                  ))}
+                  {unit.words.length > 6 && (
+                    <span className="text-[11px] px-2 py-0.5 rounded-full bg-[var(--bg-input)] text-[var(--text-muted)]">
+                      +{unit.words.length - 6}
+                    </span>
+                  )}
+                </div>
+              )}
 
-              {isInstalled ? (
-                <div className="flex items-center gap-2 text-xs text-[var(--mint-soft)]">
-                  <Check size={14} />
-                  <span>已加入你的单词本和SRS复习</span>
+              {isEmpty ? (
+                <div className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium opacity-40 cursor-not-allowed" style={{ background: 'var(--bg-input)', color: 'var(--text-muted)' }}>
+                  <BookOpen size={14} />
+                  整理中，即将上线
                 </div>
               ) : (
-                <button
-                  onClick={() => handleInstall(unit)}
-                  disabled={!!installing}
-                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] hover:bg-[var(--pink-primary)]/20 disabled:opacity-50 text-sm font-medium transition-colors"
+                <Link
+                  href={`/vocabulary/${routePrefix}/${unit.id}`}
+                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium transition-colors"
+                  style={{ background: `${color}20`, color }}
                 >
-                  {isCurrent ? (
-                    <>
-                      <Loader2 size={14} className="animate-spin" />
-                      导入中...
-                    </>
-                  ) : (
-                    <>
-                      <Plus size={14} />
-                      导入此单元
-                    </>
-                  )}
-                </button>
+                  <BookOpen size={14} />
+                  进入学习
+                </Link>
               )}
             </div>
           );

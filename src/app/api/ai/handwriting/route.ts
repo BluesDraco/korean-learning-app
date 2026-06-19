@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { DEEPSEEK_MODEL } from '@/lib/deepseek';
 import { getAuthFromCookie } from '@/lib/server/auth';
 import { checkAiRateLimit, recordAiUsage } from '@/lib/server/rate-limit';
 import { fetchWithTimeout } from '@/lib/fetch';
@@ -35,7 +34,7 @@ export async function POST(req: Request) {
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: DEEPSEEK_MODEL,
+        model: 'deepseek-vl2',
         messages: [
           {
             role: 'system',

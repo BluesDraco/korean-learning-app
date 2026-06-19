@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { Volume2, ChevronDown, ChevronUp, ArrowRight, Sparkles, Check, X, BookOpen, Lightbulb } from 'lucide-react';
+import Link from 'next/link';
+import { Volume2, ChevronDown, ChevronUp, ArrowRight, Sparkles, Check, X, BookOpen, Lightbulb, ArrowLeft } from 'lucide-react';
 import { speak } from '@/lib/tts';
 
 const ruleCategories = [
@@ -181,8 +182,12 @@ export default function PhoneticsRulesPage() {
   return (
     <div className="py-6 max-w-2xl mx-auto space-y-6 pb-24">
       {/* Header */}
-      <div className="text-center space-y-2">
-        <div className="flex items-center justify-center gap-2">
+      <div className="space-y-2">
+        <Link href="/phonetics" className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] mb-1">
+          <ArrowLeft size={16} />
+          返回发音
+        </Link>
+        <div className="flex items-center gap-2">
           <BookOpen size={22} className="text-[var(--pink-primary)]" />
           <h1 className="text-2xl font-bold text-[var(--text-primary)]">韩语连读规则</h1>
         </div>

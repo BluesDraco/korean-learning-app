@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import Link from 'next/link';
 import {
   ArrowRight, ArrowLeft, Check, X, Loader2, Sparkles,
@@ -12,7 +12,6 @@ import { getProfile, updateStreak, awardXp, XP_REWARDS, addStudyMinutes, updateP
 import { learningUnits, TOTAL_UNITS } from '@/data/learningUnits';
 import { grammarPoints } from '@/data/grammar';
 import { emitXpFlyout, emitStreakMilestone } from '@/components/XpOverlay';
-import { KoreanInput } from '@/components/KoreanKeyboard';
 import { speak, speakWord } from '@/lib/tts';
 import type { Word, UserProfile } from '@/types';
 import type { LearningUnit } from '@/data/learningUnits';
@@ -48,10 +47,21 @@ export default function LearnPage() {
   const [dictationInput, setDictationInput] = useState('');
   const [dictationResult, setDictationResult] = useState<'idle' | 'correct' | 'incorrect'>('idle');
   const [dictationCorrect, setDictationCorrect] = useState(0);
+  const dictationInputRef = useRef<HTMLInputElement>(null);
 
   // Listening phase
   const [listeningIdx, setListeningIdx] = useState(0);
   const [listeningAnswer, setListeningAnswer] = useState<number | null>(null);
+  const { options: listeningOptions, correctIdx: listeningCorrectIdx } = useMemo(() => {
+    const sents = selectedUnit?.listeningSentences || [];
+    const currentSent = sents[listeningIdx];
+    if (!currentSent) return { options: [], correctIdx: 0 };
+    const correct = currentSent.chinese;
+    const others = sents.filter((s) => s.chinese !== correct).slice(0, 3).map((s) => s.chinese);
+    while (others.length < 3) others.push('他今天很高兴', '明天会下雨', '我喜欢吃泡菜');
+    const items = [correct, ...others.slice(0, 3)].sort(() => Math.random() - 0.5);
+    return { options: items, correctIdx: items.indexOf(correct) };
+  }, [listeningIdx, selectedUnit]);
   // Test phase
   const [testQuestions, setTestQuestions] = useState<TestQuestion[]>([]);
   const [testIdx, setTestIdx] = useState(0);
@@ -317,6 +327,7 @@ export default function LearnPage() {
       setDictationIdx((p) => p + 1);
       setDictationInput('');
       setDictationResult('idle');
+      setTimeout(() => dictationInputRef.current?.focus(), 0);
     }
   };
 
@@ -780,11 +791,21 @@ export default function LearnPage() {
           </button>
 
           <div>
-            <KoreanInput
+            <input
+              ref={dictationInputRef}
+              type="text"
               value={dictationInput}
-              onChange={setDictationInput}
+              onChange={(e) => setDictationInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.nativeEvent.isComposing) return;
+                if (e.key === 'Enter') {
+                  if (dictationResult === 'idle' && dictationInput.trim()) handleDictationCheck();
+                  else if (dictationResult !== 'idle') handleDictationNext();
+                }
+              }}
               placeholder="输入你听到的韩文..."
               autoFocus
+              className="w-full bg-[var(--bg-input)] border border-[var(--border-color)] rounded-xl px-4 py-2.5 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)] focus:outline-none focus:border-[var(--pink-primary)]/50"
             />
           </div>
 
@@ -832,20 +853,7 @@ export default function LearnPage() {
   if (phase === 'listening') {
     const currentSent = sents[listeningIdx];
     if (!currentSent) return null;
-
-    // Build options: correct answer + 3 distractors
-    const buildListeningOptions = () => {
-      const correct = currentSent.chinese;
-      const others = (selectedUnit?.listeningSentences || [])
-        .filter((s) => s.chinese !== correct)
-        .slice(0, 3)
-        .map((s) => s.chinese);
-      while (others.length < 3) others.push('他今天很高兴', '明天会下雨', '我喜欢吃泡菜');
-      const items = [correct, ...others.slice(0, 3)].sort(() => Math.random() - 0.5);
-      return { options: items, correctIdx: items.indexOf(correct) };
-    };
-
-    const { options: listeningOptions, correctIdx } = buildListeningOptions();
+    const correctIdx = listeningCorrectIdx;
 
     return (
       <div className="py-6 max-w-2xl mx-auto space-y-4">

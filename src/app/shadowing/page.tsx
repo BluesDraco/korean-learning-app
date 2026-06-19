@@ -1,24 +1,23 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { shadowingClips } from '@/data/shadowingClips';
+import { useTheme } from '@/components/ThemeProvider';
 
-const C = {
-  ink: '#241917', muted: '#89756e', line: '#eee0d8', pink: '#ff7fa8',
-  pinkSoft: '#fff0f5', mint: '#aee3d8', cream: '#fff8f4', black: '#201815',
-  mintBg: '#eaf8f5', mintText: '#4e746d',
-  shadow: '0 16px 42px rgba(78,52,46,.10)',
-  strong: '0 28px 72px rgba(78,52,46,.18)',
-};
+const LIGHT_C = { ink: '#241917', muted: '#89756e', line: '#eee0d8', pink: '#ff7fa8', pinkSoft: '#fff0f5', mint: '#aee3d8', cream: '#fff8f4', black: '#201815', mintBg: '#eaf8f5', mintText: '#4e746d', shadow: '0 16px 42px rgba(78,52,46,.10)', strong: '0 28px 72px rgba(78,52,46,.18)' };
+const DARK_C  = { ink: '#F0E8FF', muted: '#B8A8C8', line: '#3A3060', pink: '#ff7fa8', pinkSoft: '#2D2848', mint: '#4A6058', cream: '#252040', black: '#3A3060', mintBg: '#1E3530', mintText: '#5ecfb8', shadow: '0 16px 42px rgba(0,0,0,.30)', strong: '0 28px 72px rgba(0,0,0,.40)' };
 
 export default function ShadowingListPage() {
+  const { theme } = useTheme();
+  const C = theme === 'dark' ? DARK_C : LIGHT_C;
   const router = useRouter();
 
   return (
     <div style={{ paddingBottom: 24 }}>
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, marginBottom: 14 }}>
-        <button onClick={() => router.back()} style={{ width: 38, height: 38, borderRadius: 16, background: '#fff', border: '1px solid ' + C.line, fontSize: 20, color: '#4d3933', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}>{'‹'}</button>
+        <Link href="/explore" style={{ width: 38, height: 38, borderRadius: 16, background: '#fff', border: '1px solid ' + C.line, fontSize: 20, color: '#4d3933', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}>{'‹'}</Link>
         <div style={{ flex: 1 }}>
           <div style={{ fontSize: 17, fontWeight: 800, color: C.ink }}>{'影子跟读'}</div>
           <div style={{ fontSize: 12, color: C.muted, fontWeight: 700, marginTop: 2 }}>{'韩剧 / 综艺 / YouTube 片段'}</div>
@@ -70,11 +69,14 @@ export default function ShadowingListPage() {
                 boxShadow: C.shadow, cursor: 'pointer',
               }}
             >
-              <div style={{ width: 88, height: 88, borderRadius: 22, flexShrink: 0, overflow: 'hidden', background: 'linear-gradient(135deg,#201815,#ff8daf)' }}>
+              <div style={{ width: 88, height: 88, borderRadius: 22, flexShrink: 0, overflow: 'hidden', background: 'linear-gradient(135deg,#201815,#ff8daf)', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ position: 'absolute', color: 'rgba(255,255,255,0.5)', fontSize: 28, fontWeight: 900, zIndex: 0 }}>
+                  {clip.title.charAt(0)}
+                </span>
                 <img
                   src={clip.coverUrl}
                   alt={clip.title}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', position: 'absolute', inset: 0, zIndex: 1 }}
                   onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
                 />
               </div>

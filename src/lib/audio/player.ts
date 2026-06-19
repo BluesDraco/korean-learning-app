@@ -1,6 +1,8 @@
 // Global audio singleton — prevents overlapping playback and supports rate control.
 'use client';
 
+import { cancelSpeech } from '@/lib/tts';
+
 /** Strip non-Korean markers (vs, /, etc.) so TTS only reads Korean text. */
 function sanitizeTTSText(text: string): string {
   return text
@@ -35,21 +37,30 @@ class AudioPlayer {
 
   /** Play a URL at given rate. Stops any currently playing audio first. */
   play(url: string, rate: number = 1): void {
+    cancelSpeech(); // cancel any in-flight tts.ts NLS requests
     this.stop();
     this.audio = new Audio(url);
     this.audio.playbackRate = rate;
     this.audio.onplay = () => this.setState('playing');
     this.audio.onended = () => this.setState('idle');
     this.audio.onerror = () => this.setState('idle');
-    this.audio.oncanplaythrough = () => {
-      this.audio?.play().catch(() => this.setState('idle'));
-    };
-    this.setState('loading');
+    // blob: URLs are already in memory — play immediately without waiting for canplaythrough
+    // (iOS Safari does not reliably fire canplaythrough for blob URLs)
+    if (url.startsWith('blob:')) {
+      this.setState('loading');
+      this.audio.play().catch(() => this.setState('idle'));
+    } else {
+      this.audio.oncanplaythrough = () => {
+        this.audio?.play().catch(() => this.setState('idle'));
+      };
+      this.setState('loading');
+    }
   }
 
   /** Play TTS for Korean text using browser speechSynthesis (fast, offline).
    *  Text is sanitized to remove non-Korean markers like "vs", "/" etc. */
   speakTTS(text: string, rate: number = 0.75): void {
+    cancelSpeech(); // cancel any in-flight tts.ts NLS requests
     this.stop();
     if (typeof speechSynthesis === 'undefined') return;
     const sanitized = sanitizeTTSText(text);

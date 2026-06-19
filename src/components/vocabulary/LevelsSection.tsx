@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ChevronRight, Target } from 'lucide-react';
-import { getAllLevels, getLevelWords } from '@/data/vocabulary';
+import { ChevronRight, Target, Loader2 } from 'lucide-react';
 import { db } from '@/lib/db';
 
 const levelNames: Record<number, string> = {
@@ -17,28 +16,48 @@ const levelColors: Record<number, string> = {
   5: 'var(--purple-soft)', 6: 'var(--purple-soft)',
 };
 
+type LevelInfo = {
+  level: number;
+  totalCount: number;
+  mastered: number;
+  learning: number;
+};
+
 export function LevelsSection() {
-  const levels = getAllLevels();
-  const [levelProgress, setLevelProgress] = useState<Record<number, { mastered: number; learning: number }>>({});
+  const [levels, setLevels] = useState<LevelInfo[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
-      const allUserWords = await db.words.toArray();
+      const [{ getAllLevels, getLevelWords }, allUserWords] = await Promise.all([
+        import('@/data/vocabulary').catch(() => ({ getAllLevels: () => [], getLevelWords: () => [] })),
+        db.words.toArray().catch(() => []),
+      ]);
       const userMasteredSet = new Set(allUserWords.filter((w) => w.mastery === 'mastered').map((w) => w.word));
       const userLearningSet = new Set(allUserWords.filter((w) => w.mastery !== 'mastered' && w.mastery !== 'new').map((w) => w.word));
 
-      const progress: Record<number, { mastered: number; learning: number }> = {};
-      for (const lvl of levels) {
+      const result: LevelInfo[] = getAllLevels().map((lvl) => {
         const words = getLevelWords(lvl.level);
         const koreanWords = words.map((w) => w.korean);
-        progress[lvl.level] = {
+        return {
+          level: lvl.level,
+          totalCount: words.length,
           mastered: koreanWords.filter((w) => userMasteredSet.has(w)).length,
           learning: koreanWords.filter((w) => userLearningSet.has(w)).length,
         };
-      }
-      setLevelProgress(progress);
+      });
+      setLevels(result);
+      setLoading(false);
     })();
-  }, [levels]);
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-16">
+        <Loader2 size={24} className="animate-spin text-[var(--text-secondary)]" />
+      </div>
+    );
+  }
 
   const topikI = levels.filter((l) => l.level <= 2);
   const topikII = levels.filter((l) => l.level >= 3);
@@ -53,12 +72,9 @@ export function LevelsSection() {
         </div>
         <div className="grid grid-cols-2 gap-3">
           {topikI.map((lvl) => {
-            const words = getLevelWords(lvl.level);
-            const progress = levelProgress[lvl.level] || { mastered: 0, learning: 0 };
-            const total = words.length;
-            const done = progress.mastered + progress.learning;
+            const total = lvl.totalCount;
+            const done = lvl.mastered + lvl.learning;
             const pct = total > 0 ? Math.round((done / total) * 100) : 0;
-
             return (
               <Link
                 key={lvl.level}
@@ -73,7 +89,7 @@ export function LevelsSection() {
                 </div>
                 <p className="text-xs text-[var(--text-secondary)] mb-1">{levelNames[lvl.level]}</p>
                 <p className="text-sm font-bold text-[var(--text-primary)] mb-3">
-                  {lvl.totalCount.toLocaleString()} 词
+                  {total.toLocaleString()} 词
                 </p>
                 <div className="space-y-1.5">
                   <div className="flex justify-between text-xs text-[var(--text-muted)]">
@@ -81,22 +97,16 @@ export function LevelsSection() {
                     <span>{pct}%</span>
                   </div>
                   <div className="w-full bg-[var(--bg-input)] rounded-full h-1.5 flex overflow-hidden">
-                    <div
-                      className="h-full rounded-l-full transition-all"
-                      style={{ width: `${total > 0 ? (progress.mastered / total) * 100 : 0}%`, backgroundColor: 'var(--mint-soft)' }}
-                    />
-                    <div
-                      className="h-full transition-all"
-                      style={{ width: `${total > 0 ? (progress.learning / total) * 100 : 0}%`, backgroundColor: 'var(--peach-soft)' }}
-                    />
+                    <div className="h-full rounded-l-full transition-all" style={{ width: `${total > 0 ? (lvl.mastered / total) * 100 : 0}%`, backgroundColor: 'var(--mint-soft)' }} />
+                    <div className="h-full transition-all" style={{ width: `${total > 0 ? (lvl.learning / total) * 100 : 0}%`, backgroundColor: 'var(--peach-soft)' }} />
                     <div className="h-full rounded-r-full flex-1" style={{ backgroundColor: 'var(--border-color)' }} />
                   </div>
                   <div className="flex gap-3 text-[13px] text-[var(--text-muted)]">
                     <span className="flex items-center gap-1">
-                      <span className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--mint-soft)' }} /> 掌握 {progress.mastered}
+                      <span className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--mint-soft)' }} /> 掌握 {lvl.mastered}
                     </span>
                     <span className="flex items-center gap-1">
-                      <span className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--peach-soft)' }} /> 学习 {progress.learning}
+                      <span className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--peach-soft)' }} /> 学习 {lvl.learning}
                     </span>
                   </div>
                 </div>
@@ -114,12 +124,9 @@ export function LevelsSection() {
         </div>
         <div className="grid grid-cols-2 gap-3">
           {topikII.map((lvl) => {
-            const words = getLevelWords(lvl.level);
-            const progress = levelProgress[lvl.level] || { mastered: 0, learning: 0 };
-            const total = words.length;
-            const done = progress.mastered + progress.learning;
+            const total = lvl.totalCount;
+            const done = lvl.mastered + lvl.learning;
             const pct = total > 0 ? Math.round((done / total) * 100) : 0;
-
             return (
               <Link
                 key={lvl.level}
@@ -134,7 +141,7 @@ export function LevelsSection() {
                 </div>
                 <p className="text-xs text-[var(--text-secondary)] mb-1">{levelNames[lvl.level]}</p>
                 <p className="text-sm font-bold text-[var(--text-primary)] mb-3">
-                  {lvl.totalCount.toLocaleString()} 词
+                  {total.toLocaleString()} 词
                 </p>
                 <div className="space-y-1.5">
                   <div className="flex justify-between text-xs text-[var(--text-muted)]">
@@ -142,22 +149,16 @@ export function LevelsSection() {
                     <span>{pct}%</span>
                   </div>
                   <div className="w-full bg-[var(--bg-input)] rounded-full h-1.5 flex overflow-hidden">
-                    <div
-                      className="h-full rounded-l-full transition-all"
-                      style={{ width: `${total > 0 ? (progress.mastered / total) * 100 : 0}%`, backgroundColor: 'var(--mint-soft)' }}
-                    />
-                    <div
-                      className="h-full transition-all"
-                      style={{ width: `${total > 0 ? (progress.learning / total) * 100 : 0}%`, backgroundColor: 'var(--peach-soft)' }}
-                    />
+                    <div className="h-full rounded-l-full transition-all" style={{ width: `${total > 0 ? (lvl.mastered / total) * 100 : 0}%`, backgroundColor: 'var(--mint-soft)' }} />
+                    <div className="h-full transition-all" style={{ width: `${total > 0 ? (lvl.learning / total) * 100 : 0}%`, backgroundColor: 'var(--peach-soft)' }} />
                     <div className="h-full rounded-r-full flex-1" style={{ backgroundColor: 'var(--border-color)' }} />
                   </div>
                   <div className="flex gap-3 text-[13px] text-[var(--text-muted)]">
                     <span className="flex items-center gap-1">
-                      <span className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--mint-soft)' }} /> 掌握 {progress.mastered}
+                      <span className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--mint-soft)' }} /> 掌握 {lvl.mastered}
                     </span>
                     <span className="flex items-center gap-1">
-                      <span className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--peach-soft)' }} /> 学习 {progress.learning}
+                      <span className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--peach-soft)' }} /> 学习 {lvl.learning}
                     </span>
                   </div>
                 </div>

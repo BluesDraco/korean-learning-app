@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react';
 import { Search, X, Volume2, ChevronDown, ChevronUp } from 'lucide-react';
 import { vocabularyEntries } from '@/data/vocabulary/entries';
 import { speak } from '@/lib/tts';
+import { TappableText } from '@/components/TappableText';
 
 
 export function ScenesSection() {
@@ -72,7 +73,7 @@ export function ScenesSection() {
                 <div className="px-4 pb-4 border-t border-[var(--border-color)] pt-3 space-y-2">
                   {entry.examples.map((ex, i) => (
                     <div key={i} className="bg-[var(--bg-input)] rounded-lg p-3">
-                      <p className="text-sm text-[var(--text-primary)]">{ex.korean}</p>
+                      <TappableText text={ex.korean} className="text-sm text-[var(--text-primary)]" source="场景词汇" highlightWord={entry.korean} />
                       <p className="text-xs text-[var(--text-secondary)] mt-0.5">{ex.chinese}</p>
                     </div>
                   ))}

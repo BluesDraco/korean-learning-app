@@ -8,7 +8,7 @@ import {
 import type { GrammarPoint } from '@/types';
 import { GRAMMAR_TO_COURSE_DAY } from '@/data/grammar-new';
 import { getCourseDayForGrammar } from '@/data/thirtyDayCourse';
-import { globalPlayer } from '@/lib/audio/player';
+import { speak, cancelSpeech } from '@/lib/tts';
 import { db } from '@/lib/db';
 import { awardXp, XP_REWARDS } from '@/lib/gamification';
 
@@ -43,7 +43,7 @@ export function GrammarSession({ grammar, onClose, reviewQueue, onNextReview }: 
   const [choiceResult, setChoiceResult] = useState<'correct' | 'wrong' | null>(null);
   const [selectedChoiceOption, setSelectedChoiceOption] = useState<string | null>(null);
   const [correctCount, setCorrectCount] = useState(0);
-  const [playerState, setPlayerState] = useState<string>('idle');
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const [nextReviewDays, setNextReviewDays] = useState(1);
   const correctRef = useRef(0);
   const wrongRef = useRef(0);
@@ -61,14 +61,15 @@ export function GrammarSession({ grammar, onClose, reviewQueue, onNextReview }: 
   };
 
   useEffect(() => {
-    globalPlayer.setStateChange(setPlayerState);
-    return () => { globalPlayer.stop(); };
+    return () => { cancelSpeech(); };
   }, []);
 
-  const isPlaying = playerState === 'playing' || playerState === 'loading';
+  const isPlaying = isSpeaking;
 
   const playTTS = useCallback((text: string) => {
-    globalPlayer.speakTTS(text, 0.8);
+    cancelSpeech();
+    setIsSpeaking(true);
+    speak(text, 0.8, () => setIsSpeaking(false));
   }, []);
 
   // ── Compute next review interval (SRS-like) ──

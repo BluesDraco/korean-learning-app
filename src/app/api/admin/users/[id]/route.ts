@@ -196,6 +196,16 @@ export async function PATCH(
   const { id } = await params;
   const body: UpdateUserBody = await request.json();
 
+  // 禁止管理员修改自己的 role
+  if (body.role !== undefined && adminCheck.userId === id) {
+    return NextResponse.json({ error: '不能修改自己的角色权限' }, { status: 403 });
+  }
+
+  // role 白名单校验
+  if (body.role !== undefined && !['user', 'admin'].includes(body.role)) {
+    return NextResponse.json({ error: '无效的角色值' }, { status: 400 });
+  }
+
   const db = await getDb();
 
   const check = await db.exec('SELECT id FROM users WHERE id = ?', [id]);
@@ -210,6 +220,7 @@ export async function PATCH(
   if (body.membershipExpiry !== undefined) { sets.push('membership_expiry = ?'); vals.push(body.membershipExpiry); }
   if (body.banned !== undefined) { sets.push('banned = ?'); vals.push(body.banned ? 1 : 0); }
   if (body.adminNote !== undefined) { sets.push('admin_note = ?'); vals.push(body.adminNote); }
+  if (body.role !== undefined) { sets.push('role = ?'); vals.push(body.role); }
 
   if (sets.length === 0) {
     return NextResponse.json({ success: false, message: '没有需要更新的字段' });

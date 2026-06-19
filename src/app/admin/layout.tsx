@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
   LayoutDashboard, DollarSign, Users, FileText, Activity, Mail,
-  ShieldAlert, LogOut, Home, Menu, X, Music,
+  ShieldAlert, LogOut, Home, Menu, X, Music, MessageSquare,
 } from 'lucide-react';
 
 const navItems = [
@@ -14,6 +14,7 @@ const navItems = [
   { href: '/admin/revenue', label: '收入中心', icon: DollarSign },
   { href: '/admin/users', label: '用户管理', icon: Users },
   { href: '/admin/content', label: '内容管理', icon: FileText },
+  { href: '/admin/feedback', label: '用户反馈', icon: MessageSquare },
   { href: '/admin/messages', label: '消息中心', icon: Mail },
   { href: '/admin/system', label: '系统监控', icon: Activity },
   { href: '/admin/kpop-calibration', label: 'KPOP 校准', icon: Music },

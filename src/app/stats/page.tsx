@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import {
   BarChart3, BookOpen, Bookmark, TrendingUp, Loader2, Flame, Zap,
-  Award, Star, Target, Brain, AlertTriangle, Activity,
+  Award, Star, Target, Brain, AlertTriangle, Activity, ArrowLeft,
 } from 'lucide-react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -12,6 +12,7 @@ import {
   Area, AreaChart,
 } from 'recharts';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { db } from '@/lib/db';
 import { ACHIEVEMENT_DEFS } from '@/types';
 import { memoryHealthScore, retentionDistribution, generateCurvePoints, wordStability, atRiskWords, type RetentionBucket } from '@/lib/forgetting-curve';
@@ -56,6 +57,7 @@ export default function StatsPage() {
 
   useEffect(() => {
     const load = async () => {
+      try {
       const [words, sessions, dictationRecords, shadowingRecords, achs, p, articleProgress] = await Promise.all([
         db.words.toArray(),
         db.reviewSessions.orderBy('date').reverse().toArray(),
@@ -142,6 +144,9 @@ export default function StatsPage() {
       setAchievements(achs);
       setProfile(p || null);
       setLoading(false);
+      } catch {
+        setLoading(false);
+      }
     };
     load();
   }, []);
@@ -168,6 +173,7 @@ export default function StatsPage() {
       {/* Header */}
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
+          <Link href="/mine" className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"><ArrowLeft size={20} /></Link>
           <div>
             <h1 className="text-2xl font-bold text-[var(--text-primary)]">学习统计</h1>
             <p className="text-[var(--text-secondary)] text-sm mt-1">追踪你的学习进度与成就</p>

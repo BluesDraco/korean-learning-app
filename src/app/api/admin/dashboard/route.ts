@@ -1,7 +1,17 @@
 import { NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/server/admin-guard';
 import { getDb } from '@/lib/server/db';
-import type { DashboardResponse, ActivityFeedItem } from '@/types/admin';
+import type { DashboardResponse, ActivityFeedItem, RegTrendPoint, RegUser } from '@/types/admin';
+
+function dateKey(ts: number): string {
+  const d = new Date(ts + 8 * 3600000);
+  return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}-${String(d.getUTCDate()).padStart(2, '0')}`;
+}
+
+function monthKey(ts: number): string {
+  const d = new Date(ts + 8 * 3600000);
+  return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`;
+}
 
 function safeNum(val: unknown): number {
   return Number(val) || 0;
@@ -17,7 +27,11 @@ export async function GET() {
   if (!admin.authorized) return admin.response;
 
   const db = await getDb();
-  const todayStart = new Date().setHours(0, 0, 0, 0);
+  // All date boundaries use UTC+8 (Beijing time)
+  const nowUtc8 = Date.now() + 8 * 3600000;
+  const d = new Date(nowUtc8);
+  d.setUTCHours(0, 0, 0, 0);
+  const todayStart = d.getTime() - 8 * 3600000; // back to UTC ms
   const yesterdayStart = todayStart - 86400000;
   const yesterdayEnd = todayStart;
 
@@ -130,7 +144,6 @@ export async function GET() {
     }
   }
 
-  // Sort activity feed by time desc, limit to 10
   activities.sort((a, b) => b.timestamp - a.timestamp);
   const activityFeed = activities.slice(0, 10);
 
@@ -145,6 +158,101 @@ export async function GET() {
     paid: { total: 0, rate: 0 },
     yearly: { total: 0, rate: 0 },
   };
+
+  // ── User Registration Stats: daily last 30 days ──
+  const daily30Start = todayStart - 29 * 86400000;
+  const dailyRows = await db.exec(
+    `SELECT created_at FROM users WHERE created_at >= ${daily30Start} ORDER BY created_at ASC`
+  );
+  const dailyMap: Record<string, number> = {};
+  if (dailyRows.length > 0) {
+    for (const row of dailyRows[0].values) {
+      const key = dateKey(safeNum(row[0]));
+      dailyMap[key] = (dailyMap[key] || 0) + 1;
+    }
+  }
+  const [[beforeDayRow]] = await Promise.all([
+    db.exec(`SELECT COUNT(*) as c FROM users WHERE created_at < ${daily30Start}`),
+  ]);
+  let cumulative = safeNum(beforeDayRow?.values?.[0]?.[0]);
+  const dailyTrend: RegTrendPoint[] = [];
+  for (let i = 0; i < 30; i++) {
+    const key = dateKey(daily30Start + i * 86400000);
+    const count = dailyMap[key] || 0;
+    cumulative += count;
+    dailyTrend.push({ date: key, count, cumulative });
+  }
+
+  // ── User Registration Stats: all-time daily ──
+  const allDailyRows = await db.exec(
+    `SELECT created_at FROM users ORDER BY created_at ASC`
+  );
+  const allDailyMap: Record<string, number> = {};
+  let allDailyFirstTs = 0;
+  if (allDailyRows.length > 0) {
+    for (const row of allDailyRows[0].values) {
+      const ts = safeNum(row[0]);
+      if (!allDailyFirstTs) allDailyFirstTs = ts;
+      const key = dateKey(ts);
+      allDailyMap[key] = (allDailyMap[key] || 0) + 1;
+    }
+  }
+  const allDailyTrend: RegTrendPoint[] = [];
+  if (allDailyFirstTs) {
+    // Align first day to UTC+8 midnight
+    const firstDayUtc8 = new Date(allDailyFirstTs + 8 * 3600000);
+    firstDayUtc8.setUTCHours(0, 0, 0, 0);
+    const firstDayTs = firstDayUtc8.getTime() - 8 * 3600000;
+    const totalDays = Math.floor((todayStart - firstDayTs) / 86400000) + 1;
+    let allCumulative = 0;
+    for (let i = 0; i < totalDays; i++) {
+      const key = dateKey(firstDayTs + i * 86400000);
+      const count = allDailyMap[key] || 0;
+      allCumulative += count;
+      allDailyTrend.push({ date: key, count, cumulative: allCumulative });
+    }
+  }
+
+  // ── User Registration Stats: monthly ALL time (reuse allDailyRows data) ──
+  const monthlyMap: Record<string, number> = {};
+  let firstMonthKey = '';
+  if (allDailyRows.length > 0) {
+    for (const row of allDailyRows[0].values) {
+      const key = monthKey(safeNum(row[0]));
+      if (!firstMonthKey) firstMonthKey = key;
+      monthlyMap[key] = (monthlyMap[key] || 0) + 1;
+    }
+  }
+  // Fill all months from first to current
+  const monthlyTrend: RegTrendPoint[] = [];
+  if (firstMonthKey) {
+    const [fy, fm] = firstMonthKey.split('-').map(Number);
+    const nowUtc8Date = new Date(Date.now() + 8 * 3600000);
+    const totalMonths = (nowUtc8Date.getUTCFullYear() - fy) * 12 + (nowUtc8Date.getUTCMonth() + 1 - fm) + 1;
+    let monthlyCumulative = 0;
+    for (let i = 0; i < totalMonths; i++) {
+      const d = new Date(Date.UTC(fy, fm - 1 + i, 1));
+      const key = `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`;
+      const count = monthlyMap[key] || 0;
+      monthlyCumulative += count;
+      monthlyTrend.push({ date: key, count, cumulative: monthlyCumulative });
+    }
+  }
+
+  // ── Recent users list (last 100) ──
+  const usersListRows = await db.exec(
+    "SELECT id, username, created_at FROM users ORDER BY created_at DESC LIMIT 100"
+  );
+  const recentUsersList: RegUser[] = [];
+  if (usersListRows.length > 0) {
+    for (const row of usersListRows[0].values) {
+      recentUsersList.push({
+        id: String(row[0]),
+        username: String(row[1]),
+        createdAt: safeNum(row[2]),
+      });
+    }
+  }
 
   const response: DashboardResponse = {
     overview: {
@@ -168,6 +276,12 @@ export async function GET() {
       { feature: 'AI对话', icon: '🤖', count: 0, totalPercent: 0 },
     ],
     activityFeed,
+    userRegStats: {
+      daily: dailyTrend,
+      allDaily: allDailyTrend,
+      monthly: monthlyTrend,
+      recentUsers: recentUsersList,
+    },
   };
 
   return NextResponse.json(response, {

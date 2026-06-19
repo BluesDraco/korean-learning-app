@@ -31,25 +31,36 @@ const ENTRIES: LearningEntry[] = [
     color: '#e47a94',
   },
   {
-    label: '常用场景模板',
-    desc: '从点餐、旅行、聊天和追星等真实场景开始。',
-    available: false,
-    icon: '景',
-    color: '#81b5a1',
-  },
-  {
     label: 'TOPIK 备考模板',
     desc: '按题型整理词汇、阅读和写作练习路线。',
-    available: false,
+    href: '/topik',
+    available: true,
     icon: '考',
     color: '#b49ccf',
   },
   {
-    label: '发音 / 阅读 / 写作入门模板',
-    desc: '正式版会分模块提供更完整的自学路径。',
-    available: false,
-    icon: '学',
+    label: '发音跟读',
+    desc: '录音对比标准发音，练习韩语语调和单音。',
+    href: '/pronunciation',
+    available: true,
+    icon: '音',
+    color: '#e47a94',
+  },
+  {
+    label: '听写练习',
+    desc: '听韩语单词和句子，用打字或手写完成听写。',
+    href: '/dictation',
+    available: true,
+    icon: '听',
     color: '#e8a87c',
+  },
+  {
+    label: '写作练习',
+    desc: '用韩语写句子，AI 给出参考例句对照。',
+    href: '/writing',
+    available: true,
+    icon: '写',
+    color: '#81b5a1',
   },
 ];
 
@@ -149,21 +160,15 @@ export function DesktopLearningPage() {
             </div>
             <div style={{ background: '#fdfaf5', borderRadius: 16, padding: '14px 16px', marginBottom: 16 }}>
               <p style={{ fontSize: 13, color: '#2f2a26', lineHeight: 1.6, textAlign: 'center' }}>
-                这个学习路线会在正式版上线后开放。内测阶段你可以先使用内容拆解、影音跟读、KPOP 跟唱和复习功能开始学习。
+                这个学习路线会在正式版上线后开放。内测阶段你可以先去词汇模块，按级别和场景学习常用韩语单词。
               </p>
             </div>
             <div style={{ display: 'flex', gap: 8 }}>
               <button
-                onClick={() => { setModalEntry(null); router.push('/ai/analyze'); }}
+                onClick={() => { setModalEntry(null); router.push('/vocabulary'); }}
                 style={{ flex: 1, padding: '10px 0', borderRadius: 14, border: '1px solid #efe4d8', background: '#fff', color: '#2f2a26', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}
               >
-                先去内容拆解
-              </button>
-              <button
-                onClick={() => { setModalEntry(null); router.push('/shadowing'); }}
-                style={{ flex: 1, padding: '10px 0', borderRadius: 14, border: '1px solid #efe4d8', background: '#fff', color: '#2f2a26', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}
-              >
-                先去影音跟读
+                先去词汇模块
               </button>
             </div>
             <button

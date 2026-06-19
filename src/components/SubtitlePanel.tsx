@@ -26,12 +26,19 @@ export const SubtitlePanel = memo(function SubtitlePanel({
 }: SubtitlePanelProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll to keep active subtitle in view
+  // Auto-scroll within the subtitle container only — don't affect page scroll
   useEffect(() => {
     if (activeIndex < 0 || !containerRef.current) return;
-    const items = containerRef.current.children;
-    if (items[activeIndex]) {
-      items[activeIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    const container = containerRef.current;
+    const items = container.children;
+    const el = items[activeIndex] as HTMLElement | undefined;
+    if (!el) return;
+    const elTop = el.offsetTop;
+    const elBottom = elTop + el.offsetHeight;
+    const scrollTop = container.scrollTop;
+    const scrollBottom = scrollTop + container.clientHeight;
+    if (elTop < scrollTop + 40 || elBottom > scrollBottom - 40) {
+      container.scrollTo({ top: elTop - container.clientHeight / 2 + el.offsetHeight / 2, behavior: 'smooth' });
     }
   }, [activeIndex]);
 

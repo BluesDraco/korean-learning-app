@@ -2,8 +2,45 @@ import { classifyContent, resolveAudioPolicy, sanitizeTTSText, type AudioContent
 import { getStaticAudio } from '@/lib/audio/audioRegistry';
 
 let currentAudio: HTMLAudioElement | null = null;
-let qwenFailedUntil = 0;
+let currentAudioSource: AudioBufferSourceNode | null = null;
+let currentFetchController: AbortController | null = null;
+let nlsFailedUntil = 0;
 let speakSeq = 0;
+let audioCtxUnlocked = false;
+
+// Minimal silent MP3 (0.1s) as a data URI — used to unlock iOS audio on first gesture
+const SILENT_MP3 = 'data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjI5LjEwMAAAAAAAAAAAAAAA//OEAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAABAAABIADAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA//MUZAAAAAGkAAAAAAAAA0gAAAAATEFN//MUZAMAAAGkAAAAAAAAA0gAAAAATEFN//MUZAYAAAGkAAAAAAAAA0gAAAAATEFN//MUZAkAAAGkAAAAAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV';
+
+let unlockedAudio: HTMLAudioElement | null = null;
+
+// Unlock iOS/WeChat audio on first user gesture so async audio.play() works
+export function unlockAudioContext() {
+  if (audioCtxUnlocked || typeof window === 'undefined') return;
+  try {
+    // Unlock HTMLAudioElement for WeChat/iOS WebView
+    const a = new Audio(SILENT_MP3);
+    a.onended = () => { a.src = ''; };  // clear data: src so reuse check works
+    a.play().catch(() => {});
+    unlockedAudio = a;
+
+    // Also unlock AudioContext for browsers that need it
+    const ctx = new AudioContext();
+    const buf = ctx.createBuffer(1, 1, 22050);
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    src.connect(ctx.destination);
+    src.start(0);
+    ctx.close();
+    audioCtxUnlocked = true;
+  } catch { /* ignore */ }
+}
+
+// Auto-unlock on first touchstart/click so all subsequent audio.play() calls work on iOS
+if (typeof window !== 'undefined') {
+  const autoUnlock = () => { unlockAudioContext(); };
+  window.addEventListener('touchstart', autoUnlock, { once: true, passive: true });
+  window.addEventListener('click', autoUnlock, { once: true, passive: true });
+}
 
 const TTS_SPEED_KEY = 'tts-speed';
 
@@ -43,25 +80,33 @@ export function setSpeechRate(rate: number): void {
   } catch { /* ignore */ }
 }
 
-/** Word TTS — always uses browser speech synthesis for consistent pronunciation of single words/syllables. */
+/** Word TTS — uses NLS for consistent Korean pronunciation including on iOS. */
 export async function speakWord(text: string, rate?: number): Promise<void> {
   if (typeof window === 'undefined') return;
   const cleaned = cleanText(text);
   if (!cleaned) return;
   cancelSpeech();
-  await speakViaBrowser(cleaned, rate ?? getSpeechRate());
+  await speak(cleaned, rate ?? getSpeechRate());
 }
 
-/** Browser-only TTS — bypasses Qwen entirely. Use for practice/exam modes where quality isn't critical. */
+/** Browser-compatible TTS — routes through speak() so NLS is used where available. */
 export async function speakBrowser(text: string, rate?: number): Promise<void> {
   if (typeof window === 'undefined') return;
   const cleaned = cleanText(text);
   if (!cleaned) return;
   cancelSpeech();
-  await speakViaBrowser(cleaned, rate ?? getSpeechRate());
+  await speak(cleaned, rate ?? getSpeechRate());
 }
 
 export function cancelSpeech() {
+  if (currentFetchController) {
+    currentFetchController.abort();
+    currentFetchController = null;
+  }
+  if (currentAudioSource) {
+    try { currentAudioSource.stop(); } catch { /* already stopped */ }
+    currentAudioSource = null;
+  }
   if (currentAudio) {
     currentAudio.pause();
     currentAudio.onended = null;
@@ -69,7 +114,7 @@ export function cancelSpeech() {
     currentAudio = null;
   }
   window.speechSynthesis?.cancel();
-  speakSeq++; // invalidate in-flight Qwen requests
+  speakSeq++; // invalidate in-flight NLS requests
 }
 
 function cleanText(text: string): string {
@@ -80,21 +125,17 @@ function cleanText(text: string): string {
     .trim();
 }
 
-// Detect if text is jamo, minimal pair, or very short Korean that Qwen can't handle reliably.
+// Detect if text is jamo, minimal pair, or very short Korean that NLS can't handle reliably.
 // These must use browser speechSynthesis — NEVER generative AI TTS.
 function isShortKoreanText(text: string): boolean {
   const cleaned = text.replace(/\s/g, '');
   if (!cleaned) return false;
-  // Single jamo character (consonant or vowel) — Qwen hallucinates on these
+  // Single jamo character (consonant or vowel) — NLS hallucinates on these
   if (/^[ㄱ-ㅎㅏ-ㅣ]$/.test(cleaned)) return true;
-  // 1-3 Hangul syllables — short words that Qwen may over-extend
-  if (/^[가-힣]{1,3}$/.test(cleaned)) return true;
-  // Minimal pair patterns like "으 vs 우", "어 vs 오"
-  if (/vs/i.test(text)) return true;
-  // Text with "/" separator — likely comparative phonetics like "ㄱ/ㅋ/ㄲ"
-  if (/\//.test(text)) return true;
-  // Text containing single jamo mixed with separators
-  if (/[ㄱ-ㅎㅏ-ㅣ]/.test(cleaned) && cleaned.length <= 6) return true;
+  // Text containing jamo mixed with separators (e.g. "ㄱ/ㅋ/ㄲ")
+  if (/[ㄱ-ㅎㅏ-ㅣ]/.test(cleaned)) return true;
+  // Minimal pair patterns like "으 vs 우"
+  if (/vs/i.test(text) || /\//.test(text)) return true;
   return false;
 }
 
@@ -129,6 +170,7 @@ export async function speak(
     return;
   }
 
+  unlockAudioContext();
   cancelSpeech();
   const seq = ++speakSeq;
 
@@ -151,8 +193,18 @@ export async function speak(
     return;
   }
 
-  // Check cache first (for Qwen-allowed content types)
-  const cacheKey = `${rate}:${cleaned}`;
+  // If static audio exists for this text, always prefer it over NLS.
+  // Note: explicitRate/slowUrl are intentionally ignored here — all registered
+  // entries currently use a single pre-recorded file at natural speed.
+  const staticForWord = getStaticAudio(cleaned);
+  if (staticForWord) {
+    try { await playUrl(staticForWord.url, seq); } catch { /* silent */ }
+    onEnd?.();
+    return;
+  }
+
+  // Check cache first (for NLS-allowed content types)
+  const cacheKey = `${rate}:${sanitizeTTSText(cleaned, undefined, true)}`;
   const cached = audioCache.get(cacheKey);
   if (cached && Date.now() - cached.ts < CACHE_TTL) {
     try {
@@ -162,27 +214,27 @@ export async function speak(
       return;
     } catch {
       audioCache.delete(cacheKey);
+      // fall through to NLS re-request
     }
   }
 
-  // If text is Chinese, skip Qwen and go straight to browser TTS
+  // If text is Chinese, skip NLS and go straight to browser TTS
   if (isChineseText(cleaned)) {
     try {
       await speakViaBrowser(sanitizeTTSText(cleaned), rate);
-      onEnd?.();
     } catch {
-      // both failed
+      // failed silently
     }
+    onEnd?.();
     return;
   }
 
-  // Qwen3-TTS (阿里云 — best Korean pronunciation)
-  const qwenAvailable = Date.now() > qwenFailedUntil;
-  if (qwenAvailable) {
+  // Aliyun NLS TTS (best Korean pronunciation, works on iOS/iPad)
+  const nlsAvailable = Date.now() > nlsFailedUntil;
+  if (nlsAvailable) {
     try {
-      const blobUrl = await speakViaQwen(cleaned, rate, seq);
+      const blobUrl = await speakViaNls(sanitizeTTSText(cleaned, undefined, true), seq);
       if (blobUrl) {
-        // Cache successful result
         if (audioCache.size >= CACHE_MAX) {
           const first = audioCache.keys().next().value;
           if (first) {
@@ -195,20 +247,76 @@ export async function speak(
         onEnd?.();
         return;
       }
-    } catch {
-      // Blacklist Qwen for 5 minutes on failure
-      qwenFailedUntil = Date.now() + 5 * 60 * 1000;
+      // blobUrl === null means a newer speak() call superseded this one — abort
+      if (seq !== speakSeq) { onEnd?.(); return; }
+    } catch (err: unknown) {
+      // User cancelled (AbortError) — not an NLS failure, just exit silently
+      if (err instanceof Error && err.name === 'AbortError') { onEnd?.(); return; }
+      if (seq !== speakSeq) { onEnd?.(); return; }
+      // NLS failed — blacklist briefly and fall through to browser TTS
+      nlsFailedUntil = Date.now() + 3 * 1000;
     }
   }
 
   // Browser speechSynthesis fallback
   try {
-    await speakViaBrowser(sanitizeTTSText(cleaned), rate);
+    await speakViaBrowser(cleaned, rate);
   } catch {
     // both failed, give up silently
   }
   onEnd?.();
 }
+
+/** Chinese TTS via Aliyun NLS (Meimei voice), falls back to browser speechSynthesis. */
+export async function speakChinese(
+  text: string,
+  rate?: number,
+  onEnd?: () => void,
+): Promise<void> {
+  if (typeof window === 'undefined') { onEnd?.(); return; }
+  const cleaned = cleanText(text);
+  if (!cleaned) { onEnd?.(); return; }
+
+  const seq = speakSeq;
+
+  try {
+    const controller = new AbortController();
+    currentFetchController = controller;
+    let res: Response;
+    try {
+      res = await fetch('/api/tts/aliyun', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: cleaned, voice: 'zhiyue' }),
+        signal: controller.signal,
+      });
+    } finally {
+      if (currentFetchController === controller) currentFetchController = null;
+    }
+    if (seq !== speakSeq) { onEnd?.(); return; }
+    if (res.ok) {
+      const blob = await res.blob();
+      if (seq !== speakSeq) { onEnd?.(); return; }
+      const url = URL.createObjectURL(blob);
+      try {
+        await playUrlViaElement(url, seq);
+      } finally {
+        URL.revokeObjectURL(url);
+      }
+      if (seq !== speakSeq) return;
+      onEnd?.();
+      return;
+    }
+  } catch { /* fall through to browser TTS */ }
+
+  if (seq !== speakSeq) { onEnd?.(); return; }
+  // Browser fallback
+  try {
+    await speakViaBrowser(sanitizeTTSText(cleaned), rate ?? getSpeechRate());
+  } catch { /* ignore */ }
+  if (seq === speakSeq) onEnd?.();
+}
+
 
 async function speakViaBrowser(text: string, rate: number): Promise<void> {
   const synth = window.speechSynthesis;
@@ -222,34 +330,64 @@ async function speakViaBrowser(text: string, rate: number): Promise<void> {
     const utter = new SpeechSynthesisUtterance(text);
     utter.lang = lang;
     utter.rate = rate;
+
+    // Prefer a native voice for the target language so we don't fall through to
+    // the system default (often zh-CN on Chinese devices), which mispronounces Korean.
+    const voices = synth.getVoices();
+    if (voices.length > 0) {
+      const match = voices.find((v) => v.lang === lang) ?? voices.find((v) => v.lang.startsWith(lang.slice(0, 2)));
+      if (match) utter.voice = match;
+    }
+
     utter.onend = () => resolve();
     utter.onerror = () => resolve();
     synth.speak(utter);
   });
 }
 
-async function speakViaQwen(text: string, rate: number, seq: number): Promise<string | null> {
-  const res = await fetch('/api/tts/qwen', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text, speechRate: rate }),
-  });
-  if (!res.ok) throw new Error('Qwen failed');
+async function speakViaNls(text: string, seq: number): Promise<string | null> {
+  const controller = new AbortController();
+  currentFetchController = controller;
+  let res: Response;
+  try {
+    res = await fetch('/api/tts/aliyun', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text }),
+      signal: controller.signal,
+    });
+  } finally {
+    if (currentFetchController === controller) currentFetchController = null;
+  }
+  if (!res.ok) throw new Error('NLS failed');
 
-  // Check if this request is still valid
   if (seq !== speakSeq) return null;
 
   const blob = await res.blob();
   if (seq !== speakSeq) return null;
 
   const url = URL.createObjectURL(blob);
-  await playUrl(url, seq);
+  try {
+    await playUrlViaElement(url, seq);
+  } catch {
+    URL.revokeObjectURL(url);
+    throw new Error('NLS audio playback failed');
+  }
   return url;
 }
 
-async function playUrl(url: string, _seq: number): Promise<void> {
-  await new Promise<void>((resolve, reject) => {
-    const audio = new Audio(url);
+
+async function playUrl(url: string, seq: number): Promise<void> {
+  await playUrlViaElement(url, seq);
+}
+
+async function playUrlViaElement(url: string, seq: number): Promise<void> {
+  await new Promise<void>((resolve) => {
+    // Reuse the unlocked Audio element for WeChat/iOS WebView compatibility.
+    // WeChat blocks audio.play() after async operations unless the element was
+    // already unlocked in a prior gesture handler.
+    const audio = unlockedAudio ?? new Audio();
+    audio.src = url;
     currentAudio = audio;
     audio.onended = () => {
       if (currentAudio === audio) currentAudio = null;
@@ -257,15 +395,8 @@ async function playUrl(url: string, _seq: number): Promise<void> {
     };
     audio.onerror = () => {
       if (currentAudio === audio) currentAudio = null;
-      reject(new Error('playback failed'));
+      resolve();
     };
-    audio.play().catch((e: any) => {
-      if (currentAudio === audio) currentAudio = null;
-      if (e.name === 'AbortError') {
-        resolve();
-      } else {
-        reject(e);
-      }
-    });
+    audio.play().catch(() => resolve());
   });
 }

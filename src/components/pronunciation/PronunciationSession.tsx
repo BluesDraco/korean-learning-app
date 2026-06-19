@@ -6,8 +6,9 @@ import {
   ChevronRight, Sparkles, Zap, RotateCcw, AlertTriangle
 } from 'lucide-react';
 import type { PronunciationItem } from '@/types';
-import { AudioRecorder, isRecordingSupported, requestMicPermission, revokeRecording } from '@/lib/audio/recorder';
+import { AudioRecorder, isRecordingSupported, revokeRecording } from '@/lib/audio/recorder';
 import { globalPlayer } from '@/lib/audio/player';
+import { speak, cancelSpeech } from '@/lib/tts';
 import { db } from '@/lib/db';
 import { awardXp, XP_REWARDS } from '@/lib/gamification';
 import { playClick, playSuccess, playComplete } from '@/lib/soundManager';
@@ -65,6 +66,7 @@ export function PronunciationSession({ items, onClose }: Props) {
   const [completedItems, setCompletedItems] = useState(0);
   const [totalAttempts, setTotalAttempts] = useState(0);
   const [playerState, setPlayerState] = useState<string>('idle');
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const cleanupRef = useRef<string | null>(null);
 
   const item = items[itemIdx];
@@ -72,7 +74,7 @@ export function PronunciationSession({ items, onClose }: Props) {
   // All hooks must be called unconditionally (before any early return)
   useEffect(() => {
     globalPlayer.setStateChange(setPlayerState);
-    return () => { globalPlayer.stop(); };
+    return () => { globalPlayer.stop(); cancelSpeech(); };
   }, []);
 
   useEffect(() => {
@@ -88,22 +90,20 @@ export function PronunciationSession({ items, onClose }: Props) {
   const currentItemId = item?.id ?? '';
 
   const playStandard = useCallback(() => {
-    if (item) globalPlayer.speakTTS(item.textKo, rate);
+    if (!item) return;
+    cancelSpeech();
+    setIsSpeaking(true);
+    speak(item.textKo, rate, () => setIsSpeaking(false));
   }, [item, rate]);
 
   const playSegment = useCallback((text: string) => {
-    globalPlayer.speakTTS(text, rate);
+    cancelSpeech(); setIsSpeaking(true); speak(text, rate, () => setIsSpeaking(false));
   }, [rate]);
 
   const startRecording = useCallback(async () => {
     setMicError(null);
     if (!isRecordingSupported()) {
       setMicError('此浏览器不支持录音');
-      return;
-    }
-    const perm = await requestMicPermission();
-    if (perm !== 'granted') {
-      setMicError(perm === 'denied' ? '麦克风权限未开启，请在浏览器设置中允许' : '无法访问麦克风');
       return;
     }
     const result = await recorder.start();
@@ -144,25 +144,36 @@ export function PronunciationSession({ items, onClose }: Props) {
 
   const goNextStep = useCallback(() => {
     if (!item) return;
+    const goNext = () => {
+      if (itemIdx + 1 < items.length) {
+        setItemIdx(itemIdx + 1);
+        setStep('target');
+        setRecordingUrl(null);
+        setMicError(null);
+        setSlowMode(false);
+      } else {
+        setCompletedItems(items.length);
+        setStep('settlement');
+      }
+    };
+
     const seq: StepType[] = item.segments?.length
       ? ['target', 'listen', 'segments', 'record', 'compare']
       : ['target', 'listen', 'record', 'compare'];
 
     const idx = seq.indexOf(step);
     if (idx >= 0 && idx < seq.length - 1) {
-      setStep(seq[idx + 1]);
-    } else {
-      if (itemIdx + 1 < items.length) {
-        setItemIdx(itemIdx + 1);
-        setStep('target');
-        setRecordingUrl(null);
-        setMicError(null);
+      // skip compare if no recording and coming from record via skip
+      const nextStep = seq[idx + 1];
+      if (nextStep === 'compare' && !recordingUrl) {
+        goNext();
       } else {
-        setCompletedItems(items.length);
-        setStep('settlement');
+        setStep(nextStep);
       }
+    } else {
+      goNext();
     }
-  }, [step, itemIdx, items.length, item]);
+  }, [step, itemIdx, items.length, item, recordingUrl]);
 
   const handleReRecord = useCallback(() => {
     setRecordingUrl(null);
@@ -180,7 +191,7 @@ export function PronunciationSession({ items, onClose }: Props) {
     setTotalAttempts(0);
   }, []);
 
-  const isPlaying = playerState === 'playing' || playerState === 'loading';
+  const isPlaying = isSpeaking || playerState === 'playing' || playerState === 'loading';
 
   useEffect(() => {
     if (step === 'settlement') playComplete();
@@ -261,7 +272,10 @@ export function PronunciationSession({ items, onClose }: Props) {
     <div className="py-4 max-w-lg mx-auto space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <button onClick={onClose} className="p-1 text-[var(--text-muted)] hover:text-[var(--text-primary)]">
+        <button onClick={() => {
+          if (step !== 'target' && !confirm('确定退出？当前进度不会保存')) return;
+          onClose();
+        }} className="p-1 text-[var(--text-muted)] hover:text-[var(--text-primary)]">
           <ArrowLeft size={20} />
         </button>
         <div className="flex flex-col items-center">
@@ -340,21 +354,33 @@ export function PronunciationSession({ items, onClose }: Props) {
         {step === 'segments' && item.segments && (
           <>
             <StepBadge label="分段练习" />
-            <p className="text-xs text-[var(--text-muted)]">跟着分段读，注意每个发音</p>
-            <div className="space-y-2 w-full">
+            <p className="text-xs text-[var(--text-muted)]">点击每个音听发音，注意区别</p>
+            <div className={`w-full ${item.segments.length <= 3 ? 'flex flex-wrap gap-3 justify-center' : 'space-y-2'}`}>
               {item.segments.map((seg, i) => (
-                <div key={i} className="flex items-center justify-between bg-[var(--bg-input)] rounded-xl px-4 py-3">
-                  <div className="text-left">
-                    <span className="text-lg font-bold text-[var(--text-primary)]">{seg.text}</span>
-                    {seg.hint && <span className="text-xs text-[var(--text-muted)] ml-2">{seg.hint}</span>}
-                  </div>
+                item.segments!.length <= 3 ? (
                   <button
+                    key={i}
                     onClick={() => playSegment(seg.text)}
-                    className="p-2 rounded-xl text-[var(--pink-primary)] hover:bg-[var(--pink-primary)]/10 transition-colors"
+                    className="flex flex-col items-center gap-2 bg-[var(--bg-card)] border border-[var(--border-color)] hover:border-[var(--pink-primary)]/50 hover:bg-[var(--pink-primary)]/5 active:scale-95 rounded-2xl px-6 py-5 transition-all min-w-[90px] shadow-sm"
                   >
-                    <Volume2 size={18} />
+                    <span className="text-4xl font-bold text-[var(--text-primary)]" style={{ fontFamily: "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif" }}>{seg.text}</span>
+                    {seg.hint && <span className="text-[10px] text-[var(--text-muted)] text-center">{seg.hint}</span>}
+                    <Volume2 size={16} className="text-[var(--pink-primary)]" />
                   </button>
-                </div>
+                ) : (
+                  <div key={i} className="flex items-center justify-between bg-[var(--bg-input)] rounded-xl px-4 py-3">
+                    <div className="text-left">
+                      <span className="text-lg font-bold text-[var(--text-primary)]">{seg.text}</span>
+                      {seg.hint && <span className="text-xs text-[var(--text-muted)] ml-2">{seg.hint}</span>}
+                    </div>
+                    <button
+                      onClick={() => playSegment(seg.text)}
+                      className="p-2 rounded-xl text-[var(--pink-primary)] hover:bg-[var(--pink-primary)]/10 transition-colors"
+                    >
+                      <Volume2 size={18} />
+                    </button>
+                  </div>
+                )
               ))}
             </div>
             <button onClick={goNextStep} className="w-full py-3 bg-[var(--pink-primary)] text-white rounded-2xl font-bold text-sm">
@@ -397,17 +423,25 @@ export function PronunciationSession({ items, onClose }: Props) {
             )}
 
             {!recording && (
-              <button
-                onClick={goNextStep}
-                disabled={!recordingUrl}
-                className={`w-full py-3 rounded-2xl font-bold text-sm transition-colors ${
-                  recordingUrl
-                    ? 'bg-[var(--pink-primary)] text-white'
-                    : 'bg-[var(--bg-input)] text-[var(--text-muted)]'
-                }`}
-              >
-                {recordingUrl ? '听我的录音' : '请先录音'}
-              </button>
+              <div className="flex gap-3 w-full">
+                <button
+                  onClick={goNextStep}
+                  className="flex-1 py-3 rounded-2xl font-medium text-sm bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
+                >
+                  跳过
+                </button>
+                <button
+                  onClick={goNextStep}
+                  disabled={!recordingUrl}
+                  className={`flex-1 py-3 rounded-2xl font-bold text-sm transition-colors ${
+                    recordingUrl
+                      ? 'bg-[var(--pink-primary)] text-white'
+                      : 'bg-[var(--bg-input)] text-[var(--text-muted)] opacity-50'
+                  }`}
+                >
+                  {recordingUrl ? '听我的录音' : '请先录音'}
+                </button>
+              </div>
             )}
 
             {recording && (

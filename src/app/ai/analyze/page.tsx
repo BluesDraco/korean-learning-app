@@ -7,13 +7,10 @@ import { db } from '@/lib/db';
 import { useRequireLoginAction } from '@/hooks/useRequireLoginAction';
 import { knowledgeCategories } from '@/data/knowledge';
 import { grammarPoints } from '@/data/grammar';
+import { useTheme } from '@/components/ThemeProvider';
 
-const C = {
-  ink: '#241917', muted: '#89756e', line: '#eee0d8', pink: '#ff7fa8',
-  pinkSoft: '#fff0f5', mint: '#aee3d8', cream: '#fff8f4', black: '#201815',
-  mintBg: '#eaf8f5', mintText: '#4e746d', zhText: '#7e6b64',
-  shadow: '0 16px 42px rgba(78,52,46,.10)', strong: '0 28px 72px rgba(78,52,46,.18)',
-};
+const LIGHT_C = { ink: '#241917', muted: '#89756e', line: '#eee0d8', pink: '#ff7fa8', pinkSoft: '#fff0f5', mint: '#aee3d8', cream: '#fff8f4', black: '#201815', mintBg: '#eaf8f5', mintText: '#4e746d', zhText: '#7e6b64', shadow: '0 16px 42px rgba(78,52,46,.10)', strong: '0 28px 72px rgba(78,52,46,.18)' };
+const DARK_C  = { ink: '#F0E8FF', muted: '#B8A8C8', line: '#3A3060', pink: '#ff7fa8', pinkSoft: '#2D2848', mint: '#4A6058', cream: '#252040', black: '#3A3060', mintBg: '#1E3530', mintText: '#5ecfb8', zhText: '#9A8AB0', shadow: '0 16px 42px rgba(0,0,0,.30)', strong: '0 28px 72px rgba(0,0,0,.40)' };
 
 type Mode = 'translate' | 'learn' | 'deep';
 
@@ -28,6 +25,7 @@ interface AnalysisResult {
   suggestion?: string;
   difficulty?: string;
   note?: string;
+  _degraded?: boolean;
 }
 
 // ── Dictionary ─────────────────────────────────────────
@@ -378,6 +376,7 @@ interface HistoryItem {
   timestamp: number;
   original: string;
   fullTranslation: string;
+  result?: AnalysisResult;
 }
 
 const HISTORY_KEY = 'analyze-history';
@@ -394,6 +393,8 @@ function saveHistory(items: HistoryItem[]) {
 }
 
 export default function AnalyzePage() {
+  const { theme } = useTheme();
+  const C = theme === 'dark' ? DARK_C : LIGHT_C;
   const router = useRouter();
   const { requireLogin, isLoggedIn } = useRequireLoginAction();
   const [mode, setMode] = useState<Mode>('learn');
@@ -428,12 +429,28 @@ export default function AnalyzePage() {
       showToastMsg('当前内容较短，建议使用学习拆解模式');
     }
 
+    const TIMEOUT_MS = 15000;
+    let timedOut = false;
+    const timeoutId = setTimeout(() => {
+      timedOut = true;
+      setAnalyzing(false);
+      showToastMsg('请求超时，已切换离线模式');
+      const r = analyzeOffline(input.trim());
+      setResult(r);
+      saveToHistory(r);
+      setSavedWords(new Set());
+      setSavedSentences(new Set());
+      setShowAlt(false);
+    }, TIMEOUT_MS);
+
     try {
       const res = await fetch('/api/ai/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ sentence: input.trim(), mode }),
       });
+      if (timedOut) return;
+      clearTimeout(timeoutId);
       if (res.ok) {
         const data = await res.json();
         const r: AnalysisResult = {
@@ -451,23 +468,33 @@ export default function AnalyzePage() {
         setResult(r);
         saveToHistory(r);
       } else {
-        throw new Error('API failed');
+        const r = analyzeOffline(input.trim());
+        r._degraded = true;
+        setResult(r);
+        saveToHistory(r);
       }
     } catch {
+      if (timedOut) return;
+      clearTimeout(timeoutId);
       const r = analyzeOffline(input.trim());
+      r._degraded = true;
       setResult(r);
       saveToHistory(r);
     }
 
-    setAnalyzing(false);
-    setSavedWords(new Set());
-    setSavedSentences(new Set());
-    setShowAlt(false);
+    if (!timedOut) {
+      setAnalyzing(false);
+      setSavedWords(new Set());
+      setSavedSentences(new Set());
+      setShowAlt(false);
+      setShowAllWords(false);
+      setShowAllGrammar(false);
+    }
   }
 
   async function handleSaveSentence() {
     if (!result) return;
-    if (savedSentences.has(result.original)) { showToastMsg('已保存'); return; }
+    if (savedSentences.has(result.original)) { showToastMsg('已保存到我的句子'); return; }
     requireLogin(async () => {
       try {
         await db.sentences.add({
@@ -482,16 +509,19 @@ export default function AnalyzePage() {
   }
 
   async function handleSaveWord(text: string, meaning: string) {
-    if (savedWords.has(text)) { showToastMsg('已保存'); return; }
+    if (savedWords.has(text)) { showToastMsg('已保存到词库'); return; }
     requireLogin(async () => {
       try {
-        await db.words.add({
-          id: 'analyze-' + text + '-' + Date.now(),
-          word: text, pronunciation: '', meaning,
-          partOfSpeech: '', examples: [], mastery: 'new' as const,
-          srsLevel: 0, nextReview: Date.now(), easeFactor: 2.5, interval: 1,
-          createdAt: Date.now(), lastReviewed: null,
-        });
+        const existing = await db.words.where('word').equals(text).first();
+        if (!existing) {
+          await db.words.add({
+            id: 'analyze-' + text,
+            word: text, pronunciation: '', meaning,
+            partOfSpeech: '', examples: [], mastery: 'new' as const,
+            srsLevel: 0, nextReview: Date.now(), easeFactor: 2.5, interval: 1,
+            createdAt: Date.now(), lastReviewed: null,
+          });
+        }
         setSavedWords(prev => new Set([...prev, text]));
         showToastMsg('已保存到我的词库');
       } catch { showToastMsg('保存失败'); }
@@ -499,6 +529,7 @@ export default function AnalyzePage() {
   }
 
   function handleClear() {
+    if (result && !confirm('清空输入和分析结果？')) return;
     setInput('');
     setResult(null);
   }
@@ -514,6 +545,7 @@ export default function AnalyzePage() {
       timestamp: Date.now(),
       original: r.original,
       fullTranslation: r.fullTranslation,
+      result: r,
     };
     const hist = loadHistory();
     hist.unshift(item);
@@ -528,30 +560,37 @@ export default function AnalyzePage() {
 
   function loadFromHistory(item: HistoryItem) {
     setInput(item.original);
-    // Re-analyze when loading from history
-    setResult(null);
     setShowHistory(false);
-    // Trigger analysis
+    setSavedWords(new Set());
+    setSavedSentences(new Set());
+    if (item.result) {
+      setResult(item.result);
+      return;
+    }
+    // Legacy history items without cached result — re-fetch once
+    setResult(null);
     const trimmed = item.original;
     if (trimmed) {
       setAnalyzing(true);
       (async () => {
         try {
-          const res = await fetch('/api/ai/analyze', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sentence: trimmed }) });
+          const res = await fetch('/api/ai/analyze', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sentence: trimmed, mode }) });
           if (res.ok) {
             const data = await res.json();
-            setResult({
+            const r: AnalysisResult = {
               original: trimmed, fullTranslation: data.fullTranslation || data.overview || '',
               words: data.words || [], particles: data.particles || [], grammar: data.grammar || [],
               sentences: data.sentences, suggestion: data.suggestion, difficulty: data.difficulty,
-            });
+            };
+            setResult(r);
+            saveToHistory(r);
           } else throw new Error('');
         } catch {
-          setResult(analyzeOffline(trimmed));
+          const r = analyzeOffline(trimmed);
+          r._degraded = true;
+          setResult(r);
         }
         setAnalyzing(false);
-        setSavedWords(new Set());
-        setSavedSentences(new Set());
       })();
     }
   }
@@ -560,6 +599,9 @@ export default function AnalyzePage() {
     setHistoryResults([]);
     saveHistory([]);
   }
+
+  const [showAllWords, setShowAllWords] = useState(false);
+  const [showAllGrammar, setShowAllGrammar] = useState(false);
 
   // ── Render helpers ──────────────────────────────────
   const [speakingText, setSpeakingText] = useState<string | null>(null);
@@ -603,11 +645,19 @@ export default function AnalyzePage() {
   }
 
   function renderQuickTools() {
+    const isChinese = dir.from === '中文';
+    const hasKoreanTranslation = isChinese && /[가-힣]/.test(result?.fullTranslation || '');
+    const speakText = isChinese ? result?.fullTranslation : result?.original;
+    const canSpeak = isChinese ? hasKoreanTranslation : !!result?.original;
     return (
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, padding: '0 16px 16px' }}>
-        <button onClick={handleCopy} style={{ height: 38, borderRadius: 999, border: '1px solid ' + C.line, background: '#fff', color: '#5a4640', fontSize: 12, fontWeight: 800, cursor: 'pointer' }}>复制翻译</button>
+      <div style={{ display: 'grid', gridTemplateColumns: canSpeak ? '1fr 1fr 1fr' : '1fr 1fr', gap: 8, padding: '0 16px 16px' }}>
+        <button onClick={handleCopy} style={{ height: 38, borderRadius: 999, border: '1px solid ' + C.line, background: C.cream, color: '#5a4640', fontSize: 12, fontWeight: 800, cursor: 'pointer' }}>复制翻译</button>
         <button onClick={handleSaveSentence} style={{ height: 38, borderRadius: 999, border: '1px solid ' + C.line, background: savedSentences.has(result?.original || '') ? C.mintBg : '#fff', color: savedSentences.has(result?.original || '') ? C.mintText : '#5a4640', fontSize: 12, fontWeight: 800, cursor: 'pointer' }}>{savedSentences.has(result?.original || '') ? '✓ 已保存' : '保存句子'}</button>
-        <button onClick={() => { if (result?.original) handleSpeak(result.original); }} style={{ height: 38, borderRadius: 999, border: '1px solid ' + C.line, background: speakingText === result?.original ? C.pinkSoft : '#fff', color: speakingText === result?.original ? '#f0799b' : '#5a4640', fontSize: 12, fontWeight: 800, cursor: 'pointer' }}>{speakingText === result?.original ? '⏹ 停止' : '朗读原文'}</button>
+        {canSpeak && (
+          <button onClick={() => { if (speakText) handleSpeak(speakText); }} style={{ height: 38, borderRadius: 999, border: '1px solid ' + C.line, background: (speakingText === result?.original || speakingText === result?.fullTranslation) ? C.pinkSoft : '#fff', color: (speakingText === result?.original || speakingText === result?.fullTranslation) ? '#f0799b' : '#5a4640', fontSize: 12, fontWeight: 800, cursor: 'pointer' }}>
+            {(speakingText === result?.original || speakingText === result?.fullTranslation) ? '⏹ 停止' : (isChinese ? '朗读韩译' : '朗读原文')}
+          </button>
+        )}
       </div>
     );
   }
@@ -646,7 +696,7 @@ export default function AnalyzePage() {
           <span style={{ fontSize: 12, color: '#f0799b', fontWeight: 700 }}>输出深度</span>
         </div>
         {items.map(item => (
-          <div key={item.title} style={{ borderRadius: 26, padding: 14, background: '#fff', border: '1px solid ' + C.line, boxShadow: '0 10px 26px rgba(78,52,46,.06)', marginBottom: 12 }}>
+          <div key={item.title} style={{ borderRadius: 26, padding: 14, background: C.cream, border: '1px solid ' + C.line, boxShadow: '0 10px 26px rgba(78,52,46,.06)', marginBottom: 12 }}>
             <h3 style={{ margin: 0, fontSize: 15 }}>{item.title}</h3>
             <p style={{ margin: '7px 0 0', fontSize: 12, lineHeight: 1.55, color: C.muted }}>{item.desc}</p>
           </div>
@@ -657,6 +707,7 @@ export default function AnalyzePage() {
 
   return (
     <div style={{ paddingBottom: 152 }}>
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       {toast && (
         <div style={{ position: 'fixed', top: 60, left: '50%', transform: 'translateX(-50%)', background: C.black, color: '#fff', borderRadius: 999, padding: '9px 20px', fontSize: 13, fontWeight: 700, zIndex: 300, whiteSpace: 'nowrap', boxShadow: C.strong }}>
           {toast}
@@ -665,7 +716,7 @@ export default function AnalyzePage() {
 
       {/* Back bar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, marginBottom: 14 }}>
-        <button onClick={() => router.back()} style={{ width: 38, height: 38, borderRadius: 16, background: '#fff', border: '1px solid ' + C.line, fontSize: 20, color: '#4d3933', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}>‹</button>
+        <button onClick={() => router.push('/tools')} style={{ width: 38, height: 38, borderRadius: 16, background: C.cream, border: '1px solid ' + C.line, fontSize: 20, color: '#4d3933', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}>‹</button>
         <div style={{ flex: 1 }}>
           <div style={{ fontSize: 17, fontWeight: 800, color: C.ink }}>内容拆解</div>
           <div style={{ fontSize: 12, color: C.muted, fontWeight: 700, marginTop: 2 }}>翻译 + 学习拆解</div>
@@ -712,7 +763,7 @@ export default function AnalyzePage() {
       </div>
 
       {/* Input card */}
-      <div style={{ borderRadius: 30, background: '#fff', border: '1px solid ' + C.line, boxShadow: C.shadow, marginBottom: 14, padding: 16 }}>
+      <div style={{ borderRadius: 30, background: C.cream, border: '1px solid ' + C.line, boxShadow: C.shadow, marginBottom: 14, padding: 16 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10 }}>
           <h2 style={{ margin: 0, fontSize: 18, letterSpacing: '-.3px' }}>输入内容</h2>
           <div style={{ display: 'flex', gap: 6, alignItems: 'center', color: C.muted, fontSize: 12, fontWeight: 900 }}>
@@ -738,23 +789,26 @@ export default function AnalyzePage() {
           <button onClick={handleAnalyze} disabled={!input.trim() || analyzing} style={{
             height: 44, border: 0, borderRadius: 999, background: C.black, color: '#fff', fontSize: 13, fontWeight: 800,
             boxShadow: '0 12px 26px rgba(32,24,21,.16)', cursor: input.trim() && !analyzing ? 'pointer' : 'not-allowed', opacity: input.trim() && !analyzing ? 1 : 0.5,
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
           }}>
+            {analyzing && <span style={{ width: 14, height: 14, border: '2px solid rgba(255,255,255,.3)', borderTopColor: '#fff', borderRadius: '50%', display: 'inline-block', animation: 'spin 0.7s linear infinite' }} />}
             {analyzing ? '处理中...' : '开始处理'}
           </button>
-          <button onClick={handleClear} style={{ height: 44, border: '1px solid ' + C.line, borderRadius: 999, background: '#fff', color: '#5a4640', fontSize: 13, fontWeight: 800, cursor: 'pointer' }}>清空</button>
+          <button onClick={handleClear} style={{ height: 44, border: '1px solid ' + C.line, borderRadius: 999, background: C.cream, color: '#5a4640', fontSize: 13, fontWeight: 800, cursor: 'pointer' }}>清空</button>
         </div>
+        <p style={{ margin: '8px 2px 0', fontSize: 11, color: C.muted, fontWeight: 700 }}>提示：Ctrl + Enter 快速开始处理</p>
       </div>
 
       {/* History view */}
       {showHistory && (
-        <div style={{ borderRadius: 30, background: '#fff', border: '1px solid ' + C.line, boxShadow: C.shadow, marginBottom: 14, padding: 16 }}>
+        <div style={{ borderRadius: 30, background: C.cream, border: '1px solid ' + C.line, boxShadow: C.shadow, marginBottom: 14, padding: 16 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
             <h2 style={{ margin: 0, fontSize: 18, letterSpacing: '-.3px' }}>历史记录</h2>
             <div style={{ display: 'flex', gap: 8 }}>
               {historyResults.length > 0 && (
-                <button onClick={clearHistory} style={{ height: 28, padding: '0 10px', borderRadius: 999, border: '1px solid ' + C.line, background: '#fff', color: C.muted, fontSize: 11, fontWeight: 800, cursor: 'pointer' }}>清除</button>
+                <button onClick={clearHistory} style={{ height: 28, padding: '0 10px', borderRadius: 999, border: '1px solid ' + C.line, background: C.cream, color: C.muted, fontSize: 11, fontWeight: 800, cursor: 'pointer' }}>清除</button>
               )}
-              <button onClick={() => setShowHistory(false)} style={{ height: 28, padding: '0 10px', borderRadius: 999, border: '1px solid ' + C.line, background: '#fff', color: C.muted, fontSize: 11, fontWeight: 800, cursor: 'pointer' }}>关闭</button>
+              <button onClick={() => setShowHistory(false)} style={{ height: 28, padding: '0 10px', borderRadius: 999, border: '1px solid ' + C.line, background: C.cream, color: C.muted, fontSize: 11, fontWeight: 800, cursor: 'pointer' }}>关闭</button>
             </div>
           </div>
           {historyResults.length === 0 ? (
@@ -779,18 +833,25 @@ export default function AnalyzePage() {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', margin: '4px 2px 12px' }}>
             <h2 style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-.3px', color: C.ink, margin: 0 }}>当前模式结果</h2>
             <span style={{ fontSize: 12, color: '#f0799b', fontWeight: 700 }}>
-              {mode === 'deep' && result && (result as any)._downgraded
+            {mode === 'deep' && result && result._degraded
                 ? '学习拆解（内容较短，已自动切换）'
                 : ['快速翻译', '学习拆解', '深度解析（长文）'][['translate', 'learn', 'deep'].indexOf(mode)]}
             </span>
           </div>
 
+          {/* Degraded notice */}
+          {result._degraded && (
+            <div style={{ borderRadius: 14, padding: '9px 14px', background: 'rgba(255,200,100,.12)', border: '1px solid rgba(255,180,60,.28)', marginBottom: 12, fontSize: 12, color: '#8a6a30', fontWeight: 700 }}>
+              AI 服务暂时不可用，已切换为离线词典模式，结果仅供参考
+            </div>
+          )}
+
           {/* Translation card (all modes) */}
-          <div style={{ borderRadius: 30, background: '#fff', border: '1px solid ' + C.line, boxShadow: C.shadow, marginBottom: 14, overflow: 'hidden' }}>
+          <div style={{ borderRadius: 30, background: C.cream, border: '1px solid ' + C.line, boxShadow: C.shadow, marginBottom: 14, overflow: 'hidden' }}>
             <div style={{ padding: '15px 16px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <h2 style={{ margin: 0, fontSize: 18 }}>自然翻译</h2>
               <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-                {renderSpeakBtn(result.original, '🔊 听原文')}
+                {renderSpeakBtn(dir.from === '中文' ? result.fullTranslation : result.original, dir.from === '中文' ? '🔊 听韩译' : '🔊 听原文')}
                 <span style={{ height: 28, display: 'inline-flex', alignItems: 'center', padding: '0 9px', borderRadius: 999, background: C.mintBg, color: C.mintText, fontSize: 11, fontWeight: 800 }}>{dir.from} → {dir.to}</span>
               </div>
             </div>
@@ -804,7 +865,7 @@ export default function AnalyzePage() {
               {/* Alternative translation (quick translate mode) */}
               {mode === 'translate' && result.alternativeTranslation && (
                 <div style={{ marginTop: 8 }}>
-                  <button onClick={() => setShowAlt(!showAlt)} style={{ height: 30, padding: '0 10px', borderRadius: 999, border: '1px solid ' + C.line, background: '#fff', color: '#5a4640', fontSize: 11, fontWeight: 800, cursor: 'pointer' }}>
+                  <button onClick={() => setShowAlt(!showAlt)} style={{ height: 30, padding: '0 10px', borderRadius: 999, border: '1px solid ' + C.line, background: C.cream, color: '#5a4640', fontSize: 11, fontWeight: 800, cursor: 'pointer' }}>
                     更自然译法 {showAlt ? '▲' : '▼'}
                   </button>
                   {showAlt && (
@@ -825,11 +886,11 @@ export default function AnalyzePage() {
                 <h2 style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-.3px', color: C.ink, margin: 0 }}>句子拆解</h2>
                 <span style={{ fontSize: 12, color: '#f0799b', fontWeight: 700 }}>可保存</span>
               </div>
-              <div style={{ borderRadius: 26, padding: 15, background: '#fff', border: '1px solid ' + C.line, boxShadow: C.shadow, marginBottom: 12 }}>
+              <div style={{ borderRadius: 26, padding: 15, background: C.cream, border: '1px solid ' + C.line, boxShadow: C.shadow, marginBottom: 12 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'center', marginBottom: 12 }}>
                   <span style={{ display: 'inline-flex', alignItems: 'center', height: 26, padding: '0 10px', borderRadius: 999, background: C.black, color: '#fff', fontSize: 11, fontWeight: 700 }}>原句</span>
                   <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-                    {renderSpeakBtn(result.original, '🔊 听原句')}
+                    {renderSpeakBtn(dir.from === '中文' ? result.fullTranslation : result.original, dir.from === '中文' ? '🔊 听韩译' : '🔊 听原句')}
                     <span style={{ height: 26, display: 'inline-flex', alignItems: 'center', padding: '0 10px', borderRadius: 999, background: C.mintBg, color: C.mintText, fontSize: 11, fontWeight: 700 }}>口语表达</span>
                   </div>
                 </div>
@@ -840,7 +901,7 @@ export default function AnalyzePage() {
 
                 {/* Word breakdown */}
                 <div style={{ display: 'grid', gap: 8, marginTop: 12 }}>
-                  {result.words.slice(0, 8).map((w, i) => (
+                  {result.words.slice(0, showAllWords ? undefined : 8).map((w, i) => (
                     <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 10, alignItems: 'center', padding: '10px 11px', borderRadius: 18, background: C.cream, border: '1px solid rgba(239,224,217,.86)', fontSize: 13 }}>
                       <div>
                         <strong style={{ display: 'block' }}>{w.text}</strong>
@@ -856,21 +917,31 @@ export default function AnalyzePage() {
                       </button>
                     </div>
                   ))}
+                  {result.words.length > 8 && (
+                    <button onClick={() => setShowAllWords(v => !v)} style={{ height: 32, border: '1px solid ' + C.line, borderRadius: 999, background: C.cream, color: C.muted, fontSize: 12, fontWeight: 800, cursor: 'pointer' }}>
+                      {showAllWords ? '收起' : `显示全部 ${result.words.length} 个词 ▼`}
+                    </button>
+                  )}
                 </div>
 
                 {/* Grammar */}
-                {result.grammar.slice(0, 2).map((g, i) => (
+                {result.grammar.slice(0, showAllGrammar ? undefined : 2).map((g, i) => (
                   <div key={i} style={{ marginTop: 10, padding: 12, borderRadius: 20, background: C.mintBg, fontSize: 13, lineHeight: 1.58, color: '#416b63' }}>
                     <strong>{g.pattern}：</strong>{g.usage}
                   </div>
                 ))}
+                {result.grammar.length > 2 && (
+                  <button onClick={() => setShowAllGrammar(v => !v)} style={{ marginTop: 8, height: 32, border: '1px solid ' + C.line, borderRadius: 999, background: C.cream, color: C.muted, fontSize: 12, fontWeight: 800, cursor: 'pointer', width: '100%' }}>
+                    {showAllGrammar ? '收起语法' : `显示全部 ${result.grammar.length} 条语法 ▼`}
+                  </button>
+                )}
               </div>
             </>
           )}
 
           {/* Deep mode: full article report */}
           {mode === 'deep' && (
-            <div style={{ borderRadius: 30, background: '#fff', border: '1px solid ' + C.line, boxShadow: C.shadow, marginBottom: 14, padding: 16 }}>
+            <div style={{ borderRadius: 30, background: C.cream, border: '1px solid ' + C.line, boxShadow: C.shadow, marginBottom: 14, padding: 16 }}>
               <h2 style={{ margin: '0 0 12px', fontSize: 18, letterSpacing: '-.3px' }}>
                 深度解析
                 {result.difficulty && <span style={{ marginLeft: 8, fontSize: 12, color: '#f0799b', fontWeight: 700 }}>· {result.difficulty}</span>}
@@ -896,7 +967,7 @@ export default function AnalyzePage() {
                 <div style={{ marginBottom: 16 }}>
                   <h3 style={{ fontSize: 14, fontWeight: 800, margin: '0 0 10px', color: C.muted }}>重点词汇（{result.words.length} 个）</h3>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                    {result.words.slice(0, 12).map((w, i) => (
+                    {result.words.slice(0, showAllWords ? undefined : 12).map((w, i) => (
                       <span key={i} style={{ height: 30, padding: '0 10px', borderRadius: 999, background: C.pinkSoft, border: '1px solid rgba(255,127,168,.18)', color: '#5a423b', fontSize: 12, fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
                         {w.text}
                         <button onClick={() => handleSaveWord(w.text, w.meaning)} style={{ border: 'none', background: 'none', padding: 0, cursor: 'pointer', fontSize: 11, color: savedWords.has(w.text) ? C.mintText : '#f0799b', fontWeight: 800 }}>
@@ -905,17 +976,27 @@ export default function AnalyzePage() {
                       </span>
                     ))}
                   </div>
+                  {result.words.length > 12 && (
+                    <button onClick={() => setShowAllWords(v => !v)} style={{ marginTop: 8, height: 30, border: '1px solid ' + C.line, borderRadius: 999, background: C.cream, color: C.muted, fontSize: 11, fontWeight: 800, cursor: 'pointer', padding: '0 12px' }}>
+                      {showAllWords ? '收起' : `显示全部 ${result.words.length} 个 ▼`}
+                    </button>
+                  )}
                 </div>
               )}
 
               {result.grammar.length > 0 && (
                 <div style={{ marginBottom: 16 }}>
                   <h3 style={{ fontSize: 14, fontWeight: 800, margin: '0 0 10px', color: C.muted }}>语法解析</h3>
-                  {result.grammar.slice(0, 3).map((g, i) => (
+                  {result.grammar.slice(0, showAllGrammar ? undefined : 3).map((g, i) => (
                     <div key={i} style={{ padding: 12, borderRadius: 20, background: C.mintBg, marginBottom: 8, fontSize: 13, lineHeight: 1.58, color: '#416b63' }}>
                       <strong>{g.pattern}</strong> {g.usage}
                     </div>
                   ))}
+                  {result.grammar.length > 3 && (
+                    <button onClick={() => setShowAllGrammar(v => !v)} style={{ height: 30, border: '1px solid ' + C.line, borderRadius: 999, background: C.cream, color: C.muted, fontSize: 11, fontWeight: 800, cursor: 'pointer', padding: '0 12px' }}>
+                      {showAllGrammar ? '收起' : `显示全部 ${result.grammar.length} 条 ▼`}
+                    </button>
+                  )}
                 </div>
               )}
 
@@ -934,10 +1015,10 @@ export default function AnalyzePage() {
       {!result && !showHistory && renderModeExplanation()}
 
       {/* Bottom bar */}
-      <div style={{
+      <div className="md:left-[108px] md:!bottom-0" style={{
         position: 'fixed', left: 0, right: 0, bottom: 'calc(56px + env(safe-area-inset-bottom, 0px))', height: 88,
-        padding: '12px 18px 16px', background: 'rgba(255,255,255,.92)',
-        backdropFilter: 'blur(20px)', borderTop: '1px solid ' + C.line, zIndex: 100,
+        padding: '12px 18px 16px', background: C.cream,
+        borderTop: '1px solid ' + C.line, zIndex: 100,
       }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, height: '100%', maxWidth: 640, margin: '0 auto' }}>
           <button onClick={openHistory} style={{ borderRadius: 20, fontSize: 12, fontWeight: 800, background: C.cream, color: '#6b5851', border: '1px solid ' + C.line, cursor: 'pointer' }}>历史记录</button>
@@ -953,7 +1034,10 @@ export default function AnalyzePage() {
                 created_at: new Date().toISOString(),
               });
               showToastMsg('已加入复习队列');
-            } catch { showToastMsg('已在队列中'); }
+            } catch (e: any) {
+              if (e?.name === 'ConstraintError') showToastMsg('已在复习队列中');
+              else showToastMsg('加入失败');
+            }
           }} disabled={!result} style={{ borderRadius: 20, fontSize: 12, fontWeight: 800, background: C.cream, color: '#6b5851', border: '1px solid ' + C.line, cursor: result ? 'pointer' : 'not-allowed', opacity: result ? 1 : 0.5 }}>加入复习</button>
         </div>
       </div>

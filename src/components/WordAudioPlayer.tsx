@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { Play, Pause, SkipBack, SkipForward, Repeat, Volume2, ChevronUp, ChevronDown } from 'lucide-react';
-import { speak, cancelSpeech } from '@/lib/tts';
+import { Play, Pause, SkipBack, SkipForward } from 'lucide-react';
+import { speak, speakChinese, cancelSpeech } from '@/lib/tts';
 
 interface WordItem {
   korean: string;
@@ -11,20 +11,16 @@ interface WordItem {
 
 interface Props {
   words: WordItem[];
+  extraBottom?: number;
 }
 
-export function WordAudioPlayer({ words }: Props) {
+export function WordAudioPlayer({ words, extraBottom = 0 }: Props) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentIdx, setCurrentIdx] = useState(0);
-  const [isLooping, setIsLooping] = useState(true);
-  const [speed, setSpeed] = useState(0.85);
-  const [collapsed, setCollapsed] = useState(false);
-  const [phase, setPhase] = useState<'chinese' | 'korean' | 'idle'>('idle');
+  const [phase, setPhase] = useState<'korean' | 'chinese' | 'idle'>('idle');
 
   const idxRef = useRef(0);
   const playingRef = useRef(false);
-  const loopingRef = useRef(true);
-  const speedRef = useRef(0.85);
   const wordsRef = useRef(words);
   wordsRef.current = words;
   const timeoutIdsRef = useRef<Set<ReturnType<typeof setTimeout>>>(new Set());
@@ -40,57 +36,70 @@ export function WordAudioPlayer({ words }: Props) {
     return id;
   }, []);
 
-  const speakLocal = useCallback((text: string, lang: string, rate: number, onEnd: () => void) => {
-    if (lang === 'ko-KR') {
-      speak(text, rate, onEnd);
-    } else {
-      // Chinese — use browser TTS directly (Azure only does Korean)
-      cancelSpeech();
-      const u = new SpeechSynthesisUtterance(text);
-      u.lang = 'zh-CN';
-      u.rate = rate;
-      u.pitch = 1;
-      u.onend = onEnd;
-      u.onerror = onEnd;
-      window.speechSynthesis.speak(u);
-    }
-  }, []);
-
   const playWord = useCallback((idx: number) => {
     if (!playingRef.current) return;
-    const w = wordsRef.current[idx];
-    if (!w) {
-      if (loopingRef.current) {
-        setCurrentIdx(0);
-        idxRef.current = 0;
-        safeTimeout(() => playWord(0), 500);
-      } else {
-        setIsPlaying(false);
-        playingRef.current = false;
-        setPhase('idle');
-      }
+    const list = wordsRef.current;
+    if (idx >= list.length) {
+      // loop back
+      idxRef.current = 0;
+      setCurrentIdx(0);
+      safeTimeout(() => playWord(0), 500);
       return;
     }
-
+    const w = list[idx];
     setCurrentIdx(idx);
     idxRef.current = idx;
 
-    setPhase('chinese');
-    speakLocal(w.chinese, 'zh-CN', speedRef.current, () => {
+    setPhase('korean');
+
+    let koreanDone = false;
+    const koreanTimeout = safeTimeout(() => {
+      if (!koreanDone && playingRef.current) {
+        koreanDone = true;
+        afterKorean();
+      }
+    }, 8000);
+
+    const afterKorean = () => {
       if (!playingRef.current) return;
       safeTimeout(() => {
         if (!playingRef.current) return;
-        setPhase('korean');
-        speakLocal(w.korean, 'ko-KR', speedRef.current, () => {
+        setPhase('chinese');
+
+        let chineseDone = false;
+        const chineseTimeout = safeTimeout(() => {
+          if (!chineseDone && playingRef.current) {
+            chineseDone = true;
+            afterChinese();
+          }
+        }, 8000);
+
+        const afterChinese = () => {
           if (!playingRef.current) return;
           safeTimeout(() => {
             if (!playingRef.current) return;
             playWord(idx + 1);
-          }, 800);
+          }, 700);
+        };
+
+        speakChinese(w.chinese, 0.85, () => {
+          if (!chineseDone) {
+            chineseDone = true;
+            clearTimeout(chineseTimeout);
+            afterChinese();
+          }
         });
-      }, 400);
+      }, 350);
+    };
+
+    speak(w.korean, 0.85, () => {
+      if (!koreanDone) {
+        koreanDone = true;
+        clearTimeout(koreanTimeout);
+        afterKorean();
+      }
     });
-  }, [safeTimeout, speakLocal]);
+  }, [safeTimeout]);
 
   const start = useCallback(() => {
     cancelSpeech();
@@ -106,22 +115,12 @@ export function WordAudioPlayer({ words }: Props) {
     setPhase('idle');
   }, []);
 
-  const togglePlay = useCallback(() => {
-    if (isPlaying) {
-      pause();
-    } else {
-      start();
-    }
-  }, [isPlaying, start, pause]);
-
   const skipBack = useCallback(() => {
     cancelSpeech();
     const prev = Math.max(0, idxRef.current - 1);
     idxRef.current = prev;
     setCurrentIdx(prev);
-    if (playingRef.current) {
-      playWord(prev);
-    }
+    if (playingRef.current) playWord(prev);
   }, [playWord]);
 
   const skipForward = useCallback(() => {
@@ -129,38 +128,15 @@ export function WordAudioPlayer({ words }: Props) {
     const next = (idxRef.current + 1) % words.length;
     idxRef.current = next;
     setCurrentIdx(next);
-    if (playingRef.current) {
-      playWord(next);
-    }
+    if (playingRef.current) playWord(next);
   }, [playWord, words.length]);
 
-  const toggleLoop = useCallback(() => {
-    setIsLooping((prev) => {
-      loopingRef.current = !prev;
-      return !prev;
-    });
-  }, []);
-
-  const changeSpeed = useCallback((delta: number) => {
-    setSpeed((prev) => {
-      const next = Math.max(0.5, Math.min(1.5, prev + delta));
-      speedRef.current = next;
-      return next;
-    });
-    // Restart current word with new speed
-    if (playingRef.current) {
-      cancelSpeech();
-      playWord(idxRef.current);
-    }
-  }, [playWord]);
-
-  // Cleanup on unmount
   useEffect(() => {
     const ids = timeoutIdsRef.current;
     return () => {
       mountedRef.current = false;
       cancelSpeech();
-      ids.forEach((id) => clearTimeout(id));
+      ids.forEach(clearTimeout);
       ids.clear();
     };
   }, []);
@@ -170,135 +146,64 @@ export function WordAudioPlayer({ words }: Props) {
   const currentWord = words[currentIdx] || words[0];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-[150]">
-      <div className="px-4 md:pl-52 md:pr-5 lg:pr-8 w-full max-w-[1280px] mx-auto">
-        <div className={`bg-[var(--bg-card)] border border-[var(--border-color)] ${collapsed ? 'rounded-2xl' : 'rounded-t-2xl'} shadow-xl shadow-black/10 transition-all`}>
-          {/* Header bar */}
-          <div className="flex items-center gap-3 px-4 py-2.5">
-            <button
-              onClick={() => setCollapsed(!collapsed)}
-              className="p-1 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
-            >
-              {collapsed ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-            </button>
-
-            <Volume2 size={16} className="text-[var(--pink-primary)] shrink-0" />
-            <span className="text-sm font-medium text-[var(--text-primary)]">听单词</span>
-
-            {!collapsed && (
-              <span className="text-xs text-[var(--text-muted)]">
-                {currentIdx + 1} / {words.length}
+    <div
+      className="fixed left-0 right-0 z-[90] px-4 md:pl-[220px] md:pr-6"
+      style={{ bottom: `calc(56px + env(safe-area-inset-bottom, 0px) + ${extraBottom}px)` }}
+    >
+      <div
+        className="flex items-center gap-3 rounded-2xl px-4 py-3 shadow-lg shadow-black/10"
+        style={{ background: 'linear-gradient(135deg, #fff0f5 0%, #eaf8f5 100%)', border: '1px solid #f5dce6' }}
+      >
+        {/* Word info */}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <span className="text-[15px] font-bold text-[var(--text-primary)] truncate">{currentWord.korean}</span>
+            {phase !== 'idle' && (
+              <span
+                className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full shrink-0"
+                style={{
+                  background: phase === 'korean' ? 'rgba(255,127,168,0.15)' : 'rgba(174,227,216,0.3)',
+                  color: phase === 'korean' ? 'var(--pink-primary)' : '#3aafa9',
+                }}
+              >
+                {phase === 'korean' ? 'KR' : 'ZH'}
               </span>
             )}
-
-            <div className="flex-1" />
-
-            {!collapsed && (
-              <>
-                {/* Speed */}
-                <div className="flex items-center gap-1 text-xs">
-                  <button
-                    onClick={() => changeSpeed(-0.1)}
-                    className="px-1.5 py-0.5 rounded-md bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
-                  >
-                    -
-                  </button>
-                  <span className="text-[var(--text-muted)] w-9 text-center tabular-nums">
-                    {speed.toFixed(2)}x
-                  </span>
-                  <button
-                    onClick={() => changeSpeed(0.1)}
-                    className="px-1.5 py-0.5 rounded-md bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
-                  >
-                    +
-                  </button>
-                </div>
-
-                {/* Loop toggle */}
-                <button
-                  onClick={toggleLoop}
-                  className={`p-1.5 rounded-lg transition-colors ${
-                    isLooping
-                      ? 'bg-[var(--pink-primary)]/15 text-[var(--pink-primary)]'
-                      : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
-                  }`}
-                  title={isLooping ? '循环播放中' : '单次播放'}
-                >
-                  <Repeat size={15} />
-                </button>
-              </>
-            )}
-
-            {/* Transport controls */}
-            <button
-              onClick={skipBack}
-              className="p-1.5 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
-              title="上一首"
-            >
-              <SkipBack size={16} />
-            </button>
-
-            <button
-              onClick={togglePlay}
-              className="p-1.5 rounded-full bg-[var(--pink-primary)] text-white hover:opacity-90 transition-opacity"
-            >
-              {isPlaying ? <Pause size={16} /> : <Play size={16} className="ml-0.5" />}
-            </button>
-
-            <button
-              onClick={skipForward}
-              className="p-1.5 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
-              title="下一首"
-            >
-              <SkipForward size={16} />
-            </button>
           </div>
+          <p className="text-xs text-[var(--text-secondary)] truncate mt-0.5">{currentWord.chinese}</p>
+        </div>
 
-          {/* Expanded info */}
-          {!collapsed && (
-            <div className="px-4 pb-3 space-y-1">
-              {/* Current word display */}
-              <div className="flex items-center gap-3 bg-[var(--bg-input)]/60 rounded-xl px-4 py-3">
-                <div className="flex-1 min-w-0 text-center">
-                  <p className="text-lg font-bold text-[var(--text-primary)]">
-                    {currentWord.korean}
-                  </p>
-                  <p className="text-sm text-[var(--text-secondary)] mt-0.5">
-                    {currentWord.chinese}
-                  </p>
-                </div>
-                {phase !== 'idle' && (
-                  <span className={`text-xs px-2 py-1 rounded-full shrink-0 ${
-                    phase === 'chinese'
-                      ? 'bg-[var(--peach-soft)]/15 text-[var(--peach-soft)]'
-                      : 'bg-[var(--pink-primary)]/15 text-[var(--pink-primary)]'
-                  }`}>
-                    {phase === 'chinese' ? '🇨🇳 中文' : '🇰🇷 韩语'}
-                  </span>
-                )}
-              </div>
+        {/* Counter */}
+        <span className="text-[11px] text-[var(--text-muted)] tabular-nums shrink-0">
+          {currentIdx + 1}/{words.length}
+        </span>
 
-              {/* Progress dots */}
-              <div className="flex justify-center gap-1 pt-1 flex-wrap">
-                {words.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => {
-                      cancelSpeech();
-                      idxRef.current = i;
-                      setCurrentIdx(i);
-                      if (playingRef.current) playWord(i);
-                    }}
-                    className={`w-1.5 h-1.5 rounded-full transition-all ${
-                      i === currentIdx
-                        ? 'bg-[var(--pink-primary)] w-3'
-                        : 'bg-[var(--border-color)] hover:bg-[var(--text-muted)]'
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
+        {/* Controls */}
+        <div className="flex items-center gap-1 shrink-0">
+          <button
+            onClick={skipBack}
+            className="w-8 h-8 flex items-center justify-center rounded-full text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-black/5 transition-colors"
+          >
+            <SkipBack size={15} />
+          </button>
+
+          <button
+            onClick={isPlaying ? pause : start}
+            className="w-10 h-10 flex items-center justify-center rounded-full text-white transition-opacity hover:opacity-90 active:scale-95"
+            style={{ background: 'var(--pink-primary)' }}
+          >
+            {isPlaying
+              ? <Pause size={17} />
+              : <Play size={17} style={{ marginLeft: '2px' }} />
+            }
+          </button>
+
+          <button
+            onClick={skipForward}
+            className="w-8 h-8 flex items-center justify-center rounded-full text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-black/5 transition-colors"
+          >
+            <SkipForward size={15} />
+          </button>
         </div>
       </div>
     </div>

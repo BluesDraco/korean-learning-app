@@ -82,9 +82,7 @@ export default function KpopCalibrationPage() {
   const lineListRef = useRef<HTMLDivElement | null>(null);
 
   const song = kpopSongs.find((s) => s.id === selectedSongId);
-  const audioUrl = song
-    ? `https://torikorean-1436752408.cos.ap-hongkong.myqcloud.com/audio/kpop/${song.videoId}.webm`
-    : '';
+  const audioUrl = '';
   const currentLineCals = lineCals[selectedSongId] ?? {};
   const currentOverrides = lyricsOverrides[selectedSongId] ?? {};
 

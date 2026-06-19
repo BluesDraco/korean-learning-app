@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { notFound } from 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';
 import SingingMode from '@/components/kpop/SingingMode';
 import { talks, type TedxTalk } from '@/data/tedxTalks';
@@ -20,6 +20,7 @@ function subwayToLyric(sub: { s: number; e: number; t: string }, zh?: string): K
 
 export default function TedxPlayerPage() {
   const { id } = useParams<{ id: string }>();
+  const router = useRouter();
   const talk: TedxTalk | undefined = useMemo(() => talks.find((t) => t.id === id), [id]);
 
   const lyrics: KpopLine[] = useMemo(() => {
@@ -38,7 +39,7 @@ export default function TedxPlayerPage() {
     album: talk.event,
     year: 2024,
     coverUrl: '',
-    audioUrl: `https://torikorean-1436752408.cos.ap-hongkong.myqcloud.com/audio/tedx/${talk.videoId}.webm`,
+    audioUrl: '',
     assetStatus: 'ready',
     sourceType: 'curated',
     level: 'intermediate',
@@ -47,5 +48,5 @@ export default function TedxPlayerPage() {
     lyrics,
   };
 
-  return <SingingMode song={song} startIndex={0} onClose={() => window.history.back()} audioType="tedx" />;
+  return <SingingMode song={song} startIndex={0} onClose={() => router.push('/tedx')} audioType="tedx" />;
 }

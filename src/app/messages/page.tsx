@@ -2,7 +2,8 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import Image from 'next/image';
-import { Mail, Sparkles, Bell, Megaphone, FileText, ChevronDown, Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Mail, Sparkles, Bell, Megaphone, FileText, ChevronDown, Loader2, ArrowLeft } from 'lucide-react';
 import type { Announcement, AnnouncementType } from '@/types';
 
 const TYPE_CONFIG: Record<AnnouncementType, { label: string; icon: React.ComponentType<{ size?: number; className?: string; color?: string }>; color: string }> = {
@@ -16,10 +17,11 @@ async function markRead(announcementId: string) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ announcementId }),
-  });
+  }).catch(() => {});
 }
 
 export default function MessagesPage() {
+  const router = useRouter();
   const [messages, setMessages] = useState<(Announcement & { read: boolean })[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -28,10 +30,10 @@ export default function MessagesPage() {
     fetch('/api/announcements')
       .then((r) => r.json())
       .then((data) => {
-        setMessages(data);
+        const list = Array.isArray(data) ? data : [];
+        setMessages(list);
         setLoading(false);
-        // Auto-expand first unread
-        const firstUnread = data.find((m: any) => !m.read);
+        const firstUnread = list.find((m: any) => !m.read);
         if (firstUnread) setExpandedId(firstUnread.id);
       })
       .catch(() => setLoading(false));
@@ -57,6 +59,9 @@ export default function MessagesPage() {
 
   return (
     <div className="py-6 max-w-lg mx-auto space-y-6">
+      <button onClick={() => router.back()} className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
+        <ArrowLeft size={16} /> 返回
+      </button>
       {/* Header */}
       <div className="text-center space-y-3">
         <div className="relative inline-block">

@@ -4,8 +4,6 @@ import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { X, Delete } from 'lucide-react';
 import { useIsMobile } from '@/lib/useIsMobile';
-// Handwriting entry hidden — unreliable recognition API; re-enable with feature flag when stable
-// import { HandwritingPad } from '@/components/HandwritingPad';
 
 // ═══════════════════════════════════════════════════════════════
 // Hangul Composition Engine
@@ -499,7 +497,7 @@ export function KoreanKeyboard({ value, onChange, visible, onClose, onSend }: Ko
           overflowY: isMobile ? 'auto' : undefined,
           // Desktop: nudge right by half the sidebar width so keyboard sits
           // over the main content column rather than the sidebar
-          marginLeft: isMobile ? undefined : '56px',
+          marginLeft: isMobile ? undefined : 'calc(var(--desktop-sidebar) / 2)',
           transform: isMobile
             ? animState === 'visible' ? 'translateY(0)' : 'translateY(110%)'
             : animState === 'visible'
@@ -534,7 +532,7 @@ export function KoreanKeyboard({ value, onChange, visible, onClose, onSend }: Ko
           {/* Key area */}
           <div
             className="bg-[var(--bg-soft)] border border-[var(--border-color)] px-2 pt-2"
-            style={{ borderRadius: '0 0 16px 16px', paddingBottom: isMobile ? 'calc(env(safe-area-inset-bottom, 0px) + 10px)' : '8px' }}
+            style={{ borderRadius: '0 0 16px 16px', paddingBottom: '10px' }}
           >
             {ROWS.map((row, ri) => (
               <div key={ri} className="flex justify-center gap-[5px] mb-[5px]">
@@ -562,7 +560,7 @@ export function KoreanKeyboard({ value, onChange, visible, onClose, onSend }: Ko
                       onMouseUp={key.type === 'backspace' ? stopRepeat : undefined}
                       onMouseLeave={key.type === 'backspace' ? stopRepeat : undefined}
                       onTouchStart={(e) => { e.preventDefault(); if (key.type === 'backspace') startRepeat(); }}
-                      onTouchEnd={key.type === 'backspace' ? stopRepeat : undefined}
+                      onTouchEnd={(e) => { e.preventDefault(); if (key.type === 'backspace') { stopRepeat(); } else { handleKey(key); } }}
                       className={`${bg} ${keyH} flex items-center justify-center rounded-[8px] font-medium
                         text-[var(--text-primary)] shadow-[0_1px_2px_rgba(0,0,0,.15)]
                         active:scale-[0.92] active:brightness-90
@@ -596,6 +594,7 @@ export function KoreanKeyboard({ value, onChange, visible, onClose, onSend }: Ko
                 onClick={() => handleKey({ label: '', type: 'space', flex: 1 })}
                 onMouseDown={(e) => e.preventDefault()}
                 onTouchStart={(e) => e.preventDefault()}
+                onTouchEnd={(e) => { e.preventDefault(); handleKey({ label: '', type: 'space', flex: 1 }); }}
                 className={`bg-white dark:bg-[var(--bg-card)] flex items-center justify-center ${keyH} rounded-[8px] text-xs font-medium text-[var(--text-muted)] shadow-[0_1px_2px_rgba(0,0,0,.15)] active:scale-[0.96] transition-all select-none`}
                 style={{ flex: 5 }}
               >
@@ -607,6 +606,7 @@ export function KoreanKeyboard({ value, onChange, visible, onClose, onSend }: Ko
                   onClick={handleSend}
                   onMouseDown={(e) => e.preventDefault()}
                   onTouchStart={(e) => e.preventDefault()}
+                  onTouchEnd={(e) => { e.preventDefault(); handleSend(); }}
                   className={`bg-[var(--pink-primary)] flex items-center justify-center ${keyH} rounded-[8px] text-sm font-bold text-white shadow-[0_1px_2px_rgba(0,0,0,.15)] active:scale-[0.96] transition-all select-none`}
                   style={{ flex: 2 }}
                 >
@@ -618,6 +618,7 @@ export function KoreanKeyboard({ value, onChange, visible, onClose, onSend }: Ko
                   onClick={() => handleKey({ label: '', type: 'done', flex: 1 })}
                   onMouseDown={(e) => e.preventDefault()}
                   onTouchStart={(e) => e.preventDefault()}
+                  onTouchEnd={(e) => { e.preventDefault(); handleKey({ label: '', type: 'done', flex: 1 }); }}
                   className={`bg-[var(--pink-primary)] flex items-center justify-center ${keyH} rounded-[8px] text-sm font-bold text-white shadow-[0_1px_2px_rgba(0,0,0,.15)] active:scale-[0.96] transition-all select-none`}
                   style={{ flex: 2 }}
                 >

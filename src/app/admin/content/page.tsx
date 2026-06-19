@@ -3,7 +3,8 @@
 import { useAdminData } from '@/lib/useAdminData';
 import type { ContentResponse } from '@/types/admin';
 import { useState } from 'react';
-import { Check, X } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Check, X, MessageCircle } from 'lucide-react';
 
 const statusTabs = [
   { key: 'pending', label: '待处理' },
@@ -22,6 +23,7 @@ const typeLabels: Record<string, string> = {
 export default function ContentPage() {
   const [status, setStatus] = useState('pending');
   const { data, loading, refetch } = useAdminData<ContentResponse>(`/api/admin/content?feedbackStatus=${status}`);
+  const router = useRouter();
 
   const handleResolve = async (id: string, newStatus: 'resolved' | 'ignored') => {
     await fetch(`/api/admin/feedback/${id}`, {
@@ -129,6 +131,13 @@ export default function ContentPage() {
                 </div>
                 {f.status === 'pending' && (
                   <div className="flex items-center gap-1.5 shrink-0">
+                    <button
+                      onClick={() => router.push(`/admin/messages?userId=${f.userId}`)}
+                      className="p-1.5 rounded-lg hover:bg-[var(--pink-primary)]/10 text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors"
+                      title="发私信"
+                    >
+                      <MessageCircle size={16} />
+                    </button>
                     <button
                       onClick={() => handleResolve(f.id, 'resolved')}
                       className="p-1.5 rounded-lg hover:bg-emerald-50 text-[var(--text-muted)] hover:text-emerald-500 transition-colors"

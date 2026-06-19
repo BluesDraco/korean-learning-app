@@ -1,612 +1,186 @@
 'use client';
 
-import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
-import { Volume2, Check, X, ArrowRight, Loader2, RotateCcw, Sparkles, Star, Trophy, Mic, Pen, Keyboard, Headphones, Calendar } from 'lucide-react';
-import { db } from '@/lib/db';
-import { awardXp, XP_REWARDS, updateStreak } from '@/lib/gamification';
-import { KoreanKeyboard } from '@/components/KoreanKeyboard';
-import { HandwritingPad } from '@/components/HandwritingPad';
-import { useIsMobile } from '@/lib/useIsMobile';
-import { dictationWordPacks, type DictationWord } from '@/data/dictationWords';
-import { dictationSentences, type DictationSentence } from '@/data/dictationSentences';
-import { speakBrowser } from '@/lib/tts';
-import { useFeedback } from '@/hooks/useFeedback';
-import type { Word } from '@/types';
-import { getCharDiff } from '@/lib/koreanDiff';
+import { useState } from 'react';
+import Link from 'next/link';
+import { Play, Zap, ArrowLeft } from 'lucide-react';
+import { DictationSourcePicker, buildItemsFromConfig } from '@/components/dictation/DictationSourcePicker';
+import { DictationSession } from '@/components/dictation/DictationSession';
+import type { SourceConfig } from '@/components/dictation/DictationSourcePicker';
+import type { DictationItem } from '@/components/dictation/DictationSession';
 
-/** Normalize Korean input for comparison — NFC normalization + trim + collapse whitespace */
-function normalizeKorean(v: string): string {
-  return v.normalize('NFC').trim().replace(/\s+/g, ' ');
-}
+type Difficulty = 'beginner' | 'intermediate' | 'advanced';
+type PageState = 'config' | 'session';
 
-type Mode = 'word' | 'sentence' | 'daily';
-type WordSource = 'builtin' | 'mywords';
-type InputMode = 'type' | 'handwrite';
+const DIFFICULTY_LABELS: Record<Difficulty, { label: string; desc: string; color: string }> = {
+  beginner:     { label: '初级', desc: '慢速·可重复3次·显示释义', color: '#81b5a1' },
+  intermediate: { label: '中级', desc: '中速·可重复2次·无提示',   color: '#e8a87c' },
+  advanced:     { label: '高级', desc: '快速·仅播放1次·无提示',   color: '#e04a6a' },
+};
 
-// Daily challenge helpers
-const DAILY_KEY = 'dictation-daily';
-
-interface DailyState {
-  date: string;           // YYYY-MM-DD
-  wordIds: string[];      // 10 word ids
-  sentenceIds: string[];  // 2 sentence ids
-  currentIdx: number;     // current question index (0-11)
-  answers: { correct: boolean }[];
-}
-
-function getDailyState(): DailyState | null {
-  try {
-    const raw = localStorage.getItem(DAILY_KEY);
-    if (!raw) return null;
-    const state = JSON.parse(raw) as DailyState;
-    if (state.date !== new Date().toISOString().slice(0, 10)) return null;
-    return state;
-  } catch { return null; }
-}
-
-function saveDailyState(state: DailyState) {
-  localStorage.setItem(DAILY_KEY, JSON.stringify(state));
-}
-
-function generateDaily(): DailyState {
-  const allWords = dictationWordPacks.flatMap((p) => p.words);
-  const shuffled = [...allWords].sort(() => Math.random() - 0.5);
-  const wordIds = shuffled.slice(0, 10).map((w) => w.id);
-  const sShuffled = [...dictationSentences].sort(() => Math.random() - 0.5);
-  const sentenceIds = sShuffled.slice(0, 2).map((s) => s.id);
-  return {
-    date: new Date().toISOString().slice(0, 10),
-    wordIds, sentenceIds,
-    currentIdx: 0,
-    answers: [],
-  };
-}
-
-// Build a lookup map for all built-in words
-const allBuiltinWords = new Map<string, DictationWord>();
-dictationWordPacks.forEach((p) => p.words.forEach((w) => allBuiltinWords.set(w.id, w)));
+const DEFAULT_SOURCE: SourceConfig = {
+  type: 'builtin',
+  builtin: { packId: 'beginner', mode: 'word' },
+};
 
 export default function DictationPage() {
-  const isMobile = useIsMobile();
-  const [mode, setMode] = useState<Mode>('word');
-  const [wordSource, setWordSource] = useState<WordSource>('builtin');
-  const [packId, setPackId] = useState('beginner');
-  const [sentenceLevel, setSentenceLevel] = useState<'beginner' | 'intermediate' | 'advanced'>('beginner');
-  const [showNotice, setShowNotice] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return !sessionStorage.getItem('dictation-notice-seen');
-  });
-
-  // Game state
-  const [words, setWords] = useState<DictationWord[]>([]);
-  const [sentences, setSentences] = useState<DictationSentence[]>([]);
-  const [currentIdx, setCurrentIdx] = useState(0);
-  const [userInput, setUserInput] = useState('');
-  const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [stats, setStats] = useState({ correct: 0, total: 0 });
-  const [complete, setComplete] = useState(false);
+  const [pageState, setPageState] = useState<PageState>('config');
+  const [difficulty, setDifficulty] = useState<Difficulty>('beginner');
+  const [sourceConfig, setSourceConfig] = useState<SourceConfig>(DEFAULT_SOURCE);
+  const [items, setItems] = useState<DictationItem[]>([]);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [earnedXp, setEarnedXp] = useState(0);
-  const [showXpGain, setShowXpGain] = useState(false);
-  const [xpGainAmount, setXpGainAmount] = useState(0);
-  const [leveledUp, setLeveledUp] = useState(false);
-  const [newLevel, setNewLevel] = useState(0);
-  const [hasListened, setHasListened] = useState(false);
-  const [keyboardVisible, setKeyboardVisible] = useState(false);
-  const [inputMode, setInputMode] = useState<InputMode>('type');
-  const [dailyState, setDailyState] = useState<DailyState | null>(null);
-  const [dailyDone, setDailyDone] = useState(false);
-  const [speed, setSpeed] = useState(1.0);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const { success: feedbackSuccess, error: feedbackError, click: feedbackClick } = useFeedback();
 
-  // Load word dictation data
-  const loadWords = useCallback(async () => {
+  async function handleStart() {
     setLoading(true);
-    if (wordSource === 'mywords') {
-      const allWords = await db.words.orderBy('createdAt').reverse().limit(20).toArray();
-      setWords(allWords.map((w: Word) => ({
-        id: w.id, korean: w.word, meaning: w.meaning, pronunciation: w.pronunciation || '',
-      })).sort(() => Math.random() - 0.5));
-    } else {
-      const pack = dictationWordPacks.find((p) => p.id === packId);
-      setWords(pack ? [...pack.words].sort(() => Math.random() - 0.5) : []);
-    }
-    setLoading(false);
-  }, [wordSource, packId]);
-
-  // Load sentence data
-  const loadSentences = useCallback(() => {
-    const filtered = dictationSentences.filter((s) => s.level === sentenceLevel);
-    setSentences([...filtered].sort(() => Math.random() - 0.5));
-    setLoading(false);
-  }, [sentenceLevel]);
-
-  // Load daily challenge
-  const loadDaily = useCallback(() => {
-    const existing = getDailyState();
-    if (existing && existing.currentIdx >= existing.wordIds.length + existing.sentenceIds.length) {
-      setDailyDone(true);
-      return;
-    }
-    setDailyState(existing || generateDaily());
-    setLoading(false);
-  }, []);
-
-  // Initial load
-  useEffect(() => {
-    if (mode === 'word') loadWords();
-    else if (mode === 'sentence') loadSentences();
-    else loadDaily();
-    setCurrentIdx(0);
-    resetRound();
-    setStats({ correct: 0, total: 0 });
-    setComplete(false);
-    setEarnedXp(0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mode, loadWords, loadSentences, loadDaily]);
-
-  const resetRound = useCallback(() => {
-    setUserInput('');
-    setSubmitted(false);
     setError('');
-    setHasListened(false);
-    setKeyboardVisible(false);
-  }, []);
-
-  // Get current item
-  const currentItem = useMemo(() => {
-    if (mode === 'word') return words[currentIdx] || null;
-    if (mode === 'sentence') return sentences[currentIdx] || null;
-    if (mode === 'daily' && dailyState) {
-      const idx = dailyState.currentIdx;
-      if (idx < dailyState.wordIds.length) {
-        return allBuiltinWords.get(dailyState.wordIds[idx]) || null;
+    try {
+      const result = await buildItemsFromConfig(sourceConfig);
+      if (result.length === 0) {
+        setError('没有找到可用的题目，请检查来源配置。');
+        return;
       }
-      const sIdx = idx - dailyState.wordIds.length;
-      return dictationSentences.find((s) => s.id === dailyState.sentenceIds[sIdx]) || null;
+      setItems(result.slice(0, 30));
+      setPageState('session');
+    } catch {
+      setError('加载题目失败，请重试。');
+    } finally {
+      setLoading(false);
     }
-    return null;
-  }, [mode, words, sentences, currentIdx, dailyState]);
+  }
 
-  const isWord = useCallback((item: any): item is DictationWord & { chinese?: undefined } => {
-    return item && 'meaning' in item && !('chinese' in item);
-  }, []);
-
-  const handleSubmit = async () => {
-    if (!userInput.trim() || !currentItem) return;
-    setSubmitted(true);
-    setKeyboardVisible(false);
-
-    const correctAnswer = isWord(currentItem) ? currentItem.korean : (currentItem as DictationSentence).korean;
-    const isCorrect = normalizeKorean(userInput) === normalizeKorean(correctAnswer);
-
-    setStats((prev) => ({ correct: prev.correct + (isCorrect ? 1 : 0), total: prev.total + 1 }));
-
-    if (isCorrect) {
-      setError('');
-      feedbackSuccess('正确!');
-      const { leveledUp: didLevelUp, newLevel: lvl } = await awardXp(XP_REWARDS.dictationCorrect);
-      setEarnedXp((prev) => prev + XP_REWARDS.dictationCorrect);
-      if (didLevelUp) { setLeveledUp(true); setNewLevel(lvl); }
-      setXpGainAmount(XP_REWARDS.dictationCorrect);
-      setShowXpGain(true);
-      setTimeout(() => setShowXpGain(false), 2000);
-    } else {
-      setError(`正确答案: ${correctAnswer}`);
-      feedbackError('再试试');
-    }
-
-    // Daily: save answer
-    if (mode === 'daily' && dailyState) {
-      const updated = { ...dailyState, answers: [...dailyState.answers, { correct: isCorrect }] };
-      setDailyState(updated);
-      saveDailyState(updated);
-    }
-  };
-
-  const handleNext = async () => {
-    const total = mode === 'word' ? words.length : mode === 'sentence' ? sentences.length : (dailyState ? dailyState.wordIds.length + dailyState.sentenceIds.length : 0);
-
-    if (currentIdx + 1 >= total) {
-      await updateStreak();
-      fetch('/api/track/study', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'dictation', details: `听写: ${stats.correct}/${stats.total}`, xpEarned: earnedXp }) }).catch(() => {});
-      if (mode === 'daily' && dailyState) {
-        const final = { ...dailyState, currentIdx: currentIdx + 1 };
-        saveDailyState(final);
-        setDailyDone(true);
+  async function handleDailyChallenge() {
+    setLoading(true);
+    setError('');
+    try {
+      const { dictationWordPacks } = await import('@/data/dictationWords');
+      const { dictationSentences } = await import('@/data/dictationSentences');
+      const d = new Date();
+      const todayKey = `dictation-daily-${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+      let stored: DictationItem[] | null = null;
+      try { stored = JSON.parse(localStorage.getItem(todayKey) ?? 'null'); } catch {}
+      let dailyItems: DictationItem[] = stored ?? [];
+      if (dailyItems.length === 0) {
+        const shuffleArr = <T,>(arr: T[]) => {
+          const a = [...arr];
+          for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+          }
+          return a;
+        };
+        const allWords = dictationWordPacks.flatMap(p => p.words).map(w => ({ korean: w.korean, meaning: w.meaning, type: 'word' as const }));
+        const allSents = dictationSentences.map(s => ({ korean: s.korean, meaning: s.chinese, type: 'sentence' as const }));
+        dailyItems = [...shuffleArr(allWords).slice(0, 10), ...shuffleArr(allSents).slice(0, 2)];
+        try { localStorage.setItem(todayKey, JSON.stringify(dailyItems)); } catch {}
       }
-      setComplete(true);
-    } else {
-      if (mode === 'daily' && dailyState) {
-        const updated = { ...dailyState, currentIdx: dailyState.currentIdx + 1 };
-        setDailyState(updated);
-        saveDailyState(updated);
-      }
-      setCurrentIdx((prev) => prev + 1);
-      resetRound();
+      setItems(dailyItems);
+      setDifficulty('intermediate');
+      setPageState('session');
+    } catch {
+      setError('今日挑战加载失败，请重试。');
+    } finally {
+      setLoading(false);
     }
-  };
+  }
 
-  const handleRestart = () => {
-    resetRound();
-    setStats({ correct: 0, total: 0 });
-    setCurrentIdx(0);
-    setComplete(false);
-    setEarnedXp(0);
-    setLeveledUp(false);
-    setShowXpGain(false);
-    if (mode === 'word') loadWords();
-    else if (mode === 'sentence') loadSentences();
-    else {
-      const fresh = generateDaily();
-      setDailyState(fresh);
-      saveDailyState(fresh);
-      setDailyDone(false);
-    }
-  };
-
-  // Focus input
-  useEffect(() => {
-    if (!submitted && !loading && currentItem && inputMode === 'type') {
-      inputRef.current?.focus();
-    }
-  }, [currentIdx, submitted, loading, currentItem, inputMode]);
-
-  // Auto-speak for listen mode
-  useEffect(() => {
-    if (!submitted && !loading && currentItem && mode !== 'sentence') {
-      const text = isWord(currentItem) ? currentItem.korean : (currentItem as DictationSentence).korean;
-      speakBrowser(text, speed);
-      setHasListened(true);
-    }
-  }, [currentIdx, mode, submitted, loading, speed, currentItem, isWord]);
-
-  // Completion screen
-  if ((complete || dailyDone) && !loading) {
-    const accuracy = stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0;
+  if (pageState === 'session') {
     return (
-      <div className="py-6 max-w-lg mx-auto">
-        <div className="text-center py-16 space-y-6">
-          <Trophy size={56} className="mx-auto text-[var(--peach-soft)]" />
-          <div>
-            <h1 className="text-2xl font-bold text-[var(--text-primary)]">
-              {mode === 'daily' ? '今日挑战完成!' : '练习完成!'}
-            </h1>
-            <p className="text-[var(--text-secondary)] mt-2">正确 {stats.correct} / {stats.total}</p>
-            <p className="text-lg font-medium text-[var(--purple-soft)] mt-1">{accuracy}% 正确率</p>
-          </div>
-          {leveledUp && (
-            <div className="bg-gradient-to-r from-[var(--peach-soft)]/10 to-[var(--pink-primary)]/10 border border-[var(--peach-soft)]/20 rounded-2xl p-4">
-              <p className="text-[var(--peach-soft)] font-bold text-lg">升级了! 达到等级 {newLevel}</p>
-            </div>
-          )}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4">
-              <Sparkles size={20} className="text-[var(--peach-soft)] mx-auto mb-2" />
-              <div className="text-xl font-bold text-[var(--text-primary)]">{earnedXp}</div>
-              <div className="text-xs text-[var(--text-secondary)]">获得 XP</div>
-            </div>
-            <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4">
-              <Star size={20} className="text-[var(--purple-soft)] mx-auto mb-2" />
-              <div className="text-xl font-bold text-[var(--text-primary)]">{stats.correct}</div>
-              <div className="text-xs text-[var(--text-secondary)]">答对题数</div>
-            </div>
-          </div>
-          <div className="flex gap-3 justify-center">
-            {mode === 'daily' && dailyDone ? (
-              <p className="text-sm text-[var(--text-muted)]">明天再来挑战吧!</p>
-            ) : (
-              <button onClick={handleRestart} className="flex items-center gap-2 px-5 py-2.5 bg-[var(--pink-primary)] text-white rounded-xl text-sm font-medium hover:opacity-90">
-                <RotateCcw size={16} /> 再来一轮
-              </button>
-            )}
-          </div>
-        </div>
+      <div className="py-4 max-w-2xl mx-auto px-1">
+        <DictationSession
+          items={items}
+          difficulty={difficulty}
+          onExit={() => setPageState('config')}
+        />
       </div>
     );
   }
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center py-32">
-        <Loader2 size={32} className="animate-spin text-[var(--text-secondary)]" />
-      </div>
-    );
-  }
-
-  const total = mode === 'word' ? words.length : mode === 'sentence' ? sentences.length : (dailyState ? dailyState.wordIds.length + dailyState.sentenceIds.length : 0);
-
-  if (!currentItem || total === 0) {
-    return (
-      <div className="py-6 max-w-lg mx-auto">
-        <div className="text-center py-16 space-y-6">
-          <Volume2 size={48} className="text-[var(--text-placeholder)] mx-auto" />
-          <h1 className="text-xl font-bold text-[var(--text-primary)]">没有可练习的内容</h1>
-          <p className="text-[var(--text-secondary)] text-sm">
-            {mode === 'word' && wordSource === 'mywords' ? '先去添加单词到词库吧' : '换个词库试试'}
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  const currentKorean = isWord(currentItem) ? currentItem.korean : (currentItem as DictationSentence).korean;
-  const currentMeaning = isWord(currentItem) ? currentItem.meaning : (currentItem as DictationSentence).chinese;
-  const currentPronunciation = isWord(currentItem) ? currentItem.pronunciation : undefined;
-  const currentTag = isWord(currentItem) ? undefined : (currentItem as DictationSentence).tag;
 
   return (
-    <div className="py-4 max-w-lg mx-auto space-y-4">
-      {/* Adjustment notice modal */}
-      {showNotice && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center px-5" style={{ background: 'rgba(36,25,23,0.5)', backdropFilter: 'blur(4px)' }}>
-          <div className="bg-white rounded-[32px] p-6 max-w-sm w-full shadow-2xl">
-            <div className="w-12 h-12 rounded-2xl bg-[var(--pink-primary)]/10 flex items-center justify-center mb-4">
-              <Headphones size={24} className="text-[var(--pink-primary)]" />
-            </div>
-            <h2 className="text-[18px] font-black text-[var(--text-primary)] leading-snug">该板块正在调整中</h2>
-            <p className="text-[13px] text-[var(--text-secondary)] mt-2.5 leading-relaxed">
-              听写练习模块目前正在优化升级，部分内容和功能可能不稳定，敬请谅解。
-            </p>
-            <button
-              onClick={() => {
-                sessionStorage.setItem('dictation-notice-seen', '1');
-                setShowNotice(false);
-              }}
-              className="w-full mt-5 h-12 rounded-full bg-[#201815] text-white text-[14px] font-black"
-            >
-              知道了，继续
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Title */}
+    <div className="py-4 max-w-2xl mx-auto space-y-5 pb-24">
+      {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-[var(--text-primary)]">听写练习</h1>
-        <p className="text-[var(--text-secondary)] text-sm mt-1">听发音，写出对应内容</p>
+        <Link href="/tools" className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] mb-2">
+          <ArrowLeft size={16} /> 返回
+        </Link>
+        <h1 className="text-xl font-bold text-[var(--text-primary)]">听写练习</h1>
+        <p className="text-sm text-[var(--text-secondary)] mt-0.5">听音输入韩语，精准训练拼写能力</p>
       </div>
 
-      {/* Mode tabs */}
-      <div className="flex bg-[var(--bg-input)] rounded-xl p-1 gap-1">
-        {([
-          { k: 'word' as Mode, label: '单词听写', icon: Mic, desc: '听发音写单词' },
-          { k: 'sentence' as Mode, label: '句子听写', icon: Headphones, desc: '听完整句子' },
-          { k: 'daily' as Mode, label: '每日挑战', icon: Calendar, desc: '每日10词+2句' },
-        ]).map((m) => (
-          <button key={m.k} onClick={() => { setMode(m.k); setCurrentIdx(0); resetRound(); setStats({ correct: 0, total: 0 }); setComplete(false); setEarnedXp(0); }}
-            className={`flex-1 flex flex-col items-center py-2.5 rounded-lg text-xs transition-all ${
-              mode === m.k ? 'bg-[var(--bg-card)] text-[var(--pink-primary)] shadow-sm' : 'text-[var(--text-muted)] hover:text-[var(--text-secondary)]'
-            }`}
-          >
-            <m.icon size={18} />
-            <span className="mt-0.5 font-medium">{m.label}</span>
-          </button>
-        ))}
-      </div>
-
-      {/* Word source / level selector */}
-      {mode === 'word' && (
-        <div className="space-y-2">
-          <div className="flex bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-1 gap-1">
-            <button onClick={() => setWordSource('builtin')}
-              className={`flex-1 text-sm py-2 rounded-lg transition-colors ${wordSource === 'builtin' ? 'bg-[var(--pink-primary)] text-white font-medium' : 'text-[var(--text-secondary)]'}`}
-            >内置词库</button>
-            <button onClick={() => setWordSource('mywords')}
-              className={`flex-1 text-sm py-2 rounded-lg transition-colors ${wordSource === 'mywords' ? 'bg-[var(--pink-primary)] text-white font-medium' : 'text-[var(--text-secondary)]'}`}
-            >我的单词</button>
-          </div>
-          {wordSource === 'builtin' && (
-            <div className="flex gap-1.5">
-              {dictationWordPacks.map((p) => (
-                <button key={p.id} onClick={() => { setPackId(p.id); loadWords(); setCurrentIdx(0); resetRound(); }}
-                  className={`flex-1 text-xs py-2 rounded-lg transition-colors ${packId === p.id ? 'bg-[var(--bg-accent)] text-[var(--text-primary)] font-medium ring-1 ring-[var(--pink-pale)]' : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-muted)]'}`}
-                >
-                  {p.name}
-                </button>
-              ))}
-            </div>
-          )}
+      {/* Daily challenge shortcut */}
+      <button
+        onClick={handleDailyChallenge}
+        disabled={loading}
+        style={{
+          width: '100%', padding: '14px 18px', borderRadius: 18,
+          background: 'linear-gradient(135deg, #ff7fa8, #b49ccf)',
+          border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 12,
+        }}
+      >
+        <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <Zap size={20} style={{ color: 'white' }} />
         </div>
-      )}
+        <div style={{ textAlign: 'left' }}>
+          <p style={{ fontSize: 15, fontWeight: 800, color: 'white', margin: 0 }}>今日挑战</p>
+          <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.8)', margin: 0, marginTop: 2 }}>每日12题 · 词汇+句子混合</p>
+        </div>
+      </button>
 
-      {mode === 'sentence' && (
-        <div className="flex gap-1.5">
-          {(['beginner', 'intermediate', 'advanced'] as const).map((lv) => (
-            <button key={lv} onClick={() => { setSentenceLevel(lv); loadSentences(); setCurrentIdx(0); resetRound(); }}
-              className={`flex-1 text-xs py-2 rounded-lg transition-colors ${sentenceLevel === lv ? 'bg-[var(--bg-accent)] text-[var(--text-primary)] font-medium ring-1 ring-[var(--pink-pale)]' : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-muted)]'}`}
+      {/* Difficulty */}
+      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 space-y-3">
+        <h2 className="text-sm font-bold text-[var(--text-primary)]">难度</h2>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {(Object.entries(DIFFICULTY_LABELS) as [Difficulty, typeof DIFFICULTY_LABELS[Difficulty]][]).map(([key, val]) => (
+            <button
+              key={key}
+              onClick={() => setDifficulty(key)}
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                padding: '10px 14px', borderRadius: 12,
+                background: difficulty === key ? `${val.color}18` : 'transparent',
+                border: `1.5px solid ${difficulty === key ? val.color : '#eee0d8'}`,
+                cursor: 'pointer',
+              }}
             >
-              {lv === 'beginner' ? '初级' : lv === 'intermediate' ? '中级' : '高级'}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <span style={{ width: 10, height: 10, borderRadius: '50%', background: val.color, flexShrink: 0 }} />
+                <span style={{ fontSize: 14, fontWeight: 700, color: '#241917' }}>{val.label}</span>
+              </div>
+              <span style={{ fontSize: 12, color: '#89756e' }}>{val.desc}</span>
             </button>
           ))}
         </div>
-      )}
-
-      {mode === 'daily' && dailyState && (
-        <div className="text-xs text-[var(--text-muted)] text-center">
-          共 {dailyState.wordIds.length + dailyState.sentenceIds.length} 题 · 前10题单词 + 后2题句子
-        </div>
-      )}
-
-      {/* Progress */}
-      <div className="flex items-center justify-between text-sm">
-        <span className="text-[var(--text-muted)]">{currentIdx + 1} / {total}</span>
-        <span className="text-[var(--text-muted)]">正确: <span className="text-[var(--mint-soft)]">{stats.correct}</span> / {stats.total}</span>
       </div>
 
-      <div className="w-full bg-[var(--bg-input)] rounded-full h-1.5">
-        <div className="bg-purple-500 h-1.5 rounded-full transition-all" style={{ width: `${((currentIdx + 1) / total) * 100}%` }} />
+      {/* Source picker */}
+      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 space-y-3">
+        <h2 className="text-sm font-bold text-[var(--text-primary)]">题目来源</h2>
+        <DictationSourcePicker config={sourceConfig} onChange={setSourceConfig} />
       </div>
 
-      {/* Main card */}
-      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 text-center space-y-5">
-        {/* Play button */}
-        <button
-          onClick={() => { feedbackClick(); speakBrowser(currentKorean, speed); setHasListened(true); }}
-          className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto transition-all ${
-            hasListened ? 'bg-[var(--mint-soft)]/10 hover:bg-[var(--mint-soft)]/20' : 'bg-[var(--pink-primary)]/10 hover:bg-[var(--pink-primary)]/20'
-          }`}
-        >
-          <Volume2 size={36} className={hasListened ? 'text-[var(--mint-soft)]' : 'text-[var(--pink-primary)]'} />
-        </button>
-
-        <p className="text-sm text-[var(--text-muted)]">
-          {hasListened ? '点击可重复播放' : '点击按钮听发音'} · 输入你听到的内容
-        </p>
-
-        {/* Speed slider */}
-        <div className="flex items-center gap-3 max-w-[240px] mx-auto">
-          <span className="text-xs text-[var(--text-muted)] shrink-0">0.5x</span>
-          <input
-            type="range" min="0.5" max="1.0" step="0.1" value={speed}
-            onChange={(e) => setSpeed(parseFloat(e.target.value))}
-            className="flex-1 h-1.5 rounded-full appearance-none bg-[var(--bg-input)] cursor-pointer
-              [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4
-              [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[var(--pink-primary)]"
-          />
-          <span className="text-xs text-[var(--text-muted)] shrink-0">1x</span>
-          <span className="text-xs font-medium text-[var(--pink-primary)] w-9 text-right">{speed.toFixed(1)}x</span>
-        </div>
-
-        {/* Hint: meaning shown in sentence mode or after submission */}
-        {mode === 'sentence' && (
-          <div className="flex items-center gap-2 justify-center">
-            {currentTag && <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--pink-primary)]/10 text-[var(--pink-primary)]">{currentTag}</span>}
-            <span className="text-sm text-[var(--text-secondary)]">{currentMeaning}</span>
-            {currentPronunciation && <span className="text-xs text-[var(--text-muted)]">[{currentPronunciation}]</span>}
-          </div>
-        )}
-
-        {/* Input mode toggle */}
-        <div className="flex bg-[var(--bg-input)] rounded-xl p-1 gap-1 max-w-[200px] mx-auto">
-          <button onClick={() => { setInputMode('type'); setKeyboardVisible(true); }}
-            className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-medium transition-all ${
-              inputMode === 'type' ? 'bg-[var(--bg-card)] text-[var(--pink-primary)] shadow-sm' : 'text-[var(--text-muted)]'
-            }`}
-          ><Keyboard size={14} /> 打字</button>
-          <button onClick={() => { setInputMode('handwrite'); setKeyboardVisible(false); }}
-            className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-medium transition-all ${
-              inputMode === 'handwrite' ? 'bg-[var(--bg-card)] text-[var(--pink-primary)] shadow-sm' : 'text-[var(--text-muted)]'
-            }`}
-          ><Pen size={14} /> 手写</button>
-        </div>
-
-        {/* Input area */}
-        <div className="space-y-2">
-          {inputMode === 'type' ? (
-            <div className="flex gap-2 relative">
-              <input
-                ref={inputRef} type="text" value={userInput}
-                onChange={(e) => setUserInput(e.target.value)}
-                onFocus={() => { if (isMobile) setKeyboardVisible(true); }}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !submitted) handleSubmit();
-                  if (e.key === 'Enter' && submitted) handleNext();
-                }}
-                disabled={submitted}
-                readOnly={isMobile}
-                placeholder={mode === 'sentence' ? '输入韩语句子...' : '输入韩语...'}
-                inputMode={isMobile ? 'none' : 'text'}
-                className="flex-1 bg-[var(--bg-input)] border border-[var(--pink-pale)] rounded-xl py-3 px-4 text-[var(--text-primary)] text-center text-lg placeholder:text-[var(--text-muted)] focus:outline-none focus:border-purple-500"
-              />
-              <button onClick={() => setKeyboardVisible(!keyboardVisible)}
-                className={`self-stretch px-3 rounded-xl text-sm font-medium transition-colors ${keyboardVisible ? 'bg-[var(--pink-primary)]/20 text-[var(--pink-primary)]' : 'bg-[var(--bg-input)] text-[var(--text-muted)]'}`}
-              >한</button>
-            </div>
-          ) : (
-            <HandwritingPad onInsert={(text) => { setUserInput(text); setHasListened(true); setInputMode('type'); }} onCancel={() => setInputMode('type')} />
-          )}
-        </div>
-
-        {showXpGain && (
-          <div className="flex items-center justify-center gap-2 bg-gradient-to-r from-[var(--peach-soft)]/10 to-[var(--pink-primary)]/10 border border-[var(--peach-soft)]/20 rounded-xl py-2 px-4">
-            <Sparkles size={16} className="text-[var(--peach-soft)]" />
-            <span className="text-[var(--peach-soft)] font-bold text-sm">+{xpGainAmount} XP</span>
-          </div>
-        )}
-
-        {submitted && (
-          <div className={`p-3 rounded-xl ${error ? 'bg-[var(--color-danger-bg)]' : 'bg-[var(--mint-soft)]/15'}`}>
-            {error ? (() => {
-              const diff = getCharDiff(normalizeKorean(userInput), normalizeKorean(currentKorean));
-              return (
-                <div className="space-y-3">
-                  <div className="flex items-center justify-center gap-2 text-[var(--color-danger)]"><X size={18} /><span>答错了</span></div>
-                  {/* Visual diff */}
-                  <div className="space-y-2 text-sm">
-                    <div>
-                      <span className="text-[var(--text-muted)] text-xs">你的输入: </span>
-                      <span className="font-mono text-base">
-                        {diff.userDiff.map((s, i) => (
-                          <span key={i} className={
-                            s.status === 'correct' ? 'text-[var(--mint-soft)]' :
-                            s.status === 'wrong' ? 'text-[var(--color-danger)] line-through decoration-[var(--color-danger)]' :
-                            'text-[var(--peach-soft)] underline decoration-[var(--peach-soft)]'
-                          }>{s.char}</span>
-                        ))}
-                      </span>
-                    </div>
-                    <div>
-                      <span className="text-[var(--text-muted)] text-xs">正确答案: </span>
-                      <span className="font-mono text-base">
-                        {diff.correctDiff.map((s, i) => (
-                          <span key={i} className={
-                            s.status === 'correct' ? 'text-[var(--mint-soft)]' :
-                            s.status === 'wrong' ? 'text-[var(--pink-primary)] font-bold' :
-                            'text-[var(--color-danger)]'
-                          }>{s.char}</span>
-                        ))}
-                      </span>
-                    </div>
-                  </div>
-                  {/* Error analysis */}
-                  {diff.notes.length > 0 && (
-                    <div className="bg-[var(--bg-input)] rounded-lg p-2.5 text-left space-y-0.5">
-                      <p className="text-xs text-[var(--text-muted)] mb-1">错误分析:</p>
-                      {diff.notes.map((n, i) => (
-                        <p key={i} className="text-xs text-[var(--text-secondary)]">• {n}</p>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              );
-            })() : (
-              <div className="flex items-center justify-center gap-2 text-[var(--mint-soft)]"><Check size={18} /><span>正确!</span></div>
-            )}
-            <p className="text-[var(--text-secondary)] text-sm mt-1.5">{currentMeaning}</p>
-          </div>
-        )}
-
-        {leveledUp && (
-          <div className="bg-gradient-to-r from-[var(--peach-soft)]/10 to-[var(--pink-primary)]/10 border border-[var(--peach-soft)]/20 rounded-2xl p-3">
-            <p className="text-[var(--peach-soft)] font-bold text-sm">升级了! 达到等级 {newLevel}</p>
-          </div>
-        )}
-
-        {!submitted ? (
-          <button onClick={handleSubmit} disabled={!userInput.trim()}
-            className="px-8 py-3 bg-[var(--purple-soft)] hover:opacity-90 disabled:bg-[var(--bg-accent)] disabled:text-[var(--text-muted)] text-white rounded-xl text-sm font-medium transition-colors"
-          >确认</button>
-        ) : (
-          <button onClick={handleNext}
-            className="flex items-center justify-center gap-2 px-8 py-3 bg-[var(--pink-primary)] text-white rounded-xl text-sm font-medium mx-auto hover:opacity-90"
-          >下一题 <ArrowRight size={16} /></button>
-        )}
-
-        <p className="text-xs text-[var(--text-placeholder)]">Enter 确认 · Enter 下一题</p>
-      </div>
-
-      {earnedXp > 0 && (
-        <div className="flex items-center justify-center gap-2 text-sm text-[var(--text-muted)]">
-          <Sparkles size={14} className="text-[var(--peach-soft)]" />
-          <span>本轮获得 <span className="text-[var(--peach-soft)] font-medium">{earnedXp} XP</span></span>
-        </div>
+      {/* Error */}
+      {error && (
+        <p style={{ fontSize: 13, color: '#e04a6a', textAlign: 'center' }}>{error}</p>
       )}
 
-      <KoreanKeyboard value={userInput} onChange={(val) => { setUserInput(val); setHasListened(true); }}
-        visible={keyboardVisible} onClose={() => setKeyboardVisible(false)} />
+      {/* Start button */}
+      <div className="fixed left-0 right-0 z-30 px-4 pt-3 pb-3 bg-[var(--bg-card)] border-t border-[var(--border-color)] md:left-[108px]" style={{ bottom: 'calc(56px + env(safe-area-inset-bottom, 0px))' }}>
+        <div className="max-w-2xl mx-auto">
+          <button
+            onClick={handleStart}
+            disabled={loading}
+            style={{
+              width: '100%', padding: '14px 0', borderRadius: 16,
+              background: loading ? '#eee0d8' : '#241917',
+              color: loading ? '#89756e' : '#fff',
+              fontSize: 15, fontWeight: 800, border: 'none', cursor: loading ? 'not-allowed' : 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+            }}
+          >
+            <Play size={16} />
+            {loading ? '加载中...' : '开始听写'}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

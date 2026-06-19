@@ -3,6 +3,8 @@ export interface PhoneticLetter {
   letter: string;
   name: string;
   romanization: string;
+  quizRomanization?: string; // unambiguous single value used in quiz options
+  quizLetter?: string;       // representative letter for batchim groups in quiz
   type: 'vowel' | 'consonant' | 'double' | 'batchim';
   subtype: string;
   sound: string;
@@ -16,7 +18,7 @@ export const vowels: PhoneticLetter[] = [
   { id: 'v-01', letter: 'ㅏ', name: '아', romanization: 'a', type: 'vowel', subtype: 'basic', sound: '类似中文"啊"', mnemonic: '一个人站立，两臂展开', emoji: '🧍' },
   { id: 'v-02', letter: 'ㅑ', name: '야', romanization: 'ya', type: 'vowel', subtype: 'basic', sound: '类似中文"呀"', mnemonic: 'ㅏ+ㅣ=呀', emoji: '🙋' },
   { id: 'v-03', letter: 'ㅓ', name: '어', romanization: 'eo', type: 'vowel', subtype: 'basic', sound: '类似英语"aw"', mnemonic: '嘴型扁平，像发"哦"但嘴不圆', emoji: '😮' },
-  { id: 'v-04', letter: 'ㅕ', name: '여', romanization: 'yeo', type: 'vowel', subtype: 'basic', sound: '类似英语"yo"但嘴不圆', mnemonic: 'ㅓ+ㅣ=哟(扁嘴)', emoji: '🤔' },
+  { id: 'v-04', letter: 'ㅕ', name: '여', romanization: 'yeo', type: 'vowel', subtype: 'basic', sound: '类似中文"哟"但嘴不圆（扁嘴发哟）', mnemonic: 'ㅓ+ㅣ=哟(扁嘴)', emoji: '🤔' },
   { id: 'v-05', letter: 'ㅗ', name: '오', romanization: 'o', type: 'vowel', subtype: 'basic', sound: '类似中文"哦"', mnemonic: '像一个小圆圈，嘴型圆', emoji: '⭕' },
   { id: 'v-06', letter: 'ㅛ', name: '요', romanization: 'yo', type: 'vowel', subtype: 'basic', sound: '类似中文"哟"', mnemonic: 'ㅗ+ㅣ=哟', emoji: '👋' },
   { id: 'v-07', letter: 'ㅜ', name: '우', romanization: 'u', type: 'vowel', subtype: 'basic', sound: '类似中文"乌"', mnemonic: '像一个小横线，嘴型嘟起', emoji: '🫦' },
@@ -31,7 +33,7 @@ export const vowels: PhoneticLetter[] = [
   { id: 'v-15', letter: 'ㅘ', name: '와', romanization: 'wa', type: 'vowel', subtype: 'compound', sound: '类似中文"哇"', mnemonic: 'ㅗ+ㅏ→wa', emoji: '😲' },
   { id: 'v-16', letter: 'ㅙ', name: '왜', romanization: 'wae', type: 'vowel', subtype: 'compound', sound: '类似英语"way"', mnemonic: 'ㅗ+ㅐ→wae', emoji: '🛤️' },
   { id: 'v-17', letter: 'ㅚ', name: '외', romanization: 'oe', type: 'vowel', subtype: 'compound', sound: '类似英语"way"但嘴更圆', mnemonic: 'ㅗ+ㅣ→oe', emoji: '🔄' },
-  { id: 'v-18', letter: 'ㅝ', name: '워', romanization: 'wo', type: 'vowel', subtype: 'compound', sound: '类似英语"wow"中的wo', mnemonic: 'ㅜ+ㅓ→wo', emoji: '🌊' },
+  { id: 'v-18', letter: 'ㅝ', name: '워', romanization: 'wo', type: 'vowel', subtype: 'compound', sound: '类似中文"我"，ㅜ+ㅓ快速连读', mnemonic: 'ㅜ+ㅓ→wo', emoji: '🌊' },
   { id: 'v-19', letter: 'ㅞ', name: '웨', romanization: 'we', type: 'vowel', subtype: 'compound', sound: '类似英语"wet"中的we', mnemonic: 'ㅜ+ㅔ→we', emoji: '💧' },
   { id: 'v-20', letter: 'ㅟ', name: '위', romanization: 'wi', type: 'vowel', subtype: 'compound', sound: '类似英语"we"', mnemonic: 'ㅜ+ㅣ→wi', emoji: '⬆️' },
   { id: 'v-21', letter: 'ㅢ', name: '의', romanization: 'ui', type: 'vowel', subtype: 'compound', sound: '类似"额一"快速连读', mnemonic: 'ㅡ+ㅣ→ui', emoji: '🤝' },
@@ -39,15 +41,15 @@ export const vowels: PhoneticLetter[] = [
 
 export const consonants: PhoneticLetter[] = [
   // Basic consonants (14)
-  { id: 'c-01', letter: 'ㄱ', name: '기역', romanization: 'g/k', type: 'consonant', subtype: 'basic', sound: '类似中文"哥"的声母，词首送气少', mnemonic: '像一把刀的形状', emoji: '🔪', strokeOrder: ['从左到右一横', '从上到下一竖'] },
+  { id: 'c-01', letter: 'ㄱ', name: '기역', romanization: 'g/k', quizRomanization: 'g', type: 'consonant', subtype: 'basic', sound: '类似中文"哥"的声母，词首送气少', mnemonic: '像一把刀的形状', emoji: '🔪', strokeOrder: ['从左到右一横', '从上到下一竖'] },
   { id: 'c-02', letter: 'ㄴ', name: '니은', romanization: 'n', type: 'consonant', subtype: 'basic', sound: '类似中文"呢"的声母', mnemonic: '像鼻子的侧面轮廓', emoji: '👃', strokeOrder: ['从上到下写竖折'] },
-  { id: 'c-03', letter: 'ㄷ', name: '디귿', romanization: 'd/t', type: 'consonant', subtype: 'basic', sound: '类似中文"的"的声母', mnemonic: '像一扇门的形状 口', emoji: '🚪', strokeOrder: ['先写上面一横', '再写下面一横', '连接左边一竖'] },
-  { id: 'c-04', letter: 'ㄹ', name: '리을', romanization: 'r/l', type: 'consonant', subtype: 'basic', sound: '介于r和l之间，弹舌音', mnemonic: '像蜿蜒的小路', emoji: '🛤️', strokeOrder: ['从上到下写折线'] },
+  { id: 'c-03', letter: 'ㄷ', name: '디귿', romanization: 'd/t', quizRomanization: 'd', type: 'consonant', subtype: 'basic', sound: '类似中文"的"的声母', mnemonic: '像一扇门的形状 口', emoji: '🚪', strokeOrder: ['先写上面一横', '再写下面一横', '连接左边一竖'] },
+  { id: 'c-04', letter: 'ㄹ', name: '리을', romanization: 'r/l', quizRomanization: 'r', type: 'consonant', subtype: 'basic', sound: '介于r和l之间，弹舌音', mnemonic: '像蜿蜒的小路', emoji: '🛤️', strokeOrder: ['从上到下写折线'] },
   { id: 'c-05', letter: 'ㅁ', name: '미음', romanization: 'm', type: 'consonant', subtype: 'basic', sound: '类似中文"么"的声母', mnemonic: '像嘴巴的形状 口', emoji: '👄', strokeOrder: ['先写上面一横', '再写左右两竖', '最后写下面一横'] },
-  { id: 'c-06', letter: 'ㅂ', name: '비읍', romanization: 'b/p', type: 'consonant', subtype: 'basic', sound: '类似中文"波"的声母', mnemonic: '像一个水桶的形状', emoji: '🪣', strokeOrder: ['先写左边一竖', '再写右边两横'] },
-  { id: 'c-07', letter: 'ㅅ', name: '시옷', romanization: 's/sh', type: 'consonant', subtype: 'basic', sound: '类似中文"丝"的声母（在ㅣ前发sh）', mnemonic: '像一座山的形状 人', emoji: '⛰️', strokeOrder: ['从左上向右下', '从右上向左下'] },
-  { id: 'c-08', letter: 'ㅇ', name: '이응', romanization: 'ng/无声', type: 'consonant', subtype: 'basic', sound: '作初声时不发音，作终声时发ng', mnemonic: '像数字0，代表空/无', emoji: '⭕', strokeOrder: ['画一个圆圈'] },
-  { id: 'c-09', letter: 'ㅈ', name: '지읒', romanization: 'j/ch', type: 'consonant', subtype: 'basic', sound: '类似中文"资"的声母', mnemonic: '像一个人伸出手臂', emoji: '🤸', strokeOrder: ['先写ㅅ', '再在上面加一横'] },
+  { id: 'c-06', letter: 'ㅂ', name: '비읍', romanization: 'b/p', quizRomanization: 'b', type: 'consonant', subtype: 'basic', sound: '类似中文"波"的声母', mnemonic: '像一个水桶的形状', emoji: '🪣', strokeOrder: ['先写左边一竖', '再写右边两横'] },
+  { id: 'c-07', letter: 'ㅅ', name: '시옷', romanization: 's', quizRomanization: 's', type: 'consonant', subtype: 'basic', sound: '类似中文"丝"的声母（在ㅣ前发sh）', mnemonic: '像一座山的形状 人', emoji: '⛰️', strokeOrder: ['从左上向右下', '从右上向左下'] },
+  { id: 'c-08', letter: 'ㅇ', name: '이응', romanization: '–/ng', quizRomanization: 'silent', type: 'consonant', subtype: 'basic', sound: '作初声时不发音，作终声时发ng', mnemonic: '像数字0，代表空/无', emoji: '⭕', strokeOrder: ['画一个圆圈'] },
+  { id: 'c-09', letter: 'ㅈ', name: '지읒', romanization: 'j', quizRomanization: 'j', type: 'consonant', subtype: 'basic', sound: '类似中文"资"的声母', mnemonic: '像一个人伸出手臂', emoji: '🤸', strokeOrder: ['先写ㅅ', '再在上面加一横'] },
   { id: 'c-10', letter: 'ㅊ', name: '치읓', romanization: 'ch', type: 'consonant', subtype: 'basic', sound: '类似中文"吃"的声母（送气）', mnemonic: 'ㅈ+一横=更强的送气', emoji: '💨', strokeOrder: ['先写ㅈ', '再在上面加一横'] },
   { id: 'c-11', letter: 'ㅋ', name: '키읔', romanization: 'k', type: 'consonant', subtype: 'basic', sound: '类似中文"科"的声母（送气强）', mnemonic: 'ㄱ+一横=更强的送气', emoji: '🌬️', strokeOrder: ['先写ㄱ', '再在中间加一横'] },
   { id: 'c-12', letter: 'ㅌ', name: '티읕', romanization: 't', type: 'consonant', subtype: 'basic', sound: '类似中文"特"的声母（送气）', mnemonic: 'ㄷ+一横=更强的送气', emoji: '💥', strokeOrder: ['先写ㄷ', '再在中间加一横'] },
@@ -62,11 +64,11 @@ export const consonants: PhoneticLetter[] = [
 ];
 
 export const batchimSounds: PhoneticLetter[] = [
-  { id: 'b-01', letter: 'ㄱ/ㄲ/ㅋ', name: 'ㄱ系收音', romanization: '-k', type: 'batchim', subtype: 'stop', sound: '所有ㄱ系收音都发ㄱ[k̚]音，舌根抵软腭不爆破', mnemonic: '舌根堵住气流，不释放', emoji: '🛑' },
+  { id: 'b-01', letter: 'ㄱ/ㄲ/ㅋ', quizLetter: 'ㄱ', name: 'ㄱ系收音', romanization: '-k', type: 'batchim', subtype: 'stop', sound: '所有ㄱ系收音都发ㄱ[k̚]音，舌根抵软腭不爆破', mnemonic: '舌根堵住气流，不释放', emoji: '🛑' },
   { id: 'b-02', letter: 'ㄴ', name: 'ㄴ收音', romanization: '-n', type: 'batchim', subtype: 'nasal', sound: '发[n]音，舌尖抵上齿龈', mnemonic: '舌尖抵上颚，气流从鼻子出', emoji: '👃' },
-  { id: 'b-03', letter: 'ㄷ/ㅅ/ㅆ/ㅈ/ㅊ/ㅌ/ㅎ', name: 'ㄷ系收音', romanization: '-t', type: 'batchim', subtype: 'stop', sound: '所有ㄷ系收音都发ㄷ[t̚]音，舌尖抵上齿龈不爆破', mnemonic: '舌尖堵住气流，不释放', emoji: '🛑' },
+  { id: 'b-03', letter: 'ㄷ/ㅅ/ㅆ/ㅈ/ㅊ/ㅌ/ㅎ', quizLetter: 'ㄷ', name: 'ㄷ系收音', romanization: '-t', type: 'batchim', subtype: 'stop', sound: '所有ㄷ系收音都发ㄷ[t̚]音，舌尖抵上齿龈不爆破', mnemonic: '舌尖堵住气流，不释放', emoji: '🛑' },
   { id: 'b-04', letter: 'ㄹ', name: 'ㄹ收音', romanization: '-l', type: 'batchim', subtype: 'liquid', sound: '发[l]音，舌尖弹上齿龈', mnemonic: '舌尖弹一下上颚', emoji: '👅' },
   { id: 'b-05', letter: 'ㅁ', name: 'ㅁ收音', romanization: '-m', type: 'batchim', subtype: 'nasal', sound: '发[m]音，双唇闭合', mnemonic: '闭上嘴巴，气流从鼻子出', emoji: '🤐' },
-  { id: 'b-06', letter: 'ㅂ/ㅍ', name: 'ㅂ系收音', romanization: '-p', type: 'batchim', subtype: 'stop', sound: '所有ㅂ系收音都发ㅂ[p̚]音，双唇闭合不爆破', mnemonic: '闭上嘴巴，堵住气流', emoji: '🛑' },
+  { id: 'b-06', letter: 'ㅂ/ㅍ', quizLetter: 'ㅂ', name: 'ㅂ系收音', romanization: '-p', type: 'batchim', subtype: 'stop', sound: '所有ㅂ系收音都发ㅂ[p̚]音，双唇闭合不爆破', mnemonic: '闭上嘴巴，堵住气流', emoji: '🛑' },
   { id: 'b-07', letter: 'ㅇ', name: 'ㅇ收音', romanization: '-ng', type: 'batchim', subtype: 'nasal', sound: '发[ŋ]音，舌根抵软腭，气流从鼻子出', mnemonic: '像英语si"ng"的结尾', emoji: '🎵' },
 ];

@@ -1,8 +1,9 @@
 'use client';
 
-import { Pencil, Trash2, BookOpen } from 'lucide-react';
+import { Pencil, Trash2, BookOpen, Star } from 'lucide-react';
 import Link from 'next/link';
 import type { WordBook } from '@/types';
+import { FAVORITES_BOOK_ID } from '@/lib/db';
 
 interface Props {
   book: WordBook;
@@ -12,6 +13,8 @@ interface Props {
 }
 
 export function WordBookCard({ book, wordCount, onRename, onDelete }: Props) {
+  const isFavorites = book.id === FAVORITES_BOOK_ID;
+
   return (
     <div className="card-washi group relative" style={{ '--washi-color': book.color } as React.CSSProperties}>
       {/* Color strip at top */}
@@ -29,24 +32,27 @@ export function WordBookCard({ book, wordCount, onRename, onDelete }: Props) {
         <div className="flex items-start justify-between mb-2">
           <Link
             href={`/vocabulary/books/${book.id}`}
-            className="text-base font-bold text-[var(--text-primary)] hover:text-[var(--pink-primary)] transition-colors line-clamp-1 flex-1 mr-2"
+            className="text-base font-bold text-[var(--text-primary)] hover:text-[var(--pink-primary)] transition-colors line-clamp-1 flex-1 mr-2 flex items-center gap-1.5"
           >
+            {isFavorites && <Star size={14} fill="#f5a623" style={{ color: '#f5a623', flexShrink: 0 }} />}
             {book.name}
           </Link>
-          <div className="flex items-center gap-0.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-            <button
-              onClick={(e) => { e.preventDefault(); e.stopPropagation(); onRename(book); }}
-              className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
-            >
-              <Pencil size={13} />
-            </button>
-            <button
-              onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDelete(book.id); }}
-              className="p-1.5 rounded-lg hover:bg-[var(--color-danger-bg)] text-[var(--text-muted)] hover:text-[var(--color-danger)] transition-colors"
-            >
-              <Trash2 size={13} />
-            </button>
-          </div>
+          {!isFavorites && (
+            <div className="flex items-center gap-0.5 shrink-0">
+              <button
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); onRename(book); }}
+                className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
+              >
+                <Pencil size={13} />
+              </button>
+              <button
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDelete(book.id); }}
+                className="p-1.5 rounded-lg hover:bg-[var(--color-danger-bg)] text-[var(--text-muted)] hover:text-[var(--color-danger)] transition-colors"
+              >
+                <Trash2 size={13} />
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Description */}

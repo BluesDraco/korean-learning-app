@@ -7,23 +7,30 @@ const SUPPORTED_TYPES = [
   'audio/webm',
   'audio/mp4',
   'audio/wav',
+  '',
 ];
 
-let cachedMimeType: string | null = null;
+// Only cache after client-side detection (not during SSR)
+let cachedMimeType: string | null | undefined = undefined;
 
-function detectMimeType(): string | null {
-  if (cachedMimeType) return cachedMimeType;
+export function detectMimeType(): string | null {
+  if (typeof window === 'undefined' || typeof MediaRecorder === 'undefined') return null;
+  if (cachedMimeType !== undefined) return cachedMimeType;
   for (const t of SUPPORTED_TYPES) {
-    if (typeof MediaRecorder !== 'undefined' && MediaRecorder.isTypeSupported(t)) {
-      cachedMimeType = t;
-      return t;
+    if (t === '' || MediaRecorder.isTypeSupported(t)) {
+      cachedMimeType = t || null;
+      return cachedMimeType;
     }
   }
+  cachedMimeType = null;
   return null;
 }
 
 export function isRecordingSupported(): boolean {
-  return typeof window !== 'undefined' && typeof MediaRecorder !== 'undefined' && detectMimeType() !== null;
+  if (typeof window === 'undefined') return false;
+  if (typeof MediaRecorder === 'undefined') return false;
+  if (!navigator.mediaDevices?.getUserMedia) return false;
+  return true;
 }
 
 export async function requestMicPermission(): Promise<'granted' | 'denied' | 'unavailable'> {
@@ -61,20 +68,24 @@ export class AudioRecorder {
 
   get state() { return this._state; }
 
-  async start(): Promise<{ error?: string }> {
+  async start(): Promise<{ error?: string; errorType?: 'denied' | 'unavailable' }> {
     if (this._state === 'recording') return { error: '已经在录音' };
+    if (!isRecordingSupported()) return { error: '此浏览器不支持录音', errorType: 'unavailable' };
     const mimeType = detectMimeType();
-    if (!mimeType) return { error: '此浏览器不支持录音' };
 
     try {
       this.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     } catch (e: any) {
-      if (e.name === 'NotAllowedError') return { error: '麦克风权限未开启，请在浏览器设置中允许' };
-      return { error: '无法访问麦克风，请检查设备' };
+      if (e.name === 'NotAllowedError' || e.name === 'PermissionDeniedError') {
+        return { error: '麦克风权限未开启，请在浏览器设置中允许', errorType: 'denied' };
+      }
+      return { error: '无法访问麦克风，请检查设备', errorType: 'unavailable' };
     }
 
     this.chunks = [];
-    this.recorder = new MediaRecorder(this.stream, { mimeType });
+    this.recorder = mimeType
+      ? new MediaRecorder(this.stream, { mimeType })
+      : new MediaRecorder(this.stream);
     this.recorder.ondataavailable = (e) => { if (e.data.size > 0) this.chunks.push(e.data); };
     this.recorder.start();
     this.startTime = Date.now();
@@ -87,10 +98,11 @@ export class AudioRecorder {
   async stop(): Promise<RecordingResult | null> {
     if (this._state !== 'recording' || !this.recorder) return null;
     if (this.timeoutId) { clearTimeout(this.timeoutId); this.timeoutId = null; }
+    const actualMimeType = this.recorder.mimeType;
 
     const result = await new Promise<RecordingResult>((resolve) => {
       this.recorder!.onstop = () => {
-        const blob = new Blob(this.chunks, { type: detectMimeType() || 'audio/webm' });
+        const blob = new Blob(this.chunks, { type: actualMimeType || 'audio/webm' });
         const url = URL.createObjectURL(blob);
         const durationMs = Date.now() - this.startTime;
         this.cleanup();

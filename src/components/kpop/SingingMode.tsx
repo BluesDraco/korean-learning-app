@@ -235,7 +235,7 @@ export default function SingingMode({ song, startIndex, onClose, audioType = 'kp
 
   const getSegmentPlayer = useCallback(async () => {
     if (!segmentPlayerRef.current) {
-      const src = audioUrl ?? song.audioUrl ?? `https://torikorean-1436752408.cos.ap-hongkong.myqcloud.com/${audioPrefix}/${song.id}.webm`;
+      const src = audioUrl ?? song.audioUrl ?? '';
       const sp = new SegmentPlayer({
         onStateChange: (s) => {
           if (s === 'playing') setSongPlaying(true);
@@ -243,13 +243,18 @@ export default function SingingMode({ song, startIndex, onClose, audioType = 'kp
           else if (s === 'error') setAudioStatus('error');
           else if (s === 'loading') setAudioStatus('loading');
         },
-        onError: (err) => {
+        onError: (_err) => {
           setAudioStatus('error');
-          showToast('音频加载失败，请刷新重试', 'error');
+          // Only show toast if there was actually a src to load
+          if (src) showToast('音频加载失败，请刷新重试', 'error');
         },
       });
-      await sp.load(src);
       segmentPlayerRef.current = sp;
+      if (src) {
+        await sp.load(src);
+      } else {
+        setAudioStatus('error');
+      }
     }
     return segmentPlayerRef.current;
   }, [song.id, song.audioUrl, audioUrl, audioPrefix]);
@@ -277,7 +282,7 @@ export default function SingingMode({ song, startIndex, onClose, audioType = 'kp
 
   const playOriginalSegment = useCallback(async () => {
     const sp = await getSegmentPlayer();
-    if (sp.state !== 'ready') {
+    if (sp.state === 'loading' || sp.state === 'error') {
       showToast('音频未就绪，请稍后重试', 'error');
       return;
     }

@@ -1,11 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { X, Volume2, Keyboard } from 'lucide-react';
+import { X, Volume2 } from 'lucide-react';
 import type { DailyCourse } from '@/data/thirtyDayCourse';
 import { speak, speakWord } from '@/lib/tts';
-import { KoreanKeyboard } from '@/components/KoreanKeyboard';
-import { useIsMobile } from '@/lib/useIsMobile';
 
 interface Props {
   course: DailyCourse;
@@ -13,15 +11,14 @@ interface Props {
   onClose: () => void;
   goNextDay: () => void;
   goPrevDay: () => void;
+  outputText: string;
+  setOutputText: (v: string) => void;
 }
 
-export function BrowseDrawer({ course, dayNum, onClose, goNextDay, goPrevDay }: Props) {
+export function BrowseDrawer({ course, dayNum, onClose, goNextDay, goPrevDay, outputText, setOutputText }: Props) {
   const [showWord, setShowWord] = useState<Record<number, boolean>>({});
   const [showSentence, setShowSentence] = useState<Record<number, boolean>>({});
   const [showDict, setShowDict] = useState<Record<number, boolean>>({});
-  const [outputText, setOutputText] = useState('');
-  const [showKeyboard, setShowKeyboard] = useState(false);
-  const isMobile = useIsMobile();
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-[var(--bg-primary)]">
@@ -121,18 +118,10 @@ export function BrowseDrawer({ course, dayNum, onClose, goNextDay, goPrevDay }: 
             <p className="text-[11px] text-[var(--text-muted)] mb-3">提示：{course.output.hint}</p>
             <div className="relative">
               <textarea value={outputText} onChange={(e) => setOutputText(e.target.value)}
-                onFocus={() => isMobile && setShowKeyboard(true)}
                 placeholder="写下你的韩语句子..."
                 rows={3}
-                className="w-full bg-[var(--bg-input)] border border-[var(--border-color)] rounded-xl p-3 pr-10 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)] resize-none focus:outline-none focus:border-[var(--pink-pale)]" />
-              {isMobile && (
-                <button onClick={() => setShowKeyboard(!showKeyboard)}
-                  className={`absolute right-2 bottom-2 p-1.5 rounded-lg transition-colors ${showKeyboard ? 'bg-[var(--pink-primary)]/15 text-[var(--pink-primary)]' : 'text-[var(--text-muted)] hover:text-[var(--pink-primary)]'}`}>
-                  <Keyboard size={16} />
-                </button>
-              )}
+                className="w-full bg-[var(--bg-input)] border border-[var(--border-color)] rounded-xl p-3 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)] resize-none focus:outline-none focus:border-[var(--pink-pale)]" />
             </div>
-            <KoreanKeyboard value={outputText} onChange={setOutputText} visible={showKeyboard} onClose={() => setShowKeyboard(false)} />
             {outputText && (
               <div className="mt-3 p-3 bg-[var(--mint-soft)]/10 border border-[var(--mint-soft)]/20 rounded-xl">
                 <p className="text-[11px] text-[var(--text-muted)] mb-1">参考例句</p>

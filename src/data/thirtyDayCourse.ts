@@ -759,11 +759,11 @@ export const thirtyDayCourse: DailyCourse[] = [
     },
     sentences: [
       { korean: '늦어서 죄송합니다.', pronunciation: 'neu-jeo-seo joe-song-ham-ni-da.', chinese: '迟到了很抱歉。', scene: '正式道歉' },
-      { korean: '미안해요, 깜빡했어요.', pronunciation: 'mi-a-nae-yo, kkam-ppak-hae-sseo-yo.', chinese: '对不起，我忘了。', scene: '忘记某事' },
+      { korean: '미안해요, 깜빡했어요.', pronunciation: 'mi-an-hae-yo, kkam-ppak-hae-sseo-yo.', chinese: '对不起，我忘了。', scene: '忘记某事' },
       { korean: '괜찮아요, 다음에 조심하세요.', pronunciation: 'gwaen-cha-na-yo, da-eu-me jo-si-ma-se-yo.', chinese: '没关系，下次注意。', scene: '原谅对方' },
     ],
     dictations: [
-      { korean: '늦어서 미안해요', pronunciation: 'neu-jeo-seo mi-a-nae-yo', chinese: '迟到了对不起' },
+      { korean: '늦어서 미안해요', pronunciation: 'neu-jeo-seo mi-an-hae-yo', chinese: '迟到了对不起' },
       { korean: '깜빡했어요', pronunciation: 'kkam-ppak-hae-sseo-yo', chinese: '我忘了' },
       { korean: '괜찮아요', pronunciation: 'gwaen-cha-na-yo', chinese: '没关系' },
       { korean: '다음에는 안 늦을게요', pronunciation: 'da-eu-me-neun an neu-jeul-ge-yo', chinese: '下次不会迟到了' },

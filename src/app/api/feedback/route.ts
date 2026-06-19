@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/server/db';
 import { getAuthFromCookie, generateId } from '@/lib/server/auth';
+import { filterContent } from '@/lib/contentFilter';
 
 export async function POST(request: Request) {
   const body = await request.json();
@@ -8,6 +9,13 @@ export async function POST(request: Request) {
 
   if (!message?.trim()) {
     return NextResponse.json({ error: '反馈内容不能为空' }, { status: 400 });
+  }
+  if (message.length > 500) {
+    return NextResponse.json({ error: '反馈内容不能超过500个字符' }, { status: 400 });
+  }
+  const feedbackCheck = filterContent(message, 'user_content');
+  if (!feedbackCheck.ok) {
+    return NextResponse.json({ error: feedbackCheck.reason }, { status: 400 });
   }
 
   const auth = await getAuthFromCookie();

@@ -2,19 +2,27 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Mic, Play, Trash2 } from 'lucide-react';
+import { ArrowLeft, Mic, Play, Trash2, Volume2 } from 'lucide-react';
 import { db } from '@/lib/db';
 import { useAuth } from '@/components/AuthProvider';
+import { speak } from '@/lib/tts';
 
 interface Recording {
   id: string;
   userId?: string;
   type?: string;
+  korean?: string;
   text?: string;
   textZh?: string;
   source?: string;
+  sourceType?: string;
+  sourceId?: string;
+  lineId?: string;
   audioDataUrl?: string;
+  audioData?: string;
+  audioUrl?: string;
   duration?: number;
+  durationMs?: number;
   createdAt?: number;
 }
 
@@ -33,10 +41,23 @@ export default function MineRecordingsPage() {
       .finally(() => setLoading(false));
   }, [user]);
 
-  const handlePlay = (recording: Recording) => {
-    if (!recording.audioDataUrl) return;
-    if (audioEl) { audioEl.pause(); }
-    const audio = new Audio(recording.audioDataUrl);
+  const handlePlay = async (recording: Recording) => {
+    if (audioEl) { audioEl.pause(); setPlaying(null); }
+
+    // Resolve audio source: base64 data, data URL, or server download URL
+    let src: string | null =
+      recording.audioDataUrl ||
+      recording.audioData ||
+      null;
+
+    // KPOP recordings: fetch from server if no local data
+    if (!src && recording.sourceType === 'kpop' && recording.sourceId && recording.lineId != null) {
+      src = `/api/kpop/recording?download=1&songId=${encodeURIComponent(recording.sourceId)}&lineIndex=${encodeURIComponent(recording.lineId)}`;
+    }
+
+    if (!src) return;
+
+    const audio = new Audio(src);
     audio.onended = () => setPlaying(null);
     audio.onerror = () => setPlaying(null);
     audio.play().catch(() => setPlaying(null));
@@ -45,6 +66,7 @@ export default function MineRecordingsPage() {
   };
 
   const handleDelete = async (id: string) => {
+    if (!confirm('删除这条录音？')) return;
     if (audioEl && playing === id) { audioEl.pause(); setPlaying(null); }
     await db.recordings.delete(id);
     setRecordings((prev) => prev.filter((r) => r.id !== id));
@@ -96,9 +118,9 @@ export default function MineRecordingsPage() {
                   <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-md bg-[#f5f0ea] text-[#8c8177]">
                     {typeLabel(rec.type)}
                   </span>
-                  {rec.text && (
+                  {(rec.korean || rec.text) && (
                     <p className="text-[14px] font-bold text-[#2f2a26] mt-1.5 leading-relaxed">
-                      {rec.text}
+                      {rec.korean || rec.text}
                     </p>
                   )}
                   {rec.textZh && (
@@ -107,7 +129,16 @@ export default function MineRecordingsPage() {
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                {rec.audioDataUrl && (
+                {(rec.korean || rec.text) && (
+                  <button
+                    onClick={() => speak(rec.korean || rec.text || '', 0.8)}
+                    className="p-1.5 rounded-xl text-[#c7b7b0] hover:text-[#e47a94] hover:bg-[#f5f0ea] transition-colors"
+                    title="听发音"
+                  >
+                    <Volume2 size={14} />
+                  </button>
+                )}
+                {(rec.audioDataUrl || rec.audioData || (rec.sourceType === 'kpop' && rec.sourceId)) && (
                   <button
                     onClick={() => handlePlay(rec)}
                     className={`inline-flex items-center gap-1.5 text-[11px] font-medium px-3 py-1.5 rounded-xl transition-all ${

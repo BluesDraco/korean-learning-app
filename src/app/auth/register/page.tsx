@@ -19,6 +19,11 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    await doRegister();
+  };
+
+  const doRegister = async () => {
+    if (submitting) return;
     setError('');
 
     if (password !== confirmPassword) {
@@ -105,7 +110,8 @@ export default function RegisterPage() {
             )}
 
             <ToriPrimaryButton
-              type="submit"
+              type="button"
+              onClick={doRegister}
               loading={submitting}
               loadingText="注册中..."
             >

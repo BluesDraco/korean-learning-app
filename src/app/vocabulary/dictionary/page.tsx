@@ -10,6 +10,7 @@ import { vocabularyEntries } from '@/data/vocabulary/entries';
 import { db } from '@/lib/db';
 import type { WordEntry } from '@/types';
 import { speak, speakWord } from '@/lib/tts';
+import { TappableText } from '@/components/TappableText';
 
 export default function DictionaryPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -39,8 +40,8 @@ export default function DictionaryPage() {
   // Load mastery state
   useEffect(() => {
     (async () => {
-      const allUserWords = await db.words.toArray();
-      const mSet = new Set(allUserWords.filter((w) => w.mastery === 'mastered').map((w) => w.word));
+      const mastered = await db.words.where('mastery').equals('mastered').toArray();
+      const mSet = new Set(mastered.map((w) => w.word));
       setMasteredSet(mSet);
     })();
   }, []);
@@ -109,37 +110,26 @@ export default function DictionaryPage() {
 
   const handleAddAll = async () => {
     setAddingAll(true);
-    let count = 0;
+    const allUserWords = await db.words.toArray();
+    const userWordMap = new Map(allUserWords.map(w => [w.word, w]));
+    const now = Date.now();
+    const toInsert: any[] = [];
     const newIds = new Set(addedIds);
     for (const entry of results) {
-      const exists = await db.words.where('word').equals(entry.korean).first();
-      if (!exists) {
-        await db.words.put({
-          id: crypto.randomUUID(),
-          word: entry.korean,
-          pronunciation: entry.romanization,
-          meaning: entry.meanings[0]?.chinese || '',
-          partOfSpeech: entry.partOfSpeech,
-          examples: entry.examples.map((ex) => ({
-            text: ex.korean,
-            translation: ex.chinese,
-            source: 'dictionary' as const,
-          })),
-          sourceEntryId: entry.id,
-          mastery: 'new',
-          srsLevel: 0,
-          easeFactor: 2.5,
-          interval: 0,
-          createdAt: Date.now(),
-          lastReviewed: null,
-          nextReview: Date.now(),
+      if (!userWordMap.has(entry.korean)) {
+        toInsert.push({
+          id: crypto.randomUUID(), word: entry.korean, pronunciation: entry.romanization,
+          meaning: entry.meanings[0]?.chinese || '', partOfSpeech: entry.partOfSpeech,
+          examples: entry.examples.map((ex) => ({ text: ex.korean, translation: ex.chinese, source: 'dictionary' as const })),
+          sourceEntryId: entry.id, mastery: 'new', srsLevel: 0, easeFactor: 2.5, interval: 0,
+          createdAt: now, lastReviewed: null, nextReview: now,
         });
-        count++;
       }
       newIds.add(entry.id);
     }
+    if (toInsert.length > 0) await db.words.bulkPut(toInsert);
     setAddedIds(newIds);
-    setAddedCount(count);
+    setAddedCount(toInsert.length);
     setAddingAll(false);
   };
 
@@ -147,7 +137,7 @@ export default function DictionaryPage() {
     <div className="py-4 space-y-5 pb-24">
       {/* Header */}
       <div>
-        <Link href="/vocabulary" className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] mb-3">
+        <Link href="/vocabulary/library" className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] mb-3">
           <ArrowLeft size={16} />
           返回词库
         </Link>
@@ -337,7 +327,7 @@ export default function DictionaryPage() {
                   {entry.examples.map((ex, i) => (
                     <div key={i} className="bg-[var(--bg-input)] rounded-lg p-3 flex items-start gap-2">
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm text-[var(--text-primary)]">{ex.korean}</p>
+                        <TappableText text={ex.korean} className="text-sm text-[var(--text-primary)]" source="词典" highlightWord={entry.korean} />
                         <p className="text-xs text-[var(--text-secondary)] mt-0.5">{ex.chinese}</p>
                         {ex.scene && (
                           <span className="inline-block text-[13px] text-[var(--text-muted)] mt-1 bg-[var(--bg-card)] px-1.5 py-0.5 rounded">
@@ -381,7 +371,7 @@ export default function DictionaryPage() {
 
       {/* Bottom action bar */}
       {results.length > 0 && (
-        <div className="fixed left-0 right-0 z-30 px-4 pt-3 bg-[var(--bg-primary)] border-t border-[var(--border-color)]" style={{ bottom: "calc(56px + env(safe-area-inset-bottom, 0px))" }}>
+        <div className="fixed left-0 right-0 z-30 px-4 pt-3 bg-[var(--bg-primary)] border-t border-[var(--border-color)] md:left-[108px] md:bottom-0" style={{ bottom: "calc(56px + env(safe-area-inset-bottom, 0px))" }}>
           <div className="max-w-2xl mx-auto flex items-center gap-3">
             <div className="flex-1">
               <p className="text-sm font-medium text-[var(--text-primary)]">

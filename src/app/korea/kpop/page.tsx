@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { Search, BookOpen, Music, Loader2, Play, ChevronRight, Mic, Volume2, Clock, ExternalLink, AlertTriangle } from 'lucide-react';
+import { Search, BookOpen, Music, Loader2, Play, ChevronRight, Mic, Volume2, Clock, ExternalLink, AlertTriangle, ArrowLeft } from 'lucide-react';
 import type { KpopTrack, KpopImportJob } from '@/types/kpop';
 import { getAllTracks, getTracksByLevel, searchTracks } from '@/data/kpopTracks';
 import { getAllSongProgress, fetchProgressFromServer } from '@/lib/kpop/progress';
@@ -120,6 +120,9 @@ export default function KpopPage() {
 
   return (
     <div className="py-4 space-y-5 max-w-3xl mx-auto">
+      <Link href="/explore" className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
+        <ArrowLeft size={16} /> 返回
+      </Link>
       {/* Demo notice banner */}
       <div className="flex items-start gap-3 px-4 py-3 rounded-2xl bg-[#fff8f0] border border-[#f5d9b0]">
         <span className="text-[18px] mt-0.5">🎵</span>

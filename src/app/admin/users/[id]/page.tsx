@@ -7,22 +7,32 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Sparkles } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip } from 'recharts';
+import { useAuth } from '@/components/AuthProvider';
 
 export default function UserDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const { data, loading, refetch } = useAdminData<UserDetail>(`/api/admin/users/${id}`);
+  const { user: currentAdmin } = useAuth();
   const router = useRouter();
   const [saving, setSaving] = useState(false);
   const [membershipType, setMembershipType] = useState<string>('');
   const [banned, setBanned] = useState<boolean | null>(null);
   const [adminNote, setAdminNote] = useState('');
+  const [role, setRole] = useState<string>('');
+
+  const isSelf = currentAdmin?.id === id;
 
   const handleSave = async () => {
+    if (role && role !== (data?.role || 'user')) {
+      const action = role === 'admin' ? '设为管理员' : '降为普通用户';
+      if (!confirm(`确认将 ${data?.username} ${action}？此操作会立即生效。`)) return;
+    }
     setSaving(true);
     const body: UpdateUserBody = {};
     if (membershipType) body.membershipType = membershipType as UpdateUserBody['membershipType'];
     if (banned !== null) body.banned = banned;
     if (adminNote) body.adminNote = adminNote;
+    if (role) body.role = role as UpdateUserBody['role'];
 
     try {
       await fetch(`/api/admin/users/${id}`, {
@@ -34,6 +44,7 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
       setMembershipType('');
       setBanned(null);
       setAdminNote('');
+      setRole('');
     } finally {
       setSaving(false);
     }
@@ -151,7 +162,23 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
           <Sparkles size={16} className="text-[var(--pink-primary)]" />
           管理操作
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className={`grid grid-cols-1 gap-4 ${isSelf ? 'md:grid-cols-3' : 'md:grid-cols-4'}`}>
+          {/* Role — 不允许修改自己的权限 */}
+          {!isSelf && (
+          <div>
+            <label className="text-xs text-[var(--text-muted)] mb-1 block">修改角色权限</label>
+            <select
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="w-full text-xs border border-[var(--border-color)] rounded-lg px-3 py-2 text-[var(--text-primary)] bg-[var(--bg-card)] outline-none"
+            >
+              <option value="">不修改（当前: {data.role || 'user'}）</option>
+              <option value="user">普通用户</option>
+              <option value="admin">管理员</option>
+            </select>
+          </div>
+          )}
+
           {/* Membership */}
           <div>
             <label className="text-xs text-[var(--text-muted)] mb-1 block">修改会员状态</label>
@@ -196,7 +223,7 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
 
         <button
           onClick={handleSave}
-          disabled={saving || (!membershipType && banned === null && !adminNote)}
+          disabled={saving || (!membershipType && banned === null && !adminNote && !role)}
           className="mt-4 px-6 py-2 rounded-lg text-sm font-semibold text-white disabled:opacity-40 transition-colors"
           style={{ background: 'linear-gradient(135deg, #FF8FAB, #FFB8C9)' }}
         >

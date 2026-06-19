@@ -2,16 +2,18 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, User, Target, Flame, Save, Loader2, Trophy, Volume2, VolumeX, Zap, Type, LogOut } from 'lucide-react';
+import { ArrowLeft, User, Target, Flame, Save, Loader2, Trophy, Volume2, VolumeX, Zap, Type, LogOut, Moon, Sun } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
 import { getProfile, updateProfile } from '@/lib/gamification';
 import { db } from '@/lib/db';
 import type { UserProfile, Achievement } from '@/types';
 import { ACHIEVEMENT_DEFS } from '@/types';
 import { useFontSettings } from '@/components/FontProvider';
+import { useTheme } from '@/components/ThemeProvider';
 import { setSpeechRate, getSpeechRate } from '@/lib/tts';
 import { isSoundEnabled, setSoundEnabled } from '@/lib/soundManager';
 import { FONT_PRESETS, FONT_SIZES } from '@/lib/fontSettings';
+import { FLASHCARD_THEMES, getFlashcardTheme, saveFlashcardTheme, applyFlashcardTheme, type FlashcardTheme } from '@/lib/flashcardTheme';
 
 const REDUCE_MOTION_KEY = 'tori_reduce_motion';
 
@@ -28,8 +30,9 @@ function setReduceMotion(v: boolean): void {
 
 export default function SettingsPage() {
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const { settings: fontSettings, previewPreset, previewSize, commitFontSettings } = useFontSettings();
+  const { theme, toggle: toggleTheme } = useTheme();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [achievements, setAchievements] = useState<Achievement[]>([]);
   const [loading, setLoading] = useState(true);
@@ -37,16 +40,32 @@ export default function SettingsPage() {
   const [saved, setSaved] = useState(false);
   const [soundOn, setSoundOn] = useState(true);
   const [reduceMotion, setReduceMotionState] = useState(false);
+  const [fcTheme, setFcTheme] = useState<FlashcardTheme>('pure');
+
+  useEffect(() => {
+    setFcTheme(getFlashcardTheme());
+  }, []);
+
+  const handleFcTheme = (t: FlashcardTheme) => {
+    setFcTheme(t);
+    saveFlashcardTheme(t);
+    applyFlashcardTheme(t);
+  };
 
   useEffect(() => {
     const load = async () => {
-      const p = await getProfile();
-      setProfile({ ...p, ttsSpeed: getSpeechRate() });
-      const achs = await db.achievements.toArray();
-      setAchievements(achs);
-      setSoundOn(isSoundEnabled());
-      setReduceMotionState(getReduceMotion());
-      setLoading(false);
+      try {
+        const p = await getProfile();
+        setProfile({ ...p, ttsSpeed: getSpeechRate() });
+        const achs = await db.achievements.toArray();
+        setAchievements(achs);
+        setSoundOn(isSoundEnabled());
+        setReduceMotionState(getReduceMotion());
+      } catch {
+        // db unavailable — show page without data
+      } finally {
+        setLoading(false);
+      }
     };
     load();
   }, []);
@@ -60,6 +79,7 @@ export default function SettingsPage() {
       dailyGoalMinutes: profile.dailyGoalMinutes,
       dailyGoalWords: profile.dailyGoalWords,
       targetLevel: profile.targetLevel,
+      reviewBatchSize: profile.reviewBatchSize,
     });
     setSaving(false);
     setSaved(true);
@@ -270,11 +290,21 @@ export default function SettingsPage() {
           </button>
         </div>
 
-        {/* Theme toggle info */}
-        <div className="bg-[var(--bg-input)] rounded-xl p-4">
-          <p className="text-xs text-[var(--text-secondary)]">
-            亮色/暗色主题切换请使用导航栏底部的按钮
-          </p>
+        {/* Theme toggle */}
+        <div className="flex items-center justify-between bg-[var(--bg-input)] rounded-xl p-4">
+          <div className="flex items-center gap-3">
+            {theme === 'dark' ? <Moon size={20} className="text-[var(--text-secondary)]" /> : <Sun size={20} className="text-[var(--peach-soft)]" />}
+            <div>
+              <p className="text-sm text-[var(--text-primary)] font-medium">深色模式</p>
+              <p className="text-xs text-[var(--text-secondary)]">{theme === 'dark' ? '当前：深色' : '当前：亮色'}</p>
+            </div>
+          </div>
+          <button
+            onClick={toggleTheme}
+            className={`relative w-12 h-7 rounded-full transition-colors ${theme === 'dark' ? 'bg-[var(--bg-accent)]' : 'bg-[var(--peach-soft)]'}`}
+          >
+            <div className={`absolute top-0.5 w-6 h-6 rounded-full bg-white shadow transition-transform ${theme === 'dark' ? 'translate-x-6' : 'translate-x-0.5'}`} />
+          </button>
         </div>
       </div>
 
@@ -358,6 +388,34 @@ export default function SettingsPage() {
             The quick brown fox jumps over the lazy dog. 12345
           </p>
         </div>
+
+        {/* Flashcard theme */}
+        <div>
+          <label className="text-xs text-[var(--text-secondary)] mb-2 block">闪卡配色</label>
+          <div className="grid grid-cols-2 gap-2">
+            {FLASHCARD_THEMES.map((t) => (
+              <button
+                key={t.key}
+                onClick={() => handleFcTheme(t.key)}
+                className={`rounded-xl p-3 text-left border transition-all ${
+                  fcTheme === t.key
+                    ? 'border-[var(--pink-primary)] bg-[var(--pink-primary)]/8 shadow-sm'
+                    : 'border-[var(--border-color)] hover:border-[var(--border-hover)]'
+                }`}
+              >
+                <div className="flex items-center gap-1.5 mb-1.5">
+                  {t.swatches.map((c, i) => (
+                    <span key={i} className="w-4 h-4 rounded-full border border-black/5 inline-block flex-shrink-0" style={{ background: c }} />
+                  ))}
+                </div>
+                <p className={`text-xs font-semibold ${fcTheme === t.key ? 'text-[var(--pink-primary)]' : 'text-[var(--text-primary)]'}`}>
+                  {t.label}
+                </p>
+                <p className="text-[11px] text-[var(--text-muted)] mt-0.5">{t.desc}</p>
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Achievements */}
@@ -409,7 +467,7 @@ export default function SettingsPage() {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm font-medium text-[var(--text-primary)]">当前账号</p>
-            <p className="text-xs text-[var(--text-muted)] mt-0.5">{user?.nickname ?? '未登录'}</p>
+            <p className="text-xs text-[var(--text-muted)] mt-0.5">{authLoading ? '加载中...' : (user?.nickname ?? '未登录')}</p>
           </div>
           <button
             onClick={async () => {

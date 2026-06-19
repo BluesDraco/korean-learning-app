@@ -3,6 +3,7 @@ import { DEEPSEEK_MODEL } from '@/lib/deepseek';
 import { getAuthFromCookie } from '@/lib/server/auth';
 import { checkAiRateLimit, recordAiUsage } from '@/lib/server/rate-limit';
 import { fetchWithTimeout } from '@/lib/fetch';
+import { filterContent } from '@/lib/contentFilter';
 
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
 
@@ -19,6 +20,13 @@ export async function POST(req: Request) {
     const { context, userMessage } = await req.json();
     if (!userMessage || typeof userMessage !== 'string') {
       return NextResponse.json({ error: 'Missing userMessage' }, { status: 400 });
+    }
+    if (userMessage.length > 200) {
+      return NextResponse.json({ error: '输入不能超过200个字符' }, { status: 400 });
+    }
+    const voiceCheck = filterContent(userMessage, 'ai_input');
+    if (!voiceCheck.ok) {
+      return NextResponse.json({ error: voiceCheck.reason }, { status: 400 });
     }
 
     const limit = await checkAiRateLimit(auth.userId, 'voice');

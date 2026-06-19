@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import { Plus, X, Search, Loader2 } from 'lucide-react';
-import { db } from '@/lib/db';
+import { Plus, X, Search, Loader2, Star } from 'lucide-react';
+import { db, FAVORITES_BOOK_ID } from '@/lib/db';
 import { WordBookCard } from '@/components/WordBookCard';
 import type { WordBook } from '@/types';
 
@@ -29,6 +29,12 @@ export function BooksSection() {
 
   const load = useCallback(async () => {
     const list = await db.wordBooks.orderBy('createdAt').reverse().toArray();
+    // 「我的收藏」置顶
+    const favIdx = list.findIndex(b => b.id === FAVORITES_BOOK_ID);
+    if (favIdx > 0) {
+      const [fav] = list.splice(favIdx, 1);
+      list.unshift(fav);
+    }
     setBooks(list);
     const counts: Record<string, number> = {};
     for (const b of list) {
@@ -153,7 +159,7 @@ export function BooksSection() {
       {showModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/20" onClick={() => setShowModal(false)} />
-          <div className="relative bg-[var(--bg-card)] rounded-2xl border border-[var(--border-color)] shadow-xl w-full max-w-md p-6 space-y-4 animate-bounce-in">
+          <div className="relative bg-[var(--bg-card)] rounded-2xl border border-[var(--border-color)] shadow-xl w-full max-w-md p-6 space-y-4 animate-bounce-in max-h-[90dvh] overflow-y-auto">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-bold text-[var(--text-primary)]">
                 {editingBook ? '编辑单词本' : '新建单词本'}

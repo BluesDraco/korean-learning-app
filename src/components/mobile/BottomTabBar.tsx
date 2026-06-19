@@ -2,21 +2,41 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Sparkles, User, Wrench, GraduationCap, Compass } from 'lucide-react';
+import { Sparkles, BookOpen, Settings, GraduationCap, Compass } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 const tabs = [
   { label: '今日', href: '/daily', icon: Sparkles },
-  { label: '我的', href: '/mine', icon: User },
-  { label: '工具', href: '/tools', icon: Wrench },
+  { label: '词汇', href: '/vocabulary', icon: BookOpen },
+  { label: '工具', href: '/tools', icon: Settings },
   { label: '学习', href: '/learning', icon: GraduationCap },
   { label: '探索', href: '/explore', icon: Compass },
 ];
 
 export function BottomTabBar() {
   const pathname = usePathname();
+  const [hidden, setHidden] = useState(false);
+
+  // Hide when system keyboard is visible (visualViewport shrinks significantly)
+  useEffect(() => {
+    const vv = window.visualViewport;
+    if (!vv) return;
+    const check = () => {
+      const ratio = vv.height / window.innerHeight;
+      setHidden(ratio < 0.75);
+    };
+    vv.addEventListener('resize', check);
+    vv.addEventListener('scroll', check);
+    return () => {
+      vv.removeEventListener('resize', check);
+      vv.removeEventListener('scroll', check);
+    };
+  }, []);
+
+  if (hidden) return null;
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-[var(--border-color)] bg-[var(--bg-card)]/95 backdrop-blur pb-[env(safe-area-inset-bottom,0px)]">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-[var(--border-color)] bg-[var(--bg-card)] pb-[env(safe-area-inset-bottom,0px)]">
       <div className="mx-auto grid h-[56px] max-w-screen-sm grid-cols-5 px-2">
         {tabs.map((tab) => {
           const isHome = tab.href === '/daily';

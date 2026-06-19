@@ -1,6 +1,8 @@
 // Audio policy layer — all pronunciation requests are classified here.
 // Prevents generative AI TTS from being used on jamo / hangul letters / minimal pairs.
 
+import { normalizeKoreanPronunciation } from '@/lib/audio/koreanPronunciation';
+
 export type AudioContentType =
   | 'hangul_letter'
   | 'jamo'
@@ -24,11 +26,11 @@ export interface AudioPolicyResult {
 const STATIC_ONLY_TYPES: Set<AudioContentType> = new Set([
   'hangul_letter',
   'jamo',
-  'minimal_pair',
-  // 'short_word' removed — no static audio registry, fall through to Qwen/browser TTS
+  // minimal_pair removed — NLS handles these fine with sanitized text
 ]);
 
 const QWEN_ALLOWED_TYPES: Set<AudioContentType> = new Set([
+  'minimal_pair',
   'word',
   'sentence',
   'paragraph',
@@ -82,8 +84,8 @@ export function resolveAudioPolicy(type: AudioContentType): AudioPolicyResult {
 }
 
 /** Sanitize text before passing to TTS engine. Strips markers that confuse TTS. */
-export function sanitizeTTSText(text: string): string {
-  return text
+export function sanitizeTTSText(text: string, hint?: AudioContentType, wrapForNls = false): string {
+  const cleaned = text
     // Remove speaker icon emoji
     .replace(/🔊/g, '')
     .replace(/[●◉○◈◇◆▸►▻]/g, '')
@@ -98,4 +100,13 @@ export function sanitizeTTSText(text: string): string {
     .replace(/^,\s*/, '')
     .replace(/,\s*$/, '')
     .trim();
+  const normalized = normalizeKoreanPronunciation(cleaned);
+  // Wrap isolated words with 。 so Kyong processes in sentence mode (improves prosody stability)
+  if (wrapForNls) {
+    const type = hint ?? classifyContent(cleaned);
+    if ((type === 'word' || type === 'short_word') && /^[가-힣\s]+$/.test(normalized)) {
+      return `。${normalized}。`;
+    }
+  }
+  return normalized;
 }

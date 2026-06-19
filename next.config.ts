@@ -61,8 +61,8 @@ const nextConfig: NextConfig = {
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: blob: https:",
               "font-src 'self' data:",
-              "connect-src 'self' https://api.deepseek.com",
-              "media-src 'self' data: blob: https://torikorean-1436752408.cos.ap-hongkong.myqcloud.com",
+              "connect-src 'self' https://torikorean.com https://api.deepseek.com https://nls-gateway.cn-shanghai.aliyuncs.com https://nls-gateway-cn-shanghai.aliyuncs.com https://*.turso.io wss://*.turso.io",
+              "media-src 'self' data: blob: https://torikorean.com https://torikorean-1436752408.cos.ap-hongkong.myqcloud.com",
               "frame-src 'self' https://www.bilibili.com https://www.youtube.com https://www.youtube-nocookie.com",
               "frame-ancestors 'none'",
               "base-uri 'self'",
@@ -79,6 +79,21 @@ const nextConfig: NextConfig = {
     ] : [];
 
     return [
+      // Next.js hashed static assets — immutable long cache
+      {
+        source: '/_next/static/:path*',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
+      },
+      // Page HTML — always revalidate so users get fresh chunk manifest after deploy
+      {
+        source: '/(.*)',
+        headers: [{ key: 'Cache-Control', value: 'no-cache, no-store, must-revalidate' }],
+      },
+      // Auth endpoint — short private cache to avoid redundant DB hits on SPA navigation
+      {
+        source: '/api/auth/me',
+        headers: [{ key: 'Cache-Control', value: 'private, max-age=30' }],
+      },
       // Static content pages — 1 hour cache
       {
         source: '/phonetics/:path*',

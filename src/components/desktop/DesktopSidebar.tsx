@@ -11,14 +11,14 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { id: 'today', icon: '⌂', label: '今日', route: '/daily', matchRoutes: ['/daily'] },
-  { id: 'learn', icon: '▣', label: '学习', route: '/learning', matchRoutes: ['/learning', '/course'] },
-  { id: 'kpop', icon: '♪', label: 'KPOP', route: '/korea/kpop', matchRoutes: ['/korea/kpop', '/kpop'] },
-  { id: 'news', icon: '◈', label: '热点', route: '/korea/kpop/news', matchRoutes: ['/korea/kpop/news', '/news'] },
-  { id: 'practice', icon: '✎', label: '练习', route: '/tools', matchRoutes: ['/tools', '/typing', '/writing', '/pronunciation', '/shadowing'] },
-  { id: 'vocab', icon: '◇', label: '词库', route: '/mine/words', matchRoutes: ['/mine/words', '/mine/sentences', '/review'] },
-  { id: 'tools', icon: '⚙', label: '工具', route: '/ai/analyze', matchRoutes: ['/ai/analyze', '/grammar', '/dictation'] },
-  { id: 'mine', icon: '●', label: '我的', route: '/mine', matchRoutes: ['/mine', '/mine/recordings', '/mine/kpop', '/mine/diary', '/mine/notes', '/mine/practices', '/mine/articles'] },
+  { id: 'today', icon: '⌂︎', label: '今日', route: '/daily', matchRoutes: ['/daily'] },
+  { id: 'learn', icon: '▣︎', label: '学习', route: '/learning', matchRoutes: ['/learning', '/course'] },
+  { id: 'kpop', icon: '♪︎', label: 'KPOP', route: '/korea/kpop/news', matchRoutes: ['/korea/kpop', '/kpop'] },
+  { id: 'news', icon: '◈︎', label: '热点', route: '/korea/kpop/news', matchRoutes: ['/korea/kpop/news', '/news'] },
+  { id: 'practice', icon: '✎︎', label: '练习', route: '/tools', matchRoutes: ['/tools', '/typing', '/writing', '/pronunciation', '/shadowing'] },
+  { id: 'vocab', icon: '◇︎', label: '词库', route: '/mine/words', matchRoutes: ['/mine/words', '/mine/sentences', '/review'] },
+  { id: 'tools', icon: '⚙︎', label: '工具', route: '/ai/analyze', matchRoutes: ['/ai/analyze', '/grammar', '/dictation'] },
+  { id: 'mine', icon: '●︎', label: '我的', route: '/mine', matchRoutes: ['/mine', '/mine/recordings', '/mine/kpop', '/mine/diary', '/mine/notes', '/mine/practices', '/mine/articles'] },
 ];
 
 const META: Record<string, [string, string]> = {

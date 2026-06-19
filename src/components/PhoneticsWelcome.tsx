@@ -138,6 +138,13 @@ export default function PhoneticsWelcome({ onDone }: { onDone: () => void }) {
         {/* Interactive demo (step 2) */}
         {current.interactive && <QuickComposeDemo />}
 
+        {/* Content accuracy notice (step 2 only) */}
+        {current.interactive && (
+          <div className="bg-amber-50 border border-amber-200 rounded-2xl px-4 py-3 text-xs text-amber-700 leading-relaxed">
+            📋 当前内容准确度待校正，预计本周完成，届时将同步更新。
+          </div>
+        )}
+
         {/* Navigation */}
         <div className="flex gap-3 justify-center">
           {step > 0 && (

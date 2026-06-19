@@ -5,7 +5,7 @@ export function DesktopPanel() {
     <aside className="desktop-panel">
       <div className="panel-card">
         <h3>快捷入口</h3>
-        <p style={{ color: '#86746d', fontSize: 13, lineHeight: 1.55 }}>KPOP 跟唱、热点阅读、文章拆解、闪卡复习。</p>
+        <p style={{ color: '#86746d', fontSize: 13, lineHeight: 1.55 }}>热点阅读、文章拆解、闪卡复习。</p>
       </div>
       <div className="panel-card">
         <h3>今日进度</h3>

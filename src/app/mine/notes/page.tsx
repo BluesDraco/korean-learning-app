@@ -26,6 +26,7 @@ export default function MineNotesPage() {
   }, []);
 
   const deleteNote = async (id: string) => {
+    if (!confirm('删除这条笔记？')) return;
     await db.notes.delete(id).catch(() => {});
     setNotes((prev) => prev.filter((n) => n.id !== id));
   };

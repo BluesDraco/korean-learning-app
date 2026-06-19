@@ -21,7 +21,7 @@ export default function MinePracticesPage() {
       setPronunciationCount(p);
       setShadowingCount(s);
       setLoading(false);
-    });
+    }).catch(() => setLoading(false));
   }, []);
 
   const total = (dictationCount ?? 0) + (pronunciationCount ?? 0) + (shadowingCount ?? 0);

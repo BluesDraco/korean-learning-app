@@ -285,7 +285,7 @@ export function Navbar() {
       </nav>
 
       {/* Spacer for desktop sidebar — matches sidebar width */}
-      <div className="hidden md:block md:w-14 lg:w-52 shrink-0 transition-[width] duration-200" />
+      <div className="hidden lg:block lg:w-52 shrink-0 transition-[width] duration-200" />
     </>
   );
 }

@@ -143,10 +143,7 @@ export default function KpopNewsPage() {
     <div className="py-4 space-y-5 max-w-2xl mx-auto md:max-w-3xl">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-[13px]">
-        <Link
-          href="/korea/kpop"
-          className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1"
-        >
+        <Link href="/korea/kpop" className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1">
           <ArrowLeft size={14} />
           KPOP 歌词跟唱
         </Link>

@@ -35,7 +35,7 @@ const VOWELS = [
 ];
 
 const FINALS = [
-  { letter: '(无)', name: '无收音', rom: '' },
+  { letter: '없음', name: '无收音', rom: '' },
   { letter: 'ㄱ', name: 'ㄱ收音', rom: 'k' },
   { letter: 'ㄴ', name: 'ㄴ收音', rom: 'n' },
   { letter: 'ㄷ', name: 'ㄷ收音', rom: 't' },
@@ -141,9 +141,9 @@ export default function SyllableComposer() {
 
           {/* Final */}
           <div className={`w-20 h-20 rounded-2xl border-2 border-dashed flex items-center justify-center transition-all ${
-            jong && jong !== '(无)'
+            jong && jong !== '없음'
               ? 'border-[var(--mint-soft)] bg-[var(--mint-soft)]/5'
-              : jong === '(无)'
+              : jong === '없음'
                 ? 'border-[var(--border-color)] bg-[var(--bg-card-hover)]'
                 : 'border-[var(--border-color)] bg-[var(--bg-input)]'
           }`}>
@@ -268,9 +268,9 @@ export default function SyllableComposer() {
             {FINALS.map((item) => (
               <button
                 key={item.letter}
-                onClick={() => setJong(item.letter === '(无)' ? '' : item.letter)}
+                onClick={() => setJong(item.letter === '없음' ? '' : item.letter)}
                 className={`px-3 py-2 rounded-xl text-sm font-bold transition-all ${
-                  (item.letter === '(无)' && jong === '') || jong === item.letter
+                  (item.letter === '없음' && jong === '') || jong === item.letter
                     ? 'bg-[var(--mint-soft)] text-white shadow-md shadow-[var(--mint-soft)]/30 scale-110'
                     : 'bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] text-[var(--text-primary)]'
                 }`}

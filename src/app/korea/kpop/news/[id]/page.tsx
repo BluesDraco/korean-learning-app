@@ -10,31 +10,28 @@ import type { KoreanReadingToken, KoreanGrammarNote, KoreanReadingSentence } fro
 import { useAuth } from '@/components/AuthProvider';
 import { db } from '@/lib/db';
 import { speak, speakWord } from '@/lib/tts';
+import { useTheme } from '@/components/ThemeProvider';
 
 // ── Design tokens (matches Tori_HotReading_Detail_UI_Demo.html) ──
-const C = {
-  bg: '#fff7f4',
-  paper: '#ffffff',
-  ink: '#241917',
-  muted: '#89756e',
-  line: '#eee0d8',
-  pink: '#ff7fa8',
-  pinkSoft: '#fff0f5',
-  mint: '#aee3d8',
-  mintSoft: '#e9f8f4',
-  cream: '#fff8f4',
-  black: '#201815',
-  levelBg: '#fff0f5',
-  levelText: '#e0607a',
+const LIGHT_C = {
+  bg: '#fff7f4', paper: '#ffffff', ink: '#241917', muted: '#89756e', line: '#eee0d8',
+  pink: '#ff7fa8', pinkSoft: '#fff0f5', mint: '#aee3d8', mintSoft: '#e9f8f4',
+  cream: '#fff8f4', black: '#201815', levelBg: '#fff0f5', levelText: '#e0607a',
+};
+const DARK_C = {
+  bg: '#1E1B2E', paper: '#282440', ink: '#F0E8FF', muted: '#B8A8C8', line: '#3A3060',
+  pink: '#ff7fa8', pinkSoft: '#2D2848', mint: '#4A6058', mintSoft: '#1E3530',
+  cream: '#252040', black: '#3A3060', levelBg: '#2D2848', levelText: '#ff7fa8',
 };
 
 // ── Word Modal ────────────────────────────────────────────────────
 
-function WordModal({ token, onClose, onSave, saved }: {
+function WordModal({ token, onClose, onSave, saved, C }: {
   token: KoreanReadingToken;
   onClose: () => void;
   onSave: () => void;
   saved: boolean;
+  C: typeof LIGHT_C;
 }) {
   // Close on backdrop click
   const handleBackdrop = useCallback((e: React.MouseEvent) => {
@@ -118,14 +115,16 @@ function WordModal({ token, onClose, onSave, saved }: {
 
 // ── Sentence Card ─────────────────────────────────────────────────
 
-function SentenceCard({ sentence, index, postId, sourceName, titleKo, onTokenClick, savedTokens }: {
+function SentenceCard({ sentence, index, postId, sourceName, titleKo, onTokenClick, onSaveAllTokens, savedTokens, C }: {
   sentence: KoreanReadingSentence;
   index: number;
   postId: string;
   sourceName: string;
   titleKo: string;
   onTokenClick: (token: KoreanReadingToken) => void;
+  onSaveAllTokens: (tokens: KoreanReadingToken[]) => void;
   savedTokens: Set<string>;
+  C: typeof LIGHT_C;
 }) {
   const { user } = useAuth();
   const [sentenceSaved, setSentenceSaved] = useState(false);
@@ -269,7 +268,10 @@ function SentenceCard({ sentence, index, postId, sourceName, titleKo, onTokenCli
             {sentenceSaved ? '已保存' : '保存句子'}
           </button>
           <button
-            onClick={() => visibleTokens.forEach(t => onTokenClick(t))}
+            onClick={async (e) => {
+              e.stopPropagation();
+              onSaveAllTokens(visibleTokens.slice(0, 5));
+            }}
             style={{
               height: 38, borderRadius: 999,
               border: `1px solid ${C.line}`,
@@ -288,6 +290,8 @@ function SentenceCard({ sentence, index, postId, sourceName, titleKo, onTokenCli
 // ── Main Page ─────────────────────────────────────────────────────
 
 export default function HotPostDetailPage() {
+  const { theme } = useTheme();
+  const C = theme === 'dark' ? DARK_C : LIGHT_C;
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const post = useMemo(() => getHotPostById(id), [id]);
@@ -560,7 +564,9 @@ export default function HotPostDetailPage() {
                   sourceName={post.sourceName}
                   titleKo={post.originalTitleKo}
                   onTokenClick={setActiveToken}
+                  onSaveAllTokens={(tokens) => tokens.forEach(t => handleSaveToken(t))}
                   savedTokens={savedTokens}
+                  C={C}
                 />
               ))}
             </div>
@@ -600,7 +606,7 @@ export default function HotPostDetailPage() {
       </div>
 
       {/* ── Bottom fixed bar ── */}
-      <div style={{
+      <div className="md:left-[108px] md:!bottom-0" style={{
         position: 'fixed', bottom: 'calc(56px + env(safe-area-inset-bottom, 0px))', left: 0, right: 0,
         zIndex: 100,
         background: C.paper,
@@ -661,6 +667,7 @@ export default function HotPostDetailPage() {
             setActiveToken(null);
           }}
           saved={savedTokens.has(activeToken.surface)}
+          C={C}
         />
       )}
     </div>

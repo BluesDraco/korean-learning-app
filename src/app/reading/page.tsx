@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import {
   BookOpen, Sparkles, Clock, Target, ChevronRight,
-  Hash, Bookmark, TrendingUp,
+  Hash, Bookmark, TrendingUp, ArrowLeft,
 } from 'lucide-react';
 import { readingArticles, getTodayArticle, levelLabel, levelColor } from '@/data/reading-new';
 import { db } from '@/lib/db';
@@ -46,6 +47,9 @@ export default function ReadingPage() {
     <div className="py-4 space-y-5 max-w-2xl mx-auto md:max-w-3xl">
       {/* Header */}
       <div>
+        <div className="flex items-center gap-2 mb-1">
+          <Link href="/tools" className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"><ArrowLeft size={20} /></Link>
+        </div>
         <h1 className="text-2xl font-bold text-[var(--text-primary)] flex items-center gap-2">
           <BookOpen size={22} className="text-[var(--mint-soft)]" />
           文章阅读
