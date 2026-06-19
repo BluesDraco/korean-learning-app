@@ -205,6 +205,35 @@ src/types/kpop.ts     — KPOP 专用类型
 4. **不要重构已有页面** — 只做小范围修复和增量改动
 5. **先收口导航，再做详情页** — 不要同时改导航和页面
 6. **在服务器上构建** — 不要 Windows 构建后传到 Linux
+
+### 代码审查五维度
+
+每次完成功能后，必须按以下五个维度逐一审查，不能只靠编译通过就报告完成：
+
+**维度1：功能是否真正接通**
+- 新增的 UI 按钮/交互，是否有对应的 handler？
+- handler 是否真正调用了 API / DB / 状态更新？
+- 不能只写了 UI 没写逻辑，也不能只写了逻辑没有触发入口
+
+**维度2：数据流是否完整**
+- 新增数据类型：`src/types/index.ts` 是否导出？
+- 新增 CloudTable：`src/lib/db.ts` 是否注册？
+- 新增数据库表：`src/lib/server/db.ts` 是否建表？
+- 三者缺一不可，任何一环断掉都算未完成
+
+**维度3：SSR 安全**
+- 所有访问 `window` / `document` / `navigator` / `localStorage` 的代码，必须在 `useEffect` 内或有 `typeof window !== 'undefined'` 守卫
+- 不能在组件顶层同步调用浏览器 API（会导致 hydration 错误或 SSR 时永远返回 false）
+
+**维度4：边界与异常**
+- 空值/undefined：新字段如果可选，渲染前必须有空值保护（`field && ...` 或 `field || ''`）
+- 相等值：wrongPart === correctPart 这类无意义对比必须过滤
+- 错误状态：DB 写失败不能误标成功，API 失败要有 fallback
+
+**维度5：状态清理**
+- 切换场景/组件卸载时，正在进行的异步操作（录音、识别、定时器）必须终止
+- useEffect cleanup 函数必须 abort/cancel 所有副作用
+- 再来一轮/返回场景时，所有相关 state 必须重置到初始值
 7. **不要恢复旧版 UI** — KPOP 详情页已用 inline styles 匹配设计稿，不要改用 Tailwind 或换布局
 
 ### 沟通规则 (用户偏好)
@@ -227,3 +256,282 @@ src/types/kpop.ts     — KPOP 专用类型
 8. **禁止用 Turbopack** — 有内存溢出 bug
 9. **禁止添加新的 npm 依赖** 除非用户明确要求
 10. **禁止创建不需要的 .md 文档文件** 除非用户明确要求
+
+## 代码地图
+
+### 目录结构
+
+```
+src/
+├── app/              # 页面 + API 路由
+├── components/       # 公共组件
+├── lib/              # 工具库
+├── data/             # 静态数据
+├── types/            # TypeScript 类型
+└── middleware.ts     # JWT 验证，保护 /admin/*
+```
+
+### 关键页面文件
+
+| 路由 | 文件 | 备注 |
+|------|------|------|
+| `/korea/kpop/[id]` | `src/app/korea/kpop/[id]/page.tsx` | **禁止重构**，600行 inline styles |
+| `/grammar` | `src/app/grammar/page.tsx` | ~1600行 |
+| `/course/[day]` | `src/app/course/[day]/page.tsx` | LessonEngine |
+| `/topik` | `src/app/topik/page.tsx` | T35I/T35II 听力+阅读 |
+| `/review` | `src/app/review/page.tsx` | SRS闪卡+默写+造句 |
+| `/ai/chat` | `src/app/ai/chat/page.tsx` | 情景对话 |
+| `/mine/vocabulary-mistakes` | `src/app/mine/vocabulary-mistakes/page.tsx` | 错题本 |
+
+### 关键数据文件
+
+| 文件 | 内容 |
+|------|------|
+| `src/data/aiScenarios.ts` | AI情景对话数据（10个情景） |
+| `src/data/kpopTracks.ts` | KPOP歌曲（URL生成逻辑**禁止改动**） |
+| `src/data/grammar-cards.ts` | 语法课程卡片（P1~P8） |
+| `src/data/navigation.ts` | 五分组导航 |
+| `src/data/shadowingClips.ts` | 影子跟读片段 |
+
+### 核心库文件
+
+| 文件 | 说明 |
+|------|------|
+| `src/lib/tts.ts` | TTS主逻辑（NLS Kyong + 兜底），禁止直接调 `/api/tts/aliyun` |
+| `src/lib/db.ts` | 客户端 Dexie/IndexedDB，所有 CloudTable 在此注册 |
+| `src/lib/server/db.ts` | Turso连接 + 所有表迁移，新表写在末尾 |
+| `src/lib/server/auth.ts` | `getAuthFromCookie()` — 所有 API 路由认证入口 |
+| `src/lib/audio/speechRecognition.ts` | KoreanSpeechRecognizer（Web Speech API封装） |
+| `src/lib/kpop/audioSegmentPlayer.ts` | SegmentPlayer（**禁止改动**） |
+| `src/types/index.ts` | 全部 TypeScript 类型，新类型追加到末尾 |
+| `src/types/kpop.ts` | KPOP专用类型（含 LocalLyricLine） |
+
+### 关键 API 路由
+
+| 路由 | 说明 |
+|------|------|
+| `POST /api/tts/aliyun` | 阿里云 NLS TTS，需登录 |
+| `POST /api/ai/chat` | 情景对话 AI，需登录 |
+| `POST /api/ai/sentence-judge` | 造句生成+判断（generate/judge），需登录 |
+| `POST /api/ai/word-lookup` | 查词，公开，永久缓存 |
+| `POST /api/ai/writing` | 写作批改，需登录 |
+
+### 数据流三件套（新功能必查）
+
+新增持久化数据时，以下三处必须同步：
+1. `src/types/index.ts` — 导出类型接口
+2. `src/lib/db.ts` — 注册 `CloudTable<T>`
+3. `src/lib/server/db.ts` — `CREATE TABLE IF NOT EXISTS`
+
+---
+
+## 多 Agent 分权宪法（内测期强制执行）
+
+### 绝对规则
+
+1. **禁止自我验证**：写完代码后绝对禁止说"已验证没问题"。必须输出《修改报告》，等待 QA Agent 审核。
+2. **最小修复原则**：修 Bug 只能改导致问题的核心代码，严禁顺手重构、优化或改动无关逻辑。
+3. **先分析后开发**：收到新需求或 Bug 时，必须先输出分析，未经用户允许绝不直接写代码。
+4. **每次修改必须报告**：改完代码必须说明改了什么、影响了什么、是否新增依赖或环境变量。
+
+### 工作流协议
+
+```
+Developer 完成修改
+    → 输出《修改报告》
+    → 提示用户：「Developer 已完成，请指示是否切换 QA Agent 审查？」
+    → 等待用户确认，绝不自我通过
+
+用户指示 QA 审查（语法卡片必须两步）
+    → Step 1: 韩语内容审查 Agent（只读，禁止改代码）
+        → 输出《韩语内容审查报告》
+        → FAIL → 打回 Developer 修复 → 重新触发韩语审查
+        → PASS ↓
+    → Step 2: 代码审查 Agent（只读，禁止改代码）
+        → 输出《代码审查报告》
+        → FAIL → 打回 Developer 修复 → 视情况重新触发韩语/代码审查
+        → PASS ↓
+
+用户指示上线
+    → 切换 Release Agent（只读，禁止改代码）
+    → 输出《上线检查表》
+    → 通过才能部署，发现问题一票否决
+```
+
+### 模板文件位置
+
+- 修改报告：`docs/templates/修改报告模板.md`
+- QA审查报告：`docs/templates/QA审查报告模板.md`
+- 上线检查表：`docs/templates/上线检查表模板.md`
+
+---
+
+## 韩语内容审查 Agent 规范
+
+**触发条件**：每次新增或修改 `src/data/grammar-cards-p*.ts` 后，代码审查之前运行。  
+**角色**：只读，绝不修改文件。输出《韩语内容审查报告》。
+
+### 9步工作流（全部必须执行）
+
+**Step 1：初始化**
+- 读取目标文件全文，列出所有 cardId，确认 isPractice 卡片
+
+**Step 2：结构一致性**
+- 非 isPractice 卡片必须包含：`id / partNumber / lessonNumber / title / whatItDoes / whatItDoesBody / structureNote / rulesNote / structures / connectionRules / cardExamples / scenarios / mistakes / overviewHtml / step0Html / compareHtml / quickTable / specialQuiz / linkedGrammarIds`
+- isPractice 卡片只需：`id / isPractice / specialQuiz / overviewHtml`
+
+**Step 3：connectionRules 审查**
+- rule 字段韩文语法形式是否正确
+- 相邻两条 rule 内容是否重复
+- usage/note/compare/example 中是否有汉字+韩文混排
+
+**Step 4：cardExamples 审查**
+- korean 是完整韩文句子，句意与卡片主题一致
+- 조사检查：받침有无 → 은/는、이/가、을/를、(으)로、(이)나 是否正确
+- wordBlocks 各 token 拼合是否还原 korean 原句
+- swapWords 目标 word 是否在 korean 中确实存在
+
+**Step 5：scenarios 审查**
+- korean 语法形式与卡片主题一致
+- zh 与 korean 对应
+
+**Step 6：mistakes 审查（高风险）**
+
+逐条执行：
+1. 明确写出 `wrong` 值和 `correct` 值
+2. **wrong ≠ correct**，若相同立即 FAIL
+3. wrong 必须是学习者实际会犯的真实错误
+4. correct 对照规则验证合法韩文
+5. note 必须解释 wrong→correct 的原因
+
+**Step 7：specialQuiz 审查（最高风险）**
+
+每道题强制执行：
+```
+Step 7a: 写出四个选项
+  Q[n]: options[0]="..." options[1]="..." options[2]="..." options[3]="..."
+  answer index = X → options[X] = "..."
+
+Step 7b: 对照语法规则逐字验证 options[answer] 是否真的正确
+Step 7c: 验证其他三个选项是否真的错误
+Step 7d: explanation 是否解释了 options[answer] 正确的原因，且与题目内容对应
+Step 7e: prompt 字段必须存在且非空
+```
+
+**Step 8：조사/어미 全局检查**
+
+| 规则 | 检查点 |
+|---|---|
+| 은/는 | 前字有받침→은，无받침→는 |
+| 이/가 | 前字有받침→이，无받침→가 |
+| 을/를 | 前字有받침→을，无받침→를 |
+| 으로/로 | 有받침（ㄹ除外）→으로，无받침或ㄹ→로 |
+| 이나/나 | 有받침→이나，无받침→나 |
+
+**Step 9：输出报告**
+
+```
+# 韩语内容审查报告
+文件：src/data/grammar-cards-pXX.ts
+
+## 总体结论：PASS / FAIL
+
+## FAIL 列表
+| # | 卡片 | 字段 | 原文 | 问题 | 修正建议 |
+|---|------|------|------|------|----------|
+
+## 每卡审查摘要
+- card-pXX-l01：PASS
+- card-pXX-l04：FAIL（N处）
+
+## 审查覆盖
+- [x] Step 2 结构一致性
+- [x] Step 3 connectionRules
+- [x] Step 4 cardExamples
+- [x] Step 5 scenarios
+- [x] Step 6 mistakes
+- [x] Step 7 specialQuiz
+- [x] Step 8 조사/어미全局
+```
+
+### PASS 标准
+- 无 Step 2-8 任何 FAIL
+- specialQuiz 每道题 options[answer] 经逐字验证确实正确
+- mistakes 每条 wrong ≠ correct 且 wrong 是真实错误
+- 조사选择无误
+
+---
+
+## 代码审查 Agent 规范
+
+**触发条件**：韩语内容审查 PASS 之后运行。  
+**角色**：只读，绝不修改文件。输出《代码审查报告》。
+
+### 12步工作流（全部必须执行）
+
+**Step 1：接口位置确认**
+- 读取 `src/types/index.ts`，找到 GrammarCard 接口，列出所有字段名和类型
+
+**Step 2：顶层字段完整性（每张卡片）**
+- 对照 GrammarCard 接口逐字段检查，类型必须匹配
+- isPractice 卡片只检查必填子集
+
+**Step 3：connectionRules 结构**
+- rule 字段必须存在；可选字段若存在不能为空字符串
+- 不能有接口未定义的字段；至少 5 条
+
+**Step 4：cardExamples 结构**
+- 必须含 `korean / zh / wordBlocks`；至少 3 个
+
+**Step 5：scenarios 结构**
+- 必须含 `korean / zh`；至少 5 个
+
+**Step 6：mistakes 结构**
+- 必须含 `wrong / correct / note`，均不能为空；至少 3 个
+
+**Step 7：specialQuiz 结构（高风险）**
+
+```
+Step 7a: 检查 type / title / body / questions 字段存在
+Step 7b: 每道 question 含 prompt / options / answer / explanation
+Step 7c: options 长度 = 4
+Step 7d: answer 类型 number，范围 0|1|2|3
+Step 7e: questions 至少 4 道
+Step 7f: 写出 options[answer] 值（仅验证索引有效性）
+```
+
+**Step 8：HTML 字段**
+- overviewHtml / step0Html / compareHtml 非空，无 `<script>` 标签，标签成对
+
+**Step 9：quickTable 结构**
+- 含 `title / headers / rows`；rows 每行列数等于 headers 长度
+
+**Step 10：linkedGrammarIds**
+- string array；每个元素匹配 `card-p\d+-l\d+`；不含自身 cardId
+
+**Step 11：import/export**
+- 文件正确 import GrammarCard 类型
+- 数组正确 export，命名与 partLoaders 对应
+- 读取 `src/app/grammar/page.tsx`，确认 partLoaders 已注册本 Part
+
+**Step 12：输出报告**
+
+```
+# 代码审查报告
+文件：src/data/grammar-cards-pXX.ts
+前置条件：韩语内容审查 PASS ✓
+
+## 总体结论：PASS / FAIL
+
+## FAIL 列表
+| # | 卡片 | 步骤 | 字段 | 问题 | 修正建议 |
+|---|------|------|------|------|----------|
+
+## 每卡审查摘要
+## 审查覆盖（Step 1-11 逐项打勾）
+```
+
+### PASS 标准
+- Step 1-11 无任何 FAIL
+- specialQuiz answer 在 [0,3] 且 prompt 存在
+- partLoaders 已注册本 Part
