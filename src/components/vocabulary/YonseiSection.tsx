@@ -4,8 +4,16 @@ import { useState, useEffect } from 'react';
 import { GraduationCap, BookOpen, BookMarked } from 'lucide-react';
 import Link from 'next/link';
 import { db } from '@/lib/db';
-import { yonseiUnits } from '@/data/yonsei-books';
-import { seoulUnits } from '@/data/seoul-books';
+
+interface VocabUnit {
+  id: string;
+  unitNumber: number;
+  title: string;
+  titleKo: string;
+  bookTitle: string;
+  description: string;
+  words: { word: string }[];
+}
 
 const YONSEI_BOOK_COLORS = [
   'var(--mint-soft)',
@@ -31,6 +39,20 @@ type TextbookType = 'yonsei' | 'seoul';
 export function YonseiSection() {
   const [textbook, setTextbook] = useState<TextbookType>('yonsei');
   const [selectedBook, setSelectedBook] = useState(1);
+  const [units, setUnits] = useState<VocabUnit[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    (async () => {
+      const [{ yonseiUnits }, { seoulUnits }] = await Promise.all([
+        import('@/data/yonsei-books'),
+        import('@/data/seoul-books'),
+      ]);
+      setUnits(textbook === 'yonsei' ? yonseiUnits : seoulUnits);
+      setLoading(false);
+    })();
+  }, [textbook]);
 
   useEffect(() => {
     // One-time migration: remove old yonsei words imported before v2 data correction
@@ -69,7 +91,6 @@ export function YonseiSection() {
     setSelectedBook(1);
   };
 
-  const units = textbook === 'yonsei' ? yonseiUnits : seoulUnits;
   const bookLabels = textbook === 'yonsei' ? YONSEI_LABELS : SEOUL_LABELS;
   const bookColors = textbook === 'yonsei' ? YONSEI_BOOK_COLORS : SEOUL_BOOK_COLORS;
   const routePrefix = textbook === 'yonsei' ? 'yonsei' : 'seoul';
@@ -140,7 +161,9 @@ export function YonseiSection() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {visibleUnits.length === 0 ? (
+        {loading ? (
+          <div className="col-span-2 py-12 text-center text-sm text-[var(--text-muted)]">加载中...</div>
+        ) : visibleUnits.length === 0 ? (
           <div className="col-span-2 py-12 text-center text-sm text-[var(--text-muted)]">
             暂无数据，词汇即将上线，敬请期待
           </div>

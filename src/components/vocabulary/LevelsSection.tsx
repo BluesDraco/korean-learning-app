@@ -36,8 +36,9 @@ export function LevelsSection() {
       const userMasteredSet = new Set(allUserWords.filter((w) => w.mastery === 'mastered').map((w) => w.word));
       const userLearningSet = new Set(allUserWords.filter((w) => w.mastery !== 'mastered' && w.mastery !== 'new').map((w) => w.word));
 
-      const result: LevelInfo[] = getAllLevels().map((lvl) => {
-        const words = getLevelWords(lvl.level);
+      const allLevels = await getAllLevels();
+      const result = await Promise.all(allLevels.map(async (lvl) => {
+        const words = await getLevelWords(lvl.level);
         const koreanWords = words.map((w) => w.korean);
         return {
           level: lvl.level,
@@ -45,7 +46,7 @@ export function LevelsSection() {
           mastered: koreanWords.filter((w) => userMasteredSet.has(w)).length,
           learning: koreanWords.filter((w) => userLearningSet.has(w)).length,
         };
-      });
+      }));
       setLevels(result);
       setLoading(false);
     })();

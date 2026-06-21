@@ -14,7 +14,7 @@ import { speakWord, speak } from '@/lib/tts';
 import { TappableText } from '@/components/TappableText';
 import { getEntry, getEntryByKorean } from '@/data/vocabulary/index';
 import { updateProfile } from '@/lib/gamification';
-import type { Word, WordBook, MasteryLevel } from '@/types';
+import type { Word, WordBook, MasteryLevel, WordEntry } from '@/types';
 
 interface SavedSentence {
   id: string;
@@ -227,20 +227,19 @@ function GoalWheelPicker({ current, unmastered, onClose, onConfirm }: {
   );
 }
 
-function DueWordRoman({ word }: { word: Word }) {
+function DueWordRoman({ word, entry }: { word: Word; entry?: WordEntry }) {
   const roman = word.pronunciation && word.pronunciation !== word.word
     ? word.pronunciation
-    : (word.sourceEntryId ? getEntry(word.sourceEntryId) : getEntryByKorean(word.word))?.romanization;
+    : entry?.romanization;
   if (!roman) return null;
   return <span className="text-xs text-[var(--text-muted)]">{roman}</span>;
 }
 
-function DueWordExpanded({ word, savedExamples, setSavedExamples }: {
-  word: Word;
+function DueWordExpanded({ word, entry, savedExamples, setSavedExamples }: {
+  word: Word; entry?: WordEntry;
   savedExamples: Set<string>;
   setSavedExamples: (fn: (prev: Set<string>) => Set<string>) => void;
 }) {
-  const entry = word.sourceEntryId ? getEntry(word.sourceEntryId) : getEntryByKorean(word.word);
   const validExamples = word.examples.filter(ex => ex.text && ex.text !== '[object Object]');
   const examples = validExamples.length > 0
     ? validExamples.map(ex => ({ korean: ex.text, chinese: ex.translation }))
@@ -312,6 +311,24 @@ function VocabularyContent() {
   const [expandedSentenceId, setExpandedSentenceId] = useState<string | null>(null);
   const [expandedAnalysis, setExpandedAnalysis] = useState<Map<string, any>>(new Map());
   const [expandedLoading, setExpandedLoading] = useState<string | null>(null);
+  const [entriesCache, setEntriesCache] = useState<Map<string, WordEntry>>(new Map());
+
+  // Load dictionary entries for due words (romanization + examples fallback)
+  useEffect(() => {
+    if (!allWordsLoaded) return;
+    const now = Date.now();
+    const dueWords = allWords.filter(w => w.nextReview <= now && w.mastery !== 'mastered');
+    (async () => {
+      const results = await Promise.all(
+        dueWords.map(w => w.sourceEntryId ? getEntry(w.sourceEntryId) : getEntryByKorean(w.word))
+      );
+      const map = new Map<string, WordEntry>();
+      dueWords.forEach((w, i) => {
+        if (results[i]) map.set(w.word, results[i]!);
+      });
+      setEntriesCache(map);
+    })();
+  }, [allWords, allWordsLoaded]);
 
   // Fast stats for home tab (counts only)
   const [quickStats, setQuickStats] = useState<{ total: number; mastered: number; learning: number; newWords: number; dueReview: number }>({ total: 0, mastered: 0, learning: 0, newWords: 0, dueReview: 0 });
@@ -1047,7 +1064,7 @@ function VocabularyContent() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
                           <span className="text-sm font-bold text-[var(--text-primary)]">{word.word}</span>
-                          <DueWordRoman word={word} />
+                          <DueWordRoman word={word} entry={entriesCache.get(word.word)} />
                         </div>
                         <p className="text-xs text-[var(--text-secondary)] truncate mt-0.5">{word.meaning}</p>
                       </div>
@@ -1056,7 +1073,7 @@ function VocabularyContent() {
                       </button>
                       <span className="text-xs text-[var(--text-muted)]">{isExpanded ? '▲' : '▼'}</span>
                     </div>
-                    {isExpanded && <DueWordExpanded word={word} savedExamples={savedExamples} setSavedExamples={setSavedExamples} />}
+                    {isExpanded && <DueWordExpanded word={word} entry={entriesCache.get(word.word)} savedExamples={savedExamples} setSavedExamples={setSavedExamples} />}
                   </div>
                 );
               })}

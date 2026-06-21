@@ -96,10 +96,10 @@ function setShowTranslationPref(v: boolean) {
 
 // ── Build items from theme ────────────────────────────────
 
-function buildTypingItems(themeId: string): TypingItem[] {
-  const theme = getTheme(themeId);
+async function buildTypingItems(themeId: string): Promise<TypingItem[]> {
+  const [theme, wordsData] = await Promise.all([getTheme(themeId), getThemeWords(themeId)]);
   if (!theme) return [];
-  const words = getThemeWords(themeId).slice(0, 8).map((e, i) => ({
+  const words = wordsData.slice(0, 8).map((e, i) => ({
     id: `w-${i}`, korean: e.korean,
     chinese: e.meanings[0]?.chinese ?? '', type: 'word' as const,
   }));
@@ -238,10 +238,18 @@ export default function TypingPage() {
     }
   }, [index, pageState, items]);
 
-  const allThemes = useMemo(() => getAllThemes(), []);
-  const categories = useMemo(() => getThemeCategories(), []);
+  const [allThemes, setAllThemes] = useState<ThemePack[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
   const [wordBooks, setWordBooks] = useState<WordBook[]>([]);
   const [mySentenceCount, setMySentenceCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      const [themes, cats] = await Promise.all([getAllThemes(), getThemeCategories()]);
+      setAllThemes(themes);
+      setCategories(cats);
+    })();
+  }, []);
 
   useEffect(() => {
     if (authLoading || !user) return;
@@ -249,8 +257,8 @@ export default function TypingPage() {
     db.sentences.count().then(n => setMySentenceCount(n)).catch(() => setMySentenceCount(0));
   }, [user, authLoading]);
 
-  function openIntro(themeId: string, prebuilt?: TypingItem[]) {
-    const built = prebuilt ?? buildTypingItems(themeId);
+  async function openIntro(themeId: string, prebuilt?: TypingItem[]) {
+    const built = prebuilt ?? await buildTypingItems(themeId);
     if (built.length === 0) return;
     setActiveThemeId(themeId);
     setItems(built);
@@ -384,7 +392,7 @@ export default function TypingPage() {
 
   // ── Intro ─────────────────────────────────────────────────
   if (pageState === 'intro') {
-    const theme = getTheme(activeThemeId);
+    const theme = allThemes.find(t => t.id === activeThemeId);
     const displayEmoji = theme?.emoji ?? '📖';
     const displayName = theme?.name ?? wordBooks.find(b => `wb-${b.id}` === activeThemeId)?.name ?? (activeThemeId === 'my-sentences' ? '我的句子' : '我的单词本');
     const displayDesc = theme?.description ?? '来自单词本的词汇与例句';
@@ -452,7 +460,7 @@ export default function TypingPage() {
 
   // ── Result ────────────────────────────────────────────────
   if (pageState === 'result' && resultData) {
-    const theme = getTheme(activeThemeId);
+    const theme = allThemes.find(t => t.id === activeThemeId);
     const resEmoji = theme?.emoji ?? '📖';
     const resName = theme?.name ?? wordBooks.find(b => `wb-${b.id}` === activeThemeId)?.name ?? (activeThemeId === 'my-sentences' ? '我的句子' : '我的单词本');
     const resSec = Math.floor(resultData.elapsed / 1000);
@@ -682,7 +690,7 @@ export default function TypingPage() {
               {themes.map(theme => {
                 const progress = getPackProgress(theme.id);
                 const unlocked = isPackUnlocked(theme, allThemes);
-                const wordCount = getThemeWords(theme.id).slice(0, 8).length;
+                const wordCount = Math.min(theme.wordIds.length, 8);
                 const sentCount = (theme.sentences ?? []).slice(0, 6).length;
                 return (
                   <button

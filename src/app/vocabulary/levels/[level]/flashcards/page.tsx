@@ -42,7 +42,7 @@ export default function TopikFlashcardsPage() {
 
     (async () => {
       try {
-        const entries = getLevelWords(level);
+        const entries = await getLevelWords(level);
         const koreanWords = new Set(entries.map(e => e.korean));
         const allUserWords = await db.words.toArray();
         const userWords = allUserWords.filter(w => koreanWords.has(w.word));

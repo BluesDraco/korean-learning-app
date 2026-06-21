@@ -22,9 +22,10 @@ export function ThemesSection() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    import('@/data/vocabulary').then(({ getAllThemes, getThemeCategories }) => {
-      setThemes(getAllThemes());
-      setCategories(getThemeCategories());
+    import('@/data/vocabulary').then(async ({ getAllThemes, getThemeCategories }) => {
+      const [themes, cats] = await Promise.all([getAllThemes(), getThemeCategories()]);
+      setThemes(themes);
+      setCategories(cats);
       setLoading(false);
     }).catch(() => setLoading(false));
   }, []);

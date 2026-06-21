@@ -103,13 +103,12 @@ export default function LevelDetailPage() {
 
   useEffect(() => {
     if (isNaN(level) || level < 1 || level > 6) { router.replace('/vocabulary/levels'); return; }
-    const l = getLevel(level);
-    if (!l) { router.replace('/vocabulary/levels'); return; }
-    setLvl(l);
-    const w = getLevelWords(level);
-    setWords(w);
-
     (async () => {
+      const l = await getLevel(level);
+      if (!l) { router.replace('/vocabulary/levels'); return; }
+      setLvl(l);
+      const w = await getLevelWords(level);
+      setWords(w);
       try {
         const koreanWords = new Set(w.map((e) => e.korean));
         const allUserWords = await db.words.toArray();

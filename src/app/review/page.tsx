@@ -99,8 +99,17 @@ const MOCK_CARDS: FlashCard[] = [
 
 // ─── DB → FlashCard mapper ────────────────────────────────────────────────────
 
-function dbWordToCard(w: any): FlashCard {
+async function dbWordToCard(w: any): Promise<FlashCard> {
   const src = w.source || w.sourceType || '';
+  let example = '';
+  const validEx = (w.examples ?? []).find((ex: any) => ex.text && ex.text !== '[object Object]' && ex.text.trim());
+  if (validEx) {
+    example = `${validEx.text}\n${validEx.translation ?? ''}`;
+  } else {
+    const entry = w.sourceEntryId ? await getEntry(w.sourceEntryId) : await getEntryByKorean(w.word || w.korean || '');
+    const staticEx = entry?.examples?.[0];
+    if (staticEx) example = `${staticEx.korean}\n${staticEx.chinese}`;
+  }
   return {
     id: String(w.id),
     type: 'word',
@@ -112,14 +121,7 @@ function dbWordToCard(w: any): FlashCard {
     meaning: w.meaning || w.chinese || '',
     partOfSpeech: w.partOfSpeech || '',
     note: w.usage || w.note || '',
-    example: (() => {
-      const validEx = (w.examples ?? []).find((ex: any) => ex.text && ex.text !== '[object Object]' && ex.text.trim());
-      if (validEx) return `${validEx.text}\n${validEx.translation ?? ''}`;
-      const entry = w.sourceEntryId ? getEntry(w.sourceEntryId) : getEntryByKorean(w.word || w.korean || '');
-      const staticEx = entry?.examples?.[0];
-      if (staticEx) return `${staticEx.korean}\n${staticEx.chinese}`;
-      return '';
-    })(),
+    example,
     audioUrl: w.audioUrl,
     slowAudioUrl: w.slowAudioUrl,
     dbId: w.id,
@@ -158,6 +160,7 @@ function ReviewContent() {
   const [playingAudio, setPlayingAudio] = useState<boolean>(false);
   const [dailyGoal, setDailyGoal] = useState(20);
   const [todayReviewed, setTodayReviewed] = useState(0);
+  const [filterMode, setFilterMode] = useState<'due' | 'yesterday'>('due');
 
   // spelling phase
   const [showSpellingPrompt, setShowSpellingPrompt] = useState(false);
@@ -212,6 +215,12 @@ function ReviewContent() {
 
       if (videoId) {
         dueWords = await db.words.where('sourceVideoId').equals(videoId).toArray();
+      } else if (filterMode === 'yesterday') {
+        const startOfToday = new Date();
+        startOfToday.setHours(0, 0, 0, 0);
+        const startOfYesterday = startOfToday.getTime() - 86400000;
+        const recentlyReviewed = await db.words.where('lastReviewed').above(startOfYesterday).toArray();
+        dueWords = recentlyReviewed.filter(w => w.lastReviewed && w.lastReviewed < startOfToday.getTime());
       } else {
         dueWords = await db.words.where('nextReview').belowOrEqual(now).sortBy('nextReview');
         if (dueWords.length === 0) {
@@ -223,12 +232,12 @@ function ReviewContent() {
         }
       }
 
-      // Limit to batch size
-      if (!videoId && dueWords.length > batchSize) {
+      // Limit to batch size (skip for yesterday mode to show all)
+      if (!videoId && filterMode !== 'yesterday' && dueWords.length > batchSize) {
         dueWords = dueWords.slice(0, batchSize);
       }
 
-      const cardList = dueWords.length > 0 ? dueWords.map(dbWordToCard) : MOCK_CARDS;
+      const cardList = dueWords.length > 0 ? await Promise.all(dueWords.map(dbWordToCard)) : [];
       setCards(cardList);
       setDone(0);
       setRevealed(false);
@@ -271,7 +280,7 @@ function ReviewContent() {
     } finally {
       setLoading(false);
     }
-  }, [videoId]);
+  }, [videoId, filterMode]);
 
   useEffect(() => { loadCards(); }, [loadCards]);
 
@@ -857,13 +866,14 @@ function ReviewContent() {
 
   // ── Empty ──
   if (!current) {
+    const isYesterday = filterMode === 'yesterday';
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] px-4 gap-5">
-        <div className="text-4xl">📚</div>
+        <div className="text-4xl">{isYesterday ? '📅' : '📚'}</div>
         <div className="text-center">
-          <h2 className="text-xl font-black text-[var(--text-primary)]">{t('review.empty_title', lang)}</h2>
+          <h2 className="text-xl font-black text-[var(--text-primary)]">{t(isYesterday ? 'review.empty_yesterday_title' : 'review.empty_title', lang)}</h2>
           <p className="text-sm text-[var(--text-muted)] mt-1 max-w-xs leading-relaxed">
-            {t('review.empty_subtitle', lang)}
+            {t(isYesterday ? 'review.empty_yesterday_subtitle' : 'review.empty_subtitle', lang)}
           </p>
         </div>
         <div className="flex gap-3 flex-wrap justify-center">
@@ -900,6 +910,25 @@ function ReviewContent() {
         <span className="text-[11px] font-black text-[var(--text-muted)]">{done} / {total}</span>
       </div>
 
+      {/* ── Filter tabs ── */}
+      {!videoId && (
+        <div className="flex gap-1.5 mb-4">
+          {(['due', 'yesterday'] as const).map((m) => (
+            <button
+              key={m}
+              onClick={() => setFilterMode(m)}
+              className={`px-4 py-1.5 rounded-full text-[12px] font-black transition-all ${
+                filterMode === m
+                  ? 'bg-[var(--pink-primary)] text-white'
+                  : 'bg-[var(--bg-soft)] text-[var(--text-muted)] hover:text-[var(--text-secondary)]'
+              }`}
+            >
+              {t(m === 'due' ? 'review.filter_due' : 'review.filter_yesterday', lang)}
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* ── Progress bar ── */}
       <div className="h-[6px] rounded-full bg-[var(--border-default)] overflow-hidden mb-3">
         <div
@@ -909,7 +938,7 @@ function ReviewContent() {
       </div>
 
       {/* ── Daily goal progress ── */}
-      {!videoId && (() => {
+      {!videoId && filterMode === 'due' && (() => {
         const goalPct = Math.min(Math.round((todayReviewed / dailyGoal) * 100), 100);
         return (
           <div className="flex items-center gap-2.5 mb-4">

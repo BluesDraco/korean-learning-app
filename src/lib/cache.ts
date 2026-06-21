@@ -1,14 +1,14 @@
-const cache = new Map<string, { data: unknown; expiry: number; stale?: unknown }>();
+const cache = new Map<string, { data: unknown; expiry: number }>();
 const inflight = new Map<string, Promise<unknown>>();
+
+let trimCounter = 0;
 
 export async function cached<T>(key: string, ttlMs: number, fetch: () => Promise<T>): Promise<T> {
   const existing = cache.get(key);
-  // Serve fresh cache
   if (existing && existing.expiry > Date.now()) {
     return existing.data as T;
   }
 
-  // Deduplicate concurrent requests
   const prev = inflight.get(key);
   if (prev) return prev as Promise<T>;
 
@@ -16,15 +16,14 @@ export async function cached<T>(key: string, ttlMs: number, fetch: () => Promise
     .then((data) => {
       cache.set(key, { data, expiry: Date.now() + ttlMs });
       inflight.delete(key);
-      trim();
+      if (++trimCounter % 10 === 0) trim();
       return data;
     })
     .catch((err) => {
       inflight.delete(key);
-      // On fetch failure, serve stale cache if available
       const stale = cache.get(key);
       if (stale) {
-        stale.expiry = Date.now() + 5000; // Extend 5s to avoid hammering
+        stale.expiry = Date.now() + 5000;
         return stale.data as T;
       }
       throw err;

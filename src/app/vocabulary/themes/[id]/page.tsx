@@ -43,15 +43,13 @@ export default function ThemeDetailPage() {
   }, [managing]);
 
   useEffect(() => {
-    const t = getTheme(id);
-    if (!t) { router.replace('/vocabulary/library'); return; }
-    setTheme(t);
-
-    const w = getThemeWords(id);
-    setWords(w);
-
-    // Check which words user already has in IndexedDB
     (async () => {
+      const t = await getTheme(id);
+      if (!t) { router.replace('/vocabulary/library'); return; }
+      setTheme(t);
+
+      const w = await getThemeWords(id);
+      setWords(w);
       try {
         const koreanWords = new Set(w.map((e) => e.korean));
         const allUserWords = await db.words.toArray();

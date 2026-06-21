@@ -8,7 +8,7 @@ import { ArrowLeft, Volume2, ChevronLeft, ChevronRight, Loader2, Star, Shuffle }
 import { db, ensureFavoritesBook, FAVORITES_BOOK_ID } from '@/lib/db';
 import { speakWord, speak } from '@/lib/tts';
 import { getEntryByKorean } from '@/data/vocabulary/index';
-import type { WordBook, Word } from '@/types';
+import type { WordBook, Word, WordEntry } from '@/types';
 
 export default function FlashcardStudyPage() {
   const { id } = useParams<{ id: string }>();
@@ -23,6 +23,7 @@ export default function FlashcardStudyPage() {
   const [isSwiping, setIsSwiping] = useState(false);
   const [exiting, setExiting] = useState<'left' | 'right' | null>(null);
   const [favoritedIds, setFavoritedIds] = useState<Set<string>>(new Set());
+  const [entryCache, setEntryCache] = useState<WordEntry | null>(null);
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -127,6 +128,19 @@ export default function FlashcardStudyPage() {
       setFavoritedIds(prev => new Set(prev).add(w.id));
     }
   }, [favoritedIds]);
+
+  // Load dictionary entry for current word (fallback for examples)
+  useEffect(() => {
+    const curWord = displayWords[currentIdx];
+    if (!curWord) { setEntryCache(null); return; }
+    const valid = curWord.examples.filter(ex => ex.text && ex.text !== '[object Object]');
+    if (valid.length > 0) { setEntryCache(null); return; }
+    let cancelled = false;
+    getEntryByKorean(curWord.word).then(e => {
+      if (!cancelled) setEntryCache(e ?? null);
+    });
+    return () => { cancelled = true; };
+  }, [currentIdx, displayWords]);
 
   // Auto-play on card change
   useEffect(() => {
@@ -346,7 +360,7 @@ export default function FlashcardStudyPage() {
                 {/* Examples */}
                 {(() => {
                   const validExamples = word.examples.filter(ex => ex.text && ex.text !== '[object Object]');
-                  const entry = validExamples.length === 0 ? getEntryByKorean(word.word) : null;
+                  const entry = validExamples.length === 0 ? entryCache : null;
                   const examples = validExamples.length > 0
                     ? validExamples
                     : entry?.examples.slice(0, 2).map(ex => ({ text: ex.korean, translation: ex.chinese, source: 'dictionary' as const })) ?? [];

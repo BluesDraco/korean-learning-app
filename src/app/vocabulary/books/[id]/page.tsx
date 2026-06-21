@@ -10,7 +10,7 @@ import { WordAudioPlayer } from '@/components/WordAudioPlayer';
 import { speak, speakWord } from '@/lib/tts';
 import { TappableText } from '@/components/TappableText';
 import { getEntryByKorean } from '@/data/vocabulary/index';
-import type { WordBook, Word } from '@/types';
+import type { WordBook, Word, WordEntry } from '@/types';
 
 export default function BookDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -27,6 +27,21 @@ export default function BookDetailPage() {
   const [showMoveSheet, setShowMoveSheet] = useState(false);
   const [showAudioPlayer, setShowAudioPlayer] = useState(false);
   const [savedSentenceIds, setSavedSentenceIds] = useState<Set<string>>(new Set());
+  const [entriesMap, setEntriesMap] = useState<Map<string, WordEntry>>(new Map());
+
+  useEffect(() => {
+    const needEntry = words.filter(w => {
+      const valid = w.examples.filter(ex => ex.text && ex.text !== '[object Object]');
+      return valid.length === 0;
+    });
+    (async () => {
+      const uniqueWords = [...new Set(needEntry.map(w => w.word))];
+      const results = await Promise.all(uniqueWords.map(w => getEntryByKorean(w)));
+      const map = new Map<string, WordEntry>();
+      uniqueWords.forEach((w, i) => { if (results[i]) map.set(w, results[i]!); });
+      setEntriesMap(map);
+    })();
+  }, [words]);
 
   const saveSentence = async (korean: string, chinese: string, sourceTitle: string) => {
     if (savedSentenceIds.has(korean)) return;
@@ -269,7 +284,7 @@ export default function BookDetailPage() {
                 {/* Expanded details */}
                 {isExpanded && (() => {
                   const validExamples = word.examples.filter(ex => ex.text && ex.text !== '[object Object]');
-                  const entry = validExamples.length === 0 ? getEntryByKorean(word.word) : null;
+                  const entry = validExamples.length === 0 ? entriesMap.get(word.word) : null;
                   const examples = validExamples.length > 0
                     ? validExamples
                     : entry?.examples.slice(0, 3).map(ex => ({ text: ex.korean, translation: ex.chinese, source: 'dictionary' as const })) ?? [];

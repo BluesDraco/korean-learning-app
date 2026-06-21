@@ -946,27 +946,12 @@ export async function getDb() {
     exec: async (sql: string, params?: unknown[]) => {
       const key = `db:${sql}:${JSON.stringify(params)}`;
       return cached(key, 30000, async () => {
-        let lastErr: unknown;
-        for (let attempt = 0; attempt < 2; attempt++) {
-          try {
-            const result = await c.execute({ sql, args: params as any[] });
-            const columns = result.columns;
-            const values = result.rows.map((row: any) =>
-              columns.map((col: string) => row[col])
-            );
-            return [{ columns, values }];
-          } catch (err) {
-            lastErr = err;
-            // Only retry on timeout/network errors
-            const msg = String(err);
-            if (msg.includes('CONNECT_TIMEOUT') || msg.includes('fetch failed') || msg.includes('UND_ERR')) {
-              await new Promise((r) => setTimeout(r, 500));
-              continue;
-            }
-            throw err;
-          }
-        }
-        throw lastErr;
+        const result = await c.execute({ sql, args: params as any[] });
+        const columns = result.columns;
+        const values = result.rows.map((row: any) =>
+          columns.map((col: string) => row[col])
+        );
+        return [{ columns, values }];
       });
     },
     run: async (sql: string, params?: unknown[]) => {

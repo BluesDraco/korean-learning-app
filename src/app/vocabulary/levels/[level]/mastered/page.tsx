@@ -26,7 +26,7 @@ export default function LevelMasteredPage() {
   useEffect(() => {
     (async () => {
       try {
-        const words = getLevelWords(level);
+        const words = await getLevelWords(level);
         const koreanWords = new Set(words.map(e => e.korean));
         const allUserWords = await db.words.toArray();
         const masteredKeys = new Set(

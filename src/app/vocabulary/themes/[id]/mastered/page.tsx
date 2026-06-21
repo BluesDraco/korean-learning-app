@@ -25,10 +25,10 @@ export default function ThemeMasteredPage() {
   useEffect(() => {
     (async () => {
       try {
-        const theme = getTheme(id);
+        const theme = await getTheme(id);
         if (!theme) { router.replace('/vocabulary/themes'); return; }
         setThemeName(theme.name);
-        const words = getThemeWords(id);
+        const words = await getThemeWords(id);
         const koreanWords = new Set(words.map(e => e.korean));
         const allUserWords = await db.words.toArray();
         const masteredKeys = new Set(

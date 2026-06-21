@@ -61,8 +61,8 @@ export async function buildItemsFromConfig(config: SourceConfig): Promise<Dictat
   if (config.type === 'vocabulary' && config.vocab) {
     const { kind, id } = config.vocab;
     const entries = kind === 'theme'
-      ? getThemeWords(id)
-      : getLevelWords(parseInt(id));
+      ? await getThemeWords(id)
+      : await getLevelWords(parseInt(id));
     return shuffle(
       entries.map((e: WordEntry) => ({ korean: e.korean, meaning: e.meanings[0]?.chinese ?? '', type: 'word' as const }))
     );
@@ -106,7 +106,10 @@ export function DictationSourcePicker({ config, onChange }: DictationSourcePicke
   const [bookOpen, setBookOpen] = useState(false);
 
   useEffect(() => {
-    setThemes(getAllThemes().map(t => ({ id: t.id, name: t.name, emoji: t.emoji })));
+    (async () => {
+      const allThemes = await getAllThemes();
+      setThemes(allThemes.map(t => ({ id: t.id, name: t.name, emoji: t.emoji })));
+    })();
     db.wordBooks.toArray().then(bs => {
       setBooks(bs.map(b => ({ id: b.id, name: b.name, count: b.wordIds.length })));
     }).catch(() => {});

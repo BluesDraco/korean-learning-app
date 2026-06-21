@@ -107,23 +107,28 @@ export function AddToBookModal({ mode, preSelectedWordIds, bookId, onClose, onDo
     load();
   }, [mode, bookId]);
 
-  const results = useMemo((): ResultItem[] => {
-    if (mode !== 'select-words') return [];
+  const [results, setResults] = useState<ResultItem[]>([]);
+
+  useEffect(() => {
+    if (mode !== 'select-words') { setResults([]); return; }
     if (!search.trim()) {
-      return savedWords.map((w) => ({ kind: 'saved', word: w }));
+      setResults(savedWords.map((w) => ({ kind: 'saved', word: w })));
+      return;
     }
-    const q = search.trim();
-    const savedMatches = savedWords.filter(
-      (w) => w.word.includes(q) || w.meaning.includes(q) || w.pronunciation.includes(q)
-    );
-    const savedKorean = new Set(savedMatches.map((w) => w.word));
-    const entryMatches = searchEntries(q)
-      .filter((e) => !savedKorean.has(e.korean))
-      .slice(0, 50);
-    return [
-      ...savedMatches.map((w): ResultItem => ({ kind: 'saved', word: w })),
-      ...entryMatches.map((e): ResultItem => ({ kind: 'entry', entry: e })),
-    ];
+    (async () => {
+      const q = search.trim();
+      const savedMatches = savedWords.filter(
+        (w) => w.word.includes(q) || w.meaning.includes(q) || w.pronunciation.includes(q)
+      );
+      const savedKorean = new Set(savedMatches.map((w) => w.word));
+      const entryMatches = (await searchEntries(q))
+        .filter((e) => !savedKorean.has(e.korean))
+        .slice(0, 50);
+      setResults([
+        ...savedMatches.map((w): ResultItem => ({ kind: 'saved', word: w })),
+        ...entryMatches.map((e): ResultItem => ({ kind: 'entry', entry: e })),
+      ]);
+    })();
   }, [search, savedWords, mode]);
 
   const handleLookup = async () => {

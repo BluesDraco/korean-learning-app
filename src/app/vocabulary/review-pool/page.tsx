@@ -10,7 +10,7 @@ import { db } from '@/lib/db';
 import { speak, speakWord } from '@/lib/tts';
 import { TappableText } from '@/components/TappableText';
 import { getEntryByKorean } from '@/data/vocabulary/index';
-import type { Word, WordBook } from '@/types';
+import type { Word, WordBook, WordEntry } from '@/types';
 
 export default function ReviewPoolPage() {
   const [words, setWords] = useState<Word[]>([]);
@@ -23,6 +23,21 @@ export default function ReviewPoolPage() {
   const [showImportSheet, setShowImportSheet] = useState(false);
   const [showMoveSheet, setShowMoveSheet] = useState(false);
   const [importingBook, setImportingBook] = useState<string | null>(null);
+  const [entriesMap, setEntriesMap] = useState<Map<string, WordEntry>>(new Map());
+
+  useEffect(() => {
+    const needEntry = words.filter(w => {
+      const valid = w.examples.filter(ex => ex.text && ex.text !== '[object Object]');
+      return valid.length === 0;
+    });
+    (async () => {
+      const uniqueWords = [...new Set(needEntry.map(w => w.word))];
+      const results = await Promise.all(uniqueWords.map(w => getEntryByKorean(w)));
+      const map = new Map<string, WordEntry>();
+      uniqueWords.forEach((w, i) => { if (results[i]) map.set(w, results[i]!); });
+      setEntriesMap(map);
+    })();
+  }, [words]);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -274,7 +289,7 @@ export default function ReviewPoolPage() {
 
                 {isExpanded && (() => {
                   const validExamples = word.examples.filter(ex => ex.text && ex.text !== '[object Object]');
-                  const entry = validExamples.length === 0 ? getEntryByKorean(word.word) : null;
+                  const entry = validExamples.length === 0 ? entriesMap.get(word.word) : null;
                   const examples = validExamples.length > 0
                     ? validExamples
                     : entry?.examples.slice(0, 3).map(ex => ({ text: ex.korean, translation: ex.chinese, source: 'dictionary' as const })) ?? [];
