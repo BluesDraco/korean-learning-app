@@ -696,6 +696,7 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: `Unknown action: ${action}` }, { status: 400 });
     }
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    console.error('[user-data]', err);
+    return NextResponse.json({ error: 'Operation failed' }, { status: 500 });
   }
 }

@@ -114,7 +114,7 @@ export const consonantPairs: PronunciationItem[] = [
     id: 'cons-j-ch-jj', textKo: 'ㅈ / ㅊ / ㅉ', textZh: '松音 / 送气音 / 紧音',
     type: 'sound', level: 'beginner',
     focus: ['ㅈ/ㅊ/ㅉ', '松紧送气'],
-    tips: ['ㅈ(자) 舌尖轻触上牙后方', 'ㅊ(차) 有明显送气', 'ㅉ(짜) 舌尖用力顶住后弹开'],
+    tips: ['ㅈ(자) 舌面前部抵上齿龈', 'ㅊ(차) 有明显送气', 'ㅉ(짜) 舌面用力顶住后弹开'],
     segments: [{ text: '자', hint: '松音' }, { text: '차', hint: '送气' }, { text: '짜', hint: '紧音' }],
   },
   {
@@ -219,7 +219,7 @@ export const linkingSounds: PronunciationItem[] = [
     id: 'link-kkochi', textKo: '꽃이', textZh: '连音 — 꽃 + 이',
     type: 'word', level: 'elementary',
     focus: ['连音', '구개음화'],
-    tips: ['꽃 的收音 ㄷ系(ㅊ)代表音 ㄷ 连到 이，ㄷ+이腭化→ㅈ', '실제발음 "꼬치"', '이 引发腭化：ㄷ→ㅈ，ㅌ→ㅊ'],
+    tips: ['꽃 的收音 ㄷ系(ㅊ)代表音 ㄷ 连到 이，ㄷ+이腭化→ㅈ', '실제 발음 "꼬치"', '이 引发腭化：ㄷ→ㅈ，ㅌ→ㅊ'],
     segments: [{ text: '꽃' }, { text: '이' }, { text: '꽃이', hint: '→ 꼬치' }],
   },
 ];
@@ -267,7 +267,7 @@ export const commonWords: PronunciationItem[] = [
     romanization: 'mul',
     type: 'word', level: 'beginner',
     focus: ['收音', 'ㄹ'],
-    tips: ['收音 ㄹ 舌尖轻贴上齿龈，保持侧음 [l]，不弹开', '不是 "무르"'],
+    tips: ['收音 ㄹ 舌尖轻贴上齿龈，保持侧音[l]，不弹开', '不是 "무르"'],
   },
   {
     id: 'word-keopi', textKo: '커피', textZh: '咖啡',
@@ -348,16 +348,16 @@ export const commonPhrases: PronunciationItem[] = [
     id: 'phrase-eodi', textKo: '어디에 있어요?', textZh: '在哪里？',
     romanization: 'eo-di-e i-sseo-yo',
     type: 'phrase', level: 'elementary',
-    focus: ['日常表达', '连음', '疑问语调'],
-    tips: ['어디에 의 에 是 ㅔ，嘴型偏小', '있어요 实际读 이써요（连음）', '结尾上扬表示疑问'],
+    focus: ['日常表达', '连音', '疑问语调'],
+    tips: ['어디에 的 에 是 ㅔ，嘴型偏小', '있어요 实际读 이써요（连音）', '结尾上扬表示疑问'],
     segments: [{ text: '어디에' }, { text: '있어요', hint: '→ 이써요' }],
   },
   {
     id: 'phrase-jal', textKo: '잘 부탁드립니다', textZh: '请多关照',
     romanization: 'jal bu-tak-deu-rim-ni-da',
     type: 'phrase', level: 'elementary',
-    focus: ['日常表达', '收음', 'ㄹ收음'],
-    tips: ['잘 的 ㄹ 收음舌尖轻贴上齿龈', '부탁 的 ㄱ 收음喉咙收紧', '드립니다 经비음화读 드림니다'],
+    focus: ['日常表达', '收音', 'ㄹ收音'],
+    tips: ['잘 的 ㄹ 收音舌尖轻贴上齿龈', '부탁 的 ㄱ 收音喉咙收紧', '드립니다 经鼻音化读 드림니다'],
     segments: [{ text: '잘' }, { text: '부탁' }, { text: '드립니다', hint: '→ 드림니다' }],
   },
 ];

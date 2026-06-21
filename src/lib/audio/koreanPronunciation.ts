@@ -75,9 +75,6 @@ const PRONUNCIATION_EXCEPTIONS: Record<string, string> = {
   '닭은': '달근',
   '읽어': '일거',
   '읽어요': '일거요',
-  // Words where Kyong NLS mispronounces or breaks cadence
-  '맞아요': '마자요',
-  '맞아': '마자',
 };
 
 export function normalizeKoreanPronunciation(text: string): string {

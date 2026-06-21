@@ -24,7 +24,7 @@ export const progressiveSteps: ProgressiveStep[] = [
       {
         id: 'cp-01', label: 'ㅓ vs ㅗ', tip: 'ㅓ嘴型扁平不圆唇，ㅗ嘴型圆拢像在吹小口哨',
         letters: [
-          { ...vowels.find((v) => v.letter === 'ㅓ')!, id: 'cp-v-03', letter: 'ㅓ', name: '어', romanization: 'eo', type: 'vowel', subtype: 'basic', sound: '嘴型扁平，类似英语"aw"', mnemonic: '嘴不圆，像惊讶时微微张嘴', emoji: '😮' },
+          { ...vowels.find((v) => v.letter === 'ㅓ')!, id: 'cp-v-03', letter: 'ㅓ', name: '어', romanization: 'eo', type: 'vowel', subtype: 'basic', sound: '嘴型扁平，类似英语 but 中的 u', mnemonic: '嘴不圆，像惊讶时微微张嘴', emoji: '😮' },
           { ...vowels.find((v) => v.letter === 'ㅗ')!, id: 'cp-v-05', letter: 'ㅗ', name: '오', romanization: 'o', type: 'vowel', subtype: 'basic', sound: '嘴型圆拢，类似中文"哦"', mnemonic: '嘴巴嘟圆，像在吹蜡烛', emoji: '⭕' },
         ],
       },
@@ -141,7 +141,7 @@ export const progressiveSteps: ProgressiveStep[] = [
       { korean: '가방', pronunciation: 'ga-bang', meaning: '包' },
       { korean: '사람', pronunciation: 'sa-ram', meaning: '人' },
       { korean: '우유', pronunciation: 'u-yu', meaning: '牛奶' },
-      { korean: '학교', pronunciation: 'hak-gyo', meaning: '学校' },
+      { korean: '학교', pronunciation: 'hak-kkyo', meaning: '学校' },
       { korean: '친구', pronunciation: 'chin-gu', meaning: '朋友' },
       { korean: '고기', pronunciation: 'go-gi', meaning: '肉' },
       { korean: '나무', pronunciation: 'na-mu', meaning: '树' },
@@ -153,7 +153,7 @@ export const progressiveSteps: ProgressiveStep[] = [
       { korean: '한국어', pronunciation: 'han-gu-geo', meaning: '韩语' },
       { korean: '안녕하세요', pronunciation: 'an-nyeong-ha-se-yo', meaning: '您好' },
       { korean: '감사합니다', pronunciation: 'gam-sa-ham-ni-da', meaning: '谢谢' },
-      { korean: '반갑습니다', pronunciation: 'ban-gap-seum-ni-da', meaning: '很高兴见到你' },
+      { korean: '반갑습니다', pronunciation: 'ban-gap-sseum-ni-da', meaning: '很高兴见到你' },
       { korean: '사랑해요', pronunciation: 'sa-rang-hae-yo', meaning: '我爱你' },
       { korean: '미안해요', pronunciation: 'mi-an-hae-yo', meaning: '对不起' },
     ],

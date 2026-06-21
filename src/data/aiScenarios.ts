@@ -175,9 +175,8 @@ export const scenarios: ScenarioData[] = [
         },
         feedback: {
           natural: '点餐表达很清晰！',
-          grammarError: '"OO 주세요" 要加宾格助词 "을/를"——"비빔밥을 주세요"。',
           betterWay: '可以说 "비빔밥 하나 주세요" 加上量词"하나"更自然。',
-          wrongPart: '비빔밥 주세요', correctPart: '비빔밥을 주세요',
+          grammarError: '"~ 주세요" 是韩语中最常用的请求句型，点餐时直接加在菜名后即可。',
         },
         hints: [
           { label: '直接点菜', ko: '비빔밥 하나 주세요.', zh: '请给我一份拌饭。' },
@@ -988,7 +987,7 @@ export const scenarios: ScenarioData[] = [
     },
     closing: {
       ko: '앞으로도 잘 부탁드려요! 같이 응원해요!',
-      zh: '以后也请多关照！一起加油응援吧！',
+      zh: '以后也请多关照！一起应援吧！',
     },
     newWords: ['팬카페', '덕질', '최애', '직캠', '팬아트', '공지'],
     grammarErrors: 1,

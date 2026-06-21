@@ -14,7 +14,7 @@ export const dictationSentences: DictationSentence[] = [
   { id: 'ds04', korean: '커피 한 잔 주세요.', chinese: '请给我一杯咖啡。', level: 'beginner', tag: '点餐' },
   { id: 'ds05', korean: '저는 학생이에요.', chinese: '我是学生。', level: 'beginner', tag: '自我介绍' },
   { id: 'ds06', korean: '한국 음식을 좋아해요.', chinese: '我喜欢韩国菜。', level: 'beginner', tag: '饮食' },
-  { id: 'ds07', korean: '여기가 어디예요?', chinese: '这里是哪里？', level: 'beginner', tag: '问路' },
+  { id: 'ds07', korean: '여기가 어디예요?', chinese: '这是哪里？', level: 'beginner', tag: '问路' },
   { id: 'ds08', korean: '사진 찍어도 돼요?', chinese: '可以拍照吗？', level: 'beginner', tag: '日常' },
   { id: 'ds09', korean: '오늘 뭐 해요?', chinese: '今天做什么？', level: 'beginner', tag: '日常' },
   { id: 'ds10', korean: '배가 고파요. 밥 먹으러 가요.', chinese: '肚子饿了。去吃饭吧。', level: 'beginner', tag: '饮食' },

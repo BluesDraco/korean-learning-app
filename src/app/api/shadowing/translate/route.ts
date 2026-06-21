@@ -56,7 +56,7 @@ export async function POST(req: Request) {
     await recordAiUsage(auth.userId, 'translate');
     return NextResponse.json({ translation });
   } catch (err: any) {
-    if (texts) return NextResponse.json({ translations: texts.map(() => ''), error: err.message }, { status: 500 });
-    return NextResponse.json({ translation: '', error: err.message }, { status: 500 });
+    if (texts) return NextResponse.json({ translations: texts.map(() => ''), error: 'Translation failed' }, { status: 500 });
+    return NextResponse.json({ translation: '', error: 'Translation failed' }, { status: 500 });
   }
 }

@@ -75,7 +75,7 @@ export const topikTextbook2Entries: WordEntry[] = [
   {
     "id": "topik-2-557",
     "korean": "도움",
-    "romanization": "doume",
+    "romanization": "doum",
     "baseForm": "도움",
     "partOfSpeech": "名词",
     "level": "2",

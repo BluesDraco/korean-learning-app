@@ -83,30 +83,17 @@ export function resolveAudioPolicy(type: AudioContentType): AudioPolicyResult {
   return { source: 'cached_qwen_tts', shouldCache: true, reason: '默认策略：Qwen TTS + 浏览器回退' };
 }
 
-/** Sanitize text before passing to TTS engine. Strips markers that confuse TTS. */
-export function sanitizeTTSText(text: string, hint?: AudioContentType, wrapForNls = false): string {
+/** Sanitize text before passing to browser TTS. Strips markers that confuse TTS. */
+export function sanitizeTTSText(text: string, hint?: AudioContentType): string {
   const cleaned = text
-    // Remove speaker icon emoji
     .replace(/🔊/g, '')
     .replace(/[●◉○◈◇◆▸►▻]/g, '')
-    // Replace "vs" / "vs." with comma pause (prevents TTS from reading "v" "s")
     .replace(/\bvs\.?\b/gi, ',')
-    // Replace "/" separators with comma pause
     .replace(/\s*\/\s*/g, ', ')
-    // Collapse multiple commas/spaces
     .replace(/,+/g, ',')
     .replace(/\s{2,}/g, ' ')
-    // Remove leading/trailing commas
     .replace(/^,\s*/, '')
     .replace(/,\s*$/, '')
     .trim();
-  const normalized = normalizeKoreanPronunciation(cleaned);
-  // Wrap isolated words with 。 so Kyong processes in sentence mode (improves prosody stability)
-  if (wrapForNls) {
-    const type = hint ?? classifyContent(cleaned);
-    if ((type === 'word' || type === 'short_word') && /^[가-힣\s]+$/.test(normalized)) {
-      return `。${normalized}。`;
-    }
-  }
-  return normalized;
+  return normalizeKoreanPronunciation(cleaned);
 }

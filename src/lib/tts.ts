@@ -193,18 +193,8 @@ export async function speak(
     return;
   }
 
-  // If static audio exists for this text, always prefer it over NLS.
-  // Note: explicitRate/slowUrl are intentionally ignored here — all registered
-  // entries currently use a single pre-recorded file at natural speed.
-  const staticForWord = getStaticAudio(cleaned);
-  if (staticForWord) {
-    try { await playUrl(staticForWord.url, seq); } catch { /* silent */ }
-    onEnd?.();
-    return;
-  }
-
-  // Check cache first (for NLS-allowed content types)
-  const cacheKey = `${rate}:${sanitizeTTSText(cleaned, undefined, true)}`;
+  // Check cache first (for Edge-TTS content)
+  const cacheKey = `${rate}:${cleaned}`;
   const cached = audioCache.get(cacheKey);
   if (cached && Date.now() - cached.ts < CACHE_TTL) {
     try {
@@ -233,7 +223,7 @@ export async function speak(
   const nlsAvailable = Date.now() > nlsFailedUntil;
   if (nlsAvailable) {
     try {
-      const blobUrl = await speakViaNls(sanitizeTTSText(cleaned, undefined, true), seq);
+      const blobUrl = await speakViaNls(cleaned, seq, rate);
       if (blobUrl) {
         if (audioCache.size >= CACHE_MAX) {
           const first = audioCache.keys().next().value;
@@ -267,7 +257,7 @@ export async function speak(
   onEnd?.();
 }
 
-/** Chinese TTS via Aliyun NLS (Meimei voice), falls back to browser speechSynthesis. */
+/** Chinese TTS via Edge-TTS (Xiaoxiao voice), falls back to browser speechSynthesis. */
 export async function speakChinese(
   text: string,
   rate?: number,
@@ -283,11 +273,9 @@ export async function speakChinese(
     const controller = new AbortController();
     currentFetchController = controller;
     let res: Response;
+    const rateStr = getEdgeTtsRate(rate ?? getSpeechRate());
     try {
-      res = await fetch('/api/tts/aliyun', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: cleaned, voice: 'zhiyue' }),
+      res = await fetch(`/api/tts/edge?text=${encodeURIComponent(cleaned)}&voice=zh-CN-XiaoxiaoNeural&rate=${encodeURIComponent(rateStr)}`, {
         signal: controller.signal,
       });
     } finally {
@@ -349,10 +337,17 @@ async function speakViaBrowser(text: string, rate: number): Promise<void> {
   });
 }
 
-async function speakViaNls(text: string, seq: number): Promise<string | null> {
+function getEdgeTtsRate(userRate: number): string {
+  const pct = Math.round((userRate - 1) * 100);
+  if (pct >= 0) return `+${pct}%`;
+  return `${pct}%`;
+}
+
+async function speakViaNls(text: string, seq: number, rate?: number): Promise<string | null> {
   const controller = new AbortController();
   currentFetchController = controller;
-  const ttsUrl = `/api/tts/edge?text=${encodeURIComponent(text)}&voice=sunhi&rate=%2B0%25`;
+  const rateStr = getEdgeTtsRate(rate ?? getSpeechRate());
+  const ttsUrl = `/api/tts/edge?text=${encodeURIComponent(text)}&voice=sunhi&rate=${encodeURIComponent(rateStr)}`;
   let res: Response;
   try {
     res = await fetch(ttsUrl, { signal: controller.signal });

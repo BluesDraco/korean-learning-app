@@ -50,7 +50,7 @@ export const consonants: PhoneticLetter[] = [
   { id: 'c-07', letter: 'ㅅ', name: '시옷', romanization: 's', quizRomanization: 's', type: 'consonant', subtype: 'basic', sound: '类似中文"丝"的声母（在ㅣ及ㅑ/ㅕ等前元音前腭化为sh）', mnemonic: '像一座山的形状 人', emoji: '⛰️', strokeOrder: ['从左上向右下', '从右上向左下'] },
   { id: 'c-08', letter: 'ㅇ', name: '이응', romanization: '–/ng', quizRomanization: '–', type: 'consonant', subtype: 'basic', sound: '作初声时不发音，作终声时发ng', mnemonic: '像数字0，代表空/无', emoji: '⭕', strokeOrder: ['画一个圆圈'] },
   { id: 'c-09', letter: 'ㅈ', name: '지읒', romanization: 'j', quizRomanization: 'j', type: 'consonant', subtype: 'basic', sound: '类似英语"jeep"的j，或中文"机"的声母', mnemonic: '像一个人伸出手臂', emoji: '🤸', strokeOrder: ['先写ㅅ', '再在上面加一横'] },
-  { id: 'c-10', letter: 'ㅊ', name: '치읓', romanization: 'ch', type: 'consonant', subtype: 'basic', sound: '类似中文"吃"的声母（送气）', mnemonic: 'ㅈ+一横=更强的送气', emoji: '💨', strokeOrder: ['先写ㅈ', '再在上面加一横'] },
+  { id: 'c-10', letter: 'ㅊ', name: '치읓', romanization: 'ch', type: 'consonant', subtype: 'basic', sound: '类似中文"七"的声母（送气）', mnemonic: 'ㅈ+一横=更强的送气', emoji: '💨', strokeOrder: ['先写ㅈ', '再在上面加一横'] },
   { id: 'c-11', letter: 'ㅋ', name: '키읔', romanization: 'k', type: 'consonant', subtype: 'basic', sound: '类似中文"科"的声母（送气强）', mnemonic: 'ㄱ+一横=更强的送气', emoji: '🌬️', strokeOrder: ['先写ㄱ', '再在中间加一横'] },
   { id: 'c-12', letter: 'ㅌ', name: '티읕', romanization: 't', type: 'consonant', subtype: 'basic', sound: '类似中文"特"的声母（送气）', mnemonic: 'ㄷ+一横=更强的送气', emoji: '💥', strokeOrder: ['先写ㄷ', '再在中间加一横'] },
   { id: 'c-13', letter: 'ㅍ', name: '피읖', romanization: 'p', type: 'consonant', subtype: 'basic', sound: '类似中文"坡"的声母（送气）', mnemonic: 'ㅂ+一横=更强的送气', emoji: '🎈', strokeOrder: ['先写ㅂ', '再在中间加一横'] },

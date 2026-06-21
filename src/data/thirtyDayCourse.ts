@@ -664,7 +664,7 @@ export const thirtyDayCourse: DailyCourse[] = [
       { korean: '기쁘다', pronunciation: 'gi-ppeu-da', chinese: '开心/高兴', partOfSpeech: '形容词', emoji: '😊' },
       { korean: '슬프다', pronunciation: 'seul-peu-da', chinese: '悲伤', partOfSpeech: '形容词', emoji: '😢' },
       { korean: '화나다', pronunciation: 'hwa-na-da', chinese: '生气', partOfSpeech: '动词', emoji: '😤' },
-      { korean: '걱정하다', pronunciation: 'geok-ijeong-ha-da', chinese: '担心', partOfSpeech: '动词', emoji: '😟' },
+      { korean: '걱정하다', pronunciation: 'geok-jeong-ha-da', chinese: '担心', partOfSpeech: '动词', emoji: '😟' },
       { korean: '피곤하다', pronunciation: 'pi-gon-ha-da', chinese: '疲惫', partOfSpeech: '形容词', emoji: '😫' },
       { korean: '신나다', pronunciation: 'sin-na-da', chinese: '兴奋/激动', partOfSpeech: '动词', emoji: '🎉' },
       { korean: '행복하다', pronunciation: 'haeng-bo-ka-da', chinese: '幸福', partOfSpeech: '形容词', emoji: '💖' },
@@ -680,12 +680,12 @@ export const thirtyDayCourse: DailyCourse[] = [
     sentences: [
       { korean: '오늘 기분이 어때요?', pronunciation: 'o-neul gi-bu-ni eo-ttae-yo?', chinese: '今天心情怎么样？', scene: '关心朋友' },
       { korean: '친구를 만나서 기뻐요.', pronunciation: 'chin-gu-reul man-na-seo gi-ppeo-yo.', chinese: '见到朋友所以很开心。', scene: '解释原因' },
-      { korean: '피곤해서 좀 쉬고 싶어요.', pronunciation: 'pi-go-nae-seo jom swi-go si-peo-yo.', chinese: '累了想休息一下。', scene: '表达需要' },
+      { korean: '피곤해서 좀 쉬고 싶어요.', pronunciation: 'pi-gon-hae-seo jom swi-go si-peo-yo.', chinese: '累了想休息一下。', scene: '表达需要' },
     ],
     dictations: [
       { korean: '기분이 좋아요', pronunciation: 'gi-bu-ni jo-a-yo', chinese: '心情很好' },
       { korean: '너무 슬퍼요', pronunciation: 'neo-mu seul-peo-yo', chinese: '很难过' },
-      { korean: '걱정하지 마세요', pronunciation: 'geok-ijeong-ha-ji ma-se-yo', chinese: '别担心' },
+      { korean: '걱정하지 마세요', pronunciation: 'geok-jeong-ha-ji ma-se-yo', chinese: '别担心' },
       { korean: '정말 행복해요', pronunciation: 'jeong-mal haeng-bo-kae-yo', chinese: '真的很幸福' },
       { korean: '신나요!', pronunciation: 'sin-na-yo!', chinese: '好兴奋！' },
     ],

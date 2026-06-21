@@ -298,7 +298,7 @@ export const knowledgeCategories: KnowledgeCategory[] = [
       { id: 'bo14', word: '목', pronunciation: 'mok', meaning: '脖子/喉咙', partOfSpeech: '名词', example: '목이 아파서 말하기 힘들어요.', exampleZh: '喉咙痛所以说话很费劲。', emoji: '🧣' },
       { id: 'bo15', word: '손가락', pronunciation: 'songarak', meaning: '手指', partOfSpeech: '名词', example: '손가락을 베였어요.', exampleZh: '割伤了手指。', emoji: '🖐️' },
       { id: 'bo16', word: '발가락', pronunciation: 'balgarak', meaning: '脚趾', partOfSpeech: '名词', example: '발가락에 물집이 잡혔어요.', exampleZh: '脚趾上起了水泡。', emoji: '🦶' },
-      { id: 'bo17', word: '무릎', pronunciation: 'mureup', meaning: '膝盖', partOfSpeech: '名词', example: '넘어져서 무릎이 까졌어요.', exampleZh: '摔倒了膝盖擦破了。', emoji: '🦵', note: '收音ㅊ不发音' },
+      { id: 'bo17', word: '무릎', pronunciation: 'mureup', meaning: '膝盖', partOfSpeech: '名词', example: '넘어져서 무릎이 까졌어요.', exampleZh: '摔倒了膝盖擦破了。', emoji: '🦵', note: '收音ㅍ不发音' },
       { id: 'bo18', word: '어깨', pronunciation: 'eokkae', meaning: '肩膀', partOfSpeech: '名词', example: '어깨가 뭉쳐서 안마 받고 싶어요.', exampleZh: '肩膀僵硬想按摩。', emoji: '💆' },
       { id: 'bo19', word: '허리', pronunciation: 'heori', meaning: '腰', partOfSpeech: '名词', example: '허리가 아프면 병원에 가세요.', exampleZh: '腰疼的话请去医院。', emoji: '🧎' },
       { id: 'bo20', word: '이마', pronunciation: 'ima', meaning: '额头', partOfSpeech: '名词', example: '이마에 열이 있어요.', exampleZh: '额头有热度。', emoji: '🤒' },
