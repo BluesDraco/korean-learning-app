@@ -48,12 +48,13 @@ function resolvePageMeta(pathname: string | null) {
   if (p.startsWith('/admin')) return { title: '管理后台', activeId: 'today', hidePanel: true };
   if (p === '/daily') return { title: '今日', activeId: 'today', hidePanel: false };
   if (p.startsWith('/mine') || p.startsWith('/vocabulary')) return { title: '词汇', activeId: 'vocabulary', hidePanel: false };
+  if (p.startsWith('/reading')) return { title: '工具', activeId: 'tools', hidePanel: true };
   if (p === '/tools' || p.startsWith('/tools/')
     || p.startsWith('/typing') || p.startsWith('/writing')
     || p.startsWith('/pronunciation') || p.startsWith('/shadowing')
     || p.startsWith('/dictation') || p.startsWith('/review')
     || p.startsWith('/grammar') || p.startsWith('/ai/')
-    || p.startsWith('/dictionary') || p.startsWith('/reading')) return { title: '工具', activeId: 'tools', hidePanel: false };
+    || p.startsWith('/dictionary')) return { title: '工具', activeId: 'tools', hidePanel: false };
   if (p.startsWith('/learning') || p.startsWith('/course') || p.startsWith('/phonetics')) return { title: '学习', activeId: 'learn', hidePanel: false };
   if (p.startsWith('/explore')
     || p.startsWith('/korea/')) return { title: '探索', activeId: 'explore', hidePanel: false };

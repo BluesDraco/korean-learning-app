@@ -1,6 +1,7 @@
 import { createClient, type Client } from '@libsql/client';
 import path from 'path';
 import { mkdirSync } from 'fs';
+import { cached, clearCache } from '@/lib/cache';
 
 let client: Client | null = null;
 let initialized = false;
@@ -943,18 +944,38 @@ export async function getDb() {
 
   return {
     exec: async (sql: string, params?: unknown[]) => {
-      const result = await c.execute({ sql, args: params as any[] });
-      const columns = result.columns;
-      const values = result.rows.map((row: any) =>
-        columns.map((col: string) => row[col])
-      );
-      return [{ columns, values }];
+      const key = `db:${sql}:${JSON.stringify(params)}`;
+      return cached(key, 30000, async () => {
+        let lastErr: unknown;
+        for (let attempt = 0; attempt < 2; attempt++) {
+          try {
+            const result = await c.execute({ sql, args: params as any[] });
+            const columns = result.columns;
+            const values = result.rows.map((row: any) =>
+              columns.map((col: string) => row[col])
+            );
+            return [{ columns, values }];
+          } catch (err) {
+            lastErr = err;
+            // Only retry on timeout/network errors
+            const msg = String(err);
+            if (msg.includes('CONNECT_TIMEOUT') || msg.includes('fetch failed') || msg.includes('UND_ERR')) {
+              await new Promise((r) => setTimeout(r, 500));
+              continue;
+            }
+            throw err;
+          }
+        }
+        throw lastErr;
+      });
     },
     run: async (sql: string, params?: unknown[]) => {
       await c.execute({ sql, args: params as any[] });
+      clearCache();
     },
     batch: async (statements: { sql: string; args: unknown[] }[]) => {
       await c.batch(statements as any);
+      clearCache();
     },
   };
 }
