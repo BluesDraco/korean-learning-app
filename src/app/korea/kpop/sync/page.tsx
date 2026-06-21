@@ -1,9 +1,7 @@
 'use client';
 
 import { useTheme } from '@/components/ThemeProvider';
-
-const LIGHT_C = { ink: '#241917', muted: '#89756e', line: '#eee0d8', bg: '#fffbf7', card: '#fff' };
-const DARK_C  = { ink: '#F0E8FF', muted: '#B8A8C8', line: '#3A3060', bg: '#1E1B2E', card: '#282440' };
+import { LIGHT_C, DARK_C } from '@/lib/theme';
 
 export default function SyncKaraokePage() {
   const { theme } = useTheme();

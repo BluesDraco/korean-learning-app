@@ -6,6 +6,10 @@ import { ArrowLeft, Trash2, AlertCircle, RotateCcw } from 'lucide-react';
 import { db } from '@/lib/db';
 import type { SpellingMistake } from '@/types';
 import { useTheme } from '@/components/ThemeProvider';
+import { LIGHT_C as _LIGHT_C, DARK_C as _DARK_C } from '@/lib/theme';
+
+const LIGHT_C = { ..._LIGHT_C, mintText: '#4e746d' };
+const DARK_C  = { ..._DARK_C, mintText: '#5ecfb8' };
 
 type TabType = 'all' | 'spelling' | 'sentence';
 
@@ -21,8 +25,6 @@ function timeAgo(ts: number): string {
 
 export default function VocabularyMistakesPage() {
   const { theme } = useTheme();
-  const LIGHT_C = { ink: '#241917', muted: '#89756e', line: '#eee0d8', pink: '#ff7fa8', pinkSoft: '#fff0f5', bg: '#fffbf7', mint: '#aee3d8', mintBg: '#eaf8f5', mintText: '#4e746d', card: '#fff', black: '#201815' };
-  const DARK_C  = { ink: '#F0E8FF', muted: '#B8A8C8', line: '#3A3060', pink: '#ff7fa8', pinkSoft: '#2D2848', bg: '#1E1B2E', mint: '#4A6058', mintBg: '#1E3530', mintText: '#5ecfb8', card: '#282440', black: '#3A3060' };
   const C = theme === 'dark' ? DARK_C : LIGHT_C;
 
   const router = useRouter();

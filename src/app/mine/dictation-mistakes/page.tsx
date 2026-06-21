@@ -8,6 +8,7 @@ import type { DictationRecord } from '@/types';
 import { DictationSession } from '@/components/dictation/DictationSession';
 import type { DictationItem } from '@/components/dictation/DictationSession';
 import { useTheme } from '@/components/ThemeProvider';
+import { LIGHT_C, DARK_C } from '@/lib/theme';
 
 interface MistakeGroup {
   korean: string;
@@ -16,9 +17,6 @@ interface MistakeGroup {
   lastWrongAt: number;
   records: DictationRecord[];
 }
-
-const LIGHT_C = { ink: '#241917', muted: '#89756e', line: '#eee0d8', pink: '#ff7fa8', pinkSoft: '#fff0f5', bg: '#fffbf7', mint: '#aee3d8', mintBg: '#eaf8f5' };
-const DARK_C  = { ink: '#F0E8FF', muted: '#B8A8C8', line: '#3A3060', pink: '#ff7fa8', pinkSoft: '#2D2848', bg: '#1E1B2E', mint: '#4A6058', mintBg: '#1E3530' };
 
 export default function DictationMistakesPage() {
   const { theme } = useTheme();

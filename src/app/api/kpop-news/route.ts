@@ -230,6 +230,6 @@ export async function POST() {
     await recordAiUsage(auth.userId, 'kpop-news');
     return NextResponse.json({ ok: true, count: posts.length, posts });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: 500 });
+    return NextResponse.json({ error: 'TTS service error' }, { status: 500 });
   }
 }

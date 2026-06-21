@@ -43,14 +43,14 @@ export async function POST(req: Request) {
 
     if (!ttsRes.ok) {
       const err = await ttsRes.text().catch(() => 'unknown');
-      return NextResponse.json({ error: `Qwen TTS error: ${ttsRes.status}`, detail: err }, { status: 502 });
+      return NextResponse.json({ error: `Qwen TTS error: ${ttsRes.status}` }, { status: 502 });
     }
 
     const ttsData = await ttsRes.json();
     const audioUrl: string | undefined = ttsData?.output?.audio?.url;
 
     if (!audioUrl) {
-      return NextResponse.json({ error: 'No audio URL in Qwen response', detail: JSON.stringify(ttsData) }, { status: 502 });
+      return NextResponse.json({ error: 'No audio URL in Qwen response' }, { status: 502 });
     }
 
     // Step 2: Download the audio from the OSS URL
@@ -74,6 +74,6 @@ export async function POST(req: Request) {
     if (e.name === 'AbortError' || e.name === 'FetchTimeoutError') {
       return NextResponse.json({ error: 'Qwen TTS timeout' }, { status: 504 });
     }
-    return NextResponse.json({ error: e.message }, { status: 500 });
+    return NextResponse.json({ error: 'TTS service error' }, { status: 500 });
   }
 }

@@ -6,9 +6,10 @@ import { ArrowLeft, Trophy, RotateCcw, BookOpen, ChevronRight } from 'lucide-rea
 import type { TopikQuestion, TopikSection } from '@/data/topik-questions';
 import Link from 'next/link';
 import { useTheme } from '@/components/ThemeProvider';
+import { LIGHT_C as _LIGHT_C, DARK_C as _DARK_C } from '@/lib/theme';
 
-const LIGHT_C = { ink: '#241917', muted: '#89756e', line: '#eee0d8', pink: '#ff7fa8', pinkSoft: '#fff0f5', bg: '#fffbf7', mint: '#aee3d8', mintBg: '#eaf8f5', card: '#fff', mistakeBg: '#f9f5f2', statBg: '#f0ece8', actionBg: '#f0ece8' };
-const DARK_C  = { ink: '#F0E8FF', muted: '#B8A8C8', line: '#3A3060', pink: '#ff7fa8', pinkSoft: '#2D2848', bg: '#1E1B2E', mint: '#4A6058', mintBg: '#1E3530', card: '#282440', mistakeBg: '#252040', statBg: '#2A2040', actionBg: '#2A2040' };
+const LIGHT_C = { ..._LIGHT_C, mistakeBg: '#f9f5f2', statBg: '#f0ece8', actionBg: '#f0ece8' };
+const DARK_C  = { ..._DARK_C, mistakeBg: '#252040', statBg: '#2A2040', actionBg: '#2A2040' };
 
 interface ResultData {
   sectionId: string;

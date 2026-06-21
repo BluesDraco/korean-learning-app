@@ -52,7 +52,7 @@ export async function POST(req: Request) {
     const b23Match = url.match(/b23\.tv\/([a-zA-Z0-9]+)/);
     if (b23Match && platform === 'unknown') {
       try {
-        const redirectRes = await fetch(`https://b23.tv/${b23Match[1]}`, { redirect: 'manual' });
+        const redirectRes = await fetch(`https://b23.tv/${b23Match[1]}`, { redirect: 'manual', signal: AbortSignal.timeout(8000) });
         const location = redirectRes.headers.get('location') || '';
         const realBv = location.match(/BV[a-zA-Z0-9]{10,12}/);
         if (realBv) {

@@ -13,6 +13,7 @@ import { speak } from '@/lib/tts';
 import { useAuth } from '@/components/AuthProvider';
 import type { GrammarPoint, GrammarCard, UserGrammarState, ConnectionRule } from '@/types';
 import { useTheme } from '@/components/ThemeProvider';
+import { LIGHT_C as _LIGHT_C, DARK_C as _DARK_C } from '@/lib/theme';
 import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
 
@@ -70,8 +71,8 @@ async function loadNextCard(cardId: string): Promise<GrammarCard | null> {
   return nextPartCards[0] ?? null;
 }
 
-const LIGHT_C = { ink: '#241917', muted: '#89756e', line: '#eee0d8', pink: '#ff7fa8', pinkSoft: '#fff0f5', mint: '#aee3d8', mintBg: '#eaf8f5', purple: '#b49ccf', purpleBg: '#f3eefb', bg: '#fffbf7', card: '#fff' };
-const DARK_C  = { ink: '#F0E8FF', muted: '#B8A8C8', line: '#3A3060', pink: '#ff7fa8', pinkSoft: '#2D2848', mint: '#4A6058', mintBg: '#1E3530', purple: '#8a7ab0', purpleBg: '#2A2040', bg: '#1E1B2E', card: '#282440' };
+const LIGHT_C = { ..._LIGHT_C, purple: '#b49ccf', purpleBg: '#f3eefb' };
+const DARK_C  = { ..._DARK_C, purple: '#8a7ab0', purpleBg: '#2A2040' };
 
 const ColorCtx = createContext<typeof LIGHT_C>(LIGHT_C);
 const useC = () => useContext(ColorCtx);

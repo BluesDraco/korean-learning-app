@@ -7,7 +7,7 @@
 - **产品名**: Tori Korean / 한국어 학습
 - **部署域名**: https://torikorean.com
 - **服务器**: 207.57.134.171 (宝塔面板), SSH 端口 17478
-- **数据库**: Turso (libsql, Tokyo 区域) + 客户端 IndexedDB (Dexie.js)
+- **数据库**: Turso (libsql, Tokyo 区域) + 客户端 IndexedDB (CloudTable)
 
 ## 技术栈
 
@@ -17,10 +17,10 @@
 | 语言 | TypeScript 5 |
 | 样式 | Tailwind CSS v4 (PostCSS 插件, 无 config 文件) + 部分 inline styles |
 | 服务端数据库 | Turso (@libsql/client) — 用户、进度、KPOP 数据 |
-| 客户端数据库 | Dexie.js (IndexedDB) — SRS 状态、学习日志、离线缓存 |
+| 客户端数据库 | CloudTable (IndexedDB 封装) — SRS 状态、学习日志、离线缓存 |
 | 认证 | JWT (jose) + bcryptjs, httpOnly cookie |
 | AI | DeepSeek API (api.deepseek.com/anthropic 端点, 5 个场景) |
-| TTS | 浏览器 speechSynthesis (lang='ko-KR', rate=0.75) |
+| TTS | Edge-TTS (自建 API, SunHi/InJoon 韩语神经语音) 为主，浏览器 speechSynthesis 兜底 |
 | 图表 | Recharts 3.8 |
 | 图标 | Lucide React |
 | 音频 | 腾讯云 COS (香港) + 自定义 SegmentPlayer |
@@ -47,6 +47,10 @@ npm start
 **验证标准**: 每次修改后必须 `tsc --noEmit` 零错误 + `npm run build` 通过才能部署。
 
 ## 部署流程
+
+**推荐使用 `/tori-deploy` skill**，它会自动执行以下全部步骤。
+
+**手动部署（skill 不可用时）：**
 
 **严禁在 Windows 上构建后传到 Linux！** `@libsql/client` 跨平台不兼容。必须在服务器上构建。
 
@@ -107,7 +111,7 @@ PM2 路径: `/www/server/nodejs/*/bin/pm2` (Node.js 管理器在宝塔面板下)
 ```
 src/data/       — 静态数据 (歌曲、课程、词汇、文章等)
 src/lib/server/db.ts  — Turso 连接 + 20+ 表的迁移
-src/lib/db.ts   — 客户端 IndexedDB (Dexie)
+src/lib/db.ts   — 客户端 IndexedDB (CloudTable)
 src/types/index.ts    — 全部 TypeScript 类型 (~620行)
 src/types/kpop.ts     — KPOP 专用类型
 ```
@@ -247,7 +251,7 @@ src/types/kpop.ts     — KPOP 专用类型
 
 ## 40音真人录音规则（强制执行）
 
-所有 40音（21个元音 + 14个辅音 + 5个紧音）的发音**必须使用真人录音静态 MP3**，禁止回落到 NLS/TTS 合成。
+所有 40音（21个元音 + 14个辅音 + 5个紧音）的发音**必须使用真人录音静态 MP3**，禁止回落到 TTS 合成。
 
 ### 文件映射
 
@@ -260,9 +264,9 @@ src/types/kpop.ts     — KPOP 专用类型
 ### 注意事项
 
 - `ㅇ` 的 CONSONANT_DEMO 是 `아`，与元音 v-01 冲突 — **不覆盖**，ㅇ 通过 `이응` 键播放
-- `한` 是合成音节（ㅎ+ㅏ+ㄴ），不属于 40音范畴，允许 NLS 合成
-- 任何新增发音功能若涉及单个자모/40音字母，必须先在 `src/lib/audio/audioRegistry.ts` 注册 key，不能直接调 NLS
-- `SyllableComposer` 和 `pronunciation/` 模块处理任意音节组合，NLS 合成是预期行为，不受本规则约束
+- `한` 是合成音节（ㅎ+ㅏ+ㄴ），不属于 40音范畴，允许 TTS 合成
+- 任何新增发音功能若涉及单个자모/40音字母，必须先在 `src/lib/audio/audioRegistry.ts` 注册 key，不能直接调 TTS API
+- `SyllableComposer` 和 `pronunciation/` 模块处理任意音节组合，TTS 合成是预期行为，不受本规则约束
 
 ## 禁止事项
 
@@ -296,7 +300,7 @@ src/
 | 路由 | 文件 | 备注 |
 |------|------|------|
 | `/korea/kpop/[id]` | `src/app/korea/kpop/[id]/page.tsx` | **禁止重构**，600行 inline styles |
-| `/grammar` | `src/app/grammar/page.tsx` | ~1600行 |
+| `/grammar` | `src/app/grammar/page.tsx` | ~2500行 |
 | `/course/[day]` | `src/app/course/[day]/page.tsx` | LessonEngine |
 | `/topik` | `src/app/topik/page.tsx` | T35I/T35II 听力+阅读 |
 | `/review` | `src/app/review/page.tsx` | SRS闪卡+默写+造句 |
@@ -317,7 +321,7 @@ src/
 
 | 文件 | 说明 |
 |------|------|
-| `src/lib/tts.ts` | TTS主逻辑（NLS Kyong + 兜底），禁止直接调 `/api/tts/aliyun` |
+| `src/lib/tts.ts` | TTS 主逻辑（Edge-TTS 为主 + 浏览器兜底），禁止直接调 `/api/tts/*`，必须走 `speak()` |
 | `src/lib/db.ts` | 客户端 Dexie/IndexedDB，所有 CloudTable 在此注册 |
 | `src/lib/server/db.ts` | Turso连接 + 所有表迁移，新表写在末尾 |
 | `src/lib/server/auth.ts` | `getAuthFromCookie()` — 所有 API 路由认证入口 |
@@ -330,7 +334,8 @@ src/
 
 | 路由 | 说明 |
 |------|------|
-| `POST /api/tts/aliyun` | 阿里云 NLS TTS，需登录 |
+| `GET /api/tts/edge` | Edge-TTS 韩语语音合成，无需登录 |
+| `POST /api/tts/aliyun` | 阿里云 NLS TTS（仅中文 `speakChinese()`），需登录 |
 | `POST /api/ai/chat` | 情景对话 AI，需登录 |
 | `POST /api/ai/sentence-judge` | 造句生成+判断（generate/judge），需登录 |
 | `POST /api/ai/word-lookup` | 查词，公开，永久缓存 |
@@ -555,3 +560,117 @@ Step 7f: 写出 options[answer] 值（仅验证索引有效性）
 - Step 1-11 无任何 FAIL
 - specialQuiz answer 在 [0,3] 且 prompt 存在
 - partLoaders 已注册本 Part
+
+---
+
+## Skills 使用指南
+
+你已安装了 75 个 skills。**不需要手动调用**——根据用户的话题自动激活。
+以下是按场景的激活规则。
+
+### 场景 1：韩语内容创作（最高频）
+
+| 用户说了什么 | 激活的 skill | 原因 |
+|-------------|-------------|------|
+| 写韩语对话/文章/例句 | **korean** | 让韩语自然、口语化、敬语正确 |
+| 设计课程/教学内容 | **language-learning** + **korean** | 课程结构 + 自然韩语 |
+| 解释发音/音变规则 | **pronunciation** + **korean** | 发音教练 + 韩语专项 |
+| 检查韩语语法错误 | **grammar** + **korean** | 通用语法 + 韩语语感 |
+| 生成词汇表/闪卡 | **language-learning** | 语言教学工具 |
+
+### 场景 2：TTS 和音频
+
+| 用户说了什么 | 激活的 skill |
+|-------------|-------------|
+| 生成韩语单词音频 | **audio** + **korean**（先校验文本再合成） |
+| 音频降噪/格式转换 | **audio** |
+| 检查 TTS 发音是否正确 | **pronunciation** + **audio** |
+
+### 场景 3：写代码/开发功能
+
+| 用户说了什么 | 激活的 skill |
+|-------------|-------------|
+| 写新功能/新代码 | **karpathy-guidelines** + **coding-agent** |
+| "用 ponytail 模式" / "精简代码" | **ponytail**（砍掉不必要代码） |
+| "审查代码" / "audit" | **ponytail-audit** + **karpathy-guidelines** |
+| 写测试 | **tdd** |
+| 设计 API | **api-design** + **error-handling** |
+| 提交代码 | **git-workflow** |
+| 复杂功能先规划 | **writing-plans** + **thinking** |
+
+### 场景 4：UI/设计
+
+| 用户说了什么 | 激活的 skill |
+|-------------|-------------|
+| 做页面/UI 组件 | **impeccable-uxui** + **fullstack-dev** |
+| 检查无障碍 | **a11y** |
+| 审计现有界面 | **impeccable-uxui** |
+
+### 场景 5：营销/增长
+
+| 用户说了什么 | 激活的 skill |
+|-------------|-------------|
+| SEO 优化 | **seo-audit** + **product-marketing** |
+| 写营销文案 | **copywriting** + **product-marketing** |
+| 转化率优化 | **cro** |
+| 做落地页 | **copywriting** + **impeccable-uxui** |
+
+### 场景 6：生成文档/材料
+
+| 用户说了什么 | 激活的 skill |
+|-------------|-------------|
+| 生成 PDF 课件 | **pdf** + **korean** |
+| 做 PPT | **pptx** |
+| 做Excel词汇表 | **xlsx** + **korean** |
+| 生成图表 | **charts** |
+
+### 场景 7：深度分析
+
+| 用户说了什么 | 激活的 skill |
+|-------------|-------------|
+| "先想清楚" / 复杂问题 | **thinking** |
+| 理解代码库结构 | **graphify** |
+| 搜索网络资料 | **web-search** + **web-reader** |
+
+---
+
+## Skills 协作规则
+
+1. **korean 永远优先** — 任何涉及韩语文本的任务，korean skill 必须激活
+2. **pronunciation 处理音变** — 涉及韩语发音时，pronunciation 负责音变规则解释
+3. **ponytail 不碰韩语内容** — ponytail 只管代码精简，不碰韩语文本
+4. **TTS 校验流程** — 生成音频前，先用 korean skill 校验文本，再用 audio skill 处理
+5. **marketing skills 互引用** — 使用营销 skill 前先读 product-marketing 建立上下文
+
+---
+
+## 禁止激活的组合
+
+以下 skill 不要同时激活（会冲突）：
+
+- **ponytail** + **tdd** 同时写同一段代码 — ponytail 砍代码，tdd 要求先写测试，会矛盾
+  - 正确做法：先用 tdd 写测试，再用 ponytail 精简实现
+- **impeccable-uxui** + **cro** 同时改一个页面 — 会抢设计方向
+  - 正确做法：先 cro 分析转化问题，再 impeccable-uxui 实现设计
+
+---
+
+## 项目特定知识
+
+### TTS API
+- 地址: http://localhost:8800
+- 声音: sunhi(女声教学) / injoon(男声对话)
+- 接口: GET /tts?text={韩语}&voice={声音}
+- 自动处理韩语音变（连音/同化/颚化）
+
+### 韩语审核流程
+1. 文本审核: korean skill 检查语感 → grammar skill 检查语法
+2. 发音审核: pronunciation skill 检查音变规则
+3. 音频审核: 用 TTS 生成音频 → 对比标准发音
+4. 内容审核: language-learning skill 验证教学层级匹配
+
+### 用户注意事项
+- 用户没有韩语基础，所有韩语内容需要附带中文解释
+- 用户没有编程经验，代码相关的操作由 Claude Code 完成
+- 用户使用 Claude Code 开发网站，skills 安装在 .claude/skills/ 目录
+

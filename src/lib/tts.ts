@@ -352,32 +352,28 @@ async function speakViaBrowser(text: string, rate: number): Promise<void> {
 async function speakViaNls(text: string, seq: number): Promise<string | null> {
   const controller = new AbortController();
   currentFetchController = controller;
+  const ttsUrl = `/api/tts/edge?text=${encodeURIComponent(text)}&voice=sunhi&rate=%2B0%25`;
   let res: Response;
   try {
-    res = await fetch('/api/tts/aliyun', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text }),
-      signal: controller.signal,
-    });
+    res = await fetch(ttsUrl, { signal: controller.signal });
   } finally {
     if (currentFetchController === controller) currentFetchController = null;
   }
-  if (!res.ok) throw new Error('NLS failed');
+  if (!res.ok) throw new Error('TTS failed');
 
   if (seq !== speakSeq) return null;
 
   const blob = await res.blob();
   if (seq !== speakSeq) return null;
 
-  const url = URL.createObjectURL(blob);
+  const blobUrl = URL.createObjectURL(blob);
   try {
-    await playUrlViaElement(url, seq);
+    await playUrlViaElement(blobUrl, seq);
   } catch {
-    URL.revokeObjectURL(url);
-    throw new Error('NLS audio playback failed');
+    URL.revokeObjectURL(blobUrl);
+    throw new Error('TTS audio playback failed');
   }
-  return url;
+  return blobUrl;
 }
 
 

@@ -8,9 +8,7 @@ import { LyricLine } from '@/components/kpop/LyricLine';
 import { OffsetPanel } from '@/components/kpop/OffsetPanel';
 import { WordTapSheet } from '@/components/WordTapSheet';
 import type { LocalLyricLine } from '@/types/kpop';
-
-const LIGHT_C = { ink: '#241917', muted: '#89756e', line: '#eee0d8', pink: '#ff7fa8', pinkSoft: '#fff0f5', bg: '#fffbf7', card: '#fff', black: '#201815' };
-const DARK_C  = { ink: '#F0E8FF', muted: '#B8A8C8', line: '#3A3060', pink: '#ff7fa8', pinkSoft: '#2D2848', bg: '#1E1B2E', card: '#282440', black: '#3A3060' };
+import { LIGHT_C, DARK_C } from '@/lib/theme';
 
 type Stage = 'import' | 'naming' | 'generating' | 'player';
 const SPEEDS = [0.5, 0.75, 1.0, 1.25];

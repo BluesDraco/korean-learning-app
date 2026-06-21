@@ -4,9 +4,10 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { shadowingClips } from '@/data/shadowingClips';
 import { useTheme } from '@/components/ThemeProvider';
+import { LIGHT_C as _LIGHT_C, DARK_C as _DARK_C } from '@/lib/theme';
 
-const LIGHT_C = { ink: '#241917', muted: '#89756e', line: '#eee0d8', pink: '#ff7fa8', pinkSoft: '#fff0f5', mint: '#aee3d8', cream: '#fff8f4', black: '#201815', mintBg: '#eaf8f5', mintText: '#4e746d', shadow: '0 16px 42px rgba(78,52,46,.10)', strong: '0 28px 72px rgba(78,52,46,.18)' };
-const DARK_C  = { ink: '#F0E8FF', muted: '#B8A8C8', line: '#3A3060', pink: '#ff7fa8', pinkSoft: '#2D2848', mint: '#4A6058', cream: '#252040', black: '#3A3060', mintBg: '#1E3530', mintText: '#5ecfb8', shadow: '0 16px 42px rgba(0,0,0,.30)', strong: '0 28px 72px rgba(0,0,0,.40)' };
+const LIGHT_C = { ..._LIGHT_C, cream: '#fff8f4', mintText: '#4e746d', shadow: '0 16px 42px rgba(78,52,46,.10)', strong: '0 28px 72px rgba(78,52,46,.18)' };
+const DARK_C  = { ..._DARK_C, cream: '#252040', mintText: '#5ecfb8', shadow: '0 16px 42px rgba(0,0,0,.30)', strong: '0 28px 72px rgba(0,0,0,.40)' };
 
 export default function ShadowingListPage() {
   const { theme } = useTheme();

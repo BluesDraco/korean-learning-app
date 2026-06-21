@@ -8,9 +8,10 @@ import { db } from '@/lib/db';
 import type { TopikSession, TopikMistake } from '@/types';
 import Link from 'next/link';
 import { useTheme } from '@/components/ThemeProvider';
+import { LIGHT_C as _LIGHT_C, DARK_C as _DARK_C } from '@/lib/theme';
 
-const LIGHT_C = { ink: '#241917', muted: '#89756e', line: '#eee0d8', pink: '#ff7fa8', pinkSoft: '#fff0f5', bg: '#fffbf7', mint: '#aee3d8', mintBg: '#eaf8f5', card: '#fff', tagBg: '#f0ece8', disabledBtn: '#c4a89e' };
-const DARK_C  = { ink: '#F0E8FF', muted: '#B8A8C8', line: '#3A3060', pink: '#ff7fa8', pinkSoft: '#2D2848', bg: '#1E1B2E', mint: '#4A6058', mintBg: '#1E3530', card: '#282440', tagBg: '#252040', disabledBtn: '#4A3A5A' };
+const LIGHT_C = { ..._LIGHT_C, tagBg: '#f0ece8', disabledBtn: '#c4a89e' };
+const DARK_C  = { ..._DARK_C, tagBg: '#252040', disabledBtn: '#4A3A5A' };
 
 type Tab = 'exam' | 'simulate' | 'practice' | 'mine';
 

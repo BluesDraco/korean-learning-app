@@ -59,15 +59,23 @@ export async function GET(request: Request) {
       updatedAt: row[col('updated_at')],
     }));
 
-    // attach segment counts
-    for (const clip of clips) {
+    // attach segment counts — single GROUP BY query instead of N+1
+    if (clips.length > 0) {
+      const ids = clips.map(c => c.id);
+      const placeholders = ids.map(() => '?').join(',');
       const cntResult = await db.exec(
-        `SELECT COUNT(*) as cnt FROM shadowing_segments WHERE clip_id = ?`,
-        [clip.id]
+        `SELECT clip_id, COUNT(*) as cnt FROM shadowing_segments WHERE clip_id IN (${placeholders}) GROUP BY clip_id`,
+        ids
       );
       const cntRows = cntResult[0]?.values ?? [];
       const cntCols = cntResult[0]?.columns ?? [];
-      (clip as any).segmentCount = (cntRows[0]?.[cntCols.indexOf('cnt')] as number) ?? 0;
+      const cntMap = new Map<string, number>();
+      for (const row of cntRows) {
+        cntMap.set(row[cntCols.indexOf('clip_id')] as string, row[cntCols.indexOf('cnt')] as number);
+      }
+      for (const clip of clips) {
+        (clip as any).segmentCount = cntMap.get(clip.id) ?? 0;
+      }
     }
 
     return NextResponse.json({ clips });

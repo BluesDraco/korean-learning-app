@@ -154,7 +154,7 @@ export async function POST(req: Request) {
     if (e.name === 'AbortError' || e.name === 'FetchTimeoutError') {
       return NextResponse.json({ error: 'NLS TTS timeout' }, { status: 504 });
     }
-    return NextResponse.json({ error: e.message }, { status: 500 });
+    return NextResponse.json({ error: 'TTS service error' }, { status: 500 });
   }
 }
 

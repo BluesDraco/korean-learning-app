@@ -386,8 +386,10 @@ export async function POST(req: Request) {
 
     switch (action) {
       case 'getAll': {
+        const limit = typeof data?.limit === 'number' && data.limit >= 0 ? data.limit : 2000;
         const u = buildUserClause(userScope, auth.userId);
-        const sql = `SELECT ${cols.join(', ')} FROM ${info.table}${u.clause ? ` WHERE ${u.clause}` : ''}`;
+        let sql = `SELECT ${cols.join(', ')} FROM ${info.table}${u.clause ? ` WHERE ${u.clause}` : ''}`;
+        if (limit > 0) sql += ` LIMIT ${limit}`;
         const result = await db.exec(sql, u.params);
         const rows = result[0]?.values.map((r: unknown[]) => rowToObj(cols, r)) ?? [];
         return NextResponse.json(rows);
