@@ -733,7 +733,7 @@ export default function ArticleReaderPage() {
                   })}
                 </div>
 
-                {quizAnswers[q.id] && quizRevealed[q.id] && (
+                {quizAnswers[q.id] && quizRevealed[q.id] && q.explanation && (
                   <div className="bg-[var(--bg-input)] rounded-xl p-3 animate-fade-in">
                     <p className="text-xs text-[var(--text-muted)] mb-0.5">解释</p>
                     <p className="text-xs text-[var(--text-secondary)]">{q.explanation}</p>

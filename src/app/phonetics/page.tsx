@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Volume2, Play, Check, X, ArrowRight, RotateCcw, Trophy, ChevronDown, ChevronUp, Sparkles, Lightbulb, ArrowLeft } from 'lucide-react';
 import { vowels, consonants, batchimSounds, type PhoneticLetter } from '@/data/phonetics';
 import { speak, speakWord, unlockAudioContext } from '@/lib/tts';
+import { getStaticAudio } from '@/lib/audio/audioRegistry';
 import { playSuccess, playError } from '@/lib/soundManager';
 import ProgressivePhonetics from '@/components/ProgressivePhonetics';
 import SyllableComposer from '@/components/SyllableComposer';
@@ -118,6 +119,17 @@ const BATCHIM_DEMO: Record<string, string> = {
   'ㅂ': '밥', 'ㅇ': '강',
 };
 
+function playPhoneticAudio(text: string, rate = 1.0) {
+  const entry = getStaticAudio(text);
+  if (entry) {
+    const audio = new Audio(entry.url);
+    audio.playbackRate = rate;
+    audio.play().catch(() => {});
+  } else {
+    speakWord(text, rate);
+  }
+}
+
 function getSpeakText(letter: PhoneticLetter): string {
   if (letter.type === 'vowel') return letter.name;
   if (letter.type === 'consonant' || letter.type === 'double') {
@@ -133,7 +145,6 @@ function getSpeakText(letter: PhoneticLetter): string {
 
 // ── Batchim classification quiz ───────────────────────────────
 function generateBatchimQuiz() {
-  // Expand each batchimSound's letter field (e.g. 'ㄷ/ㅅ/ㅆ/ㅈ/ㅊ/ㅌ/ㅎ') into individual questions
   const questions: { prompt: string; correctAnswer: string; options: string[]; repLetter: string; letter: string }[] = [];
   const repLetters = batchimSounds.map((b) => b.quizLetter ?? b.letter.split('/')[0]);
 
@@ -322,6 +333,7 @@ function generateRulesQuiz(categoryId?: string) {
         ...ex,
         ruleTitle: rule.title,
         categoryId: cat.id,
+        ruleExplanation: rule.explanation,
       }))
     )
   );
@@ -342,6 +354,8 @@ function generateRulesQuiz(categoryId?: string) {
       original: item.original,
       meaning: item.meaning,
       correctRead: item.originalRead,
+      ruleTitle: item.ruleTitle,
+      explanation: item.ruleExplanation,
     };
   });
 }
@@ -358,14 +372,14 @@ export default function PhoneticsPage() {
   const [tab, setTab] = useState<Tab>('vowel');
   const [mode, setMode] = useState<Mode>('browse');
   const [quizType, setQuizType] = useState<QuizType>('letter-to-roman');
-  const [batchimQuizState, setBatchimQuizState] = useState<{
-    questions: ReturnType<typeof generateBatchimQuiz>;
+  const [quizState, setQuizState] = useState<{
+    questions: ReturnType<typeof generateQuiz>;
     currentIdx: number;
     selectedAnswer: string | null;
     correctCount: number;
   } | null>(null);
-  const [quizState, setQuizState] = useState<{
-    questions: ReturnType<typeof generateQuiz>;
+  const [batchimQuizState, setBatchimQuizState] = useState<{
+    questions: ReturnType<typeof generateBatchimQuiz>;
     currentIdx: number;
     selectedAnswer: string | null;
     correctCount: number;
@@ -577,7 +591,7 @@ export default function PhoneticsPage() {
                       {letters.map((letter) => (
                         <button
                           key={letter.id}
-                          onClick={() => { unlockAudioContext(); speakWord(getSpeakText(letter), 0.7); }}
+                          onClick={() => { unlockAudioContext(); playPhoneticAudio(getSpeakText(letter)); }}
                           className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 text-center hover:border-[var(--pink-primary)]/30 hover:shadow-md hover:shadow-[var(--pink-primary)]/5 transition-all group"
                         >
                           <span className="text-3xl font-bold text-[var(--text-primary)] block mb-0.5" style={{ fontFamily: "'system-ui', 'sans-serif'" }}>
@@ -606,7 +620,7 @@ export default function PhoneticsPage() {
                     className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 flex items-start gap-4"
                   >
                     <button
-                      onClick={() => { unlockAudioContext(); speakWord(getSpeakText(letter), 0.7); }}
+                      onClick={() => { unlockAudioContext(); playPhoneticAudio(getSpeakText(letter)); }}
                       className="shrink-0 w-16 h-16 rounded-xl bg-[var(--bg-input)] flex items-center justify-center hover:bg-[var(--bg-accent)] transition-colors"
                     >
                       <span className="text-2xl font-bold text-[var(--text-primary)]" style={{ fontFamily: "'system-ui', 'sans-serif'" }}>
@@ -629,7 +643,7 @@ export default function PhoneticsPage() {
                       <p className="text-xs text-[var(--text-muted)] mt-1">{letter.mnemonic}</p>
                     </div>
                     <button
-                      onClick={() => { unlockAudioContext(); speakWord(getSpeakText(letter), 0.7); }}
+                      onClick={() => { unlockAudioContext(); playPhoneticAudio(getSpeakText(letter)); }}
                       className="p-2 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-placeholder)] hover:text-[var(--pink-primary)] transition-colors shrink-0"
                       title="听发音"
                     >
@@ -724,6 +738,18 @@ export default function PhoneticsPage() {
                           })}
                         </div>
                         {batchimQuizState.selectedAnswer !== null && (
+                          <div className={`rounded-xl px-3 py-2.5 text-xs ${
+                            batchimQuizState.selectedAnswer === bq.correctAnswer
+                              ? 'bg-[var(--mint-soft)]/10 text-[var(--text-primary)]'
+                              : 'bg-[var(--color-danger)]/10 text-[var(--text-primary)]'
+                          }`}>
+                            {batchimQuizState.selectedAnswer === bq.correctAnswer
+                              ? <><span className="text-[var(--mint-soft)] font-medium">正确！</span>「{bq.letter}」属于 [{bq.correctAnswer}] 代表音类</>
+                              : <><span className="text-[var(--color-danger)] font-medium">不对。</span>「{bq.letter}」的代表音是 [{bq.correctAnswer}]，不是 [{batchimQuizState.selectedAnswer}]</>
+                            }
+                          </div>
+                        )}
+                        {batchimQuizState.selectedAnswer !== null && (
                           <button onClick={handleBatchimQuizNext} className="w-full py-2.5 bg-[var(--pink-primary)] text-white rounded-xl text-sm font-medium">
                             {batchimQuizState.currentIdx + 1 >= batchimQuizState.questions.length ? '查看结果' : '下一题'}
                           </button>
@@ -806,7 +832,7 @@ export default function PhoneticsPage() {
                     {q.isListen && (
                       <div className="text-center space-y-3">
                         <button
-                          onClick={() => { unlockAudioContext(); speakWord(getSpeakText(q.item), 0.7); }}
+                          onClick={() => { unlockAudioContext(); playPhoneticAudio(getSpeakText(q.item)); }}
                           className="w-20 h-20 rounded-2xl bg-[var(--pink-primary)]/10 border-2 border-[var(--pink-primary)]/30 flex items-center justify-center mx-auto hover:bg-[var(--pink-primary)]/20 transition-colors"
                         >
                           <Volume2 size={32} className="text-[var(--pink-primary)]" />
@@ -820,7 +846,7 @@ export default function PhoneticsPage() {
                         <span className="text-5xl font-bold text-[var(--text-primary)] inline-block bg-[var(--bg-input)] rounded-2xl px-8 py-4" style={{ fontFamily: "'system-ui', 'sans-serif'" }}>
                           {getQuizLetter(q.item)}
                         </span>
-                        <button onClick={() => { unlockAudioContext(); speakWord(getSpeakText(q.item), 0.7); }} className="p-2 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-placeholder)] hover:text-[var(--pink-primary)] transition-colors" title="听发音"><Volume2 size={18} /></button>
+                        <button onClick={() => { unlockAudioContext(); playPhoneticAudio(getSpeakText(q.item)); }} className="p-2 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-placeholder)] hover:text-[var(--pink-primary)] transition-colors" title="听发音"><Volume2 size={18} /></button>
                       </div>
                     )}
 
@@ -831,7 +857,7 @@ export default function PhoneticsPage() {
                           [{getQuizRomanization(q.item)}]
                         </span>
                         <button
-                          onClick={() => { unlockAudioContext(); speakWord(getSpeakText(q.item), 0.7); }}
+                          onClick={() => { unlockAudioContext(); playPhoneticAudio(getSpeakText(q.item)); }}
                           className="ml-2 p-2 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-placeholder)] hover:text-[var(--pink-primary)] transition-colors inline-flex align-middle"
                           title="听发音"
                         >
@@ -865,7 +891,7 @@ export default function PhoneticsPage() {
                               {opt}
                             </span>
                             {!q.prompt.includes('字母') && (
-                              <Volume2 size={12} className="opacity-50" onClick={e => { e.stopPropagation(); unlockAudioContext(); speakWord(getSpeakText(q.item), 0.7); }} />
+                              <Volume2 size={12} className="opacity-50" onClick={e => { e.stopPropagation(); unlockAudioContext(); playPhoneticAudio(getSpeakText(q.item)); }} />
                             )}
                             {quizState.selectedAnswer !== null && opt === q.correctAnswer && (
                               <Check size={16} className="inline ml-1 text-[var(--mint-soft)]" />
@@ -879,9 +905,26 @@ export default function PhoneticsPage() {
                     </div>
 
                     {quizState.selectedAnswer !== null && (
+                      <div className={`rounded-xl px-3 py-2.5 text-xs ${
+                        quizState.selectedAnswer === q.correctAnswer
+                          ? 'bg-[var(--mint-soft)]/10 text-[var(--text-primary)]'
+                          : 'bg-[var(--color-danger)]/10 text-[var(--text-primary)]'
+                      }`}>
+                        {quizType === 'roman-to-letter' ? (
+                          quizState.selectedAnswer === q.correctAnswer
+                            ? <><span className="text-[var(--mint-soft)] font-medium">正确！</span>[{getQuizRomanization(q.item)}] 对应的字母是「{getQuizLetter(q.item)}」</>
+                            : <><span className="text-[var(--color-danger)] font-medium">不对。</span>[{getQuizRomanization(q.item)}] 对应的字母是「{getQuizLetter(q.item)}」，不是「{quizState.selectedAnswer}」</>
+                        ) : (
+                          quizState.selectedAnswer === q.correctAnswer
+                            ? <><span className="text-[var(--mint-soft)] font-medium">正确！</span>「{getQuizLetter(q.item)}」的读音是 [{getQuizRomanization(q.item)}]</>
+                            : <><span className="text-[var(--color-danger)] font-medium">不对。</span>「{getQuizLetter(q.item)}」的读音是 [{getQuizRomanization(q.item)}]，不是 [{quizState.selectedAnswer}]</>
+                        )}
+                      </div>
+                    )}
+                    {quizState.selectedAnswer !== null && (
                       <div className="flex items-center justify-between pt-2 border-t border-[var(--border-color)]">
                         <button
-                          onClick={() => { unlockAudioContext(); speakWord(getSpeakText(q.item), 0.7); }}
+                          onClick={() => { unlockAudioContext(); playPhoneticAudio(getSpeakText(q.item)); }}
                           className="text-xs text-[var(--text-secondary)] hover:text-[var(--pink-primary)] flex items-center gap-1"
                         >
                           <Volume2 size={12} />
@@ -920,7 +963,7 @@ export default function PhoneticsPage() {
 function PracticeTab() {
   const allLetters = [...vowels, ...consonants, ...batchimSounds];
 
-  type PracticeMode = 'letter-to-roman' | 'roman-to-letter' | 'listen-to-letter' | 'batchim' | 'rules' | null;
+  type PracticeMode = 'letter-to-roman' | 'listen-to-letter' | 'rules' | null;
   const [activeMode, setActiveMode] = useState<PracticeMode>(null);
 
   // Alphabet quiz state
@@ -929,13 +972,6 @@ function PracticeTab() {
   const [alphaAnswer, setAlphaAnswer] = useState<string | null>(null);
   const [alphaCorrect, setAlphaCorrect] = useState(0);
   const [alphaFinished, setAlphaFinished] = useState(false);
-
-  // Batchim quiz state
-  const [batchimQ, setBatchimQ] = useState<ReturnType<typeof generateBatchimQuiz>>([]);
-  const [batchimIdx, setBatchimIdx] = useState(0);
-  const [batchimAnswer, setBatchimAnswer] = useState<string | null>(null);
-  const [batchimCorrect, setBatchimCorrect] = useState(0);
-  const [batchimFinished, setBatchimFinished] = useState(false);
 
   // Rules quiz state
   const [rulesQ, setRulesQ] = useState<ReturnType<typeof generateRulesQuiz>>([]);
@@ -946,12 +982,9 @@ function PracticeTab() {
 
   const startMode = (mode: PracticeMode) => {
     setActiveMode(mode);
-    if (mode === 'letter-to-roman' || mode === 'roman-to-letter' || mode === 'listen-to-letter') {
+    if (mode === 'letter-to-roman' || mode === 'listen-to-letter') {
       setAlphaQ(generateQuiz(allLetters, mode as QuizType));
       setAlphaIdx(0); setAlphaAnswer(null); setAlphaCorrect(0); setAlphaFinished(false);
-    } else if (mode === 'batchim') {
-      setBatchimQ(generateBatchimQuiz());
-      setBatchimIdx(0); setBatchimAnswer(null); setBatchimCorrect(0); setBatchimFinished(false);
     } else if (mode === 'rules') {
       setRulesQ(generateRulesQuiz());
       setRulesIdx(0); setRulesAnswer(null); setRulesCorrect(0); setRulesFinished(false);
@@ -962,9 +995,7 @@ function PracticeTab() {
 
   const practiceCards = [
     { mode: 'letter-to-roman' as PracticeMode, icon: '👁', title: '看字选音', desc: '看韩文字母，选出正确的罗马音' },
-    { mode: 'roman-to-letter' as PracticeMode, icon: '🔤', title: '看音选字', desc: '看罗马音，选出对应的韩文字母' },
     { mode: 'listen-to-letter' as PracticeMode, icon: '🔊', title: '听音选字', desc: '听发音，选出对应的韩文字母' },
-    { mode: 'batchim' as PracticeMode, icon: '📦', title: '收音归类', desc: '给出收音字母，选它发哪个代表音' },
     { mode: 'rules' as PracticeMode, icon: '🔗', title: '连读发音', desc: '给出韩文词，选出正确的实际发音' },
   ];
 
@@ -994,8 +1025,8 @@ function PracticeTab() {
     );
   }
 
-  // ── 字母测验（看字/看音/听音）──
-  if (activeMode === 'letter-to-roman' || activeMode === 'roman-to-letter' || activeMode === 'listen-to-letter') {
+  // ── 字母测验（看字/听音）──
+  if (activeMode === 'letter-to-roman' || activeMode === 'listen-to-letter') {
     if (alphaFinished) {
       const acc = Math.round((alphaCorrect / alphaQ.length) * 100);
       return (
@@ -1026,7 +1057,7 @@ function PracticeTab() {
         <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 space-y-5">
           {q.isListen ? (
             <div className="text-center space-y-2">
-              <button onClick={() => { unlockAudioContext(); speakWord(getSpeakText(q.item), 0.7); }}
+              <button onClick={() => { unlockAudioContext(); playPhoneticAudio(getSpeakText(q.item)); }}
                 className="w-20 h-20 rounded-2xl bg-[var(--pink-primary)]/10 border-2 border-[var(--pink-primary)]/30 flex items-center justify-center mx-auto hover:bg-[var(--pink-primary)]/20 transition-colors">
                 <Volume2 size={32} className="text-[var(--pink-primary)]" />
               </button>
@@ -1037,7 +1068,7 @@ function PracticeTab() {
               <span className="text-5xl font-bold text-[var(--text-primary)] inline-block bg-[var(--bg-input)] rounded-2xl px-8 py-4" style={{ fontFamily: "'system-ui', 'sans-serif'" }}>
                 {getQuizLetter(q.item)}
               </span>
-              <button onClick={() => { unlockAudioContext(); speakWord(getSpeakText(q.item), 0.7); }} className="p-2 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-placeholder)] hover:text-[var(--pink-primary)] transition-colors" title="听发音"><Volume2 size={18} /></button>
+              <button onClick={() => { unlockAudioContext(); playPhoneticAudio(getSpeakText(q.item)); }} className="p-2 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-placeholder)] hover:text-[var(--pink-primary)] transition-colors" title="听发音"><Volume2 size={18} /></button>
             </div>
           ) : (
             <div className="text-center">
@@ -1045,7 +1076,7 @@ function PracticeTab() {
                 [{getQuizRomanization(q.item)}]
               </span>
               <div className="flex justify-center mt-2">
-                <button onClick={() => { unlockAudioContext(); speakWord(getSpeakText(q.item), 0.7); }} className="p-1.5 rounded-lg bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] text-[var(--text-secondary)] hover:text-[var(--pink-primary)] transition-colors" title="听发音"><Volume2 size={15} /></button>
+                <button onClick={() => { unlockAudioContext(); playPhoneticAudio(getSpeakText(q.item)); }} className="p-1.5 rounded-lg bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] text-[var(--text-secondary)] hover:text-[var(--pink-primary)] transition-colors" title="听发音"><Volume2 size={15} /></button>
               </div>
             </div>
           )}
@@ -1077,83 +1108,28 @@ function PracticeTab() {
             })}
           </div>
           {alphaAnswer !== null && (
+            <div className={`rounded-xl px-4 py-3 text-sm ${
+              alphaAnswer === q.correctAnswer
+                ? 'bg-[var(--mint-soft)]/10 text-[var(--text-primary)]'
+                : 'bg-[var(--color-danger)]/10 text-[var(--text-primary)]'
+            }`}>
+              {q.isListen ? (
+                alphaAnswer === q.correctAnswer
+                  ? <><span className="text-[var(--mint-soft)] font-medium">正确！</span>这个音对应的字母是「{getQuizLetter(q.item)}」[{getQuizRomanization(q.item)}]</>
+                  : <><span className="text-[var(--color-danger)] font-medium">不对。</span>正确字母是「{getQuizLetter(q.item)}」[{getQuizRomanization(q.item)}]，不是「{alphaAnswer}」</>
+              ) : (
+                alphaAnswer === q.correctAnswer
+                  ? <><span className="text-[var(--mint-soft)] font-medium">正确！</span>「{getQuizLetter(q.item)}」的读音是 [{getQuizRomanization(q.item)}]</>
+                  : <><span className="text-[var(--color-danger)] font-medium">不对。</span>「{getQuizLetter(q.item)}」的读音是 [{getQuizRomanization(q.item)}]，不是 [{alphaAnswer}]</>
+              )}
+            </div>
+          )}
+          {alphaAnswer !== null && (
             <button onClick={() => {
               if (alphaIdx + 1 >= alphaQ.length) { setAlphaFinished(true); }
               else { setAlphaIdx((p) => p + 1); setAlphaAnswer(null); }
             }} className="w-full py-3 bg-[var(--pink-primary)] text-white rounded-xl text-sm font-medium">
               {alphaIdx + 1 >= alphaQ.length ? '查看结果' : '下一题'}
-            </button>
-          )}
-        </div>
-      </div>
-    );
-  }
-
-  // ── 收音归类 ──
-  if (activeMode === 'batchim') {
-    if (batchimFinished) {
-      const acc = Math.round((batchimCorrect / batchimQ.length) * 100);
-      return (
-        <div className="space-y-4 pb-24">
-          <button onClick={backToMenu} className="text-sm text-[var(--text-secondary)] flex items-center gap-1"><ArrowLeft size={14} /> 返回</button>
-          <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 text-center space-y-3">
-            <Trophy size={40} className="text-[var(--peach-soft)] mx-auto" />
-            <p className="text-lg font-bold text-[var(--text-primary)]">练习完成！</p>
-            <p className="text-3xl font-extrabold text-[var(--pink-primary)]">{acc}%</p>
-            <p className="text-sm text-[var(--text-secondary)]">{batchimCorrect} / {batchimQ.length} 正确</p>
-            <div className="flex gap-2 justify-center">
-              <button onClick={() => startMode('batchim')} className="px-4 py-2 bg-[var(--pink-primary)] text-white rounded-xl text-sm font-medium">再来一次</button>
-              <button onClick={backToMenu} className="px-4 py-2 bg-[var(--bg-input)] text-[var(--text-primary)] rounded-xl text-sm font-medium">换题型</button>
-            </div>
-          </div>
-        </div>
-      );
-    }
-    const bq = batchimQ[batchimIdx];
-    if (!bq) return null;
-    return (
-      <div className="space-y-4 pb-24">
-        <div className="flex items-center justify-between">
-          <button onClick={backToMenu} className="text-sm text-[var(--text-secondary)] flex items-center gap-1"><ArrowLeft size={14} /> 返回</button>
-          <span className="text-sm text-[var(--text-muted)]">{batchimIdx + 1} / {batchimQ.length}</span>
-          <span className="text-xs text-[var(--text-muted)]">正确 {batchimCorrect}</span>
-        </div>
-        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 space-y-5">
-          <div className="text-center">
-            <span className="text-5xl font-bold text-[var(--text-primary)] inline-block bg-[var(--bg-input)] rounded-2xl px-8 py-4" style={{ fontFamily: "'system-ui', 'sans-serif'" }}>{bq.letter}</span>
-            <div className="flex justify-center mt-2">
-              <button onClick={() => { unlockAudioContext(); speakWord(bq.letter, 0.7); }} className="p-1.5 rounded-lg bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] text-[var(--text-secondary)] hover:text-[var(--pink-primary)] transition-colors" title="听发音"><Volume2 size={15} /></button>
-            </div>
-          </div>
-          <h3 className="text-base font-medium text-[var(--text-primary)] text-center">{bq.prompt}</h3>
-          <div className="grid grid-cols-4 gap-2">
-            {bq.options.map((opt, i) => {
-              let cls = 'bg-[var(--bg-input)] border border-[var(--border-color)] text-[var(--text-primary)]';
-              if (batchimAnswer !== null) {
-                if (opt === bq.correctAnswer) cls = 'bg-[var(--mint-soft)]/10 border-[var(--mint-soft)]/50 text-[var(--mint-soft)]';
-                else if (opt === batchimAnswer) cls = 'bg-[var(--color-danger)]/10 border-[var(--color-danger)]/50 text-[var(--color-danger)]';
-                else cls = 'bg-[var(--bg-input)] border-[var(--border-color)] text-[var(--text-placeholder)] opacity-40';
-              }
-              return (
-                <button key={i} onClick={() => {
-                  if (batchimAnswer !== null) return;
-                  const correct = opt === bq.correctAnswer;
-                  if (correct) playSuccess(); else playError();
-                  setBatchimAnswer(opt);
-                  setBatchimCorrect((p) => p + (correct ? 1 : 0));
-                }} disabled={batchimAnswer !== null} className={`py-3 rounded-xl text-xl font-bold transition-all border ${cls} flex flex-col items-center gap-1`} style={{ fontFamily: "'system-ui', 'sans-serif'" }}>
-                  {opt}
-                  <span onClick={(e) => { e.stopPropagation(); unlockAudioContext(); speakWord(opt, 0.7); }} className="p-0.5 rounded bg-white/20 text-current opacity-60 hover:opacity-100 transition-opacity"><Volume2 size={11} /></span>
-                </button>
-              );
-            })}
-          </div>
-          {batchimAnswer !== null && (
-            <button onClick={() => {
-              if (batchimIdx + 1 >= batchimQ.length) { setBatchimFinished(true); }
-              else { setBatchimIdx((p) => p + 1); setBatchimAnswer(null); }
-            }} className="w-full py-3 bg-[var(--pink-primary)] text-white rounded-xl text-sm font-medium">
-              {batchimIdx + 1 >= batchimQ.length ? '查看结果' : '下一题'}
             </button>
           )}
         </div>
@@ -1223,6 +1199,25 @@ function PracticeTab() {
               );
             })}
           </div>
+          {rulesAnswer !== null && (
+            <div className={`rounded-xl px-4 py-3 text-sm space-y-1.5 ${
+              rulesAnswer === rq.correct
+                ? 'bg-[var(--mint-soft)]/10 text-[var(--text-primary)]'
+                : 'bg-[var(--color-danger)]/10 text-[var(--text-primary)]'
+            }`}>
+              <p>
+                {rulesAnswer === rq.correct
+                  ? <><span className="text-[var(--mint-soft)] font-medium">正确！</span>「{rq.original}」读作「{rq.correctRead}」</>
+                  : <><span className="text-[var(--color-danger)] font-medium">不对。</span>「{rq.original}」的正确读音是「{rq.correctRead}」</>
+                }
+              </p>
+              {rq.explanation && (
+                <p className="text-xs text-[var(--text-secondary)] border-t border-[var(--border-color)] pt-1.5">
+                  <span className="font-medium text-[var(--text-primary)]">{rq.ruleTitle}：</span>{rq.explanation}
+                </p>
+              )}
+            </div>
+          )}
           {rulesAnswer !== null && (
             <button onClick={() => {
               if (rulesIdx + 1 >= rulesQ.length) { setRulesFinished(true); }
