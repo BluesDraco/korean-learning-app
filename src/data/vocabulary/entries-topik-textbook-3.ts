@@ -48833,9 +48833,9 @@ export const topikTextbook3Entries: WordEntry[] = [
   },
   {
     "id": "topik-3-1685",
-    "korean": "정식",
+    "korean": "正式",
     "romanization": "jeongsik",
-    "baseForm": "정식",
+    "baseForm": "正式",
     "partOfSpeech": "名词",
     "level": "3",
     "frequency": 2,
