@@ -5,6 +5,7 @@ import { AppShell } from '@/components/AppShell';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { AuthProvider } from '@/components/AuthProvider';
 import { FontProvider } from '@/components/FontProvider';
+import { LangProvider } from '@/components/LangProvider';
 import { PageViewTracker } from '@/components/PageViewTracker';
 import { XpOverlay } from '@/components/XpOverlay';
 import { FeedbackButton } from '@/components/FeedbackButton';
@@ -66,6 +67,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-screen antialiased page-corner-bunny">
         <ThemeProvider>
           <FontProvider>
+          <LangProvider>
           <AuthProvider>
           <ToastProvider>
           <PageViewTracker />
@@ -73,6 +75,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ToriToastContainer />
           </ToastProvider>
           </AuthProvider>
+          </LangProvider>
           </FontProvider>
         </ThemeProvider>
         <XpOverlay />

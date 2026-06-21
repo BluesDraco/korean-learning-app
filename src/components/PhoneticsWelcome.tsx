@@ -3,42 +3,45 @@
 import { useState, useEffect } from 'react';
 import { ArrowRight, X, Volume2, Sparkles, Compass } from 'lucide-react';
 import { speak, speakWord } from '@/lib/tts';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 
 const WELCOME_KEY = 'phonetics-welcome-seen';
 
-const STEPS = [
-  {
-    emoji: '👋',
-    title: '韩语40音，其实很简单',
-    subtitle: '韩文是世界上唯一一个被指定为 UNESCO 世界记录遗产的文字 — 因为它太科学了',
-    highlights: [
-      '21 个元音 + 19 个辅音 = 40 个字母',
-      '每个字母的发音几乎完全固定，没有英语那样的不规则',
-      '15 分钟就能看懂所有韩文',
-    ],
-  },
-  {
-    emoji: '🧩',
-    title: '韩文的秘密：像积木一样拼',
-    subtitle: '每个"韩文字"其实是一个方块，由 2-3 个字母拼成',
-    visual: true,
-    highlights: [
-      '初声（开头的辅音）+ 中声（元音）= 一个音节',
-      '有终声（收音）时再加一个辅音在底部',
-      '가 = ㄱ + ㅏ，한 = ㅎ + ㅏ + ㄴ',
-    ],
-  },
-  {
-    emoji: '🎯',
-    title: '你来试试',
-    subtitle: '点一下这些字母，拼出你的第一个韩文',
-    interactive: true,
-  },
-];
-
 export default function PhoneticsWelcome({ onDone }: { onDone: () => void }) {
+  const { lang } = useLang();
   const [step, setStep] = useState(0);
   const [dismissed, setDismissed] = useState(false);
+
+  const STEPS = [
+    {
+      emoji: '👋',
+      title: t('phoneticsWelcome.step0_title', lang),
+      subtitle: t('phoneticsWelcome.step0_subtitle', lang),
+      highlights: [
+        t('phoneticsWelcome.step0_highlight1', lang),
+        t('phoneticsWelcome.step0_highlight2', lang),
+        t('phoneticsWelcome.step0_highlight3', lang),
+      ],
+    },
+    {
+      emoji: '🧩',
+      title: t('phoneticsWelcome.step1_title', lang),
+      subtitle: t('phoneticsWelcome.step1_subtitle', lang),
+      visual: true,
+      highlights: [
+        t('phoneticsWelcome.step1_highlight1', lang),
+        t('phoneticsWelcome.step1_highlight2', lang),
+        t('phoneticsWelcome.step1_highlight3', lang),
+      ],
+    },
+    {
+      emoji: '🎯',
+      title: t('phoneticsWelcome.step2_title', lang),
+      subtitle: t('phoneticsWelcome.step2_subtitle', lang),
+      interactive: true,
+    },
+  ];
 
   useEffect(() => {
     if (dismissed) {
@@ -110,7 +113,7 @@ export default function PhoneticsWelcome({ onDone }: { onDone: () => void }) {
                 onClick={() => speakWord('가', 0.7)}
                 className="bg-gradient-to-br from-[var(--pink-primary)]/20 to-[var(--purple-soft)]/20 text-[var(--text-primary)] px-6 py-3 rounded-2xl text-3xl hover:scale-105 transition-transform"
               >
-                加
+                가
                 <Volume2 size={14} className="inline ml-2 text-[var(--text-muted)]" />
               </button>
             </div>
@@ -130,7 +133,7 @@ export default function PhoneticsWelcome({ onDone }: { onDone: () => void }) {
               </button>
             </div>
             <p className="text-xs text-center text-[var(--text-muted)]">
-              点击韩文听发音 ↑
+              {t('phoneticsWelcome.click_to_hear_hint', lang)}
             </p>
           </div>
         )}
@@ -141,7 +144,7 @@ export default function PhoneticsWelcome({ onDone }: { onDone: () => void }) {
         {/* Content accuracy notice (step 2 only) */}
         {current.interactive && (
           <div className="bg-amber-50 border border-amber-200 rounded-2xl px-4 py-3 text-xs text-amber-700 leading-relaxed">
-            📋 当前内容准确度待校正，预计本周完成，届时将同步更新。
+            {t('phoneticsWelcome.accuracy_notice', lang)}
           </div>
         )}
 
@@ -152,7 +155,7 @@ export default function PhoneticsWelcome({ onDone }: { onDone: () => void }) {
               onClick={() => setStep(step - 1)}
               className="px-5 py-3 bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-primary)] rounded-2xl text-sm font-medium hover:bg-[var(--bg-accent)] transition-colors"
             >
-              上一步
+              {t('phoneticsWelcome.prev_button', lang)}
             </button>
           )}
           {!isLast ? (
@@ -160,7 +163,7 @@ export default function PhoneticsWelcome({ onDone }: { onDone: () => void }) {
               onClick={() => setStep(step + 1)}
               className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--purple-soft)] to-[var(--pink-primary)] text-white rounded-2xl text-sm font-bold hover:shadow-lg hover:shadow-[var(--pink-primary)]/25 transition-all active:scale-95"
             >
-              继续
+              {t('phoneticsWelcome.next_button', lang)}
               <ArrowRight size={16} />
             </button>
           ) : (
@@ -169,7 +172,7 @@ export default function PhoneticsWelcome({ onDone }: { onDone: () => void }) {
               className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--pink-primary)] to-[var(--peach-soft)] text-white rounded-2xl text-sm font-bold hover:shadow-lg hover:shadow-[var(--pink-primary)]/25 transition-all active:scale-95"
             >
               <Compass size={16} />
-              开始学习
+              {t('phoneticsWelcome.start_button', lang)}
             </button>
           )}
         </div>
@@ -180,7 +183,7 @@ export default function PhoneticsWelcome({ onDone }: { onDone: () => void }) {
             onClick={() => setDismissed(true)}
             className="block mx-auto text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
           >
-            跳过介绍，直接开始
+            {t('phoneticsWelcome.skip_button', lang)}
           </button>
         )}
       </div>
@@ -189,6 +192,7 @@ export default function PhoneticsWelcome({ onDone }: { onDone: () => void }) {
 }
 
 function QuickComposeDemo() {
+  const { lang } = useLang();
   const [cho, setCho] = useState<string | null>(null);
   const [jung, setJung] = useState<string | null>(null);
 
@@ -197,7 +201,7 @@ function QuickComposeDemo() {
     { letter: 'ㄴ', rom: 'n' },
     { letter: 'ㅁ', rom: 'm' },
     { letter: 'ㅅ', rom: 's' },
-    { letter: 'ㅇ', rom: '(无)' },
+    { letter: 'ㅇ', rom: t('phoneticsWelcome.consonant_none_label', lang) },
     { letter: 'ㅎ', rom: 'h' },
   ];
 
@@ -220,7 +224,7 @@ function QuickComposeDemo() {
 
   return (
     <div className="space-y-4">
-      <p className="text-xs text-center text-[var(--text-muted)]">选一个辅音 + 一个元音，拼出你的第一个韩文</p>
+      <p className="text-xs text-center text-[var(--text-muted)]">{t('phoneticsWelcome.compose_hint', lang)}</p>
 
       {/* Selection */}
       <div className="flex items-center justify-center gap-3 flex-wrap">
@@ -272,7 +276,7 @@ function QuickComposeDemo() {
           </div>
         ) : (
           <div className="text-sm text-[var(--text-muted)] py-6">
-            ↑ 上面选一个辅音和一个元音试试
+            {t('phoneticsWelcome.compose_idle_hint', lang)}
           </div>
         )}
       </div>

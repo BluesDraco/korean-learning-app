@@ -6,6 +6,8 @@ import Image from 'next/image';
 import { Loader2, Sparkles, BookOpen, Mic, BookMarked, Edit3, Target, GraduationCap, Music, RefreshCw, FileText, LogIn, Flame, Bell, X, Settings, ChevronRight, PenLine } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
 import { useFeedback } from '@/hooks/useFeedback';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 import { buildDailyPlanFromApi, type DailyPlan } from '@/lib/daily/buildDailyPlan';
 import { getAllSongProgress } from '@/lib/kpop/progress';
 import { getProfile } from '@/lib/gamification';
@@ -36,6 +38,7 @@ const TASK_COLORS: Record<string, string> = {
 export default function DailyPage() {
   const { user } = useAuth();
   const { click: feedbackClick } = useFeedback();
+  const { lang } = useLang();
   const [plan, setPlan] = useState<DailyPlan | null>(null);
   const [planLoading, setPlanLoading] = useState(true);
   const [showOnboarding, setShowOnboarding] = useState(false);
@@ -173,32 +176,38 @@ export default function DailyPage() {
       <div className="py-4 space-y-4 max-w-2xl mx-auto">
         <HeroSection />
         <div className="flex flex-col items-center justify-center py-20 gap-4">
-          <p className="text-[14px] text-[var(--text-muted)]">加载失败，请刷新重试。</p>
-          <button onClick={() => window.location.reload()} className="px-4 py-2 bg-[#e47a94] text-white text-[14px] rounded-xl">刷新</button>
+          <p className="text-[14px] text-[var(--text-muted)]">{t('daily.load_error', lang)}</p>
+          <button onClick={() => window.location.reload()} className="px-4 py-2 bg-[#e47a94] text-white text-[14px] rounded-xl">{t('common.retry', lang)}</button>
         </div>
       </div>
     );
   }
 
-  const weekday = ['日', '一', '二', '三', '四', '五', '六'];
+  const weekday = lang === 'en'
+    ? ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+    : ['日', '一', '二', '三', '四', '五', '六'];
   const d = new Date();
-  const dateStr = `${d.getMonth() + 1}月${d.getDate()}日 星期${weekday[d.getDay()]}`;
+  const dateStr = lang === 'en'
+    ? `${d.toLocaleString('en', { month: 'short' })} ${d.getDate()}, ${weekday[d.getDay()]}`
+    : `${d.getMonth() + 1}月${d.getDate()}日 星期${weekday[d.getDay()]}`;
   const progressPercent = plan.totalCount > 0 ? Math.round((plan.completedCount / plan.totalCount) * 100) : 0;
-  const activeTasks = plan.tasks.filter(t => t.key !== 'course' && !t.done);
+  const activeTasks = plan.tasks.filter(task => task.key !== 'course' && !task.done);
   const displayName = user?.nickname || user?.username || '';
-  const heroTitle = displayName ? `${displayName}，今天继续学什么？` : '今天继续学什么？';
-  const streakText = streak >= 2 ? `🔥 已连续学习 ${streak} 天` : null;
+  const heroTitle = displayName
+    ? t('daily.hero_title_named', lang).replace('{name}', displayName)
+    : t('daily.hero_title_default', lang);
+  const streakText = streak >= 2 ? `🔥 ${t('daily.streak_text', lang).replace('{n}', String(streak))}` : null;
   const heroDesc = plan.allDone
-    ? `今日任务全部完成！${streakText ? streakText : '太棒了！'}`
+    ? `${t('daily.all_done_prefix', lang)}${streakText ? ` ${streakText}` : ` ${t('daily.all_done_great', lang)}`}`
     : plan.course
       ? `Day ${plan.courseDay} · ${dateStr}${streakText ? ` · ${streakText}` : ''}`
       : `${dateStr}${streakText ? ` · ${streakText}` : ''}`;
 
   const quickTools = [
-    { label: '拆句', href: '/ai/analyze', icon: Sparkles, color: '#e47a94' },
-    { label: '查词', href: '/dictionary', icon: BookOpen, color: '#b49ccf' },
-    { label: '听写', href: '/dictation', icon: Edit3, color: '#e8a87c' },
-    { label: '闪卡', href: '/review', icon: RefreshCw, color: '#81b5a1' },
+    { label: t('daily.quick_tool_analyze', lang), href: '/ai/analyze', icon: Sparkles, color: '#e47a94' },
+    { label: t('daily.quick_tool_vocab', lang), href: '/dictionary', icon: BookOpen, color: '#b49ccf' },
+    { label: t('daily.quick_tool_dictation', lang), href: '/dictation', icon: Edit3, color: '#e8a87c' },
+    { label: t('daily.quick_tool_flashcard', lang), href: '/review', icon: RefreshCw, color: '#81b5a1' },
   ] as const;
 
   return (
@@ -213,7 +222,7 @@ export default function DailyPage() {
                 <Bell size={18} className="text-[#ff7fa8]" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-[11px] font-bold text-[#ff7fa8] mb-0.5">你有一条新消息</p>
+                <p className="text-[11px] font-bold text-[#ff7fa8] mb-0.5">{t('daily.message_notification_label', lang)}</p>
                 <p className="text-[15px] font-black text-[var(--text-primary)] truncate">{unreadMsg.title}</p>
               </div>
               <button
@@ -230,13 +239,13 @@ export default function DailyPage() {
                 onClick={() => { setUnreadMsg(null); sessionStorage.setItem('msg_dismissed', '1'); }}
                 className="flex-1 py-2.5 rounded-[14px] bg-[#ff7fa8] text-white text-[13px] font-bold text-center"
               >
-                查看消息
+                {t('daily.message_view_button', lang)}
               </Link>
               <button
                 onClick={() => { setUnreadMsg(null); sessionStorage.setItem('msg_dismissed', '1'); }}
                 className="flex-1 py-2.5 rounded-[14px] bg-[var(--bg-muted)] text-[var(--text-secondary)] text-[13px] font-bold"
               >
-                稍后再看
+                {t('daily.message_later_button', lang)}
               </button>
             </div>
           </div>
@@ -256,7 +265,7 @@ export default function DailyPage() {
               className="flex items-center gap-1.5 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-[12px] px-3 py-1.5 text-[12px] font-semibold text-[var(--text-secondary)] shadow-[0_2px_8px_rgba(78,52,46,.06)] shrink-0 whitespace-nowrap"
             >
               <Settings size={13} />
-              设置
+              {t('daily.settings_button', lang)}
             </Link>
           </div>
           {plan.allDone && (
@@ -266,25 +275,25 @@ export default function DailyPage() {
                   <Sparkles size={20} className="text-[#81b5a1]" />
                 </div>
                 <div>
-                  <p className="text-[15px] font-bold text-[#81b5a1]">今日任务全部完成!</p>
-                  <p className="text-[13px] text-[var(--text-muted)] mt-0.5">继续探索，保持热度。</p>
+                  <p className="text-[15px] font-bold text-[#81b5a1]">{t('daily.all_done_title', lang)}</p>
+                  <p className="text-[13px] text-[var(--text-muted)] mt-0.5">{t('daily.all_done_subtitle', lang)}</p>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-2 mb-3">
                 <Link href="/korea/kpop/news" onClick={feedbackClick}
                   className="flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-default)] text-[13px] font-medium text-[var(--text-primary)] active:scale-[0.97] transition-transform">
                   <Music size={14} className="text-[#e47a94]" />
-                  看韩娱热帖
+                  {t('daily.kpop_news_button', lang)}
                 </Link>
                 <Link href="/vocabulary/library" onClick={feedbackClick}
                   className="flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-default)] text-[13px] font-medium text-[var(--text-primary)] active:scale-[0.97] transition-transform">
                   <BookOpen size={14} className="text-[#b49ccf]" />
-                  浏览词库
+                  {t('daily.browse_vocab_button', lang)}
                 </Link>
               </div>
               {plan.tasks.filter(t => t.key !== 'course' && t.done).length > 0 && (
                 <>
-                  <p className="text-[11px] font-bold text-[var(--text-muted)] mb-2">今日回顾</p>
+                  <p className="text-[11px] font-bold text-[var(--text-muted)] mb-2">{t('daily.daily_review_label', lang)}</p>
                   <div className="space-y-1.5">
                     {plan.tasks.filter(t => t.key !== 'course' && t.done).map(task => {
                       const Icon = TASK_ICONS[task.key] || Target;
@@ -310,16 +319,16 @@ export default function DailyPage() {
           )}
           {!plan.allDone && (
             <ToriHeroCard
-              label="韩语词库"
-              desc="按主题、等级整理的韩语词汇，随时查阅、加入复习队列。"
+              label={t('daily.vocab_library_label', lang)}
+              desc={t('daily.vocab_library_desc', lang)}
               href="/vocabulary/library"
-              actionLabel="浏览词库"
+              actionLabel={t('daily.vocab_library_action', lang)}
               gradient="from-[#e8f4ff] to-[#f0e8ff]"
             />
           )}
           {activeTasks.length > 0 && (
             <div>
-              <ToriSectionHeader title="今日任务" className="mb-2" />
+              <ToriSectionHeader title={t('daily.tasks_section_title', lang)} className="mb-2" />
               <div className="space-y-2">
                 {activeTasks.map((task) => {
                   const Icon = TASK_ICONS[task.key] || Target;
@@ -335,7 +344,7 @@ export default function DailyPage() {
                         <p className="text-[12px] text-[var(--text-muted)] mt-0.5 truncate">{task.detail}</p>
                       </div>
                       <div className="flex items-center gap-1 shrink-0 px-3 py-1.5 rounded-xl text-[12px] font-medium" style={{ backgroundColor: `${color}15`, color }}>
-                        去完成
+                        {t('daily.task_go_button', lang)}
                       </div>
                     </Link>
                   );
@@ -344,17 +353,17 @@ export default function DailyPage() {
             </div>
           )}
           <div>
-            <ToriSectionHeader title="我的" className="mb-2.5" />
+            <ToriSectionHeader title={t('daily.mine_section_title', lang)} className="mb-2.5" />
             <div className="grid grid-cols-2 gap-2.5">
-              <ToriMiniCard icon={<PenLine size={18} className="text-[#e47a94]" />} label="我的错题" detail="听写答错的词" href="/mine/dictation-mistakes" />
-              <ToriMiniCard icon={<Mic size={18} className="text-[#e47a94]" />} label="我的录音" detail="发音练习记录" href="/mine/recordings" />
-              <ToriMiniCard icon={<Sparkles size={18} className="text-[#e8a87c]" />} label="我的成就" detail="学习里程碑" href="/achievement/card" />
-              <ToriMiniCard icon={<FileText size={18} className="text-[#81b5a1]" />} label="我的私信" detail="消息与通知" href="/messages" />
+              <ToriMiniCard icon={<PenLine size={18} className="text-[#e47a94]" />} label={t('daily.mini_card_mistakes_label', lang)} detail={t('daily.mini_card_mistakes_detail', lang)} href="/mine/dictation-mistakes" />
+              <ToriMiniCard icon={<Mic size={18} className="text-[#e47a94]" />} label={t('daily.mini_card_recordings_label', lang)} detail={t('daily.mini_card_recordings_detail', lang)} href="/mine/recordings" />
+              <ToriMiniCard icon={<Sparkles size={18} className="text-[#e8a87c]" />} label={t('daily.mini_card_achievements_label', lang)} detail={t('daily.mini_card_achievements_detail', lang)} href="/achievement/card" />
+              <ToriMiniCard icon={<FileText size={18} className="text-[#81b5a1]" />} label={t('daily.mini_card_messages_label', lang)} detail={t('daily.mini_card_messages_detail', lang)} href="/messages" />
             </div>
           </div>
           {/* Quick tools — mobile only, desktop sees it in aside */}
           <div className="lg:hidden">
-            <ToriSectionHeader title="快捷工具" className="mb-2.5" />
+            <ToriSectionHeader title={t('daily.quick_tools_section_title', lang)} className="mb-2.5" />
             <div className="grid grid-cols-4 gap-2">
               {quickTools.map((tool) => (
                 <Link key={tool.href} href={tool.href} onClick={feedbackClick}
@@ -368,8 +377,8 @@ export default function DailyPage() {
           {/* Progress bar — mobile only */}
           <ToriCard className="lg:hidden">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[13px] text-[var(--text-muted)]">今日进度</span>
-              <span className="text-[12px] text-[var(--text-muted)]">{plan.completedCount}/{plan.totalCount} 已完成</span>
+              <span className="text-[13px] text-[var(--text-muted)]">{t('daily.progress_label', lang)}</span>
+              <span className="text-[12px] text-[var(--text-muted)]">{plan.completedCount}/{plan.totalCount} {t('daily.progress_completed_suffix', lang)}</span>
             </div>
             <div className="w-full bg-[var(--border-default)] rounded-full h-2">
               <div className="h-2 rounded-full bg-gradient-to-r from-[#b49ccf] to-[#e47a94] transition-all duration-500" style={{ width: `${Math.max(4, progressPercent)}%` }} />
@@ -380,7 +389,7 @@ export default function DailyPage() {
               href="/admin"
               className="flex items-center justify-center gap-2 w-full py-3 rounded-2xl border border-dashed border-[#d9cbc3] text-[12px] text-[var(--text-muted)] hover:border-[#e47a94] hover:text-[#e47a94] transition-colors"
             >
-              <span>⚙</span> 管理后台
+              <span>⚙</span> {t('daily.admin_button', lang)}
             </Link>
           )}
         </div>
@@ -388,14 +397,14 @@ export default function DailyPage() {
       aside={
         <div className="space-y-4 pt-4">
           <div className="rounded-2xl bg-[var(--bg-card)] border border-[var(--border-default)] p-4 shadow-[0_2px_8px_rgba(92,64,38,0.04)]">
-            <p className="text-[13px] font-bold text-[var(--text-primary)] mb-3">今日进度</p>
+            <p className="text-[13px] font-bold text-[var(--text-primary)] mb-3">{t('daily.aside_progress_title', lang)}</p>
             <div className="w-full bg-[var(--border-default)] rounded-full h-2 mb-2">
               <div className="h-2 rounded-full bg-gradient-to-r from-[#b49ccf] to-[#e47a94] transition-all duration-500" style={{ width: `${Math.max(4, progressPercent)}%` }} />
             </div>
-            <p className="text-[12px] text-[var(--text-muted)]">{plan.completedCount}/{plan.totalCount} 已完成</p>
+            <p className="text-[12px] text-[var(--text-muted)]">{plan.completedCount}/{plan.totalCount} {t('daily.aside_progress_completed_suffix', lang)}</p>
           </div>
           <div className="rounded-2xl bg-[var(--bg-card)] border border-[var(--border-default)] p-4 shadow-[0_2px_8px_rgba(92,64,38,0.04)]">
-            <p className="text-[13px] font-bold text-[var(--text-primary)] mb-3">快捷工具</p>
+            <p className="text-[13px] font-bold text-[var(--text-primary)] mb-3">{t('daily.aside_quick_tools_title', lang)}</p>
             <div className="grid grid-cols-2 gap-2">
               {quickTools.map((tool) => (
                 <Link key={tool.href} href={tool.href} onClick={feedbackClick}
@@ -409,8 +418,8 @@ export default function DailyPage() {
           <div className="rounded-2xl bg-gradient-to-br from-[#fff0f5] to-[#eee7ff] border border-[var(--border-default)] p-4 shadow-[0_2px_8px_rgba(92,64,38,0.04)] flex items-center gap-3">
             <Flame size={22} className="text-[#e47a94] shrink-0" />
             <div>
-              <p className="text-[13px] font-bold text-[var(--text-primary)]">继续学习</p>
-              <p className="text-[11px] text-[var(--text-muted)] mt-0.5">每天打卡，积累最重要</p>
+              <p className="text-[13px] font-bold text-[var(--text-primary)]">{t('daily.aside_continue_title', lang)}</p>
+              <p className="text-[11px] text-[var(--text-muted)] mt-0.5">{t('daily.aside_continue_subtitle', lang)}</p>
             </div>
           </div>
         </div>
@@ -423,12 +432,13 @@ export default function DailyPage() {
 // ── Shared hero section (shown to ALL users) ──
 
 function HeroSection() {
+  const { lang } = useLang();
   return (
     <>
       <div className="rounded-[32px] overflow-hidden shadow-[0_26px_68px_rgba(78,52,46,.18)] bg-white border border-white/90">
         <Image
           src="/images/tori-hero-daily.webp"
-          alt="Tori 的韩语日记 — 用喜欢的内容学韩语"
+          alt={t('daily.hero_image_alt', lang)}
           width={800}
           height={400}
           priority
@@ -441,7 +451,7 @@ function HeroSection() {
           href="/korea/kpop/news"
           className="flex items-center justify-center h-12 rounded-full bg-[var(--bg-card)] text-[var(--text-secondary)] font-extrabold text-[14px] border border-[var(--border-default)] shadow-[0_10px_26px_rgba(78,52,46,.07)] active:scale-[0.97] transition-transform"
         >
-          看韩娱热帖
+          {t('daily.hero_kpop_news_button', lang)}
         </Link>
       </div>
     </>
@@ -451,13 +461,14 @@ function HeroSection() {
 // ── Guest view ──
 
 function GuestDaily() {
+  const { lang } = useLang();
   return (
     <div className="py-4 space-y-4 max-w-2xl mx-auto md:max-w-3xl">
       <HeroSection />
 
       <div className="flex items-center justify-between mt-5 mb-3 px-0.5">
-        <h2 className="text-[18px] font-bold text-[var(--text-primary)] tracking-[-.3px]">今日继续</h2>
-        <span className="text-[12px] font-extrabold text-[#f0799b]">上次进度</span>
+        <h2 className="text-[18px] font-bold text-[var(--text-primary)] tracking-[-.3px]">{t('daily.guest_continue_title', lang)}</h2>
+        <span className="text-[12px] font-extrabold text-[#f0799b]">{t('daily.guest_last_progress_label', lang)}</span>
       </div>
 
       <div
@@ -466,8 +477,8 @@ function GuestDaily() {
         <div className="absolute -right-7 -top-8 w-[120px] h-[120px] rounded-full bg-[rgba(255,127,168,.07)]" />
         <div className="w-[60px] h-[60px] rounded-3xl bg-[#201815] text-white grid place-items-center text-[18px] font-extrabold relative z-[1]">影</div>
         <div className="relative z-[1] flex-1 min-w-0">
-          <h3 className="text-[17px] font-bold text-[var(--text-primary)] leading-tight">影音跟读</h3>
-          <p className="mt-1.5 text-[13px] text-[var(--text-muted)] leading-snug">优化中，即将回归</p>
+          <h3 className="text-[17px] font-bold text-[var(--text-primary)] leading-tight">{t('daily.guest_shadowing_title', lang)}</h3>
+          <p className="mt-1.5 text-[13px] text-[var(--text-muted)] leading-snug">{t('daily.guest_shadowing_subtitle', lang)}</p>
         </div>
       </div>
 
@@ -478,22 +489,22 @@ function GuestDaily() {
         <div className="absolute -right-7 -top-8 w-[120px] h-[120px] rounded-full bg-[rgba(174,227,216,.18)]" />
         <div className="w-[60px] h-[60px] rounded-3xl bg-[#fff1f6] text-[#f0799b] grid place-items-center text-[18px] font-extrabold relative z-[1]">复</div>
         <div className="relative z-[1] flex-1 min-w-0">
-          <h3 className="text-[17px] font-bold text-[var(--text-primary)] leading-tight">今日复习</h3>
-          <p className="mt-1.5 text-[13px] text-[var(--text-muted)] leading-snug">打开闪卡系统，复习你收藏的单词和句子。</p>
+          <h3 className="text-[17px] font-bold text-[var(--text-primary)] leading-tight">{t('daily.guest_review_title', lang)}</h3>
+          <p className="mt-1.5 text-[13px] text-[var(--text-muted)] leading-snug">{t('daily.guest_review_subtitle', lang)}</p>
         </div>
         <span className="ml-auto text-[#c7b7b0] text-2xl font-extrabold relative z-[1]">›</span>
       </Link>
 
       <div className="flex items-center justify-between mt-5 mb-3 px-0.5">
-        <h2 className="text-[18px] font-bold text-[var(--text-primary)] tracking-[-.3px]">快捷工具</h2>
-        <span className="text-[12px] font-extrabold text-[#f0799b]">常用</span>
+        <h2 className="text-[18px] font-bold text-[var(--text-primary)] tracking-[-.3px]">{t('daily.guest_quick_tools_title', lang)}</h2>
+        <span className="text-[12px] font-extrabold text-[#f0799b]">{t('daily.guest_quick_tools_label', lang)}</span>
       </div>
 
       <div className="grid grid-cols-3 gap-2.5">
         {([
-          { label: '内容拆解', sub: '粘贴韩文拆词句', href: '/ai/analyze', ch: '拆', bg: '#fff0f5', color: '#f0799b', deco: 'rgba(255,127,168,.07)' },
-          { label: '听写练习', sub: '听一句输入韩文', href: '/dictation', ch: '听', bg: '#fff0f5', color: '#f0799b', deco: 'rgba(174,227,216,.12)' },
-          { label: '闪卡复习', sub: '轻量三档复习', href: '/review', ch: '卡', bg: '#fff0f5', color: '#f0799b', deco: 'rgba(174,227,216,.12)' },
+          { labelKey: 'daily.guest_tool_analyze_label', subKey: 'daily.guest_tool_analyze_sub', href: '/ai/analyze', ch: '拆', bg: '#fff0f5', color: '#f0799b', deco: 'rgba(255,127,168,.07)' },
+          { labelKey: 'daily.guest_tool_dictation_label', subKey: 'daily.guest_tool_dictation_sub', href: '/dictation', ch: '听', bg: '#fff0f5', color: '#f0799b', deco: 'rgba(174,227,216,.12)' },
+          { labelKey: 'daily.guest_tool_review_label', subKey: 'daily.guest_tool_review_sub', href: '/review', ch: '卡', bg: '#fff0f5', color: '#f0799b', deco: 'rgba(174,227,216,.12)' },
         ] as const).map((tool) => (
           <Link
             key={tool.href}
@@ -502,19 +513,19 @@ function GuestDaily() {
           >
             <div className="absolute -right-4 -top-4 w-[70px] h-[70px] rounded-full" style={{ background: tool.deco }} />
             <div className="w-[34px] h-[34px] rounded-[15px] grid place-items-center text-[14px] font-extrabold relative z-[1]" style={{ background: tool.bg, color: tool.color }}>{tool.ch}</div>
-            <h3 className="mt-2.5 mb-1 text-[14px] font-bold text-[var(--text-primary)] leading-tight relative z-[1]">{tool.label}</h3>
-            <p className="text-[11px] text-[var(--text-muted)] leading-snug relative z-[1]">{tool.sub}</p>
+            <h3 className="mt-2.5 mb-1 text-[14px] font-bold text-[var(--text-primary)] leading-tight relative z-[1]">{t(tool.labelKey, lang)}</h3>
+            <p className="text-[11px] text-[var(--text-muted)] leading-snug relative z-[1]">{t(tool.subKey, lang)}</p>
           </Link>
         ))}
       </div>
 
       <div className="mt-5 rounded-[28px] p-4 bg-[var(--bg-card)] border border-[var(--border-default)] shadow-[0_16px_40px_rgba(78,52,46,.10)] text-center space-y-3">
-        <p className="text-[13px] text-[var(--text-muted)]">登录后可以保存学习记录，解锁完整每日计划。</p>
+        <p className="text-[13px] text-[var(--text-muted)]">{t('daily.guest_login_prompt', lang)}</p>
         <Link
           href="/auth/login?redirect=/daily"
           className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#e47a94] text-white rounded-xl text-[13px] font-medium active:scale-95 transition-transform"
         >
-          <LogIn size={14} />登录
+          <LogIn size={14} />{t('daily.guest_login_button', lang)}
         </Link>
       </div>
     </div>

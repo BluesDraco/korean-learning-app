@@ -10,6 +10,8 @@ import { playSuccess, playError } from '@/lib/soundManager';
 import ProgressivePhonetics from '@/components/ProgressivePhonetics';
 import SyllableComposer from '@/components/SyllableComposer';
 import PhoneticsWelcome, { hasSeenWelcome } from '@/components/PhoneticsWelcome';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 
 type Tab = 'vowel' | 'consonant' | 'batchim';
 type Mode = 'browse' | 'quiz';
@@ -79,30 +81,30 @@ function generateQuiz(letters: PhoneticLetter[], quizType: QuizType = 'letter-to
 }
 
 const tabConfig: { key: Tab; label: string }[] = [
-  { key: 'vowel', label: '元音' },
-  { key: 'consonant', label: '辅音' },
-  { key: 'batchim', label: '收音' },
+  { key: 'vowel', label: 'phonetics.tab_vowel' },
+  { key: 'consonant', label: 'phonetics.tab_consonant' },
+  { key: 'batchim', label: 'phonetics.tab_batchim' },
 ];
 
-const subtypeLabels: Record<string, string> = {
-  basic: '基础',
-  compound: '复合',
-  double: '紧音',
-  stop: '塞音',
-  nasal: '鼻音',
-  liquid: '流音',
+const subtypeKeys: Record<string, string> = {
+  basic: 'phonetics.subtype_basic',
+  compound: 'phonetics.subtype_compound',
+  double: 'phonetics.subtype_double',
+  stop: 'phonetics.subtype_stop',
+  nasal: 'phonetics.subtype_nasal',
+  liquid: 'phonetics.subtype_liquid',
 };
 
-function getSubtypeLabel(subtype: string, tab: Tab): string {
+function getSubtypeLabel(subtype: string, tab: Tab, lang: import('@/lib/i18n').Lang): string {
   if (tab === 'vowel') {
-    if (subtype === 'basic') return '基础元音';
-    if (subtype === 'compound') return '复合元音';
+    if (subtype === 'basic') return t('phonetics.subtype_label_basic_vowel', lang);
+    if (subtype === 'compound') return t('phonetics.subtype_label_compound_vowel', lang);
   }
   if (tab === 'consonant') {
-    if (subtype === 'basic') return '基础辅音';
-    if (subtype === 'double') return '紧音';
+    if (subtype === 'basic') return t('phonetics.subtype_label_basic_consonant', lang);
+    if (subtype === 'double') return t('phonetics.subtype_label_double_consonant', lang);
   }
-  return subtypeLabels[subtype] || subtype;
+  return t(subtypeKeys[subtype] ?? subtype, lang);
 }
 
 const CONSONANT_DEMO: Record<string, string> = {
@@ -361,6 +363,7 @@ function generateRulesQuiz(categoryId?: string) {
 }
 
 export default function PhoneticsPage() {
+  const { lang } = useLang();
   const [showWelcome, setShowWelcome] = useState(false);
   const [welcomeChecked, setWelcomeChecked] = useState(false);
   const [mainTab, setMainTab] = useState<MainTab>('progressive');
@@ -484,11 +487,11 @@ export default function PhoneticsPage() {
       <div className="py-4 space-y-3 max-w-3xl mx-auto">
       <div>
         <Link href="/learning" className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] mb-2">
-          <ArrowLeft size={16} /> 返回
+          <ArrowLeft size={16} /> {t('phonetics.back_button', lang)}
         </Link>
-        <h1 className="text-2xl font-bold text-[var(--text-primary)]">韩语40音</h1>
+        <h1 className="text-2xl font-bold text-[var(--text-primary)]">{t('phonetics.page_title', lang)}</h1>
         <p className="text-[var(--text-secondary)] text-sm mt-1">
-          21个元音 + 19个辅音，科学分步学习。15分钟看懂所有韩文 — 这是你韩语学习的地基模块
+          {t('phonetics.page_subtitle', lang)}
         </p>
       </div>
 
@@ -508,7 +511,7 @@ export default function PhoneticsPage() {
               : 'text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)]'
           }`}
         >
-          分步学习
+          {t('phonetics.main_tab_progressive', lang)}
         </button>
         <button
           onClick={() => handleMainTabChange('alphabet')}
@@ -518,7 +521,7 @@ export default function PhoneticsPage() {
               : 'text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)]'
           }`}
         >
-          字母表
+          {t('phonetics.main_tab_alphabet', lang)}
         </button>
         <button
           onClick={() => handleMainTabChange('rules')}
@@ -528,7 +531,7 @@ export default function PhoneticsPage() {
               : 'text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)]'
           }`}
         >
-          连读规则
+          {t('phonetics.main_tab_rules', lang)}
         </button>
         <button
           onClick={() => handleMainTabChange('composer')}
@@ -538,7 +541,7 @@ export default function PhoneticsPage() {
               : 'text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)]'
           }`}
         >
-          音节拼装
+          {t('phonetics.main_tab_composer', lang)}
         </button>
         <button
           onClick={() => handleMainTabChange('practice')}
@@ -548,7 +551,7 @@ export default function PhoneticsPage() {
               : 'text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)]'
           }`}
         >
-          练习
+          {t('phonetics.main_tab_practice', lang)}
         </button>
       </div>
 
@@ -560,17 +563,17 @@ export default function PhoneticsPage() {
         <>
           {/* Sub-tab switcher */}
           <div className="flex gap-2 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-1.5">
-            {tabConfig.map((t) => (
+            {tabConfig.map((tc) => (
               <button
-                key={t.key}
-                onClick={() => { setTab(t.key); setMode('browse'); setQuizState(null); }}
+                key={tc.key}
+                onClick={() => { setTab(tc.key); setMode('browse'); setQuizState(null); }}
                 className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                  tab === t.key
+                  tab === tc.key
                     ? 'bg-[var(--pink-primary)] text-white shadow-sm'
                     : 'text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)]'
                 }`}
               >
-                {t.label}
+                {t(tc.label, lang)}
               </button>
             ))}
           </div>
@@ -584,7 +587,7 @@ export default function PhoneticsPage() {
                   <div key={subtype}>
                     <h3 className="text-sm font-medium text-[var(--text-muted)] mb-2 flex items-center gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-[var(--pink-primary)]" />
-                      {getSubtypeLabel(subtype, tab)}
+                      {getSubtypeLabel(subtype, tab, lang)}
                       <span className="text-[var(--text-placeholder)] font-normal">({letters.length}个)</span>
                     </h3>
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
@@ -635,7 +638,7 @@ export default function PhoneticsPage() {
                         </span>
                         {letter.type === 'batchim' && (
                           <span className="text-xs px-1.5 py-0.5 rounded bg-[var(--purple-soft)]/10 text-[var(--purple-soft)]">
-                            {subtypeLabels[letter.subtype]}
+                            {t(subtypeKeys[letter.subtype] ?? letter.subtype, lang)}
                           </span>
                         )}
                       </div>
@@ -655,25 +658,25 @@ export default function PhoneticsPage() {
 
               {/* Quiz CTA */}
               <div className="bg-gradient-to-r from-[var(--pink-primary)]/10 to-[var(--purple-soft)]/10 border border-[var(--pink-primary)]/20 rounded-2xl p-6 text-center">
-                <p className="text-[var(--text-primary)] font-medium mb-1">准备测试一下吗？</p>
-                <p className="text-sm text-[var(--text-secondary)] mb-4">选择题型，检验你的掌握程度</p>
+                <p className="text-[var(--text-primary)] font-medium mb-1">{t('phonetics.quiz_cta_title', lang)}</p>
+                <p className="text-sm text-[var(--text-secondary)] mb-4">{t('phonetics.quiz_cta_subtitle', lang)}</p>
                 {/* Quiz type selector */}
                 <div className="flex gap-2 mb-4">
                   {([
-                    { key: 'letter-to-roman', label: '看字选音' },
-                    { key: 'roman-to-letter', label: '看音选字' },
-                    { key: 'listen-to-letter', label: '听音选字' },
-                  ] as { key: QuizType; label: string }[]).map((t) => (
+                    { key: 'letter-to-roman', labelKey: 'phonetics.quiz_type_letter_to_roman' },
+                    { key: 'roman-to-letter', labelKey: 'phonetics.quiz_type_roman_to_letter' },
+                    { key: 'listen-to-letter', labelKey: 'phonetics.quiz_type_listen_to_letter' },
+                  ] as { key: QuizType; labelKey: string }[]).map((qt) => (
                     <button
-                      key={t.key}
-                      onClick={() => setQuizType(t.key)}
+                      key={qt.key}
+                      onClick={() => setQuizType(qt.key)}
                       className={`flex-1 py-2 rounded-xl text-sm font-medium transition-all ${
-                        quizType === t.key
+                        quizType === qt.key
                           ? 'bg-[var(--pink-primary)] text-white'
                           : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:border-[var(--pink-primary)]/30'
                       }`}
                     >
-                      {t.label}
+                      {t(qt.labelKey, lang)}
                     </button>
                   ))}
                 </div>
@@ -682,7 +685,7 @@ export default function PhoneticsPage() {
                   className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--pink-primary)] hover:bg-[var(--pink-primary)] text-white rounded-xl font-medium transition-colors active:scale-95"
                 >
                   <Play size={16} />
-                  开始测验
+                  {t('phonetics.start_quiz_button', lang)}
                 </button>
               </div>
 
@@ -690,28 +693,28 @@ export default function PhoneticsPage() {
               {tab === 'batchim' && (
                 <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-5 space-y-4">
                   <div>
-                    <p className="font-medium text-[var(--text-primary)]">收音归类练习</p>
-                    <p className="text-sm text-[var(--text-secondary)] mt-0.5">给出一个收音字母，选出它发哪个代表音</p>
+                    <p className="font-medium text-[var(--text-primary)]">{t('phonetics.batchim_quiz_title', lang)}</p>
+                    <p className="text-sm text-[var(--text-secondary)] mt-0.5">{t('phonetics.batchim_quiz_subtitle', lang)}</p>
                   </div>
                   {!batchimQuizState ? (
                     <button
                       onClick={startBatchimQuiz}
                       className="w-full py-2.5 bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] text-[var(--text-primary)] rounded-xl text-sm font-medium transition-colors"
                     >
-                      开始收音归类
+                      {t('phonetics.batchim_quiz_start_button', lang)}
                     </button>
                   ) : batchimQuizState.currentIdx >= batchimQuizState.questions.length ? (
                     <div className="text-center space-y-3">
                       <p className="text-2xl font-bold text-[var(--pink-primary)]">{batchimQuizState.correctCount} / {batchimQuizState.questions.length}</p>
-                      <button onClick={() => { setBatchimQuizState(null); }} className="px-5 py-2 bg-[var(--pink-primary)] text-white rounded-xl text-sm font-medium">再来一次</button>
+                      <button onClick={() => { setBatchimQuizState(null); }} className="px-5 py-2 bg-[var(--pink-primary)] text-white rounded-xl text-sm font-medium">{t('phonetics.quiz_retry_button', lang)}</button>
                     </div>
                   ) : (() => {
                     const bq = batchimQuizState.questions[batchimQuizState.currentIdx];
                     return (
                       <div className="space-y-3">
                         <div className="flex items-center justify-between text-xs text-[var(--text-muted)]">
-                          <span>第 {batchimQuizState.currentIdx + 1} / {batchimQuizState.questions.length} 题</span>
-                          <span>正确 {batchimQuizState.correctCount}</span>
+                          <span>{t('phonetics.quiz_progress', lang).replace('{n}', String(batchimQuizState.currentIdx + 1)).replace('{total}', String(batchimQuizState.questions.length))}</span>
+                          <span>{t('phonetics.quiz_correct_count', lang).replace('{n}', String(batchimQuizState.correctCount))}</span>
                         </div>
                         <div className="text-center py-3">
                           <span className="text-4xl font-bold text-[var(--text-primary)] bg-[var(--bg-input)] px-6 py-3 rounded-xl inline-block" style={{ fontFamily: "'system-ui', 'sans-serif'" }}>
@@ -744,14 +747,14 @@ export default function PhoneticsPage() {
                               : 'bg-[var(--color-danger)]/10 text-[var(--text-primary)]'
                           }`}>
                             {batchimQuizState.selectedAnswer === bq.correctAnswer
-                              ? <><span className="text-[var(--mint-soft)] font-medium">正确！</span>「{bq.letter}」属于 [{bq.correctAnswer}] 代表音类</>
-                              : <><span className="text-[var(--color-danger)] font-medium">不对。</span>「{bq.letter}」的代表音是 [{bq.correctAnswer}]，不是 [{batchimQuizState.selectedAnswer}]</>
+                              ? <><span className="text-[var(--mint-soft)] font-medium">{t('phonetics.feedback_correct', lang)}</span>「{bq.letter}」{t('phonetics.batchim_correct_explanation', lang).replace('{sound}', bq.correctAnswer)}</>
+                              : <><span className="text-[var(--color-danger)] font-medium">{t('phonetics.feedback_wrong', lang)}</span>「{bq.letter}」{t('phonetics.batchim_wrong_explanation', lang).replace('{correct}', bq.correctAnswer).replace('{wrong}', batchimQuizState.selectedAnswer)}</>
                             }
                           </div>
                         )}
                         {batchimQuizState.selectedAnswer !== null && (
                           <button onClick={handleBatchimQuizNext} className="w-full py-2.5 bg-[var(--pink-primary)] text-white rounded-xl text-sm font-medium">
-                            {batchimQuizState.currentIdx + 1 >= batchimQuizState.questions.length ? '查看结果' : '下一题'}
+                            {batchimQuizState.currentIdx + 1 >= batchimQuizState.questions.length ? t('phonetics.quiz_view_results_button', lang) : t('phonetics.quiz_next_button', lang)}
                           </button>
                         )}
                       </div>
@@ -767,17 +770,17 @@ export default function PhoneticsPage() {
               {/* Quiz header */}
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-[var(--text-primary)]">
-                  第 {quizState.currentIdx + 1} / {quizState.questions.length} 题
+                  {t('phonetics.quiz_progress', lang).replace('{n}', String(quizState.currentIdx + 1)).replace('{total}', String(quizState.questions.length))}
                 </span>
                 <span className="text-xs text-[var(--text-muted)]">
-                  正确: <span className="text-[var(--mint-soft)] font-medium">{quizState.correctCount}</span>
+                  {t('phonetics.quiz_correct_label', lang)} <span className="text-[var(--mint-soft)] font-medium">{quizState.correctCount}</span>
                 </span>
                 <button
                   onClick={resetQuiz}
                   className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] flex items-center gap-1"
                 >
                   <RotateCcw size={12} />
-                  退出
+                  {t('phonetics.quiz_exit_button', lang)}
                 </button>
               </div>
 
@@ -800,7 +803,7 @@ export default function PhoneticsPage() {
                     <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-3xl p-8 text-center space-y-6">
                       <Trophy size={48} className="text-[var(--peach-soft)] mx-auto" />
                       <div>
-                        <h2 className="text-xl font-bold text-[var(--text-primary)]">测验完成！</h2>
+                        <h2 className="text-xl font-bold text-[var(--text-primary)]">{t('phonetics.quiz_complete_title', lang)}</h2>
                         <p className="text-[var(--text-secondary)] mt-1">
                           正确 {quizState.correctCount} / {quizState.questions.length}
                         </p>
@@ -813,13 +816,13 @@ export default function PhoneticsPage() {
                           onClick={startQuiz}
                           className="px-5 py-2.5 bg-[var(--pink-primary)] hover:bg-[var(--pink-primary)] text-white rounded-xl text-sm font-medium transition-colors"
                         >
-                          再来一次
+                          {t('phonetics.quiz_complete_retry', lang)}
                         </button>
                         <button
                           onClick={resetQuiz}
                           className="px-5 py-2.5 bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] text-[var(--text-primary)] rounded-xl text-sm font-medium transition-colors"
                         >
-                          返回浏览
+                          {t('phonetics.quiz_back_to_browse', lang)}
                         </button>
                       </div>
                     </div>
@@ -837,7 +840,7 @@ export default function PhoneticsPage() {
                         >
                           <Volume2 size={32} className="text-[var(--pink-primary)]" />
                         </button>
-                        <p className="text-xs text-[var(--text-muted)]">点击重播</p>
+                        <p className="text-xs text-[var(--text-muted)]">{t('phonetics.quiz_replay_hint', lang)}</p>
                       </div>
                     )}
                     {/* Letter display for sound questions */}
@@ -912,12 +915,12 @@ export default function PhoneticsPage() {
                       }`}>
                         {quizType === 'roman-to-letter' ? (
                           quizState.selectedAnswer === q.correctAnswer
-                            ? <><span className="text-[var(--mint-soft)] font-medium">正确！</span>[{getQuizRomanization(q.item)}] 对应的字母是「{getQuizLetter(q.item)}」</>
-                            : <><span className="text-[var(--color-danger)] font-medium">不对。</span>[{getQuizRomanization(q.item)}] 对应的字母是「{getQuizLetter(q.item)}」，不是「{quizState.selectedAnswer}」</>
+                            ? <><span className="text-[var(--mint-soft)] font-medium">{t('phonetics.feedback_correct', lang)}</span>[{getQuizRomanization(q.item)}] 对应的字母是「{getQuizLetter(q.item)}」</>
+                            : <><span className="text-[var(--color-danger)] font-medium">{t('phonetics.feedback_wrong', lang)}</span>[{getQuizRomanization(q.item)}] 对应的字母是「{getQuizLetter(q.item)}」，不是「{quizState.selectedAnswer}」</>
                         ) : (
                           quizState.selectedAnswer === q.correctAnswer
-                            ? <><span className="text-[var(--mint-soft)] font-medium">正确！</span>「{getQuizLetter(q.item)}」的读音是 [{getQuizRomanization(q.item)}]</>
-                            : <><span className="text-[var(--color-danger)] font-medium">不对。</span>「{getQuizLetter(q.item)}」的读音是 [{getQuizRomanization(q.item)}]，不是 [{quizState.selectedAnswer}]</>
+                            ? <><span className="text-[var(--mint-soft)] font-medium">{t('phonetics.feedback_correct', lang)}</span>「{getQuizLetter(q.item)}」的读音是 [{getQuizRomanization(q.item)}]</>
+                            : <><span className="text-[var(--color-danger)] font-medium">{t('phonetics.feedback_wrong', lang)}</span>「{getQuizLetter(q.item)}」的读音是 [{getQuizRomanization(q.item)}]，不是 [{quizState.selectedAnswer}]</>
                         )}
                       </div>
                     )}
@@ -928,13 +931,13 @@ export default function PhoneticsPage() {
                           className="text-xs text-[var(--text-secondary)] hover:text-[var(--pink-primary)] flex items-center gap-1"
                         >
                           <Volume2 size={12} />
-                          再听一次
+                          {t('phonetics.quiz_relisten_button', lang)}
                         </button>
                         <button
                           onClick={handleQuizNext}
                           className="flex items-center gap-1.5 px-5 py-2.5 bg-[var(--pink-primary)] hover:bg-[var(--pink-primary)] text-white rounded-xl text-sm font-medium transition-colors"
                         >
-                          下一题
+                          {t('phonetics.quiz_next_button', lang)}
                           <ArrowRight size={14} />
                         </button>
                       </div>
@@ -961,6 +964,7 @@ export default function PhoneticsPage() {
 }
 
 function PracticeTab() {
+  const { lang } = useLang();
   const allLetters = [...vowels, ...consonants, ...batchimSounds];
 
   type PracticeMode = 'letter-to-roman' | 'listen-to-letter' | 'rules' | null;
@@ -994,30 +998,30 @@ function PracticeTab() {
   const backToMenu = () => setActiveMode(null);
 
   const practiceCards = [
-    { mode: 'letter-to-roman' as PracticeMode, icon: '👁', title: '看字选音', desc: '看韩文字母，选出正确的罗马音' },
-    { mode: 'listen-to-letter' as PracticeMode, icon: '🔊', title: '听音选字', desc: '听发音，选出对应的韩文字母' },
-    { mode: 'rules' as PracticeMode, icon: '🔗', title: '连读发音', desc: '给出韩文词，选出正确的实际发音' },
+    { mode: 'letter-to-roman' as PracticeMode, icon: '👁', titleKey: 'phonetics.practice_card_letter_title', descKey: 'phonetics.practice_card_letter_desc' },
+    { mode: 'listen-to-letter' as PracticeMode, icon: '🔊', titleKey: 'phonetics.practice_card_listen_title', descKey: 'phonetics.practice_card_listen_desc' },
+    { mode: 'rules' as PracticeMode, icon: '🔗', titleKey: 'phonetics.practice_card_rules_title', descKey: 'phonetics.practice_card_rules_desc' },
   ];
 
   // ── 选题型界面 ──
   if (activeMode === null) {
     return (
       <div className="space-y-3 pb-24">
-        <p className="text-sm text-[var(--text-secondary)]">选择一个练习开始</p>
+        <p className="text-sm text-[var(--text-secondary)]">{t('phonetics.practice_menu_hint', lang)}</p>
         {practiceCards.map((c) => (
           <div key={c.mode as string} className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <span className="text-2xl">{c.icon}</span>
               <div>
-                <p className="font-medium text-[var(--text-primary)]">{c.title}</p>
-                <p className="text-xs text-[var(--text-secondary)] mt-0.5">{c.desc}</p>
+                <p className="font-medium text-[var(--text-primary)]">{t(c.titleKey, lang)}</p>
+                <p className="text-xs text-[var(--text-secondary)] mt-0.5">{t(c.descKey, lang)}</p>
               </div>
             </div>
             <button
               onClick={() => startMode(c.mode)}
               className="shrink-0 px-4 py-2 bg-[var(--pink-primary)] text-white rounded-xl text-sm font-medium active:scale-95 transition-transform"
             >
-              开始
+              {t('phonetics.practice_start_button', lang)}
             </button>
           </div>
         ))}
@@ -1034,12 +1038,12 @@ function PracticeTab() {
           <button onClick={backToMenu} className="text-sm text-[var(--text-secondary)] flex items-center gap-1"><ArrowLeft size={14} /> 返回</button>
           <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 text-center space-y-3">
             <Trophy size={40} className="text-[var(--peach-soft)] mx-auto" />
-            <p className="text-lg font-bold text-[var(--text-primary)]">练习完成！</p>
+            <p className="text-lg font-bold text-[var(--text-primary)]">{t('phonetics.practice_complete_title', lang)}</p>
             <p className="text-3xl font-extrabold text-[var(--pink-primary)]">{acc}%</p>
-            <p className="text-sm text-[var(--text-secondary)]">{alphaCorrect} / {alphaQ.length} 正确</p>
+            <p className="text-sm text-[var(--text-secondary)]">{alphaCorrect} / {alphaQ.length} {t('phonetics.practice_correct_suffix', lang)}</p>
             <div className="flex gap-2 justify-center">
-              <button onClick={() => startMode(activeMode)} className="px-4 py-2 bg-[var(--pink-primary)] text-white rounded-xl text-sm font-medium">再来一次</button>
-              <button onClick={backToMenu} className="px-4 py-2 bg-[var(--bg-input)] text-[var(--text-primary)] rounded-xl text-sm font-medium">换题型</button>
+              <button onClick={() => startMode(activeMode)} className="px-4 py-2 bg-[var(--pink-primary)] text-white rounded-xl text-sm font-medium">{t('phonetics.practice_retry_button', lang)}</button>
+              <button onClick={backToMenu} className="px-4 py-2 bg-[var(--bg-input)] text-[var(--text-primary)] rounded-xl text-sm font-medium">{t('phonetics.practice_change_type_button', lang)}</button>
             </div>
           </div>
         </div>
@@ -1052,7 +1056,7 @@ function PracticeTab() {
         <div className="flex items-center justify-between">
           <button onClick={backToMenu} className="text-sm text-[var(--text-secondary)] flex items-center gap-1"><ArrowLeft size={14} /> 返回</button>
           <span className="text-sm text-[var(--text-muted)]">{alphaIdx + 1} / {alphaQ.length}</span>
-          <span className="text-xs text-[var(--text-muted)]">正确 {alphaCorrect}</span>
+          <span className="text-xs text-[var(--text-muted)]">{t('phonetics.quiz_correct_count', lang).replace('{n}', String(alphaCorrect))}</span>
         </div>
         <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 space-y-5">
           {q.isListen ? (
@@ -1061,7 +1065,7 @@ function PracticeTab() {
                 className="w-20 h-20 rounded-2xl bg-[var(--pink-primary)]/10 border-2 border-[var(--pink-primary)]/30 flex items-center justify-center mx-auto hover:bg-[var(--pink-primary)]/20 transition-colors">
                 <Volume2 size={32} className="text-[var(--pink-primary)]" />
               </button>
-              <p className="text-xs text-[var(--text-muted)]">点击播放</p>
+              <p className="text-xs text-[var(--text-muted)]">{t('phonetics.practice_click_play_hint', lang)}</p>
             </div>
           ) : q.prompt.includes('字母') ? (
             <div className="text-center flex flex-col items-center gap-2">
@@ -1115,12 +1119,12 @@ function PracticeTab() {
             }`}>
               {q.isListen ? (
                 alphaAnswer === q.correctAnswer
-                  ? <><span className="text-[var(--mint-soft)] font-medium">正确！</span>这个音对应的字母是「{getQuizLetter(q.item)}」[{getQuizRomanization(q.item)}]</>
-                  : <><span className="text-[var(--color-danger)] font-medium">不对。</span>正确字母是「{getQuizLetter(q.item)}」[{getQuizRomanization(q.item)}]，不是「{alphaAnswer}」</>
+                  ? <><span className="text-[var(--mint-soft)] font-medium">{t('phonetics.feedback_correct', lang)}</span>这个音对应的字母是「{getQuizLetter(q.item)}」[{getQuizRomanization(q.item)}]</>
+                  : <><span className="text-[var(--color-danger)] font-medium">{t('phonetics.feedback_wrong', lang)}</span>正确字母是「{getQuizLetter(q.item)}」[{getQuizRomanization(q.item)}]，不是「{alphaAnswer}」</>
               ) : (
                 alphaAnswer === q.correctAnswer
-                  ? <><span className="text-[var(--mint-soft)] font-medium">正确！</span>「{getQuizLetter(q.item)}」的读音是 [{getQuizRomanization(q.item)}]</>
-                  : <><span className="text-[var(--color-danger)] font-medium">不对。</span>「{getQuizLetter(q.item)}」的读音是 [{getQuizRomanization(q.item)}]，不是 [{alphaAnswer}]</>
+                  ? <><span className="text-[var(--mint-soft)] font-medium">{t('phonetics.feedback_correct', lang)}</span>「{getQuizLetter(q.item)}」的读音是 [{getQuizRomanization(q.item)}]</>
+                  : <><span className="text-[var(--color-danger)] font-medium">{t('phonetics.feedback_wrong', lang)}</span>「{getQuizLetter(q.item)}」的读音是 [{getQuizRomanization(q.item)}]，不是 [{alphaAnswer}]</>
               )}
             </div>
           )}
@@ -1129,7 +1133,7 @@ function PracticeTab() {
               if (alphaIdx + 1 >= alphaQ.length) { setAlphaFinished(true); }
               else { setAlphaIdx((p) => p + 1); setAlphaAnswer(null); }
             }} className="w-full py-3 bg-[var(--pink-primary)] text-white rounded-xl text-sm font-medium">
-              {alphaIdx + 1 >= alphaQ.length ? '查看结果' : '下一题'}
+              {alphaIdx + 1 >= alphaQ.length ? t('phonetics.practice_view_results', lang) : t('phonetics.practice_next', lang)}
             </button>
           )}
         </div>
@@ -1146,12 +1150,12 @@ function PracticeTab() {
           <button onClick={backToMenu} className="text-sm text-[var(--text-secondary)] flex items-center gap-1"><ArrowLeft size={14} /> 返回</button>
           <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 text-center space-y-3">
             <Trophy size={40} className="text-[var(--peach-soft)] mx-auto" />
-            <p className="text-lg font-bold text-[var(--text-primary)]">练习完成！</p>
+            <p className="text-lg font-bold text-[var(--text-primary)]">{t('phonetics.rules_practice_complete_title', lang)}</p>
             <p className="text-3xl font-extrabold text-[var(--pink-primary)]">{acc}%</p>
-            <p className="text-sm text-[var(--text-secondary)]">{rulesCorrect} / {rulesQ.length} 正确</p>
+            <p className="text-sm text-[var(--text-secondary)]">{rulesCorrect} / {rulesQ.length} {t('phonetics.rules_practice_correct_suffix', lang)}</p>
             <div className="flex gap-2 justify-center">
-              <button onClick={() => startMode('rules')} className="px-4 py-2 bg-[var(--pink-primary)] text-white rounded-xl text-sm font-medium">再来一次</button>
-              <button onClick={backToMenu} className="px-4 py-2 bg-[var(--bg-input)] text-[var(--text-primary)] rounded-xl text-sm font-medium">换题型</button>
+              <button onClick={() => startMode('rules')} className="px-4 py-2 bg-[var(--pink-primary)] text-white rounded-xl text-sm font-medium">{t('phonetics.rules_practice_retry', lang)}</button>
+              <button onClick={backToMenu} className="px-4 py-2 bg-[var(--bg-input)] text-[var(--text-primary)] rounded-xl text-sm font-medium">{t('phonetics.rules_practice_change_type', lang)}</button>
             </div>
           </div>
         </div>
@@ -1164,7 +1168,7 @@ function PracticeTab() {
         <div className="flex items-center justify-between">
           <button onClick={backToMenu} className="text-sm text-[var(--text-secondary)] flex items-center gap-1"><ArrowLeft size={14} /> 返回</button>
           <span className="text-sm text-[var(--text-muted)]">{rulesIdx + 1} / {rulesQ.length}</span>
-          <span className="text-xs text-[var(--text-muted)]">正确 {rulesCorrect}</span>
+          <span className="text-xs text-[var(--text-muted)]">{t('phonetics.rules_practice_correct_count', lang).replace('{n}', String(rulesCorrect))}</span>
         </div>
         <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 space-y-5">
           <div className="text-center">
@@ -1207,8 +1211,8 @@ function PracticeTab() {
             }`}>
               <p>
                 {rulesAnswer === rq.correct
-                  ? <><span className="text-[var(--mint-soft)] font-medium">正确！</span>「{rq.original}」读作「{rq.correctRead}」</>
-                  : <><span className="text-[var(--color-danger)] font-medium">不对。</span>「{rq.original}」的正确读音是「{rq.correctRead}」</>
+                  ? <><span className="text-[var(--mint-soft)] font-medium">{t('phonetics.feedback_correct', lang)}</span>「{rq.original}」{t('phonetics.rules_quiz_reads_as', lang)}「{rq.correctRead}」</>
+                  : <><span className="text-[var(--color-danger)] font-medium">{t('phonetics.feedback_wrong', lang)}</span>「{rq.original}」{t('phonetics.rules_quiz_correct_read_is', lang)}「{rq.correctRead}」</>
                 }
               </p>
               {rq.explanation && (
@@ -1223,7 +1227,7 @@ function PracticeTab() {
               if (rulesIdx + 1 >= rulesQ.length) { setRulesFinished(true); }
               else { setRulesIdx((p) => p + 1); setRulesAnswer(null); }
             }} className="w-full py-3 bg-[var(--pink-primary)] text-white rounded-xl text-sm font-medium">
-              {rulesIdx + 1 >= rulesQ.length ? '查看结果' : '下一题'}
+              {rulesIdx + 1 >= rulesQ.length ? t('phonetics.practice_view_results', lang) : t('phonetics.practice_next', lang)}
             </button>
           )}
         </div>
@@ -1235,6 +1239,7 @@ function PracticeTab() {
 }
 
 function RulesTab() {
+  const { lang } = useLang();
   const [activeTab, setActiveTab] = useState(ruleCategories[0].id);
   const [expandedRules, setExpandedRules] = useState<Set<string>>(new Set([ruleCategories[0].rules[0].id]));
   const [quizScope, setQuizScope] = useState<'current' | 'all'>('current');
@@ -1372,7 +1377,7 @@ function RulesTab() {
                   {rule.formulas && (
                     <div style={{ background: '#fff0f5', border: '1px solid #ff7fa8', borderRadius: 12, padding: '12px 16px' }}>
                       <p style={{ fontSize: 11, color: '#ff7fa8', fontWeight: 600, marginBottom: 8, letterSpacing: '0.5px', textTransform: 'uppercase' }}>
-                        变化规则
+                        {t('phonetics.rules_formula_label', lang)}
                       </p>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                         {rule.formulas.map((f, i) => (
@@ -1410,7 +1415,7 @@ function RulesTab() {
                   {/* Examples table */}
                   <div>
                     <p className="text-xs text-[var(--text-muted)] uppercase tracking-wider mb-2 font-medium">
-                      发音示例
+                      {t('phonetics.rules_examples_label', lang)}
                     </p>
                     <div className="bg-[var(--bg-primary)] rounded-xl overflow-hidden border border-[var(--border-color)]">
                       {/* Table header */}
@@ -1485,7 +1490,7 @@ function RulesTab() {
                               </button>
                             </div>
                           </div>
-                          <span className="text-xs text-[var(--text-secondary)]">含义: {ex.meaning}</span>
+                          <span className="text-xs text-[var(--text-secondary)]">{t('phonetics.rules_example_meaning_label', lang)} {ex.meaning}</span>
                         </div>
                       ))}
                     </div>
@@ -1500,7 +1505,7 @@ function RulesTab() {
       {/* Quiz section divider */}
       <div className="flex items-center gap-3 py-2">
         <div className="flex-1 h-px bg-[var(--pink-pale)]" />
-        <span className="text-xs text-[var(--text-muted)] font-medium">测验练习</span>
+        <span className="text-xs text-[var(--text-muted)] font-medium">{t('phonetics.rules_quiz_divider_label', lang)}</span>
         <div className="flex-1 h-px bg-[var(--pink-pale)]" />
       </div>
 
@@ -1515,7 +1520,7 @@ function RulesTab() {
                 : 'bg-[var(--bg-input)] text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)]'
             }`}
           >
-            当前规则
+            {t('phonetics.rules_quiz_scope_current', lang)}
           </button>
           <button
             onClick={() => handleScopeChange('all')}
@@ -1525,7 +1530,7 @@ function RulesTab() {
                 : 'bg-[var(--bg-input)] text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)]'
             }`}
           >
-            全部规则
+            {t('phonetics.rules_quiz_scope_all', lang)}
           </button>
         </div>
       )}
@@ -1537,17 +1542,17 @@ function RulesTab() {
             <Trophy size={28} className="text-[var(--pink-primary)]" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-[var(--text-primary)]">测验完成！</h3>
+            <h3 className="text-lg font-bold text-[var(--text-primary)]">{t('phonetics.rules_quiz_complete_title', lang)}</h3>
             <p className="text-3xl font-extrabold text-[var(--pink-primary)] mt-2">{quizCorrect} / {quizQuestions.length}</p>
             <p className="text-sm text-[var(--text-secondary)] mt-1">
-              {quizCorrect === quizQuestions.length ? '全部答对，太棒了！' : quizCorrect >= Math.ceil(quizQuestions.length / 2) ? '不错，继续加油！' : '再练练，你可以的！'}
+              {quizCorrect === quizQuestions.length ? t('phonetics.rules_quiz_perfect', lang) : quizCorrect >= Math.ceil(quizQuestions.length / 2) ? t('phonetics.rules_quiz_good', lang) : t('phonetics.rules_quiz_keep_trying', lang)}
             </p>
           </div>
           <button
             onClick={handleQuizRestart}
             className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--purple-soft)] to-[var(--pink-primary)] text-white rounded-2xl transition-all text-sm font-medium mx-auto shadow-lg shadow-[var(--purple-soft)]/15 active:scale-95"
           >
-            再来一次
+            {t('phonetics.rules_quiz_retry', lang)}
             <ArrowRight size={16} />
           </button>
         </div>
@@ -1557,9 +1562,9 @@ function RulesTab() {
             <Sparkles size={28} className="text-[var(--pink-primary)]" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-[var(--text-primary)]">听发音选正确读音</h3>
+            <h3 className="text-lg font-bold text-[var(--text-primary)]">{t('phonetics.rules_quiz_cta_title', lang)}</h3>
             <p className="text-sm text-[var(--text-secondary)] mt-1">
-              测试你对韩语连读规则的掌握程度，共 10 题
+              {t('phonetics.rules_quiz_cta_subtitle', lang)}
             </p>
           </div>
           <button
@@ -1571,7 +1576,7 @@ function RulesTab() {
             }}
             className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--purple-soft)] to-[var(--pink-primary)] hover:from-[var(--purple-soft)] hover:to-[var(--pink-primary)] text-white rounded-2xl transition-all text-sm font-medium mx-auto shadow-lg shadow-[var(--purple-soft)]/15 active:scale-95"
           >
-            开始测验
+            {t('phonetics.rules_quiz_start_button', lang)}
             <ArrowRight size={16} />
           </button>
         </div>
@@ -1580,10 +1585,10 @@ function RulesTab() {
           {/* Quiz progress */}
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium text-[var(--text-primary)]">
-              第 {quizIdx + 1} 题 / 共 {quizQuestions.length} 题
+              {t('phonetics.rules_quiz_progress', lang).replace('{n}', String(quizIdx + 1)).replace('{total}', String(quizQuestions.length))}
             </span>
             <span className="text-xs text-[var(--text-muted)]">
-              正确: {quizCorrect}/{quizQuestions.length}
+              {t('phonetics.rules_quiz_correct_label', lang)} {quizCorrect}/{quizQuestions.length}
             </span>
           </div>
           <div className="w-full bg-[var(--bg-input)] rounded-full h-1.5">
@@ -1597,7 +1602,7 @@ function RulesTab() {
           <div className="space-y-4">
             <div className="text-center space-y-2">
               <p className="text-sm text-[var(--text-secondary)]">
-                含义: <span className="text-[var(--text-primary)] font-medium">{quizQuestions[quizIdx].meaning}</span>
+                {t('phonetics.rules_quiz_meaning_label', lang)} <span className="text-[var(--text-primary)] font-medium">{quizQuestions[quizIdx].meaning}</span>
               </p>
               <div className="flex items-center justify-center gap-2">
                 <span className="text-2xl font-bold text-[var(--text-primary)]">
@@ -1671,19 +1676,19 @@ function RulesTab() {
               >
                 {quizAnswer === quizQuestions[quizIdx].correct ? (
                   <div className="text-sm text-[var(--text-primary)] font-medium flex flex-wrap items-center justify-center gap-1">
-                    <span>正确！</span>
+                    <span>{t('phonetics.rules_quiz_correct_msg', lang)}</span>
                     <span style={{ fontFamily: "'system-ui', 'sans-serif'" }}>{quizQuestions[quizIdx].original}</span>
                     <button onClick={() => { unlockAudioContext(); speakWord(quizQuestions[quizIdx].original, 0.7); }} className="p-0.5 rounded text-[var(--text-secondary)] hover:text-[var(--pink-primary)] transition-colors"><Volume2 size={13} /></button>
-                    <span>读作</span>
+                    <span>{t('phonetics.rules_quiz_reads_as', lang)}</span>
                     <span style={{ fontFamily: "'system-ui', 'sans-serif'" }}>{quizQuestions[quizIdx].correctRead}</span>
                     <button onClick={() => { unlockAudioContext(); speakWord(quizQuestions[quizIdx].correctRead, 0.7); }} className="p-0.5 rounded text-[var(--text-secondary)] hover:text-[var(--pink-primary)] transition-colors"><Volume2 size={13} /></button>
                   </div>
                 ) : (
                   <div className="text-sm text-[var(--text-primary)] font-medium flex flex-wrap items-center justify-center gap-1">
-                    <span>不对哦！</span>
+                    <span>{t('phonetics.rules_quiz_wrong_msg', lang)}</span>
                     <span style={{ fontFamily: "'system-ui', 'sans-serif'" }}>{quizQuestions[quizIdx].original}</span>
                     <button onClick={() => { unlockAudioContext(); speakWord(quizQuestions[quizIdx].original, 0.7); }} className="p-0.5 rounded text-[var(--text-secondary)] hover:text-[var(--pink-primary)] transition-colors"><Volume2 size={13} /></button>
-                    <span>的正确读音是</span>
+                    <span>{t('phonetics.rules_quiz_correct_read_is', lang)}</span>
                     <span style={{ fontFamily: "'system-ui', 'sans-serif'" }}>{quizQuestions[quizIdx].correctRead}</span>
                     <button onClick={() => { unlockAudioContext(); speakWord(quizQuestions[quizIdx].correctRead, 0.7); }} className="p-0.5 rounded text-[var(--text-secondary)] hover:text-[var(--pink-primary)] transition-colors"><Volume2 size={13} /></button>
                   </div>
@@ -1697,7 +1702,7 @@ function RulesTab() {
                 onClick={handleQuizNext}
                 className="w-full flex items-center justify-center gap-2 py-3 bg-[var(--pink-primary)] hover:bg-[var(--pink-primary)] text-white rounded-2xl transition-colors font-medium active:scale-95"
               >
-                {quizIdx + 1 >= quizQuestions.length ? '查看结果' : '下一题'}
+                {quizIdx + 1 >= quizQuestions.length ? t('phonetics.rules_quiz_view_results', lang) : t('phonetics.rules_quiz_next', lang)}
                 <ArrowRight size={16} />
               </button>
             )}

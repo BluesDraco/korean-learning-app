@@ -5,13 +5,15 @@ import Link from 'next/link';
 import {
   Library, BookOpen, MessageSquare, FileText, Mic,
   Music, PenLine, TrendingUp,
-  Loader2, StickyNote, LogIn, Settings,
+  StickyNote, LogIn, Settings,
   Mail, Moon, Sun,
 } from 'lucide-react';
 import { db } from '@/lib/db';
 import { useAuth } from '@/components/AuthProvider';
 import { useFeedback } from '@/hooks/useFeedback';
 import { useTheme } from '@/components/ThemeProvider';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 import { MobilePageHero } from '@/components/mobile/MobilePageHero';
 import { ToriCard } from '@/components/mobile/ToriCard';
 import { ToriListRow } from '@/components/mobile/ToriListRow';
@@ -29,6 +31,7 @@ export default function MinePage() {
   const { user, loading: authLoading } = useAuth();
   const { click: feedbackClick } = useFeedback();
   const { theme, toggle } = useTheme();
+  const { lang } = useLang();
   const [stats, setStats] = useState<MineStats>({ wordCount: 0, sentenceCount: 0, articleCount: 0, recordingCount: 0 });
   const [loadError, setLoadError] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -60,7 +63,7 @@ export default function MinePage() {
   if (!mounted) {
     return (
       <div className="py-4 space-y-5 max-w-2xl mx-auto md:max-w-3xl">
-        <MobilePageHero title="我的学习资料" description="你保存过的内容都在这里。" variant="blue" />
+        <MobilePageHero title={t('mine.page_title', lang)} description={t('mine.page_desc', lang)} variant="blue" />
         <div className="animate-pulse">
           <div className="rounded-[24px] border border-[var(--border-default)] bg-[var(--bg-card)] p-4 shadow-[0_8px_24px_rgba(92,64,38,0.08)]">
             <div className="h-4 w-32 bg-[var(--bg-muted)] rounded mb-3" />
@@ -81,22 +84,22 @@ export default function MinePage() {
   if (loadError) {
     return (
       <div className="py-4 space-y-5 max-w-2xl mx-auto md:max-w-3xl">
-        <MobilePageHero title="我的学习资料" description="你保存过的内容都在这里。" variant="blue" />
+        <MobilePageHero title={t('mine.page_title', lang)} description={t('mine.page_desc', lang)} variant="blue" />
         <ToriCard className="text-center space-y-3">
-          <p className="text-[14px] text-[var(--text-muted)]">加载失败，请刷新重试</p>
+          <p className="text-[14px] text-[var(--text-muted)]">{t('mine.load_error', lang)}</p>
           <button onClick={() => window.location.reload()} className="px-4 py-2 bg-[#e47a94] text-white text-[13px] rounded-xl active:scale-95 transition-transform">
-            刷新
+            {t('mine.load_error_retry', lang)}
           </button>
         </ToriCard>
       </div>
     );
   }
 
-  // ── Auth loading — show skeleton instead of blank spinner ──
+  // ── Auth loading ──
   if (authLoading) {
     return (
       <div className="py-4 space-y-5 max-w-2xl mx-auto md:max-w-3xl">
-        <MobilePageHero title="我的学习资料" description="你保存过的内容都在这里。" variant="blue" />
+        <MobilePageHero title={t('mine.page_title', lang)} description={t('mine.page_desc', lang)} variant="blue" />
         <div className="animate-pulse space-y-3">
           {[1, 2, 3].map((i) => (
             <div key={i} className="h-[60px] rounded-[18px] border border-[var(--border-default)] bg-[var(--bg-card)]" />
@@ -108,41 +111,42 @@ export default function MinePage() {
 
   // ── Unauthenticated ──
   if (!user) {
+    const lockedItems = [
+      { labelKey: 'mine.locked_words_label', descKey: 'mine.locked_words_desc', icon: BookOpen, color: '#e47a94' },
+      { labelKey: 'mine.locked_sentences_label', descKey: 'mine.locked_sentences_desc', icon: MessageSquare, color: '#b49ccf' },
+      { labelKey: 'mine.locked_notes_label', descKey: 'mine.locked_notes_desc', icon: StickyNote, color: '#81b5a1' },
+      { labelKey: 'mine.locked_kpop_label', descKey: 'mine.locked_kpop_desc', icon: Music, color: '#b49ccf' },
+      { labelKey: 'mine.locked_diary_label', descKey: 'mine.locked_diary_desc', icon: PenLine, color: '#e47a94' },
+      { labelKey: 'mine.locked_achievements_label', descKey: 'mine.locked_achievements_desc', icon: TrendingUp, color: '#e8a87c' },
+    ];
     return (
       <div className="py-4 space-y-5 max-w-2xl mx-auto md:max-w-3xl">
-        <MobilePageHero title="我的学习资料" description="你保存过的内容都在这里。" variant="blue" />
+        <MobilePageHero title={t('mine.page_title', lang)} description={t('mine.page_desc', lang)} variant="blue" />
 
         <ToriCard className="text-center space-y-3">
           <Library size={48} className="text-[#d4ccc4] mx-auto" />
-          <p className="text-[14px] text-[var(--text-muted)]">登录后可以保存你的单词、句子、文章、笔记、录音、跟唱进度和学习记录。</p>
+          <p className="text-[14px] text-[var(--text-muted)]">{t('mine.login_prompt', lang)}</p>
           <div className="flex gap-2 justify-center">
             <Link href="/auth/login?redirect=/mine" className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#e47a94] text-white rounded-xl text-[13px] font-medium active:scale-95 transition-transform">
-              <LogIn size={14} />登录
+              <LogIn size={14} />{t('mine.login_button', lang)}
             </Link>
             <Link href="/auth/register" className="inline-flex items-center gap-1.5 px-4 py-2 bg-[var(--bg-muted)] text-[var(--text-primary)] rounded-xl text-[13px] font-medium border border-[var(--border-default)] active:scale-95 transition-transform">
-              注册
+              {t('mine.register_button', lang)}
             </Link>
           </div>
         </ToriCard>
 
         <div>
-          <ToriSectionHeader title="登录后可保存" className="mb-2" />
+          <ToriSectionHeader title={t('mine.locked_section_title', lang)} className="mb-2" />
           <div className="space-y-2">
-            {[
-              { label: '我的词', desc: '收藏的单词和学习记录', icon: BookOpen, color: '#e47a94' },
-              { label: '我的句子', desc: '收藏的句子和表达', icon: MessageSquare, color: '#b49ccf' },
-              { label: '我的笔记', desc: '学习笔记和备忘', icon: StickyNote, color: '#81b5a1' },
-              { label: '我的跟唱', desc: 'KPOP歌词跟唱进度', icon: Music, color: '#b49ccf' },
-              { label: '我的日记', desc: '学习日记', icon: PenLine, color: '#e47a94' },
-              { label: '我的成就', desc: '学习成就和徽章', icon: TrendingUp, color: '#e8a87c' },
-            ].map((item) => (
-              <div key={item.label} className="flex items-center gap-3 rounded-[18px] bg-[var(--bg-card)] border border-[var(--border-default)] px-4 py-3.5 shadow-[0_2px_8px_rgba(92,64,38,0.03)] opacity-50">
+            {lockedItems.map((item) => (
+              <div key={item.labelKey} className="flex items-center gap-3 rounded-[18px] bg-[var(--bg-card)] border border-[var(--border-default)] px-4 py-3.5 shadow-[0_2px_8px_rgba(92,64,38,0.03)] opacity-50">
                 <div className="w-9 h-9 rounded-[14px] bg-[var(--bg-muted)] flex items-center justify-center shrink-0">
                   <item.icon size={18} style={{ color: item.color }} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[14px] font-medium text-[var(--text-primary)]">{item.label}</p>
-                  <p className="text-[11px] text-[var(--text-muted)] mt-0.5">{item.desc}</p>
+                  <p className="text-[14px] font-medium text-[var(--text-primary)]">{t(item.labelKey, lang)}</p>
+                  <p className="text-[11px] text-[var(--text-muted)] mt-0.5">{t(item.descKey, lang)}</p>
                 </div>
               </div>
             ))}
@@ -154,63 +158,63 @@ export default function MinePage() {
 
   // ── Authenticated ──
   const statCards = [
-    { label: '词', value: stats.wordCount, color: '#e47a94' },
-    { label: '句子', value: stats.sentenceCount, color: '#b49ccf' },
-    { label: '文章', value: stats.articleCount, color: '#e8a87c' },
-    { label: '录音', value: stats.recordingCount, color: '#81b5a1' },
+    { labelKey: 'mine.stat_words', value: stats.wordCount },
+    { labelKey: 'mine.stat_sentences', value: stats.sentenceCount },
+    { labelKey: 'mine.stat_articles', value: stats.articleCount },
+    { labelKey: 'mine.stat_recordings', value: stats.recordingCount },
   ];
 
   const menuSections = [
     {
-      title: '我的资料',
+      titleKey: 'mine.section_materials',
       items: [
-        { label: '我的词', desc: '已保存的单词和学习记录', href: '/vocabulary', icon: BookOpen, color: '#e47a94' },
-        { label: '我的句子', desc: '已保存的句子和表达', href: '/vocabulary?tab=sentences', icon: MessageSquare, color: '#b49ccf' },
-        { label: '我的文章', desc: '已保存的文章', href: '/mine/articles', icon: FileText, color: '#e8a87c' },
-        { label: '我的笔记', desc: '学习笔记和备忘', href: '/mine/notes', icon: StickyNote, color: '#81b5a1' },
+        { labelKey: 'mine.item_words_label', descKey: 'mine.item_words_desc', href: '/vocabulary', icon: BookOpen, color: '#e47a94' },
+        { labelKey: 'mine.item_sentences_label', descKey: 'mine.item_sentences_desc', href: '/vocabulary?tab=sentences', icon: MessageSquare, color: '#b49ccf' },
+        { labelKey: 'mine.item_articles_label', descKey: 'mine.item_articles_desc', href: '/mine/articles', icon: FileText, color: '#e8a87c' },
+        { labelKey: 'mine.item_notes_label', descKey: 'mine.item_notes_desc', href: '/mine/notes', icon: StickyNote, color: '#81b5a1' },
       ],
     },
     {
-      title: '我的练习',
+      titleKey: 'mine.section_practice',
       items: [
-        { label: '我的录音', desc: '发音跟读录音', href: '/mine/recordings', icon: Mic, color: '#81b5a1' },
-        { label: '我的跟唱', desc: 'KPOP歌词跟唱进度', href: '/mine/kpop', icon: Music, color: '#b49ccf' },
-        { label: '我的日记', desc: '学习日记', href: '/mine/diary', icon: PenLine, color: '#e47a94' },
-        { label: '我的成就', desc: '学习成就和徽章', href: '/stats', icon: TrendingUp, color: '#e8a87c' },
+        { labelKey: 'mine.item_recordings_label', descKey: 'mine.item_recordings_desc', href: '/mine/recordings', icon: Mic, color: '#81b5a1' },
+        { labelKey: 'mine.item_kpop_label', descKey: 'mine.item_kpop_desc', href: '/mine/kpop', icon: Music, color: '#b49ccf' },
+        { labelKey: 'mine.item_diary_label', descKey: 'mine.item_diary_desc', href: '/mine/diary', icon: PenLine, color: '#e47a94' },
+        { labelKey: 'mine.item_achievements_label', descKey: 'mine.item_achievements_desc', href: '/stats', icon: TrendingUp, color: '#e8a87c' },
       ],
     },
   ];
 
   return (
     <div className="py-4 space-y-5 max-w-2xl mx-auto md:max-w-3xl">
-      <MobilePageHero title="我的学习资料" description="你保存过的内容都在这里。" variant="blue" />
+      <MobilePageHero title={t('mine.page_title', lang)} description={t('mine.page_desc', lang)} variant="blue" />
 
       {/* Stats */}
       <div className="grid grid-cols-4 gap-2">
         {statCards.map((s) => (
-          <ToriStatCard key={s.label} value={s.value} label={s.label} />
+          <ToriStatCard key={s.labelKey} value={s.value} label={t(s.labelKey, lang)} />
         ))}
       </div>
 
-      {/* Empty state guidance for new users */}
+      {/* Empty state */}
       {stats.wordCount === 0 && stats.sentenceCount === 0 && stats.recordingCount === 0 && (
         <ToriCard className="text-center space-y-2 bg-[var(--bg-muted)]">
-          <p className="text-[13px] text-[var(--text-muted)]">还没有保存内容。</p>
-          <p className="text-[12px] text-[var(--text-muted)]">去拆一句韩语、跟唱一句 KPOP 或查一个词，保存你的第一个学习资产。</p>
+          <p className="text-[13px] text-[var(--text-muted)]">{t('mine.empty_state', lang)}</p>
+          <p className="text-[12px] text-[var(--text-muted)]">{t('mine.empty_state_cta', lang)}</p>
         </ToriCard>
       )}
 
       {/* Menu sections */}
       {menuSections.map((section) => (
-        <div key={section.title}>
-          <ToriSectionHeader title={section.title} className="mb-2" />
+        <div key={section.titleKey}>
+          <ToriSectionHeader title={t(section.titleKey, lang)} className="mb-2" />
           <div className="space-y-2">
             {section.items.map((item) => (
               <ToriListRow
                 key={item.href}
                 icon={<item.icon size={18} style={{ color: item.color }} />}
-                label={item.label}
-                desc={item.desc}
+                label={t(item.labelKey, lang)}
+                desc={t(item.descKey, lang)}
                 href={item.href}
                 onClick={feedbackClick}
               />
@@ -222,18 +226,18 @@ export default function MinePage() {
       {/* Footer links */}
       <div className="flex gap-2 justify-center flex-wrap pb-2">
         <Link href="/messages" className="inline-flex items-center gap-1.5 text-[12px] text-[#8c8177] hover:text-[#e47a94] transition-colors px-3 py-1.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-default)]">
-          <Mail size={13} />消息
+          <Mail size={13} />{t('mine.footer_messages', lang)}
         </Link>
         <Link href="/settings" className="inline-flex items-center gap-1.5 text-[12px] text-[#8c8177] hover:text-[#e47a94] transition-colors px-3 py-1.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-default)]">
-          <Settings size={13} />设置
+          <Settings size={13} />{t('mine.footer_settings', lang)}
         </Link>
         <button onClick={toggle} className="inline-flex items-center gap-1.5 text-[12px] text-[#8c8177] hover:text-[#e47a94] transition-colors px-3 py-1.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-default)]">
           {theme === 'light' ? <Moon size={13} /> : <Sun size={13} />}
-          {theme === 'light' ? '深色模式' : '亮色模式'}
+          {theme === 'light' ? t('mine.footer_dark_mode', lang) : t('mine.footer_light_mode', lang)}
         </button>
         {user?.role === 'admin' && (
           <Link href="/admin" className="inline-flex items-center gap-1.5 text-[12px] text-[#e47a94] hover:text-[#c75a78] transition-colors px-3 py-1.5 rounded-xl bg-[#fff0f4] border border-[#f8c8d4] font-medium">
-            ⚙ 管理后台
+            ⚙ {t('mine.footer_admin', lang)}
           </Link>
         )}
       </div>

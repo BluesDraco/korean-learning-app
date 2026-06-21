@@ -10,6 +10,8 @@ import { speak, speakBrowser, cancelSpeech, speakWord } from '@/lib/tts';
 import { getTodayLog, updateTodayLog } from '@/lib/gamification';
 import { DiffFeedback } from '@/components/dictation/DiffFeedback';
 import { getEntry, getEntryByKorean } from '@/data/vocabulary/index';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 
 function normalizeKorean(s: string) {
   return s.normalize('NFC').replace(/[。？！，,.?!、…\s]+/g, '').trim();
@@ -49,7 +51,7 @@ const MOCK_CARDS: FlashCard[] = [
     id: 'mock-1',
     type: 'word',
     typeLabel: '单词卡',
-    source: '来自：韩娱热点',
+    source: 'kpop',
     reviewCount: 4,
     front: '기대감',
     sub: 'gi-dae-gam',
@@ -61,7 +63,7 @@ const MOCK_CARDS: FlashCard[] = [
     id: 'mock-2',
     type: 'sentence',
     typeLabel: '句子卡',
-    source: '来自：KPOP',
+    source: 'kpop',
     reviewCount: 2,
     front: '숨 참고 love dive',
     sub: 'sum chamgo love dive',
@@ -73,7 +75,7 @@ const MOCK_CARDS: FlashCard[] = [
     id: 'mock-3',
     type: 'grammar',
     typeLabel: '语法卡',
-    source: '来自：内容拆解',
+    source: 'analyze',
     reviewCount: 3,
     front: '-고 있다',
     sub: '正在……',
@@ -85,7 +87,7 @@ const MOCK_CARDS: FlashCard[] = [
     id: 'mock-4',
     type: 'word',
     typeLabel: '单词卡',
-    source: '来自：影子跟读',
+    source: 'shadowing',
     reviewCount: 1,
     front: '기분',
     sub: 'gi-bun',
@@ -98,18 +100,12 @@ const MOCK_CARDS: FlashCard[] = [
 // ─── DB → FlashCard mapper ────────────────────────────────────────────────────
 
 function dbWordToCard(w: any): FlashCard {
-  const sourceMap: Record<string, string> = {
-    kpop: '来自：KPOP',
-    reading: '来自：韩娱热点',
-    shadowing: '来自：影子跟读',
-    analyze: '来自：内容拆解',
-  };
   const src = w.source || w.sourceType || '';
   return {
     id: String(w.id),
     type: 'word',
     typeLabel: '单词卡',
-    source: sourceMap[src] || '来自：我的词汇',
+    source: src || 'default',
     reviewCount: (w.srsLevel || 0) + 1,
     front: w.word || w.korean || '',
     sub: w.pronunciation || w.romanization || '',
@@ -139,6 +135,19 @@ function ReviewContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const videoId = searchParams.get('videoId');
+  const { lang } = useLang();
+
+  const getSourceLabel = (src: string) => {
+    const key = `review.source_${src}`;
+    const mapped = t(key, lang);
+    return mapped !== key ? mapped : t('review.source_default', lang);
+  };
+
+  const getTypeLabel = (type: CardType) => {
+    if (type === 'word') return t('review.card_type_word', lang);
+    if (type === 'sentence') return t('review.card_type_sentence', lang);
+    return t('review.card_type_grammar', lang);
+  };
 
   const [cards, setCards] = useState<FlashCard[]>([]);
   const [currentIdx, setCurrentIdx] = useState(0);
@@ -405,16 +414,16 @@ function ReviewContent() {
           <PenLine size={36} style={{ color: '#ff7fa8' }} />
         </div>
         <div className="text-center">
-          <h2 className="text-xl font-black text-[var(--text-primary)]">要进行练习吗？</h2>
-          <p className="text-sm text-[var(--text-muted)] mt-2">本轮答对 {spellingWords.length} 个词</p>
-          <p className="text-sm text-[var(--text-muted)] mt-1">选择一种练习方式加深记忆</p>
+          <h2 className="text-xl font-black text-[var(--text-primary)]">{t('review.practice_prompt_title', lang)}</h2>
+          <p className="text-sm text-[var(--text-muted)] mt-2">{t('review.practice_prompt_correct_count', lang).replace('{n}', String(spellingWords.length))}</p>
+          <p className="text-sm text-[var(--text-muted)] mt-1">{t('review.practice_prompt_subtitle', lang)}</p>
         </div>
         <div className="flex flex-col gap-2 w-full max-w-xs">
           <button
             onClick={() => { setShowSpellingPrompt(false); setSpellingPhase(true); setTimeout(() => spellingInputRef.current?.focus(), 100); }}
             className="w-full py-3 rounded-full bg-[var(--text-primary)] text-white text-sm font-black"
           >
-            默写练习
+            {t('review.practice_spelling_button', lang)}
           </button>
           <button
             onClick={async () => {
@@ -443,13 +452,13 @@ function ReviewContent() {
             }}
             className="w-full py-3 rounded-full bg-[var(--bg-card)] border border-[var(--border-default)] text-[var(--text-secondary)] text-sm font-black"
           >
-            造句练习
+            {t('review.practice_sentence_button', lang)}
           </button>
           <button
             onClick={() => { setShowSpellingPrompt(false); setComplete(true); }}
             className="w-full py-3 rounded-full bg-transparent text-[var(--text-muted)] text-sm font-black"
           >
-            跳过看结果
+            {t('review.practice_skip_button', lang)}
           </button>
         </div>
       </div>
@@ -519,7 +528,7 @@ function ReviewContent() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <PenLine size={18} style={{ color: '#ff7fa8' }} />
-            <span className="text-[17px] font-black text-[var(--text-primary)]">默写练习</span>
+            <span className="text-[17px] font-black text-[var(--text-primary)]">{t('review.spelling_phase_title', lang)}</span>
           </div>
           <span className="text-[11px] font-black text-[var(--text-muted)]">{spellingIdx + 1} / {spellingWords.length}</span>
         </div>
@@ -543,7 +552,7 @@ function ReviewContent() {
           >
             <Volume2 size={28} style={{ color: 'white' }} />
           </button>
-          <p className="text-xs text-[var(--text-muted)]">听音默写韩文</p>
+          <p className="text-xs text-[var(--text-muted)]">{t('review.spelling_listen_hint', lang)}</p>
           {!spellingSubmitted ? (
             <div className="w-full flex flex-col gap-3">
               <input
@@ -551,7 +560,7 @@ function ReviewContent() {
                 value={spellingInput}
                 onChange={e => setSpellingInput(e.target.value)}
                 onKeyDown={e => { if (e.key === 'Enter') handleSpellingSubmit(); }}
-                placeholder="输入你听到的韩语..."
+                placeholder={t('review.spelling_input_placeholder', lang)}
                 className="w-full"
                 style={{
                   padding: '14px 16px', borderRadius: 14,
@@ -570,7 +579,7 @@ function ReviewContent() {
                   border: 'none', cursor: spellingInput.trim() ? 'pointer' : 'not-allowed',
                 }}
               >
-                提交
+                {t('review.spelling_submit_button', lang)}
               </button>
             </div>
           ) : (
@@ -582,7 +591,7 @@ function ReviewContent() {
                   className="w-full py-2.5 rounded-full text-sm font-bold border"
                   style={{ background: 'transparent', color: 'var(--text-muted)', borderColor: 'var(--border-default)' }}
                 >
-                  再听一遍
+                  {t('review.spelling_relisten_button', lang)}
                 </button>
               )}
               {isWrong ? (
@@ -591,7 +600,7 @@ function ReviewContent() {
                   className="w-full py-3 rounded-full text-sm font-black flex items-center justify-center gap-2"
                   style={{ background: 'var(--bg-soft)', color: '#f0799b', border: 'none' }}
                 >
-                  跳过 <ChevronRight size={16} />
+                  {t('review.spelling_skip_button', lang)} <ChevronRight size={16} />
                 </button>
               ) : null}
             </div>
@@ -660,7 +669,7 @@ function ReviewContent() {
           }).catch(() => {});
         }
       } catch {
-        setSentenceResult({ isCorrect: false, score: 0, wrongPart: '', correctPart: '', explanation: 'AI判断失败，请重试', betterWay: '' });
+        setSentenceResult({ isCorrect: false, score: 0, wrongPart: '', correctPart: '', explanation: t('review.sentence_ai_error', lang), betterWay: '' });
       } finally {
         setSentenceJudging(false);
       }
@@ -671,7 +680,7 @@ function ReviewContent() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Shuffle size={18} style={{ color: '#ff7fa8' }} />
-            <span className="text-[17px] font-black text-[var(--text-primary)]">造句练习</span>
+            <span className="text-[17px] font-black text-[var(--text-primary)]">{t('review.sentence_phase_title', lang)}</span>
           </div>
           <span className="text-[11px] font-black text-[var(--text-muted)]">{sentenceIdx + 1} / {sentenceWords.length}</span>
         </div>
@@ -700,7 +709,7 @@ function ReviewContent() {
               }}
               className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
               style={{ background: showHint ? 'var(--bg-muted)' : 'var(--bg-muted)', border: 'none' }}
-              title={showHint ? '隐藏提示' : '显示提示'}
+              title={showHint ? t('review.sentence_hide_hint_title', lang) : t('review.sentence_show_hint_title', lang)}
             >
               {showHint ? <Eye size={15} style={{ color: '#3aafa9' }} /> : <EyeOff size={15} style={{ color: '#c9b8b0' }} />}
             </button>
@@ -718,7 +727,7 @@ function ReviewContent() {
           {sentenceLoading ? (
             <div className="flex items-center justify-center py-8">
               <Loader2 size={24} className="animate-spin" style={{ color: '#ff7fa8' }} />
-              <span className="ml-2 text-sm text-[var(--text-muted)]">正在生成词块...</span>
+              <span className="ml-2 text-sm text-[var(--text-muted)]">{t('review.sentence_generating_blocks', lang)}</span>
             </div>
           ) : (
             <>
@@ -726,7 +735,7 @@ function ReviewContent() {
               <div className="min-h-[48px] rounded-2xl border-2 border-dashed px-3 py-2 flex flex-wrap gap-2 items-center"
                 style={{ borderColor: sentenceChecked ? (sentenceResult?.isCorrect ? '#aee3d8' : '#f0799b') : 'var(--border-default)' }}>
                 {sentenceAnswers.length === 0 ? (
-                  <span className="text-[13px]" style={{ color: '#c9b8b0' }}>点击词块组成句子...</span>
+                  <span className="text-[13px]" style={{ color: '#c9b8b0' }}>{t('review.sentence_blocks_placeholder', lang)}</span>
                 ) : (
                   sentenceAnswers.map((b, i) => (
                     <button key={i} onClick={() => {
@@ -771,15 +780,15 @@ function ReviewContent() {
                   <div className="flex items-center gap-2">
                     <span className="text-lg">{sentenceResult.isCorrect ? '✅' : '❌'}</span>
                     <span className="text-sm font-black" style={{ color: sentenceResult.isCorrect ? '#3aafa9' : '#f0799b' }}>
-                      {sentenceResult.isCorrect ? '造句正确！' : '还需改进'}
+                      {sentenceResult.isCorrect ? t('review.sentence_correct_label', lang) : t('review.sentence_needs_improvement_label', lang)}
                     </span>
-                    <span className="text-xs ml-auto" style={{ color: 'var(--text-muted)' }}>{sentenceResult.score}/5分</span>
+                    <span className="text-xs ml-auto" style={{ color: 'var(--text-muted)' }}>{t('review.sentence_score', lang).replace('{n}', String(sentenceResult.score))}</span>
                   </div>
                   {sentenceResult.explanation && (
                     <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>{sentenceResult.explanation}</p>
                   )}
                   {sentenceResult.betterWay && (
-                    <p className="text-xs font-bold" style={{ color: '#3aafa9' }}>更地道：{sentenceResult.betterWay}</p>
+                    <p className="text-xs font-bold" style={{ color: '#3aafa9' }}>{t('review.sentence_better_way_prefix', lang)}{sentenceResult.betterWay}</p>
                   )}
                 </div>
               )}
@@ -791,19 +800,19 @@ function ReviewContent() {
                     <button onClick={() => { setSentenceAnswers([]); setSentenceUsed(new Set()); }}
                       className="flex-1 py-3 rounded-full text-sm font-black border"
                       style={{ background: 'transparent', color: 'var(--text-muted)', borderColor: 'var(--border-default)' }}>
-                      重置
+                      {t('review.sentence_reset_button', lang)}
                     </button>
                     <button onClick={handleJudge} disabled={sentenceAnswers.length === 0 || sentenceJudging}
                       className="flex-1 py-3 rounded-full text-sm font-black"
                       style={{ background: sentenceAnswers.length > 0 ? 'var(--text-primary)' : 'var(--border-default)', color: sentenceAnswers.length > 0 ? '#fff' : 'var(--text-muted)', border: 'none' }}>
-                      {sentenceJudging ? '判断中...' : '提交AI判断'}
+                      {sentenceJudging ? t('review.sentence_judging', lang) : t('review.sentence_submit_ai_button', lang)}
                     </button>
                   </>
                 ) : (
                   <button onClick={goNextSentence}
                     className="w-full py-3 rounded-full text-sm font-black"
                     style={{ background: 'var(--text-primary)', color: '#fff', border: 'none' }}>
-                    {sentenceIdx + 1 >= sentenceWords.length ? '完成' : '下一个'} <ChevronRight size={16} className="inline" />
+                    {sentenceIdx + 1 >= sentenceWords.length ? t('review.sentence_done_button', lang) : t('review.sentence_next_button', lang)} <ChevronRight size={16} className="inline" />
                   </button>
                 )}
               </div>
@@ -820,11 +829,11 @@ function ReviewContent() {
       <div className="flex flex-col items-center justify-center min-h-[60vh] px-4 gap-5">
         <div className="w-20 h-20 rounded-full bg-[var(--bg-muted)] flex items-center justify-center text-4xl">🎉</div>
         <div className="text-center">
-          <h2 className="text-xl font-black text-[var(--text-primary)]">复习完成</h2>
-          <p className="text-sm text-[var(--text-muted)] mt-1">今天的复习全做完了，明天再来吧</p>
+          <h2 className="text-xl font-black text-[var(--text-primary)]">{t('review.complete_title', lang)}</h2>
+          <p className="text-sm text-[var(--text-muted)] mt-1">{t('review.complete_subtitle', lang)}</p>
           {spellingWords.length > 0 && (
             <p className="text-sm mt-2 font-bold" style={{ color: spellingCorrectCount === spellingWords.length ? '#3aafa9' : '#89756e' }}>
-              默写 {spellingCorrectCount} / {spellingWords.length} 词正确
+              {t('review.complete_spelling_result', lang).replace('{correct}', String(spellingCorrectCount)).replace('{total}', String(spellingWords.length))}
             </p>
           )}
         </div>
@@ -833,13 +842,13 @@ function ReviewContent() {
             onClick={loadCards}
             className="px-6 py-2.5 rounded-full bg-[var(--text-primary)] text-white text-sm font-black"
           >
-            再来一轮
+            {t('review.complete_retry_button', lang)}
           </button>
           <button
             onClick={() => router.push('/daily')}
             className="px-6 py-2.5 rounded-full bg-[var(--bg-card)] border border-[var(--border-default)] text-[var(--text-secondary)] text-sm font-black"
           >
-            返回首页
+            {t('review.complete_back_button', lang)}
           </button>
         </div>
       </div>
@@ -852,19 +861,19 @@ function ReviewContent() {
       <div className="flex flex-col items-center justify-center min-h-[60vh] px-4 gap-5">
         <div className="text-4xl">📚</div>
         <div className="text-center">
-          <h2 className="text-xl font-black text-[var(--text-primary)]">今日暂无待复习内容</h2>
+          <h2 className="text-xl font-black text-[var(--text-primary)]">{t('review.empty_title', lang)}</h2>
           <p className="text-sm text-[var(--text-muted)] mt-1 max-w-xs leading-relaxed">
-            SRS 系统会根据记忆曲线自动安排复习时间，到期的词才会出现在这里。已加入的单词会在合适的时间提醒你复习。
+            {t('review.empty_subtitle', lang)}
           </p>
         </div>
         <div className="flex gap-3 flex-wrap justify-center">
           <button onClick={() => router.push('/vocabulary')}
             className="px-6 py-3 rounded-full bg-[var(--text-primary)] text-white text-sm font-black">
-            查看全部单词
+            {t('review.empty_view_vocab_button', lang)}
           </button>
           <button onClick={() => router.push('/daily')}
             className="px-6 py-3 rounded-full bg-[var(--bg-card)] border border-[var(--border-default)] text-[var(--text-secondary)] text-sm font-black">
-            返回首页
+            {t('review.empty_back_button', lang)}
           </button>
         </div>
       </div>
@@ -886,7 +895,7 @@ function ReviewContent() {
           >
             <ArrowLeft size={18} />
           </Link>
-          <div className="text-[17px] font-black text-[var(--text-primary)]">闪卡复习</div>
+          <div className="text-[17px] font-black text-[var(--text-primary)]">{t('review.flashcard_title', lang)}</div>
         </div>
         <span className="text-[11px] font-black text-[var(--text-muted)]">{done} / {total}</span>
       </div>
@@ -911,7 +920,7 @@ function ReviewContent() {
               />
             </div>
             <span className="text-[11px] font-black shrink-0" style={{ color: goalPct >= 100 ? '#4e746d' : '#a08f87' }}>
-              今日 {todayReviewed}/{dailyGoal} · {goalPct}%
+              {t('review.today_prefix', lang)} {todayReviewed}/{dailyGoal} · {goalPct}%
             </span>
           </div>
         );
@@ -963,7 +972,7 @@ function ReviewContent() {
                   className="w-full flex items-center justify-between px-4 py-2.5 text-left"
                   style={{ background: 'var(--bg-muted)', color: '#3aafa9' }}
                 >
-                  <span className="text-[12px] font-black">例句</span>
+                  <span className="text-[12px] font-black">{t('review.example_section_label', lang)}</span>
                   <ChevronRight size={14} style={{ transform: exampleExpanded ? 'rotate(90deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
                 </button>
                 {exampleExpanded && (
@@ -997,14 +1006,14 @@ function ReviewContent() {
             className="flex-1 h-12 rounded-full text-white text-[14px] font-black"
             style={{ background: 'var(--text-primary)', boxShadow: '0 14px 28px rgba(32,24,21,.18)' }}
           >
-            查看答案
+            {t('review.reveal_button', lang)}
           </button>
           <button
             onClick={() => handleRate('remember')}
             className="h-12 px-5 rounded-full text-[14px] font-black border"
             style={{ background: 'var(--bg-muted)', color: '#4e746d', borderColor: 'rgba(174,227,216,.55)', whiteSpace: 'nowrap' }}
           >
-            下一个 →
+            {t('review.skip_next_button', lang)}
           </button>
         </div>
       )}
@@ -1017,24 +1026,24 @@ function ReviewContent() {
             className="min-h-[56px] rounded-[20px] flex flex-col items-center justify-center gap-1 text-[12px] font-black border"
             style={{ background: 'var(--bg-soft)', color: '#f0799b', borderColor: 'rgba(255,127,168,.18)' }}
           >
-            <b className="text-[15px]">忘了</b>
-            <span>再见一次</span>
+            <b className="text-[15px]">{t('review.rating_forgot', lang)}</b>
+            <span>{t('review.rating_forgot_sub', lang)}</span>
           </button>
           <button
             onClick={() => handleRate('fuzzy')}
             className="min-h-[56px] rounded-[20px] flex flex-col items-center justify-center gap-1 text-[12px] font-black border"
             style={{ background: 'var(--bg-muted)', color: 'var(--text-muted)', borderColor: 'var(--border-default)' }}
           >
-            <b className="text-[15px]">模糊</b>
-            <span>稍后复习</span>
+            <b className="text-[15px]">{t('review.rating_fuzzy', lang)}</b>
+            <span>{t('review.rating_fuzzy_sub', lang)}</span>
           </button>
           <button
             onClick={() => handleRate('remember')}
             className="min-h-[56px] rounded-[20px] flex flex-col items-center justify-center gap-1 text-[12px] font-black border"
             style={{ background: 'var(--bg-muted)', color: '#4e746d', borderColor: 'rgba(174,227,216,.55)' }}
           >
-            <b className="text-[15px]">记得</b>
-            <span>延后复习</span>
+            <b className="text-[15px]">{t('review.rating_remember', lang)}</b>
+            <span>{t('review.rating_remember_sub', lang)}</span>
           </button>
         </div>
       )}

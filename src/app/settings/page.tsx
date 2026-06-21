@@ -10,6 +10,8 @@ import type { UserProfile, Achievement } from '@/types';
 import { ACHIEVEMENT_DEFS } from '@/types';
 import { useFontSettings } from '@/components/FontProvider';
 import { useTheme } from '@/components/ThemeProvider';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 import { setSpeechRate, getSpeechRate } from '@/lib/tts';
 import { isSoundEnabled, setSoundEnabled } from '@/lib/soundManager';
 import { FONT_PRESETS, FONT_SIZES } from '@/lib/fontSettings';
@@ -33,6 +35,7 @@ export default function SettingsPage() {
   const { user, loading: authLoading, logout } = useAuth();
   const { settings: fontSettings, previewPreset, previewSize, commitFontSettings } = useFontSettings();
   const { theme, toggle: toggleTheme } = useTheme();
+  const { lang, setLang } = useLang();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [achievements, setAchievements] = useState<Achievement[]>([]);
   const [loading, setLoading] = useState(true);
@@ -108,8 +111,8 @@ export default function SettingsPage() {
           <ArrowLeft size={20} />
         </button>
         <div>
-          <h1 className="text-2xl font-bold text-[var(--text-primary)]">设置</h1>
-          <p className="text-[var(--text-secondary)] text-sm mt-1">个性化你的学习体验</p>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">{t('settings.title', lang)}</h1>
+          <p className="text-[var(--text-secondary)] text-sm mt-1">{lang === 'en' ? 'Personalize your learning experience' : '个性化你的学习体验'}</p>
         </div>
       </div>
 
@@ -117,16 +120,17 @@ export default function SettingsPage() {
       <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 space-y-4">
         <div className="flex items-center gap-3 mb-4">
           <User size={20} className="text-[var(--pink-primary)]" />
-          <h2 className="text-lg font-medium text-[var(--text-primary)]">个人资料</h2>
+          <h2 className="text-lg font-medium text-[var(--text-primary)]">{t('settings.profile', lang)}</h2>
         </div>
 
         {/* Nickname */}
         <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">昵称</label>
+          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">{t('settings.nickname', lang)}</label>
           <input
             type="text"
             value={profile.nickname}
             onChange={(e) => setProfile({ ...profile, nickname: e.target.value })}
+            placeholder={t('settings.nickname_placeholder', lang)}
             className="w-full bg-[var(--bg-input)] border border-[var(--pink-pale)] rounded-xl py-3 px-4 text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--pink-primary)] transition-colors"
           />
         </div>
@@ -154,8 +158,8 @@ export default function SettingsPage() {
         <div className="flex items-center gap-3 bg-[var(--bg-input)] rounded-xl p-4">
           <Flame size={20} className="text-[var(--peach-soft)]" />
           <div>
-            <div className="text-sm text-[var(--text-primary)] font-medium">连续学习 {profile.streak} 天</div>
-            <div className="text-xs text-[var(--text-secondary)]">最长记录: {profile.longestStreak} 天</div>
+            <div className="text-sm text-[var(--text-primary)] font-medium">{lang === 'en' ? `${profile.streak}-day streak` : `连续学习 ${profile.streak} 天`}</div>
+            <div className="text-xs text-[var(--text-secondary)]">{lang === 'en' ? `Best: ${profile.longestStreak} days` : `最长记录: ${profile.longestStreak} 天`}</div>
           </div>
         </div>
       </div>
@@ -164,26 +168,26 @@ export default function SettingsPage() {
       <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 space-y-4">
         <div className="flex items-center gap-3 mb-4">
           <Target size={20} className="text-[var(--mint-soft)]" />
-          <h2 className="text-lg font-medium text-[var(--text-primary)]">学习目标</h2>
+          <h2 className="text-lg font-medium text-[var(--text-primary)]">{t('settings.learning_goal', lang)}</h2>
         </div>
 
         {/* Target Level */}
         <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">当前水平</label>
+          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">{t('settings.level', lang)}</label>
           <select
             value={profile.targetLevel}
             onChange={(e) => setProfile({ ...profile, targetLevel: e.target.value as UserProfile['targetLevel'] })}
             className="w-full bg-[var(--bg-input)] border border-[var(--pink-pale)] rounded-xl py-3 px-4 text-[var(--text-primary)] focus:outline-none focus:border-[var(--pink-primary)] transition-colors"
           >
-            <option value="beginner">初级 (TOPIK 1-2)</option>
-            <option value="intermediate">中级 (TOPIK 3-4)</option>
-            <option value="advanced">高级 (TOPIK 5-6)</option>
+            <option value="beginner">{lang === 'en' ? 'Beginner (TOPIK 1-2)' : '初级 (TOPIK 1-2)'}</option>
+            <option value="intermediate">{lang === 'en' ? 'Intermediate (TOPIK 3-4)' : '中级 (TOPIK 3-4)'}</option>
+            <option value="advanced">{lang === 'en' ? 'Advanced (TOPIK 5-6)' : '高级 (TOPIK 5-6)'}</option>
           </select>
         </div>
 
         {/* Daily Goal Words */}
         <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">每日学习单词: {profile.dailyGoalWords} 个</label>
+          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">{lang === 'en' ? `Daily word goal: ${profile.dailyGoalWords} words` : `每日学习单词: ${profile.dailyGoalWords} 个`}</label>
           <input
             type="range"
             min="5"
@@ -200,7 +204,7 @@ export default function SettingsPage() {
 
         {/* Daily Goal Minutes */}
         <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">每日学习时间: {profile.dailyGoalMinutes} 分钟</label>
+          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">{lang === 'en' ? `Daily study time: ${profile.dailyGoalMinutes} min` : `每日学习时间: ${profile.dailyGoalMinutes} 分钟`}</label>
           <input
             type="range"
             min="5"
@@ -211,7 +215,7 @@ export default function SettingsPage() {
             className="w-full accent-[var(--pink-primary)]"
           />
           <div className="flex justify-between text-xs text-[var(--text-placeholder)] mt-1">
-            <span>5分钟</span><span>2小时</span>
+            <span>{lang === 'en' ? '5 min' : '5分钟'}</span><span>{lang === 'en' ? '2 hrs' : '2小时'}</span>
           </div>
         </div>
       </div>
@@ -220,12 +224,32 @@ export default function SettingsPage() {
       <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 space-y-4">
         <div className="flex items-center gap-3 mb-4">
           <Flame size={20} className="text-[var(--purple-soft)]" />
-          <h2 className="text-lg font-medium text-[var(--text-primary)]">偏好设置</h2>
+          <h2 className="text-lg font-medium text-[var(--text-primary)]">{t('settings.preferences', lang)}</h2>
+        </div>
+
+        {/* Language */}
+        <div>
+          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">{t('settings.language', lang)} / Language</label>
+          <div className="flex gap-2">
+            {(['zh', 'en'] as const).map((l) => (
+              <button
+                key={l}
+                onClick={() => setLang(l)}
+                className={`flex-1 py-2 rounded-xl text-sm font-medium border transition-all ${
+                  lang === l
+                    ? 'bg-[var(--pink-primary)] text-white border-[var(--pink-primary)]'
+                    : 'bg-[var(--bg-input)] text-[var(--text-secondary)] border-[var(--border-color)] hover:border-[var(--pink-primary)]/40'
+                }`}
+              >
+                {l === 'zh' ? '中文' : 'English'}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* TTS Speed */}
         <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">朗读语速: {profile.ttsSpeed ?? 0.8}x</label>
+          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">{t('settings.tts_speed', lang)}: {profile.ttsSpeed ?? 0.8}x</label>
           <input
             type="range"
             min="0.5"
@@ -236,23 +260,23 @@ export default function SettingsPage() {
             className="w-full accent-[var(--purple-soft)]"
           />
           <div className="flex justify-between text-xs text-[var(--text-placeholder)] mt-1">
-            <span>0.5x 慢</span><span>1.2x 快</span>
+            <span>{lang === 'en' ? '0.5x slow' : '0.5x 慢'}</span><span>{lang === 'en' ? '1.2x fast' : '1.2x 快'}</span>
           </div>
         </div>
 
         {/* Review batch size */}
         <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">每次复习数量: {profile.reviewBatchSize ?? 10} 个</label>
+          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">{t('settings.review_batch', lang)}: {profile.reviewBatchSize ?? 10}{lang === 'en' ? '' : ' 个'}</label>
           <select
             value={profile.reviewBatchSize ?? 10}
             onChange={(e) => setProfile({ ...profile, reviewBatchSize: Number(e.target.value) })}
             className="w-full bg-[var(--bg-input)] border border-[var(--border-color)] rounded-xl py-3 px-4 text-[var(--text-primary)] focus:outline-none focus:border-[var(--purple-soft)] transition-colors"
           >
-            <option value={5}>5 个</option>
-            <option value={10}>10 个</option>
-            <option value={15}>15 个</option>
-            <option value={20}>20 个</option>
-            <option value={30}>30 个</option>
+            <option value={5}>{lang === 'en' ? '5 words' : '5 个'}</option>
+            <option value={10}>{lang === 'en' ? '10 words' : '10 个'}</option>
+            <option value={15}>{lang === 'en' ? '15 words' : '15 个'}</option>
+            <option value={20}>{lang === 'en' ? '20 words' : '20 个'}</option>
+            <option value={30}>{lang === 'en' ? '30 words' : '30 个'}</option>
           </select>
         </div>
 
@@ -261,8 +285,8 @@ export default function SettingsPage() {
           <div className="flex items-center gap-3">
             {soundOn ? <Volume2 size={20} className="text-[var(--purple-soft)]" /> : <VolumeX size={20} className="text-[var(--text-muted)]" />}
             <div>
-              <p className="text-sm text-[var(--text-primary)] font-medium">音效</p>
-              <p className="text-xs text-[var(--text-secondary)]">轻量操作反馈音效（音量很低）</p>
+              <p className="text-sm text-[var(--text-primary)] font-medium">{t('settings.sound_effects', lang)}</p>
+              <p className="text-xs text-[var(--text-secondary)]">{lang === 'en' ? 'Lightweight feedback sounds (very quiet)' : '轻量操作反馈音效（音量很低）'}</p>
             </div>
           </div>
           <button
@@ -278,8 +302,8 @@ export default function SettingsPage() {
           <div className="flex items-center gap-3">
             <Zap size={20} className={reduceMotion ? 'text-[var(--text-muted)]' : 'text-[var(--peach-soft)]'} />
             <div>
-              <p className="text-sm text-[var(--text-primary)] font-medium">减少动效</p>
-              <p className="text-xs text-[var(--text-secondary)]">关闭弹跳、呼吸等动画效果</p>
+              <p className="text-sm text-[var(--text-primary)] font-medium">{t('settings.reduce_motion', lang)}</p>
+              <p className="text-xs text-[var(--text-secondary)]">{lang === 'en' ? 'Disable bounce and breathing animations' : '关闭弹跳、呼吸等动画效果'}</p>
             </div>
           </div>
           <button
@@ -295,8 +319,8 @@ export default function SettingsPage() {
           <div className="flex items-center gap-3">
             {theme === 'dark' ? <Moon size={20} className="text-[var(--text-secondary)]" /> : <Sun size={20} className="text-[var(--peach-soft)]" />}
             <div>
-              <p className="text-sm text-[var(--text-primary)] font-medium">深色模式</p>
-              <p className="text-xs text-[var(--text-secondary)]">{theme === 'dark' ? '当前：深色' : '当前：亮色'}</p>
+              <p className="text-sm text-[var(--text-primary)] font-medium">{t('settings.dark_mode', lang)}</p>
+              <p className="text-xs text-[var(--text-secondary)]">{theme === 'dark' ? (lang === 'en' ? 'Current: Dark' : '当前：深色') : (lang === 'en' ? 'Current: Light' : '当前：亮色')}</p>
             </div>
           </div>
           <button
@@ -312,12 +336,12 @@ export default function SettingsPage() {
       <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 space-y-5">
         <div className="flex items-center gap-3 mb-4">
           <Type size={28} className="text-[var(--text-primary)]" />
-          <h2 className="text-lg font-medium text-[var(--text-primary)]">显示设置</h2>
+          <h2 className="text-lg font-medium text-[var(--text-primary)]">{t('settings.display', lang)}</h2>
         </div>
 
         {/* Font preset */}
         <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-2 block">字体风格</label>
+          <label className="text-xs text-[var(--text-secondary)] mb-2 block">{t('settings.font_style', lang)}</label>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
             {FONT_PRESETS.map((p) => (
               <button
@@ -348,7 +372,7 @@ export default function SettingsPage() {
 
         {/* Font size */}
         <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-2 block">字号大小</label>
+          <label className="text-xs text-[var(--text-secondary)] mb-2 block">{t('settings.font_size', lang)}</label>
           <div className="flex gap-2">
             {FONT_SIZES.map((s) => (
               <button
@@ -377,7 +401,7 @@ export default function SettingsPage() {
 
         {/* Live preview */}
         <div className="bg-[var(--bg-base)] border border-[var(--border-color)] rounded-xl p-4 space-y-2">
-          <p className="text-[13px] text-[var(--text-muted)] mb-1">预览效果</p>
+          <p className="text-[13px] text-[var(--text-muted)] mb-1">{lang === 'en' ? 'Preview' : '预览效果'}</p>
           <p className="text-lg font-semibold text-[var(--text-primary)]">
             안녕하세요! 좋은 아침이에요.
           </p>
@@ -391,7 +415,7 @@ export default function SettingsPage() {
 
         {/* Flashcard theme */}
         <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-2 block">闪卡配色</label>
+          <label className="text-xs text-[var(--text-secondary)] mb-2 block">{t('settings.flashcard_color', lang)}</label>
           <div className="grid grid-cols-2 gap-2">
             {FLASHCARD_THEMES.map((t) => (
               <button
@@ -423,7 +447,7 @@ export default function SettingsPage() {
         <div className="flex items-center gap-3 mb-4">
           <Trophy size={20} className="text-[var(--peach-soft)]" />
           <h2 className="text-lg font-medium text-[var(--text-primary)]">
-            成就 ({earnedAchievements.length}/{allTypes.length})
+            {t('settings.achievements', lang)} ({earnedAchievements.length}/{allTypes.length})
           </h2>
         </div>
 
@@ -459,15 +483,15 @@ export default function SettingsPage() {
             : 'bg-[var(--pink-primary)] hover:bg-[var(--pink-primary)] active:scale-[0.98]'
         }`}
       >
-        {saving ? <Loader2 size={18} className="animate-spin" /> : saved ? <><Save size={18} /> 已保存</> : <><Save size={18} /> 保存设置</>}
+        {saving ? <Loader2 size={18} className="animate-spin" /> : saved ? <><Save size={18} /> {t('settings.save_success', lang)}</> : <><Save size={18} /> {t('settings.save', lang)}</>}
       </button>
 
       {/* Logout */}
       <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-[var(--text-primary)]">当前账号</p>
-            <p className="text-xs text-[var(--text-muted)] mt-0.5">{authLoading ? '加载中...' : (user?.nickname ?? '未登录')}</p>
+            <p className="text-sm font-medium text-[var(--text-primary)]">{lang === 'en' ? 'Current account' : '当前账号'}</p>
+            <p className="text-xs text-[var(--text-muted)] mt-0.5">{authLoading ? t('common.loading', lang) : (user?.nickname ?? (lang === 'en' ? 'Not logged in' : '未登录'))}</p>
           </div>
           <button
             onClick={async () => {
@@ -477,7 +501,7 @@ export default function SettingsPage() {
             className="flex items-center gap-2 px-4 py-2 rounded-xl border border-red-200 text-red-500 text-sm hover:bg-red-50 transition-colors"
           >
             <LogOut size={15} />
-            退出登录
+            {t('settings.logout', lang)}
           </button>
         </div>
       </div>
