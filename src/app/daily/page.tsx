@@ -3,15 +3,13 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Loader2, Sparkles, BookOpen, Mic, BookMarked, Edit3, Target, GraduationCap, Music, RefreshCw, FileText, LogIn, Flame, Bell, X, Settings, ChevronRight, PenLine } from 'lucide-react';
+import { Loader2, Sparkles, BookOpen, Mic, BookMarked, Edit3, Target, GraduationCap, RefreshCw, FileText, LogIn, Flame, Bell, X, Settings, ChevronRight, PenLine } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
 import { useFeedback } from '@/hooks/useFeedback';
 import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
 import { buildDailyPlanFromApi, type DailyPlan } from '@/lib/daily/buildDailyPlan';
-import { getAllSongProgress } from '@/lib/kpop/progress';
 import { getProfile } from '@/lib/gamification';
-import { getTrackById } from '@/data/kpopTracks';
 import Onboarding from '@/components/Onboarding';
 import { ToriHeroCard } from '@/components/mobile/ToriHeroCard';
 import { ToriMiniCard } from '@/components/mobile/ToriMiniCard';
@@ -43,7 +41,6 @@ export default function DailyPage() {
   const [planLoading, setPlanLoading] = useState(true);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [onboardingChecked, setOnboardingChecked] = useState(false);
-  const [kpopProg, setKpopProg] = useState<{ songId: string; title: string; artist: string; practicedLines: number; totalLines: number } | null>(null);
   const [streak, setStreak] = useState(0);
   const [isDesktop, setIsDesktop] = useState(
     () => typeof window !== 'undefined' && window.innerWidth >= 768
@@ -60,8 +57,6 @@ export default function DailyPage() {
     const timeoutId = setTimeout(() => controller.abort(), 6000);
     try {
       setPlanLoading(true);
-      let prog: { songId: string; practicedLines: number; totalLines: number }[] = [];
-      try { prog = getAllSongProgress(); } catch { /* localStorage not available */ }
       const currentUser = userRef.current;
       const [p, profile] = await Promise.all([
         buildDailyPlanFromApi().catch(() => null),
@@ -74,17 +69,6 @@ export default function DailyPage() {
         if (profile && !profile.onboardingComplete) setShowOnboarding(true);
       }
       setOnboardingChecked(true);
-      const active = prog.find((s) => s.practicedLines > 0 && s.practicedLines < s.totalLines);
-      if (active) {
-        const track = getTrackById(active.songId);
-        setKpopProg({
-          songId: active.songId,
-          title: track?.title ?? active.songId,
-          artist: track?.artist ?? '',
-          practicedLines: active.practicedLines,
-          totalLines: active.totalLines,
-        });
-      }
     } catch {
       if (gen !== loadGenRef.current) return;
       setOnboardingChecked(true);
@@ -280,11 +264,6 @@ export default function DailyPage() {
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-2 mb-3">
-                <Link href="/korea/kpop/news" onClick={feedbackClick}
-                  className="flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-default)] text-[13px] font-medium text-[var(--text-primary)] active:scale-[0.97] transition-transform">
-                  <Music size={14} className="text-[#e47a94]" />
-                  {t('daily.kpop_news_button', lang)}
-                </Link>
                 <Link href="/vocabulary/library" onClick={feedbackClick}
                   className="flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-default)] text-[13px] font-medium text-[var(--text-primary)] active:scale-[0.97] transition-transform">
                   <BookOpen size={14} className="text-[#b49ccf]" />
@@ -444,15 +423,6 @@ function HeroSection() {
           priority
           className="w-full block h-auto"
         />
-      </div>
-
-      <div className="mt-3.5">
-        <Link
-          href="/korea/kpop/news"
-          className="flex items-center justify-center h-12 rounded-full bg-[var(--bg-card)] text-[var(--text-secondary)] font-extrabold text-[14px] border border-[var(--border-default)] shadow-[0_10px_26px_rgba(78,52,46,.07)] active:scale-[0.97] transition-transform"
-        >
-          {t('daily.hero_kpop_news_button', lang)}
-        </Link>
       </div>
     </>
   );

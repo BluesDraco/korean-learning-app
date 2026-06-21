@@ -2,22 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 
-const FEATURED = [
-  {
-    label: 'KPOP 跟唱',
-    desc: '逐句歌词，原唱播放，跟唱录音。56 首歌随时开唱。',
-    href: '/korea/kpop',
-    gradient: 'linear-gradient(135deg, #ffe4ec 0%, #fff0bd 100%)',
-    badge: null,
-  },
-  {
-    label: '韩娱热帖',
-    desc: '刷热点，顺便看懂韩语。每帖逐句拆解。',
-    href: '/korea/kpop/news',
-    gradient: 'linear-gradient(135deg, #eee7ff 0%, #e6f3ff 100%)',
-    badge: null,
-  },
-];
+const FEATURED: { label: string; desc: string; href: string; gradient: string; badge: string | null }[] = [];
 
 const INTEREST_GRID = [
   { icon: '📖', label: 'Tori 绘本馆', desc: '韩语绘本故事', href: '/learn/picture-books', color: '#81b5a1' },
@@ -26,7 +11,6 @@ const INTEREST_GRID = [
 ];
 
 const FEED = [
-  { label: '今日热帖', desc: 'IVE 回归新闻热帖', href: '/korea/kpop/news' },
   { label: '今日绘本', desc: '토리와 첫 만남', href: '/learn/picture-books' },
   { label: '今日韩剧表达', desc: '《眼泪女王》经典台词', href: '/korea/drama' },
 ];
@@ -40,7 +24,7 @@ export function DesktopExplorePage() {
       <div className="desktop-hero explore">
         <span className="desktop-label">◉ 探索</span>
         <h2>用喜欢的内容学韩语</h2>
-        <p>KPOP、韩娱热点、绘本和韩剧表达，都可以变成你的学习材料。</p>
+        <p>绘本、韩剧表达、韩国小知识，都可以变成你的学习材料。</p>
       </div>
 
       {/* Featured 2-col */}

@@ -8,6 +8,8 @@ import { useRequireLoginAction } from '@/hooks/useRequireLoginAction';
 import { knowledgeCategories } from '@/data/knowledge';
 import { grammarPoints } from '@/data/grammar';
 import { useTheme } from '@/components/ThemeProvider';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 
 const LIGHT_C = { ink: '#241917', muted: '#89756e', line: '#eee0d8', pink: '#ff7fa8', pinkSoft: '#fff0f5', mint: '#aee3d8', cream: '#fff8f4', black: '#201815', mintBg: '#eaf8f5', mintText: '#4e746d', zhText: '#7e6b64', shadow: '0 16px 42px rgba(78,52,46,.10)', strong: '0 28px 72px rgba(78,52,46,.18)' };
 const DARK_C  = { ink: '#F0E8FF', muted: '#B8A8C8', line: '#3A3060', pink: '#ff7fa8', pinkSoft: '#2D2848', mint: '#4A6058', cream: '#252040', black: '#3A3060', mintBg: '#1E3530', mintText: '#5ecfb8', zhText: '#9A8AB0', shadow: '0 16px 42px rgba(0,0,0,.30)', strong: '0 28px 72px rgba(0,0,0,.40)' };
@@ -396,6 +398,7 @@ export default function AnalyzePage() {
   const { theme } = useTheme();
   const C = theme === 'dark' ? DARK_C : LIGHT_C;
   const router = useRouter();
+  const { lang } = useLang();
   const { requireLogin, isLoggedIn } = useRequireLoginAction();
   const [mode, setMode] = useState<Mode>('learn');
   const [input, setInput] = useState('');
@@ -412,7 +415,7 @@ export default function AnalyzePage() {
 
   function detectCharCount(text: string) {
     const len = text.replace(/\s/g, '').length;
-    return { len, label: len < 5 ? '极短输入' : len < 20 ? '短句输入' : len < 80 ? '段落输入' : '长文输入' };
+    return { len, label: len < 5 ? t('analyze.char_very_short', lang) : len < 20 ? t('analyze.char_short', lang) : len < 80 ? t('analyze.char_para', lang) : t('analyze.char_long', lang) };
   }
 
   const dir = detectDirection(input);
@@ -426,7 +429,7 @@ export default function AnalyzePage() {
     setShowHistory(false);
 
     if (mode === 'deep' && !isLong) {
-      showToastMsg('当前内容较短，建议使用学习拆解模式');
+      showToastMsg(t('analyze.toast_short_for_deep', lang));
     }
 
     const TIMEOUT_MS = 15000;
@@ -434,7 +437,7 @@ export default function AnalyzePage() {
     const timeoutId = setTimeout(() => {
       timedOut = true;
       setAnalyzing(false);
-      showToastMsg('请求超时，已切换离线模式');
+      showToastMsg(t('analyze.toast_timeout', lang));
       const r = analyzeOffline(input.trim());
       setResult(r);
       saveToHistory(r);
@@ -494,23 +497,23 @@ export default function AnalyzePage() {
 
   async function handleSaveSentence() {
     if (!result) return;
-    if (savedSentences.has(result.original)) { showToastMsg('已保存到我的句子', '/vocabulary?tab=sentences'); return; }
+    if (savedSentences.has(result.original)) { showToastMsg(t('analyze.toast_already_saved_sentence', lang), '/vocabulary?tab=sentences'); return; }
     requireLogin(async () => {
       try {
         await db.sentences.add({
           id: crypto.randomUUID(),
           korean: result.original, chinese: result.fullTranslation, source_type: 'analysis',
-          source_id: 'analyze-' + Date.now(), source_title: '内容拆解',
+          source_id: 'analyze-' + Date.now(), source_title: t('analyze.page_title', lang),
           created_at: new Date().toISOString(),
         });
         setSavedSentences(prev => new Set([...prev, result.original]));
-        showToastMsg('已保存到我的句子', '/vocabulary?tab=sentences');
-      } catch { showToastMsg('保存失败'); }
+        showToastMsg(t('analyze.toast_saved_sentence', lang), '/vocabulary?tab=sentences');
+      } catch { showToastMsg(t('analyze.toast_save_fail', lang)); }
     });
   }
 
   async function handleSaveWord(text: string, meaning: string) {
-    if (savedWords.has(text)) { showToastMsg('已保存到词库'); return; }
+    if (savedWords.has(text)) { showToastMsg(t('analyze.toast_saved_word', lang)); return; }
     requireLogin(async () => {
       try {
         const existing = await db.words.where('word').equals(text).first();
@@ -524,20 +527,20 @@ export default function AnalyzePage() {
           });
         }
         setSavedWords(prev => new Set([...prev, text]));
-        showToastMsg('已保存到我的词库');
-      } catch { showToastMsg('保存失败'); }
+        showToastMsg(t('analyze.toast_saved_word', lang));
+      } catch { showToastMsg(t('analyze.toast_save_fail', lang)); }
     });
   }
 
   function handleClear() {
-    if (result && !confirm('清空输入和分析结果？')) return;
+    if (result && !confirm(t('analyze.clear_confirm', lang))) return;
     setInput('');
     setResult(null);
   }
 
   function handleCopy() {
     if (!result?.fullTranslation) return;
-    navigator.clipboard.writeText(result.fullTranslation).then(() => showToastMsg('已复制')).catch(() => showToastMsg('复制失败'));
+    navigator.clipboard.writeText(result.fullTranslation).then(() => showToastMsg(t('analyze.toast_copied', lang))).catch(() => showToastMsg(t('analyze.toast_copy_fail', lang)));
   }
 
   function saveToHistory(r: AnalysisResult) {
@@ -634,7 +637,7 @@ export default function AnalyzePage() {
           fontSize: 11, fontWeight: 800, cursor: 'pointer', flexShrink: 0,
         }}
       >
-        {isActive ? '⏹ 停止' : label}
+        {isActive ? t('analyze.btn_speak_stop', lang) : label}
       </button>
     );
   }
@@ -660,11 +663,11 @@ export default function AnalyzePage() {
     const canSpeak = isChinese ? hasKoreanTranslation : !!result?.original;
     return (
       <div style={{ display: 'grid', gridTemplateColumns: canSpeak ? '1fr 1fr 1fr' : '1fr 1fr', gap: 8, padding: '0 16px 16px' }}>
-        <button onClick={handleCopy} style={{ height: 38, borderRadius: 999, border: '1px solid ' + C.line, background: C.cream, color: '#5a4640', fontSize: 12, fontWeight: 800, cursor: 'pointer' }}>复制翻译</button>
-        <button onClick={handleSaveSentence} style={{ height: 38, borderRadius: 999, border: '1px solid ' + C.line, background: savedSentences.has(result?.original || '') ? C.mintBg : '#fff', color: savedSentences.has(result?.original || '') ? C.mintText : '#5a4640', fontSize: 12, fontWeight: 800, cursor: 'pointer' }}>{savedSentences.has(result?.original || '') ? '✓ 已保存' : '保存句子'}</button>
+        <button onClick={handleCopy} style={{ height: 38, borderRadius: 999, border: '1px solid ' + C.line, background: C.cream, color: '#5a4640', fontSize: 12, fontWeight: 800, cursor: 'pointer' }}>{t('analyze.btn_copy', lang)}</button>
+        <button onClick={handleSaveSentence} style={{ height: 38, borderRadius: 999, border: '1px solid ' + C.line, background: savedSentences.has(result?.original || '') ? C.mintBg : '#fff', color: savedSentences.has(result?.original || '') ? C.mintText : '#5a4640', fontSize: 12, fontWeight: 800, cursor: 'pointer' }}>{savedSentences.has(result?.original || '') ? t('analyze.btn_saved_sentence', lang) : t('analyze.btn_save_sentence', lang)}</button>
         {canSpeak && (
           <button onClick={() => { if (speakText) handleSpeak(speakText); }} style={{ height: 38, borderRadius: 999, border: '1px solid ' + C.line, background: (speakingText === result?.original || speakingText === result?.fullTranslation) ? C.pinkSoft : '#fff', color: (speakingText === result?.original || speakingText === result?.fullTranslation) ? '#f0799b' : '#5a4640', fontSize: 12, fontWeight: 800, cursor: 'pointer' }}>
-            {(speakingText === result?.original || speakingText === result?.fullTranslation) ? '⏹ 停止' : (isChinese ? '朗读韩译' : '朗读原文')}
+            {(speakingText === result?.original || speakingText === result?.fullTranslation) ? t('analyze.btn_speak_stop', lang) : (isChinese ? t('analyze.speak_korean', lang) : t('analyze.speak_original', lang))}
           </button>
         )}
       </div>
@@ -673,9 +676,9 @@ export default function AnalyzePage() {
 
   function renderModeDescription() {
     const descs = [
-      { label: '快速翻译', desc: '只看意思' },
-      { label: '学习拆解', desc: '翻译 + 词句' },
-      { label: '深度解析', desc: '长文精读' },
+      { label: t('analyze.mode_translate', lang), desc: t('analyze.mode_translate_desc', lang) },
+      { label: t('analyze.mode_learn', lang), desc: t('analyze.mode_learn_desc', lang) },
+      { label: t('analyze.mode_deep', lang), desc: t('analyze.mode_deep_desc', lang) },
     ];
     return (
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, margin: '-4px 0 14px' }}>
@@ -694,15 +697,15 @@ export default function AnalyzePage() {
 
   function renderModeExplanation() {
     const items = [
-      { title: '快速翻译', desc: '只要自然翻译、复制、朗读。适合只想快速知道意思。' },
-      { title: '学习拆解', desc: '翻译 + 关键词 + 简单语法 + 保存词句。适合短句和普通段落。' },
-      { title: '深度解析（长文）', desc: '适合长段落、文章、新闻和热帖，输出全文翻译、逐句对照、重点词汇、语法解析和学完建议。' },
+      { title: t('analyze.mode_translate_full', lang), desc: t('analyze.mode_translate_full_desc', lang) },
+      { title: t('analyze.mode_learn_full', lang), desc: t('analyze.mode_learn_full_desc', lang) },
+      { title: t('analyze.mode_deep_full', lang), desc: t('analyze.mode_deep_full_desc', lang) },
     ];
     return (
       <>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', margin: '22px 2px 12px' }}>
-          <h2 style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-.3px', color: C.ink, margin: 0 }}>三个模式有什么区别</h2>
-          <span style={{ fontSize: 12, color: '#f0799b', fontWeight: 700 }}>输出深度</span>
+          <h2 style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-.3px', color: C.ink, margin: 0 }}>{t('analyze.mode_explain_title', lang)}</h2>
+          <span style={{ fontSize: 12, color: '#f0799b', fontWeight: 700 }}>{t('analyze.mode_explain_depth', lang)}</span>
         </div>
         {items.map(item => (
           <div key={item.title} style={{ borderRadius: 26, padding: 14, background: C.cream, border: '1px solid ' + C.line, boxShadow: '0 10px 26px rgba(78,52,46,.06)', marginBottom: 12 }}>
@@ -718,9 +721,9 @@ export default function AnalyzePage() {
   function renderActionButtons() {
     return (
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
-        <button onClick={openHistory} style={{ height: 40, borderRadius: 20, fontSize: 12, fontWeight: 800, background: C.cream, color: '#6b5851', border: '1px solid ' + C.line, cursor: 'pointer' }}>历史记录</button>
+        <button onClick={openHistory} style={{ height: 40, borderRadius: 20, fontSize: 12, fontWeight: 800, background: C.cream, color: '#6b5851', border: '1px solid ' + C.line, cursor: 'pointer' }}>{t('analyze.btn_history', lang)}</button>
         <button onClick={handleSaveSentence} disabled={!result} style={{ height: 40, borderRadius: 20, fontSize: 12, fontWeight: 800, background: result ? C.black : C.cream, color: result ? '#fff' : '#6b5851', border: result ? 'none' : '1px solid ' + C.line, cursor: result ? 'pointer' : 'not-allowed', opacity: result ? 1 : 0.5 }}>
-          {savedSentences.has(result?.original || '') ? '已保存' : '保存结果'}
+          {savedSentences.has(result?.original || '') ? t('analyze.btn_saved', lang) : t('analyze.btn_save', lang)}
         </button>
         <button onClick={async () => {
           if (!result) return;
@@ -728,15 +731,15 @@ export default function AnalyzePage() {
             await db.sentences.add({
               id: crypto.randomUUID(),
               korean: result.original, chinese: result.fullTranslation, source_type: 'analysis',
-              source_id: 'review-' + Date.now(), source_title: '内容拆解',
+              source_id: 'review-' + Date.now(), source_title: t('analyze.page_title', lang),
               created_at: new Date().toISOString(),
             });
-            showToastMsg('已加入复习队列');
+            showToastMsg(t('analyze.toast_added_review', lang));
           } catch (e: any) {
-            if (e?.name === 'ConstraintError') showToastMsg('已在复习队列中');
-            else showToastMsg('加入失败');
+            if (e?.name === 'ConstraintError') showToastMsg(t('analyze.toast_already_in_review', lang));
+            else showToastMsg(t('analyze.toast_add_review_fail', lang));
           }
-        }} disabled={!result} style={{ height: 40, borderRadius: 20, fontSize: 12, fontWeight: 800, background: C.cream, color: '#6b5851', border: '1px solid ' + C.line, cursor: result ? 'pointer' : 'not-allowed', opacity: result ? 1 : 0.5 }}>加入复习</button>
+        }} disabled={!result} style={{ height: 40, borderRadius: 20, fontSize: 12, fontWeight: 800, background: C.cream, color: '#6b5851', border: '1px solid ' + C.line, cursor: result ? 'pointer' : 'not-allowed', opacity: result ? 1 : 0.5 }}>{t('analyze.btn_add_review', lang)}</button>
       </div>
     );
   }
@@ -747,7 +750,7 @@ export default function AnalyzePage() {
       {toast && (
         <div style={{ position: 'fixed', top: 60, left: '50%', transform: 'translateX(-50%)', background: C.black, color: '#fff', borderRadius: 999, padding: '9px 20px', fontSize: 13, fontWeight: 700, zIndex: 300, whiteSpace: 'nowrap', boxShadow: C.strong, display: 'flex', alignItems: 'center', gap: 8 }}>
           {toast.msg}
-          {toast.href && <a href={toast.href} style={{ color: '#aee3d8', fontSize: 12, fontWeight: 700, textDecoration: 'none' }}>查看 →</a>}
+          {toast.href && <a href={toast.href} style={{ color: '#aee3d8', fontSize: 12, fontWeight: 700, textDecoration: 'none' }}>{t('analyze.view_arrow', lang)}</a>}
         </div>
       )}
 
@@ -760,27 +763,27 @@ export default function AnalyzePage() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, marginBottom: 14 }}>
         <button onClick={() => router.push('/tools')} style={{ width: 38, height: 38, borderRadius: 16, background: C.cream, border: '1px solid ' + C.line, fontSize: 20, color: '#4d3933', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}>‹</button>
         <div style={{ flex: 1 }}>
-          <div style={{ fontSize: 17, fontWeight: 800, color: C.ink }}>内容拆解</div>
-          <div style={{ fontSize: 12, color: C.muted, fontWeight: 700, marginTop: 2 }}>翻译 + 学习拆解</div>
+          <div style={{ fontSize: 17, fontWeight: 800, color: C.ink }}>{t('analyze.page_title', lang)}</div>
+          <div style={{ fontSize: 12, color: C.muted, fontWeight: 700, marginTop: 2 }}>{t('analyze.page_subtitle', lang)}</div>
         </div>
-        <div style={{ height: 30, padding: '0 11px', borderRadius: 999, background: C.pinkSoft, color: '#f0799b', fontSize: 11, fontWeight: 800, border: '1px solid rgba(255,127,168,.16)', display: 'flex', alignItems: 'center', flexShrink: 0 }}>正式功能</div>
+        <div style={{ height: 30, padding: '0 11px', borderRadius: 999, background: C.pinkSoft, color: '#f0799b', fontSize: 11, fontWeight: 800, border: '1px solid rgba(255,127,168,.16)', display: 'flex', alignItems: 'center', flexShrink: 0 }}>{t('analyze.badge_official', lang)}</div>
       </div>
 
       {!isLoggedIn && (
         <div style={{ borderRadius: 14, padding: '10px 14px', background: 'rgba(255,127,168,.10)', border: '1px solid rgba(255,127,168,.24)', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 10 }}>
           <span style={{ fontSize: 12 }}>💡</span>
           <span style={{ fontSize: 12, color: '#a05a70', fontWeight: 700, lineHeight: 1.4, flex: 1 }}>
-            登录后每天可 AI 拆解 30 次，游客限 5 次
+            {t('analyze.login_hint', lang)}
           </span>
-          <button onClick={() => router.push('/auth/login?redirect=/ai/analyze')} style={{ height: 28, padding: '0 12px', borderRadius: 999, border: 0, background: '#201815', color: '#fff', fontSize: 11, fontWeight: 800, cursor: 'pointer', flexShrink: 0 }}>登录</button>
+          <button onClick={() => router.push('/auth/login?redirect=/ai/analyze')} style={{ height: 28, padding: '0 12px', borderRadius: 999, border: 0, background: '#201815', color: '#fff', fontSize: 11, fontWeight: 800, cursor: 'pointer', flexShrink: 0 }}>{t('analyze.login_btn', lang)}</button>
         </div>
       )}
 
       {/* Hero */}
       <div style={{ borderRadius: 32, padding: 20, background: 'radial-gradient(circle at 88% 78%, rgba(255,255,255,.58), transparent 24%), linear-gradient(135deg, #fff2f7, #fffdf8 48%, #eaf8f5)', boxShadow: C.strong, border: '1px solid rgba(255,255,255,.92)', marginBottom: 14, overflow: 'hidden', position: 'relative', minHeight: 180 }}>
         <div style={{ height: 34, padding: '0 13px', borderRadius: 999, background: 'rgba(255,255,255,.72)', color: '#f0799b', fontWeight: 800, fontSize: 12, border: '1px solid rgba(255,127,168,.14)', display: 'inline-flex', alignItems: 'center' }}>Translate & Break Down</div>
-        <h1 style={{ margin: '14px 0 0', maxWidth: 270, fontSize: 28, lineHeight: 1.12, letterSpacing: '-.8px', fontWeight: 800 }}>自动识别语言，选择输出深度</h1>
-        <p style={{ margin: '10px 0 0', maxWidth: 270, fontSize: 13, lineHeight: 1.55, color: '#7f6b64' }}>快速翻译看意思，学习拆解看词句，长文再进入深度解析。</p>
+        <h1 style={{ margin: '14px 0 0', maxWidth: 270, fontSize: 28, lineHeight: 1.12, letterSpacing: '-.8px', fontWeight: 800 }}>{t('analyze.hero_title', lang)}</h1>
+        <p style={{ margin: '10px 0 0', maxWidth: 270, fontSize: 13, lineHeight: 1.55, color: '#7f6b64' }}>{t('analyze.hero_desc', lang)}</p>
         <div style={{ position: 'absolute', right: 10, bottom: 0, width: 120, height: 142, pointerEvents: 'none' }}>
           <div style={{ position: 'absolute', right: -36, bottom: -58, width: 180, height: 180, borderRadius: '50%', background: 'rgba(255,127,168,.10)' }} />
           <div style={{ position: 'absolute', top: 2, left: 36, width: 25, height: 68, borderRadius: 999, background: 'linear-gradient(180deg,#fff,#fff5f8)', border: '1px solid rgba(255,127,168,.14)', transform: 'rotate(-12deg)' }} />
@@ -799,7 +802,7 @@ export default function AnalyzePage() {
             height: 36, border: 0, borderRadius: 999, background: mode === m ? C.black : 'transparent',
             color: mode === m ? '#fff' : '#8b766e', fontSize: 12, fontWeight: 800, cursor: 'pointer',
           }}>
-            {['快速翻译', '学习拆解', '深度解析（长文）'][i]}
+            {[t('analyze.mode_translate', lang), t('analyze.mode_learn', lang), t('analyze.mode_deep', lang)][i]}
           </button>
         ))}
       </div>
@@ -807,25 +810,25 @@ export default function AnalyzePage() {
       {/* Input card */}
       <div style={{ borderRadius: 30, background: C.cream, border: '1px solid ' + C.line, boxShadow: C.shadow, marginBottom: 14, padding: 16 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10 }}>
-          <h2 style={{ margin: 0, fontSize: 18, letterSpacing: '-.3px' }}>输入内容</h2>
+          <h2 style={{ margin: 0, fontSize: 18, letterSpacing: '-.3px' }}>{t('analyze.input_title', lang)}</h2>
           <div style={{ display: 'flex', gap: 6, alignItems: 'center', color: C.muted, fontSize: 12, fontWeight: 900 }}>
-            <span style={{ height: 28, display: 'inline-flex', alignItems: 'center', padding: '0 9px', borderRadius: 999, background: C.cream, border: '1px solid ' + C.line }}>自动识别</span>
+            <span style={{ height: 28, display: 'inline-flex', alignItems: 'center', padding: '0 9px', borderRadius: 999, background: C.cream, border: '1px solid ' + C.line }}>{t('analyze.input_auto_detect', lang)}</span>
           </div>
         </div>
         <p style={{ margin: '8px 0 0', color: C.muted, fontSize: 13, lineHeight: 1.55 }}>
-          可以只输一个词、一句话，也可以粘贴一整段。语言方向由系统自动识别；三个按钮只决定结果要输出到什么深度。
+          {t('analyze.input_desc', lang)}
         </p>
         <textarea
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={e => { if (e.key === 'Enter' && e.ctrlKey) handleAnalyze(); }}
-          placeholder="粘贴韩文、中文内容..."
+          placeholder={t('analyze.input_placeholder', lang)}
           rows={4}
           style={{ marginTop: 14, minHeight: 148, borderRadius: 24, padding: 14, background: C.cream, border: '1px solid rgba(239,224,217,.92)', color: '#6f5c55', fontSize: 15, lineHeight: 1.7, width: '100%', boxSizing: 'border-box', resize: 'vertical', outline: 'none', fontFamily: 'inherit' }}
         />
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 10, color: '#a08f87', fontSize: 11, fontWeight: 900 }}>
-          <span>{charCount.len} 字符 · {charCount.label}</span>
-          <span>当前：{['快速翻译', '学习拆解', '深度解析（长文）'][['translate', 'learn', 'deep'].indexOf(mode)]}</span>
+          <span>{charCount.len} {lang === 'en' ? 'chars' : '字符'} · {charCount.label}</span>
+          <span>{t('analyze.current_mode_label', lang)}{[t('analyze.mode_translate', lang), t('analyze.mode_learn', lang), t('analyze.mode_deep', lang)][['translate', 'learn', 'deep'].indexOf(mode)]}</span>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginTop: 12 }}>
           <button onClick={handleAnalyze} disabled={!input.trim() || analyzing} style={{
@@ -834,11 +837,11 @@ export default function AnalyzePage() {
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
           }}>
             {analyzing && <span style={{ width: 14, height: 14, border: '2px solid rgba(255,255,255,.3)', borderTopColor: '#fff', borderRadius: '50%', display: 'inline-block', animation: 'spin 0.7s linear infinite' }} />}
-            {analyzing ? '处理中...' : '开始处理'}
+            {analyzing ? t('analyze.btn_analyzing', lang) : t('analyze.btn_analyze', lang)}
           </button>
-          <button onClick={handleClear} style={{ height: 44, border: '1px solid ' + C.line, borderRadius: 999, background: C.cream, color: '#5a4640', fontSize: 13, fontWeight: 800, cursor: 'pointer' }}>清空</button>
+          <button onClick={handleClear} style={{ height: 44, border: '1px solid ' + C.line, borderRadius: 999, background: C.cream, color: '#5a4640', fontSize: 13, fontWeight: 800, cursor: 'pointer' }}>{t('analyze.btn_clear', lang)}</button>
         </div>
-        <p style={{ margin: '8px 2px 0', fontSize: 11, color: C.muted, fontWeight: 700 }}>提示：Ctrl + Enter 快速开始处理</p>
+        <p style={{ margin: '8px 2px 0', fontSize: 11, color: C.muted, fontWeight: 700 }}>{t('analyze.input_shortcut', lang)}</p>
       </div>
 
       {/* Desktop: action buttons below input */}
@@ -856,14 +859,14 @@ export default function AnalyzePage() {
             {isDesktop && !result && !showHistory && !analyzing && (
               <div style={{ borderRadius: 28, border: '1.5px dashed ' + C.line, padding: '48px 24px', textAlign: 'center', color: C.muted }}>
                 <div style={{ fontSize: 32, marginBottom: 12 }}>⚙</div>
-                <p style={{ fontSize: 14, fontWeight: 700, margin: 0 }}>输入内容后点击「开始处理」</p>
-                <p style={{ fontSize: 12, margin: '6px 0 0' }}>结果将显示在这里</p>
+                <p style={{ fontSize: 14, fontWeight: 700, margin: 0 }}>{t('analyze.desktop_empty', lang)}</p>
+                <p style={{ fontSize: 12, margin: '6px 0 0' }}>{t('analyze.desktop_empty_sub', lang)}</p>
               </div>
             )}
             {isDesktop && analyzing && (
               <div style={{ borderRadius: 28, border: '1px solid ' + C.line, padding: '48px 24px', textAlign: 'center', color: C.muted }}>
                 <div style={{ width: 28, height: 28, border: '3px solid rgba(255,127,168,.3)', borderTopColor: '#ff7fa8', borderRadius: '50%', animation: 'spin 0.7s linear infinite', margin: '0 auto 12px' }} />
-                <p style={{ fontSize: 13, fontWeight: 700, margin: 0 }}>处理中...</p>
+                <p style={{ fontSize: 13, fontWeight: 700, margin: 0 }}>{t('analyze.btn_analyzing', lang)}</p>
               </div>
             )}
 
@@ -871,16 +874,16 @@ export default function AnalyzePage() {
       {showHistory && (
         <div style={{ borderRadius: 30, background: C.cream, border: '1px solid ' + C.line, boxShadow: C.shadow, marginBottom: 14, padding: 16 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <h2 style={{ margin: 0, fontSize: 18, letterSpacing: '-.3px' }}>历史记录</h2>
+            <h2 style={{ margin: 0, fontSize: 18, letterSpacing: '-.3px' }}>{t('analyze.history_title', lang)}</h2>
             <div style={{ display: 'flex', gap: 8 }}>
               {historyResults.length > 0 && (
-                <button onClick={clearHistory} style={{ height: 28, padding: '0 10px', borderRadius: 999, border: '1px solid ' + C.line, background: C.cream, color: C.muted, fontSize: 11, fontWeight: 800, cursor: 'pointer' }}>清除</button>
+                <button onClick={clearHistory} style={{ height: 28, padding: '0 10px', borderRadius: 999, border: '1px solid ' + C.line, background: C.cream, color: C.muted, fontSize: 11, fontWeight: 800, cursor: 'pointer' }}>{t('analyze.history_clear', lang)}</button>
               )}
-              <button onClick={() => setShowHistory(false)} style={{ height: 28, padding: '0 10px', borderRadius: 999, border: '1px solid ' + C.line, background: C.cream, color: C.muted, fontSize: 11, fontWeight: 800, cursor: 'pointer' }}>关闭</button>
+              <button onClick={() => setShowHistory(false)} style={{ height: 28, padding: '0 10px', borderRadius: 999, border: '1px solid ' + C.line, background: C.cream, color: C.muted, fontSize: 11, fontWeight: 800, cursor: 'pointer' }}>{t('analyze.history_close', lang)}</button>
             </div>
           </div>
           {historyResults.length === 0 ? (
-            <p style={{ color: C.muted, fontSize: 13, textAlign: 'center', padding: '24px 0' }}>暂无分析记录</p>
+            <p style={{ color: C.muted, fontSize: 13, textAlign: 'center', padding: '24px 0' }}>{t('analyze.history_empty', lang)}</p>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {historyResults.slice(0, 10).map((r, i) => (
@@ -899,32 +902,32 @@ export default function AnalyzePage() {
       {result && !showHistory && (
         <>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', margin: '4px 2px 12px' }}>
-            <h2 style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-.3px', color: C.ink, margin: 0 }}>当前模式结果</h2>
+            <h2 style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-.3px', color: C.ink, margin: 0 }}>{t('analyze.result_title', lang)}</h2>
             <span style={{ fontSize: 12, color: '#f0799b', fontWeight: 700 }}>
             {mode === 'deep' && result && result._degraded
-                ? '学习拆解（内容较短，已自动切换）'
-                : ['快速翻译', '学习拆解', '深度解析（长文）'][['translate', 'learn', 'deep'].indexOf(mode)]}
+                ? t('analyze.result_mode_degraded', lang)
+                : [t('analyze.mode_translate', lang), t('analyze.mode_learn', lang), t('analyze.mode_deep', lang)][['translate', 'learn', 'deep'].indexOf(mode)]}
             </span>
           </div>
 
           {/* Degraded notice */}
           {result._degraded && (
             <div style={{ borderRadius: 14, padding: '9px 14px', background: 'rgba(255,200,100,.12)', border: '1px solid rgba(255,180,60,.28)', marginBottom: 12, fontSize: 12, color: '#8a6a30', fontWeight: 700 }}>
-              AI 服务暂时不可用，已切换为离线词典模式，结果仅供参考
+              {t('analyze.degraded_notice', lang)}
             </div>
           )}
 
           {/* Translation card (all modes) */}
           <div style={{ borderRadius: 30, background: C.cream, border: '1px solid ' + C.line, boxShadow: C.shadow, marginBottom: 14, overflow: 'hidden' }}>
             <div style={{ padding: '15px 16px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h2 style={{ margin: 0, fontSize: 18 }}>自然翻译</h2>
+              <h2 style={{ margin: 0, fontSize: 18 }}>{t('analyze.translation_title', lang)}</h2>
               <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-                {renderSpeakBtn(dir.from === '中文' ? result.fullTranslation : result.original, dir.from === '中文' ? '🔊 听韩译' : '🔊 听原文')}
+                {renderSpeakBtn(dir.from === '中文' ? result.fullTranslation : result.original, dir.from === '中文' ? t('analyze.speak_korean', lang) : t('analyze.speak_original', lang))}
                 <span style={{ height: 28, display: 'inline-flex', alignItems: 'center', padding: '0 9px', borderRadius: 999, background: C.mintBg, color: C.mintText, fontSize: 11, fontWeight: 800 }}>{dir.from} → {dir.to}</span>
               </div>
             </div>
             <div style={{ padding: '14px 16px 16px', fontSize: 15, lineHeight: 1.78, color: '#382a26' }}>
-              {result.fullTranslation || '（无法生成翻译）'}
+              {result.fullTranslation || t('analyze.no_translation', lang)}
               {result.note && mode !== 'deep' && (
                 <div style={{ marginTop: 12, padding: 12, borderRadius: 20, background: C.cream, color: '#7e6b64', fontSize: 13, lineHeight: 1.65 }}>
                   {result.note}
@@ -934,7 +937,7 @@ export default function AnalyzePage() {
               {mode === 'translate' && result.alternativeTranslation && (
                 <div style={{ marginTop: 8 }}>
                   <button onClick={() => setShowAlt(!showAlt)} style={{ height: 30, padding: '0 10px', borderRadius: 999, border: '1px solid ' + C.line, background: C.cream, color: '#5a4640', fontSize: 11, fontWeight: 800, cursor: 'pointer' }}>
-                    更自然译法 {showAlt ? '▲' : '▼'}
+                    {t('analyze.btn_alt_translation', lang)} {showAlt ? '▲' : '▼'}
                   </button>
                   {showAlt && (
                     <div style={{ marginTop: 8, padding: 12, borderRadius: 20, background: C.cream, color: '#7e6b64', fontSize: 13, lineHeight: 1.65 }}>
@@ -951,15 +954,15 @@ export default function AnalyzePage() {
           {mode === 'learn' && result.words.length > 0 && (
             <>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', margin: '4px 2px 12px' }}>
-                <h2 style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-.3px', color: C.ink, margin: 0 }}>句子拆解</h2>
-                <span style={{ fontSize: 12, color: '#f0799b', fontWeight: 700 }}>可保存</span>
+                <h2 style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-.3px', color: C.ink, margin: 0 }}>{t('analyze.breakdown_title', lang)}</h2>
+                <span style={{ fontSize: 12, color: '#f0799b', fontWeight: 700 }}>{t('analyze.breakdown_saveable', lang)}</span>
               </div>
               <div style={{ borderRadius: 26, padding: 15, background: C.cream, border: '1px solid ' + C.line, boxShadow: C.shadow, marginBottom: 12 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'center', marginBottom: 12 }}>
-                  <span style={{ display: 'inline-flex', alignItems: 'center', height: 26, padding: '0 10px', borderRadius: 999, background: C.black, color: '#fff', fontSize: 11, fontWeight: 700 }}>原句</span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', height: 26, padding: '0 10px', borderRadius: 999, background: C.black, color: '#fff', fontSize: 11, fontWeight: 700 }}>{t('analyze.original_label', lang)}</span>
                   <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-                    {renderSpeakBtn(dir.from === '中文' ? result.fullTranslation : result.original, dir.from === '中文' ? '🔊 听韩译' : '🔊 听原句')}
-                    <span style={{ height: 26, display: 'inline-flex', alignItems: 'center', padding: '0 10px', borderRadius: 999, background: C.mintBg, color: C.mintText, fontSize: 11, fontWeight: 700 }}>口语表达</span>
+                    {renderSpeakBtn(dir.from === '中文' ? result.fullTranslation : result.original, dir.from === '中文' ? t('analyze.speak_korean', lang) : t('analyze.speak_original_sentence', lang))}
+                    <span style={{ height: 26, display: 'inline-flex', alignItems: 'center', padding: '0 10px', borderRadius: 999, background: C.mintBg, color: C.mintText, fontSize: 11, fontWeight: 700 }}>{t('analyze.colloquial_label', lang)}</span>
                   </div>
                 </div>
                 <p style={{ fontSize: 17, lineHeight: 1.6, fontWeight: 900, margin: 0 }}>
@@ -981,13 +984,13 @@ export default function AnalyzePage() {
                         color: savedWords.has(w.text) ? C.mintText : '#f0799b',
                         fontSize: 11, fontWeight: 800, cursor: 'pointer',
                       }}>
-                        {savedWords.has(w.text) ? '已保存' : '保存'}
+                        {savedWords.has(w.text) ? t('analyze.word_saved_btn', lang) : t('analyze.word_save_btn', lang)}
                       </button>
                     </div>
                   ))}
                   {result.words.length > 8 && (
                     <button onClick={() => setShowAllWords(v => !v)} style={{ height: 32, border: '1px solid ' + C.line, borderRadius: 999, background: C.cream, color: C.muted, fontSize: 12, fontWeight: 800, cursor: 'pointer' }}>
-                      {showAllWords ? '收起' : `显示全部 ${result.words.length} 个词 ▼`}
+                      {showAllWords ? t('analyze.btn_collapse', lang) : t('analyze.btn_show_all', lang).replace('{n}', String(result.words.length))}
                     </button>
                   )}
                 </div>
@@ -1000,7 +1003,7 @@ export default function AnalyzePage() {
                 ))}
                 {result.grammar.length > 2 && (
                   <button onClick={() => setShowAllGrammar(v => !v)} style={{ marginTop: 8, height: 32, border: '1px solid ' + C.line, borderRadius: 999, background: C.cream, color: C.muted, fontSize: 12, fontWeight: 800, cursor: 'pointer', width: '100%' }}>
-                    {showAllGrammar ? '收起语法' : `显示全部 ${result.grammar.length} 条语法 ▼`}
+                    {showAllGrammar ? t('analyze.btn_collapse_grammar', lang) : t('analyze.btn_show_all_grammar', lang).replace('{n}', String(result.grammar.length))}
                   </button>
                 )}
               </div>
@@ -1011,13 +1014,13 @@ export default function AnalyzePage() {
           {mode === 'deep' && (
             <div style={{ borderRadius: 30, background: C.cream, border: '1px solid ' + C.line, boxShadow: C.shadow, marginBottom: 14, padding: 16 }}>
               <h2 style={{ margin: '0 0 12px', fontSize: 18, letterSpacing: '-.3px' }}>
-                深度解析
+                {t('analyze.deep_title', lang)}
                 {result.difficulty && <span style={{ marginLeft: 8, fontSize: 12, color: '#f0799b', fontWeight: 700 }}>· {result.difficulty}</span>}
               </h2>
 
               {result.sentences && result.sentences.length > 0 && (
                 <div style={{ marginBottom: 16 }}>
-                  <h3 style={{ fontSize: 14, fontWeight: 800, margin: '0 0 10px', color: C.muted }}>逐句对照</h3>
+                  <h3 style={{ fontSize: 14, fontWeight: 800, margin: '0 0 10px', color: C.muted }}>{t('analyze.sentences_title', lang)}</h3>
                   {result.sentences.map((s, i) => (
                     <div key={i} style={{ padding: '12px 0', borderBottom: i < result.sentences!.length - 1 ? '1px solid ' + C.line : 'none' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 }}>
@@ -1033,7 +1036,7 @@ export default function AnalyzePage() {
 
               {result.words.length > 0 && (
                 <div style={{ marginBottom: 16 }}>
-                  <h3 style={{ fontSize: 14, fontWeight: 800, margin: '0 0 10px', color: C.muted }}>重点词汇（{result.words.length} 个）</h3>
+                  <h3 style={{ fontSize: 14, fontWeight: 800, margin: '0 0 10px', color: C.muted }}>{t('analyze.vocab_title', lang).replace('{n}', String(result.words.length))}</h3>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                     {result.words.slice(0, showAllWords ? undefined : 12).map((w, i) => (
                       <span key={i} style={{ height: 30, padding: '0 10px', borderRadius: 999, background: C.pinkSoft, border: '1px solid rgba(255,127,168,.18)', color: '#5a423b', fontSize: 12, fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
@@ -1046,7 +1049,7 @@ export default function AnalyzePage() {
                   </div>
                   {result.words.length > 12 && (
                     <button onClick={() => setShowAllWords(v => !v)} style={{ marginTop: 8, height: 30, border: '1px solid ' + C.line, borderRadius: 999, background: C.cream, color: C.muted, fontSize: 11, fontWeight: 800, cursor: 'pointer', padding: '0 12px' }}>
-                      {showAllWords ? '收起' : `显示全部 ${result.words.length} 个 ▼`}
+                      {showAllWords ? t('analyze.btn_collapse', lang) : t('analyze.btn_show_all', lang).replace('{n}', String(result.words.length))}
                     </button>
                   )}
                 </div>
@@ -1054,7 +1057,7 @@ export default function AnalyzePage() {
 
               {result.grammar.length > 0 && (
                 <div style={{ marginBottom: 16 }}>
-                  <h3 style={{ fontSize: 14, fontWeight: 800, margin: '0 0 10px', color: C.muted }}>语法解析</h3>
+                  <h3 style={{ fontSize: 14, fontWeight: 800, margin: '0 0 10px', color: C.muted }}>{t('analyze.grammar_title', lang)}</h3>
                   {result.grammar.slice(0, showAllGrammar ? undefined : 3).map((g, i) => (
                     <div key={i} style={{ padding: 12, borderRadius: 20, background: C.mintBg, marginBottom: 8, fontSize: 13, lineHeight: 1.58, color: '#416b63' }}>
                       <strong>{g.pattern}</strong> {g.usage}
@@ -1062,7 +1065,7 @@ export default function AnalyzePage() {
                   ))}
                   {result.grammar.length > 3 && (
                     <button onClick={() => setShowAllGrammar(v => !v)} style={{ height: 30, border: '1px solid ' + C.line, borderRadius: 999, background: C.cream, color: C.muted, fontSize: 11, fontWeight: 800, cursor: 'pointer', padding: '0 12px' }}>
-                      {showAllGrammar ? '收起' : `显示全部 ${result.grammar.length} 条 ▼`}
+                      {showAllGrammar ? t('analyze.btn_collapse', lang) : t('analyze.btn_show_all_grammar', lang).replace('{n}', String(result.grammar.length))}
                     </button>
                   )}
                 </div>
@@ -1070,7 +1073,7 @@ export default function AnalyzePage() {
 
               {result.suggestion && (
                 <div style={{ padding: 14, borderRadius: 20, background: C.pinkSoft, border: '1px solid rgba(255,127,168,.18)' }}>
-                  <h3 style={{ fontSize: 13, fontWeight: 800, margin: '0 0 6px', color: '#f0799b' }}>学完建议</h3>
+                  <h3 style={{ fontSize: 13, fontWeight: 800, margin: '0 0 6px', color: '#f0799b' }}>{t('analyze.suggestion_title', lang)}</h3>
                   <p style={{ margin: 0, fontSize: 13, lineHeight: 1.55, color: '#5a423b' }}>{result.suggestion}</p>
                 </div>
               )}
@@ -1092,24 +1095,24 @@ export default function AnalyzePage() {
         borderTop: '1px solid ' + C.line, zIndex: 100,
       }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, height: '100%', maxWidth: 640, margin: '0 auto' }}>
-          <button onClick={openHistory} style={{ borderRadius: 20, fontSize: 12, fontWeight: 800, background: C.cream, color: '#6b5851', border: '1px solid ' + C.line, cursor: 'pointer' }}>历史记录</button>
+          <button onClick={openHistory} style={{ borderRadius: 20, fontSize: 12, fontWeight: 800, background: C.cream, color: '#6b5851', border: '1px solid ' + C.line, cursor: 'pointer' }}>{t('analyze.btn_history', lang)}</button>
           <button onClick={handleSaveSentence} disabled={!result} style={{ borderRadius: 20, fontSize: 12, fontWeight: 800, background: result ? C.black : C.cream, color: result ? '#fff' : '#6b5851', border: result ? 'none' : '1px solid ' + C.line, cursor: result ? 'pointer' : 'not-allowed', opacity: result ? 1 : 0.5 }}>
-            {savedSentences.has(result?.original || '') ? '已保存' : '保存结果'}
+            {savedSentences.has(result?.original || '') ? t('analyze.btn_saved', lang) : t('analyze.btn_save', lang)}
           </button>
           <button onClick={async () => {
             if (!result) return;
             try {
               await db.sentences.add({
                 korean: result.original, chinese: result.fullTranslation, source_type: 'analysis',
-                source_id: 'review-' + Date.now(), source_title: '内容拆解',
+                source_id: 'review-' + Date.now(), source_title: t('analyze.page_title', lang),
                 created_at: new Date().toISOString(),
               });
-              showToastMsg('已加入复习队列');
+              showToastMsg(t('analyze.toast_added_review', lang));
             } catch (e: any) {
-              if (e?.name === 'ConstraintError') showToastMsg('已在复习队列中');
-              else showToastMsg('加入失败');
+              if (e?.name === 'ConstraintError') showToastMsg(t('analyze.toast_already_in_review', lang));
+              else showToastMsg(t('analyze.toast_add_review_fail', lang));
             }
-          }} disabled={!result} style={{ borderRadius: 20, fontSize: 12, fontWeight: 800, background: C.cream, color: '#6b5851', border: '1px solid ' + C.line, cursor: result ? 'pointer' : 'not-allowed', opacity: result ? 1 : 0.5 }}>加入复习</button>
+          }} disabled={!result} style={{ borderRadius: 20, fontSize: 12, fontWeight: 800, background: C.cream, color: '#6b5851', border: '1px solid ' + C.line, cursor: result ? 'pointer' : 'not-allowed', opacity: result ? 1 : 0.5 }}>{t('analyze.btn_add_review', lang)}</button>
         </div>
       </div>}
     </div>

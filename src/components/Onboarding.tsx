@@ -11,12 +11,11 @@ interface Props {
   onComplete: () => void;
 }
 
-type OnboardingGoal = 'shadowing' | 'analysis' | 'kpop' | 'explore';
+type OnboardingGoal = 'shadowing' | 'analysis' | 'explore';
 
 const GOAL_ROUTES: Record<OnboardingGoal, string> = {
   shadowing: '/shadowing',
   analysis: '/ai/analyze',
-  kpop: '/korea/kpop',
   explore: '/daily',
 };
 
@@ -31,7 +30,6 @@ export default function Onboarding({ onComplete }: Props) {
   const goalOptions = [
     { key: 'shadowing' as OnboardingGoal, emoji: '🎬', label: t('onboarding.goal_shadowing', lang), desc: t('onboarding.goal_shadowing_desc', lang) },
     { key: 'analysis' as OnboardingGoal, emoji: '🔍', label: t('onboarding.goal_analyze', lang), desc: t('onboarding.goal_analyze_desc', lang) },
-    { key: 'kpop' as OnboardingGoal, emoji: '🎤', label: t('onboarding.goal_kpop', lang), desc: t('onboarding.goal_kpop_desc', lang) },
     { key: 'explore' as OnboardingGoal, emoji: '🧭', label: t('onboarding.goal_explore', lang), desc: t('onboarding.goal_explore_desc', lang) },
   ];
 

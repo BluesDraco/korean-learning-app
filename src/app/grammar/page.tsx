@@ -13,6 +13,8 @@ import { speak } from '@/lib/tts';
 import { useAuth } from '@/components/AuthProvider';
 import type { GrammarPoint, GrammarCard, UserGrammarState, ConnectionRule } from '@/types';
 import { useTheme } from '@/components/ThemeProvider';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 
 // grammar-cards 按 Part 动态加载，避免 1MB 数据阻塞首屏
 const partLoaders: Record<string, () => Promise<{ [key: string]: GrammarCard[] }>> = {
@@ -236,6 +238,7 @@ function TokenEl({ role }: { role: string }) {
 
 function CardSortStep({ examples }: { examples: GrammarCard['cardExamples'] }) {
   const C = useC();
+  const { lang } = useLang();
   const quizzes = React.useMemo(() => examples.map(eg => ({
     words: eg.wordBlocks.map(wb => wb.text),
     answer: eg.wordBlocks.map(wb => wb.text),
@@ -304,7 +307,7 @@ function CardSortStep({ examples }: { examples: GrammarCard['cardExamples'] }) {
 
   return (
     <div>
-      <div style={{ fontSize: 15, color: C.muted, marginBottom: 10 }}>第 {qIdx + 1} / {quizzes.length} 题</div>
+      <div style={{ fontSize: 15, color: C.muted, marginBottom: 10 }}>{t('grammar.quiz_q_number', lang).replace('{n}', String(qIdx + 1)).replace('{total}', String(quizzes.length))}</div>
       <div style={{ background: C.bg, borderRadius: 14, padding: '14px 16px', fontSize: 15, color: C.muted, lineHeight: 1.7, marginBottom: 14 }}>{q.zh}</div>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 16 }}>
         {order.map((w, i) => (
@@ -314,18 +317,18 @@ function CardSortStep({ examples }: { examples: GrammarCard['cardExamples'] }) {
       </div>
       <div style={{ minHeight: 60, border: `2px dashed ${trackBorder}`, borderRadius: 18, padding: '12px 16px', display: 'flex', flexWrap: 'wrap', gap: 10, alignItems: 'center', background: trackBg, marginBottom: 12 }}>
         {answers.length === 0
-          ? <span style={{ fontSize: 14, color: '#ccc' }}>点击词块拼句...</span>
+          ? <span style={{ fontSize: 14, color: '#ccc' }}>{t('grammar.quiz_placeholder', lang)}</span>
           : answers.map((w, i) => <button key={i} onClick={() => remove(i)} style={{ padding: '10px 16px', borderRadius: 12, background: C.pink, color: 'white', fontSize: 17, fontWeight: 700, border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>{w}</button>)}
       </div>
       {result && (
         <div style={{ fontSize: 15, fontWeight: 700, color: result === 'ok' ? '#2db89b' : '#e05555', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 8 }}>
-          {result === 'ok' ? (allDone ? '✓ 全部完成！' : '✓ 正确！') : `✗ 正确：${q.answer.join(' ')}　再试试？`}
+          {result === 'ok' ? (allDone ? t('grammar.quiz_all_done', lang) : t('grammar.quiz_correct', lang)) : t('grammar.quiz_wrong_answer', lang).replace('{answer}', q.answer.join(' '))}
           {result !== 'ok' && <button onClick={() => speak(q.answer.join(' '))} style={{ padding: 4, borderRadius: 6, background: 'rgba(255,127,168,.08)', border: 'none', cursor: 'pointer', color: C.pink, flexShrink: 0 }}><Volume2 size={12} /></button>}
         </div>
       )}
       <div style={{ display: 'flex', gap: 8 }}>
-        <button onClick={reset} style={{ padding: '13px 18px', borderRadius: 16, border: `1.5px solid ${C.line}`, background: C.card, color: C.muted, fontSize: 15, cursor: 'pointer' }}>↺ 重置</button>
-        <button onClick={check} style={{ flex: 1, padding: 13, borderRadius: 16, border: 'none', background: '#201815', color: 'white', fontSize: 15, fontWeight: 800, cursor: 'pointer' }}>检查答案</button>
+        <button onClick={reset} style={{ padding: '13px 18px', borderRadius: 16, border: `1.5px solid ${C.line}`, background: C.card, color: C.muted, fontSize: 15, cursor: 'pointer' }}>{t('grammar.quiz_reset', lang)}</button>
+        <button onClick={check} style={{ flex: 1, padding: 13, borderRadius: 16, border: 'none', background: '#201815', color: 'white', fontSize: 15, fontWeight: 800, cursor: 'pointer' }}>{t('grammar.quiz_check', lang)}</button>
       </div>
     </div>
   );
@@ -333,6 +336,7 @@ function CardSortStep({ examples }: { examples: GrammarCard['cardExamples'] }) {
 
 function CardJudgeStep({ mistakes }: { mistakes: GrammarCard['mistakes'] }) {
   const C = useC();
+  const { lang } = useLang();
   const judges = React.useMemo(() => mistakes.map(m => {
     const swap = Math.random() < 0.5;
     return {
@@ -363,7 +367,7 @@ function CardJudgeStep({ mistakes }: { mistakes: GrammarCard['mistakes'] }) {
         };
         return (
           <div key={i} style={{ marginBottom: 20 }}>
-            <div style={{ fontSize: 15, color: C.muted, fontWeight: 700, marginBottom: 10 }}>第 {i + 1} 题 · 选出正确的句子</div>
+            <div style={{ fontSize: 15, color: C.muted, fontWeight: 700, marginBottom: 10 }}>{t('grammar.quiz_q_judge', lang).replace('{n}', String(i + 1))}</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 8 }}>
               {(['A', 'B'] as const).map(ch => (
                 <div key={ch} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -377,7 +381,7 @@ function CardJudgeStep({ mistakes }: { mistakes: GrammarCard['mistakes'] }) {
             </div>
             {s.done && (
               <div>
-                <div style={{ fontSize: 16, color: s.ok ? '#2db89b' : '#e05555', fontWeight: 700, marginBottom: 2 }}>{s.ok ? '✓ 正确！' : `✗ 正确答案：${q.ans}`}</div>
+                <div style={{ fontSize: 16, color: s.ok ? '#2db89b' : '#e05555', fontWeight: 700, marginBottom: 2 }}>{s.ok ? t('grammar.quiz_correct', lang) : t('grammar.quiz_wrong_choice', lang).replace('{choice}', q.ans)}</div>
                 <div style={{ fontSize: 15, color: C.muted }}>{q.why}</div>
               </div>
             )}
@@ -390,6 +394,7 @@ function CardJudgeStep({ mistakes }: { mistakes: GrammarCard['mistakes'] }) {
 
 function SpecialQuizStep({ quiz }: { quiz: NonNullable<GrammarCard['specialQuiz']> }) {
   const C = useC();
+  const { lang } = useLang();
   const [states, setStates] = React.useState(() => quiz.questions.map(() => ({ done: false, ok: false, picked: '' })));
 
   const pick = (qi: number, optIdx: number) => {
@@ -406,7 +411,7 @@ function SpecialQuizStep({ quiz }: { quiz: NonNullable<GrammarCard['specialQuiz'
       <p style={{ fontSize: 15, color: C.muted, marginBottom: 16 }}>{quiz.body}</p>
       {allDone && (
         <div style={{ background: C.mintBg, borderRadius: 14, padding: '12px 16px', marginBottom: 16, fontSize: 15, fontWeight: 700, color: C.ink }}>
-          完成 {correctCount}/{quiz.questions.length} 题
+          完成 {correctCount}/{quiz.questions.length} {lang === 'en' ? 'correct' : '题'}
         </div>
       )}
       {quiz.questions.map((q, qi) => {
@@ -420,7 +425,7 @@ function SpecialQuizStep({ quiz }: { quiz: NonNullable<GrammarCard['specialQuiz'
         return (
           <div key={qi} style={{ marginBottom: 16 }}>
             <div style={{ fontSize: 15, fontWeight: 700, color: C.muted, marginBottom: 8 }}>
-              第 {qi + 1} 题{q.prompt ? ` · ${q.prompt}` : ''}
+              {t('grammar.quiz_q_simple', lang).replace('{n}', String(qi + 1))}{q.prompt ? ` · ${q.prompt}` : ''}
             </div>
             {/* sentence with blank for fill type */}
             {(q.pre !== undefined || q.post !== undefined) ? (
@@ -445,7 +450,7 @@ function SpecialQuizStep({ quiz }: { quiz: NonNullable<GrammarCard['specialQuiz'
             {s.done && (
               <div>
                 <div style={{ fontSize: 15, color: s.ok ? '#2db89b' : '#e05555', fontWeight: 700, marginTop: 4, display: 'flex', alignItems: 'center', gap: 8 }}>
-                  {s.ok ? '✓ 正确！' : `✗ 正确答案：${q.options[q.answer]}`}
+                  {s.ok ? t('grammar.quiz_correct', lang) : t('grammar.quiz_wrong_answer', lang).replace('{answer}', q.options[q.answer])}
                   {!s.ok && <button onClick={() => speak(q.options[q.answer])} style={{ padding: 4, borderRadius: 6, background: 'rgba(255,127,168,.08)', border: 'none', cursor: 'pointer', color: C.pink, flexShrink: 0 }}><Volume2 size={12} /></button>}
                 </div>
                 <div style={{ fontSize: 15, color: C.muted, marginTop: 2 }}>{q.explanation}</div>
@@ -460,6 +465,7 @@ function SpecialQuizStep({ quiz }: { quiz: NonNullable<GrammarCard['specialQuiz'
 
 function CardSwapStep({ examples }: { examples: GrammarCard['cardExamples'] }) {
   const C = useC();
+  const { lang } = useLang();
   const [exIdx, setExIdx] = React.useState(0);
   const [swapIdx, setSwapIdx] = React.useState<number | null>(null);
 
@@ -475,9 +481,9 @@ function CardSwapStep({ examples }: { examples: GrammarCard['cardExamples'] }) {
     return (
       <div>
         <div style={{ background: C.pinkSoft, borderRadius: 12, padding: '13px 16px', marginBottom: 16, fontSize: 15, color: C.muted, lineHeight: 1.65 }}>
-          替换练习：点击下方词语，替换句中高亮部分。
+          {t('grammar.swap_hint_noconfig', lang)}
         </div>
-        <div style={{ fontSize: 15, color: C.muted, marginBottom: 8 }}>第 {exIdx + 1} / {examples.length} 句</div>
+        <div style={{ fontSize: 15, color: C.muted, marginBottom: 8 }}>{t('grammar.swap_sentence_n', lang).replace('{n}', String(exIdx + 1)).replace('{total}', String(examples.length))}</div>
         <div style={{ background: C.bg, borderRadius: 16, padding: '16px 14px' }}>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'flex-start' }}>
             {eg.wordBlocks.map((wb, j) => <WordBlockEl key={j} role={wb.role} text={wb.text} />)}
@@ -488,9 +494,9 @@ function CardSwapStep({ examples }: { examples: GrammarCard['cardExamples'] }) {
         {examples.length > 1 && (
           <div style={{ display: 'flex', gap: 8, marginTop: 14 }}>
             <button onClick={() => { setExIdx(i => Math.max(0, i - 1)); setSwapIdx(null); }} disabled={exIdx === 0}
-              style={{ padding: '9px 16px', borderRadius: 12, border: `1.5px solid ${C.line}`, background: C.card, color: C.muted, fontSize: 15, cursor: exIdx === 0 ? 'default' : 'pointer', opacity: exIdx === 0 ? 0.4 : 1 }}>← 上一句</button>
+              style={{ padding: '9px 16px', borderRadius: 12, border: `1.5px solid ${C.line}`, background: C.card, color: C.muted, fontSize: 15, cursor: exIdx === 0 ? 'default' : 'pointer', opacity: exIdx === 0 ? 0.4 : 1 }}>{t('grammar.nav_prev', lang)}</button>
             <button onClick={() => { setExIdx(i => Math.min(examples.length - 1, i + 1)); setSwapIdx(null); }} disabled={exIdx === examples.length - 1}
-              style={{ flex: 1, padding: '9px 16px', borderRadius: 12, border: 'none', background: '#201815', color: 'white', fontSize: 15, fontWeight: 700, cursor: exIdx === examples.length - 1 ? 'default' : 'pointer', opacity: exIdx === examples.length - 1 ? 0.4 : 1 }}>下一句 →</button>
+              style={{ flex: 1, padding: '9px 16px', borderRadius: 12, border: 'none', background: '#201815', color: 'white', fontSize: 15, fontWeight: 700, cursor: exIdx === examples.length - 1 ? 'default' : 'pointer', opacity: exIdx === examples.length - 1 ? 0.4 : 1 }}>{t('grammar.nav_next', lang)}</button>
           </div>
         )}
       </div>
@@ -507,9 +513,9 @@ function CardSwapStep({ examples }: { examples: GrammarCard['cardExamples'] }) {
   return (
     <div>
       <div style={{ background: C.mintBg, borderRadius: 12, padding: '13px 16px', marginBottom: 16, fontSize: 15, color: C.muted, lineHeight: 1.65 }}>
-        点击下方词语，替换句中高亮部分，观察句子如何变化。
+        {t('grammar.swap_hint', lang)}
       </div>
-      <div style={{ fontSize: 15, color: C.muted, marginBottom: 10 }}>第 {exIdx + 1} / {examples.length} 句</div>
+      <div style={{ fontSize: 15, color: C.muted, marginBottom: 10 }}>{t('grammar.swap_sentence_n', lang).replace('{n}', String(exIdx + 1)).replace('{total}', String(examples.length))}</div>
       <div style={{ background: C.bg, borderRadius: 16, padding: '18px 16px', marginBottom: 14 }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 10, alignItems: 'flex-start' }}>
           {displayBlocks.map((wb, j) => (
@@ -523,7 +529,7 @@ function CardSwapStep({ examples }: { examples: GrammarCard['cardExamples'] }) {
       </div>
       {hasSwaps && (
         <div>
-          <p style={{ fontSize: 15, color: C.muted, marginBottom: 8 }}>换一换{roleLabel[role] ?? role}：</p>
+          <p style={{ fontSize: 15, color: C.muted, marginBottom: 8 }}>{t('grammar.swap_replace_label', lang).replace('{role}', roleLabel[role] ?? role)}</p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
             {eg.swapWords!.map((w, i) => (
               <button key={i} onClick={() => setSwapIdx(swapIdx === i ? null : i)}
@@ -535,9 +541,9 @@ function CardSwapStep({ examples }: { examples: GrammarCard['cardExamples'] }) {
       {examples.length > 1 && (
         <div style={{ display: 'flex', gap: 8, marginTop: 14 }}>
           <button onClick={() => { setExIdx(i => Math.max(0, i - 1)); setSwapIdx(null); }} disabled={exIdx === 0}
-            style={{ padding: '9px 16px', borderRadius: 12, border: `1.5px solid ${C.line}`, background: C.card, color: C.muted, fontSize: 15, cursor: exIdx === 0 ? 'default' : 'pointer', opacity: exIdx === 0 ? 0.4 : 1 }}>← 上一句</button>
+            style={{ padding: '9px 16px', borderRadius: 12, border: `1.5px solid ${C.line}`, background: C.card, color: C.muted, fontSize: 15, cursor: exIdx === 0 ? 'default' : 'pointer', opacity: exIdx === 0 ? 0.4 : 1 }}>{t('grammar.nav_prev', lang)}</button>
           <button onClick={() => { setExIdx(i => Math.min(examples.length - 1, i + 1)); setSwapIdx(null); }} disabled={exIdx === examples.length - 1}
-            style={{ flex: 1, padding: '9px 16px', borderRadius: 12, border: 'none', background: '#201815', color: 'white', fontSize: 15, fontWeight: 700, cursor: exIdx === examples.length - 1 ? 'default' : 'pointer', opacity: exIdx === examples.length - 1 ? 0.4 : 1 }}>下一句 →</button>
+            style={{ flex: 1, padding: '9px 16px', borderRadius: 12, border: 'none', background: '#201815', color: 'white', fontSize: 15, fontWeight: 700, cursor: exIdx === examples.length - 1 ? 'default' : 'pointer', opacity: exIdx === examples.length - 1 ? 0.4 : 1 }}>{t('grammar.nav_next', lang)}</button>
         </div>
       )}
     </div>
@@ -562,6 +568,7 @@ function GrammarCardView({
   onStartGrammar: (gp: GrammarPoint) => void;
 }) {
   const C = useC();
+  const { lang } = useLang();
   const [step, setStep] = React.useState(0);
   const [isMobile, setIsMobile] = React.useState(false);
   const [isTablet, setIsTablet] = React.useState(false);
@@ -596,19 +603,19 @@ function GrammarCardView({
 
   type StepDef = { badge: string; emoji: string; label: string; color: string };
   const steps: StepDef[] = [
-    { badge: '💡', emoji: '💡', label: '今天学什么', color: C.pink },
-    ...(card.conceptCompare || card.compareHtml ? [{ badge: '🔀', emoji: '🔀', label: card.compareLabel || '和中文比一比', color: '#b49ccf' }] : []),
-    ...(hasStructures ? [{ badge: '📐', emoji: '📐', label: '语法结构', color: '#6b7ff0' }] : []),
-    ...(hasRules ? [{ badge: '🔗', emoji: '🔗', label: '接续规则', color: '#b49ccf' }] : []),
-    ...(hasReadingGuide ? [{ badge: '👁️', emoji: '👁️', label: '阅读方法', color: '#6b7ff0' }] : []),
-    ...(hasQuickTable ? [{ badge: '📊', emoji: '📊', label: '速记表', color: '#6b7ff0' }] : []),
-    ...(hasExamples ? [{ badge: '✏️', emoji: '✏️', label: '替换练习', color: '#2db89b' }] : []),
-    ...(hasScenarios ? [{ badge: '🌏', emoji: '🌏', label: '真实场景', color: '#e8a87c' }] : []),
-    ...(hasMistakes ? [{ badge: '⚠️', emoji: '⚠️', label: '别踩坑', color: '#e05555' }] : []),
-    ...(hasExamples ? [{ badge: '🎯', emoji: '🎯', label: '排序练习', color: '#2db89b' }] : []),
-    ...(hasSpecialQuiz ? [{ badge: '🧠', emoji: '🧠', label: '特殊练习', color: '#c89020' }] : []),
-    ...(hasMistakes && !hasSpecialQuiz ? [{ badge: '🧐', emoji: '🧐', label: '判断对错', color: '#c89020' }] : []),
-    { badge: '🎉', emoji: '🎉', label: '完成', color: C.pink },
+    { badge: '💡', emoji: '💡', label: t('grammar.step_intro', lang), color: C.pink },
+    ...(card.conceptCompare || card.compareHtml ? [{ badge: '🔀', emoji: '🔀', label: card.compareLabel || t('grammar.step_compare', lang), color: '#b49ccf' }] : []),
+    ...(hasStructures ? [{ badge: '📐', emoji: '📐', label: t('grammar.step_structure', lang), color: '#6b7ff0' }] : []),
+    ...(hasRules ? [{ badge: '🔗', emoji: '🔗', label: t('grammar.step_rules', lang), color: '#b49ccf' }] : []),
+    ...(hasReadingGuide ? [{ badge: '👁️', emoji: '👁️', label: t('grammar.step_reading', lang), color: '#6b7ff0' }] : []),
+    ...(hasQuickTable ? [{ badge: '📊', emoji: '📊', label: t('grammar.step_quicktable', lang), color: '#6b7ff0' }] : []),
+    ...(hasExamples ? [{ badge: '✏️', emoji: '✏️', label: t('grammar.step_swap', lang), color: '#2db89b' }] : []),
+    ...(hasScenarios ? [{ badge: '🌏', emoji: '🌏', label: t('grammar.step_scenario', lang), color: '#e8a87c' }] : []),
+    ...(hasMistakes ? [{ badge: '⚠️', emoji: '⚠️', label: t('grammar.step_mistake', lang), color: '#e05555' }] : []),
+    ...(hasExamples ? [{ badge: '🎯', emoji: '🎯', label: t('grammar.step_sort', lang), color: '#2db89b' }] : []),
+    ...(hasSpecialQuiz ? [{ badge: '🧠', emoji: '🧠', label: t('grammar.step_special', lang), color: '#c89020' }] : []),
+    ...(hasMistakes && !hasSpecialQuiz ? [{ badge: '🧐', emoji: '🧐', label: t('grammar.step_judge', lang), color: '#c89020' }] : []),
+    { badge: '🎉', emoji: '🎉', label: t('grammar.step_done', lang), color: C.pink },
   ];
 
   const total = steps.length;
@@ -657,12 +664,12 @@ function GrammarCardView({
       <div style={{ minHeight: '100vh', background: C.bg }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 20px', background: C.card, borderBottom: `1px solid ${C.line}`, position: 'sticky', top: 0, zIndex: 10 }}>
           <button onClick={onBack} style={{ width: 38, height: 38, borderRadius: 13, background: C.bg, border: 'none', cursor: 'pointer', fontSize: 22, color: C.ink, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>‹</button>
-          <div style={{ flex: 1, fontSize: 16, fontWeight: 800, color: C.ink }}>第{card.partNumber}部分 · 第{card.lessonNumber}课</div>
+          <div style={{ flex: 1, fontSize: 16, fontWeight: 800, color: C.ink }}>{lang === 'en' ? `Part ${card.partNumber} · Lesson ${card.lessonNumber}` : `第${card.partNumber}部分 · 第${card.lessonNumber}课`}</div>
         </div>
         <div style={{ padding: 24, textAlign: 'center' }}>
           <div style={{ fontSize: 36, marginBottom: 12 }}>📝</div>
-          <p style={{ fontSize: 16, fontWeight: 800, color: C.ink, marginBottom: 8 }}>内容准备中</p>
-          <p style={{ fontSize: 15, color: C.muted }}>这一课的内容正在整理，稍后更新。</p>
+          <p style={{ fontSize: 16, fontWeight: 800, color: C.ink, marginBottom: 8 }}>{t('grammar.empty_title', lang)}</p>
+          <p style={{ fontSize: 15, color: C.muted }}>{t('grammar.empty_desc', lang)}</p>
         </div>
       </div>
     );
@@ -675,7 +682,7 @@ function GrammarCardView({
         <button onClick={onBack} style={{ width: 38, height: 38, borderRadius: 13, background: C.bg, border: 'none', cursor: 'pointer', fontSize: 22, color: C.ink, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>‹</button>
         <div style={{ flex: 1 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-            <span style={{ fontSize: 14, fontWeight: 800, color: C.ink }}>第{card.partNumber}部分 · 第{card.lessonNumber}课 {card.title}</span>
+            <span style={{ fontSize: 14, fontWeight: 800, color: C.ink }}>{lang === 'en' ? `Part ${card.partNumber} · Lesson ${card.lessonNumber} ${card.title}` : `第${card.partNumber}部分 · 第${card.lessonNumber}课 ${card.title}`}</span>
             <span style={{ fontSize: 13, color: C.muted, fontWeight: 700 }}>{step + 1} / {total}</span>
           </div>
           <div style={{ height: 6, background: C.line, borderRadius: 99, overflow: 'hidden' }}>
@@ -719,17 +726,17 @@ function GrammarCardView({
                   return <>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                       <div style={{ background: `color-mix(in srgb, #aee3d8 15%, ${C.card})`, borderRadius: 14, padding: '14px 16px' }}>
-                        <div style={{ fontSize: 12, fontWeight: 800, color: '#2db89b', letterSpacing: '.06em', marginBottom: 10 }}>中文说法</div>
+                        <div style={{ fontSize: 12, fontWeight: 800, color: '#2db89b', letterSpacing: '.06em', marginBottom: 10 }}>{lang === 'en' ? 'Chinese expression' : '中文说法'}</div>
                         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                           {zhParts.map((p, i) => <WordBlockEl key={i} role={p.role} text={p.text} />)}
                         </div>
                       </div>
                       <div style={{ background: `color-mix(in srgb, #ff7fa8 10%, ${C.card})`, borderRadius: 14, padding: '14px 16px' }}>
-                        <div style={{ fontSize: 12, fontWeight: 800, color: C.pink, letterSpacing: '.06em', marginBottom: 10 }}>韩语说法</div>
+                        <div style={{ fontSize: 12, fontWeight: 800, color: C.pink, letterSpacing: '.06em', marginBottom: 10 }}>{lang === 'en' ? 'Korean expression' : '韩语说法'}</div>
                         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 8 }}>
                           {koParts.map((p, i) => <WordBlockEl key={i} role={p.role} text={p.text} />)}
                         </div>
-                        <div style={{ fontSize: 13, color: C.pink, fontWeight: 700 }}>👆 动词跑到最后面去了</div>
+                        <div style={{ fontSize: 13, color: C.pink, fontWeight: 700 }}>{lang === 'en' ? '👆 Verb goes to the end' : '👆 动词跑到最后面去了'}</div>
                       </div>
                     </div>
                     <div style={{ background: C.card, border: `1px solid ${C.line}`, borderRadius: 14, padding: '13px 15px' }}>
@@ -749,14 +756,14 @@ function GrammarCardView({
               <div dangerouslySetInnerHTML={{ __html: card.compareHtml }} />
             ) : card.conceptCompare ? (
               <div>
-                <div style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 8 }}>语序不一样</div>
+                <div style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 8 }}>{lang === 'en' ? 'Word order is different' : '语序不一样'}</div>
                 <div style={{ fontSize: 15, color: C.muted, lineHeight: 1.7, marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-                  <span>中文「{card.conceptCompare.zh}」，韩语变成「{card.conceptCompare.ko}」——动作永远压轴。</span>
+                  <span>{lang === 'en' ? `Chinese "${card.conceptCompare.zh}" → Korean "${card.conceptCompare.ko}" — the verb always goes last.` : `中文「${card.conceptCompare.zh}」，韩语变成「${card.conceptCompare.ko}」——动作永远压轴。`}</span>
                   <button onClick={() => speak(card.conceptCompare!.ko)} style={{ padding: 4, borderRadius: 6, background: 'rgba(255,127,168,.08)', border: 'none', cursor: 'pointer', color: C.pink, flexShrink: 0 }}><Volume2 size={12} /></button>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }}>
                   <div style={{ background: '#eaf8f5', borderRadius: 14, padding: '14px 16px' }}>
-                    <div style={{ fontSize: 12, fontWeight: 800, letterSpacing: '.1em', color: '#2db89b', marginBottom: 10 }}>中文顺序</div>
+                    <div style={{ fontSize: 12, fontWeight: 800, letterSpacing: '.1em', color: '#2db89b', marginBottom: 10 }}>{lang === 'en' ? 'Chinese order' : '中文顺序'}</div>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                       {card.conceptCompare.zh.split(' · ').map((text, i) => (
                         <WordBlockEl key={i} role={(['subject','verb','object'][i] || 'plain')} text={text} />
@@ -764,7 +771,7 @@ function GrammarCardView({
                     </div>
                   </div>
                   <div style={{ background: `color-mix(in srgb, #ff7fa8 10%, ${C.card})`, borderRadius: 14, padding: '14px 16px' }}>
-                    <div style={{ fontSize: 12, fontWeight: 800, letterSpacing: '.1em', color: C.pink, marginBottom: 10 }}>韩语顺序</div>
+                    <div style={{ fontSize: 12, fontWeight: 800, letterSpacing: '.1em', color: C.pink, marginBottom: 10 }}>{lang === 'en' ? 'Korean order' : '韩语顺序'}</div>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                       {card.structures[0]?.tokens.map((t, i) => (
                         <WordBlockEl key={i} role={t.role} text={t.text} />
@@ -787,10 +794,10 @@ function GrammarCardView({
           {/* 语法结构 */}
           {step === structureStepIdx && (
             <div style={{ background: C.card, borderRadius: isMobile ? 16 : 22, border: `1px solid ${C.line}`, boxShadow: '0 4px 20px rgba(78,52,46,.09)', padding: isMobile ? '24px 20px' : '32px 32px' }}>
-              <h2 style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 12 }}>语法结构</h2>
+              <h2 style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 12 }}>{t('grammar.section_structure', lang)}</h2>
               {card.structureNote && (
                 <div style={{ background: `linear-gradient(135deg, color-mix(in srgb, #aee3d8 20%, ${C.card}), color-mix(in srgb, #6b7ff0 15%, ${C.card}))`, borderRadius: 14, padding: '12px 16px', marginBottom: 16, border: `1px solid ${C.line}` }}>
-                  <div style={{ fontSize: 12, fontWeight: 800, color: '#2db89b', marginBottom: 4 }}>📐 这一步在干什么？</div>
+                  <div style={{ fontSize: 12, fontWeight: 800, color: '#2db89b', marginBottom: 4 }}>{lang === 'en' ? '📐 What does this step do?' : '📐 这一步在干什么？'}</div>
                   <div style={{ fontSize: 15, color: C.muted, lineHeight: 1.7, whiteSpace: 'pre-line' }}>{card.structureNote}</div>
                 </div>
               )}
@@ -825,10 +832,10 @@ function GrammarCardView({
               // 旧版：纯列表（P2-P6 兼容）
               return (
                 <div style={{ background: C.card, borderRadius: isMobile ? 16 : 22, border: `1px solid ${C.line}`, boxShadow: '0 4px 20px rgba(78,52,46,.09)', padding: isMobile ? '24px 20px' : '32px 32px' }}>
-                  <h2 style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 12 }}>接续规则</h2>
+                  <h2 style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 12 }}>{t('grammar.section_rules', lang)}</h2>
                   {card.rulesNote && (
-                    <div style={{ background: `linear-gradient(135deg, color-mix(in srgb, #fff8d0 30%, ${C.card}), color-mix(in srgb, #ff7fa8 10%, ${C.card}))`, borderRadius: 14, padding: '12px 16px', marginBottom: 16, border: `1px solid ${C.line}` }}>
-                      <div style={{ fontSize: 12, fontWeight: 800, color: C.pink, marginBottom: 4 }}>📌 为什么需要这些规则？</div>
+                    <div style={{ background: C.bg, borderRadius: 14, padding: '12px 16px', marginBottom: 16 }}>
+                      <div style={{ fontSize: 12, fontWeight: 800, color: C.pink, marginBottom: 4 }}>📌 {lang === 'en' ? 'Why are these rules needed?' : '为什么需要这些规则？'}</div>
                       <div style={{ fontSize: 15, color: C.muted, lineHeight: 1.7, whiteSpace: 'pre-line' }}>{card.rulesNote}</div>
                     </div>
                   )}
@@ -864,10 +871,10 @@ function GrammarCardView({
             };
             return (
               <div style={{ background: C.card, borderRadius: isMobile ? 16 : 22, border: `1px solid ${C.line}`, boxShadow: '0 4px 20px rgba(78,52,46,.09)', padding: isMobile ? '24px 20px' : '32px 32px' }}>
-                <h2 style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 12 }}>接续规则</h2>
+                <h2 style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 12 }}>{t('grammar.section_rules', lang)}</h2>
                 {card.rulesNote && (
                   <div style={{ background: 'linear-gradient(135deg,#fff8d0,#fff0f5)', borderRadius: 14, padding: '12px 16px', marginBottom: 16, border: '1px solid #f0e0c0' }}>
-                    <div style={{ fontSize: 12, fontWeight: 800, color: C.pink, marginBottom: 4 }}>📌 为什么需要这些规则？</div>
+                    <div style={{ fontSize: 12, fontWeight: 800, color: C.pink, marginBottom: 4 }}>📌 {lang === 'en' ? 'Why are these rules needed?' : '为什么需要这些规则？'}</div>
                     <div style={{ fontSize: 15, color: C.muted, lineHeight: 1.7, whiteSpace: 'pre-line' }}>{card.rulesNote}</div>
                   </div>
                 )}
@@ -1010,8 +1017,8 @@ function GrammarCardView({
           {/* 替换练习 */}
           {step === swapStepIdx && (
             <div style={{ background: C.card, borderRadius: isMobile ? 16 : 22, border: `1px solid ${C.line}`, boxShadow: '0 4px 20px rgba(78,52,46,.09)', padding: isMobile ? '24px 20px' : '32px 32px' }}>
-              <h2 style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 8 }}>替换练习</h2>
-              <p style={{ fontSize: 15, color: C.muted, marginBottom: 16 }}>观察句子结构，点击词块换换主语试试看。</p>
+              <h2 style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 8 }}>{t('grammar.section_swap', lang)}</h2>
+              <p style={{ fontSize: 15, color: C.muted, marginBottom: 16 }}>{t('grammar.section_swap_desc', lang)}</p>
               <CardSwapStep key={card.id + '-swap'} examples={card.cardExamples} />
             </div>
           )}
@@ -1019,10 +1026,10 @@ function GrammarCardView({
           {/* 真实场景 */}
           {step === scenarioStepIdx && (
             <div style={{ background: C.card, borderRadius: isMobile ? 16 : 22, border: `1px solid ${C.line}`, boxShadow: '0 4px 20px rgba(78,52,46,.09)', padding: isMobile ? '24px 20px' : '32px 32px' }}>
-              <h2 style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 12 }}>真实场景</h2>
+              <h2 style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 12 }}>{t('grammar.section_scenario', lang)}</h2>
               {card.scenarioNote && (
                 <div style={{ background: `linear-gradient(135deg, color-mix(in srgb, #6b7ff0 12%, ${C.card}), color-mix(in srgb, #aee3d8 15%, ${C.card}))`, borderRadius: 14, padding: '12px 16px', marginBottom: 16, border: `1px solid ${C.line}` }}>
-                  <div style={{ fontSize: 12, fontWeight: 800, color: '#6b7ff0', marginBottom: 4 }}>🌏 什么时候用？</div>
+                  <div style={{ fontSize: 12, fontWeight: 800, color: '#6b7ff0', marginBottom: 4 }}>{lang === 'en' ? '🌏 When to use?' : '🌏 什么时候用？'}</div>
                   <div style={{ fontSize: 15, color: C.muted, lineHeight: 1.7, whiteSpace: 'pre-line' }}>{card.scenarioNote}</div>
                 </div>
               )}
@@ -1047,7 +1054,7 @@ function GrammarCardView({
           {/* 别踩坑 */}
           {step === mistakeStepIdx && (
             <div style={{ background: C.card, borderRadius: isMobile ? 16 : 22, border: `1px solid ${C.line}`, boxShadow: '0 4px 20px rgba(78,52,46,.09)', padding: isMobile ? '24px 20px' : '32px 32px' }}>
-              <h2 style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 16 }}>别踩坑</h2>
+              <h2 style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 16 }}>{t('grammar.section_mistake', lang)}</h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                 {card.mistakes.map((m, i) => (
                   <div key={i} style={{ borderRadius: 18, overflow: 'hidden', border: `1px solid ${C.line}` }}>
@@ -1075,8 +1082,8 @@ function GrammarCardView({
           {/* 排序练习 */}
           {step === sortStepIdx && (
             <div style={{ background: C.card, borderRadius: isMobile ? 16 : 22, border: `1px solid ${C.line}`, boxShadow: '0 4px 20px rgba(78,52,46,.09)', padding: isMobile ? '24px 20px' : '32px 32px' }}>
-              <h2 style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 8 }}>排序练习</h2>
-              <p style={{ fontSize: 15, color: C.muted, marginBottom: 16 }}>把词块按正确语序排成句子。</p>
+              <h2 style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 8 }}>{t('grammar.section_sort', lang)}</h2>
+              <p style={{ fontSize: 15, color: C.muted, marginBottom: 16 }}>{t('grammar.section_sort_desc', lang)}</p>
               <CardSortStep key={card.id + '-sort'} examples={card.cardExamples} />
             </div>
           )}
@@ -1091,8 +1098,8 @@ function GrammarCardView({
           {/* 判断对错 */}
           {step === judgeStepIdx && (
             <div style={{ background: C.card, borderRadius: isMobile ? 16 : 22, border: `1px solid ${C.line}`, boxShadow: '0 4px 20px rgba(78,52,46,.09)', padding: isMobile ? '24px 20px' : '32px 32px' }}>
-              <h2 style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 8 }}>判断对错</h2>
-              <p style={{ fontSize: 15, color: C.muted, marginBottom: 16 }}>两个句子选出正确的那个。</p>
+              <h2 style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 8 }}>{t('grammar.section_judge', lang)}</h2>
+              <p style={{ fontSize: 15, color: C.muted, marginBottom: 16 }}>{t('grammar.section_judge_desc', lang)}</p>
               <CardJudgeStep key={card.id + '-judge'} mistakes={card.mistakes} />
             </div>
           )}
@@ -1109,8 +1116,8 @@ function GrammarCardView({
                     const allDone = chapterKeys.every(k => freshStates[k] === 'done');
                     return allDone ? (
                       <div style={{ background: 'linear-gradient(135deg,#ff7fa8,#aee3d8)', borderRadius: 16, padding: 20, textAlign: 'center', marginBottom: 16 }}>
-                        <h2 style={{ fontSize: 20, fontWeight: 900, color: 'white', margin: 0 }}>🎉 第一章全部完成！</h2>
-                        <p style={{ fontSize: 15, color: 'rgba(255,255,255,.9)', marginTop: 6, marginBottom: 0 }}>你已经掌握了韩语最基础的10个语法点，可以开始说出完整的韩语句子了。</p>
+                        <h2 style={{ fontSize: 20, fontWeight: 900, color: 'white', margin: 0 }}>{t('grammar.done_chapter_title', lang)}</h2>
+                        <p style={{ fontSize: 15, color: 'rgba(255,255,255,.9)', marginTop: 6, marginBottom: 0 }}>{t('grammar.done_chapter_desc', lang)}</p>
                       </div>
                     ) : null;
                   })()}
@@ -1125,8 +1132,8 @@ function GrammarCardView({
                     const allDone = chapterKeys.every(k => freshStates[k] === 'done');
                     return allDone ? (
                       <div style={{ background: 'linear-gradient(135deg,#ff7fa8,#aee3d8)', borderRadius: 16, padding: 20, textAlign: 'center', marginBottom: 16 }}>
-                        <h2 style={{ fontSize: 20, fontWeight: 900, color: 'white', marginBottom: 6, margin: 0 }}>🎉 第一章全部完成！</h2>
-                        <p style={{ fontSize: 15, color: 'rgba(255,255,255,.9)', marginTop: 6 }}>你已经掌握了韩语最基础的10个语法点，可以开始说出完整的韩语句子了。</p>
+                        <h2 style={{ fontSize: 20, fontWeight: 900, color: 'white', marginBottom: 6, margin: 0 }}>{t('grammar.done_chapter_title', lang)}</h2>
+                        <p style={{ fontSize: 15, color: 'rgba(255,255,255,.9)', marginTop: 6 }}>{t('grammar.done_chapter_desc', lang)}</p>
                       </div>
                     ) : null;
                   })()}
@@ -1136,7 +1143,7 @@ function GrammarCardView({
                   </div>
                   {card.connectionRules.length > 0 && (
                     <div style={{ background: C.mintBg, borderRadius: 14, padding: 16, marginBottom: 14 }}>
-                      <h3 style={{ fontSize: 15, fontWeight: 800, color: '#2db89b', marginBottom: 10, margin: '0 0 10px 0' }}>核心规律</h3>
+                      <h3 style={{ fontSize: 15, fontWeight: 800, color: '#2db89b', marginBottom: 10, margin: '0 0 10px 0' }}>{t('grammar.done_core_rules', lang)}</h3>
                       <div style={{ fontSize: 15, lineHeight: 2, color: C.ink }}>
                         {card.connectionRules.map((rule, i) => {
                           const text = typeof rule === 'string' ? rule : `${rule.text}${(rule as any).examples ? '　' + (rule as any).examples : ''}`;
@@ -1174,7 +1181,7 @@ function GrammarCardView({
                   )}
                   {card.mistakes.length > 0 && (
                     <div style={{ background: C.pinkSoft, borderRadius: 14, padding: 16, marginBottom: 14 }}>
-                      <h3 style={{ fontSize: 15, fontWeight: 800, color: C.pink, marginBottom: 10, margin: '0 0 10px 0' }}>常见错误</h3>
+                      <h3 style={{ fontSize: 15, fontWeight: 800, color: C.pink, marginBottom: 10, margin: '0 0 10px 0' }}>{t('grammar.done_common_errors', lang)}</h3>
                       {card.mistakes.slice(0, 4).map((m, i) => (
                         <div key={i} style={{ fontSize: 15, lineHeight: 1.8, marginBottom: 4, display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
                           <span style={{ color: '#be185d', textDecoration: 'line-through' }}>{m.wrong}</span>{' → '}
@@ -1186,7 +1193,7 @@ function GrammarCardView({
                   )}
                   {linkedGps.length > 0 && (
                     <div style={{ background: C.bg, borderRadius: 14, padding: 16, marginBottom: 14 }}>
-                      <p style={{ fontSize: 15, fontWeight: 800, color: C.muted, marginBottom: 12, margin: '0 0 12px 0' }}>继续练习关联语法：</p>
+                      <p style={{ fontSize: 15, fontWeight: 800, color: C.muted, marginBottom: 12, margin: '0 0 12px 0' }}>{t('grammar.done_continue_practice', lang)}</p>
                       {linkedGps.map(gp => (
                         <button key={gp.id} onClick={() => onStartGrammar(gp)}
                           style={{ display: 'block', width: '100%', padding: '12px 16px', background: C.pinkSoft, border: `1px solid rgba(255,127,168,.2)`, borderRadius: 14, fontSize: 15, fontWeight: 700, color: C.pink, cursor: 'pointer', marginBottom: 8, textAlign: 'left' }}>
@@ -1215,13 +1222,13 @@ function GrammarCardView({
               {!card.overviewHtml && (
                 <button onClick={() => { setStep(0); window.scrollTo(0, 0); }}
                   style={{ width: '100%', padding: 14, borderRadius: 14, border: `1.5px solid ${C.line}`, background: C.card, color: C.muted, fontSize: 15, fontWeight: 700, cursor: 'pointer', marginBottom: 10 }}>
-                  ↺ 重新学习一遍
+                  {t('grammar.done_relearn', lang)}
                 </button>
               )}
               <div style={{ borderTop: `1px solid ${C.line}`, paddingTop: 20, marginTop: 20 }}>
                 <button onClick={onComplete}
                   style={{ width: '100%', padding: 17, borderRadius: 99, border: 'none', background: `linear-gradient(135deg, ${C.mint}, ${C.pink})`, color: 'white', fontSize: 16, fontWeight: 800, cursor: 'pointer' }}>
-                  完成这一课 ✓
+                  {t('grammar.done_complete', lang)}
                 </button>
               </div>
             </div>
@@ -1238,11 +1245,11 @@ function GrammarCardView({
         padding: '14px 0 0', display: 'flex', gap: 10
       }}>
         {step > 0 && (
-          <button onClick={goPrev} style={{ padding: '15px 18px', borderRadius: 18, border: `1.5px solid ${C.line}`, background: C.card, color: C.muted, fontSize: 16, fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' }}>← 上一页</button>
+          <button onClick={goPrev} style={{ padding: '15px 18px', borderRadius: 18, border: `1.5px solid ${C.line}`, background: C.card, color: C.muted, fontSize: 16, fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' }}>{t('grammar.nav_prev_page', lang)}</button>
         )}
         {step < doneStepIdx && (
           <button onClick={goNext} style={{ flex: 1, padding: 15, borderRadius: 18, border: 'none', background: '#201815', color: 'white', fontSize: 16, fontWeight: 800, cursor: 'pointer' }}>
-            下一页 →
+            {t('grammar.nav_next_page', lang)}
           </button>
         )}
       </div>
@@ -1316,6 +1323,7 @@ type ErrState = { revealed: boolean };
 
 function SortStep({ onDone }: { onDone: () => void }) {
   const C = useC();
+  const { lang } = useLang();
   const [qIdx, setQIdx] = React.useState(0);
   const [order, setOrder] = React.useState<string[]>([]);
   const [answers, setAnswers] = React.useState<string[]>([]);
@@ -1378,7 +1386,7 @@ function SortStep({ onDone }: { onDone: () => void }) {
 
   return (
     <div>
-      <div style={{ fontSize: 15, color: C.muted, marginBottom: 4 }}>第 {qIdx + 1} / {SORT_Q.length} 题</div>
+      <div style={{ fontSize: 15, color: C.muted, marginBottom: 4 }}>{t('grammar.quiz_q_number', lang).replace('{n}', String(qIdx + 1)).replace('{total}', String(SORT_Q.length))}</div>
       <div style={{ fontSize: 15, background: C.bg, borderRadius: 10, padding: '8px 12px', color: C.muted, marginBottom: 10 }}>{q.hint}</div>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
         {order.map((w, i) => (
@@ -1387,17 +1395,17 @@ function SortStep({ onDone }: { onDone: () => void }) {
       </div>
       <div onClick={() => {}} style={{ minHeight: 50, border: `2px dashed ${trackBorder}`, borderRadius: 14, padding: '8px 12px', display: 'flex', flexWrap: 'wrap', gap: 6, alignItems: 'center', background: trackBg, marginBottom: 8 }}>
         {answers.length === 0
-          ? <span style={{ fontSize: 16, color: '#ccc' }}>点击词块拼句...</span>
+          ? <span style={{ fontSize: 16, color: '#ccc' }}>{t('grammar.quiz_placeholder', lang)}</span>
           : answers.map((w, i) => <button key={i} onClick={() => remove(i)} style={{ padding: '6px 12px', borderRadius: 10, background: C.pink, color: 'white', fontSize: 17, fontWeight: 700, border: 'none', cursor: 'pointer' }}>{w}</button>)
         }
       </div>
       {result && <div style={{ fontSize: 15, fontWeight: 700, color: result === 'ok' ? '#2db89b' : '#e05555', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
-        {result === 'ok' ? (allDone ? '✓ 全部完成！点「下一页」继续。' : '✓ 正确！') : `✗ 正确顺序：${q.answer.join(' ')}。再试试？`}
+        {result === 'ok' ? (allDone ? t('grammar.practice_sort_all_done', lang) : t('grammar.quiz_correct', lang)) : t('grammar.quiz_wrong_sort', lang).replace('{answer}', q.answer.join(' '))}
         {result !== 'ok' && <button onClick={() => speak(q.answer.join(' '))} style={{ padding: 4, borderRadius: 6, background: 'rgba(255,127,168,.08)', border: 'none', cursor: 'pointer', color: C.pink, flexShrink: 0 }}><Volume2 size={12} /></button>}
       </div>}
       <div style={{ display: 'flex', gap: 8 }}>
-        <button onClick={reset} style={{ padding: '12px 16px', borderRadius: 14, border: `1.5px solid ${C.line}`, background: C.card, color: C.muted, fontSize: 16, cursor: 'pointer' }}>↺ 重置</button>
-        <button onClick={check} style={{ flex: 1, padding: 12, borderRadius: 14, border: 'none', background: '#201815', color: 'white', fontSize: 16, fontWeight: 800, cursor: 'pointer' }}>检查答案</button>
+        <button onClick={reset} style={{ padding: '12px 16px', borderRadius: 14, border: `1.5px solid ${C.line}`, background: C.card, color: C.muted, fontSize: 16, cursor: 'pointer' }}>{t('grammar.quiz_reset', lang)}</button>
+        <button onClick={check} style={{ flex: 1, padding: 12, borderRadius: 14, border: 'none', background: '#201815', color: 'white', fontSize: 16, fontWeight: 800, cursor: 'pointer' }}>{t('grammar.quiz_check', lang)}</button>
       </div>
     </div>
   );
@@ -1405,6 +1413,7 @@ function SortStep({ onDone }: { onDone: () => void }) {
 
 function FillStep({ data, onScore }: { data: typeof FILL3_DATA; onScore?: (s: { correct: number; total: number }) => void }) {
   const C = useC();
+  const { lang } = useLang();
   const [states, setStates] = React.useState<FillState[]>(() => data.map(() => ({ done: false, ok: null, picked: null })));
 
   const pick = (i: number, opt: string) => {
@@ -1427,7 +1436,7 @@ function FillStep({ data, onScore }: { data: typeof FILL3_DATA; onScore?: (s: { 
         const sentence = q.post ? <>{q.pre}{blank} {q.post}</> : <>{q.pre}{blank}</>;
         return (
           <div key={i} style={{ marginBottom: 20 }}>
-            <div style={{ fontSize: 15, color: C.muted, fontWeight: 700, marginBottom: 10 }}>第 {i + 1} 题</div>
+            <div style={{ fontSize: 15, color: C.muted, fontWeight: 700, marginBottom: 10 }}>{t('grammar.quiz_q_simple', lang).replace('{n}', String(i + 1))}</div>
             <div style={{ fontSize: 17, fontWeight: 700, color: C.ink, marginBottom: 10 }}>{sentence}</div>
             {q.opts.map(opt => {
               let border = '1.5px solid #eee0d8', bg = 'white';
@@ -1441,7 +1450,7 @@ function FillStep({ data, onScore }: { data: typeof FILL3_DATA; onScore?: (s: { 
             })}
             {s.done && (
               <div style={{ marginBottom: 14 }}>
-                <div style={{ fontSize: 16, color: s.ok ? '#2db89b' : '#e05555', fontWeight: 700, margin: '6px 0 2px' }}>{s.ok ? '✓ 正确！' : `✗ 正确答案：${q.ans}`}</div>
+                <div style={{ fontSize: 16, color: s.ok ? '#2db89b' : '#e05555', fontWeight: 700, margin: '6px 0 2px' }}>{s.ok ? t('grammar.quiz_correct', lang) : t('grammar.quiz_wrong_answer', lang).replace('{answer}', q.ans)}</div>
                 <div style={{ fontSize: 15, color: C.muted }}>{q.why}</div>
               </div>
             )}
@@ -1455,6 +1464,7 @@ function FillStep({ data, onScore }: { data: typeof FILL3_DATA; onScore?: (s: { 
 
 function MorphStep({ onScore }: { onScore?: (s: { correct: number; total: number }) => void }) {
   const C = useC();
+  const { lang } = useLang();
   const [states, setStates] = React.useState<FillState[]>(() => MORPH_DATA.map(() => ({ done: false, ok: null, picked: null })));
 
   const pick = (i: number, opt: string) => {
@@ -1473,7 +1483,7 @@ function MorphStep({ onScore }: { onScore?: (s: { correct: number; total: number
         const s = states[i];
         return (
           <div key={i} style={{ marginBottom: 20 }}>
-            <div style={{ fontSize: 15, color: C.muted, fontWeight: 700, marginBottom: 10 }}>第 {i + 1} 题</div>
+            <div style={{ fontSize: 15, color: C.muted, fontWeight: 700, marginBottom: 10 }}>{t('grammar.quiz_q_simple', lang).replace('{n}', String(i + 1))}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: C.ink, marginBottom: 12 }}>{q.label}</div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 8 }}>
               {q.opts.map(opt => {
@@ -1489,7 +1499,7 @@ function MorphStep({ onScore }: { onScore?: (s: { correct: number; total: number
             </div>
             {s.done && (
               <div style={{ marginBottom: 12 }}>
-                <div style={{ fontSize: 16, color: s.ok ? '#2db89b' : '#e05555', fontWeight: 700, margin: '6px 0 2px' }}>{s.ok ? '✓ 正确！' : `✗ 正确答案：${q.ans}`}</div>
+                <div style={{ fontSize: 16, color: s.ok ? '#2db89b' : '#e05555', fontWeight: 700, margin: '6px 0 2px' }}>{s.ok ? t('grammar.quiz_correct', lang) : t('grammar.quiz_wrong_answer', lang).replace('{answer}', q.ans)}</div>
                 <div style={{ fontSize: 15, color: C.muted }}>{q.why}</div>
               </div>
             )}
@@ -1503,6 +1513,7 @@ function MorphStep({ onScore }: { onScore?: (s: { correct: number; total: number
 
 function JudgeStep({ onScore }: { onScore?: (s: { correct: number; total: number }) => void }) {
   const C = useC();
+  const { lang } = useLang();
   const [states, setStates] = React.useState<JudgeState[]>(() => JUDGE_DATA.map(() => ({ done: false, ok: null, picked: null })));
 
   const pick = (i: number, choice: string) => {
@@ -1527,7 +1538,7 @@ function JudgeStep({ onScore }: { onScore?: (s: { correct: number; total: number
         };
         return (
           <div key={i} style={{ marginBottom: 20 }}>
-            <div style={{ fontSize: 15, color: C.muted, fontWeight: 700, marginBottom: 10 }}>第 {i + 1} 题 · 选出更自然的句子</div>
+            <div style={{ fontSize: 15, color: C.muted, fontWeight: 700, marginBottom: 10 }}>{t('grammar.quiz_q_natural', lang).replace('{n}', String(i + 1))}</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 8 }}>
               {(['A', 'B'] as const).map(ch => (
                 <div key={ch} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -1540,7 +1551,7 @@ function JudgeStep({ onScore }: { onScore?: (s: { correct: number; total: number
             </div>
             {s.done && (
               <div style={{ marginBottom: 12 }}>
-                <div style={{ fontSize: 16, color: s.ok ? '#2db89b' : '#e05555', fontWeight: 700, margin: '6px 0 2px' }}>{s.ok ? '✓ 正确！' : `✗ 正确答案：${q.ans}`}</div>
+                <div style={{ fontSize: 16, color: s.ok ? '#2db89b' : '#e05555', fontWeight: 700, margin: '6px 0 2px' }}>{s.ok ? t('grammar.quiz_correct', lang) : t('grammar.quiz_wrong_answer', lang).replace('{answer}', q.ans)}</div>
                 <div style={{ fontSize: 15, color: C.muted }}>{q.why}</div>
               </div>
             )}
@@ -1554,6 +1565,7 @@ function JudgeStep({ onScore }: { onScore?: (s: { correct: number; total: number
 
 function ErrStep() {
   const C = useC();
+  const { lang } = useLang();
   const [states, setStates] = React.useState<ErrState[]>(() => ERR_DATA.map(() => ({ revealed: false })));
 
   const reveal = (i: number) => setStates(s => s.map((item, j) => j === i ? { revealed: true } : item));
@@ -1562,7 +1574,7 @@ function ErrStep() {
     <div>
       {ERR_DATA.map((q, i) => (
         <div key={i} style={{ marginBottom: 20 }}>
-          <div style={{ fontSize: 15, color: C.muted, fontWeight: 700, marginBottom: 10 }}>第 {i + 1} 题 · 找出错误并改正</div>
+          <div style={{ fontSize: 15, color: C.muted, fontWeight: 700, marginBottom: 10 }}>{t('grammar.quiz_q_find_error', lang).replace('{n}', String(i + 1))}</div>
           <div style={{ borderRadius: 16, overflow: 'hidden', border: `1px solid ${C.line}` }}>
             <div style={{ background: `color-mix(in srgb, #e05555 8%, ${C.card})`, padding: '11px 14px', display: 'flex', alignItems: 'center', gap: 8 }}>
               <span style={{ background: '#e05555', color: 'white', fontSize: 13, fontWeight: 800, padding: '2px 7px', borderRadius: 99, flexShrink: 0 }}>错</span>
@@ -1580,7 +1592,7 @@ function ErrStep() {
               </>
             ) : (
               <div style={{ padding: '10px 14px' }}>
-                <button onClick={() => reveal(i)} style={{ padding: '8px 16px', borderRadius: 12, border: '1.5px solid #aee3d8', background: '#eaf8f5', color: '#2db89b', fontSize: 16, fontWeight: 800, cursor: 'pointer' }}>显示答案</button>
+                <button onClick={() => reveal(i)} style={{ padding: '8px 16px', borderRadius: 12, border: '1.5px solid #aee3d8', background: '#eaf8f5', color: '#2db89b', fontSize: 16, fontWeight: 800, cursor: 'pointer' }}>{t('grammar.quiz_show_answer', lang)}</button>
               </div>
             )}
           </div>
@@ -1592,34 +1604,35 @@ function ErrStep() {
 
 function ScoreStep({ onComplete, scores }: { onComplete: () => void; scores?: { fill3: number; fill3max: number; fill4: number; fill4max: number; morph: number; morphmax: number; judge: number; judgemax: number } }) {
   const C = useC();
+  const { lang } = useLang();
   const total = (scores?.fill3 ?? 0) + (scores?.fill4 ?? 0) + (scores?.morph ?? 0) + (scores?.judge ?? 0);
   const max = (scores?.fill3max ?? FILL3_DATA.length) + (scores?.fill4max ?? FILL4_DATA.length) + (scores?.morphmax ?? MORPH_DATA.length) + (scores?.judgemax ?? JUDGE_DATA.length);
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
       <div style={{ background: 'linear-gradient(135deg,#fff0f5,#eaf8f5)', borderRadius: 20, padding: 20, textAlign: 'center' }}>
         <div style={{ fontSize: 42, fontWeight: 900, color: C.pink }}>{total}<span style={{ fontSize: 18, color: C.muted }}> / {max}</span></div>
-        <div style={{ fontSize: 16, color: C.muted, marginTop: 4 }}>选择题答对数</div>
+        <div style={{ fontSize: 16, color: C.muted, marginTop: 4 }}>{t('grammar.practice_score_correct', lang)}</div>
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
         <div style={{ background: C.bg, borderRadius: 14, padding: 12, textAlign: 'center' }}>
           <div style={{ fontSize: 22, fontWeight: 900, color: C.pink }}>{scores?.fill3 ?? 0}/{scores?.fill3max ?? FILL3_DATA.length}</div>
-          <div style={{ fontSize: 15, color: C.muted, marginTop: 3 }}>助词填空①</div>
+          <div style={{ fontSize: 15, color: C.muted, marginTop: 3 }}>{t('grammar.practice_score_fill1', lang)}</div>
         </div>
         <div style={{ background: C.bg, borderRadius: 14, padding: 12, textAlign: 'center' }}>
           <div style={{ fontSize: 22, fontWeight: 900, color: C.pink }}>{scores?.fill4 ?? 0}/{scores?.fill4max ?? FILL4_DATA.length}</div>
-          <div style={{ fontSize: 15, color: C.muted, marginTop: 3 }}>助词填空②</div>
+          <div style={{ fontSize: 15, color: C.muted, marginTop: 3 }}>{t('grammar.practice_score_fill2', lang)}</div>
         </div>
         <div style={{ background: C.bg, borderRadius: 14, padding: 12, textAlign: 'center' }}>
           <div style={{ fontSize: 22, fontWeight: 900, color: C.pink }}>{scores?.morph ?? 0}/{scores?.morphmax ?? MORPH_DATA.length}</div>
-          <div style={{ fontSize: 15, color: C.muted, marginTop: 3 }}>变形练习</div>
+          <div style={{ fontSize: 15, color: C.muted, marginTop: 3 }}>{t('grammar.practice_score_morph', lang)}</div>
         </div>
         <div style={{ background: C.bg, borderRadius: 14, padding: 12, textAlign: 'center', gridColumn: 'span 3' }}>
           <div style={{ fontSize: 22, fontWeight: 900, color: C.pink }}>{scores?.judge ?? 0}/{scores?.judgemax ?? JUDGE_DATA.length}</div>
-          <div style={{ fontSize: 15, color: C.muted, marginTop: 3 }}>判断正误</div>
+          <div style={{ fontSize: 15, color: C.muted, marginTop: 3 }}>{t('grammar.practice_score_judge', lang)}</div>
         </div>
       </div>
       <div style={{ background: C.card, border: `1px solid ${C.line}`, borderRadius: 16, padding: '14px 16px' }}>
-        <div style={{ fontSize: 15, fontWeight: 800, color: C.muted, marginBottom: 10 }}>本章掌握的7项能力</div>
+        <div style={{ fontSize: 15, fontWeight: 800, color: C.muted, marginBottom: 10 }}>{t('grammar.practice_abilities', lang)}</div>
         {[
           '韩语基本语序：谓语放句末',
           '正式体 합니다/습니다，日常体 아요/어요',
@@ -1633,18 +1646,18 @@ function ScoreStep({ onComplete, scores }: { onComplete: () => void; scores?: { 
         ))}
       </div>
       <div style={{ background: C.bg, borderRadius: 16, padding: '14px 16px' }}>
-        <div style={{ fontSize: 15, fontWeight: 800, color: C.muted, marginBottom: 4 }}>下一阶段</div>
+        <div style={{ fontSize: 15, fontWeight: 800, color: C.muted, marginBottom: 4 }}>{t('grammar.practice_next_phase', lang)}</div>
         <div style={{ fontSize: 15, fontWeight: 700, color: C.ink }}>02｜常用固定句型及助词</div>
         <div style={{ fontSize: 15, color: C.muted, marginTop: 3 }}>去哪里、和谁、有/没有、请求命令、数词量词……</div>
       </div>
       <button onClick={onComplete} style={{ width: '100%', padding: 14, borderRadius: 16, border: 'none', background: 'linear-gradient(135deg,#aee3d8,#ff7fa8)', color: 'white', fontSize: 15, fontWeight: 800, cursor: 'pointer' }}>
-        完成练习 ✓
+        {t('grammar.practice_complete_btn', lang)}
       </button>
     </div>
   );
 }
 
-const STEP_CONFIG = [
+const STEP_CONFIG_ZH = [
   { badge: '📋', label: '练习说明', color: '#ff7fa8' },
   { badge: '🎯', label: '句子排序', color: '#2db89b' },
   { badge: '✏️', label: '助词填空①', color: '#6b7ff0' },
@@ -1654,10 +1667,21 @@ const STEP_CONFIG = [
   { badge: '⚠️', label: '改错练习', color: '#e05555' },
   { badge: '🏆', label: '练习完成', color: '#e07a30' },
 ];
-const STEPS_TOTAL = STEP_CONFIG.length;
+const STEP_CONFIG_EN = [
+  { badge: '📋', label: 'Overview', color: '#ff7fa8' },
+  { badge: '🎯', label: 'Word order', color: '#2db89b' },
+  { badge: '✏️', label: 'Particles ①', color: '#6b7ff0' },
+  { badge: '✏️', label: 'Particles ②', color: '#b49ccf' },
+  { badge: '🔄', label: 'Conjugation', color: '#2db89b' },
+  { badge: '✅', label: 'True/False', color: '#c89020' },
+  { badge: '⚠️', label: 'Error correction', color: '#e05555' },
+  { badge: '🏆', label: 'Results', color: '#e07a30' },
+];
+const STEPS_TOTAL = 8;
 
 function ComprehensivePractice({ card, onBack, onComplete }: { card: GrammarCard; onBack: () => void; onComplete: () => void }) {
   const C = useC();
+  const { lang } = useLang();
   const [step, setStep] = React.useState(0);
   const [isMobile, setIsMobile] = React.useState(false);
   const [scores, setScores] = React.useState({ fill3: 0, fill3max: FILL3_DATA.length, fill4: 0, fill4max: FILL4_DATA.length, morph: 0, morphmax: MORPH_DATA.length, judge: 0, judgemax: JUDGE_DATA.length });
@@ -1668,7 +1692,8 @@ function ComprehensivePractice({ card, onBack, onComplete }: { card: GrammarCard
     return () => window.removeEventListener('resize', check);
   }, []);
 
-  const cfg = STEP_CONFIG[step];
+  const configs = lang === 'en' ? STEP_CONFIG_EN : STEP_CONFIG_ZH;
+  const cfg = configs[step];
   const progress = ((step + 1) / STEPS_TOTAL) * 100;
 
   return (
@@ -1678,7 +1703,7 @@ function ComprehensivePractice({ card, onBack, onComplete }: { card: GrammarCard
         <button onClick={onBack} style={{ width: 34, height: 34, borderRadius: 10, background: C.bg, border: 'none', cursor: 'pointer', fontSize: 18, color: C.ink, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>‹</button>
         <div style={{ flex: 1 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
-            <span style={{ fontSize: 15, fontWeight: 800, color: C.ink }}>综合练习①｜韩语基本句型</span>
+            <span style={{ fontSize: 15, fontWeight: 800, color: C.ink }}>{t('grammar.practice_title', lang)}</span>
             <span style={{ fontSize: 15, color: C.muted, fontWeight: 700 }}>{step + 1} / {STEPS_TOTAL}</span>
           </div>
           <div style={{ height: 5, background: C.line, borderRadius: 99, overflow: 'hidden' }}>
@@ -1697,10 +1722,10 @@ function ComprehensivePractice({ card, onBack, onComplete }: { card: GrammarCard
           {/* Step 0: 说明 */}
           {step === 0 && (
             <>
-              <div style={{ fontSize: 21, fontWeight: 900, color: C.ink }}>第一章综合练习</div>
-              <div style={{ fontSize: 16, color: C.muted, lineHeight: 1.7 }}>完成这份练习，检验前 10 课是否掌握。</div>
+              <div style={{ fontSize: 21, fontWeight: 900, color: C.ink }}>{t('grammar.practice_intro_title', lang)}</div>
+              <div style={{ fontSize: 16, color: C.muted, lineHeight: 1.7 }}>{t('grammar.practice_intro_desc', lang)}</div>
               <div style={{ background: 'linear-gradient(135deg,#fff0f5,#eaf8f5)', borderRadius: 22, padding: 20 }}>
-                <div style={{ fontSize: 16, fontWeight: 800, color: C.muted, marginBottom: 12 }}>本次练习覆盖的知识点</div>
+                <div style={{ fontSize: 16, fontWeight: 800, color: C.muted, marginBottom: 12 }}>{t('grammar.practice_coverage_title', lang)}</div>
                 {[
                   ['🔤','韩语基本语序','谓语放句末'],
                   ['🎙️','正式礼貌体','합니다 / 습니다 / 입니다'],
@@ -1719,17 +1744,17 @@ function ComprehensivePractice({ card, onBack, onComplete }: { card: GrammarCard
                   </div>
                 ))}
               </div>
-              <div style={{ background: C.card, border: `1px solid ${C.line}`, borderRadius: 14, padding: '13px 15px', fontSize: 15, color: C.muted, lineHeight: 1.65 }}>
-                共 <span style={{ color: C.pink, fontWeight: 700 }}>7 组练习</span>，包含排序、填空、变形、判断和改错。<br />选错了会显示正确答案，可以继续往下做。
-              </div>
+              <div style={{ background: C.card, border: `1px solid ${C.line}`, borderRadius: 14, padding: '13px 15px', fontSize: 15, color: C.muted, lineHeight: 1.65 }} dangerouslySetInnerHTML={{ __html: lang === 'en'
+                ? 'Includes <b>7 exercises</b>: word order, fill-in, conjugation, judgment & error correction.<br />Wrong answers show the correct answer — just keep going.'
+                : '共 <span style="color:#ff7fa8;font-weight:700">7 组练习</span>，包含排序、填空、变形、判断和改错。<br />选错了会显示正确答案，可以继续往下做。' }} />
             </>
           )}
 
           {/* Step 1: 排序 */}
           {step === 1 && (
             <>
-              <div style={{ fontSize: 21, fontWeight: 900, color: C.ink }}>拼出正确的句子</div>
-              <div style={{ fontSize: 16, color: C.muted, lineHeight: 1.65 }}>韩语谓语放句末！注意助词的位置。</div>
+              <div style={{ fontSize: 21, fontWeight: 900, color: C.ink }}>{t('grammar.practice_sort_title', lang)}</div>
+              <div style={{ fontSize: 16, color: C.muted, lineHeight: 1.65 }}>{t('grammar.practice_sort_desc', lang)}</div>
               <SortStep onDone={() => {}} />
             </>
           )}
@@ -1737,8 +1762,8 @@ function ComprehensivePractice({ card, onBack, onComplete }: { card: GrammarCard
           {/* Step 2: 填空① */}
           {step === 2 && (
             <>
-              <div style={{ fontSize: 21, fontWeight: 900, color: C.ink }}>예요/이에요 · 은/는</div>
-              <div style={{ fontSize: 16, color: C.muted, lineHeight: 1.7 }}>根据名词末尾有无收音选择正确形式。</div>
+              <div style={{ fontSize: 21, fontWeight: 900, color: C.ink }}>{t('grammar.practice_fill1_title', lang)}</div>
+              <div style={{ fontSize: 16, color: C.muted, lineHeight: 1.7 }}>{t('grammar.practice_fill1_desc', lang)}</div>
               <FillStep data={FILL3_DATA} onScore={s => setScores(prev => ({ ...prev, fill3: s.correct }))} />
             </>
           )}
@@ -1746,8 +1771,8 @@ function ComprehensivePractice({ card, onBack, onComplete }: { card: GrammarCard
           {/* Step 3: 填空② */}
           {step === 3 && (
             <>
-              <div style={{ fontSize: 21, fontWeight: 900, color: C.ink }}>을/를 · 에/에서</div>
-              <div style={{ fontSize: 16, color: C.muted, lineHeight: 1.7 }}>宾语助词和地点助词，选对它！</div>
+              <div style={{ fontSize: 21, fontWeight: 900, color: C.ink }}>{t('grammar.practice_fill2_title', lang)}</div>
+              <div style={{ fontSize: 16, color: C.muted, lineHeight: 1.7 }}>{t('grammar.practice_fill2_desc', lang)}</div>
               <FillStep data={FILL4_DATA} onScore={s => setScores(prev => ({ ...prev, fill4: s.correct }))} />
             </>
           )}
@@ -1755,8 +1780,8 @@ function ComprehensivePractice({ card, onBack, onComplete }: { card: GrammarCard
           {/* Step 4: 变形 */}
           {step === 4 && (
             <>
-              <div style={{ fontSize: 21, fontWeight: 900, color: C.ink }}>选出正确变形结果</div>
-              <div style={{ fontSize: 16, color: C.muted, lineHeight: 1.7 }}>합니다体和疑问句变换，注意有无收音！</div>
+              <div style={{ fontSize: 21, fontWeight: 900, color: C.ink }}>{t('grammar.practice_morph_title', lang)}</div>
+              <div style={{ fontSize: 16, color: C.muted, lineHeight: 1.7 }}>{t('grammar.practice_morph_desc', lang)}</div>
               <MorphStep onScore={s => setScores(prev => ({ ...prev, morph: s.correct }))} />
             </>
           )}
@@ -1764,8 +1789,8 @@ function ComprehensivePractice({ card, onBack, onComplete }: { card: GrammarCard
           {/* Step 5: 判断 */}
           {step === 5 && (
             <>
-              <div style={{ fontSize: 21, fontWeight: 900, color: C.ink }}>选出更自然的句子</div>
-              <div style={{ fontSize: 16, color: C.muted, lineHeight: 1.7 }}>结合时间词判断时态，注意 에 / 에서 的用法。</div>
+              <div style={{ fontSize: 21, fontWeight: 900, color: C.ink }}>{t('grammar.practice_judge_title', lang)}</div>
+              <div style={{ fontSize: 16, color: C.muted, lineHeight: 1.7 }}>{t('grammar.practice_judge_desc', lang)}</div>
               <JudgeStep onScore={s => setScores(prev => ({ ...prev, judge: s.correct }))} />
             </>
           )}
@@ -1773,8 +1798,8 @@ function ComprehensivePractice({ card, onBack, onComplete }: { card: GrammarCard
           {/* Step 6: 改错 */}
           {step === 6 && (
             <>
-              <div style={{ fontSize: 21, fontWeight: 900, color: C.ink }}>找出错误并改正</div>
-              <div style={{ fontSize: 16, color: C.muted, lineHeight: 1.7 }}>这些都是初学者最常犯的错误，检查自己有没有！</div>
+              <div style={{ fontSize: 21, fontWeight: 900, color: C.ink }}>{t('grammar.practice_error_title', lang)}</div>
+              <div style={{ fontSize: 16, color: C.muted, lineHeight: 1.7 }}>{t('grammar.practice_error_desc', lang)}</div>
               <ErrStep />
             </>
           )}
@@ -1788,10 +1813,10 @@ function ComprehensivePractice({ card, onBack, onComplete }: { card: GrammarCard
       {step < 7 && (
         <div style={isMobile ? { position: 'fixed', bottom: 'calc(56px + env(safe-area-inset-bottom, 0px))', left: 0, right: 0, padding: '12px 16px', background: C.card, borderTop: `1px solid ${C.line}`, display: 'flex', gap: 10, zIndex: 70 } : { padding: '12px 0 0', display: 'flex', gap: 10 }}>
           {step > 0 && (
-            <button onClick={() => { setStep(s => s - 1); window.scrollTo(0, 0); }} style={{ padding: '14px 16px', borderRadius: 16, border: `1.5px solid ${C.line}`, background: C.card, color: C.muted, fontSize: 15, fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' }}>← 上一页</button>
+            <button onClick={() => { setStep(s => s - 1); window.scrollTo(0, 0); }} style={{ padding: '14px 16px', borderRadius: 16, border: `1.5px solid ${C.line}`, background: C.card, color: C.muted, fontSize: 15, fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' }}>{t('grammar.nav_prev_page', lang)}</button>
           )}
           <button onClick={() => { setStep(s => s + 1); window.scrollTo(0, 0); }} style={{ flex: 1, padding: 14, borderRadius: 16, border: 'none', background: '#201815', color: 'white', fontSize: 15, fontWeight: 800, cursor: 'pointer' }}>
-            {step === 6 ? '查看结果 →' : '下一页 →'}
+            {step === 6 ? t('grammar.nav_see_result', lang) : t('grammar.nav_next_page', lang)}
           </button>
         </div>
       )}
@@ -1803,6 +1828,7 @@ function ComprehensivePractice({ card, onBack, onComplete }: { card: GrammarCard
 
 function ChaptersTab({ onOpenCard, isAdmin }: { onOpenCard: (card: GrammarCard) => void; isAdmin: boolean }) {
   const C = useC();
+  const { lang } = useLang();
   const [lessonStates, setLessonStates] = useState<Record<string, LessonStatus>>({});
   const [isLoaded, setIsLoaded] = useState(false);
   const [expanded, setExpanded] = useState<Set<number>>(new Set([1]));
@@ -1835,7 +1861,7 @@ function ChaptersTab({ onOpenCard, isAdmin }: { onOpenCard: (card: GrammarCard) 
             const card = await loadGrammarCard(lesson.cardId);
             if (!cancelled && card) {
               setContinueCard(card);
-              setContinuePartTitle(`第${partNums[part.partNumber - 1]}部分 · ${part.title}`);
+              setContinuePartTitle(lang === 'en' ? `Part ${part.partNumber} · ${part.title}` : `第${partNums[part.partNumber - 1]}部分 · ${part.title}`);
             }
             return;
           }
@@ -1850,9 +1876,9 @@ function ChaptersTab({ onOpenCard, isAdmin }: { onOpenCard: (card: GrammarCard) 
       {/* Stats */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, marginBottom: 12 }}>
         {[
-          { n: doneLessons, l: '已完成课', c: '#2db89b' },
-          { n: doneLessons > 0 && doneLessons < totalLessons ? 1 : 0, l: '进行中', c: C.pink },
-          { n: totalLessons, l: '共课次', c: C.ink },
+          { n: doneLessons, l: t('grammar.chapters_done_count', lang), c: '#2db89b' },
+          { n: doneLessons > 0 && doneLessons < totalLessons ? 1 : 0, l: t('grammar.chapters_in_progress', lang), c: C.pink },
+          { n: totalLessons, l: t('grammar.chapters_total', lang), c: C.ink },
         ].map(({ n, l, c }) => (
           <div key={l} style={{ background: C.card, border: `1px solid ${C.line}`, borderRadius: 20, padding: '14px 10px', textAlign: 'center' }}>
             <div style={{ fontSize: 26, fontWeight: 900, color: c, lineHeight: 1 }}>{n}</div>
@@ -1864,13 +1890,13 @@ function ChaptersTab({ onOpenCard, isAdmin }: { onOpenCard: (card: GrammarCard) 
       {/* 整体进度 */}
       <div style={{ background: C.card, border: `1px solid ${C.line}`, borderRadius: 24, padding: '16px 18px', marginBottom: 12 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-          <span style={{ fontSize: 15, fontWeight: 800 }}>整体进度</span>
-          <span style={{ fontSize: 13, color: C.muted }}>{continueCard ? continuePartTitle : doneLessons === totalLessons ? '全部完成 🎉' : '从第一部分开始'}</span>
+          <span style={{ fontSize: 15, fontWeight: 800 }}>{t('grammar.chapters_overall_progress', lang)}</span>
+          <span style={{ fontSize: 13, color: C.muted }}>{continueCard ? continuePartTitle : doneLessons === totalLessons ? t('grammar.chapters_all_done', lang) : t('grammar.chapters_from_part1', lang)}</span>
         </div>
         <div style={{ height: 8, background: C.line, borderRadius: 999, overflow: 'hidden', marginBottom: 8 }}>
           <div style={{ height: '100%', borderRadius: 999, background: `linear-gradient(90deg, ${C.mint}, ${C.pink})`, width: `${(doneLessons / totalLessons) * 100}%`, transition: 'width .4s' }} />
         </div>
-        <p style={{ fontSize: 13, color: C.muted }}>已完成 {doneLessons} / {totalLessons} 课</p>
+        <p style={{ fontSize: 13, color: C.muted }}>{t('grammar.chapters_completed_n', lang).replace('{done}', String(doneLessons)).replace('{total}', String(totalLessons))}</p>
       </div>
 
       {/* 继续学习 */}
@@ -1880,10 +1906,10 @@ function ChaptersTab({ onOpenCard, isAdmin }: { onOpenCard: (card: GrammarCard) 
           style={{ background: `linear-gradient(135deg, rgba(255,127,168,.07), rgba(180,156,207,.07))`, border: `1.5px solid rgba(255,127,168,.2)`, borderRadius: 28, padding: 20, marginBottom: 16, cursor: 'pointer', boxShadow: '0 8px 32px rgba(255,127,168,.1)' }}
         >
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-            <span style={{ fontSize: 15, fontWeight: 800 }}>继续学习</span>
-            <span style={{ fontSize: 13, fontWeight: 800, background: C.pinkSoft, color: C.pink, borderRadius: 999, padding: '4px 12px' }}>进行中</span>
+            <span style={{ fontSize: 15, fontWeight: 800 }}>{t('grammar.chapters_continue', lang)}</span>
+            <span style={{ fontSize: 13, fontWeight: 800, background: C.pinkSoft, color: C.pink, borderRadius: 999, padding: '4px 12px' }}>{t('grammar.chapters_in_progress', lang)}</span>
           </div>
-          <p style={{ fontSize: 18, fontWeight: 900, marginBottom: 4 }}>第 {continueCard.lessonNumber} 课</p>
+          <p style={{ fontSize: 18, fontWeight: 900, marginBottom: 4 }}>{t('grammar.chapters_lesson_n', lang).replace('{n}', String(continueCard.lessonNumber))}</p>
           <p style={{ fontSize: 15, color: C.ink, fontWeight: 800, marginBottom: 2 }}>{continueCard.title}</p>
           {continueCard.whatItDoes && !continueCard.isPractice && (
             <p style={{ fontSize: 15, color: C.muted, marginBottom: 16 }}>{continueCard.whatItDoes}</p>
@@ -1893,12 +1919,12 @@ function ChaptersTab({ onOpenCard, isAdmin }: { onOpenCard: (card: GrammarCard) 
             onClick={e => { e.stopPropagation(); onOpenCard(continueCard!); }}
             style={{ width: '100%', padding: '14px 0', borderRadius: 99, background: C.pink, color: '#fff', fontSize: 16, fontWeight: 800, border: 'none', cursor: 'pointer' }}
           >
-            继续学习
+            {t('grammar.chapters_continue', lang)}
           </button>
         </div>
       )}
 
-      <p style={{ fontSize: 13, fontWeight: 800, color: C.muted, letterSpacing: '.6px', textTransform: 'uppercase', margin: '18px 0 10px' }}>全部部分</p>
+      <p style={{ fontSize: 13, fontWeight: 800, color: C.muted, letterSpacing: '.6px', textTransform: 'uppercase', margin: '18px 0 10px' }}>{t('grammar.chapters_all_parts', lang)}</p>
 
       {grammarParts.map(part => {
         const isPartLocked = !isAdmin && part.partNumber >= 7;
@@ -1918,10 +1944,10 @@ function ChaptersTab({ onOpenCard, isAdmin }: { onOpenCard: (card: GrammarCard) 
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-                  <p style={{ fontSize: 16, fontWeight: 800, color: isDone || isActive ? C.ink : C.muted, margin: 0 }}>第{partNums[part.partNumber - 1]}部分 · {part.title}</p>
-                  {part.partNumber >= 7 && <span style={{ fontSize: 11, fontWeight: 800, background: 'linear-gradient(135deg,#6b7ff0,#a78bfa)', color: 'white', borderRadius: 999, padding: '2px 8px', flexShrink: 0 }}>中级</span>}
+                  <p style={{ fontSize: 16, fontWeight: 800, color: isDone || isActive ? C.ink : C.muted, margin: 0 }}>{lang === 'en' ? `Part ${part.partNumber} · ${part.title}` : `第${partNums[part.partNumber - 1]}部分 · ${part.title}`}</p>
+                  {part.partNumber >= 7 && <span style={{ fontSize: 11, fontWeight: 800, background: 'linear-gradient(135deg,#6b7ff0,#a78bfa)', color: 'white', borderRadius: 999, padding: '2px 8px', flexShrink: 0 }}>{lang === 'en' ? 'Intermediate' : '中级'}</span>}
                 </div>
-                <p style={{ fontSize: 13, color: C.muted, marginTop: 3 }}>{isPartLocked ? '即将开放' : `${part.lessons.length} 课${doneInPart > 0 ? ` · ${doneInPart}/${part.lessons.length} 已完成` : ''}`}</p>
+                <p style={{ fontSize: 13, color: C.muted, marginTop: 3 }}>{isPartLocked ? t('grammar.chapters_status_coming', lang) : lang === 'en' ? `${part.lessons.length} lessons${doneInPart > 0 ? ` · ${doneInPart}/${part.lessons.length} done` : ''}` : `${part.lessons.length} 课${doneInPart > 0 ? ` · ${doneInPart}/${part.lessons.length} 已完成` : ''}`}</p>
               </div>
               <div style={{ width: 56, height: 6, background: C.line, borderRadius: 999, overflow: 'hidden', flexShrink: 0 }}>
                 <div style={{ height: '100%', borderRadius: 999, background: `linear-gradient(90deg, ${C.mint}, ${C.pink})`, width: `${(doneInPart / part.lessons.length) * 100}%` }} />
@@ -1950,17 +1976,17 @@ function ChaptersTab({ onOpenCard, isAdmin }: { onOpenCard: (card: GrammarCard) 
                         {isLocked ? <Lock size={12} /> : status === 'done' ? '✓' : isCurrent ? '▶' : lesson.lessonNumber}
                       </div>
                       <div style={{ flex: 1, minWidth: 0 }}>
-                        <p style={{ fontSize: 12, color: C.muted, margin: 0 }}>第 {lesson.lessonNumber} 课</p>
+                        <p style={{ fontSize: 12, color: C.muted, margin: 0 }}>{t('grammar.lesson_label', lang).replace('{n}', String(lesson.lessonNumber))}</p>
                         <p style={{ fontSize: 16, fontWeight: 800, color: isLocked ? C.muted : status === 'done' ? C.ink : isCurrent ? C.ink : C.muted, margin: 0 }}>{lesson.title}</p>
                       </div>
-                      {!isLocked && status === 'done' && <span style={{ fontSize: 12, fontWeight: 800, background: C.mintBg, color: '#2db89b', borderRadius: 999, padding: '3px 10px', flexShrink: 0 }}>已完成</span>}
+                      {!isLocked && status === 'done' && <span style={{ fontSize: 12, fontWeight: 800, background: C.mintBg, color: '#2db89b', borderRadius: 999, padding: '3px 10px', flexShrink: 0 }}>{t('grammar.chapters_status_done', lang)}</span>}
                       {!isLocked && isCurrent && status !== 'done' && (
                         <button onClick={async e => { e.stopPropagation(); const c = await loadGrammarCard(lesson.cardId); if (c) onOpenCard(c); }} style={{ padding: '6px 14px', borderRadius: 10, background: C.pink, color: '#fff', fontSize: 13, fontWeight: 800, border: 'none', cursor: 'pointer', flexShrink: 0 }}>
-                          学习
+                          {t('grammar.chapters_study_btn', lang)}
                         </button>
                       )}
-                      {!isLocked && !isCurrent && status === 'todo' && <span style={{ fontSize: 12, fontWeight: 800, background: C.bg, color: C.muted, borderRadius: 999, padding: '3px 10px', flexShrink: 0 }}>未开始</span>}
-                      {isLocked && <span style={{ fontSize: 12, fontWeight: 800, background: C.bg, color: C.muted, borderRadius: 999, padding: '3px 10px', flexShrink: 0 }}>即将开放</span>}
+                      {!isLocked && !isCurrent && status === 'todo' && <span style={{ fontSize: 12, fontWeight: 800, background: C.bg, color: C.muted, borderRadius: 999, padding: '3px 10px', flexShrink: 0 }}>{t('grammar.chapters_status_todo', lang)}</span>}
+                      {isLocked && <span style={{ fontSize: 12, fontWeight: 800, background: C.bg, color: C.muted, borderRadius: 999, padding: '3px 10px', flexShrink: 0 }}>{t('grammar.chapters_status_coming', lang)}</span>}
                     </div>
                   );
                 })}
@@ -1970,7 +1996,7 @@ function ChaptersTab({ onOpenCard, isAdmin }: { onOpenCard: (card: GrammarCard) 
         );
       })}
 
-      <p style={{ fontSize: 13, color: C.muted, textAlign: 'center', padding: '16px 0 0' }}>共 {totalLessons} 课 · 内容陆续更新中</p>
+      <p style={{ fontSize: 13, color: C.muted, textAlign: 'center', padding: '16px 0 0' }}>{t('grammar.chapters_total_footer', lang).replace('{n}', String(totalLessons))}</p>
     </div>
   );
 }
@@ -2112,6 +2138,7 @@ function highlightPattern(text: string, pattern: string): React.ReactNode {
 
 function LibraryTab({ onStartGrammar }: { onStartGrammar: (gp: GrammarPoint) => void }) {
   const C = useC();
+  const { lang } = useLang();
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
@@ -2175,7 +2202,7 @@ function LibraryTab({ onStartGrammar }: { onStartGrammar: (gp: GrammarPoint) => 
 
       {/* 统计条 */}
       <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
-        <span style={{ fontSize: 13, color: C.muted, fontWeight: 600 }}>{grammarPoints.length} 个语法点</span>
+        <span style={{ fontSize: 13, color: C.muted, fontWeight: 600 }}>{t('grammar.library_count', lang).replace('{n}', String(grammarPoints.length))}</span>
         {(['beginner', 'intermediate', 'advanced'] as const).map(lv => (
           <button key={lv} onClick={() => { setActiveLevel(activeLevel === lv ? 'all' : lv); setShowFavorites(false); }}
             style={{ padding: '3px 10px', borderRadius: 999, fontSize: 12, fontWeight: 700, border: 'none', cursor: 'pointer', background: activeLevel === lv ? levelConfig[lv].bg : 'transparent', color: activeLevel === lv ? levelConfig[lv].color : C.muted }}>
@@ -2184,7 +2211,7 @@ function LibraryTab({ onStartGrammar }: { onStartGrammar: (gp: GrammarPoint) => 
         ))}
         <button onClick={() => { setShowFavorites(f => !f); setActiveLevel('all'); }}
           style={{ marginLeft: 'auto', padding: '3px 10px', borderRadius: 999, fontSize: 12, fontWeight: 700, border: 'none', cursor: 'pointer', background: showFavorites ? 'rgba(255,193,7,.15)' : 'transparent', color: showFavorites ? '#c89020' : C.muted, display: 'flex', alignItems: 'center', gap: 4 }}>
-          <Star size={11} fill={showFavorites ? '#c89020' : 'none'} />收藏 {favorites.length > 0 ? favorites.length : ''}
+          <Star size={11} fill={showFavorites ? '#c89020' : 'none'} />{lang === 'en' ? 'Favorites' : '收藏'} {favorites.length > 0 ? favorites.length : ''}
         </button>
       </div>
 
@@ -2194,7 +2221,7 @@ function LibraryTab({ onStartGrammar }: { onStartGrammar: (gp: GrammarPoint) => 
         <input
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
-          placeholder="搜索语法点、句型..."
+          placeholder={t('grammar.library_search_placeholder', lang)}
           style={{ width: '100%', background: C.card, border: `1px solid ${C.line}`, borderRadius: 12, padding: '10px 36px', fontSize: 15, color: C.ink, outline: 'none' }}
         />
         {searchQuery && (
@@ -2206,7 +2233,7 @@ function LibraryTab({ onStartGrammar }: { onStartGrammar: (gp: GrammarPoint) => 
 
       {/* 分类筛选 */}
       <div style={{ display: 'flex', gap: 6, overflowX: 'auto', paddingBottom: 4 }}>
-        <button onClick={() => setActiveCategory('all')} style={{ flexShrink: 0, padding: '6px 14px', borderRadius: 999, fontSize: 13, fontWeight: 600, border: 'none', cursor: 'pointer', background: activeCategory === 'all' ? C.ink : C.card, color: activeCategory === 'all' ? '#fff' : C.muted }}>全部</button>
+        <button onClick={() => setActiveCategory('all')} style={{ flexShrink: 0, padding: '6px 14px', borderRadius: 999, fontSize: 13, fontWeight: 600, border: 'none', cursor: 'pointer', background: activeCategory === 'all' ? C.ink : C.card, color: activeCategory === 'all' ? '#fff' : C.muted }}>{t('grammar.library_all', lang)}</button>
         {categories.map(cat => (
           <button key={cat} onClick={() => setActiveCategory(cat)} style={{ flexShrink: 0, padding: '6px 14px', borderRadius: 999, fontSize: 13, fontWeight: 600, border: 'none', cursor: 'pointer', background: activeCategory === cat ? C.ink : C.card, color: activeCategory === cat ? '#fff' : C.muted }}>
             {categoryLabels[cat] || cat}
@@ -2218,12 +2245,12 @@ function LibraryTab({ onStartGrammar }: { onStartGrammar: (gp: GrammarPoint) => 
       {filtered.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '32px 0', color: C.muted }}>
           <p style={{ fontSize: 15, fontWeight: 700, marginBottom: 4 }}>
-            {showFavorites ? '还没有收藏的语法点' : `没有找到「${searchQuery}」`}
+            {showFavorites ? t('grammar.library_no_favorites', lang) : t('grammar.library_no_results', lang).replace('{query}', searchQuery)}
           </p>
-          <p style={{ fontSize: 13 }}>{showFavorites ? '展开任意语法点，点击星形图标收藏' : '试试其他关键词或分类'}</p>
+          <p style={{ fontSize: 13 }}>{showFavorites ? t('grammar.library_no_favorites_hint', lang) : t('grammar.library_no_results_hint', lang)}</p>
         </div>
       ) : (
-        <p style={{ fontSize: 13, color: C.muted }}>{filtered.length} 个结果</p>
+        <p style={{ fontSize: 13, color: C.muted }}>{t('grammar.library_results', lang).replace('{n}', String(filtered.length))}</p>
       )}
 
       {/* 列表 */}
@@ -2279,7 +2306,7 @@ function LibraryTab({ onStartGrammar }: { onStartGrammar: (gp: GrammarPoint) => 
                   {/* ② 例句 */}
                   {gp.examples.length > 0 && (
                     <div>
-                      <p style={{ fontSize: 12, fontWeight: 700, color: C.muted, letterSpacing: '.5px', marginBottom: 8 }}>例句 ({gp.examples.length})</p>
+                      <p style={{ fontSize: 12, fontWeight: 700, color: C.muted, letterSpacing: '.5px', marginBottom: 8 }}>{t('grammar.library_example_count', lang).replace('{n}', String(gp.examples.length))}</p>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                         {gp.examples.map((ex, i) => (
                           <div key={i} style={{ background: C.card, border: `1px solid ${C.line}`, borderRadius: 12, padding: '10px 14px', display: 'flex', alignItems: 'flex-start', gap: 10 }}>
@@ -2302,7 +2329,7 @@ function LibraryTab({ onStartGrammar }: { onStartGrammar: (gp: GrammarPoint) => 
                   {/* toriTip */}
                   {gp.toriTip && (
                     <div style={{ background: 'rgba(232,168,124,.08)', border: '1px solid rgba(232,168,124,.2)', borderRadius: 12, padding: 12 }}>
-                      <p style={{ fontSize: 13, fontWeight: 700, color: '#e8a87c', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 4 }}><Lightbulb size={11} />替换练习</p>
+                      <p style={{ fontSize: 13, fontWeight: 700, color: '#e8a87c', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 4 }}><Lightbulb size={11} />{t('grammar.library_practice_tip', lang)}</p>
                       <p style={{ fontSize: 14, color: C.muted }}>{gp.toriTip}</p>
                     </div>
                   )}
@@ -2312,7 +2339,7 @@ function LibraryTab({ onStartGrammar }: { onStartGrammar: (gp: GrammarPoint) => 
                     <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, background: 'rgba(180,156,207,.08)', border: '1px solid rgba(180,156,207,.15)', borderRadius: 12, padding: 12 }}>
                       <AlertCircle size={13} style={{ color: C.purple, flexShrink: 0, marginTop: 2 }} />
                       <div>
-                        <p style={{ fontSize: 13, fontWeight: 700, color: C.purple, marginBottom: 4 }}>与 {gp.similarPatterns.join(', ')} 的区别</p>
+                        <p style={{ fontSize: 13, fontWeight: 700, color: C.purple, marginBottom: 4 }}>{t('grammar.library_difference', lang).replace('{patterns}', gp.similarPatterns.join(', '))}</p>
                         <p style={{ fontSize: 14, color: C.muted, lineHeight: 1.6 }}>{gp.difference}</p>
                       </div>
                     </div>
@@ -2323,7 +2350,7 @@ function LibraryTab({ onStartGrammar }: { onStartGrammar: (gp: GrammarPoint) => 
                     {matchedLesson && (
                       <button onClick={() => router.push(`/grammar?card=${matchedLesson.cardId}`)}
                         style={{ width: '100%', padding: '10px 0', borderRadius: 12, background: C.mintBg, border: `1px solid ${C.mint}`, fontSize: 14, fontWeight: 700, color: '#2db89b', cursor: 'pointer' }}>
-                        → 进入课程学习
+                        {t('grammar.library_go_lesson', lang)}
                       </button>
                     )}
                     {(() => {
@@ -2331,7 +2358,7 @@ function LibraryTab({ onStartGrammar }: { onStartGrammar: (gp: GrammarPoint) => 
                       return sp ? (
                         <button onClick={() => onStartGrammar(sp)}
                           style={{ width: '100%', padding: '10px 0', borderRadius: 12, background: 'rgba(255,127,168,.1)', border: '1px solid rgba(255,127,168,.2)', fontSize: 14, fontWeight: 700, color: C.pink, cursor: 'pointer' }}>
-                          练习这个句型
+                          {t('grammar.library_practice_pattern', lang)}
                         </button>
                       ) : null;
                     })()}
@@ -2352,6 +2379,7 @@ function LibraryTab({ onStartGrammar }: { onStartGrammar: (gp: GrammarPoint) => 
 function GrammarContent() {
   const { theme } = useTheme();
   const C = theme === 'dark' ? DARK_C : LIGHT_C;
+  const { lang } = useLang();
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user } = useAuth();
@@ -2467,13 +2495,13 @@ function GrammarContent() {
             <button onClick={() => router.back()} style={{ width: 38, height: 38, borderRadius: 13, border: `1px solid ${C.line}`, background: C.card, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}>
               <ArrowLeft size={16} color={C.muted} />
             </button>
-            <h1 style={{ fontSize: 28, fontWeight: 900, color: C.ink, margin: 0 }}>语法</h1>
+            <h1 style={{ fontSize: 28, fontWeight: 900, color: C.ink, margin: 0 }}>{t('grammar.page_title', lang)}</h1>
           </div>
-          <p style={{ fontSize: 15, color: C.muted, marginLeft: 50 }}>按教材章节系统学习，从零基础到中级</p>
+          <p style={{ fontSize: 15, color: C.muted, marginLeft: 50 }}>{t('grammar.page_subtitle', lang)}</p>
         </div>
 
         <div style={{ display: 'flex', background: C.bg, borderRadius: 16, padding: 4, gap: 3, marginBottom: 18 }}>
-          {([['chapters', '章节学习'], ['library', '语法库']] as [Tab, string][]).map(([key, label]) => (
+          {([['chapters', t('grammar.tab_chapters', lang)], ['library', t('grammar.tab_library', lang)]] as [Tab, string][]).map(([key, label]) => (
             <button key={key} onClick={() => setTab(key)} style={{ flex: 1, padding: '10px 4px', borderRadius: 13, border: 'none', background: tab === key ? C.card : 'transparent', color: tab === key ? C.ink : C.muted, fontSize: 15, fontWeight: 800, cursor: 'pointer', boxShadow: tab === key ? '0 2px 8px rgba(0,0,0,.08)' : 'none' }}>
               {label}
             </button>

@@ -10,7 +10,6 @@ import { useAuth } from '@/components/AuthProvider';
 const SHORTCUT_KEY = 'tori_shortcuts';
 
 const ALL_SHORTCUTS = [
-  { id: 'kpop',     label: '♪  KPOP 跟唱',  href: '/korea/kpop',      style: { background: '#201815', color: '#fff', border: 'none' } },
   { id: 'news',     label: '◈  热点阅读',    href: '/korea/kpop/news', style: { background: '#fff0f5', color: '#f0799b', border: '1px solid rgba(255,127,168,.18)' } },
   { id: 'analyze',  label: '⚙  文章拆解',    href: '/ai/analyze',      style: { background: '#fff', color: '#5a4640', border: '1px solid var(--desktop-line)' } },
   { id: 'review',   label: '◇  闪卡复习',    href: '/review',          style: { background: '#eaf8f5', color: '#4e746d', border: 'none' } },
@@ -22,7 +21,7 @@ const ALL_SHORTCUTS = [
   { id: 'writing',  label: '✏  写作练习',    href: '/writing',         style: { background: '#fff', color: '#5a4640', border: '1px solid var(--desktop-line)' } },
 ];
 
-const DEFAULT_IDS = ['kpop', 'news', 'analyze', 'review'];
+const DEFAULT_IDS = ['news', 'analyze', 'review'];
 
 function loadShortcuts(): string[] {
   if (typeof window === 'undefined') return DEFAULT_IDS;
@@ -57,8 +56,6 @@ function resolvePageMeta(pathname: string | null) {
     || p.startsWith('/dictionary') || p.startsWith('/reading')) return { title: '工具', activeId: 'tools', hidePanel: false };
   if (p.startsWith('/learning') || p.startsWith('/course') || p.startsWith('/phonetics')) return { title: '学习', activeId: 'learn', hidePanel: false };
   if (p.startsWith('/explore')
-    || p.startsWith('/korea/kpop/news')
-    || p.startsWith('/korea/kpop')
     || p.startsWith('/korea/')) return { title: '探索', activeId: 'explore', hidePanel: false };
   if (p === '/settings') return { title: '设置', activeId: '', hidePanel: true };
   return { title: 'Tori Korean', activeId: 'today', hidePanel: false };
@@ -275,7 +272,7 @@ function PanelContent({ activeId, navigate }: { activeId: string; navigate: (hre
 }
 
 function TodayPanel() {
-  interface PanelData { words: number; sentences: number; kpopDone: number; articlesRead: number; minutes: number; }
+  interface PanelData { words: number; sentences: number; articlesRead: number; minutes: number; }
 
   const [data, setData] = useState<PanelData | null>(null);
 
@@ -285,10 +282,9 @@ function TodayPanel() {
         const { db } = await import('@/lib/db');
         const words = await db.words.count();
         const sentences = 0; // TODO: add sentences table
-        const kpopDone = 0;
         const articlesRead = 0;
-        setData({ words, sentences, kpopDone, articlesRead, minutes: 0 });
-      } catch { setData({ words: 0, sentences: 0, kpopDone: 0, articlesRead: 0, minutes: 0 }); }
+        setData({ words, sentences, articlesRead, minutes: 0 });
+      } catch { setData({ words: 0, sentences: 0, articlesRead: 0, minutes: 0 }); }
     })();
   }, []);
 
@@ -305,7 +301,7 @@ function TodayPanel() {
         </div>
         <div style={{ background: '#fff8f4', borderRadius: 16, padding: '10px 12px', textAlign: 'center' }}>
           {data ? (
-            <><b style={{ fontSize: 20 }}>{data.kpopDone}</b><span style={{ display: 'block', fontSize: 11, color: '#86746d', marginTop: 2 }}>跟唱歌曲</span></>
+            <><b style={{ fontSize: 20 }}>{data.articlesRead}</b><span style={{ display: 'block', fontSize: 11, color: '#86746d', marginTop: 2 }}>热点阅读</span></>
           ) : (
             <span style={{ fontSize: 11, color: '#86746d' }}>今日暂无记录</span>
           )}

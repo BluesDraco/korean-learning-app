@@ -142,7 +142,7 @@ export default function SettingsPage() {
           </div>
           <div className="flex-1">
             <div className="flex items-center justify-between mb-1">
-              <span className="text-sm text-[var(--text-primary)] font-medium">等级 {profile.level}</span>
+              <span className="text-sm text-[var(--text-primary)] font-medium">{lang === 'en' ? `Level ${profile.level}` : `等级 ${profile.level}`}</span>
               <span className="text-xs text-[var(--text-secondary)]">{profile.xp}/{profile.xpToNextLevel} XP</span>
             </div>
             <div className="w-full bg-[var(--bg-accent)] rounded-full h-2">

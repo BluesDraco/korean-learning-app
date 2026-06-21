@@ -21,7 +21,7 @@ import {
   BookOpen, Play, TrendingUp,
   MessageSquare, FileText, Mic, BookImage,
   PenLine, Search, Keyboard, RefreshCw, Pencil,
-  Grid3X3, Languages, Lightbulb, Music, Radio,
+  Grid3X3, Languages, Lightbulb,
   Tv, StickyNote, Dumbbell, Layers,
 } from 'lucide-react';
 
@@ -30,7 +30,6 @@ export const navGroups: NavGroup[] = [
     icon: Sparkles, label: '今日', ko: '오늘', href: '/daily', children: [
       { label: '今日工作台', ko: '오늘의 학습', href: '/daily', icon: Sparkles },
       { label: '继续学习', ko: '이어서', href: '/course', icon: Play },
-      { label: '继续跟唱', ko: '노래 계속', href: '/korea/kpop/news', icon: Music },
       { label: '继续阅读', ko: '읽기 계속', href: '/reading', icon: BookOpen },
       { label: '今日复习', ko: '오늘 복습', href: '/review', icon: RefreshCw },
       { label: '学习概览', ko: '학습 개요', href: '/stats', icon: TrendingUp },
@@ -44,7 +43,6 @@ export const navGroups: NavGroup[] = [
       { label: '我的笔记', ko: '내 노트', href: '/mine/notes', icon: StickyNote },
       { label: '我的练习', ko: '내 연습', href: '/mine/practices', icon: Dumbbell },
       { label: '我的录音', ko: '내 녹음', href: '/mine/recordings', icon: Mic },
-      { label: '我的跟唱', ko: '내 노래', href: '/mine/kpop', icon: Music },
       { label: '我的日记', ko: '내 일기', href: '/mine/diary', icon: PenLine },
       { label: '我的成就', ko: '내 성과', href: '/stats', icon: TrendingUp },
       { label: '消息', ko: '메시지', href: '/messages', icon: MessageSquare },
@@ -78,8 +76,6 @@ export const navGroups: NavGroup[] = [
   },
   {
     icon: Compass, label: '探索', ko: '탐색', href: '/explore', children: [
-      { label: 'KPOP歌词跟唱', ko: 'KPOP 따라부르기', href: '/korea/kpop/news', icon: Music, comingSoon: true },
-      { label: '韩娱热帖', ko: 'K-pop 핫이슈', href: '/korea/kpop/news', icon: Radio },
       { label: '影子跟读', ko: '섀도잉', href: '/shadowing', icon: Mic, comingSoon: true },
       { label: 'Tori绘本馆', ko: '토리 그림책', href: '/learn/picture-books', icon: BookImage },
       { label: '韩国小知识', ko: '한국 지식', href: '/knowledge', icon: Lightbulb, comingSoon: true },
