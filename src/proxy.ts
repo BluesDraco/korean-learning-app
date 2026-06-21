@@ -15,109 +15,47 @@ function getJwtSecret(): Uint8Array {
   return new TextEncoder().encode(DEV_JWT_SECRET);
 }
 
-const AUTH_PATHS = [
-  '/auth/login',
-  '/auth/register',
-];
-
-const PUBLIC_PATHS = [
-  '/',
-  '/daily',
-  '/mine',
-  '/tools',
-  '/learning',
-  '/explore',
-  '/learn',
-  '/learn/picture-books',
-  '/course',
-  '/reading',
-  '/dictation',
-  '/shadowing',
-  '/typing',
-  '/writing',
-  '/phonetics',
-  '/phonetics/rules',
-  '/pronunciation',
-  '/grammar',
-  '/vocabulary',
-  '/vocabulary/library',
-  '/vocabulary/levels',
-  '/review',
-  '/knowledge',
-  '/stats',
-  '/diary',
-  '/korea',
-  '/korea/culture',
-  '/korea/food',
-  '/korea/kpop',
-  '/korea/kpop/news',
-  '/korea/travel',
-  '/korea/drama',
-  '/tedx',
-  '/dictionary',
-  '/topik',
-  '/ai/analyze',
-  '/ai/chat',
-  '/ai/voice',
-  '/tori/stickers',
-];
-
-function isAuthPath(pathname: string): boolean {
-  return AUTH_PATHS.some((p) => pathname === p || pathname.startsWith(p + '?'));
-}
-
-function isPublicPath(pathname: string): boolean {
-  return PUBLIC_PATHS.some((p) => pathname === p || pathname.startsWith(`${p}/`));
-}
-
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Always allow static assets
+  // Static assets — always allow
   if (
     pathname.startsWith('/_next') ||
     pathname.startsWith('/images') ||
+    pathname.startsWith('/audio') ||
     pathname.startsWith('/stickers') ||
-    pathname.startsWith('/favicon.ico') ||
+    pathname.startsWith('/icons') ||
     pathname === '/sw.js' ||
     pathname === '/manifest.json' ||
+    pathname === '/favicon.ico' ||
     pathname === '/file.svg' ||
     pathname === '/globe.svg' ||
     pathname === '/next.svg' ||
     pathname === '/vercel.svg' ||
-    pathname === '/window.svg'
+    pathname === '/window.svg' ||
+    /\.(png|jpg|jpeg|webp|gif|svg|ico|woff2?|ttf|eot|mp3|mp4|webm)$/i.test(pathname)
   ) {
     return NextResponse.next();
   }
 
-  // Allow non-auth APIs to pass through (they handle auth internally via getAuthFromCookie)
-  if (pathname.startsWith('/api/') && !pathname.startsWith('/api/auth')) {
-    return NextResponse.next();
-  }
-
-  // API auth endpoints: always pass through (they handle their own auth logic)
-  if (pathname.startsWith('/api/auth')) {
-    return NextResponse.next();
-  }
-
-  // Auth pages (login/register): redirect logged-in users away, let others through
-  if (isAuthPath(pathname)) {
+  // Auth pages — always allow (handle redirect-if-logged-in below)
+  if (pathname === '/auth/login' || pathname === '/auth/register') {
     const token = request.cookies.get('token')?.value;
     if (token) {
       try {
         await jose.jwtVerify(token, getJwtSecret());
-        return NextResponse.redirect(new URL('/', request.url));
+        return NextResponse.redirect(new URL('/daily', request.url));
       } catch {}
     }
     return NextResponse.next();
   }
 
-  // Public content pages are visible without login
-  if (isPublicPath(pathname)) {
+  // All API routes — pass through (each route handles its own auth)
+  if (pathname.startsWith('/api/')) {
     return NextResponse.next();
   }
 
-  // All other pages: require login
+  // All other pages — require login
   const token = request.cookies.get('token')?.value;
   if (!token) {
     const loginUrl = new URL('/auth/login', request.url);
@@ -129,11 +67,13 @@ export async function proxy(request: NextRequest) {
     const { payload } = await jose.jwtVerify(token, getJwtSecret());
 
     // Admin routes: require admin role
-    if (pathname.startsWith('/admin') && payload.role !== 'admin') {
-      return NextResponse.redirect(new URL('/', request.url));
+    if ((pathname === '/admin' || pathname.startsWith('/admin/')) && payload.role !== 'admin') {
+      return NextResponse.redirect(new URL('/daily', request.url));
     }
   } catch {
-    return NextResponse.redirect(new URL('/auth/login', request.url));
+    const loginUrl = new URL('/auth/login', request.url);
+    loginUrl.searchParams.set('redirect', pathname);
+    return NextResponse.redirect(loginUrl);
   }
 
   return NextResponse.next();

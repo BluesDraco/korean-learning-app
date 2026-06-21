@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { Loader2, Sparkles, BookOpen, Mic, BookMarked, Edit3, Target, GraduationCap, Music, RefreshCw, FileText, LogIn, Flame, Bell, X, Settings, ChevronRight, PenLine } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
 import { useFeedback } from '@/hooks/useFeedback';
-import { buildDailyPlan, type DailyPlan } from '@/lib/daily/buildDailyPlan';
+import { buildDailyPlanFromApi, type DailyPlan } from '@/lib/daily/buildDailyPlan';
 import { getAllSongProgress } from '@/lib/kpop/progress';
 import { getProfile } from '@/lib/gamification';
 import { getTrackById } from '@/data/kpopTracks';
@@ -43,28 +43,34 @@ export default function DailyPage() {
   const [kpopProg, setKpopProg] = useState<{ songId: string; title: string; artist: string; practicedLines: number; totalLines: number } | null>(null);
   const [streak, setStreak] = useState(0);
   const [isDesktop, setIsDesktop] = useState(
-    () => typeof window !== 'undefined' && window.innerWidth >= 1024
+    () => typeof window !== 'undefined' && window.innerWidth >= 768
   );
   const [unreadMsg, setUnreadMsg] = useState<{ title: string; content: string; id: string } | null>(null);
 
-  const load = useCallback(async (currentUser: typeof user) => {
-    let planTimer: ReturnType<typeof setTimeout> | null = null;
+  const loadGenRef = useRef(0);
+  const userRef = useRef(user);
+  useEffect(() => { userRef.current = user; }, [user]);
+
+  const load = useCallback(async () => {
+    const gen = ++loadGenRef.current;
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 6000);
     try {
       setPlanLoading(true);
       let prog: { songId: string; practicedLines: number; totalLines: number }[] = [];
       try { prog = getAllSongProgress(); } catch { /* localStorage not available */ }
-      const planTimeout = new Promise<null>((resolve) => { planTimer = setTimeout(() => resolve(null), 8000); });
-      const profileTimeout = new Promise<null>((resolve) => { setTimeout(() => resolve(null), 8000); });
-      const [p, profile] = await Promise.all([Promise.race([buildDailyPlan().catch(() => null), planTimeout]), Promise.race([getProfile().catch(() => null), profileTimeout])]);
+      const currentUser = userRef.current;
+      const [p, profile] = await Promise.all([
+        buildDailyPlanFromApi().catch(() => null),
+        getProfile().catch(() => null),
+      ]);
+      if (gen !== loadGenRef.current) return; // 旧轮，丢弃
       setPlan(p);
       if (profile) setStreak(profile.streak ?? 0);
-
-      // Check onboarding using profile already fetched (avoids duplicate getProfile call)
       if (currentUser && !currentUser.onboardingCompleted) {
         if (profile && !profile.onboardingComplete) setShowOnboarding(true);
       }
       setOnboardingChecked(true);
-
       const active = prog.find((s) => s.practicedLines > 0 && s.practicedLines < s.totalLines);
       if (active) {
         const track = getTrackById(active.songId);
@@ -77,16 +83,22 @@ export default function DailyPage() {
         });
       }
     } catch {
+      if (gen !== loadGenRef.current) return;
       setOnboardingChecked(true);
     } finally {
-      if (planTimer) clearTimeout(planTimer);
-      setPlanLoading(false);
+      clearTimeout(timeoutId);
+      controller.abort();
+      if (gen === loadGenRef.current) setPlanLoading(false);
     }
   }, []);
 
-  // Start loading immediately on mount — don't wait for auth
+  // Start loading immediately on mount
   useEffect(() => {
-    load(user);
+    load();
+    // iOS freezes setTimeout when tab goes to background — restart load on resume
+    const onVisible = () => { if (document.visibilityState === 'visible') load(); };
+    document.addEventListener('visibilitychange', onVisible);
+    return () => document.removeEventListener('visibilitychange', onVisible);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -96,7 +108,7 @@ export default function DailyPage() {
     if (prevUserRef.current === undefined) { prevUserRef.current = user; return; }
     if (prevUserRef.current?.id !== user?.id) {
       prevUserRef.current = user;
-      load(user);
+      load();
     }
   }, [user, load]);
 
@@ -120,8 +132,8 @@ export default function DailyPage() {
   }, [user]);
 
   useEffect(() => {
-    setIsDesktop(window.innerWidth >= 1024);
-    const onResize = () => setIsDesktop(window.innerWidth >= 1024);
+    setIsDesktop(window.innerWidth >= 768);
+    const onResize = () => setIsDesktop(window.innerWidth >= 768);
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, []);

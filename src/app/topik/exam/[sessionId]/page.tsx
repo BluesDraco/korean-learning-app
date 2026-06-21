@@ -3,11 +3,10 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Clock, Volume2, Check, X, ChevronRight, BookOpen } from 'lucide-react';
-import { topikQuestions, topikSections } from '@/data/topik-questions';
 import { speakBrowser, cancelSpeech } from '@/lib/tts';
 import { db } from '@/lib/db';
 import type { TopikSession, TopikMistake } from '@/types';
-import type { TopikQuestion } from '@/data/topik-questions';
+import type { TopikQuestion, TopikSection } from '@/data/topik-questions';
 import { useTheme } from '@/components/ThemeProvider';
 
 const LIGHT_C = { ink: '#241917', muted: '#89756e', line: '#eee0d8', pink: '#ff7fa8', pinkSoft: '#fff0f5', bg: '#fffbf7', mint: '#aee3d8', mintBg: '#eaf8f5', card: '#fff', optionBg: '#f9f5f2', innerCard: '#fff' };
@@ -35,39 +34,43 @@ export default function TopikExamPage() {
   const autoPlayedRef = useRef<number>(-1);
   const finishCalledRef = useRef(false);
 
-  const sectionInfo = topikSections.find(s => s.id === sectionId) || topikSections[0];
-  const isListening = sectionInfo.section === 'listening';
+  const [allSections, setAllSections] = useState<TopikSection[]>([]);
+  const sectionInfo = allSections.find(s => s.id === sectionId) || allSections[0];
+  const isListening = sectionInfo?.section === 'listening';
 
   // Load session from sessionStorage
   useEffect(() => {
     if (!sessionId) return;
-    try {
-      const saved = sessionStorage.getItem(`topik-exam-${sessionId}`);
-      if (!saved) { router.replace('/topik'); return; }
-      const data = JSON.parse(saved) as {
-        sectionId?: string; questionIds?: string[]; mode?: string;
-        timeLeft?: number; idx?: number; answers?: [string, number][]; startedAt?: number;
-      };
-      let qs: TopikQuestion[] = [];
-      if (data.questionIds && data.questionIds.length > 0) {
-        qs = data.questionIds.map(id => topikQuestions.find(q => q.id === id)).filter(Boolean) as TopikQuestion[];
-      } else if (data.sectionId) {
-        const sec = topikSections.find(s => s.id === data.sectionId);
-        if (sec) qs = topikQuestions.filter(q => q.section === sec.section && q.level === sec.level);
+    import('@/data/topik-questions').then(({ topikQuestions, topikSections }) => {
+      setAllSections(topikSections);
+      try {
+        const saved = sessionStorage.getItem(`topik-exam-${sessionId}`);
+        if (!saved) { router.replace('/topik'); return; }
+        const data = JSON.parse(saved) as {
+          sectionId?: string; questionIds?: string[]; mode?: string;
+          timeLeft?: number; idx?: number; answers?: [string, number][]; startedAt?: number;
+        };
+        let qs: TopikQuestion[] = [];
+        if (data.questionIds && data.questionIds.length > 0) {
+          qs = data.questionIds.map(id => topikQuestions.find(q => q.id === id)).filter(Boolean) as TopikQuestion[];
+        } else if (data.sectionId) {
+          const sec = topikSections.find(s => s.id === data.sectionId);
+          if (sec) qs = topikQuestions.filter(q => q.section === sec.section && q.level === sec.level);
+        }
+        if (qs.length === 0) { router.replace('/topik'); return; }
+        setQuestions(qs);
+        setSectionId(data.sectionId || 'beginner-listening');
+        setMode((data.mode as TopikSession['mode']) || 'practice');
+        setCurrentIdx(data.idx || 0);
+        setAnswers(new Map(data.answers || []));
+        setTimeLeft(data.timeLeft ?? -1);
+        autoPlayedRef.current = (data.idx || 0) - 1;
+      } catch {
+        router.replace('/topik');
+        return;
       }
-      if (qs.length === 0) { router.replace('/topik'); return; }
-      setQuestions(qs);
-      setSectionId(data.sectionId || 'beginner-listening');
-      setMode((data.mode as TopikSession['mode']) || 'practice');
-      setCurrentIdx(data.idx || 0);
-      setAnswers(new Map(data.answers || []));
-      setTimeLeft(data.timeLeft ?? -1);
-      autoPlayedRef.current = (data.idx || 0) - 1;
-    } catch {
-      router.replace('/topik');
-      return;
-    }
-    setLoaded(true);
+      setLoaded(true);
+    });
   }, [sessionId, router]);
 
   // Timer

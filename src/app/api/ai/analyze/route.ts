@@ -1,26 +1,12 @@
 import { NextResponse } from 'next/server';
 import { getAuthFromCookie } from '@/lib/server/auth';
-import { checkAiRateLimit, recordAiUsage } from '@/lib/server/rate-limit';
+import { checkAiRateLimit, recordAiUsage, checkGuestAiRateLimit } from '@/lib/server/rate-limit';
 import { fetchWithTimeout } from '@/lib/fetch';
 import { getDb } from '@/lib/server/db';
 import { filterContent } from '@/lib/contentFilter';
 
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
 const DEEPSEEK_MODEL = 'deepseek-chat';
-
-// In-memory guest rate limit: key = "ip:date", value = call count
-const guestAnalyzeCount = new Map<string, number>();
-
-// Prune yesterday's entries once per day
-let lastPruneDate = '';
-function pruneGuestCount() {
-  const today = new Date().toISOString().slice(0, 10);
-  if (today === lastPruneDate) return;
-  lastPruneDate = today;
-  for (const key of guestAnalyzeCount.keys()) {
-    if (!key.endsWith(today)) guestAnalyzeCount.delete(key);
-  }
-}
 
 async function analyzeModeTranslate(sentence: string, apiKey: string): Promise<Record<string, unknown>> {
   const res = await fetchWithTimeout(DEEPSEEK_API_URL, {
@@ -164,20 +150,15 @@ export async function POST(req: Request) {
 
     const userId = auth?.userId;
 
-    // Guest rate limit: 10 calls per day tracked by IP in memory
     if (!userId) {
-      pruneGuestCount();
       const ip = (req.headers.get('x-forwarded-for') || 'unknown').split(',')[0].trim();
-      const today = new Date().toISOString().slice(0, 10);
-      const key = `${ip}:${today}`;
-      const count = guestAnalyzeCount.get(key) ?? 0;
-      if (count >= 10) {
+      const guestLimit = await checkGuestAiRateLimit(ip, 'analyze');
+      if (!guestLimit.allowed) {
         return NextResponse.json(
           { error: '今日免费次数已用完（10次），请登录后继续使用' },
           { status: 429, headers: { 'Retry-After': '86400' } },
         );
       }
-      guestAnalyzeCount.set(key, count + 1);
     } else {
       const limit = await checkAiRateLimit(userId, 'analyze');
       if (!limit.allowed) {

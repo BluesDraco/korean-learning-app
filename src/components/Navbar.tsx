@@ -255,7 +255,7 @@ export function Navbar() {
                 </div>
               </Link>
               <button
-                onClick={() => logout()}
+                onClick={async () => { await logout(); window.location.href = '/auth/login'; }}
                 title="退出登录"
                 className="w-full text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors md:px-1 lg:px-2 py-1"
               >

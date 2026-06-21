@@ -11,10 +11,10 @@ export const grammarCardsP5: GrammarCard[] = [
     structureNote: '两个条件结构共用一套收音规则：\n有收音→으면/으려면，无收音/ㄹ收音→면/려면。\n区别在含义：\n-(으)면 是普通条件，-(으)려면 是"以目标为前提"的条件，后句常配 -야 해요 或 -세요。',
     rulesNote: 'ㄹ 收音直接接 -면（살면/알면），不脱落 ㄹ。\n不规则在此正常触发：\n듣다→들으면，춥다→추우면，어렵다→어려우면。\n-(으)려면 是 -(으)려고 하면 的缩略形，后句适合接命令或义务句。',
     scenarioNote: '"如果有时间就去""想把韩语学好就要每天练习"条件句是日常对话里最常用的句型之一。\n掌握这节课，你能给出建议、表达计划、描述"如果……"的情况。',
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;margin:0 0 4px 0;color:#241917">-(으)면 · -(으)려면</h1>
-<p style="font-size:.9rem;color:#89756e;margin:0 0 16px 0">说"如果……"和"想要……的话"。</p>
+    step0Html: `<h1 style="font-size:25px;font-weight:800;margin:0 0 4px 0;color:#241917">-(으)면 · -(으)려면</h1>
+<p style="font-size:16px;color:#89756e;margin:0 0 16px 0">说"如果……"和"想要……的话"。</p>
 <div class="block">
-  <div style="font-size:.85rem;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">시간이 있으면 카페에 가요.</span> — 如果有时间，就去咖啡店。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">한국어를 잘하려면 매일 연습해야 해요.</span> — 想把韩语学好，就要每天练习。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px"><span style="font-weight:700">피곤하면 일찍 쉬세요.</span> — 如果累了，请早点休息。</div>
@@ -30,19 +30,19 @@ export const grammarCardsP5: GrammarCard[] = [
 <div class="card-body">两者变形规则相同，含义不同：-(으)면 是普通"如果……就……"，-(으)려면 是"以某个目标为前提"，相当于"想……的话就要……"，后句通常是建议或义务。中文"如果"和"想要……的话"在韩语里是两套不同结构。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-(으)면</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">普通条件：如果……就……</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">시간이 있으면 공부해요.</span><span style="font-size:14px;color:#5a4640">如果有时间就学习。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">날씨가 좋으면 산책해요.</span><span style="font-size:14px;color:#5a4640">如果天气好就散步。</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">普通条件：如果……就……</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">시간이 있으면 공부해요.</span><span style="font-size:16px;color:#5a4640">如果有时间就学习。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">날씨가 좋으면 산책해요.</span><span style="font-size:16px;color:#5a4640">如果天气好就散步。</span></div>
   </div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-(으)려면</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">目标条件：想……的话就……</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">잘하려면 매일 들어야 해요.</span><span style="font-size:14px;color:#5a4640">想做好的话就要每天听。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">한국에 가려면 비자가 필요해요.</span><span style="font-size:14px;color:#5a4640">想去韩国的话需要签证。</span></div></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">目标条件：想……的话就……</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">잘하려면 매일 들어야 해요.</span><span style="font-size:16px;color:#5a4640">想做好的话就要每天听。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">한국에 가려면 비자가 필요해요.</span><span style="font-size:16px;color:#5a4640">想去韩国的话需要签证。</span></div></div>
 </div>
 <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:10px">
-  <div style="font-size:14px;font-weight:700;color:#ff7fa8;margin-bottom:6px">收音规则（两者相同）</div>
-  <div style="font-size:15px;color:#241917">有收音 → <b>-으면 / -으려면</b>：먹다 → 먹으면 / 먹으려면</div>
-  <div style="font-size:15px;color:#241917">无收音 / ㄹ收音 → <b>-면 / -려면</b>：가다 → 가면 / 가려면 &nbsp;|&nbsp; 살다 → 살면 / 살려면</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:6px">收音规则（两者相同）</div>
+  <div style="font-size:16px;color:#241917">有收音 → <b>-으면 / -으려면</b>：먹다 → 먹으면 / 먹으려면</div>
+  <div style="font-size:16px;color:#241917">无收音 / ㄹ收音 → <b>-면 / -려면</b>：가다 → 가면 / 가려면 &nbsp;|&nbsp; 살다 → 살면 / 살려면</div>
 </div>
 <div class="reminder-box">가면 일찍 일어나야 해요 ✗（想说想去的话）→ 가려면 일찍 일어나야 해요 ✓ — 目标条件用 -려면，不用 -면。-(으)려면 后句常带 -야 해요 或 -세요，这是固定搭配信号。</div>`,
     compareLabel: '-(으)면（条件）vs -(으)려면（目标）',
@@ -176,7 +176,7 @@ export const grammarCardsP5: GrammarCard[] = [
   <div class='ov-sec'><span class='badge' style='background:#2db89b;color:white'>받침 있는</span> 먹다→먹으면 / 읽다→읽으면</div>
   <div class='ov-sec'><span class='badge' style='background:#e05555;color:white'>ㄹ주의</span> 살다→살면（不加 으）</div>
 </div>`,
-    linkedGrammarIds: ['gp-28'],
+    linkedGrammarIds: ['g28'],
   },
   {
     id: 'card-p5-l02',
@@ -188,10 +188,10 @@ export const grammarCardsP5: GrammarCard[] = [
     structureNote: '两套否定各有短形和长形：\n안/못（短形，口语常用）和 -지 않다/-지 못하다（长形，更完整）。\n短形直接放动词前，长形接词干后加 지。\n注意 못 不能用于形容词。',
     rulesNote: '하다 动词的否定要把 안/못 插在 하다 前面：\n공부 안 해요，不是 안 공부해요。\n못 不能用于形容词（날씨가 못 좋아요 ✗→안 좋아요 ✓）。\n关键区分：\n自愿不做用 안，条件/能力不允许用 못。',
     scenarioNote: '"我不吃辣""因为过敏所以不能喝""发音太快跟不上"\n안 和 못 的区分是日常对话里非常实用的技能，能让你表达更准确，避免误会。',
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;margin:0 0 4px 0;color:#241917">안/못 · -지 않다/-지 못하다</h1>
-<p style="font-size:.9rem;color:#89756e;margin:0 0 16px 0">区分"不做"（主观）和"做不了"（客观）。</p>
+    step0Html: `<h1 style="font-size:25px;font-weight:800;margin:0 0 4px 0;color:#241917">안/못 · -지 않다/-지 못하다</h1>
+<p style="font-size:16px;color:#89756e;margin:0 0 16px 0">区分"不做"（主观）和"做不了"（客观）。</p>
 <div class="block">
-  <div style="font-size:.85rem;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">오늘 공부 안 해요.</span> — 今天不学习。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">저는 커피를 안 마셔요.</span> — 我不喝咖啡。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px"><span style="font-weight:700">너무 빨라서 따라 하지 못해요.</span> — 太快了，所以跟不上。</div>
@@ -200,27 +200,27 @@ export const grammarCardsP5: GrammarCard[] = [
   <div style="font-weight:700;margin-bottom:8px">两套否定，用法不同</div>
   <div style="margin-bottom:6px">① <b>안 / -지 않다</b> — 主观不做（我选择不做）</div>
   <div style="margin-bottom:6px">② <b>못 / -지 못하다</b> — 客观不能（条件/能力不允许）</div>
-  <div style="color:#89756e;font-size:.9rem">短形（안/못）放动词前；长形（-지 않다/-지 못하다）接词干后</div>
+  <div style="color:#89756e;font-size:16px">短形（안/못）放动词前；长形（-지 않다/-지 못하다）接词干后</div>
 </div>
 <div class="reminder-box">하다 动词：안/못 插在 하다 前 → 공부 안 해요 / 공부 못 해요。못 不接形容词：날씨가 못 좋아요 ✗ → 안 좋아요 ✓。</div>`,
     compareHtml: `<div class="card-title">안（不做）vs 못（做不了）</div>
 <div class="card-body">中文"不"和"不能"有时可互换，但韩语 안 和 못 含义差别很大：안 是主观意愿，못 是客观条件/能力不允许。搞混会让对方误解你的意思——说 안 가요 表示你选择不去，说 못 가요 表示你去不了。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">안 / -지 않다</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">主观：我选择不做</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">저는 커피를 안 마셔요.</span><span style="font-size:14px;color:#5a4640">我不喝咖啡。（个人偏好）</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">오늘은 안 가요.</span><span style="font-size:14px;color:#5a4640">今天我不去。（主动选择）</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">主观：我选择不做</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">저는 커피를 안 마셔요.</span><span style="font-size:16px;color:#5a4640">我不喝咖啡。（个人偏好）</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">오늘은 안 가요.</span><span style="font-size:16px;color:#5a4640">今天我不去。（主动选择）</span></div>
   </div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">못 / -지 못하다</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">客观：条件/能力不允许</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">알레르기가 있어서 못 마셔요.</span><span style="font-size:14px;color:#5a4640">因为过敏所以不能喝。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">약속이 있어서 못 가요.</span><span style="font-size:14px;color:#5a4640">因为有约所以去不了。</span></div></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">客观：条件/能力不允许</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">알레르기가 있어서 못 마셔요.</span><span style="font-size:16px;color:#5a4640">因为过敏所以不能喝。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">약속이 있어서 못 가요.</span><span style="font-size:16px;color:#5a4640">因为有约所以去不了。</span></div></div>
 </div>
 <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:10px">
-  <div style="font-size:14px;font-weight:700;color:#ff7fa8;margin-bottom:6px">长形否定（更正式）</div>
-  <div style="font-size:15px;color:#241917">안 → <b>-지 않아요</b>：가지 않아요（不去）</div>
-  <div style="font-size:15px;color:#241917">못 → <b>-지 못해요</b>：가지 못해요（去不了）</div>
-  <div style="font-size:15px;color:#89756e;margin-top:4px">短形口语更常用，长形书面/正式场合使用</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:6px">长形否定（更正式）</div>
+  <div style="font-size:16px;color:#241917">안 → <b>-지 않아요</b>：가지 않아요（不去）</div>
+  <div style="font-size:16px;color:#241917">못 → <b>-지 못해요</b>：가지 못해요（去不了）</div>
+  <div style="font-size:16px;color:#89756e;margin-top:4px">短形口语更常用，长形书面/正式场合使用</div>
 </div>
 <div class="reminder-box">안 가요（我选择不去）vs 못 가요（我去不了）— 语气差别很大。하다 动词：안 해요 / 못 해요（中间加空格）。形容词只能用 안：안 예뻐요 ✓，못 예뻐요 ✗。</div>`,
     compareLabel: '안（不做）vs 못（做不了）',
@@ -351,7 +351,7 @@ export const grammarCardsP5: GrammarCard[] = [
   <div class='ov-sec'><span class='badge' style='background:#2db89b;color:white'>하다동사</span> 공부 안/못 해요</div>
   <div class='ov-sec'><span class='badge' style='background:#e05555;color:white'>주의</span> 못 不接形容词</div>
 </div>`,
-    linkedGrammarIds: [],
+    linkedGrammarIds: ['g15'],
   },
   {
     id: 'card-p5-l03',
@@ -363,37 +363,37 @@ export const grammarCardsP5: GrammarCard[] = [
     structureNote: '两块内容：①-(으)려고 해요（计划/意图）有收音接 으려고，无收音接 려고；\n②아마 -을/ㄹ 거예요（推测）-을/ㄹ 거예요 已学过，加 아마 表示"大概/可能"。',
     rulesNote: '-(으)려고 해요 的主语必须是有意志的人/动物，天气等无意志主语不能用（날씨가 따뜻하려고 해요 ✗）。\n推测的강도：\n갈 거예요（会去）→ 아마 갈 거예요（大概会去）。\nㅂ 不规则触发：\n어렵다→어려울 거예요。',
     scenarioNote: '"今天打算复习单词""打算去演唱会""票大概会很贵"计划和推测是学习日记、聊天、讨论未来时最常用的表达。\n掌握这节课，你能说出自己的计划也能猜测别人的情况。',
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;margin:0 0 4px 0;color:#241917">-(으)려고 하다 · 아마 -을/ㄹ 것이다</h1>
-<p style="font-size:.9rem;color:#89756e;margin:0 0 16px 0">说打算做什么，或大概会怎样。</p>
+    step0Html: `<h1 style="font-size:25px;font-weight:800;margin:0 0 4px 0;color:#241917">-(으)려고 하다 · 아마 -을/ㄹ 것이다</h1>
+<p style="font-size:16px;color:#89756e;margin:0 0 16px 0">说打算做什么，或大概会怎样。</p>
 <div class="block">
-  <div style="font-size:.85rem;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">오늘 단어를 복습하려고 해요.</span> — 今天打算复习单词。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">이 노래를 따라 하려고 해요.</span> — 打算跟唱这首歌。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px"><span style="font-weight:700">아마 콘서트 티켓이 비쌀 거예요.</span> — 演唱会票大概会很贵。</div>
 </div>
 <div class="block">
   <div style="font-weight:700;margin-bottom:8px">两个结构</div>
-  <div style="margin-bottom:6px">① <b>-(으)려고 해요</b> — 打算/计划做（有意志的主语）<br><span style="color:#89756e;font-size:.9rem">有收音→으려고，无收音→려고</span></div>
-  <div>② <b>아마 -을/ㄹ 거예요</b> — 大概会……（推测）<br><span style="color:#89756e;font-size:.9rem">아마 加强"不确定"语气</span></div>
+  <div style="margin-bottom:6px">① <b>-(으)려고 해요</b> — 打算/计划做（有意志的主语）<br><span style="color:#89756e;font-size:16px">有收音→으려고，无收音→려고</span></div>
+  <div>② <b>아마 -을/ㄹ 거예요</b> — 大概会……（推测）<br><span style="color:#89756e;font-size:16px">아마 加强"不确定"语气</span></div>
 </div>
 <div class="reminder-box">ㅂ 不规则：어렵다→어려울 거예요。무의지 주어（天气等）不能用 -려고 해요，改用 -을/ㄹ 거예요。</div>`,
     compareHtml: `<div class="card-title">-(으)려고 해요（计划）vs 아마 -을/ㄹ 거예요（推测）</div>
 <div class="card-body">两者都说"将来"，但意图不同：-(으)려고 해요 是已有计划/意图，主语必须是有意志的人；아마 -을/ㄹ 거예요 是对未来的推测，主语可以是人也可以是天气、事物。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-(으)려고 해요</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">个人计划：我打算……</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">오늘 공부하려고 해요.</span><span style="font-size:14px;color:#5a4640">今天打算学习。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">내년에 한국에 가려고 해요.</span><span style="font-size:14px;color:#5a4640">明年打算去韩国。</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">个人计划：我打算……</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">오늘 공부하려고 해요.</span><span style="font-size:16px;color:#5a4640">今天打算学习。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">내년에 한국에 가려고 해요.</span><span style="font-size:16px;color:#5a4640">明年打算去韩国。</span></div>
   </div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">아마 -을/ㄹ 거예요</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">未来推测：大概会……</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">아마 어려울 거예요.</span><span style="font-size:14px;color:#5a4640">大概会难。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">아마 내일 비가 올 거예요.</span><span style="font-size:14px;color:#5a4640">明天大概会下雨。</span></div></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">未来推测：大概会……</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">아마 어려울 거예요.</span><span style="font-size:16px;color:#5a4640">大概会难。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">아마 내일 비가 올 거예요.</span><span style="font-size:16px;color:#5a4640">明天大概会下雨。</span></div></div>
 </div>
 <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:10px">
-  <div style="font-size:14px;font-weight:700;color:#ff7fa8;margin-bottom:6px">收音规则</div>
-  <div style="font-size:15px;color:#241917">-(으)려고：有收音 → <b>-으려고</b>（먹으려고），无收音 → <b>-려고</b>（가려고）</div>
-  <div style="font-size:15px;color:#241917">-을/ㄹ 거예요：有收音 → <b>-을 거예요</b>（먹을），无收音 → <b>-ㄹ 거예요</b>（갈）</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:6px">收音规则</div>
+  <div style="font-size:16px;color:#241917">-(으)려고：有收音 → <b>-으려고</b>（먹으려고），无收音 → <b>-려고</b>（가려고）</div>
+  <div style="font-size:16px;color:#241917">-을/ㄹ 거예요：有收音 → <b>-을 거예요</b>（먹을），无收音 → <b>-ㄹ 거예요</b>（갈）</div>
 </div>
 <div class="reminder-box">비가 오려고 해요 ✗（天气没有意志）→ 아마 비가 올 거예요 ✓ — 天气/事物无意志，只能用推测句。-(으)려고 해요 和 -(으)ㄹ 거예요 都能说计划，但 -려고 更强调"我有意图"，거예요 更中性。</div>`,
     compareLabel: '-(으)려고 해요（计划）vs 아마 -을/ㄹ 거예요（推测）',
@@ -523,7 +523,7 @@ export const grammarCardsP5: GrammarCard[] = [
   <div class='ov-sec'><span class='badge' style='background:#2db89b;color:white'>받침 있는</span> 먹으려고 / 먹을 거예요</div>
   <div class='ov-sec'><span class='badge' style='background:#e05555;color:white'>주의</span> 无意志主语不用 -려고 해요</div>
 </div>`,
-    linkedGrammarIds: [],
+    linkedGrammarIds: ['g25', 'g48'],
   },
   {
     id: 'card-p5-l04',
@@ -535,10 +535,10 @@ export const grammarCardsP5: GrammarCard[] = [
     structureNote: '三块内容：①이/가 아니에요（单纯否定"不是"）；\n②이/가 아니라 B예요（对比否定"不是A而是B"）；\n③-는 게 아니라（动作层面的"不是做A"）。\n아니라 后面必须跟正确答案，不能单独用。',
     rulesNote: '이/가 的收音规则和主格助词相同：\n有收音→이 아니에요，无收音→가 아니에요。\n-는 게 아니라 中的 게 是 것이 的口语缩略。\n注意：\n아니에요 可以单独结束句子，아니라 必须接 B예요 给出正确答案。',
     scenarioNote: '"这不是咖啡而是茶""不是背单词而是要理解""我不是老师，我是学生"纠正误解、澄清身份、说明真相，这类场景在日常对话里非常常见。\n学会这节课，你能更自信地说清楚"不是这样"。',
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;margin:0 0 4px 0;color:#241917">이/가 아니다 · -는 게 아니라</h1>
-<p style="font-size:.9rem;color:#89756e;margin:0 0 16px 0">说"不是……"和"不是A而是B"。</p>
+    step0Html: `<h1 style="font-size:25px;font-weight:800;margin:0 0 4px 0;color:#241917">이/가 아니다 · -는 게 아니라</h1>
+<p style="font-size:16px;color:#89756e;margin:0 0 16px 0">说"不是……"和"不是A而是B"。</p>
 <div class="block">
-  <div style="font-size:.85rem;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">저는 학생이 아니에요.</span> — 我不是学生。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">이건 커피가 아니라 차예요.</span> — 这不是咖啡，而是茶。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px"><span style="font-weight:700">외우는 게 아니라 이해해야 해요.</span> — 不是背，而是要理解。</div>
@@ -554,19 +554,19 @@ export const grammarCardsP5: GrammarCard[] = [
 <div class="card-body">两个结构都是否定，但目的不同：이/가 아니에요 只说"不是"，可以单独成句；이/가 아니라 B예요 在否定的同时给出正确答案，语气更完整，适合纠正误解。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">이/가 아니에요</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">单纯否定：不是（可独立成句）</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">저는 학생이 아니에요.</span><span style="font-size:14px;color:#5a4640">我不是学生。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">이건 커피가 아니에요.</span><span style="font-size:14px;color:#5a4640">这个不是咖啡。</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">单纯否定：不是（可独立成句）</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">저는 학생이 아니에요.</span><span style="font-size:16px;color:#5a4640">我不是学生。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">이건 커피가 아니에요.</span><span style="font-size:16px;color:#5a4640">这个不是咖啡。</span></div>
   </div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">이/가 아니라 B예요</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">对比纠正：不是A而是B</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">커피가 아니라 차예요.</span><span style="font-size:14px;color:#5a4640">不是咖啡而是茶。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">선생님이 아니라 학생이에요.</span><span style="font-size:14px;color:#5a4640">不是老师而是学生。</span></div></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">对比纠正：不是A而是B</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">커피가 아니라 차예요.</span><span style="font-size:16px;color:#5a4640">不是咖啡而是茶。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">선생님이 아니라 학생이에요.</span><span style="font-size:16px;color:#5a4640">不是老师而是学生。</span></div></div>
 </div>
 <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:10px">
-  <div style="font-size:14px;font-weight:700;color:#ff7fa8;margin-bottom:6px">收音规则（两者相同）</div>
-  <div style="font-size:15px;color:#241917">有收音名词 → <b>이 아니에요 / 이 아니라</b>：학생이 아니에요 / 학생이 아니라</div>
-  <div style="font-size:15px;color:#241917">无收音名词 → <b>가 아니에요 / 가 아니라</b>：가수가 아니에요 / 가수가 아니라</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:6px">收音规则（两者相同）</div>
+  <div style="font-size:16px;color:#241917">有收音名词 → <b>이 아니에요 / 이 아니라</b>：학생이 아니에요 / 학생이 아니라</div>
+  <div style="font-size:16px;color:#241917">无收音名词 → <b>가 아니에요 / 가 아니라</b>：가수가 아니에요 / 가수가 아니라</div>
 </div>
 <div class="reminder-box">커피가 아니에요 차예요 ✗ → 커피가 아니라 차예요 ✓ — 对比纠正不是两个独立句，要用 아니라 连接。아니라 必须后接 B예요/이에요，不能单独结尾。</div>`,
     compareLabel: '단순 부정 vs 대조 부정',
@@ -703,10 +703,10 @@ export const grammarCardsP5: GrammarCard[] = [
     structureNote: '三套冠词形：①动词现在→-는（공부하는 사람）；\n②形容词→-은/ㄴ（按收音，어려운 문법）；\n③动词未来/未完成→-을/ㄹ（갈 곳）。\n变形后直接放名词前，结构和中文"……的+名词"一样。',
     rulesNote: '动词 -는 不看收音，统一接 는。\n形容词 -은/ㄴ 看收音：\n有收音→은，无收音→ㄴ。\n-을/ㄹ 看收音：\n有收音→을，无收音→ㄹ。\n注意 있다/없다 用 -는（있는/없는），和动词一样。\nㅂ 不规则触发：\n어렵다→어려운。',
     scenarioNote: '"现在听的歌""学习韩语的人""明天要去的地方"冠词形是韩语里使用频率极高的结构，几乎每个较复杂的句子都会用到。\n掌握这节课，你能描述事物、修饰名词，表达大幅丰富。',
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;margin:0 0 4px 0;color:#241917">动词/形容词的冠词形</h1>
-<p style="font-size:.9rem;color:#89756e;margin:0 0 16px 0">用动作和状态来修饰名词。</p>
+    step0Html: `<h1 style="font-size:25px;font-weight:800;margin:0 0 4px 0;color:#241917">动词/形容词的冠词形</h1>
+<p style="font-size:16px;color:#89756e;margin:0 0 16px 0">用动作和状态来修饰名词。</p>
 <div class="block">
-  <div style="font-size:.85rem;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">한국어를 공부하는 사람이에요.</span> — 是学习韩语的人。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">어려운 문법은 천천히 공부해요.</span> — 难的语法慢慢学。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px"><span style="font-weight:700">내일 갈 곳이 있어요.</span> — 明天有要去的地方。</div>
@@ -723,27 +723,27 @@ export const grammarCardsP5: GrammarCard[] = [
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:12px 0">
   <div class="tok-row">
     <div class="tok t-v">动词现在 -는</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">不看收音，统一接 는</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">공부하는 사람</span><span style="font-size:14px;color:#5a4640">学习的人</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">먹는 음식</span><span style="font-size:14px;color:#5a4640">吃的食物</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">不看收音，统一接 는</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">공부하는 사람</span><span style="font-size:16px;color:#5a4640">学习的人</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">먹는 음식</span><span style="font-size:16px;color:#5a4640">吃的食物</span></div>
   </div>
   <div class="tok-row">
     <div class="tok t-v">形容词 -은/ㄴ</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">有收音→-은，无收音→-ㄴ</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">어려운 문법</span><span style="font-size:14px;color:#5a4640">难的语法</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">좋은 노래</span><span style="font-size:14px;color:#5a4640">好听的歌</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">有收音→-은，无收音→-ㄴ</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">어려운 문법</span><span style="font-size:16px;color:#5a4640">难的语法</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">좋은 노래</span><span style="font-size:16px;color:#5a4640">好听的歌</span></div>
   </div>
   <div class="tok-row">
     <div class="tok t-v">动词未来 -을/ㄹ</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">有收音→-을，无收音→-ㄹ</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">갈 곳</span><span style="font-size:14px;color:#5a4640">要去的地方</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">먹을 것</span><span style="font-size:14px;color:#5a4640">要吃的东西</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">有收音→-을，无收音→-ㄹ</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">갈 곳</span><span style="font-size:16px;color:#5a4640">要去的地方</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">먹을 것</span><span style="font-size:16px;color:#5a4640">要吃的东西</span></div>
   </div>
 </div>
 <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:10px">
-  <div style="font-size:14px;font-weight:700;color:#ff7fa8;margin-bottom:6px">있다/없다 特殊规则</div>
-  <div style="font-size:15px;color:#241917">있다/없다 虽然是形容词，但冠词形用动词规则 <b>-는</b>：있는 사람 / 없는 것</div>
-  <div style="font-size:15px;color:#89756e;margin-top:4px">ㅂ 不规则：어렵다 → 어려운（-다 前 ㅂ→우，再接 -ㄴ）</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:6px">있다/없다 特殊规则</div>
+  <div style="font-size:16px;color:#241917">있다/없다 虽然是形容词，但冠词形用动词规则 <b>-는</b>：있는 사람 / 없는 것</div>
+  <div style="font-size:16px;color:#89756e;margin-top:4px">ㅂ 不规则：어렵다 → 어려운（-다 前 ㅂ→우，再接 -ㄴ）</div>
 </div>
 <div class="reminder-box">좋는 노래 ✗ → 좋은 노래 ✓ — 形容词有收音用 -은，不用 -는。공부한 사람 ✗（习惯）→ 공부하는 사람 ✓ — 习惯动作用现在冠词形 -는。</div>`,
     compareLabel: '동사 -는 vs 형용사 -은/ㄴ',
@@ -888,38 +888,38 @@ export const grammarCardsP5: GrammarCard[] = [
     structureNote: '两块内容：①-아/어/여 주세요（请帮我做）变形和 -아요/어요 一样，加 주세요；\n②-지요?/-죠?（确认语气）直接接词干，不看收音，用于寻求对方同意或确认。',
     rulesNote: '-아/어/여 주세요 变形：\n词干末元音 ㅏ/ㅗ→아 주세요，其他→어 주세요，하다→해 주세요。\n-지요? 口语几乎总缩成 -죠?。\n注意：\n주세요 是对对方的请求，주다 用于对第三方（친구한테 선물을 줘요）。',
     scenarioNote: '"请慢点说""请再说一遍""这首歌很好听吧？"-아/어/여 주세요 在任何需要帮助的场合都用得到，-죠? 在分享感受、确认信息时是最自然的语气。\n这节课学完，你的对话立刻更流畅自然。',
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;margin:0 0 4px 0;color:#241917">-아/어/여 주다 · -지요?</h1>
-<p style="font-size:.9rem;color:#89756e;margin:0 0 16px 0">请别人帮忙，或用"吧？"确认。</p>
+    step0Html: `<h1 style="font-size:25px;font-weight:800;margin:0 0 4px 0;color:#241917">-아/어/여 주다 · -지요?</h1>
+<p style="font-size:16px;color:#89756e;margin:0 0 16px 0">请别人帮忙，或用"吧？"确认。</p>
 <div class="block">
-  <div style="font-size:.85rem;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">다시 말해 주세요.</span> — 请再说一遍。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">이 단어를 알려 주세요.</span> — 请告诉我这个单词。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px"><span style="font-weight:700">이 문법은 어렵지요?</span> — 这个语法很难吧？</div>
 </div>
 <div class="block">
   <div style="font-weight:700;margin-bottom:8px">两块内容</div>
-  <div style="margin-bottom:6px">① <b>-아/어/여 주세요</b> — 请帮我做（礼貌请求）<br><span style="color:#89756e;font-size:.9rem">变形和 -아요/어요 一样，再加 주세요</span></div>
-  <div>② <b>-지요? / -죠?</b> — ……吧？（确认语气）<br><span style="color:#89756e;font-size:.9rem">直接接词干，口语常缩成 -죠?</span></div>
+  <div style="margin-bottom:6px">① <b>-아/어/여 주세요</b> — 请帮我做（礼貌请求）<br><span style="color:#89756e;font-size:16px">变形和 -아요/어요 一样，再加 주세요</span></div>
+  <div>② <b>-지요? / -죠?</b> — ……吧？（确认语气）<br><span style="color:#89756e;font-size:16px">直接接词干，口语常缩成 -죠?</span></div>
 </div>
 <div class="reminder-box">말하다 주세요 ✗ → 말해 주세요 ✓ — 주세요 前先变 아/어/여 形。-지요? 是确认，不是否定（어렵지요? ≠ 어렵지 않아요）。</div>`,
     compareHtml: `<div class="card-title">-아/어/여 주세요（请求）vs -지요?（确认）</div>
 <div class="card-body">两者都是常用对话工具：주세요 用于请别人帮忙做某事，-지요? 用于寻求对方同意或确认信息。前者是请求，后者是引导共鸣或确认。中文"请……"和"……吧？"是这两个的最直接对应。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-아/어/여 주세요</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">礼貌请求：请帮我做</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">기다려 주세요.</span><span style="font-size:14px;color:#5a4640">请等一下。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">천천히 말해 주세요.</span><span style="font-size:14px;color:#5a4640">请说慢一点。</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">礼貌请求：请帮我做</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">기다려 주세요.</span><span style="font-size:16px;color:#5a4640">请等一下。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">천천히 말해 주세요.</span><span style="font-size:16px;color:#5a4640">请说慢一点。</span></div>
   </div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-지요? / -죠?</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">确认语气：……吧？对吧？</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">재미있죠?</span><span style="font-size:14px;color:#5a4640">有意思吧？</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">한국어 공부하지요?</span><span style="font-size:14px;color:#5a4640">你在学韩语吧？</span></div></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">确认语气：……吧？对吧？</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">재미있죠?</span><span style="font-size:16px;color:#5a4640">有意思吧？</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">한국어 공부하지요?</span><span style="font-size:16px;color:#5a4640">你在学韩语吧？</span></div></div>
 </div>
 <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:10px">
-  <div style="font-size:14px;font-weight:700;color:#ff7fa8;margin-bottom:6px">-아/어/여 주세요 变形规则</div>
-  <div style="font-size:15px;color:#241917">阳性元音（아/오）→ <b>아 주세요</b>：봐 주세요 / 도와주세요</div>
-  <div style="font-size:15px;color:#241917">其他元音 → <b>어 주세요</b>：읽어 주세요 / 가르쳐 주세요</div>
-  <div style="font-size:15px;color:#241917">하다 → <b>해 주세요</b>：설명해 주세요 / 전화해 주세요</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:6px">-아/어/여 주세요 变形规则</div>
+  <div style="font-size:16px;color:#241917">阳性元音（아/오）→ <b>아 주세요</b>：봐 주세요 / 도와주세요</div>
+  <div style="font-size:16px;color:#241917">其他元音 → <b>어 주세요</b>：읽어 주세요 / 가르쳐 주세요</div>
+  <div style="font-size:16px;color:#241917">하다 → <b>해 주세요</b>：설명해 주세요 / 전화해 주세요</div>
 </div>
 <div class="reminder-box">도움 주세요 ✗ → 도와주세요 ✓ — 帮忙是固定合写形。기다리어 주세요 ✗ → 기다려 주세요 ✓ — ㅣ+어→여 缩合。-지요? 口语缩为 -죠?，意思完全相同。</div>`,
     compareLabel: '주세요（请求）vs -지요?（确认）',
@@ -1056,17 +1056,17 @@ export const grammarCardsP5: GrammarCard[] = [
     structureNote: '三块内容：①电话号码读法（汉字数词逐位读，0读 공）；\n②시간+에（在某个时间点做）；\n③부터…까지（从某时到某时的范围）。\n时间点和时间范围是两种不同表达，不能混用。',
     rulesNote: '时间点用 에（세 시에 만나요），时间范围用 부터/까지（세 시부터 다섯 시까지）。\n0 在电话号码里读 공，不读 영。\n시（点）用固有数词，분（分）用汉字数词和P2学的一样，这节课再强化一遍。',
     scenarioNote: '"下午三点见""课程从十点到十一点""我的电话是010-xxxx-xxxx"约时间、说课程表、留联系方式，这三种场景每天都会碰到。\n掌握这节课，你能在韩国顺畅处理时间相关的对话。',
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;margin:0 0 4px 0;color:#241917">전화번호 읽기 · 시간 에/부터/까지</h1>
-<p style="font-size:.9rem;color:#89756e;margin:0 0 16px 0">读电话号码，说在几点、从几点到几点。</p>
+    step0Html: `<h1 style="font-size:25px;font-weight:800;margin:0 0 4px 0;color:#241917">전화번호 읽기 · 시간 에/부터/까지</h1>
+<p style="font-size:16px;color:#89756e;margin:0 0 16px 0">读电话号码，说在几点、从几点到几点。</p>
 <div class="block">
-  <div style="font-size:.85rem;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">제 전화번호는 공일공 일이삼사 오육칠팔이에요.</span> — 我的电话是010-1234-5678。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">오후 세 시에 만나요.</span> — 下午三点见。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px"><span style="font-weight:700">세 시부터 다섯 시까지 공부해요.</span> — 从三点到五点学习。</div>
 </div>
 <div class="block">
   <div style="font-weight:700;margin-bottom:8px">三块内容</div>
-  <div style="margin-bottom:6px">① <b>电话号码</b> — 用汉字数词逐位读，0读 공<br><span style="color:#89756e;font-size:.9rem">010-1234-5678 → 공일공 일이삼사 오육칠팔</span></div>
+  <div style="margin-bottom:6px">① <b>电话号码</b> — 用汉字数词逐位读，0读 공<br><span style="color:#89756e;font-size:16px">010-1234-5678 → 공일공 일이삼사 오육칠팔</span></div>
   <div style="margin-bottom:6px">② <b>시간 + 에</b> — 在某个时间点做（세 시에 만나요）</div>
   <div>③ <b>부터…까지</b> — 从某时到某时（세 시부터 다섯 시까지）</div>
 </div>
@@ -1075,20 +1075,20 @@ export const grammarCardsP5: GrammarCard[] = [
 <div class="card-body">两者都表示时间，但用途不同：에 指某个具体时刻（在三点），부터…까지 表示一段时间范围（从三点到五点）。不能互换，用错会让对方不知道你说的是时刻还是时段。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">시간 + 에</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">时间点：在……（某一刻）</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">세 시에 만나요.</span><span style="font-size:14px;color:#5a4640">三点见。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">아침 여덟 시에 일어나요.</span><span style="font-size:14px;color:#5a4640">早上八点起床。</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">时间点：在……（某一刻）</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">세 시에 만나요.</span><span style="font-size:16px;color:#5a4640">三点见。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">아침 여덟 시에 일어나요.</span><span style="font-size:16px;color:#5a4640">早上八点起床。</span></div>
   </div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">부터…까지</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">时间范围：从……到……</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">세 시부터 다섯 시까지</span><span style="font-size:14px;color:#5a4640">从三点到五点</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">월요일부터 금요일까지 일해요.</span><span style="font-size:14px;color:#5a4640">从周一到周五工作。</span></div></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">时间范围：从……到……</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">세 시부터 다섯 시까지</span><span style="font-size:16px;color:#5a4640">从三点到五点</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">월요일부터 금요일까지 일해요.</span><span style="font-size:16px;color:#5a4640">从周一到周五工作。</span></div></div>
 </div>
 <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:10px">
-  <div style="font-size:14px;font-weight:700;color:#ff7fa8;margin-bottom:6px">时间数词读法</div>
-  <div style="font-size:15px;color:#241917">小时（시）→ 固有数词：한 시 / 두 시 / 세 시 … 열두 시</div>
-  <div style="font-size:15px;color:#241917">分钟（분）→ 汉字数词：일 분 / 십오 분 / 삼십 분</div>
-  <div style="font-size:15px;color:#89756e;margin-top:4px">3:30 = 세 시 삼십 분 / 口语：세 시 반（半）</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:6px">时间数词读法</div>
+  <div style="font-size:16px;color:#241917">小时（시）→ 固有数词：한 시 / 두 시 / 세 시 … 열두 시</div>
+  <div style="font-size:16px;color:#241917">分钟（분）→ 汉字数词：일 분 / 십오 분 / 삼십 분</div>
+  <div style="font-size:16px;color:#89756e;margin-top:4px">3:30 = 세 시 삼십 분 / 口语：세 시 반（半）</div>
 </div>
 <div class="reminder-box">세 시에부터 ✗ → 세 시부터 ✓ — 부터 直接加在时间词后，不加 에。세 시에 만나요（在三点见）vs 세 시부터 공부해요（从三点开始学）— 一个是时刻，一个是起点。</div>`,
     compareLabel: '시간 에（时间点）vs 부터…까지（时间范围）',
@@ -1227,10 +1227,10 @@ export const grammarCardsP5: GrammarCard[] = [
     structureNote: '三个表达方式：①타요（单独说乘坐）；\n②타고 가요/와요（坐上后去/来，强调动作连续）；\n③(으)로 가요/와요（用某方式去/来，更简洁）。\n日常口语中 타고 和 (으)로 都常用，可互换。',
     rulesNote: '타고 가다 中的 타고 是 타다+-고 的连接形（已学）。\n(으)로 的收音规则：\n有收音→으로，无收音/ㄹ→로（버스로/지하철로）。\n걸어서 가요（走着去）是例外走路不用 타다，用 걸어서。',
     scenarioNote: '"坐地铁去公司""坐飞机去韩国""坐公交去学校"说出行方式是日常对话中最基础的场景之一。\n掌握这节课，你能流畅描述交通出行，在韩国问路和回答都没问题。',
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;margin:0 0 4px 0;color:#241917">을/를 타다 · 타고 가다 · (으)로 가다</h1>
-<p style="font-size:.9rem;color:#89756e;margin:0 0 16px 0">说坐什么交通工具去或来。</p>
+    step0Html: `<h1 style="font-size:25px;font-weight:800;margin:0 0 4px 0;color:#241917">을/를 타다 · 타고 가다 · (으)로 가다</h1>
+<p style="font-size:16px;color:#89756e;margin:0 0 16px 0">说坐什么交通工具去或来。</p>
 <div class="block">
-  <div style="font-size:.85rem;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">버스를 타고 학교에 가요.</span> — 坐公交去学校。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">지하철로 회사에 가요.</span> — 坐地铁去公司。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px"><span style="font-weight:700">걸어서 집에 와요.</span> — 走着回家。</div>
@@ -1246,20 +1246,20 @@ export const grammarCardsP5: GrammarCard[] = [
 <div class="card-body">两者都表示乘交通工具出行，意思几乎相同，但结构不同：타고 가다 是两个动词连接（坐上+去），(으)로 가다 是方式助词+去。日常口语两者都自然，但走路固定用 걸어서，不能替换。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">교통수단을 타고 가다</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">坐上后去（动作连接）</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">버스를 타고 가요.</span><span style="font-size:14px;color:#5a4640">坐公交去。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">지하철을 타고 왔어요.</span><span style="font-size:14px;color:#5a4640">坐地铁来的。</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">坐上后去（动作连接）</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">버스를 타고 가요.</span><span style="font-size:16px;color:#5a4640">坐公交去。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">지하철을 타고 왔어요.</span><span style="font-size:16px;color:#5a4640">坐地铁来的。</span></div>
   </div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">교통수단(으)로 가다</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">用某方式去（方式助词）</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">버스로 가요.</span><span style="font-size:14px;color:#5a4640">坐公交去。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">지하철로 왔어요.</span><span style="font-size:14px;color:#5a4640">坐地铁来的。</span></div></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">用某方式去（方式助词）</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">버스로 가요.</span><span style="font-size:16px;color:#5a4640">坐公交去。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">지하철로 왔어요.</span><span style="font-size:16px;color:#5a4640">坐地铁来的。</span></div></div>
 </div>
 <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:10px">
-  <div style="font-size:14px;font-weight:700;color:#ff7fa8;margin-bottom:6px">(으)로 收音规则</div>
-  <div style="font-size:15px;color:#241917">无收音 / ㄹ收音 → <b>로</b>：버스로 / 택시로 / 지하철로 / 자전거로</div>
-  <div style="font-size:15px;color:#241917">有收音（非ㄹ）→ <b>으로</b>：（交通工具中少见，일반적으로 无收音/ㄹ收音 적용）</div>
-  <div style="font-size:15px;color:#89756e;margin-top:4px">걸어서 가요（走路去）— 走路固定用 걸어서，不能说 발로 가요</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:6px">(으)로 收音规则</div>
+  <div style="font-size:16px;color:#241917">无收音 / ㄹ收音 → <b>로</b>：버스로 / 택시로 / 지하철로 / 자전거로</div>
+  <div style="font-size:16px;color:#241917">有收音（非ㄹ）→ <b>으로</b>：（交通工具中少见，일반적으로 无收音/ㄹ收音 적용）</div>
+  <div style="font-size:16px;color:#89756e;margin-top:4px">걸어서 가요（走路去）— 走路固定用 걸어서，不能说 발로 가요</div>
 </div>
 <div class="reminder-box">버스를 타고 가요 = 버스로 가요 — 两种说法都正确。걸어로 가요 ✗ → 걸어서 가요 ✓ — 走路固定用 걸어서。지하철을 타고 vs 지하철로：타고 更强调动作过程，로 更简洁。</div>`,
     compareLabel: '타고 가다 vs (으)로 가다',
@@ -1391,7 +1391,7 @@ export const grammarCardsP5: GrammarCard[] = [
   <div class='ov-sec'><span class='badge' style='background:#2db89b;color:white'>(으)로 가요</span> 지하철로 가요</div>
   <div class='ov-sec'><span class='badge' style='background:#e05555;color:white'>ㄹ주의</span> 지하철로（ㄹ 받침 뒤에 로）</div>
 </div>`,
-    linkedGrammarIds: [],
+    linkedGrammarIds: ['g9'],
   },
   {
     id: 'card-p5-l09',
@@ -1403,10 +1403,10 @@ export const grammarCardsP5: GrammarCard[] = [
     structureNote: '这节课是上节课 타다/(으)로 가다 的延伸，核心动词换成 갈아타다。\n三种表达：①을/를 갈아타요（换乘某工具）；\n②(으)로 갈아타요（换成某方向）；\n③A에서 B로 갈아타요（从A换到B，最完整）。',
     rulesNote: '갈아타다 的助词选择和 타다 一样：\n宾语位置用 을/를，方向/工具位置用 (으)로。\n起点用 에서（버스에서），终点用 (으)로（지하철로）。\n次数说法：\n두 번 갈아타야 해요（要换两次）。',
     scenarioNote: '"在这里换乘2号线""从公交换地铁""要换几次"问路和乘车时这类表达必不可少。\n去韩国旅行、坐地铁换乘都会用到。\n这节课配合上节课，出行对话就完整了。',
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;margin:0 0 4px 0;color:#241917">갈아타다 · A에서 B로 갈아타다</h1>
-<p style="font-size:.9rem;color:#89756e;margin:0 0 16px 0">说中途换乘、转车。</p>
+    step0Html: `<h1 style="font-size:25px;font-weight:800;margin:0 0 4px 0;color:#241917">갈아타다 · A에서 B로 갈아타다</h1>
+<p style="font-size:16px;color:#89756e;margin:0 0 16px 0">说中途换乘、转车。</p>
 <div class="block">
-  <div style="font-size:.85rem;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">버스에서 지하철로 갈아타요.</span> — 从公交换乘地铁。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">이호선으로 갈아타세요.</span> — 请换乘2号线。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px"><span style="font-weight:700">두 번 갈아타야 해요.</span> — 要换乘两次。</div>
@@ -1422,20 +1422,20 @@ export const grammarCardsP5: GrammarCard[] = [
 <div class="card-body">타다 是最初上车乘坐，갈아타다 是途中换乘另一辆。两个词的助词用法也不同：타다 用目的格 을/를，갈아타다 用方向助词 (으)로，起点用 에서 标出。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">을/를 타다</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">乘坐（上车，목적어 을/를）</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">지하철을 타요.</span><span style="font-size:14px;color:#5a4640">坐地铁。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">버스를 탔어요.</span><span style="font-size:14px;color:#5a4640">坐了公交。</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">乘坐（上车，목적어 을/를）</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">지하철을 타요.</span><span style="font-size:16px;color:#5a4640">坐地铁。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">버스를 탔어요.</span><span style="font-size:16px;color:#5a4640">坐了公交。</span></div>
   </div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">에서 (으)로 갈아타다</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">换乘（起点 에서 + 目标 (으)로）</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">버스에서 지하철로 갈아타요.</span><span style="font-size:14px;color:#5a4640">从公交换地铁。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">2호선에서 3호선으로 갈아타세요.</span><span style="font-size:14px;color:#5a4640">从2号线换3号线。</span></div></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">换乘（起点 에서 + 目标 (으)로）</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">버스에서 지하철로 갈아타요.</span><span style="font-size:16px;color:#5a4640">从公交换地铁。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">2호선에서 3호선으로 갈아타세요.</span><span style="font-size:16px;color:#5a4640">从2号线换3号线。</span></div></div>
 </div>
 <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:10px">
-  <div style="font-size:14px;font-weight:700;color:#ff7fa8;margin-bottom:6px">换乘次数表达</div>
-  <div style="font-size:15px;color:#241917">한 번 갈아타요（换一次乘）/ 두 번 갈아타요（换两次）</div>
-  <div style="font-size:15px;color:#241917">환승 없이 가요（不换乘直达）</div>
-  <div style="font-size:15px;color:#89756e;margin-top:4px">어디서 갈아타요?（在哪换乘？）— 问路必备句型</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:6px">换乘次数表达</div>
+  <div style="font-size:16px;color:#241917">한 번 갈아타요（换一次乘）/ 두 번 갈아타요（换两次）</div>
+  <div style="font-size:16px;color:#241917">환승 없이 가요（不换乘直达）</div>
+  <div style="font-size:16px;color:#89756e;margin-top:4px">어디서 갈아타요?（在哪换乘？）— 问路必备句型</div>
 </div>
 <div class="reminder-box">지하철을 갈아타요（换乘地铁，强调对象）= 지하철로 갈아타요（换乘地铁，强调方向）— 两种说法都正确，口语中 (으)로 갈아타다 更常用。어디서 갈아타요?（在哪换乘？）是问路必备句型。</div>`,
     compareLabel: '타다（乘坐）vs 갈아타다（换乘）',
@@ -1561,9 +1561,9 @@ export const grammarCardsP5: GrammarCard[] = [
   <div class='ov-sec'><span class='badge' style='background:#ff7fa8;color:white'>B로 갈아타요</span> 换成地铁：지하철로 갈아타요</div>
   <div class='ov-sec'><span class='badge' style='background:#6b7ff0;color:white'>A에서 B로</span> 从公交换地铁</div>
   <div class='ov-sec'><span class='badge' style='background:#2db89b;color:white'>N번 갈아타야 해요</span> 换乘N次</div>
-  <div class='ov-sec'><span class='badge' style='background:#e05555;color:white'>주의</span> 타다（乘坐）≠ 갈아타다（换乘）</div>
+  <div class='ov-sec'><span class='badge' style='background:#e05555;color:white'>주의</span> 타다（乘坐）≠ 갈아타다（換乘）</div>
 </div>`,
-    linkedGrammarIds: [],
+    linkedGrammarIds: ['g9'],
   },
   {
     id: 'card-p5-l10',
@@ -1575,10 +1575,10 @@ export const grammarCardsP5: GrammarCard[] = [
     structureNote: '结构非常简单：\n动词词干直接加 -다가，不看收音，后句说发生的变化或结果。\n注意 -다가 和 -고 的区别：\n-고 是"做完A再做B"，-다가 是"做A途中（没做完）就发生了B"。',
     rulesNote: '-다가 直接接词干，无变形，不规则也不触发。\n关键是含义前句动作必须是"正在进行中/未完成"的状态，后句是中途发生的变化。\n可以缩略成 -다：\n공부하다 잠들었어요。',
     scenarioNote: '"追剧追着追着哭了""学习学着学着睡着了""走着走着迷路了"这类"做着做着"的描述在讲故事、聊日常经历时非常自然。\n掌握 -다가，你的韩语叙述能力会明显提升。',
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;margin:0 0 4px 0;color:#241917">-다가</h1>
-<p style="font-size:.9rem;color:#89756e;margin:0 0 16px 0">说做着做着，中途发生了变化。</p>
+    step0Html: `<h1 style="font-size:25px;font-weight:800;margin:0 0 4px 0;color:#241917">-다가</h1>
+<p style="font-size:16px;color:#89756e;margin:0 0 16px 0">说做着做着，中途发生了变化。</p>
 <div class="block">
-  <div style="font-size:.85rem;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">공부하다가 잠들었어요.</span> — 学着学着睡着了。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">드라마를 보다가 울었어요.</span> — 看电视剧看着看着哭了。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px"><span style="font-weight:700">길을 걷다가 친구를 만났어요.</span> — 走路走着走着遇见了朋友。</div>
@@ -1594,20 +1594,20 @@ export const grammarCardsP5: GrammarCard[] = [
 <div class="card-body">-고 是做完A再做B（A完成），-다가 是做A途中发生了B（A未完成）。含义差别很大：-고 前句动作已结束，-다가 前句动作被中断或转向，两者不能随意替换。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-고</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">顺接：A完成后做B</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">밥을 먹고 공부해요.</span><span style="font-size:14px;color:#5a4640">吃完饭然后学习。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">샤워를 하고 잤어요.</span><span style="font-size:14px;color:#5a4640">洗完澡睡觉了。</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">顺接：A完成后做B</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">밥을 먹고 공부해요.</span><span style="font-size:16px;color:#5a4640">吃完饭然后学习。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">샤워를 하고 잤어요.</span><span style="font-size:16px;color:#5a4640">洗完澡睡觉了。</span></div>
   </div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-다가</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">中途变化：做A途中发生B</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">공부하다가 잠들었어요.</span><span style="font-size:14px;color:#5a4640">学着学着睡着了。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">걷다가 넘어졌어요.</span><span style="font-size:14px;color:#5a4640">走着走着摔倒了。</span></div></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">中途变化：做A途中发生B</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">공부하다가 잠들었어요.</span><span style="font-size:16px;color:#5a4640">学着学着睡着了。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">걷다가 넘어졌어요.</span><span style="font-size:16px;color:#5a4640">走着走着摔倒了。</span></div></div>
 </div>
 <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:10px">
-  <div style="font-size:14px;font-weight:700;color:#ff7fa8;margin-bottom:6px">-다가 的三种用法</div>
-  <div style="font-size:15px;color:#241917">① 动作中途中断：공부하다가 전화가 왔어요（学习中接到电话）</div>
-  <div style="font-size:15px;color:#241917">② 方向转变：집에 가다가 슈퍼에 들렀어요（回家途中顺路去了超市）</div>
-  <div style="font-size:15px;color:#241917">③ 意外发生：서다가 넘어졌어요（站着站着摔倒了）</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:6px">-다가 的三种用法</div>
+  <div style="font-size:16px;color:#241917">① 动作中途中断：공부하다가 전화가 왔어요（学习中接到电话）</div>
+  <div style="font-size:16px;color:#241917">② 方向转变：집에 가다가 슈퍼에 들렀어요（回家途中顺路去了超市）</div>
+  <div style="font-size:16px;color:#241917">③ 意外发生：서다가 넘어졌어요（站着站着摔倒了）</div>
 </div>
 <div class="reminder-box">밥을 먹고 잠들었어요（吃完饭睡着了）vs 밥을 먹다가 잠들었어요（吃着吃着睡着了）— 一字之差，含义完全不同。-다가 接续：去掉 다 直接加 다가，所有不规则均不触发（다가 以辅音开头）。</div>`,
     compareLabel: '-고（顺接）vs -다가（中途变化）',
@@ -1741,7 +1741,7 @@ export const grammarCardsP5: GrammarCard[] = [
   <div class='ov-sec'><span class='badge' style='background:#2db89b;color:white'>불규칙 미적용</span> 듣다→듣다가</div>
   <div class='ov-sec'><span class='badge' style='background:#e05555;color:white'>-고와 구분</span> -고（顺接完成）vs -다가（中途变化）</div>
 </div>`,
-    linkedGrammarIds: [],
+    linkedGrammarIds: ['g41'],
   },
 
   {
@@ -1753,10 +1753,10 @@ export const grammarCardsP5: GrammarCard[] = [
     whatItDoesBody: '综合运用第五章 L01-L10 所学语法：\n条件、否定、计划推测、纠正、冠词形、请求确认、交通出行、换乘、动作转换。',
     isPractice: true,
     structureNote: '这是第五章的总复习。\n第五章的主线是"表达更立体"条件假设、否定辨析、修饰名词、出行交通，让你从说单句升级到说复杂情境。\n做题时想想每个语法点在真实对话里会出现在哪个场景。',
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;margin:0 0 4px 0;color:#241917">第五章综合练习</h1>
-<p style="font-size:.9rem;color:#89756e;margin:0 0 16px 0">条件、否定、计划、冠词形、交通出行——全部整合在一起。</p>
+    step0Html: `<h1 style="font-size:25px;font-weight:800;margin:0 0 4px 0;color:#241917">第五章综合练习</h1>
+<p style="font-size:16px;color:#89756e;margin:0 0 16px 0">条件、否定、计划、冠词形、交通出行——全部整合在一起。</p>
 <div class="block">
-  <div style="font-size:.85rem;font-weight:700;color:#ff7fa8;margin-bottom:8px">这章学了什么：</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">这章学了什么：</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">L01-L03</span> — 条件（-(으)면）、否定（안/못）、计划推测（-(으)려고 하다）</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">L04-L06</span> — 纠正否定（아니라）、冠词形（-는/은/을）、请求确认（주세요/-지요?）</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px"><span style="font-weight:700">L07-L10</span> — 时间助词、交通（타다/(으)로）、换乘（갈아타다）、途中变化（-다가）</div>
@@ -1764,7 +1764,7 @@ export const grammarCardsP5: GrammarCard[] = [
 <div class="block">
   <div style="font-weight:700;margin-bottom:8px">综合例句</div>
   <div style="margin-bottom:6px">한국어를 잘하려면 매일 공부하는 게 좋아요.</div>
-  <div style="color:#89756e;font-size:.9rem">想把韩语学好，每天学习才好。（L01+L05综合）</div>
+  <div style="color:#89756e;font-size:16px">想把韩语学好，每天学习才好。（L01+L05综合）</div>
 </div>
 <div class="reminder-box">综合练习会混合本章所有语法点出题。不确定时回到对应课次复习。</div>`,
     compareLabel: '第五章要点速览',
@@ -1871,9 +1871,9 @@ export const grammarCardsP5: GrammarCard[] = [
     ],
     compareHtml: `<div class="card-title">第五章核心对比速览</div>
 <div class="card-body">第五章的主线是"条件、否定、交通、冠词修饰、请求、中途转变"。这几组最容易混淆，对比清楚就掌握了本章要点。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">-(으)면 vs -(으)려면</div><div style="font-size:14px;color:#89756e;margin-top:2px">条件 vs 目的条件</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">시간이 있으면 가요.</span><span style="font-size:14px;color:#5a4640">如果有时间就去。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">잘하려면 연습해야 해요.</span><span style="font-size:14px;color:#5a4640">想做好的话要练习。</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">안 vs 못</div><div style="font-size:14px;color:#89756e;margin-top:2px">主观不做 vs 客观不能</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">안 가요. （不想去）</span><span style="font-size:14px;color:#5a4640">主观选择不去。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">못 가요. （不能去）</span><span style="font-size:14px;color:#5a4640">客观条件做不到。</span></div></div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">-(으)면 vs -(으)려면</div><div style="font-size:16px;color:#89756e;margin-top:2px">条件 vs 目的条件</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">시간이 있으면 가요.</span><span style="font-size:16px;color:#5a4640">如果有时间就去。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">잘하려면 연습해야 해요.</span><span style="font-size:16px;color:#5a4640">想做好的话要练习。</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">안 vs 못</div><div style="font-size:16px;color:#89756e;margin-top:2px">主观不做 vs 客观不能</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">안 가요. （不想去）</span><span style="font-size:16px;color:#5a4640">主观选择不去。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">못 가요. （不能去）</span><span style="font-size:16px;color:#5a4640">客观条件做不到。</span></div></div>
 </div>
-<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:15px;font-weight:700;color:#241917;margin-bottom:6px">-고 vs -다가</div><div style="font-size:15px;color:#5a4640">-고：顺序完成再做下一个（먹고 가요 = 吃完再去）<br>-다가：做A做到一半，中途转变成B（먹다가 전화가 왔어요 = 正吃着电话来了）<br>区别：-고 前面动作已完成；-다가 前面动作未完成就中断。</div></div>
+<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">-고 vs -다가</div><div style="font-size:16px;color:#5a4640">-고：顺序完成再做下一个（먹고 가요 = 吃完再去）<br>-다가：做A做到一半，中途转变成B（먹다가 전화가 왔어요 = 正吃着电话来了）<br>区别：-고 前面动作已完成；-다가 前面动作未完成就中断。</div></div>
 <div class="reminder-box">타다（乘坐）+ 갈아타다（换乘）：버스를 타고 지하철로 갈아타요。(으)로 表方向/工具，ㄹ收音后用 로（지하철로 ✓，지하철으로 ✗）。</div>`,
     overviewHtml: `<div class='overview'>
   <div class='ov-title'>제5장 종합 연습 완성！</div>

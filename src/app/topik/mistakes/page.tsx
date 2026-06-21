@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Trash2, PenLine } from 'lucide-react';
 import { db } from '@/lib/db';
-import { topikQuestions } from '@/data/topik-questions';
 import type { TopikMistake } from '@/types';
 import type { TopikQuestion } from '@/data/topik-questions';
 import { useTheme } from '@/components/ThemeProvider';
@@ -26,7 +25,10 @@ export default function TopikMistakesPage() {
 
   async function load() {
     try {
-      const mistakes = await db.topikMistakes.filter((m: TopikMistake) => m.mastered === 0);
+      const [{ topikQuestions }, mistakes] = await Promise.all([
+        import('@/data/topik-questions'),
+        db.topikMistakes.filter((m: TopikMistake) => m.mastered === 0),
+      ]);
       const withQ = mistakes
         .map((m: TopikMistake) => ({ mistake: m, question: topikQuestions.find(q => q.id === m.questionId) }))
         .filter((r: { question: TopikQuestion | undefined }) => r.question) as MistakeRow[];

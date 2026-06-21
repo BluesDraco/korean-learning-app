@@ -20,7 +20,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
   }
 
-  const apiKey = process.env.DEEPSEEK_LOOKUP_KEY;
+  const apiKey = process.env.DEEPSEEK_SHADOWING_KEY;
   if (!apiKey) {
     return NextResponse.json({
       dictionaryForm: '',

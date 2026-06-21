@@ -514,7 +514,7 @@ function ReviewContent() {
     };
 
     return (
-      <div className="flex flex-col px-4 pt-4 pb-8 gap-4" style={{ minHeight: 'calc(100dvh - 60px)' }}>
+      <div className="flex flex-col px-4 pt-4 pb-8 gap-4 max-w-xl mx-auto w-full" style={{ minHeight: 'calc(100dvh - 60px)' }}>
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -875,7 +875,7 @@ function ReviewContent() {
   const [exKo, exZh] = current.example.split('\n');
 
   return (
-    <div className="flex flex-col px-4 pt-4 pb-[calc(100px+env(safe-area-inset-bottom,0px))]" style={{ minHeight: 'calc(100dvh - 60px)' }}>
+    <div className="flex flex-col px-4 pt-4 pb-[calc(100px+env(safe-area-inset-bottom,0px))] max-w-xl mx-auto w-full" style={{ minHeight: 'calc(100dvh - 60px)' }}>
       {/* ── Top bar ── */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2.5">

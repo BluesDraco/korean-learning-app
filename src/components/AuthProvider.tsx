@@ -48,7 +48,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (typeof window === 'undefined') return null;
     return getCachedUser();
   });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const fetchUser = useCallback(async () => {
     try {
@@ -154,9 +154,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = async () => {
     try {
-      await fetch('/api/auth/logout', { method: 'POST' });
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 5000);
+      await fetch('/api/auth/logout', { method: 'POST', signal: controller.signal });
+      clearTimeout(timer);
     } catch {
-      // ignore network errors on logout
+      // ignore network errors
     }
     setUser(null);
     setCachedUser(null);

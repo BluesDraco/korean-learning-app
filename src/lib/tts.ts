@@ -335,7 +335,11 @@ async function speakViaBrowser(text: string, rate: number): Promise<void> {
     // the system default (often zh-CN on Chinese devices), which mispronounces Korean.
     const voices = synth.getVoices();
     if (voices.length > 0) {
-      const match = voices.find((v) => v.lang === lang) ?? voices.find((v) => v.lang.startsWith(lang.slice(0, 2)));
+      const exact = voices.find((v) => v.lang === lang);
+      const fallback = lang === 'zh-CN'
+        ? voices.find((v) => v.lang === 'zh-CN' || v.lang === 'zh_CN')
+        : voices.find((v) => v.lang.startsWith('ko'));
+      const match = exact ?? fallback;
       if (match) utter.voice = match;
     }
 
@@ -383,11 +387,7 @@ async function playUrl(url: string, seq: number): Promise<void> {
 
 async function playUrlViaElement(url: string, seq: number): Promise<void> {
   await new Promise<void>((resolve) => {
-    // Reuse the unlocked Audio element for WeChat/iOS WebView compatibility.
-    // WeChat blocks audio.play() after async operations unless the element was
-    // already unlocked in a prior gesture handler.
-    const audio = unlockedAudio ?? new Audio();
-    audio.src = url;
+    const audio = new Audio(url);
     currentAudio = audio;
     audio.onended = () => {
       if (currentAudio === audio) currentAudio = null;

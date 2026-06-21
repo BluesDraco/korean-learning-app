@@ -50,6 +50,7 @@ registerMany({
   '웨': { url: '/audio/phonetics/v-19.mp3' },
   '위': { url: '/audio/phonetics/v-20.mp3' },
   '의': { url: '/audio/phonetics/v-21.mp3' },
+  // 辅音 — 按字母名称注册（用于字母表显示）
   '기역': { url: '/audio/phonetics/c-01.mp3' },
   '니은': { url: '/audio/phonetics/c-02.mp3' },
   '디귿': { url: '/audio/phonetics/c-03.mp3' },
@@ -69,13 +70,19 @@ registerMany({
   '쌍비읍': { url: '/audio/phonetics/c-17.mp3' },
   '쌍시옷': { url: '/audio/phonetics/c-18.mp3' },
   '쌍지읒': { url: '/audio/phonetics/c-19.mp3' },
-  '박': { url: '/audio/phonetics/b-01.mp3' },
-  '산': { url: '/audio/phonetics/b-02.mp3' },
-  '옷': { url: '/audio/phonetics/b-03.mp3' },
-  '말': { url: '/audio/phonetics/b-04.mp3' },
-  '밤': { url: '/audio/phonetics/b-05.mp3' },
-  '밥': { url: '/audio/phonetics/b-06.mp3' },
-  '강': { url: '/audio/phonetics/b-07.mp3' },
+  // 辅音 — 按 CONSONANT_DEMO 音节注册（phonetics 页面实际传入的 key）
+  // 注意：单音节 key 会与词汇页冲突，只保留不在词汇库高频出现的字母
+  // 가/나/다/라/마/바/사/자/하 已移除，由 NLS 播放，避免词汇页误用音标录音
+  '차': { url: '/audio/phonetics/c-10.mp3' },
+  '카': { url: '/audio/phonetics/c-11.mp3' },
+  '타': { url: '/audio/phonetics/c-12.mp3' },
+  '파': { url: '/audio/phonetics/c-13.mp3' },
+  '까': { url: '/audio/phonetics/c-15.mp3' },
+  '따': { url: '/audio/phonetics/c-16.mp3' },
+  '빠': { url: '/audio/phonetics/c-17.mp3' },
+  '싸': { url: '/audio/phonetics/c-18.mp3' },
+  '짜': { url: '/audio/phonetics/c-19.mp3' },
+  // 받침 demo — 박/산/말/밤/밥/강/옷 移除，由 NLS 播放，避免词汇页误用音标录音
 });
 
 // ── 30天课程单词 ──

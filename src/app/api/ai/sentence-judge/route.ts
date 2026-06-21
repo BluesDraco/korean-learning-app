@@ -11,7 +11,7 @@ export async function POST(req: Request) {
   const auth = await getAuthFromCookie();
   if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  const apiKey = process.env.DEEPSEEK_ANALYZE_KEY;
+  const apiKey = process.env.DEEPSEEK_JUDGE_KEY;
   if (!apiKey) return NextResponse.json({ error: 'API key not configured' }, { status: 503 });
 
   try {

@@ -142,6 +142,29 @@ export function PronunciationSession({ items, onClose }: Props) {
     if (recordingUrl) globalPlayer.play(recordingUrl, 1);
   }, [recordingUrl]);
 
+  const goPrevStep = useCallback(() => {
+    if (!item) return;
+    const seq: StepType[] = item.segments?.length
+      ? ['target', 'segments', 'record', 'compare']
+      : ['target', 'record', 'compare'];
+    const idx = seq.indexOf(step);
+    if (idx > 0) {
+      const prevStep = seq[idx - 1];
+      if (prevStep === 'compare') {
+        setStep('record');
+      } else {
+        setStep(prevStep);
+      }
+    } else if (itemIdx > 0) {
+      const prevItem = items[itemIdx - 1];
+      setItemIdx(itemIdx - 1);
+      setStep(prevItem.segments?.length ? 'segments' : 'target');
+      setRecordingUrl(null);
+      setMicError(null);
+      setSlowMode(false);
+    }
+  }, [step, itemIdx, items, item]);
+
   const goNextStep = useCallback(() => {
     if (!item) return;
     const goNext = () => {
@@ -158,8 +181,8 @@ export function PronunciationSession({ items, onClose }: Props) {
     };
 
     const seq: StepType[] = item.segments?.length
-      ? ['target', 'listen', 'segments', 'record', 'compare']
-      : ['target', 'listen', 'record', 'compare'];
+      ? ['target', 'segments', 'record', 'compare']
+      : ['target', 'record', 'compare'];
 
     const idx = seq.indexOf(step);
     if (idx >= 0 && idx < seq.length - 1) {
@@ -266,18 +289,32 @@ export function PronunciationSession({ items, onClose }: Props) {
     record: '开口录音', compare: '回放对比', settlement: '',
   };
 
-  const progress = ((itemIdx * 5 + ['target', 'listen', 'segments', 'record', 'compare'].indexOf(step)) / (items.length * 5)) * 100;
+  const currentItem = items[itemIdx];
+  const currentSeq = currentItem?.segments?.length
+    ? ['target', 'segments', 'record', 'compare']
+    : ['target', 'record', 'compare'];
+  const totalSteps = items.reduce((sum, it) => sum + (it.segments?.length ? 4 : 3), 0);
+  const doneSteps = items.slice(0, itemIdx).reduce((sum, it) => sum + (it.segments?.length ? 4 : 3), 0);
+  const stepIdx = currentSeq.indexOf(step);
+  const progress = ((doneSteps + (stepIdx >= 0 ? stepIdx : 0)) / totalSteps) * 100;
 
   return (
     <div className="py-4 max-w-lg mx-auto space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <button onClick={() => {
-          if (step !== 'target' && !confirm('确定退出？当前进度不会保存')) return;
-          onClose();
-        }} className="p-1 text-[var(--text-muted)] hover:text-[var(--text-primary)]">
-          <ArrowLeft size={20} />
-        </button>
+        <div className="flex items-center gap-1">
+          <button onClick={() => {
+            if (step !== 'target' && !confirm('确定退出？当前进度不会保存')) return;
+            onClose();
+          }} className="p-1 text-[var(--text-muted)] hover:text-[var(--text-primary)]">
+            <ArrowLeft size={20} />
+          </button>
+          {(itemIdx > 0 || step !== 'target') && (
+            <button onClick={goPrevStep} className="text-xs px-2 py-1 rounded-lg bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors">
+              上一步
+            </button>
+          )}
+        </div>
         <div className="flex flex-col items-center">
           <span className="text-xs font-medium text-[var(--text-primary)]">{stepNames[step]}</span>
           <span className="text-[10px] text-[var(--text-muted)]">{itemIdx + 1} / {items.length}</span>
@@ -318,34 +355,6 @@ export function PronunciationSession({ items, onClose }: Props) {
             )}
             <button onClick={goNextStep} className="w-full py-3 bg-[var(--pink-primary)] text-white rounded-2xl font-bold text-sm">
               开始练习
-            </button>
-          </>
-        )}
-
-        {/* ── LISTEN ── */}
-        {step === 'listen' && (
-          <>
-            <StepBadge label="听标准音" />
-            <p className="text-xs text-[var(--text-muted)]">先仔细听一遍标准发音</p>
-            <h2 className="text-2xl font-extrabold text-[var(--text-primary)]">{item.textKo}</h2>
-            {item.romanization && (
-              <p className="text-sm text-[var(--text-muted)] font-mono">[{item.romanization}]</p>
-            )}
-            <div className="flex items-center gap-4">
-              <PlayBtn onClick={playStandard} size={28} label="标准" isPlaying={isPlaying} />
-            </div>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setSlowMode(!slowMode)}
-                className={`text-xs px-3 py-1.5 rounded-full transition-colors ${
-                  slowMode ? 'bg-[var(--peach-soft)]/15 text-[var(--peach-soft)]' : 'bg-[var(--bg-input)] text-[var(--text-muted)]'
-                }`}
-              >
-                {slowMode ? '🐢 慢速' : '慢速'}
-              </button>
-            </div>
-            <button onClick={goNextStep} className="w-full py-3 bg-[var(--pink-primary)] text-white rounded-2xl font-bold text-sm">
-              听好了，下一步
             </button>
           </>
         )}

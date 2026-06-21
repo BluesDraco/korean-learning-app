@@ -145,6 +145,7 @@ export default function ShadowingClipPage() {
     if (savedSentences.has(sub.id)) { showToast('已保存到我的句子'); return; }
     try {
       await db.sentences.add({
+        id: crypto.randomUUID(),
         korean: sub.korean, chinese: sub.chinese, source_type: 'shadowing',
         source_id: clip.id, source_title: clip.title,
         start_time: sub.startMs, end_time: sub.endMs,

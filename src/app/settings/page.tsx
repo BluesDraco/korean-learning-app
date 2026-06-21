@@ -30,7 +30,7 @@ function setReduceMotion(v: boolean): void {
 
 export default function SettingsPage() {
   const router = useRouter();
-  const { user, loading: authLoading } = useAuth();
+  const { user, loading: authLoading, logout } = useAuth();
   const { settings: fontSettings, previewPreset, previewSize, commitFontSettings } = useFontSettings();
   const { theme, toggle: toggleTheme } = useTheme();
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -471,7 +471,7 @@ export default function SettingsPage() {
           </div>
           <button
             onClick={async () => {
-              await fetch('/api/auth/logout', { method: 'POST' });
+              await logout();
               window.location.href = '/auth/login';
             }}
             className="flex items-center gap-2 px-4 py-2 rounded-xl border border-red-200 text-red-500 text-sm hover:bg-red-50 transition-colors"

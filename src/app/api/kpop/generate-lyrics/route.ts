@@ -2,11 +2,15 @@ import { NextResponse } from 'next/server';
 import { fetchWithTimeout } from '@/lib/fetch';
 import { getDb } from '@/lib/server/db';
 import type { LocalLyricLine } from '@/types/kpop';
+import { getAuthFromCookie } from '@/lib/server/auth';
 
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
 const DEEPSEEK_MODEL = 'deepseek-chat';
 
 export async function POST(req: Request) {
+  const auth = await getAuthFromCookie();
+  if (!auth) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
+
   const apiKey = process.env.DEEPSEEK_ANALYZE_KEY;
   if (!apiKey) {
     return NextResponse.json({ error: 'API key not configured' }, { status: 503 });

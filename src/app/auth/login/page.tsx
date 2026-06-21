@@ -11,7 +11,24 @@ import { ToriPrimaryButton } from '@/components/mobile/ToriPrimaryButton';
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirect = searchParams.get('redirect') || '/';
+  const STATIC_EXT = /\.(png|jpg|jpeg|webp|gif|svg|ico|woff2?|ttf|eot|mp3|mp4|webm)$/i;
+  const rawRedirect = searchParams.get('redirect');
+  // Extract only the pathname to prevent open redirect via //evil.com or ///evil.com
+  let redirect = '/daily';
+  if (rawRedirect) {
+    try {
+      const pathname = new URL(rawRedirect, 'http://localhost').pathname;
+      // Block redirect back to auth pages to prevent loops
+      if (
+        pathname.startsWith('/') &&
+        !STATIC_EXT.test(pathname) &&
+        pathname !== '/auth/login' &&
+        pathname !== '/auth/register'
+      ) {
+        redirect = pathname;
+      }
+    } catch { /* ignore malformed redirect */ }
+  }
   const { login } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -32,7 +49,7 @@ function LoginForm() {
       if (result.error) {
         setError(result.error === 'Invalid credentials' ? '用户名或密码错误' : (result.error || '登录失败，请稍后重试'));
       } else {
-        router.push(redirect);
+        window.location.href = redirect;
       }
     } catch {
       setError('网络错误，请检查网络连接后重试');

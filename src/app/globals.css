@@ -129,11 +129,11 @@
    Font Settings — unlayered so they override any cascade-layer styles
    ═══════════════════════════════════════════════════════════════ */
 
-html { font-size: 17px; }
-html[data-font-size="small"]  { font-size: 15px; }
-html[data-font-size="medium"] { font-size: 17px; }
-html[data-font-size="large"]  { font-size: 19px; }
-html[data-font-size="xlarge"] { font-size: 21px; }
+html { font-size: 16px; }
+html[data-font-size="small"]  { font-size: 14px; }
+html[data-font-size="medium"] { font-size: 16px; }
+html[data-font-size="large"]  { font-size: 18px; }
+html[data-font-size="xlarge"] { font-size: 20px; }
 
 body {
   font-family: system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
@@ -1458,6 +1458,8 @@ html[data-reduce-motion="true"] *::after {
 .desktop-content {
   min-height: 0;
   flex: 1;
+  display: flex;
+  flex-direction: column;
   overflow-y: visible;
   scrollbar-width: none;
   padding-right: 4px;
@@ -1586,6 +1588,14 @@ html[data-reduce-motion="true"] *::after {
 
 .desktop-hero.tools {
   background: linear-gradient(135deg, #fff9f4 0%, #fff0f5 55%, #eaf8f5 100%);
+}
+
+.desktop-hero.explore {
+  background: linear-gradient(135deg, #fff0f5 0%, #eee7ff 55%, #e6f3ff 100%);
+}
+
+.desktop-hero.vocabulary {
+  background: linear-gradient(135deg, #fff9f4 0%, #fff0f5 60%, #eaf8f5 100%);
 }
 
 /* Hero label pill */

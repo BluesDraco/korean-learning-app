@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, BookOpen, Plus, Trash2, Volume2, Search, Loader2, CheckSquare, Square, FolderInput, X, Headphones, ChevronUp, ChevronDown } from 'lucide-react';
+import { ArrowLeft, BookOpen, Plus, Trash2, Volume2, Search, Loader2, CheckSquare, Square, FolderInput, X, Headphones, ChevronUp, ChevronDown, BookmarkPlus } from 'lucide-react';
 import { db } from '@/lib/db';
 import { AddToBookModal } from '@/components/AddToBookModal';
 import { WordAudioPlayer } from '@/components/WordAudioPlayer';
@@ -26,6 +26,16 @@ export default function BookDetailPage() {
   const [allBooks, setAllBooks] = useState<{ id: string; name: string }[]>([]);
   const [showMoveSheet, setShowMoveSheet] = useState(false);
   const [showAudioPlayer, setShowAudioPlayer] = useState(false);
+  const [savedSentenceIds, setSavedSentenceIds] = useState<Set<string>>(new Set());
+
+  const saveSentence = async (korean: string, chinese: string, sourceTitle: string) => {
+    if (savedSentenceIds.has(korean)) return;
+    const existing = await db.sentences.where('korean').equals(korean).first().catch(() => null);
+    if (!existing) {
+      await db.sentences.add({ id: crypto.randomUUID(), korean, chinese, source_type: 'vocabulary', source_id: 'book-' + id, source_title: sourceTitle, created_at: new Date().toISOString() }).catch(() => {});
+    }
+    setSavedSentenceIds((prev) => new Set(prev).add(korean));
+  };
 
   const load = useCallback(async () => {
     try {
@@ -279,6 +289,13 @@ export default function BookDetailPage() {
                               className="p-1 rounded-lg hover:bg-[var(--bg-accent)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] shrink-0"
                             >
                               <Volume2 size={14} />
+                            </button>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); saveSentence(ex.text, ex.translation, word.word); }}
+                              className="p-1 rounded-lg hover:bg-[var(--bg-accent)] transition-colors shrink-0"
+                              style={{ color: savedSentenceIds.has(ex.text) ? 'var(--pink-primary)' : 'var(--text-muted)' }}
+                            >
+                              <BookmarkPlus size={14} fill={savedSentenceIds.has(ex.text) ? 'currentColor' : 'none'} />
                             </button>
                           </div>
                         ))}

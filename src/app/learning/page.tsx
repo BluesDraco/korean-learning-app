@@ -72,8 +72,8 @@ export default function LearningPage() {
   const [modalEntry, setModalEntry] = useState<LearningEntry | null>(null);
 
   useEffect(() => {
-    setIsDesktop(window.innerWidth >= 1024);
-    const onResize = () => setIsDesktop(window.innerWidth >= 1024);
+    setIsDesktop(window.innerWidth >= 768);
+    const onResize = () => setIsDesktop(window.innerWidth >= 768);
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, []);

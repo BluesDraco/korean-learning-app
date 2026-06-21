@@ -1,11 +1,21 @@
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/server/db';
-import { verifyPassword, signToken, setAuthCookie } from '@/lib/server/auth';
+import { verifyPassword, signToken } from '@/lib/server/auth';
 import { checkLoginRateLimit, resetLoginRateLimit } from '@/lib/server/rate-limit';
 
 function getClientIp(request: Request): string {
   const forwarded = request.headers.get('x-forwarded-for');
   return forwarded?.split(',')[0]?.trim() || '127.0.0.1';
+}
+
+function setTokenCookie(res: NextResponse, token: string) {
+  res.cookies.set('token', token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+    maxAge: 60 * 60 * 24 * 7,
+  });
 }
 
 export async function POST(request: Request) {
@@ -41,13 +51,12 @@ export async function POST(request: Request) {
 
     await resetLoginRateLimit(ip, username);
 
-    // Record last login time
-    await db.run('UPDATE users SET last_login_at = ? WHERE id = ?', [Date.now(), id]);
+    try { await db.run('UPDATE users SET last_login_at = ? WHERE id = ?', [Date.now(), id]); } catch { /* column may not exist */ }
 
     const token = await signToken({ userId: id, username: uname, role });
-    await setAuthCookie(token);
-
-    return NextResponse.json({ success: true, user: { id, username: uname, role } });
+    const res = NextResponse.json({ success: true, user: { id, username: uname, role } });
+    setTokenCookie(res, token);
+    return res;
   } catch (err) {
     console.error('Login error:', err);
     return NextResponse.json({ error: '登录失败，请稍后重试' }, { status: 500 });

@@ -3,8 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Trophy, RotateCcw, BookOpen, ChevronRight } from 'lucide-react';
-import { topikQuestions, topikSections } from '@/data/topik-questions';
-import type { TopikQuestion } from '@/data/topik-questions';
+import type { TopikQuestion, TopikSection } from '@/data/topik-questions';
 import Link from 'next/link';
 import { useTheme } from '@/components/ThemeProvider';
 
@@ -28,19 +27,23 @@ export default function TopikResultPage() {
   const router = useRouter();
   const [result, setResult] = useState<ResultData | null>(null);
   const [wrongQuestions, setWrongQuestions] = useState<TopikQuestion[]>([]);
+  const [topikSections, setTopikSections] = useState<TopikSection[]>([]);
 
   useEffect(() => {
     if (!sessionId) return;
-    try {
-      const saved = sessionStorage.getItem(`topik-result-${sessionId}`);
-      if (!saved) { router.replace('/topik'); return; }
-      const data = JSON.parse(saved) as ResultData;
-      setResult(data);
-      const wqs = data.wrongQuestionIds.map(id => topikQuestions.find(q => q.id === id)).filter(Boolean) as TopikQuestion[];
-      setWrongQuestions(wqs);
-    } catch {
-      router.replace('/topik');
-    }
+    import('@/data/topik-questions').then(({ topikQuestions, topikSections: secs }) => {
+      setTopikSections(secs);
+      try {
+        const saved = sessionStorage.getItem(`topik-result-${sessionId}`);
+        if (!saved) { router.replace('/topik'); return; }
+        const data = JSON.parse(saved) as ResultData;
+        setResult(data);
+        const wqs = data.wrongQuestionIds.map(id => topikQuestions.find(q => q.id === id)).filter(Boolean) as TopikQuestion[];
+        setWrongQuestions(wqs);
+      } catch {
+        router.replace('/topik');
+      }
+    });
   }, [sessionId, router]);
 
   if (!result) {

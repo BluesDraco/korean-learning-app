@@ -85,7 +85,7 @@ export default function DictationPage() {
 
   if (pageState === 'session') {
     return (
-      <div className="py-4 max-w-2xl mx-auto px-1">
+      <div className="py-4 max-w-2xl md:max-w-3xl mx-auto px-1">
         <DictationSession
           items={items}
           difficulty={difficulty}
@@ -96,7 +96,7 @@ export default function DictationPage() {
   }
 
   return (
-    <div className="py-4 max-w-2xl mx-auto space-y-5 pb-24">
+    <div className="py-4 max-w-2xl mx-auto space-y-5 pb-24 md:max-w-3xl">
       {/* Header */}
       <div>
         <Link href="/tools" className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] mb-2">
@@ -163,8 +163,8 @@ export default function DictationPage() {
       )}
 
       {/* Start button */}
-      <div className="fixed left-0 right-0 z-30 px-4 pt-3 pb-3 bg-[var(--bg-card)] border-t border-[var(--border-color)] md:left-[108px]" style={{ bottom: 'calc(56px + env(safe-area-inset-bottom, 0px))' }}>
-        <div className="max-w-2xl mx-auto">
+      <div className="fixed left-0 right-0 z-30 px-4 pt-3 pb-3 bg-[var(--bg-card)] border-t border-[var(--border-color)] md:left-52" style={{ bottom: 'calc(56px + env(safe-area-inset-bottom, 0px))' }}>
+        <div className="max-w-2xl md:max-w-3xl mx-auto">
           <button
             onClick={handleStart}
             disabled={loading}

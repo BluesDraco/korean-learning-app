@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useEffect, Suspense, createContext, useContext, useMemo } from 'react';
+import React, { useState, useEffect, useRef, Suspense, createContext, useContext, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { ArrowLeft, Search, X, AlertCircle, Volume2, Lightbulb, ChevronDown, ChevronRight, Lock } from 'lucide-react';
+import { ArrowLeft, Search, X, AlertCircle, Volume2, Lightbulb, ChevronDown, ChevronRight, Lock, Star } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { sentencePatterns, getTodayPattern, getRecommendedPatterns } from '@/data/grammar-new';
 import { grammarPoints, type GrammarPoint as LegacyPoint } from '@/data/grammar';
@@ -28,6 +28,8 @@ const partLoaders: Record<string, () => Promise<{ [key: string]: GrammarCard[] }
   p10: () => import('@/data/grammar-cards-p10') as any,
   p11: () => import('@/data/grammar-cards-p11') as any,
   p12: () => import('@/data/grammar-cards-p12') as any,
+  p13: () => import('@/data/grammar-cards-p13') as any,
+  p14: () => import('@/data/grammar-cards-p14') as any,
 };
 
 const partCache: Record<string, GrammarCard[]> = {};
@@ -47,7 +49,7 @@ async function loadGrammarCard(cardId: string): Promise<GrammarCard | null> {
   return cards.find(c => c.id === cardId) ?? null;
 }
 
-const PART_ORDER = ['p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8', 'p9', 'p10', 'p11', 'p12'];
+const PART_ORDER = ['p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8', 'p9', 'p10', 'p11', 'p12', 'p13', 'p14'];
 
 async function loadNextCard(cardId: string): Promise<GrammarCard | null> {
   const match = cardId.match(/^card-(p\d+)-l(\d+)$/);
@@ -75,14 +77,14 @@ const useC = () => useContext(ColorCtx);
 const GRAMMAR_STYLES = `
     /* L1-L5 design system */
     .hook-box { background: linear-gradient(135deg,color-mix(in srgb,var(--pink-primary) 12%,var(--bg-card)),color-mix(in srgb,var(--mint-soft) 20%,var(--bg-card))); border-radius: 22px; padding: 20px; margin-bottom: 16px; }
-    .reminder-box { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; padding: 16px 18px; font-size: 15px; color: var(--text-secondary); line-height: 1.75; }
+    .reminder-box { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; padding: 16px 18px; font-size: 16px; color: var(--text-secondary); line-height: 1.75; }
     .reminder-box .hl, .reminder-box b { color: #ff7fa8; font-weight: 700; }
     .compare-grid { display: grid; grid-template-columns: 1fr 1fr; border-radius: 18px; overflow: hidden; border: 1px solid var(--border-color); margin-bottom: 16px; }
     .cc { padding: 18px 16px; }
     .cc.formal { background: color-mix(in srgb,#6b7ff0 12%,var(--bg-card)); }
     .cc.daily { background: color-mix(in srgb,#ff7fa8 10%,var(--bg-card)); }
     .cc-lang { font-size: 12px; font-weight: 800; letter-spacing: .1em; color: var(--text-muted); margin-bottom: 10px; }
-    .compare-note { background: var(--bg-soft); border-radius: 14px; padding: 16px 18px; font-size: 15px; color: var(--text-secondary); line-height: 1.75; }
+    .compare-note { background: var(--bg-soft); border-radius: 14px; padding: 16px 18px; font-size: 16px; color: var(--text-secondary); line-height: 1.75; }
     .compare-note .hl { color: #ff7fa8; font-weight: 700; }
     .pill { display: inline-block; padding: 4px 10px; border-radius: 8px; font-size: 16px; font-weight: 800; }
     .p-s { background: #ddf5ef; color: #2db89b; }
@@ -91,7 +93,7 @@ const GRAMMAR_STYLES = `
     .p-n { background: #e8e8ff; color: #6b7ff0; }
     .p-q { background: #fff8d0; color: #b89020; }
     .tok-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
-    .tok { padding: 7px 13px; border-radius: 9px; font-size: 14px; font-weight: 700; }
+    .tok { padding: 7px 13px; border-radius: 9px; font-size: 16px; font-weight: 700; }
     .t-s { background: #ddf5ef; color: #2db89b; }
     .t-o { background: #f3eefb; color: #b49ccf; }
     .t-v { background: #ff7fa8; color: white; }
@@ -103,7 +105,7 @@ const GRAMMAR_STYLES = `
     .block { background: var(--bg-card); border-radius: 14px; padding: 18px; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
     .block .h2 { font-size: .95rem; font-weight: 700; margin-bottom: 10px; color: #2db89b; }
     .ko { font-size: 17px; font-weight: 700; color: var(--text-primary); }
-    .zh { font-size: 15px; color: var(--text-muted); margin-top: 4px; line-height: 1.6; }
+    .zh { font-size: 16px; color: var(--text-muted); margin-top: 4px; line-height: 1.6; }
     .row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
     .chip { padding: 6px 13px; border-radius: 20px; font-size: .88rem; font-weight: 600; cursor: pointer; border: 2px solid transparent; transition: all .15s; }
     .chip.s { background: #d4f5e2; color: #1a7a4a; border-color: #b2e8c8; }
@@ -117,38 +119,38 @@ const GRAMMAR_STYLES = `
     td { padding: 7px 10px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); }
     tr:last-child td { border-bottom: none; }
     .card-title { font-size: 21px; font-weight: 900; color: var(--text-primary); line-height: 1.3; margin: 0 0 10px 0; }
-    .card-body { font-size: 15px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 12px; }
+    .card-body { font-size: 16px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 12px; }
     .card-body b { color: var(--text-primary); }
     /* Overview / completion page design systems */
     .overview { padding: 0 2px; }
     .ov-hero { background: linear-gradient(135deg,color-mix(in srgb,#ff7fa8 15%,var(--bg-card)),color-mix(in srgb,#aee3d8 20%,var(--bg-card))); border-radius: 24px; padding: 22px 20px; margin-bottom: 16px; }
     .ov-hero-label { font-size: 12px; font-weight: 800; color: #ff7fa8; letter-spacing: .08em; margin-bottom: 6px; }
     .ov-hero-title { font-size: 22px; font-weight: 900; color: var(--text-primary); margin-bottom: 6px; }
-    .ov-hero-sub { font-size: 15px; color: var(--text-secondary); line-height: 1.6; }
+    .ov-hero-sub { font-size: 16px; color: var(--text-secondary); line-height: 1.6; }
     .ov-section { margin-bottom: 14px; }
     .ov-section-hd { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; padding: 0 2px; }
     .ov-section-line { width: 3px; height: 16px; border-radius: 99px; flex-shrink: 0; }
-    .ov-section-title { font-size: 15px; font-weight: 800; letter-spacing: .05em; color: var(--text-primary); }
+    .ov-section-title { font-size: 16px; font-weight: 800; letter-spacing: .05em; color: var(--text-primary); }
     .ov-block { background: var(--bg-card); border-radius: 18px; padding: 16px 18px; border: 1px solid var(--border-color); box-shadow: 0 2px 8px rgba(78,52,46,.05); margin-bottom: 14px; }
-    .struct-zh { font-size: 15px; color: var(--text-muted); margin-top: 3px; }
-    .t-t { background: #fff8d0; color: #b89020; padding: 5px 11px; border-radius: 9px; font-size: 14px; font-weight: 700; }
+    .struct-zh { font-size: 16px; color: var(--text-muted); margin-top: 3px; }
+    .t-t { background: #fff8d0; color: #b89020; padding: 5px 11px; border-radius: 9px; font-size: 16px; font-weight: 700; }
     .mistake { border-radius: 14px; overflow: hidden; border: 1px solid var(--border-color); margin-bottom: 16px; }
     .m-w { background: color-mix(in srgb,#e05555 8%,var(--bg-card)); padding: 13px 16px; display: flex; align-items: center; gap: 10px; }
     .m-r { background: color-mix(in srgb,#2db89b 8%,var(--bg-card)); padding: 13px 16px; display: flex; align-items: center; gap: 10px; }
-    .m-txt { font-size: 15px; color: var(--text-primary); line-height: 1.6; }
-    .m-note { font-size: 15px; color: var(--text-muted); margin-top: 6px; line-height: 1.7; }
+    .m-txt { font-size: 16px; color: var(--text-primary); line-height: 1.6; }
+    .m-note { font-size: 16px; color: var(--text-muted); margin-top: 6px; line-height: 1.7; }
     .bx { background: #e05555; color: white; font-size: 12px; font-weight: 800; padding: 2px 7px; border-radius: 99px; flex-shrink: 0; }
     .bo { background: #2db89b; color: white; font-size: 12px; font-weight: 800; padding: 2px 7px; border-radius: 99px; flex-shrink: 0; }
     .table-wrap { border-radius: 10px; overflow: hidden; border: 1px solid var(--border-color); }
     .tbl-row { display: flex; }
     .tbl-row.hd .tc { background: color-mix(in srgb,#ff7fa8 12%,var(--bg-card)); color: #be185d; font-weight: 800; font-size: 13px; }
-    .tc { flex: 1; padding: 10px 12px; font-size: 15px; color: var(--text-primary); border-bottom: 1px solid var(--border-color); }
+    .tc { flex: 1; padding: 10px 12px; font-size: 16px; color: var(--text-primary); border-bottom: 1px solid var(--border-color); }
     .tbl-row:last-child .tc { border-bottom: none; }
     /* L6-L10 overview */
     .ov-title { font-size: 22px; font-weight: 900; color: var(--text-primary); margin: 8px 0 4px; }
-    .ov-sub { font-size: 15px; color: var(--text-muted); margin-bottom: 14px; }
+    .ov-sub { font-size: 16px; color: var(--text-muted); margin-bottom: 14px; }
     .ov-sec { background: var(--bg-card); border-radius: 14px; padding: 16px 18px; margin-bottom: 14px; border: 1px solid var(--border-color); box-shadow: 0 2px 6px rgba(78,52,46,.05); }
-    .ov-sec h3 { font-size: 15px; font-weight: 800; color: #2db89b; margin: 0 0 10px 0; }
+    .ov-sec h3 { font-size: 16px; font-weight: 800; color: #2db89b; margin: 0 0 10px 0; }
     .badge { display: inline-block; background: color-mix(in srgb,#ff7fa8 15%,var(--bg-card)); color: #ff7fa8; font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 99px; letter-spacing: .05em; margin-bottom: 4px; }
     .relearn-btn { width: 100%; padding: 13px; border-radius: 16px; border: 1.5px solid var(--border-color); background: var(--bg-card); color: var(--text-muted); font-size: 13px; font-weight: 700; cursor: pointer; margin-top: 8px; }
     /* 三端响应式 */
@@ -316,8 +318,9 @@ function CardSortStep({ examples }: { examples: GrammarCard['cardExamples'] }) {
           : answers.map((w, i) => <button key={i} onClick={() => remove(i)} style={{ padding: '10px 16px', borderRadius: 12, background: C.pink, color: 'white', fontSize: 17, fontWeight: 700, border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>{w}</button>)}
       </div>
       {result && (
-        <div style={{ fontSize: 15, fontWeight: 700, color: result === 'ok' ? '#2db89b' : '#e05555', marginBottom: 10 }}>
+        <div style={{ fontSize: 15, fontWeight: 700, color: result === 'ok' ? '#2db89b' : '#e05555', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 8 }}>
           {result === 'ok' ? (allDone ? '✓ 全部完成！' : '✓ 正确！') : `✗ 正确：${q.answer.join(' ')}　再试试？`}
+          {result !== 'ok' && <button onClick={() => speak(q.answer.join(' '))} style={{ padding: 4, borderRadius: 6, background: 'rgba(255,127,168,.08)', border: 'none', cursor: 'pointer', color: C.pink, flexShrink: 0 }}><Volume2 size={12} /></button>}
         </div>
       )}
       <div style={{ display: 'flex', gap: 8 }}>
@@ -363,10 +366,13 @@ function CardJudgeStep({ mistakes }: { mistakes: GrammarCard['mistakes'] }) {
             <div style={{ fontSize: 15, color: C.muted, fontWeight: 700, marginBottom: 10 }}>第 {i + 1} 题 · 选出正确的句子</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 8 }}>
               {(['A', 'B'] as const).map(ch => (
-                <button key={ch} onClick={() => pick(i, ch)}
-                  style={{ padding: '11px 14px', borderRadius: 14, fontSize: 17, fontWeight: 700, color: C.ink, cursor: 'pointer', textAlign: 'left', ...btnStyle(ch) }}>
-                  {ch}. {ch === 'A' ? q.A : q.B}
-                </button>
+                <div key={ch} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <button onClick={() => pick(i, ch)}
+                    style={{ flex: 1, padding: '11px 14px', borderRadius: 14, fontSize: 17, fontWeight: 700, color: C.ink, cursor: 'pointer', textAlign: 'left', ...btnStyle(ch) }}>
+                    {ch}. {ch === 'A' ? q.A : q.B}
+                  </button>
+                  <button onClick={() => speak(ch === 'A' ? q.A : q.B)} style={{ padding: 6, borderRadius: 8, background: 'rgba(255,127,168,.08)', border: 'none', cursor: 'pointer', color: C.pink, flexShrink: 0 }}><Volume2 size={13} /></button>
+                </div>
               ))}
             </div>
             {s.done && (
@@ -438,7 +444,10 @@ function SpecialQuizStep({ quiz }: { quiz: NonNullable<GrammarCard['specialQuiz'
             </div>
             {s.done && (
               <div>
-                <div style={{ fontSize: 15, color: s.ok ? '#2db89b' : '#e05555', fontWeight: 700, marginTop: 4 }}>{s.ok ? '✓ 正确！' : `✗ 正确答案：${q.options[q.answer]}`}</div>
+                <div style={{ fontSize: 15, color: s.ok ? '#2db89b' : '#e05555', fontWeight: 700, marginTop: 4, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  {s.ok ? '✓ 正确！' : `✗ 正确答案：${q.options[q.answer]}`}
+                  {!s.ok && <button onClick={() => speak(q.options[q.answer])} style={{ padding: 4, borderRadius: 6, background: 'rgba(255,127,168,.08)', border: 'none', cursor: 'pointer', color: C.pink, flexShrink: 0 }}><Volume2 size={12} /></button>}
+                </div>
                 <div style={{ fontSize: 15, color: C.muted, marginTop: 2 }}>{q.explanation}</div>
               </div>
             )}
@@ -472,6 +481,7 @@ function CardSwapStep({ examples }: { examples: GrammarCard['cardExamples'] }) {
         <div style={{ background: C.bg, borderRadius: 16, padding: '16px 14px' }}>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'flex-start' }}>
             {eg.wordBlocks.map((wb, j) => <WordBlockEl key={j} role={wb.role} text={wb.text} />)}
+            <button onClick={e => { e.stopPropagation(); speak(eg.wordBlocks.map(b => b.text).join('')); }} style={{ padding: 4, borderRadius: 8, background: 'rgba(255,127,168,.08)', border: 'none', cursor: 'pointer', color: C.pink, flexShrink: 0, alignSelf: 'center' }}><Volume2 size={13} /></button>
           </div>
           <p style={{ fontSize: 15, color: C.muted, marginTop: 8, lineHeight: 1.6 }}>{eg.zh}</p>
         </div>
@@ -507,6 +517,7 @@ function CardSwapStep({ examples }: { examples: GrammarCard['cardExamples'] }) {
               <WordBlockEl role={wb.role} text={wb.text} />
             </div>
           ))}
+          <button onClick={e => { e.stopPropagation(); speak(displayBlocks.map(b => b.text).join('')); }} style={{ padding: 4, borderRadius: 8, background: 'rgba(255,127,168,.08)', border: 'none', cursor: 'pointer', color: C.pink, flexShrink: 0, alignSelf: 'center' }}><Volume2 size={13} /></button>
         </div>
         <p style={{ fontSize: 15, color: C.muted, marginTop: 8, lineHeight: 1.6 }}>{eg.zh}</p>
       </div>
@@ -739,8 +750,9 @@ function GrammarCardView({
             ) : card.conceptCompare ? (
               <div>
                 <div style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 8 }}>语序不一样</div>
-                <div style={{ fontSize: 15, color: C.muted, lineHeight: 1.7, marginBottom: 20 }}>
-                  中文「{card.conceptCompare.zh}」，韩语变成「{card.conceptCompare.ko}」——动作永远压轴。
+                <div style={{ fontSize: 15, color: C.muted, lineHeight: 1.7, marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                  <span>中文「{card.conceptCompare.zh}」，韩语变成「{card.conceptCompare.ko}」——动作永远压轴。</span>
+                  <button onClick={() => speak(card.conceptCompare!.ko)} style={{ padding: 4, borderRadius: 6, background: 'rgba(255,127,168,.08)', border: 'none', cursor: 'pointer', color: C.pink, flexShrink: 0 }}><Volume2 size={12} /></button>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }}>
                   <div style={{ background: '#eaf8f5', borderRadius: 14, padding: '14px 16px' }}>
@@ -828,7 +840,8 @@ function GrammarCardView({
                       return (
                         <div key={i} style={{ display: 'flex', gap: 14, alignItems: 'flex-start', fontSize: 15, lineHeight: 1.75, background: C.bg, borderRadius: 14, padding: '14px 16px' }}>
                           <div style={{ width: 28, height: 28, background: C.pink, color: '#fff', borderRadius: '50%', fontSize: 13, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 2 }}>{i + 1}</div>
-                          <div><span style={{ color: C.pink, fontWeight: 800 }}>{head}</span>{tail}</div>
+                          <div style={{ flex: 1 }}><span style={{ color: C.pink, fontWeight: 800 }}>{head}</span>{tail}</div>
+                          <button onClick={() => speak(head)} style={{ padding: 4, borderRadius: 8, background: 'rgba(255,127,168,.08)', border: 'none', cursor: 'pointer', color: C.pink, flexShrink: 0, marginTop: 2 }}><Volume2 size={12} /></button>
                         </div>
                       );
                     })}
@@ -870,13 +883,16 @@ function GrammarCardView({
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                           {items.map((item, i) => (
-                            <div key={i} style={{ fontSize: 15, lineHeight: 1.75, color: C.ink, whiteSpace: 'pre-line' }}>
-                              <span style={{ fontWeight: 700 }}>{item.text}</span>
-                              {item.examples && (
-                                <span style={{ display: 'inline-block', background: 'rgba(0,0,0,.05)', borderRadius: 6, padding: '1px 7px', marginLeft: 6, fontSize: 15, color: C.muted, fontFamily: 'monospace' }}>
-                                  {item.examples}
-                                </span>
-                              )}
+                            <div key={i} style={{ fontSize: 15, lineHeight: 1.75, color: C.ink, whiteSpace: 'pre-line', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8 }}>
+                              <div>
+                                <span style={{ fontWeight: 700 }}>{item.text}</span>
+                                {item.examples && (
+                                  <span style={{ display: 'inline-block', background: 'rgba(0,0,0,.05)', borderRadius: 6, padding: '1px 7px', marginLeft: 6, fontSize: 15, color: C.muted, fontFamily: 'monospace' }}>
+                                    {item.examples}
+                                  </span>
+                                )}
+                              </div>
+                              <button onClick={() => speak(item.examples || item.text)} style={{ padding: 4, borderRadius: 8, background: 'rgba(255,127,168,.08)', border: 'none', cursor: 'pointer', color: C.pink, flexShrink: 0, marginTop: 2 }}><Volume2 size={12} /></button>
                             </div>
                           ))}
                         </div>
@@ -903,7 +919,10 @@ function GrammarCardView({
               </div>
               {card.readingGuide.demo && (
                 <div style={{ background: C.pinkSoft, borderRadius: 14, padding: '13px 15px' }}>
-                  <p style={{ fontSize: 15, fontWeight: 800, color: C.ink, marginBottom: 10 }}>{card.readingGuide.demo.ko}</p>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+                    <p style={{ fontSize: 15, fontWeight: 800, color: C.ink, margin: 0 }}>{card.readingGuide.demo.ko}</p>
+                    <button onClick={() => speak(card.readingGuide!.demo!.ko)} style={{ padding: 6, borderRadius: 8, background: 'rgba(255,127,168,.08)', border: 'none', cursor: 'pointer', color: C.pink, flexShrink: 0 }}><Volume2 size={13} /></button>
+                  </div>
                   {card.readingGuide.demo.rows.map((row, i) => (
                     <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 5 }}>
                       <span style={{ fontSize: 12, color: C.muted, whiteSpace: 'nowrap' }}>{row.label}</span>
@@ -1119,9 +1138,16 @@ function GrammarCardView({
                     <div style={{ background: C.mintBg, borderRadius: 14, padding: 16, marginBottom: 14 }}>
                       <h3 style={{ fontSize: 15, fontWeight: 800, color: '#2db89b', marginBottom: 10, margin: '0 0 10px 0' }}>核心规律</h3>
                       <div style={{ fontSize: 15, lineHeight: 2, color: C.ink }}>
-                        {card.connectionRules.map((rule, i) => (
-                          <div key={i}>{typeof rule === 'string' ? rule : `${rule.text}${rule.examples ? '　' + rule.examples : ''}`}</div>
-                        ))}
+                        {card.connectionRules.map((rule, i) => {
+                          const text = typeof rule === 'string' ? rule : `${rule.text}${(rule as any).examples ? '　' + (rule as any).examples : ''}`;
+                          const speakText = typeof rule === 'string' ? rule.split(' — ')[0] : ((rule as any).examples || rule.text);
+                          return (
+                            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                              <span style={{ flex: 1 }}>{text}</span>
+                              <button onClick={() => speak(speakText)} style={{ padding: 3, borderRadius: 6, background: 'rgba(255,127,168,.08)', border: 'none', cursor: 'pointer', color: C.pink, flexShrink: 0 }}><Volume2 size={11} /></button>
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                   )}
@@ -1150,9 +1176,10 @@ function GrammarCardView({
                     <div style={{ background: C.pinkSoft, borderRadius: 14, padding: 16, marginBottom: 14 }}>
                       <h3 style={{ fontSize: 15, fontWeight: 800, color: C.pink, marginBottom: 10, margin: '0 0 10px 0' }}>常见错误</h3>
                       {card.mistakes.slice(0, 4).map((m, i) => (
-                        <div key={i} style={{ fontSize: 15, lineHeight: 1.8, marginBottom: 4 }}>
+                        <div key={i} style={{ fontSize: 15, lineHeight: 1.8, marginBottom: 4, display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
                           <span style={{ color: '#be185d', textDecoration: 'line-through' }}>{m.wrong}</span>{' → '}
                           <span style={{ color: '#1a7a4a' }}>{m.correct}</span>
+                          <button onClick={() => speak(m.correct)} style={{ padding: 3, borderRadius: 6, background: 'rgba(255,127,168,.08)', border: 'none', cursor: 'pointer', color: C.pink, flexShrink: 0 }}><Volume2 size={11} /></button>
                         </div>
                       ))}
                     </div>
@@ -1364,8 +1391,9 @@ function SortStep({ onDone }: { onDone: () => void }) {
           : answers.map((w, i) => <button key={i} onClick={() => remove(i)} style={{ padding: '6px 12px', borderRadius: 10, background: C.pink, color: 'white', fontSize: 17, fontWeight: 700, border: 'none', cursor: 'pointer' }}>{w}</button>)
         }
       </div>
-      {result && <div style={{ fontSize: 15, fontWeight: 700, color: result === 'ok' ? '#2db89b' : '#e05555', marginBottom: 8 }}>
+      {result && <div style={{ fontSize: 15, fontWeight: 700, color: result === 'ok' ? '#2db89b' : '#e05555', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
         {result === 'ok' ? (allDone ? '✓ 全部完成！点「下一页」继续。' : '✓ 正确！') : `✗ 正确顺序：${q.answer.join(' ')}。再试试？`}
+        {result !== 'ok' && <button onClick={() => speak(q.answer.join(' '))} style={{ padding: 4, borderRadius: 6, background: 'rgba(255,127,168,.08)', border: 'none', cursor: 'pointer', color: C.pink, flexShrink: 0 }}><Volume2 size={12} /></button>}
       </div>}
       <div style={{ display: 'flex', gap: 8 }}>
         <button onClick={reset} style={{ padding: '12px 16px', borderRadius: 14, border: `1.5px solid ${C.line}`, background: C.card, color: C.muted, fontSize: 16, cursor: 'pointer' }}>↺ 重置</button>
@@ -1502,9 +1530,12 @@ function JudgeStep({ onScore }: { onScore?: (s: { correct: number; total: number
             <div style={{ fontSize: 15, color: C.muted, fontWeight: 700, marginBottom: 10 }}>第 {i + 1} 题 · 选出更自然的句子</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 8 }}>
               {(['A', 'B'] as const).map(ch => (
-                <button key={ch} onClick={() => pick(i, ch)} style={{ padding: '11px 14px', borderRadius: 14, fontSize: 17, fontWeight: 700, color: C.ink, cursor: 'pointer', textAlign: 'left', ...btnStyle(ch) }}>
-                  {ch}. {ch === 'A' ? q.A : q.B}
-                </button>
+                <div key={ch} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <button onClick={() => pick(i, ch)} style={{ flex: 1, padding: '11px 14px', borderRadius: 14, fontSize: 17, fontWeight: 700, color: C.ink, cursor: 'pointer', textAlign: 'left', ...btnStyle(ch) }}>
+                    {ch}. {ch === 'A' ? q.A : q.B}
+                  </button>
+                  <button onClick={() => speak(ch === 'A' ? q.A : q.B)} style={{ padding: 6, borderRadius: 8, background: 'rgba(255,127,168,.08)', border: 'none', cursor: 'pointer', color: C.pink, flexShrink: 0 }}><Volume2 size={13} /></button>
+                </div>
               ))}
             </div>
             {s.done && (
@@ -1535,13 +1566,15 @@ function ErrStep() {
           <div style={{ borderRadius: 16, overflow: 'hidden', border: `1px solid ${C.line}` }}>
             <div style={{ background: `color-mix(in srgb, #e05555 8%, ${C.card})`, padding: '11px 14px', display: 'flex', alignItems: 'center', gap: 8 }}>
               <span style={{ background: '#e05555', color: 'white', fontSize: 13, fontWeight: 800, padding: '2px 7px', borderRadius: 99, flexShrink: 0 }}>错</span>
-              <span style={{ fontSize: 17, fontWeight: 600 }}>{q.wrong}</span>
+              <span style={{ fontSize: 17, fontWeight: 600, flex: 1 }}>{q.wrong}</span>
+              <button onClick={() => speak(q.wrong)} style={{ padding: 6, borderRadius: 8, background: 'rgba(255,127,168,.08)', border: 'none', cursor: 'pointer', color: C.pink, flexShrink: 0 }}><Volume2 size={13} /></button>
             </div>
             {states[i].revealed ? (
               <>
                 <div style={{ background: `color-mix(in srgb, #2db89b 8%, ${C.card})`, padding: '11px 14px', display: 'flex', alignItems: 'center', gap: 8 }}>
                   <span style={{ background: '#2db89b', color: 'white', fontSize: 13, fontWeight: 800, padding: '2px 7px', borderRadius: 99, flexShrink: 0 }}>正</span>
-                  <span style={{ fontSize: 17, fontWeight: 600 }}>{q.right}</span>
+                  <span style={{ fontSize: 17, fontWeight: 600, flex: 1 }}>{q.right}</span>
+                  <button onClick={() => speak(q.right)} style={{ padding: 6, borderRadius: 8, background: 'rgba(255,127,168,.08)', border: 'none', cursor: 'pointer', color: C.pink, flexShrink: 0 }}><Volume2 size={13} /></button>
                 </div>
                 <div style={{ background: C.bg, borderTop: `1px solid ${C.line}`, padding: '8px 14px', fontSize: 15, color: C.muted, lineHeight: 1.5 }}>{q.why}</div>
               </>
@@ -1790,7 +1823,7 @@ function ChaptersTab({ onOpenCard, isAdmin }: { onOpenCard: (card: GrammarCard) 
 
   const [continueCard, setContinueCard] = useState<GrammarCard | null>(null);
   const [continuePartTitle, setContinuePartTitle] = useState('');
-  const partNums = ['一', '二', '三', '四', '五', '六', '七'];
+  const partNums = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二', '十三', '十四'];
 
   useEffect(() => {
     if (!isLoaded) return;
@@ -1901,7 +1934,7 @@ function ChaptersTab({ onOpenCard, isAdmin }: { onOpenCard: (card: GrammarCard) 
                 {part.lessons.map(lesson => {
                   const status = lessonStates[lesson.cardId] || 'todo';
                   const isCurrent = continueCard?.id === lesson.cardId;
-                  const isLocked = isAdmin ? false : part.partNumber !== 1;
+                  const isLocked = isAdmin ? false : part.partNumber > 6;
 
                   return (
                     <div
@@ -2040,33 +2073,89 @@ function PracticeTab({
 
 // ── Library Tab ───────────────────────────────────────────────────────────────
 
+function highlightPattern(text: string, pattern: string): React.ReactNode {
+  const raw = pattern.replace(/^-+/, '').replace(/[?+]/g, '');
+  const variants: string[] = [];
+  const parts = raw.split('/');
+  for (const part of parts) {
+    const trimmed = part.trim().replace(/^-/, '');
+    if (trimmed.includes('(으)')) {
+      variants.push(trimmed.replace('(으)', '으'));
+      variants.push(trimmed.replace('(으)', ''));
+    } else if (trimmed.includes('(이)')) {
+      variants.push(trimmed.replace('(이)', '이'));
+      variants.push(trimmed.replace('(이)', ''));
+    } else if (trimmed.includes('(ㄹ)')) {
+      variants.push(trimmed.replace('(ㄹ)', 'ㄹ'));
+      variants.push(trimmed.replace('(ㄹ)', ''));
+    } else {
+      if (trimmed) variants.push(trimmed);
+    }
+  }
+  if (variants.length === 0) return text;
+  variants.sort((a, b) => b.length - a.length);
+  const escaped = variants.map(v => v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  const regex = new RegExp(`(${escaped.join('|')})`);
+  const match = text.match(regex);
+  if (!match || match.index === undefined) return text;
+  const before = text.slice(0, match.index);
+  const matched = match[0];
+  const after = text.slice(match.index + matched.length);
+  return (
+    <>
+      {before}
+      <mark style={{ background: 'rgba(255,127,168,0.18)', color: '#e4547a', borderRadius: 3, padding: '0 1px', fontWeight: 700 }}>{matched}</mark>
+      {after}
+    </>
+  );
+}
+
 function LibraryTab({ onStartGrammar }: { onStartGrammar: (gp: GrammarPoint) => void }) {
   const C = useC();
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
   const [activeLevel, setActiveLevel] = useState('all');
+  const [showFavorites, setShowFavorites] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [favorites, setFavorites] = useState<string[]>(() => {
+    if (typeof window === 'undefined') return [];
+    try { return JSON.parse(localStorage.getItem('grammar-favorites') || '[]'); } catch { return []; }
+  });
 
-  const legacyCategories = ['조사', '어미', '연결', '시제', '존대', '문형', '인용', '사동/피동'];
-  const legacyCategoryLabels: Record<string, string> = {
-    '조사': '조사 (助词)', '어미': '어미 (语尾)', '연결': '연결 (连接)',
-    '시제': '시제 (时制)', '존대': '존대 (敬语)', '문형': '문형 (句型)',
-    '인용': '인용 (引用)', '사동/피동': '사동/피동',
+  const toggleFavorite = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setFavorites(prev => {
+      const next = prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id];
+      try { localStorage.setItem('grammar-favorites', JSON.stringify(next)); } catch { /* ignore */ }
+      return next;
+    });
   };
-  const legacyLevels = [
-    { value: 'all', label: '全部' },
-    { value: 'beginner', label: '初级' },
-    { value: 'intermediate', label: '中级' },
-    { value: 'advanced', label: '高级' },
-  ];
-  const legacyLevelConfig: Record<string, { label: string; color: string }> = {
-    beginner: { label: '初级', color: 'bg-[#eaf8f5] text-[#2db89b]' },
-    intermediate: { label: '中级', color: 'bg-[#fff0f5] text-[#ff7fa8]' },
-    advanced: { label: '高级', color: 'bg-[#f3eefb] text-[#b49ccf]' },
+
+  const categories = ['조사', '어미', '연결', '시제', '존대', '문형', '인용', '사동/피동'];
+  const categoryLabels: Record<string, string> = {
+    '조사': '助词', '어미': '语尾', '연결': '连接',
+    '시제': '时制', '존대': '敬语', '문형': '句型',
+    '인용': '引用', '사동/피동': '使被动',
   };
+  const levelConfig: Record<string, { label: string; bg: string; color: string }> = {
+    beginner:     { label: '初级', bg: '#eaf8f5', color: '#2db89b' },
+    intermediate: { label: '中级', bg: '#fff0f5', color: '#ff7fa8' },
+    advanced:     { label: '高级', bg: '#f3eefb', color: '#b49ccf' },
+  };
+
+  const counts = useMemo(() => ({
+    beginner:     grammarPoints.filter(g => g.level === 'beginner').length,
+    intermediate: grammarPoints.filter(g => g.level === 'intermediate').length,
+    advanced:     grammarPoints.filter(g => g.level === 'advanced').length,
+  }), []);
+
+  // flat list of all lessons for cross-referencing
+  const allLessons = useMemo(() => grammarParts.flatMap(p => p.lessons), []);
 
   const filtered = useMemo(() => {
     let result = grammarPoints;
+    if (showFavorites) result = result.filter(g => favorites.includes(g.id));
     if (activeLevel !== 'all') result = result.filter(g => g.level === activeLevel);
     if (activeCategory !== 'all') result = result.filter(g => g.category === activeCategory);
     if (searchQuery.trim()) {
@@ -2079,17 +2168,34 @@ function LibraryTab({ onStartGrammar }: { onStartGrammar: (gp: GrammarPoint) => 
       );
     }
     return result;
-  }, [activeLevel, activeCategory, searchQuery]);
+  }, [activeLevel, activeCategory, searchQuery, showFavorites, favorites]);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+
+      {/* 统计条 */}
+      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
+        <span style={{ fontSize: 13, color: C.muted, fontWeight: 600 }}>{grammarPoints.length} 个语法点</span>
+        {(['beginner', 'intermediate', 'advanced'] as const).map(lv => (
+          <button key={lv} onClick={() => { setActiveLevel(activeLevel === lv ? 'all' : lv); setShowFavorites(false); }}
+            style={{ padding: '3px 10px', borderRadius: 999, fontSize: 12, fontWeight: 700, border: 'none', cursor: 'pointer', background: activeLevel === lv ? levelConfig[lv].bg : 'transparent', color: activeLevel === lv ? levelConfig[lv].color : C.muted }}>
+            {levelConfig[lv].label} {counts[lv]}
+          </button>
+        ))}
+        <button onClick={() => { setShowFavorites(f => !f); setActiveLevel('all'); }}
+          style={{ marginLeft: 'auto', padding: '3px 10px', borderRadius: 999, fontSize: 12, fontWeight: 700, border: 'none', cursor: 'pointer', background: showFavorites ? 'rgba(255,193,7,.15)' : 'transparent', color: showFavorites ? '#c89020' : C.muted, display: 'flex', alignItems: 'center', gap: 4 }}>
+          <Star size={11} fill={showFavorites ? '#c89020' : 'none'} />收藏 {favorites.length > 0 ? favorites.length : ''}
+        </button>
+      </div>
+
+      {/* 搜索框 */}
       <div style={{ position: 'relative' }}>
         <Search size={16} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: C.muted }} />
         <input
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
-          placeholder="搜索语法..."
-          style={{ width: '100%', background: C.card, border: `1px solid ${C.line}`, borderRadius: 12, padding: '10px 36px', fontSize: 16, color: C.ink, outline: 'none' }}
+          placeholder="搜索语法点、句型..."
+          style={{ width: '100%', background: C.card, border: `1px solid ${C.line}`, borderRadius: 12, padding: '10px 36px', fontSize: 15, color: C.ink, outline: 'none' }}
         />
         {searchQuery && (
           <button onClick={() => setSearchQuery('')} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: C.muted }}>
@@ -2098,97 +2204,139 @@ function LibraryTab({ onStartGrammar }: { onStartGrammar: (gp: GrammarPoint) => 
         )}
       </div>
 
+      {/* 分类筛选 */}
       <div style={{ display: 'flex', gap: 6, overflowX: 'auto', paddingBottom: 4 }}>
-        <button onClick={() => setActiveCategory('all')} style={{ flexShrink: 0, padding: '6px 14px', borderRadius: 999, fontSize: 16, fontWeight: 600, border: 'none', cursor: 'pointer', background: activeCategory === 'all' ? C.pink : C.card, color: activeCategory === 'all' ? '#fff' : C.muted }}>全部</button>
-        {legacyCategories.map(cat => (
-          <button key={cat} onClick={() => setActiveCategory(cat)} style={{ flexShrink: 0, padding: '6px 14px', borderRadius: 999, fontSize: 16, fontWeight: 600, border: 'none', cursor: 'pointer', background: activeCategory === cat ? C.pink : C.card, color: activeCategory === cat ? '#fff' : C.muted }}>
-            {legacyCategoryLabels[cat] || cat}
+        <button onClick={() => setActiveCategory('all')} style={{ flexShrink: 0, padding: '6px 14px', borderRadius: 999, fontSize: 13, fontWeight: 600, border: 'none', cursor: 'pointer', background: activeCategory === 'all' ? C.ink : C.card, color: activeCategory === 'all' ? '#fff' : C.muted }}>全部</button>
+        {categories.map(cat => (
+          <button key={cat} onClick={() => setActiveCategory(cat)} style={{ flexShrink: 0, padding: '6px 14px', borderRadius: 999, fontSize: 13, fontWeight: 600, border: 'none', cursor: 'pointer', background: activeCategory === cat ? C.ink : C.card, color: activeCategory === cat ? '#fff' : C.muted }}>
+            {categoryLabels[cat] || cat}
           </button>
         ))}
       </div>
 
-      <div style={{ display: 'flex', gap: 6 }}>
-        {legacyLevels.map(l => (
-          <button key={l.value} onClick={() => setActiveLevel(l.value)} style={{ padding: '6px 14px', borderRadius: 8, fontSize: 16, fontWeight: 600, border: 'none', cursor: 'pointer', background: activeLevel === l.value ? 'rgba(255,127,168,.1)' : 'transparent', color: activeLevel === l.value ? C.pink : C.muted }}>
-            {l.label}
-          </button>
-        ))}
-      </div>
+      {/* 结果数 / 空状态 */}
+      {filtered.length === 0 ? (
+        <div style={{ textAlign: 'center', padding: '32px 0', color: C.muted }}>
+          <p style={{ fontSize: 15, fontWeight: 700, marginBottom: 4 }}>
+            {showFavorites ? '还没有收藏的语法点' : `没有找到「${searchQuery}」`}
+          </p>
+          <p style={{ fontSize: 13 }}>{showFavorites ? '展开任意语法点，点击星形图标收藏' : '试试其他关键词或分类'}</p>
+        </div>
+      ) : (
+        <p style={{ fontSize: 13, color: C.muted }}>{filtered.length} 个结果</p>
+      )}
 
-      <p style={{ fontSize: 16, color: C.muted }}>{filtered.length} 个语法点</p>
-
+      {/* 列表 */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {filtered.map((gp: LegacyPoint) => {
           const isOpen = expandedId === gp.id;
-          const level = legacyLevelConfig[gp.level] || legacyLevelConfig.beginner;
+          const lv = levelConfig[gp.level] || levelConfig.beginner;
+          const isFav = favorites.includes(gp.id);
+          // 匹配章节学习课程（pattern 或 title 字符串包含关系）
+          const matchedLesson = allLessons.find(l =>
+            l.title.includes(gp.pattern) || gp.pattern.includes(l.title) ||
+            l.title.includes(gp.title) || gp.title.includes(l.title)
+          );
           return (
-            <div key={gp.id} style={{ background: C.card, border: `1px solid ${C.line}`, borderRadius: 20, overflow: 'hidden' }}>
-              <button onClick={() => setExpandedId(isOpen ? null : gp.id)} style={{ width: '100%', padding: 16, display: 'flex', alignItems: 'center', gap: 12, background: 'transparent', border: 'none', cursor: 'pointer', textAlign: 'left' }}>
-                <span className={`px-2 py-1 rounded-lg text-[10px] font-medium shrink-0 ${level.color}`}>{level.label}</span>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <p style={{ fontSize: 15, fontWeight: 700, color: C.ink, margin: 0 }}>{gp.title}</p>
-                  <p style={{ fontSize: 15, color: C.muted, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{gp.pattern} · {gp.topik} · {gp.usage}</p>
-                </div>
-              </button>
+            <div key={gp.id} style={{ background: C.card, border: `1px solid ${isOpen ? C.pink : C.line}`, borderRadius: 20, overflow: 'hidden', transition: 'border-color .15s' }}>
+              {/* 标题行 */}
+              <div style={{ display: 'flex', alignItems: 'center', padding: '14px 16px', gap: 10 }}>
+                <button onClick={() => setExpandedId(isOpen ? null : gp.id)} style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 10, background: 'transparent', border: 'none', cursor: 'pointer', textAlign: 'left', minWidth: 0 }}>
+                  <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 8, background: lv.bg, color: lv.color, flexShrink: 0 }}>{lv.label}</span>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{ fontSize: 15, fontWeight: 700, color: C.ink, margin: 0 }}>{gp.title}</p>
+                    <p style={{ fontSize: 13, color: C.muted, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginTop: 1 }}>
+                      <span style={{ fontFamily: 'monospace', fontWeight: 700, color: C.purple }}>{gp.pattern}</span>
+                      {' · '}{gp.topik}
+                    </p>
+                  </div>
+                  {isOpen ? <ChevronDown size={15} color={C.muted} /> : <ChevronRight size={15} color={C.muted} />}
+                </button>
+                <button onClick={e => toggleFavorite(gp.id, e)} style={{ padding: 6, background: 'none', border: 'none', cursor: 'pointer', flexShrink: 0, color: isFav ? '#c89020' : C.muted }}>
+                  <Star size={15} fill={isFav ? '#c89020' : 'none'} />
+                </button>
+              </div>
 
+              {/* 展开内容 */}
               {isOpen && (
-                <div style={{ padding: '16px', borderTop: `1px solid ${C.line}`, display: 'flex', flexDirection: 'column', gap: 12 }}>
-                  <div style={{ background: C.card, borderRadius: 16, padding: 14, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <div style={{ borderTop: `1px solid ${C.line}`, padding: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
+
+                  {/* ① 语法说明 */}
+                  <div style={{ background: C.bg, borderRadius: 14, padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 10 }}>
                     {[
                       { l: '结构', v: gp.pattern, mono: true },
                       { l: '意思', v: gp.explanation },
-                      gp.conjugation ? { l: '接续', v: gp.conjugation } : null,
+                      ...(gp.conjugation ? [{ l: '接续', v: gp.conjugation, mono: false }] : []),
                       { l: '场景', v: gp.usage },
-                    ].filter(Boolean).map(item => (
-                      <div key={item!.l} style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
-                        <span style={{ fontSize: 16, fontWeight: 700, color: C.muted, width: 28, flexShrink: 0, paddingTop: 2 }}>{item!.l}</span>
-                        <span style={{ fontSize: 15, fontFamily: item!.mono ? 'monospace' : undefined, fontWeight: item!.mono ? 700 : undefined, color: item!.mono ? C.purple : C.ink }}>{item!.v}</span>
+                    ].map(item => (
+                      <div key={item.l} style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                        <span style={{ fontSize: 12, fontWeight: 700, color: C.muted, width: 28, flexShrink: 0, paddingTop: 2 }}>{item.l}</span>
+                        <span style={{ fontSize: 15, fontFamily: item.mono ? 'monospace' : undefined, fontWeight: item.mono ? 700 : undefined, color: item.mono ? C.purple : C.ink, lineHeight: 1.6 }}>{item.v}</span>
                       </div>
                     ))}
                   </div>
 
+                  {/* ② 例句 */}
                   {gp.examples.length > 0 && (
                     <div>
-                      <p style={{ fontSize: 16, fontWeight: 700, color: C.muted, textTransform: 'uppercase', letterSpacing: '.5px', marginBottom: 6 }}>例句</p>
-                      {gp.examples.map((ex, i) => (
-                        <div key={i} style={{ background: C.card, border: `1px solid ${C.line}`, borderRadius: 12, padding: '10px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginBottom: 6 }}>
-                          <div style={{ minWidth: 0, flex: 1 }}>
-                            <p style={{ fontSize: 17, fontWeight: 600, color: C.ink, margin: 0 }}>{ex.ko}</p>
-                            <p style={{ fontSize: 15, color: C.muted, marginTop: 2 }}>{ex.zh}</p>
+                      <p style={{ fontSize: 12, fontWeight: 700, color: C.muted, letterSpacing: '.5px', marginBottom: 8 }}>例句 ({gp.examples.length})</p>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                        {gp.examples.map((ex, i) => (
+                          <div key={i} style={{ background: C.card, border: `1px solid ${C.line}`, borderRadius: 12, padding: '10px 14px', display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <p style={{ fontSize: 16, fontWeight: 600, color: C.ink, margin: 0 }}>{highlightPattern(ex.ko, gp.pattern)}</p>
+                              <p style={{ fontSize: 13, color: C.muted, marginTop: 2 }}>{ex.zh}</p>
+                              {ex.note && (
+                                <p style={{ fontSize: 12, color: C.pink, marginTop: 4, margin: '4px 0 0', fontStyle: 'italic' }}>💡 {ex.note}</p>
+                              )}
+                            </div>
+                            <button onClick={e => { e.stopPropagation(); speak(ex.ko); }} style={{ padding: 6, borderRadius: 8, background: 'rgba(255,127,168,.08)', border: 'none', cursor: 'pointer', color: C.pink, flexShrink: 0 }}>
+                              <Volume2 size={13} />
+                            </button>
                           </div>
-                          <button onClick={e => { e.stopPropagation(); speak(ex.ko); }} style={{ padding: 6, borderRadius: 8, background: 'rgba(255,127,168,.08)', border: 'none', cursor: 'pointer', color: C.pink, flexShrink: 0 }}>
-                            <Volume2 size={13} />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {gp.toriTip && (
-                    <div style={{ background: 'rgba(232,168,124,.08)', border: '1px solid rgba(232,168,124,.2)', borderRadius: 12, padding: 12 }}>
-                      <p style={{ fontSize: 16, fontWeight: 700, color: '#e8a87c', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 4 }}><Lightbulb size={11} />替换练习</p>
-                      <p style={{ fontSize: 16, color: C.muted }}>{gp.toriTip}</p>
-                    </div>
-                  )}
-
-                  {gp.difference && gp.similarPatterns && (
-                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, background: 'rgba(180,156,207,.08)', border: '1px solid rgba(180,156,207,.15)', borderRadius: 12, padding: 12 }}>
-                      <AlertCircle size={13} style={{ color: C.purple, flexShrink: 0, marginTop: 2 }} />
-                      <div>
-                        <p style={{ fontSize: 16, fontWeight: 700, color: C.purple, marginBottom: 4 }}>与 {gp.similarPatterns.join(', ')} 的区别</p>
-                        <p style={{ fontSize: 16, color: C.muted }}>{gp.difference}</p>
+                        ))}
                       </div>
                     </div>
                   )}
 
-                  {(() => {
-                    const sp = sentencePatterns.find(p => p.id === gp.id);
-                    return sp ? (
-                      <button onClick={() => onStartGrammar(sp)} style={{ width: '100%', padding: '10px 0', borderRadius: 12, background: 'rgba(255,127,168,.1)', border: '1px solid rgba(255,127,168,.2)', fontSize: 15, fontWeight: 700, color: C.pink, cursor: 'pointer' }}>
-                        练习这个句型
+                  {/* toriTip */}
+                  {gp.toriTip && (
+                    <div style={{ background: 'rgba(232,168,124,.08)', border: '1px solid rgba(232,168,124,.2)', borderRadius: 12, padding: 12 }}>
+                      <p style={{ fontSize: 13, fontWeight: 700, color: '#e8a87c', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 4 }}><Lightbulb size={11} />替换练习</p>
+                      <p style={{ fontSize: 14, color: C.muted }}>{gp.toriTip}</p>
+                    </div>
+                  )}
+
+                  {/* 相似语法 */}
+                  {gp.difference && gp.similarPatterns && (
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, background: 'rgba(180,156,207,.08)', border: '1px solid rgba(180,156,207,.15)', borderRadius: 12, padding: 12 }}>
+                      <AlertCircle size={13} style={{ color: C.purple, flexShrink: 0, marginTop: 2 }} />
+                      <div>
+                        <p style={{ fontSize: 13, fontWeight: 700, color: C.purple, marginBottom: 4 }}>与 {gp.similarPatterns.join(', ')} 的区别</p>
+                        <p style={{ fontSize: 14, color: C.muted, lineHeight: 1.6 }}>{gp.difference}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* ③ 底部操作 */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    {matchedLesson && (
+                      <button onClick={() => router.push(`/grammar?card=${matchedLesson.cardId}`)}
+                        style={{ width: '100%', padding: '10px 0', borderRadius: 12, background: C.mintBg, border: `1px solid ${C.mint}`, fontSize: 14, fontWeight: 700, color: '#2db89b', cursor: 'pointer' }}>
+                        → 进入课程学习
                       </button>
-                    ) : null;
-                  })()}
+                    )}
+                    {(() => {
+                      const sp = sentencePatterns.find(p => p.id === gp.id);
+                      return sp ? (
+                        <button onClick={() => onStartGrammar(sp)}
+                          style={{ width: '100%', padding: '10px 0', borderRadius: 12, background: 'rgba(255,127,168,.1)', border: '1px solid rgba(255,127,168,.2)', fontSize: 14, fontWeight: 700, color: C.pink, cursor: 'pointer' }}>
+                          练习这个句型
+                        </button>
+                      ) : null;
+                    })()}
+                  </div>
+
                 </div>
               )}
             </div>
@@ -2213,6 +2361,9 @@ function GrammarContent() {
   const [sessionGrammar, setSessionGrammar] = useState<GrammarPoint | null>(null);
   const [reviewQueue, setReviewQueue] = useState<GrammarPoint[]>([]);
   const [activeCard, setActiveCard] = useState<GrammarCard | null>(null);
+  const savedScrollY = useRef(0);
+  const openCard = (card: GrammarCard) => { savedScrollY.current = window.scrollY; setActiveCard(card); };
+  const closeCard = () => { setActiveCard(null); requestAnimationFrame(() => window.scrollTo(0, savedScrollY.current)); };
 
   useEffect(() => {
     db.userGrammarStates.toArray().then(states => {
@@ -2227,6 +2378,12 @@ function GrammarContent() {
     if (patternParam) {
       const gp = sentencePatterns.find(g => g.id === patternParam);
       if (gp) setSessionGrammar(gp);
+    }
+    const cardParam = searchParams.get('card');
+    if (cardParam) {
+      loadGrammarCard(cardParam).then(card => {
+        if (card) { setTab('chapters'); openCard(card); }
+      });
     }
   }, [searchParams]);
 
@@ -2278,12 +2435,12 @@ function GrammarContent() {
 
   if (activeCard) {
     const part = grammarParts.find(p => p.partNumber === activeCard.partNumber);
-    const partNums = ['一', '二', '三', '四', '五', '六', '七'];
+    const partNums = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二', '十三', '十四'];
     if (activeCard.isPractice) {
       return (
         <ComprehensivePractice
           card={activeCard}
-          onBack={() => setActiveCard(null)}
+          onBack={closeCard}
           onComplete={() => handleCompleteCard(activeCard)}
         />
       );
@@ -2294,9 +2451,9 @@ function GrammarContent() {
         card={activeCard}
         partTitle={part ? `第${partNums[part.partNumber - 1]}部分 · ${part.title}` : ''}
         totalInPart={part?.lessons.length ?? 10}
-        onBack={() => setActiveCard(null)}
+        onBack={closeCard}
         onComplete={() => handleCompleteCard(activeCard)}
-        onStartGrammar={gp => { setActiveCard(null); setSessionGrammar(gp); }}
+        onStartGrammar={gp => { closeCard(); setSessionGrammar(gp); }}
       />
     );
   }
@@ -2304,7 +2461,7 @@ function GrammarContent() {
   return (
     <ColorCtx.Provider value={C}>
     <div style={{ minHeight: '100vh', background: C.bg, paddingBottom: 40 }}>
-      <div style={{ maxWidth: 680, margin: '0 auto', padding: '20px 16px 0' }}>
+      <div style={{ maxWidth: 960, margin: '0 auto', padding: '20px 16px 0' }}>
         <div style={{ marginBottom: 18 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 6 }}>
             <button onClick={() => router.back()} style={{ width: 38, height: 38, borderRadius: 13, border: `1px solid ${C.line}`, background: C.card, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}>
@@ -2323,7 +2480,7 @@ function GrammarContent() {
           ))}
         </div>
 
-        {tab === 'chapters' && <ChaptersTab onOpenCard={setActiveCard} isAdmin={isAdmin} />}
+        {tab === 'chapters' && <ChaptersTab onOpenCard={openCard} isAdmin={isAdmin} />}
         {tab === 'library' && <LibraryTab onStartGrammar={setSessionGrammar} />}
       </div>
     </div>

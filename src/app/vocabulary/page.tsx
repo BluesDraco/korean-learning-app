@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, useCallback, useMemo, useRef, Suspense } from 'react';
+import { DesktopVocabularyPage } from '@/components/desktop/DesktopVocabularyPage';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import {
@@ -262,7 +263,7 @@ function DueWordExpanded({ word, savedExamples, setSavedExamples }: {
                 if (savedExamples.has(ex.korean)) return;
                 const existing = await db.sentences.where('korean').equals(ex.korean).first().catch(() => null);
                 if (!existing) {
-                  await db.sentences.add({ korean: ex.korean, chinese: ex.chinese, source_type: 'vocabulary', source_id: 'word-' + word.word, source_title: word.word, created_at: new Date().toISOString() });
+                  await db.sentences.add({ id: crypto.randomUUID(), korean: ex.korean, chinese: ex.chinese, source_type: 'vocabulary', source_id: 'word-' + word.word, source_title: word.word, created_at: new Date().toISOString() });
                 }
                 setSavedExamples(prev => new Set([...prev, ex.korean]));
               }}
@@ -1072,10 +1073,25 @@ function VocabularyContent() {
   );
 }
 
-export default function VocabularyPage() {
+function VocabularyPageInner() {
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    setIsDesktop(window.innerWidth >= 768);
+    const onResize = () => setIsDesktop(window.innerWidth >= 768);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
+  if (isDesktop) return <DesktopVocabularyPage />;
+
   return (
     <Suspense fallback={<div className="flex-1 flex items-center justify-center py-20"><div className="w-6 h-6 rounded-full border-2 border-[var(--pink-primary)] border-t-transparent animate-spin" /></div>}>
       <VocabularyContent />
     </Suspense>
   );
+}
+
+export default function VocabularyPage() {
+  return <VocabularyPageInner />;
 }

@@ -11,7 +11,7 @@ import { speak, speakWord, cancelSpeech } from '@/lib/tts';
 import { db, ensureFavoritesBook } from '@/lib/db';
 import { awardXp, addStudyMinutes } from '@/lib/gamification';
 import { useFeedback } from '@/hooks/useFeedback';
-import type { ArticleQuestion } from '@/types';
+import type { ArticleQuestion, ArticleWord } from '@/types';
 
 type Step = 'goals' | 'vocab' | 'reading' | 'key_sentence' | 'quiz' | 'output' | 'settlement';
 
@@ -48,7 +48,11 @@ export default function ArticleReaderPage() {
   const [quizRevealed, setQuizRevealed] = useState<Record<string, boolean>>({});
   const [quizCorrect, setQuizCorrect] = useState(0);
   const [outputValue, setOutputValue] = useState('');
+  const [sentenceToast, setSentenceToast] = useState(false);
   const [outputDone, setOutputDone] = useState(false);
+  const [selectedWord, setSelectedWord] = useState<ArticleWord | null>(null);
+  const [activeHighlight, setActiveHighlight] = useState<string | null>(null);
+  const sentenceRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const completedRef = useRef(false);
   const { success: feedbackSuccess, complete: feedbackComplete, click: feedbackClick } = useFeedback();
 
@@ -149,6 +153,14 @@ export default function ArticleReaderPage() {
     }).catch(() => {});
   };
 
+  const handleFullTextClick = (sId: string) => {
+    setActiveHighlight(sId);
+    if (!revealedZh.has(sId)) toggleRevealZh(sId);
+    setTimeout(() => {
+      sentenceRefs.current[sId]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 50);
+  };
+
   const toggleSaveSentence = async (sId: string) => {
     const wasSaved = savedSentences.has(sId);
     setSavedSentences((prev) => {
@@ -157,7 +169,7 @@ export default function ArticleReaderPage() {
       return next;
     });
     feedbackClick();
-    if (!wasSaved) feedbackSuccess('已收藏句子');
+    if (!wasSaved) { feedbackSuccess('已收藏句子'); setSentenceToast(true); setTimeout(() => setSentenceToast(false), 3000); }
     try {
       const p = await db.userArticleProgress.get(article.id);
       const ids = new Set(p?.savedSentenceIds || []);
@@ -172,6 +184,7 @@ export default function ArticleReaderPage() {
           const existing = await db.sentences.where('korean').equals(sentence.ko).first().catch(() => null);
           if (!existing) {
             await db.sentences.add({
+              id: crypto.randomUUID(),
               korean: sentence.ko,
               chinese: sentence.zh ?? '',
               source_type: 'reading',
@@ -285,6 +298,12 @@ export default function ArticleReaderPage() {
 
   return (
     <div className="py-4 space-y-4">
+      {sentenceToast && (
+        <div style={{ position: 'fixed', top: 60, left: '50%', transform: 'translateX(-50%)', background: '#201815', color: '#fff', borderRadius: 999, padding: '9px 20px', fontSize: 13, fontWeight: 700, zIndex: 300, whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: 8 }}>
+          已收藏句子
+          <a href="/vocabulary?tab=sentences" style={{ color: '#aee3d8', fontSize: 12, fontWeight: 700, textDecoration: 'none' }}>查看 →</a>
+        </div>
+      )}
       {/* Top bar */}
       <div className="flex items-center justify-between">
         <button onClick={() => {
@@ -403,107 +422,194 @@ export default function ArticleReaderPage() {
 
       {/* ── Step: Reading ── */}
       {step === 'reading' && (
-        <div className="space-y-4 animate-fade-in">
-          {/* Reading progress */}
-          <div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
-            <div className="flex-1 bg-[var(--bg-input)] rounded-full h-1">
-              <div className="bg-[var(--mint-soft)] h-1 rounded-full transition-all"
+        <div className="animate-fade-in space-y-4">
+          {/* Progress bar */}
+          <div className="flex items-center gap-3 text-xs text-[var(--text-muted)]">
+            <div className="flex-1 bg-[var(--bg-input)] rounded-full h-1.5">
+              <div className="bg-[var(--mint-soft)] h-1.5 rounded-full transition-all"
                 style={{ width: `${total > 0 ? (readCount / total) * 100 : 0}%` }} />
             </div>
-            <span>{readCount}/{total} 句已展开</span>
+            <span className="shrink-0 tabular-nums">已理解 {readCount} / {total} 句</span>
           </div>
 
-          {/* Segmented reading */}
-          <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-5 space-y-4">
-            {article.sentences.map((s, idx) => (
-              <div key={s.id} className="space-y-2">
-                {/* Korean text — always visible */}
-                <div className="flex items-start gap-2">
-                  <span className="text-[10px] text-[var(--text-muted)] w-5 shrink-0 pt-0.5">{idx + 1}</span>
-                  <button
-                    onClick={() => toggleRevealZh(s.id)}
-                    className={`flex-1 text-left text-base leading-7 rounded-lg px-2 py-1.5 transition-colors ${
-                      revealedZh.has(s.id)
-                        ? 'bg-[var(--mint-soft)]/5 text-[var(--text-primary)]'
-                        : 'text-[var(--text-primary)] hover:bg-[var(--bg-input)]'
-                    }`}
-                  >
-                    {s.ko}
-                  </button>
-                  <div className="flex items-center gap-0.5 shrink-0">
-                    <button
-                      onClick={() => speakSentence(s.id, s.ko)}
-                      className={`p-1.5 rounded-lg transition-colors ${
-                        speakingId === s.id ? 'bg-[var(--mint-soft)]/20 text-[var(--mint-soft)]' : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
-                      }`}
-                    >
-                      <Volume2 size={14} />
-                    </button>
-                    <button
-                      onClick={() => toggleSaveSentence(s.id)}
-                      className={`p-1.5 rounded-lg transition-colors ${
-                        savedSentences.has(s.id) ? 'text-[var(--peach-soft)]' : 'text-[var(--text-muted)] hover:text-[var(--peach-soft)]'
-                      }`}
-                    >
-                      <Bookmark size={14} fill={savedSentences.has(s.id) ? 'currentColor' : 'none'} />
-                    </button>
+          {/* Desktop: two-col; Mobile: single col */}
+          <div className="md:grid md:grid-cols-[45%_55%] md:gap-6 md:items-start">
+
+            {/* ── 左栏：文章正文 ── */}
+            <div className="md:sticky md:top-20 mb-4 md:mb-0">
+              <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl overflow-hidden">
+                {/* 文章头 */}
+                <div className="px-5 pt-5 pb-4 border-b border-[var(--border-color)]">
+                  <div className="flex items-center gap-3 mb-1">
+                    <span className="text-2xl">{article.emoji}</span>
+                    <div>
+                      <h2 className="text-base font-bold text-[var(--text-primary)] leading-tight">{article.title}</h2>
+                      <p className="text-xs text-[var(--text-muted)] mt-0.5">{article.titleKo}</p>
+                    </div>
                   </div>
                 </div>
+                {/* 正文段落 */}
+                <div className="px-5 py-4 space-y-0.5">
+                  {article.sentences.map((s) => (
+                    <button
+                      key={s.id}
+                      onClick={() => handleFullTextClick(s.id)}
+                      style={{
+                        display: 'block',
+                        width: '100%',
+                        textAlign: 'left',
+                        padding: '4px 8px',
+                        borderRadius: 8,
+                        fontSize: 16,
+                        lineHeight: '1.85',
+                        color: 'var(--text-primary)',
+                        background: activeHighlight === s.id
+                          ? 'rgba(168,216,208,0.13)'
+                          : revealedZh.has(s.id)
+                            ? 'var(--bg-input)'
+                            : 'transparent',
+                        transition: 'background 0.2s',
+                        position: 'relative',
+                        paddingRight: 20,
+                      }}
+                    >
+                      {s.ko}
+                      {revealedZh.has(s.id) && (
+                        <span style={{
+                          position: 'absolute', right: 6, top: '50%', transform: 'translateY(-50%)',
+                          width: 6, height: 6, borderRadius: '50%',
+                          background: 'var(--mint-soft)', display: 'inline-block',
+                        }} />
+                      )}
+                    </button>
+                  ))}
+                </div>
+                {/* 正文提示 */}
+                <div className="px-5 pb-4 flex items-center gap-1.5">
+                  <Lightbulb size={12} className="text-[var(--peach-soft)] shrink-0" />
+                  <p className="text-[11px] text-[var(--text-muted)]">点击正文句子，在下方查看详细拆解</p>
+                </div>
+              </div>
+            </div>
 
-                {/* Chinese — toggleable */}
-                {revealedZh.has(s.id) && (
-                  <div className="ml-7 space-y-2 animate-fade-in">
-                    <p className="text-sm text-[var(--text-secondary)] bg-[var(--bg-input)] rounded-lg px-3 py-2">
-                      {s.zh}
-                    </p>
-
-                    {/* Word chips */}
-                    {s.words.length > 0 && (
-                      <div className="flex flex-wrap gap-1.5">
-                        {s.words.map((w) => (
+            {/* ── 右栏：逐句拆解 ── */}
+            <div className="space-y-4">
+              <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl overflow-hidden">
+                <div className="px-4 py-3 border-b border-[var(--border-color)] flex items-center gap-2">
+                  <BookOpen size={14} className="text-[var(--mint-soft)]" />
+                  <span className="text-sm font-bold text-[var(--text-primary)]">逐句拆解</span>
+                  <span className="text-xs text-[var(--text-muted)] ml-auto">点击句子展开翻译</span>
+                </div>
+                <div className="divide-y divide-[var(--border-color)]">
+                  {article.sentences.map((s, idx) => (
+                    <div
+                      key={s.id}
+                      ref={(el) => { sentenceRefs.current[s.id] = el; }}
+                      style={{
+                        borderLeft: revealedZh.has(s.id) ? '3px solid var(--mint-soft)' : '3px solid transparent',
+                        transition: 'border-color 0.2s',
+                        background: activeHighlight === s.id ? 'var(--bg-input)' : undefined,
+                      }}
+                    >
+                      {/* 句子行 */}
+                      <div className="flex items-center gap-2 px-4 py-3">
+                        <span style={{
+                          width: 22, height: 22, borderRadius: '50%', flexShrink: 0,
+                          background: revealedZh.has(s.id) ? 'var(--mint-soft)' : 'var(--bg-input)',
+                          color: revealedZh.has(s.id) ? '#fff' : 'var(--text-muted)',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          fontSize: 10, fontWeight: 700, transition: 'all 0.2s',
+                        }}>
+                          {idx + 1}
+                        </span>
+                        <button
+                          onClick={() => toggleRevealZh(s.id)}
+                          className="flex-1 text-left text-sm leading-relaxed text-[var(--text-primary)]"
+                        >
+                          {s.ko}
+                        </button>
+                        <div className="flex items-center gap-0.5 shrink-0">
                           <button
-                            key={w.word}
-                            onClick={() => toggleSaveWord(w.word)}
-                            className={`text-xs px-2 py-1 rounded-full border transition-colors ${
-                              savedWords.has(w.word)
-                                ? 'bg-[var(--peach-soft)]/10 border-[var(--peach-soft)]/30 text-[var(--peach-soft)]'
-                                : 'bg-[var(--bg-input)] border-[var(--border-color)] text-[var(--text-muted)] hover:border-[var(--text-placeholder)]'
+                            onClick={() => speakSentence(s.id, s.ko)}
+                            className={`p-1.5 rounded-lg transition-colors ${
+                              speakingId === s.id ? 'text-[var(--mint-soft)]' : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                             }`}
                           >
-                            {w.word} <span className="opacity-60">{w.meaning}</span>
+                            <Volume2 size={13} />
                           </button>
-                        ))}
+                          <button
+                            onClick={() => toggleSaveSentence(s.id)}
+                            className={`p-1.5 rounded-lg transition-colors ${
+                              savedSentences.has(s.id) ? 'text-[var(--peach-soft)]' : 'text-[var(--text-muted)] hover:text-[var(--peach-soft)]'
+                            }`}
+                          >
+                            <Bookmark size={13} fill={savedSentences.has(s.id) ? 'currentColor' : 'none'} />
+                          </button>
+                        </div>
                       </div>
-                    )}
 
-                    {/* Pronunciation */}
-                    {s.pronunciation && (
-                      <p className="text-xs text-[var(--text-muted)] font-mono">[{s.pronunciation}]</p>
-                    )}
-                  </div>
-                )}
+                      {/* 展开：中文 + chips + 注音 */}
+                      {revealedZh.has(s.id) && (
+                        <div className="px-4 pb-3 pl-10 space-y-2 animate-fade-in">
+                          <p className="text-sm text-[var(--text-secondary)] bg-[var(--bg-input)] rounded-lg px-3 py-2">
+                            {s.zh}
+                          </p>
+                          {s.words.length > 0 && (
+                            <div className="flex flex-wrap gap-1.5">
+                              {s.words.map((w) => (
+                                <button
+                                  key={w.word}
+                                  onClick={() => setSelectedWord(w)}
+                                  className={`text-xs px-2 py-1 rounded-full border transition-colors ${
+                                    savedWords.has(w.word)
+                                      ? 'bg-[var(--peach-soft)]/10 border-[var(--peach-soft)]/30 text-[var(--peach-soft)]'
+                                      : 'bg-[var(--bg-input)] border-[var(--border-color)] text-[var(--text-muted)] hover:border-[var(--text-placeholder)]'
+                                  }`}
+                                >
+                                  {w.word} <span className="opacity-60">{w.meaning}</span>
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                          {s.pronunciation && (
+                            <p className="text-xs text-[var(--text-muted)] font-mono">[{s.pronunciation}]</p>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
-            ))}
-          </div>
 
-          {/* Tip */}
-          <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-3 flex items-start gap-2">
-            <Lightbulb size={14} className="text-[var(--peach-soft)] shrink-0 mt-0.5" />
-            <p className="text-xs text-[var(--text-muted)]">
-              点击韩语句子可以查看中文翻译。点小喇叭听发音，点书签收藏句子。
-            </p>
-          </div>
-
-          <div className="flex gap-2">
-            <button onClick={() => setStep('vocab')} className="flex-1 py-3 bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-primary)] rounded-2xl font-medium text-sm">
-              返回词汇
-            </button>
-            <button
-              onClick={() => setStep('key_sentence')}
-              className="flex-[2] flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-[var(--mint-soft)] to-[var(--purple-soft)] text-white rounded-2xl font-bold text-sm"
-            >
-              看重点句型 <ChevronRight size={18} />
-            </button>
+              {/* 导航按钮 */}
+              <div className="flex gap-2">
+                <button onClick={() => {
+                    if (revealedZh.size > 0) {
+                      db.userArticleProgress.update(article.id, {
+                        readSentenceIds: [...revealedZh],
+                        updatedAt: Date.now(),
+                      }).catch(() => {});
+                    }
+                    setStep('vocab');
+                  }} className="flex-1 py-3 bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-primary)] rounded-2xl font-medium text-sm">
+                  返回词汇
+                </button>
+                <button
+                  onClick={() => {
+                    if (revealedZh.size > 0) {
+                      db.userArticleProgress.update(article.id, {
+                        readSentenceIds: [...revealedZh],
+                        updatedAt: Date.now(),
+                      }).catch(() => {});
+                    }
+                    setStep('key_sentence');
+                  }}
+                  className="flex-[2] flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-[var(--mint-soft)] to-[var(--purple-soft)] text-white rounded-2xl font-bold text-sm"
+                >
+                  看重点句型 <ChevronRight size={18} />
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -793,6 +899,7 @@ export default function ArticleReaderPage() {
             <button
               onClick={() => {
                 setRevealedZh(new Set());
+                setSelectedWord(null);
                 setQuizIdx(0);
                 setQuizAnswers({});
                 setQuizRevealed({});
@@ -807,6 +914,70 @@ export default function ArticleReaderPage() {
             </button>
           </div>
         </div>
+      )}
+      {/* ── Word detail bottom drawer ── */}
+      {selectedWord && (
+        <>
+          {/* Backdrop */}
+          <div
+            onClick={() => setSelectedWord(null)}
+            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.35)', zIndex: 200 }}
+          />
+          {/* Drawer */}
+          <div style={{
+            position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 201,
+            background: 'var(--bg-card)', borderRadius: '20px 20px 0 0',
+            padding: '20px 20px calc(env(safe-area-inset-bottom, 0px) + 20px)',
+            boxShadow: '0 -4px 24px rgba(0,0,0,0.12)',
+          }}>
+            {/* Handle */}
+            <div style={{ width: 36, height: 4, borderRadius: 2, background: 'var(--border-color)', margin: '0 auto 16px' }} />
+            {/* Close */}
+            <button
+              onClick={() => setSelectedWord(null)}
+              style={{ position: 'absolute', top: 16, right: 16, padding: 4, color: 'var(--text-muted)' }}
+            >
+              <X size={20} />
+            </button>
+            {/* Word */}
+            <p style={{ fontSize: 28, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 2 }}>
+              {selectedWord.word}
+            </p>
+            {selectedWord.pronunciation && (
+              <p style={{ fontSize: 14, color: 'var(--text-muted)', fontFamily: 'monospace', marginBottom: 8 }}>
+                [{selectedWord.pronunciation}]
+              </p>
+            )}
+            <p style={{ fontSize: 16, color: 'var(--text-secondary)', marginBottom: 20 }}>
+              {selectedWord.meaning}
+            </p>
+            {/* Actions */}
+            <div style={{ display: 'flex', gap: 10 }}>
+              <button
+                onClick={() => speakWord(selectedWord.word)}
+                style={{
+                  flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                  padding: '11px 0', borderRadius: 14, border: '1px solid var(--border-color)',
+                  background: 'var(--bg-input)', fontSize: 14, color: 'var(--text-primary)', fontWeight: 600,
+                }}
+              >
+                <Volume2 size={16} /> 朗读
+              </button>
+              <button
+                onClick={() => { toggleSaveWord(selectedWord.word); setSelectedWord(null); }}
+                style={{
+                  flex: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                  padding: '11px 0', borderRadius: 14, border: 'none',
+                  background: savedWords.has(selectedWord.word) ? 'var(--peach-soft)' : 'var(--ink)',
+                  color: '#fff', fontSize: 14, fontWeight: 700,
+                }}
+              >
+                <Bookmark size={16} fill={savedWords.has(selectedWord.word) ? '#fff' : 'none'} />
+                {savedWords.has(selectedWord.word) ? '已加入单词本' : '加入单词本'}
+              </button>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );

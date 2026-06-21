@@ -52,6 +52,7 @@ export async function getDb() {
   // onboarding_completed is a boolean flag (0/1), korean_level is a text label
   try { await c.execute(`ALTER TABLE users ADD COLUMN onboarding_completed INTEGER DEFAULT 0`); } catch { /* already exists */ }
   try { await c.execute(`ALTER TABLE users ADD COLUMN korean_level TEXT DEFAULT ''`); } catch { /* already exists */ }
+  try { await c.execute(`ALTER TABLE users ADD COLUMN last_login_at INTEGER`); } catch { /* already exists */ }
 
   await c.execute(`
     CREATE TABLE IF NOT EXISTS study_logs (

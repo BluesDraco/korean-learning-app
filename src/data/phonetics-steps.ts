@@ -53,7 +53,7 @@ export const progressiveSteps: ProgressiveStep[] = [
         ],
       },
       {
-        id: 'cp-04', label: 'ㅚ vs ㅙ vs ㅞ', tip: '三者发音非常接近。ㅚ=ㅗ+ㅣ，ㅙ=ㅗ+ㅐ，ㅞ=ㅜ+ㅔ。简化来说都类似英语"way"',
+        id: 'cp-04', label: 'ㅚ vs ㅙ vs ㅞ', tip: '三者发音非常接近，现代口语几乎相同。ㅚ=ㅗ+ㅣ，ㅙ=ㅗ+ㅐ，ㅞ=ㅜ+ㅔ（类似英语"wet"中的we）。',
         letters: [
           { ...vowels.find((v) => v.letter === 'ㅚ')!, id: 'cp-v-17', letter: 'ㅚ', name: '외', romanization: 'oe', type: 'vowel', subtype: 'compound', sound: '类似英语"way"但嘴更圆', mnemonic: 'ㅗ+ㅣ=oe', emoji: '🔄' },
           { ...vowels.find((v) => v.letter === 'ㅙ')!, id: 'cp-v-16', letter: 'ㅙ', name: '왜', romanization: 'wae', type: 'vowel', subtype: 'compound', sound: '类似英语"way"', mnemonic: 'ㅗ+ㅐ=wae', emoji: '🛤️' },
@@ -68,7 +68,7 @@ export const progressiveSteps: ProgressiveStep[] = [
     titleKo: '기본 자음',
     emoji: '',
     description: '14个基础辅音（含5个送气音），模仿发音器官的形状创造。韩语辅音的关键是"松紧"和"送气"。',
-    letters: consonants.filter((c) => c.subtype === 'basic' || c.subtype === 'aspirated'),
+    letters: consonants.filter((c) => c.subtype === 'basic'),
     confusedPairs: [
       {
         id: 'cp-05', label: 'ㄱ vs ㅋ vs ㄲ', tip: 'ㄱ=轻声g(松音)，ㅋ=强送气k，ㄲ=喉部用力不送气(紧音)',

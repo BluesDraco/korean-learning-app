@@ -127,17 +127,17 @@ export const grammarCardsP9: GrammarCard[] = [
     step0Html: `<div class="card-title">-겠- · -는/을 것 같다</div>
 <div class="card-body">两种表达推测的方式：-겠- 更肯定，-것 같다 更柔和。-겠- 第一人称还能表示意向"我要做"。</div>
 <div class="hook-box">
-  <div style="font-size:12px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说：</div>
   <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
     <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
       <div style="font-size:9px;font-weight:800;color:#ff7fa8;margin-bottom:4px">-겠-（意向/肯定推测）</div>
       <div style="font-size:16px;font-weight:800;color:#241917">제가 하겠습니다!</div>
-      <div style="font-size:12px;color:#89756e;margin-top:2px">我来做！（意向，正式场合）</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">我来做！（意向，正式场合）</div>
     </div>
     <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
       <div style="font-size:9px;font-weight:800;color:#2db89b;margin-bottom:4px">-는/을 것 같다（柔和推测）</div>
       <div style="font-size:16px;font-weight:800;color:#241917">비가 올 것 같아요.</div>
-      <div style="font-size:12px;color:#89756e;margin-top:2px">好像要下雨了。</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">好像要下雨了。</div>
     </div>
   </div>
 </div>
@@ -147,16 +147,16 @@ export const grammarCardsP9: GrammarCard[] = [
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
   <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-겠- → 较肯定的推测 / 第一人称意向</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">动词/形容词词干 + 겠 + 어요/습니다</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">힘들겠어요.</span><span style="font-size:14px;color:#5a4640">你一定很辛苦吧。（较肯定）</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">제가 하겠습니다.</span><span style="font-size:14px;color:#5a4640">我来做。（意向）</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">알겠어요 / 모르겠어요</span><span style="font-size:14px;color:#5a4640">明白了 / 不太清楚</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">动词/形容词词干 + 겠 + 어요/습니다</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">힘들겠어요.</span><span style="font-size:16px;color:#5a4640">你一定很辛苦吧。（较肯定）</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">제가 하겠습니다.</span><span style="font-size:16px;color:#5a4640">我来做。（意向）</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">알겠어요 / 모르겠어요</span><span style="font-size:16px;color:#5a4640">明白了 / 不太清楚</span></div>
   </div>
   <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-는/을 것 같다 → 柔和推测，语气不确定</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">动词현재 -는 것 같다 / 将来 -을/ㄹ 것 같다 / 形容词 -은/ㄴ 것 같다</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">비가 올 것 같아요.</span><span style="font-size:14px;color:#5a4640">好像要下雨了。（不确定）</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">피곤한 것 같아요.</span><span style="font-size:14px;color:#5a4640">好像很累的样子。</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">动词현재 -는 것 같다 / 将来 -을/ㄹ 것 같다 / 形容词 -은/ㄴ 것 같다</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">비가 올 것 같아요.</span><span style="font-size:16px;color:#5a4640">好像要下雨了。（不确定）</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">피곤한 것 같아요.</span><span style="font-size:16px;color:#5a4640">好像很累的样子。</span></div>
   </div>
 </div>
 <div class="reminder-box">저는 피곤하겠어요 ✗ — -겠- 第一人称推测自己的感受很奇怪，说自己的状态直接用 피곤해요。</div>`,
@@ -182,7 +182,7 @@ export const grammarCardsP9: GrammarCard[] = [
         { pre: '그 영화가', post: '。（那部电影好像很有意思——推测）', options: ['재미있겠어요', '재미있을 것 같아요', '재미있는 것 같겠어요', '재미있었겠어요'], answer: 1, explanation: '对将来事物的柔和推测用 -을 것 같다 → 재미있을 것 같아요' },
       ],
     },
-    linkedGrammarIds: ['card-p3-l05', 'card-p7-l01'],
+    linkedGrammarIds: ['g51', 'g69'],
   },
   {
     id: 'card-p9-l02',
@@ -292,17 +292,17 @@ export const grammarCardsP9: GrammarCard[] = [
     step0Html: `<div class="card-title">-네요 · -군요 · -구나</div>
 <div class="card-body">三个感叹语尾都表示"哦原来如此"，区别只在礼貌程度。-네요 最安全，任何场合都能用。</div>
 <div class="hook-box">
-  <div style="font-size:12px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说：</div>
   <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
     <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
       <div style="font-size:9px;font-weight:800;color:#ff7fa8;margin-bottom:4px">-네요（礼貌感叹，万能）</div>
       <div style="font-size:16px;font-weight:800;color:#241917">한국어를 정말 잘하시네요!</div>
-      <div style="font-size:12px;color:#89756e;margin-top:2px">您韩语说得真好啊！</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">您韩语说得真好啊！</div>
     </div>
     <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
       <div style="font-size:9px;font-weight:800;color:#2db89b;margin-bottom:4px">-구나（自言自语/对晚辈）</div>
       <div style="font-size:16px;font-weight:800;color:#241917">아, 이렇게 하는구나.</div>
-      <div style="font-size:12px;color:#89756e;margin-top:2px">哦，原来是这样做的。</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">哦，原来是这样做的。</div>
     </div>
   </div>
 </div>
@@ -312,19 +312,19 @@ export const grammarCardsP9: GrammarCard[] = [
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
   <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-네요 → 最安全，任何场合</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">动词/形容词词干 + 네요</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">맛있네요!</span><span style="font-size:14px;color:#5a4640">真好吃啊！（对任何人都可）</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">많이 바뀌었네요.</span><span style="font-size:14px;color:#5a4640">变化好大啊。</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">动词/形容词词干 + 네요</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">맛있네요!</span><span style="font-size:16px;color:#5a4640">真好吃啊！（对任何人都可）</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">많이 바뀌었네요.</span><span style="font-size:16px;color:#5a4640">变化好大啊。</span></div>
   </div>
   <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-군요 → 稍正式，书面/对话均可</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">动词词干 + 는군요 / 形容词词干 + 군요</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">서울이 정말 크군요.</span><span style="font-size:14px;color:#5a4640">首尔真大啊。（稍正式）</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">动词词干 + 는군요 / 形容词词干 + 군요</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">서울이 정말 크군요.</span><span style="font-size:16px;color:#5a4640">首尔真大啊。（稍正式）</span></div>
   </div>
   <div class="tok-row" style="background:#f5f0fb;border-radius:12px;padding:12px">
     <div class="tok t-v">-구나 → 非正式，自言自语/晚辈</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">动词词干 + 는구나 / 形容词词干 + 구나</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">아, 그렇구나.</span><span style="font-size:14px;color:#5a4640">哦，原来如此。（自言自语）</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">动词词干 + 는구나 / 形容词词干 + 구나</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">아, 그렇구나.</span><span style="font-size:16px;color:#5a4640">哦，原来如此。（自言自语）</span></div>
   </div>
 </div>
 <div class="reminder-box">形容词 + -네요/-군요/-구나 直接接词干，不加 -는。只有动词才用 -는네요/-는군요/-는구나。</div>`,
@@ -349,7 +349,7 @@ export const grammarCardsP9: GrammarCard[] = [
         { pre: '动词 먹다 + -는구나 →', post: '', options: ['먹구나', '먹는구나', '먹는는구나', '먹었는구나'], answer: 1, explanation: '动词현재 + -는구나 → 먹는구나' },
       ],
     },
-    linkedGrammarIds: ['card-p9-l01'],
+    linkedGrammarIds: ['g16', 'g17'],
   },
   {
     id: 'card-p9-l03',
@@ -468,17 +468,17 @@ export const grammarCardsP9: GrammarCard[] = [
     step0Html: `<div class="card-title">-는/은/ㄴ/을/ㄹ 것 같다</div>
 <div class="card-body">说"好像/感觉"，是韩语最常用的推测句型。时态靠冠词形变化体现，一个模板走遍所有场景。</div>
 <div class="hook-box">
-  <div style="font-size:12px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说：</div>
   <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
     <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
       <div style="font-size:9px;font-weight:800;color:#ff7fa8;margin-bottom:4px">现在推测（动词）</div>
       <div style="font-size:16px;font-weight:800;color:#241917">지금 자는 것 같아요.</div>
-      <div style="font-size:12px;color:#89756e;margin-top:2px">好像现在在睡觉。</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">好像现在在睡觉。</div>
     </div>
     <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
       <div style="font-size:9px;font-weight:800;color:#2db89b;margin-bottom:4px">将来推测</div>
       <div style="font-size:16px;font-weight:800;color:#241917">비가 올 것 같아요.</div>
-      <div style="font-size:12px;color:#89756e;margin-top:2px">好像要下雨了。</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">好像要下雨了。</div>
     </div>
   </div>
 </div>
@@ -488,23 +488,23 @@ export const grammarCardsP9: GrammarCard[] = [
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
   <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">동사 현재：词干 + 는 것 같다</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">가는 것 같아요</span><span style="font-size:14px;color:#5a4640">好像在去</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">먹는 것 같아요</span><span style="font-size:14px;color:#5a4640">好像在吃</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">가는 것 같아요</span><span style="font-size:16px;color:#5a4640">好像在去</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">먹는 것 같아요</span><span style="font-size:16px;color:#5a4640">好像在吃</span></div>
   </div>
   <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">형용사：词干 + 은/ㄴ 것 같다</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">추운 것 같아요</span><span style="font-size:14px;color:#5a4640">好像很冷</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">바쁜 것 같아요</span><span style="font-size:14px;color:#5a4640">好像很忙</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">추운 것 같아요</span><span style="font-size:16px;color:#5a4640">好像很冷</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">바쁜 것 같아요</span><span style="font-size:16px;color:#5a4640">好像很忙</span></div>
   </div>
   <div class="tok-row" style="background:#f0eef8;border-radius:12px;padding:12px">
     <div class="tok t-v">과거：동사 词干 + 은/ㄴ 것 같다 / -았/었을 것 같다</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">간 것 같아요</span><span style="font-size:14px;color:#5a4640">好像去了</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">갔을 것 같아요</span><span style="font-size:14px;color:#5a4640">大概去了</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">간 것 같아요</span><span style="font-size:16px;color:#5a4640">好像去了</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">갔을 것 같아요</span><span style="font-size:16px;color:#5a4640">大概去了</span></div>
   </div>
   <div class="tok-row" style="background:#fff8f0;border-radius:12px;padding:12px">
     <div class="tok t-v">미래：词干 + 을/ㄹ 것 같다</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">올 것 같아요</span><span style="font-size:14px;color:#5a4640">好像会来</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">비가 올 것 같아요</span><span style="font-size:14px;color:#5a4640">好像要下雨</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">올 것 같아요</span><span style="font-size:16px;color:#5a4640">好像会来</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">비가 올 것 같아요</span><span style="font-size:16px;color:#5a4640">好像要下雨</span></div>
   </div>
 </div>
 <div class="reminder-box">형용사 + -는 것 같다 ✗ → 형용사는 -은/ㄴ 것 같다 ✓（추운 것 같아요，not 춥는 것 같아요）</div>`,
@@ -531,7 +531,7 @@ export const grammarCardsP9: GrammarCard[] = [
         { pre: '명사 학생이다 →', post: '（好像是学生）', options: ['학생는 것 같아요', '학생인 것 같아요', '학생은 것 같아요', '학생이는 것 같아요'], answer: 1, explanation: '명사+이다 → 명사+인 것 같다 → 학생인 것 같아요' },
       ],
     },
-    linkedGrammarIds: ['card-p9-l01'],
+    linkedGrammarIds: ['g69'],
   },
   {
     id: 'card-p9-l04',
@@ -661,17 +661,17 @@ export const grammarCardsP9: GrammarCard[] = [
     step0Html: `<div class="card-title">-동안 · 마다 · -을/ㄹ 때마다</div>
 <div class="card-body">三个时间表达：-동안（在……期间）、마다（每个……）、-을/ㄹ 때마다（每次……的时候）。</div>
 <div class="hook-box">
-  <div style="font-size:12px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说：</div>
   <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
     <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
       <div style="font-size:9px;font-weight:800;color:#ff7fa8;margin-bottom:4px">-동안（期间）</div>
       <div style="font-size:16px;font-weight:800;color:#241917">방학 동안 한국어를 공부했어요.</div>
-      <div style="font-size:12px;color:#89756e;margin-top:2px">假期期间学了韩语。</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">假期期间学了韩语。</div>
     </div>
     <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
       <div style="font-size:9px;font-weight:800;color:#2db89b;margin-bottom:4px">-을 때마다（每次）</div>
       <div style="font-size:16px;font-weight:800;color:#241917">이 노래를 들을 때마다 생각나요.</div>
-      <div style="font-size:12px;color:#89756e;margin-top:2px">每次听这首歌都会想起你。</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">每次听这首歌都会想起你。</div>
     </div>
   </div>
 </div>
@@ -681,21 +681,21 @@ export const grammarCardsP9: GrammarCard[] = [
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
   <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-동안 → 持续一段时间</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">명사 + 동안 / 동사词干 + 는 동안</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">3년 동안 살았어요.</span><span style="font-size:14px;color:#5a4640">住了3年。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">자는 동안 전화가 왔어요.</span><span style="font-size:14px;color:#5a4640">睡觉期间来了电话。</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">명사 + 동안 / 동사词干 + 는 동안</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">3년 동안 살았어요.</span><span style="font-size:16px;color:#5a4640">住了3年。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">자는 동안 전화가 왔어요.</span><span style="font-size:16px;color:#5a4640">睡觉期间来了电话。</span></div>
   </div>
   <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">마다 → 每一个（无例外）</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">명사 + 마다</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">날마다 운동해요.</span><span style="font-size:14px;color:#5a4640">每天运动。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">사람마다 달라요.</span><span style="font-size:14px;color:#5a4640">每个人都不一样。</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">명사 + 마다</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">날마다 운동해요.</span><span style="font-size:16px;color:#5a4640">每天运动。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">사람마다 달라요.</span><span style="font-size:16px;color:#5a4640">每个人都不一样。</span></div>
   </div>
   <div class="tok-row" style="background:#f0eef8;border-radius:12px;padding:12px">
     <div class="tok t-v">-을/ㄹ 때마다 → 每次做……的时候</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">有收음+을 때마다 / 无收음+ㄹ 때마다</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">볼 때마다 반가워요.</span><span style="font-size:14px;color:#5a4640">每次见面都很高兴。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">먹을 때마다 생각나요.</span><span style="font-size:14px;color:#5a4640">每次吃都会想起。</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">有收음+을 때마다 / 无收음+ㄹ 때마다</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">볼 때마다 반가워요.</span><span style="font-size:16px;color:#5a4640">每次见面都很高兴。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">먹을 때마다 생각나요.</span><span style="font-size:16px;color:#5a4640">每次吃都会想起。</span></div>
   </div>
 </div>
 <div class="reminder-box">마다 + 동사词干 ✗（먹마다 ✗）— 마다 只接名词。动词用 -을 때마다。</div>`,
@@ -721,7 +721,7 @@ export const grammarCardsP9: GrammarCard[] = [
         { pre: '주말', post: '쉬어요（每个周末休息）', options: ['동안', '마다', '때마다', '는 동안'], answer: 1, explanation: '명사 + 마다 = 每个……，주말마다 = 每个周末' },
       ],
     },
-    linkedGrammarIds: ['card-p5-l10'],
+    linkedGrammarIds: ['g44'],
   },
   {
     id: 'card-p9-l05',
@@ -836,17 +836,17 @@ export const grammarCardsP9: GrammarCard[] = [
     step0Html: `<div class="card-title">-기는요 · -기는 하다</div>
 <div class="card-body">两个用 -기 构成的口语表达：-기는요 谦虚回应夸奖，-기는 하다 承认但转折"倒是……不过……"。</div>
 <div class="hook-box">
-  <div style="font-size:12px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说：</div>
   <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
     <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
       <div style="font-size:9px;font-weight:800;color:#ff7fa8;margin-bottom:4px">-기는요（谦虚回应）</div>
       <div style="font-size:16px;font-weight:800;color:#241917">잘하기는요, 아직 멀었어요.</div>
-      <div style="font-size:12px;color:#89756e;margin-top:2px">哪里哪里，还差得远呢。</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">哪里哪里，还差得远呢。</div>
     </div>
     <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
       <div style="font-size:9px;font-weight:800;color:#2db89b;margin-bottom:4px">-기는 하다（承认但转折）</div>
       <div style="font-size:16px;font-weight:800;color:#241917">알기는 하는데 설명하기 어려워요.</div>
-      <div style="font-size:12px;color:#89756e;margin-top:2px">倒是知道，但很难解释。</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">倒是知道，但很难解释。</div>
     </div>
   </div>
 </div>
@@ -856,15 +856,15 @@ export const grammarCardsP9: GrammarCard[] = [
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
   <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-기는요 → 谦虚否定夸奖</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">动词/形容词词干 + 기는요</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">A: 한국어 잘하시네요! B: 잘하기는요.</span><span style="font-size:14px;color:#5a4640">哪里，哪有。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">예쁘기는요, 그냥 평범해요.</span><span style="font-size:14px;color:#5a4640">哪里漂亮，很普通。</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">动词/形容词词干 + 기는요</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">A: 한국어 잘하시네요! B: 잘하기는요.</span><span style="font-size:16px;color:#5a4640">哪里，哪有。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">예쁘기는요, 그냥 평범해요.</span><span style="font-size:16px;color:#5a4640">哪里漂亮，很普通。</span></div>
   </div>
   <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-기는 하다 → 承认 + 转折</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">动词/形容词词干 + 기는 해요/했어요 + 转折</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">먹기는 했는데 맛없었어요.</span><span style="font-size:14px;color:#5a4640">倒是吃了，但不好吃。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">보기는 봤어요, 근데 잘 모르겠어요.</span><span style="font-size:14px;color:#5a4640">倒是看了，但不太明白。</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">动词/形容词词干 + 기는 해요/했어요 + 转折</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">먹기는 했는데 맛없었어요.</span><span style="font-size:16px;color:#5a4640">倒是吃了，但不好吃。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">보기는 봤어요, 근데 잘 모르겠어요.</span><span style="font-size:16px;color:#5a4640">倒是看了，但不太明白。</span></div>
   </div>
 </div>
 <div class="reminder-box">-기는요 单独用作回应，-기는 하다 后面要跟 -는데/-지만 才完整，不能单独结束句子。</div>`,
@@ -890,7 +890,7 @@ export const grammarCardsP9: GrammarCard[] = [
         { pre: 'A: 요리 잘하시죠? B:', post: '（哪里，我不太会做）', options: ['잘하기는요', '잘하기는 해요', '못하기는요', '잘하는데요'], answer: 0, explanation: '-기는요 谦虚回应，否定对方的夸奖' },
       ],
     },
-    linkedGrammarIds: ['card-p7-l06'],
+    linkedGrammarIds: ['g13'],
   },
   {
     id: 'card-p9-l06',
@@ -1011,17 +1011,17 @@ export const grammarCardsP9: GrammarCard[] = [
     step0Html: `<div class="card-title">-아/어/여지다 · -게 되다</div>
 <div class="card-body">两种表示变化的句型：-아/어지다 说状态自然变了，-게 되다 说事情顺势发展到某个结果。</div>
 <div class="hook-box">
-  <div style="font-size:12px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说：</div>
   <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
     <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
       <div style="font-size:9px;font-weight:800;color:#ff7fa8;margin-bottom:4px">-아/어지다（状态变化）</div>
       <div style="font-size:16px;font-weight:800;color:#241917">요즘 한국어가 늘어지고 있어요.</div>
-      <div style="font-size:12px;color:#89756e;margin-top:2px">最近韩语在慢慢进步。</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">最近韩语在慢慢进步。</div>
     </div>
     <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
       <div style="font-size:9px;font-weight:800;color:#2db89b;margin-bottom:4px">-게 되다（结果形成）</div>
       <div style="font-size:16px;font-weight:800;color:#241917">한국어를 좋아하게 됐어요.</div>
-      <div style="font-size:12px;color:#89756e;margin-top:2px">慢慢喜欢上韩语了。</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">慢慢喜欢上韩语了。</div>
     </div>
   </div>
 </div>
@@ -1031,17 +1031,17 @@ export const grammarCardsP9: GrammarCard[] = [
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
   <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-아/어지다 → 状态渐变</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">形容词词干 + 아/어지다（ㅏ/ㅗ→아지다，其他→어지다，하다→해지다）</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">날씨가 따뜻해졌어요.</span><span style="font-size:14px;color:#5a4640">天气变暖了。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">한국어 실력이 좋아졌어요.</span><span style="font-size:14px;color:#5a4640">韩语水平提高了。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">커지다 / 작아지다 / 빨라지다</span><span style="font-size:14px;color:#5a4640">变大/变小/变快</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">形容词词干 + 아/어지다（ㅏ/ㅗ→아지다，其他→어지다，하다→해지다）</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">날씨가 따뜻해졌어요.</span><span style="font-size:16px;color:#5a4640">天气变暖了。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">한국어 실력이 좋아졌어요.</span><span style="font-size:16px;color:#5a4640">韩语水平提高了。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">커지다 / 작아지다 / 빨라지다</span><span style="font-size:16px;color:#5a4640">变大/变小/变快</span></div>
   </div>
   <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-게 되다 → 顺势达到某结果</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">动词词干 + 게 되다</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">한국어를 배우게 됐어요.</span><span style="font-size:14px;color:#5a4640">就开始学韩语了。（顺其自然）</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">한국 드라마를 좋아하게 됐어요.</span><span style="font-size:14px;color:#5a4640">慢慢喜欢上韩剧了。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">알게 되다 / 만나게 되다</span><span style="font-size:14px;color:#5a4640">得知/相识</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">动词词干 + 게 되다</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">한국어를 배우게 됐어요.</span><span style="font-size:16px;color:#5a4640">就开始学韩语了。（顺其自然）</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">한국 드라마를 좋아하게 됐어요.</span><span style="font-size:16px;color:#5a4640">慢慢喜欢上韩剧了。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">알게 되다 / 만나게 되다</span><span style="font-size:16px;color:#5a4640">得知/相识</span></div>
   </div>
 </div>
 <div class="reminder-box">好记法：-아/어지다 = 状态"变了"（형용사首选）/ -게 되다 = 事情"发展成"（动사首选，说缘由和过程）</div>`,
@@ -1067,7 +1067,7 @@ export const grammarCardsP9: GrammarCard[] = [
         { pre: '요즘 건강이 많이 좋', post: '（最近身体好多了）', options: ['게 됐어요', '아졌어요', '아지게 됐어요', '아하게 됐어요'], answer: 1, explanation: '좋다 ㅗ结尾形容词 → 좋아지다，状态变化用 -아지다' },
       ],
     },
-    linkedGrammarIds: ['card-p4-l05'],
+    linkedGrammarIds: ['g83', 'g73'],
   },
   {
     id: 'card-p9-l07',
@@ -1242,7 +1242,7 @@ export const grammarCardsP9: GrammarCard[] = [
         },
       ],
     },
-    linkedGrammarIds: ['card-p9-l03'],
+    linkedGrammarIds: ['g72', 'g80'],
   },
   {
     id: 'card-p9-l08',
@@ -1426,7 +1426,7 @@ export const grammarCardsP9: GrammarCard[] = [
         },
       ],
     },
-    linkedGrammarIds: ['card-p4-l01', 'card-p5-l10'],
+    linkedGrammarIds: ['g39'],
   },
 
   {
@@ -1649,7 +1649,7 @@ export const grammarCardsP9: GrammarCard[] = [
         },
       ],
     },
-    linkedGrammarIds: ['card-p7-l08', 'card-p4-l01'],
+    linkedGrammarIds: ['g80', 'g75'],
   },
 
   {
@@ -1867,7 +1867,7 @@ export const grammarCardsP9: GrammarCard[] = [
         },
       ],
     },
-    linkedGrammarIds: ['card-p5-l02', 'card-p9-l06'],
+    linkedGrammarIds: ['g13', 'g67'],
   },
 
   {

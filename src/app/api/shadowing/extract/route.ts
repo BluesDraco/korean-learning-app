@@ -108,10 +108,15 @@ async function processWithDeepSeek(
   return results;
 }
 
-export async function POST(request: Request) {
+export async function POST(_request: Request) {
+  return NextResponse.json({ error: '该功能暂未开放' }, { status: 503 });
+}
+
+export async function POST_disabled(request: Request) {
   try {
     const auth = await getAuthFromCookie();
     if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (auth.role !== 'admin') return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
     const body = await request.json();
     const { url } = body;

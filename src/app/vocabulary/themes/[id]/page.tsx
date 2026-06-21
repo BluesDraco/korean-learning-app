@@ -34,6 +34,7 @@ export default function ThemeDetailPage() {
   const [managing, setManaging] = useState(false);
   const [selectedWords, setSelectedWords] = useState<Set<string>>(new Set());
   const [deletePending, setDeletePending] = useState(false);
+  const [savedSentenceIds, setSavedSentenceIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (managing) document.body.setAttribute('data-batch-managing', '1');
@@ -70,6 +71,15 @@ export default function ThemeDetailPage() {
       }
     })();
   }, [id, router]);
+
+  const saveSentence = async (korean: string, chinese: string, sourceTitle: string) => {
+    if (savedSentenceIds.has(korean)) return;
+    const existing = await db.sentences.where('korean').equals(korean).first().catch(() => null);
+    if (!existing) {
+      await db.sentences.add({ id: crypto.randomUUID(), korean, chinese, source_type: 'vocabulary', source_id: 'theme-' + id, source_title: sourceTitle, created_at: new Date().toISOString() }).catch(() => {});
+    }
+    setSavedSentenceIds((prev) => new Set(prev).add(korean));
+  };
 
   const handleAddAllToBook = async (bookId: string) => {
     if (!theme || addingAll) return;
@@ -453,6 +463,13 @@ export default function ThemeDetailPage() {
                               className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors shrink-0"
                             >
                               <Volume2 size={14} />
+                            </button>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); saveSentence(ex.korean, ex.chinese, entry.korean); }}
+                              className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] transition-colors shrink-0"
+                              style={{ color: savedSentenceIds.has(ex.korean) ? 'var(--pink-primary)' : 'var(--text-muted)' }}
+                            >
+                              <BookmarkPlus size={14} fill={savedSentenceIds.has(ex.korean) ? 'currentColor' : 'none'} />
                             </button>
                           </div>
                         ))}

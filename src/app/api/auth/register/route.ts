@@ -1,12 +1,22 @@
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/server/db';
-import { hashPassword, signToken, setAuthCookie, generateId } from '@/lib/server/auth';
+import { hashPassword, signToken, generateId } from '@/lib/server/auth';
 import { checkRateLimit } from '@/lib/server/rate-limit';
 import { filterContent } from '@/lib/contentFilter';
 
 function getClientIp(request: Request): string {
   const forwarded = request.headers.get('x-forwarded-for');
   return forwarded?.split(',')[0]?.trim() || '127.0.0.1';
+}
+
+function setTokenCookie(res: NextResponse, token: string) {
+  res.cookies.set('token', token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+    maxAge: 60 * 60 * 24 * 7,
+  });
 }
 
 export async function POST(request: Request) {
@@ -57,11 +67,15 @@ export async function POST(request: Request) {
     );
 
     const token = await signToken({ userId: id, username, role: 'user' });
-    await setAuthCookie(token);
-
-    return NextResponse.json({ success: true, user: { id, username, role: 'user' } });
-  } catch (err) {
+    const res = NextResponse.json({ success: true, user: { id, username, role: 'user' } });
+    setTokenCookie(res, token);
+    return res;
+  } catch (err: unknown) {
     console.error('Register error:', err);
+    const msg = err instanceof Error ? err.message : String(err);
+    if (msg.includes('UNIQUE') || msg.includes('unique')) {
+      return NextResponse.json({ error: '用户名已被注册' }, { status: 409 });
+    }
     return NextResponse.json({ error: '注册失败，请稍后重试' }, { status: 500 });
   }
 }

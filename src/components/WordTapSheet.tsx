@@ -26,7 +26,7 @@ interface WordTapSheetProps {
   onSaved?: (surface: string) => void;
 }
 
-type QueryState = 'loading' | 'found' | 'not_found' | 'error';
+type QueryState = 'loading' | 'found' | 'not_found' | 'error' | 'need_login';
 type SaveState = 'idle' | 'selecting' | 'saving' | 'saved';
 
 export function WordTapSheet({ surface, source, onClose, onSaved }: WordTapSheetProps) {
@@ -59,6 +59,7 @@ export function WordTapSheet({ surface, source, onClose, onSaved }: WordTapSheet
           body: JSON.stringify({ input: activeSurface }),
         });
         if (cancelled) return;
+        if (res.status === 401) { setQueryState('need_login'); return; }
         if (!res.ok) { setQueryState('not_found'); return; }
         const data = await res.json();
         if (cancelled) return;
@@ -215,6 +216,13 @@ export function WordTapSheet({ surface, source, onClose, onSaved }: WordTapSheet
           </div>
         )}
 
+        {queryState === 'need_login' && (
+          <div style={{ textAlign: 'center', padding: '20px 0' }}>
+            <p style={{ fontSize: 14, color: '#89756e', marginBottom: 12 }}>登录后才能查词</p>
+            <a href="/auth/login" style={{ display: 'inline-block', padding: '8px 20px', borderRadius: 10, background: '#241917', color: '#fff', fontSize: 13, fontWeight: 700, textDecoration: 'none' }}>去登录</a>
+          </div>
+        )}
+
         {queryState === 'found' && result && (
           <div style={{ marginBottom: 20 }}>
             {/* meaning */}
@@ -257,7 +265,7 @@ export function WordTapSheet({ surface, source, onClose, onSaved }: WordTapSheet
                         if (savedExamples.has(ex.korean)) return;
                         const existing = await db.sentences.where('korean').equals(ex.korean).first().catch(() => null);
                         if (!existing) {
-                          await db.sentences.add({ korean: ex.korean, chinese: ex.chinese, source_type: 'vocabulary', source_id: 'word-' + activeSurface, source_title: activeSurface, created_at: new Date().toISOString() });
+                          await db.sentences.add({ id: crypto.randomUUID(), korean: ex.korean, chinese: ex.chinese, source_type: 'vocabulary', source_id: 'word-' + activeSurface, source_title: activeSurface, created_at: new Date().toISOString() });
                         }
                         setSavedExamples(prev => new Set([...prev, ex.korean]));
                       }}

@@ -30,7 +30,7 @@ export const grammarParts: GrammarPart[] = [
   },
   {
     partNumber: 2,
-    title: '描述世界——存在、数量与时间',
+    title: '存在、数量与时间',
     lessons: [
       { lessonNumber: 1,  title: '에 가다, 와/과, 하고',                    cardId: 'card-p2-l01' },
       { lessonNumber: 2,  title: '이/가 있다/없다',                         cardId: 'card-p2-l02' },
@@ -47,7 +47,7 @@ export const grammarParts: GrammarPart[] = [
   },
   {
     partNumber: 3,
-    title: '说清楚——想法、原因与顺序',
+    title: '想法、原因与顺序',
     lessons: [
       { lessonNumber: 1,  title: '-고 있다, -고 있었다',                    cardId: 'card-p3-l01' },
       { lessonNumber: 2,  title: '무슨, 어느, 어떤',                        cardId: 'card-p3-l06' },
@@ -64,7 +64,7 @@ export const grammarParts: GrammarPart[] = [
   },
   {
     partNumber: 4,
-    title: '说得得体——连句、义务与礼貌',
+    title: '连句、义务与礼貌',
     lessons: [
       { lessonNumber: 1,  title: '-고, -아/어/여서',                        cardId: 'card-p4-l01' },
       { lessonNumber: 2,  title: '에게서, 한테서, 씨, 짜리',                 cardId: 'card-p4-l09' },
@@ -81,7 +81,7 @@ export const grammarParts: GrammarPart[] = [
   },
   {
     partNumber: 5,
-    title: '说得精准——条件、否定与出行',
+    title: '条件、否定与出行',
     lessons: [
       { lessonNumber: 1,  title: '-(으)면, -(으)려면',                      cardId: 'card-p5-l01' },
       { lessonNumber: 2,  title: '못, -지 못하다, 안, -지 않다',             cardId: 'card-p5-l02' },
@@ -115,7 +115,7 @@ export const grammarParts: GrammarPart[] = [
   },
   {
     partNumber: 7,
-    title: '说得更像——比较、时间与转折',
+    title: '比较、时间与转折',
     lessons: [
       { lessonNumber: 1, title: '처럼, 같이, 같은',                        cardId: 'card-p7-l01' },
       { lessonNumber: 2, title: '-은/ㄴ 지 나다/되다, 만에, 만이다',        cardId: 'card-p7-l02' },
@@ -130,7 +130,7 @@ export const grammarParts: GrammarPart[] = [
   },
   {
     partNumber: 8,
-    title: '说得深入——回忆、意志与经历',
+    title: '回忆、意志与经历',
     lessons: [
       { lessonNumber: 1, title: '-던, -았/었/였던',                        cardId: 'card-p8-l01' },
       { lessonNumber: 2, title: '-아/어/여야(만), -아/어/여야겠다',          cardId: 'card-p8-l02' },
@@ -144,7 +144,7 @@ export const grammarParts: GrammarPart[] = [
   },
   {
     partNumber: 9,
-    title: '说得自然——推测、变化与程度',
+    title: '推测、变化与程度',
     lessons: [
       { lessonNumber: 1,  title: '不定阶(1)：-겠-, -는/을 것 같다',          cardId: 'card-p9-l01' },
       { lessonNumber: 2,  title: '不定阶(2)：-네요, -군요, -구나',            cardId: 'card-p9-l02' },
@@ -161,7 +161,7 @@ export const grammarParts: GrammarPart[] = [
   },
   {
     partNumber: 10,
-    title: '说得地道——愿望、并列与指示',
+    title: '愿望、并列与指示',
     lessons: [
       { lessonNumber: 1,  title: '-을/ㄹ 뿐, -을/ㄹ 뿐이다',                cardId: 'card-p10-l01' },
       { lessonNumber: 2,  title: '-(으)면 좋겠다, -기(를) 바라다',            cardId: 'card-p10-l02' },
@@ -178,7 +178,7 @@ export const grammarParts: GrammarPart[] = [
   },
   {
     partNumber: 11,
-    title: '说得准确——间接引语上',
+    title: '间接引语上',
     lessons: [
       { lessonNumber: 1, title: '陈述句间接引语',                              cardId: 'card-p11-l01' },
       { lessonNumber: 2, title: '疑问句间接引语',                              cardId: 'card-p11-l02' },
@@ -193,7 +193,7 @@ export const grammarParts: GrammarPart[] = [
   },
   {
     partNumber: 12,
-    title: '说得流畅——间接引语下',
+    title: '间接引语下',
     lessons: [
       { lessonNumber: 1, title: '-을/ㄹ 테니까, -(이)든지',                    cardId: 'card-p12-l01' },
       { lessonNumber: 2, title: '-(으)려고 하다/가다/오다',                     cardId: 'card-p12-l02' },
@@ -203,6 +203,42 @@ export const grammarParts: GrammarPart[] = [
       { lessonNumber: 6, title: '"ㄹ" 的不规则音变',                           cardId: 'card-p12-l06' },
       { lessonNumber: 7, title: '"ㅎ" 的不规则音变',                           cardId: 'card-p12-l07' },
       { lessonNumber: 8, title: '综合练习⑫',                                  cardId: 'card-p12-l08' },
+    ],
+  },
+  {
+    partNumber: 13,
+    title: '高级语法上',
+    lessons: [
+      { lessonNumber: 1,  title: '(으)로 해서，-는 길에',                     cardId: 'card-p13-l01' },
+      { lessonNumber: 2,  title: '-을/를 만큼，-을/를 정도로',                cardId: 'card-p13-l02' },
+      { lessonNumber: 3,  title: '-도록，-을/를 수 있게，-게 하기 위하여',    cardId: 'card-p13-l03' },
+      { lessonNumber: 4,  title: '-을/를 지경이다，-을수록',                  cardId: 'card-p13-l04' },
+      { lessonNumber: 5,  title: '-테요，-던데요，-더라',                     cardId: 'card-p13-l05' },
+      { lessonNumber: 6,  title: '-았/었/였더니，-더니',                      cardId: 'card-p13-l06' },
+      { lessonNumber: 7,  title: '(으)로 인하여，(으)로 인한，-길래',         cardId: 'card-p13-l07' },
+      { lessonNumber: 8,  title: '-는/은/ㄴ 듯하다，-는/은/ㄴ/을 모양이다',  cardId: 'card-p13-l08' },
+      { lessonNumber: 9,  title: '-을/ㄹ 텐데，더러/보고',                   cardId: 'card-p13-l09' },
+      { lessonNumber: 10, title: '-잖아요，-거든요',                         cardId: 'card-p13-l10' },
+      { lessonNumber: 11, title: '综合练习⑬①',                              cardId: 'card-p13-l11' },
+      { lessonNumber: 12, title: '综合练习⑬②',                              cardId: 'card-p13-l12' },
+    ],
+  },
+  {
+    partNumber: 14,
+    title: '高级语法下',
+    lessons: [
+      { lessonNumber: 1,  title: '-아/어/여다 주다/하다/드리다',              cardId: 'card-p14-l01' },
+      { lessonNumber: 2,  title: '-아/어다 오다，주다（연속 동작）',           cardId: 'card-p14-l02' },
+      { lessonNumber: 3,  title: '-다니요，-고 말고요',                       cardId: 'card-p14-l03' },
+      { lessonNumber: 4,  title: '-아/어 오다，-아/어 가다',                  cardId: 'card-p14-l04' },
+      { lessonNumber: 5,  title: '에 대해(서)，에 관해서，에 관한',           cardId: 'card-p14-l05' },
+      { lessonNumber: 6,  title: '을/를 비롯한，비롯해서，만 해도',           cardId: 'card-p14-l06' },
+      { lessonNumber: 7,  title: '개나，까지（강조 보조사）',                 cardId: 'card-p14-l07' },
+      { lessonNumber: 8,  title: '(이)라든가，(이)라든지，마저',              cardId: 'card-p14-l08' },
+      { lessonNumber: 9,  title: '-는/은/ㄴ 체하다，-는/은/ㄴ 척하다',       cardId: 'card-p14-l09' },
+      { lessonNumber: 10, title: '-는가 하면，-기도 하다',                    cardId: 'card-p14-l10' },
+      { lessonNumber: 11, title: '综合练习⑭①',                              cardId: 'card-p14-l11' },
+      { lessonNumber: 12, title: '综合练习⑭②',                              cardId: 'card-p14-l12' },
     ],
   },
 ];

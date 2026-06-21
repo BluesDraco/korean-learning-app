@@ -11,38 +11,38 @@ export const grammarCardsP6: GrammarCard[] = [
     structureNote: '这节课学两个表达：① -을/ㄹ게요（我来做/我会做，向对方承诺）；\n② -겠군요（原来如此，推测感叹对方的处境）。\n前者强调"我的意志"，后者强调"我对你的共情"。\n两个都是口语常用句尾。',
     rulesNote: '-을/ㄹ게요 的收音规则与 -을/ㄹ 거예요 相同：\n有收音→을게요，无收音或ㄹ收音→ㄹ게요。\n关键限制：\n主语必须是第一人称（저/나），不能说"你会做"或"他会做"。\n-겠군요 直接接词干，过去推测加 -았/었겠군요。',
     scenarioNote: '"我来拿""不用担心我来帮你""你一定很辛苦吧""当时一定很开心吧"这两个表达在朋友间、职场、服务场合都高频出现。\n-을/ㄹ게요 让你主动承担，-겠군요 让你表达共情，都是让对方感到被照顾的礼貌表达。',
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;margin:0 0 4px 0;color:#241917">-을/ㄹ게요 · -겠군요</h1>
-<p style="font-size:.9rem;color:#89756e;margin:0 0 16px 0">说"我来做"，或听完后表达共情感叹。</p>
+    step0Html: `<h1 style="font-size:25px;font-weight:800;margin:0 0 4px 0;color:#241917">-을/ㄹ게요 · -겠군요</h1>
+<p style="font-size:16px;color:#89756e;margin:0 0 16px 0">说"我来做"，或听完后表达共情感叹。</p>
 <div class="block">
-  <div style="font-size:.85rem;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">걱정하지 마세요, 제가 도와줄게요.</span> — 不用担心，我来帮你。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">많이 피곤하겠군요.</span> — 你一定很累吧。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px"><span style="font-weight:700">그때 정말 힘드셨겠군요.</span> — 那时候你一定很辛苦吧。</div>
 </div>
 <div class="block">
   <div style="font-weight:700;margin-bottom:8px">两个表达</div>
-  <div style="margin-bottom:6px">① <b>-을/ㄹ게요</b> — 我来做/我会做（向对方承诺，主语必须是"我"）<br><span style="color:#89756e;font-size:.9rem">有收音→을게요，无收音/ㄹ收音→ㄹ게요</span></div>
-  <div>② <b>-겠군요</b> — 原来如此啊/一定是……（听对方说完后推测感叹）<br><span style="color:#89756e;font-size:.9rem">过去推测：-았/었겠군요</span></div>
+  <div style="margin-bottom:6px">① <b>-을/ㄹ게요</b> — 我来做/我会做（向对方承诺，主语必须是"我"）<br><span style="color:#89756e;font-size:16px">有收音→을게요，无收音/ㄹ收音→ㄹ게요</span></div>
+  <div>② <b>-겠군요</b> — 原来如此啊/一定是……（听对方说完后推测感叹）<br><span style="color:#89756e;font-size:16px">过去推测：-았/었겠군요</span></div>
 </div>
 <div class="reminder-box">-을/ㄹ게요 主语限制：只能说"我来做"，不能说"你会做/他会做"。갈 거예요（计划）vs 갈게요（向你承诺）— 语气不同。</div>`,
     compareHtml: `<div class="card-title">-을/ㄹ게요（承诺）vs -겠군요（感叹推测）</div>
 <div class="card-body">两者都有表态的意味，但方向不同：-을/ㄹ게요 是我主动承担（说话人→对方），-겠군요 是我对你的处境表示共情（感叹你的状态）。中文没有这种区分，但韩语用两套完全不同的语尾来区别。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-을/ㄹ게요</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">我来做/我会做（承诺，主语只能是我）</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">제가 먼저 갈게요.</span><span style="font-size:14px;color:#5a4640">我先走。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">제가 연락할게요.</span><span style="font-size:14px;color:#5a4640">我来联系你。</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">我来做/我会做（承诺，主语只能是我）</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">제가 먼저 갈게요.</span><span style="font-size:16px;color:#5a4640">我先走。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">제가 연락할게요.</span><span style="font-size:16px;color:#5a4640">我来联系你。</span></div>
   </div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-겠군요</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">推测感叹：你一定……（共情对方）</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">많이 바쁘겠군요.</span><span style="font-size:14px;color:#5a4640">你一定很忙吧。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">힘드셨겠군요.</span><span style="font-size:14px;color:#5a4640">那时一定很辛苦吧。</span></div></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">推测感叹：你一定……（共情对方）</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">많이 바쁘겠군요.</span><span style="font-size:16px;color:#5a4640">你一定很忙吧。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">힘드셨겠군요.</span><span style="font-size:16px;color:#5a4640">那时一定很辛苦吧。</span></div></div>
 </div>
 <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:10px">
-  <div style="font-size:14px;font-weight:700;color:#ff7fa8;margin-bottom:6px">-을/ㄹ게요 收音规则 + 主语限制</div>
-  <div style="font-size:15px;color:#241917">有收音 → <b>-을게요</b>：먹을게요 / 읽을게요</div>
-  <div style="font-size:15px;color:#241917">无收音 / ㄹ收音 → <b>-ㄹ게요</b>：갈게요 / 할게요</div>
-  <div style="font-size:15px;color:#e05555;margin-top:4px">⚠️ 主语只能是"我"：당신이 갈게요 ✗ — 不能对别人用</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:6px">-을/ㄹ게요 收音规则 + 主语限制</div>
+  <div style="font-size:16px;color:#241917">有收音 → <b>-을게요</b>：먹을게요 / 읽을게요</div>
+  <div style="font-size:16px;color:#241917">无收音 / ㄹ收音 → <b>-ㄹ게요</b>：갈게요 / 할게요</div>
+  <div style="font-size:16px;color:#e05555;margin-top:4px">⚠️ 主语只能是"我"：당신이 갈게요 ✗ — 不能对别人用</div>
 </div>
 <div class="reminder-box">갈게요（我来走/我先走，向对方承诺）vs 갈 거예요（我打算去，陈述计划）— 前者顾虑对方感受，后者只是陈述。-겠군요 可加过去时：힘드셨겠군요（那时一定很辛苦）。</div>`,
         overviewHtml: `<div class="overview">
@@ -55,8 +55,8 @@ export const grammarCardsP6: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">核心规律</div></div>
     <div class="ov-block">
       <div style="display:flex;flex-direction:column;gap:6px">
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#ff7fa8">-을/ㄹ게요</span>：说话人主动承诺"我来做"（我→对方）</div>
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#2db89b">-겠군요</span>：对对方状态的感叹/共情推测（我感受到你的处境）</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">-을/ㄹ게요</span>：说话人主动承诺"我来做"（我→对方）</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">-겠군요</span>：对对方状态的感叹/共情推测（我感受到你的处境）</div>
       </div>
     </div>
   </div>
@@ -186,7 +186,7 @@ export const grammarCardsP6: GrammarCard[] = [
       { wrong: '먹을게요. (主语是你)', correct: '드세요. / 먹어요.', note: '-을/ㄹ게요 主语只能是说话人自己' },
       { wrong: '어제 갔겠군요. (说话者自己亲历)', correct: '어제 힘드셨겠군요.', note: '-겠군요 用于推测他人情况，不用于叙述自己亲历的事' },
     ],
-    linkedGrammarIds: ['gp-18', 'gp-19'],
+    linkedGrammarIds: ['g51', 'g17'],
   },
   {
     id: 'card-p6-l02',
@@ -198,10 +198,10 @@ export const grammarCardsP6: GrammarCard[] = [
     structureNote: '这节课学"更礼貌的问法"和"正式场合的转折"。\n-나요? 适合动词，-은/ㄴ가요? 适合形容词，两者都比直接加？更温和。\n-ㅂ니다만/습니다만 是正式版的"但是"，常见于服务场合的礼貌拒绝或说明。',
     rulesNote: '-나요? 直接接词干，动词和形容词都可用，不看收音。\n-은/ㄴ가요? 只用于形容词：\n有收音→은가요?，无收音→ㄴ가요?。\n-ㅂ니다만：\n有收音词干→습니다만，无收音词干→ㅂ니다만。\n注意 이다→입니다만。',
     scenarioNote: '"请问你吃过韩国料理吗？""您方便现在接听电话吗？""非常抱歉，但现在没有空位"客服、问卷、初次见面的问候都频繁用到这节课的表达。\n学会 -나요? 和 -ㅂ니다만，你的韩语立刻显得有教养。',
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;margin:0 0 4px 0;color:#241917">-나요? · -은/ㄴ가요? · -ㅂ니다만</h1>
-<p style="font-size:.9rem;color:#89756e;margin:0 0 16px 0">比"吗？"更温柔的问法，以及正式场合的转折。</p>
+    step0Html: `<h1 style="font-size:25px;font-weight:800;margin:0 0 4px 0;color:#241917">-나요? · -은/ㄴ가요? · -ㅂ니다만</h1>
+<p style="font-size:16px;color:#89756e;margin:0 0 16px 0">比"吗？"更温柔的问法，以及正式场合的转折。</p>
 <div class="block">
-  <div style="font-size:.85rem;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">한국어를 공부했나요?</span> — 你学过韩语吗？</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">지금 시간이 있으신가요?</span> — 您现在方便吗？</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px"><span style="font-weight:700">죄송합니다만 잠깐만 기다려 주세요.</span> — 非常抱歉，请稍等一会儿。</div>
@@ -217,20 +217,20 @@ export const grammarCardsP6: GrammarCard[] = [
 <div class="card-body">两个都是礼貌韩语的核心表达：-나요? 让提问听起来更温和不强硬；-ㅂ니다만 是正式场合表达"虽然……但是"的标准方式，比直接说 -지만 更有礼貌。两者都常见于职场和正式对话。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-나요?</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">柔和疑问，比 -아요? 更温和</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">경제학을 공부했나요?</span><span style="font-size:14px;color:#5a4640">你学过经济学吗？</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">지금 바쁘신가요?</span><span style="font-size:14px;color:#5a4640">您现在忙吗？</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">柔和疑问，比 -아요? 更温和</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">경제학을 공부했나요?</span><span style="font-size:16px;color:#5a4640">你学过经济学吗？</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">지금 바쁘신가요?</span><span style="font-size:16px;color:#5a4640">您现在忙吗？</span></div>
   </div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-ㅂ니다만</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">正式转折：虽然……但是</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">도와드리고 싶습니다만 시간이 없어요.</span><span style="font-size:14px;color:#5a4640">虽然想帮，但没时间。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">죄송합니다만 다시 말씀해 주세요.</span><span style="font-size:14px;color:#5a4640">抱歉，请再说一遍。</span></div></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">正式转折：虽然……但是</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">도와드리고 싶습니다만 시간이 없어요.</span><span style="font-size:16px;color:#5a4640">虽然想帮，但没时间。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">죄송합니다만 다시 말씀해 주세요.</span><span style="font-size:16px;color:#5a4640">抱歉，请再说一遍。</span></div></div>
 </div>
 <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:10px">
-  <div style="font-size:14px;font-weight:700;color:#ff7fa8;margin-bottom:6px">-나요? 变形规则</div>
-  <div style="font-size:15px;color:#241917">动词 → 词干 + <b>-나요?</b>：가나요? / 먹나요? / 공부하나요?</div>
-  <div style="font-size:15px;color:#241917">形容词现在时 → <b>-은/ㄴ가요?</b>：좋은가요? / 바쁜가요?</div>
-  <div style="font-size:15px;color:#241917">过去时 → -았/었 + <b>나요?</b>：갔나요? / 먹었나요?</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:6px">-나요? 变形规则</div>
+  <div style="font-size:16px;color:#241917">动词 → 词干 + <b>-나요?</b>：가나요? / 먹나요? / 공부하나요?</div>
+  <div style="font-size:16px;color:#241917">形容词现在时 → <b>-은/ㄴ가요?</b>：좋은가요? / 바쁜가요?</div>
+  <div style="font-size:16px;color:#241917">过去时 → -았/었 + <b>나요?</b>：갔나요? / 먹었나요?</div>
 </div>
 <div class="reminder-box">좋나요? ✗ → 좋은가요? ✓ — 形容词现在时用 -은/ㄴ가요?，不用 -나요?。-ㅂ니다만 比 -지만 更正式有礼貌，职场道歉/婉拒时首选。</div>`,
         overviewHtml: `<div class="overview">
@@ -243,9 +243,9 @@ export const grammarCardsP6: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">核心规律</div></div>
     <div class="ov-block">
       <div style="display:flex;flex-direction:column;gap:6px">
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#ff7fa8">동사+-나요?</span>：比吗？更柔和的问句（어떻게 하나요?）</div>
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#2db89b">형용사+-은/ㄴ가요?</span>：形容词疑问（좋은가요? / 큰가요?）</div>
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#6b7ff0">-ㅂ니다만</span>：正式转折（……，但是……）</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">동사+-나요?</span>：比吗？更柔和的问句（어떻게 하나요?）</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">형용사+-은/ㄴ가요?</span>：形容词疑问（좋은가요? / 큰가요?）</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#6b7ff0">-ㅂ니다만</span>：正式转折（……，但是……）</div>
       </div>
     </div>
   </div>
@@ -379,7 +379,7 @@ export const grammarCardsP6: GrammarCard[] = [
       { wrong: '학생ㄴ가요?', correct: '학생인가요?', note: '名词用 -인가요?，不能直接接 -ㄴ가요?' },
       { wrong: '어렵나요? (형용사 현재)', correct: '어려운가요?', note: '形容词现在时用 -은/ㄴ가요?，-나요? 是动词专用' },
     ],
-    linkedGrammarIds: ['gp-20'],
+    linkedGrammarIds: [],
   },
   {
     id: 'card-p6-l03',
@@ -391,38 +391,38 @@ export const grammarCardsP6: GrammarCard[] = [
     structureNote: '这节课学两个口语必备小词：\n아직（还/仍然）常配否定句，아직 안 했어요 = 还没做；\n은요/는요 接在名词后面反问"那……呢？"，是追问对方的最简洁方式。\n两个都是日常对话里用频极高的表达。',
     rulesNote: '아직 放在否定词前：\n아직 안/못/지 않다。\n아직도 语气更强，带惊讶或不耐烦。\n아직 也可配肯定句表示"仍然在做中"：\n아직 공부해요（还在学呢）。\n은요/는요 的收音规则：\n名词有收音→은요，无收音→는요。',
     scenarioNote: '"你作业交了吗？""还没。\n""那小明呢？"아직 和 은요/는요 是聊进度、问对方情况时最自然的表达。\n追剧时、朋友间问进度、课堂互动里随处可见。\n学会这两个词，对话立刻更流畅自然。',
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;margin:0 0 4px 0;color:#241917">아직 · 은요/는요</h1>
-<p style="font-size:.9rem;color:#89756e;margin:0 0 16px 0">说"还没……"，或追问"那你呢"。</p>
+    step0Html: `<h1 style="font-size:25px;font-weight:800;margin:0 0 4px 0;color:#241917">아직 · 은요/는요</h1>
+<p style="font-size:16px;color:#89756e;margin:0 0 16px 0">说"还没……"，或追问"那你呢"。</p>
 <div class="block">
-  <div style="font-size:.85rem;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">아직 안 끝났어요.</span> — 还没结束。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">아직 여기 있어요.</span> — 还在这里呢。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px"><span style="font-weight:700">저는 못 가요. 손창 씨는요?</span> — 我不能去。那孙畅呢？</div>
 </div>
 <div class="block">
   <div style="font-weight:700;margin-bottom:8px">两个口语必备小词</div>
-  <div style="margin-bottom:6px">① <b>아직</b> — 还/仍然，常配否定句（아직 안/못）= 还没<br><span style="color:#89756e;font-size:.9rem">아직도 语气更强，带"都这时候了还……"的惊讶</span></div>
-  <div>② <b>은요/는요</b> — 那……呢？（接名词反问）<br><span style="color:#89756e;font-size:.9rem">有收音→은요，无收音→는요</span></div>
+  <div style="margin-bottom:6px">① <b>아직</b> — 还/仍然，常配否定句（아직 안/못）= 还没<br><span style="color:#89756e;font-size:16px">아직도 语气更强，带"都这时候了还……"的惊讶</span></div>
+  <div>② <b>은요/는요</b> — 那……呢？（接名词反问）<br><span style="color:#89756e;font-size:16px">有收音→은요，无收音→는요</span></div>
 </div>
 <div class="reminder-box">아직 也可用于肯定句：아직 공부해요（还在学呢）。은요/는요 只接名词，不能直接接动词词干。</div>`,
     compareHtml: `<div class="card-title">아직（状态副词）vs 은요/는요（追问助词）</div>
 <div class="card-body">아직 是副词，修饰整个句子，表示"还没/仍然"；은요/는요 接在名词后追问对方情况，是对话里最简洁的反问方式。两者常常连着用：先用 아직 回答，再用 은요/는요 反问。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">아직 + 否定</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">还没……（未完成状态）</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">아직 도착 안 했어요.</span><span style="font-size:14px;color:#5a4640">还没到。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">아직 못 먹었어요.</span><span style="font-size:14px;color:#5a4640">还没吃。</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">还没……（未完成状态）</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">아직 도착 안 했어요.</span><span style="font-size:16px;color:#5a4640">还没到。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">아직 못 먹었어요.</span><span style="font-size:16px;color:#5a4640">还没吃。</span></div>
   </div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">은요/는요</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">那……呢？（追问，只接名词）</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">저는 갔어요. 친구는요?</span><span style="font-size:14px;color:#5a4640">我去了。那朋友呢？</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">오늘은요?</span><span style="font-size:14px;color:#5a4640">那今天呢？</span></div></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">那……呢？（追问，只接名词）</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">저는 갔어요. 친구는요?</span><span style="font-size:16px;color:#5a4640">我去了。那朋友呢？</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">오늘은요?</span><span style="font-size:16px;color:#5a4640">那今天呢？</span></div></div>
 </div>
 <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:10px">
-  <div style="font-size:14px;font-weight:700;color:#ff7fa8;margin-bottom:6px">은요/는요 收音规则</div>
-  <div style="font-size:15px;color:#241917">有收音名词 → <b>은요</b>：손창 씨는요? / 형은요?</div>
-  <div style="font-size:15px;color:#241917">无收音名词 → <b>는요</b>：오늘은요? / 내일은요? / 저는요?</div>
-  <div style="font-size:15px;color:#e05555;margin-top:4px">⚠️ 只能接名词：가는요? ✗ — 动词后不能直接加 은요/는요</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:6px">은요/는요 收音规则</div>
+  <div style="font-size:16px;color:#241917">有收音名词 → <b>은요</b>：손창 씨는요? / 형은요?</div>
+  <div style="font-size:16px;color:#241917">无收音名词 → <b>는요</b>：오늘은요? / 내일은요? / 저는요?</div>
+  <div style="font-size:16px;color:#e05555;margin-top:4px">⚠️ 只能接名词：가는요? ✗ — 动词后不能直接加 은요/는요</div>
 </div>
 <div class="reminder-box">아직도 안 왔어요（都这时候了还没来，语气更强）vs 아직 안 왔어요（还没来）— 아직도 比 아직 更强调。아직 肯定用法：아직 여기 있어요（还在这里）/ 아직 기다리고 있어요（还在等）。</div>`,
         overviewHtml: `<div class="overview">
@@ -435,9 +435,9 @@ export const grammarCardsP6: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">核心规律</div></div>
     <div class="ov-block">
       <div style="display:flex;flex-direction:column;gap:6px">
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#ff7fa8">아직 + 否定</span>：还没……（아직 안 했어요）</div>
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#ff7fa8">아직 + 肯定</span>：还在……（아직 있어요）</div>
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#2db89b">은요/는요</span>：追问"那……呢？"</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">아직 + 否定</span>：还没……（아직 안 했어요）</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">아직 + 肯定</span>：还在……（아직 있어요）</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">은요/는요</span>：追问"那……呢？"</div>
       </div>
     </div>
   </div>
@@ -579,38 +579,38 @@ export const grammarCardsP6: GrammarCard[] = [
     structureNote: '这节课学"问别人计划"和"先做完再做"：\n-을/ㄹ 건가요? 是询问对方将来意图的口语问句；\n-고 나서 强调动作的先后顺序和完成感，相当于"做完……之后"。',
     rulesNote: '-을/ㄹ 건가요? 的收音规则与 -을/ㄹ 거예요 相同：\n有收音→을 건가요?，无收音/ㄹ→ㄹ 건가요?。\n只用于疑问句，不用于陈述。\n-고 나서 直接接动词词干+고，나서 固定不变。\n나서 来自 나다（结束/出来），强调"完成"含义。',
     scenarioNote: '"你今天下班后打算做什么？""等我吃完饭再出发。\n""作业做完再玩。\n"询问计划和描述做事顺序是日常对话的基础。\n学会 -을/ㄹ 건가요? 和 -고 나서，你能流畅安排事情、讨论计划。',
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;margin:0 0 4px 0;color:#241917">-을/ㄹ 건가요? · -고 나서</h1>
-<p style="font-size:.9rem;color:#89756e;margin:0 0 16px 0">问别人打算做什么，或说做完才做下一件事。</p>
+    step0Html: `<h1 style="font-size:25px;font-weight:800;margin:0 0 4px 0;color:#241917">-을/ㄹ 건가요? · -고 나서</h1>
+<p style="font-size:16px;color:#89756e;margin:0 0 16px 0">问别人打算做什么，或说做完才做下一件事。</p>
 <div class="block">
-  <div style="font-size:.85rem;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">오늘 저녁에 뭘 먹을 건가요?</span> — 今天晚上打算吃什么？</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">퇴근 후에 바로 갈 건가요?</span> — 下班后直接去吗？</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px"><span style="font-weight:700">숙제를 다 하고 나서 쉬어요.</span> — 作业全做完之后再休息。</div>
 </div>
 <div class="block">
   <div style="font-weight:700;margin-bottom:8px">两个结构</div>
-  <div style="margin-bottom:6px">① <b>-을/ㄹ 건가요?</b> — 询问对方将来打算（只用于疑问句）<br><span style="color:#89756e;font-size:.9rem">有收音→을 건가요?，无收音/ㄹ→ㄹ 건가요?</span></div>
-  <div>② <b>-고 나서</b> — 做完A之后才做B（强调完成顺序）<br><span style="color:#89756e;font-size:.9rem">直接接词干+고，나서 固定不变</span></div>
+  <div style="margin-bottom:6px">① <b>-을/ㄹ 건가요?</b> — 询问对方将来打算（只用于疑问句）<br><span style="color:#89756e;font-size:16px">有收音→을 건가요?，无收音/ㄹ→ㄹ 건가요?</span></div>
+  <div>② <b>-고 나서</b> — 做完A之后才做B（强调完成顺序）<br><span style="color:#89756e;font-size:16px">直接接词干+고，나서 固定不变</span></div>
 </div>
 <div class="reminder-box">-을/ㄹ 건가요? 只用于疑问句，陈述计划用 -을/ㄹ 거예요。-고 나서 vs -고：나서 强调"前面那件事真的做完了"，-고 只表示顺序。</div>`,
     compareHtml: `<div class="card-title">-을/ㄹ 건가요?（询问计划）vs -고 나서（完成后）</div>
 <div class="card-body">两者都和将来的行动有关，但用途不同：-을/ㄹ 건가요? 是向对方提问计划的疑问句；-고 나서 是连接两个动作，强调前一个动作必须先彻底完成才做下一个。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-을/ㄹ 건가요?</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">询问对方将来打算（只用于疑问）</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">퇴근 후에 바로 갈 건가요?</span><span style="font-size:14px;color:#5a4640">下班后直接去吗？</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">콘서트가 끝난 후에 뭘 할 건가요?</span><span style="font-size:14px;color:#5a4640">演唱会结束后打算做什么？</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">询问对方将来打算（只用于疑问）</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">퇴근 후에 바로 갈 건가요?</span><span style="font-size:16px;color:#5a4640">下班后直接去吗？</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">콘서트가 끝난 후에 뭘 할 건가요?</span><span style="font-size:16px;color:#5a4640">演唱会结束后打算做什么？</span></div>
   </div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-고 나서</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">做完A之后才做B（强调完成）</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">밥을 먹고 나서 산책해요.</span><span style="font-size:14px;color:#5a4640">吃完饭之后散步。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">숙제를 끝내고 나서 놀아요.</span><span style="font-size:14px;color:#5a4640">作业做完之后再玩。</span></div></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">做完A之后才做B（强调完成）</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">밥을 먹고 나서 산책해요.</span><span style="font-size:16px;color:#5a4640">吃完饭之后散步。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">숙제를 끝내고 나서 놀아요.</span><span style="font-size:16px;color:#5a4640">作业做完之后再玩。</span></div></div>
 </div>
 <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:10px">
-  <div style="font-size:14px;font-weight:700;color:#ff7fa8;margin-bottom:6px">-고 vs -고 나서 区别</div>
-  <div style="font-size:15px;color:#241917">밥을 먹고 산책해요 — 吃饭，然后散步（中性顺序）</div>
-  <div style="font-size:15px;color:#241917">밥을 먹고 나서 산책해요 — 吃完饭之后再散步（强调先完成）</div>
-  <div style="font-size:15px;color:#89756e;margin-top:4px">나서 加强"前句完全结束"的语气，比单独 -고 更强调顺序</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:6px">-고 vs -고 나서 区别</div>
+  <div style="font-size:16px;color:#241917">밥을 먹고 산책해요 — 吃饭，然后散步（中性顺序）</div>
+  <div style="font-size:16px;color:#241917">밥을 먹고 나서 산책해요 — 吃完饭之后再散步（强调先完成）</div>
+  <div style="font-size:16px;color:#89756e;margin-top:4px">나서 加强"前句完全结束"的语气，比单独 -고 更强调顺序</div>
 </div>
 <div class="reminder-box">-을/ㄹ 건가요? 只用于疑问句，陈述自己的计划用 -을/ㄹ 거예요：공부할 건가요 ✗（自己）→ 공부할 거예요 ✓。-고 나서 接词干，不接过去时：갔고 나서 ✗ → 가고 나서 ✓。</div>`,
         overviewHtml: `<div class="overview">
@@ -623,8 +623,8 @@ export const grammarCardsP6: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">核心规律</div></div>
     <div class="ov-block">
       <div style="display:flex;flex-direction:column;gap:6px">
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#ff7fa8">-을/ㄹ 건가요?</span>：礼貌询问对方打算（你打算……吗？）</div>
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#2db89b">-고 나서</span>：强调前一动作完成后，再做后一动作</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">-을/ㄹ 건가요?</span>：礼貌询问对方打算（你打算……吗？）</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">-고 나서</span>：强调前一动作完成后，再做后一动作</div>
       </div>
     </div>
   </div>
@@ -756,7 +756,7 @@ export const grammarCardsP6: GrammarCard[] = [
       { wrong: '밥을 먹고 나서고 커피를 마셔요.', correct: '밥을 먹고 나서 커피를 마셔요.', note: '-고 나서 后直接接下一动作，不再加 고' },
       { wrong: '공부할 건가요. (自己的计划)', correct: '공부할 거예요.', note: '-을/ㄹ 건가요? 用于询问他人计划，自己的计划用 -을/ㄹ 거예요' },
     ],
-    linkedGrammarIds: ['gp-21'],
+    linkedGrammarIds: ['g21'],
   },
   {
     id: 'card-p6-l05',
@@ -768,38 +768,38 @@ export const grammarCardsP6: GrammarCard[] = [
     structureNote: '这节课学两种表达强烈情绪的句型：\n-(으)면 큰일이다 表示"一旦发生就麻烦/完蛋了"（担心/警告语气）；\n-아/어/여 버리다 接在动词后面，表示动作彻底完成，有时带轻松，有时带遗憾，取决于语境。',
     rulesNote: '-(으)면 큰일이다 的收音规则同 -(으)면：\n有收音→으면 큰일이다，无收音→면 큰일이다。\n-아/어/여 버리다 的连接规则同 해요体：\n阳性元音(ㅏ/ㅗ)→아 버리다，其余→어 버리다，하다→해 버리다。\n버리다 本身可以变时态：\n버렸어요（彻底完了）。',
     scenarioNote: '"要是错过末班车就麻烦了！""把零食全吃完了""手机电量用完了"这两个表达在表达担忧、懊悔或轻松完成时都很自然。\n聊日常生活、追剧吐槽时经常用到 버리다，让你的韩语更有感情色彩。',
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;margin:0 0 4px 0;color:#241917">-(으)면 큰일이다 · -아/어/여 버리다</h1>
-<p style="font-size:.9rem;color:#89756e;margin:0 0 16px 0">说"要是这样就麻烦了"，或彻底做完了某件事。</p>
+    step0Html: `<h1 style="font-size:25px;font-weight:800;margin:0 0 4px 0;color:#241917">-(으)면 큰일이다 · -아/어/여 버리다</h1>
+<p style="font-size:16px;color:#89756e;margin:0 0 16px 0">说"要是这样就麻烦了"，或彻底做完了某件事。</p>
 <div class="block">
-  <div style="font-size:.85rem;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">지각하면 큰일이에요.</span> — 要是迟到就麻烦了。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">비행기를 놓쳐 버렸어요.</span> — 把飞机错过了。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px"><span style="font-weight:700">과자를 다 먹어 버렸어요.</span> — 把零食全吃完了。</div>
 </div>
 <div class="block">
   <div style="font-weight:700;margin-bottom:8px">两个结构</div>
-  <div style="margin-bottom:6px">① <b>-(으)면 큰일이다</b> — 要是……就麻烦了（担心/警告）<br><span style="color:#89756e;font-size:.9rem">有收音→으면 큰일이다，无收音→면 큰일이다</span></div>
-  <div>② <b>-아/어/여 버리다</b> — 彻底完成/消耗殆尽<br><span style="color:#89756e;font-size:.9rem">变形同 해요体：阳性元音→아 버리다，其他→어 버리다，하다→해 버리다</span></div>
+  <div style="margin-bottom:6px">① <b>-(으)면 큰일이다</b> — 要是……就麻烦了（担心/警告）<br><span style="color:#89756e;font-size:16px">有收音→으면 큰일이다，无收音→면 큰일이다</span></div>
+  <div>② <b>-아/어/여 버리다</b> — 彻底完成/消耗殆尽<br><span style="color:#89756e;font-size:16px">变形同 해요体：阳性元音→아 버리다，其他→어 버리다，하다→해 버리다</span></div>
 </div>
 <div class="reminder-box">-(으)면 큰일이다 vs -(으)면 안 되다：前者有"大灾难"的强烈感，后者是单纯禁止。-아/어 버리다 可以带遗憾（잊어 버렸어요）也可以带轻松（다 해 버렸어요）。</div>`,
     compareHtml: `<div class="card-title">-(으)면 큰일이다（糟糕假设）vs -아/어/여 버리다（彻底完成）</div>
 <div class="card-body">两个表达都带强烈情感：큰일이다 是"预想糟糕结果"的担心/警告；버리다 是动作彻底完成，语气取决于语境——可以是轻松（终于做完了）也可以是遗憾（完蛋了）。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-(으)면 큰일이다</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">假设糟糕后果，担心/警告</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">시험을 못 보면 큰일이에요.</span><span style="font-size:14px;color:#5a4640">要是考不好就麻烦了。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">지각하면 큰일이에요.</span><span style="font-size:14px;color:#5a4640">要是迟到就麻烦了。</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">假设糟糕后果，担心/警告</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">시험을 못 보면 큰일이에요.</span><span style="font-size:16px;color:#5a4640">要是考不好就麻烦了。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">지각하면 큰일이에요.</span><span style="font-size:16px;color:#5a4640">要是迟到就麻烦了。</span></div>
   </div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-아/어/여 버리다</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">彻底完成（语气由语境定）</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">숙제를 다 해 버렸어요.</span><span style="font-size:14px;color:#5a4640">作业全做完了。（轻松）</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">비행기를 놓쳐 버렸어요.</span><span style="font-size:14px;color:#5a4640">把飞机错过了。（遗憾）</span></div></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">彻底完成（语气由语境定）</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">숙제를 다 해 버렸어요.</span><span style="font-size:16px;color:#5a4640">作业全做完了。（轻松）</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">비행기를 놓쳐 버렸어요.</span><span style="font-size:16px;color:#5a4640">把飞机错过了。（遗憾）</span></div></div>
 </div>
 <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:10px">
-  <div style="font-size:14px;font-weight:700;color:#ff7fa8;margin-bottom:6px">-아/어/여 버리다 变形规则</div>
-  <div style="font-size:15px;color:#241917">阳性元音（아/오）→ <b>아 버리다</b>：보다→봐 버려요 / 팔다→팔아 버려요</div>
-  <div style="font-size:15px;color:#241917">其他元音 → <b>어 버리다</b>：먹다→먹어 버려요 / 잊다→잊어 버려요</div>
-  <div style="font-size:15px;color:#241917">하다 → <b>해 버리다</b>：말하다→말해 버려요</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:6px">-아/어/여 버리다 变形规则</div>
+  <div style="font-size:16px;color:#241917">阳性元音（아/오）→ <b>아 버리다</b>：보다→봐 버려요 / 팔다→팔아 버려요</div>
+  <div style="font-size:16px;color:#241917">其他元音 → <b>어 버리다</b>：먹다→먹어 버려요 / 잊다→잊어 버려요</div>
+  <div style="font-size:16px;color:#241917">하다 → <b>해 버리다</b>：말하다→말해 버려요</div>
 </div>
 <div class="reminder-box">-(으)면 큰일이다 vs -(으)면 안 되다：큰일이다 有"大灾难"的强烈感，안 되다 是单纯禁止。놓쳐 버렸어요（遗憾）vs 다 해 버렸어요（轻松）— 버리다 的情感色彩由上下文决定。</div>`,
         overviewHtml: `<div class="overview">
@@ -812,8 +812,8 @@ export const grammarCardsP6: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">核心规律</div></div>
     <div class="ov-block">
       <div style="display:flex;flex-direction:column;gap:6px">
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#ff7fa8">-(으)면 큰일이다</span>：假设糟糕情境——"要是……就麻烦了"</div>
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#2db89b">-아/어/여 버리다</span>：动作彻底完成，含轻松或遗憾语气</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">-(으)면 큰일이다</span>：假设糟糕情境——"要是……就麻烦了"</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">-아/어/여 버리다</span>：动作彻底完成，含轻松或遗憾语气</div>
       </div>
     </div>
   </div>
@@ -944,7 +944,7 @@ export const grammarCardsP6: GrammarCard[] = [
       { wrong: '공부해서 버렸어요.', correct: '공부해 버렸어요.', note: '-아/어/여 버리다 直接接补助动词，不加 서' },
       { wrong: '늦면 큰일이에요.', correct: '늦으면 큰일이에요.', note: '늦다 是有收音词干，接 -으면，不能直接接 -면' },
     ],
-    linkedGrammarIds: [],
+    linkedGrammarIds: ['g32'],
   },
   {
     id: 'card-p6-l06',
@@ -956,10 +956,10 @@ export const grammarCardsP6: GrammarCard[] = [
     structureNote: '这节课学"表达观点"的句型框架。\n韩语说"我觉得……"时，中间那个"……"要变形：\n动词→-는/ㄴ다고，形容词→-다고，名词→-(이)라고，最后统一接 생각해요。\n记住三个入口，观点表达就通了。',
     rulesNote: '动词收音规则：\n有收音→-는다고（먹는다고），无收音→-ㄴ다고（가다→간다고）。\n形容词直接接 -다고（예쁘다고，맛있다고）。\n名词：\n有收音→이라고，无收音→라고。\n过去时统一用 -았/었다고 생각해요。',
     scenarioNote: '"我觉得那首歌很好听""你觉得这家店怎么样？""我认为他是个好人"表达个人观点是所有对话的核心能力。\n看综艺、追剧讨论剧情、和韩国朋友聊天时，-다고 생각해요 是你最需要的句型之一。',
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;margin:0 0 4px 0;color:#241917">-다고 생각하다 · -(이)라고 생각하다</h1>
-<p style="font-size:.9rem;color:#89756e;margin:0 0 16px 0">说"我觉得……，我认为……"。</p>
+    step0Html: `<h1 style="font-size:25px;font-weight:800;margin:0 0 4px 0;color:#241917">-다고 생각하다 · -(이)라고 생각하다</h1>
+<p style="font-size:16px;color:#89756e;margin:0 0 16px 0">说"我觉得……，我认为……"。</p>
 <div class="block">
-  <div style="font-size:.85rem;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">그 가수가 라이브를 잘할 수 있다고 생각해요.</span> — 我觉得那个歌手能唱好现场。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">한국 생활이 재미있다고 생각해요.</span> — 我觉得韩国生活很有趣。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px"><span style="font-weight:700">그 남자가 좋은 사람이라고 생각해요.</span> — 我觉得那个男生是个好人。</div>
@@ -976,24 +976,24 @@ export const grammarCardsP6: GrammarCard[] = [
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:12px 0">
   <div class="tok-row">
     <div class="tok t-v">动词 -는/ㄴ다고</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">有收音→-는다고，无收音→-ㄴ다고</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">잘한다고 생각해요.</span><span style="font-size:14px;color:#5a4640">我觉得做得很好。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">간다고 생각해요.</span><span style="font-size:14px;color:#5a4640">我觉得会去。</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">有收音→-는다고，无收音→-ㄴ다고</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">잘한다고 생각해요.</span><span style="font-size:16px;color:#5a4640">我觉得做得很好。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">간다고 생각해요.</span><span style="font-size:16px;color:#5a4640">我觉得会去。</span></div>
   </div>
   <div class="tok-row">
     <div class="tok t-v">形容词 -다고</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">词干直接接 -다고</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">재미있다고 생각해요.</span><span style="font-size:14px;color:#5a4640">我觉得很有意思。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">어렵다고 생각해요.</span><span style="font-size:14px;color:#5a4640">我觉得很难。</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">词干直接接 -다고</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">재미있다고 생각해요.</span><span style="font-size:16px;color:#5a4640">我觉得很有意思。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">어렵다고 생각해요.</span><span style="font-size:16px;color:#5a4640">我觉得很难。</span></div>
   </div>
   <div class="tok-row">
     <div class="tok t-v">名词 -(이)라고</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">有收音→이라고，无收音→라고</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">좋은 사람이라고 생각해요.</span><span style="font-size:14px;color:#5a4640">我觉得是个好人。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">가수라고 생각했어요.</span><span style="font-size:14px;color:#5a4640">我以为是歌手。</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">有收音→이라고，无收音→라고</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">좋은 사람이라고 생각해요.</span><span style="font-size:16px;color:#5a4640">我觉得是个好人。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">가수라고 생각했어요.</span><span style="font-size:16px;color:#5a4640">我以为是歌手。</span></div>
   </div>
 </div>
-<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:15px;font-weight:700;color:#241917;margin-bottom:6px">-다고 하다 变形规则</div><div style="font-size:15px;color:#5a4640">动词现在时：-는다고（먹는다고）；形容词/이다：-다고（좋다고/학생이다고）。</div><div style="margin-top:4px;font-size:15px;color:#5a4640">过去时统一加 -았/었다고：먹었다고、좋았다고。-라고 생각해요 表示我觉得/认为，是日常表达看法的标准句式。</div></div>
+<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">-다고 하다 变形规则</div><div style="font-size:16px;color:#5a4640">动词现在时：-는다고（먹는다고）；形容词/이다：-다고（좋다고/학생이다고）。</div><div style="margin-top:4px;font-size:16px;color:#5a4640">过去时统一加 -았/었다고：먹었다고、좋았다고。-라고 생각해요 表示我觉得/认为，是日常表达看法的标准句式。</div></div>
 <div class="reminder-box">형용사에 -는다고 쓰면 틀려요：좋는다고 ✗ → 좋다고 ✓。동사에 -다고 바로 쓰면 틀려요：먹다고 ✗ → 먹는다고 ✓。过去时统一用 -았/었다고：잘했다고 생각해요 ✓。</div>`,
         overviewHtml: `<div class="overview">
   <div class="ov-hero">
@@ -1005,9 +1005,9 @@ export const grammarCardsP6: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">核心规律</div></div>
     <div class="ov-block">
       <div style="display:flex;flex-direction:column;gap:6px">
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#ff7fa8">동사</span>：-는다고 생각해요（먹는다고）</div>
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#2db89b">형용사</span>：-다고 생각해요（좋다고）</div>
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#6b7ff0">명사+이다</span>：-(이)라고 생각해요（학생이라고）</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">동사</span>：-는다고 생각해요（먹는다고）</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">형용사</span>：-다고 생각해요（좋다고）</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#6b7ff0">명사+이다</span>：-(이)라고 생각해요（학생이라고）</div>
       </div>
     </div>
   </div>
@@ -1138,7 +1138,7 @@ export const grammarCardsP6: GrammarCard[] = [
       { wrong: '먹다고 생각해요.', correct: '먹는다고 생각해요.', note: '有收音动词用 -는다고，不能直接接 -다고' },
       { wrong: '선생님이다고 생각해요.', correct: '선생님이라고 생각해요.', note: '名词后面引用用 -(이)라고，이다+다고 是错误形式' },
     ],
-    linkedGrammarIds: ['gp-22'],
+    linkedGrammarIds: ['g78'],
   },
   {
     id: 'card-p6-l07',
@@ -1150,10 +1150,10 @@ export const grammarCardsP6: GrammarCard[] = [
     structureNote: '这节课是冠词形的专项练习：\n动词现在时(-는 날)、动词过去时(-은/ㄴ 날)、形容词(-은/ㄴ 날)三种形式修饰 날。\n核心逻辑和修饰其他名词完全一样，只是 날 这个词在日常对话里特别常用，值得单独练习。',
     rulesNote: '动词现在冠词形：\n直接词干 + -는（不看收音）。\n动词过去冠词形：\n有收音→-은 날，无收音/ㄹ→-ㄴ 날。\n形容词冠词形：\n有收音→-은 날，无收音→-ㄴ 날（形容词现在时也用 -은/ㄴ）。\nㄹ收音动词/形容词：\nㄹ 脱落→-ㄴ 날（살다→사는 날，길다→긴 날）。',
     scenarioNote: '"第一次见面的那天""心情好的日子就出去逛""今天是休息的日子"描述特定日子是写日记、聊感受、回忆往事时的必备表达。\nKPOP 歌词里充满了 날 的用法，学会这节课你能读懂更多歌词。',
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;margin:0 0 4px 0;color:#241917">-는/은/ㄴ 날</h1>
-<p style="font-size:.9rem;color:#89756e;margin:0 0 16px 0">描述特定的日子——做什么的日子，或心情怎样的日子。</p>
+    step0Html: `<h1 style="font-size:25px;font-weight:800;margin:0 0 4px 0;color:#241917">-는/은/ㄴ 날</h1>
+<p style="font-size:16px;color:#89756e;margin:0 0 16px 0">描述特定的日子——做什么的日子，或心情怎样的日子。</p>
 <div class="block">
-  <div style="font-size:.85rem;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">오늘은 일하는 날이에요.</span> — 今天是工作的日子。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">기분이 좋은 날에 노래를 불러요.</span> — 心情好的日子就唱歌。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px"><span style="font-weight:700">처음 만난 날을 기억해요.</span> — 记得第一次见面的那天。</div>
@@ -1170,27 +1170,27 @@ export const grammarCardsP6: GrammarCard[] = [
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:12px 0">
   <div class="tok-row">
     <div class="tok t-v">动词现在 -는 날</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">习惯做/当前做的日子</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">일하는 날</span><span style="font-size:14px;color:#5a4640">工作的日子</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">운동하는 날</span><span style="font-size:14px;color:#5a4640">运动的日子</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">习惯做/当前做的日子</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">일하는 날</span><span style="font-size:16px;color:#5a4640">工作的日子</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">운동하는 날</span><span style="font-size:16px;color:#5a4640">运动的日子</span></div>
   </div>
   <div class="tok-row">
     <div class="tok t-v">动词过去 -은/ㄴ 날</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">过去某个特定那天</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">처음 만난 날</span><span style="font-size:14px;color:#5a4640">第一次见面的那天</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">졸업한 날</span><span style="font-size:14px;color:#5a4640">毕业的那天</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">过去某个特定那天</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">처음 만난 날</span><span style="font-size:16px;color:#5a4640">第一次见面的那天</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">졸업한 날</span><span style="font-size:16px;color:#5a4640">毕业的那天</span></div>
   </div>
   <div class="tok-row">
     <div class="tok t-v">形容词 -은/ㄴ 날</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">某种状态的日子</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">기분이 좋은 날</span><span style="font-size:14px;color:#5a4640">心情好的日子</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">바쁜 날</span><span style="font-size:14px;color:#5a4640">忙碌的日子</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">某种状态的日子</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">기분이 좋은 날</span><span style="font-size:16px;color:#5a4640">心情好的日子</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">바쁜 날</span><span style="font-size:16px;color:#5a4640">忙碌的日子</span></div>
   </div>
 </div>
 <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:10px">
-  <div style="font-size:14px;font-weight:700;color:#ff7fa8;margin-bottom:6px">KPOP 歌词里的 날</div>
-  <div style="font-size:15px;color:#241917">니가 없는 날（没有你的日子）/ 행복했던 날（曾经幸福的日子）</div>
-  <div style="font-size:15px;color:#241917">네가 좋은 날（喜欢你的日子）/ 우리가 처음 만난 날（我们第一次见面的那天）</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:6px">KPOP 歌词里的 날</div>
+  <div style="font-size:16px;color:#241917">니가 없는 날（没有你的日子）/ 행복했던 날（曾经幸福的日子）</div>
+  <div style="font-size:16px;color:#241917">네가 좋은 날（喜欢你的日子）/ 우리가 처음 만난 날（我们第一次见面的那天）</div>
 </div>
 <div class="reminder-box">기분이 좋는 날 ✗ → 기분이 좋은 날 ✓ — 形容词 좋다 有收音，用 -은，不用 -는。바쁘는 날 ✗ → 바쁜 날 ✓ — 形容词没有 -는 날 的形式。</div>`,
         overviewHtml: `<div class="overview">
@@ -1203,9 +1203,9 @@ export const grammarCardsP6: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">核心规律</div></div>
     <div class="ov-block">
       <div style="display:flex;flex-direction:column;gap:6px">
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#ff7fa8">동사 + -는 날</span>：만나는 날（见面那天）</div>
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#2db89b">형용사 + -은/ㄴ 날</span>：더운 날（热的日子）</div>
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#6b7ff0">명사 + (의) 날</span>：졸업(의) 날（毕业那天）</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">동사 + -는 날</span>：만나는 날（见面那天）</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">형용사 + -은/ㄴ 날</span>：더운 날（热的日子）</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#6b7ff0">명사 + (의) 날</span>：졸업(의) 날（毕业那天）</div>
       </div>
     </div>
   </div>
@@ -1341,7 +1341,7 @@ export const grammarCardsP6: GrammarCard[] = [
       { wrong: '아버지의 날이 날이에요.', correct: '아버지의 날이에요.', note: '名词 + 의 날 后直接接述语，不重复 날' },
       { wrong: '바쁘는 날', correct: '바쁜 날', note: '바쁘다 是形容词，冠词形是 -ㄴ（바쁜），不是 -는' },
     ],
-    linkedGrammarIds: ['gp-23'],
+    linkedGrammarIds: [],
   },
   {
     id: 'card-p6-l08',
@@ -1353,17 +1353,17 @@ export const grammarCardsP6: GrammarCard[] = [
     structureNote: '这节课学"没听清时怎么礼貌确认"。\n用疑问词（얼마/누구/어디/언제/뭐）代替没听清的部分，后面接 라고 했지요? 或 라고 하셨지요? 即可。\n사정이 있다 是独立短语，表示"有事/有苦衷"，常用来婉拒或提前离开时说明原因。',
     rulesNote: '얼마/누구/어디/언제 结尾无收音，直接接 라고 하다。\n무엇 有收音→이라고 하다；\n口语缩略 뭐 无收音→라고 하다（뭐라고 했지요?）。\n礼貌程度：\n하다→했지요?（普通），하셨지요?（尊敬）。\n사정이 있다/사정이 생겼다（有事了/临时有事）都常用。',
     scenarioNote: '"您说价格是多少来着？""刚才说是谁？""不好意思，我有点事先走了"这三种场景在购物、问路、聚会离场时都会遇到。\n사정이 있다 是礼貌退出的万能借口，-라고 했지요? 是确认信息的标准句型，实用性极高。',
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;margin:0 0 4px 0;color:#241917">얼마/누구 + 라고 했지요? · 사정이 있다</h1>
-<p style="font-size:.9rem;color:#89756e;margin:0 0 16px 0">礼貌确认没听清的内容，或说"我有事先走了"。</p>
+    step0Html: `<h1 style="font-size:25px;font-weight:800;margin:0 0 4px 0;color:#241917">얼마/누구 + 라고 했지요? · 사정이 있다</h1>
+<p style="font-size:16px;color:#89756e;margin:0 0 16px 0">礼貌确认没听清的内容，或说"我有事先走了"。</p>
 <div class="block">
-  <div style="font-size:.85rem;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">수리비가 얼마라고 했지요?</span> — 修理费您说是多少来着？</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">방금 뭐라고 하셨지요?</span> — 刚才说什么来着？</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px"><span style="font-weight:700">사정이 있어서 먼저 갈게요.</span> — 我有事，先走了。</div>
 </div>
 <div class="block">
   <div style="font-weight:700;margin-bottom:8px">两块内容</div>
-  <div style="margin-bottom:6px">① <b>疑问词 + -(이)라고 했지요?</b> — 用疑问词代替没听清的部分，礼貌确认<br><span style="color:#89756e;font-size:.9rem">얼마/누구/어디/언제 无收音→라고；무엇 有收音→이라고</span></div>
+  <div style="margin-bottom:6px">① <b>疑问词 + -(이)라고 했지요?</b> — 用疑问词代替没听清的部分，礼貌确认<br><span style="color:#89756e;font-size:16px">얼마/누구/어디/언제 无收音→라고；무엇 有收音→이라고</span></div>
   <div>② <b>사정이 있다</b> — 有事/有苦衷（礼貌退出的万能短语）</div>
 </div>
 <div class="reminder-box">얼마이라고 ✗ → 얼마라고 ✓（无收音直接接 라고）。무엇이라고 ✓ / 뭐라고 ✓（两种都正确）。尊敬体：-했지요? → -하셨지요?</div>`,
@@ -1371,20 +1371,20 @@ export const grammarCardsP6: GrammarCard[] = [
 <div class="card-body">疑问词末尾有无收音决定接 라고 还是 이라고：얼마/누구/어디/언제 无收音，直接接 라고；무엇 有收音 ㅅ，接 이라고。口语缩略 뭐 无收音，接 라고。规则和名词的 -(이)라고 完全相同。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">얼마/누구/어디/언제 + 라고</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">无收音疑问词 → 直接接 라고</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">생일이 언제라고 했지요?</span><span style="font-size:14px;color:#5a4640">生日说是什么时候来着？</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">수리비가 얼마라고 했지요?</span><span style="font-size:14px;color:#5a4640">修理费说是多少来着？</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">无收音疑问词 → 直接接 라고</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">생일이 언제라고 했지요?</span><span style="font-size:16px;color:#5a4640">生日说是什么时候来着？</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">수리비가 얼마라고 했지요?</span><span style="font-size:16px;color:#5a4640">修理费说是多少来着？</span></div>
   </div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">무엇 이라고 / 뭐라고</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">무엇 有收音→이라고 / 뭐→라고</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">방금 뭐라고 하셨지요?</span><span style="font-size:14px;color:#5a4640">刚才说什么来着？</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">이름이 무엇이라고 했지요?</span><span style="font-size:14px;color:#5a4640">名字说是什么来着？</span></div></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">무엇 有收音→이라고 / 뭐→라고</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">방금 뭐라고 하셨지요?</span><span style="font-size:16px;color:#5a4640">刚才说什么来着？</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">이름이 무엇이라고 했지요?</span><span style="font-size:16px;color:#5a4640">名字说是什么来着？</span></div></div>
 </div>
 <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:10px">
-  <div style="font-size:14px;font-weight:700;color:#ff7fa8;margin-bottom:6px">사정이 있다 — 礼貌退出万能句</div>
-  <div style="font-size:15px;color:#241917">사정이 있어서 먼저 갈게요 — 我有事，先走了（礼貌提前离场）</div>
-  <div style="font-size:15px;color:#241917">사정이 생겼어요 — 突然有事了（临时有变）</div>
-  <div style="font-size:15px;color:#89756e;margin-top:4px">사정 = 情况/苦衷，不说具体原因，礼貌又万能</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:6px">사정이 있다 — 礼貌退出万能句</div>
+  <div style="font-size:16px;color:#241917">사정이 있어서 먼저 갈게요 — 我有事，先走了（礼貌提前离场）</div>
+  <div style="font-size:16px;color:#241917">사정이 생겼어요 — 突然有事了（临时有变）</div>
+  <div style="font-size:16px;color:#89756e;margin-top:4px">사정 = 情况/苦衷，不说具体原因，礼貌又万能</div>
 </div>
 <div class="reminder-box">얼마이라고 ✗ → 얼마라고 ✓（无收音直接接 라고）。-했지요? 是 -라고 하다 的过去确认形，尊敬体：-했지요? → -하셨지요?。</div>`,
         overviewHtml: `<div class="overview">
@@ -1397,9 +1397,9 @@ export const grammarCardsP6: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">核心规律</div></div>
     <div class="ov-block">
       <div style="display:flex;flex-direction:column;gap:6px">
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#ff7fa8">뭐라고 하셨어요?</span>：您说的是什么？（礼貌再次确认）</div>
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#2db89b">어디라고 했어요?</span>：说的是哪里？</div>
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#6b7ff0">-(이)라고 하다</span>：转述/引用（他说……）</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">뭐라고 하셨어요?</span>：您说的是什么？（礼貌再次确认）</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">어디라고 했어요?</span>：说的是哪里？</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#6b7ff0">-(이)라고 하다</span>：转述/引用（他说……）</div>
       </div>
     </div>
   </div>
@@ -1531,7 +1531,7 @@ export const grammarCardsP6: GrammarCard[] = [
       { wrong: '사정이 있다서 못 가요.', correct: '사정이 있어서 못 가요.', note: '있다 接 -아/어서 时变为 있어서，不是 있다서' },
       { wrong: '어디이라고 하셨지요?', correct: '어디라고 하셨지요?', note: '어디 是无收音疑问词，接 라고，不接 이라고' },
     ],
-    linkedGrammarIds: [],
+    linkedGrammarIds: ['g79'],
   },
   {
     id: 'card-p6-l09',
@@ -1543,17 +1543,17 @@ export const grammarCardsP6: GrammarCard[] = [
     structureNote: '这节课学两个固定句式。\n第一个：\n-을/ㄹ 수 있을지 걱정이다，把"能力担忧"打包成一句话；\n第二个：\n-은/ㄴ 지 얼마 안 되다，用过去冠词形+지 表示"从做了那件事到现在时间很短"。\n两个都是固定搭配，整块记忆效率最高。',
     rulesNote: '-을/ㄹ 수 있을지：\n有收音→을지，无收音/ㄹ→ㄹ지，规则与 -을/ㄹ 수 있다 相同。\n-은/ㄴ 지 얼마 안 되다：\n动词过去冠词形 + 지（有收音→-은 지，无收音→-ㄴ 지）。\n时间表达：\n얼마 안 됐어요（没多久）/ 이제 막 됐어요（刚刚）。\n지(가) 中的 가 可省略。',
     scenarioNote: '"担心自己韩语够不够好""来韩国没多久还不熟悉""学韩语没多久"初学者自我介绍、解释自己水平时超级实用。\n两个句式都带有谦虚、坦诚的语气，在韩国文化里给人留下好印象。',
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;margin:0 0 4px 0;color:#241917">-을/ㄹ 수 있을지 걱정이다 · -은/ㄴ 지 얼마 안 되다</h1>
-<p style="font-size:.9rem;color:#89756e;margin:0 0 16px 0">说"担心能不能……"和"做了没多久"。</p>
+    step0Html: `<h1 style="font-size:25px;font-weight:800;margin:0 0 4px 0;color:#241917">-을/ㄹ 수 있을지 걱정이다 · -은/ㄴ 지 얼마 안 되다</h1>
+<p style="font-size:16px;color:#89756e;margin:0 0 16px 0">说"担心能不能……"和"做了没多久"。</p>
 <div class="block">
-  <div style="font-size:.85rem;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">발표를 잘할 수 있을지 걱정이에요.</span> — 担心能不能把发表做好。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">한국어에 적응할 수 있을지 걱정이에요.</span> — 担心能不能适应韩语。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px"><span style="font-weight:700">한국에 온 지 얼마 안 됐어요.</span> — 来韩国没多久。</div>
 </div>
 <div class="block">
   <div style="font-weight:700;margin-bottom:8px">两个固定句式</div>
-  <div style="margin-bottom:6px">① <b>-을/ㄹ 수 있을지 걱정이다</b> — 担心能不能做某事（整块记忆）<br><span style="color:#89756e;font-size:.9rem">有收音→을지，无收音/ㄹ→ㄹ지</span></div>
+  <div style="margin-bottom:6px">① <b>-을/ㄹ 수 있을지 걱정이다</b> — 担心能不能做某事（整块记忆）<br><span style="color:#89756e;font-size:16px">有收音→을지，无收音/ㄹ→ㄹ지</span></div>
   <div>② <b>-은/ㄴ 지 얼마 안 되다</b> — 做了没多久（动词过去冠词形+지 얼마 안 됐어요）</div>
 </div>
 <div class="reminder-box">한국에 온 지 얼마 안 됐어요（来韩国没多久）vs 온 지 3개월 됐어요（来了3个月）— 안 됐어요=没多久，됐어요=说明时长。</div>`,
@@ -1561,20 +1561,20 @@ export const grammarCardsP6: GrammarCard[] = [
 <div class="card-body">两个都是固定句式，整块记忆效率最高：걱정이다 前固定接 -을/ㄹ 수 있을지；얼마 안 되다 前接动词过去冠词形 -은/ㄴ 지。两者结构相似但含义完全不同，都是日常高频表达。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-을/ㄹ 수 있을지 걱정이다</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">担心能不能做到</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">따라 할 수 있을지 걱정이에요.</span><span style="font-size:14px;color:#5a4640">担心能不能跟上。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">발표를 잘할 수 있을지 걱정이에요.</span><span style="font-size:14px;color:#5a4640">担心能不能把发表做好。</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">担心能不能做到</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">따라 할 수 있을지 걱정이에요.</span><span style="font-size:16px;color:#5a4640">担心能不能跟上。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">발표를 잘할 수 있을지 걱정이에요.</span><span style="font-size:16px;color:#5a4640">担心能不能把发表做好。</span></div>
   </div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-은/ㄴ 지 얼마 안 되다</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">做了没多久（时间短暂）</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">배운 지 얼마 안 됐어요.</span><span style="font-size:14px;color:#5a4640">学了没多久。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">한국에 온 지 얼마 안 됐어요.</span><span style="font-size:14px;color:#5a4640">来韩国没多久。</span></div></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">做了没多久（时间短暂）</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">배운 지 얼마 안 됐어요.</span><span style="font-size:16px;color:#5a4640">学了没多久。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">한국에 온 지 얼마 안 됐어요.</span><span style="font-size:16px;color:#5a4640">来韩国没多久。</span></div></div>
 </div>
 <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:10px">
-  <div style="font-size:14px;font-weight:700;color:#ff7fa8;margin-bottom:6px">-은/ㄴ 지 时间表达对比</div>
-  <div style="font-size:15px;color:#241917">온 지 얼마 안 됐어요 — 来了没多久（时间短）</div>
-  <div style="font-size:15px;color:#241917">온 지 3개월 됐어요 — 来了3个月（说明时长）</div>
-  <div style="font-size:15px;color:#241917">온 지 오래됐어요 — 来了很久了（时间长）</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:6px">-은/ㄴ 지 时间表达对比</div>
+  <div style="font-size:16px;color:#241917">온 지 얼마 안 됐어요 — 来了没多久（时间短）</div>
+  <div style="font-size:16px;color:#241917">온 지 3개월 됐어요 — 来了3个月（说明时长）</div>
+  <div style="font-size:16px;color:#241917">온 지 오래됐어요 — 来了很久了（时间长）</div>
 </div>
 <div class="reminder-box">먹을 지 얼마 안 됐어요 ✗（未来形）→ 먹은 지 얼마 안 됐어요 ✓（过去冠词形）。걱정이에요 固定搭配，不说 걱정해요。-을지 걱정이다 整块记忆，不要拆开理解。</div>`,
         overviewHtml: `<div class="overview">
@@ -1587,8 +1587,8 @@ export const grammarCardsP6: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">核心规律</div></div>
     <div class="ov-block">
       <div style="display:flex;flex-direction:column;gap:6px">
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#ff7fa8">-을/ㄹ 수 있을지 걱정이다</span>：担心自己能不能做到</div>
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#2db89b">-은/ㄴ 지(가) 얼마 안 되다</span>：做了……没多久</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">-을/ㄹ 수 있을지 걱정이다</span>：担心自己能不能做到</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">-은/ㄴ 지(가) 얼마 안 되다</span>：做了……没多久</div>
       </div>
     </div>
   </div>
@@ -1720,7 +1720,7 @@ export const grammarCardsP6: GrammarCard[] = [
       { wrong: '먹을 지 얼마 안 됐어요.', correct: '먹은 지 얼마 안 됐어요.', note: '-은/ㄴ 지 얼마 안 되다 用过去冠词形，不能用未来形' },
       { wrong: '-ㄴ 지가 혼자서 쓰임 (시간 없이)', correct: '온 지 얼마 안 됐어요. / 온 지 3개월 됐어요.', note: '-은/ㄴ 지 必须和时间表达或 얼마 一起使用才自然' },
     ],
-    linkedGrammarIds: [],
+    linkedGrammarIds: ['g67'],
   },
   {
     id: 'card-p6-l10',
@@ -1732,38 +1732,38 @@ export const grammarCardsP6: GrammarCard[] = [
     structureNote: '这节课学两个情感表达句式：\n-을/ㄹ 생각도 못 하다 表示"连那个念头都没有"（强调不敢或根本没考虑）；\n이/가 그립다 是思念句，名词+이/가+그립다，形容词用法，直接描述思念的对象。\n两个都是情感丰富的表达，日记、聊天时很自然。',
     rulesNote: '-을/ㄹ 생각도 못 하다：\n有收音→을 생각도 못 하다，无收音/ㄹ→ㄹ 생각도 못 하다。\n생각도 못 했어요 是过去式（连想都没想过）。\n그립다 是形容词，变形：\n그리워요（해요体），그리웠어요（过去），그리운 사람（冠词形）。\n이/가 选择：\n思念对象有收音→이，无收音→가。',
     scenarioNote: '"连去韩国都不敢想""想念家乡的食物""思念以前的朋友"这节课的两个表达都带浓烈情感，是留学、旅行、异地生活时最常说的心情描述。\n写韩语日记、给韩国朋友发消息时用上这两句，情感表达立刻更真实。',
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;margin:0 0 4px 0;color:#241917">-을/ㄹ 생각도 못 하다 · 이/가 그립다</h1>
-<p style="font-size:.9rem;color:#89756e;margin:0 0 16px 0">说"连想都不敢想"，或表达思念之情。</p>
+    step0Html: `<h1 style="font-size:25px;font-weight:800;margin:0 0 4px 0;color:#241917">-을/ㄹ 생각도 못 하다 · 이/가 그립다</h1>
+<p style="font-size:16px;color:#89756e;margin:0 0 16px 0">说"连想都不敢想"，或表达思念之情。</p>
 <div class="block">
-  <div style="font-size:.85rem;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">혼자 여행할 생각도 못 해요.</span> — 连一个人旅行都不敢想。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">기름값이 너무 비싸서 차를 살 생각도 못 해요.</span> — 油价太贵，连买车都不敢想。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px"><span style="font-weight:700">고향 음식이 그리워요.</span> — 想念家乡的食物。</div>
 </div>
 <div class="block">
   <div style="font-weight:700;margin-bottom:8px">两个情感表达</div>
-  <div style="margin-bottom:6px">① <b>-을/ㄹ 생각도 못 하다</b> — 连那种念头都没有（极端程度）<br><span style="color:#89756e;font-size:.9rem">有收音→을 생각도 못 해요，无收音/ㄹ→ㄹ 생각도 못 해요</span></div>
-  <div>② <b>이/가 그립다</b> — 思念某人某物（情感形容词）<br><span style="color:#89756e;font-size:.9rem">그립다 ㅂ不规则→그리워요；思念对象用 이/가，不用 을/를</span></div>
+  <div style="margin-bottom:6px">① <b>-을/ㄹ 생각도 못 하다</b> — 连那种念头都没有（极端程度）<br><span style="color:#89756e;font-size:16px">有收音→을 생각도 못 해요，无收音/ㄹ→ㄹ 생각도 못 해요</span></div>
+  <div>② <b>이/가 그립다</b> — 思念某人某物（情感形容词）<br><span style="color:#89756e;font-size:16px">그립다 ㅂ不规则→그리워요；思念对象用 이/가，不用 을/를</span></div>
 </div>
 <div class="reminder-box">생각도 못 해요 中 도 是必须的，省略变成错误表达。친구를 그립다 ✗ → 친구가 그립다 ✓ — 그립다 是形容词，思念对象用 이/가。</div>`,
     compareHtml: `<div class="card-title">-을/ㄹ 생각도 못 하다（连想都不想）vs 이/가 그립다（思念）</div>
 <div class="card-body">两个都是表达强烈情感的高级表达：생각도 못 하다 强调"连那个念头都不敢有"（程度极端）；그립다 是思念形容词，直接说出心里想念的对象。两者都比普通表达语气更重，情感更饱满。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-을/ㄹ 생각도 못 하다</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">连那种想法都没有（极端程度）</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">사직할 생각도 못 해요.</span><span style="font-size:14px;color:#5a4640">连辞职都不敢想。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">혼자 여행할 생각도 못 해요.</span><span style="font-size:14px;color:#5a4640">连一个人旅行都不敢想。</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">连那种想法都没有（极端程度）</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">사직할 생각도 못 해요.</span><span style="font-size:16px;color:#5a4640">连辞职都不敢想。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">혼자 여행할 생각도 못 해요.</span><span style="font-size:16px;color:#5a4640">连一个人旅行都不敢想。</span></div>
   </div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">이/가 그립다</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">思念某人某物（形容词，主语用 이/가）</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">가족이 그리워요.</span><span style="font-size:14px;color:#5a4640">思念家人。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">고향 음식이 그리워요.</span><span style="font-size:14px;color:#5a4640">想念家乡的食物。</span></div></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">思念某人某物（形容词，主语用 이/가）</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">가족이 그리워요.</span><span style="font-size:16px;color:#5a4640">思念家人。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">고향 음식이 그리워요.</span><span style="font-size:16px;color:#5a4640">想念家乡的食物。</span></div></div>
 </div>
 <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:10px">
-  <div style="font-size:14px;font-weight:700;color:#ff7fa8;margin-bottom:6px">그립다 vs 그리워하다</div>
-  <div style="font-size:15px;color:#241917">그립다 — 我自己思念（主语是说话人）：가족이 그리워요</div>
-  <div style="font-size:15px;color:#241917">그리워하다 — 第三者在思念（主语是他人）：그는 고향을 그리워해요</div>
-  <div style="font-size:15px;color:#89756e;margin-top:4px">그립다 是 ㅂ 不规则：그립다 → 그리워요（ㅂ→우+어=워）</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:6px">그립다 vs 그리워하다</div>
+  <div style="font-size:16px;color:#241917">그립다 — 我自己思念（主语是说话人）：가족이 그리워요</div>
+  <div style="font-size:16px;color:#241917">그리워하다 — 第三者在思念（主语是他人）：그는 고향을 그리워해요</div>
+  <div style="font-size:16px;color:#89756e;margin-top:4px">그립다 是 ㅂ 不规则：그립다 → 그리워요（ㅂ→우+어=워）</div>
 </div>
 <div class="reminder-box">생각도 못 해요 中 도 是必须的，省略变成错误表达：생각 못 해요 ✗。친구를 그립다 ✗ → 친구가 그립다 ✓ — 그립다 是形容词，思念对象用 이/가，不用 을/를。</div>`,
         overviewHtml: `<div class="overview">
@@ -1776,8 +1776,8 @@ export const grammarCardsP6: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">核心规律</div></div>
     <div class="ov-block">
       <div style="display:flex;flex-direction:column;gap:6px">
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#ff7fa8">-을/ㄹ 생각도 못 하다</span>：连……都没想到/不敢想</div>
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#2db89b">이/가 그립다</span>：思念……（형용사，ㅂ 不规则→그리워요）</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">-을/ㄹ 생각도 못 하다</span>：连……都没想到/不敢想</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">이/가 그립다</span>：思念……（형용사，ㅂ 不规则→그리워요）</div>
       </div>
     </div>
   </div>
@@ -1921,10 +1921,10 @@ export const grammarCardsP6: GrammarCard[] = [
     whatItDoesBody: '综合运用第六章 L01-L10 所学语法：\n意志承诺、推测感叹、柔和疑问、还没追问、计划询问、担心糟糕、表达看法、特殊日子、转述确认、担心能否、思念表达。',
     isPractice: true,
     structureNote: '这是第六章的总复习。\n第六章的主线是"表达更有温度"承诺、共情、看法、思念，让你从说事实升级到说感受和态度。\n做题时想想这些表达在和韩国朋友聊天时会出现在哪个时刻。',
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;margin:0 0 4px 0;color:#241917">第六章综合练习</h1>
-<p style="font-size:.9rem;color:#89756e;margin:0 0 16px 0">承诺、推测、疑问、完成、感情表达——全部整合在一起。</p>
+    step0Html: `<h1 style="font-size:25px;font-weight:800;margin:0 0 4px 0;color:#241917">第六章综合练习</h1>
+<p style="font-size:16px;color:#89756e;margin:0 0 16px 0">承诺、推测、疑问、完成、感情表达——全部整合在一起。</p>
 <div class="block">
-  <div style="font-size:.85rem;font-weight:700;color:#ff7fa8;margin-bottom:8px">这章学了什么：</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">这章学了什么：</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">L01-L04</span> — 承诺（-을/ㄹ게요）、感叹（-겠군요）、柔和疑问（-나요?）、进度追问（아직/은요?）</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">L05-L07</span> — 担心后果（큰일이다）、彻底完成（버리다）、表达观点（-다고 생각하다）、描述日子（-는/은/ㄴ 날）</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px"><span style="font-weight:700">L08-L10</span> — 礼貌确认（얼마라고 했지요?）、担心能否（-을지 걱정）、思念（이/가 그립다）</div>
@@ -1932,16 +1932,16 @@ export const grammarCardsP6: GrammarCard[] = [
 <div class="block">
   <div style="font-weight:700;margin-bottom:8px">综合例句</div>
   <div style="margin-bottom:6px">걱정하지 마세요, 제가 도와줄게요.</div>
-  <div style="color:#89756e;font-size:.9rem">不用担心，我来帮你。（L01 -을/ㄹ게요）</div>
+  <div style="color:#89756e;font-size:16px">不用担心，我来帮你。（L01 -을/ㄹ게요）</div>
 </div>
 <div class="reminder-box">综合练习会混合本章所有语法点出题。不确定时回到对应课次复习。</div>`,
     compareHtml: `<div class="card-title">第六章要点速览</div>
 <div class="card-body">本章十节课涵盖承诺、感叹、疑问、完成和情感表达五大主题。每个语法点都有细微的使用限制——把这些限制记清楚，就能说出更地道的韩语。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">-을/ㄹ게요 vs -겠군요</div><div style="font-size:14px;color:#89756e;margin-top:2px">承诺（我→你）vs 感叹共情（我感受你）</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">도와줄게요 / 힘드셨겠군요</span><span style="font-size:14px;color:#5a4640">我来帮你 / 那时一定很辛苦吧</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">이/가 그립다 vs 그리워하다</div><div style="font-size:14px;color:#89756e;margin-top:2px">我思念 vs 第三者思念</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">가족이 그리워요 / 그를 그리워해요</span><span style="font-size:14px;color:#5a4640">我想念家人 / 他思念那人</span></div></div>
-  <div class="tok-row"><div class="tok t-v">-나요? vs -은/ㄴ가요?</div><div style="font-size:14px;color:#89756e;margin-top:2px">动词柔和疑问 vs 形容词柔和疑问</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">가나요? / 좋은가요?</span><span style="font-size:14px;color:#5a4640">要去吗？/ 好吗？</span></div></div>
-  <div class="tok-row"><div class="tok t-v">-는/ㄴ다고 vs -다고 vs -(이)라고</div><div style="font-size:14px;color:#89756e;margin-top:2px">动词 vs 形容词 vs 名词的 생각하다 接法</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">간다고 / 좋다고 / 학생이라고</span><span style="font-size:14px;color:#5a4640">三种词性三套形式</span></div></div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">-을/ㄹ게요 vs -겠군요</div><div style="font-size:16px;color:#89756e;margin-top:2px">承诺（我→你）vs 感叹共情（我感受你）</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">도와줄게요 / 힘드셨겠군요</span><span style="font-size:16px;color:#5a4640">我来帮你 / 那时一定很辛苦吧</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">이/가 그립다 vs 그리워하다</div><div style="font-size:16px;color:#89756e;margin-top:2px">我思念 vs 第三者思念</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">가족이 그리워요 / 그를 그리워해요</span><span style="font-size:16px;color:#5a4640">我想念家人 / 他思念那人</span></div></div>
+  <div class="tok-row"><div class="tok t-v">-나요? vs -은/ㄴ가요?</div><div style="font-size:16px;color:#89756e;margin-top:2px">动词柔和疑问 vs 形容词柔和疑问</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">가나요? / 좋은가요?</span><span style="font-size:16px;color:#5a4640">要去吗？/ 好吗？</span></div></div>
+  <div class="tok-row"><div class="tok t-v">-는/ㄴ다고 vs -다고 vs -(이)라고</div><div style="font-size:16px;color:#89756e;margin-top:2px">动词 vs 形容词 vs 名词的 생각하다 接法</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">간다고 / 좋다고 / 학생이라고</span><span style="font-size:16px;color:#5a4640">三种词性三套形式</span></div></div>
 </div>
-<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:15px;font-weight:700;color:#241917;margin-bottom:6px">버리다 vs 고 나서</div><div style="font-size:15px;color:#5a4640">-아/어 버리다（彻底完成，带遗憾/后悔语气）vs -고 나서（完成后再做下一件事）：먹어 버렸어요（吃光了，有些遗憾）/ 먹고 나서 공부해요（吃完之后学习）。中文"吃完了"没有这种语气差别，韩语用词尾表达说话人的情绪。</div></div>
+<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">버리다 vs 고 나서</div><div style="font-size:16px;color:#5a4640">-아/어 버리다（彻底完成，带遗憾/后悔语气）vs -고 나서（完成后再做下一件事）：먹어 버렸어요（吃光了，有些遗憾）/ 먹고 나서 공부해요（吃完之后学习）。中文"吃完了"没有这种语气差别，韩语用词尾表达说话人的情绪。</div></div>
 <div class="reminder-box">-을/ㄹ게요 主语只能是"我"；-나요? 接动词，형용사는 -은/ㄴ가요?；생각도 못 해요 中 도 不能省；그립다 思念对象用 이/가 不用 을/를。</div>`,
     compareLabel: '第六章要点速览',
     structures: [
@@ -2047,9 +2047,9 @@ export const grammarCardsP6: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">本章核心语法</div></div>
     <div class="ov-block">
       <div style="display:flex;flex-direction:column;gap:6px">
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#ff7fa8">-을/ㄹ게요</span> 承诺（我来做）/ <span style="font-weight:700;color:#ff7fa8">-겠군요</span> 推测感叹</div>
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#2db89b">-나요?/-은/ㄴ가요?</span> 柔和疑问 / <span style="font-weight:700;color:#2db89b">아직</span> 还没</div>
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#6b7ff0">-다고 생각하다</span> 表达看法 / <span style="font-weight:700;color:#6b7ff0">이/가 그립다</span> 思念</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">-을/ㄹ게요</span> 承诺（我来做）/ <span style="font-weight:700;color:#ff7fa8">-겠군요</span> 推测感叹</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">-나요?/-은/ㄴ가요?</span> 柔和疑问 / <span style="font-weight:700;color:#2db89b">아직</span> 还没</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#6b7ff0">-다고 생각하다</span> 表达看法 / <span style="font-weight:700;color:#6b7ff0">이/가 그립다</span> 思念</div>
       </div>
     </div>
   </div>

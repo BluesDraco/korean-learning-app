@@ -37,7 +37,7 @@ export default function RegisterPage() {
       if (result.error) {
         setError(result.error);
       } else {
-        router.push('/daily');
+        window.location.href = '/daily';
       }
     } catch {
       setError('网络错误，请检查网络连接后重试');

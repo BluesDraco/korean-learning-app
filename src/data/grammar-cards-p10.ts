@@ -196,7 +196,7 @@ export const grammarCardsP10: GrammarCard[] = [
         },
       ],
     },
-    linkedGrammarIds: ['card-p9-l10', 'card-p5-l03'],
+    linkedGrammarIds: [],
   },
 
   {
@@ -397,7 +397,7 @@ export const grammarCardsP10: GrammarCard[] = [
         },
       ],
     },
-    linkedGrammarIds: ['card-p5-l01', 'card-p10-l03'],
+    linkedGrammarIds: ['g28'],
   },
 
   {
@@ -594,7 +594,7 @@ export const grammarCardsP10: GrammarCard[] = [
         },
       ],
     },
-    linkedGrammarIds: ['card-p5-l03', 'card-p10-l02'],
+    linkedGrammarIds: ['g76'],
   },
 
   {
@@ -791,7 +791,7 @@ export const grammarCardsP10: GrammarCard[] = [
         },
       ],
     },
-    linkedGrammarIds: ['card-p3-l09', 'card-p5-l03'],
+    linkedGrammarIds: ['g30'],
   },
 
   {
@@ -991,7 +991,7 @@ export const grammarCardsP10: GrammarCard[] = [
         },
       ],
     },
-    linkedGrammarIds: ['card-p1-l06', 'card-p9-l04'],
+    linkedGrammarIds: ['g5'],
   },
 
   {
@@ -1190,7 +1190,7 @@ export const grammarCardsP10: GrammarCard[] = [
         },
       ],
     },
-    linkedGrammarIds: ['card-p3-l07', 'card-p3-l08'],
+    linkedGrammarIds: ['g22'],
   },
 
   {
@@ -1386,7 +1386,7 @@ export const grammarCardsP10: GrammarCard[] = [
         },
       ],
     },
-    linkedGrammarIds: ['card-p1-l10', 'card-p3-l01'],
+    linkedGrammarIds: ['g49'],
   },
 
   {
@@ -1580,7 +1580,7 @@ export const grammarCardsP10: GrammarCard[] = [
         },
       ],
     },
-    linkedGrammarIds: ['card-p10-l07', 'card-p4-l01'],
+    linkedGrammarIds: [],
   },
 
   {
@@ -1775,7 +1775,7 @@ export const grammarCardsP10: GrammarCard[] = [
         },
       ],
     },
-    linkedGrammarIds: ['card-p4-l05', 'card-p10-l05'],
+    linkedGrammarIds: [],
   },
 
   {
@@ -1977,7 +1977,7 @@ export const grammarCardsP10: GrammarCard[] = [
         },
       ],
     },
-    linkedGrammarIds: ['card-p2-l03', 'card-p10-l09'],
+    linkedGrammarIds: [],
   },
 
   {

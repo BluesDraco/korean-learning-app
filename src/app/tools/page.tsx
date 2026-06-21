@@ -8,19 +8,18 @@ import { ToriSectionHeader } from '@/components/mobile/ToriSectionHeader';
 import { DesktopToolsPage } from '@/components/desktop/DesktopToolsPage';
 
 const toolGrid = [
-  { label: '查词翻译', desc: '韩语字典', href: '/dictionary', icon: '🔍', color: '#b49ccf' },
-  { label: '文章拆解', desc: '文章分析', href: '/reading', icon: '📄', color: '#b49ccf' },
   { label: '语法解释', desc: '句型例句', href: '/grammar', icon: '📖', color: '#e47a94' },
-  { label: '韩文打字', desc: '键盘练习', href: '/typing', icon: '⌨️', color: '#e8a87c' },
+  { label: '文章拆解', desc: '文章分析', href: '/reading', icon: '📄', color: '#b49ccf' },
   { label: 'AI 场景陪练', desc: '情景对话', href: '/ai/chat', icon: '💬', color: '#b49ccf' },
+  { label: '韩文打字', desc: '键盘练习', href: '/typing', icon: '⌨️', color: '#e8a87c' },
 ];
 
 export default function ToolsPage() {
   const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
-    setIsDesktop(window.innerWidth >= 1024);
-    const onResize = () => setIsDesktop(window.innerWidth >= 1024);
+    setIsDesktop(window.innerWidth >= 768);
+    const onResize = () => setIsDesktop(window.innerWidth >= 768);
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, []);

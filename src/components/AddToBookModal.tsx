@@ -139,7 +139,11 @@ export function AddToBookModal({ mode, preSelectedWordIds, bookId, onClose, onDo
       });
       const data = await res.json();
       if (!res.ok) {
-        setLookupError(data.error || '查询失败，请重试');
+        if (res.status === 401) {
+          setLookupError('请先登录后再查词');
+        } else {
+          setLookupError(data.error || '查询失败，请重试');
+        }
       } else {
         setLookupResult(data);
       }

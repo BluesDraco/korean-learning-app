@@ -401,14 +401,14 @@ export default function AnalyzePage() {
   const [input, setInput] = useState('');
   const [analyzing, setAnalyzing] = useState(false);
   const [result, setResult] = useState<AnalysisResult | null>(null);
-  const [toast, setToast] = useState<string | null>(null);
+  const [toast, setToast] = useState<{ msg: string; href?: string } | null>(null);
   const [savedWords, setSavedWords] = useState<Set<string>>(new Set());
   const [savedSentences, setSavedSentences] = useState<Set<string>>(new Set());
   const [showHistory, setShowHistory] = useState(false);
   const [historyResults, setHistoryResults] = useState<HistoryItem[]>([]);
   const [showAlt, setShowAlt] = useState(false);
 
-  function showToastMsg(msg: string) { setToast(msg); setTimeout(() => setToast(null), 2200); }
+  function showToastMsg(msg: string, href?: string) { setToast({ msg, href }); setTimeout(() => setToast(null), 3000); }
 
   function detectCharCount(text: string) {
     const len = text.replace(/\s/g, '').length;
@@ -494,16 +494,17 @@ export default function AnalyzePage() {
 
   async function handleSaveSentence() {
     if (!result) return;
-    if (savedSentences.has(result.original)) { showToastMsg('已保存到我的句子'); return; }
+    if (savedSentences.has(result.original)) { showToastMsg('已保存到我的句子', '/vocabulary?tab=sentences'); return; }
     requireLogin(async () => {
       try {
         await db.sentences.add({
+          id: crypto.randomUUID(),
           korean: result.original, chinese: result.fullTranslation, source_type: 'analysis',
           source_id: 'analyze-' + Date.now(), source_title: '内容拆解',
           created_at: new Date().toISOString(),
         });
         setSavedSentences(prev => new Set([...prev, result.original]));
-        showToastMsg('已保存到我的句子');
+        showToastMsg('已保存到我的句子', '/vocabulary?tab=sentences');
       } catch { showToastMsg('保存失败'); }
     });
   }
@@ -602,6 +603,14 @@ export default function AnalyzePage() {
 
   const [showAllWords, setShowAllWords] = useState(false);
   const [showAllGrammar, setShowAllGrammar] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    setIsDesktop(window.innerWidth >= 768);
+    const onResize = () => setIsDesktop(window.innerWidth >= 768);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
 
   // ── Render helpers ──────────────────────────────────
   const [speakingText, setSpeakingText] = useState<string | null>(null);
@@ -705,14 +714,47 @@ export default function AnalyzePage() {
     );
   }
 
+  // ── Inline action buttons (shared between desktop and mobile bottom bar) ──
+  function renderActionButtons() {
+    return (
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
+        <button onClick={openHistory} style={{ height: 40, borderRadius: 20, fontSize: 12, fontWeight: 800, background: C.cream, color: '#6b5851', border: '1px solid ' + C.line, cursor: 'pointer' }}>历史记录</button>
+        <button onClick={handleSaveSentence} disabled={!result} style={{ height: 40, borderRadius: 20, fontSize: 12, fontWeight: 800, background: result ? C.black : C.cream, color: result ? '#fff' : '#6b5851', border: result ? 'none' : '1px solid ' + C.line, cursor: result ? 'pointer' : 'not-allowed', opacity: result ? 1 : 0.5 }}>
+          {savedSentences.has(result?.original || '') ? '已保存' : '保存结果'}
+        </button>
+        <button onClick={async () => {
+          if (!result) return;
+          try {
+            await db.sentences.add({
+              id: crypto.randomUUID(),
+              korean: result.original, chinese: result.fullTranslation, source_type: 'analysis',
+              source_id: 'review-' + Date.now(), source_title: '内容拆解',
+              created_at: new Date().toISOString(),
+            });
+            showToastMsg('已加入复习队列');
+          } catch (e: any) {
+            if (e?.name === 'ConstraintError') showToastMsg('已在复习队列中');
+            else showToastMsg('加入失败');
+          }
+        }} disabled={!result} style={{ height: 40, borderRadius: 20, fontSize: 12, fontWeight: 800, background: C.cream, color: '#6b5851', border: '1px solid ' + C.line, cursor: result ? 'pointer' : 'not-allowed', opacity: result ? 1 : 0.5 }}>加入复习</button>
+      </div>
+    );
+  }
+
   return (
-    <div style={{ paddingBottom: 152 }}>
+    <div style={{ paddingBottom: isDesktop ? 24 : 152 }}>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       {toast && (
-        <div style={{ position: 'fixed', top: 60, left: '50%', transform: 'translateX(-50%)', background: C.black, color: '#fff', borderRadius: 999, padding: '9px 20px', fontSize: 13, fontWeight: 700, zIndex: 300, whiteSpace: 'nowrap', boxShadow: C.strong }}>
-          {toast}
+        <div style={{ position: 'fixed', top: 60, left: '50%', transform: 'translateX(-50%)', background: C.black, color: '#fff', borderRadius: 999, padding: '9px 20px', fontSize: 13, fontWeight: 700, zIndex: 300, whiteSpace: 'nowrap', boxShadow: C.strong, display: 'flex', alignItems: 'center', gap: 8 }}>
+          {toast.msg}
+          {toast.href && <a href={toast.href} style={{ color: '#aee3d8', fontSize: 12, fontWeight: 700, textDecoration: 'none' }}>查看 →</a>}
         </div>
       )}
+
+      {/* Desktop two-column wrapper */}
+      <div style={isDesktop ? { display: 'grid', gridTemplateColumns: '420px 1fr', gap: 24, alignItems: 'start' } : {}}>
+        {/* Left col (desktop) / full width (mobile) */}
+        <div>
 
       {/* Back bar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, marginBottom: 14 }}>
@@ -798,6 +840,32 @@ export default function AnalyzePage() {
         </div>
         <p style={{ margin: '8px 2px 0', fontSize: 11, color: C.muted, fontWeight: 700 }}>提示：Ctrl + Enter 快速开始处理</p>
       </div>
+
+      {/* Desktop: action buttons below input */}
+      {isDesktop && (
+        <div style={{ marginTop: 12 }}>
+          {renderActionButtons()}
+        </div>
+      )}
+
+        </div>{/* end left col */}
+
+        {/* Right col (desktop) / full width (mobile) */}
+        <div>
+            {/* Right col empty state */}
+            {isDesktop && !result && !showHistory && !analyzing && (
+              <div style={{ borderRadius: 28, border: '1.5px dashed ' + C.line, padding: '48px 24px', textAlign: 'center', color: C.muted }}>
+                <div style={{ fontSize: 32, marginBottom: 12 }}>⚙</div>
+                <p style={{ fontSize: 14, fontWeight: 700, margin: 0 }}>输入内容后点击「开始处理」</p>
+                <p style={{ fontSize: 12, margin: '6px 0 0' }}>结果将显示在这里</p>
+              </div>
+            )}
+            {isDesktop && analyzing && (
+              <div style={{ borderRadius: 28, border: '1px solid ' + C.line, padding: '48px 24px', textAlign: 'center', color: C.muted }}>
+                <div style={{ width: 28, height: 28, border: '3px solid rgba(255,127,168,.3)', borderTopColor: '#ff7fa8', borderRadius: '50%', animation: 'spin 0.7s linear infinite', margin: '0 auto 12px' }} />
+                <p style={{ fontSize: 13, fontWeight: 700, margin: 0 }}>处理中...</p>
+              </div>
+            )}
 
       {/* History view */}
       {showHistory && (
@@ -1014,8 +1082,11 @@ export default function AnalyzePage() {
       {/* Mode explanation (no result) */}
       {!result && !showHistory && renderModeExplanation()}
 
-      {/* Bottom bar */}
-      <div className="md:left-[108px] md:!bottom-0" style={{
+        </div>{/* end right col */}
+      </div>{/* end two-column wrapper */}
+
+      {/* Bottom bar — mobile only */}
+      {!isDesktop && <div className="md:left-[108px] md:!bottom-0" style={{
         position: 'fixed', left: 0, right: 0, bottom: 'calc(56px + env(safe-area-inset-bottom, 0px))', height: 88,
         padding: '12px 18px 16px', background: C.cream,
         borderTop: '1px solid ' + C.line, zIndex: 100,
@@ -1040,7 +1111,7 @@ export default function AnalyzePage() {
             }
           }} disabled={!result} style={{ borderRadius: 20, fontSize: 12, fontWeight: 800, background: C.cream, color: '#6b5851', border: '1px solid ' + C.line, cursor: result ? 'pointer' : 'not-allowed', opacity: result ? 1 : 0.5 }}>加入复习</button>
         </div>
-      </div>
+      </div>}
     </div>
   );
 }

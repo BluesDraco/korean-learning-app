@@ -138,8 +138,8 @@ export const grammarCardsP1: GrammarCard[] = [
       demo: {
         ko: '저는 도서관에서 책을 읽어요.',
         rows: [
-          { label: '① 句尾', text: '<span style="background:#ff7fa8;color:white;padding:3px 9px;border-radius:7px;font-size:13px;font-weight:700">읽어요 → 读</span>' },
-          { label: '② 谁', text: '<span style="background:#ddf5ef;color:#2db89b;padding:3px 9px;border-radius:7px;font-size:13px;font-weight:700">저는 → 我</span>' },
+          { label: '① 句尾', text: '<span style="background:#ff7fa8;color:white;padding:3px 9px;border-radius:7px;font-size:16px;font-weight:700">읽어요 → 读</span>' },
+          { label: '② 谁', text: '<span style="background:#ddf5ef;color:#2db89b;padding:3px 9px;border-radius:7px;font-size:16px;font-weight:700">저는 → 我</span>' },
           { label: '③ 补充', text: '도서관에서（在图书馆）책을（书）' },
         ],
         result: '→ 我在图书馆读书。',
@@ -157,9 +157,9 @@ export const grammarCardsP1: GrammarCard[] = [
     },
     compareHtml: `<div class="card-title">韩语语序 vs 中文语序</div>
 <div class="card-body">韩语是 SOV 语序（主语+宾语+动词），中文是 SVO（主语+动词+宾语）。动词永远在句末——这是韩语所有句子的铁则。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">中文语序（SVO）</div><div style="font-size:14px;color:#89756e;margin-top:2px">动词在宾语前</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">我 喝 咖啡。</span><span style="font-size:14px;color:#5a4640">主→动→宾</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">他 看 电影。</span><span style="font-size:14px;color:#5a4640">主→动→宾</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">韩语语序（SOV）</div><div style="font-size:14px;color:#89756e;margin-top:2px">动词在句末</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">저는 커피를 마셔요.</span><span style="font-size:14px;color:#5a4640">主→宾→动</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">저는 영화를 봐요.</span><span style="font-size:14px;color:#5a4640">主→宾→动</span></div></div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">中文语序（SVO）</div><div style="font-size:16px;color:#89756e;margin-top:2px">动词在宾语前</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">我 喝 咖啡。</span><span style="font-size:16px;color:#5a4640">主→动→宾</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">他 看 电影。</span><span style="font-size:16px;color:#5a4640">主→动→宾</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">韩语语序（SOV）</div><div style="font-size:16px;color:#89756e;margin-top:2px">动词在句末</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">저는 커피를 마셔요.</span><span style="font-size:16px;color:#5a4640">主→宾→动</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">저는 영화를 봐요.</span><span style="font-size:16px;color:#5a4640">主→宾→动</span></div></div>
 </div>
-<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:15px;font-weight:700;color:#241917;margin-bottom:6px">助词标记成分</div><div style="font-size:15px;color:#5a4640">韩语靠助词（는/가/를/에）标记每个词的成分，语序可以调整但动词必须在末尾。</div><div style="margin-top:4px;font-size:15px;color:#5a4640">저는（主）커피를（宾）마셔요（谓）— 助词告诉你谁是主语谁是宾语。</div><div style="margin-top:4px;font-size:15px;color:#5a4640">커피를 저는 마셔요 — 调换顺序仍然正确，因为助词没变。</div></div>
+<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">助词标记成分</div><div style="font-size:16px;color:#5a4640">韩语靠助词（는/가/를/에）标记每个词的成分，语序可以调整但动词必须在末尾。</div><div style="margin-top:4px;font-size:16px;color:#5a4640">저는（主）커피를（宾）마셔요（谓）— 助词告诉你谁是主语谁是宾语。</div><div style="margin-top:4px;font-size:16px;color:#5a4640">커피를 저는 마셔요 — 调换顺序仍然正确，因为助词没变。</div></div>
 <div class="reminder-box">커피를 마셔요 저는 ✗（动词不在末尾）— 无论怎么调顺序，动词必须在最后。这是韩语语序唯一不能打破的规则。</div>`,
     compareLabel: '韩语语序（SOV）vs 中文语序（SVO）',
     linkedGrammarIds: [],
@@ -172,7 +172,7 @@ export const grammarCardsP1: GrammarCard[] = [
     <div class="ov-section">
       <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">核心规律</div></div>
       <div class="ov-block">
-        <div style="font-size:13px;font-weight:700;color:#241917;margin-bottom:10px">动词/形容词永远放在句子最末尾</div>
+        <div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:10px">动词/形容词永远放在句子最末尾</div>
         <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="pill p-s">저는（我）</span><span class="pill p-o">밥을（饭）</span><span class="pill p-v">먹어요（吃）</span></div>
       </div>
     </div>
@@ -191,13 +191,13 @@ export const grammarCardsP1: GrammarCard[] = [
       <div class="ov-section-hd"><div class="ov-section-line" style="background:#6b7ff0"></div><div class="ov-section-title" style="color:#6b7ff0">阅读三步法</div></div>
       <div class="ov-block">
         <div style="display:flex;flex-direction:column;gap:8px">
-          <div style="display:flex;gap:10px;align-items:center"><span style="width:20px;height:20px;border-radius:99px;background:#ff7fa8;color:white;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</span><span style="font-size:13px;color:#241917;font-weight:600">先看<span style="color:#ff7fa8">句尾</span>：判断动作还是状态</span></div>
-          <div style="display:flex;gap:10px;align-items:center"><span style="width:20px;height:20px;border-radius:99px;background:#ff7fa8;color:white;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</span><span style="font-size:13px;color:#241917;font-weight:600">再看<span style="color:#ff7fa8">谁</span>在做这件事</span></div>
-          <div style="display:flex;gap:10px;align-items:center"><span style="width:20px;height:20px;border-radius:99px;background:#ff7fa8;color:white;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</span><span style="font-size:13px;color:#241917;font-weight:600">最后补充<span style="color:#ff7fa8">对象、地点、时间</span></span></div>
+          <div style="display:flex;gap:10px;align-items:center"><span style="width:20px;height:20px;border-radius:99px;background:#ff7fa8;color:white;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</span><span style="font-size:16px;color:#241917;font-weight:600">先看<span style="color:#ff7fa8">句尾</span>：判断动作还是状态</span></div>
+          <div style="display:flex;gap:10px;align-items:center"><span style="width:20px;height:20px;border-radius:99px;background:#ff7fa8;color:white;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</span><span style="font-size:16px;color:#241917;font-weight:600">再看<span style="color:#ff7fa8">谁</span>在做这件事</span></div>
+          <div style="display:flex;gap:10px;align-items:center"><span style="width:20px;height:20px;border-radius:99px;background:#ff7fa8;color:white;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</span><span style="font-size:16px;color:#241917;font-weight:600">最后补充<span style="color:#ff7fa8">对象、地点、时间</span></span></div>
         </div>
         <div style="background:#fff0f5;border-radius:12px;padding:12px;margin-top:10px">
-          <div style="font-size:14px;font-weight:800;color:#241917;margin-bottom:8px">저는 도서관에서 책을 읽어요.</div>
-          <div style="font-size:12px;color:#89756e;line-height:1.8">① 읽어요（读）→ ② 저는（我）→ ③ 도서관에서（在图书馆）책을（书）<br><b style="color:#5a4640">→ 我在图书馆读书。</b></div>
+          <div style="font-size:16px;font-weight:800;color:#241917;margin-bottom:8px">저는 도서관에서 책을 읽어요.</div>
+          <div style="font-size:16px;color:#89756e;line-height:1.8">① 읽어요（读）→ ② 저는（我）→ ③ 도서관에서（在图书馆）책을（书）<br><b style="color:#5a4640">→ 我在图书馆读书。</b></div>
         </div>
       </div>
     </div>
@@ -205,10 +205,10 @@ export const grammarCardsP1: GrammarCard[] = [
       <div class="ov-section-hd"><div class="ov-section-line" style="background:#c89020"></div><div class="ov-section-title" style="color:#c89020">常用助词</div></div>
       <div class="ov-block">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-          <div style="background:#f8f4f0;border-radius:10px;padding:10px"><div style="font-size:14px;font-weight:800;color:#241917">은/는</div><div style="font-size:11px;color:#89756e;margin-top:2px">提示话题</div></div>
-          <div style="background:#f8f4f0;border-radius:10px;padding:10px"><div style="font-size:14px;font-weight:800;color:#241917">을/를</div><div style="font-size:11px;color:#89756e;margin-top:2px">提示宾语</div></div>
-          <div style="background:#f8f4f0;border-radius:10px;padding:10px"><div style="font-size:14px;font-weight:800;color:#241917">에</div><div style="font-size:11px;color:#89756e;margin-top:2px">方向 / 时间</div></div>
-          <div style="background:#f8f4f0;border-radius:10px;padding:10px"><div style="font-size:14px;font-weight:800;color:#241917">에서</div><div style="font-size:11px;color:#89756e;margin-top:2px">动作发生地点</div></div>
+          <div style="background:#f8f4f0;border-radius:10px;padding:10px"><div style="font-size:16px;font-weight:800;color:#241917">은/는</div><div style="font-size:11px;color:#89756e;margin-top:2px">提示话题</div></div>
+          <div style="background:#f8f4f0;border-radius:10px;padding:10px"><div style="font-size:16px;font-weight:800;color:#241917">을/를</div><div style="font-size:11px;color:#89756e;margin-top:2px">提示宾语</div></div>
+          <div style="background:#f8f4f0;border-radius:10px;padding:10px"><div style="font-size:16px;font-weight:800;color:#241917">에</div><div style="font-size:11px;color:#89756e;margin-top:2px">方向 / 时间</div></div>
+          <div style="background:#f8f4f0;border-radius:10px;padding:10px"><div style="font-size:16px;font-weight:800;color:#241917">에서</div><div style="font-size:11px;color:#89756e;margin-top:2px">动作发生地点</div></div>
         </div>
       </div>
     </div>
@@ -237,28 +237,28 @@ export const grammarCardsP1: GrammarCard[] = [
       <div class="card-title">正式场合这样说</div>
       <div class="card-body">一种语气，搞定面试、课堂、公告三大场景。</div>
       <div class="hook-box">
-        <div style="font-size:12px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">同一件事，两种说法</div>
+        <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">同一件事，两种说法</div>
         <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
           <div style="background:#f0f4ff;border-radius:12px;padding:10px 14px">
             <div style="font-size:9px;font-weight:800;color:#6b7ff0;margin-bottom:4px">正式体</div>
             <div style="font-size:16px;font-weight:800;color:#241917">저는 학생입니다.</div>
-            <div style="font-size:12px;color:#89756e;margin-top:2px">我是学生。（面试 / 课堂）</div>
+            <div style="font-size:16px;color:#89756e;margin-top:2px">我是学生。（面试 / 课堂）</div>
           </div>
           <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
             <div style="font-size:9px;font-weight:800;color:#ff7fa8;margin-bottom:4px">日常体（下节课学）</div>
             <div style="font-size:16px;font-weight:800;color:#241917">저는 학생이에요.</div>
-            <div style="font-size:12px;color:#89756e;margin-top:2px">我是学生。（日常聊天）</div>
+            <div style="font-size:16px;color:#89756e;margin-top:2px">我是学生。（日常聊天）</div>
           </div>
         </div>
-        <div style="font-size:13px;color:#ff7fa8;font-weight:700">👆 这节课先学正式体，打好基础</div>
+        <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 这节课先学正式体，打好基础</div>
       </div>
       <div class="reminder-box">正式体常用于：<b>自我介绍、课堂回答、新闻播报、面试、公告</b>。<br>先记住这一课，下一课就学日常版本。</div>
     `,
     compareHtml: `<div class="card-title">名词句 vs 动词句 — 正式体选哪个</div>
 <div class="card-body">正式体最关键的判断：前面是名词还是动词/形容词？两种情况用完全不同的词尾。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">动词/形容词 → -ㅂ/습니다</div><div style="font-size:14px;color:#89756e;margin-top:2px">看词干有无收音</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">가다 → 갑니다</span><span style="font-size:14px;color:#5a4640">无收音 → -ㅂ니다</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">먹다 → 먹습니다</span><span style="font-size:14px;color:#5a4640">有收音 → -습니다</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">名词 → 입니다</div><div style="font-size:14px;color:#89756e;margin-top:2px">直接加 입니다，不看收音</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">학생 → 학생입니다</span><span style="font-size:14px;color:#5a4640">我是学生。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">학교 → 학교입니다</span><span style="font-size:14px;color:#5a4640">这是学校。</span></div></div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">动词/形容词 → -ㅂ/습니다</div><div style="font-size:16px;color:#89756e;margin-top:2px">看词干有无收音</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">가다 → 갑니다</span><span style="font-size:16px;color:#5a4640">无收音 → -ㅂ니다</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">먹다 → 먹습니다</span><span style="font-size:16px;color:#5a4640">有收音 → -습니다</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">名词 → 입니다</div><div style="font-size:16px;color:#89756e;margin-top:2px">直接加 입니다，不看收音</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">학생 → 학생입니다</span><span style="font-size:16px;color:#5a4640">我是学生。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">학교 → 학교입니다</span><span style="font-size:16px;color:#5a4640">这是学校。</span></div></div>
 </div>
-<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:15px;font-weight:700;color:#241917;margin-bottom:6px">하다 动词最常用</div><div style="font-size:15px;color:#5a4640">所有 하다 动词直接变 합니다：공부하다→공부합니다，좋아하다→좋아합니다。不需要判断收音，先把 합니다 背熟。</div><div style="margin-top:4px;font-size:15px;color:#5a4640">疑问句只换词尾：입니다→입니까? / 갑니다→갑니까? / 먹습니다→먹습니까?</div></div>
+<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">하다 动词最常用</div><div style="font-size:16px;color:#5a4640">所有 하다 动词直接变 합니다：공부하다→공부합니다，좋아하다→좋아합니다。不需要判断收音，先把 합니다 背熟。</div><div style="margin-top:4px;font-size:16px;color:#5a4640">疑问句只换词尾：입니다→입니까? / 갑니다→갑니까? / 먹습니다→먹습니까?</div></div>
 <div class="reminder-box">中文"我是学生"和"我去学校"里"是"和"去"是动词，韩语却分两套词尾。名词句用 입니다，动词句看收音选 ㅂ니다/습니다——这是正式体最容易搞混的地方。</div>`,
     structures: [
       {
@@ -382,7 +382,7 @@ export const grammarCardsP1: GrammarCard[] = [
         { prompt: '词典形：읽다（读）', options: ['읽ㅂ니다', '읽습니다', '읽어요'], answer: 1, explanation: '읽 词干有收音→用 -습니다，所以是 읽습니다。' },
       ],
     },
-    linkedGrammarIds: ['gp-02'],
+    linkedGrammarIds: ['g54'],
     overviewHtml: `<div class="overview">
     <div class="ov-hero">
       <div class="ov-hero-label">第 2 课 · 已完成</div>
@@ -392,7 +392,7 @@ export const grammarCardsP1: GrammarCard[] = [
     <div class="ov-section">
       <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">核心规律</div></div>
       <div class="ov-block">
-        <div style="font-size:13px;font-weight:700;color:#241917;margin-bottom:10px">正式体四种情况</div>
+        <div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:10px">正式体四种情况</div>
         <div class="table-wrap">
           <div class="tbl-row hd"><div class="tc">类型</div><div class="tc">陈述</div><div class="tc">疑问</div><div class="tc">例子</div></div>
           <div class="tbl-row"><div class="tc">无收音</div><div class="tc" style="color:#6b7ff0;font-weight:800">-ㅂ니다</div><div class="tc" style="color:#c89020">-ㅂ니까?</div><div class="tc">갑니다</div></div>
@@ -406,10 +406,10 @@ export const grammarCardsP1: GrammarCard[] = [
       <div class="ov-section-hd"><div class="ov-section-line" style="background:#b49ccf"></div><div class="ov-section-title" style="color:#b49ccf">常用例句</div></div>
       <div class="ov-block">
         <div style="display:flex;flex-direction:column;gap:10px">
-          <div><div class="tok-row"><span class="tok t-s">저는</span><span class="tok t-v">학생입니다</span></div><div style="font-size:12px;color:#89756e">我是学生。· 名词句</div></div>
-          <div><div class="tok-row"><span class="tok t-s">저는</span><span class="tok t-o">한국어를</span><span class="tok t-v">공부합니다</span></div><div style="font-size:12px;color:#89756e">我学习韩语。· 하다 动词</div></div>
-          <div><div class="tok-row"><span class="tok t-s">저는</span><span class="tok t-o">밥을</span><span class="tok t-v">먹습니다</span></div><div style="font-size:12px;color:#89756e">我吃饭。· 词干有收音</div></div>
-          <div><div class="tok-row"><span class="tok t-s">저는</span><span class="tok t-o">학교에</span><span class="tok t-v">갑니다</span></div><div style="font-size:12px;color:#89756e">我去学校。· 词干无收音</div></div>
+          <div><div class="tok-row"><span class="tok t-s">저는</span><span class="tok t-v">학생입니다</span></div><div style="font-size:16px;color:#89756e">我是学生。· 名词句</div></div>
+          <div><div class="tok-row"><span class="tok t-s">저는</span><span class="tok t-o">한국어를</span><span class="tok t-v">공부합니다</span></div><div style="font-size:16px;color:#89756e">我学习韩语。· 하다 动词</div></div>
+          <div><div class="tok-row"><span class="tok t-s">저는</span><span class="tok t-o">밥을</span><span class="tok t-v">먹습니다</span></div><div style="font-size:16px;color:#89756e">我吃饭。· 词干有收音</div></div>
+          <div><div class="tok-row"><span class="tok t-s">저는</span><span class="tok t-o">학교에</span><span class="tok t-v">갑니다</span></div><div style="font-size:16px;color:#89756e">我去学校。· 词干无收音</div></div>
         </div>
       </div>
     </div>
@@ -438,28 +438,28 @@ export const grammarCardsP1: GrammarCard[] = [
       <div class="card-title">日常最常用的说法</div>
       <div class="card-body">和朋友聊天、发动态、追剧评论，全靠这一课。</div>
       <div class="hook-box">
-        <div style="font-size:12px;font-weight:800;color:#89756e;margin-bottom:12px">上节课 vs 这节课</div>
+        <div style="font-size:16px;font-weight:800;color:#89756e;margin-bottom:12px">上节课 vs 这节课</div>
         <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
           <div style="background:#f0f4ff;border-radius:12px;padding:10px 14px">
             <div style="font-size:9px;font-weight:800;color:#6b7ff0;margin-bottom:4px">正式体（第2课）</div>
-            <div style="font-size:15px;font-weight:800;color:#241917">저는 학생입니다.</div>
+            <div style="font-size:16px;font-weight:800;color:#241917">저는 학생입니다.</div>
             <div style="font-size:11px;color:#89756e;margin-top:2px">适合面试、课堂、公告</div>
           </div>
           <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
             <div style="font-size:9px;font-weight:800;color:#ff7fa8;margin-bottom:4px">日常体（这节课）✨</div>
-            <div style="font-size:15px;font-weight:800;color:#241917">저는 학생이에요.</div>
+            <div style="font-size:16px;font-weight:800;color:#241917">저는 학생이에요.</div>
             <div style="font-size:11px;color:#89756e;margin-top:2px">适合日常聊天、评论、日记</div>
           </div>
         </div>
-        <div style="font-size:13px;color:#ff7fa8;font-weight:700">👆 日常体用得更多，这节课最重要！</div>
+        <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 日常体用得更多，这节课最重要！</div>
       </div>
       <div class="reminder-box">日常体（-아/어/여요）是韩语里用得<b>最频繁</b>的礼貌表达。掌握它，就能开口说大部分日常韩语。</div>
     `,
     compareHtml: `<div class="card-title">日常体 — 动词句 vs 名词句</div>
 <div class="card-body">日常体（해요 体）也分两种：动词/形容词看元音选词尾，名词看有无收音选 이에요/예요。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">动词/形容词 → -아/어요</div><div style="font-size:14px;color:#89756e;margin-top:2px">看词干末元音</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">가다 → 가요</span><span style="font-size:14px;color:#5a4640">ㅏ/ㅗ → -아요（缩合）</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">먹다 → 먹어요</span><span style="font-size:14px;color:#5a4640">其他 → -어요</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">名词 → 이에요 / 예요</div><div style="font-size:14px;color:#89756e;margin-top:2px">看名词有无收音</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">학생 → 학생이에요</span><span style="font-size:14px;color:#5a4640">有收音 → 이에요</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">학교 → 학교예요</span><span style="font-size:14px;color:#5a4640">无收音 → 예요</span></div></div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">动词/形容词 → -아/어요</div><div style="font-size:16px;color:#89756e;margin-top:2px">看词干末元音</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">가다 → 가요</span><span style="font-size:16px;color:#5a4640">ㅏ/ㅗ → -아요（缩合）</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">먹다 → 먹어요</span><span style="font-size:16px;color:#5a4640">其他 → -어요</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">名词 → 이에요 / 예요</div><div style="font-size:16px;color:#89756e;margin-top:2px">看名词有无收音</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">학생 → 학생이에요</span><span style="font-size:16px;color:#5a4640">有收音 → 이에요</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">학교 → 학교예요</span><span style="font-size:16px;color:#5a4640">无收音 → 예요</span></div></div>
 </div>
-<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:15px;font-weight:700;color:#241917;margin-bottom:6px">하다 动词最好记</div><div style="font-size:15px;color:#5a4640">所有 하다 动词统一变 해요：공부하다→공부해요，좋아하다→좋아해요。不需要判断元音，先把这个规律背熟，能说出大部分日常句子。</div><div style="margin-top:4px;font-size:15px;color:#5a4640">和中文不同：中文"是学生"和"去学校"结构一样，韩语名词句（이에요）和动词句（가요）用完全不同的词尾。</div></div>
+<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">하다 动词最好记</div><div style="font-size:16px;color:#5a4640">所有 하다 动词统一变 해요：공부하다→공부해요，좋아하다→좋아해요。不需要判断元音，先把这个规律背熟，能说出大部分日常句子。</div><div style="margin-top:4px;font-size:16px;color:#5a4640">和中文不同：中文"是学生"和"去学校"结构一样，韩语名词句（이에요）和动词句（가요）用完全不同的词尾。</div></div>
 <div class="reminder-box">예요 vs 이에요 速记：학교예요（无收音，直接 예요）/ 학생이에요（有收音，加 이）。疑问句语调上扬即可，不换词尾。</div>`,
     structures: [
       {
@@ -584,7 +584,7 @@ export const grammarCardsP1: GrammarCard[] = [
         { prompt: '词典形：오다（来）', options: ['오요', '와요', '오어요'], answer: 1, explanation: '오 末元音为 ㅗ→아요→오+아요 缩约成 와요。' },
       ],
     },
-    linkedGrammarIds: ['gp-01'],
+    linkedGrammarIds: ['g55'],
     overviewHtml: `<div class="overview">
     <div class="ov-hero">
       <div class="ov-hero-label">第 3 课 · 已完成</div>
@@ -608,10 +608,10 @@ export const grammarCardsP1: GrammarCard[] = [
       <div class="ov-section-hd"><div class="ov-section-line" style="background:#b49ccf"></div><div class="ov-section-title" style="color:#b49ccf">常用例句</div></div>
       <div class="ov-block">
         <div style="display:flex;flex-direction:column;gap:10px">
-          <div><div class="tok-row"><span class="tok t-s">저는</span><span class="tok t-v">학생이에요</span></div><div style="font-size:12px;color:#89756e">我是学生。· 有收音名词</div></div>
-          <div><div class="tok-row"><span class="tok t-s">여기는</span><span class="tok t-v">카페예요</span></div><div style="font-size:12px;color:#89756e">这里是咖啡店。· 无收音名词</div></div>
-          <div><div class="tok-row"><span class="tok t-s">저는</span><span class="tok t-o">한국어를</span><span class="tok t-v">공부해요</span></div><div style="font-size:12px;color:#89756e">我学习韩语。· 하다→해요</div></div>
-          <div><div class="tok-row"><span class="tok t-s">이 노래가</span><span class="tok t-v">좋아요</span></div><div style="font-size:12px;color:#89756e">这首歌很好。· 词干元音 ㅗ→아요</div></div>
+          <div><div class="tok-row"><span class="tok t-s">저는</span><span class="tok t-v">학생이에요</span></div><div style="font-size:16px;color:#89756e">我是学生。· 有收音名词</div></div>
+          <div><div class="tok-row"><span class="tok t-s">여기는</span><span class="tok t-v">카페예요</span></div><div style="font-size:16px;color:#89756e">这里是咖啡店。· 无收音名词</div></div>
+          <div><div class="tok-row"><span class="tok t-s">저는</span><span class="tok t-o">한국어를</span><span class="tok t-v">공부해요</span></div><div style="font-size:16px;color:#89756e">我学习韩语。· 하다→해요</div></div>
+          <div><div class="tok-row"><span class="tok t-s">이 노래가</span><span class="tok t-v">좋아요</span></div><div style="font-size:16px;color:#89756e">这首歌很好。· 词干元音 ㅗ→아요</div></div>
         </div>
       </div>
     </div>
@@ -641,25 +641,25 @@ export const grammarCardsP1: GrammarCard[] = [
       <div class="card-title">提出话题的小标记</div>
       <div class="card-body">一个助词，让对方知道你接下来要说谁/什么。</div>
       <div class="hook-box">
-        <div style="font-size:12px;font-weight:800;color:#89756e;margin-bottom:10px">为什么韩语需要 은/는？</div>
+        <div style="font-size:16px;font-weight:800;color:#89756e;margin-bottom:10px">为什么韩语需要 은/는？</div>
         <div style="background:white;border-radius:14px;padding:14px;margin-bottom:12px">
-          <div style="font-size:15px;font-weight:800;color:#241917;margin-bottom:6px">저는 학생이에요.</div>
-          <div style="font-size:12px;color:#89756e;line-height:1.7">拆开来看：<br>
+          <div style="font-size:16px;font-weight:800;color:#241917;margin-bottom:6px">저는 학생이에요.</div>
+          <div style="font-size:16px;color:#89756e;line-height:1.7">拆开来看：<br>
             <span style="background:#ddf5ef;color:#2db89b;padding:2px 8px;border-radius:6px;font-weight:700">저</span>（我）+
             <span style="background:#fff0f5;color:#ff7fa8;padding:2px 8px;border-radius:6px;font-weight:700">는</span>（话题标记）+
             학생이에요（是学生）<br><br>
             는 告诉听者：<b>「关于我嘛——」</b>，接下来说的是我的事。
           </div>
         </div>
-        <div style="font-size:13px;color:#ff7fa8;font-weight:700">👆 은/는 = 「关于……嘛」「说到……」</div>
+        <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 은/는 = 「关于……嘛」「说到……」</div>
       </div>
       <div class="reminder-box">은/는 最主要的作用：<b>1) 提出话题</b>，<b>2) 做对比</b>。<br>这节课先学这两点，下一步再和 이/가 做区分。</div>
     `,
     compareHtml: `<div class="card-title">은/는 — 两个字，选一个</div>
 <div class="card-body">选 은 还是 는，只看前面名词最后有没有收音。中文没有话题助词，但韩语的 은/는 是最常用的助词之一。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">有收音 → 은</div><div style="font-size:14px;color:#89756e;margin-top:2px">末音节有辅音收尾</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">책 → 책은</span><span style="font-size:14px;color:#5a4640">书（话题）</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">학생 → 학생은</span><span style="font-size:14px;color:#5a4640">学生（话题）</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">无收音 → 는</div><div style="font-size:14px;color:#89756e;margin-top:2px">末音节以元音结尾</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">저 → 저는</span><span style="font-size:14px;color:#5a4640">我（话题）</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">커피 → 커피는</span><span style="font-size:14px;color:#5a4640">咖啡（话题）</span></div></div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">有收音 → 은</div><div style="font-size:16px;color:#89756e;margin-top:2px">末音节有辅音收尾</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">책 → 책은</span><span style="font-size:16px;color:#5a4640">书（话题）</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">학생 → 학생은</span><span style="font-size:16px;color:#5a4640">学生（话题）</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">无收音 → 는</div><div style="font-size:16px;color:#89756e;margin-top:2px">末音节以元音结尾</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">저 → 저는</span><span style="font-size:16px;color:#5a4640">我（话题）</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">커피 → 커피는</span><span style="font-size:16px;color:#5a4640">咖啡（话题）</span></div></div>
 </div>
-<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:15px;font-weight:700;color:#241917;margin-bottom:6px">은/는 的两个核心作用</div><div style="font-size:15px;color:#5a4640">① 提出话题：저는 학생이에요（说到我，我是学生）<br>② 做对比：저는 가요. 친구는 안 가요.（我去，朋友不去）<br>中文"我是学生"里没有"话题标记"的概念，韩语的 은/는 明确告诉听者"接下来说的是关于这个词的事"。</div></div>
+<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">은/는 的两个核心作用</div><div style="font-size:16px;color:#5a4640">① 提出话题：저는 학생이에요（说到我，我是学生）<br>② 做对比：저는 가요. 친구는 안 가요.（我去，朋友不去）<br>中文"我是学生"里没有"话题标记"的概念，韩语的 은/는 明确告诉听者"接下来说的是关于这个词的事"。</div></div>
 <div class="reminder-box">速记口诀：有收音 → 은，无收音 → 는。이/가（主格）和 은/는（话题）不一样——下节课专门对比。</div>`,
     structures: [
       {
@@ -780,7 +780,7 @@ export const grammarCardsP1: GrammarCard[] = [
         { pre: '학생', post: '열심히 공부해요', options: ['은', '는'], answer: 0, explanation: '생 有收音 ㅇ→은。학생은 열심히 공부해요。' },
       ],
     },
-    linkedGrammarIds: [],
+    linkedGrammarIds: ['g1'],
     overviewHtml: `<div class="overview">
     <div class="ov-hero">
       <div class="ov-hero-label">第 4 课 · 已完成</div>
@@ -791,12 +791,12 @@ export const grammarCardsP1: GrammarCard[] = [
       <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">核心规律</div></div>
       <div class="ov-block">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
-          <div style="background:#eaf8f5;border-radius:12px;padding:12px;text-align:center"><div style="font-size:20px;font-weight:900;color:#2db89b">은</div><div style="font-size:11px;color:#89756e;margin-top:4px">前面有收音</div><div style="font-size:12px;color:#241917;margin-top:4px">책 → 책은</div></div>
-          <div style="background:#fff0f5;border-radius:12px;padding:12px;text-align:center"><div style="font-size:20px;font-weight:900;color:#ff7fa8">는</div><div style="font-size:11px;color:#89756e;margin-top:4px">前面无收音</div><div style="font-size:12px;color:#241917;margin-top:4px">저 → 저는</div></div>
+          <div style="background:#eaf8f5;border-radius:12px;padding:12px;text-align:center"><div style="font-size:20px;font-weight:900;color:#2db89b">은</div><div style="font-size:11px;color:#89756e;margin-top:4px">前面有收音</div><div style="font-size:16px;color:#241917;margin-top:4px">책 → 책은</div></div>
+          <div style="background:#fff0f5;border-radius:12px;padding:12px;text-align:center"><div style="font-size:20px;font-weight:900;color:#ff7fa8">는</div><div style="font-size:11px;color:#89756e;margin-top:4px">前面无收音</div><div style="font-size:16px;color:#241917;margin-top:4px">저 → 저는</div></div>
         </div>
         <div style="background:#f8f4f0;border-radius:12px;padding:12px">
           <div style="font-size:11px;font-weight:800;color:#89756e;margin-bottom:8px">两大用法</div>
-          <div style="font-size:13px;color:#241917;line-height:1.8"><b>1. 提出话题：</b>저는 학생이에요.<br><b>2. 制造对比：</b>커피는 좋아해요. 차는 안 좋아해요.</div>
+          <div style="font-size:16px;color:#241917;line-height:1.8"><b>1. 提出话题：</b>저는 학생이에요.<br><b>2. 制造对比：</b>커피는 좋아해요. 차는 안 좋아해요.</div>
         </div>
       </div>
     </div>
@@ -804,10 +804,10 @@ export const grammarCardsP1: GrammarCard[] = [
       <div class="ov-section-hd"><div class="ov-section-line" style="background:#b49ccf"></div><div class="ov-section-title" style="color:#b49ccf">常用例句</div></div>
       <div class="ov-block">
         <div style="display:flex;flex-direction:column;gap:10px">
-          <div><div class="tok-row"><span class="tok t-s">저는</span><span class="tok t-v">학생이에요</span></div><div style="font-size:12px;color:#89756e">我是学生。</div></div>
-          <div><div class="tok-row"><span class="tok t-s">한국어는</span><span class="tok t-v">재미있어요</span></div><div style="font-size:12px;color:#89756e">韩语很有意思。</div></div>
-          <div><div class="tok-row"><span class="tok t-s">커피는</span><span class="tok t-v">좋아해요</span></div><div style="font-size:12px;color:#89756e">咖啡我喜欢。（对比感）</div></div>
-          <div><div class="tok-row"><span class="tok t-s">오늘은</span><span class="tok t-v">바빠요</span></div><div style="font-size:12px;color:#89756e">今天忙。（含对比：今天 vs 其他天）</div></div>
+          <div><div class="tok-row"><span class="tok t-s">저는</span><span class="tok t-v">학생이에요</span></div><div style="font-size:16px;color:#89756e">我是学生。</div></div>
+          <div><div class="tok-row"><span class="tok t-s">한국어는</span><span class="tok t-v">재미있어요</span></div><div style="font-size:16px;color:#89756e">韩语很有意思。</div></div>
+          <div><div class="tok-row"><span class="tok t-s">커피는</span><span class="tok t-v">좋아해요</span></div><div style="font-size:16px;color:#89756e">咖啡我喜欢。（对比感）</div></div>
+          <div><div class="tok-row"><span class="tok t-s">오늘은</span><span class="tok t-v">바빠요</span></div><div style="font-size:16px;color:#89756e">今天忙。（含对比：今天 vs 其他天）</div></div>
         </div>
       </div>
     </div>
@@ -836,27 +836,27 @@ export const grammarCardsP1: GrammarCard[] = [
     step0Html: `<div class="card-title">动作落在谁身上</div>
   <div class="card-body">을/를 告诉你：这个动作的「受害者」是谁。</div>
   <div class="hook-box">
-    <div style="font-size:12px;font-weight:800;color:#89756e;margin-bottom:12px">을/를 是什么？</div>
+    <div style="font-size:16px;font-weight:800;color:#89756e;margin-bottom:12px">을/를 是什么？</div>
     <div style="background:white;border-radius:14px;padding:14px;margin-bottom:12px">
       <div class="tok-row" style="margin-bottom:10px">
         <span class="tok t-s">저는</span>
         <span class="tok t-o">밥을</span>
         <span class="tok t-v">먹어요</span>
       </div>
-      <div style="font-size:12px;color:#89756e;line-height:1.8">
+      <div style="font-size:16px;color:#89756e;line-height:1.8">
         <span style="background:#ddf5ef;color:#2db89b;padding:2px 8px;border-radius:6px;font-weight:700">저는</span> 话题（我）<br>
         <span style="background:#f3eefb;color:#b49ccf;padding:2px 8px;border-radius:6px;font-weight:700">밥을</span> 动作对象（饭）← 을/를 标记这个<br>
         <span style="background:#ff7fa8;color:white;padding:2px 8px;border-radius:6px;font-weight:700">먹어요</span> 动作（吃）
       </div>
     </div>
-    <div style="font-size:13px;color:#ff7fa8;font-weight:700">👆 을/를 标记动作落在哪个名词上</div>
+    <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 을/를 标记动作落在哪个名词上</div>
   </div>
   <div class="reminder-box">을/를 不需要翻译成中文里的某个字。<br>它只是在说：<b>「前面这个词，是后面动作的对象。」</b></div>`,
     compareHtml: `<div class="card-title">을/를 — 两个字，选一个</div>
 <div class="card-body">选 을 还是 를，和 은/는 一样只看有无收音。을/를 标记动作的宾语——动作"落"在哪个词上。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">有收音 → 을</div><div style="font-size:14px;color:#89756e;margin-top:2px">末音节有辅音收尾</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">밥 → 밥을</span><span style="font-size:14px;color:#5a4640">吃饭（宾语）</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">책 → 책을</span><span style="font-size:14px;color:#5a4640">读书（宾语）</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">无收音 → 를</div><div style="font-size:14px;color:#89756e;margin-top:2px">末音节以元音结尾</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">커피 → 커피를</span><span style="font-size:14px;color:#5a4640">喝咖啡（宾语）</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">노래 → 노래를</span><span style="font-size:14px;color:#5a4640">听歌（宾语）</span></div></div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">有收音 → 을</div><div style="font-size:16px;color:#89756e;margin-top:2px">末音节有辅音收尾</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">밥 → 밥을</span><span style="font-size:16px;color:#5a4640">吃饭（宾语）</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">책 → 책을</span><span style="font-size:16px;color:#5a4640">读书（宾语）</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">无收音 → 를</div><div style="font-size:16px;color:#89756e;margin-top:2px">末音节以元音结尾</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">커피 → 커피를</span><span style="font-size:16px;color:#5a4640">喝咖啡（宾语）</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">노래 → 노래를</span><span style="font-size:16px;color:#5a4640">听歌（宾语）</span></div></div>
 </div>
-<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:15px;font-weight:700;color:#241917;margin-bottom:6px">을/를 vs 은/는 的区别</div><div style="font-size:15px;color:#5a4640">을/를：标宾语，标记动作的对象（"把什么"做了）<br>은/는：标话题，说"关于什么"<br>同一句话：저는（话题）커피를（宾语）마셔요。<br>中文"我喝咖啡"里没有这两种助词的区分，但韩语必须分清楚。</div></div>
+<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">을/를 vs 은/는 的区别</div><div style="font-size:16px;color:#5a4640">을/를：标宾语，标记动作的对象（"把什么"做了）<br>은/는：标话题，说"关于什么"<br>同一句话：저는（话题）커피를（宾语）마셔요。<br>中文"我喝咖啡"里没有这两种助词的区分，但韩语必须分清楚。</div></div>
 <div class="reminder-box">을/를 不需要翻译成中文的某个字，它只表示"前面的词是后面动作的对象"。선생님을 좋아해요（喜欢老师）——을 就是宾格标记。</div>`,
     structures: [
       {
@@ -990,7 +990,7 @@ export const grammarCardsP1: GrammarCard[] = [
         { pre: '커피', post: '마셔요', options: ['을', '를'], answer: 1, explanation: '피 无收音 → 를' },
       ],
     },
-    linkedGrammarIds: [],
+    linkedGrammarIds: ['g3'],
     overviewHtml: `<div class="overview">
     <div class="ov-hero">
       <div class="ov-hero-label">第 5 课 · 已完成</div>
@@ -1001,21 +1001,21 @@ export const grammarCardsP1: GrammarCard[] = [
       <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">核心规律</div></div>
       <div class="ov-block">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
-          <div style="background:#eaf8f5;border-radius:12px;padding:12px;text-align:center"><div style="font-size:20px;font-weight:900;color:#2db89b">을</div><div style="font-size:11px;color:#89756e;margin-top:4px">前面有收音</div><div style="font-size:12px;color:#241917;margin-top:4px">밥 → 밥을</div></div>
-          <div style="background:#fff0f5;border-radius:12px;padding:12px;text-align:center"><div style="font-size:20px;font-weight:900;color:#ff7fa8">를</div><div style="font-size:11px;color:#89756e;margin-top:4px">前面无收音</div><div style="font-size:12px;color:#241917;margin-top:4px">커피 → 커피를</div></div>
+          <div style="background:#eaf8f5;border-radius:12px;padding:12px;text-align:center"><div style="font-size:20px;font-weight:900;color:#2db89b">을</div><div style="font-size:11px;color:#89756e;margin-top:4px">前面有收音</div><div style="font-size:16px;color:#241917;margin-top:4px">밥 → 밥을</div></div>
+          <div style="background:#fff0f5;border-radius:12px;padding:12px;text-align:center"><div style="font-size:20px;font-weight:900;color:#ff7fa8">를</div><div style="font-size:11px;color:#89756e;margin-top:4px">前面无收音</div><div style="font-size:16px;color:#241917;margin-top:4px">커피 → 커피를</div></div>
         </div>
-        <div style="background:#f8f4f0;border-radius:12px;padding:12px;font-size:13px;color:#241917;line-height:1.8">을/를 = 标记<b>动作的对象</b>（宾语）<br>位置：宾语 + 动词 = 을/를 + 动词</div>
+        <div style="background:#f8f4f0;border-radius:12px;padding:12px;font-size:16px;color:#241917;line-height:1.8">을/를 = 标记<b>动作的对象</b>（宾语）<br>位置：宾语 + 动词 = 을/를 + 动词</div>
       </div>
     </div>
     <div class="ov-section">
       <div class="ov-section-hd"><div class="ov-section-line" style="background:#b49ccf"></div><div class="ov-section-title" style="color:#b49ccf">常用搭配</div></div>
       <div class="ov-block">
         <div style="display:flex;flex-direction:column;gap:8px">
-          <div style="display:flex;justify-content:space-between"><div class="tok-row" style="margin:0"><span class="tok t-o">밥을</span><span class="tok t-v">먹어요</span></div><div style="font-size:12px;color:#89756e;align-self:center">吃饭</div></div>
-          <div style="display:flex;justify-content:space-between"><div class="tok-row" style="margin:0"><span class="tok t-o">커피를</span><span class="tok t-v">마셔요</span></div><div style="font-size:12px;color:#89756e;align-self:center">喝咖啡</div></div>
-          <div style="display:flex;justify-content:space-between"><div class="tok-row" style="margin:0"><span class="tok t-o">영화를</span><span class="tok t-v">봐요</span></div><div style="font-size:12px;color:#89756e;align-self:center">看电影</div></div>
-          <div style="display:flex;justify-content:space-between"><div class="tok-row" style="margin:0"><span class="tok t-o">노래를</span><span class="tok t-v">들어요</span></div><div style="font-size:12px;color:#89756e;align-self:center">听歌</div></div>
-          <div style="display:flex;justify-content:space-between"><div class="tok-row" style="margin:0"><span class="tok t-o">한국어를</span><span class="tok t-v">공부해요</span></div><div style="font-size:12px;color:#89756e;align-self:center">学韩语</div></div>
+          <div style="display:flex;justify-content:space-between"><div class="tok-row" style="margin:0"><span class="tok t-o">밥을</span><span class="tok t-v">먹어요</span></div><div style="font-size:16px;color:#89756e;align-self:center">吃饭</div></div>
+          <div style="display:flex;justify-content:space-between"><div class="tok-row" style="margin:0"><span class="tok t-o">커피를</span><span class="tok t-v">마셔요</span></div><div style="font-size:16px;color:#89756e;align-self:center">喝咖啡</div></div>
+          <div style="display:flex;justify-content:space-between"><div class="tok-row" style="margin:0"><span class="tok t-o">영화를</span><span class="tok t-v">봐요</span></div><div style="font-size:16px;color:#89756e;align-self:center">看电影</div></div>
+          <div style="display:flex;justify-content:space-between"><div class="tok-row" style="margin:0"><span class="tok t-o">노래를</span><span class="tok t-v">들어요</span></div><div style="font-size:16px;color:#89756e;align-self:center">听歌</div></div>
+          <div style="display:flex;justify-content:space-between"><div class="tok-row" style="margin:0"><span class="tok t-o">한국어를</span><span class="tok t-v">공부해요</span></div><div style="font-size:16px;color:#89756e;align-self:center">学韩语</div></div>
         </div>
       </div>
     </div>
@@ -1040,29 +1040,29 @@ export const grammarCardsP1: GrammarCard[] = [
     structureNote: '에 有三种用法，但形式完全一样。\n下面展示三种句型，靠后面的动词就能判断是哪种用法。',
     rulesNote: '에 的规则简单：\n直接加在时间词或地点词后面，不看收音。\n关键是后面配什么动词：\n가다/오다→方向，있다/없다→存在，시간+에→时间点。',
     scenarioNote: '에 在日常对话里极其常见说去哪里、在哪里、几点都用它。\n中文的"在/去/到"是三个词，韩语统一用 에，靠动词来区分含义。',
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">에 — 一个词，三种定位</h1>
-  <p class="sub" style="color:#89756e;font-size:.9rem;margin-bottom:22px">去哪里 · 在哪里 · 几点</p>
+    step0Html: `<h1 style="font-size:25px;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">에 — 一个词，三种定位</h1>
+  <p class="sub" style="color:#89756e;font-size:16px;margin-bottom:22px">去哪里 · 在哪里 · 几点</p>
   <div class="block">
-    <div style="font-size:.95rem;font-weight:700;margin-bottom:10px;color:#2db89b">想一想，这三句韩语你会说吗？</div>
-    <div style="margin-bottom:10px"><div class="ko" style="font-size:1.25rem;font-weight:700;color:#241917">학교에 가요.</div><div class="zh" style="font-size:.88rem;color:#89756e;margin-top:2px">去学校。</div></div>
-    <div style="margin-bottom:10px"><div class="ko" style="font-size:1.25rem;font-weight:700;color:#241917">집에 있어요.</div><div class="zh" style="font-size:.88rem;color:#89756e;margin-top:2px">在家。</div></div>
-    <div style="margin-bottom:10px"><div class="ko" style="font-size:1.25rem;font-weight:700;color:#241917">세 시에 만나요.</div><div class="zh" style="font-size:.88rem;color:#89756e;margin-top:2px">三点见。</div></div>
-    <div style="margin-top:12px;font-size:.88rem;color:#89756e">这三句里都有 <strong style="color:#ff7fa8">에</strong>，但含义不一样。这节课搞定它。</div>
+    <div style="font-size:16px;font-weight:700;margin-bottom:10px;color:#2db89b">想一想，这三句韩语你会说吗？</div>
+    <div style="margin-bottom:10px"><div class="ko" style="font-size:20px;font-weight:700;color:#241917">학교에 가요.</div><div class="zh" style="font-size:16px;color:#89756e;margin-top:2px">去学校。</div></div>
+    <div style="margin-bottom:10px"><div class="ko" style="font-size:20px;font-weight:700;color:#241917">집에 있어요.</div><div class="zh" style="font-size:16px;color:#89756e;margin-top:2px">在家。</div></div>
+    <div style="margin-bottom:10px"><div class="ko" style="font-size:20px;font-weight:700;color:#241917">세 시에 만나요.</div><div class="zh" style="font-size:16px;color:#89756e;margin-top:2px">三点见。</div></div>
+    <div style="margin-top:12px;font-size:16px;color:#89756e">这三句里都有 <strong style="color:#ff7fa8">에</strong>，但含义不一样。这节课搞定它。</div>
   </div>
   <div class="block">
-    <div style="font-size:.95rem;font-weight:700;margin-bottom:10px;color:#2db89b">에 的三张面孔</div>
+    <div style="font-size:16px;font-weight:700;margin-bottom:10px;color:#2db89b">에 的三张面孔</div>
     <div class="row" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
       <span class="chip p">방향: 去哪里</span>
       <span class="chip s">존재: 在哪里</span>
       <span class="chip t">시간: 几点/什么时候</span>
     </div>
-    <div style="margin-top:10px;font-size:.85rem;color:#89756e">同一个 에，意思取决于后面的动词。</div>
+    <div style="margin-top:10px;font-size:16px;color:#89756e">同一个 에，意思取决于后面的动词。</div>
   </div>`,
     compareHtml: `<div class="card-title">에 — 三种用法一个助词</div>
 <div class="card-body">中文"在/去/到"是三个词，韩语统一用 에，靠后面搭配的动词来区分含义。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">方向（去/来）</div><div style="font-size:14px;color:#89756e;margin-top:2px">地点 + 에 + 가다/오다</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">학교에 가요.</span><span style="font-size:14px;color:#5a4640">去学校。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">한국에 와요.</span><span style="font-size:14px;color:#5a4640">来韩国。</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">存在（在）</div><div style="font-size:14px;color:#89756e;margin-top:2px">地点 + 에 + 있다/없다</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">집에 있어요.</span><span style="font-size:14px;color:#5a4640">在家。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">세 시에 만나요.</span><span style="font-size:14px;color:#5a4640">三点见。（时间）</span></div></div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">方向（去/来）</div><div style="font-size:16px;color:#89756e;margin-top:2px">地点 + 에 + 가다/오다</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">학교에 가요.</span><span style="font-size:16px;color:#5a4640">去学校。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">한국에 와요.</span><span style="font-size:16px;color:#5a4640">来韩国。</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">存在（在）</div><div style="font-size:16px;color:#89756e;margin-top:2px">地点 + 에 + 있다/없다</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">집에 있어요.</span><span style="font-size:16px;color:#5a4640">在家。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">세 시에 만나요.</span><span style="font-size:16px;color:#5a4640">三点见。（时间）</span></div></div>
 </div>
-<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:15px;font-weight:700;color:#241917;margin-bottom:6px">时间也用 에</div><div style="font-size:15px;color:#5a4640">에 还可以表示时间点：세 시에 만나요（三点见）、월요일에 해요（周一做）。中文"在三点""在周一"里的"在"，韩语也用 에 表达。</div><div style="margin-top:4px;font-size:15px;color:#5a4640">关键：에 后面接 가요/와요 → 方向；接 있어요/없어요 → 存在；接时间词 → 时间点。</div></div>
+<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">时间也用 에</div><div style="font-size:16px;color:#5a4640">에 还可以表示时间点：세 시에 만나요（三点见）、월요일에 해요（周一做）。中文"在三点""在周一"里的"在"，韩语也用 에 表达。</div><div style="margin-top:4px;font-size:16px;color:#5a4640">关键：에 后面接 가요/와요 → 方向；接 있어요/없어요 → 存在；接时间词 → 时间点。</div></div>
 <div class="reminder-box">에서 ≠ 에。에서 是"在某地做动作"，에 是"去某地/在某地存在"。下一课专门学 에서。</div>`,
     structures: [
       {
@@ -1186,14 +1186,14 @@ export const grammarCardsP1: GrammarCard[] = [
         { options: ['집에 가요', '집에서 가요'], answer: 0, explanation: '가다 等方向动词用 에。' },
       ],
     },
-    linkedGrammarIds: [],
+    linkedGrammarIds: ['g4'],
     overviewHtml: `<div class="overview">
     <div class="badge">第6课</div>
     <div class="ov-title">에 — 时间、地点、方向</div>
     <div class="ov-sub">장소에 가요 · 장소에 있어요 · 시간에 动词</div>
     <div class="ov-sec">
       <h3>核心规律</h3>
-      <div style="font-size:.88rem;line-height:1.9">
+      <div style="font-size:16px;line-height:1.9">
         <strong>방향: </strong>장소에 가요 / 와요<br>
         <strong>존재: </strong>장소에 있어요 / 없어요 / 살아요<br>
         <strong>시간: </strong>시간에 + 动词<br>
@@ -1218,7 +1218,7 @@ export const grammarCardsP1: GrammarCard[] = [
     </div>
     <div class="ov-sec">
       <h3>常见错误</h3>
-      <div style="font-size:.85rem;line-height:1.8">
+      <div style="font-size:16px;line-height:1.8">
         <span style="color:#be185d">✗</span> 학교에 공부해요 → <span style="color:#1a7a4a">✓</span> 학교<strong>에서</strong> 공부해요<br>
         <span style="color:#be185d">✗</span> 오늘에 공부해요 → <span style="color:#1a7a4a">✓</span> 오늘 공부해요
       </div>
@@ -1237,26 +1237,26 @@ export const grammarCardsP1: GrammarCard[] = [
     structureNote: '에서 只有一个用法：\n在哪里「做」动作。\n下面的结构展示它和动词的搭配方式。',
     rulesNote: '判断用 에 还是 에서 只需要问一句话：\n这里是「真的在做某件事」，还是「只是存在/在那里」？做事→ 에서，存在/去向→ 에。',
     scenarioNote: '几乎所有「在某地做某事」的句子都需要 에서在咖啡店工作、在学校学习、在家休息。\n和 에 的区分是P1最重要的辨析，值得多练。',
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">에서 — 在哪里「做」动作</h1>
-  <p class="sub" style="color:#89756e;font-size:.9rem;margin-bottom:22px">动作 + 地点 的专属搭档</p>
+    step0Html: `<h1 style="font-size:25px;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">에서 — 在哪里「做」动作</h1>
+  <p class="sub" style="color:#89756e;font-size:16px;margin-bottom:22px">动作 + 地点 的专属搭档</p>
   <div class="block">
-    <div style="font-size:.95rem;font-weight:700;margin-bottom:10px;color:#2db89b">学完这节课，你能说：</div>
-    <div style="margin-bottom:10px"><div class="ko" style="font-size:1.25rem;font-weight:700;color:#241917">학교에서 공부해요.</div><div class="zh" style="font-size:.88rem;color:#89756e;margin-top:2px">在学校学习。</div></div>
-    <div style="margin-bottom:10px"><div class="ko" style="font-size:1.25rem;font-weight:700;color:#241917">카페에서 커피를 마셔요.</div><div class="zh" style="font-size:.88rem;color:#89756e;margin-top:2px">在咖啡店喝咖啡。</div></div>
-    <div style="margin-bottom:10px"><div class="ko" style="font-size:1.25rem;font-weight:700;color:#241917">공원에서 사진을 찍어요.</div><div class="zh" style="font-size:.88rem;color:#89756e;margin-top:2px">在公园拍照。</div></div>
+    <div style="font-size:16px;font-weight:700;margin-bottom:10px;color:#2db89b">学完这节课，你能说：</div>
+    <div style="margin-bottom:10px"><div class="ko" style="font-size:20px;font-weight:700;color:#241917">학교에서 공부해요.</div><div class="zh" style="font-size:16px;color:#89756e;margin-top:2px">在学校学习。</div></div>
+    <div style="margin-bottom:10px"><div class="ko" style="font-size:20px;font-weight:700;color:#241917">카페에서 커피를 마셔요.</div><div class="zh" style="font-size:16px;color:#89756e;margin-top:2px">在咖啡店喝咖啡。</div></div>
+    <div style="margin-bottom:10px"><div class="ko" style="font-size:20px;font-weight:700;color:#241917">공원에서 사진을 찍어요.</div><div class="zh" style="font-size:16px;color:#89756e;margin-top:2px">在公园拍照。</div></div>
   </div>
   <div class="block">
-    <div style="font-size:.95rem;font-weight:700;margin-bottom:10px;color:#2db89b">에 vs 에서 先记这一句</div>
-    <div style="font-size:.88rem;line-height:2;background:#f8f4f0;border-radius:8px;padding:10px">
+    <div style="font-size:16px;font-weight:700;margin-bottom:10px;color:#2db89b">에 vs 에서 先记这一句</div>
+    <div style="font-size:16px;line-height:2;background:#f8f4f0;border-radius:8px;padding:10px">
       <div><span style="color:#2db89b;font-weight:700">에</span>：去哪里 / 在哪里存在 / 几点</div>
       <div><span style="color:#ff7fa8;font-weight:700">에서</span>：在哪里<strong>做动作</strong></div>
     </div>
   </div>`,
     compareHtml: `<div class="card-title">에 vs 에서 — 最常混淆的两个助词</div>
 <div class="card-body">中文"在图书馆读书"里"在"一个词搞定，韩语要区分 에（存在/方向）和 에서（动作发生地）。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">에（存在/方向）</div><div style="font-size:14px;color:#89756e;margin-top:2px">接 있다/없다/가다/오다</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">카페에 있어요.</span><span style="font-size:14px;color:#5a4640">在咖啡店。（存在）</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">카페에 가요.</span><span style="font-size:14px;color:#5a4640">去咖啡店。（方向）</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">에서（动作发生地）</div><div style="font-size:14px;color:#89756e;margin-top:2px">接一般动作动词</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">카페에서 공부해요.</span><span style="font-size:14px;color:#5a4640">在咖啡店学习。（动作）</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">도서관에서 책을 읽어요.</span><span style="font-size:14px;color:#5a4640">在图书馆读书。（动作）</span></div></div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">에（存在/方向）</div><div style="font-size:16px;color:#89756e;margin-top:2px">接 있다/없다/가다/오다</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">카페에 있어요.</span><span style="font-size:16px;color:#5a4640">在咖啡店。（存在）</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">카페에 가요.</span><span style="font-size:16px;color:#5a4640">去咖啡店。（方向）</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">에서（动作发生地）</div><div style="font-size:16px;color:#89756e;margin-top:2px">接一般动作动词</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">카페에서 공부해요.</span><span style="font-size:16px;color:#5a4640">在咖啡店学习。（动作）</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">도서관에서 책을 읽어요.</span><span style="font-size:16px;color:#5a4640">在图书馆读书。（动作）</span></div></div>
 </div>
-<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:15px;font-weight:700;color:#241917;margin-bottom:6px">判断口诀</div><div style="font-size:15px;color:#5a4640">后面接 있다/없다/가다/오다 → 用 에。后面接其他动作动词（먹다/공부하다/일하다）→ 用 에서。这个区分中文没有，需要刻意练习。</div><div style="margin-top:4px;font-size:15px;color:#5a4640">测试：학교에서 있어요 ✗ → 학교에 있어요 ✓（있다 前面用 에）</div></div>
+<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">判断口诀</div><div style="font-size:16px;color:#5a4640">后面接 있다/없다/가다/오다 → 用 에。后面接其他动作动词（먹다/공부하다/일하다）→ 用 에서。这个区分中文没有，需要刻意练习。</div><div style="margin-top:4px;font-size:16px;color:#5a4640">测试：학교에서 있어요 ✗ → 학교에 있어요 ✓（있다 前面用 에）</div></div>
 <div class="reminder-box">에서 있어요 ✗ — 있다/없다 前面永远用 에，不用 에서。这是 P1 里最常犯的助词错误。</div>`,
     structures: [
       {
@@ -1379,14 +1379,14 @@ export const grammarCardsP1: GrammarCard[] = [
         { pre: '화장실', post: '있어요', options: ['에', '에서'], answer: 0, explanation: '있다 是存在 → 存在位置用 에' },
       ],
     },
-    linkedGrammarIds: [],
+    linkedGrammarIds: ['g5'],
     overviewHtml: `<div class="overview">
     <div class="badge">第7课</div>
     <div class="ov-title">에서 — 在哪里做动作</div>
     <div class="ov-sub">장소에서 + 动作动词</div>
     <div class="ov-sec">
       <h3>核心规律</h3>
-      <div style="font-size:.88rem;line-height:1.9">
+      <div style="font-size:16px;line-height:1.9">
         <strong>에서</strong>：在哪里做动作 → 地点 + 에서 + 动词<br>
         <strong>에 vs 에서：</strong>只是"在不在" → 에；真的"做什么" → 에서<br>
         <strong>记住：</strong>있어요/없어요 用 에，不用 에서
@@ -1404,7 +1404,7 @@ export const grammarCardsP1: GrammarCard[] = [
     </div>
     <div class="ov-sec">
       <h3>常见错误</h3>
-      <div style="font-size:.85rem;line-height:1.8">
+      <div style="font-size:16px;line-height:1.8">
         <span style="color:#be185d">✗</span> 학교에 공부해요 → <span style="color:#1a7a4a">✓</span> 학교<strong>에서</strong> 공부해요<br>
         <span style="color:#be185d">✗</span> 집에서 있어요 → <span style="color:#1a7a4a">✓</span> 집<strong>에</strong> 있어요<br>
         <span style="color:#be185d">✗</span> 세 시에서 만나요 → <span style="color:#1a7a4a">✓</span> 세 시<strong>에</strong> 만나요
@@ -1424,11 +1424,11 @@ export const grammarCardsP1: GrammarCard[] = [
     structureNote: '过去时只改动词/形容词的词尾，主语和助词完全不变。\n下面展示变化后的句型框架。',
     rulesNote: '过去时词尾由词干最后的元音决定：\nㅏ/ㅗ 结尾→ 았어요，其他元音→ 었어요，하다→ 했어요。\n三条规则覆盖99%的词。',
     scenarioNote: '写日记、讲昨天发生的事、追剧聊剧情都需要过去时。\n和中文的「了」不完全一样韩语过去时单纯表示「已发生」，不像中文「了」还能表示变化或持续结果。',
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">过去时 — 说「昨天做了什么」</h1>
-  <p class="sub" style="color:#89756e;font-size:.9rem;margin-bottom:22px">-았어요 / -었어요 / -했어요</p>
+    step0Html: `<h1 style="font-size:25px;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">过去时 — 说「昨天做了什么」</h1>
+  <p class="sub" style="color:#89756e;font-size:16px;margin-bottom:22px">-았어요 / -었어요 / -했어요</p>
   <div class="block">
-    <div style="font-size:.95rem;font-weight:700;margin-bottom:10px;color:#2db89b">从现在时到过去时</div>
-    <table style="width:100%;border-collapse:collapse;font-size:.86rem">
+    <div style="font-size:16px;font-weight:700;margin-bottom:10px;color:#2db89b">从现在时到过去时</div>
+    <table style="width:100%;border-collapse:collapse;font-size:16px">
       <tr><th style="background:#ffeef4;color:#be185d;padding:7px 10px;text-align:left;font-weight:700">现在</th><th style="background:#ffeef4;color:#be185d;padding:7px 10px;text-align:left;font-weight:700">→</th><th style="background:#ffeef4;color:#be185d;padding:7px 10px;text-align:left;font-weight:700">过去</th><th style="background:#ffeef4;color:#be185d;padding:7px 10px;text-align:left;font-weight:700">中文</th></tr>
       <tr><td style="padding:7px 10px;border-bottom:1px solid #f0e8e4">가요</td><td style="padding:7px 10px;border-bottom:1px solid #f0e8e4">→</td><td style="padding:7px 10px;border-bottom:1px solid #f0e8e4;color:#ff7fa8">갔어요</td><td style="padding:7px 10px;border-bottom:1px solid #f0e8e4">去了</td></tr>
       <tr><td style="padding:7px 10px;border-bottom:1px solid #f0e8e4">먹어요</td><td style="padding:7px 10px;border-bottom:1px solid #f0e8e4">→</td><td style="padding:7px 10px;border-bottom:1px solid #f0e8e4;color:#ff7fa8">먹었어요</td><td style="padding:7px 10px;border-bottom:1px solid #f0e8e4">吃了</td></tr>
@@ -1437,8 +1437,8 @@ export const grammarCardsP1: GrammarCard[] = [
     </table>
   </div>
   <div class="block">
-    <div style="font-size:.95rem;font-weight:700;margin-bottom:10px;color:#2db89b">这节课学完，你能写韩语日记：</div>
-    <div style="font-size:.88rem;line-height:2;background:#f0fdf8;border-radius:8px;padding:10px">
+    <div style="font-size:16px;font-weight:700;margin-bottom:10px;color:#2db89b">这节课学完，你能写韩语日记：</div>
+    <div style="font-size:16px;line-height:2;background:#f0fdf8;border-radius:8px;padding:10px">
       어제 한국어를 공부했어요. — 昨天学习了韩语。<br>
       지난주에 도서관에 갔어요. — 上周去了图书馆。<br>
       이 노래가 좋았어요. — 这首歌很好。
@@ -1446,9 +1446,9 @@ export const grammarCardsP1: GrammarCard[] = [
   </div>`,
     compareHtml: `<div class="card-title">过去时变形 — 元音决定词尾</div>
 <div class="card-body">韩语过去时词尾由词干末元音决定，不像中文加"了"那么简单——要先看元音再选词尾。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">末元音 ㅏ/ㅗ → -았어요</div><div style="font-size:14px;color:#89756e;margin-top:2px">亮元音接亮词尾</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">가다 → 갔어요</span><span style="font-size:14px;color:#5a4640">去了。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">보다 → 봤어요</span><span style="font-size:14px;color:#5a4640">看了。</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">其他元音 → -었어요</div><div style="font-size:14px;color:#89756e;margin-top:2px">暗元音接暗词尾</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">먹다 → 먹었어요</span><span style="font-size:14px;color:#5a4640">吃了。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">마시다 → 마셨어요</span><span style="font-size:14px;color:#5a4640">喝了。</span></div></div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">末元音 ㅏ/ㅗ → -았어요</div><div style="font-size:16px;color:#89756e;margin-top:2px">亮元音接亮词尾</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">가다 → 갔어요</span><span style="font-size:16px;color:#5a4640">去了。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">보다 → 봤어요</span><span style="font-size:16px;color:#5a4640">看了。</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">其他元音 → -었어요</div><div style="font-size:16px;color:#89756e;margin-top:2px">暗元音接暗词尾</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">먹다 → 먹었어요</span><span style="font-size:16px;color:#5a4640">吃了。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">마시다 → 마셨어요</span><span style="font-size:16px;color:#5a4640">喝了。</span></div></div>
 </div>
-<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:15px;font-weight:700;color:#241917;margin-bottom:6px">하다 动词特殊</div><div style="font-size:15px;color:#5a4640">所有 하다 动词统一变 했어요：공부하다→공부했어요，좋아하다→좋아했어요。不需要判断元音，记住这个特例就省事了。</div><div style="margin-top:4px;font-size:15px;color:#5a4640">中文"了"表示动作完成或状态变化，韩语 -었어요 只表示"已经发生"，不表示状态持续。</div></div>
+<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">하다 动词特殊</div><div style="font-size:16px;color:#5a4640">所有 하다 动词统一变 했어요：공부하다→공부했어요，좋아하다→좋아했어요。不需要判断元音，记住这个特例就省事了。</div><div style="margin-top:4px;font-size:16px;color:#5a4640">中文"了"表示动作完成或状态变化，韩语 -었어요 只表示"已经发生"，不表示状态持续。</div></div>
 <div class="reminder-box">이다（是）→ 이었어요/였어요（过去"是"）。학생이었어요（曾经是学生）/ 가수였어요（曾经是歌手）。이다 过去时容易忘，要单独记。</div>`,
     structures: [
       {
@@ -1574,14 +1574,14 @@ export const grammarCardsP1: GrammarCard[] = [
         { prompt: '现在时：와요', options: ['왔어요', '오었어요', '와었어요'], answer: 0, explanation: '오+았어요→왔어요（缩约）' },
       ],
     },
-    linkedGrammarIds: ['gp-23'],
+    linkedGrammarIds: ['g47'],
     overviewHtml: `<div class="overview">
     <div class="badge">第8课</div>
     <div class="ov-title">过去时 -았/었/했어요</div>
     <div class="ov-sub">昨天做了什么 · 刚才 · 上周</div>
     <div class="ov-sec">
       <h3>三条规则</h3>
-      <div style="font-size:.88rem;line-height:2">
+      <div style="font-size:16px;line-height:2">
         <strong>规则 1：</strong>词干元音 ㅏ/ㅗ → -았어요（가→갔어요, 보→봤어요）<br>
         <strong>规则 2：</strong>其他元音 → -었어요（먹→먹었어요）<br>
         <strong>规则 3：</strong>하다 → 했어요（공부하다→공부했어요）
@@ -1618,11 +1618,11 @@ export const grammarCardsP1: GrammarCard[] = [
     structureNote: '将来时在现在时的基础上只改动词词尾，结构位置完全相同。\n下面展示变化后的句型。',
     rulesNote: '将来时只看一件事：\n词干最后有没有收音。\n有收音加을 거예요，没有收音加ㄹ 거예요。\n比过去时更简单，只有两条。',
     scenarioNote: '说计划、约定、推测都用-을/ㄹ 거예요。\n它同时覆盖中文的「要/会/打算」三种含义，是一个词尾三种用法。',
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">将来时 — 说「以后要做什么」</h1>
-  <p class="sub" style="color:#89756e;font-size:.9rem;margin-bottom:22px">-을/ㄹ 거예요 = 要做/会做/打算做</p>
+    step0Html: `<h1 style="font-size:25px;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">将来时 — 说「以后要做什么」</h1>
+  <p class="sub" style="color:#89756e;font-size:16px;margin-bottom:22px">-을/ㄹ 거예요 = 要做/会做/打算做</p>
   <div class="block">
-    <div style="font-size:.95rem;font-weight:700;margin-bottom:10px;color:#2db89b">三种时态对比</div>
-    <table style="width:100%;border-collapse:collapse;font-size:.86rem">
+    <div style="font-size:16px;font-weight:700;margin-bottom:10px;color:#2db89b">三种时态对比</div>
+    <table style="width:100%;border-collapse:collapse;font-size:16px">
       <tr><th style="background:#ffeef4;color:#be185d;padding:7px 10px;text-align:left;font-weight:700">时态</th><th style="background:#ffeef4;color:#be185d;padding:7px 10px;text-align:left;font-weight:700">韩语</th><th style="background:#ffeef4;color:#be185d;padding:7px 10px;text-align:left;font-weight:700">中文</th></tr>
       <tr><td style="padding:7px 10px;border-bottom:1px solid #f0e8e4">现在</td><td style="padding:7px 10px;border-bottom:1px solid #f0e8e4">공부해요</td><td style="padding:7px 10px;border-bottom:1px solid #f0e8e4">学习</td></tr>
       <tr><td style="padding:7px 10px;border-bottom:1px solid #f0e8e4">过去</td><td style="padding:7px 10px;border-bottom:1px solid #f0e8e4">공부했어요</td><td style="padding:7px 10px;border-bottom:1px solid #f0e8e4">学习了</td></tr>
@@ -1630,8 +1630,8 @@ export const grammarCardsP1: GrammarCard[] = [
     </table>
   </div>
   <div class="block">
-    <div style="font-size:.95rem;font-weight:700;margin-bottom:10px;color:#2db89b">学完这节课，你能说：</div>
-    <div style="font-size:.88rem;line-height:2;background:#f0fdf8;border-radius:8px;padding:10px">
+    <div style="font-size:16px;font-weight:700;margin-bottom:10px;color:#2db89b">学完这节课，你能说：</div>
+    <div style="font-size:16px;line-height:2;background:#f0fdf8;border-radius:8px;padding:10px">
       내일 한국어를 공부할 거예요. — 明天要学习韩语。<br>
       주말에 카페에 갈 거예요. — 周末要去咖啡店。<br>
       나중에 한국에 갈 거예요. — 以后会去韩国。
@@ -1639,9 +1639,9 @@ export const grammarCardsP1: GrammarCard[] = [
   </div>`,
     compareHtml: `<div class="card-title">将来时 — 两条规则搞定</div>
 <div class="card-body">-을/ㄹ 거예요 表示要做/会做/打算做。中文"要/会/打算"是独立词，韩语把这三种意思全用一个词尾表达，放在动词末尾。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">词干无收音 → -ㄹ 거예요</div><div style="font-size:14px;color:#89756e;margin-top:2px">末音节以元音结尾</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">가다 → 갈 거예요</span><span style="font-size:14px;color:#5a4640">要去。/ 打算去。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">하다 → 할 거예요</span><span style="font-size:14px;color:#5a4640">要做。</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">词干有收音 → -을 거예요</div><div style="font-size:14px;color:#89756e;margin-top:2px">末音节以辅音结尾</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">먹다 → 먹을 거예요</span><span style="font-size:14px;color:#5a4640">要吃。/ 打算吃。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">읽다 → 읽을 거예요</span><span style="font-size:14px;color:#5a4640">要读。</span></div></div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">词干无收音 → -ㄹ 거예요</div><div style="font-size:16px;color:#89756e;margin-top:2px">末音节以元音结尾</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">가다 → 갈 거예요</span><span style="font-size:16px;color:#5a4640">要去。/ 打算去。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">하다 → 할 거예요</span><span style="font-size:16px;color:#5a4640">要做。</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">词干有收音 → -을 거예요</div><div style="font-size:16px;color:#89756e;margin-top:2px">末音节以辅音结尾</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">먹다 → 먹을 거예요</span><span style="font-size:16px;color:#5a4640">要吃。/ 打算吃。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">읽다 → 읽을 거예요</span><span style="font-size:16px;color:#5a4640">要读。</span></div></div>
 </div>
-<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:15px;font-weight:700;color:#241917;margin-bottom:6px">和现在时的对比</div><div style="font-size:15px;color:#5a4640">현재（现在）：지금 밥을 먹어요（现在吃饭）<br>미래（将来）：내일 밥을 먹을 거예요（明天要吃饭）。区别只在词尾，中文靠"现在/明天"区分，韩语词尾本身就带时态信息。</div><div style="margin-top:4px;font-size:15px;color:#5a4640">问对方计划：뭐 할 거예요?（打算做什么？）— 日常对话高频句型。</div></div>
+<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">和现在时的对比</div><div style="font-size:16px;color:#5a4640">현재（现在）：지금 밥을 먹어요（现在吃饭）<br>미래（将来）：내일 밥을 먹을 거예요（明天要吃饭）。区别只在词尾，中文靠"现在/明天"区分，韩语词尾本身就带时态信息。</div><div style="margin-top:4px;font-size:16px;color:#5a4640">问对方计划：뭐 할 거예요?（打算做什么？）— 日常对话高频句型。</div></div>
 <div class="reminder-box">거예요 前面有空格：먹을 거예요（✓），먹을거예요（✗）。거 和 예요 之间也有空格，是三个词：먹을 / 거 / 예요。</div>`,
     structures: [
       {
@@ -1774,14 +1774,14 @@ export const grammarCardsP1: GrammarCard[] = [
         { prompt: '词典形：읽다', options: ['읽을 거예요', '읽ㄹ 거예요', '읽거예요'], answer: 0, explanation: '词干 읽 有收音 → 을 거예요' },
       ],
     },
-    linkedGrammarIds: ['gp-24'],
+    linkedGrammarIds: ['g48'],
     overviewHtml: `<div class="overview">
     <div class="badge">第9课</div>
     <div class="ov-title">将来时 -을/ㄹ 거예요</div>
     <div class="ov-sub">明天要做什么 · 周末计划 · 以后打算</div>
     <div class="ov-sec">
       <h3>两条规则</h3>
-      <div style="font-size:.88rem;line-height:2">
+      <div style="font-size:16px;line-height:2">
         <strong>规则 1：</strong>词干无收音 → -ㄹ 거예요（가→갈, 보→볼）<br>
         <strong>规则 2：</strong>词干有收音 → -을 거예요（먹→먹을）<br>
         <strong>特例：</strong>하다 → 할 거예요（공부할, 운동할）
@@ -1815,11 +1815,11 @@ export const grammarCardsP1: GrammarCard[] = [
     title: '进行时',
     whatItDoes: '说正在做什么',
     whatItDoesBody: '动词词干 + 고 있어요，比过去时和将来时都简单，不用判断元音。\n和中文不同：\n中文进行时靠"正在/着"来表达，韩语把进行意义直接嵌入动词词尾，不需要额外加词。',
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">进行时 — 说「正在做什么」</h1>
-  <p class="sub" style="color:#89756e;font-size:.9rem;margin-bottom:22px">动词词干 + 고 있어요</p>
+    step0Html: `<h1 style="font-size:25px;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">进行时 — 说「正在做什么」</h1>
+  <p class="sub" style="color:#89756e;font-size:16px;margin-bottom:22px">动词词干 + 고 있어요</p>
   <div class="block">
-    <div style="font-size:.95rem;font-weight:700;margin-bottom:10px;color:#2db89b">三种时态全对比</div>
-    <table style="width:100%;border-collapse:collapse;font-size:.86rem">
+    <div style="font-size:16px;font-weight:700;margin-bottom:10px;color:#2db89b">三种时态全对比</div>
+    <table style="width:100%;border-collapse:collapse;font-size:16px">
       <tr><th style="background:#ffeef4;color:#be185d;padding:7px 10px;text-align:left;font-weight:700">时态</th><th style="background:#ffeef4;color:#be185d;padding:7px 10px;text-align:left;font-weight:700">韩语</th><th style="background:#ffeef4;color:#be185d;padding:7px 10px;text-align:left;font-weight:700">中文</th></tr>
       <tr><td style="padding:7px 10px;border-bottom:1px solid #f0e8e4">过去</td><td style="padding:7px 10px;border-bottom:1px solid #f0e8e4">공부했어요</td><td style="padding:7px 10px;border-bottom:1px solid #f0e8e4">学习了</td></tr>
       <tr><td style="padding:7px 10px;border-bottom:1px solid #f0e8e4">现在/习惯</td><td style="padding:7px 10px;border-bottom:1px solid #f0e8e4">공부해요</td><td style="padding:7px 10px;border-bottom:1px solid #f0e8e4">学习</td></tr>
@@ -1828,8 +1828,8 @@ export const grammarCardsP1: GrammarCard[] = [
     </table>
   </div>
   <div class="block">
-    <div style="font-size:.95rem;font-weight:700;margin-bottom:10px;color:#2db89b">学完这节课，你能说：</div>
-    <div style="font-size:.88rem;line-height:2;background:#f0fdf8;border-radius:8px;padding:10px">
+    <div style="font-size:16px;font-weight:700;margin-bottom:10px;color:#2db89b">学完这节课，你能说：</div>
+    <div style="font-size:16px;line-height:2;background:#f0fdf8;border-radius:8px;padding:10px">
       지금 한국어를 공부하고 있어요. — 现在正在学习韩语。<br>
       이 노래를 듣고 있어요. — 正在听这首歌。<br>
       카페에서 커피를 마시고 있어요. — 正在咖啡店喝咖啡。
@@ -1837,9 +1837,9 @@ export const grammarCardsP1: GrammarCard[] = [
   </div>`,
     compareHtml: `<div class="card-title">进行时 — 最简单的时态</div>
 <div class="card-body">动词词干 + 고 있어요，不用判断元音，比过去时和将来时都简单。中文进行时靠"正在/着"表达，韩语把进行意义嵌入词尾。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">进行时（-고 있어요）</div><div style="font-size:14px;color:#89756e;margin-top:2px">动词词干 + 고 있어요</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">먹다 → 먹고 있어요</span><span style="font-size:14px;color:#5a4640">正在吃。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">공부하다 → 공부하고 있어요</span><span style="font-size:14px;color:#5a4640">正在学习。</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">现在时 vs 进行时</div><div style="font-size:14px;color:#89756e;margin-top:2px">习惯 vs 正在进行</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">밥을 먹어요.</span><span style="font-size:14px;color:#5a4640">（平时）吃饭。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">지금 밥을 먹고 있어요.</span><span style="font-size:14px;color:#5a4640">现在正在吃饭。</span></div></div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">进行时（-고 있어요）</div><div style="font-size:16px;color:#89756e;margin-top:2px">动词词干 + 고 있어요</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">먹다 → 먹고 있어요</span><span style="font-size:16px;color:#5a4640">正在吃。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">공부하다 → 공부하고 있어요</span><span style="font-size:16px;color:#5a4640">正在学习。</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">现在时 vs 进行时</div><div style="font-size:16px;color:#89756e;margin-top:2px">习惯 vs 正在进行</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">밥을 먹어요.</span><span style="font-size:16px;color:#5a4640">（平时）吃饭。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">지금 밥을 먹고 있어요.</span><span style="font-size:16px;color:#5a4640">现在正在吃饭。</span></div></div>
 </div>
-<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:15px;font-weight:700;color:#241917;margin-bottom:6px">穿戴类动词的特殊用法</div><div style="font-size:15px;color:#5a4640">입다（穿）/쓰다（戴）/신다（穿鞋）+ -고 있어요 表示"穿着/戴着"的持续状态，不是"正在穿"的动作进行。모자를 쓰고 있어요 = 戴着帽子（状态）。中文"穿着"和"正在穿"靠语境区分，韩语用同一结构。</div></div>
+<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">穿戴类动词的特殊用法</div><div style="font-size:16px;color:#5a4640">입다（穿）/쓰다（戴）/신다（穿鞋）+ -고 있어요 表示"穿着/戴着"的持续状态，不是"正在穿"的动作进行。모자를 쓰고 있어요 = 戴着帽子（状态）。中文"穿着"和"正在穿"靠语境区分，韩语用同一结构。</div></div>
 <div class="reminder-box">-고 연결 时不触发不规则变化：듣다 → 듣고 있어요（✓），不变形。-고 있다 只接动作动词，形容词不能用（예쁘고 있어요 ✗）。</div>`,
     structures: [
       {
@@ -1960,14 +1960,14 @@ export const grammarCardsP1: GrammarCard[] = [
         ['듣다 听', { ko: '듣고 있습니다', zh: '正在听（正式）' }, { ko: '듣고 있어요', zh: '正在听（日常）' }, '正在听'],
       ],
     },
-    linkedGrammarIds: [],
+    linkedGrammarIds: ['g49'],
     overviewHtml: `<div class="overview">
     <div class="badge">第10课</div>
     <div class="ov-title">进行时 -고 있어요</div>
     <div class="ov-sub">正在做什么 · 此刻状态</div>
     <div class="ov-sec">
       <h3>核心规律</h3>
-      <div style="font-size:.88rem;line-height:2">
+      <div style="font-size:16px;line-height:2">
         <strong>规则：</strong>动词去掉 다，直接加 -고 있어요<br>
         <strong>地点：</strong>在某地做某事 → 에서 + 动词 + 고 있어요<br>
         <strong>注意：</strong>하다 → 하고 있어요（不是 해고 있어요）<br>
@@ -1987,7 +1987,7 @@ export const grammarCardsP1: GrammarCard[] = [
     </div>
     <div class="ov-sec">
       <h3>第一章全部语法点</h3>
-      <div style="font-size:.82rem;line-height:2;color:#475569">
+      <div style="font-size:16px;line-height:2;color:#475569">
         01 SOV语序 · 02 正式体 ㅂ니다 · 03 日常体 아/어요<br>
         04 话题助词 은/는 · 05 宾语助词 을/를<br>
         06 助词 에 · 07 助词 에서<br>
@@ -2052,9 +2052,9 @@ export const grammarCardsP1: GrammarCard[] = [
     linkedGrammarIds: [],
     compareHtml: `<div class="card-title">第一章核心助词总览</div>
 <div class="card-body">第一章学了六个最基础的助词和三种时态。这张卡把最容易混淆的几对放在一起对比，确认都记清楚了再进入第二章。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">에 vs 에서</div><div style="font-size:14px;color:#89756e;margin-top:2px">方向/存在 vs 动作场所</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">학교에 가요 / 학교에 있어요</span><span style="font-size:14px;color:#5a4640">去学校 / 在学校（方向·存在）</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">학교에서 공부해요</span><span style="font-size:14px;color:#5a4640">在学校学习（动作场所）</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">은/는 vs 을/를</div><div style="font-size:14px;color:#89756e;margin-top:2px">话题 vs 宾语</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">저는 학생이에요</span><span style="font-size:14px;color:#5a4640">我是学生。（话题）</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">밥을 먹어요</span><span style="font-size:14px;color:#5a4640">吃饭。（宾语）</span></div></div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">에 vs 에서</div><div style="font-size:16px;color:#89756e;margin-top:2px">方向/存在 vs 动作场所</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">학교에 가요 / 학교에 있어요</span><span style="font-size:16px;color:#5a4640">去学校 / 在学校（方向·存在）</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">학교에서 공부해요</span><span style="font-size:16px;color:#5a4640">在学校学习（动作场所）</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">은/는 vs 을/를</div><div style="font-size:16px;color:#89756e;margin-top:2px">话题 vs 宾语</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">저는 학생이에요</span><span style="font-size:16px;color:#5a4640">我是学生。（话题）</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">밥을 먹어요</span><span style="font-size:16px;color:#5a4640">吃饭。（宾语）</span></div></div>
 </div>
-<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:15px;font-weight:700;color:#241917;margin-bottom:6px">三种时态对比</div><div style="font-size:15px;color:#5a4640">현재（现在）：먹어요 / 공부해요<br>과거（过去）：먹었어요 / 공부했어요（-았/었어요）<br>미래（将来）：먹을 거예요 / 공부할 거예요（-을/ㄹ 거예요）<br>진행（进行）：먹고 있어요 / 공부하고 있어요（-고 있어요）</div></div>
+<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">三种时态对比</div><div style="font-size:16px;color:#5a4640">현재（现在）：먹어요 / 공부해요<br>과거（过去）：먹었어요 / 공부했어요（-았/었어요）<br>미래（将来）：먹을 거예요 / 공부할 거예요（-을/ㄹ 거예요）<br>진행（进行）：먹고 있어요 / 공부하고 있어요（-고 있어요）</div></div>
 <div class="reminder-box">收音判断口诀：有收音→은/을，无收音→는/를。에서 있어요 ✗ → 에 있어요 ✓（있다/없다 前永远用 에）。</div>`,
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
@@ -2066,9 +2066,9 @@ export const grammarCardsP1: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">本章核心语法</div></div>
     <div class="ov-block">
       <div style="display:flex;flex-direction:column;gap:6px">
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#ff7fa8">语序</span> 主 → 宾 → 谓（动词永远在句末）</div>
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#2db89b">助词</span> 은/는（话题）/ 을/를（宾语）/ 에（方向·存在）/ 에서（动作场所）</div>
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#6b7ff0">时态</span> 먹어요 / 먹었어요 / 먹을 거예요 / 먹고 있어요</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">语序</span> 主 → 宾 → 谓（动词永远在句末）</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">助词</span> 은/는（话题）/ 을/를（宾语）/ 에（方向·存在）/ 에서（动作场所）</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#6b7ff0">时态</span> 먹어요 / 먹었어요 / 먹을 거예요 / 먹고 있어요</div>
       </div>
     </div>
   </div>

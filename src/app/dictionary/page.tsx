@@ -85,7 +85,7 @@ export default function DictionaryPage() {
   const totalPages = Math.ceil(total / 20);
 
   return (
-    <div className="max-w-2xl mx-auto py-4 space-y-4">
+    <div className="max-w-2xl mx-auto py-4 space-y-4 md:max-w-4xl">
       <div className="flex items-center gap-2 -mb-2">
         <Link href="/tools" className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"><ArrowLeft size={20} /></Link>
       </div>
@@ -135,7 +135,7 @@ export default function DictionaryPage() {
       )}
 
       {/* Results list */}
-      <div className="space-y-3">
+      <div className="space-y-3 md:grid md:grid-cols-2 md:gap-3 md:space-y-0">
         {results.map((r) => (
           <div key={r.w} className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl px-4 py-3">
             {/* Word header row */}

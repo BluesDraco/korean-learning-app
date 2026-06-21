@@ -603,7 +603,7 @@ export interface Article {
   title: string;
   titleKo: string;
   emoji: string;
-  level: 'A0' | 'A1' | 'A2' | 'B1' | 'TOPIK';
+  level: 'A0' | 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2' | 'TOPIK';
   topic: string;
   estimatedMinutes: number;
   learningGoals: string[];
@@ -617,6 +617,8 @@ export interface Article {
   };
   questions: ArticleQuestion[];
   outputTask?: ArticleOutputTask;
+  tags?: string[];
+  featured?: boolean;
   createdAt: number;
 }
 

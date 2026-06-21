@@ -18,12 +18,10 @@ const FEATURED = [
 ];
 
 const TOOL_GRID = [
-  { icon: '🔍', label: '查词翻译', desc: '韩语字典', href: '/dictionary', color: '#b49ccf' },
-  { icon: '🔄', label: '闪卡复习', desc: 'SRS 复习', href: '/review', color: '#81b5a1' },
-  { icon: '📄', label: '文章拆解', desc: '文章分析', href: '/reading', color: '#b49ccf' },
   { icon: '📖', label: '语法解释', desc: '句型例句', href: '/grammar', color: '#e47a94' },
-  { icon: '⌨️', label: '韩文打字', desc: '键盘练习', href: '/typing', color: '#e8a87c' },
+  { icon: '📄', label: '文章拆解', desc: '文章分析', href: '/reading', color: '#b49ccf' },
   { icon: '💬', label: 'AI 场景陪练', desc: '情景对话', href: '/ai/chat', color: '#b49ccf' },
+  { icon: '⌨️', label: '韩文打字', desc: '键盘练习', href: '/typing', color: '#e8a87c' },
 ];
 
 export function DesktopToolsPage() {
@@ -35,7 +33,7 @@ export function DesktopToolsPage() {
       <div className="desktop-hero tools">
         <span className="desktop-label">⚙︎ 工具</span>
         <h2>把你看到的韩文，变成可以学的内容</h2>
-        <p>内容拆解、影音跟读、查词翻译、发音跟读、闪卡复习……全部工具都在这里。</p>
+        <p>语法解释、文章拆解、AI陪练、韩文打字……全部工具都在这里。</p>
       </div>
 
       {/* Featured cards */}

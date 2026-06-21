@@ -3,9 +3,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { PenLine, Check, X, Lightbulb, RefreshCw, Sparkles, BookOpen, Clock, ChevronDown, ChevronUp, Trophy, Loader2, BookmarkCheck, Bookmark, ArrowLeft } from 'lucide-react';
-import { useIsMobile } from '@/lib/useIsMobile';
-import { KoreanKeyboard } from '@/components/KoreanKeyboard';
 import { useIsDesktop } from '@/lib/useIsMobile';
+import { KoreanKeyboard } from '@/components/KoreanKeyboard';
 import { useFeedback } from '@/hooks/useFeedback';
 import { useAuth } from '@/components/AuthProvider';
 import { db } from '@/lib/db';
@@ -91,7 +90,6 @@ export default function WritingPage() {
 }
 
 function ImitationMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord, 'id' | 'date'>) => void }) {
-  const isMobile = useIsMobile();
   const { success: feedbackSuccess, error: feedbackError, click: feedbackClick } = useFeedback();
   const isDesktop = useIsDesktop();
   const [currentIdx, setCurrentIdx] = useState(0);
@@ -305,7 +303,6 @@ function ImitationMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord, '
 }
 
 function FreeWritingMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord, 'id' | 'date'>) => void }) {
-  const isMobile = useIsMobile();
   const isDesktop = useIsDesktop();
   const { user } = useAuth();
   const { showToast } = useToast();

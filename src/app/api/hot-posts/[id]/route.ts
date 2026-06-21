@@ -9,7 +9,7 @@ export async function GET(
     const { id } = await params;
     const db = await getDb();
 
-    const postResult = await db.exec('SELECT * FROM kpop_hot_posts WHERE id = ?', [id]);
+    const postResult = await db.exec('SELECT * FROM kpop_hot_posts WHERE id = ? AND is_published = 1', [id]);
     if (!postResult[0]?.values?.length) {
       return NextResponse.json({ error: '未找到该热帖' }, { status: 404 });
     }

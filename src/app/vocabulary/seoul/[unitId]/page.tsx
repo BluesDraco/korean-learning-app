@@ -1,13 +1,13 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   ArrowLeft, BookOpen, Target, Volume2, ChevronDown, ChevronUp,
   Loader2, BarChart3, BookmarkPlus, CheckCircle, Layers, Check, Trash2, CheckSquare, Square, ListChecks,
 } from 'lucide-react';
-import { seoulUnits } from '@/data/seoul-books';
+import type { YonseiUnit } from '@/data/yonsei-books';
 import { speakWord } from '@/lib/tts';
 import { db } from '@/lib/db';
 import { useAuth } from '@/components/AuthProvider';
@@ -16,9 +16,11 @@ import { TappableText } from '@/components/TappableText';
 
 export default function YonseiUnitPage() {
   const { unitId } = useParams<{ unitId: string }>();
+  const router = useRouter();
   const { user, loading: authLoading } = useAuth();
 
-  const unit = seoulUnits.find(u => u.id === unitId);
+  const [unit, setUnit] = useState<YonseiUnit | undefined>(undefined);
+  const [allUnits, setAllUnits] = useState<YonseiUnit[]>([]);
 
   const [masteredSet, setMasteredSet] = useState<Set<string>>(new Set());
   const [learningSet, setLearningSet] = useState<Set<string>>(new Set());
@@ -32,6 +34,7 @@ export default function YonseiUnitPage() {
   const [managing, setManaging] = useState(false);
   const [selectedWords, setSelectedWords] = useState<Set<string>>(new Set());
   const [deletePending, setDeletePending] = useState(false);
+  const [savedSentenceIds, setSavedSentenceIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (managing) document.body.setAttribute('data-batch-managing', '1');
@@ -40,10 +43,15 @@ export default function YonseiUnitPage() {
   }, [managing]);
 
   useEffect(() => {
-    if (!unit) { setLoading(false); return; }
+    if (!unitId) { setLoading(false); return; }
     (async () => {
       try {
-        const koreanWords = new Set(unit.words.map(w => w.word));
+        const { seoulUnits } = await import('@/data/seoul-books');
+        const found = seoulUnits.find(u => u.id === unitId);
+        if (!found) { setLoading(false); return; }
+        setUnit(found);
+        setAllUnits(seoulUnits);
+        const koreanWords = new Set(found.words.map(w => w.word));
         const allUserWords = await db.words.toArray();
         const userWords = allUserWords.filter(uw => koreanWords.has(uw.word));
         const mSet = new Set(userWords.filter(uw => uw.mastery === 'mastered').map(uw => uw.word));
@@ -53,7 +61,16 @@ export default function YonseiUnitPage() {
       } catch {}
       finally { setLoading(false); }
     })();
-  }, [unit]);
+  }, [unitId]);
+
+  const saveSentence = async (korean: string, chinese: string, sourceTitle: string) => {
+    if (savedSentenceIds.has(korean)) return;
+    const existing = await db.sentences.where('korean').equals(korean).first().catch(() => null);
+    if (!existing) {
+      await db.sentences.add({ id: crypto.randomUUID(), korean, chinese, source_type: 'vocabulary', source_id: 'seoul-' + unitId, source_title: sourceTitle, created_at: new Date().toISOString() }).catch(() => {});
+    }
+    setSavedSentenceIds((prev) => new Set(prev).add(korean));
+  };
 
   const partOptions = useMemo(() => {
     if (!unit) return ['全部'];
@@ -465,6 +482,13 @@ export default function YonseiUnitPage() {
                         >
                           <Volume2 size={14} />
                         </button>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); saveSentence(ex.text, ex.translation, w.word); }}
+                          className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] transition-colors shrink-0"
+                          style={{ color: savedSentenceIds.has(ex.text) ? 'var(--pink-primary)' : 'var(--text-muted)' }}
+                        >
+                          <BookmarkPlus size={14} fill={savedSentenceIds.has(ex.text) ? 'currentColor' : 'none'} />
+                        </button>
                       </div>
                     ))}
                   </div>
@@ -532,9 +556,9 @@ export default function YonseiUnitPage() {
         const bookNum = parseInt(parts[1]);
         const unitNum = parseInt(parts[2]);
         const nextUnitId = `yonsei-${bookNum}-${unitNum + 1}`;
-        const nextUnitEntry = seoulUnits.find(u => u.id === nextUnitId);
+        const nextUnitEntry = allUnits.find(u => u.id === nextUnitId);
         const nextBookId = `yonsei-${bookNum + 1}-1`;
-        const nextBookEntry = seoulUnits.find(u => u.id === nextBookId);
+        const nextBookEntry = allUnits.find(u => u.id === nextBookId);
         const isComplete = untouched === 0;
         return (
           <div className={`rounded-2xl p-5 text-center space-y-3 border ${isComplete ? 'bg-gradient-to-b from-[var(--mint-soft)]/10 to-[var(--bg-card)] border-[var(--mint-soft)]/30' : 'bg-[var(--bg-card)] border-[var(--border-color)]'}`}>

@@ -137,3 +137,37 @@ export function aiRateLimitHeaders(result: AiRateLimitResult): Record<string, st
     'X-RateLimit-Remaining': String(result.remaining),
   };
 }
+
+const GUEST_AI_DAILY_LIMIT = 10;
+
+// DB-backed guest rate limit — survives pm2 restarts unlike in-memory maps
+export async function checkGuestAiRateLimit(
+  ip: string,
+  endpoint: string,
+): Promise<{ allowed: boolean; remaining: number }> {
+  const db = await getDb();
+  const today = new Date().toISOString().slice(0, 10);
+  const key = `guest-ai:${endpoint}:${ip}:${today}`;
+
+  // Clean up old entries (older than 2 days)
+  await db.run(
+    `DELETE FROM login_attempts WHERE ip LIKE 'guest-ai:%' AND attempted_at < datetime('now', '-2 days')`,
+  );
+
+  const result = await db.exec(
+    `SELECT COUNT(*) FROM login_attempts WHERE ip = ? AND attempted_at >= datetime('now', 'start of day')`,
+    [key],
+  );
+  const count = (result[0]?.values[0]?.[0] ?? 0) as number;
+
+  if (count >= GUEST_AI_DAILY_LIMIT) {
+    return { allowed: false, remaining: 0 };
+  }
+
+  await db.run(
+    `INSERT INTO login_attempts (id, ip, attempted_at) VALUES (?, ?, datetime('now'))`,
+    [generateId(), key],
+  );
+
+  return { allowed: true, remaining: GUEST_AI_DAILY_LIMIT - count - 1 };
+}

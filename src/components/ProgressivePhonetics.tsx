@@ -29,14 +29,15 @@ function getQuizLetter(l: PhoneticLetter) {
 
 const CONSONANT_DEMO: Record<string, string> = {
   'ㄱ': '가', 'ㄴ': '나', 'ㄷ': '다', 'ㄹ': '라', 'ㅁ': '마',
-  'ㅂ': '바', 'ㅅ': '사', 'ㅇ': '아', 'ㅈ': '자', 'ㅊ': '차',
+  'ㅂ': '바', 'ㅅ': '사', 'ㅈ': '자', 'ㅊ': '차',
   'ㅋ': '카', 'ㅌ': '타', 'ㅍ': '파', 'ㅎ': '하',
   'ㄲ': '까', 'ㄸ': '따', 'ㅃ': '빠', 'ㅆ': '싸', 'ㅉ': '짜',
+  // ㅇ 不在此表，回退到 letter.name（이응）→ audioRegistry c-08.mp3
 };
 
 const BATCHIM_DEMO: Record<string, string> = {
-  'ㄱ': '악', 'ㄴ': '안', 'ㄷ': '앋', 'ㄹ': '알', 'ㅁ': '암',
-  'ㅂ': '압', 'ㅇ': '앙',
+  'ㄱ': '박', 'ㄴ': '산', 'ㄷ': '옷', 'ㄹ': '말', 'ㅁ': '밤',
+  'ㅂ': '밥', 'ㅇ': '강',
 };
 
 function getSpeakText(l: PhoneticLetter): string {

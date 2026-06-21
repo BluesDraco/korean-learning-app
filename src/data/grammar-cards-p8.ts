@@ -11,17 +11,17 @@ export const grammarCardsP8: GrammarCard[] = [
     step0Html: `<div class="card-title">-던 · -았/었던</div>
 <div class="card-body">两种"回忆过去"的冠词形：-던 修饰曾经持续的习惯，-았던 修饰已经完成的过去经历。</div>
 <div class="hook-box">
-  <div style="font-size:12px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说：</div>
   <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
     <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
       <div style="font-size:9px;font-weight:800;color:#ff7fa8;margin-bottom:4px">-던（过去习惯/持续）</div>
       <div style="font-size:16px;font-weight:800;color:#241917">자주 가던 카페가 없어졌어요.</div>
-      <div style="font-size:12px;color:#89756e;margin-top:2px">以前常去的咖啡店消失了。</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">以前常去的咖啡店消失了。</div>
     </div>
     <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
       <div style="font-size:9px;font-weight:800;color:#2db89b;margin-bottom:4px">-았던（已完成的回忆）</div>
       <div style="font-size:16px;font-weight:800;color:#241917">어릴 때 살았던 동네가 그리워요.</div>
-      <div style="font-size:12px;color:#89756e;margin-top:2px">很想念小时候住过的那片街区。</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">很想念小时候住过的那片街区。</div>
     </div>
   </div>
 </div>
@@ -31,21 +31,21 @@ export const grammarCardsP8: GrammarCard[] = [
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
   <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-던 → 过去反复/持续，现在已不同</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">动词词干 + 던 + 名词</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">자주 가던 카페</span><span style="font-size:14px;color:#5a4640">以前常去的咖啡店（现在不去了）</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">좋아하던 노래</span><span style="font-size:14px;color:#5a4640">以前喜欢的歌（现在不那么喜欢了）</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">动词词干 + 던 + 名词</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">자주 가던 카페</span><span style="font-size:16px;color:#5a4640">以前常去的咖啡店（现在不去了）</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">좋아하던 노래</span><span style="font-size:16px;color:#5a4640">以前喜欢的歌（现在不那么喜欢了）</span></div>
   </div>
   <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-았/었던 → 已完成的过去，回忆性</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">动词词干 + 았/었 + 던 + 名词</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">한 번 갔던 카페</span><span style="font-size:14px;color:#5a4640">曾经去过一次的咖啡店</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">살았던 동네</span><span style="font-size:14px;color:#5a4640">曾经住过的街区（已离开）</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">动词词干 + 았/었 + 던 + 名词</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">한 번 갔던 카페</span><span style="font-size:16px;color:#5a4640">曾经去过一次的咖啡店</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">살았던 동네</span><span style="font-size:16px;color:#5a4640">曾经住过的街区（已离开）</span></div>
   </div>
 </div>
 <div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0">
-  <div style="font-size:15px;font-weight:700;color:#241917;margin-bottom:6px">一个例子看清区别</div>
-  <div style="font-size:15px;color:#5a4640">자주 가던 카페（常去的）→ 强调习惯，现在不去了</div>
-  <div style="margin-top:4px;font-size:15px;color:#5a4640">한 번 갔던 카페（去过一次的）→ 强调那次经历本身</div>
+  <div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">一个例子看清区别</div>
+  <div style="font-size:16px;color:#5a4640">자주 가던 카페（常去的）→ 强调习惯，现在不去了</div>
+  <div style="margin-top:4px;font-size:16px;color:#5a4640">한 번 갔던 카페（去过一次的）→ 强调那次经历本身</div>
 </div>
 <div class="reminder-box">如果现在还在持续的习惯，用 -는（현재 冠词形）：자주 가는 카페（我现在常去的咖啡店）。-던 暗示"现在已不同了"。</div>`,
     overviewHtml: `<div class="overview">
@@ -58,8 +58,8 @@ export const grammarCardsP8: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">核心对比</div></div>
     <div class="ov-block">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-        <div style="background:#fff0f5;border-radius:10px;padding:10px"><div style="font-size:14px;font-weight:800;color:#ff7fa8">-던</div><div style="font-size:11px;color:#89756e;margin-top:2px">过去习惯/持续</div><div style="font-size:12px;color:#241917;margin-top:4px">가던 카페</div></div>
-        <div style="background:#eaf8f5;border-radius:10px;padding:10px"><div style="font-size:14px;font-weight:800;color:#2db89b">-았던</div><div style="font-size:11px;color:#89756e;margin-top:2px">已完成的回忆</div><div style="font-size:12px;color:#241917;margin-top:4px">살았던 동네</div></div>
+        <div style="background:#fff0f5;border-radius:10px;padding:10px"><div style="font-size:16px;font-weight:800;color:#ff7fa8">-던</div><div style="font-size:11px;color:#89756e;margin-top:2px">过去习惯/持续</div><div style="font-size:16px;color:#241917;margin-top:4px">가던 카페</div></div>
+        <div style="background:#eaf8f5;border-radius:10px;padding:10px"><div style="font-size:16px;font-weight:800;color:#2db89b">-았던</div><div style="font-size:11px;color:#89756e;margin-top:2px">已完成的回忆</div><div style="font-size:16px;color:#241917;margin-top:4px">살았던 동네</div></div>
       </div>
     </div>
   </div>
@@ -116,7 +116,7 @@ export const grammarCardsP8: GrammarCard[] = [
       { wrong: '지난주에 보던 영화', correct: '지난주에 본 영화 / 봤던 영화', note: '-던 强调过去反复/持续的行为，一次性完结的事件用 -은/ㄴ 或 -았/었던，不用 -던。' },
       { wrong: '살았던 동네에서 살아요', correct: '지금 사는 동네에서 살아요', note: '-았던 暗示已经离开那里，如果现在还住，用 사는（现在时冠词形）。' },
     ],
-    linkedGrammarIds: [],
+    linkedGrammarIds: ['g50'],
   },
   {
     id: 'card-p8-l02', partNumber: 8, lessonNumber: 2, title: '-아/어/여야(만), -아/어/여야겠다',
@@ -128,17 +128,17 @@ export const grammarCardsP8: GrammarCard[] = [
     step0Html: `<div class="card-title">-아야만 · -아야겠다</div>
 <div class="card-body">-아야만 强调"只有这样才行"（唯一条件），-아야겠다 表达说话人的内心决心"我得……了"。</div>
 <div class="hook-box">
-  <div style="font-size:12px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">两种必要性表达</div>
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">两种必要性表达</div>
   <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
     <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
       <div style="font-size:9px;font-weight:800;color:#ff7fa8;margin-bottom:4px">-아야만（唯一条件）</div>
       <div style="font-size:16px;font-weight:800;color:#241917">열심히 해야만 성공해요.</div>
-      <div style="font-size:12px;color:#89756e;margin-top:2px">只有努力才能成功。</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">只有努力才能成功。</div>
     </div>
     <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
       <div style="font-size:9px;font-weight:800;color:#2db89b;margin-bottom:4px">-아야겠다（主观决心）</div>
       <div style="font-size:16px;font-weight:800;color:#241917">이제 운동을 시작해야겠어요.</div>
-      <div style="font-size:12px;color:#89756e;margin-top:2px">我得开始运动了。</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">我得开始运动了。</div>
     </div>
   </div>
 </div>
@@ -148,19 +148,19 @@ export const grammarCardsP8: GrammarCard[] = [
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
   <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-아야만 → 只有……才行（唯一条件）</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">强调这是达到目标的唯一途径</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">노력해야만 꿈을 이룰 수 있어요.</span><span style="font-size:14px;color:#5a4640">只有努力才能实现梦想。</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">强调这是达到目标的唯一途径</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">노력해야만 꿈을 이룰 수 있어요.</span><span style="font-size:16px;color:#5a4640">只有努力才能实现梦想。</span></div>
   </div>
   <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-아야겠다 → 我得……了（内心决心）</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">说话人自己下的决心，带有"从现在起"的语感</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">이제 다이어트를 해야겠어요.</span><span style="font-size:14px;color:#5a4640">我得减肥了。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">일찍 자야겠다고 생각했어요.</span><span style="font-size:14px;color:#5a4640">我想着得早睡了。</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">说话人自己下的决心，带有"从现在起"的语感</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">이제 다이어트를 해야겠어요.</span><span style="font-size:16px;color:#5a4640">我得减肥了。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">일찍 자야겠다고 생각했어요.</span><span style="font-size:16px;color:#5a4640">我想着得早睡了。</span></div>
   </div>
   <div class="tok-row" style="background:#f0f4ff;border-radius:12px;padding:12px">
     <div class="tok t-v">-아야 하다 → 必须……（客观规则）</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">外部规定或客观需要，不一定是自己想做</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">9시까지 와야 해요.</span><span style="font-size:14px;color:#5a4640">必须9点前来。（规定）</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">外部规定或客观需要，不一定是自己想做</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">9시까지 와야 해요.</span><span style="font-size:16px;color:#5a4640">必须9点前来。（规定）</span></div>
   </div>
 </div>
 <div class="reminder-box">공부야겠어요 ✗ → 공부해야겠어요 ✓（공부 是名词，要先 +하다 再变형）。먹아야겠다 ✗ → 먹어야겠다 ✓（먹 末元音不是 ㅏ/ㅗ）。</div>`,
@@ -174,9 +174,9 @@ export const grammarCardsP8: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">变形规则</div></div>
     <div class="ov-block">
       <div style="display:flex;flex-direction:column;gap:6px">
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#ff7fa8">ㅏ/ㅗ</span>：가야만 / 가야겠다</div>
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#2db89b">其他</span>：먹어야만 / 먹어야겠다</div>
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#6b7ff0">하다</span>：해야만 / 해야겠다</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">ㅏ/ㅗ</span>：가야만 / 가야겠다</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">其他</span>：먹어야만 / 먹어야겠다</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#6b7ff0">하다</span>：해야만 / 해야겠다</div>
       </div>
     </div>
   </div>
@@ -233,7 +233,7 @@ export const grammarCardsP8: GrammarCard[] = [
       { wrong: '해야겠다 하다', correct: '해야겠어요', note: '-야겠다 本身就是句尾词尾，后面不再加 하다，直接加敬语词尾 어요。' },
       { wrong: '자야만 해요（强调睡觉是唯一条件）', correct: '자야 해요（单纯必须睡）', note: '-야만 强调"只有这个条件才行"，如果只是说"必须"，用 -아야 하다 就够了。' },
     ],
-    linkedGrammarIds: [],
+    linkedGrammarIds: ['g70'],
   },
   {
     id: 'card-p8-l03', partNumber: 8, lessonNumber: 3, title: '-을/ㄹ 뻔하다, -아/어/여서 죽을 것 같다',
@@ -245,17 +245,17 @@ export const grammarCardsP8: GrammarCard[] = [
     step0Html: `<div class="card-title">-을 뻔했어요 · -아서 죽을 것 같아요</div>
 <div class="card-body">-을 뻔했어요 说"差点发生了（幸好没有）"，-아서 죽을 것 같아요 是夸张表达"……死了"。两个都是情绪化口语必备。</div>
 <div class="hook-box">
-  <div style="font-size:12px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说：</div>
   <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
     <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
       <div style="font-size:9px;font-weight:800;color:#ff7fa8;margin-bottom:4px">-을 뻔했어요（差点发生）</div>
       <div style="font-size:16px;font-weight:800;color:#241917">넘어질 뻔했어요!</div>
-      <div style="font-size:12px;color:#89756e;margin-top:2px">差点摔倒了！（实际没摔）</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">差点摔倒了！（实际没摔）</div>
     </div>
     <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
       <div style="font-size:9px;font-weight:800;color:#2db89b;margin-bottom:4px">-아서 죽을 것 같아요（夸张程度）</div>
       <div style="font-size:16px;font-weight:800;color:#241917">너무 배고파서 죽을 것 같아요.</div>
-      <div style="font-size:12px;color:#89756e;margin-top:2px">饿得要死。</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">饿得要死。</div>
     </div>
   </div>
 </div>
@@ -265,17 +265,17 @@ export const grammarCardsP8: GrammarCard[] = [
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
   <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-을/ㄹ 뻔했어요 → 险些发生（实际没发生）</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">有收音→을 뻔했어요 / 无收音→ㄹ 뻔했어요</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">넘어질 뻔했어요.</span><span style="font-size:14px;color:#5a4640">差点摔倒了。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">지각할 뻔했는데 다행이에요.</span><span style="font-size:14px;color:#5a4640">差点迟到，真幸运。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">잊을 뻔했어요.</span><span style="font-size:14px;color:#5a4640">差点忘了。</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">有收音→을 뻔했어요 / 无收音→ㄹ 뻔했어요</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">넘어질 뻔했어요.</span><span style="font-size:16px;color:#5a4640">差点摔倒了。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">지각할 뻔했는데 다행이에요.</span><span style="font-size:16px;color:#5a4640">差点迟到，真幸运。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">잊을 뻔했어요.</span><span style="font-size:16px;color:#5a4640">差点忘了。</span></div>
   </div>
   <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-아/어서 죽을 것 같아요 → 夸张极度程度</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">形容词+아/어서+죽을 것 같아요</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">너무 배고파서 죽을 것 같아요.</span><span style="font-size:14px;color:#5a4640">饿得要死。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">너무 웃겨서 죽을 것 같았어요.</span><span style="font-size:14px;color:#5a4640">笑死了。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">너무 더워서 죽을 것 같아요.</span><span style="font-size:14px;color:#5a4640">热死了。</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">形容词+아/어서+죽을 것 같아요</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">너무 배고파서 죽을 것 같아요.</span><span style="font-size:16px;color:#5a4640">饿得要死。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">너무 웃겨서 죽을 것 같았어요.</span><span style="font-size:16px;color:#5a4640">笑死了。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">너무 더워서 죽을 것 같아요.</span><span style="font-size:16px;color:#5a4640">热死了。</span></div>
   </div>
 </div>
 <div class="reminder-box">배고프서 ✗ → 배고파서 ✓（배고프다 词干 ㅡ 脱落后 → 배고파서）。재미있어서 죽을 것이에요 ✗ → 죽을 것 같아요 ✓（夸张用 것 같다，不是 것이다）。</div>`,
@@ -289,9 +289,9 @@ export const grammarCardsP8: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">结构速查</div></div>
     <div class="ov-block">
       <div style="display:flex;flex-direction:column;gap:6px">
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#ff7fa8">有收音+을 뻔했어요</span>：먹을 뻔했어요 / 잊을 뻔했어요</div>
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#ff7fa8">无收音+ㄹ 뻔했어요</span>：넘어질 뻔했어요 / 갈 뻔했어요</div>
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#2db89b">-아/어서 죽을 것 같아요</span>：배고파서 / 피곤해서 / 더워서</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">有收音+을 뻔했어요</span>：먹을 뻔했어요 / 잊을 뻔했어요</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">无收音+ㄹ 뻔했어요</span>：넘어질 뻔했어요 / 갈 뻔했어요</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">-아/어서 죽을 것 같아요</span>：배고파서 / 피곤해서 / 더워서</div>
       </div>
     </div>
   </div>
@@ -360,17 +360,17 @@ export const grammarCardsP8: GrammarCard[] = [
     step0Html: `<div class="card-title">-고 싶어하다 · -뿐만 아니라</div>
 <div class="card-body">-고 싶어하다 描述别人的愿望（说自己用 싶다），-뿐만 아니라 递进"不仅……而且……"。两个都是聊人聊事的常用表达。</div>
 <div class="hook-box">
-  <div style="font-size:12px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说：</div>
   <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
     <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
       <div style="font-size:9px;font-weight:800;color:#ff7fa8;margin-bottom:4px">-고 싶어하다（别人的愿望）</div>
       <div style="font-size:16px;font-weight:800;color:#241917">친구가 한국에 가고 싶어해요.</div>
-      <div style="font-size:12px;color:#89756e;margin-top:2px">朋友想去韩国。</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">朋友想去韩国。</div>
     </div>
     <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
       <div style="font-size:9px;font-weight:800;color:#2db89b;margin-bottom:4px">-뿐만 아니라（递进）</div>
       <div style="font-size:16px;font-weight:800;color:#241917">노래뿐만 아니라 춤도 잘해요.</div>
-      <div style="font-size:12px;color:#89756e;margin-top:2px">不仅歌好，舞也跳得好。</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">不仅歌好，舞也跳得好。</div>
     </div>
   </div>
 </div>
@@ -380,19 +380,19 @@ export const grammarCardsP8: GrammarCard[] = [
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
   <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-고 싶다 → 说话人自己的愿望（第一人称）</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">저는 한국에 가고 싶어요.</span><span style="font-size:14px;color:#5a4640">我想去韩国。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">뭐 먹고 싶어요?</span><span style="font-size:14px;color:#5a4640">你想吃什么？（问对方时也可以用）</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">저는 한국에 가고 싶어요.</span><span style="font-size:16px;color:#5a4640">我想去韩国。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">뭐 먹고 싶어요?</span><span style="font-size:16px;color:#5a4640">你想吃什么？（问对方时也可以用）</span></div>
   </div>
   <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-고 싶어하다 → 第三人称的愿望</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">친구가 한국에 가고 싶어해요.</span><span style="font-size:14px;color:#5a4640">朋友想去韩国。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">동생이 강아지를 갖고 싶어해요.</span><span style="font-size:14px;color:#5a4640">弟弟想要一只狗。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">친구가 한국에 가고 싶어해요.</span><span style="font-size:16px;color:#5a4640">朋友想去韩国。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">동생이 강아지를 갖고 싶어해요.</span><span style="font-size:16px;color:#5a4640">弟弟想要一只狗。</span></div>
   </div>
 </div>
 <div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0">
-  <div style="font-size:15px;font-weight:700;color:#241917;margin-bottom:6px">-뿐만 아니라 结构</div>
-  <div style="font-size:15px;color:#5a4640">名词+뿐만 아니라：노래뿐만 아니라 춤도 잘해요.</div>
-  <div style="margin-top:4px;font-size:15px;color:#5a4640">后句必须用 도（也）来呼应：뿐만 아니라 + ……도……</div>
+  <div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">-뿐만 아니라 结构</div>
+  <div style="font-size:16px;color:#5a4640">名词+뿐만 아니라：노래뿐만 아니라 춤도 잘해요.</div>
+  <div style="margin-top:4px;font-size:16px;color:#5a4640">后句必须用 도（也）来呼应：뿐만 아니라 + ……도……</div>
 </div>
 <div class="reminder-box">노래뿐 아니라 ✗ → 노래뿐만 아니라 ✓（不能省略 만）。뿐만 아니라 放句首 ✗（前面必须有名词/动词）。</div>`,
     overviewHtml: `<div class="overview">
@@ -405,8 +405,8 @@ export const grammarCardsP8: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">核心对比</div></div>
     <div class="ov-block">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-        <div style="background:#fff0f5;border-radius:10px;padding:10px"><div style="font-size:13px;font-weight:800;color:#ff7fa8">-고 싶다</div><div style="font-size:11px;color:#89756e;margin-top:2px">我想……（第一人称）</div></div>
-        <div style="background:#eaf8f5;border-radius:10px;padding:10px"><div style="font-size:13px;font-weight:800;color:#2db89b">-고 싶어하다</div><div style="font-size:11px;color:#89756e;margin-top:2px">他/她想……（第三人称）</div></div>
+        <div style="background:#fff0f5;border-radius:10px;padding:10px"><div style="font-size:16px;font-weight:800;color:#ff7fa8">-고 싶다</div><div style="font-size:11px;color:#89756e;margin-top:2px">我想……（第一人称）</div></div>
+        <div style="background:#eaf8f5;border-radius:10px;padding:10px"><div style="font-size:16px;font-weight:800;color:#2db89b">-고 싶어하다</div><div style="font-size:11px;color:#89756e;margin-top:2px">他/她想……（第三人称）</div></div>
       </div>
     </div>
   </div>
@@ -463,7 +463,7 @@ export const grammarCardsP8: GrammarCard[] = [
       { wrong: '노래뿐 아니라 춤도 잘해요', correct: '노래뿐만 아니라 춤도 잘해요', note: '完整形式是 뿐만 아니라，不能省略 만。' },
       { wrong: '뿐만 아니라 춤도 잘해요', correct: '노래뿐만 아니라 춤도 잘해요', note: '뿐만 아니라 前面必须有明确的名词，不能单独放在句首。' },
     ],
-    linkedGrammarIds: [],
+    linkedGrammarIds: ['g38', 'g66'],
   },
   {
     id: 'card-p8-l05', partNumber: 8, lessonNumber: 5, title: '-아/어/여 보다, -은/ㄴ 적이 있다/없다',
@@ -475,17 +475,17 @@ export const grammarCardsP8: GrammarCard[] = [
     step0Html: `<div class="card-title">-아 봤어요 · -은 적이 있어요</div>
 <div class="card-body">-아 봤어요 说"试过/尝过"，-은 적이 있어요 说"有过这个经历"。聊旅行、美食、追星经历全靠这两个。</div>
 <div class="hook-box">
-  <div style="font-size:12px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说：</div>
   <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
     <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
       <div style="font-size:9px;font-weight:800;color:#ff7fa8;margin-bottom:4px">-아/어 봤어요（尝试）</div>
       <div style="font-size:16px;font-weight:800;color:#241917">이 음식 먹어 봤어요?</div>
-      <div style="font-size:12px;color:#89756e;margin-top:2px">你试过这道菜吗？</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">你试过这道菜吗？</div>
     </div>
     <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
       <div style="font-size:9px;font-weight:800;color:#2db89b;margin-bottom:4px">-은/ㄴ 적이 있어요（经历）</div>
       <div style="font-size:16px;font-weight:800;color:#241917">한국에 간 적이 있어요?</div>
-      <div style="font-size:12px;color:#89756e;margin-top:2px">你有去过韩国吗？</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">你有去过韩国吗？</div>
     </div>
   </div>
 </div>
@@ -495,21 +495,21 @@ export const grammarCardsP8: GrammarCard[] = [
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
   <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-아/어 봤어요 → 尝试/试过（动作本身）</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">ㅏ/ㅗ→아 봤어요 / 其他→어 봤어요 / 하다→해 봤어요</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">이 라면 먹어 봤어요?</span><span style="font-size:14px;color:#5a4640">你试过这个拉面吗？</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">한번 들어 봐요.</span><span style="font-size:14px;color:#5a4640">试听一下吧。（建议）</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">ㅏ/ㅗ→아 봤어요 / 其他→어 봤어요 / 하다→해 봤어요</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">이 라면 먹어 봤어요?</span><span style="font-size:16px;color:#5a4640">你试过这个拉面吗？</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">한번 들어 봐요.</span><span style="font-size:16px;color:#5a4640">试听一下吧。（建议）</span></div>
   </div>
   <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-은/ㄴ 적이 있다 → 有过这段经历</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">有收音→은 적이 있어요 / 无收音→ㄴ 적이 있어요</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">한국에 간 적이 있어요?</span><span style="font-size:14px;color:#5a4640">你有去过韩国吗？</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">스키 탄 적이 없어요.</span><span style="font-size:14px;color:#5a4640">我没有滑过雪。</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">有收音→은 적이 있어요 / 无收音→ㄴ 적이 있어요</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">한국에 간 적이 있어요?</span><span style="font-size:16px;color:#5a4640">你有去过韩国吗？</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">스키 탄 적이 없어요.</span><span style="font-size:16px;color:#5a4640">我没有滑过雪。</span></div>
   </div>
 </div>
 <div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0">
-  <div style="font-size:15px;font-weight:700;color:#241917;margin-bottom:6px">日常对话中的区别</div>
-  <div style="font-size:15px;color:#5a4640">이 음식 먹어 봤어요?（你试过这道菜吗？→ 侧重"试没试"）</div>
-  <div style="margin-top:4px;font-size:15px;color:#5a4640">이 음식 먹은 적이 있어요?（你吃过这道菜吗？→ 侧重"有没有这个经历"）</div>
+  <div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">日常对话中的区别</div>
+  <div style="font-size:16px;color:#5a4640">이 음식 먹어 봤어요?（你试过这道菜吗？→ 侧重"试没试"）</div>
+  <div style="margin-top:4px;font-size:16px;color:#5a4640">이 음식 먹은 적이 있어요?（你吃过这道菜吗？→ 侧重"有没有这个经历"）</div>
 </div>
 <div class="reminder-box">먹은 봤어요 ✗ → 먹어 봤어요 ✓（要按末元音选 아/어，不能用 -은）。-은 적이 있다 描述已结束的过去经历，不用于当下进行中的动作。</div>`,
     overviewHtml: `<div class="overview">
@@ -522,10 +522,10 @@ export const grammarCardsP8: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">变形规则</div></div>
     <div class="ov-block">
       <div style="display:flex;flex-direction:column;gap:6px">
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#ff7fa8">ㅏ/ㅗ→아 봤어요</span>：가 봤어요 / 와 봤어요</div>
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#ff7fa8">其他→어 봤어요</span>：먹어 봤어요 / 들어 봤어요</div>
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#2db89b">有收음→은 적이</span>：먹은 적이 / 읽은 적이</div>
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#2db89b">无收음→ㄴ 적이</span>：간 적이 / 본 적이</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">ㅏ/ㅗ→아 봤어요</span>：가 봤어요 / 와 봤어요</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">其他→어 봤어요</span>：먹어 봤어요 / 들어 봤어요</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">有收음→은 적이</span>：먹은 적이 / 읽은 적이</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">无收음→ㄴ 적이</span>：간 적이 / 본 적이</div>
       </div>
     </div>
   </div>
@@ -582,7 +582,7 @@ export const grammarCardsP8: GrammarCard[] = [
       { wrong: '간 적이 있어요 지금', correct: '지금 가고 있어요 / 방금 갔어요', note: '-은/ㄴ 적이 있다 用于已结束的过去经历，不能描述当前进行中的动作。' },
       { wrong: '한국에 가 본 적이 있어요 없어요', correct: '한국에 가 본 적이 있어요? / 없어요', note: '有经历和没经历是两个不同句子，不能在同一句里同时说有和没有。' },
     ],
-    linkedGrammarIds: [],
+    linkedGrammarIds: ['g65'],
   },
   {
     id: 'card-p8-l06', partNumber: 8, lessonNumber: 6, title: '-아/어/여도, -(이)라도, -아/어/여도 되다/괜찮다/좋다',
@@ -594,22 +594,22 @@ export const grammarCardsP8: GrammarCard[] = [
     step0Html: `<div class="card-title">-아도 · -(이)라도 · -아도 돼요?</div>
 <div class="card-body">三种让步/允许表达：即使也……/ 哪怕……也行 / 可以……吗。日常对话超高频，一节课全打通。</div>
 <div class="hook-box">
-  <div style="font-size:12px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">三种用法一览</div>
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">三种用法一览</div>
   <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
     <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
       <div style="font-size:9px;font-weight:800;color:#ff7fa8;margin-bottom:4px">-아도（即使也）</div>
       <div style="font-size:16px;font-weight:800;color:#241917">비가 와도 갈 거예요.</div>
-      <div style="font-size:12px;color:#89756e;margin-top:2px">即使下雨也要去。</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">即使下雨也要去。</div>
     </div>
     <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
       <div style="font-size:9px;font-weight:800;color:#2db89b;margin-bottom:4px">-(이)라도（哪怕也行）</div>
       <div style="font-size:16px;font-weight:800;color:#241917">물이라도 마실래요?</div>
-      <div style="font-size:12px;color:#89756e;margin-top:2px">喝点水也好？（退而求其次）</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">喝点水也好？（退而求其次）</div>
     </div>
     <div style="background:#f0f4ff;border-radius:12px;padding:10px 14px">
       <div style="font-size:9px;font-weight:800;color:#6b7ff0;margin-bottom:4px">-아도 돼요?（可以吗）</div>
       <div style="font-size:16px;font-weight:800;color:#241917">여기 앉아도 돼요?</div>
-      <div style="font-size:12px;color:#89756e;margin-top:2px">可以坐这里吗？</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">可以坐这里吗？</div>
     </div>
   </div>
 </div>
@@ -619,21 +619,21 @@ export const grammarCardsP8: GrammarCard[] = [
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
   <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-아/어도 → 即使……也……（让步）</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">ㅏ/ㅗ→아도 / 其他→어도 / 하다→해도</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">비가 와도 괜찮아요.</span><span style="font-size:14px;color:#5a4640">即使下雨也没关系。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">힘들어도 포기 안 해요.</span><span style="font-size:14px;color:#5a4640">即使辛苦也不放弃。</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">ㅏ/ㅗ→아도 / 其他→어도 / 하다→해도</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">비가 와도 괜찮아요.</span><span style="font-size:16px;color:#5a4640">即使下雨也没关系。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">힘들어도 포기 안 해요.</span><span style="font-size:16px;color:#5a4640">即使辛苦也不放弃。</span></div>
   </div>
   <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-(이)라도 → 哪怕……也行（退而求其次）</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">有收音名词+이라도 / 无收音名词+라도</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">커피라도 마실까요?</span><span style="font-size:14px;color:#5a4640">喝杯咖啡也好？</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">버스라도 타요.</span><span style="font-size:14px;color:#5a4640">坐公交也行。</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">有收音名词+이라도 / 无收音名词+라도</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">커피라도 마실까요?</span><span style="font-size:16px;color:#5a4640">喝杯咖啡也好？</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">버스라도 타요.</span><span style="font-size:16px;color:#5a4640">坐公交也行。</span></div>
   </div>
   <div class="tok-row" style="background:#f0f4ff;border-radius:12px;padding:12px">
     <div class="tok t-v">-아/어도 되다 → 可以……吗？（请求许可）</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">变形同 -아/어도，后接 되다/돼요</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">사진 찍어도 돼요?</span><span style="font-size:14px;color:#5a4640">可以拍照吗？</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">여기 앉아도 돼요?</span><span style="font-size:14px;color:#5a4640">可以坐这里吗？</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">变形同 -아/어도，后接 되다/돼요</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">사진 찍어도 돼요?</span><span style="font-size:16px;color:#5a4640">可以拍照吗？</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">여기 앉아도 돼요?</span><span style="font-size:16px;color:#5a4640">可以坐这里吗？</span></div>
   </div>
 </div>
 <div class="reminder-box">물라도 ✗ → 물이라도 ✓（물 有收音 ㄹ，用 이라도）。-아도 돼요? 的回答：돼요（可以）/ 안 돼요（不可以）。</div>`,
@@ -647,9 +647,9 @@ export const grammarCardsP8: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">三种用法速查</div></div>
     <div class="ov-block">
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
-        <div style="background:#fff0f5;border-radius:10px;padding:10px;text-align:center"><div style="font-size:13px;font-weight:800;color:#ff7fa8">-아도</div><div style="font-size:11px;color:#89756e;margin-top:2px">即使……也</div></div>
-        <div style="background:#eaf8f5;border-radius:10px;padding:10px;text-align:center"><div style="font-size:13px;font-weight:800;color:#2db89b">-(이)라도</div><div style="font-size:11px;color:#89756e;margin-top:2px">哪怕……也行</div></div>
-        <div style="background:#f0f4ff;border-radius:10px;padding:10px;text-align:center"><div style="font-size:13px;font-weight:800;color:#6b7ff0">-아도 돼요?</div><div style="font-size:11px;color:#89756e;margin-top:2px">可以……吗</div></div>
+        <div style="background:#fff0f5;border-radius:10px;padding:10px;text-align:center"><div style="font-size:16px;font-weight:800;color:#ff7fa8">-아도</div><div style="font-size:11px;color:#89756e;margin-top:2px">即使……也</div></div>
+        <div style="background:#eaf8f5;border-radius:10px;padding:10px;text-align:center"><div style="font-size:16px;font-weight:800;color:#2db89b">-(이)라도</div><div style="font-size:11px;color:#89756e;margin-top:2px">哪怕……也行</div></div>
+        <div style="background:#f0f4ff;border-radius:10px;padding:10px;text-align:center"><div style="font-size:16px;font-weight:800;color:#6b7ff0">-아도 돼요?</div><div style="font-size:11px;color:#89756e;margin-top:2px">可以……吗</div></div>
       </div>
     </div>
   </div>
@@ -707,7 +707,7 @@ export const grammarCardsP8: GrammarCard[] = [
       { wrong: '피곤해서 운동해요', correct: '피곤해도 운동해요', note: '-아서 表示原因，不能用于让步。"即使累也运动"要用 -아도，不是 -아서。' },
       { wrong: '사진 찍어도 돼요 안 돼요?', correct: '사진 찍어도 돼요? — 네, 돼요 / 안 돼요', note: '请求许可是疑问句，回答是分开的 돼요 或 안 돼요，不能连在一个句子里问。' },
     ],
-    linkedGrammarIds: [],
+    linkedGrammarIds: ['g32', 'g68'],
   },
   {
     id: 'card-p8-l07', partNumber: 8, lessonNumber: 7, title: '-(으)면 안 되다, -(으)면 되다',
@@ -719,17 +719,17 @@ export const grammarCardsP8: GrammarCard[] = [
     step0Html: `<div class="card-title">-(으)면 안 돼요 · -(으)면 돼요</div>
 <div class="card-body">-(으)면 안 돼요 说"不可以做"，-(으)면 돼요 说"做这个就行了"。规则说明和操作指引必备。</div>
 <div class="hook-box">
-  <div style="font-size:12px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">一词之差，意思相反</div>
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">一词之差，意思相反</div>
   <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
     <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
       <div style="font-size:9px;font-weight:800;color:#ff7fa8;margin-bottom:4px">-(으)면 안 돼요（禁止）</div>
       <div style="font-size:16px;font-weight:800;color:#241917">여기서 담배를 피우면 안 돼요.</div>
-      <div style="font-size:12px;color:#89756e;margin-top:2px">这里不可以抽烟。</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">这里不可以抽烟。</div>
     </div>
     <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
       <div style="font-size:9px;font-weight:800;color:#2db89b;margin-bottom:4px">-(으)면 돼요（充分条件）</div>
       <div style="font-size:16px;font-weight:800;color:#241917">이 버튼을 누르면 돼요.</div>
-      <div style="font-size:12px;color:#89756e;margin-top:2px">按这个按钮就行了。</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">按这个按钮就行了。</div>
     </div>
   </div>
 </div>
@@ -739,20 +739,20 @@ export const grammarCardsP8: GrammarCard[] = [
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
   <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-(으)면 안 되다 → 条件性禁止</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">"如果做了就不行"，强调条件</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">여기서 먹으면 안 돼요.</span><span style="font-size:14px;color:#5a4640">这里不可以吃。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">늦으면 안 되니까 빨리 가요.</span><span style="font-size:14px;color:#5a4640">不可以迟到，快走吧。</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">"如果做了就不行"，强调条件</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">여기서 먹으면 안 돼요.</span><span style="font-size:16px;color:#5a4640">这里不可以吃。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">늦으면 안 되니까 빨리 가요.</span><span style="font-size:16px;color:#5a4640">不可以迟到，快走吧。</span></div>
   </div>
   <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-(으)면 되다 → 充分条件（做这个就够了）</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">"满足这个条件就可以了"，降低门槛</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">이름만 쓰면 돼요.</span><span style="font-size:14px;color:#5a4640">只写名字就行了。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">버스 타면 돼요.</span><span style="font-size:14px;color:#5a4640">坐公交就行了。</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">"满足这个条件就可以了"，降低门槛</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">이름만 쓰면 돼요.</span><span style="font-size:16px;color:#5a4640">只写名字就行了。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">버스 타면 돼요.</span><span style="font-size:16px;color:#5a4640">坐公交就行了。</span></div>
   </div>
   <div class="tok-row" style="background:#f0f4ff;border-radius:12px;padding:12px">
     <div class="tok t-v">-지 말다 → 直接命令禁止</div>
-    <div style="font-size:14px;color:#89756e;margin-top:2px">更直接的禁止，命令语气</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">먹지 마세요.</span><span style="font-size:14px;color:#5a4640">请不要吃。</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">更直接的禁止，命令语气</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">먹지 마세요.</span><span style="font-size:16px;color:#5a4640">请不要吃。</span></div>
   </div>
 </div>
 <div class="reminder-box">먹면 돼요 ✗ → 먹으면 돼요 ✓（먹 有收음 ㄱ，加 으）。늦면 안 돼요 ✗ → 늦으면 안 돼요 ✓（늦 有收음 ㅈ，加 으）。</div>`,
@@ -766,9 +766,9 @@ export const grammarCardsP8: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">变形规则</div></div>
     <div class="ov-block">
       <div style="display:flex;flex-direction:column;gap:6px">
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#ff7fa8">无收음+면</span>：가면 안 돼요 / 가면 돼요</div>
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#2db89b">有收음+으면</span>：먹으면 안 돼요 / 앉으면 돼요</div>
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#6b7ff0">ㄹ词干脱落</span>：알면 안 돼요 / 만들면 돼요</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">无收음+면</span>：가면 안 돼요 / 가면 돼요</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">有收음+으면</span>：먹으면 안 돼요 / 앉으면 돼요</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#6b7ff0">ㄹ词干脱落</span>：알면 안 돼요 / 만들면 돼요</div>
       </div>
     </div>
   </div>
@@ -825,7 +825,7 @@ export const grammarCardsP8: GrammarCard[] = [
       { wrong: '이것 하면 됩니다 안 됩니다', correct: '이것 하면 돼요 / 하면 안 돼요', note: '충분 조건(돼요)과 금지(안 돼요)는 서로 다른 문장，不能在同一句里同时说。' },
       { wrong: '늦면 안 돼요', correct: '늦으면 안 돼요', note: '늦다 有收音 ㅈ，必须加 으 → 늦으면 안 돼요。' },
     ],
-    linkedGrammarIds: [],
+    linkedGrammarIds: ['g68'],
   },
   {
     id: 'card-p8-l08', partNumber: 8, lessonNumber: 8, isPractice: true, title: '综合练习⑧',

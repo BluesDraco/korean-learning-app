@@ -107,22 +107,22 @@ export const grammarCardsP2: GrammarCard[] = [
       { wrong: '학교에서 가요', correct: '학교에 가요', note: '去某地用 에 가요；에서 表示"在某地做动作"。' },
       { wrong: '친구와하고 가요', correct: '친구와 가요 / 친구하고 가요', note: '와/과 和 하고 二选一，不要叠用。' },
     ],
-    linkedGrammarIds: [],
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">에 가다 · 와/과 · 하고</h1>
-  <p class="sub" style="color:#89756e;font-size:.9rem;margin-bottom:22px">说「去哪里」和「和谁一起」，这节课两个句型一起掌握。</p>
+    linkedGrammarIds: ['g4', 'g12'],
+    step0Html: `<h1 style="font-size:25px;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">에 가다 · 와/과 · 하고</h1>
+  <p class="sub" style="color:#89756e;font-size:16px;margin-bottom:22px">说「去哪里」和「和谁一起」，这节课两个句型一起掌握。</p>
   <div class="block">
-    <div style="font-size:.95rem;font-weight:700;margin-bottom:10px;color:#2db89b">学完这节课，你能说：</div>
-    <div style="margin-bottom:10px"><div class="ko" style="font-size:1.25rem;font-weight:700;color:#241917">친구하고 카페에 가요.</div><div class="zh" style="font-size:.88rem;color:#89756e;margin-top:2px">和朋友去咖啡店。</div></div>
-    <div style="margin-bottom:10px"><div class="ko" style="font-size:1.25rem;font-weight:700;color:#241917">선생님과 공부해요.</div><div class="zh" style="font-size:.88rem;color:#89756e;margin-top:2px">和老师一起学习。</div></div>
-    <div style="margin-bottom:10px"><div class="ko" style="font-size:1.25rem;font-weight:700;color:#241917">주말에 한국에 가요!</div><div class="zh" style="font-size:.88rem;color:#89756e;margin-top:2px">周末去韩国！</div></div>
+    <div style="font-size:16px;font-weight:700;margin-bottom:10px;color:#2db89b">学完这节课，你能说：</div>
+    <div style="margin-bottom:10px"><div class="ko" style="font-size:20px;font-weight:700;color:#241917">친구하고 카페에 가요.</div><div class="zh" style="font-size:16px;color:#89756e;margin-top:2px">和朋友去咖啡店。</div></div>
+    <div style="margin-bottom:10px"><div class="ko" style="font-size:20px;font-weight:700;color:#241917">선생님과 공부해요.</div><div class="zh" style="font-size:16px;color:#89756e;margin-top:2px">和老师一起学习。</div></div>
+    <div style="margin-bottom:10px"><div class="ko" style="font-size:20px;font-weight:700;color:#241917">주말에 한국에 가요!</div><div class="zh" style="font-size:16px;color:#89756e;margin-top:2px">周末去韩国！</div></div>
   </div>
   <div class="block">
-    <div style="font-size:.95rem;font-weight:700;margin-bottom:10px;color:#2db89b">两个核心句型</div>
-    <div style="background:#f8f4f0;border-radius:12px;padding:14px;font-size:.88rem;line-height:2.2">
+    <div style="font-size:16px;font-weight:700;margin-bottom:10px;color:#2db89b">两个核心句型</div>
+    <div style="background:#f8f4f0;border-radius:12px;padding:14px;font-size:16px;line-height:2.2">
       <div><span style="background:#eaf8f5;color:#2db89b;padding:2px 10px;border-radius:6px;font-weight:700">① 去哪里</span>　地点 <b style="color:#ff7fa8">에</b> 가요 / 와요</div>
       <div><span style="background:#fff0f5;color:#ff7fa8;padding:2px 10px;border-radius:6px;font-weight:700">② 和谁一起</span>　人名 <b style="color:#ff7fa8">와/과/하고</b> + 动词</div>
     </div>
-    <div style="margin-top:10px;font-size:.85rem;color:#89756e">两个句型组合起来：친구<b style="color:#ff7fa8">와</b> 카페<b style="color:#ff7fa8">에</b> 가요 ✓</div>
+    <div style="margin-top:10px;font-size:16px;color:#89756e">两个句型组合起来：친구<b style="color:#ff7fa8">와</b> 카페<b style="color:#ff7fa8">에</b> 가요 ✓</div>
   </div>
   <div class="reminder-box">와/과/하고 都是「和」，不同的是语气：하고 是日常口语，와/과 是书面或中性语气，<b>意思完全相同</b>，选哪个都对。</div>`,
     compareHtml: `<div class="card-title">와/과 vs 하고</div>
@@ -152,7 +152,7 @@ export const grammarCardsP2: GrammarCard[] = [
       <div class="tok-row"><span class="tok t-s">선생님</span><span style="color:#89756e">→</span><span class="tok t-v">선생님하고</span></div>
     </div>
   </div>
-  <div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:15px;font-weight:700;color:#241917;margin-bottom:6px">选哪个？</div><div style="font-size:15px;color:#5a4640">日常对话：用 하고，简单好记，无需看收音。</div><div style="margin-top:4px;font-size:15px;color:#5a4640">书面/正式：用 와/과——看最后有无收音，无收音→와，有收音→과。</div></div>
+  <div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">选哪个？</div><div style="font-size:16px;color:#5a4640">日常对话：用 하고，简单好记，无需看收音。</div><div style="margin-top:4px;font-size:16px;color:#5a4640">书面/正式：用 와/과——看最后有无收音，无收音→와，有收音→과。</div></div>
 <div class="reminder-box">와/과 和 하고 <span class="hl">意思完全相同</span>，只是语气不同。日常对话里 하고 最常用，不用担心选错。</div>`,
     compareLabel: '와/과 vs 하고',
     quickTable: {
@@ -210,32 +210,32 @@ export const grammarCardsP2: GrammarCard[] = [
     <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px">
       <span class="tok t-p">학교에</span><span class="tok t-v">가요</span>
     </div>
-    <div style="font-size:12px;color:#89756e;margin-top:6px">可替换：카페에 / 회사에 / 병원에 / 도서관에</div>
+    <div style="font-size:16px;color:#89756e;margin-top:6px">可替换：카페에 / 회사에 / 병원에 / 도서관에</div>
   </div>
   <div class="ov-sec">
     <h3>② 和……：와/과（书面）</h3>
-    <div style="font-size:13px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       有收音 → <b style="color:#ff7fa8">과</b>：선생님과, 동생과, 책과<br>
       无收音 → <b style="color:#2db89b">와</b>：친구와, 엄마와, 가수와
     </div>
   </div>
   <div class="ov-sec">
     <h3>③ 和……：하고（口语）</h3>
-    <div style="font-size:13px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       不分收音，直接加：친구하고 / 선생님하고<br>
       <span style="color:#89756e">와/과 是书面，하고 是口语，都正确</span>
     </div>
   </div>
   <div class="ov-sec">
     <h3>④ 并列名词</h3>
-    <div style="font-size:13px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       커피<b style="color:#ff7fa8">하고</b> 빵을 사요（买咖啡和面包）<br>
       책<b style="color:#ff7fa8">과</b> 연필을 사요（买书和铅笔）
     </div>
   </div>
   <div class="ov-sec">
     <h3>⚠️ 常见错误</h3>
-    <div style="font-size:12px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       친구<span style="color:#e05555;text-decoration:line-through">과</span> → 친구<span style="color:#2db89b">와</span>（无收音）<br>
       선생님<span style="color:#e05555;text-decoration:line-through">와</span> → 선생님<span style="color:#ff7fa8">과</span>（有收音）<br>
       학교<span style="color:#e05555;text-decoration:line-through">에서</span> 가요 → 학교<span style="color:#2db89b">에</span> 가요（目的地用 에）
@@ -356,9 +356,9 @@ export const grammarCardsP2: GrammarCard[] = [
   <div class="ov-section">
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">核心规律</div></div>
     <div class="ov-block">
-      <div style="font-size:13px;font-weight:700;color:#241917;margin-bottom:8px">있다/없다 的主语必须加 이/가</div>
+      <div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:8px">있다/없다 的主语必须加 이/가</div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px"><span class="pill p-s">친구가</span><span class="pill p-v">있어요</span></div>
-      <div style="font-size:12px;color:#89756e">有朋友。— 이/가 不可省略</div>
+      <div style="font-size:16px;color:#89756e">有朋友。— 이/가 不可省略</div>
     </div>
   </div>
   <div class="ov-section">
@@ -379,62 +379,62 @@ export const grammarCardsP2: GrammarCard[] = [
     </div>
   </div>
 </div>`,
-    linkedGrammarIds: [],
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">이/가 있다 · 없다</h1>
-<p class="sub" style="font-size:.9rem;color:#89756e;margin-bottom:16px;line-height:1.6">「有/没有」「在/不在」——韩语用同一个词，关键看句子里有没有地点。</p>
+    linkedGrammarIds: ['g2', 'g4'],
+    step0Html: `<h1 style="font-size:25px;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">이/가 있다 · 없다</h1>
+<p class="sub" style="font-size:16px;color:#89756e;margin-bottom:16px;line-height:1.6">「有/没有」「在/不在」——韩语用同一个词，关键看句子里有没有地点。</p>
 <div class="block">
-  <div style="font-size:13px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
   <div style="display:flex;flex-direction:column;gap:8px">
     <div style="background:#fff8fb;border-radius:10px;padding:10px 14px">
-      <div style="font-size:15px;font-weight:700;color:#241917">책이 있어요.</div>
-      <div style="font-size:13px;color:#89756e;margin-top:2px">有书。（有/没有）</div>
+      <div style="font-size:16px;font-weight:700;color:#241917">책이 있어요.</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">有书。（有/没有）</div>
     </div>
     <div style="background:#fff8fb;border-radius:10px;padding:10px 14px">
-      <div style="font-size:15px;font-weight:700;color:#241917">휴대폰이 가방 안에 있어요.</div>
-      <div style="font-size:13px;color:#89756e;margin-top:2px">手机在包里。（在某地）</div>
+      <div style="font-size:16px;font-weight:700;color:#241917">휴대폰이 가방 안에 있어요.</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">手机在包里。（在某地）</div>
     </div>
     <div style="background:#fff8fb;border-radius:10px;padding:10px 14px">
-      <div style="font-size:15px;font-weight:700;color:#241917">책상 위에 책이 있어요.</div>
-      <div style="font-size:13px;color:#89756e;margin-top:2px">桌上有书。（某地有……）</div>
+      <div style="font-size:16px;font-weight:700;color:#241917">책상 위에 책이 있어요.</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">桌上有书。（某地有……）</div>
     </div>
   </div>
 </div>
 <div class="block">
-  <div style="font-size:13px;font-weight:700;color:#241917;margin-bottom:8px">三种核心句型</div>
+  <div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:8px">三种核心句型</div>
   <div style="background:#f8f4f0;border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:8px">
-    <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#ff7fa8">① 有/没有</span>　名词+이/가 있어요 / 없어요</div>
-    <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#2db89b">② 在某地</span>　名词+이/가 + 地点+에 있어요</div>
-    <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#6b7ff0">③ 某地有</span>　地点+에 + 名词+이/가 있어요</div>
+    <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">① 有/没有</span>　名词+이/가 있어요 / 없어요</div>
+    <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">② 在某地</span>　名词+이/가 + 地点+에 있어요</div>
+    <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#6b7ff0">③ 某地有</span>　地点+에 + 名词+이/가 있어요</div>
   </div>
-  <div style="font-size:13px;color:#5a4640;margin-top:8px;line-height:1.7">중요：有/在/存在，韩语全用 있어요——靠有没有地点来区分"有"和"在"。</div>
+  <div style="font-size:16px;color:#5a4640;margin-top:8px;line-height:1.7">중요：有/在/存在，韩语全用 있어요——靠有没有地点来区分"有"和"在"。</div>
 </div>
 <div class="reminder-box">이/가 的选择只看名词末字有没有收音：有收音 → 이，无收音 → 가。</div>`,
     compareHtml: `<div class="card-title">이 vs 가 — 主格助词选择</div>
 <div class="card-body">只看名词最后一个字：有收音接 이，无收音接 가。和 이/가 是话题助词 은/는 的逻辑完全一样。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px">
   <div style="background:#fff0f5;border-radius:12px;padding:12px">
-    <div style="font-size:12px;font-weight:700;color:#ff7fa8;margin-bottom:8px">有收音 → 이</div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-s">책<b style="color:#ff7fa8">이</b></span><span style="font-size:12px;color:#89756e">书</span></div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-s">시간<b style="color:#ff7fa8">이</b></span><span style="font-size:12px;color:#89756e">时间</span></div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-s">돈<b style="color:#ff7fa8">이</b></span><span style="font-size:12px;color:#89756e">钱</span></div>
-    <div class="tok-row"><span class="tok t-s">가방<b style="color:#ff7fa8">이</b></span><span style="font-size:12px;color:#89756e">包</span></div>
+    <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">有收音 → 이</div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-s">책<b style="color:#ff7fa8">이</b></span><span style="font-size:16px;color:#89756e">书</span></div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-s">시간<b style="color:#ff7fa8">이</b></span><span style="font-size:16px;color:#89756e">时间</span></div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-s">돈<b style="color:#ff7fa8">이</b></span><span style="font-size:16px;color:#89756e">钱</span></div>
+    <div class="tok-row"><span class="tok t-s">가방<b style="color:#ff7fa8">이</b></span><span style="font-size:16px;color:#89756e">包</span></div>
   </div>
   <div style="background:#eaf8f5;border-radius:12px;padding:12px">
-    <div style="font-size:12px;font-weight:700;color:#2db89b;margin-bottom:8px">无收音 → 가</div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-s">친구<b style="color:#2db89b">가</b></span><span style="font-size:12px;color:#89756e">朋友</span></div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-s">의자<b style="color:#2db89b">가</b></span><span style="font-size:12px;color:#89756e">椅子</span></div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-s">커피<b style="color:#2db89b">가</b></span><span style="font-size:12px;color:#89756e">咖啡</span></div>
-    <div class="tok-row"><span class="tok t-s">고양이<b style="color:#2db89b">가</b></span><span style="font-size:12px;color:#89756e">猫</span></div>
+    <div style="font-size:16px;font-weight:700;color:#2db89b;margin-bottom:8px">无收音 → 가</div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-s">친구<b style="color:#2db89b">가</b></span><span style="font-size:16px;color:#89756e">朋友</span></div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-s">의자<b style="color:#2db89b">가</b></span><span style="font-size:16px;color:#89756e">椅子</span></div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-s">커피<b style="color:#2db89b">가</b></span><span style="font-size:16px;color:#89756e">咖啡</span></div>
+    <div class="tok-row"><span class="tok t-s">고양이<b style="color:#2db89b">가</b></span><span style="font-size:16px;color:#89756e">猫</span></div>
   </div>
 </div>
 <div style="background:#f0eef8;border-radius:12px;padding:12px;margin-bottom:12px">
-  <div style="font-size:12px;font-weight:700;color:#6b7ff0;margin-bottom:8px">常用位置词（+ 에）</div>
+  <div style="font-size:16px;font-weight:700;color:#6b7ff0;margin-bottom:8px">常用位置词（+ 에）</div>
   <div style="display:flex;flex-wrap:wrap;gap:10px">
     <span class="chip p">위（上）</span><span class="chip p">아래（下）</span><span class="chip p">앞（前）</span>
     <span class="chip p">뒤（后）</span><span class="chip p">안（里）</span><span class="chip p">밖（外）</span><span class="chip p">옆（旁）</span>
   </div>
 </div>
-<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:15px;font-weight:700;color:#241917;margin-bottom:6px">이/가 vs 은/는</div><div style="font-size:15px;color:#5a4640">은/는 强调话题（我嘛……），이/가 强调主体或引入新信息。两者都能做主语助词，但感觉不同。</div><div style="margin-top:4px;font-size:15px;color:#5a4640">초보자는 모음만 보면 됩니다 → 다음에 있다/없다가 오면 이/가를 씁니다。</div></div>
+<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">이/가 vs 은/는</div><div style="font-size:16px;color:#5a4640">은/는 强调话题（我嘛……），이/가 强调主体或引入新信息。两者都能做主语助词，但感觉不同。</div><div style="margin-top:4px;font-size:16px;color:#5a4640">초보자는 모음만 보면 됩니다 → 다음에 있다/없다가 오면 이/가를 씁니다。</div></div>
 <div class="reminder-box">있다/없다 的主语必须加 이/가，不可省略：친구 있어요 ✗ → 친구가 있어요 ✓</div>`,
     compareLabel: '이 vs 가',
     quickTable: {
@@ -588,60 +588,60 @@ export const grammarCardsP2: GrammarCard[] = [
       { wrong: '앉세요', correct: '앉으세요', note: '앉 有复合收音 ㄵ，要加 으，用 앉으세요。' },
       { wrong: '같이 가세요（邀一起去）', correct: '같이 갑시다', note: '가세요 是请对方去，갑시다 是"我们一起去"。语气不同。' },
     ],
-    linkedGrammarIds: [],
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">-ㅂ시다/읍시다 · -(으)세요</h1>
-<p class="sub" style="font-size:.9rem;color:#89756e;margin-bottom:16px;line-height:1.6">邀请对方一起做 vs 礼貌请对方做——两种词尾，语气完全不同。</p>
+    linkedGrammarIds: ['g56', 'g58'],
+    step0Html: `<h1 style="font-size:25px;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">-ㅂ시다/읍시다 · -(으)세요</h1>
+<p class="sub" style="font-size:16px;color:#89756e;margin-bottom:16px;line-height:1.6">邀请对方一起做 vs 礼貌请对方做——两种词尾，语气完全不同。</p>
 <div class="block">
-  <div style="font-size:13px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
   <div style="display:flex;flex-direction:column;gap:8px">
     <div style="background:#fff8fb;border-radius:10px;padding:10px 14px">
-      <div style="font-size:15px;font-weight:700;color:#241917">같이 공부합시다!</div>
-      <div style="font-size:13px;color:#89756e;margin-top:2px">我们一起学习吧！（说话人也参与）</div>
+      <div style="font-size:16px;font-weight:700;color:#241917">같이 공부합시다!</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">我们一起学习吧！（说话人也参与）</div>
     </div>
     <div style="background:#fff8fb;border-radius:10px;padding:10px 14px">
-      <div style="font-size:15px;font-weight:700;color:#241917">앉으세요.</div>
-      <div style="font-size:13px;color:#89756e;margin-top:2px">请坐。（礼貌请对方做）</div>
+      <div style="font-size:16px;font-weight:700;color:#241917">앉으세요.</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">请坐。（礼貌请对方做）</div>
     </div>
     <div style="background:#fff8fb;border-radius:10px;padding:10px 14px">
-      <div style="font-size:15px;font-weight:700;color:#241917">천천히 말씀해 주세요.</div>
-      <div style="font-size:13px;color:#89756e;margin-top:2px">请说慢一点。（请求帮忙）</div>
+      <div style="font-size:16px;font-weight:700;color:#241917">천천히 말씀해 주세요.</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">请说慢一点。（请求帮忙）</div>
     </div>
   </div>
 </div>
 <div class="block">
-  <div style="font-size:13px;font-weight:700;color:#241917;margin-bottom:8px">两套词尾的核心区别</div>
+  <div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:8px">两套词尾的核心区别</div>
   <div style="background:#f8f4f0;border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:8px">
-    <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#ff7fa8">-ㅂ시다/읍시다</span>　说话人也参与 → "咱们一起……吧"</div>
-    <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#2db89b">-(으)세요</span>　　　只请对方做 → "请您……"</div>
-    <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#6b7ff0">-(으)십시오</span>　正式场合专用 → 广播/告示</div>
+    <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">-ㅂ시다/읍시다</span>　说话人也参与 → "咱们一起……吧"</div>
+    <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">-(으)세요</span>　　　只请对方做 → "请您……"</div>
+    <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#6b7ff0">-(으)십시오</span>　正式场合专用 → 广播/告示</div>
   </div>
-  <div style="font-size:13px;color:#5a4640;margin-top:8px;line-height:1.7">变形规则：看词干末字有无收音——无收音接 -ㅂ시다/-세요，有收音接 -읍시다/-으세요。</div>
+  <div style="font-size:16px;color:#5a4640;margin-top:8px;line-height:1.7">变形规则：看词干末字有无收音——无收音接 -ㅂ시다/-세요，有收音接 -읍시다/-으세요。</div>
 </div>
 <div class="reminder-box">ㅂ시다 说"我们一起去"，세요 说"请您去"——说话人参不参与是关键区别。</div>`,
     compareHtml: `<div class="card-title">-ㅂ시다/읍시다 vs -(으)세요</div>
 <div class="card-body">词干末字有无收音决定接哪个形式。口诀：无收音短，有收音加 으。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px">
   <div style="background:#fff0f5;border-radius:12px;padding:12px">
-    <div style="font-size:12px;font-weight:700;color:#ff7fa8;margin-bottom:8px">无收音 → -ㅂ시다 / -세요</div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">갑시다</span><span style="font-size:12px;color:#89756e">走吧（가다）</span></div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">봅시다</span><span style="font-size:12px;color:#89756e">看吧（보다）</span></div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">가세요</span><span style="font-size:12px;color:#89756e">请去（가다）</span></div>
-    <div class="tok-row"><span class="tok t-v">보세요</span><span style="font-size:12px;color:#89756e">请看（보다）</span></div>
+    <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">无收音 → -ㅂ시다 / -세요</div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">갑시다</span><span style="font-size:16px;color:#89756e">走吧（가다）</span></div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">봅시다</span><span style="font-size:16px;color:#89756e">看吧（보다）</span></div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">가세요</span><span style="font-size:16px;color:#89756e">请去（가다）</span></div>
+    <div class="tok-row"><span class="tok t-v">보세요</span><span style="font-size:16px;color:#89756e">请看（보다）</span></div>
   </div>
   <div style="background:#eaf8f5;border-radius:12px;padding:12px">
-    <div style="font-size:12px;font-weight:700;color:#2db89b;margin-bottom:8px">有收音 → -읍시다 / -으세요</div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">먹읍시다</span><span style="font-size:12px;color:#89756e">吃吧（먹다）</span></div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">읽읍시다</span><span style="font-size:12px;color:#89756e">读吧（읽다）</span></div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">먹으세요</span><span style="font-size:12px;color:#89756e">请吃（먹다）</span></div>
-    <div class="tok-row"><span class="tok t-v">앉으세요</span><span style="font-size:12px;color:#89756e">请坐（앉다）</span></div>
+    <div style="font-size:16px;font-weight:700;color:#2db89b;margin-bottom:8px">有收音 → -읍시다 / -으세요</div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">먹읍시다</span><span style="font-size:16px;color:#89756e">吃吧（먹다）</span></div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">읽읍시다</span><span style="font-size:16px;color:#89756e">读吧（읽다）</span></div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">먹으세요</span><span style="font-size:16px;color:#89756e">请吃（먹다）</span></div>
+    <div class="tok-row"><span class="tok t-v">앉으세요</span><span style="font-size:16px;color:#89756e">请坐（앉다）</span></div>
   </div>
 </div>
 <div style="background:#f0eef8;border-radius:12px;padding:12px;margin-bottom:12px">
-  <div style="font-size:12px;font-weight:700;color:#6b7ff0;margin-bottom:8px">ㄹ词干特例：ㄹ脱落后接 -ㅂ시다</div>
-  <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">압시다</span><span style="font-size:12px;color:#89756e">知道吧（알다 → ㄹ脱落）</span></div>
-  <div class="tok-row"><span class="tok t-v">만듭시다</span><span style="font-size:12px;color:#89756e">做吧（만들다 → ㄹ脱落）</span></div>
+  <div style="font-size:16px;font-weight:700;color:#6b7ff0;margin-bottom:8px">ㄹ词干特例：ㄹ脱落后接 -ㅂ시다</div>
+  <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">압시다</span><span style="font-size:16px;color:#89756e">知道吧（알다 → ㄹ脱落）</span></div>
+  <div class="tok-row"><span class="tok t-v">만듭시다</span><span style="font-size:16px;color:#89756e">做吧（만들다 → ㄹ脱落）</span></div>
 </div>
-<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:15px;font-weight:700;color:#241917;margin-bottom:6px">이/가 와 지시사 위치</div><div style="font-size:15px;color:#5a4640">이/그/저 は 명사 앞에，이/가 는 명사 뒤에 붙는다。</div><div style="margin-top:4px;font-size:15px;color:#5a4640">이 책이 좋아요 → 이（指示词）在前，이（助词）在后，看位置区分。</div></div>
+<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">이/가 와 지시사 위치</div><div style="font-size:16px;color:#5a4640">이/그/저 は 명사 앞에，이/가 는 명사 뒤에 붙는다。</div><div style="margin-top:4px;font-size:16px;color:#5a4640">이 책이 좋아요 → 이（指示词）在前，이（助词）在后，看位置区分。</div></div>
 <div class="reminder-box">갑시다（我们一起去）≠ 가세요（请您去）——搞混会造成语气误会。</div>`,
     compareLabel: '一起 vs 请您 vs 正式请',
     quickTable: {
@@ -694,28 +694,28 @@ export const grammarCardsP2: GrammarCard[] = [
   <div class="ov-sub">三种常见"让别人做事"的表达，语气各有侧重</div>
   <div class="ov-sec">
     <h3>① 一起……吧：-ㅂ시다/읍시다</h3>
-    <div style="font-size:13px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       받침 없는 → <b style="color:#ff7fa8">ㅂ시다</b>：갑시다, 봅시다, 공부합시다<br>
       받침 있는 → <b style="color:#ff7fa8">읍시다</b>：먹읍시다, 읽읍시다, 앉읍시다
     </div>
   </div>
   <div class="ov-sec">
     <h3>② 请您……：-(으)세요</h3>
-    <div style="font-size:13px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       받침 없는 → <b style="color:#2db89b">세요</b>：가세요, 보세요, 기다리세요<br>
       받침 있는 → <b style="color:#2db89b">으세요</b>：먹으세요, 읽으세요, 앉으세요
     </div>
   </div>
   <div class="ov-sec">
     <h3>③ 请……（正式）：-(으)십시오</h3>
-    <div style="font-size:13px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       받침 없는 → <b style="color:#6b7ff0">십시오</b>：가십시오, 확인하십시오<br>
       받침 있는 → <b style="color:#6b7ff0">으십시오</b>：앉으십시오, 읽으십시오
     </div>
   </div>
   <div class="ov-sec">
     <h3>④ 语气区别</h3>
-    <div style="font-size:13px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       같이 갑시다 — 一起去吧（说话人也去）<br>
       가세요 — 请您去（只请对方）<br>
       가십시오 — 请走（正式/公告语气）
@@ -723,7 +723,7 @@ export const grammarCardsP2: GrammarCard[] = [
   </div>
   <div class="ov-sec">
     <h3>⚠️ 常见错误</h3>
-    <div style="font-size:12px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       앉<span style="color:#e05555;text-decoration:line-through">세요</span> → 앉<span style="color:#2db89b">으세요</span>（받침 있는 必须加 으）<br>
       가<span style="color:#e05555;text-decoration:line-through">읍시다</span> → <span style="color:#ff7fa8">갑시다</span>（받침 없는 用 ㅂ시다）<br>
       가세요（误当"一起去"）→ 같이 <span style="color:#ff7fa8">갑시다</span>（一起要用 ㅂ시다）
@@ -830,32 +830,32 @@ export const grammarCardsP2: GrammarCard[] = [
       { wrong: '두 원（想说两韩元）', correct: '이 원', note: '韩元(원)用汉字数词，두 원 × → 이 원 ✓。' },
     ],
     linkedGrammarIds: [],
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">数词 · 量词</h1>
-<p class="sub" style="font-size:.9rem;color:#89756e;margin-bottom:16px;line-height:1.6">韩语有两套数字系统，搞清楚谁配谁，点餐、购物、报人数全不怕。</p>
+    step0Html: `<h1 style="font-size:25px;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">数词 · 量词</h1>
+<p class="sub" style="font-size:16px;color:#89756e;margin-bottom:16px;line-height:1.6">韩语有两套数字系统，搞清楚谁配谁，点餐、购物、报人数全不怕。</p>
 <div class="block">
-  <div style="font-size:13px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
   <div style="display:flex;flex-direction:column;gap:8px">
     <div style="background:#fff8fb;border-radius:10px;padding:10px 14px">
-      <div style="font-size:15px;font-weight:700;color:#241917">아메리카노 한 잔 주세요.</div>
-      <div style="font-size:13px;color:#89756e;margin-top:2px">请给我一杯美式。（固有数词+量词）</div>
+      <div style="font-size:16px;font-weight:700;color:#241917">아메리카노 한 잔 주세요.</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">请给我一杯美式。（固有数词+量词）</div>
     </div>
     <div style="background:#fff8fb;border-radius:10px;padding:10px 14px">
-      <div style="font-size:15px;font-weight:700;color:#241917">네 명이에요.</div>
-      <div style="font-size:13px;color:#89756e;margin-top:2px">四个人。（人数用固有数词）</div>
+      <div style="font-size:16px;font-weight:700;color:#241917">네 명이에요.</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">四个人。（人数用固有数词）</div>
     </div>
     <div style="background:#fff8fb;border-radius:10px;padding:10px 14px">
-      <div style="font-size:15px;font-weight:700;color:#241917">오천 원이에요.</div>
-      <div style="font-size:13px;color:#89756e;margin-top:2px">五千韩元。（价格用汉字数词）</div>
+      <div style="font-size:16px;font-weight:700;color:#241917">오천 원이에요.</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">五千韩元。（价格用汉字数词）</div>
     </div>
   </div>
 </div>
 <div class="block">
-  <div style="font-size:13px;font-weight:700;color:#241917;margin-bottom:8px">两套数字系统一眼看清</div>
+  <div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:8px">两套数字系统一眼看清</div>
   <div style="background:#f8f4f0;border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:8px">
-    <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#ff7fa8">固有数词</span>　하나·둘·셋·넷… → 量词前缩短：한·두·세·네</div>
-    <div style="font-size:12px;color:#89756e;padding-left:8px">配：个(개)·人(명)·杯(잔)·本(권)·瓶(병)·张(장)·只(마리)</div>
-    <div style="font-size:13px;color:#241917;margin-top:4px"><span style="font-weight:700;color:#2db89b">汉字数词</span>　일·이·삼·사… → 不缩短，直接用</div>
-    <div style="font-size:12px;color:#89756e;padding-left:8px">配：韩元(원)·月份(월)·日期(일)·分钟(분)·电话号码</div>
+    <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">固有数词</span>　하나·둘·셋·넷… → 量词前缩短：한·두·세·네</div>
+    <div style="font-size:16px;color:#89756e;padding-left:8px">配：个(개)·人(명)·杯(잔)·本(권)·瓶(병)·张(장)·只(마리)</div>
+    <div style="font-size:16px;color:#241917;margin-top:4px"><span style="font-weight:700;color:#2db89b">汉字数词</span>　일·이·삼·사… → 不缩短，直接用</div>
+    <div style="font-size:16px;color:#89756e;padding-left:8px">配：韩元(원)·月份(월)·日期(일)·分钟(분)·电话号码</div>
   </div>
 </div>
 <div class="reminder-box">하나/둘/셋/넷 接量词时必须缩短：한 잔 ✓，하나 잔 ✗。</div>`,
@@ -863,26 +863,26 @@ export const grammarCardsP2: GrammarCard[] = [
 <div class="card-body">两套系统各有分工，混用会让人听不懂。关键：数人/个/杯/本用固有，数钱/月/日/分用汉字。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px">
   <div style="background:#fff0f5;border-radius:12px;padding:12px">
-    <div style="font-size:12px;font-weight:700;color:#ff7fa8;margin-bottom:8px">固有数词（量词前缩短）</div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-s">한 잔</span><span style="font-size:12px;color:#89756e">一杯</span></div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-s">두 명</span><span style="font-size:12px;color:#89756e">两人</span></div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-s">세 권</span><span style="font-size:12px;color:#89756e">三本</span></div>
-    <div class="tok-row"><span class="tok t-s">네 개</span><span style="font-size:12px;color:#89756e">四个</span></div>
+    <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">固有数词（量词前缩短）</div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-s">한 잔</span><span style="font-size:16px;color:#89756e">一杯</span></div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-s">두 명</span><span style="font-size:16px;color:#89756e">两人</span></div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-s">세 권</span><span style="font-size:16px;color:#89756e">三本</span></div>
+    <div class="tok-row"><span class="tok t-s">네 개</span><span style="font-size:16px;color:#89756e">四个</span></div>
   </div>
   <div style="background:#eaf8f5;border-radius:12px;padding:12px">
-    <div style="font-size:12px;font-weight:700;color:#2db89b;margin-bottom:8px">汉字数词（不缩短）</div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">오천 원</span><span style="font-size:12px;color:#89756e">五千元</span></div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">삼 월</span><span style="font-size:12px;color:#89756e">三月</span></div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">십오 일</span><span style="font-size:12px;color:#89756e">十五号</span></div>
-    <div class="tok-row"><span class="tok t-v">삼십 분</span><span style="font-size:12px;color:#89756e">三十分</span></div>
+    <div style="font-size:16px;font-weight:700;color:#2db89b;margin-bottom:8px">汉字数词（不缩短）</div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">오천 원</span><span style="font-size:16px;color:#89756e">五千元</span></div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">삼 월</span><span style="font-size:16px;color:#89756e">三月</span></div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">십오 일</span><span style="font-size:16px;color:#89756e">十五号</span></div>
+    <div class="tok-row"><span class="tok t-v">삼십 분</span><span style="font-size:16px;color:#89756e">三十分</span></div>
   </div>
 </div>
 <div style="background:#f8f4f0;border-radius:12px;padding:12px;margin-bottom:12px">
-  <div style="font-size:12px;font-weight:700;color:#241917;margin-bottom:6px">시(点)用固有，분(分)用汉字</div>
-  <div class="tok-row" style="margin-bottom:4px"><span class="tok t-s">두 시</span><span style="font-size:12px;color:#89756e">两点（固有）</span></div>
-  <div class="tok-row"><span class="tok t-v">삼십 분</span><span style="font-size:12px;color:#89756e">三十分（汉字）</span></div>
+  <div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">시(点)用固有，분(分)用汉字</div>
+  <div class="tok-row" style="margin-bottom:4px"><span class="tok t-s">두 시</span><span style="font-size:16px;color:#89756e">两点（固有）</span></div>
+  <div class="tok-row"><span class="tok t-v">삼십 분</span><span style="font-size:16px;color:#89756e">三十分（汉字）</span></div>
 </div>
-<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:15px;font-weight:700;color:#241917;margin-bottom:6px">记忆口诀</div><div style="font-size:15px;color:#5a4640">固有数词（하나/둘…）：数人、数量词、时钟「几点」。</div><div style="margin-top:4px;font-size:15px;color:#5a4640">汉字数词（일/이/삼…）：钱、月份、日期、分钟、电话号码。</div></div>
+<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">记忆口诀</div><div style="font-size:16px;color:#5a4640">固有数词（하나/둘…）：数人、数量词、时钟「几点」。</div><div style="margin-top:4px;font-size:16px;color:#5a4640">汉字数词（일/이/삼…）：钱、月份、日期、分钟、电话号码。</div></div>
 <div class="reminder-box">두 원 ✗ → 이 원 ✓（韩元用汉字）　이 명 ✗ → 두 명 ✓（人数用固有）</div>`,
     compareLabel: '固有数词 vs 汉字数词',
     quickTable: {
@@ -940,23 +940,23 @@ export const grammarCardsP2: GrammarCard[] = [
   <div class="ov-sub">两套数字系统，搭配不同量词，数人数物点餐购物</div>
   <div class="ov-sec">
     <h3>① 固有数词（1-10）</h3>
-    <div style="font-size:13px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       하나(한) 둘(두) 셋(세) 넷(네) 다섯<br>
       여섯 일곱 여덟 아홉 열<br>
-      <span style="color:#89756e;font-size:12px">수량사 앞에서 时：하나→한, 둘→두, 셋→세, 넷→네</span>
+      <span style="color:#89756e;font-size:16px">수량사 앞에서 时：하나→한, 둘→두, 셋→세, 넷→네</span>
     </div>
   </div>
   <div class="ov-sec">
     <h3>② 汉字数词</h3>
-    <div style="font-size:13px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       일 이 삼 사 오 육 칠 팔 구 십<br>
       백(100) 천(1000) 만(10000)<br>
-      <span style="color:#89756e;font-size:12px">用于：价格/원、月份/월、日期/일、分钟/분</span>
+      <span style="color:#89756e;font-size:16px">用于：价格/원、月份/월、日期/일、分钟/분</span>
     </div>
   </div>
   <div class="ov-sec">
     <h3>③ 常用量词搭配</h3>
-    <div style="font-size:13px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       <b style="color:#ff7fa8">한 잔</b> 咖啡一杯 &nbsp; <b style="color:#ff7fa8">두 명</b> 两个人<br>
       <b style="color:#ff7fa8">세 권</b> 三本书 &nbsp; <b style="color:#ff7fa8">네 개</b> 四个<br>
       <b style="color:#2db89b">오천 원</b> 5000韩元 &nbsp; <b style="color:#2db89b">삼 월</b> 3月
@@ -964,7 +964,7 @@ export const grammarCardsP2: GrammarCard[] = [
   </div>
   <div class="ov-sec">
     <h3>⚠️ 常见错误</h3>
-    <div style="font-size:12px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       커피 <span style="color:#e05555;text-decoration:line-through">하나 잔</span> → <span style="color:#ff7fa8">한 잔</span>（수량사 앞에서 缩短）<br>
       <span style="color:#e05555;text-decoration:line-through">이 명</span>이에요 → <span style="color:#ff7fa8">두 명</span>이에요（人数用固有）<br>
       사과 <span style="color:#e05555;text-decoration:line-through">삼 개</span> → <span style="color:#ff7fa8">세 개</span>（个数用固有，셋→세）
@@ -1077,58 +1077,58 @@ export const grammarCardsP2: GrammarCard[] = [
       { wrong: '커피를만 마셔요', correct: '커피만 마셔요', note: '만 替换 을/를，不要叠用：커피를만 × → 커피만 ✓。' },
       { wrong: '저만도 알아요', correct: '저만 알아요', note: '도 和 만 不同时用于同一成分，意思会混乱。' },
     ],
-    linkedGrammarIds: [],
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">의 · 도 · 만</h1>
-<p class="sub" style="font-size:.9rem;color:#89756e;margin-bottom:16px;line-height:1.6">三个小助词让句子更丰富：说"的"用 의，说"也"用 도，说"只"用 만。</p>
+    linkedGrammarIds: ['g7', 'g6'],
+    step0Html: `<h1 style="font-size:25px;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">의 · 도 · 만</h1>
+<p class="sub" style="font-size:16px;color:#89756e;margin-bottom:16px;line-height:1.6">三个小助词让句子更丰富：说"的"用 의，说"也"用 도，说"只"用 만。</p>
 <div class="block">
-  <div style="font-size:13px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
   <div style="display:flex;flex-direction:column;gap:8px">
     <div style="background:#fff8fb;border-radius:10px;padding:10px 14px">
-      <div style="font-size:15px;font-weight:700;color:#241917">이건 제 친구의 사진이에요.</div>
-      <div style="font-size:13px;color:#89756e;margin-top:2px">这是我朋友的照片。（의=的）</div>
+      <div style="font-size:16px;font-weight:700;color:#241917">이건 제 친구의 사진이에요.</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">这是我朋友的照片。（의=的）</div>
     </div>
     <div style="background:#fff8fb;border-radius:10px;padding:10px 14px">
-      <div style="font-size:15px;font-weight:700;color:#241917">저도 이 가수 좋아해요!</div>
-      <div style="font-size:13px;color:#89756e;margin-top:2px">我也喜欢这位歌手！（도=也）</div>
+      <div style="font-size:16px;font-weight:700;color:#241917">저도 이 가수 좋아해요!</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">我也喜欢这位歌手！（도=也）</div>
     </div>
     <div style="background:#fff8fb;border-radius:10px;padding:10px 14px">
-      <div style="font-size:15px;font-weight:700;color:#241917">저는 커피만 마셔요.</div>
-      <div style="font-size:13px;color:#89756e;margin-top:2px">我只喝咖啡。（만=只）</div>
+      <div style="font-size:16px;font-weight:700;color:#241917">저는 커피만 마셔요.</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">我只喝咖啡。（만=只）</div>
     </div>
   </div>
 </div>
 <div class="block">
-  <div style="font-size:13px;font-weight:700;color:#241917;margin-bottom:8px">三个助词核心用法</div>
+  <div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:8px">三个助词核心用法</div>
   <div style="background:#f8f4f0;border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:8px">
-    <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#ff7fa8">의</span>　名词A + 의 + 名词B = "A的B"　（口语"我的"：저의→제）</div>
-    <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#2db89b">도</span>　直接替换 은/는/이/가/을/를 → 表示"也"</div>
-    <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#6b7ff0">만</span>　直接替换其他助词 → 表示"只、仅"</div>
+    <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">의</span>　名词A + 의 + 名词B = "A的B"　（口语"我的"：저의→제）</div>
+    <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">도</span>　直接替换 은/는/이/가/을/를 → 表示"也"</div>
+    <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#6b7ff0">만</span>　直接替换其他助词 → 表示"只、仅"</div>
   </div>
-  <div style="font-size:13px;color:#5a4640;margin-top:8px;line-height:1.7">도 和 만 不能叠加在同一名词上：커피를만 ✗ → 커피만 ✓。</div>
+  <div style="font-size:16px;color:#5a4640;margin-top:8px;line-height:1.7">도 和 만 不能叠加在同一名词上：커피를만 ✗ → 커피만 ✓。</div>
 </div>
 <div class="reminder-box">도/만 替换助词，不叠加——저는도 ✗ → 저도 ✓，커피를만 ✗ → 커피만 ✓。</div>`,
     compareHtml: `<div class="card-title">도（也）vs 만（只）</div>
 <div class="card-body">两个助词功能相反：도 追加同类信息，만 排除其他只留一个。都直接接名词，替换原有助词。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px">
   <div style="background:#eaf8f5;border-radius:12px;padding:12px">
-    <div style="font-size:12px;font-weight:700;color:#2db89b;margin-bottom:8px">도 — 也（追加）</div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-s">저도</span><span style="font-size:12px;color:#89756e">我也</span></div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-o">한국어도</span><span style="font-size:12px;color:#89756e">韩语也</span></div>
-    <div class="tok-row"><span class="tok t-o">이것도</span><span style="font-size:12px;color:#89756e">这个也</span></div>
+    <div style="font-size:16px;font-weight:700;color:#2db89b;margin-bottom:8px">도 — 也（追加）</div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-s">저도</span><span style="font-size:16px;color:#89756e">我也</span></div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-o">한국어도</span><span style="font-size:16px;color:#89756e">韩语也</span></div>
+    <div class="tok-row"><span class="tok t-o">이것도</span><span style="font-size:16px;color:#89756e">这个也</span></div>
   </div>
   <div style="background:#f0eef8;border-radius:12px;padding:12px">
-    <div style="font-size:12px;font-weight:700;color:#6b7ff0;margin-bottom:8px">만 — 只（限定）</div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-o">커피만</span><span style="font-size:12px;color:#89756e">只咖啡</span></div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-o">오늘만</span><span style="font-size:12px;color:#89756e">只今天</span></div>
-    <div class="tok-row"><span class="tok t-s">나만</span><span style="font-size:12px;color:#89756e">只有我</span></div>
+    <div style="font-size:16px;font-weight:700;color:#6b7ff0;margin-bottom:8px">만 — 只（限定）</div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-o">커피만</span><span style="font-size:16px;color:#89756e">只咖啡</span></div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-o">오늘만</span><span style="font-size:16px;color:#89756e">只今天</span></div>
+    <div class="tok-row"><span class="tok t-s">나만</span><span style="font-size:16px;color:#89756e">只有我</span></div>
   </div>
 </div>
 <div style="background:#fff0f5;border-radius:12px;padding:12px;margin-bottom:12px">
-  <div style="font-size:12px;font-weight:700;color:#ff7fa8;margin-bottom:8px">의 — 的（所属）</div>
-  <div class="tok-row" style="margin-bottom:4px"><span class="tok t-s">친구의 책</span><span style="font-size:12px;color:#89756e">朋友的书</span></div>
-  <div class="tok-row"><span class="tok t-s">제 가방</span><span style="font-size:12px;color:#89756e">我的包（저의→제）</span></div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">의 — 的（所属）</div>
+  <div class="tok-row" style="margin-bottom:4px"><span class="tok t-s">친구의 책</span><span style="font-size:16px;color:#89756e">朋友的书</span></div>
+  <div class="tok-row"><span class="tok t-s">제 가방</span><span style="font-size:16px;color:#89756e">我的包（저의→제）</span></div>
 </div>
-<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:15px;font-weight:700;color:#241917;margin-bottom:6px">의 vs 도/만</div><div style="font-size:15px;color:#5a4640">의（的）可以省略：저의 가방 = 제 가방，日常口语多省略。</div><div style="margin-top:4px;font-size:15px;color:#5a4640">도（也）/만（只）直接替换主格/宾格助词，不叠加：저도（我也）→ 저는도 ✗。</div></div>
+<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">의 vs 도/만</div><div style="font-size:16px;color:#5a4640">의（的）可以省略：저의 가방 = 제 가방，日常口语多省略。</div><div style="margin-top:4px;font-size:16px;color:#5a4640">도（也）/만（只）直接替换主格/宾格助词，不叠加：저도（我也）→ 저는도 ✗。</div></div>
 <div class="reminder-box">저는도 ✗ → 저도 ✓　커피를만 ✗ → 커피만 ✓　도/만 直接替换，不叠加。</div>`,
     compareLabel: '도（也）vs 만（只）',
     quickTable: {
@@ -1182,7 +1182,7 @@ export const grammarCardsP2: GrammarCard[] = [
   <div class="ov-sub">三个高频小助词：的、也、只</div>
   <div class="ov-sec">
     <h3>① 의 — ……的……</h3>
-    <div style="font-size:13px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       친구<b style="color:#ff7fa8">의</b> 책（朋友的书）<br>
       선생님<b style="color:#ff7fa8">의</b> 가방（老师的包）<br>
       <span style="color:#89756e">저의→<b style="color:#ff7fa8">제</b>（我的，礼貌口语）&nbsp; 나의→<b style="color:#ff7fa8">내</b>（我的，亲近口语）</span>
@@ -1190,7 +1190,7 @@ export const grammarCardsP2: GrammarCard[] = [
   </div>
   <div class="ov-sec">
     <h3>② 도 — 也</h3>
-    <div style="font-size:13px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       저<b style="color:#2db89b">도</b> 학생이에요（我也是学生）<br>
       한국어<b style="color:#2db89b">도</b> 재미있어요（韩语也有趣）<br>
       <span style="color:#89756e">도 直接替换 은/는/이/가/을/를，不叠用</span>
@@ -1198,7 +1198,7 @@ export const grammarCardsP2: GrammarCard[] = [
   </div>
   <div class="ov-sec">
     <h3>③ 만 — 只、只有</h3>
-    <div style="font-size:13px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       커피<b style="color:#6b7ff0">만</b> 마셔요（只喝咖啡）<br>
       오늘<b style="color:#6b7ff0">만</b> 시간이 있어요（只有今天有时间）<br>
       <span style="color:#89756e">만 直接替换其他助词，不叠用</span>
@@ -1206,7 +1206,7 @@ export const grammarCardsP2: GrammarCard[] = [
   </div>
   <div class="ov-sec">
     <h3>⚠️ 常见错误</h3>
-    <div style="font-size:12px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       <span style="color:#e05555;text-decoration:line-through">저는도</span> → <span style="color:#2db89b">저도</span>（도 替换 는）<br>
       <span style="color:#e05555;text-decoration:line-through">커피를만</span> → <span style="color:#6b7ff0">커피만</span>（만 替换 를）<br>
       <span style="color:#e05555;text-decoration:line-through">저만도</span> → <span style="color:#6b7ff0">저만</span>（도 和 만 不同时用）
@@ -1311,32 +1311,32 @@ export const grammarCardsP2: GrammarCard[] = [
       { wrong: '그리고 전에 쉼표 필수（以为要加逗号）', correct: '그리고/그렇지만 自成句首', note: '그리고/그렇지만 在韩语中直接放句首，前句用 。结尾，不用中文里的逗号接法。' },
       { wrong: '이 노래는 좋아요. 그리고 어려워요.（转折用了顺接）', correct: '이 노래는 좋아요. 그렇지만 어려워요.', note: '前后有对比/转折时用 그렇지만，补充信息才用 그리고。' },
     ],
-    linkedGrammarIds: [],
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">안 · -지 않다 · 그리고 · 그렇지만</h1>
-<p class="sub" style="font-size:.9rem;color:#89756e;margin-bottom:16px;line-height:1.6">说"不……"的两种方式，再把两句话连起来——否定+连词一起学效率翻倍。</p>
+    linkedGrammarIds: ['g15'],
+    step0Html: `<h1 style="font-size:25px;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">안 · -지 않다 · 그리고 · 그렇지만</h1>
+<p class="sub" style="font-size:16px;color:#89756e;margin-bottom:16px;line-height:1.6">说"不……"的两种方式，再把两句话连起来——否定+连词一起学效率翻倍。</p>
 <div class="block">
-  <div style="font-size:13px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
   <div style="display:flex;flex-direction:column;gap:8px">
     <div style="background:#fff8fb;border-radius:10px;padding:10px 14px">
-      <div style="font-size:15px;font-weight:700;color:#241917">오늘은 학교에 안 가요.</div>
-      <div style="font-size:13px;color:#89756e;margin-top:2px">今天不去学校。（안 简短否定）</div>
+      <div style="font-size:16px;font-weight:700;color:#241917">오늘은 학교에 안 가요.</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">今天不去学校。（안 简短否定）</div>
     </div>
     <div style="background:#fff8fb;border-radius:10px;padding:10px 14px">
-      <div style="font-size:15px;font-weight:700;color:#241917">한국어는 어렵지 않아요.</div>
-      <div style="font-size:13px;color:#89756e;margin-top:2px">韩语不难。（-지 않아요 完整否定）</div>
+      <div style="font-size:16px;font-weight:700;color:#241917">한국어는 어렵지 않아요.</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">韩语不难。（-지 않아요 完整否定）</div>
     </div>
     <div style="background:#fff8fb;border-radius:10px;padding:10px 14px">
-      <div style="font-size:15px;font-weight:700;color:#241917">맛있어요. 그렇지만 비싸요.</div>
-      <div style="font-size:13px;color:#89756e;margin-top:2px">好吃，但是贵。（그렇지만 转折）</div>
+      <div style="font-size:16px;font-weight:700;color:#241917">맛있어요. 그렇지만 비싸요.</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">好吃，但是贵。（그렇지만 转折）</div>
     </div>
   </div>
 </div>
 <div class="block">
-  <div style="font-size:13px;font-weight:700;color:#241917;margin-bottom:8px">否定两条路，连词两选一</div>
+  <div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:8px">否定两条路，连词两选一</div>
   <div style="background:#f8f4f0;border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:8px">
-    <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#ff7fa8">안</span>　直接放动词前 → 口语快速否定（하다动词：名词 + 안 해요）</div>
-    <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#2db89b">-지 않아요</span>　词干 + 지 않아요 → 完整否定，更正式</div>
-    <div style="font-size:13px;color:#241917;margin-top:4px"><span style="font-weight:700;color:#6b7ff0">그리고</span>　连接补充/顺接　<span style="font-weight:700;color:#b49ccf">그렇지만</span>　连接转折</div>
+    <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">안</span>　直接放动词前 → 口语快速否定（하다动词：名词 + 안 해요）</div>
+    <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">-지 않아요</span>　词干 + 지 않아요 → 完整否定，更正式</div>
+    <div style="font-size:16px;color:#241917;margin-top:4px"><span style="font-weight:700;color:#6b7ff0">그리고</span>　连接补充/顺接　<span style="font-weight:700;color:#b49ccf">그렇지만</span>　连接转折</div>
   </div>
 </div>
 <div class="reminder-box">하다 动词否定口语首选：공부 안 해요（✓）比 안 공부해요 更自然。</div>`,
@@ -1344,24 +1344,24 @@ export const grammarCardsP2: GrammarCard[] = [
 <div class="card-body">两种否定语义相同，区别在语气：안 是口语快速否定，-지 않아요 更完整正式。하다 动词有特殊口语规则。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px">
   <div style="background:#fff0f5;border-radius:12px;padding:12px">
-    <div style="font-size:12px;font-weight:700;color:#ff7fa8;margin-bottom:8px">안 — 口语简短</div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">안 가요</span><span style="font-size:12px;color:#89756e">不去</span></div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">안 먹어요</span><span style="font-size:12px;color:#89756e">不吃</span></div>
-    <div class="tok-row"><span class="tok t-v">공부 안 해요</span><span style="font-size:12px;color:#89756e">不学习</span></div>
+    <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">안 — 口语简短</div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">안 가요</span><span style="font-size:16px;color:#89756e">不去</span></div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">안 먹어요</span><span style="font-size:16px;color:#89756e">不吃</span></div>
+    <div class="tok-row"><span class="tok t-v">공부 안 해요</span><span style="font-size:16px;color:#89756e">不学习</span></div>
   </div>
   <div style="background:#eaf8f5;border-radius:12px;padding:12px">
-    <div style="font-size:12px;font-weight:700;color:#2db89b;margin-bottom:8px">-지 않아요 — 完整正式</div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">가지 않아요</span><span style="font-size:12px;color:#89756e">不去</span></div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">먹지 않아요</span><span style="font-size:12px;color:#89756e">不吃</span></div>
-    <div class="tok-row"><span class="tok t-v">어렵지 않아요</span><span style="font-size:12px;color:#89756e">不难</span></div>
+    <div style="font-size:16px;font-weight:700;color:#2db89b;margin-bottom:8px">-지 않아요 — 完整正式</div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">가지 않아요</span><span style="font-size:16px;color:#89756e">不去</span></div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">먹지 않아요</span><span style="font-size:16px;color:#89756e">不吃</span></div>
+    <div class="tok-row"><span class="tok t-v">어렵지 않아요</span><span style="font-size:16px;color:#89756e">不难</span></div>
   </div>
 </div>
 <div style="background:#f0eef8;border-radius:12px;padding:12px;margin-bottom:12px">
-  <div style="font-size:12px;font-weight:700;color:#6b7ff0;margin-bottom:8px">连接词对比</div>
-  <div class="tok-row" style="margin-bottom:6px"><span class="tok t-s">그리고</span><span style="font-size:12px;color:#89756e">而且/然后（顺接补充）</span></div>
-  <div class="tok-row"><span class="tok t-v">그렇지만</span><span style="font-size:12px;color:#89756e">但是/不过（转折对比）</span></div>
+  <div style="font-size:16px;font-weight:700;color:#6b7ff0;margin-bottom:8px">连接词对比</div>
+  <div class="tok-row" style="margin-bottom:6px"><span class="tok t-s">그리고</span><span style="font-size:16px;color:#89756e">而且/然后（顺接补充）</span></div>
+  <div class="tok-row"><span class="tok t-v">그렇지만</span><span style="font-size:16px;color:#89756e">但是/不过（转折对比）</span></div>
 </div>
-<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:15px;font-weight:700;color:#241917;margin-bottom:6px">시간 읽기 핵심</div><div style="font-size:15px;color:#5a4640">「几点」用固有数词：한 시/두 시/세 시……열두 시。</div><div style="margin-top:4px;font-size:15px;color:#5a4640">「几分」用汉字数词：십 분/이십 분/삼십 분（=반）。두 시 삼십 분 = 두 시 반（两点半）。</div></div>
+<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">시간 읽기 핵심</div><div style="font-size:16px;color:#5a4640">「几点」用固有数词：한 시/두 시/세 시……열두 시。</div><div style="margin-top:4px;font-size:16px;color:#5a4640">「几分」用汉字数词：십 분/이십 분/삼십 분（=반）。두 시 삼십 분 = 두 시 반（两点半）。</div></div>
 <div class="reminder-box">그리고/그렇지만 放第二句句首，前句用句号结尾：맛있어요. 그렇지만 비싸요.</div>`,
     compareLabel: '안 vs -지 않아요',
     quickTable: {
@@ -1416,28 +1416,28 @@ export const grammarCardsP2: GrammarCard[] = [
   <div class="ov-sub">否定表达 + 句子连接，让表达更完整自然</div>
   <div class="ov-sec">
     <h3>① 안 — 口语否定</h3>
-    <div style="font-size:13px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       <b style="color:#ff7fa8">안</b> 가요（不去）&nbsp; <b style="color:#ff7fa8">안</b> 먹어요（不吃）<br>
       하다 동사：공부 <b style="color:#ff7fa8">안 해요</b>（不学习，比 안 공부해요 更自然）
     </div>
   </div>
   <div class="ov-sec">
     <h3>② -지 않아요 — 完整否定</h3>
-    <div style="font-size:13px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       가<b style="color:#2db89b">지 않아요</b>（不去）&nbsp; 먹<b style="color:#2db89b">지 않아요</b>（不吃）<br>
       어렵<b style="color:#2db89b">지 않아요</b>（不难）&nbsp; 좋아하<b style="color:#2db89b">지 않아요</b>（不喜欢）
     </div>
   </div>
   <div class="ov-sec">
     <h3>③ 连接词</h3>
-    <div style="font-size:13px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       <b style="color:#6b7ff0">그리고</b>：A. 그리고 B.（而且/然后，顺接补充）<br>
       <b style="color:#e8a87c">그렇지만</b>：A. 그렇지만 B.（但是，转折对比）
     </div>
   </div>
   <div class="ov-sec">
     <h3>⚠️ 常见错误</h3>
-    <div style="font-size:12px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       <span style="color:#e05555;text-decoration:line-through">안 공부해요</span> → 공부 <span style="color:#ff7fa8">안 해요</span>（하다 동사 口语）<br>
       <span style="color:#e05555;text-decoration:line-through">가다지 않아요</span> → 가<span style="color:#2db89b">지 않아요</span>（接词干）<br>
       转折误用 그리고 → 用 <span style="color:#e8a87c">그렇지만</span>
@@ -1544,32 +1544,32 @@ export const grammarCardsP2: GrammarCard[] = [
       { wrong: '책가 있어요', correct: '책이 있어요', note: '책 末尾有收音 ㄱ，主格助词用 이，不是 가。' },
       { wrong: '이거는 얼마예요（选 은/는）', correct: '이거 얼마예요? 或 이게 얼마예요?', note: '问价格时 이거/이게 更自然，이거는 有对比意味，一般不这么问。' },
     ],
-    linkedGrammarIds: [],
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">이/가 · 이, 그, 저</h1>
-<p class="sub" style="font-size:.9rem;color:#89756e;margin-bottom:16px;line-height:1.6">主格助词 이/가 标出主语，指示词 이/그/저 指出"这个/那个"——两套工具合起来就能精准说人说物。</p>
+    linkedGrammarIds: ['g2'],
+    step0Html: `<h1 style="font-size:25px;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">이/가 · 이, 그, 저</h1>
+<p class="sub" style="font-size:16px;color:#89756e;margin-bottom:16px;line-height:1.6">主格助词 이/가 标出主语，指示词 이/그/저 指出"这个/那个"——两套工具合起来就能精准说人说物。</p>
 <div class="block">
-  <div style="font-size:13px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
   <div style="display:flex;flex-direction:column;gap:8px">
     <div style="background:#fff8fb;border-radius:10px;padding:10px 14px">
-      <div style="font-size:15px;font-weight:700;color:#241917">이 노래가 진짜 너무 좋아요!</div>
-      <div style="font-size:13px;color:#89756e;margin-top:2px">这首歌真的太好了！（이=这，가=主格）</div>
+      <div style="font-size:16px;font-weight:700;color:#241917">이 노래가 진짜 너무 좋아요!</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">这首歌真的太好了！（이=这，가=主格）</div>
     </div>
     <div style="background:#fff8fb;border-radius:10px;padding:10px 14px">
-      <div style="font-size:15px;font-weight:700;color:#241917">저 가수가 누구예요?</div>
-      <div style="font-size:13px;color:#89756e;margin-top:2px">那位歌手是谁？（저=远处那个）</div>
+      <div style="font-size:16px;font-weight:700;color:#241917">저 가수가 누구예요?</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">那位歌手是谁？（저=远处那个）</div>
     </div>
     <div style="background:#fff8fb;border-radius:10px;padding:10px 14px">
-      <div style="font-size:15px;font-weight:700;color:#241917">이거 얼마예요?</div>
-      <div style="font-size:13px;color:#89756e;margin-top:2px">这个多少钱？（이거=이것 口语形）</div>
+      <div style="font-size:16px;font-weight:700;color:#241917">이거 얼마예요?</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">这个多少钱？（이거=이것 口语形）</div>
     </div>
   </div>
 </div>
 <div class="block">
-  <div style="font-size:13px;font-weight:700;color:#241917;margin-bottom:8px">两套工具各有位置</div>
+  <div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:8px">两套工具各有位置</div>
   <div style="background:#f8f4f0;border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:8px">
-    <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#ff7fa8">이/가</span>　接名词<b>后</b>，标记主语　有收音→이，无收音→가</div>
-    <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#2db89b">이/그/저</span>　接名词<b>前</b>，指示距离　이=近，그=中，저=远</div>
-    <div style="font-size:13px;color:#5a4640;margin-top:4px">两者可以同时出现：이 노래<b>가</b> 좋아요（这首歌好）</div>
+    <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">이/가</span>　接名词<b>后</b>，标记主语　有收音→이，无收音→가</div>
+    <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">이/그/저</span>　接名词<b>前</b>，指示距离　이=近，그=中，저=远</div>
+    <div style="font-size:16px;color:#5a4640;margin-top:4px">两者可以同时出现：이 노래<b>가</b> 좋아요（这首歌好）</div>
   </div>
 </div>
 <div class="reminder-box">이/가 是助词（名词后），이/그/저 是指示词（名词前）——同一个 이 出现两次功能不同。</div>`,
@@ -1577,28 +1577,28 @@ export const grammarCardsP2: GrammarCard[] = [
 <div class="card-body">按说话人和听话人的距离分三级。口语中 이것/그것/저것 缩成 이거/그거/저거，更常用。</div>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px">
   <div style="background:#fff0f5;border-radius:12px;padding:10px">
-    <div style="font-size:12px;font-weight:700;color:#ff7fa8;margin-bottom:6px">이 — 近（我这边）</div>
+    <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:6px">이 — 近（我这边）</div>
     <div class="tok-row" style="margin-bottom:4px"><span class="tok t-s">이 사람</span></div>
     <div class="tok-row" style="margin-bottom:4px"><span class="tok t-s">이 노래</span></div>
     <div class="tok-row"><span class="tok t-s">이거</span></div>
   </div>
   <div style="background:#eaf8f5;border-radius:12px;padding:10px">
-    <div style="font-size:12px;font-weight:700;color:#2db89b;margin-bottom:6px">그 — 中（你那边）</div>
+    <div style="font-size:16px;font-weight:700;color:#2db89b;margin-bottom:6px">그 — 中（你那边）</div>
     <div class="tok-row" style="margin-bottom:4px"><span class="tok t-v">그 책</span></div>
     <div class="tok-row" style="margin-bottom:4px"><span class="tok t-v">그 배우</span></div>
     <div class="tok-row"><span class="tok t-v">그거</span></div>
   </div>
   <div style="background:#f0eef8;border-radius:12px;padding:10px">
-    <div style="font-size:12px;font-weight:700;color:#6b7ff0;margin-bottom:6px">저 — 远（双方都远）</div>
+    <div style="font-size:16px;font-weight:700;color:#6b7ff0;margin-bottom:6px">저 — 远（双方都远）</div>
     <div class="tok-row" style="margin-bottom:4px"><span class="tok t-o">저 가수</span></div>
     <div class="tok-row" style="margin-bottom:4px"><span class="tok t-o">저 건물</span></div>
     <div class="tok-row"><span class="tok t-o">저거</span></div>
   </div>
 </div>
 <div style="background:#fff8fb;border-radius:12px;padding:12px;margin-bottom:12px">
-  <div style="font-size:12px;font-weight:700;color:#ff7fa8;margin-bottom:8px">이/가 收音选择规则</div>
-  <div class="tok-row" style="margin-bottom:6px"><span class="tok t-s">책<b style="color:#ff7fa8">이</b></span><span style="font-size:12px;color:#89756e">有收音→이</span></div>
-  <div class="tok-row"><span class="tok t-s">친구<b style="color:#2db89b">가</b></span><span style="font-size:12px;color:#89756e">无收音→가</span></div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">이/가 收音选择规则</div>
+  <div class="tok-row" style="margin-bottom:6px"><span class="tok t-s">책<b style="color:#ff7fa8">이</b></span><span style="font-size:16px;color:#89756e">有收音→이</span></div>
+  <div class="tok-row"><span class="tok t-s">친구<b style="color:#2db89b">가</b></span><span style="font-size:16px;color:#89756e">无收音→가</span></div>
 </div>
 <div class="reminder-box">이 사람이 에서：前面 이 是指示词（这），后面 이 是主格助词——两个 이 功能完全不同。</div>`,
     compareLabel: '이/그/저 距离对比',
@@ -1655,7 +1655,7 @@ export const grammarCardsP2: GrammarCard[] = [
   <div class="ov-sub">主格助词 + 指示词，指人指物更清晰</div>
   <div class="ov-sec">
     <h3>① 주격 조사 이/가</h3>
-    <div style="font-size:13px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       받침 있는 → <b style="color:#ff7fa8">이</b>：책이, 시간이, 돈이<br>
       받침 없는 → <b style="color:#2db89b">가</b>：친구가, 비가, 가수가<br>
       <span style="color:#89756e">用于：引入新信息、강조、있다/없다 的主语</span>
@@ -1663,7 +1663,7 @@ export const grammarCardsP2: GrammarCard[] = [
   </div>
   <div class="ov-sec">
     <h3>② 指示词 이/그/저</h3>
-    <div style="font-size:13px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       <b style="color:#ff7fa8">이</b>（这）：이 사람, 이 노래, 이거<br>
       <b style="color:#2db89b">그</b>（那/刚提到的）：그 책, 그 배우, 그거<br>
       <b style="color:#6b7ff0">저</b>（远处那）：저 가수, 저 건물, 저거
@@ -1671,14 +1671,14 @@ export const grammarCardsP2: GrammarCard[] = [
   </div>
   <div class="ov-sec">
     <h3>③ 이 사람이… — 双重 이</h3>
-    <div style="font-size:13px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       <b style="color:#ff7fa8">이</b> 사람<b style="color:#2db89b">이</b> 누구예요?<br>
       前者 이 = 指示词"这"，后者 이 = 主格助词
     </div>
   </div>
   <div class="ov-sec">
     <h3>⚠️ 常见错误</h3>
-    <div style="font-size:12px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       친구<span style="color:#e05555;text-decoration:line-through">이</span> 와요 → 친구<span style="color:#2db89b">가</span> 와요（받침 없는 用 가）<br>
       책<span style="color:#e05555;text-decoration:line-through">가</span> 있어요 → 책<span style="color:#ff7fa8">이</span> 있어요（받침 있는 用 이）<br>
       이/그/저 指示词 ≠ 이/가 助词，不要混淆
@@ -1788,32 +1788,32 @@ export const grammarCardsP2: GrammarCard[] = [
       { wrong: '삼 시（用汉字数词说时）', correct: '세 시', note: '几点用固有数词：하나→한, 둘→두, 셋→세，所以 三点 = 세 시。' },
       { wrong: '두 시 삼십 분 반', correct: '두 시 삼십 분 / 두 시 반', note: '삼십 분 和 반 意思一样，不要叠用。' },
     ],
-    linkedGrammarIds: [],
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">부터…까지 · 时间表示法</h1>
-<p class="sub" style="font-size:.9rem;color:#89756e;margin-bottom:16px;line-height:1.6">说"从……到……"的范围，加上几点几分的读法——约时间、说日程全靠这节课。</p>
+    linkedGrammarIds: ['g11'],
+    step0Html: `<h1 style="font-size:25px;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">부터…까지 · 时间表示法</h1>
+<p class="sub" style="font-size:16px;color:#89756e;margin-bottom:16px;line-height:1.6">说"从……到……"的范围，加上几点几分的读法——约时间、说日程全靠这节课。</p>
 <div class="block">
-  <div style="font-size:13px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
   <div style="display:flex;flex-direction:column;gap:8px">
     <div style="background:#fff8fb;border-radius:10px;padding:10px 14px">
-      <div style="font-size:15px;font-weight:700;color:#241917">세 시부터 다섯 시까지 공부해요.</div>
-      <div style="font-size:13px;color:#89756e;margin-top:2px">从三点学习到五点。</div>
+      <div style="font-size:16px;font-weight:700;color:#241917">세 시부터 다섯 시까지 공부해요.</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">从三点学习到五点。</div>
     </div>
     <div style="background:#fff8fb;border-radius:10px;padding:10px 14px">
-      <div style="font-size:15px;font-weight:700;color:#241917">오전 열 시 반이에요.</div>
-      <div style="font-size:13px;color:#89756e;margin-top:2px">上午十点半。（반=30분）</div>
+      <div style="font-size:16px;font-weight:700;color:#241917">오전 열 시 반이에요.</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">上午十点半。（반=30분）</div>
     </div>
     <div style="background:#fff8fb;border-radius:10px;padding:10px 14px">
-      <div style="font-size:15px;font-weight:700;color:#241917">서울에서 부산까지 얼마나 걸려요?</div>
-      <div style="font-size:13px;color:#89756e;margin-top:2px">从首尔到釜山要多久？（空间用 에서）</div>
+      <div style="font-size:16px;font-weight:700;color:#241917">서울에서 부산까지 얼마나 걸려요?</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">从首尔到釜山要多久？（空间用 에서）</div>
     </div>
   </div>
 </div>
 <div class="block">
-  <div style="font-size:13px;font-weight:700;color:#241917;margin-bottom:8px">两个核心句型</div>
+  <div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:8px">两个核心句型</div>
   <div style="background:#f8f4f0;border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:8px">
-    <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#ff7fa8">부터…까지</span>　时间/范围：월요일부터 금요일까지</div>
-    <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#2db89b">에서…까지</span>　空间：서울에서 부산까지</div>
-    <div style="font-size:13px;color:#241917;margin-top:4px"><span style="font-weight:700;color:#6b7ff0">시（点）</span>固有数词　<span style="font-weight:700;color:#b49ccf">분（分）</span>汉字数词　반=30分</div>
+    <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">부터…까지</span>　时间/范围：월요일부터 금요일까지</div>
+    <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">에서…까지</span>　空间：서울에서 부산까지</div>
+    <div style="font-size:16px;color:#241917;margin-top:4px"><span style="font-weight:700;color:#6b7ff0">시（点）</span>固有数词　<span style="font-weight:700;color:#b49ccf">분（分）</span>汉字数词　반=30分</div>
   </div>
 </div>
 <div class="reminder-box">시（时刻）用固有：세 시 ✓，삼 시 ✗。분（分钟）用汉字：삼십 분 ✓，서른 분 ✗。</div>`,
@@ -1821,25 +1821,25 @@ export const grammarCardsP2: GrammarCard[] = [
 <div class="card-body">两个助词都表示"从"，但分工不同：부터 管时间和抽象范围，에서 管空间地点。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px">
   <div style="background:#fff0f5;border-radius:12px;padding:12px">
-    <div style="font-size:12px;font-weight:700;color:#ff7fa8;margin-bottom:8px">부터 — 时间/范围起点</div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-s">아침부터</span><span style="font-size:12px;color:#89756e">从早上</span></div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-s">지금부터</span><span style="font-size:12px;color:#89756e">从现在</span></div>
-    <div class="tok-row"><span class="tok t-s">월요일부터</span><span style="font-size:12px;color:#89756e">从周一</span></div>
+    <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">부터 — 时间/范围起点</div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-s">아침부터</span><span style="font-size:16px;color:#89756e">从早上</span></div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-s">지금부터</span><span style="font-size:16px;color:#89756e">从现在</span></div>
+    <div class="tok-row"><span class="tok t-s">월요일부터</span><span style="font-size:16px;color:#89756e">从周一</span></div>
   </div>
   <div style="background:#eaf8f5;border-radius:12px;padding:12px">
-    <div style="font-size:12px;font-weight:700;color:#2db89b;margin-bottom:8px">에서 — 空间地点起点</div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-p">서울에서</span><span style="font-size:12px;color:#89756e">从首尔</span></div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-p">집에서</span><span style="font-size:12px;color:#89756e">从家</span></div>
-    <div class="tok-row"><span class="tok t-p">학교에서</span><span style="font-size:12px;color:#89756e">从学校</span></div>
+    <div style="font-size:16px;font-weight:700;color:#2db89b;margin-bottom:8px">에서 — 空间地点起点</div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-p">서울에서</span><span style="font-size:16px;color:#89756e">从首尔</span></div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-p">집에서</span><span style="font-size:16px;color:#89756e">从家</span></div>
+    <div class="tok-row"><span class="tok t-p">학교에서</span><span style="font-size:16px;color:#89756e">从学校</span></div>
   </div>
 </div>
 <div style="background:#f0eef8;border-radius:12px;padding:12px;margin-bottom:12px">
-  <div style="font-size:12px;font-weight:700;color:#6b7ff0;margin-bottom:8px">时间数词规则</div>
-  <div class="tok-row" style="margin-bottom:6px"><span class="tok t-s">세 시</span><span style="font-size:12px;color:#89756e">三点（固有数词 셋→세）</span></div>
-  <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">삼십 분</span><span style="font-size:12px;color:#89756e">三十分（汉字数词）</span></div>
-  <div class="tok-row"><span class="tok t-v">두 시 반</span><span style="font-size:12px;color:#89756e">两点半（반=30分）</span></div>
+  <div style="font-size:16px;font-weight:700;color:#6b7ff0;margin-bottom:8px">时间数词规则</div>
+  <div class="tok-row" style="margin-bottom:6px"><span class="tok t-s">세 시</span><span style="font-size:16px;color:#89756e">三点（固有数词 셋→세）</span></div>
+  <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">삼십 분</span><span style="font-size:16px;color:#89756e">三十分（汉字数词）</span></div>
+  <div class="tok-row"><span class="tok t-v">두 시 반</span><span style="font-size:16px;color:#89756e">两点半（반=30分）</span></div>
 </div>
-<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:15px;font-weight:700;color:#241917;margin-bottom:6px">부터/까지 核心用法</div><div style="font-size:15px;color:#5a4640">时间范围：월요일부터 금요일까지（从周一到周五）。</div><div style="margin-top:4px;font-size:15px;color:#5a4640">空间起点用 에서（不用 부터）：서울에서 부산까지 — 에서 标动作出发地，부터 标时间/顺序起点。</div></div>
+<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">부터/까지 核心用法</div><div style="font-size:16px;color:#5a4640">时间范围：월요일부터 금요일까지（从周一到周五）。</div><div style="margin-top:4px;font-size:16px;color:#5a4640">空间起点用 에서（不用 부터）：서울에서 부산까지 — 에서 标动作出发地，부터 标时间/顺序起点。</div></div>
 <div class="reminder-box">서울부터 부산까지 ✗ → 서울에서 부산까지 ✓　空间起点必须用 에서。</div>`,
     compareLabel: '부터 vs 에서（起点）',
     quickTable: {
@@ -1895,7 +1895,7 @@ export const grammarCardsP2: GrammarCard[] = [
   <div class="ov-sub">从……到……，加上时间表达</div>
   <div class="ov-sec">
     <h3>① A부터 B까지</h3>
-    <div style="font-size:13px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       월요일<b style="color:#ff7fa8">부터</b> 금요일<b style="color:#2db89b">까지</b>（从周一到周五）<br>
       세 시<b style="color:#ff7fa8">부터</b> 다섯 시<b style="color:#2db89b">까지</b>（从三点到五点）<br>
       공간 起点：서울<b style="color:#6b7ff0">에서</b> 부산<b style="color:#2db89b">까지</b>
@@ -1903,7 +1903,7 @@ export const grammarCardsP2: GrammarCard[] = [
   </div>
   <div class="ov-sec">
     <h3>② 时间数词</h3>
-    <div style="font-size:13px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       시（点钟）→ 固有数词：<b style="color:#ff7fa8">한 두 세 네 다섯…열두</b><br>
       분（分钟）→ 汉字数词：<b style="color:#2db89b">십 이십 삼십…오십구</b><br>
       반 = 30분：두 시 <b style="color:#ff7fa8">반</b>（两点半）
@@ -1911,14 +1911,14 @@ export const grammarCardsP2: GrammarCard[] = [
   </div>
   <div class="ov-sec">
     <h3>③ 오전/오후</h3>
-    <div style="font-size:13px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       <b style="color:#6b7ff0">오전</b> 열 시（上午十点）<br>
       <b style="color:#e8a87c">오후</b> 일곱 시（下午七点）
     </div>
   </div>
   <div class="ov-sec">
     <h3>⚠️ 常见错误</h3>
-    <div style="font-size:12px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       <span style="color:#e05555;text-decoration:line-through">삼 시</span> → <span style="color:#ff7fa8">세 시</span>（시 用固有数词）<br>
       서울<span style="color:#e05555;text-decoration:line-through">부터</span> 부산까지 → 서울<span style="color:#6b7ff0">에서</span> 부산까지（공간 기점 用 에서）<br>
       <span style="color:#e05555;text-decoration:line-through">두 시 삼십 분 반</span> → 두 시 반（삼십 분=반，不叠用）
@@ -2033,9 +2033,9 @@ export const grammarCardsP2: GrammarCard[] = [
     ],
     compareHtml: `<div class="card-title">에게 vs 한테 — 给谁/对谁</div>
 <div class="card-body">两个都表示动作的对象"给谁/对谁"，区别只在场合：에게 书面，한테 口语。中文"给朋友"只有一种说法，韩语要看说话场合选择。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">에게（书面/正式）</div><div style="font-size:14px;color:#89756e;margin-top:2px">文章、信件、正式场合</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">선생님에게 물었어요.</span><span style="font-size:14px;color:#5a4640">问了老师。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">친구에게 보냈어요.</span><span style="font-size:14px;color:#5a4640">发给朋友了。</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">한테（口语）</div><div style="font-size:14px;color:#89756e;margin-top:2px">日常对话、聊天</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">친구한테 카톡 보냈어요.</span><span style="font-size:14px;color:#5a4640">给朋友发了KakaoTalk。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">엄마한테 전화했어요.</span><span style="font-size:14px;color:#5a4640">给妈妈打了电话。</span></div></div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">에게（书面/正式）</div><div style="font-size:16px;color:#89756e;margin-top:2px">文章、信件、正式场合</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">선생님에게 물었어요.</span><span style="font-size:16px;color:#5a4640">问了老师。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">친구에게 보냈어요.</span><span style="font-size:16px;color:#5a4640">发给朋友了。</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">한테（口语）</div><div style="font-size:16px;color:#89756e;margin-top:2px">日常对话、聊天</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">친구한테 카톡 보냈어요.</span><span style="font-size:16px;color:#5a4640">给朋友发了KakaoTalk。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">엄마한테 전화했어요.</span><span style="font-size:16px;color:#5a4640">给妈妈打了电话。</span></div></div>
 </div>
-<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:15px;font-weight:700;color:#241917;margin-bottom:6px">ㅂ 不规则：遇元音变 워</div><div style="font-size:15px;color:#5a4640">덥다→더워요（热）/ 춥다→추워요（冷）/ 어렵다→어려워요（难）。规律：ㅂ 遇元音语尾时脱落，变成 워。但 입다(穿)/잡다(抓) 是规则变化，不走这条规律。</div><div style="margin-top:4px;font-size:15px;color:#5a4640">收/发方向：에게/한테 = 给谁（发出）；에게서/한테서 = 从谁那里（收到）。</div></div>
+<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">ㅂ 不规则：遇元音变 워</div><div style="font-size:16px;color:#5a4640">덥다→더워요（热）/ 춥다→추워요（冷）/ 어렵다→어려워요（难）。规律：ㅂ 遇元音语尾时脱落，变成 워。但 입다(穿)/잡다(抓) 是规则变化，不走这条规律。</div><div style="margin-top:4px;font-size:16px;color:#5a4640">收/发方向：에게/한테 = 给谁（发出）；에게서/한테서 = 从谁那里（收到）。</div></div>
 <div class="reminder-box">에게/한테 只用于人或动物，地点用 에。학교한테 ✗ → 학교에 ✓。这是最容易犯的错误。</div>`,
         overviewHtml: `<div class="overview">
   <div class="ov-hero">
@@ -2047,9 +2047,9 @@ export const grammarCardsP2: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">核心规律</div></div>
     <div class="ov-block">
       <div style="display:flex;flex-direction:column;gap:6px">
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#ff7fa8">에게/한테</span> → 给谁/对谁（方向）</div>
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#2db89b">에게서/한테서</span> → 从谁那里（来源）</div>
-        <div style="font-size:13px;color:#241917;margin-top:4px"><span style="font-weight:700;color:#6b7ff0">ㅂ 不规则</span>：ㅂ + 元音 → 워（덥다→더워요）</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">에게/한테</span> → 给谁/对谁（方向）</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">에게서/한테서</span> → 从谁那里（来源）</div>
+        <div style="font-size:16px;color:#241917;margin-top:4px"><span style="font-weight:700;color:#6b7ff0">ㅂ 不规则</span>：ㅂ + 元音 → 워（덥다→더워요）</div>
       </div>
     </div>
   </div>
@@ -2071,35 +2071,35 @@ export const grammarCardsP2: GrammarCard[] = [
     </div>
   </div>
 </div>`,
-    linkedGrammarIds: [],
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">에게 · 한테 · ㅂ 不规则</h1>
-<p class="sub" style="font-size:.9rem;color:#89756e;margin-bottom:16px;line-height:1.6">说"给谁/对谁"，加上天气词的特殊变形——让你能聊日常、说感受。</p>
+    linkedGrammarIds: ['g8'],
+    step0Html: `<h1 style="font-size:25px;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">에게 · 한테 · ㅂ 不规则</h1>
+<p class="sub" style="font-size:16px;color:#89756e;margin-bottom:16px;line-height:1.6">说"给谁/对谁"，加上天气词的特殊变形——让你能聊日常、说感受。</p>
 <div class="block">
-  <div style="font-size:13px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
   <div style="display:flex;flex-direction:column;gap:8px">
     <div style="background:#fff8fb;border-radius:10px;padding:10px 14px">
-      <div style="font-size:15px;font-weight:700;color:#241917">친구한테 카톡 보냈어요.</div>
-      <div style="font-size:13px;color:#89756e;margin-top:2px">给朋友发了KakaoTalk消息。</div>
+      <div style="font-size:16px;font-weight:700;color:#241917">친구한테 카톡 보냈어요.</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">给朋友发了KakaoTalk消息。</div>
     </div>
     <div style="background:#fff8fb;border-radius:10px;padding:10px 14px">
-      <div style="font-size:15px;font-weight:700;color:#241917">오늘 너무 더워요.</div>
-      <div style="font-size:13px;color:#89756e;margin-top:2px">今天太热了。（덥다→더워요，ㅂ不规则）</div>
+      <div style="font-size:16px;font-weight:700;color:#241917">오늘 너무 더워요.</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">今天太热了。（덥다→더워요，ㅂ不规则）</div>
     </div>
     <div style="background:#fff8fb;border-radius:10px;padding:10px 14px">
-      <div style="font-size:15px;font-weight:700;color:#241917">친구한테서 선물을 받았어요.</div>
-      <div style="font-size:13px;color:#89756e;margin-top:2px">从朋友那里收到了礼物。（한테서=来源）</div>
+      <div style="font-size:16px;font-weight:700;color:#241917">친구한테서 선물을 받았어요.</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">从朋友那里收到了礼物。（한테서=来源）</div>
     </div>
   </div>
 </div>
 <div class="block">
-  <div style="font-size:13px;font-weight:700;color:#241917;margin-bottom:8px">两个核心知识点</div>
+  <div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:8px">两个核心知识点</div>
   <div style="background:#f8f4f0;border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:8px">
-    <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#ff7fa8">에게/한테</span>　接人名后，表示"给谁/对谁"　口语用 한테，书面用 에게</div>
-    <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#2db89b">ㅂ 不规则</span>　词干末 ㅂ + 元音 → 워　덥다→더워요 / 춥다→추워요</div>
+    <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">에게/한테</span>　接人名后，表示"给谁/对谁"　口语用 한테，书面用 에게</div>
+    <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">ㅂ 不规则</span>　词干末 ㅂ + 元音 → 워　덥다→더워요 / 춥다→추워요</div>
   </div>
-  <div style="font-size:13px;color:#5a4640;margin-top:8px;line-height:1.7">注意：입다(穿)、잡다(抓) 是规则词，不变形：입어요 ✓，입워요 ✗。</div>
+  <div style="font-size:16px;color:#5a4640;margin-top:8px;line-height:1.7">注意：입다(穿)、잡다(抓) 是规则词，不变形：입어요 ✓，입워요 ✗。</div>
 </div>
-<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:.85rem;font-weight:700;color:#241917;margin-bottom:6px">에게/한테 方向</div><div style="font-size:.85rem;color:#5a4640">给方向（向）→ 에게/한테：친구한테 전화해요（给朋友打电话）。</div><div style="margin-top:4px;font-size:.85rem;color:#5a4640">来源方向（从）→ 에게서/한테서：친구한테서 받았어요（从朋友那收到）。「서」表示来源。</div></div>
+<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">에게/한테 方向</div><div style="font-size:16px;color:#5a4640">给方向（向）→ 에게/한테：친구한테 전화해요（给朋友打电话）。</div><div style="margin-top:4px;font-size:16px;color:#5a4640">来源方向（从）→ 에게서/한테서：친구한테서 받았어요（从朋友那收到）。「서」表示来源。</div></div>
 <div class="reminder-box">에게/한테 只用于人或动物，地点用 에：학교에게 ✗ → 학교에 ✓。</div>`,
     compareLabel: '에게 vs 한테',
     quickTable: {
@@ -2266,9 +2266,9 @@ export const grammarCardsP2: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">核心规律</div></div>
     <div class="ov-block">
       <div style="display:flex;flex-direction:column;gap:6px">
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#ff7fa8">ㄷ 不规则</span>：ㄷ + 元音 → ㄹ（듣다→들어요，걷다→걸어요）</div>
-        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#2db89b">ㅡ 脱落</span>：末 ㅡ + 아/어 → ㅡ 消失（쓰다→써요，예쁘다→예뻐요）</div>
-        <div style="font-size:12px;color:#89756e;margin-top:4px">注意：받다/믿다 的 ㄷ 是规则，不变形。</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">ㄷ 不规则</span>：ㄷ + 元音 → ㄹ（듣다→들어요，걷다→걸어요）</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">ㅡ 脱落</span>：末 ㅡ + 아/어 → ㅡ 消失（쓰다→써요，예쁘다→예뻐요）</div>
+        <div style="font-size:16px;color:#89756e;margin-top:4px">注意：받다/믿다 的 ㄷ 是规则，不变形。</div>
       </div>
     </div>
   </div>
@@ -2291,32 +2291,32 @@ export const grammarCardsP2: GrammarCard[] = [
   </div>
 </div>`,
     linkedGrammarIds: [],
-    step0Html: `<h1 style="font-size:1.55rem;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">ㄷ 不规则 · ㅡ 脱落</h1>
-<p class="sub" style="font-size:.9rem;color:#89756e;margin-bottom:16px;line-height:1.6">两类变形规律——看懂 듣다→들어요 和 아프다→아파요，高频词一次搞定。</p>
+    step0Html: `<h1 style="font-size:25px;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">ㄷ 不规则 · ㅡ 脱落</h1>
+<p class="sub" style="font-size:16px;color:#89756e;margin-bottom:16px;line-height:1.6">两类变形规律——看懂 듣다→들어요 和 아프다→아파요，高频词一次搞定。</p>
 <div class="block">
-  <div style="font-size:13px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
+  <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
   <div style="display:flex;flex-direction:column;gap:8px">
     <div style="background:#fff8fb;border-radius:10px;padding:10px 14px">
-      <div style="font-size:15px;font-weight:700;color:#241917">이 노래를 들어요.</div>
-      <div style="font-size:13px;color:#89756e;margin-top:2px">听这首歌。（듣다→들어요，ㄷ不规则）</div>
+      <div style="font-size:16px;font-weight:700;color:#241917">이 노래를 들어요.</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">听这首歌。（듣다→들어요，ㄷ不规则）</div>
     </div>
     <div style="background:#fff8fb;border-radius:10px;padding:10px 14px">
-      <div style="font-size:15px;font-weight:700;color:#241917">머리가 아파요.</div>
-      <div style="font-size:13px;color:#89756e;margin-top:2px">头疼。（아프다→아파요，ㅡ脱落）</div>
+      <div style="font-size:16px;font-weight:700;color:#241917">머리가 아파요.</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">头疼。（아프다→아파요，ㅡ脱落）</div>
     </div>
     <div style="background:#fff8fb;border-radius:10px;padding:10px 14px">
-      <div style="font-size:15px;font-weight:700;color:#241917">요즘 너무 바빠요.</div>
-      <div style="font-size:13px;color:#89756e;margin-top:2px">最近太忙了。（바쁘다→바빠요，ㅡ脱落）</div>
+      <div style="font-size:16px;font-weight:700;color:#241917">요즘 너무 바빠요.</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">最近太忙了。（바쁘다→바빠요，ㅡ脱落）</div>
     </div>
   </div>
 </div>
 <div class="block">
-  <div style="font-size:13px;font-weight:700;color:#241917;margin-bottom:8px">两套变形规律</div>
+  <div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:8px">两套变形规律</div>
   <div style="background:#f8f4f0;border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:8px">
-    <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#ff7fa8">ㄷ 不规则</span>　词干末 ㄷ + 元音 → ㄷ 变 ㄹ　듣다→들어요 / 걷다→걸어요</div>
-    <div style="font-size:12px;color:#89756e;padding-left:8px">⚠️ 规则词不变：받다→받아요 / 믿다→믿어요</div>
-    <div style="font-size:13px;color:#241917;margin-top:4px"><span style="font-weight:700;color:#2db89b">ㅡ 脱落</span>　词干末 ㅡ 接 아/어요 时消失，看前元音选接 아/어</div>
-    <div style="font-size:12px;color:#89756e;padding-left:8px">前元音 ㅏ/ㅗ→아파요 　其他→예뻐요 　单音节→써요</div>
+    <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">ㄷ 不规则</span>　词干末 ㄷ + 元音 → ㄷ 变 ㄹ　듣다→들어요 / 걷다→걸어요</div>
+    <div style="font-size:16px;color:#89756e;padding-left:8px">⚠️ 规则词不变：받다→받아요 / 믿다→믿어요</div>
+    <div style="font-size:16px;color:#241917;margin-top:4px"><span style="font-weight:700;color:#2db89b">ㅡ 脱落</span>　词干末 ㅡ 接 아/어요 时消失，看前元音选接 아/어</div>
+    <div style="font-size:16px;color:#89756e;padding-left:8px">前元音 ㅏ/ㅗ→아파요 　其他→예뻐요 　单音节→써요</div>
   </div>
 </div>
 <div class="reminder-box">两种变形都接 -고 时不触发：듣고 있어요 ✓（不是 들고）/ 아프고 피곤해요 ✓。</div>`,
@@ -2324,26 +2324,26 @@ export const grammarCardsP2: GrammarCard[] = [
 <div class="card-body">不是所有 ㄷ 结尾的词都变形。高频词要记住哪些变、哪些不变，接 -고 等辅音语尾时两类都不变。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px">
   <div style="background:#fff0f5;border-radius:12px;padding:12px">
-    <div style="font-size:12px;font-weight:700;color:#ff7fa8;margin-bottom:8px">ㄷ 不规则（遇元音变 ㄹ）</div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">들어요</span><span style="font-size:12px;color:#89756e">听（듣다）</span></div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">걸어요</span><span style="font-size:12px;color:#89756e">走（걷다）</span></div>
-    <div class="tok-row"><span class="tok t-v">물어요</span><span style="font-size:12px;color:#89756e">问（묻다）</span></div>
+    <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">ㄷ 不规则（遇元音变 ㄹ）</div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">들어요</span><span style="font-size:16px;color:#89756e">听（듣다）</span></div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">걸어요</span><span style="font-size:16px;color:#89756e">走（걷다）</span></div>
+    <div class="tok-row"><span class="tok t-v">물어요</span><span style="font-size:16px;color:#89756e">问（묻다）</span></div>
   </div>
   <div style="background:#eaf8f5;border-radius:12px;padding:12px">
-    <div style="font-size:12px;font-weight:700;color:#2db89b;margin-bottom:8px">ㄷ 规则（不变）</div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">받아요</span><span style="font-size:12px;color:#89756e">收（받다）</span></div>
-    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">믿어요</span><span style="font-size:12px;color:#89756e">信（믿다）</span></div>
-    <div class="tok-row"><span class="tok t-v">닫아요</span><span style="font-size:12px;color:#89756e">关（닫다）</span></div>
+    <div style="font-size:16px;font-weight:700;color:#2db89b;margin-bottom:8px">ㄷ 规则（不变）</div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">받아요</span><span style="font-size:16px;color:#89756e">收（받다）</span></div>
+    <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">믿어요</span><span style="font-size:16px;color:#89756e">信（믿다）</span></div>
+    <div class="tok-row"><span class="tok t-v">닫아요</span><span style="font-size:16px;color:#89756e">关（닫다）</span></div>
   </div>
 </div>
 <div style="background:#f0eef8;border-radius:12px;padding:12px;margin-bottom:12px">
-  <div style="font-size:12px;font-weight:700;color:#6b7ff0;margin-bottom:8px">ㅡ 脱落（前元音决定 아/어）</div>
-  <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">아파요</span><span style="font-size:12px;color:#89756e">痛（아프다，前元音ㅏ→아）</span></div>
-  <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">바빠요</span><span style="font-size:12px;color:#89756e">忙（바쁘다，前元音ㅏ→아）</span></div>
-  <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">예뻐요</span><span style="font-size:12px;color:#89756e">漂亮（예쁘다，前元音非ㅏ/ㅗ→어）</span></div>
-  <div class="tok-row"><span class="tok t-v">써요</span><span style="font-size:12px;color:#89756e">写（쓰다，单音节→어）</span></div>
+  <div style="font-size:16px;font-weight:700;color:#6b7ff0;margin-bottom:8px">ㅡ 脱落（前元音决定 아/어）</div>
+  <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">아파요</span><span style="font-size:16px;color:#89756e">痛（아프다，前元音ㅏ→아）</span></div>
+  <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">바빠요</span><span style="font-size:16px;color:#89756e">忙（바쁘다，前元音ㅏ→아）</span></div>
+  <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">예뻐요</span><span style="font-size:16px;color:#89756e">漂亮（예쁘다，前元音非ㅏ/ㅗ→어）</span></div>
+  <div class="tok-row"><span class="tok t-v">써요</span><span style="font-size:16px;color:#89756e">写（쓰다，单音节→어）</span></div>
 </div>
-<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:15px;font-weight:700;color:#241917;margin-bottom:6px">两类不规则口诀</div><div style="font-size:15px;color:#5a4640">ㄷ 不规则：듣다/묻다/걷다 遇元音时 ㄷ→ㄹ（듣+어요→들어요）。但 받다/믿다 是规则的。</div><div style="margin-top:4px;font-size:15px;color:#5a4640">ㅡ 脱落：쓰다/바쁘다/예쁘다 词干末 ㅡ 遇 아/어 时脱落（쓰+어요→써요）。</div></div>
+<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">两类不规则口诀</div><div style="font-size:16px;color:#5a4640">ㄷ 不规则：듣다/묻다/걷다 遇元音时 ㄷ→ㄹ（듣+어요→들어요）。但 받다/믿다 是规则的。</div><div style="margin-top:4px;font-size:16px;color:#5a4640">ㅡ 脱落：쓰다/바쁘다/예쁘다 词干末 ㅡ 遇 아/어 时脱落（쓰+어요→써요）。</div></div>
 <div class="reminder-box">듣고 있어요 ✓（接 -고 不变）　들고 있어요 ✗（들다 是"拿/举"，意思不同）</div>`,
     compareLabel: 'ㄷ规则 vs 不规则',
     quickTable: {
@@ -2475,9 +2475,9 @@ export const grammarCardsP2: GrammarCard[] = [
     linkedGrammarIds: [],
     compareHtml: `<div class="card-title">第二章核心助词总览</div>
 <div class="card-body">第二章学了大量助词和变形规则。这张卡帮你把最容易混淆的几对对比清楚。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">와/과 vs 하고</div><div style="font-size:14px;color:#89756e;margin-top:2px">都表示"和"</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">친구와 가요（书面）</span><span style="font-size:14px;color:#5a4640">와/과：书面/正式</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">친구하고 가요（口语）</span><span style="font-size:14px;color:#5a4640">하고：口语，不看收音</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">부터 vs 에서</div><div style="font-size:14px;color:#89756e;margin-top:2px">都表示"从……"</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">두 시부터（从两点）</span><span style="font-size:14px;color:#5a4640">부터：时间起点</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">서울에서（从首尔）</span><span style="font-size:14px;color:#5a4640">에서：空间起点</span></div></div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">와/과 vs 하고</div><div style="font-size:16px;color:#89756e;margin-top:2px">都表示"和"</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">친구와 가요（书面）</span><span style="font-size:16px;color:#5a4640">와/과：书面/正式</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">친구하고 가요（口语）</span><span style="font-size:16px;color:#5a4640">하고：口语，不看收音</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">부터 vs 에서</div><div style="font-size:16px;color:#89756e;margin-top:2px">都表示"从……"</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">두 시부터（从两点）</span><span style="font-size:16px;color:#5a4640">부터：时间起点</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">서울에서（从首尔）</span><span style="font-size:16px;color:#5a4640">에서：空间起点</span></div></div>
 </div>
-<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:15px;font-weight:700;color:#241917;margin-bottom:6px">不规则变化速记</div><div style="font-size:15px;color:#5a4640">ㅂ 不规则：덥다→더워요 / 춥다→추워요（ㅂ遇元音→워）<br>ㄷ 不规则：듣다→들어요（ㄷ遇元音→ㄹ）<br>ㅡ 脱落：아프다→아파요 / 예쁘다→예뻐요（ㅡ脱落看前一个元音）</div></div>
+<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">不规则变化速记</div><div style="font-size:16px;color:#5a4640">ㅂ 不规则：덥다→더워요 / 춥다→추워요（ㅂ遇元音→워）<br>ㄷ 不规则：듣다→들어요（ㄷ遇元音→ㄹ）<br>ㅡ 脱落：아프다→아파요 / 예쁘다→예뻐요（ㅡ脱落看前一个元音）</div></div>
 <div class="reminder-box">도/만/도 不替换，是叠加助词：저도（我也）/ 오늘만（只有今天）。은/는/이/가/을/를 遇到 도/만 时直接替换掉。</div>`,
     overviewHtml: `<div class="overview">
   <span class="badge">第2部分 · 综合练习</span>
@@ -2485,7 +2485,7 @@ export const grammarCardsP2: GrammarCard[] = [
   <div class="ov-sub">第二章 10 课核心知识点总览</div>
   <div class="ov-sec">
     <h3>① 助词系统</h3>
-    <div style="font-size:13px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       와/과（和）：받침 있는→과，받침 없는→와；하고（口语）<br>
       에 가다（去某地）；이/가 있다/없다（有/在）<br>
       의（的）；도（也）；만（只）
@@ -2493,14 +2493,14 @@ export const grammarCardsP2: GrammarCard[] = [
   </div>
   <div class="ov-sec">
     <h3>② 请求 & 否定</h3>
-    <div style="font-size:13px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       -ㅂ시다/읍시다（一起吧）；-(으)세요（请…）<br>
       안 + 동사；동사 어간 + 지 않아요；하다→명사 안 해요
     </div>
   </div>
   <div class="ov-sec">
     <h3>③ 数词 & 时间</h3>
-    <div style="font-size:13px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       固有数词（시/개/명/잔/권）：한 잔, 두 명<br>
       汉字数词（원/월/분）：오천 원, 삼십 분<br>
       A부터 B까지（时间）；에서…까지（공간）
@@ -2508,7 +2508,7 @@ export const grammarCardsP2: GrammarCard[] = [
   </div>
   <div class="ov-sec">
     <h3>④ 不规则变化</h3>
-    <div style="font-size:13px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       ㅂ 불규칙：덥다→더워요, 춥다→추워요, 어렵다→어려워요<br>
       ㄷ 불규칙：듣다→들어요, 걷다→걸어요<br>
       ㅡ 탈락：아프다→아파요, 예쁘다→예뻐요, 바쁘다→바빠요
@@ -2516,7 +2516,7 @@ export const grammarCardsP2: GrammarCard[] = [
   </div>
   <div class="ov-sec">
     <h3>⑤ 连接 & 指示</h3>
-    <div style="font-size:13px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       그리고（而且）；그렇지만（但是）<br>
       이/그/저 + 名词（这/那/远那）；에게/한테（给谁）
     </div>
@@ -2605,9 +2605,9 @@ export const grammarCardsP2: GrammarCard[] = [
     ],
         compareHtml: `<div class="card-title">第三章综合练习</div>
 <div class="card-body">完成这份练习，检验第三章前 10 课是否掌握。涵盖进行时、经历回顾、愿望、ㄹ 不规则、意愿选择、疑问词、连接词、目的表达、时间顺序等核心知识点。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">本课复习</div><div style="font-size:14px;color:#89756e;margin-top:2px">一课一句核心</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">-고 있다</span><span style="font-size:14px;color:#5a4640">正在做</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">-았었/었었</span><span style="font-size:14px;color:#5a4640">曾经……过</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">核心知识点</div><div style="font-size:14px;color:#89756e;margin-top:2px">全章重点</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">-고 싶다 / 그러면</span><span style="font-size:14px;color:#5a4640">想做 / 那样的话</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">ㄹ不规则 / -을/ㄹ래요</span><span style="font-size:14px;color:#5a4640">变形 / 意愿选择</span></div></div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">本课复习</div><div style="font-size:16px;color:#89756e;margin-top:2px">一课一句核心</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">-고 있다</span><span style="font-size:16px;color:#5a4640">正在做</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">-았었/었었</span><span style="font-size:16px;color:#5a4640">曾经……过</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">核心知识点</div><div style="font-size:16px;color:#89756e;margin-top:2px">全章重点</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">-고 싶다 / 그러면</span><span style="font-size:16px;color:#5a4640">想做 / 那样的话</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">ㄹ不规则 / -을/ㄹ래요</span><span style="font-size:16px;color:#5a4640">变形 / 意愿选择</span></div></div>
 </div>
-<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:15px;font-weight:700;color:#241917;margin-bottom:6px">综合练习建议</div><div style="font-size:15px;color:#5a4640">遇到不确定的题，先回想"这是哪节课的知识点"，再作答。第三章的核心是"时间"和"目的"——什么时候做、为什么做、做了什么之后发生什么。</div><div style="margin-top:4px;font-size:15px;color:#5a4640">如果大部分题都答对了，说明第三章掌握得不错，可以进入第四章。</div></div>
+<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">综合练习建议</div><div style="font-size:16px;color:#5a4640">遇到不确定的题，先回想"这是哪节课的知识点"，再作答。第三章的核心是"时间"和"目的"——什么时候做、为什么做、做了什么之后发生什么。</div><div style="margin-top:4px;font-size:16px;color:#5a4640">如果大部分题都答对了，说明第三章掌握得不错，可以进入第四章。</div></div>
 <div class="reminder-box">综合练习不计成绩，目的是帮你发现哪里还不熟练。答错了就回去复习对应的课次。</div>`,
     linkedGrammarIds: [],
     overviewHtml: `<div class="overview">
@@ -2616,7 +2616,7 @@ export const grammarCardsP2: GrammarCard[] = [
   <div class="ov-sub">第三章 10 课核心知识点总览</div>
   <div class="ov-sec">
     <h3>① 进行 & 经历</h3>
-    <div style="font-size:13px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       -고 <b style="color:#ff7fa8">있어요</b>（正在做）/ -고 <b style="color:#ff7fa8">있었어요</b>（过去正在做）<br>
       穿戴类：입고/쓰고/들고 <b style="color:#ff7fa8">있어요</b>（穿着/戴着/拿着）<br>
       -<b style="color:#2db89b">았었/었었어요</b>（以前曾经……）；하다→했었어요；名词→이었었어요
@@ -2624,21 +2624,21 @@ export const grammarCardsP2: GrammarCard[] = [
   </div>
   <div class="ov-sec">
     <h3>② 愿望 & 意愿</h3>
-    <div style="font-size:13px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       -고 <b style="color:#ff7fa8">싶어요</b>（想做）；그러면/그럼（那么，条件顺接）<br>
       -을/ㄹ<b style="color:#2db89b">래요</b>（我要/要不要）；<b style="color:#6b7ff0">알겠어요</b>（明白了）
     </div>
   </div>
   <div class="ov-sec">
     <h3>③ ㄹ 不规则</h3>
-    <div style="font-size:13px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       接元音 → ㄹ <b style="color:#2db89b">保留</b>：살아요, 알아요, 만들어요<br>
       接 ㄴ/ㅂ/ㅅ → ㄹ <b style="color:#ff7fa8">脱落</b>：사세요, 삽니다, 아세요
     </div>
   </div>
   <div class="ov-sec">
     <h3>④ 疑问词 & 连接词</h3>
-    <div style="font-size:13px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       <b style="color:#ff7fa8">무슨</b>（名称/属性）/ <b style="color:#2db89b">어느</b>（选项）/ <b style="color:#6b7ff0">어떤</b>（特点）<br>
       <b style="color:#ff7fa8">그렇지만</b>（但是）/ <b style="color:#2db89b">그런데</b>（不过/话题转换）<br>
       <b style="color:#e8a87c">그래서</b>（所以）/ <b style="color:#6b7ff0">그러니까</b>（所以/因此，带劝告）
@@ -2646,7 +2646,7 @@ export const grammarCardsP2: GrammarCard[] = [
   </div>
   <div class="ov-sec">
     <h3>⑤ 目的 & 时间顺序</h3>
-    <div style="font-size:13px;color:#241917;line-height:2">
+    <div style="font-size:16px;color:#241917;line-height:2">
       -(으)러 가요（去做某事）；-을/ㄹ까요?（要不要……）<br>
       -은/ㄴ <b style="color:#ff7fa8">후에</b>（之后，看 받침）；-기 <b style="color:#2db89b">전에</b>（之前，不看 받침）
     </div>

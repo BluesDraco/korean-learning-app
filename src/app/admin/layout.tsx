@@ -6,13 +6,14 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
   LayoutDashboard, DollarSign, Users, FileText, Activity, Mail,
-  ShieldAlert, LogOut, Home, Menu, X, Music, MessageSquare,
+  ShieldAlert, LogOut, Home, Menu, X, Music, MessageSquare, BarChart2,
 } from 'lucide-react';
 
 const navItems = [
   { href: '/admin/dashboard', label: '仪表盘', icon: LayoutDashboard },
   { href: '/admin/revenue', label: '收入中心', icon: DollarSign },
   { href: '/admin/users', label: '用户管理', icon: Users },
+  { href: '/admin/users/registrations', label: '注册分析', icon: BarChart2 },
   { href: '/admin/content', label: '内容管理', icon: FileText },
   { href: '/admin/feedback', label: '用户反馈', icon: MessageSquare },
   { href: '/admin/messages', label: '消息中心', icon: Mail },
@@ -20,7 +21,7 @@ const navItems = [
   { href: '/admin/kpop-calibration', label: 'KPOP 校准', icon: Music },
 ];
 
-function SidebarContent({ pathname, onNavClick }: { pathname: string; onNavClick?: () => void }) {
+function SidebarContent({ pathname, onNavClick, onLogout }: { pathname: string; onNavClick?: () => void; onLogout: () => void }) {
   return (
     <>
       <div className="px-5 py-5 border-b border-[var(--border-color)]">
@@ -67,10 +68,7 @@ function SidebarContent({ pathname, onNavClick }: { pathname: string; onNavClick
           返回首页
         </Link>
         <button
-          onClick={async () => {
-            await fetch('/api/auth/logout', { method: 'POST' });
-            window.location.href = '/daily';
-          }}
+          onClick={onLogout}
           className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[var(--text-muted)] hover:bg-[var(--bg-input)] hover:text-red-400 transition-colors w-full text-left"
         >
           <LogOut size={18} />
@@ -82,7 +80,7 @@ function SidebarContent({ pathname, onNavClick }: { pathname: string; onNavClick
 }
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth();
+  const { user, loading, logout } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -117,6 +115,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     );
   }
 
+  const handleLogout = async () => {
+    await logout();
+    window.location.href = '/auth/login';
+  };
+
   return (
     <div className="min-h-screen flex" style={{ background: 'var(--bg-soft)' }}>
       {/* Desktop sidebar */}
@@ -124,7 +127,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         className="hidden lg:flex flex-col w-56 bg-[var(--bg-card)] border-r border-[var(--border-color)] shrink-0 min-h-screen sticky top-0 left-0"
         style={{ boxShadow: '2px 0 12px rgba(0,0,0,0.04)' }}
       >
-        <SidebarContent pathname={pathname} />
+        <SidebarContent pathname={pathname} onLogout={handleLogout} />
       </aside>
 
       {/* Mobile sidebar overlay */}
@@ -132,7 +135,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="fixed inset-0 z-50 lg:hidden">
           <div className="absolute inset-0 bg-black/30" onClick={() => setMobileOpen(false)} />
           <aside className="relative w-64 h-full bg-[var(--bg-card)] border-r border-[var(--border-color)] flex flex-col z-10 animate-slide-in-left" style={{ boxShadow: '4px 0 20px rgba(0,0,0,0.1)' }}>
-            <SidebarContent pathname={pathname} onNavClick={() => setMobileOpen(false)} />
+            <SidebarContent pathname={pathname} onNavClick={() => setMobileOpen(false)} onLogout={handleLogout} />
           </aside>
         </div>
       )}

@@ -14,7 +14,7 @@ export default function ShadowingListPage() {
   const router = useRouter();
 
   return (
-    <div style={{ paddingBottom: 24 }}>
+    <div style={{ paddingBottom: 24, maxWidth: 960, margin: '0 auto' }}>
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, marginBottom: 14 }}>
         <Link href="/explore" style={{ width: 38, height: 38, borderRadius: 16, background: '#fff', border: '1px solid ' + C.line, fontSize: 20, color: '#4d3933', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}>{'‹'}</Link>
@@ -55,7 +55,7 @@ export default function ShadowingListPage() {
 
       <h2 style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-.3px', color: C.ink, margin: '0 2px 14px' }}>{'精选片段'}</h2>
 
-      <div style={{ display: 'grid', gap: 12 }}>
+      <div className="flex flex-col gap-3 md:grid md:grid-cols-3">
         {shadowingClips.map((clip, i) => {
           const isActive = i === 0;
           return (

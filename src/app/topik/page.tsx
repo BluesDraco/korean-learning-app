@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, BookOpen, Headphones, ChevronRight, Trophy, AlertCircle } from 'lucide-react';
-import { topikSections, topikExamSets, topikQuestions } from '@/data/topik-questions';
+import type { TopikSection, TopikExamSet, TopikQuestion } from '@/data/topik-questions';
 import { db } from '@/lib/db';
 import type { TopikSession, TopikMistake } from '@/types';
 import Link from 'next/link';
@@ -29,8 +29,16 @@ export default function TopikPage() {
   const [recentSessions, setRecentSessions] = useState<TopikSession[]>([]);
   const [practiceLevel, setPracticeLevel] = useState<'all' | 'beginner' | 'intermediate' | 'advanced'>('all');
   const [practiceSection, setPracticeSection] = useState<'all' | 'listening' | 'reading'>('all');
+  const [topikSections, setTopikSections] = useState<TopikSection[]>([]);
+  const [topikExamSets, setTopikExamSets] = useState<TopikExamSet[]>([]);
+  const [topikQuestions, setTopikQuestions] = useState<TopikQuestion[]>([]);
 
   useEffect(() => {
+    import('@/data/topik-questions').then(({ topikSections: secs, topikExamSets: sets, topikQuestions: qs }) => {
+      setTopikSections(secs);
+      setTopikExamSets(sets);
+      setTopikQuestions(qs);
+    });
     db.topikMistakes.filter((m: TopikMistake) => m.mastered === 0).then(items => setMistakeCount(items.length)).catch(() => {});
     db.topikSessions.toArray().then(sessions => {
       const sorted = [...sessions].sort((a, b) => b.completedAt - a.completedAt).slice(0, 3);
@@ -39,14 +47,14 @@ export default function TopikPage() {
   }, []);
 
   // Filtered questions for practice
-  const practiceQuestions = topikQuestions.filter(q => {
+  const practiceQuestions = useMemo(() => topikQuestions.filter(q => {
     if (practiceLevel !== 'all' && q.level !== practiceLevel) return false;
     if (practiceSection !== 'all' && q.section !== practiceSection) return false;
     return true;
-  });
+  }), [topikQuestions, practiceLevel, practiceSection]);
 
   // Exam year groups
-  const examYears = Array.from(new Set(topikExamSets.map(s => s.year))).sort((a, b) => b - a);
+  const examYears = useMemo(() => Array.from(new Set(topikExamSets.map(s => s.year))).sort((a, b) => b - a), [topikExamSets]);
 
   function startSimulate(sectionId: string) {
     const sessionId = crypto.randomUUID();
@@ -74,6 +82,7 @@ export default function TopikPage() {
 
   return (
     <div style={{ minHeight: '100vh', background: C.bg, paddingBottom: 40 }}>
+      <div style={{ maxWidth: 960, margin: '0 auto' }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '16px 16px 0' }}>
         <button onClick={() => router.back()} style={{ width: 36, height: 36, borderRadius: '50%', border: `1px solid ${C.line}`, background: C.card, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
@@ -252,6 +261,7 @@ export default function TopikPage() {
           </div>
         )}
 
+      </div>
       </div>
     </div>
   );
