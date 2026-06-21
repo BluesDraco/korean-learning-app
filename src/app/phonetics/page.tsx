@@ -495,12 +495,6 @@ export default function PhoneticsPage() {
         </p>
       </div>
 
-      {/* Accuracy notice */}
-      <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-2xl px-4 py-3 text-xs text-amber-700 leading-relaxed">
-        <span className="shrink-0">📋</span>
-        <span>目前音标读音不准确，正式上线将换成真人读音，此页面仅供参考。</span>
-      </div>
-
       {/* Top-level tab switcher: 分步学习 | 字母表 | 连读规则 */}
       <div className="flex gap-2 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-1.5 overflow-x-auto">
         <button

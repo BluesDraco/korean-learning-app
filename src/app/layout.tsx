@@ -6,12 +6,9 @@ import { ThemeProvider } from '@/components/ThemeProvider';
 import { AuthProvider } from '@/components/AuthProvider';
 import { FontProvider } from '@/components/FontProvider';
 import { LangProvider } from '@/components/LangProvider';
-import { PageViewTracker } from '@/components/PageViewTracker';
-import { XpOverlay } from '@/components/XpOverlay';
-import { FeedbackButton } from '@/components/FeedbackButton';
 import { ToastProvider } from '@/hooks/useToast';
 import { ToriToastContainer } from '@/components/ToriToast';
-import ScrollToTop from '@/components/ScrollToTop';
+import { LazyLayoutComponents } from '@/components/LazyLayoutComponents';
 
 export const metadata: Metadata = {
   title: '토리的 韩语日记',
@@ -35,6 +32,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="zh-CN" suppressHydrationWarning>
       <head>
+        {/* Preconnect/dns-prefetch for faster resource loading */}
+        <link rel="dns-prefetch" href="//torikorean.com" />
+        <link rel="preconnect" href="https://torikorean.com" />
         {/* Polyfills for older Chromium browsers (Baidu, 360, etc.) */}
         <script dangerouslySetInnerHTML={{ __html: `
           (function(){
@@ -70,7 +70,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <LangProvider>
           <AuthProvider>
           <ToastProvider>
-          <PageViewTracker />
           <AppShell>{children}</AppShell>
           <ToriToastContainer />
           </ToastProvider>
@@ -78,9 +77,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </LangProvider>
           </FontProvider>
         </ThemeProvider>
-        <XpOverlay />
-        <FeedbackButton />
-        <ScrollToTop />
+        <LazyLayoutComponents />
         <script
           dangerouslySetInnerHTML={{
             __html: `if('serviceWorker' in navigator){caches.keys().then(function(keys){keys.filter(function(k){return k!=='korean-learn-v8'}).forEach(function(k){caches.delete(k)})});navigator.serviceWorker.register('/sw.js')}`,

@@ -63,6 +63,7 @@ ssh -p 17478 root@207.57.134.171 \
    cd /www/wwwroot/torikorean.com && \
    tar -xzf source.tar.gz && \
    npm run build && \
+   find .next/static -type f \( -name '*.js' -o -name '*.css' \) -exec brotli -f {} \; && \
    pm2 restart torikorean"
 
 # 4. 验证

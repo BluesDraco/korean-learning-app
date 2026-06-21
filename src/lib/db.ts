@@ -74,12 +74,22 @@ class WhereClause<T> {
   }
 
   async count(): Promise<number> {
-    const rows = await call('query', this.parent.name, undefined, {
+    const res = await call('count', this.parent.name, undefined, {
       field: this.field,
       op: this.op,
       value: this.value,
     });
-    return (rows as T[]).length;
+    return res.count as number;
+  }
+
+  async countWhere(extraFilters: { field: string; op: string; value: unknown }[]): Promise<number> {
+    const res = await call('count', this.parent.name, undefined, {
+      field: this.field,
+      op: this.op,
+      value: this.value,
+      andFilters: extraFilters,
+    });
+    return res.count as number;
   }
 
   async toArray(): Promise<T[]> {

@@ -640,9 +640,53 @@ export async function POST(req: Request) {
       }
 
       case 'count': {
+        const { field, op, value, andFilters } = data || {};
         const u = buildUserClause(userScope, auth.userId);
-        const sql = `SELECT COUNT(*) FROM ${info.table}${u.clause ? ` WHERE ${u.clause}` : ''}`;
-        const result = await db.exec(sql, u.params);
+        const conditions: string[] = [];
+        const params: unknown[] = [];
+
+        if (u.clause) {
+          conditions.push(u.clause);
+          params.push(...u.params);
+        }
+
+        const countOpMap: Record<string, string> = {
+          eq: '=', neq: '!=', lt: '<', lte: '<=', gt: '>', gte: '>=',
+        };
+
+        if (field && op && value !== undefined) {
+          const snField = toSnake(field);
+          if (cols.includes(snField)) {
+            if (op === 'in' && Array.isArray(value)) {
+              if (value.length > 0) {
+                conditions.push(`${snField} IN (${value.map(() => '?').join(',')})`);
+                params.push(...value);
+              }
+            } else if (countOpMap[op]) {
+              conditions.push(`${snField} ${countOpMap[op]} ?`);
+              params.push(value);
+            }
+          }
+        }
+
+        if (Array.isArray(andFilters)) {
+          for (const af of andFilters) {
+            const snAfField = toSnake(af.field || '');
+            if (!cols.includes(snAfField)) continue;
+            if (af.op === 'in' && Array.isArray(af.value)) {
+              if (af.value.length > 0) {
+                conditions.push(`${snAfField} IN (${af.value.map(() => '?').join(',')})`);
+                params.push(...af.value);
+              }
+            } else if (countOpMap[af.op]) {
+              conditions.push(`${snAfField} ${countOpMap[af.op]} ?`);
+              params.push(af.value);
+            }
+          }
+        }
+
+        const sql = `SELECT COUNT(*) FROM ${info.table}${conditions.length > 0 ? ` WHERE ${conditions.join(' AND ')}` : ''}`;
+        const result = await db.exec(sql, params);
         return NextResponse.json({ count: result[0]?.values[0]?.[0] ?? 0 });
       }
 

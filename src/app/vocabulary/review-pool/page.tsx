@@ -30,13 +30,16 @@ export default function ReviewPoolPage() {
       const valid = w.examples.filter(ex => ex.text && ex.text !== '[object Object]');
       return valid.length === 0;
     });
+    let cancelled = false;
     (async () => {
       const uniqueWords = [...new Set(needEntry.map(w => w.word))];
       const results = await Promise.all(uniqueWords.map(w => getEntryByKorean(w)));
+      if (cancelled) return;
       const map = new Map<string, WordEntry>();
       uniqueWords.forEach((w, i) => { if (results[i]) map.set(w, results[i]!); });
       setEntriesMap(map);
     })();
+    return () => { cancelled = true; };
   }, [words]);
 
   const load = useCallback(async () => {

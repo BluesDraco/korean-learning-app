@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { HighlightedExample } from '@/components/vocabulary/HighlightedExample';
 import { X, Search, Check, Plus, Loader2, Volume2, AlertCircle } from 'lucide-react';
 import { db } from '@/lib/db';

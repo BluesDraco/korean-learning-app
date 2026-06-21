@@ -348,7 +348,7 @@ function VocabularyContent() {
           db.words.count(),
           db.words.where('mastery').equals('mastered').count(),
           db.words.where('mastery').anyOf('learning', 'reviewing').count(),
-          db.words.where('nextReview').belowOrEqual(now).toArray().then(ws => ws.filter(w => w.mastery !== 'mastered').length),
+          db.words.where('nextReview').belowOrEqual(now).countWhere([{ field: 'mastery', op: 'neq', value: 'mastered' }]),
           db.wordBooks.toArray(),
           db.userProfiles.get('main'),
         ]);
