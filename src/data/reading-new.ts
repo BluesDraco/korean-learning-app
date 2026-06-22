@@ -3020,7 +3020,7 @@ export const readingArticles: Article[] = [
         id: 'kde-11',
         ko: '이번 드라마 시청률이 높거든요. 화제가 됐어요.',
         zh: '这次剧的收视率很高嘛。成了热门话题。',
-        pronunciation: 'i-beon deu-ra-ma si-cheong-nyu-ri nop-geo-deun-yo hwa-je-ga dwaet-seo-yo',
+        pronunciation: 'i-beon deu-ra-ma si-cheong-nyu-ri no-keo-deun-yo hwa-je-ga dwaet-seo-yo',
         words: [
           { word: '이번 드라마', meaning: '这次的剧' },
           { word: '시청률이 높거든요', meaning: '收视率很高嘛（-거든요）' },
@@ -4247,7 +4247,7 @@ export const readingArticles: Article[] = [
         id: 'ksc-2',
         ko: '한국 여성들은 스킨케어에 신경을 많이 쓰는 반면에 남성들도 점점 관심을 가져요.',
         zh: '韩国女性非常注重护肤，反而男性也逐渐关注起来。',
-        pronunciation: 'han-guk yeo-seong-deu-reun seu-kin-ke-eo-e sin-gyeong-eul ma-ni sseu-neun ban-myeo-ne nam-seong-deu-ro jeom-jeom gwan-si-meul ga-jeo-yo',
+        pronunciation: 'han-guk yeo-seong-deu-reun seu-kin-ke-eo-e sin-gyeong-eul ma-ni sseu-neun ban-myeo-ne nam-seong-deul-do jeom-jeom gwan-si-meul ga-jeo-yo',
         words: [
           { word: '한국 여성들은', meaning: '韩国女性（话题）' },
           { word: '스킨케어에 신경을 많이 쓰는 반면에', meaning: '非常注重护肤，反而（-는 반면에）' },
@@ -4298,7 +4298,7 @@ export const readingArticles: Article[] = [
         id: 'ksc-6',
         ko: '마스크팩은 사용하기 편한 반면에 매일 쓰면 비용이 들어요.',
         zh: '面膜使用起来方便，但每天用的话费用不小。',
-        pronunciation: 'ma-seu-keu-paeng-eun sa-yong-ha-gi pyeon-han ban-myeo-ne mae-il sseu-myeon bi-yong-i deu-reo-yo',
+        pronunciation: 'ma-seu-keu-pae-geun sa-yong-ha-gi pyeon-han ban-myeo-ne mae-il sseu-myeon bi-yong-i deu-reo-yo',
         words: [
           { word: '마스크팩은', meaning: '面膜（话题）' },
           { word: '사용하기 편한 반면에', meaning: '使用方便，反而（-(으)ㄴ 반면에）' },
