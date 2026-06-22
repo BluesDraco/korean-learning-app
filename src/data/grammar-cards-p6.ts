@@ -4,7 +4,7 @@ export const grammarCardsP6: GrammarCard[] = [
   {
     id: 'card-p6-l01',
     partNumber: 6,
-    lessonNumber: 2,
+    lessonNumber: 1,
     title: '-을/ㄹ게요, -겠군요, -았/었/였겠군요',
     whatItDoes: '说"我来做"，也表达共情感叹',
     whatItDoesBody: '-을/ㄹ게요 表示说话人的意志或承诺，主语一般是第一人称；\n-겠군요 听到对方说的话后对可能发生的状况或感觉表示推测，常用于口语。\n和中文"我来做"很像，但韩语 -을/ㄹ게요 带有"顾虑对方、主动承担"的语气，比直接说"我做"更礼貌。',
@@ -77,7 +77,42 @@ export const grammarCardsP6: GrammarCard[] = [
       <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">제가 할겠군요（我来做）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">제가 할게요（承诺用 ㄹ게요）</span></div></div>
     </div>
   </div>
-</div>`,
+</div>`,    specialQuiz: {
+      type: 'fill',
+      title: '选择正确的承诺/推测表达',
+      body: '根据句意选择 -을게요 或 -겠군요。',
+      questions: [
+        {
+          pre: '내일 꼭',
+          post: '.',
+          options: ["갈게요","가겠군요","갔어요"],
+          answer: 0,
+          explanation: '-을게요 表示承诺："明天一定去。"',
+        },
+        {
+          pre: '밖이 춥',
+          post: '.',
+          options: ["겠군요","을게요","았어요"],
+          answer: 0,
+          explanation: '-겠군요 表示"看来/想必……"：춥겠군요（外面看来很冷吧）。',
+        },
+        {
+          pre: '제가 도와',
+          post: '.',
+          options: ["드릴게요","드리겠군요","드렸어요"],
+          answer: 0,
+          explanation: '-을게요 承诺："我来帮您。"도와 드리다+ㄹ게요 = 도와 드릴게요。',
+        },
+        {
+          pre: '시험 공부 많이 했',
+          post: '.',
+          options: ["겠군요","을게요","어요"],
+          answer: 0,
+          explanation: '-았겠군요 推测过去："看来你复习了很多啊。"했겠군요。',
+        },
+      ],
+    },
+
     compareLabel: '-을/ㄹ게요（意志）vs -겠군요（推测感叹）',
     structures: [
       {
@@ -182,7 +217,7 @@ export const grammarCardsP6: GrammarCard[] = [
     ],
     mistakes: [
       { wrong: '손창 씨가 갈게요.', correct: '손창 씨가 갈 거예요.', note: '-을/ㄹ게요 只能用第一人称主语，他人用 -을/ㄹ 거예요' },
-      { wrong: '날씨가 좋겠군요. (刚查了天气)', correct: '날씨가 좋겠군요. (听别人说完后感叹)', note: '-겠군요 是听到对方信息后的推测感叹，不是自己查到的事实陈述' },
+      { wrong: '날씨가 좋겠어요', correct: '날씨가 좋겠군요', note: '-겠군요 是对新信息的感叹/发现，-겠어요 只是单纯推测，不能表达发现新信息时的感受。' },
       { wrong: '먹을게요. (主语是你)', correct: '드세요. / 먹어요.', note: '-을/ㄹ게요 主语只能是说话人自己' },
       { wrong: '어제 갔겠군요. (说话者自己亲历)', correct: '어제 힘드셨겠군요.', note: '-겠군요 用于推测他人情况，不用于叙述自己亲历的事' },
     ],
@@ -191,7 +226,7 @@ export const grammarCardsP6: GrammarCard[] = [
   {
     id: 'card-p6-l02',
     partNumber: 6,
-    lessonNumber: 3,
+    lessonNumber: 2,
     title: '-나요?, -은/ㄴ가요?, -ㅂ니다만/습니다만',
     whatItDoes: '比"吗？"更温柔的问法',
     whatItDoesBody: '-나요?/-은/ㄴ가요? 是 -아/어/여요?의 疑问形式，比直接疑问更自然柔和，常用于口语；\n-ㅂ니다만/습니다만 与 -지만 意思相同，"虽然……但是"，用于正式场合或需要讲究礼节的场合。\n中文提问"你吃了吗？"语气是中性的，韩语 -나요? 相当于加了一个轻柔的语气词，让问句听起来更体贴、不强硬。',
@@ -266,7 +301,42 @@ export const grammarCardsP6: GrammarCard[] = [
       <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">먹은가요?（동사）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">먹나요?（动词用 -나요）</span></div></div>
     </div>
   </div>
-</div>`,
+</div>`,    specialQuiz: {
+      type: 'fill',
+      title: '选择正确的疑问句形式',
+      body: '根据句意选择 -나요? 或 -은/ㄴ가요?。',
+      questions: [
+        {
+          pre: '한국어를 할 줄',
+          post: '?',
+          options: ["아나요","은가요","아요"],
+          answer: 0,
+          explanation: '动词 + -나요? 礼貌疑问："会说韩语吗？"',
+        },
+        {
+          pre: '이 옷이',
+          post: '?',
+          options: ["예쁜가요","예쁘나요","예뻐요"],
+          answer: 0,
+          explanation: '形容词有收音 + -은가요?："这件衣服好看吗？"예쁘다→예쁜가요。',
+        },
+        {
+          pre: '저 분이',
+          post: '?',
+          options: ["누군가요","누구나요","누구예요"],
+          answer: 0,
+          explanation: '누구 + -ㄴ가요 = 누군가요（那是谁？），이다→인가요。',
+        },
+        {
+          pre: '지금 뭐',
+          post: '?',
+          options: ["하나요","하는가요","해요"],
+          answer: 0,
+          explanation: '动词 + -나요?："现在在做什么？"하다→하나요。',
+        },
+      ],
+    },
+
     compareLabel: '-나요?（柔和疑问）vs -ㅂ니다만（正式转折）',
     structures: [
       {
@@ -384,7 +454,7 @@ export const grammarCardsP6: GrammarCard[] = [
   {
     id: 'card-p6-l03',
     partNumber: 6,
-    lessonNumber: 1,
+    lessonNumber: 3,
     title: '아직, 은요/는요',
     whatItDoes: '说"还没……"，追问"那你呢"',
     whatItDoesBody: '아직 是副词，修饰后面的句子或动词，表示"仍然（没）……，还（没）……"，常与否定表达搭配；\n은요/는요 仅用于口语，询问对方，通常与名词搭配，强调追问此名词。\n中文"还没"和 아직 안/못 几乎一一对应，但 아직도 带有"都这时候了还……"的惊讶语气，比 아직 程度更强。',
@@ -458,7 +528,42 @@ export const grammarCardsP6: GrammarCard[] = [
       <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">밥은요 먹었어요</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">밥은요?（은요/는요 独立追问，不加后续）</span></div></div>
     </div>
   </div>
-</div>`,
+</div>`,    specialQuiz: {
+      type: 'fill',
+      title: '选择合适的 아직/은요/는요 表达',
+      body: '根据句意完成句子。',
+      questions: [
+        {
+          pre: '아직 밥을',
+          post: '.',
+          options: ["안 먹었어요","먹었어요","먹을 거예요"],
+          answer: 0,
+          explanation: '아직 + 否定 = "还没……"：아직 안 먹었어요（还没吃饭）。',
+        },
+        {
+          pre: '저는 괜찮아요. 민수 씨',
+          post: '?',
+          options: ["는요","가요","를요"],
+          answer: 0,
+          explanation: '은요/는요 反问对方："我没事。敏秀你呢？"',
+        },
+        {
+          pre: '아직',
+          post: '.',
+          options: ["숙제를 못 했어요","숙제를 다 했어요","숙제를 할 거예요"],
+          answer: 0,
+          explanation: '아직 + 否定："作业还没做完。"',
+        },
+        {
+          pre: '이건 제 거예요. 그',
+          post: '?',
+          options: ["건요","거는요","게요"],
+          answer: 0,
+          explanation: '그거 + 는요 → 그건요："这是我的。那个呢？"',
+        },
+      ],
+    },
+
     compareLabel: '아직（状态副词）vs 은요/는요（追问助词）',
     structures: [
       {
@@ -645,7 +750,42 @@ export const grammarCardsP6: GrammarCard[] = [
       <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">먹을 건가요 저는</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">저는 먹을 건가요?（주어 前置）</span></div></div>
     </div>
   </div>
-</div>`,
+</div>`,    specialQuiz: {
+      type: 'fill',
+      title: '选择正确的意图/顺序表达',
+      body: '根据句意选择 -을 건가요? 或 -고 나서。',
+      questions: [
+        {
+          pre: '주말에 뭐',
+          post: '?',
+          options: ["할 건가요","하고 나서","했어요"],
+          answer: 0,
+          explanation: '-을 건가요? = "打算做……吗？"周末打算做什么？',
+        },
+        {
+          pre: '숙제를',
+          post: 'TV를 볼 거예요.',
+          options: ["하고 나서","할 건가요","하면서"],
+          answer: 0,
+          explanation: '-고 나서 表示"做完……之后"：做完作业后看电视。',
+        },
+        {
+          pre: '밥을 먹',
+          post: '산책했어요.',
+          options: ["고 나서","을 건가요","으면서"],
+          answer: 0,
+          explanation: '-고 나서 = "做完后"：吃完饭后散了步。',
+        },
+        {
+          pre: '언제 결혼',
+          post: '?',
+          options: ["할 건가요","하고 나서","했어요"],
+          answer: 0,
+          explanation: '-을 건가요? 问将来计划："什么时候结婚？"',
+        },
+      ],
+    },
+
     compareLabel: '-을/ㄹ 건가요?（询问计划）vs -고 나서（完成后）',
     structures: [
       {
@@ -761,7 +901,7 @@ export const grammarCardsP6: GrammarCard[] = [
   {
     id: 'card-p6-l05',
     partNumber: 6,
-    lessonNumber: 8,
+    lessonNumber: 5,
     title: '-(으)면 큰일이다, -아/어/여 버리다',
     whatItDoes: '说"要是……就麻烦了"，或彻底做完',
     whatItDoesBody: '-(으)면 큰일이다 常用于口语，表示"要是……的话，就麻烦了"；\n-아/어/여 버리다 用于口语，表示行为或动作完全结束，含有"一下子全做完"或"完全丢失/消耗"的语气。\n中文"完了/糟了"对应 큰일이다，但韩语更强调"假设"用 -(으)면 引出那个让人担心的情境。',
@@ -834,7 +974,18 @@ export const grammarCardsP6: GrammarCard[] = [
       <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">하다 버리다</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">해 버리다（하다 → 해）</span></div></div>
     </div>
   </div>
-</div>`,
+</div>`,    specialQuiz: {
+      type: 'judge',
+      title: '判断对错：-(으)면 큰일이다 和 -아/어 버리다',
+      body: '选出使用正确的句子。',
+      questions: [
+        { options: ["지각하면 큰일이에요","지각하면 큰일나요"], answer: 0, explanation: '-(으)면 큰일이다 = "如果……就糟了"：迟到就麻烦了。' },
+        { options: ["숙제를 다 해 버렸어요","숙제를 다 했어 버렸어요"], answer: 0, explanation: '해 버리다 表示"彻底做完"：把作业全做完啦。다 했어 버렸어요 语法不成立。' },
+        { options: ["먹어 버렸어요","먹었어 버렸어요"], answer: 0, explanation: '-아/어 버리다 接在词干后：먹다→먹어 버렸어요（全吃掉啦）。不能接过去时。' },
+        { options: ["잊어버리면 큰일이에요","잊어버리었으면 큰일이에요"], answer: 0, explanation: '잊어버리다 + 면 → 잊어버리면（正确）。잊어버리었으면 在词干和 면 之间多了一层 과거시제 었，语法不成立。' },
+      ],
+    },
+
     compareLabel: '-(으)면 큰일이다（糟糕假设）vs -아/어 버리다（彻底完成）',
     structures: [
       {
@@ -1028,7 +1179,42 @@ export const grammarCardsP6: GrammarCard[] = [
       <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">먹다고 생각해요</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">먹는다고 생각해요（动词现在时用 -는다고）</span></div></div>
     </div>
   </div>
-</div>`,
+</div>`,    specialQuiz: {
+      type: 'fill',
+      title: '选择正确的"认为"表达',
+      body: '根据句意选择正确的 -다고 생각하다 形式。',
+      questions: [
+        {
+          pre: '한국어가 재미있',
+          post: '.',
+          options: ["다고 생각해요","는 생각해요","ㄴ다고 생각해요"],
+          answer: 0,
+          explanation: '形容词 + -다고 생각하다："我认为韩语有趣。"재미있다→재미있다고。',
+        },
+        {
+          pre: '이 노래가',
+          post: '생각해요.',
+          options: ["좋다고","좋은다고","좋는다고"],
+          answer: 0,
+          explanation: '形容词 좋다 + -다고 = 좋다고 생각해요（觉得这首歌好）。',
+        },
+        {
+          pre: '그분은 선생님',
+          post: '생각해요.',
+          options: ["이라고","다고","라고"],
+          answer: 0,
+          explanation: '名词 + (이)라고 생각하다："我认为那个人是老师。"선생님+이라고。',
+        },
+        {
+          pre: '민수 씨는 내일',
+          post: '생각해요.',
+          options: ["온다고","오다고","왔다고"],
+          answer: 0,
+          explanation: '动词 + -ㄴ/는다고 생각하다："我觉得敏秀明天会来。"오다→온다고。',
+        },
+      ],
+    },
+
     compareLabel: '동사 -는/ㄴ다고 vs 명사 -(이)라고',
     structures: [
       {
@@ -1143,7 +1329,7 @@ export const grammarCardsP6: GrammarCard[] = [
   {
     id: 'card-p6-l07',
     partNumber: 6,
-    lessonNumber: 5,
+    lessonNumber: 7,
     title: '-는/은/ㄴ 날',
     whatItDoes: '描述特定的日子和时刻',
     whatItDoesBody: '날 是名词，表示"日子、那天"。\n动词和形容词与 날 相连时需要搭配冠词形；\n名词直接用 (의) 날。\n用于描述某个特定时间点或特定性质的日子。\n这是第五章冠词形的延伸应用你已经学过 -는/은/ㄴ 修饰名词，这节课专门把它用在 날 上，感受"描述日子"这一高频场景。\n中文"下雨的日子"直接形容词+名词，韩语要根据动词还是形容词、有无收音分别选 -는/-은/-ㄴ，规则比中文复杂。',
@@ -1226,7 +1412,42 @@ export const grammarCardsP6: GrammarCard[] = [
       <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">더운는 날</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">더운 날（形容词用 -은/ㄴ，不用 -는）</span></div></div>
     </div>
   </div>
-</div>`,
+</div>`,    specialQuiz: {
+      type: 'fill',
+      title: '选择正确的 -는/은/ㄴ 날 表达',
+      body: '根据时态选择正确的冠词形 + 날。',
+      questions: [
+        {
+          pre: '우리가 처음',
+          post: '날을 기억해요?',
+          options: ["만난","만나는","만날"],
+          answer: 0,
+          explanation: '过去时冠词形 + 날："记得我们第一次见面的那天吗？"만나다→만난 날。',
+        },
+        {
+          pre: '비가',
+          post: '날에는 집에 있어요.',
+          options: ["오는","온","올"],
+          answer: 0,
+          explanation: '现在时冠词形："下雨的日子里待在家。"오다→오는 날。',
+        },
+        {
+          pre: '제가 결혼',
+          post: '날이 기대돼요.',
+          options: ["하는","한","할"],
+          answer: 0,
+          explanation: '现在/将来 + 날 均可，하는 날 更自然："期待我结婚那天。"',
+        },
+        {
+          pre: '크리스마스는 일년에',
+          post: '날이에요.',
+          options: ["한 번뿐인","한 번 있는","한 번인"],
+          answer: 0,
+          explanation: '뿐이다 + -ㄴ 날："圣诞节是一年仅一次的日子。"',
+        },
+      ],
+    },
+
     compareLabel: '-는 날（现在/习惯）vs -은/ㄴ 날（过去那天）',
     structures: [
       {
@@ -1346,7 +1567,7 @@ export const grammarCardsP6: GrammarCard[] = [
   {
     id: 'card-p6-l08',
     partNumber: 6,
-    lessonNumber: 7,
+    lessonNumber: 8,
     title: '얼마/누구/어디/언제/무엇(뭐) + -(이)라고 하다, 사정이 있다',
     whatItDoes: '礼貌确认没听清的内容',
     whatItDoesBody: '얼마/누구/어디/언제/무엇(뭐) + -(이)라고 하다 表示说话人没听清对方的话或为了确认时使用，相当于汉语的"您说……来着？"；\n사정이 있다 主要用于口语，相当于"有事情，有说道，有苦衷"。\n中文"来着"这个词就对应 -(이)라고 했지요?用疑问词"定位"没听清的部分，再加 라고 하다 表示转述确认。',
@@ -1420,7 +1641,42 @@ export const grammarCardsP6: GrammarCard[] = [
       <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">가다고 했어요</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">간다고 했어요（动词转述用 -ㄴ다고）</span></div></div>
     </div>
   </div>
-</div>`,
+</div>`,    specialQuiz: {
+      type: 'fill',
+      title: '选择正确的间接引语',
+      body: '根据疑问词选择合适的 -(이)라고 하다 形式。',
+      questions: [
+        {
+          pre: '친구가 언제',
+          post: '물어봤어요.',
+          options: ["(이)라고","라고","다고"],
+          answer: 0,
+          explanation: '언제 + 라고 = 언제라고（朋友问"什么时候"）。疑问词+라고 하다。',
+        },
+        {
+          pre: '그 사람 이름이 뭐',
+          post: '했어요?',
+          options: ["라고","이라고","다고"],
+          answer: 0,
+          explanation: '뭐 + 라고 = 뭐라고 했어요?（他说叫什么名字？）',
+        },
+        {
+          pre: '엄마가 사정이',
+          post: '말씀하셨어요.',
+          options: ["있다고","있는다고","있으라고"],
+          answer: 0,
+          explanation: '사정이 있다 + 고 = 사정이 있다고 하다（妈妈说有苦衷）。',
+        },
+        {
+          pre: '친구가 어디',
+          post: '물었어요.',
+          options: ["(이)라고","라고","다고"],
+          answer: 0,
+          explanation: '어디 + 라고 = 어디라고 물었어요（朋友问"在哪里"）。',
+        },
+      ],
+    },
+
     compareLabel: '얼마/누구/어디/언제 + 라고 vs 무엇/뭐 + 이라고/라고',
     structures: [
       {
@@ -1609,7 +1865,42 @@ export const grammarCardsP6: GrammarCard[] = [
       <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">온 지 얼마 안 되다（现在）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">온 지 얼마 안 됐어요（用 됐어요）</span></div></div>
     </div>
   </div>
-</div>`,
+</div>`,    specialQuiz: {
+      type: 'fill',
+      title: '选择正确的担心/经历表达',
+      body: '根据句意选择合适的表达。',
+      questions: [
+        {
+          pre: '한국어를 잘할',
+          post: '.',
+          options: ["수 있을지 걱정이에요","줄 알아요","거예요"],
+          answer: 0,
+          explanation: '-을 수 있을지 걱정이다："担心能不能学好韩语。"',
+        },
+        {
+          pre: '한국어를 배운',
+          post: '.',
+          options: ["지 얼마 안 됐어요","지 오래 됐어요","때 배웠어요"],
+          answer: 0,
+          explanation: '-은 지 얼마 안 되다："学韩语没多久。"',
+        },
+        {
+          pre: '시험에 합격할',
+          post: '.',
+          options: ["수 있을지 걱정이에요","거예요","것 같아요"],
+          answer: 0,
+          explanation: '-을 수 있을지 걱정이다 = "担心能不能通过考试。"',
+        },
+        {
+          pre: '이사 온',
+          post: '.',
+          options: ["지 일주일밖에 안 됐어요","후에 정리했어요","때 청소했어요"],
+          answer: 0,
+          explanation: '-은 지 + 时间 + 되다 = "搬家才一周。"',
+        },
+      ],
+    },
+
     compareLabel: '-을/ㄹ 수 있을지 걱정（担心能否）vs -은/ㄴ 지 얼마 안 되다（没多久）',
     structures: [
       {
@@ -1798,7 +2089,42 @@ export const grammarCardsP6: GrammarCard[] = [
       <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">갈 생각을 못 해요</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">갈 생각도 못 해요（도 强调"连……都"）</span></div></div>
     </div>
   </div>
-</div>`,
+</div>`,    specialQuiz: {
+      type: 'fill',
+      title: '选择正确的否定/思念表达',
+      body: '根据句意完成句子。',
+      questions: [
+        {
+          pre: '그런 일이 있을 거라고는',
+          post: '.',
+          options: ["생각도 못 했어요","생각했어요","알았어요"],
+          answer: 0,
+          explanation: '-을 생각도 못 하다："完全没想到会有那种事。"',
+        },
+        {
+          pre: '고향이 너무',
+          post: '.',
+          options: ["그리워요","보고 싶어요","좋아요"],
+          answer: 0,
+          explanation: '이/가 그립다 = "想念（某地/某事）"：好想念故乡。사람 用 보고 싶다。',
+        },
+        {
+          pre: '이렇게 빨리 끝날 줄은',
+          post: '.',
+          options: ["상상도 못 했어요","알고 있었어요","예상했어요"],
+          answer: 0,
+          explanation: '-을 생각도/상상도 못 하다："完全没想到会这么快结束。"',
+        },
+        {
+          pre: '한국 음식이',
+          post: '.',
+          options: ["그리워요","보고 싶어요","싫어요"],
+          answer: 0,
+          explanation: '음식/장소 等用 그립다："想念韩国食物。"사람은 보고 싶다。',
+        },
+      ],
+    },
+
     compareLabel: '-을/ㄹ 생각도 못 하다（连想都不想）vs 이/가 그립다（思念）',
     structures: [
       {

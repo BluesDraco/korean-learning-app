@@ -47,7 +47,42 @@ export const grammarCardsP8: GrammarCard[] = [
   <div style="font-size:16px;color:#5a4640">자주 가던 카페（常去的）→ 强调习惯，现在不去了</div>
   <div style="margin-top:4px;font-size:16px;color:#5a4640">한 번 갔던 카페（去过一次的）→ 强调那次经历本身</div>
 </div>
-<div class="reminder-box">如果现在还在持续的习惯，用 -는（현재 冠词形）：자주 가는 카페（我现在常去的咖啡店）。-던 暗示"现在已不同了"。</div>`,
+<div class="reminder-box">如果现在还在持续的习惯，用 -는（현재 冠词形）：자주 가는 카페（我现在常去的咖啡店）。-던 暗示"现在已不同了"。</div>`,    specialQuiz: {
+      type: 'fill',
+      title: '选择正确的回忆冠词形',
+      body: '根据句意选择 -던 或 -았/었던。',
+      questions: [
+        {
+          pre: '자주',
+          post: '카페가 문을 닫았어요.',
+          options: ["가던","갔던","가는"],
+          answer: 0,
+          explanation: '-던 表示过去习惯/反复："以前常去的咖啡店关了。"가던（习惯性去）。',
+        },
+        {
+          pre: '어릴 때',
+          post: '동네가 그리워요.',
+          options: ["살았던","살던","사는"],
+          answer: 0,
+          explanation: '-았던 表示已完成的过去经历："想念小时候住过的小区。"살았던=住过的（已成回忆）。',
+        },
+        {
+          pre: '내가',
+          post: '사람이에요.',
+          options: ["좋아했던","좋아하던","좋아하는"],
+          answer: 0,
+          explanation: '좋아했던 = "曾经喜欢过的（那个人）"。已完成的情感，用 -았던。',
+        },
+        {
+          pre: '아까',
+          post: '얘기 계속해요.',
+          options: ["하던","했던","하는"],
+          answer: 0,
+          explanation: '-던 表示中断的持续动作："继续刚才在说的话题吧。"하던 얘기（刚才在说的）。',
+        },
+      ],
+    },
+
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
     <div class="ov-hero-label">第 8 章 第 1 课 · 已完成</div>
@@ -163,7 +198,42 @@ export const grammarCardsP8: GrammarCard[] = [
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">9시까지 와야 해요.</span><span style="font-size:16px;color:#5a4640">必须9点前来。（规定）</span></div>
   </div>
 </div>
-<div class="reminder-box">공부야겠어요 ✗ → 공부해야겠어요 ✓（공부 是名词，要先 +하다 再变형）。먹아야겠다 ✗ → 먹어야겠다 ✓（먹 末元音不是 ㅏ/ㅗ）。</div>`,
+<div class="reminder-box">공부야겠어요 ✗ → 공부해야겠어요 ✓（공부 是名词，要先 +하다 再变형）。먹아야겠다 ✗ → 먹어야겠다 ✓（먹 末元音不是 ㅏ/ㅗ）。</div>`,    specialQuiz: {
+      type: 'fill',
+      title: '选择正确的"必须/得"表达',
+      body: '根据句意选择 -아/어야(만) 或 -아/어야겠다。',
+      questions: [
+        {
+          pre: '한국어를 잘하려면 매일',
+          post: '.',
+          options: ["공부해야 해요","공부해야겠어요","공부할 거예요"],
+          answer: 0,
+          explanation: '-아/어야 하다 = "必须"客观义务：想学好韩语必须每天学习。',
+        },
+        {
+          pre: '내일은 일찍',
+          post: '.',
+          options: ["일어나야겠어요","일어나야 해요","일어날 거예요"],
+          answer: 0,
+          explanation: '-아/어야겠다 = "我得……"主观决心："明天我得早起。"',
+        },
+        {
+          pre: '한국에서는 밥을 먹을 때 젓가락',
+          post: '.',
+          options: ["만 써야 해요","을 써야겠어요","을 쓸 거예요"],
+          answer: 0,
+          explanation: '-아/어야 하다 客观规则："在韩国吃饭时必须用筷子。"',
+        },
+        {
+          pre: '약속 시간이 다 됐어요. 이제',
+          post: '.',
+          options: ["가야겠어요","가야 해요","갈 거예요"],
+          answer: 0,
+          explanation: '-아/어야겠다 决意："约会时间快到了，我得走了。"',
+        },
+      ],
+    },
+
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
     <div class="ov-hero-label">第 8 章 第 2 课 · 已完成</div>
@@ -278,7 +348,18 @@ export const grammarCardsP8: GrammarCard[] = [
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">너무 더워서 죽을 것 같아요.</span><span style="font-size:16px;color:#5a4640">热死了。</span></div>
   </div>
 </div>
-<div class="reminder-box">배고프서 ✗ → 배고파서 ✓（배고프다 词干 ㅡ 脱落后 → 배고파서）。재미있어서 죽을 것이에요 ✗ → 죽을 것 같아요 ✓（夸张用 것 같다，不是 것이다）。</div>`,
+<div class="reminder-box">배고프서 ✗ → 배고파서 ✓（배고프다 词干 ㅡ 脱落后 → 배고파서）。재미있어서 죽을 것이에요 ✗ → 죽을 것 같아요 ✓（夸张用 것 같다，不是 것이다）。</div>`,    specialQuiz: {
+      type: 'judge',
+      title: '判断对错：-을 뻔하다 和 -아/어서 죽을 것 같다',
+      body: '选出使用正确的句子。',
+      questions: [
+        { options: ["길에서 넘어질 뻔했어요","길에서 넘어졌 뻔했어요"], answer: 0, explanation: '-을 뻔하다 接动词词干："差点在路上摔倒。"넘어지다→넘어질 뻔했어요。不能接过去时。' },
+        { options: ["놓칠 뻔했어요","놓쳤을 뻔했어요"], answer: 0, explanation: '놓치다→놓칠 뻔했어요（差点错过）。-을 뻔하다 接词干不接过去时。' },
+        { options: ["배고파서 죽을 것 같아요","배고파서 죽었어요"], answer: 0, explanation: '-아/어서 죽을 것 같다 = "……得快要死了"：饿死了（夸张）。不能真用 죽었어요。' },
+        { options: ["더워서 죽을 뻔했어요","더워서 죽을 뻔어요"], answer: 0, explanation: '-을 뻔하다 的过去时是 -을 뻔했어요，不能写成 뻔어요。选项 2 的过去时变形不完整。' },
+      ],
+    },
+
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
     <div class="ov-hero-label">第 8 章 第 3 课 · 已完成</div>
@@ -394,7 +475,42 @@ export const grammarCardsP8: GrammarCard[] = [
   <div style="font-size:16px;color:#5a4640">名词+뿐만 아니라：노래뿐만 아니라 춤도 잘해요.</div>
   <div style="margin-top:4px;font-size:16px;color:#5a4640">后句必须用 도（也）来呼应：뿐만 아니라 + ……도……</div>
 </div>
-<div class="reminder-box">노래뿐 아니라 ✗ → 노래뿐만 아니라 ✓（不能省略 만）。뿐만 아니라 放句首 ✗（前面必须有名词/动词）。</div>`,
+<div class="reminder-box">노래뿐 아니라 ✗ → 노래뿐만 아니라 ✓（不能省略 만）。뿐만 아니라 放句首 ✗（前面必须有名词/动词）。</div>`,    specialQuiz: {
+      type: 'fill',
+      title: '选择正确的第三人称愿望/递进表达',
+      body: '根据句意选择 -고 싶어하다 或 -뿐만 아니라。',
+      questions: [
+        {
+          pre: '친구는 한국에',
+          post: '.',
+          options: ["가고 싶어해요","가고 싶어요","갈 거예요"],
+          answer: 0,
+          explanation: '第三人称愿望用 -고 싶어하다："朋友想去韩国。"说别人不能用 -고 싶어요。',
+        },
+        {
+          pre: '그 가수는 노래를 잘할',
+          post: '춤도 잘 춰요.',
+          options: ["뿐만 아니라","뿐이 아니라","것뿐만 아니라"],
+          answer: 0,
+          explanation: '-을 뿐만 아니라 = "不仅……而且……"：那歌手不仅歌唱得好，舞也跳得好。',
+        },
+        {
+          pre: '동생이 아이스크림을',
+          post: '.',
+          options: ["먹고 싶어해요","먹고 싶어요","먹을래요"],
+          answer: 0,
+          explanation: '第三人称愿望：동생이 먹고 싶어해요（妹妹想吃冰淇淋）。',
+        },
+        {
+          pre: '한국어는 재미있을',
+          post: '유용해요.',
+          options: ["뿐만 아니라","뿐이 아니라","것만 아니라"],
+          answer: 0,
+          explanation: '-을 뿐만 아니라 = "韩语不仅有趣，而且有用。"',
+        },
+      ],
+    },
+
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
     <div class="ov-hero-label">第 8 章 第 4 课 · 已完成</div>
@@ -511,7 +627,42 @@ export const grammarCardsP8: GrammarCard[] = [
   <div style="font-size:16px;color:#5a4640">이 음식 먹어 봤어요?（你试过这道菜吗？→ 侧重"试没试"）</div>
   <div style="margin-top:4px;font-size:16px;color:#5a4640">이 음식 먹은 적이 있어요?（你吃过这道菜吗？→ 侧重"有没有这个经历"）</div>
 </div>
-<div class="reminder-box">먹은 봤어요 ✗ → 먹어 봤어요 ✓（要按末元音选 아/어，不能用 -은）。-은 적이 있다 描述已结束的过去经历，不用于当下进行中的动作。</div>`,
+<div class="reminder-box">먹은 봤어요 ✗ → 먹어 봤어요 ✓（要按末元音选 아/어，不能用 -은）。-은 적이 있다 描述已结束的过去经历，不用于当下进行中的动作。</div>`,    specialQuiz: {
+      type: 'fill',
+      title: '选择正确的"尝试/经历"表达',
+      body: '根据句意选择 -아/어 보다 或 -은/ㄴ 적이 있다。',
+      questions: [
+        {
+          pre: '이 김치를 한번',
+          post: '.',
+          options: ["먹어 보세요","먹은 적이 있어요","먹을 거예요"],
+          answer: 0,
+          explanation: '-아/어 보다 = "试试看"："请尝尝这个泡菜。"',
+        },
+        {
+          pre: '한국에',
+          post: '.',
+          options: ["가 본 적이 있어요","가 봤어요","갈 거예요"],
+          answer: 0,
+          explanation: '-은 적이 있다 = "有过……经历"："去过韩国。"',
+        },
+        {
+          pre: '이 옷을',
+          post: '?',
+          options: ["입어 볼까요","입은 적이 있어요","입을 거예요"],
+          answer: 0,
+          explanation: '-아/어 보다 尝试："要不要试穿这件衣服？"',
+        },
+        {
+          pre: '저는 김치를',
+          post: '.',
+          options: ["먹어 본 적이 없어요","먹어 봤어요","먹을 거예요"],
+          answer: 0,
+          explanation: '-은 적이 없다 = "没做过……"：我没吃过泡菜。',
+        },
+      ],
+    },
+
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
     <div class="ov-hero-label">第 8 章 第 5 课 · 已完成</div>
@@ -636,7 +787,42 @@ export const grammarCardsP8: GrammarCard[] = [
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">여기 앉아도 돼요?</span><span style="font-size:16px;color:#5a4640">可以坐这里吗？</span></div>
   </div>
 </div>
-<div class="reminder-box">물라도 ✗ → 물이라도 ✓（물 有收音 ㄹ，用 이라도）。-아도 돼요? 的回答：돼요（可以）/ 안 돼요（不可以）。</div>`,
+<div class="reminder-box">물라도 ✗ → 물이라도 ✓（물 有收音 ㄹ，用 이라도）。-아도 돼요? 的回答：돼요（可以）/ 안 돼요（不可以）。</div>`,    specialQuiz: {
+      type: 'fill',
+      title: '选择正确的让步/允许表达',
+      body: '根据句意选择 -아/어도, -(이)라도 或 -아/어도 되다。',
+      questions: [
+        {
+          pre: '바빠',
+          post: '운동은 꼭 하세요.',
+          options: ["도","라도","서"],
+          answer: 0,
+          explanation: '-아/어도 = "即使……也"：即使忙也要运动。',
+        },
+        {
+          pre: '시간이 없으면 물',
+          post: '마셔요.',
+          options: ["이라도","어도","이나"],
+          answer: 0,
+          explanation: '-(이)라도 = "至少/哪怕是"：没时间的话至少喝点水吧。',
+        },
+        {
+          pre: '여기 앉',
+          post: '?',
+          options: ["아도 돼요","으면 돼요","을까요"],
+          answer: 0,
+          explanation: '-아/어도 되다 = "可以……吗？"：可以坐这里吗？',
+        },
+        {
+          pre: '피곤해',
+          post: '숙제는 해야 해요.',
+          options: ["도","라도","서"],
+          answer: 0,
+          explanation: '-아/어도 = "即使累也要做作业。"',
+        },
+      ],
+    },
+
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
     <div class="ov-hero-label">第 8 章 第 6 课 · 已完成</div>
@@ -755,7 +941,18 @@ export const grammarCardsP8: GrammarCard[] = [
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">먹지 마세요.</span><span style="font-size:16px;color:#5a4640">请不要吃。</span></div>
   </div>
 </div>
-<div class="reminder-box">먹면 돼요 ✗ → 먹으면 돼요 ✓（먹 有收음 ㄱ，加 으）。늦면 안 돼요 ✗ → 늦으면 안 돼요 ✓（늦 有收음 ㅈ，加 으）。</div>`,
+<div class="reminder-box">먹면 돼요 ✗ → 먹으면 돼요 ✓（먹 有收음 ㄱ，加 으）。늦면 안 돼요 ✗ → 늦으면 안 돼요 ✓（늦 有收음 ㅈ，加 으）。</div>`,    specialQuiz: {
+      type: 'judge',
+      title: '判断对错：-(으)면 안 되다 和 -(으)면 되다',
+      body: '选出使用正确的句子。',
+      questions: [
+        { options: ["여기서 담배를 피우면 안 돼요","여기서 담배를 피우면 되지 않아요"], answer: 0, explanation: '-(으)면 안 되다 = "不可以……"：这里不可以抽烟。되지 않아요 是其他含义。' },
+        { options: ["지금 가면 돼요","지금 가기면 돼요"], answer: 0, explanation: '-(으)면 되다 接动词词干：가다 → 가면 돼요。가기면 是错误形式，-기 和 -면 不能叠用。' },
+        { options: ["내일까지 내면 돼요","내일까지 내기면 돼요"], answer: 0, explanation: '내다 + 면 → 내면 돼요（交就行）。내기면 是错误形式，-기 和 -면 不能叠用。' },
+        { options: ["시험에서 컨닝하면 안 돼요","시험에서 컨닝하면 돼요"], answer: 0, explanation: '-(으)면 안 되다 = 禁止："考试不可以作弊。"' },
+      ],
+    },
+
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
     <div class="ov-hero-label">第 8 章 第 7 课 · 已完成</div>

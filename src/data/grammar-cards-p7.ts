@@ -49,7 +49,42 @@ export const grammarCardsP7: GrammarCard[] = [
   <div style="font-size:16px;color:#5a4640">两者意思相同，可以互换。처럼 书面/口语均可，같이 口语更自然。</div>
   <div style="margin-top:4px;font-size:16px;color:#5a4640">모델처럼 = 모델같이（都是"像模特一样"）</div>
 </div>
-<div class="reminder-box">같이 还有"一起"的意思（같이 가요 = 一起去），不要和比较用法混淆。看后面是动词还是名词来判断：같이 걸어요（一起走）vs 모델같이 걸어요（像模特一样走）。</div>`,
+<div class="reminder-box">같이 还有"一起"的意思（같이 가요 = 一起去），不要和比较用法混淆。看后面是动词还是名词来判断：같이 걸어요（一起走）vs 모델같이 걸어요（像模特一样走）。</div>`,    specialQuiz: {
+      type: 'fill',
+      title: '选择正确的"像……一样"表达',
+      body: '根据句意选择 처럼, 같이 或 같은。',
+      questions: [
+        {
+          pre: '아이돌',
+          post: '춤을 춰요.',
+          options: ["처럼","같은","처럼의"],
+          answer: 0,
+          explanation: 'N처럼 = "像N一样"修饰动词：跳舞像爱豆一样。처럼의 是错误形式，처럼 不能接 의。',
+        },
+        {
+          pre: '언니',
+          post: '노래해요.',
+          options: ["같이","같은","처럼은"],
+          answer: 0,
+          explanation: 'N같이 = "像N一样"口语版：唱歌像姐姐一样。',
+        },
+        {
+          pre: '우리는',
+          post: '옷을 입었어요.',
+          options: ["같은","처럼","같이"],
+          answer: 0,
+          explanation: '같은 + 名词 = "相同的……"：我们穿了同样的衣服。같은 后必须跟名词。',
+        },
+        {
+          pre: '가수',
+          post: '노래를 잘하고 싶어요.',
+          options: ["처럼","같은","처럼의"],
+          answer: 0,
+          explanation: 'N처럼 修饰动词："想像歌手一样唱得好。"',
+        },
+      ],
+    },
+
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
     <div class="ov-hero-label">第 7 章 第 1 课 · 已完成</div>
@@ -169,7 +204,42 @@ export const grammarCardsP7: GrammarCard[] = [
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">졸업한 지 3년 만이에요.</span><span style="font-size:16px;color:#5a4640">毕业已经三年了。</span></div>
   </div>
 </div>
-<div class="reminder-box">됐어요 前加 이（1년이 됐어요），만이에요 前不加 이（3년 만이에요）——两者结构不同，不能混用。</div>`,
+<div class="reminder-box">됐어요 前加 이（1년이 됐어요），만이에요 前不加 이（3년 만이에요）——两者结构不同，不能混用。</div>`,    specialQuiz: {
+      type: 'fill',
+      title: '选择正确的时间经过表达',
+      body: '根据句意选择 -은/ㄴ 지 或 만에。',
+      questions: [
+        {
+          pre: '한국어를 배운',
+          post: '1년 됐어요.',
+          options: ["지","만에","후에"],
+          answer: 0,
+          explanation: '-은 지 + 时间 + 되다 = "做……已经……时间了"：学韩语已经一年了。',
+        },
+        {
+          pre: '3년',
+          post: '고향에 돌아왔어요.',
+          options: ["만에","지","동안"],
+          answer: 0,
+          explanation: '时间 + 만에 = "时隔……"：时隔三年回到故乡。',
+        },
+        {
+          pre: '밥을 먹은',
+          post: '한 시간이 지났어요.',
+          options: ["지","만에","후에"],
+          answer: 0,
+          explanation: '-은 지 + 时间 + 지나다："吃饭后过了一小时。"',
+        },
+        {
+          pre: '일주일',
+          post: '다시 만났어요.',
+          options: ["만에","지","동안"],
+          answer: 0,
+          explanation: '时间 + 만에 = 时隔一周再见。',
+        },
+      ],
+    },
+
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
     <div class="ov-hero-label">第 7 章 第 2 课 · 已完成</div>
@@ -291,7 +361,42 @@ export const grammarCardsP7: GrammarCard[] = [
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">갔는데 문이 닫혔어요.</span><span style="font-size:16px;color:#5a4640">去了，但门关着。</span></div>
   </div>
 </div>
-<div class="reminder-box">좋는데 ✗ → 좋은데 ✓（形容词用은데）；갔은데 ✗ → 갔는데 ✓（过去时用는데）——这两个是最常犯的错误。</div>`,
+<div class="reminder-box">좋는데 ✗ → 좋은데 ✓（形容词用은데）；갔은데 ✗ → 갔는데 ✓（过去时用는데）——这两个是最常犯的错误。</div>`,    specialQuiz: {
+      type: 'fill',
+      title: '选择正确的 -(으)ㄴ/는데 用法',
+      body: '根据前后句关系选择正确的连接形式。',
+      questions: [
+        {
+          pre: '날씨가 추운',
+          post: '따뜻하게 입으세요.',
+          options: ["데","대","지만"],
+          answer: 0,
+          explanation: '-(으)ㄴ/는데 提供背景："天气冷，请穿暖和。"',
+        },
+        {
+          pre: '어제 영화를 봤',
+          post: '정말 재미있었어요.',
+          options: ["는데","지만","으니까"],
+          answer: 0,
+          explanation: '-는데 提供背景/铺垫："昨天看了电影，真的很有意思。"',
+        },
+        {
+          pre: '배가 고픈',
+          post: '먹을 게 없어요.',
+          options: ["데","지만","면"],
+          answer: 0,
+          explanation: '-(으)ㄴ데 表轻微转折/对比："肚子饿，但没什么可吃的。"',
+        },
+        {
+          pre: '숙제는 다 했',
+          post: '시험 공부는 못 했어요.',
+          options: ["는데","지만","고"],
+          answer: 0,
+          explanation: '-는데 表对比："作业做完了，但考试复习没做。"',
+        },
+      ],
+    },
+
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
     <div class="ov-hero-label">第 7 章 第 3 课 · 已完成</div>
@@ -416,7 +521,42 @@ export const grammarCardsP7: GrammarCard[] = [
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">하나도 못 먹었어요.</span><span style="font-size:16px;color:#5a4640">一口都没吃到。</span></div>
   </div>
 </div>
-<div class="reminder-box">아무 + 名词 + 도 → 아무 말도 안 했어요（什么话都没说）。这个扩展格式能覆盖更多场景。</div>`,
+<div class="reminder-box">아무 + 名词 + 도 → 아무 말도 안 했어요（什么话都没说）。这个扩展格式能覆盖更多场景。</div>`,    specialQuiz: {
+      type: 'fill',
+      title: '选择正确的否定强调表达',
+      body: '根据句意选择 아무도 或 하나도。',
+      questions: [
+        {
+          pre: '교실에',
+          post: '없어요.',
+          options: ["아무도","하나도","아무거나"],
+          answer: 0,
+          explanation: '아무도 + 否定 = "没有任何人"：教室里一个人都没有。',
+        },
+        {
+          pre: '돈이',
+          post: '없어요.',
+          options: ["하나도","아무도","전혀"],
+          answer: 0,
+          explanation: '하나도 + 否定 = "一点都……"：一分钱都没有。하나도 强调程度为零。',
+        },
+        {
+          pre: '',
+          post: '몰라요.',
+          options: ["아무것도","아무도","하나도"],
+          answer: 0,
+          explanation: '아무것도 + 否定 = "什么也不知道"：什么都不知道。',
+        },
+        {
+          pre: '그 이야기는',
+          post: '못 들었어요.',
+          options: ["하나도","아무도","절대로"],
+          answer: 0,
+          explanation: '하나도 + 否定："那件事一点都没听说。"强调零信息。',
+        },
+      ],
+    },
+
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
     <div class="ov-hero-label">第 7 章 第 4 课 · 已完成</div>
@@ -536,7 +676,42 @@ export const grammarCardsP7: GrammarCard[] = [
   <div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">常见搭配动词</div>
   <div style="font-size:16px;color:#5a4640">쓰다（写）／붙이다（贴）／넣다（放入）／바르다（涂）／두다（放置）／그리다（画）</div>
 </div>
-<div class="reminder-box">있다/없다（存在动词）用 에，不用 에다가：가방에다가 있어요 ✗ → 가방에 있어요 ✓。</div>`,
+<div class="reminder-box">있다/없다（存在动词）用 에，不用 에다가：가방에다가 있어요 ✗ → 가방에 있어요 ✓。</div>`,    specialQuiz: {
+      type: 'fill',
+      title: '选择正确的 에다(가) 表达',
+      body: '根据语境选择正确的助词。',
+      questions: [
+        {
+          pre: '책상',
+          post: '책을 올려놓으세요.',
+          options: ["에다","에","에서"],
+          answer: 0,
+          explanation: '에다(가) 强调放置的精确位置："把书放在桌上。"',
+        },
+        {
+          pre: '이 종이',
+          post: '이름을 써 주세요.',
+          options: ["에","에다","에서"],
+          answer: 0,
+          explanation: '에 基本位置助词："请在这张纸上写名字。"',
+        },
+        {
+          pre: '냉장고',
+          post: '넣어 두었어요.',
+          options: ["에다","에","에서"],
+          answer: 0,
+          explanation: '에다(가) + 넣다 强调放进去的目标位置。에 也可，에다 更强调方向性。',
+        },
+        {
+          pre: '여기',
+          post: '전화번호를 적어 주세요.',
+          options: ["에","에다","에서"],
+          answer: 0,
+          explanation: '여기에 = 基本位置："请在这里写电话号码。"',
+        },
+      ],
+    },
+
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
     <div class="ov-hero-label">第 7 章 第 5 课 · 已完成</div>
@@ -655,7 +830,42 @@ export const grammarCardsP7: GrammarCard[] = [
   <div style="font-size:16px;color:#5a4640">写作、正式表达 → 用 -지만（对比明确）</div>
   <div style="margin-top:4px;font-size:16px;color:#5a4640">日常聊天、委婉表达 → 用 -는데（语气轻）</div>
 </div>
-<div class="reminder-box">两个分句主语可以不同：저는 좋지만 친구는 싫어해요（我喜欢但朋友不喜欢）。-지만 不限制主语是否相同。</div>`,
+<div class="reminder-box">两个分句主语可以不同：저는 좋지만 친구는 싫어해요（我喜欢但朋友不喜欢）。-지만 不限制主语是否相同。</div>`,    specialQuiz: {
+      type: 'fill',
+      title: '选择正确的转折/背景连接词',
+      body: '根据前后句关系选择 -지만 或 -는/은/ㄴ데。',
+      questions: [
+        {
+          pre: '한국어는 어렵',
+          post: '재미있어요.',
+          options: ["지만","은데","아서"],
+          answer: 0,
+          explanation: '-지만 表示明确转折："韩语虽然难，但有趣。"',
+        },
+        {
+          pre: '밖에 비가 오',
+          post: '우산을 가져가세요.',
+          options: ["는데","지만","면"],
+          answer: 0,
+          explanation: '-는데 提供背景信息："外面在下雨，请带伞。"',
+        },
+        {
+          pre: '값은 비싸',
+          post: '품질이 좋아요.',
+          options: ["지만","ㄴ데","서"],
+          answer: 0,
+          explanation: '-지만 转折："价格虽然贵，但质量好。"',
+        },
+        {
+          pre: '생각해 봤',
+          post: '좋은 생각인 것 같아요.',
+          options: ["는데","지만","어서"],
+          answer: 0,
+          explanation: '-는데 提供背景："我想了想，觉得是个好主意。"',
+        },
+      ],
+    },
+
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
     <div class="ov-hero-label">第 7 章 第 6 课 · 已完成</div>
@@ -776,7 +986,42 @@ export const grammarCardsP7: GrammarCard[] = [
   <div style="margin-top:4px;font-size:16px;color:#5a4640">② 词性：-느라고 只接动词，形容词不能用</div>
   <div style="margin-top:4px;font-size:16px;color:#5a4640">③ 主语：-느라고 前后句主语必须相同</div>
 </div>
-<div class="reminder-box">피곤하느라고 ✗（피곤하다 是形容词）→ 피곤하니까 ✓。먹으느라고 ✗ → 먹느라고 ✓（느라고 直接加词干，不加 으）。</div>`,
+<div class="reminder-box">피곤하느라고 ✗（피곤하다 是形容词）→ 피곤하니까 ✓。먹으느라고 ✗ → 먹느라고 ✓（느라고 直接加词干，不加 으）。</div>`,    specialQuiz: {
+      type: 'fill',
+      title: '选择正确的原因表达',
+      body: '根据句意选择 -(으)니까 或 -느라고。',
+      questions: [
+        {
+          pre: '날씨가 추우',
+          post: '코트를 입으세요.',
+          options: ["니까","느라고","면"],
+          answer: 0,
+          explanation: '-(으)니까 表原因/命令依据："天气冷，请穿大衣。"',
+        },
+        {
+          pre: '시험 공부하',
+          post: '잠을 못 잤어요.',
+          options: ["느라고","니까","면"],
+          answer: 0,
+          explanation: '-느라고 表示"因为忙于……（导致负面结果）"：因为忙着复习考试，没睡好。',
+        },
+        {
+          pre: '배가 고프',
+          post: '먹으러 가요.',
+          options: ["니까","느라고","면서"],
+          answer: 0,
+          explanation: '-(으)니까 原因："肚子饿了，去吃饭吧。"',
+        },
+        {
+          pre: '아침에 늦잠을 자',
+          post: '지각했어요.',
+          options: ["느라고","니까","서"],
+          answer: 0,
+          explanation: '-느라고 表示"因为做……导致"：因为早上睡懒觉，迟到了。',
+        },
+      ],
+    },
+
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
     <div class="ov-hero-label">第 7 章 第 7 课 · 已完成</div>
@@ -896,7 +1141,42 @@ export const grammarCardsP7: GrammarCard[] = [
   <div style="font-size:16px;color:#5a4640">-거든요 常与 사실（其实）搭配，带有"我来告诉你一个你可能不知道的理由"的语感。</div>
   <div style="margin-top:4px;font-size:16px;color:#5a4640">사실 저 그 사람 알거든요. → "其实我认识那个人，（所以我知道……）"</div>
 </div>
-<div class="reminder-box">때문에 需要前有名词或 -기：때문에 가요 ✗ → 그것 때문에 가요 ✓。-거든요 不能后接命令句，需换成 -(으)니까。</div>`,
+<div class="reminder-box">때문에 需要前有名词或 -기：때문에 가요 ✗ → 그것 때문에 가요 ✓。-거든요 不能后接命令句，需换成 -(으)니까。</div>`,    specialQuiz: {
+      type: 'fill',
+      title: '选择正确的原因/说明表达',
+      body: '根据句意选择 때문에 或 -거든요。',
+      questions: [
+        {
+          pre: '비',
+          post: '소풍이 취소됐어요.',
+          options: ["때문에","거든요","라서"],
+          answer: 0,
+          explanation: 'N 때문에 = "因为……"：因为下雨，郊游取消了。',
+        },
+        {
+          pre: '왜 한국어를 공부해요? — 케이팝을 좋아하',
+          post: '.',
+          options: ["거든요","니까요","때문이에요"],
+          answer: 0,
+          explanation: '-거든요 说明原因（句末）："为什么学韩语？——因为我喜欢K-pop啊。"',
+        },
+        {
+          pre: '감기',
+          post: '학교에 못 갔어요.',
+          options: ["때문에","거든요","라서"],
+          answer: 0,
+          explanation: 'N 때문에 = "因为感冒没去学校。"',
+        },
+        {
+          pre: '시간이 없어요. 내일 시험이',
+          post: '.',
+          options: ["있거든요","있으니까요","있어서요"],
+          answer: 0,
+          explanation: '-거든요 句末说明原因："没时间。因为明天有考试啊。"',
+        },
+      ],
+    },
+
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
     <div class="ov-hero-label">第 7 章 第 8 课 · 已完成</div>

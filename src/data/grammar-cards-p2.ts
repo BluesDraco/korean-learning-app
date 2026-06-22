@@ -490,7 +490,7 @@ export const grammarCardsP2: GrammarCard[] = [
   {
     id: 'card-p2-l03',
     partNumber: 2,
-    lessonNumber: 4,
+    lessonNumber: 3,
     title: '-ㅂ시다/읍시다, -(으)세요',
     whatItDoes: '邀请别人一起做，或礼貌请求',
     whatItDoesBody: '-ㅂ시다/읍시다 是"我们一起……吧"，-(으)세요 是礼貌地请对方做某事。\n和中文类比：\nㅂ시다 ≈"咱们……吧"（说话人也参与），세요 ≈"请您……"（只请对方做）。',
@@ -641,7 +641,7 @@ export const grammarCardsP2: GrammarCard[] = [
   <div class="tok-row" style="margin-bottom:6px"><span class="tok t-v">압시다</span><span style="font-size:16px;color:#89756e">知道吧（알다 → ㄹ脱落）</span></div>
   <div class="tok-row"><span class="tok t-v">만듭시다</span><span style="font-size:16px;color:#89756e">做吧（만들다 → ㄹ脱落）</span></div>
 </div>
-<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">이/가 와 지시사 위치</div><div style="font-size:16px;color:#5a4640">이/그/저 は 명사 앞에，이/가 는 명사 뒤에 붙는다。</div><div style="margin-top:4px;font-size:16px;color:#5a4640">이 책이 좋아요 → 이（指示词）在前，이（助词）在后，看位置区分。</div></div>
+<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">이/가 与指示词位置</div><div style="font-size:16px;color:#5a4640">이/그/저 在名词前，이/가 在名词后。</div><div style="margin-top:4px;font-size:16px;color:#5a4640">이 책이 좋아요 → 이（指示词）在前，이（助词）在后，看位置区分。</div></div>
 <div class="reminder-box">갑시다（我们一起去）≠ 가세요（请您去）——搞混会造成语气误会。</div>`,
     compareLabel: '一起 vs 请您 vs 正式请',
     quickTable: {
@@ -736,7 +736,7 @@ export const grammarCardsP2: GrammarCard[] = [
   {
     id: 'card-p2-l04',
     partNumber: 2,
-    lessonNumber: 5,
+    lessonNumber: 4,
     title: '数词，量词',
     whatItDoes: '数东西、点餐、报人数',
     whatItDoesBody: '韩语数字有两套：\n固有数词（하나/둘…）配个/人/杯，汉字数词（일/이/삼…）配钱/日期/电话。\n中文只有一套数字，韩语有两套是因为历史上借用了汉字数词，但保留了固有词用于数实物。',
@@ -977,7 +977,7 @@ export const grammarCardsP2: GrammarCard[] = [
   {
     id: 'card-p2-l05',
     partNumber: 2,
-    lessonNumber: 7,
+    lessonNumber: 5,
     title: '의, 도, 만',
     whatItDoes: '说"的""也""只"',
     whatItDoesBody: '三个小助词各有一招：\n의 标所属，도 加"也"，만 限制"只有"。\n这三个助词都贴在名词后面，但功能完全不同，类似中文的"的/也/只"认准功能，用法就清楚了。',
@@ -1072,7 +1072,7 @@ export const grammarCardsP2: GrammarCard[] = [
       { icon: '🏠', context: '家里', ko: '집에 물만 있어요. 장 보러 가야 해요.', zh: '家里只有水了，得去买菜。' },
     ],
     mistakes: [
-      { wrong: '저의 = 제（一律替换）', correct: '두 표현 모두 사용 가능', note: '저의 和 제 都对，제 在口语更自然，저의 更书面正式。' },
+      { wrong: '제의 친구예요', correct: '제 친구예요', note: '제 已包含 의 的意思，不要再加 의。저의→제 是自然缩合，口语多用 제，正式书写可用 저의。' },
       { wrong: '저는도 좋아해요', correct: '저도 좋아해요', note: '도 替换 은/는，不要叠用：저는도 × → 저도 ✓。' },
       { wrong: '커피를만 마셔요', correct: '커피만 마셔요', note: '만 替换 을/를，不要叠用：커피를만 × → 커피만 ✓。' },
       { wrong: '저만도 알아요', correct: '저만 알아요', note: '도 和 만 不同时用于同一成分，意思会混乱。' },
@@ -1219,7 +1219,7 @@ export const grammarCardsP2: GrammarCard[] = [
   {
     id: 'card-p2-l06',
     partNumber: 2,
-    lessonNumber: 8,
+    lessonNumber: 6,
     title: '안, -지 않다, 그리고, 그렇지만',
     whatItDoes: '说"不"，再用"但是"连句',
     whatItDoesBody: '안 是最简单的否定，-지 않다 更完整；\n그리고 连接补充信息，그렇지만 连接转折。\n这节课把"否定"和"连词"合在一起，是因为你一旦能说否定句，就需要连词来组合前后信息了。\n中文"不去"直接在动词前加"不"，韩语 안 位置相同，但 하다 动词需拆开：\n공부 안 해요（不是 안 공부해요）。',
@@ -1361,7 +1361,6 @@ export const grammarCardsP2: GrammarCard[] = [
   <div class="tok-row" style="margin-bottom:6px"><span class="tok t-s">그리고</span><span style="font-size:16px;color:#89756e">而且/然后（顺接补充）</span></div>
   <div class="tok-row"><span class="tok t-v">그렇지만</span><span style="font-size:16px;color:#89756e">但是/不过（转折对比）</span></div>
 </div>
-<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">시간 읽기 핵심</div><div style="font-size:16px;color:#5a4640">「几点」用固有数词：한 시/두 시/세 시……열두 시。</div><div style="margin-top:4px;font-size:16px;color:#5a4640">「几分」用汉字数词：십 분/이십 분/삼십 분（=반）。두 시 삼십 분 = 두 시 반（两点半）。</div></div>
 <div class="reminder-box">그리고/그렇지만 放第二句句首，前句用句号结尾：맛있어요. 그렇지만 비싸요.</div>`,
     compareLabel: '안 vs -지 않아요',
     quickTable: {
@@ -1450,7 +1449,7 @@ export const grammarCardsP2: GrammarCard[] = [
   {
     id: 'card-p2-l07',
     partNumber: 2,
-    lessonNumber: 3,
+    lessonNumber: 7,
     title: '이/가, 冠词 이, 그, 저',
     whatItDoes: '指出"这个/那个"，标出主语',
     whatItDoesBody: '이/가 标记主语或引入新信息；\n이・그・저 是指示词，放名词前表示"这个/那个/远处那个"。\n注意：\n이/가 是P1已学过的主格助词，这节课重点是把它和指示词结合用，同时理解"引入新信息"这个功能。\n中文"这个/那个"不按距离三分，韩语的 이/그/저 严格区分说话人、听话人、两者皆远三种距离。',
@@ -1691,7 +1690,7 @@ export const grammarCardsP2: GrammarCard[] = [
   {
     id: 'card-p2-l08',
     partNumber: 2,
-    lessonNumber: 6,
+    lessonNumber: 8,
     title: '부터…까지, 时间表示法',
     whatItDoes: '说从几点到几点、从哪到哪',
     whatItDoesBody: '부터 表示起点"从"，까지 表示终点"到"，时间说法：\n시간은 固有数词，분은 汉字数词。\n这节课把P2-L04学的数词直接用到时间表达上，同时学会说"从……到……"的范围句型。\n中文"从三点到五点"结构和韩语相同，但韩语"小时"用固有数词、"分钟"用汉字数词，两套混用是中文没有的难点。',

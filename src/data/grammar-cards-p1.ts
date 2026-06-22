@@ -153,6 +153,7 @@ export const grammarCardsP1: GrammarCard[] = [
         { options: ['저는 학교에 갑니다', '저는 갑니다 학교에'], answer: 0, explanation: '갑니다（去）是动词，必须放句末，학교에（去学校）放在动词前面。' },
         { options: ['저는 밥을 먹어요', '저는 먹어요 밥을'], answer: 0, explanation: '먹어요（吃）是动词，必须放句末，밥을（饭）是宾语放在动词前面。' },
         { options: ['책이 있어요', '있어요 책이'], answer: 0, explanation: '있어요 表示"有/存在"，也是谓语，同样要放在句末。' },
+        { options: ['오늘 저는 학교에 가요', '가요 오늘 저는 학교에'], answer: 0, explanation: '谓语 가요 必须放句末。"가요 오늘 저는 학교에" 把动词放在了句首，违反了韩语 SOV 语序的铁则。' },
       ],
     },
     compareHtml: `<div class="card-title">韩语语序 vs 中文语序</div>
@@ -1184,6 +1185,7 @@ export const grammarCardsP1: GrammarCard[] = [
         { options: ['오늘 공부해요', '오늘에 공부해요'], answer: 0, explanation: '오늘/내일/어제 等词不加 에。' },
         { options: ['학교에서 공부해요', '학교에 공부해요'], answer: 0, explanation: '动作发生的场所用 에서。' },
         { options: ['집에 가요', '집에서 가요'], answer: 0, explanation: '가다 等方向动词用 에。' },
+        { options: ['친구가 집에 있어요', '친구가 집에서 있어요'], answer: 0, explanation: '있다/없다 表示存在，前面永远用 에，不用 에서。' },
       ],
     },
     linkedGrammarIds: ['g4'],
@@ -1960,7 +1962,18 @@ export const grammarCardsP1: GrammarCard[] = [
         ['듣다 听', { ko: '듣고 있습니다', zh: '正在听（正式）' }, { ko: '듣고 있어요', zh: '正在听（日常）' }, '正在听'],
       ],
     },
-    linkedGrammarIds: ['g49'],
+    linkedGrammarIds: ['g49'],    specialQuiz: {
+      type: 'judge',
+      title: '判断对错：-고 있어요 进行时',
+      body: '选出使用 -고 있어요 正确的句子。',
+      questions: [
+        { options: ['지금 한국어를 공부하고 있어요', '지금 한국어를 공부해고 있어요'], answer: 0, explanation: '공부하다→공부하고 있어요。하다 动词加 -고 时用 하고，不是 해고。' },
+        { options: ['친구를 기다리고 있어요', '친구를 기대리고 있어요'], answer: 0, explanation: '기다리다→기다리고 있어요（正在等朋友）。不是 기대리다。' },
+        { options: ['이 노래가 좋고 있어요', '이 노래가 좋아요'], answer: 1, explanation: '形容词不能用 -고 있어요。좋다 是形容词，直接说 좋아요。' },
+        { options: ['음악을 듣고 있어요', '음악을 들고 있어요'], answer: 0, explanation: '듣다→듣고 있어요（正在听）。들고 있어요 是"拿着"。' },
+      ],
+    },
+
     overviewHtml: `<div class="overview">
     <div class="badge">第10课</div>
     <div class="ov-title">进行时 -고 있어요</div>

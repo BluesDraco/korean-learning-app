@@ -2583,7 +2583,7 @@ export const grammarCards: GrammarCard[] = [
   {
     id: 'card-p2-l03',
     partNumber: 2,
-    lessonNumber: 4,
+    lessonNumber: 3,
     title: '-ㅂ시다/읍시다, -(으)세요',
     whatItDoes: '邀请别人一起做，或礼貌请求',
     whatItDoesBody: '-ㅂ시다/읍시다 是"我们一起……吧"，-(으)세요 是礼貌地请对方做某事。\n和中文类比：\nㅂ시다 ≈"咱们……吧"（说话人也参与），세요 ≈"请您……"（只请对方做）。',
@@ -2828,7 +2828,7 @@ export const grammarCards: GrammarCard[] = [
   {
     id: 'card-p2-l04',
     partNumber: 2,
-    lessonNumber: 5,
+    lessonNumber: 4,
     title: '数词，量词',
     whatItDoes: '数东西、点餐、报人数',
     whatItDoesBody: '韩语数字有两套：\n固有数词（하나/둘…）配个/人/杯，汉字数词（일/이/삼…）配钱/日期/电话。\n中文只有一套数字，韩语有两套是因为历史上借用了汉字数词，但保留了固有词用于数实物。',
@@ -3069,7 +3069,7 @@ export const grammarCards: GrammarCard[] = [
   {
     id: 'card-p2-l05',
     partNumber: 2,
-    lessonNumber: 7,
+    lessonNumber: 5,
     title: '의, 도, 만',
     whatItDoes: '说"的""也""只"',
     whatItDoesBody: '三个小助词各有一招：\n의 标所属，도 加"也"，만 限制"只有"。\n这三个助词都贴在名词后面，但功能完全不同，类似中文的"的/也/只"认准功能，用法就清楚了。',
@@ -3311,7 +3311,7 @@ export const grammarCards: GrammarCard[] = [
   {
     id: 'card-p2-l06',
     partNumber: 2,
-    lessonNumber: 8,
+    lessonNumber: 6,
     title: '안, -지 않다, 그리고, 그렇지만',
     whatItDoes: '说"不"，再用"但是"连句',
     whatItDoesBody: '안 是最简单的否定，-지 않다 更完整；\n그리고 连接补充信息，그렇지만 连接转折。\n这节课把"否定"和"连词"合在一起，是因为你一旦能说否定句，就需要连词来组合前后信息了。\n中文"不去"直接在动词前加"不"，韩语 안 位置相同，但 하다 动词需拆开：\n공부 안 해요（不是 안 공부해요）。',
@@ -3541,7 +3541,7 @@ export const grammarCards: GrammarCard[] = [
   {
     id: 'card-p2-l07',
     partNumber: 2,
-    lessonNumber: 3,
+    lessonNumber: 7,
     title: '이/가, 冠词 이, 그, 저',
     whatItDoes: '指出"这个/那个"，标出主语',
     whatItDoesBody: '이/가 标记主语或引入新信息；\n이・그・저 是指示词，放名词前表示"这个/那个/远处那个"。\n注意：\n이/가 是P1已学过的主格助词，这节课重点是把它和指示词结合用，同时理解"引入新信息"这个功能。\n中文"这个/那个"不按距离三分，韩语的 이/그/저 严格区分说话人、听话人、两者皆远三种距离。',
@@ -3782,7 +3782,7 @@ export const grammarCards: GrammarCard[] = [
   {
     id: 'card-p2-l08',
     partNumber: 2,
-    lessonNumber: 6,
+    lessonNumber: 8,
     title: '부터…까지, 时间表示法',
     whatItDoes: '说从几点到几点、从哪到哪',
     whatItDoesBody: '부터 表示起点"从"，까지 表示终点"到"，时间说法：\n시간은 固有数词，분은 汉字数词。\n这节课把P2-L04学的数词直接用到时间表达上，同时学会说"从……到……"的范围句型。\n中文"从三点到五点"结构和韩语相同，但韩语"小时"用固有数词、"分钟"用汉字数词，两套混用是中文没有的难点。',
@@ -4916,7 +4916,7 @@ export const grammarCards: GrammarCard[] = [
   {
     id: 'card-p3-l02',
     partNumber: 3,
-    lessonNumber: 5,
+    lessonNumber: 2,
     title: '-았었/었었/였었-',
     whatItDoes: '说以前曾经……现在不一样了',
     whatItDoesBody: '-았었/었었/였었어요 表达过去曾经有过的经历或状态，常带有"现在可能已经不同了"的感觉，比普通过去时多一层回忆感。\n中文里没有完全对应的形式，可以理解为"曾经……（但现在未必如此）"。',
@@ -5259,7 +5259,7 @@ export const grammarCards: GrammarCard[] = [
   {
     id: 'card-p3-l04',
     partNumber: 3,
-    lessonNumber: 10,
+    lessonNumber: 4,
     title: '"ㄹ"不规则音变',
     whatItDoes: '认识ㄹ收音词的特殊变形规律',
     whatItDoesBody: 'ㄹ 不规则不是永远变化，而是遇到 ㄴ/ㅂ/ㅅ 开头的语尾时 ㄹ 脱落。\n接 -아요/어요、-고 时保留。\n常见词：\n살다, 알다, 만들다, 놀다。\n中文没有类似规则，记住"遇 ㄴ/ㅂ/ㅅ 就脱落"这一条就够了。',
@@ -5439,7 +5439,7 @@ export const grammarCards: GrammarCard[] = [
   {
     id: 'card-p3-l05',
     partNumber: 3,
-    lessonNumber: 4,
+    lessonNumber: 5,
     title: '-을/ㄹ래요, -겠-',
     whatItDoes: '说"好的我知道了"和做选择',
     whatItDoesBody: '-을/ㄹ래요 表达"我要……/要不要……"，比 -고 싶어요 更直接；\n-겠- 表达意志、推测或礼貌，最常见固定表达是 알겠어요（明白了）。\n-을/ㄹ래요 类似中文口语里"我要……"，-겠- 类似"我会/我来……"。',
@@ -5606,7 +5606,7 @@ export const grammarCards: GrammarCard[] = [
   {
     id: 'card-p3-l06',
     partNumber: 3,
-    lessonNumber: 2,
+    lessonNumber: 6,
     title: '무슨, 어느, 어떤',
     whatItDoes: '问什么、哪个、什么样的',
     whatItDoesBody: '三个疑问词都可译成"什么/哪"，但用法不同：\n무슨 问名称内容，어느 从选项中选哪个，어떤 问性质特点。\n中文"什么歌""哪首歌""什么风格的歌"对应的就是这三个词。',
@@ -5768,7 +5768,7 @@ export const grammarCards: GrammarCard[] = [
   {
     id: 'card-p3-l07',
     partNumber: 3,
-    lessonNumber: 6,
+    lessonNumber: 7,
     title: '그렇지만, 그런데',
     whatItDoes: '说"但是/不过"，转折话题',
     whatItDoesBody: '그렇지만 是明确转折"但是"；\n그런데 语气更口语，可以是轻转折"不过"，也可以用来推进话题或引入新信息。\n这节课和P2的 그렇지만 有重叠重点是新增 그런데，弄清楚两者的区别。\n中文"但是"和"不过"的区别类似：\n그렇지만 ≈ 但是（正式转折），그런데 ≈ 不过（口语，还能转换话题）。',
@@ -5932,7 +5932,7 @@ export const grammarCards: GrammarCard[] = [
   {
     id: 'card-p3-l08',
     partNumber: 3,
-    lessonNumber: 7,
+    lessonNumber: 8,
     title: '그래서, 그러니까',
     whatItDoes: '说"所以/因此"，连接原因结果',
     whatItDoesBody: '그래서 连接原因和自然结果；\n그러니까 也表示所以/因此，口语中常带总结、提醒或劝告的语气。\n两个都对应中文"所以"，区别在 그러니까 更像"所以说……"，语气更强调。',
@@ -6100,7 +6100,7 @@ export const grammarCards: GrammarCard[] = [
   {
     id: 'card-p3-l09',
     partNumber: 3,
-    lessonNumber: 8,
+    lessonNumber: 9,
     title: '-(으)러 가다/오다, -을/ㄹ까요?',
     whatItDoes: '说"去做某事"，以及提议询问',
     whatItDoesBody: '-(으)러 가다/오다 表达"去/来做某事"的目的；\n-을/ㄹ까요? 用于提议或询问意见，表示"要不要……？"。\n中文"去吃饭"直接说，韩语需要目的助词 -(으)러 连接动词和去/来。',
@@ -6272,7 +6272,7 @@ export const grammarCards: GrammarCard[] = [
   {
     id: 'card-p3-l10',
     partNumber: 3,
-    lessonNumber: 9,
+    lessonNumber: 10,
     title: '-은/ㄴ 후에, -기 전에',
     whatItDoes: '说"做完之后"和"做之前"',
     whatItDoesBody: '-은/ㄴ 후에 表达"做完……之后"；\n-기 전에 表达"做……之前"。\n两者合用可以清晰表达时间顺序，适合写学习计划、日程和日记。\n注意：\n-기 전에 不管有没有收音都直接加 기，比 -은/ㄴ 후에 更简单。\n中文"之后/之前"直接放动词后面，韩语需要正确的词尾变形，尤其 -은/ㄴ 후에 的收音判断是中文没有的难点。',
@@ -6635,7 +6635,7 @@ export const grammarCards: GrammarCard[] = [
   {
     id: 'card-p4-l02',
     partNumber: 4,
-    lessonNumber: 3,
+    lessonNumber: 2,
     title: '-아/어/여야 하다/되다, -지 말다',
     whatItDoes: '说必须做，或请别人别做',
     whatItDoesBody: '-아/어/여야 해요 / 돼요 表达"必须、应该、得……"；\n-지 마세요 表达"请不要……"。\n-아/어/여야 해요 对应中文"得……/必须……"，-지 마세요 对应"请不要……"，两者都是日常非常高频的表达。',
@@ -6788,7 +6788,7 @@ export const grammarCards: GrammarCard[] = [
   {
     id: 'card-p4-l03',
     partNumber: 4,
-    lessonNumber: 4,
+    lessonNumber: 3,
     title: '걸리다, -는 데(에) + 돈 + 들다',
     whatItDoes: '说花了多长时间、多少钱',
     whatItDoesBody: '걸려요 表示花费时间；\n-는 데 돈이 들어요 表示做某事花钱。\n和中文"花了三十分钟""很花钱"对应韩语要用专门的动词 걸리다（时间）和 들다（金钱），不能混用。',
@@ -6952,7 +6952,7 @@ export const grammarCards: GrammarCard[] = [
   {
     id: 'card-p4-l04',
     partNumber: 4,
-    lessonNumber: 5,
+    lessonNumber: 4,
     title: '-은/ㄴ/는데요',
     whatItDoes: '说话时加自然的铺垫语气',
     whatItDoesBody: '-은/ㄴ/는데요 是口语常用的铺垫表达，带有"是这样，不过……"的语气，用于转折、说明、引出后文。\n中文没有完全对应的表达它更像是一种语气词，让句子听起来更柔和、更自然，不那么直接。',
@@ -7087,7 +7087,7 @@ export const grammarCards: GrammarCard[] = [
       { wrong: '좋는데요.', correct: '좋은데요.', note: '形容词 좋다 有收音 ㅎ，接 -은데요，不是 -는데요' },
       { wrong: '학생는데요.', correct: '학생인데요.', note: '名词后要用 인데요，不是直接加 는데요' },
       { wrong: '어렵은데요.', correct: '어려운데요.', note: 'ㅂ 不规则：어렵다 → 어려운데요（ㅂ→우）' },
-      { wrong: '只翻成"但是"', correct: '根据上下文判断铺垫/转折/说明', note: '-는데요 不等于"但是"，更多是铺垫语气，含义取决于上下文' },
+      { wrong: '날씨가 좋은데요. 하지만 저는 집에 있을 거예요.', correct: '날씨가 좋은데요. 저는 집에 있을 거예요.', note: '-는데요 不等于"但是"，它是铺垫语气、自然连接，不需再用 하지만/그렇지만 转折。' },
     ],
     quickTable: {
       title: '接续规则表',
@@ -7113,7 +7113,7 @@ export const grammarCards: GrammarCard[] = [
   {
     id: 'card-p4-l05',
     partNumber: 4,
-    lessonNumber: 6,
+    lessonNumber: 5,
     title: '체언 서술형, -는 것, -게',
     whatItDoes: '把动作变名词，把形容词变副词',
     whatItDoesBody: '名词+이다 做谓语；\n动词 + -는 것 把动作名词化；\n形容词 + -게 变成副词，表示方式。\n这节课是韩语表达的"变形工具"让动词能当主语用，让形容词能修饰动作。\n中文动词可以直接当主语（"学习很重要"），韩语必须用 -는 것 把动词名词化才能放在主语或宾语位置。',
@@ -7269,7 +7269,7 @@ export const grammarCards: GrammarCard[] = [
   {
     id: 'card-p4-l06',
     partNumber: 4,
-    lessonNumber: 7,
+    lessonNumber: 6,
     title: '보다, 에 비하다',
     whatItDoes: '说"比……更……"和"和……相比"',
     whatItDoesBody: 'N보다 表示"比……"；\n에 비해서 表示"和……相比"（更书面）。\n和中文一样，韩语比较句也是"A比B更……"的结构，보다 相当于中文的"比"，直接贴在比较基准后面。',
@@ -7402,7 +7402,7 @@ export const grammarCards: GrammarCard[] = [
     ],
     mistakes: [
       { wrong: '영어는 한국어보다 어려워요. (想说韩语比英语难)', correct: '한국어는 영어보다 어려워요.', note: '보다 接在比较基准（被比较的那个）后面，不是主语后' },
-      { wrong: '보다 쓸 때 항상 동사 "보다"라고 생각함', correct: '영어보다 어려워요（比较助词）vs 영화를 봐요（动词看）', note: '보다 有两个用法：比较助词（接名词后）和动词"看"（需要宾语）' },
+      { wrong: '한국어를 영어보다 봐요', correct: '한국어가 영어보다 어려워요', note: '보다 有两个用法：比较助词（接名词后表"比"）和动词"看"。比较时不用接를/을，直接名词+보다。' },
       { wrong: '일상 대화에서 에 비해서 남발', correct: '일상에서는 보다를, 분석/설명에서는 에 비해서를 써요.', note: '에 비해서 语气偏书面，日常对话直接用 보다 更自然' },
       { wrong: '어제보다 더 잘했어요. (忘记加时间词)', correct: '어제보다 오늘 더 잘해요.', note: '用 보다 比较时，两个比较对象要都出现在句中' },
     ],
@@ -7429,7 +7429,7 @@ export const grammarCards: GrammarCard[] = [
   {
     id: 'card-p4-l07',
     partNumber: 4,
-    lessonNumber: 8,
+    lessonNumber: 7,
     title: '(으)로',
     whatItDoes: '说用什么工具、以什么身份',
     whatItDoesBody: '(으)로 是多义助词：\n表示工具/语言、方向、身份结果。\n有收音用 으로，无收音或 ㄹ 收音用 로。\n中文"用韩语说""往右走""用信用卡付"都靠 (으)로 来表达。',
@@ -7578,7 +7578,7 @@ export const grammarCards: GrammarCard[] = [
   {
     id: 'card-p4-l08',
     partNumber: 4,
-    lessonNumber: 9,
+    lessonNumber: 8,
     title: '(이)나, -거나',
     whatItDoes: '说"或者""随便哪个""至少"',
     whatItDoesBody: '(이)나 连接名词表示"或者"；\n-거나 连接动作表示"或者做……"。\n中文"咖啡或者茶""听歌或者看剧"前者用 (이)나，后者用 -거나，按名词/动词分类就记住了。',
@@ -7738,7 +7738,7 @@ export const grammarCards: GrammarCard[] = [
   {
     id: 'card-p4-l09',
     partNumber: 4,
-    lessonNumber: 2,
+    lessonNumber: 9,
     title: '에게서, 한테서, 씨, 짜리',
     whatItDoes: '说从谁那里得到，礼貌称呼人',
     whatItDoesBody: '에게서/한테서 表示"从谁那里"；\n씨 是人名后的礼貌称呼；\n짜리 表示价格/年龄/面额属性。\n这节课三个知识点各自独立，但都是日常韩语里非常实用的细节。\n中文"从朋友那里"一个结构搞定，韩语要区分语体：\n에게서（书面）和 한테서（口语）。',
@@ -7866,7 +7866,7 @@ export const grammarCards: GrammarCard[] = [
       { wrong: '친구에게서 선물을 줘요. (想说给朋友)', correct: '친구한테 선물을 줘요.', note: '给出用 에게/한테；从那里收到用 에게서/한테서，方向相反' },
       { wrong: '선생님 씨, 안녕하세요?', correct: '선생님, 안녕하세요?', note: '씨 接人名，不接职称。선생님 本身就是称呼' },
       { wrong: '짜리 티켓을 샀어요. (没有数量)', correct: '만원짜리 티켓을 샀어요.', note: '짜리 前必须有价格/数量/年龄等信息' },
-      { wrong: '친구에게서 선물을 받아요. (口语场合)', correct: '친구한테서 선물을 받아요.', note: '口语里更常用 한테서；에게서 偏书面/正式' },
+      { wrong: '친구한테 선물을 받아요', correct: '친구한테서 선물을 받아요', note: '받다（收到）用 한테서/에게서 表示"从...收到"；한테/에게 是"给..."的方向，赠受方向相反。' },
     ],
     quickTable: {
       title: '방향 정리표',
@@ -8019,7 +8019,7 @@ export const grammarCards: GrammarCard[] = [
       { wrong: '많이 먹으세요. (对长辈)', correct: '많이 드세요.', note: '对长辈/客人 먹다 更自然用特殊敬语词 드세요' },
       { wrong: '선생님이 있으세요. (老师在)', correct: '선생님이 계세요.', note: '尊敬对象"在"用 계세요，不是 있으세요' },
       { wrong: '알으세요? (알다+으세요)', correct: '아세요?', note: 'ㄹ 收音脱落：알다→아세요' },
-      { wrong: '初级阶段就想学完整套敬语', correct: '初级先掌握高频固定表达', note: '敬语系统复杂，初级先掌握高频固定表达（앉으세요/드세요/계세요）' },
+      { wrong: '할머니가 집에 있으세요', correct: '할머니가 집에 계세요', note: '존경 대상의 "있다" 用 계시다，不是 있으시다。敬语复杂，初级先掌握高频固定表达（앉으세요/드세요/계세요）。' },
     ],
     quickTable: {
       title: '일반 → 경어 대조표',
@@ -8541,7 +8541,7 @@ export const grammarCards: GrammarCard[] = [
   {
     id: 'card-p5-l03',
     partNumber: 5,
-    lessonNumber: 4,
+    lessonNumber: 3,
     title: '-(으)려고 하다, (아마) -을/ㄹ 것이다',
     whatItDoes: '说打算做什么，大概会怎样',
     whatItDoesBody: '-(으)려고 해요 表示"打算/准备做某事"；\n아마 -을/ㄹ 거예요 表示"大概会……"的推测。\n前者是P1将来时 -을/ㄹ 거예요 的延伸将来时说"会做"，这节课的 -(으)려고 해요 强调"已有计划/意图"。\n中文"打算去"和"会去"都靠独立词区分，韩语用不同词尾直接嵌入动词末尾表达。',
@@ -8713,7 +8713,7 @@ export const grammarCards: GrammarCard[] = [
   {
     id: 'card-p5-l04',
     partNumber: 5,
-    lessonNumber: 3,
+    lessonNumber: 4,
     title: '이/가 아니다, -는 게 아니라',
     whatItDoes: '说"不是……"和"不是A而是B"',
     whatItDoesBody: '이/가 아니에요 表示"不是"；\n이/가 아니라 B예요 表示"不是A而是B"；\n-는 게 아니라 用于纠正动作。\n纠正误解、澄清事实、对比两种说法这节课的三个结构都是用来"说清楚真相"的。\n中文"不是A而是B"靠词序和独立词实现，韩语用 이/가 아니라 + B예요 的专用结构，助词选择还要看有无收音。',
@@ -9904,7 +9904,7 @@ export const grammarCards: GrammarCard[] = [
     mistakes: [
       { wrong: '공부하다가 밥을 먹어요. (平铺两件事)', correct: '공부하고 밥을 먹어요.', note: '只是顺序做两件事用 -고；-다가 要有中途变化感' },
       { wrong: '들다가 가사를 봤어요. (듣다의 다가)', correct: '듣다가 가사를 봤어요.', note: '-다가 接续时 ㄷ 不规则不触发：듣다→듣다가（不是 들다가）' },
-      { wrong: '-다가 后句没有变化（如学完继续学）', correct: '공부하다가 잠들었어요.（有变化）', note: '-다가 后句应有变化、中断、意外，不能前后完全无关' },
+      { wrong: '공부하다가 계속 공부했어요', correct: '공부하다가 잠들었어요', note: '-다가 后句应有变化、中断或意外，不能前后完全无关或单调延续。' },
       { wrong: '먹다가 공부해요. (완성 후 공부)', correct: '먹고 공부해요.（완성 후）/ 먹다가 그만뒀어요.（중단）', note: '吃完后学习用 -고；吃到一半停下才用 -다가' },
     ],
     quickTable: {
@@ -10075,7 +10075,7 @@ export const grammarCards: GrammarCard[] = [
   {
     id: 'card-p6-l01',
     partNumber: 6,
-    lessonNumber: 2,
+    lessonNumber: 1,
     title: '-을/ㄹ게요, -겠군요, -았/었/였겠군요',
     whatItDoes: '说"我来做"，也表达共情感叹',
     whatItDoesBody: '-을/ㄹ게요 表示说话人的意志或承诺，主语一般是第一人称；\n-겠군요 听到对方说的话后对可能发生的状况或感觉表示推测，常用于口语。\n和中文"我来做"很像，但韩语 -을/ㄹ게요 带有"顾虑对方、主动承担"的语气，比直接说"我做"更礼貌。',
@@ -10262,7 +10262,7 @@ export const grammarCards: GrammarCard[] = [
   {
     id: 'card-p6-l02',
     partNumber: 6,
-    lessonNumber: 3,
+    lessonNumber: 2,
     title: '-나요?, -은/ㄴ가요?, -ㅂ니다만/습니다만',
     whatItDoes: '比"吗？"更温柔的问法',
     whatItDoesBody: '-나요?/-은/ㄴ가요? 是 -아/어/여요?의 疑问形式，比直接疑问更自然柔和，常用于口语；\n-ㅂ니다만/습니다만 与 -지만 意思相同，"虽然……但是"，用于正式场合或需要讲究礼节的场合。\n中文提问"你吃了吗？"语气是中性的，韩语 -나요? 相当于加了一个轻柔的语气词，让问句听起来更体贴、不强硬。',
@@ -10455,7 +10455,7 @@ export const grammarCards: GrammarCard[] = [
   {
     id: 'card-p6-l03',
     partNumber: 6,
-    lessonNumber: 1,
+    lessonNumber: 3,
     title: '아직, 은요/는요',
     whatItDoes: '说"还没……"，追问"那你呢"',
     whatItDoesBody: '아직 是副词，修饰后面的句子或动词，表示"仍然（没）……，还（没）……"，常与否定表达搭配；\n은요/는요 仅用于口语，询问对方，通常与名词搭配，强调追问此名词。\n中文"还没"和 아직 안/못 几乎一一对应，但 아직도 带有"都这时候了还……"的惊讶语气，比 아직 程度更强。',
@@ -10832,7 +10832,7 @@ export const grammarCards: GrammarCard[] = [
   {
     id: 'card-p6-l05',
     partNumber: 6,
-    lessonNumber: 8,
+    lessonNumber: 5,
     title: '-(으)면 큰일이다, -아/어/여 버리다',
     whatItDoes: '说"要是……就麻烦了"，或彻底做完',
     whatItDoesBody: '-(으)면 큰일이다 常用于口语，表示"要是……的话，就麻烦了"；\n-아/어/여 버리다 用于口语，表示行为或动作完全结束，含有"一下子全做完"或"完全丢失/消耗"的语气。\n中文"完了/糟了"对应 큰일이다，但韩语更强调"假设"用 -(으)면 引出那个让人担心的情境。',
@@ -11214,7 +11214,7 @@ export const grammarCards: GrammarCard[] = [
   {
     id: 'card-p6-l07',
     partNumber: 6,
-    lessonNumber: 5,
+    lessonNumber: 7,
     title: '-는/은/ㄴ 날',
     whatItDoes: '描述特定的日子和时刻',
     whatItDoesBody: '날 是名词，表示"日子、那天"。\n动词和形容词与 날 相连时需要搭配冠词形；\n名词直接用 (의) 날。\n用于描述某个特定时间点或特定性质的日子。\n这是第五章冠词形的延伸应用你已经学过 -는/은/ㄴ 修饰名词，这节课专门把它用在 날 上，感受"描述日子"这一高频场景。\n中文"下雨的日子"直接形容词+名词，韩语要根据动词还是形容词、有无收音分别选 -는/-은/-ㄴ，规则比中文复杂。',
@@ -11417,7 +11417,7 @@ export const grammarCards: GrammarCard[] = [
   {
     id: 'card-p6-l08',
     partNumber: 6,
-    lessonNumber: 7,
+    lessonNumber: 8,
     title: '얼마/누구/어디/언제/무엇(뭐) + -(이)라고 하다, 사정이 있다',
     whatItDoes: '礼貌确认没听清的内容',
     whatItDoesBody: '얼마/누구/어디/언제/무엇(뭐) + -(이)라고 하다 表示说话人没听清对方的话或为了确认时使用，相当于汉语的"您说……来着？"；\n사정이 있다 主要用于口语，相当于"有事情，有说道，有苦衷"。\n中文"来着"这个词就对应 -(이)라고 했지요?用疑问词"定位"没听清的部分，再加 라고 하다 表示转述确认。',

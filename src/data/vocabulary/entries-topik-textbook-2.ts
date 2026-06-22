@@ -6250,7 +6250,7 @@ export const topikTextbook2Entries: WordEntry[] = [
   {
     "id": "topik-2-734",
     "korean": "고장나다",
-    "romanization": "gojangnada",
+    "romanization":"gojang nada",
     "baseForm": "고장나다",
     "partOfSpeech": "动词",
     "level": "2",
