@@ -65,7 +65,8 @@ export default function SettingsPage() {
         setSoundOn(isSoundEnabled());
         setReduceMotionState(getReduceMotion());
       } catch {
-        // db unavailable — show page without data
+        // db unavailable — set empty profile so page still renders
+        setProfile({ nickname: '', dailyGoalMinutes: 30, dailyGoalWords: 10, targetLevel: 'A1', reviewBatchSize: 20, ttsSpeed: getSpeechRate() } as any);
       } finally {
         setLoading(false);
       }
@@ -104,15 +105,15 @@ export default function SettingsPage() {
           <button onClick={() => window.history.back()} className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
             <ArrowLeft size={20} />
           </button>
-          <h1 className="text-2xl font-bold text-[var(--text-primary)]">设置</h1>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">{t('settings.title', lang)}</h1>
         </div>
         <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 text-center space-y-4">
-          <p className="text-[var(--text-secondary)]">请先登录后使用设置</p>
+          <p className="text-[var(--text-secondary)]">{lang === 'en' ? 'Please log in to access settings' : '请先登录后使用设置'}</p>
           <button
             onClick={() => { window.location.href = '/auth/login'; }}
             className="px-6 py-2 rounded-full bg-[#201815] text-white text-sm font-bold"
           >
-            去登录
+            {lang === 'en' ? 'Log in' : '去登录'}
           </button>
         </div>
       </div>
