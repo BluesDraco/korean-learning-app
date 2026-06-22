@@ -2,17 +2,30 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { MobilePageHero } from '@/components/mobile/MobilePageHero';
-import { ToriPrimaryButton } from '@/components/mobile/ToriPrimaryButton';
-import { ToriSectionHeader } from '@/components/mobile/ToriSectionHeader';
+import { BookOpen, FileText, MessageSquare, Keyboard, Sparkles } from 'lucide-react';
+import { PageHeader, Section, Card, Button } from '@/components/ui';
 import { DesktopToolsPage } from '@/components/desktop/DesktopToolsPage';
 
-const toolGrid = [
-  { label: '语法解释', desc: '句型例句', href: '/grammar', icon: '📖', color: '#e47a94' },
-  { label: '文章拆解', desc: '文章分析', href: '/reading', icon: '📄', color: '#b49ccf' },
-  { label: 'AI 场景陪练', desc: '情景对话', href: '/ai/chat', icon: '💬', color: '#b49ccf' },
-  { label: '韩文打字', desc: '键盘练习', href: '/typing', icon: '⌨️', color: '#e8a87c' },
+const TOOLS = [
+  { label: '语法解释', desc: '句型例句', href: '/grammar', Icon: BookOpen, tone: 'pink' as const },
+  { label: '文章拆解', desc: '文章分析', href: '/reading', Icon: FileText, tone: 'purple' as const },
+  { label: 'AI 场景陪练', desc: '情景对话', href: '/ai/chat', Icon: MessageSquare, tone: 'mint' as const },
+  { label: '韩文打字', desc: '键盘练习', href: '/typing', Icon: Keyboard, tone: 'peach' as const },
 ];
+
+const TONE_FG: Record<typeof TOOLS[number]['tone'], string> = {
+  pink:   'var(--color-pink-strong)',
+  purple: 'var(--color-purple-strong)',
+  mint:   'var(--color-mint-strong)',
+  peach:  'var(--color-peach-strong)',
+};
+
+const TONE_BG: Record<typeof TOOLS[number]['tone'], string> = {
+  pink:   'var(--color-pink-soft)',
+  purple: 'var(--color-purple-soft)',
+  mint:   'var(--color-mint-soft)',
+  peach:  'var(--color-peach-soft)',
+};
 
 export default function ToolsPage() {
   const [isDesktop, setIsDesktop] = useState(false);
@@ -27,45 +40,78 @@ export default function ToolsPage() {
   if (isDesktop) return <DesktopToolsPage />;
 
   return (
-    <div className="py-4 space-y-5 max-w-2xl mx-auto md:max-w-3xl">
-      <MobilePageHero
+    <div className="py-4 max-w-2xl mx-auto">
+      <PageHeader
+        eyebrow="도구"
         title="工具"
-        description="把你看到的韩文，变成可以学的内容。"
-        variant="green"
+        subtitle="把你看到的韩文，变成可以学的内容。"
+        tone="mint"
+        mascot="sit"
       />
 
-      {/* Featured card */}
-      <div className="space-y-2.5">
-        {/* Content breakdown */}
-        <div className="rounded-[28px] bg-gradient-to-br from-[#ffe4ec] to-[#fff4dc] p-5 shadow-[0_8px_24px_rgba(92,64,38,0.06)]">
-          <div className="relative z-10">
-            <p className="text-[17px] font-bold text-[#2f2a26]">内容拆解</p>
-            <p className="text-[13px] text-[#8c8177] mt-1 leading-relaxed">粘贴一句韩语，Tori 帮你翻译、拆词、解释句子。</p>
-            <div className="mt-3">
-              <Link href="/ai/analyze">
-                <ToriPrimaryButton>开始拆解</ToriPrimaryButton>
+      {/* Featured: Content breakdown */}
+      <Section spacing="normal">
+        <Card variant="hero" tone="pink" padding="lg">
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
+            <div
+              style={{
+                width: 44, height: 44, borderRadius: 'var(--radius-md)',
+                background: 'var(--color-surface-2)', display: 'flex',
+                alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                color: 'var(--color-pink-strong)',
+              }}
+              aria-hidden
+            >
+              <Sparkles size={22} strokeWidth={1.75} />
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <p style={{ fontSize: 17, fontWeight: 800, color: 'var(--color-ink-1)', margin: 0 }}>
+                内容拆解
+              </p>
+              <p style={{ fontSize: 13, color: 'var(--color-ink-3)', margin: '4px 0 14px', lineHeight: 1.5 }}>
+                粘贴一句韩语，Tori 帮你翻译、拆词、解释句子。
+              </p>
+              <Link href="/ai/analyze" style={{ textDecoration: 'none' }}>
+                <Button variant="primary" tone="black" size="md">开始拆解</Button>
               </Link>
             </div>
           </div>
-        </div>
-      </div>
+        </Card>
+      </Section>
 
       {/* Tool grid */}
-      <div>
-        <ToriSectionHeader title="全部工具" className="mb-2.5" />
-        <div className="grid grid-cols-2 gap-2.5">
-          {toolGrid.map((tool) => (
-            <Link key={tool.href} href={tool.href} className="block rounded-2xl bg-[var(--bg-card)] border border-[var(--border-color)] p-3.5 hover:bg-[var(--bg-card-hover)] transition-colors">
-              <div className="w-11 h-11 rounded-2xl flex items-center justify-center text-xl mb-2.5" style={{ background: `${tool.color}18` }}>
-                {tool.icon}
+      <Section title="全部工具" spacing="normal">
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+          {TOOLS.map(({ label, desc, href, Icon, tone }) => (
+            <Card
+              key={href}
+              as="a"
+              href={href}
+              variant="default"
+              padding="md"
+              interactive
+            >
+              <div
+                style={{
+                  width: 40, height: 40, borderRadius: 'var(--radius-md)',
+                  background: TONE_BG[tone], color: TONE_FG[tone],
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  marginBottom: 10,
+                }}
+                aria-hidden
+              >
+                <Icon size={20} strokeWidth={1.75} />
               </div>
-              <p className="text-sm font-bold text-[var(--text-primary)]">{tool.label}</p>
-              <p className="text-xs text-[var(--text-muted)] mt-0.5">{tool.desc}</p>
-            </Link>
+              <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>
+                {label}
+              </p>
+              <p style={{ fontSize: 12, color: 'var(--color-ink-3)', margin: '2px 0 0' }}>
+                {desc}
+              </p>
+            </Card>
           ))}
         </div>
-      </div>
-
+      </Section>
     </div>
   );
 }

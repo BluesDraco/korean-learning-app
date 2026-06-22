@@ -11,13 +11,11 @@ import { t } from '@/lib/i18n';
 import { buildDailyPlanFromApi, type DailyPlan } from '@/lib/daily/buildDailyPlan';
 import { getProfile } from '@/lib/gamification';
 import Onboarding from '@/components/Onboarding';
-import { ToriHeroCard } from '@/components/mobile/ToriHeroCard';
-import { ToriMiniCard } from '@/components/mobile/ToriMiniCard';
-import { ToriCard } from '@/components/mobile/ToriCard';
-import { ToriSectionHeader } from '@/components/mobile/ToriSectionHeader';
 import { DailyShell } from '@/components/DailyShell';
 import { DesktopDailyPage } from '@/components/desktop/DesktopDailyPage';
-const TASK_ICONS: Record<string, React.ComponentType<any>> = {
+import { PageHeader, Section, Card, Button, Modal } from '@/components/ui';
+
+const TASK_ICONS: Record<string, React.ComponentType<{ size?: number; color?: string; style?: React.CSSProperties }>> = {
   course: GraduationCap,
   srsReview: BookOpen,
   pronunciation: Mic,
@@ -25,12 +23,21 @@ const TASK_ICONS: Record<string, React.ComponentType<any>> = {
   output: Edit3,
 };
 
-const TASK_COLORS: Record<string, string> = {
-  course: '#b49ccf',
-  srsReview: '#e8a87c',
-  pronunciation: '#e47a94',
-  reading: '#81b5a1',
-  output: '#d4a853',
+const TASK_TONE: Record<string, 'pink' | 'mint' | 'peach' | 'purple'> = {
+  course: 'purple',
+  srsReview: 'peach',
+  pronunciation: 'pink',
+  reading: 'mint',
+  output: 'peach',
+};
+
+const TONE_BG: Record<'pink' | 'mint' | 'peach' | 'purple', string> = {
+  pink: 'var(--color-pink-soft)', mint: 'var(--color-mint-soft)',
+  peach: 'var(--color-peach-soft)', purple: 'var(--color-purple-soft)',
+};
+const TONE_FG: Record<'pink' | 'mint' | 'peach' | 'purple', string> = {
+  pink: 'var(--color-pink-strong)', mint: 'var(--color-mint-strong)',
+  peach: 'var(--color-peach-strong)', purple: 'var(--color-purple-strong)',
 };
 
 export default function DailyPage() {
@@ -62,7 +69,7 @@ export default function DailyPage() {
         buildDailyPlanFromApi().catch(() => null),
         getProfile().catch(() => null),
       ]);
-      if (gen !== loadGenRef.current) return; // 旧轮，丢弃
+      if (gen !== loadGenRef.current) return;
       setPlan(p);
       if (profile) setStreak(profile.streak ?? 0);
       if (currentUser && !currentUser.onboardingCompleted) {
@@ -79,17 +86,14 @@ export default function DailyPage() {
     }
   }, []);
 
-  // Start loading immediately on mount
   useEffect(() => {
     load();
-    // iOS freezes setTimeout when tab goes to background — restart load on resume
     const onVisible = () => { if (document.visibilityState === 'visible') load(); };
     document.addEventListener('visibilitychange', onVisible);
     return () => document.removeEventListener('visibilitychange', onVisible);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Re-load when user changes (login/logout)
   const prevUserRef = useRef<typeof user>(undefined);
   useEffect(() => {
     if (prevUserRef.current === undefined) { prevUserRef.current = user; return; }
@@ -99,7 +103,6 @@ export default function DailyPage() {
     }
   }, [user, load]);
 
-  // 拉取未读私信，有新消息弹窗提示一次
   useEffect(() => {
     if (!user) return;
     const dismissed = sessionStorage.getItem('msg_dismissed');
@@ -109,7 +112,7 @@ export default function DailyPage() {
     fetch('/api/announcements', { signal: controller.signal })
       .then(r => r.json())
       .then(data => {
-        const msgs: any[] = data.announcements || [];
+        const msgs: Array<{ id: string; read: boolean; type: string; title: string; content: string }> = data.announcements || [];
         const unread = msgs.find(m => !m.read && m.type === 'private_message');
         if (unread) setUnreadMsg({ title: unread.title, content: unread.content, id: unread.id });
       })
@@ -133,10 +136,10 @@ export default function DailyPage() {
 
   if (!onboardingChecked) {
     return (
-      <div className="py-4 space-y-4 max-w-2xl mx-auto">
+      <div className="py-4 max-w-2xl mx-auto">
         <HeroSection />
         <div className="flex items-center justify-center py-20">
-          <Loader2 size={28} className="animate-spin text-[var(--text-muted)]" />
+          <Loader2 size={28} className="animate-spin" color="var(--color-ink-3)" />
         </div>
       </div>
     );
@@ -146,10 +149,10 @@ export default function DailyPage() {
 
   if (planLoading) {
     return (
-      <div className="py-4 space-y-4 max-w-2xl mx-auto">
+      <div className="py-4 max-w-2xl mx-auto">
         <HeroSection />
         <div className="flex items-center justify-center py-20">
-          <Loader2 size={28} className="animate-spin text-[var(--text-muted)]" />
+          <Loader2 size={28} className="animate-spin" color="var(--color-ink-3)" />
         </div>
       </div>
     );
@@ -157,11 +160,13 @@ export default function DailyPage() {
 
   if (!plan) {
     return (
-      <div className="py-4 space-y-4 max-w-2xl mx-auto">
+      <div className="py-4 max-w-2xl mx-auto">
         <HeroSection />
         <div className="flex flex-col items-center justify-center py-20 gap-4">
-          <p className="text-[14px] text-[var(--text-muted)]">{t('daily.load_error', lang)}</p>
-          <button onClick={() => window.location.reload()} className="px-4 py-2 bg-[#e47a94] text-white text-[14px] rounded-xl">{t('common.retry', lang)}</button>
+          <p style={{ fontSize: 14, color: 'var(--color-ink-3)' }}>{t('daily.load_error', lang)}</p>
+          <Button variant="primary" tone="pink" size="md" onClick={() => window.location.reload()}>
+            {t('common.retry', lang)}
+          </Button>
         </div>
       </div>
     );
@@ -188,316 +193,453 @@ export default function DailyPage() {
       : `${dateStr}${streakText ? ` · ${streakText}` : ''}`;
 
   const quickTools = [
-    { label: t('daily.quick_tool_analyze', lang), href: '/ai/analyze', icon: Sparkles, color: '#e47a94' },
-    { label: t('daily.quick_tool_vocab', lang), href: '/dictionary', icon: BookOpen, color: '#b49ccf' },
-    { label: t('daily.quick_tool_dictation', lang), href: '/dictation', icon: Edit3, color: '#e8a87c' },
-    { label: t('daily.quick_tool_flashcard', lang), href: '/review', icon: RefreshCw, color: '#81b5a1' },
-  ] as const;
+    { label: t('daily.quick_tool_analyze', lang),   href: '/ai/analyze', Icon: Sparkles,  tone: 'pink'   as const },
+    { label: t('daily.quick_tool_vocab', lang),     href: '/dictionary', Icon: BookOpen,  tone: 'purple' as const },
+    { label: t('daily.quick_tool_dictation', lang), href: '/dictation',  Icon: Edit3,     tone: 'peach'  as const },
+    { label: t('daily.quick_tool_flashcard', lang), href: '/review',    Icon: RefreshCw,  tone: 'mint'   as const },
+  ];
+
+  const dismissMsg = () => {
+    setUnreadMsg(null);
+    sessionStorage.setItem('msg_dismissed', '1');
+  };
 
   return (
     <>
-      {/* 未读私信弹窗 */}
-      {unreadMsg && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
-          <div className="absolute inset-0 bg-black/40" onClick={() => { setUnreadMsg(null); sessionStorage.setItem('msg_dismissed', '1'); }} />
-          <div className="relative bg-[var(--bg-base)] rounded-[28px] w-full max-w-sm p-6 shadow-2xl z-10">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-2xl bg-[#fff0f5] flex items-center justify-center shrink-0">
-                <Bell size={18} className="text-[#ff7fa8]" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-[11px] font-bold text-[#ff7fa8] mb-0.5">{t('daily.message_notification_label', lang)}</p>
-                <p className="text-[15px] font-black text-[var(--text-primary)] truncate">{unreadMsg.title}</p>
-              </div>
-              <button
-                onClick={() => { setUnreadMsg(null); sessionStorage.setItem('msg_dismissed', '1'); }}
-                className="w-7 h-7 rounded-full bg-[var(--bg-muted)] flex items-center justify-center text-[var(--text-muted)] shrink-0"
-              >
-                <X size={14} />
-              </button>
-            </div>
-            <p className="text-[13px] text-[var(--text-secondary)] leading-relaxed mb-5 line-clamp-4">{unreadMsg.content}</p>
-            <div className="flex gap-2">
-              <Link
-                href="/messages"
-                onClick={() => { setUnreadMsg(null); sessionStorage.setItem('msg_dismissed', '1'); }}
-                className="flex-1 py-2.5 rounded-[14px] bg-[#ff7fa8] text-white text-[13px] font-bold text-center"
-              >
-                {t('daily.message_view_button', lang)}
-              </Link>
-              <button
-                onClick={() => { setUnreadMsg(null); sessionStorage.setItem('msg_dismissed', '1'); }}
-                className="flex-1 py-2.5 rounded-[14px] bg-[var(--bg-muted)] text-[var(--text-secondary)] text-[13px] font-bold"
-              >
-                {t('daily.message_later_button', lang)}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    <DailyShell
-      main={
-        <div className="space-y-4">
-          <HeroSection />
-          <div className="rounded-[22px] bg-gradient-to-r from-[#fff0f5] via-white to-[#effaf6] border border-[var(--border-default)] px-4 py-3.5 shadow-[0_6px_20px_rgba(78,52,46,.06)] flex items-center justify-between gap-3">
-            <div className="min-w-0">
-              <p className="text-[16px] font-extrabold text-[var(--text-primary)]">{heroTitle}</p>
-              <p className="text-[12px] text-[var(--text-muted)] mt-1">{heroDesc}</p>
-            </div>
-            <Link
-              href="/settings"
-              className="flex items-center gap-1.5 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-[12px] px-3 py-1.5 text-[12px] font-semibold text-[var(--text-secondary)] shadow-[0_2px_8px_rgba(78,52,46,.06)] shrink-0 whitespace-nowrap"
-            >
-              <Settings size={13} />
-              {t('daily.settings_button', lang)}
-            </Link>
-          </div>
-          {plan.allDone && (
-            <ToriCard className="bg-[#e8f7ed]/60 border-[#81b5a1]/20">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-2xl bg-[#81b5a1]/15 flex items-center justify-center shrink-0">
-                  <Sparkles size={20} className="text-[#81b5a1]" />
-                </div>
-                <div>
-                  <p className="text-[15px] font-bold text-[#81b5a1]">{t('daily.all_done_title', lang)}</p>
-                  <p className="text-[13px] text-[var(--text-muted)] mt-0.5">{t('daily.all_done_subtitle', lang)}</p>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-2 mb-3">
-                <Link href="/vocabulary/library" onClick={feedbackClick}
-                  className="flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-default)] text-[13px] font-medium text-[var(--text-primary)] active:scale-[0.97] transition-transform">
-                  <BookOpen size={14} className="text-[#b49ccf]" />
-                  {t('daily.browse_vocab_button', lang)}
-                </Link>
-              </div>
-              {plan.tasks.filter(t => t.key !== 'course' && t.done).length > 0 && (
-                <>
-                  <p className="text-[11px] font-bold text-[var(--text-muted)] mb-2">{t('daily.daily_review_label', lang)}</p>
-                  <div className="space-y-1.5">
-                    {plan.tasks.filter(t => t.key !== 'course' && t.done).map(task => {
-                      const Icon = TASK_ICONS[task.key] || Target;
-                      const color = TASK_COLORS[task.key] || '#8c8177';
-                      return (
-                        <Link key={task.key} href={task.href} onClick={feedbackClick}
-                          className="flex items-center gap-3 rounded-[16px] bg-white/70 border border-[var(--border-default)] px-3 py-2.5 active:bg-[var(--bg-muted)] transition-all">
-                          <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: `${color}15` }}>
-                            <Icon size={15} style={{ color }} />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <span className="text-[13px] font-bold text-[var(--text-secondary)]">{task.label}</span>
-                            <p className="text-[11px] text-[var(--text-muted)] truncate">{task.detail}</p>
-                          </div>
-                          <ChevronRight size={14} className="text-[#c4a89e] shrink-0" />
-                        </Link>
-                      );
-                    })}
-                  </div>
-                </>
-              )}
-            </ToriCard>
-          )}
-          {!plan.allDone && (
-            <ToriHeroCard
-              label={t('daily.vocab_library_label', lang)}
-              desc={t('daily.vocab_library_desc', lang)}
-              href="/vocabulary/library"
-              actionLabel={t('daily.vocab_library_action', lang)}
-              gradient="from-[#e8f4ff] to-[#f0e8ff]"
-            />
-          )}
-          {activeTasks.length > 0 && (
-            <div>
-              <ToriSectionHeader title={t('daily.tasks_section_title', lang)} className="mb-2" />
-              <div className="space-y-2">
-                {activeTasks.map((task) => {
-                  const Icon = TASK_ICONS[task.key] || Target;
-                  const color = TASK_COLORS[task.key] || '#8c8177';
-                  return (
-                    <Link key={task.key} href={task.href} onClick={feedbackClick}
-                      className="flex items-center gap-3 rounded-[20px] border border-[var(--border-default)] bg-[var(--bg-card)] p-4 shadow-[0_2px_8px_rgba(92,64,38,0.04)] active:bg-[var(--bg-muted)] transition-all">
-                      <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: `${color}18` }}>
-                        <Icon size={20} style={{ color }} />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <span className="text-[15px] font-bold text-[var(--text-primary)]">{task.label}</span>
-                        <p className="text-[12px] text-[var(--text-muted)] mt-0.5 truncate">{task.detail}</p>
-                      </div>
-                      <div className="flex items-center gap-1 shrink-0 px-3 py-1.5 rounded-xl text-[12px] font-medium" style={{ backgroundColor: `${color}15`, color }}>
-                        {t('daily.task_go_button', lang)}
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
-          )}
+      <Modal open={!!unreadMsg} onClose={dismissMsg} size="sm">
+        {unreadMsg && (
           <div>
-            <ToriSectionHeader title={t('daily.mine_section_title', lang)} className="mb-2.5" />
-            <div className="grid grid-cols-2 gap-2.5">
-              <ToriMiniCard icon={<PenLine size={18} className="text-[#e47a94]" />} label={t('daily.mini_card_mistakes_label', lang)} detail={t('daily.mini_card_mistakes_detail', lang)} href="/mine/dictation-mistakes" />
-              <ToriMiniCard icon={<Mic size={18} className="text-[#e47a94]" />} label={t('daily.mini_card_recordings_label', lang)} detail={t('daily.mini_card_recordings_detail', lang)} href="/mine/recordings" />
-              <ToriMiniCard icon={<Sparkles size={18} className="text-[#e8a87c]" />} label={t('daily.mini_card_achievements_label', lang)} detail={t('daily.mini_card_achievements_detail', lang)} href="/achievement/card" />
-              <ToriMiniCard icon={<FileText size={18} className="text-[#81b5a1]" />} label={t('daily.mini_card_messages_label', lang)} detail={t('daily.mini_card_messages_detail', lang)} href="/messages" />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
+              <div
+                style={{
+                  width: 40, height: 40, borderRadius: 'var(--radius-md)',
+                  background: 'var(--color-pink-soft)', color: 'var(--color-pink-strong)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                }}
+                aria-hidden
+              >
+                <Bell size={18} />
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--color-pink-strong)', margin: 0 }}>
+                  {t('daily.message_notification_label', lang)}
+                </p>
+                <p style={{ fontSize: 15, fontWeight: 800, color: 'var(--color-ink-1)', margin: '2px 0 0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {unreadMsg.title}
+                </p>
+              </div>
+            </div>
+            <p style={{ fontSize: 13, color: 'var(--color-ink-2)', lineHeight: 1.6, marginBottom: 18 }}>
+              {unreadMsg.content}
+            </p>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <Link href="/messages" onClick={dismissMsg} style={{ flex: 1, textDecoration: 'none' }}>
+                <Button variant="primary" tone="pink" fullWidth>
+                  {t('daily.message_view_button', lang)}
+                </Button>
+              </Link>
+              <Button variant="secondary" fullWidth onClick={dismissMsg}>
+                {t('daily.message_later_button', lang)}
+              </Button>
             </div>
           </div>
-          {/* Quick tools — mobile only, desktop sees it in aside */}
-          <div className="lg:hidden">
-            <ToriSectionHeader title={t('daily.quick_tools_section_title', lang)} className="mb-2.5" />
-            <div className="grid grid-cols-4 gap-2">
-              {quickTools.map((tool) => (
-                <Link key={tool.href} href={tool.href} onClick={feedbackClick}
-                  className="rounded-[20px] border border-[var(--border-default)] bg-[var(--bg-card)] p-3 text-center shadow-[0_2px_8px_rgba(92,64,38,0.04)] active:scale-[0.97] transition-all">
-                  <tool.icon size={20} style={{ color: tool.color }} className="mx-auto mb-1" />
-                  <span className="text-[12px] font-medium text-[var(--text-primary)]">{tool.label}</span>
+        )}
+      </Modal>
+
+      <DailyShell
+        main={
+          <div>
+            <HeroSection />
+
+            {/* Greeting strip */}
+            <Card variant="hero" tone="pink" padding="md" style={{ marginTop: 16, marginBottom: 20 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+                <div style={{ minWidth: 0 }}>
+                  <p style={{ fontSize: 16, fontWeight: 800, color: 'var(--color-ink-1)', margin: 0 }}>
+                    {heroTitle}
+                  </p>
+                  <p style={{ fontSize: 12, color: 'var(--color-ink-3)', margin: '4px 0 0' }}>
+                    {heroDesc}
+                  </p>
+                </div>
+                <Link href="/settings" style={{ textDecoration: 'none', flexShrink: 0 }}>
+                  <Button variant="secondary" size="sm" icon={<Settings size={13} />}>
+                    {t('daily.settings_button', lang)}
+                  </Button>
                 </Link>
-              ))}
-            </div>
-          </div>
-          {/* Progress bar — mobile only */}
-          <ToriCard className="lg:hidden">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-[13px] text-[var(--text-muted)]">{t('daily.progress_label', lang)}</span>
-              <span className="text-[12px] text-[var(--text-muted)]">{plan.completedCount}/{plan.totalCount} {t('daily.progress_completed_suffix', lang)}</span>
-            </div>
-            <div className="w-full bg-[var(--border-default)] rounded-full h-2">
-              <div className="h-2 rounded-full bg-gradient-to-r from-[#b49ccf] to-[#e47a94] transition-all duration-500" style={{ width: `${Math.max(4, progressPercent)}%` }} />
-            </div>
-          </ToriCard>
-          {user?.role === 'admin' && (
-            <Link
-              href="/admin"
-              className="flex items-center justify-center gap-2 w-full py-3 rounded-2xl border border-dashed border-[#d9cbc3] text-[12px] text-[var(--text-muted)] hover:border-[#e47a94] hover:text-[#e47a94] transition-colors"
-            >
-              <span>⚙</span> {t('daily.admin_button', lang)}
-            </Link>
-          )}
-        </div>
-      }
-      aside={
-        <div className="space-y-4 pt-4">
-          <div className="rounded-2xl bg-[var(--bg-card)] border border-[var(--border-default)] p-4 shadow-[0_2px_8px_rgba(92,64,38,0.04)]">
-            <p className="text-[13px] font-bold text-[var(--text-primary)] mb-3">{t('daily.aside_progress_title', lang)}</p>
-            <div className="w-full bg-[var(--border-default)] rounded-full h-2 mb-2">
-              <div className="h-2 rounded-full bg-gradient-to-r from-[#b49ccf] to-[#e47a94] transition-all duration-500" style={{ width: `${Math.max(4, progressPercent)}%` }} />
-            </div>
-            <p className="text-[12px] text-[var(--text-muted)]">{plan.completedCount}/{plan.totalCount} {t('daily.aside_progress_completed_suffix', lang)}</p>
-          </div>
-          <div className="rounded-2xl bg-[var(--bg-card)] border border-[var(--border-default)] p-4 shadow-[0_2px_8px_rgba(92,64,38,0.04)]">
-            <p className="text-[13px] font-bold text-[var(--text-primary)] mb-3">{t('daily.aside_quick_tools_title', lang)}</p>
-            <div className="grid grid-cols-2 gap-2">
-              {quickTools.map((tool) => (
-                <Link key={tool.href} href={tool.href} onClick={feedbackClick}
-                  className="flex flex-col items-center gap-1.5 rounded-xl border border-[var(--border-default)] bg-[var(--bg-base)] p-3 text-center hover:bg-[#fff0f5] transition-colors">
-                  <tool.icon size={18} style={{ color: tool.color }} />
-                  <span className="text-[11px] font-medium text-[var(--text-primary)]">{tool.label}</span>
+              </div>
+            </Card>
+
+            {plan.allDone && (
+              <Card variant="hero" tone="mint" padding="md" style={{ marginBottom: 20 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+                  <div
+                    style={{
+                      width: 40, height: 40, borderRadius: 'var(--radius-md)',
+                      background: 'var(--color-surface-2)', color: 'var(--color-mint-strong)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                    }}
+                    aria-hidden
+                  >
+                    <Sparkles size={20} />
+                  </div>
+                  <div>
+                    <p style={{ fontSize: 15, fontWeight: 800, color: 'var(--color-mint-strong)', margin: 0 }}>
+                      {t('daily.all_done_title', lang)}
+                    </p>
+                    <p style={{ fontSize: 12, color: 'var(--color-ink-3)', margin: '2px 0 0' }}>
+                      {t('daily.all_done_subtitle', lang)}
+                    </p>
+                  </div>
+                </div>
+                <Link href="/vocabulary/library" onClick={feedbackClick} style={{ textDecoration: 'none' }}>
+                  <Button variant="secondary" fullWidth icon={<BookOpen size={14} />}>
+                    {t('daily.browse_vocab_button', lang)}
+                  </Button>
                 </Link>
-              ))}
-            </div>
+              </Card>
+            )}
+
+            {!plan.allDone && (
+              <Section spacing="normal">
+                <Card variant="hero" tone="purple" padding="lg" as="a" href="/vocabulary/library" interactive>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
+                    <div
+                      style={{
+                        width: 44, height: 44, borderRadius: 'var(--radius-md)',
+                        background: 'var(--color-surface-2)', color: 'var(--color-purple-strong)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                      }}
+                      aria-hidden
+                    >
+                      <BookOpen size={22} strokeWidth={1.75} />
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p style={{ fontSize: 17, fontWeight: 800, color: 'var(--color-ink-1)', margin: 0 }}>
+                        {t('daily.vocab_library_label', lang)}
+                      </p>
+                      <p style={{ fontSize: 13, color: 'var(--color-ink-3)', margin: '4px 0 12px' }}>
+                        {t('daily.vocab_library_desc', lang)}
+                      </p>
+                      <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--color-purple-strong)', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                        {t('daily.vocab_library_action', lang)}
+                        <ChevronRight size={14} />
+                      </span>
+                    </div>
+                  </div>
+                </Card>
+              </Section>
+            )}
+
+            {activeTasks.length > 0 && (
+              <Section title={t('daily.tasks_section_title', lang)} spacing="normal">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {activeTasks.map((task) => {
+                    const Icon = TASK_ICONS[task.key] || Target;
+                    const tone = TASK_TONE[task.key] || 'peach';
+                    return (
+                      <Card key={task.key} as="a" href={task.href} onClick={feedbackClick} variant="row" interactive>
+                        <div
+                          style={{
+                            width: 40, height: 40, borderRadius: 'var(--radius-md)',
+                            background: TONE_BG[tone], color: TONE_FG[tone],
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                          }}
+                          aria-hidden
+                        >
+                          <Icon size={20} />
+                        </div>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <p style={{ fontSize: 15, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>
+                            {task.label}
+                          </p>
+                          <p style={{ fontSize: 12, color: 'var(--color-ink-3)', margin: '2px 0 0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {task.detail}
+                          </p>
+                        </div>
+                        <span
+                          style={{
+                            fontSize: 12, fontWeight: 700, color: TONE_FG[tone],
+                            background: TONE_BG[tone], padding: '6px 12px',
+                            borderRadius: 'var(--radius-pill)', flexShrink: 0,
+                          }}
+                        >
+                          {t('daily.task_go_button', lang)}
+                        </span>
+                      </Card>
+                    );
+                  })}
+                </div>
+              </Section>
+            )}
+
+            <Section title={t('daily.mine_section_title', lang)} spacing="normal">
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                {([
+                  { Icon: PenLine,  label: t('daily.mini_card_mistakes_label', lang),     detail: t('daily.mini_card_mistakes_detail', lang),     href: '/mine/dictation-mistakes', tone: 'pink' as const },
+                  { Icon: Mic,      label: t('daily.mini_card_recordings_label', lang),   detail: t('daily.mini_card_recordings_detail', lang),   href: '/mine/recordings',         tone: 'pink' as const },
+                  { Icon: Sparkles, label: t('daily.mini_card_achievements_label', lang), detail: t('daily.mini_card_achievements_detail', lang), href: '/achievement/card',        tone: 'peach' as const },
+                  { Icon: FileText, label: t('daily.mini_card_messages_label', lang),     detail: t('daily.mini_card_messages_detail', lang),     href: '/messages',                tone: 'mint' as const },
+                ]).map(({ Icon, label, detail, href, tone }) => (
+                  <Card key={href} as="a" href={href} variant="default" padding="md" interactive>
+                    <div
+                      style={{
+                        width: 36, height: 36, borderRadius: 'var(--radius-md)',
+                        background: TONE_BG[tone], color: TONE_FG[tone],
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        marginBottom: 8,
+                      }}
+                      aria-hidden
+                    >
+                      <Icon size={18} />
+                    </div>
+                    <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>{label}</p>
+                    <p style={{ fontSize: 11, color: 'var(--color-ink-3)', margin: '2px 0 0' }}>{detail}</p>
+                  </Card>
+                ))}
+              </div>
+            </Section>
+
+            <Section title={t('daily.quick_tools_section_title', lang)} spacing="normal">
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
+                {quickTools.map(({ label, href, Icon, tone }) => (
+                  <Card key={href} as="a" href={href} onClick={feedbackClick} variant="default" padding="sm" interactive>
+                    <div
+                      style={{
+                        width: 36, height: 36, borderRadius: 'var(--radius-md)',
+                        background: TONE_BG[tone], color: TONE_FG[tone],
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        margin: '0 auto 4px',
+                      }}
+                      aria-hidden
+                    >
+                      <Icon size={18} />
+                    </div>
+                    <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0, textAlign: 'center' }}>
+                      {label}
+                    </p>
+                  </Card>
+                ))}
+              </div>
+            </Section>
+
+            <Card variant="default" padding="md" style={{ marginBottom: 20 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+                <span style={{ fontSize: 13, color: 'var(--color-ink-3)' }}>{t('daily.progress_label', lang)}</span>
+                <span style={{ fontSize: 12, color: 'var(--color-ink-3)' }}>
+                  {plan.completedCount}/{plan.totalCount} {t('daily.progress_completed_suffix', lang)}
+                </span>
+              </div>
+              <div style={{ width: '100%', height: 8, borderRadius: 'var(--radius-pill)', background: 'var(--color-surface-4)' }}>
+                <div
+                  style={{
+                    height: 8, borderRadius: 'var(--radius-pill)',
+                    background: 'linear-gradient(90deg, var(--color-purple-base), var(--color-pink-base))',
+                    width: `${Math.max(4, progressPercent)}%`,
+                    transition: 'width var(--dur-slow) var(--ease-soft)',
+                  }}
+                />
+              </div>
+            </Card>
+
+            {user?.role === 'admin' && (
+              <Link href="/admin" style={{ textDecoration: 'none' }}>
+                <Button variant="ghost" fullWidth size="sm">
+                  ⚙ {t('daily.admin_button', lang)}
+                </Button>
+              </Link>
+            )}
           </div>
-          <div className="rounded-2xl bg-gradient-to-br from-[#fff0f5] to-[#eee7ff] border border-[var(--border-default)] p-4 shadow-[0_2px_8px_rgba(92,64,38,0.04)] flex items-center gap-3">
-            <Flame size={22} className="text-[#e47a94] shrink-0" />
-            <div>
-              <p className="text-[13px] font-bold text-[var(--text-primary)]">{t('daily.aside_continue_title', lang)}</p>
-              <p className="text-[11px] text-[var(--text-muted)] mt-0.5">{t('daily.aside_continue_subtitle', lang)}</p>
-            </div>
+        }
+        aside={
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16, paddingTop: 16 }}>
+            <Card variant="default" padding="md">
+              <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--color-ink-1)', margin: '0 0 12px' }}>
+                {t('daily.aside_progress_title', lang)}
+              </p>
+              <div style={{ width: '100%', height: 8, borderRadius: 'var(--radius-pill)', background: 'var(--color-surface-4)', marginBottom: 8 }}>
+                <div
+                  style={{
+                    height: 8, borderRadius: 'var(--radius-pill)',
+                    background: 'linear-gradient(90deg, var(--color-purple-base), var(--color-pink-base))',
+                    width: `${Math.max(4, progressPercent)}%`,
+                    transition: 'width var(--dur-slow) var(--ease-soft)',
+                  }}
+                />
+              </div>
+              <p style={{ fontSize: 12, color: 'var(--color-ink-3)', margin: 0 }}>
+                {plan.completedCount}/{plan.totalCount} {t('daily.aside_progress_completed_suffix', lang)}
+              </p>
+            </Card>
+
+            <Card variant="default" padding="md">
+              <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--color-ink-1)', margin: '0 0 12px' }}>
+                {t('daily.aside_quick_tools_title', lang)}
+              </p>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                {quickTools.map(({ label, href, Icon, tone }) => (
+                  <Link
+                    key={href}
+                    href={href}
+                    onClick={feedbackClick}
+                    style={{
+                      display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
+                      padding: 12, borderRadius: 'var(--radius-md)',
+                      background: 'var(--color-surface-1)',
+                      border: '1px solid var(--color-border-1)',
+                      textDecoration: 'none',
+                    }}
+                  >
+                    <Icon size={18} color={TONE_FG[tone]} />
+                    <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--color-ink-1)' }}>{label}</span>
+                  </Link>
+                ))}
+              </div>
+            </Card>
+
+            <Card variant="hero" tone="pink" padding="md">
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <Flame size={22} color="var(--color-pink-strong)" />
+                <div>
+                  <p style={{ fontSize: 13, fontWeight: 800, color: 'var(--color-ink-1)', margin: 0 }}>
+                    {t('daily.aside_continue_title', lang)}
+                  </p>
+                  <p style={{ fontSize: 11, color: 'var(--color-ink-3)', margin: '2px 0 0' }}>
+                    {t('daily.aside_continue_subtitle', lang)}
+                  </p>
+                </div>
+              </div>
+            </Card>
           </div>
-        </div>
-      }
-    />
+        }
+      />
     </>
   );
 }
-
-// ── Shared hero section (shown to ALL users) ──
 
 function HeroSection() {
   const { lang } = useLang();
   return (
-    <>
-      <div className="rounded-[32px] overflow-hidden shadow-[0_26px_68px_rgba(78,52,46,.18)] bg-white border border-white/90">
-        <Image
-          src="/images/tori-hero-daily.webp"
-          alt={t('daily.hero_image_alt', lang)}
-          width={800}
-          height={400}
-          priority
-          className="w-full block h-auto"
-        />
-      </div>
-    </>
+    <div
+      style={{
+        borderRadius: 'var(--radius-xl)',
+        overflow: 'hidden',
+        boxShadow: 'var(--shadow-lg)',
+        background: 'var(--color-surface-2)',
+        border: '1px solid var(--color-border-1)',
+      }}
+    >
+      <Image
+        src="/images/tori-hero-daily.webp"
+        alt={t('daily.hero_image_alt', lang)}
+        width={800}
+        height={400}
+        priority
+        style={{ width: '100%', display: 'block', height: 'auto' }}
+      />
+    </div>
   );
 }
-
-// ── Guest view ──
 
 function GuestDaily() {
   const { lang } = useLang();
   return (
-    <div className="py-4 space-y-4 max-w-2xl mx-auto md:max-w-3xl">
+    <div className="py-4 max-w-2xl mx-auto">
       <HeroSection />
 
-      <div className="flex items-center justify-between mt-5 mb-3 px-0.5">
-        <h2 className="text-[18px] font-bold text-[var(--text-primary)] tracking-[-.3px]">{t('daily.guest_continue_title', lang)}</h2>
-        <span className="text-[12px] font-extrabold text-[#f0799b]">{t('daily.guest_last_progress_label', lang)}</span>
-      </div>
+      <Section title={t('daily.guest_continue_title', lang)} action={{ label: t('daily.guest_last_progress_label', lang), href: '/review' }} spacing="normal">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <Card variant="default" padding="md" style={{ opacity: 0.4, cursor: 'not-allowed' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+              <div
+                style={{
+                  width: 60, height: 60, borderRadius: 'var(--radius-lg)',
+                  background: 'var(--color-ink-1)', color: '#fff',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 18, fontWeight: 800, flexShrink: 0,
+                }}
+                aria-hidden
+              >
+                影
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <h3 style={{ fontSize: 17, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>
+                  {t('daily.guest_shadowing_title', lang)}
+                </h3>
+                <p style={{ fontSize: 13, color: 'var(--color-ink-3)', margin: '4px 0 0' }}>
+                  {t('daily.guest_shadowing_subtitle', lang)}
+                </p>
+              </div>
+            </div>
+          </Card>
 
-      <div
-        className="flex items-center gap-3.5 rounded-[30px] p-4 min-h-[112px] bg-[var(--bg-card)] border border-[var(--border-default)] relative overflow-hidden opacity-40 cursor-not-allowed"
-      >
-        <div className="absolute -right-7 -top-8 w-[120px] h-[120px] rounded-full bg-[rgba(255,127,168,.07)]" />
-        <div className="w-[60px] h-[60px] rounded-3xl bg-[#201815] text-white grid place-items-center text-[18px] font-extrabold relative z-[1]">影</div>
-        <div className="relative z-[1] flex-1 min-w-0">
-          <h3 className="text-[17px] font-bold text-[var(--text-primary)] leading-tight">{t('daily.guest_shadowing_title', lang)}</h3>
-          <p className="mt-1.5 text-[13px] text-[var(--text-muted)] leading-snug">{t('daily.guest_shadowing_subtitle', lang)}</p>
+          <Card as="a" href="/review" variant="default" padding="md" interactive>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+              <div
+                style={{
+                  width: 60, height: 60, borderRadius: 'var(--radius-lg)',
+                  background: 'var(--color-pink-soft)', color: 'var(--color-pink-strong)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 18, fontWeight: 800, flexShrink: 0,
+                }}
+                aria-hidden
+              >
+                复
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <h3 style={{ fontSize: 17, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>
+                  {t('daily.guest_review_title', lang)}
+                </h3>
+                <p style={{ fontSize: 13, color: 'var(--color-ink-3)', margin: '4px 0 0' }}>
+                  {t('daily.guest_review_subtitle', lang)}
+                </p>
+              </div>
+              <ChevronRight size={20} color="var(--color-ink-4)" />
+            </div>
+          </Card>
         </div>
-      </div>
+      </Section>
 
-      <Link
-        href="/review"
-        className="flex items-center gap-3.5 rounded-[30px] p-4 min-h-[112px] bg-[var(--bg-card)] border border-[var(--border-default)] shadow-[0_16px_40px_rgba(78,52,46,.10)] relative overflow-hidden active:scale-[0.98] transition-transform"
-      >
-        <div className="absolute -right-7 -top-8 w-[120px] h-[120px] rounded-full bg-[rgba(174,227,216,.18)]" />
-        <div className="w-[60px] h-[60px] rounded-3xl bg-[#fff1f6] text-[#f0799b] grid place-items-center text-[18px] font-extrabold relative z-[1]">复</div>
-        <div className="relative z-[1] flex-1 min-w-0">
-          <h3 className="text-[17px] font-bold text-[var(--text-primary)] leading-tight">{t('daily.guest_review_title', lang)}</h3>
-          <p className="mt-1.5 text-[13px] text-[var(--text-muted)] leading-snug">{t('daily.guest_review_subtitle', lang)}</p>
+      <Section title={t('daily.guest_quick_tools_title', lang)} spacing="normal">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+          {([
+            { labelKey: 'daily.guest_tool_analyze_label',   subKey: 'daily.guest_tool_analyze_sub',   href: '/ai/analyze', ch: '拆', tone: 'pink' as const },
+            { labelKey: 'daily.guest_tool_dictation_label', subKey: 'daily.guest_tool_dictation_sub', href: '/dictation',  ch: '默', tone: 'mint' as const },
+            { labelKey: 'daily.guest_tool_review_label',    subKey: 'daily.guest_tool_review_sub',    href: '/review',     ch: '卡', tone: 'purple' as const },
+          ] as const).map((tool) => (
+            <Card key={tool.href} as="a" href={tool.href} variant="default" padding="md" interactive>
+              <div
+                style={{
+                  width: 34, height: 34, borderRadius: 'var(--radius-md)',
+                  background: TONE_BG[tool.tone], color: TONE_FG[tool.tone],
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 14, fontWeight: 800,
+                }}
+                aria-hidden
+              >
+                {tool.ch}
+              </div>
+              <h3 style={{ fontSize: 14, fontWeight: 700, color: 'var(--color-ink-1)', margin: '10px 0 2px' }}>
+                {t(tool.labelKey, lang)}
+              </h3>
+              <p style={{ fontSize: 11, color: 'var(--color-ink-3)', margin: 0 }}>
+                {t(tool.subKey, lang)}
+              </p>
+            </Card>
+          ))}
         </div>
-        <span className="ml-auto text-[#c7b7b0] text-2xl font-extrabold relative z-[1]">›</span>
-      </Link>
+      </Section>
 
-      <div className="flex items-center justify-between mt-5 mb-3 px-0.5">
-        <h2 className="text-[18px] font-bold text-[var(--text-primary)] tracking-[-.3px]">{t('daily.guest_quick_tools_title', lang)}</h2>
-        <span className="text-[12px] font-extrabold text-[#f0799b]">{t('daily.guest_quick_tools_label', lang)}</span>
-      </div>
-
-      <div className="grid grid-cols-3 gap-2.5">
-        {([
-          { labelKey: 'daily.guest_tool_analyze_label', subKey: 'daily.guest_tool_analyze_sub', href: '/ai/analyze', ch: '拆', bg: '#fff0f5', color: '#f0799b', deco: 'rgba(255,127,168,.07)' },
-          { labelKey: 'daily.guest_tool_dictation_label', subKey: 'daily.guest_tool_dictation_sub', href: '/dictation', ch: '默', bg: '#fff0f5', color: '#f0799b', deco: 'rgba(174,227,216,.12)' },
-          { labelKey: 'daily.guest_tool_review_label', subKey: 'daily.guest_tool_review_sub', href: '/review', ch: '卡', bg: '#fff0f5', color: '#f0799b', deco: 'rgba(174,227,216,.12)' },
-        ] as const).map((tool) => (
-          <Link
-            key={tool.href}
-            href={tool.href}
-            className="min-h-[118px] rounded-[26px] p-3.5 bg-[var(--bg-card)] border border-[var(--border-default)] shadow-[0_10px_26px_rgba(78,52,46,.07)] relative overflow-hidden active:scale-[0.97] transition-transform"
-          >
-            <div className="absolute -right-4 -top-4 w-[70px] h-[70px] rounded-full" style={{ background: tool.deco }} />
-            <div className="w-[34px] h-[34px] rounded-[15px] grid place-items-center text-[14px] font-extrabold relative z-[1]" style={{ background: tool.bg, color: tool.color }}>{tool.ch}</div>
-            <h3 className="mt-2.5 mb-1 text-[14px] font-bold text-[var(--text-primary)] leading-tight relative z-[1]">{t(tool.labelKey, lang)}</h3>
-            <p className="text-[11px] text-[var(--text-muted)] leading-snug relative z-[1]">{t(tool.subKey, lang)}</p>
-          </Link>
-        ))}
-      </div>
-
-      <div className="mt-5 rounded-[28px] p-4 bg-[var(--bg-card)] border border-[var(--border-default)] shadow-[0_16px_40px_rgba(78,52,46,.10)] text-center space-y-3">
-        <p className="text-[13px] text-[var(--text-muted)]">{t('daily.guest_login_prompt', lang)}</p>
-        <Link
-          href="/auth/login?redirect=/daily"
-          className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#e47a94] text-white rounded-xl text-[13px] font-medium active:scale-95 transition-transform"
-        >
-          <LogIn size={14} />{t('daily.guest_login_button', lang)}
+      <Card variant="default" padding="lg" style={{ textAlign: 'center', marginTop: 20 }}>
+        <p style={{ fontSize: 13, color: 'var(--color-ink-3)', margin: '0 0 14px' }}>
+          {t('daily.guest_login_prompt', lang)}
+        </p>
+        <Link href="/auth/login?redirect=/daily" style={{ textDecoration: 'none' }}>
+          <Button variant="primary" tone="pink" icon={<LogIn size={14} />}>
+            {t('daily.guest_login_button', lang)}
+          </Button>
         </Link>
-      </div>
+      </Card>
     </div>
   );
 }

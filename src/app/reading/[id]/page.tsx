@@ -581,7 +581,7 @@ export default function ArticleReaderPage() {
                                       if (!revealedZh.has(s.id)) toggleRevealZh(s.id);
                                       setAiLookupWord(cleaned);
                                     }}
-                                    className="hover:bg-[var(--mint-soft)]/10 rounded-sm transition-colors"
+                                    className="cursor-pointer hover:bg-[var(--mint-soft)]/10 rounded-sm transition-colors"
                                   >
                                     {token}
                                   </span>

@@ -1,7 +1,176 @@
 @import 'tailwindcss';
 
 /* ═══════════════════════════════════════════════════════════════
-   「奶油手账 × 首尔女生日记」 配色系统
+   Design Tokens (P1) — 暖手账升级版
+   Tailwind v4 `@theme` block. Variables here become utility classes:
+   `--color-surface-1` → `bg-surface-1` / `text-surface-1` etc.
+   Dark overrides live in the `[data-theme="dark"]` block further down.
+   Legacy tokens under :root (lines below) are kept as alias-bridge,
+   nothing is removed in P1.
+   ═══════════════════════════════════════════════════════════════ */
+
+@theme {
+  /* ── Surface (page / card / soft / muted) ── */
+  --color-surface-1: #fffbf7;
+  --color-surface-2: #ffffff;
+  --color-surface-3: #fff4f0;
+  --color-surface-4: #f5ece7;
+
+  /* ── Ink (text scale) ── */
+  --color-ink-1: #1a1310;
+  --color-ink-2: #3a2e29;
+  --color-ink-3: #897167;
+  --color-ink-4: #b8a89c;
+
+  /* ── Border (hairline / default / strong) ── */
+  --color-border-1: #efe1da;
+  --color-border-2: #e4d3c8;
+  --color-border-3: #c9b7aa;
+
+  /* ── Accent: pink (primary brand) ── */
+  --color-pink-soft:   #ffe4ee;
+  --color-pink-base:   #ff7fa8;
+  --color-pink-strong: #e55a87;
+
+  /* ── Accent: mint ── */
+  --color-mint-soft:   #e3f5f0;
+  --color-mint-base:   #7dc6b3;
+  --color-mint-strong: #4a9880;
+
+  /* ── Accent: peach ── */
+  --color-peach-soft:   #ffefe6;
+  --color-peach-base:   #ff9d7a;
+  --color-peach-strong: #d97a55;
+
+  /* ── Accent: purple ── */
+  --color-purple-soft:   #efe7ff;
+  --color-purple-base:   #a896d9;
+  --color-purple-strong: #7560b8;
+
+  /* ── Status ── */
+  --color-status-success: #4a9880;
+  --color-status-warning: #d99c2a;
+  --color-status-danger:  #d65656;
+  --color-status-info:    #5e8fd6;
+
+  /* ── Radius (sm / md / lg / xl / pill) ── */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-pill: 999px;
+
+  /* ── Shadow (matte, 4 steps) ── */
+  --shadow-xs: 0 1px 2px rgba(78, 52, 46, 0.04);
+  --shadow-sm: 0 4px 12px rgba(78, 52, 46, 0.06);
+  --shadow-md: 0 10px 26px rgba(78, 52, 46, 0.08);
+  --shadow-lg: 0 24px 56px rgba(78, 52, 46, 0.12);
+
+  /* ── Font size + line-height (text-xs … text-2xl) ── */
+  --text-xs: 12px;
+  --text-xs--line-height: 16px;
+  --text-sm: 13px;
+  --text-sm--line-height: 18px;
+  --text-base: 14px;
+  --text-base--line-height: 22px;
+  --text-md: 16px;
+  --text-md--line-height: 24px;
+  --text-lg: 20px;
+  --text-lg--line-height: 28px;
+  --text-xl: 28px;
+  --text-xl--line-height: 34px;
+  --text-2xl: 36px;
+  --text-2xl--line-height: 42px;
+
+  /* ── Motion ── */
+  --ease-soft: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  /* ── Semantic spacing token (Tailwind already has spacing scale) ── */
+  --spacing-section: 32px;
+}
+
+/* ── Token: motion duration (not in @theme to avoid utility bloat) ── */
+:root {
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 320ms;
+}
+
+/* ── ui/* primitive keyframes (P2) ── */
+@keyframes tori-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes tori-slide-up {
+  from { transform: translateY(16px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+@keyframes tori-scale-in {
+  from { transform: translate(-50%, -50%) scale(0.96); opacity: 0; }
+  to   { transform: translate(-50%, -50%) scale(1);    opacity: 1; }
+}
+@keyframes tori-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ui/Card interactive hover */
+.tori-card-interactive:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.tori-card-interactive:active {
+  transform: translateY(0);
+}
+
+/* ui/Button press */
+.tori-btn:not(:disabled):active {
+  transform: translateY(1px);
+}
+.tori-btn:not(:disabled):hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* ── Dark overrides for design tokens ── */
+[data-theme="dark"] {
+  /* Surface */
+  --color-surface-1: #15131c;
+  --color-surface-2: #1e1b28;
+  --color-surface-3: #262232;
+  --color-surface-4: #2e2940;
+
+  /* Ink */
+  --color-ink-1: #f4eee8;
+  --color-ink-2: #d6cec4;
+  --color-ink-3: #a59a8d;
+  --color-ink-4: #6a5e54;
+
+  /* Border */
+  --color-border-1: #2e2632;
+  --color-border-2: #3a2f3e;
+  --color-border-3: #4a3d4f;
+
+  /* Accent — dark soft backgrounds; base & strong unchanged */
+  --color-pink-soft:   #3b1f2d;
+  --color-pink-strong: #ff9bbc;
+  --color-mint-soft:   #1f3530;
+  --color-peach-soft:  #3a261d;
+  --color-purple-soft: #2a213f;
+
+  /* Status — slightly brighter for dark contrast */
+  --color-status-success: #7ec5a8;
+  --color-status-warning: #f0c46e;
+  --color-status-danger:  #ff8585;
+  --color-status-info:    #8eb1e6;
+
+  /* Shadow — deeper for dark surface */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.20);
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.30);
+  --shadow-md: 0 10px 26px rgba(0, 0, 0, 0.40);
+  --shadow-lg: 0 24px 56px rgba(0, 0, 0, 0.55);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   「奶油手账 × 首尔女生日记」 配色系统 (LEGACY — kept as alias-bridge)
    indie web × Neocities kawaii aesthetic
    ═══════════════════════════════════════════════════════════════ */
 
@@ -2321,44 +2490,74 @@ html[data-reduce-motion="true"] *::after {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   Tablet / small desktop (≤1100px)
+   Tablet / small desktop responsive (P3)
+   Three-tier breakpoints inside the desktop shell:
+     >=1280  full 3 columns (sidebar 108 + main 1088 + panel 280)
+     1024–1279  2 columns (sidebar 96 + main 880, panel hidden)
+     768–1023  2 columns tablet (sidebar 80 icon-only + main 720)
    ═══════════════════════════════════════════════════════════════ */
 
-@media (max-width: 1280px) {
+@media (min-width: 1024px) and (max-width: 1279px) {
   .desktop-app {
-    grid-template-columns: 92px minmax(0, 1fr);
+    grid-template-columns: 96px minmax(0, 1fr);
+    padding: 24px;
+    gap: 24px;
+  }
+  .desktop-panel { display: none; }
+  .desktop-search { display: none; }
+  .desktop-navbtn { width: 72px; }
+  .desktop-main-rail { max-width: 880px; }
+  .desktop-module-grid,
+  .desktop-grid-3 { grid-template-columns: 1fr 1fr; }
+  .desktop-grid-2 { grid-template-columns: 1fr; }
+  .desktop-word-modal { right: 24px; }
+  .desktop-stat-row { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .desktop-app {
+    grid-template-columns: 80px minmax(0, 1fr);
     padding: 16px;
     gap: 16px;
   }
-
-  .desktop-panel {
-    display: none;
+  .desktop-panel { display: none; }
+  .desktop-search { display: none; }
+  .desktop-sidebar {
+    border-radius: var(--radius-lg);
+    padding: 14px 8px;
+    gap: 4px;
   }
-
-  .desktop-search {
-    display: none;
-  }
-
   .desktop-navbtn {
-    width: 64px;
+    width: 60px;
+    min-height: 56px;
+    font-size: 0; /* hide text */
+    gap: 0;
+    border-radius: var(--radius-md);
   }
-
+  .desktop-navbtn .desktop-navico {
+    font-size: 22px;
+  }
+  .desktop-logo {
+    width: 56px;
+    height: 56px;
+  }
+  .desktop-logo::before,
+  .desktop-logo::after { display: none; }
+  .desktop-main-rail { max-width: 720px; }
+  .desktop-topbar {
+    padding: 16px 20px;
+    border-radius: var(--radius-lg);
+  }
+  .desktop-topbar h1 { font-size: 22px; }
   .desktop-module-grid,
-  .desktop-grid-3 {
-    grid-template-columns: 1fr 1fr;
+  .desktop-grid-3,
+  .desktop-grid-2 { grid-template-columns: 1fr 1fr; }
+  .desktop-stat-row { grid-template-columns: repeat(2, 1fr); }
+  .desktop-content {
+    padding-inline: 4px;
   }
-
-  .desktop-grid-2 {
-    grid-template-columns: 1fr;
-  }
-
-  .desktop-word-modal {
-    right: 24px;
-  }
-
-  .desktop-stat-row {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .desktop-foot-label { display: none; }
+  .desktop-foot-btn { justify-content: center !important; padding: 8px !important; }
 }
 
 /* Hide desktop shell on mobile (< 768px) — mobile uses existing layout */

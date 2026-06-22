@@ -115,10 +115,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               {user?.role === 'admin' && (
                 <button
                   onClick={() => navigate('/admin')}
+                  className="desktop-foot-btn"
                   style={{
                     width: '100%',
                     display: 'flex',
                     alignItems: 'center',
+                    justifyContent: 'flex-start',
                     gap: 8,
                     padding: '8px 16px',
                     background: 'none',
@@ -131,8 +133,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     textAlign: 'left',
                   }}
                 >
-                  <span>⚙</span>
-                  <span>管理后台</span>
+                  <span aria-hidden>⚙</span>
+                  <span className="desktop-foot-label">管理后台</span>
                 </button>
               )}
               <button

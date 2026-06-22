@@ -1,111 +1,126 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { BookOpen, FileText, MessageSquare, Keyboard, Sparkles, Library } from 'lucide-react';
+import { PageHeader, Section, Card, Button } from '@/components/ui';
 
 const FEATURED = [
   {
     label: '内容拆解',
     desc: '粘贴韩文文章或句子，生成全文翻译、重点词汇、语法解析。',
     href: '/ai/analyze',
-    gradient: 'linear-gradient(135deg, #ffe4ec 0%, #fff4dc 100%)',
+    tone: 'pink' as const,
+    Icon: Sparkles,
   },
   {
     label: '韩语词库',
     desc: '按主题、等级整理的韩语词汇，随时查阅、加入单词本、开始复习。',
     href: '/vocabulary?tab=library',
-    gradient: 'linear-gradient(135deg, #e8f4ff 0%, #f0e8ff 100%)',
+    tone: 'purple' as const,
+    Icon: Library,
   },
 ];
 
 const TOOL_GRID = [
-  { icon: '📖', label: '语法解释', desc: '句型例句', href: '/grammar', color: '#e47a94' },
-  { icon: '📄', label: '文章拆解', desc: '文章分析', href: '/reading', color: '#b49ccf' },
-  { icon: '💬', label: 'AI 场景陪练', desc: '情景对话', href: '/ai/chat', color: '#b49ccf' },
-  { icon: '⌨️', label: '韩文打字', desc: '键盘练习', href: '/typing', color: '#e8a87c' },
+  { Icon: BookOpen, label: '语法解释', desc: '句型例句', href: '/grammar', tone: 'pink' as const },
+  { Icon: FileText, label: '文章拆解', desc: '文章分析', href: '/reading', tone: 'purple' as const },
+  { Icon: MessageSquare, label: 'AI 场景陪练', desc: '情景对话', href: '/ai/chat', tone: 'mint' as const },
+  { Icon: Keyboard, label: '韩文打字', desc: '键盘练习', href: '/typing', tone: 'peach' as const },
 ];
+
+const TONE_BG: Record<'pink' | 'purple' | 'mint' | 'peach', string> = {
+  pink: 'var(--color-pink-soft)',
+  purple: 'var(--color-purple-soft)',
+  mint: 'var(--color-mint-soft)',
+  peach: 'var(--color-peach-soft)',
+};
+const TONE_FG: Record<'pink' | 'purple' | 'mint' | 'peach', string> = {
+  pink: 'var(--color-pink-strong)',
+  purple: 'var(--color-purple-strong)',
+  mint: 'var(--color-mint-strong)',
+  peach: 'var(--color-peach-strong)',
+};
 
 export function DesktopToolsPage() {
   const router = useRouter();
 
   return (
-    <div style={{ animation: 'fade-in .18s ease-out' }}>
-      {/* Hero */}
-      <div className="desktop-hero tools">
-        <span className="desktop-label">⚙︎ 工具</span>
-        <h2>把你看到的韩文，变成可以学的内容</h2>
-        <p>语法解释、文章拆解、AI陪练、韩文打字……全部工具都在这里。</p>
-      </div>
+    <div>
+      <PageHeader
+        eyebrow="도구 · TOOLS"
+        title="把你看到的韩文，变成可以学的内容"
+        subtitle="语法解释、文章拆解、AI 陪练、韩文打字 ── 全部工具都在这里。"
+        tone="mint"
+        mascot="sit"
+      />
 
       {/* Featured cards */}
-      <div className="desktop-grid-2" style={{ marginTop: 16 }}>
-        {FEATURED.map((item) => (
-          <div
-            key={item.label}
-            style={{
-              borderRadius: 28,
-              background: item.gradient,
-              padding: '22px 24px',
-              boxShadow: '0 8px 24px rgba(92,64,38,0.07)',
-              cursor: 'pointer',
-              transition: 'transform .15s ease',
-            }}
-            onClick={() => router.push(item.href)}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = 'translateY(-2px)')}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
-          >
-            <p style={{ fontSize: 17, fontWeight: 700, color: '#2f2a26' }}>{item.label}</p>
-            <p style={{ fontSize: 13, color: '#8c8177', marginTop: 6, lineHeight: 1.55 }}>{item.desc}</p>
-            <button
-              style={{
-                marginTop: 14,
-                background: '#241917',
-                color: '#fff',
-                border: 'none',
-                borderRadius: 999,
-                padding: '8px 18px',
-                fontSize: 13,
-                fontWeight: 700,
-                cursor: 'pointer',
-              }}
-            >
-              打开
-            </button>
-          </div>
-        ))}
-      </div>
+      <Section spacing="normal">
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+          {FEATURED.map(({ label, desc, href, tone, Icon }) => (
+            <Card key={href} variant="hero" tone={tone} padding="lg">
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14 }}>
+                <div
+                  style={{
+                    width: 48, height: 48, borderRadius: 'var(--radius-md)',
+                    background: 'var(--color-surface-2)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: TONE_FG[tone], flexShrink: 0,
+                  }}
+                  aria-hidden
+                >
+                  <Icon size={22} strokeWidth={1.75} />
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{ fontSize: 18, fontWeight: 800, color: 'var(--color-ink-1)', margin: 0 }}>
+                    {label}
+                  </p>
+                  <p style={{ fontSize: 13, color: 'var(--color-ink-3)', margin: '6px 0 14px', lineHeight: 1.6 }}>
+                    {desc}
+                  </p>
+                  <Button variant="primary" tone="black" size="md" onClick={() => router.push(href)}>
+                    打开
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </Section>
 
-      {/* All tools grid */}
-      <div className="desktop-section" style={{ marginTop: 20 }}>
-        <h2>全部工具</h2>
-      </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
-        {TOOL_GRID.map((tool) => (
-          <div
-            key={tool.href}
-            className="desktop-card"
-            style={{ cursor: 'pointer', transition: 'transform .15s ease' }}
-            onClick={() => router.push(tool.href)}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = 'translateY(-2px)')}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
-          >
-            <div style={{
-              width: 48,
-              height: 48,
-              borderRadius: 16,
-              background: `${tool.color}18`,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: 20,
-              marginBottom: 10,
-            }}>
-              {tool.icon}
-            </div>
-            <p style={{ fontSize: 14, fontWeight: 700, color: '#241917' }}>{tool.label}</p>
-            <p style={{ fontSize: 12, color: '#89756e', marginTop: 3 }}>{tool.desc}</p>
-          </div>
-        ))}
-      </div>
+      {/* All tools */}
+      <Section title="全部工具" spacing="normal">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
+          {TOOL_GRID.map(({ Icon, label, desc, href, tone }) => (
+            <Card
+              key={href}
+              as="button"
+              onClick={() => router.push(href)}
+              variant="default"
+              padding="md"
+              interactive
+            >
+              <div
+                style={{
+                  width: 48, height: 48, borderRadius: 'var(--radius-md)',
+                  background: TONE_BG[tone], color: TONE_FG[tone],
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  marginBottom: 10,
+                }}
+                aria-hidden
+              >
+                <Icon size={22} strokeWidth={1.75} />
+              </div>
+              <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>
+                {label}
+              </p>
+              <p style={{ fontSize: 12, color: 'var(--color-ink-3)', margin: '3px 0 0' }}>
+                {desc}
+              </p>
+            </Card>
+          ))}
+        </div>
+      </Section>
     </div>
   );
 }
