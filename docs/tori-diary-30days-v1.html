@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>30 天剧本 v1 · Tori 的韩语日记 · 留学生真实场景版</title>
+<style>
+  :root {
+    --bg: #fffbf7;
+    --card: #ffffff;
+    --soft: #fff4f0;
+    --muted: #f5ece7;
+    --ink-1: #1a1310;
+    --ink-2: #3a2e29;
+    --ink-3: #897167;
+    --ink-4: #b8a89c;
+    --border: #efe1da;
+    --pink-soft: #ffe4ee;
+    --pink: #ff7fa8;
+    --pink-strong: #e55a87;
+    --mint-soft: #e3f5f0;
+    --mint: #7dc6b3;
+    --mint-strong: #4a9880;
+    --peach-soft: #ffefe6;
+    --peach: #ff9d7a;
+    --peach-strong: #d97a55;
+    --purple-soft: #efe7ff;
+    --purple: #a896d9;
+    --purple-strong: #7560b8;
+    --carrot: #ff9d4a;
+    --shadow-sm: 0 4px 12px rgba(78,52,46,0.06);
+    --shadow-md: 0 10px 26px rgba(78,52,46,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg);
+    color: var(--ink-1);
+    font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { padding: 32px 16px 80px; }
+  .container { max-width: 1080px; margin: 0 auto; }
+
+  .hero {
+    background: linear-gradient(135deg, var(--pink-soft), #fff8fb);
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    padding: 44px 28px;
+    text-align: center;
+    margin-bottom: 28px;
+    box-shadow: var(--shadow-md);
+  }
+  .hero .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: var(--pink-strong); text-transform: uppercase; margin-bottom: 10px; }
+  .hero h1 { font-size: 30px; font-weight: 800; margin-bottom: 6px; line-height: 1.2; }
+  .hero p { font-size: 14px; color: var(--ink-3); }
+
+  /* Carrot 道具说明 */
+  .carrot-box {
+    background: linear-gradient(135deg, #fff5ed, #fffaf3);
+    border: 1.5px solid #ffd8a8;
+    border-radius: 20px;
+    padding: 20px 22px;
+    margin: 24px 0;
+    box-shadow: var(--shadow-sm);
+  }
+  .carrot-box h3 {
+    font-size: 16px;
+    color: var(--carrot);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .carrot-box p { font-size: 13px; color: var(--ink-2); margin-bottom: 6px; }
+  .carrot-box ul { margin: 8px 0 0 20px; font-size: 13px; color: var(--ink-2); }
+
+  /* Legend */
+  .legend {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 14px 20px;
+    margin-bottom: 24px;
+    font-size: 12px;
+    color: var(--ink-3);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+  .legend > strong { color: var(--ink-1); margin-right: 4px; }
+  .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    background: var(--card);
+    color: var(--ink-3);
+    border: 1px solid var(--border);
+  }
+  .tag.goal { background: var(--mint-soft); color: var(--mint-strong); border-color: transparent; }
+  .tag.char { background: var(--purple-soft); color: var(--purple-strong); border-color: transparent; }
+  .tag.grammar { background: var(--peach-soft); color: var(--peach-strong); border-color: transparent; }
+  .tag.sticker { background: var(--pink-soft); color: var(--pink-strong); border-color: transparent; }
+  .tag.exam { background: #ff5454; color: #fff; border-color: transparent; font-weight: 700; }
+  .tag.final { background: linear-gradient(135deg, var(--pink), var(--carrot)); color: #fff; border-color: transparent; font-weight: 700; }
+  .tag.carrot { background: #fff0d8; color: var(--carrot); border-color: transparent; font-weight: 700; }
+  .tag.special { background: var(--ink-1); color: #fff; border-color: transparent; }
+
+  /* Week block */
+  .week {
+    margin: 28px 0;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+  .week-head {
+    padding: 20px 26px;
+    border-bottom: 1px solid var(--border);
+  }
+  .week-head.w1 { background: linear-gradient(135deg, var(--pink-soft), #fff8fb); }
+  .week-head.w2 { background: linear-gradient(135deg, var(--mint-soft), #f4fbf8); }
+  .week-head.w3 { background: linear-gradient(135deg, var(--purple-soft), #f7f3ff); }
+  .week-head.w4 { background: linear-gradient(135deg, var(--peach-soft), #fff7f1); }
+  .week-head h2 { font-size: 19px; font-weight: 800; margin-bottom: 4px; }
+  .week-head h2 .sub { font-size: 12px; font-weight: 600; color: var(--ink-3); margin-left: 10px; }
+  .week-head p { font-size: 13px; color: var(--ink-2); margin-top: 6px; }
+
+  .day {
+    padding: 18px 26px;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 18px;
+    align-items: start;
+  }
+  .day:last-child { border-bottom: none; }
+  .day-num {
+    width: 56px; height: 56px; border-radius: 16px;
+    background: var(--soft);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    font-weight: 800;
+  }
+  .day-num .label { font-size: 10px; color: var(--ink-3); font-weight: 600; }
+  .day-num .n { font-size: 22px; color: var(--ink-1); line-height: 1; margin-top: 2px; }
+  .day.exam .day-num { background: #ff5454; }
+  .day.exam .day-num .label { color: rgba(255,255,255,0.85); }
+  .day.exam .day-num .n { color: #fff; }
+  .day.final .day-num { background: linear-gradient(135deg, var(--pink), var(--carrot)); }
+  .day.final .day-num .label { color: rgba(255,255,255,0.85); }
+  .day.final .day-num .n { color: #fff; }
+
+  .day-body h3 { font-size: 16px; font-weight: 800; margin-bottom: 6px; color: var(--ink-1); }
+  .day-body .scene { font-size: 12px; color: var(--ink-3); margin-bottom: 8px; }
+  .day-body .diary {
+    font-size: 13px;
+    color: var(--ink-2);
+    line-height: 1.7;
+    margin-bottom: 10px;
+    padding-left: 12px;
+    border-left: 2px solid var(--border);
+    font-family: 'KaiTi', 'STKaiti', serif;
+  }
+  .day-body .meta { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+
+  /* Map summary table at top */
+  .map-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    margin: 16px 0 28px;
+    font-size: 12px;
+  }
+  .map-table thead { background: var(--soft); }
+  .map-table th, .map-table td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); }
+  .map-table th { font-weight: 700; color: var(--ink-1); font-size: 12px; }
+  .map-table tr:last-child td { border-bottom: none; }
+  .map-table td.exam-cell { background: #fff0f0; color: #c44; font-weight: 700; }
+  .map-table td.final-cell { background: linear-gradient(135deg, #fff0f5, #fff5ed); color: var(--pink-strong); font-weight: 700; }
+
+  footer { margin-top: 48px; text-align: center; color: var(--ink-4); font-size: 12px; }
+
+  @media (max-width: 720px) {
+    .day { grid-template-columns: 1fr; }
+    .day-num { width: 100%; max-width: 80px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="hero">
+  <p class="eyebrow">30 天剧本 v1 · 留学生真实场景版</p>
+  <h1>토리의 한국어 일기 · 30 天剧本</h1>
+  <p>从准备出发到独立生活 · 真实留学场景 · 勇气胡萝卜全程相伴</p>
+</div>
+
+<!-- 道具说明 -->
+<div class="carrot-box">
+  <h3>🥕 勇气胡萝卜 · 你的 AI 助手</h3>
+  <p>Tori 妈妈在出发前给 Tori 装进行李箱的"超能力胡萝卜"，写着 <strong>용기</strong>（勇气）。</p>
+  <ul>
+    <li>任意页面右下角悬浮按钮，<strong>随时可点</strong></li>
+    <li>遇到不会的词、不懂的语法、不知道怎么说的场景 → 点胡萝卜问 AI</li>
+    <li>Tori 的 AI 助手会用"温柔学姐"的语气解答，永远不嫌烦</li>
+    <li>设定：胡萝卜是 Tori 在虚拟世界的安心物 / 你在真实世界的学习伙伴</li>
+  </ul>
+</div>
+
+<!-- 关卡分布表 -->
+<table class="map-table">
+  <thead><tr><th>Day</th><th>主题</th><th>性质</th></tr></thead>
+  <tbody>
+    <tr><td>1-3</td><td>准备出发 · 抵达首尔动物城</td><td>开篇 · 故事引入</td></tr>
+    <tr><td>4-6</td><td>报到 · 宿舍 · 自我介绍</td><td>新生活开始</td></tr>
+    <tr><td class="exam-cell">7</td><td class="exam-cell">📦 关卡 1：宿舍报到完整对话</td><td class="exam-cell">第 1 关</td></tr>
+    <tr><td>8-13</td><td>便利店 · 食堂 · 买生活用品 · 简单点单</td><td>日常生活技能</td></tr>
+    <tr><td class="exam-cell">14</td><td class="exam-cell">☕ 关卡 2：一个人去咖啡馆点单</td><td class="exam-cell">第 2 关</td></tr>
+    <tr><td>15-20</td><td>租房看房 · 银行办卡 · 看医生 · 问路坐车</td><td>独立生活技能</td></tr>
+    <tr><td class="exam-cell">21</td><td class="exam-cell">🏠 关卡 3：和房东签合同</td><td class="exam-cell">第 3 关</td></tr>
+    <tr><td>22-25</td><td>追星 · 约朋友 · 看 KPOP 演出</td><td>社交融入</td></tr>
+    <tr><td class="exam-cell">26</td><td class="exam-cell">🎤 关卡 4：偶像生咖啡店点单 + 应援</td><td class="exam-cell">第 4 关</td></tr>
+    <tr><td>27-28</td><td>请客 · 邀朋友 · 表达感谢</td><td>关系深化</td></tr>
+    <tr><td class="exam-cell">29</td><td class="exam-cell">💌 关卡 5：给朋友写一封韩文信</td><td class="exam-cell">第 5 关</td></tr>
+    <tr><td class="final-cell">30</td><td class="final-cell">🎓 最终考试 + 毕业典礼</td><td class="final-cell">大结局</td></tr>
+  </tbody>
+</table>
+
+<div class="legend">
+  <strong>图例</strong>
+  <span class="tag goal">学习目标</span>
+  <span class="tag char">角色</span>
+  <span class="tag grammar">语法</span>
+  <span class="tag sticker">贴纸</span>
+  <span class="tag carrot">🥕 推荐用</span>
+  <span class="tag exam">关卡</span>
+  <span class="tag final">最终考</span>
+  <span class="tag special">章末仪式</span>
+</div>
+
+<!-- ─── WEEK 1 ─── -->
+<div class="week">
+  <div class="week-head w1">
+    <h2>Week 1 · 准备出发到落地报到 <span class="sub">출발과 첫걸음</span></h2>
+    <p>3 天准备 + 3 天落地 + 1 关卡。学完能：基础问候、自我介绍、40 音、点头摇头。</p>
+  </div>
+
+  <div class="day">
+    <div class="day-num"><span class="label">DAY</span><span class="n">1</span></div>
+    <div class="day-body">
+      <h3>出发前夜 · 妈妈给我装了胡萝卜</h3>
+      <p class="scene">📍 中国家里 / 卧室 · 行李箱前 · Tori 独白 + 妈妈背影</p>
+      <p class="diary">"明天就要出发去韩国了。行李箱炸了三次还是塞不下。妈妈悄悄塞了一根胡萝卜进来，上面写着"용기"。她说：'有事问它，它会帮你。' 我笑她迷信，但还是把胡萝卜放进了背包。"</p>
+      <div class="meta">
+        <span class="tag goal">40 音 · 元音 ㅏㅓㅗㅜㅡㅣ</span>
+        <span class="tag goal">기본 인사 · 안녕하세요</span>
+        <span class="tag char">Tori 独白 + 妈妈</span>
+        <span class="tag carrot">🥕 介绍胡萝卜怎么用</span>
+        <span class="tag sticker">🐰 出发前夜</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="day-num"><span class="label">DAY</span><span class="n">2</span></div>
+    <div class="day-body">
+      <h3>飞机上 · 第一次说韩语</h3>
+      <p class="scene">📍 飞机上 · 空乘是只仙鹤 · Tori 紧张到出汗</p>
+      <p class="diary">"空乘姐姐是只仙鹤，她问我'음료수 드릴까요?' 我懵了 — 是要喝什么？我看着胡萝卜，心一横说'네、콜라 주세요'。她笑了。我接过可乐的那一刻、觉得自己赢了人生第一战。"</p>
+      <div class="meta">
+        <span class="tag goal">40 音 · 元音 ㅑㅕㅛㅠ</span>
+        <span class="tag goal">네 / 아니요 · 是/不是</span>
+        <span class="tag goal">~ 주세요 · 请给我</span>
+        <span class="tag char">仙鹤空乘</span>
+        <span class="tag carrot">🥕 不会回应空乘？问胡萝卜</span>
+        <span class="tag sticker">✈️ 第一杯韩国可乐</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="day-num"><span class="label">DAY</span><span class="n">3</span></div>
+    <div class="day-body">
+      <h3>仁爪机场 · 짐 vs 집 翻车事件</h3>
+      <p class="scene">📍 仁爪机场出口 · 出租车候车点 · 水獭 Minji 帮忙</p>
+      <p class="diary">"机场出口我想请一只水獭姐姐帮忙抬'짐'(行李)，结果说成了'집'(家)。她愣住的那秒、我也愣住了。她叫 Minji，没有笑我，只是把行李拎上了出租车。后来她加了我微信。"</p>
+      <div class="meta">
+        <span class="tag goal">14 个辅音入门</span>
+        <span class="tag goal">짐 / 집 容易混淆词</span>
+        <span class="tag goal">미안해요 / 괜찮아요</span>
+        <span class="tag char">Minji（水獭）首次登场</span>
+        <span class="tag grammar">~ 입니다 · 是</span>
+        <span class="tag carrot">🥕 怕说错？问胡萝卜怎么说"行李"</span>
+        <span class="tag sticker">🛬 落地首尔动物城</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="day-num"><span class="label">DAY</span><span class="n">4</span></div>
+    <div class="day-body">
+      <h3>한빛宿舍 · 第一天报到</h3>
+      <p class="scene">📍 한빛语言学校宿舍楼 · 宿管阿姨（一只浣熊）</p>
+      <p class="diary">"宿管阿姨是只浣熊，她翻着登记表说'토리 학생 맞아요?' 我连忙说'네、맞아요!'。然后她递给我钥匙、说'301호예요'。我握紧钥匙、感觉这就是我以后的家了。"</p>
+      <div class="meta">
+        <span class="tag goal">자기소개 · 자는 토리예요</span>
+        <span class="tag goal">맞아요 / 아니에요</span>
+        <span class="tag goal">数字 1-10 (公寓号)</span>
+        <span class="tag char">浣熊宿管</span>
+        <span class="tag grammar">~ 이에요/예요 · 是</span>
+        <span class="tag carrot">🥕 怎么填登记表？问胡萝卜</span>
+        <span class="tag sticker">🔑 我的房间钥匙</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="day-num"><span class="label">DAY</span><span class="n">5</span></div>
+    <div class="day-body">
+      <h3>宿舍楼下 · 遇见 Haru 仓鼠</h3>
+      <p class="scene">📍 宿舍楼下走廊 · 仓鼠 Haru 主动搭讪</p>
+      <p class="diary">"我在楼下倒垃圾的时候，遇到了一只可爱的仓鼠。她笑着说'301호 새 학생 맞죠?' 我点头。她说她是 Haru、住 302。从今天开始我们是邻居了。"</p>
+      <div class="meta">
+        <span class="tag goal">맞죠? · 对吧</span>
+        <span class="tag goal">이웃 / 친구 · 邻居/朋友</span>
+        <span class="tag char">Haru（仓鼠）首次登场</span>
+        <span class="tag grammar">은/는 · 主题助词</span>
+        <span class="tag carrot">🥕 怎么自我介绍？问胡萝卜</span>
+        <span class="tag sticker">🐹 邻居 Haru</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="day-num"><span class="label">DAY</span><span class="n">6</span></div>
+    <div class="day-body">
+      <h3>语言学校教室 · 班长 Junho</h3>
+      <p class="scene">📍 한빛语言学校教室 · 老虎 Junho 是班长</p>
+      <p class="diary">"开学第一天。班长 Junho 是只大老虎、看起来很凶、其实是 KPOP 死忠粉。他说'안녕하세요、반장 준호예요'。我也鼓起勇气说了'저는 토리예요、잘 부탁드려요'。第一次在课堂上开口说韩语。"</p>
+      <div class="meta">
+        <span class="tag goal">반장 · 잘 부탁드려요</span>
+        <span class="tag goal">学校相关词 6 个</span>
+        <span class="tag char">Junho（老虎）首次登场</span>
+        <span class="tag grammar">~ 입니다 vs ~ 이에요 礼貌差异</span>
+        <span class="tag carrot">🥕 不知道说"请多关照"？问胡萝卜</span>
+        <span class="tag sticker">📝 学生证</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="day exam">
+    <div class="day-num"><span class="label">DAY</span><span class="n">7</span></div>
+    <div class="day-body">
+      <h3>📦 关卡 1 · 宿舍报到完整对话</h3>
+      <p class="scene">📍 模拟场景：你是 Tori、第一次到宿舍。和宿管完整完成一段对话</p>
+      <p class="diary">"宿管：'안녕하세요、이름이 뭐예요?' → 你回答 → 宿管：'어느 나라 사람이에요?' → 你回答 → 宿管：'방 번호 알아요?' → 你回答 → 宿管：'잘 지내세요!'"</p>
+      <div class="meta">
+        <span class="tag exam">🎯 通关条件：5 句对话全对 · 失败可重试 · 胡萝卜可救场</span>
+        <span class="tag goal">综合复盘 Week 1</span>
+        <span class="tag special">🎀 章末仪式：颁发"通过宿舍报到"贴纸</span>
+        <span class="tag special">🥕 勇气胡萝卜 +1</span>
+        <span class="tag sticker">📖 Week 1 完成</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── WEEK 2 ─── -->
+<div class="week">
+  <div class="week-head w2">
+    <h2>Week 2 · 日常生活技能 <span class="sub">일상의 시작</span></h2>
+    <p>便利店 + 食堂 + 买生活用品 + 简单点单。学完能：买东西、问价钱、点单、和店员对话。</p>
+  </div>
+
+  <div class="day">
+    <div class="day-num"><span class="label">DAY</span><span class="n">8</span></div>
+    <div class="day-body">
+      <h3>CU 便利店 · 第一次自己买饭</h3>
+      <p class="scene">📍 宿舍楼下 CU 便利店 · 一只考拉店员</p>
+      <p class="diary">"今天饿了、自己下楼去便利店。我盯着冰柜里的삼각김밥半天。店员是只考拉、慢吞吞地说'결제 도와드릴까요?' 我赶紧把饭团递过去说'이거 주세요'。"</p>
+      <div class="meta">
+        <span class="tag goal">~ 주세요 综合应用</span>
+        <span class="tag goal">便利店物品 6 个</span>
+        <span class="tag char">考拉店员</span>
+        <span class="tag grammar">을/를 · 宾语助词</span>
+        <span class="tag carrot">🥕 不懂"결제"是什么？问胡萝卜</span>
+        <span class="tag sticker">🍙 第一个紫菜包饭</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="day-num"><span class="label">DAY</span><span class="n">9</span></div>
+    <div class="day-body">
+      <h3>价格的故事 · 만 원</h3>
+      <p class="scene">📍 街边小店 · Minji 教 Tori 韩币</p>
+      <p class="diary">"今天 Minji 带我去街边小店买文具。她说千、万的发音和中文不同。我反复练习'만 원'差点没把舌头打结。结账时我自己说了'만 이천 원이에요?' Minji 笑着点头。"</p>
+      <div class="meta">
+        <span class="tag goal">数字 10-10000</span>
+        <span class="tag goal">얼마예요? · 多少钱</span>
+        <span class="tag char">Minji</span>
+        <span class="tag grammar">数字 + 단위 · 单位</span>
+        <span class="tag carrot">🥕 价格听不懂？问胡萝卜</span>
+        <span class="tag sticker">💴 第一张万元</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="day-num"><span class="label">DAY</span><span class="n">10</span></div>
+    <div class="day-body">
+      <h3>学校食堂 · 有什么/没什么</h3>
+      <p class="scene">📍 학교 식당 · 食堂大妈（一只袋鼠）</p>
+      <p class="diary">"中午食堂吃饭。我问'김치찌개 있어요?' 袋鼠阿姨摇头'없어요'，又指了指된장찌개说'이거 있어요'。我尝了一口、又咸又香。Junho 在桌对面已经吃完了。"</p>
+      <div class="meta">
+        <span class="tag goal">있어요 / 없어요</span>
+        <span class="tag goal">韩国食物 6 个</span>
+        <span class="tag char">袋鼠食堂阿姨</span>
+        <span class="tag grammar">~ 이/가 있어요</span>
+        <span class="tag carrot">🥕 想吃但不知名字？问胡萝卜</span>
+        <span class="tag sticker">🍲 된장찌개</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="day-num"><span class="label">DAY</span><span class="n">11</span></div>
+    <div class="day-body">
+      <h3>Daiso 买生活用品 · 这个/那个</h3>
+      <p class="scene">📍 다이소（Daiso）· 一只羊店员</p>
+      <p class="diary">"今天去다이소买洗漱用品。我指着远处的衣架问'그거 얼마예요?'。店员是只羊、耐心地说'저거요? 천 원이에요'。我学到了 이거/그거/저거 的区别 — 自己的、对方的、远处的。"</p>
+      <div class="meta">
+        <span class="tag goal">이거 / 그거 / 저거</span>
+        <span class="tag goal">생활용품 6 个</span>
+        <span class="tag char">羊店员</span>
+        <span class="tag grammar">距离指示</span>
+        <span class="tag carrot">🥕 哪个是哪个？问胡萝卜</span>
+        <span class="tag sticker">🛒 다이소买买买</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="day-num"><span class="label">DAY</span><span class="n">12</span></div>
+    <div class="day-body">
+      <h3>独立咖啡馆 · 第一杯拿铁</h3>
+      <p class="scene">📍 学校附近独立咖啡馆 · 一只猫店员</p>
+      <p class="diary">"今天去 Haru 推荐的小咖啡馆。店员问'아이스 아메리카노 드릴까요?'我蒙了。Haru 教过我'얼음 빼고요'。我说'라떼 주세요、얼음 빼고요'。猫店员笑着说'네、따뜻하게요!'"</p>
+      <div class="meta">
+        <span class="tag goal">咖啡类 6 个词</span>
+        <span class="tag goal">~ 빼고 · 不要 / 따뜻하게 · 热的</span>
+        <span class="tag char">猫店员</span>
+        <span class="tag carrot">🥕 不会读菜单？问胡萝卜</span>
+        <span class="tag sticker">☕ 第一杯拿铁</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="day-num"><span class="label">DAY</span><span class="n">13</span></div>
+    <div class="day-body">
+      <h3>药店 · 我感冒了</h3>
+      <p class="scene">📍 学校附近약국 · 一只白鹭药剂师</p>
+      <p class="diary">"半夜流鼻涕。Haru 陪我去药店。我说'감기 걸렸어요、콧물이 나요'。白鹭药剂师姐姐温柔地说'알겠어요、이 약 드세요'。回宿舍吃完药、睡前听 Haru 说她以前也是这样开始适应的。"</p>
+      <div class="meta">
+        <span class="tag goal">감기 / 콧물 / 약 · 感冒/鼻涕/药</span>
+        <span class="tag goal">~ 걸리다 · 得（病）</span>
+        <span class="tag char">Haru + 白鹭药剂师</span>
+        <span class="tag grammar">~ 어요 (动词）</span>
+        <span class="tag carrot">🥕 描述病情？问胡萝卜</span>
+        <span class="tag sticker">💊 第一次买药</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="day exam">
+    <div class="day-num"><span class="label">DAY</span><span class="n">14</span></div>
+    <div class="day-body">
+      <h3>☕ 关卡 2 · 一个人去咖啡馆点单</h3>
+      <p class="scene">📍 模拟场景：你是 Tori、独自走进新咖啡馆。完成完整点单流程</p>
+      <p class="diary">"店员：'어서 오세요、뭐 드릴까요?' → 你点单 → 店员：'사이즈는요?' → 你回答 → 店员：'얼음은 어떻게?' → 你回答 → 店员：'얼마 드릴까요?(支付)' → 你拿出现金/卡"</p>
+      <div class="meta">
+        <span class="tag exam">🎯 通关条件：6 句对话流畅完成</span>
+        <span class="tag goal">综合复盘 Week 2</span>
+        <span class="tag special">🎀 章末仪式：用韩语录"我的咖啡订单"语音</span>
+        <span class="tag special">🥕 勇气胡萝卜 +1（共 2 根）</span>
+        <span class="tag sticker">📖 Week 2 完成</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── WEEK 3 ─── -->
+<div class="week">
+  <div class="week-head w3">
+    <h2>Week 3 · 独立生活技能 <span class="sub">독립적인 생활</span></h2>
+    <p>租房 + 银行办卡 + 看医生 + 问路。学完能：独立处理留学生最常遇到的"硬核"场景。</p>
+  </div>
+
+  <div class="day">
+    <div class="day-num"><span class="label">DAY</span><span class="n">15</span></div>
+    <div class="day-body">
+      <h3>看房 · 找一间属于我的房间</h3>
+      <p class="scene">📍 학교 근처 自习考虑租房 · 中介（一只老犬）</p>
+      <p class="diary">"宿舍只能住到 1 月。Minji 带我去看房子。中介老犬叔叔说'원룸이 좋아요、투룸이 좋아요?' 我懵了 — 一房一卫还是两房？我说'원룸요、혼자 살아요'。叔叔说'좋아요、보러 가요'。"</p>
+      <div class="meta">
+        <span class="tag goal">원룸 / 투룸 / 보증금 / 월세</span>
+        <span class="tag goal">혼자 · 一个人</span>
+        <span class="tag char">中介老犬叔叔 + Minji</span>
+        <span class="tag grammar">~ 보러 가요 · 去看</span>
+        <span class="tag carrot">🥕 不懂租房术语？问胡萝卜</span>
+        <span class="tag sticker">🏠 看房日记</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="day-num"><span class="label">DAY</span><span class="n">16</span></div>
+    <div class="day-body">
+      <h3>问路 · 这里怎么去？</h3>
+      <p class="scene">📍 弘爪街 · 我又迷路了 · 一只海狸路人</p>
+      <p class="diary">"约 Haru 在 2 号出口结果走到 5 号出口。我问一只海狸叔叔'2번 출구 어디예요?' 他指着说'쭉 가서 오른쪽이에요'。我说'감사합니다、안녕히 가세요'。海狸叔叔回头笑了一下。"</p>
+      <div class="meta">
+        <span class="tag goal">어디예요? · 在哪</span>
+        <span class="tag goal">방향 6 个 · 쭉/오른쪽/왼쪽/앞/뒤</span>
+        <span class="tag char">海狸路人</span>
+        <span class="tag grammar">~ 아/어서 · 然后</span>
+        <span class="tag carrot">🥕 听不懂方向？问胡萝卜</span>
+        <span class="tag sticker">🗺️ 不会迷路了</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="day-num"><span class="label">DAY</span><span class="n">17</span></div>
+    <div class="day-body">
+      <h3>地铁 · 一卡通和 Naver Map</h3>
+      <p class="scene">📍 弘爪站售票处 · 一只猫头鹰售票员</p>
+      <p class="diary">"今天我自己去办了 티머니 카드（一卡通）。售票员是只猫头鹰、戴眼镜、说话超快。她说'충전 얼마예요?' 我说'만 원이요'。然后我用 Naver Map 看路、第一次没问 Haru 自己回宿舍。"</p>
+      <div class="meta">
+        <span class="tag goal">티머니카드 / 충전 · 充值</span>
+        <span class="tag goal">地铁站名 + 호선 · 号线</span>
+        <span class="tag char">猫头鹰售票员</span>
+        <span class="tag grammar">얼마 + 名词</span>
+        <span class="tag carrot">🥕 一卡通怎么用？问胡萝卜</span>
+        <span class="tag sticker">🎫 我的一卡通</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="day-num"><span class="label">DAY</span><span class="n">18</span></div>
+    <div class="day-body">
+      <h3>银行 · 办留学生账户</h3>
+      <p class="scene">📍 KB 银行 · 一只乌龟柜员</p>
+      <p class="diary">"今天去银行办账户。乌龟柜员说话很慢、我感谢上天。他问'외국인 등록증 있어요?' 我把外国人登录证递给他。然后他问'비밀번호 4자리 정해 주세요'。我设了 1004 — 天使的意思。"</p>
+      <div class="meta">
+        <span class="tag goal">은행 / 통장 / 비밀번호</span>
+        <span class="tag goal">외국인등록증</span>
+        <span class="tag char">乌龟柜员</span>
+        <span class="tag grammar">~ 자리 · 位数</span>
+        <span class="tag carrot">🥕 听不懂柜员？问胡萝卜</span>
+        <span class="tag sticker">🏦 我的第一张银行卡</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="day-num"><span class="label">DAY</span><span class="n">19</span></div>
+    <div class="day-body">
+      <h3>看医生 · 综合병원挂号</h3>
+      <p class="scene">📍 区内 综合병원 · 护士（一只兔子）</p>
+      <p class="diary">"持续咳嗽两天了。Haru 陪我去병원挂号。护士姐姐（一只白兔！）问'어느 과예요?' 我说'내과요'。她说'증상 말씀해 주세요'。我说'기침이 심해요、열도 좀 나요'。这是我第一次用韩语描述病情。"</p>
+      <div class="meta">
+        <span class="tag goal">병원 / 내과 / 증상</span>
+        <span class="tag goal">기침 / 열 / 두통 · 症状</span>
+        <span class="tag char">兔护士 + Haru</span>
+        <span class="tag grammar">~ 도 · 也</span>
+        <span class="tag carrot">🥕 描述身体不舒服？问胡萝卜</span>
+        <span class="tag sticker">🏥 第一次看医生</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="day-num"><span class="label">DAY</span><span class="n">20</span></div>
+    <div class="day-body">
+      <h3>租房合同细节 · 签约前的疑问</h3>
+      <p class="scene">📍 中介办公室 · 老犬叔叔 + 房东（一只海豹）</p>
+      <p class="diary">"今天和房东海豹叔叔见面。他说'보증금 500만원、월세 50만원이에요'。我心里慌、问 Haru 这价格行不行。叔叔补了一句'관리비 5만원 따로요'。我看胡萝卜 — 它告诉我管理费什么意思。"</p>
+      <div class="meta">
+        <span class="tag goal">보증금 / 월세 / 관리비</span>
+        <span class="tag goal">계약 / 따로 · 合同/另外</span>
+        <span class="tag char">海豹房东 + 老犬中介</span>
+        <span class="tag grammar">~ 따로 · 另外</span>
+        <span class="tag carrot">🥕 不懂合同？问胡萝卜（重点用）</span>
+        <span class="tag sticker">📄 合同条款笔记</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="day exam">
+    <div class="day-num"><span class="label">DAY</span><span class="n">21</span></div>
+    <div class="day-body">
+      <h3>🏠 关卡 3 · 和房东签合同</h3>
+      <p class="scene">📍 模拟场景：你是 Tori、和房东海豹叔叔谈合同。完成 8 句关键对话</p>
+      <p class="diary">"房东：'안녕하세요、보증금 얼마 가능해요?' → 你回答 → 房东：'언제 입주하실 거예요?' → 你回答 → 房东：'전기세、수도세 본인 부담이에요' → 你确认 → 房东：'계약서 사인하시면 돼요' → 你签字"</p>
+      <div class="meta">
+        <span class="tag exam">🎯 通关条件：完整理解合同条款 + 提出 1 个问题</span>
+        <span class="tag goal">综合复盘 Week 3</span>
+        <span class="tag special">🎀 章末仪式：制作"我的租房须知"小册子</span>
+        <span class="tag special">🥕 勇气胡萝卜 +1（共 3 根）</span>
+        <span class="tag sticker">📖 Week 3 完成</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── WEEK 4 ─── -->
+<div class="week">
+  <div class="week-head w4">
+    <h2>Week 4 · 社交融入 + 毕业 <span class="sub">소속과 졸업</span></h2>
+    <p>追星 + 约朋友 + 看演出 + 请客 + 写信。最终毕业典礼。学完一个月、Tori 真的成为这里的人。</p>
+  </div>
+
+  <div class="day">
+    <div class="day-num"><span class="label">DAY</span><span class="n">22</span></div>
+    <div class="day-body">
+      <h3>해요体登场 · 我去/我吃/我学</h3>
+      <p class="scene">📍 教室 · 老师讲해요体</p>
+      <p class="diary">"今天老师讲了 해요体 — 韩语动词最常用的礼貌形。가요、먹어요、공부해요。我把每一个新动词都对着新房子的窗户念了 7 遍。"</p>
+      <div class="meta">
+        <span class="tag goal">해요体动词 8 个</span>
+        <span class="tag goal">아/어요 词尾</span>
+        <span class="tag grammar">动词时态 · 现在时</span>
+        <span class="tag carrot">🥕 动词变化记不住？问胡萝卜</span>
+        <span class="tag sticker">📚 해요体上手</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="day-num"><span class="label">DAY</span><span class="n">23</span></div>
+    <div class="day-body">
+      <h3>弘爪街追星 · 偶像生日咖啡馆</h3>
+      <p class="scene">📍 弘爪生咖啡店 · 排队的猫狐狸们 · Junho 兴奋</p>
+      <p class="diary">"今天 Junho 拉我去他偶像的生日咖啡馆。门口排了 30 个动物、全是猫和狐狸。Junho 已经红了眼眶、说'이건 진짜 죽기 전에 한 번은 와야 돼요'。我笑他、但我也悄悄存了照片。"</p>
+      <div class="meta">
+        <span class="tag goal">진짜 / 정말 · 真的</span>
+        <span class="tag goal">KPOP 应援词 6 个</span>
+        <span class="tag char">Junho</span>
+        <span class="tag grammar">~ 야 돼요 · 必须</span>
+        <span class="tag carrot">🥕 KPOP 词不懂？问胡萝卜</span>
+        <span class="tag sticker">💖 第一张小卡</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="day-num"><span class="label">DAY</span><span class="n">24</span></div>
+    <div class="day-body">
+      <h3>邀请约定 · 같이</h3>
+      <p class="scene">📍 微信对话 · 三人群（Minji + Junho + Haru）</p>
+      <p class="diary">"今天 Junho 偶像出新 MV。我在群里发'얘들아、같이 봐요?'。Minji 秒回'좋아요!'，Haru 发了一个'당연하지'。我突然意识到、我已经能在韩语群里聊天了。"</p>
+      <div class="meta">
+        <span class="tag goal">같이 · 一起</span>
+        <span class="tag goal">~ 봐요 邀请</span>
+        <span class="tag goal">당연하지 · 当然</span>
+        <span class="tag char">Minji + Junho + Haru</span>
+        <span class="tag grammar">~ㄹ까요? 提议</span>
+        <span class="tag carrot">🥕 怎么邀请朋友？问胡萝卜</span>
+        <span class="tag sticker">📱 第一次群聊</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="day-num"><span class="label">DAY</span><span class="n">25</span></div>
+    <div class="day-body">
+      <h3>한강 演唱会 · 我们一起喊应援</h3>
+      <p class="scene">📍 한강公园演唱会现场 · Junho 教 Tori 应援</p>
+      <p class="diary">"한강演唱会现场。Junho 把应援棒塞我手里、说'토리、따라해'。然后他大声喊：'아이돌、사랑해!' 我也喊了。声音被烟火吞没。回家路上我们三个人一起唱主打曲 — 我居然记住了副歌的一半。"</p>
+      <div class="meta">
+        <span class="tag goal">사랑해 / 응원해</span>
+        <span class="tag goal">따라해 · 跟我做</span>
+        <span class="tag char">Junho + Haru + Minji</span>
+        <span class="tag grammar">~ 해 · 命令式</span>
+        <span class="tag carrot">🥕 应援怎么喊？问胡萝卜</span>
+        <span class="tag sticker">🎤 现场应援</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="day exam">
+    <div class="day-num"><span class="label">DAY</span><span class="n">26</span></div>
+    <div class="day-body">
+      <h3>🎤 关卡 4 · 偶像生咖啡店挑战</h3>
+      <p class="scene">📍 模拟场景：你是 Tori、独自在生咖排队、和店员交流</p>
+      <p class="diary">"店员：'어떤 카페 라테 드시겠어요?' → 你点 → 店员：'특전은 어떤 거 받으실래요?' → 你回答 → 店员：'사이즈?' → 你回答 → 拿到小卡的瞬间、对店员说一句"</p>
+      <div class="meta">
+        <span class="tag exam">🎯 通关条件：5 句对话 + 一句你即兴的话</span>
+        <span class="tag goal">KPOP 词汇 + 应援</span>
+        <span class="tag special">🥕 勇气胡萝卜 +1（半根 → 3.5）</span>
+        <span class="tag sticker">💖 小卡收藏</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="day-num"><span class="label">DAY</span><span class="n">27</span></div>
+    <div class="day-body">
+      <h3>请客 · 한턱 낼게요</h3>
+      <p class="scene">📍 弘爪街韩式火锅店 · 四人聚餐</p>
+      <p class="diary">"今天我用第一笔奖学金请大家吃饭。我说'오늘 내가 한턱 낼게요!'。大家都笑我说我超有面子。结账时我发现钱不够、Junho 偷偷帮我补了。我假装没看见、心里默默想 — 下次我自己赚到、就请回来。"</p>
+      <div class="meta">
+        <span class="tag goal">한턱 낼게요 · 我请客</span>
+        <span class="tag goal">결제 · 付账词汇</span>
+        <span class="tag char">Minji + Junho + Haru</span>
+        <span class="tag grammar">~ 게요 · 我会</span>
+        <span class="tag carrot">🥕 请客怎么说？问胡萝卜</span>
+        <span class="tag sticker">🍻 第一次请客</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="day-num"><span class="label">DAY</span><span class="n">28</span></div>
+    <div class="day-body">
+      <h3>过去时 · 写日记的开始</h3>
+      <p class="scene">📍 新家窗边 · 写第一篇日记</p>
+      <p class="diary">"今天开始用~았/었어요 写日记。'어제 친구랑 콘서트 갔어요. 정말 즐거웠어요. 처음으로 응원했어요.' 我把日记本翻回 Day 1 看 — 那时候连'안녕하세요'都说不利索。眼泪居然掉下来了。"</p>
+      <div class="meta">
+        <span class="tag goal">过去时 ~았/었어요</span>
+        <span class="tag goal">日记结构 시간 + 행동</span>
+        <span class="tag grammar">动词时态总结</span>
+        <span class="tag carrot">🥕 过去时不会变？问胡萝卜</span>
+        <span class="tag sticker">✍️ 第一篇韩文日记</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="day exam">
+    <div class="day-num"><span class="label">DAY</span><span class="n">29</span></div>
+    <div class="day-body">
+      <h3>💌 关卡 5 · 给朋友写一封韩文信</h3>
+      <p class="scene">📍 模拟场景：选一个朋友（Minji/Junho/Haru），写一封 8-12 句的韩文信</p>
+      <p class="diary">"信里要包含：开头打招呼 → 一件这个月发生的事 → 你的感受 → 想对他们说的话 → 结尾签名。AI 会给你的信打分、提出改进建议。"</p>
+      <div class="meta">
+        <span class="tag exam">🎯 通关条件：写完 8 句以上 + AI 打分 7/10 以上</span>
+        <span class="tag goal">综合复盘 Week 4</span>
+        <span class="tag goal">写作综合输出</span>
+        <span class="tag special">🥕 勇气胡萝卜 +1（共 4 根 = 一束）</span>
+        <span class="tag sticker">💌 第一封韩文信</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="day final">
+    <div class="day-num"><span class="label">DAY</span><span class="n">30</span></div>
+    <div class="day-body">
+      <h3>🎓 最终考试 + 毕业典礼</h3>
+      <p class="scene">📍 한빛语言学校礼堂 · Minji + Junho + Haru + 全班动物</p>
+      <p class="diary">"今天毕业。我穿了粉色的小礼服、胸前别着勇气胡萝卜的徽章。最终考试是一段 5 分钟的口语 — 介绍自己 + 讲这一个月的故事。我说完最后一句、整个礼堂响起了掌声。Minji 录像、Junho 献花、Haru 在旁边偷偷哭。校长发证书的时候、我用韩语说了一句'30 일 동안 정말 행복했어요、감사합니다!' 那一刻我突然懂了 — 妈妈的胡萝卜不是迷信、是她的祝福。"</p>
+      <div class="meta">
+        <span class="tag final">🎓 最终考试：综合口语 · 5 分钟自述</span>
+        <span class="tag final">📜 通过 = 颁发毕业证书</span>
+        <span class="tag final">📦 触发实体周边申请（年付用户）</span>
+        <span class="tag goal">综合输出 · 韩语致辞</span>
+        <span class="tag char">Minji + Junho + Haru 全员</span>
+        <span class="tag special">🎬 解锁毕业典礼动画序列</span>
+        <span class="tag special">🥕 勇气胡萝卜 + 1（5 根 = 一束花）</span>
+        <span class="tag sticker">🎀 毕业证书 + 30 天纪念册</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p><strong>30 天剧本 v1</strong> · 留学生真实场景版 · 5 个关卡 + 最终考试</p>
+  <p>每一天剧情、关卡、胡萝卜用法都欢迎打回。</p>
+</footer>
+
+</div>
+</body>
+</html>

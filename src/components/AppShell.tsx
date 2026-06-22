@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState, type ComponentType } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { Sparkles, BookOpen, Wrench, GraduationCap, Compass, Shield } from 'lucide-react';
+import { Sparkles, BookOpen, Wrench, GraduationCap, Compass, Shield, NotebookPen } from 'lucide-react';
 import { BottomTabBar } from '@/components/mobile/BottomTabBar';
 import { FloatingDecorations } from '@/components/FloatingDecorations';
 import { useAuth } from '@/components/AuthProvider';
@@ -36,7 +36,7 @@ function saveShortcuts(ids: string[]) {
 }
 
 type NavItem = {
-  id: 'today' | 'vocabulary' | 'tools' | 'learn' | 'explore';
+  id: 'today' | 'diary' | 'vocabulary' | 'tools' | 'learn' | 'explore';
   Icon: ComponentType<{ size?: number; strokeWidth?: number }>;
   label: string;
   href: string;
@@ -44,6 +44,7 @@ type NavItem = {
 
 const NAV_ITEMS: NavItem[] = [
   { id: 'today',      Icon: Sparkles,      label: '今日', href: '/daily' },
+  { id: 'diary',      Icon: NotebookPen,   label: '日记', href: '/diary' },
   { id: 'vocabulary', Icon: BookOpen,      label: '词汇', href: '/vocabulary' },
   { id: 'tools',      Icon: Wrench,        label: '工具', href: '/tools' },
   { id: 'learn',      Icon: GraduationCap, label: '学习', href: '/learning' },
@@ -54,6 +55,7 @@ function resolvePageMeta(pathname: string | null) {
   const p = pathname || '/daily';
   if (p.startsWith('/admin')) return { title: '管理后台', activeId: 'today', hidePanel: true };
   if (p === '/daily') return { title: '今日', activeId: 'today', hidePanel: false };
+  if (p.startsWith('/diary')) return { title: '兔莉的韩语日记', activeId: 'diary', hidePanel: true };
   if (p.startsWith('/mine') || p.startsWith('/vocabulary')) return { title: '词汇', activeId: 'vocabulary', hidePanel: false };
   if (p.startsWith('/reading')) return { title: '工具', activeId: 'tools', hidePanel: true };
   if (p === '/tools' || p.startsWith('/tools/')

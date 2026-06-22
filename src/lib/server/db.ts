@@ -932,6 +932,33 @@ export async function getDb() {
       `);
       await c.execute(`CREATE INDEX IF NOT EXISTS idx_ai_chat_new_words_user ON ai_chat_new_words(user_id)`);
 
+      // ── Tori 韩语日记（30 天养成手册）──
+      await c.execute(`
+        CREATE TABLE IF NOT EXISTS user_tori_progress (
+          id TEXT PRIMARY KEY,
+          user_id TEXT NOT NULL,
+          day INTEGER NOT NULL,
+          modules_done TEXT NOT NULL DEFAULT '[]',
+          output_json TEXT NOT NULL DEFAULT '[]',
+          started_at INTEGER NOT NULL,
+          completed_at INTEGER,
+          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        )
+      `);
+      await c.execute(`CREATE INDEX IF NOT EXISTS idx_user_tori_progress_user ON user_tori_progress(user_id, day)`);
+
+      await c.execute(`
+        CREATE TABLE IF NOT EXISTS user_tori_stickers (
+          id TEXT PRIMARY KEY,
+          user_id TEXT NOT NULL,
+          sticker_id TEXT NOT NULL,
+          acquired_at INTEGER NOT NULL,
+          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+          UNIQUE(user_id, sticker_id)
+        )
+      `);
+      await c.execute(`CREATE INDEX IF NOT EXISTS idx_user_tori_stickers_user ON user_tori_stickers(user_id)`);
+
   // Migration: add correct_count / wrong_count to user_words
   try { await c.execute(`ALTER TABLE user_words ADD COLUMN correct_count INTEGER DEFAULT 0`); } catch { /* already exists */ }
   try { await c.execute(`ALTER TABLE user_words ADD COLUMN wrong_count INTEGER DEFAULT 0`); } catch { /* already exists */ }

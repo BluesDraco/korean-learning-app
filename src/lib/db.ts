@@ -1,5 +1,6 @@
 import type { Word, ReviewSession, DictationRecord, ShadowingRecord, UserProfile, DailyLog, Achievement, AppSettings, WordBook, StudyVideo, StudySubtitle, StudyLog, UserAchievement, UserShareLink, StickerPack, Sticker, StickerDownload, BuddyRelation, BuddyInvite, PronunciationAttempt, UserGrammarState, UserArticleProgress, ArticleLearningEvent, TopikSession, TopikMistake, SpellingMistake, AiChatMistake, AiChatNewWord, SavedSentence, SavedArticle, SavedNote, UserRecording, KpopSongProgress, DiaryEntry, NewsReadingProgress } from '@/types';
 import type { LessonMastery, LearningEvent } from '@/lib/lesson/types';
+import type { ToriProgress, ToriStickerOwned } from '@/types/tori-diary';
 
 const API = '/api/user-data';
 
@@ -280,6 +281,8 @@ export const db = {
   spellingMistakes: new CloudTable<SpellingMistake>('spelling_mistakes'),
   aiChatMistakes: new CloudTable<AiChatMistake>('aiChatMistakes'),
   aiChatNewWords: new CloudTable<AiChatNewWord>('aiChatNewWords'),
+  toriProgress: new CloudTable<ToriProgress>('toriProgress'),
+  toriStickersOwned: new CloudTable<ToriStickerOwned>('toriStickersOwned'),
 };
 
 export const FAVORITES_BOOK_ID = 'default-favorites';
