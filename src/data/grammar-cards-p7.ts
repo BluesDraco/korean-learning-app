@@ -451,7 +451,7 @@ export const grammarCardsP7: GrammarCard[] = [
     ],
     connectionRules: [
       { type: 'rule', text: '动词词干 + 는데（现在时，不看收音）', examples: '가다→가는데 / 먹다→먹는데 / 공부하다→공부하는데' },
-      { type: 'rule', text: '形容词词干 有收音加 은데，无收音加 ㄴ데', examples: '작다→작은데 / 크다→큰데 / 좋다→좋은데 / 예쁘다→예쁜데' },
+      { type: 'rule', text: '形容词词干：有收音加 은데，无收音加 ㄴ데', examples: '작다→작은데 / 크다→큰데 / 좋다→좋은데 / 예쁘다→예쁜데' },
       { type: 'rule', text: '过去时 -았/었/였 + 는데', examples: '갔는데 / 먹었는데 / 봤는데' },
       { type: 'usage', text: '用法①：铺垫背景，引出后续', examples: '날씨가 좋은데 나갈까요?（天气好，要出去吗？）' },
       { type: 'usage', text: '用法②：表示轻微转折', examples: '한국어를 공부하는데 어려워요（学韩语，但是难）' },
@@ -706,12 +706,12 @@ export const grammarCardsP7: GrammarCard[] = [
           explanation: '에다(가) 强调放置的精确位置："把书放在桌上。"',
         },
         {
-          prompt: '이 종이에 이름을 써 주세요.',
+          prompt: '이 종이에다 이름을 써 주세요.',
           pre: '이 종이',
           post: '이름을 써 주세요.',
           options: ["에다","에","에서"],
           answer: 0,
-          explanation: '에다(가) + 쓰다 强调附着操作目标："请在这张纸上写名字。"쓰다는 에다(가)와 자연스럽게 쓰입니다.',
+          explanation: '에다(가) + 쓰다 强调附着操作目标："请在这张纸上写名字。"에다 强调写的目标位置。',
         },
         {
           prompt: '냉장고에다 넣어 두었어요.',
@@ -1291,5 +1291,66 @@ export const grammarCardsP7: GrammarCard[] = [
     scenarios: [],
     mistakes: [],
     linkedGrammarIds: [],
+    overviewHtml: `<div class="overview">
+  <div class="ov-hero">
+    <div class="ov-hero-label">第 7 章 第 9 课 · 综合练习</div>
+    <div class="ov-hero-title">综合练习⑦</div>
+    <div class="ov-hero-sub">八个语法点综合运用</div>
+  </div>
+  <div class="ov-section">
+    <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">本章语法速查</div></div>
+    <div class="ov-block">
+      <div style="display:flex;flex-direction:column;gap:6px;font-size:14px;color:#241917">
+        <div>① <span style="font-weight:700">처럼/같이</span> 修饰动词，<span style="font-weight:700">같은</span> 修饰名词</div>
+        <div>② <span style="font-weight:700">-은/ㄴ 지 됐어요</span> 说已经过了多久</div>
+        <div>③ <span style="font-weight:700">-(으)ㄴ/는데</span> 铺垫背景或轻微转折</div>
+        <div>④ <span style="font-weight:700">아무도/아무것도</span> + 否定 全称否定</div>
+        <div>⑤ <span style="font-weight:700">에다가</span> 强调附着操作目标</div>
+        <div>⑥ <span style="font-weight:700">-지만</span> 明确转折</div>
+        <div>⑦ <span style="font-weight:700">-(으)니까</span> 可接命令，<span style="font-weight:700">-느라고</span> 后接负面结果</div>
+        <div>⑧ <span style="font-weight:700">때문에</span> 正式原因，<span style="font-weight:700">-거든요</span> 口语补充</div>
+      </div>
+    </div>
+  </div>
+</div>`,
+    specialQuiz: {
+      type: 'fill',
+      title: '第七章综合练习',
+      body: '选择每句话中最合适的语法形式。',
+      questions: [
+        {
+          prompt: '아이돌처럼 춤을 춰요.',
+          pre: '아이돌',
+          post: '춤을 춰요.',
+          options: ['처럼', '같은', '처럼의'],
+          answer: 0,
+          explanation: 'N처럼 修饰动词："像爱豆一样跳舞。"같은 修饰名词，처럼의 是错误形式。',
+        },
+        {
+          prompt: '한국어를 배운 지 1년이 됐어요.',
+          pre: '한국어를 배운',
+          post: '1년이 됐어요.',
+          options: ['지', '만에', '후에'],
+          answer: 0,
+          explanation: '-은 지 + 时间 + 되다："学韩语已经一年了。"',
+        },
+        {
+          prompt: '아무도 안 왔어요.',
+          pre: '',
+          post: '안 왔어요.',
+          options: ['아무도', '하나도', '아무거나'],
+          answer: 0,
+          explanation: '아무도 + 否定 = "谁都没来"，强调人的全称否定。',
+        },
+        {
+          prompt: '날씨가 추우니까 코트를 입으세요.',
+          pre: '날씨가 추우',
+          post: '코트를 입으세요.',
+          options: ['니까', '느라고', '면'],
+          answer: 0,
+          explanation: '-(으)니까 后可接命令句："天气冷，请穿大衣。"-느라고 不接命令句。',
+        },
+      ],
+    },
   },
 ];

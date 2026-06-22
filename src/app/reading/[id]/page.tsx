@@ -432,11 +432,11 @@ export default function ArticleReaderPage() {
             <span className="shrink-0 tabular-nums">已理解 {readCount} / {total} 句</span>
           </div>
 
-          {/* Desktop: two-col; Mobile: single col */}
-          <div className="md:grid md:grid-cols-[45%_55%] md:gap-6 md:items-start">
+          {/* Desktop: two-col fixed height; Mobile: single col */}
+          <div className="md:grid md:grid-cols-[45%_55%] md:gap-6 md:h-[calc(100vh-180px)] md:min-h-[400px]">
 
             {/* ── 左栏：文章正文 ── */}
-            <div className="md:sticky md:top-20 mb-4 md:mb-0">
+            <div className="mb-4 md:mb-0 md:overflow-y-auto md:h-full">
               <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl overflow-hidden">
                 {/* 文章头 */}
                 <div className="px-5 pt-5 pb-4 border-b border-[var(--border-color)]">
@@ -493,7 +493,7 @@ export default function ArticleReaderPage() {
             </div>
 
             {/* ── 右栏：逐句拆解 ── */}
-            <div className="space-y-4">
+            <div className="space-y-4 md:overflow-y-auto md:h-full md:pb-4">
               <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl overflow-hidden">
                 <div className="px-4 py-3 border-b border-[var(--border-color)] flex items-center gap-2">
                   <BookOpen size={14} className="text-[var(--mint-soft)]" />
@@ -504,11 +504,12 @@ export default function ArticleReaderPage() {
                   {article.sentences.map((s, idx) => (
                     <div
                       key={s.id}
-                      ref={(el) => { sentenceRefs.current[s.id] = el; }}
+                      ref={(el) => { if (el) sentenceRefs.current[s.id] = el; }}
                       style={{
                         borderLeft: revealedZh.has(s.id) ? '3px solid var(--mint-soft)' : '3px solid transparent',
                         transition: 'border-color 0.2s',
                         background: activeHighlight === s.id ? 'var(--bg-input)' : undefined,
+                        contentVisibility: 'auto',
                       }}
                     >
                       {/* 句子行 */}
@@ -522,12 +523,41 @@ export default function ArticleReaderPage() {
                         }}>
                           {idx + 1}
                         </span>
-                        <button
+                        <div
                           onClick={() => toggleRevealZh(s.id)}
-                          className="flex-1 text-left text-sm leading-relaxed text-[var(--text-primary)]"
+                          className="flex-1 text-left text-sm leading-relaxed text-[var(--text-primary)] cursor-pointer"
                         >
-                          {s.ko}
-                        </button>
+                          {revealedZh.has(s.id) ? (
+                            <span>
+                              {s.ko.split(/(\s+)/).map((token, i) => {
+                                if (/^\s+$/.test(token)) return <span key={i}>{token}</span>;
+                                const wordInfo = s.words.find(w => {
+                                  if (token.length / w.word.length > 1.8) return false;
+                                  if (token.startsWith(w.word)) return true;
+                                  if (w.word.endsWith('다')) return token.startsWith(w.word.slice(0, -1));
+                                  return false;
+                                });
+                                if (wordInfo) {
+                                  return (
+                                    <span
+                                      key={i}
+                                      onClick={(e) => { e.stopPropagation(); setSelectedWord(wordInfo); }}
+                                      className="cursor-pointer hover:bg-[var(--mint-soft)]/10 rounded-sm transition-colors"
+                                      style={{
+                                        borderBottom: savedWords.has(wordInfo.word) ? '2px solid var(--peach-soft)' : '1px dashed var(--border-color)',
+                                      }}
+                                    >
+                                      {token}
+                                    </span>
+                                  );
+                                }
+                                return <span key={i}>{token}</span>;
+                              })}
+                            </span>
+                          ) : (
+                            s.ko
+                          )}
+                        </div>
                         <div className="flex items-center gap-0.5 shrink-0">
                           <button
                             onClick={() => speakSentence(s.id, s.ko)}
