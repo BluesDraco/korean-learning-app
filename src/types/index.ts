@@ -785,3 +785,98 @@ export interface AiChatNewWord {
   scenarioId: string;
   createdAt: number;
 }
+
+// ===== CloudTable typed tables (replacing CloudTable<any>) =====
+
+export interface SavedSentence {
+  id?: string;  // optional — CloudTable auto-generates if missing
+  userId?: string;
+  korean: string;
+  chinese?: string;
+  sourceType?: string;
+  sourceId?: string;
+  sourceTitle?: string;
+  source?: string;           // kpop pages use `source: "${title} - ${artist}"`
+  source_type?: string;      // snake_case aliases for sync compatibility
+  source_id?: string;
+  source_title?: string;
+  startTime?: number;
+  start_time?: number | string;
+  endTime?: number;
+  end_time?: number | string;
+  note?: string;
+  createdAt?: number;
+  created_at?: number | string;
+  updatedAt?: number;
+}
+
+export interface SavedArticle {
+  id: string;
+  userId?: string;
+  title: string;
+  originalText?: string;
+  translatedText?: string;
+  sourceType?: string;
+  sourceUrl?: string;
+  createdAt?: number;
+  updatedAt?: number;
+}
+
+export interface SavedNote {
+  id: string;
+  userId?: string;
+  title: string;
+  content?: string;
+  sourceType?: string;
+  sourceId?: string;
+  createdAt?: number;
+  updatedAt?: number;
+}
+
+export interface UserRecording {
+  id?: string;  // optional — CloudTable auto-generates if missing
+  userId?: string;
+  type?: string;              // 'shadowing' | 'kpop' | 'pronunciation'
+  sourceId?: string;
+  sourceType?: string;
+  source_id?: string;          // snake_case alias
+  source_type?: string;
+  lineId?: string;
+  line_id?: string;
+  korean?: string;
+  audioUrl?: string;
+  audioData?: string;
+  audio_data?: string;
+  durationMs?: number;
+  duration_ms?: number;
+  createdAt?: number;
+  created_at?: number | string;
+  updatedAt?: number;
+}
+
+export interface KpopSongProgress {
+  id: string;
+  userId?: string;
+  songId: string;
+  practicedLines?: number[];
+  completedLines?: number[];
+  updatedAt?: number;
+}
+
+export interface DiaryEntry {
+  id: string;
+  userId?: string;
+  title: string;
+  content: string;
+  mood?: string;
+  createdAt?: number;
+  updatedAt?: number;
+}
+
+export interface NewsReadingProgress {
+  id: string;
+  userId?: string;
+  postId: string;
+  readAt: number;
+  completedAt?: number;
+}

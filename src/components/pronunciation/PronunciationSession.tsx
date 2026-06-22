@@ -133,6 +133,29 @@ export function PronunciationSession({ items, onClose }: Props) {
           durationMs: result.durationMs,
           createdAt: Date.now(),
         });
+        // Save practiced word to SRS vocabulary
+        if (item.textKo) {
+          const words = item.textKo.replace(/[.!?。！？,，]/g, '').split(/\s+/).filter(Boolean);
+          for (const w of words) {
+            db.words.put({
+              id: `pron-${currentItemId}-${w}`,
+              word: w,
+              pronunciation: item.romanization || '',
+              meaning: item.textZh || '',
+              partOfSpeech: '',
+              examples: [],
+              source: 'pronunciation',
+              sourceDetail: item.type,
+              mastery: 'new' as const,
+              srsLevel: 0,
+              nextReview: Date.now(),
+              easeFactor: 2.5,
+              interval: 1,
+              createdAt: Date.now(),
+              lastReviewed: null,
+            }).catch(() => {});
+          }
+        }
         await awardXp(XP_REWARDS.wordReviewed);
       } catch (_e) {}
     }

@@ -1,4 +1,4 @@
-import type { Word, ReviewSession, DictationRecord, ShadowingRecord, UserProfile, DailyLog, Achievement, AppSettings, WordBook, StudyVideo, StudySubtitle, StudyLog, UserAchievement, UserShareLink, StickerPack, Sticker, StickerDownload, BuddyRelation, BuddyInvite, PronunciationAttempt, UserGrammarState, UserArticleProgress, ArticleLearningEvent, TopikSession, TopikMistake, SpellingMistake, AiChatMistake, AiChatNewWord } from '@/types';
+import type { Word, ReviewSession, DictationRecord, ShadowingRecord, UserProfile, DailyLog, Achievement, AppSettings, WordBook, StudyVideo, StudySubtitle, StudyLog, UserAchievement, UserShareLink, StickerPack, Sticker, StickerDownload, BuddyRelation, BuddyInvite, PronunciationAttempt, UserGrammarState, UserArticleProgress, ArticleLearningEvent, TopikSession, TopikMistake, SpellingMistake, AiChatMistake, AiChatNewWord, SavedSentence, SavedArticle, SavedNote, UserRecording, KpopSongProgress, DiaryEntry, NewsReadingProgress } from '@/types';
 import type { LessonMastery, LearningEvent } from '@/lib/lesson/types';
 
 const API = '/api/user-data';
@@ -268,13 +268,13 @@ export const db = {
   userGrammarStates: new CloudTable<UserGrammarState>('userGrammarStates'),
   userArticleProgress: new CloudTable<UserArticleProgress>('userArticleProgress'),
   articleLearningEvents: new CloudTable<ArticleLearningEvent>('articleLearningEvents'),
-  sentences: new CloudTable<any>('sentences'),
-  articles: new CloudTable<any>('articles'),
-  notes: new CloudTable<any>('notes'),
-  recordings: new CloudTable<any>('recordings'),
-  kpopProgress: new CloudTable<any>('kpopProgress'),
-  diary: new CloudTable<any>('diary'),
-  readingProgress: new CloudTable<any>('readingProgress'),
+  sentences: new CloudTable<SavedSentence>('sentences'),
+  articles: new CloudTable<SavedArticle>('articles'),
+  notes: new CloudTable<SavedNote>('notes'),
+  recordings: new CloudTable<UserRecording>('recordings'),
+  kpopProgress: new CloudTable<KpopSongProgress>('kpopProgress'),
+  diary: new CloudTable<DiaryEntry>('diary'),
+  readingProgress: new CloudTable<NewsReadingProgress>('readingProgress'),
   topikSessions: new CloudTable<TopikSession>('topikSessions'),
   topikMistakes: new CloudTable<TopikMistake>('topikMistakes'),
   spellingMistakes: new CloudTable<SpellingMistake>('spelling_mistakes'),

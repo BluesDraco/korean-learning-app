@@ -20,7 +20,7 @@ import {
   Sparkles, Library, Wrench, GraduationCap, Compass,
   BookOpen, Play, TrendingUp,
   MessageSquare, FileText, Mic, BookImage,
-  PenLine, Search, Keyboard, RefreshCw, Pencil,
+  PenLine, Search, Keyboard, RefreshCw, Pencil, Headphones,
   Grid3X3, Languages, Lightbulb,
   Tv, StickyNote, Dumbbell, Layers,
 } from 'lucide-react';
@@ -53,7 +53,7 @@ export const navGroups: NavGroup[] = [
       { label: '内容拆解', ko: '내용 분석', href: '/ai/analyze', icon: Sparkles },
       { label: '查词翻译', ko: '사전', href: '/dictionary', icon: Search },
       { label: '发音跟读', ko: '발음 연습', href: '/pronunciation', icon: Mic },
-      { label: '听写练习', ko: '받아쓰기', href: '/dictation', icon: Pencil },
+      { label: '听力练习', ko: '듣기 연습', href: '/listening', icon: Headphones },
       { label: '闪卡复习', ko: 'SRS 복습', href: '/review', icon: RefreshCw },
       { label: '文章拆解', ko: '읽기 분석', href: '/reading', icon: FileText },
       { label: '语法解释', ko: '문법 설명', href: '/grammar', icon: Languages },
@@ -78,7 +78,7 @@ export const navGroups: NavGroup[] = [
     icon: Compass, label: '探索', ko: '탐색', href: '/explore', children: [
       { label: '影子跟读', ko: '섀도잉', href: '/shadowing', icon: Mic, comingSoon: true },
       { label: 'Tori绘本馆', ko: '토리 그림책', href: '/learn/picture-books', icon: BookImage },
-      { label: '韩国小知识', ko: '한국 지식', href: '/knowledge', icon: Lightbulb, comingSoon: true },
+      { label: '韩国小知识', ko: '한국 지식', href: '/knowledge', icon: Lightbulb },
       { label: '韩剧表达', ko: '드라마 표현', href: '/korea/drama', icon: Tv, comingSoon: true },
     ],
   },

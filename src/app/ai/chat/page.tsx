@@ -23,6 +23,7 @@ import { KoreanKeyboard } from '@/components/KoreanKeyboard';
 import { useIsDesktop } from '@/lib/useIsMobile';
 import { scenarios, type ScenarioData, type ChatMessage } from '@/data/aiScenarios';
 import { speak } from '@/lib/tts';
+import { TappableText } from '@/components/TappableText';
 import { detectMimeType, isRecordingSupported } from '@/lib/audio/recorder';
 import { KoreanSpeechRecognizer, isSpeechRecognitionSupported } from '@/lib/audio/speechRecognition';
 import { db } from '@/lib/db';
@@ -264,10 +265,10 @@ export default function AIChatPage() {
           }).catch(() => {});
         }
 
-        // Auto-save new words (fire-and-forget, UNIQUE constraint deduplicates)
+        // Auto-save new words (fire-and-forget, deduplicate via id)
         if (data.newWords?.length) {
           for (const w of data.newWords) {
-            const word: AiChatNewWord = {
+            const word = {
               id: crypto.randomUUID(),
               ko: w.ko,
               zh: w.zh,
@@ -275,9 +276,25 @@ export default function AIChatPage() {
               scenarioId: scenario.id,
               createdAt: Date.now(),
             };
-            db.aiChatNewWords.add(word).then(() =>
-              setCollectedWords(prev => [...prev, word])
-            ).catch(() => {});
+            // Write to SRS vocabulary so words enter the review loop
+            db.words.add({
+              id: crypto.randomUUID(),
+              word: w.ko,
+              pronunciation: '',
+              meaning: w.zh,
+              partOfSpeech: w.partOfSpeech || '',
+              examples: [],
+              source: 'aiChat',
+              sourceDetail: scenario.nameZh,
+              mastery: 'new' as const,
+              srsLevel: 0,
+              nextReview: Date.now(),
+              easeFactor: 2.5,
+              interval: 1,
+              createdAt: Date.now(),
+              lastReviewed: null,
+            }).catch(() => {});
+            setCollectedWords(prev => [...prev, word]);
           }
         }
 
@@ -927,9 +944,12 @@ export default function AIChatPage() {
                       borderTop: `8px solid ${theme.aiNotchColor}`,
                       borderLeft: '7px solid transparent',
                     }} />
-                    <p className="text-sm leading-relaxed" style={{ color: theme.aiText }}>
-                      {msg.text}
-                    </p>
+                    <TappableText
+                      text={msg.text}
+                      className="text-sm leading-relaxed"
+                      style={{ color: theme.aiText }}
+                      source={scenario.nameZh}
+                    />
                     {msg.hint && (
                       <div>
                         <button

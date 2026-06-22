@@ -111,6 +111,39 @@ function ImitationMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord, '
     if (correct) { setScore((s) => s + 1); feedbackSuccess('完全正确!'); }
     else feedbackError('再看看标准答案');
 
+    if (correct) {
+      // Save Korean sentence to db.sentences for review
+      const sentenceId = `writing-im-${Date.now()}`;
+      db.sentences.put({
+        id: sentenceId,
+        korean: prompt.ko,
+        chinese: prompt.zh,
+        sourceType: 'writing',
+        createdAt: Date.now(),
+      }).catch(() => {});
+      // Extract content words from the Korean sentence and save to SRS vocabulary
+      const words = prompt.ko.replace(/[.!?。！？,，]/g, '').split(/\s+/).filter(Boolean);
+      for (const w of words) {
+        db.words.put({
+          id: `writing-voc-${w}-${Date.now()}`,
+          word: w,
+          pronunciation: '',
+          meaning: '',
+          partOfSpeech: '',
+          examples: [],
+          source: 'writing',
+          sourceDetail: prompt.grammarPoint,
+          mastery: 'new' as const,
+          srsLevel: 0,
+          nextReview: Date.now(),
+          easeFactor: 2.5,
+          interval: 1,
+          createdAt: Date.now(),
+          lastReviewed: null,
+        }).catch(() => {});
+      }
+    }
+
     onAddRecord({
       mode: 'imitation',
       modeLabel: '仿写',
@@ -527,7 +560,30 @@ function ClozeMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord, 'id' 
     feedbackClick();
     setSelectedAnswer(idx);
     setAnswered(true);
-    if (idx === exercise.correct) { setScore((s) => s + 1); feedbackSuccess('正确!'); }
+    if (idx === exercise.correct) {
+      setScore((s) => s + 1); feedbackSuccess('正确!');
+      // Save close exercise words to SRS vocabulary
+      const words = exercise.full.replace(/[.!?。！？,，]/g, '').split(/\s+/).filter(Boolean);
+      for (const w of words) {
+        db.words.put({
+          id: `writing-cloze-${w}-${Date.now()}`,
+          word: w,
+          pronunciation: '',
+          meaning: '',
+          partOfSpeech: '',
+          examples: [],
+          source: 'writing',
+          sourceDetail: 'cloze',
+          mastery: 'new' as const,
+          srsLevel: 0,
+          nextReview: Date.now(),
+          easeFactor: 2.5,
+          interval: 1,
+          createdAt: Date.now(),
+          lastReviewed: null,
+        }).catch(() => {});
+      }
+    }
     else feedbackError('不对哦');
   };
 

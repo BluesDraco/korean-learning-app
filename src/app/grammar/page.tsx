@@ -2438,6 +2438,37 @@ function GrammarContent() {
     } catch (e) {
       console.warn('Failed to save lesson state:', e);
     }
+
+    // Save grammar example words to SRS vocabulary
+    if (card.cardExamples?.length) {
+      const seen = new Set<string>();
+      for (const ex of card.cardExamples) {
+        const koreanText = ex.wordBlocks.map(wb => wb.text).join(' ');
+        const words = koreanText.replace(/[.!?。！？,，]/g, '').split(/\s+/).filter(Boolean);
+        for (const w of words) {
+          if (seen.has(w)) continue;
+          seen.add(w);
+          db.words.put({
+            id: `grammar-${card.id}-${w}`,
+            word: w,
+            pronunciation: '',
+            meaning: '',
+            partOfSpeech: '',
+            examples: [],
+            source: 'grammar',
+            sourceDetail: card.title,
+            mastery: 'new' as const,
+            srsLevel: 0,
+            nextReview: Date.now(),
+            easeFactor: 2.5,
+            interval: 1,
+            createdAt: Date.now(),
+            lastReviewed: null,
+          }).catch(() => {});
+        }
+      }
+    }
+
     const next = await loadNextCard(card.id);
     if (next && (isAdmin || next.partNumber === 1)) {
       setActiveCard(next);
