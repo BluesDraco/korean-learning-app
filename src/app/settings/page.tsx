@@ -97,7 +97,27 @@ export default function SettingsPage() {
     );
   }
 
-  if (!profile) return null;
+  if (!profile) {
+    return (
+      <div className="py-4 max-w-2xl mx-auto space-y-4">
+        <div className="flex items-center gap-4">
+          <button onClick={() => window.history.back()} className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
+            <ArrowLeft size={20} />
+          </button>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">设置</h1>
+        </div>
+        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 text-center space-y-4">
+          <p className="text-[var(--text-secondary)]">请先登录后使用设置</p>
+          <button
+            onClick={() => { window.location.href = '/auth/login'; }}
+            className="px-6 py-2 rounded-full bg-[#201815] text-white text-sm font-bold"
+          >
+            去登录
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const earnedAchievements = achievements.filter((a) => ACHIEVEMENT_DEFS[a.type]);
   const allTypes = Object.keys(ACHIEVEMENT_DEFS) as (keyof typeof ACHIEVEMENT_DEFS)[];

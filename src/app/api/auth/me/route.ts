@@ -5,7 +5,7 @@ import { getDb } from '@/lib/server/db';
 export async function GET() {
   const auth = await getAuthFromCookie();
   if (!auth) {
-    return NextResponse.json({ user: null });
+    return NextResponse.json({ user: null }, { status: 401 });
   }
 
   const db = await getDb();
@@ -15,7 +15,7 @@ export async function GET() {
   );
 
   if (result.length === 0 || result[0].values.length === 0) {
-    return NextResponse.json({ user: null });
+    return NextResponse.json({ user: null }, { status: 401 });
   }
 
   const row = result[0].values[0];

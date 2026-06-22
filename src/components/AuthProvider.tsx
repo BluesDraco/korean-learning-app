@@ -67,8 +67,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return;
       }
       const freshUser = data.user || null;
-      setUser(freshUser);
-      setCachedUser(freshUser);
+      if (freshUser) {
+        // Server confirmed user is valid — update cache
+        setUser(freshUser);
+        setCachedUser(freshUser);
+      } else if (res.status === 401 || res.status === 403) {
+        // Server explicitly rejected auth — clear
+        setUser(null);
+        setCachedUser(null);
+      }
+      // user: null with 200 means token invalid/expired on server side
+      // but could be env var mismatch — keep cached user to avoid spurious logouts
     } catch {
       // Network error — keep cached user, don't clear
     } finally {
