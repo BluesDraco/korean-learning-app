@@ -2724,7 +2724,7 @@ export const readingArticles: Article[] = [
         id: 'kds-10',
         ko: '데뷔 전에 몇 년씩 훈련하는 경우도 있어요.',
         zh: '出道前有时要训练好几年。',
-        pronunciation: 'de-bwi jeo-ne myeong nyeon-ssik hul-lyeon-ha-neun gyeong-u-do i-sseo-yo',
+        pronunciation: 'de-bwi jeo-ne myeon nyeon-ssik hul-lyeon-ha-neun gyeong-u-do i-sseo-yo',
         words: [
           { word: '데뷔 전에', meaning: '出道之前' },
           { word: '몇 년씩', meaning: '好几年' },
@@ -2941,7 +2941,7 @@ export const readingArticles: Article[] = [
         id: 'kde-5',
         ko: '이 장면에서 울었거든요. 너무 감동적이었어요.',
         zh: '我在这个场景哭了嘛。太感动了。',
-        pronunciation: 'i jang-myeo-ne-seo u-reot-geo-deun-yo neo-mu gam-dong-jeo-gi-eot-seo-yo',
+        pronunciation: 'i jang-myeo-ne-seo u-reot-geo-deun-yo neo-mu gam-dong-jeo-gi-eo-sseo-yo',
         words: [
           { word: '이 장면에서', meaning: '在这个场景' },
           { word: '울었거든요', meaning: '哭了嘛（-거든요）' },
@@ -3044,7 +3044,7 @@ export const readingArticles: Article[] = [
         id: 'kde-13',
         ko: '저도 그 드라마 봤거든요. 정말 감동적이었어요.',
         zh: '我也看了那部剧嘛。真的很感动。',
-        pronunciation: 'jeo-do geu deu-ra-ma bwat-geo-deun-yo jeong-mal gam-dong-jeo-gi-eot-seo-yo',
+        pronunciation: 'jeo-do geu deu-ra-ma bwat-geo-deun-yo jeong-mal gam-dong-jeo-gi-eo-sseo-yo',
         words: [
           { word: '저도', meaning: '我也' },
           { word: '그 드라마 봤거든요', meaning: '看了那部剧嘛（-거든요）' },
@@ -4636,7 +4636,7 @@ export const readingArticles: Article[] = [
         id: 'fmg-12',
         ko: '티켓을 놓칠 뻔했지만 친구 덕분에 구했어요.',
         zh: '差点错过票，但多亏朋友帮忙买到了。',
-        pronunciation: 'ti-ke-seul no-chil ppeon-haet-jji-man chin-gu deong-bu-ne gu-hae-sseo-yo',
+        pronunciation: 'ti-ke-seul no-chil ppeon-haet-jji-man chin-gu deok-bu-ne gu-hae-sseo-yo',
         words: [
           { word: '티켓을 놓칠 뻔했지만', meaning: '差点错过票（-(으)ㄹ 뻔하다）' },
           { word: '친구 덕분에', meaning: '多亏朋友' },
@@ -4782,7 +4782,7 @@ export const readingArticles: Article[] = [
         id: 'bst-2',
         ko: '친구가 숙소를 미리 예약해 준 덕분에 좋은 방을 잡을 수 있었어요.',
         zh: '多亏朋友提前预订了住宿，才能订到好房间。',
-        pronunciation: 'chin-gu-ga suk-so-reul mi-ri ye-ya-kae jun deong-bu-ne jo-eun bang-eul ja-beul su i-sseo-sseo-yo',
+        pronunciation: 'chin-gu-ga suk-so-reul mi-ri ye-ya-kae jun deok-bu-ne jo-eun bang-eul ja-beul su i-sseo-sseo-yo',
         words: [
           { word: '친구가 숙소를 미리 예약해 준 덕분에', meaning: '多亏朋友提前预订了住宿（-(으)ㄴ 덕분에）' },
           { word: '좋은 방을', meaning: '好房间（宾语）' },
