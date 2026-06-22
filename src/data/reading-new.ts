@@ -2302,7 +2302,7 @@ export const readingArticles: Article[] = [
         id: 'ksf-1',
         ko: '서울에는 맛있는 길거리 음식이 많아요.',
         zh: '首尔有很多好吃的街头小吃。',
-        pronunciation: '서우레는 마싯는 길거리 음시기 마나요',
+        pronunciation: 'seo-u-re-neun ma-sin-neun gil-geo-ri eum-si-gi ma-na-yo',
         words: [
           { word: '서울에는', meaning: '在首尔（表强调）' },
           { word: '맛있는', meaning: '好吃的' },
@@ -2315,7 +2315,7 @@ export const readingArticles: Article[] = [
         id: 'ksf-2',
         ko: '저는 음악을 들으면서 거리를 걸어요.',
         zh: '我一边听音乐一边走在街上。',
-        pronunciation: '저는 으마글 드르면서 거리를 거러요',
+        pronunciation: 'jeo-neun eu-ma-geul deu-reu-myeon-seo geo-ri-reul geo-reo-yo',
         words: [
           { word: '음악을', meaning: '音乐（宾语）' },
           { word: '들으면서', meaning: '一边听……（-면서）' },
@@ -2329,7 +2329,7 @@ export const readingArticles: Article[] = [
         id: 'ksf-3',
         ko: '떡볶이를 먹을 때는 어묵 국물도 같이 마셔요.',
         zh: '吃炒年糕的时候，也会一起喝鱼饼汤。',
-        pronunciation: '떡뽀끼를 머글 때는 어묵 궁물도 가치 마셔요',
+        pronunciation: 'tteok-bo-kki-reul meo-geul ttae-neun eo-muk gung-mul-do ga-chi ma-syeo-yo',
         words: [
           { word: '떡볶이를', meaning: '炒年糕（宾语）' },
           { word: '먹을 때는', meaning: '吃……的时候（-(으)ㄹ 때）' },
@@ -2344,7 +2344,7 @@ export const readingArticles: Article[] = [
         id: 'ksf-4',
         ko: '포장마차 앞에 줄을 서면서 친구와 이야기해요.',
         zh: '在小摊前排队的同时和朋友聊天。',
-        pronunciation: '포장마차 아페 주를 서면서 치구와 이야기해요',
+        pronunciation: 'po-jang-ma-cha a-pe ju-reul seo-myeon-seo chin-gu-wa i-ya-gi-hae-yo',
         words: [
           { word: '포장마차 앞에', meaning: '在小摊前面' },
           { word: '줄을 서면서', meaning: '一边排队（-면서）' },
@@ -2357,7 +2357,7 @@ export const readingArticles: Article[] = [
         id: 'ksf-5',
         ko: '겨울에 붕어빵을 먹을 때 정말 행복해요.',
         zh: '冬天吃鲫鱼饼的时候真的很幸福。',
-        pronunciation: '겨우레 부너빵을 머글 때 정말 행보캐요',
+        pronunciation: 'gyeo-u-re bung-eo-ppang-eul meo-geul ttae jeong-mal haeng-bo-kae-yo',
         words: [
           { word: '겨울에', meaning: '在冬天' },
           { word: '붕어빵을', meaning: '鲫鱼饼（宾语）' },
@@ -2371,7 +2371,7 @@ export const readingArticles: Article[] = [
         id: 'ksf-6',
         ko: '순대는 겨자 소스와 소금에 찍어 먹어요.',
         zh: '血肠蘸着芥末酱和盐吃。',
-        pronunciation: '순대는 겨자 소스와 소그메 찌거 머거요',
+        pronunciation: 'sun-dae-neun gyeo-ja so-seu-wa so-geu-me jji-geo meo-geo-yo',
         words: [
           { word: '순대는', meaning: '血肠（话题）' },
           { word: '겨자 소스와', meaning: '和芥末酱' },
@@ -2384,7 +2384,7 @@ export const readingArticles: Article[] = [
         id: 'ksf-7',
         ko: '핫도그를 먹으면서 길을 걸으면 기분이 좋아요.',
         zh: '一边吃热狗一边走路，心情很好。',
-        pronunciation: '핟도그를 머그면서 기를 거르면 기부니 조아요',
+        pronunciation: 'hat-do-geu-reul meo-geu-myeon-seo gi-reul geo-reu-myeon gi-bu-ni jo-a-yo',
         words: [
           { word: '핫도그를', meaning: '热狗（宾语）' },
           { word: '먹으면서', meaning: '一边吃（-면서）' },
@@ -2399,7 +2399,7 @@ export const readingArticles: Article[] = [
         id: 'ksf-8',
         ko: '날씨가 추울 때 따뜻한 어묵 국물이 최고예요.',
         zh: '天气冷的时候，热乎乎的鱼饼汤最棒了。',
-        pronunciation: '날씨가 추울 때 따뜻한 어묵 궁무리 최고예요',
+        pronunciation: 'nal-ssi-ga chu-ul ttae tta-tteu-tan eo-muk gung-mu-ri choe-go-ye-yo',
         words: [
           { word: '날씨가', meaning: '天气（主语）' },
           { word: '추울 때', meaning: '冷的时候（-(으)ㄹ 때）' },
@@ -2413,7 +2413,7 @@ export const readingArticles: Article[] = [
         id: 'ksf-9',
         ko: '떡볶이는 맵지만 먹을 때마다 또 먹고 싶어요.',
         zh: '炒年糕虽然辣，但每次吃的时候都还想再吃。',
-        pronunciation: '떡뽀끼는 맵찌만 머글 때마다 또 먹꼬 시퍼요',
+        pronunciation: 'tteok-bo-kki-neun maep-ji-man meo-geul ttae-ma-da tto meok-go si-peo-yo',
         words: [
           { word: '떡볶이는', meaning: '炒年糕（话题）' },
           { word: '맵지만', meaning: '虽然辣' },
@@ -2427,7 +2427,7 @@ export const readingArticles: Article[] = [
         id: 'ksf-10',
         ko: '길거리에서 사진을 찍으면서 음식을 먹어요.',
         zh: '在街上一边拍照一边吃东西。',
-        pronunciation: '길거리에서 사지를 찌그면서 음시글 머거요',
+        pronunciation: 'gil-geo-ri-e-seo sa-ji-neul jji-geu-myeon-seo eum-si-geul meo-geo-yo',
         words: [
           { word: '길거리에서', meaning: '在街上' },
           { word: '사진을', meaning: '照片（宾语）' },
@@ -2441,7 +2441,7 @@ export const readingArticles: Article[] = [
         id: 'ksf-11',
         ko: '바삭한 핫도그는 바깥에서 먹을 때 더 맛있어요.',
         zh: '酥脆的热狗在外面吃的时候更好吃。',
-        pronunciation: '바삭한 핟도그는 바까테서 머글 때 더 마시써요',
+        pronunciation: 'ba-sa-kan hat-do-geu-neun ba-kka-te-seo meo-geul ttae deo ma-si-sseo-yo',
         words: [
           { word: '바삭한', meaning: '酥脆的' },
           { word: '핫도그는', meaning: '热狗（话题）' },
@@ -2456,7 +2456,7 @@ export const readingArticles: Article[] = [
         id: 'ksf-12',
         ko: '달콤한 붕어빵을 손에 들고 걸으면서 먹어요.',
         zh: '手里拿着甜甜的鲫鱼饼边走边吃。',
-        pronunciation: '달코만 부너빵을 소네 들고 거르면서 머거요',
+        pronunciation: 'dal-kom-han bung-eo-ppang-eul so-ne deul-go geo-reu-myeon-seo meo-geo-yo',
         words: [
           { word: '달콤한', meaning: '甜甜的' },
           { word: '붕어빵을', meaning: '鲫鱼饼（宾语）' },
@@ -2470,7 +2470,7 @@ export const readingArticles: Article[] = [
         id: 'ksf-13',
         ko: '음식을 고를 때 가격도 확인해야 해요.',
         zh: '选食物的时候也要确认一下价格。',
-        pronunciation: '음시글 고를 때 가겨도 화기내야 해요',
+        pronunciation: 'eum-si-geul go-reul ttae ga-gyeok-do hwa-gin-hae-ya hae-yo',
         words: [
           { word: '음식을', meaning: '食物（宾语）' },
           { word: '고를 때', meaning: '选的时候（-(으)ㄹ 때）' },
@@ -2483,7 +2483,7 @@ export const readingArticles: Article[] = [
         id: 'ksf-14',
         ko: '친구와 이야기하면서 포장마차 음식을 먹었어요.',
         zh: '和朋友聊天，一边吃着小摊上的食物。',
-        pronunciation: '치구와 이야기하면서 포장마차 음시글 머거써요',
+        pronunciation: 'chin-gu-wa i-ya-gi-ha-myeon-seo po-jang-ma-cha eum-si-geul meo-geo-sseo-yo',
         words: [
           { word: '친구와', meaning: '和朋友' },
           { word: '이야기하면서', meaning: '一边聊天（-면서）' },
@@ -2496,7 +2496,7 @@ export const readingArticles: Article[] = [
         id: 'ksf-15',
         ko: '길거리 음식을 먹을 때 휴지가 꼭 필요해요.',
         zh: '吃街头小吃的时候，纸巾是必须的。',
-        pronunciation: '길거리 음시글 머글 때 휴지가 꼭 피료해요',
+        pronunciation: 'gil-geo-ri eum-si-geul meo-geul ttae hyu-ji-ga kkok pi-ryo-hae-yo',
         words: [
           { word: '길거리 음식을', meaning: '街头小吃（宾语）' },
           { word: '먹을 때', meaning: '吃的时候' },
@@ -2510,7 +2510,7 @@ export const readingArticles: Article[] = [
         id: 'ksf-16',
         ko: '서울 길거리 음식은 외국 여행자들에게도 인기예요.',
         zh: '首尔的街头小吃在外国旅行者中也很受欢迎。',
-        pronunciation: '서울 길거리 음시근 외국 여행자들에게도 인기예요',
+        pronunciation: 'seo-ul gil-geo-ri eum-si-geun oe-guk yeo-haeng-ja-deu-re-ge-do in-gi-ye-yo',
         words: [
           { word: '서울 길거리 음식은', meaning: '首尔街头小吃（话题）' },
           { word: '외국 여행자들에게도', meaning: '对外国旅行者也' },
@@ -2607,7 +2607,7 @@ export const readingArticles: Article[] = [
         id: 'kds-1',
         ko: '한국 아이돌이 되려면 먼저 연습생 생활을 해야 해요.',
         zh: '想成为韩国偶像，首先要经历练习生生活。',
-        pronunciation: '한국 아이도리 되려면 먼저 연습쌩 생화를 해야 해요',
+        pronunciation: 'han-guk a-i-do-ri doe-ryeo-myeon meon-jeo yeon-seup-saeng saeng-hwa-reul hae-ya hae-yo',
         words: [
           { word: '한국 아이돌이', meaning: '韩国偶像（主语）' },
           { word: '되려면', meaning: '想成为的话' },
@@ -2621,7 +2621,7 @@ export const readingArticles: Article[] = [
         id: 'kds-2',
         ko: '회사에 따라 연습 방식이 다를 수 있어요.',
         zh: '根据公司不同，练习方式也可能不同。',
-        pronunciation: '회사에 따라 연습 방시기 다를 수 이써요',
+        pronunciation: 'hoe-sa-e da-ra yeon-seup bang-si-gi da-reul su i-sseo-yo',
         words: [
           { word: '회사에 따라', meaning: '根据公司（-에 따라）' },
           { word: '연습 방식이', meaning: '练习方式（主语）' },
@@ -2634,7 +2634,7 @@ export const readingArticles: Article[] = [
         id: 'kds-3',
         ko: '연습할수록 실력이 빠르게 늘어요.',
         zh: '练习得越多，实力提升越快。',
-        pronunciation: '연습할수록 실려기 빠르게 느러요',
+        pronunciation: 'yeon-seu-pal-su-rok sil-lyeo-gi ppa-reu-ge neu-reo-yo',
         words: [
           { word: '연습할수록', meaning: '越练习（-(으)ㄹ수록）' },
           { word: '실력이', meaning: '实力（主语）' },
@@ -2648,7 +2648,7 @@ export const readingArticles: Article[] = [
         id: 'kds-4',
         ko: '오디션 결과에 따라 연습생이 될 수도 있고 안 될 수도 있어요.',
         zh: '根据选秀结果，可能成为练习生，也可能不会。',
-        pronunciation: '오디션 결과에 따라 연습쌩이 될 수도 있꼬 안 될 수도 이써요',
+        pronunciation: 'o-di-syeon gyeol-gwa-e da-ra yeon-seup-saeng-i doel su-do it-go an doel su-do i-sseo-yo',
         words: [
           { word: '오디션 결과에 따라', meaning: '根据选秀结果（-에 따라）' },
           { word: '연습생이 될 수도 있고', meaning: '也可能成为练习生' },
@@ -2660,7 +2660,7 @@ export const readingArticles: Article[] = [
         id: 'kds-5',
         ko: '경쟁이 치열할수록 더 열심히 노력해야 해요.',
         zh: '竞争越激烈，就越要努力。',
-        pronunciation: '경쟁이 치열할수록 더 열시미 노려캐야 해요',
+        pronunciation: 'gyeong-jaeng-i chi-yeol-hal-su-rok deo yeol-sim-hi no-ryeo-kae-ya hae-yo',
         words: [
           { word: '경쟁이', meaning: '竞争（主语）' },
           { word: '치열할수록', meaning: '越激烈（-(으)ㄹ수록）' },
@@ -2674,7 +2674,7 @@ export const readingArticles: Article[] = [
         id: 'kds-6',
         ko: '소속사의 규모에 따라 훈련 시설도 달라요.',
         zh: '根据经纪公司的规模，训练设施也不同。',
-        pronunciation: '소속싸의 규모에 따라 훌련 시서로 달라요',
+        pronunciation: 'so-sok-sa-e gyu-mo-e da-ra hul-lyeon si-seol-do dal-la-yo',
         words: [
           { word: '소속사의 규모에 따라', meaning: '根据公司规模（-에 따라）' },
           { word: '훈련 시설도', meaning: '训练设施也' },
@@ -2686,7 +2686,7 @@ export const readingArticles: Article[] = [
         id: 'kds-7',
         ko: '무대 경험이 많을수록 자신감이 생겨요.',
         zh: '舞台经验越多，越有自信。',
-        pronunciation: '무대 경험이 마눌수록 자신가미 생겨요',
+        pronunciation: 'mu-dae gyeong-heo-mi ma-neul-su-rok ja-sin-ga-mi saeng-gyeo-yo',
         words: [
           { word: '무대 경험이', meaning: '舞台经验（主语）' },
           { word: '많을수록', meaning: '越多（-(으)ㄹ수록）' },
@@ -2699,7 +2699,7 @@ export const readingArticles: Article[] = [
         id: 'kds-8',
         ko: '계약 조건에 따라 연습생 기간이 다를 수 있어요.',
         zh: '根据合同条件，练习生期限也可能不同。',
-        pronunciation: '계약 조건에 따라 연습쌩 기가니 다를 수 이써요',
+        pronunciation: 'gye-yak jo-geo-ne da-ra yeon-seup-saeng gi-ga-ni da-reul su i-sseo-yo',
         words: [
           { word: '계약 조건에 따라', meaning: '根据合同条件（-에 따라）' },
           { word: '연습생 기간이', meaning: '练习生期限（主语）' },
@@ -2711,7 +2711,7 @@ export const readingArticles: Article[] = [
         id: 'kds-9',
         ko: '팬덤이 클수록 아이돌의 영향력도 커져요.',
         zh: '粉丝群体越大，偶像的影响力也越大。',
-        pronunciation: '팬더미 클수록 아이도릐 영향려도 커져요',
+        pronunciation: 'paen-deo-mi keul-su-rok a-i-do-re yeong-hyang-nyeok-do keo-jeo-yo',
         words: [
           { word: '팬덤이', meaning: '粉丝群体（主语）' },
           { word: '클수록', meaning: '越大（-(으)ㄹ수록）' },
@@ -2724,7 +2724,7 @@ export const readingArticles: Article[] = [
         id: 'kds-10',
         ko: '데뷔 전에 몇 년씩 훈련하는 경우도 있어요.',
         zh: '出道前有时要训练好几年。',
-        pronunciation: '데뷔 저네 몇 년씩 훌련하는 경우도 이써요',
+        pronunciation: 'de-bwi jeo-ne myeong nyeon-ssik hul-lyeon-ha-neun gyeong-u-do i-sseo-yo',
         words: [
           { word: '데뷔 전에', meaning: '出道之前' },
           { word: '몇 년씩', meaning: '好几年' },
@@ -2737,7 +2737,7 @@ export const readingArticles: Article[] = [
         id: 'kds-11',
         ko: '성장할수록 팬들도 더 많은 것을 기대해요.',
         zh: '越成长，粉丝们期待的也越多。',
-        pronunciation: '성장할수록 팬드로 더 마는 거슬 기대해요',
+        pronunciation: 'seong-jang-hal-su-rok paen-deul-do deo ma-neun geo-seul gi-dae-hae-yo',
         words: [
           { word: '성장할수록', meaning: '越成长（-(으)ㄹ수록）' },
           { word: '팬들도', meaning: '粉丝们也' },
@@ -2750,7 +2750,7 @@ export const readingArticles: Article[] = [
         id: 'kds-12',
         ko: '아이돌 시스템은 회사에 따라 조금씩 달라요.',
         zh: '偶像系统根据公司不同会有些差异。',
-        pronunciation: '아이돌 시스테믄 회사에 따라 조금씩 달라요',
+        pronunciation: 'a-i-dol si-seu-te-meun hoe-sa-e da-ra jo-geum-ssik dal-la-yo',
         words: [
           { word: '아이돌 시스템은', meaning: '偶像系统（话题）' },
           { word: '회사에 따라', meaning: '根据公司（-에 따라）' },
@@ -2763,7 +2763,7 @@ export const readingArticles: Article[] = [
         id: 'kds-13',
         ko: '노력할수록 데뷔에 가까워진다고 믿어요.',
         zh: '我相信越努力，就越接近出道。',
-        pronunciation: '노려칼수록 데뷔에 가까워진다고 미더요',
+        pronunciation: 'no-ryeo-kal-su-rok de-bwi-e ga-kka-wo-jin-da-go mi-deo-yo',
         words: [
           { word: '노력할수록', meaning: '越努力（-(으)ㄹ수록）' },
           { word: '데뷔에', meaning: '距出道' },
@@ -2776,7 +2776,7 @@ export const readingArticles: Article[] = [
         id: 'kds-14',
         ko: '연습생 평가 결과에 따라 데뷔 멤버가 결정돼요.',
         zh: '根据练习生评估结果，出道成员会被确定。',
-        pronunciation: '연습쌩 평가 결과에 따라 데뷔 멤버가 결정돼요',
+        pronunciation: 'yeon-seup-saeng pyeong-ga gyeol-gwa-e da-ra de-bwi mem-beo-ga gyeol-jeong-dwae-yo',
         words: [
           { word: '연습생 평가 결과에 따라', meaning: '根据练习生评估结果（-에 따라）' },
           { word: '데뷔 멤버가', meaning: '出道成员（主语）' },
@@ -2788,7 +2788,7 @@ export const readingArticles: Article[] = [
         id: 'kds-15',
         ko: '한국 아이돌 산업은 전 세계에서 주목받고 있어요.',
         zh: '韩国偶像产业正在受到全世界的关注。',
-        pronunciation: '한국 아이돌 산어븐 전 세계에서 주목받꼬 이써요',
+        pronunciation: 'han-guk a-i-dol sa-neo-beun jeon se-gye-e-seo ju-mok-bat-go i-sseo-yo',
         words: [
           { word: '한국 아이돌 산업은', meaning: '韩国偶像产业（话题）' },
           { word: '전 세계에서', meaning: '在全世界' },
@@ -2885,7 +2885,7 @@ export const readingArticles: Article[] = [
         id: 'kde-1',
         ko: '한국 드라마에는 자주 나오는 표현들이 있어요.',
         zh: '韩剧里有一些经常出现的表达。',
-        pronunciation: '한국 드라마에는 자주 나오는 표현드리 이써요',
+        pronunciation: 'han-guk deu-ra-ma-e-neun ja-ju na-o-neun pyo-hyeon-deu-ri i-sseo-yo',
         words: [
           { word: '한국 드라마에는', meaning: '在韩剧中（话题）' },
           { word: '자주 나오는', meaning: '经常出现的' },
@@ -2898,7 +2898,7 @@ export const readingArticles: Article[] = [
         id: 'kde-2',
         ko: '이 드라마 재미있잖아요. 저도 매일 봐요.',
         zh: '这部剧很有趣嘛（你也知道的）。我也每天看。',
-        pronunciation: '이 드라마 재미있자나요. 저도 매일 봐요',
+        pronunciation: 'i deu-ra-ma jae-mi-it-ja-na-yo jeo-do mae-il bwa-yo',
         words: [
           { word: '이 드라마', meaning: '这部剧' },
           { word: '재미있잖아요', meaning: '很有趣嘛（-잖아요）' },
@@ -2912,7 +2912,7 @@ export const readingArticles: Article[] = [
         id: 'kde-3',
         ko: '제가 이 배우를 좋아하거든요. 그래서 이 드라마를 봤어요.',
         zh: '因为我喜欢这个演员嘛。所以才看了这部剧。',
-        pronunciation: '제가 이 배우를 조아하거든요. 그래서 이 드라마를 봐써요',
+        pronunciation: 'je-ga i bae-u-reul jo-a-ha-geo-deun-yo geu-rae-seo i deu-ra-ma-reul bwa-sseo-yo',
         words: [
           { word: '제가', meaning: '我（主语）' },
           { word: '이 배우를', meaning: '这个演员（宾语）' },
@@ -2928,7 +2928,7 @@ export const readingArticles: Article[] = [
         id: 'kde-4',
         ko: '주인공이 고백하는 장면은 항상 설레잖아요.',
         zh: '主角表白的场景总是令人心跳加速嘛。',
-        pronunciation: '주인공이 고배카는 장면은 항상 설레잖아요',
+        pronunciation: 'ju-in-gong-i go-bae-ka-neun jang-myeo-neun hang-sang seol-le-ja-na-yo',
         words: [
           { word: '주인공이', meaning: '主角（主语）' },
           { word: '고백하는 장면은', meaning: '表白的场景（话题）' },
@@ -2941,7 +2941,7 @@ export const readingArticles: Article[] = [
         id: 'kde-5',
         ko: '이 장면에서 울었거든요. 너무 감동적이었어요.',
         zh: '我在这个场景哭了嘛。太感动了。',
-        pronunciation: '이 장면에서 우렀거든요. 너무 감동저기었어요',
+        pronunciation: 'i jang-myeo-ne-seo u-reot-geo-deun-yo neo-mu gam-dong-jeo-gi-eot-seo-yo',
         words: [
           { word: '이 장면에서', meaning: '在这个场景' },
           { word: '울었거든요', meaning: '哭了嘛（-거든요）' },
@@ -2954,7 +2954,7 @@ export const readingArticles: Article[] = [
         id: 'kde-6',
         ko: '한국 드라마에는 오해 장면이 많잖아요.',
         zh: '韩剧里误解的场景很多嘛（大家都知道）。',
-        pronunciation: '한국 드라마에는 오해 장면이 만잖아요',
+        pronunciation: 'han-guk deu-ra-ma-e-neun o-hae jang-myeo-ni man-cha-na-yo',
         words: [
           { word: '한국 드라마에는', meaning: '韩剧中（话题）' },
           { word: '오해 장면이', meaning: '误解场景（主语）' },
@@ -2966,7 +2966,7 @@ export const readingArticles: Article[] = [
         id: 'kde-7',
         ko: '저는 이 배우 팬이거든요. 새 드라마가 나오면 꼭 봐요.',
         zh: '我是这个演员的粉丝嘛。新剧一出来就一定看。',
-        pronunciation: '저는 이 배우 패니거든요. 새 드라마가 나오면 꼭 봐요',
+        pronunciation: 'jeo-neun i bae-u pae-ni-geo-deun-yo sae deu-ra-ma-ga na-o-myeon kkok bwa-yo',
         words: [
           { word: '저는', meaning: '我（话题）' },
           { word: '이 배우 팬이거든요', meaning: '是这个演员的粉丝嘛（-거든요）' },
@@ -2980,7 +2980,7 @@ export const readingArticles: Article[] = [
         id: 'kde-8',
         ko: '그 대사 정말 유명하잖아요. 다들 알잖아요.',
         zh: '那句台词真的很有名嘛。大家都知道嘛。',
-        pronunciation: '그 대사 정말 유명하잖아요. 다들 알잖아요',
+        pronunciation: 'geu dae-sa jeong-mal yu-myeong-a-cha-na-yo da-deul al-ja-na-yo',
         words: [
           { word: '그 대사', meaning: '那句台词' },
           { word: '정말 유명하잖아요', meaning: '真的很有名嘛（-잖아요）' },
@@ -2993,7 +2993,7 @@ export const readingArticles: Article[] = [
         id: 'kde-9',
         ko: '저는 재방송도 세 번 봤거든요. 정말 재미있어요.',
         zh: '我连重播都看了三遍嘛。真的很有趣。',
-        pronunciation: '저는 재방송도 세 번 봤거든요. 정말 재미이써요',
+        pronunciation: 'jeo-neun jae-bang-song-do se beon bwat-geo-deun-yo jeong-mal jae-mi-i-sseo-yo',
         words: [
           { word: '저는', meaning: '我（话题）' },
           { word: '재방송도', meaning: '重播也' },
@@ -3007,7 +3007,7 @@ export const readingArticles: Article[] = [
         id: 'kde-10',
         ko: '드라마 클리셰가 많지만 그래도 보게 되잖아요.',
         zh: '虽然老套情节很多，但还是会看下去嘛。',
-        pronunciation: '드라마 클리셰가 만치만 그래도 보게 되잖아요',
+        pronunciation: 'deu-ra-ma keul-li-se-ga man-chi-man geu-rae-do bo-ge doe-ja-na-yo',
         words: [
           { word: '드라마 클리셰가', meaning: '剧情老套（主语）' },
           { word: '많지만', meaning: '虽然很多' },
@@ -3020,7 +3020,7 @@ export const readingArticles: Article[] = [
         id: 'kde-11',
         ko: '이번 드라마 시청률이 높거든요. 화제가 됐어요.',
         zh: '这次剧的收视率很高嘛。成了热门话题。',
-        pronunciation: '이번 드라마 시청뉴리 높거든요. 화제가 됐어요',
+        pronunciation: 'i-beon deu-ra-ma si-cheong-nyu-ri nop-geo-deun-yo hwa-je-ga dwaet-seo-yo',
         words: [
           { word: '이번 드라마', meaning: '这次的剧' },
           { word: '시청률이 높거든요', meaning: '收视率很高嘛（-거든요）' },
@@ -3032,7 +3032,7 @@ export const readingArticles: Article[] = [
         id: 'kde-12',
         ko: '눈물 장면에서 항상 울게 되잖아요.',
         zh: '在哭泣场景总是会哭嘛。',
-        pronunciation: '눈물 장면에서 항상 울게 되잖아요',
+        pronunciation: 'nun-mul jang-myeo-ne-seo hang-sang ul-ge doe-ja-na-yo',
         words: [
           { word: '눈물 장면에서', meaning: '在哭泣场景' },
           { word: '항상', meaning: '总是' },
@@ -3044,7 +3044,7 @@ export const readingArticles: Article[] = [
         id: 'kde-13',
         ko: '저도 그 드라마 봤거든요. 정말 감동적이었어요.',
         zh: '我也看了那部剧嘛。真的很感动。',
-        pronunciation: '저도 그 드라마 봤거든요. 정말 감동저기었어요',
+        pronunciation: 'jeo-do geu deu-ra-ma bwat-geo-deun-yo jeong-mal gam-dong-jeo-gi-eot-seo-yo',
         words: [
           { word: '저도', meaning: '我也' },
           { word: '그 드라마 봤거든요', meaning: '看了那部剧嘛（-거든요）' },
@@ -3057,7 +3057,7 @@ export const readingArticles: Article[] = [
         id: 'kde-14',
         ko: '한국어를 잘하면 대사를 더 잘 이해할 수 있잖아요.',
         zh: '韩语好的话就能更好地理解台词嘛。',
-        pronunciation: '한구거를 자라면 대사를 더 잘 이해할 수 있자나요',
+        pronunciation: 'han-gu-geo-reul ja-ra-myeon dae-sa-reul deo jal i-hae-hal su it-ja-na-yo',
         words: [
           { word: '한국어를 잘하면', meaning: '韩语好的话' },
           { word: '대사를', meaning: '台词（宾语）' },
@@ -3070,7 +3070,7 @@ export const readingArticles: Article[] = [
         id: 'kde-15',
         ko: '한국 드라마 덕분에 한국어 공부가 재미있어졌어요.',
         zh: '多亏了韩剧，韩语学习变得有趣了。',
-        pronunciation: '한국 드라마 덕부네 한구거 공부가 재미이써졌어요',
+        pronunciation: 'han-guk deu-ra-ma deok-bu-ne han-gu-geo gong-bu-ga jae-mi-i-sseo-jyeo-sseo-yo',
         words: [
           { word: '한국 드라마 덕분에', meaning: '多亏了韩剧' },
           { word: '한국어 공부가', meaning: '韩语学习（主语）' },
@@ -3172,7 +3172,7 @@ export const readingArticles: Article[] = [
         id: 'kia-1',
         ko: '한국 사람들은 겨울에도 아이스 아메리카노를 마셔요.',
         zh: '韩国人即使在冬天也喝冰美式咖啡。',
-        pronunciation: '한국 사람드른 겨우레도 아이스 아메리카노를 마셔요',
+        pronunciation: 'han-guk sa-ram-deu-reun gyeo-u-re-do a-i-seu a-me-ri-ka-no-reul ma-syeo-yo',
         words: [
           { word: '한국 사람들은', meaning: '韩国人（话题）' },
           { word: '겨울에도', meaning: '冬天也' },
@@ -3185,7 +3185,7 @@ export const readingArticles: Article[] = [
         id: 'kia-2',
         ko: '한국 사람들이 아이스 아메리카노를 좋아한다고 해요.',
         zh: '据说韩国人很喜欢冰美式咖啡。',
-        pronunciation: '한국 사람드리 아이스 아메리카노를 조아한다고 해요',
+        pronunciation: 'han-guk sa-ram-deu-ri a-i-seu a-me-ri-ka-no-reul jo-a-han-da-go hae-yo',
         words: [
           { word: '한국 사람들이', meaning: '韩国人（主语）' },
           { word: '아이스 아메리카노를', meaning: '冰美式（宾语）' },
@@ -3198,7 +3198,7 @@ export const readingArticles: Article[] = [
         id: 'kia-3',
         ko: '저는 커피를 마시는 편이에요.',
         zh: '我算是比较喜欢喝咖啡的类型。',
-        pronunciation: '저는 커피를 마시는 펴니에요',
+        pronunciation: 'jeo-neun keo-pi-reul ma-si-neun pyeo-ni-e-yo',
         words: [
           { word: '저는', meaning: '我（话题）' },
           { word: '커피를', meaning: '咖啡（宾语）' },
@@ -3211,7 +3211,7 @@ export const readingArticles: Article[] = [
         id: 'kia-4',
         ko: '아이스 아메리카노가 집중력에 도움이 된다고 해요.',
         zh: '据说冰美式有助于提升专注力。',
-        pronunciation: '아이스 아메리카노가 집중녀게 도우미 된다고 해요',
+        pronunciation: 'a-i-seu a-me-ri-ka-no-ga jip-jung-nyeo-ge do-u-mi doen-da-go hae-yo',
         words: [
           { word: '아이스 아메리카노가', meaning: '冰美式（主语）' },
           { word: '집중력에', meaning: '对专注力' },
@@ -3223,7 +3223,7 @@ export const readingArticles: Article[] = [
         id: 'kia-5',
         ko: '한국 사람들은 커피를 많이 마시는 편이에요.',
         zh: '韩国人算是比较多喝咖啡的。',
-        pronunciation: '한국 사람드른 커피를 마니 마시는 펴니에요',
+        pronunciation: 'han-guk sa-ram-deu-reun keo-pi-reul ma-ni ma-si-neun pyeo-ni-e-yo',
         words: [
           { word: '한국 사람들은', meaning: '韩国人（话题）' },
           { word: '커피를', meaning: '咖啡（宾语）' },
@@ -3235,7 +3235,7 @@ export const readingArticles: Article[] = [
         id: 'kia-6',
         ko: '차가운 음료가 정신이 드는 데 도움이 된다고 해요.',
         zh: '据说冷饮有助于让人清醒。',
-        pronunciation: '차가운 음료가 정시니 드는 데 도우미 된다고 해요',
+        pronunciation: 'cha-ga-un eum-nyo-ga jeong-si-ni deu-neun de do-u-mi doen-da-go hae-yo',
         words: [
           { word: '차가운 음료가', meaning: '冷饮（主语）' },
           { word: '정신이 드는 데', meaning: '让人清醒方面' },
@@ -3247,7 +3247,7 @@ export const readingArticles: Article[] = [
         id: 'kia-7',
         ko: '저는 따뜻한 커피보다 차가운 커피를 좋아하는 편이에요.',
         zh: '我算是比起热咖啡更喜欢冷咖啡。',
-        pronunciation: '저는 따뜻한 커피보다 차가운 커피를 조아하는 펴니에요',
+        pronunciation: 'jeo-neun tta-tteu-tan keo-pi-bo-da cha-ga-un keo-pi-reul jo-a-ha-neun pyeo-ni-e-yo',
         words: [
           { word: '저는', meaning: '我（话题）' },
           { word: '따뜻한 커피보다', meaning: '比热咖啡' },
@@ -3260,7 +3260,7 @@ export const readingArticles: Article[] = [
         id: 'kia-8',
         ko: '"아아"는 "아이스 아메리카노"의 줄임말이라고 해요.',
         zh: '"아아"据说是"아이스 아메리카노"的缩写。',
-        pronunciation: '"아아"는 "아이스 아메리카노"의 주림마리라고 해요',
+        pronunciation: 'a-a-neun a-i-seu a-me-ri-ka-no-e ju-rim-ma-ri-ra-go hae-yo',
         words: [
           { word: '"아아"는', meaning: '"아아"（话题）' },
           { word: '"아이스 아메리카노"의', meaning: '"冰美式"的' },
@@ -3272,7 +3272,7 @@ export const readingArticles: Article[] = [
         id: 'kia-9',
         ko: '추위를 잘 타지 않는 편이라서 겨울에도 아이스로 마셔요.',
         zh: '因为算是不太怕冷，所以冬天也喝冰的。',
-        pronunciation: '추위를 잘 타지 안는 펴니라서 겨우레도 아이스로 마셔요',
+        pronunciation: 'chu-wi-reul jal ta-ji an-neun pyeo-ni-ra-seo gyeo-u-re-do a-i-seu-ro ma-syeo-yo',
         words: [
           { word: '추위를 잘 타지 않는 편이라서', meaning: '因为算是不太怕冷（-는 편이다）' },
           { word: '겨울에도', meaning: '冬天也' },
@@ -3284,7 +3284,7 @@ export const readingArticles: Article[] = [
         id: 'kia-10',
         ko: '한국의 커피 문화는 독특하다고 해요.',
         zh: '据说韩国的咖啡文化很独特。',
-        pronunciation: '한구게 커피 문화는 독트카다고 해요',
+        pronunciation: 'han-gu-ge keo-pi mun-hwa-neun dok-teu-ka-da-go hae-yo',
         words: [
           { word: '한국의 커피 문화는', meaning: '韩国的咖啡文化（话题）' },
           { word: '독특하다고 해요', meaning: '据说很独特（-다고 하다）' },
@@ -3295,7 +3295,7 @@ export const readingArticles: Article[] = [
         id: 'kia-11',
         ko: '개인차가 있는 편이라서 따뜻한 커피를 좋아하는 사람도 있어요.',
         zh: '因为个体差异较大，也有喜欢热咖啡的人。',
-        pronunciation: '개인차가 인는 펴니라서 따뜻한 커피를 조아하는 사라모 이써요',
+        pronunciation: 'gae-in-cha-ga in-neun pyeo-ni-ra-seo tta-tteu-tan keo-pi-reul jo-a-ha-neun sa-ram-do i-sseo-yo',
         words: [
           { word: '개인차가 있는 편이라서', meaning: '因为个体差异较大（-는 편이다）' },
           { word: '따뜻한 커피를', meaning: '热咖啡（宾语）' },
@@ -3308,7 +3308,7 @@ export const readingArticles: Article[] = [
         id: 'kia-12',
         ko: '카페인이 많이 들어 있다고 해서 조심하는 사람도 있어요.',
         zh: '因为据说含有很多咖啡因，也有人注意控制摄入量。',
-        pronunciation: '카페이니 마니 드러 잇따고 해서 조심하는 사라모 이써요',
+        pronunciation: 'ka-pe-i-ni ma-ni deu-reo it-da-go hae-seo jo-sim-ha-neun sa-ram-do i-sseo-yo',
         words: [
           { word: '카페인이 많이 들어 있다고 해서', meaning: '因为据说含有很多咖啡因' },
           { word: '조심하는 사람도', meaning: '注意的人也' },
@@ -3320,7 +3320,7 @@ export const readingArticles: Article[] = [
         id: 'kia-13',
         ko: '한국의 아이스 아메리카노 유행은 계속될 것 같아요.',
         zh: '韩国的冰美式流行趋势似乎会持续下去。',
-        pronunciation: '한구게 아이스 아메리카노 유행은 계속될 것 가타요',
+        pronunciation: 'han-gu-ge a-i-seu a-me-ri-ka-no yu-haeng-eun gye-sok-doel geot ga-ta-yo',
         words: [
           { word: '한국의', meaning: '韩国的' },
           { word: '아이스 아메리카노 유행은', meaning: '冰美式流行趋势（话题）' },
@@ -3417,7 +3417,7 @@ export const readingArticles: Article[] = [
         id: 'nrc-1',
         ko: '노래방은 한국 사람들이 스트레스를 푸는 대표적인 장소예요.',
         zh: 'KTV是韩国人解压的代表性场所。',
-        pronunciation: '노래방은 한국 사람드리 스트레스를 푸는 대표저긴 장소예요',
+        pronunciation: 'no-rae-bang-eun han-guk sa-ram-deu-ri seu-teu-re-seu-reul pu-neun dae-pyo-jeo-gin jang-so-ye-yo',
         words: [
           { word: '노래방은', meaning: 'KTV（话题）' },
           { word: '한국 사람들이', meaning: '韩国人（主语）' },
@@ -3430,7 +3430,7 @@ export const readingArticles: Article[] = [
         id: 'nrc-2',
         ko: '친구가 제가 좋아하는 노래를 신청해 줬어요.',
         zh: '朋友帮我点了我喜欢的歌。',
-        pronunciation: '친구가 제가 조아하는 노래를 신청해 줬어요',
+        pronunciation: 'chin-gu-ga je-ga jo-a-ha-neun no-rae-reul sin-cheong-hae jweo-sseo-yo',
         words: [
           { word: '친구가', meaning: '朋友（主语）' },
           { word: '제가 좋아하는', meaning: '我喜欢的' },
@@ -3444,7 +3444,7 @@ export const readingArticles: Article[] = [
         id: 'nrc-3',
         ko: '마이크를 잡게 해 줘서 정말 신났어요.',
         zh: '让我能拿麦克风，真的好兴奋。',
-        pronunciation: '마이크를 잡게 해 줘서 정말 신났어요',
+        pronunciation: 'ma-i-keu-reul jap-ge hae jwo-seo jeong-mal sin-na-sseo-yo',
         words: [
           { word: '마이크를', meaning: '麦克风（宾语）' },
           { word: '잡게 해 줘서', meaning: '让我能拿（-게 해 주다）' },
@@ -3458,7 +3458,7 @@ export const readingArticles: Article[] = [
         id: 'nrc-4',
         ko: '노래방에서 탬버린을 흔들어 줬어요.',
         zh: '在KTV里帮忙摇铃鼓（为朋友助兴）。',
-        pronunciation: '노래방에서 탬버린을 흔드러 줬어요',
+        pronunciation: 'no-rae-bang-e-seo taem-beo-ri-neul heun-deu-reo jweo-sseo-yo',
         words: [
           { word: '노래방에서', meaning: '在KTV' },
           { word: '탬버린을', meaning: '铃鼓（宾语）' },
@@ -3470,7 +3470,7 @@ export const readingArticles: Article[] = [
         id: 'nrc-5',
         ko: '점수가 잘 나오게 해 주는 연습이 필요해요.',
         zh: '需要能让分数更高的练习。',
-        pronunciation: '점수가 잘 나오게 해 주는 연스비 피료해요',
+        pronunciation: 'jeom-su-ga jal na-o-ge hae ju-neun yeon-seu-bi pi-ryo-hae-yo',
         words: [
           { word: '점수가', meaning: '分数（主语）' },
           { word: '잘 나오게 해 주는', meaning: '让分数高的（-게 해 주다）' },
@@ -3482,7 +3482,7 @@ export const readingArticles: Article[] = [
         id: 'nrc-6',
         ko: '친구들이 분위기를 띄워 줘서 더 즐거웠어요.',
         zh: '朋友们帮忙活跃气氛，更加开心了。',
-        pronunciation: '친구드리 분위기를 띄워 줘서 더 즐거웠어요',
+        pronunciation: 'chin-gu-deu-ri bu-nwi-gi-reul ttwi-wo jwo-seo deo jeul-geo-wo-sseo-yo',
         words: [
           { word: '친구들이', meaning: '朋友们（主语）' },
           { word: '분위기를', meaning: '气氛（宾语）' },
@@ -3495,7 +3495,7 @@ export const readingArticles: Article[] = [
         id: 'nrc-7',
         ko: '노래를 더 잘 부르게 해 주는 비결이 있을까요?',
         zh: '有没有能让唱歌更好的秘诀呢？',
-        pronunciation: '노래를 더 잘 부르게 해 주는 비결이 이쓸까요',
+        pronunciation: 'no-rae-reul deo jal bu-reu-ge hae ju-neun bi-gyeo-ri i-sseul-kka-yo',
         words: [
           { word: '노래를', meaning: '歌（宾语）' },
           { word: '더 잘 부르게 해 주는', meaning: '能让唱得更好的（-게 해 주다）' },
@@ -3508,7 +3508,7 @@ export const readingArticles: Article[] = [
         id: 'nrc-8',
         ko: '예약을 해 줘서 바로 노래방에 들어갈 수 있었어요.',
         zh: '帮忙预约了，所以能马上进包厢。',
-        pronunciation: '예야글 해 줘서 바로 노래방에 드러갈 수 이써써요',
+        pronunciation: 'ye-ya-geul hae jwo-seo ba-ro no-rae-bang-e deu-reo-gal su i-sseo-sseo-yo',
         words: [
           { word: '예약을 해 줘서', meaning: '帮忙预约了所以（-아/어 주다）' },
           { word: '바로', meaning: '立刻/马上' },
@@ -3521,7 +3521,7 @@ export const readingArticles: Article[] = [
         id: 'nrc-9',
         ko: '흥을 돋워 주는 노래를 부르면 다들 신나요.',
         zh: '唱能助兴的歌，大家都很兴奋。',
-        pronunciation: '흥을 돋워 주는 노래를 부르면 다들 신나요',
+        pronunciation: 'heung-eul do-dwo ju-neun no-rae-reul bu-reu-myeon da-deul sin-na-yo',
         words: [
           { word: '흥을 돋워 주는', meaning: '能助兴的（-아/어 주다）' },
           { word: '노래를', meaning: '歌（宾语）' },
@@ -3534,7 +3534,7 @@ export const readingArticles: Article[] = [
         id: 'nrc-10',
         ko: '음정을 잘 맞추게 해 주는 앱도 있어요.',
         zh: '也有能帮助唱准音调的应用程序。',
-        pronunciation: '음정을 잘 맞추게 해 주는 애보 이써요',
+        pronunciation: 'eum-jeong-eul jal ma-chu-ge hae ju-neun aep-do i-sseo-yo',
         words: [
           { word: '음정을 잘 맞추게 해 주는', meaning: '能帮助唱准音调的（-게 해 주다）' },
           { word: '앱도', meaning: 'APP也' },
@@ -3546,7 +3546,7 @@ export const readingArticles: Article[] = [
         id: 'nrc-11',
         ko: '노래방에서 함께 노래하면 친해지는 것 같아요.',
         zh: '在KTV一起唱歌，感觉会变得更亲近。',
-        pronunciation: '노래방에서 함께 노래하면 친해지는 것 가타요',
+        pronunciation: 'no-rae-bang-e-seo ham-kke no-rae-ha-myeon chin-hae-ji-neun geot ga-ta-yo',
         words: [
           { word: '노래방에서', meaning: '在KTV' },
           { word: '함께 노래하면', meaning: '一起唱歌的话' },
@@ -3558,7 +3558,7 @@ export const readingArticles: Article[] = [
         id: 'nrc-12',
         ko: '스트레스를 잊게 해 주는 노래방이 항상 그리워요.',
         zh: '能让人忘记压力的KTV，总是让人想念。',
-        pronunciation: '스트레스를 잊게 해 주는 노래방이 항상 그리워요',
+        pronunciation: 'seu-teu-re-seu-reul it-kke hae ju-neun no-rae-bang-i hang-sang geu-ri-wo-yo',
         words: [
           { word: '스트레스를 잊게 해 주는', meaning: '能让人忘记压力的（-게 해 주다）' },
           { word: '노래방이', meaning: 'KTV（主语）' },
@@ -3571,7 +3571,7 @@ export const readingArticles: Article[] = [
         id: 'nrc-13',
         ko: '노래방에 가서 실컷 노래해 줄게요.',
         zh: '去KTV尽情为你唱歌吧。',
-        pronunciation: '노래방에 가서 실컷 노래해 줄게요',
+        pronunciation: 'no-rae-bang-e ga-seo sil-keot no-rae-hae jul-ge-yo',
         words: [
           { word: '노래방에 가서', meaning: '去KTV' },
           { word: '실컷', meaning: '尽情地' },
@@ -3583,7 +3583,7 @@ export const readingArticles: Article[] = [
         id: 'nrc-14',
         ko: '한국 노래방 문화는 외국인들도 즐길 수 있어요.',
         zh: '韩国KTV文化外国人也能享受。',
-        pronunciation: '한국 노래방 문화는 외구긴드로 즐길 수 이써요',
+        pronunciation: 'han-guk no-rae-bang mun-hwa-neun oe-gu-gin-deul-do jeul-gil su i-sseo-yo',
         words: [
           { word: '한국 노래방 문화는', meaning: '韩国KTV文化（话题）' },
           { word: '외국인들도', meaning: '外国人也' },
@@ -3595,7 +3595,7 @@ export const readingArticles: Article[] = [
         id: 'nrc-15',
         ko: '노래방은 한국의 독특한 문화 중 하나예요.',
         zh: 'KTV是韩国独特文化之一。',
-        pronunciation: '노래방은 한구게 독트칸 문화 중 하나예요',
+        pronunciation: 'no-rae-bang-eun han-gu-ge dok-teu-kan mun-hwa jung ha-na-ye-yo',
         words: [
           { word: '노래방은', meaning: 'KTV（话题）' },
           { word: '한국의 독특한', meaning: '韩国的独特' },
@@ -3692,7 +3692,7 @@ export const readingArticles: Article[] = [
         id: 'kul-1',
         ko: '한국 대학 생활은 한국 문화를 배우는 좋은 기회예요.',
         zh: '韩国的大学生活是了解韩国文化的好机会。',
-        pronunciation: '한국 대학 생화른 한국 문화를 배우는 조은 기회예요',
+        pronunciation: 'han-guk dae-hak saeng-hwa-reun han-guk mun-hwa-reul bae-u-neun jo-eun gi-hoe-ye-yo',
         words: [
           { word: '한국 대학 생활은', meaning: '韩国大学生活（话题）' },
           { word: '한국 문화를', meaning: '韩国文化（宾语）' },
@@ -3705,7 +3705,7 @@ export const readingArticles: Article[] = [
         id: 'kul-2',
         ko: '동아리 활동을 하다 보면 자연스럽게 친해져요.',
         zh: '持续参加社团活动，自然而然就会变亲近。',
-        pronunciation: '동아리 화동을 하다 보면 자연스럽게 친해져요',
+        pronunciation: 'dong-a-ri hwal-dong-eul ha-da bo-myeon ja-yeon-seu-reop-kke chin-hae-jyeo-yo',
         words: [
           { word: '동아리 활동을', meaning: '社团活动（宾语）' },
           { word: '하다 보면', meaning: '持续做着就……（-다 보면）' },
@@ -3719,7 +3719,7 @@ export const readingArticles: Article[] = [
         id: 'kul-3',
         ko: '수업을 듣다 보면 한국어가 점점 익숙해져요.',
         zh: '持续听课，韩语会慢慢变得熟悉。',
-        pronunciation: '수어블 듣따 보면 한구거가 점점 익수캐져요',
+        pronunciation: 'su-eo-beul deut-tta bo-myeon han-gu-geo-ga jeom-jeom ik-su-kae-jyeo-yo',
         words: [
           { word: '수업을 듣다 보면', meaning: '持续听课就……（-다 보면）' },
           { word: '한국어가', meaning: '韩语（主语）' },
@@ -3733,7 +3733,7 @@ export const readingArticles: Article[] = [
         id: 'kul-4',
         ko: '수강 신청 기간에는 모두 바빠져요.',
         zh: '选课期间大家都会变得很忙。',
-        pronunciation: '수강 신청 기가네는 모두 바빠져요',
+        pronunciation: 'su-gang sin-cheong gi-ga-ne-neun mo-du ba-ppa-jyeo-yo',
         words: [
           { word: '수강 신청 기간에는', meaning: '选课期间（话题）' },
           { word: '모두', meaning: '大家' },
@@ -3745,7 +3745,7 @@ export const readingArticles: Article[] = [
         id: 'kul-5',
         ko: '선배들과 이야기하다 보면 학교생활이 더 쉬워져요.',
         zh: '和学长学姐聊天，校园生活会变得更容易。',
-        pronunciation: '선배드롸 이야기하다 보면 학교생화리 더 쉬워져요',
+        pronunciation: 'seon-bae-deul-gwa i-ya-gi-ha-da bo-myeon hak-gyo-saeng-hwa-ri deo swi-wo-jyeo-yo',
         words: [
           { word: '선배들과', meaning: '和学长学姐' },
           { word: '이야기하다 보면', meaning: '持续聊天就……（-다 보면）' },
@@ -3758,7 +3758,7 @@ export const readingArticles: Article[] = [
         id: 'kul-6',
         ko: '과제를 하다 보면 어느새 새벽이 돼요.',
         zh: '做作业做着做着，不知不觉就到了凌晨。',
-        pronunciation: '과제를 하다 보면 어느새 새벼기 돼요',
+        pronunciation: 'gwa-je-reul ha-da bo-myeon eo-neu-sae sae-byeo-gi dwae-yo',
         words: [
           { word: '과제를 하다 보면', meaning: '做作业做着就……（-다 보면）' },
           { word: '어느새', meaning: '不知不觉' },
@@ -3770,7 +3770,7 @@ export const readingArticles: Article[] = [
         id: 'kul-7',
         ko: '도서관을 자주 이용하다 보면 공부 습관이 잡혀요.',
         zh: '经常使用图书馆，学习习惯就会养成。',
-        pronunciation: '도서관을 자주 이용하다 보면 공부 습과니 자펴요',
+        pronunciation: 'do-seo-gwa-neul ja-ju i-yong-ha-da bo-myeon gong-bu seup-gwa-ni ja-pyeo-yo',
         words: [
           { word: '도서관을 자주 이용하다 보면', meaning: '经常使用图书馆就……（-다 보면）' },
           { word: '공부 습관이', meaning: '学习习惯（主语）' },
@@ -3782,7 +3782,7 @@ export const readingArticles: Article[] = [
         id: 'kul-8',
         ko: '학식을 자주 먹다 보면 좋아하는 메뉴가 생겨요.',
         zh: '经常吃食堂，就会有自己喜欢的菜单。',
-        pronunciation: '학시글 자주 먹따 보면 조아하는 메뉴가 생겨요',
+        pronunciation: 'hak-si-geul ja-ju meok-tta bo-myeon jo-a-ha-neun me-nyu-ga saeng-gyeo-yo',
         words: [
           { word: '학식을 자주 먹다 보면', meaning: '经常吃食堂就……（-다 보면）' },
           { word: '좋아하는 메뉴가', meaning: '喜欢的菜单（主语）' },
@@ -3794,7 +3794,7 @@ export const readingArticles: Article[] = [
         id: 'kul-9',
         ko: 'MT에 참가하면 후배들과 더 가까워져요.',
         zh: '参加团建旅行，和学弟学妹会变得更亲近。',
-        pronunciation: 'MT에 참가하면 후배드롸 더 가까워져요',
+        pronunciation: 'em-ti-e cham-ga-ha-myeon hu-bae-deul-gwa deo ga-kka-wo-jyeo-yo',
         words: [
           { word: 'MT에 참가하면', meaning: '参加团建旅行的话' },
           { word: '후배들과', meaning: '和学弟学妹' },
@@ -3806,7 +3806,7 @@ export const readingArticles: Article[] = [
         id: 'kul-10',
         ko: '한국어로 발표를 하다 보면 말하기가 자연스러워져요.',
         zh: '持续用韩语做发表，说话会变得自然。',
-        pronunciation: '한구거로 발표를 하다 보면 말하기가 자연스러워져요',
+        pronunciation: 'han-gu-geo-ro bal-pyo-reul ha-da bo-myeon ma-ra-gi-ga ja-yeon-seu-reo-wo-jyeo-yo',
         words: [
           { word: '한국어로 발표를 하다 보면', meaning: '用韩语做发表做着就……（-다 보면）' },
           { word: '말하기가', meaning: '说话（主语）' },
@@ -3818,7 +3818,7 @@ export const readingArticles: Article[] = [
         id: 'kul-11',
         ko: '학점 관리를 잘하면 취업이 훨씬 쉬워져요.',
         zh: '好好管理学分绩点，找工作会变得容易很多。',
-        pronunciation: '학쩜 관리를 잘하면 취어비 훨씬 쉬워져요',
+        pronunciation: 'hak-jjeom gwal-li-reul ja-ra-myeon chwi-eo-bi hwol-ssin swi-wo-jyeo-yo',
         words: [
           { word: '학점 관리를 잘하면', meaning: '好好管理绩点的话' },
           { word: '취업이', meaning: '就业（主语）' },
@@ -3830,7 +3830,7 @@ export const readingArticles: Article[] = [
         id: 'kul-12',
         ko: '대학 생활을 즐기다 보면 소중한 추억이 많이 생겨요.',
         zh: '享受大学生活，就会积累很多珍贵的回忆。',
-        pronunciation: '대학 생화를 즐기다 보면 소중한 추어기 마니 생겨요',
+        pronunciation: 'dae-hak saeng-hwa-reul jeul-gi-da bo-myeon so-jung-han chu-eo-gi ma-ni saeng-gyeo-yo',
         words: [
           { word: '대학 생활을 즐기다 보면', meaning: '享受大学生活就……（-다 보면）' },
           { word: '소중한 추억이', meaning: '珍贵的回忆（主语）' },
@@ -3842,7 +3842,7 @@ export const readingArticles: Article[] = [
         id: 'kul-13',
         ko: '한국 친구를 사귀다 보면 한국어 실력이 빨리 늘어요.',
         zh: '结交韩国朋友，韩语实力会快速提升。',
-        pronunciation: '한국 친구를 사귀다 보면 한구거 실려기 빨리 느러요',
+        pronunciation: 'han-guk chin-gu-reul sa-gwi-da bo-myeon han-gu-geo sil-lyeo-gi ppal-li neu-reo-yo',
         words: [
           { word: '한국 친구를 사귀다 보면', meaning: '结交韩国朋友就……（-다 보면）' },
           { word: '한국어 실력이', meaning: '韩语实力（主语）' },
@@ -3854,7 +3854,7 @@ export const readingArticles: Article[] = [
         id: 'kul-14',
         ko: '처음에는 낯설지만 적응하다 보면 편해져요.',
         zh: '一开始虽然陌生，但适应下去就会变得舒适。',
-        pronunciation: '처으메는 낯설지만 저그파다 보면 편해져요',
+        pronunciation: 'cheo-eu-me-neun nat-sseol-ji-man jeo-geung-ha-da bo-myeon pyeon-hae-jyeo-yo',
         words: [
           { word: '처음에는', meaning: '一开始（话题）' },
           { word: '낯설지만', meaning: '虽然陌生' },
@@ -3867,7 +3867,7 @@ export const readingArticles: Article[] = [
         id: 'kul-15',
         ko: '한국 대학 생활은 힘들지만 성장할 수 있는 시간이에요.',
         zh: '韩国大学生活虽然辛苦，但是能够成长的时间。',
-        pronunciation: '한국 대학 생화른 힘들지만 성장할 수 있는 시가니에요',
+        pronunciation: 'han-guk dae-hak saeng-hwa-reun him-deul-ji-man seong-jang-hal su in-neun si-ga-ni-e-yo',
         words: [
           { word: '한국 대학 생활은', meaning: '韩国大学生活（话题）' },
           { word: '힘들지만', meaning: '虽然辛苦' },
@@ -3965,7 +3965,7 @@ export const readingArticles: Article[] = [
         id: 'jei-1',
         ko: '제주도는 한국에서 가장 유명한 여행지 중 하나예요.',
         zh: '济州岛是韩国最著名的旅行目的地之一。',
-        pronunciation: '제주도는 한구게서 가장 유명한 여행지 중 하나예요',
+        pronunciation: 'je-ju-do-neun han-gu-ge-seo ga-jang yu-myeong-han yeo-haeng-ji jung ha-na-ye-yo',
         words: [
           { word: '제주도는', meaning: '济州岛（话题）' },
           { word: '한국에서', meaning: '在韩国' },
@@ -3978,7 +3978,7 @@ export const readingArticles: Article[] = [
         id: 'jei-2',
         ko: '비가 오는데도 불구하고 한라산을 올랐어요.',
         zh: '尽管在下雨，还是登上了汉拿山。',
-        pronunciation: '비가 오는데도 불구하고 한라사늘 올랐어요',
+        pronunciation: 'bi-ga o-neun-de-do bul-gu-ha-go hal-la-sa-neul ol-la-sseo-yo',
         words: [
           { word: '비가 오는데도 불구하고', meaning: '尽管下雨（-에도 불구하고）' },
           { word: '한라산을', meaning: '汉拿山（宾语）' },
@@ -3991,7 +3991,7 @@ export const readingArticles: Article[] = [
         id: 'jei-3',
         ko: '제주도는 아름다우면서도 바람이 강해요.',
         zh: '济州岛既美丽，同时风也很强。',
-        pronunciation: '제주도는 아름다우면서도 바라미 강해요',
+        pronunciation: 'je-ju-do-neun a-reum-da-u-myeon-seo-do ba-ra-mi gang-hae-yo',
         words: [
           { word: '제주도는', meaning: '济州岛（话题）' },
           { word: '아름다우면서도', meaning: '既美丽（-(으)면서도）' },
@@ -4004,7 +4004,7 @@ export const readingArticles: Article[] = [
         id: 'jei-4',
         ko: '날씨가 변덕스러운데도 불구하고 올레길은 걷기 좋아요.',
         zh: '尽管天气多变，올레길还是很适合徒步。',
-        pronunciation: '날씨가 변덕스러운데도 불구하고 올레기른 걷끼 조아요',
+        pronunciation: 'nal-ssi-ga byeon-deok-seu-reo-un-de-do bul-gu-ha-go ol-le-gi-reun geot-gi jo-a-yo',
         words: [
           { word: '날씨가 변덕스러운데도 불구하고', meaning: '尽管天气多变（-에도 불구하고）' },
           { word: '올레길은', meaning: '올레길（话题）' },
@@ -4016,7 +4016,7 @@ export const readingArticles: Article[] = [
         id: 'jei-5',
         ko: '흑돼지는 비싸면서도 먹을 가치가 있어요.',
         zh: '黑猪肉虽然贵，但同时也值得吃。',
-        pronunciation: '흑돼지는 비싸면서도 머글 가치가 이써요',
+        pronunciation: 'heuk-dwae-ji-neun bi-ssa-myeon-seo-do meo-geul ga-chi-ga i-sseo-yo',
         words: [
           { word: '흑돼지는', meaning: '黑猪肉（话题）' },
           { word: '비싸면서도', meaning: '虽然贵同时（-(으)면서도）' },
@@ -4028,7 +4028,7 @@ export const readingArticles: Article[] = [
         id: 'jei-6',
         ko: '제주도는 멀면서도 항상 가고 싶은 곳이에요.',
         zh: '济州岛虽然远，但同时是总想去的地方。',
-        pronunciation: '제주도는 멀면서도 항상 가고 시픈 고시에요',
+        pronunciation: 'je-ju-do-neun meol-myeon-seo-do hang-sang ga-go si-peun go-si-e-yo',
         words: [
           { word: '제주도는', meaning: '济州岛（话题）' },
           { word: '멀면서도', meaning: '虽然远同时（-(으)면서도）' },
@@ -4040,7 +4040,7 @@ export const readingArticles: Article[] = [
         id: 'jei-7',
         ko: '피곤한 일정에도 불구하고 해녀 공연을 꼭 봤어요.',
         zh: '尽管行程很累，还是一定看了海女表演。',
-        pronunciation: '피곤한 일정에도 불구하고 해녀 공연을 꼭 봐써요',
+        pronunciation: 'pi-gon-han il-jeong-e-do bul-gu-ha-go hae-nyeo gong-yeo-neul kkok bwa-sseo-yo',
         words: [
           { word: '피곤한 일정에도 불구하고', meaning: '尽管行程很累（-에도 불구하고）' },
           { word: '해녀 공연을', meaning: '海女表演（宾语）' },
@@ -4052,7 +4052,7 @@ export const readingArticles: Article[] = [
         id: 'jei-8',
         ko: '현무암은 울퉁불퉁하면서도 독특한 아름다움이 있어요.',
         zh: '玄武岩虽然凹凸不平，但同时有独特的美感。',
-        pronunciation: '현무아믄 울퉁불퉁하면서도 독트칸 아름다우미 이써요',
+        pronunciation: 'hyeon-mu-a-meun ul-tung-bul-tung-ha-myeon-seo-do dok-teu-kan a-reum-da-u-mi i-sseo-yo',
         words: [
           { word: '현무암은', meaning: '玄武岩（话题）' },
           { word: '울퉁불퉁하면서도', meaning: '虽然凹凸不平同时（-(으)면서도）' },
@@ -4064,7 +4064,7 @@ export const readingArticles: Article[] = [
         id: 'jei-9',
         ko: '추운 날씨에도 불구하고 감귤 따기 체험을 했어요.',
         zh: '尽管天气寒冷，还是体验了摘柑橘。',
-        pronunciation: '추운 날씨에도 불구하고 감귤 따기 체험을 해써요',
+        pronunciation: 'chu-un nal-ssi-e-do bul-gu-ha-go gam-gyul tta-gi che-heom-eul hae-sseo-yo',
         words: [
           { word: '추운 날씨에도 불구하고', meaning: '尽管天气寒冷（-에도 불구하고）' },
           { word: '감귤 따기 체험을', meaning: '摘柑橘体验（宾语）' },
@@ -4076,7 +4076,7 @@ export const readingArticles: Article[] = [
         id: 'jei-10',
         ko: '제주 바다는 차가우면서도 맑고 아름다워요.',
         zh: '济州的海水虽然凉，但同时清澈美丽。',
-        pronunciation: '제주 바다는 차가우면서도 맑꼬 아름다워요',
+        pronunciation: 'je-ju ba-da-neun cha-ga-u-myeon-seo-do mal-go a-reum-da-wo-yo',
         words: [
           { word: '제주 바다는', meaning: '济州的海（话题）' },
           { word: '차가우면서도', meaning: '虽然凉同时（-(으)면서도）' },
@@ -4088,7 +4088,7 @@ export const readingArticles: Article[] = [
         id: 'jei-11',
         ko: '높은 입장료에도 불구하고 절경을 보면 값어치가 있어요.',
         zh: '尽管票价很高，但看到绝景就觉得值得。',
-        pronunciation: '노픈 입장뇨에도 불구하고 절경을 보면 갑써치가 이써요',
+        pronunciation: 'no-peun ip-jang-nyo-e-do bul-gu-ha-go jeol-gyeong-eul bo-myeon ga-beo-chi-ga i-sseo-yo',
         words: [
           { word: '높은 입장료에도 불구하고', meaning: '尽管票价很高（-에도 불구하고）' },
           { word: '절경을 보면', meaning: '看到绝景的话' },
@@ -4100,7 +4100,7 @@ export const readingArticles: Article[] = [
         id: 'jei-12',
         ko: '제주도는 작으면서도 볼 것이 정말 많아요.',
         zh: '济州岛虽然不大，但同时有很多值得看的东西。',
-        pronunciation: '제주도는 자그면서도 볼 꺼시 정말 마나요',
+        pronunciation: 'je-ju-do-neun ja-geu-myeon-seo-do bol geo-si jeong-mal ma-na-yo',
         words: [
           { word: '제주도는', meaning: '济州岛（话题）' },
           { word: '작으면서도', meaning: '虽然不大同时（-(으)면서도）' },
@@ -4112,7 +4112,7 @@ export const readingArticles: Article[] = [
         id: 'jei-13',
         ko: '긴 여행 거리에도 불구하고 매년 방문하는 사람이 많아요.',
         zh: '尽管路程很远，每年还是有很多人来访。',
-        pronunciation: '긴 여행 거리에도 불구하고 매년 방문하는 사라미 마나요',
+        pronunciation: 'gin yeo-haeng geo-ri-e-do bul-gu-ha-go mae-nyeon bang-mun-ha-neun sa-ra-mi ma-na-yo',
         words: [
           { word: '긴 여행 거리에도 불구하고', meaning: '尽管路程很远（-에도 불구하고）' },
           { word: '매년', meaning: '每年' },
@@ -4124,7 +4124,7 @@ export const readingArticles: Article[] = [
         id: 'jei-14',
         ko: '제주도 여행은 힘들면서도 잊지 못할 추억을 만들어 줘요.',
         zh: '济州岛旅行虽然辛苦，但同时创造出难忘的回忆。',
-        pronunciation: '제주도 여행은 힘들면서도 잊찌 몯할 추어글 만들어 줘요',
+        pronunciation: 'je-ju-do yeo-haeng-eun him-deul-myeon-seo-do it-ji mo-tal chu-eo-geul man-deu-reo jwo-yo',
         words: [
           { word: '제주도 여행은', meaning: '济州岛旅行（话题）' },
           { word: '힘들면서도', meaning: '虽然辛苦同时（-(으)면서도）' },
@@ -4137,7 +4137,7 @@ export const readingArticles: Article[] = [
         id: 'jei-15',
         ko: '제주도는 한 번 가면 또 가고 싶어지는 섬이에요.',
         zh: '济州岛是去过一次就想再去的岛。',
-        pronunciation: '제주도는 한 번 가면 또 가고 시퍼지는 서미에요',
+        pronunciation: 'je-ju-do-neun han beon ga-myeon tto ga-go si-peo-ji-neun seo-mi-e-yo',
         words: [
           { word: '제주도는', meaning: '济州岛（话题）' },
           { word: '한 번 가면', meaning: '去一次的话' },
@@ -4235,7 +4235,7 @@ export const readingArticles: Article[] = [
         id: 'ksc-1',
         ko: '한국 스킨케어 문화는 전 세계에서 주목받고 있어요.',
         zh: '韩国护肤文化正在受到全世界的关注。',
-        pronunciation: '한국 스킨케어 문화는 전 세계에서 주목받꼬 이써요',
+        pronunciation: 'han-guk seu-kin-ke-eo mu-nwa-neun jeon se-gye-e-seo ju-mok-bat-go i-sseo-yo',
         words: [
           { word: '한국 스킨케어 문화는', meaning: '韩国护肤文化（话题）' },
           { word: '전 세계에서', meaning: '在全世界' },
@@ -4247,7 +4247,7 @@ export const readingArticles: Article[] = [
         id: 'ksc-2',
         ko: '한국 여성들은 스킨케어에 신경을 많이 쓰는 반면에 남성들도 점점 관심을 가져요.',
         zh: '韩国女性非常注重护肤，反而男性也逐渐关注起来。',
-        pronunciation: '한국 여성드른 스킨케어에 신경을 마니 쓰는 반면에 남성드로 점점 관심을 가져요',
+        pronunciation: 'han-guk yeo-seong-deu-reun seu-kin-ke-eo-e sin-gyeong-eul ma-ni sseu-neun ban-myeo-ne nam-seong-deu-ro jeom-jeom gwan-si-meul ga-jeo-yo',
         words: [
           { word: '한국 여성들은', meaning: '韩国女性（话题）' },
           { word: '스킨케어에 신경을 많이 쓰는 반면에', meaning: '非常注重护肤，反而（-는 반면에）' },
@@ -4261,7 +4261,7 @@ export const readingArticles: Article[] = [
         id: 'ksc-3',
         ko: '피부가 민감하기 때문에 성분을 꼭 확인해요.',
         zh: '因为皮肤敏感，所以一定要确认成分。',
-        pronunciation: '피부가 민감하기 때무네 성부늘 꼭 화기내요',
+        pronunciation: 'pi-bu-ga min-gam-ha-gi ttae-mu-ne seong-bu-neul kkok hwa-gin-hae-yo',
         words: [
           { word: '피부가', meaning: '皮肤（主语）' },
           { word: '민감하기 때문에', meaning: '因为敏感（-기 때문에）' },
@@ -4274,7 +4274,7 @@ export const readingArticles: Article[] = [
         id: 'ksc-4',
         ko: '한국 제품은 가격이 저렴한 반면에 품질이 높아요.',
         zh: '韩国产品价格实惠，反而品质很高。',
-        pronunciation: '한국 제푸믄 가겨기 저렴한 반면에 품지리 노파요',
+        pronunciation: 'han-guk je-pu-meun ga-gyeo-gi jeo-ryeom-han ban-myeo-ne pum-ji-ri no-pa-yo',
         words: [
           { word: '한국 제품은', meaning: '韩国产品（话题）' },
           { word: '가격이 저렴한 반면에', meaning: '价格实惠，反而（-(으)ㄴ 반면에）' },
@@ -4286,7 +4286,7 @@ export const readingArticles: Article[] = [
         id: 'ksc-5',
         ko: '자외선이 강하기 때문에 자외선 차단제를 매일 발라요.',
         zh: '因为紫外线很强，所以每天涂防晒霜。',
-        pronunciation: '자외서니 강하기 때무네 자외선 차단제를 매일 발라요',
+        pronunciation: 'ja-oe-seo-ni gang-ha-gi ttae-mu-ne ja-oe-seon cha-dan-je-reul mae-il bal-la-yo',
         words: [
           { word: '자외선이 강하기 때문에', meaning: '因为紫外线很强（-기 때문에）' },
           { word: '자외선 차단제를', meaning: '防晒霜（宾语）' },
@@ -4298,7 +4298,7 @@ export const readingArticles: Article[] = [
         id: 'ksc-6',
         ko: '마스크팩은 사용하기 편한 반면에 매일 쓰면 비용이 들어요.',
         zh: '面膜使用起来方便，但每天用的话费用不小。',
-        pronunciation: '마스크패근 사용하기 편한 반면에 매일 쓰면 비용이 드러요',
+        pronunciation: 'ma-seu-keu-paeng-eun sa-yong-ha-gi pyeon-han ban-myeo-ne mae-il sseu-myeon bi-yong-i deu-reo-yo',
         words: [
           { word: '마스크팩은', meaning: '面膜（话题）' },
           { word: '사용하기 편한 반면에', meaning: '使用方便，反而（-(으)ㄴ 반면에）' },
@@ -4311,7 +4311,7 @@ export const readingArticles: Article[] = [
         id: 'ksc-7',
         ko: '피부 보습이 중요하기 때문에 에센스를 꼭 써요.',
         zh: '因为皮肤保湿很重要，所以一定会用精华液。',
-        pronunciation: '피부 보스비 중요하기 때무네 에센스를 꼭 써요',
+        pronunciation: 'pi-bu bo-seu-bi jung-yo-ha-gi ttae-mu-ne e-sen-seu-reul kkok sseo-yo',
         words: [
           { word: '피부 보습이 중요하기 때문에', meaning: '因为保湿很重要（-기 때문에）' },
           { word: '에센스를 꼭 써요', meaning: '一定会用精华液' },
@@ -4322,7 +4322,7 @@ export const readingArticles: Article[] = [
         id: 'ksc-8',
         ko: '한국 스킨케어 루틴은 단계가 많은 반면에 효과가 좋아요.',
         zh: '韩国护肤程序步骤很多，反而效果很好。',
-        pronunciation: '한국 스킨케어 루티는 단계가 마는 반면에 효과가 조아요',
+        pronunciation: 'han-guk seu-kin-ke-eo ru-ti-neun dan-gye-ga man-eun ban-myeo-ne hyo-gwa-ga jo-a-yo',
         words: [
           { word: '한국 스킨케어 루틴은', meaning: '韩国护肤程序（话题）' },
           { word: '단계가 많은 반면에', meaning: '步骤很多，反而（-(으)ㄴ 반면에）' },
@@ -4334,7 +4334,7 @@ export const readingArticles: Article[] = [
         id: 'ksc-9',
         ko: '세안이 기본이기 때문에 외출 후에는 꼭 세안해요.',
         zh: '因为洗脸是基本，所以外出回来一定要洗脸。',
-        pronunciation: '세아니 기보니기 때무네 외출 후에는 꼭 세안해요',
+        pronunciation: 'se-a-ni gi-bo-ni-gi ttae-mu-ne oe-chul hu-e-neun kkok se-an-hae-yo',
         words: [
           { word: '세안이 기본이기 때문에', meaning: '因为洗脸是基本（-기 때문에）' },
           { word: '외출 후에는', meaning: '外出后（话题）' },
@@ -4346,7 +4346,7 @@ export const readingArticles: Article[] = [
         id: 'ksc-10',
         ko: '피부가 촉촉한 반면에 자연스러운 메이크업을 선호해요.',
         zh: '皮肤水润，反而更偏好自然的妆容。',
-        pronunciation: '피부가 촉초칸 반면에 자연스러운 메이크업을 선호해요',
+        pronunciation: 'pi-bu-ga chok-chok-an ban-myeo-ne ja-yeon-seu-reo-un me-i-keu-eo-beul seon-ho-hae-yo',
         words: [
           { word: '피부가 촉촉한 반면에', meaning: '皮肤水润，反而（-(으)ㄴ 반면에）' },
           { word: '자연스러운 메이크업을', meaning: '自然的妆容（宾语）' },
@@ -4358,7 +4358,7 @@ export const readingArticles: Article[] = [
         id: 'ksc-11',
         ko: '좋은 성분이 들어 있기 때문에 한국 제품이 인기예요.',
         zh: '因为含有好的成分，所以韩国产品很受欢迎。',
-        pronunciation: '조은 성부니 드러 잇끼 때무네 한국 제푸미 인기예요',
+        pronunciation: 'jo-eun seong-bu-ni deu-reo it-gi ttae-mu-ne han-guk je-pu-mi in-gi-ye-yo',
         words: [
           { word: '좋은 성분이 들어 있기 때문에', meaning: '因为含有好的成分（-기 때문에）' },
           { word: '한국 제품이', meaning: '韩国产品（主语）' },
@@ -4370,7 +4370,7 @@ export const readingArticles: Article[] = [
         id: 'ksc-12',
         ko: '가격은 비싼 반면에 성분이 좋아서 고르기 어려워요.',
         zh: '价格虽贵，反而成分好，所以难以选择。',
-        pronunciation: '가겨근 비싼 반면에 성부니 조아서 고르기 어려워요',
+        pronunciation: 'ga-gyeo-geun bi-ssan ban-myeo-ne seong-bu-ni jo-a-seo go-reu-gi eo-ryeo-wo-yo',
         words: [
           { word: '가격은 비싼 반면에', meaning: '价格虽贵，反而（-(으)ㄴ 반면에）' },
           { word: '성분이 좋아서', meaning: '因为成分好' },
@@ -4382,7 +4382,7 @@ export const readingArticles: Article[] = [
         id: 'ksc-13',
         ko: '한국 스킨케어를 꾸준히 하기 때문에 피부가 좋아졌어요.',
         zh: '因为坚持做韩国护肤，皮肤变好了。',
-        pronunciation: '한국 스킨케어를 꾸준히 하기 때무네 피부가 조아져써요',
+        pronunciation: 'han-guk seu-kin-ke-eo-reul kku-jun-hi ha-gi ttae-mu-ne pi-bu-ga jo-a-jyeo-sseo-yo',
         words: [
           { word: '한국 스킨케어를 꾸준히 하기 때문에', meaning: '因为坚持做护肤（-기 때문에）' },
           { word: '피부가 좋아졌어요', meaning: '皮肤变好了' },
@@ -4393,7 +4393,7 @@ export const readingArticles: Article[] = [
         id: 'ksc-14',
         ko: '외국에서는 구하기 힘든 반면에 한국에서는 쉽게 살 수 있어요.',
         zh: '在国外很难买到，反而在韩国可以轻松购买。',
-        pronunciation: '외구게서는 구하기 힘든 반면에 한구게서는 쉽게 살 수 이써요',
+        pronunciation: 'oe-gu-ge-seo-neun gu-ha-gi him-deun ban-myeo-ne han-gu-ge-seo-neun swip-ge sal su i-sseo-yo',
         words: [
           { word: '외국에서는 구하기 힘든 반면에', meaning: '在国外难以购买，反而（-는 반면에）' },
           { word: '한국에서는', meaning: '在韩国（话题）' },
@@ -4405,7 +4405,7 @@ export const readingArticles: Article[] = [
         id: 'ksc-15',
         ko: '한국 스킨케어 문화는 건강한 피부를 위한 습관이에요.',
         zh: '韩国护肤文化是为了健康皮肤的生活习惯。',
-        pronunciation: '한국 스킨케어 문화는 건강한 피부를 위한 스과니에요',
+        pronunciation: 'han-guk seu-kin-ke-eo mu-nwa-neun geon-gang-han pi-bu-reul wi-han seup-gwa-ni-e-yo',
         words: [
           { word: '한국 스킨케어 문화는', meaning: '韩国护肤文化（话题）' },
           { word: '건강한 피부를 위한', meaning: '为了健康皮肤的' },
@@ -4502,7 +4502,7 @@ export const readingArticles: Article[] = [
         id: 'fmg-1',
         ko: '팬미팅은 아이돌을 직접 만날 수 있는 소중한 기회예요.',
         zh: '见面会是能直接见到偶像的珍贵机会。',
-        pronunciation: '팬미팅은 아이도를 직접 만날 수 있는 소중한 기회예요',
+        pronunciation: 'paen-mi-ting-eun a-i-do-reul jik-jeop man-nal su in-neun so-jung-han gi-hoe-ye-yo',
         words: [
           { word: '팬미팅은', meaning: '见面会（话题）' },
           { word: '아이돌을', meaning: '偶像（宾语）' },
@@ -4515,7 +4515,7 @@ export const readingArticles: Article[] = [
         id: 'fmg-2',
         ko: '티켓팅에 실패할 뻔했는데 마지막에 성공했어요.',
         zh: '差点抢票失败，但最后成功了。',
-        pronunciation: '티케팅에 실패할 뻔했는데 마지마게 성공했어요',
+        pronunciation: 'ti-ket-ting-e sil-pae-hal ppeon-haen-neun-de ma-ji-ma-ge seong-gong-hae-sseo-yo',
         words: [
           { word: '티켓팅에', meaning: '抢票' },
           { word: '실패할 뻔했는데', meaning: '差点失败（-(으)ㄹ 뻔하다）' },
@@ -4529,7 +4529,7 @@ export const readingArticles: Article[] = [
         id: 'fmg-3',
         ko: '아이돌을 보자마자 울고 말았어요.',
         zh: '一看到偶像，最终还是哭了。',
-        pronunciation: '아이도를 보자마자 울고 마라써요',
+        pronunciation: 'a-i-do-reul bo-ja-ma-ja ul-go ma-ra-sseo-yo',
         words: [
           { word: '아이돌을', meaning: '偶像（宾语）' },
           { word: '보자마자', meaning: '一看到' },
@@ -4542,7 +4542,7 @@ export const readingArticles: Article[] = [
         id: 'fmg-4',
         ko: '대기줄에서 기다리다가 쓰러질 뻔했어요.',
         zh: '在等候队伍里等着，差点晕倒了。',
-        pronunciation: '대기줄에서 기다리다가 쓰러질 뻔했어요',
+        pronunciation: 'dae-gi-ju-re-seo gi-da-ri-da-ga sseu-reo-jil ppeon-hae-sseo-yo',
         words: [
           { word: '대기줄에서', meaning: '在等候队伍里' },
           { word: '기다리다가', meaning: '等着等着' },
@@ -4554,7 +4554,7 @@ export const readingArticles: Article[] = [
         id: 'fmg-5',
         ko: '악수를 하는 순간 긴장해서 아무 말도 못하고 말았어요.',
         zh: '握手的瞬间因为紧张，最终什么话都没说出来。',
-        pronunciation: '악수를 하는 순간 긴장해서 아무 말도 못하고 마라써요',
+        pronunciation: 'ak-su-reul ha-neun sun-gan gin-jang-hae-seo a-mu mal-do mo-ta-go ma-ra-sseo-yo',
         words: [
           { word: '악수를 하는 순간', meaning: '握手的瞬间' },
           { word: '긴장해서', meaning: '因为紧张' },
@@ -4567,7 +4567,7 @@ export const readingArticles: Article[] = [
         id: 'fmg-6',
         ko: '포토타임에 눈물이 날 뻔했어요.',
         zh: '拍照时间差点流泪了。',
-        pronunciation: '포토타이메 눈무리 날 뻔했어요',
+        pronunciation: 'po-to-ta-i-me nun-mu-ri nal ppeon-hae-sseo-yo',
         words: [
           { word: '포토타임에', meaning: '在拍照时间' },
           { word: '눈물이 날 뻔했어요', meaning: '差点流泪（-(으)ㄹ 뻔하다）' },
@@ -4578,7 +4578,7 @@ export const readingArticles: Article[] = [
         id: 'fmg-7',
         ko: '사인을 받고 감격해서 소리를 지르고 말았어요.',
         zh: '拿到签名太激动，最终还是大叫出来。',
-        pronunciation: '사이늘 받꼬 감겨캐서 소리를 지르고 마라써요',
+        pronunciation: 'sa-i-neul bat-kko gam-gyeo-kae-seo so-ri-reul ji-reu-go ma-ra-sseo-yo',
         words: [
           { word: '사인을 받고', meaning: '拿到签名' },
           { word: '감격해서', meaning: '因为激动' },
@@ -4590,7 +4590,7 @@ export const readingArticles: Article[] = [
         id: 'fmg-8',
         ko: '현장 분위기에 압도될 뻔했어요.',
         zh: '差点被现场气氛震撼到无法自持。',
-        pronunciation: '현장 분위기에 압도될 뻔했어요',
+        pronunciation: 'hyeon-jang bu-nwi-gi-e ap-do-doel ppeon-hae-sseo-yo',
         words: [
           { word: '현장 분위기에', meaning: '被现场气氛' },
           { word: '압도될 뻔했어요', meaning: '差点被压倒（-(으)ㄹ 뻔하다）' },
@@ -4601,7 +4601,7 @@ export const readingArticles: Article[] = [
         id: 'fmg-9',
         ko: '준비한 말을 다 잊어버리고 말았어요.',
         zh: '最终还是忘了所有准备好的话。',
-        pronunciation: '준비한 마를 다 이저버리고 마라써요',
+        pronunciation: 'jun-bi-han ma-reul da i-jeo-beo-ri-go ma-ra-sseo-yo',
         words: [
           { word: '준비한 말을', meaning: '准备好的话（宾语）' },
           { word: '다', meaning: '全部' },
@@ -4613,7 +4613,7 @@ export const readingArticles: Article[] = [
         id: 'fmg-10',
         ko: '설레는 마음에 잠을 못 잘 뻔했어요.',
         zh: '因为心跳加速，差点睡不着觉。',
-        pronunciation: '설레는 마으메 자믈 못 잘 뻔했어요',
+        pronunciation: 'seol-le-neun ma-eu-me ja-meul mot jal ppeon-hae-sseo-yo',
         words: [
           { word: '설레는 마음에', meaning: '因为激动的心情' },
           { word: '잠을 못 잘 뻔했어요', meaning: '差点睡不着（-(으)ㄹ 뻔하다）' },
@@ -4624,7 +4624,7 @@ export const readingArticles: Article[] = [
         id: 'fmg-11',
         ko: '팬미팅은 평생 기억에 남고 말 것 같아요.',
         zh: '见面会感觉会永远留在记忆里。',
-        pronunciation: '팬미팅은 평생 기어게 남꼬 말 것 가타요',
+        pronunciation: 'paen-mi-ting-eun pyeong-saeng gi-eo-ge nam-go mal kkeot ga-ta-yo',
         words: [
           { word: '팬미팅은', meaning: '见面会（话题）' },
           { word: '평생', meaning: '一生/永远' },
@@ -4636,7 +4636,7 @@ export const readingArticles: Article[] = [
         id: 'fmg-12',
         ko: '티켓을 놓칠 뻔했지만 친구 덕분에 구했어요.',
         zh: '差点错过票，但多亏朋友帮忙买到了。',
-        pronunciation: '티케슬 노칠 뻔했찌만 친구 덕부네 구했어요',
+        pronunciation: 'ti-ke-seul no-chil ppeon-haet-jji-man chin-gu deong-bu-ne gu-hae-sseo-yo',
         words: [
           { word: '티켓을 놓칠 뻔했지만', meaning: '差点错过票（-(으)ㄹ 뻔하다）' },
           { word: '친구 덕분에', meaning: '多亏朋友' },
@@ -4648,7 +4648,7 @@ export const readingArticles: Article[] = [
         id: 'fmg-13',
         ko: '팬미팅에서 아이돌이 웃어주자 눈물이 흐르고 말았어요.',
         zh: '见面会上偶像一对我笑，眼泪最终还是流下来了。',
-        pronunciation: '팬미팅에서 아이도리 우서주자 눈무리 흐르고 마라써요',
+        pronunciation: 'paen-mi-ting-e-seo a-i-do-ri u-seo-ju-ja nun-mu-ri heu-reu-go ma-ra-sseo-yo',
         words: [
           { word: '팬미팅에서', meaning: '在见面会上' },
           { word: '아이돌이 웃어주자', meaning: '偶像一笑' },
@@ -4660,7 +4660,7 @@ export const readingArticles: Article[] = [
         id: 'fmg-14',
         ko: '팬미팅 현장은 생각보다 훨씬 감동적이에요.',
         zh: '见面会现场比想象中感动得多。',
-        pronunciation: '팬미팅 현장은 생각보다 훨씬 감동저기에요',
+        pronunciation: 'paen-mi-ting hyeon-jang-eun saeng-gak-bo-da hwol-ssin gam-dong-jeo-gi-e-yo',
         words: [
           { word: '팬미팅 현장은', meaning: '见面会现场（话题）' },
           { word: '생각보다', meaning: '比想象中' },
@@ -4672,7 +4672,7 @@ export const readingArticles: Article[] = [
         id: 'fmg-15',
         ko: '팬미팅 경험은 평생 소중한 추억으로 남아요.',
         zh: '见面会的经历会作为一生中珍贵的回忆留下来。',
-        pronunciation: '팬미팅 경험은 평생 소중한 추어그로 나마요',
+        pronunciation: 'paen-mi-ting gyeong-heo-meun pyeong-saeng so-jung-han chu-eo-geu-ro na-ma-yo',
         words: [
           { word: '팬미팅 경험은', meaning: '见面会经历（话题）' },
           { word: '평생', meaning: '一生' },
@@ -4770,7 +4770,7 @@ export const readingArticles: Article[] = [
         id: 'bst-1',
         ko: '지난 주말에 친구와 함께 부산에 갔다 왔어요.',
         zh: '上周末和朋友一起去釜山回来了。',
-        pronunciation: '지난 주마레 친구와 함께 부사네 갔따 와써요',
+        pronunciation: 'ji-nan ju-ma-re chin-gu-wa ham-kke bu-sa-ne gat-da wa-sseo-yo',
         words: [
           { word: '지난 주말에', meaning: '上周末' },
           { word: '친구와 함께', meaning: '和朋友一起' },
@@ -4782,7 +4782,7 @@ export const readingArticles: Article[] = [
         id: 'bst-2',
         ko: '친구가 숙소를 미리 예약해 준 덕분에 좋은 방을 잡을 수 있었어요.',
         zh: '多亏朋友提前预订了住宿，才能订到好房间。',
-        pronunciation: '친구가 숙소를 미리 예야캐 준 덕부네 조은 방을 자블 수 이써써요',
+        pronunciation: 'chin-gu-ga suk-so-reul mi-ri ye-ya-kae jun deong-bu-ne jo-eun bang-eul ja-beul su i-sseo-sseo-yo',
         words: [
           { word: '친구가 숙소를 미리 예약해 준 덕분에', meaning: '多亏朋友提前预订了住宿（-(으)ㄴ 덕분에）' },
           { word: '좋은 방을', meaning: '好房间（宾语）' },
@@ -4795,7 +4795,7 @@ export const readingArticles: Article[] = [
         id: 'bst-3',
         ko: '늦잠을 자는 바람에 KTX를 놓쳤어요.',
         zh: '因为睡过头，错过了KTX。',
-        pronunciation: '늦짜믈 자는 바라메 KTX를 노쳤어요',
+        pronunciation: 'neut-jja-meul ja-neun ba-ra-me ke-i-ti-ek-seu-reul no-chyeo-sseo-yo',
         words: [
           { word: '늦잠을 자는 바람에', meaning: '因为睡过头（-는 바람에）' },
           { word: 'KTX를', meaning: 'KTX（宾语）' },
@@ -4808,7 +4808,7 @@ export const readingArticles: Article[] = [
         id: 'bst-4',
         ko: '날씨가 좋은 덕분에 해운대 해변을 즐길 수 있었어요.',
         zh: '多亏天气好，能够享受海云台海滩。',
-        pronunciation: '날씨가 조은 덕부네 해운대 해변을 즐길 수 이써써요',
+        pronunciation: 'nal-ssi-ga jo-eun deong-bu-ne hae-un-dae hae-byeo-neul jeul-gil su i-sseo-sseo-yo',
         words: [
           { word: '날씨가 좋은 덕분에', meaning: '多亏天气好（-(으)ㄴ 덕분에）' },
           { word: '해운대 해변을', meaning: '海云台海滩（宾语）' },
@@ -4820,7 +4820,7 @@ export const readingArticles: Article[] = [
         id: 'bst-5',
         ko: '갑자기 비가 오는 바람에 계획을 바꿔야 했어요.',
         zh: '因为突然下雨，不得不改变计划。',
-        pronunciation: '갑짜기 비가 오는 바라메 계획을 바꿔야 했어요',
+        pronunciation: 'gap-ja-gi bi-ga o-neun ba-ra-me gye-hoe-geul ba-kkwo-ya hae-sseo-yo',
         words: [
           { word: '갑자기 비가 오는 바람에', meaning: '因为突然下雨（-는 바람에）' },
           { word: '계획을', meaning: '计划（宾语）' },
@@ -4832,7 +4832,7 @@ export const readingArticles: Article[] = [
         id: 'bst-6',
         ko: '자갈치 시장에서 신선한 회를 먹은 덕분에 기분이 최고였어요.',
         zh: '多亏在札嘎其市场吃了新鲜的生鱼片，心情极好。',
-        pronunciation: '자갈치 시장에서 신선한 회를 머근 덕부네 기부니 최고였어요',
+        pronunciation: 'ja-gal-chi si-jang-e-seo sin-seon-han hoe-reul meo-geun deong-bu-ne gi-bu-ni choe-go-yeo-sseo-yo',
         words: [
           { word: '자갈치 시장에서', meaning: '在札嘎其市场' },
           { word: '신선한 회를 먹은 덕분에', meaning: '多亏吃了新鲜生鱼片（-(으)ㄴ 덕분에）' },
@@ -4844,7 +4844,7 @@ export const readingArticles: Article[] = [
         id: 'bst-7',
         ko: '지갑을 숙소에 두고 온 바람에 저녁 식사를 못 할 뻔했어요.',
         zh: '因为把钱包落在住宿处，差点没法吃晚饭。',
-        pronunciation: '지가블 숙소에 두고 온 바라메 저녁 식사를 못 할 뻔했어요',
+        pronunciation: 'ji-ga-beul suk-so-e du-go on ba-ra-me jeo-nyeok sik-sa-reul mot hal ppeon-hae-sseo-yo',
         words: [
           { word: '지갑을 숙소에 두고 온 바람에', meaning: '因为把钱包留在住宿处（-는 바람에）' },
           { word: '저녁 식사를', meaning: '晚饭（宾语）' },
@@ -4856,7 +4856,7 @@ export const readingArticles: Article[] = [
         id: 'bst-8',
         ko: '현지 친구의 추천 덕분에 숨겨진 맛집을 찾았어요.',
         zh: '多亏当地朋友的推荐，找到了隐藏的美食店。',
-        pronunciation: '현지 친구의 추천 덕부네 숨겨진 맛찌블 차자써요',
+        pronunciation: 'hyeon-ji chin-gu-e chu-cheon deong-bu-ne sum-gyeo-jin mat-jji-beul cha-ja-sseo-yo',
         words: [
           { word: '현지 친구의 추천 덕분에', meaning: '多亏当地朋友的推荐（-(으)ㄴ 덕분에）' },
           { word: '숨겨진 맛집을', meaning: '隐藏的美食店（宾语）' },
@@ -4868,7 +4868,7 @@ export const readingArticles: Article[] = [
         id: 'bst-9',
         ko: '길을 잘못 든 바람에 광안리 야경을 더 오래 걸으며 봤어요.',
         zh: '因为走错了路，反而更长时间边走边看广安里夜景。',
-        pronunciation: '기를 잘못 든 바라메 광안리 야경을 더 오래 거르며 봐써요',
+        pronunciation: 'gi-reul jal-mot deun ba-ra-me gwang-al-li ya-gyeong-eul deo o-rae geo-reu-myeo bwa-sseo-yo',
         words: [
           { word: '길을 잘못 든 바람에', meaning: '因为走错了路（-는 바람에）' },
           { word: '광안리 야경을', meaning: '广安里夜景（宾语）' },
@@ -4880,7 +4880,7 @@ export const readingArticles: Article[] = [
         id: 'bst-10',
         ko: '밀면을 처음 먹어 본 덕분에 부산만의 맛을 알게 됐어요.',
         zh: '多亏第一次吃了밀면，了解到了釜山独有的味道。',
-        pronunciation: '밀면을 처음 머거 본 덕부네 부산마네 마스 알게 됐어요',
+        pronunciation: 'mil-myeo-neul cheo-eum meo-geo bon deong-bu-ne bu-san-ma-ne ma-seul al-ge dwae-sseo-yo',
         words: [
           { word: '밀면을 처음 먹어 본 덕분에', meaning: '多亏第一次吃了밀면（-(으)ㄴ 덕분에）' },
           { word: '부산만의 맛을', meaning: '釜山独有的味道（宾语）' },
@@ -4892,7 +4892,7 @@ export const readingArticles: Article[] = [
         id: 'bst-11',
         ko: '버스를 잘못 탄 바람에 국제시장을 못 들렀어요.',
         zh: '因为坐错了公交，没能绕道去国际市场。',
-        pronunciation: '버스를 잘못 탄 바라메 국제시장을 못 들렀어요',
+        pronunciation: 'beo-seu-reul jal-mot tan ba-ra-me guk-je-si-jang-eul mot deul-leo-sseo-yo',
         words: [
           { word: '버스를 잘못 탄 바람에', meaning: '因为坐错了公交（-는 바람에）' },
           { word: '국제시장을', meaning: '国际市场（宾语）' },
@@ -4904,7 +4904,7 @@ export const readingArticles: Article[] = [
         id: 'bst-12',
         ko: '친구와 함께한 덕분에 혼자였으면 못 갔을 곳도 갔어요.',
         zh: '多亏和朋友一起，去了一个人去不了的地方。',
-        pronunciation: '친구와 함께한 덕부네 혼자였으면 못 갔을 고도 가써요',
+        pronunciation: 'chin-gu-wa ham-kke-han deong-bu-ne hon-ja-yeo-sseu-myeon mot ga-sseul got-tto ga-sseo-yo',
         words: [
           { word: '친구와 함께한 덕분에', meaning: '多亏和朋友一起（-(으)ㄴ 덕분에）' },
           { word: '혼자였으면 못 갔을 곳도', meaning: '一个人去不了的地方也' },
@@ -4916,7 +4916,7 @@ export const readingArticles: Article[] = [
         id: 'bst-13',
         ko: '짐을 너무 많이 챙긴 바람에 이동하기 불편했어요.',
         zh: '因为带了太多行李，移动起来很不方便。',
-        pronunciation: '지믈 너무 마니 챙긴 바라메 이동하기 불편했어요',
+        pronunciation: 'ji-meul neo-mu ma-ni chaeng-gin ba-ra-me i-dong-ha-gi bul-pyeon-hae-sseo-yo',
         words: [
           { word: '짐을 너무 많이 챙긴 바람에', meaning: '因为带了太多行李（-는 바람에）' },
           { word: '이동하기', meaning: '移动（名词化）' },
@@ -4928,7 +4928,7 @@ export const readingArticles: Article[] = [
         id: 'bst-14',
         ko: '부산 여행은 1박 2일이었지만 정말 알찼어요.',
         zh: '釜山旅行虽然只有两天一夜，但非常充实。',
-        pronunciation: '부산 여행은 1박 2이리었찌만 정말 알차써요',
+        pronunciation: 'bu-san yeo-haeng-eun il-bak i-i-ri-eot-jji-man jeong-mal al-cha-sseo-yo',
         words: [
           { word: '부산 여행은', meaning: '釜山旅行（话题）' },
           { word: '1박 2일이었지만', meaning: '虽然是两天一夜' },
@@ -4940,7 +4940,7 @@ export const readingArticles: Article[] = [
         id: 'bst-15',
         ko: '다음에는 더 오래 머물면서 부산 곳곳을 돌아보고 싶어요.',
         zh: '下次想住得更久，游遍釜山各个角落。',
-        pronunciation: '다으메는 더 오래 머물면서 부산 곳고슬 도라보고 시퍼요',
+        pronunciation: 'da-eu-me-neun deo o-rae meo-mul-myeon-seo bu-san got-kko-seul do-ra-bo-go si-peo-yo',
         words: [
           { word: '다음에는', meaning: '下次（话题）' },
           { word: '더 오래 머물면서', meaning: '住得更久地' },
@@ -5038,7 +5038,7 @@ export const readingArticles: Article[] = [
         id: 'kwp-1',
         ko: '한국 직장 생활은 처음에는 낯설지만 점점 익숙해져요.',
         zh: '韩国职场生活一开始会觉得陌生，但会慢慢习惯。',
-        pronunciation: '한국 직장 생화른 처으메는 낯설지만 점점 익수캐져요',
+        pronunciation: 'han-guk jik-jang saeng-hwa-reun cheo-eu-me-neun nat-sseol-ji-man jeom-jeom ik-su-kae-jyeo-yo',
         words: [
           { word: '한국 직장 생활은', meaning: '韩国职场生活（话题）' },
           { word: '처음에는', meaning: '一开始' },
@@ -5051,7 +5051,7 @@ export const readingArticles: Article[] = [
         id: 'kwp-2',
         ko: '한국 직장에서는 상사에게 존댓말을 써야만 해요.',
         zh: '在韩国职场，必须对上司使用敬语。',
-        pronunciation: '한국 직장에서는 상사에게 존댄마를 써야만 해요',
+        pronunciation: 'han-guk jik-jang-e-seo-neun sang-sa-e-ge jon-daen-ma-reul sseo-ya-man hae-yo',
         words: [
           { word: '한국 직장에서는', meaning: '在韩国职场（话题）' },
           { word: '상사에게', meaning: '对上司' },
@@ -5065,7 +5065,7 @@ export const readingArticles: Article[] = [
         id: 'kwp-3',
         ko: '마감이 내일이라서 야근을 할 수밖에 없어요.',
         zh: '因为截止日期是明天，只能加班了。',
-        pronunciation: '마가미 내일이라서 야그늘 할 수바께 없어요',
+        pronunciation: 'ma-ga-mi nae-i-ri-ra-seo ya-geu-neul hal su-ba-kke eop-seo-yo',
         words: [
           { word: '마감이 내일이라서', meaning: '因为截止日期是明天' },
           { word: '야근을 할 수밖에 없어요', meaning: '只能加班（-(으)ㄹ 수밖에 없다）' },
@@ -5077,7 +5077,7 @@ export const readingArticles: Article[] = [
         id: 'kwp-4',
         ko: '눈치를 잘 봐야만 직장 생활이 편해요.',
         zh: '必须善于察言观色，职场生活才会顺畅。',
-        pronunciation: '눈치를 잘 봐야만 직장 생화리 편해요',
+        pronunciation: 'nun-chi-reul jal bwa-ya-man jik-jang saeng-hwa-ri pyeon-hae-yo',
         words: [
           { word: '눈치를 잘 봐야만', meaning: '必须善于察言观色（-아/어야만 하다）' },
           { word: '직장 생활이', meaning: '职场生活（主语）' },
@@ -5089,7 +5089,7 @@ export const readingArticles: Article[] = [
         id: 'kwp-5',
         ko: '상사가 회식을 제안하면 참석할 수밖에 없어요.',
         zh: '上司提议聚餐时，只能出席了。',
-        pronunciation: '상사가 회시글 제안하면 참석할 수바께 없어요',
+        pronunciation: 'sang-sa-ga hoe-si-geul je-an-ha-myeon cham-seo-kal su-ba-kke eop-seo-yo',
         words: [
           { word: '상사가 회식을 제안하면', meaning: '上司提议聚餐的话' },
           { word: '참석할 수밖에 없어요', meaning: '只能出席（-(으)ㄹ 수밖에 없다）' },
@@ -5100,7 +5100,7 @@ export const readingArticles: Article[] = [
         id: 'kwp-6',
         ko: '보고서는 마감 전에 제출해야만 해요.',
         zh: '报告必须在截止日期前提交。',
-        pronunciation: '보고서는 마감 저네 제출해야만 해요',
+        pronunciation: 'bo-go-seo-neun ma-gam jeo-ne je-chul-hae-ya-man hae-yo',
         words: [
           { word: '보고서는', meaning: '报告书（话题）' },
           { word: '마감 전에', meaning: '截止日期前' },
@@ -5112,7 +5112,7 @@ export const readingArticles: Article[] = [
         id: 'kwp-7',
         ko: '업무가 많이 쌓이면 야근을 할 수밖에 없어요.',
         zh: '工作积压太多时，只能加班了。',
-        pronunciation: '업무가 마니 쌓이면 야그늘 할 수바께 없어요',
+        pronunciation: 'eom-mu-ga ma-ni ssa-i-myeon ya-geu-neul hal su-ba-kke eop-seo-yo',
         words: [
           { word: '업무가 많이 쌓이면', meaning: '工作积压太多的话' },
           { word: '야근을 할 수밖에 없어요', meaning: '只能加班（-(으)ㄹ 수밖에 없다）' },
@@ -5123,7 +5123,7 @@ export const readingArticles: Article[] = [
         id: 'kwp-8',
         ko: '한국 직장에서는 출근 시간을 정확히 지켜야만 해요.',
         zh: '在韩国职场，必须严格遵守上班时间。',
-        pronunciation: '한국 직장에서는 출근 시간을 정화키 지켜야만 해요',
+        pronunciation: 'han-guk jik-jang-e-seo-neun chul-geun si-ga-neul jeong-hwa-ki ji-kyeo-ya-man hae-yo',
         words: [
           { word: '한국 직장에서는', meaning: '在韩国职场（话题）' },
           { word: '출근 시간을', meaning: '上班时间（宾语）' },
@@ -5135,7 +5135,7 @@ export const readingArticles: Article[] = [
         id: 'kwp-9',
         ko: '연차를 쓰고 싶어도 바쁜 시기에는 참을 수밖에 없어요.',
         zh: '就算想用年假，忙碌时期也只能忍着了。',
-        pronunciation: '연차를 쓰고 시퍼도 바쁜 시기에는 차믈 수바께 없어요',
+        pronunciation: 'yeon-cha-reul sseu-go si-peo-do ba-ppeun si-gi-e-neun cha-meul su-ba-kke eop-seo-yo',
         words: [
           { word: '연차를 쓰고 싶어도', meaning: '就算想用年假' },
           { word: '바쁜 시기에는', meaning: '忙碌时期（话题）' },
@@ -5147,7 +5147,7 @@ export const readingArticles: Article[] = [
         id: 'kwp-10',
         ko: '팀워크를 위해서 동료들과 잘 지내야만 해요.',
         zh: '为了团队合作，必须和同事好好相处。',
-        pronunciation: '팀워크를 위해서 동료드롸 잘 지내야만 해요',
+        pronunciation: 'tim-wo-keu-reul wi-hae-seo dong-nyo-deul-gwa jal ji-nae-ya-man hae-yo',
         words: [
           { word: '팀워크를 위해서', meaning: '为了团队合作' },
           { word: '동료들과', meaning: '和同事' },
@@ -5159,7 +5159,7 @@ export const readingArticles: Article[] = [
         id: 'kwp-11',
         ko: '급한 연락이 오면 퇴근 후에도 답장할 수밖에 없어요.',
         zh: '收到紧急联络，下班后也只能回复了。',
-        pronunciation: '그판 연라기 오면 퇴근 후에도 답장할 수바께 없어요',
+        pronunciation: 'geu-pan yeol-la-gi o-myeon toe-geun hu-e-do dap-jjang-hal su-ba-kke eop-seo-yo',
         words: [
           { word: '급한 연락이 오면', meaning: '收到紧急联络的话' },
           { word: '퇴근 후에도', meaning: '下班后也' },
@@ -5171,7 +5171,7 @@ export const readingArticles: Article[] = [
         id: 'kwp-12',
         ko: '새 직원은 회사 규칙을 빨리 익혀야만 해요.',
         zh: '新员工必须尽快熟悉公司规则。',
-        pronunciation: '새 직원은 회사 규칙을 빨리 이켜야만 해요',
+        pronunciation: 'sae ji-gwon-eun hoe-sa gyu-chi-geul ppal-li i-kyeo-ya-man hae-yo',
         words: [
           { word: '새 직원은', meaning: '新员工（话题）' },
           { word: '회사 규칙을', meaning: '公司规则（宾语）' },
@@ -5183,7 +5183,7 @@ export const readingArticles: Article[] = [
         id: 'kwp-13',
         ko: '한국 직장 문화를 이해하면 일이 훨씬 수월해져요.',
         zh: '理解韩国职场文化，工作会顺畅很多。',
-        pronunciation: '한국 직장 문화를 이해하면 이리 훨씬 수월해져요',
+        pronunciation: 'han-guk jik-jang mun-hwa-reul i-hae-ha-myeon i-ri hwel-ssin su-wol-hae-jyeo-yo',
         words: [
           { word: '한국 직장 문화를 이해하면', meaning: '理解韩国职场文化的话' },
           { word: '일이', meaning: '工作（主语）' },
@@ -5195,7 +5195,7 @@ export const readingArticles: Article[] = [
         id: 'kwp-14',
         ko: '어려운 상황이어도 포기할 수밖에 없을 때는 다시 생각해 보세요.',
         zh: '即使是困难的情况，感觉只能放弃时，再想想看。',
-        pronunciation: '어려운 상황이어도 포기할 수바께 없을 때는 다시 생각해 보세요',
+        pronunciation: 'eo-ryeo-un sang-hwang-i-eo-do po-gi-hal su-ba-kke eop-sseul ttae-neun da-si saeng-ga-kae bo-se-yo',
         words: [
           { word: '어려운 상황이어도', meaning: '即使是困难的情况' },
           { word: '포기할 수밖에 없을 때는', meaning: '感觉只能放弃时（-(으)ㄹ 수밖에 없다）' },
@@ -5207,7 +5207,7 @@ export const readingArticles: Article[] = [
         id: 'kwp-15',
         ko: '한국 직장 생활은 힘들지만 성장할 수 있는 좋은 경험이에요.',
         zh: '韩国职场生活虽然辛苦，但是能够成长的好经历。',
-        pronunciation: '한국 직장 생화른 힘들지만 성장할 수 있는 조은 경험이에요',
+        pronunciation: 'han-guk jik-jang saeng-hwa-reun him-deul-ji-man seong-jang-hal su in-neun jo-eun gyeong-heo-mi-e-yo',
         words: [
           { word: '한국 직장 생활은', meaning: '韩国职场生活（话题）' },
           { word: '힘들지만', meaning: '虽然辛苦' },
@@ -5305,7 +5305,7 @@ export const readingArticles: Article[] = [
         id: 'hca-1',
         ko: '한류는 아시아뿐만 아니라 전 세계 젊은이들에게 큰 영향을 주고 있어요.',
         zh: '韩流不仅对亚洲，对全世界的年轻人都产生了很大影响。',
-        pronunciation: '한류는 아시아뿐만 아니라 전 세계 절믄이드레게 큰 영향을 주고 이써요',
+        pronunciation: 'hal-lyu-neun a-si-a-ppun-man a-ni-ra jeon se-gye jeol-meu-ni-deul-e-ge keun yeong-hyang-eul ju-go i-sseo-yo',
         words: [
           { word: '한류는', meaning: '韩流（话题）' },
           { word: '아시아뿐만 아니라', meaning: '不仅是亚洲' },
@@ -5318,7 +5318,7 @@ export const readingArticles: Article[] = [
         id: 'hca-2',
         ko: '한류로 인해 한국어 학습자 수가 크게 늘었어요.',
         zh: '由于韩流，学习韩语的人数大幅增加了。',
-        pronunciation: '한류로 인해 한구거 학습자 수가 크게 느러써요',
+        pronunciation: 'hal-lyu-ro in-hae han-gu-geo hak-seup-ja su-ga keu-ge neu-reo-sseo-yo',
         words: [
           { word: '한류로 인해', meaning: '由于韩流（-(으)로 인해）' },
           { word: '한국어 학습자 수가', meaning: '韩语学习者人数（主语）' },
@@ -5331,7 +5331,7 @@ export const readingArticles: Article[] = [
         id: 'hca-3',
         ko: '드라마를 통해 한국 문화를 처음 접한 사람들이 많아요.',
         zh: '很多人是通过韩剧第一次接触到韩国文化的。',
-        pronunciation: '드라마를 통해 한국 문화를 처음 저판 사람드리 마나요',
+        pronunciation: 'deu-ra-ma-reul tong-hae han-guk mun-hwa-reul cheo-eum jeo-pan sa-ram-deu-ri ma-na-yo',
         words: [
           { word: '드라마를 통해', meaning: '通过韩剧（-을/를 통해）' },
           { word: '한국 문화를', meaning: '韩国文化（宾语）' },
@@ -5345,7 +5345,7 @@ export const readingArticles: Article[] = [
         id: 'hca-4',
         ko: '한류로 인해 한국 화장품과 패션 산업도 성장했어요.',
         zh: '由于韩流，韩国化妆品和时尚产业也得到了增长。',
-        pronunciation: '한류로 인해 한국 화장품과 패션 산어보 성장했어요',
+        pronunciation: 'hal-lyu-ro in-hae han-guk hwa-jang-pum-gwa pae-syeon sa-neop-tto seong-jang-hae-sseo-yo',
         words: [
           { word: '한류로 인해', meaning: '由于韩流（-(으)로 인해）' },
           { word: '한국 화장품과 패션 산업도', meaning: '韩国化妆品和时尚产业也' },
@@ -5357,7 +5357,7 @@ export const readingArticles: Article[] = [
         id: 'hca-5',
         ko: '소셜 미디어를 통해 한국 트렌드가 빠르게 확산돼요.',
         zh: '通过社交媒体，韩国潮流迅速传播。',
-        pronunciation: '소셜 미디어를 통해 한국 트렌드가 빠르게 확산돼요',
+        pronunciation: 'so-syeol mi-di-eo-reul tong-hae han-guk teu-ren-deu-ga ppa-reu-ge hwak-san-dwae-yo',
         words: [
           { word: '소셜 미디어를 통해', meaning: '通过社交媒体（-을/를 통해）' },
           { word: '한국 트렌드가', meaning: '韩国潮流（主语）' },
@@ -5369,7 +5369,7 @@ export const readingArticles: Article[] = [
         id: 'hca-6',
         ko: '한류로 인해 아시아 젊은이들의 가치관도 변화하고 있어요.',
         zh: '由于韩流，亚洲年轻人的价值观也在变化。',
-        pronunciation: '한류로 인해 아시아 절믄이드레 가치과노 변화하고 이써요',
+        pronunciation: 'hal-lyu-ro in-hae a-si-a jeol-meu-ni-deul-e ga-chi-gwan-do byeon-hwa-ha-go i-sseo-yo',
         words: [
           { word: '한류로 인해', meaning: '由于韩流（-(으)로 인해）' },
           { word: '아시아 젊은이들의', meaning: '亚洲年轻人的' },
@@ -5382,7 +5382,7 @@ export const readingArticles: Article[] = [
         id: 'hca-7',
         ko: '글로벌 플랫폼을 통해 K-팝이 전 세계에 알려졌어요.',
         zh: '通过全球平台，K-POP被全世界所知晓。',
-        pronunciation: '글로벌 플랫포믈 통해 K-팝이 전 세계에 알려졌어요',
+        pronunciation: 'geul-lo-beol peul-laet-po-meul tong-hae ke-i-pa-bi jeon se-gye-e al-lyeo-jyeo-sseo-yo',
         words: [
           { word: '글로벌 플랫폼을 통해', meaning: '通过全球平台（-을/를 통해）' },
           { word: 'K-팝이', meaning: 'K-POP（主语）' },
@@ -5394,7 +5394,7 @@ export const readingArticles: Article[] = [
         id: 'hca-8',
         ko: '한류로 인해 한국 여행을 원하는 외국인이 늘었어요.',
         zh: '由于韩流，想来韩国旅游的外国人增加了。',
-        pronunciation: '한류로 인해 한국 여행을 원하는 외구기니 느러써요',
+        pronunciation: 'hal-lyu-ro in-hae han-guk yeo-haeng-eul won-ha-neun oe-gu-gi-ni neu-reo-sseo-yo',
         words: [
           { word: '한류로 인해', meaning: '由于韩流（-(으)로 인해）' },
           { word: '한국 여행을 원하는', meaning: '想来韩国旅游的' },
@@ -5406,7 +5406,7 @@ export const readingArticles: Article[] = [
         id: 'hca-9',
         ko: '문화 교류를 통해 서로의 가치관을 이해할 수 있어요.',
         zh: '通过文化交流，能够理解彼此的价值观。',
-        pronunciation: '문화 교류를 통해 서로의 가치과늘 이해할 수 이써요',
+        pronunciation: 'mun-hwa gyo-ryu-reul tong-hae seo-ro-e ga-chi-gwa-neul i-hae-hal su i-sseo-yo',
         words: [
           { word: '문화 교류를 통해', meaning: '通过文化交流（-을/를 통해）' },
           { word: '서로의 가치관을', meaning: '彼此的价值观（宾语）' },
@@ -5418,7 +5418,7 @@ export const readingArticles: Article[] = [
         id: 'hca-10',
         ko: '한류로 인한 소비문화의 변화는 경제에도 영향을 줘요.',
         zh: '由韩流引起的消费文化变化也影响到了经济。',
-        pronunciation: '한류로 인한 소비문화의 변화는 경제에도 영향을 줘요',
+        pronunciation: 'hal-lyu-ro in-han so-bi-mun-hwa-e byeon-hwa-neun gyeong-je-e-do yeong-hyang-eul jwo-yo',
         words: [
           { word: '한류로 인한', meaning: '由韩流引起的（-(으)로 인한）' },
           { word: '소비문화의 변화는', meaning: '消费文化的变化（话题）' },
@@ -5431,7 +5431,7 @@ export const readingArticles: Article[] = [
         id: 'hca-11',
         ko: '콘텐츠를 통해 공감하는 경험이 한류의 핵심이에요.',
         zh: '通过内容产生共鸣的体验，是韩流的核心。',
-        pronunciation: '콘텐츠를 통해 공감하는 경험이 한류의 핵시미에요',
+        pronunciation: 'kon-ten-cheu-reul tong-hae gong-gam-ha-neun gyeong-heo-mi hal-lyu-e haek-si-mi-e-yo',
         words: [
           { word: '콘텐츠를 통해', meaning: '通过内容（-을/를 통해）' },
           { word: '공감하는 경험이', meaning: '产生共鸣的体验（主语）' },
@@ -5443,7 +5443,7 @@ export const readingArticles: Article[] = [
         id: 'hca-12',
         ko: '한류로 인해 아시아 각국의 문화 정체성에 대한 논의도 늘었어요.',
         zh: '由于韩流，亚洲各国关于文化身份认同的讨论也增多了。',
-        pronunciation: '한류로 인해 아시아 각구게 문화 정체성에 대한 노니도 느러써요',
+        pronunciation: 'hal-lyu-ro in-hae a-si-a gak-gu-ge mun-hwa jeong-che-seong-e dae-han no-ni-do neu-reo-sseo-yo',
         words: [
           { word: '한류로 인해', meaning: '由于韩流（-(으)로 인해）' },
           { word: '아시아 각국의', meaning: '亚洲各国的' },
@@ -5456,7 +5456,7 @@ export const readingArticles: Article[] = [
         id: 'hca-13',
         ko: '한국어를 통해 한국 문화를 깊이 이해하는 사람들이 늘고 있어요.',
         zh: '通过韩语深入理解韩国文化的人越来越多。',
-        pronunciation: '한구거를 통해 한국 문화를 기피 이해하는 사람드리 늘꼬 이써요',
+        pronunciation: 'han-gu-geo-reul tong-hae han-guk mun-hwa-reul gi-pi i-hae-ha-neun sa-ram-deu-ri neul-go i-sseo-yo',
         words: [
           { word: '한국어를 통해', meaning: '通过韩语（-을/를 통해）' },
           { word: '한국 문화를', meaning: '韩国文化（宾语）' },
@@ -5469,7 +5469,7 @@ export const readingArticles: Article[] = [
         id: 'hca-14',
         ko: '한류로 인해 한국과 아시아의 문화적 거리가 가까워졌어요.',
         zh: '由于韩流，韩国与亚洲各国的文化距离拉近了。',
-        pronunciation: '한류로 인해 한국과 아시아의 문화적 거리가 가까워졌어요',
+        pronunciation: 'hal-lyu-ro in-hae han-guk-gwa a-si-a-e mun-hwa-jeok geo-ri-ga ga-kka-wo-jyeo-sseo-yo',
         words: [
           { word: '한류로 인해', meaning: '由于韩流（-(으)로 인해）' },
           { word: '한국과 아시아의', meaning: '韩国与亚洲的' },
@@ -5482,7 +5482,7 @@ export const readingArticles: Article[] = [
         id: 'hca-15',
         ko: '한류는 앞으로도 글로벌 문화 교류의 중요한 다리 역할을 할 거예요.',
         zh: '韩流今后也将继续担任全球文化交流的重要桥梁角色。',
-        pronunciation: '한류는 아프로도 글로벌 문화 교류의 중요한 다리 역하를 할 꺼예요',
+        pronunciation: 'hal-lyu-neun a-peu-ro-do geul-lo-beol mun-hwa gyo-ryu-e jung-yo-han da-ri yeo-kha-reul hal kkeo-ye-yo',
         words: [
           { word: '한류는', meaning: '韩流（话题）' },
           { word: '앞으로도', meaning: '今后也' },
@@ -5580,7 +5580,7 @@ export const readingArticles: Article[] = [
         id: 'kcd-1',
         ko: '한국의 카페 밀도는 다른 나라에 비해 매우 높아요.',
         zh: '韩国的咖啡馆密度与其他国家相比非常高。',
-        pronunciation: '한구게 카페 밀도는 다른 나라에 비해 매우 노파요',
+        pronunciation: 'han-gu-ge ka-pe mil-do-neun da-reun na-ra-e bi-hae mae-u no-pa-yo',
         words: [
           { word: '한국의 카페 밀도는', meaning: '韩国的咖啡馆密度（话题）' },
           { word: '다른 나라에 비해', meaning: '与其他国家相比（-에 비해）' },
@@ -5593,7 +5593,7 @@ export const readingArticles: Article[] = [
         id: 'kcd-2',
         ko: '놀랄 정도로 많은 카페가 서울 곳곳에 있어요.',
         zh: '首尔各处有多到令人惊讶的咖啡馆。',
-        pronunciation: '놀랄 정도로 마는 카페가 서울 곳고세 이써요',
+        pronunciation: 'nol-lal jeong-do-ro ma-neun ka-pe-ga seo-ul go-kko-se i-sseo-yo',
         words: [
           { word: '놀랄 정도로', meaning: '令人惊讶的程度（-(으)ㄹ 정도로）' },
           { word: '많은 카페가', meaning: '很多咖啡馆（主语）' },
@@ -5606,7 +5606,7 @@ export const readingArticles: Article[] = [
         id: 'kcd-3',
         ko: '한국의 커피 소비량은 세계 평균에 비해 훨씬 높아요.',
         zh: '韩国的咖啡消费量与世界平均水平相比高出很多。',
-        pronunciation: '한구게 커피 소비량은 세계 평균에 비해 훨씬 노파요',
+        pronunciation: 'han-gu-ge keo-pi so-bi-ryang-eun se-gye pyeong-gyun-e bi-hae hwol-ssin no-pa-yo',
         words: [
           { word: '한국의 커피 소비량은', meaning: '韩国的咖啡消费量（话题）' },
           { word: '세계 평균에 비해', meaning: '与世界平均相比（-에 비해）' },
@@ -5618,7 +5618,7 @@ export const readingArticles: Article[] = [
         id: 'kcd-4',
         ko: '카페를 일할 정도로 오래 이용하는 사람들이 많아요.',
         zh: '有很多人在咖啡馆待得像在工作一样长。',
-        pronunciation: '카페를 이랄 정도로 오래 이용하는 사람드리 마나요',
+        pronunciation: 'ka-pe-reul il-hal jeong-do-ro o-rae i-yong-ha-neun sa-ram-deu-ri ma-na-yo',
         words: [
           { word: '카페를', meaning: '咖啡馆（宾语）' },
           { word: '일할 정도로', meaning: '像工作一样长的程度（-(으)ㄹ 정도로）' },
@@ -5631,7 +5631,7 @@ export const readingArticles: Article[] = [
         id: 'kcd-5',
         ko: '한국 카페는 다른 나라에 비해 인테리어에 많은 투자를 해요.',
         zh: '与其他国家相比，韩国咖啡馆在室内设计上投入很多。',
-        pronunciation: '한국 카페는 다른 나라에 비해 인테리어에 마는 투자를 해요',
+        pronunciation: 'han-guk ka-pe-neun da-reun na-ra-e bi-hae in-te-ri-eo-e ma-neun tu-ja-reul hae-yo',
         words: [
           { word: '한국 카페는', meaning: '韩国咖啡馆（话题）' },
           { word: '다른 나라에 비해', meaning: '与其他国家相比（-에 비해）' },
@@ -5644,7 +5644,7 @@ export const readingArticles: Article[] = [
         id: 'kcd-6',
         ko: '중독될 정도로 맛있는 커피가 한국 카페의 경쟁력이에요.',
         zh: '令人上瘾程度的美味咖啡，是韩国咖啡馆的竞争力。',
-        pronunciation: '중독될 정도로 마싯는 커피가 한국 카페에 경쟁녀기에요',
+        pronunciation: 'jung-dok-doel jeong-do-ro ma-din-neun keo-pi-ga han-guk ka-pe-e gyeong-jaeng-nyeo-gi-e-yo',
         words: [
           { word: '중독될 정도로', meaning: '令人上瘾程度（-(으)ㄹ 정도로）' },
           { word: '맛있는 커피가', meaning: '好喝的咖啡（主语）' },
@@ -5656,7 +5656,7 @@ export const readingArticles: Article[] = [
         id: 'kcd-7',
         ko: '과거에 비해 프리미엄 커피 시장이 크게 성장했어요.',
         zh: '与过去相比，高端咖啡市场大幅增长了。',
-        pronunciation: '과거에 비해 프리미엄 커피 시자기 크게 성장했어요',
+        pronunciation: 'gwa-geo-e bi-hae peu-ri-mi-eom keo-pi si-jang-i keu-ge seong-jang-hae-sseo-yo',
         words: [
           { word: '과거에 비해', meaning: '与过去相比（-에 비해）' },
           { word: '프리미엄 커피 시장이', meaning: '高端咖啡市场（主语）' },
@@ -5668,7 +5668,7 @@ export const readingArticles: Article[] = [
         id: 'kcd-8',
         ko: '밥값보다 비쌀 정도로 커피 가격이 올랐어요.',
         zh: '咖啡价格涨到比饭钱还贵的程度了。',
-        pronunciation: '밥깝보다 비쌀 정도로 커피 가겨기 올랐어요',
+        pronunciation: 'bap-kkap-bo-da bi-ssal jeong-do-ro keo-pi ga-gyeo-gi ol-las-seo-yo',
         words: [
           { word: '밥값보다 비쌀 정도로', meaning: '贵到比饭钱还贵的程度（-(으)ㄹ 정도로）' },
           { word: '커피 가격이', meaning: '咖啡价格（主语）' },
@@ -5680,7 +5680,7 @@ export const readingArticles: Article[] = [
         id: 'kcd-9',
         ko: '테이크아웃 문화는 예전에 비해 훨씬 보편화됐어요.',
         zh: '与以前相比，外带文化普及多了。',
-        pronunciation: '테이크아웃 문화는 예저네 비해 훨씬 보편화됐어요',
+        pronunciation: 'te-i-keu-a-ut mun-hwa-neun ye-jeo-ne bi-hae hwol-ssin bo-pyeon-hwa-dwaes-seo-yo',
         words: [
           { word: '테이크아웃 문화는', meaning: '外带文化（话题）' },
           { word: '예전에 비해', meaning: '与以前相比（-에 비해）' },
@@ -5692,7 +5692,7 @@ export const readingArticles: Article[] = [
         id: 'kcd-10',
         ko: '하루에 세 잔을 마실 정도로 커피 의존도가 높아요.',
         zh: '每天喝到三杯的程度，对咖啡的依赖度很高。',
-        pronunciation: '하루에 세 자늘 마실 정도로 커피 의존도가 노파요',
+        pronunciation: 'ha-ru-e se ja-neul ma-sil jeong-do-ro keo-pi ui-jon-do-ga no-pa-yo',
         words: [
           { word: '하루에 세 잔을 마실 정도로', meaning: '每天喝到三杯的程度（-(으)ㄹ 정도로）' },
           { word: '커피 의존도가', meaning: '对咖啡的依赖度（主语）' },
@@ -5704,7 +5704,7 @@ export const readingArticles: Article[] = [
         id: 'kcd-11',
         ko: '한국 커피 브랜드는 글로벌 브랜드에 비해 가격이 경쟁력 있어요.',
         zh: '与全球品牌相比，韩国咖啡品牌的价格更有竞争力。',
-        pronunciation: '한국 커피 브랜드는 글로벌 브랜드에 비해 가겨기 경쟁녁 이써요',
+        pronunciation: 'han-guk keo-pi beu-raen-deu-neun geul-lo-beol beu-raen-deu-e bi-hae ga-gyeo-gi gyeong-jaeng-nyeok i-sseo-yo',
         words: [
           { word: '한국 커피 브랜드는', meaning: '韩国咖啡品牌（话题）' },
           { word: '글로벌 브랜드에 비해', meaning: '与全球品牌相比（-에 비해）' },
@@ -5716,7 +5716,7 @@ export const readingArticles: Article[] = [
         id: 'kcd-12',
         ko: '카페가 소셜 공간으로 사용될 정도로 문화적 역할이 커졌어요.',
         zh: '咖啡馆的文化角色扩大到被当作社交空间的程度。',
-        pronunciation: '카페가 소셜 공간으로 사용될 정도로 문화적 역하리 커져써요',
+        pronunciation: 'ka-pe-ga so-syeol gong-gan-eu-ro sa-yong-doel jeong-do-ro mun-hwa-jeok yeo-ka-ri keo-jyeo-sseo-yo',
         words: [
           { word: '카페가 소셜 공간으로 사용될 정도로', meaning: '到被当作社交空间的程度（-(으)ㄹ 정도로）' },
           { word: '문화적 역할이', meaning: '文化角色（主语）' },
@@ -5728,7 +5728,7 @@ export const readingArticles: Article[] = [
         id: 'kcd-13',
         ko: '인스턴트 커피 시대에 비해 지금은 원두 커피 소비가 훨씬 많아요.',
         zh: '与速溶咖啡时代相比，现在咖啡豆咖啡的消费量多了很多。',
-        pronunciation: '인스턴트 커피 시대에 비해 지그믄 원두 커피 소비가 훨씬 마나요',
+        pronunciation: 'in-seu-teon-teu keo-pi si-dae-e bi-hae ji-geu-meun won-du keo-pi so-bi-ga hwol-ssin ma-na-yo',
         words: [
           { word: '인스턴트 커피 시대에 비해', meaning: '与速溶咖啡时代相比（-에 비해）' },
           { word: '지금은', meaning: '现在（话题）' },
@@ -5741,7 +5741,7 @@ export const readingArticles: Article[] = [
         id: 'kcd-14',
         ko: '한국 커피 문화는 단순한 음료 소비를 넘어 생활 방식이 됐어요.',
         zh: '韩国咖啡文化已经超越了简单的饮料消费，成为了一种生活方式。',
-        pronunciation: '한국 커피 문화는 단순한 음료 소비를 너머 생활 방시기 됐어요',
+        pronunciation: 'han-guk keo-pi mun-hwa-neun dan-sun-han eum-nyo so-bi-reul neo-meo saeng-hwal bang-si-gi dwaes-seo-yo',
         words: [
           { word: '한국 커피 문화는', meaning: '韩国咖啡文化（话题）' },
           { word: '단순한 음료 소비를 넘어', meaning: '超越简单的饮料消费' },
@@ -5753,7 +5753,7 @@ export const readingArticles: Article[] = [
         id: 'kcd-15',
         ko: '앞으로도 한국 커피 문화는 독자적인 방향으로 발전할 것 같아요.',
         zh: '今后韩国咖啡文化似乎还会向独特的方向发展。',
-        pronunciation: '아프로도 한국 커피 문화는 독자저긴 방향으로 발전할 것 가타요',
+        pronunciation: 'a-peu-ro-do han-guk keo-pi mun-hwa-neun dok-ja-jeo-gin bang-hyang-eu-ro bal-jeon-hal geot ga-ta-yo',
         words: [
           { word: '앞으로도', meaning: '今后也' },
           { word: '한국 커피 문화는', meaning: '韩国咖啡文化（话题）' },
@@ -5851,7 +5851,7 @@ export const readingArticles: Article[] = [
         id: 'kdi-1',
         ko: '한국 드라마 산업은 매년 빠르게 성장하고 있어요.',
         zh: '韩国电视剧产业每年都在快速增长。',
-        pronunciation: '한국 드라마 산어븐 매년 빠르게 성장하고 이써요',
+        pronunciation: 'han-guk deu-ra-ma sa-neo-beun mae-nyeon ppa-reu-ge seong-jang-ha-go i-sseo-yo',
         words: [
           { word: '한국 드라마 산업은', meaning: '韩国电视剧产业（话题）' },
           { word: '매년', meaning: '每年' },
@@ -5863,7 +5863,7 @@ export const readingArticles: Article[] = [
         id: 'kdi-2',
         ko: '제작사는 새로운 작품을 준비하는 한편 기존 작품의 해외 판권도 판매해요.',
         zh: '制作公司在准备新作品的同时，也在销售现有作品的海外版权。',
-        pronunciation: '제작싸는 새로운 작푸믈 준비하는 한편 기존 작푸메 해외 판권도 판매해요',
+        pronunciation: 'je-jak-sa-neun sae-ro-un jak-pu-meul jun-bi-ha-neun han-pyeon gi-jon jak-pu-me hae-oe pan-gwon-do pan-mae-hae-yo',
         words: [
           { word: '제작사는', meaning: '制作公司（话题）' },
           { word: '새로운 작품을 준비하는 한편', meaning: '在准备新作品的同时（-는 한편）' },
@@ -5877,7 +5877,7 @@ export const readingArticles: Article[] = [
         id: 'kdi-3',
         ko: '한국 드라마는 아시아뿐만 아니라 전 세계에서 인기를 끌어요.',
         zh: '韩国电视剧不仅在亚洲，在全世界都引发人气。',
-        pronunciation: '한국 드라마는 아시아뿐만 아니라 전 세계에서 인기를 끌어요',
+        pronunciation: 'han-guk deu-ra-ma-neun a-si-a-ppun-man a-ni-ra jeon se-gye-e-seo in-gi-reul kkeu-reo-yo',
         words: [
           { word: '한국 드라마는', meaning: '韩国电视剧（话题）' },
           { word: '아시아뿐만 아니라', meaning: '不仅是亚洲（-(으)ㄹ 뿐만 아니라）' },
@@ -5891,7 +5891,7 @@ export const readingArticles: Article[] = [
         id: 'kdi-4',
         ko: '방송국은 광고 수익을 올리는 한편 스트리밍 플랫폼과도 계약해요.',
         zh: '电视台在提高广告收益的同时，也与流媒体平台签约。',
-        pronunciation: '방송구근 광고 수이글 올리는 한편 스트리밍 플랫폼과도 계야캐요',
+        pronunciation: 'bang-song-gu-geun gwang-go su-i-geul ol-li-neun han-pyeon seu-teu-ri-ming peul-laet-pom-gwa-do gye-ya-kae-yo',
         words: [
           { word: '방송국은', meaning: '电视台（话题）' },
           { word: '광고 수익을 올리는 한편', meaning: '在提高广告收益的同时（-는 한편）' },
@@ -5904,7 +5904,7 @@ export const readingArticles: Article[] = [
         id: 'kdi-5',
         ko: '드라마는 시청률을 높일 뿐만 아니라 협찬 수익도 가져다줘요.',
         zh: '电视剧不仅能提高收视率，还能带来赞助收益。',
-        pronunciation: '드라마는 시청뉴를 노필 뿐만 아니라 협찬 수익또 가져다줘요',
+        pronunciation: 'deu-ra-ma-neun si-cheong-nyu-reul no-pil ppun-man a-ni-ra hyeop-chan su-ik-do ga-jyeo-da-jwo-yo',
         words: [
           { word: '드라마는', meaning: '电视剧（话题）' },
           { word: '시청률을 높일 뿐만 아니라', meaning: '不仅提高收视率（-(으)ㄹ 뿐만 아니라）' },
@@ -5917,7 +5917,7 @@ export const readingArticles: Article[] = [
         id: 'kdi-6',
         ko: '각본 작가는 대본을 쓰는 한편 제작사와 수정 작업도 진행해요.',
         zh: '剧本作家在写剧本的同时，也与制作公司进行修改工作。',
-        pronunciation: '각본 작가는 대보늘 쓰는 한편 제작싸와 수정 작어보 진행해요',
+        pronunciation: 'gak-bon jak-ga-neun dae-bo-neul sseu-neun han-pyeon je-jak-sa-wa su-jeong ja-geop-do jin-haeng-hae-yo',
         words: [
           { word: '각본 작가는', meaning: '剧本作家（话题）' },
           { word: '대본을 쓰는 한편', meaning: '在写剧本的同时（-는 한편）' },
@@ -5930,7 +5930,7 @@ export const readingArticles: Article[] = [
         id: 'kdi-7',
         ko: '한국 드라마는 문화를 수출할 뿐만 아니라 관광 산업에도 도움이 돼요.',
         zh: '韩国电视剧不仅出口文化，对旅游业也有帮助。',
-        pronunciation: '한국 드라마는 문화를 수출할 뿐만 아니라 관광 산어베도 도우미 돼요',
+        pronunciation: 'han-guk deu-ra-ma-neun mun-hwa-reul su-chul-hal ppun-man a-ni-ra gwan-gwang sa-neo-be-do do-u-mi dwae-yo',
         words: [
           { word: '한국 드라마는', meaning: '韩国电视剧（话题）' },
           { word: '문화를 수출할 뿐만 아니라', meaning: '不仅出口文化（-(으)ㄹ 뿐만 아니라）' },
@@ -5943,7 +5943,7 @@ export const readingArticles: Article[] = [
         id: 'kdi-8',
         ko: '촬영 팀은 세트를 짓는 한편 야외 촬영 장소도 준비해요.',
         zh: '拍摄团队在搭建布景的同时，也准备户外拍摄地点。',
-        pronunciation: '촬영 티믄 세트를 짓는 한편 야외 촬영 장소도 준비해요',
+        pronunciation: 'chwal-lyeong ti-meun se-teu-reul jin-neun han-pyeon ya-oe chwal-lyeong jang-so-do jun-bi-hae-yo',
         words: [
           { word: '촬영 팀은', meaning: '拍摄团队（话题）' },
           { word: '세트를 짓는 한편', meaning: '在搭建布景的同时（-는 한편）' },
@@ -5956,7 +5956,7 @@ export const readingArticles: Article[] = [
         id: 'kdi-9',
         ko: '글로벌 진출은 수익을 높일 뿐만 아니라 브랜드 인지도도 높여요.',
         zh: '全球进军不仅能提高收益，还能提升品牌知名度。',
-        pronunciation: '글로벌 진추른 수이글 노필 뿐만 아니라 브랜드 인지도도 노펴요',
+        pronunciation: 'geul-lo-beol jin-chu-reun su-i-geul no-pil ppun-man a-ni-ra beu-raen-deu in-ji-do-do no-pyeo-yo',
         words: [
           { word: '글로벌 진출은', meaning: '全球进军（话题）' },
           { word: '수익을 높일 뿐만 아니라', meaning: '不仅提高收益（-(으)ㄹ 뿐만 아니라）' },
@@ -5969,7 +5969,7 @@ export const readingArticles: Article[] = [
         id: 'kdi-10',
         ko: '스트리밍 서비스는 드라마를 제공하는 한편 데이터를 분석해 새로운 콘텐츠도 개발해요.',
         zh: '流媒体服务在提供电视剧的同时，也分析数据开发新内容。',
-        pronunciation: '스트리밍 서비스는 드라마를 제공하는 한편 데이터를 분석해 새로운 콘텐츠도 개발해요',
+        pronunciation: 'seu-teu-ri-ming seo-bi-seu-neun deu-ra-ma-reul je-gong-ha-neun han-pyeon de-i-teo-reul bun-seo-kae sae-ro-un kon-ten-cheu-do gae-bal-hae-yo',
         words: [
           { word: '스트리밍 서비스는', meaning: '流媒体服务（话题）' },
           { word: '드라마를 제공하는 한편', meaning: '在提供电视剧的同时（-는 한편）' },
@@ -5982,7 +5982,7 @@ export const readingArticles: Article[] = [
         id: 'kdi-11',
         ko: '흥행한 드라마는 시즌 2를 제작할 뿐만 아니라 영화로도 만들어져요.',
         zh: '卖座的电视剧不仅会制作第2季，还会被改编为电影。',
-        pronunciation: '흥행한 드라마는 시즌 2를 제작할 뿐만 아니라 영화로도 만들어져요',
+        pronunciation: 'heung-haeng-han deu-ra-ma-neun si-jun i-reul je-ja-kal ppun-man a-ni-ra yeong-hwa-ro-do man-deu-reo-jyeo-yo',
         words: [
           { word: '흥행한 드라마는', meaning: '卖座的电视剧（话题）' },
           { word: '시즌 2를 제작할 뿐만 아니라', meaning: '不仅制作第2季（-(으)ㄹ 뿐만 아니라）' },
@@ -5994,7 +5994,7 @@ export const readingArticles: Article[] = [
         id: 'kdi-12',
         ko: '제작비가 올라가는 한편 시청자들의 눈높이도 높아지고 있어요.',
         zh: '在制作费上涨的同时，观众的眼光也在提高。',
-        pronunciation: '제작비가 올라가는 한편 시청자드레 눈노이도 노파지고 이써요',
+        pronunciation: 'je-jak-bi-ga ol-la-ga-neun han-pyeon si-cheong-ja-deu-re nun-no-pi-do no-pa-ji-go i-sseo-yo',
         words: [
           { word: '제작비가 올라가는 한편', meaning: '在制作费上涨的同时（-는 한편）' },
           { word: '시청자들의 눈높이도', meaning: '观众的眼光也' },
@@ -6006,7 +6006,7 @@ export const readingArticles: Article[] = [
         id: 'kdi-13',
         ko: '한국 드라마의 성공 이면에는 수많은 스태프의 노력이 있어요.',
         zh: '韩国电视剧成功的背后，有无数工作人员的努力。',
-        pronunciation: '한국 드라마의 성공 이면에는 수많은 스태프에 노려기 이써요',
+        pronunciation: 'han-guk deu-ra-ma-e seong-gong i-myeo-ne-neun su-ma-neun seu-tae-peu-e no-ryeo-gi i-sseo-yo',
         words: [
           { word: '한국 드라마의 성공 이면에는', meaning: '韩国电视剧成功的背后（话题）' },
           { word: '수많은 스태프의', meaning: '无数工作人员的' },
@@ -6018,7 +6018,7 @@ export const readingArticles: Article[] = [
         id: 'kdi-14',
         ko: '드라마 산업은 국내 시장에 집중할 뿐만 아니라 해외 시장도 적극 공략해요.',
         zh: '电视剧产业不仅专注国内市场，也积极开拓海外市场。',
-        pronunciation: '드라마 산어븐 국내 시장에 집중할 뿐만 아니라 해외 시장도 적극 공략해요',
+        pronunciation: 'deu-ra-ma sa-neo-beun gung-nae si-jang-e jip-jung-hal ppun-man a-ni-ra hae-oe si-jang-do jeok-geuk gong-nya-kae-yo',
         words: [
           { word: '드라마 산업은', meaning: '电视剧产业（话题）' },
           { word: '국내 시장에 집중할 뿐만 아니라', meaning: '不仅专注国内市场（-(으)ㄹ 뿐만 아니라）' },
@@ -6031,7 +6031,7 @@ export const readingArticles: Article[] = [
         id: 'kdi-15',
         ko: '한국 드라마 산업은 앞으로도 계속 발전할 가능성이 높아요.',
         zh: '韩国电视剧产业今后继续发展的可能性很高。',
-        pronunciation: '한국 드라마 산어븐 아프로도 계속 발전할 가능성이 노파요',
+        pronunciation: 'han-guk deu-ra-ma-neun ap-eu-ro-do gye-sok pal-lyeon-hae-so se-gye si-jang-e-seo jung-yo-han wi-chi-reul cha-ji-hal geo-ye-yo',
         words: [
           { word: '한국 드라마 산업은', meaning: '韩国电视剧产业（话题）' },
           { word: '앞으로도', meaning: '今后也' },
@@ -6129,7 +6129,7 @@ export const readingArticles: Article[] = [
         id: 'kgs-1',
         ko: 'K-팝은 강력한 팬덤을 바탕으로 전 세계 시장에 진출했어요.',
         zh: 'K-Pop以强大的粉丝群体为基础，进军了全球市场。',
-        pronunciation: 'K-파믄 강력한 팬더믈 바탕으로 전 세계 시장에 진출했어요',
+        pronunciation: 'ke-i-pa-beun gang-nyeo-kan paen-deo-meul ba-tang-eu-ro jeon se-gye si-jang-e jin-chul-hae-sseo-yo',
         words: [
           { word: 'K-팝은', meaning: 'K-Pop（话题）' },
           { word: '강력한 팬덤을 바탕으로', meaning: '以强大的粉丝群体为基础（-을/를 바탕으로）' },
@@ -6143,7 +6143,7 @@ export const readingArticles: Article[] = [
         id: 'kgs-2',
         ko: '소셜 미디어로써 팬들과의 소통을 강화했어요.',
         zh: '以社交媒体作为手段，加强了与粉丝的沟通。',
-        pronunciation: '소셜 미디어로써 팬드롸에 소통을 강화했어요',
+        pronunciation: 'so-syeol mi-di-eo-ro-sseo paen-deul-gwa-e so-tong-eul gang-hwa-hae-sseo-yo',
         words: [
           { word: '소셜 미디어로써', meaning: '以社交媒体作为手段（-(으)로써）' },
           { word: '팬들과의 소통을', meaning: '与粉丝的沟通（宾语）' },
@@ -6156,7 +6156,7 @@ export const readingArticles: Article[] = [
         id: 'kgs-3',
         ko: '현지 문화를 바탕으로 다양한 스타일의 음악을 만들어요.',
         zh: '以当地文化为基础，制作多种风格的音乐。',
-        pronunciation: '현지 문화를 바탕으로 다양한 스타이레 음아글 만들어요',
+        pronunciation: 'hyeon-ji mun-hwa-reul ba-tang-eu-ro da-yang-han seu-ta-i-re eu-ma-geul man-deu-reo-yo',
         words: [
           { word: '현지 문화를 바탕으로', meaning: '以当地文化为基础（-을/를 바탕으로）' },
           { word: '다양한 스타일의', meaning: '多种风格的' },
@@ -6168,7 +6168,7 @@ export const readingArticles: Article[] = [
         id: 'kgs-4',
         ko: '아이돌은 글로벌 문화 대사로써 한국을 알리는 역할을 해요.',
         zh: '偶像以全球文化大使的身份，担任宣传韩国的角色。',
-        pronunciation: '아이도른 글로벌 문화 대사로써 한구글 알리는 역하를 해요',
+        pronunciation: 'a-i-do-reun geul-lo-beol mun-hwa dae-sa-ro-sseo han-gu-geul al-li-neun yeo-ka-reul hae-yo',
         words: [
           { word: '아이돌은', meaning: '偶像（话题）' },
           { word: '글로벌 문화 대사로써', meaning: '以全球文化大使身份（-(으)로써）' },
@@ -6180,7 +6180,7 @@ export const readingArticles: Article[] = [
         id: 'kgs-5',
         ko: '풍부한 연습생 시스템을 바탕으로 전문 아이돌을 양성해요.',
         zh: '以丰富的练习生系统为基础，培养专业偶像。',
-        pronunciation: '풍부한 연습쌩 시스테믈 바탕으로 전문 아이도를 양성해요',
+        pronunciation: 'pung-bu-han yeon-seup-ssaeng si-seu-te-meul ba-tang-eu-ro jeon-mun a-i-do-reul yang-seong-hae-yo',
         words: [
           { word: '풍부한 연습생 시스템을 바탕으로', meaning: '以丰富的练习生系统为基础（-을/를 바탕으로）' },
           { word: '전문 아이돌을', meaning: '专业偶像（宾语）' },
@@ -6192,7 +6192,7 @@ export const readingArticles: Article[] = [
         id: 'kgs-6',
         ko: '다국어 콘텐츠로써 더 많은 글로벌 팬을 확보해요.',
         zh: '以多语言内容作为手段，获取更多全球粉丝。',
-        pronunciation: '다구거 콘텐츠로써 더 마는 글로벌 패늘 확보해요',
+        pronunciation: 'da-gu-geo kon-ten-cheu-ro-sseo deo ma-neun geul-lo-beol pae-neul hwak-bo-hae-yo',
         words: [
           { word: '다국어 콘텐츠로써', meaning: '以多语言内容作为手段（-(으)로써）' },
           { word: '더 많은', meaning: '更多的' },
@@ -6204,7 +6204,7 @@ export const readingArticles: Article[] = [
         id: 'kgs-7',
         ko: '탄탄한 브랜딩을 바탕으로 K-팝의 이미지를 구축했어요.',
         zh: '以扎实的品牌塑造为基础，构建了K-Pop的形象。',
-        pronunciation: '탄탄한 브랜딩을 바탕으로 K-파페 이미지를 구축했어요',
+        pronunciation: 'tan-tan-han beu-raen-ding-eul ba-tang-eu-ro ke-i-pa-be i-mi-ji-reul gu-chu-kae-sseo-yo',
         words: [
           { word: '탄탄한 브랜딩을 바탕으로', meaning: '以扎实的品牌塑造为基础（-을/를 바탕으로）' },
           { word: 'K-팝의 이미지를', meaning: 'K-Pop的形象（宾语）' },
@@ -6216,7 +6216,7 @@ export const readingArticles: Article[] = [
         id: 'kgs-8',
         ko: '협업으로써 서로 다른 문화권의 팬들을 연결해요.',
         zh: '以合作作为手段，连接不同文化圈的粉丝。',
-        pronunciation: '혀버브로써 서로 다른 문화궤 팬드를 연결해요',
+        pronunciation: 'hyeo-beo-beu-ro-sseo seo-ro da-reun mun-hwa-gwo-ne paen-deu-reul yeon-gyeo-rae-yo',
         words: [
           { word: '협업으로써', meaning: '以合作作为手段（-(으)로써）' },
           { word: '서로 다른 문화권의', meaning: '不同文化圈的' },
@@ -6228,7 +6228,7 @@ export const readingArticles: Article[] = [
         id: 'kgs-9',
         ko: 'K-팝의 차별화된 콘텐츠를 바탕으로 독자적인 시장을 개척했어요.',
         zh: '以K-Pop差异化的内容为基础，开拓了独特的市场。',
-        pronunciation: 'K-파페 차별화된 콘텐츠를 바탕으로 독자저긴 시장을 개척했어요',
+        pronunciation: 'ke-i-pa-be cha-byeol-hwa-doen kon-ten-cheu-reul ba-tang-eu-ro dok-ja-jeo-gin si-jang-eul gae-cheo-kae-sseo-yo',
         words: [
           { word: 'K-팝의 차별화된 콘텐츠를 바탕으로', meaning: '以差异化内容为基础（-을/를 바탕으로）' },
           { word: '독자적인 시장을', meaning: '独特的市场（宾语）' },
@@ -6240,7 +6240,7 @@ export const readingArticles: Article[] = [
         id: 'kgs-10',
         ko: '팬 참여로써 음악 산업의 새로운 모델을 만들었어요.',
         zh: '以粉丝参与作为手段，创造了音乐产业的新模式。',
-        pronunciation: '팬 참여로써 음악 산어베 새로운 모데를 만들었어요',
+        pronunciation: 'paen cham-yeo-ro-sseo eu-mak sa-neo-be sae-ro-un mo-de-reul man-deu-reo-sseo-yo',
         words: [
           { word: '팬 참여로써', meaning: '以粉丝参与作为手段（-(으)로써）' },
           { word: '음악 산업의', meaning: '音乐产业的' },
@@ -6252,7 +6252,7 @@ export const readingArticles: Article[] = [
         id: 'kgs-11',
         ko: '현지화 전략을 바탕으로 각 나라에 맞는 콘텐츠를 제공해요.',
         zh: '以本地化策略为基础，提供适合各国的内容。',
-        pronunciation: '현지화 전략을 바탕으로 각 나라에 맞는 콘텐츠를 제공해요',
+        pronunciation: 'hyeon-ji-hwa jeol-lya-geul ba-tang-eu-ro gak na-ra-e man-neun kon-ten-cheu-reul je-gong-hae-yo',
         words: [
           { word: '현지화 전략을 바탕으로', meaning: '以本地化策略为基础（-을/를 바탕으로）' },
           { word: '각 나라에 맞는', meaning: '适合各国的' },
@@ -6264,7 +6264,7 @@ export const readingArticles: Article[] = [
         id: 'kgs-12',
         ko: '음악으로써 언어의 장벽을 넘어 전 세계와 소통해요.',
         zh: '以音乐作为手段，超越语言障碍与全世界沟通。',
-        pronunciation: '으마그로써 어너에 장벼글 너머 전 세계와 소통해요',
+        pronunciation: 'eu-ma-geu-ro-sseo eo-neo-e jang-byeo-geul neo-meo jeon se-gye-wa so-tong-hae-yo',
         words: [
           { word: '음악으로써', meaning: '以音乐作为手段（-(으)로써）' },
           { word: '언어의 장벽을 넘어', meaning: '超越语言障碍' },
@@ -6276,7 +6276,7 @@ export const readingArticles: Article[] = [
         id: 'kgs-13',
         ko: 'K-팝은 서양 문화를 수용하면서도 한국만의 정체성을 유지했어요.',
         zh: 'K-Pop在吸收西方文化的同时，也维持了韩国独有的身份特性。',
-        pronunciation: 'K-파믄 서양 문화를 수용하면서도 한국마네 정체성을 유지했어요',
+        pronunciation: 'ke-i-pa-beun seo-yang mun-hwa-reul su-yong-ha-myeon-seo-do han-gung-ma-ne jeong-che-seong-eul yu-ji-hae-sseo-yo',
         words: [
           { word: 'K-팝은', meaning: 'K-Pop（话题）' },
           { word: '서양 문화를 수용하면서도', meaning: '在吸收西方文化的同时' },
@@ -6289,7 +6289,7 @@ export const readingArticles: Article[] = [
         id: 'kgs-14',
         ko: 'K-팝의 글로벌 성공은 철저한 전략과 끊임없는 노력을 바탕으로 해요.',
         zh: 'K-Pop的全球成功以周密的策略和不懈的努力为基础。',
-        pronunciation: 'K-파페 글로벌 성고근 철저한 전략과 끄니멈는 노려글 바탕으로 해요',
+        pronunciation: 'ke-i-pa-be geul-lo-beol seong-go-geun cheol-jeo-han jeol-lyak-gwa kkeu-ni-meom-neun no-ryeo-geul ba-tang-eu-ro hae-yo',
         words: [
           { word: 'K-팝의 글로벌 성공은', meaning: 'K-Pop的全球成功（话题）' },
           { word: '철저한 전략과 끊임없는 노력을 바탕으로 해요', meaning: '以周密策略和不懈努力为基础（-을/를 바탕으로）' },
@@ -6300,7 +6300,7 @@ export const readingArticles: Article[] = [
         id: 'kgs-15',
         ko: 'K-팝은 앞으로도 새로운 전략으로써 계속 진화할 거예요.',
         zh: 'K-Pop今后也将以新策略作为手段，持续进化。',
-        pronunciation: 'K-파믄 아프로도 새로운 전략으로써 계속 진화할 꺼예요',
+        pronunciation: 'ke-i-pa-beun a-peu-ro-do sae-ro-un jeol-lya-geu-ro-sseo gye-sok ji-nwa-hal geo-ye-yo',
         words: [
           { word: 'K-팝은', meaning: 'K-Pop（话题）' },
           { word: '앞으로도', meaning: '今后也' },
@@ -6398,7 +6398,7 @@ export const readingArticles: Article[] = [
         id: 'kys-1',
         ko: '한국 젊은이들의 소셜 문화는 디지털 기술과 함께 빠르게 변화하고 있어요.',
         zh: '韩国年轻人的社交文化正随着数字技术快速变化。',
-        pronunciation: '한국 절믄이드레 소셜 문화는 디지털 기술과 함께 빠르게 변화하고 이써요',
+        pronunciation: 'han-guk jeol-meun-i-deu-re so-syeol mun-hwa-neun di-ji-teol gi-sul-gwa ham-kke ppa-reu-ge byeon-hwa-ha-go i-sseo-yo',
         words: [
           { word: '한국 젊은이들의 소셜 문화는', meaning: '韩国年轻人的社交文化（话题）' },
           { word: '디지털 기술과 함께', meaning: '随着数字技术' },
@@ -6410,7 +6410,7 @@ export const readingArticles: Article[] = [
         id: 'kys-2',
         ko: '온라인 소통이 오프라인만큼 중요해졌다고 볼 수 있어요.',
         zh: '可以认为，线上沟通已经和线下一样重要了。',
-        pronunciation: '온라인 소통이 오프라인만큼 중요해졌따고 볼 수 이써요',
+        pronunciation: 'ol-la-in so-tong-i o-peu-ra-in-man-keum jung-yo-hae-jeot-tta-go bol su i-sseo-yo',
         words: [
           { word: '온라인 소통이', meaning: '线上沟通（主语）' },
           { word: '오프라인만큼', meaning: '和线下一样' },
@@ -6423,7 +6423,7 @@ export const readingArticles: Article[] = [
         id: 'kys-3',
         ko: '관계의 질은 소통의 방식에 달려 있어요.',
         zh: '关系的质量取决于沟通的方式。',
-        pronunciation: '관계에 질은 소통에 방시게 달려 이써요',
+        pronunciation: 'gwan-gye-e ji-reun so-tong-e bang-si-ge dal-lyeo i-sseo-yo',
         words: [
           { word: '관계의 질은', meaning: '关系的质量（话题）' },
           { word: '소통의 방식에', meaning: '沟通的方式' },
@@ -6436,7 +6436,7 @@ export const readingArticles: Article[] = [
         id: 'kys-4',
         ko: '취향 중심의 모임이 증가했다고 볼 수 있어요.',
         zh: '可以认为，以兴趣为中心的聚会增加了。',
-        pronunciation: '취향 중심에 모이미 증가했따고 볼 수 이써요',
+        pronunciation: 'chwi-hyang jung-si-me mo-i-mi jeung-ga-haet-tta-go bol su i-sseo-yo',
         words: [
           { word: '취향 중심의 모임이', meaning: '以兴趣为中心的聚会（主语）' },
           { word: '증가했다고 볼 수 있어요', meaning: '可以认为增加了（-다고 볼 수 있다）' },
@@ -6447,7 +6447,7 @@ export const readingArticles: Article[] = [
         id: 'kys-5',
         ko: '젊은이들 간의 유대감은 공통된 관심사에 달려 있어요.',
         zh: '年轻人之间的纽带感取决于共同的兴趣爱好。',
-        pronunciation: '절믄이들 가네 유대가믄 공통된 관심사에 달려 이써요',
+        pronunciation: 'jeol-meun-i-deul ga-ne yu-dae-ga-meun gong-tong-doen gwan-sim-sa-e dal-lyeo i-sseo-yo',
         words: [
           { word: '젊은이들 간의 유대감은', meaning: '年轻人之间的纽带感（话题）' },
           { word: '공통된 관심사에', meaning: '共同的兴趣爱好' },
@@ -6459,7 +6459,7 @@ export const readingArticles: Article[] = [
         id: 'kys-6',
         ko: '한국 젊은이들은 개인주의와 공동체 의식을 동시에 갖고 있다고 볼 수 있어요.',
         zh: '可以认为，韩国年轻人同时具有个人主义和共同体意识。',
-        pronunciation: '한국 절믄이드른 개인주의와 공동체 의시글 동시에 갖꼬 있따고 볼 수 이써요',
+        pronunciation: 'han-guk jeol-meun-i-deu-reun gae-in-ju-i-wa gong-dong-che ui-si-geul dong-si-e gat-go it-tta-go bol su i-sseo-yo',
         words: [
           { word: '한국 젊은이들은', meaning: '韩国年轻人（话题）' },
           { word: '개인주의와 공동체 의식을', meaning: '个人主义和共同体意识（宾语）' },
@@ -6471,7 +6471,7 @@ export const readingArticles: Article[] = [
         id: 'kys-7',
         ko: '건강한 관계 유지 여부는 경계를 어떻게 설정하느냐에 달려 있어요.',
         zh: '能否维持健康的关系，取决于如何设定界限。',
-        pronunciation: '건강한 관계 유지 여부는 경계를 어떻게 설정하느냐에 달려 이써요',
+        pronunciation: 'geon-gang-han gwan-gye yu-ji yeo-bu-neun gyeong-gye-reul eo-tteo-ke seol-jeong-ha-neu-nya-e dal-lyeo i-sseo-yo',
         words: [
           { word: '건강한 관계 유지 여부는', meaning: '能否维持健康关系（话题）' },
           { word: '경계를 어떻게 설정하느냐에', meaning: '如何设定界限' },
@@ -6483,7 +6483,7 @@ export const readingArticles: Article[] = [
         id: 'kys-8',
         ko: '자기표현이 활발해진 것은 소셜 미디어의 영향이라고 볼 수 있어요.',
         zh: '可以认为，自我表达变得活跃是社交媒体影响的结果。',
-        pronunciation: '자기표현이 활발해진 거슨 소셜 미디어에 영향이라고 볼 수 이써요',
+        pronunciation: 'ja-gi-pyo-hyeo-ni hwal-bal-hae-jin geo-seun so-syeol mi-di-eo-e yeong-hyang-i-ra-go bol su i-sseo-yo',
         words: [
           { word: '자기표현이 활발해진 것은', meaning: '自我表达变得活跃这件事（话题）' },
           { word: '소셜 미디어의 영향이라고 볼 수 있어요', meaning: '可以认为是社交媒体的影响（-다고 볼 수 있다）' },
@@ -6494,7 +6494,7 @@ export const readingArticles: Article[] = [
         id: 'kys-9',
         ko: '소속감을 느끼는 정도는 공동체 활동에 얼마나 참여하느냐에 달려 있어요.',
         zh: '归属感的程度，取决于参与共同体活动的程度。',
-        pronunciation: '소속가믈 느끼는 정도는 공동체 활동에 얼마나 참여하느냐에 달려 이써요',
+        pronunciation: 'so-sok-ga-meul neu-kki-neun jeong-do-neun gong-dong-che hwal-dong-e eol-ma-na cham-yeo-ha-neu-nya-e dal-lyeo i-sseo-yo',
         words: [
           { word: '소속감을 느끼는 정도는', meaning: '归属感的程度（话题）' },
           { word: '공동체 활동에', meaning: '共同体活动' },
@@ -6506,7 +6506,7 @@ export const readingArticles: Article[] = [
         id: 'kys-10',
         ko: '한국 젊은이들이 온라인과 오프라인을 자유롭게 넘나든다고 볼 수 있어요.',
         zh: '可以认为，韩国年轻人能自由地穿梭于线上和线下之间。',
-        pronunciation: '한국 절믄이드리 온라인과 오프라인을 자유롭게 넘나든다고 볼 수 이써요',
+        pronunciation: 'han-guk jeol-meun-i-deu-re in-gan-gwan-gye-neun bok-jap-ha-ji-man so-jung-hae-yo',
         words: [
           { word: '한국 젊은이들이', meaning: '韩国年轻人（主语）' },
           { word: '온라인과 오프라인을', meaning: '线上与线下（宾语）' },
@@ -6518,7 +6518,7 @@ export const readingArticles: Article[] = [
         id: 'kys-11',
         ko: '사회적 성공은 인맥 관리에 달려 있다는 시각도 있어요.',
         zh: '也有一种观点认为社会成功取决于人脉管理。',
-        pronunciation: '사회적 성고근 인맥 관리에 달려 있따는 시가고 이써요',
+        pronunciation: 'geon-gang-han so-tong-eun sang-dae-bang-eul jo-jung-ha-neun ma-eu-me-seo si-jak-dwae-yo',
         words: [
           { word: '사회적 성공은', meaning: '社会成功（话题）' },
           { word: '인맥 관리에 달려 있다는', meaning: '取决于人脉管理的（-에 달려 있다）' },
@@ -6530,7 +6530,7 @@ export const readingArticles: Article[] = [
         id: 'kys-12',
         ko: '이 세대는 관계보다 취향을 우선시한다고 볼 수 있어요.',
         zh: '可以认为，这一代人将兴趣偏好置于关系之上。',
-        pronunciation: '이 세대는 관계보다 취향을 우선시한다고 볼 수 이써요',
+        pronunciation: 'di-ji-teol so-tong-do jung-yo-ha-ji-man dae-myeon so-tong-do yeo-jeon-hi pil-lyeo-hae-yo',
         words: [
           { word: '이 세대는', meaning: '这一代人（话题）' },
           { word: '관계보다 취향을', meaning: '比起关系，兴趣（宾语）' },
@@ -6542,7 +6542,7 @@ export const readingArticles: Article[] = [
         id: 'kys-13',
         ko: '소셜 문화의 방향은 젊은이들 스스로의 선택에 달려 있어요.',
         zh: '社交文化的走向取决于年轻人自身的选择。',
-        pronunciation: '소셜 문화에 방향은 절믄이들 스스로에 선택에 달려 이써요',
+        pronunciation: 'han-guk jeol-meun-i-deu-reun gae-in-jeok in-gan-gwan-gye-wa ji-yeok-sa-hoe-reul dong-si-e jung-si-hae-yo',
         words: [
           { word: '소셜 문화의 방향은', meaning: '社交文化的走向（话题）' },
           { word: '젊은이들 스스로의 선택에', meaning: '年轻人自身的选择' },
@@ -6554,7 +6554,7 @@ export const readingArticles: Article[] = [
         id: 'kys-14',
         ko: '디지털 세대의 소통 방식은 새로운 공동체 문화를 만들고 있다고 볼 수 있어요.',
         zh: '可以认为，数字世代的沟通方式正在创造新的共同体文化。',
-        pronunciation: '디지털 세대에 소통 방시근 새로운 공동체 문화를 만들고 있따고 볼 수 이써요',
+        pronunciation: 'in-gan-gwan-gye-neun si-ga-ni ji-nal-su-rok deo-uk jung-yo-hae-jyeo-yo',
         words: [
           { word: '디지털 세대의 소통 방식은', meaning: '数字世代的沟通方式（话题）' },
           { word: '새로운 공동체 문화를', meaning: '新的共同体文化（宾语）' },
@@ -6566,7 +6566,7 @@ export const readingArticles: Article[] = [
         id: 'kys-15',
         ko: '앞으로의 소셜 문화는 어떤 가치를 중요시하느냐에 달려 있어요.',
         zh: '未来的社交文化取决于重视什么样的价值观。',
-        pronunciation: '아프로에 소셜 문화는 어떤 가치를 중요시하느냐에 달려 이써요',
+        pronunciation: 'han-guk-e-seo geon-gang-han in-gan-gwan-gye-reul yu-ji-ha-neun geot-eun mae-u jung-yo-hae-yo',
         words: [
           { word: '앞으로의 소셜 문화는', meaning: '未来的社交文화（话题）' },
           { word: '어떤 가치를 중요시하느냐에', meaning: '重视什么价值观' },

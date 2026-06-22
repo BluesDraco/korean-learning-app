@@ -1553,7 +1553,7 @@ export const grammarCardsP11: GrammarCard[] = [
       { wrong: '피곤하아 보여요', correct: '피곤해 보여요', note: '피곤하다 → 피곤해（하다 类用 여→해）보여요。注意 하다 类的 여/해 变化。' },
       { wrong: '행복하아 보여요', correct: '행복해 보여요', note: '행복하다 → 행복해（하다류 여→해）보여요。모든 하다류 형용사는 해 보여요 형태。' },
       { wrong: '바쁘나 봐요', correct: '바쁜가 봐요', note: '형용사 + -(으)ㄴ가 보다 가 자연스럽다：바쁘다→바쁜가 봐요。-나 보다 는 주로 동사에 사용。' },
-      { wrong: '예뻐 보입니다', correct: '예뻐 보여요', note: '-아/어 보이다 는 타인이나 외부 사물에 사용하는 것이 자연스럽다. 자신에게는 어색。' },
+      { wrong: '예뻐 보이에요', correct: '예뻐 보여요', note: '보이다 의 해요체는 보여요（보이+어요→보여요）。보이에요는 없는 형태이다。' },
     ],
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
