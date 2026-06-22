@@ -55,6 +55,7 @@ export const grammarCardsP7: GrammarCard[] = [
       body: '根据句意选择 처럼, 같이 或 같은。',
       questions: [
         {
+          prompt: '아이돌처럼 춤을 춰요.',
           pre: '아이돌',
           post: '춤을 춰요.',
           options: ["처럼","같은","처럼의"],
@@ -62,6 +63,7 @@ export const grammarCardsP7: GrammarCard[] = [
           explanation: 'N처럼 = "像N一样"修饰动词：跳舞像爱豆一样。처럼의 是错误形式，처럼 不能接 의。',
         },
         {
+          prompt: '언니같이 노래해요.',
           pre: '언니',
           post: '노래해요.',
           options: ["같이","같은","처럼은"],
@@ -69,6 +71,7 @@ export const grammarCardsP7: GrammarCard[] = [
           explanation: 'N같이 = "像N一样"口语版：唱歌像姐姐一样。',
         },
         {
+          prompt: '우리는 같은 옷을 입었어요.',
           pre: '우리는',
           post: '옷을 입었어요.',
           options: ["같은","처럼","같이"],
@@ -76,6 +79,7 @@ export const grammarCardsP7: GrammarCard[] = [
           explanation: '같은 + 名词 = "相同的……"：我们穿了同样的衣服。같은 后必须跟名词。',
         },
         {
+          prompt: '가수처럼 노래를 잘하고 싶어요.',
           pre: '가수',
           post: '노래를 잘하고 싶어요.',
           options: ["처럼","같은","처럼의"],
@@ -137,7 +141,7 @@ export const grammarCardsP7: GrammarCard[] = [
     cardExamples: [
       { wordBlocks: [{ text: '모델처럼', role: 'plain' }, { text: '걸어요', role: 'verb' }], zh: '走路像模特一样。', swapRole: 'plain', swapWords: ['모델처럼', '배우처럼', '언니처럼'] },
       { wordBlocks: [{ text: '아이돌같이', role: 'plain' }, { text: '춤을', role: 'object' }, { text: '춰요', role: 'verb' }], zh: '跳舞像爱豆一样。', swapRole: 'plain', swapWords: ['아이돌같이', '친구같이', '전문가같이'] },
-      { wordBlocks: [{ text: '같은', role: 'plain' }, { text: '학교예요', role: 'verb' }], zh: '是同一所学校。', swapRole: 'plain', swapWords: ['같은 학교예요', '같은 반이에요', '같은 팀이에요'] },
+      { wordBlocks: [{ text: '같은', role: 'plain' }, { text: '학교예요', role: 'verb' }], zh: '是同一所学校。', swapRole: 'plain', swapWords: ['같은', '다른', '비슷한'] },
       { wordBlocks: [{ text: '한국 사람처럼', role: 'plain' }, { text: '한국어를', role: 'object' }, { text: '해요', role: 'verb' }], zh: '说韩语像韩国人一样。', swapRole: 'plain', swapWords: ['한국 사람처럼', '원어민처럼', '선생님처럼'] },
     ],
     scenarios: [
@@ -210,6 +214,7 @@ export const grammarCardsP7: GrammarCard[] = [
       body: '根据句意选择 -은/ㄴ 지 或 만에。',
       questions: [
         {
+          prompt: '한국어를 배운 지 1년 됐어요.',
           pre: '한국어를 배운',
           post: '1년 됐어요.',
           options: ["지","만에","후에"],
@@ -217,6 +222,7 @@ export const grammarCardsP7: GrammarCard[] = [
           explanation: '-은 지 + 时间 + 되다 = "做……已经……时间了"：学韩语已经一年了。',
         },
         {
+          prompt: '3년 만에 고향에 돌아왔어요.',
           pre: '3년',
           post: '고향에 돌아왔어요.',
           options: ["만에","지","동안"],
@@ -224,6 +230,7 @@ export const grammarCardsP7: GrammarCard[] = [
           explanation: '时间 + 만에 = "时隔……"：时隔三年回到故乡。',
         },
         {
+          prompt: '밥을 먹은 지 한 시간이 지났어요.',
           pre: '밥을 먹은',
           post: '한 시간이 지났어요.',
           options: ["지","만에","후에"],
@@ -231,6 +238,7 @@ export const grammarCardsP7: GrammarCard[] = [
           explanation: '-은 지 + 时间 + 지나다："吃饭后过了一小时。"',
         },
         {
+          prompt: '일주일 만에 다시 만났어요.',
           pre: '일주일',
           post: '다시 만났어요.',
           options: ["만에","지","동안"],
@@ -367,6 +375,7 @@ export const grammarCardsP7: GrammarCard[] = [
       body: '根据前后句关系选择正确的连接形式。',
       questions: [
         {
+          prompt: '날씨가 추운데 따뜻하게 입으세요.',
           pre: '날씨가 추운',
           post: '따뜻하게 입으세요.',
           options: ["데","대","지만"],
@@ -374,6 +383,7 @@ export const grammarCardsP7: GrammarCard[] = [
           explanation: '-(으)ㄴ/는데 提供背景："天气冷，请穿暖和。"',
         },
         {
+          prompt: '어제 영화를 봤는데 정말 재미있었어요.',
           pre: '어제 영화를 봤',
           post: '정말 재미있었어요.',
           options: ["는데","지만","으니까"],
@@ -381,6 +391,7 @@ export const grammarCardsP7: GrammarCard[] = [
           explanation: '-는데 提供背景/铺垫："昨天看了电影，真的很有意思。"',
         },
         {
+          prompt: '배가 고픈데 먹을 게 없어요.',
           pre: '배가 고픈',
           post: '먹을 게 없어요.',
           options: ["데","지만","면"],
@@ -388,6 +399,7 @@ export const grammarCardsP7: GrammarCard[] = [
           explanation: '-(으)ㄴ데 表轻微转折/对比："肚子饿，但没什么可吃的。"',
         },
         {
+          prompt: '숙제는 다 했는데 시험 공부는 못 했어요.',
           pre: '숙제는 다 했',
           post: '시험 공부는 못 했어요.',
           options: ["는데","지만","고"],
@@ -439,7 +451,7 @@ export const grammarCardsP7: GrammarCard[] = [
     ],
     connectionRules: [
       { type: 'rule', text: '动词词干 + 는데（现在时，不看收音）', examples: '가다→가는데 / 먹다→먹는데 / 공부하다→공부하는데' },
-      { type: 'rule', text: '形容词词干 有收음 + 은데，无收음 + ㄴ데', examples: '작다→작은데 / 크다→큰데 / 좋다→좋은데 / 예쁘다→예쁜데' },
+      { type: 'rule', text: '形容词词干 有收音加 은데，无收音加 ㄴ데', examples: '작다→작은데 / 크다→큰데 / 좋다→좋은데 / 예쁘다→예쁜데' },
       { type: 'rule', text: '过去时 -았/었/였 + 는데', examples: '갔는데 / 먹었는데 / 봤는데' },
       { type: 'usage', text: '用法①：铺垫背景，引出后续', examples: '날씨가 좋은데 나갈까요?（天气好，要出去吗？）' },
       { type: 'usage', text: '用法②：表示轻微转折', examples: '한국어를 공부하는데 어려워요（学韩语，但是难）' },
@@ -527,6 +539,7 @@ export const grammarCardsP7: GrammarCard[] = [
       body: '根据句意选择 아무도 或 하나도。',
       questions: [
         {
+          prompt: '교실에 아무도 없어요.',
           pre: '교실에',
           post: '없어요.',
           options: ["아무도","하나도","아무거나"],
@@ -534,6 +547,7 @@ export const grammarCardsP7: GrammarCard[] = [
           explanation: '아무도 + 否定 = "没有任何人"：教室里一个人都没有。',
         },
         {
+          prompt: '돈이 하나도 없어요.',
           pre: '돈이',
           post: '없어요.',
           options: ["하나도","아무도","전혀"],
@@ -541,13 +555,15 @@ export const grammarCardsP7: GrammarCard[] = [
           explanation: '하나도 + 否定 = "一点都……"：一分钱都没有。하나도 强调程度为零。',
         },
         {
-          pre: '',
+          prompt: '저는 아무것도 몰라요.',
+          pre: '저는',
           post: '몰라요.',
           options: ["아무것도","아무도","하나도"],
           answer: 0,
           explanation: '아무것도 + 否定 = "什么也不知道"：什么都不知道。',
         },
         {
+          prompt: '그 이야기는 하나도 못 들었어요.',
           pre: '그 이야기는',
           post: '못 들었어요.',
           options: ["하나도","아무도","절대로"],
@@ -604,7 +620,7 @@ export const grammarCardsP7: GrammarCard[] = [
       { type: 'example', text: '아무도 없어요 / 아무것도 안 먹었어요 / 하나도 안 피곤해요' },
     ],
     cardExamples: [
-      { wordBlocks: [{ text: '아무도', role: 'subject' }, { text: '없어요', role: 'verb' }], zh: '谁都没有。', swapRole: 'verb', swapWords: ['없어요', '안 왔어요', '안 알아요'] },
+      { wordBlocks: [{ text: '아무도', role: 'subject' }, { text: '없어요', role: 'verb' }], zh: '谁都没有。', swapRole: 'verb', swapWords: ['없어요', '안 왔어요', '몰라요'] },
       { wordBlocks: [{ text: '아무것도', role: 'object' }, { text: '안 먹었어요', role: 'verb' }], zh: '什么都没吃。', swapRole: 'verb', swapWords: ['안 먹었어요', '없어요', '안 했어요'] },
       { wordBlocks: [{ text: '하나도', role: 'plain' }, { text: '안 어려워요', role: 'verb' }], zh: '一点都不难。', swapRole: 'verb', swapWords: ['안 어려워요', '안 무서워요', '안 피곤해요'] },
       { wordBlocks: [{ text: '아무데도', role: 'plain' }, { text: '안 갔어요', role: 'verb' }], zh: '哪里都没去。', swapRole: 'verb', swapWords: ['안 갔어요', '안 나갔어요', '못 갔어요'] },
@@ -682,6 +698,7 @@ export const grammarCardsP7: GrammarCard[] = [
       body: '根据语境选择正确的助词。',
       questions: [
         {
+          prompt: '책상에다 책을 올려놓으세요.',
           pre: '책상',
           post: '책을 올려놓으세요.',
           options: ["에다","에","에서"],
@@ -689,20 +706,23 @@ export const grammarCardsP7: GrammarCard[] = [
           explanation: '에다(가) 强调放置的精确位置："把书放在桌上。"',
         },
         {
+          prompt: '이 종이에 이름을 써 주세요.',
           pre: '이 종이',
           post: '이름을 써 주세요.',
-          options: ["에","에다","에서"],
+          options: ["에다","에","에서"],
           answer: 0,
-          explanation: '에 基本位置助词："请在这张纸上写名字。"',
+          explanation: '에다(가) + 쓰다 强调附着操作目标："请在这张纸上写名字。"쓰다는 에다(가)와 자연스럽게 쓰입니다.',
         },
         {
+          prompt: '냉장고에다 넣어 두었어요.',
           pre: '냉장고',
           post: '넣어 두었어요.',
           options: ["에다","에","에서"],
           answer: 0,
-          explanation: '에다(가) + 넣다 强调放进去的目标位置。에 也可，에다 更强调方向性。',
+          explanation: '에다(가) + 넣다 强调附着/放置目标："把……放进冰箱里。"에다 比 에 更强调操作对象。',
         },
         {
+          prompt: '여기에 전화번호를 적어 주세요.',
           pre: '여기',
           post: '전화번호를 적어 주세요.',
           options: ["에","에다","에서"],
@@ -836,6 +856,7 @@ export const grammarCardsP7: GrammarCard[] = [
       body: '根据前后句关系选择 -지만 或 -는/은/ㄴ데。',
       questions: [
         {
+          prompt: '한국어는 어렵지만 재미있어요.',
           pre: '한국어는 어렵',
           post: '재미있어요.',
           options: ["지만","은데","아서"],
@@ -843,6 +864,7 @@ export const grammarCardsP7: GrammarCard[] = [
           explanation: '-지만 表示明确转折："韩语虽然难，但有趣。"',
         },
         {
+          prompt: '밖에 비가 오는데 우산을 가져가세요.',
           pre: '밖에 비가 오',
           post: '우산을 가져가세요.',
           options: ["는데","지만","면"],
@@ -850,6 +872,7 @@ export const grammarCardsP7: GrammarCard[] = [
           explanation: '-는데 提供背景信息："外面在下雨，请带伞。"',
         },
         {
+          prompt: '값은 비싸지만 품질이 좋아요.',
           pre: '값은 비싸',
           post: '품질이 좋아요.',
           options: ["지만","ㄴ데","서"],
@@ -857,6 +880,7 @@ export const grammarCardsP7: GrammarCard[] = [
           explanation: '-지만 转折："价格虽然贵，但质量好。"',
         },
         {
+          prompt: '생각해 봤는데 좋은 생각인 것 같아요.',
           pre: '생각해 봤',
           post: '좋은 생각인 것 같아요.',
           options: ["는데","지만","어서"],
@@ -992,6 +1016,7 @@ export const grammarCardsP7: GrammarCard[] = [
       body: '根据句意选择 -(으)니까 或 -느라고。',
       questions: [
         {
+          prompt: '날씨가 추우니까 코트를 입으세요.',
           pre: '날씨가 추우',
           post: '코트를 입으세요.',
           options: ["니까","느라고","면"],
@@ -999,6 +1024,7 @@ export const grammarCardsP7: GrammarCard[] = [
           explanation: '-(으)니까 表原因/命令依据："天气冷，请穿大衣。"',
         },
         {
+          prompt: '시험 공부하느라고 잠을 못 잤어요.',
           pre: '시험 공부하',
           post: '잠을 못 잤어요.',
           options: ["느라고","니까","면"],
@@ -1006,6 +1032,7 @@ export const grammarCardsP7: GrammarCard[] = [
           explanation: '-느라고 表示"因为忙于……（导致负面结果）"：因为忙着复习考试，没睡好。',
         },
         {
+          prompt: '배가 고프니까 먹으러 가요.',
           pre: '배가 고프',
           post: '먹으러 가요.',
           options: ["니까","느라고","면서"],
@@ -1013,6 +1040,7 @@ export const grammarCardsP7: GrammarCard[] = [
           explanation: '-(으)니까 原因："肚子饿了，去吃饭吧。"',
         },
         {
+          prompt: '아침에 늦잠을 자느라고 지각했어요.',
           pre: '아침에 늦잠을 자',
           post: '지각했어요.',
           options: ["느라고","니까","서"],
@@ -1066,7 +1094,7 @@ export const grammarCardsP7: GrammarCard[] = [
       { type: 'rule', text: '名词 有收음 + 이니까 / 名词 无收음 + 니까', examples: '학생이니까 / 의사이니까 / 친구니까 / 선생님이니까' },
       { type: 'rule', text: '未来时：词干 有收음 + 을 거니까 / 无收음 + ㄹ 거니까', examples: '먹을 거니까 / 갈 거니까 / 바쁠 거니까' },
       { type: 'rule', text: '过去时：词干末元음 ㅏ/ㅗ + 았으니까 / 其他 + 었으니까 / 하다 → 했으니까', examples: '갔으니까 / 먹었으니까 / 공부했으니까' },
-      { type: 'rule', text: 'ㄹ 词干：脱落 ㄹ 후 + 니까', examples: '알다→아니까 / 만들다→만드니까 / 멀다→머니까' },
+      { type: 'rule', text: 'ㄹ 词干：脱落 ㄹ 후 + 니까', examples: '알다→아니까 / 만들다→만드니까 / 살다→사니까' },
       { type: 'rule', text: '动词词干 + 느라고（不看收음，只接动词）', examples: '공부하다→공부하느라고 / 일하다→일하느라고 / 먹다→먹느라고' },
       { type: 'compare', text: '-(으)니까 vs -느라고', examples: '-(으)니까：可接命令/建议 / -느라고：后句是负面结果，不接命令/建议' },
       { type: 'usage', text: '-느라고 的后句特征：못 하다 / 늦다 / 피곤하다 등 负面结果', examples: '자느라고 못 일어났어요 / 공부하느라고 늦었어요' },
@@ -1147,6 +1175,7 @@ export const grammarCardsP7: GrammarCard[] = [
       body: '根据句意选择 때문에 或 -거든요。',
       questions: [
         {
+          prompt: '비 때문에 소풍이 취소됐어요.',
           pre: '비',
           post: '소풍이 취소됐어요.',
           options: ["때문에","거든요","라서"],
@@ -1154,6 +1183,7 @@ export const grammarCardsP7: GrammarCard[] = [
           explanation: 'N 때문에 = "因为……"：因为下雨，郊游取消了。',
         },
         {
+          prompt: '왜 한국어를 공부해요? — 케이팝을 좋아하거든요.',
           pre: '왜 한국어를 공부해요? — 케이팝을 좋아하',
           post: '.',
           options: ["거든요","니까요","때문이에요"],
@@ -1161,6 +1191,7 @@ export const grammarCardsP7: GrammarCard[] = [
           explanation: '-거든요 说明原因（句末）："为什么学韩语？——因为我喜欢K-pop啊。"',
         },
         {
+          prompt: '감기 때문에 학교에 못 갔어요.',
           pre: '감기',
           post: '학교에 못 갔어요.',
           options: ["때문에","거든요","라서"],
@@ -1168,6 +1199,7 @@ export const grammarCardsP7: GrammarCard[] = [
           explanation: 'N 때문에 = "因为感冒没去学校。"',
         },
         {
+          prompt: '시간이 없어요. 내일 시험이 있거든요.',
           pre: '시간이 없어요. 내일 시험이',
           post: '.',
           options: ["있거든요","있으니까요","있어서요"],
@@ -1212,7 +1244,7 @@ export const grammarCardsP7: GrammarCard[] = [
   </div>
 </div>`,
     structures: [
-      { ko: '스트레스 때문에 잠을 못 자요', zh: '因为压力睡不着觉。', tokens: [{ text: '스트레스', role: 'subject' }, { text: '때문에', role: 'plain' }, { text: '잠을', role: 'object' }, { text: '못 자요', role: 'verb' }] },
+      { ko: '스트레스 때문에 잠을 못 자요', zh: '因为压力睡不着觉。', tokens: [{ text: '스트레스', role: 'plain' }, { text: '때문에', role: 'plain' }, { text: '잠을', role: 'object' }, { text: '못 자요', role: 'verb' }] },
       { ko: '비가 오기 때문에 못 가요', zh: '因为下雨，所以不能去。', tokens: [{ text: '비가', role: 'subject' }, { text: '오기 때문에', role: 'plain' }, { text: '못 가요', role: 'verb' }] },
       { ko: '사실 피곤하거든요', zh: '其实是因为很累。', tokens: [{ text: '사실', role: 'plain' }, { text: '피곤하거든요', role: 'verb' }] },
       { ko: '저 한국어를 배우거든요', zh: '我在学韩语呢。（所以…）', tokens: [{ text: '저', role: 'subject' }, { text: '한국어를', role: 'object' }, { text: '배우거든요', role: 'verb' }] },

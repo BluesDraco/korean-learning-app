@@ -53,6 +53,7 @@ export const grammarCardsP8: GrammarCard[] = [
       body: '根据句意选择 -던 或 -았/었던。',
       questions: [
         {
+          prompt: '자주 가던 카페가 문을 닫았어요.',
           pre: '자주',
           post: '카페가 문을 닫았어요.',
           options: ["가던","갔던","가는"],
@@ -60,6 +61,7 @@ export const grammarCardsP8: GrammarCard[] = [
           explanation: '-던 表示过去习惯/反复："以前常去的咖啡店关了。"가던（习惯性去）。',
         },
         {
+          prompt: '어릴 때 살았던 동네가 그리워요.',
           pre: '어릴 때',
           post: '동네가 그리워요.',
           options: ["살았던","살던","사는"],
@@ -67,6 +69,7 @@ export const grammarCardsP8: GrammarCard[] = [
           explanation: '-았던 表示已完成的过去经历："想念小时候住过的小区。"살았던=住过的（已成回忆）。',
         },
         {
+          prompt: '내가 좋아했던 사람이에요.',
           pre: '내가',
           post: '사람이에요.',
           options: ["좋아했던","좋아하던","좋아하는"],
@@ -74,6 +77,7 @@ export const grammarCardsP8: GrammarCard[] = [
           explanation: '좋아했던 = "曾经喜欢过的（那个人）"。已完成的情感，用 -았던。',
         },
         {
+          prompt: '아까 하던 얘기 계속해요.',
           pre: '아까',
           post: '얘기 계속해요.',
           options: ["하던","했던","하는"],
@@ -204,6 +208,7 @@ export const grammarCardsP8: GrammarCard[] = [
       body: '根据句意选择 -아/어야(만) 或 -아/어야겠다。',
       questions: [
         {
+          prompt: '한국어를 잘하려면 매일 공부해야 해요.',
           pre: '한국어를 잘하려면 매일',
           post: '.',
           options: ["공부해야 해요","공부해야겠어요","공부할 거예요"],
@@ -211,6 +216,7 @@ export const grammarCardsP8: GrammarCard[] = [
           explanation: '-아/어야 하다 = "必须"客观义务：想学好韩语必须每天学习。',
         },
         {
+          prompt: '내일은 일찍 일어나야겠어요.',
           pre: '내일은 일찍',
           post: '.',
           options: ["일어나야겠어요","일어나야 해요","일어날 거예요"],
@@ -218,6 +224,7 @@ export const grammarCardsP8: GrammarCard[] = [
           explanation: '-아/어야겠다 = "我得……"主观决心："明天我得早起。"',
         },
         {
+          prompt: '한국에서는 밥을 먹을 때 젓가락만 써야 해요.',
           pre: '한국에서는 밥을 먹을 때 젓가락',
           post: '.',
           options: ["만 써야 해요","을 써야겠어요","을 쓸 거예요"],
@@ -225,6 +232,7 @@ export const grammarCardsP8: GrammarCard[] = [
           explanation: '-아/어야 하다 客观规则："在韩国吃饭时必须用筷子。"',
         },
         {
+          prompt: '약속 시간이 다 됐어요. 이제 가야겠어요.',
           pre: '약속 시간이 다 됐어요. 이제',
           post: '.',
           options: ["가야겠어요","가야 해요","갈 거예요"],
@@ -353,10 +361,10 @@ export const grammarCardsP8: GrammarCard[] = [
       title: '判断对错：-을 뻔하다 和 -아/어서 죽을 것 같다',
       body: '选出使用正确的句子。',
       questions: [
-        { options: ["길에서 넘어질 뻔했어요","길에서 넘어졌 뻔했어요"], answer: 0, explanation: '-을 뻔하다 接动词词干："差点在路上摔倒。"넘어지다→넘어질 뻔했어요。不能接过去时。' },
-        { options: ["놓칠 뻔했어요","놓쳤을 뻔했어요"], answer: 0, explanation: '놓치다→놓칠 뻔했어요（差点错过）。-을 뻔하다 接词干不接过去时。' },
-        { options: ["배고파서 죽을 것 같아요","배고파서 죽었어요"], answer: 0, explanation: '-아/어서 죽을 것 같다 = "……得快要死了"：饿死了（夸张）。不能真用 죽었어요。' },
-        { options: ["더워서 죽을 뻔했어요","더워서 죽을 뻔어요"], answer: 0, explanation: '-을 뻔하다 的过去时是 -을 뻔했어요，不能写成 뻔어요。选项 2 的过去时变形不完整。' },
+        { prompt: '길에서 넘어질 뻔했어요.', options: ["길에서 넘어질 뻔했어요","길에서 넘어졌 뻔했어요"], answer: 0, explanation: '-을 뻔하다 接动词词干："差点在路上摔倒。"넘어지다→넘어질 뻔했어요。不能接过去时。' },
+        { prompt: '기차를 놓칠 뻔했어요.', options: ["놓칠 뻔했어요","놓쳤을 뻔했어요"], answer: 0, explanation: '놓치다→놓칠 뻔했어요（差点错过）。-을 뻔하다 接词干不接过去时。' },
+        { prompt: '너무 배고파서 죽을 것 같아요.', options: ["배고파서 죽을 것 같아요","배고파서 죽었어요"], answer: 0, explanation: '-아/어서 죽을 것 같다 = "……得快要死了"：饿死了（夸张）。不能真用 죽었어요。' },
+        { prompt: '더워서 죽을 뻔했어요.', options: ["더워서 죽을 뻔했어요","더워서 죽을 뻔어요"], answer: 0, explanation: '-을 뻔하다 的过去时是 -을 뻔했어요，不能写成 뻔어요。选项 2 的过去时变形不完整。' },
       ],
     },
 
@@ -481,6 +489,7 @@ export const grammarCardsP8: GrammarCard[] = [
       body: '根据句意选择 -고 싶어하다 或 -뿐만 아니라。',
       questions: [
         {
+          prompt: '친구는 한국에 가고 싶어해요.',
           pre: '친구는 한국에',
           post: '.',
           options: ["가고 싶어해요","가고 싶어요","갈 거예요"],
@@ -488,6 +497,7 @@ export const grammarCardsP8: GrammarCard[] = [
           explanation: '第三人称愿望用 -고 싶어하다："朋友想去韩国。"说别人不能用 -고 싶어요。',
         },
         {
+          prompt: '그 가수는 노래를 잘할 뿐만 아니라 춤도 잘 춰요.',
           pre: '그 가수는 노래를 잘할',
           post: '춤도 잘 춰요.',
           options: ["뿐만 아니라","뿐이 아니라","것뿐만 아니라"],
@@ -495,6 +505,7 @@ export const grammarCardsP8: GrammarCard[] = [
           explanation: '-을 뿐만 아니라 = "不仅……而且……"：那歌手不仅歌唱得好，舞也跳得好。',
         },
         {
+          prompt: '동생이 아이스크림을 먹고 싶어해요.',
           pre: '동생이 아이스크림을',
           post: '.',
           options: ["먹고 싶어해요","먹고 싶어요","먹을래요"],
@@ -502,6 +513,7 @@ export const grammarCardsP8: GrammarCard[] = [
           explanation: '第三人称愿望：동생이 먹고 싶어해요（妹妹想吃冰淇淋）。',
         },
         {
+          prompt: '한국어는 재미있을 뿐만 아니라 유용해요.',
           pre: '한국어는 재미있을',
           post: '유용해요.',
           options: ["뿐만 아니라","뿐이 아니라","것만 아니라"],
@@ -633,6 +645,7 @@ export const grammarCardsP8: GrammarCard[] = [
       body: '根据句意选择 -아/어 보다 或 -은/ㄴ 적이 있다。',
       questions: [
         {
+          prompt: '이 김치를 한번 먹어 보세요.',
           pre: '이 김치를 한번',
           post: '.',
           options: ["먹어 보세요","먹은 적이 있어요","먹을 거예요"],
@@ -640,6 +653,7 @@ export const grammarCardsP8: GrammarCard[] = [
           explanation: '-아/어 보다 = "试试看"："请尝尝这个泡菜。"',
         },
         {
+          prompt: '한국에 가 본 적이 있어요.',
           pre: '한국에',
           post: '.',
           options: ["가 본 적이 있어요","가 봤어요","갈 거예요"],
@@ -647,6 +661,7 @@ export const grammarCardsP8: GrammarCard[] = [
           explanation: '-은 적이 있다 = "有过……经历"："去过韩国。"',
         },
         {
+          prompt: '이 옷을 입어 볼까요?',
           pre: '이 옷을',
           post: '?',
           options: ["입어 볼까요","입은 적이 있어요","입을 거예요"],
@@ -654,6 +669,7 @@ export const grammarCardsP8: GrammarCard[] = [
           explanation: '-아/어 보다 尝试："要不要试穿这件衣服？"',
         },
         {
+          prompt: '저는 김치를 먹어 본 적이 없어요.',
           pre: '저는 김치를',
           post: '.',
           options: ["먹어 본 적이 없어요","먹어 봤어요","먹을 거예요"],
@@ -793,6 +809,7 @@ export const grammarCardsP8: GrammarCard[] = [
       body: '根据句意选择 -아/어도, -(이)라도 或 -아/어도 되다。',
       questions: [
         {
+          prompt: '바빠도 운동은 꼭 하세요.',
           pre: '바빠',
           post: '운동은 꼭 하세요.',
           options: ["도","라도","서"],
@@ -800,6 +817,7 @@ export const grammarCardsP8: GrammarCard[] = [
           explanation: '-아/어도 = "即使……也"：即使忙也要运动。',
         },
         {
+          prompt: '시간이 없으면 물이라도 마셔요.',
           pre: '시간이 없으면 물',
           post: '마셔요.',
           options: ["이라도","어도","이나"],
@@ -807,6 +825,7 @@ export const grammarCardsP8: GrammarCard[] = [
           explanation: '-(이)라도 = "至少/哪怕是"：没时间的话至少喝点水吧。',
         },
         {
+          prompt: '여기 앉아도 돼요?',
           pre: '여기 앉',
           post: '?',
           options: ["아도 돼요","으면 돼요","을까요"],
@@ -814,6 +833,7 @@ export const grammarCardsP8: GrammarCard[] = [
           explanation: '-아/어도 되다 = "可以……吗？"：可以坐这里吗？',
         },
         {
+          prompt: '피곤해도 숙제는 해야 해요.',
           pre: '피곤해',
           post: '숙제는 해야 해요.',
           options: ["도","라도","서"],
@@ -946,10 +966,10 @@ export const grammarCardsP8: GrammarCard[] = [
       title: '判断对错：-(으)면 안 되다 和 -(으)면 되다',
       body: '选出使用正确的句子。',
       questions: [
-        { options: ["여기서 담배를 피우면 안 돼요","여기서 담배를 피우면 되지 않아요"], answer: 0, explanation: '-(으)면 안 되다 = "不可以……"：这里不可以抽烟。되지 않아요 是其他含义。' },
-        { options: ["지금 가면 돼요","지금 가기면 돼요"], answer: 0, explanation: '-(으)면 되다 接动词词干：가다 → 가면 돼요。가기면 是错误形式，-기 和 -면 不能叠用。' },
-        { options: ["내일까지 내면 돼요","내일까지 내기면 돼요"], answer: 0, explanation: '내다 + 면 → 내면 돼요（交就行）。내기면 是错误形式，-기 和 -면 不能叠用。' },
-        { options: ["시험에서 컨닝하면 안 돼요","시험에서 컨닝하면 돼요"], answer: 0, explanation: '-(으)면 안 되다 = 禁止："考试不可以作弊。"' },
+        { prompt: '여기서 담배를 피우면 안 돼요.', options: ["여기서 담배를 피우면 안 돼요","여기서 담배를 피우면 되지 않아요"], answer: 0, explanation: '-(으)면 안 되다 = "不可以……"：这里不可以抽烟。되지 않아요 是其他含义。' },
+        { prompt: '지금 가면 돼요.', options: ["지금 가면 돼요","지금 가기면 돼요"], answer: 0, explanation: '-(으)면 되다 接动词词干：가다 → 가면 돼요。가기면 是错误形式，-기 和 -면 不能叠用。' },
+        { prompt: '내일까지 내면 돼요.', options: ["내일까지 내면 돼요","내일까지 내기면 돼요"], answer: 0, explanation: '내다 + 면 → 내면 돼요（交就行）。내기면 是错误형式，-기 和 -면 不能叠用。' },
+        { prompt: '시험에서 컨닝하면 안 돼요.', options: ["시험에서 컨닝하면 안 돼요","시험에서 컨닝하면 돼요"], answer: 0, explanation: '-(으)면 안 되다 = 禁止："考试不可以作弊。"' },
       ],
     },
 
@@ -1017,7 +1037,7 @@ export const grammarCardsP8: GrammarCard[] = [
       { icon: '✅', context: '简单解释条件', ko: '이 쿠폰만 보여 주면 돼요. 따로 준비 안 해도 돼요.', zh: '只要出示这张优惠券就行了，不需要另外准备。' },
     ],
     mistakes: [
-      { wrong: '가면 안 돼요→想表示"必须去"', correct: '가야 해요 / 가야 돼요', note: '가면 안 돼요 是"不可以去"，"必须去"要用 가야 해요。别搞反了。' },
+      { wrong: '가면 안 돼요', correct: '가야 해요 / 가야 돼요', note: '가면 안 돼요 是"不可以去"，不是"必须去"。"必须去"要用 가야 해요。别搞反了。' },
       { wrong: '먹면 돼요', correct: '먹으면 돼요', note: '먹 有收音 ㄱ，必须加 으 → 먹으면 돼요。' },
       { wrong: '이것 하면 됩니다 안 됩니다', correct: '이것 하면 돼요 / 하면 안 돼요', note: '충분 조건(돼요)과 금지(안 돼요)는 서로 다른 문장，不能在同一句里同时说。' },
       { wrong: '늦면 안 돼요', correct: '늦으면 안 돼요', note: '늦다 有收音 ㅈ，必须加 으 → 늦으면 안 돼요。' },
@@ -1029,6 +1049,67 @@ export const grammarCardsP8: GrammarCard[] = [
     whatItDoes: '综合复习第八章：回忆、意志、经历与许可',
     whatItDoesBody: '本章围绕"说话人的内心世界"展开：如何回忆过去的习惯与状态（-던/-았던），如何表达自己的决心与必要（-아야겠다），如何描述险些发生的事或夸张的感受（-을 뻔하다/-아서 죽을 것 같다），如何谈论别人的愿望和自己的经历（-고 싶어하다/-은 적이 있다），以及在各种让步与许可场景中如何措辞（-아도/-아도 되다/-(으)면 안 되다/-(으)면 되다）。中文里这些表达往往靠语气词和语境区分，韩语则通过专用语法形式精确传达说话人的立场和态度。',
     structureNote: '第八章七个语法点的核心要点：\n① -던：修饰"过去反复发生但现在已不做"的行为；-았/었던 强调已完成的过去状态，带有回忆色彩\n② -아/어야(만) 하다 / -아야겠다：前者说"必须做"（外部要求），后者说"我决定要做"（内心决心）\n③ -을/ㄹ 뻔하다：险些发生但没发生；-아서 죽을 것 같다：夸张表达极限感受\n④ -고 싶어하다：描述第三人称的愿望（不能用 -고 싶다）；-뿐만 아니라：不仅……而且……\n⑤ -아/어 보다：尝试做某事；-은/ㄴ 적이 있다/없다：有/没有过某种经历\n⑥ -아/어도：即使……也……（让步）；-(이)라도：哪怕……也……（退而求其次）；-아/어도 되다：允许做某事\n⑦ -(으)면 안 되다：禁止/不可以；-(으)면 되다：只要……就可以（最低条件）',
+    overviewHtml: `<div class="overview">
+  <div class="ov-hero">
+    <div class="ov-hero-label">第 8 章 第 8 课 · 综合练习</div>
+    <div class="ov-hero-title">综合练习⑧</div>
+    <div class="ov-hero-sub">回忆 · 意志 · 经历 · 许可与禁止</div>
+  </div>
+  <div class="ov-section">
+    <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">本章语法速查</div></div>
+    <div class="ov-block">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#ff7fa8">-던 / -았던</span>：过去习惯/已完成回忆</div>
+        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#ff7fa8">-아야겠다</span>：内心决心"我得……了"</div>
+        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#2db89b">-을 뻔했다</span>：差点发生（幸好没有）</div>
+        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#2db89b">-아서 죽을 것 같다</span>：夸张程度"……死了"</div>
+        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#6b7ff0">-고 싶어하다</span>：第三人称愿望</div>
+        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#6b7ff0">-뿐만 아니라</span>：不仅……而且……</div>
+        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#b49ccf">-아 봤어요 / -은 적이 있다</span>：尝试/经历</div>
+        <div style="font-size:13px;color:#241917"><span style="font-weight:700;color:#e05555">-(으)면 안 돼요</span>：禁止 / <span style="font-weight:700;color:#4e746d">-(으)면 돼요</span>：充分条件</div>
+      </div>
+    </div>
+  </div>
+</div>`,
+    specialQuiz: {
+      type: 'fill',
+      title: '第八章综合练习',
+      body: '根据句意选择正确的语法形式。',
+      questions: [
+        {
+          prompt: '자주 가던 카페가 없어졌어요.',
+          pre: '자주',
+          post: '카페가 없어졌어요.',
+          options: ["가던","갔던","가는"],
+          answer: 0,
+          explanation: '-던 = 过去习惯："以前常去的咖啡店关了。"가던（习惯性）≠ 갔던（一次性完成）。',
+        },
+        {
+          prompt: '이제 운동을 시작해야겠어요.',
+          pre: '이제 운동을',
+          post: '.',
+          options: ["시작해야겠어요","시작해야 해요","시작할 거예요"],
+          answer: 0,
+          explanation: '-아야겠다 = 说话人内心决心："我得开始运动了。"',
+        },
+        {
+          prompt: '넘어질 뻔했어요.',
+          pre: '길에서',
+          post: '.',
+          options: ["넘어질 뻔했어요","넘어졌 뻔했어요","넘어질 뻔이에요"],
+          answer: 0,
+          explanation: '-을 뻔했다 接动词词干，不接过去时："差点摔倒了。"',
+        },
+        {
+          prompt: '여기 앉아도 돼요?',
+          pre: '여기',
+          post: '?',
+          options: ["앉아도 돼요","앉으면 돼요","앉아야 해요"],
+          answer: 0,
+          explanation: '-아도 되다 = 请求许可："可以坐这里吗？"',
+        },
+      ],
+    },
     structures: [], connectionRules: [], cardExamples: [], scenarios: [], mistakes: [], linkedGrammarIds: [],
   },
 ];
