@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>토리의 한국어 일기 · 30 天和 Tori 一起学韩语 — 王牌产品策划方案</title>
+<style>
+  :root {
+    --bg: #fffbf7;
+    --card: #ffffff;
+    --soft: #fff4f0;
+    --muted: #f5ece7;
+    --ink-1: #1a1310;
+    --ink-2: #3a2e29;
+    --ink-3: #897167;
+    --ink-4: #b8a89c;
+    --border: #efe1da;
+    --border-strong: #e4d3c8;
+    --pink-soft: #ffe4ee;
+    --pink: #ff7fa8;
+    --pink-strong: #e55a87;
+    --mint-soft: #e3f5f0;
+    --mint: #7dc6b3;
+    --mint-strong: #4a9880;
+    --peach-soft: #ffefe6;
+    --peach: #ff9d7a;
+    --peach-strong: #d97a55;
+    --purple-soft: #efe7ff;
+    --purple: #a896d9;
+    --purple-strong: #7560b8;
+    --shadow-sm: 0 4px 12px rgba(78, 52, 46, 0.06);
+    --shadow-md: 0 10px 26px rgba(78, 52, 46, 0.08);
+    --shadow-lg: 0 24px 56px rgba(78, 52, 46, 0.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg);
+    color: var(--ink-1);
+    font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { padding: 0 16px 80px; }
+  .container { max-width: 880px; margin: 0 auto; }
+
+  /* Hero */
+  .hero {
+    text-align: center;
+    padding: 64px 24px 48px;
+    background: linear-gradient(135deg, var(--pink-soft), #fff8fb);
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    margin: 32px auto;
+    box-shadow: var(--shadow-md);
+  }
+  .hero .eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--pink-strong);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .hero h1 {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--ink-1);
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+  .hero h1 .ko { color: var(--pink-strong); font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; }
+  .hero .subtitle {
+    font-size: 18px;
+    color: var(--ink-2);
+    margin-bottom: 20px;
+  }
+  .hero .meta {
+    display: inline-flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .hero .badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--card);
+    color: var(--ink-2);
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid var(--border);
+  }
+
+  /* Section */
+  section { margin: 48px 0; }
+  h2 {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--ink-1);
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+  }
+  h2 .num {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    border-radius: 50%;
+    background: var(--pink);
+    color: #fff;
+    font-size: 14px;
+    margin-right: 12px;
+    vertical-align: middle;
+  }
+  h3 { font-size: 18px; font-weight: 700; color: var(--ink-1); margin: 24px 0 10px; }
+  h4 { font-size: 14px; font-weight: 700; color: var(--ink-2); margin: 16px 0 8px; }
+  p { color: var(--ink-2); margin-bottom: 12px; font-size: 15px; }
+  .lead { font-size: 16px; color: var(--ink-2); margin-bottom: 20px; }
+  ul, ol { margin: 12px 0 12px 24px; }
+  li { color: var(--ink-2); margin-bottom: 6px; font-size: 14px; line-height: 1.7; }
+  strong { color: var(--ink-1); font-weight: 700; }
+  em { color: var(--pink-strong); font-style: normal; font-weight: 600; }
+
+  /* Card */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 24px;
+    margin: 16px 0;
+    box-shadow: var(--shadow-sm);
+  }
+  .card.hero-pink { background: linear-gradient(135deg, var(--pink-soft), #fff8fb); border-color: var(--border); }
+  .card.hero-mint { background: linear-gradient(135deg, var(--mint-soft), #f4fbf8); }
+  .card.hero-peach { background: linear-gradient(135deg, var(--peach-soft), #fff7f1); }
+  .card.hero-purple { background: linear-gradient(135deg, var(--purple-soft), #f7f3ff); }
+
+  /* Table */
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    margin: 12px 0;
+    font-size: 13px;
+  }
+  thead { background: var(--soft); }
+  th {
+    text-align: left;
+    padding: 12px 14px;
+    font-weight: 700;
+    color: var(--ink-1);
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 12px 14px;
+    color: var(--ink-2);
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  td.tone-pink { color: var(--pink-strong); font-weight: 600; }
+  td.tone-mint { color: var(--mint-strong); font-weight: 600; }
+  td.tone-peach { color: var(--peach-strong); font-weight: 600; }
+  td.tone-purple { color: var(--purple-strong); font-weight: 600; }
+
+  /* Grid */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 16px 0; }
+  @media (max-width: 720px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  }
+  .feature-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .feature-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  .feature-card .icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: var(--pink-soft);
+    color: var(--pink-strong);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+  .feature-card.mint .icon { background: var(--mint-soft); color: var(--mint-strong); }
+  .feature-card.peach .icon { background: var(--peach-soft); color: var(--peach-strong); }
+  .feature-card.purple .icon { background: var(--purple-soft); color: var(--purple-strong); }
+  .feature-card h4 { margin-top: 0; font-size: 15px; }
+  .feature-card p { font-size: 13px; color: var(--ink-3); margin-bottom: 0; line-height: 1.6; }
+
+  /* Highlight box */
+  .highlight {
+    border-left: 3px solid var(--pink);
+    background: var(--pink-soft);
+    border-radius: 4px 16px 16px 4px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-size: 14px;
+    color: var(--ink-2);
+  }
+  .highlight strong { color: var(--pink-strong); }
+  .highlight.mint { border-left-color: var(--mint); background: var(--mint-soft); }
+  .highlight.mint strong { color: var(--mint-strong); }
+  .highlight.peach { border-left-color: var(--peach); background: var(--peach-soft); }
+  .highlight.peach strong { color: var(--peach-strong); }
+  .highlight.purple { border-left-color: var(--purple); background: var(--purple-soft); }
+  .highlight.purple strong { color: var(--purple-strong); }
+
+  /* Day pill */
+  .day-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--pink-soft);
+    color: var(--pink-strong);
+    font-size: 11px;
+    font-weight: 700;
+    margin-right: 6px;
+  }
+
+  /* TOC */
+  .toc {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 20px 24px;
+    margin: 32px 0;
+  }
+  .toc h3 { margin-top: 0; font-size: 14px; color: var(--ink-3); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; }
+  .toc ol { margin: 12px 0 0 20px; }
+  .toc li { font-size: 14px; color: var(--ink-2); margin-bottom: 4px; }
+  .toc a { color: inherit; text-decoration: none; border-bottom: 1px dotted transparent; }
+  .toc a:hover { color: var(--pink-strong); border-bottom-color: var(--pink); }
+
+  /* Diff */
+  .diff {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  @media (max-width: 720px) { .diff { grid-template-columns: 1fr; } }
+  .diff > div {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+  }
+  .diff .before { border-left: 3px solid #d65656; }
+  .diff .after { border-left: 3px solid var(--mint-strong); }
+  .diff h5 { font-size: 12px; font-weight: 700; color: var(--ink-3); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .diff p { font-size: 13px; margin: 0; }
+
+  /* Footer */
+  footer {
+    margin-top: 64px;
+    padding: 32px 0;
+    text-align: center;
+    color: var(--ink-3);
+    font-size: 12px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* Print */
+  @media print {
+    body { padding: 0; }
+    .hero { box-shadow: none; }
+    section { break-inside: avoid; }
+    .card, .feature-card, table { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="hero">
+  <p class="eyebrow">王牌产品策划方案 · TORI'S DIARY</p>
+  <h1><span class="ko">토리의 한국어 일기</span></h1>
+  <p class="subtitle">30 天和 Tori 一起学韩语</p>
+  <div class="meta">
+    <span class="badge">入门系列 · Day 1–30</span>
+    <span class="badge">首尔动物城留学日记</span>
+    <span class="badge">陪伴式自学伙伴</span>
+    <span class="badge">短剧 IP 联动</span>
+  </div>
+</div>
+
+<div class="toc">
+  <h3>目录</h3>
+  <ol>
+    <li><a href="#s1">一、产品定位与命名</a></li>
+    <li><a href="#s2">二、用户痛点与竞品分析</a></li>
+    <li><a href="#s3">三、世界观融合 — 短剧 × 学习</a></li>
+    <li><a href="#s4">四、30 天内容结构 — 全周地图</a></li>
+    <li><a href="#s5">五、每日体验设计 — Day Loop</a></li>
+    <li><a href="#s6">六、六大模块详解</a></li>
+    <li><a href="#s7">七、动效 / 声效 / 反馈系统</a></li>
+    <li><a href="#s8">八、虚拟奖励 · 实体周边 · 亲笔信</a></li>
+    <li><a href="#s9">九、付费模型与定价</a></li>
+    <li><a href="#s10">十、UI / 信息架构</a></li>
+    <li><a href="#s11">十一、技术架构与数据流</a></li>
+    <li><a href="#s12">十二、内容生产工作流</a></li>
+    <li><a href="#s13">十三、风险与对策</a></li>
+    <li><a href="#s14">十四、上线节奏（路线图）</a></li>
+    <li><a href="#s15">十五、立项后第一步要做的事</a></li>
+  </ol>
+</div>
+
+<!-- ─────────────────────────────────────────── -->
+<section id="s1">
+  <h2><span class="num">1</span>产品定位与命名</h2>
+
+  <div class="card hero-pink">
+    <h3>正式名</h3>
+    <p style="font-size:22px;font-weight:800;color:var(--ink-1)">토리의 한국어 일기 · Tori 的韩语日记</p>
+    <p style="color:var(--pink-strong);font-weight:600;margin:0">副标题：30 天和 Tori 一起学韩语</p>
+  </div>
+
+  <h3>定位三句话</h3>
+  <ol>
+    <li><strong>它不是课程</strong>，是 Tori 在首尔留学的 30 天日记，用户每天上线"陪她过一天"</li>
+    <li><strong>它不是学习</strong>，是养成一只小兔子的语言能力同时也养成自己的</li>
+    <li><strong>它不是工具</strong>，是 Tori 这个 IP 进入用户日常的入口 — 30 天后 Tori 会成为用户的"韩语朋友"</li>
+  </ol>
+
+  <h3>核心差异</h3>
+  <div class="diff">
+    <div class="before">
+      <h5>市面上的入门课</h5>
+      <p>大纲驱动 · 系统教学 · 课程进度条 · 严肃干净 · 学完一节继续下一节 · 老师讲你听</p>
+    </div>
+    <div class="after">
+      <h5>Tori 的韩语日记</h5>
+      <p>剧情驱动 · 每天日记 · 故事推进 · 暖手账风 · 今天 Tori 遇到了什么你才会用什么 · 你是同学</p>
+    </div>
+  </div>
+
+  <div class="highlight">
+    <strong>关键句</strong>：用户不是"在学韩语"，是"今天 Tori 又出了什么糗，我也跟着学一下"。学习是副产品，陪伴才是产品本身。
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────── -->
+<section id="s2">
+  <h2><span class="num">2</span>用户痛点与竞品分析</h2>
+
+  <h3>用户痛点（来自韩语自学社群高频抱怨）</h3>
+  <table>
+    <thead><tr><th>痛点</th><th>对应解法</th></tr></thead>
+    <tbody>
+      <tr><td>"教材太枯燥学不下去"</td><td class="tone-pink">每天 Tori 一段日记 + 故事，学完想知道明天发生什么</td></tr>
+      <tr><td>"学完 40 音不知道下一步"</td><td class="tone-pink">Day 1-3 = 40 音 + 第一句问候，Day 4 已经在便利店点咖啡</td></tr>
+      <tr><td>"碎片化打卡像签到，没学到东西"</td><td class="tone-pink">每天有完整闭环：场景 → 词 → 句 → 输出 → 复盘</td></tr>
+      <tr><td>"多邻国太游戏化失去严肃感"</td><td class="tone-pink">日记体保留温度但有正经"今日重点"和"知识卡"</td></tr>
+      <tr><td>"沪江/嗨学网严肃但孤独，没人陪"</td><td class="tone-pink">Tori 是 24h 在线的角色，时不时给你寄"贴纸"和"语音消息"</td></tr>
+      <tr><td>"录音对比软件冷冰冰像考试"</td><td class="tone-pink">"今天的发音 Tori 听到了，给你寄了一个胡萝卜表情包"</td></tr>
+      <tr><td>"学了也用不到"</td><td class="tone-pink">每句话都是 Tori 当天遇到的真实场景台词</td></tr>
+    </tbody>
+  </table>
+
+  <h3>竞品对比</h3>
+  <table>
+    <thead><tr><th>产品</th><th>强项</th><th>弱项</th><th>我们如何差异化</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Duolingo</td>
+        <td>游戏化、连胜、积分</td>
+        <td>韩语进度慢、机翻句不自然、强迫感强（小绿鸟威胁）</td>
+        <td>慢但有故事；不威胁，Tori 会等你；韩语句子全人工校对</td>
+      </tr>
+      <tr>
+        <td>沪江开心词场</td>
+        <td>词汇深、社区强</td>
+        <td>UI 老旧、单词为主无场景、需要付费才能解锁</td>
+        <td>UI 暖手账风、句子和场景为主、入门 30 天免费</td>
+      </tr>
+      <tr>
+        <td>韩语菌 / 韩老师 APP</td>
+        <td>韩语原生内容多</td>
+        <td>偏 KOL 讲课，学员被动听</td>
+        <td>用户主动陪 Tori 过日子，沉浸感强</td>
+      </tr>
+      <tr>
+        <td>多邻国（最像的对手）</td>
+        <td>UI 顶级、动效极致、跨平台</td>
+        <td>没有故事线、机器配音、所有用户共用一只鸟</td>
+        <td>每一句都有剧情、Tori 是独一无二的、真人 TTS、暖色不刺眼</td>
+      </tr>
+      <tr>
+        <td>羊驼韩语 / Hi Korean</td>
+        <td>系统、有教材授权</td>
+        <td>太正经，离年轻人远</td>
+        <td>抓 KPOP/韩剧/韩娱用户，他们正是 Tori IP 的目标受众</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>行业判断</h3>
+  <ul>
+    <li>韩语学习市场过去 5 年规模翻 4 倍，主要由 KPOP/韩剧推动</li>
+    <li>核心用户：18–28 岁女性，喜欢追星/韩剧/韩国文化，付费能力强但抗拒"上课"</li>
+    <li>市面入门产品同质化严重：40 音 → 你好谢谢 → 我是 XX → TOPIK 词汇</li>
+    <li><strong>没有人在做"角色养成式入门"</strong>。这是空白地</li>
+  </ul>
+</section>
+
+<!-- ─────────────────────────────────────────── -->
+<section id="s3">
+  <h2><span class="num">3</span>世界观融合 — 短剧 × 学习</h2>
+
+  <div class="highlight purple">
+    <strong>核心机制</strong>：每集短剧 = 学习日记的剧情入口。用户在短视频平台看到 Tori 的预告片 → 想看完整版 → 引流到网站 → "完整版分 30 天讲完，跟着 Tori 一起学韩语就能解锁后续剧情"。
+  </div>
+
+  <h3>预告片到 Day 1 的衔接</h3>
+  <p>用户在 B 站/小红书/抖音刷到预告片后，下方文案：</p>
+  <div class="card hero-pink">
+    <p style="font-size:14px;margin-bottom:0">"Tori 把'행李'说成了'家'？这只是她韩语翻车的第一天 — 后面 29 天她和 Minji、Haru 还会遇到什么糗事？<strong style="color:var(--pink-strong)">点进首页 · 跟 Tori 一起学韩语 · 30 天免费</strong>"</p>
+  </div>
+
+  <h3>剧情映射 30 天（提案）</h3>
+  <table>
+    <thead><tr><th>时间</th><th>剧情阶段</th><th>对应学习目标</th><th>关键场景</th></tr></thead>
+    <tbody>
+      <tr><td><span class="day-pill">Day 1-3</span></td><td>抵达：仁爪机场 → 宿舍</td><td>40 音 · 自我介绍 · 你好谢谢对不起</td><td>机场翻译、地铁迷路、宿管阿姨</td></tr>
+      <tr><td><span class="day-pill">Day 4-7</span></td><td>开学：한빛语言学校第一周</td><td>问候 · 数字 · 时间 · 简单对话</td><td>认识 Minji 水獭、Junho 老虎、Haru 仓鼠</td></tr>
+      <tr><td><span class="day-pill">Day 8-12</span></td><td>觅食：便利店和食堂</td><td>食物词汇 · 点单句型 · 询问价格</td><td>买三角紫菜包饭、点拿铁、火锅店</td></tr>
+      <tr><td><span class="day-pill">Day 13-17</span></td><td>追星：弘爪生日咖啡馆</td><td>表达喜欢/想要 · KPOP 常用词</td><td>偶像应援、生日咖啡馆礼物、刷小卡</td></tr>
+      <tr><td><span class="day-pill">Day 18-22</span></td><td>遇挫：第一次崩溃</td><td>情绪表达 · 描述感受 · 请求帮助</td><td>地铁坐反、点错餐、想家、Haru 安慰</td></tr>
+      <tr><td><span class="day-pill">Day 23-27</span></td><td>融入：开始有"朋友"</td><td>聊天句型 · 介绍人 · 邀请约定</td><td>和朋友看 KPOP MV、约火锅、互送贴纸</td></tr>
+      <tr><td><span class="day-pill">Day 28-30</span></td><td>成长：第一次独自完成任务</td><td>综合复习 · 输出小作文</td><td>独自去咖啡馆点单、自己写一篇日记、毕业告别</td></tr>
+    </tbody>
+  </table>
+
+  <h3>角色资产复用</h3>
+  <ul>
+    <li><strong>Minji（水獭）</strong>：好友 1，温柔，常出现在便利店和咖啡馆场景</li>
+    <li><strong>Junho（老虎）</strong>：班长，KPOP 爱好者，带 Tori 去追星</li>
+    <li><strong>Haru（仓鼠）</strong>：第一个朋友，Tori 崩溃时的精神支柱</li>
+    <li><strong>勇气胡萝卜（용기 당근）</strong>：贯穿全程的图腾 — 学习连续 7 天解锁 1 根虚拟胡萝卜，30 天 = 一束花</li>
+  </ul>
+
+  <h3>短剧 ↔ 学习交叉点</h3>
+  <ul>
+    <li>每集短剧片尾插："今天的故事在 Day X 等你 · torikorean.com"</li>
+    <li>网站 Day X 顶部播放该集短剧片段（10 秒），把用户从"看片"转成"学韩语"</li>
+    <li>学完 Day X 解锁"剧透卡"：剧情花絮、Minji 的设定集、Tori 的便利贴照片</li>
+  </ul>
+</section>
+
+<!-- ─────────────────────────────────────────── -->
+<section id="s4">
+  <h2><span class="num">4</span>30 天内容结构 — 全周地图</h2>
+
+  <p class="lead">每 7 天是一个"小章节"，每章对应一段剧情和一个核心目标。第 7、14、21、28 天是"星期天复盘日"，用户写一段日记 + Tori 给回信。</p>
+
+  <table>
+    <thead><tr><th>Week</th><th>主题</th><th>语法骨架</th><th>能掌握</th><th>章末仪式</th></tr></thead>
+    <tbody>
+      <tr><td>Week 1 · 抵达首尔</td><td>韩文字母 + 自我介绍</td><td>이에요/예요 · 입니다</td><td>40 音 · 我是 XX · 你好/再见/对不起</td><td>Day 7：和 Tori 互发一张贴纸</td></tr>
+      <tr><td>Week 2 · 第一次出门</td><td>数字 + 点单</td><td>주세요 · 있어요/없어요</td><td>买东西、问价格、点咖啡</td><td>Day 14：录一段"点单"语音</td></tr>
+      <tr><td>Week 3 · 找到归属</td><td>动词变化 + 邀请</td><td>해요体 · 같이</td><td>邀请朋友、表达喜好</td><td>Day 21：和虚拟朋友"对话"</td></tr>
+      <tr><td>Week 4 · 独立生活</td><td>过去/计划 + 描述</td><td>았/었어요 · (으)ㄹ 거예요</td><td>讲今天/讲明天/写小日记</td><td>Day 28-30：毕业典礼 + 颁发证书 + 实体周边触发</td></tr>
+    </tbody>
+  </table>
+
+  <h3>关键数字</h3>
+  <table>
+    <thead><tr><th>指标</th><th>30 天总量</th><th>每日均值</th></tr></thead>
+    <tbody>
+      <tr><td>核心词汇</td><td>≈ 180 个</td><td>6 个</td></tr>
+      <tr><td>核心句型</td><td>30 个</td><td>1 个</td></tr>
+      <tr><td>语法点</td><td>15 个</td><td>每 2 天 1 个</td></tr>
+      <tr><td>场景对话</td><td>30 段</td><td>1 段</td></tr>
+      <tr><td>剧情节点</td><td>15 个</td><td>每 2 天推进 1 个</td></tr>
+      <tr><td>预计学习时间</td><td>≈ 4–6 小时</td><td>8–12 分钟</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ─────────────────────────────────────────── -->
+<section id="s5">
+  <h2><span class="num">5</span>每日体验设计 — Day Loop</h2>
+
+  <p class="lead">用户每天上线 8–12 分钟，按固定 6 模块顺序走完。每一步都有 Tori 的存在感（短句、表情、台词）。</p>
+
+  <div class="card">
+    <h3>Day Loop 流程图</h3>
+    <ol>
+      <li><strong>开场（30 秒）</strong> · Tori 的日记片段 + 今日心情贴纸 + 10 秒短剧切片</li>
+      <li><strong>新词（2 分钟）</strong> · 6 个词 + 真人 TTS + 例句卡片</li>
+      <li><strong>对话（2 分钟）</strong> · Tori 和今天角色的一段对话，听 → 跟读 → 选择正确回应</li>
+      <li><strong>语法小卡（90 秒）</strong> · 一句话讲清今天的语法，配 Tori 的例子</li>
+      <li><strong>输出（2 分钟）</strong> · 默写 1 个核心句 / 录音 1 句 / 选场景应用</li>
+      <li><strong>复盘（30 秒）</strong> · Tori 总结今天："学了 6 个词，明天我们要去便利店！" + 给 1 个"今日贴纸"</li>
+    </ol>
+  </div>
+
+  <h3>每一步的"陪伴元素"</h3>
+  <table>
+    <thead><tr><th>步骤</th><th>Tori 的存在</th><th>反馈机制</th></tr></thead>
+    <tbody>
+      <tr><td>开场</td><td>日记体第一人称 + Tori pose</td><td>—</td></tr>
+      <tr><td>新词</td><td>每个词配一张 Tori 的反应表情</td><td>翻卡有"啪"声 + 微震</td></tr>
+      <tr><td>对话</td><td>对话气泡上 Tori 头像</td><td>选对：💚色 + 叮声；选错：Tori 歪头 + 重读机会</td></tr>
+      <tr><td>语法</td><td>Tori 举例 "比如 Tori 想说..."</td><td>—</td></tr>
+      <tr><td>输出</td><td>录音后 Tori 给出反馈表情</td><td>≥80 分：撒花动效；&lt;80：胡萝卜递过来"再来一次"</td></tr>
+      <tr><td>复盘</td><td>Tori 总结，画一张今日贴纸</td><td>贴纸滑入"今日收藏"</td></tr>
+    </tbody>
+  </table>
+
+  <div class="highlight peach">
+    <strong>设计原则</strong>：每天的 Tori 都不一样。Day 1 紧张兴奋，Day 15 开始疲惫，Day 22 想家哭过，Day 30 笑着告别。这种"角色情绪曲线"让用户和角色有真实的关系。
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────── -->
+<section id="s6">
+  <h2><span class="num">6</span>六大模块详解</h2>
+
+  <div class="grid-2">
+    <div class="feature-card">
+      <div class="icon">📖</div>
+      <h4>1. 日记开场 (Diary)</h4>
+      <p>第一人称叙事 · 200 字以内 · 配一张 Tori 当天的姿态图 · 偶尔附短剧 10s 切片</p>
+    </div>
+    <div class="feature-card mint">
+      <div class="icon">⚪️</div>
+      <h4>2. 新词卡 (Words)</h4>
+      <p>6 个核心词 · 真人 TTS · 例句卡片 · 一键加入单词本 · 翻卡动效 + 微震</p>
+    </div>
+    <div class="feature-card peach">
+      <div class="icon">💬</div>
+      <h4>3. 场景对话 (Dialogue)</h4>
+      <p>Tori 和今天角色的真实对话 · 逐句听 → 跟读 → 选择正确回应 · 错了 Tori 歪头重来</p>
+    </div>
+    <div class="feature-card purple">
+      <div class="icon">🔍</div>
+      <h4>4. 语法小卡 (Grammar)</h4>
+      <p>每天 0 或 1 个语法点 · 一句话讲清 + Tori 举例 · 不超过 90 秒 · 不堆术语</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">✍️</div>
+      <h4>5. 输出练习 (Output)</h4>
+      <p>三选一：① 默写核心句 ② 录音跟读 ③ 场景选择题。每天换花样不让用户疲劳</p>
+    </div>
+    <div class="feature-card mint">
+      <div class="icon">🌙</div>
+      <h4>6. 日记收尾 (Recap)</h4>
+      <p>Tori 总结今天 · 颁发"今日贴纸" · 预告明天 · 解锁短剧花絮（如果有）</p>
+    </div>
+  </div>
+
+  <h3>额外能力（不是每天都出现）</h3>
+  <table>
+    <thead><tr><th>能力</th><th>触发时机</th><th>体验</th></tr></thead>
+    <tbody>
+      <tr><td>Tori 的便利贴</td><td>关键词/语法之后</td><td>侧边滑入一张手写体便利贴，写一个小提示</td></tr>
+      <tr><td>勇气胡萝卜</td><td>连续 7 天打卡</td><td>解锁 1 根虚拟胡萝卜，进入"我的胡萝卜田"</td></tr>
+      <tr><td>剧情花絮</td><td>每 7 天结束</td><td>解锁一段 30s 短剧 + 角色设定卡</td></tr>
+      <tr><td>Tori 的语音消息</td><td>3/7/14/21/28 天</td><td>Tori 给你发一条"语音"（其实是 TTS 短句）</td></tr>
+      <tr><td>毕业典礼</td><td>Day 30 完成时</td><td>动画 + 证书 + 实体周边触发问卷</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ─────────────────────────────────────────── -->
+<section id="s7">
+  <h2><span class="num">7</span>动效 / 声效 / 反馈系统</h2>
+
+  <p class="lead">高级感不是堆功能，是<strong>每一个微交互都被打磨</strong>。用户感受到"这个产品有人在用心做"。</p>
+
+  <h3>动效层级（4 档）</h3>
+  <table>
+    <thead><tr><th>层级</th><th>用例</th><th>时长</th><th>缓动</th></tr></thead>
+    <tbody>
+      <tr><td>L1 · 反馈</td><td>翻卡、按钮按下、tab 切换</td><td>120ms</td><td>ease-out</td></tr>
+      <tr><td>L2 · 转场</td><td>页面切换、Sheet 上滑</td><td>200–320ms</td><td>cubic-bezier(0.2,0.7,0.2,1)</td></tr>
+      <tr><td>L3 · 庆祝</td><td>答对、解锁贴纸、完成 7 天</td><td>800–1200ms</td><td>spring</td></tr>
+      <tr><td>L4 · 仪式</td><td>Day 30 毕业、年付付费成功</td><td>3–5 秒</td><td>编排序列</td></tr>
+    </tbody>
+  </table>
+
+  <h3>声效系统（极简，宁可没有也不要烂的）</h3>
+  <ul>
+    <li><strong>翻卡 / 解锁</strong>：日记本翻页"沙沙"声 · 极轻 · 默认开</li>
+    <li><strong>答对</strong>："叮"一声 · 像收到消息的提示音 · 温暖不刺耳</li>
+    <li><strong>答错</strong>：完全静音 · 不惩罚 · 只用视觉反馈（Tori 歪头）</li>
+    <li><strong>胡萝卜解锁</strong>：低低的"咔哒"+ Tori "야호！"语音（真人录音）</li>
+    <li><strong>毕业典礼</strong>：仅一次 · 一小段定制配乐（10 秒）</li>
+  </ul>
+  <p style="font-size:13px;color:var(--ink-3)">所有声音可在设置里一键静音。默认状态：声效开 / 背景音乐关。</p>
+
+  <h3>触觉（仅 PWA + 移动端）</h3>
+  <ul>
+    <li>翻卡：navigator.vibrate(10) 微震</li>
+    <li>答对：vibrate([10, 30, 10]) 双脉冲</li>
+    <li>解锁胡萝卜：vibrate([20, 50, 20, 50, 40])</li>
+  </ul>
+
+  <h3>视觉反馈词典</h3>
+  <table>
+    <thead><tr><th>事件</th><th>Tori 表情</th><th>颜色</th><th>动效</th></tr></thead>
+    <tbody>
+      <tr><td>开始一天</td><td>peek (探头)</td><td>pink soft</td><td>从底部上滑</td></tr>
+      <tr><td>答对</td><td>celebrate</td><td>mint 闪光</td><td>缩放弹跳</td></tr>
+      <tr><td>答错</td><td>side (歪头)</td><td>peach 警示</td><td>左右摆头 ±5°</td></tr>
+      <tr><td>解锁胡萝卜</td><td>celebrate</td><td>peach + 金色光晕</td><td>胡萝卜从底部弹出 + 星星撒</td></tr>
+      <tr><td>完成 7 天</td><td>celebrate + 短剧切片</td><td>pink + purple 渐变</td><td>剧情卡翻转</td></tr>
+      <tr><td>Day 30 毕业</td><td>celebrate (新姿势)</td><td>full screen 渐变</td><td>定制序列：胡萝卜花束 + Tori 鞠躬 + 证书</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ─────────────────────────────────────────── -->
+<section id="s8">
+  <h2><span class="num">8</span>虚拟奖励 · 实体周边 · 亲笔信</h2>
+
+  <h3>虚拟奖励系统（每个人都能拿）</h3>
+  <div class="grid-2">
+    <div class="feature-card">
+      <div class="icon">🎯</div>
+      <h4>每日贴纸</h4>
+      <p>Day 1–30 共 30 张专属贴纸，对应当天剧情。保存在"我的贴纸册"</p>
+    </div>
+    <div class="feature-card mint">
+      <div class="icon">🥕</div>
+      <h4>勇气胡萝卜</h4>
+      <p>每 7 天打卡解锁 1 根，30 天 = 4 根胡萝卜 = 一束。可显示在用户头像旁</p>
+    </div>
+    <div class="feature-card peach">
+      <div class="icon">📜</div>
+      <h4>毕业证书</h4>
+      <p>Day 30 解锁。带用户昵称 + 完成日期 + Tori 印章。可分享朋友圈</p>
+    </div>
+    <div class="feature-card purple">
+      <div class="icon">📨</div>
+      <h4>Tori 的语音消息</h4>
+      <p>Day 3/7/14/21/28 收到 Tori 的语音卡片。永久保存在"我和 Tori 的对话"</p>
+    </div>
+  </div>
+
+  <h3>实体周边（年付会员 + 完成 30 天解锁）</h3>
+  <div class="card hero-pink">
+    <h4>触发条件</h4>
+    <ol>
+      <li>开通 ¥128/年的年付会员</li>
+      <li>完成 30 天日记的全部 6 模块</li>
+      <li>在"我的"填写收件地址</li>
+    </ol>
+    <h4>包裹内容</h4>
+    <ul>
+      <li><strong>勇气胡萝卜手办</strong>（约 8cm 高，毛绒/树脂二选一）— 30 天的实体象征</li>
+      <li><strong>Tori 的亲笔信</strong>（印刷信 + 烫金签名 + 钢印）— 模板信，每封最后烫金压印 Tori 的签名</li>
+      <li><strong>30 天贴纸合集</strong>（A6 卡纸贴纸册）— 把虚拟贴纸印成实体</li>
+      <li><strong>胡萝卜钥匙扣 / 书签</strong>（小赠品，二选一）</li>
+    </ul>
+    <h4>包装设计</h4>
+    <p>外盒做成 Tori 的行李箱样式（粉色软盒 + 烫金行李牌）。打开第一眼是"亲笔信"。这一刻就是用户在朋友圈发图的瞬间。</p>
+  </div>
+
+  <h3>亲笔信内容样例</h3>
+  <div class="card">
+<pre style="font-family: 'KaiTi', 'STKaiti', serif; font-size: 14px; line-height: 1.9; color: var(--ink-2); white-space: pre-wrap; margin: 0;">
+안녕、 {{用户昵称}}！
+
+记得我第一天来首尔的时候，把"행李"说成了"家"，结果 Minji 一脸懵。
+我也常常觉得自己学得太慢、说得太差，特别想放弃。
+
+但你陪我走完了 30 天。
+
+谢谢你陪我从仁爪机场到弘爪街，从泡面到火锅，从一个人到有 Minji、Junho、Haru。
+谢谢你每天给我一点点的鼓励。
+
+这只胡萝卜是我送你的礼物 —
+它叫"용기"，是勇气的意思。
+
+接下来 60 天，我们继续？
+
+Tori 💌
+首尔动物城 · 한빛语言学校
+{{当天日期}}
+
+[Tori 烫金签名 · 钢印]
+</pre>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────── -->
+<section id="s9">
+  <h2><span class="num">9</span>付费模型与定价</h2>
+
+  <h3>定价表（确认版）</h3>
+  <table>
+    <thead><tr><th>方案</th><th>价格</th><th>含什么</th><th>转化目标</th></tr></thead>
+    <tbody>
+      <tr><td><strong>30 天日记</strong></td><td>免费</td><td>Day 1–30 全部 6 模块 · 全部虚拟奖励 · 30 张贴纸 + 4 根胡萝卜 + 毕业证书</td><td>获客 · 让用户养成依赖 Tori</td></tr>
+      <tr><td><strong>月付会员</strong></td><td>¥19/月</td><td>Day 31+ 的所有日记 · AI 陪练 · 自由复习池 · 升级版头像框</td><td>低门槛进入</td></tr>
+      <tr><td><strong>年付会员（推荐）</strong></td><td>¥128/年</td><td>月付的全部 + 实体周边（完成 30 天后寄送）+ Tori 限定贴纸 + 早期访问</td><td>主推 · 客单价</td></tr>
+    </tbody>
+  </table>
+
+  <h3>价格逻辑</h3>
+  <ul>
+    <li><strong>月付 ¥19</strong>：低于多邻国 Super 的 ¥56/月，比沪江网校的 ¥30+/月便宜，门槛低</li>
+    <li><strong>年付 ¥128</strong>：相当于 ¥10.6/月，对比月付有 44% 折扣 — 用户会算账</li>
+    <li><strong>实体周边的成本</strong>：胡萝卜手办 ¥18 + 亲笔信印刷 ¥5 + 贴纸册 ¥6 + 包装 ¥8 + 邮费 ¥10 ≈ <strong>¥47/单</strong>。年付 ¥128，留 ¥81 给毛利和服务器</li>
+    <li><strong>30 天免费</strong>：是钩子，不是亏本 — 完成 30 天的用户付费意愿是流失用户的 8–12 倍</li>
+  </ul>
+
+  <h3>付费触达节奏</h3>
+  <table>
+    <thead><tr><th>时机</th><th>触达方式</th><th>话术</th></tr></thead>
+    <tbody>
+      <tr><td>Day 14</td><td>Tori 的语音消息</td><td>"我们已经一起 14 天了！下个月我要去打工了，你也跟我一起吗？"</td></tr>
+      <tr><td>Day 21</td><td>剧情花絮里轻提</td><td>"Day 31 之后的我，你想知道发生了什么吗？"</td></tr>
+      <tr><td>Day 28-30</td><td>毕业典礼弹窗</td><td>"30 天日记完结。你和 Tori 的故事可以继续 —— 年付有惊喜（胡萝卜实体）"</td></tr>
+      <tr><td>Day 31</td><td>邮件 + Push</td><td>"昨天 Tori 一直在等你..."（不强迫，纯故事化）</td></tr>
+    </tbody>
+  </table>
+
+  <div class="highlight">
+    <strong>关键不做</strong>：不做 connect-streak-fear（多邻国式 "你的连胜要断了！"），那会让用户讨厌 Tori。Tori 永远等用户，从不催。
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────── -->
+<section id="s10">
+  <h2><span class="num">10</span>UI / 信息架构</h2>
+
+  <h3>入口</h3>
+  <ul>
+    <li><strong>学习</strong> 模块下，第一张大卡片：「Tori 的韩语日记 · 30 天 · 免费」（替换现在"30 天入门模板"）</li>
+    <li>路由：<code>/diary</code>（保留 <code>/course</code> 作为旧课程入口）</li>
+    <li>首页 Daily 也常驻一个推送条："Tori 在等你 · Day {{n}}"</li>
+  </ul>
+
+  <h3>核心页面</h3>
+  <table>
+    <thead><tr><th>路由</th><th>页面</th><th>关键交互</th></tr></thead>
+    <tbody>
+      <tr><td><code>/diary</code></td><td>日记总览</td><td>30 天宫格地图 · 当前进度 · 角色介绍 · 短剧预告片入口</td></tr>
+      <tr><td><code>/diary/[day]</code></td><td>当日日记</td><td>6 模块顺序 · 进度条 · 退出保存</td></tr>
+      <tr><td><code>/diary/stickers</code></td><td>我的贴纸册</td><td>30 张贴纸网格 · 已解锁高亮 · 未解锁灰阶</td></tr>
+      <tr><td><code>/diary/carrots</code></td><td>胡萝卜田</td><td>4 根胡萝卜进度 · 长按胡萝卜 Tori 出声</td></tr>
+      <tr><td><code>/diary/letters</code></td><td>Tori 的来信</td><td>语音消息合集 · 写日记给 Tori（输出）</td></tr>
+      <tr><td><code>/diary/graduation</code></td><td>毕业典礼</td><td>Day 30 完成后解锁 · 证书 + 周边申请</td></tr>
+    </tbody>
+  </table>
+
+  <h3>当日日记页布局（核心）</h3>
+  <pre style="background: var(--soft); border-radius: 12px; padding: 16px; font-size: 12px; line-height: 1.5; overflow-x: auto;">
++--------------------------------------------------+
+| ← 返回   Day 14 · 弘爪街追星        ●●●●●●●○○○  |
++--------------------------------------------------+
+| [10s 短剧切片自动播放 · 可关闭]                |
+| ----------------------------------------------- |
+| 📖 Tori 的日记                                   |
+|   "今天 Junho 拉我去弘爪街参加他追的偶像的生日   |
+|    咖啡馆。我超紧张，因为店员是真的韩国人..."   |
+|                                                  |
+| 🔄 新词（6 个）                                  |
+|   [生日 생일] [咖啡馆 카페] [应援 응원] ...      |
+|                                                  |
+| 💬 场景对话                                      |
+|   [对话气泡 + 语音 + 选择题]                     |
+|                                                  |
+| 🔍 今日语法                                      |
+|   ~을/를 좋아해요 · "喜欢 XX"                    |
+|                                                  |
+| ✍️ 输出                                         |
+|   [默写 / 录音 / 选场景 三选一]                   |
+|                                                  |
+| 🌙 Tori 的总结 + 今日贴纸                         |
++--------------------------------------------------+
+                  [完成 Day 14]
+  </pre>
+</section>
+
+<!-- ─────────────────────────────────────────── -->
+<section id="s11">
+  <h2><span class="num">11</span>技术架构与数据流</h2>
+
+  <h3>新增数据模型</h3>
+  <table>
+    <thead><tr><th>表 / CloudTable</th><th>位置</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td><code>diaryProgress</code></td><td>Turso + IndexedDB</td><td>userId · day · completed · moduleStates · finishedAt</td></tr>
+      <tr><td><code>diaryStickers</code></td><td>IndexedDB</td><td>userId · day · sticker · unlockedAt</td></tr>
+      <tr><td><code>diaryCarrots</code></td><td>IndexedDB</td><td>userId · weekIndex · unlockedAt</td></tr>
+      <tr><td><code>diaryLetters</code></td><td>IndexedDB</td><td>userId · type (voice/sticker) · content · receivedAt</td></tr>
+      <tr><td><code>diaryGraduation</code></td><td>Turso</td><td>userId · finishedAt · shippingAddr · shippedAt · trackingNo</td></tr>
+    </tbody>
+  </table>
+
+  <h3>静态内容（不进 DB，进 src/data/）</h3>
+  <ul>
+    <li><code>src/data/diary/days.ts</code> · 30 天的每日剧本 · TypeScript 类型化</li>
+    <li><code>src/data/diary/characters.ts</code> · Minji/Junho/Haru 角色卡</li>
+    <li><code>src/data/diary/stickers.ts</code> · 30 张贴纸元信息（emoji/路径/描述）</li>
+    <li><code>src/data/diary/clips.ts</code> · 短剧切片清单（COS 路径）</li>
+  </ul>
+
+  <h3>关键能力复用</h3>
+  <ul>
+    <li>TTS：复用 <code>src/lib/tts.ts</code>（Edge-TTS sunhi 女声 + 40 音真人录音）</li>
+    <li>录音：复用 <code>src/lib/audio/recorder.ts</code></li>
+    <li>SRS：完成的词自动入复习池（可选）</li>
+    <li>UI 原语：复用 P2 建的 <code>src/components/ui/*</code></li>
+  </ul>
+
+  <h3>新增 API</h3>
+  <ul>
+    <li><code>POST /api/diary/complete</code> · 标记当日完成 · 触发贴纸/胡萝卜解锁</li>
+    <li><code>POST /api/diary/graduation</code> · Day 30 完成 · 触发实体周边申请</li>
+    <li><code>POST /api/diary/shipping</code> · 用户填写收件地址</li>
+    <li>管理后台 <code>/admin/diary/orders</code> · 实体寄送订单管理</li>
+  </ul>
+</section>
+
+<!-- ─────────────────────────────────────────── -->
+<section id="s12">
+  <h2><span class="num">12</span>内容生产工作流</h2>
+
+  <p class="lead">30 天 × 6 模块 = 180 个内容单元。这是工作量瓶颈。流程必须高效。</p>
+
+  <h3>四步生产流程</h3>
+  <ol>
+    <li><strong>剧本（你 / Claude 协助）</strong>：30 天的剧情大纲 · 每天的场景 · 每天的核心 5 句</li>
+    <li><strong>语言（korean skill 写 + 你审）</strong>：每天 6 词 + 1 段对话 + 1 语法点的韩语撰写</li>
+    <li><strong>音频（TTS 生成 + 你抽检）</strong>：sunhi 女声 · 全部句子预生成 mp3 上传 COS</li>
+    <li><strong>组装（自动）</strong>：写到 <code>src/data/diary/days.ts</code> · 网页自动渲染</li>
+  </ol>
+
+  <h3>每天的内容字段（约定）</h3>
+  <pre style="background: var(--soft); border-radius: 12px; padding: 16px; font-size: 12px; line-height: 1.5; overflow-x: auto;">
+{
+  day: 1,
+  title: "抵达首尔",
+  scene: "仁爪机场 → 出租车",
+  diary: "今天到首尔了...",
+  toriPose: "peek",
+  clipUrl?: "/audio/diary/d1.mp4",  // 短剧切片
+  words: [{ ko, zh, romaji, audio }, ...6],
+  dialogue: { lines: [...], correctAnswers: [...] },
+  grammar?: { rule, example, example_zh },
+  output: { type: 'dictation'|'recording'|'choice', payload },
+  recap: { toriSays, sticker, tomorrow_preview },
+}
+  </pre>
+
+  <h3>质量门</h3>
+  <ul>
+    <li>每天剧本 → korean-qa skill 检查韩文自然度 · 조사 · 발음</li>
+    <li>每周整体 → 重读一遍剧情连贯性 · Tori 语气一致性</li>
+    <li>上线前 → 你亲自走完整 30 天</li>
+  </ul>
+</section>
+
+<!-- ─────────────────────────────────────────── -->
+<section id="s13">
+  <h2><span class="num">13</span>风险与对策</h2>
+
+  <table>
+    <thead><tr><th>风险</th><th>影响</th><th>对策</th></tr></thead>
+    <tbody>
+      <tr><td>实体周边发货乱 / 延迟</td><td>用户投诉、口碑崩</td><td>完成 30 天后才寄 · 设置 14 天发货承诺 · 用快递鸟 API 自动同步轨迹</td></tr>
+      <tr><td>30 天后用户不付费</td><td>商业模式不成立</td><td>转化率目标 5-8%（行业 2-3%）· 实体周边显著抬升 · 月付门槛低</td></tr>
+      <tr><td>韩语内容写错</td><td>专业性翻车</td><td>korean-qa + 你亲审 + 上线前两周内测</td></tr>
+      <tr><td>短剧节奏跟不上学习节奏</td><td>剧情学习脱节</td><td>先做 Day 1-7 配套切片 · 后面 Day 8+ 用静态台词卡片兜底 · 短剧赶上来再补</td></tr>
+      <tr><td>用户中途断更</td><td>完成率低</td><td>Tori 不催 · 邮件软提醒 · 断更可"补上昨天的日记"无惩罚</td></tr>
+      <tr><td>实体成本失控</td><td>毛利变负</td><td>胡萝卜手办 1688 比价 · 信件批量印刷 · 包装外包 · 严控 ¥47 上限</td></tr>
+      <tr><td>抄袭多邻国</td><td>法律风险</td><td>世界观 / 故事 / 角色完全原创 · 不复制小绿鸟连胜恐吓机制</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ─────────────────────────────────────────── -->
+<section id="s14">
+  <h2><span class="num">14</span>上线节奏（路线图）</h2>
+
+  <table>
+    <thead><tr><th>阶段</th><th>时间</th><th>目标</th><th>关键产出</th></tr></thead>
+    <tbody>
+      <tr><td>P0 · 规划立项</td><td>本周</td><td>方案定稿</td><td>本文档 + 角色/剧情确认</td></tr>
+      <tr><td>P1 · 内容骨架</td><td>第 1–2 周</td><td>30 天剧本写完</td><td>days.ts 全部 30 天框架 · 韩语初稿</td></tr>
+      <tr><td>P2 · 数据层 + UI 原型</td><td>第 2–3 周</td><td>能跑完 Day 1–3</td><td>/diary 路由 · 6 模块 UI · TTS 集成</td></tr>
+      <tr><td>P3 · 完整 30 天</td><td>第 3–5 周</td><td>所有日全部可用</td><td>30 天全部上线 · 贴纸解锁 · 胡萝卜系统</td></tr>
+      <tr><td>P4 · 周边 + 付费</td><td>第 5–6 周</td><td>付费链路打通</td><td>月付/年付 · 实体周边发货系统 · 管理后台订单</td></tr>
+      <tr><td>P5 · 内测打磨</td><td>第 6–7 周</td><td>20 人完整跑完</td><td>修 bug · 韩语精修 · 动效精修</td></tr>
+      <tr><td>P6 · 公开发布</td><td>第 8 周</td><td>上线 + 短剧预告片同步</td><td>B 站/小红书/抖音 · 引流到 /diary</td></tr>
+    </tbody>
+  </table>
+
+  <h3>关键里程碑</h3>
+  <ul>
+    <li><strong>Week 3 末</strong>：第一个真用户能跑完 Day 1–7（你自己试）</li>
+    <li><strong>Week 5 末</strong>：30 天全部内容上线，付费链路打通</li>
+    <li><strong>Week 6 末</strong>：20 个内测用户完整跑完 + 反馈</li>
+    <li><strong>Week 8</strong>：公开发布，短剧预告片同步全平台</li>
+  </ul>
+</section>
+
+<!-- ─────────────────────────────────────────── -->
+<section id="s15">
+  <h2><span class="num">15</span>立项后第一步要做的事</h2>
+
+  <p class="lead">本方案确认后，建议按顺序做：</p>
+
+  <ol style="font-size:14px;line-height:1.9">
+    <li><strong>定剧本框架</strong>：30 天的"今天发生什么"一句话清单（30 行 Excel）</li>
+    <li><strong>定核心 6 句 × 30 天</strong>：每天 Tori 用上的 6 个核心词/句（180 个单元的语料源）</li>
+    <li><strong>跑通 1 天 demo</strong>：Day 1 的 6 模块全部跑通，让你和团队感受"这是不是想要的体验"</li>
+    <li><strong>评估短剧切片成本</strong>：30 天 30 个 10 秒切片，制作周期评估</li>
+    <li><strong>实体周边打样</strong>：1688/淘工厂找胡萝卜手办供应商，打 5–10 个样品</li>
+    <li><strong>付费链路 PoC</strong>：复用现有 Turso users 表加 membership 字段，先跑通 ¥19/¥128 两个 SKU 的最小购买流程</li>
+  </ol>
+
+  <div class="card hero-mint">
+    <h3>最小可玩版本（MVP）边界</h3>
+    <p>第一版上线时<strong>必须有</strong>：</p>
+    <ul>
+      <li>Day 1–30 全部 6 模块可用</li>
+      <li>贴纸 + 胡萝卜 + 毕业证书三个虚拟奖励</li>
+      <li>月付 + 年付付费链路</li>
+      <li>30 张静态贴纸（即使没有短剧切片）</li>
+    </ul>
+    <p><strong>可以没有</strong>：</p>
+    <ul>
+      <li>所有 30 集短剧切片（先做 Day 1/7/14/21/30 五个里程碑切片）</li>
+      <li>Tori 的语音消息（可后补，先用文字消息）</li>
+      <li>胡萝卜田的 3D 动效（先用 2D 简单动效）</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <p><strong>토리의 한국어 일기 · Tori 的韩语日记</strong></p>
+  <p>策划版本 v1.0 · 2026 · 项目代号：Tori Diary</p>
+  <p style="margin-top:12px">本方案是讨论稿。任何环节都欢迎打回。</p>
+</footer>
+
+</div>
+</body>
+</html>
