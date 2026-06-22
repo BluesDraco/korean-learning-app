@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { useParams, useRouter } from 'next/navigation';
 import {
   ArrowLeft, Volume2, ChevronRight, Check, Sparkles,
@@ -978,7 +979,7 @@ export default function ArticleReaderPage() {
         </div>
       )}
       {/* ── Word detail bottom drawer ── */}
-      {selectedWord && (
+      {selectedWord && typeof window !== 'undefined' && createPortal(
         <>
           {/* Backdrop */}
           <div
@@ -991,6 +992,7 @@ export default function ArticleReaderPage() {
             background: 'var(--bg-card)', borderRadius: '20px 20px 0 0',
             padding: '20px 20px calc(env(safe-area-inset-bottom, 0px) + 20px)',
             boxShadow: '0 -4px 24px rgba(0,0,0,0.12)',
+            maxWidth: 560, margin: '0 auto',
           }}>
             {/* Handle */}
             <div style={{ width: 36, height: 4, borderRadius: 2, background: 'var(--border-color)', margin: '0 auto 16px' }} />
@@ -1039,7 +1041,8 @@ export default function ArticleReaderPage() {
               </button>
             </div>
           </div>
-        </>
+        </>,
+        document.body
       )}
       {aiLookupWord && (
         <WordTapSheet

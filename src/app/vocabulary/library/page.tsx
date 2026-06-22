@@ -8,56 +8,78 @@ import { ThemesSection } from '@/components/vocabulary/ThemesSection';
 import { LevelsSection } from '@/components/vocabulary/LevelsSection';
 import { YonseiSection } from '@/components/vocabulary/YonseiSection';
 import { ExpressionsSection } from '@/components/vocabulary/ExpressionsSection';
+import { useIsDesktop } from '@/lib/useIsMobile';
+import { PageHeader } from '@/components/ui';
 
 const tabs = [
-  { key: 'levels',      label: 'TOPIK词表', icon: BarChart3 },
-  { key: 'yonsei',      label: '教材词汇',  icon: GraduationCap },
-  { key: 'themes',      label: '主题词包',  icon: Library },
-  { key: 'expressions', label: '活用表达',  icon: MessageCircle },
+  { key: 'levels',      label: 'TOPIK 词表', Icon: BarChart3 },
+  { key: 'yonsei',      label: '教材词汇',   Icon: GraduationCap },
+  { key: 'themes',      label: '主题词包',   Icon: Library },
+  { key: 'expressions', label: '活用表达',   Icon: MessageCircle },
 ] as const;
 
 type TabKey = (typeof tabs)[number]['key'];
 const validKeys = tabs.map(t => t.key) as string[];
 
 function LibraryContent() {
+  const isDesktop = useIsDesktop();
   const searchParams = useSearchParams();
   const urlTab = searchParams.get('tab');
   const [tab, setTab] = useState<TabKey>(() =>
     validKeys.includes(urlTab ?? '') ? (urlTab as TabKey) : 'levels'
   );
 
+  const containerCls = isDesktop ? 'py-4 max-w-5xl mx-auto' : 'py-4 max-w-2xl mx-auto';
+
   return (
-    <div className="py-4 space-y-5">
-      {/* Header */}
-      <div>
-        <Link href="/vocabulary" className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] mb-3">
-          <ArrowLeft size={16} />
-          返回我的单词
-        </Link>
-        <h1 className="text-2xl font-bold text-[var(--text-primary)] flex items-center gap-2">
-          📚 词库
-        </h1>
-        <p className="text-sm text-[var(--text-secondary)] mt-1">
-          系统化词汇学习资源，按场景、分级或教材探索
-        </p>
-      </div>
+    <div className={containerCls}>
+      <Link
+        href="/vocabulary"
+        style={{
+          display: 'inline-flex', alignItems: 'center', gap: 6,
+          fontSize: 13, color: 'var(--color-ink-2)', textDecoration: 'none',
+          marginBottom: 14,
+        }}
+      >
+        <ArrowLeft size={14} />
+        返回词汇
+      </Link>
+
+      <PageHeader
+        eyebrow="LIBRARY"
+        title="词库"
+        subtitle="系统化词汇学习资源，按场景、分级或教材探索"
+        tone="purple"
+        flat
+      />
 
       {/* Tabs */}
-      <div className="flex gap-2 border-b border-[var(--border-color)] overflow-x-auto flex-nowrap">
+      <div
+        style={{
+          display: 'flex', gap: 4,
+          borderBottom: '1px solid var(--color-border-1)',
+          overflowX: 'auto', flexWrap: 'nowrap',
+          marginBottom: 20,
+        }}
+      >
         {tabs.map((t) => {
-          const Icon = t.icon;
           const isActive = tab === t.key;
           return (
             <button
               key={t.key}
               onClick={() => setTab(t.key)}
-              className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-all whitespace-nowrap ${
-                isActive
-                  ? 'border-[var(--pink-primary)] text-[var(--pink-primary)]'
-                  : 'border-transparent text-[var(--text-muted)] hover:text-[var(--text-primary)]'
-              }`}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+                padding: '12px 16px', fontSize: 13, fontWeight: 600,
+                borderBottom: '2px solid',
+                borderBottomColor: isActive ? 'var(--color-pink-base)' : 'transparent',
+                color: isActive ? 'var(--color-pink-strong)' : 'var(--color-ink-3)',
+                background: 'transparent', border: 'none', borderRadius: 0,
+                whiteSpace: 'nowrap', cursor: 'pointer',
+                transition: 'all var(--dur-fast) var(--ease-soft)',
+              }}
             >
-              <Icon size={16} />
+              <t.Icon size={16} strokeWidth={1.75} />
               {t.label}
             </button>
           );
@@ -77,7 +99,17 @@ function LibraryContent() {
 
 export default function LibraryPage() {
   return (
-    <Suspense fallback={<div className="flex-1 flex items-center justify-center py-20"><div className="w-6 h-6 rounded-full border-2 border-[var(--pink-primary)] border-t-transparent animate-spin" /></div>}>
+    <Suspense fallback={
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '80px 0' }}>
+        <div
+          style={{
+            width: 24, height: 24, borderRadius: '50%',
+            border: '2px solid var(--color-pink-base)', borderTopColor: 'transparent',
+            animation: 'tori-spin 0.7s linear infinite',
+          }}
+        />
+      </div>
+    }>
       <LibraryContent />
     </Suspense>
   );

@@ -11,8 +11,11 @@ import { speak, speakWord } from '@/lib/tts';
 import { TappableText } from '@/components/TappableText';
 import { getEntryByKorean } from '@/data/vocabulary/index';
 import type { Word, WordBook, WordEntry } from '@/types';
+import { useIsDesktop } from '@/lib/useIsMobile';
+import { PageHeader, Button } from '@/components/ui';
 
 export default function ReviewPoolPage() {
+  const isDesktop = useIsDesktop();
   const [words, setWords] = useState<Word[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -157,21 +160,29 @@ export default function ReviewPoolPage() {
   }
 
   return (
-    <div className="py-4 space-y-4 pb-32">
-      {/* Header */}
-      <div className="flex items-center gap-3">
-        <Link href="/vocabulary" className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
-          <ArrowLeft size={20} />
-        </Link>
-        <div className="flex-1">
-          <h1 className="text-xl font-bold text-[var(--text-primary)]">待复习词库</h1>
-          <p className="text-xs text-[var(--text-muted)] mt-0.5">共 {words.length} 个单词到期待复习</p>
-        </div>
-        <Link
-          href="/review"
-          className="shrink-0 flex items-center gap-1.5 bg-[var(--pink-primary)] text-white rounded-xl px-4 py-2.5 text-sm font-medium hover:opacity-90 transition-opacity"
-        >
-          开始复习
+    <div className={isDesktop ? 'py-4 max-w-5xl mx-auto pb-32' : 'py-4 max-w-2xl mx-auto pb-32'}>
+      <Link
+        href="/vocabulary"
+        style={{
+          display: 'inline-flex', alignItems: 'center', gap: 6,
+          fontSize: 13, color: 'var(--color-ink-2)', textDecoration: 'none',
+          marginBottom: 14,
+        }}
+      >
+        <ArrowLeft size={14} />
+        返回词汇
+      </Link>
+
+      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 16, marginBottom: 24 }}>
+        <PageHeader
+          eyebrow="REVIEW POOL"
+          title="待复习词库"
+          subtitle={`共 ${words.length} 个单词到期待复习`}
+          tone="pink"
+          flat
+        />
+        <Link href="/review" style={{ textDecoration: 'none', flexShrink: 0, marginBottom: 24 }}>
+          <Button variant="primary" tone="pink">开始复习</Button>
         </Link>
       </div>
 

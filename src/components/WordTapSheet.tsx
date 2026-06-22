@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { HighlightedExample } from '@/components/vocabulary/HighlightedExample';
 import { X, Volume2, Check, Loader2, Bookmark, BookmarkCheck } from 'lucide-react';
 import { speakWord } from '@/lib/tts';
@@ -137,7 +138,9 @@ export function WordTapSheet({ surface, source, onClose, onSaved }: WordTapSheet
     }
   }
 
-  return (
+  if (typeof window === 'undefined') return null;
+
+  const sheetNode = (
     <div
       style={{ position: 'fixed', inset: 0, zIndex: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}
       onClick={onClose}
@@ -340,4 +343,6 @@ export function WordTapSheet({ surface, source, onClose, onSaved }: WordTapSheet
       <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
     </div>
   );
+
+  return createPortal(sheetNode, document.body);
 }

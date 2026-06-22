@@ -16,6 +16,7 @@ import { TappableText } from '@/components/TappableText';
 
 const PAGE_SIZE = 50;
 import { AddToBookSheet } from '@/components/vocabulary/AddToBookSheet';
+import { useIsDesktop } from '@/lib/useIsMobile';
 
 const levelNames: Record<number, string> = {
   1: '1级 · 入门', 2: '2级 · 基础', 3: '3级 · 进阶',
@@ -23,6 +24,7 @@ const levelNames: Record<number, string> = {
 };
 
 export default function LevelDetailPage() {
+  const isWideViewport = useIsDesktop();
   const { level: levelStr } = useParams<{ level: string }>();
   const router = useRouter();
   const level = parseInt(levelStr);
@@ -385,18 +387,25 @@ export default function LevelDetailPage() {
   const untouched = total - mastered - learning;
 
   return (
-    <div className="py-4 space-y-5 pb-8">
+    <div className={isWideViewport ? 'py-4 max-w-5xl mx-auto pb-8' : 'py-4 max-w-2xl mx-auto pb-8'}>
       {/* Header */}
-      <div>
-        <Link href="/vocabulary/library?tab=levels" className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] mb-3">
-          <ArrowLeft size={16} />
+      <div style={{ marginBottom: 20 }}>
+        <Link
+          href="/vocabulary/library?tab=levels"
+          style={{
+            display: 'inline-flex', alignItems: 'center', gap: 6,
+            fontSize: 13, color: 'var(--color-ink-2)', textDecoration: 'none',
+            marginBottom: 14,
+          }}
+        >
+          <ArrowLeft size={14} />
           返回分级词表
         </Link>
-        <div className="flex items-center gap-3">
-          <span className="text-3xl font-bold text-[var(--pink-primary)]">{level}级</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <span style={{ fontSize: 32, fontWeight: 800, color: 'var(--color-pink-strong)' }}>{level}级</span>
           <div>
-            <h1 className="text-xl font-bold text-[var(--text-primary)]">{levelNames[level]}</h1>
-            <p className="text-sm text-[var(--text-secondary)] mt-0.5">
+            <h1 style={{ fontSize: 22, fontWeight: 800, color: 'var(--color-ink-1)', margin: 0 }}>{levelNames[level]}</h1>
+            <p style={{ fontSize: 13, color: 'var(--color-ink-3)', margin: '2px 0 0' }}>
               TOPIK {level <= 2 ? 'I' : 'II'} · 核心词汇 {lvl.totalCount.toLocaleString()} 词
             </p>
           </div>

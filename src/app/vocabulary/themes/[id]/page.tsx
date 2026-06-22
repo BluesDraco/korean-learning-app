@@ -14,8 +14,10 @@ import { speak } from '@/lib/tts';
 import { useAuth } from '@/components/AuthProvider';
 import { TappableText } from '@/components/TappableText';
 import { AddToBookSheet } from '@/components/vocabulary/AddToBookSheet';
+import { useIsDesktop } from '@/lib/useIsMobile';
 
 export default function ThemeDetailPage() {
+  const isWideViewport = useIsDesktop();
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
 
@@ -190,18 +192,25 @@ export default function ThemeDetailPage() {
   const progressPercent = totalWords > 0 ? Math.round(((masteredCount + learningCount) / totalWords) * 100) : 0;
 
   return (
-    <div className="py-4 space-y-5 pb-8">
+    <div className={isWideViewport ? 'py-4 max-w-5xl mx-auto pb-8' : 'py-4 max-w-2xl mx-auto pb-8'}>
       {/* Header */}
-      <div>
-        <Link href="/vocabulary/library?tab=themes" className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] mb-3">
-          <ArrowLeft size={16} />
+      <div style={{ marginBottom: 20 }}>
+        <Link
+          href="/vocabulary/library?tab=themes"
+          style={{
+            display: 'inline-flex', alignItems: 'center', gap: 6,
+            fontSize: 13, color: 'var(--color-ink-2)', textDecoration: 'none',
+            marginBottom: 14,
+          }}
+        >
+          <ArrowLeft size={14} />
           返回词包列表
         </Link>
-        <div className="flex items-center gap-3">
-          <span className="text-4xl">{theme.emoji}</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <span style={{ fontSize: 40 }}>{theme.emoji}</span>
           <div>
-            <h1 className="text-xl font-bold text-[var(--text-primary)]">{theme.name}</h1>
-            <p className="text-sm text-[var(--text-secondary)] mt-0.5">{theme.description}</p>
+            <h1 style={{ fontSize: 22, fontWeight: 800, color: 'var(--color-ink-1)', margin: 0 }}>{theme.name}</h1>
+            <p style={{ fontSize: 13, color: 'var(--color-ink-3)', margin: '2px 0 0' }}>{theme.description}</p>
           </div>
         </div>
       </div>

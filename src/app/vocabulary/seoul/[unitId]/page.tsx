@@ -13,8 +13,10 @@ import { db } from '@/lib/db';
 import { useAuth } from '@/components/AuthProvider';
 import { AddToBookSheet } from '@/components/vocabulary/AddToBookSheet';
 import { TappableText } from '@/components/TappableText';
+import { useIsDesktop } from '@/lib/useIsMobile';
 
 export default function YonseiUnitPage() {
+  const isWideViewport = useIsDesktop();
   const { unitId } = useParams<{ unitId: string }>();
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
@@ -227,23 +229,36 @@ export default function YonseiUnitPage() {
   const untouched = total - mastered - learning;
 
   return (
-    <div className="py-4 space-y-5 pb-[calc(80px+env(safe-area-inset-bottom,0px))]">
+    <div className={isWideViewport ? 'py-4 max-w-5xl mx-auto pb-[calc(80px+env(safe-area-inset-bottom,0px))]' : 'py-4 max-w-2xl mx-auto pb-[calc(80px+env(safe-area-inset-bottom,0px))]'}>
       {/* Header */}
-      <div>
-        <Link href="/vocabulary/library?tab=yonsei" className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] mb-3">
-          <ArrowLeft size={16} />
+      <div style={{ marginBottom: 20 }}>
+        <Link
+          href="/vocabulary/library?tab=yonsei"
+          style={{
+            display: 'inline-flex', alignItems: 'center', gap: 6,
+            fontSize: 13, color: 'var(--color-ink-2)', textDecoration: 'none',
+            marginBottom: 14,
+          }}
+        >
+          <ArrowLeft size={14} />
           返回首尔教材
         </Link>
-        <div className="flex items-center gap-3">
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
           <div
-            className="w-12 h-12 rounded-2xl flex items-center justify-center text-lg font-black text-white shrink-0"
-            style={{ backgroundColor: 'var(--mint-soft)' }}
+            style={{
+              width: 48, height: 48, borderRadius: 'var(--radius-md)',
+              background: 'var(--color-mint-base)', color: '#fff',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 18, fontWeight: 800, flexShrink: 0,
+            }}
           >
             {unit.unitNumber}
           </div>
           <div>
-            <h1 className="text-xl font-bold text-[var(--text-primary)]">{unit.title}</h1>
-            <p className="text-sm text-[var(--text-secondary)] mt-0.5">{unit.titleKo} · {unit.bookTitle} 第{unit.unitNumber}课</p>
+            <h1 style={{ fontSize: 22, fontWeight: 800, color: 'var(--color-ink-1)', margin: 0 }}>{unit.title}</h1>
+            <p style={{ fontSize: 13, color: 'var(--color-ink-3)', margin: '2px 0 0' }}>
+              {unit.titleKo} · {unit.bookTitle} 第{unit.unitNumber}课
+            </p>
           </div>
         </div>
       </div>

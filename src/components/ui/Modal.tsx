@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import { useIsMobile } from '@/lib/useIsMobile';
 import { Sheet } from '@/components/ui/Sheet';
@@ -56,8 +57,9 @@ export function Modal({
       </Sheet>
     );
   }
+  if (typeof window === 'undefined') return null;
 
-  return (
+  return createPortal(
     <>
       <div
         onClick={closeOnBackdrop ? onClose : undefined}
@@ -136,6 +138,7 @@ export function Modal({
         )}
         {children}
       </div>
-    </>
+    </>,
+    document.body
   );
 }

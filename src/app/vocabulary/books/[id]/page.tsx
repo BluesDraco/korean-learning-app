@@ -11,8 +11,10 @@ import { speak, speakWord } from '@/lib/tts';
 import { TappableText } from '@/components/TappableText';
 import { getEntryByKorean } from '@/data/vocabulary/index';
 import type { WordBook, Word, WordEntry } from '@/types';
+import { useIsDesktop } from '@/lib/useIsMobile';
 
 export default function BookDetailPage() {
+  const isWideViewport = useIsDesktop();
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const [book, setBook] = useState<WordBook | null>(null);
@@ -147,21 +149,33 @@ export default function BookDetailPage() {
   if (!book) return null;
 
   return (
-    <div className="py-4 space-y-4 pb-[calc(56px+env(safe-area-inset-bottom,0px)+128px)]">
+    <div className={isWideViewport ? 'py-4 max-w-5xl mx-auto pb-[calc(56px+env(safe-area-inset-bottom,0px)+128px)]' : 'py-4 max-w-2xl mx-auto pb-[calc(56px+env(safe-area-inset-bottom,0px)+128px)]'}>
       {/* Header */}
-      <div className="flex items-center gap-4">
-        <Link href="/vocabulary/books" className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
+      <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 20 }}>
+        <Link
+          href="/vocabulary/books"
+          style={{
+            display: 'inline-flex', alignItems: 'center',
+            color: 'var(--color-ink-2)', textDecoration: 'none',
+          }}
+        >
           <ArrowLeft size={20} />
         </Link>
-        <div className="flex-1">
-          <h1 className="text-2xl font-bold text-[var(--text-primary)] section-header">{book.name}</h1>
-          <p className="text-sm text-[var(--text-secondary)] mt-1">
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <h1 style={{ fontSize: 22, fontWeight: 800, color: 'var(--color-ink-1)', margin: 0 }}>{book.name}</h1>
+          <p style={{ fontSize: 13, color: 'var(--color-ink-3)', margin: '2px 0 0' }}>
             {book.description || `${words.length} 个单词`}
           </p>
         </div>
         <Link
           href={`/vocabulary/books/${book.id}/flashcards`}
-          className="shrink-0 flex items-center gap-1.5 bg-[var(--pink-primary)] text-white rounded-xl px-4 py-2.5 text-sm font-medium hover:opacity-90 transition-opacity"
+          style={{
+            display: 'inline-flex', alignItems: 'center', gap: 6, flexShrink: 0,
+            background: 'var(--color-pink-base)', color: '#fff',
+            borderRadius: 'var(--radius-pill)', padding: '10px 18px',
+            fontSize: 13, fontWeight: 700, textDecoration: 'none',
+            boxShadow: 'var(--shadow-sm)',
+          }}
         >
           <BookOpen size={16} />
           开始学习

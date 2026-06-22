@@ -7,6 +7,7 @@ import { db } from '@/lib/db';
 import { speakWord } from '@/lib/tts';
 import { yonseiUnits } from '@/data/yonsei-books';
 import { AddToBookSheet } from '@/components/vocabulary/AddToBookSheet';
+import { useIsDesktop } from '@/lib/useIsMobile';
 
 type YonseiWord = {
   word: string;
@@ -17,6 +18,7 @@ type YonseiWord = {
 };
 
 export default function YonseiMasteredPage() {
+  const isDesktop = useIsDesktop();
   const { unitId } = useParams<{ unitId: string }>();
   const router = useRouter();
   const unit = yonseiUnits.find(u => u.id === unitId);
@@ -77,29 +79,34 @@ export default function YonseiMasteredPage() {
   };
 
   return (
-    <div className="min-h-screen pb-24" style={{ background: '#fffbf7' }}>
-      <div className="sticky top-0 z-10 flex items-center gap-3 px-4 py-3 border-b border-[var(--border-color)]" style={{ background: '#fffbf7' }}>
-        <button onClick={() => router.back()} className="p-1.5 -ml-1.5 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors">
-          <ArrowLeft size={20} />
-        </button>
-        <h1 className="text-base font-bold text-[var(--text-primary)] flex-1">已掌握单词 · {unit?.title}</h1>
-        {masteredWords.length > 0 && (
-          <button onClick={() => { setManaging(m => !m); setSelected(new Set()); setDeletePending(false); }} className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)]">
-            {managing ? '取消' : '批量管理'}
+    <div className="min-h-screen pb-24" style={{ background: 'var(--color-surface-1)' }}>
+      <div className="sticky top-0 z-10" style={{ background: 'var(--color-surface-1)', borderBottom: '1px solid var(--color-border-1)' }}>
+        <div className={isDesktop ? 'max-w-5xl mx-auto' : ''} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px' }}>
+          <button onClick={() => router.back()} style={{ padding: 6, background: 'transparent', border: 'none', color: 'var(--color-ink-3)', cursor: 'pointer' }}>
+            <ArrowLeft size={20} />
           </button>
-        )}
+          <h1 style={{ fontSize: 16, fontWeight: 700, color: 'var(--color-ink-1)', flex: 1, margin: 0 }}>已掌握单词 · {unit?.title}</h1>
+          {masteredWords.length > 0 && (
+            <button onClick={() => { setManaging(m => !m); setSelected(new Set()); setDeletePending(false); }} style={{ fontSize: 13, color: 'var(--color-ink-3)', background: 'transparent', border: 'none', cursor: 'pointer' }}>
+              {managing ? '取消' : '批量管理'}
+            </button>
+          )}
+        </div>
       </div>
 
       {managing && masteredWords.length > 0 && (
-        <div className="flex items-center justify-between px-4 py-2 border-b border-[var(--border-color)]" style={{ background: '#fffbf7' }}>
-          <button onClick={() => setSelected(allSelected ? new Set() : new Set(masteredWords.map(w => w.word)))} className="text-sm text-[var(--pink-primary)] font-medium">
-            {allSelected ? '取消全选' : '全选'}
-          </button>
-          <span className="text-xs text-[var(--text-muted)]">已选 {selected.size} 个</span>
+        <div style={{ background: 'var(--color-surface-1)', borderBottom: '1px solid var(--color-border-1)' }}>
+          <div className={isDesktop ? 'max-w-5xl mx-auto' : ''} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 16px' }}>
+            <button onClick={() => setSelected(allSelected ? new Set() : new Set(masteredWords.map(w => w.word)))} style={{ fontSize: 13, fontWeight: 600, color: 'var(--color-pink-strong)', background: 'transparent', border: 'none', cursor: 'pointer' }}>
+              {allSelected ? '取消全选' : '全选'}
+            </button>
+            <span style={{ fontSize: 12, color: 'var(--color-ink-3)' }}>已选 {selected.size} 个</span>
+          </div>
         </div>
       )}
 
-      <div className="px-4 py-3 space-y-2">
+      <div className={isDesktop ? 'max-w-5xl mx-auto px-4 py-3' : 'px-4 py-3'}>
+        <div style={{ display: 'grid', gridTemplateColumns: isDesktop ? '1fr 1fr' : '1fr', gap: 8 }}>
         {loading ? (
           <div className="flex items-center justify-center py-16">
             <div className="w-6 h-6 rounded-full border-2 border-[var(--pink-primary)] border-t-transparent animate-spin" />
@@ -163,6 +170,7 @@ export default function YonseiMasteredPage() {
             );
           })
         )}
+        </div>
       </div>
 
       {managing && selected.size > 0 && (

@@ -278,7 +278,7 @@ export default function YonseiFlashcardsPage() {
 
   return (
     <div
-      className="flex flex-col px-4 pt-4"
+      className="flex flex-col px-4 pt-4 max-w-2xl mx-auto w-full"
       style={{ minHeight: 'calc(100dvh - 56px - env(safe-area-inset-bottom, 0px))', paddingBottom: 'calc(16px + env(safe-area-inset-bottom, 0px))' }}
     >
       {/* Header */}

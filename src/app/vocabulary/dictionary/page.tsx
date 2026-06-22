@@ -11,8 +11,11 @@ import { db } from '@/lib/db';
 import type { WordEntry } from '@/types';
 import { speak, speakWord } from '@/lib/tts';
 import { TappableText } from '@/components/TappableText';
+import { useIsDesktop } from '@/lib/useIsMobile';
+import { PageHeader } from '@/components/ui';
 
 export default function DictionaryPage() {
+  const isDesktop = useIsDesktop();
   const [searchQuery, setSearchQuery] = useState('');
   const [sceneFilter, setSceneFilter] = useState<string>('全部');
   const [emotionFilter, setEmotionFilter] = useState<string>('全部');
@@ -134,20 +137,26 @@ export default function DictionaryPage() {
   };
 
   return (
-    <div className="py-4 space-y-5 pb-24">
-      {/* Header */}
-      <div>
-        <Link href="/vocabulary/library" className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] mb-3">
-          <ArrowLeft size={16} />
-          返回词库
-        </Link>
-        <h1 className="text-2xl font-bold text-[var(--text-primary)] flex items-center gap-2">
-          📖 情景词典
-        </h1>
-        <p className="text-sm text-[var(--text-secondary)] mt-1">
-          中文搜韩语，场景找单词，情绪查表达。精准匹配用法和语境。
-        </p>
-      </div>
+    <div className={isDesktop ? 'py-4 max-w-5xl mx-auto pb-24' : 'py-4 max-w-2xl mx-auto pb-24'}>
+      <Link
+        href="/vocabulary/library"
+        style={{
+          display: 'inline-flex', alignItems: 'center', gap: 6,
+          fontSize: 13, color: 'var(--color-ink-2)', textDecoration: 'none',
+          marginBottom: 14,
+        }}
+      >
+        <ArrowLeft size={14} />
+        返回词库
+      </Link>
+
+      <PageHeader
+        eyebrow="DICTIONARY"
+        title="情景词典"
+        subtitle="中文搜韩语，场景找单词，情绪查表达。精准匹配用法和语境。"
+        tone="purple"
+        flat
+      />
 
       {/* Search bar */}
       <div className="relative">

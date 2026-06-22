@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 
 export interface SheetProps {
@@ -43,8 +44,9 @@ export function Sheet({
   }, [open, onClose]);
 
   if (!open) return null;
+  if (typeof window === 'undefined') return null;
 
-  return (
+  return createPortal(
     <>
       <div
         onClick={closeOnBackdrop ? onClose : undefined}
@@ -129,6 +131,7 @@ export function Sheet({
         )}
         {children}
       </div>
-    </>
+    </>,
+    document.body
   );
 }
