@@ -65,21 +65,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="min-h-screen antialiased page-corner-bunny">
-        {/* 维护公告弹窗 */}
-        <div id="maintenance-overlay" style={{position:'fixed',inset:0,zIndex:99999,background:'rgba(0,0,0,0.7)',display:'flex',alignItems:'center',justifyContent:'center',padding:'24px'}}>
-          <div style={{background:'#fffbf7',borderRadius:'20px',padding:'32px 28px',maxWidth:'360px',width:'100%',textAlign:'center',boxShadow:'0 8px 40px rgba(0,0,0,0.18)'}}>
-            <div style={{fontSize:'40px',marginBottom:'16px'}}>🔧</div>
-            <div style={{fontSize:'20px',fontWeight:'800',color:'#241917',marginBottom:'12px',lineHeight:'1.4'}}>系统升级中</div>
-            <div style={{fontSize:'15px',color:'#5a4640',lineHeight:'1.7',marginBottom:'16px'}}>
-              目前网站正在进行<strong>用户数据库升级</strong>及<strong>服务器扩容</strong>，预计很快恢复上线。
-            </div>
-            <div style={{background:'#fff0f5',borderRadius:'12px',padding:'12px 16px',marginBottom:'20px'}}>
-              <div style={{fontSize:'14px',fontWeight:'700',color:'#ff7fa8',marginBottom:'4px'}}>⚠️ 暂时无法登录</div>
-              <div style={{fontSize:'13px',color:'#89756e',lineHeight:'1.6'}}>升级期间暂时无法登录，请稍后再来。</div>
-            </div>
-            <div style={{fontSize:'13px',color:'#89756e'}}>torikorean.com</div>
-          </div>
-        </div>
         <ThemeProvider>
           <FontProvider>
           <LangProvider>

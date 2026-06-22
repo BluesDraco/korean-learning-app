@@ -11,38 +11,29 @@ interface Props {
   onComplete: () => void;
 }
 
-type OnboardingGoal = 'shadowing' | 'analysis' | 'explore';
-
-const GOAL_ROUTES: Record<OnboardingGoal, string> = {
-  shadowing: '/shadowing',
-  analysis: '/ai/analyze',
-  explore: '/daily',
-};
+const FEATURES = [
+  { emoji: '🎬', label: '影子跟读', desc: '用韩剧、采访片段一句一句练听说' },
+  { emoji: '🎵', label: 'KPOP 跟唱', desc: '跟着喜欢的歌学韩语，边唱边记' },
+  { emoji: '🔍', label: '内容拆解', desc: '粘贴韩文，马上看懂意思和用法' },
+  { emoji: '📖', label: '语法课程', desc: '30天入门，系统打好语法基础' },
+  { emoji: '🃏', label: '闪卡复习', desc: 'SRS间隔重复，高效记忆单词' },
+  { emoji: '🗞️', label: '韩娱热帖', desc: '读真实的韩娱内容，顺便学韩语' },
+];
 
 export default function Onboarding({ onComplete }: Props) {
   const router = useRouter();
   const { lang, setLang: setContextLang } = useLang();
-  // step -1 = language select, 0 = greeting, 1 = goal
+  // step -1 = language select, 0 = greeting, 1 = feature showcase
   const [step, setStep] = useState<-1 | 0 | 1>(-1);
-  const [selectedGoal, setSelectedGoal] = useState<OnboardingGoal | null>(null);
   const [animating, setAnimating] = useState(false);
 
-  const goalOptions = [
-    { key: 'shadowing' as OnboardingGoal, emoji: '🎬', label: t('onboarding.goal_shadowing', lang), desc: t('onboarding.goal_shadowing_desc', lang) },
-    { key: 'analysis' as OnboardingGoal, emoji: '🔍', label: t('onboarding.goal_analyze', lang), desc: t('onboarding.goal_analyze_desc', lang) },
-    { key: 'explore' as OnboardingGoal, emoji: '🧭', label: t('onboarding.goal_explore', lang), desc: t('onboarding.goal_explore_desc', lang) },
-  ];
-
-  const completeAndRedirect = useCallback(async (goal: OnboardingGoal | null) => {
+  const completeAndRedirect = useCallback(async () => {
     try { await updateProfile({ onboardingComplete: true }); } catch { /* not critical */ }
     fetch('/api/auth/onboarding', { method: 'POST' }).catch(() => {});
     try { await awardXp(10); } catch { /* not critical */ }
     try { await updateStreak(); } catch { /* not critical */ }
-    if (typeof window !== 'undefined' && goal) {
-      try { localStorage.setItem('tori_onboarding_goal', goal); } catch { /* not critical */ }
-    }
     onComplete();
-    router.replace(goal ? GOAL_ROUTES[goal] : '/daily');
+    router.replace('/daily');
   }, [onComplete, router]);
 
   const pickLang = useCallback(async (l: Lang) => {
@@ -61,23 +52,13 @@ export default function Onboarding({ onComplete }: Props) {
     setStep(1);
   }, []);
 
-  const handleStart = useCallback(async () => {
-    if (!selectedGoal) return;
-    await completeAndRedirect(selectedGoal);
-  }, [selectedGoal, completeAndRedirect]);
-
-  const handleSkip = useCallback(async () => {
-    await completeAndRedirect(null);
-  }, [completeAndRedirect]);
-
-  // progress dots only for step 0 and 1
   const totalSteps = 2;
 
   return (
     <div className="fixed inset-0 z-[100] bg-[var(--bg-base)] flex items-center justify-center p-4">
       <div className="w-full max-w-md">
 
-        {/* Progress dots (hidden on language step) */}
+        {/* Progress dots */}
         {step >= 0 && (
           <div className="flex justify-center gap-2 mb-8">
             {Array.from({ length: totalSteps }).map((_, i) => (
@@ -158,54 +139,38 @@ export default function Onboarding({ onComplete }: Props) {
             </div>
           )}
 
-          {/* ── Step 1: Start method selection ── */}
+          {/* ── Step 1: Feature showcase ── */}
           {step === 1 && (
             <div className="space-y-5">
               <div>
-                <h2 className="text-xl font-bold text-[var(--text-primary)] mb-2">
-                  {t('onboarding.goal_title', lang)}
+                <h2 className="text-xl font-bold text-[var(--text-primary)] mb-1">
+                  Tori 能帮你做什么？
                 </h2>
                 <p className="text-sm text-[var(--text-muted)]">
-                  {t('onboarding.goal_subtitle', lang)}
+                  所有功能随时可用，想从哪里开始都行。
                 </p>
               </div>
 
-              <div className="space-y-3">
-                {goalOptions.map((opt) => (
-                  <button
-                    key={opt.key}
-                    onClick={() => setSelectedGoal(opt.key)}
-                    className={`w-full flex items-center gap-4 p-4 rounded-xl border transition-all text-left ${
-                      selectedGoal === opt.key
-                        ? 'bg-[var(--pink-primary)]/10 border-[var(--pink-primary)]/50'
-                        : 'bg-[var(--bg-soft)] border-[var(--border-color)] hover:border-[var(--border-hover)]'
-                    }`}
+              <div className="grid grid-cols-2 gap-2 text-left">
+                {FEATURES.map((f) => (
+                  <div
+                    key={f.label}
+                    className="flex flex-col gap-1 p-3 rounded-xl bg-[var(--bg-soft)] border border-[var(--border-color)]"
                   >
-                    <span className="text-2xl">{opt.emoji}</span>
-                    <div className="flex-1 text-left">
-                      <div className="text-sm font-medium text-[var(--text-primary)]">{opt.label}</div>
-                      <div className="text-xs text-[var(--text-secondary)]">{opt.desc}</div>
-                    </div>
-                  </button>
+                    <span className="text-xl">{f.emoji}</span>
+                    <div className="text-xs font-semibold text-[var(--text-primary)]">{f.label}</div>
+                    <div className="text-[11px] text-[var(--text-muted)] leading-snug">{f.desc}</div>
+                  </div>
                 ))}
               </div>
 
-              <div className="space-y-3">
-                <button
-                  onClick={handleStart}
-                  disabled={!selectedGoal}
-                  className="w-full flex items-center justify-center gap-2 py-3.5 bg-[var(--pink-primary)] hover:brightness-90 text-white rounded-2xl font-bold text-sm transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100"
-                >
-                  {t('onboarding.start_btn', lang)}
-                  <ArrowRight size={18} />
-                </button>
-                <button
-                  onClick={handleSkip}
-                  className="w-full py-3 text-[var(--text-muted)] text-sm hover:text-[var(--text-secondary)] transition-colors"
-                >
-                  {t('onboarding.skip_btn', lang)}
-                </button>
-              </div>
+              <button
+                onClick={completeAndRedirect}
+                className="w-full flex items-center justify-center gap-2 py-3.5 bg-[var(--pink-primary)] hover:brightness-90 text-white rounded-2xl font-bold text-sm transition-all active:scale-95"
+              >
+                开始使用 Tori
+                <ArrowRight size={18} />
+              </button>
             </div>
           )}
         </div>
@@ -213,3 +178,4 @@ export default function Onboarding({ onComplete }: Props) {
     </div>
   );
 }
+
