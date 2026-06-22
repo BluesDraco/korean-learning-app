@@ -6,9 +6,8 @@ import { ArrowLeft, Trash2, PenLine } from 'lucide-react';
 import { db } from '@/lib/db';
 import type { DictationRecord } from '@/types';
 import { DictationSession } from '@/components/dictation/DictationSession';
-import type { DictationItem } from '@/components/dictation/DictationSession';
-import { useTheme } from '@/components/ThemeProvider';
-import { LIGHT_C, DARK_C } from '@/lib/theme';
+import { useIsDesktop } from '@/lib/useIsMobile';
+import { PageHeader, Section, Card, Button } from '@/components/ui';
 
 interface MistakeGroup {
   korean: string;
@@ -19,9 +18,8 @@ interface MistakeGroup {
 }
 
 export default function DictationMistakesPage() {
-  const { theme } = useTheme();
-  const C = theme === 'dark' ? DARK_C : LIGHT_C;
   const router = useRouter();
+  const isDesktop = useIsDesktop();
   const [mistakes, setMistakes] = useState<MistakeGroup[]>([]);
   const [loading, setLoading] = useState(true);
   const [practicing, setPracticing] = useState(false);
@@ -32,13 +30,7 @@ export default function DictationMistakesPage() {
       const grouped: Record<string, MistakeGroup> = {};
       for (const r of wrongRecords) {
         if (!grouped[r.wordId]) {
-          grouped[r.wordId] = {
-            korean: r.wordId,
-            meaning: r.meaning || '',
-            wrongCount: 0,
-            lastWrongAt: 0,
-            records: [],
-          };
+          grouped[r.wordId] = { korean: r.wordId, meaning: r.meaning || '', wrongCount: 0, lastWrongAt: 0, records: [] };
         }
         grouped[r.wordId].wrongCount++;
         if (r.date > grouped[r.wordId].lastWrongAt) grouped[r.wordId].lastWrongAt = r.date;
@@ -76,68 +68,105 @@ export default function DictationMistakesPage() {
     );
   }
 
-  return (
-    <div style={{ minHeight: '100vh', background: C.bg, paddingBottom: 40 }}>
-      {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '16px 16px 0' }}>
-        <button onClick={() => router.back()} style={{ width: 36, height: 36, borderRadius: '50%', border: `1px solid ${C.line}`, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-          <ArrowLeft size={16} style={{ color: C.muted }} />
-        </button>
-        <div>
-          <h1 style={{ fontSize: 18, fontWeight: 900, color: C.ink, margin: 0 }}>默写错题本</h1>
-          <p style={{ fontSize: 12, color: C.muted, margin: 0 }}>{mistakes.length} 个词需要加强</p>
-        </div>
-      </div>
+  const containerCls = isDesktop ? 'py-4 max-w-4xl mx-auto' : 'py-4 max-w-2xl mx-auto';
 
-      <div style={{ padding: '16px 16px 0' }}>
-        {loading ? (
-          <div style={{ textAlign: 'center', paddingTop: 60, color: C.muted, fontSize: 14 }}>加载中...</div>
-        ) : mistakes.length === 0 ? (
-          <div style={{ textAlign: 'center', paddingTop: 60 }}>
+  return (
+    <div className={containerCls} style={{ paddingBottom: 40 }}>
+      <button
+        onClick={() => router.back()}
+        style={{
+          display: 'inline-flex', alignItems: 'center', gap: 6,
+          fontSize: 13, color: 'var(--color-ink-2)', background: 'transparent', border: 'none',
+          padding: 0, cursor: 'pointer', marginBottom: 14,
+        }}
+      >
+        <ArrowLeft size={16} />
+        返回
+      </button>
+
+      <PageHeader
+        eyebrow="MISTAKE BOOK"
+        title="默写错题本"
+        subtitle={`${mistakes.length} 个词需要加强`}
+        tone="pink"
+        flat
+      />
+
+      {loading ? (
+        <Card variant="default" padding="lg" style={{ textAlign: 'center' }}>
+          <p style={{ fontSize: 14, color: 'var(--color-ink-3)', margin: 0 }}>加载中…</p>
+        </Card>
+      ) : mistakes.length === 0 ? (
+        <Card variant="hero" tone="mint" padding="lg">
+          <div style={{ textAlign: 'center' }}>
             <div style={{ fontSize: 48, marginBottom: 12 }}>🎉</div>
-            <p style={{ fontSize: 16, fontWeight: 700, color: C.ink }}>暂无错题</p>
-            <p style={{ fontSize: 13, color: C.muted, marginTop: 4 }}>完成默写练习后，答错的词会出现在这里</p>
-            <button
-              onClick={() => router.push('/dictation')}
-              style={{ marginTop: 20, padding: '12px 28px', borderRadius: 14, background: C.pink, color: '#fff', fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer' }}
-            >
+            <p style={{ fontSize: 16, fontWeight: 800, color: 'var(--color-ink-1)', margin: 0 }}>暂无错题</p>
+            <p style={{ fontSize: 13, color: 'var(--color-ink-3)', margin: '4px 0 18px' }}>
+              完成默写练习后，答错的词会出现在这里
+            </p>
+            <Button variant="primary" tone="pink" onClick={() => router.push('/dictation')}>
               去默写练习
-            </button>
+            </Button>
           </div>
-        ) : (
-          <>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {mistakes.map(m => (
-                <div key={m.korean} style={{ background: '#fff', borderRadius: 16, border: `1px solid ${C.line}`, padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 12 }}>
+        </Card>
+      ) : (
+        <Section spacing="normal">
+          <div style={{ display: 'grid', gridTemplateColumns: isDesktop ? '1fr 1fr' : '1fr', gap: 10 }}>
+            {mistakes.map(m => (
+              <Card key={m.korean} variant="default" padding="md">
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <span style={{ fontSize: 18, fontWeight: 900, color: C.ink }}>{m.korean}</span>
-                      <span style={{ fontSize: 11, fontWeight: 700, color: C.pink, background: C.pinkSoft, borderRadius: 6, padding: '2px 7px' }}>×{m.wrongCount}</span>
+                      <span style={{ fontSize: 18, fontWeight: 900, color: 'var(--color-ink-1)' }}>{m.korean}</span>
+                      <span
+                        style={{
+                          fontSize: 11, fontWeight: 700,
+                          color: 'var(--color-pink-strong)', background: 'var(--color-pink-soft)',
+                          borderRadius: 6, padding: '2px 8px',
+                        }}
+                      >
+                        ×{m.wrongCount}
+                      </span>
                     </div>
-                    {m.meaning && <p style={{ fontSize: 12, color: C.muted, margin: '2px 0 0' }}>{m.meaning}</p>}
-                    <p style={{ fontSize: 11, color: '#c4a89e', margin: '2px 0 0' }}>最近出错 {formatDate(m.lastWrongAt)}</p>
+                    {m.meaning && (
+                      <p style={{ fontSize: 12, color: 'var(--color-ink-3)', margin: '2px 0 0' }}>{m.meaning}</p>
+                    )}
+                    <p style={{ fontSize: 11, color: 'var(--color-ink-4)', margin: '2px 0 0' }}>
+                      最近出错 {formatDate(m.lastWrongAt)}
+                    </p>
                   </div>
                   <button
                     onClick={() => handleMastered(m.korean)}
-                    style={{ width: 34, height: 34, borderRadius: 10, border: `1px solid ${C.line}`, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}
                     title="已掌握，从错题本移除"
+                    style={{
+                      width: 34, height: 34, borderRadius: 'var(--radius-md)',
+                      border: '1px solid var(--color-border-2)', background: 'var(--color-surface-2)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      cursor: 'pointer', flexShrink: 0,
+                      color: 'var(--color-ink-3)',
+                    }}
                   >
-                    <Trash2 size={15} style={{ color: C.muted }} />
+                    <Trash2 size={15} />
                   </button>
                 </div>
-              ))}
-            </div>
+              </Card>
+            ))}
+          </div>
 
-            <button
+          <div style={{ marginTop: 20 }}>
+            <Button
+              variant="primary"
+              tone="black"
+              size="lg"
+              fullWidth
+              icon={<PenLine size={16} />}
               onClick={() => setPracticing(true)}
-              style={{ width: '100%', marginTop: 20, padding: '14px 0', borderRadius: 14, background: C.ink, color: '#fff', fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
             >
-              <PenLine size={16} />
               再练一遍
-            </button>
-          </>
-        )}
-      </div>
+            </Button>
+          </div>
+        </Section>
+      )}
     </div>
   );
 }

@@ -14,6 +14,7 @@ import { speakWord, speak } from '@/lib/tts';
 import { TappableText } from '@/components/TappableText';
 import { getEntry, getEntryByKorean } from '@/data/vocabulary/index';
 import { updateProfile } from '@/lib/gamification';
+import { PageHeader, Section, Card, Button } from '@/components/ui';
 import type { Word, WordBook, MasteryLevel, WordEntry } from '@/types';
 
 interface SavedSentence {
@@ -173,14 +174,14 @@ function GoalWheelPicker({ current, unmastered, onClose, onConfirm }: {
       <div className="absolute inset-0 bg-black/20" />
       <div
         className="relative w-full max-w-md rounded-t-3xl"
-        style={{ background: '#fff', borderTop: '1px solid #eee0d8' }}
+        style={{ background: 'var(--color-surface-2)', borderTop: '1px solid var(--color-border-1)' }}
         onClick={e => e.stopPropagation()}
       >
         <div className="flex items-center justify-between px-5 pt-5 pb-3">
-          <h3 className="text-base font-black" style={{ color: '#241917' }}>设置复习计划</h3>
-          <button onClick={onClose} style={{ color: '#89756e' }}><X size={20} /></button>
+          <h3 className="text-base font-black" style={{ color: 'var(--color-ink-1)' }}>设置复习计划</h3>
+          <button onClick={onClose} style={{ color: 'var(--color-ink-3)' }}><X size={20} /></button>
         </div>
-        <p className="text-xs px-5 pb-4" style={{ color: '#89756e' }}>
+        <p className="text-xs px-5 pb-4" style={{ color: 'var(--color-ink-3)' }}>
           共 {unmastered} 个未掌握单词 · 每天复习 {GOAL_OPTIONS[selectedIdx]} 个 · 约需 {days > 0 ? `${days} 天` : '—'}
         </p>
 
@@ -193,18 +194,18 @@ function GoalWheelPicker({ current, unmastered, onClose, onConfirm }: {
         >
           <div className="absolute left-0 right-0 pointer-events-none z-10" style={{
             top: ITEM_H * 2, height: ITEM_H,
-            background: 'rgba(255,127,168,.1)',
-            borderTop: '1.5px solid rgba(255,127,168,.4)',
-            borderBottom: '1.5px solid rgba(255,127,168,.4)',
+            background: 'var(--color-pink-soft)',
+            borderTop: '1.5px solid var(--color-pink-base)',
+            borderBottom: '1.5px solid var(--color-pink-base)',
           }} />
-          <div className="absolute inset-x-0 top-0 pointer-events-none z-10" style={{ height: ITEM_H * 2, background: 'linear-gradient(to bottom, #fff, rgba(255,255,255,0))' }} />
-          <div className="absolute inset-x-0 bottom-0 pointer-events-none z-10" style={{ height: ITEM_H * 2, background: 'linear-gradient(to top, #fff, rgba(255,255,255,0))' }} />
+          <div className="absolute inset-x-0 top-0 pointer-events-none z-10" style={{ height: ITEM_H * 2, background: 'linear-gradient(to bottom, var(--color-surface-2), transparent)' }} />
+          <div className="absolute inset-x-0 bottom-0 pointer-events-none z-10" style={{ height: ITEM_H * 2, background: 'linear-gradient(to top, var(--color-surface-2), transparent)' }} />
           <div ref={itemsRef} style={{ transform: `translateY(${ITEM_H * 2 + (-initIdx * ITEM_H)}px)`, transition: 'none' }}>
             {GOAL_OPTIONS.map((n, i) => (
               <div key={n} style={{
                 height: ITEM_H, display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontSize: i === selectedIdx ? 28 : 20, fontWeight: 900,
-                color: i === selectedIdx ? '#ff7fa8' : '#c4a89e',
+                color: i === selectedIdx ? 'var(--color-pink-strong)' : 'var(--color-ink-4)',
                 transition: 'font-size 0.15s, color 0.15s',
               }}>
                 {n} 个/天
@@ -217,7 +218,7 @@ function GoalWheelPicker({ current, unmastered, onClose, onConfirm }: {
           <button
             onClick={() => onConfirm(GOAL_OPTIONS[selectedIdx])}
             className="w-full py-3.5 rounded-2xl text-white font-black text-sm"
-            style={{ background: '#ff7fa8', boxShadow: '0 8px 20px rgba(255,127,168,.35)' }}
+            style={{ background: 'var(--color-pink-base)', boxShadow: 'var(--shadow-md)' }}
           >
             确认
           </button>
@@ -765,13 +766,13 @@ function VocabularyContent() {
             {/* 打字练习快捷入口 */}
             <button
               onClick={() => router.push('/typing')}
-              style={{ width: '100%', padding: '12px 16px', borderRadius: 16, background: '#eaf8f5', border: '1.5px solid #aee3d8', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}
+              style={{ width: '100%', padding: '12px 16px', borderRadius: 16, background: 'var(--color-mint-soft)', border: '1.5px solid var(--color-mint-base)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}
             >
               <div style={{ textAlign: 'left' }}>
-                <p style={{ fontSize: 14, fontWeight: 700, color: '#241917', margin: 0 }}>用这些句子练打字</p>
-                <p style={{ fontSize: 12, color: '#3aafa9', margin: '2px 0 0' }}>{sentences.length} 条句子已可用</p>
+                <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>用这些句子练打字</p>
+                <p style={{ fontSize: 12, color: 'var(--color-mint-strong)', margin: '2px 0 0' }}>{sentences.length} 条句子已可用</p>
               </div>
-              <ChevronRight size={18} style={{ color: '#3aafa9', flexShrink: 0 }} />
+              <ChevronRight size={18} style={{ color: 'var(--color-mint-strong)', flexShrink: 0 }} />
             </button>
 
             <p className="text-xs text-[var(--text-muted)]">共 {sentences.length} 条句子</p>
@@ -805,7 +806,7 @@ function VocabularyContent() {
                         <button onClick={() => speakWord(s.korean, 0.75)} className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors" title="听发音">
                           <Volume2 size={14} />
                         </button>
-                        <button onClick={() => handleCopy(s.id, s.korean)} className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] transition-colors" style={{ color: copiedSentenceId === s.id ? '#3aafa9' : 'var(--text-muted)' }} title="复制">
+                        <button onClick={() => handleCopy(s.id, s.korean)} className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] transition-colors" style={{ color: copiedSentenceId === s.id ? 'var(--color-mint-strong)' : 'var(--text-muted)' }} title="复制">
                           {copiedSentenceId === s.id ? <Check size={14} /> : <Copy size={14} />}
                         </button>
                         <button onClick={() => handleDeleteSentence(s.id, s.korean)} className="p-1.5 rounded-lg hover:bg-red-50 text-[var(--text-muted)] hover:text-red-500 transition-colors" title="删除">
@@ -820,7 +821,7 @@ function VocabularyContent() {
                     <div className="border-t border-[var(--border-color)] px-4 pt-3 pb-4">
                       {isLoadingThis ? (
                         <div className="flex items-center justify-center py-4">
-                          <Loader2 size={18} className="animate-spin" style={{ color: '#ff7fa8' }} />
+                          <Loader2 size={18} className="animate-spin" style={{ color: 'var(--color-pink-strong)' }} />
                         </div>
                       ) : analysis && analysis !== 'error' ? (
                         <div className="space-y-3">
@@ -881,66 +882,87 @@ function VocabularyContent() {
   const s = quickStats;
   return (
     <>
-    <div className="py-4 space-y-5 max-w-2xl mx-auto md:max-w-3xl">
-      <div className="flex items-center justify-between px-1">
-        <div>
-          <h1 className="text-[26px] font-black text-[var(--text-primary)] tracking-tight leading-none">词汇</h1>
-          <p className="text-xs text-[var(--text-muted)] mt-1">我的单词与词库</p>
-        </div>
-      </div>
+    <div className="py-4 max-w-2xl mx-auto">
+      <PageHeader
+        eyebrow="단어"
+        title="词汇"
+        subtitle="我的单词与词库"
+        tone="pink"
+        flat
+      />
 
       {/* Today task card */}
-      <div className="rounded-[28px] p-5 relative overflow-hidden bg-[var(--bg-card)] border border-[var(--border-default)]">
-        <div className="absolute -right-5 -top-5 w-[100px] h-[100px] rounded-full" style={{ background: 'rgba(255,127,168,.1)' }} />
-        <div className="absolute right-5 -bottom-8 w-[70px] h-[70px] rounded-full" style={{ background: 'rgba(174,227,216,.15)' }} />
-        <div className="flex items-center justify-between gap-2 mb-4 relative z-[1]">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[var(--pink-primary)] inline-block" />
-            <span className="text-xs font-bold text-[var(--pink-primary)]">今日闪卡复习</span>
+      <Section spacing="normal">
+        <Card variant="hero" tone="pink" padding="lg">
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 16 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--color-pink-base)', display: 'inline-block' }} />
+              <span style={{ fontSize: 12, fontWeight: 800, color: 'var(--color-pink-strong)' }}>今日闪卡复习</span>
+            </div>
+            <Button
+              variant="primary"
+              tone="pink"
+              size="sm"
+              icon={<Target size={11} />}
+              onClick={() => setShowGoalPicker(true)}
+            >
+              设置复习计划
+            </Button>
           </div>
-          <button
-            onClick={() => setShowGoalPicker(true)}
-            className="flex items-center gap-1 text-[11px] font-bold px-3 py-1.5 rounded-full transition-colors"
-            style={{ background: 'var(--pink-primary)', color: '#fff' }}
-          >
-            <Target size={11} />
-            设置复习计划
-          </button>
-        </div>
-        <div className="grid grid-cols-3 gap-2 mb-4 relative z-[1]">
-          <button
-            onClick={handleOpenDueSheet}
-            className="rounded-2xl p-3 text-center transition-all active:scale-95"
-            style={{ background: 'var(--bg-muted)' }}
-          >
-            {loading ? <div className="h-8 w-8 mx-auto rounded bg-white/60 animate-pulse" /> : (
-              <p className="text-[26px] font-black text-[var(--pink-primary)] leading-none">{s.dueReview}</p>
-            )}
-            <p className="text-[10px] text-[var(--text-muted)] mt-1">待复习{s.dueReview > 0 ? ' →' : ''}</p>
-          </button>
-          <div className="rounded-2xl p-3 text-center" style={{ background: 'var(--bg-muted)' }}>
-            {loading ? <div className="h-8 w-8 mx-auto rounded bg-white/60 animate-pulse" /> : (
-              <p className="text-[26px] font-black leading-none" style={{ color: '#A78BFA' }}>{Math.min(s.newWords, 5)}</p>
-            )}
-            <p className="text-[10px] text-[var(--text-muted)] mt-1">推荐新词</p>
-          </div>
-          <div className="rounded-2xl p-3 text-center" style={{ background: 'var(--bg-muted)' }}>
-            {loading ? <div className="h-8 w-8 mx-auto rounded bg-white/60 animate-pulse" /> : (
-              <p className="text-[26px] font-black text-[var(--text-muted)] leading-none">
-                {dailyGoal > 0 && s.total > 0 ? Math.ceil((s.total - s.mastered) / dailyGoal) : '—'}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, marginBottom: 16 }}>
+            <button
+              onClick={handleOpenDueSheet}
+              style={{
+                borderRadius: 'var(--radius-md)', padding: 12, textAlign: 'center',
+                background: 'var(--color-surface-2)', border: '1px solid var(--color-border-1)',
+                cursor: 'pointer', transition: 'transform var(--dur-fast) var(--ease-soft)',
+              }}
+            >
+              {loading ? (
+                <div style={{ height: 32, width: 32, margin: '0 auto', borderRadius: 6, background: 'var(--color-surface-4)' }} />
+              ) : (
+                <p style={{ fontSize: 26, fontWeight: 900, color: 'var(--color-pink-strong)', lineHeight: 1, margin: 0 }}>{s.dueReview}</p>
+              )}
+              <p style={{ fontSize: 10, color: 'var(--color-ink-3)', margin: '4px 0 0' }}>
+                待复习{s.dueReview > 0 ? ' →' : ''}
               </p>
-            )}
-            <p className="text-[10px] text-[var(--text-muted)] mt-1">预计天数</p>
+            </button>
+            <div
+              style={{
+                borderRadius: 'var(--radius-md)', padding: 12, textAlign: 'center',
+                background: 'var(--color-surface-2)', border: '1px solid var(--color-border-1)',
+              }}
+            >
+              {loading ? (
+                <div style={{ height: 32, width: 32, margin: '0 auto', borderRadius: 6, background: 'var(--color-surface-4)' }} />
+              ) : (
+                <p style={{ fontSize: 26, fontWeight: 900, color: 'var(--color-purple-strong)', lineHeight: 1, margin: 0 }}>{Math.min(s.newWords, 5)}</p>
+              )}
+              <p style={{ fontSize: 10, color: 'var(--color-ink-3)', margin: '4px 0 0' }}>推荐新词</p>
+            </div>
+            <div
+              style={{
+                borderRadius: 'var(--radius-md)', padding: 12, textAlign: 'center',
+                background: 'var(--color-surface-2)', border: '1px solid var(--color-border-1)',
+              }}
+            >
+              {loading ? (
+                <div style={{ height: 32, width: 32, margin: '0 auto', borderRadius: 6, background: 'var(--color-surface-4)' }} />
+              ) : (
+                <p style={{ fontSize: 26, fontWeight: 900, color: 'var(--color-ink-3)', lineHeight: 1, margin: 0 }}>
+                  {dailyGoal > 0 && s.total > 0 ? Math.ceil((s.total - s.mastered) / dailyGoal) : '—'}
+                </p>
+              )}
+              <p style={{ fontSize: 10, color: 'var(--color-ink-3)', margin: '4px 0 0' }}>预计天数</p>
+            </div>
           </div>
-        </div>
-        <Link
-          href="/review"
-          className="block w-full py-3.5 text-white text-center rounded-[18px] font-bold text-sm transition-all relative z-[1]"
-          style={{ background: 'var(--pink-primary)', boxShadow: '0 8px 20px rgba(255,127,168,.35)' }}
-        >
-          {s.total === 0 ? '先去词库导入单词' : s.dueReview === 0 && s.newWords === 0 ? '今日已全部完成 ✓' : '开始闪卡复习'}
-        </Link>
-      </div>
+          <Link href="/review" style={{ textDecoration: 'none' }}>
+            <Button variant="primary" tone="pink" fullWidth size="lg">
+              {s.total === 0 ? '先去词库导入单词' : s.dueReview === 0 && s.newWords === 0 ? '今日已全部完成 ✓' : '开始闪卡复习'}
+            </Button>
+          </Link>
+        </Card>
+      </Section>
 
       {showGoalPicker && (
         <GoalWheelPicker
@@ -956,87 +978,118 @@ function VocabularyContent() {
       )}
 
       {/* Library entry */}
-      <Link
-        href="/vocabulary/library"
-        className="flex items-center gap-4 rounded-[20px] bg-[var(--bg-card)] border border-[var(--border-color)] px-4 py-4 hover:border-[var(--pink-primary)] hover:shadow-sm transition-all group"
-      >
-        <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-[22px] shrink-0" style={{ background: 'linear-gradient(135deg, #FFE4EC, #EAF8F5)' }}>
-          📖
-        </div>
-        <div className="flex-1">
-          <p className="text-sm font-bold text-[var(--text-primary)]">韩语词库</p>
-          <p className="text-[11px] text-[var(--text-muted)] mt-0.5">主题词包 · 分级词表 · 延世教材 · 情景词典</p>
-          <p className="text-[10px] text-[var(--pink-primary)] mt-1 font-medium">本周持续补全中 ✦</p>
-        </div>
-        <div className="w-7 h-7 rounded-full bg-[var(--bg-input)] flex items-center justify-center text-[var(--text-muted)] group-hover:bg-[var(--pink-primary)] group-hover:text-white transition-all shrink-0 text-lg">
-          ›
-        </div>
-      </Link>
+      <Section spacing="normal">
+        <Card as="a" href="/vocabulary/library" variant="row" interactive>
+          <div
+            style={{
+              width: 44, height: 44, borderRadius: 'var(--radius-md)',
+              background: 'var(--color-purple-soft)', color: 'var(--color-purple-strong)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+            }}
+            aria-hidden
+          >
+            <Library size={20} strokeWidth={1.75} />
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>韩语词库</p>
+            <p style={{ fontSize: 11, color: 'var(--color-ink-3)', margin: '2px 0 0' }}>
+              主题词包 · 分级词表 · 延世教材 · 情景词典
+            </p>
+            <p style={{ fontSize: 10, color: 'var(--color-pink-strong)', margin: '4px 0 0', fontWeight: 600 }}>
+              本周持续补全中 ✦
+            </p>
+          </div>
+          <ChevronRight size={18} color="var(--color-ink-4)" />
+        </Card>
+      </Section>
 
       {/* Word books */}
-      <div>
-        <div className="flex items-center justify-between mb-3 px-1">
-          <div className="flex items-center gap-2">
-            <span className="w-[22px] h-[22px] rounded-[8px] bg-[var(--pink-pale)] flex items-center justify-center text-xs">📚</span>
-            <span className="text-[15px] font-black text-[var(--text-primary)]">我的单词本</span>
-          </div>
-          <Link href="/vocabulary/books" className="flex items-center gap-1 text-xs px-3 py-1.5 rounded-full bg-[var(--pink-pale)] text-[var(--pink-primary)] font-bold hover:bg-[#FFD0E0] transition-colors">
-            <Plus size={11} />新建
-          </Link>
-        </div>
-
-        <div className="space-y-2">
+      <Section
+        title="我的单词本"
+        action={wordBooks.length > 0 ? { label: '新建', href: '/vocabulary/books' } : undefined}
+        spacing="normal"
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {loading ? (
-            <div className="h-16 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-color)] animate-pulse" />
+            <div style={{ height: 64, borderRadius: 'var(--radius-md)', background: 'var(--color-surface-3)' }} />
           ) : wordBooks.length === 0 ? (
-            <Link href="/vocabulary/books" className="flex items-center justify-center gap-2 rounded-[20px] border-[1.5px] border-dashed border-[#D9CBC3] py-5 text-[var(--text-muted)] text-sm font-semibold hover:border-[var(--pink-primary)] hover:text-[var(--pink-primary)] hover:bg-[var(--pink-pale)] transition-all">
-              <span className="w-[22px] h-[22px] rounded-full bg-[var(--bg-card)] border border-[var(--border-color)] flex items-center justify-center text-sm font-bold">+</span>
-              新建第一个单词本
+            <Link href="/vocabulary/books" style={{ textDecoration: 'none' }}>
+              <div
+                style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                  borderRadius: 'var(--radius-md)',
+                  border: '1.5px dashed var(--color-border-2)',
+                  padding: 20,
+                  color: 'var(--color-ink-3)',
+                  fontSize: 14, fontWeight: 600,
+                  transition: 'all var(--dur-fast) var(--ease-soft)',
+                }}
+              >
+                <Plus size={16} />
+                新建第一个单词本
+              </div>
             </Link>
           ) : (
             <>
               {wordBooks.slice(0, 4).map((book) => (
-                <Link
-                  key={book.id}
-                  href={`/vocabulary/books/${book.id}`}
-                  className="flex items-center gap-3 rounded-[20px] bg-[var(--bg-card)] border border-[var(--border-color)] px-4 py-3.5 hover:border-[var(--pink-primary)] hover:shadow-sm transition-all"
-                >
-                  <div className="w-1 h-11 rounded-full shrink-0" style={{ background: book.color || 'var(--pink-primary)' }} />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-bold text-[var(--text-primary)] truncate">{book.name}</p>
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className="text-[11px] text-[var(--text-muted)]">{book.wordIds.length} 个单词</span>
-                    </div>
+                <Card key={book.id} as="a" href={`/vocabulary/books/${book.id}`} variant="row" interactive>
+                  <div
+                    style={{
+                      width: 4, height: 44, borderRadius: 'var(--radius-pill)',
+                      background: book.color || 'var(--color-pink-base)',
+                      flexShrink: 0,
+                    }}
+                  />
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {book.name}
+                    </p>
+                    <span style={{ fontSize: 11, color: 'var(--color-ink-3)' }}>
+                      {book.wordIds.length} 个单词
+                    </span>
                   </div>
-                  <span className="text-[var(--text-muted)] text-xl font-light">›</span>
-                </Link>
+                  <ChevronRight size={16} color="var(--color-ink-4)" />
+                </Card>
               ))}
               {wordBooks.length > 4 && (
-                <Link href="/vocabulary/books" className="flex items-center justify-center gap-1 py-2.5 text-xs text-[var(--pink-primary)] font-bold">
+                <Link
+                  href="/vocabulary/books"
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 4,
+                    padding: '10px 0', fontSize: 12, fontWeight: 700, color: 'var(--color-pink-strong)',
+                    textDecoration: 'none',
+                  }}
+                >
                   查看全部 {wordBooks.length} 个单词本 <ArrowRight size={12} />
                 </Link>
               )}
             </>
           )}
         </div>
-      </div>
+      </Section>
 
       {/* My sentences entry */}
-      <button
-        onClick={() => switchTab('sentences')}
-        className="flex items-center gap-4 rounded-[20px] bg-[var(--bg-card)] border border-[var(--border-color)] px-4 py-4 hover:border-[var(--pink-primary)] hover:shadow-sm transition-all group w-full text-left"
-      >
-        <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-[22px] shrink-0" style={{ background: 'linear-gradient(135deg, #eaf8f5, #fff0f5)' }}>
-          🔖
-        </div>
-        <div className="flex-1">
-          <p className="text-sm font-bold text-[var(--text-primary)]">我的句子</p>
-          <p className="text-[11px] text-[var(--text-muted)] mt-0.5">保存的句子 · 语法拆解 · 打字练习</p>
-        </div>
-        <div className="w-7 h-7 rounded-full bg-[var(--bg-input)] flex items-center justify-center text-[var(--text-muted)] group-hover:bg-[var(--pink-primary)] group-hover:text-white transition-all shrink-0 text-lg">
-          ›
-        </div>
-      </button>
+      <Section spacing="normal">
+        <Card as="button" onClick={() => switchTab('sentences')} variant="row" interactive>
+          <div
+            style={{
+              width: 44, height: 44, borderRadius: 'var(--radius-md)',
+              background: 'var(--color-mint-soft)', color: 'var(--color-mint-strong)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+            }}
+            aria-hidden
+          >
+            <Bookmark size={20} strokeWidth={1.75} />
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>我的句子</p>
+            <p style={{ fontSize: 11, color: 'var(--color-ink-3)', margin: '2px 0 0' }}>
+              保存的句子 · 语法拆解 · 打字练习
+            </p>
+          </div>
+          <ChevronRight size={18} color="var(--color-ink-4)" />
+        </Card>
+      </Section>
     </div>
 
       {showDueSheet && (

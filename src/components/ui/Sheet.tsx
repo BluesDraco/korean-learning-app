@@ -51,7 +51,7 @@ export function Sheet({
         style={{
           position: 'fixed',
           inset: 0,
-          background: 'rgba(0,0,0,0.35)',
+          background: 'var(--backdrop-color)',
           zIndex: 200,
           animation: 'tori-fade-in var(--dur-base) var(--ease-soft)',
         }}

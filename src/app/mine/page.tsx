@@ -6,19 +6,16 @@ import {
   Library, BookOpen, MessageSquare, FileText, Mic,
   Music, PenLine, TrendingUp,
   StickyNote, LogIn, Settings,
-  Mail, Moon, Sun,
+  Mail, Moon, Sun, Shield,
 } from 'lucide-react';
 import { db } from '@/lib/db';
 import { useAuth } from '@/components/AuthProvider';
 import { useFeedback } from '@/hooks/useFeedback';
 import { useTheme } from '@/components/ThemeProvider';
 import { useLang } from '@/components/LangProvider';
+import { useIsDesktop } from '@/lib/useIsMobile';
 import { t } from '@/lib/i18n';
-import { MobilePageHero } from '@/components/mobile/MobilePageHero';
-import { ToriCard } from '@/components/mobile/ToriCard';
-import { ToriListRow } from '@/components/mobile/ToriListRow';
-import { ToriStatCard } from '@/components/mobile/ToriStatCard';
-import { ToriSectionHeader } from '@/components/mobile/ToriSectionHeader';
+import { PageHeader, Section, Card, Button } from '@/components/ui';
 
 interface MineStats {
   wordCount: number;
@@ -27,13 +24,22 @@ interface MineStats {
   recordingCount: number;
 }
 
+const TONE_BG: Record<'pink' | 'mint' | 'peach' | 'purple', string> = {
+  pink: 'var(--color-pink-soft)', mint: 'var(--color-mint-soft)',
+  peach: 'var(--color-peach-soft)', purple: 'var(--color-purple-soft)',
+};
+const TONE_FG: Record<'pink' | 'mint' | 'peach' | 'purple', string> = {
+  pink: 'var(--color-pink-strong)', mint: 'var(--color-mint-strong)',
+  peach: 'var(--color-peach-strong)', purple: 'var(--color-purple-strong)',
+};
+
 export default function MinePage() {
   const { user, loading: authLoading } = useAuth();
   const { click: feedbackClick } = useFeedback();
   const { theme, toggle } = useTheme();
   const { lang } = useLang();
+  const isDesktop = useIsDesktop();
   const [stats, setStats] = useState<MineStats>({ wordCount: 0, sentenceCount: 0, articleCount: 0, recordingCount: 0 });
-  const [loadError, setLoadError] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => { setMounted(true); }, []);
@@ -59,50 +65,28 @@ export default function MinePage() {
     return () => { cancelled = true; };
   }, [user]);
 
+  const containerCls = isDesktop ? 'py-4 max-w-5xl mx-auto' : 'py-4 max-w-2xl mx-auto';
+
   // ── SSR / initial client render ──
   if (!mounted) {
     return (
-      <div className="py-4 space-y-5 max-w-2xl mx-auto md:max-w-3xl">
-        <MobilePageHero title={t('mine.page_title', lang)} description={t('mine.page_desc', lang)} variant="blue" />
-        <div className="animate-pulse">
-          <div className="rounded-[24px] border border-[var(--border-default)] bg-[var(--bg-card)] p-4 shadow-[0_8px_24px_rgba(92,64,38,0.08)]">
-            <div className="h-4 w-32 bg-[var(--bg-muted)] rounded mb-3" />
-            <div className="h-3 w-48 bg-[var(--bg-muted)] rounded" />
-          </div>
-        </div>
-        <div className="space-y-2">
-          <div className="h-5 w-20 bg-[var(--bg-muted)] rounded" />
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="h-[60px] rounded-[18px] border border-[var(--border-default)] bg-[var(--bg-card)]" />
-          ))}
-        </div>
+      <div className={containerCls}>
+        <PageHeader eyebrow="내 정보" title={t('mine.page_title', lang)} subtitle={t('mine.page_desc', lang)} tone="purple" flat />
+        <Card variant="default" padding="md">
+          <div style={{ height: 16, width: 128, background: 'var(--color-surface-4)', borderRadius: 6, marginBottom: 12 }} />
+          <div style={{ height: 12, width: 192, background: 'var(--color-surface-4)', borderRadius: 6 }} />
+        </Card>
       </div>
     );
   }
 
-  // ── Error ──
-  if (loadError) {
-    return (
-      <div className="py-4 space-y-5 max-w-2xl mx-auto md:max-w-3xl">
-        <MobilePageHero title={t('mine.page_title', lang)} description={t('mine.page_desc', lang)} variant="blue" />
-        <ToriCard className="text-center space-y-3">
-          <p className="text-[14px] text-[var(--text-muted)]">{t('mine.load_error', lang)}</p>
-          <button onClick={() => window.location.reload()} className="px-4 py-2 bg-[#e47a94] text-white text-[13px] rounded-xl active:scale-95 transition-transform">
-            {t('mine.load_error_retry', lang)}
-          </button>
-        </ToriCard>
-      </div>
-    );
-  }
-
-  // ── Auth loading ──
   if (authLoading) {
     return (
-      <div className="py-4 space-y-5 max-w-2xl mx-auto md:max-w-3xl">
-        <MobilePageHero title={t('mine.page_title', lang)} description={t('mine.page_desc', lang)} variant="blue" />
-        <div className="animate-pulse space-y-3">
+      <div className={containerCls}>
+        <PageHeader eyebrow="내 정보" title={t('mine.page_title', lang)} subtitle={t('mine.page_desc', lang)} tone="purple" flat />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-[60px] rounded-[18px] border border-[var(--border-default)] bg-[var(--bg-card)]" />
+            <div key={i} style={{ height: 60, borderRadius: 'var(--radius-md)', background: 'var(--color-surface-3)' }} />
           ))}
         </div>
       </div>
@@ -112,46 +96,60 @@ export default function MinePage() {
   // ── Unauthenticated ──
   if (!user) {
     const lockedItems = [
-      { labelKey: 'mine.locked_words_label', descKey: 'mine.locked_words_desc', icon: BookOpen, color: '#e47a94' },
-      { labelKey: 'mine.locked_sentences_label', descKey: 'mine.locked_sentences_desc', icon: MessageSquare, color: '#b49ccf' },
-      { labelKey: 'mine.locked_notes_label', descKey: 'mine.locked_notes_desc', icon: StickyNote, color: '#81b5a1' },
-      { labelKey: 'mine.locked_kpop_label', descKey: 'mine.locked_kpop_desc', icon: Music, color: '#b49ccf' },
-      { labelKey: 'mine.locked_diary_label', descKey: 'mine.locked_diary_desc', icon: PenLine, color: '#e47a94' },
-      { labelKey: 'mine.locked_achievements_label', descKey: 'mine.locked_achievements_desc', icon: TrendingUp, color: '#e8a87c' },
+      { labelKey: 'mine.locked_words_label', descKey: 'mine.locked_words_desc', Icon: BookOpen, tone: 'pink' as const },
+      { labelKey: 'mine.locked_sentences_label', descKey: 'mine.locked_sentences_desc', Icon: MessageSquare, tone: 'purple' as const },
+      { labelKey: 'mine.locked_notes_label', descKey: 'mine.locked_notes_desc', Icon: StickyNote, tone: 'mint' as const },
+      { labelKey: 'mine.locked_kpop_label', descKey: 'mine.locked_kpop_desc', Icon: Music, tone: 'purple' as const },
+      { labelKey: 'mine.locked_diary_label', descKey: 'mine.locked_diary_desc', Icon: PenLine, tone: 'pink' as const },
+      { labelKey: 'mine.locked_achievements_label', descKey: 'mine.locked_achievements_desc', Icon: TrendingUp, tone: 'peach' as const },
     ];
     return (
-      <div className="py-4 space-y-5 max-w-2xl mx-auto md:max-w-3xl">
-        <MobilePageHero title={t('mine.page_title', lang)} description={t('mine.page_desc', lang)} variant="blue" />
+      <div className={containerCls}>
+        <PageHeader eyebrow="내 정보" title={t('mine.page_title', lang)} subtitle={t('mine.page_desc', lang)} tone="purple" flat />
 
-        <ToriCard className="text-center space-y-3">
-          <Library size={48} className="text-[#d4ccc4] mx-auto" />
-          <p className="text-[14px] text-[var(--text-muted)]">{t('mine.login_prompt', lang)}</p>
-          <div className="flex gap-2 justify-center">
-            <Link href="/auth/login?redirect=/mine" className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#e47a94] text-white rounded-xl text-[13px] font-medium active:scale-95 transition-transform">
-              <LogIn size={14} />{t('mine.login_button', lang)}
-            </Link>
-            <Link href="/auth/register" className="inline-flex items-center gap-1.5 px-4 py-2 bg-[var(--bg-muted)] text-[var(--text-primary)] rounded-xl text-[13px] font-medium border border-[var(--border-default)] active:scale-95 transition-transform">
-              {t('mine.register_button', lang)}
-            </Link>
-          </div>
-        </ToriCard>
-
-        <div>
-          <ToriSectionHeader title={t('mine.locked_section_title', lang)} className="mb-2" />
-          <div className="space-y-2">
-            {lockedItems.map((item) => (
-              <div key={item.labelKey} className="flex items-center gap-3 rounded-[18px] bg-[var(--bg-card)] border border-[var(--border-default)] px-4 py-3.5 shadow-[0_2px_8px_rgba(92,64,38,0.03)] opacity-50">
-                <div className="w-9 h-9 rounded-[14px] bg-[var(--bg-muted)] flex items-center justify-center shrink-0">
-                  <item.icon size={18} style={{ color: item.color }} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-[14px] font-medium text-[var(--text-primary)]">{t(item.labelKey, lang)}</p>
-                  <p className="text-[11px] text-[var(--text-muted)] mt-0.5">{t(item.descKey, lang)}</p>
-                </div>
+        <Section spacing="normal">
+          <Card variant="hero" tone="purple" padding="lg">
+            <div style={{ textAlign: 'center' }}>
+              <Library size={48} color="var(--color-ink-4)" style={{ margin: '0 auto 12px', display: 'block' }} />
+              <p style={{ fontSize: 14, color: 'var(--color-ink-3)', margin: '0 0 16px' }}>
+                {t('mine.login_prompt', lang)}
+              </p>
+              <div style={{ display: 'flex', gap: 8, justifyContent: 'center', flexWrap: 'wrap' }}>
+                <Link href="/auth/login?redirect=/mine" style={{ textDecoration: 'none' }}>
+                  <Button variant="primary" tone="pink" icon={<LogIn size={14} />}>{t('mine.login_button', lang)}</Button>
+                </Link>
+                <Link href="/auth/register" style={{ textDecoration: 'none' }}>
+                  <Button variant="secondary">{t('mine.register_button', lang)}</Button>
+                </Link>
               </div>
+            </div>
+          </Card>
+        </Section>
+
+        <Section title={t('mine.locked_section_title', lang)} spacing="normal">
+          <div style={{ display: 'grid', gridTemplateColumns: isDesktop ? 'repeat(3, 1fr)' : '1fr', gap: 10 }}>
+            {lockedItems.map((item) => (
+              <Card key={item.labelKey} variant="default" padding="md" style={{ opacity: 0.55 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div
+                    style={{
+                      width: 40, height: 40, borderRadius: 'var(--radius-md)',
+                      background: TONE_BG[item.tone], color: TONE_FG[item.tone],
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                    }}
+                    aria-hidden
+                  >
+                    <item.Icon size={18} strokeWidth={1.75} />
+                  </div>
+                  <div style={{ minWidth: 0 }}>
+                    <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>{t(item.labelKey, lang)}</p>
+                    <p style={{ fontSize: 11, color: 'var(--color-ink-3)', margin: '2px 0 0' }}>{t(item.descKey, lang)}</p>
+                  </div>
+                </div>
+              </Card>
             ))}
           </div>
-        </div>
+        </Section>
       </div>
     );
   }
@@ -168,76 +166,89 @@ export default function MinePage() {
     {
       titleKey: 'mine.section_materials',
       items: [
-        { labelKey: 'mine.item_words_label', descKey: 'mine.item_words_desc', href: '/vocabulary', icon: BookOpen, color: '#e47a94' },
-        { labelKey: 'mine.item_sentences_label', descKey: 'mine.item_sentences_desc', href: '/vocabulary?tab=sentences', icon: MessageSquare, color: '#b49ccf' },
-        { labelKey: 'mine.item_articles_label', descKey: 'mine.item_articles_desc', href: '/mine/articles', icon: FileText, color: '#e8a87c' },
-        { labelKey: 'mine.item_notes_label', descKey: 'mine.item_notes_desc', href: '/mine/notes', icon: StickyNote, color: '#81b5a1' },
+        { labelKey: 'mine.item_words_label', descKey: 'mine.item_words_desc', href: '/vocabulary', Icon: BookOpen, tone: 'pink' as const },
+        { labelKey: 'mine.item_sentences_label', descKey: 'mine.item_sentences_desc', href: '/vocabulary?tab=sentences', Icon: MessageSquare, tone: 'purple' as const },
+        { labelKey: 'mine.item_articles_label', descKey: 'mine.item_articles_desc', href: '/mine/articles', Icon: FileText, tone: 'peach' as const },
+        { labelKey: 'mine.item_notes_label', descKey: 'mine.item_notes_desc', href: '/mine/notes', Icon: StickyNote, tone: 'mint' as const },
       ],
     },
     {
       titleKey: 'mine.section_practice',
       items: [
-        { labelKey: 'mine.item_recordings_label', descKey: 'mine.item_recordings_desc', href: '/mine/recordings', icon: Mic, color: '#81b5a1' },
-        { labelKey: 'mine.item_kpop_label', descKey: 'mine.item_kpop_desc', href: '/mine/kpop', icon: Music, color: '#b49ccf' },
-        { labelKey: 'mine.item_diary_label', descKey: 'mine.item_diary_desc', href: '/mine/diary', icon: PenLine, color: '#e47a94' },
-        { labelKey: 'mine.item_achievements_label', descKey: 'mine.item_achievements_desc', href: '/stats', icon: TrendingUp, color: '#e8a87c' },
+        { labelKey: 'mine.item_recordings_label', descKey: 'mine.item_recordings_desc', href: '/mine/recordings', Icon: Mic, tone: 'mint' as const },
+        { labelKey: 'mine.item_kpop_label', descKey: 'mine.item_kpop_desc', href: '/mine/kpop', Icon: Music, tone: 'purple' as const },
+        { labelKey: 'mine.item_diary_label', descKey: 'mine.item_diary_desc', href: '/mine/diary', Icon: PenLine, tone: 'pink' as const },
+        { labelKey: 'mine.item_achievements_label', descKey: 'mine.item_achievements_desc', href: '/stats', Icon: TrendingUp, tone: 'peach' as const },
       ],
     },
   ];
 
   return (
-    <div className="py-4 space-y-5 max-w-2xl mx-auto md:max-w-3xl">
-      <MobilePageHero title={t('mine.page_title', lang)} description={t('mine.page_desc', lang)} variant="blue" />
+    <div className={containerCls}>
+      <PageHeader eyebrow="내 정보" title={t('mine.page_title', lang)} subtitle={t('mine.page_desc', lang)} tone="purple" flat />
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-2">
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: isDesktop ? 12 : 8, marginBottom: 28 }}>
         {statCards.map((s) => (
-          <ToriStatCard key={s.labelKey} value={s.value} label={t(s.labelKey, lang)} />
+          <Card key={s.labelKey} variant="stat" padding="md">
+            <p style={{ fontSize: isDesktop ? 28 : 22, fontWeight: 800, color: 'var(--color-ink-1)', margin: 0, lineHeight: 1 }}>
+              {s.value}
+            </p>
+            <p style={{ fontSize: 11, color: 'var(--color-ink-3)', margin: '6px 0 0' }}>{t(s.labelKey, lang)}</p>
+          </Card>
         ))}
       </div>
 
       {/* Empty state */}
       {stats.wordCount === 0 && stats.sentenceCount === 0 && stats.recordingCount === 0 && (
-        <ToriCard className="text-center space-y-2 bg-[var(--bg-muted)]">
-          <p className="text-[13px] text-[var(--text-muted)]">{t('mine.empty_state', lang)}</p>
-          <p className="text-[12px] text-[var(--text-muted)]">{t('mine.empty_state_cta', lang)}</p>
-        </ToriCard>
+        <Section spacing="normal">
+          <Card variant="default" padding="lg" tone="neutral" style={{ background: 'var(--color-surface-3)', textAlign: 'center' }}>
+            <p style={{ fontSize: 13, color: 'var(--color-ink-3)', margin: '0 0 4px' }}>{t('mine.empty_state', lang)}</p>
+            <p style={{ fontSize: 12, color: 'var(--color-ink-3)', margin: 0 }}>{t('mine.empty_state_cta', lang)}</p>
+          </Card>
+        </Section>
       )}
 
       {/* Menu sections */}
       {menuSections.map((section) => (
-        <div key={section.titleKey}>
-          <ToriSectionHeader title={t(section.titleKey, lang)} className="mb-2" />
-          <div className="space-y-2">
+        <Section key={section.titleKey} title={t(section.titleKey, lang)} spacing="normal">
+          <div style={{ display: 'grid', gridTemplateColumns: isDesktop ? 'repeat(2, 1fr)' : '1fr', gap: 10 }}>
             {section.items.map((item) => (
-              <ToriListRow
-                key={item.href}
-                icon={<item.icon size={18} style={{ color: item.color }} />}
-                label={t(item.labelKey, lang)}
-                desc={t(item.descKey, lang)}
-                href={item.href}
-                onClick={feedbackClick}
-              />
+              <Card key={item.href} as="a" href={item.href} onClick={feedbackClick} variant="row" interactive>
+                <div
+                  style={{
+                    width: 40, height: 40, borderRadius: 'var(--radius-md)',
+                    background: TONE_BG[item.tone], color: TONE_FG[item.tone],
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                  }}
+                  aria-hidden
+                >
+                  <item.Icon size={18} strokeWidth={1.75} />
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>{t(item.labelKey, lang)}</p>
+                  <p style={{ fontSize: 11, color: 'var(--color-ink-3)', margin: '2px 0 0' }}>{t(item.descKey, lang)}</p>
+                </div>
+              </Card>
             ))}
           </div>
-        </div>
+        </Section>
       ))}
 
       {/* Footer links */}
-      <div className="flex gap-2 justify-center flex-wrap pb-2">
-        <Link href="/messages" className="inline-flex items-center gap-1.5 text-[12px] text-[#8c8177] hover:text-[#e47a94] transition-colors px-3 py-1.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-default)]">
-          <Mail size={13} />{t('mine.footer_messages', lang)}
+      <div style={{ display: 'flex', gap: 8, justifyContent: 'center', flexWrap: 'wrap', paddingBottom: 8 }}>
+        <Link href="/messages" style={{ textDecoration: 'none' }}>
+          <Button variant="secondary" size="sm" icon={<Mail size={13} />}>{t('mine.footer_messages', lang)}</Button>
         </Link>
-        <Link href="/settings" className="inline-flex items-center gap-1.5 text-[12px] text-[#8c8177] hover:text-[#e47a94] transition-colors px-3 py-1.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-default)]">
-          <Settings size={13} />{t('mine.footer_settings', lang)}
+        <Link href="/settings" style={{ textDecoration: 'none' }}>
+          <Button variant="secondary" size="sm" icon={<Settings size={13} />}>{t('mine.footer_settings', lang)}</Button>
         </Link>
-        <button onClick={toggle} className="inline-flex items-center gap-1.5 text-[12px] text-[#8c8177] hover:text-[#e47a94] transition-colors px-3 py-1.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-default)]">
-          {theme === 'light' ? <Moon size={13} /> : <Sun size={13} />}
+        <Button variant="secondary" size="sm" icon={theme === 'light' ? <Moon size={13} /> : <Sun size={13} />} onClick={toggle}>
           {theme === 'light' ? t('mine.footer_dark_mode', lang) : t('mine.footer_light_mode', lang)}
-        </button>
+        </Button>
         {user?.role === 'admin' && (
-          <Link href="/admin" className="inline-flex items-center gap-1.5 text-[12px] text-[#e47a94] hover:text-[#c75a78] transition-colors px-3 py-1.5 rounded-xl bg-[#fff0f4] border border-[#f8c8d4] font-medium">
-            ⚙ {t('mine.footer_admin', lang)}
+          <Link href="/admin" style={{ textDecoration: 'none' }}>
+            <Button variant="primary" tone="pink" size="sm" icon={<Shield size={13} />}>{t('mine.footer_admin', lang)}</Button>
           </Link>
         )}
       </div>

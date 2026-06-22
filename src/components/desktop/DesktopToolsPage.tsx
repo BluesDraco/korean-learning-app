@@ -51,7 +51,6 @@ export function DesktopToolsPage() {
         title="把你看到的韩文，变成可以学的内容"
         subtitle="语法解释、文章拆解、AI 陪练、韩文打字 ── 全部工具都在这里。"
         tone="mint"
-        mascot="sit"
       />
 
       {/* Featured cards */}

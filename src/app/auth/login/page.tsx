@@ -1,24 +1,41 @@
 'use client';
 
-import { useState, Suspense } from 'react';
+import { useState, Suspense, type CSSProperties } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
-import { ToriPrimaryButton } from '@/components/mobile/ToriPrimaryButton';
+import { Card, Button } from '@/components/ui';
+
+const inputStyle: CSSProperties = {
+  width: '100%',
+  background: 'var(--color-surface-1)',
+  border: '1px solid var(--color-border-2)',
+  borderRadius: 'var(--radius-md)',
+  padding: '10px 14px',
+  fontSize: 14,
+  color: 'var(--color-ink-1)',
+  outline: 'none',
+  transition: 'border-color var(--dur-fast) var(--ease-soft)',
+};
+
+const labelStyle: CSSProperties = {
+  display: 'block',
+  fontSize: 12,
+  fontWeight: 600,
+  color: 'var(--color-ink-2)',
+  marginBottom: 6,
+};
 
 function LoginForm() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const STATIC_EXT = /\.(png|jpg|jpeg|webp|gif|svg|ico|woff2?|ttf|eot|mp3|mp4|webm)$/i;
   const rawRedirect = searchParams.get('redirect');
-  // Extract only the pathname to prevent open redirect via //evil.com or ///evil.com
   let redirect = '/daily';
   if (rawRedirect) {
     try {
       const pathname = new URL(rawRedirect, 'http://localhost').pathname;
-      // Block redirect back to auth pages to prevent loops
       if (
         pathname.startsWith('/') &&
         !STATIC_EXT.test(pathname) &&
@@ -27,7 +44,7 @@ function LoginForm() {
       ) {
         redirect = pathname;
       }
-    } catch { /* ignore malformed redirect */ }
+    } catch { /* ignore */ }
   }
   const { login } = useAuth();
   const [username, setUsername] = useState('');
@@ -59,70 +76,100 @@ function LoginForm() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-10rem)] flex items-center justify-center py-8">
-      <div className="w-full max-w-sm">
-        <Link href="/daily" className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] mb-6">
+    <div style={{ minHeight: 'calc(100vh - 10rem)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '32px 0' }}>
+      <div style={{ width: '100%', maxWidth: 360 }}>
+        <Link
+          href="/daily"
+          style={{
+            display: 'inline-flex', alignItems: 'center', gap: 6,
+            fontSize: 13, color: 'var(--color-ink-2)', textDecoration: 'none',
+            marginBottom: 18,
+          }}
+        >
           <ArrowLeft size={16} />
           返回首页
         </Link>
 
-        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 space-y-5">
-          <div className="text-center">
-            <Image src="/images/tori-poses/tori-pose-02.webp" alt="Tori" width={64} height={64} className="object-contain mx-auto mb-2" />
-            <h1 className="text-xl font-bold text-[var(--text-primary)]">登录</h1>
-            <p className="text-xs text-[var(--text-muted)] mt-1">登录后可以保存你的生词、跟唱记录和学习进度</p>
+        <Card variant="default" padding="lg">
+          <div style={{ textAlign: 'center', marginBottom: 24 }}>
+            <Image
+              src="/images/tori-poses/tori-pose-02.webp"
+              alt="Tori"
+              width={64}
+              height={64}
+              style={{ objectFit: 'contain', margin: '0 auto 8px', display: 'block' }}
+            />
+            <h1 style={{ fontSize: 22, fontWeight: 800, color: 'var(--color-ink-1)', margin: 0 }}>登录</h1>
+            <p style={{ fontSize: 12, color: 'var(--color-ink-3)', margin: '6px 0 0', lineHeight: 1.5 }}>
+              登录后可以保存你的生词、跟唱记录和学习进度
+            </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             <div>
-              <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
-                用户名
-              </label>
+              <label style={labelStyle}>用户名</label>
               <input
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="请输入用户名"
-                className="w-full bg-[var(--bg-input)] border border-[var(--border-color)] rounded-xl px-4 py-2.5 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--pink-primary)] transition-colors"
+                style={inputStyle}
                 autoComplete="username"
+                onFocus={(e) => (e.currentTarget.style.borderColor = 'var(--color-pink-base)')}
+                onBlur={(e) => (e.currentTarget.style.borderColor = 'var(--color-border-2)')}
               />
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
-                密码
-              </label>
+              <label style={labelStyle}>密码</label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="请输入密码"
-                className="w-full bg-[var(--bg-input)] border border-[var(--border-color)] rounded-xl px-4 py-2.5 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--pink-primary)] transition-colors"
+                style={inputStyle}
                 autoComplete="current-password"
+                onFocus={(e) => (e.currentTarget.style.borderColor = 'var(--color-pink-base)')}
+                onBlur={(e) => (e.currentTarget.style.borderColor = 'var(--color-border-2)')}
               />
             </div>
 
             {error && (
-              <p className="text-xs text-[var(--color-danger)] bg-[var(--color-danger-bg)] rounded-lg px-3 py-2">{error}</p>
+              <p style={{
+                fontSize: 12,
+                color: 'var(--color-status-danger)',
+                background: 'var(--color-status-danger-bg)',
+                borderRadius: 'var(--radius-sm)',
+                padding: '8px 12px',
+                margin: 0,
+              }}>
+                {error}
+              </p>
             )}
 
-            <ToriPrimaryButton
+            <Button
               type="button"
-              onClick={doLogin}
+              variant="primary"
+              tone="pink"
+              size="lg"
+              fullWidth
               loading={submitting}
-              loadingText="登录中..."
+              onClick={doLogin}
             >
-              登录
-            </ToriPrimaryButton>
+              {submitting ? '登录中...' : '登录'}
+            </Button>
           </form>
 
-          <p className="text-center text-xs text-[var(--text-muted)]">
+          <p style={{ textAlign: 'center', fontSize: 12, color: 'var(--color-ink-3)', margin: '20px 0 0' }}>
             还没有账户？{' '}
-            <Link href="/auth/register" className="text-[var(--pink-primary)] hover:underline font-medium">
+            <Link
+              href="/auth/register"
+              style={{ color: 'var(--color-pink-strong)', textDecoration: 'none', fontWeight: 600 }}
+            >
               立即注册
             </Link>
           </p>
-        </div>
+        </Card>
       </div>
     </div>
   );
@@ -130,28 +177,15 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-[calc(100vh-10rem)] flex items-center justify-center py-8">
-        <div className="w-full max-w-sm space-y-3">
-          <p className="text-center text-sm text-[var(--text-muted)]">加载中...</p>
-          <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 space-y-5 animate-pulse">
-            <div className="flex flex-col items-center gap-3">
-              <div className="w-16 h-16 rounded-full bg-[var(--bg-input)]" />
-              <div className="h-6 w-16 bg-[var(--bg-input)] rounded" />
-            </div>
-            <div className="space-y-3">
-              <div className="h-4 w-12 bg-[var(--bg-input)] rounded" />
-              <div className="h-10 w-full bg-[var(--bg-input)] rounded-xl" />
-            </div>
-            <div className="space-y-3">
-              <div className="h-4 w-12 bg-[var(--bg-input)] rounded" />
-              <div className="h-10 w-full bg-[var(--bg-input)] rounded-xl" />
-            </div>
-            <div className="h-10 w-full bg-[var(--bg-input)] rounded-xl" />
-          </div>
+    <Suspense
+      fallback={
+        <div style={{ minHeight: 'calc(100vh - 10rem)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '32px 0' }}>
+          <Card variant="default" padding="lg" style={{ width: '100%', maxWidth: 360, textAlign: 'center' }}>
+            <p style={{ fontSize: 13, color: 'var(--color-ink-3)', margin: 0 }}>加载中...</p>
+          </Card>
         </div>
-      </div>
-    }>
+      }
+    >
       <LoginForm />
     </Suspense>
   );

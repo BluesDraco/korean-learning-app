@@ -2,10 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Dumbbell, Headphones, Mic, PenLine } from 'lucide-react';
+import { ArrowLeft, Dumbbell, Edit3, Mic, PenLine } from 'lucide-react';
 import { db } from '@/lib/db';
+import { useIsDesktop } from '@/lib/useIsMobile';
+import { PageHeader, Section, Card } from '@/components/ui';
 
 export default function MinePracticesPage() {
+  const isDesktop = useIsDesktop();
   const [dictationCount, setDictationCount] = useState<number | null>(null);
   const [pronunciationCount, setPronunciationCount] = useState<number | null>(null);
   const [shadowingCount, setShadowingCount] = useState<number | null>(null);
@@ -27,67 +30,107 @@ export default function MinePracticesPage() {
   const total = (dictationCount ?? 0) + (pronunciationCount ?? 0) + (shadowingCount ?? 0);
 
   const items = [
-    { icon: <Headphones size={20} className="text-[var(--blue-soft)]" />, label: '默写练习', count: dictationCount, href: '/dictation', desc: '次' },
-    { icon: <Mic size={20} className="text-[var(--mint-soft)]" />, label: '发音练习', count: pronunciationCount, href: '/pronunciation', desc: '次' },
-    { icon: <PenLine size={20} className="text-[var(--purple-soft)]" />, label: '影子跟读', count: shadowingCount, href: '/shadowing', desc: '次' },
+    { Icon: Edit3,   label: '默写练习', count: dictationCount,     href: '/dictation',     tone: 'mint'   as const },
+    { Icon: Mic,     label: '发音练习', count: pronunciationCount, href: '/pronunciation', tone: 'pink'   as const },
+    { Icon: PenLine, label: '影子跟读', count: shadowingCount,     href: '/shadowing',     tone: 'purple' as const },
   ];
 
-  return (
-    <div className="py-4 space-y-4">
-      <div className="flex items-center gap-2 text-[13px]">
-        <Link href="/mine" className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1">
-          <ArrowLeft size={14} />返回
-        </Link>
-        <span className="text-[var(--border-color)]">/</span>
-        <span className="text-[var(--text-secondary)] font-medium">我的练习</span>
-      </div>
+  const TONE_BG: Record<'pink' | 'mint' | 'purple', string> = {
+    pink: 'var(--color-pink-soft)', mint: 'var(--color-mint-soft)', purple: 'var(--color-purple-soft)',
+  };
+  const TONE_FG: Record<'pink' | 'mint' | 'purple', string> = {
+    pink: 'var(--color-pink-strong)', mint: 'var(--color-mint-strong)', purple: 'var(--color-purple-strong)',
+  };
 
-      <div className="flex items-center justify-between">
-        <h1 className="text-[20px] font-bold text-[var(--text-primary)]">我的练习</h1>
-        {!loading && total > 0 && (
-          <span className="text-[12px] text-[var(--text-muted)]">共 {total} 次</span>
-        )}
-      </div>
+  const containerCls = isDesktop ? 'py-4 max-w-4xl mx-auto' : 'py-4 max-w-2xl mx-auto';
+
+  return (
+    <div className={containerCls}>
+      <Link
+        href="/mine"
+        style={{
+          display: 'inline-flex', alignItems: 'center', gap: 6,
+          fontSize: 13, color: 'var(--color-ink-2)', textDecoration: 'none',
+          marginBottom: 14,
+        }}
+      >
+        <ArrowLeft size={14} />
+        返回我的
+      </Link>
+
+      <PageHeader
+        eyebrow="MY PRACTICES"
+        title="我的练习"
+        subtitle={!loading && total > 0 ? `共 ${total} 次` : '默写、发音、跟读的练习汇总'}
+        tone="purple"
+        flat
+      />
 
       {loading ? (
-        <div className="flex justify-center py-16">
-          <div className="w-6 h-6 rounded-full border-2 border-[var(--pink-primary)] border-t-transparent animate-spin" />
-        </div>
+        <Card variant="default" padding="lg" style={{ textAlign: 'center' }}>
+          <div
+            style={{
+              width: 24, height: 24, borderRadius: '50%',
+              border: '2px solid var(--color-pink-base)', borderTopColor: 'transparent',
+              animation: 'tori-spin 0.7s linear infinite',
+              margin: '0 auto',
+            }}
+          />
+        </Card>
       ) : total === 0 ? (
-        <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
-          <div className="w-16 h-16 rounded-2xl bg-[var(--bg-muted)] flex items-center justify-center mb-4">
-            <Dumbbell size={28} className="text-[var(--border-color)]" />
-          </div>
-          <h2 className="text-[16px] font-bold text-[var(--text-primary)] mb-2">还没有练习记录</h2>
-          <p className="text-[13px] text-[var(--text-muted)] max-w-xs leading-relaxed">
-            完成默写、发音或跟读练习后，记录会显示在这里
-          </p>
-        </div>
-      ) : (
-        <div className="space-y-3">
-          {items.map((item) => (
-            <Link
-              key={item.label}
-              href={item.href}
-              className="flex items-center gap-4 rounded-[20px] bg-[var(--bg-card)] border border-[var(--border-color)] px-5 py-4 shadow-[0_2px_8px_rgba(92,64,38,0.04)] active:scale-[0.98] transition-all"
+        <Card variant="hero" tone="purple" padding="lg">
+          <div style={{ textAlign: 'center' }}>
+            <div
+              style={{
+                width: 64, height: 64, borderRadius: 'var(--radius-lg)',
+                background: 'var(--color-surface-2)', color: 'var(--color-purple-strong)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                margin: '0 auto 14px',
+              }}
+              aria-hidden
             >
-              <div className="w-11 h-11 rounded-[14px] bg-[var(--bg-muted)] flex items-center justify-center shrink-0">
-                {item.icon}
-              </div>
-              <div className="flex-1">
-                <p className="text-[15px] font-bold text-[var(--text-primary)]">{item.label}</p>
-                <p className="text-[12px] text-[var(--text-muted)] mt-0.5">
-                  {item.count !== null && item.count > 0
-                    ? `已完成 ${item.count} ${item.desc}`
-                    : '点击开始练习'}
-                </p>
-              </div>
-              <span className="text-[22px] font-extrabold text-[var(--text-primary)]">
-                {item.count ?? '—'}
-              </span>
-            </Link>
-          ))}
-        </div>
+              <Dumbbell size={28} strokeWidth={1.75} />
+            </div>
+            <h2 style={{ fontSize: 16, fontWeight: 800, color: 'var(--color-ink-1)', margin: '0 0 6px' }}>
+              还没有练习记录
+            </h2>
+            <p style={{ fontSize: 13, color: 'var(--color-ink-3)', margin: 0, lineHeight: 1.6 }}>
+              完成默写、发音或跟读练习后，记录会显示在这里
+            </p>
+          </div>
+        </Card>
+      ) : (
+        <Section spacing="normal">
+          <div style={{ display: 'grid', gridTemplateColumns: isDesktop ? 'repeat(3, 1fr)' : '1fr', gap: 12 }}>
+            {items.map(({ Icon, label, count, href, tone }) => (
+              <Card key={label} as="a" href={href} variant="default" padding="md" interactive>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                  <div
+                    style={{
+                      width: 44, height: 44, borderRadius: 'var(--radius-md)',
+                      background: TONE_BG[tone], color: TONE_FG[tone],
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                    }}
+                    aria-hidden
+                  >
+                    <Icon size={20} strokeWidth={1.75} />
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{ fontSize: 15, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>
+                      {label}
+                    </p>
+                    <p style={{ fontSize: 12, color: 'var(--color-ink-3)', margin: '2px 0 0' }}>
+                      {count !== null && count > 0 ? `已完成 ${count} 次` : '点击开始练习'}
+                    </p>
+                  </div>
+                  <span style={{ fontSize: 22, fontWeight: 800, color: 'var(--color-ink-1)' }}>
+                    {count ?? '—'}
+                  </span>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </Section>
       )}
     </div>
   );

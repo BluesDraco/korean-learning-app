@@ -1,7 +1,8 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, type ComponentType } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import { Sparkles, BookOpen, Wrench, GraduationCap, Compass, Shield } from 'lucide-react';
 import { BottomTabBar } from '@/components/mobile/BottomTabBar';
 import { FloatingDecorations } from '@/components/FloatingDecorations';
 import { useAuth } from '@/components/AuthProvider';
@@ -9,15 +10,15 @@ import { useAuth } from '@/components/AuthProvider';
 const SHORTCUT_KEY = 'tori_shortcuts';
 
 const ALL_SHORTCUTS = [
-  { id: 'news',     label: '◈  热点阅读',    href: '/korea/kpop/news', style: { background: '#fff0f5', color: '#f0799b', border: '1px solid rgba(255,127,168,.18)' } },
-  { id: 'analyze',  label: '⚙  文章拆解',    href: '/ai/analyze',      style: { background: '#fff', color: '#5a4640', border: '1px solid var(--desktop-line)' } },
-  { id: 'review',   label: '◇  闪卡复习',    href: '/review',          style: { background: '#eaf8f5', color: '#4e746d', border: 'none' } },
-  { id: 'dict',     label: '🔍  查词翻译',    href: '/dictionary',      style: { background: '#fff', color: '#5a4640', border: '1px solid var(--desktop-line)' } },
-  { id: 'typing',   label: '⌨  韩文打字',    href: '/typing',          style: { background: '#fff', color: '#5a4640', border: '1px solid var(--desktop-line)' } },
-  { id: 'reading',  label: '📖  文章阅读',    href: '/reading',         style: { background: '#fff', color: '#5a4640', border: '1px solid var(--desktop-line)' } },
-  { id: 'shadow',   label: '🎬  影子跟读',    href: '/shadowing',       style: { background: '#fff', color: '#5a4640', border: '1px solid var(--desktop-line)' } },
-  { id: 'pronounce',label: '🎤  发音练习',    href: '/pronunciation',   style: { background: '#fff', color: '#5a4640', border: '1px solid var(--desktop-line)' } },
-  { id: 'writing',  label: '✏  写作练习',    href: '/writing',         style: { background: '#fff', color: '#5a4640', border: '1px solid var(--desktop-line)' } },
+  { id: 'news',     label: '热点阅读',    href: '/korea/kpop/news', style: { background: 'var(--color-pink-soft)', color: 'var(--color-pink-strong)', border: '1px solid var(--color-border-1)' } },
+  { id: 'analyze',  label: '文章拆解',    href: '/ai/analyze',      style: { background: 'var(--color-surface-2)', color: 'var(--color-ink-2)', border: '1px solid var(--color-border-1)' } },
+  { id: 'review',   label: '闪卡复习',    href: '/review',          style: { background: 'var(--color-mint-soft)', color: 'var(--color-mint-strong)', border: '1px solid var(--color-border-1)' } },
+  { id: 'dict',     label: '查词翻译',    href: '/dictionary',      style: { background: 'var(--color-surface-2)', color: 'var(--color-ink-2)', border: '1px solid var(--color-border-1)' } },
+  { id: 'typing',   label: '韩文打字',    href: '/typing',          style: { background: 'var(--color-surface-2)', color: 'var(--color-ink-2)', border: '1px solid var(--color-border-1)' } },
+  { id: 'reading',  label: '文章阅读',    href: '/reading',         style: { background: 'var(--color-surface-2)', color: 'var(--color-ink-2)', border: '1px solid var(--color-border-1)' } },
+  { id: 'shadow',   label: '影子跟读',    href: '/shadowing',       style: { background: 'var(--color-surface-2)', color: 'var(--color-ink-2)', border: '1px solid var(--color-border-1)' } },
+  { id: 'pronounce',label: '发音练习',    href: '/pronunciation',   style: { background: 'var(--color-surface-2)', color: 'var(--color-ink-2)', border: '1px solid var(--color-border-1)' } },
+  { id: 'writing',  label: '写作练习',    href: '/writing',         style: { background: 'var(--color-surface-2)', color: 'var(--color-ink-2)', border: '1px solid var(--color-border-1)' } },
 ];
 
 const DEFAULT_IDS = ['news', 'analyze', 'review'];
@@ -34,13 +35,20 @@ function saveShortcuts(ids: string[]) {
   try { localStorage.setItem(SHORTCUT_KEY, JSON.stringify(ids)); } catch {}
 }
 
-const NAV_ITEMS = [
-  { id: 'today',    icon: '⌂︎', label: '今日', href: '/daily' },
-  { id: 'vocabulary', icon: '◈︎', label: '词汇', href: '/vocabulary' },
-  { id: 'tools',    icon: '⚙︎', label: '工具', href: '/tools' },
-  { id: 'learn',    icon: '▣︎', label: '学习', href: '/learning' },
-  { id: 'explore',  icon: '◉︎', label: '探索', href: '/explore' },
-] as const;
+type NavItem = {
+  id: 'today' | 'vocabulary' | 'tools' | 'learn' | 'explore';
+  Icon: ComponentType<{ size?: number; strokeWidth?: number }>;
+  label: string;
+  href: string;
+};
+
+const NAV_ITEMS: NavItem[] = [
+  { id: 'today',      Icon: Sparkles,      label: '今日', href: '/daily' },
+  { id: 'vocabulary', Icon: BookOpen,      label: '词汇', href: '/vocabulary' },
+  { id: 'tools',      Icon: Wrench,        label: '工具', href: '/tools' },
+  { id: 'learn',      Icon: GraduationCap, label: '学习', href: '/learning' },
+  { id: 'explore',    Icon: Compass,       label: '探索', href: '/explore' },
+];
 
 function resolvePageMeta(pathname: string | null) {
   const p = pathname || '/daily';
@@ -106,7 +114,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 className={'desktop-navbtn' + (meta.activeId === item.id ? ' active' : '')}
                 onClick={() => navigate(item.href)}
               >
-                <span className="desktop-navico">{item.icon}</span>
+                <span className="desktop-navico"><item.Icon size={22} strokeWidth={1.75} /></span>
                 <span>{item.label}</span>
               </button>
             ))}
@@ -133,7 +141,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     textAlign: 'left',
                   }}
                 >
-                  <span aria-hidden>⚙</span>
+                  <Shield size={14} strokeWidth={1.75} aria-hidden />
                   <span className="desktop-foot-label">管理后台</span>
                 </button>
               )}

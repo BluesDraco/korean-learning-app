@@ -33,11 +33,11 @@ const TONE_BG: Record<Tone, string> = {
 };
 
 const TONE_HERO_GRADIENT: Record<Tone, string> = {
-  neutral: 'linear-gradient(135deg, var(--color-surface-2), var(--color-surface-3))',
-  pink:    'linear-gradient(135deg, var(--color-pink-soft), #fff8fb)',
-  mint:    'linear-gradient(135deg, var(--color-mint-soft), #f4fbf8)',
-  peach:   'linear-gradient(135deg, var(--color-peach-soft), #fff7f1)',
-  purple:  'linear-gradient(135deg, var(--color-purple-soft), #f7f3ff)',
+  neutral: 'linear-gradient(135deg, var(--color-surface-2), var(--hero-grad-end-neutral))',
+  pink:    'linear-gradient(135deg, var(--color-pink-soft), var(--hero-grad-end-pink))',
+  mint:    'linear-gradient(135deg, var(--color-mint-soft), var(--hero-grad-end-mint))',
+  peach:   'linear-gradient(135deg, var(--color-peach-soft), var(--hero-grad-end-peach))',
+  purple:  'linear-gradient(135deg, var(--color-purple-soft), var(--hero-grad-end-purple))',
 };
 
 export const Card = forwardRef<HTMLElement, CardProps>(function Card(

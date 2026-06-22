@@ -45,7 +45,6 @@ export default function ExplorePage() {
         title="探索"
         subtitle="用喜欢的内容学韩语。"
         tone="pink"
-        mascot="kpop"
       />
 
       {/* Hot posts — featured hero */}

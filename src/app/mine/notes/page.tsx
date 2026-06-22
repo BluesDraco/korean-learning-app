@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, StickyNote, Plus, Trash2 } from 'lucide-react';
 import { db } from '@/lib/db';
+import { useIsDesktop } from '@/lib/useIsMobile';
+import { PageHeader, Section, Card, Button } from '@/components/ui';
 
 interface Note {
   id: string;
@@ -15,6 +17,7 @@ interface Note {
 }
 
 export default function MineNotesPage() {
+  const isDesktop = useIsDesktop();
   const [notes, setNotes] = useState<Note[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -31,75 +34,118 @@ export default function MineNotesPage() {
     setNotes((prev) => prev.filter((n) => n.id !== id));
   };
 
-  return (
-    <div className="py-4 space-y-4">
-      <div className="flex items-center gap-2 text-[13px]">
-        <Link href="/mine" className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1">
-          <ArrowLeft size={14} />返回
-        </Link>
-        <span className="text-[var(--border-color)]">/</span>
-        <span className="text-[var(--text-secondary)] font-medium">我的笔记</span>
-      </div>
+  const containerCls = isDesktop ? 'py-4 max-w-5xl mx-auto' : 'py-4 max-w-2xl mx-auto';
 
-      <div className="flex items-center justify-between">
-        <h1 className="text-[20px] font-bold text-[var(--text-primary)]">我的笔记</h1>
-        {notes.length > 0 && (
-          <span className="text-[12px] text-[var(--text-muted)]">{notes.length} 条</span>
-        )}
-      </div>
+  return (
+    <div className={containerCls}>
+      <Link
+        href="/mine"
+        style={{
+          display: 'inline-flex', alignItems: 'center', gap: 6,
+          fontSize: 13, color: 'var(--color-ink-2)', textDecoration: 'none',
+          marginBottom: 14,
+        }}
+      >
+        <ArrowLeft size={14} />
+        返回我的
+      </Link>
+
+      <PageHeader
+        eyebrow="MY NOTES"
+        title="我的笔记"
+        subtitle={notes.length > 0 ? `共 ${notes.length} 条` : '记录学习中的灵感与备忘'}
+        tone="mint"
+        flat
+      />
 
       {loading ? (
-        <div className="flex justify-center py-16">
-          <div className="w-6 h-6 rounded-full border-2 border-[var(--pink-primary)] border-t-transparent animate-spin" />
-        </div>
+        <Card variant="default" padding="lg" style={{ textAlign: 'center' }}>
+          <div
+            style={{
+              width: 24, height: 24, borderRadius: '50%',
+              border: '2px solid var(--color-pink-base)', borderTopColor: 'transparent',
+              animation: 'tori-spin 0.7s linear infinite',
+              margin: '0 auto',
+            }}
+          />
+        </Card>
       ) : notes.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-20 px-4 text-center">
-          <div className="w-16 h-16 rounded-2xl bg-[var(--bg-muted)] flex items-center justify-center mb-4">
-            <StickyNote size={28} className="text-[var(--border-color)]" />
-          </div>
-          <h2 className="text-[16px] font-bold text-[var(--text-primary)] mb-2">还没有笔记</h2>
-          <p className="text-[13px] text-[var(--text-muted)] max-w-xs leading-relaxed">
-            学习过程中记录的笔记和备忘，会出现在这里
-          </p>
-          <Link
-            href="/grammar"
-            className="mt-6 flex items-center gap-2 h-11 px-6 rounded-full bg-[var(--text-primary)] text-white text-[13px] font-bold"
-          >
-            <Plus size={15} />去学习
-          </Link>
-        </div>
-      ) : (
-        <div className="space-y-3">
-          {notes.map((note) => (
+        <Card variant="hero" tone="mint" padding="lg">
+          <div style={{ textAlign: 'center' }}>
             <div
-              key={note.id}
-              className="rounded-[20px] bg-[var(--bg-card)] border border-[var(--border-color)] p-4 shadow-[0_2px_8px_rgba(92,64,38,0.04)]"
+              style={{
+                width: 64, height: 64, borderRadius: 'var(--radius-lg)',
+                background: 'var(--color-surface-2)', color: 'var(--color-mint-strong)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                margin: '0 auto 14px',
+              }}
+              aria-hidden
             >
-              <div className="flex items-start justify-between gap-2">
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-[15px] font-bold text-[var(--text-primary)] line-clamp-1">{note.title}</h3>
-                  {note.content && (
-                    <p className="text-[12px] text-[var(--text-muted)] mt-1 line-clamp-3 leading-relaxed">
-                      {note.content}
-                    </p>
-                  )}
-                  {note.createdAt && (
-                    <p className="text-[11px] text-[var(--border-color)] mt-2">
-                      {new Date(note.createdAt).toLocaleDateString('zh-CN')}
-                      {note.sourceType && ` · ${note.sourceType}`}
-                    </p>
-                  )}
-                </div>
-                <button
-                  onClick={() => deleteNote(note.id)}
-                  className="shrink-0 p-2 rounded-xl text-[var(--border-color)] hover:text-[var(--color-danger)] hover:bg-[var(--color-danger-bg)] transition-colors"
-                >
-                  <Trash2 size={14} />
-                </button>
-              </div>
+              <StickyNote size={28} strokeWidth={1.75} />
             </div>
-          ))}
-        </div>
+            <h2 style={{ fontSize: 16, fontWeight: 800, color: 'var(--color-ink-1)', margin: '0 0 6px' }}>
+              还没有笔记
+            </h2>
+            <p style={{ fontSize: 13, color: 'var(--color-ink-3)', margin: '0 0 20px', lineHeight: 1.6 }}>
+              学习过程中记录的笔记和备忘，会出现在这里
+            </p>
+            <Link href="/grammar" style={{ textDecoration: 'none' }}>
+              <Button variant="primary" tone="black" icon={<Plus size={15} />}>去学习</Button>
+            </Link>
+          </div>
+        </Card>
+      ) : (
+        <Section spacing="normal">
+          <div style={{ display: 'grid', gridTemplateColumns: isDesktop ? '1fr 1fr' : '1fr', gap: 10 }}>
+            {notes.map((note) => (
+              <Card key={note.id} variant="default" padding="md">
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8 }}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <h3
+                      style={{
+                        fontSize: 15, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0,
+                        overflow: 'hidden', display: '-webkit-box',
+                        WebkitLineClamp: 1, WebkitBoxOrient: 'vertical' as const,
+                      }}
+                    >
+                      {note.title}
+                    </h3>
+                    {note.content && (
+                      <p
+                        style={{
+                          fontSize: 12, color: 'var(--color-ink-3)', margin: '6px 0 0', lineHeight: 1.6,
+                          overflow: 'hidden', display: '-webkit-box',
+                          WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' as const,
+                        }}
+                      >
+                        {note.content}
+                      </p>
+                    )}
+                    {note.createdAt && (
+                      <p style={{ fontSize: 11, color: 'var(--color-ink-4)', margin: '8px 0 0' }}>
+                        {new Date(note.createdAt).toLocaleDateString('zh-CN')}
+                        {note.sourceType && ` · ${note.sourceType}`}
+                      </p>
+                    )}
+                  </div>
+                  <button
+                    onClick={() => deleteNote(note.id)}
+                    title="删除"
+                    style={{
+                      flexShrink: 0,
+                      padding: 8, borderRadius: 'var(--radius-sm)',
+                      background: 'transparent', border: 'none',
+                      color: 'var(--color-ink-4)',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </Section>
       )}
     </div>
   );

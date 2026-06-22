@@ -32,7 +32,6 @@ export function DesktopExplorePage() {
         title="用喜欢的内容学韩语"
         subtitle="绘本、韩剧表达、韩国小知识 ── 都可以变成你的学习材料。"
         tone="pink"
-        mascot="kpop"
       />
 
       {/* Hot posts featured */}

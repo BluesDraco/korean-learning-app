@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type CSSProperties } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, User, Target, Flame, Save, Loader2, Trophy, Volume2, VolumeX, Zap, Type, LogOut, Moon, Sun } from 'lucide-react';
+import { ArrowLeft, User, Target, Sliders, Save, Loader2, Trophy, Volume2, VolumeX, Zap, Type, LogOut, Moon, Sun, Flame } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
 import { getProfile, updateProfile } from '@/lib/gamification';
 import { db } from '@/lib/db';
@@ -16,6 +16,7 @@ import { setSpeechRate, getSpeechRate } from '@/lib/tts';
 import { isSoundEnabled, setSoundEnabled } from '@/lib/soundManager';
 import { FONT_PRESETS, FONT_SIZES } from '@/lib/fontSettings';
 import { FLASHCARD_THEMES, getFlashcardTheme, saveFlashcardTheme, applyFlashcardTheme, type FlashcardTheme } from '@/lib/flashcardTheme';
+import { PageHeader, Section, Card, Button } from '@/components/ui';
 
 const REDUCE_MOTION_KEY = 'tori_reduce_motion';
 
@@ -28,6 +29,80 @@ function setReduceMotion(v: boolean): void {
   if (typeof window === 'undefined') return;
   localStorage.setItem(REDUCE_MOTION_KEY, String(v));
   document.documentElement.setAttribute('data-reduce-motion', v ? 'true' : 'false');
+}
+
+const inputStyle: CSSProperties = {
+  width: '100%',
+  background: 'var(--color-surface-1)',
+  border: '1px solid var(--color-border-2)',
+  borderRadius: 'var(--radius-md)',
+  padding: '10px 14px',
+  fontSize: 14,
+  color: 'var(--color-ink-1)',
+  outline: 'none',
+};
+
+const labelStyle: CSSProperties = {
+  display: 'block',
+  fontSize: 12,
+  fontWeight: 600,
+  color: 'var(--color-ink-3)',
+  marginBottom: 6,
+};
+
+function Toggle({ on, onChange, tone = 'pink' }: { on: boolean; onChange: () => void; tone?: 'pink' | 'mint' | 'peach' | 'purple' }) {
+  const accent = `var(--color-${tone}-base)`;
+  return (
+    <button
+      onClick={onChange}
+      aria-pressed={on}
+      style={{
+        position: 'relative', width: 48, height: 28,
+        borderRadius: 'var(--radius-pill)',
+        background: on ? accent : 'var(--color-surface-4)',
+        border: 'none', cursor: 'pointer',
+        transition: 'background var(--dur-base) var(--ease-soft)',
+      }}
+    >
+      <div
+        style={{
+          position: 'absolute', top: 2, left: on ? 22 : 2,
+          width: 24, height: 24, borderRadius: '50%',
+          background: '#fff',
+          boxShadow: 'var(--shadow-sm)',
+          transition: 'left var(--dur-base) var(--ease-soft)',
+        }}
+      />
+    </button>
+  );
+}
+
+function ToggleRow({
+  Icon, label, desc, on, onChange, tone,
+}: {
+  Icon: React.ComponentType<{ size?: number; color?: string }>;
+  label: string; desc: string; on: boolean; onChange: () => void; tone?: 'pink' | 'mint' | 'peach' | 'purple';
+}) {
+  const fg = tone ? `var(--color-${tone}-strong)` : 'var(--color-ink-3)';
+  return (
+    <div
+      style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
+        background: 'var(--color-surface-3)',
+        borderRadius: 'var(--radius-md)',
+        padding: '14px 16px',
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 }}>
+        <Icon size={20} color={fg} />
+        <div style={{ minWidth: 0 }}>
+          <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>{label}</p>
+          <p style={{ fontSize: 12, color: 'var(--color-ink-3)', margin: '2px 0 0' }}>{desc}</p>
+        </div>
+      </div>
+      <Toggle on={on} onChange={onChange} tone={tone ?? 'pink'} />
+    </div>
+  );
 }
 
 export default function SettingsPage() {
@@ -65,8 +140,7 @@ export default function SettingsPage() {
         setSoundOn(isSoundEnabled());
         setReduceMotionState(getReduceMotion());
       } catch {
-        // db unavailable — set empty profile so page still renders
-        setProfile({ nickname: '', dailyGoalMinutes: 30, dailyGoalWords: 10, targetLevel: 'A1', reviewBatchSize: 20, ttsSpeed: getSpeechRate() } as any);
+        setProfile({ nickname: '', dailyGoalMinutes: 30, dailyGoalWords: 10, targetLevel: 'beginner', reviewBatchSize: 20, ttsSpeed: getSpeechRate() } as UserProfile);
       } finally {
         setLoading(false);
       }
@@ -92,30 +166,24 @@ export default function SettingsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-32">
-        <Loader2 size={32} className="animate-spin text-[var(--text-secondary)]" />
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '128px 0' }}>
+        <Loader2 size={32} className="animate-spin" color="var(--color-ink-3)" />
       </div>
     );
   }
 
   if (!profile) {
     return (
-      <div className="py-4 max-w-2xl mx-auto space-y-4">
-        <div className="flex items-center gap-4">
-          <button onClick={() => window.history.back()} className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
-            <ArrowLeft size={20} />
-          </button>
-          <h1 className="text-2xl font-bold text-[var(--text-primary)]">{t('settings.title', lang)}</h1>
-        </div>
-        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 text-center space-y-4">
-          <p className="text-[var(--text-secondary)]">{lang === 'en' ? 'Please log in to access settings' : '请先登录后使用设置'}</p>
-          <button
-            onClick={() => { window.location.href = '/auth/login'; }}
-            className="px-6 py-2 rounded-full bg-[#201815] text-white text-sm font-bold"
-          >
+      <div className="py-4 max-w-2xl mx-auto">
+        <PageHeader title={t('settings.title', lang)} flat />
+        <Card variant="default" padding="lg" style={{ textAlign: 'center' }}>
+          <p style={{ fontSize: 14, color: 'var(--color-ink-2)', margin: '0 0 16px' }}>
+            {lang === 'en' ? 'Please log in to access settings' : '请先登录后使用设置'}
+          </p>
+          <Button variant="primary" tone="black" onClick={() => { window.location.href = '/auth/login'; }}>
             {lang === 'en' ? 'Log in' : '去登录'}
-          </button>
-        </div>
+          </Button>
+        </Card>
       </div>
     );
   }
@@ -125,407 +193,459 @@ export default function SettingsPage() {
   const earnedTypes = new Set(achievements.map((a) => a.type));
 
   return (
-    <div className="py-4 space-y-4 max-w-2xl mx-auto">
-      {/* Header */}
-      <div className="flex items-center gap-4">
-        <button onClick={() => router.back()} className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
-          <ArrowLeft size={20} />
-        </button>
-        <div>
-          <h1 className="text-2xl font-bold text-[var(--text-primary)]">{t('settings.title', lang)}</h1>
-          <p className="text-[var(--text-secondary)] text-sm mt-1">{lang === 'en' ? 'Personalize your learning experience' : '个性化你的学习体验'}</p>
-        </div>
-      </div>
-
-      {/* Profile Section */}
-      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 space-y-4">
-        <div className="flex items-center gap-3 mb-4">
-          <User size={20} className="text-[var(--pink-primary)]" />
-          <h2 className="text-lg font-medium text-[var(--text-primary)]">{t('settings.profile', lang)}</h2>
-        </div>
-
-        {/* Nickname */}
-        <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">{t('settings.nickname', lang)}</label>
-          <input
-            type="text"
-            value={profile.nickname}
-            onChange={(e) => setProfile({ ...profile, nickname: e.target.value })}
-            placeholder={t('settings.nickname_placeholder', lang)}
-            className="w-full bg-[var(--bg-input)] border border-[var(--pink-pale)] rounded-xl py-3 px-4 text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--pink-primary)] transition-colors"
-          />
-        </div>
-
-        {/* Level display */}
-        <div className="flex items-center gap-4 bg-[var(--bg-input)] rounded-xl p-4">
-          <div className="w-12 h-12 rounded-full bg-[var(--pink-primary)]/15 flex items-center justify-center">
-            <span className="text-[var(--pink-primary)] font-bold text-lg">{profile.level}</span>
-          </div>
-          <div className="flex-1">
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-sm text-[var(--text-primary)] font-medium">{lang === 'en' ? `Level ${profile.level}` : `等级 ${profile.level}`}</span>
-              <span className="text-xs text-[var(--text-secondary)]">{profile.xp}/{profile.xpToNextLevel} XP</span>
-            </div>
-            <div className="w-full bg-[var(--bg-accent)] rounded-full h-2">
-              <div
-                className="bg-[var(--pink-primary)] h-2 rounded-full transition-all"
-                style={{ width: `${(profile.xp / profile.xpToNextLevel) * 100}%` }}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Streak */}
-        <div className="flex items-center gap-3 bg-[var(--bg-input)] rounded-xl p-4">
-          <Flame size={20} className="text-[var(--peach-soft)]" />
-          <div>
-            <div className="text-sm text-[var(--text-primary)] font-medium">{lang === 'en' ? `${profile.streak}-day streak` : `连续学习 ${profile.streak} 天`}</div>
-            <div className="text-xs text-[var(--text-secondary)]">{lang === 'en' ? `Best: ${profile.longestStreak} days` : `最长记录: ${profile.longestStreak} 天`}</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Goals Section */}
-      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 space-y-4">
-        <div className="flex items-center gap-3 mb-4">
-          <Target size={20} className="text-[var(--mint-soft)]" />
-          <h2 className="text-lg font-medium text-[var(--text-primary)]">{t('settings.learning_goal', lang)}</h2>
-        </div>
-
-        {/* Target Level */}
-        <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">{t('settings.level', lang)}</label>
-          <select
-            value={profile.targetLevel}
-            onChange={(e) => setProfile({ ...profile, targetLevel: e.target.value as UserProfile['targetLevel'] })}
-            className="w-full bg-[var(--bg-input)] border border-[var(--pink-pale)] rounded-xl py-3 px-4 text-[var(--text-primary)] focus:outline-none focus:border-[var(--pink-primary)] transition-colors"
-          >
-            <option value="beginner">{lang === 'en' ? 'Beginner (TOPIK 1-2)' : '初级 (TOPIK 1-2)'}</option>
-            <option value="intermediate">{lang === 'en' ? 'Intermediate (TOPIK 3-4)' : '中级 (TOPIK 3-4)'}</option>
-            <option value="advanced">{lang === 'en' ? 'Advanced (TOPIK 5-6)' : '高级 (TOPIK 5-6)'}</option>
-          </select>
-        </div>
-
-        {/* Daily Goal Words */}
-        <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">{lang === 'en' ? `Daily word goal: ${profile.dailyGoalWords} words` : `每日学习单词: ${profile.dailyGoalWords} 个`}</label>
-          <input
-            type="range"
-            min="5"
-            max="50"
-            step="5"
-            value={profile.dailyGoalWords}
-            onChange={(e) => setProfile({ ...profile, dailyGoalWords: Number(e.target.value) })}
-            className="w-full accent-[var(--pink-primary)]"
-          />
-          <div className="flex justify-between text-xs text-[var(--text-placeholder)] mt-1">
-            <span>5</span><span>50</span>
-          </div>
-        </div>
-
-        {/* Daily Goal Minutes */}
-        <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">{lang === 'en' ? `Daily study time: ${profile.dailyGoalMinutes} min` : `每日学习时间: ${profile.dailyGoalMinutes} 分钟`}</label>
-          <input
-            type="range"
-            min="5"
-            max="120"
-            step="5"
-            value={profile.dailyGoalMinutes}
-            onChange={(e) => setProfile({ ...profile, dailyGoalMinutes: Number(e.target.value) })}
-            className="w-full accent-[var(--pink-primary)]"
-          />
-          <div className="flex justify-between text-xs text-[var(--text-placeholder)] mt-1">
-            <span>{lang === 'en' ? '5 min' : '5分钟'}</span><span>{lang === 'en' ? '2 hrs' : '2小时'}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Preferences Section */}
-      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 space-y-4">
-        <div className="flex items-center gap-3 mb-4">
-          <Flame size={20} className="text-[var(--purple-soft)]" />
-          <h2 className="text-lg font-medium text-[var(--text-primary)]">{t('settings.preferences', lang)}</h2>
-        </div>
-
-        {/* Language */}
-        <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">{t('settings.language', lang)} / Language</label>
-          <div className="flex gap-2">
-            {(['zh', 'en'] as const).map((l) => (
-              <button
-                key={l}
-                onClick={() => setLang(l)}
-                className={`flex-1 py-2 rounded-xl text-sm font-medium border transition-all ${
-                  lang === l
-                    ? 'bg-[var(--pink-primary)] text-white border-[var(--pink-primary)]'
-                    : 'bg-[var(--bg-input)] text-[var(--text-secondary)] border-[var(--border-color)] hover:border-[var(--pink-primary)]/40'
-                }`}
-              >
-                {l === 'zh' ? '中文' : 'English'}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* TTS Speed */}
-        <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">{t('settings.tts_speed', lang)}: {profile.ttsSpeed ?? 0.8}x</label>
-          <input
-            type="range"
-            min="0.5"
-            max="1.2"
-            step="0.1"
-            value={profile.ttsSpeed ?? 0.8}
-            onChange={(e) => { const v = parseFloat(e.target.value); setSpeechRate(v); setProfile({ ...profile, ttsSpeed: v }); }}
-            className="w-full accent-[var(--purple-soft)]"
-          />
-          <div className="flex justify-between text-xs text-[var(--text-placeholder)] mt-1">
-            <span>{lang === 'en' ? '0.5x slow' : '0.5x 慢'}</span><span>{lang === 'en' ? '1.2x fast' : '1.2x 快'}</span>
-          </div>
-        </div>
-
-        {/* Review batch size */}
-        <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">{t('settings.review_batch', lang)}: {profile.reviewBatchSize ?? 10}{lang === 'en' ? '' : ' 个'}</label>
-          <select
-            value={profile.reviewBatchSize ?? 10}
-            onChange={(e) => setProfile({ ...profile, reviewBatchSize: Number(e.target.value) })}
-            className="w-full bg-[var(--bg-input)] border border-[var(--border-color)] rounded-xl py-3 px-4 text-[var(--text-primary)] focus:outline-none focus:border-[var(--purple-soft)] transition-colors"
-          >
-            <option value={5}>{lang === 'en' ? '5 words' : '5 个'}</option>
-            <option value={10}>{lang === 'en' ? '10 words' : '10 个'}</option>
-            <option value={15}>{lang === 'en' ? '15 words' : '15 个'}</option>
-            <option value={20}>{lang === 'en' ? '20 words' : '20 个'}</option>
-            <option value={30}>{lang === 'en' ? '30 words' : '30 个'}</option>
-          </select>
-        </div>
-
-        {/* Sound toggle */}
-        <div className="flex items-center justify-between bg-[var(--bg-input)] rounded-xl p-4">
-          <div className="flex items-center gap-3">
-            {soundOn ? <Volume2 size={20} className="text-[var(--purple-soft)]" /> : <VolumeX size={20} className="text-[var(--text-muted)]" />}
-            <div>
-              <p className="text-sm text-[var(--text-primary)] font-medium">{t('settings.sound_effects', lang)}</p>
-              <p className="text-xs text-[var(--text-secondary)]">{lang === 'en' ? 'Lightweight feedback sounds (very quiet)' : '轻量操作反馈音效（音量很低）'}</p>
-            </div>
-          </div>
-          <button
-            onClick={() => { const v = !soundOn; setSoundOn(v); setSoundEnabled(v); }}
-            className={`relative w-12 h-7 rounded-full transition-colors ${soundOn ? 'bg-[var(--purple-soft)]' : 'bg-[var(--bg-accent)]'}`}
-          >
-            <div className={`absolute top-0.5 w-6 h-6 rounded-full bg-white shadow transition-transform ${soundOn ? 'translate-x-6' : 'translate-x-0.5'}`} />
-          </button>
-        </div>
-
-        {/* Reduce motion toggle */}
-        <div className="flex items-center justify-between bg-[var(--bg-input)] rounded-xl p-4">
-          <div className="flex items-center gap-3">
-            <Zap size={20} className={reduceMotion ? 'text-[var(--text-muted)]' : 'text-[var(--peach-soft)]'} />
-            <div>
-              <p className="text-sm text-[var(--text-primary)] font-medium">{t('settings.reduce_motion', lang)}</p>
-              <p className="text-xs text-[var(--text-secondary)]">{lang === 'en' ? 'Disable bounce and breathing animations' : '关闭弹跳、呼吸等动画效果'}</p>
-            </div>
-          </div>
-          <button
-            onClick={() => { const v = !reduceMotion; setReduceMotionState(v); setReduceMotion(v); }}
-            className={`relative w-12 h-7 rounded-full transition-colors ${reduceMotion ? 'bg-[var(--bg-accent)]' : 'bg-[var(--peach-soft)]'}`}
-          >
-            <div className={`absolute top-0.5 w-6 h-6 rounded-full bg-white shadow transition-transform ${reduceMotion ? 'translate-x-0.5' : 'translate-x-6'}`} />
-          </button>
-        </div>
-
-        {/* Theme toggle */}
-        <div className="flex items-center justify-between bg-[var(--bg-input)] rounded-xl p-4">
-          <div className="flex items-center gap-3">
-            {theme === 'dark' ? <Moon size={20} className="text-[var(--text-secondary)]" /> : <Sun size={20} className="text-[var(--peach-soft)]" />}
-            <div>
-              <p className="text-sm text-[var(--text-primary)] font-medium">{t('settings.dark_mode', lang)}</p>
-              <p className="text-xs text-[var(--text-secondary)]">{theme === 'dark' ? (lang === 'en' ? 'Current: Dark' : '当前：深色') : (lang === 'en' ? 'Current: Light' : '当前：亮色')}</p>
-            </div>
-          </div>
-          <button
-            onClick={toggleTheme}
-            className={`relative w-12 h-7 rounded-full transition-colors ${theme === 'dark' ? 'bg-[var(--bg-accent)]' : 'bg-[var(--peach-soft)]'}`}
-          >
-            <div className={`absolute top-0.5 w-6 h-6 rounded-full bg-white shadow transition-transform ${theme === 'dark' ? 'translate-x-6' : 'translate-x-0.5'}`} />
-          </button>
-        </div>
-      </div>
-
-      {/* Font Settings */}
-      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 space-y-5">
-        <div className="flex items-center gap-3 mb-4">
-          <Type size={28} className="text-[var(--text-primary)]" />
-          <h2 className="text-lg font-medium text-[var(--text-primary)]">{t('settings.display', lang)}</h2>
-        </div>
-
-        {/* Font preset */}
-        <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-2 block">{t('settings.font_style', lang)}</label>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-            {FONT_PRESETS.map((p) => (
-              <button
-                key={p.key}
-                onClick={() => previewPreset(p.key)}
-                className={`rounded-xl p-3 text-center border transition-all ${
-                  fontSettings.preset === p.key
-                    ? 'border-[var(--pink-primary)] bg-[var(--pink-primary)]/8 shadow-sm'
-                    : 'border-[var(--border-color)] hover:border-[var(--border-hover)]'
-                }`}
-              >
-                <p className={`text-xs font-semibold mb-1 ${
-                  fontSettings.preset === p.key ? 'text-[var(--pink-primary)]' : 'text-[var(--text-primary)]'
-                }`}>
-                  {p.label}
-                </p>
-                <p className="text-[10px] text-[var(--text-muted)] leading-tight">{p.desc}</p>
-                <p
-                  className="mt-1.5 text-[9px] text-[var(--text-muted)] truncate"
-                  style={{ fontFamily: p.key === 'cute' ? "'KaiTi','STKaiti','Malgun Gothic',sans-serif" : p.key === 'clean' ? "system-ui,'Segoe UI','PingFang SC',sans-serif" : "Georgia,'KaiTi','STKaiti',serif" }}
-                >
-                  {p.preview}
-                </p>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Font size */}
-        <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-2 block">{t('settings.font_size', lang)}</label>
-          <div className="flex gap-2">
-            {FONT_SIZES.map((s) => (
-              <button
-                key={s.key}
-                onClick={() => previewSize(s.key)}
-                className={`flex-1 rounded-xl py-2.5 text-center border transition-all ${
-                  fontSettings.size === s.key
-                    ? 'border-[var(--pink-primary)] bg-[var(--pink-primary)]/8 shadow-sm'
-                    : 'border-[var(--border-color)] hover:border-[var(--border-hover)]'
-                }`}
-              >
-                <span className={`text-xs ${
-                  fontSettings.size === s.key ? 'text-[var(--pink-primary)] font-semibold' : 'text-[var(--text-primary)]'
-                }`}>
-                  {s.label}
-                </span>
-                <span className={`block ${
-                  fontSettings.size === s.key ? 'text-[var(--pink-primary)]' : 'text-[var(--text-muted)]'
-                }`} style={{ fontSize: `${s.px}px` }}>
-                  Aa
-                </span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Live preview */}
-        <div className="bg-[var(--bg-base)] border border-[var(--border-color)] rounded-xl p-4 space-y-2">
-          <p className="text-[13px] text-[var(--text-muted)] mb-1">{lang === 'en' ? 'Preview' : '预览效果'}</p>
-          <p className="text-lg font-semibold text-[var(--text-primary)]">
-            안녕하세요! 좋은 아침이에요.
-          </p>
-          <p className="text-sm text-[var(--text-secondary)]">
-            你好！这是一段中文预览文本，用于展示当前字体和字号的实际效果。
-          </p>
-          <p className="text-xs text-[var(--text-muted)]">
-            The quick brown fox jumps over the lazy dog. 12345
-          </p>
-        </div>
-
-        {/* Flashcard theme */}
-        <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-2 block">{t('settings.flashcard_color', lang)}</label>
-          <div className="grid grid-cols-2 gap-2">
-            {FLASHCARD_THEMES.map((t) => (
-              <button
-                key={t.key}
-                onClick={() => handleFcTheme(t.key)}
-                className={`rounded-xl p-3 text-left border transition-all ${
-                  fcTheme === t.key
-                    ? 'border-[var(--pink-primary)] bg-[var(--pink-primary)]/8 shadow-sm'
-                    : 'border-[var(--border-color)] hover:border-[var(--border-hover)]'
-                }`}
-              >
-                <div className="flex items-center gap-1.5 mb-1.5">
-                  {t.swatches.map((c, i) => (
-                    <span key={i} className="w-4 h-4 rounded-full border border-black/5 inline-block flex-shrink-0" style={{ background: c }} />
-                  ))}
-                </div>
-                <p className={`text-xs font-semibold ${fcTheme === t.key ? 'text-[var(--pink-primary)]' : 'text-[var(--text-primary)]'}`}>
-                  {t.label}
-                </p>
-                <p className="text-[11px] text-[var(--text-muted)] mt-0.5">{t.desc}</p>
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Achievements */}
-      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 space-y-4">
-        <div className="flex items-center gap-3 mb-4">
-          <Trophy size={20} className="text-[var(--peach-soft)]" />
-          <h2 className="text-lg font-medium text-[var(--text-primary)]">
-            {t('settings.achievements', lang)} ({earnedAchievements.length}/{allTypes.length})
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-          {allTypes.map((type) => {
-            const def = ACHIEVEMENT_DEFS[type];
-            const earned = earnedTypes.has(type);
-            return (
-              <div
-                key={type}
-                className={`rounded-xl p-3 text-center transition-all ${
-                  earned
-                    ? 'bg-[var(--yellow-soft)]/20 border border-[var(--yellow-soft)]/30'
-                    : 'bg-[var(--bg-input)] border border-[var(--pink-pale)]/50 opacity-40'
-                }`}
-              >
-                <div className="text-2xl mb-1">{def.icon}</div>
-                <div className="text-xs text-[var(--text-primary)] font-medium">{def.title}</div>
-                <div className="text-[13px] text-[var(--text-secondary)] mt-0.5">{def.description}</div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Save Button */}
+    <div className="py-4 max-w-2xl mx-auto">
       <button
-        onClick={handleSave}
-        disabled={saving}
-        className={`w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-[var(--text-primary)] font-medium transition-all ${
-          saved
-            ? 'bg-[var(--pink-primary)]'
-            : 'bg-[var(--pink-primary)] hover:bg-[var(--pink-primary)] active:scale-[0.98]'
-        }`}
+        onClick={() => router.back()}
+        style={{
+          display: 'inline-flex', alignItems: 'center', gap: 6,
+          fontSize: 13, color: 'var(--color-ink-2)', background: 'transparent', border: 'none',
+          padding: 0, cursor: 'pointer', marginBottom: 14,
+        }}
       >
-        {saving ? <Loader2 size={18} className="animate-spin" /> : saved ? <><Save size={18} /> {t('settings.save_success', lang)}</> : <><Save size={18} /> {t('settings.save', lang)}</>}
+        <ArrowLeft size={16} />
+        返回
       </button>
 
-      {/* Logout */}
-      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-medium text-[var(--text-primary)]">{lang === 'en' ? 'Current account' : '当前账号'}</p>
-            <p className="text-xs text-[var(--text-muted)] mt-0.5">{authLoading ? t('common.loading', lang) : (user?.nickname ?? (lang === 'en' ? 'Not logged in' : '未登录'))}</p>
+      <PageHeader
+        eyebrow="설정"
+        title={t('settings.title', lang)}
+        subtitle={lang === 'en' ? 'Personalize your learning experience' : '个性化你的学习体验'}
+        flat
+      />
+
+      {/* Profile */}
+      <Section spacing="normal">
+        <Card variant="default" padding="lg">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+            <User size={18} color="var(--color-pink-strong)" />
+            <h2 style={{ fontSize: 16, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>
+              {t('settings.profile', lang)}
+            </h2>
           </div>
-          <button
-            onClick={async () => {
-              await logout();
-              window.location.href = '/auth/login';
-            }}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl border border-red-200 text-red-500 text-sm hover:bg-red-50 transition-colors"
-          >
-            <LogOut size={15} />
-            {t('settings.logout', lang)}
-          </button>
-        </div>
-      </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <div>
+              <label style={labelStyle}>{t('settings.nickname', lang)}</label>
+              <input
+                type="text"
+                value={profile.nickname}
+                onChange={(e) => setProfile({ ...profile, nickname: e.target.value })}
+                placeholder={t('settings.nickname_placeholder', lang)}
+                style={inputStyle}
+              />
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14, background: 'var(--color-surface-3)', borderRadius: 'var(--radius-md)', padding: 14 }}>
+              <div
+                style={{
+                  width: 44, height: 44, borderRadius: '50%',
+                  background: 'var(--color-pink-soft)', color: 'var(--color-pink-strong)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 18, fontWeight: 800, flexShrink: 0,
+                }}
+              >
+                {profile.level}
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--color-ink-1)' }}>
+                    {lang === 'en' ? `Level ${profile.level}` : `等级 ${profile.level}`}
+                  </span>
+                  <span style={{ fontSize: 11, color: 'var(--color-ink-3)' }}>
+                    {profile.xp}/{profile.xpToNextLevel} XP
+                  </span>
+                </div>
+                <div style={{ width: '100%', height: 6, borderRadius: 'var(--radius-pill)', background: 'var(--color-surface-4)' }}>
+                  <div
+                    style={{
+                      height: 6, borderRadius: 'var(--radius-pill)',
+                      background: 'var(--color-pink-base)',
+                      width: `${(profile.xp / profile.xpToNextLevel) * 100}%`,
+                      transition: 'width var(--dur-slow) var(--ease-soft)',
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'var(--color-surface-3)', borderRadius: 'var(--radius-md)', padding: 14 }}>
+              <Flame size={20} color="var(--color-peach-strong)" />
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--color-ink-1)' }}>
+                  {lang === 'en' ? `${profile.streak}-day streak` : `连续学习 ${profile.streak} 天`}
+                </div>
+                <div style={{ fontSize: 11, color: 'var(--color-ink-3)' }}>
+                  {lang === 'en' ? `Best: ${profile.longestStreak} days` : `最长记录: ${profile.longestStreak} 天`}
+                </div>
+              </div>
+            </div>
+          </div>
+        </Card>
+      </Section>
+
+      {/* Goals */}
+      <Section spacing="normal">
+        <Card variant="default" padding="lg">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+            <Target size={18} color="var(--color-mint-strong)" />
+            <h2 style={{ fontSize: 16, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>
+              {t('settings.learning_goal', lang)}
+            </h2>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <div>
+              <label style={labelStyle}>{t('settings.level', lang)}</label>
+              <select
+                value={profile.targetLevel}
+                onChange={(e) => setProfile({ ...profile, targetLevel: e.target.value as UserProfile['targetLevel'] })}
+                style={inputStyle}
+              >
+                <option value="beginner">{lang === 'en' ? 'Beginner (TOPIK 1-2)' : '初级 (TOPIK 1-2)'}</option>
+                <option value="intermediate">{lang === 'en' ? 'Intermediate (TOPIK 3-4)' : '中级 (TOPIK 3-4)'}</option>
+                <option value="advanced">{lang === 'en' ? 'Advanced (TOPIK 5-6)' : '高级 (TOPIK 5-6)'}</option>
+              </select>
+            </div>
+
+            <div>
+              <label style={labelStyle}>
+                {lang === 'en' ? `Daily word goal: ${profile.dailyGoalWords} words` : `每日学习单词: ${profile.dailyGoalWords} 个`}
+              </label>
+              <input
+                type="range"
+                min="5" max="50" step="5"
+                value={profile.dailyGoalWords}
+                onChange={(e) => setProfile({ ...profile, dailyGoalWords: Number(e.target.value) })}
+                style={{ width: '100%', accentColor: 'var(--color-pink-base)' }}
+              />
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: 'var(--color-ink-4)', marginTop: 2 }}>
+                <span>5</span><span>50</span>
+              </div>
+            </div>
+
+            <div>
+              <label style={labelStyle}>
+                {lang === 'en' ? `Daily study time: ${profile.dailyGoalMinutes} min` : `每日学习时间: ${profile.dailyGoalMinutes} 分钟`}
+              </label>
+              <input
+                type="range"
+                min="5" max="120" step="5"
+                value={profile.dailyGoalMinutes}
+                onChange={(e) => setProfile({ ...profile, dailyGoalMinutes: Number(e.target.value) })}
+                style={{ width: '100%', accentColor: 'var(--color-pink-base)' }}
+              />
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: 'var(--color-ink-4)', marginTop: 2 }}>
+                <span>{lang === 'en' ? '5 min' : '5 分钟'}</span><span>{lang === 'en' ? '2 hrs' : '2 小时'}</span>
+              </div>
+            </div>
+          </div>
+        </Card>
+      </Section>
+
+      {/* Preferences */}
+      <Section spacing="normal">
+        <Card variant="default" padding="lg">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+            <Sliders size={18} color="var(--color-purple-strong)" />
+            <h2 style={{ fontSize: 16, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>
+              {t('settings.preferences', lang)}
+            </h2>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <div>
+              <label style={labelStyle}>{t('settings.language', lang)} / Language</label>
+              <div style={{ display: 'flex', gap: 8 }}>
+                {(['zh', 'en'] as const).map((l) => (
+                  <button
+                    key={l}
+                    onClick={() => setLang(l)}
+                    style={{
+                      flex: 1, padding: '10px 0', borderRadius: 'var(--radius-md)',
+                      fontSize: 13, fontWeight: 700,
+                      border: lang === l ? '1px solid var(--color-pink-base)' : '1px solid var(--color-border-2)',
+                      background: lang === l ? 'var(--color-pink-base)' : 'var(--color-surface-1)',
+                      color: lang === l ? '#fff' : 'var(--color-ink-2)',
+                      cursor: 'pointer',
+                      transition: 'all var(--dur-fast) var(--ease-soft)',
+                    }}
+                  >
+                    {l === 'zh' ? '中文' : 'English'}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <label style={labelStyle}>{t('settings.tts_speed', lang)}: {profile.ttsSpeed ?? 0.8}x</label>
+              <input
+                type="range"
+                min="0.5" max="1.2" step="0.1"
+                value={profile.ttsSpeed ?? 0.8}
+                onChange={(e) => { const v = parseFloat(e.target.value); setSpeechRate(v); setProfile({ ...profile, ttsSpeed: v }); }}
+                style={{ width: '100%', accentColor: 'var(--color-purple-base)' }}
+              />
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: 'var(--color-ink-4)', marginTop: 2 }}>
+                <span>{lang === 'en' ? '0.5x slow' : '0.5x 慢'}</span>
+                <span>{lang === 'en' ? '1.2x fast' : '1.2x 快'}</span>
+              </div>
+            </div>
+
+            <div>
+              <label style={labelStyle}>{t('settings.review_batch', lang)}: {profile.reviewBatchSize ?? 10}{lang === 'en' ? '' : ' 个'}</label>
+              <select
+                value={profile.reviewBatchSize ?? 10}
+                onChange={(e) => setProfile({ ...profile, reviewBatchSize: Number(e.target.value) })}
+                style={inputStyle}
+              >
+                {[5, 10, 15, 20, 30].map(n => (
+                  <option key={n} value={n}>{lang === 'en' ? `${n} words` : `${n} 个`}</option>
+                ))}
+              </select>
+            </div>
+
+            <ToggleRow
+              Icon={soundOn ? Volume2 : VolumeX}
+              label={t('settings.sound_effects', lang)}
+              desc={lang === 'en' ? 'Lightweight feedback sounds (very quiet)' : '轻量操作反馈音效（音量很低）'}
+              on={soundOn}
+              tone="purple"
+              onChange={() => { const v = !soundOn; setSoundOn(v); setSoundEnabled(v); }}
+            />
+
+            <ToggleRow
+              Icon={Zap}
+              label={t('settings.reduce_motion', lang)}
+              desc={lang === 'en' ? 'Disable bounce and breathing animations' : '关闭弹跳、呼吸等动画效果'}
+              on={!reduceMotion}
+              tone="peach"
+              onChange={() => { const v = !reduceMotion; setReduceMotionState(v); setReduceMotion(v); }}
+            />
+
+            <ToggleRow
+              Icon={theme === 'dark' ? Moon : Sun}
+              label={t('settings.dark_mode', lang)}
+              desc={theme === 'dark' ? (lang === 'en' ? 'Current: Dark' : '当前：深色') : (lang === 'en' ? 'Current: Light' : '当前：亮色')}
+              on={theme === 'dark'}
+              tone="purple"
+              onChange={toggleTheme}
+            />
+          </div>
+        </Card>
+      </Section>
+
+      {/* Display */}
+      <Section spacing="normal">
+        <Card variant="default" padding="lg">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+            <Type size={20} color="var(--color-ink-1)" />
+            <h2 style={{ fontSize: 16, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>
+              {t('settings.display', lang)}
+            </h2>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+            <div>
+              <label style={labelStyle}>{t('settings.font_style', lang)}</label>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+                {FONT_PRESETS.map((p) => {
+                  const active = fontSettings.preset === p.key;
+                  return (
+                    <button
+                      key={p.key}
+                      onClick={() => previewPreset(p.key)}
+                      style={{
+                        padding: 12, borderRadius: 'var(--radius-md)',
+                        textAlign: 'center',
+                        border: active ? '1px solid var(--color-pink-base)' : '1px solid var(--color-border-2)',
+                        background: active ? 'var(--color-pink-soft)' : 'var(--color-surface-2)',
+                        cursor: 'pointer',
+                        transition: 'all var(--dur-fast) var(--ease-soft)',
+                      }}
+                    >
+                      <p style={{ fontSize: 12, fontWeight: 700, color: active ? 'var(--color-pink-strong)' : 'var(--color-ink-1)', margin: '0 0 4px' }}>
+                        {p.label}
+                      </p>
+                      <p style={{ fontSize: 10, color: 'var(--color-ink-3)', margin: 0, lineHeight: 1.3 }}>{p.desc}</p>
+                      <p
+                        style={{
+                          fontSize: 9, color: 'var(--color-ink-4)', marginTop: 6,
+                          overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                          fontFamily: p.key === 'cute'
+                            ? "'KaiTi','STKaiti','Malgun Gothic',sans-serif"
+                            : p.key === 'clean'
+                              ? "system-ui,'Segoe UI','PingFang SC',sans-serif"
+                              : "Georgia,'KaiTi','STKaiti',serif",
+                        }}
+                      >
+                        {p.preview}
+                      </p>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div>
+              <label style={labelStyle}>{t('settings.font_size', lang)}</label>
+              <div style={{ display: 'flex', gap: 8 }}>
+                {FONT_SIZES.map((s) => {
+                  const active = fontSettings.size === s.key;
+                  return (
+                    <button
+                      key={s.key}
+                      onClick={() => previewSize(s.key)}
+                      style={{
+                        flex: 1, padding: '10px 0', borderRadius: 'var(--radius-md)',
+                        textAlign: 'center',
+                        border: active ? '1px solid var(--color-pink-base)' : '1px solid var(--color-border-2)',
+                        background: active ? 'var(--color-pink-soft)' : 'var(--color-surface-2)',
+                        cursor: 'pointer',
+                        transition: 'all var(--dur-fast) var(--ease-soft)',
+                      }}
+                    >
+                      <span style={{ fontSize: 12, color: active ? 'var(--color-pink-strong)' : 'var(--color-ink-1)', fontWeight: 700 }}>
+                        {s.label}
+                      </span>
+                      <span style={{ display: 'block', color: active ? 'var(--color-pink-strong)' : 'var(--color-ink-3)', fontSize: s.px }}>
+                        Aa
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div style={{ background: 'var(--color-surface-1)', border: '1px solid var(--color-border-1)', borderRadius: 'var(--radius-md)', padding: 14 }}>
+              <p style={{ fontSize: 12, color: 'var(--color-ink-3)', margin: '0 0 4px' }}>
+                {lang === 'en' ? 'Preview' : '预览效果'}
+              </p>
+              <p style={{ fontSize: 18, fontWeight: 700, color: 'var(--color-ink-1)', margin: '0 0 4px' }}>
+                안녕하세요! 좋은 아침이에요.
+              </p>
+              <p style={{ fontSize: 13, color: 'var(--color-ink-2)', margin: '0 0 4px' }}>
+                你好！这是一段中文预览文本，用于展示当前字体和字号的实际效果。
+              </p>
+              <p style={{ fontSize: 11, color: 'var(--color-ink-3)', margin: 0 }}>
+                The quick brown fox jumps over the lazy dog. 12345
+              </p>
+            </div>
+
+            <div>
+              <label style={labelStyle}>{t('settings.flashcard_color', lang)}</label>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                {FLASHCARD_THEMES.map((th) => {
+                  const active = fcTheme === th.key;
+                  return (
+                    <button
+                      key={th.key}
+                      onClick={() => handleFcTheme(th.key)}
+                      style={{
+                        padding: 12, borderRadius: 'var(--radius-md)',
+                        textAlign: 'left',
+                        border: active ? '1px solid var(--color-pink-base)' : '1px solid var(--color-border-2)',
+                        background: active ? 'var(--color-pink-soft)' : 'var(--color-surface-2)',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <div style={{ display: 'flex', gap: 6, marginBottom: 6 }}>
+                        {th.swatches.map((c, i) => (
+                          <span
+                            key={i}
+                            style={{
+                              width: 16, height: 16, borderRadius: '50%',
+                              background: c, border: '1px solid var(--color-swatch-outline)', flexShrink: 0,
+                            }}
+                          />
+                        ))}
+                      </div>
+                      <p style={{ fontSize: 12, fontWeight: 700, color: active ? 'var(--color-pink-strong)' : 'var(--color-ink-1)', margin: 0 }}>
+                        {th.label}
+                      </p>
+                      <p style={{ fontSize: 11, color: 'var(--color-ink-3)', margin: '2px 0 0' }}>
+                        {th.desc}
+                      </p>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </Card>
+      </Section>
+
+      {/* Achievements */}
+      <Section spacing="normal">
+        <Card variant="default" padding="lg">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+            <Trophy size={18} color="var(--color-peach-strong)" />
+            <h2 style={{ fontSize: 16, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>
+              {t('settings.achievements', lang)} ({earnedAchievements.length}/{allTypes.length})
+            </h2>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+            {allTypes.map((type) => {
+              const def = ACHIEVEMENT_DEFS[type];
+              const earned = earnedTypes.has(type);
+              return (
+                <div
+                  key={type}
+                  style={{
+                    padding: 12, borderRadius: 'var(--radius-md)',
+                    textAlign: 'center',
+                    background: earned ? 'var(--color-peach-soft)' : 'var(--color-surface-3)',
+                    border: '1px solid var(--color-border-1)',
+                    opacity: earned ? 1 : 0.4,
+                  }}
+                >
+                  <div style={{ fontSize: 22, marginBottom: 4 }}>{def.icon}</div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--color-ink-1)' }}>{def.title}</div>
+                  <div style={{ fontSize: 11, color: 'var(--color-ink-3)', marginTop: 2 }}>{def.description}</div>
+                </div>
+              );
+            })}
+          </div>
+        </Card>
+      </Section>
+
+      {/* Save */}
+      <Button
+        variant="primary"
+        tone="pink"
+        size="lg"
+        fullWidth
+        loading={saving}
+        onClick={handleSave}
+        icon={<Save size={18} />}
+      >
+        {saved ? t('settings.save_success', lang) : t('settings.save', lang)}
+      </Button>
+
+      {/* Logout */}
+      <Section spacing="normal">
+        <Card variant="default" padding="md" style={{ marginTop: 20 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+            <div style={{ minWidth: 0 }}>
+              <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>
+                {lang === 'en' ? 'Current account' : '当前账号'}
+              </p>
+              <p style={{ fontSize: 12, color: 'var(--color-ink-3)', margin: '2px 0 0' }}>
+                {authLoading ? t('common.loading', lang) : (user?.nickname ?? (lang === 'en' ? 'Not logged in' : '未登录'))}
+              </p>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              icon={<LogOut size={14} />}
+              onClick={async () => { await logout(); window.location.href = '/auth/login'; }}
+              style={{ color: 'var(--color-status-danger)', borderColor: 'var(--color-status-danger-border)' }}
+            >
+              {t('settings.logout', lang)}
+            </Button>
+          </div>
+        </Card>
+      </Section>
     </div>
   );
 }

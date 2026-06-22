@@ -46,7 +46,6 @@ export default function ToolsPage() {
         title="工具"
         subtitle="把你看到的韩文，变成可以学的内容。"
         tone="mint"
-        mascot="sit"
       />
 
       {/* Featured: Content breakdown */}

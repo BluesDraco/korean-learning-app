@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, FileText, Plus } from 'lucide-react';
 import { db } from '@/lib/db';
+import { useIsDesktop } from '@/lib/useIsMobile';
+import { PageHeader, Section, Card, Button } from '@/components/ui';
 
 interface Article {
   id: string;
@@ -15,6 +17,7 @@ interface Article {
 }
 
 export default function MineArticlesPage() {
+  const isDesktop = useIsDesktop();
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -25,64 +28,100 @@ export default function MineArticlesPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  return (
-    <div className="py-4 space-y-4">
-      <div className="flex items-center gap-2 text-[13px]">
-        <Link href="/mine" className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1">
-          <ArrowLeft size={14} />返回
-        </Link>
-        <span className="text-[var(--border-color)]">/</span>
-        <span className="text-[var(--text-secondary)] font-medium">我的文章</span>
-      </div>
+  const containerCls = isDesktop ? 'py-4 max-w-5xl mx-auto' : 'py-4 max-w-2xl mx-auto';
 
-      <div className="flex items-center justify-between">
-        <h1 className="text-[20px] font-bold text-[var(--text-primary)]">我的文章</h1>
-        {articles.length > 0 && (
-          <span className="text-[12px] text-[var(--text-muted)]">{articles.length} 篇</span>
-        )}
-      </div>
+  return (
+    <div className={containerCls}>
+      <Link
+        href="/mine"
+        style={{
+          display: 'inline-flex', alignItems: 'center', gap: 6,
+          fontSize: 13, color: 'var(--color-ink-2)', textDecoration: 'none',
+          marginBottom: 14,
+        }}
+      >
+        <ArrowLeft size={14} />
+        返回我的
+      </Link>
+
+      <PageHeader
+        eyebrow="MY ARTICLES"
+        title="我的文章"
+        subtitle={articles.length > 0 ? `共 ${articles.length} 篇` : '保存阅读过的文章，方便回顾'}
+        tone="peach"
+        flat
+      />
 
       {loading ? (
-        <div className="flex justify-center py-16">
-          <div className="w-6 h-6 rounded-full border-2 border-[var(--pink-primary)] border-t-transparent animate-spin" />
-        </div>
+        <Card variant="default" padding="lg" style={{ textAlign: 'center' }}>
+          <div
+            style={{
+              width: 24, height: 24, borderRadius: '50%',
+              border: '2px solid var(--color-pink-base)', borderTopColor: 'transparent',
+              animation: 'tori-spin 0.7s linear infinite',
+              margin: '0 auto',
+            }}
+          />
+        </Card>
       ) : articles.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-20 px-4 text-center">
-          <div className="w-16 h-16 rounded-2xl bg-[var(--bg-muted)] flex items-center justify-center mb-4">
-            <FileText size={28} className="text-[var(--border-color)]" />
-          </div>
-          <h2 className="text-[16px] font-bold text-[var(--text-primary)] mb-2">还没有保存文章</h2>
-          <p className="text-[13px] text-[var(--text-muted)] max-w-xs leading-relaxed">
-            在阅读文章时点击保存，内容会出现在这里
-          </p>
-          <Link
-            href="/reading"
-            className="mt-6 flex items-center gap-2 h-11 px-6 rounded-full bg-[var(--text-primary)] text-white text-[13px] font-bold"
-          >
-            <Plus size={15} />去阅读
-          </Link>
-        </div>
-      ) : (
-        <div className="space-y-3">
-          {articles.map((article) => (
+        <Card variant="hero" tone="peach" padding="lg">
+          <div style={{ textAlign: 'center' }}>
             <div
-              key={article.id}
-              className="rounded-[20px] bg-[var(--bg-card)] border border-[var(--border-color)] p-4 shadow-[0_2px_8px_rgba(92,64,38,0.04)]"
+              style={{
+                width: 64, height: 64, borderRadius: 'var(--radius-lg)',
+                background: 'var(--color-surface-2)', color: 'var(--color-peach-strong)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                margin: '0 auto 14px',
+              }}
+              aria-hidden
             >
-              <h3 className="text-[15px] font-bold text-[var(--text-primary)] line-clamp-1">{article.title}</h3>
-              {article.originalText && (
-                <p className="text-[12px] text-[var(--text-muted)] mt-1 line-clamp-2 leading-relaxed">
-                  {article.originalText}
-                </p>
-              )}
-              {article.createdAt && (
-                <p className="text-[11px] text-[var(--border-color)] mt-2">
-                  {new Date(article.createdAt).toLocaleDateString('zh-CN')}
-                </p>
-              )}
+              <FileText size={28} strokeWidth={1.75} />
             </div>
-          ))}
-        </div>
+            <h2 style={{ fontSize: 16, fontWeight: 800, color: 'var(--color-ink-1)', margin: '0 0 6px' }}>
+              还没有保存文章
+            </h2>
+            <p style={{ fontSize: 13, color: 'var(--color-ink-3)', margin: '0 0 20px', lineHeight: 1.6 }}>
+              在阅读文章时点击保存，内容会出现在这里
+            </p>
+            <Link href="/reading" style={{ textDecoration: 'none' }}>
+              <Button variant="primary" tone="black" icon={<Plus size={15} />}>去阅读</Button>
+            </Link>
+          </div>
+        </Card>
+      ) : (
+        <Section spacing="normal">
+          <div style={{ display: 'grid', gridTemplateColumns: isDesktop ? '1fr 1fr' : '1fr', gap: 10 }}>
+            {articles.map((article) => (
+              <Card key={article.id} variant="default" padding="md">
+                <h3
+                  style={{
+                    fontSize: 15, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0,
+                    overflow: 'hidden', display: '-webkit-box',
+                    WebkitLineClamp: 1, WebkitBoxOrient: 'vertical' as const,
+                  }}
+                >
+                  {article.title}
+                </h3>
+                {article.originalText && (
+                  <p
+                    style={{
+                      fontSize: 12, color: 'var(--color-ink-3)', margin: '6px 0 0', lineHeight: 1.6,
+                      overflow: 'hidden', display: '-webkit-box',
+                      WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const,
+                    }}
+                  >
+                    {article.originalText}
+                  </p>
+                )}
+                {article.createdAt && (
+                  <p style={{ fontSize: 11, color: 'var(--color-ink-4)', margin: '8px 0 0' }}>
+                    {new Date(article.createdAt).toLocaleDateString('zh-CN')}
+                  </p>
+                )}
+              </Card>
+            ))}
+          </div>
+        </Section>
       )}
     </div>
   );

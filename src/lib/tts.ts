@@ -174,6 +174,17 @@ export async function speak(
   cancelSpeech();
   const seq = ++speakSeq;
 
+  // Static audio registry takes precedence (40音 real human recordings).
+  // Bypass content classification to avoid 短词 → AI TTS misroute.
+  {
+    const staticAudio = getStaticAudio(cleaned);
+    if (staticAudio) {
+      try { await playUrl(staticAudio.url, seq); } catch { /* silent */ }
+      onEnd?.();
+      return;
+    }
+  }
+
   // Classify content and resolve audio policy
   const contentType: AudioContentType = classifyContent(cleaned);
   const policy = resolveAudioPolicy(contentType);
