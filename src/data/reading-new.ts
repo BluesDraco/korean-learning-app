@@ -2980,7 +2980,7 @@ export const readingArticles: Article[] = [
         id: 'kde-8',
         ko: '그 대사 정말 유명하잖아요. 다들 알잖아요.',
         zh: '那句台词真的很有名嘛。大家都知道嘛。',
-        pronunciation: 'geu dae-sa jeong-mal yu-myeong-a-cha-na-yo da-deul al-ja-na-yo',
+        pronunciation: 'geu dae-sa jeong-mal yu-myeong-ha-ja-na-yo da-deul al-ja-na-yo',
         words: [
           { word: '그 대사', meaning: '那句台词' },
           { word: '정말 유명하잖아요', meaning: '真的很有名嘛（-잖아요）' },
@@ -3482,7 +3482,7 @@ export const readingArticles: Article[] = [
         id: 'nrc-6',
         ko: '친구들이 분위기를 띄워 줘서 더 즐거웠어요.',
         zh: '朋友们帮忙活跃气氛，更加开心了。',
-        pronunciation: 'chin-gu-deu-ri bu-nwi-gi-reul ttwi-wo jwo-seo deo jeul-geo-wo-sseo-yo',
+        pronunciation: 'chin-gu-deu-ri bun-wi-gi-reul ttwi-wo jwo-seo deo jeul-geo-wo-sseo-yo',
         words: [
           { word: '친구들이', meaning: '朋友们（主语）' },
           { word: '분위기를', meaning: '气氛（宾语）' },
@@ -4808,7 +4808,7 @@ export const readingArticles: Article[] = [
         id: 'bst-4',
         ko: '날씨가 좋은 덕분에 해운대 해변을 즐길 수 있었어요.',
         zh: '多亏天气好，能够享受海云台海滩。',
-        pronunciation: 'nal-ssi-ga jo-eun deong-bu-ne hae-un-dae hae-byeo-neul jeul-gil su i-sseo-sseo-yo',
+        pronunciation: 'nal-ssi-ga jo-eun deok-bu-ne hae-un-dae hae-byeo-neul jeul-gil su i-sseo-sseo-yo',
         words: [
           { word: '날씨가 좋은 덕분에', meaning: '多亏天气好（-(으)ㄴ 덕분에）' },
           { word: '해운대 해변을', meaning: '海云台海滩（宾语）' },
@@ -4832,7 +4832,7 @@ export const readingArticles: Article[] = [
         id: 'bst-6',
         ko: '자갈치 시장에서 신선한 회를 먹은 덕분에 기분이 최고였어요.',
         zh: '多亏在札嘎其市场吃了新鲜的生鱼片，心情极好。',
-        pronunciation: 'ja-gal-chi si-jang-e-seo sin-seon-han hoe-reul meo-geun deong-bu-ne gi-bu-ni choe-go-yeo-sseo-yo',
+        pronunciation: 'ja-gal-chi si-jang-e-seo sin-seon-han hoe-reul meo-geun deok-bu-ne gi-bu-ni choe-go-yeo-sseo-yo',
         words: [
           { word: '자갈치 시장에서', meaning: '在札嘎其市场' },
           { word: '신선한 회를 먹은 덕분에', meaning: '多亏吃了新鲜生鱼片（-(으)ㄴ 덕분에）' },
@@ -4856,7 +4856,7 @@ export const readingArticles: Article[] = [
         id: 'bst-8',
         ko: '현지 친구의 추천 덕분에 숨겨진 맛집을 찾았어요.',
         zh: '多亏当地朋友的推荐，找到了隐藏的美食店。',
-        pronunciation: 'hyeon-ji chin-gu-e chu-cheon deong-bu-ne sum-gyeo-jin mat-jji-beul cha-ja-sseo-yo',
+        pronunciation: 'hyeon-ji chin-gu-e chu-cheon deok-bu-ne sum-gyeo-jin mat-jji-beul cha-ja-sseo-yo',
         words: [
           { word: '현지 친구의 추천 덕분에', meaning: '多亏当地朋友的推荐（-(으)ㄴ 덕분에）' },
           { word: '숨겨진 맛집을', meaning: '隐藏的美食店（宾语）' },
@@ -4880,7 +4880,7 @@ export const readingArticles: Article[] = [
         id: 'bst-10',
         ko: '밀면을 처음 먹어 본 덕분에 부산만의 맛을 알게 됐어요.',
         zh: '多亏第一次吃了밀면，了解到了釜山独有的味道。',
-        pronunciation: 'mil-myeo-neul cheo-eum meo-geo bon deong-bu-ne bu-san-ma-ne ma-seul al-ge dwae-sseo-yo',
+        pronunciation: 'mil-myeo-neul cheo-eum meo-geo bon deok-bu-ne bu-san-ma-ne ma-seul al-ge dwae-sseo-yo',
         words: [
           { word: '밀면을 처음 먹어 본 덕분에', meaning: '多亏第一次吃了밀면（-(으)ㄴ 덕분에）' },
           { word: '부산만의 맛을', meaning: '釜山独有的味道（宾语）' },
@@ -4904,7 +4904,7 @@ export const readingArticles: Article[] = [
         id: 'bst-12',
         ko: '친구와 함께한 덕분에 혼자였으면 못 갔을 곳도 갔어요.',
         zh: '多亏和朋友一起，去了一个人去不了的地方。',
-        pronunciation: 'chin-gu-wa ham-kke-han deong-bu-ne hon-ja-yeo-sseu-myeon mot ga-sseul got-tto ga-sseo-yo',
+        pronunciation: 'chin-gu-wa ham-kke-han deok-bu-ne hon-ja-yeo-sseu-myeon mot ga-sseul got-tto ga-sseo-yo',
         words: [
           { word: '친구와 함께한 덕분에', meaning: '多亏和朋友一起（-(으)ㄴ 덕분에）' },
           { word: '혼자였으면 못 갔을 곳도', meaning: '一个人去不了的地方也' },
@@ -5482,7 +5482,7 @@ export const readingArticles: Article[] = [
         id: 'hca-15',
         ko: '한류는 앞으로도 글로벌 문화 교류의 중요한 다리 역할을 할 거예요.',
         zh: '韩流今后也将继续担任全球文化交流的重要桥梁角色。',
-        pronunciation: 'hal-lyu-neun a-peu-ro-do geul-lo-beol mun-hwa gyo-ryu-e jung-yo-han da-ri yeo-kha-reul hal kkeo-ye-yo',
+        pronunciation: 'hal-lyu-neun a-peu-ro-do geul-lo-beol mun-hwa gyo-ryu-e jung-yo-han da-ri yeo-ka-reul hal kkeo-ye-yo',
         words: [
           { word: '한류는', meaning: '韩流（话题）' },
           { word: '앞으로도', meaning: '今后也' },
@@ -6031,7 +6031,7 @@ export const readingArticles: Article[] = [
         id: 'kdi-15',
         ko: '한국 드라마 산업은 앞으로도 계속 발전할 가능성이 높아요.',
         zh: '韩国电视剧产业今后继续发展的可能性很高。',
-        pronunciation: 'han-guk deu-ra-ma-neun ap-eu-ro-do gye-sok pal-lyeon-hae-so se-gye si-jang-e-seo jung-yo-han wi-chi-reul cha-ji-hal geo-ye-yo',
+        pronunciation: 'han-guk deu-ra-ma sa-neo-beun a-peu-ro-do gye-sok bal-jeon-hal ga-neung-seong-i no-pa-yo',
         words: [
           { word: '한국 드라마 산업은', meaning: '韩国电视剧产业（话题）' },
           { word: '앞으로도', meaning: '今后也' },
@@ -6506,7 +6506,7 @@ export const readingArticles: Article[] = [
         id: 'kys-10',
         ko: '한국 젊은이들이 온라인과 오프라인을 자유롭게 넘나든다고 볼 수 있어요.',
         zh: '可以认为，韩国年轻人能自由地穿梭于线上和线下之间。',
-        pronunciation: 'han-guk jeol-meun-i-deu-re in-gan-gwan-gye-neun bok-jap-ha-ji-man so-jung-hae-yo',
+        pronunciation: 'han-guk jeol-meun-i-deu-ri ol-la-in-gwa o-peu-ra-i-neul ja-yu-rop-ge neom-na-deun-da-go bol su i-sseo-yo',
         words: [
           { word: '한국 젊은이들이', meaning: '韩国年轻人（主语）' },
           { word: '온라인과 오프라인을', meaning: '线上与线下（宾语）' },
@@ -6518,7 +6518,7 @@ export const readingArticles: Article[] = [
         id: 'kys-11',
         ko: '사회적 성공은 인맥 관리에 달려 있다는 시각도 있어요.',
         zh: '也有一种观点认为社会成功取决于人脉管理。',
-        pronunciation: 'geon-gang-han so-tong-eun sang-dae-bang-eul jo-jung-ha-neun ma-eu-me-seo si-jak-dwae-yo',
+        pronunciation: 'sa-hoe-jeok seong-gong-eun in-maek gwal-li-e dal-lyeo it-da-neun si-gak-do i-sseo-yo',
         words: [
           { word: '사회적 성공은', meaning: '社会成功（话题）' },
           { word: '인맥 관리에 달려 있다는', meaning: '取决于人脉管理的（-에 달려 있다）' },
@@ -6530,7 +6530,7 @@ export const readingArticles: Article[] = [
         id: 'kys-12',
         ko: '이 세대는 관계보다 취향을 우선시한다고 볼 수 있어요.',
         zh: '可以认为，这一代人将兴趣偏好置于关系之上。',
-        pronunciation: 'di-ji-teol so-tong-do jung-yo-ha-ji-man dae-myeon so-tong-do yeo-jeon-hi pil-lyeo-hae-yo',
+        pronunciation: 'i se-dae-neun gwan-gye-bo-da chwi-hyang-eul u-seon-si-han-da-go bol su i-sseo-yo',
         words: [
           { word: '이 세대는', meaning: '这一代人（话题）' },
           { word: '관계보다 취향을', meaning: '比起关系，兴趣（宾语）' },
@@ -6542,7 +6542,7 @@ export const readingArticles: Article[] = [
         id: 'kys-13',
         ko: '소셜 문화의 방향은 젊은이들 스스로의 선택에 달려 있어요.',
         zh: '社交文化的走向取决于年轻人自身的选择。',
-        pronunciation: 'han-guk jeol-meun-i-deu-reun gae-in-jeok in-gan-gwan-gye-wa ji-yeok-sa-hoe-reul dong-si-e jung-si-hae-yo',
+        pronunciation: 'so-syeol mun-hwa-e bang-hyang-eun jeol-meun-i-deul seu-seu-ro-e seon-tae-ge dal-lyeo i-sseo-yo',
         words: [
           { word: '소셜 문화의 방향은', meaning: '社交文化的走向（话题）' },
           { word: '젊은이들 스스로의 선택에', meaning: '年轻人自身的选择' },
@@ -6554,7 +6554,7 @@ export const readingArticles: Article[] = [
         id: 'kys-14',
         ko: '디지털 세대의 소통 방식은 새로운 공동체 문화를 만들고 있다고 볼 수 있어요.',
         zh: '可以认为，数字世代的沟通方式正在创造新的共同体文化。',
-        pronunciation: 'in-gan-gwan-gye-neun si-ga-ni ji-nal-su-rok deo-uk jung-yo-hae-jyeo-yo',
+        pronunciation: 'di-ji-teol se-dae-e so-tong bang-si-geun sae-ro-un gong-dong-che mun-hwa-reul man-deul-go it-da-go bol su i-sseo-yo',
         words: [
           { word: '디지털 세대의 소통 방식은', meaning: '数字世代的沟通方式（话题）' },
           { word: '새로운 공동체 문화를', meaning: '新的共同体文化（宾语）' },
@@ -6566,7 +6566,7 @@ export const readingArticles: Article[] = [
         id: 'kys-15',
         ko: '앞으로의 소셜 문화는 어떤 가치를 중요시하느냐에 달려 있어요.',
         zh: '未来的社交文化取决于重视什么样的价值观。',
-        pronunciation: 'han-guk-e-seo geon-gang-han in-gan-gwan-gye-reul yu-ji-ha-neun geot-eun mae-u jung-yo-hae-yo',
+        pronunciation: 'a-peu-ro-e so-syeol mun-hwa-neun eo-tteon ga-chi-reul jung-yo-si-ha-neu-nya-e dal-lyeo i-sseo-yo',
         words: [
           { word: '앞으로의 소셜 문화는', meaning: '未来的社交文화（话题）' },
           { word: '어떤 가치를 중요시하느냐에', meaning: '重视什么价值观' },
