@@ -1,8 +1,7 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { Volume2, RotateCcw, ChevronRight, Trophy } from 'lucide-react';
-import { speak } from '@/lib/tts';
+import { useState, useEffect, useRef } from 'react';
+import { ChevronRight, Trophy } from 'lucide-react';
 import { awardXp } from '@/lib/gamification';
 import { useIsDesktop } from '@/lib/useIsMobile';
 import { DiffFeedback } from './DiffFeedback';
@@ -16,30 +15,18 @@ export interface DictationItem {
   type: 'word' | 'sentence';
 }
 
-interface DifficultyConfig {
-  speed: number;
-  maxPlays: number;
-  showHint: boolean;
-}
-
-const DIFFICULTY_CONFIG: Record<string, DifficultyConfig> = {
-  beginner:     { speed: 0.8,  maxPlays: 3, showHint: true },
-  intermediate: { speed: 0.75, maxPlays: 2, showHint: false },
-  advanced:     { speed: 0.7,  maxPlays: 1, showHint: false },
-};
-
 interface DictationSessionProps {
   items: DictationItem[];
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  difficulty?: 'beginner' | 'intermediate' | 'advanced';
   onExit: () => void;
   exitLabel?: string;
 }
 
-export function DictationSession({ items, difficulty, onExit, exitLabel = '返回配置' }: DictationSessionProps) {
-  const config = DIFFICULTY_CONFIG[difficulty];
+export function DictationSession({ items, onExit, exitLabel = '返回配置' }: DictationSessionProps) {
   const SESSION_KEY = `dictation-session-${items.map(i => i.korean).join(',').slice(0, 40)}`;
 
   const [index, setIndex] = useState(() => {
+    if (typeof window === 'undefined') return 0;
     try {
       const saved = sessionStorage.getItem(SESSION_KEY);
       if (saved) {
@@ -51,14 +38,12 @@ export function DictationSession({ items, difficulty, onExit, exitLabel = '返�
   });
   const [input, setInput] = useState('');
   const [submitted, setSubmitted] = useState(false);
-  const [playsLeft, setPlaysLeft] = useState(config.maxPlays);
   const [xpTotal, setXpTotal] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
   const [done, setDone] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const isDesktop = useIsDesktop();
 
-  // persist index
   useEffect(() => {
     if (done) { try { sessionStorage.removeItem(SESSION_KEY); } catch { /* ignore */ } return; }
     try { sessionStorage.setItem(SESSION_KEY, JSON.stringify({ idx: index, total: items.length })); } catch { /* ignore */ }
@@ -66,23 +51,16 @@ export function DictationSession({ items, difficulty, onExit, exitLabel = '返�
 
   const current = items[index];
 
-  const playAudio = useCallback(() => {
-    if (playsLeft <= 0 || !current) return;
-    speak(current.korean, config.speed);
-    setPlaysLeft(p => p - 1);
-  }, [current, playsLeft, config.speed]);
-
   function resetForItem() {
     setInput('');
     setSubmitted(false);
-    setPlaysLeft(config.maxPlays);
   }
 
   useEffect(() => {
     if (!current) return;
     resetForItem();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [index, config]);
+  }, [index]);
 
   function handleSubmit() {
     if (!input.trim() || submitted) return;
@@ -108,8 +86,6 @@ export function DictationSession({ items, difficulty, onExit, exitLabel = '返�
       setDone(true);
     } else {
       setIndex(i => i + 1);
-      const nextItem = items[index + 1];
-      if (nextItem) speak(nextItem.korean, config.speed);
     }
   }
 
@@ -120,6 +96,7 @@ export function DictationSession({ items, difficulty, onExit, exitLabel = '返�
     }
   }
 
+  // ── Done screen ──
   if (done) {
     const pct = Math.round((correctCount / items.length) * 100);
     return (
@@ -134,7 +111,7 @@ export function DictationSession({ items, difficulty, onExit, exitLabel = '返�
         <div style={{ background: '#eaf8f5', borderRadius: 14, padding: '10px 20px' }}>
           <span style={{ fontSize: 13, color: '#3aafa9', fontWeight: 700 }}>+{xpTotal} XP 已获得</span>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, width: '100%', maxWidth: 340, marginTop: 8 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, width: '100%', maxWidth: 400, marginTop: 8 }}>
           <button
             onClick={() => { setIndex(0); setCorrectCount(0); setXpTotal(0); setDone(false); resetForItem(); }}
             style={{ padding: '13px 0', borderRadius: 14, background: '#241917', color: '#fff', fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer' }}
@@ -152,6 +129,88 @@ export function DictationSession({ items, difficulty, onExit, exitLabel = '返�
     );
   }
 
+  // ── Desktop layout ──
+  if (isDesktop) {
+    return (
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: 24, paddingBottom: 24 }}>
+        {/* Progress bar — full width */}
+        <div style={{ gridColumn: '1 / -1', display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ flex: 1, height: 6, background: '#eee0d8', borderRadius: 999, overflow: 'hidden' }}>
+            <div style={{ height: '100%', width: `${(index / items.length) * 100}%`, background: '#ff7fa8', borderRadius: 999, transition: 'width 0.3s' }} />
+          </div>
+          <span style={{ fontSize: 12, color: '#89756e', whiteSpace: 'nowrap' }}>{index + 1} / {items.length}</span>
+        </div>
+
+        {/* Left — prompt card */}
+        <div className="desktop-card" style={{ padding: 32, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 16, minHeight: 280 }}>
+          <p style={{ fontSize: 13, color: '#89756e', margin: 0 }}>用韩语写出下面的意思</p>
+          <p style={{ fontSize: 40, fontWeight: 900, color: '#241917', margin: 0, textAlign: 'center', lineHeight: 1.3 }}>
+            {current.meaning}
+          </p>
+          <span style={{ fontSize: 12, color: '#89756e', background: '#f5ede8', borderRadius: 99, padding: '4px 12px' }}>
+            {current.type === 'word' ? '单词' : '句子'}
+          </span>
+          {submitted && (
+            <div style={{ marginTop: 8, width: '100%', borderTop: '1px solid #eee0d8', paddingTop: 16, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+              <p style={{ fontSize: 12, color: '#89756e', margin: 0 }}>正确答案</p>
+              <p style={{ fontSize: 24, fontWeight: 800, color: '#3aafa9', margin: 0, textAlign: 'center' }}>{current.korean}</p>
+            </div>
+          )}
+        </div>
+
+        {/* Right — input / feedback */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {!submitted ? (
+            <>
+              <input
+                ref={inputRef}
+                value={input}
+                onChange={e => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="输入韩语..."
+                style={{
+                  width: '100%', padding: '16px 18px', borderRadius: 14,
+                  border: '2px solid #eee0d8', fontSize: 22, color: '#241917',
+                  outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box',
+                  background: 'white', transition: 'border-color 0.15s',
+                }}
+                onFocus={e => (e.target.style.borderColor = '#ff7fa8')}
+                onBlur={e => (e.target.style.borderColor = '#eee0d8')}
+              />
+              <p style={{ fontSize: 12, color: '#89756e', margin: 0 }}>使用实体键盘输入韩语，按键高亮显示如下</p>
+              <KoreanKeyboardDisplay value={input} />
+              <button
+                onClick={handleSubmit}
+                disabled={!input.trim()}
+                style={{
+                  padding: '14px 0', borderRadius: 14,
+                  background: input.trim() ? '#241917' : '#eee0d8',
+                  color: input.trim() ? '#fff' : '#89756e',
+                  fontSize: 15, fontWeight: 700, border: 'none', cursor: input.trim() ? 'pointer' : 'not-allowed',
+                  transition: 'background 0.15s',
+                }}
+              >
+                提交
+              </button>
+            </>
+          ) : (
+            <>
+              <DiffFeedback userInput={normalizeKorean(input)} correct={normalizeKorean(current.korean)} />
+              <button
+                onClick={handleNext}
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '14px 0', borderRadius: 14, background: '#ff7fa8', color: '#fff', fontSize: 15, fontWeight: 700, border: 'none', cursor: 'pointer' }}
+              >
+                {index + 1 >= items.length ? '查看结果' : '下一题'}
+                <ChevronRight size={16} />
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // ── Mobile layout ──
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16, paddingBottom: 20 }}>
       {/* Progress bar */}
@@ -163,39 +222,14 @@ export function DictationSession({ items, difficulty, onExit, exitLabel = '返�
       </div>
 
       {/* Card */}
-      <div style={{ background: 'white', borderRadius: 20, border: '1px solid #eee0d8', padding: '24px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
-        {config.showHint && (
-          <div style={{ background: '#fff0f5', borderRadius: 10, padding: '6px 14px' }}>
-            <span style={{ fontSize: 14, color: '#ff7fa8', fontWeight: 600 }}>{current.meaning}</span>
-          </div>
-        )}
-        <button
-          onClick={playAudio}
-          disabled={playsLeft <= 0}
-          style={{
-            width: 72, height: 72, borderRadius: '50%',
-            background: playsLeft > 0 ? '#ff7fa8' : '#eee0d8',
-            border: 'none', cursor: playsLeft > 0 ? 'pointer' : 'not-allowed',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            transition: 'background 0.2s',
-          }}
-        >
-          <Volume2 size={30} style={{ color: 'white' }} />
-        </button>
-        <div style={{ display: 'flex', gap: 6 }}>
-          {Array.from({ length: config.maxPlays }).map((_, i) => (
-            <div key={i} style={{ width: 8, height: 8, borderRadius: '50%', background: i < playsLeft ? '#ff7fa8' : '#eee0d8', transition: 'background 0.2s' }} />
-          ))}
-        </div>
-        {submitted && (
-          <button
-            onClick={() => speak(current.korean, config.speed)}
-            style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: '#89756e', background: 'transparent', border: '1px solid #eee0d8', borderRadius: 10, padding: '6px 12px', cursor: 'pointer' }}
-          >
-            <RotateCcw size={13} />
-            再听一遍
-          </button>
-        )}
+      <div style={{ background: 'white', borderRadius: 20, border: '1px solid #eee0d8', padding: '32px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+        <p style={{ fontSize: 13, color: '#89756e', margin: 0 }}>用韩语写出下面的意思</p>
+        <p style={{ fontSize: 32, fontWeight: 900, color: '#241917', margin: 0, textAlign: 'center', lineHeight: 1.3 }}>
+          {current.meaning}
+        </p>
+        <span style={{ fontSize: 11, color: '#89756e', background: '#f5ede8', borderRadius: 99, padding: '3px 10px' }}>
+          {current.type === 'word' ? '单词' : '句子'}
+        </span>
       </div>
 
       {/* Input */}
@@ -206,7 +240,7 @@ export function DictationSession({ items, difficulty, onExit, exitLabel = '返�
             value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="输入你听到的韩语..."
+            placeholder="输入韩语..."
             style={{
               width: '100%', padding: '14px 16px', borderRadius: 14,
               border: '2px solid #eee0d8', fontSize: 18, color: '#241917',
@@ -215,9 +249,8 @@ export function DictationSession({ items, difficulty, onExit, exitLabel = '返�
             }}
           />
           <p style={{ fontSize: 12, color: '#89756e', textAlign: 'center', margin: 0 }}>
-            {isDesktop ? '使用实体键盘输入韩语，按键高亮显示如下' : '请切换系统键盘为韩语后输入'}
+            请切换系统键盘为韩语后输入
           </p>
-          {isDesktop && <KoreanKeyboardDisplay value={input} />}
           <button
             onClick={handleSubmit}
             disabled={!input.trim()}
