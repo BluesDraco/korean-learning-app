@@ -21,6 +21,7 @@ export class KoreanSpeechRecognizer {
   private onFinalCb: FinalCallback | null = null;
   private onErrorCb: ErrorCallback | null = null;
   private _active = false;
+  private _lastInterim = '';
 
   get active() {
     return this._active;
@@ -43,6 +44,7 @@ export class KoreanSpeechRecognizer {
     this.recognition.interimResults = true;
     this.recognition.maxAlternatives = 1;
     this.recognition.continuous = false;
+    this._lastInterim = '';
 
     this.recognition.onresult = (e: any) => {
       let interim = '';
@@ -55,15 +57,20 @@ export class KoreanSpeechRecognizer {
           interim += t;
         }
       }
-      if (interim) this.onInterimCb?.(interim);
+      if (interim) {
+        this._lastInterim = interim;
+        this.onInterimCb?.(interim);
+      }
       if (final) {
         this._active = false;
+        this._lastInterim = '';
         this.onFinalCb?.(final.trim());
       }
     };
 
     this.recognition.onerror = (e: any) => {
       this._active = false;
+      this._lastInterim = '';
       if (e.error === 'not-allowed') {
         this.onErrorCb?.('denied');
       } else if (e.error === 'network') {
@@ -74,7 +81,17 @@ export class KoreanSpeechRecognizer {
     };
 
     this.recognition.onend = () => {
-      this._active = false;
+      if (this._active) {
+        this._active = false;
+        // iOS sometimes ends without a final result — use last interim if available
+        if (this._lastInterim) {
+          const text = this._lastInterim;
+          this._lastInterim = '';
+          this.onFinalCb?.(text.trim());
+        } else {
+          this.onErrorCb?.('unknown');
+        }
+      }
     };
 
     this._active = true;
@@ -83,8 +100,19 @@ export class KoreanSpeechRecognizer {
 
   stop() {
     if (this.recognition && this._active) {
-      this.recognition.stop();
       this._active = false;
+      const text = this._lastInterim;
+      this._lastInterim = '';
+      this.recognition.stop();
+      if (text) {
+        this.onFinalCb?.(text.trim());
+      } else {
+        this.onErrorCb?.('unknown');
+      }
+      // prevent any late onresult/onend from firing callbacks again
+      this.onFinalCb = null;
+      this.onErrorCb = null;
+      this.onInterimCb = null;
     }
   }
 
@@ -92,6 +120,10 @@ export class KoreanSpeechRecognizer {
     if (this.recognition) {
       this.recognition.abort();
       this._active = false;
+      this._lastInterim = '';
+      this.onFinalCb = null;
+      this.onErrorCb = null;
+      this.onInterimCb = null;
     }
   }
 }

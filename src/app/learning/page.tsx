@@ -49,9 +49,9 @@ const entries: LearningEntry[] = [
     color: '#e47a94',
   },
   {
-    label: '听写练习',
-    desc: '听韩语单词和句子，用打字或手写完成听写。',
-    href: '/dictation',
+    label: '听力练习',
+    desc: '听写练习 + 听说练习，全面训练韩语听力。',
+    href: '/listening',
     available: true,
     icon: '听',
     color: '#e8a87c',

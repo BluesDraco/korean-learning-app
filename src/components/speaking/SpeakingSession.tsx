@@ -21,7 +21,14 @@ interface SpeakingSessionProps {
   exitLabel?: string;
 }
 
-type ItemResult = 'correct' | 'close' | 'wrong' | null;
+interface JudgeResult {
+  result: 'correct' | 'acceptable' | 'wrong';
+  score: number;
+  correctAnswer: string;
+  alternativeAnswers: string[];
+  errorReason: string | null;
+  tip: string | null;
+}
 
 function getSimilarity(a: string, b: string): number {
   const na = normalizeKorean(a);
@@ -29,7 +36,6 @@ function getSimilarity(a: string, b: string): number {
   if (na === nb) return 1;
   if (!na || !nb) return 0;
   const maxLen = Math.max(na.length, nb.length);
-  // Levenshtein distance
   const dp: number[][] = Array.from({ length: na.length + 1 }, (_, i) =>
     Array.from({ length: nb.length + 1 }, (_, j) => (i === 0 ? j : j === 0 ? i : 0))
   );
@@ -43,28 +49,34 @@ function getSimilarity(a: string, b: string): number {
   return 1 - dp[na.length][nb.length] / maxLen;
 }
 
-function getResult(similarity: number): ItemResult {
-  if (similarity >= 0.85) return 'correct';
-  if (similarity >= 0.6) return 'close';
-  return 'wrong';
+function fallbackJudge(spoken: string, target: string): JudgeResult {
+  const sim = getSimilarity(spoken, target);
+  const result = sim >= 0.85 ? 'correct' : sim >= 0.6 ? 'acceptable' : 'wrong';
+  return {
+    result,
+    score: Math.round(sim * 100),
+    correctAnswer: target,
+    alternativeAnswers: [],
+    errorReason: null,
+    tip: null,
+  };
 }
 
 const RESULT_CONFIG = {
-  correct: { label: '正确', color: '#3aafa9', bg: '#eaf8f5', emoji: '✅' },
-  close:   { label: '接近', color: '#e8a87c', bg: '#fff6ee', emoji: '⚠️' },
-  wrong:   { label: '错误', color: '#e04a6a', bg: '#fff0f4', emoji: '❌' },
+  correct:    { label: '正确', color: '#3aafa9', bg: '#eaf8f5', emoji: '✅' },
+  acceptable: { label: '接近', color: '#e8a87c', bg: '#fff6ee', emoji: '⚠️' },
+  wrong:      { label: '错误', color: '#e04a6a', bg: '#fff0f4', emoji: '❌' },
 };
 
 export function SpeakingSession({ items, onExit, exitLabel = '返回配置' }: SpeakingSessionProps) {
   const [index, setIndex] = useState(0);
-  const [phase, setPhase] = useState<'prompt' | 'listening' | 'result'>('prompt');
+  const [phase, setPhase] = useState<'prompt' | 'listening' | 'judging' | 'result'>('prompt');
   const [interim, setInterim] = useState('');
   const [finalText, setFinalText] = useState('');
-  const [result, setResult] = useState<ItemResult>(null);
-  const [similarity, setSimilarity] = useState(0);
+  const [judgeResult, setJudgeResult] = useState<JudgeResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [correctCount, setCorrectCount] = useState(0);
-  const [closeCount, setCloseCount] = useState(0);
+  const [acceptableCount, setAcceptableCount] = useState(0);
   const [xpTotal, setXpTotal] = useState(0);
   const [done, setDone] = useState(false);
   const recognizerRef = useRef<KoreanSpeechRecognizer | null>(null);
@@ -72,21 +84,72 @@ export function SpeakingSession({ items, onExit, exitLabel = '返回配置' }: S
 
   const current = items[index];
 
-  // cleanup on unmount
   useEffect(() => {
     return () => { recognizerRef.current?.abort(); };
   }, []);
 
-  // reset state when moving to next item
   useEffect(() => {
     setPhase('prompt');
     setInterim('');
     setFinalText('');
-    setResult(null);
-    setSimilarity(0);
+    setJudgeResult(null);
     setError(null);
     recognizerRef.current?.abort();
   }, [index]);
+
+  const judgeSpoken = useCallback(async (spoken: string, item: SpeakingItem) => {
+    setPhase('judging');
+    let jr: JudgeResult;
+    try {
+      const res = await fetch('/api/ai/speaking-judge', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ spoken, target: item.korean, meaning: item.meaning, type: item.type }),
+      });
+      if (!res.ok) throw new Error(`${res.status}`);
+      jr = await res.json();
+    } catch {
+      jr = fallbackJudge(spoken, item.korean);
+    }
+
+    setJudgeResult(jr);
+    setPhase('result');
+
+    if (jr.result === 'correct') {
+      setCorrectCount(c => c + 1);
+      awardXp(10).catch(() => {});
+      setXpTotal(x => x + 10);
+    } else if (jr.result === 'acceptable') {
+      setAcceptableCount(c => c + 1);
+      awardXp(4).catch(() => {});
+      setXpTotal(x => x + 4);
+    }
+
+    const quality = jr.result === 'correct' ? 4 : jr.result === 'acceptable' ? 2 : 1;
+    const wordId = `speaking-${item.korean}`;
+    db.words.get(wordId).then(existing => {
+      const srsResult = calculateSRS(
+        quality,
+        existing?.srsLevel ?? 0,
+        existing?.easeFactor ?? 2.5,
+        existing?.interval ?? 1,
+      );
+      db.words.put({
+        id: wordId,
+        word: item.korean,
+        pronunciation: '',
+        meaning: item.meaning,
+        partOfSpeech: '',
+        examples: [],
+        source: 'speaking',
+        sourceDetail: item.type,
+        mastery: jr.result === 'correct' ? 'learning' : 'new',
+        ...srsResult,
+        createdAt: existing?.createdAt ?? Date.now(),
+        lastReviewed: Date.now(),
+      }).catch(() => {});
+    }).catch(() => {});
+  }, []);
 
   const startListening = useCallback(() => {
     if (!supported) {
@@ -96,6 +159,7 @@ export function SpeakingSession({ items, onExit, exitLabel = '返回配置' }: S
     setError(null);
     setInterim('');
     setFinalText('');
+    setJudgeResult(null);
     setPhase('listening');
 
     const recognizer = new KoreanSpeechRecognizer();
@@ -106,47 +170,7 @@ export function SpeakingSession({ items, onExit, exitLabel = '返回配置' }: S
       .onFinal(t => {
         setFinalText(t);
         setInterim('');
-        const sim = getSimilarity(t, current.korean);
-        const res = getResult(sim);
-        setSimilarity(sim);
-        setResult(res);
-        setPhase('result');
-
-        if (res === 'correct') {
-          setCorrectCount(c => c + 1);
-          awardXp(10).catch(() => {});
-          setXpTotal(x => x + 10);
-        } else if (res === 'close') {
-          setCloseCount(c => c + 1);
-          awardXp(4).catch(() => {});
-          setXpTotal(x => x + 4);
-        }
-
-        // write to SRS
-        const quality = res === 'correct' ? 4 : res === 'close' ? 2 : 1;
-        const wordId = `speaking-${current.korean}`;
-        db.words.get(wordId).then(existing => {
-          const srsResult = calculateSRS(
-            quality,
-            existing?.srsLevel ?? 0,
-            existing?.easeFactor ?? 2.5,
-            existing?.interval ?? 1,
-          );
-          db.words.put({
-            id: wordId,
-            word: current.korean,
-            pronunciation: '',
-            meaning: current.meaning,
-            partOfSpeech: '',
-            examples: [],
-            source: 'speaking',
-            sourceDetail: current.type,
-            mastery: res === 'correct' ? 'learning' : 'new',
-            ...srsResult,
-            createdAt: existing?.createdAt ?? Date.now(),
-            lastReviewed: Date.now(),
-          }).catch(() => {});
-        }).catch(() => {});
+        judgeSpoken(t, current);
       })
       .onError(reason => {
         setPhase('prompt');
@@ -155,13 +179,15 @@ export function SpeakingSession({ items, onExit, exitLabel = '返回配置' }: S
           setError('麦克风权限被拒绝，请在浏览器设置中允许麦克风。');
         } else if (reason === 'not-supported') {
           setError('当前浏览器不支持语音识别，请使用 Chrome 浏览器。');
+        } else if (reason === 'network') {
+          setError('网络异常导致识别失败，请检查网络后重试。');
         } else {
-          setError('识别失败，请再试一次。');
+          setError('未能识别到语音，请重新说一次。');
         }
       });
 
     recognizer.start();
-  }, [current, supported]);
+  }, [current, supported, judgeSpoken]);
 
   const stopListening = useCallback(() => {
     recognizerRef.current?.stop();
@@ -175,8 +201,24 @@ export function SpeakingSession({ items, onExit, exitLabel = '返回配置' }: S
     }
   }
 
-  function handlePlayAnswer() {
-    speak(current.korean);
+  function handleRetry() {
+    setPhase('prompt');
+    setFinalText('');
+    setJudgeResult(null);
+    setInterim('');
+  }
+
+  function handleRestart() {
+    setIndex(0);
+    setCorrectCount(0);
+    setAcceptableCount(0);
+    setXpTotal(0);
+    setDone(false);
+    setPhase('prompt');
+    setFinalText('');
+    setJudgeResult(null);
+    setInterim('');
+    setError(null);
   }
 
   // ── Done screen ──
@@ -191,7 +233,7 @@ export function SpeakingSession({ items, onExit, exitLabel = '返回配置' }: S
         <div style={{ textAlign: 'center' }}>
           <p style={{ fontSize: 28, fontWeight: 900, color: '#241917', margin: 0 }}>{pct}%</p>
           <p style={{ fontSize: 14, color: '#89756e', marginTop: 4 }}>
-            {correctCount} 正确 · {closeCount} 接近 · {total - correctCount - closeCount} 错误
+            {correctCount} 正确 · {acceptableCount} 接近 · {total - correctCount - acceptableCount} 错误
           </p>
         </div>
         <div style={{ background: '#eaf8f5', borderRadius: 14, padding: '10px 20px' }}>
@@ -199,7 +241,7 @@ export function SpeakingSession({ items, onExit, exitLabel = '返回配置' }: S
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10, width: '100%', maxWidth: 340, marginTop: 8 }}>
           <button
-            onClick={() => { setIndex(0); setCorrectCount(0); setCloseCount(0); setXpTotal(0); setDone(false); setPhase('prompt'); setFinalText(''); setResult(null); setSimilarity(0); setInterim(''); setError(null); }}
+            onClick={handleRestart}
             style={{ padding: '13px 0', borderRadius: 14, background: '#241917', color: '#fff', fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer' }}
           >
             再来一轮
@@ -215,7 +257,7 @@ export function SpeakingSession({ items, onExit, exitLabel = '返回配置' }: S
     );
   }
 
-  const resultCfg = result ? RESULT_CONFIG[result] : null;
+  const cfg = judgeResult ? RESULT_CONFIG[judgeResult.result] : null;
 
   // ── Session screen ──
   return (
@@ -234,20 +276,15 @@ export function SpeakingSession({ items, onExit, exitLabel = '返回配置' }: S
         <p style={{ fontSize: 32, fontWeight: 900, color: '#241917', margin: 0, textAlign: 'center', lineHeight: 1.3 }}>
           {current.meaning}
         </p>
-        {current.type === 'word' && (
-          <span style={{ fontSize: 11, color: '#89756e', background: '#f5ede8', borderRadius: 99, padding: '3px 10px' }}>单词</span>
-        )}
-        {current.type === 'sentence' && (
-          <span style={{ fontSize: 11, color: '#89756e', background: '#f5ede8', borderRadius: 99, padding: '3px 10px' }}>句子</span>
-        )}
+        <span style={{ fontSize: 11, color: '#89756e', background: '#f5ede8', borderRadius: 99, padding: '3px 10px' }}>
+          {current.type === 'word' ? '单词' : '句子'}
+        </span>
       </div>
 
-      {/* Mic area */}
+      {/* Prompt phase */}
       {phase === 'prompt' && (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
-          {error && (
-            <p style={{ fontSize: 13, color: '#e04a6a', textAlign: 'center', margin: 0 }}>{error}</p>
-          )}
+          {error && <p style={{ fontSize: 13, color: '#e04a6a', textAlign: 'center', margin: 0 }}>{error}</p>}
           {!supported && (
             <p style={{ fontSize: 13, color: '#e04a6a', textAlign: 'center', margin: 0 }}>
               当前浏览器不支持语音识别，请使用 Chrome 浏览器。
@@ -270,14 +307,14 @@ export function SpeakingSession({ items, onExit, exitLabel = '返回配置' }: S
         </div>
       )}
 
+      {/* Listening phase */}
       {phase === 'listening' && (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
           <button
             onClick={stopListening}
             style={{
               width: 80, height: 80, borderRadius: '50%',
-              background: '#ff7fa8',
-              border: 'none', cursor: 'pointer',
+              background: '#ff7fa8', border: 'none', cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               animation: 'pulse 1.2s infinite',
             }}
@@ -291,31 +328,86 @@ export function SpeakingSession({ items, onExit, exitLabel = '返回配置' }: S
         </div>
       )}
 
-      {phase === 'result' && resultCfg && (
+      {/* Judging phase */}
+      {phase === 'judging' && (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, padding: '20px 0' }}>
+          <div style={{ width: 40, height: 40, borderRadius: '50%', border: '3px solid #aee3d8', borderTopColor: '#3aafa9', animation: 'spin 0.8s linear infinite' }} />
+          <p style={{ fontSize: 13, color: '#89756e', margin: 0 }}>AI 正在评估...</p>
+          {finalText && (
+            <p style={{ fontSize: 15, color: '#241917', fontWeight: 600, margin: 0, textAlign: 'center' }}>「{finalText}」</p>
+          )}
+        </div>
+      )}
+
+      {/* Result phase */}
+      {phase === 'result' && cfg && judgeResult && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {/* Result badge */}
-          <div style={{ background: resultCfg.bg, borderRadius: 16, padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div style={{ background: cfg.bg, borderRadius: 16, padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: 10 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{ fontSize: 20 }}>{resultCfg.emoji}</span>
-              <span style={{ fontSize: 15, fontWeight: 800, color: resultCfg.color }}>{resultCfg.label}</span>
-              <span style={{ fontSize: 12, color: '#89756e', marginLeft: 'auto' }}>{Math.round(similarity * 100)}% 匹配</span>
+              <span style={{ fontSize: 20 }}>{cfg.emoji}</span>
+              <span style={{ fontSize: 15, fontWeight: 800, color: cfg.color }}>{cfg.label}</span>
+              <span style={{ fontSize: 12, color: '#89756e', marginLeft: 'auto' }}>{judgeResult.score}分</span>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-                <span style={{ fontSize: 12, color: '#89756e', flexShrink: 0 }}>你说的：</span>
-                <span style={{ fontSize: 15, color: '#241917', fontWeight: 600 }}>{finalText || '（未识别）'}</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-                <span style={{ fontSize: 12, color: '#89756e', flexShrink: 0 }}>正确答案：</span>
-                <span style={{ fontSize: 15, color: resultCfg.color, fontWeight: 700 }}>{current.korean}</span>
-                <button
-                  onClick={handlePlayAnswer}
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 2, flexShrink: 0 }}
-                >
-                  <Volume2 size={15} style={{ color: '#89756e' }} />
-                </button>
-              </div>
+
+            {/* 你说的 */}
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+              <span style={{ fontSize: 12, color: '#89756e', flexShrink: 0 }}>你说的：</span>
+              <span style={{ fontSize: 15, color: '#241917', fontWeight: 600 }}>{finalText || '（未识别）'}</span>
             </div>
+
+            {/* 标准答案 */}
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+              <span style={{ fontSize: 12, color: '#89756e', flexShrink: 0 }}>标准答案：</span>
+              <span style={{ fontSize: 15, color: cfg.color, fontWeight: 700 }}>{judgeResult.correctAnswer}</span>
+              <button
+                onClick={() => speak(judgeResult.correctAnswer)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 2, flexShrink: 0 }}
+              >
+                <Volume2 size={15} style={{ color: '#89756e' }} />
+              </button>
+            </div>
+
+            {/* 其他说法 */}
+            {judgeResult.alternativeAnswers.length > 0 && (
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+                <span style={{ fontSize: 12, color: '#89756e', flexShrink: 0, paddingTop: 2 }}>其他说法：</span>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                  {judgeResult.alternativeAnswers.map((alt, i) => (
+                    <button
+                      key={i}
+                      onClick={() => speak(alt)}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: 4,
+                        background: 'rgba(0,0,0,0.05)', border: 'none', borderRadius: 99,
+                        padding: '3px 10px', cursor: 'pointer', fontSize: 13, color: '#241917', fontWeight: 600,
+                      }}
+                    >
+                      {alt}
+                      <Volume2 size={12} style={{ color: '#89756e' }} />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* 错误原因 */}
+            {judgeResult.errorReason && (
+              <div style={{ background: 'rgba(224,74,106,0.08)', borderRadius: 10, padding: '8px 12px' }}>
+                <p style={{ fontSize: 12, color: '#e04a6a', margin: 0, lineHeight: 1.6 }}>
+                  <span style={{ fontWeight: 700 }}>错误原因：</span>{judgeResult.errorReason}
+                </p>
+              </div>
+            )}
+
+            {/* 小提示 */}
+            {judgeResult.tip && (
+              <div style={{ background: 'rgba(58,175,169,0.08)', borderRadius: 10, padding: '8px 12px' }}>
+                <p style={{ fontSize: 12, color: '#3aafa9', margin: 0, lineHeight: 1.6 }}>
+                  <span style={{ fontWeight: 700 }}>小提示：</span>{judgeResult.tip}
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Next button */}
@@ -327,9 +419,9 @@ export function SpeakingSession({ items, onExit, exitLabel = '返回配置' }: S
             <ChevronRight size={16} />
           </button>
 
-          {/* Retry same item */}
+          {/* Retry */}
           <button
-            onClick={() => { setPhase('prompt'); setFinalText(''); setResult(null); setInterim(''); }}
+            onClick={handleRetry}
             style={{ padding: '10px 0', borderRadius: 14, background: 'transparent', color: '#89756e', fontSize: 13, fontWeight: 600, border: '1px solid #eee0d8', cursor: 'pointer' }}
           >
             再说一次
@@ -341,6 +433,9 @@ export function SpeakingSession({ items, onExit, exitLabel = '返回配置' }: S
         @keyframes pulse {
           0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,127,168,0.4); }
           50% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255,127,168,0); }
+        }
+        @keyframes spin {
+          to { transform: rotate(360deg); }
         }
       `}</style>
     </div>

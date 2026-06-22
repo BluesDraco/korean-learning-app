@@ -20,7 +20,7 @@ import {
   Sparkles, Library, Wrench, GraduationCap, Compass,
   BookOpen, Play, TrendingUp,
   MessageSquare, FileText, Mic, BookImage,
-  PenLine, Search, Keyboard, RefreshCw, Pencil, Headphones,
+  PenLine, Search, Keyboard, RefreshCw,
   Grid3X3, Languages, Lightbulb,
   Tv, StickyNote, Dumbbell, Layers,
 } from 'lucide-react';
@@ -53,7 +53,6 @@ export const navGroups: NavGroup[] = [
       { label: '内容拆解', ko: '내용 분석', href: '/ai/analyze', icon: Sparkles },
       { label: '查词翻译', ko: '사전', href: '/dictionary', icon: Search },
       { label: '发音跟读', ko: '발음 연습', href: '/pronunciation', icon: Mic },
-      { label: '听力练习', ko: '듣기 연습', href: '/listening', icon: Headphones },
       { label: '闪卡复习', ko: 'SRS 복습', href: '/review', icon: RefreshCw },
       { label: '文章拆解', ko: '읽기 분석', href: '/reading', icon: FileText },
       { label: '语法解释', ko: '문법 설명', href: '/grammar', icon: Languages },
