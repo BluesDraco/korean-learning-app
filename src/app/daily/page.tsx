@@ -473,7 +473,7 @@ function GuestDaily() {
       <div className="grid grid-cols-3 gap-2.5">
         {([
           { labelKey: 'daily.guest_tool_analyze_label', subKey: 'daily.guest_tool_analyze_sub', href: '/ai/analyze', ch: '拆', bg: '#fff0f5', color: '#f0799b', deco: 'rgba(255,127,168,.07)' },
-          { labelKey: 'daily.guest_tool_dictation_label', subKey: 'daily.guest_tool_dictation_sub', href: '/dictation', ch: '听', bg: '#fff0f5', color: '#f0799b', deco: 'rgba(174,227,216,.12)' },
+          { labelKey: 'daily.guest_tool_dictation_label', subKey: 'daily.guest_tool_dictation_sub', href: '/dictation', ch: '默', bg: '#fff0f5', color: '#f0799b', deco: 'rgba(174,227,216,.12)' },
           { labelKey: 'daily.guest_tool_review_label', subKey: 'daily.guest_tool_review_sub', href: '/review', ch: '卡', bg: '#fff0f5', color: '#f0799b', deco: 'rgba(174,227,216,.12)' },
         ] as const).map((tool) => (
           <Link

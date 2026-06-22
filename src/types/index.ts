@@ -71,7 +71,7 @@ export const ACHIEVEMENT_DEFS: Record<AchievementType, { title: string; descript
   streak_100: { title: '百天王者', description: '连续学习 100 天', icon: '👑' },
   reviews_100: { title: '百次复习', description: '完成 100 次复习', icon: '🔄' },
   reviews_1000: { title: '千锤百炼', description: '完成 1000 次复习', icon: '💪' },
-  dictation_50: { title: '听力达人', description: '完成 50 次听写', icon: '🎧' },
+  dictation_50: { title: '听力达人', description: '完成 50 次默写', icon: '🎧' },
   shadowing_10: { title: '口语新星', description: '完成 10 次影子跟读', icon: '🎤' },
   perfect_week: { title: '完美一周', description: '连续 7 天完成所有每日目标', icon: '💎' },
   level_5: { title: '学有所成', description: '达到等级 5', icon: '🎖️' },

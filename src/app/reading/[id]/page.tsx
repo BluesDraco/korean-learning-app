@@ -11,6 +11,7 @@ import { speak, speakWord, cancelSpeech } from '@/lib/tts';
 import { db, ensureFavoritesBook } from '@/lib/db';
 import { awardXp, addStudyMinutes } from '@/lib/gamification';
 import { useFeedback } from '@/hooks/useFeedback';
+import { WordTapSheet } from '@/components/WordTapSheet';
 import type { ArticleQuestion, ArticleWord } from '@/types';
 
 type Step = 'goals' | 'vocab' | 'reading' | 'key_sentence' | 'quiz' | 'output' | 'settlement';
@@ -51,6 +52,7 @@ export default function ArticleReaderPage() {
   const [sentenceToast, setSentenceToast] = useState(false);
   const [outputDone, setOutputDone] = useState(false);
   const [selectedWord, setSelectedWord] = useState<ArticleWord | null>(null);
+  const [aiLookupWord, setAiLookupWord] = useState<string | null>(null);
   const [activeHighlight, setActiveHighlight] = useState<string | null>(null);
   const sentenceRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const completedRef = useRef(false);
@@ -498,7 +500,7 @@ export default function ArticleReaderPage() {
                 <div className="px-4 py-3 border-b border-[var(--border-color)] flex items-center gap-2">
                   <BookOpen size={14} className="text-[var(--mint-soft)]" />
                   <span className="text-sm font-bold text-[var(--text-primary)]">逐句拆解</span>
-                  <span className="text-xs text-[var(--text-muted)] ml-auto">点击句子展开翻译</span>
+                  <span className="text-xs text-[var(--text-muted)] ml-auto">点句展翻译，点词查释义</span>
                 </div>
                 <div className="divide-y divide-[var(--border-color)]">
                   {article.sentences.map((s, idx) => (
@@ -551,11 +553,41 @@ export default function ArticleReaderPage() {
                                     </span>
                                   );
                                 }
-                                return <span key={i}>{token}</span>;
+                                const cleaned = token.replace(/[。？！，,.?!、…·"'"'()（）\[\]]+$/g, '').replace(/^[「『"'"']+/g, '').trim();
+                                if (!cleaned) return <span key={i}>{token}</span>;
+                                return (
+                                  <span
+                                    key={i}
+                                    onClick={(e) => { e.stopPropagation(); setAiLookupWord(cleaned); }}
+                                    className="cursor-pointer hover:bg-[var(--mint-soft)]/10 rounded-sm transition-colors"
+                                    style={{ borderBottom: '1px dotted var(--border-color)' }}
+                                  >
+                                    {token}
+                                  </span>
+                                );
                               })}
                             </span>
                           ) : (
-                            s.ko
+                            <span>
+                              {s.ko.split(/(\s+)/).map((token, i) => {
+                                if (/^\s+$/.test(token)) return <span key={i}>{token}</span>;
+                                const cleaned = token.replace(/[。？！，,.?!、…·"'"'()（）\[\]]+$/g, '').replace(/^[「『"'"']+/g, '').trim();
+                                if (!cleaned) return <span key={i}>{token}</span>;
+                                return (
+                                  <span
+                                    key={i}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      if (!revealedZh.has(s.id)) toggleRevealZh(s.id);
+                                      setAiLookupWord(cleaned);
+                                    }}
+                                    className="hover:bg-[var(--mint-soft)]/10 rounded-sm transition-colors"
+                                  >
+                                    {token}
+                                  </span>
+                                );
+                              })}
+                            </span>
                           )}
                         </div>
                         <div className="flex items-center gap-0.5 shrink-0">
@@ -1008,6 +1040,14 @@ export default function ArticleReaderPage() {
             </div>
           </div>
         </>
+      )}
+      {aiLookupWord && (
+        <WordTapSheet
+          surface={aiLookupWord}
+          source={`reading:${article.id}`}
+          onClose={() => setAiLookupWord(null)}
+          onSaved={() => setAiLookupWord(null)}
+        />
       )}
     </div>
   );

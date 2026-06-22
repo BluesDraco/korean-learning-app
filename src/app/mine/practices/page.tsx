@@ -27,7 +27,7 @@ export default function MinePracticesPage() {
   const total = (dictationCount ?? 0) + (pronunciationCount ?? 0) + (shadowingCount ?? 0);
 
   const items = [
-    { icon: <Headphones size={20} className="text-[var(--blue-soft)]" />, label: '听写练习', count: dictationCount, href: '/dictation', desc: '次' },
+    { icon: <Headphones size={20} className="text-[var(--blue-soft)]" />, label: '默写练习', count: dictationCount, href: '/dictation', desc: '次' },
     { icon: <Mic size={20} className="text-[var(--mint-soft)]" />, label: '发音练习', count: pronunciationCount, href: '/pronunciation', desc: '次' },
     { icon: <PenLine size={20} className="text-[var(--purple-soft)]" />, label: '影子跟读', count: shadowingCount, href: '/shadowing', desc: '次' },
   ];
@@ -60,7 +60,7 @@ export default function MinePracticesPage() {
           </div>
           <h2 className="text-[16px] font-bold text-[var(--text-primary)] mb-2">还没有练习记录</h2>
           <p className="text-[13px] text-[var(--text-muted)] max-w-xs leading-relaxed">
-            完成听写、发音或跟读练习后，记录会显示在这里
+            完成默写、发音或跟读练习后，记录会显示在这里
           </p>
         </div>
       ) : (

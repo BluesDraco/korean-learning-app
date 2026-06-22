@@ -70,7 +70,6 @@ export default function DictationMistakesPage() {
     return (
       <DictationSession
         items={mistakes.map(m => ({ korean: m.korean, meaning: m.meaning, type: 'word' as const }))}
-        difficulty="beginner"
         onExit={() => { setPracticing(false); loadMistakes(); }}
         exitLabel="返回错题本"
       />
@@ -85,7 +84,7 @@ export default function DictationMistakesPage() {
           <ArrowLeft size={16} style={{ color: C.muted }} />
         </button>
         <div>
-          <h1 style={{ fontSize: 18, fontWeight: 900, color: C.ink, margin: 0 }}>听写错题本</h1>
+          <h1 style={{ fontSize: 18, fontWeight: 900, color: C.ink, margin: 0 }}>默写错题本</h1>
           <p style={{ fontSize: 12, color: C.muted, margin: 0 }}>{mistakes.length} 个词需要加强</p>
         </div>
       </div>
@@ -97,12 +96,12 @@ export default function DictationMistakesPage() {
           <div style={{ textAlign: 'center', paddingTop: 60 }}>
             <div style={{ fontSize: 48, marginBottom: 12 }}>🎉</div>
             <p style={{ fontSize: 16, fontWeight: 700, color: C.ink }}>暂无错题</p>
-            <p style={{ fontSize: 13, color: C.muted, marginTop: 4 }}>完成听写练习后，答错的词会出现在这里</p>
+            <p style={{ fontSize: 13, color: C.muted, marginTop: 4 }}>完成默写练习后，答错的词会出现在这里</p>
             <button
               onClick={() => router.push('/dictation')}
               style={{ marginTop: 20, padding: '12px 28px', borderRadius: 14, background: C.pink, color: '#fff', fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer' }}
             >
-              去听写练习
+              去默写练习
             </button>
           </div>
         ) : (

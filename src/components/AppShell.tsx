@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { Navbar } from '@/components/Navbar';
 import { BottomTabBar } from '@/components/mobile/BottomTabBar';
 import { FloatingDecorations } from '@/components/FloatingDecorations';
 import { useAuth } from '@/components/AuthProvider';
@@ -82,7 +81,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </span>
         </div>
         <div className="h-[36px] pt-safe" />
-        <Navbar />
         <main className="relative min-h-screen min-h-dvh mx-auto w-full max-w-screen-sm px-4 pt-3 overflow-x-hidden bg-[var(--bg-base)] pb-[calc(72px+env(safe-area-inset-bottom,0px))]">
           <FloatingDecorations />
           <div className="relative z-[1]">{children}</div>

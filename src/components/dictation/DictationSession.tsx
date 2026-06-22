@@ -17,7 +17,6 @@ export interface DictationItem {
 
 interface DictationSessionProps {
   items: DictationItem[];
-  difficulty?: 'beginner' | 'intermediate' | 'advanced';
   onExit: () => void;
   exitLabel?: string;
 }

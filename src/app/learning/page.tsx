@@ -49,12 +49,20 @@ const entries: LearningEntry[] = [
     color: '#e47a94',
   },
   {
-    label: '听力练习',
-    desc: '听写练习 + 听说练习，全面训练韩语听力。',
+    label: '听说练习',
+    desc: '看中文意思，用韩语说出来。语音识别自动判断准确度。',
     href: '/listening',
     available: true,
     icon: '听',
     color: '#e8a87c',
+  },
+  {
+    label: '默写练习',
+    desc: '看中文意思，用韩文默写出来，精准训练拼写能力。',
+    href: '/dictation',
+    available: true,
+    icon: '默',
+    color: '#81b5a1',
   },
   {
     label: '写作练习',

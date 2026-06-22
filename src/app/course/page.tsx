@@ -63,7 +63,7 @@ export default function CoursePage() {
           30天入门路线
         </h1>
         <p className="text-sm text-[var(--text-muted)] mt-2">
-          每天15分钟 · 8个单词 · 1个语法 · 3句口语 · 5个听写 · 1个输出任务
+          每天15分钟 · 8个单词 · 1个语法 · 3句口语 · 5个默写 · 1个输出任务
         </p>
       </div>
 

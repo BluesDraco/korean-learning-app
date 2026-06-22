@@ -92,7 +92,7 @@ export function BrowseDrawer({ course, dayNum, onClose, goNextDay, goPrevDay, ou
 
           {/* Dictations */}
           <section className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4">
-            <h3 className="text-sm font-bold text-[var(--text-primary)] mb-3">🎧 听写 ({course.dictations.length}个)</h3>
+            <h3 className="text-sm font-bold text-[var(--text-primary)] mb-3">🎧 默写 ({course.dictations.length}个)</h3>
             <div className="space-y-2">
               {course.dictations.map((d, i) => (
                 <div key={i} className="bg-[var(--bg-input)]/60 rounded-xl p-3">

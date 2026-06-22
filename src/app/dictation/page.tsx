@@ -12,9 +12,9 @@ type Difficulty = 'beginner' | 'intermediate' | 'advanced';
 type PageState = 'config' | 'session';
 
 const DIFFICULTY_LABELS: Record<Difficulty, { label: string; desc: string; color: string }> = {
-  beginner:     { label: '初级', desc: '慢速·可重复3次·显示释义', color: '#81b5a1' },
-  intermediate: { label: '中级', desc: '中速·可重复2次·无提示',   color: '#e8a87c' },
-  advanced:     { label: '高级', desc: '快速·仅播放1次·无提示',   color: '#e04a6a' },
+  beginner:     { label: '初级', desc: '基础词汇·显示首字母提示', color: '#81b5a1' },
+  intermediate: { label: '中级', desc: '场景词汇+短句·无提示',    color: '#e8a87c' },
+  advanced:     { label: '高级', desc: '完整句子·无提示·无宽松匹配', color: '#e04a6a' },
 };
 
 const DEFAULT_SOURCE: SourceConfig = {
@@ -88,7 +88,6 @@ export default function DictationPage() {
       <div className="py-4 max-w-2xl md:max-w-3xl mx-auto px-1">
         <DictationSession
           items={items}
-          difficulty={difficulty}
           onExit={() => setPageState('config')}
         />
       </div>
@@ -102,8 +101,8 @@ export default function DictationPage() {
         <Link href="/tools" className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] mb-2">
           <ArrowLeft size={16} /> 返回
         </Link>
-        <h1 className="text-xl font-bold text-[var(--text-primary)]">听写练习</h1>
-        <p className="text-sm text-[var(--text-secondary)] mt-0.5">听音输入韩语，精准训练拼写能力</p>
+        <h1 className="text-xl font-bold text-[var(--text-primary)]">默写练习</h1>
+        <p className="text-sm text-[var(--text-secondary)] mt-0.5">看中文意思，用韩文默写出来，训练拼写能力</p>
       </div>
 
       {/* Daily challenge shortcut */}
@@ -177,7 +176,7 @@ export default function DictationPage() {
             }}
           >
             <Play size={16} />
-            {loading ? '加载中...' : '开始听写'}
+            {loading ? '加载中...' : '开始默写'}
           </button>
         </div>
       </div>

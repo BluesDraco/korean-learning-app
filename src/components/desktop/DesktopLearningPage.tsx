@@ -47,8 +47,8 @@ const ENTRIES: LearningEntry[] = [
     color: '#e47a94',
   },
   {
-    label: '听写练习',
-    desc: '听韩语单词和句子，用打字或手写完成听写。',
+    label: '默写练习',
+    desc: '看中文意思，用韩文默写出来，精准训练拼写能力。',
     href: '/dictation',
     available: true,
     icon: '听',

@@ -83,7 +83,7 @@ export function DesktopDailyPage() {
         <div className="desktop-module" onClick={() => router.push('/mine/dictation-mistakes')}>
           <div className="mini">✎</div>
           <h3>我的错题</h3>
-          <p>听写答错的词，集中复习薄弱项。</p>
+          <p>默写答错的词，集中复习薄弱项。</p>
         </div>
         <div className="desktop-module" onClick={() => router.push('/mine/recordings')}>
           <div className="mini">🎤</div>
