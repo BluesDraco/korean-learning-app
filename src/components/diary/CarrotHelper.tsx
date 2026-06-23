@@ -143,7 +143,10 @@ export function CarrotHelper({ day, currentModule, progress }: Props) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           userMessage: userText,
-          history: messages.slice(-10),
+          history: messages.slice(-10).map((m) => ({
+            ...m,
+            text: m.text.startsWith(SUMMARY_TAG) ? m.text.slice(SUMMARY_TAG.length) : m.text,
+          })),
           context: buildContext(),
         }),
       });

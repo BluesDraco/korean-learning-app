@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import type { ToriDay, ToriModuleKind } from '@/types/tori-diary';
@@ -31,7 +30,6 @@ interface Props {
 }
 
 export function DiaryDayClient({ day }: Props) {
-  const router = useRouter();
   const { user } = useAuth();
   const [currentModule, setCurrentModule] = useState<ToriModuleKind>('opening');
   const [outputResults, setOutputResults] = useState<Array<{ taskId: string; correct: boolean; userText?: string }>>([]);
@@ -204,17 +202,14 @@ export function DiaryDayClient({ day }: Props) {
           {currentModule === 'recap' && (
             <DiaryRecap
               day={day}
-              onComplete={() => {
-                advance('recap');
-                router.push('/diary');
-              }}
+              onComplete={() => advance('recap')}
             />
           )}
         </div>
       </div>
 
       {/* 悬浮的勇气胡萝卜助手 */}
-      <CarrotHelper day={day} currentModule={currentModule} progress={carrotProgress} />
+      <CarrotHelper key={day.day} day={day} currentModule={currentModule} progress={carrotProgress} />
     </div>
   );
 }

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import type { ToriDay, ToriDialogueLine } from '@/types/tori-diary';
-import { ChevronRight, MessageCircle } from 'lucide-react';
+import { ChevronRight, ChevronDown, MessageCircle } from 'lucide-react';
 import { TappableText } from '@/components/TappableText';
 import { DiaryLineActions } from './DiaryLineActions';
 
@@ -107,11 +107,11 @@ interface LineProps {
 function DialogueLine({ line, day, isCurrent, pickedChoice, isShadowed, onPick, onShadow, onListenAdvance }: LineProps) {
   const isTori = line.speaker === 'tori';
   const isNpc = line.speaker === 'npc';
+  const [expanded, setExpanded] = useState(false);
 
   const labelColor = isTori ? 'var(--diary-gold-deep)' : 'var(--diary-stamp-red)';
   const speakerName = isTori ? '兔莉（你）' : isNpc ? line.npcName ?? '对方' : '你';
   const source = `tori-diary-day-${day}`;
-  const isShadowLine = line.practice === 'shadow';
 
   return (
     <div
@@ -129,6 +129,7 @@ function DialogueLine({ line, day, isCurrent, pickedChoice, isShadowed, onPick, 
       <div
         className="diary-card-paper"
         style={{
+          minWidth: 'min(280px, 85%)',
           maxWidth: '85%',
           padding: '14px 16px',
           background: isTori ? 'var(--diary-paper)' : '#fffaf0',
@@ -138,19 +139,45 @@ function DialogueLine({ line, day, isCurrent, pickedChoice, isShadowed, onPick, 
         {/* 韩文 + 翻译（pick 行不显示韩文，需要思考） */}
         {line.practice !== 'pick' && (
           <>
-            <div className="diary-ko" style={{ fontSize: 'var(--diary-text-xl)', marginBottom: 4 }}>
-              <TappableText text={line.ko} source={source} />
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+              <div className="diary-ko" style={{ fontSize: 'var(--diary-text-xl)', flex: 1, lineHeight: 1.5 }}>
+                <TappableText text={line.ko} source={source} />
+              </div>
+              <button
+                onClick={() => setExpanded((v) => !v)}
+                aria-label={expanded ? '收起' : '展开'}
+                style={{
+                  border: 'none',
+                  background: 'transparent',
+                  cursor: 'pointer',
+                  padding: 4,
+                  color: 'var(--diary-gold-deep)',
+                  display: 'inline-flex',
+                  transition: 'transform 0.2s',
+                  transform: expanded ? 'rotate(0deg)' : 'rotate(-90deg)',
+                  marginTop: 4,
+                }}
+              >
+                <ChevronDown size={16} />
+              </button>
             </div>
-            <div className="diary-romaji" style={{ marginBottom: 4 }}>{line.hangul}</div>
-            <div className="diary-handwriting-zh" style={{ fontSize: 'var(--diary-text-sm)', color: 'var(--diary-ink-soft)', marginBottom: 8 }}>
-              {line.zh}
-            </div>
-            <DiaryLineActions
-              ko={line.ko}
-              zh={line.zh}
-              source={source}
-              showRecord={isShadowLine}
-            />
+            {expanded && (
+              <div
+                className="diary-anim-fade-up"
+                style={{ marginTop: 8, paddingTop: 8, borderTop: '1px dashed var(--diary-line)' }}
+              >
+                <div className="diary-romaji" style={{ marginBottom: 4 }}>{line.hangul}</div>
+                <div className="diary-handwriting-zh" style={{ fontSize: 'var(--diary-text-sm)', color: 'var(--diary-ink-soft)', marginBottom: 8 }}>
+                  {line.zh}
+                </div>
+                <DiaryLineActions
+                  ko={line.ko}
+                  zh={line.zh}
+                  source={source}
+                  showRecord={true}
+                />
+              </div>
+            )}
           </>
         )}
 

@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import type { ToriDay, ToriGrammar } from '@/types/tori-diary';
 import { ChevronRight, ChevronDown, Lightbulb } from 'lucide-react';
-import { romanize, RomanizationSystem } from '@romanize/korean';
 import { TappableText } from '@/components/TappableText';
 import { DiaryLineActions } from './DiaryLineActions';
 
@@ -134,7 +133,6 @@ interface ExampleRowProps {
 
 function ExampleRow({ ex, grammar, source }: ExampleRowProps) {
   const [expanded, setExpanded] = useState(false);
-  const hangul = expanded ? safeRomanize(ex.ko) : '';
 
   // 韩文带 highlight 的渲染
   const koNode = ex.highlight
@@ -193,11 +191,6 @@ function ExampleRow({ ex, grammar, source }: ExampleRowProps) {
           className="diary-anim-fade-up"
           style={{ marginTop: 8, paddingTop: 8, borderTop: '1px dashed var(--diary-line)' }}
         >
-          {hangul && (
-            <div className="diary-romaji" style={{ marginBottom: 4 }}>
-              {hangul}
-            </div>
-          )}
           <div className="diary-handwriting-zh" style={{ fontSize: 'var(--diary-text-sm)', color: 'var(--diary-ink-soft)', marginBottom: 8 }}>
             {ex.zh}
           </div>
@@ -221,12 +214,4 @@ function ExampleRow({ ex, grammar, source }: ExampleRowProps) {
       )}
     </div>
   );
-}
-
-function safeRomanize(ko: string): string {
-  try {
-    return romanize(ko, { system: RomanizationSystem.REVISED });
-  } catch {
-    return '';
-  }
 }

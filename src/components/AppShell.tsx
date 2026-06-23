@@ -76,6 +76,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const meta = resolvePageMeta(pathname);
   const { user } = useAuth();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+  const isAdmin = mounted && user?.role === 'admin';
 
   const navigate = useCallback((href: string) => {
     router.push(href);
@@ -122,7 +125,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             ))}
             {/* User entry at bottom */}
             <div style={{ marginTop: 'auto', borderTop: '1px solid var(--desktop-line)' }}>
-              {user?.role === 'admin' && (
+              {isAdmin && (
                 <button
                   onClick={() => navigate('/admin')}
                   className="desktop-foot-btn"
