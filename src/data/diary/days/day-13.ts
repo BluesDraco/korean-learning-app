@@ -189,11 +189,47 @@ export const day13: ToriDay = {
   output: [
     {
       id: 'd13-o1',
-      kind: 'fill',
-      prompt: '___ 걸렸어요. 콧물이 나요.',
+      kind: 'compose',
       zhHint: '我感冒了，流鼻涕。',
-      answer: '감기',
+      tokens: ['감기', '걸렸어요', '콧물이', '나요', '있어요', '기침이'],
+      composeAnswer: ['감기', '걸렸어요', '콧물이', '나요'],
       successMsg: '白鹭药剂师姐姐拿出了三盒药递给你 ✓',
+    },
+    {
+      id: 'd13-o2',
+      kind: 'listen-choice',
+      audioKo: '식후에 드세요.',
+      successMsg: '✓ 「请饭后服用」。「식후」= 饭后；「드세요」是「먹다」的尊敬形。',
+      choices: [
+        { zh: '请饭后服用。', correct: true },
+        { zh: '请饭前服用。', correct: false },
+        { zh: '请喝热水。', correct: false },
+        { zh: '咳嗽厉害吗？', correct: false },
+      ],
+    },
+    {
+      id: 'd13-o3',
+      kind: 'zh-to-ko',
+      zhPrompt: '咳嗽很厉害。',
+      successMsg: '"기침이 심해요" — 「기침」(받침 ㅁ)→「이」；「심하다」是「严重」。',
+      choices: [
+        { ko: '기침이 심해요.', correct: true },
+        { ko: '기침가 심해요.', correct: false },
+        { ko: '기침이 많아요.', correct: false },
+        { ko: '기침이 걸렸어요.', correct: false },
+      ],
+    },
+    {
+      id: 'd13-o4',
+      kind: 'particle-error',
+      zhHint: '发烧了。',
+      successMsg: '「열」(받침 ㄹ) → 主语助词「이」。「나요」是「나다」(出/流) 的礼貌形。',
+      choices: [
+        { ko: '열이 나요.', correct: true },
+        { ko: '열가 나요.', correct: false },
+        { ko: '열을 나요.', correct: false },
+        { ko: '열이 있어요.', correct: false },
+      ],
     },
   ],
 

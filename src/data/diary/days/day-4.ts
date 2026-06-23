@@ -177,11 +177,47 @@ export const day4: ToriDay = {
   output: [
     {
       id: 'd04-o1',
-      kind: 'fill',
-      prompt: '저는 중국 사람___.',
-      zhHint: '我是中国人。（用温暖礼貌的句尾）',
-      answer: '이에요',
+      kind: 'compose',
+      zhHint: '我是中国人。（温暖礼貌的句尾）',
+      tokens: ['저는', '중국', '사람이에요', '입니다', '학생이에요', '예요'],
+      composeAnswer: ['저는', '중국', '사람이에요'],
       successMsg: '宿管阿姨在登记册上写下了你的名字 ✓',
+    },
+    {
+      id: 'd04-o2',
+      kind: 'listen-choice',
+      audioKo: '키 받으세요.',
+      successMsg: '✓ 「请收下钥匙」。「받다」是收/拿，加 「-(으)세요」变礼貌请求。',
+      choices: [
+        { zh: '请收下钥匙。', correct: true },
+        { zh: '请给我钥匙。', correct: false },
+        { zh: '钥匙在哪里？', correct: false },
+        { zh: '这是礼物。', correct: false },
+      ],
+    },
+    {
+      id: 'd04-o3',
+      kind: 'zh-to-ko',
+      zhPrompt: '是的，我叫兔莉。（最正式句尾）',
+      successMsg: '"토리입니다." — 对宿管阿姨用最正式的「입니다」。',
+      choices: [
+        { ko: '네, 토리입니다.', correct: true },
+        { ko: '네, 토리이에요.', correct: false },
+        { ko: '네, 토리이입니다.', correct: false },
+        { ko: '네, 저 토리예요입니다.', correct: false },
+      ],
+    },
+    {
+      id: 'd04-o4',
+      kind: 'particle-error',
+      zhHint: '我是学生。（温暖礼貌句尾）',
+      successMsg: '학생 末字 「생」有받침 ㅇ → 用「이에요」。「저는」没问题。',
+      choices: [
+        { ko: '저는 학생이에요.', correct: true },
+        { ko: '저는 학생예요.', correct: false },
+        { ko: '저은 학생이에요.', correct: false },
+        { ko: '저는 학생이예요.', correct: false },
+      ],
     },
   ],
 

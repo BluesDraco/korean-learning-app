@@ -204,11 +204,47 @@ export const day20: ToriDay = {
   output: [
     {
       id: 'd20-o1',
-      kind: 'fill',
-      prompt: '관리비에 뭐가 ___ 있어요?',
+      kind: 'compose',
       zhHint: '管理费包含什么？',
-      answer: '들어',
+      tokens: ['관리비에', '뭐가', '들어 있어요', '?', '관리비는', '있어요'],
+      composeAnswer: ['관리비에', '뭐가', '들어 있어요', '?'],
       successMsg: '海豹房东点点头："질문 잘하시네요." (问得很好。) ✓',
+    },
+    {
+      id: 'd20-o2',
+      kind: 'listen-choice',
+      audioKo: '관리비 5만 따로예요.',
+      successMsg: '✓ 「管理费 5 万单独」。「따로예요」= 是另算的，签合同必问。',
+      choices: [
+        { zh: '管理费 5 万单独。', correct: true },
+        { zh: '管理费 5 万包含。', correct: false },
+        { zh: '月租 5 万。', correct: false },
+        { zh: '押金 5 万。', correct: false },
+      ],
+    },
+    {
+      id: 'd20-o3',
+      kind: 'zh-to-ko',
+      zhPrompt: '水费不包含。',
+      successMsg: '"수도세는 안 들어 있어요" — 否定回答用「는 안 V」结构。',
+      choices: [
+        { ko: '수도세는 안 들어 있어요.', correct: true },
+        { ko: '수도세가 안 들어 있어요.', correct: false },
+        { ko: '수도세는 들어 없어요.', correct: false },
+        { ko: '수도세는 안 있어요.', correct: false },
+      ],
+    },
+    {
+      id: 'd20-o4',
+      kind: 'particle-error',
+      zhHint: '电费也包含。',
+      successMsg: '「전기세」(无받침) → 「도」直接接（「도」替换主语助词「가」）。',
+      choices: [
+        { ko: '전기세도 들어 있어요.', correct: true },
+        { ko: '전기세가도 들어 있어요.', correct: false },
+        { ko: '전기세도가 들어 있어요.', correct: false },
+        { ko: '전기세는도 들어 있어요.', correct: false },
+      ],
     },
   ],
 

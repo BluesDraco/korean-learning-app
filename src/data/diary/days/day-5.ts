@@ -182,11 +182,47 @@ Haru 笑得停不下来，
   output: [
     {
       id: 'd05-o1',
-      kind: 'fill',
-      prompt: '저___ 토리예요.',
+      kind: 'compose',
       zhHint: '我叫兔莉。（用主题助词）',
-      answer: '는',
+      tokens: ['저는', '토리예요', '저는', '저', '친구예요', '맞아요'],
+      composeAnswer: ['저는', '토리예요'],
       successMsg: 'Haru 听清你的名字了，眼睛笑成了一条缝。',
+    },
+    {
+      id: 'd05-o2',
+      kind: 'listen-choice',
+      audioKo: '같이 아침 먹으러 갈래?',
+      successMsg: '✓ 「一起去吃早饭吗？」「같이」(一起) 是邀请的关键词。',
+      choices: [
+        { zh: '一起去吃早饭吗？', correct: true },
+        { zh: '一起去看电影吗？', correct: false },
+        { zh: '你住在哪里？', correct: false },
+        { zh: '你是新来的学生吗？', correct: false },
+      ],
+    },
+    {
+      id: 'd05-o3',
+      kind: 'zh-to-ko',
+      zhPrompt: '是的，没错。我叫兔莉。',
+      successMsg: '"맞아요" 比单说「네」更暖。「저는」用 是」表达话题。',
+      choices: [
+        { ko: '네, 맞아요. 저는 토리예요.', correct: true },
+        { ko: '네, 맞아요. 저은 토리예요.', correct: false },
+        { ko: '아니요, 맞아요. 저는 토리예요.', correct: false },
+        { ko: '네, 정말. 저 토리이에요.', correct: false },
+      ],
+    },
+    {
+      id: 'd05-o4',
+      kind: 'particle-error',
+      zhHint: '我的朋友是中国人。',
+      successMsg: '친구 (无받침) → 는；사람 (받침 ㅁ) → 이에요。两条规则都到位。',
+      choices: [
+        { ko: '제 친구는 중국 사람이에요.', correct: true },
+        { ko: '제 친구은 중국 사람이에요.', correct: false },
+        { ko: '제 친구는 중국 사람예요.', correct: false },
+        { ko: '제 친구가 중국 사람이에요.', correct: false },
+      ],
     },
   ],
 

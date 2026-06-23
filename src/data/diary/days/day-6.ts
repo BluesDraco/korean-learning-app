@@ -183,11 +183,47 @@ export const day6: ToriDay = {
   output: [
     {
       id: 'd06-o1',
-      kind: 'fill',
-      prompt: '중국 사람___?',
+      kind: 'compose',
       zhHint: '是中国人吗？',
-      answer: '이에요',
+      tokens: ['중국', '사람이에요', '?', '예요', '학생이에요', '한국'],
+      composeAnswer: ['중국', '사람이에요', '?'],
       successMsg: 'Junho 听到答案，眼睛瞬间亮了，掏出了 KPOP 应援棒 ✨',
+    },
+    {
+      id: 'd06-o2',
+      kind: 'listen-choice',
+      audioKo: 'KPOP 좋아해요?',
+      successMsg: '✓ 「喜欢 KPOP 吗？」「좋아해요」+ 升调 = 疑问。',
+      choices: [
+        { zh: '喜欢 KPOP 吗？', correct: true },
+        { zh: '听 KPOP 吗？', correct: false },
+        { zh: '是 KPOP 团成员吗？', correct: false },
+        { zh: '请多关照。', correct: false },
+      ],
+    },
+    {
+      id: 'd06-o3',
+      kind: 'zh-to-ko',
+      zhPrompt: '你好，我是兔莉。请多关照。',
+      successMsg: '"잘 부탁드려요" 比「잘 부탁합니다」更柔。「토리」无받침配「예요」。',
+      choices: [
+        { ko: '안녕하세요, 토리예요. 잘 부탁드려요.', correct: true },
+        { ko: '안녕하세요, 토리이에요. 잘 부탁드려요.', correct: false },
+        { ko: '안녕하세요, 토리예요. 잘 부탁이에요.', correct: false },
+        { ko: '안녕히 가세요, 토리예요. 잘 부탁드려요.', correct: false },
+      ],
+    },
+    {
+      id: 'd06-o4',
+      kind: 'particle-error',
+      zhHint: '我是班长。',
+      successMsg: '반장 末字「장」有받침 ㅇ → 이에요。「저는」(无받침) → 主题助词「는」。',
+      choices: [
+        { ko: '저는 반장이에요.', correct: true },
+        { ko: '저는 반장예요.', correct: false },
+        { ko: '저은 반장이에요.', correct: false },
+        { ko: '저는 반장이예요.', correct: false },
+      ],
     },
   ],
 

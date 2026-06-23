@@ -180,11 +180,47 @@ export const day8: ToriDay = {
   output: [
     {
       id: 'd08-o1',
-      kind: 'fill',
-      prompt: '___ 주세요.',
+      kind: 'compose',
       zhHint: '请给我这个。',
-      answer: '이거',
+      tokens: ['이거', '주세요', '저거', '그거', '이것도요', '주실래요'],
+      composeAnswer: ['이거', '주세요'],
       successMsg: '考拉哥哥按下了扫码枪 ✓',
+    },
+    {
+      id: 'd08-o2',
+      kind: 'listen-choice',
+      audioKo: '바나나우유 한 병 주세요.',
+      successMsg: '✓ 「请给我一瓶香蕉牛奶」。「한 병」= 一瓶（固有数 하나 + 量词 병 时变「한」）。',
+      choices: [
+        { zh: '请给我一瓶香蕉牛奶。', correct: true },
+        { zh: '请给我一瓶可乐。', correct: false },
+        { zh: '请给我一个三角饭团。', correct: false },
+        { zh: '请给我两杯咖啡。', correct: false },
+      ],
+    },
+    {
+      id: 'd08-o3',
+      kind: 'zh-to-ko',
+      zhPrompt: '请给我这个。还有这个也是。',
+      successMsg: '"이것도요" = "这个也（请给我）"。「도」是「也」，省略 주세요 是口语。',
+      choices: [
+        { ko: '이거 주세요. 그리고 이것도요.', correct: true },
+        { ko: '그거 주세요. 그리고 이것도요.', correct: false },
+        { ko: '이거 주세요. 그리고 그것도요.', correct: false },
+        { ko: '저거 주세요. 그리고 저것도요.', correct: false },
+      ],
+    },
+    {
+      id: 'd08-o4',
+      kind: 'particle-error',
+      zhHint: '请给我两杯咖啡。',
+      successMsg: '두(2) + 量词「잔」(杯) → 「두 잔」。固有数 2 = 둘，但搭量词时变「두」。',
+      choices: [
+        { ko: '커피 두 잔 주세요.', correct: true },
+        { ko: '커피 둘 잔 주세요.', correct: false },
+        { ko: '커피 이 잔 주세요.', correct: false },
+        { ko: '커피 두 병 주세요.', correct: false },
+      ],
     },
   ],
 

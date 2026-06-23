@@ -187,11 +187,47 @@ Haru 给我发了一个地址：
   output: [
     {
       id: 'd12-o1',
-      kind: 'fill',
-      prompt: '라떼 주세요. 얼음 ___.',
+      kind: 'compose',
       zhHint: '请给我拿铁，不要冰。',
-      answer: '빼고요',
+      tokens: ['라떼', '주세요', '얼음', '빼고요', '따뜻하게', '없어요'],
+      composeAnswer: ['라떼', '주세요', '얼음', '빼고요'],
       successMsg: '猫店员对着你眨了一下眼："알겠습니다 ☕" ✓',
+    },
+    {
+      id: 'd12-o2',
+      kind: 'listen-choice',
+      audioKo: '따뜻한 라떼 한 잔이요.',
+      successMsg: '✓ 「热拿铁一杯」。「따뜻한」是形容词修饰名词形（冠形形）。「한 잔」= 一杯。',
+      choices: [
+        { zh: '热拿铁一杯。', correct: true },
+        { zh: '冰拿铁一杯。', correct: false },
+        { zh: '热美式一杯。', correct: false },
+        { zh: '请给我拿铁。', correct: false },
+      ],
+    },
+    {
+      id: 'd12-o3',
+      kind: 'zh-to-ko',
+      zhPrompt: '请给我热的。',
+      successMsg: '"따뜻하게" 是形容词「따뜻하다」+ -게 副词化。点单改属性的标准句式。',
+      choices: [
+        { ko: '따뜻하게 주세요.', correct: true },
+        { ko: '따뜻한 주세요.', correct: false },
+        { ko: '따뜻해요 주세요.', correct: false },
+        { ko: '따뜻하다 주세요.', correct: false },
+      ],
+    },
+    {
+      id: 'd12-o4',
+      kind: 'particle-error',
+      zhHint: '不要糖浆。',
+      successMsg: '「N + 빼고요」是点单减项的固定句式。末尾「요」让语气更礼貌。',
+      choices: [
+        { ko: '시럽 빼고요.', correct: true },
+        { ko: '시럽 빼요.', correct: false },
+        { ko: '시럽도 빼고요.', correct: false },
+        { ko: '시럽이 빼고요.', correct: false },
+      ],
     },
   ],
 

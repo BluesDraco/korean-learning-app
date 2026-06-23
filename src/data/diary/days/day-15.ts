@@ -188,11 +188,47 @@ export const day15: ToriDay = {
   output: [
     {
       id: 'd15-o1',
-      kind: 'fill',
-      prompt: '원룸 ___ 있어요.',
+      kind: 'compose',
       zhHint: '我在找一居室。',
-      answer: '찾고',
+      tokens: ['원룸', '찾고', '있어요', '투룸', '찾아요', '없어요'],
+      composeAnswer: ['원룸', '찾고', '있어요'],
       successMsg: '老犬中介合上册子，从抽屉里又拿出一本：「제가 좋은 거 보여 드릴게요.」(我给您看好的。) ✓',
+    },
+    {
+      id: 'd15-o2',
+      kind: 'listen-choice',
+      audioKo: '월세는 50만 원 정도예요.',
+      successMsg: '✓ 「月租 50 万元左右」。「만 원」是固定说法（不读「일만」）；「정도」= 左右。',
+      choices: [
+        { zh: '月租 50 万元左右。', correct: true },
+        { zh: '押金 50 万元。', correct: false },
+        { zh: '月租 5 万元。', correct: false },
+        { zh: '月租 500 万元。', correct: false },
+      ],
+    },
+    {
+      id: 'd15-o3',
+      kind: 'zh-to-ko',
+      zhPrompt: '我在学韩语。',
+      successMsg: '"공부하고 있어요" — 「공부하다」去 다 + 「고 있어요」= 正在学习。',
+      choices: [
+        { ko: '한국어 공부하고 있어요.', correct: true },
+        { ko: '한국어 공부하다고 있어요.', correct: false },
+        { ko: '한국어 공부해고 있어요.', correct: false },
+        { ko: '한국어 공부 있어요.', correct: false },
+      ],
+    },
+    {
+      id: 'd15-o4',
+      kind: 'particle-error',
+      zhHint: '押金是 500 万元。',
+      successMsg: '「보증금」末字「금」有받침 ㅁ → 主题助词「은」。「만 원」直接读，前不加「일」。',
+      choices: [
+        { ko: '보증금은 500만 원이에요.', correct: true },
+        { ko: '보증금는 500만 원이에요.', correct: false },
+        { ko: '보증금은 500일만 원이에요.', correct: false },
+        { ko: '보증금이 500만 원예요.', correct: false },
+      ],
     },
   ],
 

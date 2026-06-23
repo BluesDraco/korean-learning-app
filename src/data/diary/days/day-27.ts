@@ -219,11 +219,47 @@ Minji 笑："한국에서는 다음 번에 네가 사면 돼."
   output: [
     {
       id: 'd27-o1',
-      kind: 'fill',
-      prompt: '잘 먹___. 다음엔 제가 살게요.',
+      kind: 'compose',
       zhHint: '吃饱了。下次我请。',
-      answer: '었습니다',
+      tokens: ['잘', '먹었습니다', '다음엔', '제가', '살게요', '잘 먹겠습니다', '한턱'],
+      composeAnswer: ['잘', '먹었습니다', '다음엔', '제가', '살게요'],
       successMsg: 'Minji 笑得眼睛弯弯："한국 사람 다 됐네!" (你已经是韩国人了！) ✓',
+    },
+    {
+      id: 'd27-o2',
+      kind: 'listen-choice',
+      audioKo: '오늘 내가 한턱 낼게.',
+      successMsg: '✓ 「今天我请客」。「한턱 내다」是韩国朋友间最高频的"请客"说法。半语「-(으)ㄹ게」承诺。',
+      choices: [
+        { zh: '今天我请客。', correct: true },
+        { zh: '今天我吃饱了。', correct: false },
+        { zh: '今天没有钱。', correct: false },
+        { zh: '今天考试结束了。', correct: false },
+      ],
+    },
+    {
+      id: 'd27-o3',
+      kind: 'zh-to-ko',
+      zhPrompt: '请来 4 人份五花肉。',
+      successMsg: '"4인분" — 数字 + 인분 是韩国烤肉店点肉单位。',
+      choices: [
+        { ko: '삼겹살 4인분 주세요.', correct: true },
+        { ko: '삼겹살 4명 주세요.', correct: false },
+        { ko: '삼겹살 4개 주세요.', correct: false },
+        { ko: '삼겹살 4잔 주세요.', correct: false },
+      ],
+    },
+    {
+      id: 'd27-o4',
+      kind: 'particle-error',
+      zhHint: '下次你请。(对朋友)',
+      successMsg: '「다음에」(下次) + 「네가」(你-主语) + 「사」(买/请客 半语)。最自然的轮流请客句。',
+      choices: [
+        { ko: '다음에 네가 사.', correct: true },
+        { ko: '다음에서 네가 사.', correct: false },
+        { ko: '다음에 너를 사.', correct: false },
+        { ko: '다음에 네가 사다.', correct: false },
+      ],
     },
   ],
 

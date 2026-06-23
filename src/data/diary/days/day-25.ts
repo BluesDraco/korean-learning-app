@@ -218,11 +218,47 @@ Minji 一边喊一边笑着拍我后背：
   output: [
     {
       id: 'd25-o1',
-      kind: 'fill',
-      prompt: '사랑해! 응원___! 따라해!',
+      kind: 'compose',
       zhHint: '我爱你！我支持你！我跟着你！',
-      answer: '해',
+      tokens: ['사랑해', '!', '응원해', '!', '따라해', '사랑해요', '응원해요'],
+      composeAnswer: ['사랑해', '!', '응원해', '!', '따라해'],
       successMsg: '✓ 应援棒在你手里发亮。Junho 哭了，Minji 笑着拍你后背。',
+    },
+    {
+      id: 'd25-o2',
+      kind: 'listen-choice',
+      audioKo: '큰 소리로 외쳐!',
+      successMsg: '✓ 「大声喊！」「큰 소리로」= 用大声音；「외쳐」= 「외치다」(呼喊) 半语命令。',
+      choices: [
+        { zh: '大声喊！', correct: true },
+        { zh: '小声说。', correct: false },
+        { zh: '跟着我喊。', correct: false },
+        { zh: '别害羞。', correct: false },
+      ],
+    },
+    {
+      id: 'd25-o3',
+      kind: 'zh-to-ko',
+      zhPrompt: '我爱你。(对偶像本人，敬语)',
+      successMsg: '"사랑해요" — 偶像见面会用敬语，比半语「사랑해」更礼貌。',
+      choices: [
+        { ko: '사랑해요.', correct: true },
+        { ko: '사랑합니다요.', correct: false },
+        { ko: '사랑한다.', correct: false },
+        { ko: '사랑하다.', correct: false },
+      ],
+    },
+    {
+      id: 'd25-o4',
+      kind: 'particle-error',
+      zhHint: '在汉江看演唱会。',
+      successMsg: '「한강」(받침 ㅇ) → 「에서」(动作发生地点); 「콘서트」(无받침) → 「를」(宾语)。',
+      choices: [
+        { ko: '한강에서 콘서트를 봐요.', correct: true },
+        { ko: '한강에 콘서트를 봐요.', correct: false },
+        { ko: '한강에서 콘서트가 봐요.', correct: false },
+        { ko: '한강를 콘서트에서 봐요.', correct: false },
+      ],
     },
   ],
 

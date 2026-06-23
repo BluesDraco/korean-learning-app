@@ -211,11 +211,47 @@ KakaoTalk 通知一连串。
   output: [
     {
       id: 'd24-o1',
-      kind: 'fill',
-      prompt: '___ 가요! 어디서 만나요?',
+      kind: 'compose',
       zhHint: '一起去！在哪里见？',
-      answer: '같이',
+      tokens: ['같이', '가요', '!', '어디서', '만나요', '?', '있어요', '갔어요'],
+      composeAnswer: ['같이', '가요', '!', '어디서', '만나요', '?'],
       successMsg: 'Junho 秒回："학교 정문 5시!" ✓ 你的第一条群聊消息发出去了。',
+    },
+    {
+      id: 'd24-o2',
+      kind: 'listen-choice',
+      audioKo: '카페 갈래?',
+      successMsg: '✓ 「要去咖啡馆吗？」「-(으)ㄹ래?」是朋友间征求意愿的半语。「갈래요?」是敬语版。',
+      choices: [
+        { zh: '要去咖啡馆吗？(朋友)', correct: true },
+        { zh: '要去咖啡馆吗？(对长辈)', correct: false },
+        { zh: '一起去咖啡馆。', correct: false },
+        { zh: '咖啡馆在哪里？', correct: false },
+      ],
+    },
+    {
+      id: 'd24-o3',
+      kind: 'zh-to-ko',
+      zhPrompt: '我们看电影吗？(对朋友)',
+      successMsg: '"영화 볼래?" — 「보다」(看) 词干末 ㅗ → 「(으)ㄹ래?」直接接「볼래?」。半语对朋友。',
+      choices: [
+        { ko: '영화 볼래?', correct: true },
+        { ko: '영화 본래?', correct: false },
+        { ko: '영화 봐요?', correct: false },
+        { ko: '영화 보다?', correct: false },
+      ],
+    },
+    {
+      id: 'd24-o4',
+      kind: 'particle-error',
+      zhHint: '在哪里见？',
+      successMsg: '「어디」+「서」(在某处)+「만나요」(见面)。「-에서」是动作发生地点助词。',
+      choices: [
+        { ko: '어디서 만나요?', correct: true },
+        { ko: '어디에 만나요?', correct: false },
+        { ko: '어디로 만나요?', correct: false },
+        { ko: '어디서 만나다?', correct: false },
+      ],
     },
   ],
 

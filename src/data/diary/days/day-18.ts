@@ -194,11 +194,47 @@ KB 国民银行学校支行——
   output: [
     {
       id: 'd18-o1',
-      kind: 'fill',
-      prompt: '통장 만들___ 싶어요.',
-      zhHint: '我想开户。',
-      answer: '고',
+      kind: 'compose',
+      zhHint: '我想开户。我是学生。',
+      tokens: ['통장', '만들고', '싶어요', '학생이에요', '있어요', '만들어요'],
+      composeAnswer: ['통장', '만들고', '싶어요', '학생이에요'],
       successMsg: '乌龟柜员慢慢点了一下头：「잠시만 기다려 주세요.」(请稍等。) ✓',
+    },
+    {
+      id: 'd18-o2',
+      kind: 'listen-choice',
+      audioKo: '여권 주세요.',
+      successMsg: '✓ 「请把护照给我」。「여권」= 护照，是办韩国账户必要证件之一。',
+      choices: [
+        { zh: '请把护照给我。', correct: true },
+        { zh: '请给我登录证。', correct: false },
+        { zh: '请输入密码。', correct: false },
+        { zh: '请签名。', correct: false },
+      ],
+    },
+    {
+      id: 'd18-o3',
+      kind: 'zh-to-ko',
+      zhPrompt: '你想吃什么？',
+      successMsg: '"먹고 싶어요" — 「먹다」(吃) 去 다 + 고 싶어요 = 想吃。「뭐」是疑问词「什么」。',
+      choices: [
+        { ko: '뭐 먹고 싶어요?', correct: true },
+        { ko: '뭐 먹고 있어요?', correct: false },
+        { ko: '뭐 먹어 싶어요?', correct: false },
+        { ko: '뭐 먹다 싶어요?', correct: false },
+      ],
+    },
+    {
+      id: 'd18-o4',
+      kind: 'particle-error',
+      zhHint: '我想去韩国。',
+      successMsg: '「가다」(去) 去 다 → 「가고 싶어요」。「한국에」用方位助词「에」。',
+      choices: [
+        { ko: '한국에 가고 싶어요.', correct: true },
+        { ko: '한국를 가고 싶어요.', correct: false },
+        { ko: '한국에 가고 있어요.', correct: false },
+        { ko: '한국에 가 싶어요.', correct: false },
+      ],
     },
   ],
 

@@ -212,11 +212,47 @@ Junho 兴奋到说话太快——
   output: [
     {
       id: 'd23-o1',
-      kind: 'fill',
-      prompt: '___ 사람 많아요!',
+      kind: 'compose',
       zhHint: '真的好多人！(对朋友的口语)',
-      answer: '진짜',
+      tokens: ['진짜', '사람', '많아요', '정말', '있어요', '없어요'],
+      composeAnswer: ['진짜', '사람', '많아요'],
       successMsg: 'Junho 兴奋地把应援卡塞给你："토리, 너 이제 우리 팬이야!" ✓',
+    },
+    {
+      id: 'd23-o2',
+      kind: 'listen-choice',
+      audioKo: '저는 하루 오빠 팬이에요.',
+      successMsg: '✓ 「我是 Haru 哥哥的粉丝」。「오빠」= 偶像男爱称；「팬이에요」无받침→이에요（워낙은 ㄴ 받침 → 「팬」末字「ㄴ」→ 이에요）。',
+      choices: [
+        { zh: '我是 Haru 哥哥的粉丝。', correct: true },
+        { zh: '我是 Haru 姐姐的粉丝。', correct: false },
+        { zh: '我喜欢 Haru 哥哥。', correct: false },
+        { zh: '我想去演唱会。', correct: false },
+      ],
+    },
+    {
+      id: 'd23-o3',
+      kind: 'zh-to-ko',
+      zhPrompt: '真的非常感谢。(对长辈)',
+      successMsg: '"정말 감사합니다" — 对长辈 / 正式场合用「정말」，比「진짜」更稳。',
+      choices: [
+        { ko: '정말 감사합니다.', correct: true },
+        { ko: '진짜 감사합니다.', correct: false },
+        { ko: '정말 감사해요.', correct: false },
+        { ko: '진짜 정말 감사합니다.', correct: false },
+      ],
+    },
+    {
+      id: 'd23-o4',
+      kind: 'particle-error',
+      zhHint: '我想去演唱会。',
+      successMsg: '「콘서트」(无받침) → 「에」(去往)；「가다」+ 고 싶어요 = 가고 싶어요。',
+      choices: [
+        { ko: '콘서트에 가고 싶어요.', correct: true },
+        { ko: '콘서트를 가고 싶어요.', correct: false },
+        { ko: '콘서트에 가고 있어요.', correct: false },
+        { ko: '콘서트에 갈 싶어요.', correct: false },
+      ],
     },
   ],
 

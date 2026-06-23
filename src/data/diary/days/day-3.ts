@@ -178,11 +178,47 @@ export const day3: ToriDay = {
   output: [
     {
       id: 'd03-o1',
-      kind: 'fill',
-      prompt: '제 ___ 너무 무거워요.',
+      kind: 'compose',
       zhHint: '我的行李太重了。',
-      answer: '짐이',
+      tokens: ['제', '짐이', '너무', '무거워요', '집이', '가벼워요'],
+      composeAnswer: ['제', '짐이', '너무', '무거워요'],
       successMsg: 'Minji 在副驾驶位回头笑了一下。第一个朋友，就这样有了。',
+    },
+    {
+      id: 'd03-o2',
+      kind: 'listen-choice',
+      audioKo: '집이 어디예요?',
+      successMsg: '✓ 「집」(jip) 是「家」。注意 ㅂ 收音，跟「짐」(jim) 的 ㅁ 完全不同。',
+      choices: [
+        { zh: '你家在哪里？', correct: true },
+        { zh: '行李在哪里？', correct: false },
+        { zh: '你叫什么名字？', correct: false },
+        { zh: '今天怎么样？', correct: false },
+      ],
+    },
+    {
+      id: 'd03-o3',
+      kind: 'zh-to-ko',
+      zhPrompt: '不好意思，行李很重。',
+      successMsg: '"저기요" 是叫陌生人的标准开场；「짐」(行李) 用「이」因为「짐」有받침 ㅁ。',
+      choices: [
+        { ko: '저기요, 짐이 무거워요.', correct: true },
+        { ko: '저기요, 집이 무거워요.', correct: false },
+        { ko: '저기요, 짐을 무거워요.', correct: false },
+        { ko: '죄송해요, 짐이 가벼워요.', correct: false },
+      ],
+    },
+    {
+      id: 'd03-o4',
+      kind: 'particle-error',
+      zhHint: '我的行李太重了。',
+      successMsg: '「짐」末字「짐」有받침 ㅁ → 主语助词用「이」。「제」是「我的」固定形态。',
+      choices: [
+        { ko: '제 짐이 너무 무거워요.', correct: true },
+        { ko: '제 짐가 너무 무거워요.', correct: false },
+        { ko: '저 짐이 너무 무거워요.', correct: false },
+        { ko: '제의 짐이 너무 무거워요.', correct: false },
+      ],
     },
   ],
 

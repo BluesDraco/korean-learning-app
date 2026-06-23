@@ -184,11 +184,47 @@ Junho 偷偷拿手机翻译给我看——大酱。
   output: [
     {
       id: 'd10-o1',
-      kind: 'fill',
-      prompt: '김치찌개 ___?',
+      kind: 'compose',
       zhHint: '有泡菜汤吗？',
-      answer: '있어요',
+      tokens: ['김치찌개', '있어요', '?', '없어요', '맛있어요', '된장찌개'],
+      composeAnswer: ['김치찌개', '있어요', '?'],
       successMsg: '袋鼠阿姨抬头看你一眼 ✓',
+    },
+    {
+      id: 'd10-o2',
+      kind: 'listen-choice',
+      audioKo: '오늘 없어요.',
+      successMsg: '✓ 「今天没有」。「없어요」实际念 [업써요]——「ㅄ」받침只发 ㅂ。',
+      choices: [
+        { zh: '今天没有。', correct: true },
+        { zh: '今天有。', correct: false },
+        { zh: '今天好吃。', correct: false },
+        { zh: '今天没问题。', correct: false },
+      ],
+    },
+    {
+      id: 'd10-o3',
+      kind: 'zh-to-ko',
+      zhPrompt: '那，请给我大酱汤。',
+      successMsg: '"그럼" = 那（顺承）；点单加「주세요」即可，前面助词省略很自然。',
+      choices: [
+        { ko: '그럼 된장찌개 주세요.', correct: true },
+        { ko: '그래서 된장찌개 주세요.', correct: false },
+        { ko: '그럼 김치찌개 주세요.', correct: false },
+        { ko: '그럼 된장찌개 있어요.', correct: false },
+      ],
+    },
+    {
+      id: 'd10-o4',
+      kind: 'particle-error',
+      zhHint: '有时间吗？',
+      successMsg: '시간 末字「간」有받침 ㄴ → 主语助词「이」。问句升调即可。',
+      choices: [
+        { ko: '시간 있어요?', correct: true },
+        { ko: '시간를 있어요?', correct: false },
+        { ko: '시간를 없어요?', correct: false },
+        { ko: '시간이 있다?', correct: false },
+      ],
     },
   ],
 

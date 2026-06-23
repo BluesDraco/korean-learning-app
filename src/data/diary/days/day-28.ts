@@ -209,11 +209,47 @@ Haru 加班。
   output: [
     {
       id: 'd28-o1',
-      kind: 'fill',
-      prompt: '어제 친구들이랑 삼겹살을 ___.',
+      kind: 'compose',
       zhHint: '昨天和朋友们吃了五花肉。',
-      answer: '먹었어요',
+      tokens: ['어제', '친구들이랑', '삼겹살을', '먹었어요', '먹어요', '있어요', '학교에'],
+      composeAnswer: ['어제', '친구들이랑', '삼겹살을', '먹었어요'],
       successMsg: '✓ 你的第一行韩文日记落在了牛皮封面笔记本里。',
+    },
+    {
+      id: 'd28-o2',
+      kind: 'listen-choice',
+      audioKo: '오늘은 비가 왔어요.',
+      successMsg: '✓ 「今天下雨了」。「오다」→「왔어요」(오 + 았어요 缩写)。「비가 와요」是现在时。',
+      choices: [
+        { zh: '今天下雨了。', correct: true },
+        { zh: '今天下雨。(现在时)', correct: false },
+        { zh: '今天来了。', correct: false },
+        { zh: '今天回家了。', correct: false },
+      ],
+    },
+    {
+      id: 'd28-o3',
+      kind: 'zh-to-ko',
+      zhPrompt: '真的很开心。',
+      successMsg: '"즐거웠어요" — 「즐겁다」是 ㅂ 不规则：ㅂ→우 + 었어요 = 즐거웠어요。',
+      choices: [
+        { ko: '정말 즐거웠어요.', correct: true },
+        { ko: '정말 즐겁었어요.', correct: false },
+        { ko: '정말 즐거워요.', correct: false },
+        { ko: '정말 즐겁어요.', correct: false },
+      ],
+    },
+    {
+      id: 'd28-o4',
+      kind: 'particle-error',
+      zhHint: '我学了韩语。',
+      successMsg: '「공부하다」→「공부했어요」(하다 → 했어요)。「한국어」(无받침) → 「를」宾语。',
+      choices: [
+        { ko: '한국어를 공부했어요.', correct: true },
+        { ko: '한국어를 공부하였어요.', correct: false },
+        { ko: '한국어이 공부했어요.', correct: false },
+        { ko: '한국어를 공부어요.', correct: false },
+      ],
     },
   ],
 

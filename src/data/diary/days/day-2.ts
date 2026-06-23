@@ -172,11 +172,47 @@ export const day2: ToriDay = {
   output: [
     {
       id: 'd02-o1',
-      kind: 'fill',
-      prompt: '콜라 ___.',
-      zhHint: '请给我可乐。',
-      answer: '주세요',
+      kind: 'compose',
+      zhHint: '请给我一杯可乐。',
+      tokens: ['콜라', '주세요', '얼음', '감사합니다', '아니요'],
+      composeAnswer: ['콜라', '주세요'],
       successMsg: '空乘姐姐笑着把可乐递过来了 🥤',
+    },
+    {
+      id: 'd02-o2',
+      kind: 'listen-choice',
+      audioKo: '물 한 잔 주세요.',
+      successMsg: '✓ 是「请给我一杯水」。「물」(水) + 「한 잔」(一杯) + 「주세요」。',
+      choices: [
+        { zh: '请给我一杯水。', correct: true },
+        { zh: '请给我一杯可乐。', correct: false },
+        { zh: '请给我冰块。', correct: false },
+        { zh: '不用了，谢谢。', correct: false },
+      ],
+    },
+    {
+      id: 'd02-o3',
+      kind: 'zh-to-ko',
+      zhPrompt: '好的，请给我一杯可乐。',
+      successMsg: '"네, 콜라 주세요." — 兔莉的人生第一次韩语点单。',
+      choices: [
+        { ko: '네, 콜라 주세요.', correct: true },
+        { ko: '아니요, 콜라 주세요.', correct: false },
+        { ko: '네, 콜라 부탁해요.', correct: false },
+        { ko: '콜라 네 주세요.', correct: false },
+      ],
+    },
+    {
+      id: 'd02-o4',
+      kind: 'match-pair',
+      successMsg: '✓ Day 2 核心词全部对上。下了飞机，一切才刚刚开始。',
+      pairs: [
+        { ko: '네', zh: '是 / 好' },
+        { ko: '아니요', zh: '不是 / 不用' },
+        { ko: '주세요', zh: '请给我' },
+        { ko: '감사합니다', zh: '谢谢（正式）' },
+        { ko: '죄송합니다', zh: '对不起（正式）' },
+      ],
     },
   ],
 

@@ -180,11 +180,47 @@ Junho 拍我肩膀："다이소 가자! 거기서 다 있어!"
   output: [
     {
       id: 'd11-o1',
-      kind: 'fill',
-      prompt: '___ 얼마예요?',
+      kind: 'compose',
       zhHint: '那个（远处）多少钱？',
-      answer: '저거',
+      tokens: ['저거', '얼마예요', '?', '이거', '그거', '있어요'],
+      composeAnswer: ['저거', '얼마예요', '?'],
       successMsg: '羊店员指了一下："저거요? 천 원이에요." ✓',
+    },
+    {
+      id: 'd11-o2',
+      kind: 'listen-choice',
+      audioKo: '저거 천 원이에요.',
+      successMsg: '✓ 「那个 1000 元」。「저거」= 远处的那个；「천 원」= 1000 韩元（约 5 RMB）。',
+      choices: [
+        { zh: '那个 1000 元。', correct: true },
+        { zh: '这个 1000 元。', correct: false },
+        { zh: '那个 100 元。', correct: false },
+        { zh: '那个 10000 元。', correct: false },
+      ],
+    },
+    {
+      id: 'd11-o3',
+      kind: 'zh-to-ko',
+      zhPrompt: '请也给我这个。',
+      successMsg: '"이거도 주세요" — 「도」= 也，紧贴在「이거」后面。',
+      choices: [
+        { ko: '이거도 주세요.', correct: true },
+        { ko: '이거를 주세요.', correct: false },
+        { ko: '저거도 주세요.', correct: false },
+        { ko: '이거가 주세요.', correct: false },
+      ],
+    },
+    {
+      id: 'd11-o4',
+      kind: 'particle-error',
+      zhHint: '请给我三个那个（远处的）。',
+      successMsg: '「세 개」是固有数 셋(3) 配量词「개」时变「세」。1=한, 2=두, 3=세, 4=네。',
+      choices: [
+        { ko: '저거 세 개 주세요.', correct: true },
+        { ko: '저거 셋 개 주세요.', correct: false },
+        { ko: '저거 삼 개 주세요.', correct: false },
+        { ko: '저거 세 잔 주세요.', correct: false },
+      ],
     },
   ],
 

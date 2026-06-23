@@ -186,11 +186,47 @@ Minji 拉我去学校对面的문구점（文具店）。
   output: [
     {
       id: 'd09-o1',
-      kind: 'fill',
-      prompt: '이거 ___?',
+      kind: 'compose',
       zhHint: '这个多少钱？',
-      answer: '얼마예요',
+      tokens: ['이거', '얼마예요', '?', '얼마이에요', '저거', '원이에요'],
+      composeAnswer: ['이거', '얼마예요', '?'],
       successMsg: '店员姐姐露出"啊这位小朋友学得真努力"的笑容 ✓',
+    },
+    {
+      id: 'd09-o2',
+      kind: 'listen-choice',
+      audioKo: '만 이천 원이에요.',
+      successMsg: '✓ 12000 韩元。韩国把万和千分开念：만(1万) + 이천(2000)。',
+      choices: [
+        { zh: '12000 元。', correct: true },
+        { zh: '2000 元。', correct: false },
+        { zh: '1200 元。', correct: false },
+        { zh: '120000 元。', correct: false },
+      ],
+    },
+    {
+      id: 'd09-o3',
+      kind: 'zh-to-ko',
+      zhPrompt: '请问，这个多少钱？',
+      successMsg: '"저기요" 是叫人开场；「얼마예요?」是问价标准句。',
+      choices: [
+        { ko: '저기요, 이거 얼마예요?', correct: true },
+        { ko: '저기요, 이거 얼마이에요?', correct: false },
+        { ko: '죄송해요, 이거 얼마예요?', correct: false },
+        { ko: '저기요, 그거 얼마이에요?', correct: false },
+      ],
+    },
+    {
+      id: 'd09-o4',
+      kind: 'particle-error',
+      zhHint: '这个是 10000 元。',
+      successMsg: '韩国不读「일만」，直接「만」。「원」(원 받침 ㄴ) → 이에요。',
+      choices: [
+        { ko: '이거 만 원이에요.', correct: true },
+        { ko: '이거 일만 원이에요.', correct: false },
+        { ko: '이거 만 원예요.', correct: false },
+        { ko: '이거 만 원이예요.', correct: false },
+      ],
     },
   ],
 

@@ -192,11 +192,47 @@ export const day17: ToriDay = {
   output: [
     {
       id: 'd17-o1',
-      kind: 'fill',
-      prompt: '충전 ___ 주세요. 만 원이요.',
-      zhHint: '请帮我充值。一万元。',
-      answer: '해',
-      successMsg: '猫头鹰售票员把卡推过来：「띡 ✓」 ',
+      kind: 'compose',
+      zhHint: '也帮我充值。一万元。',
+      tokens: ['충전도', '해 주세요', '만 원이요', '있어요', '충전이', '천 원이요'],
+      composeAnswer: ['충전도', '해 주세요', '만 원이요'],
+      successMsg: '猫头鹰售票员把卡推过来：「띡 ✓」',
+    },
+    {
+      id: 'd17-o2',
+      kind: 'listen-choice',
+      audioKo: '카드는 4,000원이에요.',
+      successMsg: '✓ 「卡是 4000 元」。「카드」(无받침) → 「는」；「원이에요」(原 ㄴ→이에요)。',
+      choices: [
+        { zh: '卡是 4000 元。', correct: true },
+        { zh: '充值 4000 元。', correct: false },
+        { zh: '卡是 400 元。', correct: false },
+        { zh: '卡是 40000 元。', correct: false },
+      ],
+    },
+    {
+      id: 'd17-o3',
+      kind: 'zh-to-ko',
+      zhPrompt: '请再说一次。',
+      successMsg: '"다시 말씀해 주세요" 是请人重复时最礼貌的句子。「말씀」是「말」的尊敬形。',
+      choices: [
+        { ko: '다시 말씀해 주세요.', correct: true },
+        { ko: '다시 말해 주세요.', correct: false },
+        { ko: '다시 말씀하세요.', correct: false },
+        { ko: '다시 말씀이 주세요.', correct: false },
+      ],
+    },
+    {
+      id: 'd17-o4',
+      kind: 'particle-error',
+      zhHint: '请帮我充值。',
+      successMsg: '「충전」是名词，配「하다」用「해 주세요」表"请帮我做"。',
+      choices: [
+        { ko: '충전 해 주세요.', correct: true },
+        { ko: '충전 하 주세요.', correct: false },
+        { ko: '충전 어 주세요.', correct: false },
+        { ko: '충전이 해 주세요.', correct: false },
+      ],
     },
   ],
 

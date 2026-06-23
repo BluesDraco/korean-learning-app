@@ -199,11 +199,47 @@ Haru 敲门：「토리, 약국 말고 병원 가자.」
   output: [
     {
       id: 'd19-o1',
-      kind: 'fill',
-      prompt: '열___ 나고, 목___ 아파요.',
+      kind: 'compose',
       zhHint: '也发烧，嗓子也疼。',
-      answer: '도',
+      tokens: ['열도', '나고', '목도', '아파요', '열이', '있어요'],
+      composeAnswer: ['열도', '나고', '목도', '아파요'],
       successMsg: '兔护士在登记表上"啪"地盖了一个章，递回登录证 ✓',
+    },
+    {
+      id: 'd19-o2',
+      kind: 'listen-choice',
+      audioKo: '어디 아프세요?',
+      successMsg: '✓ 「哪里不舒服？」韩国医院前台标准开场。「어디」(哪里) + 「아프다」(疼) 尊敬形。',
+      choices: [
+        { zh: '哪里不舒服？', correct: true },
+        { zh: '哪里来的？', correct: false },
+        { zh: '哪里疼？', correct: false },
+        { zh: '是第一次来吗？', correct: false },
+      ],
+    },
+    {
+      id: 'd19-o3',
+      kind: 'zh-to-ko',
+      zhPrompt: '我也去。',
+      successMsg: '"저도 가요" — 「도」紧跟主语，替换原本的「는/가」。最简单的"也"用法。',
+      choices: [
+        { ko: '저도 가요.', correct: true },
+        { ko: '저는도 가요.', correct: false },
+        { ko: '저가도 가요.', correct: false },
+        { ko: '저도는 가요.', correct: false },
+      ],
+    },
+    {
+      id: 'd19-o4',
+      kind: 'particle-error',
+      zhHint: '也请给我咖啡。',
+      successMsg: '「도」替换原本宾语助词「를」，不能叠加。「커피를도」「커피도를」都是错的。',
+      choices: [
+        { ko: '커피도 주세요.', correct: true },
+        { ko: '커피를도 주세요.', correct: false },
+        { ko: '커피도를 주세요.', correct: false },
+        { ko: '커피가도 주세요.', correct: false },
+      ],
     },
   ],
 

@@ -208,11 +208,47 @@ Junho 看了一眼："토리, 너 미쳤어. 진짜 잘 적었어."
   output: [
     {
       id: 'd22-o1',
-      kind: 'fill',
-      prompt: '한국어 공부___.',
+      kind: 'compose',
       zhHint: '我学韩语。',
-      answer: '해요',
+      tokens: ['한국어', '공부해요', '공부아요', '먹어요', '있어요', '학교에'],
+      composeAnswer: ['한국어', '공부해요'],
       successMsg: '火鹤老师在你笔记本上画了一个大大的圆圈。"잘했어요." ✓',
+    },
+    {
+      id: 'd22-o2',
+      kind: 'listen-choice',
+      audioKo: '커피 마셔요.',
+      successMsg: '✓ 「我喝咖啡」。「마시다」词干末 ㅣ + 어요 缩写为「셔요」。',
+      choices: [
+        { zh: '我喝咖啡。', correct: true },
+        { zh: '我吃咖啡。', correct: false },
+        { zh: '请给我咖啡。', correct: false },
+        { zh: '我学韩语。', correct: false },
+      ],
+    },
+    {
+      id: 'd22-o3',
+      kind: 'zh-to-ko',
+      zhPrompt: '我听音乐。',
+      successMsg: '"음악 들어요" — 「듣다」是 ㄷ 不规则：ㄷ 变 ㄹ + 어요 = 들어요。',
+      choices: [
+        { ko: '음악 들어요.', correct: true },
+        { ko: '음악 듣어요.', correct: false },
+        { ko: '음악 듣아요.', correct: false },
+        { ko: '음악 들아요.', correct: false },
+      ],
+    },
+    {
+      id: 'd22-o4',
+      kind: 'particle-error',
+      zhHint: '我去学校。',
+      successMsg: '「가다」词干末 ㅏ + 아요 = 가요（同元音省略）。「학교」(无받침) → 「에」(去往)。',
+      choices: [
+        { ko: '학교에 가요.', correct: true },
+        { ko: '학교를 가요.', correct: false },
+        { ko: '학교에 가아요.', correct: false },
+        { ko: '학교에 가어요.', correct: false },
+      ],
     },
   ],
 

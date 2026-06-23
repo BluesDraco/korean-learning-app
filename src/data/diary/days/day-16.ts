@@ -194,11 +194,47 @@ Naver 地图说还有 200 米。
   output: [
     {
       id: 'd16-o1',
-      kind: 'fill',
-      prompt: '오른쪽___ 도세요.',
+      kind: 'compose',
       zhHint: '请往右转。',
-      answer: '으로',
+      tokens: ['오른쪽으로', '도세요', '왼쪽으로', '오른쪽이', '가세요', '쭉'],
+      composeAnswer: ['오른쪽으로', '도세요'],
       successMsg: '海狸大叔的柴犬摇了摇尾巴，像在说「잘 가요」 ✓',
+    },
+    {
+      id: 'd16-o2',
+      kind: 'listen-choice',
+      audioKo: '이 길로 쭉 가세요.',
+      successMsg: '✓ 「沿这条路一直走」。「길」是 ㄹ 받침 → 接「로」不接「으로」。',
+      choices: [
+        { zh: '沿这条路一直走。', correct: true },
+        { zh: '往这边右转。', correct: false },
+        { zh: '往左走。', correct: false },
+        { zh: '走到便利店就到了。', correct: false },
+      ],
+    },
+    {
+      id: 'd16-o3',
+      kind: 'zh-to-ko',
+      zhPrompt: '不好意思，请问一下路。',
+      successMsg: '"여쭤볼게요" 是「물어보다」的尊敬形，对陌生人开场最礼貌的句子。',
+      choices: [
+        { ko: '저, 죄송한데… 길 좀 여쭤볼게요.', correct: true },
+        { ko: '저, 죄송한데… 길 좀 물어요.', correct: false },
+        { ko: '저, 안녕하세요… 길 좀 여쭤볼게요.', correct: false },
+        { ko: '저, 죄송해요… 길을 가르쳐요.', correct: false },
+      ],
+    },
+    {
+      id: 'd16-o4',
+      kind: 'particle-error',
+      zhHint: '去学校。',
+      successMsg: '학교 (无받침) → 「로」(不是「으로」)。这是方向助词的基本规则。',
+      choices: [
+        { ko: '학교로 가요.', correct: true },
+        { ko: '학교으로 가요.', correct: false },
+        { ko: '학교에서 가요.', correct: false },
+        { ko: '학교를 가요.', correct: false },
+      ],
     },
   ],
 
