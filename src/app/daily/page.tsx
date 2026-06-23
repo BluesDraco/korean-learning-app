@@ -576,25 +576,15 @@ function GuestDaily() {
             { labelKey: 'daily.guest_tool_dictation_label', subKey: 'daily.guest_tool_dictation_sub', href: '/dictation',  ch: '默', tone: 'mint' as const },
             { labelKey: 'daily.guest_tool_review_label',    subKey: 'daily.guest_tool_review_sub',    href: '/review',     ch: '卡', tone: 'purple' as const },
           ] as const).map((tool) => (
-            <Card key={tool.href} as="a" href={tool.href} variant="default" padding="md" interactive>
-              <div
-                style={{
-                  width: 34, height: 34, borderRadius: 'var(--radius-md)',
-                  background: TONE_BG[tool.tone], color: TONE_FG[tool.tone],
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: 14, fontWeight: 800,
-                }}
-                aria-hidden
-              >
-                {tool.ch}
-              </div>
-              <h3 style={{ fontSize: 14, fontWeight: 700, color: 'var(--color-ink-1)', margin: '10px 0 2px' }}>
-                {t(tool.labelKey, lang)}
-              </h3>
-              <p style={{ fontSize: 11, color: 'var(--color-ink-3)', margin: 0 }}>
-                {t(tool.subKey, lang)}
-              </p>
-            </Card>
+            <EntryCard
+              key={tool.href}
+              href={tool.href}
+              icon={<span style={{ fontSize: 14, fontWeight: 800 }}>{tool.ch}</span>}
+              label={t(tool.labelKey, lang)}
+              detail={t(tool.subKey, lang)}
+              tone={tool.tone}
+              layout="block"
+            />
           ))}
         </div>
       </Section>

@@ -47,6 +47,11 @@
   --color-purple-base:   #a896d9;
   --color-purple-strong: #7560b8;
 
+  /* ── Accent: gold（v2 升级补全 · 完成态/奖励语义） ── */
+  --color-gold-soft:   #fdf4e3;
+  --color-gold-base:   #c8995b;
+  --color-gold-strong: #9b7a3e;
+
   /* ── Status ── */
   --color-status-success: #4a9880;
   --color-status-warning: #d99c2a;

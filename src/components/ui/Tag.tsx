@@ -21,7 +21,7 @@ const TONE_BG: Record<TagTone, string> = {
   purple: 'var(--color-purple-soft)',
   mint: 'var(--color-mint-soft)',
   peach: 'var(--color-peach-soft)',
-  gold: '#fdf4e3',
+  gold: 'var(--color-gold-soft)',
   neutral: 'var(--color-surface-3)',
 };
 
@@ -30,7 +30,7 @@ const TONE_FG: Record<TagTone, string> = {
   purple: 'var(--color-purple-strong)',
   mint: 'var(--color-mint-strong)',
   peach: 'var(--color-peach-strong)',
-  gold: '#9b7a3e',
+  gold: 'var(--color-gold-strong)',
   neutral: 'var(--color-ink-2)',
 };
 
@@ -39,7 +39,7 @@ const TONE_SOLID_BG: Record<TagTone, string> = {
   purple: 'var(--color-purple-base)',
   mint: 'var(--color-mint-base)',
   peach: 'var(--color-peach-base)',
-  gold: '#c8995b',
+  gold: 'var(--color-gold-base)',
   neutral: 'var(--color-ink-2)',
 };
 

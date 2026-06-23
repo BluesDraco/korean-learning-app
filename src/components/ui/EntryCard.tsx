@@ -12,7 +12,7 @@ const TONE_BG: Record<EntryTone, string> = {
   mint: 'var(--color-mint-soft)',
   peach: 'var(--color-peach-soft)',
   purple: 'var(--color-purple-soft)',
-  gold:  '#fdf4e3',
+  gold:  'var(--color-gold-soft)',
 };
 
 const TONE_FG: Record<EntryTone, string> = {
@@ -20,7 +20,7 @@ const TONE_FG: Record<EntryTone, string> = {
   mint: 'var(--color-mint-strong)',
   peach: 'var(--color-peach-strong)',
   purple: 'var(--color-purple-strong)',
-  gold:  '#9b7a3e',
+  gold:  'var(--color-gold-strong)',
 };
 
 export interface EntryCardProps {
@@ -174,7 +174,7 @@ function renderInner({
             <div style={{
               height: '100%',
               width: `${Math.max(0, Math.min(100, progress))}%`,
-              background: TONE_BG[progressTone ?? tone],
+              background: TONE_FG[progressTone ?? tone],
               borderRadius: 'var(--radius-pill)',
               transition: 'width var(--dur-base) var(--ease-out-quart)',
             }} />

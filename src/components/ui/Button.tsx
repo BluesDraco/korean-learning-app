@@ -33,7 +33,7 @@ function bgFor(variant: Variant, tone: Tone): string {
   // primary
   if (tone === 'pink') return 'var(--color-pink-base)';
   if (tone === 'mint') return 'var(--color-mint-base)';
-  if (tone === 'gold') return '#c8995b';
+  if (tone === 'gold') return 'var(--color-gold-base)';
   return 'var(--color-ink-1)'; // black
 }
 
@@ -42,7 +42,7 @@ function fgFor(variant: Variant, tone: Tone): string {
   if (variant === 'text') {
     if (tone === 'pink') return 'var(--color-pink-strong)';
     if (tone === 'mint') return 'var(--color-mint-strong)';
-    if (tone === 'gold') return '#9b7a3e';
+    if (tone === 'gold') return 'var(--color-gold-strong)';
     return 'var(--color-ink-1)';
   }
   if (variant === 'secondary') return 'var(--color-ink-1)';

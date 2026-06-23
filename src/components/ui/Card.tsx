@@ -31,7 +31,7 @@ const TONE_BG: Record<Tone, string> = {
   peach:   'var(--color-peach-soft)',
   purple:  'var(--color-purple-soft)',
   cream:   'var(--color-surface-3)',
-  gold:    '#fdf4e3',
+  gold:    'var(--color-gold-soft)',
 };
 
 const TONE_BORDER: Record<Tone, string> = {
@@ -41,7 +41,7 @@ const TONE_BORDER: Record<Tone, string> = {
   peach:   'var(--color-peach-base)',
   purple:  'var(--color-purple-base)',
   cream:   'var(--color-border-2)',
-  gold:    '#c8995b',
+  gold:    'var(--color-gold-base)',
 };
 
 const TONE_HERO_GRADIENT: Record<Tone, string> = {
@@ -51,7 +51,7 @@ const TONE_HERO_GRADIENT: Record<Tone, string> = {
   peach:   'linear-gradient(135deg, var(--color-peach-soft), var(--hero-grad-end-peach))',
   purple:  'linear-gradient(135deg, var(--color-purple-soft), var(--hero-grad-end-purple))',
   cream:   'linear-gradient(135deg, var(--color-surface-3), var(--color-surface-2))',
-  gold:    'linear-gradient(135deg, #fdf4e3, #fffbf3)',
+  gold:    'linear-gradient(135deg, var(--color-gold-soft), #fffbf3)',
 };
 
 export const Card = forwardRef<HTMLElement, CardProps>(function Card(
@@ -118,6 +118,10 @@ export const Card = forwardRef<HTMLElement, CardProps>(function Card(
       'border-color var(--dur-base) var(--ease-out-quart)',
     cursor: interactive || Tag !== 'div' ? 'pointer' : undefined,
     color: 'var(--color-ink-1)',
+    // 当 Card 渲染为 <button> 时，重置浏览器默认样式
+    ...(Tag === 'button'
+      ? { fontFamily: 'inherit', appearance: 'none' as const, WebkitAppearance: 'none' as const }
+      : {}),
     ...(style ?? {}),
   };
 

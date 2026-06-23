@@ -24,7 +24,7 @@ const SIZE_HEIGHT: Record<ProgressBarSize, number> = {
 const TONE_FILL: Record<ProgressBarTone, string> = {
   pink: 'var(--color-pink-base)',
   mint: 'var(--color-mint-base)',
-  gold: '#c8995b',
+  gold: 'var(--color-gold-base)',
   peach: 'var(--color-peach-base)',
   purple: 'var(--color-purple-base)',
 };
