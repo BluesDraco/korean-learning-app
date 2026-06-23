@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tori · 今日 · v3 设计稿</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  /* ─── Design tokens ─── */
+  :root {
+    /* 韩系暖底（不是纯白） */
+    --bg: oklch(98.5% 0.005 60);
+    --paper: oklch(99% 0.003 50);
+    --paper-deep: oklch(96.5% 0.008 45);
+    --paper-muted: oklch(94% 0.012 40);
+
+    /* 文字 */
+    --ink-1: oklch(20% 0.015 30);
+    --ink-2: oklch(40% 0.012 35);
+    --ink-3: oklch(58% 0.010 40);
+    --ink-4: oklch(72% 0.008 45);
+
+    /* 细线 */
+    --line-1: oklch(92% 0.008 40);
+    --line-2: oklch(86% 0.012 40);
+
+    /* 粉系（韩系产品柔粉，不是糖果粉） */
+    --pink-50:  oklch(98% 0.014 14);
+    --pink-100: oklch(94% 0.030 14);
+    --pink-200: oklch(88% 0.060 14);
+    --pink-400: oklch(76% 0.115 14);
+    --pink-500: oklch(70% 0.135 14);
+    --pink-600: oklch(62% 0.145 14);
+    --pink-700: oklch(52% 0.140 14);
+
+    /* 紫 */
+    --purple-50:  oklch(96% 0.015 290);
+    --purple-100: oklch(92% 0.030 290);
+    --purple-500: oklch(64% 0.145 290);
+    --purple-700: oklch(50% 0.150 290);
+
+    /* 薄荷 */
+    --mint-50:  oklch(96% 0.015 175);
+    --mint-100: oklch(92% 0.030 175);
+    --mint-500: oklch(70% 0.090 175);
+    --mint-700: oklch(54% 0.095 175);
+
+    /* 金 */
+    --gold-50:  oklch(96% 0.025 90);
+    --gold-500: oklch(74% 0.115 80);
+    --gold-700: oklch(54% 0.110 75);
+
+    /* 阴影：永远棕调，永远不黑 */
+    --shadow-xs: 0 1px 2px 0 oklch(28% 0.02 30 / 0.05);
+    --shadow-sm: 0 4px 12px -3px oklch(28% 0.02 30 / 0.08);
+    --shadow-md: 0 12px 28px -8px oklch(28% 0.02 30 / 0.12);
+    --shadow-lg: 0 24px 48px -16px oklch(28% 0.02 30 / 0.16);
+
+    /* 字号 1.25 modular scale */
+    --text-xs:    12px;
+    --text-sm:    13px;
+    --text-base:  15px;
+    --text-md:    17px;
+    --text-lg:    20px;
+    --text-xl:    26px;
+    --text-2xl:   34px;
+    --text-display: 46px;
+
+    /* 圆角 */
+    --r-xs: 4px;
+    --r-sm: 8px;
+    --r-md: 14px;
+    --r-lg: 18px;
+    --r-xl: 24px;
+    --r-2xl: 32px;
+    --r-pill: 999px;
+
+    /* 字间距（韩系标志） */
+    --tracking-tight: -0.025em;
+    --tracking-snug: -0.012em;
+
+    /* 易出曲线 */
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg);
+    color: var(--ink-1);
+    font-family: 'Inter', 'Noto Sans KR', -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    font-feature-settings: 'cv11', 'ss01';
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+  }
+
+  body {
+    min-height: 100vh;
+    padding-bottom: 96px;
+  }
+
+  /* 双视口：把移动 + 桌面两块并排展示 */
+  .canvas {
+    display: flex;
+    gap: 32px;
+    padding: 32px;
+    align-items: flex-start;
+    justify-content: center;
+    min-height: 100vh;
+  }
+  @media (max-width: 900px) {
+    .canvas { flex-direction: column; padding: 0; gap: 0; }
+  }
+
+  /* 移动端框 */
+  .mobile-frame {
+    width: 390px;
+    flex-shrink: 0;
+    background: var(--bg);
+    border-radius: 36px;
+    padding: 12px 0;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    position: sticky;
+    top: 32px;
+  }
+  @media (max-width: 900px) {
+    .mobile-frame { width: 100%; border-radius: 0; box-shadow: none; padding: 0; position: static; }
+  }
+  .mobile-frame::before {
+    content: '';
+    display: block;
+    width: 124px;
+    height: 5px;
+    background: var(--ink-1);
+    border-radius: 999px;
+    margin: 0 auto 12px;
+    opacity: 0.85;
+  }
+  @media (max-width: 900px) {
+    .mobile-frame::before { display: none; }
+  }
+  .mobile-content {
+    padding: 0 18px 12px;
+    overflow-y: auto;
+    max-height: calc(100vh - 100px);
+    scrollbar-width: thin;
+  }
+  @media (max-width: 900px) {
+    .mobile-content { padding: 0 16px 12px; max-height: none; }
+  }
+
+  /* 桌面端 */
+  .desktop-frame {
+    flex: 1;
+    max-width: 1080px;
+    background: var(--paper);
+    border-radius: var(--r-2xl);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    border: 1px solid var(--line-1);
+  }
+  @media (max-width: 900px) { .desktop-frame { display: none; } }
+
+  /* ─── 顶部状态栏 ─── */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 4px 4px;
+  }
+  .topbar .greet-day {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .topbar .greet-day .dot {
+    width: 8px;
+    height: 8px;
+    background: var(--pink-500);
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px var(--pink-100);
+  }
+  .topbar .date {
+    font-size: var(--text-xs);
+    color: var(--ink-3);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .topbar .actions {
+    display: flex;
+    gap: 6px;
+  }
+  .topbar .icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--r-pill);
+    background: var(--paper-deep);
+    border: 1px solid var(--line-1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-2);
+    cursor: pointer;
+    transition: all 0.2s var(--ease);
+  }
+  .topbar .icon-btn:hover {
+    background: var(--paper-muted);
+    transform: translateY(-1px);
+  }
+
+  /* ─── Hero 区域：大字号韩系问候 ─── */
+  .hero {
+    margin: 16px 0 24px;
+    padding: 28px 22px 24px;
+    background: linear-gradient(160deg, var(--pink-50) 0%, oklch(98% 0.012 45) 100%);
+    border-radius: var(--r-2xl);
+    border: 1px solid var(--pink-100);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::after {
+    /* 装饰：右上角 Tori 头像浮雕 */
+    content: '🐰';
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    font-size: 100px;
+    opacity: 0.08;
+    transform: rotate(8deg);
+    pointer-events: none;
+  }
+  .hero .eyebrow {
+    font-family: 'Caveat', serif;
+    font-size: var(--text-md);
+    color: var(--pink-700);
+    margin-bottom: 4px;
+    letter-spacing: 0;
+  }
+  .hero h1 {
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    color: var(--ink-1);
+    letter-spacing: var(--tracking-tight);
+    line-height: 1.15;
+    margin-bottom: 14px;
+  }
+  .hero h1 .accent {
+    color: var(--pink-700);
+    position: relative;
+  }
+  .hero .meta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+    font-size: var(--text-sm);
+    color: var(--ink-2);
+  }
+  .hero .meta .streak {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+  }
+  .hero .meta .streak-icon {
+    font-size: 14px;
+  }
+  .hero .meta .divider {
+    width: 1px;
+    height: 12px;
+    background: var(--line-2);
+  }
+  .hero .progress-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .hero .progress-row .label {
+    font-size: var(--text-xs);
+    color: var(--ink-3);
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .hero .progress-bar {
+    flex: 1;
+    height: 8px;
+    background: oklch(95% 0.015 14);
+    border-radius: 999px;
+    overflow: hidden;
+    position: relative;
+  }
+  .hero .progress-bar .fill {
+    height: 100%;
+    width: 64%;
+    background: linear-gradient(90deg, var(--pink-400), var(--pink-600));
+    border-radius: 999px;
+    box-shadow: 0 0 12px oklch(70% 0.135 14 / 0.4);
+    position: relative;
+  }
+  .hero .progress-row .value {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--ink-1);
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+  }
+  .hero .progress-row .value .total { color: var(--ink-3); font-weight: 500; font-size: var(--text-xs); }
+
+  .hero .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 18px;
+    padding: 11px 22px;
+    background: var(--ink-1);
+    color: oklch(99% 0.003 50);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    letter-spacing: var(--tracking-snug);
+    border-radius: var(--r-pill);
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s var(--ease);
+  }
+  .hero .cta:hover {
+    background: oklch(28% 0.018 35);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+
+  /* ─── Section 标题 ─── */
+  .section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 28px 0 12px;
+  }
+  .section-head h2 {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    letter-spacing: var(--tracking-tight);
+    color: var(--ink-1);
+  }
+  .section-head .ko {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: var(--text-xs);
+    color: var(--ink-3);
+    margin-left: 8px;
+    font-weight: 500;
+  }
+  .section-head .more {
+    font-size: var(--text-sm);
+    color: var(--ink-3);
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  /* ─── Stats（成就横排卡片）─── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .stat {
+    background: var(--paper);
+    border: 1px solid var(--line-1);
+    border-radius: var(--r-md);
+    padding: 14px 12px;
+    text-align: left;
+    transition: all 0.2s var(--ease);
+  }
+  .stat:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+    border-color: var(--line-2);
+  }
+  .stat .value {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    letter-spacing: var(--tracking-tight);
+    color: var(--ink-1);
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat .label {
+    font-size: var(--text-xs);
+    color: var(--ink-3);
+    margin-top: 4px;
+    font-weight: 500;
+  }
+  .stat.streak .value::after {
+    content: ' 🔥';
+    font-size: 16px;
+  }
+
+  /* ─── 任务卡 ─── */
+  .tasks { display: flex; flex-direction: column; gap: 8px; }
+  .task {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--paper);
+    border: 1px solid var(--line-1);
+    border-radius: var(--r-lg);
+    cursor: pointer;
+    transition: all 0.2s var(--ease);
+  }
+  .task:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--line-2);
+  }
+  .task .icon-tile {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--r-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 20px;
+  }
+  .task .icon-tile.pink { background: var(--pink-100); color: var(--pink-700); }
+  .task .icon-tile.purple { background: var(--purple-100); color: var(--purple-700); }
+  .task .icon-tile.mint { background: var(--mint-100); color: var(--mint-700); }
+  .task .icon-tile.gold { background: var(--gold-50); color: var(--gold-700); }
+  .task .body { flex: 1; min-width: 0; }
+  .task .title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .task .title {
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--ink-1);
+    letter-spacing: var(--tracking-snug);
+  }
+  .task .badge {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--pink-700);
+    background: var(--pink-100);
+    padding: 2px 8px;
+    border-radius: 999px;
+    letter-spacing: 0.04em;
+  }
+  .task .desc {
+    font-size: var(--text-xs);
+    color: var(--ink-3);
+    line-height: 1.5;
+  }
+  .task .desc .ko {
+    font-family: 'Noto Sans KR', sans-serif;
+    color: var(--ink-2);
+    font-weight: 500;
+  }
+  .task .arrow {
+    color: var(--ink-4);
+    transition: transform 0.2s var(--ease);
+    flex-shrink: 0;
+  }
+  .task:hover .arrow { transform: translateX(2px); color: var(--ink-2); }
+
+  /* ─── 工具网格（4 列 compact）─── */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  .tool {
+    background: var(--paper);
+    border: 1px solid var(--line-1);
+    border-radius: var(--r-md);
+    padding: 14px 8px 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s var(--ease);
+  }
+  .tool:hover {
+    transform: translateY(-2px);
+    border-color: var(--pink-200);
+    box-shadow: var(--shadow-sm);
+  }
+  .tool .icon {
+    font-size: 22px;
+    margin-bottom: 6px;
+    display: block;
+    line-height: 1;
+  }
+  .tool .name {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ink-2);
+    letter-spacing: var(--tracking-snug);
+  }
+
+  /* ─── 韩剧台词 / 韩国小知识 横滑卡 ─── */
+  .feature-card {
+    margin-top: 16px;
+    background: linear-gradient(135deg, var(--purple-50) 0%, var(--paper) 100%);
+    border: 1px solid var(--purple-100);
+    border-radius: var(--r-xl);
+    padding: 22px 20px;
+    cursor: pointer;
+    transition: all 0.2s var(--ease);
+    position: relative;
+    overflow: hidden;
+  }
+  .feature-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  .feature-card .tag {
+    font-family: 'Caveat', serif;
+    font-size: 17px;
+    color: var(--purple-700);
+    margin-bottom: 6px;
+  }
+  .feature-card .quote {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: var(--text-md);
+    font-weight: 600;
+    color: var(--ink-1);
+    line-height: 1.55;
+    letter-spacing: var(--tracking-snug);
+    margin-bottom: 8px;
+  }
+  .feature-card .quote em {
+    font-style: normal;
+    background: linear-gradient(180deg, transparent 70%, var(--purple-100) 70%);
+  }
+  .feature-card .source {
+    font-size: var(--text-xs);
+    color: var(--ink-3);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .feature-card .source::before {
+    content: '';
+    display: inline-block;
+    width: 14px;
+    height: 1.5px;
+    background: var(--ink-4);
+  }
+
+  /* ─── 桌面端布局 ─── */
+  .desktop-content {
+    display: grid;
+    grid-template-columns: 256px 1fr 280px;
+    min-height: 720px;
+  }
+
+  /* desktop sidebar */
+  .desktop-sidebar {
+    background: var(--paper-deep);
+    border-right: 1px solid var(--line-1);
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+  }
+  .desktop-sidebar .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 12px 24px;
+  }
+  .desktop-sidebar .brand .logo {
+    width: 36px;
+    height: 36px;
+    background: var(--ink-1);
+    border-radius: var(--r-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: oklch(99% 0.003 50);
+    font-weight: 800;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 18px;
+  }
+  .desktop-sidebar .brand .name {
+    font-weight: 800;
+    font-size: var(--text-md);
+    color: var(--ink-1);
+    letter-spacing: var(--tracking-tight);
+    line-height: 1.1;
+  }
+  .desktop-sidebar .brand .tagline {
+    font-size: 10px;
+    color: var(--ink-3);
+    font-weight: 500;
+  }
+  .desktop-sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: auto;
+  }
+  .desktop-sidebar nav .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: var(--r-md);
+    color: var(--ink-2);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s var(--ease);
+  }
+  .desktop-sidebar nav .nav-item:hover {
+    background: var(--paper);
+    color: var(--ink-1);
+  }
+  .desktop-sidebar nav .nav-item.active {
+    background: var(--ink-1);
+    color: var(--paper);
+    font-weight: 600;
+  }
+  .desktop-sidebar nav .nav-item .ico {
+    font-size: 16px;
+    width: 18px;
+    text-align: center;
+  }
+  .desktop-sidebar nav .nav-item .badge {
+    margin-left: auto;
+    font-size: 10px;
+    padding: 2px 7px;
+    background: var(--pink-100);
+    color: var(--pink-700);
+    border-radius: 999px;
+    font-weight: 700;
+  }
+  .desktop-sidebar nav .nav-item.active .badge {
+    background: oklch(99% 0.003 50 / 0.2);
+    color: var(--paper);
+  }
+
+  /* desktop main */
+  .desktop-main {
+    padding: 32px 36px;
+    overflow-y: auto;
+  }
+  .desktop-main .hero {
+    background: linear-gradient(135deg, var(--pink-50) 0%, oklch(98% 0.012 45) 60%, var(--purple-50) 100%);
+    padding: 36px 32px;
+    border-radius: var(--r-2xl);
+  }
+  .desktop-main .hero h1 { font-size: var(--text-display); }
+  .desktop-main .hero .meta { gap: 18px; font-size: var(--text-base); }
+
+  .desktop-main .grid-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  /* desktop right */
+  .desktop-right {
+    background: var(--paper);
+    border-left: 1px solid var(--line-1);
+    padding: 28px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .desktop-right .panel {
+    background: var(--paper-deep);
+    border: 1px solid var(--line-1);
+    border-radius: var(--r-lg);
+    padding: 18px;
+  }
+  .desktop-right .panel .panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .desktop-right .panel .panel-head h3 {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    letter-spacing: var(--tracking-snug);
+  }
+  .desktop-right .panel .panel-head .more {
+    font-size: 11px;
+    color: var(--ink-3);
+    cursor: pointer;
+  }
+  .desktop-right .calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-top: 6px;
+  }
+  .desktop-right .calendar .day {
+    aspect-ratio: 1;
+    background: var(--paper);
+    border: 1px solid var(--line-1);
+    border-radius: var(--r-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--ink-3);
+  }
+  .desktop-right .calendar .day.done {
+    background: var(--pink-100);
+    color: var(--pink-700);
+    border-color: var(--pink-200);
+  }
+  .desktop-right .calendar .day.today {
+    background: var(--ink-1);
+    color: var(--paper);
+    border-color: var(--ink-1);
+    font-weight: 800;
+  }
+
+  .desktop-right .vocab-card {
+    padding: 14px;
+    background: var(--paper);
+    border: 1px solid var(--line-1);
+    border-radius: var(--r-md);
+    margin-bottom: 8px;
+  }
+  .desktop-right .vocab-card .word {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: var(--text-md);
+    font-weight: 700;
+    color: var(--ink-1);
+  }
+  .desktop-right .vocab-card .meaning {
+    font-size: var(--text-xs);
+    color: var(--ink-3);
+    margin-top: 2px;
+  }
+
+  /* ─── 底部 TabBar（移动） ─── */
+  .tabbar {
+    position: sticky;
+    bottom: 0;
+    margin-top: 12px;
+    padding: 12px 8px calc(8px + env(safe-area-inset-bottom));
+    background: oklch(99% 0.003 50 / 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid var(--line-1);
+    display: grid;
+    grid-template-columns: 1fr 1fr 64px 1fr 1fr;
+    align-items: end;
+    gap: 4px;
+  }
+  .tab-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 4px 0;
+    color: var(--ink-3);
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .tab-item .ico { font-size: 18px; }
+  .tab-item.active { color: var(--ink-1); }
+  .tab-item.active .ico { transform: translateY(-2px); }
+
+  .tab-tori {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: -28px;
+  }
+  .tab-tori .bubble {
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, var(--pink-500), var(--pink-700));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    color: white;
+    box-shadow: 0 8px 22px oklch(70% 0.135 14 / 0.4);
+    border: 4px solid var(--bg);
+    transition: all 0.2s var(--ease);
+  }
+  .tab-tori:hover .bubble {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 28px oklch(70% 0.135 14 / 0.5);
+  }
+  .tab-tori .label {
+    font-size: 10px;
+    color: var(--pink-700);
+    font-weight: 700;
+    margin-top: 4px;
+  }
+
+  /* desktop nav 不显示 tabbar */
+  .desktop-frame .tabbar { display: none; }
+
+  /* 顶部说明卡 */
+  .canvas-meta {
+    grid-column: 1 / -1;
+    text-align: center;
+    margin-bottom: 24px;
+    padding: 12px;
+  }
+  .canvas-meta h2 {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--ink-1);
+    letter-spacing: var(--tracking-tight);
+    margin-bottom: 4px;
+  }
+  .canvas-meta p {
+    font-size: var(--text-sm);
+    color: var(--ink-3);
+    line-height: 1.5;
+  }
+  .canvas-meta .v {
+    display: inline-block;
+    margin: 0 8px;
+    padding: 2px 10px;
+    background: var(--pink-100);
+    color: var(--pink-700);
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+</style>
+</head>
+<body>
+
+<div class="canvas">
+
+  <!-- 文档头 -->
+  <div class="canvas-meta">
+    <h2>Tori 视觉系统 · v3 设计稿</h2>
+    <p>韩系暖底 · 大字号节奏 · 棕调阴影 · 真留白 <span class="v">移动端 + 桌面端 同屏对比</span></p>
+  </div>
+
+  <!-- ─── 移动端 ─── -->
+  <div class="mobile-frame">
+    <div class="mobile-content">
+
+      <!-- 顶部 -->
+      <div class="topbar">
+        <div class="greet-day">
+          <div class="dot"></div>
+          <span class="date">MON · 6월 23</span>
+        </div>
+        <div class="actions">
+          <div class="icon-btn">🔔</div>
+          <div class="icon-btn">⚙️</div>
+        </div>
+      </div>
+
+      <!-- Hero -->
+      <div class="hero">
+        <div class="eyebrow">오늘의 토리</div>
+        <h1>안녕,<br>今天<span class="accent">第 13 天</span> ♡</h1>
+        <div class="meta">
+          <div class="streak"><span class="streak-icon">🔥</span> 13 day streak</div>
+          <div class="divider"></div>
+          <div>已完成 156 个词</div>
+        </div>
+        <div class="progress-row">
+          <span class="label">本周</span>
+          <div class="progress-bar"><div class="fill"></div></div>
+          <span class="value">4<span class="total">/7</span></span>
+        </div>
+        <button class="cta">继续学习 Day 13 →</button>
+      </div>
+
+      <!-- 数据快览 -->
+      <div class="stats-row">
+        <div class="stat streak">
+          <div class="value">13</div>
+          <div class="label">连续打卡</div>
+        </div>
+        <div class="stat">
+          <div class="value">156</div>
+          <div class="label">已学单词</div>
+        </div>
+        <div class="stat">
+          <div class="value">8</div>
+          <div class="label">待复习</div>
+        </div>
+      </div>
+
+      <!-- 今日任务 -->
+      <div class="section-head">
+        <h2>今日任务<span class="ko">오늘 할 일</span></h2>
+        <span class="more">查看全部 →</span>
+      </div>
+
+      <div class="tasks">
+        <div class="task">
+          <div class="icon-tile purple">📖</div>
+          <div class="body">
+            <div class="title-row">
+              <span class="title">Day 13 · 약국</span>
+              <span class="badge">NEW</span>
+            </div>
+            <div class="desc">学 <span class="ko">감기 / 콧물 / 약</span> 描述病情</div>
+          </div>
+          <span class="arrow">→</span>
+        </div>
+
+        <div class="task">
+          <div class="icon-tile pink">🔁</div>
+          <div class="body">
+            <div class="title-row">
+              <span class="title">复习卡片</span>
+            </div>
+            <div class="desc">8 个单词到期 · 3 分钟搞定</div>
+          </div>
+          <span class="arrow">→</span>
+        </div>
+
+        <div class="task">
+          <div class="icon-tile mint">🎤</div>
+          <div class="body">
+            <div class="title-row">
+              <span class="title">发音跟读</span>
+            </div>
+            <div class="desc">练习昨天学的 <span class="ko">얼음 빼고요</span></div>
+          </div>
+          <span class="arrow">→</span>
+        </div>
+      </div>
+
+      <!-- 韩剧台词 feature -->
+      <div class="feature-card">
+        <div class="tag">📺 今日韩剧台词</div>
+        <div class="quote"><em>이 비가 그치면, 우린 다시 만날까?</em></div>
+        <div class="source">눈물의 여왕 · 第 4 集</div>
+      </div>
+
+      <!-- 工具 -->
+      <div class="section-head">
+        <h2>常用工具<span class="ko">도구</span></h2>
+      </div>
+      <div class="tools-grid">
+        <div class="tool"><span class="icon">📝</span><span class="name">查词</span></div>
+        <div class="tool"><span class="icon">🎵</span><span class="name">KPOP</span></div>
+        <div class="tool"><span class="icon">✍️</span><span class="name">打字</span></div>
+        <div class="tool"><span class="icon">🤖</span><span class="name">AI 陪练</span></div>
+      </div>
+
+    </div>
+
+    <!-- 底部 TabBar -->
+    <div class="tabbar">
+      <div class="tab-item active">
+        <span class="ico">⌂</span>
+        <span>今日</span>
+      </div>
+      <div class="tab-item">
+        <span class="ico">📚</span>
+        <span>学习</span>
+      </div>
+      <div class="tab-tori">
+        <div class="bubble">🐰</div>
+        <span class="label">日记</span>
+      </div>
+      <div class="tab-item">
+        <span class="ico">🧰</span>
+        <span>工具</span>
+      </div>
+      <div class="tab-item">
+        <span class="ico">👤</span>
+        <span>我的</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 桌面端 ─── -->
+  <div class="desktop-frame">
+    <div class="desktop-content">
+
+      <!-- 左侧栏 -->
+      <aside class="desktop-sidebar">
+        <div class="brand">
+          <div class="logo">토</div>
+          <div>
+            <div class="name">Tori Korean</div>
+            <div class="tagline">한국어 학습</div>
+          </div>
+        </div>
+        <nav>
+          <div class="nav-item active"><span class="ico">⌂</span> 今日</div>
+          <div class="nav-item"><span class="ico">📚</span> 学习</div>
+          <div class="nav-item"><span class="ico">🐰</span> 兔莉日记 <span class="badge">13</span></div>
+          <div class="nav-item"><span class="ico">🎵</span> KPOP</div>
+          <div class="nav-item"><span class="ico">📖</span> 词汇</div>
+          <div class="nav-item"><span class="ico">📝</span> 语法</div>
+          <div class="nav-item"><span class="ico">🤖</span> AI 陪练</div>
+          <div class="nav-item"><span class="ico">⚙️</span> 设置</div>
+        </nav>
+      </aside>
+
+      <!-- 中间主内容 -->
+      <main class="desktop-main">
+        <div class="topbar">
+          <div class="greet-day">
+            <div class="dot"></div>
+            <span class="date">MONDAY · JUNE 23 · 한국 시간</span>
+          </div>
+          <div class="actions">
+            <div class="icon-btn">🔔</div>
+            <div class="icon-btn">⚙️</div>
+          </div>
+        </div>
+
+        <div class="hero">
+          <div class="eyebrow">오늘의 토리 · 第 13 天</div>
+          <h1>안녕,<br>该学韩语了 ♡<br><span class="accent">한걸음씩</span></h1>
+          <div class="meta">
+            <div class="streak"><span class="streak-icon">🔥</span> 13 day streak</div>
+            <div class="divider"></div>
+            <div>已掌握 156 个词</div>
+            <div class="divider"></div>
+            <div>本周完成度 64%</div>
+          </div>
+          <div class="progress-row">
+            <span class="label">本周目标</span>
+            <div class="progress-bar"><div class="fill"></div></div>
+            <span class="value">4<span class="total">/7 天</span></span>
+          </div>
+          <button class="cta">继续学习 Day 13 →</button>
+        </div>
+
+        <div class="section-head">
+          <h2>今日任务<span class="ko">오늘 할 일</span></h2>
+          <span class="more">查看全部 →</span>
+        </div>
+
+        <div class="grid-2col">
+          <div class="task">
+            <div class="icon-tile purple">📖</div>
+            <div class="body">
+              <div class="title-row">
+                <span class="title">Day 13 · 약국</span>
+                <span class="badge">NEW</span>
+              </div>
+              <div class="desc">学 <span class="ko">감기 / 콧물 / 약</span> 描述病情</div>
+            </div>
+            <span class="arrow">→</span>
+          </div>
+
+          <div class="task">
+            <div class="icon-tile pink">🔁</div>
+            <div class="body">
+              <div class="title-row">
+                <span class="title">复习卡片</span>
+              </div>
+              <div class="desc">8 个单词到期 · 3 分钟搞定</div>
+            </div>
+            <span class="arrow">→</span>
+          </div>
+
+          <div class="task">
+            <div class="icon-tile mint">🎤</div>
+            <div class="body">
+              <div class="title-row">
+                <span class="title">发音跟读</span>
+              </div>
+              <div class="desc">练习昨天的 <span class="ko">얼음 빼고요</span></div>
+            </div>
+            <span class="arrow">→</span>
+          </div>
+
+          <div class="task">
+            <div class="icon-tile gold">✍️</div>
+            <div class="body">
+              <div class="title-row">
+                <span class="title">写作练习</span>
+              </div>
+              <div class="desc">今天的主题：<span class="ko">생일</span></div>
+            </div>
+            <span class="arrow">→</span>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="tag">📺 今日韩剧台词</div>
+          <div class="quote"><em>이 비가 그치면, 우린 다시 만날까?</em></div>
+          <div class="source">눈물의 여왕 · 第 4 集 · 1:23:14</div>
+        </div>
+      </main>
+
+      <!-- 右侧 -->
+      <aside class="desktop-right">
+        <div class="panel">
+          <div class="panel-head">
+            <h3>本月打卡</h3>
+            <span class="more">详情</span>
+          </div>
+          <div class="calendar">
+            <div class="day done">1</div>
+            <div class="day done">2</div>
+            <div class="day done">3</div>
+            <div class="day">4</div>
+            <div class="day done">5</div>
+            <div class="day done">6</div>
+            <div class="day">7</div>
+            <div class="day done">8</div>
+            <div class="day done">9</div>
+            <div class="day done">10</div>
+            <div class="day done">11</div>
+            <div class="day done">12</div>
+            <div class="day today">13</div>
+            <div class="day"></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h3>今日 3 个新词</h3>
+            <span class="more">→</span>
+          </div>
+          <div class="vocab-card">
+            <div class="word">감기</div>
+            <div class="meaning">名 · 感冒</div>
+          </div>
+          <div class="vocab-card">
+            <div class="word">콧물</div>
+            <div class="meaning">名 · 鼻涕</div>
+          </div>
+          <div class="vocab-card">
+            <div class="word">약국</div>
+            <div class="meaning">名 · 药店</div>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

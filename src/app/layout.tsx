@@ -35,6 +35,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Preconnect/dns-prefetch for faster resource loading */}
         <link rel="dns-prefetch" href="//torikorean.com" />
         <link rel="preconnect" href="https://torikorean.com" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Playfair+Display:ital,wght@1,500;1,600&display=swap"
+          rel="stylesheet"
+        />
         {/* Polyfills for older Chromium browsers (Baidu, 360, etc.) */}
         <script dangerouslySetInnerHTML={{ __html: `
           (function(){

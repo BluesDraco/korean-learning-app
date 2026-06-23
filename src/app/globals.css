@@ -29,6 +29,7 @@
 
   /* ── Accent: pink (primary brand) ── */
   --color-pink-soft:   #ffe4ee;
+  --color-pink-200:    oklch(90% 0.05 14);
   --color-pink-base:   #ff7fa8;
   --color-pink-strong: #e55a87;
 
@@ -199,19 +200,43 @@
   to { transform: rotate(360deg); }
 }
 
-/* ui/Card interactive hover */
+/* ─── 质感升级 4 件套（v3）─── */
+
+/* 1. Card 默认带玻璃柔和高光（顶部 1px 透明白边） */
+.tori-card {
+  position: relative;
+  box-shadow:
+    var(--shadow-sm),
+    inset 0 1px 0 0 oklch(100% 0 0 / 0.5);
+}
+
+/* 2. Card hover：变粉 + 抬升 + 轻微 glow */
+.tori-card-interactive {
+  transition:
+    transform 0.2s var(--ease-out-quart),
+    box-shadow 0.25s var(--ease-out-quart),
+    border-color 0.2s var(--ease-out-quart),
+    background 0.2s var(--ease-out-quart);
+}
 .tori-card-interactive:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+  border-color: var(--color-pink-200, oklch(90% 0.05 14)) !important;
+  box-shadow:
+    var(--shadow-md),
+    0 0 28px -8px oklch(74% 0.12 12 / 0.18),
+    inset 0 1px 0 0 oklch(100% 0 0 / 0.6);
 }
 .tori-card-interactive:active {
   transform: translateY(0);
+  box-shadow: var(--shadow-xs);
 }
 
-/* ui/Button states · v2 升级（hover 抬升 + focus 用 token + 棕调阴影） */
+/* 3. Button 渐变 + 轻微 glow（pink primary） */
 .tori-btn:not(:disabled):hover {
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-1.5px);
+  box-shadow:
+    var(--shadow-md),
+    0 0 20px -4px oklch(74% 0.12 12 / 0.35);
 }
 .tori-btn:not(:disabled):active {
   transform: translateY(0);
@@ -220,6 +245,13 @@
 .tori-btn:focus-visible {
   outline: none;
   box-shadow: var(--focus-ring), var(--shadow-sm);
+}
+
+/* 4. 细线全站升级：1.5px 但更淡 */
+.tori-card,
+.tori-card-interactive {
+  border-width: 1.5px;
+  border-color: oklch(91% 0.008 40 / 0.9);
 }
 
 /* ── Dark overrides for design tokens ── */

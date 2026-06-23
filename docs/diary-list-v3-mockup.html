@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tori Diary · 章节式书页 mockup · 方向 A</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&family=Caveat:wght@500;600&family=Playfair+Display:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+<style>
+  /* ─── Tokens ─── */
+  :root {
+    --bg: oklch(98.5% 0.005 60);
+    --paper: oklch(99.2% 0.003 50);
+    --paper-2: oklch(96.5% 0.008 45);
+    --paper-3: oklch(94% 0.012 40);
+
+    --ink-1: oklch(20% 0.015 30);
+    --ink-2: oklch(38% 0.012 35);
+    --ink-3: oklch(58% 0.010 40);
+    --ink-4: oklch(72% 0.008 45);
+
+    --line-1: oklch(91% 0.008 40);
+    --line-2: oklch(86% 0.012 40);
+
+    --pink-50:  oklch(98% 0.014 14);
+    --pink-100: oklch(94% 0.030 14);
+    --pink-200: oklch(88% 0.060 14);
+    --pink-400: oklch(76% 0.115 14);
+    --pink-500: oklch(70% 0.135 14);
+    --pink-700: oklch(52% 0.140 14);
+
+    --gold-50:  oklch(96% 0.020 90);
+    --gold-200: oklch(88% 0.060 85);
+    --gold-500: oklch(74% 0.115 80);
+    --gold-700: oklch(54% 0.110 75);
+
+    --shadow-xs: 0 1px 2px 0 oklch(28% 0.02 30 / 0.04);
+    --shadow-sm: 0 4px 12px -3px oklch(28% 0.02 30 / 0.07);
+    --shadow-md: 0 14px 32px -10px oklch(28% 0.02 30 / 0.12);
+    --shadow-lg: 0 28px 56px -16px oklch(28% 0.02 30 / 0.16);
+
+    --r-sm: 8px;
+    --r-md: 14px;
+    --r-lg: 20px;
+    --r-xl: 28px;
+
+    --tracking-tight: -0.025em;
+    --tracking-snug: -0.012em;
+
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg);
+    color: var(--ink-1);
+    font-family: 'Inter', 'Noto Sans KR', -apple-system, 'PingFang SC', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+  }
+
+  body {
+    background-image:
+      radial-gradient(at 15% 8%, oklch(94% 0.030 14 / 0.4) 0%, transparent 40%),
+      radial-gradient(at 92% 90%, oklch(94% 0.030 290 / 0.3) 0%, transparent 40%);
+    min-height: 100vh;
+  }
+
+  /* ─── 双视口画布 ─── */
+  .canvas {
+    display: flex;
+    gap: 32px;
+    padding: 32px 32px 80px;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  @media (max-width: 980px) {
+    .canvas { flex-direction: column; padding: 0; gap: 0; }
+  }
+
+  /* mobile frame */
+  .mobile {
+    width: 410px;
+    flex-shrink: 0;
+    background: var(--bg);
+    border-radius: 40px;
+    padding: 14px 0 0;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    position: sticky;
+    top: 32px;
+  }
+  @media (max-width: 980px) {
+    .mobile { width: 100%; border-radius: 0; box-shadow: none; padding: 0; position: static; }
+  }
+  .mobile::before {
+    content: '';
+    display: block;
+    width: 124px;
+    height: 5px;
+    background: var(--ink-1);
+    border-radius: 999px;
+    margin: 0 auto 14px;
+    opacity: 0.85;
+  }
+  @media (max-width: 980px) {
+    .mobile::before { display: none; }
+  }
+  .mobile-content {
+    overflow-y: auto;
+    max-height: calc(100vh - 100px);
+    scrollbar-width: thin;
+  }
+  @media (max-width: 980px) {
+    .mobile-content { max-height: none; }
+  }
+
+  /* desktop frame */
+  .desktop {
+    flex: 1;
+    max-width: 1080px;
+    background: var(--paper);
+    border-radius: 32px;
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    border: 1px solid var(--line-1);
+    min-height: 720px;
+  }
+  @media (max-width: 980px) {
+    .desktop { display: none; }
+  }
+
+  /* ─── 标题栏 ─── */
+  .doc-title {
+    text-align: center;
+    margin-bottom: 32px;
+    padding: 16px;
+  }
+  .doc-title h1 {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: var(--tracking-tight);
+  }
+  .doc-title p {
+    font-size: 13px;
+    color: var(--ink-3);
+    margin-top: 6px;
+  }
+  .doc-title .pill {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 3px 12px;
+    background: var(--pink-100);
+    color: var(--pink-700);
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  /* ═══ Mobile Hero ═══ */
+  .m-hero {
+    position: relative;
+    padding: 48px 24px 40px;
+    text-align: left;
+    overflow: hidden;
+    background: linear-gradient(180deg, transparent 0%, oklch(98% 0.012 14 / 0.5) 100%);
+  }
+  .m-hero::before {
+    /* 大字水印 30 */
+    content: '30';
+    position: absolute;
+    right: -24px;
+    top: 12px;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 220px;
+    line-height: 1;
+    font-weight: 600;
+    color: var(--pink-100);
+    letter-spacing: var(--tracking-tight);
+    z-index: 0;
+    pointer-events: none;
+  }
+  .m-hero > * { position: relative; z-index: 1; }
+
+  .m-hero .eyebrow {
+    font-family: 'Caveat', serif;
+    font-size: 22px;
+    color: var(--pink-700);
+    margin-bottom: 14px;
+    line-height: 1;
+  }
+  .m-hero .ko-title {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink-3);
+    margin-bottom: 4px;
+    letter-spacing: var(--tracking-snug);
+  }
+  .m-hero h1 {
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: var(--tracking-tight);
+    color: var(--ink-1);
+    margin-bottom: 18px;
+  }
+  .m-hero p.lead {
+    font-size: 14px;
+    color: var(--ink-2);
+    line-height: 1.65;
+    max-width: 320px;
+    margin-bottom: 28px;
+  }
+
+  /* 进度横条 · "已写到 13 / 30 页" */
+  .m-hero .progress-row {
+    margin-top: 24px;
+    padding: 16px 18px;
+    background: var(--paper);
+    border: 1.5px solid var(--line-1);
+    border-radius: var(--r-md);
+    box-shadow: var(--shadow-xs), inset 0 1px 0 0 oklch(100% 0 0 / 0.6);
+  }
+  .m-hero .progress-row .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+  }
+  .m-hero .progress-row .top .left {
+    font-size: 11px;
+    color: var(--ink-3);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .m-hero .progress-row .top .right {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--ink-1);
+    letter-spacing: var(--tracking-tight);
+    font-variant-numeric: tabular-nums;
+  }
+  .m-hero .progress-row .top .right .total {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink-3);
+    margin-left: 4px;
+  }
+  .m-hero .progress-row .bar {
+    height: 6px;
+    background: var(--paper-3);
+    border-radius: 999px;
+    overflow: hidden;
+    position: relative;
+  }
+  .m-hero .progress-row .bar::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 43%;
+    background: linear-gradient(90deg, var(--pink-400), var(--pink-700));
+    border-radius: 999px;
+    box-shadow: 0 0 16px oklch(70% 0.135 14 / 0.4);
+  }
+
+  .m-hero .cta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 16px;
+    padding: 16px 20px;
+    background: var(--ink-1);
+    color: var(--paper);
+    border-radius: var(--r-md);
+    border: none;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.2s var(--ease);
+    box-shadow: var(--shadow-sm);
+  }
+  .m-hero .cta:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md), 0 0 24px oklch(20% 0.015 30 / 0.2);
+  }
+  .m-hero .cta .left {
+    flex: 1;
+    text-align: left;
+  }
+  .m-hero .cta .label {
+    font-size: 11px;
+    color: oklch(75% 0.005 50);
+    letter-spacing: 0.06em;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .m-hero .cta .next {
+    font-size: 16px;
+    font-weight: 700;
+    margin-top: 4px;
+    letter-spacing: var(--tracking-snug);
+  }
+  .m-hero .cta .arrow {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: oklch(99% 0 0 / 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--paper);
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  /* ═══ Mobile · 章节列表 ═══ */
+  .m-chapters {
+    padding: 48px 0 32px;
+  }
+  .chapter {
+    padding: 0 24px 32px;
+    border-bottom: 1px solid var(--line-1);
+    margin-bottom: 32px;
+    position: relative;
+  }
+  .chapter:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+
+  .chapter-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .chapter-head .chap-num {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink-3);
+    margin-bottom: 4px;
+    letter-spacing: 0.04em;
+  }
+  .chapter-head h2 {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: var(--tracking-tight);
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+  .chapter-head .ko {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 12px;
+    color: var(--ink-3);
+    font-weight: 500;
+  }
+  .chapter-head .stats {
+    text-align: right;
+    font-size: 11px;
+    color: var(--ink-3);
+    font-weight: 600;
+    line-height: 1.5;
+    flex-shrink: 0;
+  }
+  .chapter-head .stats .num {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--ink-1);
+    letter-spacing: var(--tracking-tight);
+    font-variant-numeric: tabular-nums;
+    display: block;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  /* day list */
+  .days {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .day {
+    display: grid;
+    grid-template-columns: 38px 1fr auto;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border-radius: var(--r-md);
+    cursor: pointer;
+    transition: all 0.2s var(--ease);
+    border: 1.5px solid transparent;
+    position: relative;
+  }
+  .day:hover {
+    background: var(--paper);
+    border-color: var(--line-1);
+    box-shadow: var(--shadow-xs);
+  }
+  .day .day-num {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 26px;
+    font-weight: 500;
+    color: var(--ink-3);
+    letter-spacing: var(--tracking-tight);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .day .body {
+    min-width: 0;
+  }
+  .day .body .title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink-1);
+    letter-spacing: var(--tracking-snug);
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .day .body .sub {
+    font-size: 11px;
+    color: var(--ink-3);
+    font-weight: 500;
+    line-height: 1.4;
+  }
+  .day .body .sub .ko {
+    font-family: 'Noto Sans KR', sans-serif;
+    color: var(--ink-2);
+    margin-right: 6px;
+  }
+  .day .marker {
+    flex-shrink: 0;
+    font-size: 11px;
+    color: var(--ink-3);
+    font-weight: 600;
+  }
+
+  /* 已完成 */
+  .day.done .day-num {
+    color: var(--pink-700);
+  }
+  .day.done .marker::after {
+    content: '✓';
+    color: var(--pink-700);
+    font-size: 16px;
+    font-weight: 800;
+  }
+  .day.done .body .title {
+    color: var(--ink-2);
+  }
+
+  /* 当前 */
+  .day.current {
+    background: oklch(99.5% 0.005 14);
+    border: 1.5px solid var(--pink-200);
+    box-shadow: var(--shadow-sm), 0 0 24px oklch(70% 0.135 14 / 0.12);
+  }
+  .day.current .day-num {
+    color: var(--pink-700);
+    font-weight: 700;
+  }
+  .day.current .body .title {
+    color: var(--ink-1);
+    font-weight: 700;
+  }
+  .day.current .marker {
+    background: var(--ink-1);
+    color: var(--paper);
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  /* 关卡日 */
+  .day.checkpoint .day-num {
+    color: var(--gold-700);
+  }
+  .day.checkpoint .marker {
+    color: var(--gold-700);
+    font-weight: 700;
+  }
+  .day.checkpoint .marker::before {
+    content: '◆ ';
+  }
+
+  /* 锁定 */
+  .day.locked {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  .day.locked .day-num {
+    color: var(--ink-4);
+  }
+  .day.locked .body .title {
+    color: var(--ink-3);
+    font-weight: 500;
+  }
+  .day.locked:hover {
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+  }
+
+  /* checkpoint 大日（关卡日卡片浮起） */
+  .day.checkpoint-big {
+    margin: 16px 0;
+    padding: 18px 18px 18px 16px;
+    background: linear-gradient(135deg, var(--gold-50) 0%, oklch(98% 0.018 50) 100%);
+    border: 1.5px solid var(--gold-200);
+    box-shadow: var(--shadow-sm);
+  }
+  .day.checkpoint-big .day-num {
+    color: var(--gold-700);
+    font-weight: 700;
+    font-size: 30px;
+  }
+  .day.checkpoint-big .body .title {
+    font-weight: 700;
+    color: var(--ink-1);
+  }
+  .day.checkpoint-big .marker {
+    background: var(--gold-500);
+    color: var(--paper);
+    padding: 5px 11px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    box-shadow: 0 4px 12px oklch(74% 0.115 80 / 0.4);
+  }
+  .day.checkpoint-big .marker::before { content: ''; }
+
+  /* ═══ Desktop ═══ */
+  .desktop-content {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    min-height: 720px;
+  }
+
+  .d-side {
+    background: linear-gradient(180deg,
+      oklch(98% 0.014 14) 0%,
+      oklch(96% 0.020 30) 60%,
+      oklch(94% 0.025 50) 100%);
+    padding: 56px 40px;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--line-1);
+    position: relative;
+    overflow: hidden;
+  }
+  .d-side::after {
+    content: '30';
+    position: absolute;
+    right: -50px;
+    bottom: -80px;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 380px;
+    font-weight: 600;
+    color: var(--pink-200);
+    line-height: 1;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.45;
+  }
+  .d-side > * { position: relative; z-index: 1; }
+
+  .d-side .eyebrow {
+    font-family: 'Caveat', serif;
+    font-size: 24px;
+    color: var(--pink-700);
+    margin-bottom: 18px;
+  }
+  .d-side .ko-title {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink-3);
+    margin-bottom: 8px;
+    letter-spacing: var(--tracking-snug);
+  }
+  .d-side h1 {
+    font-size: 44px;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: var(--tracking-tight);
+    color: var(--ink-1);
+    margin-bottom: 22px;
+  }
+  .d-side p.lead {
+    font-size: 15px;
+    color: var(--ink-2);
+    line-height: 1.7;
+    margin-bottom: 32px;
+    max-width: 280px;
+  }
+
+  .d-side .progress-row {
+    margin-top: auto;
+    padding: 22px 22px;
+    background: oklch(99.5% 0.003 50 / 0.85);
+    backdrop-filter: blur(20px);
+    border: 1.5px solid var(--line-1);
+    border-radius: var(--r-md);
+    box-shadow: var(--shadow-sm), inset 0 1px 0 0 oklch(100% 0 0 / 0.6);
+  }
+  .d-side .progress-row .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+  }
+  .d-side .progress-row .top .left {
+    font-size: 11px;
+    color: var(--ink-3);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .d-side .progress-row .top .right {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--ink-1);
+    letter-spacing: var(--tracking-tight);
+    font-variant-numeric: tabular-nums;
+  }
+  .d-side .progress-row .top .right .total {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink-3);
+    margin-left: 4px;
+  }
+  .d-side .progress-row .bar {
+    height: 6px;
+    background: var(--paper-3);
+    border-radius: 999px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 16px;
+  }
+  .d-side .progress-row .bar::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 43%;
+    background: linear-gradient(90deg, var(--pink-400), var(--pink-700));
+    border-radius: 999px;
+    box-shadow: 0 0 16px oklch(70% 0.135 14 / 0.4);
+  }
+  .d-side .cta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    background: var(--ink-1);
+    color: var(--paper);
+    border-radius: var(--r-md);
+    border: none;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.2s var(--ease);
+  }
+  .d-side .cta:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md), 0 0 28px oklch(20% 0.015 30 / 0.18);
+  }
+  .d-side .cta .left {
+    flex: 1; text-align: left;
+  }
+  .d-side .cta .label {
+    font-size: 10px;
+    color: oklch(75% 0.005 50);
+    letter-spacing: 0.06em;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .d-side .cta .next {
+    font-size: 14px;
+    font-weight: 700;
+    margin-top: 3px;
+  }
+  .d-side .cta .arrow { color: var(--paper); }
+
+  /* desktop main */
+  .d-main {
+    padding: 48px 56px;
+    overflow-y: auto;
+    max-height: 720px;
+  }
+  .d-main .chapter {
+    padding-bottom: 32px;
+    margin-bottom: 32px;
+    border-bottom: 1px solid var(--line-1);
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .d-main .chapter:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+  .d-main .chapter-head h2 { font-size: 26px; }
+  .d-main .day {
+    grid-template-columns: 56px 1fr auto;
+    padding: 16px 18px;
+  }
+  .d-main .day .day-num { font-size: 32px; }
+  .d-main .day .body .title { font-size: 16px; }
+  .d-main .day .body .sub { font-size: 12px; }
+</style>
+</head>
+<body>
+
+<div class="doc-title">
+  <h1>Tori Diary · 章节书页 mockup <span class="pill">方向 A</span></h1>
+  <p>移动 + 桌面 同屏对比 · 这是替代 30 格网格的提案</p>
+</div>
+
+<div class="canvas">
+
+<!-- ═══ MOBILE ═══ -->
+<div class="mobile">
+<div class="mobile-content">
+
+  <!-- Hero -->
+  <section class="m-hero">
+    <p class="eyebrow">a story of 30 days</p>
+    <p class="ko-title">토리의 한국어 일기</p>
+    <h1>兔莉的<br>韩语日记。</h1>
+    <p class="lead">从中国家里到首尔动物城。<br>每天 15 分钟，跟兔莉一起。</p>
+
+    <div class="progress-row">
+      <div class="top">
+        <span class="left">your progress</span>
+        <span class="right">13<span class="total">/ 30</span></span>
+      </div>
+      <div class="bar"></div>
+    </div>
+
+    <button class="cta">
+      <div class="left">
+        <div class="label">continue</div>
+        <div class="next">Day 13 · 약국</div>
+      </div>
+      <div class="arrow">→</div>
+    </button>
+  </section>
+
+  <!-- Chapters -->
+  <section class="m-chapters">
+
+    <!-- Chapter 1 -->
+    <div class="chapter">
+      <div class="chapter-head">
+        <div>
+          <p class="chap-num">Chapter One</p>
+          <h2>出发与落地</h2>
+          <p class="ko">출발과 첫걸음 · Day 1–7</p>
+        </div>
+        <div class="stats">
+          <span class="num">7/7</span>
+          已完成
+        </div>
+      </div>
+
+      <div class="days">
+        <div class="day done">
+          <div class="day-num">01</div>
+          <div class="body">
+            <div class="title">出发前夜 · 妈妈的胡萝卜</div>
+            <div class="sub"><span class="ko">출발 전날 밤</span></div>
+          </div>
+          <span class="marker"></span>
+        </div>
+        <div class="day done">
+          <div class="day-num">02</div>
+          <div class="body">
+            <div class="title">飞机上 · 第一次说韩语</div>
+            <div class="sub"><span class="ko">비행기 안</span></div>
+          </div>
+          <span class="marker"></span>
+        </div>
+        <div class="day done">
+          <div class="day-num">03</div>
+          <div class="body">
+            <div class="title">仁爪机场 · 짐 vs 집 翻车</div>
+            <div class="sub"><span class="ko">인천공항</span></div>
+          </div>
+          <span class="marker"></span>
+        </div>
+        <div class="day done">
+          <div class="day-num">04</div>
+          <div class="body">
+            <div class="title">한빛宿舍 · 第一天报到</div>
+            <div class="sub"><span class="ko">기숙사 입주</span></div>
+          </div>
+          <span class="marker"></span>
+        </div>
+        <div class="day done">
+          <div class="day-num">05</div>
+          <div class="body">
+            <div class="title">楼下 · 遇见 Haru 仓鼠</div>
+            <div class="sub"><span class="ko">첫 이웃</span></div>
+          </div>
+          <span class="marker"></span>
+        </div>
+        <div class="day done">
+          <div class="day-num">06</div>
+          <div class="body">
+            <div class="title">语言学校 · 班长 Junho</div>
+            <div class="sub"><span class="ko">한빛어학당</span></div>
+          </div>
+          <span class="marker"></span>
+        </div>
+        <div class="day done checkpoint-big">
+          <div class="day-num">07</div>
+          <div class="body">
+            <div class="title">关卡 1 · 一周入住检查</div>
+            <div class="sub"><span class="ko">기숙사 점검</span></div>
+          </div>
+          <span class="marker">CLEARED</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chapter 2 -->
+    <div class="chapter">
+      <div class="chapter-head">
+        <div>
+          <p class="chap-num">Chapter Two</p>
+          <h2>日常生活</h2>
+          <p class="ko">일상의 시작 · Day 8–14</p>
+        </div>
+        <div class="stats">
+          <span class="num">5/7</span>
+          进行中
+        </div>
+      </div>
+
+      <div class="days">
+        <div class="day done">
+          <div class="day-num">08</div>
+          <div class="body">
+            <div class="title">CU 便利店 · 第一个紫菜包饭</div>
+            <div class="sub"><span class="ko">편의점</span></div>
+          </div>
+          <span class="marker"></span>
+        </div>
+        <div class="day done">
+          <div class="day-num">09</div>
+          <div class="body">
+            <div class="title">价格的故事 · 만 원</div>
+            <div class="sub"><span class="ko">한국 화폐</span></div>
+          </div>
+          <span class="marker"></span>
+        </div>
+        <div class="day done">
+          <div class="day-num">10</div>
+          <div class="body">
+            <div class="title">学校食堂 · 有什么/没什么</div>
+            <div class="sub"><span class="ko">학교 식당</span></div>
+          </div>
+          <span class="marker"></span>
+        </div>
+        <div class="day done">
+          <div class="day-num">11</div>
+          <div class="body">
+            <div class="title">Daiso · 千元世界</div>
+            <div class="sub"><span class="ko">다이소</span></div>
+          </div>
+          <span class="marker"></span>
+        </div>
+        <div class="day done">
+          <div class="day-num">12</div>
+          <div class="body">
+            <div class="title">粉色咖啡馆 · 第一杯拿铁</div>
+            <div class="sub"><span class="ko">바나나 토끼 카페</span></div>
+          </div>
+          <span class="marker"></span>
+        </div>
+        <div class="day current">
+          <div class="day-num">13</div>
+          <div class="body">
+            <div class="title">약국 · 感冒了</div>
+            <div class="sub"><span class="ko">감기 걸렸어요</span></div>
+          </div>
+          <span class="marker">TODAY</span>
+        </div>
+        <div class="day locked">
+          <div class="day-num">14</div>
+          <div class="body">
+            <div class="title">关卡 2 · 一个人去咖啡馆点单</div>
+            <div class="sub"><span class="ko">하루카페</span></div>
+          </div>
+          <span class="marker">·</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chapter 3 -->
+    <div class="chapter">
+      <div class="chapter-head">
+        <div>
+          <p class="chap-num">Chapter Three</p>
+          <h2>独立生活</h2>
+          <p class="ko">독립적인 생활 · Day 15–21</p>
+        </div>
+        <div class="stats">
+          <span class="num">0/7</span>
+          未开启
+        </div>
+      </div>
+
+      <div class="days">
+        <div class="day locked">
+          <div class="day-num">15</div>
+          <div class="body">
+            <div class="title">看房 · 找一间属于我的房间</div>
+            <div class="sub"><span class="ko">원룸 찾기</span></div>
+          </div>
+          <span class="marker">·</span>
+        </div>
+        <div class="day locked">
+          <div class="day-num">16</div>
+          <div class="body">
+            <div class="title">问路 · 这里怎么去</div>
+            <div class="sub"><span class="ko">길 묻기</span></div>
+          </div>
+          <span class="marker">·</span>
+        </div>
+        <div class="day locked">
+          <div class="day-num">17</div>
+          <div class="body">
+            <div class="title">티머니카드 · 一卡通</div>
+            <div class="sub"><span class="ko">교통카드</span></div>
+          </div>
+          <span class="marker">·</span>
+        </div>
+        <div class="day locked">
+          <div class="day-num">18</div>
+          <div class="body">
+            <div class="title">银行 · 留学生账户</div>
+            <div class="sub"><span class="ko">은행 통장</span></div>
+          </div>
+          <span class="marker">·</span>
+        </div>
+        <div class="day locked">
+          <div class="day-num">19</div>
+          <div class="body">
+            <div class="title">병원 · 第一次挂号</div>
+            <div class="sub"><span class="ko">병원 접수</span></div>
+          </div>
+          <span class="marker">·</span>
+        </div>
+        <div class="day locked">
+          <div class="day-num">20</div>
+          <div class="body">
+            <div class="title">租房合同细节</div>
+            <div class="sub"><span class="ko">계약 조건</span></div>
+          </div>
+          <span class="marker">·</span>
+        </div>
+        <div class="day locked">
+          <div class="day-num">21</div>
+          <div class="body">
+            <div class="title">关卡 3 · 和房东签合同</div>
+            <div class="sub"><span class="ko">계약하기</span></div>
+          </div>
+          <span class="marker">·</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chapter 4 -->
+    <div class="chapter">
+      <div class="chapter-head">
+        <div>
+          <p class="chap-num">Chapter Four · final</p>
+          <h2>社交融入与毕业</h2>
+          <p class="ko">소속과 졸업 · Day 22–30</p>
+        </div>
+        <div class="stats">
+          <span class="num">0/9</span>
+          未开启
+        </div>
+      </div>
+
+      <div class="days">
+        <div class="day locked">
+          <div class="day-num">22</div>
+          <div class="body">
+            <div class="title">한빛어학당 · 해요体登场</div>
+            <div class="sub"><span class="ko">반장 준호</span></div>
+          </div>
+          <span class="marker">·</span>
+        </div>
+        <div class="day locked">
+          <div class="day-num">26</div>
+          <div class="body">
+            <div class="title">关卡 4 · 偶像 생카</div>
+            <div class="sub"><span class="ko">달빛카페</span></div>
+          </div>
+          <span class="marker">·</span>
+        </div>
+        <div class="day locked">
+          <div class="day-num">29</div>
+          <div class="body">
+            <div class="title">关卡 5 · 韩文信</div>
+            <div class="sub"><span class="ko">편지 쓰기</span></div>
+          </div>
+          <span class="marker">·</span>
+        </div>
+        <div class="day locked">
+          <div class="day-num">30</div>
+          <div class="body">
+            <div class="title">毕业典礼 · 졸업식</div>
+            <div class="sub"><span class="ko">최종 시험</span></div>
+          </div>
+          <span class="marker">·</span>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+</div>
+</div>
+
+<!-- ═══ DESKTOP ═══ -->
+<div class="desktop">
+<div class="desktop-content">
+
+  <!-- Side -->
+  <aside class="d-side">
+    <p class="eyebrow">a story of 30 days</p>
+    <p class="ko-title">토리의 한국어 일기</p>
+    <h1>兔莉的<br>韩语日记。</h1>
+    <p class="lead">从中国家里到首尔动物城。<br>每天 15 分钟，跟兔莉一起<br>过 30 天首尔留学。</p>
+
+    <div class="progress-row">
+      <div class="top">
+        <span class="left">your progress</span>
+        <span class="right">13<span class="total">/ 30</span></span>
+      </div>
+      <div class="bar"></div>
+      <button class="cta">
+        <div class="left">
+          <div class="label">continue reading</div>
+          <div class="next">Day 13 · 약국</div>
+        </div>
+        <div class="arrow">→</div>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="d-main">
+
+    <div class="chapter">
+      <div class="chapter-head">
+        <div>
+          <p class="chap-num">Chapter One</p>
+          <h2>出发与落地</h2>
+          <p class="ko">출발과 첫걸음 · Day 1–7</p>
+        </div>
+        <div class="stats">
+          <span class="num">7/7</span>已完成
+        </div>
+      </div>
+
+      <div class="days">
+        <div class="day done">
+          <div class="day-num">01</div>
+          <div class="body">
+            <div class="title">出发前夜 · 妈妈的胡萝卜</div>
+            <div class="sub"><span class="ko">출발 전날 밤</span> · 镜子前练 100 遍 안녕하세요</div>
+          </div>
+          <span class="marker"></span>
+        </div>
+        <div class="day done">
+          <div class="day-num">02</div>
+          <div class="body">
+            <div class="title">飞机上 · 第一次说韩语</div>
+            <div class="sub"><span class="ko">비행기 안</span> · 仙鹤空乘 + 第一杯可乐</div>
+          </div>
+          <span class="marker"></span>
+        </div>
+        <div class="day done">
+          <div class="day-num">03</div>
+          <div class="body">
+            <div class="title">仁爪机场 · 짐 vs 집 翻车</div>
+            <div class="sub"><span class="ko">인천공항</span> · Minji 水獭登场</div>
+          </div>
+          <span class="marker"></span>
+        </div>
+        <div class="day done">
+          <div class="day-num">04</div>
+          <div class="body">
+            <div class="title">한빛宿舍 · 第一天报到</div>
+            <div class="sub"><span class="ko">기숙사 입주</span> · 浣熊宿管 + 301 号钥匙</div>
+          </div>
+          <span class="marker"></span>
+        </div>
+        <div class="day done">
+          <div class="day-num">05</div>
+          <div class="body">
+            <div class="title">楼下 · 遇见 Haru 仓鼠</div>
+            <div class="sub"><span class="ko">첫 이웃</span> · 隔壁 302 也是 KPOP 迷</div>
+          </div>
+          <span class="marker"></span>
+        </div>
+        <div class="day done">
+          <div class="day-num">06</div>
+          <div class="body">
+            <div class="title">语言学校 · 班长 Junho 老虎</div>
+            <div class="sub"><span class="ko">한빛어학당</span> · 虎牙的老虎追中国偶像</div>
+          </div>
+          <span class="marker"></span>
+        </div>
+        <div class="day done checkpoint-big">
+          <div class="day-num">07</div>
+          <div class="body">
+            <div class="title">关卡 1 · 一周入住检查</div>
+            <div class="sub"><span class="ko">기숙사 점검</span> · 完整撑过宿管阿姨的对话</div>
+          </div>
+          <span class="marker">CLEARED</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter">
+      <div class="chapter-head">
+        <div>
+          <p class="chap-num">Chapter Two</p>
+          <h2>日常生活</h2>
+          <p class="ko">일상의 시작 · Day 8–14</p>
+        </div>
+        <div class="stats">
+          <span class="num">5/7</span>进行中
+        </div>
+      </div>
+
+      <div class="days">
+        <div class="day done">
+          <div class="day-num">08</div>
+          <div class="body">
+            <div class="title">CU 便利店 · 第一个紫菜包饭</div>
+            <div class="sub"><span class="ko">편의점</span> · 考拉店员 + 결제 도와드릴까요</div>
+          </div>
+          <span class="marker"></span>
+        </div>
+        <div class="day done">
+          <div class="day-num">09</div>
+          <div class="body">
+            <div class="title">价格的故事 · 만 원</div>
+            <div class="sub"><span class="ko">한국 화폐</span> · Minji 教韩币</div>
+          </div>
+          <span class="marker"></span>
+        </div>
+        <div class="day done">
+          <div class="day-num">10</div>
+          <div class="body">
+            <div class="title">学校食堂 · 有什么/没什么</div>
+            <div class="sub"><span class="ko">학교 식당</span> · 袋鼠阿姨 + 된장찌개</div>
+          </div>
+          <span class="marker"></span>
+        </div>
+        <div class="day done">
+          <div class="day-num">11</div>
+          <div class="body">
+            <div class="title">Daiso · 千元世界</div>
+            <div class="sub"><span class="ko">다이소</span> · 一次买齐生活套装</div>
+          </div>
+          <span class="marker"></span>
+        </div>
+        <div class="day done">
+          <div class="day-num">12</div>
+          <div class="body">
+            <div class="title">粉色咖啡馆 · 第一杯拿铁</div>
+            <div class="sub"><span class="ko">바나나 토끼 카페</span> · 얼음 빼고요</div>
+          </div>
+          <span class="marker"></span>
+        </div>
+        <div class="day current">
+          <div class="day-num">13</div>
+          <div class="body">
+            <div class="title">약국 · 感冒了</div>
+            <div class="sub"><span class="ko">감기 걸렸어요</span> · Haru 陪去药店 · 白鹭药剂师</div>
+          </div>
+          <span class="marker">TODAY</span>
+        </div>
+        <div class="day locked">
+          <div class="day-num">14</div>
+          <div class="body">
+            <div class="title">关卡 2 · 一个人去咖啡馆点单</div>
+            <div class="sub"><span class="ko">하루카페</span> · 6 句对话全程独立</div>
+          </div>
+          <span class="marker">·</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter">
+      <div class="chapter-head">
+        <div>
+          <p class="chap-num">Chapter Three</p>
+          <h2>独立生活</h2>
+          <p class="ko">독립적인 생활 · Day 15–21</p>
+        </div>
+        <div class="stats">
+          <span class="num">0/7</span>未开启
+        </div>
+      </div>
+
+      <div class="days">
+        <div class="day locked">
+          <div class="day-num">15</div>
+          <div class="body">
+            <div class="title">부동산 · 第一次说"我在找房子"</div>
+            <div class="sub"><span class="ko">원룸 찾기</span></div>
+          </div>
+          <span class="marker">·</span>
+        </div>
+        <div class="day locked">
+          <div class="day-num">16</div>
+          <div class="body">
+            <div class="title">迷路在小巷子 · 第一次开口问路</div>
+            <div class="sub"><span class="ko">길 묻기</span></div>
+          </div>
+          <span class="marker">·</span>
+        </div>
+        <div class="day locked">
+          <div class="day-num">21</div>
+          <div class="body">
+            <div class="title">关卡 3 · 海豹房东签合同</div>
+            <div class="sub"><span class="ko">계약하기</span></div>
+          </div>
+          <span class="marker">·</span>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+</div>
+</div>
+
+</div>
+
+</body>
+</html>
