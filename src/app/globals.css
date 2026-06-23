@@ -60,30 +60,36 @@
   --radius-xl: 28px;
   --radius-pill: 999px;
 
-  /* ── Shadow (matte, 4 steps) ── */
-  --shadow-xs: 0 1px 2px rgba(78, 52, 46, 0.04);
-  --shadow-sm: 0 4px 12px rgba(78, 52, 46, 0.06);
-  --shadow-md: 0 10px 26px rgba(78, 52, 46, 0.08);
-  --shadow-lg: 0 24px 56px rgba(78, 52, 46, 0.12);
+  /* ── Shadow (matte, 5 steps · OKLCH 棕调 = 温度的关键) ── */
+  --shadow-xs: 0 1px 2px 0 oklch(28% 0.02 30 / 0.04);
+  --shadow-sm: 0 4px 10px -2px oklch(28% 0.02 30 / 0.06);
+  --shadow-md: 0 10px 22px -6px oklch(28% 0.02 30 / 0.08);
+  --shadow-lg: 0 20px 40px -12px oklch(28% 0.02 30 / 0.12);
+  --shadow-xl: 0 32px 60px -16px oklch(28% 0.02 30 / 0.16);
+  --shadow-hover: 0 14px 28px -8px oklch(28% 0.02 30 / 0.10);
 
-  /* ── Font size + line-height (text-xs … text-2xl) ── */
+  /* ── Font size + line-height (1.25 modular scale · 韩系节奏) ── */
   --text-xs: 12px;
-  --text-xs--line-height: 16px;
+  --text-xs--line-height: 18px;
   --text-sm: 13px;
-  --text-sm--line-height: 18px;
-  --text-base: 14px;
-  --text-base--line-height: 22px;
-  --text-md: 16px;
-  --text-md--line-height: 24px;
+  --text-sm--line-height: 20px;
+  --text-base: 15px;
+  --text-base--line-height: 24px;
+  --text-md: 17px;
+  --text-md--line-height: 28px;
   --text-lg: 20px;
-  --text-lg--line-height: 28px;
-  --text-xl: 28px;
+  --text-lg--line-height: 30px;
+  --text-xl: 24px;
   --text-xl--line-height: 34px;
-  --text-2xl: 36px;
-  --text-2xl--line-height: 42px;
+  --text-2xl: 32px;
+  --text-2xl--line-height: 40px;
+  --text-display: 42px;
+  --text-display--line-height: 50px;
 
   /* ── Motion ── */
   --ease-soft: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 
   /* ── Semantic spacing token (Tailwind already has spacing scale) ── */
   --spacing-section: 32px;
@@ -95,6 +101,47 @@
   --dur-base: 200ms;
   --dur-slow: 320ms;
 
+  /* ── 字重梯度（视觉系统升级 v2 新增 · 韩系层级） ── */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-black: 800;
+
+  /* ── 字间距（韩系标志 · 标题收紧、副标轻拉开） ── */
+  --tracking-tight: -0.02em;   /* 标题 */
+  --tracking-snug: -0.01em;    /* 副标题 */
+  --tracking-normal: 0;        /* 正文 */
+  --tracking-wide: 0.02em;     /* 全大写小标 */
+  --tracking-wider: 0.06em;    /* eyebrow / 分类标签 */
+
+  /* ── 行高补充（韩文行需要更松） ── */
+  --leading-tight: 1.3;
+  --leading-snug: 1.45;
+  --leading-base: 1.6;
+  --leading-relaxed: 1.7;
+  --leading-loose: 1.8;        /* 韩文段 */
+
+  /* ── 焦点环（统一不用默认蓝） ── */
+  --focus-ring-color: var(--color-pink-base);
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+  --focus-ring: 0 0 0 var(--focus-ring-offset) var(--color-surface-1),
+                0 0 0 calc(var(--focus-ring-offset) + var(--focus-ring-width)) var(--focus-ring-color);
+
+  /* ── 间距 scale（4pt base · plan v2 加入） ── */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
   /* Hero gradient end colors (per tone) — light variants */
   --hero-grad-end-pink:   #fff8fb;
   --hero-grad-end-mint:   #f4fbf8;
@@ -103,8 +150,8 @@
   --hero-grad-end-neutral: var(--color-surface-3);
 
   /* Backdrop overlay alpha for Sheet/Modal */
-  --backdrop-color: rgba(0, 0, 0, 0.35);
-  --backdrop-color-strong: rgba(0, 0, 0, 0.45);
+  --backdrop-color: oklch(20% 0.015 30 / 0.35);
+  --backdrop-color-strong: oklch(20% 0.015 30 / 0.5);
 
   /* Danger tint backgrounds (status-danger with low alpha) */
   --color-status-danger-bg: rgba(214, 86, 86, 0.08);
@@ -156,12 +203,18 @@
   transform: translateY(0);
 }
 
-/* ui/Button press */
-.tori-btn:not(:disabled):active {
-  transform: translateY(1px);
-}
+/* ui/Button states · v2 升级（hover 抬升 + focus 用 token + 棕调阴影） */
 .tori-btn:not(:disabled):hover {
+  transform: translateY(-1px);
   box-shadow: var(--shadow-md);
+}
+.tori-btn:not(:disabled):active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-xs);
+}
+.tori-btn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring), var(--shadow-sm);
 }
 
 /* ── Dark overrides for design tokens ── */
@@ -215,9 +268,9 @@
   --bg-soft:        #FFF0F3;
   --bg-muted:       #F5F0EB;
 
-  /* ── 主色调（粉色系）── */
-  --pink-primary:   #FF8FAB;
-  --pink-light:     #FFB3C6;
+  /* ── 主色调（粉色系）alias 到 P1 token，消除 7 色差 ── */
+  --pink-primary:   var(--color-pink-base);
+  --pink-light:     var(--color-pink-soft);
   --pink-pale:      #FFD6E0;
 
   /* ── 辅助色 ── */
@@ -1458,8 +1511,8 @@ html[data-reduce-motion="true"] *::after {
   --desktop-ink: #241917;
   --desktop-muted: #86746d;
   --desktop-line: #efe1da;
-  --desktop-pink: #ff7fa8;
-  --desktop-mint: #aee3d8;
+  --desktop-pink: var(--color-pink-base);
+  --desktop-mint: var(--color-mint-soft);
   --desktop-cream: #fff8f4;
   --desktop-black: #201815;
   --desktop-shadow: none;
@@ -2809,4 +2862,16 @@ html[data-reduce-motion="true"] *::after {
   --fc-dot-active: #7050c0;
   --fc-dot-inactive: #e0e0e0;
   --fc-progress-bg: #e8e8e8;
+}
+
+/* ── ProgressBar indeterminate animation ── */
+@keyframes tori-progress-indet {
+  0%   { left: -40%; }
+  100% { left: 100%; }
+}
+
+/* ── StatePlaceholder loading dots ── */
+@keyframes tori-dot-bounce {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; }
+  40%           { transform: scale(1);   opacity: 1; }
 }

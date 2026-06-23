@@ -2,37 +2,49 @@
 
 import { forwardRef, type ButtonHTMLAttributes, type ReactNode, type CSSProperties } from 'react';
 
-type Variant = 'primary' | 'secondary' | 'ghost' | 'danger';
+type Variant = 'primary' | 'secondary' | 'ghost' | 'text' | 'danger';
 type Size = 'sm' | 'md' | 'lg';
-type Tone = 'pink' | 'black' | 'mint';
+type Tone = 'pink' | 'black' | 'mint' | 'gold';
+type Shape = 'pill' | 'rounded';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant;
   size?: Size;
   tone?: Tone;
+  shape?: Shape;
+  /** 左侧图标 */
   icon?: ReactNode;
+  /** 右侧图标（如 ChevronRight） */
+  trailingIcon?: ReactNode;
   loading?: boolean;
   fullWidth?: boolean;
 }
 
 const SIZE: Record<Size, { h: number; px: number; fs: number; gap: number }> = {
-  sm: { h: 32, px: 12, fs: 13, gap: 6 },
-  md: { h: 40, px: 18, fs: 14, gap: 8 },
-  lg: { h: 48, px: 22, fs: 15, gap: 10 },
+  sm: { h: 36, px: 14, fs: 13, gap: 6 },
+  md: { h: 44, px: 20, fs: 14, gap: 8 },
+  lg: { h: 52, px: 26, fs: 16, gap: 10 },
 };
 
 function bgFor(variant: Variant, tone: Tone): string {
   if (variant === 'danger') return 'var(--color-status-danger)';
-  if (variant === 'ghost') return 'transparent';
+  if (variant === 'ghost' || variant === 'text') return 'transparent';
   if (variant === 'secondary') return 'var(--color-surface-3)';
   // primary
   if (tone === 'pink') return 'var(--color-pink-base)';
   if (tone === 'mint') return 'var(--color-mint-base)';
+  if (tone === 'gold') return '#c8995b';
   return 'var(--color-ink-1)'; // black
 }
 
 function fgFor(variant: Variant, tone: Tone): string {
   if (variant === 'ghost') return 'var(--color-ink-2)';
+  if (variant === 'text') {
+    if (tone === 'pink') return 'var(--color-pink-strong)';
+    if (tone === 'mint') return 'var(--color-mint-strong)';
+    if (tone === 'gold') return '#9b7a3e';
+    return 'var(--color-ink-1)';
+  }
   if (variant === 'secondary') return 'var(--color-ink-1)';
   if (variant === 'primary' && tone === 'mint') return 'var(--color-ink-1)';
   return '#ffffff';
@@ -49,7 +61,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     variant = 'primary',
     size = 'md',
     tone = 'black',
+    shape = 'pill',
     icon,
+    trailingIcon,
     loading = false,
     fullWidth = false,
     disabled,
@@ -62,27 +76,35 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
 ) {
   const s = SIZE[size];
   const isDisabled = disabled || loading;
+  const isElevated = variant === 'primary' || variant === 'danger';
 
   const css: CSSProperties = {
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
     gap: s.gap,
-    height: s.h,
-    paddingInline: s.px,
+    minHeight: s.h,                     // touch standard 44px
+    paddingInline: variant === 'text' ? 0 : s.px,
     fontSize: s.fs,
-    fontWeight: 700,
+    fontWeight: 'var(--font-weight-semibold)',
+    letterSpacing: 'var(--tracking-snug)',
     lineHeight: 1,
-    borderRadius: 'var(--radius-pill)',
+    borderRadius:
+      shape === 'pill' ? 'var(--radius-pill)' : 'var(--radius-md)',
     background: bgFor(variant, tone),
     color: fgFor(variant, tone),
     border: borderFor(variant),
-    boxShadow: variant === 'primary' || variant === 'danger' ? 'var(--shadow-sm)' : 'none',
+    boxShadow: isElevated ? 'var(--shadow-sm)' : 'none',
     cursor: isDisabled ? 'not-allowed' : 'pointer',
-    opacity: isDisabled ? 0.55 : 1,
-    transition: 'transform var(--dur-fast) var(--ease-soft), box-shadow var(--dur-fast) var(--ease-soft), opacity var(--dur-fast) var(--ease-soft)',
+    opacity: isDisabled ? 0.5 : 1,
+    transition:
+      'transform var(--dur-fast) var(--ease-out-quart), ' +
+      'box-shadow var(--dur-fast) var(--ease-out-quart), ' +
+      'background var(--dur-fast) var(--ease-out-quart), ' +
+      'opacity var(--dur-fast) var(--ease-out-quart)',
     width: fullWidth ? '100%' : undefined,
     whiteSpace: 'nowrap',
+    outline: 'none',
     ...(style ?? {}),
   };
 
@@ -107,9 +129,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
           }}
         />
       ) : icon ? (
-        <span style={{ display: 'inline-flex' }}>{icon}</span>
+        <span style={{ display: 'inline-flex', flexShrink: 0 }}>{icon}</span>
       ) : null}
       {children}
+      {!loading && trailingIcon && (
+        <span style={{ display: 'inline-flex', flexShrink: 0 }}>{trailingIcon}</span>
+      )}
     </button>
   );
 });

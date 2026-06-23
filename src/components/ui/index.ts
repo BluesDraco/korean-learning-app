@@ -15,3 +15,15 @@ export type { PageHeaderProps } from './PageHeader';
 
 export { Section } from './Section';
 export type { SectionProps } from './Section';
+
+export { Tag } from './Tag';
+export type { TagProps, TagPreset, TagTone } from './Tag';
+
+export { ProgressBar } from './ProgressBar';
+export type { ProgressBarProps, ProgressBarTone, ProgressBarSize } from './ProgressBar';
+
+export { StatePlaceholder } from './StatePlaceholder';
+export type { StatePlaceholderProps, StateKind } from './StatePlaceholder';
+
+export { EntryCard } from './EntryCard';
+export type { EntryCardProps } from './EntryCard';

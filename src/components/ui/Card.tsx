@@ -2,8 +2,8 @@
 
 import { forwardRef, type ReactNode, type HTMLAttributes, type CSSProperties } from 'react';
 
-type Variant = 'default' | 'hero' | 'feature' | 'stat' | 'row';
-type Tone = 'neutral' | 'pink' | 'mint' | 'peach' | 'purple';
+type Variant = 'default' | 'flat' | 'outlined' | 'tinted' | 'hero' | 'feature' | 'stat' | 'row';
+type Tone = 'neutral' | 'pink' | 'mint' | 'peach' | 'purple' | 'cream' | 'gold';
 type Padding = 'sm' | 'md' | 'lg' | 'none';
 type AsTag = 'div' | 'button' | 'a';
 
@@ -30,6 +30,18 @@ const TONE_BG: Record<Tone, string> = {
   mint:    'var(--color-mint-soft)',
   peach:   'var(--color-peach-soft)',
   purple:  'var(--color-purple-soft)',
+  cream:   'var(--color-surface-3)',
+  gold:    '#fdf4e3',
+};
+
+const TONE_BORDER: Record<Tone, string> = {
+  neutral: 'var(--color-border-1)',
+  pink:    'var(--color-pink-base)',
+  mint:    'var(--color-mint-base)',
+  peach:   'var(--color-peach-base)',
+  purple:  'var(--color-purple-base)',
+  cream:   'var(--color-border-2)',
+  gold:    '#c8995b',
 };
 
 const TONE_HERO_GRADIENT: Record<Tone, string> = {
@@ -38,6 +50,8 @@ const TONE_HERO_GRADIENT: Record<Tone, string> = {
   mint:    'linear-gradient(135deg, var(--color-mint-soft), var(--hero-grad-end-mint))',
   peach:   'linear-gradient(135deg, var(--color-peach-soft), var(--hero-grad-end-peach))',
   purple:  'linear-gradient(135deg, var(--color-purple-soft), var(--hero-grad-end-purple))',
+  cream:   'linear-gradient(135deg, var(--color-surface-3), var(--color-surface-2))',
+  gold:    'linear-gradient(135deg, #fdf4e3, #fffbf3)',
 };
 
 export const Card = forwardRef<HTMLElement, CardProps>(function Card(
@@ -68,13 +82,21 @@ export const Card = forwardRef<HTMLElement, CardProps>(function Card(
     background:
       variant === 'hero'
         ? TONE_HERO_GRADIENT[tone]
-        : variant === 'feature' || variant === 'stat'
-          ? TONE_BG[tone]
-          : 'var(--color-surface-2)',
+        : variant === 'flat'
+          ? 'transparent'
+          : variant === 'outlined'
+            ? 'var(--color-surface-2)'
+            : variant === 'tinted'
+              ? TONE_BG[tone]
+              : variant === 'feature' || variant === 'stat'
+                ? TONE_BG[tone]
+                : 'var(--color-surface-2)',
     border:
-      variant === 'hero'
-        ? '1px solid var(--color-border-1)'
-        : '1px solid var(--color-border-1)',
+      variant === 'flat'
+        ? 'none'
+        : variant === 'outlined'
+          ? `1.5px solid ${TONE_BORDER[tone]}`
+          : '1px solid var(--color-border-1)',
     borderRadius:
       variant === 'hero'
         ? 'var(--radius-xl)'
@@ -83,12 +105,17 @@ export const Card = forwardRef<HTMLElement, CardProps>(function Card(
           : 'var(--radius-lg)',
     padding: PAD[effectivePadding],
     boxShadow:
-      variant === 'hero'
-        ? 'var(--shadow-md)'
-        : variant === 'stat'
-          ? 'var(--shadow-xs)'
-          : 'var(--shadow-sm)',
-    transition: 'transform var(--dur-base) var(--ease-soft), box-shadow var(--dur-base) var(--ease-soft)',
+      variant === 'flat' || variant === 'outlined'
+        ? 'none'
+        : variant === 'hero'
+          ? 'var(--shadow-md)'
+          : variant === 'stat'
+            ? 'var(--shadow-xs)'
+            : 'var(--shadow-sm)',
+    transition:
+      'transform var(--dur-base) var(--ease-out-quart), ' +
+      'box-shadow var(--dur-base) var(--ease-out-quart), ' +
+      'border-color var(--dur-base) var(--ease-out-quart)',
     cursor: interactive || Tag !== 'div' ? 'pointer' : undefined,
     color: 'var(--color-ink-1)',
     ...(style ?? {}),

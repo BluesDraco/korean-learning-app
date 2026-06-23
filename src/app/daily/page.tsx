@@ -13,7 +13,7 @@ import { getProfile } from '@/lib/gamification';
 import Onboarding from '@/components/Onboarding';
 import { DailyShell } from '@/components/DailyShell';
 import { DesktopDailyPage } from '@/components/desktop/DesktopDailyPage';
-import { PageHeader, Section, Card, Button, Modal } from '@/components/ui';
+import { PageHeader, Section, Card, Button, Modal, EntryCard } from '@/components/ui';
 
 const TASK_ICONS: Record<string, React.ComponentType<{ size?: number; color?: string; style?: React.CSSProperties }>> = {
   course: GraduationCap,
@@ -338,35 +338,17 @@ export default function DailyPage() {
                     const Icon = TASK_ICONS[task.key] || Target;
                     const tone = TASK_TONE[task.key] || 'peach';
                     return (
-                      <Card key={task.key} as="a" href={task.href} onClick={feedbackClick} variant="row" interactive>
-                        <div
-                          style={{
-                            width: 40, height: 40, borderRadius: 'var(--radius-md)',
-                            background: TONE_BG[tone], color: TONE_FG[tone],
-                            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                          }}
-                          aria-hidden
-                        >
-                          <Icon size={20} />
-                        </div>
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                          <p style={{ fontSize: 15, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>
-                            {task.label}
-                          </p>
-                          <p style={{ fontSize: 12, color: 'var(--color-ink-3)', margin: '2px 0 0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                            {task.detail}
-                          </p>
-                        </div>
-                        <span
-                          style={{
-                            fontSize: 12, fontWeight: 700, color: TONE_FG[tone],
-                            background: TONE_BG[tone], padding: '6px 12px',
-                            borderRadius: 'var(--radius-pill)', flexShrink: 0,
-                          }}
-                        >
-                          {t('daily.task_go_button', lang)}
-                        </span>
-                      </Card>
+                      <EntryCard
+                        key={task.key}
+                        href={task.href}
+                        onClick={feedbackClick}
+                        icon={<Icon size={20} />}
+                        label={task.label}
+                        detail={task.detail}
+                        tone={tone}
+                        layout="row"
+                        cta={t('daily.task_go_button', lang)}
+                      />
                     );
                   })}
                 </div>
@@ -381,21 +363,15 @@ export default function DailyPage() {
                   { Icon: Sparkles, label: t('daily.mini_card_achievements_label', lang), detail: t('daily.mini_card_achievements_detail', lang), href: '/achievement/card',        tone: 'peach' as const },
                   { Icon: FileText, label: t('daily.mini_card_messages_label', lang),     detail: t('daily.mini_card_messages_detail', lang),     href: '/messages',                tone: 'mint' as const },
                 ]).map(({ Icon, label, detail, href, tone }) => (
-                  <Card key={href} as="a" href={href} variant="default" padding="md" interactive>
-                    <div
-                      style={{
-                        width: 36, height: 36, borderRadius: 'var(--radius-md)',
-                        background: TONE_BG[tone], color: TONE_FG[tone],
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        marginBottom: 8,
-                      }}
-                      aria-hidden
-                    >
-                      <Icon size={18} />
-                    </div>
-                    <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>{label}</p>
-                    <p style={{ fontSize: 11, color: 'var(--color-ink-3)', margin: '2px 0 0' }}>{detail}</p>
-                  </Card>
+                  <EntryCard
+                    key={href}
+                    href={href}
+                    icon={<Icon size={18} />}
+                    label={label}
+                    detail={detail}
+                    tone={tone}
+                    layout="block"
+                  />
                 ))}
               </div>
             </Section>
@@ -403,22 +379,15 @@ export default function DailyPage() {
             <Section title={t('daily.quick_tools_section_title', lang)} spacing="normal">
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
                 {quickTools.map(({ label, href, Icon, tone }) => (
-                  <Card key={href} as="a" href={href} onClick={feedbackClick} variant="default" padding="sm" interactive>
-                    <div
-                      style={{
-                        width: 36, height: 36, borderRadius: 'var(--radius-md)',
-                        background: TONE_BG[tone], color: TONE_FG[tone],
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        margin: '0 auto 4px',
-                      }}
-                      aria-hidden
-                    >
-                      <Icon size={18} />
-                    </div>
-                    <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0, textAlign: 'center' }}>
-                      {label}
-                    </p>
-                  </Card>
+                  <EntryCard
+                    key={href}
+                    href={href}
+                    onClick={feedbackClick}
+                    icon={<Icon size={18} />}
+                    label={label}
+                    tone={tone}
+                    layout="compact"
+                  />
                 ))}
               </div>
             </Section>
