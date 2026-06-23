@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { ToriDay } from '@/types/tori-diary';
 import { getStickerByDay } from '@/data/diary';
 import { Home, BookMarked } from 'lucide-react';
@@ -25,12 +25,22 @@ const PALETTE_BG: Record<string, string> = {
  * Day Recap — 收尾 + 颁发贴纸
  * 贴纸盖印动画 + 表扬文案 + 明天预告 + 回首页/贴纸册按钮
  */
-export function DiaryRecap({ day }: Props) {
+export function DiaryRecap({ day, onComplete }: Props) {
   const sticker = getStickerByDay(day.day);
   const [stamped, setStamped] = useState(false);
+  const completedRef = useRef(false);
+  const onCompleteRef = useRef(onComplete);
+  // 始终持有最新的 onComplete，避免 useEffect 依赖匿名函数引用
+  onCompleteRef.current = onComplete;
 
   useEffect(() => {
-    const t = setTimeout(() => setStamped(true), 400);
+    const t = setTimeout(() => {
+      setStamped(true);
+      if (!completedRef.current) {
+        completedRef.current = true;
+        onCompleteRef.current();
+      }
+    }, 400);
     return () => clearTimeout(t);
   }, []);
 

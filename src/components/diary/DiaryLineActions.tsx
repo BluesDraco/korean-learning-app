@@ -30,17 +30,18 @@ export function DiaryLineActions({ ko, zh, source, showRecord = false, rate = 0.
   const [recError, setRecError] = useState<string | null>(null);
   const recorderRef = useRef<AudioRecorder | null>(null);
 
-  // 查询是否已收藏
+  // 查询是否已收藏（按 userId 过滤，防止多账号串）
   useEffect(() => {
     let cancelled = false;
     (async () => {
       try {
-        const existing = await db.sentences.where('korean').equals(ko).first();
-        if (!cancelled && existing) setBookmarked(true);
+        const all = await db.sentences.where('korean').equals(ko).toArray();
+        const mine = all.find((s) => !s.userId || s.userId === user?.id);
+        if (!cancelled && mine) setBookmarked(true);
       } catch { /* ignore */ }
     })();
     return () => { cancelled = true; };
-  }, [ko]);
+  }, [ko, user?.id]);
 
   // 卸载清理
   useEffect(() => {
@@ -58,8 +59,9 @@ export function DiaryLineActions({ ko, zh, source, showRecord = false, rate = 0.
   const handleBookmark = async () => {
     if (bookmarked) return;
     try {
-      const existing = await db.sentences.where('korean').equals(ko).first();
-      if (!existing) {
+      const all = await db.sentences.where('korean').equals(ko).toArray();
+      const mine = all.find((s) => !s.userId || s.userId === user?.id);
+      if (!mine) {
         await db.sentences.add({
           id: crypto.randomUUID(),
           userId: user?.id,

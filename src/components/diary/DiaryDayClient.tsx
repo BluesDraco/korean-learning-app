@@ -35,6 +35,12 @@ export function DiaryDayClient({ day }: Props) {
   const { user } = useAuth();
   const [currentModule, setCurrentModule] = useState<ToriModuleKind>('opening');
   const [outputResults, setOutputResults] = useState<Array<{ taskId: string; correct: boolean; userText?: string }>>([]);
+  const [carrotProgress, setCarrotProgress] = useState<{
+    completedDays: number;
+    checkpointsCleared: number;
+    sentencesCount: number;
+    recordingsCount: number;
+  } | undefined>(undefined);
 
   const progressId = user ? `${user.id}-${day.day}` : '';
 
@@ -57,6 +63,38 @@ export function DiaryDayClient({ day }: Props) {
       } catch { /* ignore */ }
     })();
   }, [progressId, day.day, user]);
+
+  // 算胡萝卜需要的进度数据
+  useEffect(() => {
+    if (!user) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const [allP, allSentences, allRecordings] = await Promise.all([
+          db.toriProgress.toArray(),
+          db.sentences.toArray().catch(() => []),
+          db.recordings.toArray().catch(() => []),
+        ]);
+        const checkpoints = new Set([7, 14, 21, 26, 29, 30]);
+        const userP = allP.filter((p) => p.userId === user.id && p.completedAt);
+        const sentences = allSentences.filter(
+          (s) => (s.userId === user.id || !s.userId) && (s.sourceType === 'tori-diary' || s.source_type === 'tori-diary')
+        );
+        const recordings = allRecordings.filter(
+          (r) => (r.userId === user.id || !r.userId) && (r.sourceType === 'tori-diary' || r.source_type === 'tori-diary')
+        );
+        if (!cancelled) {
+          setCarrotProgress({
+            completedDays: userP.length,
+            checkpointsCleared: userP.filter((p) => checkpoints.has(p.day)).length,
+            sentencesCount: sentences.length,
+            recordingsCount: recordings.length,
+          });
+        }
+      } catch { /* keep undefined */ }
+    })();
+    return () => { cancelled = true; };
+  }, [user, day.day]);
 
   const advance = useCallback(async (currentMod: ToriModuleKind) => {
     if (user) {
@@ -176,7 +214,7 @@ export function DiaryDayClient({ day }: Props) {
       </div>
 
       {/* 悬浮的勇气胡萝卜助手 */}
-      <CarrotHelper day={day} currentModule={currentModule} />
+      <CarrotHelper day={day} currentModule={currentModule} progress={carrotProgress} />
     </div>
   );
 }

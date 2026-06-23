@@ -32,8 +32,8 @@ export function DiaryOutput({ day, onComplete }: Props) {
 
   const q = questions[qIdx];
 
-  const userTokens = picked.map((i) => q.tokens[i]);
-  const isFull = userTokens.length === q.composeAnswer.length;
+  const userTokens = useMemo(() => (q ? picked.map((i) => q.tokens[i]) : []), [q, picked]);
+  const isFull = q ? userTokens.length === q.composeAnswer.length : false;
 
   const handlePickToken = (idx: number) => {
     if (checked === 'correct') return;
@@ -56,7 +56,7 @@ export function DiaryOutput({ day, onComplete }: Props) {
 
   // 自动检查（凑齐时）
   useEffect(() => {
-    if (!isFull || checked !== 'idle') return;
+    if (!q || !isFull || checked !== 'idle') return;
     const userText = userTokens.join(' ');
     const expected = q.composeAnswer.join(' ');
     const correct = userText === expected;
@@ -66,10 +66,15 @@ export function DiaryOutput({ day, onComplete }: Props) {
     } else {
       setChecked('wrong');
       setShaking(true);
-      const t = setTimeout(() => setShaking(false), 500);
-      return () => clearTimeout(t);
     }
   }, [isFull, checked, userTokens, q]);
+
+  // shaking 自动复位（独立 effect，不被主检查 effect 重置）
+  useEffect(() => {
+    if (!shaking) return;
+    const t = setTimeout(() => setShaking(false), 500);
+    return () => clearTimeout(t);
+  }, [shaking]);
 
   const handleNext = () => {
     if (qIdx < questions.length - 1) {
@@ -80,6 +85,20 @@ export function DiaryOutput({ day, onComplete }: Props) {
       onComplete(results);
     }
   };
+
+  // 防御：所有 task 都无法转成组词题（极端情况）— 必须放在所有 hooks 之后
+  if (!q) {
+    return (
+      <div className="diary-anim-fade-up" style={{ textAlign: 'center', padding: '40px 20px' }}>
+        <p className="diary-handwriting-zh diary-text-soft" style={{ marginBottom: 20 }}>
+          今天没有组词练习，直接进入收尾吧。
+        </p>
+        <button onClick={() => onComplete([])} className="diary-btn diary-btn-primary">
+          继续 · 收尾 <ChevronRight size={16} />
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="diary-anim-fade-up">
