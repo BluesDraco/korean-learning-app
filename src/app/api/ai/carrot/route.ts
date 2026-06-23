@@ -102,6 +102,45 @@ const CARROT_SUMMARY_PROMPT = `${CARROT_CHAT_PROMPT}
 示例输出：
 「学徒，已经走到 Day 12 了。还记得 Day 1 你连『안녕하세요』（你好）都打到一半退出去过——现在能自己点咖啡，这事说出去没人信。最近写的比说的多——嘴还在害羞？建议这周抽 10 分钟回去 Day 5，把那段对话整段录一遍，听听自己的声音。그게 다예요（就这样）。」`;
 
+const CARROT_EXPLAIN_PROMPT = `你是「勇气胡萝卜」——古灵精怪的胡萝卜小精灵，活了几百年，看过无数学韩语的人。
+现在用户刚交了一道题的答案，你要用一两句话点透「为什么对/错」。
+
+## 风格
+- 口吻松弛、像朋友聊天，不是老师讲课
+- 自称「我」「这根胡萝卜」，称用户「少年」「小同学」「学徒」轮换
+- 总字数 60-100 字（中文+韩文一起）
+- 韩语必须 100% 自然，0 机翻味
+- 不用 emoji（最多一个 🥕）
+- 不列 1/2/3 条目，纯聊天口吻
+- 不许说「加油」「你最棒」「相信自己」
+
+## 答对时怎么写
+- 不只是说"对了"——点出 **为什么这条对** 的那条规则
+- 比如：「토리 没받침 → 예요」「저(无받침) 配 는」「사람(받침ㅁ) 配 이에요」
+- 收尾可以带一句轻快的鼓励，但不许喊口号
+
+## 答错时怎么写
+- 直接指出错在哪个字 / 哪条助词 / 哪个 형태
+- 给出正确版本，并解释规则
+- 学习者真实的错通常源于"받침有无"或"语序"——先判断属于哪类
+- 不要说「没关系下次加油」之类的废话
+
+## 正面示例
+
+输入：题型 zh-to-ko / 中文「我的名字是兔莉」/ 正确「제 이름은 토리예요.」/ 用户「저는 이름 토리예요.」/ 答对：否
+输出：「这条不对。你想说『我的名字』就得用「제 이름은」——「제」是「我的」，「이름」名字，「은」是话题助词。「저는」开头是「至于我，是兔莉」，少了"名字"那一层。再来一次。」
+
+输入：题型 particle-error / 中文「我是中国人」/ 正确「저는 중국 사람이에요.」/ 用户「저은 중국 사람이에요.」/ 答对：否
+输出：「就差一个字。「저」这字没받침（리는 ㄹ做初声不算尾音），话题助词得用「는」不是「은」。规律：有받침 → 은，无 → 는。你看，规则其实就这一句。」
+
+输入：题型 compose / 中文「我是兔莉」/ 正确「저는 토리예요.」/ 用户「저는 토리예요.」/ 答对：是
+输出：「漂亮。「토리」最后一字「리」没받침——所以配「예요」，不是「이에요」。这一条吃透，剩下 29 天会省掉一堆错。」
+
+## 反面示例（这样写就崩）
+错：「答对啦！你真棒！继续加油哦~ ✨」——空话+emoji
+错：「错误：助词「은」应改为「는」。」——像编译器报错
+错：「让我们一起来分析一下这道题：1. 主语…2. 助词…」——讲课口吻+列条`;
+
 function buildContextLine(ctx: CarrotContext): string {
   const parts: string[] = [];
 
@@ -139,6 +178,7 @@ export async function POST(req: Request) {
   let history: CarrotMessage[] = [];
   let context: CarrotContext = {};
   let summarize = false;
+  let explain: { kind?: string; zhHint?: string; userAnswer?: string; correctAnswer?: string; isCorrect?: boolean } | null = null;
 
   try {
     const body = await req.json();
@@ -146,11 +186,12 @@ export async function POST(req: Request) {
     history = Array.isArray(body.history) ? body.history.slice(-10) : [];
     context = body.context || {};
     summarize = body.summarize === true;
+    explain = body.explain && typeof body.explain === 'object' ? body.explain : null;
   } catch {
     return NextResponse.json({ error: '请求格式错误' }, { status: 400 });
   }
 
-  if (!summarize && !userMessage) {
+  if (!summarize && !explain && !userMessage) {
     return NextResponse.json({ error: '请输入问题' }, { status: 400 });
   }
   if (userMessage.length > 300) {
@@ -161,16 +202,22 @@ export async function POST(req: Request) {
     if (!check.ok) return NextResponse.json({ error: check.reason }, { status: 400 });
   }
 
-  const basePrompt = summarize ? CARROT_SUMMARY_PROMPT : CARROT_CHAT_PROMPT;
-  const temperature = summarize ? 0.4 : 0.7;
-  const maxTokens = summarize ? 400 : 200;
+  const basePrompt = explain
+    ? CARROT_EXPLAIN_PROMPT
+    : summarize ? CARROT_SUMMARY_PROMPT : CARROT_CHAT_PROMPT;
+  const temperature = explain ? 0.5 : summarize ? 0.4 : 0.7;
+  const maxTokens = explain ? 250 : summarize ? 400 : 200;
 
-  const systemContent = basePrompt + buildContextLine(context);
+  const systemContent = basePrompt + (explain ? '' : buildContextLine(context));
+
+  const userPayload = explain
+    ? `题型：${explain.kind ?? ''}\n中文意思：${explain.zhHint ?? '（无）'}\n正确答案：${explain.correctAnswer ?? '（无）'}\n用户的答案：${explain.userAnswer ?? '（无）'}\n是否答对：${explain.isCorrect ? '是' : '否'}\n\n用你的风格给一句解释。`
+    : userMessage || '帮我总结一下我最近的学习情况。';
 
   const messages = [
     { role: 'system', content: systemContent },
-    ...history.map((m) => ({ role: m.role === 'tori' ? 'assistant' : 'user', content: m.text })),
-    { role: 'user', content: userMessage || '帮我总结一下我最近的学习情况。' },
+    ...(explain ? [] : history.map((m) => ({ role: m.role === 'tori' ? 'assistant' : 'user', content: m.text }))),
+    { role: 'user', content: userPayload },
   ];
 
   try {

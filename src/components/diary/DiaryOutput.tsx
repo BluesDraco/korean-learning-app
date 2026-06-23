@@ -2,8 +2,9 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import type { ToriDay, ToriOutputTask } from '@/types/tori-diary';
-import { ChevronRight, Check, X, RotateCcw, Volume2 } from 'lucide-react';
+import { ChevronRight, Check, X, RotateCcw, Volume2, Sparkles } from 'lucide-react';
 import { speak } from '@/lib/tts';
+import { sfxCorrect, sfxWrong } from '@/lib/sfx';
 
 interface Props {
   day: ToriDay;
@@ -12,10 +13,6 @@ interface Props {
 
 type Checked = 'idle' | 'correct' | 'wrong';
 
-/**
- * Day Output — 5 种题型混搭
- * compose / listen-choice / zh-to-ko / particle-error / match-pair
- */
 export function DiaryOutput({ day, onComplete }: Props) {
   const tasks = day.output;
   const [qIdx, setQIdx] = useState(0);
@@ -23,37 +20,45 @@ export function DiaryOutput({ day, onComplete }: Props) {
   const [shaking, setShaking] = useState(false);
   const [results, setResults] = useState<Array<{ taskId: string; correct: boolean; userText?: string }>>([]);
 
-  // compose 专用状态
+  // compose
   const [picked, setPicked] = useState<number[]>([]);
   const [composeChecked, setComposeChecked] = useState<Checked>('idle');
-  // match-pair 专用
+  // match-pair
   const [matched, setMatched] = useState<Set<string>>(new Set());
-  // 通用选项（listen/zh-to/particle/match）
+  const [wrongZh, setWrongZh] = useState<string | null>(null);
+  // 通用选项
   const [pickedIdx, setPickedIdx] = useState<number | null>(null);
+  // 当前题用户最后一次答（给胡萝卜解释用）
+  const [lastUserAnswer, setLastUserAnswer] = useState<string>('');
 
-  // shaking reset
   useEffect(() => {
     if (!shaking) return;
     const t = setTimeout(() => setShaking(false), 500);
     return () => clearTimeout(t);
   }, [shaking]);
 
-  // 切题重置
   useEffect(() => {
     setChecked('idle');
     setComposeChecked('idle');
     setPicked([]);
     setPickedIdx(null);
     setMatched(new Set());
+    setWrongZh(null);
     setShaking(false);
+    setLastUserAnswer('');
   }, [qIdx]);
 
   const task = tasks[qIdx];
   const isLast = qIdx === tasks.length - 1;
   const allCleared = checked === 'correct' || composeChecked === 'correct';
+  const currentChecked: Checked = task?.kind === 'fill' || task?.kind === 'compose' ? composeChecked : checked;
 
   const handleCorrect = (taskId: string, userText?: string) => {
     setResults((rs) => [...rs, { taskId, correct: true, userText }]);
+    sfxCorrect();
+  };
+  const handleWrong = () => {
+    sfxWrong();
   };
 
   const handleNext = () => {
@@ -61,7 +66,6 @@ export function DiaryOutput({ day, onComplete }: Props) {
     else onComplete(results);
   };
 
-  // null guard
   if (!task || tasks.length === 0) {
     return (
       <div className="diary-anim-fade-up" style={{ textAlign: 'center', padding: '40px 20px' }}>
@@ -96,6 +100,8 @@ export function DiaryOutput({ day, onComplete }: Props) {
           shaking={shaking}
           setShaking={setShaking}
           onCorrect={() => handleCorrect(task.id)}
+          onWrong={handleWrong}
+          onUserAnswer={setLastUserAnswer}
         />
       ) : (
         <ChoiceBlock
@@ -109,7 +115,30 @@ export function DiaryOutput({ day, onComplete }: Props) {
           setShaking={setShaking}
           matched={matched}
           setMatched={setMatched}
+          wrongZh={wrongZh}
+          setWrongZh={setWrongZh}
           onCorrect={() => handleCorrect(task.id)}
+          onWrong={handleWrong}
+          onUserAnswer={setLastUserAnswer}
+        />
+      )}
+
+      {/* match-pair 在自己组件里渲染错题解释；这里只接管其余题型 */}
+      {currentChecked !== 'idle' && task.kind !== 'match-pair' && (
+        <CarrotExplain
+          key={`${task.id}-${currentChecked}`}
+          task={task}
+          isCorrect={currentChecked === 'correct'}
+          userAnswer={lastUserAnswer}
+        />
+      )}
+      {/* match-pair 全部连对后由父级显示答对解释 */}
+      {currentChecked === 'correct' && task.kind === 'match-pair' && (
+        <CarrotExplain
+          key={`${task.id}-correct`}
+          task={task}
+          isCorrect
+          userAnswer="全部连对"
         />
       )}
 
@@ -138,31 +167,35 @@ const KIND_TITLE: Partial<Record<ToriOutputTask['kind'], string>> = {
 
 /* ═══════ Compose / Fill ═══════ */
 function ComposeBlock({
-  task, picked, setPicked, checked, setChecked, shaking, setShaking, onCorrect,
+  task, picked, setPicked, checked, setChecked, shaking, setShaking, onCorrect, onWrong, onUserAnswer,
 }: {
   task: ToriOutputTask;
   picked: number[]; setPicked: (v: number[] | ((p: number[]) => number[])) => void;
   checked: Checked; setChecked: (v: Checked) => void;
   shaking: boolean; setShaking: (v: boolean) => void;
-  onCorrect: () => void;
+  onCorrect: () => void; onWrong: () => void;
+  onUserAnswer: (s: string) => void;
 }) {
   const compose = useMemo(() => synthesizeCompose(task), [task]);
-  if (!compose) return null;
-
-  const userTokens = picked.map((i) => compose.tokens[i]);
-  const isFull = userTokens.length === compose.composeAnswer.length;
+  const userTokens = picked.map((i) => compose?.tokens[i] ?? '');
+  const isFull = compose ? userTokens.length === compose.composeAnswer.length : false;
 
   useEffect(() => {
-    if (!isFull || checked !== 'idle') return;
-    const correct = userTokens.join(' ') === compose.composeAnswer.join(' ');
+    if (!compose || !isFull || checked !== 'idle') return;
+    const userJoin = userTokens.join(' ');
+    onUserAnswer(userJoin);
+    const correct = userJoin === compose.composeAnswer.join(' ');
     if (correct) {
       setChecked('correct');
       onCorrect();
     } else {
       setChecked('wrong');
       setShaking(true);
+      onWrong();
     }
-  }, [isFull, checked, userTokens, compose, setChecked, setShaking, onCorrect]);
+  }, [isFull, checked, userTokens, compose, setChecked, setShaking, onCorrect, onWrong, onUserAnswer]);
+
+  if (!compose) return null;
 
   return (
     <div className="diary-card-paper" style={{ padding: '20px 22px', background: 'var(--diary-paper)' }}>
@@ -201,7 +234,6 @@ function ComposeBlock({
         })}
       </div>
 
-      {checked === 'correct' && <Feedback ok msg={task.successMsg} />}
       {checked === 'wrong' && (
         <div style={{ marginTop: 14, padding: '10px 14px', background: 'rgba(193,78,58,0.1)', borderRadius: 6, borderLeft: '3px solid var(--diary-stamp-red)', display: 'flex', gap: 8, alignItems: 'center' }}>
           <X size={16} color="var(--diary-stamp-red)" />
@@ -215,18 +247,20 @@ function ComposeBlock({
   );
 }
 
-/* ═══════ Choice (listen / zh-to-ko / particle) ═══════ */
+/* ═══════ Choice (listen / zh-to-ko / particle / match) ═══════ */
 function ChoiceBlock({
-  task, checked, setChecked, pickedIdx, setPickedIdx, shaking, setShaking, matched, setMatched, onCorrect,
+  task, checked, setChecked, pickedIdx, setPickedIdx, shaking, setShaking, matched, setMatched, wrongZh, setWrongZh, onCorrect, onWrong, onUserAnswer,
 }: {
   task: ToriOutputTask; checked: Checked; setChecked: (v: Checked) => void;
   pickedIdx: number | null; setPickedIdx: (v: number | null) => void;
   shaking: boolean; setShaking: (v: boolean) => void;
   matched: Set<string>; setMatched: (v: Set<string>) => void;
-  onCorrect: () => void;
+  wrongZh: string | null; setWrongZh: (v: string | null) => void;
+  onCorrect: () => void; onWrong: () => void;
+  onUserAnswer: (s: string) => void;
 }) {
   if (task.kind === 'match-pair' && task.pairs) {
-    return <MatchBlock key={task.id} task={task} matched={matched} setMatched={setMatched} checked={checked} setChecked={setChecked} onCorrect={onCorrect} />;
+    return <MatchBlock key={task.id} task={task} matched={matched} setMatched={setMatched} wrongZh={wrongZh} setWrongZh={setWrongZh} checked={checked} setChecked={setChecked} onCorrect={onCorrect} onWrong={onWrong} onUserAnswer={onUserAnswer} />;
   }
 
   const choices = task.choices ?? [];
@@ -235,18 +269,20 @@ function ChoiceBlock({
   const handlePick = (idx: number) => {
     if (checked === 'correct' || checked === 'wrong') return;
     setPickedIdx(idx);
-    if (choices[idx]?.correct) {
+    const c = choices[idx];
+    onUserAnswer(c?.ko ?? c?.zh ?? c?.text ?? '');
+    if (c?.correct) {
       setChecked('correct');
       onCorrect();
     } else {
       setChecked('wrong');
       setShaking(true);
+      onWrong();
     }
   };
 
   return (
     <div className="diary-card-paper" style={{ padding: '20px 22px', background: 'var(--diary-paper)' }}>
-      {/* Prompt */}
       <div style={{ textAlign: 'center', marginBottom: 18 }}>
         {isListen && task.audioKo && (
           <button onClick={() => { speak(task.audioKo!, 0.85).catch(() => {}); }}
@@ -259,7 +295,6 @@ function ChoiceBlock({
         </p>
       </div>
 
-      {/* Choices */}
       <div className={shaking ? 'diary-anim-shake' : ''} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {choices.map((c, i) => {
           const isPicked = pickedIdx === i;
@@ -283,7 +318,6 @@ function ChoiceBlock({
         })}
       </div>
 
-      {checked === 'correct' && <Feedback ok msg={task.successMsg} />}
       {checked === 'wrong' && (
         <div style={{ marginTop: 14, padding: '10px 14px', background: 'rgba(193,78,58,0.1)', borderRadius: 6, borderLeft: '3px solid var(--diary-stamp-red)', display: 'flex', gap: 8, alignItems: 'center' }}>
           <X size={16} color="var(--diary-stamp-red)" />
@@ -299,18 +333,32 @@ function ChoiceBlock({
 
 /* ═══════ Match Pair ═══════ */
 function MatchBlock({
-  task, matched, setMatched, checked, setChecked, onCorrect,
+  task, matched, setMatched, wrongZh, setWrongZh, checked, setChecked, onCorrect, onWrong, onUserAnswer,
 }: {
   task: ToriOutputTask; matched: Set<string>; setMatched: (v: Set<string>) => void;
-  checked: Checked; setChecked: (v: Checked) => void; onCorrect: () => void;
+  wrongZh: string | null; setWrongZh: (v: string | null) => void;
+  checked: Checked; setChecked: (v: Checked) => void;
+  onCorrect: () => void; onWrong: () => void;
+  onUserAnswer: (s: string) => void;
 }) {
   const pairs = task.pairs ?? [];
   const [selKo, setSelKo] = useState<string | null>(null);
+  const [shake, setShake] = useState(false);
+  const [wrongInfo, setWrongInfo] = useState<{ ko: string; userZh: string; correctZh: string } | null>(null);
 
   const shuffledKo = useMemo(() => shuffle(pairs.map((p) => p.ko)), [pairs]);
   const shuffledZh = useMemo(() => shuffle(pairs.map((p) => p.zh)), [pairs]);
 
-  const handleKo = (ko: string) => setSelKo(ko);
+  useEffect(() => {
+    if (!shake) return;
+    const t = setTimeout(() => { setShake(false); setWrongZh(null); }, 480);
+    return () => clearTimeout(t);
+  }, [shake, setWrongZh]);
+
+  const handleKo = (ko: string) => {
+    if (matched.has(pairs.find((p) => p.ko === ko)?.zh ?? '')) return;
+    setSelKo(ko);
+  };
   const handleZh = (zh: string) => {
     if (!selKo || matched.has(zh)) return;
     const pair = pairs.find((p) => p.ko === selKo && p.zh === zh);
@@ -318,9 +366,22 @@ function MatchBlock({
       const next = new Set(matched); next.add(zh);
       setMatched(next);
       setSelKo(null);
-      if (next.size === pairs.length) { setChecked('correct'); onCorrect(); }
+      sfxCorrect();
+      setWrongInfo(null);
+      if (next.size === pairs.length) {
+        setChecked('correct');
+        onUserAnswer('全部连对');
+        onCorrect();
+      }
     } else {
-      setSelKo(null); // 没对就清
+      setWrongZh(zh);
+      setShake(true);
+      onWrong();
+      const wrongPair = pairs.find((p) => p.ko === selKo);
+      const correctZh = wrongPair?.zh ?? '';
+      onUserAnswer(`${selKo} ↔ ${zh}（应该是 ${selKo} ↔ ${correctZh}）`);
+      setWrongInfo({ ko: selKo, userZh: zh, correctZh });
+      setSelKo(null);
     }
   };
 
@@ -329,47 +390,143 @@ function MatchBlock({
       <p style={{ fontSize: 15, color: 'var(--diary-ink-soft)', marginBottom: 18, textAlign: 'center' }}>
         🔗 点击韩文词卡，再点对应的中文
       </p>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+      <div className={shake ? 'diary-anim-shake' : ''} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          {shuffledKo.map((ko) => (
-            <button key={ko} onClick={() => handleKo(ko)}
-              disabled={matched.has(pairs.find((p) => p.ko === ko)?.zh ?? '')}
-              style={{
-                padding: '10px 12px', borderRadius: 10, border: selKo === ko ? '2px solid var(--color-pink-base)' : '1.5px solid var(--diary-line)',
-                background: matched.has(pairs.find((p) => p.ko === ko)?.zh ?? '') ? 'rgba(94,168,134,0.12)' : 'var(--diary-paper-deep)',
-                cursor: 'pointer', fontSize: 14, fontWeight: 600, color: 'var(--diary-ink)',
-              }}>
-              {ko}
-            </button>
-          ))}
+          {shuffledKo.map((ko) => {
+            const isMatched = matched.has(pairs.find((p) => p.ko === ko)?.zh ?? '');
+            return (
+              <button key={ko} onClick={() => handleKo(ko)}
+                disabled={isMatched}
+                style={{
+                  padding: '10px 12px', borderRadius: 10,
+                  border: selKo === ko ? '2px solid var(--color-pink-base)' : '1.5px solid var(--diary-line)',
+                  background: isMatched ? 'rgba(94,168,134,0.12)' : 'var(--diary-paper-deep)',
+                  cursor: isMatched ? 'default' : 'pointer', fontSize: 14, fontWeight: 600, color: 'var(--diary-ink)',
+                  opacity: isMatched ? 0.6 : 1,
+                }}>
+                {ko}
+              </button>
+            );
+          })}
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          {shuffledZh.map((zh) => (
-            <button key={zh} onClick={() => handleZh(zh)}
-              disabled={matched.has(zh)}
-              style={{
-                padding: '10px 12px', borderRadius: 10, border: '1.5px solid var(--diary-line)',
-                background: matched.has(zh) ? 'rgba(94,168,134,0.12)' : 'var(--diary-paper-deep)',
-                cursor: matched.has(zh) ? 'default' : 'pointer', fontSize: 13, color: 'var(--diary-ink)',
-              }}>
-              {zh}
-              {matched.has(zh) && <Check size={14} color="#5ea886" style={{ marginLeft: 6, verticalAlign: 'middle', display: 'inline' }} />}
-            </button>
-          ))}
+          {shuffledZh.map((zh) => {
+            const isMatched = matched.has(zh);
+            const isWrong = wrongZh === zh;
+            return (
+              <button key={zh} onClick={() => handleZh(zh)}
+                disabled={isMatched}
+                style={{
+                  padding: '10px 12px', borderRadius: 10,
+                  border: isWrong ? '2px solid var(--diary-stamp-red)' : '1.5px solid var(--diary-line)',
+                  background: isMatched ? 'rgba(94,168,134,0.12)' : isWrong ? 'rgba(193,78,58,0.14)' : 'var(--diary-paper-deep)',
+                  cursor: isMatched ? 'default' : 'pointer', fontSize: 13, color: 'var(--diary-ink)',
+                  transition: 'all 0.15s',
+                }}>
+                {zh}
+                {isMatched && <Check size={14} color="#5ea886" style={{ marginLeft: 6, verticalAlign: 'middle', display: 'inline' }} />}
+              </button>
+            );
+          })}
         </div>
       </div>
-      {checked === 'correct' && <Feedback ok msg={task.successMsg} />}
+
+      {wrongInfo && checked !== 'correct' && (
+        <CarrotExplain
+          key={`${task.id}-wrong-${wrongInfo.ko}-${wrongInfo.userZh}`}
+          task={task}
+          isCorrect={false}
+          userAnswer={`${wrongInfo.ko} ↔ ${wrongInfo.userZh}（正确：${wrongInfo.ko} ↔ ${wrongInfo.correctZh}）`}
+        />
+      )}
     </div>
   );
 }
 
-/* ═══════ Feedback ═══════ */
-function Feedback({ ok, msg }: { ok: boolean; msg?: string }) {
-  if (!ok) return null;
+/* ═══════ Carrot Explain ═══════ */
+function CarrotExplain({
+  task, isCorrect, userAnswer,
+}: { task: ToriOutputTask; isCorrect: boolean; userAnswer: string }) {
+  const [text, setText] = useState<string>(isCorrect ? (task.successMsg ?? '答对了。') : '');
+  const [loading, setLoading] = useState(false);
+  const [requested, setRequested] = useState(false);
+
+  const correctAnswer = useMemo(() => {
+    if (task.composeAnswer) return task.composeAnswer.join(' ');
+    if (task.choices) {
+      const c = task.choices.find((x) => x.correct);
+      return c?.ko ?? c?.zh ?? c?.text ?? '';
+    }
+    if (task.pairs) return task.pairs.map((p) => `${p.ko}↔${p.zh}`).join('，');
+    return task.answer ?? '';
+  }, [task]);
+
+  const fetchExplain = async () => {
+    if (loading || requested) return;
+    setLoading(true);
+    setRequested(true);
+    try {
+      const res = await fetch('/api/ai/carrot', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          explain: {
+            kind: task.kind,
+            zhHint: task.zhHint ?? task.zhPrompt ?? '',
+            userAnswer,
+            correctAnswer,
+            isCorrect,
+          },
+        }),
+      });
+      const data = await res.json();
+      if (res.ok && data.reply) setText(data.reply);
+      else setText('胡萝卜走神了，等一下再问。');
+    } catch {
+      setText('网络问题，胡萝卜没听清。');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 答对：自动调一次（successMsg 之外补一句胡萝卜解释为什么对）
+  useEffect(() => {
+    if (isCorrect && !requested) {
+      const t = setTimeout(fetchExplain, 250);
+      return () => clearTimeout(t);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-    <div className="diary-anim-fade-up" style={{ marginTop: 14, padding: '10px 14px', background: 'rgba(94,168,134,0.14)', borderRadius: 6, borderLeft: '3px solid #5ea886', display: 'flex', gap: 8, alignItems: 'center' }}>
-      <Check size={16} color="#5ea886" />
-      <span style={{ fontSize: 13 }}>{msg ?? '答对了！'}</span>
+    <div className="diary-anim-fade-up" style={{
+      marginTop: 14, padding: '12px 14px',
+      background: isCorrect ? 'rgba(94,168,134,0.10)' : 'rgba(255,184,77,0.10)',
+      borderRadius: 10,
+      borderLeft: `3px solid ${isCorrect ? '#5ea886' : 'var(--color-gold-base, #e0a500)'}`,
+    }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+        <span style={{ fontSize: 22, flexShrink: 0, lineHeight: 1.1 }}>🥕</span>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--diary-ink-soft)', letterSpacing: '0.06em', marginBottom: 4 }}>
+            勇气胡萝卜
+          </div>
+          {text ? (
+            <p style={{ fontSize: 13.5, lineHeight: 1.65, color: 'var(--diary-ink)', margin: 0, whiteSpace: 'pre-wrap' }}>
+              {text}
+            </p>
+          ) : (
+            <button
+              onClick={fetchExplain}
+              disabled={loading}
+              className="diary-btn diary-btn-ghost"
+              style={{ padding: '6px 12px', fontSize: 12, gap: 6 }}
+            >
+              <Sparkles size={13} /> {loading ? '想一下…' : '让胡萝卜解释'}
+            </button>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
@@ -384,7 +541,6 @@ function synthesizeCompose(task: ToriOutputTask): ComposeData | null {
   const answer = task.answer;
   if (!task.prompt || !answer) return null;
   const filled = task.prompt.replace(/_+/g, answer);
-  // 拆成 tokens，清洗末尾标点（句号/感叹号/问号）
   const rawTokens = filled.trim().split(/\s+/).filter(Boolean);
   const composeAnswer = rawTokens.map((t, i) =>
     i === rawTokens.length - 1 ? t.replace(/[.!?。！？]+$/g, '') : t

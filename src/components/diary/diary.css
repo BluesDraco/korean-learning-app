@@ -1991,3 +1991,19 @@
   font-family: var(--diary-v4-serif) !important;
   letter-spacing: 0.02em !important;
 }
+
+.diary-detail-back {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-ink-3);
+  background: transparent;
+  border: 1px solid var(--color-border-1);
+  border-radius: var(--radius-pill);
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-out-quart);
+}
+.diary-detail-back:hover {
+  color: var(--diary-d-tone-strong);
+  border-color: var(--diary-d-tone-base);
+}
