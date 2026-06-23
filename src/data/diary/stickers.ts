@@ -23,7 +23,25 @@ export const stickers: ToriSticker[] = [
   { id: 'sticker-d13', day: 13, title: '약국 Haru', meaning: '在韩国第一次生病，第一次自己买药', paletteHint: 'purple' },
   { id: 'sticker-d14', day: 14, title: '🎉 关卡 2 通关', meaning: '一个人完整点完一杯咖啡', paletteHint: 'gold' },
 
-  // Day 15-30 待补
+  // Week 3 · 独立生活技能
+  { id: 'sticker-d15', day: 15, title: '老犬中介的册子', meaning: '第一次说出"찾고 있어요"', paletteHint: 'cream' },
+  { id: 'sticker-d16', day: 16, title: '海狸大叔的柴犬', meaning: '迷路 30 分钟后终于开口问路', paletteHint: 'mint' },
+  { id: 'sticker-d17', day: 17, title: '猫头鹰的티머니카드', meaning: '拿到首尔的钥匙——一卡通在手', paletteHint: 'yellow' },
+  { id: 'sticker-d18', day: 18, title: '乌龟柜员的통장', meaning: '深蓝烫金 KB 通帐 + 第一本韩国账户', paletteHint: 'purple' },
+  { id: 'sticker-d19', day: 19, title: '兔护士的처방전', meaning: '第一次自己挂号看내과', paletteHint: 'peach' },
+  { id: 'sticker-d20', day: 20, title: '海豹房东的500/50/5', meaning: '问出"관리비에 뭐가 들어 있어요"', paletteHint: 'pink' },
+  { id: 'sticker-d21', day: 21, title: '🎉 关卡 3 通关', meaning: '银钥匙圈上挂着 Daiso 胡萝卜', paletteHint: 'gold' },
+
+  // Week 4 · 社交融入 + 毕业
+  { id: 'sticker-d22', day: 22, title: '火鹤老师的해요体', meaning: '韩语动词的心脏 — 三规则', paletteHint: 'pink' },
+  { id: 'sticker-d23', day: 23, title: '弘대 생카', meaning: '老虎追星的样子终于看见了', paletteHint: 'purple' },
+  { id: 'sticker-d24', day: 24, title: '第一次群聊@', meaning: '같이 가요! 어디서 만나요?', paletteHint: 'mint' },
+  { id: 'sticker-d25', day: 25, title: '한강 3000 人浪潮', meaning: '사랑해! 응원해! 따라해!', paletteHint: 'peach' },
+  { id: 'sticker-d26', day: 26, title: '🎉 关卡 4 通关', meaning: '鹿店员的하루 시그니처 + 小卡', paletteHint: 'gold' },
+  { id: 'sticker-d27', day: 27, title: 'Minji 的 60,000 원', meaning: '请客不是交易，是友情的轮流', paletteHint: 'cream' },
+  { id: 'sticker-d28', day: 28, title: '牛皮日记本的第一页', meaning: '过去时 — 把日子留下来的钥匙', paletteHint: 'yellow' },
+  { id: 'sticker-d29', day: 29, title: '🎉 关卡 5 通关', meaning: '7/10 通过 — 给 Minji 写完整封信', paletteHint: 'gold' },
+  { id: 'sticker-d30', day: 30, title: '🎓 졸업이에요', meaning: '5 根胡萝卜 + 烫金毕业证书 + 红丝带花束', paletteHint: 'gold' },
 ];
 
 export function getStickerByDay(day: number): ToriSticker | undefined {

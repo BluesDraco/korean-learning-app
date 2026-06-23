@@ -151,10 +151,10 @@ Junho 偷偷拿手机翻译给我看——大酱。
         speaker: 'tori',
         ko: '?',
         hangul: '',
-        zh: '吃完后兔莉对袋鼠阿姨说什么？',
+        zh: '阿姨把托盘递过来，兔莉应该说什么？',
         practice: 'pick',
         choices: [
-          { ko: '잘 먹었습니다.', zh: '我吃饱了 / 谢谢款待。', correct: true },
+          { ko: '감사합니다. 잘 먹겠습니다.', zh: '谢谢。我会好好吃的。', correct: true },
           { ko: '맛없어요.', zh: '不好吃。', correct: false },
           { ko: '없어요.', zh: '没有。', correct: false },
         ],
