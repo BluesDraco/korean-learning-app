@@ -1814,7 +1814,8 @@
   font-style: italic;
   font-size: 220px;
   font-weight: 600;
-  color: oklch(99% 0.005 50 / 0.55);
+  color: var(--diary-d-tone-base);
+  opacity: 0.18;
   line-height: 1;
   z-index: 0;
   pointer-events: none;
@@ -1932,19 +1933,16 @@
 }
 
 @keyframes diary-detail-fade-in {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 .diary-detail-fade-in {
-  animation: diary-detail-fade-in 240ms var(--ease-out-quart);
+  animation: diary-detail-fade-in 220ms var(--ease-out-quart);
 }
 
-/* 子组件样式覆盖 */
+/* 子组件样式覆盖 · 仅去阴影避免嵌套双阴影；保留 border/bg/padding */
 .diary-detail-card .diary-card-paper {
-  background: transparent !important;
-  border: none !important;
   box-shadow: none !important;
-  padding: 0 !important;
 }
 .diary-detail-card .diary-tape { display: none !important; }
 .diary-detail-card .diary-handwriting-zh {

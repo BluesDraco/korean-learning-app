@@ -76,6 +76,7 @@ export function DiaryDayClient({ day }: Props) {
   // 加载 / 创建进度记录
   useEffect(() => {
     if (!user) return;
+    setModulesDone(new Set()); // 切 day 时先重置避免残留
     (async () => {
       try {
         const existing = await db.toriProgress.get(progressId);
@@ -183,7 +184,13 @@ export function DiaryDayClient({ day }: Props) {
           <button
             aria-label="关闭"
             className="diary-detail-close"
-            onClick={() => router.back()}
+            onClick={() => {
+              if (typeof window !== 'undefined' && window.history.length > 1) {
+                router.back();
+              } else {
+                router.push('/diary');
+              }
+            }}
           >
             <X size={18} strokeWidth={1.75} />
           </button>
