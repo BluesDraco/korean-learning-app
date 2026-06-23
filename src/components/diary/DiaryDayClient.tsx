@@ -8,17 +8,19 @@ import { db } from '@/lib/db';
 import { useAuth } from '@/components/AuthProvider';
 import { DiaryOpening } from './DiaryOpening';
 import { DiaryWords } from './DiaryWords';
+import { DiaryFlashcard } from './DiaryFlashcard';
 import { DiaryDialogue } from './DiaryDialogue';
 import { DiaryGrammar } from './DiaryGrammar';
 import { DiaryOutput } from './DiaryOutput';
 import { DiaryRecap } from './DiaryRecap';
 import { CarrotHelper } from './CarrotHelper';
 
-const MODULE_ORDER: ToriModuleKind[] = ['opening', 'words', 'dialogue', 'grammar', 'output', 'recap'];
+const MODULE_ORDER: ToriModuleKind[] = ['opening', 'words', 'flashcard', 'dialogue', 'grammar', 'output', 'recap'];
 
 const MODULE_LABELS: Record<ToriModuleKind, string> = {
   opening: '开场',
   words: '单词',
+  flashcard: '闪卡',
   dialogue: '对话',
   grammar: '语法',
   output: '输出',
@@ -28,6 +30,7 @@ const MODULE_LABELS: Record<ToriModuleKind, string> = {
 const MODULE_EYEBROWS: Record<ToriModuleKind, string> = {
   opening: 'opening · 日记开场',
   words: 'vocabulary · 新词卡',
+  flashcard: 'flashcard · 闪卡复习',
   dialogue: 'dialogue · 场景对话',
   grammar: 'grammar · 语法小卡',
   output: 'practice · 输出练习',
@@ -264,6 +267,9 @@ export function DiaryDayClient({ day }: Props) {
             )}
             {currentModule === 'words' && (
               <DiaryWords day={day} onComplete={() => advance('words')} />
+            )}
+            {currentModule === 'flashcard' && (
+              <DiaryFlashcard day={day} onComplete={() => advance('flashcard')} />
             )}
             {currentModule === 'dialogue' && (
               <DiaryDialogue day={day} onComplete={() => advance('dialogue')} />

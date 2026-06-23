@@ -1,7 +1,7 @@
 // Tori 韩语日记 · 30 天养成手册类型定义
 // 主角中文名：兔莉（Tori）— 不复用 src/types DiaryEntry（已被用户写日记功能占用）
 
-export type ToriModuleKind = 'opening' | 'words' | 'dialogue' | 'grammar' | 'output' | 'recap';
+export type ToriModuleKind = 'opening' | 'words' | 'flashcard' | 'dialogue' | 'grammar' | 'output' | 'recap';
 export type ToriOutputKind = 'dictation' | 'record' | 'choice' | 'fill' | 'compose' | 'listen-choice' | 'zh-to-ko' | 'particle-error' | 'match-pair';
 export type ToriPhase = 'foundation' | 'expansion' | 'expression' | 'mastery';
 export type ToriPaletteHint = 'pink' | 'mint' | 'yellow' | 'cream' | 'gold' | 'peach' | 'purple';
