@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { X } from 'lucide-react';
 import { db } from '@/lib/db';
 import { useAuth } from '@/components/AuthProvider';
 import { Modal } from '@/components/ui';
@@ -11,18 +12,19 @@ import '@/components/diary/diary.css';
 
 interface ChapterDef {
   num: string;
+  romanNum: string;
   title: string;
   ko: string;
-  rangeLabel: string;
   startDay: number;
   endDay: number;
+  tone: 'pink' | 'mint' | 'purple' | 'gold';
 }
 
 const CHAPTERS: ChapterDef[] = [
-  { num: 'One',          title: '出发与落地',     ko: '출발과 첫걸음 · Day 1–7',   rangeLabel: '1–7',   startDay: 1,  endDay: 7  },
-  { num: 'Two',          title: '日常生活',       ko: '일상의 시작 · Day 8–14',   rangeLabel: '8–14',  startDay: 8,  endDay: 14 },
-  { num: 'Three',        title: '独立生活',       ko: '독립적인 생활 · Day 15–21', rangeLabel: '15–21', startDay: 15, endDay: 21 },
-  { num: 'Four · final', title: '社交融入与毕业', ko: '소속과 졸업 · Day 22–30',  rangeLabel: '22–30', startDay: 22, endDay: 30 },
+  { num: 'One',          romanNum: 'i',   title: '出发与落地',     ko: '출발과 첫걸음 · Day 1–7',   startDay: 1,  endDay: 7,  tone: 'pink' },
+  { num: 'Two',          romanNum: 'ii',  title: '日常生活',       ko: '일상의 시작 · Day 8–14',   startDay: 8,  endDay: 14, tone: 'mint' },
+  { num: 'Three',        romanNum: 'iii', title: '独立生活',       ko: '독립적인 생활 · Day 15–21', startDay: 15, endDay: 21, tone: 'purple' },
+  { num: 'Four · final', romanNum: 'iv',  title: '社交融入与毕业', ko: '소속과 졸업 · Day 22–30',  startDay: 22, endDay: 30, tone: 'gold' },
 ];
 
 export default function DiaryPage() {
@@ -52,10 +54,7 @@ export default function DiaryPage() {
   }, [user]);
 
   const handleDayClick = (day: number) => {
-    if (isAdmin) {
-      router.push(`/diary/${day}`);
-      return;
-    }
+    if (isAdmin) { router.push(`/diary/${day}`); return; }
     if (day > currentDay) return;
     setShowSoonModal(true);
   };
@@ -64,12 +63,15 @@ export default function DiaryPage() {
   const currentDayTitle = currentDayData?.title ?? `Day ${currentDay}`;
   const progressPct = Math.round((completedDays.size / TOTAL_DAYS) * 100);
   const allCleared = completedDays.size === TOTAL_DAYS;
+  const remainDays = TOTAL_DAYS - completedDays.size;
 
   // ── Loading
   if (authLoading || !loaded) {
     return (
-      <div className="diary-root diary-list-page" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div className="diary-handwriting-zh" style={{ color: 'var(--color-ink-3)' }}>加载中…</div>
+      <div className="diary-fullscreen">
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
+          <div className="diary-v4-loading">加载中…</div>
+        </div>
       </div>
     );
   }
@@ -77,66 +79,103 @@ export default function DiaryPage() {
   // ── Not logged in
   if (!user) {
     return (
-      <div className="diary-root diary-list-page" style={{ minHeight: '100vh' }}>
-        <div style={{ maxWidth: 480, margin: '0 auto', padding: '64px 24px 40px', textAlign: 'center' }}>
-          <div style={{ fontSize: 56, marginBottom: 12 }}>🐰</div>
-          <h1 className="diary-list-h1" style={{ marginBottom: 12 }}>兔莉的韩语日记</h1>
-          <p style={{ fontSize: 14, color: 'var(--color-ink-2)', marginBottom: 28, lineHeight: 1.65 }}>
+      <div className="diary-fullscreen">
+        <button
+          aria-label="关闭"
+          className="diary-v4-close"
+          onClick={() => router.back()}
+        >
+          <X size={18} strokeWidth={1.75} />
+        </button>
+        <div style={{ maxWidth: 480, margin: '0 auto', padding: '120px 24px 40px', textAlign: 'center' }}>
+          <h1 className="diary-v4-h1" style={{ marginBottom: 16, textAlign: 'center' }}>
+            兔莉的<br />韩语日记<span className="diary-v4-h1-sm">·30天</span>
+          </h1>
+          <p style={{ fontFamily: 'var(--diary-v4-serif)', fontSize: 15, color: 'var(--color-ink-2)', marginBottom: 28, lineHeight: 1.85 }}>
             30 天，和兔莉一起从零学韩语。<br />登录后开始你的第 1 天。
           </p>
           <Link href="/auth/login?redirect=/diary" style={{ textDecoration: 'none' }}>
-            <button className="diary-btn diary-btn-primary">登录 · 开始 Day 1</button>
+            <button className="diary-list-cta" style={{ display: 'inline-flex', width: 'auto' }}>
+              <span style={{ fontFamily: 'var(--diary-v4-serif)', fontSize: 16, fontWeight: 700, letterSpacing: '0.02em', padding: '0 8px' }}>登录 · 开始 Day 1</span>
+              <span className="diary-list-cta-arrow">→</span>
+            </button>
           </Link>
         </div>
       </div>
     );
   }
 
+  const ritual = allCleared ? (
+    <span className="diary-v4-ritual-text">
+      你已完成 <strong>30 天</strong> 全部旅程 · <strong>毕业了</strong>
+    </span>
+  ) : (
+    <span className="diary-v4-ritual-text">
+      今天是第 <strong>{currentDay} 天</strong>，还剩 {remainDays} 天 · 已完成 <strong>{completedDays.size}/30</strong>
+    </span>
+  );
+
   const heroContent = (
     <>
-      <p className="diary-list-eyebrow">a story of 30 days</p>
-      <p className="diary-list-ko">토리의 한국어 일기</p>
-      <h1 className="diary-list-h1">兔莉的<br />韩语日记。</h1>
-      <p className="diary-list-lead">从中国家里到首尔动物城。<br />每天 15 分钟，跟兔莉一起。</p>
+      <p className="diary-v4-eyebrow">a story of 30 days</p>
+      <p className="diary-v4-ko-title">토리의 한국어 일기</p>
+      <h1 className="diary-v4-h1">兔莉的<br />韩语日记<span className="diary-v4-h1-sm">·30天</span></h1>
+      <p className="diary-v4-lead">从中国家里到首尔动物城。<br />每天 15 分钟，跟兔莉一起。</p>
 
-      <div className="diary-list-progress">
-        <div className="diary-list-progress-top">
-          <span className="diary-list-progress-label">your progress</span>
-          <span className="diary-list-progress-value">
-            {completedDays.size}<span className="diary-list-progress-value-total"> / {TOTAL_DAYS}</span>
+      {/* 桌面端独享的大插画位（手机端 CSS 隐藏） */}
+      <div className="diary-v4-illust diary-v4-illust-desktop">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/images/diary/tori-mirror-practice.jpg" alt="Tori 在镜子前练韩语" />
+        <span className="diary-v4-illust-tag">{allCleared ? '已毕业' : `Day ${currentDay} · ${currentDayTitle}`}</span>
+      </div>
+
+      <div className="diary-v4-ritual">
+        <span className="diary-v4-ritual-pulse" />
+        {ritual}
+      </div>
+
+      <div className="diary-v4-progress">
+        <div className="diary-v4-progress-top">
+          <span className="diary-v4-progress-label">your progress</span>
+          <span className="diary-v4-progress-value">
+            {completedDays.size}<span className="diary-v4-progress-total">/{TOTAL_DAYS}</span>
           </span>
         </div>
-        <div className="diary-list-progress-bar">
-          <div className="diary-list-progress-fill" style={{ width: `${progressPct}%` }} />
+        <div className="diary-v4-progress-bar">
+          <div className="diary-v4-progress-fill" style={{ width: `${progressPct}%` }} />
         </div>
       </div>
 
       {isAdmin ? (
-        <Link href={allCleared ? '/diary/stickers' : `/diary/${currentDay}`} className="diary-list-cta" style={{ textDecoration: 'none' }}>
-          <div className="diary-list-cta-left">
-            <div className="diary-list-cta-label">{allCleared ? 'congratulations' : 'continue'}</div>
-            <div className="diary-list-cta-next">
+        <Link
+          href={allCleared ? '/diary/stickers' : `/diary/${currentDay}`}
+          className="diary-v4-cta"
+          style={{ textDecoration: 'none' }}
+        >
+          <div className="diary-v4-cta-left">
+            <div className="diary-v4-cta-label">{allCleared ? 'congratulations' : 'continue'}</div>
+            <div className="diary-v4-cta-next">
               {allCleared ? '查看毕业贴纸册' : `Day ${currentDay} · ${currentDayTitle}`}
             </div>
           </div>
-          <div className="diary-list-cta-arrow">→</div>
+          <div className="diary-v4-cta-arrow">→</div>
         </Link>
       ) : (
-        <button onClick={() => setShowSoonModal(true)} className="diary-list-cta">
-          <div className="diary-list-cta-left">
-            <div className="diary-list-cta-label">{allCleared ? 'congratulations' : 'continue'}</div>
-            <div className="diary-list-cta-next">
+        <button onClick={() => setShowSoonModal(true)} className="diary-v4-cta">
+          <div className="diary-v4-cta-left">
+            <div className="diary-v4-cta-label">{allCleared ? 'congratulations' : 'continue'}</div>
+            <div className="diary-v4-cta-next">
               {allCleared ? '查看毕业贴纸册' : `Day ${currentDay} · ${currentDayTitle}`}
             </div>
           </div>
-          <div className="diary-list-cta-arrow">→</div>
+          <div className="diary-v4-cta-arrow">→</div>
         </button>
       )}
     </>
   );
 
   const chaptersContent = (
-    <div className="diary-list-chapters">
+    <div className="diary-v4-chapters">
       {CHAPTERS.map((ch) => {
         const days: number[] = [];
         for (let d = ch.startDay; d <= ch.endDay; d++) days.push(d);
@@ -145,91 +184,94 @@ export default function DiaryPage() {
         const status = chapterDone === chapterTotal ? '已完成' : chapterDone > 0 ? '进行中' : '未开启';
 
         return (
-          <section key={ch.num} className="diary-list-chapter">
-            <header className="diary-list-chapter-head">
-              <div>
-                <p className="diary-list-chap-num">Chapter {ch.num}</p>
-                <h2 className="diary-list-chap-h2">{ch.title}</h2>
-                <p className="diary-list-chap-ko">{ch.ko}</p>
-              </div>
-              <div className="diary-list-chap-stats">
-                <span className="diary-list-chap-stats-num">{chapterDone}/{chapterTotal}</span>
-                {status}
+          <article key={ch.num} className="diary-v4-chapter" data-tone={ch.tone}>
+            <header className="diary-v4-chapter-band" data-num={ch.romanNum}>
+              <div className="diary-v4-chapter-band-head">
+                <div>
+                  <p className="diary-v4-chap-num">Chapter {ch.num}</p>
+                  <h2 className="diary-v4-chap-h2">{ch.title}</h2>
+                  <p className="diary-v4-chap-ko">{ch.ko}</p>
+                </div>
+                <div className="diary-v4-chap-stats">
+                  <span className="diary-v4-chap-stats-num">{chapterDone}/{chapterTotal}</span>
+                  <span className="diary-v4-chap-stats-label">{status}</span>
+                </div>
               </div>
             </header>
 
-            <div className="diary-list-days">
-              {days.map((d) => {
-                const dayData = ALL_DAYS.find((x) => x.day === d);
-                const dayTitle = dayData?.title ?? `Day ${d}`;
-                const daySub = dayData?.subtitle ?? '';
-                const locked = !isAdmin && d > currentDay;
-                const done = completedDays.has(d);
-                const current = d === currentDay && !done;
-                const checkpoint = isCheckpoint(d);
+            <div className="diary-v4-chapter-body">
+              <div className="diary-v4-days">
+                {days.map((d) => {
+                  const dayData = ALL_DAYS.find((x) => x.day === d);
+                  const dayTitle = dayData?.title ?? `Day ${d}`;
+                  const daySub = dayData?.subtitle ?? '';
+                  const locked = !isAdmin && d > currentDay;
+                  const done = completedDays.has(d);
+                  const current = d === currentDay && !done;
+                  const checkpoint = isCheckpoint(d);
 
-                const classNames = [
-                  'diary-list-day',
-                  done && 'is-done',
-                  current && 'is-current',
-                  locked && 'is-locked',
-                  // current 优先：current+checkpoint 同日时不附加 is-checkpoint，避免金色覆盖 TODAY
-                  checkpoint && !current && 'is-checkpoint',
-                ].filter(Boolean).join(' ');
+                  const classNames = [
+                    'diary-v4-day',
+                    done && 'is-done',
+                    current && 'is-current',
+                    locked && 'is-locked',
+                    checkpoint && !current && 'is-checkpoint',
+                  ].filter(Boolean).join(' ');
 
-                return (
-                  <button
-                    key={d}
-                    onClick={() => handleDayClick(d)}
-                    disabled={locked}
-                    className={classNames}
-                  >
-                    <div className="diary-list-day-num">{String(d).padStart(2, '0')}</div>
-                    <div className="diary-list-day-body">
-                      <div className="diary-list-day-title">{dayTitle}</div>
-                      <div className="diary-list-day-sub">
-                        {daySub && <span className="diary-list-day-sub-ko">{daySub}</span>}
+                  return (
+                    <button
+                      key={d}
+                      onClick={() => handleDayClick(d)}
+                      disabled={locked}
+                      className={classNames}
+                    >
+                      <div className="diary-v4-day-num">{String(d).padStart(2, '0')}</div>
+                      <div className="diary-v4-day-body">
+                        <div className="diary-v4-day-title">{dayTitle}</div>
+                        {daySub && <div className="diary-v4-day-sub">{daySub}</div>}
                       </div>
-                    </div>
-                    <span className="diary-list-day-marker">
-                      {current ? 'TODAY' : done && checkpoint ? 'CLEARED' : done ? '✓' : checkpoint ? '◆' : '·'}
-                    </span>
-                  </button>
-                );
-              })}
+                      <span className="diary-v4-day-marker">
+                        {current ? 'TODAY' : done && checkpoint ? 'CLEARED' : done ? '✓' : checkpoint ? '◆' : '·'}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-          </section>
+          </article>
         );
       })}
     </div>
   );
 
   return (
-    <div className="diary-root diary-list-page">
-      {/* 桌面端 980+: 左 sidebar + 右 main */}
-      <div className="diary-list-layout">
-        <aside className="diary-list-sidecol diary-list-hero">
+    <div className="diary-fullscreen">
+      <button aria-label="关闭" className="diary-v4-close" onClick={() => router.back()}>
+        <X size={18} strokeWidth={1.75} />
+      </button>
+
+      <div className="diary-v4-layout">
+        <aside className="diary-v4-sidecol">
+          <div className="diary-v4-brand-mini">tori diary</div>
           {heroContent}
         </aside>
-        <main className="diary-list-maincol">
+        <main className="diary-v4-maincol">
           {chaptersContent}
         </main>
       </div>
 
-      {/* 移动端 < 980: hero 顶部 + 章节下方（CSS 媒体查询塌成单列） */}
-
       <Modal open={showSoonModal} onClose={() => setShowSoonModal(false)} size="sm" closeButton={false}>
         <div style={{ textAlign: 'center', padding: '4px 0' }}>
           <div style={{ fontSize: 48, marginBottom: 12 }}>🥕</div>
-          <h2 style={{ fontSize: 20, fontWeight: 800, marginBottom: 10, color: 'var(--color-ink-1)', letterSpacing: '-0.02em' }}>
+          <h2 style={{ fontFamily: 'var(--diary-v4-serif)', fontSize: 20, fontWeight: 800, marginBottom: 10, color: 'var(--color-ink-1)', letterSpacing: '0.02em' }}>
             这一关还在准备中
           </h2>
-          <p style={{ fontSize: 14, lineHeight: 1.7, color: 'var(--color-ink-3)', marginBottom: 22 }}>
+          <p style={{ fontFamily: 'var(--diary-v4-serif)', fontSize: 14, lineHeight: 1.85, color: 'var(--color-ink-3)', marginBottom: 22, letterSpacing: '0.02em' }}>
             Tori 在首尔的故事正在打磨细节。
             <br />预计本周开放，到时候你就能陪她一起过这 30 天了。
           </p>
-          <button onClick={() => setShowSoonModal(false)} className="diary-btn diary-btn-primary" style={{ width: '100%' }}>
-            好的，下周来
+          <button onClick={() => setShowSoonModal(false)} className="diary-list-cta" style={{ width: '100%' }}>
+            <span style={{ fontFamily: 'var(--diary-v4-serif)', fontSize: 15, fontWeight: 700, letterSpacing: '0.02em', flex: 1 }}>好的，下周来</span>
           </button>
         </div>
       </Modal>

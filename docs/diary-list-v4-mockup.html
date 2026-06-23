@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tori Diary · 全屏纯页 v4 · 中文书体 / 插画位 / 仪式 / 章色带</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&family=Noto+Serif+SC:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800&family=Caveat:wght@500;600&family=Playfair+Display:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+<style>
+  /* ─── Tokens ─── */
+  :root {
+    --bg: oklch(98.5% 0.012 50);
+    --paper: oklch(99.2% 0.005 50);
+    --paper-2: oklch(96.5% 0.012 45);
+    --paper-3: oklch(94% 0.018 45);
+
+    --ink-1: oklch(20% 0.015 30);
+    --ink-2: oklch(38% 0.012 35);
+    --ink-3: oklch(58% 0.010 40);
+    --ink-4: oklch(72% 0.008 45);
+
+    --line-1: oklch(91% 0.012 40);
+    --line-2: oklch(86% 0.018 40);
+
+    --pink-50:  oklch(98% 0.014 14);
+    --pink-100: oklch(94% 0.030 14);
+    --pink-200: oklch(88% 0.060 14);
+    --pink-400: oklch(76% 0.115 14);
+    --pink-500: oklch(70% 0.135 14);
+    --pink-700: oklch(52% 0.140 14);
+
+    --mint-50:  oklch(96% 0.018 175);
+    --mint-100: oklch(92% 0.040 175);
+    --mint-500: oklch(68% 0.090 175);
+    --mint-700: oklch(50% 0.090 175);
+
+    --purple-50:  oklch(96% 0.022 290);
+    --purple-100: oklch(92% 0.050 290);
+    --purple-500: oklch(64% 0.145 290);
+    --purple-700: oklch(48% 0.150 290);
+
+    --gold-50:  oklch(96% 0.025 90);
+    --gold-100: oklch(92% 0.060 88);
+    --gold-200: oklch(88% 0.080 85);
+    --gold-500: oklch(74% 0.115 80);
+    --gold-700: oklch(52% 0.110 75);
+
+    --shadow-xs: 0 1px 2px 0 oklch(28% 0.02 30 / 0.04);
+    --shadow-sm: 0 4px 14px -4px oklch(28% 0.02 30 / 0.08);
+    --shadow-md: 0 16px 36px -10px oklch(28% 0.02 30 / 0.14);
+    --shadow-lg: 0 32px 60px -16px oklch(28% 0.02 30 / 0.18);
+
+    --r-sm: 8px;
+    --r-md: 14px;
+    --r-lg: 20px;
+    --r-xl: 28px;
+
+    --tracking-tight: -0.025em;
+    --tracking-snug: -0.012em;
+
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+    --serif-zh: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', 'STSong', '华文宋体', 'PingFang SC', serif;
+    --sans-en: 'Inter', -apple-system, sans-serif;
+    --sans-ko: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+    --serif-en-italic: 'Playfair Display', Georgia, serif;
+    --hand: 'Caveat', 'Patrick Hand', cursive;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg);
+    color: var(--ink-1);
+    font-family: var(--sans-en);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+  }
+
+  body {
+    background-image:
+      radial-gradient(at 12% 8%, oklch(94% 0.030 14 / 0.45) 0%, transparent 45%),
+      radial-gradient(at 92% 88%, oklch(94% 0.040 290 / 0.32) 0%, transparent 42%),
+      repeating-linear-gradient(
+        180deg,
+        transparent 0,
+        transparent 31px,
+        oklch(82% 0.020 60 / 0.05) 31px,
+        oklch(82% 0.020 60 / 0.05) 32px
+      );
+    min-height: 100vh;
+  }
+
+  /* mockup wrapper */
+  .doc-title {
+    text-align: center;
+    padding: 24px 16px 0;
+  }
+  .doc-title h1 {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: var(--tracking-tight);
+  }
+  .doc-title p {
+    font-size: 12px;
+    color: var(--ink-3);
+    margin-top: 4px;
+  }
+  .doc-title .pill {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 2px 9px;
+    background: var(--pink-100);
+    color: var(--pink-700);
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  /* ════════════ 全屏纯页 ════════════ */
+  .canvas {
+    display: flex;
+    gap: 24px;
+    padding: 24px;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  @media (max-width: 1100px) {
+    .canvas { flex-direction: column; padding: 0; gap: 0; }
+  }
+
+  .mobile {
+    width: 410px;
+    flex-shrink: 0;
+    background: var(--bg);
+    border-radius: 40px;
+    padding: 14px 0 0;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    position: sticky;
+    top: 24px;
+  }
+  @media (max-width: 1100px) {
+    .mobile { width: 100%; border-radius: 0; box-shadow: none; padding: 0; position: static; }
+  }
+  .mobile::before {
+    content: '';
+    display: block;
+    width: 124px;
+    height: 5px;
+    background: var(--ink-1);
+    border-radius: 999px;
+    margin: 0 auto 14px;
+    opacity: 0.85;
+  }
+  @media (max-width: 1100px) {
+    .mobile::before { display: none; }
+  }
+  .mobile-content {
+    overflow-y: auto;
+    max-height: calc(100vh - 80px);
+  }
+  @media (max-width: 1100px) {
+    .mobile-content { max-height: none; }
+  }
+
+  .desktop {
+    flex: 1;
+    max-width: 1280px;
+    background: oklch(98% 0.012 50);
+    border-radius: 32px;
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    border: 1px solid var(--line-1);
+    min-height: 800px;
+  }
+  @media (max-width: 1100px) {
+    .desktop { display: none; }
+  }
+
+  /* ─── 顶部「关闭」按钮（替代 AppShell 的 BackButton） ─── */
+  .close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: oklch(99.5% 0.003 50 / 0.85);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border: 1.5px solid var(--line-1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-2);
+    cursor: pointer;
+    z-index: 50;
+    box-shadow: var(--shadow-xs);
+    transition: all 0.2s var(--ease);
+  }
+  .close-btn:hover {
+    background: var(--paper);
+    transform: rotate(90deg);
+    border-color: var(--line-2);
+  }
+  @media (min-width: 1101px) {
+    .close-btn { top: 24px; right: 24px; }
+  }
+
+  /* ════════════ Mobile 视图 ════════════ */
+  .m-page {
+    position: relative;
+    padding: 56px 0 32px;
+  }
+
+  /* Hero */
+  .m-hero {
+    position: relative;
+    padding: 0 24px 28px;
+    overflow: hidden;
+  }
+  .m-hero::before {
+    content: '30';
+    position: absolute;
+    right: -28px;
+    top: -8px;
+    font-family: var(--serif-en-italic);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 240px;
+    line-height: 1;
+    color: oklch(94% 0.030 14);
+    letter-spacing: -0.025em;
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+  }
+  .m-hero > * { position: relative; z-index: 1; }
+
+  .m-eyebrow {
+    font-family: var(--hand);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--pink-700);
+    margin-bottom: 12px;
+    line-height: 1;
+  }
+  .m-ko-title {
+    font-family: var(--sans-ko);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-3);
+    margin-bottom: 6px;
+    letter-spacing: var(--tracking-snug);
+  }
+  .m-h1 {
+    font-family: var(--serif-zh);
+    font-weight: 800;
+    font-size: 38px;
+    line-height: 1.18;
+    letter-spacing: 0.02em;
+    color: var(--ink-1);
+    margin-bottom: 14px;
+  }
+  .m-h1 .small {
+    font-weight: 600;
+    font-size: 0.85em;
+    color: var(--ink-2);
+    letter-spacing: 0.04em;
+  }
+  .m-lead {
+    font-family: var(--serif-zh);
+    font-size: 15px;
+    color: var(--ink-2);
+    line-height: 1.85;
+    margin-bottom: 24px;
+    letter-spacing: 0.02em;
+    max-width: 320px;
+  }
+
+  /* 9:16 场景插画位 */
+  .m-illust {
+    position: relative;
+    aspect-ratio: 9 / 16;
+    width: 60%;
+    margin: 0 0 24px;
+    border-radius: var(--r-md);
+    background: linear-gradient(160deg, var(--pink-100) 0%, var(--purple-50) 50%, var(--mint-50) 100%);
+    border: 1.5px solid var(--line-1);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .m-illust::before {
+    content: '🐰';
+    font-size: 64px;
+    opacity: 0.6;
+    transform: rotate(-4deg);
+  }
+  .m-illust::after {
+    content: 'Day 13 · 약국';
+    position: absolute;
+    bottom: 12px;
+    left: 14px;
+    font-size: 10px;
+    color: var(--ink-3);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: oklch(99% 0.003 50 / 0.85);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--line-1);
+  }
+
+  /* 今日仪式 */
+  .m-ritual {
+    margin-bottom: 18px;
+    padding: 14px 16px;
+    background: oklch(99.5% 0.003 50 / 0.6);
+    border: 1px dashed var(--line-2);
+    border-radius: var(--r-md);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .m-ritual .pulse {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--pink-500);
+    box-shadow: 0 0 0 4px var(--pink-100);
+    flex-shrink: 0;
+    position: relative;
+  }
+  .m-ritual .pulse::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 50%;
+    border: 2px solid var(--pink-500);
+    opacity: 0.4;
+    animation: ritual-pulse 2s ease-out infinite;
+  }
+  @keyframes ritual-pulse {
+    0% { transform: scale(1); opacity: 0.6; }
+    100% { transform: scale(2.4); opacity: 0; }
+  }
+  .m-ritual .text {
+    font-family: var(--serif-zh);
+    font-size: 13px;
+    color: var(--ink-2);
+    letter-spacing: 0.02em;
+    line-height: 1.5;
+  }
+  .m-ritual .text strong {
+    color: var(--ink-1);
+    font-weight: 700;
+  }
+
+  /* 进度卡 */
+  .m-progress {
+    margin-bottom: 12px;
+    padding: 16px 18px;
+    background: oklch(99.5% 0.003 50 / 0.85);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    border: 1.5px solid var(--line-1);
+    border-radius: var(--r-md);
+    box-shadow: var(--shadow-xs), inset 0 1px 0 0 oklch(100% 0 0 / 0.6);
+  }
+  .m-progress .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+  }
+  .m-progress .label {
+    font-size: 11px;
+    color: var(--ink-3);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .m-progress .value {
+    font-family: var(--serif-en-italic);
+    font-style: italic;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--ink-1);
+    letter-spacing: -0.025em;
+  }
+  .m-progress .value .total {
+    font-size: 14px;
+    color: var(--ink-3);
+    margin-left: 2px;
+  }
+  .m-progress .bar {
+    height: 6px;
+    background: var(--paper-3);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .m-progress .bar .fill {
+    height: 100%;
+    width: 43%;
+    background: linear-gradient(90deg, var(--pink-400), var(--pink-700));
+    border-radius: 999px;
+    box-shadow: 0 0 12px oklch(70% 0.135 14 / 0.4);
+  }
+
+  /* CTA */
+  .m-cta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: var(--ink-1);
+    color: var(--paper);
+    border-radius: var(--r-md);
+    border: none;
+    width: 100%;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s var(--ease);
+  }
+  .m-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  .m-cta .left { flex: 1; text-align: left; }
+  .m-cta .lab {
+    font-size: 11px;
+    color: oklch(75% 0.005 50);
+    letter-spacing: 0.06em;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .m-cta .next {
+    font-family: var(--serif-zh);
+    font-size: 16px;
+    font-weight: 700;
+    margin-top: 4px;
+    letter-spacing: 0.02em;
+  }
+  .m-cta .arr {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: oklch(99% 0 0 / 0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  /* ─── Mobile 章节 ─── */
+  .m-chapters { padding-top: 32px; }
+
+  .chapter {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+  .chapter:last-child .chapter-body { border-bottom: none; }
+
+  /* 章节色带 */
+  .chapter-band {
+    padding: 28px 24px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .chapter-band::before {
+    /* 色带左侧大字符号 */
+    content: attr(data-num);
+    position: absolute;
+    left: -12px;
+    bottom: -36px;
+    font-family: var(--serif-en-italic);
+    font-style: italic;
+    font-size: 200px;
+    font-weight: 600;
+    color: oklch(98% 0.005 50 / 0.6);
+    line-height: 1;
+    z-index: 0;
+    pointer-events: none;
+    letter-spacing: -0.05em;
+  }
+  .chapter-band > * { position: relative; z-index: 1; }
+  .chapter[data-tone="pink"] .chapter-band {
+    background: linear-gradient(180deg, var(--pink-50) 0%, transparent 100%);
+  }
+  .chapter[data-tone="mint"] .chapter-band {
+    background: linear-gradient(180deg, var(--mint-50) 0%, transparent 100%);
+  }
+  .chapter[data-tone="purple"] .chapter-band {
+    background: linear-gradient(180deg, var(--purple-50) 0%, transparent 100%);
+  }
+  .chapter[data-tone="gold"] .chapter-band {
+    background: linear-gradient(180deg, var(--gold-50) 0%, transparent 100%);
+  }
+
+  .chapter-band-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .chap-num {
+    font-family: var(--serif-en-italic);
+    font-style: italic;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink-3);
+    margin-bottom: 4px;
+    letter-spacing: 0.04em;
+  }
+  .chapter[data-tone="pink"] .chap-num { color: var(--pink-700); }
+  .chapter[data-tone="mint"] .chap-num { color: var(--mint-700); }
+  .chapter[data-tone="purple"] .chap-num { color: var(--purple-700); }
+  .chapter[data-tone="gold"] .chap-num { color: var(--gold-700); }
+
+  .chap-h2 {
+    font-family: var(--serif-zh);
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    line-height: 1.2;
+    color: var(--ink-1);
+    margin-bottom: 4px;
+  }
+  .chap-ko {
+    font-family: var(--sans-ko);
+    font-size: 12px;
+    color: var(--ink-3);
+    font-weight: 500;
+  }
+  .chap-stats {
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .chap-stats-num {
+    font-family: var(--serif-en-italic);
+    font-style: italic;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--ink-1);
+    letter-spacing: -0.025em;
+    display: block;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .chap-stats-label {
+    font-size: 11px;
+    color: var(--ink-3);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  /* day list */
+  .chapter-body {
+    padding: 16px 16px 28px;
+    border-bottom: 1px solid var(--line-1);
+  }
+  .days {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .day {
+    display: grid;
+    grid-template-columns: 44px 1fr auto;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border-radius: var(--r-md);
+    cursor: pointer;
+    transition: all 0.2s var(--ease);
+    border: 1.5px solid transparent;
+    background: transparent;
+    text-align: left;
+  }
+  .day:hover {
+    background: oklch(99.5% 0.003 50 / 0.85);
+    border-color: var(--line-1);
+    box-shadow: var(--shadow-xs);
+    transform: translateY(-1px);
+  }
+  .day-num {
+    font-family: var(--serif-en-italic);
+    font-style: italic;
+    font-size: 26px;
+    font-weight: 500;
+    color: var(--ink-3);
+    letter-spacing: -0.025em;
+    line-height: 1;
+  }
+  .day-body { min-width: 0; }
+  .day-title {
+    font-family: var(--serif-zh);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink-1);
+    letter-spacing: 0.02em;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .day-sub {
+    font-size: 11px;
+    color: var(--ink-3);
+    font-weight: 500;
+    line-height: 1.4;
+  }
+  .day-sub .ko {
+    font-family: var(--sans-ko);
+    color: var(--ink-2);
+    margin-right: 6px;
+  }
+  .day-marker {
+    flex-shrink: 0;
+    font-size: 11px;
+    color: var(--ink-3);
+    font-weight: 600;
+  }
+
+  /* 状态：done */
+  .day.done .day-num { color: var(--pink-700); }
+  .day.done .day-title { color: var(--ink-2); }
+  .day.done .day-marker {
+    color: var(--pink-700);
+    font-size: 16px;
+    font-weight: 800;
+  }
+
+  /* current */
+  .day.current {
+    background: oklch(99.5% 0.005 14);
+    border-color: var(--pink-200);
+    box-shadow: var(--shadow-sm), 0 0 28px oklch(70% 0.135 14 / 0.14);
+  }
+  .day.current .day-num {
+    color: var(--pink-700);
+    font-weight: 700;
+  }
+  .day.current .day-title {
+    color: var(--ink-1);
+    font-weight: 700;
+  }
+  .day.current .day-marker {
+    background: var(--ink-1);
+    color: var(--paper);
+    padding: 5px 11px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  /* locked */
+  .day.locked { opacity: 0.45; cursor: not-allowed; }
+  .day.locked .day-num { color: var(--ink-4); }
+  .day.locked .day-title { color: var(--ink-3); font-weight: 500; }
+  .day.locked:hover {
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    transform: none;
+  }
+
+  /* checkpoint */
+  .day.checkpoint {
+    margin: 12px 0;
+    padding: 18px;
+    background: linear-gradient(135deg, var(--gold-50) 0%, oklch(98% 0.018 50) 100%);
+    border-color: var(--gold-200);
+    box-shadow: var(--shadow-sm);
+  }
+  .day.checkpoint .day-num {
+    color: var(--gold-700);
+    font-weight: 700;
+    font-size: 30px;
+  }
+  .day.checkpoint .day-title { font-weight: 700; color: var(--ink-1); }
+  .day.checkpoint .day-marker {
+    background: var(--gold-500);
+    color: var(--paper);
+    padding: 5px 11px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    box-shadow: 0 4px 12px oklch(74% 0.115 80 / 0.4);
+  }
+
+  /* ════════════ Desktop 视图 ════════════ */
+  .d-page {
+    position: relative;
+    display: grid;
+    grid-template-columns: 460px 1fr;
+    min-height: 800px;
+  }
+
+  /* 左侧 ── 大书皮 */
+  .d-side {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    max-height: 800px;
+    padding: 64px 56px;
+    background:
+      radial-gradient(at 30% 20%, oklch(94% 0.030 14 / 0.6) 0%, transparent 60%),
+      radial-gradient(at 70% 80%, oklch(94% 0.040 290 / 0.4) 0%, transparent 55%),
+      oklch(98% 0.012 50);
+    border-right: 1px solid var(--line-1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .d-side::after {
+    content: '30';
+    position: absolute;
+    right: -48px;
+    bottom: -100px;
+    font-family: var(--serif-en-italic);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 440px;
+    color: oklch(92% 0.040 14 / 0.5);
+    line-height: 1;
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: -0.025em;
+  }
+  .d-side > * { position: relative; z-index: 1; }
+
+  .d-side .top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+  }
+  .d-side .brand-mini {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--ink-3);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .d-side .brand-mini::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--pink-500);
+  }
+
+  .d-eyebrow {
+    font-family: var(--hand);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--pink-700);
+    margin-bottom: 18px;
+    line-height: 1;
+  }
+  .d-ko-title {
+    font-family: var(--sans-ko);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink-3);
+    margin-bottom: 8px;
+    letter-spacing: var(--tracking-snug);
+  }
+  .d-h1 {
+    font-family: var(--serif-zh);
+    font-weight: 800;
+    font-size: 56px;
+    line-height: 1.15;
+    letter-spacing: 0.02em;
+    color: var(--ink-1);
+    margin-bottom: 24px;
+  }
+  .d-h1 .sm {
+    font-weight: 600;
+    font-size: 0.5em;
+    color: var(--ink-2);
+    letter-spacing: 0.05em;
+    display: block;
+    margin-top: 12px;
+  }
+  .d-lead {
+    font-family: var(--serif-zh);
+    font-size: 16px;
+    color: var(--ink-2);
+    line-height: 1.95;
+    margin-bottom: 32px;
+    letter-spacing: 0.02em;
+    max-width: 340px;
+  }
+
+  /* 9:16 桌面端插画位 */
+  .d-illust {
+    position: relative;
+    aspect-ratio: 9 / 16;
+    width: 200px;
+    margin-bottom: 28px;
+    border-radius: var(--r-lg);
+    background: linear-gradient(160deg, var(--pink-100) 0%, var(--purple-50) 50%, var(--mint-50) 100%);
+    border: 1.5px solid var(--line-1);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .d-illust::before {
+    content: '🐰';
+    font-size: 80px;
+    opacity: 0.6;
+    transform: rotate(-4deg);
+  }
+  .d-illust::after {
+    content: 'Day 13 · 약국';
+    position: absolute;
+    bottom: 14px;
+    left: 14px;
+    font-size: 10px;
+    color: var(--ink-3);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: oklch(99% 0.003 50 / 0.85);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--line-1);
+  }
+
+  .d-bottom {
+    margin-top: auto;
+  }
+
+  /* 仪式 */
+  .d-ritual {
+    margin-bottom: 16px;
+    padding: 14px 16px;
+    background: oklch(99.5% 0.003 50 / 0.6);
+    border: 1px dashed var(--line-2);
+    border-radius: var(--r-md);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .d-ritual .pulse {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--pink-500);
+    box-shadow: 0 0 0 4px var(--pink-100);
+    flex-shrink: 0;
+  }
+  .d-ritual .text {
+    font-family: var(--serif-zh);
+    font-size: 13px;
+    color: var(--ink-2);
+    letter-spacing: 0.02em;
+    line-height: 1.5;
+  }
+  .d-ritual .text strong { color: var(--ink-1); font-weight: 700; }
+
+  .d-progress {
+    padding: 18px 20px;
+    background: oklch(99.5% 0.003 50 / 0.85);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    border: 1.5px solid var(--line-1);
+    border-radius: var(--r-md);
+    box-shadow: var(--shadow-sm), inset 0 1px 0 0 oklch(100% 0 0 / 0.6);
+  }
+  .d-progress .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+  }
+  .d-progress .label {
+    font-size: 11px;
+    color: var(--ink-3);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .d-progress .value {
+    font-family: var(--serif-en-italic);
+    font-style: italic;
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--ink-1);
+    letter-spacing: -0.025em;
+  }
+  .d-progress .value .total {
+    font-size: 16px;
+    color: var(--ink-3);
+    margin-left: 2px;
+  }
+  .d-progress .bar {
+    height: 6px;
+    background: var(--paper-3);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .d-progress .bar .fill {
+    height: 100%;
+    width: 43%;
+    background: linear-gradient(90deg, var(--pink-400), var(--pink-700));
+    border-radius: 999px;
+    box-shadow: 0 0 16px oklch(70% 0.135 14 / 0.4);
+  }
+  .d-cta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    background: var(--ink-1);
+    color: var(--paper);
+    border-radius: var(--r-md);
+    border: none;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.2s var(--ease);
+  }
+  .d-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  .d-cta .left { flex: 1; text-align: left; }
+  .d-cta .lab {
+    font-size: 10px;
+    color: oklch(75% 0.005 50);
+    letter-spacing: 0.06em;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .d-cta .next {
+    font-family: var(--serif-zh);
+    font-size: 14px;
+    font-weight: 700;
+    margin-top: 3px;
+    letter-spacing: 0.02em;
+  }
+  .d-cta .arr { color: var(--paper); }
+
+  /* 右侧 ── 章节书页 */
+  .d-main {
+    overflow-y: auto;
+    max-height: 800px;
+  }
+  .d-main .chapter-band { padding: 56px 64px 32px; }
+  .d-main .chapter-band::before { font-size: 280px; left: -16px; bottom: -52px; }
+  .d-main .chap-h2 { font-size: 32px; }
+  .d-main .chapter-body { padding: 32px 64px 48px; }
+  .d-main .day {
+    grid-template-columns: 60px 1fr auto;
+    padding: 18px 22px;
+  }
+  .d-main .day-num { font-size: 32px; }
+  .d-main .day-title { font-size: 17px; }
+  .d-main .day-sub { font-size: 12px; }
+
+</style>
+</head>
+<body>
+
+<div class="doc-title">
+  <h1>Tori Diary · 全屏纯页 v4 <span class="pill">FINAL</span></h1>
+  <p>中文书体 · 9:16 插画位 · 今日仪式 · 章节色带 · 不走 AppShell</p>
+</div>
+
+<div class="canvas">
+
+<!-- ═══════════ MOBILE ═══════════ -->
+<div class="mobile">
+<div class="mobile-content">
+
+  <main class="m-page">
+    <button class="close-btn" aria-label="关闭">✕</button>
+
+    <!-- Hero -->
+    <section class="m-hero">
+      <p class="m-eyebrow">a story of 30 days</p>
+      <p class="m-ko-title">토리의 한국어 일기</p>
+      <h1 class="m-h1">兔莉的<br>韩语日记<span class="small">·三十日</span></h1>
+      <p class="m-lead">从中国家里到首尔动物城。<br>每天 15 分钟，跟兔莉一起。</p>
+
+      <div class="m-illust"></div>
+
+      <div class="m-ritual">
+        <span class="pulse"></span>
+        <span class="text">今天是第 <strong>13 天</strong>，还剩 17 天 · 已积累 <strong>156 个词</strong></span>
+      </div>
+
+      <div class="m-progress">
+        <div class="top">
+          <span class="label">your progress</span>
+          <span class="value">13<span class="total">/30</span></span>
+        </div>
+        <div class="bar"><div class="fill"></div></div>
+      </div>
+
+      <button class="m-cta">
+        <div class="left">
+          <div class="lab">continue</div>
+          <div class="next">Day 13 · 약국 · 感冒了</div>
+        </div>
+        <div class="arr">→</div>
+      </button>
+    </section>
+
+    <!-- Chapter 1 -->
+    <article class="chapter" data-tone="pink">
+      <div class="chapter-band" data-num="i">
+        <div class="chapter-band-head">
+          <div>
+            <p class="chap-num">Chapter One</p>
+            <h2 class="chap-h2">出发与落地</h2>
+            <p class="chap-ko">출발과 첫걸음 · Day 1–7</p>
+          </div>
+          <div class="chap-stats">
+            <span class="chap-stats-num">7/7</span>
+            <span class="chap-stats-label">已完成</span>
+          </div>
+        </div>
+      </div>
+      <div class="chapter-body">
+        <div class="days">
+          <div class="day done"><div class="day-num">01</div><div class="day-body"><div class="day-title">出发前夜 · 妈妈的胡萝卜</div><div class="day-sub"><span class="ko">출발 전날 밤</span></div></div><span class="day-marker">✓</span></div>
+          <div class="day done"><div class="day-num">02</div><div class="day-body"><div class="day-title">飞机上 · 第一次说韩语</div><div class="day-sub"><span class="ko">비행기 안</span></div></div><span class="day-marker">✓</span></div>
+          <div class="day done"><div class="day-num">03</div><div class="day-body"><div class="day-title">仁川机场 · 짐 vs 집 翻车</div><div class="day-sub"><span class="ko">인천공항</span></div></div><span class="day-marker">✓</span></div>
+          <div class="day done"><div class="day-num">04</div><div class="day-body"><div class="day-title">한빛宿舍 · 第一天报到</div><div class="day-sub"><span class="ko">기숙사 입주</span></div></div><span class="day-marker">✓</span></div>
+          <div class="day done"><div class="day-num">05</div><div class="day-body"><div class="day-title">楼下 · 遇见 Haru 仓鼠</div><div class="day-sub"><span class="ko">첫 이웃</span></div></div><span class="day-marker">✓</span></div>
+          <div class="day done"><div class="day-num">06</div><div class="day-body"><div class="day-title">语言学校 · 班长 Junho</div><div class="day-sub"><span class="ko">한빛어학당</span></div></div><span class="day-marker">✓</span></div>
+          <div class="day done checkpoint"><div class="day-num">07</div><div class="day-body"><div class="day-title">关卡 · 一周入住检查</div><div class="day-sub"><span class="ko">기숙사 점검</span></div></div><span class="day-marker">CLEARED</span></div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Chapter 2 -->
+    <article class="chapter" data-tone="mint">
+      <div class="chapter-band" data-num="ii">
+        <div class="chapter-band-head">
+          <div>
+            <p class="chap-num">Chapter Two</p>
+            <h2 class="chap-h2">日常生活</h2>
+            <p class="chap-ko">일상의 시작 · Day 8–14</p>
+          </div>
+          <div class="chap-stats">
+            <span class="chap-stats-num">5/7</span>
+            <span class="chap-stats-label">进行中</span>
+          </div>
+        </div>
+      </div>
+      <div class="chapter-body">
+        <div class="days">
+          <div class="day done"><div class="day-num">08</div><div class="day-body"><div class="day-title">CU 便利店 · 第一个紫菜包饭</div><div class="day-sub"><span class="ko">편의점</span></div></div><span class="day-marker">✓</span></div>
+          <div class="day done"><div class="day-num">09</div><div class="day-body"><div class="day-title">价格的故事 · 만 원</div><div class="day-sub"><span class="ko">한국 화폐</span></div></div><span class="day-marker">✓</span></div>
+          <div class="day done"><div class="day-num">10</div><div class="day-body"><div class="day-title">学校食堂 · 有什么/没什么</div><div class="day-sub"><span class="ko">학교 식당</span></div></div><span class="day-marker">✓</span></div>
+          <div class="day done"><div class="day-num">11</div><div class="day-body"><div class="day-title">Daiso · 千元世界</div><div class="day-sub"><span class="ko">다이소</span></div></div><span class="day-marker">✓</span></div>
+          <div class="day done"><div class="day-num">12</div><div class="day-body"><div class="day-title">粉色咖啡馆 · 第一杯拿铁</div><div class="day-sub"><span class="ko">바나나 토끼</span></div></div><span class="day-marker">✓</span></div>
+          <div class="day current"><div class="day-num">13</div><div class="day-body"><div class="day-title">약국 · 感冒了</div><div class="day-sub"><span class="ko">감기 걸렸어요</span></div></div><span class="day-marker">TODAY</span></div>
+          <div class="day locked checkpoint"><div class="day-num">14</div><div class="day-body"><div class="day-title">关卡 · 一个人去咖啡馆点单</div><div class="day-sub"><span class="ko">하루카페</span></div></div><span class="day-marker">·</span></div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Chapter 3 -->
+    <article class="chapter" data-tone="purple">
+      <div class="chapter-band" data-num="iii">
+        <div class="chapter-band-head">
+          <div>
+            <p class="chap-num">Chapter Three</p>
+            <h2 class="chap-h2">独立生活</h2>
+            <p class="chap-ko">독립적인 생활 · Day 15–21</p>
+          </div>
+          <div class="chap-stats">
+            <span class="chap-stats-num">0/7</span>
+            <span class="chap-stats-label">未开启</span>
+          </div>
+        </div>
+      </div>
+      <div class="chapter-body">
+        <div class="days">
+          <div class="day locked"><div class="day-num">15</div><div class="day-body"><div class="day-title">부동산 · 第一次说"我在找房子"</div><div class="day-sub"><span class="ko">원룸 찾기</span></div></div><span class="day-marker">·</span></div>
+          <div class="day locked"><div class="day-num">16</div><div class="day-body"><div class="day-title">迷路 · 第一次开口问路</div><div class="day-sub"><span class="ko">길 묻기</span></div></div><span class="day-marker">·</span></div>
+          <div class="day locked"><div class="day-num">21</div><div class="day-body"><div class="day-title">关卡 · 海豹房东签合同</div><div class="day-sub"><span class="ko">계약하기</span></div></div><span class="day-marker">·</span></div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Chapter 4 -->
+    <article class="chapter" data-tone="gold">
+      <div class="chapter-band" data-num="iv">
+        <div class="chapter-band-head">
+          <div>
+            <p class="chap-num">Chapter Four · final</p>
+            <h2 class="chap-h2">社交融入与毕业</h2>
+            <p class="chap-ko">소속과 졸업 · Day 22–30</p>
+          </div>
+          <div class="chap-stats">
+            <span class="chap-stats-num">0/9</span>
+            <span class="chap-stats-label">未开启</span>
+          </div>
+        </div>
+      </div>
+      <div class="chapter-body">
+        <div class="days">
+          <div class="day locked"><div class="day-num">22</div><div class="day-body"><div class="day-title">한빛어학당 · 해요体登场</div><div class="day-sub"><span class="ko">반장 준호</span></div></div><span class="day-marker">·</span></div>
+          <div class="day locked"><div class="day-num">30</div><div class="day-body"><div class="day-title">毕业典礼 · 졸업식</div><div class="day-sub"><span class="ko">최종 시험</span></div></div><span class="day-marker">·</span></div>
+        </div>
+      </div>
+    </article>
+
+  </main>
+
+</div>
+</div>
+
+<!-- ═══════════ DESKTOP ═══════════ -->
+<div class="desktop">
+<div class="d-page">
+
+  <button class="close-btn" aria-label="关闭">✕</button>
+
+  <!-- 左侧 -->
+  <aside class="d-side">
+    <div class="top-row">
+      <span class="brand-mini">tori diary</span>
+    </div>
+
+    <p class="d-eyebrow">a story of 30 days</p>
+    <p class="d-ko-title">토리의 한국어 일기</p>
+    <h1 class="d-h1">兔莉的<br>韩语日记<span class="sm">·三十日</span></h1>
+    <p class="d-lead">从中国家里到首尔动物城。<br>每天 15 分钟，跟兔莉一起<br>过 30 天首尔留学。</p>
+
+    <div class="d-illust"></div>
+
+    <div class="d-bottom">
+      <div class="d-ritual">
+        <span class="pulse"></span>
+        <span class="text">今天是第 <strong>13 天</strong>，还剩 17 天</span>
+      </div>
+
+      <div class="d-progress">
+        <div class="top">
+          <span class="label">your progress</span>
+          <span class="value">13<span class="total">/30</span></span>
+        </div>
+        <div class="bar"><div class="fill"></div></div>
+        <button class="d-cta">
+          <div class="left">
+            <div class="lab">continue reading</div>
+            <div class="next">Day 13 · 약국</div>
+          </div>
+          <div class="arr">→</div>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- 右侧 -->
+  <main class="d-main">
+
+    <article class="chapter" data-tone="pink">
+      <div class="chapter-band" data-num="i">
+        <div class="chapter-band-head">
+          <div>
+            <p class="chap-num">Chapter One</p>
+            <h2 class="chap-h2">出发与落地</h2>
+            <p class="chap-ko">출발과 첫걸음 · Day 1–7</p>
+          </div>
+          <div class="chap-stats">
+            <span class="chap-stats-num">7/7</span>
+            <span class="chap-stats-label">已完成</span>
+          </div>
+        </div>
+      </div>
+      <div class="chapter-body">
+        <div class="days">
+          <div class="day done"><div class="day-num">01</div><div class="day-body"><div class="day-title">出发前夜 · 妈妈的胡萝卜</div><div class="day-sub"><span class="ko">출발 전날 밤</span> · 镜子前练 100 遍 안녕하세요</div></div><span class="day-marker">✓</span></div>
+          <div class="day done"><div class="day-num">02</div><div class="day-body"><div class="day-title">飞机上 · 第一次说韩语</div><div class="day-sub"><span class="ko">비행기 안</span> · 仙鹤空乘 + 第一杯可乐</div></div><span class="day-marker">✓</span></div>
+          <div class="day done"><div class="day-num">03</div><div class="day-body"><div class="day-title">仁川机场 · 짐 vs 집 翻车</div><div class="day-sub"><span class="ko">인천공항</span> · Minji 水獭登场</div></div><span class="day-marker">✓</span></div>
+          <div class="day done"><div class="day-num">04</div><div class="day-body"><div class="day-title">한빛宿舍 · 第一天报到</div><div class="day-sub"><span class="ko">기숙사 입주</span> · 浣熊宿管 + 301 号钥匙</div></div><span class="day-marker">✓</span></div>
+          <div class="day done"><div class="day-num">05</div><div class="day-body"><div class="day-title">楼下 · 遇见 Haru 仓鼠</div><div class="day-sub"><span class="ko">첫 이웃</span> · 隔壁 302 也是 KPOP 迷</div></div><span class="day-marker">✓</span></div>
+          <div class="day done"><div class="day-num">06</div><div class="day-body"><div class="day-title">语言学校 · 班长 Junho 老虎</div><div class="day-sub"><span class="ko">한빛어학당</span> · 虎牙的老虎追中国偶像</div></div><span class="day-marker">✓</span></div>
+          <div class="day done checkpoint"><div class="day-num">07</div><div class="day-body"><div class="day-title">关卡 · 一周入住检查</div><div class="day-sub"><span class="ko">기숙사 점검</span> · 完整撑过宿管阿姨的对话</div></div><span class="day-marker">CLEARED</span></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="chapter" data-tone="mint">
+      <div class="chapter-band" data-num="ii">
+        <div class="chapter-band-head">
+          <div>
+            <p class="chap-num">Chapter Two</p>
+            <h2 class="chap-h2">日常生活</h2>
+            <p class="chap-ko">일상의 시작 · Day 8–14</p>
+          </div>
+          <div class="chap-stats">
+            <span class="chap-stats-num">5/7</span>
+            <span class="chap-stats-label">进行中</span>
+          </div>
+        </div>
+      </div>
+      <div class="chapter-body">
+        <div class="days">
+          <div class="day done"><div class="day-num">08</div><div class="day-body"><div class="day-title">CU 便利店 · 第一个紫菜包饭</div><div class="day-sub"><span class="ko">편의점</span> · 考拉店员</div></div><span class="day-marker">✓</span></div>
+          <div class="day done"><div class="day-num">09</div><div class="day-body"><div class="day-title">价格的故事 · 만 원</div><div class="day-sub"><span class="ko">한국 화폐</span> · Minji 教韩币</div></div><span class="day-marker">✓</span></div>
+          <div class="day done"><div class="day-num">12</div><div class="day-body"><div class="day-title">粉色咖啡馆 · 第一杯拿铁</div><div class="day-sub"><span class="ko">바나나 토끼 카페</span> · 얼음 빼고요</div></div><span class="day-marker">✓</span></div>
+          <div class="day current"><div class="day-num">13</div><div class="day-body"><div class="day-title">약국 · 感冒了</div><div class="day-sub"><span class="ko">감기 걸렸어요</span> · Haru 陪去药店</div></div><span class="day-marker">TODAY</span></div>
+          <div class="day locked checkpoint"><div class="day-num">14</div><div class="day-body"><div class="day-title">关卡 · 一个人去咖啡馆点单</div><div class="day-sub"><span class="ko">하루카페</span> · 6 句对话全程独立</div></div><span class="day-marker">·</span></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="chapter" data-tone="purple">
+      <div class="chapter-band" data-num="iii">
+        <div class="chapter-band-head">
+          <div>
+            <p class="chap-num">Chapter Three</p>
+            <h2 class="chap-h2">独立生活</h2>
+            <p class="chap-ko">독립적인 생활 · Day 15–21</p>
+          </div>
+          <div class="chap-stats">
+            <span class="chap-stats-num">0/7</span>
+            <span class="chap-stats-label">未开启</span>
+          </div>
+        </div>
+      </div>
+      <div class="chapter-body">
+        <div class="days">
+          <div class="day locked"><div class="day-num">15</div><div class="day-body"><div class="day-title">부동산 · 第一次说"我在找房子"</div><div class="day-sub"><span class="ko">원룸 찾기</span></div></div><span class="day-marker">·</span></div>
+          <div class="day locked checkpoint"><div class="day-num">21</div><div class="day-body"><div class="day-title">关卡 · 海豹房东签合同</div><div class="day-sub"><span class="ko">계약하기</span></div></div><span class="day-marker">·</span></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="chapter" data-tone="gold">
+      <div class="chapter-band" data-num="iv">
+        <div class="chapter-band-head">
+          <div>
+            <p class="chap-num">Chapter Four · final</p>
+            <h2 class="chap-h2">社交融入与毕业</h2>
+            <p class="chap-ko">소속과 졸업 · Day 22–30</p>
+          </div>
+          <div class="chap-stats">
+            <span class="chap-stats-num">0/9</span>
+            <span class="chap-stats-label">未开启</span>
+          </div>
+        </div>
+      </div>
+      <div class="chapter-body">
+        <div class="days">
+          <div class="day locked"><div class="day-num">22</div><div class="day-body"><div class="day-title">한빛어학당 · 해요体登场</div><div class="day-sub"><span class="ko">반장 준호</span></div></div><span class="day-marker">·</span></div>
+          <div class="day locked"><div class="day-num">30</div><div class="day-body"><div class="day-title">毕业典礼 · 졸업식</div><div class="day-sub"><span class="ko">최종 시험</span> · 5 分钟口语自述</div></div><span class="day-marker">·</span></div>
+        </div>
+      </div>
+    </article>
+
+  </main>
+
+</div>
+</div>
+
+</div>
+
+</body>
+</html>

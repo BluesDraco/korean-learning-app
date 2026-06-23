@@ -2653,7 +2653,7 @@ html[data-reduce-motion="true"] *::after {
   .desktop-panel { display: none; }
   .desktop-search { display: none; }
   .desktop-navbtn { width: 72px; }
-  .desktop-main-rail { max-width: 880px; }
+  .desktop-main-rail { max-width: 968px; }
   .desktop-module-grid,
   .desktop-grid-3 { grid-template-columns: 1fr 1fr; }
   .desktop-grid-2 { grid-template-columns: 1fr; }
@@ -2690,7 +2690,7 @@ html[data-reduce-motion="true"] *::after {
   }
   .desktop-logo::before,
   .desktop-logo::after { display: none; }
-  .desktop-main-rail { max-width: 720px; }
+  .desktop-main-rail { max-width: 800px; }
   .desktop-topbar {
     padding: 16px 20px;
     border-radius: var(--radius-lg);
