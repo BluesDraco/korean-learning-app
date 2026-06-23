@@ -50,48 +50,72 @@ export function DiaryRecap({ day }: Props) {
         DAY {day.day} 完成 · 你赢得了今天的贴纸
       </p>
 
-      {/* 贴纸盖印 */}
+      {/* 9:16 场景图占位 + 角标贴纸 */}
       {sticker && (
         <div
           className={stamped ? 'diary-anim-stamp' : ''}
           style={{
-            display: 'inline-flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: 200,
-            height: 200,
-            margin: '0 auto 32px',
-            borderRadius: '50%',
-            background: PALETTE_BG[sticker.paletteHint] ?? PALETTE_BG.cream,
-            border: '3px solid var(--diary-gold)',
-            boxShadow: '0 12px 28px -10px rgba(58, 42, 30, 0.4)',
             position: 'relative',
+            width: '100%',
+            maxWidth: 270,
+            aspectRatio: '9 / 16',
+            margin: '0 auto 32px',
+            borderRadius: 'var(--diary-r-md)',
+            overflow: 'hidden',
+            background: PALETTE_BG[sticker.paletteHint] ?? PALETTE_BG.cream,
+            border: '1.5px solid var(--diary-gold)',
+            boxShadow: '0 16px 36px -14px rgba(58, 42, 30, 0.4)',
             opacity: stamped ? 1 : 0,
           }}
         >
+          {day.recap.sceneImageUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={day.recap.sceneImageUrl}
+              alt={sticker.title}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            />
+          ) : (
+            <div
+              style={{
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <div style={{ fontSize: 96, opacity: 0.5, lineHeight: 1 }}>🐰</div>
+            </div>
+          )}
+
+          {/* 右下角金边贴纸标签 */}
           <div
             style={{
-              fontSize: 48,
-              marginBottom: 6,
+              position: 'absolute',
+              right: 10,
+              bottom: 10,
+              padding: '8px 12px',
+              background: 'rgba(252, 247, 236, 0.94)',
+              border: '1.5px solid var(--diary-gold)',
+              borderRadius: 'var(--diary-r-sm)',
+              backdropFilter: 'blur(4px)',
+              boxShadow: '0 4px 10px -3px rgba(58, 42, 30, 0.25)',
+              maxWidth: '78%',
             }}
           >
-            🐰
-          </div>
-          <div className="diary-handwriting-zh" style={{ fontSize: 'var(--diary-text-md)', fontWeight: 700, color: 'var(--diary-ink)' }}>
-            {sticker.title}
-          </div>
-          <div
-            className="diary-handwriting-zh"
-            style={{
-              fontSize: 'var(--diary-text-xs)',
-              color: 'var(--diary-ink-soft)',
-              marginTop: 4,
-              maxWidth: 160,
-              lineHeight: 1.4,
-            }}
-          >
-            {sticker.meaning}
+            <div
+              className="diary-handwriting-zh"
+              style={{ fontSize: 'var(--diary-text-sm)', fontWeight: 700, color: 'var(--diary-ink)', lineHeight: 1.3 }}
+            >
+              {sticker.title}
+            </div>
+            <div
+              className="diary-handwriting-zh"
+              style={{ fontSize: 11, color: 'var(--diary-ink-soft)', lineHeight: 1.4, marginTop: 2 }}
+            >
+              {sticker.meaning}
+            </div>
           </div>
         </div>
       )}

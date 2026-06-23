@@ -2,8 +2,9 @@
 
 import { useState } from 'react';
 import type { ToriDay, ToriDialogueLine } from '@/types/tori-diary';
-import { Volume2, ChevronRight, MessageCircle } from 'lucide-react';
-import { speak } from '@/lib/tts';
+import { ChevronRight, MessageCircle } from 'lucide-react';
+import { TappableText } from '@/components/TappableText';
+import { DiaryLineActions } from './DiaryLineActions';
 
 interface Props {
   day: ToriDay;
@@ -26,14 +27,6 @@ export function DiaryDialogue({ day, onComplete }: Props) {
     isLast &&
     (currentLine.practice !== 'pick' ||
       (picked[currentIdx] !== undefined && currentLine.choices?.[picked[currentIdx]]?.correct));
-
-  const handleSpeak = async (ko: string) => {
-    try {
-      await speak(ko, 0.85);
-    } catch {
-      /* ignore */
-    }
-  };
 
   const handlePick = (lineIdx: number, choiceIdx: number) => {
     setPicked((p) => ({ ...p, [lineIdx]: choiceIdx }));
@@ -74,10 +67,10 @@ export function DiaryDialogue({ day, onComplete }: Props) {
             key={idx}
             line={line}
             idx={idx}
+            day={day.day}
             isCurrent={idx === currentIdx}
             pickedChoice={picked[idx]}
             isShadowed={shadowedIdx.has(idx)}
-            onSpeak={() => handleSpeak(line.ko)}
             onPick={(ci) => handlePick(idx, ci)}
             onShadow={() => handleShadow(idx)}
             onListenAdvance={handleListenAdvance}
@@ -102,21 +95,23 @@ export function DiaryDialogue({ day, onComplete }: Props) {
 interface LineProps {
   line: ToriDialogueLine;
   idx: number;
+  day: number;
   isCurrent: boolean;
   pickedChoice?: number;
   isShadowed: boolean;
-  onSpeak: () => void;
   onPick: (idx: number) => void;
   onShadow: () => void;
   onListenAdvance: () => void;
 }
 
-function DialogueLine({ line, isCurrent, pickedChoice, isShadowed, onSpeak, onPick, onShadow, onListenAdvance }: LineProps) {
+function DialogueLine({ line, day, isCurrent, pickedChoice, isShadowed, onPick, onShadow, onListenAdvance }: LineProps) {
   const isTori = line.speaker === 'tori';
   const isNpc = line.speaker === 'npc';
 
   const labelColor = isTori ? 'var(--diary-gold-deep)' : 'var(--diary-stamp-red)';
   const speakerName = isTori ? '兔莉（你）' : isNpc ? line.npcName ?? '对方' : '你';
+  const source = `tori-diary-day-${day}`;
+  const isShadowLine = line.practice === 'shadow';
 
   return (
     <div
@@ -143,28 +138,19 @@ function DialogueLine({ line, isCurrent, pickedChoice, isShadowed, onSpeak, onPi
         {/* 韩文 + 翻译（pick 行不显示韩文，需要思考） */}
         {line.practice !== 'pick' && (
           <>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-              <div className="diary-ko" style={{ fontSize: 'var(--diary-text-xl)', flex: 1 }}>
-                {line.ko}
-              </div>
-              <button
-                onClick={onSpeak}
-                style={{
-                  width: 32, height: 32, borderRadius: '50%',
-                  border: '1.5px solid var(--diary-line-strong)',
-                  background: 'transparent', color: 'var(--diary-gold-deep)',
-                  cursor: 'pointer',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}
-                aria-label="听"
-              >
-                <Volume2 size={14} />
-              </button>
+            <div className="diary-ko" style={{ fontSize: 'var(--diary-text-xl)', marginBottom: 4 }}>
+              <TappableText text={line.ko} source={source} />
             </div>
             <div className="diary-romaji" style={{ marginBottom: 4 }}>{line.hangul}</div>
-            <div className="diary-handwriting-zh" style={{ fontSize: 'var(--diary-text-sm)', color: 'var(--diary-ink-soft)' }}>
+            <div className="diary-handwriting-zh" style={{ fontSize: 'var(--diary-text-sm)', color: 'var(--diary-ink-soft)', marginBottom: 8 }}>
               {line.zh}
             </div>
+            <DiaryLineActions
+              ko={line.ko}
+              zh={line.zh}
+              source={source}
+              showRecord={isShadowLine}
+            />
           </>
         )}
 
@@ -178,32 +164,31 @@ function DialogueLine({ line, isCurrent, pickedChoice, isShadowed, onSpeak, onPi
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {line.choices?.map((c, ci) => {
                 const isPicked = pickedChoice === ci;
-                const showResult = pickedChoice !== undefined;
-                const bg = !showResult
-                  ? 'var(--diary-paper-deep)'
-                  : c.correct
-                    ? 'rgba(94, 168, 134, 0.18)'
-                    : isPicked
-                      ? 'rgba(193, 78, 58, 0.14)'
-                      : 'var(--diary-paper-deep)';
-                const border = !showResult
-                  ? '1.5px solid var(--diary-line)'
-                  : c.correct
-                    ? '1.5px solid #5ea886'
-                    : isPicked
-                      ? '1.5px solid var(--diary-stamp-red)'
-                      : '1.5px solid var(--diary-line)';
+                const correctPicked =
+                  pickedChoice !== undefined && line.choices?.[pickedChoice]?.correct === true;
+                const showCorrect = correctPicked && c.correct;
+                const showThisWrong = isPicked && !c.correct;
+                const bg = showCorrect
+                  ? 'rgba(94, 168, 134, 0.18)'
+                  : showThisWrong
+                    ? 'rgba(193, 78, 58, 0.14)'
+                    : 'var(--diary-paper-deep)';
+                const border = showCorrect
+                  ? '1.5px solid #5ea886'
+                  : showThisWrong
+                    ? '1.5px solid var(--diary-stamp-red)'
+                    : '1.5px solid var(--diary-line)';
                 return (
                   <button
                     key={ci}
-                    onClick={() => !showResult && onPick(ci)}
-                    disabled={showResult}
+                    onClick={() => !correctPicked && onPick(ci)}
+                    disabled={correctPicked}
                     style={{
                       padding: '10px 14px',
                       background: bg,
                       border: border,
                       borderRadius: 'var(--diary-r-sm)',
-                      cursor: showResult ? 'default' : 'pointer',
+                      cursor: correctPicked ? 'default' : 'pointer',
                       textAlign: 'left',
                       transition: 'all 0.15s',
                     }}

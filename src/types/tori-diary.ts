@@ -57,7 +57,7 @@ export interface ToriGrammar {
   pitfall?: string;
 }
 
-/** 输出任务（默写/录音/选择/填空） */
+/** 输出任务（默写/录音/选择/填空/组词） */
 export interface ToriOutputTask {
   id: string;
   kind: ToriOutputKind;
@@ -65,6 +65,10 @@ export interface ToriOutputTask {
   zhHint?: string;
   answer?: string;
   choices?: Array<{ text: string; correct: boolean }>;
+  /** 组词题 · 候选词卡（含 2-3 个干扰词，已打乱） */
+  tokens?: string[];
+  /** 组词题 · 正确顺序（必须严格匹配） */
+  composeAnswer?: string[];
   successMsg?: string;
 }
 
@@ -86,6 +90,8 @@ export interface ToriRecap {
   praise: string;
   preview: string;
   stickerId: string;
+  /** 9:16 场景图（可选）。无图时走渐变 + emoji 兜底 */
+  sceneImageUrl?: string;
 }
 
 /** 贴纸 */

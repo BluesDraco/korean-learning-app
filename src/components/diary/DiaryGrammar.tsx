@@ -1,7 +1,11 @@
 'use client';
 
-import type { ToriDay } from '@/types/tori-diary';
-import { ChevronRight, Lightbulb } from 'lucide-react';
+import { useState } from 'react';
+import type { ToriDay, ToriGrammar } from '@/types/tori-diary';
+import { ChevronRight, ChevronDown, Lightbulb } from 'lucide-react';
+import { romanize, RomanizationSystem } from '@romanize/korean';
+import { TappableText } from '@/components/TappableText';
+import { DiaryLineActions } from './DiaryLineActions';
 
 interface Props {
   day: ToriDay;
@@ -10,10 +14,11 @@ interface Props {
 
 /**
  * Day Grammar — 语法小卡
- * 一句话讲清，例句配对，明确易错点。"我懂了"按钮通过
+ * 例句默认折叠，展开后看罗马音 + 中文 + 语法解释 + 操作栏
  */
 export function DiaryGrammar({ day, onComplete }: Props) {
   const g = day.grammar;
+  const source = `tori-diary-day-${day.day}`;
 
   return (
     <div className="diary-anim-fade-up">
@@ -74,41 +79,14 @@ export function DiaryGrammar({ day, onComplete }: Props) {
         </ul>
       </div>
 
-      {/* 例句 */}
+      {/* 例句（折叠/展开） */}
       <div style={{ marginBottom: 22 }}>
         <h3 className="diary-handwriting-zh" style={{ fontSize: 'var(--diary-text-md)', color: 'var(--diary-ink)', marginBottom: 10, fontWeight: 700 }}>
-          💡 例句
+          💡 例句 <span style={{ fontSize: 11, fontWeight: 400, color: 'var(--diary-ink-faint)' }}>· 点击展开看读音和解释</span>
         </h3>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {g.examples.map((ex, i) => (
-            <div
-              key={i}
-              style={{
-                padding: '10px 14px',
-                background: 'var(--diary-paper-deep)',
-                borderLeft: '3px solid var(--diary-gold)',
-                borderRadius: 'var(--diary-r-sm)',
-              }}
-            >
-              <div className="diary-handwriting-ko" style={{ fontSize: 'var(--diary-text-md)', color: 'var(--diary-ink)', marginBottom: 2 }}>
-                {ex.highlight
-                  ? ex.ko.split(ex.highlight).reduce<React.ReactNode[]>((acc, part, idx, arr) => {
-                      acc.push(part);
-                      if (idx < arr.length - 1) {
-                        acc.push(
-                          <span key={idx} style={{ color: 'var(--diary-stamp-red)', fontWeight: 800 }}>
-                            {ex.highlight}
-                          </span>
-                        );
-                      }
-                      return acc;
-                    }, [])
-                  : ex.ko}
-              </div>
-              <div className="diary-handwriting-zh" style={{ fontSize: 'var(--diary-text-sm)', color: 'var(--diary-ink-soft)' }}>
-                {ex.zh}
-              </div>
-            </div>
+            <ExampleRow key={i} ex={ex} grammar={g} source={source} />
           ))}
         </div>
       </div>
@@ -146,4 +124,109 @@ export function DiaryGrammar({ day, onComplete }: Props) {
       </div>
     </div>
   );
+}
+
+interface ExampleRowProps {
+  ex: { ko: string; zh: string; highlight?: string };
+  grammar: ToriGrammar;
+  source: string;
+}
+
+function ExampleRow({ ex, grammar, source }: ExampleRowProps) {
+  const [expanded, setExpanded] = useState(false);
+  const hangul = expanded ? safeRomanize(ex.ko) : '';
+
+  // 韩文带 highlight 的渲染
+  const koNode = ex.highlight
+    ? (
+        <span>
+          {ex.ko.split(ex.highlight).reduce<React.ReactNode[]>((acc, part, idx, arr) => {
+            if (part) acc.push(<TappableText key={`p-${idx}`} text={part} source={source} />);
+            if (idx < arr.length - 1) {
+              acc.push(
+                <span key={`h-${idx}`} style={{ color: 'var(--diary-stamp-red)', fontWeight: 800 }}>
+                  <TappableText text={ex.highlight!} source={source} />
+                </span>
+              );
+            }
+            return acc;
+          }, [])}
+        </span>
+      )
+    : <TappableText text={ex.ko} source={source} />;
+
+  return (
+    <div
+      style={{
+        padding: '10px 14px',
+        background: 'var(--diary-paper-deep)',
+        borderLeft: '3px solid var(--diary-gold)',
+        borderRadius: 'var(--diary-r-sm)',
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div className="diary-handwriting-ko" style={{ fontSize: 'var(--diary-text-md)', color: 'var(--diary-ink)', lineHeight: 1.6 }}>
+            {koNode}
+          </div>
+        </div>
+        <button
+          onClick={() => setExpanded((v) => !v)}
+          aria-label={expanded ? '收起' : '展开'}
+          style={{
+            border: 'none',
+            background: 'transparent',
+            cursor: 'pointer',
+            padding: 4,
+            color: 'var(--diary-gold-deep)',
+            display: 'inline-flex',
+            transition: 'transform 0.2s',
+            transform: expanded ? 'rotate(0deg)' : 'rotate(-90deg)',
+          }}
+        >
+          <ChevronDown size={16} />
+        </button>
+      </div>
+
+      {expanded && (
+        <div
+          className="diary-anim-fade-up"
+          style={{ marginTop: 8, paddingTop: 8, borderTop: '1px dashed var(--diary-line)' }}
+        >
+          {hangul && (
+            <div className="diary-romaji" style={{ marginBottom: 4 }}>
+              {hangul}
+            </div>
+          )}
+          <div className="diary-handwriting-zh" style={{ fontSize: 'var(--diary-text-sm)', color: 'var(--diary-ink-soft)', marginBottom: 8 }}>
+            {ex.zh}
+          </div>
+          <div
+            className="diary-handwriting-zh"
+            style={{
+              fontSize: 'var(--diary-text-xs)',
+              color: 'var(--diary-ink-faint)',
+              lineHeight: 1.6,
+              marginBottom: 10,
+              paddingLeft: 8,
+              borderLeft: '2px solid var(--diary-line)',
+            }}
+          >
+            <strong style={{ color: 'var(--diary-gold-deep)' }}>语法点：</strong>
+            {grammar.whenToUse}
+            {grammar.pitfall && <><br /><strong style={{ color: 'var(--diary-stamp-red)' }}>注意：</strong>{grammar.pitfall}</>}
+          </div>
+          <DiaryLineActions ko={ex.ko} zh={ex.zh} source={source} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+function safeRomanize(ko: string): string {
+  try {
+    return romanize(ko, { system: RomanizationSystem.REVISED });
+  } catch {
+    return '';
+  }
 }

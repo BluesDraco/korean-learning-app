@@ -1,9 +1,10 @@
 'use client';
 
-import { use } from 'react';
+import { use, useEffect } from 'react';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
 import { getDay } from '@/data/diary';
+import { useAuth } from '@/components/AuthProvider';
 import { DiaryDayClient } from '@/components/diary/DiaryDayClient';
 import '@/components/diary/diary.css';
 
@@ -13,10 +14,31 @@ interface Props {
 
 export default function DiaryDayPage({ params }: Props) {
   const { day: dayStr } = use(params);
+  const router = useRouter();
+  const { user, loading } = useAuth();
+
   const dayNum = parseInt(dayStr, 10);
+
+  // 非管理员一律重定向回列表（在列表页弹"本周开放"）
+  useEffect(() => {
+    if (loading) return;
+    if (!user) return; // 未登录交给上层处理
+    if (user.role !== 'admin') {
+      router.replace('/diary');
+    }
+  }, [user, loading, router]);
 
   if (Number.isNaN(dayNum) || dayNum < 1 || dayNum > 30) {
     notFound();
+  }
+
+  // 加载中或非管理员 → 不渲染内容
+  if (loading || !user || user.role !== 'admin') {
+    return (
+      <div className="diary-root diary-page" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="diary-handwriting-zh" style={{ color: 'var(--diary-ink-soft)' }}>加载中…</div>
+      </div>
+    );
   }
 
   const day = getDay(dayNum);

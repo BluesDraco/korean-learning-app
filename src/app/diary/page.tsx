@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Lock, Sparkles, BookMarked, Flag } from 'lucide-react';
 import { db } from '@/lib/db';
 import { useAuth } from '@/components/AuthProvider';
+import { Modal } from '@/components/ui';
 import { TOTAL_DAYS, isCheckpoint, weekOf } from '@/data/diary';
 import '@/components/diary/diary.css';
 
@@ -22,6 +23,9 @@ export default function DiaryPage() {
   const [completedDays, setCompletedDays] = useState<Set<number>>(new Set());
   const [currentDay, setCurrentDay] = useState(1);
   const [loaded, setLoaded] = useState(false);
+  const [showSoonModal, setShowSoonModal] = useState(false);
+
+  const isAdmin = user?.role === 'admin';
 
   useEffect(() => {
     if (!user) { setLoaded(true); return; }
@@ -44,6 +48,10 @@ export default function DiaryPage() {
 
   const handleDayClick = (day: number) => {
     if (day > currentDay) return; // 锁定
+    if (!isAdmin) {
+      setShowSoonModal(true);
+      return;
+    }
     router.push(`/diary/${day}`);
   };
 
@@ -115,12 +123,23 @@ export default function DiaryPage() {
           </div>
 
           {/* CTA */}
-          <Link href={`/diary/${currentDay}`} style={{ textDecoration: 'none' }}>
-            <button className="diary-btn diary-btn-primary" style={{ width: '100%' }}>
+          {isAdmin ? (
+            <Link href={`/diary/${currentDay}`} style={{ textDecoration: 'none' }}>
+              <button className="diary-btn diary-btn-primary" style={{ width: '100%' }}>
+                <Sparkles size={16} />
+                {completedDays.size === 0 ? '开始 Day 1' : `继续 Day ${currentDay}`}
+              </button>
+            </Link>
+          ) : (
+            <button
+              className="diary-btn diary-btn-primary"
+              style={{ width: '100%' }}
+              onClick={() => setShowSoonModal(true)}
+            >
               <Sparkles size={16} />
               {completedDays.size === 0 ? '开始 Day 1' : `继续 Day ${currentDay}`}
             </button>
-          </Link>
+          )}
 
           <div style={{ display: 'flex', gap: 8, marginTop: 12, justifyContent: 'center' }}>
             <Link href="/diary/stickers" style={{ textDecoration: 'none' }}>
@@ -187,6 +206,44 @@ export default function DiaryPage() {
           );
         })}
       </div>
+
+      {/* 「本周开放」弹窗 */}
+      <Modal
+        open={showSoonModal}
+        onClose={() => setShowSoonModal(false)}
+        size="sm"
+        closeButton={false}
+      >
+        <div style={{ textAlign: 'center', padding: '4px 0' }}>
+          <div style={{ fontSize: 48, marginBottom: 12 }}>🥕</div>
+          <h2
+            className="diary-handwriting-zh"
+            style={{ fontSize: 20, fontWeight: 800, marginBottom: 10, color: 'var(--color-ink-1, #241917)' }}
+          >
+            这一关还在准备中
+          </h2>
+          <p
+            className="diary-handwriting-zh"
+            style={{
+              fontSize: 14,
+              lineHeight: 1.7,
+              color: 'var(--color-ink-3, #89756e)',
+              marginBottom: 22,
+            }}
+          >
+            Tori 在首尔的故事正在打磨细节。
+            <br />
+            预计本周开放，到时候你就能陪她一起过这 30 天了。
+          </p>
+          <button
+            onClick={() => setShowSoonModal(false)}
+            className="diary-btn diary-btn-primary"
+            style={{ width: '100%' }}
+          >
+            好的，下周来
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 }
