@@ -6,7 +6,6 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Search, BookOpen, Music, Loader2, Play, ChevronRight, Mic, Volume2, Clock, ExternalLink, AlertTriangle, ArrowLeft } from 'lucide-react';
 import type { KpopTrack, KpopImportJob } from '@/types/kpop';
-import { getAllTracks, getTracksByLevel, searchTracks } from '@/data/kpopTracks';
 import { getAllSongProgress, fetchProgressFromServer } from '@/lib/kpop/progress';
 
 import { useAuth } from '@/components/AuthProvider';
@@ -56,9 +55,21 @@ export default function KpopPage() {
   const { user } = useAuth();
   const [importJobs, setImportJobs] = useState<KpopImportJob[]>([]);
 
-  const allTracks = useMemo(() => getAllTracks(), []);
+  const [allTracks, setAllTracks] = useState<KpopTrack[]>([]);
+  const [tracksLoaded, setTracksLoaded] = useState(false);
 
   useEffect(() => {
+    let cancelled = false;
+    import('@/data/kpopTracks').then((m) => {
+      if (cancelled) return;
+      setAllTracks(m.getAllTracks());
+      setTracksLoaded(true);
+    });
+    return () => { cancelled = true; };
+  }, []);
+
+  useEffect(() => {
+    if (!tracksLoaded) return;
     (async () => {
       const local = getAllSongProgress();
       const serverProgress = user ? await fetchProgressFromServer().catch(() => []) : [];
@@ -80,7 +91,7 @@ export default function KpopPage() {
       }
       setProgressMap(map);
     })();
-  }, [allTracks, user]);
+  }, [allTracks, user, tracksLoaded]);
 
   useEffect(() => {
     if (!user) return;
@@ -98,8 +109,14 @@ export default function KpopPage() {
 
   const filtered = useMemo(() => {
     let tracks = allTracks;
-    if (levelFilter !== 'all') tracks = getTracksByLevel(levelFilter as KpopTrack['level']);
-    if (search) tracks = searchTracks(search);
+    if (levelFilter !== 'all') tracks = allTracks.filter((t) => t.level === levelFilter);
+    if (search) {
+      const q = search.toLowerCase();
+      tracks = tracks.filter((t) =>
+        t.title.toLowerCase().includes(q) ||
+        t.artist.toLowerCase().includes(q)
+      );
+    }
     return tracks;
   }, [search, levelFilter, allTracks]);
 

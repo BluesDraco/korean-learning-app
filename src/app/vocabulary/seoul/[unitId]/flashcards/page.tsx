@@ -6,8 +6,7 @@ import Link from 'next/link';
 import { ArrowLeft, Volume2, ChevronLeft, ChevronRight, Loader2, CheckCircle, RotateCcw, Shuffle } from 'lucide-react';
 import { db } from '@/lib/db';
 import { speakWord, speak } from '@/lib/tts';
-import { seoulUnits } from '@/data/seoul-books';
-import type { YonseiWord } from '@/data/yonsei-books';
+import type { YonseiUnit, YonseiWord } from '@/data/yonsei-books';
 import { TappableText } from '@/components/TappableText';
 import { WordTapSheet } from '@/components/WordTapSheet';
 
@@ -19,7 +18,17 @@ export default function YonseiFlashcardsPage() {
   const searchParams = useSearchParams();
   const filterNew = searchParams.get('filter') === 'new';
 
-  const unit = seoulUnits.find(u => u.id === unitId);
+  const [unit, setUnit] = useState<YonseiUnit | null | undefined>(undefined);
+
+  useEffect(() => {
+    let cancelled = false;
+    import('@/data/seoul-books').then((m) => {
+      if (cancelled) return;
+      const found = m.seoulUnits.find(u => u.id === unitId);
+      setUnit(found ?? null);
+    });
+    return () => { cancelled = true; };
+  }, [unitId]);
 
   const [words, setWords] = useState<CardWord[]>([]);
   const [loading, setLoading] = useState(true);
@@ -37,7 +46,8 @@ export default function YonseiFlashcardsPage() {
   const swipeLockedRef = useRef<'horizontal' | 'vertical' | null>(null);
 
   useEffect(() => {
-    if (!unit) { router.replace('/vocabulary/library?tab=yonsei'); return; }
+    if (unit === undefined) return;
+    if (unit === null) { router.replace('/vocabulary/library?tab=yonsei'); return; }
 
     (async () => {
       try {
@@ -265,7 +275,7 @@ export default function YonseiFlashcardsPage() {
     return 'translateX(0) rotate(0deg)';
   };
 
-  if (loading) {
+  if (loading || unit === undefined) {
     return (
       <div className="flex items-center justify-center py-32">
         <Loader2 size={32} className="animate-spin" style={{ color: '#89756e' }} />

@@ -10,7 +10,6 @@ import {
   getTodayItems, itemsFromCourseWords,
 } from '@/data/pronunciation/content';
 import { db } from '@/lib/db';
-import { thirtyDayCourse } from '@/data/thirtyDayCourse';
 import type { PronunciationItem } from '@/types';
 import { MobilePageHero } from '@/components/mobile/MobilePageHero';
 import { ToriPrimaryButton } from '@/components/mobile/ToriPrimaryButton';
@@ -72,13 +71,18 @@ function PageContent() {
     if (!dayParam) return;
     const dayNum = parseInt(dayParam);
     if (isNaN(dayNum)) return;
-    const course = thirtyDayCourse.find((c) => c.day === dayNum);
-    if (course && course.words.length > 0) {
-      setSessionItems(itemsFromCourseWords(
-        course.words.map((w) => ({ korean: w.korean, chinese: w.chinese, pronunciation: w.pronunciation })),
-        dayNum,
-      ));
-    }
+    let cancelled = false;
+    import('@/data/thirtyDayCourse').then(({ thirtyDayCourse }) => {
+      if (cancelled) return;
+      const course = thirtyDayCourse.find((c) => c.day === dayNum);
+      if (course && course.words.length > 0) {
+        setSessionItems(itemsFromCourseWords(
+          course.words.map((w) => ({ korean: w.korean, chinese: w.chinese, pronunciation: w.pronunciation })),
+          dayNum,
+        ));
+      }
+    });
+    return () => { cancelled = true; };
   }, [searchParams]);
 
   // Handle ?focus=X
@@ -118,6 +122,7 @@ function PageContent() {
         }
         if (completedDays.size === 0) return;
         const latestDay = Math.max(...completedDays);
+        const { thirtyDayCourse } = await import('@/data/thirtyDayCourse');
         const course = thirtyDayCourse.find((c) => c.day === latestDay);
         if (!course || course.words.length === 0) return;
         const items = itemsFromCourseWords(

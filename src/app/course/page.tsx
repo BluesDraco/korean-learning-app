@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Check, Play, Lock, Loader2, ArrowLeft } from 'lucide-react';
 import { db } from '@/lib/db';
 import { useFeedback } from '@/hooks/useFeedback';
-import { thirtyDayCourse } from '@/data/thirtyDayCourse';
+import type { DailyCourse } from '@/data/thirtyDayCourse';
 import { ToriCardMascot } from '@/components/mobile/ToriCardMascot';
 
 const weeks = [
@@ -17,34 +17,37 @@ const weeks = [
 
 export default function CoursePage() {
   const [completedDays, setCompletedDays] = useState<Set<number>>(new Set());
+  const [course, setCourse] = useState<DailyCourse[] | null>(null);
   const [loading, setLoading] = useState(true);
   const { click: feedbackClick } = useFeedback();
 
   useEffect(() => {
-    // Primary: read completion events (set by recordLessonComplete)
-    db.learningEvents.where('action').equals('complete').toArray().then((events) => {
-      const days = new Set<number>();
-      for (const e of events) {
-        if (e.dayNum) days.add(e.dayNum);
-      }
-      // Fallback: also read words with source='course' in case events are missing
-      return db.words.where('source').equals('course').toArray().then((words) => {
-        for (const w of words) {
-          if (w.sourceDetail) {
-            const m = w.sourceDetail.match(/Day (\d+)/);
-            if (m) days.add(parseInt(m[1], 10));
+    Promise.all([
+      import('@/data/thirtyDayCourse').then((m) => m.thirtyDayCourse),
+      db.learningEvents.where('action').equals('complete').toArray().then((events) => {
+        const days = new Set<number>();
+        for (const e of events) { if (e.dayNum) days.add(e.dayNum); }
+        return db.words.where('source').equals('course').toArray().then((words) => {
+          for (const w of words) {
+            if (w.sourceDetail) {
+              const m = w.sourceDetail.match(/Day (\d+)/);
+              if (m) days.add(parseInt(m[1], 10));
+            }
           }
-        }
-        setCompletedDays(days);
-        setLoading(false);
-      });
+          return days;
+        });
+      }).catch(() => new Set<number>()),
+    ]).then(([data, days]) => {
+      setCourse(data);
+      setCompletedDays(days);
+      setLoading(false);
     }).catch(() => setLoading(false));
   }, []);
 
   const currentDay = completedDays.size > 0 ? Math.min(Math.max(...completedDays) + 1, 30) : 1;
   const completedCount = completedDays.size;
 
-  if (loading) {
+  if (loading || !course) {
     return (
       <div className="flex items-center justify-center py-32">
         <Loader2 size={32} className="animate-spin text-[var(--text-secondary)]" />
@@ -113,7 +116,7 @@ export default function CoursePage() {
             </div>
             <div className="grid grid-cols-4 sm:grid-cols-7 gap-2">
               {week.days.map((dayNum) => {
-                const day = thirtyDayCourse[dayNum - 1];
+                const day = course[dayNum - 1];
                 const isCompleted = completedDays.has(dayNum);
                 const isCurrent = dayNum === currentDay && !isCompleted;
                 const isLocked = dayNum > currentDay && !isCompleted;

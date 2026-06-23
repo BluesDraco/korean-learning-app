@@ -6,8 +6,7 @@ import Link from 'next/link';
 import { ArrowLeft, Volume2, ChevronLeft, ChevronRight, Loader2, CheckCircle, RotateCcw, Shuffle } from 'lucide-react';
 import { db } from '@/lib/db';
 import { speakWord, speak } from '@/lib/tts';
-import { yonseiUnits } from '@/data/yonsei-books';
-import type { YonseiWord } from '@/data/yonsei-books';
+import type { YonseiUnit, YonseiWord } from '@/data/yonsei-books';
 import { TappableText } from '@/components/TappableText';
 import { WordTapSheet } from '@/components/WordTapSheet';
 
@@ -19,7 +18,7 @@ export default function YonseiFlashcardsPage() {
   const searchParams = useSearchParams();
   const filterNew = searchParams.get('filter') === 'new';
 
-  const unit = yonseiUnits.find(u => u.id === unitId);
+  const [unit, setUnit] = useState<YonseiUnit | null | undefined>(undefined);
 
   const [words, setWords] = useState<CardWord[]>([]);
   const [loading, setLoading] = useState(true);
@@ -36,7 +35,18 @@ export default function YonseiFlashcardsPage() {
   const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!unit) { router.replace('/vocabulary/library?tab=yonsei'); return; }
+    let cancelled = false;
+    import('@/data/yonsei-books').then((m) => {
+      if (cancelled) return;
+      const found = m.yonseiUnits.find(u => u.id === unitId);
+      setUnit(found ?? null);
+    });
+    return () => { cancelled = true; };
+  }, [unitId]);
+
+  useEffect(() => {
+    if (unit === undefined) return;
+    if (unit === null) { router.replace('/vocabulary/library?tab=yonsei'); return; }
 
     (async () => {
       try {
@@ -62,7 +72,7 @@ export default function YonseiFlashcardsPage() {
         setLoading(false);
       }
     })();
-  }, [unit, router]);
+  }, [unit, router, filterNew]);
 
   const SESSION_KEY = `fc-progress-yonsei-${unitId}`;
 
@@ -249,7 +259,7 @@ export default function YonseiFlashcardsPage() {
     return 'translateX(0) rotate(0deg)';
   };
 
-  if (loading) {
+  if (loading || unit === undefined) {
     return (
       <div className="flex items-center justify-center py-32">
         <Loader2 size={32} className="animate-spin" style={{ color: '#89756e' }} />

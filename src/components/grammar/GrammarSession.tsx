@@ -7,7 +7,6 @@ import {
 } from 'lucide-react';
 import type { GrammarPoint } from '@/types';
 import { GRAMMAR_TO_COURSE_DAY } from '@/data/grammar-new';
-import { getCourseDayForGrammar } from '@/data/thirtyDayCourse';
 import { speak, cancelSpeech } from '@/lib/tts';
 import { db } from '@/lib/db';
 import { awardXp, XP_REWARDS } from '@/lib/gamification';
@@ -38,6 +37,15 @@ const stepLabels: Record<StepType, string> = {
 export function GrammarSession({ grammar, onClose, reviewQueue, onNextReview }: Props) {
   const [step, setStep] = useState<StepType>('target');
   const [subIdx, setSubIdx] = useState(0);
+  const [courseRef, setCourseRef] = useState<{ day: number; title: string } | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    import('@/data/thirtyDayCourse').then((m) => {
+      if (!cancelled) setCourseRef(m.getCourseDayForGrammar(grammar.id) ?? null);
+    });
+    return () => { cancelled = true; };
+  }, [grammar.id]);
   const [choiceIdx, setChoiceIdx] = useState(0);
   const [outputText, setOutputText] = useState('');
   const [choiceResult, setChoiceResult] = useState<'correct' | 'wrong' | null>(null);
@@ -222,8 +230,6 @@ export function GrammarSession({ grammar, onClose, reviewQueue, onNextReview }: 
 
   // ═══════════════════════════════ SETTLEMENT ═══════════════════════════════
   if (step === 'settlement') {
-    const courseRef = getCourseDayForGrammar(grammar.id);
-
     return (
       <div className="py-4 max-w-lg mx-auto space-y-6 text-center">
         <div className="text-6xl">🐰</div>

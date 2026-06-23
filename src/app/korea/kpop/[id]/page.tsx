@@ -7,12 +7,11 @@ import {
   BookOpen, ChevronDown,
   Mic, Play, Pause,
 } from 'lucide-react';
-import { kpopSongs } from '@/data/kpopSongs';
 import { speak, cancelSpeech } from '@/lib/tts';
-import type { KpopLine } from '@/types/kpop';
+import type { KpopLine, KpopTrack } from '@/types/kpop';
+import type { KpopSong } from '@/types';
 import SingingMode from '@/components/kpop/SingingMode';
 import { getSongProgress, loadSongProgress } from '@/lib/kpop/progress';
-import { getTrackById } from '@/data/kpopTracks';
 import { SegmentPlayer } from '@/lib/kpop/audioSegmentPlayer';
 import { db } from '@/lib/db';
 import { useTheme } from '@/components/ThemeProvider';
@@ -96,8 +95,22 @@ export default function KpopSongPage() {
   const { theme } = useTheme();
   const C = theme === 'dark' ? DARK_C : LIGHT_C;
   const { id } = useParams<{ id: string }>();
-  const track = useMemo(() => getTrackById(id), [id]);
-  const oldSong = useMemo(() => kpopSongs.find((s) => s.id === id), [id]);
+  const [track, setTrack] = useState<KpopTrack | null | undefined>(undefined);
+  const [oldSong, setOldSong] = useState<KpopSong | null | undefined>(undefined);
+
+  useEffect(() => {
+    let cancelled = false;
+    Promise.all([
+      import('@/data/kpopTracks').then((m) => m.getTrackById(id) ?? null),
+      import('@/data/kpopSongs').then((m) => m.kpopSongs.find((s) => s.id === id) ?? null),
+    ]).then(([t, s]) => {
+      if (!cancelled) {
+        setTrack(t);
+        setOldSong(s);
+      }
+    });
+    return () => { cancelled = true; };
+  }, [id]);
 
   const [selectedLineIndex, setSelectedLineIndex] = useState<number | null>(null);
   const setSelectedLine = useCallback((idx: number | null) => {
@@ -321,6 +334,14 @@ export default function KpopSongPage() {
   }, [stopAll, selectedLineIndex]);
 
   // ── Not found ──
+  if (track === undefined) {
+    return (
+      <div className="flex items-center justify-center py-32">
+        <div className="w-8 h-8 border-2 border-[#f0799b] border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
   if (!track) {
     return (
       <div className="flex items-center justify-center py-32">

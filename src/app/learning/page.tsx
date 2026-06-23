@@ -18,7 +18,6 @@ interface LearningEntry {
 
 const ENTRIES: LearningEntry[] = [
   { label: '韩文字母入门', desc: '从 40 音开始，听标准发音，再学习音节拼装。',                href: '/phonetics',     available: true,  progress: 58, Icon: Music2,        tone: 'purple' },
-  { label: '30 天入门模板', desc: '适合第一次开始自学韩语的人，每天一个小任务。',                                       available: false,             Icon: Calendar,      tone: 'pink' },
   { label: 'TOPIK 备考模板', desc: '按题型整理词汇、阅读和写作练习路线。',              href: '/topik',         available: true,              Icon: GraduationCap, tone: 'purple' },
   { label: '发音跟读',      desc: '录音对比标准发音，练习韩语语调和单音。',              href: '/pronunciation', available: true,              Icon: Mic,           tone: 'pink' },
   { label: '听说练习',      desc: '看中文意思，用韩语说出来。语音识别自动判断准确度。',  href: '/listening',     available: true,              Icon: Headphones,    tone: 'peach' },

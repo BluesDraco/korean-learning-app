@@ -2,14 +2,21 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { getAllTracks } from '@/data/kpopTracks';
 import { getAllSongProgress } from '@/lib/kpop/progress';
 import type { KpopTrack } from '@/types/kpop';
 
 export function DesktopKpopPage() {
   const router = useRouter();
   const [progressMap, setProgressMap] = useState<Record<string, number>>({});
-  const tracks = useMemo(() => getAllTracks(), []);
+  const [tracks, setTracks] = useState<KpopTrack[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    import('@/data/kpopTracks').then((m) => {
+      if (!cancelled) setTracks(m.getAllTracks());
+    });
+    return () => { cancelled = true; };
+  }, []);
 
   useEffect(() => {
     try {

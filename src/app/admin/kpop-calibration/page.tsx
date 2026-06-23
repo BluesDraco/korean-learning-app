@@ -5,7 +5,7 @@ import {
   Music, Play, Pause, Save, ChevronLeft, ChevronRight,
   CheckCircle, List, Edit2, X, Check, Radio, Stamp,
 } from 'lucide-react';
-import { kpopSongs } from '@/data/kpopSongs';
+import type { KpopSong } from '@/types';
 import { SegmentPlayer } from '@/lib/kpop/audioSegmentPlayer';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -45,10 +45,11 @@ function fmtMs(ms: number) {
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export default function KpopCalibrationPage() {
+  const [kpopSongs, setKpopSongs] = useState<KpopSong[]>([]);
   const [calibrations, setCalibrations] = useState<Record<string, CalibrationRecord>>({});
   const [lineCals, setLineCals] = useState<Record<string, Record<number, LineCalibration>>>({});
   const [lyricsOverrides, setLyricsOverrides] = useState<Record<string, Record<number, LyricsOverride>>>({});
-  const [selectedSongId, setSelectedSongId] = useState(kpopSongs[0]?.id ?? '');
+  const [selectedSongId, setSelectedSongId] = useState('');
   const [offset, setOffset] = useState(0);
   const [inputOffset, setInputOffset] = useState('0');
   const [playing, setPlaying] = useState(false);
@@ -80,6 +81,17 @@ export default function KpopCalibrationPage() {
   const spRef = useRef<SegmentPlayer | null>(null);
   const rafRef = useRef<number | null>(null);
   const lineListRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    import('@/data/kpopSongs').then((m) => {
+      if (cancelled) return;
+      setKpopSongs(m.kpopSongs);
+      if (!selectedSongId && m.kpopSongs[0]) setSelectedSongId(m.kpopSongs[0].id);
+    });
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const song = kpopSongs.find((s) => s.id === selectedSongId);
   const audioUrl = '';

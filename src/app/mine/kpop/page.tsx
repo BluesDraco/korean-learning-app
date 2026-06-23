@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Music, ChevronRight } from 'lucide-react';
 import { db } from '@/lib/db';
-import { getTrackById } from '@/data/kpopTracks';
 import { useIsDesktop } from '@/lib/useIsMobile';
 import { PageHeader, Section, Card } from '@/components/ui';
 
@@ -17,10 +16,13 @@ interface KpopProgress {
   updatedAt?: number;
 }
 
+interface TrackMeta { id: string; title: string; artist: string; totalLines: number }
+
 export default function MineKpopPage() {
   const isDesktop = useIsDesktop();
   const [progress, setProgress] = useState<KpopProgress[]>([]);
   const [loading, setLoading] = useState(true);
+  const [trackMeta, setTrackMeta] = useState<Map<string, TrackMeta>>(new Map());
 
   useEffect(() => {
     db.kpopProgress.toArray()
@@ -29,6 +31,21 @@ export default function MineKpopPage() {
       .finally(() => setLoading(false));
   }, []);
 
+  useEffect(() => {
+    if (progress.length === 0) return;
+    let cancelled = false;
+    import('@/data/kpopTracks').then((m) => {
+      if (cancelled) return;
+      const map = new Map<string, TrackMeta>();
+      for (const p of progress) {
+        const t = m.getTrackById(p.songId);
+        if (t) map.set(p.songId, { id: p.songId, title: t.title, artist: t.artist, totalLines: t.lyrics?.length || 0 });
+      }
+      setTrackMeta(map);
+    });
+    return () => { cancelled = true; };
+  }, [progress]);
+
   const entries = progress
     .filter((p) => {
       const practiced = p.practicedLines?.length || 0;
@@ -36,14 +53,14 @@ export default function MineKpopPage() {
       return practiced > 0 || completed > 0;
     })
     .map((p) => {
-      const track = getTrackById(p.songId);
+      const meta = trackMeta.get(p.songId);
       return {
         ...p,
-        title: track?.title ?? p.songId,
-        artist: track?.artist ?? '',
+        title: meta?.title ?? p.songId,
+        artist: meta?.artist ?? '',
         practicedCount: p.practicedLines?.length || 0,
         completedCount: p.completedLines?.length || 0,
-        totalLines: track?.lyrics?.length || 0,
+        totalLines: meta?.totalLines ?? 0,
       };
     });
 

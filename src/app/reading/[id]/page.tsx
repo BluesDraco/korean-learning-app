@@ -7,13 +7,13 @@ import {
   ArrowLeft, Volume2, ChevronRight, Check, Sparkles,
   Trophy, BookOpen, Target, Lightbulb, Bookmark, Star, X,
 } from 'lucide-react';
-import { readingArticles, levelLabel, levelColor } from '@/data/reading-new';
+import { levelLabel, levelColor } from '@/data/reading-meta';
 import { speak, speakWord, cancelSpeech } from '@/lib/tts';
 import { db, ensureFavoritesBook } from '@/lib/db';
 import { awardXp, addStudyMinutes } from '@/lib/gamification';
 import { useFeedback } from '@/hooks/useFeedback';
 import { WordTapSheet } from '@/components/WordTapSheet';
-import type { ArticleQuestion, ArticleWord } from '@/types';
+import type { Article, ArticleQuestion, ArticleWord } from '@/types';
 
 type Step = 'goals' | 'vocab' | 'reading' | 'key_sentence' | 'quiz' | 'output' | 'settlement';
 
@@ -38,7 +38,17 @@ export default function ArticleReaderPage() {
   const router = useRouter();
   const params = useParams();
   const articleId = params.id as string;
-  const article = readingArticles.find((a) => a.id === articleId);
+  const [article, setArticle] = useState<Article | null | undefined>(undefined);
+
+  useEffect(() => {
+    let cancelled = false;
+    import('@/data/reading-new').then((m) => {
+      if (cancelled) return;
+      const found = m.readingArticles.find((a) => a.id === articleId);
+      setArticle(found ?? null);
+    });
+    return () => { cancelled = true; };
+  }, [articleId]);
 
   const [step, setStep] = useState<Step>('goals');
   const [revealedZh, setRevealedZh] = useState<Set<string>>(new Set());
@@ -125,6 +135,14 @@ export default function ArticleReaderPage() {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step, article]);
+
+  if (article === undefined) {
+    return (
+      <div className="flex items-center justify-center py-32">
+        <div className="w-8 h-8 border-2 border-[var(--pink-primary)] border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   if (!article) {
     return (

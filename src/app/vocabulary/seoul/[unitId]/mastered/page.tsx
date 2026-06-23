@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Volume2, ChevronDown, ChevronUp, Check, Trash2, BookmarkPlus, CheckSquare, Square } from 'lucide-react';
 import { db } from '@/lib/db';
 import { speakWord } from '@/lib/tts';
-import { seoulUnits } from '@/data/seoul-books';
+import type { YonseiUnit } from '@/data/yonsei-books';
 import { AddToBookSheet } from '@/components/vocabulary/AddToBookSheet';
 import { useIsDesktop } from '@/lib/useIsMobile';
 
@@ -21,7 +21,7 @@ export default function SeoulMasteredPage() {
   const isDesktop = useIsDesktop();
   const { unitId } = useParams<{ unitId: string }>();
   const router = useRouter();
-  const unit = seoulUnits.find(u => u.id === unitId);
+  const [unit, setUnit] = useState<YonseiUnit | null | undefined>(undefined);
 
   const [masteredWords, setMasteredWords] = useState<SeoulWord[]>([]);
   const [loading, setLoading] = useState(true);
@@ -32,7 +32,18 @@ export default function SeoulMasteredPage() {
   const [showAddBook, setShowAddBook] = useState(false);
 
   useEffect(() => {
-    if (!unit) { router.replace('/vocabulary/library'); return; }
+    let cancelled = false;
+    import('@/data/seoul-books').then((m) => {
+      if (cancelled) return;
+      const found = m.seoulUnits.find(u => u.id === unitId);
+      setUnit(found ?? null);
+    });
+    return () => { cancelled = true; };
+  }, [unitId]);
+
+  useEffect(() => {
+    if (unit === undefined) return;
+    if (unit === null) { router.replace('/vocabulary/library'); return; }
     (async () => {
       try {
         const koreanWords = new Set(unit.words.map(w => w.word));

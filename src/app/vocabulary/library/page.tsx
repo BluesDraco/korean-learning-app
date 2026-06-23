@@ -3,13 +3,21 @@
 import { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { ArrowLeft, BarChart3, GraduationCap, Library, MessageCircle } from 'lucide-react';
-import { ThemesSection } from '@/components/vocabulary/ThemesSection';
-import { LevelsSection } from '@/components/vocabulary/LevelsSection';
-import { YonseiSection } from '@/components/vocabulary/YonseiSection';
-import { ExpressionsSection } from '@/components/vocabulary/ExpressionsSection';
 import { useIsDesktop } from '@/lib/useIsMobile';
 import { PageHeader } from '@/components/ui';
+
+const SectionLoading = () => (
+  <div style={{ display: 'flex', justifyContent: 'center', padding: '60px 0' }}>
+    <div style={{ width: 24, height: 24, borderRadius: '50%', border: '2px solid var(--color-pink-base)', borderTopColor: 'transparent', animation: 'tori-spin 0.7s linear infinite' }} />
+  </div>
+);
+
+const ThemesSection = dynamic(() => import('@/components/vocabulary/ThemesSection').then(m => m.ThemesSection), { loading: SectionLoading });
+const LevelsSection = dynamic(() => import('@/components/vocabulary/LevelsSection').then(m => m.LevelsSection), { loading: SectionLoading });
+const YonseiSection = dynamic(() => import('@/components/vocabulary/YonseiSection').then(m => m.YonseiSection), { loading: SectionLoading });
+const ExpressionsSection = dynamic(() => import('@/components/vocabulary/ExpressionsSection').then(m => m.ExpressionsSection), { loading: SectionLoading });
 
 const tabs = [
   { key: 'levels',      label: 'TOPIK 词表', Icon: BarChart3 },

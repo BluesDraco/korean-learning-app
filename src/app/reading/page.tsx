@@ -7,7 +7,7 @@ import {
   BookOpen, Sparkles, Clock, Target, ChevronRight,
   Hash, Bookmark, TrendingUp, ArrowLeft,
 } from 'lucide-react';
-import { readingArticles, getTodayArticle, levelLabel, levelColor } from '@/data/reading-new';
+import { levelLabel, levelColor } from '@/data/reading-meta';
 import { db } from '@/lib/db';
 import type { Article, UserArticleProgress } from '@/types';
 
@@ -19,6 +19,8 @@ export default function ReadingPage() {
   const [filterTopic, setFilterTopic] = useState<string | null>(null);
   const [progress, setProgress] = useState<Map<string, UserArticleProgress>>(new Map());
   const [totalRead, setTotalRead] = useState(0);
+  const [articles, setArticles] = useState<Article[] | null>(null);
+  const [todayArticle, setTodayArticle] = useState<Article | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -30,17 +32,32 @@ export default function ReadingPage() {
         setTotalRead(all.filter((p) => p.status === 'completed').length);
       } catch {}
     })();
+
+    let cancelled = false;
+    import('@/data/reading-new').then((m) => {
+      if (!cancelled) {
+        setArticles(m.readingArticles);
+        setTodayArticle(m.getTodayArticle() ?? null);
+      }
+    });
+    return () => { cancelled = true; };
   }, []);
 
-  const todayArticle = getTodayArticle();
+  if (!articles) {
+    return (
+      <div className="flex items-center justify-center py-32">
+        <div className="w-8 h-8 border-2 border-[var(--mint-soft)] border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
 
-  let filtered = filterLevel === 'all' ? readingArticles : readingArticles.filter((a) => a.level === filterLevel);
+  let filtered = filterLevel === 'all' ? articles : articles.filter((a) => a.level === filterLevel);
   if (filterTopic) filtered = filtered.filter((a) => a.topic === filterTopic);
 
-  const uniqueTopics = [...new Set(readingArticles.map((a) => a.topic))];
+  const uniqueTopics = [...new Set(articles.map((a) => a.topic))];
 
   // Stats
-  const totalSentences = readingArticles.reduce((sum, a) => sum + a.sentences.length, 0);
+  const totalSentences = articles.reduce((sum, a) => sum + a.sentences.length, 0);
   const savedCount = [...progress.values()].reduce((sum, p) => sum + p.savedSentenceIds.length + p.savedWordIds.length, 0);
 
   return (
@@ -80,6 +97,7 @@ export default function ReadingPage() {
       )}
 
       {/* Today's reading */}
+      {todayArticle && (
       <div className="bg-gradient-to-br from-[var(--mint-soft)]/10 to-[var(--pink-primary)]/10 border-2 border-[var(--mint-soft)]/20 rounded-3xl p-6 space-y-4">
         <div className="flex items-center gap-2">
           <Sparkles size={20} className="text-[var(--mint-soft)]" />
@@ -111,6 +129,7 @@ export default function ReadingPage() {
           开始阅读
         </button>
       </div>
+      )}
 
       {/* Level filter */}
       <div className="flex gap-2 overflow-x-auto pb-1">
@@ -125,7 +144,7 @@ export default function ReadingPage() {
           全部
         </button>
         {levelOrder.map((level) => {
-          const count = readingArticles.filter((a) => a.level === level).length;
+          const count = articles.filter((a) => a.level === level).length;
           return (
             <button
               key={level}
@@ -225,7 +244,7 @@ export default function ReadingPage() {
           <div className="flex-1">
             <p className="text-sm font-bold text-[var(--text-primary)]">阅读能力进度</p>
             <p className="text-xs text-[var(--text-muted)]">
-              已读 {totalRead} 篇 · 收藏 {savedCount} 项 · {readingArticles.length} 篇待探索
+              已读 {totalRead} 篇 · 收藏 {savedCount} 项 · {articles.length} 篇待探索
             </p>
           </div>
           {progress.size > 0 && (
