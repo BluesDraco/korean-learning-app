@@ -1,14 +1,18 @@
 import type { ToriDay } from '@/types/tori-diary';
 import { day1 } from './days/day-1';
+import { day2 } from './days/day-2';
+import { day3 } from './days/day-3';
+import { day4 } from './days/day-4';
+import { day5 } from './days/day-5';
+import { day6 } from './days/day-6';
+import { day7 } from './days/day-7';
 
 /**
  * 30 天日记总入口
- * 当前已写：Day 1
- * 待写：Day 2 ~ Day 30
+ * 当前已写：Day 1 ~ Day 7 (Week 1 完整)
+ * 待写：Day 8 ~ Day 30
  */
-export const days: ToriDay[] = [
-  day1,
-];
+export const days: ToriDay[] = [day1, day2, day3, day4, day5, day6, day7];
 
 export const TOTAL_DAYS = 30;
 
