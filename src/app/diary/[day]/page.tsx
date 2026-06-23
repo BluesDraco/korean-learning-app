@@ -19,21 +19,21 @@ export default function DiaryDayPage({ params }: Props) {
 
   const dayNum = parseInt(dayStr, 10);
 
-  // 非管理员一律重定向回列表（在列表页弹"本周开放"）
+  // Day 1 开放给所有登录用户；其他天仅 admin
   useEffect(() => {
     if (loading) return;
     if (!user) return; // 未登录交给上层处理
-    if (user.role !== 'admin') {
+    if (user.role !== 'admin' && dayNum !== 1) {
       router.replace('/diary');
     }
-  }, [user, loading, router]);
+  }, [user, loading, router, dayNum]);
 
   if (Number.isNaN(dayNum) || dayNum < 1 || dayNum > 30) {
     notFound();
   }
 
-  // 加载中或非管理员 → 不渲染内容
-  if (loading || !user || user.role !== 'admin') {
+  // 加载中或非 admin 且非 Day 1 → 不渲染内容
+  if (loading || !user || (user.role !== 'admin' && dayNum !== 1)) {
     return (
       <div className="diary-root diary-page" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div className="diary-handwriting-zh" style={{ color: 'var(--diary-ink-soft)' }}>加载中…</div>

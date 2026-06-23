@@ -198,6 +198,7 @@ export function DiaryDayClient({ day }: Props) {
             <X size={18} strokeWidth={1.75} />
           </button>
 
+          {/* 桌面显示「DAY 01 · 标题」；手机隐藏靠 CSS（hero 已有 h1 不重复） */}
           <div className="diary-detail-topbar-title">
             <span className="diary-detail-topbar-day">DAY {String(day.day).padStart(2, '0')}</span>
             <span className="diary-detail-topbar-sep">·</span>
@@ -207,8 +208,8 @@ export function DiaryDayClient({ day }: Props) {
           <span className="diary-detail-topbar-mod">{MODULE_LABELS[currentModule]}</span>
         </div>
 
-        {/* 6 区进度条 */}
-        <div className="diary-detail-progress" role="tablist" aria-label="模块进度">
+        {/* 桌面进度条（手机隐藏，移到底部 footer-bar） */}
+        <div className="diary-detail-progress diary-detail-progress--desktop" role="tablist" aria-label="模块进度">
           {MODULE_ORDER.map((m) => {
             const idx = MODULE_ORDER.indexOf(m);
             const currentIdx = MODULE_ORDER.indexOf(currentModule);
@@ -236,6 +237,33 @@ export function DiaryDayClient({ day }: Props) {
           })}
         </div>
       </header>
+
+      {/* 手机底部固定细进度条 */}
+      <div className="diary-detail-progress-mobile" role="tablist" aria-label="模块进度">
+        {MODULE_ORDER.map((m) => {
+          const idx = MODULE_ORDER.indexOf(m);
+          const currentIdx = MODULE_ORDER.indexOf(currentModule);
+          const isDone = modulesDone.has(m) || idx < currentIdx;
+          const isCurrent = m === currentModule;
+          const canJump = isAdmin || isDone || idx <= currentIdx;
+          return (
+            <button
+              key={m}
+              role="tab"
+              aria-selected={isCurrent}
+              aria-label={MODULE_LABELS[m]}
+              className={[
+                'diary-detail-progress-mobile-seg',
+                isDone && 'is-done',
+                isCurrent && 'is-current',
+                !canJump && 'is-locked',
+              ].filter(Boolean).join(' ')}
+              onClick={() => canJump && handleProgressJump(m)}
+              disabled={!canJump}
+            />
+          );
+        })}
+      </div>
 
       {/* 章节色带 hero */}
       <section className="diary-detail-hero" data-roman={roman}>

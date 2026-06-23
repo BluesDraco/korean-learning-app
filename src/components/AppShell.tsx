@@ -80,6 +80,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   useEffect(() => { setMounted(true); }, []);
   const isAdmin = mounted && user?.role === 'admin';
 
+  // 全屏沉浸页（自带覆盖层），不显示移动顶部横幅 + 占位
+  const isFullscreenPage = pathname?.startsWith('/diary') ?? false;
+
   const navigate = useCallback((href: string) => {
     router.push(href);
   }, [router]);
@@ -88,12 +91,16 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     <>
       {/* ═══ Mobile ═══ */}
       <div className="block md:hidden">
-        <div className="fixed top-0 left-0 right-0 z-[60] bg-[var(--bg-card)] border-b border-[var(--border-color)] py-1.5 text-center pt-safe px-4">
-          <span className="text-[11px] font-bold tracking-wider text-[var(--pink-primary)]" style={{ fontFamily: "'KaiTi', 'STKaiti', cursive" }}>
-            服务器及用户数据库升级完毕
-          </span>
-        </div>
-        <div className="h-[36px] pt-safe" />
+        {!isFullscreenPage && (
+          <>
+            <div className="fixed top-0 left-0 right-0 z-[60] bg-[var(--bg-card)] border-b border-[var(--border-color)] py-1.5 text-center pt-safe px-4">
+              <span className="text-[11px] font-bold tracking-wider text-[var(--pink-primary)]" style={{ fontFamily: "'KaiTi', 'STKaiti', cursive" }}>
+                服务器及用户数据库升级完毕
+              </span>
+            </div>
+            <div className="h-[36px] pt-safe" />
+          </>
+        )}
         <main className="relative min-h-screen min-h-dvh mx-auto w-full max-w-screen-sm px-4 pt-3 overflow-x-hidden bg-[var(--bg-base)] pb-[calc(72px+env(safe-area-inset-bottom,0px))]">
           <FloatingDecorations />
           <div className="relative z-[1]">{children}</div>

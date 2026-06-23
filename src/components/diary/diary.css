@@ -1832,6 +1832,58 @@
   opacity: 0.7;
 }
 
+/* ── 手机底部细进度条 ── */
+.diary-detail-progress-mobile {
+  display: none;
+}
+@media (max-width: 767px) {
+  /* 桌面进度条隐藏 */
+  .diary-detail-progress--desktop { display: none; }
+
+  /* 手机隐藏 topbar 中间「DAY 01 · 标题」（hero 已有 h1，避免重复） */
+  .diary-detail-topbar-title { display: none; }
+
+  /* 底部细线进度条（fixed） */
+  .diary-detail-progress-mobile {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0 10px calc(env(safe-area-inset-bottom, 0px) + 6px);
+    padding-top: 6px;
+    background: linear-gradient(180deg, transparent 0%, var(--diary-paper, #fffaf3) 60%);
+    z-index: 50;
+    pointer-events: auto;
+  }
+  .diary-detail-progress-mobile-seg {
+    appearance: none;
+    border: 0;
+    background: var(--diary-line, #e0d4c4);
+    height: 3px;
+    border-radius: 2px;
+    padding: 0;
+    cursor: pointer;
+    transition: background 0.18s ease, opacity 0.18s ease;
+  }
+  .diary-detail-progress-mobile-seg.is-done {
+    background: var(--diary-d-tone-base, #c98aa0);
+  }
+  .diary-detail-progress-mobile-seg.is-current {
+    background: var(--diary-d-tone-strong, #a45f7a);
+    height: 4px;
+  }
+  .diary-detail-progress-mobile-seg.is-locked {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  /* 给页面底部留出进度条空间 */
+  .diary-detail-page { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 18px); }
+}
+
 .diary-detail-hero {
   position: relative;
   overflow: hidden;

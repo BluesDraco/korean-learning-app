@@ -55,7 +55,7 @@ export default function DiaryPage() {
 
   const handleDayClick = (day: number) => {
     if (isAdmin) { router.push(`/diary/${day}`); return; }
-    if (day > currentDay) return;
+    if (day === 1) { router.push('/diary/1'); return; }
     setShowSoonModal(true);
   };
 
@@ -134,7 +134,7 @@ export default function DiaryPage() {
         </div>
       </div>
 
-      {isAdmin ? (
+      {isAdmin || (!allCleared && currentDay === 1) ? (
         <Link
           href={allCleared ? '/diary/stickers' : `/diary/${currentDay}`}
           className="diary-v4-cta"
@@ -193,7 +193,7 @@ export default function DiaryPage() {
                   const dayData = ALL_DAYS.find((x) => x.day === d);
                   const dayTitle = dayData?.title ?? `Day ${d}`;
                   const daySub = dayData?.subtitle ?? '';
-                  const locked = !isAdmin && d > currentDay;
+                  const locked = !isAdmin && d !== 1;
                   const done = completedDays.has(d);
                   const current = d === currentDay && !done;
                   const checkpoint = isCheckpoint(d);
