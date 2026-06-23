@@ -2,7 +2,7 @@
 // 主角中文名：兔莉（Tori）— 不复用 src/types DiaryEntry（已被用户写日记功能占用）
 
 export type ToriModuleKind = 'opening' | 'words' | 'dialogue' | 'grammar' | 'output' | 'recap';
-export type ToriOutputKind = 'dictation' | 'record' | 'choice' | 'fill';
+export type ToriOutputKind = 'dictation' | 'record' | 'choice' | 'fill' | 'compose' | 'listen-choice' | 'zh-to-ko' | 'particle-error' | 'match-pair';
 export type ToriPhase = 'foundation' | 'expansion' | 'expression' | 'mastery';
 export type ToriPaletteHint = 'pink' | 'mint' | 'yellow' | 'cream' | 'gold' | 'peach' | 'purple';
 
@@ -57,18 +57,25 @@ export interface ToriGrammar {
   pitfall?: string;
 }
 
-/** 输出任务（默写/录音/选择/填空/组词） */
+/** 输出任务（默写/录音/选择/填空/组词/听力/中韩/助词/连连） */
 export interface ToriOutputTask {
   id: string;
   kind: ToriOutputKind;
-  prompt: string;
+  prompt?: string;
   zhHint?: string;
   answer?: string;
-  choices?: Array<{ text: string; correct: boolean }>;
+  /** 选择题通用（listen-choice / zh-to-ko / particle-error） */
+  choices?: Array<{ ko?: string; zh?: string; text?: string; correct: boolean }>;
   /** 组词题 · 候选词卡（含 2-3 个干扰词，已打乱） */
   tokens?: string[];
-  /** 组词题 · 正确顺序（必须严格匹配） */
+  /** 组词题 · 正确顺序 */
   composeAnswer?: string[];
+  /** 听力题 · TTS 朗读源 */
+  audioKo?: string;
+  /** 中→韩题 / 助词题 · 中文提示 */
+  zhPrompt?: string;
+  /** 连连看 · 4-5 对韩中词卡 */
+  pairs?: Array<{ ko: string; zh: string }>;
   successMsg?: string;
 }
 

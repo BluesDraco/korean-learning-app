@@ -280,6 +280,26 @@ export function DiaryDayClient({ day }: Props) {
               />
             )}
           </div>
+
+          {/* 底部导航：上一页 / 跳过 */}
+          <div className="diary-detail-nav">
+            <button
+              className="diary-detail-skip"
+              disabled={currentModule === 'opening'}
+              style={{ opacity: currentModule === 'opening' ? 0.35 : 1 }}
+              onClick={() => {
+                const idx = MODULE_ORDER.indexOf(currentModule);
+                if (idx > 0) setCurrentModule(MODULE_ORDER[idx - 1]);
+              }}
+            >
+              ← 上一页
+            </button>
+            {currentModule !== 'recap' && (
+              <button className="diary-detail-skip" onClick={() => advance(currentModule)}>
+                跳过 →
+              </button>
+            )}
+          </div>
         </article>
       </main>
 

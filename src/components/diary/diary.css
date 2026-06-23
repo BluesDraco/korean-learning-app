@@ -215,10 +215,11 @@
   color: var(--diary-ink-soft);
 }
 .diary-romaji {
-  font-family: var(--diary-font-en), serif;
+  font-family: -apple-system, 'Inter', 'Helvetica Neue', Arial, sans-serif;
   font-size: var(--diary-text-sm);
   color: var(--diary-ink-faint);
-  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.02em;
 }
 
 /* ── 10. 按钮 ── */
@@ -1749,6 +1750,37 @@
   flex-shrink: 0;
 }
 
+
+/* 底部导航栏 */
+.diary-detail-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--color-border-1);
+}
+@media (min-width: 768px) {
+  .diary-detail-nav { margin-top: 36px; padding-top: 24px; }
+}
+.diary-detail-skip {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-ink-3);
+  background: transparent;
+  border: 1px solid var(--color-border-1);
+  border-radius: var(--radius-pill);
+  padding: 4px 12px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all var(--dur-fast) var(--ease-out-quart);
+  letter-spacing: 0.04em;
+}
+.diary-detail-skip:hover {
+  color: var(--diary-d-tone-strong);
+  border-color: var(--diary-d-tone-base);
+}
+
 .diary-detail-progress {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -1918,6 +1950,9 @@
 }
 
 .diary-detail-card-eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   font-family: var(--diary-v4-italic);
   font-style: italic;
   font-size: 14px;
@@ -1930,6 +1965,7 @@
 }
 @media (min-width: 768px) {
   .diary-detail-card-eyebrow { font-size: 16px; margin-bottom: 28px; padding-bottom: 20px; }
+  .diary-detail-skip { font-size: 12px; padding: 5px 14px; }
 }
 
 @keyframes diary-detail-fade-in {
