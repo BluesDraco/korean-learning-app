@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { X } from 'lucide-react';
 import type { ToriDay, ToriModuleKind } from '@/types/tori-diary';
 import { db } from '@/lib/db';
 import { useAuth } from '@/components/AuthProvider';
@@ -25,14 +25,42 @@ const MODULE_LABELS: Record<ToriModuleKind, string> = {
   recap: '收尾',
 };
 
+const MODULE_EYEBROWS: Record<ToriModuleKind, string> = {
+  opening: 'opening · 日记开场',
+  words: 'vocabulary · 新词卡',
+  dialogue: 'dialogue · 场景对话',
+  grammar: 'grammar · 语法小卡',
+  output: 'practice · 输出练习',
+  recap: 'recap · 今日收尾',
+};
+
+type ChapterTone = 'pink' | 'mint' | 'purple' | 'gold';
+type ChapterRoman = 'i' | 'ii' | 'iii' | 'iv';
+
+function chapterTone(day: number): ChapterTone {
+  if (day <= 7) return 'pink';
+  if (day <= 14) return 'mint';
+  if (day <= 21) return 'purple';
+  return 'gold';
+}
+
+function chapterRoman(day: number): ChapterRoman {
+  if (day <= 7) return 'i';
+  if (day <= 14) return 'ii';
+  if (day <= 21) return 'iii';
+  return 'iv';
+}
+
 interface Props {
   day: ToriDay;
 }
 
 export function DiaryDayClient({ day }: Props) {
+  const router = useRouter();
   const { user } = useAuth();
   const [currentModule, setCurrentModule] = useState<ToriModuleKind>('opening');
   const [outputResults, setOutputResults] = useState<Array<{ taskId: string; correct: boolean; userText?: string }>>([]);
+  const [modulesDone, setModulesDone] = useState<Set<ToriModuleKind>>(new Set());
   const [carrotProgress, setCarrotProgress] = useState<{
     completedDays: number;
     checkpointsCleared: number;
@@ -41,6 +69,9 @@ export function DiaryDayClient({ day }: Props) {
   } | undefined>(undefined);
 
   const progressId = user ? `${user.id}-${day.day}` : '';
+  const tone = chapterTone(day.day);
+  const roman = chapterRoman(day.day);
+  const isAdmin = user?.role === 'admin';
 
   // 加载 / 创建进度记录
   useEffect(() => {
@@ -48,7 +79,9 @@ export function DiaryDayClient({ day }: Props) {
     (async () => {
       try {
         const existing = await db.toriProgress.get(progressId);
-        if (!existing) {
+        if (existing) {
+          setModulesDone(new Set(existing.modulesDone as ToriModuleKind[]));
+        } else {
           await db.toriProgress.put({
             id: progressId,
             userId: user.id,
@@ -99,13 +132,13 @@ export function DiaryDayClient({ day }: Props) {
       try {
         const existing = await db.toriProgress.get(progressId);
         if (existing) {
-          const modulesDone = Array.from(new Set([...existing.modulesDone, currentMod]));
-          const allDone = MODULE_ORDER.every((m) => modulesDone.includes(m));
+          const nextDone = Array.from(new Set([...existing.modulesDone, currentMod]));
+          const allDone = MODULE_ORDER.every((m) => nextDone.includes(m));
           await db.toriProgress.update(progressId, {
-            modulesDone,
+            modulesDone: nextDone,
             ...(allDone && !existing.completedAt ? { completedAt: Date.now(), output: outputResults } : {}),
           });
-          // 完成贴纸落库
+          setModulesDone(new Set(nextDone as ToriModuleKind[]));
           if (allDone) {
             const stickerId = `sticker-d${String(day.day).padStart(2, '0')}`;
             const ownedId = `${user.id}-${stickerId}`;
@@ -125,88 +158,123 @@ export function DiaryDayClient({ day }: Props) {
     const idx = MODULE_ORDER.indexOf(currentMod);
     if (idx < MODULE_ORDER.length - 1) {
       setCurrentModule(MODULE_ORDER[idx + 1]);
-      // 切到顶部
-      if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (typeof window !== 'undefined') {
+        const scroller = document.querySelector('.diary-detail-page');
+        if (scroller) scroller.scrollTo({ top: 0, behavior: 'smooth' });
+        else window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     }
   }, [progressId, user, outputResults, day.day]);
 
+  const handleProgressJump = (target: ToriModuleKind) => {
+    // admin 任意切；普通用户只能切已完成或当前
+    const targetIdx = MODULE_ORDER.indexOf(target);
+    const currentIdx = MODULE_ORDER.indexOf(currentModule);
+    if (isAdmin || targetIdx <= currentIdx || modulesDone.has(target)) {
+      setCurrentModule(target);
+    }
+  };
+
   return (
-    <div className="diary-root diary-page" style={{ minHeight: '100vh' }}>
-      <div style={{ maxWidth: 720, margin: '0 auto', padding: '16px 16px 40px' }}>
-        {/* Top bar */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18 }}>
-          <Link href="/diary" style={{ textDecoration: 'none' }}>
-            <button
-              style={{
-                display: 'inline-flex', alignItems: 'center', gap: 6,
-                fontSize: 'var(--diary-text-sm)', color: 'var(--diary-ink-soft)',
-                background: 'transparent', border: 'none', cursor: 'pointer', padding: 0,
-              }}
-            >
-              <ArrowLeft size={14} />
-              回到日记
-            </button>
-          </Link>
-          <span className="diary-handwriting-zh diary-text-soft" style={{ fontSize: 'var(--diary-text-xs)' }}>
-            DAY {day.day} · {MODULE_LABELS[currentModule]}
-          </span>
+    <div className={`diary-detail-page diary-detail-tone-${tone}`}>
+      {/* Sticky 顶栏 */}
+      <header className="diary-detail-topbar">
+        <div className="diary-detail-topbar-row">
+          <button
+            aria-label="关闭"
+            className="diary-detail-close"
+            onClick={() => router.back()}
+          >
+            <X size={18} strokeWidth={1.75} />
+          </button>
+
+          <div className="diary-detail-topbar-title">
+            <span className="diary-detail-topbar-day">DAY {String(day.day).padStart(2, '0')}</span>
+            <span className="diary-detail-topbar-sep">·</span>
+            <span className="diary-detail-topbar-name">{day.title}</span>
+          </div>
+
+          <span className="diary-detail-topbar-mod">{MODULE_LABELS[currentModule]}</span>
         </div>
 
-        {/* 进度点 */}
-        <div style={{ display: 'flex', gap: 6, marginBottom: 24, justifyContent: 'center' }}>
+        {/* 6 区进度条 */}
+        <div className="diary-detail-progress" role="tablist" aria-label="模块进度">
           {MODULE_ORDER.map((m) => {
-            const isPast = MODULE_ORDER.indexOf(m) < MODULE_ORDER.indexOf(currentModule);
+            const idx = MODULE_ORDER.indexOf(m);
+            const currentIdx = MODULE_ORDER.indexOf(currentModule);
+            const isDone = modulesDone.has(m) || idx < currentIdx;
             const isCurrent = m === currentModule;
+            const canJump = isAdmin || isDone || idx <= currentIdx;
             return (
-              <div
+              <button
                 key={m}
-                style={{
-                  width: isCurrent ? 24 : 8,
-                  height: 8,
-                  borderRadius: 999,
-                  background: isPast || isCurrent ? 'var(--diary-gold)' : 'var(--diary-line)',
-                  transition: 'all 0.3s',
-                }}
-              />
+                role="tab"
+                aria-selected={isCurrent}
+                aria-label={MODULE_LABELS[m]}
+                className={[
+                  'diary-detail-progress-seg',
+                  isDone && 'is-done',
+                  isCurrent && 'is-current',
+                  !canJump && 'is-locked',
+                ].filter(Boolean).join(' ')}
+                onClick={() => canJump && handleProgressJump(m)}
+                disabled={!canJump}
+              >
+                <span className="diary-detail-progress-fill" />
+              </button>
             );
           })}
         </div>
+      </header>
 
-        {/* 主体内容 */}
-        <div className="diary-card-paper" style={{ padding: '28px 26px', minHeight: 'auto' }}>
-          {/* washi tape 装饰 */}
-          <span className="diary-tape diary-tape-pink" style={{ top: -8, left: 32 }} />
-          <span className="diary-tape diary-tape-mint" style={{ top: -8, right: 48 }} />
-
-          {currentModule === 'opening' && (
-            <DiaryOpening day={day} onComplete={() => advance('opening')} />
-          )}
-          {currentModule === 'words' && (
-            <DiaryWords day={day} onComplete={() => advance('words')} />
-          )}
-          {currentModule === 'dialogue' && (
-            <DiaryDialogue day={day} onComplete={() => advance('dialogue')} />
-          )}
-          {currentModule === 'grammar' && (
-            <DiaryGrammar day={day} onComplete={() => advance('grammar')} />
-          )}
-          {currentModule === 'output' && (
-            <DiaryOutput
-              day={day}
-              onComplete={(results) => {
-                setOutputResults(results);
-                advance('output');
-              }}
-            />
-          )}
-          {currentModule === 'recap' && (
-            <DiaryRecap
-              day={day}
-              onComplete={() => advance('recap')}
-            />
+      {/* 章节色带 hero */}
+      <section className="diary-detail-hero" data-roman={roman}>
+        <div className="diary-detail-hero-inner">
+          <p className="diary-detail-hero-eyebrow">Day {day.day} of 30 · Chapter {roman}</p>
+          <h1 className="diary-detail-hero-title">{day.title}</h1>
+          {day.subtitle && (
+            <p className="diary-detail-hero-sub">{day.subtitle}</p>
           )}
         </div>
-      </div>
+      </section>
+
+      {/* 信纸主体卡片 */}
+      <main className="diary-detail-main">
+        <article className="diary-detail-card">
+          <div className="diary-detail-card-band" />
+          <div className="diary-detail-card-eyebrow">{MODULE_EYEBROWS[currentModule]}</div>
+
+          <div key={currentModule} className="diary-detail-fade-in diary-root">
+            {currentModule === 'opening' && (
+              <DiaryOpening day={day} onComplete={() => advance('opening')} />
+            )}
+            {currentModule === 'words' && (
+              <DiaryWords day={day} onComplete={() => advance('words')} />
+            )}
+            {currentModule === 'dialogue' && (
+              <DiaryDialogue day={day} onComplete={() => advance('dialogue')} />
+            )}
+            {currentModule === 'grammar' && (
+              <DiaryGrammar day={day} onComplete={() => advance('grammar')} />
+            )}
+            {currentModule === 'output' && (
+              <DiaryOutput
+                day={day}
+                onComplete={(results) => {
+                  setOutputResults(results);
+                  advance('output');
+                }}
+              />
+            )}
+            {currentModule === 'recap' && (
+              <DiaryRecap
+                day={day}
+                onComplete={() => advance('recap')}
+              />
+            )}
+          </div>
+        </article>
+      </main>
 
       {/* 悬浮的勇气胡萝卜助手 */}
       <CarrotHelper key={day.day} day={day} currentModule={currentModule} progress={carrotProgress} />

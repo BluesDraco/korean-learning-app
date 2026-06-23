@@ -1,9 +1,9 @@
 import type { ToriDay } from '@/types/tori-diary';
 
 /**
- * Day 3 · 仁川机场 · 짐 vs 집 翻车 · Minji 登场
+ * Day 3 · 仁爪机场 · 짐 vs 집 翻车 · Minji 登场
  *
- * 剧情：兔莉拖着爆炸的行李箱出仁川机场，行李太重抬不动。
+ * 剧情：兔莉拖着爆炸的行李箱出仁爪机场，行李太重抬不动。
  * 她想请旁边等出租车的水獭姐姐帮忙抬「행李」（韩语是 짐 jim），
  * 结果说成了「집」（jip = 家），变成"我的家太重了"。
  * 水獭愣住了一秒，没笑，只是把行李帮她抬上了出租车。
@@ -15,16 +15,16 @@ import type { ToriDay } from '@/types/tori-diary';
 export const day3: ToriDay = {
   day: 3,
   phase: 'foundation',
-  title: '仁川机场 · 짐 vs 집 翻车',
+  title: '仁爪机场 · 짐 vs 집 翻车',
   subtitle: '把"行李"说成了"家"',
   isCheckpoint: null,
   estimatedMin: 13,
 
   opening: {
     date: '9月 3日 인천공항',
-    weather: '韩国 仁川 · 多云',
+    weather: '韩国 仁爪 · 多云',
     toriPose: 'shy',
-    diaryText: `9月 3日，仁川机场出口。
+    diaryText: `9月 3日，仁爪机场出口。
 
 行李箱在落地传送带上转了三圈，
 我才认出那个被妈妈贴满胡萝卜贴纸的粉色箱子。
@@ -105,7 +105,7 @@ export const day3: ToriDay = {
   ],
 
   dialogue: {
-    scene: '仁川机场 · 出租车候车区',
+    scene: '仁爪机场 · 出租车候车区',
     setting: {
       time: '落地 30 分钟后',
       place: '机场出口',

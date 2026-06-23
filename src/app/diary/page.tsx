@@ -89,7 +89,7 @@ export default function DiaryPage() {
         </button>
         <div style={{ maxWidth: 480, margin: '0 auto', padding: '120px 24px 40px', textAlign: 'center' }}>
           <h1 className="diary-v4-h1" style={{ marginBottom: 16, textAlign: 'center' }}>
-            兔莉的<br />韩语日记<span className="diary-v4-h1-sm">·30天</span>
+            兔莉的<wbr /><span className="diary-v4-h1-br" />韩语日记
           </h1>
           <p style={{ fontFamily: 'var(--diary-v4-serif)', fontSize: 15, color: 'var(--color-ink-2)', marginBottom: 28, lineHeight: 1.85 }}>
             30 天，和兔莉一起从零学韩语。<br />登录后开始你的第 1 天。
@@ -105,38 +105,26 @@ export default function DiaryPage() {
     );
   }
 
-  const ritual = allCleared ? (
-    <span className="diary-v4-ritual-text">
-      你已完成 <strong>30 天</strong> 全部旅程 · <strong>毕业了</strong>
-    </span>
-  ) : (
-    <span className="diary-v4-ritual-text">
-      今天是第 <strong>{currentDay} 天</strong>，还剩 {remainDays} 天 · 已完成 <strong>{completedDays.size}/30</strong>
-    </span>
-  );
-
   const heroContent = (
     <>
       <p className="diary-v4-eyebrow">a story of 30 days</p>
       <p className="diary-v4-ko-title">토리의 한국어 일기</p>
-      <h1 className="diary-v4-h1">兔莉的<br />韩语日记<span className="diary-v4-h1-sm">·30天</span></h1>
-      <p className="diary-v4-lead">从中国家里到首尔动物城。<br />每天 15 分钟，跟兔莉一起。</p>
+      <h1 className="diary-v4-h1">兔莉的<wbr /><span className="diary-v4-h1-br" />韩语日记</h1>
 
-      {/* 桌面端独享的大插画位（手机端 CSS 隐藏） */}
-      <div className="diary-v4-illust diary-v4-illust-desktop">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/images/diary/tori-mirror-practice.jpg" alt="Tori 在镜子前练韩语" />
-        <span className="diary-v4-illust-tag">{allCleared ? '已毕业' : `Day ${currentDay} · ${currentDayTitle}`}</span>
+      <div className="diary-v4-lead-card">
+        <p className="diary-v4-lead">30 天，从中国家里到首尔动物城，<br />每天 15 分钟，跟兔莉一起零基础学习韩语。</p>
       </div>
 
-      <div className="diary-v4-ritual">
-        <span className="diary-v4-ritual-pulse" />
-        {ritual}
+      {/* 16:9 hero 横幅 */}
+      <div className="diary-v4-illust">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/images/diary/tori-bedroom-hero.png" alt="Tori 在卧室准备出发去首尔" />
+        <span className="diary-v4-illust-tag">{allCleared ? '已毕业' : `Day ${currentDay} · ${currentDayTitle}`}</span>
       </div>
 
       <div className="diary-v4-progress">
         <div className="diary-v4-progress-top">
-          <span className="diary-v4-progress-label">your progress</span>
+          <span className="diary-v4-progress-label">your progress · {remainDays > 0 ? `还剩 ${remainDays} 天` : '已完成'}</span>
           <span className="diary-v4-progress-value">
             {completedDays.size}<span className="diary-v4-progress-total">/{TOTAL_DAYS}</span>
           </span>

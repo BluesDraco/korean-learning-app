@@ -183,7 +183,7 @@ export const day2: ToriDay = {
   recap: {
     toriPose: 'proud',
     praise: '第一次对韩国人说出了韩语。토리, 진짜 잘했어요!',
-    preview: '明天就要落地仁川了。机场出口，会发生什么呢？我已经有点紧张了。',
+    preview: '明天就要落地仁爪了。机场出口，会发生什么呢？我已经有点紧张了。',
     stickerId: 'sticker-d02',
   },
 
