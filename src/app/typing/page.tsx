@@ -141,17 +141,17 @@ function TargetChars({ target, input }: { target: string; input: string }) {
 
         if (i < typed.length) {
           if (typed[i] === ch) {
-            charColor = '#3aafa9';
-            underColor = '#aee3d8';
+            charColor = 'var(--color-mint-strong)';
+            underColor = 'var(--color-mint-soft)';
             glow = '0 0 8px #aee3d870';
           } else {
             charColor = '#e04a6a';
-            underColor = '#ff7fa8';
+            underColor = 'var(--color-pink-base)';
             strikethrough = true;
           }
         } else if (i === typed.length) {
           charColor = '#241917';
-          underColor = '#ff7fa8';
+          underColor = 'var(--color-pink-base)';
           isCurrent = true;
         }
 
@@ -418,7 +418,7 @@ export default function TypingPage() {
             <p style={{ fontSize: 11, fontWeight: 700, color: '#89756e', margin: '0 0 12px', letterSpacing: '0.05em' }}>将要练习的单词</p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
               {previewWords.map((item, i) => (
-                <div key={i} style={{ background: '#fff0f5', borderRadius: 10, padding: '6px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+                <div key={i} style={{ background: 'var(--color-pink-soft)', borderRadius: 10, padding: '6px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
                   <span style={{ fontSize: 15, fontWeight: 700, color: '#241917', fontFamily: "'Malgun Gothic', sans-serif" }}>{item.korean}</span>
                   <span style={{ fontSize: 10, color: '#89756e' }}>{item.chinese}</span>
                 </div>
@@ -467,8 +467,8 @@ export default function TypingPage() {
     const resDisplay = `${Math.floor(resSec / 60)}:${String(resSec % 60).padStart(2, '0')}`;
     return (
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', gap: 20, padding: '20px' }}>
-        <div style={{ background: '#fff0f5', borderRadius: '50%', width: 80, height: 80, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Trophy size={36} style={{ color: '#ff7fa8' }} />
+        <div style={{ background: 'var(--color-pink-soft)', borderRadius: '50%', width: 80, height: 80, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Trophy size={36} style={{ color: 'var(--color-pink-base)' }} />
         </div>
         <div style={{ textAlign: 'center' }}>
           <p style={{ fontSize: 13, color: '#89756e', margin: '0 0 4px' }}>完成主题包</p>
@@ -482,8 +482,8 @@ export default function TypingPage() {
             </div>
           ))}
         </div>
-        <div style={{ background: '#eaf8f5', borderRadius: 14, padding: '10px 20px' }}>
-          <span style={{ fontSize: 13, color: '#3aafa9', fontWeight: 700 }}>+{resultData.xp} XP 已获得</span>
+        <div style={{ background: 'var(--color-mint-soft)', borderRadius: 14, padding: '10px 20px' }}>
+          <span style={{ fontSize: 13, color: 'var(--color-mint-strong)', fontWeight: 700 }}>+{resultData.xp} XP 已获得</span>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10, width: '100%', maxWidth: 340, marginTop: 8 }}>
           <button onClick={startPack} style={{ padding: '13px 0', borderRadius: 14, background: '#241917', color: '#fff', fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer' }}>
@@ -499,7 +499,7 @@ export default function TypingPage() {
 
   // ── Session ───────────────────────────────────────────────
   if (pageState === 'session' && current) {
-    const cardBorderColor = submitted ? (lastCorrect ? '#aee3d8' : '#ff7fa8') : '#eee0d8';
+    const cardBorderColor = submitted ? (lastCorrect ? 'var(--color-mint-soft)' : 'var(--color-pink-base)') : '#eee0d8';
     const cardBg = submitted ? (lastCorrect ? '#f0faf8' : '#fff5f7') : 'white';
     const cardShadow = submitted
       ? lastCorrect ? '0 4px 24px #aee3d840' : '0 4px 24px #ff7fa830'
@@ -519,7 +519,7 @@ export default function TypingPage() {
             {items.map((_, i) => (
               <div key={i} style={{
                 flex: 1, height: 8, borderRadius: 3,
-                background: i < index ? '#ff7fa8' : i === index ? '#ffb8cf' : '#eee0d8',
+                background: i < index ? 'var(--color-pink-base)' : i === index ? '#ffb8cf' : '#eee0d8',
                 boxShadow: i < index ? '0 0 5px #ff7fa840' : 'none',
                 animation: i === index ? 'pulse-block 1s infinite' : 'none',
               }} />
@@ -579,17 +579,17 @@ export default function TypingPage() {
             <TargetChars target={current.korean} input={input} />
             <button
               onClick={() => speakWord(current.korean, 0.85)}
-              style={{ flexShrink: 0, width: 42, height: 42, borderRadius: '50%', background: '#fff0f5', border: '1.5px solid #ffd6e5', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.15s' }}
+              style={{ flexShrink: 0, width: 42, height: 42, borderRadius: '50%', background: 'var(--color-pink-soft)', border: '1.5px solid #ffd6e5', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.15s' }}
             >
-              <Volume2 size={17} style={{ color: '#ff7fa8' }} />
+              <Volume2 size={17} style={{ color: 'var(--color-pink-base)' }} />
             </button>
           </div>
 
           {/* Type badge */}
           <span style={{
             fontSize: 11, fontWeight: 700, padding: '3px 10px', borderRadius: 20, alignSelf: 'flex-start',
-            color: current.type === 'word' ? '#ff7fa8' : '#3aafa9',
-            background: current.type === 'word' ? '#fff0f5' : '#eaf8f5',
+            color: current.type === 'word' ? 'var(--color-pink-base)' : 'var(--color-mint-strong)',
+            background: current.type === 'word' ? 'var(--color-pink-soft)' : 'var(--color-mint-soft)',
             border: `1px solid ${current.type === 'word' ? '#ffd6e5' : '#aee3d860'}`,
           }}>
             {current.type === 'word' ? '单词' : '句子'}
@@ -612,10 +612,10 @@ export default function TypingPage() {
                   width: '100%', padding: '15px 52px 15px 18px', borderRadius: 14,
                   border: '2px solid #eee0d8', fontSize: 20, color: '#241917',
                   outline: 'none', fontFamily: "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif",
-                  boxSizing: 'border-box', background: 'white', caretColor: '#ff7fa8',
+                  boxSizing: 'border-box', background: 'white', caretColor: 'var(--color-pink-base)',
                   transition: 'border-color 0.2s, box-shadow 0.2s',
                 }}
-                onFocus={e => { e.target.style.borderColor = '#ff7fa8'; e.target.style.boxShadow = '0 0 0 4px #ff7fa815'; }}
+                onFocus={e => { e.target.style.borderColor = 'var(--color-pink-base)'; e.target.style.boxShadow = '0 0 0 4px #ff7fa815'; }}
                 onBlur={e => { e.target.style.borderColor = '#eee0d8'; e.target.style.boxShadow = 'none'; }}
               />
               <span style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)', background: '#f5ede8', borderRadius: 6, padding: '3px 7px', fontSize: 10, color: '#89756e' }}>↵</span>
@@ -675,9 +675,9 @@ export default function TypingPage() {
       </div>
 
       {streak > 0 && (
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#fff0f5', borderRadius: 20, padding: '6px 14px', marginBottom: 20 }}>
-          <Flame size={14} style={{ color: '#ff7fa8' }} />
-          <span style={{ fontSize: 13, color: '#ff7fa8', fontWeight: 700 }}>连续练习 {streak} 天</span>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'var(--color-pink-soft)', borderRadius: 20, padding: '6px 14px', marginBottom: 20 }}>
+          <Flame size={14} style={{ color: 'var(--color-pink-base)' }} />
+          <span style={{ fontSize: 13, color: 'var(--color-pink-base)', fontWeight: 700 }}>连续练习 {streak} 天</span>
         </div>
       )}
 
@@ -698,15 +698,15 @@ export default function TypingPage() {
                     onClick={() => unlocked && openIntro(theme.id)}
                     style={{
                       flexShrink: 0, width: 140, padding: '14px 12px', borderRadius: 16,
-                      border: `1.5px solid ${progress ? '#aee3d8' : unlocked ? '#eee0d8' : '#eee0d8'}`,
-                      background: progress ? '#eaf8f5' : unlocked ? 'white' : '#f9f4f0',
+                      border: `1.5px solid ${progress ? 'var(--color-mint-soft)' : unlocked ? '#eee0d8' : '#eee0d8'}`,
+                      background: progress ? 'var(--color-mint-soft)' : unlocked ? 'white' : '#f9f4f0',
                       cursor: unlocked ? 'pointer' : 'not-allowed',
                       textAlign: 'left', position: 'relative', opacity: unlocked ? 1 : 0.6,
                       boxShadow: unlocked ? '0 2px 12px rgba(78,52,46,.06)' : 'none',
                     }}
                   >
                     {progress && (
-                      <div style={{ position: 'absolute', top: 8, right: 8, width: 18, height: 18, borderRadius: '50%', background: '#3aafa9', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <div style={{ position: 'absolute', top: 8, right: 8, width: 18, height: 18, borderRadius: '50%', background: 'var(--color-mint-strong)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <Check size={10} style={{ color: 'white' }} />
                       </div>
                     )}
@@ -719,7 +719,7 @@ export default function TypingPage() {
                     <p style={{ fontSize: 13, fontWeight: 700, color: '#241917', margin: '0 0 4px', lineHeight: 1.3 }}>{theme.name}</p>
                     <p style={{ fontSize: 11, color: '#89756e', margin: 0 }}>{wordCount}词 · {sentCount}句</p>
                     {progress && (
-                      <p style={{ fontSize: 11, color: '#3aafa9', margin: '4px 0 0', fontWeight: 600 }}>
+                      <p style={{ fontSize: 11, color: 'var(--color-mint-strong)', margin: '4px 0 0', fontWeight: 600 }}>
                         最佳 {progress.bestWpm} WPM
                       </p>
                     )}
@@ -766,13 +766,13 @@ export default function TypingPage() {
               onClick={openMySentences}
               style={{
                 flexShrink: 0, width: 140, padding: '14px 12px', borderRadius: 16,
-                border: '1.5px solid #aee3d8', background: '#eaf8f5', cursor: 'pointer',
+                border: '1.5px solid #aee3d8', background: 'var(--color-mint-soft)', cursor: 'pointer',
                 textAlign: 'left', boxShadow: '0 2px 12px rgba(78,52,46,.06)',
               }}
             >
               <div style={{ fontSize: 26, marginBottom: 6 }}>🔖</div>
               <p style={{ fontSize: 13, fontWeight: 700, color: '#241917', margin: '0 0 4px', lineHeight: 1.3 }}>我收藏的句子</p>
-              <p style={{ fontSize: 11, color: '#3aafa9', margin: 0, fontWeight: 600 }}>{mySentenceCount} 条句子</p>
+              <p style={{ fontSize: 11, color: 'var(--color-mint-strong)', margin: 0, fontWeight: 600 }}>{mySentenceCount} 条句子</p>
             </button>
           </div>
         </div>

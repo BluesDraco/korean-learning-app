@@ -34,15 +34,15 @@ interface RowCategory {
 }
 
 const gridCategories: GridCategory[] = [
-  { key: 'vowel',     title: '元音区分',   subtitle: 'ㅓ/ㅗ · ㅡ/ㅜ · ㅐ/ㅔ', icon: '🔊', items: vowelPairs,    accent: '#aee3d8' },
+  { key: 'vowel',     title: '元音区分',   subtitle: 'ㅓ/ㅗ · ㅡ/ㅜ · ㅐ/ㅔ', icon: '🔊', items: vowelPairs,    accent: 'var(--color-mint-soft)' },
   { key: 'consonant', title: '松/紧/送气', subtitle: 'ㄱ/ㅋ/ㄲ · ㄷ/ㅌ/ㄸ',   icon: '🎤', items: consonantPairs, accent: '#c4a8e8' },
   { key: 'syllable',  title: '音节练习',   subtitle: '基础 · 送气 · 紧音',     icon: '⚡', items: syllableDrills, accent: '#ffb896' },
-  { key: 'batchim',   title: '收音训练',   subtitle: 'ㄱ/ㄴ/ㄷ/ㄹ/ㅁ/ㅂ/ㅇ', icon: '🎧', items: batchimWords,   accent: '#ff7fa8' },
+  { key: 'batchim',   title: '收音训练',   subtitle: 'ㄱ/ㄴ/ㄷ/ㄹ/ㅁ/ㅂ/ㅇ', icon: '🎧', items: batchimWords,   accent: 'var(--color-pink-base)' },
 ];
 
 const rowCategories: RowCategory[] = [
-  { key: 'linking', title: '连音训练',   subtitle: '한국어 · 있어요 · 좋아요', items: linkingSounds, accent: '#aee3d8' },
-  { key: 'words',   title: '常用词发音', subtitle: '안녕하세요 · 감사합니다',   items: commonWords,   accent: '#ff7fa8' },
+  { key: 'linking', title: '连音训练',   subtitle: '한국어 · 있어요 · 좋아요', items: linkingSounds, accent: 'var(--color-mint-soft)' },
+  { key: 'words',   title: '常用词发音', subtitle: '안녕하세요 · 감사합니다',   items: commonWords,   accent: 'var(--color-pink-base)' },
   { key: 'phrases', title: '实用句跟读', subtitle: '场景化完整表达',            items: commonPhrases, accent: '#c4a8e8' },
 ];
 

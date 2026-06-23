@@ -196,7 +196,7 @@ export default function ShadowingClipPage() {
         }}>‹</button>
         <div style={{ flex: 1 }}>
           <div style={{ fontSize: 17, fontWeight: 800, color: C.ink }}>{clip.title}</div>
-          {'speaker' in clip && clip.speaker && <div style={{ fontSize: 13, color: '#f0799b', fontWeight: 700, marginTop: 1 }}>{clip.speaker}</div>}
+          {'speaker' in clip && clip.speaker && <div style={{ fontSize: 13, color: 'var(--color-pink-strong)', fontWeight: 700, marginTop: 1 }}>{clip.speaker}</div>}
           <div style={{ fontSize: 12, color: C.muted, fontWeight: 700, marginTop: 2 }}>
             {clip.durationLabel} · {clip.difficulty} · {totalSubs} 句
           </div>
@@ -251,7 +251,7 @@ export default function ShadowingClipPage() {
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', margin: '4px 2px 12px' }}>
         <h2 style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-.3px', color: C.ink }}>{'字幕跟读卡'}</h2>
-        <span style={{ fontSize: 12, color: '#f0799b', fontWeight: 700 }}>{totalSubs} {'句'}</span>
+        <span style={{ fontSize: 12, color: 'var(--color-pink-strong)', fontWeight: 700 }}>{totalSubs} {'句'}</span>
       </div>
 
       {subtitles.map((sub, i) => {
@@ -285,11 +285,11 @@ export default function ShadowingClipPage() {
                       <div style={{ color: C.rowLabel, fontSize: 11, fontWeight: 700, marginBottom: 6 }}>{'中文意思'}</div>
                       <div style={{ fontSize: 14, lineHeight: 1.58, color: C.zhText }}>{sub.chinese}</div>
                     </div>
-                    <button onClick={e => { e.stopPropagation(); playSegment(sub, true); }} style={{ height: 36, minWidth: 58, borderRadius: 999, fontSize: 12, fontWeight: 800, background: C.pinkSoft, color: '#f0799b', border: '1px solid rgba(255,127,168,.18)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '0 12px', whiteSpace: 'nowrap' }}>{'🐢'} {'慢速'}</button>
+                    <button onClick={e => { e.stopPropagation(); playSegment(sub, true); }} style={{ height: 36, minWidth: 58, borderRadius: 999, fontSize: 12, fontWeight: 800, background: C.pinkSoft, color: 'var(--color-pink-strong)', border: '1px solid rgba(255,127,168,.18)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '0 12px', whiteSpace: 'nowrap' }}>{'🐢'} {'慢速'}</button>
                   </div>
                 </> : <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 12, alignItems: 'start', padding: '12px 0', borderBottom: '1px solid rgba(239,224,217,.76)' }}>
                     <div />
-                    <button onClick={e => { e.stopPropagation(); playSegment(sub, true); }} style={{ height: 36, minWidth: 58, borderRadius: 999, fontSize: 12, fontWeight: 800, background: C.pinkSoft, color: '#f0799b', border: '1px solid rgba(255,127,168,.18)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '0 12px', whiteSpace: 'nowrap' }}>{'🐢'} {'慢速'}</button>
+                    <button onClick={e => { e.stopPropagation(); playSegment(sub, true); }} style={{ height: 36, minWidth: 58, borderRadius: 999, fontSize: 12, fontWeight: 800, background: C.pinkSoft, color: 'var(--color-pink-strong)', border: '1px solid rgba(255,127,168,.18)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '0 12px', whiteSpace: 'nowrap' }}>{'🐢'} {'慢速'}</button>
                   </div>}
 {sub.shadowingTip ? <div style={{ padding: '12px 0 0' }}>
                 <div style={{ color: C.rowLabel, fontSize: 11, fontWeight: 700, marginBottom: 6 }}>{'跟读提示'}</div>
@@ -343,7 +343,7 @@ export default function ShadowingClipPage() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
               <div>
                 <h2 style={{ fontSize: 26, fontWeight: 800, color: C.ink, margin: 0 }}>{wordModal.surface}</h2>
-                <div style={{ marginTop: 6, fontSize: 16, fontWeight: 800, color: '#f0799b' }}>{wordModal.meaning}</div>
+                <div style={{ marginTop: 6, fontSize: 16, fontWeight: 800, color: 'var(--color-pink-strong)' }}>{wordModal.meaning}</div>
                 <p style={{ color: C.muted, fontSize: 13, lineHeight: 1.58, marginTop: 6 }}>
                   {'원형'}: {wordModal.baseForm} &middot; {wordModal.partOfSpeech}
                 </p>

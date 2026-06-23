@@ -1,27 +1,36 @@
-export const LIGHT_C = {
-  ink: '#241917',
-  muted: '#89756e',
-  line: '#eee0d8',
-  pink: '#ff7fa8',
-  pinkSoft: '#fff0f5',
-  mint: '#aee3d8',
-  mintBg: '#eaf8f5',
-  bg: '#fffbf7',
-  card: '#fff',
-  black: '#201815',
+/**
+ * Legacy color shim — 保持 JS 对象 API 不破坏 11+ 页面的 import，
+ * 但所有色值改读 CSS 变量，自动接入全站 token 系统。
+ *
+ * 不要新增字段。需要新色板 → 直接用 var(--color-*)。
+ * 长期目标：每页改完后删除该 import，最后删此文件。
+ */
+export interface ThemeColors {
+  ink: string;
+  muted: string;
+  line: string;
+  pink: string;
+  pinkSoft: string;
+  mint: string;
+  mintBg: string;
+  bg: string;
+  card: string;
+  black: string;
+  [key: string]: string;
+}
+
+const TOKEN_C: ThemeColors = {
+  ink: 'var(--color-ink-1)',
+  muted: 'var(--color-ink-3)',
+  line: 'var(--color-border-1)',
+  pink: 'var(--color-pink-base)',
+  pinkSoft: 'var(--color-pink-soft)',
+  mint: 'var(--color-mint-soft)',
+  mintBg: 'var(--color-mint-soft)',
+  bg: 'var(--color-surface-1)',
+  card: 'var(--color-surface-2)',
+  black: 'var(--color-ink-1)',
 };
 
-export const DARK_C = {
-  ink: '#F0E8FF',
-  muted: '#B8A8C8',
-  line: '#3A3060',
-  pink: '#ff7fa8',
-  pinkSoft: '#2D2848',
-  mint: '#4A6058',
-  mintBg: '#1E3530',
-  bg: '#1E1B2E',
-  card: '#282440',
-  black: '#3A3060',
-};
-
-export type ThemeColors = typeof LIGHT_C;
+export const LIGHT_C = TOKEN_C;
+export const DARK_C = TOKEN_C;

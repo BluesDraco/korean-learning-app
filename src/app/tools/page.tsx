@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { BookOpen, FileText, MessageSquare, Keyboard, Sparkles } from 'lucide-react';
-import { PageHeader, Section, Card, Button } from '@/components/ui';
+import { PageHeader, Section, Card, Button, EntryCard } from '@/components/ui';
 import { DesktopToolsPage } from '@/components/desktop/DesktopToolsPage';
 
 const TOOLS = [
@@ -12,20 +12,6 @@ const TOOLS = [
   { label: 'AI 场景陪练', desc: '情景对话', href: '/ai/chat', Icon: MessageSquare, tone: 'mint' as const },
   { label: '韩文打字', desc: '键盘练习', href: '/typing', Icon: Keyboard, tone: 'peach' as const },
 ];
-
-const TONE_FG: Record<typeof TOOLS[number]['tone'], string> = {
-  pink:   'var(--color-pink-strong)',
-  purple: 'var(--color-purple-strong)',
-  mint:   'var(--color-mint-strong)',
-  peach:  'var(--color-peach-strong)',
-};
-
-const TONE_BG: Record<typeof TOOLS[number]['tone'], string> = {
-  pink:   'var(--color-pink-soft)',
-  purple: 'var(--color-purple-soft)',
-  mint:   'var(--color-mint-soft)',
-  peach:  'var(--color-peach-soft)',
-};
 
 export default function ToolsPage() {
   const [isDesktop, setIsDesktop] = useState(false);
@@ -82,32 +68,15 @@ export default function ToolsPage() {
       <Section title="全部工具" spacing="normal">
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
           {TOOLS.map(({ label, desc, href, Icon, tone }) => (
-            <Card
+            <EntryCard
               key={href}
-              as="a"
               href={href}
-              variant="default"
-              padding="md"
-              interactive
-            >
-              <div
-                style={{
-                  width: 40, height: 40, borderRadius: 'var(--radius-md)',
-                  background: TONE_BG[tone], color: TONE_FG[tone],
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  marginBottom: 10,
-                }}
-                aria-hidden
-              >
-                <Icon size={20} strokeWidth={1.75} />
-              </div>
-              <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>
-                {label}
-              </p>
-              <p style={{ fontSize: 12, color: 'var(--color-ink-3)', margin: '2px 0 0' }}>
-                {desc}
-              </p>
-            </Card>
+              icon={<Icon size={20} strokeWidth={1.75} />}
+              label={label}
+              detail={desc}
+              tone={tone}
+              layout="block"
+            />
           ))}
         </div>
       </Section>

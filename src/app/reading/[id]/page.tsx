@@ -304,7 +304,7 @@ export default function ArticleReaderPage() {
       {sentenceToast && (
         <div style={{ position: 'fixed', top: 60, left: '50%', transform: 'translateX(-50%)', background: '#201815', color: '#fff', borderRadius: 999, padding: '9px 20px', fontSize: 13, fontWeight: 700, zIndex: 300, whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: 8 }}>
           已收藏句子
-          <a href="/vocabulary?tab=sentences" style={{ color: '#aee3d8', fontSize: 12, fontWeight: 700, textDecoration: 'none' }}>查看 →</a>
+          <a href="/vocabulary?tab=sentences" style={{ color: 'var(--color-mint-soft)', fontSize: 12, fontWeight: 700, textDecoration: 'none' }}>查看 →</a>
         </div>
       )}
       {/* Top bar */}

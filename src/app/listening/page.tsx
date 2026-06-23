@@ -28,17 +28,17 @@ export default function ListeningPage() {
           }}>
             <div style={{
               width: 52, height: 52, borderRadius: 16, flexShrink: 0,
-              background: '#eaf8f5',
+              background: 'var(--color-mint-soft)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <Mic size={22} style={{ color: '#3aafa9' }} />
+              <Mic size={22} style={{ color: 'var(--color-mint-strong)' }} />
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
                 <span style={{ fontSize: 16, fontWeight: 800, color: '#241917' }}>听说练习</span>
                 <span style={{
-                  fontSize: 11, fontWeight: 700, color: '#3aafa9',
-                  background: '#eaf8f5', border: '1px solid rgba(58,175,169,0.2)',
+                  fontSize: 11, fontWeight: 700, color: 'var(--color-mint-strong)',
+                  background: 'var(--color-mint-soft)', border: '1px solid rgba(58,175,169,0.2)',
                   borderRadius: 99, padding: '2px 8px',
                 }}>可体验</span>
               </div>

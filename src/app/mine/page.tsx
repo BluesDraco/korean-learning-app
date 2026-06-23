@@ -15,7 +15,7 @@ import { useTheme } from '@/components/ThemeProvider';
 import { useLang } from '@/components/LangProvider';
 import { useIsDesktop } from '@/lib/useIsMobile';
 import { t } from '@/lib/i18n';
-import { PageHeader, Section, Card, Button } from '@/components/ui';
+import { PageHeader, Section, Card, Button, EntryCard } from '@/components/ui';
 
 interface MineStats {
   wordCount: number;
@@ -23,15 +23,6 @@ interface MineStats {
   articleCount: number;
   recordingCount: number;
 }
-
-const TONE_BG: Record<'pink' | 'mint' | 'peach' | 'purple', string> = {
-  pink: 'var(--color-pink-soft)', mint: 'var(--color-mint-soft)',
-  peach: 'var(--color-peach-soft)', purple: 'var(--color-purple-soft)',
-};
-const TONE_FG: Record<'pink' | 'mint' | 'peach' | 'purple', string> = {
-  pink: 'var(--color-pink-strong)', mint: 'var(--color-mint-strong)',
-  peach: 'var(--color-peach-strong)', purple: 'var(--color-purple-strong)',
-};
 
 export default function MinePage() {
   const { user, loading: authLoading } = useAuth();
@@ -129,24 +120,15 @@ export default function MinePage() {
         <Section title={t('mine.locked_section_title', lang)} spacing="normal">
           <div style={{ display: 'grid', gridTemplateColumns: isDesktop ? 'repeat(3, 1fr)' : '1fr', gap: 10 }}>
             {lockedItems.map((item) => (
-              <Card key={item.labelKey} variant="default" padding="md" style={{ opacity: 0.55 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <div
-                    style={{
-                      width: 40, height: 40, borderRadius: 'var(--radius-md)',
-                      background: TONE_BG[item.tone], color: TONE_FG[item.tone],
-                      display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                    }}
-                    aria-hidden
-                  >
-                    <item.Icon size={18} strokeWidth={1.75} />
-                  </div>
-                  <div style={{ minWidth: 0 }}>
-                    <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>{t(item.labelKey, lang)}</p>
-                    <p style={{ fontSize: 11, color: 'var(--color-ink-3)', margin: '2px 0 0' }}>{t(item.descKey, lang)}</p>
-                  </div>
-                </div>
-              </Card>
+              <EntryCard
+                key={item.labelKey}
+                icon={<item.Icon size={18} strokeWidth={1.75} />}
+                label={t(item.labelKey, lang)}
+                detail={t(item.descKey, lang)}
+                tone={item.tone}
+                layout="row"
+                disabled
+              />
             ))}
           </div>
         </Section>
@@ -214,22 +196,16 @@ export default function MinePage() {
         <Section key={section.titleKey} title={t(section.titleKey, lang)} spacing="normal">
           <div style={{ display: 'grid', gridTemplateColumns: isDesktop ? 'repeat(2, 1fr)' : '1fr', gap: 10 }}>
             {section.items.map((item) => (
-              <Card key={item.href} as="a" href={item.href} onClick={feedbackClick} variant="row" interactive>
-                <div
-                  style={{
-                    width: 40, height: 40, borderRadius: 'var(--radius-md)',
-                    background: TONE_BG[item.tone], color: TONE_FG[item.tone],
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                  }}
-                  aria-hidden
-                >
-                  <item.Icon size={18} strokeWidth={1.75} />
-                </div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>{t(item.labelKey, lang)}</p>
-                  <p style={{ fontSize: 11, color: 'var(--color-ink-3)', margin: '2px 0 0' }}>{t(item.descKey, lang)}</p>
-                </div>
-              </Card>
+              <EntryCard
+                key={item.href}
+                href={item.href}
+                onClick={feedbackClick}
+                icon={<item.Icon size={18} strokeWidth={1.75} />}
+                label={t(item.labelKey, lang)}
+                detail={t(item.descKey, lang)}
+                tone={item.tone}
+                layout="row"
+              />
             ))}
           </div>
         </Section>

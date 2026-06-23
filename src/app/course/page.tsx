@@ -9,10 +9,10 @@ import { thirtyDayCourse } from '@/data/thirtyDayCourse';
 import { ToriCardMascot } from '@/components/mobile/ToriCardMascot';
 
 const weeks = [
-  { label: '第一周', sub: '日常问候与自我介绍', days: [1, 2, 3, 4, 5, 6, 7], color: '#FF8FAB' },
-  { label: '第二周', sub: '日常生活', days: [8, 9, 10, 11, 12, 13, 14], color: '#A8D8D0' },
-  { label: '第三周', sub: '社交与表达', days: [15, 16, 17, 18, 19, 20, 21], color: '#C9B8E8' },
-  { label: '第四周', sub: '进阶日常 + 总测试', days: [22, 23, 24, 25, 26, 27, 28, 29, 30], color: '#FFE4A0' },
+  { label: '第一周', sub: '日常问候与自我介绍', days: [1, 2, 3, 4, 5, 6, 7], color: 'var(--color-pink-base)' },
+  { label: '第二周', sub: '日常生活', days: [8, 9, 10, 11, 12, 13, 14], color: 'var(--color-mint-base)' },
+  { label: '第三周', sub: '社交与表达', days: [15, 16, 17, 18, 19, 20, 21], color: 'var(--color-purple-base)' },
+  { label: '第四周', sub: '进阶日常 + 总测试', days: [22, 23, 24, 25, 26, 27, 28, 29, 30], color: 'var(--color-gold-base)' },
 ];
 
 export default function CoursePage() {

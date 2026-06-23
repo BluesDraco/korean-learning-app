@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowRight, Music2, Calendar, GraduationCap, Mic, Headphones, PenLine, Edit3 } from 'lucide-react';
-import { PageHeader, Section, Card, Button, Sheet } from '@/components/ui';
+import { PageHeader, Section, Button, Sheet, EntryCard } from '@/components/ui';
 import { DesktopLearningPage } from '@/components/desktop/DesktopLearningPage';
 
 interface LearningEntry {
@@ -59,70 +59,20 @@ export default function LearningPage() {
 
       <Section spacing="normal">
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          {ENTRIES.map((entry) => {
-            const inner = (
-              <div>
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
-                  <div
-                    style={{
-                      width: 44, height: 44, borderRadius: 'var(--radius-md)',
-                      background: TONE_BG[entry.tone], color: TONE_FG[entry.tone],
-                      display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                    }}
-                    aria-hidden
-                  >
-                    <entry.Icon size={20} strokeWidth={1.75} />
-                  </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 4 }}>
-                      <h3 style={{ fontSize: 15, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>
-                        {entry.label}
-                      </h3>
-                      <span
-                        style={{
-                          fontSize: 11, fontWeight: 700,
-                          color: entry.available ? TONE_FG[entry.tone] : 'var(--color-ink-4)',
-                          background: entry.available ? TONE_BG[entry.tone] : 'var(--color-surface-4)',
-                          padding: '3px 10px', borderRadius: 'var(--radius-pill)',
-                          flexShrink: 0, whiteSpace: 'nowrap',
-                        }}
-                      >
-                        {entry.available ? '可体验' : '即将推出'}
-                      </span>
-                    </div>
-                    <p style={{ fontSize: 13, color: 'var(--color-ink-3)', margin: 0, lineHeight: 1.5 }}>
-                      {entry.desc}
-                    </p>
-                    {entry.available && entry.progress !== undefined && (
-                      <div style={{ marginTop: 12, height: 6, borderRadius: 'var(--radius-pill)', background: 'var(--color-surface-4)', overflow: 'hidden' }}>
-                        <div
-                          style={{
-                            height: '100%', borderRadius: 'var(--radius-pill)',
-                            background: `linear-gradient(90deg, ${TONE_FG[entry.tone]}, var(--color-pink-base))`,
-                            width: `${entry.progress}%`,
-                            transition: 'width var(--dur-slow) var(--ease-soft)',
-                          }}
-                        />
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            );
-
-            if (entry.available && entry.href) {
-              return (
-                <Card key={entry.label} as="a" href={entry.href} variant="default" padding="md" interactive>
-                  {inner}
-                </Card>
-              );
-            }
-            return (
-              <Card key={entry.label} as="button" onClick={() => setModalEntry(entry)} variant="default" padding="md" interactive>
-                {inner}
-              </Card>
-            );
-          })}
+          {ENTRIES.map((entry) => (
+            <EntryCard
+              key={entry.label}
+              icon={<entry.Icon size={20} strokeWidth={1.75} />}
+              label={entry.label}
+              detail={entry.desc}
+              tone={entry.tone}
+              layout="row"
+              href={entry.available && entry.href ? entry.href : undefined}
+              onClick={entry.available && entry.href ? undefined : () => setModalEntry(entry)}
+              cta={entry.available ? '可体验' : '即将推出'}
+              progress={entry.available ? entry.progress : undefined}
+            />
+          ))}
         </div>
       </Section>
 

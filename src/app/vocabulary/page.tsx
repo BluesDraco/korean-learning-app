@@ -14,7 +14,7 @@ import { speakWord, speak } from '@/lib/tts';
 import { TappableText } from '@/components/TappableText';
 import { getEntry, getEntryByKorean } from '@/data/vocabulary/index';
 import { updateProfile } from '@/lib/gamification';
-import { PageHeader, Section, Card, Button } from '@/components/ui';
+import { PageHeader, Section, Card, Button, EntryCard } from '@/components/ui';
 import type { Word, WordBook, MasteryLevel, WordEntry } from '@/types';
 
 interface SavedSentence {
@@ -979,28 +979,15 @@ function VocabularyContent() {
 
       {/* Library entry */}
       <Section spacing="normal">
-        <Card as="a" href="/vocabulary/library" variant="row" interactive>
-          <div
-            style={{
-              width: 44, height: 44, borderRadius: 'var(--radius-md)',
-              background: 'var(--color-purple-soft)', color: 'var(--color-purple-strong)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-            }}
-            aria-hidden
-          >
-            <Library size={20} strokeWidth={1.75} />
-          </div>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>韩语词库</p>
-            <p style={{ fontSize: 11, color: 'var(--color-ink-3)', margin: '2px 0 0' }}>
-              主题词包 · 分级词表 · 延世教材 · 情景词典
-            </p>
-            <p style={{ fontSize: 10, color: 'var(--color-pink-strong)', margin: '4px 0 0', fontWeight: 600 }}>
-              本周持续补全中 ✦
-            </p>
-          </div>
-          <ChevronRight size={18} color="var(--color-ink-4)" />
-        </Card>
+        <EntryCard
+          href="/vocabulary/library"
+          icon={<Library size={20} strokeWidth={1.75} />}
+          label="韩语词库"
+          detail="主题词包 · 分级词表 · 延世教材 · 情景词典"
+          tone="purple"
+          layout="row"
+          cta="进入"
+        />
       </Section>
 
       {/* Word books */}

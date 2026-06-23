@@ -107,7 +107,7 @@ export default function TopikHistoryPage() {
         ) : (
           sessions.map(s => (
             <div key={s.id} style={{ background: C.card, borderRadius: 14, border: `1px solid ${C.line}`, padding: '12px 14px', display: 'flex', alignItems: 'center', gap: 12 }}>
-              <div style={{ width: 48, height: 48, borderRadius: 12, background: s.score >= 60 ? C.mintBg : C.pinkSoft, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, fontWeight: 900, color: s.score >= 60 ? '#2db89b' : C.pink, flexShrink: 0 }}>
+              <div style={{ width: 48, height: 48, borderRadius: 12, background: s.score >= 60 ? C.mintBg : C.pinkSoft, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, fontWeight: 900, color: s.score >= 60 ? 'var(--color-mint-strong)' : C.pink, flexShrink: 0 }}>
                 {s.score}
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>

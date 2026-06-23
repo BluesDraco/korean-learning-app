@@ -237,7 +237,7 @@ export default function TopikPage() {
                 <p style={{ fontSize: 11, fontWeight: 700, color: C.muted, marginTop: 6 }}>最近练习</p>
                 {recentSessions.map(s => (
                   <div key={s.id} style={{ background: C.card, borderRadius: 12, border: `1px solid ${C.line}`, padding: '12px 14px', display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <div style={{ width: 44, height: 44, borderRadius: 12, background: s.score >= 60 ? C.mintBg : C.pinkSoft, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, fontWeight: 900, color: s.score >= 60 ? '#2db89b' : C.pink, flexShrink: 0 }}>
+                    <div style={{ width: 44, height: 44, borderRadius: 12, background: s.score >= 60 ? C.mintBg : C.pinkSoft, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, fontWeight: 900, color: s.score >= 60 ? 'var(--color-mint-strong)' : C.pink, flexShrink: 0 }}>
                       {s.score}
                     </div>
                     <div style={{ flex: 1 }}>

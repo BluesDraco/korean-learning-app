@@ -3,51 +3,51 @@
    仅在 /diary 路由下使用。所有类名以 .diary- 开头，不污染全局
    ═══════════════════════════════════════════════════════════════ */
 
-/* ── 1. Token 体系 ── */
+/* ── 1. Token 体系（v2 升级 · 接入全站设计 token） ── */
 .diary-root {
-  /* 纸张 */
-  --diary-paper: #fcf7ec;
-  --diary-paper-deep: #f5edd9;
-  --diary-paper-edge: #efe5cb;
+  /* 纸张：用全站奶油底，色保持现有粉紫色系一致 */
+  --diary-paper: var(--color-surface-1);
+  --diary-paper-deep: var(--color-surface-2);
+  --diary-paper-edge: var(--color-surface-3);
 
-  /* 墨水（深棕做主文字，区别于全局黑灰）*/
-  --diary-ink: #3a2a1e;
-  --diary-ink-soft: #6b5544;
-  --diary-ink-faint: #b3a191;
+  /* 墨水：用全站 ink 系列 */
+  --diary-ink: var(--color-ink-1);
+  --diary-ink-soft: var(--color-ink-2);
+  --diary-ink-faint: var(--color-ink-3);
 
-  /* 烫金高亮 */
-  --diary-gold: #c8995b;
-  --diary-gold-soft: #e9d3a4;
-  --diary-gold-deep: #9b7a3e;
+  /* 烫金（接入全站 gold token） */
+  --diary-gold: var(--color-gold-base);
+  --diary-gold-soft: var(--color-gold-soft);
+  --diary-gold-deep: var(--color-gold-strong);
 
-  /* 三色 washi 胶带 */
-  --diary-tape-pink: #f6c9c0;
-  --diary-tape-mint: #c4e3d4;
+  /* 三色 washi 胶带（保留：作为"成就/仪式"装饰语义） */
+  --diary-tape-pink: var(--color-pink-soft);
+  --diary-tape-mint: var(--color-mint-soft);
   --diary-tape-yellow: #f6dc8c;
 
-  /* 红印章（盖章效果）*/
-  --diary-stamp-red: #c14e3a;
+  /* 红印章（盖章效果，保留品牌识别） */
+  --diary-stamp-red: var(--color-status-danger);
 
-  /* 线 / 阴影 */
-  --diary-line: rgba(58, 42, 30, 0.12);
-  --diary-line-strong: rgba(58, 42, 30, 0.28);
-  --diary-stitch: rgba(58, 42, 30, 0.32);
-  --diary-shadow-page: 0 14px 32px -18px rgba(58, 42, 30, 0.45);
-  --diary-shadow-sticker: 0 6px 14px -4px rgba(58, 42, 30, 0.22);
+  /* 线 / 阴影：接入全站 shadow（OKLCH 棕调） */
+  --diary-line: var(--color-border-1);
+  --diary-line-strong: var(--color-border-2);
+  --diary-stitch: var(--color-border-3);
+  --diary-shadow-page: var(--shadow-md);
+  --diary-shadow-sticker: var(--shadow-sm);
 
-  /* 字号 */
-  --diary-text-xs: 11px;
-  --diary-text-sm: 13px;
-  --diary-text-md: 15px;
-  --diary-text-lg: 18px;
-  --diary-text-xl: 22px;
-  --diary-text-2xl: 28px;
-  --diary-text-display: 36px;
+  /* 字号：接入全站字号 scale */
+  --diary-text-xs: var(--text-xs);
+  --diary-text-sm: var(--text-sm);
+  --diary-text-md: var(--text-base);
+  --diary-text-lg: var(--text-md);
+  --diary-text-xl: var(--text-lg);
+  --diary-text-2xl: var(--text-xl);
+  --diary-text-display: var(--text-display);
 
-  /* 圆角 */
-  --diary-r-sm: 6px;
-  --diary-r-md: 12px;
-  --diary-r-lg: 20px;
+  /* 圆角：接入全站 radius */
+  --diary-r-sm: var(--radius-sm);
+  --diary-r-md: var(--radius-md);
+  --diary-r-lg: var(--radius-xl);
 
   font-family: var(--diary-font-zh), 'KaiTi', 'STKaiti', 'Microsoft YaHei', serif;
   --diary-font-zh: 'Ma Shan Zheng', 'KaiTi', 'STKaiti', 'Microsoft YaHei', serif;

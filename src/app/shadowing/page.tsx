@@ -23,7 +23,7 @@ export default function ShadowingListPage() {
           <div style={{ fontSize: 17, fontWeight: 800, color: C.ink }}>{'影子跟读'}</div>
           <div style={{ fontSize: 12, color: C.muted, fontWeight: 700, marginTop: 2 }}>{'韩剧 / 综艺 / YouTube 片段'}</div>
         </div>
-        <div style={{ height: 30, padding: '0 11px', borderRadius: 999, background: C.pinkSoft, color: '#f0799b', fontSize: 11, fontWeight: 800, border: '1px solid rgba(255,127,168,.16)', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+        <div style={{ height: 30, padding: '0 11px', borderRadius: 999, background: C.pinkSoft, color: 'var(--color-pink-strong)', fontSize: 11, fontWeight: 800, border: '1px solid rgba(255,127,168,.16)', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
           {'核心功能'}
         </div>
       </div>
@@ -83,7 +83,7 @@ export default function ShadowingListPage() {
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <h3 style={{ fontSize: 15, fontWeight: 800, color: C.ink, margin: 0 }}>{clip.title}</h3>
-                {'speaker' in clip && clip.speaker && <div style={{ fontSize: 12, color: '#f0799b', fontWeight: 700, marginTop: 1 }}>{clip.speaker}</div>}
+                {'speaker' in clip && clip.speaker && <div style={{ fontSize: 12, color: 'var(--color-pink-strong)', fontWeight: 700, marginTop: 1 }}>{clip.speaker}</div>}
                 <p style={{ color: C.muted, fontSize: 12, lineHeight: 1.4, marginTop: 5 }}>{clip.description}</p>
                 <div style={{ display: 'flex', gap: 6, marginTop: 8, flexWrap: 'wrap' }}>
                   <span style={{ height: 22, padding: '0 8px', borderRadius: 999, background: C.cream, border: '1px solid ' + C.line, color: '#7a665f', fontSize: 10, fontWeight: 800, display: 'inline-flex', alignItems: 'center' }}>{clip.durationLabel}</span>

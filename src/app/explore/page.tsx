@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { BookImage, Lightbulb, Tv, Newspaper, ChevronRight } from 'lucide-react';
+import { BookImage, Lightbulb, Tv, Newspaper } from 'lucide-react';
 import Link from 'next/link';
-import { PageHeader, Section, Card, Button } from '@/components/ui';
+import { PageHeader, Section, Card, Button, EntryCard } from '@/components/ui';
 import { DesktopExplorePage } from '@/components/desktop/DesktopExplorePage';
 
 const FEED = [
@@ -16,15 +16,6 @@ const INTERESTS = [
   { Icon: Lightbulb, label: '韩国小知识', desc: '文化·美食·旅行', href: '/knowledge', tone: 'peach' as const },
   { Icon: Tv, label: '韩剧表达', desc: '经典台词学韩语', href: '/korea/drama', tone: 'purple' as const },
 ];
-
-const TONE_BG: Record<'pink' | 'mint' | 'peach' | 'purple', string> = {
-  pink: 'var(--color-pink-soft)', mint: 'var(--color-mint-soft)',
-  peach: 'var(--color-peach-soft)', purple: 'var(--color-purple-soft)',
-};
-const TONE_FG: Record<'pink' | 'mint' | 'peach' | 'purple', string> = {
-  pink: 'var(--color-pink-strong)', mint: 'var(--color-mint-strong)',
-  peach: 'var(--color-peach-strong)', purple: 'var(--color-purple-strong)',
-};
 
 export default function ExplorePage() {
   const [isDesktop, setIsDesktop] = useState(false);
@@ -80,27 +71,15 @@ export default function ExplorePage() {
       <Section title="今日推荐" spacing="normal">
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {FEED.map(({ label, desc, href, tone, Icon }) => (
-            <Card key={href} as="a" href={href} variant="row" interactive>
-              <div
-                style={{
-                  width: 40, height: 40, borderRadius: 'var(--radius-md)',
-                  background: TONE_BG[tone], color: TONE_FG[tone],
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                }}
-                aria-hidden
-              >
-                <Icon size={20} strokeWidth={1.75} />
-              </div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>
-                  {label}
-                </p>
-                <p style={{ fontSize: 12, color: 'var(--color-ink-3)', margin: '2px 0 0' }}>
-                  {desc}
-                </p>
-              </div>
-              <ChevronRight size={16} color="var(--color-ink-4)" aria-hidden />
-            </Card>
+            <EntryCard
+              key={href}
+              href={href}
+              icon={<Icon size={20} strokeWidth={1.75} />}
+              label={label}
+              detail={desc}
+              tone={tone}
+              layout="row"
+            />
           ))}
         </div>
       </Section>
@@ -109,25 +88,15 @@ export default function ExplorePage() {
       <Section title="按兴趣探索" spacing="normal">
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
           {INTERESTS.map(({ Icon, label, desc, href, tone }) => (
-            <Card key={href} as="a" href={href} variant="default" padding="md" interactive>
-              <div
-                style={{
-                  width: 40, height: 40, borderRadius: 'var(--radius-md)',
-                  background: TONE_BG[tone], color: TONE_FG[tone],
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  marginBottom: 10,
-                }}
-                aria-hidden
-              >
-                <Icon size={20} strokeWidth={1.75} />
-              </div>
-              <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>
-                {label}
-              </p>
-              <p style={{ fontSize: 12, color: 'var(--color-ink-3)', margin: '2px 0 0' }}>
-                {desc}
-              </p>
-            </Card>
+            <EntryCard
+              key={href}
+              href={href}
+              icon={<Icon size={20} strokeWidth={1.75} />}
+              label={label}
+              detail={desc}
+              tone={tone}
+              layout="block"
+            />
           ))}
         </div>
       </Section>

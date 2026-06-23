@@ -420,7 +420,7 @@ function ReviewContent() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] px-4 gap-5">
         <div className="w-20 h-20 rounded-full bg-[var(--bg-soft)] flex items-center justify-center">
-          <PenLine size={36} style={{ color: '#ff7fa8' }} />
+          <PenLine size={36} style={{ color: 'var(--color-pink-base)' }} />
         </div>
         <div className="text-center">
           <h2 className="text-xl font-black text-[var(--text-primary)]">{t('review.practice_prompt_title', lang)}</h2>
@@ -536,7 +536,7 @@ function ReviewContent() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <PenLine size={18} style={{ color: '#ff7fa8' }} />
+            <PenLine size={18} style={{ color: 'var(--color-pink-base)' }} />
             <span className="text-[17px] font-black text-[var(--text-primary)]">{t('review.spelling_phase_title', lang)}</span>
           </div>
           <span className="text-[11px] font-black text-[var(--text-muted)]">{spellingIdx + 1} / {spellingWords.length}</span>
@@ -552,12 +552,12 @@ function ReviewContent() {
         <div className="rounded-[32px] bg-[var(--bg-card)] border border-[var(--border-default)] p-6 flex flex-col items-center gap-4 flex-1"
           style={{ boxShadow: '0 20px 60px rgba(78,52,46,.14)' }}>
           <div className="rounded-[16px] px-4 py-2" style={{ background: 'var(--bg-soft)' }}>
-            <span className="text-sm font-bold" style={{ color: '#ff7fa8' }}>{sw.meaning}</span>
+            <span className="text-sm font-bold" style={{ color: 'var(--color-pink-base)' }}>{sw.meaning}</span>
           </div>
           <button
             onClick={() => speakWord(sw.front, 0.8)}
             className="w-16 h-16 rounded-full flex items-center justify-center border-none"
-            style={{ background: '#ff7fa8' }}
+            style={{ background: 'var(--color-pink-base)' }}
           >
             <Volume2 size={28} style={{ color: 'white' }} />
           </button>
@@ -607,7 +607,7 @@ function ReviewContent() {
                 <button
                   onClick={handleSkip}
                   className="w-full py-3 rounded-full text-sm font-black flex items-center justify-center gap-2"
-                  style={{ background: 'var(--bg-soft)', color: '#f0799b', border: 'none' }}
+                  style={{ background: 'var(--bg-soft)', color: 'var(--color-pink-strong)', border: 'none' }}
                 >
                   {t('review.spelling_skip_button', lang)} <ChevronRight size={16} />
                 </button>
@@ -688,7 +688,7 @@ function ReviewContent() {
       <div className="flex flex-col px-4 pt-4 pb-8 gap-4" style={{ minHeight: 'calc(100dvh - 60px)' }}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Shuffle size={18} style={{ color: '#ff7fa8' }} />
+            <Shuffle size={18} style={{ color: 'var(--color-pink-base)' }} />
             <span className="text-[17px] font-black text-[var(--text-primary)]">{t('review.sentence_phase_title', lang)}</span>
           </div>
           <span className="text-[11px] font-black text-[var(--text-muted)]">{sentenceIdx + 1} / {sentenceWords.length}</span>
@@ -720,7 +720,7 @@ function ReviewContent() {
               style={{ background: showHint ? 'var(--bg-muted)' : 'var(--bg-muted)', border: 'none' }}
               title={showHint ? t('review.sentence_hide_hint_title', lang) : t('review.sentence_show_hint_title', lang)}
             >
-              {showHint ? <Eye size={15} style={{ color: '#3aafa9' }} /> : <EyeOff size={15} style={{ color: '#c9b8b0' }} />}
+              {showHint ? <Eye size={15} style={{ color: 'var(--color-mint-strong)' }} /> : <EyeOff size={15} style={{ color: '#c9b8b0' }} />}
             </button>
           </div>
 
@@ -735,14 +735,14 @@ function ReviewContent() {
 
           {sentenceLoading ? (
             <div className="flex items-center justify-center py-8">
-              <Loader2 size={24} className="animate-spin" style={{ color: '#ff7fa8' }} />
+              <Loader2 size={24} className="animate-spin" style={{ color: 'var(--color-pink-base)' }} />
               <span className="ml-2 text-sm text-[var(--text-muted)]">{t('review.sentence_generating_blocks', lang)}</span>
             </div>
           ) : (
             <>
               {/* Answer track */}
               <div className="min-h-[48px] rounded-2xl border-2 border-dashed px-3 py-2 flex flex-wrap gap-2 items-center"
-                style={{ borderColor: sentenceChecked ? (sentenceResult?.isCorrect ? '#aee3d8' : '#f0799b') : 'var(--border-default)' }}>
+                style={{ borderColor: sentenceChecked ? (sentenceResult?.isCorrect ? 'var(--color-mint-soft)' : 'var(--color-pink-strong)') : 'var(--border-default)' }}>
                 {sentenceAnswers.length === 0 ? (
                   <span className="text-[13px]" style={{ color: '#c9b8b0' }}>{t('review.sentence_blocks_placeholder', lang)}</span>
                 ) : (
@@ -772,8 +772,8 @@ function ReviewContent() {
                     className="px-3 py-2 rounded-full text-sm font-bold transition-all"
                     style={{
                       background: sentenceUsed.has(i) ? 'var(--bg-muted)' : 'var(--bg-soft)',
-                      color: sentenceUsed.has(i) ? '#c9b8b0' : '#f0799b',
-                      border: `1px solid ${sentenceUsed.has(i) ? 'var(--border-default)' : '#ffd0e0'}`,
+                      color: sentenceUsed.has(i) ? '#c9b8b0' : 'var(--color-pink-strong)',
+                      border: `1px solid ${sentenceUsed.has(i) ? 'var(--border-default)' : 'var(--color-pink-soft)'}`,
                       cursor: sentenceUsed.has(i) ? 'default' : 'pointer',
                       opacity: sentenceUsed.has(i) ? 0.4 : 1,
                     }}>
@@ -785,10 +785,10 @@ function ReviewContent() {
               {/* Result */}
               {sentenceChecked && sentenceResult && (
                 <div className="rounded-2xl p-4 space-y-2"
-                  style={{ background: sentenceResult.isCorrect ? 'var(--bg-muted)' : 'var(--bg-soft)', border: `1px solid ${sentenceResult.isCorrect ? '#aee3d8' : '#ffd0e0'}` }}>
+                  style={{ background: sentenceResult.isCorrect ? 'var(--bg-muted)' : 'var(--bg-soft)', border: `1px solid ${sentenceResult.isCorrect ? 'var(--color-mint-soft)' : 'var(--color-pink-soft)'}` }}>
                   <div className="flex items-center gap-2">
                     <span className="text-lg">{sentenceResult.isCorrect ? '✅' : '❌'}</span>
-                    <span className="text-sm font-black" style={{ color: sentenceResult.isCorrect ? '#3aafa9' : '#f0799b' }}>
+                    <span className="text-sm font-black" style={{ color: sentenceResult.isCorrect ? 'var(--color-mint-strong)' : 'var(--color-pink-strong)' }}>
                       {sentenceResult.isCorrect ? t('review.sentence_correct_label', lang) : t('review.sentence_needs_improvement_label', lang)}
                     </span>
                     <span className="text-xs ml-auto" style={{ color: 'var(--text-muted)' }}>{t('review.sentence_score', lang).replace('{n}', String(sentenceResult.score))}</span>
@@ -797,7 +797,7 @@ function ReviewContent() {
                     <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>{sentenceResult.explanation}</p>
                   )}
                   {sentenceResult.betterWay && (
-                    <p className="text-xs font-bold" style={{ color: '#3aafa9' }}>{t('review.sentence_better_way_prefix', lang)}{sentenceResult.betterWay}</p>
+                    <p className="text-xs font-bold" style={{ color: 'var(--color-mint-strong)' }}>{t('review.sentence_better_way_prefix', lang)}{sentenceResult.betterWay}</p>
                   )}
                 </div>
               )}
@@ -841,7 +841,7 @@ function ReviewContent() {
           <h2 className="text-xl font-black text-[var(--text-primary)]">{t('review.complete_title', lang)}</h2>
           <p className="text-sm text-[var(--text-muted)] mt-1">{t('review.complete_subtitle', lang)}</p>
           {spellingWords.length > 0 && (
-            <p className="text-sm mt-2 font-bold" style={{ color: spellingCorrectCount === spellingWords.length ? '#3aafa9' : '#89756e' }}>
+            <p className="text-sm mt-2 font-bold" style={{ color: spellingCorrectCount === spellingWords.length ? 'var(--color-mint-strong)' : '#89756e' }}>
               {t('review.complete_spelling_result', lang).replace('{correct}', String(spellingCorrectCount)).replace('{total}', String(spellingWords.length))}
             </p>
           )}
@@ -945,7 +945,7 @@ function ReviewContent() {
             <div className="flex-1 h-[4px] rounded-full bg-[var(--border-default)] overflow-hidden">
               <div
                 className="h-full rounded-full transition-all duration-500"
-                style={{ width: `${goalPct}%`, background: '#ff7fa8' }}
+                style={{ width: `${goalPct}%`, background: 'var(--color-pink-base)' }}
               />
             </div>
             <span className="text-[11px] font-black shrink-0" style={{ color: goalPct >= 100 ? '#4e746d' : '#a08f87' }}>
@@ -999,7 +999,7 @@ function ReviewContent() {
                 <button
                   onClick={() => setExampleExpanded(e => !e)}
                   className="w-full flex items-center justify-between px-4 py-2.5 text-left"
-                  style={{ background: 'var(--bg-muted)', color: '#3aafa9' }}
+                  style={{ background: 'var(--bg-muted)', color: 'var(--color-mint-strong)' }}
                 >
                   <span className="text-[12px] font-black">{t('review.example_section_label', lang)}</span>
                   <ChevronRight size={14} style={{ transform: exampleExpanded ? 'rotate(90deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
@@ -1014,7 +1014,7 @@ function ReviewContent() {
                       <button
                         onClick={() => speak(exKo, 0.85).catch(() => {})}
                         className="w-7 h-7 rounded-full flex items-center justify-center shrink-0 mt-0.5"
-                        style={{ background: '#aee3d8', border: 'none' }}
+                        style={{ background: 'var(--color-mint-soft)', border: 'none' }}
                       >
                         <Volume2 size={13} style={{ color: '#2d7a74' }} />
                       </button>
@@ -1053,7 +1053,7 @@ function ReviewContent() {
           <button
             onClick={() => handleRate('forgot')}
             className="min-h-[56px] rounded-[20px] flex flex-col items-center justify-center gap-1 text-[12px] font-black border"
-            style={{ background: 'var(--bg-soft)', color: '#f0799b', borderColor: 'rgba(255,127,168,.18)' }}
+            style={{ background: 'var(--bg-soft)', color: 'var(--color-pink-strong)', borderColor: 'rgba(255,127,168,.18)' }}
           >
             <b className="text-[15px]">{t('review.rating_forgot', lang)}</b>
             <span>{t('review.rating_forgot_sub', lang)}</span>

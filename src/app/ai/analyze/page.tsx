@@ -634,7 +634,7 @@ export default function AnalyzePage() {
           height: 30, padding: '0 10px', borderRadius: 999,
           border: '1px solid ' + (isActive ? 'rgba(255,127,168,.4)' : C.line),
           background: isActive ? C.pinkSoft : '#fff',
-          color: isActive ? '#f0799b' : '#5a4640',
+          color: isActive ? 'var(--color-pink-strong)' : '#5a4640',
           fontSize: 11, fontWeight: 800, cursor: 'pointer', flexShrink: 0,
         }}
       >
@@ -667,7 +667,7 @@ export default function AnalyzePage() {
         <button onClick={handleCopy} style={{ height: 38, borderRadius: 999, border: '1px solid ' + C.line, background: C.cream, color: '#5a4640', fontSize: 12, fontWeight: 800, cursor: 'pointer' }}>{t('analyze.btn_copy', lang)}</button>
         <button onClick={handleSaveSentence} style={{ height: 38, borderRadius: 999, border: '1px solid ' + C.line, background: savedSentences.has(result?.original || '') ? C.mintBg : '#fff', color: savedSentences.has(result?.original || '') ? C.mintText : '#5a4640', fontSize: 12, fontWeight: 800, cursor: 'pointer' }}>{savedSentences.has(result?.original || '') ? t('analyze.btn_saved_sentence', lang) : t('analyze.btn_save_sentence', lang)}</button>
         {canSpeak && (
-          <button onClick={() => { if (speakText) handleSpeak(speakText); }} style={{ height: 38, borderRadius: 999, border: '1px solid ' + C.line, background: (speakingText === result?.original || speakingText === result?.fullTranslation) ? C.pinkSoft : '#fff', color: (speakingText === result?.original || speakingText === result?.fullTranslation) ? '#f0799b' : '#5a4640', fontSize: 12, fontWeight: 800, cursor: 'pointer' }}>
+          <button onClick={() => { if (speakText) handleSpeak(speakText); }} style={{ height: 38, borderRadius: 999, border: '1px solid ' + C.line, background: (speakingText === result?.original || speakingText === result?.fullTranslation) ? C.pinkSoft : '#fff', color: (speakingText === result?.original || speakingText === result?.fullTranslation) ? 'var(--color-pink-strong)' : '#5a4640', fontSize: 12, fontWeight: 800, cursor: 'pointer' }}>
             {(speakingText === result?.original || speakingText === result?.fullTranslation) ? t('analyze.btn_speak_stop', lang) : (isChinese ? t('analyze.speak_korean', lang) : t('analyze.speak_original', lang))}
           </button>
         )}
@@ -688,7 +688,7 @@ export default function AnalyzePage() {
           return (
             <div key={d.label} style={{ borderRadius: 20, padding: '10px 6px', textAlign: 'center', background: isActive ? C.pinkSoft : '#fff', border: '1px solid ' + (isActive ? 'rgba(255,127,168,.28)' : C.line), boxShadow: C.shadow }}>
               <strong style={{ display: 'block', fontSize: 12 }}>{d.label}</strong>
-              <span style={{ display: 'block', marginTop: 4, color: isActive ? '#f0799b' : C.muted, fontSize: 10, fontWeight: 900 }}>{d.desc}</span>
+              <span style={{ display: 'block', marginTop: 4, color: isActive ? 'var(--color-pink-strong)' : C.muted, fontSize: 10, fontWeight: 900 }}>{d.desc}</span>
             </div>
           );
         })}
@@ -706,7 +706,7 @@ export default function AnalyzePage() {
       <>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', margin: '22px 2px 12px' }}>
           <h2 style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-.3px', color: C.ink, margin: 0 }}>{t('analyze.mode_explain_title', lang)}</h2>
-          <span style={{ fontSize: 12, color: '#f0799b', fontWeight: 700 }}>{t('analyze.mode_explain_depth', lang)}</span>
+          <span style={{ fontSize: 12, color: 'var(--color-pink-strong)', fontWeight: 700 }}>{t('analyze.mode_explain_depth', lang)}</span>
         </div>
         {items.map(item => (
           <div key={item.title} style={{ borderRadius: 26, padding: 14, background: C.cream, border: '1px solid ' + C.line, boxShadow: '0 10px 26px rgba(78,52,46,.06)', marginBottom: 12 }}>
@@ -751,7 +751,7 @@ export default function AnalyzePage() {
       {toast && (
         <div style={{ position: 'fixed', top: 60, left: '50%', transform: 'translateX(-50%)', background: C.black, color: '#fff', borderRadius: 999, padding: '9px 20px', fontSize: 13, fontWeight: 700, zIndex: 300, whiteSpace: 'nowrap', boxShadow: C.strong, display: 'flex', alignItems: 'center', gap: 8 }}>
           {toast.msg}
-          {toast.href && <a href={toast.href} style={{ color: '#aee3d8', fontSize: 12, fontWeight: 700, textDecoration: 'none' }}>{t('analyze.view_arrow', lang)}</a>}
+          {toast.href && <a href={toast.href} style={{ color: 'var(--color-mint-soft)', fontSize: 12, fontWeight: 700, textDecoration: 'none' }}>{t('analyze.view_arrow', lang)}</a>}
         </div>
       )}
 
@@ -767,7 +767,7 @@ export default function AnalyzePage() {
           <div style={{ fontSize: 17, fontWeight: 800, color: C.ink }}>{t('analyze.page_title', lang)}</div>
           <div style={{ fontSize: 12, color: C.muted, fontWeight: 700, marginTop: 2 }}>{t('analyze.page_subtitle', lang)}</div>
         </div>
-        <div style={{ height: 30, padding: '0 11px', borderRadius: 999, background: C.pinkSoft, color: '#f0799b', fontSize: 11, fontWeight: 800, border: '1px solid rgba(255,127,168,.16)', display: 'flex', alignItems: 'center', flexShrink: 0 }}>{t('analyze.badge_official', lang)}</div>
+        <div style={{ height: 30, padding: '0 11px', borderRadius: 999, background: C.pinkSoft, color: 'var(--color-pink-strong)', fontSize: 11, fontWeight: 800, border: '1px solid rgba(255,127,168,.16)', display: 'flex', alignItems: 'center', flexShrink: 0 }}>{t('analyze.badge_official', lang)}</div>
       </div>
 
       {!isLoggedIn && (
@@ -782,7 +782,7 @@ export default function AnalyzePage() {
 
       {/* Hero */}
       <div style={{ borderRadius: 32, padding: 20, background: 'radial-gradient(circle at 88% 78%, rgba(255,255,255,.58), transparent 24%), linear-gradient(135deg, #fff2f7, #fffdf8 48%, #eaf8f5)', boxShadow: C.strong, border: '1px solid rgba(255,255,255,.92)', marginBottom: 14, overflow: 'hidden', position: 'relative', minHeight: 180 }}>
-        <div style={{ height: 34, padding: '0 13px', borderRadius: 999, background: 'rgba(255,255,255,.72)', color: '#f0799b', fontWeight: 800, fontSize: 12, border: '1px solid rgba(255,127,168,.14)', display: 'inline-flex', alignItems: 'center' }}>Translate & Break Down</div>
+        <div style={{ height: 34, padding: '0 13px', borderRadius: 999, background: 'rgba(255,255,255,.72)', color: 'var(--color-pink-strong)', fontWeight: 800, fontSize: 12, border: '1px solid rgba(255,127,168,.14)', display: 'inline-flex', alignItems: 'center' }}>Translate & Break Down</div>
         <h1 style={{ margin: '14px 0 0', maxWidth: 270, fontSize: 28, lineHeight: 1.12, letterSpacing: '-.8px', fontWeight: 800 }}>{t('analyze.hero_title', lang)}</h1>
         <p style={{ margin: '10px 0 0', maxWidth: 270, fontSize: 13, lineHeight: 1.55, color: '#7f6b64' }}>{t('analyze.hero_desc', lang)}</p>
         <div style={{ position: 'absolute', right: 10, bottom: 0, width: 120, height: 142, pointerEvents: 'none' }}>
@@ -866,7 +866,7 @@ export default function AnalyzePage() {
             )}
             {isDesktop && analyzing && (
               <div style={{ borderRadius: 28, border: '1px solid ' + C.line, padding: '48px 24px', textAlign: 'center', color: C.muted }}>
-                <div style={{ width: 28, height: 28, border: '3px solid rgba(255,127,168,.3)', borderTopColor: '#ff7fa8', borderRadius: '50%', animation: 'spin 0.7s linear infinite', margin: '0 auto 12px' }} />
+                <div style={{ width: 28, height: 28, border: '3px solid rgba(255,127,168,.3)', borderTopColor: 'var(--color-pink-base)', borderRadius: '50%', animation: 'spin 0.7s linear infinite', margin: '0 auto 12px' }} />
                 <p style={{ fontSize: 13, fontWeight: 700, margin: 0 }}>{t('analyze.btn_analyzing', lang)}</p>
               </div>
             )}
@@ -904,7 +904,7 @@ export default function AnalyzePage() {
         <>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', margin: '4px 2px 12px' }}>
             <h2 style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-.3px', color: C.ink, margin: 0 }}>{t('analyze.result_title', lang)}</h2>
-            <span style={{ fontSize: 12, color: '#f0799b', fontWeight: 700 }}>
+            <span style={{ fontSize: 12, color: 'var(--color-pink-strong)', fontWeight: 700 }}>
             {mode === 'deep' && result && result._degraded
                 ? t('analyze.result_mode_degraded', lang)
                 : [t('analyze.mode_translate', lang), t('analyze.mode_learn', lang), t('analyze.mode_deep', lang)][['translate', 'learn', 'deep'].indexOf(mode)]}
@@ -956,7 +956,7 @@ export default function AnalyzePage() {
             <>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', margin: '4px 2px 12px' }}>
                 <h2 style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-.3px', color: C.ink, margin: 0 }}>{t('analyze.breakdown_title', lang)}</h2>
-                <span style={{ fontSize: 12, color: '#f0799b', fontWeight: 700 }}>{t('analyze.breakdown_saveable', lang)}</span>
+                <span style={{ fontSize: 12, color: 'var(--color-pink-strong)', fontWeight: 700 }}>{t('analyze.breakdown_saveable', lang)}</span>
               </div>
               <div style={{ borderRadius: 26, padding: 15, background: C.cream, border: '1px solid ' + C.line, boxShadow: C.shadow, marginBottom: 12 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'center', marginBottom: 12 }}>
@@ -982,7 +982,7 @@ export default function AnalyzePage() {
                       <button onClick={() => handleSaveWord(w.text, w.meaning)} style={{
                         height: 30, border: '1px solid rgba(255,127,168,.18)', borderRadius: 999, padding: '0 10px',
                         background: savedWords.has(w.text) ? C.mint : C.pinkSoft,
-                        color: savedWords.has(w.text) ? C.mintText : '#f0799b',
+                        color: savedWords.has(w.text) ? C.mintText : 'var(--color-pink-strong)',
                         fontSize: 11, fontWeight: 800, cursor: 'pointer',
                       }}>
                         {savedWords.has(w.text) ? t('analyze.word_saved_btn', lang) : t('analyze.word_save_btn', lang)}
@@ -1016,7 +1016,7 @@ export default function AnalyzePage() {
             <div style={{ borderRadius: 30, background: C.cream, border: '1px solid ' + C.line, boxShadow: C.shadow, marginBottom: 14, padding: 16 }}>
               <h2 style={{ margin: '0 0 12px', fontSize: 18, letterSpacing: '-.3px' }}>
                 {t('analyze.deep_title', lang)}
-                {result.difficulty && <span style={{ marginLeft: 8, fontSize: 12, color: '#f0799b', fontWeight: 700 }}>· {result.difficulty}</span>}
+                {result.difficulty && <span style={{ marginLeft: 8, fontSize: 12, color: 'var(--color-pink-strong)', fontWeight: 700 }}>· {result.difficulty}</span>}
               </h2>
 
               {result.sentences && result.sentences.length > 0 && (
@@ -1042,7 +1042,7 @@ export default function AnalyzePage() {
                     {result.words.slice(0, showAllWords ? undefined : 12).map((w, i) => (
                       <span key={i} style={{ height: 30, padding: '0 10px', borderRadius: 999, background: C.pinkSoft, border: '1px solid rgba(255,127,168,.18)', color: '#5a423b', fontSize: 12, fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
                         {w.text}
-                        <button onClick={() => handleSaveWord(w.text, w.meaning)} style={{ border: 'none', background: 'none', padding: 0, cursor: 'pointer', fontSize: 11, color: savedWords.has(w.text) ? C.mintText : '#f0799b', fontWeight: 800 }}>
+                        <button onClick={() => handleSaveWord(w.text, w.meaning)} style={{ border: 'none', background: 'none', padding: 0, cursor: 'pointer', fontSize: 11, color: savedWords.has(w.text) ? C.mintText : 'var(--color-pink-strong)', fontWeight: 800 }}>
                           {savedWords.has(w.text) ? '✓' : '+'}
                         </button>
                       </span>
@@ -1074,7 +1074,7 @@ export default function AnalyzePage() {
 
               {result.suggestion && (
                 <div style={{ padding: 14, borderRadius: 20, background: C.pinkSoft, border: '1px solid rgba(255,127,168,.18)' }}>
-                  <h3 style={{ fontSize: 13, fontWeight: 800, margin: '0 0 6px', color: '#f0799b' }}>{t('analyze.suggestion_title', lang)}</h3>
+                  <h3 style={{ fontSize: 13, fontWeight: 800, margin: '0 0 6px', color: 'var(--color-pink-strong)' }}>{t('analyze.suggestion_title', lang)}</h3>
                   <p style={{ margin: 0, fontSize: 13, lineHeight: 1.55, color: '#5a423b' }}>{result.suggestion}</p>
                 </div>
               )}

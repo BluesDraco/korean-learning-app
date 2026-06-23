@@ -109,9 +109,9 @@ function SongItem({ track, progress, onClick }: { track: KpopTrack; progress: nu
         </div>
       </div>
       {isDone ? (
-        <span className="desktop-status-pill" style={{ background: '#eaf8f5', color: '#4e746d' }}>已完成</span>
+        <span className="desktop-status-pill" style={{ background: 'var(--color-mint-soft)', color: 'var(--color-mint-strong)' }}>已完成</span>
       ) : isContinue ? (
-        <span className="desktop-status-pill" style={{ background: '#fff0f5', color: '#f0799b' }}>继续</span>
+        <span className="desktop-status-pill" style={{ background: 'var(--color-pink-soft)', color: 'var(--color-pink-strong)' }}>继续</span>
       ) : (
         <span className="desktop-status-pill">打开</span>
       )}

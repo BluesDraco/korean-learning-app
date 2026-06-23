@@ -15,13 +15,13 @@ import { useTheme } from '@/components/ThemeProvider';
 // ── Design tokens (matches Tori_HotReading_Detail_UI_Demo.html) ──
 const LIGHT_C = {
   bg: '#fff7f4', paper: '#ffffff', ink: '#241917', muted: '#89756e', line: '#eee0d8',
-  pink: '#ff7fa8', pinkSoft: '#fff0f5', mint: '#aee3d8', mintSoft: '#e9f8f4',
-  cream: '#fff8f4', black: '#201815', levelBg: '#fff0f5', levelText: '#e0607a',
+  pink: 'var(--color-pink-base)', pinkSoft: 'var(--color-pink-soft)', mint: 'var(--color-mint-soft)', mintSoft: '#e9f8f4',
+  cream: '#fff8f4', black: '#201815', levelBg: 'var(--color-pink-soft)', levelText: '#e0607a',
 };
 const DARK_C = {
   bg: '#1E1B2E', paper: '#282440', ink: '#F0E8FF', muted: '#B8A8C8', line: '#3A3060',
-  pink: '#ff7fa8', pinkSoft: '#2D2848', mint: '#4A6058', mintSoft: '#1E3530',
-  cream: '#252040', black: '#3A3060', levelBg: '#2D2848', levelText: '#ff7fa8',
+  pink: 'var(--color-pink-base)', pinkSoft: '#2D2848', mint: '#4A6058', mintSoft: '#1E3530',
+  cream: '#252040', black: '#3A3060', levelBg: '#2D2848', levelText: 'var(--color-pink-base)',
 };
 
 // ── Word Modal ────────────────────────────────────────────────────

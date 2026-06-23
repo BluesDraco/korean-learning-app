@@ -51,7 +51,7 @@ export function DesktopDailyPage() {
           position: 'relative',
           display: 'flex',
           alignItems: 'stretch',
-          background: 'linear-gradient(135deg, var(--color-pink-soft), #fff8fb)',
+          background: 'linear-gradient(135deg, var(--color-pink-soft), var(--hero-grad-end-pink))',
           border: '1px solid var(--color-border-1)',
           borderRadius: 'var(--radius-xl)',
           padding: 0,

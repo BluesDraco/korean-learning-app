@@ -1369,8 +1369,8 @@ function RulesTab() {
                 <div className="px-5 pb-5 space-y-4 animate-fade-in">
                   {/* Formula block */}
                   {rule.formulas && (
-                    <div style={{ background: '#fff0f5', border: '1px solid #ff7fa8', borderRadius: 12, padding: '12px 16px' }}>
-                      <p style={{ fontSize: 11, color: '#ff7fa8', fontWeight: 600, marginBottom: 8, letterSpacing: '0.5px', textTransform: 'uppercase' }}>
+                    <div style={{ background: 'var(--color-pink-soft)', border: '1px solid #ff7fa8', borderRadius: 12, padding: '12px 16px' }}>
+                      <p style={{ fontSize: 11, color: 'var(--color-pink-base)', fontWeight: 600, marginBottom: 8, letterSpacing: '0.5px', textTransform: 'uppercase' }}>
                         {t('phonetics.rules_formula_label', lang)}
                       </p>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -1390,7 +1390,7 @@ function RulesTab() {
                               </>
                             )}
                             <span style={{ fontSize: 16, color: '#89756e' }}>→</span>
-                            <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minWidth: 36, height: 36, padding: '0 6px', background: '#ff7fa8', border: '1.5px solid #ff7fa8', borderRadius: 8, fontSize: 16, fontWeight: 700, color: '#fff' }}>
+                            <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minWidth: 36, height: 36, padding: '0 6px', background: 'var(--color-pink-base)', border: '1.5px solid #ff7fa8', borderRadius: 8, fontSize: 16, fontWeight: 700, color: '#fff' }}>
                               {f.to}
                             </span>
                           </div>
