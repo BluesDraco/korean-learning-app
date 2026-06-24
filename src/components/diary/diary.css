@@ -3,70 +3,74 @@
    仅在 /diary 路由下使用。所有类名以 .diary- 开头，不污染全局
    ═══════════════════════════════════════════════════════════════ */
 
-/* ── 1. Token 体系（v2 升级 · 接入全站设计 token） ── */
+/* ── 1. Token 体系（v3 · 粉紫手账 / 墨蓝紫暗）── */
 .diary-root {
-  /* 纸张：用全站奶油底，色保持现有粉紫色系一致 */
-  --diary-paper: var(--color-surface-1);
-  --diary-paper-deep: var(--color-surface-2);
-  --diary-paper-edge: var(--color-surface-3);
-
-  /* 墨水：用全站 ink 系列 */
-  --diary-ink: var(--color-ink-1);
-  --diary-ink-soft: var(--color-ink-2);
-  --diary-ink-faint: var(--color-ink-3);
-
-  /* 烫金（接入全站 gold token） */
-  --diary-gold: var(--color-gold-base);
-  --diary-gold-soft: var(--color-gold-soft);
-  --diary-gold-deep: var(--color-gold-strong);
-
-  /* 三色 washi 胶带（保留：作为"成就/仪式"装饰语义） */
-  --diary-tape-pink: var(--color-pink-soft);
-  --diary-tape-mint: var(--color-mint-soft);
-  --diary-tape-yellow: #f6dc8c;
-
-  /* 红印章（盖章效果，保留品牌识别） */
-  --diary-stamp-red: var(--color-status-danger);
-
-  /* 线 / 阴影：接入全站 shadow（OKLCH 棕调） */
-  --diary-line: var(--color-border-1);
-  --diary-line-strong: var(--color-border-2);
-  --diary-stitch: var(--color-border-3);
-  --diary-shadow-page: var(--shadow-md);
-  --diary-shadow-sticker: var(--shadow-sm);
-
-  /* 字号：接入全站字号 scale */
-  --diary-text-xs: var(--text-xs);
-  --diary-text-sm: var(--text-sm);
-  --diary-text-md: var(--text-base);
-  --diary-text-lg: var(--text-md);
-  --diary-text-xl: var(--text-lg);
-  --diary-text-2xl: var(--text-xl);
-  --diary-text-display: var(--text-display);
-
-  /* 圆角：接入全站 radius */
-  --diary-r-sm: var(--radius-sm);
-  --diary-r-md: var(--radius-md);
-  --diary-r-lg: var(--radius-xl);
+  /* 纸张 */
+  --diary-paper: #FFFBF7;
+  --diary-paper-deep: #FFF5F0;
+  --diary-paper-edge: #FFE4EE;
+  /* 墨水 */
+  --diary-ink: #241917;
+  --diary-ink-soft: #6B5950;
+  --diary-ink-faint: #B8A89E;
+  /* 烫金 + 紫水晶 */
+  --diary-gold: #C8995B;
+  --diary-gold-soft: #FDF4E3;
+  --diary-gold-deep: #9B7A3E;
+  /* washi 胶带 */
+  --diary-tape-pink: #FFB3C6;
+  --diary-tape-mint: #B8E0D8;
+  --diary-tape-yellow: #F6DC8C;
+  --diary-tape-purple: #D9C8F0;
+  /* 红印章 */
+  --diary-stamp-red: #C14E3A;
+  /* 渐变 */
+  --diary-grad-hero: linear-gradient(180deg, #FFE4EE, #EFE7FF);
+  --diary-grad-accent: linear-gradient(135deg, #FF8FAB, #C9B8E8);
+  /* 线 / 阴影 */
+  --diary-line: #EEE0D8;
+  --diary-line-strong: rgba(168,150,217,.35);
+  --diary-stitch: rgba(168,150,217,.35);
+  --diary-shadow-page: 0 1px 2px rgba(255,127,168,.06), 0 8px 24px rgba(168,150,217,.12);
+  --diary-shadow-sticker: 0 2px 4px rgba(0,0,0,.05);
+  /* 字号 */
+  --diary-text-xs: 12px; --diary-text-sm: 14px; --diary-text-md: 16px;
+  --diary-text-lg: 18px; --diary-text-xl: 22px; --diary-text-2xl: 28px; --diary-text-display: 36px;
+  /* 圆角 */
+  --diary-r-sm: 8px; --diary-r-md: 14px; --diary-r-lg: 24px;
+  /* 横线纸纹理 */
+  --diary-rule: rgba(200,153,91,.10);
+  --diary-rule-size: 27px;
 
   font-family: var(--diary-font-zh), 'KaiTi', 'STKaiti', 'Microsoft YaHei', serif;
   --diary-font-zh: 'Ma Shan Zheng', 'KaiTi', 'STKaiti', 'Microsoft YaHei', serif;
   --diary-font-ko: 'Nanum Pen Script', 'Gaegu', 'Malgun Gothic', sans-serif;
   --diary-font-en: 'Caveat', 'Patrick Hand', 'Comic Sans MS', cursive;
 }
-
-/* dark 模式微调（油纸感）*/
+/* dark · 墨蓝紫手账 */
 [data-theme="dark"] .diary-root {
-  --diary-paper: #28201a;
-  --diary-paper-deep: #322820;
-  --diary-paper-edge: #3a2e25;
-  --diary-ink: #f3e8d4;
-  --diary-ink-soft: #c5b39a;
-  --diary-ink-faint: #7a6e5f;
-  --diary-gold: #d9b06a;
-  --diary-gold-soft: #4a3a25;
-  --diary-line: rgba(243, 232, 212, 0.16);
-  --diary-line-strong: rgba(243, 232, 212, 0.30);
+  --diary-paper: #0B0A14;
+  --diary-paper-deep: #131124;
+  --diary-paper-edge: #1C1830;
+  --diary-ink: #E8E4F4;
+  --diary-ink-soft: rgba(232,228,244,.52);
+  --diary-ink-faint: rgba(232,228,244,.28);
+  --diary-gold: #9D8DF7;
+  --diary-gold-soft: rgba(157,141,247,.14);
+  --diary-gold-deep: #C4B8FF;
+  --diary-tape-pink: rgba(244,114,182,.40);
+  --diary-tape-mint: rgba(129,199,190,.40);
+  --diary-tape-yellow: rgba(246,220,140,.40);
+  --diary-tape-purple: rgba(157,141,247,.46);
+  --diary-stamp-red: #F472B6;
+  --diary-grad-hero: linear-gradient(180deg, rgba(108,99,255,.18), rgba(244,114,182,.1));
+  --diary-grad-accent: linear-gradient(135deg, #8B7EFF, #F472B6);
+  --diary-line: rgba(255,255,255,.07);
+  --diary-line-strong: rgba(157,141,247,.25);
+  --diary-stitch: rgba(157,141,247,.25);
+  --diary-shadow-page: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(108,99,255,.14);
+  --diary-shadow-sticker: 0 2px 4px rgba(0,0,0,.4);
+  --diary-rule: rgba(157,141,247,.08);
 }
 
 /* ── 2. 页面外壳（纸张感）── */
@@ -74,9 +78,7 @@
   min-height: 100vh;
   background-color: var(--diary-paper);
   background-image:
-    radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.55), transparent 38%),
-    radial-gradient(circle at 88% 88%, rgba(58, 42, 30, 0.05), transparent 40%),
-    repeating-linear-gradient(transparent 0 27px, var(--diary-line) 27.5px, transparent 28px);
+    repeating-linear-gradient(transparent 0 var(--diary-rule-size), var(--diary-rule) calc(var(--diary-rule-size) + 0.5px), transparent calc(var(--diary-rule-size) + 1px));
   color: var(--diary-ink);
   background-attachment: fixed;
 }
@@ -98,8 +100,8 @@
 }
 
 .diary-card-paper {
-  background: linear-gradient(135deg, rgba(255,255,255,0.08), transparent);
-  background-color: #fffaf0;
+  background: var(--diary-paper);
+  background-color: var(--diary-paper);
   border: 1px solid var(--diary-line);
   border-radius: var(--diary-r-md);
   padding: 18px 20px;
@@ -238,15 +240,17 @@
   transition: transform 0.15s, box-shadow 0.15s;
 }
 .diary-btn-primary {
-  background: var(--diary-ink);
-  color: var(--diary-paper);
-  box-shadow: 0 4px 12px rgba(58, 42, 30, 0.25);
+  background: var(--diary-grad-accent);
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(255,127,168,.32);
+  border-radius: 14px;
+  transition: transform .15s, filter .15s;
 }
-.diary-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(58, 42, 30, 0.32); }
+.diary-btn-primary:hover { transform: translateY(-1px); filter: brightness(1.05); }
 .diary-btn-gold {
   background: var(--diary-gold);
   color: #fff;
-  box-shadow: 0 4px 12px rgba(200, 153, 91, 0.35);
+  box-shadow: 0 4px 12px rgba(157,141,247,.35);
 }
 .diary-btn-ghost {
   background: transparent;
@@ -1595,53 +1599,28 @@
    ═══════════════════════════════════════════════════════════════════════ */
 
 .diary-detail-page {
-  --diary-v4-serif: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', 'STSong', '华文宋体', 'PingFang SC', serif;
-  --diary-v4-italic: 'Playfair Display', Georgia, serif;
-  --diary-v4-hand: 'Caveat', 'Patrick Hand', cursive;
-  --diary-v4-ko: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
-
-  --diary-d-tone-soft: var(--color-pink-soft);
-  --diary-d-tone-base: var(--color-pink-base);
-  --diary-d-tone-strong: var(--color-pink-strong);
-
+  --diary-d-tone-soft: var(--diary-tape-pink);
+  --diary-d-tone-base: var(--diary-paper-edge);
+  --diary-d-tone-strong: var(--diary-gold-deep);
   position: fixed;
   inset: 0;
   z-index: 100;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  background:
-    radial-gradient(at 12% 8%, oklch(94% 0.030 14 / 0.4) 0%, transparent 45%),
-    radial-gradient(at 92% 88%, oklch(94% 0.040 290 / 0.28) 0%, transparent 42%),
-    repeating-linear-gradient(
-      180deg,
-      transparent 0,
-      transparent 31px,
-      oklch(82% 0.020 60 / 0.05) 31px,
-      oklch(82% 0.020 60 / 0.05) 32px
-    ),
-    oklch(98.5% 0.005 60);
-  color: var(--color-ink-1);
-  font-family: var(--diary-v4-serif);
+  background: repeating-linear-gradient(transparent 0 27px, rgba(255,127,168,.12) 27px, rgba(255,127,168,.12) 28px), linear-gradient(180deg, #FFFBF7 0%, #F5EDFf 100%);
+  background-attachment: fixed;
 }
-@media (max-width: 767px) {
-  .diary-detail-page {
-    background:
-      radial-gradient(at 12% 8%, oklch(94% 0.030 14 / 0.4) 0%, transparent 45%),
-      radial-gradient(at 92% 88%, oklch(94% 0.040 290 / 0.28) 0%, transparent 42%),
-      oklch(98.5% 0.005 60);
-  }
-}
+
 [data-theme="dark"] .diary-detail-page {
   background:
-    radial-gradient(at 12% 8%, oklch(40% 0.040 14 / 0.28) 0%, transparent 45%),
-    radial-gradient(at 92% 88%, oklch(38% 0.045 290 / 0.22) 0%, transparent 42%),
-    oklch(15% 0.012 50);
+    radial-gradient(ellipse 100% 60% at 50% 0%, rgba(108,99,255,.18), transparent 60%),
+    oklch(8% 0.015 260);
+  background-attachment: fixed;
 }
 
 .diary-detail-tone-pink {
-  --diary-d-tone-soft: var(--color-pink-soft);
-  --diary-d-tone-base: var(--color-pink-base);
-  --diary-d-tone-strong: var(--color-pink-strong);
+  --diary-d-tone-soft: var(--diary-tape-pink);
+  --diary-d-tone-base: var(--diary-paper-edge);
+  --diary-d-tone-strong: var(--diary-gold-deep);
 }
 .diary-detail-tone-mint {
   --diary-d-tone-soft: var(--color-mint-soft);
@@ -1886,8 +1865,24 @@
 
 .diary-detail-hero {
   position: relative;
-  overflow: hidden;
-  background: linear-gradient(180deg, var(--diary-d-tone-soft) 0%, transparent 100%);
+  overflow: visible;
+  background: var(--diary-grad-hero);
+}
+/* washi tape on hero */
+.diary-detail-hero::after {
+  content: '';
+  position: absolute;
+  top: -9px;
+  left: 20px;
+  height: 18px;
+  width: 56px;
+  border-radius: 1px;
+  background: var(--diary-tape-pink);
+  opacity: .9;
+  transform: rotate(-3deg);
+  box-shadow: 0 2px 4px rgba(0,0,0,.06);
+  z-index: 2;
+  pointer-events: none;
 }
 .diary-detail-hero::before {
   content: attr(data-roman);
@@ -1971,21 +1966,17 @@
 
 .diary-detail-card {
   position: relative;
-  background: oklch(99.5% 0.005 50);
-  border: 1.5px dashed oklch(88% 0.030 70);
+  background: var(--diary-paper);
+  border: 1px solid var(--diary-line);
   border-radius: 24px;
   padding: 36px 24px 32px;
-  box-shadow:
-    var(--shadow-md),
-    inset 0 1px 0 0 oklch(100% 0 0 / 0.6);
+  box-shadow: var(--diary-shadow-page);
   overflow: hidden;
 }
 [data-theme="dark"] .diary-detail-card {
-  background: oklch(20% 0.012 50);
-  border-color: oklch(38% 0.030 70);
-  box-shadow:
-    var(--shadow-md),
-    inset 0 1px 0 0 oklch(100% 0 0 / 0.05);
+  background: var(--diary-paper);
+  border-color: var(--diary-line);
+  box-shadow: var(--diary-shadow-page);
 }
 @media (min-width: 768px) {
   .diary-detail-card { padding: 56px 56px 48px; }
@@ -2199,4 +2190,17 @@
 @keyframes cp-dot-pulse {
   0%, 100% { box-shadow: 0 0 0 0 rgba(168,85,247,0.7); }
   50%       { box-shadow: 0 0 0 5px rgba(168,85,247,0); }
+}
+.diary-card-tape {
+  position: absolute;
+  top: -9px;
+  right: 28px;
+  height: 18px;
+  width: 56px;
+  border-radius: 1px;
+  background: var(--diary-tape-purple);
+  opacity: .9;
+  transform: rotate(4deg);
+  box-shadow: 0 2px 4px rgba(0,0,0,.06);
+  z-index: 2;
 }

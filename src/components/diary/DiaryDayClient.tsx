@@ -290,15 +290,39 @@ export function DiaryDayClient({ day, level }: Props) {
           {day.subtitle && (
             <p className="diary-detail-hero-sub">{day.subtitle}</p>
           )}
+          {/* module progress dots — matches ui-compare hero */}
+          <div className="diary-hero-modules" style={{ display: 'flex', gap: 10, marginTop: 20 }}>
+            {activeOrder.map((m, i) => {
+              const currentIdx = activeOrder.indexOf(currentModule);
+              const done = modulesDone.has(m) || i < currentIdx;
+              const current = m === currentModule;
+              return (
+                <div key={m} className={`diary-hero-dot${done ? ' is-done' : ''}${current ? ' is-current' : ''}`}
+                  style={{
+                    width: 30, height: 30, borderRadius: '50%',
+                    background: done ? 'var(--diary-grad-accent)' : current ? 'var(--diary-paper)' : 'rgba(255,255,255,.4)',
+                    border: current ? '2px solid var(--diary-gold)' : done ? 'none' : '1.5px dashed var(--diary-stitch)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 13, fontWeight: 700,
+                    color: done ? '#fff' : current ? 'var(--diary-gold-deep)' : 'var(--diary-ink-faint)',
+                    boxShadow: done ? '0 4px 14px rgba(255,127,168,.3)' : 'none',
+                  }}>
+                  {done ? '✓' : current ? (i + 1) : (i + 1)}
+                </div>
+              );
+            })}
+          </div>
         </div>
       </section>
 
       {/* 信纸主体卡片 */}
       <main className="diary-detail-main">
         <article className="diary-detail-card" {...(isCheckpointDay ? { 'data-checkpoint': 'true' } : {})}>
-          <div className="diary-detail-card-band" />
-          <div className="diary-detail-card-eyebrow">
-            <span>{MODULE_EYEBROWS[currentModule]}</span>
+          <div className="diary-card-tape" />
+          <div className="diary-detail-card-eyebrow" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, height: 24, padding: '0 12px', borderRadius: 99, fontFamily: 'Caveat, Patrick Hand, cursive', fontSize: 14, fontWeight: 700, color: 'var(--diary-gold-deep)', background: 'var(--diary-gold-soft)', border: '1px solid var(--diary-gold)' }}>
+              {MODULE_LABELS[currentModule]}
+            </span>
             {currentModule !== 'recap' && (
               <button className="diary-detail-skip" onClick={() => advance(currentModule)}>
                 跳过 →
