@@ -132,6 +132,21 @@ function playPhoneticAudio(text: string, rate = 1.0) {
   }
 }
 
+async function playBatchimAudio(jamo: string) {
+  const word = BATCHIM_DEMO[jamo] ?? jamo;
+  try {
+    const res = await fetch(`/api/tts/phonetics?text=${encodeURIComponent(word)}`);
+    if (!res.ok) throw new Error('fail');
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const audio = new Audio(url);
+    audio.onended = () => URL.revokeObjectURL(url);
+    await audio.play();
+  } catch {
+    speakWord(word, 0.7);
+  }
+}
+
 function getSpeakText(letter: PhoneticLetter): string {
   if (letter.type === 'vowel') return letter.name;
   if (letter.type === 'consonant' || letter.type === 'double') {
@@ -714,7 +729,7 @@ export default function PhoneticsPage() {
                           <span className="text-4xl font-bold text-[var(--text-primary)] bg-[var(--bg-input)] px-6 py-3 rounded-xl inline-block" style={{ fontFamily: "'system-ui', 'sans-serif'" }}>
                             {bq.letter}
                           </span>
-                          <button onClick={() => { unlockAudioContext(); speakWord(bq.letter, 0.7); }} className="ml-2 p-2 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-placeholder)] hover:text-[var(--pink-primary)] transition-colors inline-flex align-middle"><Volume2 size={16} /></button>
+                          <button onClick={() => { unlockAudioContext(); playBatchimAudio(bq.letter); }} className="ml-2 p-2 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-placeholder)] hover:text-[var(--pink-primary)] transition-colors inline-flex align-middle"><Volume2 size={16} /></button>
                           <p className="text-sm text-[var(--text-secondary)] mt-2">{bq.prompt}</p>
                         </div>
                         <div className="grid grid-cols-4 gap-2">
@@ -729,7 +744,7 @@ export default function PhoneticsPage() {
                               <button key={i} onClick={() => handleBatchimQuizAnswer(opt)} disabled={batchimQuizState.selectedAnswer !== null}
                                 className={`py-3 rounded-xl text-xl font-bold transition-all border ${cls} flex flex-col items-center gap-1`} style={{ fontFamily: "'system-ui', 'sans-serif'" }}>
                                 {opt}
-                                <Volume2 size={12} className="opacity-50" onClick={e => { e.stopPropagation(); unlockAudioContext(); speakWord(opt, 0.7); }} />
+                                <Volume2 size={12} className="opacity-50" onClick={e => { e.stopPropagation(); unlockAudioContext(); playBatchimAudio(opt); }} />
                               </button>
                             );
                           })}

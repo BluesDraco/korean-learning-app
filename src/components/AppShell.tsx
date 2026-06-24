@@ -99,7 +99,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <>
             <div className="fixed top-0 left-0 right-0 z-[60] bg-[var(--bg-card)] border-b border-[var(--border-color)] py-1.5 text-center pt-safe px-4">
               <span className="text-[11px] font-bold tracking-wider text-[var(--pink-primary)]" style={{ fontFamily: "'KaiTi', 'STKaiti', cursive" }}>
-                服务器及用户数据库升级完毕
+                内测阶段 BUG 较多，如遇问题可随时反馈，当日修复
               </span>
             </div>
             <div className="h-[36px] pt-safe" />

@@ -40,6 +40,13 @@ const BATCHIM_DEMO: Record<string, string> = {
   'ㅂ': '밥', 'ㅇ': '강',
 };
 
+const BATCHIM_TYPE_LABEL: Record<string, string> = {
+  stop: '阻塞音', nasal: '鼻音', liquid: '流音',
+};
+const BATCHIM_IPA: Record<string, string> = {
+  'ㄱ': '[k̚]', 'ㄴ': '[n]', 'ㄷ': '[t̚]', 'ㄹ': '[l]', 'ㅁ': '[m]', 'ㅂ': '[p̚]', 'ㅇ': '[ŋ]',
+};
+
 function getSpeakText(l: PhoneticLetter): string {
   if (l.type === 'vowel') return l.name;
   if (l.type === 'consonant' || l.type === 'double') {
@@ -204,6 +211,21 @@ export default function ProgressivePhonetics() {
     }
   };
 
+  const playBatchimAudio = useCallback(async (word: string) => {
+    unlockAudioContext();
+    try {
+      const res = await fetch(`/api/tts/phonetics?text=${encodeURIComponent(word)}`);
+      if (!res.ok) throw new Error('fail');
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const audio = new Audio(url);
+      audio.onended = () => URL.revokeObjectURL(url);
+      await audio.play();
+    } catch {
+      speakWord(word, 0.7);
+    }
+  }, []);
+
   const goToStep = (idx: number) => {
     setActiveStepIdx(idx);
     setMode('browse');
@@ -326,6 +348,49 @@ export default function ProgressivePhonetics() {
           {/* Letter cards grid */}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
             {activeStep.letters.map((letter) => {
+              if (letter.type === 'batchim') {
+                const subLetters = letter.letter.split('/');
+                const repJamo = (letter as PhoneticLetter & { quizLetter?: string }).quizLetter ?? subLetters[0];
+                const demoWord = BATCHIM_DEMO[repJamo] ?? '';
+                const ipa = BATCHIM_IPA[repJamo] ?? '';
+                const typeLabel = BATCHIM_TYPE_LABEL[letter.subtype] ?? '';
+                return (
+                  <div key={letter.id} className="col-span-full bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 space-y-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold text-[var(--pink-primary)] bg-[var(--pink-primary)]/10 px-2 py-0.5 rounded-full">{typeLabel}</span>
+                      <span className="text-xs text-[var(--text-muted)]">{ipa}</span>
+                    </div>
+                    <button
+                      onClick={() => playBatchimAudio(demoWord)}
+                      className="w-full flex items-center gap-3 bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] rounded-xl p-3 transition-colors text-left"
+                    >
+                      <span className="text-4xl font-extrabold text-[var(--text-primary)]" style={{ fontFamily: "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif" }}>{demoWord}</span>
+                      <span className="flex-1 text-xs text-[var(--text-secondary)]">
+                        <span className="block text-[var(--text-primary)] font-medium">[{letter.romanization}]</span>
+                        <span className="text-[var(--text-muted)]">{letter.mnemonic}</span>
+                      </span>
+                      <Volume2 size={16} className="text-[var(--pink-primary)] shrink-0" />
+                    </button>
+                    <div className="space-y-1.5">
+                      <div className="text-xs text-[var(--text-muted)]">以下字母在收音位置发同一个音：</div>
+                      <div className="flex flex-wrap gap-2">
+                        {subLetters.map((jamo) => (
+                          <button
+                            key={jamo}
+                            onClick={() => playBatchimAudio(demoWord)}
+                            className="flex items-center gap-1.5 bg-[var(--bg-card)] border border-[var(--border-color)] hover:border-[var(--pink-primary)]/50 hover:bg-[var(--pink-primary)]/5 rounded-lg px-3 py-2 transition-colors"
+                            style={{ fontFamily: "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif" }}
+                          >
+                            <span className="text-xl font-bold text-[var(--text-primary)]">{jamo}</span>
+                            <Volume2 size={11} className="text-[var(--pink-primary)]" />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="text-xs text-[var(--text-secondary)]">{letter.sound}</div>
+                  </div>
+                );
+              }
               const isExpanded = expandedCards.has(letter.id);
               return (
                 <div
