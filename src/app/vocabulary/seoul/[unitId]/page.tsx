@@ -231,7 +231,7 @@ export default function YonseiUnitPage() {
   const untouched = total - mastered - learning;
 
   return (
-    <div className={isWideViewport ? 'py-4 max-w-5xl mx-auto pb-[calc(80px+env(safe-area-inset-bottom,0px))]' : 'py-4 max-w-2xl mx-auto pb-[calc(80px+env(safe-area-inset-bottom,0px))]'}>
+    <div className={isWideViewport ? 'py-6 max-w-5xl mx-auto px-4 space-y-5 pb-[calc(80px+env(safe-area-inset-bottom,0px))]' : 'py-4 max-w-2xl mx-auto px-4 space-y-4 pb-[calc(80px+env(safe-area-inset-bottom,0px))]'}>
       {/* Header */}
       <div style={{ marginBottom: 20 }}>
         <Link
@@ -399,7 +399,7 @@ export default function YonseiUnitPage() {
           </div>
         )}
 
-        <div className="space-y-2">
+        <div className={isWideViewport ? 'grid grid-cols-2 gap-3 items-start' : 'space-y-2'}>
           {filteredWords.map((w, i) => {
             const isExpanded = expandedId === w.word;
             const isMastered = masteredSet.has(w.word);

@@ -24565,7 +24565,7 @@ export const topikTextbook3Entries: WordEntry[] = [
     "korean": "따라서",
     "romanization": "ttaraseo",
     "baseForm": "따라서",
-    "partOfSpeech": "接续词",
+    "partOfSpeech": "连词",
     "level": "3",
     "frequency": 2,
     "meanings": [
@@ -35543,7 +35543,7 @@ export const topikTextbook3Entries: WordEntry[] = [
     "korean": "시설이 잘되어 있다",
     "romanization": "sisiri jaldoeeo itda",
     "baseForm": "시설이 잘되어 있다",
-    "partOfSpeech": "惯용语",
+    "partOfSpeech": "惯用语",
     "level": "3",
     "frequency": 2,
     "meanings": [
@@ -37187,7 +37187,7 @@ export const topikTextbook3Entries: WordEntry[] = [
     "korean": "눈물을 흘리다",
     "romanization": "nunmureul heullida",
     "baseForm": "눈물을 흘리다",
-    "partOfSpeech": "惯용语",
+    "partOfSpeech": "惯用语",
     "level": "3",
     "frequency": 2,
     "meanings": [
@@ -39251,7 +39251,7 @@ export const topikTextbook3Entries: WordEntry[] = [
     "korean": "천둥이 치다",
     "romanization": "cheondungi chida",
     "baseForm": "천둥이 치다",
-    "partOfSpeech": "惯용语",
+    "partOfSpeech": "惯用语",
     "level": "3",
     "frequency": 2,
     "meanings": [
@@ -39600,7 +39600,7 @@ export const topikTextbook3Entries: WordEntry[] = [
     "korean": "홍수가 나다",
     "romanization": "hong suga nada",
     "baseForm": "홍수가 나다",
-    "partOfSpeech": "惯용语",
+    "partOfSpeech": "惯用语",
     "level": "3",
     "frequency": 2,
     "meanings": [
@@ -48207,7 +48207,7 @@ export const topikTextbook3Entries: WordEntry[] = [
     "korean": "즉",
     "romanization": "jeuk",
     "baseForm": "즉",
-    "partOfSpeech": "接续词",
+    "partOfSpeech": "连词",
     "level": "3",
     "frequency": 2,
     "meanings": [

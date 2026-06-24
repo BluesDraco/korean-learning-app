@@ -11,6 +11,7 @@ import { getTodayLog, updateTodayLog } from '@/lib/gamification';
 import { DiffFeedback } from '@/components/dictation/DiffFeedback';
 import { getEntry, getEntryByKorean } from '@/data/vocabulary/index';
 import { useLang } from '@/components/LangProvider';
+import { useIsDesktop } from '@/lib/useIsMobile';
 import { t } from '@/lib/i18n';
 
 function normalizeKorean(s: string) {
@@ -135,6 +136,7 @@ async function dbWordToCard(w: any): Promise<FlashCard> {
 
 function ReviewContent() {
   const router = useRouter();
+  const isDesktop = useIsDesktop();
   const searchParams = useSearchParams();
   const videoId = searchParams.get('videoId');
   const { lang } = useLang();
@@ -894,7 +896,7 @@ function ReviewContent() {
   const [exKo, exZh] = current.example.split('\n');
 
   return (
-    <div className="flex flex-col px-4 pt-4 pb-[calc(100px+env(safe-area-inset-bottom,0px))] max-w-xl mx-auto w-full" style={{ minHeight: 'calc(100dvh - 60px)' }}>
+    <div className={`flex flex-col px-4 pt-4 pb-[calc(100px+env(safe-area-inset-bottom,0px))] mx-auto w-full ${isDesktop ? 'max-w-3xl' : 'max-w-xl'}`} style={{ minHeight: 'calc(100dvh - 60px)' }}>
       {/* ── Top bar ── */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2.5">

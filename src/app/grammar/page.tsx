@@ -2521,8 +2521,8 @@ function GrammarContent() {
   return (
     <ColorCtx.Provider value={C}>
     <div style={{ minHeight: '100vh', background: C.bg, paddingBottom: 40 }}>
-      <div style={{ maxWidth: 960, margin: '0 auto', padding: '20px 16px 0' }}>
-        <div style={{ marginBottom: 18 }}>
+      <div style={{ maxWidth: 960, margin: '0 auto', padding: '20px 16px 0', display: 'flex', flexDirection: 'column', gap: 18 }}>
+        <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 6 }}>
             <button onClick={() => router.back()} style={{ width: 38, height: 38, borderRadius: 13, border: `1px solid ${C.line}`, background: C.card, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}>
               <ArrowLeft size={16} color={C.muted} />

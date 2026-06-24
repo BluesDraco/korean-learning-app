@@ -64,17 +64,18 @@ export default function TopikHistoryPage() {
 
   return (
     <div style={{ minHeight: '100vh', background: C.bg, paddingBottom: 40 }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '16px 16px 0' }}>
-        <button onClick={() => router.back()} style={{ width: 36, height: 36, borderRadius: '50%', border: `1px solid ${C.line}`, background: C.card, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-          <ArrowLeft size={16} color={C.muted} />
-        </button>
-        <div>
-          <h1 style={{ fontSize: 18, fontWeight: 900, color: C.ink, margin: 0 }}>成绩历史</h1>
-          <p style={{ fontSize: 12, color: C.muted, margin: 0 }}>共 {sessions.length} 次练习记录</p>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 960, margin: '0 auto', padding: '0 16px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, paddingTop: 16 }}>
+          <button onClick={() => router.back()} style={{ width: 36, height: 36, borderRadius: '50%', border: `1px solid ${C.line}`, background: C.card, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+            <ArrowLeft size={16} color={C.muted} />
+          </button>
+          <div>
+            <h1 style={{ fontSize: 18, fontWeight: 900, color: C.ink, margin: 0 }}>成绩历史</h1>
+            <p style={{ fontSize: 12, color: C.muted, margin: 0 }}>共 {sessions.length} 次练习记录</p>
+          </div>
         </div>
-      </div>
 
-      <div style={{ padding: '16px 16px 0', display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
 
         {/* Trend chart */}
         {trendData.length >= 2 && (
@@ -123,6 +124,7 @@ export default function TopikHistoryPage() {
             </div>
           ))
         )}
+      </div>
       </div>
     </div>
   );

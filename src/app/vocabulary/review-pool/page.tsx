@@ -160,7 +160,7 @@ export default function ReviewPoolPage() {
   }
 
   return (
-    <div className={isDesktop ? 'py-4 max-w-5xl mx-auto pb-32' : 'py-4 max-w-2xl mx-auto pb-32'}>
+    <div className={isDesktop ? 'py-6 max-w-5xl mx-auto px-4 space-y-5 pb-32' : 'py-4 max-w-2xl mx-auto px-4 space-y-4 pb-32'}>
       <Link
         href="/vocabulary"
         style={{

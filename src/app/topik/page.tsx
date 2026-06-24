@@ -83,9 +83,9 @@ export default function TopikPage() {
 
   return (
     <div style={{ minHeight: '100vh', background: C.bg, paddingBottom: 40 }}>
-      <div style={{ maxWidth: 960, margin: '0 auto' }}>
+      <div style={{ maxWidth: 960, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 16, padding: '0 16px' }}>
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '16px 16px 0' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
         <button onClick={() => router.back()} style={{ width: 36, height: 36, borderRadius: '50%', border: `1px solid ${C.line}`, background: C.card, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
           <ArrowLeft size={16} style={{ color: C.muted }} />
         </button>
@@ -96,7 +96,7 @@ export default function TopikPage() {
       </div>
 
       {/* Tabs */}
-      <div style={{ display: 'flex', gap: 6, padding: '14px 16px 0' }}>
+      <div style={{ display: 'flex', gap: 6 }}>
         {([['exam', '历年真题'], ['simulate', '模拟练习'], ['practice', '专项练习'], ['mine', '我的']] as [Tab, string][]).map(([key, label]) => (
           <button key={key} onClick={() => setTab(key)} style={{ flex: 1, padding: '8px 4px', borderRadius: 10, border: 'none', background: tab === key ? C.ink : 'transparent', color: tab === key ? '#fff' : C.muted, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
             {label}
@@ -104,7 +104,7 @@ export default function TopikPage() {
         ))}
       </div>
 
-      <div style={{ padding: '16px 16px 0' }}>
+      <div style={{ paddingTop: 16 }}>
 
         {/* ── 历年真题 ── */}
         {tab === 'exam' && (

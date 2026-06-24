@@ -160,7 +160,7 @@ export const vocabularyEntries: WordEntry[] = [
   // 2. GREETINGS & COMMON PHRASES 问候与常用语
   // ═══════════════════════════════════════════════════════════════
   {
-    id: 'greet-01', korean: '안녕하세요', romanization: 'annyeonghaseyo', baseForm: '안녕하다', partOfSpeech: '常用语',
+    id: 'greet-01', korean: '안녕하세요', romanization: 'annyeonghaseyo', baseForm: '안녕하다', partOfSpeech: '表达',
     level: '1', frequency: 3,
     meanings: [{ chinese: '你好', nuance: '敬语', register: '通用' }],
     examples: [
@@ -170,7 +170,7 @@ export const vocabularyEntries: WordEntry[] = [
     tags: ['社交', '打招呼'], emotionTags: [], relatedWords: ['greet-02', 'greet-03'],
   },
   {
-    id: 'greet-02', korean: '감사합니다', romanization: 'gamsahamnida', baseForm: '감사하다', partOfSpeech: '常用语',
+    id: 'greet-02', korean: '감사합니다', romanization: 'gamsahamnida', baseForm: '감사하다', partOfSpeech: '表达',
     level: '1', frequency: 3,
     meanings: [{ chinese: '谢谢', nuance: '正式敬语', register: '通用' }],
     examples: [
@@ -180,7 +180,7 @@ export const vocabularyEntries: WordEntry[] = [
     tags: ['社交', '感谢道歉'], emotionTags: ['感谢'], relatedWords: ['greet-03', 'greet-04'],
   },
   {
-    id: 'greet-03', korean: '죄송합니다', romanization: 'joesonghamnida', baseForm: '죄송하다', partOfSpeech: '常用语',
+    id: 'greet-03', korean: '죄송합니다', romanization: 'joesonghamnida', baseForm: '죄송하다', partOfSpeech: '表达',
     level: '1', frequency: 3,
     meanings: [{ chinese: '对不起', nuance: '正式敬语', register: '通用' }],
     examples: [
@@ -190,7 +190,7 @@ export const vocabularyEntries: WordEntry[] = [
     tags: ['社交', '感谢道歉'], emotionTags: ['道歉'], relatedWords: ['greet-02', 'greet-04'],
   },
   {
-    id: 'greet-04', korean: '괜찮아요', romanization: 'gwaenchanayo', baseForm: '괜찮다', partOfSpeech: '常用语',
+    id: 'greet-04', korean: '괜찮아요', romanization: 'gwaenchanayo', baseForm: '괜찮다', partOfSpeech: '表达',
     level: '1', frequency: 3,
     meanings: [{ chinese: '没关系/还可以', nuance: '口语', register: '通用' }],
     examples: [
@@ -200,7 +200,7 @@ export const vocabularyEntries: WordEntry[] = [
     tags: ['社交', '感谢道歉', '购物'], emotionTags: [], relatedWords: ['greet-03'],
   },
   {
-    id: 'greet-05', korean: '안녕히 가세요', romanization: 'annyeonghi gaseyo', baseForm: '안녕하다', partOfSpeech: '常用语',
+    id: 'greet-05', korean: '안녕히 가세요', romanization: 'annyeonghi gaseyo', baseForm: '안녕하다', partOfSpeech: '表达',
     level: '1', frequency: 2,
     meanings: [{ chinese: '再见（对离开的人）', nuance: '敬语', register: '通用' }],
     examples: [
@@ -209,7 +209,7 @@ export const vocabularyEntries: WordEntry[] = [
     tags: ['社交', '打招呼'], emotionTags: [], relatedWords: ['greet-06'],
   },
   {
-    id: 'greet-06', korean: '안녕히 계세요', romanization: 'annyeonghi gyeseyo', baseForm: '안녕하다', partOfSpeech: '常用语',
+    id: 'greet-06', korean: '안녕히 계세요', romanization: 'annyeonghi gyeseyo', baseForm: '안녕하다', partOfSpeech: '表达',
     level: '1', frequency: 2,
     meanings: [{ chinese: '再见（对留下的人）', nuance: '敬语', register: '通用' }],
     examples: [

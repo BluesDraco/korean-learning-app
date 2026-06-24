@@ -29442,7 +29442,7 @@ export const topikTextbook4Entries: WordEntry[] = [
     "korean": "고개를 돌리고 마시다",
     "romanization": "gogaereul dolligo masida",
     "baseForm": "고개를 돌리고 마시다",
-    "partOfSpeech": "惯용语",
+    "partOfSpeech": "惯用语",
     "level": "4",
     "frequency": 2,
     "meanings": [

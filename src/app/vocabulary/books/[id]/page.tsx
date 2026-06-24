@@ -151,7 +151,7 @@ export default function BookDetailPage() {
   if (!book) return null;
 
   return (
-    <div className={isWideViewport ? 'py-4 max-w-5xl mx-auto pb-[calc(56px+env(safe-area-inset-bottom,0px)+128px)]' : 'py-4 max-w-2xl mx-auto pb-[calc(56px+env(safe-area-inset-bottom,0px)+128px)]'}>
+    <div className={isWideViewport ? 'py-6 max-w-5xl mx-auto px-4 space-y-5 pb-[calc(56px+env(safe-area-inset-bottom,0px)+128px)]' : 'py-4 max-w-2xl mx-auto px-4 space-y-4 pb-[calc(56px+env(safe-area-inset-bottom,0px)+128px)]'}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 20 }}>
         <Link

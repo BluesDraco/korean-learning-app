@@ -8601,7 +8601,7 @@ export const topikTextbook2Entries: WordEntry[] = [
     "korean": "그렇지만",
     "romanization": "geureochiman",
     "baseForm": "그렇지만",
-    "partOfSpeech": "接续词",
+    "partOfSpeech": "连词",
     "level": "2",
     "frequency": 3,
     "meanings": [
@@ -8624,7 +8624,7 @@ export const topikTextbook2Entries: WordEntry[] = [
     "korean": "그러니까",
     "romanization": "geureonikka",
     "baseForm": "그러니까",
-    "partOfSpeech": "接续词",
+    "partOfSpeech": "连词",
     "level": "2",
     "frequency": 3,
     "meanings": [
@@ -8647,7 +8647,7 @@ export const topikTextbook2Entries: WordEntry[] = [
     "korean": "그러나",
     "romanization": "geureona",
     "baseForm": "그러나",
-    "partOfSpeech": "接续词",
+    "partOfSpeech": "连词",
     "level": "2",
     "frequency": 3,
     "meanings": [
@@ -16340,7 +16340,7 @@ export const topikTextbook2Entries: WordEntry[] = [
     "korean": "음악을 듣다",
     "romanization": "eumageul deutda",
     "baseForm": "음악을 듣다",
-    "partOfSpeech": "惯용语",
+    "partOfSpeech": "惯用语",
     "level": "2",
     "frequency": 3,
     "meanings": [
@@ -17038,7 +17038,7 @@ export const topikTextbook2Entries: WordEntry[] = [
     "korean": "만지다",
     "romanization": "manjida",
     "baseForm": "만지다",
-    "partOfSpeech": "동词",
+    "partOfSpeech": "动词",
     "level": "2",
     "frequency": 3,
     "meanings": [
@@ -17317,7 +17317,7 @@ export const topikTextbook2Entries: WordEntry[] = [
     "korean": "입이 크다[작다]",
     "romanization": "ibi keuda[jakda]",
     "baseForm": "입이 크다[작다]",
-    "partOfSpeech": "惯용语",
+    "partOfSpeech": "惯用语",
     "level": "2",
     "frequency": 3,
     "meanings": [

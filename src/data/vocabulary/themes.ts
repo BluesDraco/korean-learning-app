@@ -33,7 +33,7 @@ export const themePacks: ThemePack[] = [
           { text: '아메리카노', meaning: '美式咖啡', partOfSpeech: '名词' },
           { text: '한', meaning: '一', partOfSpeech: '数词' },
           { text: '잔', meaning: '杯', partOfSpeech: '名词' },
-          { text: '주세요', meaning: '请给我', partOfSpeech: '语法' },
+          { text: '주세요', meaning: '请给我', partOfSpeech: '表达' },
         ],
       },
       {
@@ -43,8 +43,8 @@ export const themePacks: ThemePack[] = [
         situationNote: '店员确认冷热，回答 네/아니요 即可',
         breakdown: [
           { text: '따뜻한', meaning: '热的', partOfSpeech: '形容词' },
-          { text: '걸로', meaning: '用...的', partOfSpeech: '语法' },
-          { text: '드릴까요', meaning: '给您吗', partOfSpeech: '语法' },
+          { text: '걸로', meaning: '用...的', partOfSpeech: '助词' },
+          { text: '드릴까요', meaning: '给您吗', partOfSpeech: '表达' },
         ],
       },
       {
@@ -54,10 +54,10 @@ export const themePacks: ThemePack[] = [
         situationNote: '堂食说 여기서 마실게요，外带说 테이크아웃이요',
         breakdown: [
           { text: '여기서', meaning: '在这里', partOfSpeech: '副词' },
-          { text: '드실', meaning: '喝/吃', partOfSpeech: '语法' },
-          { text: '거예요', meaning: '要...吗', partOfSpeech: '语法' },
+          { text: '드실', meaning: '喝/吃', partOfSpeech: '动词' },
+          { text: '거예요', meaning: '要...吗', partOfSpeech: '表达' },
           { text: '테이크아웃', meaning: '外带', partOfSpeech: '名词' },
-          { text: '이세요', meaning: '是吗', partOfSpeech: '语法' },
+          { text: '이세요', meaning: '是吗', partOfSpeech: '助词' },
         ],
       },
       {
@@ -69,7 +69,7 @@ export const themePacks: ThemePack[] = [
           { text: '사이즈', meaning: '尺寸', partOfSpeech: '名词' },
           { text: '는', meaning: '主题助词', partOfSpeech: '助词' },
           { text: '어떻게', meaning: '怎么', partOfSpeech: '副词' },
-          { text: '하시겠어요', meaning: '您要怎么', partOfSpeech: '语法' },
+          { text: '하시겠어요', meaning: '您要怎么', partOfSpeech: '表达' },
         ],
       },
       {
@@ -81,7 +81,7 @@ export const themePacks: ThemePack[] = [
           { text: '카드', meaning: '卡', partOfSpeech: '名词' },
           { text: '로', meaning: '用/以', partOfSpeech: '助词' },
           { text: '계산', meaning: '结账', partOfSpeech: '名词' },
-          { text: '할게요', meaning: '我要...', partOfSpeech: '语法' },
+          { text: '할게요', meaning: '我要...', partOfSpeech: '表达' },
         ],
       },
       {
@@ -93,7 +93,7 @@ export const themePacks: ThemePack[] = [
           { text: '와이파이', meaning: 'WiFi', partOfSpeech: '名词' },
           { text: '비밀번호', meaning: '密码', partOfSpeech: '名词' },
           { text: '가', meaning: '主格助词', partOfSpeech: '助词' },
-          { text: '뭐예요', meaning: '是什么', partOfSpeech: '语法' },
+          { text: '뭐예요', meaning: '是什么', partOfSpeech: '表达' },
         ],
       },
       {
@@ -104,7 +104,7 @@ export const themePacks: ThemePack[] = [
         breakdown: [
           { text: '여기', meaning: '这里', partOfSpeech: '代词' },
           { text: '자리', meaning: '座位', partOfSpeech: '名词' },
-          { text: '있어요', meaning: '有吗', partOfSpeech: '语法' },
+          { text: '있어요', meaning: '有吗', partOfSpeech: '动词' },
         ],
       },
       {
@@ -115,7 +115,7 @@ export const themePacks: ThemePack[] = [
         breakdown: [
           { text: '휘핑크림', meaning: '奶油', partOfSpeech: '名词' },
           { text: '빼', meaning: '去掉', partOfSpeech: '动词' },
-          { text: '주세요', meaning: '请', partOfSpeech: '语法' },
+          { text: '주세요', meaning: '请', partOfSpeech: '表达' },
         ],
       },
       {
@@ -126,7 +126,7 @@ export const themePacks: ThemePack[] = [
         breakdown: [
           { text: '포인트', meaning: '积分', partOfSpeech: '名词' },
           { text: '카드', meaning: '卡', partOfSpeech: '名词' },
-          { text: '있으세요', meaning: '有吗敬语', partOfSpeech: '语法' },
+          { text: '있으세요', meaning: '有吗敬语', partOfSpeech: '动词' },
         ],
       },
     ],
@@ -161,7 +161,7 @@ export const themePacks: ThemePack[] = [
         breakdown: [
           { text: '몇', meaning: '几', partOfSpeech: '数词' },
           { text: '분', meaning: '位', partOfSpeech: '名词' },
-          { text: '이세요', meaning: '是敬语', partOfSpeech: '语法' },
+          { text: '이세요', meaning: '是敬语', partOfSpeech: '助词' },
         ],
       },
       {
@@ -173,7 +173,7 @@ export const themePacks: ThemePack[] = [
           { text: '메뉴', meaning: '菜单', partOfSpeech: '名词' },
           { text: '좀', meaning: '稍微/请', partOfSpeech: '副词' },
           { text: '보여', meaning: '给看', partOfSpeech: '动词' },
-          { text: '주세요', meaning: '请', partOfSpeech: '语法' },
+          { text: '주세요', meaning: '请', partOfSpeech: '表达' },
         ],
       },
       {
@@ -185,10 +185,10 @@ export const themePacks: ThemePack[] = [
           { text: '여기', meaning: '这里', partOfSpeech: '代词' },
           { text: '제일', meaning: '最', partOfSpeech: '副词' },
           { text: '인기', meaning: '人气', partOfSpeech: '名词' },
-          { text: '있는', meaning: '有的', partOfSpeech: '语法' },
+          { text: '있는', meaning: '有的', partOfSpeech: '动词' },
           { text: '메뉴', meaning: '菜', partOfSpeech: '名词' },
           { text: '가', meaning: '主格助词', partOfSpeech: '助词' },
-          { text: '뭐예요', meaning: '是什么', partOfSpeech: '语法' },
+          { text: '뭐예요', meaning: '是什么', partOfSpeech: '表达' },
         ],
       },
       {
@@ -199,7 +199,7 @@ export const themePacks: ThemePack[] = [
         breakdown: [
           { text: '삼겹살', meaning: '五花肉', partOfSpeech: '名词' },
           { text: '2인분', meaning: '两人份', partOfSpeech: '名词' },
-          { text: '주세요', meaning: '请给', partOfSpeech: '语法' },
+          { text: '주세요', meaning: '请给', partOfSpeech: '表达' },
         ],
       },
       {
@@ -209,9 +209,9 @@ export const themePacks: ThemePack[] = [
         situationNote: '也可说 조금 맵게（稍微辣一点）',
         breakdown: [
           { text: '맵지', meaning: '辣', partOfSpeech: '形容词' },
-          { text: '않게', meaning: '不...地', partOfSpeech: '语法' },
+          { text: '않게', meaning: '不...地', partOfSpeech: '副词' },
           { text: '해', meaning: '做', partOfSpeech: '动词' },
-          { text: '주세요', meaning: '请', partOfSpeech: '语法' },
+          { text: '주세요', meaning: '请', partOfSpeech: '表达' },
         ],
       },
       {
@@ -223,7 +223,7 @@ export const themePacks: ThemePack[] = [
           { text: '물', meaning: '水', partOfSpeech: '名词' },
           { text: '좀', meaning: '一些', partOfSpeech: '副词' },
           { text: '더', meaning: '更多', partOfSpeech: '副词' },
-          { text: '주세요', meaning: '请给', partOfSpeech: '语法' },
+          { text: '주세요', meaning: '请给', partOfSpeech: '表达' },
         ],
       },
       {
@@ -234,7 +234,7 @@ export const themePacks: ThemePack[] = [
         breakdown: [
           { text: '포장', meaning: '打包', partOfSpeech: '名词' },
           { text: '해', meaning: '做', partOfSpeech: '动词' },
-          { text: '주세요', meaning: '请', partOfSpeech: '语法' },
+          { text: '주세요', meaning: '请', partOfSpeech: '表达' },
         ],
       },
       {
@@ -244,7 +244,7 @@ export const themePacks: ThemePack[] = [
         situationNote: '也可直接说 계산해 주세요（请结账）',
         breakdown: [
           { text: '계산서', meaning: '账单', partOfSpeech: '名词' },
-          { text: '주세요', meaning: '请给', partOfSpeech: '语法' },
+          { text: '주세요', meaning: '请给', partOfSpeech: '表达' },
         ],
       },
       {
@@ -254,7 +254,7 @@ export const themePacks: ThemePack[] = [
         situationNote: '韩国礼仪，吃完说 잘 먹었습니다',
         breakdown: [
           { text: '잘', meaning: '好好地', partOfSpeech: '副词' },
-          { text: '먹겠습니다', meaning: '要吃了', partOfSpeech: '语法' },
+          { text: '먹겠습니다', meaning: '要吃了', partOfSpeech: '表达' },
         ],
       },
     ],
@@ -287,7 +287,7 @@ export const themePacks: ThemePack[] = [
         breakdown: [
           { text: '이거', meaning: '这个', partOfSpeech: '代词' },
           { text: '얼마', meaning: '多少钱', partOfSpeech: '代词' },
-          { text: '예요', meaning: '是', partOfSpeech: '语法' },
+          { text: '예요', meaning: '是', partOfSpeech: '助词' },
         ],
       },
       {
@@ -298,7 +298,7 @@ export const themePacks: ThemePack[] = [
         breakdown: [
           { text: '좀', meaning: '稍微', partOfSpeech: '副词' },
           { text: '깎아', meaning: '打折/减', partOfSpeech: '动词' },
-          { text: '주세요', meaning: '请', partOfSpeech: '语法' },
+          { text: '주세요', meaning: '请', partOfSpeech: '表达' },
         ],
       },
       {
@@ -309,7 +309,7 @@ export const themePacks: ThemePack[] = [
         breakdown: [
           { text: '다른', meaning: '其他的', partOfSpeech: '形容词' },
           { text: '색깔', meaning: '颜色', partOfSpeech: '名词' },
-          { text: '있어요', meaning: '有吗', partOfSpeech: '语法' },
+          { text: '있어요', meaning: '有吗', partOfSpeech: '动词' },
         ],
       },
       {
@@ -319,7 +319,7 @@ export const themePacks: ThemePack[] = [
         situationNote: '试鞋说 신어봐도 돼요，试戴说 써봐도 돼요',
         breakdown: [
           { text: '입어봐도', meaning: '试穿', partOfSpeech: '动词' },
-          { text: '돼요', meaning: '可以吗', partOfSpeech: '语法' },
+          { text: '돼요', meaning: '可以吗', partOfSpeech: '动词' },
         ],
       },
       {
@@ -329,7 +329,7 @@ export const themePacks: ThemePack[] = [
         situationNote: '有时店员会问要不要，主动说更方便',
         breakdown: [
           { text: '영수증', meaning: '收据', partOfSpeech: '名词' },
-          { text: '주세요', meaning: '请给', partOfSpeech: '语法' },
+          { text: '주세요', meaning: '请给', partOfSpeech: '表达' },
         ],
       },
       {
@@ -339,7 +339,7 @@ export const themePacks: ThemePack[] = [
         situationNote: '退款说 환불할 수 있어요，需带收据',
         breakdown: [
           { text: '교환', meaning: '换货', partOfSpeech: '名词' },
-          { text: '할 수 있어요', meaning: '可以...吗', partOfSpeech: '语法' },
+          { text: '할 수 있어요', meaning: '可以...吗', partOfSpeech: '表达' },
         ],
       },
       {
@@ -349,7 +349,7 @@ export const themePacks: ThemePack[] = [
         situationNote: '韩国超市袋子收费，不问一般不给',
         breakdown: [
           { text: '봉투', meaning: '袋子', partOfSpeech: '名词' },
-          { text: '주세요', meaning: '请给', partOfSpeech: '语法' },
+          { text: '주세요', meaning: '请给', partOfSpeech: '表达' },
         ],
       },
       {
@@ -359,7 +359,7 @@ export const themePacks: ThemePack[] = [
         situationNote: '小摊偶尔只收现金，提前确认',
         breakdown: [
           { text: '카드', meaning: '卡', partOfSpeech: '名词' },
-          { text: '돼요', meaning: '可以吗', partOfSpeech: '语法' },
+          { text: '돼요', meaning: '可以吗', partOfSpeech: '动词' },
         ],
       },
       {
@@ -371,7 +371,7 @@ export const themePacks: ThemePack[] = [
           { text: '이', meaning: '这', partOfSpeech: '代词' },
           { text: '상품', meaning: '商品', partOfSpeech: '名词' },
           { text: '세일', meaning: '打折', partOfSpeech: '名词' },
-          { text: '해요', meaning: '有吗', partOfSpeech: '语法' },
+          { text: '해요', meaning: '有吗', partOfSpeech: '动词' },
         ],
       },
     ],
@@ -576,7 +576,7 @@ export const themePacks: ThemePack[] = [
           { text: '최애', meaning: '最爱', partOfSpeech: '名词' },
           { text: '가', meaning: '主格助词', partOfSpeech: '助词' },
           { text: '누구', meaning: '谁', partOfSpeech: '代词' },
-          { text: '예요', meaning: '是', partOfSpeech: '语法' },
+          { text: '예요', meaning: '是', partOfSpeech: '助词' },
         ],
       },
       {
@@ -598,9 +598,9 @@ export const themePacks: ThemePack[] = [
         breakdown: [
           { text: '저는', meaning: '我', partOfSpeech: '代词' },
           { text: '입덕한', meaning: '入坑', partOfSpeech: '动词' },
-          { text: '지', meaning: '以来', partOfSpeech: '语法' },
+          { text: '지', meaning: '以来', partOfSpeech: '助词' },
           { text: '3년', meaning: '3年', partOfSpeech: '名词' },
-          { text: '됐어요', meaning: '已经', partOfSpeech: '语法' },
+          { text: '됐어요', meaning: '已经', partOfSpeech: '动词' },
         ],
       },
       {
@@ -613,7 +613,7 @@ export const themePacks: ThemePack[] = [
           { text: '가', meaning: '主格助词', partOfSpeech: '助词' },
           { text: '진짜', meaning: '真的', partOfSpeech: '副词' },
           { text: '대박', meaning: '厉害/赞', partOfSpeech: '感叹词' },
-          { text: '이에요', meaning: '是', partOfSpeech: '语法' },
+          { text: '이에요', meaning: '是', partOfSpeech: '助词' },
         ],
       },
       {
@@ -624,7 +624,7 @@ export const themePacks: ThemePack[] = [
         breakdown: [
           { text: '팬미팅', meaning: '粉丝见面会', partOfSpeech: '名词' },
           { text: '에', meaning: '到', partOfSpeech: '助词' },
-          { text: '가고 싶어요', meaning: '想去', partOfSpeech: '语法' },
+          { text: '가고 싶어요', meaning: '想去', partOfSpeech: '表达' },
         ],
       },
       {
@@ -1008,7 +1008,7 @@ export const themePacks: ThemePack[] = [
         situationNote: '팔로우 백 해줘요（回关我）也是常见说法',
         breakdown: [
           { text: '팔로우', meaning: '关注', partOfSpeech: '名词' },
-          { text: '해줄게요', meaning: '我来做', partOfSpeech: '语法' },
+          { text: '해줄게요', meaning: '我来做', partOfSpeech: '表达' },
         ],
       },
       {
@@ -1022,7 +1022,7 @@ export const themePacks: ThemePack[] = [
           { text: '조회수', meaning: '播放量', partOfSpeech: '名词' },
           { text: '가', meaning: '主格助词', partOfSpeech: '助词' },
           { text: '대박', meaning: '超厉害', partOfSpeech: '感叹词' },
-          { text: '이에요', meaning: '是', partOfSpeech: '语法' },
+          { text: '이에요', meaning: '是', partOfSpeech: '助词' },
         ],
       },
       {
@@ -1034,7 +1034,7 @@ export const themePacks: ThemePack[] = [
           { text: '좋아요', meaning: '点赞', partOfSpeech: '名词' },
           { text: '누르고', meaning: '按下', partOfSpeech: '动词' },
           { text: '구독', meaning: '订阅', partOfSpeech: '名词' },
-          { text: '해 주세요', meaning: '请做', partOfSpeech: '语法' },
+          { text: '해 주세요', meaning: '请做', partOfSpeech: '表达' },
         ],
       },
       {
@@ -1045,7 +1045,7 @@ export const themePacks: ThemePack[] = [
         breakdown: [
           { text: '댓글', meaning: '评论', partOfSpeech: '名词' },
           { text: '남겨', meaning: '留下', partOfSpeech: '动词' },
-          { text: '주세요', meaning: '请', partOfSpeech: '语法' },
+          { text: '주세요', meaning: '请', partOfSpeech: '表达' },
         ],
       },
       {
@@ -1057,7 +1057,7 @@ export const themePacks: ThemePack[] = [
           { text: '이', meaning: '这', partOfSpeech: '代词' },
           { text: '게시물', meaning: '帖子', partOfSpeech: '名词' },
           { text: '공유', meaning: '分享', partOfSpeech: '名词' },
-          { text: '했어요', meaning: '做了', partOfSpeech: '语法' },
+          { text: '했어요', meaning: '做了', partOfSpeech: '动词' },
         ],
       },
       {
@@ -1092,7 +1092,7 @@ export const themePacks: ThemePack[] = [
         breakdown: [
           { text: '알림', meaning: '通知', partOfSpeech: '名词' },
           { text: '설정', meaning: '设置', partOfSpeech: '名词' },
-          { text: '했어요', meaning: '做了吗', partOfSpeech: '语法' },
+          { text: '했어요', meaning: '做了吗', partOfSpeech: '动词' },
         ],
       },
       {
@@ -1105,7 +1105,7 @@ export const themePacks: ThemePack[] = [
           { text: '가', meaning: '主格助词', partOfSpeech: '助词' },
           { text: '10만', meaning: '10万', partOfSpeech: '名词' },
           { text: '명', meaning: '名/人', partOfSpeech: '名词' },
-          { text: '이에요', meaning: '是', partOfSpeech: '语法' },
+          { text: '이에요', meaning: '是', partOfSpeech: '助词' },
         ],
       },
     ],

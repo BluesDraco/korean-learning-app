@@ -195,7 +195,7 @@ export default function ThemeDetailPage() {
   const progressPercent = totalWords > 0 ? Math.round(((masteredCount + learningCount) / totalWords) * 100) : 0;
 
   return (
-    <div className={isWideViewport ? 'py-4 max-w-5xl mx-auto pb-8' : 'py-4 max-w-2xl mx-auto pb-8'}>
+    <div className={isWideViewport ? 'py-6 max-w-5xl mx-auto px-4 space-y-5 pb-8' : 'py-4 max-w-2xl mx-auto px-4 space-y-4 pb-8'}>
       {/* Header */}
       <div style={{ marginBottom: 20 }}>
         <Link
@@ -361,7 +361,7 @@ export default function ThemeDetailPage() {
           </div>
         )}
 
-        <div className="space-y-2">
+        <div className={isWideViewport ? 'grid grid-cols-2 gap-3 items-start' : 'space-y-2'}>
           {words.map((entry) => {
             const isExpanded = expandedWord === entry.id;
             const isMastered = masteredIds.has(entry.korean);

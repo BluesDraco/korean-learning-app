@@ -40,28 +40,28 @@ const SUMMARIZE_COOLDOWN_MS = 60_000;
 function pickGreeting(day: number, p?: CarrotProgress): string {
   // Day 1 新人
   if (day === 1) {
-    return '亲爱的，第一次见面。我是兔莉妈妈塞过来的胡萝卜——别问为什么，我也没想通。30 天后我们再聊聊你变成什么样了。';
+    return '亲爱的，第一天。我是兔莉妈妈放在背包里的胡萝卜——陪你把 30 天走完。有什么想问的，我在这儿。';
   }
   // 关卡前一天
   if ([6, 13, 20, 25, 28, 29].includes(day)) {
-    return '亲爱的，明天打 boss。这根胡萝卜没什么好嘱咐的——你前面练的那些就是答案。早点睡，别临时抱佛脚。';
+    return '亲爱的，明天是关卡日。之前练过的那些就是答案，早点睡，不用紧张。';
   }
   if (!p) {
-    return '亲爱的，又见面了。问我吧，我陪你。';
+    return '亲爱的，又见面了。有什么想问的？';
   }
   // 长时间未来 — currentDay 远超 completedDays
   if (p.completedDays > 0 && day > p.completedDays + 3) {
-    return '亲爱的，我以为你忘了我。也行——抽屉里也挺暖和的。从哪天落下的就从哪天接着，不用补，回来就回来了。';
+    return '亲爱的，好几天没见了。不用补，从上次停的地方接着来就好。';
   }
   // 蜜月期 Day 5-7
   if (day >= 5 && day <= 7 && p.sentencesCount > 0) {
-    return `亲爱的，看到你已经收藏了 ${p.sentencesCount} 句话——挺有眼光。这个劲儿别丢。`;
+    return `亲爱的，你已经收藏了 ${p.sentencesCount} 句话，第一周这个量挺不错。`;
   }
   // 倦怠期 Day 8-14
   if (day >= 8 && day <= 14) {
-    return '亲爱的，第二周了。倦怠期是正常的——这根胡萝卜不催你。要问就问。';
+    return '亲爱的，第二周。倦怠期是正常的——不急，按自己的节奏来。';
   }
-  return '亲爱的，我在这儿。问我吧。';
+  return '亲爱的，我在这儿。有什么想问的？';
 }
 
 /**

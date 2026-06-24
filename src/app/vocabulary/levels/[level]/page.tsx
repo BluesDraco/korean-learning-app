@@ -389,7 +389,7 @@ export default function LevelDetailPage() {
   const untouched = total - mastered - learning;
 
   return (
-    <div className={isWideViewport ? 'py-4 max-w-5xl mx-auto pb-8' : 'py-4 max-w-2xl mx-auto pb-8'}>
+    <div className={isWideViewport ? 'py-6 max-w-5xl mx-auto pb-8 px-4 space-y-5' : 'py-4 max-w-2xl mx-auto pb-8 px-4 space-y-4'}>
       {/* Header */}
       <div style={{ marginBottom: 20 }}>
         <Link
@@ -541,7 +541,7 @@ export default function LevelDetailPage() {
         </div>
       )}
 
-      <div className="space-y-2">
+      <div className={isWideViewport ? 'grid grid-cols-2 gap-3 items-start' : 'space-y-2'}>
         {visibleWords.map((entry, idx) => {
           const isExpanded = expandedId === entry.id;
           const isMastered = masteredSet.has(entry.korean);

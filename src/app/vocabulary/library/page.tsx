@@ -37,7 +37,7 @@ function LibraryContent() {
     validKeys.includes(urlTab ?? '') ? (urlTab as TabKey) : 'levels'
   );
 
-  const containerCls = isDesktop ? 'py-4 max-w-5xl mx-auto' : 'py-4 max-w-2xl mx-auto';
+  const containerCls = isDesktop ? 'py-6 max-w-5xl mx-auto px-4 space-y-5' : 'py-4 max-w-2xl mx-auto px-4 space-y-4';
 
   return (
     <div className={containerCls}>
