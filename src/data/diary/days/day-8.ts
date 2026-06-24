@@ -21,7 +21,7 @@ export const day8: ToriDay = {
   estimatedMin: 12,
 
   opening: {
-    date: '9月 8일 일요일 밤 늦게',
+    date: '9月 8日 周日 深夜',
     weather: '兽尔 · 雨后',
     toriPose: 'shy',
     diaryText: `9月 8日，深夜。

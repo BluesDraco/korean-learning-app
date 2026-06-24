@@ -23,10 +23,10 @@ export const day7: ToriDay = {
   estimatedMin: 15,
 
   opening: {
-    date: '9월 8일 일요일 밤',
+    date: '9月 7日 周六 傍晚',
     weather: '兽尔 · 雨',
     toriPose: 'shy',
-    diaryText: `9月 8日，周日夜晚。
+    diaryText: `9月 7日，周六傍晚。
 
 我不知道怎么一个人坐地铁坐到了陌生的站。
 手机显示 1%。

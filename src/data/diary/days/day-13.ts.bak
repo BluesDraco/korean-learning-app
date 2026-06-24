@@ -179,7 +179,7 @@ export const day13: ToriDay = {
 
   grammar: {
     title: '描述病情 · 名词 + 걸렸어요 / 나요',
-    pattern: '병 + 걸렸어요 (得了___) / 증상 + 이/가 나요 (出现___)',
+    pattern: '병 + 걸렸어요 (得了___) · 증상 + 이/가 나요 (出现___)',
     whenToUse: '看病、买药、跟朋友说"我不太舒服"时。',
     rules: [
       '**병 + 걸렸어요** = 得了___病：감기 **걸렸어요** / 독감 **걸렸어요**',
@@ -241,19 +241,8 @@ export const day13: ToriDay = {
         { ko: '열이 있어요.', correct: false },
       ],
     },
-    {
-      id: 'd13-o5',
-      kind: 'match-pair',
-      successMsg: '✓ Day 13 核心词全部对上。感冒了，但身边有人。',
-      pairs: [
-        { ko: '약국', zh: '药店' },
-        { ko: '감기', zh: '感冒' },
-        { ko: '콧물', zh: '鼻涕' },
-        { ko: '기침', zh: '咳嗽' },
-        { ko: '약', zh: '药' },
-      ],
-    },
   ],
+
   recap: {
     toriPose: 'sleepy',
     praise: '在韩国第一次生病、第一次自己买药。Haru 在你身边。',

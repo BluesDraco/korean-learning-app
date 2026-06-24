@@ -19,7 +19,9 @@ export function DiaryOutput({ day, onComplete }: Props) {
   const [checked, setChecked] = useState<Checked>('idle');
   const [shaking, setShaking] = useState(false);
   const [results, setResults] = useState<Array<{ taskId: string; correct: boolean; userText?: string }>>([]);
-  const [hearts, setHearts] = useState(3);
+  const isCheckpointDay = !!day.isCheckpoint;
+  const maxHearts = isCheckpointDay ? 5 : 3;
+  const [hearts, setHearts] = useState(maxHearts);
 
   // compose
   const [picked, setPicked] = useState<number[]>([]);
@@ -75,7 +77,7 @@ export function DiaryOutput({ day, onComplete }: Props) {
         <p className="diary-h2 diary-handwriting-zh" style={{ marginBottom: 8 }}>哎呀，今天有点难…</p>
         <p className="diary-text-soft" style={{ marginBottom: 24 }}>Tori 觉得我们需要再来一遍！</p>
         <button onClick={() => {
-          setHearts(3); setQIdx(0); setResults([]);
+          setHearts(maxHearts); setQIdx(0); setResults([]);
           setChecked('idle'); setComposeChecked('idle');
           setPicked([]); setPickedIdx(null);
           setMatched(new Set()); setWrongZh(null);
@@ -103,10 +105,15 @@ export function DiaryOutput({ day, onComplete }: Props) {
   return (
     <div className="diary-anim-fade-up">
       <div style={{ marginBottom: 18, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span className="diary-tag" style={{ background: '#5ea886', color: '#fff' }}>OUTPUT · 输出</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span className="diary-tag" style={{ background: '#5ea886', color: '#fff' }}>OUTPUT · 输出</span>
+          {isCheckpointDay && (
+            <span className="diary-tag" style={{ background: 'var(--diary-gold-deep)', color: '#fff', fontSize: 11 }}>★ 关卡考试</span>
+          )}
+        </div>
         <div style={{ display: 'flex', gap: 3 }}>
-          {[1, 2, 3].map(i => (
-            <span key={i} style={{ fontSize: 18, opacity: i <= hearts ? 1 : 0.2, transition: 'opacity 0.3s' }}>🥕</span>
+          {Array.from({ length: maxHearts }, (_, i) => (
+            <span key={i} style={{ fontSize: 18, opacity: i < hearts ? 1 : 0.2, transition: 'opacity 0.3s' }}>🥕</span>
           ))}
         </div>
       </div>

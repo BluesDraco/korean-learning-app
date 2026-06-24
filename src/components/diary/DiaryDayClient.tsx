@@ -76,6 +76,7 @@ export function DiaryDayClient({ day, level }: Props) {
   const tone = chapterTone(day.day);
   const roman = chapterRoman(day.day);
   const isAdmin = user?.role === 'admin';
+  const isCheckpointDay = !!day.isCheckpoint;
 
   // 加载 / 创建进度记录
   useEffect(() => {
@@ -184,7 +185,7 @@ export function DiaryDayClient({ day, level }: Props) {
   return (
     <div className={`diary-detail-page diary-detail-tone-${tone}`}>
       {/* Sticky 顶栏 */}
-      <header className="diary-detail-topbar">
+      <header className="diary-detail-topbar" {...(isCheckpointDay ? { 'data-checkpoint': 'true' } : {})}>
         <div className="diary-detail-topbar-row">
           <button
             aria-label="关闭"
@@ -268,9 +269,15 @@ export function DiaryDayClient({ day, level }: Props) {
       </div>
 
       {/* 章节色带 hero */}
-      <section className="diary-detail-hero" data-roman={roman}>
+      <section className="diary-detail-hero" data-roman={roman} {...(isCheckpointDay ? { 'data-checkpoint': 'true' } : {})}>
         <div className="diary-detail-hero-inner">
-          <p className="diary-detail-hero-eyebrow">Day {day.day} of 30 · Chapter {roman}</p>
+          <p className="diary-detail-hero-eyebrow">
+            {isCheckpointDay
+              ? day.isCheckpoint === 30
+                ? `★ CHECKPOINT · 最终考试 · Day 30 of 30`
+                : `★ CHECKPOINT · 关卡 ${[7,14,21,26,29].indexOf(day.isCheckpoint!) + 1} · Day ${day.day} of 30`
+              : `Day ${day.day} of 30 · Chapter ${roman}`}
+          </p>
           <h1 className="diary-detail-hero-title">{day.title}</h1>
           {day.subtitle && (
             <p className="diary-detail-hero-sub">{day.subtitle}</p>

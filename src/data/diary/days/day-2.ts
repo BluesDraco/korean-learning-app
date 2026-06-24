@@ -215,6 +215,18 @@ export const day2: ToriDay = {
     },
     {
       id: 'd02-o4',
+      kind: 'particle-error',
+      zhHint: '请给我一杯可乐。',
+      successMsg: '콜라 无받침 → 을/를 省略也可。口语中最常见的点单句式。',
+      choices: [
+        { ko: '콜라 주세요.', correct: true },
+        { ko: '콜라를 주세요.', correct: false },
+        { ko: '콜라가 주세요.', correct: false },
+        { ko: '콜라은 주세요.', correct: false },
+      ],
+    },
+    {
+      id: 'd02-o5',
       kind: 'match-pair',
       successMsg: '✓ Day 2 核心词全部对上。下了飞机，一切才刚刚开始。',
       pairs: [
