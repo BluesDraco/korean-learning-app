@@ -131,7 +131,7 @@ export function DiaryDayClient({ day }: Props) {
     return () => { cancelled = true; };
   }, [user, day.day]);
 
-  const advance = useCallback(async (currentMod: ToriModuleKind) => {
+  const advance = useCallback(async (currentMod: ToriModuleKind, completionOutput?: typeof outputResults) => {
     if (user) {
       try {
         const existing = await db.toriProgress.get(progressId);
@@ -140,7 +140,7 @@ export function DiaryDayClient({ day }: Props) {
           const allDone = MODULE_ORDER.every((m) => nextDone.includes(m));
           await db.toriProgress.update(progressId, {
             modulesDone: nextDone,
-            ...(allDone && !existing.completedAt ? { completedAt: Date.now(), output: outputResults } : {}),
+            ...(allDone && !existing.completedAt ? { completedAt: Date.now(), output: completionOutput ?? outputResults } : {}),
           });
           setModulesDone(new Set(nextDone as ToriModuleKind[]));
           if (allDone) {
@@ -310,7 +310,7 @@ export function DiaryDayClient({ day }: Props) {
                 day={day}
                 onComplete={(results) => {
                   setOutputResults(results);
-                  advance('output');
+                  advance('output', results);
                 }}
               />
             )}

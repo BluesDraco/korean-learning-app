@@ -18,7 +18,9 @@ import { PageHeader, Section, Card, Button, EntryCard } from '@/components/ui';
 import type { Word, WordBook, MasteryLevel, WordEntry } from '@/types';
 
 const DesktopVocabularyPage = dynamic(
-  () => import('@/components/desktop/DesktopVocabularyPage').then((m) => m.DesktopVocabularyPage),
+  () => import('@/components/desktop/DesktopVocabularyPage')
+    .then((m) => m.DesktopVocabularyPage)
+    .catch(() => () => <div style={{ padding: '80px 40px', textAlign: 'center', color: 'var(--color-ink-3)' }}>加载失败，请刷新页面</div>),
   { ssr: false }
 );
 

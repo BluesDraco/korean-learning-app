@@ -14,10 +14,22 @@ const SectionLoading = () => (
   </div>
 );
 
-const ThemesSection = dynamic(() => import('@/components/vocabulary/ThemesSection').then(m => m.ThemesSection), { loading: SectionLoading });
-const LevelsSection = dynamic(() => import('@/components/vocabulary/LevelsSection').then(m => m.LevelsSection), { loading: SectionLoading });
-const YonseiSection = dynamic(() => import('@/components/vocabulary/YonseiSection').then(m => m.YonseiSection), { loading: SectionLoading });
-const ExpressionsSection = dynamic(() => import('@/components/vocabulary/ExpressionsSection').then(m => m.ExpressionsSection), { loading: SectionLoading });
+const ThemesSection = dynamic(
+  () => import('@/components/vocabulary/ThemesSection').then(m => m.ThemesSection).catch(() => () => <span style={{ color: 'var(--color-ink-3)' }}>加载失败，请刷新页面</span>),
+  { loading: SectionLoading }
+);
+const LevelsSection = dynamic(
+  () => import('@/components/vocabulary/LevelsSection').then(m => m.LevelsSection).catch(() => () => <span style={{ color: 'var(--color-ink-3)' }}>加载失败，请刷新页面</span>),
+  { loading: SectionLoading }
+);
+const YonseiSection = dynamic(
+  () => import('@/components/vocabulary/YonseiSection').then(m => m.YonseiSection).catch(() => () => <span style={{ color: 'var(--color-ink-3)' }}>加载失败，请刷新页面</span>),
+  { loading: SectionLoading }
+);
+const ExpressionsSection = dynamic(
+  () => import('@/components/vocabulary/ExpressionsSection').then(m => m.ExpressionsSection).catch(() => () => <span style={{ color: 'var(--color-ink-3)' }}>加载失败，请刷新页面</span>),
+  { loading: SectionLoading }
+);
 
 const tabs = [
   { key: 'levels',      label: 'TOPIK 词表', Icon: BarChart3 },
