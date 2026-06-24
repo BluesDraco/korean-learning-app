@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { db } from '@/lib/db';
 import { shadowingClips, ShadowingToken } from '@/data/shadowingClips';
-import { detectMimeType } from '@/lib/audio/recorder';
+import { detectMimeType, isRecordingSupported } from '@/lib/audio/recorder';
 import { useTheme } from '@/components/ThemeProvider';
 import { LIGHT_C as _LIGHT_C, DARK_C as _DARK_C } from '@/lib/theme';
 
@@ -50,6 +50,18 @@ export default function ShadowingClipPage() {
     if (videoRef.current) videoRef.current.load();
     return () => { if (stopTimerRef.current) clearInterval(stopTimerRef.current); };
   }, [clip.videoUrl]);
+
+  useEffect(() => {
+    return () => { if (recordedUrl) URL.revokeObjectURL(recordedUrl); };
+  }, [recordedUrl]);
+
+  useEffect(() => {
+    return () => {
+      if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+        mediaRecorderRef.current.stop();
+      }
+    };
+  }, []);
 
   // auto-scroll active card into view
   useEffect(() => {
@@ -102,6 +114,7 @@ export default function ShadowingClipPage() {
 
   async function handleRecord() {
     if (recordState === 'recording') { mediaRecorderRef.current?.stop(); return; }
+    if (!isRecordingSupported()) { showToast('此浏览器不支持录音'); return; }
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       chunksRef.current = [];

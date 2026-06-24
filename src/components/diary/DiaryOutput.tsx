@@ -19,6 +19,7 @@ export function DiaryOutput({ day, onComplete }: Props) {
   const [checked, setChecked] = useState<Checked>('idle');
   const [shaking, setShaking] = useState(false);
   const [results, setResults] = useState<Array<{ taskId: string; correct: boolean; userText?: string }>>([]);
+  const [hearts, setHearts] = useState(3);
 
   // compose
   const [picked, setPicked] = useState<number[]>([]);
@@ -59,12 +60,32 @@ export function DiaryOutput({ day, onComplete }: Props) {
   };
   const handleWrong = () => {
     sfxWrong();
+    setHearts(h => Math.max(0, h - 1));
   };
 
   const handleNext = () => {
     if (qIdx < tasks.length - 1) setQIdx(qIdx + 1);
     else onComplete(results);
   };
+
+  if (hearts === 0) {
+    return (
+      <div className="diary-anim-fade-up" style={{ textAlign: 'center', padding: '40px 20px' }}>
+        <div style={{ fontSize: 48, marginBottom: 12 }}>🥕</div>
+        <p className="diary-h2 diary-handwriting-zh" style={{ marginBottom: 8 }}>哎呀，今天有点难…</p>
+        <p className="diary-text-soft" style={{ marginBottom: 24 }}>Tori 觉得我们需要再来一遍！</p>
+        <button onClick={() => {
+          setHearts(3); setQIdx(0); setResults([]);
+          setChecked('idle'); setComposeChecked('idle');
+          setPicked([]); setPickedIdx(null);
+          setMatched(new Set()); setWrongZh(null);
+          setShaking(false); setLastUserAnswer('');
+        }} className="diary-btn diary-btn-primary">
+          重新挑战 🥕
+        </button>
+      </div>
+    );
+  }
 
   if (!task || tasks.length === 0) {
     return (
@@ -81,8 +102,13 @@ export function DiaryOutput({ day, onComplete }: Props) {
 
   return (
     <div className="diary-anim-fade-up">
-      <div style={{ marginBottom: 18 }}>
+      <div style={{ marginBottom: 18, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <span className="diary-tag" style={{ background: '#5ea886', color: '#fff' }}>OUTPUT · 输出</span>
+        <div style={{ display: 'flex', gap: 3 }}>
+          {[1, 2, 3].map(i => (
+            <span key={i} style={{ fontSize: 18, opacity: i <= hearts ? 1 : 0.2, transition: 'opacity 0.3s' }}>🥕</span>
+          ))}
+        </div>
       </div>
       <h2 className="diary-h2" style={{ marginBottom: 6 }}>{KIND_TITLE[task.kind] ?? '练习'}</h2>
       <p className="diary-text-soft" style={{ fontSize: 13, marginBottom: 20 }}>

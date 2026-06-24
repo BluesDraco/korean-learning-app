@@ -1,8 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { ToriDay, ToriDialogueLine } from '@/types/tori-diary';
-import { ChevronRight, ChevronDown, MessageCircle } from 'lucide-react';
+import { ChevronRight, ChevronDown, MessageCircle, Volume2, Mic, Square, Play, RotateCcw } from 'lucide-react';
+import { speak } from '@/lib/tts';
+import { AudioRecorder, isRecordingSupported, revokeRecording } from '@/lib/audio/recorder';
 import { TappableText } from '@/components/TappableText';
 import { DiaryLineActions } from './DiaryLineActions';
 
@@ -248,11 +250,89 @@ function DialogueLine({ line, day, isCurrent, pickedChoice, isShadowed, onPick, 
             </button>
           )}
           {line.practice === 'shadow' && !isShadowed && (
-            <button onClick={onShadow} className="diary-btn diary-btn-ghost" style={{ padding: '6px 16px', fontSize: 'var(--diary-text-sm)' }}>
-              我跟读了 →
-            </button>
+            <ShadowRecordBlock ko={line.ko} onDone={onShadow} />
           )}
         </div>
+      )}
+    </div>
+  );
+}
+
+function ShadowRecordBlock({ ko, onDone }: { ko: string; onDone: () => void }) {
+  const [state, setState] = useState<'idle' | 'rec' | 'preview'>('idle');
+  const [url, setUrl] = useState<string | null>(null);
+  const [err, setErr] = useState<string | null>(null);
+  const recRef = useRef<AudioRecorder | null>(null);
+  const supported = isRecordingSupported();
+
+  useEffect(() => () => { if (url) revokeRecording(url); }, [url]);
+  useEffect(() => () => { recRef.current?.cancel(); }, []);
+
+  const playOrig = () => speak(ko, 0.85).catch(() => {});
+  const playMine = () => url && new Audio(url).play().catch(() => {});
+
+  const start = async () => {
+    setErr(null);
+    const r = new AudioRecorder(15000);
+    recRef.current = r;
+    const res = await r.start();
+    if (res.error) { setErr(res.error); recRef.current = null; return; }
+    setState('rec');
+  };
+
+  const stop = async () => {
+    const res = await recRef.current?.stop();
+    recRef.current = null;
+    if (res) { setUrl(res.url); setState('preview'); } else setState('idle');
+  };
+
+  const retry = () => {
+    if (url) revokeRecording(url);
+    setUrl(null);
+    setErr(null);
+    setState('idle');
+  };
+
+  return (
+    <div style={{ marginTop: 10, display: 'flex', flexDirection: 'column', gap: 8 }}>
+      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+        <button onClick={playOrig} className="diary-btn diary-btn-ghost" style={{ padding: '5px 12px', fontSize: 12, display: 'flex', alignItems: 'center', gap: 4 }}>
+          <Volume2 size={12} /> 听原句
+        </button>
+        {supported && state === 'idle' && (
+          <button onClick={start} className="diary-btn diary-btn-ghost" style={{ padding: '5px 12px', fontSize: 12, display: 'flex', alignItems: 'center', gap: 4 }}>
+            <Mic size={12} /> 开始跟读
+          </button>
+        )}
+        {state === 'rec' && (
+          <button onClick={stop} style={{ padding: '5px 12px', fontSize: 12, background: 'var(--diary-stamp-red)', color: '#fff', border: 'none', borderRadius: 'var(--diary-r-sm)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}>
+            <Square size={10} fill="currentColor" /> 停止
+          </button>
+        )}
+      </div>
+      {err && (
+        <span className="diary-handwriting-zh" style={{ fontSize: 11, color: 'var(--diary-stamp-red)' }}>{err}</span>
+      )}
+      {state === 'preview' && (
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
+          <button onClick={playMine} className="diary-btn diary-btn-ghost" style={{ padding: '5px 12px', fontSize: 12, display: 'flex', alignItems: 'center', gap: 4 }}>
+            <Play size={12} /> 听我的
+          </button>
+          <button onClick={playOrig} className="diary-btn diary-btn-ghost" style={{ padding: '5px 12px', fontSize: 12, display: 'flex', alignItems: 'center', gap: 4 }}>
+            <Volume2 size={12} /> 听原句
+          </button>
+          <button onClick={retry} className="diary-btn diary-btn-ghost" style={{ padding: '5px 10px', fontSize: 12, display: 'flex', alignItems: 'center', gap: 4 }}>
+            <RotateCcw size={11} /> 再来
+          </button>
+          <button onClick={onDone} className="diary-btn diary-btn-primary" style={{ padding: '5px 14px', fontSize: 12 }}>
+            完成 →
+          </button>
+        </div>
+      )}
+      {state !== 'preview' && (
+        <button onClick={onDone} style={{ fontSize: 11, color: 'var(--diary-ink-faint)', border: 'none', background: 'transparent', cursor: 'pointer', textAlign: 'left', padding: 0 }}>
+          跳过跟读 →
+        </button>
       )}
     </div>
   );

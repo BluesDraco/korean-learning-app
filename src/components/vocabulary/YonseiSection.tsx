@@ -45,12 +45,15 @@ export function YonseiSection() {
   useEffect(() => {
     setLoading(true);
     (async () => {
-      const [{ yonseiUnits }, { seoulUnits }] = await Promise.all([
-        import('@/data/yonsei-books'),
-        import('@/data/seoul-books'),
-      ]);
-      setUnits(textbook === 'yonsei' ? yonseiUnits : seoulUnits);
-      setLoading(false);
+      try {
+        const [{ yonseiUnits }, { seoulUnits }] = await Promise.all([
+          import('@/data/yonsei-books'),
+          import('@/data/seoul-books'),
+        ]);
+        setUnits(textbook === 'yonsei' ? yonseiUnits : seoulUnits);
+      } catch {} finally {
+        setLoading(false);
+      }
     })();
   }, [textbook]);
 

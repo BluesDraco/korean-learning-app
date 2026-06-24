@@ -508,6 +508,7 @@ export default function AIChatPage() {
     return () => {
       audio.pause();
       audio.src = '';
+      URL.revokeObjectURL(audioUrl);
     };
   }, [audioUrl]);
 

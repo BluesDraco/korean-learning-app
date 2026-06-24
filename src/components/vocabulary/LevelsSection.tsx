@@ -36,7 +36,8 @@ export function LevelsSection() {
       const userMasteredSet = new Set(allUserWords.filter((w) => w.mastery === 'mastered').map((w) => w.word));
       const userLearningSet = new Set(allUserWords.filter((w) => w.mastery !== 'mastered' && w.mastery !== 'new').map((w) => w.word));
 
-      const allLevels = await getAllLevels();
+      let allLevels: { level: number }[] = [];
+      try { allLevels = await getAllLevels(); } catch { /* empty = [] */ }
       const result = await Promise.all(allLevels.map(async (lvl) => {
         const words = await getLevelWords(lvl.level);
         const koreanWords = words.map((w) => w.korean);

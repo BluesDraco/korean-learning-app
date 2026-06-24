@@ -246,10 +246,10 @@ function DueWordExpanded({ word, entry, savedExamples, setSavedExamples }: {
   savedExamples: Set<string>;
   setSavedExamples: (fn: (prev: Set<string>) => Set<string>) => void;
 }) {
-  const validExamples = word.examples.filter(ex => ex.text && ex.text !== '[object Object]');
+  const validExamples = (word.examples ?? []).filter(ex => ex.text && ex.text !== '[object Object]');
   const examples = validExamples.length > 0
     ? validExamples.map(ex => ({ korean: ex.text, chinese: ex.translation }))
-    : entry?.examples.slice(0, 3).map(ex => ({ korean: ex.korean, chinese: ex.chinese })) ?? [];
+    : (entry?.examples ?? []).slice(0, 3).map(ex => ({ korean: ex.korean, chinese: ex.chinese })) ?? [];
   return (
     <div className="px-4 pb-3 space-y-2 border-t border-[var(--border-color)]">
       {examples.length > 0 ? examples.map((ex, i) => (
@@ -361,6 +361,8 @@ function VocabularyContent() {
         setQuickStats({ total, mastered, learning, newWords: Math.max(0, total - mastered - learning), dueReview });
         setWordBooks(books);
         if (profile?.dailyGoalWords) setDailyGoal(profile.dailyGoalWords);
+      } catch {
+        // ignore — keep empty state instead of crashing
       } finally {
         setLoading(false);
       }
