@@ -70,12 +70,12 @@ export function DesktopLearningPage() {
       <PageHeader
         eyebrow="학습 · LEARN"
         title="学习"
-        subtitle="3 大系统课程 + 8 个练习工具，按你的节奏来。"
+        subtitle="字母、语法、TOPIK — 按入门顺序一步步来。"
         tone="pink"
       />
 
-      {/* 上半 · 系统课程 */}
-      <Section title="系统课程" spacing="normal">
+      {/* 上半 · 入门顺序 */}
+      <Section title="入门顺序" spacing="normal">
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {systemWithProgress.map((entry) => (
             <Card

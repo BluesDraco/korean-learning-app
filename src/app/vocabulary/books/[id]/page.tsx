@@ -62,6 +62,8 @@ export default function BookDetailPage() {
       const b = await db.wordBooks.get(id);
       if (!b) { router.replace('/vocabulary/books'); return; }
       setBook(b);
+      const { recordVocabVisit } = await import('@/lib/progress/dailyHero');
+      recordVocabVisit({ source: 'books', unitId: b.id, unitTitle: b.name });
       const loaded = await db.words.where('id').anyOf(b.wordIds).toArray();
       setWords(loaded.filter((w): w is Word => w != null));
     } catch {

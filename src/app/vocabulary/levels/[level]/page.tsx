@@ -109,6 +109,8 @@ export default function LevelDetailPage() {
       const l = await getLevel(level);
       if (!l) { router.replace('/vocabulary/levels'); return; }
       setLvl(l);
+      const { recordVocabVisit } = await import('@/lib/progress/dailyHero');
+      recordVocabVisit({ source: 'levels', unitId: String(level), unitTitle: levelNames[level] ?? `${level}级` });
       const w = await getLevelWords(level);
       setWords(w);
       try {

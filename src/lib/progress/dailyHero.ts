@@ -26,6 +26,8 @@ export interface DiaryProgress {
   /** 已完成 day 数 */
   completedCount: number;
   total: number;
+  /** 当前天的 16:9 场景图（路径） */
+  sceneImageUrl?: string;
 }
 
 export interface PhoneticProgress {
@@ -76,9 +78,9 @@ export async function getDiaryProgress(userId: string): Promise<DiaryProgress> {
     const completedDays = new Set<number>();
     userRows.forEach((r) => { if (r.completedAt) completedDays.add(r.day); });
     const next = Math.min(Math.max(0, ...Array.from(completedDays)) + 1, TOTAL_DAYS);
-    return { currentDay: next || 1, completedCount: completedDays.size, total: TOTAL_DAYS };
+    return { currentDay: next || 1, completedCount: completedDays.size, total: TOTAL_DAYS, sceneImageUrl: sceneImageForDay(next || 1) };
   } catch {
-    return { currentDay: 1, completedCount: 0, total: TOTAL_DAYS };
+    return { currentDay: 1, completedCount: 0, total: TOTAL_DAYS, sceneImageUrl: sceneImageForDay(1) };
   }
 }
 
@@ -120,4 +122,8 @@ export async function getGrammarProgress(): Promise<GrammarProgress> {
     total = grammarParts.reduce((s, p) => s + p.lessons.length, 0);
   } catch { /* ignore */ }
   return { completed, total };
+}
+
+export function sceneImageForDay(day: number): string {
+  return `/images/diary/day-${String(day).padStart(2, '0')}-scene.png`;
 }

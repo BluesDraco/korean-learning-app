@@ -1,9 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
 import {
-  ArrowRight, Music2, GraduationCap, BookOpen,
+  Music2, GraduationCap, BookOpen,
   Mic, Headphones, PenLine, Edit3,
   FileText, MessageCircle, Keyboard, Sparkles,
 } from 'lucide-react';
@@ -73,12 +72,12 @@ export default function LearningPage() {
       <PageHeader
         eyebrow="학습"
         title="学习"
-        subtitle="3 大系统课程 + 8 个练习工具，按你的节奏来。"
+        subtitle="字母、语法、TOPIK — 按入门顺序一步步来。"
         tone="pink"
       />
 
-      {/* 上半 · 系统课程 */}
-      <Section title="系统课程" spacing="normal">
+      {/* 上半 · 入门顺序 */}
+      <Section title="入门顺序" spacing="normal">
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {systemWithProgress.map((entry) => (
             <EntryCard

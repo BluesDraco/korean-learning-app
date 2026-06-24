@@ -2,13 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import Image from 'next/image';
-import { Sparkles, PenLine, Mic, Trophy, MessageSquare, ChevronRight } from 'lucide-react';
+import { PenLine, Mic, Trophy, MessageSquare, ChevronRight } from 'lucide-react';
 import { db } from '@/lib/db';
 import { useAuth } from '@/components/AuthProvider';
 import { PageHeader, Section, Card } from '@/components/ui';
 import { HeroFourCards, type HeroProgressData } from '@/components/today/HeroFourCards';
-import { TodayPickSheet } from '@/components/today/TodayPickSheet';
 import { getVocabProgress, getDiaryProgress, getPhoneticProgress, getGrammarProgress } from '@/lib/progress/dailyHero';
 import { buildDailyPlanFromApi, type DailyPlan } from '@/lib/daily/buildDailyPlan';
 
@@ -33,7 +33,7 @@ export function DesktopDailyPage() {
   const { user } = useAuth();
   const [stats, setStats] = useState({ words: 0, sentences: 0, articlesRead: 0 });
   const [heroData, setHeroData] = useState<HeroProgressData | null>(null);
-  const [pickOpen, setPickOpen] = useState(false);
+  const [pickExpanded, setPickExpanded] = useState(false);
   const [plan, setPlan] = useState<DailyPlan | null>(null);
 
   useEffect(() => {
@@ -65,7 +65,7 @@ export function DesktopDailyPage() {
         : '/vocabulary';
       setHeroData({
         vocab: { mastered: vocab.mastered, total: vocab.total, lastUnitTitle: vocab.unitTitle, href: vocabHref },
-        diary: { currentDay: diary.currentDay, total: diary.total },
+        diary: { currentDay: diary.currentDay, total: diary.total, sceneImageUrl: diary.sceneImageUrl },
         phonetic: { completed: phonetic.completed, total: phonetic.total },
         grammar: { completed: grammar.completed, total: grammar.total },
       });
@@ -135,16 +135,16 @@ export function DesktopDailyPage() {
       {/* 4 张大卡：1 + 3 不对称（日记占大格） */}
       {heroData && <HeroFourCards data={heroData} layout="desktop" />}
 
-      {/* 今日推荐按钮 */}
+      {/* 今日推荐折叠展开 */}
       <button
-        onClick={() => setPickOpen(true)}
+        onClick={() => setPickExpanded(!pickExpanded)}
         style={{
           width: '100%',
           padding: '18px 22px',
-          marginBottom: 24,
+          marginBottom: pickExpanded ? 12 : 24,
           background: 'linear-gradient(135deg, var(--color-pink-soft), var(--color-purple-soft))',
           border: '1.5px solid var(--color-border-1)',
-          borderRadius: 'var(--radius-lg)',
+          borderRadius: pickExpanded ? 'var(--radius-lg) var(--radius-lg) 0 0' : 'var(--radius-lg)',
           boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5), var(--shadow-sm)',
           cursor: 'pointer',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -159,8 +159,64 @@ export function DesktopDailyPage() {
             今日推荐 · {plan && plan.totalCount > 0 ? `${plan.completedCount}/${plan.totalCount} 完成` : '看看今天做什么'}
           </p>
         </div>
-        <ChevronRight size={20} color="var(--color-pink-strong)" />
+        <ChevronRight size={20} color="var(--color-pink-strong)" style={{ transition: 'transform 150ms ease', transform: pickExpanded ? 'rotate(90deg)' : 'rotate(0deg)' }} />
       </button>
+
+      {pickExpanded && plan && (
+        <div style={{
+          marginBottom: 24,
+          padding: '14px 20px 20px',
+          background: 'var(--color-surface-1)',
+          border: '1.5px solid var(--color-border-1)',
+          borderTop: 'none',
+          borderRadius: '0 0 var(--radius-lg) var(--radius-lg)',
+        }}>
+          {plan.totalCount > 0 && (
+            <div style={{ marginBottom: 16, padding: '10px 14px', background: 'var(--color-surface-3)', borderRadius: 'var(--radius-md)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                <span style={{ fontSize: 12, color: 'var(--color-ink-3)' }}>今日进度</span>
+                <span style={{ fontSize: 12, fontWeight: 800, color: 'var(--color-pink-strong)' }}>
+                  {plan.completedCount}/{plan.totalCount} 完成
+                </span>
+              </div>
+              <div style={{ height: 5, borderRadius: 'var(--radius-pill)', background: 'var(--color-surface-4)', overflow: 'hidden' }}>
+                <div
+                  style={{
+                    height: '100%',
+                    background: 'linear-gradient(90deg, var(--color-purple-base), var(--color-pink-base))',
+                    width: `${Math.max(4, plan.totalCount > 0 ? Math.round((plan.completedCount / plan.totalCount) * 100) : 0)}%`,
+                    transition: 'width var(--dur-slow) var(--ease-soft)',
+                  }}
+                />
+              </div>
+            </div>
+          )}
+          {plan.tasks.length === 0 ? (
+            <div style={{ padding: '24px 16px', textAlign: 'center' }}>
+              <p style={{ fontSize: 28, marginBottom: 8 }}>🎉</p>
+              <p style={{ fontSize: 14, color: 'var(--color-ink-3)', margin: 0 }}>
+                今天所有任务都完成了，去刷词汇或日记吧！
+              </p>
+            </div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {plan.tasks.map((task) => (
+                <Link key={task.key} href={task.href} style={{ textDecoration: 'none' }}>
+                  <div style={{ padding: '14px 18px', borderRadius: 'var(--radius-md)', border: '1.5px solid var(--color-border-1)', background: 'var(--color-surface-1)', display: 'flex', alignItems: 'center', gap: 14 }}>
+                    <span style={{ fontSize: 12, fontWeight: 800, padding: '6px 14px', borderRadius: 'var(--radius-pill)', background: 'var(--color-pink-soft)', color: 'var(--color-pink-strong)', flexShrink: 0 }}>
+                      去做
+                    </span>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p style={{ fontSize: 15, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>{task.label}</p>
+                      {task.detail && <p style={{ fontSize: 13, color: 'var(--color-ink-3)', margin: '2px 0 0' }}>{task.detail}</p>}
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* 我的 */}
       <Section title="我的" spacing="normal">
@@ -184,16 +240,6 @@ export function DesktopDailyPage() {
           ))}
         </div>
       </Section>
-
-      {plan && (
-        <TodayPickSheet
-          open={pickOpen}
-          onClose={() => setPickOpen(false)}
-          tasks={plan.tasks}
-          completedCount={plan.completedCount}
-          totalCount={plan.totalCount}
-        />
-      )}
     </div>
   );
 }

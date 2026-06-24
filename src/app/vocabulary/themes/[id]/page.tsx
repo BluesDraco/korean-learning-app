@@ -50,6 +50,9 @@ export default function ThemeDetailPage() {
       if (!t) { router.replace('/vocabulary/library'); return; }
       setTheme(t);
 
+      const { recordVocabVisit } = await import('@/lib/progress/dailyHero');
+      recordVocabVisit({ source: 'themes', unitId: id, unitTitle: t.name });
+
       const w = await getThemeWords(id);
       setWords(w);
       try {

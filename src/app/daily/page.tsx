@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Loader2, Sparkles, BookOpen, Mic, BookMarked, Edit3, Target, GraduationCap, RefreshCw, FileText, LogIn, Flame, Bell, X, Settings, ChevronRight, PenLine } from 'lucide-react';
+import { Loader2, Sparkles, Mic, FileText, LogIn, Flame, Bell, Settings, ChevronRight, PenLine } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
 import { useFeedback } from '@/hooks/useFeedback';
 import { useLang } from '@/components/LangProvider';
@@ -13,35 +13,9 @@ import { getProfile } from '@/lib/gamification';
 import Onboarding from '@/components/Onboarding';
 import { DailyShell } from '@/components/DailyShell';
 import { DesktopDailyPage } from '@/components/desktop/DesktopDailyPage';
-import { PageHeader, Section, Card, Button, Modal, EntryCard } from '@/components/ui';
+import { Section, Card, Button, Modal, EntryCard } from '@/components/ui';
 import { HeroFourCards, type HeroProgressData } from '@/components/today/HeroFourCards';
-import { TodayPickSheet } from '@/components/today/TodayPickSheet';
 import { getVocabProgress, getDiaryProgress, getPhoneticProgress, getGrammarProgress } from '@/lib/progress/dailyHero';
-
-const TASK_ICONS: Record<string, React.ComponentType<{ size?: number; color?: string; style?: React.CSSProperties }>> = {
-  course: GraduationCap,
-  srsReview: BookOpen,
-  pronunciation: Mic,
-  reading: BookMarked,
-  output: Edit3,
-};
-
-const TASK_TONE: Record<string, 'pink' | 'mint' | 'peach' | 'purple'> = {
-  course: 'purple',
-  srsReview: 'peach',
-  pronunciation: 'pink',
-  reading: 'mint',
-  output: 'peach',
-};
-
-const TONE_BG: Record<'pink' | 'mint' | 'peach' | 'purple', string> = {
-  pink: 'var(--color-pink-soft)', mint: 'var(--color-mint-soft)',
-  peach: 'var(--color-peach-soft)', purple: 'var(--color-purple-soft)',
-};
-const TONE_FG: Record<'pink' | 'mint' | 'peach' | 'purple', string> = {
-  pink: 'var(--color-pink-strong)', mint: 'var(--color-mint-strong)',
-  peach: 'var(--color-peach-strong)', purple: 'var(--color-purple-strong)',
-};
 
 export default function DailyPage() {
   const { user } = useAuth();
@@ -57,7 +31,7 @@ export default function DailyPage() {
   );
   const [unreadMsg, setUnreadMsg] = useState<{ title: string; content: string; id: string } | null>(null);
   const [heroData, setHeroData] = useState<HeroProgressData | null>(null);
-  const [pickOpen, setPickOpen] = useState(false);
+  const [pickExpanded, setPickExpanded] = useState(false);
 
   const loadGenRef = useRef(0);
   const userRef = useRef(user);
@@ -150,7 +124,7 @@ export default function DailyPage() {
         : '/vocabulary';
       setHeroData({
         vocab: { mastered: vocab.mastered, total: vocab.total, lastUnitTitle: vocab.unitTitle, href: vocabHref },
-        diary: { currentDay: diary.currentDay, total: diary.total },
+        diary: { currentDay: diary.currentDay, total: diary.total, sceneImageUrl: diary.sceneImageUrl },
         phonetic: { completed: phonetic.completed, total: phonetic.total },
         grammar: { completed: grammar.completed, total: grammar.total },
       });
@@ -321,32 +295,96 @@ export default function DailyPage() {
             {/* 4 张大卡：词汇 / 日记 / 字母 / 语法（带回归进度） */}
             {heroData && <HeroFourCards data={heroData} layout="mobile" />}
 
-            {/* 「今日推荐」按钮 → 弹 Sheet 显示今日任务 */}
-            <button
-              onClick={() => setPickOpen(true)}
-              style={{
-                width: '100%',
-                padding: '16px 20px',
-                marginBottom: 20,
-                background: 'linear-gradient(135deg, var(--color-pink-soft), var(--color-purple-soft))',
-                border: '1.5px solid var(--color-border-1)',
-                borderRadius: 'var(--radius-lg)',
-                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5), var(--shadow-sm)',
-                cursor: 'pointer',
-                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                transition: 'all var(--dur-fast) var(--ease-soft)',
-              }}
-            >
-              <div style={{ textAlign: 'left' }}>
-                <p style={{ fontSize: 11, fontWeight: 800, color: 'var(--color-pink-strong)', letterSpacing: '0.08em', textTransform: 'uppercase', margin: 0 }}>
-                  Today's Pick
-                </p>
-                <p style={{ fontSize: 16, fontWeight: 800, color: 'var(--color-ink-1)', margin: '3px 0 0' }}>
-                  今日推荐 · {plan.totalCount > 0 ? `${plan.completedCount}/${plan.totalCount} 完成` : '看看今天做什么'}
-                </p>
-              </div>
-              <ChevronRight size={18} color="var(--color-pink-strong)" />
-            </button>
+            {/* «今日推荐» 折叠展开 */}
+            <div style={{ marginBottom: 28 }}>
+              <button
+                onClick={() => setPickExpanded(!pickExpanded)}
+                style={{
+                  width: '100%',
+                  padding: '14px 20px',
+                  marginBottom: pickExpanded ? 0 : 0,
+                  background: 'var(--color-surface-1)',
+                  border: '1px solid var(--color-border-1)',
+                  borderRadius: pickExpanded ? '16px 16px 0 0' : '16px',
+                  boxShadow: '0 2px 10px oklch(28% 0.02 30 / 0.03)',
+                  cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                  transition: 'all 150ms var(--ease-soft)',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <span style={{ fontSize: 16 }}>📋</span>
+                  <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--color-ink-1)' }}>
+                    今日推荐
+                  </span>
+                  {plan.totalCount > 0 && (
+                    <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--color-pink-strong)', background: 'var(--color-pink-soft)', padding: '2px 10px', borderRadius: 10 }}>
+                      {plan.completedCount}/{plan.totalCount}
+                    </span>
+                  )}
+                </div>
+                <ChevronRight size={16} color="var(--color-ink-3)" style={{ transition: 'transform 150ms ease', transform: pickExpanded ? 'rotate(90deg)' : 'rotate(0deg)' }} />
+              </button>
+
+              {pickExpanded && (
+                <div style={{
+                  padding: '8px 16px 16px',
+                  background: 'var(--color-surface-1)',
+                  border: '1px solid var(--color-border-1)',
+                  borderTop: 'none',
+                  borderRadius: '0 0 16px 16px',
+                }}>
+                  {plan.totalCount > 0 && (
+                    <div style={{ marginBottom: 12, padding: '10px 12px', background: 'var(--color-surface-3)', borderRadius: 12 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                        <span style={{ fontSize: 11, color: 'var(--color-ink-3)' }}>今日进度</span>
+                        <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--color-pink-strong)' }}>
+                          {plan.completedCount}/{plan.totalCount} 完成
+                        </span>
+                      </div>
+                      <div style={{ height: 3, borderRadius: 2, background: 'var(--color-surface-4)', overflow: 'hidden' }}>
+                        <div
+                          style={{
+                            height: '100%', borderRadius: 2,
+                            background: 'var(--color-pink-strong)',
+                            width: `${Math.max(4, plan.totalCount > 0 ? Math.round((plan.completedCount / plan.totalCount) * 100) : 0)}%`,
+                            transition: 'width 400ms var(--ease-soft)',
+                          }}
+                        />
+                      </div>
+                    </div>
+                  )}
+                  {plan.tasks.length === 0 ? (
+                    <div style={{ padding: '20px 16px', textAlign: 'center' }}>
+                      <p style={{ fontSize: 26, marginBottom: 6 }}>🎉</p>
+                      <p style={{ fontSize: 13, color: 'var(--color-ink-3)', margin: 0 }}>
+                        今天所有任务都完成了
+                      </p>
+                    </div>
+                  ) : (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                      {plan.tasks.map((task) => (
+                        <Link
+                          key={task.key}
+                          href={task.href}
+                          style={{ textDecoration: 'none' }}
+                        >
+                          <div style={{ padding: '11px 14px', borderRadius: 12, border: '1px solid var(--color-border-1)', background: 'var(--color-surface-1)', display: 'flex', alignItems: 'center', gap: 10 }}>
+                            <span style={{ fontSize: 11, fontWeight: 700, padding: '4px 10px', borderRadius: 8, background: 'var(--color-pink-soft)', color: 'var(--color-pink-strong)', flexShrink: 0 }}>
+                              去做
+                            </span>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <p style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--color-ink-1)', margin: 0 }}>{task.label}</p>
+                              {task.detail && <p style={{ fontSize: 12, color: 'var(--color-ink-3)', margin: '1px 0 0' }}>{task.detail}</p>}
+                            </div>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
 
             {/* 我的资料快捷 */}
             <Section title={t('daily.mine_section_title', lang)} spacing="normal">
@@ -415,14 +453,6 @@ export default function DailyPage() {
             </Card>
           </div>
         }
-      />
-
-      <TodayPickSheet
-        open={pickOpen}
-        onClose={() => setPickOpen(false)}
-        tasks={plan.tasks}
-        completedCount={plan.completedCount}
-        totalCount={plan.totalCount}
       />
     </>
   );
