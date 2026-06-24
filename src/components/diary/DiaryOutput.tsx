@@ -12,6 +12,8 @@ interface Props {
 }
 
 type Checked = 'idle' | 'correct' | 'wrong';
+export type { Checked };
+export { synthesizeCompose };
 
 export function DiaryOutput({ day, onComplete }: Props) {
   const tasks = day.output;
@@ -118,9 +120,17 @@ export function DiaryOutput({ day, onComplete }: Props) {
         </div>
       </div>
       <h2 className="diary-h2" style={{ marginBottom: 6 }}>{KIND_TITLE[task.kind] ?? '练习'}</h2>
-      <p className="diary-text-soft" style={{ fontSize: 13, marginBottom: 20 }}>
+      <p className="diary-text-soft" style={{ fontSize: 13, marginBottom: task.sceneContext ? 16 : 20 }}>
         {qIdx + 1}/{tasks.length}
       </p>
+
+      {task.sceneContext && (
+        <div className="diary-scene-break diary-anim-fade-up">
+          {task.sceneContext.split('\n').map((line, i, arr) => (
+            <p key={i} style={{ margin: 0, color: i === arr.length - 1 ? '#fff' : 'rgba(255,255,255,0.65)', fontWeight: i === arr.length - 1 ? 700 : 400 }}>{line}</p>
+          ))}
+        </div>
+      )}
 
       {isCompose ? (
         <ComposeBlock
@@ -199,7 +209,7 @@ const KIND_TITLE: Partial<Record<ToriOutputTask['kind'], string>> = {
 };
 
 /* ═══════ Compose / Fill ═══════ */
-function ComposeBlock({
+export function ComposeBlock({
   task, picked, setPicked, checked, setChecked, shaking, setShaking, onCorrect, onWrong, onUserAnswer,
 }: {
   task: ToriOutputTask;
@@ -281,7 +291,7 @@ function ComposeBlock({
 }
 
 /* ═══════ Choice (listen / zh-to-ko / particle / match) ═══════ */
-function ChoiceBlock({
+export function ChoiceBlock({
   task, checked, setChecked, pickedIdx, setPickedIdx, shaking, setShaking, matched, setMatched, wrongZh, setWrongZh, onCorrect, onWrong, onUserAnswer,
 }: {
   task: ToriOutputTask; checked: Checked; setChecked: (v: Checked) => void;

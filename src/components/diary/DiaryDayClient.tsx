@@ -14,8 +14,12 @@ import { DiaryGrammar } from './DiaryGrammar';
 import { DiaryOutput } from './DiaryOutput';
 import { DiaryRecap } from './DiaryRecap';
 import { CarrotHelper } from './CarrotHelper';
+import { DiaryCheckpointPrelude } from './DiaryCheckpointPrelude';
+import { DiaryCheckpointUnlock } from './DiaryCheckpointUnlock';
+import { DiaryCheckpointExam } from './DiaryCheckpointExam';
 
 const MODULE_ORDER: ToriModuleKind[] = ['opening', 'words', 'flashcard', 'dialogue', 'grammar', 'output', 'recap'];
+const CHECKPOINT_MODULE_ORDER: ToriModuleKind[] = ['opening', 'words', 'dialogue', 'grammar', 'output', 'recap'];
 
 const MODULE_LABELS: Record<ToriModuleKind, string> = {
   opening: '开场',
@@ -77,6 +81,10 @@ export function DiaryDayClient({ day, level }: Props) {
   const roman = chapterRoman(day.day);
   const isAdmin = user?.role === 'admin';
   const isCheckpointDay = !!day.isCheckpoint;
+  const activeOrder = isCheckpointDay ? CHECKPOINT_MODULE_ORDER : MODULE_ORDER;
+  const [checkpointPhase, setCheckpointPhase] = useState<'prelude' | 'exam' | 'unlock' | null>(
+    isCheckpointDay ? 'prelude' : null
+  );
 
   // 加载 / 创建进度记录
   useEffect(() => {
@@ -140,7 +148,7 @@ export function DiaryDayClient({ day, level }: Props) {
         const existing = await db.toriProgress.get(progressId);
         if (existing) {
           const nextDone = Array.from(new Set([...existing.modulesDone, currentMod]));
-          const allDone = MODULE_ORDER.every((m) => nextDone.includes(m));
+          const allDone = activeOrder.every((m) => nextDone.includes(m));
           await db.toriProgress.update(progressId, {
             modulesDone: nextDone,
             ...(allDone && !existing.completedAt ? { completedAt: Date.now(), output: completionOutput ?? outputResults } : {}),
@@ -162,9 +170,9 @@ export function DiaryDayClient({ day, level }: Props) {
         }
       } catch { /* ignore */ }
     }
-    const idx = MODULE_ORDER.indexOf(currentMod);
-    if (idx < MODULE_ORDER.length - 1) {
-      setCurrentModule(MODULE_ORDER[idx + 1]);
+    const idx = activeOrder.indexOf(currentMod);
+    if (idx < activeOrder.length - 1) {
+      setCurrentModule(activeOrder[idx + 1]);
       if (typeof window !== 'undefined') {
         const scroller = document.querySelector('.diary-detail-page');
         if (scroller) scroller.scrollTo({ top: 0, behavior: 'smooth' });
@@ -175,8 +183,8 @@ export function DiaryDayClient({ day, level }: Props) {
 
   const handleProgressJump = (target: ToriModuleKind) => {
     // admin 任意切；普通用户只能切已完成或当前
-    const targetIdx = MODULE_ORDER.indexOf(target);
-    const currentIdx = MODULE_ORDER.indexOf(currentModule);
+    const targetIdx = activeOrder.indexOf(target);
+    const currentIdx = activeOrder.indexOf(currentModule);
     if (isAdmin || targetIdx <= currentIdx || modulesDone.has(target)) {
       setCurrentModule(target);
     }
@@ -213,9 +221,9 @@ export function DiaryDayClient({ day, level }: Props) {
 
         {/* 桌面进度条（手机隐藏，移到底部 footer-bar） */}
         <div className="diary-detail-progress diary-detail-progress--desktop" role="tablist" aria-label="模块进度">
-          {MODULE_ORDER.map((m) => {
-            const idx = MODULE_ORDER.indexOf(m);
-            const currentIdx = MODULE_ORDER.indexOf(currentModule);
+          {activeOrder.map((m) => {
+            const idx = activeOrder.indexOf(m);
+            const currentIdx = activeOrder.indexOf(currentModule);
             const isDone = modulesDone.has(m) || idx < currentIdx;
             const isCurrent = m === currentModule;
             const canJump = isAdmin || isDone || idx <= currentIdx;
@@ -243,9 +251,9 @@ export function DiaryDayClient({ day, level }: Props) {
 
       {/* 手机底部固定细进度条 */}
       <div className="diary-detail-progress-mobile" role="tablist" aria-label="模块进度">
-        {MODULE_ORDER.map((m) => {
-          const idx = MODULE_ORDER.indexOf(m);
-          const currentIdx = MODULE_ORDER.indexOf(currentModule);
+        {activeOrder.map((m) => {
+          const idx = activeOrder.indexOf(m);
+          const currentIdx = activeOrder.indexOf(currentModule);
           const isDone = modulesDone.has(m) || idx < currentIdx;
           const isCurrent = m === currentModule;
           const canJump = isAdmin || isDone || idx <= currentIdx;
@@ -287,7 +295,7 @@ export function DiaryDayClient({ day, level }: Props) {
 
       {/* 信纸主体卡片 */}
       <main className="diary-detail-main">
-        <article className="diary-detail-card">
+        <article className="diary-detail-card" {...(isCheckpointDay ? { 'data-checkpoint': 'true' } : {})}>
           <div className="diary-detail-card-band" />
           <div className="diary-detail-card-eyebrow">
             <span>{MODULE_EYEBROWS[currentModule]}</span>
@@ -300,28 +308,37 @@ export function DiaryDayClient({ day, level }: Props) {
 
           <div key={currentModule} className="diary-detail-fade-in diary-root">
             {currentModule === 'opening' && (
-              <DiaryOpening day={day} onComplete={() => advance('opening')} />
+              <DiaryOpening day={day} onComplete={() => advance('opening')} isCheckpoint={isCheckpointDay} />
             )}
             {currentModule === 'words' && (
-              <DiaryWords day={day} onComplete={() => advance('words')} />
+              <DiaryWords day={day} onComplete={() => advance('words')} isCheckpoint={isCheckpointDay} />
             )}
             {currentModule === 'flashcard' && (
               <DiaryFlashcard day={day} onComplete={() => advance('flashcard')} />
             )}
             {currentModule === 'dialogue' && (
-              <DiaryDialogue day={day} onComplete={() => advance('dialogue')} />
+              <DiaryDialogue day={day} onComplete={() => advance('dialogue')} isCheckpoint={isCheckpointDay} />
             )}
             {currentModule === 'grammar' && (
-              <DiaryGrammar day={day} onComplete={() => advance('grammar')} />
+              <DiaryGrammar day={day} onComplete={() => advance('grammar')} isCheckpoint={isCheckpointDay} />
             )}
-            {currentModule === 'output' && (
+            {currentModule === 'output' && isCheckpointDay && checkpointPhase === 'prelude' && (
+              <DiaryCheckpointPrelude day={day} onReady={() => setCheckpointPhase('exam')} />
+            )}
+            {currentModule === 'output' && !isCheckpointDay && (
               <DiaryOutput
                 day={day}
-                onComplete={(results) => {
-                  setOutputResults(results);
-                  advance('output', results);
-                }}
+                onComplete={(results) => { setOutputResults(results); advance('output', results); }}
               />
+            )}
+            {currentModule === 'output' && isCheckpointDay && checkpointPhase === 'exam' && (
+              <DiaryCheckpointExam
+                day={day}
+                onComplete={(results) => { setOutputResults(results); setCheckpointPhase('unlock'); }}
+              />
+            )}
+            {currentModule === 'output' && isCheckpointDay && checkpointPhase === 'unlock' && (
+              <DiaryCheckpointUnlock day={day} onComplete={() => advance('output', outputResults)} />
             )}
             {currentModule === 'recap' && (
               <DiaryRecap
@@ -335,8 +352,8 @@ export function DiaryDayClient({ day, level }: Props) {
             <button
               className="diary-detail-back"
               onClick={() => {
-                const idx = MODULE_ORDER.indexOf(currentModule);
-                if (idx > 0) setCurrentModule(MODULE_ORDER[idx - 1]);
+                const idx = activeOrder.indexOf(currentModule);
+                if (idx > 0) setCurrentModule(activeOrder[idx - 1]);
               }}
             >
               ← 上一步
@@ -346,7 +363,14 @@ export function DiaryDayClient({ day, level }: Props) {
       </main>
 
       {/* 悬浮的勇气胡萝卜助手 */}
-      <CarrotHelper key={day.day} day={day} currentModule={currentModule} progress={carrotProgress} />
+      <CarrotHelper
+        key={day.day}
+        day={day}
+        currentModule={currentModule}
+        progress={carrotProgress}
+        locked={isCheckpointDay && checkpointPhase === 'exam'}
+        lockedMsg={day.checkpointConfig?.carrotLostMsg}
+      />
     </div>
   );
 }

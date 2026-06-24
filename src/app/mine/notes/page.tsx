@@ -20,13 +20,18 @@ export default function MineNotesPage() {
   const isDesktop = useIsDesktop();
   const [notes, setNotes] = useState<Note[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
 
-  useEffect(() => {
+  const reload = () => {
+    setLoadError(false);
+    setLoading(true);
     db.notes.orderBy('createdAt').reverse().toArray()
       .then((rows) => setNotes(rows as Note[]))
-      .catch(() => setNotes([]))
+      .catch(() => setLoadError(true))
       .finally(() => setLoading(false));
-  }, []);
+  };
+
+  useEffect(() => { reload(); }, []);
 
   const deleteNote = async (id: string) => {
     if (!confirm('删除这条笔记？')) return;
@@ -68,6 +73,13 @@ export default function MineNotesPage() {
               margin: '0 auto',
             }}
           />
+        </Card>
+      ) : loadError ? (
+        <Card variant="hero" padding="lg">
+          <div style={{ textAlign: 'center' }}>
+            <p style={{ fontSize: 14, color: 'var(--color-ink-3)', marginBottom: 12 }}>加载失败</p>
+            <Button variant="primary" tone="black" onClick={reload}>重试</Button>
+          </div>
         </Card>
       ) : notes.length === 0 ? (
         <Card variant="hero" tone="mint" padding="lg">

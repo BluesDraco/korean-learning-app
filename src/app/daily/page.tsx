@@ -116,22 +116,24 @@ export default function DailyPage() {
     if (!user) return;
     let cancelled = false;
     (async () => {
-      const [vocab, diary, phonetic, grammar] = await Promise.all([
-        getVocabProgress(),
-        getDiaryProgress(user.id),
-        getPhoneticProgress(),
-        getGrammarProgress(),
-      ]);
-      if (cancelled) return;
-      const vocabHref = vocab.source && vocab.unitId
-        ? `/vocabulary/${vocab.source}/${vocab.unitId}`
-        : '/vocabulary';
-      setHeroData({
-        vocab: { mastered: vocab.mastered, total: vocab.total, lastUnitTitle: vocab.unitTitle, href: vocabHref },
-        diary: { currentDay: diary.currentDay, total: diary.total, sceneImageUrl: diary.sceneImageUrl },
-        phonetic: { completed: phonetic.completed, total: phonetic.total },
-        grammar: { completed: grammar.completed, total: grammar.total },
-      });
+      try {
+        const [vocab, diary, phonetic, grammar] = await Promise.all([
+          getVocabProgress(),
+          getDiaryProgress(user.id),
+          getPhoneticProgress(),
+          getGrammarProgress(),
+        ]);
+        if (cancelled) return;
+        const vocabHref = vocab.source && vocab.unitId
+          ? `/vocabulary/${vocab.source}/${vocab.unitId}`
+          : '/vocabulary';
+        setHeroData({
+          vocab: { mastered: vocab.mastered, total: vocab.total, lastUnitTitle: vocab.unitTitle, href: vocabHref },
+          diary: { currentDay: diary.currentDay, total: diary.total, sceneImageUrl: diary.sceneImageUrl },
+          phonetic: { completed: phonetic.completed, total: phonetic.total },
+          grammar: { completed: grammar.completed, total: grammar.total },
+        });
+      } catch { /* heroData stays null, section hidden gracefully */ }
     })();
     return () => { cancelled = true; };
   }, [user]);

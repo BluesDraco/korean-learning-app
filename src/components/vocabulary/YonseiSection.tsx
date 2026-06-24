@@ -41,6 +41,7 @@ export function YonseiSection() {
   const [selectedBook, setSelectedBook] = useState(1);
   const [units, setUnits] = useState<VocabUnit[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -51,7 +52,7 @@ export function YonseiSection() {
           import('@/data/seoul-books'),
         ]);
         setUnits(textbook === 'yonsei' ? yonseiUnits : seoulUnits);
-      } catch {} finally {
+      } catch { setLoadError(true); } finally {
         setLoading(false);
       }
     })();
@@ -166,6 +167,11 @@ export function YonseiSection() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {loading ? (
           <div className="col-span-2 py-12 text-center text-sm text-[var(--text-muted)]">加载中...</div>
+        ) : loadError ? (
+          <div className="text-center py-16">
+            <p className="text-sm text-[var(--text-secondary)] mb-3">加载失败</p>
+            <button onClick={() => { setLoadError(false); setLoading(true); }} className="text-sm text-[var(--pink-primary)] underline">重试</button>
+          </div>
         ) : visibleUnits.length === 0 ? (
           <div className="col-span-2 py-12 text-center text-sm text-[var(--text-muted)]">
             暂无数据，词汇即将上线，敬请期待

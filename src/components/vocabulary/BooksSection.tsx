@@ -26,6 +26,7 @@ export function BooksSection() {
   const [formDesc, setFormDesc] = useState('');
   const [formColor, setFormColor] = useState(PRESET_COLORS[0].value);
   const [saving, setSaving] = useState(false);
+  const [loadError, setLoadError] = useState(false);
 
   const load = useCallback(async () => {
     try {
@@ -42,7 +43,7 @@ export function BooksSection() {
         counts[b.id] = b.wordIds.length;
       }
       setWordCounts(counts);
-    } catch { /* ignore */ } finally {
+    } catch { setLoadError(true); } finally {
       setLoading(false);
     }
   }, []);
@@ -132,7 +133,12 @@ export function BooksSection() {
         </button>
       </div>
 
-      {filteredBooks.length === 0 ? (
+      {loadError ? (
+        <div className="text-center py-16">
+          <p className="text-sm text-[var(--text-secondary)] mb-3">加载失败</p>
+          <button onClick={() => { setLoadError(false); load(); }} className="text-sm text-[var(--pink-primary)] underline">重试</button>
+        </div>
+      ) : filteredBooks.length === 0 ? (
         <div className="text-center py-16">
           <span className="text-5xl block mb-3">📚</span>
           <p className="text-[var(--text-secondary)] text-sm mb-1">

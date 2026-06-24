@@ -20,20 +20,34 @@ export function ThemesSection() {
   const [themes, setThemes] = useState<ThemePack[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
 
-  useEffect(() => {
+  const load = () => {
+    setLoadError(false);
+    setLoading(true);
     import('@/data/vocabulary').then(async ({ getAllThemes, getThemeCategories }) => {
-      const [themes, cats] = await Promise.all([getAllThemes(), getThemeCategories()]);
-      setThemes(themes);
+      const [t, cats] = await Promise.all([getAllThemes(), getThemeCategories()]);
+      setThemes(t);
       setCategories(cats);
-      setLoading(false);
-    }).catch(() => setLoading(false));
-  }, []);
+    }).catch(() => setLoadError(true))
+      .finally(() => setLoading(false));
+  };
+
+  useEffect(() => { load(); }, []);
 
   if (loading) {
     return (
       <div className="flex items-center justify-center py-16">
         <Loader2 size={24} className="animate-spin text-[var(--text-secondary)]" />
+      </div>
+    );
+  }
+
+  if (loadError) {
+    return (
+      <div className="text-center py-16">
+        <p className="text-sm text-[var(--text-secondary)] mb-3">加载失败</p>
+        <button onClick={load} className="text-sm text-[var(--pink-primary)] underline">重试</button>
       </div>
     );
   }

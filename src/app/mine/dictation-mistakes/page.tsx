@@ -23,6 +23,7 @@ export default function DictationMistakesPage() {
   const [mistakes, setMistakes] = useState<MistakeGroup[]>([]);
   const [loading, setLoading] = useState(true);
   const [practicing, setPracticing] = useState(false);
+  const [loadError, setLoadError] = useState(false);
 
   async function loadMistakes() {
     try {
@@ -39,7 +40,7 @@ export default function DictationMistakesPage() {
       const sorted = Object.values(grouped).sort((a, b) => b.wrongCount - a.wrongCount);
       setMistakes(sorted);
     } catch {
-      setMistakes([]);
+      setLoadError(true);
     } finally {
       setLoading(false);
     }
@@ -95,6 +96,13 @@ export default function DictationMistakesPage() {
       {loading ? (
         <Card variant="default" padding="lg" style={{ textAlign: 'center' }}>
           <p style={{ fontSize: 14, color: 'var(--color-ink-3)', margin: 0 }}>加载中…</p>
+        </Card>
+      ) : loadError ? (
+        <Card variant="hero" tone="pink" padding="lg">
+          <div style={{ textAlign: 'center' }}>
+            <p style={{ fontSize: 14, color: 'var(--color-ink-3)', marginBottom: 12 }}>加载失败</p>
+            <Button variant="primary" tone="pink" onClick={loadMistakes}>重试</Button>
+          </div>
         </Card>
       ) : mistakes.length === 0 ? (
         <Card variant="hero" tone="mint" padding="lg">

@@ -33,6 +33,7 @@ export default function MineRecordingsPage() {
   const isDesktop = useIsDesktop();
   const [recordings, setRecordings] = useState<Recording[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [playing, setPlaying] = useState<string | null>(null);
   const [audioEl, setAudioEl] = useState<HTMLAudioElement | null>(null);
 
@@ -40,7 +41,7 @@ export default function MineRecordingsPage() {
     if (!user) { setLoading(false); return; }
     db.recordings.orderBy('createdAt').reverse().limit(200).toArray()
       .then((rows) => setRecordings(rows as Recording[]))
-      .catch(() => setRecordings([]))
+      .catch(() => setLoadError(true))
       .finally(() => setLoading(false));
   }, [user]);
 
@@ -109,6 +110,13 @@ export default function MineRecordingsPage() {
               margin: '0 auto',
             }}
           />
+        </Card>
+      ) : loadError ? (
+        <Card variant="hero" tone="mint" padding="lg">
+          <div style={{ textAlign: 'center' }}>
+            <p style={{ fontSize: 14, color: 'var(--color-ink-3)', marginBottom: 12 }}>加载失败</p>
+            <button onClick={() => { setLoadError(false); setLoading(true); db.recordings.orderBy('createdAt').reverse().limit(200).toArray().then(r => setRecordings(r as Recording[])).catch(() => setLoadError(true)).finally(() => setLoading(false)); }} style={{ fontSize: 13, color: 'var(--color-pink-base)', textDecoration: 'underline', background: 'none', border: 'none', cursor: 'pointer' }}>重试</button>
+          </div>
         </Card>
       ) : recordings.length === 0 ? (
         <Card variant="hero" tone="mint" padding="lg">

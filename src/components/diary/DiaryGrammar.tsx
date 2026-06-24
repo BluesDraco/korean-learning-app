@@ -13,20 +13,17 @@ const breakdownCache = new Map<string, BreakdownToken[]>();
 interface Props {
   day: ToriDay;
   onComplete: () => void;
+  isCheckpoint?: boolean;
 }
 
-/**
- * Day Grammar — 语法小卡
- * 例句默认折叠，展开后看罗马音 + 中文 + 语法解释 + 操作栏
- */
-export function DiaryGrammar({ day, onComplete }: Props) {
+export function DiaryGrammar({ day, onComplete, isCheckpoint }: Props) {
   const g = day.grammar;
   const source = `tori-diary-day-${day.day}`;
 
   return (
     <div className="diary-anim-fade-up">
       <div style={{ marginBottom: 18 }}>
-        <span className="diary-tag diary-tag-pink">GRAMMAR · 语法</span>
+        <span className="diary-tag diary-tag-pink">{isCheckpoint ? 'SURVIVE · 生存句式' : 'GRAMMAR · 语法'}</span>
       </div>
 
       <h2 className="diary-h2 diary-handwriting-zh" style={{ marginBottom: 6 }}>

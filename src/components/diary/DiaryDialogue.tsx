@@ -11,13 +11,10 @@ import { DiaryLineActions } from './DiaryLineActions';
 interface Props {
   day: ToriDay;
   onComplete: () => void;
+  isCheckpoint?: boolean;
 }
 
-/**
- * Day Dialogue — 场景对话
- * 逐行展开。listen 行只播音，shadow 行要求点"跟读"，pick 行要求选答
- */
-export function DiaryDialogue({ day, onComplete }: Props) {
+export function DiaryDialogue({ day, onComplete, isCheckpoint }: Props) {
   const lines = day.dialogue.lines;
   const [currentIdx, setCurrentIdx] = useState(0);
   const [picked, setPicked] = useState<Record<number, number>>({});
@@ -54,10 +51,10 @@ export function DiaryDialogue({ day, onComplete }: Props) {
   return (
     <div className="diary-anim-fade-up">
       <div style={{ marginBottom: 18 }}>
-        <span className="diary-tag diary-tag-mint">DIALOGUE · 对话</span>
+        <span className="diary-tag diary-tag-mint">{isCheckpoint ? 'SCENE · 那一晚' : 'DIALOGUE · 对话'}</span>
       </div>
       <h2 className="diary-h2 diary-handwriting-zh" style={{ marginBottom: 6 }}>
-        {day.dialogue.scene}
+        {isCheckpoint ? '地铁末班车 · 还原现场' : day.dialogue.scene}
       </h2>
       <p className="diary-handwriting-zh diary-text-soft" style={{ marginBottom: 20 }}>
         📍 {day.dialogue.setting.place} · {day.dialogue.setting.time}

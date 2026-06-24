@@ -16,6 +16,8 @@ interface Props {
   day: ToriDay;
   currentModule: ToriModuleKind;
   progress?: CarrotProgress;
+  locked?: boolean;
+  lockedMsg?: string;
 }
 
 const MODULE_LABELS: Record<ToriModuleKind, string> = {
@@ -68,7 +70,7 @@ function pickGreeting(day: number, p?: CarrotProgress): string {
  * 勇气胡萝卜 AI 助手 — 悬浮按钮 + 抽屉面板
  * 历史 localStorage 持久化，最多保留 20 轮
  */
-export function CarrotHelper({ day, currentModule, progress }: Props) {
+export function CarrotHelper({ day, currentModule, progress, locked, lockedMsg }: Props) {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<ToriCarrotMessage[]>([]);
   const [input, setInput] = useState('');
@@ -195,6 +197,27 @@ export function CarrotHelper({ day, currentModule, progress }: Props) {
   };
 
   if (!mounted) return null;
+
+  if (locked) {
+    return createPortal(
+      <button
+        onClick={() => alert(lockedMsg ?? '胡萝卜不在了。你来的。')}
+        aria-label="胡萝卜不见了"
+        style={{
+          position: 'fixed', right: 16,
+          bottom: 'calc(72px + env(safe-area-inset-bottom, 0px))',
+          zIndex: 250, width: 56, height: 56, borderRadius: '50%',
+          background: 'rgba(80,70,70,0.55)', border: '1.5px dashed rgba(255,255,255,0.18)',
+          color: 'rgba(255,255,255,0.35)', fontSize: 26, cursor: 'pointer',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          backdropFilter: 'blur(4px)',
+        }}
+      >
+        🎒
+      </button>,
+      document.body
+    );
+  }
 
   return createPortal(
     <>

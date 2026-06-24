@@ -17,10 +17,10 @@ export const day7: ToriDay = {
   level: 'beginner',
   day: 7,
   phase: 'foundation',
-  title: '★关卡 1 · 地铁末班车',
-  subtitle: '手机1%，末班车，听不懂的广播',
-  isCheckpoint: 7,
-  estimatedMin: 15,
+  title: '地铁末班车 · Haru',
+  subtitle: '手机1%，末班车，遇见了最重要的人',
+  isCheckpoint: null,
+  estimatedMin: 12,
 
   opening: {
     date: '9月 7日 周六 傍晚',
@@ -204,7 +204,7 @@ Haru。
     {
       id: 'd07-o1',
       kind: 'compose',
-      zhHint: '请帮帮我。（关卡综合：用这周学的请求句式）',
+      zhHint: '请帮帮我。',
       tokens: ['도와주세요', '잠깐만요', '도와요', '주세요', '도와', '부탁드려요'],
       composeAnswer: ['도와주세요'],
       successMsg: '✓ 这一句，Tori 在站台上说出来了。',
@@ -212,16 +212,16 @@ Haru。
     {
       id: 'd07-o2',
       kind: 'compose',
-      zhHint: '是的，没错。我是中国人。（Week 1 综合复习）',
+      zhHint: '是的，没错。我是中国人。',
       tokens: ['네', '맞아요', '저는', '중국', '사람이에요', '사람예요', '저은'],
       composeAnswer: ['네', '맞아요', '저는', '중국', '사람이에요'],
-      successMsg: '✓ Week 1 核心句式全部到位。',
+      successMsg: '✓ Week 1 核心句式到位。',
     },
     {
       id: 'd07-o3',
       kind: 'listen-choice',
       audioKo: '같이 가자.',
-      successMsg: '✓「一起走吧」——반말형태 가자，Haru 对朋友说的。',
+      successMsg: '✓「一起走吧」——반말形 가자，Haru 对朋友说的。',
       choices: [
         { zh: '一起走吧。', correct: true },
         { zh: '你从哪里来？', correct: false },
@@ -232,8 +232,8 @@ Haru。
     {
       id: 'd07-o4',
       kind: 'zh-to-ko',
-      zhPrompt: '那个，请帮帮我。（在陌生人面前开口）',
-      successMsg: '저기요 叫住对方，도와주세요 说出请求——两句连用是开口的完整模板。',
+      zhPrompt: '那个，请帮帮我。',
+      successMsg: '저기요 叫住对方，도와주세요 说出请求。',
       choices: [
         { ko: '저기요, 도와주세요.', correct: true },
         { ko: '잠깐만요, 같이 가요.', correct: false },
@@ -244,7 +244,7 @@ Haru。
     {
       id: 'd07-o5',
       kind: 'match-pair',
-      successMsg: '✓ 关卡 1 通关！胡萝卜被捡回来了，Haru 陪着一起走 🥕',
+      successMsg: '✓ Day 7 完成！遇见了 Haru 🥕',
       pairs: [
         { ko: '지하철', zh: '地铁' },
         { ko: '도와주세요', zh: '请帮帮我' },
@@ -257,11 +257,10 @@ Haru。
 
   recap: {
     toriPose: 'celebrate',
-    praise: '🎉 关卡 1 通关！没赶上末班车，但遇到了最重要的人。토리, 정말 잘했어요!',
+    praise: '今天没赶上末班车，但遇到了最重要的人。토리, 정말 잘했어요!',
     preview: '明天…回到宿舍，房间里只有泡面和一面贴满便利贴的镜子。',
     stickerId: 'sticker-d07',
   },
 
-  carrotHint:
-    '关卡通关！可以问胡萝卜「韩语地铁相关词汇」「如何问路」「반말和해요体怎么切换」',
+  carrotHint: '可以问胡萝卜「韩语地铁相关词汇」「如何问路」「반말和해요体怎么切换」',
 };

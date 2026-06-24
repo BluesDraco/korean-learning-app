@@ -6,13 +6,26 @@ import { Calendar, ArrowRight } from 'lucide-react';
 interface Props {
   day: ToriDay;
   onComplete: () => void;
+  isCheckpoint?: boolean;
 }
 
-/**
- * Day Opening — 日记第一页
- * 显示日期、天气、日记文案、开始按钮
- */
-export function DiaryOpening({ day, onComplete }: Props) {
+export function DiaryOpening({ day, onComplete, isCheckpoint }: Props) {
+  if (isCheckpoint) {
+    return (
+      <div className="diary-anim-fade-up">
+        <p className="diary-handwriting-zh" style={{ fontSize: 12, color: 'rgba(255,77,109,0.75)', marginBottom: 20, fontWeight: 700, letterSpacing: '0.1em' }}>
+          {day.opening.date} · {day.opening.weather}
+        </p>
+        <div className="diary-handwriting-zh" style={{ fontSize: 16, lineHeight: 2.2, whiteSpace: 'pre-line', marginBottom: 36 }}>
+          {day.opening.diaryText}
+        </div>
+        <div style={{ textAlign: 'center' }}>
+          <button onClick={onComplete} className="diary-btn diary-btn-primary">进入那一晚 <ArrowRight size={16} /></button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="diary-anim-fade-up">
       {/* 日期与天气 */}

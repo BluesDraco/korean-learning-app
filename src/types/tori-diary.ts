@@ -80,6 +80,10 @@ export interface ToriOutputTask {
   /** 连连看 · 4-5 对韩中词卡 */
   pairs?: Array<{ ko: string; zh: string }>;
   successMsg?: string;
+  /** 关卡专用：该题对应的剧情时刻，显示在题目上方（用 \n 分行） */
+  sceneContext?: string;
+  /** 关卡专用：故事面板左上角的标签，如"广播第三次" */
+  examMoment?: string;
 }
 
 /** 日记开场 */
@@ -122,6 +126,15 @@ export interface ToriDay {
   subtitle: string;
   /** 关卡天（Day 7/14/21/26/29）或最终考试 Day 30，普通天为 null/undefined */
   isCheckpoint?: 7 | 14 | 21 | 26 | 29 | 30 | null;
+  /** 关卡专属配置（仅 isCheckpoint 天有） */
+  checkpointConfig?: {
+    /** 入场卡文本（分行数组），每条换行显示 */
+    preludeLines: string[];
+    /** CarrotHelper 锁定时显示的提示（显示在按钮旁） */
+    carrotLostMsg: string;
+    /** 通关后解锁动画的对白 */
+    unlockDialogue: { speaker: 'npc'; npcName: string; ko: string; zh: string }[];
+  };
   estimatedMin: number;
   opening: ToriOpening;
   words: ToriWord[];

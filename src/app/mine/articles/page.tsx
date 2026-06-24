@@ -20,13 +20,18 @@ export default function MineArticlesPage() {
   const isDesktop = useIsDesktop();
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
 
-  useEffect(() => {
+  const reload = () => {
+    setLoadError(false);
+    setLoading(true);
     db.articles.orderBy('createdAt').reverse().toArray()
       .then((rows) => setArticles(rows as Article[]))
-      .catch(() => setArticles([]))
+      .catch(() => setLoadError(true))
       .finally(() => setLoading(false));
-  }, []);
+  };
+
+  useEffect(() => { reload(); }, []);
 
   const containerCls = isDesktop ? 'py-4 max-w-5xl mx-auto' : 'py-4 max-w-2xl mx-auto';
 
@@ -62,6 +67,13 @@ export default function MineArticlesPage() {
               margin: '0 auto',
             }}
           />
+        </Card>
+      ) : loadError ? (
+        <Card variant="hero" padding="lg">
+          <div style={{ textAlign: 'center' }}>
+            <p style={{ fontSize: 14, color: 'var(--color-ink-3)', marginBottom: 12 }}>加载失败</p>
+            <Button variant="primary" tone="black" onClick={reload}>重试</Button>
+          </div>
         </Card>
       ) : articles.length === 0 ? (
         <Card variant="hero" tone="peach" padding="lg">

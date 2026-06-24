@@ -8,13 +8,10 @@ import { speak } from '@/lib/tts';
 interface Props {
   day: ToriDay;
   onComplete: () => void;
+  isCheckpoint?: boolean;
 }
 
-/**
- * Day Words — 6 个新词
- * 翻卡 + 真人 TTS。全部翻看过才能 onComplete
- */
-export function DiaryWords({ day, onComplete }: Props) {
+export function DiaryWords({ day, onComplete, isCheckpoint }: Props) {
   const [flippedIds, setFlippedIds] = useState<Set<string>>(new Set());
   const [speakingId, setSpeakingId] = useState<string | null>(null);
 
@@ -40,13 +37,13 @@ export function DiaryWords({ day, onComplete }: Props) {
   return (
     <div className="diary-anim-fade-up">
       <div style={{ marginBottom: 18 }}>
-        <span className="diary-tag diary-tag-gold">WORDS · 单词</span>
+        <span className="diary-tag diary-tag-gold">{isCheckpoint ? 'EMERGENCY · 急救包' : 'WORDS · 单词'}</span>
       </div>
       <h2 className="diary-h2 diary-handwriting-zh" style={{ marginBottom: 6 }}>
-        今天的 6 个词
+        {isCheckpoint ? '你今晚需要这 6 个词' : '今天的 6 个词'}
       </h2>
       <p className="diary-handwriting-zh diary-text-soft" style={{ marginBottom: 20 }}>
-        点开卡片看意思，按 🔊 听发音。{flippedIds.size}/{day.words.length} 已翻看
+        {isCheckpoint ? '记住这些，待会儿要用到。' : `点开卡片看意思，按 🔊 听发音。`}{!isCheckpoint && `${flippedIds.size}/${day.words.length} 已翻看`}
       </p>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 28 }}>
