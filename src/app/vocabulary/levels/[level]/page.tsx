@@ -235,7 +235,7 @@ export default function LevelDetailPage() {
       setLearningSet(prev => { const s = new Set(prev); filteredWords.forEach(e => s.delete(e.korean)); return s; });
       setMasteredAll(true);
       setTimeout(() => setMasteredAll(false), 3000);
-    } finally {
+    } catch { /* ignore */ } finally {
       setMasteringAll(false);
     }
   };
@@ -276,7 +276,7 @@ export default function LevelDetailPage() {
       ]);
       setAddedAll(true);
       setTimeout(() => setAddedAll(false), 3000);
-    } finally {
+    } catch { /* ignore */ } finally {
       setAddingAll(false);
       setAddAllBook(false);
     }
@@ -284,6 +284,7 @@ export default function LevelDetailPage() {
 
   const toggleMastered = async (entry: WordEntry) => {
     const now = Date.now();
+    try {
     if (masteredSet.has(entry.korean)) {
       const existing = await db.words.where('word').equals(entry.korean).first();
       if (existing) {
@@ -317,6 +318,7 @@ export default function LevelDetailPage() {
       setMasteredSet(prev => new Set(prev).add(entry.korean));
       setLearningSet(prev => { const s = new Set(prev); s.delete(entry.korean); return s; });
     }
+  } catch { /* ignore */ }
   };
 
   const unmasteredFiltered = filteredWords.filter(e => !masteredSet.has(e.korean));
@@ -356,8 +358,8 @@ export default function LevelDetailPage() {
       }
     }
     await Promise.all([
-      toUpdate.length > 0 ? db.words.bulkUpdate(toUpdate) : Promise.resolve(),
-      toInsert.length > 0 ? db.words.bulkPut(toInsert) : Promise.resolve(),
+      toUpdate.length > 0 ? db.words.bulkUpdate(toUpdate).catch(() => {}) : Promise.resolve(),
+      toInsert.length > 0 ? db.words.bulkPut(toInsert).catch(() => {}) : Promise.resolve(),
     ]);
     setMasteredSet(prev => { const s = new Set(prev); selectedWords.forEach(w => s.add(w)); return s; });
     setLearningSet(prev => { const s = new Set(prev); selectedWords.forEach(w => s.delete(w)); return s; });
@@ -367,7 +369,7 @@ export default function LevelDetailPage() {
   const batchDelete = async () => {
     const allUserWords = await db.words.toArray();
     const ids = allUserWords.filter(w => selectedWords.has(w.word)).map(w => w.id);
-    await db.words.bulkDelete(ids);
+    await db.words.bulkDelete(ids).catch(() => {});
     setMasteredSet(prev => { const s = new Set(prev); selectedWords.forEach(w => s.delete(w)); return s; });
     setLearningSet(prev => { const s = new Set(prev); selectedWords.forEach(w => s.delete(w)); return s; });
     exitManage();
@@ -570,7 +572,7 @@ export default function LevelDetailPage() {
                   <button
                     onClick={async () => {
                       const existing = await db.words.where('word').equals(entry.korean).first();
-                      if (existing) await db.words.delete(existing.id);
+                      if (existing) await db.words.delete(existing.id).catch(() => {});
                       setMasteredSet(prev => { const s = new Set(prev); s.delete(entry.korean); return s; });
                       setLearningSet(prev => { const s = new Set(prev); s.delete(entry.korean); return s; });
                       setSwipeOffset(entry.id, 0);

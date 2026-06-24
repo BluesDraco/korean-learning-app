@@ -62,7 +62,7 @@ export default function MineRecordingsPage() {
   const handleDelete = async (id: string) => {
     if (!confirm('删除这条录音？')) return;
     if (audioEl && playing === id) { audioEl.pause(); setPlaying(null); }
-    await db.recordings.delete(id);
+    await db.recordings.delete(id).catch(() => {});
     setRecordings((prev) => prev.filter((r) => r.id !== id));
   };
 

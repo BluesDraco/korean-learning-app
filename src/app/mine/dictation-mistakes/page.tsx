@@ -49,7 +49,7 @@ export default function DictationMistakesPage() {
 
   async function handleMastered(korean: string) {
     const records = await db.dictationRecords.filter(r => r.wordId === korean);
-    await Promise.all(records.map((r: DictationRecord) => db.dictationRecords.delete(r.id)));
+    await Promise.all(records.map((r: DictationRecord) => db.dictationRecords.delete(r.id).catch(() => {})));
     setMistakes(prev => prev.filter(m => m.korean !== korean));
   }
 

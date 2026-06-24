@@ -108,7 +108,7 @@ function BuddyInviteContent() {
       intro,
       expiresAt: Date.now() + 30 * 86400000,
     };
-    await db.buddyInvites.add(invite);
+    await db.buddyInvites.add(invite).catch(() => {});
 
     cardDataRef.current = { nickname: profile.nickname || '학습자', goal, level, daily, intro };
     setToken(inviteToken);

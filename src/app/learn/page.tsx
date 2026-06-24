@@ -263,7 +263,7 @@ export default function LearnPage() {
           lastReviewed: null,
           nextReview: Date.now(),
         };
-        await db.words.put(newWord);
+        await db.words.put(newWord).catch(() => {});
         const { leveledUp, newLevel: nl } = await awardXp(XP_REWARDS.wordLearned);
         setLessonXp((prev) => prev + XP_REWARDS.wordLearned);
         if (leveledUp) { setLeveledUp(true); setNewLevel(nl); }

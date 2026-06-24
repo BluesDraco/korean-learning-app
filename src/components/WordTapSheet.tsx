@@ -268,7 +268,7 @@ export function WordTapSheet({ surface, source, onClose, onSaved }: WordTapSheet
                         if (savedExamples.has(ex.korean)) return;
                         const existing = await db.sentences.where('korean').equals(ex.korean).first().catch(() => null);
                         if (!existing) {
-                          await db.sentences.add({ id: crypto.randomUUID(), korean: ex.korean, chinese: ex.chinese, source_type: 'vocabulary', source_id: 'word-' + activeSurface, source_title: activeSurface, created_at: new Date().toISOString() });
+                          await db.sentences.add({ id: crypto.randomUUID(), korean: ex.korean, chinese: ex.chinese, source_type: 'vocabulary', source_id: 'word-' + activeSurface, source_title: activeSurface, created_at: new Date().toISOString() }).catch(() => {});
                         }
                         setSavedExamples(prev => new Set([...prev, ex.korean]));
                       }}

@@ -72,7 +72,7 @@ export function BooksSection() {
         description: formDesc.trim(),
         color: formColor,
         updatedAt: now,
-      });
+      }).catch(() => {});
     } else {
       await db.wordBooks.put({
         id: crypto.randomUUID(),
@@ -82,7 +82,7 @@ export function BooksSection() {
         color: formColor,
         createdAt: now,
         updatedAt: now,
-      });
+      }).catch(() => {});
     }
     setShowModal(false);
     setSaving(false);
@@ -91,7 +91,7 @@ export function BooksSection() {
 
   const handleDelete = async (id: string) => {
     if (!confirm('确定删除这个单词本吗？')) return;
-    await db.wordBooks.delete(id);
+    await db.wordBooks.delete(id).catch(() => {});
     load();
   };
 

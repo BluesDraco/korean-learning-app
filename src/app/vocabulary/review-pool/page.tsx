@@ -92,13 +92,12 @@ export default function ReviewPoolPage() {
   const handleBatchDelete = async () => {
     if (selected.size === 0) return;
     if (!confirm(`确定删除这 ${selected.size} 个单词？此操作不可撤销。`)) return;
-    await Promise.all([...selected].map(id => db.words.delete(id)));
-    // Remove deleted wordIds from all word books
+    await Promise.all([...selected].map(id => db.words.delete(id).catch(() => {})));
     const allBooks = await db.wordBooks.toArray();
     await Promise.all(allBooks.map(book => {
       const newIds = book.wordIds.filter(wid => !selected.has(wid));
       if (newIds.length !== book.wordIds.length) {
-        return db.wordBooks.update(book.id, { wordIds: newIds, updatedAt: Date.now() });
+        return db.wordBooks.update(book.id, { wordIds: newIds, updatedAt: Date.now() }).catch(() => {});
       }
     }));
     setWords(prev => prev.filter(w => !selected.has(w.id)));
@@ -135,7 +134,7 @@ export default function ReviewPoolPage() {
         await db.words.update(w.id, { nextReview: now });
       }
       await load();
-    } finally {
+    } catch { /* ignore */ } finally {
       setImportingBook(null);
       setShowImportSheet(false);
     }
@@ -282,12 +281,12 @@ export default function ReviewPoolPage() {
                         onClick={async e => {
                           e.stopPropagation();
                           if (!confirm(`删除「${word.word}」？`)) return;
-                          await db.words.delete(word.id);
+                          await db.words.delete(word.id).catch(() => {});
                           const allBooks = await db.wordBooks.toArray();
                           await Promise.all(allBooks.map(book => {
                             const newIds = book.wordIds.filter(wid => wid !== word.id);
                             if (newIds.length !== book.wordIds.length) {
-                              return db.wordBooks.update(book.id, { wordIds: newIds, updatedAt: Date.now() });
+                              return db.wordBooks.update(book.id, { wordIds: newIds, updatedAt: Date.now() }).catch(() => {});
                             }
                           }));
                           setWords(prev => prev.filter(w => w.id !== word.id));

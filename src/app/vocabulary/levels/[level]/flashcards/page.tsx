@@ -142,7 +142,7 @@ export default function TopikFlashcardsPage() {
         const cur = displayWords[currentIdx];
         if (cur && cur.mastery === 'new') {
           db.words.where('word').equals(cur.korean).first().then(existing => {
-            if (existing) db.words.update(existing.id, { mastery: 'learning', srsLevel: 1, interval: 1, nextReview: Date.now() });
+            if (existing) db.words.update(existing.id, { mastery: 'learning', srsLevel: 1, interval: 1, nextReview: Date.now() }).catch(() => {});
           });
           setWords(prev => prev.map(w => w.korean === cur.korean ? { ...w, mastery: 'learning' } : w));
         }
@@ -169,13 +169,13 @@ export default function TopikFlashcardsPage() {
 
     if (isMastered) {
       if (existing) {
-        await db.words.update(existing.id, { mastery: 'learning', srsLevel: 1, interval: 1, nextReview: now });
+        await db.words.update(existing.id, { mastery: 'learning', srsLevel: 1, interval: 1, nextReview: now }).catch(() => {});
       }
       setMasteredSet(prev => { const s = new Set(prev); s.delete(entry.korean); return s; });
       setWords(prev => prev.map(w => w.korean === entry.korean ? { ...w, mastery: 'learning' } : w));
     } else {
       if (existing) {
-        await db.words.update(existing.id, { mastery: 'mastered', srsLevel: 5, interval: 21, nextReview: now + 21 * 86400000, lastReviewed: now });
+        await db.words.update(existing.id, { mastery: 'mastered', srsLevel: 5, interval: 21, nextReview: now + 21 * 86400000, lastReviewed: now }).catch(() => {});
       } else {
         await db.words.put({
           id: crypto.randomUUID(),
@@ -193,7 +193,7 @@ export default function TopikFlashcardsPage() {
           createdAt: now,
           lastReviewed: now,
           source: 'library',
-        });
+        }).catch(() => {});
       }
       setMasteredSet(prev => new Set(prev).add(entry.korean));
       setWords(prev => prev.map(w => w.korean === entry.korean ? { ...w, mastery: 'mastered' } : w));

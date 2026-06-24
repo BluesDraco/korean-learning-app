@@ -51,7 +51,7 @@ export default function AdminAmbassadorsPage() {
           isAmbassador: true,
           ambassadorSince: Date.now(),
           ambassadorReason: reasons.join('; '),
-        } satisfies Partial<UserProfile>);
+        } satisfies Partial<UserProfile>).catch(() => {});
       }
     }
 
@@ -64,7 +64,7 @@ export default function AdminAmbassadorsPage() {
       isAmbassador: false,
       ambassadorSince: null,
       ambassadorReason: null,
-    } satisfies Partial<UserProfile>);
+    } satisfies Partial<UserProfile>).catch(() => {});
     setAmbassadors((prev) => prev.filter((a) => a.id !== profileId));
   };
 

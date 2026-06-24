@@ -171,7 +171,7 @@ export default function ShadowingPlayerPage() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ action: 'shadowing', details: `影子跟读: ${currentVideo.title}`, xpEarned: 0 }),
         }).catch(() => {});
-        db.studyVideos.update(currentVideo.id, { lastStudiedAt: Date.now() });
+        db.studyVideos.update(currentVideo.id, { lastStudiedAt: Date.now() }).catch(() => {});
       }
       // Cleanup recording resources
       if (recordedAudioUrl) revokeRecording(recordedAudioUrl);
@@ -263,7 +263,7 @@ export default function ShadowingPlayerPage() {
       lastReviewed: null,
       nextReview: Date.now(),
     };
-    await db.words.put(newWord);
+    await db.words.put(newWord).catch(() => {});
     setWordData((prev) => prev ? { ...prev, alreadySaved: true } : null);
     feedbackSuccess('已加入单词本');
   };

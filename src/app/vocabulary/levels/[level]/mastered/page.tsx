@@ -52,7 +52,7 @@ export default function LevelMasteredPage() {
     const toUpdate = allUserWords
       .filter(w => selected.has(w.word))
       .map(w => ({ id: w.id, mastery: 'learning', srsLevel: 1, interval: 1, nextReview: now }));
-    await db.words.bulkUpdate(toUpdate);
+    await db.words.bulkUpdate(toUpdate).catch(() => {});
     setMasteredWords(prev => prev.filter(e => !selected.has(e.korean)));
     setSelected(new Set()); setManaging(false); setUnmasterPending(false);
   };
@@ -60,7 +60,7 @@ export default function LevelMasteredPage() {
   const batchDelete = async () => {
     const allUserWords = await db.words.toArray();
     const ids = allUserWords.filter(w => selected.has(w.word)).map(w => w.id);
-    await db.words.bulkDelete(ids);
+    await db.words.bulkDelete(ids).catch(() => {});
     setMasteredWords(prev => prev.filter(e => !selected.has(e.korean)));
     setSelected(new Set()); setManaging(false); setDeletePending(false);
   };
@@ -68,7 +68,7 @@ export default function LevelMasteredPage() {
   const unmaster = async (entry: WordEntry) => {
     const now = Date.now();
     const existing = await db.words.where('word').equals(entry.korean).first();
-    if (existing) await db.words.update(existing.id, { mastery: 'learning', srsLevel: 1, interval: 1, nextReview: now });
+    if (existing) await db.words.update(existing.id, { mastery: 'learning', srsLevel: 1, interval: 1, nextReview: now }).catch(() => {});
     setMasteredWords(prev => prev.filter(e => e.korean !== entry.korean));
   };
 
@@ -246,7 +246,7 @@ export default function LevelMasteredPage() {
               const book = await db.wordBooks.get(bookId);
               if (!book) continue;
               if (!book.wordIds.includes(dbWord.id)) {
-                await db.wordBooks.update(bookId, { wordIds: [...book.wordIds, dbWord.id] });
+                await db.wordBooks.update(bookId, { wordIds: [...book.wordIds, dbWord.id] }).catch(() => {});
               }
             }
             setShowAddBook(false);

@@ -172,14 +172,14 @@ export function AddToBookModal({ mode, preSelectedWordIds, bookId, onClose, onDo
         wordId = existingWord.id;
       } else {
         const newWord = lookupToWord(lookupResult);
-        await db.words.add(newWord);
+        await db.words.add(newWord).catch(() => {});
         wordId = newWord.id;
       }
       if (!book.wordIds.includes(wordId)) {
         await db.wordBooks.update(bookId, {
           wordIds: [...book.wordIds, wordId],
           updatedAt: Date.now(),
-        });
+        }).catch(() => {});
       }
       onDone();
       onClose();
@@ -191,6 +191,7 @@ export function AddToBookModal({ mode, preSelectedWordIds, bookId, onClose, onDo
   };
 
   const handleSave = async () => {
+    try {
     if (mode === 'select-books' && preSelectedWordIds) {
       for (const bid of selectedBookIds) {
         const book = await db.wordBooks.get(bid);
@@ -232,6 +233,7 @@ export function AddToBookModal({ mode, preSelectedWordIds, bookId, onClose, onDo
     }
     onDone();
     onClose();
+    } catch { /* ignore */ }
   };
 
   const toggleBook = (id: string) => {

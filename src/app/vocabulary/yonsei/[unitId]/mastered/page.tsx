@@ -67,7 +67,7 @@ export default function YonseiMasteredPage() {
     const now = Date.now();
     for (const k of selected) {
       const existing = await db.words.where('word').equals(k).first();
-      if (existing) await db.words.update(existing.id, { mastery: 'learning', srsLevel: 1, interval: 1, nextReview: now });
+      if (existing) await db.words.update(existing.id, { mastery: 'learning', srsLevel: 1, interval: 1, nextReview: now }).catch(() => {});
     }
     setMasteredWords(prev => prev.filter(w => !selected.has(w.word)));
     setSelected(new Set()); setManaging(false);
@@ -76,7 +76,7 @@ export default function YonseiMasteredPage() {
   const batchDelete = async () => {
     for (const k of selected) {
       const existing = await db.words.where('word').equals(k).first();
-      if (existing) await db.words.delete(existing.id);
+      if (existing) await db.words.delete(existing.id).catch(() => {});
     }
     setMasteredWords(prev => prev.filter(w => !selected.has(w.word)));
     setSelected(new Set()); setManaging(false); setDeletePending(false);
@@ -85,7 +85,7 @@ export default function YonseiMasteredPage() {
   const unmaster = async (w: YonseiWord) => {
     const now = Date.now();
     const existing = await db.words.where('word').equals(w.word).first();
-    if (existing) await db.words.update(existing.id, { mastery: 'learning', srsLevel: 1, interval: 1, nextReview: now });
+    if (existing) await db.words.update(existing.id, { mastery: 'learning', srsLevel: 1, interval: 1, nextReview: now }).catch(() => {});
     setMasteredWords(prev => prev.filter(x => x.word !== w.word));
   };
 
@@ -223,7 +223,7 @@ export default function YonseiMasteredPage() {
               const book = await db.wordBooks.get(bookId);
               if (!book) continue;
               if (!book.wordIds.includes(dbWord.id)) {
-                await db.wordBooks.update(bookId, { wordIds: [...book.wordIds, dbWord.id] });
+                await db.wordBooks.update(bookId, { wordIds: [...book.wordIds, dbWord.id] }).catch(() => {});
               }
             }
             setShowAddBook(false);

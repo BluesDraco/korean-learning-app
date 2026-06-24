@@ -115,8 +115,8 @@ export default function ThemeDetailPage() {
         }
       }
       await Promise.all([
-        toInsert.length > 0 ? db.words.bulkPut(toInsert) : Promise.resolve(),
-        newWordIds.length > 0 ? db.wordBooks.update(bookId, { wordIds: [...book.wordIds, ...newWordIds], updatedAt: now }) : Promise.resolve(),
+        toInsert.length > 0 ? db.words.bulkPut(toInsert).catch(() => {}) : Promise.resolve(),
+        newWordIds.length > 0 ? db.wordBooks.update(bookId, { wordIds: [...book.wordIds, ...newWordIds], updatedAt: now }).catch(() => {}) : Promise.resolve(),
       ]);
       setAddedAll(true);
       setTimeout(() => setAddedAll(false), 3000);
@@ -162,8 +162,8 @@ export default function ThemeDetailPage() {
       }
     }
     await Promise.all([
-      toUpdate.length > 0 ? db.words.bulkUpdate(toUpdate) : Promise.resolve(),
-      toInsert.length > 0 ? db.words.bulkPut(toInsert) : Promise.resolve(),
+      toUpdate.length > 0 ? db.words.bulkUpdate(toUpdate).catch(() => {}) : Promise.resolve(),
+      toInsert.length > 0 ? db.words.bulkPut(toInsert).catch(() => {}) : Promise.resolve(),
     ]);
     setMasteredIds(prev => { const s = new Set(prev); selectedWords.forEach(w => s.add(w)); return s; });
     setLearningIds(prev => { const s = new Set(prev); selectedWords.forEach(w => s.delete(w)); return s; });
@@ -173,7 +173,7 @@ export default function ThemeDetailPage() {
   const batchDelete = async () => {
     const allUserWords = await db.words.toArray();
     const ids = allUserWords.filter(w => selectedWords.has(w.word)).map(w => w.id);
-    await db.words.bulkDelete(ids);
+    await db.words.bulkDelete(ids).catch(() => {});
     setMasteredIds(prev => { const s = new Set(prev); selectedWords.forEach(w => s.delete(w)); return s; });
     setLearningIds(prev => { const s = new Set(prev); selectedWords.forEach(w => s.delete(w)); return s; });
     exitManage();

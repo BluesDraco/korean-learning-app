@@ -93,7 +93,7 @@ export function AddToBookSheet({ word, onClose, onSelectBook, title }: Props) {
       const bookId = crypto.randomUUID();
       const COLORS = ['var(--pink-primary)', 'var(--mint-soft)', 'var(--purple-soft)', 'var(--peach-soft)', 'var(--blue-soft)'];
       const color = COLORS[books.length % COLORS.length];
-      await db.wordBooks.put({ id: bookId, name, description: '', wordIds: [], color, createdAt: now, updatedAt: now });
+      await db.wordBooks.put({ id: bookId, name, description: '', wordIds: [], color, createdAt: now, updatedAt: now }).catch(() => {});
       const newBook = { id: bookId, name, color };
       setBooks(prev => [...prev, newBook]);
       setNewBookName('');

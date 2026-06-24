@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback, useRef, Suspense } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Volume2, ChevronLeft, ChevronRight, Loader2, CheckCircle, RotateCcw, Shuffle } from 'lucide-react';
@@ -12,7 +12,7 @@ import { WordTapSheet } from '@/components/WordTapSheet';
 
 type CardWord = YonseiWord & { mastery: 'new' | 'learning' | 'reviewing' | 'mastered' };
 
-export default function YonseiFlashcardsPage() {
+function SeoulFlashcardsContent() {
   const { unitId } = useParams<{ unitId: string }>();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -150,7 +150,7 @@ export default function YonseiFlashcardsPage() {
         const cur = displayWords[currentIdx];
         if (cur && cur.mastery === 'new') {
           db.words.where('word').equals(cur.word).first().then(existing => {
-            if (existing) db.words.update(existing.id, { mastery: 'learning', srsLevel: 1, interval: 1, nextReview: Date.now() });
+            if (existing) db.words.update(existing.id, { mastery: 'learning', srsLevel: 1, interval: 1, nextReview: Date.now() }).catch(() => {});
           });
           setWords(prev => prev.map(w => w.word === cur.word ? { ...w, mastery: 'learning' } : w));
         }
@@ -175,12 +175,12 @@ export default function YonseiFlashcardsPage() {
     const existing = await db.words.where('word').equals(w.word).first();
 
     if (isMastered) {
-      if (existing) await db.words.update(existing.id, { mastery: 'learning', srsLevel: 1, interval: 1, nextReview: now });
+      if (existing) await db.words.update(existing.id, { mastery: 'learning', srsLevel: 1, interval: 1, nextReview: now }).catch(() => {});
       setMasteredSet(prev => { const s = new Set(prev); s.delete(w.word); return s; });
       setWords(prev => prev.map(c => c.word === w.word ? { ...c, mastery: 'learning' } : c));
     } else {
       if (existing) {
-        await db.words.update(existing.id, { mastery: 'mastered', srsLevel: 5, interval: 21, nextReview: now + 21 * 86400000, lastReviewed: now });
+        await db.words.update(existing.id, { mastery: 'mastered', srsLevel: 5, interval: 21, nextReview: now + 21 * 86400000, lastReviewed: now }).catch(() => {});
       } else {
         await db.words.put({
           id: crypto.randomUUID(),
@@ -197,7 +197,7 @@ export default function YonseiFlashcardsPage() {
           createdAt: now,
           lastReviewed: now,
           source: 'seoul',
-        });
+        }).catch(() => {});
       }
       setMasteredSet(prev => new Set(prev).add(w.word));
       setWords(prev => prev.map(c => c.word === w.word ? { ...c, mastery: 'mastered' } : c));
@@ -487,5 +487,13 @@ export default function YonseiFlashcardsPage() {
         </button>
       </div>
     </div>
+  );
+}
+
+export default function SeoulFlashcardsPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center py-32"><Loader2 className="animate-spin" size={24} /></div>}>
+      <SeoulFlashcardsContent />
+    </Suspense>
   );
 }

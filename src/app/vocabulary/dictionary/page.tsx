@@ -105,7 +105,7 @@ export default function DictionaryPage() {
         createdAt: Date.now(),
         lastReviewed: null,
         nextReview: Date.now(),
-      });
+      }).catch(() => {});
     }
     setAddedIds((prev) => new Set(prev).add(entry.id));
     setAddingId(null);
@@ -130,7 +130,7 @@ export default function DictionaryPage() {
       }
       newIds.add(entry.id);
     }
-    if (toInsert.length > 0) await db.words.bulkPut(toInsert);
+    if (toInsert.length > 0) await db.words.bulkPut(toInsert).catch(() => {});
     setAddedIds(newIds);
     setAddedCount(toInsert.length);
     setAddingAll(false);

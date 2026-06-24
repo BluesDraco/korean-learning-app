@@ -9,6 +9,7 @@ import { LangProvider } from '@/components/LangProvider';
 import { ToastProvider } from '@/hooks/useToast';
 import { ToriToastContainer } from '@/components/ToriToast';
 import { LazyLayoutComponents } from '@/components/LazyLayoutComponents';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 
 export const metadata: Metadata = {
   title: '토리的 韩语日记',
@@ -76,7 +77,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <LangProvider>
           <AuthProvider>
           <ToastProvider>
-          <AppShell>{children}</AppShell>
+          <ErrorBoundary>
+            <AppShell>{children}</AppShell>
+          </ErrorBoundary>
           <ToriToastContainer />
           </ToastProvider>
           </AuthProvider>

@@ -96,13 +96,13 @@ export default function YonseiUnitPage() {
     const now = Date.now();
     if (masteredSet.has(word)) {
       const existing = await db.words.where('word').equals(word).first();
-      if (existing) await db.words.update(existing.id, { mastery: 'learning', srsLevel: 1, interval: 1, nextReview: now });
+      if (existing) await db.words.update(existing.id, { mastery: 'learning', srsLevel: 1, interval: 1, nextReview: now }).catch(() => {});
       setMasteredSet(prev => { const s = new Set(prev); s.delete(word); return s; });
       setLearningSet(prev => new Set(prev).add(word));
     } else {
       const existing = await db.words.where('word').equals(word).first();
       if (existing) {
-        await db.words.update(existing.id, { mastery: 'mastered', srsLevel: 5, interval: 21, nextReview: now + 21 * 86400000, lastReviewed: now });
+        await db.words.update(existing.id, { mastery: 'mastered', srsLevel: 5, interval: 21, nextReview: now + 21 * 86400000, lastReviewed: now }).catch(() => {});
       } else {
         await db.words.put({
           id: crypto.randomUUID(),
@@ -119,7 +119,7 @@ export default function YonseiUnitPage() {
           createdAt: now,
           lastReviewed: now,
           source: 'yonsei',
-        });
+        }).catch(() => {});
       }
       setMasteredSet(prev => new Set(prev).add(word));
       setLearningSet(prev => { const s = new Set(prev); s.delete(word); return s; });
@@ -157,8 +157,8 @@ export default function YonseiUnitPage() {
         }
       }
       await Promise.all([
-        toInsert.length > 0 ? db.words.bulkPut(toInsert) : Promise.resolve(),
-        wordIdsToAdd.length > 0 ? db.wordBooks.update(bookId, { wordIds: [...book.wordIds, ...wordIdsToAdd], updatedAt: now }) : Promise.resolve(),
+        toInsert.length > 0 ? db.words.bulkPut(toInsert).catch(() => {}) : Promise.resolve(),
+        wordIdsToAdd.length > 0 ? db.wordBooks.update(bookId, { wordIds: [...book.wordIds, ...wordIdsToAdd], updatedAt: now }).catch(() => {}) : Promise.resolve(),
       ]);
       setAddedAll(true);
       setTimeout(() => setAddedAll(false), 3000);
@@ -188,7 +188,7 @@ export default function YonseiUnitPage() {
     for (const w of allWords.filter(fw => selectedWords.has(fw.word))) {
       const existing = await db.words.where('word').equals(w.word).first();
       if (existing) {
-        await db.words.update(existing.id, { mastery: 'mastered', srsLevel: 5, interval: 21, nextReview: now + 21 * 86400000, lastReviewed: now });
+        await db.words.update(existing.id, { mastery: 'mastered', srsLevel: 5, interval: 21, nextReview: now + 21 * 86400000, lastReviewed: now }).catch(() => {});
       } else {
         await db.words.put({
           id: crypto.randomUUID(), word: w.word, pronunciation: w.pronunciation,
@@ -196,7 +196,7 @@ export default function YonseiUnitPage() {
           examples: w.examples.map(ex => ({ text: ex.text, translation: ex.translation, source: 'manual' as const })),
           mastery: 'mastered', srsLevel: 5, easeFactor: 2.5, interval: 21,
           nextReview: now + 21 * 86400000, createdAt: now, lastReviewed: now, source: 'yonsei',
-        });
+        }).catch(() => {});
       }
     }
     setMasteredSet(prev => { const s = new Set(prev); selectedWords.forEach(w => s.add(w)); return s; });
@@ -207,7 +207,7 @@ export default function YonseiUnitPage() {
   const batchDelete = async () => {
     for (const word of selectedWords) {
       const existing = await db.words.where('word').equals(word).first();
-      if (existing) await db.words.delete(existing.id);
+      if (existing) await db.words.delete(existing.id).catch(() => {});
     }
     setMasteredSet(prev => { const s = new Set(prev); selectedWords.forEach(w => s.delete(w)); return s; });
     setLearningSet(prev => { const s = new Set(prev); selectedWords.forEach(w => s.delete(w)); return s; });

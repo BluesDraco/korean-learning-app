@@ -9,6 +9,7 @@ import {
   Target, MessageSquare, Trash2, Volume2, CheckSquare, Square, FolderInput, X, Plus, Settings2, Check, Bookmark, BookmarkCheck, Copy, ChevronRight, ChevronDown, Loader2,
 } from 'lucide-react';
 import { db } from '@/lib/db';
+import { useAuth } from '@/components/AuthProvider';
 import { BooksSection } from '@/components/vocabulary/BooksSection';
 import { speakWord, speak } from '@/lib/tts';
 import { TappableText } from '@/components/TappableText';
@@ -268,11 +269,13 @@ function DueWordExpanded({ word, entry, savedExamples, setSavedExamples }: {
               onClick={async e => {
                 e.stopPropagation();
                 if (savedExamples.has(ex.korean)) return;
-                const existing = await db.sentences.where('korean').equals(ex.korean).first().catch(() => null);
-                if (!existing) {
-                  await db.sentences.add({ id: crypto.randomUUID(), korean: ex.korean, chinese: ex.chinese, source_type: 'vocabulary', source_id: 'word-' + word.word, source_title: word.word, created_at: new Date().toISOString() });
-                }
-                setSavedExamples(prev => new Set([...prev, ex.korean]));
+                try {
+                  const existing = await db.sentences.where('korean').equals(ex.korean).first();
+                  if (!existing) {
+                    await db.sentences.add({ id: crypto.randomUUID(), korean: ex.korean, chinese: ex.chinese, source_type: 'vocabulary', source_id: 'word-' + word.word, source_title: word.word, created_at: new Date().toISOString() });
+                  }
+                  setSavedExamples(prev => new Set([...prev, ex.korean]));
+                } catch { /* ignore */ }
               }}
               className="p-1 rounded-lg shrink-0"
               style={{ color: savedExamples.has(ex.korean) ? 'var(--pink-primary)' : 'var(--text-muted)', cursor: savedExamples.has(ex.korean) ? 'default' : 'pointer' }}
@@ -289,6 +292,7 @@ function DueWordExpanded({ word, entry, savedExamples, setSavedExamples }: {
 }
 
 function VocabularyContent() {
+  const { user, loading: authLoading } = useAuth();
   const searchParams = useSearchParams();
   const router = useRouter();
   const urlTab = searchParams.get('tab');
@@ -408,7 +412,7 @@ function VocabularyContent() {
   const handleBatchDelete = async () => {
     if (selected.size === 0) return;
     if (!confirm(`确定删除这 ${selected.size} 个单词？此操作不可撤销。`)) return;
-    await Promise.all([...selected].map(id => db.words.delete(id)));
+    await Promise.all([...selected].map(id => db.words.delete(id).catch(() => {})));
     setAllWords(prev => prev.filter(w => !selected.has(w.id)));
     setSelected(new Set());
     setManaging(false);
@@ -417,7 +421,7 @@ function VocabularyContent() {
   const handleBatchUnmaster = async () => {
     if (selected.size === 0) return;
     await Promise.all([...selected].map(id =>
-      db.words.update(id, { mastery: 'learning' as MasteryLevel, srsLevel: 1, interval: 1 })
+      db.words.update(id, { mastery: 'learning' as MasteryLevel, srsLevel: 1, interval: 1 }).catch(() => {})
     ));
     setAllWords(prev => prev.map(w => selected.has(w.id) ? { ...w, mastery: 'learning' as MasteryLevel } : w));
     setSelected(new Set());
@@ -617,7 +621,7 @@ function VocabularyContent() {
                           e.preventDefault();
                           e.stopPropagation();
                           if (!confirm(`删除「${w.word}」？`)) return;
-                          await db.words.delete(w.id);
+                          await db.words.delete(w.id).catch(() => {});
                           setAllWords(prev => prev.filter(x => x.id !== w.id));
                         }}
                         className="p-1.5 rounded-lg hover:bg-[var(--color-danger-bg)] text-[var(--text-muted)] hover:text-[var(--color-danger)] transition-all"
@@ -700,7 +704,7 @@ function VocabularyContent() {
   if (tab === 'sentences') {
     const handleDeleteSentence = async (id: string, korean: string) => {
       if (!confirm(`删除这条句子？\n${korean}`)) return;
-      await db.sentences.delete(id);
+      await db.sentences.delete(id).catch(() => {});
       setSentences((prev) => prev.filter((s) => s.id !== id));
     };
 

@@ -101,7 +101,7 @@ export default function BookDetailPage() {
     if (!book || selected.size === 0) return;
     if (!confirm(`确定从单词本中移除这 ${selected.size} 个单词？`)) return;
     const newIds = book.wordIds.filter(wid => !selected.has(wid));
-    await db.wordBooks.update(book.id, { wordIds: newIds, updatedAt: Date.now() });
+    await db.wordBooks.update(book.id, { wordIds: newIds, updatedAt: Date.now() }).catch(() => {});
     setBook({ ...book, wordIds: newIds });
     setWords(prev => prev.filter(w => !selected.has(w.id)));
     setSelected(new Set());
@@ -131,7 +131,7 @@ export default function BookDetailPage() {
     if (!book) return;
     if (!confirm('从单词本中移除这个单词？')) return;
     const newIds = book.wordIds.filter((wid) => wid !== wordId);
-    await db.wordBooks.update(book.id, { wordIds: newIds, updatedAt: Date.now() });
+    await db.wordBooks.update(book.id, { wordIds: newIds, updatedAt: Date.now() }).catch(() => {});
     setBook({ ...book, wordIds: newIds });
     setWords((prev) => prev.filter((w) => w.id !== wordId));
   };

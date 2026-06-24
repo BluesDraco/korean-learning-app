@@ -137,7 +137,7 @@ export default function ShadowingClipPage() {
               line_id: activeSub.id, audio_data: reader.result as string,
               duration_ms: blob.size, korean: activeSub.korean,
               created_at: new Date().toISOString()
-            });
+            }).catch(() => {});
           };
         } catch {}
       };

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Send, Loader2, Check, User, Megaphone, FileText, Bell } from 'lucide-react';
 import type { AnnouncementType } from '@/types';
@@ -11,7 +11,7 @@ const TYPE_OPTIONS: { value: AnnouncementType; label: string; icon: React.Compon
   { value: 'private_message', label: '私信（指定用户）', icon: Bell },
 ];
 
-export default function AdminMessagesPage() {
+function AdminMessagesContent() {
   const searchParams = useSearchParams();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -233,5 +233,13 @@ export default function AdminMessagesPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function AdminMessagesPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center py-32"><Loader2 className="animate-spin" size={24} /></div>}>
+      <AdminMessagesContent />
+    </Suspense>
   );
 }
