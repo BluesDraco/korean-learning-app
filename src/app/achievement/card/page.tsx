@@ -178,7 +178,7 @@ export default function AchievementCardPage() {
         if (profile) setNickname(profile.nickname || '학습자');
 
         // Gather stats
-        const allWords = await db.words.toArray();
+        const allWords = await db.words.orderBy('id').limit(2000).toArray();
         const reviewed = allWords.filter((w) => w.lastReviewed).length;
         const longestStreak = profile?.longestStreak || 0;
 
@@ -193,7 +193,7 @@ export default function AchievementCardPage() {
         } catch { /* ignore */ }
 
         // Calculate total study days
-        const dailyLogs = await db.dailyLogs.toArray();
+        const dailyLogs = await db.dailyLogs.orderBy('id').limit(1000).toArray();
         const studyDays = dailyLogs.length;
 
         // Determine which milestones have been reached but not yet card-generated

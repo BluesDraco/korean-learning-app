@@ -110,8 +110,8 @@ export function DiaryDayClient({ day, level }: Props) {
       try {
         const [allP, allSentences, allRecordings] = await Promise.all([
           db.toriProgress.toArray(),
-          db.sentences.toArray().catch(() => []),
-          db.recordings.toArray().catch(() => []),
+          db.sentences.orderBy('id').limit(1000).toArray().catch(() => []),
+          db.recordings.orderBy('id').limit(500).toArray().catch(() => []),
         ]);
         const checkpoints = new Set([7, 14, 21, 26, 29, 30]);
         const userP = allP.filter((p) => p.userId === user.id && p.completedAt);

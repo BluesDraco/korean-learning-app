@@ -100,22 +100,27 @@ function PageContent() {
 
   // Load stats
   useEffect(() => {
+    let cancelled = false;
     (async () => {
       try {
         const attempts = await db.pronunciationAttempts.toArray();
+        if (cancelled) return;
         if (attempts.length === 0) return;
         const seenIds = new Set<string>();
         for (const a of attempts) seenIds.add(a.itemId);
         setStats({ totalAttempts: attempts.length, recentItems: seenIds.size });
       } catch (_e) {}
     })();
+    return () => { cancelled = true; };
   }, []);
 
   // Load course items
   useEffect(() => {
+    let cancelled = false;
     (async () => {
       try {
-        const events = await db.learningEvents.toArray();
+        const events = await db.learningEvents.orderBy('id').limit(2000).toArray();
+        if (cancelled) return;
         const completedDays = new Set<number>();
         for (const e of events) {
           if (e.action === 'complete' && e.dayNum) completedDays.add(e.dayNum);
@@ -129,9 +134,10 @@ function PageContent() {
           course.words.map((w) => ({ korean: w.korean, chinese: w.chinese, pronunciation: w.pronunciation })),
           latestDay,
         );
-        setCourseItems({ dayNum: latestDay, title: course.title, items });
+        if (!cancelled) setCourseItems({ dayNum: latestDay, title: course.title, items });
       } catch (_e2) {}
     })();
+    return () => { cancelled = true; };
   }, []);
 
   if (sessionItems) {

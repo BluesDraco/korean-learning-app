@@ -2,38 +2,36 @@
 
 import { useState, useEffect } from 'react';
 
-function checkMobile() {
-  if (typeof window === 'undefined') return false;
-  return window.innerWidth < 768;
+const BREAKPOINT = 768;
+
+function getIsDesktop() {
+  return typeof window !== 'undefined' && window.innerWidth >= BREAKPOINT;
 }
 
-function checkDesktop() {
-  if (typeof window === 'undefined') return false;
-  return window.innerWidth >= 768;
-}
+// Shared singleton — one ResizeObserver for the entire app
+const listeners = new Set<(v: boolean) => void>();
+let ro: ResizeObserver | null = null;
 
-export function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(checkMobile);
-
-  useEffect(() => {
-    const check = () => setIsMobile(checkMobile());
-    const ro = new ResizeObserver(check);
+function subscribe(fn: (v: boolean) => void) {
+  if (!ro && typeof window !== 'undefined') {
+    ro = new ResizeObserver(() => {
+      const v = getIsDesktop();
+      listeners.forEach(f => f(v));
+    });
     ro.observe(document.documentElement);
-    return () => ro.disconnect();
-  }, []);
-
-  return isMobile;
+  }
+  listeners.add(fn);
+  return () => { listeners.delete(fn); };
 }
 
 export function useIsDesktop() {
-  const [isDesktop, setIsDesktop] = useState(checkDesktop);
-
-  useEffect(() => {
-    const check = () => setIsDesktop(checkDesktop());
-    const ro = new ResizeObserver(check);
-    ro.observe(document.documentElement);
-    return () => ro.disconnect();
-  }, []);
-
+  const [isDesktop, setIsDesktop] = useState(getIsDesktop);
+  useEffect(() => subscribe(setIsDesktop), []);
   return isDesktop;
+}
+
+export function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(() => !getIsDesktop());
+  useEffect(() => subscribe(v => setIsMobile(!v)), []);
+  return isMobile;
 }

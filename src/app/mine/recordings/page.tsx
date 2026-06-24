@@ -38,7 +38,7 @@ export default function MineRecordingsPage() {
 
   useEffect(() => {
     if (!user) { setLoading(false); return; }
-    db.recordings.orderBy('createdAt').reverse().toArray()
+    db.recordings.orderBy('createdAt').reverse().limit(200).toArray()
       .then((rows) => setRecordings(rows as Recording[]))
       .catch(() => setRecordings([]))
       .finally(() => setLoading(false));

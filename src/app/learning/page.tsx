@@ -51,12 +51,14 @@ export default function LearningPage() {
   }, []);
 
   useEffect(() => {
+    let cancelled = false;
     getPhoneticProgress().then((p) => {
-      if (p.total > 0) setPhoneticPct(Math.round((p.completed / p.total) * 100));
+      if (!cancelled && p.total > 0) setPhoneticPct(Math.round((p.completed / p.total) * 100));
     });
     getGrammarProgress().then((p) => {
-      if (p.total > 0) setGrammarPct(Math.round((p.completed / p.total) * 100));
+      if (!cancelled && p.total > 0) setGrammarPct(Math.round((p.completed / p.total) * 100));
     });
+    return () => { cancelled = true; };
   }, []);
 
   if (isDesktop) return <DesktopLearningPage />;

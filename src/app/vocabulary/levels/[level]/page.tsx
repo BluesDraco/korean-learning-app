@@ -116,7 +116,7 @@ export default function LevelDetailPage() {
         setWords(w);
         try {
           const koreanWords = new Set(w.map((e) => e.korean));
-          const allUserWords = await db.words.toArray();
+          const allUserWords = await db.words.where('word').anyOf([...koreanWords]).toArray();
           const userWords = allUserWords.filter((uw) => koreanWords.has(uw.word));
           const mSet = new Set(userWords.filter((uw) => uw.mastery === 'mastered').map((uw) => uw.word));
           const lSet = new Set(userWords.filter((uw) => uw.mastery !== 'mastered' && uw.mastery !== 'new').map((uw) => uw.word));
@@ -248,7 +248,7 @@ export default function LevelDetailPage() {
     try {
       const [book, allUserWords] = await Promise.all([
         db.wordBooks.get(bookId),
-        db.words.toArray(),
+        db.words.where('word').anyOf(filteredWords.map(e => e.korean)).toArray(),
       ]);
       if (!book) return;
       const now = Date.now();
@@ -341,7 +341,7 @@ export default function LevelDetailPage() {
     const now = Date.now();
     const selected = words.filter(e => selectedWords.has(e.korean));
     // One fetch for all user words, then one bulk write — 2 HTTP requests total
-    const allUserWords = await db.words.toArray();
+    const allUserWords = await db.words.where('word').anyOf(selected.map(e => e.korean)).toArray();
     const userWordMap = new Map(allUserWords.map(w => [w.word, w]));
     const toUpdate: { id: string; mastery: string; srsLevel: number; interval: number; nextReview: number; lastReviewed: number }[] = [];
     const toInsert: any[] = [];
@@ -369,8 +369,8 @@ export default function LevelDetailPage() {
   };
 
   const batchDelete = async () => {
-    const allUserWords = await db.words.toArray();
-    const ids = allUserWords.filter(w => selectedWords.has(w.word)).map(w => w.id);
+    const allUserWords = await db.words.where('word').anyOf([...selectedWords]).toArray();
+    const ids = allUserWords.map(w => w.id);
     await db.words.bulkDelete(ids).catch(() => {});
     setMasteredSet(prev => { const s = new Set(prev); selectedWords.forEach(w => s.delete(w)); return s; });
     setLearningSet(prev => { const s = new Set(prev); selectedWords.forEach(w => s.delete(w)); return s; });

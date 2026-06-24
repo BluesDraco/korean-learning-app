@@ -103,6 +103,7 @@ const MOCK_CARDS: FlashCard[] = [
 async function dbWordToCard(w: any): Promise<FlashCard> {
   const src = w.source || w.sourceType || '';
   let example = '';
+  let meaning = w.meaning || w.chinese || '';
   const validEx = (w.examples ?? []).find((ex: any) => ex.text && ex.text !== '[object Object]' && ex.text.trim());
   if (validEx) {
     example = `${validEx.text}\n${validEx.translation ?? ''}`;
@@ -110,6 +111,7 @@ async function dbWordToCard(w: any): Promise<FlashCard> {
     const entry = w.sourceEntryId ? await getEntry(w.sourceEntryId) : await getEntryByKorean(w.word || w.korean || '');
     const staticEx = entry?.examples?.[0];
     if (staticEx) example = `${staticEx.korean}\n${staticEx.chinese}`;
+    if (!meaning) meaning = entry?.meanings?.[0]?.chinese || '';
   }
   return {
     id: String(w.id),
@@ -119,7 +121,7 @@ async function dbWordToCard(w: any): Promise<FlashCard> {
     reviewCount: (w.srsLevel || 0) + 1,
     front: w.word || w.korean || '',
     sub: w.pronunciation || w.romanization || '',
-    meaning: w.meaning || w.chinese || '',
+    meaning,
     partOfSpeech: w.partOfSpeech || '',
     note: w.usage || w.note || '',
     example,

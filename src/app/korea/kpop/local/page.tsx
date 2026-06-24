@@ -51,11 +51,13 @@ export default function LocalKaraokePage() {
   const recordingAudioRef = useRef<HTMLAudioElement | null>(null);
   const urlRef = useRef<string>('');
   const isGeneratingRef = useRef(false);
+  const stepTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     return () => {
       if (urlRef.current) URL.revokeObjectURL(urlRef.current);
       if (intervalRef.current) clearInterval(intervalRef.current);
+      if (stepTimerRef.current) clearInterval(stepTimerRef.current);
     };
   }, []);
 
@@ -109,7 +111,7 @@ export default function LocalKaraokePage() {
     setGenError('');
     setStage('generating');
     setGenStep(0);
-    const stepTimer = setInterval(() => setGenStep((s) => Math.min(s + 1, GEN_STEPS.length - 2)), 1800);
+    stepTimerRef.current = setInterval(() => setGenStep((s) => Math.min(s + 1, GEN_STEPS.length - 2)), 1800);
     try {
       const url = URL.createObjectURL(audioFile);
       urlRef.current = url;
@@ -124,7 +126,7 @@ export default function LocalKaraokePage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ songName: songName.trim(), artistName: artistName.trim(), estimatedDurationSec: Math.round(dur) }),
       });
-      clearInterval(stepTimer);
+      clearInterval(stepTimerRef.current!);
       if (!res.ok) {
         const err = await res.json().catch(() => ({ error: '生成失败，请重试' }));
         setGenError(err.error || '生成失败，请重试');
@@ -140,7 +142,7 @@ export default function LocalKaraokePage() {
       setDuration(dur * 1000);
       setStage('player');
     } catch {
-      clearInterval(stepTimer);
+      clearInterval(stepTimerRef.current!);
       setGenError('网络异常，请重试');
       setStage('naming');
     }

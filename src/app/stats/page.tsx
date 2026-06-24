@@ -56,16 +56,17 @@ export default function StatsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let cancelled = false;
     const load = async () => {
       try {
       const [words, sessions, dictationRecords, shadowingRecords, achs, p, articleProgress] = await Promise.all([
-        db.words.toArray(),
-        db.reviewSessions.orderBy('date').reverse().toArray(),
-        db.dictationRecords.toArray(),
-        db.shadowingRecords.toArray(),
+        db.words.orderBy('id').limit(3000).toArray(),
+        db.reviewSessions.orderBy('date').reverse().limit(1000).toArray(),
+        db.dictationRecords.orderBy('id').limit(1000).toArray(),
+        db.shadowingRecords.orderBy('id').limit(1000).toArray(),
         db.achievements.toArray(),
         db.userProfiles.get('main'),
-        db.userArticleProgress.toArray(),
+        db.userArticleProgress.orderBy('id').limit(1000).toArray(),
       ]);
 
       const todayStart = new Date().setHours(0, 0, 0, 0);
@@ -140,15 +141,17 @@ export default function StatsPage() {
       const totalRead = articleProgress.filter((ap) => ap.status === 'completed').length;
       const totalSavedItems = articleProgress.reduce((sum, ap) => sum + ap.savedSentenceIds.length + ap.savedWordIds.length, 0);
 
+      if (cancelled) return;
       setStats({ totalWords, masteredWords, totalReviews, totalDictations, totalShadowings, todayReviews, weekReviews, masteryDistribution, srsBins, totalXp, skills, healthScore, retentionBuckets, curvePoints, atRisk, totalRead, totalSavedItems });
       setAchievements(achs);
       setProfile(p || null);
-      setLoading(false);
+      if (!cancelled) setLoading(false);
       } catch {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
     load();
+    return () => { cancelled = true; };
   }, []);
 
   if (loading) {

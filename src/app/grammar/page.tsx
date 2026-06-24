@@ -2395,11 +2395,14 @@ function GrammarContent() {
   const closeCard = () => { setActiveCard(null); requestAnimationFrame(() => window.scrollTo(0, savedScrollY.current)); };
 
   useEffect(() => {
+    let cancelled = false;
     db.userGrammarStates.toArray().then(states => {
+      if (cancelled) return;
       const map: Record<string, UserGrammarState> = {};
       for (const s of states) map[s.id] = s;
       setGrammarStates(map);
     }).catch((err) => console.warn('IndexedDB error:', err));
+    return () => { cancelled = true; };
   }, []);
 
   useEffect(() => {

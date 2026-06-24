@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, useCallback, useMemo, useRef, Suspense } from 'react';
+import { useIsDesktop } from '@/lib/useIsMobile';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
@@ -324,12 +325,16 @@ function VocabularyContent() {
   const [expandedAnalysis, setExpandedAnalysis] = useState<Map<string, any>>(new Map());
   const [expandedLoading, setExpandedLoading] = useState<string | null>(null);
   const [entriesCache, setEntriesCache] = useState<Map<string, WordEntry>>(new Map());
+  const dueWordKeyRef = useRef('');
 
   // Load dictionary entries for due words (romanization + examples fallback)
   useEffect(() => {
     if (!allWordsLoaded) return;
     const now = Date.now();
     const dueWords = allWords.filter(w => w.nextReview <= now && w.mastery !== 'mastered');
+    const key = dueWords.map(w => w.id).join(',');
+    if (key === dueWordKeyRef.current) return;
+    dueWordKeyRef.current = key;
     (async () => {
       const results = await Promise.all(
         dueWords.map(w => w.sourceEntryId ? getEntry(w.sourceEntryId) : getEntryByKorean(w.word))
@@ -378,7 +383,7 @@ function VocabularyContent() {
   // Lazy-load full word list only when library tab or due-words sheet needs it
   const loadAllWords = useCallback(async () => {
     if (allWordsLoaded) return;
-    const list = await db.words.orderBy('createdAt').reverse().toArray();
+    const list = await db.words.orderBy('createdAt').reverse().limit(2000).toArray();
     setAllWords(list);
     setAllWordsLoaded(true);
   }, [allWordsLoaded]);
@@ -469,9 +474,15 @@ function VocabularyContent() {
     return { dueReview, mastered, learning, newWords, total: allWords.length };
   }, [allWords]);
 
+  const masteredWords = useMemo(() => allWords.filter(w => w.mastery === 'mastered'), [allWords]);
+
+  const dueSheetWords = useMemo(() => {
+    const now = Date.now();
+    return allWords.filter(w => w.nextReview <= now && w.mastery !== 'mastered');
+  }, [allWords]);
+
   // ── Mastered tab ──
   if (tab === 'mastered') {
-    const masteredWords = allWords.filter(w => w.mastery === 'mastered');
     return (
       <div className="py-4 space-y-4">
         <div className="flex items-center gap-3">
@@ -1118,7 +1129,7 @@ function VocabularyContent() {
               </div>
             </div>
             <div className="flex-1 min-h-0 overflow-y-auto px-4 pb-4 space-y-2">
-              {allWords.filter(w => w.nextReview <= Date.now() && w.mastery !== 'mastered').map(word => {
+              {dueSheetWords.map(word => {
                 const isExpanded = dueExpandedId === word.id;
                 return (
                   <div key={word.id} className="bg-[var(--bg-input)] rounded-2xl overflow-hidden">
@@ -1153,14 +1164,7 @@ function VocabularyContent() {
 }
 
 function VocabularyPageInner() {
-  const [isDesktop, setIsDesktop] = useState<boolean | undefined>(undefined);
-
-  useEffect(() => {
-    setIsDesktop(window.innerWidth >= 768);
-    const onResize = () => setIsDesktop(window.innerWidth >= 768);
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, []);
+  const isDesktop = useIsDesktop();
 
   if (isDesktop) return <DesktopVocabularyPage />;
 

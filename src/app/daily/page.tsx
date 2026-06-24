@@ -67,6 +67,7 @@ export default function DailyPage() {
   }, []);
 
   useEffect(() => {
+    if (isDesktop) return;
     load();
     const onVisible = () => { if (document.visibilityState === 'visible') load(); };
     document.addEventListener('visibilitychange', onVisible);
@@ -84,6 +85,7 @@ export default function DailyPage() {
   }, [user, load]);
 
   useEffect(() => {
+    if (isDesktop) return;
     if (!user) return;
     const dismissed = sessionStorage.getItem('msg_dismissed');
     if (dismissed) return;
@@ -110,6 +112,7 @@ export default function DailyPage() {
 
   // 4 张大卡进度数据
   useEffect(() => {
+    if (isDesktop) return;
     if (!user) return;
     let cancelled = false;
     (async () => {

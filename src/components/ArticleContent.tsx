@@ -9,7 +9,7 @@ import DOMPurify from 'isomorphic-dompurify';
 
 async function loadSavedKoreanWords(): Promise<Set<string>> {
   try {
-    const all = await db.words.toArray();
+    const all = await db.words.orderBy('id').limit(2000).toArray();
     return new Set(all.map((w) => w.word));
   } catch {
     return new Set();
