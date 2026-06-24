@@ -1,237 +1,250 @@
 import type { ToriDay } from '@/types/tori-diary';
 
 /**
- * Day 8 · CU 便利店 · 第一次自己买饭
+ * Day 8 · 第一晚想家 · 独处
  *
- * 剧情：早上 8:30，兔莉饿得肚子叫，没等 Haru 起床，自己下楼去 CU 便利店。
- * 一只懒洋洋的考拉店员靠在收银台后，慢吞吞地说话。
- * Tori 看着冰柜里花花绿绿的삼각김밥半天，鼓起勇气挑了一个金枪鱼味的，
- * 又顺手拿了一瓶香蕉牛奶。结账时手抖把零钱撒了一地，考拉哥哥淡定地等她。
+ * 剧情：地铁事件后的夜晚，Tori 坐在宿舍 301 的床上。
+ * 房间里只有泡面、行李箱和一面贴满便利贴的镜子。
+ * 外面兽尔动物城的夜景很美，但她觉得自己很小。
  *
- * 学习目标：~주세요 综合 / 数字 1-10 韩固有数 / 便利店物品
- * 韩语自审：korean skill PASS
+ * 学习目标：~고 싶어요 (想做___) / 보고 싶어요 (想念) / 情绪表达
+ * 语料层级：해요体 + 独白반말
+ * 韩语自审：korean skill PASS（자연성/문법/발음 三关）
  */
 export const day8: ToriDay = {
   level: 'beginner',
   day: 8,
   phase: 'foundation',
-  title: 'CU 便利店 · 第一次自己买饭',
-  subtitle: '一个金枪鱼三角饭团 + 一瓶香蕉牛奶',
+  title: '第一晚想家 · 独处',
+  subtitle: '空荡荡的房间只有泡面和想家的眼泪',
   isCheckpoint: null,
   estimatedMin: 12,
 
   opening: {
-    date: '9月 9일 월요일 아침',
-    weather: '首尔 · 晴',
+    date: '9月 8일 일요일 밤 늦게',
+    weather: '兽尔 · 雨后',
     toriPose: 'shy',
-    diaryText: `9月 9日，周一早上 8:30。
-肚子叫得能吓到 Haru。
-我没等她起床，自己下楼去 CU。
+    diaryText: `9月 8日，深夜。
 
-考拉店员靠在收银台后面打哈欠，
-他说"안녕하세요"的时候像在叹气。
+Haru 把我送回宿舍门口，
+说了声"잘 자"，就回 302 了。
 
-我盯着冰柜半天，
-紫菜包饭分参鸡汤味、金枪鱼味、辣鸡味……
-最后挑了金枪鱼。
+我关上 301 的门。
 
-转身又抓了一瓶香蕉牛奶——
-真的是亮黄色，妈妈见了肯定笑。
+房间里有：
+一箱还没开的行李、
+一包即食泡面、
+一面贴满便利贴的镜子——
+上面有妈妈的字：「加油」。
 
-结账时我紧张地说："이거 주세요. 그리고 이것도요."
-考拉哥哥扫码："2,800원이에요."
-我手抖，零钱撒了一地。
+窗外是兽尔动物城的夜景。
+很美。但我觉得自己很小。
 
-他没有笑，只是淡淡说："천천히 하세요."
-（慢慢来。）
+我打开手机想给妈妈打电话，
+然后想了想，关上了。
 
-第一次一个人买饭。
-我赢了。`,
+对着镜子说：
+"엄마, 나 잘 지내고 있어."
+（妈妈，我过得很好。）
+
+然后哭了。`,
   },
 
   words: [
     {
       id: 'd08-w1',
-      korean: '편의점',
-      hangul: 'pyeo-nui-jeom',
-      zh: '便利店',
-      pos: '名词',
-      example: { ko: '편의점에 가요.', zh: '我去便利店。' },
-      tip: '韩国便利店密度全球第一。CU、GS25、7-Eleven 三足鼎立',
+      korean: '외로워요',
+      hangul: 'oe-ro-wo-yo',
+      zh: '孤独',
+      pos: '形容词',
+      example: { ko: '오늘 외로워요.', zh: '今天感到孤独。' },
+      tip: '형용사「외롭다」의 해요体。坦诚说出来反而轻松',
     },
     {
       id: 'd08-w2',
-      korean: '삼각김밥',
-      hangul: 'sam-gak-gim-bap',
-      zh: '三角紫菜包饭',
-      pos: '名词',
-      example: { ko: '삼각김밥 하나 주세요.', zh: '请给我一个三角饭团。' },
-      tip: '삼각(三角) + 김밥(紫菜包饭)。便利店神级早餐',
+      korean: '보고 싶어요',
+      hangul: 'bo-go si-peo-yo',
+      zh: '想念',
+      pos: '表达',
+      example: { ko: '엄마가 보고 싶어요.', zh: '我想妈妈。' },
+      tip: '보다(看/见) + 고 싶어요(想做)。「보고 싶다」= 想见到。韩语里「想念」就是「想见」',
     },
     {
       id: 'd08-w3',
-      korean: '바나나우유',
-      hangul: 'ba-na-na-u-yu',
-      zh: '香蕉牛奶',
+      korean: '전화',
+      hangul: 'jeon-hwa',
+      zh: '电话',
       pos: '名词',
-      example: { ko: '바나나우유 한 병 주세요.', zh: '请给我一瓶香蕉牛奶。' },
-      tip: '韩国国民饮料。亮黄色塑料罐子，去到都看得到',
+      example: { ko: '전화할게요.', zh: '我会打电话的。' },
+      tip: '전화(电话) + 하다 = 打电话。전화 받다 = 接电话',
     },
     {
       id: 'd08-w4',
-      korean: '하나',
-      hangul: 'ha-na',
-      zh: '一个 / 1（固有数）',
-      pos: '名词',
-      example: { ko: '하나 주세요.', zh: '请给我一个。' },
-      tip: '韩国数字有两套：固有数(하나/둘/셋) 数东西、汉字数(일/이/삼) 报号码',
+      korean: '울다',
+      hangul: 'ul-da',
+      zh: '哭',
+      pos: '动词',
+      example: { ko: '조금 울었어요.', zh: '哭了一会儿。' },
+      tip: '울다 → 해요体 울어요。在韩国哭一哭没关系，Haru 一定懂',
     },
     {
       id: 'd08-w5',
-      korean: '둘',
-      hangul: 'dul',
-      zh: '两个 / 2（固有数）',
+      korean: '내일',
+      hangul: 'nae-il',
+      zh: '明天',
       pos: '名词',
-      example: { ko: '커피 두 잔 주세요.', zh: '请给我两杯咖啡。' },
-      tip: '둘 + 量词时变「두」: 두 잔 / 두 개 / 두 명',
+      example: { ko: '내일 또 해요.', zh: '明天继续。' },
+      tip: '오늘(今天) / 내일(明天) / 어제(昨天)。三个时间词必背',
     },
     {
       id: 'd08-w6',
-      korean: '천천히',
-      hangul: 'cheon-cheon-hi',
-      zh: '慢慢地',
-      pos: '副词',
-      example: { ko: '천천히 하세요.', zh: '请慢慢来。' },
-      tip: '韩国人最温柔的一句话。考拉哥哥说的就是这句',
+      korean: '괜찮아질 거예요',
+      hangul: 'gwaen-cha-na-jil geo-ye-yo',
+      zh: '会好起来的',
+      pos: '表达',
+      example: { ko: '괜찮아질 거예요. 진짜로.', zh: '会好起来的。真的。' },
+      tip: '괜찮다(没事) + 아질(变得) + 거예요(将会)。对自己说的最温柔一句话',
     },
   ],
 
   dialogue: {
-    scene: 'CU 便利店收银台',
+    scene: '宿舍 301 · 深夜独处',
     setting: {
-      time: '早上 8:30',
-      place: '宿舍楼下 CU',
-      npc: '考拉店员',
+      time: '深夜',
+      place: '宿舍 301',
+      npc: '镜子里的自己',
     },
     lines: [
       {
-        speaker: 'npc',
-        npcName: '考拉店员',
-        ko: '안녕하세요. 결제 도와드릴게요.',
-        hangul: 'an-nyeong-ha-se-yo. gyeol-je do-wa-deu-ril-ge-yo',
-        zh: '你好，我帮您结账。',
+        speaker: 'tori',
+        isInnerVoice: true,
+        ko: '엄마 보고 싶어…',
+        hangul: 'eom-ma bo-go si-peo…',
+        zh: '想妈妈……',
         practice: 'listen',
       },
       {
         speaker: 'tori',
-        ko: '이거 주세요. 그리고 이것도요.',
-        hangul: 'i-geo ju-se-yo. geu-ri-go i-geot-do-yo',
-        zh: '请给我这个。还有这个也是。',
+        ko: '엄마, 나 잘 지내고 있어.',
+        hangul: 'eom-ma, na jal ji-nae-go i-sseo',
+        zh: '妈妈，我过得很好。（对着镜子说谎）',
         practice: 'shadow',
-      },
-      {
-        speaker: 'npc',
-        npcName: '考拉店员',
-        ko: '네. 2,800원이에요.',
-        hangul: 'ne. i-cheon-pal-baek-won-i-e-yo',
-        zh: '好的，2800 韩元。',
-        practice: 'listen',
       },
       {
         speaker: 'tori',
-        ko: '여기요. 죄송해요, 천천히…',
-        hangul: 'yeo-gi-yo. joe-song-hae-yo, cheon-cheon-hi',
-        zh: '给你，对不起，慢一点…',
+        ko: '한국어 너무 어려워.',
+        hangul: 'han-gu-geo neo-mu eo-ryeo-wo',
+        zh: '韩语好难。',
         practice: 'shadow',
+      },
+      {
+        speaker: 'tori',
+        isInnerVoice: true,
+        ko: '근데… 내일 또 해야지.',
+        hangul: 'geun-de… nae-il tto hae-ya-ji',
+        zh: '但是……明天还要继续。',
+        practice: 'listen',
       },
       {
         speaker: 'tori',
         ko: '?',
         hangul: '',
-        zh: '考拉哥哥说"천천히 하세요"，兔莉应该说什么？',
+        zh: 'Tori 对着镜子，给明天的自己说最后一句话——哪句最像真正鼓励自己的话？',
         practice: 'pick',
         choices: [
-          { ko: '감사합니다.', zh: '谢谢。', correct: true },
-          { ko: '안녕히 가세요.', zh: '再见。', correct: false },
-          { ko: '아니요, 괜찮아요.', zh: '不用了。', correct: false },
+          { ko: '내일도 화이팅. 괜찮아질 거야.', zh: '明天也加油。会好起来的。（自我鼓励）', correct: true },
+          { ko: '감사합니다. 죄송합니다.', zh: '谢谢。对不起。（礼貌句，对镜子说不合语境）', correct: false },
+          { ko: '저는 중국 사람이에요.', zh: '我是中国人。（自我介绍，此时此刻不合适）', correct: false },
         ],
       },
     ],
   },
 
   grammar: {
-    title: '指示代词 · 이거 / 그거 / 저거',
-    pattern: '이거 (这个) · 그거 (那个 · 对方那) · 저거 (那个 · 远处)',
-    whenToUse: '便利店、商店里指着东西买的时候。三选一规则韩国人很严格。',
+    title: '想做某事 · 동사 + 고 싶어요',
+    pattern: '동사 어간 + **고 싶어요**',
+    whenToUse: '表达"想做___"。想念某人用「보고 싶어요」，想做某事用「동사 + 고 싶어요」。',
     rules: [
-      '**이거** = 我手边的：「이거 주세요」(请给我这个)',
-      '**그거** = 对方那边的 / 你刚才提到的：「그거 얼마예요?」(那个多少钱？)',
-      '**저거** = 远处第三方的：「저거 보세요」(看那边那个)',
+      '动词词干 + **고 싶어요**：가다 → 가**고 싶어요**（想去）',
+      '想念某人：**보다**(见) + 고 싶어요 → 보**고 싶어요**（想见 = 想念）',
+      '否定：**고 싶지 않아요** / 口语常用 **안 가고 싶어요**',
     ],
     examples: [
-      { ko: '이거 주세요.', zh: '请给我这个。', highlight: '이거' },
-      { ko: '그거 얼마예요?', zh: '那个（你那）多少钱？', highlight: '그거' },
-      { ko: '저거 뭐예요?', zh: '那个（远处）是什么？', highlight: '저거' },
-      { ko: '이것도 주세요.', zh: '这个也请给我。', highlight: '이것' },
+      { ko: '엄마가 보고 싶어요.', zh: '我想妈妈。', highlight: '보고 싶어요', note: '**보다**(见/看) + 고 싶어요。보고 싶다 = 想见到，韩语里「想念」就是「想见」' },
+      { ko: '한국에 가고 싶어요.', zh: '我想去韩国。', highlight: '가고 싶어요', note: '**가다**(去) + 고 싶어요。词干 가 直接加고' },
+      { ko: '한국어를 공부하고 싶어요.', zh: '我想学韩语。', highlight: '공부하고 싶어요', note: '**공부하다**(学习) + 고 싶어요。하다 동사 직접 연결' },
+      { ko: '울고 싶어요.', zh: '想哭。', highlight: '울고 싶어요', note: '**울다**(哭) + 고 싶어요。ㄹ 받침 동사，직접 고 연결' },
     ],
     pitfall:
-      '正式书面语用「이것 / 그것 / 저것」。口语用「이거 / 그거 / 저거」。本周一律用口语版即可。',
+      '「보고 싶어요」的主语可以是人：엄마**가** 보고 싶어요（我想妈妈，助词用 가/이）；也可以是地方：한국**에** 가고 싶어요（助词用 에）。注意助词随宾语变。',
   },
 
   output: [
     {
       id: 'd08-o1',
       kind: 'compose',
-      zhHint: '请给我这个。',
-      tokens: ['이거', '주세요', '저거', '그거', '이것도요', '주실래요'],
-      composeAnswer: ['이거', '주세요'],
-      successMsg: '考拉哥哥按下了扫码枪 ✓',
+      zhHint: '我想妈妈。',
+      tokens: ['엄마가', '보고', '싶어요', '엄마를', '보고 싶어요', '보아요'],
+      composeAnswer: ['엄마가', '보고', '싶어요'],
+      successMsg: '镜子里的兔莉点了点头。',
     },
     {
       id: 'd08-o2',
       kind: 'listen-choice',
-      audioKo: '바나나우유 한 병 주세요.',
-      successMsg: '✓ 「请给我一瓶香蕉牛奶」。「한 병」= 一瓶（固有数 하나 + 量词 병 时变「한」）。',
+      audioKo: '한국어를 공부하고 싶어요.',
+      successMsg: '✓「我想学韩语」。공부하다 + 고 싶어요。',
       choices: [
-        { zh: '请给我一瓶香蕉牛奶。', correct: true },
-        { zh: '请给我一瓶可乐。', correct: false },
-        { zh: '请给我一个三角饭团。', correct: false },
-        { zh: '请给我两杯咖啡。', correct: false },
+        { zh: '我想学韩语。', correct: true },
+        { zh: '我在学韩语。', correct: false },
+        { zh: '韩语很难。', correct: false },
+        { zh: '我不想学韩语。', correct: false },
       ],
     },
     {
       id: 'd08-o3',
       kind: 'zh-to-ko',
-      zhPrompt: '请给我这个。还有这个也是。',
-      successMsg: '"이것도요" = "这个也（请给我）"。「도」是「也」，省略 주세요 是口语。',
+      zhPrompt: '我想回家。',
+      successMsg: '집에 가고 싶어요。집(家) + 에(方向助词) + 가다 + 고 싶어요。',
       choices: [
-        { ko: '이거 주세요. 그리고 이것도요.', correct: true },
-        { ko: '그거 주세요. 그리고 이것도요.', correct: false },
-        { ko: '이거 주세요. 그리고 그것도요.', correct: false },
-        { ko: '저거 주세요. 그리고 저것도요.', correct: false },
+        { ko: '집에 가고 싶어요.', correct: true },
+        { ko: '집이 가고 싶어요.', correct: false },
+        { ko: '집에 보고 싶어요.', correct: false },
+        { ko: '집을 가고 싶어요.', correct: false },
       ],
     },
     {
       id: 'd08-o4',
       kind: 'particle-error',
-      zhHint: '请给我两杯咖啡。',
-      successMsg: '두(2) + 量词「잔」(杯) → 「두 잔」。固有数 2 = 둘，但搭量词时变「두」。',
+      zhHint: '我想念朋友。（助词选哪个？）',
+      successMsg: '친구**가** 보고 싶어요。「보고 싶다」的思念对象用 이/가，不用 을/를。',
       choices: [
-        { ko: '커피 두 잔 주세요.', correct: true },
-        { ko: '커피 둘 잔 주세요.', correct: false },
-        { ko: '커피 이 잔 주세요.', correct: false },
-        { ko: '커피 두 병 주세요.', correct: false },
+        { ko: '친구가 보고 싶어요.', correct: true },
+        { ko: '친구를 보고 싶어요.', correct: false },
+        { ko: '친구는 보고 싶어요.', correct: false },
+        { ko: '친구에 보고 싶어요.', correct: false },
+      ],
+    },
+    {
+      id: 'd08-o5',
+      kind: 'match-pair',
+      successMsg: '✓ Day 8 核心词全部对上。明天继续，괜찮아질 거야。',
+      pairs: [
+        { ko: '외로워요', zh: '孤独' },
+        { ko: '보고 싶어요', zh: '想念' },
+        { ko: '울다', zh: '哭' },
+        { ko: '내일', zh: '明天' },
+        { ko: '괜찮아질 거예요', zh: '会好起来的' },
       ],
     },
   ],
 
   recap: {
-    toriPose: 'proud',
-    praise: '一个人买饭成功！而且记住了"천천히 하세요"。토리, 너무 잘했어요!',
-    preview: '明天 Minji 要带我去街边的店买文具。她说要教我看懂 만 원。',
+    toriPose: 'shy',
+    praise: '哭了也没关系。明天还是会继续的。토리, 오늘도 잘했어요.',
+    preview: '明天——一个人去 CU 便利店买早饭。一个人，第一次。',
     stickerId: 'sticker-d08',
   },
 
   carrotHint:
-    '今天的胡萝卜：「韩国便利店常见食物有哪些」「数字 1-10 怎么读」「点单怎么说"还有这个"」',
+    '今天的胡萝卜：「韩语怎么说我想念某人」「고 싶어요 和 고 싶다 有什么区别」「安慰自己的韩语怎么说」',
 };

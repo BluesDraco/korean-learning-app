@@ -28,7 +28,7 @@ export const day30: ToriDay = {
 
   opening: {
     date: '10월 3일 화요일 오전',
-    weather: '首尔 · 晴',
+    weather: '兽尔 · 晴',
     toriPose: 'celebrate',
     diaryText: `10월 3日，周二上午 10 点。
 
@@ -296,7 +296,7 @@ Haru 把手都拍红了。
   recap: {
     toriPose: 'celebrate',
     praise: '🎓🎉 졸업이에요! 30 天，4 个朋友，3 个关卡，5 根胡萝卜。토리, 정말 정말 잘 했어요!',
-    preview: '终于到了。这是 30 天日记的最后一页。但首尔的故事，才刚开始。',
+    preview: '终于到了。这是 30 天日记的最后一页。但兽尔的故事，才刚开始。',
     stickerId: 'sticker-d30',
   },
 

@@ -24,12 +24,13 @@ export const day6: ToriDay = {
 
   opening: {
     date: '9月 6일 한빛 어학원 교실',
-    weather: '首尔 · 晴',
+    weather: '兽尔 · 晴',
     toriPose: 'shy',
     diaryText: `9月 6日，한빛어학원 102 教室。
 
 第一节韩语课。
 我推开门的瞬间，所有动物都看了过来。
+窗外兽尔动物城的阳光照进来，黑板上写着"한국어 1급"。
 
 第一排坐着一只老虎。
 白衬衫，金色眼睛，怀里抱着一个偶像应援手幅。
@@ -134,6 +135,14 @@ export const day6: ToriDay = {
       },
       {
         speaker: 'tori',
+        isInnerVoice: true,
+        ko: '호랑이가 말하면 다 무섭다…',
+        hangul: 'ho-rang-i-ga mal-ha-myeon da mu-seop-da…',
+        zh: '老虎说话就都好可怕……',
+        practice: 'listen',
+      },
+      {
+        speaker: 'tori',
         ko: '안녕하세요, 토리예요. 잘 부탁드려요.',
         hangul: 'an-nyeong-ha-se-yo, to-ri-ye-yo. jal bu-tak-deu-ryeo-yo',
         zh: '你好，我是兔莉。请多关照。',
@@ -151,10 +160,10 @@ export const day6: ToriDay = {
         speaker: 'tori',
         ko: '?',
         hangul: '',
-        zh: 'Junho 问"你是中国人吗"，兔莉应该怎么回答？',
+        zh: 'Junho 问"你从中国来吗"，兔莉应该怎么回答？',
         practice: 'pick',
         choices: [
-          { ko: '네, 중국 사람이에요.', zh: '是的，我是中国人。', correct: true },
+          { ko: '네, 중국에서 왔어요.', zh: '是的，我从中国来。', correct: true },
           { ko: '아니요, 한국 사람이에요.', zh: '不，我是韩国人。', correct: false },
           { ko: '여기는 교실이에요.', zh: '这里是教室。', correct: false },
         ],
@@ -172,10 +181,10 @@ export const day6: ToriDay = {
       '韩文里没有问号字符规定，全靠句末升调。书面用「?」标',
     ],
     examples: [
-      { ko: '중국 사람이에요?', zh: '是中国人吗？', highlight: '이에요?' },
-      { ko: '학생이에요?', zh: '是学生吗？', highlight: '이에요?' },
-      { ko: '반장이에요?', zh: '是班长吗？', highlight: '이에요?' },
-      { ko: '토리예요?', zh: '是兔莉吗？', highlight: '예요?' },
+      { ko: '중국 사람이에요?', zh: '是中国人吗？', highlight: '이에요?', note: '末尾升调变疑问。**사람** 받침 있음 ㅁ → **이에요**，加「?」升调即可' },
+      { ko: '학생이에요?', zh: '是学生吗？', highlight: '이에요?', note: '**학생** 받침 있음 ㅇ → **이에요**；句末升调=疑问，无需词形变化' },
+      { ko: '반장이에요?', zh: '是班长吗？', highlight: '이에요?', note: '**반장** 받침 있음 ㅇ → **이에요**；这是 Junho 自我介绍的疑问版' },
+      { ko: '토리예요?', zh: '是兔莉吗？', highlight: '예요?', note: '**토리** 받침 없음 → **예요**；这是问"是兔莉吗"，升调即疑问' },
     ],
     pitfall:
       '别和「~입니까?」混。「입니까?」最正式（合쇼체疑问），「이에요?」温暖礼貌。Junho 是同学，用「이에요?」最自然。',
@@ -206,7 +215,7 @@ export const day6: ToriDay = {
       id: 'd06-o3',
       kind: 'zh-to-ko',
       zhPrompt: '你好，我是兔莉。请多关照。',
-      successMsg: '"잘 부탁드려요" 比「잘 부탁합니다」更柔。「토리」无받침配「예요」。',
+      successMsg: '"잘 부탁드려요" 比「잘 부탁합니다」更柔。「토리」无收音(받침 없음)配「예요」。',
       choices: [
         { ko: '안녕하세요, 토리예요. 잘 부탁드려요.', correct: true },
         { ko: '안녕하세요, 토리이에요. 잘 부탁드려요.', correct: false },
@@ -218,12 +227,24 @@ export const day6: ToriDay = {
       id: 'd06-o4',
       kind: 'particle-error',
       zhHint: '我是班长。',
-      successMsg: '반장 末字「장」有받침 ㅇ → 이에요。「저는」(无받침) → 主题助词「는」。',
+      successMsg: '반장 末字「장」有收音(받침) ㅇ → 이에요。「저는」(无收音(받침 없음)) → 主题助词「는」。',
       choices: [
         { ko: '저는 반장이에요.', correct: true },
         { ko: '저는 반장예요.', correct: false },
         { ko: '저은 반장이에요.', correct: false },
         { ko: '저는 반장이예요.', correct: false },
+      ],
+    },
+    {
+      id: 'd06-o5',
+      kind: 'match-pair',
+      successMsg: '✓ Day 6 核心词全部对上。Junho 把应援棒举高了一下，算是欢迎你加入。',
+      pairs: [
+        { ko: '반장', zh: '班长' },
+        { ko: '우리', zh: '我们' },
+        { ko: '좋아해요', zh: '喜欢' },
+        { ko: '잘 부탁드려요', zh: '请多关照' },
+        { ko: '교실', zh: '教室' },
       ],
     },
   ],

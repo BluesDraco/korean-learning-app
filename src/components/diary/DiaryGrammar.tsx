@@ -41,9 +41,11 @@ export function DiaryGrammar({ day, onComplete }: Props) {
           textAlign: 'center',
         }}
       >
-        <span className="diary-handwriting-ko" style={{ fontSize: 'var(--diary-text-xl)', color: 'var(--diary-ink)', fontWeight: 700 }}>
-          {g.pattern}
-        </span>
+        <span
+          className="diary-handwriting-ko"
+          style={{ fontSize: 'var(--diary-text-xl)', color: 'var(--diary-ink)', fontWeight: 700 }}
+          dangerouslySetInnerHTML={{ __html: g.pattern.replace(/\*\*(.+?)\*\*/g, '<strong style="color:var(--diary-stamp-red);">$1</strong>') }}
+        />
       </div>
 
       {/* 用法说明 */}
@@ -109,9 +111,11 @@ export function DiaryGrammar({ day, onComplete }: Props) {
             <strong className="diary-handwriting-zh" style={{ fontSize: 'var(--diary-text-sm)', color: 'var(--diary-gold-deep)' }}>
               小心：
             </strong>
-            <span className="diary-handwriting-zh" style={{ fontSize: 'var(--diary-text-sm)', color: 'var(--diary-ink)', lineHeight: 1.7, marginLeft: 4 }}>
-              {g.pitfall}
-            </span>
+            <span
+              className="diary-handwriting-zh"
+              style={{ fontSize: 'var(--diary-text-sm)', color: 'var(--diary-ink)', lineHeight: 1.7, marginLeft: 4 }}
+              dangerouslySetInnerHTML={{ __html: g.pitfall.replace(/\*\*(.+?)\*\*/g, '<strong style="color:var(--diary-stamp-red);">$1</strong>') }}
+            />
           </div>
         </div>
       )}
@@ -126,7 +130,7 @@ export function DiaryGrammar({ day, onComplete }: Props) {
 }
 
 interface ExampleRowProps {
-  ex: { ko: string; zh: string; highlight?: string };
+  ex: { ko: string; zh: string; highlight?: string; note?: string };
   grammar: ToriGrammar;
   source: string;
 }
@@ -204,11 +208,12 @@ function ExampleRow({ ex, grammar, source }: ExampleRowProps) {
               paddingLeft: 8,
               borderLeft: '2px solid var(--diary-line)',
             }}
-          >
-            <strong style={{ color: 'var(--diary-gold-deep)' }}>语法点：</strong>
-            {grammar.whenToUse}
-            {grammar.pitfall && <><br /><strong style={{ color: 'var(--diary-stamp-red)' }}>注意：</strong>{grammar.pitfall}</>}
-          </div>
+            dangerouslySetInnerHTML={{
+              __html: ex.note
+                ? ex.note.replace(/\*\*(.+?)\*\*/g, '<strong style="color:var(--diary-stamp-red);">$1</strong>')
+                : `<strong style="color:var(--diary-gold-deep);">语法点：</strong>${grammar.whenToUse}`,
+            }}
+          />
           <DiaryLineActions ko={ex.ko} zh={ex.zh} source={source} />
         </div>
       )}

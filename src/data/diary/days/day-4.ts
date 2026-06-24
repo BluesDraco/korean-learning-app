@@ -23,7 +23,7 @@ export const day4: ToriDay = {
 
   opening: {
     date: '9月 4日 한빛 기숙사 로비',
-    weather: '首尔 · 阴',
+    weather: '兽尔 · 阴',
     toriPose: 'shy',
     diaryText: `9月 4日，한빛宿舍 1 楼前台。
 
@@ -36,6 +36,7 @@ export const day4: ToriDay = {
 
 她抬头看了我一眼，又看了眼登记册，
 点点头说："301호예요. 키 받으세요."（301 号，拿钥匙。）
+走廊很长，隔壁302房的门缝里飘出KPOP音乐。
 
 钥匙串上挂着一个小小的胡萝卜挂件。
 我有点惊讶。
@@ -142,6 +143,14 @@ export const day4: ToriDay = {
         practice: 'shadow',
       },
       {
+        speaker: 'npc',
+        npcName: '浣熊宿管',
+        ko: '301호. 옆방에 하루 학생이 있어요.',
+        hangul: 'sam-baek-il-ho. yeop-bang-e ha-ru hak-saeng-i i-sseo-yo',
+        zh: '301号。隔壁有Haru同学。',
+        practice: 'listen',
+      },
+      {
         speaker: 'tori',
         ko: '?',
         hangul: '',
@@ -166,10 +175,10 @@ export const day4: ToriDay = {
       'Day 1 学过的规则还在：받침有→**이에요**，받침无→**예요**',
     ],
     examples: [
-      { ko: '토리입니다. (最礼貌)', zh: '我是兔莉。', highlight: '입니다' },
-      { ko: '토리예요. (温暖礼貌)', zh: '我是兔莉。', highlight: '예요' },
-      { ko: '학생입니다.', zh: '我是学生。', highlight: '입니다' },
-      { ko: '학생이에요.', zh: '我是学生。', highlight: '이에요' },
+      { ko: '토리입니다. (最礼貌)', zh: '我是兔莉。', highlight: '입니다', note: '토리 받침 없음，**입니다** 不受받침影响，最正式场合固定用法' },
+      { ko: '토리예요. (温暖礼貌)', zh: '我是兔莉。', highlight: '예요', note: '토리 末字「리」받침 없음 → 用 **예요**，比 입니다 更温暖日常' },
+      { ko: '학생입니다.', zh: '我是学生。', highlight: '입니다', note: '학생 받침 있음 ㅇ，但 **입니다** 不变形，永远是 입니다' },
+      { ko: '학생이에요.', zh: '我是学生。', highlight: '이에요', note: '학생 末字「생」받침 있음 ㅇ → 이에요；日常礼貌用법' },
     ],
     pitfall:
       '宿管阿姨问话场景兔莉用「토리입니다」（更礼貌），但和朋友聊天用「토리예요」（更温暖）。两个都对，看场合。',
@@ -212,12 +221,24 @@ export const day4: ToriDay = {
       id: 'd04-o4',
       kind: 'particle-error',
       zhHint: '我是学生。（温暖礼貌句尾）',
-      successMsg: '학생 末字 「생」有받침 ㅇ → 用「이에요」。「저는」没问题。',
+      successMsg: '학생 末字 「생」有收音(받침) ㅇ → 用「이에요」。「저는」没问题。',
       choices: [
         { ko: '저는 학생이에요.', correct: true },
         { ko: '저는 학생예요.', correct: false },
         { ko: '저은 학생이에요.', correct: false },
         { ko: '저는 학생이예요.', correct: false },
+      ],
+    },
+    {
+      id: 'd04-o5',
+      kind: 'match-pair',
+      successMsg: '✓ Day 4 核心词全部对上。钥匙串上的小胡萝卜在你手心里晃了晃。',
+      pairs: [
+        { ko: '학생', zh: '学生' },
+        { ko: '이름', zh: '名字' },
+        { ko: '방', zh: '房间' },
+        { ko: '키', zh: '钥匙' },
+        { ko: '선물', zh: '礼物' },
       ],
     },
   ],

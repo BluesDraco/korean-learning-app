@@ -56,7 +56,7 @@ export interface ToriGrammar {
   pattern: string;
   whenToUse: string;
   rules: string[];
-  examples: Array<{ ko: string; zh: string; highlight?: string }>;
+  examples: Array<{ ko: string; zh: string; highlight?: string; note?: string }>;
   pitfall?: string;
 }
 

@@ -23,7 +23,7 @@ export const day13: ToriDay = {
 
   opening: {
     date: '9월 14일 목요일 오전',
-    weather: '首尔 · 雨',
+    weather: '兽尔 · 雨',
     toriPose: 'sleepy',
     diaryText: `9月 14日，半夜 2 点，我被鼻塞憋醒。
 喉咙像着了火，咳一声胸口就疼。

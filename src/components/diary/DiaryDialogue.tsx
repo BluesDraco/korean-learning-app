@@ -255,27 +255,15 @@ function DialogueLine({ line, day, isCurrent, pickedChoice, isShadowed, onPick, 
                     ? '1.5px solid var(--diary-stamp-red)'
                     : '1.5px solid var(--diary-line)';
                 return (
-                  <button
+                  <PickChoice
                     key={ci}
-                    onClick={() => !correctPicked && onPick(ci)}
-                    disabled={correctPicked}
-                    style={{
-                      padding: '10px 14px',
-                      background: bg,
-                      border: border,
-                      borderRadius: 'var(--diary-r-sm)',
-                      cursor: correctPicked ? 'default' : 'pointer',
-                      textAlign: 'left',
-                      transition: 'all 0.15s',
-                    }}
-                  >
-                    <div className="diary-ko" style={{ fontSize: 'var(--diary-text-md)', marginBottom: 2 }}>
-                      {c.ko}
-                    </div>
-                    <div className="diary-handwriting-zh" style={{ fontSize: 'var(--diary-text-sm)', color: 'var(--diary-ink-soft)' }}>
-                      {c.zh}
-                    </div>
-                  </button>
+                    c={c}
+                    ci={ci}
+                    bg={bg}
+                    border={border}
+                    correctPicked={correctPicked}
+                    onPick={onPick}
+                  />
                 );
               })}
             </div>
@@ -381,6 +369,53 @@ function ShadowRecordBlock({ ko, onDone }: { ko: string; onDone: () => void }) {
           跳过跟读 →
         </button>
       )}
+    </div>
+  );
+}
+
+function PickChoice({
+  c, ci, bg, border, correctPicked, onPick,
+}: {
+  c: { ko: string; zh: string; correct: boolean };
+  ci: number;
+  bg: string;
+  border: string;
+  correctPicked: boolean;
+  onPick: (ci: number) => void;
+}) {
+  const [showZh, setShowZh] = useState(false);
+  return (
+    <div style={{ position: 'relative' }}>
+      <button
+        onClick={() => !correctPicked && onPick(ci)}
+        disabled={correctPicked}
+        style={{
+          width: '100%', padding: '10px 44px 10px 14px',
+          background: bg, border, borderRadius: 'var(--diary-r-sm)',
+          cursor: correctPicked ? 'default' : 'pointer',
+          textAlign: 'left', transition: 'all 0.15s',
+        }}
+      >
+        <div className="diary-ko" style={{ fontSize: 'var(--diary-text-md)' }}>{c.ko}</div>
+        {showZh && (
+          <div className="diary-handwriting-zh diary-anim-fade-up" style={{ fontSize: 'var(--diary-text-sm)', color: 'var(--diary-ink-soft)', marginTop: 3 }}>
+            {c.zh}
+          </div>
+        )}
+      </button>
+      <button
+        onClick={e => { e.stopPropagation(); setShowZh(v => !v); }}
+        title={showZh ? '隐藏翻译' : '查看翻译'}
+        style={{
+          position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)',
+          border: '1px solid var(--diary-line)', borderRadius: 4,
+          background: 'var(--diary-paper)', padding: '2px 6px',
+          fontSize: 10, color: 'var(--diary-ink-faint)', cursor: 'pointer',
+          fontFamily: 'var(--diary-v4-serif)', letterSpacing: '0.03em',
+        }}
+      >
+        {showZh ? '译 ▲' : '译'}
+      </button>
     </div>
   );
 }

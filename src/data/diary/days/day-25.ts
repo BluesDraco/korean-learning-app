@@ -26,7 +26,7 @@ export const day25: ToriDay = {
 
   opening: {
     date: '9월 28일 목요일 저녁',
-    weather: '首尔 · 晚风',
+    weather: '兽尔 · 晚风',
     toriPose: 'celebrate',
     diaryText: `9월 28日，周四晚上 7 点。
 
@@ -90,7 +90,7 @@ Minji 一边喊一边笑着拍我后背：
       id: 'd25-w1',
       korean: '한강',
       hangul: 'han-gang',
-      zh: '汉江 (首尔的母亲河)',
+      zh: '汉江 (兽尔的母亲河)',
       pos: '名词',
       example: { ko: '한강에서 콘서트 봐요.', zh: '在汉江看演唱会。' },
       tip: '받침 ㅇ → 「에서」: 한강에서 (在汉江)。汉江公园 = 한강공원',

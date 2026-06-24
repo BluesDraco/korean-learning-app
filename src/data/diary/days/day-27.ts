@@ -25,7 +25,7 @@ export const day27: ToriDay = {
 
   opening: {
     date: '9월 30일 토요일 저녁',
-    weather: '首尔 · 凉',
+    weather: '兽尔 · 凉',
     toriPose: 'happy',
     diaryText: `9월 30日，周六晚 6 点。
 

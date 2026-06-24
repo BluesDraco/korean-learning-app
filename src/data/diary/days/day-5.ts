@@ -23,7 +23,7 @@ export const day5: ToriDay = {
 
   opening: {
     date: '9月 5日 한빛 기숙사 복도',
-    weather: '首尔 · 晴',
+    weather: '兽尔 · 晴',
     toriPose: 'shy',
     diaryText: `9月 5日，早上 8 点。
 
@@ -67,7 +67,7 @@ Haru 笑得停不下来，
       zh: '朋友',
       pos: '名词',
       example: { ko: '제 친구예요.', zh: '是我的朋友。' },
-      tip: '친구 无받침 → 예요',
+      tip: '친구 无收音(받침 없음) → 예요',
     },
     {
       id: 'd05-w3',
@@ -139,23 +139,31 @@ Haru 笑得停不下来，
         practice: 'listen',
       },
       {
+        speaker: 'tori',
+        isInnerVoice: true,
+        ko: '어디서 봤더라… 이 얼굴…',
+        hangul: 'eo-di-seo bwat-deo-ra… i eol-gul…',
+        zh: '在哪见过呢……这张脸……',
+        practice: 'listen',
+      },
+      {
         speaker: 'npc',
         npcName: 'Haru',
-        ko: '같이 아침 먹으러 갈래?',
-        hangul: 'ga-chi a-chim meo-geu-reo gal-lae',
-        zh: '一起去吃早饭吗？',
+        ko: '같이 아침 먹으러 갈래? 식당 어디 있는지 알아?',
+        hangul: 'ga-chi a-chim meo-geu-reo gal-lae? sik-dang eo-di it-neun-ji a-ra?',
+        zh: '一起去吃早饭吗？你知道食堂在哪吗？',
         practice: 'listen',
       },
       {
         speaker: 'tori',
         ko: '?',
         hangul: '',
-        zh: 'Haru 邀请兔莉一起吃早饭，兔莉应该怎么回答？',
+        zh: 'Haru 问"你知道食堂在哪吗"，兔莉完全不知道，应该怎么回答？',
         practice: 'pick',
         choices: [
-          { ko: '네, 좋아요!', zh: '好的，好啊！', correct: true },
-          { ko: '아니요, 죄송해요.', zh: '不了，对不起。', correct: false },
-          { ko: '여기는 어디예요?', zh: '这里是哪儿？', correct: false },
+          { ko: '아니요, 몰라요. 같이 가요!', zh: '不知道。一起去吧！', correct: true },
+          { ko: '네, 알아요. 혼자 갈게요.', zh: '知道。我自己去。', correct: false },
+          { ko: '저는 안 먹어요.', zh: '我不吃早饭。', correct: false },
         ],
       },
     ],
@@ -163,18 +171,18 @@ Haru 笑得停不下来，
 
   grammar: {
     title: '主题助词 은 / 는',
-    pattern: 'N(받침) + **은** · N(无받침) + **는**',
+    pattern: 'N(有收音) + **은** / N(无收音) + **는**',
     whenToUse: '提一个话题、做对比。等于中文里"至于___"或"___呢"。',
     rules: [
-      '名词最后一字 有받침 → **은**：이름**은** / 학생**은**',
-      '名词最后一字 无받침 → **는**：저**는** / 친구**는**',
+      '名词最后一字 有收音(받침) → **은**：이름**은** / 학생**은**',
+      '名词最后一字 无收音(받침 없음) → **는**：저**는** / 친구**는**',
       '和「이/가」（主语助词）的区别：「은/는」更强调"对比"或"话题"',
     ],
     examples: [
-      { ko: '저는 토리예요.', zh: '我叫兔莉。（话题）', highlight: '저는' },
-      { ko: '이름은 뭐예요?', zh: '名字是什么？', highlight: '이름은' },
-      { ko: '여기는 한국이에요.', zh: '这里是韩国。', highlight: '여기는' },
-      { ko: '제 친구는 한국 사람이에요.', zh: '我的朋友是韩国人。', highlight: '친구는' },
+      { ko: '저는 토리예요.', zh: '我叫兔莉。（话题）', highlight: '저는', note: '**저** 받침 없음 → 主题助词用 **는**；토리 받침 없음 → **예요**' },
+      { ko: '이름은 뭐예요?', zh: '名字是什么？', highlight: '이름은', note: '**이름** 末字받침 있음 ㅁ → 主题助词用 **은**' },
+      { ko: '여기는 한국이에요.', zh: '这里是韩国。', highlight: '여기는', note: '**여기** 받침 없음 → 主题助词 **는**；한국 받침 있음 ㄱ → **이에요**' },
+      { ko: '제 친구는 한국 사람이에요.', zh: '我的朋友是韩国人。', highlight: '친구는', note: '**친구** 받침 없음 → 助词 **는**；사람 받침 있음 ㅁ → **이에요**' },
     ],
     pitfall:
       '初学者最容易问"什么时候用 은/는，什么时候用 이/가？" 简单记法：第一次介绍自己用「은/는」（말하는 주제），后面追问细节用「이/가」（具体主语）。',
@@ -205,7 +213,7 @@ Haru 笑得停不下来，
       id: 'd05-o3',
       kind: 'zh-to-ko',
       zhPrompt: '是的，没错。我叫兔莉。',
-      successMsg: '"맞아요" 比单说「네」更暖。「저는」用 是」表达话题。',
+      successMsg: '"맞아요" 比单说「네」更暖。「저는」用「는」表达话题。',
       choices: [
         { ko: '네, 맞아요. 저는 토리예요.', correct: true },
         { ko: '네, 맞아요. 저은 토리예요.', correct: false },
@@ -217,12 +225,24 @@ Haru 笑得停不下来，
       id: 'd05-o4',
       kind: 'particle-error',
       zhHint: '我的朋友是中国人。',
-      successMsg: '친구 (无받침) → 는；사람 (받침 ㅁ) → 이에요。两条规则都到位。',
+      successMsg: '친구 (无收音(받침 없음)) → 는；사람 (받침 ㅁ) → 이에요。两条规则都到位。',
       choices: [
         { ko: '제 친구는 중국 사람이에요.', correct: true },
         { ko: '제 친구은 중국 사람이에요.', correct: false },
         { ko: '제 친구는 중국 사람예요.', correct: false },
         { ko: '제 친구가 중국 사람이에요.', correct: false },
+      ],
+    },
+    {
+      id: 'd05-o5',
+      kind: 'match-pair',
+      successMsg: '✓ Day 5 核心词全部对上。Haru 的眼睛笑成了月牙，第一个朋友就是这样来的。',
+      pairs: [
+        { ko: '이웃', zh: '邻居' },
+        { ko: '친구', zh: '朋友' },
+        { ko: '맞아요', zh: '对 / 没错' },
+        { ko: '같이', zh: '一起' },
+        { ko: '정말', zh: '真的' },
       ],
     },
   ],

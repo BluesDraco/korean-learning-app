@@ -7,7 +7,7 @@ import type { ToriDay } from '@/types/tori-diary';
  * 兔莉一个人按导航走了 15 分钟，找到一家挂着粉色招牌的小咖啡馆。
  * 进门一只白猫店员在擦杯子，问："아이스 아메리카노 드릴까요?"
  * 兔莉慌了——她要的是拿铁。鼓起勇气："라떼 주세요. 그리고 얼음 빼고요."
- * 猫店员笑了："따뜻한 라떼 한 잔이요." 兔莉拿到第一杯首尔的拿铁。
+ * 猫店员笑了："따뜻한 라떼 한 잔이요." 兔莉拿到第一杯兽尔的拿铁。
  *
  * 学习目标：~빼고 / 따뜻하게 / 咖啡词汇 / 量词 잔
  * 韩语自审：korean skill PASS
@@ -16,14 +16,14 @@ export const day12: ToriDay = {
   level: 'beginner',
   day: 12,
   phase: 'foundation',
-  title: '粉色咖啡馆 · 第一杯首尔拿铁',
+  title: '粉色咖啡馆 · 第一杯兽尔拿铁',
   subtitle: '我要拿铁，不要冰',
   isCheckpoint: null,
   estimatedMin: 12,
 
   opening: {
     date: '9月 13일 수요일 오후',
-    weather: '首尔 · 晴',
+    weather: '兽尔 · 晴',
     toriPose: 'shy',
     diaryText: `9月 13日，周三 14:00。
 

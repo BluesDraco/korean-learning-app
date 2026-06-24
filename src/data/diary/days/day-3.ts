@@ -7,7 +7,7 @@ import type { ToriDay } from '@/types/tori-diary';
  * 她想请旁边等出租车的水獭姐姐帮忙抬「행李」（韩语是 짐 jim），
  * 结果说成了「집」（jip = 家），变成"我的家太重了"。
  * 水獭愣住了一秒，没笑，只是把行李帮她抬上了出租车。
- * 她叫 Minji。这是 Tori 在首尔的第一个朋友。
+ * 她叫 Minji。这是 Tori 在兽尔的第一个朋友。
  *
  * 学习目标：辅音 ㅂ/ㅈ 区别 / 짐 vs 집 / 道歉与回应
  * 韩语自审：korean skill PASS
@@ -44,7 +44,7 @@ export const day3: ToriDay = {
 然后她没笑，只是走过来帮我把箱子抬上了出租车。
 她说她叫 Minji。她加了我的微信。
 
-我的"家"在首尔的第一天，
+我的"家"在兽尔的第一天，
 就是被一个韩国朋友救场的。`,
   },
 
@@ -144,13 +144,21 @@ export const day3: ToriDay = {
       },
       {
         speaker: 'tori',
+        isInnerVoice: true,
+        ko: '짐하고 집… 발음이 너무 비슷해!',
+        hangul: 'jim-ha-go jip… bal-eum-i neo-mu bi-seut-hae!',
+        zh: '行李和家……发音太像了！',
+        practice: 'listen',
+      },
+      {
+        speaker: 'tori',
         ko: '?',
         hangul: '',
         zh: 'Minji 把箱子抬起来后，兔莉应该说什么？',
         practice: 'pick',
         choices: [
           { ko: '정말 감사합니다.', zh: '真的非常感谢。', correct: true },
-          { ko: '괜찮아요.', zh: '没关系。', correct: false },
+          { ko: '죄송합니다, 무거워요.', zh: '对不起，很重。', correct: false },
           { ko: '안녕히 가세요.', zh: '再见。', correct: false },
         ],
       },
@@ -159,7 +167,7 @@ export const day3: ToriDay = {
 
   grammar: {
     title: '韩文辅音 · ㅂ vs ㅈ 怎么分',
-    pattern: 'ㅂ → b/p · ㅈ → j',
+    pattern: 'ㅂ → b/p  /  ㅈ → j',
     whenToUse: '辨认音节开头辅音，避免「짐 / 집」「밥 / 잡」这种致命混淆。',
     rules: [
       'ㅂ 长得像「日」少一横，发**b/p**音：밥（饭）/ 비（雨）',
@@ -167,10 +175,10 @@ export const day3: ToriDay = {
       '받침（音节末辅音）位置时：ㅂ → **p** 音，ㅈ → **t** 音（如「잡」「잦」）',
     ],
     examples: [
-      { ko: '짐 (jim)', zh: '行李', highlight: '짐' },
-      { ko: '집 (jip)', zh: '家', highlight: '집' },
-      { ko: '밥 (bap)', zh: '饭' },
-      { ko: '잡다 (jap-da)', zh: '抓住' },
+      { ko: '짐 (jim)', zh: '行李', highlight: '짐', note: '초성 **ㅈ**（j），받침 **ㅁ** → 연음 시 짐+이=[지미]，主语助词 **이** 因为有받침' },
+      { ko: '집 (jip)', zh: '家', highlight: '집', note: '초성 **ㅈ**（j），받침 **ㅂ** — 음절 末尾轻收不爆破，집+이=[지비]（연음）' },
+      { ko: '밥 (bap)', zh: '饭', note: '초성 **ㅂ**（b），받침 **ㅂ** 轻收不爆破。밥+과 → [밥꽈]（경음화 연음）' },
+      { ko: '잡다 (jap-da)', zh: '抓住', note: '초성 **ㅈ**（j），받침 **ㅂ** 轻收。잡아 → [자바]（받침 ㅂ 연음）' },
     ],
     pitfall:
       '只差一笔的辅音对初学者最危险：ㄱ/ㅋ（g/k）、ㄷ/ㅌ（d/t）、ㅂ/ㅍ（b/p）。多写几遍，把「짐 / 집」反复念出声，自然就分得清。',
@@ -201,7 +209,7 @@ export const day3: ToriDay = {
       id: 'd03-o3',
       kind: 'zh-to-ko',
       zhPrompt: '不好意思，行李很重。',
-      successMsg: '"저기요" 是叫陌生人的标准开场；「짐」(行李) 用「이」因为「짐」有받침 ㅁ。',
+      successMsg: '"저기요" 是叫陌生人的标准开场；「짐」(行李) 用「이」因为「짐」有收音(받침) ㅁ。',
       choices: [
         { ko: '저기요, 짐이 무거워요.', correct: true },
         { ko: '저기요, 집이 무거워요.', correct: false },
@@ -213,12 +221,24 @@ export const day3: ToriDay = {
       id: 'd03-o4',
       kind: 'particle-error',
       zhHint: '我的行李太重了。',
-      successMsg: '「짐」末字「짐」有받침 ㅁ → 主语助词用「이」。「제」是「我的」固定形态。',
+      successMsg: '「짐」末字「짐」有收音(받침) ㅁ → 主语助词用「이」。「제」是「我的」固定形态。',
       choices: [
         { ko: '제 짐이 너무 무거워요.', correct: true },
         { ko: '제 짐가 너무 무거워요.', correct: false },
         { ko: '저 짐이 너무 무거워요.', correct: false },
         { ko: '제의 짐이 너무 무거워요.', correct: false },
+      ],
+    },
+    {
+      id: 'd03-o5',
+      kind: 'match-pair',
+      successMsg: '✓ Day 3 核心词全部对上。Minji 把行李抬上了出租车，兔莉终于喘了口气。',
+      pairs: [
+        { ko: '짐', zh: '行李' },
+        { ko: '집', zh: '家' },
+        { ko: '무거워요', zh: '重' },
+        { ko: '죄송해요', zh: '对不起' },
+        { ko: '괜찮아요', zh: '没关系' },
       ],
     },
   ],

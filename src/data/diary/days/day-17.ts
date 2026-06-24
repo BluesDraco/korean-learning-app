@@ -8,7 +8,7 @@ import type { ToriDay } from '@/types/tori-diary';
  * 兔莉指着墙上的卡片样品："이거 하나 주세요."
  * 猫头鹰没说话，只是把卡片推过来。兔莉又问："얼마예요? 충전도 해 주세요."
  * 第一次充值 1 만 원，地铁站门一刷卡——「띡」，
- * 那一秒，她觉得自己拿到了首尔的钥匙。
+ * 那一秒，她觉得自己拿到了兽尔的钥匙。
  *
  * 学习目标：交通词 / 충전하다 / 数字组合 만 원
  * 韩语自审：korean skill PASS（实际교통카드구매표현）
@@ -17,14 +17,14 @@ export const day17: ToriDay = {
   level: 'beginner',
   day: 17,
   phase: 'expansion',
-  title: '티머니카드 · 拿到首尔的钥匙',
+  title: '티머니카드 · 拿到兽尔的钥匙',
   subtitle: '猫头鹰售票员把卡推过来',
   isCheckpoint: null,
   estimatedMin: 12,
 
   opening: {
     date: '9월 18일 월요일 오전',
-    weather: '首尔 · 晴',
+    weather: '兽尔 · 晴',
     toriPose: 'cheer',
     diaryText: `9月 18日，周一上午。
 
@@ -57,7 +57,7 @@ export const day17: ToriDay = {
 
 地铁闸机刷一下——「띡」。
 那一刻，
-我觉得自己拿到了首尔的钥匙。`,
+我觉得自己拿到了兽尔的钥匙。`,
   },
 
   words: [
@@ -239,7 +239,7 @@ export const day17: ToriDay = {
 
   recap: {
     toriPose: 'cheer',
-    praise: '一张白卡，一万块充值。今天起，地铁闸机不再是首尔的高墙。',
+    praise: '一张白卡，一万块充值。今天起，地铁闸机不再是兽尔的高墙。',
     preview: '明天要去银行办留学生账户。乌龟柜员说话很慢…我能听懂吗？',
     stickerId: 'sticker-d17',
   },
