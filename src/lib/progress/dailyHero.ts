@@ -125,5 +125,5 @@ export async function getGrammarProgress(): Promise<GrammarProgress> {
 }
 
 export function sceneImageForDay(day: number): string {
-  return `/images/diary/day-${String(day).padStart(2, '0')}-scene.png`;
+  return `/images/diary/day-${String(day).padStart(2, '0')}-hero.jpg`;
 }

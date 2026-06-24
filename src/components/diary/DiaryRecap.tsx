@@ -83,6 +83,9 @@ export function DiaryRecap({ day, onComplete }: Props) {
             <img
               src={day.recap.sceneImageUrl}
               alt={sticker.title}
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
               style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
             />
           ) : (

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, useCallback, useMemo, useRef, Suspense } from 'react';
-import { DesktopVocabularyPage } from '@/components/desktop/DesktopVocabularyPage';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import {
@@ -16,6 +16,11 @@ import { getEntry, getEntryByKorean } from '@/data/vocabulary/index';
 import { updateProfile } from '@/lib/gamification';
 import { PageHeader, Section, Card, Button, EntryCard } from '@/components/ui';
 import type { Word, WordBook, MasteryLevel, WordEntry } from '@/types';
+
+const DesktopVocabularyPage = dynamic(
+  () => import('@/components/desktop/DesktopVocabularyPage').then((m) => m.DesktopVocabularyPage),
+  { ssr: false }
+);
 
 interface SavedSentence {
   id: string;
@@ -1131,7 +1136,7 @@ function VocabularyContent() {
 }
 
 function VocabularyPageInner() {
-  const [isDesktop, setIsDesktop] = useState(false);
+  const [isDesktop, setIsDesktop] = useState<boolean | undefined>(undefined);
 
   useEffect(() => {
     setIsDesktop(window.innerWidth >= 768);

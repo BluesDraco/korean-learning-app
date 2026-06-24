@@ -229,7 +229,7 @@ export const day1: ToriDay = {
     praise: '今天，比昨天勇敢了一点点。토리, 잘했어요!',
     preview: '明天，我要在飞机上第一次用韩语点饮料。空乘姐姐会问什么？',
     stickerId: 'sticker-d01',
-    sceneImageUrl: '/images/diary/day-01-scene.png',
+    sceneImageUrl: '/images/diary/day-01-scene.jpg',
   },
 
   carrotHint:
