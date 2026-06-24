@@ -12,9 +12,12 @@ export default function AdminAmbassadorsPage() {
   const [scanning, setScanning] = useState(false);
 
   const loadAmbassadors = async () => {
-    const all = await db.userProfiles.filter((p) => p.isAmbassador === true);
-    setAmbassadors(all);
-    setLoading(false);
+    try {
+      const all = await db.userProfiles.filter((p) => p.isAmbassador === true);
+      setAmbassadors(all);
+    } catch { /* ignore */ } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => { loadAmbassadors(); }, []);

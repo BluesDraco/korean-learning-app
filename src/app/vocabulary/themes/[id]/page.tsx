@@ -46,30 +46,32 @@ export default function ThemeDetailPage() {
 
   useEffect(() => {
     (async () => {
-      const t = await getTheme(id);
-      if (!t) { router.replace('/vocabulary/library'); return; }
-      setTheme(t);
-
-      const { recordVocabVisit } = await import('@/lib/progress/dailyHero');
-      recordVocabVisit({ source: 'themes', unitId: id, unitTitle: t.name });
-
-      const w = await getThemeWords(id);
-      setWords(w);
       try {
-        const koreanWords = new Set(w.map((e) => e.korean));
-        const allUserWords = await db.words.toArray();
-        const userWords = allUserWords.filter((uw) => koreanWords.has(uw.word));
-        const mastered = new Set<string>();
-        const learning = new Set<string>();
-        for (const uw of userWords) {
-          if (uw.mastery === 'mastered') mastered.add(uw.word);
-          else if (uw.mastery !== 'new') learning.add(uw.word);
+        const t = await getTheme(id);
+        if (!t) { router.replace('/vocabulary/library'); return; }
+        setTheme(t);
+
+        const { recordVocabVisit } = await import('@/lib/progress/dailyHero');
+        recordVocabVisit({ source: 'themes', unitId: id, unitTitle: t.name });
+
+        const w = await getThemeWords(id);
+        setWords(w);
+        try {
+          const koreanWords = new Set(w.map((e) => e.korean));
+          const allUserWords = await db.words.toArray();
+          const userWords = allUserWords.filter((uw) => koreanWords.has(uw.word));
+          const mastered = new Set<string>();
+          const learning = new Set<string>();
+          for (const uw of userWords) {
+            if (uw.mastery === 'mastered') mastered.add(uw.word);
+            else if (uw.mastery !== 'new') learning.add(uw.word);
+          }
+          setMasteredIds(mastered);
+          setLearningIds(learning);
+        } catch {
+          // db error — show words without mastery state
         }
-        setMasteredIds(mastered);
-        setLearningIds(learning);
-      } catch {
-        // db error — show words without mastery state
-      } finally {
+      } catch { /* ignore */ } finally {
         setLoading(false);
       }
     })();

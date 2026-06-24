@@ -28,20 +28,23 @@ export function BooksSection() {
   const [saving, setSaving] = useState(false);
 
   const load = useCallback(async () => {
-    const list = await db.wordBooks.orderBy('createdAt').reverse().toArray();
-    // 「我的收藏」置顶
-    const favIdx = list.findIndex(b => b.id === FAVORITES_BOOK_ID);
-    if (favIdx > 0) {
-      const [fav] = list.splice(favIdx, 1);
-      list.unshift(fav);
+    try {
+      const list = await db.wordBooks.orderBy('createdAt').reverse().toArray();
+      // 「我的收藏」置顶
+      const favIdx = list.findIndex(b => b.id === FAVORITES_BOOK_ID);
+      if (favIdx > 0) {
+        const [fav] = list.splice(favIdx, 1);
+        list.unshift(fav);
+      }
+      setBooks(list);
+      const counts: Record<string, number> = {};
+      for (const b of list) {
+        counts[b.id] = b.wordIds.length;
+      }
+      setWordCounts(counts);
+    } catch { /* ignore */ } finally {
+      setLoading(false);
     }
-    setBooks(list);
-    const counts: Record<string, number> = {};
-    for (const b of list) {
-      counts[b.id] = b.wordIds.length;
-    }
-    setWordCounts(counts);
-    setLoading(false);
   }, []);
 
   useEffect(() => { load(); }, [load]);

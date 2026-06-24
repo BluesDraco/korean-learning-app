@@ -46,29 +46,32 @@ export default function StickerDetailPage() {
 
   useEffect(() => {
     (async () => {
-      const p = await db.stickerPacks.get(id);
-      if (!p) { setLoading(false); return; }
-      setPack(p);
+      try {
+        const p = await db.stickerPacks.get(id);
+        if (!p) { setLoading(false); return; }
+        setPack(p);
 
-      // Load or seed stickers
-      let s = await db.stickers.filter((s) => s.packId === id);
-      if (s.length === 0 && SEED_STICKERS[id]) {
-        const seed = SEED_STICKERS[id];
-        for (let i = 0; i < seed.length; i++) {
-          const sticker: Sticker = {
-            id: `${id}-${i}`,
-            packId: id,
-            imageUrl: `/stickers/${id}/${i + 1}.webp`,
-            captionZh: seed[i].captionZh,
-            captionKo: seed[i].captionKo,
-            sortOrder: i,
-          };
-          await db.stickers.add(sticker);
+        // Load or seed stickers
+        let s = await db.stickers.filter((s) => s.packId === id);
+        if (s.length === 0 && SEED_STICKERS[id]) {
+          const seed = SEED_STICKERS[id];
+          for (let i = 0; i < seed.length; i++) {
+            const sticker: Sticker = {
+              id: `${id}-${i}`,
+              packId: id,
+              imageUrl: `/stickers/${id}/${i + 1}.webp`,
+              captionZh: seed[i].captionZh,
+              captionKo: seed[i].captionKo,
+              sortOrder: i,
+            };
+            await db.stickers.add(sticker);
+          }
+          s = await db.stickers.filter((s) => s.packId === id);
         }
-        s = await db.stickers.filter((s) => s.packId === id);
+        setStickers(s.sort((a, b) => a.sortOrder - b.sortOrder));
+      } catch { /* ignore */ } finally {
+        setLoading(false);
       }
-      setStickers(s.sort((a, b) => a.sortOrder - b.sortOrder));
-      setLoading(false);
     })();
   }, [id]);
 

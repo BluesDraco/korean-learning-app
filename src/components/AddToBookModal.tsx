@@ -94,15 +94,18 @@ export function AddToBookModal({ mode, preSelectedWordIds, bookId, onClose, onDo
 
   useEffect(() => {
     const load = async () => {
-      if (mode === 'select-books') {
-        setBooks(await db.wordBooks.orderBy('createdAt').reverse().toArray());
-      } else if (bookId) {
-        const book = await db.wordBooks.get(bookId);
-        const all = await db.words.orderBy('createdAt').reverse().toArray();
-        const existingIds = new Set(book?.wordIds || []);
-        setSavedWords(all.filter((w) => !existingIds.has(w.id)));
+      try {
+        if (mode === 'select-books') {
+          setBooks(await db.wordBooks.orderBy('createdAt').reverse().toArray());
+        } else if (bookId) {
+          const book = await db.wordBooks.get(bookId);
+          const all = await db.words.orderBy('createdAt').reverse().toArray();
+          const existingIds = new Set(book?.wordIds || []);
+          setSavedWords(all.filter((w) => !existingIds.has(w.id)));
+        }
+      } catch { /* ignore */ } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
     load();
   }, [mode, bookId]);

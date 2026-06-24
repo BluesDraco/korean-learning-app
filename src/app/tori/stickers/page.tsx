@@ -42,25 +42,28 @@ export default function StickersPage() {
 
   useEffect(() => {
     (async () => {
-      // Seed sticker packs if none exist
-      const existing = await db.stickerPacks.toArray();
-      if (existing.length === 0) {
-        for (const p of SEED_PACKS) {
-          await db.stickerPacks.add(p);
+      try {
+        // Seed sticker packs if none exist
+        const existing = await db.stickerPacks.toArray();
+        if (existing.length === 0) {
+          for (const p of SEED_PACKS) {
+            await db.stickerPacks.add(p);
+          }
+          setPacks(SEED_PACKS);
+        } else {
+          setPacks(existing);
         }
-        setPacks(SEED_PACKS);
-      } else {
-        setPacks(existing);
-      }
 
-      // Load download counts
-      const allDownloads = await db.stickerDownloads.toArray();
-      const counts: Record<string, number> = {};
-      for (const d of allDownloads) {
-        counts[d.packId] = (counts[d.packId] || 0) + 1;
+        // Load download counts
+        const allDownloads = await db.stickerDownloads.toArray();
+        const counts: Record<string, number> = {};
+        for (const d of allDownloads) {
+          counts[d.packId] = (counts[d.packId] || 0) + 1;
+        }
+        setDownloads(counts);
+      } catch { /* ignore */ } finally {
+        setLoading(false);
       }
-      setDownloads(counts);
-      setLoading(false);
     })();
   }, []);
 

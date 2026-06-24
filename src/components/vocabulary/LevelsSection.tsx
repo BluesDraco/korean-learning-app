@@ -29,27 +29,31 @@ export function LevelsSection() {
 
   useEffect(() => {
     (async () => {
-      const [{ getAllLevels, getLevelWords }, allUserWords] = await Promise.all([
-        import('@/data/vocabulary').catch(() => ({ getAllLevels: () => [], getLevelWords: () => [] })),
-        db.words.toArray().catch(() => []),
-      ]);
-      const userMasteredSet = new Set(allUserWords.filter((w) => w.mastery === 'mastered').map((w) => w.word));
-      const userLearningSet = new Set(allUserWords.filter((w) => w.mastery !== 'mastered' && w.mastery !== 'new').map((w) => w.word));
+      try {
+        const [{ getAllLevels, getLevelWords }, allUserWords] = await Promise.all([
+          import('@/data/vocabulary').catch(() => ({ getAllLevels: () => [], getLevelWords: () => [] })),
+          db.words.toArray().catch(() => []),
+        ]);
+        const userMasteredSet = new Set(allUserWords.filter((w) => w.mastery === 'mastered').map((w) => w.word));
+        const userLearningSet = new Set(allUserWords.filter((w) => w.mastery !== 'mastered' && w.mastery !== 'new').map((w) => w.word));
 
-      let allLevels: { level: number }[] = [];
-      try { allLevels = await getAllLevels(); } catch { /* empty = [] */ }
-      const result = await Promise.all(allLevels.map(async (lvl) => {
-        const words = await getLevelWords(lvl.level);
-        const koreanWords = words.map((w) => w.korean);
-        return {
-          level: lvl.level,
-          totalCount: words.length,
-          mastered: koreanWords.filter((w) => userMasteredSet.has(w)).length,
-          learning: koreanWords.filter((w) => userLearningSet.has(w)).length,
-        };
-      }));
-      setLevels(result);
-      setLoading(false);
+        let allLevels: { level: number }[] = [];
+        try { allLevels = await getAllLevels(); } catch { /* empty = [] */ }
+        const result = await Promise.all(allLevels.map(async (lvl) => {
+          let words: { korean: string }[] = [];
+          try { words = await getLevelWords(lvl.level); } catch { /* empty */ }
+          const koreanWords = words.map((w) => w.korean);
+          return {
+            level: lvl.level,
+            totalCount: words.length,
+            mastered: koreanWords.filter((w) => userMasteredSet.has(w)).length,
+            learning: koreanWords.filter((w) => userLearningSet.has(w)).length,
+          };
+        }));
+        setLevels(result);
+      } catch { /* ignore */ } finally {
+        setLoading(false);
+      }
     })();
   }, []);
 

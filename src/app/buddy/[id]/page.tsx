@@ -19,30 +19,32 @@ export default function BuddyDetailPage() {
 
   useEffect(() => {
     (async () => {
-      const rel = await db.buddyRelations.get(id);
-      if (!rel) { setLoading(false); return; }
-      setRelation(rel);
-
-      const me = await getProfile();
-      setMyProfile(me);
-
-      // Try to get buddy profile (simplified - in production, use a proper API)
-      const bid = me?.id === rel.userAId ? rel.userBId : rel.userAId;
       try {
-        const bps = await db.userProfiles.toArray();
-        const bp = bps.find((p) => p.id.includes(bid.slice(0, 8)));
-        if (bp) setBuddyProfile(bp);
-      } catch { /* ignore */ }
+        const rel = await db.buddyRelations.get(id);
+        if (!rel) { setLoading(false); return; }
+        setRelation(rel);
 
-      // Check if already cheered today
-      const today = new Date().toISOString().slice(0, 10);
-      const cheerId = `buddy-cheer-${today}-${rel.id}`;
-      const cheers = await db.studyLogs.filter(
-        (l) => l.action === 'buddy_cheer' && l.id === cheerId
-      );
-      setCheeredToday(cheers.length > 0);
+        const me = await getProfile();
+        setMyProfile(me);
 
-      setLoading(false);
+        // Try to get buddy profile (simplified - in production, use a proper API)
+        const bid = me?.id === rel.userAId ? rel.userBId : rel.userAId;
+        try {
+          const bps = await db.userProfiles.toArray();
+          const bp = bps.find((p) => p.id.includes(bid.slice(0, 8)));
+          if (bp) setBuddyProfile(bp);
+        } catch { /* ignore */ }
+
+        // Check if already cheered today
+        const today = new Date().toISOString().slice(0, 10);
+        const cheerId = `buddy-cheer-${today}-${rel.id}`;
+        const cheers = await db.studyLogs.filter(
+          (l) => l.action === 'buddy_cheer' && l.id === cheerId
+        );
+        setCheeredToday(cheers.length > 0);
+      } catch { /* ignore */ } finally {
+        setLoading(false);
+      }
     })();
   }, [id]);
 

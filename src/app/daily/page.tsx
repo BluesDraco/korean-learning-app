@@ -54,14 +54,15 @@ export default function DailyPage() {
       if (currentUser && !currentUser.onboardingCompleted) {
         if (profile && !profile.onboardingComplete) setShowOnboarding(true);
       }
-      setOnboardingChecked(true);
     } catch {
       if (gen !== loadGenRef.current) return;
-      setOnboardingChecked(true);
     } finally {
       clearTimeout(timeoutId);
       controller.abort();
-      if (gen === loadGenRef.current) setPlanLoading(false);
+      if (gen === loadGenRef.current) {
+        setOnboardingChecked(true);
+        setPlanLoading(false);
+      }
     }
   }, []);
 

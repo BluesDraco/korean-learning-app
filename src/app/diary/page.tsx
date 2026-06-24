@@ -194,7 +194,7 @@ export default function DiaryPage() {
             onClick={() => setActiveLevel(lv.key)}
             style={{
               flex: 1,
-              padding: '16px 4px 14px',
+              padding: '10px 4px 8px',
               background: 'transparent',
               border: 'none',
               borderBottom: active ? '2.5px solid var(--diary-stamp-red)' : '2.5px solid transparent',

@@ -106,24 +106,26 @@ export default function LevelDetailPage() {
   useEffect(() => {
     if (isNaN(level) || level < 1 || level > 6) { router.replace('/vocabulary/levels'); return; }
     (async () => {
-      const l = await getLevel(level);
-      if (!l) { router.replace('/vocabulary/levels'); return; }
-      setLvl(l);
-      const { recordVocabVisit } = await import('@/lib/progress/dailyHero');
-      recordVocabVisit({ source: 'levels', unitId: String(level), unitTitle: levelNames[level] ?? `${level}级` });
-      const w = await getLevelWords(level);
-      setWords(w);
       try {
-        const koreanWords = new Set(w.map((e) => e.korean));
-        const allUserWords = await db.words.toArray();
-        const userWords = allUserWords.filter((uw) => koreanWords.has(uw.word));
-        const mSet = new Set(userWords.filter((uw) => uw.mastery === 'mastered').map((uw) => uw.word));
-        const lSet = new Set(userWords.filter((uw) => uw.mastery !== 'mastered' && uw.mastery !== 'new').map((uw) => uw.word));
-        setMasteredSet(mSet);
-        setLearningSet(lSet);
-      } catch {
-        // db error — show words without mastery state
-      } finally {
+        const l = await getLevel(level);
+        if (!l) { router.replace('/vocabulary/levels'); return; }
+        setLvl(l);
+        const { recordVocabVisit } = await import('@/lib/progress/dailyHero');
+        recordVocabVisit({ source: 'levels', unitId: String(level), unitTitle: levelNames[level] ?? `${level}级` });
+        const w = await getLevelWords(level);
+        setWords(w);
+        try {
+          const koreanWords = new Set(w.map((e) => e.korean));
+          const allUserWords = await db.words.toArray();
+          const userWords = allUserWords.filter((uw) => koreanWords.has(uw.word));
+          const mSet = new Set(userWords.filter((uw) => uw.mastery === 'mastered').map((uw) => uw.word));
+          const lSet = new Set(userWords.filter((uw) => uw.mastery !== 'mastered' && uw.mastery !== 'new').map((uw) => uw.word));
+          setMasteredSet(mSet);
+          setLearningSet(lSet);
+        } catch {
+          // db error — show words without mastery state
+        }
+      } catch { /* ignore */ } finally {
         setLoading(false);
       }
     })();
