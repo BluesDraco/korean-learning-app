@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { BookImage, Lightbulb, Tv, Newspaper } from 'lucide-react';
+import { BookImage, Lightbulb, Tv, Newspaper, Music, Mic2 } from 'lucide-react';
 import Link from 'next/link';
 import { PageHeader, Section, Card, Button, EntryCard } from '@/components/ui';
 import { DesktopExplorePage } from '@/components/desktop/DesktopExplorePage';
@@ -12,7 +12,9 @@ const FEED = [
 ];
 
 const INTERESTS = [
-  { Icon: BookImage, label: 'Tori绘本馆', desc: '韩语绘本故事', href: '/learn/picture-books', tone: 'mint' as const },
+  { Icon: Music, label: 'KPOP 跟唱', desc: '逐句歌词 + 跟唱录音', href: '/korea/kpop', tone: 'pink' as const },
+  { Icon: Mic2, label: '影子跟读', desc: '听音模仿，纠正节奏', href: '/shadowing', tone: 'pink' as const },
+  { Icon: BookImage, label: 'Tori 绘本馆', desc: '韩语绘本故事', href: '/learn/picture-books', tone: 'mint' as const },
   { Icon: Lightbulb, label: '韩国小知识', desc: '文化·美食·旅行', href: '/knowledge', tone: 'peach' as const },
   { Icon: Tv, label: '韩剧表达', desc: '经典台词学韩语', href: '/korea/drama', tone: 'purple' as const },
 ];

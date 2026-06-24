@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState, type ComponentType } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { Sparkles, BookOpen, Wrench, GraduationCap, Compass, Shield, NotebookPen } from 'lucide-react';
+import { Sparkles, BookOpen, GraduationCap, Compass, Shield, NotebookPen } from 'lucide-react';
 import { BottomTabBar } from '@/components/mobile/BottomTabBar';
 import { FloatingDecorations } from '@/components/FloatingDecorations';
 import { useAuth } from '@/components/AuthProvider';
@@ -36,7 +36,7 @@ function saveShortcuts(ids: string[]) {
 }
 
 type NavItem = {
-  id: 'today' | 'diary' | 'vocabulary' | 'tools' | 'learn' | 'explore';
+  id: 'today' | 'diary' | 'vocabulary' | 'learn' | 'explore';
   Icon: ComponentType<{ size?: number; strokeWidth?: number }>;
   label: string;
   href: string;
@@ -44,9 +44,8 @@ type NavItem = {
 
 const NAV_ITEMS: NavItem[] = [
   { id: 'today',      Icon: Sparkles,      label: '今日', href: '/daily' },
-  { id: 'diary',      Icon: NotebookPen,   label: '日记', href: '/diary' },
   { id: 'vocabulary', Icon: BookOpen,      label: '词汇', href: '/vocabulary' },
-  { id: 'tools',      Icon: Wrench,        label: '工具', href: '/tools' },
+  { id: 'diary',      Icon: NotebookPen,   label: '日记', href: '/diary' },
   { id: 'learn',      Icon: GraduationCap, label: '学习', href: '/learning' },
   { id: 'explore',    Icon: Compass,       label: '探索', href: '/explore' },
 ];
@@ -57,16 +56,21 @@ function resolvePageMeta(pathname: string | null) {
   if (p === '/daily') return { title: '今日', activeId: 'today', hidePanel: false };
   if (p.startsWith('/diary')) return { title: '兔莉的韩语日记', activeId: 'diary', hidePanel: true };
   if (p.startsWith('/mine') || p.startsWith('/vocabulary')) return { title: '词汇', activeId: 'vocabulary', hidePanel: false };
-  if (p.startsWith('/reading')) return { title: '工具', activeId: 'tools', hidePanel: true };
-  if (p === '/tools' || p.startsWith('/tools/')
-    || p.startsWith('/typing') || p.startsWith('/writing')
-    || p.startsWith('/pronunciation') || p.startsWith('/shadowing')
-    || p.startsWith('/dictation') || p.startsWith('/review')
-    || p.startsWith('/grammar') || p.startsWith('/ai/')
-    || p.startsWith('/dictionary')) return { title: '工具', activeId: 'tools', hidePanel: false };
-  if (p.startsWith('/learning') || p.startsWith('/course') || p.startsWith('/phonetics')) return { title: '学习', activeId: 'learn', hidePanel: false };
+  // 学习相关：系统课程 + 工具箱（练习类全部归学习）
+  if (p.startsWith('/learning') || p.startsWith('/course') || p.startsWith('/phonetics')
+    || p.startsWith('/grammar') || p.startsWith('/topik')
+    || p.startsWith('/pronunciation') || p.startsWith('/listening')
+    || p.startsWith('/dictation') || p.startsWith('/writing')
+    || p.startsWith('/reading') || p.startsWith('/typing')
+    || p.startsWith('/ai/chat') || p.startsWith('/ai/analyze')
+    || p.startsWith('/dictionary') || p.startsWith('/review')) return { title: '学习', activeId: 'learn', hidePanel: false };
+  // 探索：兴趣发现（KPOP / 影子跟读 / 韩剧 / 绘本 / 小知识）
   if (p.startsWith('/explore')
-    || p.startsWith('/korea/')) return { title: '探索', activeId: 'explore', hidePanel: false };
+    || p.startsWith('/korea/')
+    || p.startsWith('/shadowing')
+    || p.startsWith('/learn/picture-books')) return { title: '探索', activeId: 'explore', hidePanel: false };
+  // /tools 旧入口路由保留但不在导航中露出，归到「学习」
+  if (p === '/tools' || p.startsWith('/tools/')) return { title: '工具', activeId: 'learn', hidePanel: false };
   if (p === '/settings') return { title: '设置', activeId: '', hidePanel: true };
   return { title: 'Tori Korean', activeId: 'today', hidePanel: false };
 }

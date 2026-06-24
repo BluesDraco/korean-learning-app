@@ -14,6 +14,9 @@ import Onboarding from '@/components/Onboarding';
 import { DailyShell } from '@/components/DailyShell';
 import { DesktopDailyPage } from '@/components/desktop/DesktopDailyPage';
 import { PageHeader, Section, Card, Button, Modal, EntryCard } from '@/components/ui';
+import { HeroFourCards, type HeroProgressData } from '@/components/today/HeroFourCards';
+import { TodayPickSheet } from '@/components/today/TodayPickSheet';
+import { getVocabProgress, getDiaryProgress, getPhoneticProgress, getGrammarProgress } from '@/lib/progress/dailyHero';
 
 const TASK_ICONS: Record<string, React.ComponentType<{ size?: number; color?: string; style?: React.CSSProperties }>> = {
   course: GraduationCap,
@@ -53,6 +56,8 @@ export default function DailyPage() {
     () => typeof window !== 'undefined' && window.innerWidth >= 768
   );
   const [unreadMsg, setUnreadMsg] = useState<{ title: string; content: string; id: string } | null>(null);
+  const [heroData, setHeroData] = useState<HeroProgressData | null>(null);
+  const [pickOpen, setPickOpen] = useState(false);
 
   const loadGenRef = useRef(0);
   const userRef = useRef(user);
@@ -128,6 +133,31 @@ export default function DailyPage() {
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
+  // 4 张大卡进度数据
+  useEffect(() => {
+    if (!user) return;
+    let cancelled = false;
+    (async () => {
+      const [vocab, diary, phonetic, grammar] = await Promise.all([
+        getVocabProgress(),
+        getDiaryProgress(user.id),
+        getPhoneticProgress(),
+        getGrammarProgress(),
+      ]);
+      if (cancelled) return;
+      const vocabHref = vocab.source && vocab.unitId
+        ? `/vocabulary/${vocab.source}/${vocab.unitId}`
+        : '/vocabulary';
+      setHeroData({
+        vocab: { mastered: vocab.mastered, total: vocab.total, lastUnitTitle: vocab.unitTitle, href: vocabHref },
+        diary: { currentDay: diary.currentDay, total: diary.total },
+        phonetic: { completed: phonetic.completed, total: phonetic.total },
+        grammar: { completed: grammar.completed, total: grammar.total },
+      });
+    })();
+    return () => { cancelled = true; };
+  }, [user]);
+
   if (isDesktop) return <DesktopDailyPage />;
 
   if (showOnboarding) {
@@ -191,13 +221,6 @@ export default function DailyPage() {
     : plan.course
       ? `Day ${plan.courseDay} · ${dateStr}${streakText ? ` · ${streakText}` : ''}`
       : `${dateStr}${streakText ? ` · ${streakText}` : ''}`;
-
-  const quickTools = [
-    { label: t('daily.quick_tool_analyze', lang),   href: '/ai/analyze', Icon: Sparkles,  tone: 'pink'   as const },
-    { label: t('daily.quick_tool_vocab', lang),     href: '/dictionary', Icon: BookOpen,  tone: 'purple' as const },
-    { label: t('daily.quick_tool_dictation', lang), href: '/dictation',  Icon: Edit3,     tone: 'peach'  as const },
-    { label: t('daily.quick_tool_flashcard', lang), href: '/review',    Icon: RefreshCw,  tone: 'mint'   as const },
-  ];
 
   const dismissMsg = () => {
     setUnreadMsg(null);
@@ -292,69 +315,40 @@ export default function DailyPage() {
                     </p>
                   </div>
                 </div>
-                <Link href="/vocabulary/library" onClick={feedbackClick} style={{ textDecoration: 'none' }}>
-                  <Button variant="secondary" fullWidth icon={<BookOpen size={14} />}>
-                    {t('daily.browse_vocab_button', lang)}
-                  </Button>
-                </Link>
               </Card>
             )}
 
-            {!plan.allDone && (
-              <Section spacing="normal">
-                <Card variant="hero" tone="purple" padding="lg" as="a" href="/vocabulary/library" interactive>
-                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
-                    <div
-                      style={{
-                        width: 44, height: 44, borderRadius: 'var(--radius-md)',
-                        background: 'var(--color-surface-2)', color: 'var(--color-purple-strong)',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                      }}
-                      aria-hidden
-                    >
-                      <BookOpen size={22} strokeWidth={1.75} />
-                    </div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <p style={{ fontSize: 17, fontWeight: 800, color: 'var(--color-ink-1)', margin: 0 }}>
-                        {t('daily.vocab_library_label', lang)}
-                      </p>
-                      <p style={{ fontSize: 13, color: 'var(--color-ink-3)', margin: '4px 0 12px' }}>
-                        {t('daily.vocab_library_desc', lang)}
-                      </p>
-                      <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--color-purple-strong)', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-                        {t('daily.vocab_library_action', lang)}
-                        <ChevronRight size={14} />
-                      </span>
-                    </div>
-                  </div>
-                </Card>
-              </Section>
-            )}
+            {/* 4 张大卡：词汇 / 日记 / 字母 / 语法（带回归进度） */}
+            {heroData && <HeroFourCards data={heroData} layout="mobile" />}
 
-            {activeTasks.length > 0 && (
-              <Section title={t('daily.tasks_section_title', lang)} spacing="normal">
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  {activeTasks.map((task) => {
-                    const Icon = TASK_ICONS[task.key] || Target;
-                    const tone = TASK_TONE[task.key] || 'peach';
-                    return (
-                      <EntryCard
-                        key={task.key}
-                        href={task.href}
-                        onClick={feedbackClick}
-                        icon={<Icon size={20} />}
-                        label={task.label}
-                        detail={task.detail}
-                        tone={tone}
-                        layout="row"
-                        cta={t('daily.task_go_button', lang)}
-                      />
-                    );
-                  })}
-                </div>
-              </Section>
-            )}
+            {/* 「今日推荐」按钮 → 弹 Sheet 显示今日任务 */}
+            <button
+              onClick={() => setPickOpen(true)}
+              style={{
+                width: '100%',
+                padding: '16px 20px',
+                marginBottom: 20,
+                background: 'linear-gradient(135deg, var(--color-pink-soft), var(--color-purple-soft))',
+                border: '1.5px solid var(--color-border-1)',
+                borderRadius: 'var(--radius-lg)',
+                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5), var(--shadow-sm)',
+                cursor: 'pointer',
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                transition: 'all var(--dur-fast) var(--ease-soft)',
+              }}
+            >
+              <div style={{ textAlign: 'left' }}>
+                <p style={{ fontSize: 11, fontWeight: 800, color: 'var(--color-pink-strong)', letterSpacing: '0.08em', textTransform: 'uppercase', margin: 0 }}>
+                  Today's Pick
+                </p>
+                <p style={{ fontSize: 16, fontWeight: 800, color: 'var(--color-ink-1)', margin: '3px 0 0' }}>
+                  今日推荐 · {plan.totalCount > 0 ? `${plan.completedCount}/${plan.totalCount} 完成` : '看看今天做什么'}
+                </p>
+              </div>
+              <ChevronRight size={18} color="var(--color-pink-strong)" />
+            </button>
 
+            {/* 我的资料快捷 */}
             <Section title={t('daily.mine_section_title', lang)} spacing="normal">
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                 {([
@@ -375,41 +369,6 @@ export default function DailyPage() {
                 ))}
               </div>
             </Section>
-
-            <Section title={t('daily.quick_tools_section_title', lang)} spacing="normal">
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
-                {quickTools.map(({ label, href, Icon, tone }) => (
-                  <EntryCard
-                    key={href}
-                    href={href}
-                    onClick={feedbackClick}
-                    icon={<Icon size={18} />}
-                    label={label}
-                    tone={tone}
-                    layout="compact"
-                  />
-                ))}
-              </div>
-            </Section>
-
-            <Card variant="default" padding="md" style={{ marginBottom: 20 }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-                <span style={{ fontSize: 13, color: 'var(--color-ink-3)' }}>{t('daily.progress_label', lang)}</span>
-                <span style={{ fontSize: 12, color: 'var(--color-ink-3)' }}>
-                  {plan.completedCount}/{plan.totalCount} {t('daily.progress_completed_suffix', lang)}
-                </span>
-              </div>
-              <div style={{ width: '100%', height: 8, borderRadius: 'var(--radius-pill)', background: 'var(--color-surface-4)' }}>
-                <div
-                  style={{
-                    height: 8, borderRadius: 'var(--radius-pill)',
-                    background: 'linear-gradient(90deg, var(--color-purple-base), var(--color-pink-base))',
-                    width: `${Math.max(4, progressPercent)}%`,
-                    transition: 'width var(--dur-slow) var(--ease-soft)',
-                  }}
-                />
-              </div>
-            </Card>
 
             {user?.role === 'admin' && (
               <Link href="/admin" style={{ textDecoration: 'none' }}>
@@ -441,31 +400,6 @@ export default function DailyPage() {
               </p>
             </Card>
 
-            <Card variant="default" padding="md">
-              <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--color-ink-1)', margin: '0 0 12px' }}>
-                {t('daily.aside_quick_tools_title', lang)}
-              </p>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-                {quickTools.map(({ label, href, Icon, tone }) => (
-                  <Link
-                    key={href}
-                    href={href}
-                    onClick={feedbackClick}
-                    style={{
-                      display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
-                      padding: 12, borderRadius: 'var(--radius-md)',
-                      background: 'var(--color-surface-1)',
-                      border: '1px solid var(--color-border-1)',
-                      textDecoration: 'none',
-                    }}
-                  >
-                    <Icon size={18} color={TONE_FG[tone]} />
-                    <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--color-ink-1)' }}>{label}</span>
-                  </Link>
-                ))}
-              </div>
-            </Card>
-
             <Card variant="hero" tone="pink" padding="md">
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                 <Flame size={22} color="var(--color-pink-strong)" />
@@ -481,6 +415,14 @@ export default function DailyPage() {
             </Card>
           </div>
         }
+      />
+
+      <TodayPickSheet
+        open={pickOpen}
+        onClose={() => setPickOpen(false)}
+        tasks={plan.tasks}
+        completedCount={plan.completedCount}
+        totalCount={plan.totalCount}
       />
     </>
   );

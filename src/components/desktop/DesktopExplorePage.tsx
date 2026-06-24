@@ -1,13 +1,15 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { BookImage, Lightbulb, Tv, Newspaper, ChevronRight } from 'lucide-react';
+import { BookImage, Lightbulb, Tv, Newspaper, Music, Mic2, ChevronRight } from 'lucide-react';
 import { PageHeader, Section, Card, Button } from '@/components/ui';
 
 const INTEREST_GRID = [
-  { Icon: BookImage, label: 'Tori 绘本馆', desc: '韩语绘本故事',     href: '/learn/picture-books', tone: 'mint'   as const },
-  { Icon: Lightbulb, label: '韩国小知识', desc: '文化·美食·旅行',   href: '/knowledge',          tone: 'peach'  as const },
-  { Icon: Tv,        label: '韩剧表达',   desc: '经典台词学韩语',   href: '/korea/drama',        tone: 'purple' as const },
+  { Icon: Music,     label: 'KPOP 跟唱',   desc: '逐句歌词 + 跟唱录音', href: '/korea/kpop',          tone: 'pink'   as const },
+  { Icon: Mic2,      label: '影子跟读',    desc: '听音模仿，纠正节奏', href: '/shadowing',           tone: 'pink'   as const },
+  { Icon: BookImage, label: 'Tori 绘本馆', desc: '韩语绘本故事',       href: '/learn/picture-books', tone: 'mint'   as const },
+  { Icon: Lightbulb, label: '韩国小知识', desc: '文化·美食·旅行',     href: '/knowledge',           tone: 'peach'  as const },
+  { Icon: Tv,        label: '韩剧表达',   desc: '经典台词学韩语',     href: '/korea/drama',         tone: 'purple' as const },
 ];
 
 const FEED = [
@@ -15,11 +17,11 @@ const FEED = [
   { label: '今日韩剧表达', desc: '《眼泪女王》经典台词',     href: '/korea/drama',         tone: 'purple' as const, Icon: Tv },
 ];
 
-const TONE_BG: Record<'mint' | 'peach' | 'purple', string> = {
-  mint: 'var(--color-mint-soft)', peach: 'var(--color-peach-soft)', purple: 'var(--color-purple-soft)',
+const TONE_BG: Record<'pink' | 'mint' | 'peach' | 'purple', string> = {
+  pink: 'var(--color-pink-soft)', mint: 'var(--color-mint-soft)', peach: 'var(--color-peach-soft)', purple: 'var(--color-purple-soft)',
 };
-const TONE_FG: Record<'mint' | 'peach' | 'purple', string> = {
-  mint: 'var(--color-mint-strong)', peach: 'var(--color-peach-strong)', purple: 'var(--color-purple-strong)',
+const TONE_FG: Record<'pink' | 'mint' | 'peach' | 'purple', string> = {
+  pink: 'var(--color-pink-strong)', mint: 'var(--color-mint-strong)', peach: 'var(--color-peach-strong)', purple: 'var(--color-purple-strong)',
 };
 
 export function DesktopExplorePage() {

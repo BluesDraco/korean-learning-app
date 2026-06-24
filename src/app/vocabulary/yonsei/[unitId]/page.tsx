@@ -53,6 +53,8 @@ export default function YonseiUnitPage() {
         if (!found) { setLoading(false); return; }
         setUnit(found);
         setAllUnits(yonseiUnits);
+        const { recordVocabVisit } = await import('@/lib/progress/dailyHero');
+        recordVocabVisit({ source: 'yonsei', unitId: found.id, unitTitle: `${found.bookTitle} · ${found.title}` });
         const koreanWords = new Set(found.words.map(w => w.word));
         const allUserWords = await db.words.toArray();
         const userWords = allUserWords.filter(uw => koreanWords.has(uw.word));

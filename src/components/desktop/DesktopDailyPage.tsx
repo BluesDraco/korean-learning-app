@@ -3,10 +3,14 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { Sparkles, PenLine, Mic, Trophy, MessageSquare } from 'lucide-react';
+import { Sparkles, PenLine, Mic, Trophy, MessageSquare, ChevronRight } from 'lucide-react';
 import { db } from '@/lib/db';
 import { useAuth } from '@/components/AuthProvider';
 import { PageHeader, Section, Card } from '@/components/ui';
+import { HeroFourCards, type HeroProgressData } from '@/components/today/HeroFourCards';
+import { TodayPickSheet } from '@/components/today/TodayPickSheet';
+import { getVocabProgress, getDiaryProgress, getPhoneticProgress, getGrammarProgress } from '@/lib/progress/dailyHero';
+import { buildDailyPlanFromApi, type DailyPlan } from '@/lib/daily/buildDailyPlan';
 
 const TONE_BG: Record<'pink' | 'mint' | 'peach' | 'purple', string> = {
   pink: 'var(--color-pink-soft)', mint: 'var(--color-mint-soft)',
@@ -28,6 +32,9 @@ export function DesktopDailyPage() {
   const router = useRouter();
   const { user } = useAuth();
   const [stats, setStats] = useState({ words: 0, sentences: 0, articlesRead: 0 });
+  const [heroData, setHeroData] = useState<HeroProgressData | null>(null);
+  const [pickOpen, setPickOpen] = useState(false);
+  const [plan, setPlan] = useState<DailyPlan | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -39,7 +46,32 @@ export function DesktopDailyPage() {
         setStats({ words, sentences, articlesRead });
       } catch { /* ignore */ }
     })();
+    buildDailyPlanFromApi().then(setPlan).catch(() => {});
   }, []);
+
+  useEffect(() => {
+    if (!user) return;
+    let cancelled = false;
+    (async () => {
+      const [vocab, diary, phonetic, grammar] = await Promise.all([
+        getVocabProgress(),
+        getDiaryProgress(user.id),
+        getPhoneticProgress(),
+        getGrammarProgress(),
+      ]);
+      if (cancelled) return;
+      const vocabHref = vocab.source && vocab.unitId
+        ? `/vocabulary/${vocab.source}/${vocab.unitId}`
+        : '/vocabulary';
+      setHeroData({
+        vocab: { mastered: vocab.mastered, total: vocab.total, lastUnitTitle: vocab.unitTitle, href: vocabHref },
+        diary: { currentDay: diary.currentDay, total: diary.total },
+        phonetic: { completed: phonetic.completed, total: phonetic.total },
+        grammar: { completed: grammar.completed, total: grammar.total },
+      });
+    })();
+    return () => { cancelled = true; };
+  }, [user]);
 
   const displayName = user?.nickname ?? '同学';
 
@@ -100,31 +132,35 @@ export function DesktopDailyPage() {
         ))}
       </div>
 
-      {/* Today recommended */}
-      <Section title="今日推荐" spacing="normal">
-        <Card variant="hero" tone="pink" padding="lg" as="button" onClick={() => router.push('/ai/analyze')} interactive>
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14 }}>
-            <div
-              style={{
-                width: 48, height: 48, borderRadius: 'var(--radius-md)',
-                background: 'var(--color-surface-2)', color: 'var(--color-pink-strong)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-              }}
-              aria-hidden
-            >
-              <Sparkles size={22} strokeWidth={1.75} />
-            </div>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <p style={{ fontSize: 18, fontWeight: 800, color: 'var(--color-ink-1)', margin: 0 }}>
-                文章拆解工具
-              </p>
-              <p style={{ fontSize: 13, color: 'var(--color-ink-3)', margin: '6px 0 0', lineHeight: 1.6 }}>
-                全文翻译、重点词、重点句和语法卡。
-              </p>
-            </div>
-          </div>
-        </Card>
-      </Section>
+      {/* 4 张大卡：1 + 3 不对称（日记占大格） */}
+      {heroData && <HeroFourCards data={heroData} layout="desktop" />}
+
+      {/* 今日推荐按钮 */}
+      <button
+        onClick={() => setPickOpen(true)}
+        style={{
+          width: '100%',
+          padding: '18px 22px',
+          marginBottom: 24,
+          background: 'linear-gradient(135deg, var(--color-pink-soft), var(--color-purple-soft))',
+          border: '1.5px solid var(--color-border-1)',
+          borderRadius: 'var(--radius-lg)',
+          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5), var(--shadow-sm)',
+          cursor: 'pointer',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          transition: 'all var(--dur-fast) var(--ease-soft)',
+        }}
+      >
+        <div style={{ textAlign: 'left' }}>
+          <p style={{ fontSize: 11, fontWeight: 800, color: 'var(--color-pink-strong)', letterSpacing: '0.08em', textTransform: 'uppercase', margin: 0 }}>
+            Today&apos;s Pick
+          </p>
+          <p style={{ fontSize: 17, fontWeight: 800, color: 'var(--color-ink-1)', margin: '3px 0 0' }}>
+            今日推荐 · {plan && plan.totalCount > 0 ? `${plan.completedCount}/${plan.totalCount} 完成` : '看看今天做什么'}
+          </p>
+        </div>
+        <ChevronRight size={20} color="var(--color-pink-strong)" />
+      </button>
 
       {/* 我的 */}
       <Section title="我的" spacing="normal">
@@ -148,6 +184,16 @@ export function DesktopDailyPage() {
           ))}
         </div>
       </Section>
+
+      {plan && (
+        <TodayPickSheet
+          open={pickOpen}
+          onClose={() => setPickOpen(false)}
+          tasks={plan.tasks}
+          completedCount={plan.completedCount}
+          totalCount={plan.totalCount}
+        />
+      )}
     </div>
   );
 }
