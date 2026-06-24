@@ -5,6 +5,7 @@ export type ToriModuleKind = 'opening' | 'words' | 'flashcard' | 'dialogue' | 'g
 export type ToriOutputKind = 'dictation' | 'record' | 'choice' | 'fill' | 'compose' | 'listen-choice' | 'zh-to-ko' | 'particle-error' | 'match-pair';
 export type ToriPhase = 'foundation' | 'expansion' | 'expression' | 'mastery';
 export type ToriPaletteHint = 'pink' | 'mint' | 'yellow' | 'cream' | 'gold' | 'peach' | 'purple';
+export type ToriLevel = 'beginner' | 'intermediate' | 'advanced';
 
 /** 词汇卡 */
 export interface ToriWord {
@@ -113,6 +114,7 @@ export interface ToriSticker {
 /** 一天的完整内容 */
 export interface ToriDay {
   day: number;
+  level: ToriLevel;
   phase: ToriPhase;
   title: string;
   subtitle: string;
@@ -131,9 +133,10 @@ export interface ToriDay {
 
 /** 用户进度（一天一条） */
 export interface ToriProgress {
-  /** 形如 {userId}-{day} */
+  /** 形如 {userId}-{level}-{day} */
   id: string;
   userId: string;
+  level: ToriLevel;
   day: number;
   modulesDone: ToriModuleKind[];
   startedAt: number;

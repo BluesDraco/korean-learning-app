@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { X } from 'lucide-react';
-import type { ToriDay, ToriModuleKind } from '@/types/tori-diary';
+import type { ToriDay, ToriModuleKind, ToriLevel } from '@/types/tori-diary';
 import { db } from '@/lib/db';
 import { useAuth } from '@/components/AuthProvider';
 import { DiaryOpening } from './DiaryOpening';
@@ -56,9 +56,10 @@ function chapterRoman(day: number): ChapterRoman {
 
 interface Props {
   day: ToriDay;
+  level: ToriLevel;
 }
 
-export function DiaryDayClient({ day }: Props) {
+export function DiaryDayClient({ day, level }: Props) {
   const router = useRouter();
   const { user } = useAuth();
   const [currentModule, setCurrentModule] = useState<ToriModuleKind>('opening');
@@ -71,7 +72,7 @@ export function DiaryDayClient({ day }: Props) {
     recordingsCount: number;
   } | undefined>(undefined);
 
-  const progressId = user ? `${user.id}-${day.day}` : '';
+  const progressId = user ? `${user.id}-${level}-${day.day}` : '';
   const tone = chapterTone(day.day);
   const roman = chapterRoman(day.day);
   const isAdmin = user?.role === 'admin';
@@ -89,6 +90,7 @@ export function DiaryDayClient({ day }: Props) {
           await db.toriProgress.put({
             id: progressId,
             userId: user.id,
+            level,
             day: day.day,
             modulesDone: [],
             startedAt: Date.now(),

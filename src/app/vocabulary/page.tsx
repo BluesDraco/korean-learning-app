@@ -905,6 +905,14 @@ function VocabularyContent() {
       />
 
       {/* Today task card */}
+      {!authLoading && !user && (
+        <div style={{ textAlign: 'center', padding: '32px 20px', marginBottom: 16 }}>
+          <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--color-ink-1)', marginBottom: 8 }}>登录后查看你的词汇</p>
+          <p style={{ fontSize: 12, color: 'var(--color-ink-3)', marginBottom: 16 }}>保存单词、闪卡复习、整理单词本</p>
+          <a href="/auth/login" style={{ display: 'inline-block', padding: '8px 28px', borderRadius: 999, background: 'var(--color-pink-base)', color: '#fff', fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>登录 / 注册</a>
+        </div>
+      )}
+      {!(authLoading || !user) && (<>
       <Section spacing="normal">
         <Card variant="hero" tone="pink" padding="lg">
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 16 }}>
@@ -1090,6 +1098,7 @@ function VocabularyContent() {
           <ChevronRight size={18} color="var(--color-ink-4)" />
         </Card>
       </Section>
+      </>)}
     </div>
 
       {showDueSheet && (

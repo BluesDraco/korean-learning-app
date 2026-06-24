@@ -14,6 +14,7 @@ import type { ToriDay } from '@/types/tori-diary';
  * 韩语自审：korean skill PASS (과거형 활용 + 일기체)
  */
 export const day28: ToriDay = {
+  level: 'beginner',
   day: 28,
   phase: 'expression',
   title: '过去时 · 韩语日记的开始',

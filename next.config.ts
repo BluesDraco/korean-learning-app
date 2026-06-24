@@ -44,6 +44,11 @@ const nextConfig: NextConfig = {
         destination: '/daily',
         permanent: false,
       },
+      {
+        source: '/diary/:day(\\d+)',
+        destination: '/diary/beginner/:day',
+        permanent: false,
+      },
     ];
   },
 

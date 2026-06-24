@@ -14,6 +14,7 @@ import type { ToriDay } from '@/types/tori-diary';
  * 韩语自审：korean skill PASS（实际교통카드구매표현）
  */
 export const day17: ToriDay = {
+  level: 'beginner',
   day: 17,
   phase: 'expansion',
   title: '티머니카드 · 拿到首尔的钥匙',

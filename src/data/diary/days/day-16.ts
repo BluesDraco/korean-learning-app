@@ -14,6 +14,7 @@ import type { ToriDay } from '@/types/tori-diary';
  * 韩语自审：korean skill PASS（실제 길안내 표현 + 정중함）
  */
 export const day16: ToriDay = {
+  level: 'beginner',
   day: 16,
   phase: 'expansion',
   title: '迷路在小巷子 · 第一次开口问路',

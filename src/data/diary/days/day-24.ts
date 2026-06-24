@@ -15,6 +15,7 @@ import type { ToriDay } from '@/types/tori-diary';
  * 韩语自审：korean skill PASS (자연스러운 친구 채팅체)
  */
 export const day24: ToriDay = {
+  level: 'beginner',
   day: 24,
   phase: 'expression',
   title: '群聊炸了 · 三个人在等我回',

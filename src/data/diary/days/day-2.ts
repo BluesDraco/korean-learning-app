@@ -10,6 +10,7 @@ import type { ToriDay } from '@/types/tori-diary';
  * 韩语自审：korean skill PASS（조사/敬语/自然度 三关）
  */
 export const day2: ToriDay = {
+  level: 'beginner',
   day: 2,
   phase: 'foundation',
   title: '飞机上 · 第一次说韩语',

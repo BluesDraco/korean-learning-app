@@ -6,34 +6,36 @@ import { notFound, useRouter } from 'next/navigation';
 import { getDay } from '@/data/diary';
 import { useAuth } from '@/components/AuthProvider';
 import { DiaryDayClient } from '@/components/diary/DiaryDayClient';
+import type { ToriLevel } from '@/types/tori-diary';
 import '@/components/diary/diary.css';
 
+const VALID_LEVELS = new Set<ToriLevel>(['beginner', 'intermediate', 'advanced']);
+
 interface Props {
-  params: Promise<{ day: string }>;
+  params: Promise<{ level: string; day: string }>;
 }
 
 export default function DiaryDayPage({ params }: Props) {
-  const { day: dayStr } = use(params);
+  const { level: levelStr, day: dayStr } = use(params);
   const router = useRouter();
   const { user, loading } = useAuth();
 
+  const level = VALID_LEVELS.has(levelStr as ToriLevel) ? (levelStr as ToriLevel) : null;
   const dayNum = parseInt(dayStr, 10);
 
-  // Day 1 开放给所有登录用户；其他天仅 admin
   useEffect(() => {
-    if (loading) return;
-    if (!user) return; // 未登录交给上层处理
-    if (user.role !== 'admin' && dayNum !== 1) {
+    if (loading || !user) return;
+    // non-admin: only beginner day 1 is freely accessible; others require progression
+    if (user.role !== 'admin' && !(level === 'beginner' && dayNum === 1)) {
       router.replace('/diary');
     }
-  }, [user, loading, router, dayNum]);
+  }, [user, loading, router, level, dayNum]);
 
-  if (Number.isNaN(dayNum) || dayNum < 1 || dayNum > 30) {
+  if (!level || Number.isNaN(dayNum) || dayNum < 1 || dayNum > 30) {
     notFound();
   }
 
-  // 加载中或非 admin 且非 Day 1 → 不渲染内容
-  if (loading || !user || (user.role !== 'admin' && dayNum !== 1)) {
+  if (loading || !user || (user.role !== 'admin' && !(level === 'beginner' && dayNum === 1))) {
     return (
       <div className="diary-root diary-page" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div className="diary-handwriting-zh" style={{ color: 'var(--diary-ink-soft)' }}>加载中…</div>
@@ -41,16 +43,14 @@ export default function DiaryDayPage({ params }: Props) {
     );
   }
 
-  const day = getDay(dayNum);
+  const day = getDay(level, dayNum);
 
   if (!day) {
     return (
       <div className="diary-root diary-page" style={{ minHeight: '100vh' }}>
         <div style={{ maxWidth: 480, margin: '0 auto', padding: '64px 24px', textAlign: 'center' }}>
           <div style={{ fontSize: 56, marginBottom: 12 }}>🐰</div>
-          <h1 className="diary-h2 diary-handwriting-zh" style={{ marginBottom: 8 }}>
-            Day {dayNum} 还没写好
-          </h1>
+          <h1 className="diary-h2 diary-handwriting-zh" style={{ marginBottom: 8 }}>Day {dayNum} 还没写好</h1>
           <p className="diary-handwriting-zh" style={{ fontSize: 'var(--diary-text-md)', color: 'var(--diary-ink-soft)', marginBottom: 24 }}>
             兔莉正在赶稿…先回到上一天看看吧。
           </p>
@@ -62,5 +62,5 @@ export default function DiaryDayPage({ params }: Props) {
     );
   }
 
-  return <DiaryDayClient day={day} />;
+  return <DiaryDayClient day={day} level={level} />;
 }

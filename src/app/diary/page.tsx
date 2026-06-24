@@ -3,11 +3,12 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { X } from 'lucide-react';
+import { X, Lock } from 'lucide-react';
 import { db } from '@/lib/db';
 import { useAuth } from '@/components/AuthProvider';
 import { Modal } from '@/components/ui';
-import { TOTAL_DAYS, isCheckpoint, days as ALL_DAYS } from '@/data/diary';
+import { TOTAL_DAYS_PER_LEVEL, isCheckpoint, getLevel } from '@/data/diary';
+import type { ToriLevel } from '@/types/tori-diary';
 import '@/components/diary/diary.css';
 
 interface ChapterDef {
@@ -27,11 +28,19 @@ const CHAPTERS: ChapterDef[] = [
   { num: 'Four · final', romanNum: 'iv',  title: '社交融入与毕业', ko: '소속과 졸업 · Day 22–30',  startDay: 22, endDay: 30, tone: 'gold' },
 ];
 
+const LEVELS: { key: ToriLevel; label: string; sub: string }[] = [
+  { key: 'beginner',     label: '初级·生存期', sub: 'Day 1–30' },
+  { key: 'intermediate', label: '中级·融入期', sub: 'Day 31–60' },
+  { key: 'advanced',     label: '高级·蜕变期', sub: 'Day 61–90' },
+];
+
 export default function DiaryPage() {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
-  const [completedDays, setCompletedDays] = useState<Set<number>>(new Set());
-  const [currentDay, setCurrentDay] = useState(1);
+  const [activeLevel, setActiveLevel] = useState<ToriLevel>('beginner');
+  const [completed, setCompleted] = useState<Record<ToriLevel, Set<number>>>({
+    beginner: new Set(), intermediate: new Set(), advanced: new Set(),
+  });
   const [loaded, setLoaded] = useState(false);
   const [showSoonModal, setShowSoonModal] = useState(false);
 
@@ -43,27 +52,44 @@ export default function DiaryPage() {
       try {
         const rows = await db.toriProgress.toArray();
         const userRows = rows.filter((r) => r.userId === user.id);
-        const done = new Set<number>();
-        userRows.forEach((r) => { if (r.completedAt) done.add(r.day); });
-        setCompletedDays(done);
-        const next = Math.min(Math.max(0, ...Array.from(done)) + 1, TOTAL_DAYS);
-        setCurrentDay(next || 1);
+        const next: Record<ToriLevel, Set<number>> = { beginner: new Set(), intermediate: new Set(), advanced: new Set() };
+        userRows.forEach((r) => {
+          const lvl = (r.level ?? 'beginner') as ToriLevel;
+          if (r.completedAt) next[lvl].add(r.day);
+        });
+        setCompleted(next);
       } catch { /* ignore */ }
       finally { setLoaded(true); }
     })();
   }, [user]);
 
-  const handleDayClick = (day: number) => {
-    if (isAdmin) { router.push(`/diary/${day}`); return; }
-    if (day === 1) { router.push('/diary/1'); return; }
-    setShowSoonModal(true);
+  const isLevelUnlocked = (level: ToriLevel): boolean => {
+    if (isAdmin) return true;
+    if (level === 'beginner') return true;
+    if (level === 'intermediate') return completed.beginner.size >= TOTAL_DAYS_PER_LEVEL;
+    return completed.intermediate.size >= TOTAL_DAYS_PER_LEVEL;
   };
 
-  const currentDayData = ALL_DAYS.find((d) => d.day === currentDay);
+  const completedDays = completed[activeLevel];
+  const currentDay = Math.min(Math.max(0, ...Array.from(completedDays)) + 1, TOTAL_DAYS_PER_LEVEL) || 1;
+  const allDaysForLevel = getLevel(activeLevel);
+  const currentDayData = allDaysForLevel.find((d) => d.day === currentDay);
   const currentDayTitle = currentDayData?.title ?? `Day ${currentDay}`;
-  const progressPct = Math.round((completedDays.size / TOTAL_DAYS) * 100);
-  const allCleared = completedDays.size === TOTAL_DAYS;
-  const remainDays = TOTAL_DAYS - completedDays.size;
+  const progressPct = Math.round((completedDays.size / TOTAL_DAYS_PER_LEVEL) * 100);
+  const allCleared = completedDays.size >= TOTAL_DAYS_PER_LEVEL;
+  const remainDays = TOTAL_DAYS_PER_LEVEL - completedDays.size;
+
+  const handleDayClick = (day: number) => {
+    if (!isLevelUnlocked(activeLevel)) { setShowSoonModal(true); return; }
+    if (isAdmin) { router.push(`/diary/${activeLevel}/${day}`); return; }
+    if (activeLevel === 'beginner' && day === 1) { router.push('/diary/beginner/1'); return; }
+    // progressive unlock: only allow if previous day done or is next day
+    if (completedDays.has(day - 1) || day === currentDay) {
+      router.push(`/diary/${activeLevel}/${day}`);
+    } else {
+      setShowSoonModal(true);
+    }
+  };
 
   // ── Loading
   if (authLoading || !loaded) {
@@ -80,11 +106,7 @@ export default function DiaryPage() {
   if (!user) {
     return (
       <div className="diary-fullscreen">
-        <button
-          aria-label="关闭"
-          className="diary-v4-close"
-          onClick={() => router.back()}
-        >
+        <button aria-label="关闭" className="diary-v4-close" onClick={() => router.back()}>
           <X size={18} strokeWidth={1.75} />
         </button>
         <div style={{ maxWidth: 480, margin: '0 auto', padding: '120px 24px 40px', textAlign: 'center' }}>
@@ -92,7 +114,7 @@ export default function DiaryPage() {
             兔莉的<wbr /><span className="diary-v4-h1-br" />韩语日记
           </h1>
           <p style={{ fontFamily: 'var(--diary-v4-serif)', fontSize: 15, color: 'var(--color-ink-2)', marginBottom: 28, lineHeight: 1.85 }}>
-            30 天，和兔莉一起从零学韩语。<br />登录后开始你的第 1 天。
+            90 天，三个阶段，从零到流利。<br />登录后开始你的第 1 天。
           </p>
           <Link href="/auth/login?redirect=/diary" style={{ textDecoration: 'none' }}>
             <button className="diary-list-cta" style={{ display: 'inline-flex', width: 'auto' }}>
@@ -107,26 +129,25 @@ export default function DiaryPage() {
 
   const heroContent = (
     <>
-      <p className="diary-v4-eyebrow">a story of 30 days</p>
+      <p className="diary-v4-eyebrow">a story of 90 days</p>
       <p className="diary-v4-ko-title">토리의 한국어 일기</p>
       <h1 className="diary-v4-h1">兔莉的<wbr /><span className="diary-v4-h1-br" />韩语日记</h1>
 
       <div className="diary-v4-lead-card">
-        <p className="diary-v4-lead">30 天，从中国家里到首尔动物城，<br />每天 15 分钟，跟兔莉一起零基础学习韩语。</p>
+        <p className="diary-v4-lead">90 天，三个阶段，<br />每天 15 分钟，跟兔莉一起从零学韩语。</p>
       </div>
 
-      {/* 16:9 hero 横幅 */}
       <div className="diary-v4-illust">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/images/diary/tori-bedroom-hero.png" alt="Tori 在卧室准备出发去首尔" />
-        <span className="diary-v4-illust-tag">{allCleared ? '已毕业' : `Day ${currentDay} · ${currentDayTitle}`}</span>
+        <span className="diary-v4-illust-tag">{allCleared ? '已完成' : `${activeLevel === 'beginner' ? '初级' : activeLevel === 'intermediate' ? '中级' : '高级'} Day ${currentDay} · ${currentDayTitle}`}</span>
       </div>
 
       <div className="diary-v4-progress">
         <div className="diary-v4-progress-top">
           <span className="diary-v4-progress-label">your progress · {remainDays > 0 ? `还剩 ${remainDays} 天` : '已完成'}</span>
           <span className="diary-v4-progress-value">
-            {completedDays.size}<span className="diary-v4-progress-total">/{TOTAL_DAYS}</span>
+            {completedDays.size}<span className="diary-v4-progress-total">/{TOTAL_DAYS_PER_LEVEL}</span>
           </span>
         </div>
         <div className="diary-v4-progress-bar">
@@ -134,9 +155,9 @@ export default function DiaryPage() {
         </div>
       </div>
 
-      {isAdmin || (!allCleared && currentDay === 1) ? (
+      {isAdmin || (!allCleared && currentDay === 1 && activeLevel === 'beginner') ? (
         <Link
-          href={allCleared ? '/diary/stickers' : `/diary/${currentDay}`}
+          href={allCleared ? '/diary/stickers' : `/diary/${activeLevel}/${currentDay}`}
           className="diary-v4-cta"
           style={{ textDecoration: 'none' }}
         >
@@ -162,73 +183,135 @@ export default function DiaryPage() {
     </>
   );
 
-  const chaptersContent = (
-    <div className="diary-v4-chapters">
-      {CHAPTERS.map((ch) => {
-        const days: number[] = [];
-        for (let d = ch.startDay; d <= ch.endDay; d++) days.push(d);
-        const chapterDone = days.filter((d) => completedDays.has(d)).length;
-        const chapterTotal = days.length;
-        const status = chapterDone === chapterTotal ? '已完成' : chapterDone > 0 ? '进行中' : '未开启';
-
+  const levelTabs = (
+    <div style={{ display: 'flex', gap: 0, marginBottom: 28, marginTop: 8, borderBottom: '1px solid var(--diary-line)' }}>
+      {LEVELS.map((lv) => {
+        const active = lv.key === activeLevel;
+        const locked = !isLevelUnlocked(lv.key);
         return (
-          <article key={ch.num} className="diary-v4-chapter" data-tone={ch.tone}>
-            <header className="diary-v4-chapter-band" data-num={ch.romanNum}>
-              <div className="diary-v4-chapter-band-head">
-                <div>
-                  <p className="diary-v4-chap-num">Chapter {ch.num}</p>
-                  <h2 className="diary-v4-chap-h2">{ch.title}</h2>
-                  <p className="diary-v4-chap-ko">{ch.ko}</p>
-                </div>
-                <div className="diary-v4-chap-stats">
-                  <span className="diary-v4-chap-stats-num">{chapterDone}/{chapterTotal}</span>
-                  <span className="diary-v4-chap-stats-label">{status}</span>
-                </div>
-              </div>
-            </header>
-
-            <div className="diary-v4-chapter-body">
-              <div className="diary-v4-days">
-                {days.map((d) => {
-                  const dayData = ALL_DAYS.find((x) => x.day === d);
-                  const dayTitle = dayData?.title ?? `Day ${d}`;
-                  const daySub = dayData?.subtitle ?? '';
-                  const locked = !isAdmin && d !== 1;
-                  const done = completedDays.has(d);
-                  const current = d === currentDay && !done;
-                  const checkpoint = isCheckpoint(d);
-
-                  const classNames = [
-                    'diary-v4-day',
-                    done && 'is-done',
-                    current && 'is-current',
-                    locked && 'is-locked',
-                    checkpoint && !current && 'is-checkpoint',
-                  ].filter(Boolean).join(' ');
-
-                  return (
-                    <button
-                      key={d}
-                      onClick={() => handleDayClick(d)}
-                      disabled={locked}
-                      className={classNames}
-                    >
-                      <div className="diary-v4-day-num">{String(d).padStart(2, '0')}</div>
-                      <div className="diary-v4-day-body">
-                        <div className="diary-v4-day-title">{dayTitle}</div>
-                        {daySub && <div className="diary-v4-day-sub">{daySub}</div>}
-                      </div>
-                      <span className="diary-v4-day-marker">
-                        {current ? 'TODAY' : done && checkpoint ? 'CLEARED' : done ? '✓' : checkpoint ? '◆' : '·'}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </article>
+          <button
+            key={lv.key}
+            onClick={() => setActiveLevel(lv.key)}
+            style={{
+              flex: 1,
+              padding: '16px 4px 14px',
+              background: 'transparent',
+              border: 'none',
+              borderBottom: active ? '2.5px solid var(--diary-stamp-red)' : '2.5px solid transparent',
+              cursor: 'pointer',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 3,
+              transition: 'opacity 0.15s',
+              opacity: locked ? 0.45 : 1,
+            }}
+          >
+            <span style={{
+              fontFamily: 'var(--diary-v4-serif)',
+              fontSize: 14,
+              fontWeight: 800,
+              letterSpacing: '0.04em',
+              color: active ? 'var(--diary-stamp-red)' : 'var(--diary-ink)',
+              display: 'flex', alignItems: 'center', gap: 4,
+            }}>
+              {locked && <Lock size={10} />}
+              {lv.label}
+            </span>
+            <span style={{
+              fontFamily: 'var(--diary-v4-serif)',
+              fontSize: 11,
+              fontWeight: 400,
+              letterSpacing: '0.06em',
+              color: active ? 'var(--diary-stamp-red)' : 'var(--diary-ink-soft)',
+            }}>
+              {lv.sub}
+            </span>
+          </button>
         );
       })}
+    </div>
+  );
+
+  const unlocked = isLevelUnlocked(activeLevel);
+
+  const chaptersContent = (
+    <div className="diary-v4-chapters">
+      {levelTabs}
+      {!unlocked ? (
+        <div style={{ textAlign: 'center', padding: '60px 24px' }}>
+          <Lock size={40} strokeWidth={1.5} style={{ marginBottom: 14, color: 'var(--color-ink-4)' }} />
+          <p style={{ fontFamily: 'var(--diary-v4-serif)', fontSize: 15, fontWeight: 700, color: 'var(--color-ink-1)', marginBottom: 8 }}>
+            {activeLevel === 'intermediate' ? '完成初级 30 天后解锁' : '完成中级 30 天后解锁'}
+          </p>
+          <p style={{ fontSize: 13, color: 'var(--color-ink-3)' }}>加油，完成上一阶段就能解锁这里</p>
+        </div>
+      ) : (
+        CHAPTERS.map((ch) => {
+          const days: number[] = [];
+          for (let d = ch.startDay; d <= ch.endDay; d++) days.push(d);
+          const chapterDone = days.filter((d) => completedDays.has(d)).length;
+          const chapterTotal = days.length;
+          const status = chapterDone === chapterTotal ? '已完成' : chapterDone > 0 ? '进行中' : '未开启';
+
+          return (
+            <article key={ch.num} className="diary-v4-chapter" data-tone={ch.tone}>
+              <header className="diary-v4-chapter-band" data-num={ch.romanNum}>
+                <div className="diary-v4-chapter-band-head">
+                  <div>
+                    <p className="diary-v4-chap-num">Chapter {ch.num}</p>
+                    <h2 className="diary-v4-chap-h2">{ch.title}</h2>
+                    <p className="diary-v4-chap-ko">{ch.ko}</p>
+                  </div>
+                  <div className="diary-v4-chap-stats">
+                    <span className="diary-v4-chap-stats-num">{chapterDone}/{chapterTotal}</span>
+                    <span className="diary-v4-chap-stats-label">{status}</span>
+                  </div>
+                </div>
+              </header>
+              <div className="diary-v4-chapter-body">
+                <div className="diary-v4-days">
+                  {days.map((d) => {
+                    const dayData = allDaysForLevel.find((x) => x.day === d);
+                    const dayTitle = dayData?.title ?? `Day ${d}`;
+                    const daySub = dayData?.subtitle ?? '';
+                    const locked = !isAdmin && !completedDays.has(d) && d !== currentDay && !(d === 1 && activeLevel === 'beginner');
+                    const done = completedDays.has(d);
+                    const current = d === currentDay && !done;
+                    const checkpoint = isCheckpoint(d);
+
+                    const classNames = [
+                      'diary-v4-day',
+                      done && 'is-done',
+                      current && 'is-current',
+                      locked && 'is-locked',
+                      checkpoint && !current && 'is-checkpoint',
+                    ].filter(Boolean).join(' ');
+
+                    return (
+                      <button
+                        key={d}
+                        onClick={() => handleDayClick(d)}
+                        disabled={locked && !isAdmin}
+                        className={classNames}
+                      >
+                        <div className="diary-v4-day-num">{String(d).padStart(2, '0')}</div>
+                        <div className="diary-v4-day-body">
+                          <div className="diary-v4-day-title">{dayTitle}</div>
+                          {daySub && <div className="diary-v4-day-sub">{daySub}</div>}
+                        </div>
+                        <span className="diary-v4-day-marker">
+                          {current ? 'TODAY' : done && checkpoint ? 'CLEARED' : done ? '✓' : checkpoint ? '◆' : '·'}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </article>
+          );
+        })
+      )}
     </div>
   );
 
@@ -252,14 +335,13 @@ export default function DiaryPage() {
         <div style={{ textAlign: 'center', padding: '4px 0' }}>
           <div style={{ fontSize: 48, marginBottom: 12 }}>🥕</div>
           <h2 style={{ fontFamily: 'var(--diary-v4-serif)', fontSize: 20, fontWeight: 800, marginBottom: 10, color: 'var(--color-ink-1)', letterSpacing: '0.02em' }}>
-            这一关还在准备中
+            请按顺序学习
           </h2>
           <p style={{ fontFamily: 'var(--diary-v4-serif)', fontSize: 14, lineHeight: 1.85, color: 'var(--color-ink-3)', marginBottom: 22, letterSpacing: '0.02em' }}>
-            Tori 在首尔的故事正在打磨细节。
-            <br />预计本周开放，到时候你就能陪她一起过这 30 天了。
+            完成前一天的内容后才能解锁下一天，加油！
           </p>
           <button onClick={() => setShowSoonModal(false)} className="diary-list-cta" style={{ width: '100%' }}>
-            <span style={{ fontFamily: 'var(--diary-v4-serif)', fontSize: 15, fontWeight: 700, letterSpacing: '0.02em', flex: 1 }}>好的，下周来</span>
+            <span style={{ fontFamily: 'var(--diary-v4-serif)', fontSize: 15, fontWeight: 700, letterSpacing: '0.02em', flex: 1 }}>明白了</span>
           </button>
         </div>
       </Modal>

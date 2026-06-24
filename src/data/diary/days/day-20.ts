@@ -15,6 +15,7 @@ import type { ToriDay } from '@/types/tori-diary';
  * 韩语自审：korean skill PASS (実際 임대차 표현)
  */
 export const day20: ToriDay = {
+  level: 'beginner',
   day: 20,
   phase: 'expansion',
   title: '합약 예고 · 海豹房东走进了房间',

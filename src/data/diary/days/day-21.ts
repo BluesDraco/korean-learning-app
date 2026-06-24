@@ -16,6 +16,7 @@ import type { ToriDay } from '@/types/tori-diary';
  * 韩语自审：korean skill PASS (관계자 3인 협상 상황 + 정중한 종결)
  */
 export const day21: ToriDay = {
+  level: 'beginner',
   day: 21,
   phase: 'expansion',
   title: '🏠 关卡 3 · 海豹房东签合同',

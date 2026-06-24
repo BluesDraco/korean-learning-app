@@ -15,6 +15,7 @@ import type { ToriDay } from '@/types/tori-diary';
  * 韩语自审：korean skill PASS (식당 결제 풍습)
  */
 export const day27: ToriDay = {
+  level: 'beginner',
   day: 27,
   phase: 'expression',
   title: '회식 · Minji 请客，我学会抢付',

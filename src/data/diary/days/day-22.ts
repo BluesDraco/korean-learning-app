@@ -15,6 +15,7 @@ import type { ToriDay } from '@/types/tori-diary';
  * 韩语自审：korean skill PASS (학교 강의실 + 동사 활용)
  */
 export const day22: ToriDay = {
+  level: 'beginner',
   day: 22,
   phase: 'expression',
   title: '한빛어학당 · 해요体登场',

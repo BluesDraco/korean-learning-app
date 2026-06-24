@@ -13,6 +13,7 @@ import type { ToriDay } from '@/types/tori-diary';
  * 韩语自审：korean skill PASS
  */
 export const day13: ToriDay = {
+  level: 'beginner',
   day: 13,
   phase: 'foundation',
   title: '약국 · 感冒了',

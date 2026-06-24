@@ -14,6 +14,7 @@ import type { ToriDay } from '@/types/tori-diary';
  * 韩语自审：korean skill PASS（실제 은행창구 어휘）
  */
 export const day18: ToriDay = {
+  level: 'beginner',
   day: 18,
   phase: 'expansion',
   title: '국민은행 · 第一本韩国通帐',

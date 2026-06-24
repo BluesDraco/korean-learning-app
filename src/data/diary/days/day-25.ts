@@ -16,6 +16,7 @@ import type { ToriDay } from '@/types/tori-diary';
  * 韩语自审：korean skill PASS (응원 표현 + 群体语境)
  */
 export const day25: ToriDay = {
+  level: 'beginner',
   day: 25,
   phase: 'expression',
   title: '한강 콘서트 · 3000 人一起喊',

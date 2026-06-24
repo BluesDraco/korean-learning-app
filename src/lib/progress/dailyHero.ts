@@ -1,7 +1,7 @@
 'use client';
 
 import { db } from '@/lib/db';
-import { TOTAL_DAYS } from '@/data/diary';
+import { TOTAL_DAYS_PER_LEVEL } from '@/data/diary';
 
 // 4 张大卡的进度计算工具
 // 全部从 localStorage / IndexedDB 读，不打 API
@@ -76,11 +76,11 @@ export async function getDiaryProgress(userId: string): Promise<DiaryProgress> {
     const rows = await db.toriProgress.toArray();
     const userRows = rows.filter((r) => r.userId === userId);
     const completedDays = new Set<number>();
-    userRows.forEach((r) => { if (r.completedAt) completedDays.add(r.day); });
-    const next = Math.min(Math.max(0, ...Array.from(completedDays)) + 1, TOTAL_DAYS);
-    return { currentDay: next || 1, completedCount: completedDays.size, total: TOTAL_DAYS, sceneImageUrl: sceneImageForDay(next || 1) };
+    userRows.filter(r => (r.level ?? 'beginner') === 'beginner').forEach((r) => { if (r.completedAt) completedDays.add(r.day); });
+    const next = Math.min(Math.max(0, ...Array.from(completedDays)) + 1, TOTAL_DAYS_PER_LEVEL);
+    return { currentDay: next || 1, completedCount: completedDays.size, total: TOTAL_DAYS_PER_LEVEL, sceneImageUrl: sceneImageForDay(next || 1) };
   } catch {
-    return { currentDay: 1, completedCount: 0, total: TOTAL_DAYS, sceneImageUrl: sceneImageForDay(1) };
+    return { currentDay: 1, completedCount: 0, total: TOTAL_DAYS_PER_LEVEL, sceneImageUrl: sceneImageForDay(1) };
   }
 }
 

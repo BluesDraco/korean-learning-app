@@ -13,6 +13,7 @@ import type { ToriDay } from '@/types/tori-diary';
  * 韩语自审：korean skill PASS (실제 병원 절차 + 증상 표현)
  */
 export const day19: ToriDay = {
+  level: 'beginner',
   day: 19,
   phase: 'expansion',
   title: '병원 · 第一次去内科',

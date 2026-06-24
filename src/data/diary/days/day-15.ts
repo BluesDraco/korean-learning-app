@@ -14,6 +14,7 @@ import type { ToriDay } from '@/types/tori-diary';
  * 韩语自审：korean skill PASS（자연성 + 부동산 실제 표현）
  */
 export const day15: ToriDay = {
+  level: 'beginner',
   day: 15,
   phase: 'expansion',
   title: '부동산 · 第一次说"我在找房子"',

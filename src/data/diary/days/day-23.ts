@@ -15,6 +15,7 @@ import type { ToriDay } from '@/types/tori-diary';
  * 韩语自审：korean skill PASS (KPOP 文化 + 强调副词)
  */
 export const day23: ToriDay = {
+  level: 'beginner',
   day: 23,
   phase: 'expression',
   title: '弘大 생카 · 老虎追星的样子',

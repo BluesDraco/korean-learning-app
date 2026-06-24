@@ -18,6 +18,7 @@ import type { ToriDay } from '@/types/tori-diary';
  * 韩语自审：korean skill PASS (졸업식 격식 + 종합 표현)
  */
 export const day30: ToriDay = {
+  level: 'beginner',
   day: 30,
   phase: 'mastery',
   title: '🎓 最终考 + 毕业典礼',

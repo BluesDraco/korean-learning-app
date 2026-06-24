@@ -15,6 +15,7 @@ import type { ToriDay } from '@/types/tori-diary';
  * 韩语自审：korean skill PASS (生카文化 + 즉흥대화)
  */
 export const day26: ToriDay = {
+  level: 'beginner',
   day: 26,
   phase: 'expression',
   title: '🎤 关卡 4 · 一个人去偶像 생카',
