@@ -82,6 +82,12 @@ export function CarrotHelper({ day, currentModule, progress }: Props) {
 
   useEffect(() => { setMounted(true); }, []);
 
+  useEffect(() => {
+    const handler = () => setOpen(true);
+    window.addEventListener('openCarrot', handler);
+    return () => window.removeEventListener('openCarrot', handler);
+  }, []);
+
   // 加载历史
   useEffect(() => {
     if (!mounted) return;

@@ -27,6 +27,10 @@ export function LevelsSection() {
   const [levels, setLevels] = useState<LevelInfo[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Static fallback — always show all 6 levels even if API fails
+  const fallback: LevelInfo[] = [1,2,3,4,5,6].map(level => ({ level, totalCount: 0, mastered: 0, learning: 0 }));
+  const display = levels.length > 0 ? levels : fallback;
+
   useEffect(() => {
     (async () => {
       try {
@@ -65,8 +69,8 @@ export function LevelsSection() {
     );
   }
 
-  const topikI = levels.filter((l) => l.level <= 2);
-  const topikII = levels.filter((l) => l.level >= 3);
+  const topikI = display.filter((l) => l.level <= 2);
+  const topikII = display.filter((l) => l.level >= 3);
 
   return (
     <div className="space-y-6">

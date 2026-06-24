@@ -1,10 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import type { ToriDay, ToriGrammar } from '@/types/tori-diary';
-import { ChevronRight, ChevronDown, Lightbulb } from 'lucide-react';
+import { ChevronRight, ChevronDown, Lightbulb, Sparkles } from 'lucide-react';
 import { TappableText } from '@/components/TappableText';
 import { DiaryLineActions } from './DiaryLineActions';
+
+type BreakdownToken = { text: string; role: string };
+// Module-level cache: sentence → tokens
+const breakdownCache = new Map<string, BreakdownToken[]>();
 
 interface Props {
   day: ToriDay;
@@ -120,6 +124,16 @@ export function DiaryGrammar({ day, onComplete }: Props) {
         </div>
       )}
 
+      <div style={{ textAlign: 'center', marginBottom: 16 }}>
+        <button
+          onClick={() => window.dispatchEvent(new CustomEvent('openCarrot'))}
+          className="diary-handwriting-zh"
+          style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 13, color: 'var(--diary-ink-faint)' }}
+        >
+          🥕 还没弄懂？问问勇气胡萝卜
+        </button>
+      </div>
+
       <div style={{ textAlign: 'center' }}>
         <button onClick={onComplete} className="diary-btn diary-btn-primary">
           我懂了 · 下一步 <ChevronRight size={16} />
@@ -137,6 +151,38 @@ interface ExampleRowProps {
 
 function ExampleRow({ ex, grammar, source }: ExampleRowProps) {
   const [expanded, setExpanded] = useState(false);
+  const [tokens, setTokens] = useState<BreakdownToken[] | null>(
+    breakdownCache.get(ex.ko) ?? null
+  );
+  const [loading, setLoading] = useState(false);
+
+  const fetchBreakdown = async () => {
+    if (breakdownCache.has(ex.ko)) {
+      setTokens(breakdownCache.get(ex.ko)!);
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await fetch('/api/ai/grammar-breakdown', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sentence: ex.ko, grammarTitle: grammar.title }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const t: BreakdownToken[] = data.tokens ?? [];
+        breakdownCache.set(ex.ko, t);
+        setTokens(t);
+      }
+    } catch { /* fallback to note */ }
+    finally { setLoading(false); }
+  };
+
+  const handleExpand = () => {
+    const next = !expanded;
+    setExpanded(next);
+    if (next && tokens === null) fetchBreakdown();
+  };
 
   // 韩文带 highlight 的渲染
   const koNode = ex.highlight
@@ -173,7 +219,7 @@ function ExampleRow({ ex, grammar, source }: ExampleRowProps) {
           </div>
         </div>
         <button
-          onClick={() => setExpanded((v) => !v)}
+          onClick={handleExpand}
           aria-label={expanded ? '收起' : '展开'}
           style={{
             border: 'none',
@@ -195,25 +241,59 @@ function ExampleRow({ ex, grammar, source }: ExampleRowProps) {
           className="diary-anim-fade-up"
           style={{ marginTop: 8, paddingTop: 8, borderTop: '1px dashed var(--diary-line)' }}
         >
-          <div className="diary-handwriting-zh" style={{ fontSize: 'var(--diary-text-sm)', color: 'var(--diary-ink-soft)', marginBottom: 8 }}>
+          {/* 中文翻译 */}
+          <div className="diary-handwriting-zh" style={{ fontSize: 'var(--diary-text-sm)', color: 'var(--diary-ink-soft)', marginBottom: 12 }}>
             {ex.zh}
           </div>
-          <div
-            className="diary-handwriting-zh"
-            style={{
-              fontSize: 'var(--diary-text-xs)',
-              color: 'var(--diary-ink-faint)',
-              lineHeight: 1.6,
-              marginBottom: 10,
-              paddingLeft: 8,
-              borderLeft: '2px solid var(--diary-line)',
-            }}
-            dangerouslySetInnerHTML={{
-              __html: ex.note
-                ? ex.note.replace(/\*\*(.+?)\*\*/g, '<strong style="color:var(--diary-stamp-red);">$1</strong>')
-                : `<strong style="color:var(--diary-gold-deep);">语法点：</strong>${grammar.whenToUse}`,
-            }}
-          />
+
+          {/* AI 词素拆解 */}
+          {loading && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12, color: 'var(--diary-gold-deep)', fontSize: 12 }}>
+              <Sparkles size={13} style={{ animation: 'spin 1s linear infinite' }} />
+              <span className="diary-handwriting-zh">AI 正在拆解句子…</span>
+            </div>
+          )}
+
+          {tokens && tokens.length > 0 && (
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
+              {tokens.map((t, i) => (
+                <div key={i} style={{ textAlign: 'center' }}>
+                  <div
+                    className="diary-handwriting-ko"
+                    style={{
+                      fontSize: 'var(--diary-text-md)',
+                      fontWeight: 700,
+                      color: 'var(--diary-ink)',
+                      background: 'var(--diary-paper)',
+                      border: '1.5px solid var(--diary-gold)',
+                      borderRadius: 8,
+                      padding: '4px 10px',
+                      marginBottom: 4,
+                    }}
+                  >
+                    <TappableText text={t.text} source={source} />
+                  </div>
+                  <div className="diary-handwriting-zh" style={{ fontSize: 10, color: 'var(--diary-ink-faint)', maxWidth: 80, lineHeight: 1.4 }}>
+                    {t.role}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* fallback: static note（AI失败时显示） */}
+          {!loading && !tokens && (ex.note || grammar.whenToUse) && (
+            <div
+              className="diary-handwriting-zh"
+              style={{ fontSize: 'var(--diary-text-xs)', color: 'var(--diary-ink-faint)', lineHeight: 1.6, marginBottom: 10, paddingLeft: 8, borderLeft: '2px solid var(--diary-line)' }}
+              dangerouslySetInnerHTML={{
+                __html: ex.note
+                  ? ex.note.replace(/\*\*(.+?)\*\*/g, '<strong style="color:var(--diary-stamp-red);">$1</strong>')
+                  : `<strong style="color:var(--diary-gold-deep);">语法点：</strong>${grammar.whenToUse}`,
+              }}
+            />
+          )}
+
           <DiaryLineActions ko={ex.ko} zh={ex.zh} source={source} />
         </div>
       )}
