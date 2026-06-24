@@ -109,11 +109,58 @@ interface LineProps {
 function DialogueLine({ line, day, isCurrent, pickedChoice, isShadowed, onPick, onShadow, onListenAdvance }: LineProps) {
   const isTori = line.speaker === 'tori';
   const isNpc = line.speaker === 'npc';
+  const isInner = !!line.isInnerVoice;
   const [expanded, setExpanded] = useState(false);
 
   const labelColor = isTori ? 'var(--diary-gold-deep)' : 'var(--diary-stamp-red)';
-  const speakerName = isTori ? '兔莉（你）' : isNpc ? line.npcName ?? '对方' : '你';
+  const speakerName = isInner ? '内心' : isTori ? '兔莉（你）' : isNpc ? line.npcName ?? '对方' : '你';
   const source = `tori-diary-day-${day}`;
+
+  // 内心独白：斜体灰色气泡，居中，折叠展开同普通行
+  if (isInner) {
+    return (
+      <div className="diary-anim-fade-up" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <span style={{ fontSize: 'var(--diary-text-xs)', color: 'var(--diary-ink-faint)', fontWeight: 600, marginBottom: 4, letterSpacing: '0.08em' }}>
+          ✦ 内心 ✦
+        </span>
+        <div style={{
+          maxWidth: '85%',
+          padding: '12px 16px',
+          background: 'transparent',
+          border: '1px dashed var(--diary-line-strong)',
+          borderRadius: 'var(--diary-r-sm)',
+          textAlign: 'left',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+            <div className="diary-ko" style={{ fontSize: 'var(--diary-text-xl)', flex: 1, lineHeight: 1.5, fontStyle: 'italic', color: 'var(--diary-ink-soft)' }}>
+              <TappableText text={line.ko} source={source} />
+            </div>
+            <button
+              onClick={() => setExpanded(v => !v)}
+              aria-label={expanded ? '收起' : '展开'}
+              style={{ border: 'none', background: 'transparent', cursor: 'pointer', padding: 4, color: 'var(--diary-ink-faint)', display: 'inline-flex', transition: 'transform 0.2s', transform: expanded ? 'rotate(0deg)' : 'rotate(-90deg)', marginTop: 4 }}
+            >
+              <ChevronDown size={16} />
+            </button>
+          </div>
+          {expanded && (
+            <div className="diary-anim-fade-up" style={{ marginTop: 8, paddingTop: 8, borderTop: '1px dashed var(--diary-line)' }}>
+              <div className="diary-romaji" style={{ marginBottom: 4 }}>{line.hangul}</div>
+              <div className="diary-handwriting-zh" style={{ fontSize: 'var(--diary-text-sm)', color: 'var(--diary-ink-soft)', marginBottom: 8, fontStyle: 'italic' }}>
+                {line.zh}
+              </div>
+              <DiaryLineActions ko={line.ko} zh={line.zh} source={source} showRecord={true} />
+            </div>
+          )}
+        </div>
+        {isCurrent && (
+          <button onClick={onListenAdvance} className="diary-btn diary-btn-ghost" style={{ marginTop: 8, padding: '5px 14px', fontSize: 'var(--diary-text-sm)' }}>
+            继续 →
+          </button>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div

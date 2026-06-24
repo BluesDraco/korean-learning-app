@@ -28,6 +28,8 @@ export const day2: ToriDay = {
 起飞那一刻，胡萝卜从口袋里探出半个头，
 像在跟云朵打招呼。
 
+窗外云层翻涌，首尔动物城就在云的下面等着我。
+
 空乘姐姐是一只白色的仙鹤。
 她推着餐车走过来，对我说了一串话。
 我只听懂了一个字："드릴까요?"
@@ -135,6 +137,14 @@ export const day2: ToriDay = {
         hangul: 'a-ni-yo, gwaen-cha-na-yo',
         zh: '不用了，谢谢。',
         practice: 'shadow',
+      },
+      {
+        speaker: 'tori',
+        isInnerVoice: true,
+        ko: '해냈다! 첫 한국어!',
+        hangul: 'hae-naet-da! cheot han-gu-geo!',
+        zh: '做到了！第一句韩语！',
+        practice: 'listen',
       },
       {
         speaker: 'tori',

@@ -32,6 +32,8 @@ export interface ToriDialogueLine {
   speaker: 'tori' | 'you' | 'npc';
   /** 当 speaker === 'npc' 时显示 */
   npcName?: string;
+  /** 内心独白，渲染时斜体+灰色气泡 */
+  isInnerVoice?: boolean;
   ko: string;
   hangul: string;
   zh: string;

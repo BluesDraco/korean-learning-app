@@ -134,6 +134,14 @@ export const day1: ToriDay = {
       },
       {
         speaker: 'tori',
+        isInnerVoice: true,
+        ko: '이 당근… 왜 용기라고 써 있지?',
+        hangul: 'i dang-geun… wae yong-gi-ra-go sseo it-ji?',
+        zh: '这根胡萝卜……为什么写着"勇气"？',
+        practice: 'listen',
+      },
+      {
+        speaker: 'tori',
         ko: '?',
         hangul: '',
         zh: '兔莉应该怎么回应妈妈？',
