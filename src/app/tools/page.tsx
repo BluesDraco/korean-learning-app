@@ -1,10 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
 import { BookOpen, FileText, MessageSquare, Keyboard, Sparkles } from 'lucide-react';
 import { PageHeader, Section, Card, Button, EntryCard } from '@/components/ui';
 import { DesktopToolsPage } from '@/components/desktop/DesktopToolsPage';
+import { useIsDesktop } from '@/lib/useIsMobile';
 
 const TOOLS = [
   { label: '语法解释', desc: '句型例句', href: '/grammar', Icon: BookOpen, tone: 'pink' as const },
@@ -14,14 +14,7 @@ const TOOLS = [
 ];
 
 export default function ToolsPage() {
-  const [isDesktop, setIsDesktop] = useState(false);
-
-  useEffect(() => {
-    setIsDesktop(window.innerWidth >= 768);
-    const onResize = () => setIsDesktop(window.innerWidth >= 768);
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, []);
+  const isDesktop = useIsDesktop();
 
   if (isDesktop) return <DesktopToolsPage />;
 

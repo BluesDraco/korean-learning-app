@@ -11,6 +11,7 @@ import { useTheme } from '@/components/ThemeProvider';
 import { LIGHT_C as _LIGHT_C, DARK_C as _DARK_C } from '@/lib/theme';
 import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
+import { useIsDesktop } from '@/lib/useIsMobile';
 
 const LIGHT_C = { ..._LIGHT_C, cream: '#fff8f4', mintText: '#4e746d', zhText: '#7e6b64', shadow: '0 16px 42px rgba(78,52,46,.10)', strong: '0 28px 72px rgba(78,52,46,.18)' };
 const DARK_C  = { ..._DARK_C, cream: '#252040', mintText: '#5ecfb8', zhText: '#9A8AB0', shadow: '0 16px 42px rgba(0,0,0,.30)', strong: '0 28px 72px rgba(0,0,0,.40)' };
@@ -607,14 +608,7 @@ export default function AnalyzePage() {
 
   const [showAllWords, setShowAllWords] = useState(false);
   const [showAllGrammar, setShowAllGrammar] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(false);
-
-  useEffect(() => {
-    setIsDesktop(window.innerWidth >= 768);
-    const onResize = () => setIsDesktop(window.innerWidth >= 768);
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, []);
+  const isDesktop = useIsDesktop();
 
   // ── Render helpers ──────────────────────────────────
   const [speakingText, setSpeakingText] = useState<string | null>(null);

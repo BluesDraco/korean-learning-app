@@ -22,13 +22,19 @@ export function BottomTabBar() {
   useEffect(() => {
     const vv = window.visualViewport;
     if (!vv) return;
+    let rafId = 0;
     const check = () => {
-      const ratio = vv.height / window.innerHeight;
-      setHidden(ratio < 0.75);
+      if (rafId) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = 0;
+        const ratio = vv.height / window.innerHeight;
+        setHidden(ratio < 0.75);
+      });
     };
     vv.addEventListener('resize', check);
     vv.addEventListener('scroll', check);
     return () => {
+      if (rafId) cancelAnimationFrame(rafId);
       vv.removeEventListener('resize', check);
       vv.removeEventListener('scroll', check);
     };

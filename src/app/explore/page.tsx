@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { BookImage, Lightbulb, Tv, Newspaper, Music, Mic2 } from 'lucide-react';
 import Link from 'next/link';
 import { PageHeader, Section, Card, Button, EntryCard } from '@/components/ui';
 import { DesktopExplorePage } from '@/components/desktop/DesktopExplorePage';
+import { useIsDesktop } from '@/lib/useIsMobile';
 
 const FEED = [
   { label: '今日绘本', desc: '토리와 첫 만남', href: '/learn/picture-books', tone: 'mint' as const, Icon: BookImage },
@@ -20,14 +20,7 @@ const INTERESTS = [
 ];
 
 export default function ExplorePage() {
-  const [isDesktop, setIsDesktop] = useState(false);
-
-  useEffect(() => {
-    setIsDesktop(window.innerWidth >= 768);
-    const onResize = () => setIsDesktop(window.innerWidth >= 768);
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, []);
+  const isDesktop = useIsDesktop();
 
   if (isDesktop) return <DesktopExplorePage />;
 

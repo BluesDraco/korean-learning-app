@@ -9,6 +9,7 @@ import {
 import { PageHeader, Section, EntryCard } from '@/components/ui';
 import { DesktopLearningPage } from '@/components/desktop/DesktopLearningPage';
 import { getPhoneticProgress, getGrammarProgress } from '@/lib/progress/dailyHero';
+import { useIsDesktop } from '@/lib/useIsMobile';
 
 interface LearningEntry {
   label: string;
@@ -39,16 +40,9 @@ const TOOLBOX: LearningEntry[] = [
 ];
 
 export default function LearningPage() {
-  const [isDesktop, setIsDesktop] = useState(false);
+  const isDesktop = useIsDesktop();
   const [phoneticPct, setPhoneticPct] = useState<number | undefined>(undefined);
   const [grammarPct, setGrammarPct] = useState<number | undefined>(undefined);
-
-  useEffect(() => {
-    setIsDesktop(window.innerWidth >= 768);
-    const onResize = () => setIsDesktop(window.innerWidth >= 768);
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, []);
 
   useEffect(() => {
     let cancelled = false;

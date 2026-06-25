@@ -16,6 +16,7 @@ import { DesktopDailyPage } from '@/components/desktop/DesktopDailyPage';
 import { Section, Card, Button, Modal, EntryCard } from '@/components/ui';
 import { HeroFourCards, type HeroProgressData } from '@/components/today/HeroFourCards';
 import { getVocabProgress, getDiaryProgress, getPhoneticProgress, getGrammarProgress } from '@/lib/progress/dailyHero';
+import { useIsDesktop } from '@/lib/useIsMobile';
 
 export default function DailyPage() {
   const { user } = useAuth();
@@ -26,9 +27,7 @@ export default function DailyPage() {
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [onboardingChecked, setOnboardingChecked] = useState(false);
   const [streak, setStreak] = useState(0);
-  const [isDesktop, setIsDesktop] = useState(
-    () => typeof window !== 'undefined' && window.innerWidth >= 768
-  );
+  const isDesktop = useIsDesktop();
   const [unreadMsg, setUnreadMsg] = useState<{ title: string; content: string; id: string } | null>(null);
   const [heroData, setHeroData] = useState<HeroProgressData | null>(null);
   const [pickExpanded, setPickExpanded] = useState(false);
@@ -102,13 +101,6 @@ export default function DailyPage() {
       .finally(() => clearTimeout(timer));
     return () => controller.abort();
   }, [user]);
-
-  useEffect(() => {
-    setIsDesktop(window.innerWidth >= 768);
-    const onResize = () => setIsDesktop(window.innerWidth >= 768);
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, []);
 
   // 4 张大卡进度数据
   useEffect(() => {

@@ -271,11 +271,11 @@ export default function LocalKaraokePage() {
           <div style={{ fontSize: 15, fontWeight: 700, color: C.ink, marginBottom: 20 }}>🎵 {audioFile?.name}</div>
           <div style={{ marginBottom: 16 }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: C.ink, marginBottom: 6 }}>歌曲名称 *</div>
-            <input value={songName} onChange={(e) => setSongName(e.target.value)} placeholder="例：Dynamite" style={{ width: "100%", border: `1.5px solid ${C.line}`, borderRadius: 12, padding: "12px 14px", fontSize: 15, background: C.bg, color: C.ink, outline: "none", boxSizing: "border-box" }} />
+            <input value={songName} onChange={(e) => setSongName(e.target.value)} placeholder="例：Dynamite" style={{ width: "100%", border: `1.5px solid ${C.line}`, borderRadius: 12, padding: "12px 14px", fontSize: 16, background: C.bg, color: C.ink, outline: "none", boxSizing: "border-box" }} />
           </div>
           <div>
             <div style={{ fontSize: 13, fontWeight: 700, color: C.ink, marginBottom: 6 }}>歌手 / 组合（选填）</div>
-            <input value={artistName} onChange={(e) => setArtistName(e.target.value)} placeholder="例：BTS" style={{ width: "100%", border: `1.5px solid ${C.line}`, borderRadius: 12, padding: "12px 14px", fontSize: 15, background: C.bg, color: C.ink, outline: "none", boxSizing: "border-box" }} />
+            <input value={artistName} onChange={(e) => setArtistName(e.target.value)} placeholder="例：BTS" style={{ width: "100%", border: `1.5px solid ${C.line}`, borderRadius: 12, padding: "12px 14px", fontSize: 16, background: C.bg, color: C.ink, outline: "none", boxSizing: "border-box" }} />
           </div>
         </div>
         {genError && <div style={{ color: "#e05c5c", fontSize: 14, marginBottom: 12, padding: "10px 14px", background: "rgba(224,92,92,0.08)", borderRadius: 10 }}>{genError}</div>}

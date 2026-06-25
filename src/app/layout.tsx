@@ -89,7 +89,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <LazyLayoutComponents />
         <script
           dangerouslySetInnerHTML={{
-            __html: `if('serviceWorker' in navigator){caches.keys().then(function(keys){keys.filter(function(k){return k!=='korean-learn-v8'}).forEach(function(k){caches.delete(k)})});navigator.serviceWorker.register('/sw.js')}`,
+            __html: `if('serviceWorker' in navigator){caches.keys().then(function(keys){keys.filter(function(k){return k!=='korean-learn-v9'}).forEach(function(k){caches.delete(k)})});navigator.serviceWorker.register('/sw.js')}`,
           }}
         />
       </body>
