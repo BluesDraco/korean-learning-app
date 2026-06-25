@@ -270,7 +270,7 @@
   height: 100%;
   background: linear-gradient(90deg, var(--diary-gold), var(--diary-stamp-red));
   border-radius: 999px;
-  transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition: width 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
 /* ── 12. 翻卡动画 ── */
@@ -1248,7 +1248,7 @@
   background: linear-gradient(90deg, oklch(76% 0.115 14), oklch(52% 0.140 14));
   border-radius: var(--radius-pill);
   box-shadow: 0 0 12px oklch(70% 0.135 14 / 0.4);
-  transition: transform var(--dur-slow) var(--ease-out-quart);
+  transition: width var(--dur-slow) var(--ease-out-quart);
 }
 
 /* CTA */
@@ -1795,7 +1795,7 @@
   width: 0;
   background: var(--diary-d-tone-base);
   border-radius: 999px;
-  transition: transform var(--dur-slow) var(--ease-out-quart);
+  transition: width var(--dur-slow) var(--ease-out-quart);
 }
 .diary-detail-progress-seg.is-done .diary-detail-progress-fill {
   width: 100%;
