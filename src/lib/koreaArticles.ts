@@ -116,7 +116,7 @@ export function getArticleHtml(slug: string): string | null {
       .korea-article-body .hero { padding-left: 20px; padding-right: 20px; }
       .korea-article-body .hero h1 { font-size: 28px; color: #fff; text-shadow: 0 2px 12px rgba(0,0,0,.4); }
       .korea-article-body .hero h1 span { font-size: 16px; color: rgba(255,255,255,.85); }
-      .korea-article-body .hero-tag { color: #fff; background: rgba(255,255,255,.15); backdrop-filter: blur(4px); border-radius: 20px; }
+      .korea-article-body .hero-tag { color: #fff; background: rgba(255,255,255,.25); border-radius: 20px; }
       .korea-article-body .hero-meta { color: rgba(255,255,255,.75); }
     }
   `;

@@ -122,11 +122,13 @@ export function DiaryCheckpointExam({ day, onComplete }: Props) {
               ★ CHECKPOINT
             </span>
           </div>
-          <div style={{ height: 2, background: '#f3f4f6', borderRadius: 99, position: 'relative', overflow: 'visible' }}>
+          <div style={{ height: 2, background: '#f3f4f6', borderRadius: 99, position: 'relative', overflow: 'hidden' }}>
             <div style={{
               height: '100%', background: 'linear-gradient(90deg, #7c3aed, #a855f7)',
-              borderRadius: 99, width: `${progress * 100}%`,
-              transition: 'width 0.6s cubic-bezier(0.4,0,0.2,1)',
+              borderRadius: 99, width: '100%',
+              transform: `scaleX(${progress})`,
+              transformOrigin: 'left',
+              transition: 'transform 0.6s cubic-bezier(0.4,0,0.2,1)',
             }} />
             {/* dot at current position */}
             <div style={{

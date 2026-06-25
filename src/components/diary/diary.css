@@ -80,7 +80,7 @@
   background-image:
     repeating-linear-gradient(transparent 0 var(--diary-rule-size), var(--diary-rule) calc(var(--diary-rule-size) + 0.5px), transparent calc(var(--diary-rule-size) + 1px));
   color: var(--diary-ink);
-  background-attachment: fixed;
+
 }
 
 [data-theme="dark"] .diary-page {
@@ -270,7 +270,7 @@
   height: 100%;
   background: linear-gradient(90deg, var(--diary-gold), var(--diary-stamp-red));
   border-radius: 999px;
-  transition: width 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
 /* ── 12. 翻卡动画 ── */
@@ -522,8 +522,8 @@
   margin-top: 8px;
   padding: 16px 18px;
   background: oklch(99.5% 0.003 50 / 0.85);
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
+
+
   border: 1.5px solid var(--color-border-1);
   border-radius: var(--radius-md);
   box-shadow:
@@ -568,7 +568,7 @@
   background: linear-gradient(90deg, oklch(76% 0.115 14), oklch(52% 0.140 14));
   border-radius: var(--radius-pill);
   box-shadow: 0 0 16px oklch(70% 0.135 14 / 0.4);
-  transition: width var(--dur-slow) var(--ease-out-quart);
+  transition: transform var(--dur-slow) var(--ease-out-quart);
 }
 
 /* 主 CTA 大按钮 */
@@ -937,8 +937,8 @@
   height: 40px;
   border-radius: 50%;
   background: oklch(99.5% 0.003 50 / 0.85);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
+
+
   border: 1.5px solid var(--color-border-1);
   display: flex;
   align-items: center;
@@ -1136,8 +1136,8 @@
   font-weight: 600;
   letter-spacing: 0.06em;
   background: oklch(99% 0.003 50 / 0.92);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
+
+
   padding: 5px 11px;
   border-radius: 999px;
   border: 1px solid var(--color-border-1);
@@ -1200,8 +1200,8 @@
 .diary-v4-progress {
   padding: 16px 18px;
   background: oklch(99.5% 0.003 50 / 0.85);
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
+
+
   border: 1.5px solid var(--color-border-1);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-xs), inset 0 1px 0 0 oklch(100% 0 0 / 0.6);
@@ -1248,7 +1248,7 @@
   background: linear-gradient(90deg, oklch(76% 0.115 14), oklch(52% 0.140 14));
   border-radius: var(--radius-pill);
   box-shadow: 0 0 12px oklch(70% 0.135 14 / 0.4);
-  transition: width var(--dur-slow) var(--ease-out-quart);
+  transition: transform var(--dur-slow) var(--ease-out-quart);
 }
 
 /* CTA */
@@ -1607,14 +1607,14 @@
   z-index: 100;
   overflow-y: auto;
   background: repeating-linear-gradient(transparent 0 27px, rgba(255,127,168,.12) 27px, rgba(255,127,168,.12) 28px), linear-gradient(180deg, #FFFBF7 0%, #F5EDFf 100%);
-  background-attachment: fixed;
+
 }
 
 [data-theme="dark"] .diary-detail-page {
   background:
     radial-gradient(ellipse 100% 60% at 50% 0%, rgba(108,99,255,.18), transparent 60%),
     oklch(8% 0.015 260);
-  background-attachment: fixed;
+
 }
 
 .diary-detail-tone-pink {
@@ -1643,8 +1643,8 @@
   top: 0;
   z-index: 50;
   background: oklch(99.5% 0.003 50 / 0.85);
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
+
+
   border-bottom: 1px solid var(--color-border-1);
   box-shadow: var(--shadow-xs);
 }
@@ -1795,7 +1795,7 @@
   width: 0;
   background: var(--diary-d-tone-base);
   border-radius: 999px;
-  transition: width var(--dur-slow) var(--ease-out-quart);
+  transition: transform var(--dur-slow) var(--ease-out-quart);
 }
 .diary-detail-progress-seg.is-done .diary-detail-progress-fill {
   width: 100%;

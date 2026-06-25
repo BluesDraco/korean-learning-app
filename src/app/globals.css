@@ -1605,8 +1605,8 @@ html[data-reduce-motion="true"] *::after {
   background: rgba(255,255,255,.72);
   border: 1px solid rgba(255,255,255,.92);
   box-shadow: var(--desktop-shadow);
-  backdrop-filter: blur(22px);
-  -webkit-backdrop-filter: blur(22px);
+
+
   padding: 14px 10px;
   display: flex;
   flex-direction: column;
@@ -1708,8 +1708,8 @@ html[data-reduce-motion="true"] *::after {
   background: rgba(255,255,255,.72);
   border: 1px solid rgba(255,255,255,.94);
   box-shadow: var(--desktop-shadow);
-  backdrop-filter: blur(22px);
-  -webkit-backdrop-filter: blur(22px);
+
+
   padding: 16px 22px;
   display: flex;
   align-items: center;
@@ -1791,8 +1791,8 @@ html[data-reduce-motion="true"] *::after {
   background: rgba(255,255,255,.72);
   border: 1px solid rgba(255,255,255,.94);
   box-shadow: var(--desktop-shadow);
-  backdrop-filter: blur(22px);
-  -webkit-backdrop-filter: blur(22px);
+
+
   padding: 16px;
   overflow-y: auto;
   scrollbar-width: none;
