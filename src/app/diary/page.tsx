@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { X, Lock } from 'lucide-react';
 import { db } from '@/lib/db';
@@ -138,8 +139,14 @@ export default function DiaryPage() {
       </div>
 
       <div className="diary-v4-illust">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/images/diary/tori-bedroom-hero.png" alt="Tori 在卧室准备出发去首尔" />
+        <Image
+          src="/images/diary/tori-bedroom-hero.png"
+          alt="Tori 在卧室准备出发去首尔"
+          fill
+          sizes="(max-width: 768px) 100vw, 600px"
+          priority
+          style={{ objectFit: 'cover' }}
+        />
         <span className="diary-v4-illust-tag">{allCleared ? '已完成' : `${activeLevel === 'beginner' ? '初级' : activeLevel === 'intermediate' ? '中级' : '高级'} Day ${currentDay} · ${currentDayTitle}`}</span>
       </div>
 

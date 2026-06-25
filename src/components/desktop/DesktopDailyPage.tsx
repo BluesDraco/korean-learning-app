@@ -110,7 +110,6 @@ export function DesktopDailyPage() {
             width={320}
             height={320}
             priority
-            unoptimized
             style={{ display: 'block', height: 280, width: 'auto', objectFit: 'contain', objectPosition: 'bottom right' }}
           />
         </div>
