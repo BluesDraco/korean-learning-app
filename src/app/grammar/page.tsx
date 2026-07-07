@@ -1268,7 +1268,7 @@ type FillState = { done: boolean; ok: boolean | null; picked: string | null };
 type JudgeState = { done: boolean; ok: boolean | null; picked: string | null };
 type ErrState = { revealed: boolean };
 
-function SortStep({ onDone }: { onDone: () => void }) {
+function SortStep({ data = SORT_Q, onDone }: { data?: typeof SORT_Q; onDone: () => void }) {
   const C = useC();
   const { lang } = useLang();
   const [qIdx, setQIdx] = React.useState(0);
@@ -1285,10 +1285,10 @@ function SortStep({ onDone }: { onDone: () => void }) {
   }, []);
 
   React.useEffect(() => {
-    const q = SORT_Q[qIdx];
+    const q = data[qIdx];
     setOrder([...q.words].sort(() => Math.random() - 0.5));
     setAnswers([]); setUsed([]); setChecked(false); setResult(null);
-  }, [qIdx]);
+  }, [qIdx, data]);
 
   const pick = (word: string, idx: number) => {
     if (checked || used.includes(idx)) return;
@@ -1309,12 +1309,12 @@ function SortStep({ onDone }: { onDone: () => void }) {
   };
 
   const check = () => {
-    const q = SORT_Q[qIdx];
+    const q = data[qIdx];
     if (answers.length < q.answer.length) return;
     setChecked(true);
     const ok = answers.join('|') === q.answer.join('|');
     setResult(ok ? 'ok' : 'ng');
-    if (ok && qIdx < SORT_Q.length - 1) {
+    if (ok && qIdx < data.length - 1) {
       timerRef.current = setTimeout(() => setQIdx(i => i + 1), 900);
     } else if (ok) {
       setAllDone(true);
@@ -1322,18 +1322,18 @@ function SortStep({ onDone }: { onDone: () => void }) {
   };
 
   const reset = () => {
-    const q = SORT_Q[qIdx];
+    const q = data[qIdx];
     setOrder([...q.words].sort(() => Math.random() - 0.5));
     setAnswers([]); setUsed([]); setChecked(false); setResult(null);
   };
 
-  const q = SORT_Q[qIdx];
+  const q = data[qIdx];
   const trackBg = result === 'ok' ? 'var(--color-mint-soft)' : result === 'ng' ? 'rgba(214,86,86,0.06)' : 'var(--color-surface-3)';
   const trackBorder = result === 'ok' ? 'var(--color-mint-strong)' : result === 'ng' ? 'var(--color-status-danger)' : 'var(--color-border-1)';
 
   return (
     <div>
-      <div style={{ fontSize: 15, color: C.muted, marginBottom: 4 }}>{t('grammar.quiz_q_number', lang).replace('{n}', String(qIdx + 1)).replace('{total}', String(SORT_Q.length))}</div>
+      <div style={{ fontSize: 15, color: C.muted, marginBottom: 4 }}>{t('grammar.quiz_q_number', lang).replace('{n}', String(qIdx + 1)).replace('{total}', String(data.length))}</div>
       <div style={{ fontSize: 15, background: C.bg, borderRadius: 10, padding: '8px 12px', color: C.muted, marginBottom: 10 }}>{q.hint}</div>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
         {order.map((w, i) => (
@@ -1409,14 +1409,14 @@ function FillStep({ data, onScore }: { data: typeof FILL3_DATA; onScore?: (s: { 
   );
 }
 
-function MorphStep({ onScore }: { onScore?: (s: { correct: number; total: number }) => void }) {
+function MorphStep({ data = MORPH_DATA, onScore }: { data?: typeof MORPH_DATA; onScore?: (s: { correct: number; total: number }) => void }) {
   const C = useC();
   const { lang } = useLang();
-  const [states, setStates] = React.useState<FillState[]>(() => MORPH_DATA.map(() => ({ done: false, ok: null, picked: null })));
+  const [states, setStates] = React.useState<FillState[]>(() => data.map(() => ({ done: false, ok: null, picked: null })));
 
   const pick = (i: number, opt: string) => {
     if (states[i].done) return;
-    const ok = opt === MORPH_DATA[i].ans;
+    const ok = opt === data[i].ans;
     const newStates = states.map((item, j) => j === i ? { done: true, ok, picked: opt } : item);
     setStates(newStates);
     const correct = newStates.filter(s => s.ok).length;
@@ -1426,7 +1426,7 @@ function MorphStep({ onScore }: { onScore?: (s: { correct: number; total: number
 
   return (
     <div>
-      {MORPH_DATA.map((q, i) => {
+      {data.map((q, i) => {
         const s = states[i];
         return (
           <div key={i} style={{ marginBottom: 20 }}>
@@ -1458,14 +1458,14 @@ function MorphStep({ onScore }: { onScore?: (s: { correct: number; total: number
   );
 }
 
-function JudgeStep({ onScore }: { onScore?: (s: { correct: number; total: number }) => void }) {
+function JudgeStep({ data = JUDGE_DATA, onScore }: { data?: typeof JUDGE_DATA; onScore?: (s: { correct: number; total: number }) => void }) {
   const C = useC();
   const { lang } = useLang();
-  const [states, setStates] = React.useState<JudgeState[]>(() => JUDGE_DATA.map(() => ({ done: false, ok: null, picked: null })));
+  const [states, setStates] = React.useState<JudgeState[]>(() => data.map(() => ({ done: false, ok: null, picked: null })));
 
   const pick = (i: number, choice: string) => {
     if (states[i].done) return;
-    const ok = choice === JUDGE_DATA[i].ans;
+    const ok = choice === data[i].ans;
     const newStates = states.map((item, j) => j === i ? { done: true, ok, picked: choice } : item);
     setStates(newStates);
     const correct = newStates.filter(s => s.ok).length;
@@ -1475,7 +1475,7 @@ function JudgeStep({ onScore }: { onScore?: (s: { correct: number; total: number
 
   return (
     <div>
-      {JUDGE_DATA.map((q, i) => {
+      {data.map((q, i) => {
         const s = states[i];
         const btnStyle = (choice: string): React.CSSProperties => {
           if (!s.done) return { border: `1.5px solid ${C.line}`, background: C.card };
@@ -1510,16 +1510,16 @@ function JudgeStep({ onScore }: { onScore?: (s: { correct: number; total: number
   );
 }
 
-function ErrStep() {
+function ErrStep({ data = ERR_DATA }: { data?: typeof ERR_DATA }) {
   const C = useC();
   const { lang } = useLang();
-  const [states, setStates] = React.useState<ErrState[]>(() => ERR_DATA.map(() => ({ revealed: false })));
+  const [states, setStates] = React.useState<ErrState[]>(() => data.map(() => ({ revealed: false })));
 
   const reveal = (i: number) => setStates(s => s.map((item, j) => j === i ? { revealed: true } : item));
 
   return (
     <div>
-      {ERR_DATA.map((q, i) => (
+      {data.map((q, i) => (
         <div key={i} style={{ marginBottom: 20 }}>
           <div style={{ fontSize: 15, color: C.muted, fontWeight: 700, marginBottom: 10 }}>{t('grammar.quiz_q_find_error', lang).replace('{n}', String(i + 1))}</div>
           <div style={{ borderRadius: 16, overflow: 'hidden', border: `1px solid ${C.line}` }}>
@@ -1626,168 +1626,20 @@ const STEP_CONFIG_EN = [
 ];
 const STEPS_TOTAL = 8;
 
-// 解析题目 prompt 里的【阶段 X/N】标签，返回 { phase, cleaned }
-function parsePhase(prompt: string | undefined): { phase: string | null; cleaned: string } {
-  if (!prompt) return { phase: null, cleaned: '' };
-  // 匹配【识别 1/10】/【变形 3/10】/【选择】/【改错】/【应用】等
-  const m = prompt.match(/^【([^】]+?)(?:\s*\d+\/\d+)?】\s*/);
-  if (m) {
-    const label = m[1].trim();
-    return { phase: label, cleaned: prompt.slice(m[0].length) };
-  }
-  return { phase: null, cleaned: prompt };
-}
-
-function DataDrivenPractice({ card, onComplete }: { card: GrammarCard; onComplete: () => void }) {
-  const C = useC();
-  const { lang } = useLang();
-  const quiz = card.specialQuiz;
-  const questions = React.useMemo(() => quiz?.questions ?? [], [quiz]);
-  const [states, setStates] = React.useState(() => questions.map(() => ({ done: false, ok: false, pickedIdx: -1 })));
-
-  React.useEffect(() => {
-    setStates(questions.map(() => ({ done: false, ok: false, pickedIdx: -1 })));
-  }, [questions]);
-
-  if (!quiz || questions.length === 0) return null;
-
-  // 按 phase 分组
-  const groups: { phase: string; items: { q: (typeof questions)[number]; globalIdx: number }[] }[] = [];
-  questions.forEach((q, idx) => {
-    const { phase } = parsePhase(q.prompt);
-    const key = phase || '练习';
-    const last = groups[groups.length - 1];
-    if (last && last.phase === key) last.items.push({ q, globalIdx: idx });
-    else groups.push({ phase: key, items: [{ q, globalIdx: idx }] });
-  });
-
-  const pick = (globalIdx: number, optIdx: number) => {
-    setStates(prev => prev.map((s, i) => i === globalIdx ? { done: true, ok: optIdx === questions[i].answer, pickedIdx: optIdx } : s));
-  };
-  const doneCount = states.filter(s => s.done).length;
-  const correctCount = states.filter(s => s.ok).length;
-  const allDone = doneCount === questions.length;
-
-  const phaseColors: Record<string, string> = {
-    识别: 'var(--color-status-info)',
-    变形: 'var(--color-purple-base)',
-    选择: 'var(--color-mint-strong)',
-    改错: 'var(--color-status-danger)',
-    应用: 'var(--color-pink-base)',
-  };
-
-  return (
-    <div>
-      {/* 全局进度 */}
-      <div style={{ background: C.card, border: `1px solid ${C.line}`, borderRadius: 14, padding: '12px 16px', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 12 }}>
-        <div style={{ flex: 1 }}>
-          <div style={{ fontSize: 14, fontWeight: 800, color: C.ink }}>{quiz.title}</div>
-          <div style={{ fontSize: 13, color: C.muted, marginTop: 2 }}>{quiz.body}</div>
-        </div>
-        <div style={{ fontSize: 15, fontWeight: 800, color: allDone ? 'var(--color-mint-strong)' : C.pink }}>
-          {doneCount}/{questions.length}
-        </div>
-      </div>
-
-      {/* 分组渲染 */}
-      {groups.map((g, gi) => {
-        const groupColor = phaseColors[g.phase] || C.pink;
-        return (
-          <div key={gi} style={{ marginBottom: 20 }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 12px', borderRadius: 99, background: `${groupColor}18`, color: groupColor, fontSize: 12, fontWeight: 800, marginBottom: 12, letterSpacing: '.05em' }}>
-              <span>{g.phase}</span>
-              <span style={{ opacity: .6 }}>· {g.items.length} 题</span>
-            </div>
-
-            {g.items.map(({ q, globalIdx }) => {
-              const s = states[globalIdx];
-              const { cleaned } = parsePhase(q.prompt);
-              return (
-                <div key={globalIdx} style={{ background: C.card, border: `1px solid ${C.line}`, borderRadius: 16, padding: 16, marginBottom: 12 }}>
-                  <div style={{ fontSize: 15, fontWeight: 700, color: C.ink, marginBottom: 12, lineHeight: 1.6 }}>{cleaned}</div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                    {q.options.map((opt, optIdx) => {
-                      let borderColor = C.line;
-                      let bg = C.card;
-                      if (s.done) {
-                        if (optIdx === q.answer) { borderColor = 'var(--color-mint-strong)'; bg = 'var(--color-mint-soft)'; }
-                        else if (optIdx === s.pickedIdx) { borderColor = 'var(--color-status-danger)'; bg = 'rgba(214,86,86,0.08)'; }
-                      }
-                      return (
-                        <button
-                          key={optIdx}
-                          onClick={() => !s.done && pick(globalIdx, optIdx)}
-                          disabled={s.done}
-                          style={{ textAlign: 'left', padding: '10px 14px', borderRadius: 12, border: `1.5px solid ${borderColor}`, background: bg, fontSize: 15, fontWeight: 600, color: C.ink, cursor: s.done ? 'default' : 'pointer', transition: 'all .15s' }}
-                        >
-                          {opt}
-                        </button>
-                      );
-                    })}
-                  </div>
-                  {s.done && (
-                    <div style={{ marginTop: 10, padding: 10, borderRadius: 10, background: s.ok ? 'var(--color-mint-soft)' : 'rgba(214,86,86,0.06)' }}>
-                      <div style={{ fontSize: 14, fontWeight: 700, color: s.ok ? 'var(--color-mint-strong)' : 'var(--color-status-danger)', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 6 }}>
-                        {s.ok ? '✓ 正确' : `✗ 正确答案：${q.options[q.answer]}`}
-                        {!s.ok && (
-                          <button onClick={() => speak(q.options[q.answer])} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 2, color: C.pink }}>
-                            <Volume2 size={13} />
-                          </button>
-                        )}
-                      </div>
-                      <div style={{ fontSize: 14, color: C.ink, lineHeight: 1.6 }}>{q.explanation}</div>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        );
-      })}
-
-      {/* 完成态 */}
-      {allDone && (
-        <div style={{ background: 'linear-gradient(135deg, var(--color-mint-soft), var(--color-pink-soft))', borderRadius: 20, padding: 20, textAlign: 'center', marginBottom: 20 }}>
-          <div style={{ fontSize: 20, fontWeight: 900, color: C.ink, marginBottom: 6 }}>
-            🎉 完成！{correctCount} / {questions.length} 正确
-          </div>
-          <div style={{ fontSize: 14, color: C.muted, marginBottom: 14 }}>
-            {correctCount === questions.length ? '完美！' : correctCount >= questions.length * 0.7 ? '不错，可以进入下一部分了' : '再复习一下前面的课吧'}
-          </div>
-          <button
-            onClick={onComplete}
-            style={{ padding: '12px 36px', borderRadius: 99, background: 'var(--color-ink-1)', color: 'white', fontSize: 15, fontWeight: 800, border: 'none', cursor: 'pointer' }}
-          >
-            完成本部分 →
-          </button>
-        </div>
-      )}
-    </div>
-  );
-}
-
 function ComprehensivePractice({ card, onBack, onComplete }: { card: GrammarCard; onBack: () => void; onComplete: () => void }) {
   const C = useC();
   const { lang } = useLang();
   const [step, setStep] = React.useState(0);
   const [isMobile, setIsMobile] = React.useState(false);
-  const [scores, setScores] = React.useState({ fill3: 0, fill3max: FILL3_DATA.length, fill4: 0, fill4max: FILL4_DATA.length, morph: 0, morphmax: MORPH_DATA.length, judge: 0, judgemax: JUDGE_DATA.length });
-
-  // 数据驱动分支：card 有 specialQuiz 就走新的 UI
-  const hasQuizData = !!(card.specialQuiz && card.specialQuiz.questions && card.specialQuiz.questions.length > 0);
-  if (hasQuizData) {
-    return (
-      <div style={{ minHeight: '100vh', background: C.bg }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 16px', background: C.card, borderBottom: `1px solid ${C.line}`, position: 'sticky', top: 0, zIndex: 10 }}>
-          <button onClick={onBack} style={{ width: 34, height: 34, borderRadius: 10, background: C.bg, border: 'none', cursor: 'pointer', fontSize: 18, color: C.ink, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>‹</button>
-          <div style={{ flex: 1, fontSize: 15, fontWeight: 800, color: C.ink }}>{card.title}</div>
-        </div>
-        <div style={{ maxWidth: 560, margin: '0 auto', padding: '16px 20px 60px' }}>
-          <DataDrivenPractice card={card} onComplete={onComplete} />
-        </div>
-      </div>
-    );
-  }
+  // 数据源：优先用 card.practiceGroups，兜底用 P1 硬编码
+  const groups = card.practiceGroups;
+  const sortData = groups?.sort ?? SORT_Q;
+  const fill3Data = groups?.fill1 ?? FILL3_DATA;
+  const fill4Data = groups?.fill2 ?? FILL4_DATA;
+  const morphData = groups?.morph ?? MORPH_DATA;
+  const judgeData = groups?.judge ?? JUDGE_DATA;
+  const errData = groups?.err ?? ERR_DATA;
+  const [scores, setScores] = React.useState({ fill3: 0, fill3max: fill3Data.length, fill4: 0, fill4max: fill4Data.length, morph: 0, morphmax: morphData.length, judge: 0, judgemax: judgeData.length });
 
   React.useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -1859,7 +1711,7 @@ function ComprehensivePractice({ card, onBack, onComplete }: { card: GrammarCard
             <>
               <div style={{ fontSize: 21, fontWeight: 900, color: C.ink }}>{t('grammar.practice_sort_title', lang)}</div>
               <div style={{ fontSize: 16, color: C.muted, lineHeight: 1.65 }}>{t('grammar.practice_sort_desc', lang)}</div>
-              <SortStep onDone={() => {}} />
+              <SortStep data={sortData} onDone={() => {}} />
             </>
           )}
 
@@ -1868,7 +1720,7 @@ function ComprehensivePractice({ card, onBack, onComplete }: { card: GrammarCard
             <>
               <div style={{ fontSize: 21, fontWeight: 900, color: C.ink }}>{t('grammar.practice_fill1_title', lang)}</div>
               <div style={{ fontSize: 16, color: C.muted, lineHeight: 1.7 }}>{t('grammar.practice_fill1_desc', lang)}</div>
-              <FillStep data={FILL3_DATA} onScore={s => setScores(prev => ({ ...prev, fill3: s.correct }))} />
+              <FillStep data={fill3Data} onScore={s => setScores(prev => ({ ...prev, fill3: s.correct }))} />
             </>
           )}
 
@@ -1877,7 +1729,7 @@ function ComprehensivePractice({ card, onBack, onComplete }: { card: GrammarCard
             <>
               <div style={{ fontSize: 21, fontWeight: 900, color: C.ink }}>{t('grammar.practice_fill2_title', lang)}</div>
               <div style={{ fontSize: 16, color: C.muted, lineHeight: 1.7 }}>{t('grammar.practice_fill2_desc', lang)}</div>
-              <FillStep data={FILL4_DATA} onScore={s => setScores(prev => ({ ...prev, fill4: s.correct }))} />
+              <FillStep data={fill4Data} onScore={s => setScores(prev => ({ ...prev, fill4: s.correct }))} />
             </>
           )}
 
@@ -1886,7 +1738,7 @@ function ComprehensivePractice({ card, onBack, onComplete }: { card: GrammarCard
             <>
               <div style={{ fontSize: 21, fontWeight: 900, color: C.ink }}>{t('grammar.practice_morph_title', lang)}</div>
               <div style={{ fontSize: 16, color: C.muted, lineHeight: 1.7 }}>{t('grammar.practice_morph_desc', lang)}</div>
-              <MorphStep onScore={s => setScores(prev => ({ ...prev, morph: s.correct }))} />
+              <MorphStep data={morphData} onScore={s => setScores(prev => ({ ...prev, morph: s.correct }))} />
             </>
           )}
 
@@ -1895,7 +1747,7 @@ function ComprehensivePractice({ card, onBack, onComplete }: { card: GrammarCard
             <>
               <div style={{ fontSize: 21, fontWeight: 900, color: C.ink }}>{t('grammar.practice_judge_title', lang)}</div>
               <div style={{ fontSize: 16, color: C.muted, lineHeight: 1.7 }}>{t('grammar.practice_judge_desc', lang)}</div>
-              <JudgeStep onScore={s => setScores(prev => ({ ...prev, judge: s.correct }))} />
+              <JudgeStep data={judgeData} onScore={s => setScores(prev => ({ ...prev, judge: s.correct }))} />
             </>
           )}
 
@@ -1904,7 +1756,7 @@ function ComprehensivePractice({ card, onBack, onComplete }: { card: GrammarCard
             <>
               <div style={{ fontSize: 21, fontWeight: 900, color: C.ink }}>{t('grammar.practice_error_title', lang)}</div>
               <div style={{ fontSize: 16, color: C.muted, lineHeight: 1.7 }}>{t('grammar.practice_error_desc', lang)}</div>
-              <ErrStep />
+              <ErrStep data={errData} />
             </>
           )}
 

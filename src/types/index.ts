@@ -18,6 +18,7 @@ export interface UserProfile {
   ambassadorSince?: number | null;
   ambassadorReason?: string | null;
   shareEnabled?: boolean;
+  spellingStrictness?: 'loose' | 'standard' | 'strict';
   shareToken?: string | null;
   ttsSpeed?: number;
   reviewBatchSize?: number;
@@ -84,7 +85,8 @@ export interface Word {
   id: string;
   word: string;
   pronunciation: string;
-  meaning: string;
+  meaning: string;               // 兜底单行（多义时为 meanings.map(m=>m.chinese).join('；')）
+  meanings?: { chinese: string; partOfSpeech?: string; examples?: Example[] }[];  // 多义列表（含按义项的懒加载例句）
   partOfSpeech: string;
   examples: Example[];
   sourceEntryId?: string;        // Link to WordEntry for rich data
@@ -97,6 +99,7 @@ export interface Word {
   nextReview: number;
   easeFactor: number;
   interval: number;
+  consecutiveCorrect?: number;
   correctCount?: number;
   wrongCount?: number;
   createdAt: number;
@@ -194,19 +197,12 @@ export interface ReviewSession {
 // ===== Dictation =====
 export interface DictationRecord {
   id: string;
+  userId?: string;
   wordId: string;
   meaning?: string;
   date: number;
   correct: boolean;
   userInput: string;
-}
-
-// ===== Shadowing =====
-export interface ShadowingRecord {
-  id: string;
-  subtitleId: string;
-  date: number;
-  score?: number;
 }
 
 // ===== App Settings =====
@@ -254,40 +250,7 @@ export interface StudyLog {
   action?: string;
 }
 
-// ===== KPOP Song Learning =====
-export interface KpopLyricLine {
-  section?: string;
-  start: number;
-  end: number;
-  korean: string;
-  pronunciation: string;
-  chinese: string;
-}
-
-export interface KpopSong {
-  id: string;
-  title: string;
-  artist: string;
-  artistEmoji: string;
-  album: string;
-  year: number;
-  videoId: string;
-  thumbnail: string;
-  level: 'beginner' | 'intermediate';
-  color: string;
-  tags: string[];
-  lyrics: KpopLyricLine[];
-  lyricsKind: 'full' | 'highlight';
-  learning?: KpopLearning;
-}
-
-export interface KpopLearning {
-  highFreqWords: { korean: string; pronunciation: string; chinese: string; source: string }[];
-  emotionExpressions: { korean: string; pronunciation: string; chinese: string; context: string }[];
-  grammarPoint: { name: string; pattern: string; explanation: string; example: string; exampleZh: string };
-  dailyExpression: { korean: string; pronunciation: string; chinese: string; usage: string };
-}
-export type AnnouncementType = 'announcement' | 'update_log' | 'private_message';
+export type AnnouncementType = 'announcement' | 'update_log' | 'private_message' | 'popup';
 
 export interface Announcement {
   id: string;
@@ -296,6 +259,8 @@ export interface Announcement {
   type: AnnouncementType;
   targetUserId: string | null;
   createdAt: number;
+  read?: boolean;
+  isActive?: boolean;
 }
 
 // ===== Achievement Card & Milestones =====
@@ -494,6 +459,22 @@ export interface SpecialQuizQuestion {
   explanation: string;
 }
 
+// 综合练习卡（isPractice）的分组数据：五种题型
+export interface PracticeGroups {
+  /** 排序题：把打乱的词块按正确顺序拼回原句 */
+  sort?: { words: string[]; answer: string[]; hint: string }[];
+  /** 填空题①（一般是 이에요/예요 / 은는 类）*/
+  fill1?: { pre: string; post: string; opts: string[]; ans: string; why: string }[];
+  /** 填空题②（一般是 을를 / 에에서 类）*/
+  fill2?: { pre: string; post: string; opts: string[]; ans: string; why: string }[];
+  /** 变形题：动词变形（합니다体、疑问句等）*/
+  morph?: { label: string; opts: string[]; ans: string; why: string }[];
+  /** 判断题：A/B 二选一 */
+  judge?: { A: string; B: string; ans: 'A' | 'B'; why: string }[];
+  /** 改错题：先看错句，点击揭晓正确写法 */
+  err?: { wrong: string; right: string; why: string }[];
+}
+
 export interface GrammarCard {
   id: string;
   partNumber: number;
@@ -544,6 +525,8 @@ export interface GrammarCard {
   compareHtml?: string;
   compareLabel?: string;
   overviewHtml?: string;
+  /** 综合练习专属：5 种题型分组数据（isPractice=true 时使用） */
+  practiceGroups?: PracticeGroups;
 }
 
 export interface UserGrammarState {
@@ -625,6 +608,7 @@ export interface Article {
 export interface UserArticleProgress {
   id: string;
   articleId: string;
+  userId?: string;
   status: 'not_started' | 'reading' | 'completed';
   readSentenceIds: string[];
   savedSentenceIds: string[];
@@ -652,7 +636,7 @@ export interface ArticleLearningEvent {
 export interface TopikSession {
   id: string;
   userId: string;
-  mode: 'exam' | 'practice' | 'mistakes';
+  mode: 'exam' | 'practice' | 'mistakes' | 'simulate';
   examSetId?: string;
   section: string;
   score: number;
@@ -758,7 +742,7 @@ export interface SpellingMistake {
   meaning: string;
   userInput: string;
   correctAnswer: string;
-  mistakeType: 'spelling' | 'sentence';
+  mistakeType: 'spelling' | 'sentence' | 'spelling-ai-unavailable';
   createdAt: number;
 }
 
@@ -854,15 +838,6 @@ export interface UserRecording {
   updatedAt?: number;
 }
 
-export interface KpopSongProgress {
-  id: string;
-  userId?: string;
-  songId: string;
-  practicedLines?: number[];
-  completedLines?: number[];
-  updatedAt?: number;
-}
-
 export interface DiaryEntry {
   id: string;
   userId?: string;
@@ -879,4 +854,31 @@ export interface NewsReadingProgress {
   postId: string;
   readAt: number;
   completedAt?: number;
+}
+
+export interface PhoneticMistake {
+  id: string;
+  userId?: string;
+  targetJamo: string;
+  wrongJamo: string;
+  stage: number;
+  wrongCount: number;
+  lastWrongAt: number;
+  resolved: number;       // 0 / 1
+  createdAt: number;
+}
+
+export interface PhoneticSrsItem {
+  id: string;
+  userId?: string;
+  jamo: string;
+  stage: number;
+  srsLevel: number;
+  easeFactor: number;
+  interval: number;       // days, can be fractional for sub-day intervals
+  nextReviewAt: number;
+  seenCount: number;
+  correctCount: number;
+  wrongCount: number;
+  createdAt: number;
 }
