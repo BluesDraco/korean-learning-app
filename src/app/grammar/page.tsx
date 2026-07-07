@@ -1912,12 +1912,13 @@ function ChaptersTab({ onOpenCard, isAdmin }: { onOpenCard: (card: GrammarCard) 
         if (activeLevel === 'beginner') return part.partNumber <= 6;
         if (activeLevel === 'intermediate') return part.partNumber >= 7 && part.partNumber <= 16;
         return part.partNumber >= 17;
-      }).map(part => {
+      }).map((part, idx) => {
         const isPartLocked = !isAdmin && part.partNumber >= 7;
         const isOpen = !isPartLocked && expanded.has(part.partNumber);
         const doneInPart = part.lessons.filter(l => lessonStates[l.cardId] === 'done').length;
         const isActive = doneInPart > 0 && doneInPart < part.lessons.length;
         const isDone = doneInPart === part.lessons.length;
+        const displayIdx = idx + 1; // tab 内相对编号（1 起）
 
         return (
           <div key={part.partNumber} style={{ background: C.card, border: `1px solid ${isActive ? 'rgba(255,127,168,.35)' : C.line}`, borderRadius: 24, marginBottom: 10, overflow: 'hidden', boxShadow: isActive ? '0 4px 16px rgba(255,127,168,.08)' : '0 4px 16px rgba(78,52,46,.06)', opacity: isPartLocked ? 0.6 : 1 }}>
@@ -1926,13 +1927,11 @@ function ChaptersTab({ onOpenCard, isAdmin }: { onOpenCard: (card: GrammarCard) 
               style={{ width: '100%', padding: '16px 18px', display: 'flex', alignItems: 'center', gap: 14, cursor: isPartLocked ? 'default' : 'pointer', background: 'transparent', border: 'none', textAlign: 'left' }}
             >
               <div style={{ width: 44, height: 44, borderRadius: 15, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: isDone ? 20 : 16, fontWeight: 900, flexShrink: 0, background: isPartLocked ? 'var(--color-surface-4)' : isDone ? C.mintBg : isActive ? C.pinkSoft : 'var(--color-surface-4)', color: isPartLocked ? C.muted : isDone ? 'var(--color-mint-strong)' : isActive ? C.pink : C.muted }}>
-                {isPartLocked ? <Lock size={16} /> : isDone ? '✓' : partNums[part.partNumber - 1]}
+                {isPartLocked ? <Lock size={16} /> : isDone ? '✓' : partNums[displayIdx - 1]}
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-                  <p style={{ fontSize: 16, fontWeight: 800, color: isDone || isActive ? C.ink : C.muted, margin: 0 }}>{lang === 'en' ? `Part ${part.partNumber} · ${part.title}` : `第${partNums[part.partNumber - 1]}部分 · ${part.title}`}</p>
-                  {part.partNumber >= 7 && part.partNumber <= 16 && <span style={{ fontSize: 11, fontWeight: 800, background: 'linear-gradient(135deg,#6b7ff0,#a78bfa)', color: 'white', borderRadius: 999, padding: '2px 8px', flexShrink: 0 }}>{lang === 'en' ? 'Intermediate' : '中级'}</span>}
-                  {part.partNumber >= 17 && <span style={{ fontSize: 11, fontWeight: 800, background: 'linear-gradient(135deg,#ff7fa8,#ff5c8a)', color: 'white', borderRadius: 999, padding: '2px 8px', flexShrink: 0 }}>{lang === 'en' ? 'Advanced' : '高级'}</span>}
+                  <p style={{ fontSize: 16, fontWeight: 800, color: isDone || isActive ? C.ink : C.muted, margin: 0 }}>{lang === 'en' ? `Part ${displayIdx} · ${part.title}` : `第${partNums[displayIdx - 1]}部分 · ${part.title}`}</p>
                 </div>
                 <p style={{ fontSize: 13, color: C.muted, marginTop: 3 }}>{isPartLocked ? t('grammar.chapters_status_coming', lang) : lang === 'en' ? `${part.lessons.length} lessons${doneInPart > 0 ? ` · ${doneInPart}/${part.lessons.length} done` : ''}` : `${part.lessons.length} 课${doneInPart > 0 ? ` · ${doneInPart}/${part.lessons.length} 已完成` : ''}`}</p>
               </div>
