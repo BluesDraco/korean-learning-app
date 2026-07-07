@@ -9,7 +9,7 @@ export const grammarCardsP4: GrammarCard[] = [
     whatItDoes: '连接两个动作，说原因和顺序',
     whatItDoesBody: '-고 把两个动作并列或按顺序连起来；\n-아/어/여서 表示原因、理由，或前后动作自然衔接。\n这节课是"复句"的起点学会这两个连接形式，就能把单句扩展成连贯的表达。\n中文"吃饭和喝水"直接用"和"连接，韩语用 -고 嵌入动词词干；\n中文"因为……所以"是独立词，韩语的 -아/어서 直接附在动词后，没有独立的"因为"词。',
     structureNote: '两个连接形式功能不同：\n-고 是中性连接（做A然后做B），-아/어/여서 是因果连接（因为A所以B）。\n结构上都是接在前一个动词词干后，后句正常说。',
-    rulesNote: '-고 接续最简单直接去掉 다 加 고，大多数不规则在 -고 前不触发。\n-아/어/여서 变形和 -아요/어요 一样：\n词干末元音 ㅏ/ㅗ→아서，其他→어서，하다→해서。\n注意：\n-아/어/여서 原因句后面不适合接命令句。',
+    rulesNote: '-고 接续最简单直接去掉 다 加 고，-고 以辅音开头，不触发任何不规则变化（ㄷ、ㅂ、ㅅ、르、ㅡ、ㄹ 均不受影响）。已触发的过去式接 -고 时保留变化结果（들었고）。。\n-아/어/여서 变形和 -아요/어요 一样：\n词干末元音 ㅏ/ㅗ→아서，其他→어서，하다→해서。\n注意：\n-아/어/여서 原因句后面不适合接命令句。',
     scenarioNote: '这两个连接形式是韩语表达的骨架"喝完咖啡再学""因为发音快所以难""因为头疼所以休息"，几乎每句复句都用得到。\n掌握这节课，你的韩语表达会从"断句"变成"连贯句"。',
     step0Html: `<h1 style="font-size:25px;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">-고 · -아/어/여서</h1>
 <p style="font-size:16px;color:#89756e;margin-bottom:16px;line-height:1.6">把两个动作连起来——顺序连接或原因连接。</p>
@@ -86,10 +86,10 @@ export const grammarCardsP4: GrammarCard[] = [
     compareLabel: '-고 vs -아/어/여서',
     structures: [
       {
-        ko: '동사/형용사 어간 + -고',
+        ko: '동사/형용사어간 + -고',
         zh: '动词/形容词词干 + -고',
         tokens: [
-          { text: '동사/형용사 어간', role: 'verb' },
+          { text: '동사/형용사어간', role: 'verb' },
           { text: '+', role: 'plain' },
           { text: '-고', role: 'plain' },
         ],
@@ -290,7 +290,7 @@ export const grammarCardsP4: GrammarCard[] = [
         ],
       },
       {
-        ko: '동사 어간 + -지 마세요',
+        ko: '동사어간 + -지 마세요',
         zh: '动词词干 + -지 마세요 = 请不要……',
         tokens: [
           { text: '동사 어간', role: 'verb' },
@@ -429,7 +429,7 @@ export const grammarCardsP4: GrammarCard[] = [
 <div class="card-body">两个词都表示"花费"，但主语不同：걸려요 的主语是时间量，들어요 的主语通常是 돈（钱）。混用会造成语义错误。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">걸려요</div><div style="font-size:16px;color:#89756e;margin-top:2px">花时间（时间做主语）</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">한 시간이 걸려요.</span><span style="font-size:16px;color:#5a4640">花一个小时。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">서울까지 두 시간이 걸려요.</span><span style="font-size:16px;color:#5a4640">到首尔要花两个小时。</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">돈이 들어요</div><div style="font-size:16px;color:#89756e;margin-top:2px">花钱（돈 做主语）</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">돈이 많이 들어요.</span><span style="font-size:16px;color:#5a4640">很花钱。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">콘서트 티켓에 돈이 많이 들어요.</span><span style="font-size:16px;color:#5a4640">演唱会票很花钱。</span></div></div>
 </div>
-<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">구조 비교</div><div style="font-size:16px;color:#5a4640">걸려요：시간 표현 + 이/가 걸려요（时间表达做主语）</div><div style="margin-top:4px;font-size:16px;color:#5a4640">들어요：돈이 들어요 / 비용이 들어요（돈/비용 做主语）</div><div style="margin-top:4px;font-size:16px;color:#5a4640">-는 데（에）걸려요/들어요：이 노래를 외우는 데 시간이 걸려요。</div></div>
+<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">结构对比</div><div style="font-size:16px;color:#5a4640">걸려요：时间表达 + 이/가 걸려요（时间表达做主语）</div><div style="margin-top:4px;font-size:16px;color:#5a4640">들어요：돈이 들어요 / 비용이 들어요（돈/비용 做主语）</div><div style="margin-top:4px;font-size:16px;color:#5a4640">-는 데（에）걸려요/들어요：이 노래를 외우는 데 시간이 걸려요。</div></div>
 <div class="reminder-box">콘서트에 가는 데 걸려요 ✗ — 去演唱会是花钱，要用 돈이 들어요，不用 걸려요。时间问句：얼마나 걸려요?（花多长时间？）/ 돈이 얼마나 들어요?（花多少钱？）</div>`,    specialQuiz: {
       type: 'fill',
       title: '选择正确的花费表达',
@@ -440,7 +440,7 @@ export const grammarCardsP4: GrammarCard[] = [
           post: '.',
           options: ["해요", "들어요", "걸려요"],
           answer: 2,
-          explanation: '시간 + 걸리다 表示花费时间："到学校花30分钟。"',
+          explanation: '时间 + 걸리다 表示花费时间："到学校花30分钟。"',
         },
         {
           pre: '이 가방은 5만원',
@@ -580,11 +580,11 @@ export const grammarCardsP4: GrammarCard[] = [
       { wrong: '학교에서 집에 삼십 분 걸려요.', correct: '학교에서 집까지 삼십 분 걸려요.', note: '终点用 까지，不用 에' },
     ],
     quickTable: {
-      title: '시간 표현 속찰표',
+      title: '时间表达速查表',
       headers: ['说法', '例子', '中文'],
       rows: [
         ['N분 걸려요', '十分钟', '花十分钟'],
-        ['N시간 걸려요', '两小时', '花两小时'],
+        ['N时间 걸려요', '两小时', '花两小时'],
         ['A에서 B까지 걸려요', '집에서 학교까지 삼십 분 걸려요', '从家到学校花30分钟'],
         ['-는 데 돈이 들어요', '가는 데 돈이 들어요', '去那里花钱'],
         ['-는 데 돈이 안 들어요', '배우는 데 돈이 안 들어요', '学习不花钱'],
@@ -596,7 +596,7 @@ export const grammarCardsP4: GrammarCard[] = [
   <div class='ov-sec'><span class='badge' style='background:#ff7fa8;color:white'>걸려요</span> 花时间：삼십 분 걸려요</div>
   <div class='ov-sec'><span class='badge' style='background:#6b7ff0;color:white'>-는 데 들어요</span> 花钱：가는 데 돈이 들어요</div>
   <div class='ov-sec'><span class='badge' style='background:#2db89b;color:white'>에서…까지</span> 从…到…：집에서 학교까지</div>
-  <div class='ov-sec'><span class='badge' style='background:#e8a87c;color:white'>数字规则</span> 분=汉字数词 / 시간=固有数词</div>
+  <div class='ov-sec'><span class='badge' style='background:#e8a87c;color:white'>数字规则</span> 분=汉字数词 / 时间=固有数词</div>
 </div>`,
     linkedGrammarIds: [],
   },
@@ -607,8 +607,8 @@ export const grammarCardsP4: GrammarCard[] = [
     title: '-은/ㄴ/는데요',
     whatItDoes: '说话时加自然的铺垫语气',
     whatItDoesBody: '-은/ㄴ/는데요 是口语常用的铺垫表达，带有"是这样，不过……"的语气，用于转折、说明、引出后文。\n中文没有完全对应的表达它更像是一种语气词，让句子听起来更柔和、更自然，不那么直接。',
-    structureNote: '变形规则按词性分三类：\n动词→-는데요，形容词→-은/ㄴ데요（按받침），名词→인데요。\n本阶段的难点不在变形，而在理解这个语气词"在做什么"它是铺垫，不是转折词。',
-    rulesNote: '形容词的变形：\n有받침→은데요（좋은데요），无받침→ㄴ데요（예쁜데요）。\nㅂ 不规则在此触发：\n어렵다→어려운데요。\n있다/없다 用 -는데요（和动词一样）。\n过去时统一用 았/었는데요。',
+    structureNote: '变形规则按词性分三类：\n动词→-는데요，形容词→-은/ㄴ데요（按收音），名词→인데요。\n本阶段的难点不在变形，而在理解这个语气词"在做什么"它是铺垫，不是转折词。',
+    rulesNote: '形容词的变形：\n有收音→은데요（좋은데요），无收音→ㄴ데요（예쁜데요）。\nㅂ 不规则在此触发：\n어렵다→어려운데요。\n있다/없다 用 -는데요（和动词一样）。\n过去时统一用 았/었는데요。',
     scenarioNote: '-는데요 是让韩语听起来"像韩国人说的"的关键语气词"我在学习呢""这首歌挺好，不过……""我是学生……"。\n学会这个，你的表达会更柔和自然，不再只有干巴巴的陈述句。',
     step0Html: `<h1 style="font-size:25px;font-weight:800;margin:0 0 4px 0;color:#241917">-은/ㄴ/는데요</h1>
 <p style="font-size:16px;color:#89756e;margin:0 0 16px 0">说话时加上自然的铺垫语气，让表达更柔和。</p>
@@ -630,8 +630,8 @@ export const grammarCardsP4: GrammarCard[] = [
 <div class="card-body">动词和形容词的变形规则不同：动词统一用 -는데요，形容词按有无收音用 -은데요/-ㄴ데요。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">动词 + -는데요</div><div style="font-size:16px;color:#89756e;margin-top:2px">动词现在时铺垫</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">지금 공부하는데요.</span><span style="font-size:16px;color:#5a4640">我现在正在学习呢……</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">이 노래 아는데요.</span><span style="font-size:16px;color:#5a4640">这首歌我知道呢……</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">形容词 + -은/ㄴ데요</div><div style="font-size:16px;color:#89756e;margin-top:2px">按有无收音区分</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">좋은데요 / 예쁜데요</span><span style="font-size:16px;color:#5a4640">挺好的 / 挺漂亮的</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">어려운데요 / 바쁜데요</span><span style="font-size:16px;color:#5a4640">挺难的 / 挺忙的</span></div></div>
 </div>
-<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">变形规则总结</div><div style="font-size:16px;color:#5a4640">动词（현재）→ -는데요（统一，无需看收音）</div><div style="margin-top:4px;font-size:16px;color:#5a4640">形容词 有收音 → -은데요：좋다→좋은데요 / 많다→많은데요</div><div style="margin-top:4px;font-size:16px;color:#5a4640">形容词 无收音 → -ㄴ데요：예쁘다→예쁜데요 / 크다→큰데요</div><div style="margin-top:4px;font-size:16px;color:#5a4640">名词 → -인데요：학생인데요 / 가수인데요</div></div>
-<div class="reminder-box">좋는데요 ✗ → 좋은데요 ✓（形容词 좋다 有收音，用 -은데요，不是 -는데요）。있다/없다 例外：동사 규칙 따라 -는데요（있는데요 / 없는데요）。</div>`,    specialQuiz: {
+<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">变形规则总结</div><div style="font-size:16px;color:#5a4640">动词（现在）→ -는데요（统一，无需看收音）</div><div style="margin-top:4px;font-size:16px;color:#5a4640">形容词 有收音 → -은데요：좋다→좋은데요 / 많다→많은데요</div><div style="margin-top:4px;font-size:16px;color:#5a4640">形容词 无收音 → -ㄴ데요：예쁘다→예쁜데요 / 크다→큰데요</div><div style="margin-top:4px;font-size:16px;color:#5a4640">名词 → -인데요：학생인데요 / 가수인데요</div></div>
+<div class="reminder-box">좋는데요 ✗ → 좋은데요 ✓（形容词 좋다 有收音，用 -은데요，不是 -는데요）。있다/없다 例外：按动词规则 -는데요（있는데요 / 없는데요）。</div>`,    specialQuiz: {
       type: 'judge',
       title: '判断对错：-은/ㄴ/는데요 的用法',
       body: '选出使用 -은/ㄴ/는데요 正确的句子。',
@@ -689,7 +689,7 @@ export const grammarCardsP4: GrammarCard[] = [
       { type: 'note', text: 'ㅂ 不规则', examples: '어렵다→어려운데요（ㅂ→우+ㄴ데요）' },
       { type: 'note', text: '있다/없다 → -는데요', examples: '있는데요 / 없는데요（与动词相同）' },
       { type: 'rule', text: '名词用 인데요', examples: '학생인데요 / 가수인데요' },
-      { type: 'rule', text: '过去时：동사/형용사 末音节元音是 ㅏ/ㅗ→았는데요；其他→었는데요；하다→했는데요', examples: '갔는데요 / 먹었는데요 / 했는데요' },
+      { type: 'rule', text: '过去时：动词/形容词 末音节元音是 ㅏ/ㅗ→았는데요；其他→었는데요；하다→했는데요', examples: '갔는데요 / 먹었는데요 / 했는데요' },
       { type: 'usage', text: '-는데요 不只是"但是"，更多时候是铺垫语气，常用于对话中做铺垫、引出话题、委婉说明' },
     ],
     cardExamples: [
@@ -801,7 +801,7 @@ export const grammarCardsP4: GrammarCard[] = [
 <div class="card-body">两者都是"变形工具"，但方向不同：-는 것 把动作变成名词（可以做主语/宾语），-게 把形容词变成副词（修饰后面的动作）。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">动词 + -는 것</div><div style="font-size:16px;color:#89756e;margin-top:2px">动作→名词（这件事）</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">듣는 것이 좋아요.</span><span style="font-size:16px;color:#5a4640">听这件事很好。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">한국어를 배우는 것은 재미있어요.</span><span style="font-size:16px;color:#5a4640">学韩语这件事很有意思。</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">形容词 + -게</div><div style="font-size:16px;color:#89756e;margin-top:2px">形容词→副词（方式）</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">쉽게 써요.</span><span style="font-size:16px;color:#5a4640">简单地写。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">천천히 말해 주세요.</span><span style="font-size:16px;color:#5a4640">请慢慢说。（专属副词优先）</span></div></div>
 </div>
-<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">주의 사항</div><div style="font-size:16px;color:#5a4640">빠르다/많다/높다 有专属副词（빨리/많이/높이），优先用专属副词，不用 -게。</div><div style="margin-top:4px;font-size:16px;color:#5a4640">-는 것 只接动作动词（현재형）；形容词名词化用 -ㄴ/은 것（后续课程）。</div><div style="margin-top:4px;font-size:16px;color:#5a4640">-는 것 可充当句子各成分：主语（-는 것이）/ 宾语（-는 것을）/ 主题（-는 것은）。</div></div>
+<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">주의 사항</div><div style="font-size:16px;color:#5a4640">빠르다/많다/높다 有专属副词（빨리/많이/높이），优先用专属副词，不用 -게。</div><div style="margin-top:4px;font-size:16px;color:#5a4640">-는 것 只接动作动词（现在형）；形容词名词化用 -ㄴ/은 것（后续课程）。</div><div style="margin-top:4px;font-size:16px;color:#5a4640">-는 것 可充当句子各成分：主语（-는 것이）/ 宾语（-는 것을）/ 主题（-는 것은）。</div></div>
 <div class="reminder-box">쉽고 써요 ✗ → 쉽게 써요 ✓ — -게 表示方式，-고 表示并列顺序，两者不能混用。빠르게 가요 可以说，但 빨리 가요 更自然——遇到有专属副词的词，优先用专属副词。</div>`,    specialQuiz: {
       type: 'fill',
       title: '选择正确的名词化表达',
@@ -850,7 +850,7 @@ export const grammarCardsP4: GrammarCard[] = [
         ],
       },
       {
-        ko: '동사 어간 + -는 것',
+        ko: '동사어간 + -는 것',
         zh: '动词词干 + -는 것 = 做某事这件事',
         tokens: [
           { text: '동사 어간', role: 'verb' },
@@ -859,7 +859,7 @@ export const grammarCardsP4: GrammarCard[] = [
         ],
       },
       {
-        ko: '형용사 어간 + -게',
+        ko: '형용사어간 + -게',
         zh: '形容词词干 + -게 = ……地',
         tokens: [
           { text: '형용사 어간', role: 'verb' },
@@ -971,7 +971,7 @@ export const grammarCardsP4: GrammarCard[] = [
     whatItDoes: '说"比……更……"和"和……相比"',
     whatItDoesBody: 'N보다 表示"比……"；\n에 비해서 表示"和……相比"（更书面）。\n和中文一样，韩语比较句也是"A比B更……"的结构，보다 相当于中文的"比"，直接贴在比较基准后面。',
     structureNote: '这节课两个比较结构：①보다（口语比较）直接接在名词后，配合 더 加强；\n②에 비해서（书面比较）更适合分析说明。\n两者都能说"比……"，区别是语体风格。',
-    rulesNote: '보다 直接贴名词后，无需考虑받침。\n더 可加可不加，加了更强调"更"。\n注意 보다 的双重身份：\n보다 动词是"看"，비교조사 보다 是"比"，看句子位置区分。\n에 비해서/비하면/비하여 是同一词的三种形式。',
+    rulesNote: '보다 直接贴名词后，无需考虑收音。\n더 可加可不加，加了更强调"更"。\n注意 보다 的双重身份：\n보다 动词是"看"，比较助词 보다 是"比"，根据在句中的位置区分。\n에 비해서/비하면/비하여 是同一表达的三种形式。',
     scenarioNote: '比较两首歌、两个语言的难度、两个地方的特点보다 是日常表达里用频率最高的比较词。\n学会这节课，你能准确说出"比……更好听""比昨天更难"。',
     step0Html: `<h1 style="font-size:25px;font-weight:800;margin:0 0 4px 0;color:#241917">보다 · 에 비해서</h1>
 <p style="font-size:16px;color:#89756e;margin:0 0 16px 0">说"比……更……"，或"和……相比"。</p>
@@ -979,14 +979,14 @@ export const grammarCardsP4: GrammarCard[] = [
   <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:8px">学完这节课，你能说：</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">한국어는 영어보다 어려워요.</span> — 韩语比英语难。</div>
   <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:6px"><span style="font-weight:700">어제보다 오늘 더 잘해요.</span> — 今天比昨天做得更好。</div>
-  <div style="background:#fff8fb;border-radius:10px;padding:10px 12px"><span style="font-weight:700">초급에 비해서 중급 문법은 어려워요.</span> — 和初级相比，中级语法更难。</div>
+  <div style="background:#fff8fb;border-radius:10px;padding:10px 12px"><span style="font-weight:700">초급에 비해서 중급 语法은 어려워요.</span> — 和初级相比，中级语法更难。</div>
 </div>
 <div class="block">
   <div style="font-weight:700;margin-bottom:8px">两个比较结构</div>
   <div style="margin-bottom:6px">① <b>A는 B보다 (더) + 형용사</b> — A比B更……（口语，直接）</div>
   <div>② <b>B에 비해서 A는 + 형용사</b> — 和B相比，A……（书面，分析用）</div>
 </div>
-<div class="reminder-box">보다 直接贴在被比较对象后，더 可加可不加；에 비해서/비하면/비하여 是同一词的三种形式。注意：보다 还是动词"看"，靠位置区分。</div>`,
+<div class="reminder-box">보다 直接贴在被比较对象后，더 可加可不加；에 비해서/비하면/비하여 是同一表达的三种形式。注意：보다 还是动词"看"，靠位置区分。</div>`,
     compareHtml: `<div class="card-title">보다（口语）vs 에 비해서（书面）</div>
 <div class="card-body">两者都能表达"比较"，但语体不同：보다 简洁直接，日常对话首选；에 비해서 偏书面，适合分析说明或写作场合。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">N보다</div><div style="font-size:16px;color:#89756e;margin-top:2px">口语比较，简洁直接</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">이 노래는 저 노래보다 빨라요.</span><span style="font-size:16px;color:#5a4640">这首歌比那首歌快。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">한국어가 영어보다 어려워요.</span><span style="font-size:16px;color:#5a4640">韩语比英语难。</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">에 비해서</div><div style="font-size:16px;color:#89756e;margin-top:2px">书面比较，适合分析说明</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">초급에 비해서 중급이 어려워요.</span><span style="font-size:16px;color:#5a4640">和初级相比，中级更难。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">작년에 비해서 실력이 늘었어요.</span><span style="font-size:16px;color:#5a4640">和去年相比，实力提升了。</span></div></div>
@@ -1075,7 +1075,7 @@ export const grammarCardsP4: GrammarCard[] = [
       { type: 'usage', text: '语序：A는 B보다 더 형용사（A比B更）；或 B보다 A가 더 형용사（比B，A更）' },
       { type: 'vocab', text: '에 비하다 三种形式', examples: '에 비해서（和……相比）/ 에 비하면（如果和……相比）/ 에 비하여（书面，和……相比）' },
       { type: 'example', text: '교재 예문：중국이 한국보다 커요 / 남자가 여자보다 힘이 세요 / 저는 바다보다 산을 더 좋아해요' },
-      { type: 'compare', text: '보다 双重身份：동사 보다（看）vs 비교조사 보다（比）', examples: '영화를 봐요（看电影）vs 영어보다（比英语）' },
+      { type: 'compare', text: '보다 双重身份：作为动词 보다（看）vs 比较助词 보다（比）', examples: '영화를 봐요（看电影）vs 영어보다（比英语）' },
       { type: 'usage', text: '口语优先用 보다；写内容分析时可以用 에 비해서' },
     ],
     cardExamples: [
@@ -1133,10 +1133,10 @@ export const grammarCardsP4: GrammarCard[] = [
       { icon: '🍽️', context: '餐厅比较', ko: '이 식당은 저 식당보다 더 맛있어요.', zh: '这家餐厅比那家餐厅更好吃。' },
     ],
     mistakes: [
-      { wrong: '영어는 한국어보다 어려워요. (想说韩语比英语难)', correct: '한국어는 영어보다 어려워요.', note: '보다 接在比较基准（被比较的那个）后面，不是主语后' },
-      { wrong: '한국어를 영어보다 봐요', correct: '한국어가 영어보다 어려워요', note: '보다 有两个用法：比较助词（接名词后表"比"）和动词"看"。比较时不用接를/을，直接名词+보다。' },
-      { wrong: '일상 대화에서 에 비해서 남발', correct: '일상에서는 보다를, 분석/설명에서는 에 비해서를 써요.', note: '에 비해서 语气偏书面，日常对话直接用 보다 更自然' },
-      { wrong: '어제보다 더 잘했어요. (忘记加时间词)', correct: '어제보다 오늘 더 잘해요.', note: '用 보다 比较时，两个比较对象要都出现在句中' },
+      { wrong: '영어는 한국어보다 어려워요.', correct: '한국어는 영어보다 어려워요.', note: '想说"韩语比英语难"时，보다 要接在比较基准（英语）后面，不是被比较的主语。' },
+      { wrong: '한국어를 영어보다 어려워요', correct: '한국어가 영어보다 어려워요', note: '比较句的主语用 이/가 或 은/는，不用 을/를。' },
+      { wrong: '오늘은 어제에 비해서 추워요', correct: '오늘은 어제보다 추워요', note: '日常对话用 보다 更自然，에 비해서 偏书面/分析语气。' },
+      { wrong: '오늘는 어제보다 추워요', correct: '오늘은 어제보다 추워요', note: '오늘 末字 늘 有收音 → 은。' },
     ],
     quickTable: {
       title: '비교 표현 속찰표',
@@ -1166,7 +1166,7 @@ export const grammarCardsP4: GrammarCard[] = [
     whatItDoes: '说用什么工具、以什么身份',
     whatItDoesBody: '(으)로 是多义助词：\n表示工具/语言、方向、身份结果。\n有收音用 으로，无收音或 ㄹ 收音用 로。\n中文"用韩语说""往右走""用信用卡付"都靠 (으)로 来表达。',
     structureNote: '(으)로 有四种用法：\n方向（往哪走）、工具/语言（用什么说/做）、变化结果（变成什么）、身份（作为什么）。\n结构一样，都贴在名词后，靠语境区分意思。',
-    rulesNote: '받침 规则有个特例：\nㄹ 받침不接 으로，直接接 로（지하철로/서울로）。\n区分 에 和 (으)로：\n에 是"到达目的地"，(으)로 是"朝着方向走"학교에 가요（去学校）vs 오른쪽으로 가요（往右走）。',
+    rulesNote: '收音规则有个例外：\nㄹ 收音不接 으로，直接接 로（지하철로 / 서울로）。\n区分 에 与 (으)로：\n에 是"到达目的地"，(으)로 是"朝着方向移动"학교에 가요（去学校）vs 오른쪽으로 가요（往右走）。',
     scenarioNote: '"用韩语说""往右转""用相机拍""换大号"(으)로 是你在韩国问路、购物、沟通时绕不开的助词。\n掌握这节课，遇到"用/往/作为"这类表达就能自然说出来。',
     step0Html: `<h1 style="font-size:25px;font-weight:800;margin:0 0 4px 0;color:#241917">(으)로</h1>
 <p style="font-size:16px;color:#89756e;margin:0 0 16px 0">说用什么工具、往哪个方向、以什么身份。</p>
@@ -1182,7 +1182,7 @@ export const grammarCardsP4: GrammarCard[] = [
   <div style="margin-bottom:6px">无收音 → <b>로</b>：한국어→한국어로 / 버스→버스로</div>
   <div>ㄹ 收音（特例）→ <b>로</b>：지하철→지하철로 / 서울→서울로</div>
 </div>
-<div class="reminder-box">四种用法：方向（오른쪽으로）、工具/语言（한국어로）、变化结果（큰 사이즈로 바꿔요）、身份（선생님으로 일해요）。靠语境区分。</div>`,
+<div class="reminder-box">四种用法：方向（오른쪽으로）、工具/语言（한국어로）、变化结果（큰 사이즈로 바꿔요）、身份（선생님으로서 일해요，正式场合用 -서 更地道）。靠语境区分。</div>`,
     compareHtml: `<div class="card-title">에（到达）vs (으)로（方向/工具）</div>
 <div class="card-body">两者都能和移动动词搭配，但含义不同：에 表示"到达的目的地"，(으)로 表示"朝着某个方向走"或"使用某种工具/方式"。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">에</div><div style="font-size:16px;color:#89756e;margin-top:2px">到达地点（目的地）</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">학교에 가요.</span><span style="font-size:16px;color:#5a4640">去学校。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">도서관에 있어요.</span><span style="font-size:16px;color:#5a4640">在图书馆。</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">(으)로</div><div style="font-size:16px;color:#89756e;margin-top:2px">方向 / 工具 / 身份</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">오른쪽으로 가요.</span><span style="font-size:16px;color:#5a4640">往右走。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">한국어로 말해요.</span><span style="font-size:16px;color:#5a4640">用韩语说。</span></div></div>
@@ -1315,7 +1315,7 @@ export const grammarCardsP4: GrammarCard[] = [
       { icon: '🚇', context: '交通方式', ko: '지하철로 학교에 가요.', zh: '坐地铁去学校。' },
       { icon: '↩️', context: '路线方向', ko: '오른쪽으로 가세요.', zh: '请往右走。' },
       { icon: '📝', context: 'KPOP 练习', ko: '이 문장을 한국어로 써요.', zh: '把这个句子用韩语写出来。' },
-      { icon: '👩‍🏫', context: '身份说明', ko: '선생님으로 일해요.', zh: '作为老师工作。' },
+      { icon: '👩‍🏫', context: '身份说明', ko: '선생님으로서 일해요.', zh: '作为老师工作。' },
     ],
     mistakes: [
       { wrong: '지하철으로 가요.', correct: '지하철로 가요.', note: 'ㄹ 收音后用 로，不是 으로' },
@@ -1338,7 +1338,7 @@ export const grammarCardsP4: GrammarCard[] = [
   <div class='ov-sec'><span class='badge' style='background:#ff7fa8;color:white'>도구/언어</span> 한국어로 / 펜으로</div>
   <div class='ov-sec'><span class='badge' style='background:#6b7ff0;color:white'>방향</span> 오른쪽으로 / 서울로</div>
   <div class='ov-sec'><span class='badge' style='background:#2db89b;color:white'>신분</span> 선생님으로 일해요</div>
-  <div class='ov-sec'><span class='badge' style='background:#e05555;color:white'>ㄹ주의</span> 지하철로（ㄹ 받침 뒤에 로）</div>
+  <div class='ov-sec'><span class='badge' style='background:#e05555;color:white'>ㄹ주의</span> 지하철로（ㄹ 收音后接 로）</div>
 </div>`,
     linkedGrammarIds: ['g9'],
   },
@@ -1349,7 +1349,7 @@ export const grammarCardsP4: GrammarCard[] = [
     title: '(이)나, -거나',
     whatItDoes: '说"或者""随便哪个""至少"',
     whatItDoesBody: '(이)나 连接名词表示"或者"；\n-거나 连接动作表示"或者做……"。\n中文"咖啡或者茶""听歌或者看剧"前者用 (이)나，后者用 -거나，按名词/动词分类就记住了。',
-    structureNote: '两块内容：①(이)나（名词之间的或者）按받침选 이나/나；\n②-거나（动作之间的或者）直接接动词词干，不考虑받침。\n选择表达是日常沟通中最基础的需求之一。',
+    structureNote: '两块内容：①(이)나（名词之间的或者）按收音选 이나/나；\n②-거나（动作之间的或者）直接接动词词干，不考虑收音。\n选择表达是日常沟通中最基础的需求之一。',
     rulesNote: '(이)나 的收音规则和 이/가 完全一样：\n有收音→이나（책이나），无收音→나（커피나）。\n-거나 直接加词干，规律统一。\n注意 (이)나 还有另一个用法：\n表示"至少/就算"（밥이나 먹어요=就吃点饭吧），语气柔和。',
     scenarioNote: '"休息日听歌或者看剧""喝咖啡还是茶""无聊就刷刷手机"(이)나/-거나 在描述日常选择和习惯时极为常用。\n掌握这节课，你能更自然地描述自己的日常。',
     step0Html: `<h1 style="font-size:25px;font-weight:800;margin:0 0 4px 0;color:#241917">(이)나 · -거나</h1>
@@ -1431,7 +1431,7 @@ export const grammarCardsP4: GrammarCard[] = [
         ],
       },
       {
-        ko: '동사 어간 + -거나',
+        ko: '동사어간 + -거나',
         zh: '动词词干 + -거나',
         tokens: [
           { text: '동사 어간', role: 'verb' },
@@ -1700,10 +1700,10 @@ export const grammarCardsP4: GrammarCard[] = [
       { icon: '⏱️', context: '时长说明', ko: '두 시간짜리 영상이에요.', zh: '这是两个小时的视频。' },
     ],
     mistakes: [
-      { wrong: '친구에게서 선물을 줘요. (想说给朋友)', correct: '친구한테 선물을 줘요.', note: '给出用 에게/한테；从那里收到用 에게서/한테서，方向相反' },
-      { wrong: '선생님 씨, 안녕하세요?', correct: '선생님, 안녕하세요?', note: '씨 接人名，不接职称。선생님 本身就是称呼' },
-      { wrong: '짜리 티켓을 샀어요. (没有数量)', correct: '만원짜리 티켓을 샀어요.', note: '짜리 前必须有价格/数量/年龄等信息' },
-      { wrong: '친구한테 선물을 받아요', correct: '친구한테서 선물을 받아요', note: '받다（收到）用 한테서/에게서 表示"从...收到"；한테/에게 是"给..."的方向，赠受方向相反。' },
+      { wrong: '친구에게서 선물을 줘요.', correct: '친구한테 선물을 줘요.', note: '给出用 에게/한테；한테서/에게서 表示"从...来"。本句是给出方向用 한테。' },
+      { wrong: '선생님 씨, 안녕하세요?', correct: '선생님, 안녕하세요?', note: '씨 接人名，不接职称。선생님 本身就是称呼。' },
+      { wrong: '짜리 티켓을 샀어요.', correct: '만원짜리 티켓을 샀어요.', note: '짜리 前必须有价格/数量/年龄等信息。' },
+      { wrong: '에게서 선물 보내요', correct: '에게 선물 보내요', note: '送出方向用 에게/한테（不带 서）；에게서/한테서 表示"从…来"，方向相反。' },
     ],
     quickTable: {
       title: '방향 정리표',
@@ -1733,7 +1733,7 @@ export const grammarCardsP4: GrammarCard[] = [
     whatItDoes: '学会基本敬语，说话更有礼貌',
     whatItDoesBody: '-(으)세요 是最基础敬语请求形式；\n部分特殊敬语词（드세요/계세요/말씀하세요/주무세요）需要整词记忆。\n韩语敬语是文化必需见长辈、服务员、陌生人都需要用，不用会显得失礼。\n和中文不同：\n中文靠"请"字表达礼貌，韩语直接改变动词词尾形式，敬语是语法层面的要求，不是可选的礼貌词。',
     structureNote: '两块内容：①-(으)세요（敬语请求）已在P2学过，这节课补充更多用法和场景；\n②特殊敬语词먹다→드세요，있다→계세요，자다→주무세요，这几个需要整词背，不能从普通词变形。',
-    rulesNote: '-(으)세요 变形和P2完全一样（有받침→으세요，无받침→세요）。\n特殊敬语词只有几个，全部记住：\n먹다/마시다→드세요，있다→계세요，자다→주무세요，말하다→말씀하세요。\n这类词无规律可循，只能背。',
+    rulesNote: '-(으)세요 变形和P2完全一样（有받침→으세요，无받침→세요）。\n特殊敬语词只有几个，全部记住：\n먹다/마시다→드세요，자다→주무세요，말하다→말씀하세요。\n있다 区分两类：表"在/存在"（人作主语）→계세요（아버지가 계세요）；表"拥有/有"→ 있으세요（질문이 있으세요?）。\n这类词无规律可循，只能背。',
     scenarioNote: '在韩国咖啡店、地铁、见朋友父母随处都需要用到敬语。\n드세요（请吃/请喝）和 계세요（在）是最高频的特殊敬语词。\n学会这节课，你能在礼貌场合自然说话，不会显得突兀。',
     step0Html: `<h1 style="font-size:25px;font-weight:800;margin:0 0 4px 0;color:#241917">敬语基础</h1>
 <p style="font-size:16px;color:#89756e;margin:0 0 16px 0">学会 -(으)세요 和几个必须整词记忆的特殊敬语词。</p>
@@ -1769,7 +1769,7 @@ export const grammarCardsP4: GrammarCard[] = [
     compareLabel: '普通表达 vs 敬语表达',
     structures: [
       {
-        ko: '동사 어간 (받침 X) + -세요',
+        ko: '동사어간 (받침 X) + -세요',
         zh: '无收音词干 + 세요',
         tokens: [
           { text: '동사 어간', role: 'verb' },
@@ -1778,7 +1778,7 @@ export const grammarCardsP4: GrammarCard[] = [
         ],
       },
       {
-        ko: '동사 어간 (받침 O) + -으세요',
+        ko: '동사어간 (받침 O) + -으세요',
         zh: '有收音词干 + 으세요',
         tokens: [
           { text: '동사 어간(받침O)', role: 'verb' },
@@ -2015,9 +2015,9 @@ export const grammarCardsP4: GrammarCard[] = [
       { wrong: '공부하야 해요.', correct: '공부해야 해요.', note: 'L02：하다→해야' },
       { wrong: '이 책을 읽는다 데 시간이 걸려요.', correct: '이 책을 읽는 데 시간이 걸려요.', note: 'L03：动词+-는 데，不加 다' },
       { wrong: '학생는데요.', correct: '학생인데요.', note: 'L04：名词用 인데요' },
-      { wrong: '빠르게 읽어요. (빠르다 有专属副词)', correct: '빨리 읽어요.', note: 'L05：빠르다 有专属副词 빨리，优先用 빨리' },
+      { wrong: '천천히게 읽어요.', correct: '천천히 읽어요.', note: 'L05：천천히 本身就是副词，不用再加 -게。빠르다 等形容词可用 빨리 或 빠르게。' },
       { wrong: '영어는 한국어보다 어려워요. (想说韩语比英语难)', correct: '한국어는 영어보다 어려워요.', note: 'L06：보다 接在比较基准后' },
-      { wrong: '지하철으로 가요.', correct: '지하철로 가요.', note: 'L07：ㄹ 받침 뒤에 로' },
+      { wrong: '지하철으로 가요.', correct: '지하철로 가요.', note: 'L07：ㄹ 收音后接 로' },
       { wrong: '책거나 노트를 사요. (想说书或笔记本)', correct: '책이나 노트를 사요.', note: 'L08：名词之间用 이나，不用 거나' },
       { wrong: '친구에게서 선물을 줘요. (想说给朋友)', correct: '친구한테 선물을 줘요.', note: 'L09：에게서 是从那里收到，不是给出' },
       { wrong: '많이 먹으세요. (对长辈)', correct: '많이 드세요.', note: 'L10：对长辈用特殊敬语词 드세요' },
@@ -2027,7 +2027,7 @@ export const grammarCardsP4: GrammarCard[] = [
   <div class='ov-sub'>第四章 10 课全部完成</div>
   <div class='ov-sec'><span class='badge' style='background:#ff7fa8;color:white'>연결</span> -고 / -아/어서</div>
   <div class='ov-sec'><span class='badge' style='background:#6b7ff0;color:white'>의무</span> -야 해요 / -지 마세요</div>
-  <div class='ov-sec'><span class='badge' style='background:#2db89b;color:white'>시간/돈</span> 걸려요 / 들어요</div>
+  <div class='ov-sec'><span class='badge' style='background:#2db89b;color:white'>时间/돈</span> 걸려요 / 들어요</div>
   <div class='ov-sec'><span class='badge' style='background:#e8a87c;color:white'>비교</span> 보다 / 에 비해서</div>
   <div class='ov-sec'><span class='badge' style='background:#c89020;color:white'>(으)로</span> 工具/方向/身份</div>
   <div class='ov-sec'><span class='badge' style='background:#e05555;color:white'>경어</span> 드세요 / 계세요 / 말씀하세요</div>

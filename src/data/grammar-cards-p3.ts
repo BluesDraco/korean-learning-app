@@ -96,8 +96,8 @@ export const grammarCardsP3: GrammarCard[] = [
     mistakes: [
       { wrong: '노래를 들고 있어요（想说正在听歌）', correct: '노래를 듣고 있어요', note: '听歌用 듣다，接 -고 时 ㄷ 不规则不发生 → 듣고 있어요。注意：들다（拿/举）接 -고 있어요 是正确的，如 가방을 들고 있어요（拎着包）。' },
       { wrong: '예쁘고 있어요（想说正在漂亮）', correct: '예뻐요', note: '-고 있다 只接动作动词，形容词直接用原形。' },
-      { wrong: '먹고 있었어요 和 먹었어요 混用', correct: '먹고 있었어요（当时正在吃）/ 먹었어요（吃了）', note: '-고 있었어요 强调过去某个时间点正在进行，-었어요 只是过去完成。' },
-      { wrong: '입고 있어요를 "正在穿"로만 이해', correct: '입고 있어요（穿着/正在穿）', note: '穿戴类动词（입다、쓰다、들다、신다）+ -고 있어요 既可表示动作进行，也可表示持续状态（穿着/戴着）。具体看语境。' },
+      { wrong: '어제 책을 읽고 있어요', correct: '어제 책을 읽었어요', note: '过去某时正在进行用 읽고 있었어요，单纯过去用 -었어요。-고 있어요 描述当前进行。' },
+      { wrong: '안경을 쓰어요', correct: '안경을 쓰고 있어요', note: '"戴着眼镜"是持续状态，用 -고 있어요。穿戴类动词（입다/쓰다/들다/신다）+ -고 있어요 既表动作也表状态。' },
     ],
         compareHtml: `<div class="card-title">"正在做"vs"之前一直在做"</div>
 <div class="card-body">-고 있다 把动作拉成正在进行的状态；-고 있었다 表达过去某个时候正在做。和中文"正在……"类似，但韩语还能用于"穿着/戴着/拿着"这类持续状态。</div>
@@ -216,7 +216,7 @@ export const grammarCardsP3: GrammarCard[] = [
       { type: 'rule', text: '名词 + 이었었어요/였었어요', examples: '학생이었었어요（以前是学生）, 친구였었어요（以前是朋友）' },
       { type: 'compare', text: '-았어요 vs -았었어요', examples: '어제 먹었어요（昨天吃了，普通过去）/ 예전에 자주 먹었었어요（以前经常吃，现在未必）' },
       { type: 'note', text: '昨天发生的普通事件用 -았/었어요', examples: '어제 밥을 먹었어요 ✓ / 어제 밥을 먹었었어요 ✗' },
-      { type: 'usage', text: '常与时间表达搭配使用', examples: '예전에 / 어렸을 때 / 몇 년 전에 → 살았었어요, 공부했었어요, 다녔었어요' },
+      { type: 'usage', text: '常与시간表达搭配使用', examples: '예전에 / 어렸을 때 / 몇 년 전에 → 살았었어요, 공부했었어요, 다녔었어요' },
     ],
     cardExamples: [
       {
@@ -276,13 +276,13 @@ export const grammarCardsP3: GrammarCard[] = [
       { wrong: '어제 밥을 먹었었어요（昨天吃饭，普通过去）', correct: '어제 밥을 먹었어요', note: '昨天发生的普通事件用 -었어요，不需要 -었었어요 的回忆感。' },
       { wrong: '좋아했었어요 误解为"现在还喜欢"', correct: '좋아했었어요（以前喜欢过，现在未必）', note: '-았었어요 常暗示现在状态可能不同了，注意语气。' },
       { wrong: '어제 공부했었어요（昨天学习）', correct: '어제 공부했어요', note: '-았었어요 用于有时间距离的回忆，昨天的事直接用 -았어요。' },
-      { wrong: '친구이었었어요', correct: '친구였었어요', note: '친구 以 모음 结尾，用 였었어요，不是 이었었어요。' },
+      { wrong: '친구이었었어요', correct: '친구였었어요', note: '친구 以元音结尾，用 였었어요，不是 이었었어요。' },
     ],
         compareHtml: `<div class="card-title">"曾经……过"vs 普通过去时</div>
 <div class="card-body">-았었/었었/였었어요 表达过去曾经有过的经历或状态，常带有"现在可能已经不同了"的感觉。中文里没有完全对应的形式，可以理解为"曾经……（但现在未必如此）"。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">普通过去时</div><div style="font-size:16px;color:#89756e;margin-top:2px">单纯叙述过去</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">한국어를 배웠어요.</span><span style="font-size:16px;color:#5a4640">学了韩语。（陈述事实）</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">서울에 갔어요.</span><span style="font-size:16px;color:#5a4640">去了首尔。</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">过去回想（-았었/었었）</div><div style="font-size:16px;color:#89756e;margin-top:2px">回忆过去，暗示变化</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">한국어를 배웠었어요.</span><span style="font-size:16px;color:#5a4640">学过韩语（但现在可能忘了）。</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">서울에 갔었어요.</span><span style="font-size:16px;color:#5a4640">去过首尔（但现在不在了）。</span></div></div>
 </div>
-<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">回忆感从何而来</div><div style="font-size:16px;color:#5a4640">中文说"学过韩语"和"学了韩语"差别不大，得靠上下文判断是否现在还在学。韩语直接用词尾 -았었 标明"曾经学过，现在可能不学了"——一个词尾代替了一整句背景说明。</div><div style="margin-top:4px;font-size:16px;color:#5a4640">使用场景：聊过去的学校、前公司、以前住过的地方。</div></div>
+<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">回忆感从何而来</div><div style="font-size:16px;color:#5a4640">中文用'过'也能表达经历（'学过韩语'），但 -았었어요 将'经历+变化'两层含义压缩在一个词尾里，比中文更明确地暗示'现在已不同'。</div><div style="margin-top:4px;font-size:16px;color:#5a4640">使用场景：聊过去的学校、前公司、以前住过的地方。</div></div>
 <div class="reminder-box">回忆过去和普通过去看起来只差一个"었"，但语感完全不同。想问别人"以前是不是学过韩语？"用 배웠어요? 还是 배웠었어요?——后者更自然，因为你暗示了"现在不一定还在学"。</div>`,
     linkedGrammarIds: [],
     step0Html: `<h1 style="font-size:25px;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">-았었/었었/였었어요</h1>
@@ -331,7 +331,7 @@ export const grammarCardsP3: GrammarCard[] = [
         { options: ["예전에 서울에 살았었어요","예전에 서울에 살았어요"], answer: 0, explanation: '-았었어요 强调过去经历、现在已不同。살았어요 是普通过去陈述。题目问"回忆感"表达。' },
         { options: ["어제 밥을 먹었었어요","어제 밥을 먹었어요"], answer: 1, explanation: '昨天普通事件用 -었어요，-었었어요 用于有时间距离的回忆，어제 太近了。' },
         { options: ["예전에 학생이었었어요","예전에 학생이었어요"], answer: 0, explanation: '名词+이었었어요 表示"以前是学生（现在不是了）"，带回忆感。' },
-        { options: ["친구였었어요","친구이었었어요"], answer: 0, explanation: '친구 以 모음 结尾 → 였었어요，不是 이었었어요。' },
+        { options: ["친구였었어요","친구이었었어요"], answer: 0, explanation: '친구 以元音结尾 → 였었어요，不是 이었었어요。' },
       ],
     },
 
@@ -371,7 +371,7 @@ export const grammarCardsP3: GrammarCard[] = [
     lessonNumber: 3,
     title: '-고 싶다, 그러면',
     whatItDoes: '说想做什么，以及"那样的话"',
-    whatItDoesBody: '-고 싶어요 表达说话人自己的愿望；\n그러면 连接条件和结果，表示"那么/那样的话"。\n-고 싶어요 只能用于第一人称，说别人想做要换成 -고 싶어하다。\n和中文不同：\n中文"想做"不区分人称，韩语第一人称用 싶어요，第三人称要换成 싶어하다。',
+    whatItDoesBody: '-고 싶어요 表达说话人自己的愿望；\n그러면 连接条件和结果，表示"那么/那样的话"。\n-고 싶어요 主要用于第一人称的愿望表达；说第三人称"想做"通常换成 -고 싶어하다。\n和中文不同：\n中文"想做"不区分人称，韩语第一人称用 싶어요，第三人称要换成 싶어하다。',
     structureNote: '两块内容：①-고 싶어요（想做）动词词干直接加，非常规律；\n②그러면（那么）放句首连接两句话，口语常缩成 그럼。',
     rulesNote: '-고 싶어요 只接动词词干，不能直接接名词（커피고 싶어요 ✗）。\n说第三人称的愿望要用 -고 싶어하다（친구는 가고 싶어해요）。\n그러면 表示顺接条件，和转折用的 그렇지만 不同。',
     scenarioNote: '-고 싶어요 是表达愿望最自然的方式说学习目标、旅行计划、购物心愿都用它。\n加上 그러면/그럼，就能做出"如果……那就……"的建议句，对话立刻更流畅。',
@@ -386,7 +386,7 @@ export const grammarCardsP3: GrammarCard[] = [
       },
       {
         ko: '시간이 있어요? 그러면 같이 가요',
-        zh: '有时间吗？那一起去吧。',
+        zh: '有시간吗？那一起去吧。',
         tokens: [
           { text: '시간이', role: 'subject' },
           { text: '있어요?', role: 'verb' },
@@ -399,8 +399,8 @@ export const grammarCardsP3: GrammarCard[] = [
       { type: 'rule', text: '动词词干 + -고 싶어요', examples: '가다→가고 싶어요, 먹다→먹고 싶어요, 배우다→배우고 싶어요, 마시다→마시고 싶어요' },
       { type: 'note', text: '-고 싶어요 只接动词词干，不能直接接名词', examples: '커피고 싶어요 ✗ → 커피를 마시고 싶어요 ✓' },
       { type: 'note', text: '-고 싶어요 表达说话人本人的愿望；第三人称用 -고 싶어하다', examples: '저는 가고 싶어요（我想去）/ 친구는 가고 싶어해요（朋友想去）' },
-      { type: 'rule', text: '그러면 — 放句首连接条件与结果', examples: '시간이 있어요? 그러면 같이 가요.' },
-      { type: 'compare', text: '그러면 ≠ 그렇지만', examples: '그러면（那么，条件顺接）/ 그렇지만（但是，明确转折）' },
+      { type: 'rule', text: '그러면 — 放句首连接조건与결과', examples: '시간이 있어요? 그러면 같이 가요.' },
+      { type: 'compare', text: '그러면 ≠ 그렇지만', examples: '그러면（那么，조건顺接）/ 그렇지만（但是，明确转折）' },
       { type: 'usage', text: '口语中 그러면 常缩短为 그럼', examples: '그럼 같이 가요. / 그럼 내일 봐요.' },
       { type: 'example', text: '한국어를 잘하고 싶어요. / 뭐 먹고 싶어요? / 배가 고파요. 그러면 같이 밥을 먹어요.' },
     ],
@@ -431,7 +431,7 @@ export const grammarCardsP3: GrammarCard[] = [
           { text: '그러면', role: 'plain' },
           { text: '같이 공부해요', role: 'verb' },
         ],
-        zh: '有时间。那一起学习吧。',
+        zh: '有시간。那一起学习吧。',
         swapWords: ['같이 가요', '같이 먹어요'],
 
         swapRole: 'verb',
@@ -461,7 +461,7 @@ export const grammarCardsP3: GrammarCard[] = [
       { wrong: '커피고 싶어요', correct: '커피를 마시고 싶어요', note: '-고 싶어요 接动词，不直接接名词，需要补出动词。' },
       { wrong: '그러면을 "但是"용', correct: '그러면 = 那么/那样的话（顺接条件）', note: '转折用 그렇지만，그러면 是条件推进，意思完全不同。' },
       { wrong: '한국어고 싶어요', correct: '한국어를 배우고 싶어요', note: '-고 싶어요 接动词词干，不能直接接名词。' },
-      { wrong: '친구는 가고 싶어요（第三人称）', correct: '친구는 가고 싶어해요', note: '说话人本人用 -고 싶어요，第三人称换成 -고 싶어하다。' },
+      { wrong: '친구는 가고 싶어요（第三人称）', correct: '친구는 가고 싶어해요', note: '说话人本人用 -고 싶어요；第三人称通常换成 -고 싶어하다。疑问句\'뭐 먹고 싶어요?\'不受此限。' },
     ],
         compareHtml: `<div class="card-title">"想做"vs"那样的话"</div>
 <div class="card-body">-고 싶어요 表达说话人自己的愿望；그러면 连接条件和结果，表示"那么/那样的话"。和中文不同：中文"想做"不区分人称，韩语第一人称用 싶어요，第三人称要换成 싶어하다。</div>
@@ -505,7 +505,7 @@ export const grammarCardsP3: GrammarCard[] = [
         specialQuiz: {
       type: 'fill',
       title: '选择正确的表达',
-      body: '根据句意选择正确的词或语法填入。',
+      body: '根据句意选择正确的词或문법填入。',
       questions: [
         {
           pre: '한국어를',
@@ -710,7 +710,7 @@ export const grammarCardsP3: GrammarCard[] = [
         { options: ["어디에 살아요?","어디에 사라요?"], answer: 0, explanation: '살다 → 词干 살，遇 아요 ㄹ 脱落 → 살+아요 = 살아요（✓）。사라요 是错误写法。' },
         { options: ["이 단어를 알아요","이 단어를 알어요"], answer: 0, explanation: '알다 → 词干 알，遇 아요 ㄹ 脱落 → 알+아요 = 알아요。不是 알어요。' },
         { options: ["저 분을 아세요","저 분을 알으세요"], answer: 0, explanation: '알다 → 알+세요 = 아세요（ㄹ脱落），不是 알으세요。' },
-        { options: ["날씨가 추워서 놀았어요","날씨가 추워서 놀었어요"], answer: 0, explanation: '놀다 → 词干 놀，接 았/었어요 时 ㄹ 保留不脱落，且 ㅗ 阳性元音接 았어요 → 놀았어요。놀었어요 错在 ㅗ 不能接 었。' },
+        { options: ["날씨가 추워서 놀았어요","날씨가 추워서 놀었어요"], answer: 0, explanation: '놀다 词干 놀，ㅗ 阳性元音 → 接 았어요 = 놀았어요。놀었어요 错在 ㅗ 不能接 었。（ㄹ 不规则只看后续是不是 ㄴ/ㅂ/ㅅ/오，았/었 不触发脱落）' },
       ],
     },
 
@@ -724,11 +724,11 @@ export const grammarCardsP3: GrammarCard[] = [
         ['만들다 制作', '만들어요', '만드세요', '만듭니다'],
         ['놀다 玩', '놀아요', '노세요', '놉니다'],
         ['팔다 卖', '팔아요', '파세요', '팝니다'],
-        ['길다 长', '길어요', '기세요', '깁니다'],
-        ['달다 甜', '달아요', '다세요', '답니다'],
+        ['길다 长（形）', '길어요', '— (形容词不接命令)', '깁니다'],
+        ['달다 甜（形）', '달아요', '— (形容词不接命令)', '답니다'],
         ['들다 拿/花费', '들어요', '드세요', '듭니다'],
-        ['멀다 远', '멀어요', '머세요', '멉니다'],
-        ['힘들다 辛苦', '힘들어요', '힘드세요', '힘듭니다'],
+        ['멀다 远（形）', '멀어요', '— (形容词不接命令)', '멉니다'],
+        ['힘들다 辛苦（形）', '힘들어요', '— (敬语问候可用 힘드세요)', '힘듭니다'],
       ],
     },
     overviewHtml: `<div class="overview">
@@ -851,7 +851,7 @@ export const grammarCardsP3: GrammarCard[] = [
       { wrong: '먹ㄹ래요', correct: '먹을래요', note: '有收音词干用 을래요，먹다 → 먹을래요。' },
       { wrong: '-겠어요 只理解成将来时', correct: '알겠어요（明白了），하겠어요（我来做）', note: '-겠- 语气多样，初学先记 알겠어요 这个高频固定表达。' },
       { wrong: '가ㄹ래요', correct: '갈래요', note: '无收音词干用 ㄹ래요：가다 → 갈래요，不单独写 ㄹ。' },
-      { wrong: '알겠어요 = 알았어요（以为意思相同）', correct: '알겠어요（现在明白了，礼貌回应）/ 알았어요（知道了，随意口语）', note: '알겠어요 更礼貌，适合对上级或正式场合；알았어요 是朋友间用语。' },
+      { wrong: '사장님, 알았어요.', correct: '사장님, 알겠습니다.', note: '对上级/正式场合用 알겠어요/알겠습니다 更礼貌。알았어요 是朋友间随意用语。' },
     ],
         compareHtml: `<div class="card-title">"我要……"vs"好的我知道了"</div>
 <div class="card-body">-을/ㄹ래요 表达"我要……/要不要……"，比 -고 싶어요 更直接；-겠- 表达意志、推测或礼貌，最常见固定表达是 알겠어요（明白了）。</div>
@@ -901,7 +901,7 @@ export const grammarCardsP3: GrammarCard[] = [
         specialQuiz: {
       type: 'fill',
       title: '选择正确的意志表达',
-      body: '根据句意选择合适的语法填入。',
+      body: '根据句意选择合适的문법填入。',
       questions: [
         {
           pre: '저는 커피',
@@ -942,8 +942,8 @@ export const grammarCardsP3: GrammarCard[] = [
   <div class="ov-sec">
     <h3>-을/ㄹ래요 变化</h3>
     <div style="font-size:16px;color:#241917;line-height:2">
-      받침 없는 → <b style="color:#ff7fa8">ㄹ래요</b>：갈래요 · 볼래요 · 마실래요<br>
-      받침 있는 → <b style="color:#2db89b">을래요</b>：먹을래요 · 읽을래요 · 앉을래요
+      无收音 → <b style="color:#ff7fa8">ㄹ래요</b>：갈래요 · 볼래요 · 마실래요<br>
+      有收音 → <b style="color:#2db89b">을래요</b>：먹을래요 · 읽을래요 · 앉을래요
     </div>
   </div>
   <div class="ov-sec">
@@ -955,7 +955,7 @@ export const grammarCardsP3: GrammarCard[] = [
   <div class="ov-sec">
     <h3>⚠️ 常见错误</h3>
     <div style="font-size:16px;color:#241917;line-height:2">
-      <span style="color:#e05555;text-decoration:line-through">먹ㄹ래요</span> → <span style="color:#ff7fa8">먹을래요</span>（받침 있는 用 을래요）<br>
+      <span style="color:#e05555;text-decoration:line-through">먹ㄹ래요</span> → <span style="color:#ff7fa8">먹을래요</span>（有收音 用 을래요）<br>
       -겠어요 不只是将来 → 先记 <span style="color:#6b7ff0">알겠어요</span>
     </div>
   </div>
@@ -1190,12 +1190,12 @@ export const grammarCardsP3: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'compare', text: '그렇지만 — 明确转折，前后信息形成对比', examples: '한국어는 재미있어요. 그렇지만 어려워요.' },
+      { type: 'compare', text: '그렇지만 — 明确转折，前后정보形成对比', examples: '한국어는 재미있어요. 그렇지만 어려워요.' },
       { type: 'compare', text: '그런데 — 轻转折/话题推进，口语高频', examples: '이 노래는 좋아요. 그런데 발음이 빨라요.' },
       { type: 'note', text: '그런데 有话题转换功能，그렇지만 没有', examples: '그런데 무슨 뜻이에요? — 不能换成 그렇지만' },
       { type: 'rule', text: '两个连词都放在第二句句首', examples: '문장1. 그렇지만/그런데 문장2.' },
       { type: 'compare', text: '그리고 vs 그렇지만', examples: '공부해요. 그리고 드라마도 봐요.（补充）/ 공부해요. 그렇지만 어려워요.（转折）' },
-      { type: 'usage', text: '顺接与逆接区分', examples: '前后有对比 → 그렇지만/그런데；信息补充 → 그리고' },
+      { type: 'usage', text: '顺接与逆接区分', examples: '前后有对比 → 그렇지만/그런데；정보补充 → 그리고' },
       { type: 'example', text: '재미있어요. 그렇지만 어려워요. / 그런데 이 단어는 무슨 뜻이에요?' },
     ],
     cardExamples: [
@@ -1248,18 +1248,18 @@ export const grammarCardsP3: GrammarCard[] = [
       },
     ],
     scenarios: [
-      { icon: '📚', context: '学习反馈', ko: '한국어는 재미있어요. 그렇지만 문법은 어려워요.', zh: '韩语有意思，但是语法难。' },
-      { icon: '🎵', context: 'KPOP 评论', ko: '이 노래는 좋아요. 그런데 발음이 빨라요.', zh: '这首歌很好，不过发音很快。' },
+      { icon: '📚', context: '学习反馈', ko: '한국어는 재미있어요. 그렇지만 문법은 어려워요.', zh: '韩语有意思，但是문법难。' },
+      { icon: '🎵', context: 'KPOP 评论', ko: '이 노래는 좋아요. 그런데 발음이 빨라요.', zh: '这首歌很好，不过발음很快。' },
       { icon: '💬', context: '话题转换', ko: '그런데 이 단어는 무슨 뜻이에요?', zh: '话说，这个单词是什么意思？' },
       { icon: '🏃', context: '两者互换', ko: '선수들이 다 피곤해요. 그렇지만 열심히 훈련해요.', zh: '运动员们都很累，但是努力训练。' },
       { icon: '🍽️', context: '餐厅', ko: '이 식당은 맛있어요. 그런데 좀 비싸요.', zh: '这家餐厅很好吃，不过有点贵。' },
       { icon: '🌧️', context: '天气变化', ko: '오늘은 날씨가 좋아요. 그렇지만 내일은 비가 와요.', zh: '今天天气好，但是明天会下雨。' },
     ],
     mistakes: [
-      { wrong: '顺接用了 그렇지만', correct: '공부해요. 그리고 드라마도 봐요.', note: '补充信息用 그리고，前后有对比才用 그렇지만/그런데。' },
+      { wrong: '공부해요. 그렇지만 드라마도 봐요.', correct: '공부해요. 그리고 드라마도 봐요.', note: '补充정보用 그리고，前后有对比才用 그렇지만/그런데。' },
       { wrong: '把 그런데 只理解成强转折', correct: '그런데 무슨 뜻이에요?（话题推进）', note: '그런데 在口语中很常见，不一定是强转折，也可以只是话题推进。' },
       { wrong: '用 그렇지만 推进话题', correct: '그런데 이거 알아요?（话题推进）', note: '话题推进/引入新信息只能用 그런데，그렇지만 只有转折功能。' },
-      { wrong: '그리고 位置用了 그런데', correct: '공부해요. 그리고 운동도 해요.', note: '补充并列信息用 그리고，不是 그런데。' },
+      { wrong: '그리고 位置用了 그런데', correct: '공부해요. 그리고 운동도 해요.', note: '补充并列정보用 그리고，不是 그런데。' },
     ],
         compareHtml: `<div class="card-title">"但是"vs"不过"</div>
 <div class="card-body">그렇지만 是明确转折"但是"；그런데 语气更口语，可以是轻转折"不过"，也可以用来推进话题或引入新信息。P2已经学过 그렇지만，这课重点是新增 그런데。</div>
@@ -1323,7 +1323,7 @@ export const grammarCardsP3: GrammarCard[] = [
           post: '눈이 왔어요.',
           options: ["그렇지만", "그래서", "그런데"],
           answer: 2,
-          explanation: '补充信息："天气很冷，而且下雪了。"그런데 也可表补充说明。',
+          explanation: '补充정보："天气很冷，而且下雪了。"그런데 也可表补充说明。',
         },
         {
           pre: '이 노래는 좋아요.',
@@ -1381,7 +1381,7 @@ export const grammarCardsP3: GrammarCard[] = [
       },
       {
         ko: '이 문법은 중요해요. 그러니까 복습하세요',
-        zh: '这个语法很重要。所以请复习。',
+        zh: '这个문법很重要。所以请复习。',
         tokens: [
           { text: '이 문법은', role: 'subject' },
           { text: '중요해요.', role: 'verb' },
@@ -1391,12 +1391,12 @@ export const grammarCardsP3: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '그래서 — 原因 + 그래서 + 自然结果', examples: '비가 와요. 그래서 집에 있어요.' },
+      { type: 'rule', text: '그래서 — 原因 + 그래서 + 自然결과', examples: '비가 와요. 그래서 집에 있어요.' },
       { type: 'rule', text: '그러니까 — 原因 + 그러니까 + 结果/建议（带提醒语气）', examples: '지금 길이 막힙니다. 그러니까 빨리 가세요.' },
       { type: 'example', text: '그러니까 推断：내일 주말이에요. 그러니까 사람이 많을 거예요.' },
       { type: 'note', text: '原因-结果顺序固定：原因在前，그래서/그러니까 + 结果', examples: '집에 있어요. 그래서 비가 와요. ✗ / 비가 와요. 그래서 집에 있어요. ✓' },
-      { type: 'compare', text: '그래서/그러니까 vs 그런데', examples: '그래서（所以，原因结果）/ 그런데（不过，转折）' },
-      { type: 'compare', text: '그래서 vs 그러니까', examples: '그래서（自然结果）/ 그러니까（带提醒/劝告语气，口语更强调）' },
+      { type: 'compare', text: '그래서/그러니까 vs 그런데', examples: '그래서（所以，原因결과）/ 그런데（不过，转折）' },
+      { type: 'compare', text: '그래서 vs 그러니까', examples: '그래서（自然결과）/ 그러니까（带提醒/劝告语气，口语更强调）' },
       { type: 'usage', text: '高频模式：原因 + 그래서/그러니까 + 行动/建议', examples: '배가 고파요. 그래서 밥을 먹어요. / 피곤해요. 그러니까 좀 쉬세요.' },
     ],
     cardExamples: [
@@ -1419,7 +1419,7 @@ export const grammarCardsP3: GrammarCard[] = [
           { text: '그래서', role: 'plain' },
           { text: '따라 하기 어려워요', role: 'verb' },
         ],
-        zh: '这首歌发音快。所以跟读难。',
+        zh: '这首歌발음快。所以跟读难。',
         swapWords: ['그래서 외우기 어려워요'],
 
         swapRole: 'verb',
@@ -1431,7 +1431,7 @@ export const grammarCardsP3: GrammarCard[] = [
           { text: '그러니까', role: 'plain' },
           { text: '꼭 복습하세요', role: 'verb' },
         ],
-        zh: '这个语法很重要。所以一定要复习。',
+        zh: '这个문법很重要。所以一定要复习。',
         swapWords: ['그러니까 같이 공부해요'],
 
         swapRole: 'verb',
@@ -1451,7 +1451,7 @@ export const grammarCardsP3: GrammarCard[] = [
     ],
     scenarios: [
       { icon: '🌧️', context: '天气原因', ko: '비가 와요. 그래서 집에 있어요.', zh: '下雨。所以在家。' },
-      { icon: '📚', context: '学习反馈', ko: '이 문법은 어려워요. 그래서 다시 복습해요.', zh: '这个语法难。所以重新复习。' },
+      { icon: '📚', context: '学习反馈', ko: '이 문법은 어려워요. 그래서 다시 복습해요.', zh: '这个문법难。所以重新复习。' },
       { icon: '🚗', context: '交通推断', ko: '지금 길이 막힙니다. 그러니까 빨리 가세요.', zh: '现在堵车。所以快走吧。' },
       { icon: '📅', context: '周末推断', ko: '내일 주말이에요. 그러니까 사람이 많을 거예요.', zh: '明天是周末。所以人会很多。' },
       { icon: '😴', context: '疲倦原因', ko: '어제 많이 걸었어요. 그래서 오늘 다리가 아파요.', zh: '昨天走了很多路，所以今天腿疼。' },
@@ -1656,7 +1656,7 @@ export const grammarCardsP3: GrammarCard[] = [
       { wrong: '먹러 가요（有收音忘加 으）', correct: '먹으러 가요', note: '有收音用 으러，먹다 → 먹으러 가요。' },
       { wrong: '먹으러 가요 vs 먹고 가요 混用', correct: '먹으러 가요（去吃）/ 먹고 가요（吃了再走）', note: '-(으)러 是目的，-고 是先后顺序，意思不同。' },
       { wrong: '먹ㄹ까요', correct: '먹을까요', note: '有收音 + 을까요，먹다 → 먹을까요。' },
-      { wrong: '가러 가요', correct: '가러 가요 ✗ → 가려고 가요 or 그냥 가요', note: '가다 + 러 가다 很奇怪，目的动词和移动动词相同时换用其他表达。' },
+      { wrong: '집에 가러 가요', correct: '집에 가요', note: '目的动词和移动动词相同时不用 -(으)러 가다，直接说 가요 即可。' },
     ],
         compareHtml: `<div class="card-title">"去做某事"vs"要不要……？"</div>
 <div class="card-body">-(으)러 가다/오다 表达"去/来做某事"的目的；-을/ㄹ까요? 用于提议或询问意见，表示"要不要……？"。中文"去吃饭"直接说，韩语需要目的助词 -(으)러 连接动词和去/来。</div>
@@ -1723,21 +1723,21 @@ export const grammarCardsP3: GrammarCard[] = [
   <div class="ov-sec">
     <h3>-(으)러 가다/오다</h3>
     <div style="font-size:16px;color:#241917;line-height:2">
-      받침 없는 → <b style="color:#ff7fa8">러</b>：공부하러 가요 · 보러 가요<br>
-      받침 있는 → <b style="color:#2db89b">으러</b>：먹으러 가요 · 읽으러 가요
+      无收音 → <b style="color:#ff7fa8">러</b>：공부하러 가요 · 보러 가요<br>
+      有收音 → <b style="color:#2db89b">으러</b>：먹으러 가요 · 읽으러 가요
     </div>
   </div>
   <div class="ov-sec">
     <h3>-을/ㄹ까요?</h3>
     <div style="font-size:16px;color:#241917;line-height:2">
-      받침 없는 → <b style="color:#6b7ff0">ㄹ까요</b>：갈까요? · 볼까요?<br>
-      받침 있는 → <b style="color:#6b7ff0">을까요</b>：먹을까요? · 읽을까요?
+      无收音 → <b style="color:#6b7ff0">ㄹ까요</b>：갈까요? · 볼까요?<br>
+      有收音 → <b style="color:#6b7ff0">을까요</b>：먹을까요? · 읽을까요?
     </div>
   </div>
   <div class="ov-sec">
     <h3>⚠️ 常见错误</h3>
     <div style="font-size:16px;color:#241917;line-height:2">
-      <span style="color:#e05555;text-decoration:line-through">먹러 가요</span> → <span style="color:#ff7fa8">먹으러 가요</span>（받침 있는 加 으）<br>
+      <span style="color:#e05555;text-decoration:line-through">먹러 가요</span> → <span style="color:#ff7fa8">먹으러 가요</span>（有收音 加 으）<br>
       먹으러 가요（去吃）≠ 먹<span style="color:#2db89b">고</span> 가요（吃了再走）
     </div>
   </div>
@@ -1750,7 +1750,7 @@ export const grammarCardsP3: GrammarCard[] = [
     title: '-은/ㄴ 후에, -기 전에',
     whatItDoes: '说"做完之后"和"做之前"',
     whatItDoesBody: '-은/ㄴ 후에 表达"做完……之后"；\n-기 전에 表达"做……之前"。\n两者合用可以清晰表达时间顺序，适合写学习计划、日程和日记。\n注意：\n-기 전에 不管有没有收音都直接加 기，比 -은/ㄴ 후에 更简单。\n中文"之后/之前"直接放动词后面，韩语需要正确的词尾变形，尤其 -은/ㄴ 후에 的收音判断是中文没有的难点。',
-    structureNote: '两个时间表达结构不同：\n-은/ㄴ 후에 接在动词变形后（要看收音），-기 전에 直接接词干+기，不需要考虑收音。\n先记住这个差异，变形就不会混乱。',
+    structureNote: '两个시간表达结构不同：\n-은/ㄴ 후에 接在动词变形后（要看收音），-기 전에 直接接词干+기，不需要考虑收音。\n先记住这个差异，变形就不会混乱。',
     rulesNote: '후에 接续：\n有收音→은 후에（먹은 후에），无收音→ㄴ 후에（본 후에）。\n전에 接续：\n一律 -기 전에，不看收音。\n易错：\n먹은 전에 ✗，必须说 먹기 전에。',
     scenarioNote: '日记、学习计划、日常习惯"吃饭后学习""睡觉前复习""听歌前看歌词"，这类时间顺序表达每天都用得到。\n掌握这节课，你的韩语日记能立刻写得更自然。',
     structures: [
@@ -1838,7 +1838,7 @@ export const grammarCardsP3: GrammarCard[] = [
     mistakes: [
       { wrong: '먹은 전에（후에 和 전에 接续混用）', correct: '먹기 전에', note: '전에 前用 -기 名词化，不用 -은/ㄴ。먹은 후에（之后）/ 먹기 전에（之前）。' },
       { wrong: '보은 후에（无收音接错）', correct: '본 후에', note: '보다 无收音，接 -ㄴ 후에 → 본 후에，不是 보은 후에。' },
-      { wrong: '前后时间顺序写反', correct: '먹은 후에 공부해요（先吃，后学）', note: '-은/ㄴ 후에 前面的动作先发生，后面的动作后发生，不要写反。' },
+      { wrong: '前后시간顺序写反', correct: '먹은 후에 공부해요（先吃，后学）', note: '-은/ㄴ 후에 前面的动作先发生，后面的动作后发生，不要写反。' },
       { wrong: '자은 후에', correct: '잔 후에', note: '자다 无收音 → ㄴ 후에 → 잔 후에。无收音动词接 -ㄴ 후에。' },
     ],
         compareHtml: `<div class="card-title">"做完……之后"vs"做……之前"</div>
@@ -1888,7 +1888,7 @@ export const grammarCardsP3: GrammarCard[] = [
 <div class="reminder-box">-기 전에 不管有没有收音，都直接接词干+기，比 -은/ㄴ 후에 简单得多，不会出错。</div>`,
         specialQuiz: {
       type: 'fill',
-      title: '选择正确的时间顺序表达',
+      title: '选择正确的시간顺序表达',
       body: '根据句意选择 -은/ㄴ 후에 或 -기 전에。',
       questions: [
         {
@@ -1941,8 +1941,8 @@ export const grammarCardsP3: GrammarCard[] = [
   <div class="ov-sec">
     <h3>变化规则</h3>
     <div style="font-size:16px;color:#241917;line-height:2">
-      받침 있는 → <b style="color:#ff7fa8">은 후에</b>：먹은 후에 · 읽은 후에<br>
-      받침 없는 → <b style="color:#2db89b">ㄴ 후에</b>：본 후에 · 공부한 후에<br>
+      有收音 → <b style="color:#ff7fa8">은 후에</b>：먹은 후에 · 읽은 후에<br>
+      无收音 → <b style="color:#2db89b">ㄴ 후에</b>：본 후에 · 공부한 후에<br>
       全部 → <b style="color:#6b7ff0">기 전에</b>：먹기 전에 · 자기 전에
     </div>
   </div>
@@ -1958,7 +1958,137 @@ export const grammarCardsP3: GrammarCard[] = [
     <h3>⚠️ 常见错误</h3>
     <div style="font-size:16px;color:#241917;line-height:2">
       <span style="color:#e05555;text-decoration:line-through">먹은 전에</span> → <span style="color:#6b7ff0">먹기 전에</span><br>
-      <span style="color:#e05555;text-decoration:line-through">보은 후에</span> → <span style="color:#ff7fa8">본 후에</span>（받침 없는 用 ㄴ）
+      <span style="color:#e05555;text-decoration:line-through">보은 후에</span> → <span style="color:#ff7fa8">본 후에</span>（无收音 用 ㄴ）
+    </div>
+  </div>
+</div>`,
+  },
+
+  // ── 第三章 第11课：综合练习③ ─────────────────────────────
+  {
+    id: 'card-p3-l11',
+    partNumber: 3,
+    lessonNumber: 11,
+    title: '综合练习③',
+    whatItDoes: '第三章综合练习',
+    whatItDoesBody: '完成这份练习，检验第三章前 10 课是否掌握。\n涵盖进行时、经历回顾、愿望、ㄹ 不规则、意愿选择、疑问词、连接词、目的表达、时间顺序等核心知识点。',
+    isPractice: true,
+    structureNote: '这是第三章的总复习。\n第三章的核心是"时态扩展"和"句子连接"进行时、经历回顾、愿望、目的、顺序，都是让表达从单句变成复句的工具。\n做题时注意这条主线。',
+    structures: [
+      { ko: '지금 드라마를 보고 있어요', zh: '现在正在看电视剧。', tokens: [{ text: '지금', role: 'time' }, { text: '드라마를', role: 'object' }, { text: '보고 있어요', role: 'verb' }] },
+      { ko: '예전에 서울에 살았었어요', zh: '以前在首尔住过。', tokens: [{ text: '예전에', role: 'time' }, { text: '서울에', role: 'place' }, { text: '살았었어요', role: 'verb' }] },
+      { ko: '한국에 가고 싶어요', zh: '想去韩国。', tokens: [{ text: '한국에', role: 'place' }, { text: '가고 싶어요', role: 'verb' }] },
+      { ko: '카페에 공부하러 가요', zh: '去咖啡店学习。', tokens: [{ text: '카페에', role: 'place' }, { text: '공부하러', role: 'verb' }, { text: '가요', role: 'verb' }] },
+      { ko: '밥을 먹은 후에 공부해요', zh: '吃饭后学习。', tokens: [{ text: '밥을', role: 'object' }, { text: '먹은 후에', role: 'time' }, { text: '공부해요', role: 'verb' }] },
+    ],
+    connectionRules: [
+      { type: 'usage', text: '-고 있어요: 正在进行; 착용动词 + -고 있어요: 持续状态', examples: '공부하고 있어요 / 안경을 쓰고 있어요（戴着）' },
+      { type: 'usage', text: '-았었/었었어요: 以前曾经…（现在可能不同）', examples: '살았었어요 / 공부했었어요 / 학생이었었어요' },
+      { type: 'usage', text: '-고 싶어요: 想做; 그러면/그럼: 那么（조건顺接）', examples: '가고 싶어요 / 배가 고파요. 그러면 같이 먹어요.' },
+      { type: 'usage', text: 'ㄹ 不规则: -아요/고 앞 保留, -세요/-ㅂ니다/-는 앞 脱落', examples: '살아요 ✓ / 사세요 ✓ / 삽니다 ✓' },
+      { type: 'usage', text: '-을/ㄹ래요: 意愿选择; -겠어요: 意志/礼貌（알겠어요）', examples: '갈래요 / 먹을래요 / 알겠어요' },
+      { type: 'usage', text: '무슨（名称）/ 어느（选项）/ 어떤（特点）', examples: '무슨 노래예요? / 어느 나라? / 어떤 음식을 좋아해요?' },
+      { type: 'usage', text: '그렇지만（明确转折）/ 그런데（轻转折/话题推进）', examples: '재미있어요. 그렇지만 어려워요. / 그런데 이거 알아요?' },
+      { type: 'usage', text: '그래서（所以，자연결과）/ 그러니까（所以，제안 어감）', examples: '비가 와요. 그래서 집에 있어요.' },
+      { type: 'usage', text: '-(으)러 가다: 去做某事目的; -을/ㄹ까요?: 提议/询问', examples: '먹으러 가요 / 같이 갈까요?' },
+      { type: 'usage', text: '-은/ㄴ 후에（之后，看 收音）/ -기 전에（之前，直接加 기）', examples: '먹은 후에 / 본 후에 / 먹기 전에 / 자기 전에' },
+    ],
+    cardExamples: [
+      {
+        wordBlocks: [{ text: '지금', role: 'time' }, { text: '안경을', role: 'object' }, { text: '쓰고 있어요', role: 'verb' }],
+        zh: '正戴着眼镜。',
+        swapWords: ['입고 있어요', '들고 있어요', '보고 있어요'],
+
+        swapRole: 'verb',
+      },
+      {
+        wordBlocks: [{ text: '이 노래를', role: 'object' }, { text: '배우고 싶어요', role: 'verb' }],
+        zh: '想学这首歌。',
+        swapWords: ['가고 싶어요', '먹고 싶어요', '알고 싶어요'],
+
+        swapRole: 'verb',
+      },
+      {
+        wordBlocks: [{ text: '자기 전에', role: 'time' }, { text: '복습해요', role: 'verb' }],
+        zh: '睡觉前复习。',
+        swapWords: ['공부한 후에 자요', '먹은 후에 가요'],
+
+        swapRole: 'verb',
+      },
+      {
+        wordBlocks: [
+          { text: '수업이 끝난', role: 'time' },
+          { text: '다음에', role: 'plain' },
+          { text: '카페에 가요', role: 'verb' },
+        ],
+        zh: '课结束后去咖啡店。',
+        swapWords: ['공부하러 가요', '밥을 먹어요'],
+
+        swapRole: 'verb',
+      },
+    ],
+    scenarios: [
+      { icon: '📚', context: '学习打卡', ko: '지금 한국어를 공부하고 있어요. 자기 전에 꼭 복습해요.', zh: '现在正在学习韩语。睡前一定复习。' },
+      { icon: '🎵', context: 'KPOP', ko: '이 노래를 배우고 싶어요. 그러면 같이 연습할까요?', zh: '想学这首歌。那要一起练习吗？' },
+      { icon: '✈️', context: '旅行愿望', ko: '한국에 가고 싶어요. 그래서 요즘 열심히 공부하고 있어요.', zh: '想去韩国，所以最近在努力学习。' },
+      { icon: '☕', context: '日程安排', ko: '수업이 끝난 다음에 카페에 공부하러 가요.', zh: '课结束后去咖啡店学习。' },
+      { icon: '💬', context: '对话练习', ko: '무슨 노래를 배우고 싶어요? 그런데 알겠어요, 같이 해 봐요!', zh: '想学什么歌？话说明白了，一起来试试吧！' },
+      { icon: '🏠', context: '日常习惯', ko: '샤워한 후에 드라마를 봐요. 그런데 요즘 너무 피곤해요. 그래서 일찍 자고 싶어요.', zh: '洗澡后看电视剧。但最近太累了，所以想早睡。' },
+    ],
+    mistakes: [
+      { wrong: '노래를 들고 있어요（想说正在听歌）', correct: '노래를 듣고 있어요', note: '-고 接续时 ㄷ 不规则不发生，듣다→듣고。' },
+      { wrong: '커피고 싶어요', correct: '커피를 마시고 싶어요', note: '-고 싶어요 接动词，不直接接名词，需补出动词。' },
+      { wrong: '알세요?', correct: '아세요?', note: '알다 + -세요 → ㄹ 脱落 → 아세요。' },
+      { wrong: '먹러 가요', correct: '먹으러 가요', note: '收音 있는 + 으러，먹다→먹으러 가요。' },
+      { wrong: '먹은 전에', correct: '먹기 전에', note: '-기 전에 前用名词化 -기，不用 -은/ㄴ。' },
+      { wrong: '그러면을 "但是"로 사용', correct: '그러면（那么，条件顺接）/ 그렇지만（但是，转折）', note: '두 词意思完全不同，不能混用。' },
+    ],
+        compareHtml: `<div class="card-title">第三章综合练习</div>
+<div class="card-body">完成这份练习，检验第三章前 10 课是否掌握。涵盖进行时、经历回顾、愿望、ㄹ 不规则、意愿选择、疑问词、连接词、目的表达、时间顺序等核心知识点。</div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">本课复习</div><div style="font-size:16px;color:#89756e;margin-top:2px">一课一句核心</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">-고 있다</span><span style="font-size:16px;color:#5a4640">正在做</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">-았었/었었</span><span style="font-size:16px;color:#5a4640">曾经……过</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">核心知识点</div><div style="font-size:16px;color:#89756e;margin-top:2px">全章重点</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">-고 싶다 / 그러면</span><span style="font-size:16px;color:#5a4640">想做 / 那样的话</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">ㄹ不规则 / -을/ㄹ래요</span><span style="font-size:16px;color:#5a4640">变形 / 意愿选择</span></div></div>
+</div>
+<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">综合练习建议</div><div style="font-size:16px;color:#5a4640">遇到不确定的题，先回想"这是哪节课的知识点"，再作答。第三章的核心是"时间"和"目的"——什么时候做、为什么做、做了什么之后发生什么。</div><div style="margin-top:4px;font-size:16px;color:#5a4640">如果大部分题都答对了，说明第三章掌握得不错，可以进入第四章。</div></div>
+<div class="reminder-box">综合练习不计成绩，目的是帮你发现哪里还不熟练。答错了就回去复习对应的课次。</div>`,
+    linkedGrammarIds: [],
+    overviewHtml: `<div class="overview">
+  <span class="badge">第3部分 · 综合练习</span>
+  <div class="ov-title">综合练习③</div>
+  <div class="ov-sub">第三章 10 课核心知识点总览</div>
+  <div class="ov-sec">
+    <h3>① 进行 & 经历</h3>
+    <div style="font-size:16px;color:#241917;line-height:2">
+      -고 <b style="color:#ff7fa8">있어요</b>（正在做）/ -고 <b style="color:#ff7fa8">있었어요</b>（过去正在做）<br>
+      穿戴类：입고/쓰고/들고 <b style="color:#ff7fa8">있어요</b>（穿着/戴着/拿着）<br>
+      -<b style="color:#2db89b">았었/었었어요</b>（以前曾经……）；하다→했었어요；名词→이었었어요
+    </div>
+  </div>
+  <div class="ov-sec">
+    <h3>② 愿望 & 意愿</h3>
+    <div style="font-size:16px;color:#241917;line-height:2">
+      -고 <b style="color:#ff7fa8">싶어요</b>（想做）；그러면/그럼（那么，条件顺接）<br>
+      -을/ㄹ<b style="color:#2db89b">래요</b>（我要/要不要）；<b style="color:#6b7ff0">알겠어요</b>（明白了）
+    </div>
+  </div>
+  <div class="ov-sec">
+    <h3>③ ㄹ 不规则</h3>
+    <div style="font-size:16px;color:#241917;line-height:2">
+      接元音 → ㄹ <b style="color:#2db89b">保留</b>：살아요, 알아요, 만들어요<br>
+      接 ㄴ/ㅂ/ㅅ → ㄹ <b style="color:#ff7fa8">脱落</b>：사세요, 삽니다, 아세요
+    </div>
+  </div>
+  <div class="ov-sec">
+    <h3>④ 疑问词 & 连接词</h3>
+    <div style="font-size:16px;color:#241917;line-height:2">
+      <b style="color:#ff7fa8">무슨</b>（名称/属性）/ <b style="color:#2db89b">어느</b>（选项）/ <b style="color:#6b7ff0">어떤</b>（特点）<br>
+      <b style="color:#ff7fa8">그렇지만</b>（但是）/ <b style="color:#2db89b">그런데</b>（不过/话题转换）<br>
+      <b style="color:#e8a87c">그래서</b>（所以）/ <b style="color:#6b7ff0">그러니까</b>（所以/因此，带劝告）
+    </div>
+  </div>
+  <div class="ov-sec">
+    <h3>⑤ 目的 & 时间顺序</h3>
+    <div style="font-size:16px;color:#241917;line-height:2">
+      -(으)러 가요（去做某事）；-을/ㄹ까요?（要不要……）<br>
+      -은/ㄴ <b style="color:#ff7fa8">후에</b>（之后，看 收音）；-기 <b style="color:#2db89b">전에</b>（之前，不看 收音）
     </div>
   </div>
 </div>`,

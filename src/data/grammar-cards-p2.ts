@@ -8,9 +8,9 @@ export const grammarCardsP2: GrammarCard[] = [
     title: '에 가다, 와/과, 하고',
     whatItDoes: '说去哪里、和谁一起',
     whatItDoesBody: '两个核心：\n说目的地用 에 가요，说"和……一起"用 와/과 或 하고。\n中文的"去"和"和"是两个独立的词，韩语用助词直接贴在名词后面，不需要单独的动词。',
-    structureNote: '这节课有两个句型：\n去哪里（에 가요）和和谁一起（와/과/하고）。\n先看清楚各自在句子里的位置。',
+    structureNote: '这节课有两个句型：\n去哪里（에 가요）、和谁一起（와/과/하고）。\n先看清楚各自在句子里的位置。',
     rulesNote: '와/과 的选择只看一件事：\n前面名词最后有没有收音。\n口语直接用하고，不用考虑收音，说起来更轻松。',
-    scenarioNote: '约朋友、出行、购物是用这套语法最频繁的场景约朋友去哪里、买东西"和"什么都用得到。',
+    scenarioNote: '约朋友、出行、购物是用这套문법最频繁的场景约朋友去哪里、买东西"和"什么都用得到。',
     structures: [
       {
         ko: '카페에 가요',
@@ -46,7 +46,7 @@ export const grammarCardsP2: GrammarCard[] = [
       { type: 'usage',   text: '하고 不区分有无收音，口语中更自然',  examples: '친구하고 / 선생님하고 / 동생하고' },
       { type: 'compare', text: '와/과 vs 하고',                    examples: '와/과=书面/正式；하고=口语/日常，语意相同' },
       { type: 'usage',   text: '하고/와/과 也可并列名词',           examples: '커피하고 빵을 사요 / 책과 연필을 사요' },
-      { type: 'note',    text: '에 가요 vs 에서 가요',             examples: '目的地用 에 가요；에서 表示"在某地"，不表移动方向' },
+      { type: 'note',    text: '에 가요 vs 에서 가요',             examples: '目的地用 에 가요；에서 表示"在某地"，不表이동方向' },
     ],
     cardExamples: [
       {
@@ -160,8 +160,8 @@ export const grammarCardsP2: GrammarCard[] = [
       headers: ['用法', '条件', '助词', '例子'],
       rows: [
         ['去某地', '场所名词', { ko: '에 가요', zh: '去（方向）' }, { ko: '학교에 가요', zh: '去学校' }],
-        ['和…（书面）', { ko: '有收音', zh: '有收音' }, { ko: '과', zh: '书面"和"' }, { ko: '선생님과', zh: '和老师（书面）' }],
-        ['和…（书面）', { ko: '无收音', zh: '无收音' }, { ko: '와', zh: '书面"和"' }, { ko: '친구와', zh: '和朋友（书面）' }],
+        ['和…（书面）', { ko: '有받침', zh: '有收音' }, { ko: '과', zh: '书面"和"' }, { ko: '선생님과', zh: '和老师（书面）' }],
+        ['和…（书面）', { ko: '无받침', zh: '无收音' }, { ko: '와', zh: '书面"和"' }, { ko: '친구와', zh: '和朋友（书面）' }],
         ['和…（口语）', '不限收音', { ko: '하고', zh: '口语"和"' }, { ko: '친구하고', zh: '和朋友（口语）' }],
         ['并列名词', '不限', { ko: 'A하고/와/과 B', zh: '名词并列' }, { ko: '커피하고 빵', zh: '咖啡和面包' }],
       ],
@@ -176,14 +176,14 @@ export const grammarCardsP2: GrammarCard[] = [
           post: ' 카페에 가요.',
           options: ['과', '하고', '와'],
           answer: 2,
-          explanation: '친구 末尾无收音 → 와',
+          explanation: '친구 末尾无收音 → 와（书面）。口语 친구하고 也对，但本题练书面 와/과。',
         },
         {
           pre: '선생님',
           post: ' 도서관에 가요.',
           options: ['과', '와', '하고'],
           answer: 0,
-          explanation: '선생님 末尾有收音 ㅁ → 과',
+          explanation: '선생님 末尾有收音 ㅁ → 과（书面）。口语 선생님하고 也对。',
         },
         {
           pre: '책',
@@ -336,7 +336,7 @@ export const grammarCardsP2: GrammarCard[] = [
     scenarios: [
       { icon: '📱', context: '找东西', ko: '제 휴대폰이 어디에 있어요?', zh: '我的手机在哪里？' },
       { icon: '⏰', context: '约时间', ko: '내일 시간이 있어요? 같이 카페에 가요!', zh: '明天有时间吗？一起去咖啡店！' },
-      { icon: '🎵', context: 'KPOP 评论', ko: '이 노래가 진짜 좋아요. 지금 제 플레이리스트에 있어요.', zh: '这首歌真的很好，现在在我的播放列表里。' },
+      { icon: '🎵', context: 'KPOP 评论', ko: '이 노래가 진짜 좋아요. 지금 제 플레이리스트에 있어요.', zh: '这首歌真的好听，现在就在我的播放列表里。' },
       { icon: '🏠', context: '描述房间', ko: '책상 위에 책하고 커피가 있어요.', zh: '桌子上有书和咖啡。' },
       { icon: '🙅', context: '拒绝邀请', ko: '미안해요, 오늘 시간이 없어요.', zh: '抱歉，今天没有时间。' },
       { icon: '🛍️', context: '便利店', ko: '이 편의점에 ATM이 있어요?', zh: '这家便利店有ATM吗？' },
@@ -351,7 +351,7 @@ export const grammarCardsP2: GrammarCard[] = [
   <div class="ov-hero">
     <div class="ov-hero-label">第 2 课 · 已完成</div>
     <div class="ov-hero-title">이/가 있다/없다</div>
-    <div class="ov-hero-sub">이/가 必须带 · 有无存在 · 위치 표현</div>
+    <div class="ov-hero-sub">이/가 必须带 · 有无存在 · 位置表达</div>
   </div>
   <div class="ov-section">
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">核心规律</div></div>
@@ -434,7 +434,7 @@ export const grammarCardsP2: GrammarCard[] = [
     <span class="chip p">뒤（后）</span><span class="chip p">안（里）</span><span class="chip p">밖（外）</span><span class="chip p">옆（旁）</span>
   </div>
 </div>
-<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">이/가 vs 은/는</div><div style="font-size:16px;color:#5a4640">은/는 强调话题（我嘛……），이/가 强调主体或引入新信息。两者都能做主语助词，但感觉不同。</div><div style="margin-top:4px;font-size:16px;color:#5a4640">초보자는 모음만 보면 됩니다 → 다음에 있다/없다가 오면 이/가를 씁니다。</div></div>
+<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">이/가 vs 은/는</div><div style="font-size:16px;color:#5a4640">은/는 强调话题（我嘛……），이/가 强调主体或引入新信息。两者都能做主语助词，但感觉不同。</div><div style="margin-top:4px;font-size:16px;color:#5a4640">初学者 元音只看就行了 → 后面接 있다/없다 时用 이/가。</div></div>
 <div class="reminder-box">있다/없다 的主语必须加 이/가，不可省略：친구 있어요 ✗ → 친구가 있어요 ✓</div>`,
     compareLabel: '이 vs 가',
     quickTable: {
@@ -445,8 +445,8 @@ export const grammarCardsP2: GrammarCard[] = [
         ['没有……', { ko: '명사 + 이/가 없어요', zh: '名词+主格+没有' }, { ko: '시간이 없어요', zh: '没时间' }],
         ['在某地', { ko: '명사 + 이/가 + 장소에 있어요', zh: '名词+主格+地点+在' }, { ko: '휴대폰이 가방 안에 있어요', zh: '手机在包里' }],
         ['某地有……', { ko: '장소에 + 명사 + 이/가 있어요', zh: '地点+名词+主格+有' }, { ko: '책상 위에 책이 있어요', zh: '桌上有书' }],
-        [{ ko: '有收音', zh: '有收音' }, '+ 이', { ko: '책이, 시간이', zh: '书/时间+이' }],
-        [{ ko: '无收音', zh: '无收音' }, '+ 가', { ko: '친구가, 커피가', zh: '朋友/咖啡+가' }],
+        [{ ko: '有받침', zh: '有收音' }, '+ 이', { ko: '책이, 시간이', zh: '书/时间+이' }],
+        [{ ko: '无받침', zh: '无收音' }, '+ 가', { ko: '친구가, 커피가', zh: '朋友/咖啡+가' }],
       ],
     },
     specialQuiz: {
@@ -695,22 +695,22 @@ export const grammarCardsP2: GrammarCard[] = [
   <div class="ov-sec">
     <h3>① 一起……吧：-ㅂ시다/읍시다</h3>
     <div style="font-size:16px;color:#241917;line-height:2">
-      받침 없는 → <b style="color:#ff7fa8">ㅂ시다</b>：갑시다, 봅시다, 공부합시다<br>
-      받침 있는 → <b style="color:#ff7fa8">읍시다</b>：먹읍시다, 읽읍시다, 앉읍시다
+      收音 없는 → <b style="color:#ff7fa8">ㅂ시다</b>：갑시다, 봅시다, 공부합시다<br>
+      收音 있는 → <b style="color:#ff7fa8">읍시다</b>：먹읍시다, 읽읍시다, 앉읍시다
     </div>
   </div>
   <div class="ov-sec">
     <h3>② 请您……：-(으)세요</h3>
     <div style="font-size:16px;color:#241917;line-height:2">
-      받침 없는 → <b style="color:#2db89b">세요</b>：가세요, 보세요, 기다리세요<br>
-      받침 있는 → <b style="color:#2db89b">으세요</b>：먹으세요, 읽으세요, 앉으세요
+      收音 없는 → <b style="color:#2db89b">세요</b>：가세요, 보세요, 기다리세요<br>
+      收音 있는 → <b style="color:#2db89b">으세요</b>：먹으세요, 읽으세요, 앉으세요
     </div>
   </div>
   <div class="ov-sec">
     <h3>③ 请……（正式）：-(으)십시오</h3>
     <div style="font-size:16px;color:#241917;line-height:2">
-      받침 없는 → <b style="color:#6b7ff0">십시오</b>：가십시오, 확인하십시오<br>
-      받침 있는 → <b style="color:#6b7ff0">으십시오</b>：앉으십시오, 읽으십시오
+      收音 없는 → <b style="color:#6b7ff0">십시오</b>：가십시오, 확인하십시오<br>
+      收音 있는 → <b style="color:#6b7ff0">으십시오</b>：앉으십시오, 읽으십시오
     </div>
   </div>
   <div class="ov-sec">
@@ -724,8 +724,8 @@ export const grammarCardsP2: GrammarCard[] = [
   <div class="ov-sec">
     <h3>⚠️ 常见错误</h3>
     <div style="font-size:16px;color:#241917;line-height:2">
-      앉<span style="color:#e05555;text-decoration:line-through">세요</span> → 앉<span style="color:#2db89b">으세요</span>（받침 있는 必须加 으）<br>
-      가<span style="color:#e05555;text-decoration:line-through">읍시다</span> → <span style="color:#ff7fa8">갑시다</span>（받침 없는 用 ㅂ시다）<br>
+      앉<span style="color:#e05555;text-decoration:line-through">세요</span> → 앉<span style="color:#2db89b">으세요</span>（收音 있는 必须加 으）<br>
+      가<span style="color:#e05555;text-decoration:line-through">읍시다</span> → <span style="color:#ff7fa8">갑시다</span>（收音 없는 用 ㅂ시다）<br>
       가세요（误当"一起去"）→ 같이 <span style="color:#ff7fa8">갑시다</span>（一起要用 ㅂ시다）
     </div>
   </div>
@@ -746,7 +746,7 @@ export const grammarCardsP2: GrammarCard[] = [
     conceptCompare: {
       zh: '一杯咖啡 / 两个人 / 三本书',
       ko: '커피 한 잔 / 두 명 / 책 세 권',
-      note: '数字放在量词前面，固有数词 하나→한, 둘→두, 셋→세, 넷→네（수량사 앞에서 时缩短）。',
+      note: '数字放在量词前面，固有数词 하나→한, 둘→두, 셋→세, 넷→네（量词前时缩短）。',
     },
     structures: [
       {
@@ -816,7 +816,7 @@ export const grammarCardsP2: GrammarCard[] = [
       },
     ],
     scenarios: [
-      { icon: '☕', context: '咖啡店点单', ko: '아메리카노 두 잔이랑 라떼 한 잔 주세요.', zh: '请给我两杯美式和一杯拿铁。' },
+      { icon: '☕', context: '咖啡店点单', ko: '아메리카노 두 잔하고 라떼 한 잔 주세요.', zh: '请给我两杯美式和一杯拿铁。' },
       { icon: '🍽️', context: '餐厅订位', ko: '네 명이에요. 자리 있어요?', zh: '四个人，有位子吗？' },
       { icon: '🛒', context: '购物', ko: '이거 두 개 주세요. 얼마예요?', zh: '这个给我两个，多少钱？' },
       { icon: '📚', context: '说学了几个单词', ko: '오늘 단어 열 개 외웠어요!', zh: '今天背了十个单词！' },
@@ -943,7 +943,7 @@ export const grammarCardsP2: GrammarCard[] = [
     <div style="font-size:16px;color:#241917;line-height:2">
       하나(한) 둘(두) 셋(세) 넷(네) 다섯<br>
       여섯 일곱 여덟 아홉 열<br>
-      <span style="color:#89756e;font-size:16px">수량사 앞에서 时：하나→한, 둘→두, 셋→세, 넷→네</span>
+      <span style="color:#89756e;font-size:16px">量词前时：하나→한, 둘→두, 셋→세, 넷→네</span>
     </div>
   </div>
   <div class="ov-sec">
@@ -982,7 +982,7 @@ export const grammarCardsP2: GrammarCard[] = [
     whatItDoes: '说"的""也""只"',
     whatItDoesBody: '三个小助词各有一招：\n의 标所属，도 加"也"，만 限制"只有"。\n这三个助词都贴在名词后面，但功能完全不同，类似中文的"的/也/只"认准功能，用法就清楚了。',
     structureNote: '这节课三个助词各自独立，不需要接续变形。\n重点是搞清楚每个助词替换掉的是哪个位置：\n도 和 만 会把 은/는/이/가/을/를 替换掉。',
-    rulesNote: '의 在口语里常省略（내 친구 比 나의 친구 更自然）；\n도 和 만 会吃掉前面的格助词，但 도/만 自己可以叠加（밥만도 싫어요 = 连饭也不想要），只是不能同时接在同一名词上。',
+    rulesNote: '의 在口语里常省略（내 친구 比 나의 친구 更自然）；\n도 和 만 会吃掉前面的格助词（은/는/이/가/을/를），且不可叠加在同一名词上（커피도만 ✗）。',
     scenarioNote: '도 在日常对话里频率极高"我也是""我也想去"，每次附和都用得到；\n만 用来强调"就这个/只有这个"，点餐、表白、设限都用得上。',
     structures: [
       {
@@ -1016,7 +1016,7 @@ export const grammarCardsP2: GrammarCard[] = [
       { type: 'rule',    text: '의：名词A + 의 + 名词B = A的B',         examples: '친구의 책（朋友的书）/ 선생님의 이름（老师的名字）' },
       { type: 'usage',   text: '口语"我的"：저의→제（正式），나의→내（亲近）', examples: '제 가방 / 내 친구 / 우리 엄마' },
       { type: 'rule',    text: '도：替换 은/는/이/가/을/를，直接接名词后', examples: '저도 / 한국어도 / 커피도' },
-      { type: 'usage',   text: '도 表示"也"，前后是类似或递进信息',      examples: '저도 좋아요 / 이것도 맛있어요' },
+      { type: 'usage',   text: '도 表示"也"，前后是类似或递进정보',      examples: '저도 좋아요 / 이것도 맛있어요' },
       { type: 'rule',    text: '만：接名词后，替换其他助词，表限定',       examples: '커피만 / 오늘만 / 나만 / 한 개만' },
       { type: 'compare', text: '도 vs 만',                              examples: '도=也（扩展）；만=只（限定）' },
       { type: 'note',    text: '도/만 不能同时用在同一名词上',            examples: '커피도만 ✗ → 커피만 ✓ / 커피도 ✓' },
@@ -1104,7 +1104,7 @@ export const grammarCardsP2: GrammarCard[] = [
     <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">도</span>　直接替换 은/는/이/가/을/를 → 表示"也"</div>
     <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#6b7ff0">만</span>　直接替换其他助词 → 表示"只、仅"</div>
   </div>
-  <div style="font-size:16px;color:#5a4640;margin-top:8px;line-height:1.7">도 和 만 不能叠加在同一名词上：커피를만 ✗ → 커피만 ✓。</div>
+  <div style="font-size:16px;color:#5a4640;margin-top:8px;line-height:1.7">도 和 만 直接替换 은/는/이/가/을/를（커피를만 ✗ → 커피만 ✓），两者也不可同时接在同一名词上（커피도만 ✗）。</div>
 </div>
 <div class="reminder-box">도/만 替换助词，不叠加——저는도 ✗ → 저도 ✓，커피를만 ✗ → 커피만 ✓。</div>`,
     compareHtml: `<div class="card-title">도（也）vs 만（只）</div>
@@ -1300,7 +1300,7 @@ export const grammarCardsP2: GrammarCard[] = [
     scenarios: [
       { icon: '🙅', context: '拒绝邀请', ko: '오늘은 시간이 없어요. 그렇지만 내일은 괜찮아요!', zh: '今天没有时间，但是明天可以！' },
       { icon: '☕', context: '饮食偏好', ko: '저는 커피를 안 마셔요. 차를 마셔요.', zh: '我不喝咖啡，喝茶。' },
-      { icon: '🎵', context: 'KPOP 评论', ko: '이 노래는 좋아요. 그렇지만 발음이 어려워요.', zh: '这首歌很好，但是发音很难。' },
+      { icon: '🎵', context: 'KPOP 评论', ko: '이 노래는 좋아요. 그렇지만 발음이 어려워요.', zh: '这首歌很好，但是발음很难。' },
       { icon: '📚', context: '学习打卡', ko: '오늘도 한국어를 공부했어요. 그리고 드라마를 봤어요.', zh: '今天也学习了韩语，而且看了电视剧。' },
       { icon: '🏃', context: '日程说明', ko: '오늘 운동 안 했어요. 내일은 꼭 할 거예요.', zh: '今天没有运动，明天一定会做。' },
       { icon: '🍽️', context: '餐厅点餐', ko: '저는 고기를 안 먹어요. 채소 요리 있어요?', zh: '我不吃肉，有蔬菜料理吗？' },
@@ -1398,7 +1398,7 @@ export const grammarCardsP2: GrammarCard[] = [
           post: ' 드라마도 봐요.',
           options: ['안', '그렇지만', '그리고'],
           answer: 2,
-          explanation: '顺接补充信息，用 그리고',
+          explanation: '顺接补充정보，用 그리고',
         },
         {
           pre: '이 노래는 좋아요.',
@@ -1417,7 +1417,7 @@ export const grammarCardsP2: GrammarCard[] = [
     <h3>① 안 — 口语否定</h3>
     <div style="font-size:16px;color:#241917;line-height:2">
       <b style="color:#ff7fa8">안</b> 가요（不去）&nbsp; <b style="color:#ff7fa8">안</b> 먹어요（不吃）<br>
-      하다 동사：공부 <b style="color:#ff7fa8">안 해요</b>（不学习，比 안 공부해요 更自然）
+      하다 动词：공부 <b style="color:#ff7fa8">안 해요</b>（不学习，比 안 공부해요 更自然）
     </div>
   </div>
   <div class="ov-sec">
@@ -1437,7 +1437,7 @@ export const grammarCardsP2: GrammarCard[] = [
   <div class="ov-sec">
     <h3>⚠️ 常见错误</h3>
     <div style="font-size:16px;color:#241917;line-height:2">
-      <span style="color:#e05555;text-decoration:line-through">안 공부해요</span> → 공부 <span style="color:#ff7fa8">안 해요</span>（하다 동사 口语）<br>
+      <span style="color:#e05555;text-decoration:line-through">안 공부해요</span> → 공부 <span style="color:#ff7fa8">안 해요</span>（하다 动词 口语）<br>
       <span style="color:#e05555;text-decoration:line-through">가다지 않아요</span> → 가<span style="color:#2db89b">지 않아요</span>（接词干）<br>
       转折误用 그리고 → 用 <span style="color:#e8a87c">그렇지만</span>
     </div>
@@ -1485,7 +1485,7 @@ export const grammarCardsP2: GrammarCard[] = [
     connectionRules: [
       { type: 'rule',    text: '有收音名词 → 이',                          examples: '책이 / 시간이 / 사람이 / 음식이' },
       { type: 'rule',    text: '无收音名词 → 가',                          examples: '친구가 / 비가 / 의자가 / 고양이가' },
-      { type: 'usage',   text: '이/가 用于：①引入新信息 ②强调 ③있다/없다 主语', examples: '비가 와요（新信息）/ 제가 했어요（强调）' },
+      { type: 'usage',   text: '이/가 用于：①引入新정보 ②强调 ③있다/없다 主语', examples: '비가 와요（新信息）/ 제가 했어요（强调）' },
       { type: 'usage',   text: '이（이+名词）：说话人和听话人附近',          examples: '이 사람 / 이 노래 / 이 음식' },
       { type: 'usage',   text: '그（그+名词）：听话人附近或刚提到的',        examples: '그 책 / 그 배우 / 그 드라마' },
       { type: 'usage',   text: '저（저+名词）：双方都距离较远的',            examples: '저 가수 / 저 건물 / 저 사람' },
@@ -1599,7 +1599,7 @@ export const grammarCardsP2: GrammarCard[] = [
   <div class="tok-row" style="margin-bottom:6px"><span class="tok t-s">책<b style="color:#ff7fa8">이</b></span><span style="font-size:16px;color:#89756e">有收音→이</span></div>
   <div class="tok-row"><span class="tok t-s">친구<b style="color:#2db89b">가</b></span><span style="font-size:16px;color:#89756e">无收音→가</span></div>
 </div>
-<div class="reminder-box">이 사람이 에서：前面 이 是指示词（这），后面 이 是主格助词——两个 이 功能完全不同。</div>`,
+<div class="reminder-box">이 사람이：前面 이 是指示词（这），后面 이 是主格助词——两个 이 功能完全不同。</div>`,
     compareLabel: '이/그/저 距离对比',
     quickTable: {
       title: '이/가 + 이/그/저 速记',
@@ -1655,8 +1655,8 @@ export const grammarCardsP2: GrammarCard[] = [
   <div class="ov-sec">
     <h3>① 주격 조사 이/가</h3>
     <div style="font-size:16px;color:#241917;line-height:2">
-      받침 있는 → <b style="color:#ff7fa8">이</b>：책이, 시간이, 돈이<br>
-      받침 없는 → <b style="color:#2db89b">가</b>：친구가, 비가, 가수가<br>
+      收音 있는 → <b style="color:#ff7fa8">이</b>：책이, 시간이, 돈이<br>
+      收音 없는 → <b style="color:#2db89b">가</b>：친구가, 비가, 가수가<br>
       <span style="color:#89756e">用于：引入新信息、강조、있다/없다 的主语</span>
     </div>
   </div>
@@ -1678,8 +1678,8 @@ export const grammarCardsP2: GrammarCard[] = [
   <div class="ov-sec">
     <h3>⚠️ 常见错误</h3>
     <div style="font-size:16px;color:#241917;line-height:2">
-      친구<span style="color:#e05555;text-decoration:line-through">이</span> 와요 → 친구<span style="color:#2db89b">가</span> 와요（받침 없는 用 가）<br>
-      책<span style="color:#e05555;text-decoration:line-through">가</span> 있어요 → 책<span style="color:#ff7fa8">이</span> 있어요（받침 있는 用 이）<br>
+      친구<span style="color:#e05555;text-decoration:line-through">이</span> 와요 → 친구<span style="color:#2db89b">가</span> 와요（收音 없는 用 가）<br>
+      책<span style="color:#e05555;text-decoration:line-through">가</span> 있어요 → 책<span style="color:#ff7fa8">이</span> 있어요（收音 있는 用 이）<br>
       이/그/저 指示词 ≠ 이/가 助词，不要混淆
     </div>
   </div>
@@ -1696,7 +1696,7 @@ export const grammarCardsP2: GrammarCard[] = [
     whatItDoesBody: '부터 表示起点"从"，까지 表示终点"到"，时间说法：\n시간은 固有数词，분은 汉字数词。\n这节课把P2-L04学的数词直接用到时间表达上，同时学会说"从……到……"的范围句型。\n中文"从三点到五点"结构和韩语相同，但韩语"小时"用固有数词、"分钟"用汉字数词，两套混用是中文没有的难点。',
     structureNote: '两个核心词 부터/까지 结构很简单：\n直接贴在时间/地点词后面。\n难点在时间的读法几点用固有数词，几分用汉字数词，两套混用。',
     rulesNote: '时间读法只需记住：\n시（点）用固有数词（한/두/세…열두），분（分）用汉字数词（일/이/십…오십오）。\n特殊：\n半小时说 반（두 시 반=两点半）。\n空间起点用 에서，时间起点用 부터，不能混用。',
-    scenarioNote: '说工作时间、约定见面、描述演唱会时间부터/까지 是最常用的时间表达框架。\n掌握这节课，你能准确说出任何"从X到X"的安排。',
+    scenarioNote: '说工作时间、约定见面、描述演唱会시간부터/까지 是最常用的时间表达框架。\n掌握这节课，你能准确说出任何"从X到X"的安排。',
     conceptCompare: {
       zh: '从三点到五点 / 上午十点半',
       ko: '세 시부터 다섯 시까지 / 오전 열 시 반',
@@ -1723,13 +1723,13 @@ export const grammarCardsP2: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule',    text: '부터：时间/范围起点（从）',              examples: '아침부터 / 월요일부터 / 지금부터' },
-      { type: 'rule',    text: '까지：时间/范围终点（到）',              examples: '저녁까지 / 금요일까지 / 열 시까지' },
+      { type: 'rule',    text: '부터：시간/范围起点（从）',              examples: '아침부터 / 월요일부터 / 지금부터' },
+      { type: 'rule',    text: '까지：시간/范围终点（到）',              examples: '저녁까지 / 금요일까지 / 열 시까지' },
       { type: 'compare', text: '에서…까지 vs 부터…까지',               examples: '에서=空间起点（서울에서 부산까지）；부터=时间/抽象范围起点' },
       { type: 'rule',    text: '시（点）用固有数词',                    examples: '한 시 / 두 시 / 세 시 / 열두 시' },
       { type: 'rule',    text: '분（分）用汉字数词',                    examples: '십 분 / 삼십 분 / 오십오 분' },
       { type: 'usage',   text: '반（半）= 30分，可代替 삼십 분',        examples: '두 시 반（两点半）/ 세 시 반（三点半）' },
-      { type: 'vocab',   text: '오전/오후 放时间前',                    examples: '오전 열 시（上午十点）/ 오후 두 시（下午两点）' },
+      { type: 'vocab',   text: '오전/오후 放시간前',                    examples: '오전 열 시（上午十点）/ 오후 두 시（下午两点）' },
     ],
     cardExamples: [
       {
@@ -1855,7 +1855,7 @@ export const grammarCardsP2: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'fill',
-      title: '选择正确的时间表达',
+      title: '选择正确的시간表达',
       body: '根据语境选择正确的填入。',
       questions: [
         {
@@ -1890,14 +1890,14 @@ export const grammarCardsP2: GrammarCard[] = [
     },
     overviewHtml: `<div class="overview">
   <span class="badge">第2部分 · 第8课</span>
-  <div class="ov-title">부터…까지 · 시간 표현</div>
+  <div class="ov-title">부터…까지 · 时间表达</div>
   <div class="ov-sub">从……到……，加上时间表达</div>
   <div class="ov-sec">
     <h3>① A부터 B까지</h3>
     <div style="font-size:16px;color:#241917;line-height:2">
       월요일<b style="color:#ff7fa8">부터</b> 금요일<b style="color:#2db89b">까지</b>（从周一到周五）<br>
       세 시<b style="color:#ff7fa8">부터</b> 다섯 시<b style="color:#2db89b">까지</b>（从三点到五点）<br>
-      공간 起点：서울<b style="color:#6b7ff0">에서</b> 부산<b style="color:#2db89b">까지</b>
+      空间 起点：서울<b style="color:#6b7ff0">에서</b> 부산<b style="color:#2db89b">까지</b>
     </div>
   </div>
   <div class="ov-sec">
@@ -1919,7 +1919,7 @@ export const grammarCardsP2: GrammarCard[] = [
     <h3>⚠️ 常见错误</h3>
     <div style="font-size:16px;color:#241917;line-height:2">
       <span style="color:#e05555;text-decoration:line-through">삼 시</span> → <span style="color:#ff7fa8">세 시</span>（시 用固有数词）<br>
-      서울<span style="color:#e05555;text-decoration:line-through">부터</span> 부산까지 → 서울<span style="color:#6b7ff0">에서</span> 부산까지（공간 기점 用 에서）<br>
+      서울<span style="color:#e05555;text-decoration:line-through">부터</span> 부산까지 → 서울<span style="color:#6b7ff0">에서</span> 부산까지（空间起点 用 에서）<br>
       <span style="color:#e05555;text-decoration:line-through">두 시 삼십 분 반</span> → 두 시 반（삼십 분=반，不叠用）
     </div>
   </div>
@@ -2019,7 +2019,7 @@ export const grammarCardsP2: GrammarCard[] = [
     scenarios: [
       { icon: '💬', context: 'SNS 聊天', ko: '친구한테 카톡 보냈어요. 아직 답장이 없어요.', zh: '给朋友发了KakaoTalk，还没有回复。' },
       { icon: '🌡️', context: '天气', ko: '오늘 너무 더워요. 어제는 추웠어요.', zh: '今天太热了，昨天很冷。' },
-      { icon: '📚', context: '学习反馈', ko: '이 문법이 어려워요. 선생님한테 물어볼 거예요.', zh: '这个语法很难，要问老师。' },
+      { icon: '📚', context: '学习反馈', ko: '이 문법이 어려워요. 선생님한테 물어볼 거예요.', zh: '这个문법很难，要问老师。' },
       { icon: '🎁', context: '收礼物', ko: '친구한테 선물을 받았어요!', zh: '收到了朋友的礼物！' },
       { icon: '🎵', context: 'KPOP 评论', ko: '이 노래 가사가 너무 아름다워요.', zh: '这首歌的歌词太美了。' },
       { icon: '🏋️', context: '运动', ko: '이 가방이 너무 무거워요. 좀 들어 주세요.', zh: '这个包太重了，帮我拿一下。' },
@@ -2066,7 +2066,7 @@ export const grammarCardsP2: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">别踩的坑</div></div>
     <div class="ov-block">
       <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">학교한테 가요</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">학교에 가요（에게/한테 只用于人/动物）</span></div></div>
-      <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">더웁니다</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">덥습니다（ㅂ 脱落，합니다 体）</span></div></div>
+      <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">더웁니다</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">덥습니다（합니다 体不触发 ㅂ 不规则，直接 덥+습니다）</span></div></div>
     </div>
   </div>
 </div>`,
@@ -2369,7 +2369,7 @@ export const grammarCardsP2: GrammarCard[] = [
           post: '.（듣다）',
           options: ['듣어요', '들어요', '듣아요'],
           answer: 1,
-          explanation: '듣다 是 ㄷ 불규칙，ㄷ→ㄹ：들어요',
+          explanation: '듣다 是 ㄷ 不规则，ㄷ→ㄹ：들어요',
         },
         {
           pre: '받다 →',
@@ -2418,14 +2418,14 @@ export const grammarCardsP2: GrammarCard[] = [
       { ko: '이 노래를 들어요', zh: '听这首歌。', tokens: [{ text: '이 노래를', role: 'object' }, { text: '들어요', role: 'verb' }] },
     ],
     connectionRules: [
-      { type: 'rule', text: '받침 있는 명사 뒤: 과/이/을/은，받침 없는 명사 뒤: 와/가/를/는', examples: '책과, 밥을, 책은 / 친구와, 커피를, 친구는' },
-      { type: 'compare', text: '하고（구어, 받침 무관） vs 와/과（문어, 받침 구분）', examples: '친구하고 가요 / 친구와 가요' },
+      { type: 'rule', text: '收音 있는 名词 뒤: 과/이/을/은，收音 없는 名词 뒤: 와/가/를/는', examples: '책과, 밥을, 책은 / 친구와, 커피를, 친구는' },
+      { type: 'compare', text: '하고（口语, 收音 무관） vs 와/과（书面语, 收音 구분）', examples: '친구하고 가요 / 친구와 가요' },
       { type: 'rule', text: '수사: 시각→고유 수사，분→한자 수사，수량사 앞에서 하나→한/둘→두/셋→세/넷→네', examples: '두 시 삼십 분 / 한 잔 / 세 명' },
-      { type: 'rule', text: '의（~의）：명사A의 명사B；도：은/는/이/가/을/를 대체；만：한정 "오직"', examples: '친구의 책 / 저도 가요 / 오늘만 있어요' },
-      { type: 'rule', text: '부정: 안 + 동사（구어）；동사 어간 + 지 않아요（문어）；하다 동사: 명사 + 안 해요', examples: '안 가요 / 가지 않아요 / 공부 안 해요' },
-      { type: 'compare', text: '부터（시간 기점） vs 에서（공간 기점），까지（종점）', examples: '두 시부터 / 서울에서 부산까지' },
-      { type: 'rule', text: 'ㅂ 불규칙: ㅂ + 모음 → 워，ㄷ 불규칙: ㄷ + 모음 → ㄹ', examples: '덥다→더워요 / 듣다→들어요' },
-      { type: 'rule', text: 'ㅡ 탈락: 어간 끝 ㅡ + 아/어요 탈락', examples: '아프다→아파요 / 예쁘다→예뻐요' },
+      { type: 'rule', text: '의（~의）：名词A의 名词B；도：은/는/이/가/을/를 대체；만：한정 "오직"', examples: '친구의 책 / 저도 가요 / 오늘만 있어요' },
+      { type: 'rule', text: '否定: 안 + 动词（口语）；动词 词干 + 지 않아요（书面语）；하다 动词: 名词 + 안 해요', examples: '안 가요 / 가지 않아요 / 공부 안 해요' },
+      { type: 'compare', text: '부터（시간 기점） vs 에서（空间起点），까지（종점）', examples: '두 시부터 / 서울에서 부산까지' },
+      { type: 'rule', text: 'ㅂ 不规则: ㅂ + 元音 → 워，ㄷ 不规则: ㄷ + 元音 → ㄹ', examples: '덥다→더워요 / 듣다→들어요' },
+      { type: 'rule', text: 'ㅡ 脱落: 词干 끝 ㅡ + 아/어요 脱落', examples: '아프다→아파요 / 예쁘다→예뻐요' },
     ],
     cardExamples: [
       {
@@ -2463,13 +2463,13 @@ export const grammarCardsP2: GrammarCard[] = [
       { icon: '🌧️', context: '不规则变化', ko: '날씨가 추워요. 그래서 밖에 안 나가요.', zh: '天气冷。所以不出去。' },
     ],
     mistakes: [
-      { wrong: '친구과 가요', correct: '친구와 가요', note: '친구는 받침 없는 명사 → 와' },
+      { wrong: '친구과 가요', correct: '친구와 가요', note: '친구는 收音 없는 名词 → 와' },
       { wrong: '커피 하나 잔', correct: '커피 한 잔', note: '수량사 앞에서 하나 → 한' },
       { wrong: '저는도 좋아요', correct: '저도 좋아요', note: '도는 은/는을 직접 대체，겹쳐 쓰지 않음' },
-      { wrong: '안 공부해요', correct: '공부 안 해요', note: '하다 동사 구어 부정: 명사 + 안 해요' },
-      { wrong: '서울부터 부산까지', correct: '서울에서 부산까지', note: '공간 기점은 에서，부터는 시간/추상에 사용' },
+      { wrong: '안 공부해요', correct: '공부 안 해요', note: '하다 动词 口语 否定: 名词 + 안 해요' },
+      { wrong: '서울부터 부산까지', correct: '서울에서 부산까지', note: '空间起点은 에서，부터는 시간/用于抽象' },
       { wrong: '덥어요', correct: '더워요', note: '덥다는 ㅂ 不规则，ㅂ→워' },
-      { wrong: '듣어요', correct: '들어요', note: '듣다는 ㄷ 불규칙，ㄷ→ㄹ' },
+      { wrong: '듣어요', correct: '들어요', note: '듣다는 ㄷ 不规则，ㄷ→ㄹ' },
     ],
     linkedGrammarIds: [],
     compareHtml: `<div class="card-title">第二章核心助词总览</div>
@@ -2477,7 +2477,7 @@ export const grammarCardsP2: GrammarCard[] = [
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">와/과 vs 하고</div><div style="font-size:16px;color:#89756e;margin-top:2px">都表示"和"</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">친구와 가요（书面）</span><span style="font-size:16px;color:#5a4640">와/과：书面/正式</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">친구하고 가요（口语）</span><span style="font-size:16px;color:#5a4640">하고：口语，不看收音</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">부터 vs 에서</div><div style="font-size:16px;color:#89756e;margin-top:2px">都表示"从……"</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">두 시부터（从两点）</span><span style="font-size:16px;color:#5a4640">부터：时间起点</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">서울에서（从首尔）</span><span style="font-size:16px;color:#5a4640">에서：空间起点</span></div></div>
 </div>
 <div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">不规则变化速记</div><div style="font-size:16px;color:#5a4640">ㅂ 不规则：덥다→더워요 / 춥다→추워요（ㅂ遇元音→워）<br>ㄷ 不规则：듣다→들어요（ㄷ遇元音→ㄹ）<br>ㅡ 脱落：아프다→아파요 / 예쁘다→예뻐요（ㅡ脱落看前一个元音）</div></div>
-<div class="reminder-box">도/만/도 不替换，是叠加助词：저도（我也）/ 오늘만（只有今天）。은/는/이/가/을/를 遇到 도/만 时直接替换掉。</div>`,
+<div class="reminder-box">도/만 直接替换 은/는/이/가/을/를，不叠加：저는→저도（我也）/ 오늘은→오늘만（只有今天）。两者也不可同时接在同一名词上（커피도만 ✗）。</div>`,
     overviewHtml: `<div class="overview">
   <span class="badge">第2部分 · 综合练习</span>
   <div class="ov-title">综合练习②</div>
@@ -2485,7 +2485,7 @@ export const grammarCardsP2: GrammarCard[] = [
   <div class="ov-sec">
     <h3>① 助词系统</h3>
     <div style="font-size:16px;color:#241917;line-height:2">
-      와/과（和）：받침 있는→과，받침 없는→와；하고（口语）<br>
+      와/과（和）：收音 있는→과，收音 없는→와；하고（口语）<br>
       에 가다（去某地）；이/가 있다/없다（有/在）<br>
       의（的）；도（也）；만（只）
     </div>
@@ -2494,7 +2494,7 @@ export const grammarCardsP2: GrammarCard[] = [
     <h3>② 请求 & 否定</h3>
     <div style="font-size:16px;color:#241917;line-height:2">
       -ㅂ시다/읍시다（一起吧）；-(으)세요（请…）<br>
-      안 + 동사；동사 어간 + 지 않아요；하다→명사 안 해요
+      안 + 动词；动词 词干 + 지 않아요；하다→名词 안 해요
     </div>
   </div>
   <div class="ov-sec">
@@ -2502,15 +2502,15 @@ export const grammarCardsP2: GrammarCard[] = [
     <div style="font-size:16px;color:#241917;line-height:2">
       固有数词（시/개/명/잔/권）：한 잔, 두 명<br>
       汉字数词（원/월/분）：오천 원, 삼십 분<br>
-      A부터 B까지（时间）；에서…까지（공간）
+      A부터 B까지（时间）；에서…까지（空间）
     </div>
   </div>
   <div class="ov-sec">
     <h3>④ 不规则变化</h3>
     <div style="font-size:16px;color:#241917;line-height:2">
-      ㅂ 불규칙：덥다→더워요, 춥다→추워요, 어렵다→어려워요<br>
-      ㄷ 불규칙：듣다→들어요, 걷다→걸어요<br>
-      ㅡ 탈락：아프다→아파요, 예쁘다→예뻐요, 바쁘다→바빠요
+      ㅂ 不规则：덥다→더워요, 춥다→추워요, 어렵다→어려워요<br>
+      ㄷ 不规则：듣다→들어요, 걷다→걸어요<br>
+      ㅡ 脱落：아프다→아파요, 예쁘다→예뻐요, 바쁘다→바빠요
     </div>
   </div>
   <div class="ov-sec">
@@ -2518,136 +2518,6 @@ export const grammarCardsP2: GrammarCard[] = [
     <div style="font-size:16px;color:#241917;line-height:2">
       그리고（而且）；그렇지만（但是）<br>
       이/그/저 + 名词（这/那/远那）；에게/한테（给谁）
-    </div>
-  </div>
-</div>`,
-  },
-
-  // ── 第三章 第11课：综合练习③ ─────────────────────────────
-  {
-    id: 'card-p3-l11',
-    partNumber: 3,
-    lessonNumber: 11,
-    title: '综合练习③',
-    whatItDoes: '第三章综合练习',
-    whatItDoesBody: '完成这份练习，检验第三章前 10 课是否掌握。\n涵盖进行时、经历回顾、愿望、ㄹ 不规则、意愿选择、疑问词、连接词、目的表达、时间顺序等核心知识点。',
-    isPractice: true,
-    structureNote: '这是第三章的总复习。\n第三章的核心是"时态扩展"和"句子连接"进行时、经历回顾、愿望、目的、顺序，都是让表达从单句变成复句的工具。\n做题时注意这条主线。',
-    structures: [
-      { ko: '지금 드라마를 보고 있어요', zh: '现在正在看电视剧。', tokens: [{ text: '지금', role: 'time' }, { text: '드라마를', role: 'object' }, { text: '보고 있어요', role: 'verb' }] },
-      { ko: '예전에 서울에 살았었어요', zh: '以前在首尔住过。', tokens: [{ text: '예전에', role: 'time' }, { text: '서울에', role: 'place' }, { text: '살았었어요', role: 'verb' }] },
-      { ko: '한국에 가고 싶어요', zh: '想去韩国。', tokens: [{ text: '한국에', role: 'place' }, { text: '가고 싶어요', role: 'verb' }] },
-      { ko: '카페에 공부하러 가요', zh: '去咖啡店学习。', tokens: [{ text: '카페에', role: 'place' }, { text: '공부하러', role: 'verb' }, { text: '가요', role: 'verb' }] },
-      { ko: '밥을 먹은 후에 공부해요', zh: '吃饭后学习。', tokens: [{ text: '밥을', role: 'object' }, { text: '먹은 후에', role: 'time' }, { text: '공부해요', role: 'verb' }] },
-    ],
-    connectionRules: [
-      { type: 'usage', text: '-고 있어요: 正在进行; 착용동사 + -고 있어요: 持续状态', examples: '공부하고 있어요 / 안경을 쓰고 있어요（戴着）' },
-      { type: 'usage', text: '-았었/었었어요: 以前曾经…（现在可能不同）', examples: '살았었어요 / 공부했었어요 / 학생이었었어요' },
-      { type: 'usage', text: '-고 싶어요: 想做; 그러면/그럼: 那么（条件顺接）', examples: '가고 싶어요 / 배가 고파요. 그러면 같이 먹어요.' },
-      { type: 'usage', text: 'ㄹ 불규칙: -아요/고 앞 보류, -세요/-ㅂ니다/-는 앞 탈락', examples: '살아요 ✓ / 사세요 ✓ / 삽니다 ✓' },
-      { type: 'usage', text: '-을/ㄹ래요: 意愿选择; -겠어요: 意志/礼貌（알겠어요）', examples: '갈래요 / 먹을래요 / 알겠어요' },
-      { type: 'usage', text: '무슨（名称）/ 어느（选项）/ 어떤（特点）', examples: '무슨 노래예요? / 어느 나라? / 어떤 음식을 좋아해요?' },
-      { type: 'usage', text: '그렇지만（明确转折）/ 그런데（轻转折/话题推进）', examples: '재미있어요. 그렇지만 어려워요. / 그런데 이거 알아요?' },
-      { type: 'usage', text: '그래서（所以，자연결과）/ 그러니까（所以，제안 어감）', examples: '비가 와요. 그래서 집에 있어요.' },
-      { type: 'usage', text: '-(으)러 가다: 去做某事目的; -을/ㄹ까요?: 提议/询问', examples: '먹으러 가요 / 같이 갈까요?' },
-      { type: 'usage', text: '-은/ㄴ 후에（之后，看 받침）/ -기 전에（之前，直接加 기）', examples: '먹은 후에 / 본 후에 / 먹기 전에 / 자기 전에' },
-    ],
-    cardExamples: [
-      {
-        wordBlocks: [{ text: '지금', role: 'time' }, { text: '안경을', role: 'object' }, { text: '쓰고 있어요', role: 'verb' }],
-        zh: '正戴着眼镜。',
-        swapWords: ['입고 있어요', '들고 있어요', '보고 있어요'],
-
-        swapRole: 'verb',
-      },
-      {
-        wordBlocks: [{ text: '이 노래를', role: 'object' }, { text: '배우고 싶어요', role: 'verb' }],
-        zh: '想学这首歌。',
-        swapWords: ['가고 싶어요', '먹고 싶어요', '알고 싶어요'],
-
-        swapRole: 'verb',
-      },
-      {
-        wordBlocks: [{ text: '자기 전에', role: 'time' }, { text: '복습해요', role: 'verb' }],
-        zh: '睡觉前复习。',
-        swapWords: ['공부한 후에 자요', '먹은 후에 가요'],
-
-        swapRole: 'verb',
-      },
-      {
-        wordBlocks: [
-          { text: '수업이 끝난', role: 'time' },
-          { text: '다음에', role: 'plain' },
-          { text: '카페에 가요', role: 'verb' },
-        ],
-        zh: '课结束后去咖啡店。',
-        swapWords: ['공부하러 가요', '밥을 먹어요'],
-
-        swapRole: 'verb',
-      },
-    ],
-    scenarios: [
-      { icon: '📚', context: '学习打卡', ko: '지금 한국어를 공부하고 있어요. 자기 전에 꼭 복습해요.', zh: '现在正在学习韩语。睡前一定复习。' },
-      { icon: '🎵', context: 'KPOP', ko: '이 노래를 배우고 싶어요. 그러면 같이 연습할까요?', zh: '想学这首歌。那要一起练习吗？' },
-      { icon: '✈️', context: '旅行愿望', ko: '한국에 가고 싶어요. 그래서 요즘 열심히 공부하고 있어요.', zh: '想去韩国，所以最近在努力学习。' },
-      { icon: '☕', context: '日程安排', ko: '수업이 끝난 다음에 카페에 공부하러 가요.', zh: '课结束后去咖啡店学习。' },
-      { icon: '💬', context: '对话练习', ko: '무슨 노래를 배우고 싶어요? 그런데 알겠어요, 같이 해 봐요!', zh: '想学什么歌？话说明白了，一起来试试吧！' },
-      { icon: '🏠', context: '日常习惯', ko: '샤워한 후에 드라마를 봐요. 그런데 요즘 너무 피곤해요. 그래서 일찍 자고 싶어요.', zh: '洗澡后看电视剧。但最近太累了，所以想早睡。' },
-    ],
-    mistakes: [
-      { wrong: '노래를 들고 있어요（想说正在听歌）', correct: '노래를 듣고 있어요', note: '-고 接续时 ㄷ 不规则不发生，듣다→듣고。' },
-      { wrong: '커피고 싶어요', correct: '커피를 마시고 싶어요', note: '-고 싶어요 接动词，不直接接名词，需补出动词。' },
-      { wrong: '알세요?', correct: '아세요?', note: '알다 + -세요 → ㄹ 脱落 → 아세요。' },
-      { wrong: '먹러 가요', correct: '먹으러 가요', note: '받침 있는 + 으러，먹다→먹으러 가요。' },
-      { wrong: '먹은 전에', correct: '먹기 전에', note: '-기 전에 前用名词化 -기，不用 -은/ㄴ。' },
-      { wrong: '그러면을 "但是"로 사용', correct: '그러면（那么，条件顺接）/ 그렇지만（但是，转折）', note: '두 词意思完全不同，不能混用。' },
-    ],
-        compareHtml: `<div class="card-title">第三章综合练习</div>
-<div class="card-body">完成这份练习，检验第三章前 10 课是否掌握。涵盖进行时、经历回顾、愿望、ㄹ 不规则、意愿选择、疑问词、连接词、目的表达、时间顺序等核心知识点。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0"><div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px"><div class="tok t-v">本课复习</div><div style="font-size:16px;color:#89756e;margin-top:2px">一课一句核心</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">-고 있다</span><span style="font-size:16px;color:#5a4640">正在做</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">-았었/었었</span><span style="font-size:16px;color:#5a4640">曾经……过</span></div></div><div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px"><div class="tok t-v">核心知识点</div><div style="font-size:16px;color:#89756e;margin-top:2px">全章重点</div><div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">-고 싶다 / 그러면</span><span style="font-size:16px;color:#5a4640">想做 / 那样的话</span></div><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">ㄹ不规则 / -을/ㄹ래요</span><span style="font-size:16px;color:#5a4640">变形 / 意愿选择</span></div></div>
-</div>
-<div style="background:#fff8fb;border-radius:12px;padding:12px 14px;margin:0 0 10px 0"><div style="font-size:16px;font-weight:700;color:#241917;margin-bottom:6px">综合练习建议</div><div style="font-size:16px;color:#5a4640">遇到不确定的题，先回想"这是哪节课的知识点"，再作答。第三章的核心是"时间"和"目的"——什么时候做、为什么做、做了什么之后发生什么。</div><div style="margin-top:4px;font-size:16px;color:#5a4640">如果大部分题都答对了，说明第三章掌握得不错，可以进入第四章。</div></div>
-<div class="reminder-box">综合练习不计成绩，目的是帮你发现哪里还不熟练。答错了就回去复习对应的课次。</div>`,
-    linkedGrammarIds: [],
-    overviewHtml: `<div class="overview">
-  <span class="badge">第3部分 · 综合练习</span>
-  <div class="ov-title">综合练习③</div>
-  <div class="ov-sub">第三章 10 课核心知识点总览</div>
-  <div class="ov-sec">
-    <h3>① 进行 & 经历</h3>
-    <div style="font-size:16px;color:#241917;line-height:2">
-      -고 <b style="color:#ff7fa8">있어요</b>（正在做）/ -고 <b style="color:#ff7fa8">있었어요</b>（过去正在做）<br>
-      穿戴类：입고/쓰고/들고 <b style="color:#ff7fa8">있어요</b>（穿着/戴着/拿着）<br>
-      -<b style="color:#2db89b">았었/었었어요</b>（以前曾经……）；하다→했었어요；名词→이었었어요
-    </div>
-  </div>
-  <div class="ov-sec">
-    <h3>② 愿望 & 意愿</h3>
-    <div style="font-size:16px;color:#241917;line-height:2">
-      -고 <b style="color:#ff7fa8">싶어요</b>（想做）；그러면/그럼（那么，条件顺接）<br>
-      -을/ㄹ<b style="color:#2db89b">래요</b>（我要/要不要）；<b style="color:#6b7ff0">알겠어요</b>（明白了）
-    </div>
-  </div>
-  <div class="ov-sec">
-    <h3>③ ㄹ 不规则</h3>
-    <div style="font-size:16px;color:#241917;line-height:2">
-      接元音 → ㄹ <b style="color:#2db89b">保留</b>：살아요, 알아요, 만들어요<br>
-      接 ㄴ/ㅂ/ㅅ → ㄹ <b style="color:#ff7fa8">脱落</b>：사세요, 삽니다, 아세요
-    </div>
-  </div>
-  <div class="ov-sec">
-    <h3>④ 疑问词 & 连接词</h3>
-    <div style="font-size:16px;color:#241917;line-height:2">
-      <b style="color:#ff7fa8">무슨</b>（名称/属性）/ <b style="color:#2db89b">어느</b>（选项）/ <b style="color:#6b7ff0">어떤</b>（特点）<br>
-      <b style="color:#ff7fa8">그렇지만</b>（但是）/ <b style="color:#2db89b">그런데</b>（不过/话题转换）<br>
-      <b style="color:#e8a87c">그래서</b>（所以）/ <b style="color:#6b7ff0">그러니까</b>（所以/因此，带劝告）
-    </div>
-  </div>
-  <div class="ov-sec">
-    <h3>⑤ 目的 & 时间顺序</h3>
-    <div style="font-size:16px;color:#241917;line-height:2">
-      -(으)러 가요（去做某事）；-을/ㄹ까요?（要不要……）<br>
-      -은/ㄴ <b style="color:#ff7fa8">후에</b>（之后，看 받침）；-기 <b style="color:#2db89b">전에</b>（之前，不看 받침）
     </div>
   </div>
 </div>`,

@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import React, { useState, useEffect, useRef, Suspense, createContext, useContext, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
@@ -16,6 +16,7 @@ import { useTheme } from '@/components/ThemeProvider';
 import { LIGHT_C as _LIGHT_C, DARK_C as _DARK_C } from '@/lib/theme';
 import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
+import { useToast } from '@/hooks/useToast';
 
 // grammar-cards 按 Part 动态加载，避免 1MB 数据阻塞首屏
 const partLoaders: Record<string, () => Promise<{ [key: string]: GrammarCard[] }>> = {
@@ -33,16 +34,37 @@ const partLoaders: Record<string, () => Promise<{ [key: string]: GrammarCard[] }
   p12: () => import('@/data/grammar-cards-p12') as any,
   p13: () => import('@/data/grammar-cards-p13') as any,
   p14: () => import('@/data/grammar-cards-p14') as any,
+  p15: () => import('@/data/grammar-cards-p15') as any,
+  p16: () => import('@/data/grammar-cards-p16') as any,
+  p17: () => import('@/data/grammar-cards-p17') as any,
+  p18: () => import('@/data/grammar-cards-p18') as any,
+  p19: () => import('@/data/grammar-cards-p19') as any,
+  p20: () => import('@/data/grammar-cards-p20') as any,
+  p21: () => import('@/data/grammar-cards-p21') as any,
+  p22: () => import('@/data/grammar-cards-p22') as any,
+  p23: () => import('@/data/grammar-cards-p23') as any,
+  p24: () => import('@/data/grammar-cards-p24') as any,
+  p25: () => import('@/data/grammar-cards-p25') as any,
+  p26: () => import('@/data/grammar-cards-p26') as any,
+  p27: () => import('@/data/grammar-cards-p27') as any,
+  p28: () => import('@/data/grammar-cards-p28') as any,
+  p29: () => import('@/data/grammar-cards-p29') as any,
+  p30: () => import('@/data/grammar-cards-p30') as any,
 };
 
 const partCache: Record<string, GrammarCard[]> = {};
 
 async function loadPartCards(part: string): Promise<GrammarCard[]> {
   if (partCache[part]) return partCache[part];
-  const mod = await partLoaders[part]();
-  const key = Object.keys(mod)[0];
-  partCache[part] = mod[key] as GrammarCard[];
-  return partCache[part];
+  try {
+    const mod = await partLoaders[part]();
+    const key = Object.keys(mod)[0];
+    partCache[part] = mod[key] as GrammarCard[];
+    return partCache[part];
+  } catch (e) {
+    console.error(`[grammar] loadPartCards failed for ${part}`, e);
+    return [];
+  }
 }
 
 async function loadGrammarCard(cardId: string): Promise<GrammarCard | null> {
@@ -52,7 +74,7 @@ async function loadGrammarCard(cardId: string): Promise<GrammarCard | null> {
   return cards.find(c => c.id === cardId) ?? null;
 }
 
-const PART_ORDER = ['p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8', 'p9', 'p10', 'p11', 'p12', 'p13', 'p14'];
+const PART_ORDER = ['p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8', 'p9', 'p10', 'p11', 'p12', 'p13', 'p14', 'p15', 'p16', 'p17', 'p18', 'p19', 'p20', 'p21', 'p22', 'p23', 'p24', 'p25', 'p26', 'p27', 'p28', 'p29', 'p30'];
 
 async function loadNextCard(cardId: string): Promise<GrammarCard | null> {
   const match = cardId.match(/^card-(p\d+)-l(\d+)$/);
@@ -71,8 +93,8 @@ async function loadNextCard(cardId: string): Promise<GrammarCard | null> {
   return nextPartCards[0] ?? null;
 }
 
-const LIGHT_C = { ..._LIGHT_C, purple: '#b49ccf', purpleBg: '#f3eefb' };
-const DARK_C  = { ..._DARK_C, purple: '#8a7ab0', purpleBg: '#2A2040' };
+const LIGHT_C = { ..._LIGHT_C, purple: 'var(--color-purple-base)', purpleBg: 'var(--color-purple-soft)' };
+const DARK_C  = { ..._DARK_C, purple: 'var(--color-purple-base)', purpleBg: 'var(--color-surface-3)' };
 
 const ColorCtx = createContext<typeof LIGHT_C>(LIGHT_C);
 const useC = () => useContext(ColorCtx);
@@ -82,7 +104,8 @@ const GRAMMAR_STYLES = `
     .hook-box { background: linear-gradient(135deg,color-mix(in srgb,var(--pink-primary) 12%,var(--bg-card)),color-mix(in srgb,var(--mint-soft) 20%,var(--bg-card))); border-radius: 22px; padding: 20px; margin-bottom: 16px; }
     .reminder-box { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; padding: 16px 18px; font-size: 16px; color: var(--text-secondary); line-height: 1.75; }
     .reminder-box .hl, .reminder-box b { color: #ff7fa8; font-weight: 700; }
-    .compare-grid { display: grid; grid-template-columns: 1fr 1fr; border-radius: 18px; overflow: hidden; border: 1px solid var(--border-color); margin-bottom: 16px; }
+    .compare-grid { display: grid; grid-template-columns: 1fr; border-radius: 18px; overflow: hidden; border: 1px solid var(--border-color); margin-bottom: 16px; }
+    @media (min-width: 480px) { .compare-grid { grid-template-columns: 1fr 1fr; } }
     .cc { padding: 18px 16px; }
     .cc.formal { background: color-mix(in srgb,#6b7ff0 12%,var(--bg-card)); }
     .cc.daily { background: color-mix(in srgb,#ff7fa8 10%,var(--bg-card)); }
@@ -90,33 +113,46 @@ const GRAMMAR_STYLES = `
     .compare-note { background: var(--bg-soft); border-radius: 14px; padding: 16px 18px; font-size: 16px; color: var(--text-secondary); line-height: 1.75; }
     .compare-note .hl { color: #ff7fa8; font-weight: 700; }
     .pill { display: inline-block; padding: 4px 10px; border-radius: 8px; font-size: 16px; font-weight: 800; }
-    .p-s { background: #ddf5ef; color: #2db89b; }
-    .p-o { background: #f3eefb; color: #b49ccf; }
+    .p-s { background: color-mix(in srgb,#2db89b 18%,var(--bg-card)); color: #2db89b; }
+    .p-o { background: color-mix(in srgb,#b49ccf 18%,var(--bg-card)); color: #b49ccf; }
     .p-v { background: #ff7fa8; color: white; }
-    .p-n { background: #e8e8ff; color: #6b7ff0; }
-    .p-q { background: #fff8d0; color: #b89020; }
+    .p-n { background: color-mix(in srgb,#6b7ff0 18%,var(--bg-card)); color: #6b7ff0; }
+    .p-q { background: color-mix(in srgb,#b89020 18%,var(--bg-card)); color: #b89020; }
     .tok-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
     .tok { padding: 7px 13px; border-radius: 9px; font-size: 16px; font-weight: 700; }
-    .t-s { background: #ddf5ef; color: #2db89b; }
-    .t-o { background: #f3eefb; color: #b49ccf; }
+    .t-s { background: color-mix(in srgb,#2db89b 18%,var(--bg-card)); color: #2db89b; }
+    .t-o { background: color-mix(in srgb,#b49ccf 18%,var(--bg-card)); color: #b49ccf; }
     .t-v { background: #ff7fa8; color: white; }
-    .t-p { background: #fef3c7; color: #92400e; }
-    .t-n { background: #e8e8ff; color: #6b7ff0; }
-    .t-q { background: #fff8d0; color: #b89020; }
+    .t-p { background: color-mix(in srgb,#92400e 18%,var(--bg-card)); color: #92400e; }
+    .t-n { background: color-mix(in srgb,#6b7ff0 18%,var(--bg-card)); color: #6b7ff0; }
+    .t-q { background: color-mix(in srgb,#b89020 18%,var(--bg-card)); color: #b89020; }
     .word-col { display: flex; flex-direction: column; gap: 10px; }
     /* L6-L10 design system */
     .block { background: var(--bg-card); border-radius: 14px; padding: 18px; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
     .block .h2 { font-size: .95rem; font-weight: 700; margin-bottom: 10px; color: #2db89b; }
     .ko { font-size: 17px; font-weight: 700; color: var(--text-primary); }
     .zh { font-size: 16px; color: var(--text-muted); margin-top: 4px; line-height: 1.6; }
+    /* Step0Html / CompareHtml 兜底类（让简陋骨架卡片有基本样式） */
+    .sub { color: var(--text-muted); font-size: 16px; margin-bottom: 22px; }
+    .step0-hook { display: flex; flex-direction: column; gap: 14px; }
+    .hook-sent { background: var(--bg-input); border-radius: 14px; padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; }
+    .hook-sent .ko { font-size: 17px; font-weight: 800; color: var(--text-primary); }
+    .hook-sent .zh { font-size: 15px; color: var(--text-muted); margin-top: 0; }
+    .compare { display: flex; flex-direction: column; gap: 14px; margin: 12px 0; }
+    .cmp-block { background: var(--bg-card); border-radius: 14px; padding: 16px 18px; border: 1px solid var(--border-color); box-shadow: 0 1px 4px rgba(0,0,0,.04); }
+    .cmp-title { font-size: 17px; font-weight: 800; color: var(--text-primary); margin-bottom: 10px; }
+    .cmp-row { font-size: 16px; color: var(--text-secondary); line-height: 1.7; padding: 4px 0; display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; }
+    .cmp-row .badge { font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 6px; background: rgba(255,127,168,.12); color: #ff7fa8; letter-spacing: .04em; flex-shrink: 0; }
+    .cmp-row .ko { font-size: 16px; font-weight: 700; }
+    .cmp-row .zh { font-size: 15px; color: var(--text-muted); margin-top: 0; }
     .row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
     .chip { padding: 6px 13px; border-radius: 20px; font-size: .88rem; font-weight: 600; cursor: pointer; border: 2px solid transparent; transition: all .15s; }
-    .chip.s { background: #d4f5e2; color: #1a7a4a; border-color: #b2e8c8; }
-    .chip.o { background: #ede0f7; color: #6b21a8; border-color: #d8b4fe; }
-    .chip.v { background: #ffe0ea; color: #be185d; border-color: #fca5c0; }
-    .chip.p { background: #fef3c7; color: #92400e; border-color: #fcd34d; }
-    .chip.t { background: #dbeafe; color: #1e40af; border-color: #93c5fd; }
-    .chip.n { background: #f1f5f9; color: #475569; border-color: #cbd5e1; }
+    .chip.s { background: color-mix(in srgb,#1a7a4a 18%,var(--bg-card)); color: #1a7a4a; border-color: color-mix(in srgb,#1a7a4a 30%,var(--bg-card)); }
+    .chip.o { background: color-mix(in srgb,#6b21a8 18%,var(--bg-card)); color: #6b21a8; border-color: color-mix(in srgb,#6b21a8 30%,var(--bg-card)); }
+    .chip.v { background: color-mix(in srgb,#be185d 18%,var(--bg-card)); color: #be185d; border-color: color-mix(in srgb,#be185d 30%,var(--bg-card)); }
+    .chip.p { background: color-mix(in srgb,#92400e 18%,var(--bg-card)); color: #92400e; border-color: color-mix(in srgb,#92400e 30%,var(--bg-card)); }
+    .chip.t { background: color-mix(in srgb,#1e40af 18%,var(--bg-card)); color: #1e40af; border-color: color-mix(in srgb,#1e40af 30%,var(--bg-card)); }
+    .chip.n { background: color-mix(in srgb,#475569 18%,var(--bg-card)); color: #475569; border-color: color-mix(in srgb,#475569 30%,var(--bg-card)); }
     table { width: 100%; border-collapse: collapse; font-size: .86rem; }
     th { background: color-mix(in srgb,#ff7fa8 15%,var(--bg-card)); color: #be185d; padding: 7px 10px; text-align: left; font-weight: 700; }
     td { padding: 7px 10px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); }
@@ -175,25 +211,31 @@ const GRAMMAR_STYLES = `
     .overview-desktop .ov-sub { grid-column: 1 / -1; }
 `;
 
-type Tab = 'chapters' | 'practice' | 'library';
+type Tab = 'chapters' | 'library';
 type LessonStatus = 'done' | 'started' | 'todo';
 
 // ── localStorage helpers ──────────────────────────────────────────────────────
+// 6-26 串号事故教训：所有跨用户共享 localStorage 都必须带 userId 前缀。
+// 未登录时不写入（返回空），防止匿名进度被下个登录用户继承。
 
-function loadLessonStates(): Record<string, LessonStatus> {
-  if (typeof window === 'undefined') return {};
+function lessonStatesKey(userId: string): string {
+  return `grammar_lesson_states:${userId}`;
+}
+
+function loadLessonStates(userId: string | undefined): Record<string, LessonStatus> {
+  if (typeof window === 'undefined' || !userId) return {};
   try {
-    return JSON.parse(localStorage.getItem('grammar_lesson_states') || '{}');
+    return JSON.parse(localStorage.getItem(lessonStatesKey(userId)) || '{}');
   } catch {
     return {};
   }
 }
 
-function saveLessonState(cardId: string, status: LessonStatus) {
-  if (typeof window === 'undefined') return;
-  const states = loadLessonStates();
+function saveLessonState(userId: string | undefined, cardId: string, status: LessonStatus) {
+  if (typeof window === 'undefined' || !userId) return;
+  const states = loadLessonStates(userId);
   states[cardId] = status;
-  localStorage.setItem('grammar_lesson_states', JSON.stringify(states));
+  localStorage.setItem(lessonStatesKey(userId), JSON.stringify(states));
 }
 
 // ── GrammarCardView ───────────────────────────────────────────────────────────
@@ -203,8 +245,8 @@ function WordBlockEl({ role, text }: { role: string; text: string }) {
     subject: { background: 'var(--color-mint-soft)', color: 'var(--color-mint-strong)' },
     object:  { background: 'var(--color-purple-soft)', color: 'var(--color-purple-strong)' },
     verb:    { background: 'var(--color-pink-base)', color: 'white' },
-    place:   { background: '#fff8d0', color: '#b89020' },
-    time:    { background: '#e8e8ff', color: '#6b7ff0' },
+    place:   { background: 'var(--color-mint-soft)', color: 'var(--color-status-warning)' },
+    time:    { background: 'var(--color-purple-soft)', color: 'var(--color-purple-strong)' },
     plain:   { background: 'var(--bg-muted)', color: 'var(--text-primary)' },
   };
   const s = styles[role] || styles.plain;
@@ -220,8 +262,8 @@ function TokenEl({ role }: { role: string }) {
     subject: { background: 'var(--color-mint-soft)', color: 'var(--color-mint-strong)' },
     object:  { background: 'var(--color-purple-soft)', color: 'var(--color-purple-strong)' },
     verb:    { background: 'var(--color-pink-base)', color: 'white' },
-    place:   { background: '#fff8d0', color: '#b89020' },
-    time:    { background: '#e8e8ff', color: '#6b7ff0' },
+    place:   { background: 'var(--color-mint-soft)', color: 'var(--color-status-warning)' },
+    time:    { background: 'var(--color-purple-soft)', color: 'var(--color-purple-strong)' },
   };
   const roleLabel: Record<string, string> = {
     subject: '主语', object: '宾语', verb: '谓语', place: '地点', time: '时间',
@@ -304,7 +346,7 @@ function CardSortStep({ examples }: { examples: GrammarCard['cardExamples'] }) {
   if (!quizzes.length) return null;
   const q = quizzes[qIdx];
   const trackBorder = result === 'ok' ? 'var(--color-mint-strong)' : result === 'ng' ? 'var(--color-status-danger)' : C.line;
-  const trackBg = result === 'ok' ? '#f0fff8' : result === 'ng' ? '#fff5f5' : '#fafafa';
+  const trackBg = result === 'ok' ? 'var(--color-mint-soft)' : result === 'ng' ? 'var(--color-status-danger)' + '1a' : C.card;
 
   return (
     <div>
@@ -313,12 +355,12 @@ function CardSortStep({ examples }: { examples: GrammarCard['cardExamples'] }) {
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 16 }}>
         {order.map((w, i) => (
           <button key={i} onClick={() => pick(w, i)} disabled={used.includes(i)}
-            style={{ padding: '12px 18px', borderRadius: 14, background: C.card, border: `1.5px solid ${C.line}`, fontSize: 17, fontWeight: 700, color: used.includes(i) ? '#ccc' : C.ink, cursor: used.includes(i) ? 'default' : 'pointer', opacity: used.includes(i) ? 0.3 : 1, whiteSpace: 'nowrap' }}>{w}</button>
+            style={{ padding: '12px 18px', borderRadius: 14, background: C.card, border: `1.5px solid ${C.line}`, fontSize: 17, fontWeight: 700, color: used.includes(i) ? 'var(--color-border-3)' : C.ink, cursor: used.includes(i) ? 'default' : 'pointer', opacity: used.includes(i) ? 0.3 : 1, whiteSpace: 'nowrap' }}>{w}</button>
         ))}
       </div>
       <div style={{ minHeight: 60, border: `2px dashed ${trackBorder}`, borderRadius: 18, padding: '12px 16px', display: 'flex', flexWrap: 'wrap', gap: 10, alignItems: 'center', background: trackBg, marginBottom: 12 }}>
         {answers.length === 0
-          ? <span style={{ fontSize: 14, color: '#ccc' }}>{t('grammar.quiz_placeholder', lang)}</span>
+          ? <span style={{ fontSize: 14, color: 'var(--color-border-3)' }}>{t('grammar.quiz_placeholder', lang)}</span>
           : answers.map((w, i) => <button key={i} onClick={() => remove(i)} style={{ padding: '10px 16px', borderRadius: 12, background: C.pink, color: 'white', fontSize: 17, fontWeight: 700, border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>{w}</button>)}
       </div>
       {result && (
@@ -329,7 +371,7 @@ function CardSortStep({ examples }: { examples: GrammarCard['cardExamples'] }) {
       )}
       <div style={{ display: 'flex', gap: 8 }}>
         <button onClick={reset} style={{ padding: '13px 18px', borderRadius: 16, border: `1.5px solid ${C.line}`, background: C.card, color: C.muted, fontSize: 15, cursor: 'pointer' }}>{t('grammar.quiz_reset', lang)}</button>
-        <button onClick={check} style={{ flex: 1, padding: 13, borderRadius: 16, border: 'none', background: '#201815', color: 'white', fontSize: 15, fontWeight: 800, cursor: 'pointer' }}>{t('grammar.quiz_check', lang)}</button>
+        <button onClick={check} style={{ flex: 1, padding: 13, borderRadius: 16, border: 'none', background: 'var(--color-ink-1)', color: 'white', fontSize: 15, fontWeight: 800, cursor: 'pointer' }}>{t('grammar.quiz_check', lang)}</button>
       </div>
     </div>
   );
@@ -362,8 +404,8 @@ function CardJudgeStep({ mistakes }: { mistakes: GrammarCard['mistakes'] }) {
         const s = states[i];
         const btnStyle = (ch: string): React.CSSProperties => {
           if (!s.done) return { border: `1.5px solid ${C.line}`, background: C.card };
-          if (ch === q.ans) return { border: '1.5px solid #2db89b', background: 'var(--color-mint-soft)' };
-          if (ch === s.picked && s.picked !== q.ans) return { border: '1.5px solid #e05555', background: '#fff0f0' };
+          if (ch === q.ans) return { border: '1.5px solid var(--color-mint-strong)', background: 'var(--color-mint-soft)' };
+          if (ch === s.picked && s.picked !== q.ans) return { border: '1.5px solid var(--color-status-danger)', background: 'rgba(214,86,86,0.08)' };
           return { border: `1.5px solid ${C.line}`, background: C.card };
         };
         return (
@@ -419,8 +461,8 @@ function SpecialQuizStep({ quiz }: { quiz: NonNullable<GrammarCard['specialQuiz'
         const s = states[qi];
         const btnStyle = (optIdx: number): React.CSSProperties => {
           if (!s.done) return { border: `1.5px solid ${C.line}`, background: C.card };
-          if (optIdx === q.answer) return { border: '1.5px solid #2db89b', background: 'var(--color-mint-soft)' };
-          if (s.picked === q.options[optIdx] && optIdx !== q.answer) return { border: '1.5px solid #e05555', background: '#fff0f0' };
+          if (optIdx === q.answer) return { border: '1.5px solid var(--color-mint-strong)', background: 'var(--color-mint-soft)' };
+          if (s.picked === q.options[optIdx] && optIdx !== q.answer) return { border: '1.5px solid var(--color-status-danger)', background: 'rgba(214,86,86,0.08)' };
           return { border: `1.5px solid ${C.line}`, background: C.card };
         };
         return (
@@ -464,92 +506,6 @@ function SpecialQuizStep({ quiz }: { quiz: NonNullable<GrammarCard['specialQuiz'
   );
 }
 
-function CardSwapStep({ examples }: { examples: GrammarCard['cardExamples'] }) {
-  const C = useC();
-  const { lang } = useLang();
-  const [exIdx, setExIdx] = React.useState(0);
-  const [swapIdx, setSwapIdx] = React.useState<number | null>(null);
-
-  if (!examples.length) return null;
-  const eg = examples[exIdx];
-  const hasSwaps = eg.swapWords && eg.swapWords.length > 0;
-  const role = eg.swapRole ?? 'subject';
-  const roleLabel: Record<string, string> = { subject: '主语', verb: '谓语', object: '宾语', place: '地点', time: '时间', plain: '修饰语' };
-  const targetIdx = eg.wordBlocks.findIndex(b => b.role === role);
-
-  // Guard: 如果数据配置错误导致 targetIdx === -1，显示提示而不渲染无意义的替换按钮
-  if (targetIdx === -1) {
-    return (
-      <div>
-        <div style={{ background: C.pinkSoft, borderRadius: 12, padding: '13px 16px', marginBottom: 16, fontSize: 15, color: C.muted, lineHeight: 1.65 }}>
-          {t('grammar.swap_hint_noconfig', lang)}
-        </div>
-        <div style={{ fontSize: 15, color: C.muted, marginBottom: 8 }}>{t('grammar.swap_sentence_n', lang).replace('{n}', String(exIdx + 1)).replace('{total}', String(examples.length))}</div>
-        <div style={{ background: C.bg, borderRadius: 16, padding: '16px 14px' }}>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'flex-start' }}>
-            {eg.wordBlocks.map((wb, j) => <WordBlockEl key={j} role={wb.role} text={wb.text} />)}
-            <button onClick={e => { e.stopPropagation(); speak(eg.wordBlocks.map(b => b.text).join('')); }} style={{ padding: 4, borderRadius: 8, background: 'rgba(255,127,168,.08)', border: 'none', cursor: 'pointer', color: C.pink, flexShrink: 0, alignSelf: 'center' }}><Volume2 size={13} /></button>
-          </div>
-          <p style={{ fontSize: 15, color: C.muted, marginTop: 8, lineHeight: 1.6 }}>{eg.zh}</p>
-        </div>
-        {examples.length > 1 && (
-          <div style={{ display: 'flex', gap: 8, marginTop: 14 }}>
-            <button onClick={() => { setExIdx(i => Math.max(0, i - 1)); setSwapIdx(null); }} disabled={exIdx === 0}
-              style={{ padding: '9px 16px', borderRadius: 12, border: `1.5px solid ${C.line}`, background: C.card, color: C.muted, fontSize: 15, cursor: exIdx === 0 ? 'default' : 'pointer', opacity: exIdx === 0 ? 0.4 : 1 }}>{t('grammar.nav_prev', lang)}</button>
-            <button onClick={() => { setExIdx(i => Math.min(examples.length - 1, i + 1)); setSwapIdx(null); }} disabled={exIdx === examples.length - 1}
-              style={{ flex: 1, padding: '9px 16px', borderRadius: 12, border: 'none', background: '#201815', color: 'white', fontSize: 15, fontWeight: 700, cursor: exIdx === examples.length - 1 ? 'default' : 'pointer', opacity: exIdx === examples.length - 1 ? 0.4 : 1 }}>{t('grammar.nav_next', lang)}</button>
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  const displayBlocks = eg.wordBlocks.map((wb, i) => {
-    if (hasSwaps && swapIdx !== null && i === targetIdx && eg.swapWords) {
-      return { ...wb, text: eg.swapWords[swapIdx] };
-    }
-    return wb;
-  });
-
-  return (
-    <div>
-      <div style={{ background: C.mintBg, borderRadius: 12, padding: '13px 16px', marginBottom: 16, fontSize: 15, color: C.muted, lineHeight: 1.65 }}>
-        {t('grammar.swap_hint', lang)}
-      </div>
-      <div style={{ fontSize: 15, color: C.muted, marginBottom: 10 }}>{t('grammar.swap_sentence_n', lang).replace('{n}', String(exIdx + 1)).replace('{total}', String(examples.length))}</div>
-      <div style={{ background: C.bg, borderRadius: 16, padding: '18px 16px', marginBottom: 14 }}>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 10, alignItems: 'flex-start' }}>
-          {displayBlocks.map((wb, j) => (
-            <div key={j} style={j === targetIdx && hasSwaps ? { outline: swapIdx !== null ? 'none' : '2px dashed #ff7fa8', borderRadius: 8 } : {}}>
-              <WordBlockEl role={wb.role} text={wb.text} />
-            </div>
-          ))}
-          <button onClick={e => { e.stopPropagation(); speak(displayBlocks.map(b => b.text).join('')); }} style={{ padding: 4, borderRadius: 8, background: 'rgba(255,127,168,.08)', border: 'none', cursor: 'pointer', color: C.pink, flexShrink: 0, alignSelf: 'center' }}><Volume2 size={13} /></button>
-        </div>
-        <p style={{ fontSize: 15, color: C.muted, marginTop: 8, lineHeight: 1.6 }}>{eg.zh}</p>
-      </div>
-      {hasSwaps && (
-        <div>
-          <p style={{ fontSize: 15, color: C.muted, marginBottom: 8 }}>{t('grammar.swap_replace_label', lang).replace('{role}', roleLabel[role] ?? role)}</p>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
-            {eg.swapWords!.map((w, i) => (
-              <button key={i} onClick={() => setSwapIdx(swapIdx === i ? null : i)}
-                style={{ padding: '10px 16px', borderRadius: 12, fontSize: 17, fontWeight: 700, border: `1.5px solid ${swapIdx === i ? C.pink : C.line}`, background: swapIdx === i ? C.pinkSoft : C.card, color: swapIdx === i ? C.pink : C.ink, cursor: 'pointer' }}>{w}</button>
-            ))}
-          </div>
-        </div>
-      )}
-      {examples.length > 1 && (
-        <div style={{ display: 'flex', gap: 8, marginTop: 14 }}>
-          <button onClick={() => { setExIdx(i => Math.max(0, i - 1)); setSwapIdx(null); }} disabled={exIdx === 0}
-            style={{ padding: '9px 16px', borderRadius: 12, border: `1.5px solid ${C.line}`, background: C.card, color: C.muted, fontSize: 15, cursor: exIdx === 0 ? 'default' : 'pointer', opacity: exIdx === 0 ? 0.4 : 1 }}>{t('grammar.nav_prev', lang)}</button>
-          <button onClick={() => { setExIdx(i => Math.min(examples.length - 1, i + 1)); setSwapIdx(null); }} disabled={exIdx === examples.length - 1}
-            style={{ flex: 1, padding: '9px 16px', borderRadius: 12, border: 'none', background: '#201815', color: 'white', fontSize: 15, fontWeight: 700, cursor: exIdx === examples.length - 1 ? 'default' : 'pointer', opacity: exIdx === examples.length - 1 ? 0.4 : 1 }}>{t('grammar.nav_next', lang)}</button>
-        </div>
-      )}
-    </div>
-  );
-}
 
 // ── GrammarCardView (step-by-step flip card) ──────────────────────────────────
 
@@ -570,13 +526,14 @@ function GrammarCardView({
 }) {
   const C = useC();
   const { lang } = useLang();
+  const { user } = useAuth();
   const [step, setStep] = React.useState(0);
   const [isMobile, setIsMobile] = React.useState(false);
   const [isTablet, setIsTablet] = React.useState(false);
   const [isDesktop, setIsDesktop] = React.useState(true);
   const [lessonStates, setLessonStates] = React.useState<Record<string, string>>({});
   React.useEffect(() => {
-    setLessonStates(loadLessonStates());
+    setLessonStates(loadLessonStates(user?.id));
   }, [card.id]);
   React.useEffect(() => {
     const check = () => {
@@ -605,17 +562,16 @@ function GrammarCardView({
   type StepDef = { badge: string; emoji: string; label: string; color: string };
   const steps: StepDef[] = [
     { badge: '💡', emoji: '💡', label: t('grammar.step_intro', lang), color: C.pink },
-    ...(card.conceptCompare || card.compareHtml ? [{ badge: '🔀', emoji: '🔀', label: card.compareLabel || t('grammar.step_compare', lang), color: '#b49ccf' }] : []),
-    ...(hasStructures ? [{ badge: '📐', emoji: '📐', label: t('grammar.step_structure', lang), color: '#6b7ff0' }] : []),
-    ...(hasRules ? [{ badge: '🔗', emoji: '🔗', label: t('grammar.step_rules', lang), color: '#b49ccf' }] : []),
-    ...(hasReadingGuide ? [{ badge: '👁️', emoji: '👁️', label: t('grammar.step_reading', lang), color: '#6b7ff0' }] : []),
-    ...(hasQuickTable ? [{ badge: '📊', emoji: '📊', label: t('grammar.step_quicktable', lang), color: '#6b7ff0' }] : []),
-    ...(hasExamples ? [{ badge: '✏️', emoji: '✏️', label: t('grammar.step_swap', lang), color: 'var(--color-mint-strong)' }] : []),
-    ...(hasScenarios ? [{ badge: '🌏', emoji: '🌏', label: t('grammar.step_scenario', lang), color: '#e8a87c' }] : []),
+    ...(card.conceptCompare || card.compareHtml ? [{ badge: '🔀', emoji: '🔀', label: card.compareLabel || t('grammar.step_compare', lang), color: 'var(--color-purple-base)' }] : []),
+    ...(hasStructures ? [{ badge: '📐', emoji: '📐', label: t('grammar.step_structure', lang), color: 'var(--color-purple-strong)' }] : []),
+    ...(hasRules ? [{ badge: '🔗', emoji: '🔗', label: t('grammar.step_rules', lang), color: 'var(--color-purple-base)' }] : []),
+    ...(hasReadingGuide ? [{ badge: '👁️', emoji: '👁️', label: t('grammar.step_reading', lang), color: 'var(--color-purple-strong)' }] : []),
+    ...(hasQuickTable ? [{ badge: '📊', emoji: '📊', label: t('grammar.step_quicktable', lang), color: 'var(--color-purple-strong)' }] : []),
+    ...(hasScenarios ? [{ badge: '🌏', emoji: '🌏', label: t('grammar.step_scenario', lang), color: 'var(--color-ink-3)' }] : []),
     ...(hasMistakes ? [{ badge: '⚠️', emoji: '⚠️', label: t('grammar.step_mistake', lang), color: 'var(--color-status-danger)' }] : []),
     ...(hasExamples ? [{ badge: '🎯', emoji: '🎯', label: t('grammar.step_sort', lang), color: 'var(--color-mint-strong)' }] : []),
-    ...(hasSpecialQuiz ? [{ badge: '🧠', emoji: '🧠', label: t('grammar.step_special', lang), color: '#c89020' }] : []),
-    ...(hasMistakes && !hasSpecialQuiz ? [{ badge: '🧐', emoji: '🧐', label: t('grammar.step_judge', lang), color: '#c89020' }] : []),
+    ...(hasSpecialQuiz ? [{ badge: '🧠', emoji: '🧠', label: t('grammar.step_special', lang), color: 'var(--color-status-warning)' }] : []),
+    ...(hasMistakes && !hasSpecialQuiz ? [{ badge: '🧐', emoji: '🧐', label: t('grammar.step_judge', lang), color: 'var(--color-status-warning)' }] : []),
     { badge: '🎉', emoji: '🎉', label: t('grammar.step_done', lang), color: C.pink },
   ];
 
@@ -627,7 +583,7 @@ function GrammarCardView({
 
   const goNext = () => {
     const next = Math.min(total - 1, step + 1);
-    if (next === total - 1) saveLessonState(card.id, 'done');
+    if (next === total - 1) saveLessonState(user?.id, card.id, 'done');
     setStep(next);
     window.scrollTo(0, 0);
   };
@@ -638,7 +594,6 @@ function GrammarCardView({
   let rulesStepIdx = -1;
   let readingGuideStepIdx = -1;
   let quickTableStepIdx = -1;
-  let swapStepIdx = -1;
   let scenarioStepIdx = -1;
   let mistakeStepIdx = -1;
   let sortStepIdx = -1;
@@ -652,7 +607,6 @@ function GrammarCardView({
   if (hasRules) { rulesStepIdx = cursor++; }
   if (hasReadingGuide) { readingGuideStepIdx = cursor++; }
   if (hasQuickTable) { quickTableStepIdx = cursor++; }
-  if (hasExamples) { swapStepIdx = cursor++; }
   if (hasScenarios) { scenarioStepIdx = cursor++; }
   if (hasMistakes) { mistakeStepIdx = cursor++; }
   if (hasExamples) { sortStepIdx = cursor++; }
@@ -815,7 +769,7 @@ function GrammarCardView({
                         <span key={j} style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
                           <WordBlockEl role={tk.role} text={tk.text} />
                           <TokenEl role={tk.role} />
-                          {j < s.tokens.length - 1 && <span style={{ color: '#ccc', fontSize: 16 }}>+</span>}
+                          {j < s.tokens.length - 1 && <span style={{ color: 'var(--color-border-3)', fontSize: 16 }}>+</span>}
                         </span>
                       ))}
                     </div>
@@ -863,18 +817,18 @@ function GrammarCardView({
             const grouped: Partial<Record<ConnectionRule['type'], ConnectionRule[]>> = {};
             typed.forEach(r => { (grouped[r.type] = grouped[r.type] || []).push(r); });
             const META: Record<ConnectionRule['type'], { icon: string; label: string; bg: string; border: string; titleColor: string }> = {
-              rule:    { icon: '🔗', label: '接续规则',   bg: 'var(--color-mint-soft)', border: 'var(--color-mint-strong)', titleColor: '#1a9e85' },
-              usage:   { icon: '💡', label: '使用场景',   bg: 'var(--color-mint-soft)', border: 'var(--color-mint-strong)', titleColor: '#1a9e85' },
-              compare: { icon: '↔️', label: '对比辨析',   bg: '#f0f4ff', border: '#6b7ff0', titleColor: '#5568d4' },
-              note:    { icon: '⚠️', label: '注意事项',   bg: '#fff8ee', border: '#e0960a', titleColor: '#c89020' },
-              vocab:   { icon: '📋', label: '词汇补充',   bg: '#f5f0fa', border: '#b49ccf', titleColor: '#9370b8' },
-              example: { icon: '📝', label: '教材例句',   bg: '#f8f4f0', border: '#eee0d8', titleColor: '#89756e' },
+              rule:    { icon: '🔗', label: '接续规则',   bg: 'var(--color-mint-soft)', border: 'var(--color-mint-strong)', titleColor: 'var(--color-mint-strong)' },
+              usage:   { icon: '💡', label: '使用场景',   bg: 'var(--color-mint-soft)', border: 'var(--color-mint-strong)', titleColor: 'var(--color-mint-strong)' },
+              compare: { icon: '↔️', label: '对比辨析',   bg: 'var(--color-purple-soft)', border: 'var(--color-purple-strong)', titleColor: 'var(--color-purple-strong)' },
+              note:    { icon: '⚠️', label: '注意事项',   bg: 'var(--color-surface-4)', border: 'var(--color-status-warning)', titleColor: 'var(--color-status-warning)' },
+              vocab:   { icon: '📋', label: '词汇补充',   bg: 'var(--color-purple-soft)', border: 'var(--color-purple-base)', titleColor: 'var(--color-purple-base)' },
+              example: { icon: '📝', label: '教材例句',   bg: 'var(--color-surface-4)', border: 'var(--color-border-1)', titleColor: 'var(--color-ink-3)' },
             };
             return (
               <div style={{ background: C.card, borderRadius: isMobile ? 16 : 22, border: `1px solid ${C.line}`, boxShadow: '0 4px 20px rgba(78,52,46,.09)', padding: isMobile ? '24px 20px' : '32px 32px' }}>
                 <h2 style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 12 }}>{t('grammar.section_rules', lang)}</h2>
                 {card.rulesNote && (
-                  <div style={{ background: 'linear-gradient(135deg,#fff8d0,#fff0f5)', borderRadius: 14, padding: '12px 16px', marginBottom: 16, border: '1px solid #f0e0c0' }}>
+                  <div style={{ background: 'linear-gradient(135deg, var(--color-mint-soft), var(--color-pink-soft))', borderRadius: 14, padding: '12px 16px', marginBottom: 16, border: '1px solid #f0e0c0' }}>
                     <div style={{ fontSize: 12, fontWeight: 800, color: C.pink, marginBottom: 4 }}>📌 {lang === 'en' ? 'Why are these rules needed?' : '为什么需要这些规则？'}</div>
                     <div style={{ fontSize: 15, color: C.muted, lineHeight: 1.7, whiteSpace: 'pre-line' }}>{card.rulesNote}</div>
                   </div>
@@ -1015,14 +969,6 @@ function GrammarCardView({
             );
           })()}
 
-          {/* 替换练习 */}
-          {step === swapStepIdx && (
-            <div style={{ background: C.card, borderRadius: isMobile ? 16 : 22, border: `1px solid ${C.line}`, boxShadow: '0 4px 20px rgba(78,52,46,.09)', padding: isMobile ? '24px 20px' : '32px 32px' }}>
-              <h2 style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 8 }}>{t('grammar.section_swap', lang)}</h2>
-              <p style={{ fontSize: 15, color: C.muted, marginBottom: 16 }}>{t('grammar.section_swap_desc', lang)}</p>
-              <CardSwapStep key={card.id + '-swap'} examples={card.cardExamples} />
-            </div>
-          )}
 
           {/* 真实场景 */}
           {step === scenarioStepIdx && (
@@ -1030,7 +976,7 @@ function GrammarCardView({
               <h2 style={{ fontSize: 22, fontWeight: 900, color: C.ink, marginBottom: 12 }}>{t('grammar.section_scenario', lang)}</h2>
               {card.scenarioNote && (
                 <div style={{ background: `linear-gradient(135deg, color-mix(in srgb, #6b7ff0 12%, ${C.card}), color-mix(in srgb, #aee3d8 15%, ${C.card}))`, borderRadius: 14, padding: '12px 16px', marginBottom: 16, border: `1px solid ${C.line}` }}>
-                  <div style={{ fontSize: 12, fontWeight: 800, color: '#6b7ff0', marginBottom: 4 }}>{lang === 'en' ? '🌏 When to use?' : '🌏 什么时候用？'}</div>
+                  <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--color-purple-strong)', marginBottom: 4 }}>{lang === 'en' ? '🌏 When to use?' : '🌏 什么时候用？'}</div>
                   <div style={{ fontSize: 15, color: C.muted, lineHeight: 1.7, whiteSpace: 'pre-line' }}>{card.scenarioNote}</div>
                 </div>
               )}
@@ -1060,14 +1006,14 @@ function GrammarCardView({
                 {card.mistakes.map((m, i) => (
                   <div key={i} style={{ borderRadius: 18, overflow: 'hidden', border: `1px solid ${C.line}` }}>
                     <div style={{ background: `color-mix(in srgb, #e05555 8%, ${C.card})`, padding: '14px 16px', display: 'flex', gap: 10, alignItems: 'flex-start' }}>
-                      <span style={{ fontSize: 13, fontWeight: 800, padding: '3px 8px', borderRadius: 6, background: '#ffc0c0', color: '#c00', whiteSpace: 'nowrap', marginTop: 2 }}>✗ 错</span>
+                      <span style={{ fontSize: 13, fontWeight: 800, padding: '3px 8px', borderRadius: 6, background: 'rgba(214,86,86,0.12)', color: 'var(--color-status-danger)', whiteSpace: 'nowrap', marginTop: 2 }}>✗ 错</span>
                       <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, flex: 1 }}>
                         <span style={{ fontSize: 17, lineHeight: 1.65, flex: 1 }}>{m.wrong}</span>
                         <button onClick={e => { e.stopPropagation(); speak(m.wrong); }} style={{ padding: 4, borderRadius: 8, background: 'rgba(255,127,168,.08)', border: 'none', cursor: 'pointer', color: C.pink, flexShrink: 0, marginTop: 2 }}><Volume2 size={13} /></button>
                       </div>
                     </div>
                     <div style={{ background: `color-mix(in srgb, #2db89b 8%, ${C.card})`, padding: '14px 16px', display: 'flex', gap: 10, alignItems: 'flex-start' }}>
-                      <span style={{ fontSize: 13, fontWeight: 800, padding: '3px 8px', borderRadius: 6, background: '#b8f0d0', color: '#007a40', whiteSpace: 'nowrap', marginTop: 2 }}>✓ 对</span>
+                      <span style={{ fontSize: 13, fontWeight: 800, padding: '3px 8px', borderRadius: 6, background: 'rgba(58,175,169,0.12)', color: 'var(--color-mint-strong)', whiteSpace: 'nowrap', marginTop: 2 }}>✓ 对</span>
                       <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, flex: 1 }}>
                         <span style={{ fontSize: 17, lineHeight: 1.65, flex: 1 }}>{m.correct}</span>
                         <button onClick={e => { e.stopPropagation(); speak(m.correct); }} style={{ padding: 4, borderRadius: 8, background: 'rgba(255,127,168,.08)', border: 'none', cursor: 'pointer', color: C.pink, flexShrink: 0, marginTop: 2 }}><Volume2 size={13} /></button>
@@ -1113,7 +1059,7 @@ function GrammarCardView({
                   {/* L10 第一章全部完成横幅（React读localStorage，不依赖HTML原型JS） */}
                   {card.lessonNumber === 10 && card.partNumber === 1 && (() => {
                     const chapterKeys = ['card-p1-l01','card-p1-l02','card-p1-l03','card-p1-l04','card-p1-l05','card-p1-l06','card-p1-l07','card-p1-l08','card-p1-l09','card-p1-l10'];
-                    const freshStates = loadLessonStates();
+                    const freshStates = loadLessonStates(user?.id);
                     const allDone = chapterKeys.every(k => freshStates[k] === 'done');
                     return allDone ? (
                       <div style={{ background: 'linear-gradient(135deg,#ff7fa8,#aee3d8)', borderRadius: 16, padding: 20, textAlign: 'center', marginBottom: 16 }}>
@@ -1129,7 +1075,7 @@ function GrammarCardView({
                   {/* L10 第一章全部完成横幅 */}
                   {card.lessonNumber === 10 && card.partNumber === 1 && (() => {
                     const chapterKeys = ['card-p1-l01','card-p1-l02','card-p1-l03','card-p1-l04','card-p1-l05','card-p1-l06','card-p1-l07','card-p1-l08','card-p1-l09','card-p1-l10'];
-                    const freshStates = loadLessonStates();
+                    const freshStates = loadLessonStates(user?.id);
                     const allDone = chapterKeys.every(k => freshStates[k] === 'done');
                     return allDone ? (
                       <div style={{ background: 'linear-gradient(135deg,#ff7fa8,#aee3d8)', borderRadius: 16, padding: 20, textAlign: 'center', marginBottom: 16 }}>
@@ -1185,8 +1131,8 @@ function GrammarCardView({
                       <h3 style={{ fontSize: 15, fontWeight: 800, color: C.pink, marginBottom: 10, margin: '0 0 10px 0' }}>{t('grammar.done_common_errors', lang)}</h3>
                       {card.mistakes.slice(0, 4).map((m, i) => (
                         <div key={i} style={{ fontSize: 15, lineHeight: 1.8, marginBottom: 4, display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-                          <span style={{ color: '#be185d', textDecoration: 'line-through' }}>{m.wrong}</span>{' → '}
-                          <span style={{ color: '#1a7a4a' }}>{m.correct}</span>
+                          <span style={{ color: 'var(--color-status-danger)', textDecoration: 'line-through' }}>{m.wrong}</span>{' → '}
+                          <span style={{ color: 'var(--color-mint-strong)' }}>{m.correct}</span>
                           <button onClick={() => speak(m.correct)} style={{ padding: 3, borderRadius: 6, background: 'rgba(255,127,168,.08)', border: 'none', cursor: 'pointer', color: C.pink, flexShrink: 0 }}><Volume2 size={11} /></button>
                         </div>
                       ))}
@@ -1241,7 +1187,7 @@ function GrammarCardView({
         position: 'fixed',
         bottom: 'calc(56px + env(safe-area-inset-bottom, 0px))',
         left: 0, right: 0,
-        padding: '12px 20px', background: 'rgba(255,251,247,.95)', backdropFilter: 'blur(12px)', borderTop: `1px solid ${C.line}`, display: 'flex', gap: 10, zIndex: 70
+        padding: '12px 20px', background: 'var(--color-surface-1)', backdropFilter: 'blur(12px)', borderTop: `1px solid ${C.line}`, display: 'flex', gap: 10, zIndex: 70
       } : {
         padding: '14px 0 0', display: 'flex', gap: 10
       }}>
@@ -1249,7 +1195,7 @@ function GrammarCardView({
           <button onClick={goPrev} style={{ padding: '15px 18px', borderRadius: 18, border: `1.5px solid ${C.line}`, background: C.card, color: C.muted, fontSize: 16, fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' }}>{t('grammar.nav_prev_page', lang)}</button>
         )}
         {step < doneStepIdx && (
-          <button onClick={goNext} style={{ flex: 1, padding: 15, borderRadius: 18, border: 'none', background: '#201815', color: 'white', fontSize: 16, fontWeight: 800, cursor: 'pointer' }}>
+          <button onClick={goNext} style={{ flex: 1, padding: 15, borderRadius: 18, border: 'none', background: 'var(--color-ink-1)', color: 'white', fontSize: 16, fontWeight: 800, cursor: 'pointer' }}>
             {t('grammar.nav_next_page', lang)}
           </button>
         )}
@@ -1382,8 +1328,8 @@ function SortStep({ onDone }: { onDone: () => void }) {
   };
 
   const q = SORT_Q[qIdx];
-  const trackBg = result === 'ok' ? '#f0fff8' : result === 'ng' ? '#fff5f5' : '#fafafa';
-  const trackBorder = result === 'ok' ? 'var(--color-mint-strong)' : result === 'ng' ? 'var(--color-status-danger)' : '#eee0d8';
+  const trackBg = result === 'ok' ? 'var(--color-mint-soft)' : result === 'ng' ? 'rgba(214,86,86,0.06)' : 'var(--color-surface-3)';
+  const trackBorder = result === 'ok' ? 'var(--color-mint-strong)' : result === 'ng' ? 'var(--color-status-danger)' : 'var(--color-border-1)';
 
   return (
     <div>
@@ -1391,12 +1337,12 @@ function SortStep({ onDone }: { onDone: () => void }) {
       <div style={{ fontSize: 15, background: C.bg, borderRadius: 10, padding: '8px 12px', color: C.muted, marginBottom: 10 }}>{q.hint}</div>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
         {order.map((w, i) => (
-          <button key={i} onClick={() => pick(w, i)} disabled={used.includes(i)} style={{ padding: '8px 14px', borderRadius: 12, background: C.card, border: `1.5px solid ${C.line}`, fontSize: 17, fontWeight: 700, color: used.includes(i) ? '#ccc' : C.ink, cursor: used.includes(i) ? 'default' : 'pointer', opacity: used.includes(i) ? 0.3 : 1 }}>{w}</button>
+          <button key={i} onClick={() => pick(w, i)} disabled={used.includes(i)} style={{ padding: '8px 14px', borderRadius: 12, background: C.card, border: `1.5px solid ${C.line}`, fontSize: 17, fontWeight: 700, color: used.includes(i) ? 'var(--color-border-3)' : C.ink, cursor: used.includes(i) ? 'default' : 'pointer', opacity: used.includes(i) ? 0.3 : 1 }}>{w}</button>
         ))}
       </div>
-      <div onClick={() => {}} style={{ minHeight: 50, border: `2px dashed ${trackBorder}`, borderRadius: 14, padding: '8px 12px', display: 'flex', flexWrap: 'wrap', gap: 6, alignItems: 'center', background: trackBg, marginBottom: 8 }}>
+      <div style={{ minHeight: 50, border: `2px dashed ${trackBorder}`, borderRadius: 14, padding: '8px 12px', display: 'flex', flexWrap: 'wrap', gap: 6, alignItems: 'center', background: trackBg, marginBottom: 8 }}>
         {answers.length === 0
-          ? <span style={{ fontSize: 16, color: '#ccc' }}>{t('grammar.quiz_placeholder', lang)}</span>
+          ? <span style={{ fontSize: 16, color: 'var(--color-border-3)' }}>{t('grammar.quiz_placeholder', lang)}</span>
           : answers.map((w, i) => <button key={i} onClick={() => remove(i)} style={{ padding: '6px 12px', borderRadius: 10, background: C.pink, color: 'white', fontSize: 17, fontWeight: 700, border: 'none', cursor: 'pointer' }}>{w}</button>)
         }
       </div>
@@ -1406,7 +1352,7 @@ function SortStep({ onDone }: { onDone: () => void }) {
       </div>}
       <div style={{ display: 'flex', gap: 8 }}>
         <button onClick={reset} style={{ padding: '12px 16px', borderRadius: 14, border: `1.5px solid ${C.line}`, background: C.card, color: C.muted, fontSize: 16, cursor: 'pointer' }}>{t('grammar.quiz_reset', lang)}</button>
-        <button onClick={check} style={{ flex: 1, padding: 12, borderRadius: 14, border: 'none', background: '#201815', color: 'white', fontSize: 16, fontWeight: 800, cursor: 'pointer' }}>{t('grammar.quiz_check', lang)}</button>
+        <button onClick={check} style={{ flex: 1, padding: 12, borderRadius: 14, border: 'none', background: 'var(--color-ink-1)', color: 'white', fontSize: 16, fontWeight: 800, cursor: 'pointer' }}>{t('grammar.quiz_check', lang)}</button>
       </div>
     </div>
   );
@@ -1443,7 +1389,7 @@ function FillStep({ data, onScore }: { data: typeof FILL3_DATA; onScore?: (s: { 
               let border = '1.5px solid #eee0d8', bg = 'white';
               if (s.done) {
                 if (opt === q.ans) { border = '1.5px solid #2db89b'; bg = 'var(--color-mint-soft)'; }
-                else if (opt === s.picked && s.picked !== q.ans) { border = '1.5px solid #e05555'; bg = '#fff0f0'; }
+                else if (opt === s.picked && s.picked !== q.ans) { border = '1.5px solid #e05555'; bg = 'rgba(214,86,86,0.08)'; }
               }
               return (
                 <button key={opt} onClick={() => pick(i, opt)} style={{ display: 'inline-block', padding: '10px 20px', borderRadius: 14, border, background: bg, fontSize: 17, fontWeight: 700, color: C.ink, cursor: 'pointer', margin: '0 8px 8px 0' }}>{opt}</button>
@@ -1491,7 +1437,7 @@ function MorphStep({ onScore }: { onScore?: (s: { correct: number; total: number
                 let border = '1.5px solid #eee0d8', bg = 'white';
                 if (s.done) {
                   if (opt === q.ans) { border = '1.5px solid #2db89b'; bg = 'var(--color-mint-soft)'; }
-                  else if (opt === s.picked && s.picked !== q.ans) { border = '1.5px solid #e05555'; bg = '#fff0f0'; }
+                  else if (opt === s.picked && s.picked !== q.ans) { border = '1.5px solid #e05555'; bg = 'rgba(214,86,86,0.08)'; }
                 }
                 return (
                   <button key={opt} onClick={() => pick(i, opt)} style={{ padding: '10px 16px', borderRadius: 14, border, background: bg, fontSize: 17, fontWeight: 700, color: C.ink, cursor: 'pointer' }}>{opt}</button>
@@ -1534,7 +1480,7 @@ function JudgeStep({ onScore }: { onScore?: (s: { correct: number; total: number
         const btnStyle = (choice: string): React.CSSProperties => {
           if (!s.done) return { border: `1.5px solid ${C.line}`, background: C.card };
           if (choice === q.ans) return { border: '1.5px solid #2db89b', background: 'var(--color-mint-soft)' };
-          if (choice === s.picked && s.picked !== q.ans) return { border: '1.5px solid #e05555', background: '#fff0f0' };
+          if (choice === s.picked && s.picked !== q.ans) return { border: '1.5px solid #e05555', background: 'rgba(214,86,86,0.08)' };
           return { border: `1.5px solid ${C.line}`, background: C.card };
         };
         return (
@@ -1610,7 +1556,7 @@ function ScoreStep({ onComplete, scores }: { onComplete: () => void; scores?: { 
   const max = (scores?.fill3max ?? FILL3_DATA.length) + (scores?.fill4max ?? FILL4_DATA.length) + (scores?.morphmax ?? MORPH_DATA.length) + (scores?.judgemax ?? JUDGE_DATA.length);
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-      <div style={{ background: 'linear-gradient(135deg,#fff0f5,#eaf8f5)', borderRadius: 20, padding: 20, textAlign: 'center' }}>
+      <div style={{ background: 'linear-gradient(135deg, var(--color-pink-soft), var(--color-mint-soft))', borderRadius: 20, padding: 20, textAlign: 'center' }}>
         <div style={{ fontSize: 42, fontWeight: 900, color: C.pink }}>{total}<span style={{ fontSize: 18, color: C.muted }}> / {max}</span></div>
         <div style={{ fontSize: 16, color: C.muted, marginTop: 4 }}>{t('grammar.practice_score_correct', lang)}</div>
       </div>
@@ -1659,24 +1605,24 @@ function ScoreStep({ onComplete, scores }: { onComplete: () => void; scores?: { 
 }
 
 const STEP_CONFIG_ZH = [
-  { badge: '📋', label: '练习说明', color: '#ff7fa8' },
+  { badge: '📋', label: '练习说明', color: 'var(--color-pink-base)' },
   { badge: '🎯', label: '句子排序', color: 'var(--color-mint-strong)' },
-  { badge: '✏️', label: '助词填空①', color: '#6b7ff0' },
-  { badge: '✏️', label: '助词填空②', color: '#b49ccf' },
+  { badge: '✏️', label: '助词填空①', color: 'var(--color-purple-strong)' },
+  { badge: '✏️', label: '助词填空②', color: 'var(--color-purple-base)' },
   { badge: '🔄', label: '变形练习', color: 'var(--color-mint-strong)' },
-  { badge: '✅', label: '判断正误', color: '#c89020' },
+  { badge: '✅', label: '判断正误', color: 'var(--color-status-warning)' },
   { badge: '⚠️', label: '改错练习', color: 'var(--color-status-danger)' },
-  { badge: '🏆', label: '练习完成', color: '#e07a30' },
+  { badge: '🏆', label: '练习完成', color: 'var(--color-peach-base,#e07a30)' },
 ];
 const STEP_CONFIG_EN = [
-  { badge: '📋', label: 'Overview', color: '#ff7fa8' },
+  { badge: '📋', label: 'Overview', color: 'var(--color-pink-base)' },
   { badge: '🎯', label: 'Word order', color: 'var(--color-mint-strong)' },
-  { badge: '✏️', label: 'Particles ①', color: '#6b7ff0' },
-  { badge: '✏️', label: 'Particles ②', color: '#b49ccf' },
+  { badge: '✏️', label: 'Particles ①', color: 'var(--color-purple-strong)' },
+  { badge: '✏️', label: 'Particles ②', color: 'var(--color-purple-base)' },
   { badge: '🔄', label: 'Conjugation', color: 'var(--color-mint-strong)' },
-  { badge: '✅', label: 'True/False', color: '#c89020' },
+  { badge: '✅', label: 'True/False', color: 'var(--color-status-warning)' },
   { badge: '⚠️', label: 'Error correction', color: 'var(--color-status-danger)' },
-  { badge: '🏆', label: 'Results', color: '#e07a30' },
+  { badge: '🏆', label: 'Results', color: 'var(--color-peach-base,#e07a30)' },
 ];
 const STEPS_TOTAL = 8;
 
@@ -1725,7 +1671,7 @@ function ComprehensivePractice({ card, onBack, onComplete }: { card: GrammarCard
             <>
               <div style={{ fontSize: 21, fontWeight: 900, color: C.ink }}>{t('grammar.practice_intro_title', lang)}</div>
               <div style={{ fontSize: 16, color: C.muted, lineHeight: 1.7 }}>{t('grammar.practice_intro_desc', lang)}</div>
-              <div style={{ background: 'linear-gradient(135deg,#fff0f5,#eaf8f5)', borderRadius: 22, padding: 20 }}>
+              <div style={{ background: 'linear-gradient(135deg, var(--color-pink-soft), var(--color-mint-soft))', borderRadius: 22, padding: 20 }}>
                 <div style={{ fontSize: 16, fontWeight: 800, color: C.muted, marginBottom: 12 }}>{t('grammar.practice_coverage_title', lang)}</div>
                 {[
                   ['🔤','韩语基本语序','谓语放句末'],
@@ -1816,7 +1762,7 @@ function ComprehensivePractice({ card, onBack, onComplete }: { card: GrammarCard
           {step > 0 && (
             <button onClick={() => { setStep(s => s - 1); window.scrollTo(0, 0); }} style={{ padding: '14px 16px', borderRadius: 16, border: `1.5px solid ${C.line}`, background: C.card, color: C.muted, fontSize: 15, fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' }}>{t('grammar.nav_prev_page', lang)}</button>
           )}
-          <button onClick={() => { setStep(s => s + 1); window.scrollTo(0, 0); }} style={{ flex: 1, padding: 14, borderRadius: 16, border: 'none', background: '#201815', color: 'white', fontSize: 15, fontWeight: 800, cursor: 'pointer' }}>
+          <button onClick={() => { setStep(s => s + 1); window.scrollTo(0, 0); }} style={{ flex: 1, padding: 14, borderRadius: 16, border: 'none', background: 'var(--color-ink-1)', color: 'white', fontSize: 15, fontWeight: 800, cursor: 'pointer' }}>
             {step === 6 ? t('grammar.nav_see_result', lang) : t('grammar.nav_next_page', lang)}
           </button>
         </div>
@@ -1830,14 +1776,16 @@ function ComprehensivePractice({ card, onBack, onComplete }: { card: GrammarCard
 function ChaptersTab({ onOpenCard, isAdmin }: { onOpenCard: (card: GrammarCard) => void; isAdmin: boolean }) {
   const C = useC();
   const { lang } = useLang();
+  const { user } = useAuth();
   const [lessonStates, setLessonStates] = useState<Record<string, LessonStatus>>({});
   const [isLoaded, setIsLoaded] = useState(false);
   const [expanded, setExpanded] = useState<Set<number>>(new Set([1]));
+  const [activeLevel, setActiveLevel] = useState<'beginner' | 'intermediate' | 'advanced'>('beginner');
 
   useEffect(() => {
-    setLessonStates(loadLessonStates());
+    setLessonStates(loadLessonStates(user?.id));
     setIsLoaded(true);
-  }, []);
+  }, [user?.id]);
 
   const toggle = (partNumber: number) => setExpanded(prev => {
     const next = new Set(prev);
@@ -1858,19 +1806,19 @@ function ChaptersTab({ onOpenCard, isAdmin }: { onOpenCard: (card: GrammarCard) 
     (async () => {
       for (const part of grammarParts) {
         for (const lesson of part.lessons) {
-          if (lessonStates[lesson.cardId] !== 'done') {
-            const card = await loadGrammarCard(lesson.cardId);
-            if (!cancelled && card) {
-              setContinueCard(card);
-              setContinuePartTitle(lang === 'en' ? `Part ${part.partNumber} · ${part.title}` : `第${partNums[part.partNumber - 1]}部分 · ${part.title}`);
-            }
-            return;
+          if (lessonStates[lesson.cardId] === 'done') continue;
+          if (!isAdmin && lesson.lessonNumber === 11 && part.partNumber !== 1) continue;
+          const card = await loadGrammarCard(lesson.cardId);
+          if (!cancelled && card) {
+            setContinueCard(card);
+            setContinuePartTitle(lang === 'en' ? `Part ${part.partNumber} · ${part.title}` : `第${partNums[part.partNumber - 1]}部分 · ${part.title}`);
           }
+          return;
         }
       }
     })();
     return () => { cancelled = true; };
-  }, [isLoaded, lessonStates]);
+  }, [isLoaded, lessonStates, isAdmin]);
 
   return (
     <div>
@@ -1927,7 +1875,72 @@ function ChaptersTab({ onOpenCard, isAdmin }: { onOpenCard: (card: GrammarCard) 
 
       <p style={{ fontSize: 13, fontWeight: 800, color: C.muted, letterSpacing: '.6px', textTransform: 'uppercase', margin: '18px 0 10px' }}>{t('grammar.chapters_all_parts', lang)}</p>
 
-      {grammarParts.map(part => {
+      <div style={{ display: 'flex', gap: 6, padding: 4, background: 'var(--color-surface-4)', borderRadius: 14, marginBottom: 14 }}>
+        {([
+          { key: 'beginner', label: lang === 'en' ? 'Beginner' : '初级', sub: 'P1-P6' },
+          { key: 'intermediate', label: lang === 'en' ? 'Intermediate' : '中级', sub: 'P7-P16' },
+          { key: 'advanced', label: lang === 'en' ? 'Advanced' : '高级', sub: 'P17-P30' },
+        ] as const).map(tab => {
+          const active = activeLevel === tab.key;
+          return (
+            <button
+              key={tab.key}
+              onClick={() => setActiveLevel(tab.key)}
+              style={{
+                flex: 1,
+                padding: '10px 4px',
+                borderRadius: 10,
+                border: 'none',
+                cursor: 'pointer',
+                background: active ? C.card : 'transparent',
+                boxShadow: active ? '0 2px 6px rgba(78,52,46,.08)' : 'none',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: 2,
+              }}
+            >
+              <span style={{ fontSize: 14, fontWeight: 800, color: active ? C.ink : C.muted }}>{tab.label}</span>
+              <span style={{ fontSize: 10, fontWeight: 700, color: active ? C.pink : C.muted, letterSpacing: '.4px' }}>{tab.sub}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {(() => {
+        const info = {
+          beginner: {
+            status: lang === 'en' ? 'Complete · 6 parts / 66 lessons' : '已完备 · 6 部 · 66 课',
+            gap: lang === 'en' ? 'Optional: 汉/固有数词切换, 委婉请求深化' : '可选补充：汉/固有数词切换、委婉请求深化',
+            color: '#2db89b',
+            bg: C.mintBg,
+          },
+          intermediate: {
+            status: lang === 'en' ? 'Complete · 10 parts / 92 lessons' : '已完备 · 10 部 · 92 课',
+            gap: lang === 'en' ? 'Optional: 방언/口语音变' : '可选补充：방언 / 口语音变',
+            color: '#6b7ff0',
+            bg: 'rgba(107,127,240,.08)',
+          },
+          advanced: {
+            status: lang === 'en' ? 'Complete · 14 parts / 114 lessons' : '已完备 · 14 部 · 114 课',
+            gap: lang === 'en' ? 'Optional: 网络新造语 / 방언 표현' : '可选补充：网络新造语、방언 표현',
+            color: '#ff7fa8',
+            bg: C.pinkSoft,
+          },
+        }[activeLevel];
+        return (
+          <div style={{ background: info.bg, border: `1px solid ${info.color}33`, borderRadius: 14, padding: '12px 14px', marginBottom: 14 }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: info.color, letterSpacing: '.4px', marginBottom: 4 }}>{info.status}</div>
+            <div style={{ fontSize: 13, color: C.ink, lineHeight: 1.5 }}>{info.gap}</div>
+          </div>
+        );
+      })()}
+
+      {grammarParts.filter(part => {
+        if (activeLevel === 'beginner') return part.partNumber <= 6;
+        if (activeLevel === 'intermediate') return part.partNumber >= 7 && part.partNumber <= 16;
+        return part.partNumber >= 17;
+      }).map(part => {
         const isPartLocked = !isAdmin && part.partNumber >= 7;
         const isOpen = !isPartLocked && expanded.has(part.partNumber);
         const doneInPart = part.lessons.filter(l => lessonStates[l.cardId] === 'done').length;
@@ -1940,13 +1953,14 @@ function ChaptersTab({ onOpenCard, isAdmin }: { onOpenCard: (card: GrammarCard) 
               onClick={() => !isPartLocked && toggle(part.partNumber)}
               style={{ width: '100%', padding: '16px 18px', display: 'flex', alignItems: 'center', gap: 14, cursor: isPartLocked ? 'default' : 'pointer', background: 'transparent', border: 'none', textAlign: 'left' }}
             >
-              <div style={{ width: 44, height: 44, borderRadius: 15, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: isDone ? 20 : 16, fontWeight: 900, flexShrink: 0, background: isPartLocked ? '#f0ece8' : isDone ? C.mintBg : isActive ? C.pinkSoft : '#f0ece8', color: isPartLocked ? C.muted : isDone ? 'var(--color-mint-strong)' : isActive ? C.pink : C.muted }}>
+              <div style={{ width: 44, height: 44, borderRadius: 15, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: isDone ? 20 : 16, fontWeight: 900, flexShrink: 0, background: isPartLocked ? 'var(--color-surface-4)' : isDone ? C.mintBg : isActive ? C.pinkSoft : 'var(--color-surface-4)', color: isPartLocked ? C.muted : isDone ? 'var(--color-mint-strong)' : isActive ? C.pink : C.muted }}>
                 {isPartLocked ? <Lock size={16} /> : isDone ? '✓' : partNums[part.partNumber - 1]}
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
                   <p style={{ fontSize: 16, fontWeight: 800, color: isDone || isActive ? C.ink : C.muted, margin: 0 }}>{lang === 'en' ? `Part ${part.partNumber} · ${part.title}` : `第${partNums[part.partNumber - 1]}部分 · ${part.title}`}</p>
-                  {part.partNumber >= 7 && <span style={{ fontSize: 11, fontWeight: 800, background: 'linear-gradient(135deg,#6b7ff0,#a78bfa)', color: 'white', borderRadius: 999, padding: '2px 8px', flexShrink: 0 }}>{lang === 'en' ? 'Intermediate' : '中级'}</span>}
+                  {part.partNumber >= 7 && part.partNumber <= 16 && <span style={{ fontSize: 11, fontWeight: 800, background: 'linear-gradient(135deg,#6b7ff0,#a78bfa)', color: 'white', borderRadius: 999, padding: '2px 8px', flexShrink: 0 }}>{lang === 'en' ? 'Intermediate' : '中级'}</span>}
+                  {part.partNumber >= 17 && <span style={{ fontSize: 11, fontWeight: 800, background: 'linear-gradient(135deg,#ff7fa8,#ff5c8a)', color: 'white', borderRadius: 999, padding: '2px 8px', flexShrink: 0 }}>{lang === 'en' ? 'Advanced' : '高级'}</span>}
                 </div>
                 <p style={{ fontSize: 13, color: C.muted, marginTop: 3 }}>{isPartLocked ? t('grammar.chapters_status_coming', lang) : lang === 'en' ? `${part.lessons.length} lessons${doneInPart > 0 ? ` · ${doneInPart}/${part.lessons.length} done` : ''}` : `${part.lessons.length} 课${doneInPart > 0 ? ` · ${doneInPart}/${part.lessons.length} 已完成` : ''}`}</p>
               </div>
@@ -1961,7 +1975,9 @@ function ChaptersTab({ onOpenCard, isAdmin }: { onOpenCard: (card: GrammarCard) 
                 {part.lessons.map(lesson => {
                   const status = lessonStates[lesson.cardId] || 'todo';
                   const isCurrent = continueCard?.id === lesson.cardId;
-                  const isLocked = isAdmin ? false : part.partNumber > 6;
+                  const isPracticeLesson = lesson.lessonNumber === 11;
+                  const practiceUnavailable = isPracticeLesson && part.partNumber !== 1;
+                  const isLocked = isAdmin ? false : (part.partNumber > 6 || practiceUnavailable);
 
                   return (
                     <div
@@ -1973,7 +1989,7 @@ function ChaptersTab({ onOpenCard, isAdmin }: { onOpenCard: (card: GrammarCard) 
                       }}
                       style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 18px', borderBottom: `1px solid ${C.line}`, background: isLocked ? 'transparent' : isCurrent ? C.pinkSoft : 'transparent', cursor: isLocked ? 'default' : 'pointer', opacity: isLocked ? 0.45 : 1 }}
                     >
-                      <div style={{ width: 36, height: 36, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, fontWeight: 800, flexShrink: 0, background: isLocked ? '#f0ece8' : status === 'done' ? C.mintBg : isCurrent ? C.pinkSoft : '#f0ece8', border: `1px solid ${isLocked ? C.line : status === 'done' ? C.mint : isCurrent ? C.pink : C.line}`, color: isLocked ? C.muted : status === 'done' ? 'var(--color-mint-strong)' : isCurrent ? C.pink : C.muted }}>
+                      <div style={{ width: 36, height: 36, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, fontWeight: 800, flexShrink: 0, background: isLocked ? 'var(--color-surface-4)' : status === 'done' ? C.mintBg : isCurrent ? C.pinkSoft : 'var(--color-surface-4)', border: `1px solid ${isLocked ? C.line : status === 'done' ? C.mint : isCurrent ? C.pink : C.line}`, color: isLocked ? C.muted : status === 'done' ? 'var(--color-mint-strong)' : isCurrent ? C.pink : C.muted }}>
                         {isLocked ? <Lock size={12} /> : status === 'done' ? '✓' : isCurrent ? '▶' : lesson.lessonNumber}
                       </div>
                       <div style={{ flex: 1, minWidth: 0 }}>
@@ -2031,7 +2047,7 @@ function PracticeTab({
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
       {(learnedCount > 0 || learningCount > 0) && (
         <div style={{ background: C.card, border: `1px solid ${C.line}`, borderRadius: 20, display: 'flex', justifyContent: 'space-around', padding: '14px 0' }}>
-          {[{ n: learnedCount, l: '已掌握', c: 'var(--color-mint-strong)' }, { n: learningCount, l: '学习中', c: C.pink }, { n: difficultCount, l: '易错', c: '#e8a87c' }].map(({ n, l, c }, i, arr) => (
+          {[{ n: learnedCount, l: '已掌握', c: 'var(--color-mint-strong)' }, { n: learningCount, l: '学习中', c: C.pink }, { n: difficultCount, l: '易错', c: 'var(--color-ink-3)' }].map(({ n, l, c }, i, arr) => (
             <div key={l} style={{ display: 'flex', alignItems: 'center' }}>
               <div style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: 22, fontWeight: 900, color: c }}>{n}</div>
@@ -2057,7 +2073,7 @@ function PracticeTab({
               </button>
             ))}
           </div>
-          <button onClick={() => onStartReview(reviewPatterns)} style={{ width: '100%', padding: '10px 0', background: 'rgba(232,168,124,.1)', border: '1px solid rgba(232,168,124,.2)', borderRadius: 12, fontSize: 15, fontWeight: 600, color: '#e8a87c', cursor: 'pointer' }}>
+          <button onClick={() => onStartReview(reviewPatterns)} style={{ width: '100%', padding: '10px 0', background: 'rgba(232,168,124,.1)', border: '1px solid rgba(232,168,124,.2)', borderRadius: 12, fontSize: 15, fontWeight: 600, color: 'var(--color-ink-3)', cursor: 'pointer' }}>
             复习 {reviewPatterns.length} 个句型
           </button>
         </div>
@@ -2131,7 +2147,7 @@ function highlightPattern(text: string, pattern: string): React.ReactNode {
   return (
     <>
       {before}
-      <mark style={{ background: 'rgba(255,127,168,0.18)', color: '#e4547a', borderRadius: 3, padding: '0 1px', fontWeight: 700 }}>{matched}</mark>
+      <mark style={{ background: 'rgba(255,127,168,0.18)', color: 'var(--color-status-danger)', borderRadius: 3, padding: '0 1px', fontWeight: 700 }}>{matched}</mark>
       {after}
     </>
   );
@@ -2141,6 +2157,8 @@ function LibraryTab({ onStartGrammar }: { onStartGrammar: (gp: GrammarPoint) => 
   const C = useC();
   const { lang } = useLang();
   const router = useRouter();
+  const { user } = useAuth();
+  const favKey = user?.id ? `grammar-favorites:${user.id}` : 'grammar-favorites';
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
   const [activeLevel, setActiveLevel] = useState('all');
@@ -2148,14 +2166,20 @@ function LibraryTab({ onStartGrammar }: { onStartGrammar: (gp: GrammarPoint) => 
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [favorites, setFavorites] = useState<string[]>(() => {
     if (typeof window === 'undefined') return [];
-    try { return JSON.parse(localStorage.getItem('grammar-favorites') || '[]'); } catch { return []; }
+    try { return JSON.parse(localStorage.getItem(user?.id ? `grammar-favorites:${user.id}` : 'grammar-favorites') || '[]'); } catch { return []; }
   });
+
+  // Re-load favorites when user changes (login/logout/switch account)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try { setFavorites(JSON.parse(localStorage.getItem(favKey) || '[]')); } catch { setFavorites([]); }
+  }, [favKey]);
 
   const toggleFavorite = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
     setFavorites(prev => {
       const next = prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id];
-      try { localStorage.setItem('grammar-favorites', JSON.stringify(next)); } catch { /* ignore */ }
+      try { localStorage.setItem(favKey, JSON.stringify(next)); } catch { /* ignore */ }
       return next;
     });
   };
@@ -2168,8 +2192,8 @@ function LibraryTab({ onStartGrammar }: { onStartGrammar: (gp: GrammarPoint) => 
   };
   const levelConfig: Record<string, { label: string; bg: string; color: string }> = {
     beginner:     { label: '初级', bg: 'var(--color-mint-soft)', color: 'var(--color-mint-strong)' },
-    intermediate: { label: '中级', bg: '#fff0f5', color: '#ff7fa8' },
-    advanced:     { label: '高级', bg: '#f3eefb', color: '#b49ccf' },
+    intermediate: { label: '中级', bg: 'var(--color-pink-soft)', color: 'var(--color-pink-base)' },
+    advanced:     { label: '高级', bg: 'var(--color-purple-soft)', color: 'var(--color-purple-base)' },
   };
 
   const counts = useMemo(() => ({
@@ -2211,8 +2235,8 @@ function LibraryTab({ onStartGrammar }: { onStartGrammar: (gp: GrammarPoint) => 
           </button>
         ))}
         <button onClick={() => { setShowFavorites(f => !f); setActiveLevel('all'); }}
-          style={{ marginLeft: 'auto', padding: '3px 10px', borderRadius: 999, fontSize: 12, fontWeight: 700, border: 'none', cursor: 'pointer', background: showFavorites ? 'rgba(255,193,7,.15)' : 'transparent', color: showFavorites ? '#c89020' : C.muted, display: 'flex', alignItems: 'center', gap: 4 }}>
-          <Star size={11} fill={showFavorites ? '#c89020' : 'none'} />{lang === 'en' ? 'Favorites' : '收藏'} {favorites.length > 0 ? favorites.length : ''}
+          style={{ marginLeft: 'auto', padding: '3px 10px', borderRadius: 999, fontSize: 12, fontWeight: 700, border: 'none', cursor: 'pointer', background: showFavorites ? 'rgba(255,193,7,.15)' : 'transparent', color: showFavorites ? 'var(--color-status-warning)' : C.muted, display: 'flex', alignItems: 'center', gap: 4 }}>
+          <Star size={11} fill={showFavorites ? 'var(--color-status-warning)' : 'none'} />{lang === 'en' ? 'Favorites' : '收藏'} {favorites.length > 0 ? favorites.length : ''}
         </button>
       </div>
 
@@ -2280,8 +2304,8 @@ function LibraryTab({ onStartGrammar }: { onStartGrammar: (gp: GrammarPoint) => 
                   </div>
                   {isOpen ? <ChevronDown size={15} color={C.muted} /> : <ChevronRight size={15} color={C.muted} />}
                 </button>
-                <button onClick={e => toggleFavorite(gp.id, e)} style={{ padding: 6, background: 'none', border: 'none', cursor: 'pointer', flexShrink: 0, color: isFav ? '#c89020' : C.muted }}>
-                  <Star size={15} fill={isFav ? '#c89020' : 'none'} />
+                <button onClick={e => toggleFavorite(gp.id, e)} style={{ padding: 6, background: 'none', border: 'none', cursor: 'pointer', flexShrink: 0, color: isFav ? 'var(--color-status-warning)' : C.muted }}>
+                  <Star size={15} fill={isFav ? 'var(--color-status-warning)' : 'none'} />
                 </button>
               </div>
 
@@ -2330,7 +2354,7 @@ function LibraryTab({ onStartGrammar }: { onStartGrammar: (gp: GrammarPoint) => 
                   {/* toriTip */}
                   {gp.toriTip && (
                     <div style={{ background: 'rgba(232,168,124,.08)', border: '1px solid rgba(232,168,124,.2)', borderRadius: 12, padding: 12 }}>
-                      <p style={{ fontSize: 13, fontWeight: 700, color: '#e8a87c', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 4 }}><Lightbulb size={11} />{t('grammar.library_practice_tip', lang)}</p>
+                      <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--color-ink-3)', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 4 }}><Lightbulb size={11} />{t('grammar.library_practice_tip', lang)}</p>
                       <p style={{ fontSize: 14, color: C.muted }}>{gp.toriTip}</p>
                     </div>
                   )}
@@ -2384,6 +2408,7 @@ function GrammarContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user } = useAuth();
+  const { showToast } = useToast();
   const isAdmin = user?.role === 'admin';
   const [tab, setTab] = useState<Tab>('chapters');
   const [grammarStates, setGrammarStates] = useState<Record<string, UserGrammarState>>({});
@@ -2391,7 +2416,11 @@ function GrammarContent() {
   const [reviewQueue, setReviewQueue] = useState<GrammarPoint[]>([]);
   const [activeCard, setActiveCard] = useState<GrammarCard | null>(null);
   const savedScrollY = useRef(0);
-  const openCard = (card: GrammarCard) => { savedScrollY.current = window.scrollY; setActiveCard(card); };
+  const openCard = (card: GrammarCard) => {
+    if (card.isPractice && card.partNumber !== 1 && !isAdmin) return;
+    savedScrollY.current = window.scrollY;
+    setActiveCard(card);
+  };
   const closeCard = () => { setActiveCard(null); requestAnimationFrame(() => window.scrollTo(0, savedScrollY.current)); };
 
   useEffect(() => {
@@ -2403,7 +2432,7 @@ function GrammarContent() {
       setGrammarStates(map);
     }).catch((err) => console.warn('IndexedDB error:', err));
     return () => { cancelled = true; };
-  }, []);
+  }, [user?.id]);
 
   useEffect(() => {
     const patternParam = searchParams.get('pattern');
@@ -2437,39 +2466,9 @@ function GrammarContent() {
 
   const handleCompleteCard = async (card: GrammarCard) => {
     try {
-      saveLessonState(card.id, 'done');
+      saveLessonState(user?.id, card.id, 'done');
     } catch (e) {
       console.warn('Failed to save lesson state:', e);
-    }
-
-    // Save grammar example words to SRS vocabulary
-    if (card.cardExamples?.length) {
-      const seen = new Set<string>();
-      for (const ex of card.cardExamples) {
-        const koreanText = ex.wordBlocks.map(wb => wb.text).join(' ');
-        const words = koreanText.replace(/[.!?。！？,，]/g, '').split(/\s+/).filter(Boolean);
-        for (const w of words) {
-          if (seen.has(w)) continue;
-          seen.add(w);
-          db.words.put({
-            id: `grammar-${card.id}-${w}`,
-            word: w,
-            pronunciation: '',
-            meaning: '',
-            partOfSpeech: '',
-            examples: [],
-            source: 'grammar',
-            sourceDetail: card.title,
-            mastery: 'new' as const,
-            srsLevel: 0,
-            nextReview: Date.now(),
-            easeFactor: 2.5,
-            interval: 1,
-            createdAt: Date.now(),
-            lastReviewed: null,
-          }).catch(() => {});
-        }
-      }
     }
 
     const next = await loadNextCard(card.id);
@@ -2479,7 +2478,7 @@ function GrammarContent() {
     } else {
       setActiveCard(null);
       if (!isAdmin && next && next.partNumber !== 1) {
-        setTimeout(() => alert('第 ' + next.partNumber + ' 部分即将开放，敬请期待！'), 100);
+        setTimeout(() => showToast('第 ' + next.partNumber + ' 部分即将开放，敬请期待！', 'info'), 100);
       }
     }
   };

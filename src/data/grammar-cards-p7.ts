@@ -5,7 +5,7 @@ export const grammarCardsP7: GrammarCard[] = [
     id: 'card-p7-l01', partNumber: 7, lessonNumber: 1, title: '처럼, 같이, 같은',
     whatItDoes: '说"像……一样"的三种方式',
     whatItDoesBody: '처럼·같이·같은 都表示比较，但用法位置不同。\n和中文"像……一样"对应：\n처럼/같이 接在名词后用作副词，같은 接在名词前用作定语。',
-    structureNote: '下面展示三种比较表达的位置。\n注意 같은 后面一定还有名词，처럼/같이 后面直接接动词。',
+    structureNote: '下面展示三种比较表达的位置。\n注意 같은 后面一定还有名词，처럼/같이 后面接谓语（动词或形容词）。',
     rulesNote: '처럼 和 같이 可以互换，只是 같이 口语更常见。\n같은 是形容词，后面必须接名词。\n三个都不看收音，直接加在名词后/前。',
     scenarioNote: '追星、比较外貌、描述相似程度时最常用。\n中文"她跳舞跳得像专业的一样"在韩语里就靠这三个词来表达。',
     step0Html: `<div class="card-title">처럼 · 같이 · 같은</div>
@@ -286,7 +286,7 @@ export const grammarCardsP7: GrammarCard[] = [
       { type: 'usage', text: '만에：时间 + 만에 → 时隔……之后', examples: '1년 만에 / 오랜만에 / 3일 만에 다시 만났어요' },
       { type: 'usage', text: '만이다：지 + 时间 + 만이에요 → 已经过了……', examples: '졸업한 지 2년 만이에요 / 결혼한 지 5년 만이에요' },
       { type: 'note', text: '됐어요 / 났어요 / 흘렀어요 三者均可替换', examples: '배운 지 1년이 됐어요 = 났어요 = 흘렀어요（흐르다 常用于强调时间"流逝"的感觉）' },
-      { type: 'vocab', text: '常用时间词', examples: '얼마나 됐어요?（过了多久了？）/ 오랜만이에요（好久不见）/ 며칠 만에（时隔几天）' },
+      { type: 'vocab', text: '常用시간词', examples: '얼마나 됐어요?（过了多久了？）/ 오랜만이에요（好久不见）/ 며칠 만에（时隔几天）' },
       { type: 'example', text: '한국어를 배운 지 얼마나 됐어요? / 오랜만에 만났어요 / 세월이 많이 흘렀어요（岁月流逝了很多）' },
     ],
     cardExamples: [
@@ -315,8 +315,8 @@ export const grammarCardsP7: GrammarCard[] = [
     id: 'card-p7-l03', partNumber: 7, lessonNumber: 3, title: '-(으)ㄴ/는데',
     whatItDoes: '铺垫背景或表示转折',
     whatItDoesBody: '-(으)ㄴ/는데 是韩语最高频的连接词尾之一，用来引出背景、表示轻微转折，或铺垫下一句。\n和中文"……但是""……呢……""……的是……"都有对应，但一个词尾就能完成多种功能。',
-    structureNote: '下面展示三种典型用法的句型框架。\n注意变形规则：动词现在时用 -는데，形容词和过去时用 -(으)ㄴ데。',
-    rulesNote: '动词现在时词干 + 는데（不看收音）。\n形容词词干：有收音 + 은데，无收음 + ㄴ데。\n过去时（-았/었-）+ 는데。\n이다/아니다 → 인데/아닌데。',
+    structureNote: '下面展示三种典型用法的句型框架。\n注意变形规则：动词现在时用 -는데，形容词用 -(으)ㄴ데，过去时用 -았/었는데。',
+    rulesNote: '动词现在时词干 + 는데（不看收音）。\n形容词词干：有收音 + 은데，无收音 + ㄴ데。\n过去时（-았/었-）+ 는데。\n이다/아니다 → 인데/아닌데。',
     scenarioNote: '日常对话中铺垫、转折、请求说明全靠 -는데。\n比如"我想去但是……""天气很好，要不要出去？"这类话全都用 -는데 来连接。',
     step0Html: `<div class="card-title">-(으)ㄴ/는데</div>
 <div class="card-body">韩语最高频的连接词尾，一个词尾能铺垫背景、引出转折、暗示等待回应。</div>
@@ -439,7 +439,7 @@ export const grammarCardsP7: GrammarCard[] = [
     ],
     connectionRules: [
       { type: 'rule', text: '动词词干 + 는데（现在时，不看收音）', examples: '가다→가는데 / 먹다→먹는데 / 공부하다→공부하는데' },
-      { type: 'rule', text: '形容词词干 有收음 + 은데，无收음 + ㄴ데', examples: '작다→작은데 / 크다→큰데 / 좋다→좋은데 / 예쁘다→예쁜데' },
+      { type: 'rule', text: '形容词词干 有收音 + 은데，无收音 + ㄴ데', examples: '작다→작은데 / 크다→큰데 / 좋다→좋은데 / 예쁘다→예쁜데' },
       { type: 'rule', text: '过去时 -았/었/였 + 는데', examples: '갔는데 / 먹었는데 / 봤는데' },
       { type: 'usage', text: '用法①：铺垫背景，引出后续', examples: '날씨가 좋은데 나갈까요?（天气好，要出去吗？）' },
       { type: 'usage', text: '用法②：表示轻微转折', examples: '한국어를 공부하는데 어려워요（学韩语，但是难）' },
@@ -463,7 +463,7 @@ export const grammarCardsP7: GrammarCard[] = [
     mistakes: [
       { wrong: '좋는데', correct: '좋은데', note: '좋다 是形容词，用 -(으)ㄴ데，不是 -는데。' },
       { wrong: '갔은데', correct: '갔는데', note: '过去时 -았/었 后面用 -는데，不是 -은데。' },
-      { wrong: '저 오늘 밥 먹는데요.（当普通陈述用）', correct: '저 오늘 밥 먹는데요……（语气未完，等待回应）', note: '-는데요 单独结尾时语气未完结，暗示后续说明或等待对方反应，不是单纯陈述句。' },
+      { wrong: '저 오늘 밥 먹은데요', correct: '저 오늘 밥 먹는데요', note: '动词词干后接 -는데요，不是 -은데요。-은데요 是形容词/있다/없다/过去时后才用的形式。' },
       { wrong: '어제 날씨가 좋은데 오늘은 추워요', correct: '어제는 날씨가 좋았는데 오늘은 추워요', note: '-는데 连接两个时间不同的情况时，过去的部分要用过去时 -았/었는데，不能用现在时。' },
     ],
     linkedGrammarIds: ['g26'],
@@ -788,7 +788,7 @@ export const grammarCardsP7: GrammarCard[] = [
     whatItDoes: '表示"虽然……但是……"的对比转折',
     whatItDoesBody: '-지만 是明确的转折连词，相当于"虽然……但是……"。\n-는/은/ㄴ데 语气更柔和，可以是背景铺垫也可以是转折。\n和中文"虽然……但是"对应，-지만 更直接，-는데 更委婉。\n两者都能连接两个句子，但 -지만 转折感更强。',
     structureNote: '下面展示两种转折的典型句型。\n-지만 直接加在动词/形容词词干后，不看收音。\n-는/은/ㄴ데 的变形规则参考第3课。',
-    rulesNote: '-지만：所有动词/形容词词干 + 지만（不看收음）。\n이다 → 이지만 / 아니다 → 아니지만。\n-지만 语气明确，两个分句形成直接对比。\n-는데 语气柔和，更适合日常对话。',
+    rulesNote: '-지만：所有动词/形容词词干 + 지만（不看收音）。\n이다 → 이지만 / 아니다 → 아니지만。\n-지만 语气明确，两个分句形成直接对比。\n-는데 语气柔和，更适合日常对话。',
     scenarioNote: '表达矛盾心理、做对比评价时必用。\n"喜欢但贵""好吃但辣"这类日常表达全靠 -지만 或 -는데。',
     step0Html: `<div class="card-title">-지만 · -는/은/ㄴ데</div>
 <div class="card-body">两种转折表达：-지만 直接明确，-는데 柔和委婉。一个句子里"虽然……但是"，选哪个取决于你想传递的语气。</div>
@@ -908,9 +908,9 @@ export const grammarCardsP7: GrammarCard[] = [
     connectionRules: [
       { type: 'rule', text: '动词/形容词词干 + 지만（不看收音）', examples: '가다→가지만 / 먹다→먹지만 / 크다→크지만 / 좋다→좋지만' },
       { type: 'rule', text: '이다 → 이지만 / 명사 + 이지만', examples: '학생이지만 / 한국 사람이지만' },
-      { type: 'rule', text: '-지만 过去时：词干末元음 ㅏ/ㅗ + 았지만 / 其他 + 었지만 / 하다 → 했지만', examples: '갔지만 / 먹었지만 / 공부했지만' },
-      { type: 'rule', text: '-는/은/ㄴ데 变形：动词词干 + 는데 / 形容词有收음 + 은데 / 无收음 + ㄴ데 / 名词 + 인데', examples: '가다→가는데 / 먹다→먹는데 / 작다→작은데 / 크다→큰데 / 학생→학생인데' },
-      { type: 'rule', text: '-는/은/ㄴ데 过去时：词干末元음 ㅏ/ㅗ + 았는데 / 其他 + 었는데 / 하다 → 했는데', examples: '갔는데 / 먹었는데 / 공부했는데' },
+      { type: 'rule', text: '-지만 过去时：词干末元音 ㅏ/ㅗ + 았지만 / 其他 + 었지만 / 하다 → 했지만', examples: '갔지만 / 먹었지만 / 공부했지만' },
+      { type: 'rule', text: '-는/은/ㄴ데 变形：动词词干 + 는데 / 形容词有收音 + 은데 / 无收音 + ㄴ데 / 名词 + 인데', examples: '가다→가는데 / 먹다→먹는데 / 작다→작은데 / 크다→큰데 / 학생→학생인데' },
+      { type: 'rule', text: '-는/은/ㄴ데 过去时：词干末元音 ㅏ/ㅗ + 았는데 / 其他 + 었는데 / 하다 → 했는데', examples: '갔는데 / 먹었는데 / 공부했는데' },
       { type: 'compare', text: '-지만 vs -는데：转折强度不同', examples: '-지만：明确转折，强对比 / -는데：柔和铺垫，可转折可背景' },
       { type: 'usage', text: '-지만 常见句型：A하지만 B', examples: '비싸지만 좋아요 / 작지만 귀여워요 / 힘들지만 즐거워요' },
       { type: 'usage', text: '-는/은/ㄴ데 用于委婉转折（参考第3课变形规则）', examples: '맛있는데 매워요 / 좋은데 비싸요 / 갔는데 없었어요' },
@@ -944,7 +944,7 @@ export const grammarCardsP7: GrammarCard[] = [
     whatItDoes: '说明原因——"因为……所以……"的两种方式',
     whatItDoesBody: '-(으)니까 是最常用的原因连词，后句可以是命令、建议、请求。\n-느라고 强调"因为忙于做A，所以B受影响"，带有轻微的遗憾或解释意味。\n和中文"因为"对应，但 -느라고 只用于说明为何没能做另一件事，有负面结果含义。',
     structureNote: '下面展示两种原因表达的句型框架。\n注意：-느라고 的后句通常是负面结果或遗憾，不能用命令/建议句。',
-    rulesNote: '-(으)니까：词干有收音 + 으니까，无收음 + 니까。\nㄹ 词干脱落 ㄹ 后加 니까（알다→아니까）。\n-느라고：只接动词词干（형용词不能用）+ 느라고，不看收音。\n-느라고 的主语前后句必须一致。',
+    rulesNote: '-(으)니까：词干有收音 + 으니까，无收音 + 니까。\nㄹ 词干脱落 ㄹ 后加 니까（알다→아니까）。\n-느라고：只接动词词干（形容词不能用）+ 느라고，不看收音。\n-느라고 的主语前后句必须一致。',
     scenarioNote: '解释为什么迟到、为什么没做作业、为什么没接电话——全都用 -(으)니까 或 -느라고。\n-느라고 特别适合解释"忙于某事导致忘了/没能做另一件事"的场景。',
     step0Html: `<div class="card-title">-(으)니까 · -느라고</div>
 <div class="card-body">两种"因为"：-(으)니까 最通用，后面可接命令建议；-느라고 专门解释"忙于A导致B没能做"。</div>
@@ -1062,12 +1062,12 @@ export const grammarCardsP7: GrammarCard[] = [
       { ko: '아르바이트하느라고 많이 피곤해요', zh: '因为在打工，所以很累。', tokens: [{ text: '아르바이트하느라고', role: 'plain' }, { text: '많이', role: 'plain' }, { text: '피곤해요', role: 'verb' }] },
     ],
     connectionRules: [
-      { type: 'rule', text: '词干 无收음 + 니까 / 有收음 + 으니까', examples: '가다→가니까 / 먹다→먹으니까 / 좋다→좋으니까' },
-      { type: 'rule', text: '名词 有收음 + 이니까 / 名词 无收음 + 니까', examples: '학생이니까 / 의사이니까 / 친구니까 / 선생님이니까' },
-      { type: 'rule', text: '未来时：词干 有收음 + 을 거니까 / 无收음 + ㄹ 거니까', examples: '먹을 거니까 / 갈 거니까 / 바쁠 거니까' },
-      { type: 'rule', text: '过去时：词干末元음 ㅏ/ㅗ + 았으니까 / 其他 + 었으니까 / 하다 → 했으니까', examples: '갔으니까 / 먹었으니까 / 공부했으니까' },
-      { type: 'rule', text: 'ㄹ 词干：脱落 ㄹ 후 + 니까', examples: '알다→아니까 / 만들다→만드니까 / 멀다→머니까' },
-      { type: 'rule', text: '动词词干 + 느라고（不看收음，只接动词）', examples: '공부하다→공부하느라고 / 일하다→일하느라고 / 먹다→먹느라고' },
+      { type: 'rule', text: '词干 无收音 + 니까 / 有收音 + 으니까', examples: '가다→가니까 / 먹다→먹으니까 / 좋다→좋으니까' },
+      { type: 'rule', text: '名词 有收音 + 이니까 / 名词 无收音 + 니까', examples: '학생이니까 / 의사이니까 / 친구니까 / 선생님이니까' },
+      { type: 'rule', text: '未来时：词干 有收音 + 을 거니까 / 无收音 + ㄹ 거니까', examples: '먹을 거니까 / 갈 거니까 / 바쁠 거니까' },
+      { type: 'rule', text: '过去时：词干末元音 ㅏ/ㅗ + 았으니까 / 其他 + 었으니까 / 하다 → 했으니까', examples: '갔으니까 / 먹었으니까 / 공부했으니까' },
+      { type: 'rule', text: 'ㄹ 词干：脱落 ㄹ 后 + 니까', examples: '알다→아니까 / 만들다→만드니까 / 멀다→머니까' },
+      { type: 'rule', text: '动词词干 + 느라고（不看收音，只接动词）', examples: '공부하다→공부하느라고 / 일하다→일하느라고 / 먹다→먹느라고' },
       { type: 'compare', text: '-(으)니까 vs -느라고', examples: '-(으)니까：可接命令/建议 / -느라고：后句是负面结果，不接命令/建议' },
       { type: 'usage', text: '-느라고 的后句特征：못 하다 / 늦다 / 피곤하다 등 负面结果', examples: '자느라고 못 일어났어요 / 공부하느라고 늦었어요' },
       { type: 'note', text: '-느라고 前后句主语必须相同', examples: '✗ 내가 바쁘느라고 친구가 기다렸어요 → ✓ 내가 바빠서 친구가 기다렸어요' },
@@ -1100,7 +1100,7 @@ export const grammarCardsP7: GrammarCard[] = [
     whatItDoes: '说明原因或给出解释性补充',
     whatItDoesBody: '때문에 接在名词或动词后，表示"因为……的缘故"，语气较正式。\n-거든요 用在句尾，给对方提供解释或补充说明，语气轻松，像在说"其实是因为……"。\n和中文"是因为……""其实啊……"对应，-거든요 带有轻微的解释语气，常用于口语。',
     structureNote: '下面展示两种原因说明的句型框架。\n때문에 可接名词（名词 + 때문에）或动词（-기 때문에），-거든요 直接加在句尾。',
-    rulesNote: '名词 + 때문에（因为某事物）。\n动词/形容词 词干 + 기 때문에（因为做某事/某状态）。\n-거든요：词干 + 거든요，不看收음，陈述解释理由。\n-거든요 语气轻，不适合正式场合。',
+    rulesNote: '名词 + 때문에（因为某事物）。\n动词/形容词 词干 + 기 때문에（因为做某事/某状态）。\n-거든요：词干 + 거든요，不看收音，陈述解释理由。\n-거든요 语气轻，不适合正式场合。',
     scenarioNote: '때문에 适合写作和正式解释，-거든요 适合日常聊天中的轻松说明。\n对方问你为什么迟到，口语回答用 -거든요；写请假条用 때문에。',
     step0Html: `<div class="card-title">때문에 · -거든요</div>
 <div class="card-body">两种"原因说明"：때문에 正式书面，-거든요 口语轻松补充。一个用于写作，一个用于聊天。</div>
@@ -1243,8 +1243,8 @@ export const grammarCardsP7: GrammarCard[] = [
     mistakes: [
       { wrong: '때문에 가요', correct: '그 때문에 가요 / 그래서 가요', note: '때문에 需要前面有明确的名词或动词 기，不能单独开头。' },
       { wrong: '피곤하거든요 쉬세요', correct: '피곤하니까 쉬세요', note: '-거든요 是解释补充，后面不能接命令句，要换成 -(으)니까。' },
-      { wrong: '날씨가 추워서 집에 있어요. 거든요.', correct: '날씨가 춥거든요. 그래서 집에 있어요.', note: '-거든요 是解释理由的语尾，放在陈述句末尾，不能单独成句放在后面。' },
-      { wrong: '너무 바빴거든요 못 갔어요', correct: '너무 바빴거든요. 못 갔어요.', note: '-거든요 放在句尾作解释，不能直接连接后续动词句，需要断句。' },
+      { wrong: '비 때문에 못 갔거든요', correct: '비 때문에 못 갔어요', note: '正式原因句已经用了 때문에，结尾不需要再加 -거든요，会显得啰嗦冗余。' },
+      { wrong: '너무 바빴거든요 못 갔어요', correct: '너무 바빠서 못 갔어요', note: '-거든요 不能用作分句连接两件事，要表示因果关系应该用 -아/어서。' },
     ],
     linkedGrammarIds: ['g29', 'g19'],
   },
@@ -1253,11 +1253,138 @@ export const grammarCardsP7: GrammarCard[] = [
     whatItDoes: '综合练习第七章所有语法点',
     whatItDoesBody: '本章学习了比较（처럼/같이/같은）、时间经过（-은/ㄴ 지 되다）、背景转折（-(으)ㄴ/는데）、全称否定（아무도/하나도）、附加助词（에다가）、对比转折（-지만）、原因（-(으)니까/-느라고）、原因说明（때문에/-거든요）。\n通过综合练习巩固这些语法点的用法和辨析。',
     structureNote: '本章八个语法点的核心要点：\n① 처럼/같이 修饰动词，같은 修饰名词\n② -은/ㄴ 지 됐어요 说经过时间\n③ -는데 铺垫转折\n④ 아무도/아무것도 + 否定\n⑤ 에다가 强调附着操作\n⑥ -지만 明确转折\n⑦ -(으)니까 可接命令建议，-느라고 后接负面结果\n⑧ 때문에 正式原因，-거든요 口语补充',
-    structures: [],
-    connectionRules: [],
-    cardExamples: [],
-    scenarios: [],
-    mistakes: [],
+    structures: [
+      { ko: '아이돌처럼 춤을 춰요', zh: '跳舞像爱豆一样。', tokens: [{ text: '아이돌처럼', role: 'plain' }, { text: '춤을', role: 'object' }, { text: '춰요', role: 'verb' }] },
+      { ko: '한국어를 배운 지 1년이 됐어요', zh: '学韩语已经一年了。', tokens: [{ text: '한국어를', role: 'object' }, { text: '배운 지', role: 'plain' }, { text: '1년이 됐어요', role: 'verb' }] },
+      { ko: '비가 오는데 우산을 가져가세요', zh: '在下雨，请带伞。', tokens: [{ text: '비가', role: 'subject' }, { text: '오는데', role: 'plain' }, { text: '우산을', role: 'object' }, { text: '가져가세요', role: 'verb' }] },
+      { ko: '아무것도 안 먹었어요', zh: '什么都没吃。', tokens: [{ text: '아무것도', role: 'object' }, { text: '안 먹었어요', role: 'verb' }] },
+      { ko: '벽에다가 포스터를 붙였어요', zh: '在墙上贴了海报。', tokens: [{ text: '벽에다가', role: 'place' }, { text: '포스터를', role: 'object' }, { text: '붙였어요', role: 'verb' }] },
+      { ko: '비싸지만 사고 싶어요', zh: '虽然贵，但想买。', tokens: [{ text: '비싸지만', role: 'plain' }, { text: '사고 싶어요', role: 'verb' }] },
+      { ko: '공부하느라고 전화를 못 받았어요', zh: '因为在学习，没接到电话。', tokens: [{ text: '공부하느라고', role: 'plain' }, { text: '전화를', role: 'object' }, { text: '못 받았어요', role: 'verb' }] },
+      { ko: '사실 그 노래 알거든요', zh: '其实我知道那首歌呢。', tokens: [{ text: '사실', role: 'plain' }, { text: '그 노래', role: 'object' }, { text: '알거든요', role: 'verb' }] },
+    ],
+    connectionRules: [
+      { type: 'rule', text: '处럼/같이 修饰动词（副词用法），같은 修饰名词（定语用法）', examples: '모델처럼 걸어요 / 같은 학교예요' },
+      { type: 'rule', text: '-은/ㄴ 지 + 时间 + 됐어요：表示从某事到现在已经过了多久', examples: '배운 지 1년이 됐어요 / 온 지 6개월이 됐어요' },
+      { type: 'rule', text: '动词现在时词干 + 는데 / 形容词有收音 + 은데 / 无收音 + ㄴ데 / 过去时 + 았는데', examples: '가는데 / 좋은데 / 큰데 / 갔는데' },
+      { type: 'rule', text: '아무도/아무것도/아무데도/하나도 + 否定形式', examples: '아무도 안 왔어요 / 하나도 안 어려워요' },
+      { type: 'rule', text: '名词 + 에다가 → 在……上/里做某事（附着操作），方向移动用 에', examples: '노트에다가 써요 / 학교에 가요' },
+      { type: 'rule', text: '动词/形容词词干 + 지만 → 虽然……但是（直接转折）', examples: '비싸지만 좋아요 / 어렵지만 재미있어요' },
+      { type: 'rule', text: '-(으)니까：通用原因，可接命令/建议；-느라고：忙于A导致B（仅接动词）', examples: '비가 오니까 우산을 챙겨요 / 자느라고 못 들었어요' },
+      { type: 'rule', text: '名词 + 때문에（正式）；动词/形容词 + 기 때문에；-거든요 句尾解释（口语）', examples: '교통 때문에 늦었어요 / 사실 피곤하거든요' },
+      { type: 'compare', text: '처럼/같이 vs 같은 — 副词 vs 定语', examples: '모델처럼 걸어요（修饰动词） / 같은 학교예요（修饰名词）' },
+      { type: 'compare', text: '-지만 vs -는데 — 强对比 vs 柔和铺垫', examples: '어렵지만 재미있어요 / 어려운데 재미있어요' },
+      { type: 'compare', text: '-(으)니까 vs -느라고 — 通用原因 vs 负面结果', examples: '늦었으니까 빨리 가요 / 게임하느라고 못 했어요' },
+      { type: 'compare', text: '때문에 vs -거든요 — 正式 vs 口语', examples: '비 때문에 못 갔어요 / 비가 와서 못 갔거든요' },
+    ],
+    cardExamples: [
+      { wordBlocks: [{ text: '아이돌처럼', role: 'plain' }, { text: '춤을', role: 'object' }, { text: '춰요', role: 'verb' }], zh: '跳舞像爱豆一样。', swapRole: 'plain', swapWords: ['아이돌처럼', '모델같이', '한국 사람처럼'] },
+      { wordBlocks: [{ text: '비가', role: 'subject' }, { text: '오는데', role: 'plain' }, { text: '우산을', role: 'object' }, { text: '가져가세요', role: 'verb' }], zh: '在下雨，请带伞。', swapRole: 'subject', swapWords: ['비가', '눈이', '바람이'] },
+      { wordBlocks: [{ text: '비싸지만', role: 'plain' }, { text: '사고 싶어요', role: 'verb' }], zh: '虽然贵，但想买。', swapRole: 'plain', swapWords: ['비싸지만', '어렵지만', '힘들지만'] },
+      { wordBlocks: [{ text: '공부하느라고', role: 'plain' }, { text: '전화를', role: 'object' }, { text: '못 받았어요', role: 'verb' }], zh: '因为在学习，没接到电话。', swapRole: 'plain', swapWords: ['공부하느라고', '일하느라고', '자느라고'] },
+    ],
+    scenarios: [
+      { icon: '🎤', context: '夸朋友跳舞', ko: '너 아이돌처럼 춤춰! 진짜 잘한다.', zh: '你跳舞像爱豆一样！真的很厉害。' },
+      { icon: '📚', context: '介绍学习经历', ko: '한국어를 배운 지 2년이 됐는데 아직도 어려워요.', zh: '学韩语已经两年了，但还是很难。' },
+      { icon: '🍽️', context: '解释为什么不饿', ko: '아까 많이 먹어서 아무것도 안 먹고 싶어요.', zh: '刚才吃太多，什么都不想吃。' },
+      { icon: '☔', context: '婉拒邀请', ko: '비가 오는데 오늘은 그냥 집에 있을래요.', zh: '在下雨呢，今天就待在家里吧。' },
+      { icon: '😴', context: '解释迟到', ko: '늦잠 자느라고 지각했어요. 죄송합니다.', zh: '因为睡懒觉迟到了，对不起。' },
+      { icon: '🎵', context: '聊喜欢的歌', ko: '사실 저 그 가수 진짜 좋아하거든요.', zh: '其实我真的很喜欢那个歌手。' },
+    ],
+    mistakes: [
+      { wrong: '같이 학교예요', correct: '같은 학교예요', note: '修饰名词用 같은，같이 是副词修饰动词。' },
+      { wrong: '아무도 왔어요', correct: '아무도 안 왔어요', note: '아무도 必须配否定谓语。' },
+      { wrong: '피곤하느라고 못 잤어요', correct: '피곤해서 못 잤어요', note: '-느라고 只接动词，形容词用 -아/어서。' },
+      { wrong: '학교에다가 가요', correct: '학교에 가요', note: '에다가 表附着操作，移动方向用 에。' },
+      { wrong: '피곤하거든요 쉬세요', correct: '피곤하니까 쉬세요', note: '-거든요 后不接命令句，换成 -(으)니까。' },
+    ],
+    specialQuiz: {
+      type: 'fill',
+      title: '第七章综合测试',
+      body: '从本章八个语法点中选择正确的形式。',
+      questions: [
+        {
+          pre: '한국 사람',
+          post: '한국어를 잘해요.',
+          options: ['같은', '같은의', '처럼'],
+          answer: 2,
+          explanation: 'N처럼 修饰动词 잘해요：说韩语像韩国人一样。같은의 是错误形式（같은 不是名词，不能加 의）。',
+        },
+        {
+          pre: '서울에 온',
+          post: '6개월이 됐어요.',
+          options: ['지', '만에', '후에'],
+          answer: 0,
+          explanation: '-(으)ㄴ 지 + 时间 + 됐어요：来首尔已经六个月了。',
+        },
+        {
+          pre: '교실에',
+          post: '없어요.',
+          options: ['하나도', '아무도', '아무것도'],
+          answer: 1,
+          explanation: '아무도 + 否定 = 谁都没有：教室里一个人都没有。',
+        },
+        {
+          pre: '비가 오',
+          post: '우산을 가져가세요.',
+          options: ['니까', '느라고', '면서'],
+          answer: 0,
+          explanation: '-(으)니까 表原因，后可接命令/建议：因为下雨，请带伞。',
+        },
+        {
+          pre: '게임하',
+          post: '숙제를 못 했어요.',
+          options: ['니까', '느라고', '거든요'],
+          answer: 1,
+          explanation: '-느라고 表"忙于A导致负面结果"：因为玩游戏，没做作业。',
+        },
+        {
+          pre: '교통',
+          post: '늦었어요.',
+          options: ['거든요', '라서', '때문에'],
+          answer: 2,
+          explanation: 'N + 때문에：因为交通堵塞迟到了。',
+        },
+      ],
+    },
     linkedGrammarIds: [],
+    overviewHtml: `<div class="overview">
+  <div class="ov-hero">
+    <div class="ov-hero-label">第 7 章 · 综合练习</div>
+    <div class="ov-hero-title">综合练习⑦</div>
+    <div class="ov-hero-sub">比较 · 时间经过 · 转折铺垫 · 全称否定 · 原因 · 解释</div>
+  </div>
+  <div class="ov-section">
+    <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">本章核心语法</div></div>
+    <div class="ov-block">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">比较</span> 처럼/같이（副词）/ 같은（定语）</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">时间经过</span> -은/ㄴ 지 + 时间 + 됐어요</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#6b7ff0">背景转折</span> -(으)ㄴ/는데（柔和）/ -지만（强烈）</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#e05555">全称否定</span> 아무도/아무것도/아무데도/하나도 + 否定</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#c89020">附着助词</span> 에다가（操作）vs 에（方向/存在）</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#b49ccf">原因</span> -(으)니까 / -느라고 / 때문에 / -거든요</div>
+      </div>
+    </div>
+  </div>
+  <div class="ov-section">
+    <div class="ov-section-hd"><div class="ov-section-line" style="background:#b49ccf"></div><div class="ov-section-title" style="color:#b49ccf">常用例句</div></div>
+    <div class="ov-block">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div><div class="tok-row"><span class="tok t-v">한국어를 배운 지 1년이 됐어요</span></div><div class="struct-zh">学韩语已经一年了。</div></div>
+        <div><div class="tok-row"><span class="tok t-v">비가 오는데 우산 있어요?</span></div><div class="struct-zh">在下雨，有伞吗？</div></div>
+        <div><div class="tok-row"><span class="tok t-v">자느라고 전화를 못 받았어요</span></div><div class="struct-zh">因为在睡觉，没接到电话。</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="ov-section">
+    <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">高频易错</div></div>
+    <div class="ov-block">
+      <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">같이 학교예요</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">같은 학교예요</span></div></div>
+      <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">피곤하느라고 못 잤어요</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">피곤해서 못 잤어요</span></div></div>
+      <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">학교에다가 가요</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">학교에 가요</span></div></div>
+    </div>
+  </div>
+</div>`,
   },
 ];

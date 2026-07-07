@@ -1,0 +1,122 @@
+[
+  {
+    "cardId": "card-p1-l02",
+    "kind": "quiz-options-count-morph",
+    "detail": "[morph] specialQuiz.questions[0].options.length = 3 (morph 要求恰好 4)",
+    "severity": "ERROR"
+  },
+  {
+    "cardId": "card-p1-l02",
+    "kind": "quiz-options-count-morph",
+    "detail": "[morph] specialQuiz.questions[1].options.length = 3 (morph 要求恰好 4)",
+    "severity": "ERROR"
+  },
+  {
+    "cardId": "card-p1-l02",
+    "kind": "quiz-options-count-morph",
+    "detail": "[morph] specialQuiz.questions[2].options.length = 3 (morph 要求恰好 4)",
+    "severity": "ERROR"
+  },
+  {
+    "cardId": "card-p1-l02",
+    "kind": "quiz-options-count-morph",
+    "detail": "[morph] specialQuiz.questions[3].options.length = 3 (morph 要求恰好 4)",
+    "severity": "ERROR"
+  },
+  {
+    "cardId": "card-p1-l03",
+    "kind": "quiz-options-count-morph",
+    "detail": "[morph] specialQuiz.questions[0].options.length = 3 (morph 要求恰好 4)",
+    "severity": "ERROR"
+  },
+  {
+    "cardId": "card-p1-l03",
+    "kind": "quiz-options-count-morph",
+    "detail": "[morph] specialQuiz.questions[1].options.length = 3 (morph 要求恰好 4)",
+    "severity": "ERROR"
+  },
+  {
+    "cardId": "card-p1-l03",
+    "kind": "quiz-options-count-morph",
+    "detail": "[morph] specialQuiz.questions[2].options.length = 3 (morph 要求恰好 4)",
+    "severity": "ERROR"
+  },
+  {
+    "cardId": "card-p1-l03",
+    "kind": "quiz-options-count-morph",
+    "detail": "[morph] specialQuiz.questions[3].options.length = 3 (morph 要求恰好 4)",
+    "severity": "ERROR"
+  },
+  {
+    "cardId": "card-p1-l08",
+    "kind": "quiz-options-count-morph",
+    "detail": "[morph] specialQuiz.questions[0].options.length = 3 (morph 要求恰好 4)",
+    "severity": "ERROR"
+  },
+  {
+    "cardId": "card-p1-l08",
+    "kind": "quiz-options-count-morph",
+    "detail": "[morph] specialQuiz.questions[1].options.length = 3 (morph 要求恰好 4)",
+    "severity": "ERROR"
+  },
+  {
+    "cardId": "card-p1-l08",
+    "kind": "quiz-options-count-morph",
+    "detail": "[morph] specialQuiz.questions[2].options.length = 3 (morph 要求恰好 4)",
+    "severity": "ERROR"
+  },
+  {
+    "cardId": "card-p1-l08",
+    "kind": "quiz-options-count-morph",
+    "detail": "[morph] specialQuiz.questions[3].options.length = 3 (morph 要求恰好 4)",
+    "severity": "ERROR"
+  },
+  {
+    "cardId": "card-p1-l09",
+    "kind": "quiz-options-count-morph",
+    "detail": "[morph] specialQuiz.questions[0].options.length = 3 (morph 要求恰好 4)",
+    "severity": "ERROR"
+  },
+  {
+    "cardId": "card-p1-l09",
+    "kind": "quiz-options-count-morph",
+    "detail": "[morph] specialQuiz.questions[1].options.length = 3 (morph 要求恰好 4)",
+    "severity": "ERROR"
+  },
+  {
+    "cardId": "card-p1-l09",
+    "kind": "quiz-options-count-morph",
+    "detail": "[morph] specialQuiz.questions[2].options.length = 3 (morph 要求恰好 4)",
+    "severity": "ERROR"
+  },
+  {
+    "cardId": "card-p1-l09",
+    "kind": "quiz-options-count-morph",
+    "detail": "[morph] specialQuiz.questions[3].options.length = 3 (morph 要求恰好 4)",
+    "severity": "ERROR"
+  },
+  {
+    "cardId": "card-p12-l06",
+    "kind": "zh-untranslated",
+    "detail": "scenarios[4].zh looks untranslated: \"알다→아세요，ㄹ脱落了。\"",
+    "severity": "ERROR"
+  },
+  {
+    "cardId": "card-p12-l07",
+    "kind": "zh-untranslated",
+    "detail": "cardExamples[2].zh looks untranslated: \"头发是黑色的。（까맣다→까매요）\"",
+    "severity": "ERROR"
+  },
+  {
+    "cardId": "card-p15-l07",
+    "kind": "zh-untranslated",
+    "detail": "scenarios[5].zh looks untranslated: \"咖啡好了。（不用 나오셨습니다）\"",
+    "severity": "ERROR"
+  },
+  {
+    "cardId": "card-p15-l08",
+    "kind": "zh-untranslated",
+    "detail": "scenarios[4].zh looks untranslated: \"尺寸如何？（不用 사이즈가 어떠십니까?）\"",
+    "severity": "ERROR"
+  }
+]

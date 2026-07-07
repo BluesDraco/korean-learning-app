@@ -48,7 +48,7 @@ export const grammarCardsP10: GrammarCard[] = [
     ],
     connectionRules: [
       { type: 'rule', text: '动词/形容词接 뿐：有收音 + 을 뿐，无收音 + ㄹ 뿐', examples: '먹을 뿐 / 갈 뿐 / 좋을 뿐 / 클 뿐' },
-      { type: 'rule', text: '名词接 뿐：명사 + 일 뿐（이다的 뿐 形式）', examples: '학생일 뿐 / 친구일 뿐 / 꿈일 뿐' },
+      { type: 'rule', text: '名词接 뿐：名词 + 일 뿐（이다的 뿐 形式）', examples: '학생일 뿐 / 친구일 뿐 / 꿈일 뿐' },
       { type: 'usage', text: '-을 뿐 后面常接 아니라（不只是……）形成转折', examples: '공부할 뿐만 아니라 운동도 해요（不只学习，还运动）' },
       { type: 'note', text: '-을 뿐이다 常用于解释或辩解，表示"没有其他意图"', examples: '농담했을 뿐이에요 = 我只是开玩笑而已' },
       { type: 'compare', text: '-을 뿐 vs -만：意思相近，但 뿐 更书面、更有语气', examples: '먹을 뿐 vs 먹기만 해요（两者都"只是吃"，뿐 更强调无其他）' },
@@ -116,12 +116,12 @@ export const grammarCardsP10: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title">本课语法点</div></div>
     <div class="ov-block">
       <div class="badge">限定</div>
-      <div class="ko">동사 어간 + 을/ㄹ 뿐（이다）</div>
+      <div class="ko">动词词干 + 을/ㄹ 뿐（이다）</div>
       <div class="zh">只是……而已（无其他意图/情况）</div>
     </div>
     <div class="ov-block">
       <div class="badge">名词</div>
-      <div class="ko">명사 + 일 뿐이다</div>
+      <div class="ko">名词 + 일 뿐이다</div>
       <div class="zh">只不过是……而已</div>
     </div>
   </div>
@@ -133,36 +133,48 @@ export const grammarCardsP10: GrammarCard[] = [
     </div>
   </div>
 </div>`,
-    step0Html: `<div class="step0-hook">
-  <div class="hook-box">
-    <div class="hook-sent"><span class="ko">그저 바라볼 뿐이에요.</span><span class="zh">我只能默默注视着。</span></div>
-    <div class="hook-sent"><span class="ko">할 수 있을 뿐, 결과는 모르겠어요.</span><span class="zh">我只能去做，结果就不知道了。</span></div>
+    step0Html: `
+<div class="card-title">强调"只不过……而已"，限定动作或状态的范围</div>
+<div class="card-body">-을/ㄹ 뿐 表示"只是/仅仅"，后面通常接否定或说明。</div>
+<div class="hook-box">
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说</div>
+  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+    <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">저는 그냥 도와주고 싶었을 뿐이에요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">我只是想帮帮你而已。</div>
+    </div>
+    <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">할 수 있을 뿐 잘한다고는 할 수 없어요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">只是能做而已，不能说做得好。</div>
+    </div>
   </div>
-</div>`,
+  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 这两句典型用法记住，本课基本就掌握了</div>
+</div>
+`,
     compareLabel: '뿐 vs 만',
-    compareHtml: `<div class="compare">
-  <div class="cmp-block" style="border-left:4px solid #ff7fa8">
-    <div class="cmp-title">-을/ㄹ 뿐（이다）</div>
-    <div class="cmp-row"><span class="badge">意思</span>只……而已，不过……（限定）</div>
-    <div class="cmp-row"><span class="badge">接续</span>动词词干 + 을/ㄹ 뿐（이다）</div>
-    <div class="cmp-row"><span class="badge">语感</span>强调仅此，带无奈/谦虚语气</div>
-    <div class="cmp-row"><span class="ko">웃을 뿐이에요</span><span class="zh">只是笑而已</span></div>
+    compareHtml: `
+<div class="card-title">뿐 vs 만</div>
+<div class="card-body">-을/ㄹ 뿐 表示"只是/仅仅"，后面通常接否定或说明。</div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
+  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v">用法一</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">저는 그냥 도와주고 싶었을 뿐이에요</span><span style="font-size:16px;color:#5a4640">我只是想帮帮你而已。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">그 사람은 웃었을 뿐인데 왜 화가 났어요</span><span style="font-size:16px;color:#5a4640">那个人只是笑了一下，为什么生气了？</span></div>
   </div>
-  <div class="cmp-block" style="border-left:4px solid #aee3d8">
-    <div class="cmp-title">만（조사）</div>
-    <div class="cmp-row"><span class="badge">意思</span>只……（范围限定）</div>
-    <div class="cmp-row"><span class="badge">接续</span>名词 + 만</div>
-    <div class="cmp-row"><span class="badge">区别</span>만 接名词，뿐 接动词관형형</div>
-    <div class="cmp-row"><span class="ko">너만 믿어</span><span class="zh">只相信你</span></div>
+  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v" style="background:#aee3d8;color:#1a7a6a">用法二</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">할 수 있을 뿐 잘한다고는 할 수 없어요</span><span style="font-size:16px;color:#5a4640">只是能做而已，不能说做得好。</span></div>
   </div>
-</div>`,
+</div>
+<div class="reminder-box">注意区分两种用法的核心差异。</div>
+`,
     quickTable: {
       title: '-을/ㄹ 뿐 接续形式',
-      headers: ['词干末音', '形式', '예시', '意思'],
+      headers: ['词干末音', '形式', '例句', '意思'],
       rows: [
-        [{ ko: '有收音', zh: '' }, { ko: '-을 뿐', zh: '' }, { ko: '먹을 뿐이에요', zh: '只是吃而已' }, { ko: '', zh: '' }],
-        [{ ko: '无收音/ㄹ', zh: '' }, { ko: '-ㄹ 뿐', zh: '' }, { ko: '갈 뿐이에요', zh: '只是去而已' }, { ko: '', zh: '' }],
-        [{ ko: '뿐이다', zh: '强调句式' }, { ko: '동사 + 을/ㄹ 뿐이다', zh: '' }, { ko: '기다릴 뿐이에요', zh: '只能等待而已' }, { ko: '', zh: '' }],
+        [{ ko: '有收音', zh: '' }, { ko: '-을 뿐', zh: '' }, { ko: '먹을 뿐이에요', zh: '' }, { ko: '只是吃而已', zh: '' }],
+        [{ ko: '无收音/ㄹ', zh: '' }, { ko: '-ㄹ 뿐', zh: '' }, { ko: '갈 뿐이에요', zh: '' }, { ko: '只是去而已', zh: '' }],
+        [{ ko: '뿐이다', zh: '强调句式' }, { ko: '동사 + 을/ㄹ 뿐이다', zh: '' }, { ko: '기다릴 뿐이에요', zh: '' }, { ko: '只能等待而已', zh: '' }],
       ],
     },
     specialQuiz: {
@@ -184,9 +196,9 @@ export const grammarCardsP10: GrammarCard[] = [
         },
         {
           prompt: '-을/ㄹ 뿐 与 만 的区别是？',
-          options: ['뿐接动词관형형，만接名词', '意思完全相同', '뿐接名词，만接动词', '两者都接名词'],
+          options: ['뿐接动词冠词形，만接名词', '意思完全相同', '뿐接名词，만接动词', '两者都接名词'],
           answer: 0 as 0|1|2|3,
-          explanation: '뿐 = 동사관형형 + 뿐；만 = 명사 + 만',
+          explanation: '뿐 = 动词冠词形 + 뿐；만 = 名词 + 만',
         },
         {
           prompt: '只是笑了笑。→ 그냥 ___',
@@ -314,12 +326,12 @@ export const grammarCardsP10: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title">本课语法点</div></div>
     <div class="ov-block">
       <div class="badge">愿望</div>
-      <div class="ko">동사 어간 + (으)면 좋겠다</div>
+      <div class="ko">动词词干 + (으)면 좋겠다</div>
       <div class="zh">要是……就好了（个人希望/遗憾）</div>
     </div>
     <div class="ov-block">
       <div class="badge">期望</div>
-      <div class="ko">동사 어간 + 기(를) 바라다</div>
+      <div class="ko">动词词干 + 기(를) 바라다</div>
       <div class="zh">希望……（祝愿/正式期望）</div>
     </div>
   </div>
@@ -335,32 +347,44 @@ export const grammarCardsP10: GrammarCard[] = [
     </div>
   </div>
 </div>`,
-    step0Html: `<div class="step0-hook">
-  <div class="hook-box">
-    <div class="hook-sent"><span class="ko">날씨가 좀 따뜻해지면 좋겠어요.</span><span class="zh">天气要是能暖和一点就好了。</span></div>
-    <div class="hook-sent"><span class="ko">건강하기를 바랍니다.</span><span class="zh">祝您身体健康。</span></div>
+    step0Html: `
+<div class="card-title">表达愿望和期望的两种核心句型</div>
+<div class="card-body">-(으)면 좋겠다 表示"要是……就好了"，用于表达个人希望或遗憾。</div>
+<div class="hook-box">
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说</div>
+  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+    <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">빨리 나았으면 좋겠어요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">希望你早日康复。</div>
+    </div>
+    <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">내일 날씨가 맑았으면 좋겠다</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">希望明天天气晴朗。</div>
+    </div>
   </div>
-</div>`,
+  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 这两句典型用法记住，本课基本就掌握了</div>
+</div>
+`,
     compareLabel: '면 좋겠다 vs 기 바라다',
-    compareHtml: `<div class="compare">
-  <div class="cmp-block" style="border-left:4px solid #ff7fa8">
-    <div class="cmp-title">-(으)면 좋겠다</div>
-    <div class="cmp-row"><span class="badge">意思</span>要是……就好了（愿望、期待）</div>
-    <div class="cmp-row"><span class="badge">接续</span>동사/형용사词干 + 으면/면 좋겠다</div>
-    <div class="cmp-row"><span class="badge">语感</span>主观愿望，含轻微遗憾</div>
-    <div class="cmp-row"><span class="ko">합격하면 좋겠어요</span><span class="zh">要是能通过就好了</span></div>
+    compareHtml: `
+<div class="card-title">면 좋겠다 vs 기 바라다</div>
+<div class="card-body">-(으)면 좋겠다 表示"要是……就好了"，用于表达个人希望或遗憾。</div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
+  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v">用法一</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">빨리 나았으면 좋겠어요</span><span style="font-size:16px;color:#5a4640">希望你早日康复。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">건강하시기를 바랍니다</span><span style="font-size:16px;color:#5a4640">祝您身体健康。</span></div>
   </div>
-  <div class="cmp-block" style="border-left:4px solid #aee3d8">
-    <div class="cmp-title">-기(를) 바라다</div>
-    <div class="cmp-row"><span class="badge">意思</span>希望……，祝愿……</div>
-    <div class="cmp-row"><span class="badge">接续</span>动词词干 + 기(를) 바라다</div>
-    <div class="cmp-row"><span class="badge">语感</span>正式、书面，祝福用语常用</div>
-    <div class="cmp-row"><span class="ko">행복하기를 바랍니다</span><span class="zh">祝您幸福</span></div>
+  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v" style="background:#aee3d8;color:#1a7a6a">用法二</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">내일 날씨가 맑았으면 좋겠다</span><span style="font-size:16px;color:#5a4640">希望明天天气晴朗。</span></div>
   </div>
-</div>`,
+</div>
+<div class="reminder-box">注意区分两种用法的核心差异。</div>
+`,
     quickTable: {
       title: '两种愿望表达对比',
-      headers: ['语法', '语感', '场合', '예시'],
+      headers: ['语法', '语感', '场合', '例句'],
       rows: [
         [{ ko: '-(으)면 좋겠다', zh: '' }, { ko: '主观期待', zh: '含遗憾' }, { ko: '日常口语', zh: '' }, { ko: '빨리 낫면 좋겠어요', zh: '快点好起来就好了' }],
         [{ ko: '-기(를) 바라다', zh: '' }, { ko: '祝愿他人', zh: '正式' }, { ko: '书面/正式', zh: '' }, { ko: '성공하기를 바랍니다', zh: '祝您成功' }],
@@ -375,7 +399,7 @@ export const grammarCardsP10: GrammarCard[] = [
           prompt: '要是明天不下雨就好了。→ 내일 비가 안 ___',
           options: ['오지 바랍니다', '왔으면 좋겠어요', '오기를 바라요', '오면 좋겠어요'],
           answer: 3 as 0|1|2|3,
-          explanation: '현재 상황 기준 → 오면 좋겠어요',
+          explanation: '基于当前情况 → 오면 좋겠어요',
         },
         {
           prompt: '祝您万事如意。→ 모든 일이 잘 ___',
@@ -393,7 +417,7 @@ export const grammarCardsP10: GrammarCard[] = [
           prompt: '要是能见到他就好了。→ 그 사람을 만날 수 ___',
           options: ['있을 뿐이에요', '있기는 해요', '있으면 좋겠어요', '있기를 바라요'],
           answer: 2 as 0|1|2|3,
-          explanation: '주관적 바람 → -(으)면 좋겠어요',
+          explanation: '主观期待 → -(으)면 좋겠어요',
         },
       ],
     },
@@ -445,7 +469,7 @@ export const grammarCardsP10: GrammarCard[] = [
     ],
     connectionRules: [
       { type: 'rule', text: '-을/ㄹ까 생각하다：有收音 + 을까, 无收音 + ㄹ까, 后接 생각하다/생각 중이다', examples: '먹을까 생각해요 / 갈까 생각 중이에요 / 그만둘까 생각하고 있어요' },
-      { type: 'rule', text: '-을/ㄹ 생각이다：有收音 + 을 생각이다, 无收음 + ㄹ 생각이다', examples: '먹을 생각이에요 / 갈 생각이에요 / 쉴 생각이에요' },
+      { type: 'rule', text: '-을/ㄹ 생각이다：有收音 + 을 생각이다, 无收音 + ㄹ 생각이다', examples: '먹을 생각이에요 / 갈 생각이에요 / 쉴 생각이에요' },
       { type: 'usage', text: '-을까 하다 是 -을까 생각하다 的口语缩略形式，两者可互换', examples: '갈까 해요 = 갈까 생각해요（正在考虑去）' },
       { type: 'note', text: '-을 생각이 없다 表示没有打算，-을 생각이 있다 表示有打算', examples: '결혼할 생각이 없어요（不打算结婚）/ 이직할 생각이 있어요（有想换工作）' },
       { type: 'compare', text: '-을 생각이다 vs -(으)려고 하다：생각이다 更偏想法，려고 하다 更偏行动准备', examples: '이사할 생각이에요（有这个想法）vs 이사하려고 해요（在准备搬家了）' },
@@ -501,7 +525,7 @@ export const grammarCardsP10: GrammarCard[] = [
       {
         wrong: '나는 결혼할까 생각이에요',
         correct: '나는 결혼할까 생각하고 있어요 / 결혼할 생각이에요',
-        note: '-을까 생각 접 -이에요 不能这样组合，要选一种句型用到底',
+        note: '-을까 생각 接 -이에요 不能这样组合，要选一种句型用到底',
       },
     ],
     overviewHtml: `<div class="overview">
@@ -514,12 +538,12 @@ export const grammarCardsP10: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title">本课语法点</div></div>
     <div class="ov-block">
       <div class="badge">考虑中</div>
-      <div class="ko">동사 어간 + 을/ㄹ까 생각하다</div>
+      <div class="ko">动词词干 + 을/ㄹ까 생각하다</div>
       <div class="zh">在考虑是否……（尚未决定）</div>
     </div>
     <div class="ov-block">
       <div class="badge">打算</div>
-      <div class="ko">동사 어간 + 을/ㄹ 생각이다</div>
+      <div class="ko">动词词干 + 을/ㄹ 생각이다</div>
       <div class="zh">打算……（有这个想法/意图）</div>
     </div>
   </div>
@@ -531,32 +555,44 @@ export const grammarCardsP10: GrammarCard[] = [
     </div>
   </div>
 </div>`,
-    step0Html: `<div class="step0-hook">
-  <div class="hook-box">
-    <div class="hook-sent"><span class="ko">제주도에 갈까 생각하고 있어요.</span><span class="zh">我在考虑要不要去济州岛。</span></div>
-    <div class="hook-sent"><span class="ko">이번 주말에 영화를 볼 생각이에요.</span><span class="zh">这个周末打算去看电影。</span></div>
+    step0Html: `
+<div class="card-title">表达"在考虑是否……"和"打算/有意……"的两种意向句型</div>
+<div class="card-body">-을/ㄹ까 생각하다 表示正在考虑要不要做某事，尚未决定，语气较犹豫。</div>
+<div class="hook-box">
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说</div>
+  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+    <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">이번 주말에 등산을 갈까 생각하고 있어요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">我在考虑这周末去登山。</div>
+    </div>
+    <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">내년에 한국으로 유학을 갈까 해요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">我在考虑明年去韩国留学。</div>
+    </div>
   </div>
-</div>`,
+  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 这两句典型用法记住，本课基本就掌握了</div>
+</div>
+`,
     compareLabel: '을까 생각하다 vs 을 생각이다',
-    compareHtml: `<div class="compare">
-  <div class="cmp-block" style="border-left:4px solid #ff7fa8">
-    <div class="cmp-title">-을/ㄹ까 생각하다</div>
-    <div class="cmp-row"><span class="badge">意思</span>在考虑要不要……（犹豫中）</div>
-    <div class="cmp-row"><span class="badge">接续</span>动词词干 + 을/ㄹ까 생각하다</div>
-    <div class="cmp-row"><span class="badge">语感</span>未决定，正在考量</div>
-    <div class="cmp-row"><span class="ko">그만둘까 생각해요</span><span class="zh">在考虑要不要辞职</span></div>
+    compareHtml: `
+<div class="card-title">을까 생각하다 vs 을 생각이다</div>
+<div class="card-body">-을/ㄹ까 생각하다 表示正在考虑要不要做某事，尚未决定，语气较犹豫。</div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
+  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v">用法一</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">이번 주말에 등산을 갈까 생각하고 있어요</span><span style="font-size:16px;color:#5a4640">我在考虑这周末去登山。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">다음 달에 이사할 생각이에요</span><span style="font-size:16px;color:#5a4640">我打算下个月搬家。</span></div>
   </div>
-  <div class="cmp-block" style="border-left:4px solid #aee3d8">
-    <div class="cmp-title">-을/ㄹ 생각이다</div>
-    <div class="cmp-row"><span class="badge">意思</span>打算……（已有意向）</div>
-    <div class="cmp-row"><span class="badge">接续</span>动词词干 + 을/ㄹ 생각이다</div>
-    <div class="cmp-row"><span class="badge">语感</span>比 을까 생각하다 更确定</div>
-    <div class="cmp-row"><span class="ko">내년에 유학 갈 생각이에요</span><span class="zh">打算明年去留学</span></div>
+  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v" style="background:#aee3d8;color:#1a7a6a">用法二</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">내년에 한국으로 유학을 갈까 해요</span><span style="font-size:16px;color:#5a4640">我在考虑明年去韩国留学。</span></div>
   </div>
-</div>`,
+</div>
+<div class="reminder-box">注意区分两种用法的核心差异。</div>
+`,
     quickTable: {
       title: '계획/의향 표현 비교',
-      headers: ['语法', '确定程度', '语感', '예시'],
+      headers: ['语法', '确定程度', '语感', '例句'],
       rows: [
         [{ ko: '-을/ㄹ까 생각하다', zh: '' }, { ko: '低', zh: '犹豫中' }, { ko: '正在考虑', zh: '' }, { ko: '이사할까 생각해요', zh: '在考虑要不要搬家' }],
         [{ ko: '-을/ㄹ 생각이다', zh: '' }, { ko: '中', zh: '有意向' }, { ko: '打算', zh: '' }, { ko: '이사할 생각이에요', zh: '打算搬家' }],
@@ -645,7 +681,7 @@ export const grammarCardsP10: GrammarCard[] = [
     connectionRules: [
       { type: 'rule', text: '-(으)면서：有收音词干 + 으면서，无收音词干 + 면서，主语必须相同', examples: '먹으면서 / 가면서 / 웃으면서 / 공부하면서' },
       { type: 'rule', text: '-기 위해서：动词词干 + 기 위해서（위해 可省略 서）', examples: '먹기 위해서 / 가기 위해서 / 합격하기 위해서' },
-      { type: 'rule', text: '을/를 위해서：명사 + 을/를 위해서（名词有收音用 을，无收음用 를）', examples: '가족을 위해서 / 나라를 위해서 / 꿈을 위해서' },
+      { type: 'rule', text: '을/를 위해서：名词 + 을/를 위해서（名词有收音用 을，无收音用 를）', examples: '가족을 위해서 / 나라를 위해서 / 꿈을 위해서' },
       { type: 'note', text: '-(으)면서 前后主语必须相同，不同主语时不能用', examples: '× 내가 공부하면서 친구가 놀았어요 → ○ 내가 공부하는 동안 친구가 놀았어요' },
       { type: 'compare', text: '-기 위해서 vs -(으)려고：两者都表目的，위해서 更正式，려고 更口语', examples: '합격하기 위해서 공부해요 vs 합격하려고 공부해요' },
       { type: 'usage', text: '위해서 中 서 可省略，위해 单独使用也正确', examples: '가족을 위해 일해요 = 가족을 위해서 일해요' },
@@ -667,7 +703,7 @@ export const grammarCardsP10: GrammarCard[] = [
           { text: '위해서', role: 'plain' },
           { text: '매일 채소를 먹어요', role: 'verb' },
         ],
-        swapWords: ['다이어트를', '미래를', '꿈을', '운동해요', '일찍 자요', '공부해요'],
+        swapWords: ['다이어트를', '将来를', '꿈을', '운동해요', '일찍 자요', '공부해요'],
       },
       {
         zh: '为了找工作，正在准备资格证。',
@@ -695,7 +731,7 @@ export const grammarCardsP10: GrammarCard[] = [
       {
         wrong: '공부를 위해서 열심히 해요',
         correct: '공부하기 위해서 열심히 해요 / 공부를 잘하기 위해서 열심히 해요',
-        note: '위해서 前如果是动词行为，要用 -기 위해서，不是 동사목적어 + 위해서',
+        note: '위해서 前如果是动词行为，要用 -기 위해서，不是 动词宾语 + 위해서',
       },
       {
         wrong: '음악 들으면서 공부하면서 해요',
@@ -713,51 +749,63 @@ export const grammarCardsP10: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title">本课语法点</div></div>
     <div class="ov-block">
       <div class="badge">同时</div>
-      <div class="ko">동사 어간 + (으)면서</div>
+      <div class="ko">动词词干 + (으)면서</div>
       <div class="zh">一边……一边……（主语相同）</div>
     </div>
     <div class="ov-block">
       <div class="badge">目的</div>
-      <div class="ko">동사 어간 + 기 위해서</div>
+      <div class="ko">动词词干 + 기 위해서</div>
       <div class="zh">为了做……</div>
     </div>
     <div class="ov-block">
       <div class="badge">对象</div>
-      <div class="ko">명사 + 을/를 위해서</div>
+      <div class="ko">名词 + 을/를 위해서</div>
       <div class="zh">为了某人/某物</div>
     </div>
   </div>
 </div>`,
-    step0Html: `<div class="step0-hook">
-  <div class="hook-box">
-    <div class="hook-sent"><span class="ko">음악을 들으면서 공부해요.</span><span class="zh">一边听音乐一边学习。</span></div>
-    <div class="hook-sent"><span class="ko">건강을 위해서 매일 운동해요.</span><span class="zh">为了健康，每天运动。</span></div>
+    step0Html: `
+<div class="card-title">表达"同时进行"和"为了……目的"的两类句型</div>
+<div class="card-body">-(으)면서 表示两个动作同时发生，主语相同。</div>
+<div class="hook-box">
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说</div>
+  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+    <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">음악을 들으면서 공부해요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">一边听音乐一边学习。</div>
+    </div>
+    <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">밥을 먹으면서 TV를 보면 안 돼요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">不能边吃饭边看电视。</div>
+    </div>
   </div>
-</div>`,
+  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 这两句典型用法记住，本课基本就掌握了</div>
+</div>
+`,
     compareLabel: '으면서 vs 기 위해서',
-    compareHtml: `<div class="compare">
-  <div class="cmp-block" style="border-left:4px solid #ff7fa8">
-    <div class="cmp-title">-(으)면서</div>
-    <div class="cmp-row"><span class="badge">意思</span>一边……一边……（同时进行）</div>
-    <div class="cmp-row"><span class="badge">接续</span>动词词干 + 으면서/면서</div>
-    <div class="cmp-row"><span class="badge">条件</span>前后主语必须相同</div>
-    <div class="cmp-row"><span class="ko">걸으면서 전화해요</span><span class="zh">边走边打电话</span></div>
+    compareHtml: `
+<div class="card-title">으면서 vs 기 위해서</div>
+<div class="card-body">-(으)면서 表示两个动作同时发生，主语相同。</div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
+  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v">用法一</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">음악을 들으면서 공부해요</span><span style="font-size:16px;color:#5a4640">一边听音乐一边学习。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">한국어를 잘하기 위해서 매일 공부해요</span><span style="font-size:16px;color:#5a4640">为了学好韩语，每天都学习。</span></div>
   </div>
-  <div class="cmp-block" style="border-left:4px solid #aee3d8">
-    <div class="cmp-title">-기 위해서 / 을/를 위해서</div>
-    <div class="cmp-row"><span class="badge">意思</span>为了……（目的）</div>
-    <div class="cmp-row"><span class="badge">接续动词</span>动词词干 + 기 위해서</div>
-    <div class="cmp-row"><span class="badge">接续名词</span>名词 + 을/를 위해서</div>
-    <div class="cmp-row"><span class="ko">합격하기 위해서 공부해요</span><span class="zh">为了通过考试而学习</span></div>
+  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v" style="background:#aee3d8;color:#1a7a6a">用法二</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">밥을 먹으면서 TV를 보면 안 돼요</span><span style="font-size:16px;color:#5a4640">不能边吃饭边看电视。</span></div>
   </div>
-</div>`,
+</div>
+<div class="reminder-box">注意区分两种用法的核心差异。</div>
+`,
     quickTable: {
       title: '-기 위해서 vs 을/를 위해서',
-      headers: ['接续', '形式', '예시', '意思'],
+      headers: ['接续', '形式', '例句', '意思'],
       rows: [
-        [{ ko: '동사', zh: '动词' }, { ko: '-기 위해서', zh: '' }, { ko: '살기 위해서', zh: '为了活下去' }, { ko: '', zh: '' }],
-        [{ ko: '명사', zh: '名词' }, { ko: '을/를 위해서', zh: '' }, { ko: '가족을 위해서', zh: '为了家人' }, { ko: '', zh: '' }],
-        [{ ko: '으면서 조건', zh: '同时条件' }, { ko: '主语必须相同', zh: '' }, { ko: '먹으면서 봐요', zh: '边吃边看' }, { ko: '', zh: '' }],
+        [{ ko: '동사', zh: '动词' }, { ko: '-기 위해서', zh: '' }, { ko: '살기 위해서', zh: '' }, { ko: '为了活下去', zh: '' }],
+        [{ ko: '명사', zh: '名词' }, { ko: '을/를 위해서', zh: '' }, { ko: '가족을 위해서', zh: '' }, { ko: '为了家人', zh: '' }],
+        [{ ko: '으면서 조건', zh: '同时条件' }, { ko: '주어必须相同', zh: '' }, { ko: '먹으면서 봐요', zh: '' }, { ko: '边吃边看', zh: '' }],
       ],
     },
     specialQuiz: {
@@ -800,7 +848,7 @@ export const grammarCardsP10: GrammarCard[] = [
     lessonNumber: 5,
     title: '에서, 중에서, 때',
     whatItDoes: '精确表达"从……中"选择、"在……时候"发生的场所与时间助词',
-    whatItDoesBody: '에서 在此课中重点学习"从……里/中"的用法（选择范围）。\n중에서 表示"在……当中"，用于从一组中选择。\n때 表示"……的时候"，用于标记某个时间点或时间段。\n三者都是已学过助词的深化用法，需要区分细节。',
+    whatItDoesBody: '에서 在此课中重点学习"在……范围内"的用法（选择范围）。\n중에서 表示"在……当中"，用于从一组中选择。\n때 表示"……的时候"，用于标记某个时间点或时间段。\n三者都是已学过助词的深化用法，需要区分细节。',
     structures: [
       {
         ko: '이 중에서 어떤 게 제일 마음에 들어요',
@@ -841,9 +889,9 @@ export const grammarCardsP10: GrammarCard[] = [
     ],
     connectionRules: [
       { type: 'rule', text: '중에서：名词（复数/集合）+ 중에서，表示从一组中选取', examples: '친구들 중에서 / 세 개 중에서 / 여러 나라 중에서' },
-      { type: 'rule', text: '때：动词/형용사 관형형 + 때，动词现在用 -는 때，过去用 -은/ㄴ 때，将来用 -을/ㄹ 때', examples: '갈 때 / 먹을 때 / 어릴 때 / 피곤할 때' },
+      { type: 'rule', text: '때：动词/形容词 冠词形 + 때，动词现在用 -는 때，过去用 -은/ㄴ 때，将来用 -을/ㄹ 때', examples: '갈 때 / 먹을 때 / 어릴 때 / 피곤할 때' },
       { type: 'usage', text: '에서 的"范围选择"用法：N에서 N까지，或 이/그/저 에서（在此处）', examples: '서울에서 부산까지 / 여기에서 가장 가까운 곳' },
-      { type: 'note', text: '中에서 与 에서 区别：중에서 强调从集合中选，에서 强调出发点/场所', examples: '친구들 중에서 제일 키가 커요（从朋友里最高）vs 학교에서 왔어요（从学校来）' },
+      { type: 'note', text: '중에서 与 에서 区别：중에서 强调从集合中选，에서 强调出发点/场所', examples: '친구들 중에서 제일 키가 커요（从朋友里最高）vs 학교에서 왔어요（从学校来）' },
       { type: 'compare', text: '때 vs 동안：때 是时间点/短暂时段，동안 是持续的一段时间', examples: '먹을 때 말하지 마세요（吃饭时别说话）vs 먹는 동안 조용히 해요（吃饭期间安静）' },
       { type: 'example', text: '힘들 때 연락해. 항상 옆에 있을게.', examples: '难受的时候联系我，我会一直在你身边。（韩剧台词）' },
     ],
@@ -910,12 +958,12 @@ export const grammarCardsP10: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title">本课语法点</div></div>
     <div class="ov-block">
       <div class="badge">范围</div>
-      <div class="ko">집합 명사 + 중에서</div>
+      <div class="ko">집합 名词 + 중에서</div>
       <div class="zh">在……当中（从集合中选取）</div>
     </div>
     <div class="ov-block">
       <div class="badge">时间</div>
-      <div class="ko">동사 관형형 + 때</div>
+      <div class="ko">动词 冠词形 + 때</div>
       <div class="zh">……的时候</div>
     </div>
   </div>
@@ -927,37 +975,49 @@ export const grammarCardsP10: GrammarCard[] = [
     </div>
   </div>
 </div>`,
-    step0Html: `<div class="step0-hook">
-  <div class="hook-box">
-    <div class="hook-sent"><span class="ko">셋 중에서 이게 제일 마음에 들어요.</span><span class="zh">三个里面我最喜欢这个。</span></div>
-    <div class="hook-sent"><span class="ko">어릴 때 살던 곳에 다시 갔어요.</span><span class="zh">回到了小时候住过的地方。</span></div>
+    step0Html: `
+<div class="card-title">精确表达"从……中"选择、"在……时候"发生的场所与时间助词</div>
+<div class="card-body">에서 在此课中重点学习"在……范围内"的用法（选择范围）。</div>
+<div class="hook-box">
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说</div>
+  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+    <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">이 중에서 어떤 게 제일 마음에 들어요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">在这些当中，哪个最合你心意？</div>
+    </div>
+    <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">세 명 중에서 한 명만 합격했어요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">三人当中只有一人通过了。</div>
+    </div>
   </div>
-</div>`,
+  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 这两句典型用法记住，本课基本就掌握了</div>
+</div>
+`,
     compareLabel: '에서 vs 중에서 vs 때',
-    compareHtml: `<div class="compare">
-  <div class="cmp-block" style="border-left:4px solid #ff7fa8">
-    <div class="cmp-title">에서 / 중에서</div>
-    <div class="cmp-row"><span class="badge">에서</span>从……当中（范围起点）</div>
-    <div class="cmp-row"><span class="badge">중에서</span>在……之中（选择范围）</div>
-    <div class="cmp-row"><span class="badge">区别</span>중에서 更强调从中选一</div>
-    <div class="cmp-row"><span class="ko">친구들 중에서 제일 키가 커요</span><span class="zh">朋友里面最高</span></div>
+    compareHtml: `
+<div class="card-title">에서 vs 중에서 vs 때</div>
+<div class="card-body">에서 在此课中重点学习"在……范围内"的用法（选择范围）。</div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
+  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v">用法一</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">이 중에서 어떤 게 제일 마음에 들어요</span><span style="font-size:16px;color:#5a4640">在这些当中，哪个最合你心意？</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">어릴 때 피아노를 배웠어요</span><span style="font-size:16px;color:#5a4640">小时候学过钢琴。</span></div>
   </div>
-  <div class="cmp-block" style="border-left:4px solid #aee3d8">
-    <div class="cmp-title">때（时候）</div>
-    <div class="cmp-row"><span class="badge">意思</span>……的时候</div>
-    <div class="cmp-row"><span class="badge">接续动词</span>관형형 + 때</div>
-    <div class="cmp-row"><span class="badge">接续名词</span>名词 + 때</div>
-    <div class="cmp-row"><span class="ko">힘들 때 음악을 들어요</span><span class="zh">辛苦的时候听音乐</span></div>
+  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v" style="background:#aee3d8;color:#1a7a6a">用法二</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">세 명 중에서 한 명만 합격했어요</span><span style="font-size:16px;color:#5a4640">三人当中只有一人通过了。</span></div>
   </div>
-</div>`,
+</div>
+<div class="reminder-box">注意区分两种用法的核心差异。</div>
+`,
     quickTable: {
       title: '에서 / 중에서 / 때 용법 정리',
-      headers: ['形式', '功能', '예시', '意思'],
+      headers: ['形式', '功能', '例句', '意思'],
       rows: [
-        [{ ko: '명사 + 에서', zh: '' }, { ko: '范围起点', zh: '' }, { ko: '여기에서 고르세요', zh: '从这里选' }, { ko: '', zh: '' }],
-        [{ ko: '명사 + 중에서', zh: '' }, { ko: '选择范围', zh: '' }, { ko: '셋 중에서 하나', zh: '三个里选一个' }, { ko: '', zh: '' }],
-        [{ ko: '관형형 + 때', zh: '' }, { ko: '时候', zh: '' }, { ko: '공부할 때', zh: '学习的时候' }, { ko: '', zh: '' }],
-        [{ ko: '명사 + 때', zh: '' }, { ko: '时候', zh: '' }, { ko: '방학 때', zh: '放假的时候' }, { ko: '', zh: '' }],
+        [{ ko: '명사 + 에서', zh: '' }, { ko: '范围起点', zh: '' }, { ko: '여기에서 고르세요', zh: '' }, { ko: '从这里选', zh: '' }],
+        [{ ko: '명사 + 중에서', zh: '' }, { ko: '选择范围', zh: '' }, { ko: '셋 중에서 하나', zh: '' }, { ko: '三个里选一个', zh: '' }],
+        [{ ko: '冠词形 + 때', zh: '' }, { ko: '时候', zh: '' }, { ko: '공부할 때', zh: '' }, { ko: '学习的时候', zh: '' }],
+        [{ ko: '명사 + 때', zh: '' }, { ko: '时候', zh: '' }, { ko: '방학 때', zh: '' }, { ko: '放假的时候', zh: '' }],
       ],
     },
     specialQuiz: {
@@ -975,11 +1035,11 @@ export const grammarCardsP10: GrammarCard[] = [
           prompt: '困的时候喝咖啡。→ 졸릴 ___ 커피를 마셔요',
           options: ['중에서', '때', '에서', '동안'],
           answer: 1 as 0|1|2|3,
-          explanation: '时候 → 관형형 + 때',
+          explanation: '时候 → 冠词形 + 때',
         },
         {
           prompt: '에서 和 중에서 的区别是？',
-          options: ['중에서 强调从中选一，에서 更泛', '에서 是地点，중에서 是时间', '에서 只用于动词，中에서 只用于名词', '完全相同'],
+          options: ['중에서 强调从中选一，에서 更泛', '에서 是地点，중에서 是时间', '에서 只用于动词，중에서 只用于名词', '完全相同'],
           answer: 0 as 0|1|2|3,
           explanation: '중에서 = 强调选择范围；에서 = 范围起点，更泛用',
         },
@@ -1127,32 +1187,44 @@ export const grammarCardsP10: GrammarCard[] = [
     </div>
   </div>
 </div>`,
-    step0Html: `<div class="step0-hook">
-  <div class="hook-box">
-    <div class="hook-sent"><span class="ko">힘들었어요. 그래도 포기하지 않았어요.</span><span class="zh">很辛苦，但还是没有放弃。</span></div>
-    <div class="hook-sent"><span class="ko">열심히 했어요. 그러나 결과가 좋지 않았어요.</span><span class="zh">努力了，然而结果并不理想。</span></div>
+    step0Html: `
+<div class="card-title">表达"尽管如此"和"然而"的两种转折连接词</div>
+<div class="card-body">그래도 表示"即使这样/尽管如此"，前后形成让步转折，口语和书面都常用。</div>
+<div class="hook-box">
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说</div>
+  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+    <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">힘들어요 그래도 포기하지 않을 거예요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">很辛苦。但即便如此，我不会放弃的。</div>
+    </div>
+    <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">비가 왔어요 그래도 경기는 계속됐어요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">下雨了。尽管如此，比赛还是继续了。</div>
+    </div>
   </div>
-</div>`,
+  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 这两句典型用法记住，本课基本就掌握了</div>
+</div>
+`,
     compareLabel: '그래도 vs 그러나',
-    compareHtml: `<div class="compare">
-  <div class="cmp-block" style="border-left:4px solid #ff7fa8">
-    <div class="cmp-title">그래도</div>
-    <div class="cmp-row"><span class="badge">意思</span>即使如此，还是……（让步转折）</div>
-    <div class="cmp-row"><span class="badge">语感</span>前情况不好，但仍坚持/继续</div>
-    <div class="cmp-row"><span class="badge">口语</span>日常对话常用</div>
-    <div class="cmp-row"><span class="ko">비가 와요. 그래도 가야 해요</span><span class="zh">下雨，但还是得去</span></div>
+    compareHtml: `
+<div class="card-title">그래도 vs 그러나</div>
+<div class="card-body">그래도 表示"即使这样/尽管如此"，前后形成让步转折，口语和书面都常用。</div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
+  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v">用法一</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">힘들어요 그래도 포기하지 않을 거예요</span><span style="font-size:16px;color:#5a4640">很辛苦。但即便如此，我不会放弃的。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">가격이 비싸요 그러나 품질이 좋아요</span><span style="font-size:16px;color:#5a4640">价格贵。然而质量很好。</span></div>
   </div>
-  <div class="cmp-block" style="border-left:4px solid #aee3d8">
-    <div class="cmp-title">그러나</div>
-    <div class="cmp-row"><span class="badge">意思</span>然而，但是（对比转折）</div>
-    <div class="cmp-row"><span class="badge">语感</span>客观陈述前后对比</div>
-    <div class="cmp-row"><span class="badge">书面</span>书面/正式场合多用</div>
-    <div class="cmp-row"><span class="ko">노력했다. 그러나 실패했다</span><span class="zh">努力了，然而失败了</span></div>
+  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v" style="background:#aee3d8;color:#1a7a6a">用法二</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">비가 왔어요 그래도 경기는 계속됐어요</span><span style="font-size:16px;color:#5a4640">下雨了。尽管如此，比赛还是继续了。</span></div>
   </div>
-</div>`,
+</div>
+<div class="reminder-box">注意区分两种用法的核心差异。</div>
+`,
     quickTable: {
       title: '역접 접속사 비교',
-      headers: ['词', '语感', '场合', '예시'],
+      headers: ['词', '语感', '场合', '例句'],
       rows: [
         [{ ko: '그래도', zh: '即使如此' }, { ko: '让步，仍坚持', zh: '' }, { ko: '口语', zh: '' }, { ko: '힘들어요. 그래도 해요', zh: '辛苦但还是做' }],
         [{ ko: '그러나', zh: '然而' }, { ko: '对比转折', zh: '' }, { ko: '书面', zh: '' }, { ko: '노력했다. 그러나 실패했다', zh: '努力了但失败了' }],
@@ -1197,7 +1269,7 @@ export const grammarCardsP10: GrammarCard[] = [
     id: 'card-p10-l07',
     partNumber: 10,
     lessonNumber: 7,
-    title: '-아/어/여 있다, -고 있다 심화',
+    title: '-아/어/여 있다, -고 있다 深化',
     whatItDoes: '区分"持续状态"和"持续动作"的两种进行体',
     whatItDoesBody: '-고 있다 表示动作正在持续进行（动作进行中）。\n-아/어/여 있다 表示动作完成后的状态持续（结果状态中）。\n两者中文都可译为"正在……"，但韩语区分明确，是中级学习者最容易混淆的语法点之一。',
     structures: [
@@ -1298,19 +1370,19 @@ export const grammarCardsP10: GrammarCard[] = [
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
     <div class="ov-hero-label">P10 · 第7课</div>
-    <div class="ov-hero-title">-아/어/여 있다, -고 있다 심화</div>
+    <div class="ov-hero-title">-아/어/여 있다, -고 있다 深化</div>
     <div class="ov-hero-sub">状态持续 vs 动作持续——核心区分</div>
   </div>
   <div class="ov-section">
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title">本课语法点</div></div>
     <div class="ov-block">
       <div class="badge">动作进行</div>
-      <div class="ko">동사 어간 + 고 있다</div>
+      <div class="ko">动词词干 + 고 있다</div>
       <div class="zh">正在……（动作持续中）</div>
     </div>
     <div class="ov-block">
       <div class="badge">状态持续</div>
-      <div class="ko">동사 어간 + 아/어 있다</div>
+      <div class="ko">动词词干 + 아/어 있다</div>
       <div class="zh">……着（完成后状态持续）</div>
     </div>
   </div>
@@ -1322,67 +1394,78 @@ export const grammarCardsP10: GrammarCard[] = [
     </div>
   </div>
 </div>`,
-    step0Html: `<div class="step0-hook">
-  <div class="hook-box">
-    <div class="hook-sent"><span class="ko">문이 열려 있어요.</span><span class="zh">门开着。（状态持续）</span></div>
-    <div class="hook-sent"><span class="ko">지금 밥을 먹고 있어요.</span><span class="zh">现在正在吃饭。（动作进行）</span></div>
+    step0Html: `
+<div class="card-title">区分"持续状态"和"持续动作"的两种进行体</div>
+<div class="card-body">-고 있다 表示动作正在持续进行（动作进行中）。</div>
+<div class="hook-box">
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说</div>
+  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+    <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">지금 밥을 먹고 있어요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">现在正在吃饭。</div>
+    </div>
+    <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">친구를 기다리고 있어요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">正在等朋友。</div>
+    </div>
   </div>
-</div>`,
+  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 这两句典型用法记住，本课基本就掌握了</div>
+</div>
+`,
     compareLabel: '아/어 있다 vs 고 있다',
-    compareHtml: `<div class="compare">
-  <div class="cmp-block" style="border-left:4px solid #ff7fa8">
-    <div class="cmp-title">-아/어/여 있다</div>
-    <div class="cmp-row"><span class="badge">意思</span>……着（结果状态的持续）</div>
-    <div class="cmp-row"><span class="badge">接续</span>자동사（自动词）+ 아/어 있다</div>
-    <div class="cmp-row"><span class="badge">强调</span>动作完成后的状态</div>
-    <div class="cmp-row"><span class="ko">앉아 있어요</span><span class="zh">坐着（状态）</span></div>
-    <div class="cmp-row"><span class="ko">꽃이 피어 있어요</span><span class="zh">花开着</span></div>
+    compareHtml: `
+<div class="card-title">아/어 있다 vs 고 있다</div>
+<div class="card-body">-고 있다 表示动作正在持续进行（动作进行中）。</div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
+  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v">用法一</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">지금 밥을 먹고 있어요</span><span style="font-size:16px;color:#5a4640">现在正在吃饭。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">의자에 앉아 있어요</span><span style="font-size:16px;color:#5a4640">坐在椅子上（坐着的状态）。</span></div>
   </div>
-  <div class="cmp-block" style="border-left:4px solid #aee3d8">
-    <div class="cmp-title">-고 있다（深化）</div>
-    <div class="cmp-row"><span class="badge">意思①</span>正在……（动作进行中）</div>
-    <div class="cmp-row"><span class="badge">意思②</span>타동사結果状态（穿着/戴着）</div>
-    <div class="cmp-row"><span class="ko">공부하고 있어요</span><span class="zh">正在学习</span></div>
-    <div class="cmp-row"><span class="ko">안경을 쓰고 있어요</span><span class="zh">戴着眼镜（状态）</span></div>
+  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v" style="background:#aee3d8;color:#1a7a6a">用法二</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">친구를 기다리고 있어요</span><span style="font-size:16px;color:#5a4640">正在等朋友。</span></div>
   </div>
-</div>`,
+</div>
+<div class="reminder-box">注意区分两种用法的核心差异。</div>
+`,
     quickTable: {
       title: '-아/어 있다 vs -고 있다 对比',
-      headers: ['语法', '动词类型', '强调', '예시'],
+      headers: ['语法', '动词类型', '强调', '例句'],
       rows: [
-        [{ ko: '-아/어 있다', zh: '' }, { ko: '자동사', zh: '自动词' }, { ko: '完成后状态', zh: '' }, { ko: '열려 있어요', zh: '开着' }],
-        [{ ko: '-고 있다①', zh: '' }, { ko: '모든 동사', zh: '所有动词' }, { ko: '动作进行', zh: '' }, { ko: '먹고 있어요', zh: '正在吃' }],
-        [{ ko: '-고 있다②', zh: '' }, { ko: '타동사', zh: '他动词' }, { ko: '착용 상태', zh: '' }, { ko: '입고 있어요', zh: '穿着' }],
+        [{ ko: '-아/어 있다', zh: '' }, { ko: '自动词', zh: '自动词' }, { ko: '完成后状态', zh: '' }, { ko: '열려 있어요', zh: '开着' }],
+        [{ ko: '-고 있다①', zh: '' }, { ko: '모든 动词', zh: '所有动词' }, { ko: '动作进行', zh: '' }, { ko: '먹고 있어요', zh: '正在吃' }],
+        [{ ko: '-고 있다②', zh: '' }, { ko: '他动词', zh: '他动词' }, { ko: '착용 상태', zh: '' }, { ko: '입고 있어요', zh: '穿着' }],
       ],
     },
     specialQuiz: {
       type: 'fill',
-      title: '-아/어 있다, -고 있다 심화',
+      title: '-아/어 있다, -고 있다 深化',
       body: '测试对状态与进行的区别的掌握',
       questions: [
         {
           prompt: '那个人坐着。（状态）→ 그 사람이 ___',
           options: ['앉아요', '앉었어요', '앉고 있어요', '앉아 있어요'],
           answer: 3 as 0|1|2|3,
-          explanation: '자동사 완료 상태 → -아/어 있다',
+          explanation: '自动词完成状态 → -아/어 있다',
         },
         {
           prompt: '她戴着耳机。（状态）→ 이어폰을 ___',
           options: ['끼고 있어요', '껴 있어요', '끼었어요', '끼어요'],
           answer: 0 as 0|1|2|3,
-          explanation: '타동사 착용 상태 → -고 있다',
+          explanation: '他动词穿戴状态 → -고 있다',
         },
         {
           prompt: '正在看电视。（进行）→ 텔레비전을 ___',
           options: ['보아 있어요', '봐 있어요', '보고 있어요', '봤어 있어요'],
           answer: 2 as 0|1|2|3,
-          explanation: '동작 진행 → -고 있다',
+          explanation: '动作进行 → -고 있다',
         },
         {
           prompt: '-아/어 있다 主要用于哪类动词？',
-          options: ['형용사', '자동사（自动词）', '모든 동사', '타동사（他动词）'],
+          options: ['形容词', '自动词', '所有动词', '他动词'],
           answer: 1 as 0|1|2|3,
-          explanation: '-아/어 있다 = 자동사 완료 후 상태',
+          explanation: '-아/어 있다 = 自动词完成后的状态',
         },
       ],
     },
@@ -1501,12 +1584,12 @@ export const grammarCardsP10: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title">本课语法点</div></div>
     <div class="ov-block">
       <div class="badge">留着备用</div>
-      <div class="ko">동사 어간 + 아/어/여 두다</div>
+      <div class="ko">动词词干 + 아/어/여 두다</div>
       <div class="zh">做好……留着（为以后准备）</div>
     </div>
     <div class="ov-block">
       <div class="badge">做完放那</div>
-      <div class="ko">동사 어간 + 아/어/여 놓다</div>
+      <div class="ko">动词词干 + 아/어/여 놓다</div>
       <div class="zh">做了……放在那里（完成后状态）</div>
     </div>
   </div>
@@ -1518,32 +1601,44 @@ export const grammarCardsP10: GrammarCard[] = [
     </div>
   </div>
 </div>`,
-    step0Html: `<div class="step0-hook">
-  <div class="hook-box">
-    <div class="hook-sent"><span class="ko">냉장고에 음식을 넣어 두었어요.</span><span class="zh">把食物放进冰箱里了。（备用）</span></div>
-    <div class="hook-sent"><span class="ko">여기에 가방을 놓아도 돼요?</span><span class="zh">可以把包放在这里吗？</span></div>
+    step0Html: `
+<div class="card-title">表达"提前做好并保持"的两种结果保持句型</div>
+<div class="card-body">-아/어/여 두다 表示做某事后保持那个状态，强调"留着备用/留着以后用"。</div>
+<div class="hook-box">
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说</div>
+  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+    <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">미리 예약해 뒀어요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">提前预约好了（留着）。</div>
+    </div>
+    <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">냉장고에 음식을 넣어 뒀어요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">把食物放进冰箱里存着了。</div>
+    </div>
   </div>
-</div>`,
+  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 这两句典型用法记住，本课基本就掌握了</div>
+</div>
+`,
     compareLabel: '아/어 두다 vs 아/어 놓다',
-    compareHtml: `<div class="compare">
-  <div class="cmp-block" style="border-left:4px solid #ff7fa8">
-    <div class="cmp-title">-아/어/여 두다</div>
-    <div class="cmp-row"><span class="badge">意思</span>做好……备用，保留结果</div>
-    <div class="cmp-row"><span class="badge">语感</span>强调为了以后的目的而保存</div>
-    <div class="cmp-row"><span class="ko">미리 예약해 두었어요</span><span class="zh">提前预约好了（备用）</span></div>
-    <div class="cmp-row"><span class="ko">문을 열어 두세요</span><span class="zh">把门开着（保持状态）</span></div>
+    compareHtml: `
+<div class="card-title">아/어 두다 vs 아/어 놓다</div>
+<div class="card-body">-아/어/여 두다 表示做某事后保持那个状态，强调"留着备用/留着以后用"。</div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
+  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v">用法一</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">미리 예약해 뒀어요</span><span style="font-size:16px;color:#5a4640">提前预约好了（留着）。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">문을 열어 놓았어요</span><span style="font-size:16px;color:#5a4640">把门开着（开了放那儿）。</span></div>
   </div>
-  <div class="cmp-block" style="border-left:4px solid #aee3d8">
-    <div class="cmp-title">-아/어/여 놓다</div>
-    <div class="cmp-row"><span class="badge">意思</span>放置……，处置完毕</div>
-    <div class="cmp-row"><span class="badge">语感</span>强调动作完成后的放置状态</div>
-    <div class="cmp-row"><span class="ko">책을 책상에 올려 놓았어요</span><span class="zh">把书放在桌上了</span></div>
-    <div class="cmp-row"><span class="ko">정리해 놓았어요</span><span class="zh">整理好放在那里了</span></div>
+  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v" style="background:#aee3d8;color:#1a7a6a">用法二</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">냉장고에 음식을 넣어 뒀어요</span><span style="font-size:16px;color:#5a4640">把食物放进冰箱里存着了。</span></div>
   </div>
-</div>`,
+</div>
+<div class="reminder-box">注意区分两种用法的核心差异。</div>
+`,
     quickTable: {
       title: '-아/어 두다 vs -아/어 놓다',
-      headers: ['语法', '强调', '语感', '예시'],
+      headers: ['语法', '强调', '语感', '例句'],
       rows: [
         [{ ko: '-아/어 두다', zh: '' }, { ko: '保留备用', zh: '目的性' }, { ko: '为了以后', zh: '' }, { ko: '써 두었어요', zh: '记下来备用' }],
         [{ ko: '-아/어 놓다', zh: '' }, { ko: '处置放置', zh: '完成性' }, { ko: '完成后放那', zh: '' }, { ko: '써 놓았어요', zh: '写好放那了' }],
@@ -1628,8 +1723,8 @@ export const grammarCardsP10: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '곳：관형형 + 곳，多用于正式场合或书面语', examples: '예쁜 곳 / 가고 싶은 곳 / 위험한 곳 / 아는 곳' },
-      { type: 'rule', text: '데：관형형 + 데，口语常用，也可表示"情况/方面"', examples: '갈 데 / 앉을 데 / 피할 데 / 힘든 데가 있어요（有难的地方/方面）' },
+      { type: 'rule', text: '곳：冠词形 + 곳，多用于正式场合或书面语', examples: '예쁜 곳 / 가고 싶은 곳 / 위험한 곳 / 아는 곳' },
+      { type: 'rule', text: '데：冠词形 + 데，口语常用，也可表示"情况/方面"', examples: '갈 데 / 앉을 데 / 피할 데 / 힘든 데가 있어요（有难的地方/方面）' },
       { type: 'rule', text: '군데：수사 + 군데，表示若干处，常见搭配：한 군데, 두 군데, 몇 군데', examples: '한 군데 / 두 군데 / 몇 군데 / 여러 군데' },
       { type: 'compare', text: '곳 vs 데：곳 更书面，데 更口语；데 还可以表示"方面/情况"，곳 不行', examples: '가고 싶은 곳（正式）≈ 가고 싶은 데（口语）/ 어디 아픈 데 있어요?（哪里不舒服？）← 只能用 데' },
       { type: 'usage', text: '데 表示"方面/情况"时常用：-는 데 도움이 되다, -는 데 시간이 걸리다', examples: '한국어를 배우는 데 도움이 돼요（有助于学韩语）/ 고치는 데 시간이 걸려요（修理要花时间）' },
@@ -1697,12 +1792,12 @@ export const grammarCardsP10: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title">本课语法点</div></div>
     <div class="ov-block">
       <div class="badge">正式</div>
-      <div class="ko">관형형 + 곳</div>
+      <div class="ko">冠词形 + 곳</div>
       <div class="zh">……的地方（正式/书面）</div>
     </div>
     <div class="ov-block">
       <div class="badge">口语</div>
-      <div class="ko">관형형 + 데</div>
+      <div class="ko">冠词形 + 데</div>
       <div class="zh">……的地方/处（口语；也表方面/情况）</div>
     </div>
     <div class="ov-block">
@@ -1712,35 +1807,47 @@ export const grammarCardsP10: GrammarCard[] = [
     </div>
   </div>
 </div>`,
-    step0Html: `<div class="step0-hook">
-  <div class="hook-box">
-    <div class="hook-sent"><span class="ko">좋은 곳에서 사진을 찍었어요.</span><span class="zh">在好地方拍了照片。</span></div>
-    <div class="hook-sent"><span class="ko">서울에 가볼 만한 데가 많아요.</span><span class="zh">首尔有很多值得去的地方。</span></div>
+    step0Html: `
+<div class="card-title">表示"地方/处所"的三种依存名词，各有细微差别</div>
+<div class="card-body">곳 是表示具体地点的依存名词，较正式。</div>
+<div class="hook-box">
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说</div>
+  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+    <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">제가 자주 가는 곳이에요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">这是我经常去的地方。</div>
+    </div>
+    <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">앉을 데가 없어요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">没有可以坐的地方。</div>
+    </div>
   </div>
-</div>`,
+  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 这两句典型用法记住，本课基本就掌握了</div>
+</div>
+`,
     compareLabel: '곳 vs 데 vs 군데',
-    compareHtml: `<div class="compare">
-  <div class="cmp-block" style="border-left:4px solid #ff7fa8">
-    <div class="cmp-title">곳</div>
-    <div class="cmp-row"><span class="badge">意思</span>地方（具体场所）</div>
-    <div class="cmp-row"><span class="badge">用法</span>独立名词，可加助词</div>
-    <div class="cmp-row"><span class="ko">아름다운 곳이에요</span><span class="zh">是美丽的地方</span></div>
-    <div class="cmp-row"><span class="ko">이 곳에 처음 왔어요</span><span class="zh">第一次来这个地方</span></div>
+    compareHtml: `
+<div class="card-title">곳 vs 데 vs 군데</div>
+<div class="card-body">곳 是表示具体地点的依存名词，较正式。</div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
+  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v">用法一</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">제가 자주 가는 곳이에요</span><span style="font-size:16px;color:#5a4640">这是我经常去的地方。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">여기저기 몇 군데 돌아봤어요</span><span style="font-size:16px;color:#5a4640">到处转了几个地方。</span></div>
   </div>
-  <div class="cmp-block" style="border-left:4px solid #aee3d8">
-    <div class="cmp-title">데 / 군데</div>
-    <div class="cmp-row"><span class="badge">데 意思</span>地方（依存名词，前接관형형）</div>
-    <div class="cmp-row"><span class="badge">군데</span>处，个地方（量词）</div>
-    <div class="cmp-row"><span class="ko">갈 데가 없어요</span><span class="zh">没有地方可去</span></div>
-    <div class="cmp-row"><span class="ko">세 군데 다녀왔어요</span><span class="zh">去了三个地方</span></div>
+  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v" style="background:#aee3d8;color:#1a7a6a">用法二</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">앉을 데가 없어요</span><span style="font-size:16px;color:#5a4640">没有可以坐的地方。</span></div>
   </div>
-</div>`,
+</div>
+<div class="reminder-box">注意区分两种用法的核心差异。</div>
+`,
     quickTable: {
       title: '곳 / 데 / 군데 용법 비교',
-      headers: ['词', '词性', '用法', '예시'],
+      headers: ['词', '词性', '用法', '例句'],
       rows: [
         [{ ko: '곳', zh: '地方' }, { ko: '独立名词', zh: '' }, { ko: '自由接助词', zh: '' }, { ko: '좋은 곳이에요', zh: '是好地方' }],
-        [{ ko: '데', zh: '地方' }, { ko: '依存名词', zh: '' }, { ko: '관형형 + 데', zh: '' }, { ko: '살 데가 없어요', zh: '没地方住' }],
+        [{ ko: '데', zh: '地方' }, { ko: '依存名词', zh: '' }, { ko: '冠词形 + 데', zh: '' }, { ko: '살 데가 없어요', zh: '没地方住' }],
         [{ ko: '군데', zh: '处/个地方' }, { ko: '量词', zh: '' }, { ko: '数词 + 군데', zh: '' }, { ko: '두 군데 갔어요', zh: '去了两个地方' }],
       ],
     },
@@ -1753,7 +1860,7 @@ export const grammarCardsP10: GrammarCard[] = [
           prompt: '没有可以休息的地方。→ 쉴 ___ 없어요',
           options: ['군데가', '데는', '데가', '곳이'],
           answer: 2 as 0|1|2|3,
-          explanation: '관형형 + 데 = 依存名词用法',
+          explanation: '冠词形 + 데 = 依存名词用法',
         },
         {
           prompt: '这是个美丽的地方。→ 여기는 아름다운 ___',
@@ -1769,9 +1876,9 @@ export const grammarCardsP10: GrammarCard[] = [
         },
         {
           prompt: '데 作为依存名词，前面必须接什么？',
-          options: ['동사 기본형', '관형형', '명사', '부사'],
+          options: ['动词基本形', '冠词形', '名词', '副词'],
           answer: 1 as 0|1|2|3,
-          explanation: '데 是依存名词，前接动词/形容词관형형',
+          explanation: '데 是依存名词，前接动词/形容词冠词形',
         },
       ],
     },
@@ -1782,7 +1889,7 @@ export const grammarCardsP10: GrammarCard[] = [
     id: 'card-p10-l10',
     partNumber: 10,
     lessonNumber: 10,
-    title: '이, 저, 그 (지시대명사)',
+    title: '이, 저, 그 (指示代名词)',
     whatItDoes: '区分"这/那/那"三种指示代词的精确用法',
     whatItDoesBody: '이 指离说话人近的事物或刚提到的内容。\n저 指离说话人和听话人都远的事物。\n그 指离听话人近、或双方都知道的事物，也用于指代前文提到的内容。\n三者是韩语指示系统的核心，日常对话中不可或缺。',
     structures: [
@@ -1885,7 +1992,7 @@ export const grammarCardsP10: GrammarCard[] = [
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
     <div class="ov-hero-label">P10 · 第10课</div>
-    <div class="ov-hero-title">이, 저, 그 (지시대명사)</div>
+    <div class="ov-hero-title">이, 저, 그 (指示代名词)</div>
     <div class="ov-hero-sub">这·那·那——三分指示系统</div>
   </div>
   <div class="ov-section">
@@ -1914,36 +2021,48 @@ export const grammarCardsP10: GrammarCard[] = [
     </div>
   </div>
 </div>`,
-    step0Html: `<div class="step0-hook">
-  <div class="hook-box">
-    <div class="hook-sent"><span class="ko">이 사람이 제 친구예요.</span><span class="zh">这个人是我朋友。（近处）</span></div>
-    <div class="hook-sent"><span class="ko">저 건물이 뭐예요?</span><span class="zh">那栋楼是什么？（远处）</span></div>
+    step0Html: `
+<div class="card-title">区分"这/那/那"三种指示代词的精确用法</div>
+<div class="card-body">이 指离说话人近的事物或刚提到的内容。</div>
+<div class="hook-box">
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说</div>
+  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+    <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">이 사람이 제 친구예요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">这个人是我朋友。</div>
+    </div>
+    <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">저 건물이 뭐예요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">那栋楼是什么？</div>
+    </div>
   </div>
-</div>`,
+  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 这两句典型用法记住，本课基本就掌握了</div>
+</div>
+`,
     compareLabel: '이 vs 그 vs 저',
-    compareHtml: `<div class="compare">
-  <div class="cmp-block" style="border-left:4px solid #ff7fa8">
-    <div class="cmp-title">이 / 그 / 저</div>
-    <div class="cmp-row"><span class="badge">이</span>这（靠近说话人）</div>
-    <div class="cmp-row"><span class="badge">그</span>那（靠近听话人，或双方已知）</div>
-    <div class="cmp-row"><span class="badge">저</span>那（远离双方）</div>
-    <div class="cmp-row"><span class="ko">이 책 / 그 책 / 저 책</span><span class="zh">这本书 / 那本书 / 那本书（远）</span></div>
+    compareHtml: `
+<div class="card-title">이 vs 그 vs 저</div>
+<div class="card-body">이 指离说话人近的事物或刚提到的内容。</div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
+  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v">用法一</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">이 사람이 제 친구예요</span><span style="font-size:16px;color:#5a4640">这个人是我朋友。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">그 영화 봤어요 정말 재미있었어요</span><span style="font-size:16px;color:#5a4640">那部电影看了吗？真的很有趣。</span></div>
   </div>
-  <div class="cmp-block" style="border-left:4px solid #aee3d8">
-    <div class="cmp-title">이것 / 그것 / 저것</div>
-    <div class="cmp-row"><span class="badge">代词</span>이것=这个，그것=那个，저것=那个（远）</div>
-    <div class="cmp-row"><span class="badge">缩略</span>이거/그거/저거（口语）</div>
-    <div class="cmp-row"><span class="ko">이거 얼마예요?</span><span class="zh">这个多少钱？</span></div>
-    <div class="cmp-row"><span class="ko">그거 주세요</span><span class="zh">给我那个</span></div>
+  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v" style="background:#aee3d8;color:#1a7a6a">用法二</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">저 건물이 뭐예요</span><span style="font-size:16px;color:#5a4640">那栋楼是什么？</span></div>
   </div>
-</div>`,
+</div>
+<div class="reminder-box">注意区分两种用法的核心差异。</div>
+`,
     quickTable: {
       title: '지시사 체계',
       headers: ['系列', '冠词形', '代词形', '场所'],
       rows: [
-        [{ ko: '이-', zh: '近称' }, { ko: '이 + 명사', zh: '' }, { ko: '이것/이거/여기', zh: '' }, { ko: '靠近说话人', zh: '' }],
-        [{ ko: '그-', zh: '中称' }, { ko: '그 + 명사', zh: '' }, { ko: '그것/그거/거기', zh: '' }, { ko: '靠近听话人/已知', zh: '' }],
-        [{ ko: '저-', zh: '远称' }, { ko: '저 + 명사', zh: '' }, { ko: '저것/저거/저기', zh: '' }, { ko: '远离双方', zh: '' }],
+        [{ ko: '이-', zh: '近称' }, { ko: '이 + 名词', zh: '' }, { ko: '이것/이거/여기', zh: '' }, { ko: '靠近화자', zh: '' }],
+        [{ ko: '그-', zh: '中称' }, { ko: '그 + 名词', zh: '' }, { ko: '그것/그거/거기', zh: '' }, { ko: '靠近청자/已知', zh: '' }],
+        [{ ko: '저-', zh: '远称' }, { ko: '저 + 名词', zh: '' }, { ko: '저것/저거/저기', zh: '' }, { ko: '远离双方', zh: '' }],
       ],
     },
     specialQuiz: {
@@ -1998,7 +2117,7 @@ export const grammarCardsP10: GrammarCard[] = [
       title: '综合练习⑩',
       body: '完成 P10 所有课程后，用以下题目检验掌握程度。',
       questions: [
-        { prompt: '用 -을 뿐이다 说"我只是个学生而已"', options: ['저는 학생만이에요', '저는 학생일 뿐이에요', '저는 학생뿐이에요', '저는 학생이기만 해요'], answer: 1, explanation: '명사 + 일 뿐이다，학생 + 일 뿐이에요' },
+        { prompt: '用 -을 뿐이다 说"我只是个学生而已"', options: ['저는 학생만이에요', '저는 학생일 뿐이에요', '저는 학생뿐이에요', '저는 학생이기만 해요'], answer: 1, explanation: '名词 + 일 뿐이다，학생 + 일 뿐이에요' },
         { prompt: '"要是快点放假就好了"用哪个？', options: ['빨리 방학이 되기를 바라요', '빨리 방학이 됩시다', '빨리 방학이 됐으면 좋겠어요', '빨리 방학이 될 것 같아요'], answer: 2, explanation: '-(으)면 좋겠다 表达个人愿望：됐으면 좋겠어요' },
         { prompt: '希望你能通过考试，用 -기를 바라다', options: ['시험에 합격했으면 좋겠어요', '시험에 합격할게요', '시험에 합격하겠어요', '시험에 합격하기를 바라요'], answer: 3, explanation: '动词词干 + 기를 바라다，更正式的祝愿表达' },
         { prompt: '"打算下个月搬家"用哪个？', options: ['다음 달에 이사할 생각이에요', '다음 달에 이사할까 해요', '다음 달에 이사하려고 했어요', '다음 달에 이사하겠어요'], answer: 0, explanation: '-을 생각이다 表示已有打算：이사하다 + ㄹ 생각이에요' },
@@ -2025,10 +2144,10 @@ export const grammarCardsP10: GrammarCard[] = [
     <div class="ov-block"><div class="badge">第4课</div><div class="ko">-(으)면서, -기 위해서, 을/를 위해서</div><div class="zh">同时进行与目的</div></div>
     <div class="ov-block"><div class="badge">第5课</div><div class="ko">에서, 중에서, 때</div><div class="zh">范围选择与时间标记</div></div>
     <div class="ov-block"><div class="badge">第6课</div><div class="ko">그래도, 그러나</div><div class="zh">让步与正式转折</div></div>
-    <div class="ov-block"><div class="badge">第7课</div><div class="ko">-아/어/여 있다, -고 있다 심화</div><div class="zh">状态持续 vs 动作持续</div></div>
+    <div class="ov-block"><div class="badge">第7课</div><div class="ko">-아/어/여 있다, -고 있다 深化</div><div class="zh">状态持续 vs 动作持续</div></div>
     <div class="ov-block"><div class="badge">第8课</div><div class="ko">-아/어/여 두다, -아/어/여 놓다</div><div class="zh">做好留着与做完放那</div></div>
     <div class="ov-block"><div class="badge">第9课</div><div class="ko">곳, 데, 군데</div><div class="zh">三种"地方"依存名词</div></div>
-    <div class="ov-block"><div class="badge">第10课</div><div class="ko">이, 저, 그 (지시대명사)</div><div class="zh">近称·远称·中称</div></div>
+    <div class="ov-block"><div class="badge">第10课</div><div class="ko">이, 저, 그 (指示代名词)</div><div class="zh">近称·远称·中称</div></div>
   </div>
 </div>`,
     linkedGrammarIds: [],

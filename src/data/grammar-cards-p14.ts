@@ -1,2535 +1,1658 @@
 import type { GrammarCard } from '@/types';
 
 export const grammarCardsP14: GrammarCard[] = [
-  // ── 第11课：-아/어/여다 주다/하다/드리다 ──────────────────────────
+  // ── 第1课：-이/히/리/기 短形使动（1）──────────────────────────────────────
   {
     id: 'card-p14-l01',
     partNumber: 14,
     lessonNumber: 1,
-    title: '-아/어/여다 주다/하다/드리다',
-    whatItDoes: '表示把某动作的结果转移或提供给他人',
-    whatItDoesBody: '-아/어/여다 주다 表示做完某动作后把结果给对方，相当于"……给……/帮……做……"，比 -아/어/여 주다 多一层"把结果带来/带去"的移动感。\n-아/어/여다 드리다 是敬语形式，用于对长辈或地位高的人。\n-아/어/여다 하다 则表示"反复做/一直做"或"（不必要地）做某事"，带有轻微责备或感叹语气。',
-    structureNote: '-아/어/여다 주다：동사 어간 + 아/어/여다 주다\n어간 모음이 ㅏ/ㅗ → 아다，그 외 → 어다，하다 동사 → 여다（해다）\n-아/어/여다 드리다：주다 자리에 드리다（尊敬）',
-    rulesNote: '-아/어/여다 주다 vs -아/어 주다：전자는 결과를 가져다주는 이동 뉘앙스가 강하다。후자는 단순 봉사/도움。\n-아/어/여다 하다 는 부정적 뉘앙스로 "왜 그걸 사다 해？（买那个干嘛？）"처럼 쓰인다。',
-    scenarioNote: '-아/어/여다 주다 는 "사다 주다（买来给）"，"가져다 주다（拿来给）"，"데려다 주다（送去）"처럼 이동성 동사와 자주 쓰인다。',
+    title: '-이/히/리/기 短形使动',
+    whatItDoes: '让某人做',
+    whatItDoesBody: '韩语使动的核心方式之一：动词词干加使动接尾 -이-/-히-/-리-/-기-。使动的意思是"让 A 做 B 事"。本课学 -이-/-히-/-리-/-기- 四组共同规则。哪个动词属哪一组需按记忆表。',
+    structureNote: '动词词干 + -이/히/리/기- + 语尾｜句式：S가 O를 V-이/히-（S 让 O 做 V）',
+    rulesNote: '-이-：보다→보이다（给看）｜-히-：읽다→읽히다（让读）｜-리-：울다→울리다（弄哭）｜-기-：웃다→웃기다（逗笑）',
     structures: [
       {
-        ko: '동사 어간 + 아다/어다 주다',
+        ko: '엄마가 아기에게 그림책을 보였어요.',
+        zh: '妈妈给宝宝看图画书。',
         tokens: [
-          { text: '물', role: 'object' },
-          { text: ' 한 잔', role: 'plain' },
-          { text: ' 가져다', role: 'verb' },
-          { text: ' 주세요', role: 'verb' },
+          { text: '엄마가', role: 'subject' },
+          { text: '아기에게', role: 'plain' },
+          { text: '그림책을', role: 'object' },
+          { text: '보였어요', role: 'verb' },
         ],
-        zh: '请给我拿一杯水来。',
       },
       {
-        ko: 'ㅏ/ㅗ 어간 + 아다 주다',
+        ko: '선생님이 학생들에게 책을 읽혔어요.',
+        zh: '老师让学生们读书。',
         tokens: [
-          { text: '편의점에서', role: 'place' },
-          { text: ' 빵', role: 'object' },
-          { text: ' 사다', role: 'verb' },
-          { text: ' 줬어요', role: 'verb' },
+          { text: '선생님이', role: 'subject' },
+          { text: '학생들에게', role: 'plain' },
+          { text: '책을', role: 'object' },
+          { text: '읽혔어요', role: 'verb' },
         ],
-        zh: '从便利店买了面包来给（我）。',
       },
       {
-        ko: '드리다（尊敬）',
+        ko: '민수가 친구를 자꾸 울려요.',
+        zh: '民秀总是把朋友弄哭。',
         tokens: [
-          { text: '할머니께', role: 'object' },
-          { text: ' 약', role: 'object' },
-          { text: ' 가져다', role: 'verb' },
-          { text: ' 드렸어요', role: 'verb' },
+          { text: '민수가', role: 'subject' },
+          { text: '친구를', role: 'object' },
+          { text: '자꾸', role: 'plain' },
+          { text: '울려요', role: 'verb' },
         ],
-        zh: '把药拿去给奶奶了。',
-      },
-      {
-        ko: '-아/어다 하다（感叹/责备）',
-        tokens: [
-          { text: '왜', role: 'plain' },
-          { text: ' 이런 걸', role: 'object' },
-          { text: ' 사다', role: 'verb' },
-          { text: ' 해요？', role: 'verb' },
-        ],
-        zh: '买这种东西干嘛？',
       },
     ],
     connectionRules: [
-      { type: 'rule', text: 'ㅏ/ㅗ 모음 어간 + 아다 주다', examples: '사다 주다，놓아다 주다' },
-      { type: 'rule', text: '그 외 모음 어간 + 어다 주다', examples: '가져다 주다，데려다 주다，만들어다 주다' },
-      { type: 'rule', text: '하다 동사 → 해다 주다', examples: '준비해다 주다，청소해다 주다' },
-      { type: 'compare', text: '-아/어다 주다 vs -아/어 주다：이동 뉘앙스 유무', examples: '사다 주다（买来给，有移动）vs 사 주다（买给，纯帮助）' },
-      { type: 'note', text: '드리다：주다의 존댓말，윗사람에게 줄 때', examples: '선생님께 가져다 드렸어요，부모님께 사다 드려요' },
-      { type: 'note', text: '-아/어다 하다：불필요한 행동에 대한 가벼운 책망/감탄', examples: '왜 사다 해요？/ 또 만들어다 해？' },
+      { type: 'rule', text: '-이- 类：보다→보이다（给看）/ 먹다→먹이다（喂）/ 죽다→죽이다（弄死）', examples: '엄마가 아기에게 우유를 먹였어요.' },
+      { type: 'rule', text: '-히- 类：읽다→읽히다（让读）/ 앉다→앉히다（让坐）/ 눕다→눕히다（让躺）', examples: '선생님이 아이를 자리에 앉혔어요.' },
+      { type: 'rule', text: '-리- 类：울다→울리다（弄哭）/ 살다→살리다（救活）/ 알다→알리다（告知）', examples: '민수가 친구를 울렸어요. / 그가 소식을 알렸다.' },
+      { type: 'rule', text: '-기- 类：웃다→웃기다（逗笑）/ 벗다→벗기다（脱下）/ 감다→감기다（洗头/闭眼）', examples: '개그맨이 관객을 웃겼어요.' },
+      { type: 'usage', text: '使动句式：S가 O를(에게) V-이/히-', examples: '엄마가 아기에게 밥을 먹였다. / 형이 동생을 울렸다.' },
+      { type: 'compare', text: '短形使动 vs 短形被动（同接尾）→ 靠助词区分', examples: '(被动) 아이가 잡혔다.（被抓）/(使动) 엄마가 아이를 잡혔다. → 通常这类语义直接用被动或换 -게 하다' },
+      { type: 'note', text: '哪个动词属哪一组需按表记，不能自造', examples: '먹다→먹이다 ✓ / 먹다→먹히다（这是被动"被吃"）' },
     ],
     cardExamples: [
       {
         wordBlocks: [
-          { text: '동생이', role: 'subject' },
-          { text: ' 학교에서', role: 'place' },
-          { text: ' 그림을', role: 'object' },
-          { text: ' 그려다', role: 'verb' },
-          { text: ' 줬어요', role: 'verb' },
+          { text: '엄마가', role: 'subject' },
+          { text: '아기에게', role: 'plain' },
+          { text: '그림책을', role: 'object' },
+          { text: '보였어요', role: 'verb' },
         ],
-        zh: '弟弟/妹妹在学校画了画带来给我。',
-        swapWords: ['가져다 줬어요', '만들어다 줬어요'],
-        swapRole: 'verb',
+        zh: '妈妈给宝宝看图画书。',
+        swapWords: ['그림책', '사진', '동영상', '카드'],
       },
       {
         wordBlocks: [
-          { text: '아버지께서', role: 'subject' },
-          { text: ' 시장에서', role: 'place' },
-          { text: ' 과일을', role: 'object' },
-          { text: ' 사다', role: 'verb' },
-          { text: ' 주셨어요', role: 'verb' },
+          { text: '선생님이', role: 'subject' },
+          { text: '학생들에게', role: 'plain' },
+          { text: '책을', role: 'object' },
+          { text: '읽혔어요', role: 'verb' },
         ],
-        zh: '父亲从市场买了水果来给（我）。',
-        swapWords: ['가져다 주셨어요', '사다 드렸어요'],
-        swapRole: 'verb',
+        zh: '老师让学生读书。',
+        swapWords: ['책', '소설', '동화', '시'],
       },
       {
         wordBlocks: [
-          { text: '할머니께', role: 'object' },
-          { text: ' 약을', role: 'object' },
-          { text: ' 가져다', role: 'verb' },
-          { text: ' 드렸어요', role: 'verb' },
+          { text: '민수가', role: 'subject' },
+          { text: '친구를', role: 'object' },
+          { text: '자꾸', role: 'plain' },
+          { text: '울려요', role: 'verb' },
         ],
-        zh: '把药拿去给奶奶了。',
-        swapWords: ['사다 드렸어요', '만들어다 드렸어요'],
-        swapRole: 'verb',
-      },
-      {
-        wordBlocks: [
-          { text: '왜', role: 'plain' },
-          { text: ' 이렇게 많이', role: 'plain' },
-          { text: ' 사다', role: 'verb' },
-          { text: ' 해요？', role: 'verb' },
-        ],
-        zh: '买这么多干嘛？',
-        swapWords: ['가져다 해요？', '만들어다 해요？'],
-        swapRole: 'verb',
+        zh: '民秀总把朋友弄哭。',
+        swapWords: ['울리다', '웃기다', '놀리다', '괴롭히다'],
       },
     ],
     scenarios: [
-      { icon: '🛒', context: '托人买东西', ko: '오는 길에 우유 좀 사다 줘요.', zh: '来的路上帮我买点牛奶来。' },
-      { icon: '👵', context: '孝敬长辈', ko: '어머니께 따뜻한 차를 끓여다 드렸어요.', zh: '给母亲泡了热茶送过去了。' },
-      { icon: '📦', context: '取快递', ko: '택배가 왔길래 가져다 줬어요.', zh: '快递来了，所以帮你拿来了。' },
-      { icon: '😅', context: '责备过度', ko: '왜 그걸 또 사다 해요？', zh: '那个又买来干嘛？' },
-      { icon: '🍱', context: '带饭', ko: '점심에 도시락을 만들어다 줬어요.', zh: '午餐做了便当带来给了。' },
-      { icon: '🚗', context: '送人回家', ko: '친구를 집에 데려다 줬어요.', zh: '送朋友回家了。' },
+      { icon: '📖', context: '给看', ko: '엄마가 아기에게 그림책을 보였어요.', zh: '妈妈给宝宝看书。' },
+      { icon: '🍼', context: '喂食', ko: '엄마가 아기에게 우유를 먹였어요.', zh: '妈妈喂宝宝喝奶。' },
+      { icon: '📚', context: '让读', ko: '선생님이 학생들에게 책을 읽혔어요.', zh: '老师让学生读书。' },
+      { icon: '💺', context: '让坐', ko: '선생님이 아이를 자리에 앉혔어요.', zh: '老师让孩子坐下。' },
+      { icon: '😭', context: '弄哭', ko: '민수가 친구를 울렸어요.', zh: '民秀把朋友弄哭。' },
+      { icon: '😂', context: '逗笑', ko: '개그맨이 관객을 웃겼어요.', zh: '喜剧演员把观众逗笑。' },
     ],
     mistakes: [
-      { wrong: '사줬어요（단순 도움，이동 뉘앙스 없음）', correct: '사다 줬어요（결과를 가져다줌）', note: '-아/어다 주다 는 결과물을 가져다주는 이동 뉘앙스가 있다。단순히 사 주다 는 이동 없이 도와주는 행위만 강조한다。문맥에 맞게 구분해야 한다。' },
-      { wrong: '할머니께 가져다 줬어요（윗사람에게 주다）', correct: '할머니께 가져다 드렸어요', note: '윗사람에게는 주다 대신 드리다를 써야 한다：가져다 드렸어요（✓）。께 와 주다 조합은 존댓말이 안 된다。' },
-      { wrong: '가져다 줬드려요（주다 + 드리다 중복）', correct: '가져다 드렸어요', note: '주다와 드리다를 동시에 쓸 수 없다。윗사람이면 드리다，동등/아랫사람이면 주다 하나만 쓴다。' },
-      { wrong: '사어다 줬어요（어간 결합 오류）', correct: '사다 줬어요', note: '사다 는 사（ㅏ모음）+ 아다 → 사아다 → 축약되어 사다。사어다 는 없는 형태이다。' },
+      { wrong: '엄마가 아기가 우유를 먹였어요', correct: '엄마가 아기에게 우유를 먹였어요', note: '被使动者用 에게 或 을/를，不用 이/가' },
+      { wrong: '민수가 친구가 울렸어요', correct: '민수가 친구를 울렸어요', note: '使动句里对方是被支配对象 → 을/를' },
+      { wrong: '개그맨이 관객을 웃혔어요', correct: '개그맨이 관객을 웃겼어요', note: '웃다 → 웃기다（-기-类），不是 웃히다' },
     ],
+    quickTable: {
+      title: '-이/히/리/기 短形使动速查',
+      headers: ['接尾', '原型 → 使动', '含义'],
+      rows: [
+        ['-이-', '보다 → 보이다', '看 → 给看'],
+        ['-이-', '먹다 → 먹이다', '吃 → 喂'],
+        ['-이-', '죽다 → 죽이다', '死 → 弄死'],
+        ['-히-', '읽다 → 읽히다', '读 → 让读'],
+        ['-히-', '앉다 → 앉히다', '坐 → 让坐'],
+        ['-리-', '울다 → 울리다', '哭 → 弄哭'],
+        ['-리-', '알다 → 알리다', '知道 → 告知'],
+        ['-기-', '웃다 → 웃기다', '笑 → 逗笑'],
+        ['-기-', '벗다 → 벗기다', '脱 → 脱下'],
+      ],
+    },
     specialQuiz: {
-      type: 'fill',
-      title: '-아/어다 주다/드리다',
-      body: '선택지 중 맞는 것을 고르세요',
+      type: 'morph',
+      title: '短形使动 练习',
+      body: '选择正确形式',
       questions: [
         {
-          prompt: '오는 길에 커피 ___ 줘요。（来的路上帮我拿咖啡来。）',
-          options: ['사어다', '사면', '사고', '사다'],
-          answer: 3 as 0|1|2|3,
-          explanation: '사다（사+아다 축약）주다：사다 줘요（✓）。사어다는 없는 형태，사고/사면은 연결어미로 주다와 결합하지 않는다。',
+          prompt: '엄마가 아기에게 우유를 (먹다) 였어요.',
+          options: ['먹였어요', '먹혔어요', '먹어졌어요', '먹었어요'],
+          answer: 0,
+          explanation: '먹다 的使动是 먹이다（喂）→ 먹였어요。먹혔다 是被动"被吃"。',
         },
         {
-          prompt: '선생님께 자료를 가져다 ___。（把资料带给老师了。）',
-          options: ['드렸어요', '주셨어요', '드렸습니다요', '줬어요'],
-          answer: 0 as 0|1|2|3,
-          explanation: '선생님（윗사람）께 → 드리다：가져다 드렸어요（✓）。줬어요는 윗사람에게 부적절，주셨어요는 주어가 선생님일 때，드렸습니다요는 없는 형태。',
+          prompt: '선생님이 학생들에게 책을 (읽다) 혔어요.',
+          options: ['읽어졌어요', '읽혔어요', '읽었어요', '읽리었어요'],
+          answer: 1,
+          explanation: '읽다 的使动是 읽히다（让读）→ 읽혔어요。',
         },
         {
-          prompt: '왜 이런 걸 또 ___ 해요？（又买这种东西干嘛？）',
-          options: ['샀다', '사다', '사고', '사어'],
-          answer: 1 as 0|1|2|3,
-          explanation: '-아/어다 하다：불필요한 행동에 대한 책망，사다 해요（✓）。사어/사고/샀다는 이 표현에 맞지 않는다。',
+          prompt: '개그맨이 관객을 (웃다) 요.',
+          options: ['웃혀요', '웃겨요', '웃려요', '웃여요'],
+          answer: 1,
+          explanation: '웃다 的使动是 웃기다（逗笑）→ 웃겨요。',
         },
         {
-          prompt: '다음 중 올바른 문장은？',
-          options: ['할머니께 가져다 줬어요（尊敬）', '사줬드려요', '친구 집에 데려다 줬어요', '가져어다 줬어요'],
-          answer: 2 as 0|1|2|3,
-          explanation: '데려다 줬어요：동등한 관계에서 데려다 주다（✓）。할머니께는 드렸어요가 맞음，사줬드려요는 이중 존댓말，가져어다는 없는 형태。',
+          prompt: '"엄마가 아기에게 우유를 먹였다" 里的 먹이다 是……？',
+          options: ['被动（被喂）', '使动（喂）', '主动（吃）', '完成时'],
+          answer: 1,
+          explanation: '먹이다 是"喂"（使动），让宝宝吃奶。먹히다 才是被动"被吃"。',
         },
       ],
     },
-    overviewHtml: `<div class="overview">
-  <div class="ov-hero">
-    <div class="ov-hero-label">P14 · 第11课</div>
-    <div class="ov-hero-title">-아/어다 주다/드리다</div>
-    <div class="ov-hero-sub">把……带来给/带去给 · 帮某人做并送达</div>
-  </div>
-  <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">本课语法点</div></div>
-    <div class="ov-block">
-      <div class="badge">带来给</div>
-      <div class="ko">동사 어간 + 아/어다 주다</div>
-      <div class="zh">做完带来/带去给对方（有移动感）</div>
-    </div>
-    <div class="ov-block">
-      <div class="badge">尊敬</div>
-      <div class="ko">동사 어간 + 아/어다 드리다</div>
-      <div class="zh">对长辈/上级使用 드리다</div>
-    </div>
-  </div>
-  <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#b49ccf"></div><div class="ov-section-title" style="color:#b49ccf">어간 결합</div></div>
-    <div class="ov-block">
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div><span style="font-weight:700">ㅏ/ㅗ 모음</span>：사다 주다，놓아다 주다</div>
-        <div><span style="font-weight:700">그 외 모음</span>：가져다 주다，만들어다 주다</div>
-        <div><span style="font-weight:700">하다 동사</span>：준비해다 주다，청소해다 주다</div>
-      </div>
-    </div>
-  </div>
-  <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">别踩的坑</div></div>
-    <div class="ov-block">
-      <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">할머니께 가져다 줬어요</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">할머니께 가져다 드렸어요</span></div></div>
-      <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">사어다 줬어요</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">사다 줬어요（사+아→사）</span></div></div>
-    </div>
+    linkedGrammarIds: ['card-p14-l02', 'card-p14-l03'],
+    step0Html: `<div class="hook-box"><div style="font-size:15px;color:#241917;line-height:1.8">"妈妈喂宝宝""老师让学生读书""朋友把我弄哭" —— 韩语最经典的使动方式：动词加 <b>-이/히/리/기-</b>。<br>먹다→먹이다（喂），울다→울리다（弄哭），웃다→웃기다（逗笑）。跟短形被动同一套接尾，靠助词分辨。</div></div>`,
+    compareHtml: `<div class="cmp-block">
+  <div style="font-size:15px;color:#241917;line-height:1.8">
+    <b>短形使动 vs 短形被动</b><br>
+    ・使动：엄마가 아기에게 밥을 먹였다.<br>
+    <span style="color:#89756e">(S가 O에게/를 V-이/히-)</span><br>
+    ・被动：작은 물고기가 큰 물고기에게 먹혔다.<br>
+    <span style="color:#89756e">(S가 A에게 V-이/히-)</span>
   </div>
 </div>`,
-    step0Html: `<div class="card-title">带来给……/带去给……</div>
-<div class="card-body">不只是"帮忙做"，而是"做了之后带过来/过去"。</div>
-<div class="hook-box">
-  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">与 -아/어 주다 的区别</div>
-  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
-    <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
-      <div style="font-size:9px;font-weight:800;color:#ff7fa8;margin-bottom:4px">-아/어다 주다 — 有移动</div>
-      <div style="font-size:16px;font-weight:800;color:#241917">사다 줬어요.</div>
-      <div style="font-size:16px;color:#89756e;margin-top:2px">买来给了（买了带来）。</div>
-    </div>
-    <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
-      <div style="font-size:9px;font-weight:800;color:#5bbfb0;margin-bottom:4px">-아/어 주다 — 纯帮助</div>
-      <div style="font-size:16px;font-weight:800;color:#241917">사 줬어요.</div>
-      <div style="font-size:16px;color:#89756e;margin-top:2px">买给了（帮买，无移动感）。</div>
-    </div>
-  </div>
-  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 사다/가져다/데려다 等常见组合先记住</div>
+    compareLabel: '使动 vs 被动',
+    overviewHtml: `<div class="ov-hero">
+  <div style="font-size:20px;font-weight:700;color:#241917;margin-bottom:8px">-이/히/리/기 短形使动</div>
+  <div style="font-size:14px;color:#89756e">让人做 · 高频使动动词组</div>
 </div>
-<div class="reminder-box">윗사람에게는 반드시 드리다：가져다 드렸어요。</div>`,
-    compareHtml: `<div class="card-title">-아/어다 주다 vs -아/어 주다 vs 드리다</div>
-<div class="card-body">세 가지 형태의 차이점。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
-  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
-    <div class="tok t-v">-아/어다 주다</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">결과를 이동하여 전달，이동 뉘앙스 강함</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">사다 줬어요</span><span style="font-size:16px;color:#5a4640">买来给了</span></div>
+<div class="ov-section">
+  <div class="ov-section-hd"><div class="ov-section-line" style="background:#6b7ff0"></div><div class="ov-section-title" style="color:#6b7ff0">四组接尾</div></div>
+  <div class="ov-block">
+    <div style="font-size:16px;color:#241917;line-height:1.9">
+      -이-：보이다 / 먹이다 / 죽이다<br>
+      -히-：읽히다 / 앉히다 / 눕히다<br>
+      -리-：울리다 / 살리다 / 알리다<br>
+      -기-：웃기다 / 벗기다 / 감기다
+    </div>
   </div>
-  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
-    <div class="tok t-v">-아/어 주다</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">단순 봉사/도움，이동 없음</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">사 줬어요</span><span style="font-size:16px;color:#5a4640">买给了（帮买）</span></div>
+</div>
+<div class="ov-section">
+  <div class="ov-section-hd"><div class="ov-section-line" style="background:#6b7ff0"></div><div class="ov-section-title" style="color:#6b7ff0">句式</div></div>
+  <div class="ov-block">
+    <div style="font-size:16px;color:#241917;line-height:1.9">
+      S가 + O에게/를 + 名词을/를 + V-이/히-<br>
+      엄마가 아기에게 우유를 먹였다.<br>
+      선생님이 학생을 앉혔다.<br>
+      민수가 친구를 울렸다.
+    </div>
   </div>
-  <div class="tok-row" style="background:#f0f4ff;border-radius:12px;padding:12px">
-    <div class="tok t-v">-아/어다 드리다</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">윗사람에게 이동하여 전달（존댓말）</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">가져다 드렸어요</span><span style="font-size:16px;color:#5a4640">拿来给了（尊敬）</span></div>
+</div>
+<div class="ov-section">
+  <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">别踩的坑</div></div>
+  <div class="ov-block">
+    <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">아기가 우유를 먹였어요</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">아기에게 우유를 먹였어요</span></div></div>
+    <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">개그맨이 관객을 웃혔어요</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">개그맨이 관객을 웃겼어요</span></div></div>
   </div>
 </div>`,
-    compareLabel: '-아/어다 주다 vs -아/어 주다 vs 드리다',
-    quickTable: {
-      title: '-아/어다 주다 어간 결합',
-      headers: ['모음 유형', '결합형', '예시'],
-      rows: [
-        ['ㅏ/ㅗ 모음', '+ 아다 주다', '사다 주다，놓아다 주다'],
-        ['그 외 모음', '+ 어다 주다', '가져다 주다，만들어다 주다'],
-        ['하다 동사', '+ 해다 주다', '준비해다 주다，청소해다 주다'],
-        ['윗사람（尊敬）', '주다 → 드리다', '사다 드리다，가져다 드리다'],
-      ],
-    },
-    linkedGrammarIds: [],
   },
 
-  // ── 第12课：-아/어/여다 오다，주다 ──────────────────────────────
+  // ── 第2课：-우/구/추 短形使动 ──────────────────────────────────────
   {
     id: 'card-p14-l02',
     partNumber: 14,
     lessonNumber: 2,
-    title: '-아/어다 오다，주다（연속 동작）',
-    whatItDoes: '表示做完某动作后来/回来，或连续动作',
-    whatItDoesBody: '-아/어다 오다 表示做完某事后来（到说话现场），相当于"做了……来了/带来了"，强调结果在此处。\n-아/어다 주다 在本课重点复习"拿来给"的移动方向区别：오다 强调向说话人方向移动，가다 强调离开说话人方向移动。\n두 표현은 이동 방향이 핵심 변수다：사다 오다（买来），사다 가다（买去）。',
-    structureNote: '동사 어간 + 아/어다 오다/가다\n어간 모음 ㅏ/ㅗ → 아다，그 외 → 어다\n방향：오다（向说话人）vs 가다（离开说话人）',
-    rulesNote: '-아/어다 오다 와 -아/어다 가다 의 차이는 이동 방향이다。화자 위치 기준으로 결과물이 오는지 가는지 판단한다。\n주다/드리다 와 결합시 오다 계열：결과를 화자 측으로 가져옴。',
-    scenarioNote: '"밥을 해다 오다（做了饭来）"，"빨래를 해다 가다（洗了衣服去）"처럼 가사 동작에 자주 등장한다。',
+    title: '-우/구/추 短形使动',
+    whatItDoes: '短形使动 续',
+    whatItDoesBody: '短形使动的另外三组接尾：-우-/-구-/-추-。-우- 是最常见的，如 자다→재우다（哄睡）、타다→태우다（载）；-구- 罕见如 솟다→솟구다；-추- 类如 낮다→낮추다（降低）、늦다→늦추다（推迟）。',
+    structureNote: '词干 + -우/구/추- + 语尾',
+    rulesNote: '-우-：자다→재우다、타다→태우다、깨다→깨우다、서다→세우다｜-추-：낮다→낮추다、늦다→늦추다、맞다→맞추다｜-구-：솟다→솟구다（少见）',
     structures: [
       {
-        ko: '동사 어간 + 아/어다 오다',
+        ko: '엄마가 아기를 재웠어요.',
+        zh: '妈妈哄宝宝睡着。',
         tokens: [
-          { text: '마트에서', role: 'place' },
-          { text: ' 고기', role: 'object' },
-          { text: ' 사다', role: 'verb' },
-          { text: ' 왔어요', role: 'verb' },
+          { text: '엄마가', role: 'subject' },
+          { text: '아기를', role: 'object' },
+          { text: '재웠어요', role: 'verb' },
         ],
-        zh: '从超市买了肉来了。',
       },
       {
-        ko: '동사 어간 + 아/어다 가다',
+        ko: '아빠가 아이를 차에 태웠어요.',
+        zh: '爸爸把孩子送上车。',
         tokens: [
-          { text: '도시락을', role: 'object' },
-          { text: ' 만들어다', role: 'verb' },
-          { text: ' 갔어요', role: 'verb' },
+          { text: '아빠가', role: 'subject' },
+          { text: '아이를', role: 'object' },
+          { text: '차에', role: 'place' },
+          { text: '태웠어요', role: 'verb' },
         ],
-        zh: '做了便当去了（带去了）。',
       },
       {
-        ko: '아/어다 오다 vs 아/어다 가다 비교',
+        ko: '에어컨 온도를 낮췄어요.',
+        zh: '把空调温度调低了。',
         tokens: [
-          { text: '책을', role: 'object' },
-          { text: ' 빌려다', role: 'verb' },
-          { text: ' 왔어요', role: 'verb' },
-          { text: ' /', role: 'plain' },
-          { text: ' 빌려다', role: 'verb' },
-          { text: ' 갔어요', role: 'verb' },
+          { text: '에어컨 온도를', role: 'object' },
+          { text: '낮췄어요', role: 'verb' },
         ],
-        zh: '借了书来了 / 借了书去了。',
-      },
-      {
-        ko: '결과 이동 + 주다',
-        tokens: [
-          { text: '친구가', role: 'subject' },
-          { text: ' 꽃을', role: 'object' },
-          { text: ' 사다', role: 'verb' },
-          { text: ' 줬어요', role: 'verb' },
-        ],
-        zh: '朋友买了花来给了（我）。',
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '어간 + 아/어다 오다：결과를 화자 쪽으로 가져옴', examples: '사다 오다，만들어다 오다，빌려다 오다' },
-      { type: 'rule', text: '어간 + 아/어다 가다：결과를 화자 반대 방향으로 가져감', examples: '사다 가다，만들어다 가다，가져다 가다' },
-      { type: 'compare', text: '오다 vs 가다：화자 위치 기준 방향이 핵심', examples: '빵을 사다 왔어요（买来了）vs 빵을 사다 갔어요（买去了）' },
-      { type: 'note', text: '-아/어다 주다：오다 방향，결과를 상대에게 전달', examples: '사다 줬어요，가져다 줬어요（화자→ 상대방）' },
-      { type: 'note', text: '하다 동사 어간 + 해다 오다/가다', examples: '준비해다 왔어요，청소해다 갔어요' },
-      { type: 'compare', text: '-아/어다 오다 vs -아/어 오다：전자는 결과 이동，후자는 지속 변화', examples: '사다 왔어요（买了来）vs 먹어 왔어요（一直在吃）' },
+      { type: 'rule', text: '-우- 类：자다→재우다（哄睡）/ 타다→태우다（载）/ 깨다→깨우다（叫醒）/ 서다→세우다（让站/建）', examples: '엄마가 아이를 재웠다. / 차를 세웠다.' },
+      { type: 'rule', text: '-추- 类：낮다→낮추다（降低）/ 늦다→늦추다（推迟）/ 맞다→맞추다（对齐/搭配）', examples: '온도를 낮췄다. / 시간을 늦췄다.' },
+      { type: 'rule', text: '-구- 类：稀少，多数教材归到"솟구다"这类少数动词', examples: '솟다 → 솟구다（涌出）' },
+      { type: 'usage', text: '不规则变化：자다→재우다（모음 이 삽입）；서다→세우다', examples: '자다 + 우 → 재우다（词内元音变化）' },
+      { type: 'usage', text: '句式：S가 O를 [场所에] V-우/추-', examples: '엄마가 아이를 차에 태웠다.' },
+      { type: 'compare', text: '短形使动 vs -게 하다 → 前者固定动词组（记忆），后者通用', examples: '재우다（固定）/ 자게 하다（通用）' },
+      { type: 'note', text: '-우- 类多为身体/位置类动词的使动化', examples: '눕다→눕히다（-히） vs 자다→재우다（-우）' },
     ],
     cardExamples: [
       {
         wordBlocks: [
-          { text: '편의점에서', role: 'place' },
-          { text: ' 커피를', role: 'object' },
-          { text: ' 사다', role: 'verb' },
-          { text: ' 왔어요', role: 'verb' },
+          { text: '엄마가', role: 'subject' },
+          { text: '아기를', role: 'object' },
+          { text: '재웠어요', role: 'verb' },
         ],
-        zh: '从便利店买了咖啡来了。',
-        swapWords: ['갔어요', '줬어요'],
-        swapRole: 'verb',
+        zh: '妈妈哄宝宝睡。',
+        swapWords: ['재우다', '깨우다', '달래다', '안다'],
       },
       {
         wordBlocks: [
-          { text: '밥을', role: 'object' },
-          { text: ' 해다', role: 'verb' },
-          { text: ' 가지고', role: 'plain' },
-          { text: ' 왔어요', role: 'verb' },
+          { text: '아빠가', role: 'subject' },
+          { text: '아이를', role: 'object' },
+          { text: '차에', role: 'place' },
+          { text: '태웠어요', role: 'verb' },
         ],
-        zh: '做了饭带来了。',
-        swapWords: ['만들어다 왔어요', '사다 왔어요'],
-        swapRole: 'verb',
+        zh: '爸爸让孩子上车。',
+        swapWords: ['태우다', '내리다', '데려가다', '내려주다'],
       },
       {
         wordBlocks: [
-          { text: '친구가', role: 'subject' },
-          { text: ' 선물을', role: 'object' },
-          { text: ' 사다', role: 'verb' },
-          { text: ' 줬어요', role: 'verb' },
+          { text: '에어컨 온도를', role: 'object' },
+          { text: '낮췄어요', role: 'verb' },
         ],
-        zh: '朋友买了礼物来给了（我）。',
-        swapWords: ['가져다 줬어요', '만들어다 줬어요'],
-        swapRole: 'verb',
-      },
-      {
-        wordBlocks: [
-          { text: '도서관에서', role: 'place' },
-          { text: ' 책을', role: 'object' },
-          { text: ' 빌려다', role: 'verb' },
-          { text: ' 갔어요', role: 'verb' },
-        ],
-        zh: '从图书馆借了书去了。',
-        swapWords: ['빌려다 왔어요', '사다 갔어요'],
-        swapRole: 'verb',
+        zh: '把空调温度调低。',
+        swapWords: ['낮추다', '올리다', '높이다', '조절하다'],
       },
     ],
     scenarios: [
-      { icon: '🛍️', context: '购物回来', ko: '시장에서 채소를 사다 왔어요.', zh: '从市场买了蔬菜来了。' },
-      { icon: '🍱', context: '带便当去公司', ko: '아침에 도시락을 만들어다 갔어요.', zh: '早上做了便当带去了（公司）。' },
-      { icon: '🎁', context: '朋友送礼', ko: '친구가 케이크를 만들어다 줬어요.', zh: '朋友做了蛋糕带来给了（我）。' },
-      { icon: '📚', context: '借书来看', ko: '도서관에서 책을 빌려다 읽었어요.', zh: '从图书馆借了书来读了。' },
-      { icon: '💊', context: '取药', ko: '약국에서 약을 사다 왔어요.', zh: '从药店买了药来了。' },
-      { icon: '🚌', context: '方向区分', ko: '밥을 사다 오면 같이 먹어요.', zh: '买了饭来的话一起吃吧。' },
+      { icon: '👶', context: '哄睡', ko: '엄마가 아기를 재웠어요.', zh: '妈妈哄宝宝睡。' },
+      { icon: '🚗', context: '载客', ko: '아빠가 아이를 차에 태웠어요.', zh: '爸爸让孩子上车。' },
+      { icon: '❄️', context: '降温', ko: '에어컨 온도를 낮췄어요.', zh: '把空调调低。' },
+      { icon: '⏰', context: '叫醒', ko: '아침에 아이를 깨웠어요.', zh: '早晨叫醒孩子。' },
+      { icon: '🕰️', context: '推迟', ko: '회의 시간을 늦췄어요.', zh: '把会议时间推迟。' },
+      { icon: '🏗️', context: '建立', ko: '광장에 동상을 세웠어요.', zh: '在广场立了雕像。' },
     ],
     mistakes: [
-      { wrong: '마트에서 고기 사와요（사+아→사와，축약 후 오다 결합 누락）', correct: '마트에서 고기 사다 와요', note: '-아/어다 오다 형식을 유지해야 한다：사다 와요（✓）。사와요는 다른 표현（사오다）의 축약형으로 의미는 비슷하지만 본 문형과 다르다。' },
-      { wrong: '빵을 사다 갔다 왔어요（갔다 오다와 혼동）', correct: '빵을 사다 왔어요', note: '갔다 오다는 "去了回来"，사다 왔어요는 "买了来"。두 표현의 구조와 의미가 다르다。사다 왔어요가 결과 이동 표현이다。' },
-      { wrong: '사다가 왔어요（어다 뒤에 가 불필요）', correct: '사다 왔어요', note: '-아/어다 오다 에서 다 뒤에 조사 가 를 쓰지 않는다。사다 왔어요가 올바른 형태이다。' },
-      { wrong: '친구한테 사다 드렸어요（친구는 동등/아랫 관계）', correct: '친구한테 사다 줬어요', note: '드리다는 윗사람에게만 쓴다。친구처럼 동등한 관계에는 주다를 쓴다：사다 줬어요（✓）。' },
+      { wrong: '엄마가 아기를 자였어요', correct: '엄마가 아기를 재웠어요', note: '자다 + -우- → 재우다（词内元音要变），不是 자우다' },
+      { wrong: '아빠가 아이를 차에 타웠어요', correct: '아빠가 아이를 차에 태웠어요', note: '타다 + -우- → 태우다，词内元音也要变' },
+      { wrong: '온도를 낮혔어요', correct: '온도를 낮췄어요', note: '낮다 的使动是 낮추다（-추-类），不用 -히-' },
     ],
+    quickTable: {
+      title: '-우/구/추 使动速查',
+      headers: ['接尾', '原型 → 使动', '含义'],
+      rows: [
+        ['-우-', '자다 → 재우다', '睡 → 哄睡（元音变化）'],
+        ['-우-', '타다 → 태우다', '乘 → 载/使搭乘'],
+        ['-우-', '깨다 → 깨우다', '醒 → 叫醒'],
+        ['-우-', '서다 → 세우다', '站 → 让站/建立'],
+        ['-추-', '낮다 → 낮추다', '低 → 降低'],
+        ['-추-', '늦다 → 늦추다', '晚 → 推迟'],
+        ['-추-', '맞다 → 맞추다', '对 → 对齐/搭配'],
+      ],
+    },
     specialQuiz: {
-      type: 'fill',
-      title: '-아/어다 오다/가다',
-      body: '선택지 중 맞는 것을 고르세요',
+      type: 'morph',
+      title: '-우/구/추 使动 练习',
+      body: '选择正确形式',
       questions: [
         {
-          prompt: '마트에서 우유를 사다 ___。（从超市买了牛奶来了。—结果在说话人处）',
-          options: ['갔어요', '줬어요', '왔어요', '드렸어요'],
-          answer: 2 as 0|1|2|3,
-          explanation: '결과를 화자 쪽으로 가져옴 → 오다：사다 왔어요（✓）。갔어요는 반대 방향，줬어요는 전달，드렸어요는 존댓말 전달。',
+          prompt: '엄마가 아기를 (자다) 웠어요.',
+          options: ['자웠어요', '재웠어요', '자혔어요', '자였어요'],
+          answer: 1,
+          explanation: '자다 的使动是 재우다（词内元音变化）→ 재웠어요。',
         },
         {
-          prompt: '도시락을 만들어다 ___。（做了便当带去了。—带去别处）',
-          options: ['왔어요', '줬어요', '드렸어요', '갔어요'],
-          answer: 3 as 0|1|2|3,
-          explanation: '결과를 화자 반대 방향으로 가져감 → 가다：만들어다 갔어요（✓）。왔어요는 화자 방향。',
+          prompt: '아빠가 아이를 차에 (타다) 웠어요.',
+          options: ['타웠어요', '태웠어요', '타혔어요', '타이었어요'],
+          answer: 1,
+          explanation: '타다 的使动是 태우다 → 태웠어요。',
         },
         {
-          prompt: '친구가 꽃을 사다 ___。（朋友买了花来给了我。—给说话人）',
-          options: ['줬어요', '왔어요', '갔어요', '드렸어요'],
-          answer: 0 as 0|1|2|3,
-          explanation: '결과를 상대방（화자）에게 전달 → 주다：사다 줬어요（✓）。왔어요는 단순 이동，갔어요는 반대 방향，드렸어요는 윗사람에게。',
+          prompt: '에어컨 온도를 (낮다) 요.',
+          options: ['낮혀요', '낮춰요', '낮여요', '낮게 해요'],
+          answer: 1,
+          explanation: '낮다 的使动是 낮추다 → 낮춰요。',
         },
         {
-          prompt: '다음 중 올바른 문장은？',
-          options: ['친구한테 사다 드렸어요（동등 관계）', '약국에서 약을 사다 왔어요', '마트에서 고기 사다가 왔어요', '밥을 해다가 갔어요'],
-          answer: 1 as 0|1|2|3,
-          explanation: '사다 왔어요：결과를 화자 쪽으로 가져옴（✓）。사다가 왔어요는 조사 가 오류，친구에게 드렸어요는 윗사람 아님，해다가 갔어요는 다 뒤에 가 오류。',
+          prompt: '-우- 类使动的典型特征是……？',
+          options: [
+            '接尾直接加，无元音变化',
+            '常伴随词内元音变化（자→재、타→태、서→세）',
+            '只用于形容词',
+            '只用于하다类动词',
+          ],
+          answer: 1,
+          explanation: '-우- 类常伴随词内元音变化：자→재、타→태、서→세。',
         },
       ],
     },
-    overviewHtml: `<div class="overview">
-  <div class="ov-hero">
-    <div class="ov-hero-label">P14 · 第12课</div>
-    <div class="ov-hero-title">-아/어다 오다/가다</div>
-    <div class="ov-hero-sub">买了来 vs 买了去 · 方向是关键</div>
-  </div>
-  <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">本课核心</div></div>
-    <div class="ov-block">
-      <div class="badge">买来</div>
-      <div class="ko">어간 + 아/어다 오다</div>
-      <div class="zh">做了带来（结果到说话人处）</div>
-    </div>
-    <div class="ov-block">
-      <div class="badge">买去</div>
-      <div class="ko">어간 + 아/어다 가다</div>
-      <div class="zh">做了带去（结果离开说话人）</div>
-    </div>
-  </div>
-  <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#b49ccf"></div><div class="ov-section-title" style="color:#b49ccf">방향 구별</div></div>
-    <div class="ov-block">
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div>사다 <b style="color:#ff7fa8">왔어요</b>：从外面买了带来（在我这里）</div>
-        <div>사다 <b style="color:#ff7fa8">갔어요</b>：买了带走（不在我这里）</div>
-        <div>사다 <b style="color:#ff7fa8">줬어요</b>：买了给对方（传达）</div>
-      </div>
-    </div>
-  </div>
-  <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">别踩的坑</div></div>
-    <div class="ov-block">
-      <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">사다가 왔어요（다 뒤에 가 불필요）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">사다 왔어요</span></div></div>
-      <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">친구한테 사다 드렸어요（동등 관계）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">사다 줬어요</span></div></div>
-    </div>
+    linkedGrammarIds: ['card-p14-l01', 'card-p14-l03'],
+    step0Html: `<div class="hook-box"><div style="font-size:15px;color:#241917;line-height:1.8">"哄宝宝睡""让孩子上车""调低温度" —— 短形使动的另一半：<b>-우- / -추-</b>（-구- 极少）。<br>特点是常伴词内元音变化：자→재우다，타→태우다，서→세우다。</div></div>`,
+    compareHtml: `<div class="cmp-block">
+  <div style="font-size:15px;color:#241917;line-height:1.8">
+    <b>-우- vs -추-</b><br>
+    ・-우- → 位置/身体（睡/坐/立/载）<br>
+    <span style="color:#89756e">자다→재우다 / 타다→태우다</span><br>
+    ・-추- → 程度/时间调整<br>
+    <span style="color:#89756e">낮다→낮추다 / 늦다→늦추다</span>
   </div>
 </div>`,
-    step0Html: `<div class="card-title">买了来 / 买了去</div>
-<div class="card-body">方向决定用 오다 还是 가다。</div>
-<div class="hook-box">
-  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">以说话人位置为基准</div>
-  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
-    <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
-      <div style="font-size:9px;font-weight:800;color:#ff7fa8;margin-bottom:4px">오다 — 结果来到我处</div>
-      <div style="font-size:16px;font-weight:800;color:#241917">마트에서 고기 사다 왔어요.</div>
-      <div style="font-size:16px;color:#89756e;margin-top:2px">从超市买了肉来了。</div>
-    </div>
-    <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
-      <div style="font-size:9px;font-weight:800;color:#5bbfb0;margin-bottom:4px">가다 — 结果带去别处</div>
-      <div style="font-size:16px;font-weight:800;color:#241917">도시락 만들어다 갔어요.</div>
-      <div style="font-size:16px;color:#89756e;margin-top:2px">做了便当带去了（公司）。</div>
-    </div>
-  </div>
-  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 오다 = 到我这里，가다 = 离开我这里</div>
+    compareLabel: '-우- vs -추-',
+    overviewHtml: `<div class="ov-hero">
+  <div style="font-size:20px;font-weight:700;color:#241917;margin-bottom:8px">-우/구/추 短形使动</div>
+  <div style="font-size:14px;color:#89756e">位置/时间/程度使动</div>
 </div>
-<div class="reminder-box">-아/어다 뒤에 조사 가 는 쓰지 않는다：사다 왔어요（✓）사다가 왔어요（✗）。</div>`,
-    compareHtml: `<div class="card-title">-아/어다 오다 vs -아/어 오다 vs 갔다 오다</div>
-<div class="card-body">비슷해 보이지만 의미가 다른 세 표현。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
-  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
-    <div class="tok t-v">-아/어다 오다</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">결과를 가져옴（买了带来）</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">사다 왔어요</span><span style="font-size:16px;color:#5a4640">买了来了</span></div>
+<div class="ov-section">
+  <div class="ov-section-hd"><div class="ov-section-line" style="background:#6b7ff0"></div><div class="ov-section-title" style="color:#6b7ff0">-우- 类（元音变）</div></div>
+  <div class="ov-block">
+    <div style="font-size:16px;color:#241917;line-height:1.9">
+      자다 → 재우다（哄睡）<br>
+      타다 → 태우다（载）<br>
+      깨다 → 깨우다（叫醒）<br>
+      서다 → 세우다（让站/立）
+    </div>
   </div>
-  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
-    <div class="tok t-v">-아/어 오다</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">지속 변화（一直……来）</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">공부해 왔어요</span><span style="font-size:16px;color:#5a4640">一直学习到现在</span></div>
+</div>
+<div class="ov-section">
+  <div class="ov-section-hd"><div class="ov-section-line" style="background:#6b7ff0"></div><div class="ov-section-title" style="color:#6b7ff0">-추- 类</div></div>
+  <div class="ov-block">
+    <div style="font-size:16px;color:#241917;line-height:1.9">
+      낮다 → 낮추다（降低）<br>
+      늦다 → 늦추다（推迟）<br>
+      맞다 → 맞추다（对齐/搭配）
+    </div>
   </div>
-  <div class="tok-row" style="background:#f0f4ff;border-radius:12px;padding:12px">
-    <div class="tok t-v">갔다 오다</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">去了再回来（去了一趟）</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">마트 갔다 왔어요</span><span style="font-size:16px;color:#5a4640">去超市转了一圈回来了</span></div>
+</div>
+<div class="ov-section">
+  <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">别踩的坑</div></div>
+  <div class="ov-block">
+    <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">자웠어요</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">재웠어요（元音变）</span></div></div>
+    <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">낮혔어요</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">낮췄어요</span></div></div>
   </div>
 </div>`,
-    compareLabel: '-아/어다 오다 vs -아/어 오다 vs 갔다 오다',
-    quickTable: {
-      title: '-아/어다 + 이동동사 방향 정리',
-      headers: ['형태', '방향', '의미', '예시'],
-      rows: [
-        ['-아/어다 오다', '화자 쪽으로', '해서 가져옴', '사다 왔어요，만들어다 왔어요'],
-        ['-아/어다 가다', '화자 반대로', '해서 가져감', '사다 갔어요，만들어다 갔어요'],
-        ['-아/어다 주다', '상대방에게', '해서 전달', '사다 줬어요，가져다 줬어요'],
-        ['-아/어다 드리다', '윗사람에게', '해서 전달（존댓말）', '사다 드렸어요，가져다 드렸어요'],
-      ],
-    },
-    linkedGrammarIds: [],
   },
 
-  // ── 第13课：-다니요，-고 말고요 ──────────────────────────────────
+  // ── 第3课：-게 하다（一般使动） ──────────────────────────────────────
   {
     id: 'card-p14-l03',
     partNumber: 14,
     lessonNumber: 3,
-    title: '-다니요，-고 말고요',
-    whatItDoes: '表示惊讶/反问，或强调"当然是/那还用说"',
-    whatItDoesBody: '-다니요 用于对听到的内容表示惊讶、意外或质疑，相当于"竟然……？/……这是什么意思？"，是对前句信息的反应性追问。\n-고 말고요 用于强烈肯定对方的提议或疑问，相当于"当然……/那还用说……"，语气坚定积极。',
-    structureNote: '-다니요：动词/形容词 기본형（終止形）+ 다니요，이다 → 이라니요，있다/없다 → 있다니요/없다니요\n-고 말고요：동사/형용사 어간 + 고 말고요（무조건 肯定）',
-    rulesNote: '-다니요 는 상대방의 발화를 그대로 반복하거나 인용하면서 놀라움을 나타낸다。직접 인용에 가깝다。\n-고 말고요 는 질문에 대한 강한 긍정으로，"물론이죠"보다 감정이 더 실린다。단독으로 쓰이거나 절에 붙을 수 있다。',
-    scenarioNote: '-다니요 는 "그게 사실이라니요！（那竟是真的？！）"처럼 충격이나 믿기 어려운 상황에 자주 쓰인다。\n-고 말고요 는 "같이 가고 말고요！（当然一起去！）"처럼 상대 제안에 열정적으로 동의할 때 쓰인다。',
+    title: '-게 하다',
+    whatItDoes: '让/使',
+    whatItDoesBody: '「-게 하다」是韩语最通用的使动表达："让 A 做 B""使 A 变得……"。可接任意动词/形容词，不看받침。相比短形使动（要记单词），-게 하다 是万能通配公式。',
+    structureNote: '动词/形容词词干 + -게 하다｜句式：S가 O를 V-게 하다',
+    rulesNote: '不看받침；可接任意动词/形容词；比短形使动更委婉、更客观',
     structures: [
       {
-        ko: '동사 기본형 + 다니요',
+        ko: '엄마가 아이를 일찍 자게 했어요.',
+        zh: '妈妈让孩子早睡。',
         tokens: [
-          { text: '그 사람이', role: 'subject' },
-          { text: ' 떠났다니요？', role: 'verb' },
+          { text: '엄마가', role: 'subject' },
+          { text: '아이를', role: 'object' },
+          { text: '일찍', role: 'plain' },
+          { text: '자게 했어요', role: 'verb' },
         ],
-        zh: '那个人竟然走了？（表示惊讶）',
       },
       {
-        ko: '이다 → 이라니요',
+        ko: '선생님이 학생들을 웃게 했어요.',
+        zh: '老师让学生们笑起来。',
         tokens: [
-          { text: '그게', role: 'subject' },
-          { text: ' 사실이라니요？', role: 'verb' },
+          { text: '선생님이', role: 'subject' },
+          { text: '학생들을', role: 'object' },
+          { text: '웃게 했어요', role: 'verb' },
         ],
-        zh: '那竟然是真的？！',
       },
       {
-        ko: '어간 + 고 말고요',
+        ko: '이 영화가 저를 슬프게 했어요.',
+        zh: '这部电影让我伤心。',
         tokens: [
-          { text: '같이', role: 'plain' },
-          { text: ' 가고 말고요！', role: 'verb' },
+          { text: '이 영화가', role: 'subject' },
+          { text: '저를', role: 'object' },
+          { text: '슬프게 했어요', role: 'verb' },
         ],
-        zh: '当然一起去！',
-      },
-      {
-        ko: '형용사 어간 + 고 말고요',
-        tokens: [
-          { text: '맛있고 말고요', role: 'verb' },
-          { text: ' 정말', role: 'plain' },
-          { text: ' 최고예요！', role: 'verb' },
-        ],
-        zh: '当然好吃，真的是最棒的！',
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '동사/형용사 기본형 + 다니요（놀라움/반문）', examples: '떠났다니요，좋다니요，먹었다니요' },
-      { type: 'rule', text: '이다 → 이라니요，아니다 → 아니라니요', examples: '학생이라니요，사실이라니요，선생님이라니요' },
-      { type: 'note', text: '-다니요 는 상대 발화 인용형：들은 내용을 그대로 반복하며 놀라움 표현', examples: 'A：그 사람 떠났대요。 B：떠났다니요？' },
-      { type: 'rule', text: '동사/형용사 어간 + 고 말고요（강한 긍정）', examples: '가고 말고요，좋고 말고요，먹고 말고요' },
-      { type: 'compare', text: '-고 말고요 vs 물론이죠：고 말고요가 더 구어적이고 감정이 강함', examples: '물론이죠（정중한 긍정）vs 가고 말고요（열정적 동의）' },
-      { type: 'note', text: '-고 말고요 단독 사용 가능（당연하다는 의미）', examples: 'A：이거 맛있어요？ B：맛있고 말고요！' },
+      { type: 'rule', text: '动词/形容词词干 + -게 하다（不看받침）', examples: '자다 → 자게 하다 / 웃다 → 웃게 하다 / 슬프다 → 슬프게 하다' },
+      { type: 'rule', text: '句式：S가 O를 V-게 하다', examples: '엄마가 아이를 자게 했어요.' },
+      { type: 'usage', text: '通用性最强，可与任意动词/形容词搭配', examples: '어떤 동사든 → -게 하다 형태 가능' },
+      { type: 'usage', text: '相比短形使动，-게 하다 更客观、更委婉', examples: '(短形) 재우다（哄睡，直接照顾）｜(-게 하다) 자게 하다（让睡，允许/命令）' },
+      { type: 'compare', text: '-게 하다 vs 短形使动 → 前者通用/客观，后者固定/亲密', examples: '엄마가 아기를 재웠다（亲自哄）/ 엄마가 아기를 자게 했다（安排/让）' },
+      { type: 'note', text: '-게 하다 可用于允许/命令/让/使多种语气', examples: '아이를 놀게 하다.（允许玩）/ 학생들을 조용히 하게 하다.（让安静）' },
+      { type: 'note', text: '句末动词接尾变化跟 하다 一致：하게 했어요 / 했어요 / 할 거예요', examples: '자게 할 거예요.（要让睡）' },
     ],
     cardExamples: [
       {
         wordBlocks: [
-          { text: '회사를', role: 'object' },
-          { text: ' 그만뒀다니요？', role: 'verb' },
-          { text: ' 믿을 수가 없어요', role: 'plain' },
+          { text: '엄마가', role: 'subject' },
+          { text: '아이를', role: 'object' },
+          { text: '일찍', role: 'plain' },
+          { text: '자게 했어요', role: 'verb' },
         ],
-        zh: '竟然辞职了？难以置信。',
-        swapWords: ['떠났다니요？', '결혼했다니요？'],
-        swapRole: 'verb',
+        zh: '妈妈让孩子早睡。',
+        swapWords: ['자다', '먹다', '쉬다', '놀다'],
       },
       {
         wordBlocks: [
-          { text: '그게', role: 'subject' },
-          { text: ' 거짓말이라니요？', role: 'verb' },
-          { text: ' 저는', role: 'subject' },
-          { text: ' 진짜인 줄 알았어요', role: 'plain' },
+          { text: '선생님이', role: 'subject' },
+          { text: '학생들을', role: 'object' },
+          { text: '웃게 했어요', role: 'verb' },
         ],
-        zh: '那竟然是谎言？我以为是真的。',
-        swapWords: ['사실이라니요？', '농담이라니요？'],
-        swapRole: 'verb',
+        zh: '老师让学生们笑。',
+        swapWords: ['웃다', '울다', '생각하다', '집중하다'],
       },
       {
         wordBlocks: [
-          { text: '도와드리고', role: 'verb' },
-          { text: ' 말고요', role: 'plain' },
-          { text: ' 언제든지', role: 'plain' },
-          { text: ' 연락하세요', role: 'verb' },
+          { text: '이 영화가', role: 'subject' },
+          { text: '저를', role: 'object' },
+          { text: '슬프게 했어요', role: 'verb' },
         ],
-        zh: '当然帮您，随时联系我。',
-        swapWords: ['가고 말고요', '먹고 말고요'],
-        swapRole: 'verb',
-      },
-      {
-        wordBlocks: [
-          { text: '재미있고', role: 'verb' },
-          { text: ' 말고요', role: 'plain' },
-          { text: ' 한번 더', role: 'plain' },
-          { text: ' 볼 거예요', role: 'verb' },
-        ],
-        zh: '当然有趣，要再看一遍。',
-        swapWords: ['맛있고 말고요', '좋고 말고요'],
-        swapRole: 'verb',
+        zh: '电影让我伤心。',
+        swapWords: ['슬프다', '기쁘다', '화나다', '감동스럽다'],
       },
     ],
     scenarios: [
-      { icon: '😱', context: '听到意外消息', ko: '그 사람이 결혼했다니요？ 정말요？', zh: '那个人竟然结婚了？真的吗？' },
-      { icon: '🤔', context: '质疑信息', ko: '그게 사실이라니요？ 믿기 어렵네요.', zh: '那竟然是真的？很难相信啊。' },
-      { icon: '👍', context: '热情赞同', ko: 'A：같이 가요？ B：가고 말고요！', zh: 'A：一起去吗？ B：当然去！' },
-      { icon: '😋', context: '力推美食', ko: '맛있고 말고요，꼭 먹어 봐요！', zh: '当然好吃，一定要尝尝！' },
-      { icon: '😤', context: '对价格惊讶', ko: '이게 10만 원이라니요？ 너무 비싸요！', zh: '这竟然要10万韩元？太贵了！' },
-      { icon: '🤝', context: '爽快答应', ko: '도와드리고 말고요，제가 할게요！', zh: '当然帮您，我来做！' },
+      { icon: '🛏️', context: '哄睡', ko: '엄마가 아이를 일찍 자게 했어요.', zh: '妈妈让孩子早睡。' },
+      { icon: '😂', context: '逗乐', ko: '선생님이 학생들을 웃게 했어요.', zh: '老师逗笑学生。' },
+      { icon: '😢', context: '感人', ko: '이 영화가 저를 슬프게 했어요.', zh: '电影让我伤心。' },
+      { icon: '🍎', context: '让吃', ko: '아빠가 아이에게 야채를 먹게 했어요.', zh: '爸爸让孩子吃菜。' },
+      { icon: '📖', context: '让读', ko: '선생님이 학생들을 책을 읽게 했어요.', zh: '老师让学生读书。' },
+      { icon: '🤫', context: '让安静', ko: '엄마가 아이들을 조용히 하게 했어요.', zh: '妈妈让孩子们安静。' },
     ],
     mistakes: [
-      { wrong: '그게 사실이다니요？（이다 + 다니요 직결）', correct: '그게 사실이라니요？', note: '이다 의 다니요 결합형은 이라니요이다。이다니요는 비문이다。이다 어간에는 라니요를 붙인다：이라니요（✓）。' },
-      { wrong: '이다니요（이다 + 다니요 직결）', correct: '이라니요', note: '이다 의 다니요 결합형은 이라니요이다。이다니요는 비문이다。이다 어간에는 라니요를 붙인다。' },
-      { wrong: '가고말고요（띄어쓰기 없음）', correct: '가고 말고요（고 말고요 앞에 띄어쓰기）', note: '-고 말고요 는 앞 어간과 띄어 쓴다：가고 말고요（✓）。붙여 쓰면 틀린 형태로 보인다。' },
-      { wrong: 'A：맛있어요？ B：맛있다니요（강한 긍정에 다니요 사용）', correct: '맛있고 말고요', note: '-다니요 는 놀라움/반문에 쓴다。강한 긍정에는 -고 말고요 를 써야 한다。맛있다니요는 "竟然好吃？"의 뜻으로 의아한 반응이 된다。' },
+      { wrong: '엄마가 아이가 자게 했어요', correct: '엄마가 아이를 자게 했어요', note: '使动句里 O 用 을/를，不用 이/가' },
+      { wrong: '엄마가 아이를 자는 게 했어요', correct: '엄마가 아이를 자게 했어요', note: '固定为 -게 하다，不用 -는 게' },
+      { wrong: '아빠가 아이에게 야채가 먹게 했어요', correct: '아빠가 아이에게 야채를 먹게 했어요', note: '被吃的对象宾语用 을/를' },
     ],
+    quickTable: {
+      title: '-게 하다 vs 短形使动',
+      headers: ['形式', '特点', '语气'],
+      rows: [
+        ['-게 하다', '通用/任意动词', '客观/委婉/允许'],
+        ['短形使动 (-이/히/리/기)', '固定组/需记忆', '亲密/直接'],
+        ['-도록 하다', '正式/带安排感', '书面/建议'],
+        ['-시키다', '하다类专用', '中性/命令'],
+      ],
+    },
     specialQuiz: {
-      type: 'fill',
-      title: '-다니요，-고 말고요',
-      body: '선택지 중 맞는 것을 고르세요',
+      type: 'morph',
+      title: '-게 하다 练习',
+      body: '选择正确形式',
       questions: [
         {
-          prompt: '그 사람이 회사를 그만___요？（那个人竟然辞职了？—表惊讶）',
-          options: ['뒀고 말고', '뒀다니', '뒀잖아', '뒀거든'],
-          answer: 1 as 0|1|2|3,
-          explanation: '-다니요：놀라움/반문：그만뒀다니요（✓）。고 말고요는 강한 긍정，거든요는 배경 설명，잖아요는 공유 정보 환기。',
+          prompt: '엄마가 아이를 일찍 (자다) 했어요.',
+          options: ['자는 게', '자게', '자서', '자기가'],
+          answer: 1,
+          explanation: '固定为 -게 하다 → 자게 했어요。',
         },
         {
-          prompt: '그게 거짓말___요？ 저는 진짜인 줄 알았어요。（那竟然是谎言？）',
-          options: ['이다니', '이고 말고', '이라니', '이거든'],
-          answer: 2 as 0|1|2|3,
-          explanation: '이다（名词+이다）+ 다니요 → 이라니요（✓）。이다니요는 비문，이고 말고요는 강한 긍정，이거든요는 설명。',
+          prompt: '이 영화가 저를 (슬프다) 했어요.',
+          options: ['슬프는 게', '슬픈', '슬프게', '슬퍼서'],
+          answer: 2,
+          explanation: '形容词也接 -게 하다 → 슬프게 했어요（让我伤心）。',
         },
         {
-          prompt: 'A：같이 영화 볼래요？ B：보___ 말고요！（当然看！）',
-          options: ['고', '잖아', '거든', '다니'],
-          answer: 0 as 0|1|2|3,
-          explanation: '-고 말고요：강한 긍정/동의：보고 말고요（✓）。다니요는 놀라움，거든요는 설명，잖아요는 환기。',
+          prompt: '엄마가 아이(   ) 야채(   ) 먹게 했어요.',
+          options: ['가 / 가', '를 / 를', '에게 / 를', '가 / 을'],
+          answer: 2,
+          explanation: '被动者用 에게（这里"让阿姨吃"，对象人），宾语야채用 을。',
         },
         {
-          prompt: '다음 중 올바른 문장은？',
-          options: ['가고말고요', '그게 사실이다니요？', '도와드리다니요！（강한 긍정）', '그게 사실이라니요？'],
-          answer: 3 as 0|1|2|3,
-          explanation: '이다 + 다니요 → 이라니요：사실이라니요（✓）。이다니요는 비문，강한 긍정에는 고 말고요，고 말고요 앞에 띄어쓰기 필요。',
+          prompt: '-게 하다 与短形使动最核心的区别？',
+          options: [
+            '意义完全相同',
+            '-게 하다 通用可接任意动词/形容词；短形使动只对固定动词组',
+            '-게 하다 只用于口语',
+            '短形使动更客观',
+          ],
+          answer: 1,
+          explanation: '-게 하다 是通用公式（不受动词限制）；短形使动是固定组合。',
         },
       ],
     },
-    overviewHtml: `<div class="overview">
-  <div class="ov-hero">
-    <div class="ov-hero-label">P14 · 第13课</div>
-    <div class="ov-hero-title">-다니요，-고 말고요</div>
-    <div class="ov-hero-sub">竟然……？ · 当然……！</div>
-  </div>
-  <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">本课语法点</div></div>
-    <div class="ov-block">
-      <div class="badge">竟然？</div>
-      <div class="ko">기본형/과거형 + 다니요</div>
-      <div class="zh">表惊讶/反问（对听到的内容）</div>
-    </div>
-    <div class="ov-block">
-      <div class="badge">当然！</div>
-      <div class="ko">어간 + 고 말고요</div>
-      <div class="zh">强烈肯定（那还用说）</div>
-    </div>
-  </div>
-  <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#b49ccf"></div><div class="ov-section-title" style="color:#b49ccf">주의</div></div>
-    <div class="ov-block">
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div><span style="font-weight:700">이다</span> + 다니요 → <b style="color:#ff7fa8">이라니요</b>（不是이다니요）</div>
-        <div><span style="font-weight:700">-고 말고요</span> 앞에 <b style="color:#ff7fa8">띄어쓰기</b> 필수</div>
-      </div>
-    </div>
-  </div>
-  <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">别踩的坑</div></div>
-    <div class="ov-block">
-      <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">사실이다니요？</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">사실이라니요？</span></div></div>
-      <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">맛있다니요！（강한 긍정）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">맛있고 말고요！</span></div></div>
-    </div>
+    linkedGrammarIds: ['card-p14-l01', 'card-p14-l04'],
+    step0Html: `<div class="hook-box"><div style="font-size:15px;color:#241917;line-height:1.8">短形使动只对特定动词，怎么办？韩语给了万能通配公式：<b>-게 하다</b>。<br>接任意动词/形容词，直接表"让……做/使……变得……"。</div></div>`,
+    compareHtml: `<div class="cmp-block">
+  <div style="font-size:15px;color:#241917;line-height:1.8">
+    <b>-게 하다 vs 短形使动</b><br>
+    ・-게 하다 → 通用<br>
+    <span style="color:#89756e">자게 하다 / 웃게 하다 / 슬프게 하다</span><br>
+    ・短形使动 → 固定组<br>
+    <span style="color:#89756e">재우다 / 웃기다 / 울리다</span>
   </div>
 </div>`,
-    step0Html: `<div class="card-title">竟然？ / 当然！</div>
-<div class="card-body">一个表示惊讶追问，一个表示热情肯定，语气完全相反。</div>
-<div class="hook-box">
-  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">感情色彩完全不同</div>
-  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
-    <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
-      <div style="font-size:9px;font-weight:800;color:#ff7fa8;margin-bottom:4px">-다니요 — 惊讶/反问</div>
-      <div style="font-size:16px;font-weight:800;color:#241917">결혼했다니요？</div>
-      <div style="font-size:16px;color:#89756e;margin-top:2px">竟然结婚了？</div>
-    </div>
-    <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
-      <div style="font-size:9px;font-weight:800;color:#5bbfb0;margin-bottom:4px">-고 말고요 — 强烈肯定</div>
-      <div style="font-size:16px;font-weight:800;color:#241917">가고 말고요！</div>
-      <div style="font-size:16px;color:#89756e;margin-top:2px">当然去！</div>
-    </div>
-  </div>
-  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 이다 뒤에는 이라니요（이다니요 X）</div>
+    compareLabel: '通用 vs 固定',
+    overviewHtml: `<div class="ov-hero">
+  <div style="font-size:20px;font-weight:700;color:#241917;margin-bottom:8px">-게 하다</div>
+  <div style="font-size:14px;color:#89756e">万能使动公式</div>
 </div>
-<div class="reminder-box">다니요 = 惊讶追问，고 말고요 = 强烈肯定，不能混用。</div>`,
-    compareHtml: `<div class="card-title">-다니요 vs -잖아요 / -고 말고요 vs 물론이죠</div>
-<div class="card-body">비슷한 기능의 다른 표현과 비교。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
-  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
-    <div class="tok t-v">-다니요</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">놀라움/반문，상대 발화 반복</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">그만뒀다니요？</span><span style="font-size:16px;color:#5a4640">竟然辞职了？</span></div>
+<div class="ov-section">
+  <div class="ov-section-hd"><div class="ov-section-line" style="background:#6b7ff0"></div><div class="ov-section-title" style="color:#6b7ff0">核心规则</div></div>
+  <div class="ov-block">
+    <div style="font-size:16px;color:#241917;line-height:1.9">
+      动词/形容词 + <b>-게 하다</b><br>
+      句式：S가 O를 V-게 하다<br>
+      形容词也可接（让……变得）<br>
+      任何动词都能用（对比短形使动）
+    </div>
   </div>
-  <div class="tok-row" style="background:#f0f4ff;border-radius:12px;padding:12px">
-    <div class="tok t-v">-잖아요</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">공유 정보 환기（惊讶 없음）</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">그만뒀잖아요</span><span style="font-size:16px;color:#5a4640">不是辞职了嘛（你知道的）</span></div>
+</div>
+<div class="ov-section">
+  <div class="ov-section-hd"><div class="ov-section-line" style="background:#6b7ff0"></div><div class="ov-section-title" style="color:#6b7ff0">高频例句</div></div>
+  <div class="ov-block">
+    <div style="font-size:16px;color:#241917;line-height:1.9">
+      엄마가 아이를 일찍 자게 했어요.<br>
+      선생님이 학생들을 웃게 했어요.<br>
+      이 영화가 저를 슬프게 했어요.<br>
+      아빠가 아이에게 야채를 먹게 했어요.
+    </div>
   </div>
-  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
-    <div class="tok t-v">-고 말고요</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">강한 구어적 긍정</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">가고 말고요！</span><span style="font-size:16px;color:#5a4640">当然去！（热情）</span></div>
-  </div>
-  <div class="tok-row" style="background:#f5f0ee;border-radius:12px;padding:12px">
-    <div class="tok t-v">물론이죠</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">정중한 긍정，격식체</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">물론이죠，가겠습니다</span><span style="font-size:16px;color:#5a4640">当然，我去（正式）</span></div>
+</div>
+<div class="ov-section">
+  <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">别踩的坑</div></div>
+  <div class="ov-block">
+    <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">아이가 자게 했어요</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">아이를 자게 했어요</span></div></div>
+    <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">자는 게 했어요</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">자게 했어요</span></div></div>
   </div>
 </div>`,
-    compareLabel: '-다니요 vs -잖아요 / -고 말고요 vs 물론이죠',
-    quickTable: {
-      title: '-다니요 / -고 말고요 정리',
-      headers: ['어미', '기능', '접속', '예시'],
-      rows: [
-        ['-다니요', '놀라움/반문', '기본형/과거형 뒤', '떠났다니요，좋다니요'],
-        ['이라니요', '이다 뒤 특수형', '이다 → 이라니요', '사실이라니요，학생이라니요'],
-        ['-고 말고요', '강한 긍정', '어간 + 고 말고요', '가고 말고요，맛있고 말고요'],
-      ],
-    },
-    linkedGrammarIds: [],
   },
 
-  // ── 第14课：-아/어/여 오다，-아/어/여 가다 ────────────────────────
+  // ── 第4课：-도록 하다（安排/建议使动） ──────────────────────────────────────
   {
     id: 'card-p14-l04',
     partNumber: 14,
     lessonNumber: 4,
-    title: '-아/어 오다，-아/어 가다',
-    whatItDoes: '表示状态/动作从过去持续到现在，或向未来延续',
-    whatItDoesBody: '-아/어 오다 表示某状态或动作从过去持续到现在，相当于"一直……到现在/……起来了"，强调变化的到达点是当下。\n-아/어 가다 表示某状态或动作从现在向未来延续，相当于"越来越……/逐渐……下去"，强调变化的方向是未来。\n두 표현은 시간의 방향이 핵심：오다（过去→现在），가다（现在→未来）。',
-    structureNote: '동사/형용사 어간 + 아/어 오다（过去→现在）\n동사/형용사 어간 + 아/어 가다（现在→未来）\n어간 모음 ㅏ/ㅗ → 아，그 외 → 어，하다 → 해',
-    rulesNote: '-아/어 오다 는 주로 "지금까지" 와 함께 쓰이며 과거의 지속을 나타낸다。\n-아/어 가다 는 "점점"，"서서히" 등과 함께 쓰이며 미래 방향의 변화를 나타낸다。',
-    scenarioNote: '"한국어를 배워 오다（一直在学韩语）" vs "한국어 실력이 늘어 가다（韩语水平在提高）"처럼 같은 주제라도 시간 방향이 다르다。',
+    title: '-도록 하다',
+    whatItDoes: '安排/建议做',
+    whatItDoesBody: '「-도록 하다」和 -게 하다 类似，都表"让/使"，但语气更书面、更正式，含"安排/建议/规定"的味道。常用于工作场合、规章制度、上级对下级的建议中。',
+    structureNote: '动词词干 + -도록 하다｜句式：S가 O를 V-도록 하다',
+    rulesNote: '正式/书面/含安排感；不接形容词；也常用于自我规劝 -도록 하다',
     structures: [
       {
-        ko: '어간 + 아/어 오다（过去→现在）',
+        ko: '팀장님이 저희를 매일 회의에 참석하도록 했어요.',
+        zh: '组长安排我们每天参加会议。',
         tokens: [
-          { text: '10년 동안', role: 'time' },
-          { text: ' 이 일을', role: 'object' },
-          { text: ' 해', role: 'verb' },
-          { text: ' 왔어요', role: 'verb' },
+          { text: '팀장님이', role: 'subject' },
+          { text: '저희를', role: 'object' },
+          { text: '매일', role: 'time' },
+          { text: '회의에', role: 'place' },
+          { text: '참석하도록 했어요', role: 'verb' },
         ],
-        zh: '10年来一直做这个工作。',
       },
       {
-        ko: '어간 + 아/어 가다（现在→未来）',
+        ko: '오늘부터 담배를 피우지 않도록 하겠습니다.',
+        zh: '从今天起我决心不再抽烟。',
         tokens: [
-          { text: '날씨가', role: 'subject' },
-          { text: ' 점점', role: 'plain' },
-          { text: ' 추워', role: 'verb' },
-          { text: ' 가요', role: 'verb' },
+          { text: '오늘부터', role: 'time' },
+          { text: '담배를', role: 'object' },
+          { text: '피우지 않도록 하겠습니다', role: 'verb' },
         ],
-        zh: '天气越来越冷了。',
       },
       {
-        ko: '변화 오다（상태 변화 도달）',
+        ko: '학생들이 시간을 지키도록 지도해 주세요.',
+        zh: '请指导学生们守时。',
         tokens: [
-          { text: '한국어', role: 'plain' },
-          { text: ' 실력이', role: 'subject' },
-          { text: ' 많이', role: 'plain' },
-          { text: ' 늘어', role: 'verb' },
-          { text: ' 왔어요', role: 'verb' },
+          { text: '학생들이', role: 'subject' },
+          { text: '시간을', role: 'object' },
+          { text: '지키도록', role: 'verb' },
+          { text: '지도해 주세요', role: 'verb' },
         ],
-        zh: '韩语水平提高了很多（到现在）。',
-      },
-      {
-        ko: '변화 가다（상태 변화 진행）',
-        tokens: [
-          { text: '아이가', role: 'subject' },
-          { text: ' 점점', role: 'plain' },
-          { text: ' 커', role: 'verb' },
-          { text: ' 가고 있어요', role: 'verb' },
-        ],
-        zh: '孩子正在渐渐长大。',
       },
     ],
     connectionRules: [
-      { type: 'rule', text: 'ㅏ/ㅗ 어간 + 아 오다/가다', examples: '살아 오다，알아 오다，좋아 가다' },
-      { type: 'rule', text: '그 외 어간 + 어 오다/가다', examples: '배워 오다，늘어 오다，커 가다，줄어 가다' },
-      { type: 'compare', text: '-아/어 오다 vs -아/어 가다：시간 방향이 반대', examples: '살아 왔어요（一直生活到现在）vs 살아 갈 거예요（以后继续生活）' },
-      { type: 'note', text: '-아/어 오다 는 "지금까지" 와 호응，과거→현재 지속', examples: '지금까지 참아 왔어요，10년간 해 왔어요' },
-      { type: 'note', text: '-아/어 가다 는 "점점/서서히" 와 호응，현재→미래 변화', examples: '점점 좋아 가요，서서히 나아 가고 있어요' },
-      { type: 'compare', text: '-아/어 오다 vs -아/어다 오다：전자는 지속，후자는 결과 이동', examples: '배워 왔어요（一直在学）vs 사다 왔어요（买了来）' },
+      { type: 'rule', text: '动词词干 + -도록 하다（不接形容词）', examples: '참석하다 → 참석하도록 하다 / 지키다 → 지키도록 하다' },
+      { type: 'rule', text: '句式：S가 O를 V-도록 하다', examples: '팀장님이 저희를 참석하도록 했어요.' },
+      { type: 'usage', text: '语气：书面/正式/安排感/建议', examples: '规章："학생들이 규정을 준수하도록 한다."' },
+      { type: 'usage', text: '自我规劝：주어가 자기 자신에게 다짐', examples: '오늘부터 열심히 공부하도록 하겠습니다.' },
+      { type: 'compare', text: '-도록 하다 vs -게 하다 → 前者更正式/带安排感，后者更中性/口语', examples: '(正式) 참석하도록 하다 / (中性) 참석하게 하다' },
+      { type: 'note', text: '书面命令句常用 -도록 하다 而不是 -게 하다', examples: '"모든 직원이 참석하도록 한다."' },
+      { type: 'note', text: '-도록 하다 前不接形容词；形容词用 -게 하다', examples: '误：슬프도록 하다 / 正：슬프게 하다' },
     ],
     cardExamples: [
       {
         wordBlocks: [
-          { text: '지금까지', role: 'time' },
-          { text: ' 열심히', role: 'plain' },
-          { text: ' 공부해', role: 'verb' },
-          { text: ' 왔어요', role: 'verb' },
+          { text: '팀장님이', role: 'subject' },
+          { text: '저희를', role: 'object' },
+          { text: '회의에', role: 'place' },
+          { text: '참석하도록 했어요', role: 'verb' },
         ],
-        zh: '到现在一直努力学习。',
-        swapWords: ['해 왔어요', '노력해 왔어요'],
-        swapRole: 'verb',
+        zh: '组长安排我们参会。',
+        swapWords: ['참석하다', '발표하다', '제출하다', '보고하다'],
       },
       {
         wordBlocks: [
-          { text: '날씨가', role: 'subject' },
-          { text: ' 점점', role: 'plain' },
-          { text: ' 따뜻해', role: 'verb' },
-          { text: ' 가고 있어요', role: 'verb' },
+          { text: '오늘부터', role: 'time' },
+          { text: '담배를', role: 'object' },
+          { text: '피우지 않도록 하겠습니다', role: 'verb' },
         ],
-        zh: '天气正在渐渐变暖。',
-        swapWords: ['추워 가고 있어요', '좋아 가고 있어요'],
-        swapRole: 'verb',
+        zh: '从今起决心不吸烟。',
+        swapWords: ['담배', '술', '커피', '야식'],
       },
       {
         wordBlocks: [
-          { text: '한국어 실력이', role: 'subject' },
-          { text: ' 많이', role: 'plain' },
-          { text: ' 늘어', role: 'verb' },
-          { text: ' 왔어요', role: 'verb' },
+          { text: '학생들이', role: 'subject' },
+          { text: '시간을', role: 'object' },
+          { text: '지키도록', role: 'verb' },
+          { text: '지도해 주세요', role: 'verb' },
         ],
-        zh: '韩语水平提高了很多（到现在）。',
-        swapWords: ['좋아져 왔어요', '발전해 왔어요'],
-        swapRole: 'verb',
-      },
-      {
-        wordBlocks: [
-          { text: '아이가', role: 'subject' },
-          { text: ' 점점', role: 'plain' },
-          { text: ' 커', role: 'verb' },
-          { text: ' 가고 있어요', role: 'verb' },
-        ],
-        zh: '孩子正在渐渐长大。',
-        swapWords: ['자라 가고 있어요', '변해 가고 있어요'],
-        swapRole: 'verb',
+        zh: '请指导学生守时。',
+        swapWords: ['지키다', '준수하다', '따르다', '실천하다'],
       },
     ],
     scenarios: [
-      { icon: '📚', context: '坚持学习', ko: '3년간 한국어를 배워 왔어요.', zh: '3年来一直在学韩语。' },
-      { icon: '🌡️', context: '气候变化', ko: '지구가 점점 더워져 가고 있어요.', zh: '地球正在越来越变暖。' },
-      { icon: '💪', context: '健康改善', ko: '꾸준히 운동해서 건강해져 왔어요.', zh: '坚持运动，健康起来了。' },
-      { icon: '🌱', context: '成长', ko: '그 회사가 서서히 커 가고 있어요.', zh: '那家公司正在慢慢壮大。' },
-      { icon: '❤️', context: '感情深厚', ko: '오래 알아 오면서 더 친해졌어요.', zh: '长时间认识下来变得更亲密了。' },
-      { icon: '🌅', context: '未来期待', ko: '앞으로도 열심히 해 갈 거예요.', zh: '今后也会继续努力下去。' },
+      { icon: '📋', context: '安排', ko: '팀장님이 저희를 회의에 참석하도록 했어요.', zh: '组长安排我们参会。' },
+      { icon: '🚭', context: '自我规劝', ko: '담배를 피우지 않도록 하겠습니다.', zh: '决心不再抽烟。' },
+      { icon: '⏰', context: '教育', ko: '학생들이 시간을 지키도록 지도해 주세요.', zh: '请指导学生守时。' },
+      { icon: '📢', context: '规章', ko: '모든 직원이 매일 출석하도록 합니다.', zh: '所有员工都必须每日出勤。' },
+      { icon: '💪', context: '决心', ko: '앞으로 운동을 열심히 하도록 하겠습니다.', zh: '今后决心努力运动。' },
+      { icon: '🚦', context: '规则', ko: '보행자는 신호를 지키도록 해야 합니다.', zh: '行人须遵守信号灯。' },
     ],
     mistakes: [
-      { wrong: '공부해 갔어요（과거 지속에 가다 사용）', correct: '공부해 왔어요', note: '과거부터 현재까지의 지속은 -아/어 오다 를 쓴다。-아/어 가다 는 현재에서 미래 방향이다：지금까지 공부해 왔어요（✓）。' },
-      { wrong: '날씨가 추워 왔어요（미래 변화에 오다 사용）', correct: '날씨가 추워 가요', note: '현재 진행 중인 미래 방향 변화는 -아/어 가다 를 쓴다：추워 가요（✓）。추워 왔어요는 과거부터 지금까지 추워진 결과를 나타낸다。' },
-      { wrong: '사다 와요（-아/어다 오다 와 혼동）', correct: '사다 왔어요（결과 이동）vs 사 왔어요（持续 사다 없음）', note: '-아/어 오다（지속）와 -아/어다 오다（결과 이동）는 구조가 다르다。지속 표현에는 어 오다，결과 이동에는 어다 오다를 쓴다。' },
-      { wrong: '점점 좋아 왔어요（현재 진행 변화에 오다）', correct: '점점 좋아 가고 있어요', note: '"점점"과 함께 현재 진행 중인 변화는 -아/어 가다 가 자연스럽다：좋아 가고 있어요（✓）。좋아 왔어요는 과거 누적 결과。' },
+      { wrong: '학생들을 슬프도록 했어요', correct: '학생들을 슬프게 했어요', note: '-도록 하다 不接形容词；形容词用 -게 하다' },
+      { wrong: '아이를 자도록 했어요', correct: '아이를 자게 했어요 / 아이를 재웠어요', note: '日常"让孩子睡"更自然用 -게 하다 或短形使动；-도록 하다 偏正式安排感' },
+      { wrong: '담배를 피우지 않도록 하다', correct: '담배를 피우지 않도록 하겠습니다', note: '自我决心用 -하겠습니다 更贴切' },
     ],
+    quickTable: {
+      title: '-도록 하다 vs -게 하다',
+      headers: ['形式', '语体', '典型语境'],
+      rows: [
+        ['-도록 하다', '正式/书面', '安排 / 规章 / 建议 / 自我规劝'],
+        ['-게 하다', '中性/口语', '一般"让"'],
+        ['-도록 하다（+형용사）', '不用', '形容词请改用 -게 하다'],
+        ['-시키다', '하다类专用', '例：공부시키다'],
+      ],
+    },
     specialQuiz: {
-      type: 'fill',
-      title: '-아/어 오다，-아/어 가다',
-      body: '선택지 중 맞는 것을 고르세요',
+      type: 'morph',
+      title: '-도록 하다 练习',
+      body: '选择正确形式',
       questions: [
         {
-          prompt: '10년간 이 회사에서 일해 ___。（10年来一直在这家公司工作。）',
-          options: ['갔어요', '왔어요', '가고 왔어요', '왔다 갔어요'],
-          answer: 1 as 0|1|2|3,
-          explanation: '과거부터 현재까지 지속 → -아/어 오다：일해 왔어요（✓）。갔어요는 미래 방향，왔다 갔어요/가고 왔어요는 없는 형태。',
+          prompt: '팀장님이 저희를 회의에 (참석하다) 했어요.',
+          options: ['참석하는 게', '참석하도록', '참석하게', '참석해서'],
+          answer: 1,
+          explanation: '正式安排语境 → -도록 하다 → 참석하도록 했어요。（참석하게 했어요 也可，但正式度略低）',
         },
         {
-          prompt: '날씨가 점점 따뜻해 ___。（天气越来越暖了。—现在进行中）',
-          options: ['와요', '왔어요', '가요', '갔어요'],
-          answer: 2 as 0|1|2|3,
-          explanation: '현재 진행 중인 미래 방향 변화 → -아/어 가다：따뜻해 가요（✓）。와요는 과거→현재，왔어요는 과거 결과，갔어요는 완료。',
+          prompt: '오늘부터 담배를 (피우지 않다) 하겠습니다.',
+          options: ['피우지 않은', '피우지 않도록', '피우지 않아서', '피우지 않고'],
+          answer: 1,
+          explanation: '自我规劝/决心 → -지 않도록 하다 → 피우지 않도록 하겠습니다。',
         },
         {
-          prompt: '-아/어 오다 와 -아/어 가다 의 차이는？',
-          options: ['오다는 형용사，가다는 동사', '오다는 이동，가다는 지속', '오다는 긍정，가다는 부정', '시간 방향（오다：과거→현재，가다：현재→미래）'],
-          answer: 3 as 0|1|2|3,
-          explanation: '핵심 차이는 시간 방향：오다는 과거→현재 지속，가다는 현재→미래 변화。이동/긍부정/품사와는 무관하다。',
+          prompt: '"学生们伤心了" 韩语用 -도록 하다 是否合适？',
+          options: ['合适', '不合适（形容词请用 -게 하다）', '取决于语境', '完全通用'],
+          answer: 1,
+          explanation: '-도록 하다 只接动词；形容词（如 슬프다）用 -게 하다 → 슬프게 하다。',
         },
         {
-          prompt: '다음 중 올바른 문장은？',
-          options: ['지금까지 열심히 살아 왔어요', '3년간 배워 갔어요（과거 지속）', '점점 좋아 왔어요（현재 진행）', '날씨가 추워 왔어요（점점 변화）'],
-          answer: 0 as 0|1|2|3,
-          explanation: '살아 왔어요：과거→현재 지속（✓）。추워 왔어요는 점점 변화에 가다 필요，배워 갔어요는 과거 지속에 오다 필요，좋아 왔어요는 현재 진행에 가다 필요。',
+          prompt: '-도록 하다 vs -게 하다 最核心区别是？',
+          options: [
+            '意义完全相同',
+            '-도록 하다 更正式/带安排感；-게 하다 中性/通用（可接形容词）',
+            '-도록 하다 只用于疑问句',
+            '-도록 하다 只用于过去时',
+          ],
+          answer: 1,
+          explanation: '-도록 하다 正式/安排感/仅接动词；-게 하다 中性/更通用/可接形容词。',
         },
       ],
     },
-    overviewHtml: `<div class="overview">
-  <div class="ov-hero">
-    <div class="ov-hero-label">P14 · 第14课</div>
-    <div class="ov-hero-title">-아/어 오다，-아/어 가다</div>
-    <div class="ov-hero-sub">一直……到现在 · 越来越……下去</div>
-  </div>
-  <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">본课语法点</div></div>
-    <div class="ov-block">
-      <div class="badge">到现在</div>
-      <div class="ko">어간 + 아/어 오다</div>
-      <div class="zh">过去→现在 持续/累积</div>
-    </div>
-    <div class="ov-block">
-      <div class="badge">向未来</div>
-      <div class="ko">어간 + 아/어 가다</div>
-      <div class="zh">现在→未来 变化/延续</div>
-    </div>
-  </div>
-  <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#b49ccf"></div><div class="ov-section-title" style="color:#b49ccf">시간 방향 구별</div></div>
-    <div class="ov-block">
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div>살아 <b style="color:#ff7fa8">왔어요</b>：过去一直生活到现在</div>
-        <div>살아 <b style="color:#ff7fa8">갈 거예요</b>：今后也要继续生活</div>
-      </div>
-    </div>
-  </div>
-  <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">별踩的坑</div></div>
-    <div class="ov-block">
-      <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">점점 추워 왔어요（현재 변화）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">점점 추워 가요</span></div></div>
-      <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">10년간 배워 갔어요（과거 지속）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">10년간 배워 왔어요</span></div></div>
-    </div>
+    linkedGrammarIds: ['card-p14-l03'],
+    step0Html: `<div class="hook-box"><div style="font-size:15px;color:#241917;line-height:1.8">"组长安排我们参会""决心戒烟" —— 韩语正式场合、规章、自我规劝的使动用 <b>-도록 하다</b>。<br>比 -게 하다 更书面、更带"安排/建议"感，不接形容词。</div></div>`,
+    compareHtml: `<div class="cmp-block">
+  <div style="font-size:15px;color:#241917;line-height:1.8">
+    <b>-도록 하다 vs -게 하다</b><br>
+    ・-도록 하다 → 正式/书面/含安排<br>
+    <span style="color:#89756e">참석하도록 했어요.（安排参会）</span><br>
+    ・-게 하다 → 中性/口语/可接形容词<br>
+    <span style="color:#89756e">웃게 했어요. / 슬프게 했어요.</span>
   </div>
 </div>`,
-    step0Html: `<div class="card-title">到现在 / 向未来</div>
-<div class="card-body">同样是"持续"，方向不同，选择不同。</div>
-<div class="hook-box">
-  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">时间箭头是关键</div>
-  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
-    <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
-      <div style="font-size:9px;font-weight:800;color:#ff7fa8;margin-bottom:4px">-아/어 오다 — 过去→现在</div>
-      <div style="font-size:16px;font-weight:800;color:#241917">10년간 공부해 왔어요.</div>
-      <div style="font-size:16px;color:#89756e;margin-top:2px">10年来一直在学习（到现在）。</div>
-    </div>
-    <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
-      <div style="font-size:9px;font-weight:800;color:#5bbfb0;margin-bottom:4px">-아/어 가다 — 现在→未来</div>
-      <div style="font-size:16px;font-weight:800;color:#241917">점점 좋아 가고 있어요.</div>
-      <div style="font-size:16px;color:#89756e;margin-top:2px">正在越来越好（向未来）。</div>
-    </div>
-  </div>
-  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 "지금까지" → 오다，"점점/서서히" → 가다</div>
+    compareLabel: '正式安排 vs 通用',
+    overviewHtml: `<div class="ov-hero">
+  <div style="font-size:20px;font-weight:700;color:#241917;margin-bottom:8px">-도록 하다</div>
+  <div style="font-size:14px;color:#89756e">正式安排 / 规章 / 自我规劝</div>
 </div>
-<div class="reminder-box">-아/어다 오다（结果移动）와 -아/어 오다（持续）는 형태가 다르다。</div>`,
-    compareHtml: `<div class="card-title">-아/어 오다 vs -아/어 가다 vs -아/어다 오다</div>
-<div class="card-body">세 표현을 혼동하지 않도록 비교。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
-  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
-    <div class="tok t-v">-아/어 오다</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">과거→현재 지속/累積</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">배워 왔어요</span><span style="font-size:16px;color:#5a4640">一直学到现在</span></div>
+<div class="ov-section">
+  <div class="ov-section-hd"><div class="ov-section-line" style="background:#6b7ff0"></div><div class="ov-section-title" style="color:#6b7ff0">核心规则</div></div>
+  <div class="ov-block">
+    <div style="font-size:16px;color:#241917;line-height:1.9">
+      动词词干 + <b>-도록 하다</b><br>
+      不接形容词（用 -게 하다）<br>
+      语气：书面/正式/安排感<br>
+      自我规劝："…-도록 하겠습니다"
+    </div>
   </div>
-  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
-    <div class="tok t-v">-아/어 가다</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">현재→미래 변화/延续</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">좋아 가요</span><span style="font-size:16px;color:#5a4640">越来越好</span></div>
+</div>
+<div class="ov-section">
+  <div class="ov-section-hd"><div class="ov-section-line" style="background:#6b7ff0"></div><div class="ov-section-title" style="color:#6b7ff0">典型场景</div></div>
+  <div class="ov-block">
+    <div style="font-size:16px;color:#241917;line-height:1.9">
+      팀장님이 참석하도록 했어요.（安排）<br>
+      담배를 피우지 않도록 하겠습니다.（决心）<br>
+      학생들이 시간을 지키도록 지도해 주세요.（教育）<br>
+      직원 모두 출석하도록 한다.（规章）
+    </div>
   </div>
-  <div class="tok-row" style="background:#f0f4ff;border-radius:12px;padding:12px">
-    <div class="tok t-v">-아/어다 오다</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">결과물 이동（做了带来）</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">사다 왔어요</span><span style="font-size:16px;color:#5a4640">买了带来了</span></div>
+</div>
+<div class="ov-section">
+  <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">别踩的坑</div></div>
+  <div class="ov-block">
+    <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">슬프도록 했어요</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">슬프게 했어요</span></div></div>
+    <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">아이를 자도록 했어요</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">아이를 자게 했어요 / 재웠어요</span></div></div>
   </div>
 </div>`,
-    compareLabel: '-아/어 오다 vs -아/어 가다 vs -아/어다 오다',
-    quickTable: {
-      title: '-아/어 오다 / -아/어 가다 정리',
-      headers: ['형태', '시간 방향', '호응 부사', '예시'],
-      rows: [
-        ['-아/어 오다', '과거→현재', '지금까지，그동안', '배워 왔어요，해 왔어요'],
-        ['-아/어 가다', '현재→미래', '점점，서서히', '좋아 가요，커 가고 있어요'],
-      ],
-    },
-    linkedGrammarIds: [],
   },
 
-  // ── 第15课：에 대해(서)，에 관해서，에 관한 ────────────────────────
+  // ── 第5课：-시키다（하다类使动） ──────────────────────────────────────
   {
     id: 'card-p14-l05',
     partNumber: 14,
     lessonNumber: 5,
-    title: '에 대해(서)，에 관해서，에 관한',
-    whatItDoes: '表示"关于……/有关……"的话题指示',
-    whatItDoesBody: '에 대해(서) 和 에 관해(서) 均表示"关于……"，用于指示谈论、研究、思考的对象，意思非常接近，可以互换。\n에 관한/에 대한 是관형사형（定语形），用于修饰后面的名词，相当于"关于……的（名词）"。\n에 대해서 较口语，에 관해서 较书面/正式。',
-    structureNote: '명사 + 에 대해（서）：动词前，"关于……"\n명사 + 에 관해（서）：动词前，"关于……"（较正式）\n명사 + 에 관한/에 대한 + 명사：定语，"关于……的（명사）"',
-    rulesNote: '에 대해 와 에 관해 는 의미가 거의 같지만，에 관해 는 학술/보고서 등 격식체에서 더 자연스럽다。\n에 관한/에 대한 은 뒤에 명사가 반드시 온다（관형사형이므로）。동사 앞에는 에 대해/에 관해 를 쓴다。',
-    scenarioNote: '"환경에 대해 이야기하다"，"역사에 관한 책"처럼 발표, 논문, 뉴스, 대화에서 폭넓게 쓰인다。',
+    title: '-시키다',
+    whatItDoes: '하다类使动',
+    whatItDoesBody: '「하다」结尾的动词无法直接加 -이/히/리/기，要变使动就用 -시키다：공부하다 → 공부시키다（让……学习）、청소하다 → 청소시키다（让……打扫）、운동하다 → 운동시키다。语义常带"命令/使唤/让做"，语气可能偏强。',
+    structureNote: '汉字词/N + 하다 → N + 시키다｜句式：S가 O에게 N을 시키다',
+    rulesNote: '하다 类专用；日常口语常用；有时带"使唤/命令"的语气感',
     structures: [
       {
-        ko: '명사 + 에 대해（서）+ 동사',
+        ko: '엄마가 아이에게 공부를 시켰어요.',
+        zh: '妈妈让孩子学习。',
         tokens: [
-          { text: '이 문제', role: 'plain' },
-          { text: '에 대해서', role: 'plain' },
-          { text: ' 어떻게 생각해요？', role: 'verb' },
+          { text: '엄마가', role: 'subject' },
+          { text: '아이에게', role: 'plain' },
+          { text: '공부를', role: 'object' },
+          { text: '시켰어요', role: 'verb' },
         ],
-        zh: '关于这个问题，你怎么看？',
       },
       {
-        ko: '명사 + 에 관해（서）+ 동사',
+        ko: '선생님이 학생들을 청소시켰어요.',
+        zh: '老师让学生们打扫。',
         tokens: [
-          { text: '환경', role: 'plain' },
-          { text: '에 관해서', role: 'plain' },
-          { text: ' 발표했어요', role: 'verb' },
+          { text: '선생님이', role: 'subject' },
+          { text: '학생들을', role: 'object' },
+          { text: '청소시켰어요', role: 'verb' },
         ],
-        zh: '就环境问题做了发表。',
       },
       {
-        ko: '명사 + 에 관한/에 대한 + 명사',
+        ko: '식당에서 김치찌개를 시켰어요.',
+        zh: '在餐厅点了泡菜汤。',
         tokens: [
-          { text: '한국 역사', role: 'plain' },
-          { text: '에 관한', role: 'plain' },
-          { text: ' 책을', role: 'object' },
-          { text: ' 읽었어요', role: 'verb' },
+          { text: '식당에서', role: 'place' },
+          { text: '김치찌개를', role: 'object' },
+          { text: '시켰어요', role: 'verb' },
         ],
-        zh: '读了关于韩国历史的书。',
-      },
-      {
-        ko: '에 대한 + 명사（구어）',
-        tokens: [
-          { text: '그 사건', role: 'plain' },
-          { text: '에 대한', role: 'plain' },
-          { text: ' 뉴스를', role: 'object' },
-          { text: ' 봤어요', role: 'verb' },
-        ],
-        zh: '看了关于那件事的新闻。',
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '명사 + 에 대해（서）+ 동사：구어/문어 모두 사용', examples: '이것에 대해 말씀드릴게요，음식에 대해서 이야기해요' },
-      { type: 'rule', text: '명사 + 에 관해（서）+ 동사：격식/학술 문체에 더 자연스러움', examples: '환경에 관해 연구했어요，역사에 관해서 발표했어요' },
-      { type: 'rule', text: '명사 + 에 대한/에 관한 + 명사：관형사형，뒤에 명사 필수', examples: '환경에 관한 책，그 문제에 대한 해결책' },
-      { type: 'compare', text: '에 대해 vs 에 관해：의미 동일，에 관해가 더 격식체', examples: '내 꿈에 대해 말했어요（구어）vs 기후에 관해 연구했어요（격식）' },
-      { type: 'note', text: '에 대해/에 관해 뒤에 바로 명사 불가，에 대한/에 관한 사용', examples: '환경에 대해 책（✗）→ 환경에 대한 책（✓）' },
-      { type: 'note', text: '서 생략 가능：에 대해서 = 에 대해，에 관해서 = 에 관해', examples: '이것에 대해 얘기해요 = 이것에 대해서 얘기해요' },
+      { type: 'rule', text: '汉字词 + 하다 → 汉字词 + 시키다', examples: '공부하다 → 공부시키다 / 청소하다 → 청소시키다 / 운동하다 → 운동시키다' },
+      { type: 'rule', text: '句式 A：S가 O에게 N을 시키다', examples: '엄마가 아이에게 공부를 시켰어요.' },
+      { type: 'rule', text: '句式 B：S가 O를 N시키다（连写）', examples: '선생님이 학생들을 청소시켰어요.' },
+      { type: 'usage', text: '"点菜/点单" → 也用 시키다', examples: '식당에서 짜장면을 시켰다.' },
+      { type: 'usage', text: '带"命令/使唤"语气感，慎用于对上级/长辈', examples: '避免对长辈说 "일 시키셨어요?"（不礼貌）' },
+      { type: 'compare', text: '-시키다 vs -게 하다 → 前者只对하다类，语气可能偏"使唤"；后者通用/客观', examples: '공부시키다（让/使唤学习）/ 공부하게 하다（让学习，更中性）' },
+      { type: 'note', text: '双重使动 -시키다 + 하게 하다 是错误', examples: '误：공부시키게 하다 → 用 공부시키다 或 공부하게 하다' },
     ],
     cardExamples: [
       {
         wordBlocks: [
-          { text: '건강에 대해서', role: 'plain' },
-          { text: ' 이야기해 봐요', role: 'verb' },
+          { text: '엄마가', role: 'subject' },
+          { text: '아이에게', role: 'plain' },
+          { text: '공부를', role: 'object' },
+          { text: '시켰어요', role: 'verb' },
         ],
-        zh: '来聊聊关于健康的话题吧。',
-        swapWords: ['음식에 대해서', '여행에 대해서'],
-        swapRole: 'plain',
+        zh: '妈妈让孩子学习。',
+        swapWords: ['공부', '숙제', '운동', '연습'],
       },
       {
         wordBlocks: [
-          { text: '기후 변화에 관해서', role: 'plain' },
-          { text: ' 보고서를', role: 'object' },
-          { text: ' 썼어요', role: 'verb' },
+          { text: '선생님이', role: 'subject' },
+          { text: '학생들을', role: 'object' },
+          { text: '청소시켰어요', role: 'verb' },
         ],
-        zh: '写了关于气候变化的报告。',
-        swapWords: ['환경에 관해서', '역사에 관해서'],
-        swapRole: 'plain',
+        zh: '老师让学生打扫。',
+        swapWords: ['청소', '정리', '준비', '이동'],
       },
       {
         wordBlocks: [
-          { text: '한국 문화에 관한', role: 'plain' },
-          { text: ' 책을', role: 'object' },
-          { text: ' 추천해 줘요', role: 'verb' },
+          { text: '식당에서', role: 'place' },
+          { text: '김치찌개를', role: 'object' },
+          { text: '시켰어요', role: 'verb' },
         ],
-        zh: '推荐一本关于韩国文化的书给我吧。',
-        swapWords: ['역사에 관한', '음식에 대한'],
-        swapRole: 'plain',
-      },
-      {
-        wordBlocks: [
-          { text: '그 사건에 대한', role: 'plain' },
-          { text: ' 뉴스를', role: 'object' },
-          { text: ' 봤어요', role: 'verb' },
-        ],
-        zh: '看了关于那件事的新闻。',
-        swapWords: ['그 문제에 대한', '그 영화에 대한'],
-        swapRole: 'plain',
+        zh: '在餐厅点泡菜汤。',
+        swapWords: ['김치찌개', '된장찌개', '비빔밥', '떡볶이'],
       },
     ],
     scenarios: [
-      { icon: '📝', context: '写报告', ko: '환경에 관해서 보고서를 써야 해요.', zh: '得写一篇关于环境的报告。' },
-      { icon: '💬', context: '日常对话', ko: '요즘 건강에 대해 관심이 많아요.', zh: '最近对健康很感兴趣。' },
-      { icon: '📚', context: '推荐书籍', ko: '역사에 관한 책을 많이 읽었어요.', zh: '读了很多关于历史的书。' },
-      { icon: '🎤', context: '发表', ko: '이 주제에 대해서 발표하겠습니다.', zh: '我将就这个主题进行发表。' },
-      { icon: '🤔', context: '征求意见', ko: '이 문제에 대해 어떻게 생각해요？', zh: '关于这个问题你怎么看？' },
-      { icon: '📰', context: '新闻报道', ko: '그 사건에 대한 기사를 읽었어요.', zh: '读了关于那件事的报道。' },
+      { icon: '📚', context: '让学习', ko: '엄마가 아이에게 공부를 시켰어요.', zh: '妈妈让孩子学习。' },
+      { icon: '🧹', context: '让打扫', ko: '선생님이 학생들을 청소시켰어요.', zh: '老师让学生打扫。' },
+      { icon: '🍜', context: '点单', ko: '식당에서 김치찌개를 시켰어요.', zh: '在餐厅点泡菜汤。' },
+      { icon: '🏃', context: '让运动', ko: '코치가 선수들을 운동시켰어요.', zh: '教练让选手运动。' },
+      { icon: '📝', context: '让写', ko: '선생님이 학생들에게 시험을 보게 시켰어요.', zh: '老师让学生考试。' },
+      { icon: '👔', context: '使唤', ko: '상사가 부하 직원을 잔심부름 시켜요.', zh: '上司让下属跑腿。' },
     ],
     mistakes: [
-      { wrong: '환경에 대해 책을 읽었어요（에 대해 + 직접 명사）', correct: '환경에 대한 책을 읽었어요', note: '명사를 수식할 때는 에 대한/에 관한（관형사형）을 써야 한다。에 대해/에 관해 뒤에는 동사가 온다：에 대해 이야기하다（✓）。' },
-      { wrong: '에 관해한 책（에 관해 + 한）', correct: '에 관한 책', note: '관형사형은 에 관한 이다。에 관해한은 없는 형태이다。에 관해 + 동사，에 관한 + 명사로 구분한다。' },
-      { wrong: '이것에 대하여 이야기해요（격식 대하여 구어에 사용）', correct: '이것에 대해서 이야기해요', note: '에 대하여 는 문어/격식체 형태。구어에서는 에 대해서 또는 에 대해 가 더 자연스럽다。' },
-      { wrong: '에 관해와 에 대해를 완전히 다른 표현으로 혼동', correct: '에 관해서 ≈ 에 대해서（의미 동일，격식도 차이）', note: '에 관해서 와 에 대해서 는 의미가 같다。에 관해서 가 학술/격식체에 더 어울리고，에 대해서 는 구어에서도 자연스럽다。' },
+      { wrong: '엄마가 아이에게 공부하시켰어요', correct: '엄마가 아이에게 공부를 시켰어요', note: '-시키다 直接接名词（공부），不接하다 词干' },
+      { wrong: '엄마가 아이를 공부하게 시켰어요', correct: '엄마가 아이를 공부하게 했어요 / 공부시켰어요', note: '双重使动错误；两者选一' },
+      { wrong: '선배님, 무엇을 시켰어요?', correct: '선배님, 무엇을 부탁하셨어요?', note: '"시키다" 对长辈显失礼，用 부탁하다 / 지시하다' },
     ],
+    quickTable: {
+      title: '常用 -시키다 汇总',
+      headers: ['原型 하다', '使动 시키다', '含义'],
+      rows: [
+        ['공부하다', '공부시키다', '让学习'],
+        ['청소하다', '청소시키다', '让打扫'],
+        ['운동하다', '운동시키다', '让运动'],
+        ['이동하다', '이동시키다', '让移动/调动'],
+        ['정지하다', '정지시키다', '让停止'],
+        ['(点菜)', '시키다', '点单/点餐'],
+      ],
+    },
     specialQuiz: {
-      type: 'fill',
-      title: '에 대해(서)，에 관해서，에 관한',
-      body: '선택지 중 맞는 것을 고르세요',
+      type: 'morph',
+      title: '-시키다 练习',
+      body: '选择正确形式或搭配',
       questions: [
         {
-          prompt: '한국 역사___ 책을 읽었어요。（读了关于韩国历史的书。）',
-          options: ['에 관한', '에 대해서', '에 대해', '에 관해'],
-          answer: 0 as 0|1|2|3,
-          explanation: '명사（책）를 수식하므로 관형사형 에 관한（✓）。에 관해/에 대해/에 대해서 는 동사 앞에 쓰며 명사 직접 수식 불가。',
+          prompt: '엄마가 아이에게 공부(   ) (하다) 였어요.',
+          options: ['가 / 하시켰어요', '를 / 시켰어요', '를 / 했어요', '가 / 시켰어요'],
+          answer: 1,
+          explanation: '하다 类使动 → 名词 + 을/를 + 시키다 → 공부를 시켰어요。',
         },
         {
-          prompt: '기후 변화___ 발표했어요。（就气候变化做了发表。）',
-          options: ['에 대하여서', '에 관한', '에 관해서', '에 대한'],
-          answer: 2 as 0|1|2|3,
-          explanation: '동사（발표하다）앞에는 에 관해서（✓）。에 관한/에 대한 은 관형사형으로 명사 앞에만，에 대하여서 는 없는 형태。',
+          prompt: '식당에서 짜장면을 (?).',
+          options: ['만들었어요', '먹였어요', '시켰어요', '했어요'],
+          answer: 2,
+          explanation: '"点单/点餐" 用 시키다 → 짜장면을 시켰어요。',
         },
         {
-          prompt: '이 문제___ 어떻게 생각해요？（关于这个问题，你怎么看？）',
-          options: ['에 관하여서', '에 대해서', '에 대한', '에 관한'],
-          answer: 1 as 0|1|2|3,
-          explanation: '동사（생각하다）앞 → 에 대해서（✓）。에 대한/에 관한 은 관형사형，에 관하여서 는 없는 형태。',
+          prompt: '下列哪句 -시키다 使用不当？',
+          options: [
+            '엄마가 아이에게 공부를 시켰어요.',
+            '코치가 선수들을 운동시켰어요.',
+            '선배님, 무엇을 시켰어요?',
+            '식당에서 김치찌개를 시켰어요.',
+          ],
+          answer: 2,
+          explanation: '对长辈直接用 "시키다" 显不敬；应改用 부탁하다 / 지시하다。',
         },
         {
-          prompt: '다음 중 올바른 문장은？',
-          options: ['음식에 에 대해 이야기해요', '환경에 대해 책을 읽었어요', '역사에 관해한 보고서', '그 사건에 대한 뉴스를 봤어요'],
-          answer: 3 as 0|1|2|3,
-          explanation: '에 대한 + 명사（뉴스）：올바른 관형사형（✓）。에 대해 + 명사 직접 수식 불가，에 관해한은 없는 형태，에 에 대해 는 조사 중복。',
+          prompt: '-시키다 vs -게 하다 vs 短形使动 三者的关系？',
+          options: [
+            '-시키다 = 短形使动',
+            '-시키다 专用于하다类；-게 하다 通用；短形使动固定动词组',
+            '三者完全相同',
+            '-시키다 是被动',
+          ],
+          answer: 1,
+          explanation: '三者分工：-시키다（하다类）/ -게 하다（通用）/ 短形使动（固定组）。',
         },
       ],
     },
-    overviewHtml: `<div class="overview">
-  <div class="ov-hero">
-    <div class="ov-hero-label">P14 · 第15课</div>
-    <div class="ov-hero-title">에 대해，에 관해，에 관한</div>
-    <div class="ov-hero-sub">关于…… · 有关……的</div>
-  </div>
-  <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">本课语法点</div></div>
-    <div class="ov-block">
-      <div class="badge">关于……（动词前）</div>
-      <div class="ko">명사 + 에 대해（서）/ 에 관해（서）</div>
-      <div class="zh">话题指示，后接动词</div>
-    </div>
-    <div class="ov-block">
-      <div class="badge">……的（名词前）</div>
-      <div class="ko">명사 + 에 대한 / 에 관한 + 명사</div>
-      <div class="zh">定语形，后接名词</div>
-    </div>
-  </div>
-  <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#b49ccf"></div><div class="ov-section-title" style="color:#b49ccf">격식도 차이</div></div>
-    <div class="ov-block">
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div><span style="font-weight:700">에 대해（서）</span>：구어/문어 모두 OK</div>
-        <div><span style="font-weight:700">에 관해（서）</span>：학술/격식체에 더 자연스러움</div>
-      </div>
-    </div>
-  </div>
-  <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">别踩的坑</div></div>
-    <div class="ov-block">
-      <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">환경에 대해 책（+명사 직접）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">환경에 대한 책</span></div></div>
-      <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">에 관해한（없는 형태）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">에 관한</span></div></div>
-    </div>
+    linkedGrammarIds: ['card-p14-l03'],
+    step0Html: `<div class="hook-box"><div style="font-size:15px;color:#241917;line-height:1.8">"妈妈让孩子学习""老师让打扫""点菜" —— 韩语하다类动词的使动是 <b>-시키다</b>。<br>공부하다→공부시키다，청소하다→청소시키다。带"命令/使唤"语气，对长辈慎用。</div></div>`,
+    compareHtml: `<div class="cmp-block">
+  <div style="font-size:15px;color:#241917;line-height:1.8">
+    <b>-시키다 vs -게 하다</b><br>
+    ・-시키다 → 하다类专用<br>
+    <span style="color:#89756e">공부시키다（让学习）/ 청소시키다</span><br>
+    ・-게 하다 → 通用<br>
+    <span style="color:#89756e">공부하게 하다 / 청소하게 하다</span>
   </div>
 </div>`,
-    step0Html: `<div class="card-title">关于……</div>
-<div class="card-body">话题前置的表达，说什么之前先说"关于"。</div>
-<div class="hook-box">
-  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">动词前 vs 名词前</div>
-  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
-    <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
-      <div style="font-size:9px;font-weight:800;color:#ff7fa8;margin-bottom:4px">+ 동사 → 에 대해/에 관해</div>
-      <div style="font-size:16px;font-weight:800;color:#241917">환경에 대해 이야기해요.</div>
-      <div style="font-size:16px;color:#89756e;margin-top:2px">聊聊关于环境的话题。</div>
-    </div>
-    <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
-      <div style="font-size:9px;font-weight:800;color:#5bbfb0;margin-bottom:4px">+ 명사 → 에 대한/에 관한</div>
-      <div style="font-size:16px;font-weight:800;color:#241917">환경에 관한 책이에요.</div>
-      <div style="font-size:16px;color:#89756e;margin-top:2px">是关于环境的书。</div>
-    </div>
-  </div>
-  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 뒤에 동사 → 에 대해，뒤에 명사 → 에 대한</div>
+    compareLabel: '-시키다 vs -게 하다',
+    overviewHtml: `<div class="ov-hero">
+  <div style="font-size:20px;font-weight:700;color:#241917;margin-bottom:8px">-시키다（하다类使动）</div>
+  <div style="font-size:14px;color:#89756e">让做 / 使唤 / 点单</div>
 </div>
-<div class="reminder-box">에 관해서 = 에 대해서（意思相同，관해서 更书面）。</div>`,
-    compareHtml: `<div class="card-title">에 대해 vs 에 관해 vs 에 대한 vs 에 관한</div>
-<div class="card-body">네 가지 형태의 정확한 쓰임。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
-  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
-    <div class="tok t-v">에 대해（서）</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">동사 앞，구어/문어</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">건강에 대해 이야기해요</span><span style="font-size:16px;color:#5a4640">聊关于健康的话题</span></div>
+<div class="ov-section">
+  <div class="ov-section-hd"><div class="ov-section-line" style="background:#6b7ff0"></div><div class="ov-section-title" style="color:#6b7ff0">核心规则</div></div>
+  <div class="ov-block">
+    <div style="font-size:16px;color:#241917;line-height:1.9">
+      하다 → <b>시키다</b>：공부하다 → 공부시키다<br>
+      句式：S가 O에게 N을 시키다<br>
+      也用于"点菜/点单"<br>
+      带"使唤/命令"感 → 对长辈慎用
+    </div>
   </div>
-  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
-    <div class="tok t-v">에 관해（서）</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">동사 앞，격식/학술체</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">환경에 관해 연구해요</span><span style="font-size:16px;color:#5a4640">研究关于环境的问题</span></div>
+</div>
+<div class="ov-section">
+  <div class="ov-section-hd"><div class="ov-section-line" style="background:#6b7ff0"></div><div class="ov-section-title" style="color:#6b7ff0">高频例子</div></div>
+  <div class="ov-block">
+    <div style="font-size:16px;color:#241917;line-height:1.9">
+      공부시키다（让学习）<br>
+      청소시키다（让打扫）<br>
+      운동시키다（让运动）<br>
+      이동시키다（让移动/调动）
+    </div>
   </div>
-  <div class="tok-row" style="background:#f0f4ff;border-radius:12px;padding:12px">
-    <div class="tok t-v">에 대한</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">명사 앞，구어/문어</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">그 사건에 대한 뉴스</span><span style="font-size:16px;color:#5a4640">关于那件事的新闻</span></div>
-  </div>
-  <div class="tok-row" style="background:#f5f0ee;border-radius:12px;padding:12px">
-    <div class="tok t-v">에 관한</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">명사 앞，격식/학술체</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">역사에 관한 책</span><span style="font-size:16px;color:#5a4640">关于历史的书</span></div>
+</div>
+<div class="ov-section">
+  <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">别踩的坑</div></div>
+  <div class="ov-block">
+    <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">공부하시켰어요</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">공부를 시켰어요</span></div></div>
+    <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">공부하게 시켰어요</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">공부시켰어요 / 공부하게 했어요</span></div></div>
   </div>
 </div>`,
-    compareLabel: '에 대해 vs 에 관해 vs 에 대한 vs 에 관한',
-    quickTable: {
-      title: '에 대해/에 관해 사용 정리',
-      headers: ['형태', '뒤에 오는 것', '격식도', '예시'],
-      rows: [
-        ['에 대해（서）', '동사', '구어/문어', '건강에 대해 이야기해요'],
-        ['에 관해（서）', '동사', '격식/학술', '환경에 관해 연구해요'],
-        ['에 대한', '명사', '구어/문어', '그 문제에 대한 해결책'],
-        ['에 관한', '명사', '격식/학술', '역사에 관한 책'],
-      ],
-    },
-    linkedGrammarIds: [],
   },
 
-  // ── 第16课：을/를 비롯한，을/를 비롯해서，(까지)만 해도 ──────────
+  // ── 第6课：被动 vs 使动 辨析 ──────────────────────────────────────
   {
     id: 'card-p14-l06',
     partNumber: 14,
     lessonNumber: 6,
-    title: '을/를 비롯한，비롯해서，만 해도',
-    whatItDoes: '举例列举，或以某事为基准说"光是……就……"',
-    whatItDoesBody: '을/를 비롯한 和 을/를 비롯해서 均表示"以……为首/包括……在内"，用于列举，说明某事物是其中代表性的例子。\n비롯한 是관형사형（定语），修饰后面的名词；비롯해서 是连用形，后接动词。\n(까지)만 해도 表示"光是……就……/即便只说……也……"，以某一具体事例强调整体程度，常带有"更不用说其他"的含义。',
-    structureNote: '명사 + 을/를 비롯한 + 명사（以……为首的……）\n명사 + 을/를 비롯해서 + 동사（包括……在内，……）\n명사 + 만 해도 / 명사 + 까지만 해도（光是……就……）',
-    rulesNote: '비롯한/비롯해서 앞 명사는 전체 중 대표적인 예시가 온다。\n만 해도 는 극단적 사례 하나를 들어 전체를 강조한다。까지 는 "극단"을 더 강조하는 보조사。',
-    scenarioNote: '"BTS를 비롯한 K-POP 그룹들"처럼 대표 사례를 먼저 제시하는 설명/발표에 자주 쓰인다。\n"이것만 해도 너무 많아요"처럼 일상 대화에서 과장/강조에 쓰인다。',
+    title: '被动 vs 使动 辨析',
+    whatItDoes: '同接尾 分辨',
+    whatItDoesBody: '被动和使动共用 -이/히/리/기 接尾，学习者最容易混。分辨的钥匙是"句子结构和助词"：被动的主语是"被做的人/物"（이/가 + V-히-）；使动的主语是"让别人做的人"（이/가 + O를 + V-히-）。',
+    structureNote: '被动：受动者이/가 + 施动者에게 + V-이/히-｜使动：施动者이/가 + 受动者를 + V-이/히-',
+    rulesNote: '结构里有没有"目的宾语 을/를"是关键：有 → 使动；没有 → 被动',
     structures: [
       {
-        ko: '을/를 비롯한 + 명사',
+        ko: '도둑이 경찰에게 잡혔어요.',
+        zh: '小偷被警察抓了。（被动）',
         tokens: [
-          { text: 'BTS', role: 'plain' },
-          { text: '를 비롯한', role: 'plain' },
-          { text: ' K-POP 그룹들이', role: 'subject' },
-          { text: ' 인기예요', role: 'verb' },
+          { text: '도둑이', role: 'subject' },
+          { text: '경찰에게', role: 'plain' },
+          { text: '잡혔어요', role: 'verb' },
         ],
-        zh: '以BTS为首的K-POP团体们很受欢迎。',
       },
       {
-        ko: '을/를 비롯해서 + 동사',
+        ko: '경찰이 도둑을 잡았어요.',
+        zh: '警察抓了小偷。（主动）',
         tokens: [
-          { text: '서울', role: 'plain' },
-          { text: '을 비롯해서', role: 'plain' },
-          { text: ' 전국에서', role: 'place' },
-          { text: ' 참가했어요', role: 'verb' },
+          { text: '경찰이', role: 'subject' },
+          { text: '도둑을', role: 'object' },
+          { text: '잡았어요', role: 'verb' },
         ],
-        zh: '包括首尔在内，全国各地都参加了。',
       },
       {
-        ko: '명사 + 만 해도',
+        ko: '엄마가 아이에게 밥을 먹였어요.',
+        zh: '妈妈喂孩子饭。（使动）',
         tokens: [
-          { text: '이것', role: 'plain' },
-          { text: '만 해도', role: 'plain' },
-          { text: ' 너무 많아요', role: 'verb' },
+          { text: '엄마가', role: 'subject' },
+          { text: '아이에게', role: 'plain' },
+          { text: '밥을', role: 'object' },
+          { text: '먹였어요', role: 'verb' },
         ],
-        zh: '光是这个就已经太多了。',
-      },
-      {
-        ko: '명사 + 까지만 해도',
-        tokens: [
-          { text: '어제', role: 'time' },
-          { text: '까지만 해도', role: 'plain' },
-          { text: ' 괜찮았어요', role: 'verb' },
-        ],
-        zh: '就连昨天还好好的（更不用说之前）。',
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '받침O 명사 + 을 비롯한/비롯해서，받침X 명사 + 를 비롯한/비롯해서', examples: '음악을 비롯한（받침ㄱ），BTS를 비롯해서（받침X）' },
-      { type: 'rule', text: '비롯한 + 명사（관형사형），비롯해서 + 동사（연결형）', examples: 'BTS를 비롯한 그룹들（명사 수식）vs 서울을 비롯해서 전국이（동사 앞）' },
-      { type: 'note', text: '비롯한/비롯해서 앞 명사는 뒤에 나열될 전체의 대표 사례', examples: 'BTS를 비롯한 K-POP 그룹들（BTS가 대표 사례）' },
-      { type: 'rule', text: '명사 + 만 해도：극단 사례로 전체 강조', examples: '이것만 해도，서울만 해도，하루만 해도' },
-      { type: 'rule', text: '명사 + 까지만 해도：까지 첨가로 극단성 강조', examples: '어제까지만 해도，그것까지만 해도' },
-      { type: 'compare', text: '만 해도 vs 까지만 해도：의미 유사，까지만 해도가 더 극단적', examples: '이것만 해도 많아요 vs 이것까지만 해도 이미 너무 많아요' },
+      { type: 'rule', text: '被动：受动者做主语，用 이/가；施动者用 에게/에', examples: '도둑이 경찰에게 잡혔다.' },
+      { type: 'rule', text: '使动：施动者做主语，用 이/가；受动者用 에게/를；有 O를', examples: '엄마가 아이에게 밥을 먹였다.' },
+      { type: 'rule', text: '关键区别：使动句里有"目的宾语 을/를"，被动句里没有', examples: '(使动) 밥을 먹였다 有 밥을 / (被动) 잡혔다 没有 을/를' },
+      { type: 'usage', text: '同一动词 먹이다：使动"喂" ≠ 被动 먹히다"被吃"', examples: '엄마가 아이에게 밥을 먹였다.（喂）/ 물고기가 큰 물고기에게 먹혔다.（被吃）' },
+      { type: 'usage', text: '보이다 特殊：既是被动"能看到"又是使动"给看"', examples: '(被动) 산이 보인다. / (使动) 엄마가 아기에게 그림책을 보였다.' },
+      { type: 'compare', text: '被动 vs 使动 判断步骤 → 找主语角色→看有无 을/를 宾语', examples: '有宾语 → 使动；无宾语 → 被动' },
+      { type: 'note', text: '一些动词既是被动又是使动，靠语境判断', examples: '보이다 / 잡히다 / 안기다（分场景理解）' },
     ],
     cardExamples: [
       {
         wordBlocks: [
-          { text: 'BTS를 비롯한', role: 'plain' },
-          { text: ' K-POP 그룹들이', role: 'subject' },
-          { text: ' 세계적으로', role: 'plain' },
-          { text: ' 인기예요', role: 'verb' },
+          { text: '도둑이', role: 'subject' },
+          { text: '경찰에게', role: 'plain' },
+          { text: '잡혔어요', role: 'verb' },
         ],
-        zh: '以BTS为首的K-POP团体们在全球很受欢迎。',
-        swapWords: ['블랙핑크를 비롯한', '한국을 비롯한'],
-        swapRole: 'plain',
+        zh: '小偷被警察抓（被动）。',
+        swapWords: ['도둑', '범인', '용의자', '탈옥범'],
       },
       {
         wordBlocks: [
-          { text: '서울을 비롯해서', role: 'plain' },
-          { text: ' 전국에서', role: 'place' },
-          { text: ' 많은 사람들이', role: 'subject' },
-          { text: ' 모였어요', role: 'verb' },
+          { text: '엄마가', role: 'subject' },
+          { text: '아이에게', role: 'plain' },
+          { text: '밥을', role: 'object' },
+          { text: '먹였어요', role: 'verb' },
         ],
-        zh: '包括首尔在内，全国各地聚集了很多人。',
-        swapWords: ['한국을 비롯해서', '음식을 비롯해서'],
-        swapRole: 'plain',
+        zh: '妈妈喂孩子饭（使动）。',
+        swapWords: ['밥', '우유', '약', '과일'],
       },
       {
         wordBlocks: [
-          { text: '교통비만 해도', role: 'plain' },
-          { text: ' 한 달에', role: 'time' },
-          { text: ' 10만 원이', role: 'subject' },
-          { text: ' 넘어요', role: 'verb' },
+          { text: '작은 물고기가', role: 'subject' },
+          { text: '큰 물고기에게', role: 'plain' },
+          { text: '먹혔어요', role: 'verb' },
         ],
-        zh: '光是交通费一个月就超过10万韩元。',
-        swapWords: ['식비만 해도', '이것만 해도'],
-        swapRole: 'plain',
-      },
-      {
-        wordBlocks: [
-          { text: '어제까지만 해도', role: 'plain' },
-          { text: ' 건강했는데', role: 'verb' },
-          { text: ' 갑자기', role: 'plain' },
-          { text: ' 아파요', role: 'verb' },
-        ],
-        zh: '就连昨天还好好的，突然就不舒服了。',
-        swapWords: ['아까까지만 해도', '지난주까지만 해도'],
-        swapRole: 'plain',
+        zh: '小鱼被大鱼吃（被动）。',
+        swapWords: ['먹히다', '잡히다', '쫓기다', '물리다'],
       },
     ],
     scenarios: [
-      { icon: '🎵', context: 'K-POP介绍', ko: 'BTS를 비롯한 K-POP 가수들이 유명해요.', zh: '以BTS为首的K-POP歌手们都很有名。' },
-      { icon: '🌏', context: '国际会议', ko: '한국을 비롯해서 20개국이 참가했어요.', zh: '包括韩国在内，共20个国家参加了。' },
-      { icon: '💸', context: '生活费贵', ko: '집세만 해도 너무 비싸요.', zh: '光是房租就太贵了。' },
-      { icon: '😮', context: '突然变化', ko: '아까까지만 해도 괜찮았는데요.', zh: '刚才还好好的呢。' },
-      { icon: '📊', context: '数据列举', ko: '서울을 비롯한 대도시의 집값이 올랐어요.', zh: '以首尔为首的大城市房价上涨了。' },
-      { icon: '😫', context: '任务繁重', ko: '이것까지만 해도 이미 너무 많아요.', zh: '光是这些就已经太多了。' },
+      { icon: '👮', context: '被动·抓', ko: '도둑이 경찰에게 잡혔어요.', zh: '小偷被警察抓（被动）。' },
+      { icon: '🍚', context: '使动·喂', ko: '엄마가 아이에게 밥을 먹였어요.', zh: '妈妈喂孩子（使动）。' },
+      { icon: '🐟', context: '被动·被吃', ko: '작은 물고기가 큰 물고기에게 먹혔어요.', zh: '小鱼被大鱼吃（被动）。' },
+      { icon: '📖', context: '使动·给看', ko: '엄마가 아기에게 그림책을 보였어요.', zh: '妈妈给宝宝看书（使动）。' },
+      { icon: '⛰️', context: '被动·能看见', ko: '멀리서 산이 보여요.', zh: '远处能看见山（被动）。' },
+      { icon: '👶', context: '使动·哄睡', ko: '엄마가 아기를 재웠어요.', zh: '妈妈哄宝宝睡（使动）。' },
     ],
     mistakes: [
-      { wrong: 'BTS를 비롯해서 그룹들이（비롯해서 + 명사 수식）', correct: 'BTS를 비롯한 그룹들이', note: '명사를 수식할 때는 관형사형 비롯한 을 쓴다。비롯해서 는 연결형으로 동사 앞에 쓴다：비롯해서 모였어요（✓）。' },
-      { wrong: 'BTS를 비롯하는 그룹（비롯하는）', correct: 'BTS를 비롯한 그룹', note: '비롯한 은 비롯하다의 관형사형이다。비롯하는 은 현재형 관형사형으로 이 표현에 쓰이지 않는다。관형사형은 비롯한 이다。' },
-      { wrong: '교통비도 해도 비싸요（만 해도 대신 도 해도）', correct: '교통비만 해도 비싸요', note: '만 해도 는 조사 만 + 해도 의 결합이다。도 해도 는 없는 표현이다。광（光是）의 뉘앙스를 내려면 만 해도 를 쓴다。' },
-      { wrong: '음악를 비롯한（받침O 명사에 를）', correct: '음악을 비롯한', note: '음악（받침ㄱ 있음）→ 을 비롯한（✓）。받침 있는 명사 뒤에는 을，받침 없는 명사 뒤에는 를 쓴다。' },
+      { wrong: '엄마가 아이를 밥을 먹혔어요', correct: '엄마가 아이에게 밥을 먹였어요', note: '먹히다 是被动"被吃"；使动是 먹이다' },
+      { wrong: '도둑을 경찰에게 잡혔어요', correct: '도둑이 경찰에게 잡혔어요', note: '被动句受动者做主语用 이/가' },
+      { wrong: '엄마가 아이가 우유를 먹였어요', correct: '엄마가 아이에게 우유를 먹였어요', note: '使动句里被使动者用 에게 或 을/를，不用 이/가' },
     ],
+    quickTable: {
+      title: '被动 vs 使动 分辨',
+      headers: ['判断维度', '被动', '使动'],
+      rows: [
+        ['主语', '受动者（被做的人/物）', '施动者（让别人做的人）'],
+        ['助词', '受动者이/가 + 施动者에게', '施动者이/가 + 受动者를/에게'],
+        ['宾语 을/를', '通常没有', '有目的宾语 을/를'],
+        ['例', '도둑이 경찰에게 잡혔다', '엄마가 아이에게 밥을 먹였다'],
+        ['-이/히-', '먹히다（被吃）', '먹이다（喂）'],
+      ],
+    },
     specialQuiz: {
-      type: 'fill',
-      title: '을/를 비롯한，비롯해서，만 해도',
-      body: '선택지 중 맞는 것을 고르세요',
+      type: 'judge',
+      title: '被动 vs 使动 判断',
+      body: '判断句子属于哪种',
       questions: [
         {
-          prompt: 'BTS___ 비롯한 K-POP 그룹들이 인기예요。（以BTS为首的K-POP团体们很受欢迎。）',
-          options: ['를', '가', '을', '이'],
-          answer: 0 as 0|1|2|3,
-          explanation: 'BTS（받침X）→ 를 비롯한（✓）。받침 있는 명사면 을 비롯한。이/가는 주격 조사로 비롯한 앞에 쓰지 않는다。',
+          prompt: '"엄마가 아이에게 밥을 먹였어요."',
+          options: ['被动', '使动', '主动', '过去时'],
+          answer: 1,
+          explanation: '主语엄마（施动者），有宾语 밥을，먹이다 是使动"喂"。',
         },
         {
-          prompt: '서울을 비롯해서 전국___ 참가했어요。（包括首尔在内，全国各地参加了。）',
-          options: ['에', '이', '에서', '을'],
-          answer: 2 as 0|1|2|3,
-          explanation: '전국에서：장소+에서（행동 발생 장소）：전국에서 참가했어요（✓）。에는 목적지，이는 주격，을은 목적격으로 이 문맥에 맞지 않는다。',
+          prompt: '"작은 물고기가 큰 물고기에게 먹혔어요."',
+          options: ['被动', '使动', '主动', '将来时'],
+          answer: 0,
+          explanation: '主语 작은 물고기（受动者），无 을/를，먹히다 是被动"被吃"。',
         },
         {
-          prompt: '집세___ 해도 너무 비싸요。（光是房租就太贵了。）',
-          options: ['까지', '만', '는', '도'],
-          answer: 1 as 0|1|2|3,
-          explanation: '만 해도：광（光是）강조：집세만 해도（✓）。도 해도는 없는 표현，까지만 해도도 가능하나 만 해도가 기본형，는 해도는 다른 의미。',
+          prompt: '"엄마가 아이를 재웠어요."',
+          options: ['被动', '使动', '主动', '推测'],
+          answer: 1,
+          explanation: '主语엄마（施动者），有 아이를，재우다 是使动"哄睡"。',
         },
         {
-          prompt: '다음 중 올바른 문장은？',
-          options: ['음악를 비롯한 예술（받침O）', '이것도 해도 많아요', 'BTS를 비롯해서 그룹들이 유명해요（수식）', '한국을 비롯한 아시아 국가들이 참가했어요'],
-          answer: 3 as 0|1|2|3,
-          explanation: '한국을 비롯한 + 명사（✓）：관형사형으로 명사 수식。비롯해서는 동사 앞，음악는→을 비롯한，이것도 해도→이것만 해도。',
+          prompt: '被动 vs 使动 最快的判断方法？',
+          options: [
+            '看动词长度',
+            '看接尾（-이/히/리/기）是哪一个',
+            '看句子里有没有目的宾语 을/를',
+            '看时态',
+          ],
+          answer: 2,
+          explanation: '同接尾时，有目的宾语 을/를 → 使动；没有 → 被动。',
         },
       ],
     },
-    overviewHtml: `<div class="overview">
-  <div class="ov-hero">
-    <div class="ov-hero-label">P14 · 第16课</div>
-    <div class="ov-hero-title">비롯한，비롯해서，만 해도</div>
-    <div class="ov-hero-sub">以……为首 · 光是……就……</div>
-  </div>
-  <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">本课语法点</div></div>
-    <div class="ov-block">
-      <div class="badge">以……为首</div>
-      <div class="ko">을/를 비롯한（명사 앞）/ 비롯해서（동사 앞）</div>
-      <div class="zh">列举代表性事例</div>
-    </div>
-    <div class="ov-block">
-      <div class="badge">光是……就</div>
-      <div class="ko">명사 + 만 해도 / 까지만 해도</div>
-      <div class="zh">用极端事例强调整体程度</div>
-    </div>
-  </div>
-  <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#b49ccf"></div><div class="ov-section-title" style="color:#b49ccf">비롯한 vs 비롯해서</div></div>
-    <div class="ov-block">
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div><span style="font-weight:700">비롯한</span> + 명사：BTS를 비롯한 <b style="color:#ff7fa8">그룹들</b></div>
-        <div><span style="font-weight:700">비롯해서</span> + 동사：서울을 비롯해서 <b style="color:#ff7fa8">전국이 참가했어요</b></div>
-      </div>
-    </div>
-  </div>
-  <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">别踩的坑</div></div>
-    <div class="ov-block">
-      <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">BTS를 비롯해서 그룹들이（명사 수식）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">BTS를 비롯한 그룹들이</span></div></div>
-      <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">음악를 비롯한（받침O）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">음악을 비롯한</span></div></div>
-    </div>
+    linkedGrammarIds: ['card-p13-l01', 'card-p14-l01'],
+    step0Html: `<div class="hook-box"><div style="font-size:15px;color:#241917;line-height:1.8">"먹이다"（喂 · 使动）vs"먹히다"（被吃 · 被动） —— 同一套接尾 -이/히/리/기，学习者最容易混。<br>分辨的黄金公式：<b>句子里有没有"을/를"目的宾语？</b> 有 → 使动；没有 → 被动。</div></div>`,
+    compareHtml: `<div class="cmp-block">
+  <div style="font-size:15px;color:#241917;line-height:1.8">
+    <b>被动 vs 使动</b><br>
+    ・被动：<span style="color:#89756e">B가 A에게 V-히-</span><br>
+    도둑이 경찰에게 잡혔다.（无 을/를）<br>
+    ・使动：<span style="color:#89756e">S가 O에게 N을 V-이-</span><br>
+    엄마가 아이에게 밥을 먹였다.（有 을/를）
   </div>
 </div>`,
-    step0Html: `<div class="card-title">以……为首 / 光是……就</div>
-<div class="card-body">列举时以代表为先，强调时以极端为证。</div>
-<div class="hook-box">
-  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">两种列举强调方式</div>
-  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
-    <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
-      <div style="font-size:9px;font-weight:800;color:#ff7fa8;margin-bottom:4px">비롯한/비롯해서 — 以……为首</div>
-      <div style="font-size:16px;font-weight:800;color:#241917">BTS를 비롯한 그룹들</div>
-      <div style="font-size:16px;color:#89756e;margin-top:2px">以BTS为首的团体们</div>
-    </div>
-    <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
-      <div style="font-size:9px;font-weight:800;color:#5bbfb0;margin-bottom:4px">만 해도 — 光是……就</div>
-      <div style="font-size:16px;font-weight:800;color:#241917">집세만 해도 너무 비싸요.</div>
-      <div style="font-size:16px;color:#89756e;margin-top:2px">光是房租就太贵了。</div>
-    </div>
-  </div>
-  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 비롯한(명사 수식) vs 비롯해서(동사 앞) 구분 중요</div>
+    compareLabel: '被动 vs 使动',
+    overviewHtml: `<div class="ov-hero">
+  <div style="font-size:20px;font-weight:700;color:#241917;margin-bottom:8px">被动 vs 使动 辨析</div>
+  <div style="font-size:14px;color:#89756e">同接尾 · 靠结构分辨</div>
 </div>
-<div class="reminder-box">받침O → 을 비롯한，받침X → 를 비롯한。</div>`,
-    compareHtml: `<div class="card-title">비롯한 vs 비롯해서 / 만 해도 vs 까지만 해도</div>
-<div class="card-body">형태가 비슷한 쌍 비교。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
-  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
-    <div class="tok t-v">을/를 비롯한</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">관형사형，뒤에 명사</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">BTS를 비롯한 그룹들</span><span style="font-size:16px;color:#5a4640">以BTS为首的团体们</span></div>
+<div class="ov-section">
+  <div class="ov-section-hd"><div class="ov-section-line" style="background:#6b7ff0"></div><div class="ov-section-title" style="color:#6b7ff0">判断三步</div></div>
+  <div class="ov-block">
+    <div style="font-size:16px;color:#241917;line-height:1.9">
+      1. 找主语：是"被做的"还是"让别人做的"？<br>
+      2. 看有没有 을/를 目的宾语<br>
+      3. 有宾语 → 使动；无宾语 → 被动
+    </div>
   </div>
-  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
-    <div class="tok t-v">을/를 비롯해서</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">연결형，뒤에 동사절</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">서울을 비롯해서 전국이 참가했어요</span><span style="font-size:16px;color:#5a4640">包括首尔在内全国参加了</span></div>
+</div>
+<div class="ov-section">
+  <div class="ov-section-hd"><div class="ov-section-line" style="background:#6b7ff0"></div><div class="ov-section-title" style="color:#6b7ff0">高频对比</div></div>
+  <div class="ov-block">
+    <div style="font-size:16px;color:#241917;line-height:1.9">
+      먹히다（被吃）/ 먹이다（喂）<br>
+      잡히다（被抓）/ 잡히다（让抓 · 少用）<br>
+      보이다（能看到 · 被动）/ 보이다（给看 · 使动）<br>
+      안기다（被抱）/ 안기다（让抱）
+    </div>
   </div>
-  <div class="tok-row" style="background:#f0f4ff;border-radius:12px;padding:12px">
-    <div class="tok t-v">만 해도</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">극단 사례 강조（光是）</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">집세만 해도 비싸요</span><span style="font-size:16px;color:#5a4640">光是房租就贵</span></div>
-  </div>
-  <div class="tok-row" style="background:#f5f0ee;border-radius:12px;padding:12px">
-    <div class="tok t-v">까지만 해도</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">더 강한 극단 강조</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">어제까지만 해도 괜찮았어요</span><span style="font-size:16px;color:#5a4640">就连昨天还好好的</span></div>
+</div>
+<div class="ov-section">
+  <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">别踩的坑</div></div>
+  <div class="ov-block">
+    <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">엄마가 아이에게 밥을 먹혔어요</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">엄마가 아이에게 밥을 먹였어요</span></div></div>
+    <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">도둑을 경찰에게 잡혔어요</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">도둑이 경찰에게 잡혔어요</span></div></div>
   </div>
 </div>`,
-    compareLabel: '비롯한 vs 비롯해서 / 만 해도 vs 까지만 해도',
-    quickTable: {
-      title: '비롯한/비롯해서/만 해도 정리',
-      headers: ['형태', '뒤에 오는 것', '기능', '예시'],
-      rows: [
-        ['을/를 비롯한', '명사', '관형사형', 'BTS를 비롯한 그룹들'],
-        ['을/를 비롯해서', '동사', '연결형', '서울을 비롯해서 참가했어요'],
-        ['만 해도', '동사（술어）', '극단 강조', '집세만 해도 비싸요'],
-        ['까지만 해도', '동사（술어）', '더 강한 극단', '어제까지만 해도 괜찮았어요'],
-      ],
-    },
-    linkedGrammarIds: [],
   },
 
-  // ── 第17课：개나，까지 ────────────────────────────────────────
+  // ── 第7课：使动句助词 을/를 · 에게 ──────────────────────────────────────
   {
     id: 'card-p14-l07',
     partNumber: 14,
     lessonNumber: 7,
-    title: '개나，까지（강조 보조사）',
-    whatItDoes: '表示数量之多令人意外，或"连……都/甚至……"',
-    whatItDoesBody: '개나（도）用在数量词后，表示说话人觉得该数量多得出乎意料，相当于"竟然……个/多达……"，带有轻微惊讶或夸张语气。\n까지 作为强调助词，表示"连……都/甚至……"，强调到了意想不到的极端，可以是正面惊喜也可以是负面意外。',
-    structureNote: '수량 + 개나（도）：数量 + 개/명/권 + 나（도）（竟然……个）\n명사/부사 + 까지：名词/副词 + 까지（连……都/甚至……）',
-    rulesNote: '개나 의 나 는 "예상보다 많음"을 나타내는 보조사이다。개나도 처럼 도 를 더해 더 강조할 수 있다。\n까지 는 "극단에 도달함"을 나타낸다。예상 밖의 사태，극단적 사례에 쓰인다。앞 명사에 받침이 있어도 없어도 까지 형태 변화 없다。',
-    scenarioNote: '"이게 벌써 세 개나 됐어？（竟然已经三个了？）"，"친구까지 나를 의심해（连朋友都怀疑我）"처럼 놀라움 표현에 자주 쓰인다。',
+    title: '使动句助词 을/를·에게',
+    whatItDoes: '被使动者助词',
+    whatItDoesBody: '使动句里"被使动者（被让做的人）"到底该用 을/를 还是 에게？规则：不及物动词的使动 → 用 을/를；及物动词的使动 → 用 에게，因为宾语位置已被"目的宾语"占了。这个"占位"逻辑是使动助词的核心。',
+    structureNote: '不及物 → S가 O를 V-使动｜及物 → S가 O에게 N을 V-使动',
+    rulesNote: '判断动词原型是否及物 → 决定被使动者用 을/를 还是 에게',
     structures: [
       {
-        ko: '수량 + 개나（의외의 많음）',
+        ko: '엄마가 아기를 재웠어요.',
+        zh: '妈妈哄宝宝睡。（자다 不及物 → 아기를）',
         tokens: [
-          { text: '사과를', role: 'object' },
-          { text: ' 다섯', role: 'plain' },
-          { text: ' 개나', role: 'plain' },
-          { text: ' 먹었어요', role: 'verb' },
+          { text: '엄마가', role: 'subject' },
+          { text: '아기를', role: 'object' },
+          { text: '재웠어요', role: 'verb' },
         ],
-        zh: '苹果竟然吃了五个。',
       },
       {
-        ko: '수량 + 이나도（강조）',
+        ko: '엄마가 아기에게 우유를 먹였어요.',
+        zh: '妈妈喂宝宝奶。（먹다 及物 → 아기에게）',
         tokens: [
-          { text: '실수를', role: 'object' },
-          { text: ' 열 번', role: 'plain' },
-          { text: '이나도', role: 'plain' },
-          { text: ' 했어요', role: 'verb' },
+          { text: '엄마가', role: 'subject' },
+          { text: '아기에게', role: 'plain' },
+          { text: '우유를', role: 'object' },
+          { text: '먹였어요', role: 'verb' },
         ],
-        zh: '竟然犯了十次错误。',
       },
       {
-        ko: '명사 + 까지（극단 도달）',
+        ko: '선생님이 학생을 웃겼어요.',
+        zh: '老师逗笑了学生。（웃다 不及物 → 학생을）',
         tokens: [
-          { text: '친구', role: 'subject' },
-          { text: '까지', role: 'plain' },
-          { text: ' 나를', role: 'object' },
-          { text: ' 의심해요', role: 'verb' },
+          { text: '선생님이', role: 'subject' },
+          { text: '학생을', role: 'object' },
+          { text: '웃겼어요', role: 'verb' },
         ],
-        zh: '连朋友都怀疑我。',
-      },
-      {
-        ko: '부사 + 까지（정도 강조）',
-        tokens: [
-          { text: '이렇게', role: 'plain' },
-          { text: '까지', role: 'plain' },
-          { text: ' 할 필요는', role: 'verb' },
-          { text: ' 없어요', role: 'verb' },
-        ],
-        zh: '没必要做到这种程度。',
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '수량사 + 나：예상보다 많음을 나타냄', examples: '다섯 개나，열 명이나，세 권이나，두 시간이나' },
-      { type: 'note', text: '나（이나）선택：앞 수량사 末자 받침 있으면 이나，없으면 나', examples: '다섯 개나（받침X），열 명이나（받침O），세 번이나（받침O）' },
-      { type: 'note', text: '나도：나 + 도를 더해 더 강한 놀라움 표현', examples: '열 개나도 먹었어요，세 번이나도 실수했어요' },
-      { type: 'rule', text: '명사 + 까지：극단적 사례 강조（甚至……）', examples: '친구까지，선생님까지，그것까지，이렇게까지' },
-      { type: 'compare', text: '까지 vs 도：까지는 극단 도달，도는 포함/첨가', examples: '친구까지 왔어요（连朋友都来了）vs 친구도 왔어요（朋友也来了）' },
-      { type: 'note', text: '까지 앞 명사는 받침 유무와 관계없이 까지 형태 변화 없음', examples: '친구까지，학교까지，선생님까지 모두 동일' },
+      { type: 'rule', text: '不及物动词的使动 → 被使动者用 을/를', examples: '자다（不及物） → 아기를 재웠다 / 웃다 → 학생을 웃겼다' },
+      { type: 'rule', text: '及物动词的使动 → 被使动者用 에게，目的宾语用 을/를', examples: '먹다（及物） → 아기에게 우유를 먹였다 / 읽다 → 학생에게 책을 읽혔다' },
+      { type: 'rule', text: '判断法：原型动词能不能接 을/를 宾语', examples: '자다 O를 자다 ✗ → 不及物；먹다 O를 먹다 ✓ → 及物' },
+      { type: 'usage', text: '一个使动句最多两个 을/를 是可能的', examples: '误：엄마가 아이를 우유를 먹였다 → 正：아이에게 우유를 먹였다' },
+      { type: 'usage', text: '也可用 에게 表被使动者（不及物动词的情况下更委婉）', examples: '엄마가 아이에게 자게 했다.（比 아이를 자게 했다 更委婉）' },
+      { type: 'compare', text: '短形使动 vs -게 하다 助词规则相同', examples: '재우다 / 자게 하다 → 都用 아기를 或 아이에게' },
+      { type: 'note', text: '-시키다 常用"S가 O에게 N을 시키다"', examples: '엄마가 아이에게 공부를 시켰다.' },
     ],
     cardExamples: [
       {
         wordBlocks: [
-          { text: '오늘', role: 'time' },
-          { text: ' 커피를', role: 'object' },
-          { text: ' 세 잔이나', role: 'plain' },
-          { text: ' 마셨어요', role: 'verb' },
+          { text: '엄마가', role: 'subject' },
+          { text: '아기를', role: 'object' },
+          { text: '재웠어요', role: 'verb' },
         ],
-        zh: '今天竟然喝了三杯咖啡。',
-        swapWords: ['다섯 잔이나', '두 잔이나'],
-        swapRole: 'plain',
+        zh: '妈妈哄宝宝睡。',
+        swapWords: ['재우다', '깨우다', '앉히다', '눕히다'],
       },
       {
         wordBlocks: [
-          { text: '숙제를', role: 'object' },
-          { text: ' 두 번이나', role: 'plain' },
-          { text: ' 잊어버렸어요', role: 'verb' },
+          { text: '엄마가', role: 'subject' },
+          { text: '아기에게', role: 'plain' },
+          { text: '우유를', role: 'object' },
+          { text: '먹였어요', role: 'verb' },
         ],
-        zh: '作业竟然忘了两次。',
-        swapWords: ['세 번이나', '네 번이나'],
-        swapRole: 'plain',
+        zh: '妈妈喂宝宝奶。',
+        swapWords: ['우유', '주스', '이유식', '물'],
       },
       {
         wordBlocks: [
-          { text: '친구까지', role: 'subject' },
-          { text: ' 나를', role: 'object' },
-          { text: ' 믿지 않아요', role: 'verb' },
+          { text: '선생님이', role: 'subject' },
+          { text: '학생에게', role: 'plain' },
+          { text: '책을', role: 'object' },
+          { text: '읽혔어요', role: 'verb' },
         ],
-        zh: '连朋友都不相信我。',
-        swapWords: ['가족까지', '선생님까지'],
-        swapRole: 'subject',
-      },
-      {
-        wordBlocks: [
-          { text: '이렇게까지', role: 'plain' },
-          { text: ' 해 줄', role: 'verb' },
-          { text: ' 필요는 없었는데요', role: 'plain' },
-        ],
-        zh: '没必要做到这种程度的。',
-        swapWords: ['여기까지', '이것까지'],
-        swapRole: 'plain',
+        zh: '老师让学生读书。',
+        swapWords: ['읽히다', '외우게 하다', '풀게 하다', '쓰게 하다'],
       },
     ],
     scenarios: [
-      { icon: '😮', context: '吃太多', ko: '피자를 네 조각이나 먹었어요.', zh: '竟然吃了四片披萨。' },
-      { icon: '😢', context: '连朋友都', ko: '친구까지 연락을 안 해요.', zh: '连朋友都不联系了。' },
-      { icon: '😅', context: '犯了很多错', ko: '오늘 실수를 다섯 번이나 했어요.', zh: '今天竟然犯了五次错。' },
-      { icon: '🥺', context: '感动', ko: '선생님까지 와 주셨어요.', zh: '连老师都来了。' },
-      { icon: '😤', context: '等了好久', ko: '두 시간이나 기다렸어요.', zh: '竟然等了两个小时。' },
-      { icon: '😨', context: '过分了', ko: '이렇게까지 할 줄은 몰랐어요.', zh: '没想到会做到这种程度。' },
+      { icon: '👶', context: '不及物·哄睡', ko: '엄마가 아기를 재웠어요.', zh: '妈妈哄睡。' },
+      { icon: '🍼', context: '及物·喂奶', ko: '엄마가 아기에게 우유를 먹였어요.', zh: '妈妈喂奶。' },
+      { icon: '😂', context: '不及物·逗笑', ko: '선생님이 학생을 웃겼어요.', zh: '老师逗笑。' },
+      { icon: '📖', context: '及物·让读', ko: '선생님이 학생에게 책을 읽혔어요.', zh: '老师让学生读书。' },
+      { icon: '🚶', context: '不及物·让站', ko: '경찰이 시민들을 세웠어요.', zh: '警察让市民站着。' },
+      { icon: '📝', context: '及物·写作业', ko: '선생님이 학생에게 숙제를 하게 했어요.', zh: '老师让学生做作业。' },
     ],
     mistakes: [
-      { wrong: '다섯 개나이（이나 앞 받침X에 이 추가）', correct: '다섯 개나', note: '개는 받침이 없으므로 나 를 쓴다：다섯 개나（✓）。이나는 받침 있는 수량사 뒤에 쓴다：세 번이나（번 받침O）。' },
-      { wrong: '친구도까지 왔어요（도 + 까지 중복）', correct: '친구까지 왔어요 또는 친구도 왔어요', note: '까지 와 도 는 같은 위치의 보조사로 동시에 쓸 수 없다。까지 는 극단，도 는 포함。문맥에 맞게 하나만 선택한다。' },
-      { wrong: '열 명나（받침O 명사에 나）', correct: '열 명이나', note: '명（받침ㅇ 있음）→ 이나：열 명이나（✓）。받침 없는 수량사에만 나 를 쓴다。' },
-      { wrong: '까지도 친구가 안 왔어요（까지도 어순 오류）', correct: '친구까지도 안 왔어요', note: '까지（도）는 강조하는 명사 바로 뒤에 붙는다：친구까지도（✓）。까지도를 문장 앞에 독립적으로 쓰는 것은 어색하다。' },
+      { wrong: '엄마가 아기를 우유를 먹였어요', correct: '엄마가 아기에게 우유를 먹였어요', note: '及物动词的使动，被使动者用 에게，宾语用 을/를；不能两个 을/를' },
+      { wrong: '엄마가 아기에게 재웠어요', correct: '엄마가 아기를 재웠어요', note: '자다 不及物 → 被使动者用 을/를 更自然' },
+      { wrong: '선생님이 학생을 책을 읽혔어요', correct: '선생님이 학생에게 책을 읽혔어요', note: '읽다 及物 → 被使动者用 에게' },
     ],
+    quickTable: {
+      title: '使动句助词规则',
+      headers: ['原型动词', '被使动者', '目的宾语'],
+      rows: [
+        ['자다（不及物）', '아기를', '—'],
+        ['웃다（不及物）', '학생을', '—'],
+        ['서다（不及物）', '차를', '—'],
+        ['먹다（及物）', '아기에게', '우유를'],
+        ['읽다（及物）', '학생에게', '책을'],
+        ['공부하다（及物）', '아이에게', '공부를'],
+      ],
+    },
     specialQuiz: {
-      type: 'fill',
-      title: '개나，까지',
-      body: '선택지 중 맞는 것을 고르세요',
+      type: 'morph',
+      title: '使动助词练习',
+      body: '选择正确的助词',
       questions: [
         {
-          prompt: '커피를 세 잔___ 마셨어요。（竟然喝了三杯咖啡。）',
-          options: ['이나', '도', '나', '까지'],
-          answer: 0 as 0|1|2|3,
-          explanation: '잔（받침ㄴ 있음）→ 이나：세 잔이나（✓）。받침 없는 수량사면 나，까지는 极端강조，도는 포함。',
+          prompt: '엄마가 아기(   ) 재웠어요.',
+          options: ['에게', '를', '이', '가'],
+          answer: 1,
+          explanation: '자다 是不及物动词 → 被使动者用 을/를 → 아기를。',
         },
         {
-          prompt: '사과를 다섯 개___ 먹었어요。（竟然吃了五个苹果。）',
-          options: ['도', '이나', '까지', '나'],
-          answer: 3 as 0|1|2|3,
-          explanation: '개（받침X）→ 나：다섯 개나（✓）。받침 있는 수량사면 이나，까지/도는 다른 용법。',
+          prompt: '엄마가 아기(   ) 우유(   ) 먹였어요.',
+          options: ['를 / 를', '에게 / 를', '에게 / 가', '가 / 를'],
+          answer: 1,
+          explanation: '먹다 及物 → 被使动者用 에게，目的宾语用 을/를 → 아기에게 우유를。',
         },
         {
-          prompt: '가족___ 나를 이해 못 해요。（连家人都不理解我。）',
-          options: ['나', '이나', '까지', '도'],
-          answer: 2 as 0|1|2|3,
-          explanation: '극단 사례 강조（连……都）→ 까지：가족까지（✓）。나/이나는 수량사 뒤，도는 포함（家人也）으로 극단 강조 뉘앙스가 약하다。',
+          prompt: '선생님이 학생(   ) 책(   ) 읽혔어요.',
+          options: ['을 / 을', '에게 / 을', '에게 / 이', '가 / 을'],
+          answer: 1,
+          explanation: '읽다 是及物动词 → 学生用 에게，책用 을 → 학생에게 책을。',
         },
         {
-          prompt: '다음 중 올바른 문장은？',
-          options: ['세 개나이 먹었어요', '두 시간이나 기다렸어요', '친구도까지 왔어요', '열 명나 모였어요'],
-          answer: 1 as 0|1|2|3,
-          explanation: '시간（받침ㄴ）→ 이나：두 시간이나（✓）。세 개나이→세 개나，친구도까지→친구까지（조사 중복），열 명나→열 명이나（받침O）。',
+          prompt: '决定使动句中"被使动者用 을/를 还是 에게"的关键是？',
+          options: [
+            '被使动者是不是人',
+            '原型动词是不是及物（能不能接 을/를 宾语）',
+            '是不是过去时',
+            '句子是不是长',
+          ],
+          answer: 1,
+          explanation: '原型动词及物 → 被使动者用 에게（宾位已被占）；不及物 → 用 을/를。',
         },
       ],
     },
-    overviewHtml: `<div class="overview">
-  <div class="ov-hero">
-    <div class="ov-hero-label">P14 · 第17课</div>
-    <div class="ov-hero-title">개나，까지</div>
-    <div class="ov-hero-sub">竟然……个 · 连……都/甚至</div>
-  </div>
-  <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">本课语法点</div></div>
-    <div class="ov-block">
-      <div class="badge">竟然……个</div>
-      <div class="ko">수량 + 나/이나（개나）</div>
-      <div class="zh">数量超出预期，表惊讶</div>
-    </div>
-    <div class="ov-block">
-      <div class="badge">连……都</div>
-      <div class="ko">명사 + 까지</div>
-      <div class="zh">极端事例强调（甚至……）</div>
-    </div>
-  </div>
-  <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#b49ccf"></div><div class="ov-section-title" style="color:#b49ccf">나/이나 선택</div></div>
-    <div class="ov-block">
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div>받침X → <b style="color:#ff7fa8">나</b>：다섯 개나，세 시간이나 아님→세 시간이나（시간 받침X…）</div>
-        <div>받침O → <b style="color:#ff7fa8">이나</b>：세 잔이나，두 번이나，열 명이나</div>
-      </div>
-    </div>
-  </div>
-  <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">别踩的坑</div></div>
-    <div class="ov-block">
-      <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">열 명나（받침O에 나）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">열 명이나</span></div></div>
-      <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">친구도까지（보조사 중복）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">친구까지</span></div></div>
-    </div>
+    linkedGrammarIds: ['card-p14-l01', 'card-p14-l03'],
+    step0Html: `<div class="hook-box"><div style="font-size:15px;color:#241917;line-height:1.8">使动句里"被使动者"到底用 을/를 还是 에게？答案在<b>原型动词是否及物</b>：<br>不及物（자다/웃다）→ 아기를；及物（먹다/읽다）→ 아기에게 + 목적어 을/를。</div></div>`,
+    compareHtml: `<div class="cmp-block">
+  <div style="font-size:15px;color:#241917;line-height:1.8">
+    <b>不及物 vs 及物 使动</b><br>
+    ・不及物 → S가 O를 V<br>
+    <span style="color:#89756e">엄마가 아기를 재웠다.</span><br>
+    ・及物 → S가 O에게 N을 V<br>
+    <span style="color:#89756e">엄마가 아기에게 우유를 먹였다.</span>
   </div>
 </div>`,
-    step0Html: `<div class="card-title">竟然这么多 / 连……都</div>
-<div class="card-body">数量超出预期用 나/이나，极端举例用 까지。</div>
-<div class="hook-box">
-  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">두 보조사의 차이</div>
-  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
-    <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
-      <div style="font-size:9px;font-weight:800;color:#ff7fa8;margin-bottom:4px">나/이나 — 数量惊讶</div>
-      <div style="font-size:16px;font-weight:800;color:#241917">커피를 세 잔이나 마셨어요.</div>
-      <div style="font-size:16px;color:#89756e;margin-top:2px">竟然喝了三杯咖啡。</div>
-    </div>
-    <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
-      <div style="font-size:9px;font-weight:800;color:#5bbfb0;margin-bottom:4px">까지 — 极端事例</div>
-      <div style="font-size:16px;font-weight:800;color:#241917">친구까지 안 믿어요.</div>
-      <div style="font-size:16px;color:#89756e;margin-top:2px">连朋友都不相信了。</div>
-    </div>
-  </div>
-  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 받침O → 이나，받침X → 나（까지는 변화 없음）</div>
+    compareLabel: '不及物 vs 及物',
+    overviewHtml: `<div class="ov-hero">
+  <div style="font-size:20px;font-weight:700;color:#241917;margin-bottom:8px">使动句助词</div>
+  <div style="font-size:14px;color:#89756e">을/를 vs 에게 · 靠及物性区分</div>
 </div>
-<div class="reminder-box">까지 와 도 는 동시에 쓰지 않는다（도까지 X）。</div>`,
-    compareHtml: `<div class="card-title">나/이나 vs 도 vs 까지</div>
-<div class="card-body">세 보조사 의미 비교。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
-  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
-    <div class="tok t-v">나/이나</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">수량 예상 초과（惊讶）</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">세 잔이나 마셨어요</span><span style="font-size:16px;color:#5a4640">竟然喝了三杯</span></div>
+<div class="ov-section">
+  <div class="ov-section-hd"><div class="ov-section-line" style="background:#6b7ff0"></div><div class="ov-section-title" style="color:#6b7ff0">规则</div></div>
+  <div class="ov-block">
+    <div style="font-size:16px;color:#241917;line-height:1.9">
+      不及物 → <b>被使动者用 을/를</b><br>
+      及物 → <b>被使动者用 에게，宾语用 을/를</b><br>
+      避免一句两个 을/를<br>
+      -시키다 → S가 O에게 N을 시키다
+    </div>
   </div>
-  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
-    <div class="tok t-v">도</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">포함/첨가（也）</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">친구도 왔어요</span><span style="font-size:16px;color:#5a4640">朋友也来了</span></div>
+</div>
+<div class="ov-section">
+  <div class="ov-section-hd"><div class="ov-section-line" style="background:#6b7ff0"></div><div class="ov-section-title" style="color:#6b7ff0">典型例子</div></div>
+  <div class="ov-block">
+    <div style="font-size:16px;color:#241917;line-height:1.9">
+      엄마가 아기를 재웠다.（不及物）<br>
+      엄마가 아기에게 우유를 먹였다.（及物）<br>
+      선생님이 학생을 웃겼다.（不及物）<br>
+      선생님이 학생에게 책을 읽혔다.（及物）
+    </div>
   </div>
-  <div class="tok-row" style="background:#f0f4ff;border-radius:12px;padding:12px">
-    <div class="tok t-v">까지</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">극단 도달（连……都/甚至）</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">친구까지 왔어요</span><span style="font-size:16px;color:#5a4640">连朋友都来了</span></div>
+</div>
+<div class="ov-section">
+  <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">别踩的坑</div></div>
+  <div class="ov-block">
+    <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">아기를 우유를 먹였다</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">아기에게 우유를 먹였다</span></div></div>
+    <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">아기에게 재웠다</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">아기를 재웠다</span></div></div>
   </div>
 </div>`,
-    compareLabel: '나/이나 vs 도 vs 까지',
-    quickTable: {
-      title: '나/이나 받침 선택 / 까지 정리',
-      headers: ['조사', '앞 명사 조건', '기능', '예시'],
-      rows: [
-        ['나', '받침X 수량사', '수량 초과 놀라움', '다섯 개나，두 시간나→두 시간이나（간：받침ㄴ→이나）'],
-        ['이나', '받침O 수량사', '수량 초과 놀라움', '세 잔이나，두 번이나，열 명이나'],
-        ['까지', '받침 무관', '극단 사례 강조', '친구까지，가족까지，이렇게까지'],
-      ],
-    },
-    linkedGrammarIds: ['g12'],
   },
 
-  // ── 第18课：(이)라든가，(이)라든지，마저 ──────────────────────────
+  // ── 第8课：强制 vs 允许 vs 使唤 语气对比 ──────────────────────────────────────
   {
     id: 'card-p14-l08',
     partNumber: 14,
     lessonNumber: 8,
-    title: '(이)라든가，(이)라든지，마저',
-    whatItDoes: '举例列举，或表示"连最后的……都"',
-    whatItDoesBody: '(이)라든가 和 (이)라든지 均用于列举若干例子，表示"……啊/……之类的"，说明不限于某一个，是其中的若干例子之一。两者意思相同，라든지 略比 라든가 更书面。\n마저 表示"连最后一个也/连剩下的也"，强调到了最后的、本不应该如此的也发生了，带有绝望或遗憾的语气，相当于"连……都……（最后的希望/剩下的也）"。',
-    structureNote: '받침O 명사 + 이라든가/이라든지\n받침X 명사 + 라든가/라든지\n명사 + 마저（连最后一个也……）',
-    rulesNote: '(이)라든가/(이)라든지 뒤에는 보통 동사나 추가 열거가 이어진다。두 개 이상의 항목을 나열할 때 각 항목 뒤에 붙인다。\n마저 는 이미 나쁜 상황에서 마지막 남은 것마저 그렇게 됐다는 절망감을 표현한다。까지 보다 부정적 뉘앙스가 강하다。',
-    scenarioNote: '"영화라든가 음악이라든가（电影啊音乐之类的）"처럼 취미를 열거할 때，\n"희망마저 사라졌어요（连希望都消失了）"처럼 절망 상황을 표현할 때 쓰인다。',
+    title: '强制 vs 允许 vs 使唤',
+    whatItDoes: '使动语气分层',
+    whatItDoesBody: '同样是"让"，语气差异巨大：短形使动多为"照顾/亲密"、-게 하다 多为"允许/中性"、-도록 하다 多为"安排/规章"、-시키다 常带"使唤"感。选错语气可能显得强硬或不敬。',
+    structureNote: '4 种使动方式的语气光谱',
+    rulesNote: '短形使动 → 亲密照顾｜-게 하다 → 中性允许｜-도록 하다 → 正式安排｜-시키다 → 命令使唤',
     structures: [
       {
-        ko: '받침X 명사 + 라든가',
+        ko: '엄마가 아기를 재웠어요.',
+        zh: '妈妈亲手哄宝宝睡（短形，照顾感）。',
         tokens: [
-          { text: '영화', role: 'plain' },
-          { text: '라든가', role: 'plain' },
-          { text: ' 음악', role: 'plain' },
-          { text: '이라든가', role: 'plain' },
-          { text: ' 좋아해요', role: 'verb' },
+          { text: '엄마가', role: 'subject' },
+          { text: '아기를', role: 'object' },
+          { text: '재웠어요', role: 'verb' },
         ],
-        zh: '喜欢电影啊音乐之类的。',
       },
       {
-        ko: '받침O 명사 + 이라든지',
+        ko: '엄마가 아이를 일찍 자게 했어요.',
+        zh: '妈妈让孩子早睡（-게 하다，中性）。',
         tokens: [
-          { text: '책', role: 'plain' },
-          { text: '이라든지', role: 'plain' },
-          { text: ' 잡지', role: 'plain' },
-          { text: '라든지', role: 'plain' },
-          { text: ' 읽어요', role: 'verb' },
+          { text: '엄마가', role: 'subject' },
+          { text: '아이를', role: 'object' },
+          { text: '일찍', role: 'plain' },
+          { text: '자게 했어요', role: 'verb' },
         ],
-        zh: '读书啊杂志之类的。',
       },
       {
-        ko: '명사 + 마저（절망/안타까움）',
+        ko: '상사가 부하에게 야근을 시켰어요.',
+        zh: '上司让下属加班（-시키다，命令使唤感）。',
         tokens: [
-          { text: '친구', role: 'subject' },
-          { text: '마저', role: 'plain' },
-          { text: ' 떠났어요', role: 'verb' },
+          { text: '상사가', role: 'subject' },
+          { text: '부하에게', role: 'plain' },
+          { text: '야근을', role: 'object' },
+          { text: '시켰어요', role: 'verb' },
         ],
-        zh: '连朋友也离开了（连最后的朋友都走了）。',
-      },
-      {
-        ko: '마저 강조（남은 것마저）',
-        tokens: [
-          { text: '돈', role: 'subject' },
-          { text: '마저', role: 'plain' },
-          { text: ' 없어졌어요', role: 'verb' },
-        ],
-        zh: '连钱也没了（连最后的钱都没了）。',
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '받침X 명사 + 라든가/라든지，받침O 명사 + 이라든가/이라든지', examples: '영화라든가（받침X），음악이라든가（받침ㄱ），책이라든지（받침ㄱ）' },
-      { type: 'note', text: '(이)라든가/(이)라든지 는 보통 두 개 이상 항목 열거', examples: 'A라든가 B라든가，A이라든지 B라든지 형태로 나열' },
-      { type: 'compare', text: '라든가 vs 라든지：의미 동일，라든지가 약간 격식체', examples: '영화라든가（구어）vs 영화라든지（문어/격식）' },
-      { type: 'rule', text: '명사 + 마저：마지막 남은 것마저 그렇게 됨（절망/안타까움）', examples: '친구마저，희망마저，돈마저，건강마저' },
-      { type: 'compare', text: '마저 vs 까지：마저는 마지막 것으로 절망 강조，까지는 극단 열거', examples: '친구까지 왔어요（中性）vs 친구마저 떠났어요（绝望）' },
-      { type: 'note', text: '마저 앞에는 "마지막 남은 것"이라는 맥락이 전제', examples: '모두 포기했고，희망마저 없어졌어요' },
+      { type: 'rule', text: '短形使动（-이/히/리/기/우/추）→ 亲密/照顾/亲手做', examples: '엄마가 아기를 재웠다.（亲手哄睡）' },
+      { type: 'rule', text: '-게 하다 → 中性/允许/一般"让"', examples: '엄마가 아이를 자게 했다.（让睡，安排）' },
+      { type: 'rule', text: '-도록 하다 → 正式/安排感/规章', examples: '팀장이 팀원을 참석하도록 했다.（正式安排）' },
+      { type: 'rule', text: '-시키다 → 命令使唤感（对下位者）', examples: '상사가 부하에게 야근을 시켰다.（命令）' },
+      { type: 'usage', text: '选用建议：对长辈/客户避免 -시키다', examples: '避免："선생님, 무엇을 시켰어요?" → 请用"부탁하다 / 지시하다"' },
+      { type: 'compare', text: '同一场景不同语气：재우다 vs 자게 하다 vs 자도록 하다', examples: '재웠다（亲手）/ 자게 했다（允许/让）/ 자도록 했다（正式安排）' },
+      { type: 'note', text: '使动 ≠ 强迫；语境决定是"允许"还是"命令"', examples: '아이를 놀게 했다.（允许玩）/ 아이를 놀게 시켰다（少用；强调命令）' },
     ],
     cardExamples: [
       {
         wordBlocks: [
-          { text: '취미로', role: 'plain' },
-          { text: ' 영화라든가', role: 'plain' },
-          { text: ' 독서라든가', role: 'plain' },
-          { text: ' 해요', role: 'verb' },
+          { text: '엄마가', role: 'subject' },
+          { text: '아기를', role: 'object' },
+          { text: '재웠어요', role: 'verb' },
         ],
-        zh: '兴趣爱好是看电影啊读书之类的。',
-        swapWords: ['음악이라든가 그림이라든가', '여행이라든가 요리라든가'],
-        swapRole: 'plain',
+        zh: '妈妈亲手哄睡（照顾）。',
+        swapWords: ['재우다', '먹이다', '입히다', '씻기다'],
       },
       {
         wordBlocks: [
-          { text: '주말에는', role: 'time' },
-          { text: ' 책이라든지', role: 'plain' },
-          { text: ' 잡지라든지', role: 'plain' },
-          { text: ' 읽어요', role: 'verb' },
+          { text: '엄마가', role: 'subject' },
+          { text: '아이를', role: 'object' },
+          { text: '일찍', role: 'plain' },
+          { text: '자게 했어요', role: 'verb' },
         ],
-        zh: '周末读书啊杂志之类的。',
-        swapWords: ['신문이라든지 잡지라든지', '소설이라든지 만화라든지'],
-        swapRole: 'plain',
+        zh: '妈妈让孩子早睡（允许）。',
+        swapWords: ['자다', '먹다', '쉬다', '나가다'],
       },
       {
         wordBlocks: [
-          { text: '모두 포기하고', role: 'plain' },
-          { text: ' 희망마저', role: 'subject' },
-          { text: ' 없어졌어요', role: 'verb' },
+          { text: '상사가', role: 'subject' },
+          { text: '부하에게', role: 'plain' },
+          { text: '야근을', role: 'object' },
+          { text: '시켰어요', role: 'verb' },
         ],
-        zh: '全部放弃了，连希望都消失了。',
-        swapWords: ['의욕마저', '돈마저'],
-        swapRole: 'subject',
-      },
-      {
-        wordBlocks: [
-          { text: '건강마저', role: 'subject' },
-          { text: ' 나빠져서', role: 'verb' },
-          { text: ' 정말 힘들어요', role: 'plain' },
-        ],
-        zh: '连健康都变差了，真的很难熬。',
-        swapWords: ['일마저', '자신감마저'],
-        swapRole: 'subject',
+        zh: '上司命下属加班（使唤）。',
+        swapWords: ['야근', '심부름', '보고', '출장'],
       },
     ],
     scenarios: [
-      { icon: '🎬', context: '列举兴趣', ko: '취미가 영화라든가 음악이라든가 있어요.', zh: '兴趣有看电影啊听音乐之类的。' },
-      { icon: '📚', context: '书面列举', ko: '시라든지 소설이라든지 즐겨 읽어요.', zh: '喜欢读诗啊小说之类的。' },
-      { icon: '😞', context: '绝望', ko: '친구마저 연락을 끊었어요.', zh: '连朋友都断联了。' },
-      { icon: '💔', context: '失去一切', ko: '일도 잃고 돈마저 없어졌어요.', zh: '工作也丢了，连钱也没了。' },
-      { icon: '🤔', context: '举例建议', ko: '여행이라든가 새로운 취미라든가 시도해 봐요.', zh: '试试旅行啊新兴趣之类的吧。' },
-      { icon: '😔', context: '最后的希望', ko: '마지막 기회마저 놓쳤어요.', zh: '连最后的机会都错过了。' },
+      { icon: '💕', context: '亲手·照顾', ko: '엄마가 아기를 재웠어요.', zh: '妈妈亲手哄睡。' },
+      { icon: '🙂', context: '允许', ko: '엄마가 아이를 밖에서 놀게 했어요.', zh: '妈妈让孩子出去玩。' },
+      { icon: '📋', context: '正式安排', ko: '팀장님이 팀원을 회의에 참석하도록 했어요.', zh: '组长安排参会。' },
+      { icon: '💼', context: '命令使唤', ko: '상사가 부하에게 야근을 시켰어요.', zh: '上司让下属加班。' },
+      { icon: '📚', context: '教育安排', ko: '학생들이 시간을 지키도록 지도해 주세요.', zh: '请指导学生守时。' },
+      { icon: '🍚', context: '中性让', ko: '아빠가 아이에게 야채를 먹게 했어요.', zh: '爸爸让孩子吃菜。' },
     ],
     mistakes: [
-      { wrong: '음악라든가（받침O 명사에 라든가）', correct: '음악이라든가', note: '음악（받침ㄱ 있음）→ 이라든가（✓）。받침 없는 명사에만 라든가 를 쓴다：영화라든가（영화 받침X）。' },
-      { wrong: '영화이라든가（받침X 명사에 이라든가）', correct: '영화라든가', note: '영화（받침X）→ 라든가（✓）。받침 없는 명사에 이라든가 를 붙이면 틀린다。' },
-      { wrong: '친구마저도（마저 + 도 중복）', correct: '친구마저', note: '마저 뒤에 도 를 덧붙이는 것은 어색하다。마저 자체에 이미 강조의 의미가 있으므로 단독으로 쓴다。' },
-      { wrong: '마저 를 긍정적 맥락에 사용：선물마저 받았어요', correct: '선물까지 받았어요', note: '마저 는 부정적/절망적 맥락에만 쓴다。긍정적 맥락의 "连……都"는 까지 를 써야 한다：선물까지 받았어요（✓）。' },
+      { wrong: '선생님, 무엇을 시키셨어요?', correct: '선생님, 무엇을 부탁하셨어요?', note: '对长辈用 -시키다 显不敬；用 부탁하다 / 지시하다' },
+      { wrong: '엄마가 아기를 자도록 했어요', correct: '엄마가 아기를 자게 했어요 / 재웠어요', note: '亲密照顾场景用 -도록 하다 显生硬；用 -게 하다 或短形使动' },
+      { wrong: '아이를 놀게 시켰어요', correct: '아이를 놀게 했어요', note: '一般"允许玩"用 -게 하다 就够；-시키다 语气偏命令' },
     ],
+    quickTable: {
+      title: '4 种使动 · 语气光谱',
+      headers: ['形式', '语气', '典型场景'],
+      rows: [
+        ['短形使动 (-이/히-)', '亲密/照顾', '母子/亲手做的动作'],
+        ['-게 하다', '中性/允许', '一般"让"'],
+        ['-도록 하다', '正式/安排', '规章/工作场合/自我规劝'],
+        ['-시키다', '命令/使唤', '上级对下级/下达任务/点单'],
+      ],
+    },
     specialQuiz: {
-      type: 'fill',
-      title: '(이)라든가，(이)라든지，마저',
-      body: '선택지 중 맞는 것을 고르세요',
+      type: 'judge',
+      title: '语气分层判断',
+      body: '选择最合适的使动方式',
       questions: [
         {
-          prompt: '취미로 영화___ 음악이라든가 해요。（兴趣爱好是电影啊音乐之类的。）',
-          options: ['라든가', '까지', '마저', '이라든가'],
-          answer: 0 as 0|1|2|3,
-          explanation: '영화（받침X）→ 라든가（✓）。이라든가는 받침O 명사에，마저/까지는 열거가 아니라 강조 조사。',
+          prompt: '"妈妈亲手哄宝宝睡" 最贴切的表达是？',
+          options: ['아기를 자도록 했어요', '아기를 자게 시켰어요', '아기를 재웠어요', '아기를 자도록 시켰어요'],
+          answer: 2,
+          explanation: '亲手照顾语境 → 短形使动 재우다 最贴切；-도록 하다 生硬；-시키다 使唤感。',
         },
         {
-          prompt: '주말에는 책___ 잡지라든지 읽어요。（周末读书啊杂志之类的。）',
-          options: ['마저', '라든지', '까지', '이라든지'],
-          answer: 3 as 0|1|2|3,
-          explanation: '책（받침ㄱ 있음）→ 이라든지（✓）。라든지는 받침X，마저/까지는 열거 조사가 아니다。',
+          prompt: '"组长安排组员参会" 最贴切的表达是？',
+          options: ['팀원을 참석하게 시켰어요', '팀원을 참석하도록 했어요', '팀원을 참석시켰어요', '팀원이 참석했어요'],
+          answer: 1,
+          explanation: '正式安排/公务场合 → -도록 하다。-시키다 略带命令感也可，但 -도록 하다 更正式。',
         },
         {
-          prompt: '모두 잃고 희망___ 사라졌어요。（全失去了，连希望都消失了。—绝望）',
-          options: ['까지', '이나', '마저', '라든가'],
-          answer: 2 as 0|1|2|3,
-          explanation: '마저：마지막 남은 것마저 그렇게 됨（절망）：희망마저（✓）。까지는 중성/긍정 극단，이나는 수량，라든가는 열거。',
+          prompt: '下列哪句对长辈失礼？',
+          options: [
+            '선생님이 학생들에게 숙제를 시키셨어요.',
+            '선생님, 무엇을 시키셨어요?',
+            '엄마가 저에게 심부름을 시켰어요.',
+            '코치가 선수를 훈련시켰어요.',
+          ],
+          answer: 1,
+          explanation: '直接问长辈 "무엇을 시키셨어요?" 显不敬；应用 "무엇을 부탁하셨어요?"。',
         },
         {
-          prompt: '다음 중 올바른 문장은？',
-          options: ['선물마저 받았어요（긍정）', '음악이라든가 영화라든가 좋아해요', '친구마저도 왔어요', '음악라든가 좋아해요（받침O）'],
-          answer: 1 as 0|1|2|3,
-          explanation: '음악이라든가（받침ㄱ→이라든가）영화라든가（받침X→라든가）（✓）。음악라든가→이라든가，마저는 부정 맥락만，마저도는 중복。',
+          prompt: '同一场景可选多种使动，最重要的挑选标准是？',
+          options: [
+            '哪个短',
+            '语气 - 亲密/中性/正式/命令 是否符合语境',
+            '哪个新',
+            '哪个是过去时',
+          ],
+          answer: 1,
+          explanation: '语境是关键 - 亲手照顾用短形，一般让用 -게 하다，正式用 -도록 하다，使唤用 -시키다。',
         },
       ],
     },
-    overviewHtml: `<div class="overview">
-  <div class="ov-hero">
-    <div class="ov-hero-label">P14 · 第18课</div>
-    <div class="ov-hero-title">(이)라든가，(이)라든지，마저</div>
-    <div class="ov-hero-sub">……之类的 · 连最后的……都</div>
-  </div>
-  <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">本课语法点</div></div>
-    <div class="ov-block">
-      <div class="badge">之类的</div>
-      <div class="ko">(이)라든가 / (이)라든지</div>
-      <div class="zh">列举若干例子（……啊……之类）</div>
-    </div>
-    <div class="ov-block">
-      <div class="badge">连最后的……都</div>
-      <div class="ko">명사 + 마저</div>
-      <div class="zh">绝望/遗憾（最后剩下的也……）</div>
-    </div>
-  </div>
-  <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#b49ccf"></div><div class="ov-section-title" style="color:#b49ccf">이라든가/라든가 선택</div></div>
-    <div class="ov-block">
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div>받침X → <b style="color:#ff7fa8">라든가/라든지</b>：영화라든가，잡지라든지</div>
-        <div>받침O → <b style="color:#ff7fa8">이라든가/이라든지</b>：음악이라든가，책이라든지</div>
-      </div>
-    </div>
-  </div>
-  <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">别踩的坑</div></div>
-    <div class="ov-block">
-      <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">음악라든가（받침O에 라든가）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">음악이라든가</span></div></div>
-      <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">선물마저 받았어요（긍정）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">선물까지 받았어요</span></div></div>
-    </div>
+    linkedGrammarIds: ['card-p14-l01', 'card-p14-l03', 'card-p14-l04', 'card-p14-l05'],
+    step0Html: `<div class="hook-box"><div style="font-size:15px;color:#241917;line-height:1.8">同是"让"，语气天差地别：<br><b>재우다</b>（亲手哄）· <b>-게 하다</b>（一般让）· <b>-도록 하다</b>（正式安排）· <b>-시키다</b>（命令使唤）。<br>用错了就会从"妈妈的爱"变成"命令使唤"。</div></div>`,
+    compareHtml: `<div class="cmp-block">
+  <div style="font-size:15px;color:#241917;line-height:1.8">
+    <b>使动语气光谱</b><br>
+    ・短形使动 → 亲密/照顾<br>
+    <span style="color:#89756e">엄마가 아기를 재웠다.</span><br>
+    ・-게 하다 → 中性/允许<br>
+    <span style="color:#89756e">엄마가 아이를 자게 했다.</span><br>
+    ・-도록 하다 → 正式/安排<br>
+    <span style="color:#89756e">팀장이 참석하도록 했다.</span><br>
+    ・-시키다 → 命令/使唤<br>
+    <span style="color:#89756e">상사가 부하에게 야근을 시켰다.</span>
   </div>
 </div>`,
-    step0Html: `<div class="card-title">……之类的 / 连最后的……都</div>
-<div class="card-body">列举用라든가，绝望用마저。</div>
-<div class="hook-box">
-  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">두 가지 강조 방식</div>
-  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
-    <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
-      <div style="font-size:9px;font-weight:800;color:#ff7fa8;margin-bottom:4px">(이)라든가/(이)라든지 — 열거</div>
-      <div style="font-size:16px;font-weight:800;color:#241917">영화라든가 음악이라든가 좋아해요.</div>
-      <div style="font-size:16px;color:#89756e;margin-top:2px">喜欢电影啊音乐之类的。</div>
-    </div>
-    <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
-      <div style="font-size:9px;font-weight:800;color:#5bbfb0;margin-bottom:4px">마저 — 절망</div>
-      <div style="font-size:16px;font-weight:800;color:#241917">희망마저 없어졌어요.</div>
-      <div style="font-size:16px;color:#89756e;margin-top:2px">连希望都消失了。</div>
-    </div>
-  </div>
-  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 마저 는 반드시 부정적 맥락에서만 쓴다</div>
+    compareLabel: '使动语气光谱',
+    overviewHtml: `<div class="ov-hero">
+  <div style="font-size:20px;font-weight:700;color:#241917;margin-bottom:8px">使动语气分层</div>
+  <div style="font-size:14px;color:#89756e">4 种方式 · 4 种语气</div>
 </div>
-<div class="reminder-box">받침O → 이라든가/이라든지，받침X → 라든가/라든지。</div>`,
-    compareHtml: `<div class="card-title">마저 vs 까지 / 라든가 vs 라든지</div>
-<div class="card-body">비슷한 쌍 비교。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
-  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
-    <div class="tok t-v">마저</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">절망/부정 맥락，마지막 것마저</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">친구마저 떠났어요</span><span style="font-size:16px;color:#5a4640">连朋友都走了（绝望）</span></div>
+<div class="ov-section">
+  <div class="ov-section-hd"><div class="ov-section-line" style="background:#6b7ff0"></div><div class="ov-section-title" style="color:#6b7ff0">4 种使动</div></div>
+  <div class="ov-block">
+    <div style="font-size:16px;color:#241917;line-height:1.9">
+      短形使动（-이/히/리/기/우/추/구） → 亲密/照顾<br>
+      -게 하다 → 中性/允许<br>
+      -도록 하다 → 正式/安排<br>
+      -시키다 → 命令/使唤（하다类）
+    </div>
   </div>
-  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
-    <div class="tok t-v">까지</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">극단 강조，긍/부정 모두 가능</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">친구까지 왔어요</span><span style="font-size:16px;color:#5a4640">连朋友都来了（惊喜）</span></div>
+</div>
+<div class="ov-section">
+  <div class="ov-section-hd"><div class="ov-section-line" style="background:#6b7ff0"></div><div class="ov-section-title" style="color:#6b7ff0">选用建议</div></div>
+  <div class="ov-block">
+    <div style="font-size:16px;color:#241917;line-height:1.9">
+      亲手照顾 → 短形使动（재우다）<br>
+      日常"让" → -게 하다<br>
+      规章/公务/自我规劝 → -도록 하다<br>
+      对下级下达任务 → -시키다（对长辈避用）
+    </div>
   </div>
-  <div class="tok-row" style="background:#f0f4ff;border-radius:12px;padding:12px">
-    <div class="tok t-v">(이)라든가</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">구어적 열거</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">영화라든가 음악이라든가</span><span style="font-size:16px;color:#5a4640">电影啊音乐之类</span></div>
-  </div>
-  <div class="tok-row" style="background:#f5f0ee;border-radius:12px;padding:12px">
-    <div class="tok t-v">(이)라든지</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">약간 격식체 열거</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">책이라든지 잡지라든지</span><span style="font-size:16px;color:#5a4640">书啊杂志之类</span></div>
+</div>
+<div class="ov-section">
+  <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">别踩的坑</div></div>
+  <div class="ov-block">
+    <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">선생님, 무엇을 시키셨어요?</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">선생님, 무엇을 부탁하셨어요?</span></div></div>
+    <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">아기를 자도록 했어요（亲手照顾生硬）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">아기를 재웠어요</span></div></div>
   </div>
 </div>`,
-    compareLabel: '마저 vs 까지 / 라든가 vs 라든지',
-    quickTable: {
-      title: '(이)라든가/(이)라든지/마저 정리',
-      headers: ['조사', '받침 조건', '기능', '예시'],
-      rows: [
-        ['라든가/라든지', '받침X 명사', '열거（구어/격식）', '영화라든가，잡지라든지'],
-        ['이라든가/이라든지', '받침O 명사', '열거（구어/격식）', '음악이라든가，책이라든지'],
-        ['마저', '받침 무관', '절망 극단（부정）', '친구마저，희망마저，돈마저'],
-      ],
-    },
-    linkedGrammarIds: ['g12'],
   },
 
-  // ── 第19课：-는/은/ㄴ 체하다，-는/은/ㄴ 척하다 ──────────────────
+  // ── 第9课：P14 综合练习 ──────────────────────────────────────
   {
     id: 'card-p14-l09',
     partNumber: 14,
     lessonNumber: 9,
-    title: '-는/은/ㄴ 체하다，-는/은/ㄴ 척하다',
-    whatItDoes: '表示假装做某动作或处于某状态',
-    whatItDoesBody: '-는/은/ㄴ 체하다 和 -는/은/ㄴ 척하다 意思完全相同，均表示"假装……/装作……"，说明实际并非如此，只是表面上做出那种样子。\n척하다 는 구어에서 더 자주 쓰이고，체하다 는 약간 문어적이다。두 표현은 자유롭게 교체 가능하다。',
-    structureNote: '동사 현재 관형사형（-는）+ 체하다/척하다\n형용사/동사 과거 관형사형（-은/ㄴ）+ 체하다/척하다\n동사/형용사 미래 관형사형（-을/ㄹ）+ 체하다/척하다',
-    rulesNote: '관형사형 어미 선택：동사 현재 -는，동사/형용사 과거 -은/ㄴ，형용사 현재 -은/ㄴ\n체하다/척하다 는 단독으로는 소화 안 된다는 뜻의 체하다 와 혼동하지 말 것（체하다 = 食积，척하다 = 假装）。',
-    scenarioNote: '"자는 척하다（假装睡觉）"，"모르는 체하다（假装不知道）"처럼 일상에서 자주 쓰이는 표현이다。',
-    structures: [
-      {
-        ko: '동사 -는 체하다/척하다（현재）',
-        tokens: [
-          { text: '자는', role: 'verb' },
-          { text: ' 척했어요', role: 'verb' },
-        ],
-        zh: '假装在睡觉了。',
-      },
-      {
-        ko: '동사 -은/ㄴ 체하다（과거）',
-        tokens: [
-          { text: '모른', role: 'verb' },
-          { text: ' 체했어요', role: 'verb' },
-        ],
-        zh: '假装不知道了。',
-      },
-      {
-        ko: '형용사 -은/ㄴ 척하다',
-        tokens: [
-          { text: '바쁜', role: 'verb' },
-          { text: ' 척했어요', role: 'verb' },
-        ],
-        zh: '假装很忙了。',
-      },
-      {
-        ko: '동사 -을/ㄹ 체하다（미래/추측）',
-        tokens: [
-          { text: '갈', role: 'verb' },
-          { text: ' 것처럼', role: 'plain' },
-          { text: ' 척했어요', role: 'verb' },
-        ],
-        zh: '假装要去的样子。',
-      },
-    ],
-    connectionRules: [
-      { type: 'rule', text: '동사 현재형 + 는 체하다/척하다', examples: '자는 척하다，먹는 체하다，보는 척하다' },
-      { type: 'rule', text: '동사 과거형 + 은/ㄴ 체하다/척하다', examples: '먹은 척하다，간 척하다，모른 체하다（모르다→모른）' },
-      { type: 'rule', text: '형용사 + 은/ㄴ 체하다/척하다', examples: '바쁜 척하다，좋은 체하다，아픈 척하다' },
-      { type: 'compare', text: '체하다 vs 척하다：의미 동일，척하다가 더 구어적', examples: '자는 척해요（구어）= 자는 체해요（약간 문어）' },
-      { type: 'note', text: 'ㄹ불규칙：모르다→모른 척（과거），아는 척（현재）/안 척（과거）', examples: '모르는 척（현재）/ 모른 척（과거），아는 척（현재）/ 안 척（과거）' },
-      { type: 'note', text: '체하다（食积）와 -는/은 체하다（假装）는 완전히 다른 단어', examples: '밥을 먹고 체했어요（食积了）vs 밥 먹는 체해요（假装在吃饭）' },
-    ],
-    cardExamples: [
-      {
-        wordBlocks: [
-          { text: '그 사람은', role: 'subject' },
-          { text: ' 나를 보고도', role: 'plain' },
-          { text: ' 모르는 체했어요', role: 'verb' },
-        ],
-        zh: '那个人明明看到我，却假装不认识。',
-        swapWords: ['모르는 척했어요', '못 본 체했어요'],
-        swapRole: 'verb',
-      },
-      {
-        wordBlocks: [
-          { text: '피곤하지 않은 척했지만', role: 'verb' },
-          { text: ' 사실', role: 'plain' },
-          { text: ' 많이 힘들었어요', role: 'plain' },
-        ],
-        zh: '假装不累，但其实很难熬。',
-        swapWords: ['괜찮은 척했지만', '아프지 않은 척했지만'],
-        swapRole: 'verb',
-      },
-      {
-        wordBlocks: [
-          { text: '아이가', role: 'subject' },
-          { text: ' 자는 척했지만', role: 'verb' },
-          { text: ' 사실', role: 'plain' },
-          { text: ' 깨어 있었어요', role: 'plain' },
-        ],
-        zh: '孩子假装在睡觉，其实是醒着的。',
-        swapWords: ['자는 체했지만', '모르는 척했지만'],
-        swapRole: 'verb',
-      },
-      {
-        wordBlocks: [
-          { text: '바쁜 척하면서', role: 'verb' },
-          { text: ' 전화를', role: 'object' },
-          { text: ' 안 받았어요', role: 'verb' },
-        ],
-        zh: '假装很忙，没接电话。',
-        swapWords: ['바쁜 체하면서', '아픈 척하면서'],
-        swapRole: 'verb',
-      },
-    ],
-    scenarios: [
-      { icon: '😴', context: '假装睡觉', ko: '동생이 자는 척했어요.', zh: '弟弟/妹妹假装在睡觉。' },
-      { icon: '🙈', context: '假装不知道', ko: '알면서도 모르는 체해요.', zh: '明明知道却假装不知道。' },
-      { icon: '😐', context: '假装没事', ko: '괜찮은 척했지만 사실 많이 힘들었어요.', zh: '假装没事，但其实很难熬。' },
-      { icon: '📵', context: '假装没看到', ko: '문자를 못 본 척했어요.', zh: '假装没看到短信。' },
-      { icon: '💪', context: '假装有力气', ko: '힘든 척 안 하고 웃었어요.', zh: '没有假装很累，而是笑了。' },
-      { icon: '😤', context: '装忙逃避', ko: '바쁜 척하면서 회의를 피했어요.', zh: '假装忙，逃避了会议。' },
-    ],
-    mistakes: [
-      { wrong: '자는은 척해요（는 + 은 중복）', correct: '자는 척해요（동사 현재 -는）', note: '동사 현재 관형사형은 -는 이다。자다→자는 척해요（✓）。-는은 처럼 는 과 은 을 동시에 쓰지 않는다。' },
-      { wrong: '바쁘는 척해요（형용사에 -는）', correct: '바쁜 척해요（형용사 -은/ㄴ）', note: '형용사 관형사형은 -은/ㄴ 이다。바쁘다→바쁜 척해요（✓）。형용사에 동사형 -는 을 쓰면 틀린다。' },
-      { wrong: '모르은 척했어요（모르다 과거 관형사형 오류）', correct: '모른 척했어요', note: '모르다는 ㄹ불규칙。과거 관형사형：모르+ㄴ=모른 척했어요（✓）。모르은은 없는 형태이다。현재형은 모르는 척해요。' },
-      { wrong: '체했어요（식적으로 소화 안 됨과 혼동）', correct: '체하다（食积）≠ 는/은 체하다（假装）：문맥으로 구분', note: '체하다 단독은 "食积（소화불량）"이고，관형사형 + 체하다 는 "假装"이다。밥 먹고 체했어요（食积）vs 밥 먹는 체해요（假装吃饭）。' },
-    ],
-    specialQuiz: {
-      type: 'fill',
-      title: '-는/은/ㄴ 체하다，척하다',
-      body: '선택지 중 맞는 것을 고르세요',
-      questions: [
-        {
-          prompt: '그 사람은 나를 보고도 모르___ 체했어요。（那个人明明看到我，却假装不认识。—현재）',
-          options: ['는', '은', 'ㄴ', '을'],
-          answer: 0 as 0|1|2|3,
-          explanation: '모르다（동사）현재 관형사형：모르는 체했어요（✓）。과거라면 모른 체했어요。은/ㄴ은 형용사나 동사 과거형에，을은 미래형에 쓴다。',
-        },
-        {
-          prompt: '피곤하지 않___ 척했지만 사실 힘들었어요。（假装不累，其实很难熬。）',
-          options: ['는', '은', '던', '을'],
-          answer: 1 as 0|1|2|3,
-          explanation: '피곤하다（형용사）부정형 피곤하지 않다의 관형사형：않은 척했어요（✓）。는 은 동사 현재형，을 은 미래형，던 은 회상형。',
-        },
-        {
-          prompt: '아이가 ___ 척했지만 사실 깨어 있었어요。（孩子假装在睡觉。）',
-          options: ['잔', '자', '자는', '잘'],
-          answer: 2 as 0|1|2|3,
-          explanation: '자다（동사）현재 관형사형：자는 척했어요（✓）。잔 은 과거형，잘 은 미래형，자 는 어간 단독으로 체하다/척하다 앞에 쓰지 않는다。',
-        },
-        {
-          prompt: '다음 중 올바른 문장은？',
-          options: ['바쁘는 척하면서（형용사+는）', '자는은 척해요（는+은 중복）', '모르은 척해요（모르다+은）', '바쁜 척하면서 전화를 안 받았어요'],
-          answer: 3 as 0|1|2|3,
-          explanation: '바쁘다（형용사）→ 바쁜 척하면서（✓）。바쁘는는 형용사에 동사형 오류，자는은은 이중 어미，모르은은 ㄹ탈락 오류（모른 척해요가 맞음）。',
-        },
-      ],
-    },
-    overviewHtml: `<div class="overview">
-  <div class="ov-hero">
-    <div class="ov-hero-label">P14 · 第19课</div>
-    <div class="ov-hero-title">-는/은/ㄴ 체하다，척하다</div>
-    <div class="ov-hero-sub">假装……/装作……</div>
-  </div>
-  <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">本课语法点</div></div>
-    <div class="ov-block">
-      <div class="badge">假装</div>
-      <div class="ko">관형사형 + 체하다/척하다</div>
-      <div class="zh">假装……（实际并非如此）</div>
-    </div>
-    <div class="ov-block">
-      <div class="badge">区别</div>
-      <div class="ko">척하다（구어） vs 체하다（문어）</div>
-      <div class="zh">意思完全相同，可以互换</div>
-    </div>
-  </div>
-  <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#b49ccf"></div><div class="ov-section-title" style="color:#b49ccf">관형사형 선택</div></div>
-    <div class="ov-block">
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div><span style="font-weight:700">동사 현재</span>：자<b style="color:#ff7fa8">는</b> 척해요</div>
-        <div><span style="font-weight:700">동사 과거</span>：자<b style="color:#ff7fa8">ㄴ</b> 척해요（잔 척해요）</div>
-        <div><span style="font-weight:700">형용사</span>：바쁘<b style="color:#ff7fa8">ㄴ</b> 척해요（바쁜 척해요）</div>
-      </div>
-    </div>
-  </div>
-  <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">别踩的坑</div></div>
-    <div class="ov-block">
-      <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">바쁘는 척해요（형용사+는）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">바쁜 척해요（형용사+은/ㄴ）</span></div></div>
-      <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">체했어요（食积）와 혼동</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">관형사형+체하다 = 假装</span></div></div>
-    </div>
-  </div>
-</div>`,
-    step0Html: `<div class="card-title">假装……</div>
-<div class="card-body">实际上不是那样，只是表面上装出那个样子。</div>
-<div class="hook-box">
-  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">척하다 = 체하다（意思相同）</div>
-  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
-    <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
-      <div style="font-size:9px;font-weight:800;color:#ff7fa8;margin-bottom:4px">동사 현재 -는</div>
-      <div style="font-size:16px;font-weight:800;color:#241917">자는 척해요.</div>
-      <div style="font-size:16px;color:#89756e;margin-top:2px">假装在睡觉。</div>
-    </div>
-    <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
-      <div style="font-size:9px;font-weight:800;color:#5bbfb0;margin-bottom:4px">형용사 -은/ㄴ</div>
-      <div style="font-size:16px;font-weight:800;color:#241917">바쁜 척해요.</div>
-      <div style="font-size:16px;color:#89756e;margin-top:2px">假装很忙。</div>
-    </div>
-  </div>
-  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 형용사에는 -는 이 아니라 -은/ㄴ</div>
-</div>
-<div class="reminder-box">체하다 단독（食积）≠ 관형사형+체하다（假装）。</div>`,
-    compareHtml: `<div class="card-title">체하다 vs 척하다 / 동사 vs 형용사 관형사형</div>
-<div class="card-body">핵심 구별 포인트 비교。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
-  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
-    <div class="tok t-v">동사 현재 + 는 척</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">자는 척，먹는 척，보는 척</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">자는 척해요</span><span style="font-size:16px;color:#5a4640">假装在睡觉</span></div>
-  </div>
-  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
-    <div class="tok t-v">동사 과거 + 은/ㄴ 척</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">잔 척，먹은 척，간 척</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">잔 척했어요</span><span style="font-size:16px;color:#5a4640">假装睡过了</span></div>
-  </div>
-  <div class="tok-row" style="background:#f0f4ff;border-radius:12px;padding:12px">
-    <div class="tok t-v">형용사 + 은/ㄴ 척</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">바쁜 척，좋은 척，아픈 척</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">바쁜 척해요</span><span style="font-size:16px;color:#5a4640">假装很忙</span></div>
-  </div>
-</div>`,
-    compareLabel: '동사 현재/과거 vs 형용사 관형사형 + 척하다',
-    quickTable: {
-      title: '-는/은/ㄴ 체하다/척하다 관형사형',
-      headers: ['품사/시제', '관형사형', '예시'],
-      rows: [
-        ['동사 현재', '-는', '자는 척，먹는 체，보는 척'],
-        ['동사 과거', '-은/ㄴ', '잔 척，먹은 체，간 척'],
-        ['형용사', '-은/ㄴ', '바쁜 척，좋은 체，아픈 척'],
-        ['모르다（ㄹ탈락）', '-는（현재）/-ㄴ（과거）', '모르는 척（현재）/모른 척（과거）'],
-      ],
-    },
-    linkedGrammarIds: [],
-  },
-
-  // ── 第20课：-는/은/ㄴ가 하면，-기도 하다 ──────────────────────────
-  {
-    id: 'card-p14-l10',
-    partNumber: 14,
-    lessonNumber: 10,
-    title: '-는가 하면，-기도 하다',
-    whatItDoes: '表示一面……一面……，或"也会/也有"',
-    whatItDoesBody: '-는/은/ㄴ가 하면 表示两种对比或并列的情况同时存在，相当于"一方面……另一方面……/有时……有时……"，常用于描述事物的两面性。\n-기도 하다 表示在某行为或状态之外也有其他情况，相当于"也会/也有时/也是"，语气比较平和，常与 때로는、가끔 等副词搭配。',
-    structureNote: '-는/은/ㄴ가 하면：동사/형용사 관형사형 + 가 하면\n-기도 하다：동사/형용사 어간 + 기도 하다',
-    rulesNote: '-는가 하면 의 앞뒤 절은 대조되는 내용이 온다。앞 절이 한 상황，뒤 절이 반대이거나 다른 상황이다。\n-기도 하다 는 단독으로 "～하기도 해요"처럼 쓰이거나，나열 구조에서 "-기도 하고 -기도 하다"처럼 쓰인다。',
-    scenarioNote: '"가격이 싼가 하면 품질이 안 좋아요（一方面价格便宜，另一方面质量不好）"，\n"슬프기도 하고 기쁘기도 해요（既有些难过，也有些高兴）"처럼 복잡한 감정이나 상황 묘사에 쓰인다。',
-    structures: [
-      {
-        ko: '동사 -는가 하면',
-        tokens: [
-          { text: '웃는가', role: 'verb' },
-          { text: ' 하면', role: 'plain' },
-          { text: ' 또 울어요', role: 'verb' },
-        ],
-        zh: '一会儿笑，一会儿又哭。',
-      },
-      {
-        ko: '형용사 -은/ㄴ가 하면',
-        tokens: [
-          { text: '가격이', role: 'subject' },
-          { text: ' 싼가', role: 'verb' },
-          { text: ' 하면', role: 'plain' },
-          { text: ' 품질이 나빠요', role: 'verb' },
-        ],
-        zh: '价格便宜，但质量不好。',
-      },
-      {
-        ko: '어간 + 기도 하다（단독）',
-        tokens: [
-          { text: '가끔', role: 'plain' },
-          { text: ' 슬프기도 해요', role: 'verb' },
-        ],
-        zh: '有时也会感到悲伤。',
-      },
-      {
-        ko: '-기도 하고 -기도 하다（나열）',
-        tokens: [
-          { text: '재미있기도 하고', role: 'verb' },
-          { text: ' 어렵기도 해요', role: 'verb' },
-        ],
-        zh: '既有趣，也有些难。',
-      },
-    ],
-    connectionRules: [
-      { type: 'rule', text: '동사 + 는가 하면，형용사/동사 과거 + 은/ㄴ가 하면', examples: '웃는가 하면，싼가 하면，먹은가 하면' },
-      { type: 'note', text: '-는가 하면 앞뒤 절은 대조 내용：A인가 하면 B（A와 B가 상반/병렬）', examples: '빠른가 하면 느리기도 해요，웃는가 하면 울기도 해요' },
-      { type: 'rule', text: '동사/형용사 어간 + 기도 하다', examples: '슬프기도 해요，먹기도 해요，웃기도 해요' },
-      { type: 'note', text: '-기도 하고 -기도 하다：두 가지 상태나 행동을 나열', examples: '재미있기도 하고 어렵기도 해요，웃기도 하고 울기도 해요' },
-      { type: 'compare', text: '-는가 하면 vs -기도 하다：는가 하면은 대조，기도 하다는 병렬/추가', examples: '비싼가 하면 품질이 좋아요（대조）vs 비싸기도 하고 품질이 좋기도 해요（병렬）' },
-      { type: 'note', text: '-기도 하다 는 때로는，가끔 등 빈도 부사와 자주 호응', examples: '때로는 슬프기도 해요，가끔 실수하기도 해요' },
-    ],
-    cardExamples: [
-      {
-        wordBlocks: [
-          { text: '그 사람은', role: 'subject' },
-          { text: ' 친절한가 하면', role: 'verb' },
-          { text: ' 가끔', role: 'plain' },
-          { text: ' 차갑기도 해요', role: 'verb' },
-        ],
-        zh: '那个人一方面很亲切，有时也会冷漠。',
-        swapWords: ['착한가 하면', '조용한가 하면'],
-        swapRole: 'verb',
-      },
-      {
-        wordBlocks: [
-          { text: '이 영화는', role: 'subject' },
-          { text: ' 슬프기도 하고', role: 'verb' },
-          { text: ' 재미있기도 해요', role: 'verb' },
-        ],
-        zh: '这部电影既有些悲伤，也很有趣。',
-        swapWords: ['무섭기도 하고 감동적이기도 해요', '웃기기도 하고 감동적이기도 해요'],
-        swapRole: 'verb',
-      },
-      {
-        wordBlocks: [
-          { text: '한국어는', role: 'subject' },
-          { text: ' 어려운가 하면', role: 'verb' },
-          { text: ' 재미있기도 해요', role: 'verb' },
-        ],
-        zh: '韩语一方面很难，另一方面也很有趣。',
-        swapWords: ['복잡한가 하면', '쉬운가 하면'],
-        swapRole: 'verb',
-      },
-      {
-        wordBlocks: [
-          { text: '가끔', role: 'plain' },
-          { text: ' 지치기도 하지만', role: 'verb' },
-          { text: ' 계속', role: 'plain' },
-          { text: ' 하고 싶어요', role: 'verb' },
-        ],
-        zh: '有时也会疲惫，但还是想继续。',
-        swapWords: ['힘들기도 하지만', '포기하고 싶기도 하지만'],
-        swapRole: 'verb',
-      },
-    ],
-    scenarios: [
-      { icon: '😄😢', context: '复杂心情', ko: '기쁘기도 하고 슬프기도 해요.', zh: '既高兴又有些难过。' },
-      { icon: '🌤️', context: '天气变化', ko: '맑은가 하면 비가 오기도 해요.', zh: '有时晴，有时也会下雨。' },
-      { icon: '📚', context: '学习感受', ko: '한국어가 재미있는가 하면 어렵기도 해요.', zh: '韩语一方面有趣，另一方面也难。' },
-      { icon: '🤷', context: '两面性', ko: '그 사람은 친절한가 하면 무서운 면도 있어요.', zh: '那个人亲切的一面，也有让人害怕的一面。' },
-      { icon: '💪', context: '坚持', ko: '힘들기도 하지만 보람 있어요.', zh: '有时也辛苦，但很有成就感。' },
-      { icon: '🍽️', context: '食物两面', ko: '맵기도 하고 맛있기도 해요.', zh: '既辣，也好吃。' },
-    ],
-    mistakes: [
-      { wrong: '웃은가 하면（동사 현재에 은가）', correct: '웃는가 하면', note: '동사 현재 관형사형은 -는：웃는가 하면（✓）。-은가 는 형용사나 동사 과거형에 쓴다。' },
-      { wrong: '비싸는가 하면（형용사에 -는가）', correct: '비싼가 하면', note: '형용사 관형사형은 -은/ㄴ：비싸다→비싼가 하면（✓）。형용사에 동사형 -는가 를 쓰면 틀린다。' },
-      { wrong: '먹기도하다（띄어쓰기 없음）', correct: '먹기도 하다', note: '-기도 하다 는 기도 와 하다 사이를 띄어 쓴다：먹기도 해요（✓）。붙여 쓰면 틀린 형태로 보인다。' },
-      { wrong: '슬프기도하고 기쁘기도해요', correct: '슬프기도 하고 기쁘기도 해요', note: '-기도 하고 구조에서 기도 뒤와 하고 앞에 반드시 띄어쓰기가 필요하다。슬프기도 하고（✓）。' },
-    ],
-    specialQuiz: {
-      type: 'fill',
-      title: '-는가 하면，-기도 하다',
-      body: '선택지 중 맞는 것을 고르세요',
-      questions: [
-        {
-          prompt: '날씨가 맑___ 하면 갑자기 비가 오기도 해요。（有时晴，有时突然下雨。）',
-          options: ['는가', '던가', '을가', '은가'],
-          answer: 3 as 0|1|2|3,
-          explanation: '맑다（형용사）관형사형：맑은가 하면（✓）。는가는 동사 현재형，던가는 회상，을가는 없는 형태。',
-        },
-        {
-          prompt: '한국어가 재미있___ 하면 어렵기도 해요。（韩语一方面有趣，另一方面也难。）',
-          options: ['던가', '은가', '는가', '을가'],
-          answer: 2 as 0|1|2|3,
-          explanation: '재미있다（있다 계열 형용사）는 관형사형에서 예외적으로 -는 을 씁니다：재미있는가 하면（✓）。일반 형용사는 -은/ㄴ가를 쓰지만，있다/없다는 -는가 형태를 씁니다。은가/던가/을가는 이 문맥에 맞지 않습니다。',
-        },
-        {
-          prompt: '이 음식은 맵___ 하고 짜기도 해요。（这道食物既辣又咸。）',
-          options: ['기만', '기도', '은가', '는가'],
-          answer: 1 as 0|1|2|3,
-          explanation: '-기도 하고 -기도 하다：맵기도 하고 짜기도 해요（✓）。는가/은가는 대조 구조，기만은 없는 형태。',
-        },
-        {
-          prompt: '다음 중 올바른 문장은？',
-          options: ['슬프기도 하고 기쁘기도 해요', '웃은가 하면 또 울어요（동사 현재）', '비싸는가 하면（형용사+는가）', '먹기도하다（띄어쓰기）'],
-          answer: 0 as 0|1|2|3,
-          explanation: '슬프기도 하고 기쁘기도 해요：올바른 나열 구조（✓）。웃은가→웃는가（동사 현재），비싸는가→비싼가（형용사），먹기도하다→먹기도 하다（띄어쓰기）。',
-        },
-      ],
-    },
-    overviewHtml: `<div class="overview">
-  <div class="ov-hero">
-    <div class="ov-hero-label">P14 · 第20课</div>
-    <div class="ov-hero-title">-는가 하면，-기도 하다</div>
-    <div class="ov-hero-sub">一面……一面…… · 也会……/也是……</div>
-  </div>
-  <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">本课语法点</div></div>
-    <div class="ov-block">
-      <div class="badge">两面对比</div>
-      <div class="ko">관형사형 + 가 하면</div>
-      <div class="zh">一方面……另一方面……（对比/并列）</div>
-    </div>
-    <div class="ov-block">
-      <div class="badge">也会/有时</div>
-      <div class="ko">어간 + 기도 하다</div>
-      <div class="zh">也会……/有时也……（补充）</div>
-    </div>
-  </div>
-  <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#b49ccf"></div><div class="ov-section-title" style="color:#b49ccf">관형사형 선택</div></div>
-    <div class="ov-block">
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div><span style="font-weight:700">동사 현재</span>：웃<b style="color:#ff7fa8">는가</b> 하면</div>
-        <div><span style="font-weight:700">형용사</span>：비싸<b style="color:#ff7fa8">ㄴ가</b> 하면（비싼가 하면）</div>
-        <div><span style="font-weight:700">있다/없다</span>：재미있<b style="color:#ff7fa8">는가</b> 하면（형용사이나 -는 사용）</div>
-      </div>
-    </div>
-  </div>
-  <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">别踩的坑</div></div>
-    <div class="ov-block">
-      <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">비싸는가 하면（형용사+는가）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">비싼가 하면</span></div></div>
-      <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">먹기도하다（띄어쓰기）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">먹기도 하다</span></div></div>
-    </div>
-  </div>
-</div>`,
-    step0Html: `<div class="card-title">一面……一面…… / 也会……</div>
-<div class="card-body">同一个人/事物有两面，或者有时还有另一种情况。</div>
-<div class="hook-box">
-  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">두 가지 표현 방식</div>
-  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
-    <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
-      <div style="font-size:9px;font-weight:800;color:#ff7fa8;margin-bottom:4px">-는/은/ㄴ가 하면 — 대조</div>
-      <div style="font-size:16px;font-weight:800;color:#241917">친절한가 하면 차갑기도 해요.</div>
-      <div style="font-size:16px;color:#89756e;margin-top:2px">一方面亲切，有时也会冷漠。</div>
-    </div>
-    <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
-      <div style="font-size:9px;font-weight:800;color:#5bbfb0;margin-bottom:4px">-기도 하다 — 병렬/추가</div>
-      <div style="font-size:16px;font-weight:800;color:#241917">슬프기도 하고 기쁘기도 해요.</div>
-      <div style="font-size:16px;color:#89756e;margin-top:2px">既悲伤，也高兴。</div>
-    </div>
-  </div>
-  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 형용사 + 가 하면 → 은/ㄴ가（비싼가，어려운가）</div>
-</div>
-<div class="reminder-box">-기도 하다 의 기도 와 하다 사이는 반드시 띄어 쓴다。</div>`,
-    compareHtml: `<div class="card-title">-는가 하면 vs -기도 하다 / 있다 주의</div>
-<div class="card-body">유사한 구조의 차이와 있다/없다 특수 처리。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
-  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
-    <div class="tok t-v">-는가 하면</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">앞뒤 대조，양면 묘사</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">비싼가 하면 품질이 좋아요</span><span style="font-size:16px;color:#5a4640">贵是贵，但质量好</span></div>
-  </div>
-  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
-    <div class="tok t-v">-기도 하다</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">추가/나열，여러 상태 병렬</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">맵기도 하고 달기도 해요</span><span style="font-size:16px;color:#5a4640">既辣又甜</span></div>
-  </div>
-  <div class="tok-row" style="background:#f0f4ff;border-radius:12px;padding:12px">
-    <div class="tok t-v">있다/없다 + 는가</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">있다/없다는 형용사이나 -는가 사용</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">재미있는가 하면</span><span style="font-size:16px;color:#5a4640">一方面有趣</span></div>
-  </div>
-</div>`,
-    compareLabel: '-는가 하면 vs -기도 하다',
-    quickTable: {
-      title: '-는/은/ㄴ가 하면 관형사형 선택',
-      headers: ['품사', '관형사형', '예시'],
-      rows: [
-        ['동사 현재', '-는가', '웃는가 하면，먹는가 하면'],
-        ['형용사', '-은/ㄴ가', '비싼가 하면，어려운가 하면，좋은가 하면'],
-        ['있다/없다', '-는가', '재미있는가 하면，없는가 하면'],
-        ['-기도 하다', '어간 + 기도', '먹기도 해요，슬프기도 해요'],
-      ],
-    },
-    linkedGrammarIds: [],
-  },
-
-  // ── 综合练习① ────────────────────────────────────────────────
-  {
-    id: 'card-p14-l11',
+    title: 'P14 综合练习',
     isPractice: true,
-    partNumber: 14,
-    lessonNumber: 11,
-    title: 'P14 综合练习①',
-    whatItDoes: 'P14 第11～15课 综합练习',
-    whatItDoesBody: '',
-    structureNote: '',
-    rulesNote: '',
-    scenarioNote: '',
+    whatItDoes: '使动语态综合',
+    whatItDoesBody: '本课综合 P14 全部 8 个使动语法点：短形使动（-이/히/리/기/우/추）、-게 하다、-도록 하다、-시키다、被动 vs 使动辨析、助词 을/를·에게、语气分层。',
     structures: [],
     connectionRules: [],
     cardExamples: [],
     scenarios: [],
     mistakes: [],
-    step0Html: '',
-    compareHtml: '',
-    compareLabel: '',
-    quickTable: { title: '', headers: [], rows: [] },
-    linkedGrammarIds: [],
-    overviewHtml: `<div class="overview">
-  <div class="ov-hero">
-    <div class="ov-hero-label">P14 · 综合练习①</div>
-    <div class="ov-hero-title">第11～15课 복습</div>
-    <div class="ov-hero-sub">-아/어다 주다 · -아/어다 오다/가다 · -다니요/-고 말고요 · -아/어 오다/가다 · 에 대해/에 관한</div>
-  </div>
-</div>`,
     specialQuiz: {
-      type: 'fill',
-      title: 'P14 第11～15课 综합',
-      body: '선택지 중 맞는 것을 고르세요',
+      type: 'morph',
+      title: 'P14 综合练习',
+      body: '综合本章所有使动语法',
       questions: [
         {
-          prompt: '오는 길에 우유 좀 사다 ___。（来的路上帮我买点牛奶来。）',
-          options: ['드려요', '줘요', '갔어요', '왔어요'],
-          answer: 1 as 0|1|2|3,
-          explanation: '-아/어다 주다：결과를 상대방에게 전달，사다 줘요（✓）。드려요는 윗사람에게，왔어요/갔어요는 방향 이동。',
+          prompt: '엄마가 아기에게 우유를 (먹다) 였어요.',
+          options: ['먹였어요', '먹혔어요', '먹어졌어요', '먹었어요'],
+          answer: 0,
+          explanation: '먹다 的使动是 먹이다（喂）→ 먹였어요。먹혔다 才是被动"被吃"。',
         },
         {
-          prompt: '마트에서 고기를 사다 ___。（从超市买了肉来了。—结果在说话人处）',
-          options: ['왔어요', '갔어요', '드렸어요', '줬어요'],
-          answer: 0 as 0|1|2|3,
-          explanation: '-아/어다 오다：결과를 화자 쪽으로：사다 왔어요（✓）。갔어요는 반대 방향，줬어요는 전달，드렸어요는 윗사람。',
+          prompt: '엄마가 아기를 (자다) 웠어요.',
+          options: ['자웠어요', '재웠어요', '자혔어요', '자였어요'],
+          answer: 1,
+          explanation: '자다 的使动是 재우다（词内元音变化）→ 재웠어요。',
         },
         {
-          prompt: '그 사람이 결혼했___요？ 믿을 수가 없어요。（那个人竟然结婚了？）',
-          options: ['고 말고', '거든', '잖아', '다니'],
-          answer: 3 as 0|1|2|3,
-          explanation: '-다니요：놀라움/반문：결혼했다니요（✓）。고 말고요는 강한 긍정，거든요는 배경 설명，잖아요는 공유 정보。',
+          prompt: '이 영화가 저를 (슬프다) 했어요.',
+          options: ['슬프는 게', '슬픈', '슬프게', '슬퍼서'],
+          answer: 2,
+          explanation: '形容词接 -게 하다 → 슬프게 했어요（让我伤心）。',
         },
         {
-          prompt: '10년간 이 일을 해 ___。（10年来一直做这个工作。）',
-          options: ['왔어요', '갔어요', '오다 왔어요', '다 왔어요'],
-          answer: 0 as 0|1|2|3,
-          explanation: '-아/어 오다：과거→현재 지속：해 왔어요（✓）。갔어요는 미래 방향，다 왔어요/오다 왔어요는 없는 형태。',
+          prompt: '팀장님이 저희를 회의에 (참석하다) 했어요.',
+          options: ['참석하는 게', '참석하도록', '참석해서', '참석하기가'],
+          answer: 1,
+          explanation: '正式安排场合 → -도록 하다 → 참석하도록 했어요。',
         },
         {
-          prompt: '한국 역사___ 관한 책을 읽었어요。（读了关于韩国历史的书。）',
-          options: ['에', '에서', '이', '을'],
-          answer: 0 as 0|1|2|3,
-          explanation: '에 관한：명사 + 에 관한 + 명사：역사에 관한 책（✓）。에서는 장소，이/을은 주격/목적격 조사。',
+          prompt: '엄마가 아이(   ) 공부(   ) 시켰어요.',
+          options: ['가 / 가', '를 / 를', '에게 / 를', '가 / 을'],
+          answer: 2,
+          explanation: '-시키다 句式：S가 O에게 N을 시키다 → 아이에게 공부를 시켰어요。',
         },
         {
-          prompt: 'A：같이 갈 수 있어요？ B：가___ 말고요！（当然去！）',
-          options: ['기도', '는가', '고', '다니'],
-          answer: 2 as 0|1|2|3,
-          explanation: '-고 말고요：강한 긍정：가고 말고요（✓）。다니요는 놀라움，기도는 나열，는가는 대조。',
+          prompt: '"엄마가 아이에게 밥을 먹였어요." 是……',
+          options: ['被动', '使动', '主动', '过去完成'],
+          answer: 1,
+          explanation: '主语엄마（施动者）+ 目的宾语 밥을 + 먹이다（使动）→ 使动句。',
+        },
+        {
+          prompt: '엄마가 아기(   ) 재웠어요.',
+          options: ['에게', '를', '이', '가'],
+          answer: 1,
+          explanation: '자다 不及物 → 被使动者用 을/를 → 아기를。',
+        },
+        {
+          prompt: '엄마가 아기(   ) 우유(   ) 먹였어요.',
+          options: ['를 / 를', '에게 / 를', '에게 / 가', '가 / 를'],
+          answer: 1,
+          explanation: '먹다 及物 → 被使动者用 에게，宾语用 을/를。',
+        },
+        {
+          prompt: '"上司让下属加班" 最贴切的表达？',
+          options: ['부하가 야근했어요', '부하에게 야근을 시켰어요', '부하를 야근했어요', '부하가 야근을 당했어요'],
+          answer: 1,
+          explanation: '"命令使唤" 语气 → -시키다 → 부하에게 야근을 시켰어요。',
+        },
+        {
+          prompt: '被动 vs 使动 最快的判断方法？',
+          options: [
+            '看动词长',
+            '看接尾字母',
+            '看句子里有没有目的宾语 을/를',
+            '看时态',
+          ],
+          answer: 2,
+          explanation: '同接尾时，有目的宾语 을/를 → 使动；没有 → 被动。',
         },
       ],
     },
-  },
-
-  // ── 综合练习② ────────────────────────────────────────────────
-  {
-    id: 'card-p14-l12',
-    isPractice: true,
-    partNumber: 14,
-    lessonNumber: 12,
-    title: 'P14 综合练习②',
-    whatItDoes: 'P14 第16～20课 综합练习',
-    whatItDoesBody: '',
-    structureNote: '',
-    rulesNote: '',
-    scenarioNote: '',
-    structures: [],
-    connectionRules: [],
-    cardExamples: [],
-    scenarios: [],
-    mistakes: [],
-    step0Html: '',
-    compareHtml: '',
-    compareLabel: '',
-    quickTable: { title: '', headers: [], rows: [] },
-    linkedGrammarIds: [],
-    overviewHtml: `<div class="overview">
-  <div class="ov-hero">
-    <div class="ov-hero-label">P14 · 综合练习②</div>
-    <div class="ov-hero-title">第16～20课 복습</div>
-    <div class="ov-hero-sub">비롯한/비롯해서/만 해도 · 개나/까지 · (이)라든가/마저 · 체하다/척하다 · -는가 하면/-기도 하다</div>
+    linkedGrammarIds: [
+      'card-p14-l01',
+      'card-p14-l02',
+      'card-p14-l03',
+      'card-p14-l04',
+      'card-p14-l05',
+      'card-p14-l06',
+      'card-p14-l07',
+      'card-p14-l08',
+    ],
+    overviewHtml: `<div class="ov-hero">
+  <div style="font-size:20px;font-weight:700;color:#241917;margin-bottom:8px">P14 使动语态总结</div>
+  <div style="font-size:14px;color:#89756e">4 种使动 · 一套助词 · 一个分辨</div>
+</div>
+<div class="ov-section">
+  <div class="ov-section-hd"><div class="ov-section-line" style="background:#6b7ff0"></div><div class="ov-section-title" style="color:#6b7ff0">4 种使动方式</div></div>
+  <div class="ov-block">
+    <div style="font-size:16px;color:#241917;line-height:1.9">
+      1. 短形使动（-이/히/리/기/우/추）→ 亲密/照顾<br>
+      2. -게 하다 → 中性/允许<br>
+      3. -도록 하다 → 正式/安排<br>
+      4. -시키다 → 命令使唤（하다类）
+    </div>
+  </div>
+</div>
+<div class="ov-section">
+  <div class="ov-section-hd"><div class="ov-section-line" style="background:#6b7ff0"></div><div class="ov-section-title" style="color:#6b7ff0">助词规则</div></div>
+  <div class="ov-block">
+    <div style="font-size:16px;color:#241917;line-height:1.9">
+      不及物 → 被使动者用 을/를<br>
+      及物 → 被使动者用 에게，宾语用 을/를<br>
+      避免一句两个 을/를<br>
+      -시키다 → S가 O에게 N을 시키다
+    </div>
+  </div>
+</div>
+<div class="ov-section">
+  <div class="ov-section-hd"><div class="ov-section-line" style="background:#6b7ff0"></div><div class="ov-section-title" style="color:#6b7ff0">被动 vs 使动</div></div>
+  <div class="ov-block">
+    <div style="font-size:16px;color:#241917;line-height:1.9">
+      同接尾 -이/히/리/기<br>
+      有目的宾语 을/를 → 使动<br>
+      无目的宾语 → 被动<br>
+      먹이다（喂/使动）≠ 먹히다（被吃/被动）
+    </div>
+  </div>
+</div>
+<div class="ov-section">
+  <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">别踩的坑</div></div>
+  <div class="ov-block">
+    <div style="font-size:15px;color:#241917;line-height:1.8">
+      1. 短形使动只对固定动词组，不能自造<br>
+      2. 하다类使动只能用 -시키다 或 -게 하다<br>
+      3. -도록 하다 不接形容词<br>
+      4. -시키다 对长辈失礼，用 부탁하다<br>
+      5. 一句最多一个 을/를 目的宾语
+    </div>
   </div>
 </div>`,
-    specialQuiz: {
-      type: 'fill',
-      title: 'P14 第16～20课 综합',
-      body: '선택지 중 맞는 것을 고르세요',
-      questions: [
-        {
-          prompt: 'BTS___ 비롯한 K-POP 그룹들이 인기예요。（以BTS为首的K-POP团体们很受欢迎。）',
-          options: ['를', '이', '가', '을'],
-          answer: 0 as 0|1|2|3,
-          explanation: 'BTS（받침X）→ 를 비롯한（✓）。받침O면 을 비롯한。이/가는 주격 조사。',
-        },
-        {
-          prompt: '오늘 커피를 세 잔___ 마셨어요。（今天竟然喝了三杯咖啡。）',
-          options: ['나', '이나', '마저', '까지'],
-          answer: 1 as 0|1|2|3,
-          explanation: '잔（받침ㄴ 있음）→ 이나：세 잔이나（✓）。받침X면 나，까지는 극단，마저는 절망。',
-        },
-        {
-          prompt: '모두 잃고 희망___ 사라졌어요。（连希望都消失了。—绝望）',
-          options: ['까지', '라든가', '마저', '이나'],
-          answer: 2 as 0|1|2|3,
-          explanation: '마저：절망적 맥락에서 마지막 것마저：희망마저（✓）。까지는 중성/긍정，이나는 수량，라든가는 열거。',
-        },
-        {
-          prompt: '그 사람은 나를 보고도 모르___ 척했어요。（那个人明明看到我，却假装不认识。—현재）',
-          options: ['을', 'ㄴ', '은', '는'],
-          answer: 3 as 0|1|2|3,
-          explanation: '모르다（동사）현재 관형사형：모르는 척했어요（✓）。과거라면 모른 척，은/ㄴ은 형용사나 과거형，을은 미래형。',
-        },
-        {
-          prompt: '한국어는 어려운가 하면 재미있___ 해요。（韩语一方面难，另一方面也有趣。）',
-          options: ['기도', '기가', '는가', '기만'],
-          answer: 0 as 0|1|2|3,
-          explanation: '-기도 하다：추가/나열：재미있기도 해요（✓）。는가는 대조 구조 앞，기만/기가는 없는 형태。',
-        },
-        {
-          prompt: '취미로 영화___ 음악이라든가 해요。（兴趣爱好是电影啊音乐之类的。）',
-          options: ['라든가', '까지', '이라든가', '마저'],
-          answer: 0 as 0|1|2|3,
-          explanation: '영화（받침X）→ 라든가（✓）。이라든가는 받침O 명사에，마저는 절망，까지는 극단。',
-        },
-      ],
-    },
   },
 ];

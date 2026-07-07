@@ -46,8 +46,8 @@ export const grammarCardsP9: GrammarCard[] = [
     connectionRules: [
       { type: 'rule', text: '-겠- 变形：动词/形容词词干 + 겠 + 어요/습니다', examples: '가다→가겠어요 / 먹다→먹겠습니다 / 피곤하다→피곤하겠어요' },
       { type: 'rule', text: '-는 것 같다（现在）：动词词干 + 는 것 같다', examples: '가다→가는 것 같다 / 먹다→먹는 것 같다' },
-      { type: 'rule', text: '-은/ㄴ 것 같다（过去/形容词）：有收音+은, 无收음+ㄴ', examples: '작다→작은 것 같다 / 크다→큰 것 같다 / 갔다→간 것 같다' },
-      { type: 'rule', text: '-을/ㄹ 것 같다（将来）：有收음+을, 无收음+ㄹ', examples: '먹다→먹을 것 같다 / 가다→갈 것 같다' },
+      { type: 'rule', text: '-은/ㄴ 것 같다（过去/形容词）：有收音+은, 无收音+ㄴ', examples: '작다→작은 것 같다 / 크다→큰 것 같다 / 갔다→간 것 같다' },
+      { type: 'rule', text: '-을/ㄹ 것 같다（将来）：有收音+을, 无收音+ㄹ', examples: '먹다→먹을 것 같다 / 가다→갈 것 같다' },
       { type: 'usage', text: '-겠- 第一人称=意向', examples: '제가 하겠습니다（我来做）/ 내일 일찍 오겠습니다（我明天早点来）' },
       { type: 'usage', text: '-겠- 第二三人称=推测', examples: '힘들겠어요（你一定很辛苦吧）/ 맛있겠다（看起来很好吃）' },
       { type: 'compare', text: '-겠- vs -는/을 것 같다', examples: '비가 오겠어요（推测，语气较肯定）vs 비가 올 것 같아요（推测，语气更柔和/不确定）' },
@@ -154,7 +154,7 @@ export const grammarCardsP9: GrammarCard[] = [
   </div>
   <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-는/을 것 같다 → 柔和推测，语气不确定</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">动词현재 -는 것 같다 / 将来 -을/ㄹ 것 같다 / 形容词 -은/ㄴ 것 같다</div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">动词现在 -는 것 같다 / 将来 -을/ㄹ 것 같다 / 形容词 -은/ㄴ 것 같다</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">비가 올 것 같아요.</span><span style="font-size:16px;color:#5a4640">好像要下雨了。（不确定）</span></div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">피곤한 것 같아요.</span><span style="font-size:16px;color:#5a4640">好像很累的样子。</span></div>
   </div>
@@ -167,8 +167,8 @@ export const grammarCardsP9: GrammarCard[] = [
       rows: [
         [{ ko: '-겠-', zh: '意向/肯定推测' }, { ko: '词干 + 겠 + 어요', zh: '直接接词干' }, { ko: '较肯定', zh: '有把握' }, { ko: '가겠어요 / 피곤하겠어요', zh: '我去/你一定很累' }],
         [{ ko: '-는 것 같다', zh: '现在推测（动词）' }, { ko: '词干 + 는 것 같다', zh: '动词现在时' }, { ko: '柔和', zh: '不确定' }, { ko: '가는 것 같아요', zh: '好像在去' }],
-        [{ ko: '-을/ㄹ 것 같다', zh: '将来推测' }, { ko: '有收음+을/无收음+ㄹ', zh: '将来冠词形' }, { ko: '柔和', zh: '不确定' }, { ko: '올 것 같아요', zh: '好像会来' }],
-        [{ ko: '-은/ㄴ 것 같다', zh: '过去/形容词推测' }, { ko: '有收음+은/无收음+ㄴ', zh: '过去冠词形' }, { ko: '柔和', zh: '不确定' }, { ko: '간 것 같아요', zh: '好像去了' }],
+        [{ ko: '-을/ㄹ 것 같다', zh: '将来推测' }, { ko: '有收音+을/无收音+ㄹ', zh: '将来冠词形' }, { ko: '柔和', zh: '不确定' }, { ko: '올 것 같아요', zh: '好像会来' }],
+        [{ ko: '-은/ㄴ 것 같다', zh: '过去/形容词推测' }, { ko: '有收音+은/无收音+ㄴ', zh: '过去冠词形' }, { ko: '柔和', zh: '不确定' }, { ko: '간 것 같아요', zh: '好像去了' }],
       ],
     },
     specialQuiz: {
@@ -331,7 +331,7 @@ export const grammarCardsP9: GrammarCard[] = [
     compareLabel: '-네요（万能）vs -군요（正式）vs -구나（非正式）',
     quickTable: {
       title: '三种感叹语尾接续速查',
-      headers: ['语尾', '动词현재', '形容词', '过去时', '适用场合'],
+      headers: ['语尾', '动词现在', '形容词', '过去时', '适用场合'],
       rows: [
         [{ ko: '-네요', zh: '礼貌' }, { ko: '词干 + 네요', zh: '가네요' }, { ko: '词干 + 네요', zh: '좋네요' }, { ko: '았/었 + 네요', zh: '갔네요' }, { ko: '任何场合', zh: '最安全' }],
         [{ ko: '-군요', zh: '稍正式' }, { ko: '词干 + 는군요', zh: '가는군요' }, { ko: '词干 + 군요', zh: '좋군요' }, { ko: '았/었 + 군요', zh: '갔군요' }, { ko: '对话/书面', zh: '' }],
@@ -343,10 +343,10 @@ export const grammarCardsP9: GrammarCard[] = [
       title: '选择正确的感叹语尾',
       body: '根据场合和词性选择合适的语尾形式。',
       questions: [
-        { pre: '对上司说：서울이 정말 크', post: '（首尔真大啊）', options: ['구나', '는구나', '군요', '네요'], answer: 3, explanation: '对上司用礼貌语尾 -네요 或 -군요，-구나 对长辈失礼' },
+        { pre: '对上司说：서울이 정말 크', post: '（首尔真大啊）', options: ['구나', '는구나', '구나요', '네요'], answer: 3, explanation: '对上司用礼貌语尾 -네요。구나요 是错误形式（구나 + 요 不能组合），-구나 对长辈失礼。' },
         { pre: '自言自语：아, 이게 정답이', post: '（哦，原来这是答案）', options: ['네요', '구나', '군요', '는구나'], answer: 1, explanation: '形容词/이다 + -구나，自言自语用非正式 -구나' },
         { pre: '形容词 맛있다 + -군요 →', post: '', options: ['맛있군요', '맛있는군요', '맛있었는군요', '맛있겠군요'], answer: 0, explanation: '形容词直接接 -군요，不加 -는' },
-        { pre: '动词 먹다 + -는구나 →', post: '', options: ['먹는는구나', '먹구나', '먹는구나', '먹었는구나'], answer: 2, explanation: '动词현재 + -는구나 → 먹는구나' },
+        { pre: '动词 먹다 + -는구나 →', post: '', options: ['먹는는구나', '먹구나', '먹는구나', '먹었는구나'], answer: 2, explanation: '动词现在 + -는구나 → 먹는구나' },
       ],
     },
     linkedGrammarIds: ['g16', 'g17'],
@@ -357,7 +357,7 @@ export const grammarCardsP9: GrammarCard[] = [
     lessonNumber: 3,
     title: '-는/은/ㄴ/을/ㄹ 것 같다',
     whatItDoes: '说"感觉/好像"，表达柔和的推测',
-    whatItDoesBody: '-는/을 것 같다 是韩语表达推测最自然的方式，比直接断言更礼貌。\n时态通过冠词形变化体现：현재(-는/-은/ㄴ)、과거(-은/ㄴ)、미래(-을/ㄹ)。\n日常对话、韩剧、综艺里出现频率极高，必须熟练掌握。',
+    whatItDoesBody: '-는/을 것 같다 是韩语表达推测最自然的方式，比直接断言更礼貌。\n时态通过冠词形变化体现：现在(-는/-은/ㄴ)、过去(-은/ㄴ)、将来(-을/ㄹ)。\n日常对话、韩剧、综艺里出现频率极高，必须熟练掌握。',
     structureNote: '变形规则取决于词性和时态。\n动词现在时 + 는 것 같다 / 形容词 + 은/ㄴ 것 같다 / 将来 + 을/ㄹ 것 같다。',
     rulesNote: '形容词现在时直接接 -은/ㄴ（不用 -는）。\n过去式：动词过去冠词形 -은/ㄴ 것 같다（간 것 같다）或 -았/었을 것 같다（갔을 것 같다），两种都自然。',
     structures: [
@@ -396,11 +396,11 @@ export const grammarCardsP9: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '动词 현재：词干 + 는 것 같다', examples: '먹다→먹는 것 같다 / 자다→자는 것 같다' },
-      { type: 'rule', text: '形容词 현재：有收음+은/无收음+ㄴ 것 같다', examples: '작다→작은 것 같다 / 크다→큰 것 같다 / 예쁘다→예쁜 것 같다' },
+      { type: 'rule', text: '动词 现在：词干 + 는 것 같다', examples: '먹다→먹는 것 같다 / 자다→자는 것 같다' },
+      { type: 'rule', text: '形容词 现在：有收音+은/无收音+ㄴ 것 같다', examples: '작다→작은 것 같다 / 크다→큰 것 같다 / 예쁘다→예쁜 것 같다' },
       { type: 'rule', text: '名词+이다：名词+인 것 같다', examples: '학생이다→학생인 것 같다 / 배우이다→배우인 것 같다' },
       { type: 'rule', text: '过去推测：动词过去冠词形 -은/ㄴ 것 같다 / 또는 -았/었을 것 같다', examples: '간 것 같다 / 먹은 것 같다 / 갔을 것 같다 / 먹었을 것 같다' },
-      { type: 'rule', text: '将来：有收음+을/无收음+ㄹ 것 같다', examples: '먹다→먹을 것 같다 / 가다→갈 것 같다 / 오다→올 것 같다' },
+      { type: 'rule', text: '将来：有收音+을/无收音+ㄹ 것 같다', examples: '먹다→먹을 것 같다 / 가다→갈 것 같다 / 오다→올 것 같다' },
       { type: 'usage', text: '比直接断言更礼貌，适合表达不确定或谦虚的推测', examples: '비가 와요（确定）vs 비가 오는 것 같아요（感觉好像下雨了）' },
       { type: 'note', text: '口语中常缩略为 -는/은 것 같아 或 -ㄹ 것 같아', examples: '좀 어려운 것 같아（感觉有点难）/ 늦을 것 같아（好像要迟到了）' },
     ],
@@ -445,7 +445,7 @@ export const grammarCardsP9: GrammarCard[] = [
     ],
     mistakes: [
       { wrong: '날씨가 춥는 것 같아요（形容词）', correct: '날씨가 추운 것 같아요', note: '形容词用 -은/ㄴ 것 같다，不加 -는。只有动词现在时才用 -는 것 같다。' },
-      { wrong: '학생인 것 같다（名词）→ 학생것 같다', correct: '학생인 것 같다', note: '名词后必须加 -인 것 같다，不能省略 -인。' },
+      { wrong: '학생것 같다', correct: '학생인 것 같다', note: '名词后必须加 -인 것 같다，不能省略 -인。' },
       { wrong: '내일 비가 오는 것 같아요（将来）', correct: '내일 비가 올 것 같아요', note: '将来推测用 -을/ㄹ 것 같다，-는 것 같다 表示现在正在发生。' },
     ],
     overviewHtml: `<div class="overview">
@@ -458,7 +458,7 @@ export const grammarCardsP9: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title">变形速查</div></div>
     <div class="ov-block">
       <div class="tbl-row hd"><div class="tc">时态/词性</div><div class="tc">变形</div><div class="tc">例子</div></div>
-      <div class="tbl-row"><div class="tc">动词 현재</div><div class="tc">词干+는 것 같다</div><div class="tc">먹는 것 같다</div></div>
+      <div class="tbl-row"><div class="tc">动词 现在</div><div class="tc">词干+는 것 같다</div><div class="tc">먹는 것 같다</div></div>
       <div class="tbl-row"><div class="tc">形容词</div><div class="tc">词干+은/ㄴ 것 같다</div><div class="tc">추운 것 같다</div></div>
       <div class="tbl-row"><div class="tc">名词</div><div class="tc">名词+인 것 같다</div><div class="tc">학생인 것 같다</div></div>
       <div class="tbl-row"><div class="tc">将来</div><div class="tc">词干+을/ㄹ 것 같다</div><div class="tc">올 것 같다</div></div>
@@ -482,42 +482,42 @@ export const grammarCardsP9: GrammarCard[] = [
     </div>
   </div>
 </div>
-<div class="reminder-box">形容词 + -는 것 같다 ✗ — 형용사는 -은/ㄴ 것 같다，不用 -는。</div>`,
+<div class="reminder-box">形容词 + -는 것 같다 ✗ — 形容词는 -은/ㄴ 것 같다，不用 -는。</div>`,
     compareHtml: `<div class="card-title">-것 같다 时态变化总览</div>
 <div class="card-body">-것 같다 本身不变，时态信息全靠前面的冠词形传递。记住4种冠词形就能说所有推测。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
   <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
-    <div class="tok t-v">동사 현재：词干 + 는 것 같다</div>
+    <div class="tok t-v">动词 现在：词干 + 는 것 같다</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">가는 것 같아요</span><span style="font-size:16px;color:#5a4640">好像在去</span></div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">먹는 것 같아요</span><span style="font-size:16px;color:#5a4640">好像在吃</span></div>
   </div>
   <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
-    <div class="tok t-v">형용사：词干 + 은/ㄴ 것 같다</div>
+    <div class="tok t-v">形容词：词干 + 은/ㄴ 것 같다</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">추운 것 같아요</span><span style="font-size:16px;color:#5a4640">好像很冷</span></div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">바쁜 것 같아요</span><span style="font-size:16px;color:#5a4640">好像很忙</span></div>
   </div>
   <div class="tok-row" style="background:#f0eef8;border-radius:12px;padding:12px">
-    <div class="tok t-v">과거：동사 词干 + 은/ㄴ 것 같다 / -았/었을 것 같다</div>
+    <div class="tok t-v">过去：动词 词干 + 은/ㄴ 것 같다 / -았/었을 것 같다</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">간 것 같아요</span><span style="font-size:16px;color:#5a4640">好像去了</span></div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">갔을 것 같아요</span><span style="font-size:16px;color:#5a4640">大概去了</span></div>
   </div>
   <div class="tok-row" style="background:#fff8f0;border-radius:12px;padding:12px">
-    <div class="tok t-v">미래：词干 + 을/ㄹ 것 같다</div>
+    <div class="tok t-v">将来：词干 + 을/ㄹ 것 같다</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">올 것 같아요</span><span style="font-size:16px;color:#5a4640">好像会来</span></div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">비가 올 것 같아요</span><span style="font-size:16px;color:#5a4640">好像要下雨</span></div>
   </div>
 </div>
-<div class="reminder-box">형용사 + -는 것 같다 ✗ → 형용사는 -은/ㄴ 것 같다 ✓（추운 것 같아요，not 춥는 것 같아요）</div>`,
-    compareLabel: '-것 같다 时态：현재/형용사/과거/미래 四种冠词形',
+<div class="reminder-box">形容词 + -는 것 같다 ✗ → 形容词는 -은/ㄴ 것 같다 ✓（추운 것 같아요，not 춥는 것 같아요）</div>`,
+    compareLabel: '-것 같다 时态：现在/形容词/过去/将来 四种冠词形',
     quickTable: {
       title: '-것 같다 接续速查',
       headers: ['词性/时态', '接续规则', '예시'],
       rows: [
         [{ ko: '동사 현재', zh: '进行/现在' }, { ko: '词干 + 는 것 같다', zh: '' }, { ko: '자는 것 같다 / 먹는 것 같다', zh: '好像在睡/吃' }],
-        [{ ko: '형용사', zh: '现在状态' }, { ko: '有收음+은/无收음+ㄴ 것 같다', zh: '' }, { ko: '추운 것 같다 / 바쁜 것 같다', zh: '好像很冷/忙' }],
+        [{ ko: '형용사', zh: '现在状态' }, { ko: '有收音+은/无收音+ㄴ 것 같다', zh: '' }, { ko: '추운 것 같다 / 바쁜 것 같다', zh: '好像很冷/忙' }],
         [{ ko: '명사+이다', zh: '' }, { ko: '명사 + 인 것 같다', zh: '' }, { ko: '학생인 것 같다', zh: '好像是学生' }],
         [{ ko: '과거', zh: '过去推测' }, { ko: '词干+은/ㄴ 것 같다 / -았/었을 것 같다', zh: '' }, { ko: '간 것 같다 / 갔을 것 같다', zh: '好像去了' }],
-        [{ ko: '미래', zh: '将来推测' }, { ko: '有收음+을/无收음+ㄹ 것 같다', zh: '' }, { ko: '올 것 같다 / 먹을 것 같다', zh: '好像会来/吃' }],
+        [{ ko: '미래', zh: '将来推测' }, { ko: '有收音+을/无收音+ㄹ 것 같다', zh: '' }, { ko: '올 것 같다 / 먹을 것 같다', zh: '好像会来/吃' }],
       ],
     },
     specialQuiz: {
@@ -526,9 +526,9 @@ export const grammarCardsP9: GrammarCard[] = [
       body: '根据词性和时态选择正确的接续形式。',
       questions: [
         { pre: '形容词 춥다 →', post: '（好像很冷）', options: ['춥은 것 같아요', '춥는 것 같아요', '추운 것 같아요', '출 것 같아요'], answer: 2, explanation: '形容词无收音+ㄴ 것 같다，춥다 ㅂ불규칙 → 추운 것 같아요' },
-        { pre: '동사 가다 현재 →', post: '（好像在去）', options: ['갈 것 같아요', '가는 것 같아요', '간 것 같아요', '가은 것 같아요'], answer: 1, explanation: '동사 현재 + 는 것 같다 → 가는 것 같아요' },
-        { pre: '동사 먹다 미래 →', post: '（好像要吃）', options: ['먹을 것 같아요', '먹은 것 같아요', '먹는 것 같아요', '먹인 것 같아요'], answer: 0, explanation: '미래는 有收음+을 것 같다 → 먹을 것 같아요' },
-        { pre: '명사 학생이다 →', post: '（好像是学生）', options: ['학생은 것 같아요', '학생이는 것 같아요', '학생는 것 같아요', '학생인 것 같아요'], answer: 3, explanation: '명사+이다 → 명사+인 것 같다 → 학생인 것 같아요' },
+        { pre: '动词 가다 现在 →', post: '（好像在去）', options: ['갈 것 같아요', '가는 것 같아요', '간 것 같아요', '가은 것 같아요'], answer: 1, explanation: '动词 现在 + 는 것 같다 → 가는 것 같아요' },
+        { pre: '动词 먹다 将来 →', post: '（好像要吃）', options: ['먹을 것 같아요', '먹은 것 같아요', '먹는 것 같아요', '먹인 것 같아요'], answer: 0, explanation: '将来는 有收音+을 것 같다 → 먹을 것 같아요' },
+        { pre: '名词 학생이다 →', post: '（好像是学生）', options: ['학생은 것 같아요', '학생이는 것 같아요', '학생는 것 같아요', '학생인 것 같아요'], answer: 3, explanation: '名词+이다 → 名词+인 것 같다 → 학생인 것 같아요' },
       ],
     },
     linkedGrammarIds: ['g69'],
@@ -539,9 +539,9 @@ export const grammarCardsP9: GrammarCard[] = [
     lessonNumber: 4,
     title: '-동안, 마다, -을/ㄹ 때마다',
     whatItDoes: '表示"持续时间"和"每次/每…"',
-    whatItDoesBody: '-동안 表示某个动作或状态持续的时间段，相当于"在……期间/……之间"。\n마다 接在名词后表示"每……"，-을/ㄹ 때마다 接在动词后表示"每当……的时候"。\n这三个表达在描述日常规律和习惯时非常好用。',
-    structureNote: '-동안：时间명사 + 동안 / 동사 + 는 동안\n마다：명사 + 마다\n-을/ㄹ 때마다：动词词干 + 을/ㄹ 때마다',
-    rulesNote: '时间명사 + 동안：3시간 동안（3小时之间）/ 일 년 동안（一年之间）\n-는 동안：동작이 진행되는 동안（在……进行期间）\n마다 常与时间词搭配：매일（每天）/ 매주（每周）/ 주말마다（每个周末）',
+    whatItDoesBody: '-동안 表示某个动作或状态持续的时间段，相当于"在……期间/……的时间里"。\n마다 接在名词后表示"每……"，-을/ㄹ 때마다 接在动词后表示"每当……的时候"。\n这三个表达在描述日常规律和习惯时非常好用。',
+    structureNote: '-동안：时间名词 + 동안 / 动词 + 는 동안\n마다：名词 + 마다\n-을/ㄹ 때마다：动词词干 + 을/ㄹ 때마다',
+    rulesNote: '时间名词 + 동안：3시간 동안（3小时之间）/ 일 년 동안（一年之间）\n-는 동안：동작이 진행되는 동안（在……进行期间）\n마다 常与时间词搭配：매일（每天）/ 매주（每周）/ 주말마다（每个周末）',
     structures: [
       {
         ko: '3시간 동안 공부했어요',
@@ -580,9 +580,9 @@ export const grammarCardsP9: GrammarCard[] = [
     ],
     connectionRules: [
       { type: 'rule', text: '시간 + 동안：某段时间持续', examples: '한 시간 동안（1小时之间）/ 방학 동안（假期里）/ 여행 동안（旅行期间）' },
-      { type: 'rule', text: '동사 + 는 동안：动作进行期间', examples: '기다리는 동안（等待的期间）/ 밥 먹는 동안（吃饭的时候）' },
-      { type: 'rule', text: '명사 + 마다：每……', examples: '날마다（每天）/ 시간마다（每小时）/ 사람마다（每个人）/ 계절마다（每个季节）' },
-      { type: 'rule', text: '동사 + 을/ㄹ 때마다：每当做……的时候', examples: '볼 때마다（每次看）/ 만날 때마다（每次见面）/ 먹을 때마다（每次吃）' },
+      { type: 'rule', text: '动词 + 는 동안：动作进行期间', examples: '기다리는 동안（等待的期间）/ 밥 먹는 동안（吃饭的时候）' },
+      { type: 'rule', text: '名词 + 마다：每……', examples: '날마다（每天）/ 시간마다（每小时）/ 사람마다（每个人）/ 계절마다（每个季节）' },
+      { type: 'rule', text: '动词 + 을/ㄹ 때마다：每当做……的时候', examples: '볼 때마다（每次看）/ 만날 때마다（每次见面）/ 먹을 때마다（每次吃）' },
       { type: 'usage', text: '-는 동안 vs -을/ㄹ 때：동안 强调持续时间段，때 强调时间点', examples: '공부하는 동안（学习期间，强调时段）vs 공부할 때（学习的时候，强调时间点）' },
       { type: 'note', text: 'KPOP/韩剧常用：그리울 때마다（每当想念的时候）', examples: '보고 싶을 때마다 이 노래 들어요（每次想念就听这首歌）' },
     ],
@@ -643,17 +643,17 @@ export const grammarCardsP9: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title">本课语法点</div></div>
     <div class="ov-block">
       <div class="badge">持续</div>
-      <div class="ko">시간 + 동안 / 동사 + 는 동안</div>
+      <div class="ko">시간 + 동안 / 动词 + 는 동안</div>
       <div class="zh">在……期间，持续了……</div>
     </div>
     <div class="ov-block">
       <div class="badge">每……</div>
-      <div class="ko">명사 + 마다</div>
+      <div class="ko">名词 + 마다</div>
       <div class="zh">每个……（날마다/주말마다/사람마다）</div>
     </div>
     <div class="ov-block">
       <div class="badge">每当</div>
-      <div class="ko">동사 + 을/ㄹ 때마다</div>
+      <div class="ko">动词 + 을/ㄹ 때마다</div>
       <div class="zh">每次做……的时候</div>
     </div>
   </div>
@@ -681,24 +681,24 @@ export const grammarCardsP9: GrammarCard[] = [
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
   <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-동안 → 持续一段时间</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">명사 + 동안 / 동사词干 + 는 동안</div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">名词 + 동안 / 动词词干 + 는 동안</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">3년 동안 살았어요.</span><span style="font-size:16px;color:#5a4640">住了3年。</span></div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">자는 동안 전화가 왔어요.</span><span style="font-size:16px;color:#5a4640">睡觉期间来了电话。</span></div>
   </div>
   <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">마다 → 每一个（无例外）</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">명사 + 마다</div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">名词 + 마다</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">날마다 운동해요.</span><span style="font-size:16px;color:#5a4640">每天运动。</span></div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">사람마다 달라요.</span><span style="font-size:16px;color:#5a4640">每个人都不一样。</span></div>
   </div>
   <div class="tok-row" style="background:#f0eef8;border-radius:12px;padding:12px">
     <div class="tok t-v">-을/ㄹ 때마다 → 每次做……的时候</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">有收음+을 때마다 / 无收음+ㄹ 때마다</div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">有收音+을 때마다 / 无收音+ㄹ 때마다</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">볼 때마다 반가워요.</span><span style="font-size:16px;color:#5a4640">每次见面都很高兴。</span></div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">먹을 때마다 생각나요.</span><span style="font-size:16px;color:#5a4640">每次吃都会想起。</span></div>
   </div>
 </div>
-<div class="reminder-box">마다 + 동사词干 ✗（먹마다 ✗）— 마다 只接名词。动词用 -을 때마다。</div>`,
+<div class="reminder-box">마다 + 动词词干 ✗（먹마다 ✗）— 마다 只接名词。动词用 -을 때마다。</div>`,
     compareLabel: '-동안（持续期间）vs 마다（每个）vs -을/ㄹ 때마다（每次）',
     quickTable: {
       title: '时间表达接续速查',
@@ -707,7 +707,7 @@ export const grammarCardsP9: GrammarCard[] = [
         [{ ko: '명사 + 동안', zh: '' }, { ko: '直接接名词', zh: '' }, { ko: '在……期间', zh: '' }, { ko: '방학 동안 / 3년 동안', zh: '假期期间/3年间' }],
         [{ ko: '-는 동안', zh: '' }, { ko: '동사词干 + 는 동안', zh: '' }, { ko: '在……的同时/期间', zh: '' }, { ko: '자는 동안 / 기다리는 동안', zh: '睡觉时/等待时' }],
         [{ ko: '명사 + 마다', zh: '' }, { ko: '直接接名词', zh: '' }, { ko: '每个……', zh: '' }, { ko: '날마다 / 주말마다', zh: '每天/每个周末' }],
-        [{ ko: '-을/ㄹ 때마다', zh: '' }, { ko: '有收음+을/无收음+ㄹ 때마다', zh: '' }, { ko: '每次……的时候', zh: '' }, { ko: '볼 때마다 / 먹을 때마다', zh: '每次见/每次吃' }],
+        [{ ko: '-을/ㄹ 때마다', zh: '' }, { ko: '有收音+을/无收音+ㄹ 때마다', zh: '' }, { ko: '每次……的时候', zh: '' }, { ko: '볼 때마다 / 먹을 때마다', zh: '每次见/每次吃' }],
       ],
     },
     specialQuiz: {
@@ -715,10 +715,10 @@ export const grammarCardsP9: GrammarCard[] = [
       title: '选择正确的时间表达',
       body: '根据语境选出 -동안/마다/-을 때마다 的正确用法。',
       questions: [
-        { pre: '매일（每天）→ 날', post: '운동해요', options: ['동안', '때마다', '는 동안', '마다'], answer: 3, explanation: '명사 + 마다 = 每个……，날마다 = 每天' },
-        { pre: '한국에 있', post: '한국어를 배웠어요（在韩国期间学了韩语）', options: ['동안', '는 동안', '마다', '을 때마다'], answer: 1, explanation: '-는 동안 = 在……的期间（동사接续）' },
-        { pre: '이 노래를 듣', post: '기억나요（每次听这首歌都会想起）', options: ['는 동안', '는 마다', '을 때마다', '마다'], answer: 2, explanation: '듣다 有收음ㄷ → 들을 때마다（ㄷ불규칙）' },
-        { pre: '주말', post: '쉬어요（每个周末休息）', options: ['마다', '동안', '때마다', '는 동안'], answer: 0, explanation: '명사 + 마다 = 每个……，주말마다 = 每个周末' },
+        { pre: '매일（每天）→ 날', post: '운동해요', options: ['동안', '때마다', '는 동안', '마다'], answer: 3, explanation: '名词 + 마다 = 每个……，날마다 = 每天' },
+        { pre: '한국에 있', post: '한국어를 배웠어요（在韩国期间学了韩语）', options: ['동안', '는 동안', '마다', '을 때마다'], answer: 1, explanation: '-는 동안 = 在……的期间（动词接续）' },
+        { pre: '이 노래를 듣', post: '기억나요（每次听这首歌都会想起）', options: ['는 동안', '는 마다', '을 때마다', '마다'], answer: 2, explanation: '듣다 有收音ㄷ → 들을 때마다（ㄷ불규칙）' },
+        { pre: '주말', post: '쉬어요（每个周末休息）', options: ['마다', '동안', '때마다', '는 동안'], answer: 0, explanation: '名词 + 마다 = 每个……，주말마다 = 每个周末' },
       ],
     },
     linkedGrammarIds: ['g44'],
@@ -900,7 +900,7 @@ export const grammarCardsP9: GrammarCard[] = [
     whatItDoes: '表示状态变化和自然转变',
     whatItDoesBody: '-아/어/여지다 接在形容词后，表示逐渐变成某种状态，相当于"变得……"。\n-게 되다 接在动词后，表示某种结果自然而然地发生，相当于"就……了/变成……了"。\n两者都强调变化的过程，不是主动行为，而是自然发生的结果。',
     structureNote: '-아/어/여지다：形容词词干 + 아/어/여지다\n-게 되다：动词词干 + 게 되다',
-    rulesNote: '-아/어/여지다 用于形容词，描述状态渐变。\n-게 되다 用于동사，描述动作结果的自然达成。',
+    rulesNote: '-아/어/여지다 用于形容词，描述状态渐变。\n-게 되다 用于动词，描述动作结果的自然达成。',
     structures: [
       {
         ko: '한국어가 점점 어려워져요',
@@ -938,7 +938,7 @@ export const grammarCardsP9: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '-아/어/여지다 变形：形容词词干末尾元음 ㅏ/ㅗ+아지다, 其他+어지다, 하다→해지다', examples: '좋다→좋아지다 / 크다→커지다 / 따뜻하다→따뜻해지다 / 예쁘다→예뻐지다' },
+      { type: 'rule', text: '-아/어/여지다 变形：形容词词干末尾元音 ㅏ/ㅗ+아지다, 其他+어지다, 하다→해지다', examples: '좋다→좋아지다 / 크다→커지다 / 따뜻하다→따뜻해지다 / 예쁘다→예뻐지다' },
       { type: 'rule', text: '-게 되다 变形：动词词干 + 게 되다（时态变化加在 되다 上）', examples: '알다→알게 됐어요 / 가다→가게 됐어요 / 좋아하다→좋아하게 됐어요' },
       { type: 'usage', text: '-아/어/여지다 强调状态的渐变过程', examples: '점점 건강해지고 있어요（越来越健康了）/ 날씨가 더워졌어요（天气变热了）' },
       { type: 'usage', text: '-게 되다 表示自然而然的结果，常含"非主动"或"机缘巧合"语气', examples: '한국어를 배우게 됐어요（就这样开始学韩语了）/ 이 회사에 다니게 됐어요（就进了这家公司）' },
@@ -998,12 +998,12 @@ export const grammarCardsP9: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title">本课语法点</div></div>
     <div class="ov-block">
       <div class="badge">状态渐变</div>
-      <div class="ko">형용사 + 아/어/여지다</div>
+      <div class="ko">形容词 + 아/어/여지다</div>
       <div class="zh">变得……（날씨가 따뜻해졌어요）</div>
     </div>
     <div class="ov-block">
       <div class="badge">自然结果</div>
-      <div class="ko">동사 + 게 되다</div>
+      <div class="ko">动词 + 게 되다</div>
       <div class="zh">就……了（한국어를 좋아하게 됐어요）</div>
     </div>
   </div>
@@ -1015,7 +1015,7 @@ export const grammarCardsP9: GrammarCard[] = [
   <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
     <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
       <div style="font-size:9px;font-weight:800;color:#ff7fa8;margin-bottom:4px">-아/어지다（状态变化）</div>
-      <div style="font-size:16px;font-weight:800;color:#241917">요즘 한국어가 늘어지고 있어요.</div>
+      <div style="font-size:16px;font-weight:800;color:#241917">요즘 한국어 실력이 점점 좋아지고 있어요.</div>
       <div style="font-size:16px;color:#89756e;margin-top:2px">最近韩语在慢慢进步。</div>
     </div>
     <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
@@ -1044,7 +1044,7 @@ export const grammarCardsP9: GrammarCard[] = [
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">알게 되다 / 만나게 되다</span><span style="font-size:16px;color:#5a4640">得知/相识</span></div>
   </div>
 </div>
-<div class="reminder-box">好记法：-아/어지다 = 状态"变了"（형용사首选）/ -게 되다 = 事情"发展成"（动사首选，说缘由和过程）</div>`,
+<div class="reminder-box">好记法：-아/어지다 = 状态"变了"（形容词首选）/ -게 되다 = 事情"发展成"（动사首选，说缘由和过程）</div>`,
     compareLabel: '-아/어지다（状态渐变）vs -게 되다（顺势结果）',
     quickTable: {
       title: '-아/어지다 vs -게 되다 接续速查',
@@ -1053,7 +1053,7 @@ export const grammarCardsP9: GrammarCard[] = [
         [{ ko: '-아지다', zh: 'ㅏ/ㅗ结尾' }, { ko: '형용사词干 + 아지다', zh: '' }, { ko: '형용사（状态变化）', zh: '' }, { ko: '좋아지다 / 많아지다', zh: '变好/变多' }],
         [{ ko: '-어지다', zh: '其他结尾' }, { ko: '형용사词干 + 어지다', zh: '' }, { ko: '형용사（状态变化）', zh: '' }, { ko: '커지다 / 빨라지다', zh: '变大/变快' }],
         [{ ko: '-해지다', zh: '하다动词' }, { ko: '어간 하 → 해지다', zh: '' }, { ko: '하다형容词', zh: '' }, { ko: '따뜻해지다 / 건강해지다', zh: '变暖/变健康' }],
-        [{ ko: '-게 되다', zh: '顺势结果' }, { ko: '동사词干 + 게 되다', zh: '' }, { ko: '동사（过程→结果）', zh: '' }, { ko: '알게 되다 / 살게 되다', zh: '得知/开始住' }],
+        [{ ko: '-게 되다', zh: '顺势结果' }, { ko: '동사词干 + 게 되다', zh: '' }, { ko: '동사（过程→결과）', zh: '' }, { ko: '알게 되다 / 살게 되다', zh: '得知/开始住' }],
       ],
     },
     specialQuiz: {
@@ -1062,7 +1062,7 @@ export const grammarCardsP9: GrammarCard[] = [
       body: '根据语境选择正确的变化表达。',
       questions: [
         { pre: '날씨가 많이 따뜻', post: '（天气变暖了）', options: ['해지게 됐어요', '하게 됐어요', '하게 되었어요', '해졌어요'], answer: 3, explanation: '따뜻하다 → 따뜻해지다，形容词状态变化用 -아/어지다' },
-        { pre: '한국어를 공부하', post: '（就开始学韩语了——顺其自然）', options: ['게 됐어요', '게 되어졌어요', '아졌어요', '어졌어요'], answer: 0, explanation: '동사 + -게 되다，表示顺势发展的结果' },
+        { pre: '한국어를 공부하', post: '（就开始学韩语了——顺其自然）', options: ['게 됐어요', '게 되어졌어요', '아졌어요', '어졌어요'], answer: 0, explanation: '动词 + -게 되다，表示顺势发展的结果' },
         { pre: '그 사람을 좋아하', post: '（慢慢喜欢上那个人了）', options: ['아졌어요', '게 되어졌어요', '게 됐어요', '어졌어요'], answer: 2, explanation: '좋아하다 是动词，顺势发展用 -게 되다' },
         { pre: '요즘 건강이 많이 좋', post: '（最近身体好多了）', options: ['아지게 됐어요', '아졌어요', '아하게 됐어요', '게 됐어요'], answer: 1, explanation: '좋다 ㅗ结尾形容词 → 좋아지다，状态变化用 -아지다' },
       ],
@@ -1076,7 +1076,7 @@ export const grammarCardsP9: GrammarCard[] = [
     title: '-는/은/ㄴ 편이다, 얼마나 -는/은/ㄴ 지',
     whatItDoes: '表示"偏向某一方"和感叹程度',
     whatItDoesBody: '-는/은/ㄴ 편이다 表示"比较……/偏……"，是一种相对委婉的说法，不是绝对的判断。\n얼마나 -는/은/ㄴ 지 用于感叹程度之深，相当于"有多么……啊"，后面常接 알다/모르다。\n两者都是韩剧和日常对话中出现频率很高的地道表达。',
-    structureNote: '-는/은/ㄴ 편이다：동사+는 편이다 / 形容词有收음+은 편이다 / 无收음+ㄴ 편이다\n얼마나 -는/은/ㄴ 지：얼마나 + 동사/形容词 관형형 + 지 알다/모르다',
+    structureNote: '-는/은/ㄴ 편이다：动词+는 편이다 / 形容词有收音+은 편이다 / 无收音+ㄴ 편이다\n얼마나 -는/은/ㄴ 지：얼마나 + 动词/形容词 冠词形 + 지 알다/모르다',
     rulesNote: '-는/은/ㄴ 편이다 语气比直接断言更柔和，说话者在主观评估。\n얼마나 -는/은/ㄴ 지 后面不说出程度，而是让对方去想象，情感更强烈。',
     structures: [
       {
@@ -1106,9 +1106,9 @@ export const grammarCardsP9: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '동사 + 는 편이다：表示倾向于做某事', examples: '자주 먹는 편이에요（比较常吃）/ 빨리 걷는 편이에요（走路比较快）' },
-      { type: 'rule', text: '形容词 有收음+은/无收음+ㄴ 편이다', examples: '작다→작은 편이에요 / 크다→큰 편이에요 / 바쁘다→바쁜 편이에요' },
-      { type: 'rule', text: '얼마나 + 관형형 + 지 알다/모르다', examples: '얼마나 맛있는 지 알아요?（知道有多好吃吗？）/ 얼마나 힘든 지 몰라요（不知道有多辛苦）' },
+      { type: 'rule', text: '动词 + 는 편이다：表示倾向于做某事', examples: '자주 먹는 편이에요（比较常吃）/ 빨리 걷는 편이에요（走路比较快）' },
+      { type: 'rule', text: '形容词 有收音+은/无收音+ㄴ 편이다', examples: '작다→작은 편이에요 / 크다→큰 편이에요 / 바쁘다→바쁜 편이에요' },
+      { type: 'rule', text: '얼마나 + 冠词形 + 지 알다/모르다', examples: '얼마나 맛있는 지 알아요?（知道有多好吃吗？）/ 얼마나 힘든 지 몰라요（不知道有多辛苦）' },
       { type: 'usage', text: '-는/은/ㄴ 편이다 用于主观、相对的评价，不是绝对事实', examples: '저는 키가 큰 편이에요（我身高偏高）— 说话者认为自己偏高，不是客观事实' },
       { type: 'usage', text: '얼마나 -는/은/ㄴ 지 用于感叹，越省略后半越有韵味', examples: '그 사람이 얼마나 친절한 지！（那个人多么亲切啊！）' },
       { type: 'note', text: 'KPOP/韩剧常用：얼마나 보고 싶은 지（有多想见你啊）', examples: '네가 얼마나 보고 싶은 지 알아?（你知道我有多想你吗？）' },
@@ -1177,38 +1177,51 @@ export const grammarCardsP9: GrammarCard[] = [
     </div>
   </div>
 </div>`,
-    step0Html: `<div class="step0-hook">
-  <div class="hook-box">
-    <div class="hook-sent"><span class="ko">저는 음식을 좀 많이 먹는 편이에요.</span><span class="zh">我饭量偏大。</span></div>
-    <div class="hook-sent"><span class="ko">이 드라마가 얼마나 재미있는 지 몰라요!</span><span class="zh">这部剧有多好看啊，真的难以形容！</span></div>
+    step0Html: `
+<div class="card-title">表示"偏向某一方"和感叹程度</div>
+<div class="card-body">-는/은/ㄴ 편이다 表示"比较……/偏……"，是一种相对委婉的说法，不是绝对的判断。</div>
+<div class="hook-box">
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说</div>
+  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+    <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">저는 매운 음식을 좋아하는 편이에요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">我比较喜欢辣的食物。</div>
+    </div>
+    <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">이 드라마는 좀 긴 편이에요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">这部剧比较长。</div>
+    </div>
   </div>
-</div>`,
+  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 这两句典型用法记住，本课基本就掌握了</div>
+</div>
+<div class="reminder-box">-는/은/ㄴ 편이다 语气比直接断言更柔和，说话者在主观评估。
+얼마나 -는/은/ㄴ 지 后面不说出程度，而是让对方去想象，情感更强烈。</div>
+`,
     compareLabel: '편이다 vs 얼마나 지',
-    compareHtml: `<div class="compare">
-  <div class="cmp-block" style="border-left:4px solid #ff7fa8">
-    <div class="cmp-title">-는/은/ㄴ 편이다</div>
-    <div class="cmp-row"><span class="badge">功能</span>相对、主观的评价（偏……）</div>
-    <div class="cmp-row"><span class="badge">동사</span>동사词干 + 는 편이다</div>
-    <div class="cmp-row"><span class="badge">형용사</span>形容词 + 은/ㄴ 편이다</div>
-    <div class="cmp-row"><span class="ko">일찍 자는 편이에요</span><span class="zh">我比较早睡</span></div>
-    <div class="cmp-row"><span class="ko">키가 큰 편이에요</span><span class="zh">身高偏高</span></div>
+    compareHtml: `
+<div class="card-title">편이다 vs 얼마나 지</div>
+<div class="card-body">-는/은/ㄴ 편이다 表示"比较……/偏……"，是一种相对委婉的说法，不是绝对的判断。</div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
+  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v">用法一</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">저는 매운 음식을 좋아하는 편이에요</span><span style="font-size:16px;color:#5a4640">我比较喜欢辣的食物。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">그 노래가 얼마나 좋은 지 몰라요</span><span style="font-size:16px;color:#5a4640">那首歌有多好听啊，真的难以形容。</span></div>
   </div>
-  <div class="cmp-block" style="border-left:4px solid #aee3d8">
-    <div class="cmp-title">얼마나 -는/은/ㄴ 지 알다/모르다</div>
-    <div class="cmp-row"><span class="badge">功能</span>表达强烈程度，难以言说</div>
-    <div class="cmp-row"><span class="badge">情感</span>感叹、抒情（KPOP 常用）</div>
-    <div class="cmp-row"><span class="ko">얼마나 보고 싶은 지 몰라요</span><span class="zh">有多想你啊</span></div>
-    <div class="cmp-row"><span class="ko">얼마나 맛있는 지 알아요?</span><span class="zh">你知道多好吃吗？</span></div>
+  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v" style="background:#aee3d8;color:#1a7a6a">用法二</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">이 드라마는 좀 긴 편이에요</span><span style="font-size:16px;color:#5a4640">这部剧比较长。</span></div>
   </div>
-</div>`,
+</div>
+<div class="reminder-box">얼마나 -는/은/ㄴ 지 后面不说出程度，而是让对方去想象，情感更强烈。</div>
+`,
     quickTable: {
       title: '-는/은/ㄴ 편이다 接续规则',
       headers: ['词性', '형태', '예시', '意思'],
       rows: [
-        [{ ko: '동사', zh: '动词' }, { ko: '-는 편이다', zh: '' }, { ko: '자주 먹는 편이에요', zh: '比较常吃' }, { ko: '', zh: '' }],
-        [{ ko: '형용사 (收음)', zh: '有尾音形容词' }, { ko: '-은 편이다', zh: '' }, { ko: '작은 편이에요', zh: '偏小' }, { ko: '', zh: '' }],
-        [{ ko: '형용사 (无收음)', zh: '无尾音形容词' }, { ko: '-ㄴ 편이다', zh: '' }, { ko: '큰 편이에요', zh: '偏大' }, { ko: '', zh: '' }],
-        [{ ko: 'ㅡ 탈락', zh: 'ㅡ 脱落' }, { ko: '-ㄴ 편이다', zh: '' }, { ko: '바쁜 편이에요', zh: '比较忙' }, { ko: '', zh: '' }],
+        [{ ko: '동사', zh: '动词' }, { ko: '-는 편이다', zh: '' }, { ko: '자주 먹는 편이에요', zh: '' }, { ko: '比较常吃', zh: '' }],
+        [{ ko: '형용사 (收音)', zh: '有尾音形容词' }, { ko: '-은 편이다', zh: '' }, { ko: '작은 편이에요', zh: '' }, { ko: '偏小', zh: '' }],
+        [{ ko: '형용사 (无收音)', zh: '无尾音形容词' }, { ko: '-ㄴ 편이다', zh: '' }, { ko: '큰 편이에요', zh: '' }, { ko: '偏大', zh: '' }],
+        [{ ko: 'ㅡ 탈락', zh: 'ㅡ 脱落' }, { ko: '-ㄴ 편이다', zh: '' }, { ko: '바쁜 편이에요', zh: '' }, { ko: '比较忙', zh: '' }],
       ],
     },
     specialQuiz: {
@@ -1226,7 +1239,7 @@ export const grammarCardsP9: GrammarCard[] = [
           prompt: '你知道这首歌有多好听吗？→ 이 노래가 얼마나 ___',
           options: ['좋은 지 알아요?', '좋은지를 알아요?', '좋을 지 알아요?', '좋는 지 알아요?'],
           answer: 0 as 0|1|2|3,
-          explanation: "얼마나 + 형용사관형형 + 지 알다，좋다 → 좋은 지",
+          explanation: "얼마나 + 形容词冠词形 + 지 알다，좋다 → 좋은 지",
         },
         {
           prompt: '我走路比较快。→ 저는 걷는 속도가 ___',
@@ -1342,7 +1355,7 @@ export const grammarCardsP9: GrammarCard[] = [
     mistakes: [
       { wrong: '집에 도착했자마자', correct: '집에 도착하자마자', note: '-자마자 前半句不加过去时 -았/었，动词直接用词干形。' },
       { wrong: '먹기를 시작했어요', correct: '먹기 시작했어요', note: '-기 시작하다 中间不加 -를，直接连接。' },
-      { wrong: '울자마자 웃었어요（逻辑矛盾但语法可以）', correct: '울다가 웃었어요', note: '-자마자 강调立刻转变，哭了就笑更自然用 -다가 表示中途转换。' },
+      { wrong: '울자마자 웃었어요（逻辑矛盾但语法可以）', correct: '울다가 웃었어요', note: '-자마자 强调立刻转变，哭了就笑更自然用 -다가 表示中途转换。' },
     ],
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
@@ -1354,39 +1367,53 @@ export const grammarCardsP9: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title">本课语法点</div></div>
     <div class="ov-block">
       <div class="badge">立刻</div>
-      <div class="ko">동사 어간 + 자마자</div>
+      <div class="ko">动词 어간 + 자마자</div>
       <div class="zh">一……就……（前后紧接，无时间间隔）</div>
     </div>
     <div class="ov-block">
       <div class="badge">开始</div>
-      <div class="ko">동사 어간 + 기 시작하다</div>
+      <div class="ko">动词 어간 + 기 시작하다</div>
       <div class="zh">开始……（进入某状态的起点）</div>
     </div>
   </div>
 </div>`,
-    step0Html: `<div class="step0-hook">
-  <div class="hook-box">
-    <div class="hook-sent"><span class="ko">집에 오자마자 쓰러져 잤어요.</span><span class="zh">一到家就倒头睡了。</span></div>
-    <div class="hook-sent"><span class="ko">한국어를 배우기 시작한 지 6개월이 됐어요.</span><span class="zh">开始学韩语已经6个月了。</span></div>
+    step0Html: `
+<div class="card-title">表示"一……就……"和"开始……"</div>
+<div class="card-body">-자마자 表示前一个动作刚结束，后一个动作立刻发生，相当于"一……就……"，强调时间紧接。</div>
+<div class="hook-box">
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说</div>
+  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+    <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">집에 도착하자마자 잠이 들었어요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">一到家就睡着了。</div>
+    </div>
+    <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">알람이 울리자마자 일어났어요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">闹钟一响就起来了。</div>
+    </div>
   </div>
-</div>`,
+  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 这两句典型用法记住，本课基本就掌握了</div>
+</div>
+<div class="reminder-box">-자마자 前半句不变时态，后半句决定整体时态。
+-기 시작하다 中 시작하다 可变时态：시작해요/시작했어요/시작할 거예요。</div>
+`,
     compareLabel: '자마자 vs 기 시작하다',
-    compareHtml: `<div class="compare">
-  <div class="cmp-block" style="border-left:4px solid #ff7fa8">
-    <div class="cmp-title">-자마자</div>
-    <div class="cmp-row"><span class="badge">意思</span>一……就……（立刻，无间隔）</div>
-    <div class="cmp-row"><span class="badge">接续</span>动词词干 + 자마자</div>
-    <div class="cmp-row"><span class="badge">时态</span>前半句不变，后半句决定时态</div>
-    <div class="cmp-row"><span class="ko">문자 받자마자 전화했어요</span><span class="zh">一收到消息就打电话了</span></div>
+    compareHtml: `
+<div class="card-title">자마자 vs 기 시작하다</div>
+<div class="card-body">-자마자 表示前一个动作刚结束，后一个动作立刻发生，相当于"一……就……"，强调时间紧接。</div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
+  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v">用法一</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">집에 도착하자마자 잠이 들었어요</span><span style="font-size:16px;color:#5a4640">一到家就睡着了。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">한국어를 배우기 시작했어요</span><span style="font-size:16px;color:#5a4640">开始学韩语了。</span></div>
   </div>
-  <div class="cmp-block" style="border-left:4px solid #aee3d8">
-    <div class="cmp-title">-기 시작하다</div>
-    <div class="cmp-row"><span class="badge">意思</span>开始……（动作/状态起点）</div>
-    <div class="cmp-row"><span class="badge">接续</span>动词词干 + 기 시작하다</div>
-    <div class="cmp-row"><span class="badge">时态</span>시작하다 本身变时态</div>
-    <div class="cmp-row"><span class="ko">비가 오기 시작했어요</span><span class="zh">开始下雨了</span></div>
+  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v" style="background:#aee3d8;color:#1a7a6a">用法二</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">알람이 울리자마자 일어났어요</span><span style="font-size:16px;color:#5a4640">闹钟一响就起来了。</span></div>
   </div>
-</div>`,
+</div>
+<div class="reminder-box">-기 시작하다 中 시작하다 可变时态：시작해요/시작했어요/시작할 거예요。</div>
+`,
     quickTable: {
       title: '-자마자 vs 기 시작하다 对比',
       headers: ['语法', '强调', '时态位置', '예시'],
@@ -1476,13 +1503,13 @@ export const grammarCardsP9: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '명사 + 덕분에（名词直接接，无需冠词形）', examples: '친구 덕분에 / 선생님 덕분에 / 노력 덕분에' },
-      { type: 'rule', text: '-은/ㄴ 덕분에 接在动词/形容词后：动词过去관형형 + 덕분에', examples: '도와준 덕분에 / 열심히 한 덕분에 / 가르쳐 준 덕분에' },
+      { type: 'rule', text: '名词 + 덕분에（名词直接接，无需冠词形）', examples: '친구 덕분에 / 선생님 덕분에 / 노력 덕분에' },
+      { type: 'rule', text: '-은/ㄴ 덕분에 接在动词/形容词后：动词过去冠词形 + 덕분에', examples: '도와준 덕분에 / 열심히 한 덕분에 / 가르쳐 준 덕분에' },
       { type: 'usage', text: '-는/은/ㄴ 지 알다/모르다 ：动词现在时用 -는지，形容词/名词用 -은/ㄴ지', examples: '가는지 알아요 / 큰지 몰라요 / 학생인지 알아요' },
       { type: 'usage', text: '疑问词 + -는/은/ㄴ 지：어떻게/어디/언제/누가/얼마나 + -는지', examples: '어디에 가는지 알아요? / 얼마인지 몰라요' },
       { type: 'note', text: '덕분에 只用于正面结果，负面结果要用 때문에', examples: '× 늦잠 잔 덕분에 지각했어요 → ○ 늦잠 잔 때문에 지각했어요' },
       { type: 'compare', text: '-는/은/ㄴ 지 알다 vs -는/은/ㄴ 줄 알다：两者都是"知道"，但 -는 줄 알다 更强调主观认为/以为', examples: '비가 오는지 알아요（知道下雨吗）vs 비가 오는 줄 알았어요（以为下雨了）' },
-      { type: 'example', text: '덕분에 常用于感谢语境，也可以做单独的回答', examples: 'A: 어떻게 좋아졌어요? B: 약 덕분에요 / 皆さんのおかげで（日本语类比）' },
+      { type: 'example', text: '덕분에 常用于感谢语境，也可以做单独的回答', examples: 'A: 어떻게 좋아졌어요? B: 약 덕분에요 / 친구들 덕분이에요（托朋友的福）' },
     ],
     cardExamples: [
       {
@@ -1564,12 +1591,12 @@ export const grammarCardsP9: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title">本课语法点</div></div>
     <div class="ov-block">
       <div class="badge">感谢</div>
-      <div class="ko">명사/동사 과거 관형형 + 덕분에</div>
+      <div class="ko">名词/动词 过去 冠词形 + 덕분에</div>
       <div class="zh">多亏……（只用于正面结果）</div>
     </div>
     <div class="ov-block">
       <div class="badge">询问</div>
-      <div class="ko">동사 어간 + 는/은/ㄴ 지 알다/모르다</div>
+      <div class="ko">动词 어간 + 는/은/ㄴ 지 알다/모르다</div>
       <div class="zh">知不知道……怎么/在哪/是否……</div>
     </div>
   </div>
@@ -1585,37 +1612,49 @@ export const grammarCardsP9: GrammarCard[] = [
     </div>
   </div>
 </div>`,
-    step0Html: `<div class="step0-hook">
-  <div class="hook-box">
-    <div class="hook-sent"><span class="ko">선생님 덕분에 시험에 합격했어요.</span><span class="zh">多亏了老师，我考试合格了。</span></div>
-    <div class="hook-sent"><span class="ko">그 사람이 얼마나 친절한 지 알아요?</span><span class="zh">你知道那个人有多亲切吗？</span></div>
+    step0Html: `
+<div class="card-title">表达"多亏了"的感谢，以及"知不知道怎么做"的询问</div>
+<div class="card-body">-은/ㄴ 덕분에 用于表示因某人/某事获益，是正面的因果。</div>
+<div class="hook-box">
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说</div>
+  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+    <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">선생님 덕분에 합격했어요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">多亏了老师，我考上了。</div>
+    </div>
+    <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">여러분 덕분에 좋은 추억이 생겼어요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">多亏大家，留下了美好的回忆。</div>
+    </div>
   </div>
-</div>`,
+  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 这两句典型用法记住，本课基本就掌握了</div>
+</div>
+`,
     compareLabel: '덕분에 vs 지 알다',
-    compareHtml: `<div class="compare">
-  <div class="cmp-block" style="border-left:4px solid #ff7fa8">
-    <div class="cmp-title">-은/ㄴ 덕분에</div>
-    <div class="cmp-row"><span class="badge">意思</span>多亏……，托……的福</div>
-    <div class="cmp-row"><span class="badge">接续</span>动词/形容词 + 은/ㄴ 덕분에 / 名词 + 덕분에</div>
-    <div class="cmp-row"><span class="badge">语气</span>感谢、正面结果</div>
-    <div class="cmp-row"><span class="ko">네 덕분에 살았어</span><span class="zh">多亏了你我才活下来</span></div>
+    compareHtml: `
+<div class="card-title">덕분에 vs 지 알다</div>
+<div class="card-body">-은/ㄴ 덕분에 用于表示因某人/某事获益，是正面的因果。</div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
+  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v">用法一</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">선생님 덕분에 합격했어요</span><span style="font-size:16px;color:#5a4640">多亏了老师，我考上了。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">한국어를 어떻게 공부하는지 알아요</span><span style="font-size:16px;color:#5a4640">你知道怎么学韩语吗？</span></div>
   </div>
-  <div class="cmp-block" style="border-left:4px solid #aee3d8">
-    <div class="cmp-title">-는/은/ㄴ 지 알다/모르다</div>
-    <div class="cmp-row"><span class="badge">意思</span>知道/不知道……（间接疑问）</div>
-    <div class="cmp-row"><span class="badge">接续</span>관형형 + 지 + 알다/모르다</div>
-    <div class="cmp-row"><span class="badge">区别</span>얼마나 + 지 = 感叹程度</div>
-    <div class="cmp-row"><span class="ko">어디 사는 지 알아요?</span><span class="zh">知道住在哪里吗？</span></div>
+  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v" style="background:#aee3d8;color:#1a7a6a">用法二</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">여러분 덕분에 좋은 추억이 생겼어요</span><span style="font-size:16px;color:#5a4640">多亏大家，留下了美好的回忆。</span></div>
   </div>
-</div>`,
+</div>
+<div class="reminder-box">注意区分两种用法的核心差异。</div>
+`,
     quickTable: {
       title: '덕분에 接续形式',
       headers: ['接在', '形式', '예시', '意思'],
       rows: [
-        [{ ko: '동사', zh: '动词' }, { ko: '-은/ㄴ 덕분에', zh: '' }, { ko: '도와준 덕분에', zh: '多亏帮了我' }, { ko: '', zh: '' }],
-        [{ ko: '형용사', zh: '形容词' }, { ko: '-은/ㄴ 덕분에', zh: '' }, { ko: '건강한 덕분에', zh: '多亏身体健康' }, { ko: '', zh: '' }],
-        [{ ko: '명사', zh: '名词' }, { ko: '명사 + 덕분에', zh: '' }, { ko: '선생님 덕분에', zh: '多亏了老师' }, { ko: '', zh: '' }],
-        [{ ko: '간접의문', zh: '间接疑问' }, { ko: '-는/은/ㄴ 지 알다', zh: '' }, { ko: '뭐 먹는 지 알아요?', zh: '知道吃什么吗？' }, { ko: '', zh: '' }],
+        [{ ko: '동사', zh: '动词' }, { ko: '-은/ㄴ 덕분에', zh: '' }, { ko: '도와준 덕분에', zh: '' }, { ko: '多亏帮了我', zh: '' }],
+        [{ ko: '형용사', zh: '形容词' }, { ko: '-은/ㄴ 덕분에', zh: '' }, { ko: '건강한 덕분에', zh: '' }, { ko: '多亏身体健康', zh: '' }],
+        [{ ko: '명사', zh: '名词' }, { ko: '명사 + 덕분에', zh: '' }, { ko: '선생님 덕분에', zh: '' }, { ko: '多亏了老师', zh: '' }],
+        [{ ko: '간접의문', zh: '间接疑问' }, { ko: '-는/은/ㄴ 지 알다', zh: '' }, { ko: '뭐 먹는 지 알아요?', zh: '' }, { ko: '知道吃什么吗？', zh: '' }],
       ],
     },
     specialQuiz: {
@@ -1627,7 +1666,7 @@ export const grammarCardsP9: GrammarCard[] = [
           prompt: '多亏朋友帮忙，搬家顺利完成了。→ 친구가 ___ 이사를 잘 마쳤어요',
           options: ['도와준 덕분에', '도와주자마자', '도와주기 때문에', '도와주는 데다가'],
           answer: 0 as 0|1|2|3,
-          explanation: "동사관형형 + 덕분에 = 多亏……",
+          explanation: "动词冠词形 + 덕분에 = 多亏……",
         },
         {
           prompt: '你知道他住哪里吗？→ 그 사람이 어디 사는 ___',
@@ -1697,7 +1736,7 @@ export const grammarCardsP9: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '-기(가) + 형용사：动词词干 + 기(가) + 쉽다/어렵다/힘들다/편하다', examples: '쓰기가 편해요 / 읽기가 쉬워요 / 발음하기가 어려워요' },
+      { type: 'rule', text: '-기(가) + 形容词：动词词干 + 기(가) + 쉽다/어렵다/힘들다/편하다', examples: '쓰기가 편해요 / 읽기가 쉬워요 / 발음하기가 어려워요' },
       { type: 'rule', text: '-을/ㄹ 수 있다：有收音词干 + 을 수 있다，无收音词干 + ㄹ 수 있다', examples: '먹을 수 있다 / 갈 수 있다 / 만들 수 있다' },
       { type: 'rule', text: '-을/ㄹ 수 없다：有收音词干 + 을 수 없다，无收音词干 + ㄹ 수 없다', examples: '먹을 수 없다 / 갈 수 없다 / 만들 수 없다' },
       { type: 'usage', text: '-기가 中的 가 可省略，가 存在时语气更正式/书面', examples: '먹기 쉬워요 = 먹기가 쉬워요（口语常省）' },
@@ -1761,12 +1800,12 @@ export const grammarCardsP9: GrammarCard[] = [
       {
         wrong: '이 문제는 어렵기',
         correct: '이 문제는 풀기가 어려워요',
-        note: '-기가 후에 必须接形容词，不能单独结句',
+        note: '-기가 之后 必须接形容词，不能单独结句',
       },
       {
-        wrong: '갈 수가 없다',
-        correct: '갈 수 없다 / 갈 수가 없다（两者均可，但가 是强调用法）',
-        note: '갈 수가 없다 和 갈 수 없다 都正确，가 只是添加强调语感',
+        wrong: '갈 수를 없다',
+        correct: '갈 수가 없다 / 갈 수 없다',
+        note: '수 后面可以用 가 强调，但不能用 을/를。를 是宾格助词，수 不是宾语而是依存名词。',
       },
       {
         wrong: '쓰기는 어렵지 않지만 말하기는 어렵기 있어요',
@@ -1784,12 +1823,12 @@ export const grammarCardsP9: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title">本课语法点</div></div>
     <div class="ov-block">
       <div class="badge">难易</div>
-      <div class="ko">동사 어간 + 기(가) + 쉽다/어렵다/힘들다</div>
+      <div class="ko">动词 어간 + 기(가) + 쉽다/어렵다/힘들다</div>
       <div class="zh">做……容易/难/累（名词化后接形容词）</div>
     </div>
     <div class="ov-block">
       <div class="badge">能力</div>
-      <div class="ko">동사 어간 + 을/ㄹ 수 있다/없다</div>
+      <div class="ko">动词 어간 + 을/ㄹ 수 있다/없다</div>
       <div class="zh">能/不能做……（能力、可能性）</div>
     </div>
   </div>
@@ -1801,51 +1840,61 @@ export const grammarCardsP9: GrammarCard[] = [
     </div>
   </div>
 </div>`,
-    step0Html: `<div class="step0-hook">
-  <div class="hook-box">
-    <div class="hook-sent"><span class="ko">이 문제는 풀기가 너무 어려워요.</span><span class="zh">这道题解起来太难了。</span></div>
-    <div class="hook-sent"><span class="ko">저는 매운 음식을 먹을 수 없어요.</span><span class="zh">我不能吃辣的食物。</span></div>
+    step0Html: `
+<div class="card-title">用名词化表达难易程度，用"수 있다/없다"表示能力或可能性</div>
+<div class="card-body">-기(가) 쉽다/어렵다/힘들다 把动词变成名词，然后接形容词来描述难易。</div>
+<div class="hook-box">
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说</div>
+  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+    <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">한국어는 배우기가 어렵지 않아요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">韩语学起来并不难。</div>
+    </div>
+    <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">이 음식은 먹기가 좀 힘들어요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">这道菜吃起来有点难。</div>
+    </div>
   </div>
-</div>`,
+  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 这两句典型用法记住，本课基本就掌握了</div>
+</div>
+`,
     compareLabel: '-기(가) vs 수 있다/없다',
-    compareHtml: `<div class="compare">
-  <div class="cmp-block" style="border-left:4px solid #ff7fa8">
-    <div class="cmp-title">-기(가) + 형용사</div>
-    <div class="cmp-row"><span class="badge">意思</span>做……起来（感受评价）</div>
-    <div class="cmp-row"><span class="badge">接续</span>动词词干 + 기 + 형용사</div>
-    <div class="cmp-row"><span class="badge">가</span>가 可省略，口语常省</div>
-    <div class="cmp-row"><span class="ko">먹기(가) 좋아요</span><span class="zh">吃起来很好</span></div>
-    <div class="cmp-row"><span class="ko">말하기(가) 어려워요</span><span class="zh">说起来很难</span></div>
+    compareHtml: `
+<div class="card-title">-기(가) vs 수 있다/없다</div>
+<div class="card-body">-기(가) 쉽다/어렵다/힘들다 把动词变成名词，然后接形容词来描述难易。</div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
+  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v">用法一</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">한국어는 배우기가 어렵지 않아요</span><span style="font-size:16px;color:#5a4640">韩语学起来并不难。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">저는 수영을 할 수 있어요</span><span style="font-size:16px;color:#5a4640">我会游泳。</span></div>
   </div>
-  <div class="cmp-block" style="border-left:4px solid #aee3d8">
-    <div class="cmp-title">-을/ㄹ 수 있다/없다</div>
-    <div class="cmp-row"><span class="badge">意思</span>能/不能，可以/不可以</div>
-    <div class="cmp-row"><span class="badge">接续</span>动词词干 + 을/ㄹ 수 있다/없다</div>
-    <div class="cmp-row"><span class="badge">否定</span>없다 = 不能/不会</div>
-    <div class="cmp-row"><span class="ko">운전할 수 있어요</span><span class="zh">会开车</span></div>
-    <div class="cmp-row"><span class="ko">오늘은 갈 수 없어요</span><span class="zh">今天没办法去</span></div>
+  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v" style="background:#aee3d8;color:#1a7a6a">用法二</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">이 음식은 먹기가 좀 힘들어요</span><span style="font-size:16px;color:#5a4640">这道菜吃起来有点难。</span></div>
   </div>
-</div>`,
+</div>
+<div class="reminder-box">注意区分两种用法的核心差异。</div>
+`,
     quickTable: {
       title: '-을/ㄹ 수 있다/없다 接续',
       headers: ['词干末音', '形式', '예시', '意思'],
       rows: [
-        [{ ko: '有收音', zh: '' }, { ko: '-을 수 있다', zh: '' }, { ko: '먹을 수 있어요', zh: '能吃' }, { ko: '', zh: '' }],
-        [{ ko: '无收音/ㄹ', zh: '' }, { ko: '-ㄹ 수 있다', zh: '' }, { ko: '갈 수 있어요', zh: '能去' }, { ko: '', zh: '' }],
-        [{ ko: '有收音', zh: '' }, { ko: '-을 수 없다', zh: '' }, { ko: '읽을 수 없어요', zh: '不能读' }, { ko: '', zh: '' }],
-        [{ ko: '无收音/ㄹ', zh: '' }, { ko: '-ㄹ 수 없다', zh: '' }, { ko: '볼 수 없어요', zh: '不能看' }, { ko: '', zh: '' }],
+        [{ ko: '有收音', zh: '' }, { ko: '-을 수 있다', zh: '' }, { ko: '먹을 수 있어요', zh: '' }, { ko: '能吃', zh: '' }],
+        [{ ko: '无收音/ㄹ', zh: '' }, { ko: '-ㄹ 수 있다', zh: '' }, { ko: '갈 수 있어요', zh: '' }, { ko: '能去', zh: '' }],
+        [{ ko: '有收音', zh: '' }, { ko: '-을 수 없다', zh: '' }, { ko: '읽을 수 없어요', zh: '' }, { ko: '不能读', zh: '' }],
+        [{ ko: '无收音/ㄹ', zh: '' }, { ko: '-ㄹ 수 없다', zh: '' }, { ko: '볼 수 없어요', zh: '' }, { ko: '不能看', zh: '' }],
       ],
     },
     specialQuiz: {
       type: 'fill',
-      title: "-기(가) + 형용사, -을/ㄹ 수 있다/없다",
+      title: "-기(가) + 形容词, -을/ㄹ 수 있다/없다",
       body: "测试对两个语法点的掌握",
       questions: [
         {
           prompt: '这道菜吃起来很辣。→ 이 음식은 먹기가 ___',
           options: ['매운 편이에요', '맵자마자요', '매워요', '매울 수 있어요'],
           answer: 2 as 0|1|2|3,
-          explanation: "동사 + 기(가) + 형용사，感受评价",
+          explanation: "动词 + 기(가) + 形容词，感受评价",
         },
         {
           prompt: '我会游泳。→ 저는 수영을 ___',
@@ -1860,7 +1909,7 @@ export const grammarCardsP9: GrammarCard[] = [
           explanation: "-을/ㄹ 수 없다 = 不能",
         },
         {
-          prompt: '-기(가) + 형용사 中，가 的作用是？',
+          prompt: '-기(가) + 形容词 中，가 的作用是？',
           options: ['主格助词，可省略', '宾格助词，必须保留', '方向助词', '话题助词'],
           answer: 0 as 0|1|2|3,
           explanation: "-기(가) 中 가 是主格助词，可省略",
@@ -1898,7 +1947,7 @@ export const grammarCardsP9: GrammarCard[] = [
         { prompt: '一到家就洗澡了，用 -자마자', options: ['집에 오면서 샤워했어요', '집에 온 후에 샤워했어요', '집에 오자마자 샤워했어요', '집에 오고 나서 샤워했어요'], answer: 2, explanation: '-자마자 表示前一动作结束立刻进行后一动作' },
         { prompt: '多亏朋友找到了工作，用 덕분에', options: ['친구 때문에 취직했어요', '친구가 있어서 취직했어요', '친구한테서 취직했어요', '친구 덕분에 취직했어요'], answer: 3, explanation: 'N + 덕분에 表示正面受益因果' },
         { prompt: '你知道几点开始吗？用 -는지 알다', options: ['몇 시에 시작하는지 알아요', '몇 시에 시작하지 알아요', '몇 시에 시작할지 알아요', '몇 시 시작하는지 알아요'], answer: 0, explanation: '动词 + 는지 알다，疑问词 몇 시에 放前面' },
-        { prompt: '我会弹吉他，用 -을 수 있다', options: ['기타를 치기가 있어요', '기타를 칠 수 있을게요', '기타를 칠 수 있어요', '기타를 칠 수 있겠어요'], answer: 2, explanation: '치다 → 칠 수 있어요（无收음 + ㄹ 수 있다）' },
+        { prompt: '我会弹吉他，用 -을 수 있다', options: ['기타를 치기가 있어요', '기타를 칠 수 있을게요', '기타를 칠 수 있어요', '기타를 칠 수 있겠어요'], answer: 2, explanation: '치다 → 칠 수 있어요（无收音 + ㄹ 수 있다）' },
       ],
     },
     overviewHtml: `<div class="overview">

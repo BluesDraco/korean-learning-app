@@ -8,8 +8,8 @@ export const grammarCardsP12: GrammarCard[] = [
     title: '-을/ㄹ 테니까, -(이)든지',
     whatItDoes: '表示"我会……所以你……"和"不管……都……"',
     whatItDoesBody: '-을/ㄹ 테니까 表示说话人自己的意图或推测作为前提，让对方据此采取行动，相当于"我会……，所以你……"。\n-(이)든지 表示"不管是哪个都行"，与 -거나 类似但更强调任何情况都可以，后常接 괜찮다/좋다/상관없다。',
-    structureNote: '-을/ㄹ 테니까：동사 词干 + -을/ㄹ 테니까（有收音+을，无收音/ㄹ+ㄹ）\n-(이)든지：명사 + (이)든지，동사 + -든지',
-    rulesNote: '-을/ㄹ 테니까 의 테 는 의지/추측의 의존명사 터 의 관형형에서 왔으며，주어는 반드시 1인칭（나/우리）。\n-(이)든지 는 두 개 이상 나열할 때：A든지 B든지 형태로 사용。',
+    structureNote: '-을/ㄹ 테니까：动词 词干 + -을/ㄹ 테니까（有收音+을，无收音/ㄹ+ㄹ）\n-(이)든지：名词 + (이)든지，动词 + -든지',
+    rulesNote: '-을/ㄹ 테니까 的 테 来源于表意志/推测的依存名词 터 的冠词形，表意志时主语必须是第一人称（나/우리）。表推测时无此限制。\n-(이)든지 列出两个以上时：A든지 B든지 的形式。',
     structures: [
       {
         ko: '제가 준비할 테니까 걱정하지 마세요',
@@ -48,11 +48,11 @@ export const grammarCardsP12: GrammarCard[] = [
     ],
     connectionRules: [
       { type: 'rule', text: '-을/ㄹ 테니까：有收音词干 + -을 테니까，无收音/ㄹ词干 + -ㄹ 테니까', examples: '먹다→먹을 테니까 / 가다→갈 테니까 / 만들다→만들 테니까' },
-      { type: 'rule', text: '-(이)든지：명사 有收音 + 이든지，无收音 + 든지', examples: '학생이든지 / 의사든지 / 뭐든지 / 어디든지 / 누구든지' },
-      { type: 'rule', text: '동사 + -든지：词干 + -든지（表示无论做什么动作都行）', examples: '가든지 오든지 / 먹든지 말든지 / 자든지 깨든지' },
-      { type: 'usage', text: '-을/ㄹ 테니까 后句常接命令/请求/제안，前句主语必须是 1인칭', examples: '제가 할 테니까 쉬세요 / 내가 낼 테니까 신경 쓰지 마' },
-      { type: 'usage', text: '-(이)든지 상관없다/괜찮다 와 자주 결합', examples: '어디든지 괜찮아요 / 누구든지 상관없어요 / 뭐든지 좋아요' },
-      { type: 'note', text: '-을/ㄹ 테니까 의 테 는 의지（~할 테니까）와 강한 추측（~일 테니까）의 두 가지 의미', examples: '의지: 내가 운전할 테니까 걱정 마（我来开车）/ 추측: 거기 많이 추울 테니까 따뜻하게 입어요（那里一定很冷）' },
+      { type: 'rule', text: '-(이)든지：名词 有收音 + 이든지，无收音 + 든지', examples: '학생이든지 / 의사든지 / 뭐든지 / 어디든지 / 누구든지' },
+      { type: 'rule', text: '动词 + -든지：词干 + -든지（表示无论做什么动作都行）', examples: '가든지 오든지 / 먹든지 말든지 / 자든지 깨든지' },
+      { type: 'usage', text: '-을/ㄹ 테니까 后句常接命令/请求/建议，意志用法中前句主语必须是第一人称，推测用法无此限制', examples: '제가 할 테니까 쉬세요 / 내가 낼 테니까 신경 쓰지 마' },
+      { type: 'usage', text: '-(이)든지 常与 상관없다/괜찮다 搭配', examples: '어디든지 괜찮아요 / 누구든지 상관없어요 / 뭐든지 좋아요' },
+      { type: 'note', text: '-을/ㄹ 테니까 的 테 有意志（~할 테니까）和强推测（~일 테니까）两种含义', examples: '意志: 내가 운전할 테니까 걱정 마（我来开车）/ 推测: 거기 많이 추울 테니까 따뜻하게 입어요（那里一定很冷）' },
       { type: 'compare', text: '-을/ㄹ 테니까 vs -(으)니까：前者强调说话人意图，后者陈述客观原因', examples: '내가 살 테니까 골라（我来买，你选）vs 비가 오니까 우산 챙겨（因为下雨，带伞）' },
     ],
     cardExamples: [
@@ -102,14 +102,14 @@ export const grammarCardsP12: GrammarCard[] = [
       { icon: '🎵', context: 'KPOP 粉丝', ko: '뭐든지 들어요. 그 그룹 노래라면 다 좋아요.', zh: '什么都听，只要是那个组合的歌都喜欢。' },
       { icon: '📅', context: '约时间', ko: '언제든지 괜찮으니까 편한 때 연락해 주세요.', zh: '随时都可以，方便的时候联系我。' },
       { icon: '🚗', context: '出行安排', ko: '제가 운전할 테니까 걱정하지 마세요.', zh: '我来开车，不用担心。' },
-      { icon: '💬', context: '강한 추측', ko: '거기 사람이 많을 테니까 일찍 가는 게 좋겠어요.', zh: '那里一定很多人，最好早点去。' },
+      { icon: '💬', context: '强推测', ko: '거기 사람이 많을 테니까 일찍 가는 게 좋겠어요.', zh: '那里一定很多人，最好早点去。' },
       { icon: '🏪', context: '购物场景', ko: 'A: 뭐 먹을까요? B: 뭐든지 좋아요.', zh: 'A：吃什么？B：什么都好。' },
     ],
     mistakes: [
-      { wrong: '친구가 올 테니까 기다려요（3인칭 주어 + -을 테니까）', correct: '친구가 올 거니까 기다려요 또는 제가 기다릴 테니까 먼저 가세요', note: '-을/ㄹ 테니까 의 앞절 주어는 반드시 1인칭（나/우리）。3인칭에는 -을 거니까 사용。' },
-      { wrong: '뭐이든지 먹어요（无收音名词 + 이든지）', correct: '뭐든지 먹어요', note: '뭐 无收音 → 뭐든지（이든지 는 有收音 명사에만）。' },
-      { wrong: '먹을 테니까 먹어요（前后主语相同，意思重复）', correct: '먹을 테니까 기다려요 / 먹을 거니까 같이 먹어요', note: '-을 테니까 는 前后 주어가 다를 때 자연스럽다. 같은 주어면 어색。' },
-      { wrong: '갈 테니까 갔어요（过去时 + 테니까）', correct: '갈 테니까 기다리세요（现在/将来）', note: '-을/ㄹ 테니까 는 미래 의지/추측에 사용，과거형과 결합하지 않는다。' },
+      { wrong: '친구가 올 테니까 기다려요（第三人称主语 + -을 테니까）', correct: '친구가 올 거니까 기다려요 / 제가 기다릴 테니까 먼저 가세요', note: '意志用法中，前句主语必须是第一人称（나/우리）。推测用法不受此限（如 추울 테니까 따뜻하게 입어요）。' },
+      { wrong: '뭐이든지 먹어요（无收音名词 + 이든지）', correct: '뭐든지 먹어요', note: '뭐 无收音 → 뭐든지。이든지 仅用于有收音名词。' },
+      { wrong: '먹을 테니까 먹어요（前后主语相同，意思重复）', correct: '먹을 테니까 기다려요 / 먹을 거니까 같이 먹어요', note: '-을 테니까 前后主语不同时较自然，相同主语时不自然。' },
+      { wrong: '갈 테니까 갔어요（过去时 + 테니까）', correct: '갈 테니까 기다리세요', note: '-을/ㄹ 테니까 用于将来意图/推测，不能与过去时结合。' },
     ],
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
@@ -121,46 +121,60 @@ export const grammarCardsP12: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title">本课语法点</div></div>
     <div class="ov-block">
       <div class="badge">意图/推测前提</div>
-      <div class="ko">동사 词干 + -을/ㄹ 테니까</div>
+      <div class="ko">动词 词干 + -을/ㄹ 테니까</div>
       <div class="zh">我会……，所以你……</div>
     </div>
     <div class="ov-block">
       <div class="badge">任意选择</div>
-      <div class="ko">명사/동사 + -(이)든지</div>
+      <div class="ko">名词/动词 + -(이)든지</div>
       <div class="zh">不管哪个都……</div>
     </div>
   </div>
 </div>`,
-    step0Html: `<div class="step0-hook">
-  <div class="hook-box">
-    <div class="hook-sent"><span class="ko">제가 준비할 테니까 걱정하지 마세요.</span><span class="zh">我来准备，请不要担心。</span></div>
-    <div class="hook-sent"><span class="ko">언제든지 연락해도 돼요.</span><span class="zh">随时联系都可以。</span></div>
+    step0Html: `
+<div class="card-title">表示"我会……所以你……"和"不管……都……"</div>
+<div class="card-body">-을/ㄹ 테니까 表示说话人自己的意图或推测作为前提，让对方据此采取行动，相当于"我会……，所以你……"。</div>
+<div class="hook-box">
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说</div>
+  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+    <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">제가 준비할 테니까 걱정하지 마세요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">我来准备，请不要担心。</div>
+    </div>
+    <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">제가 먼저 갈 테니까 천천히 오세요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">我先走，你慢慢来。</div>
+    </div>
   </div>
-</div>`,
+  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 这两句典型用法记住，本课基本就掌握了</div>
+</div>
+<div class="reminder-box">-을/ㄹ 테니까 的 테 来源于表意志/推测的依存名词 터 的冠词形，表意志时主语必须是第一人称（나/우리），表推测时无此限制。
+-(이)든지 列出两个以上时：A든지 B든지 的形式。</div>
+`,
     compareLabel: '-을 테니까 vs -(으)니까',
-    compareHtml: `<div class="compare">
-  <div class="cmp-block" style="border-left:4px solid #ff7fa8">
-    <div class="cmp-title">-을/ㄹ 테니까</div>
-    <div class="cmp-row"><span class="badge">주어</span>반드시 1인칭（나/우리）</div>
-    <div class="cmp-row"><span class="badge">意思</span>我会……，所以你……</div>
-    <div class="cmp-row"><span class="badge">后句</span>命令/请求/제안</div>
-    <div class="cmp-row"><span class="ko">제가 살 테니까 골라요</span><span class="zh">我来买，你选</span></div>
+    compareHtml: `
+<div class="card-title">-을 테니까 vs -(으)니까</div>
+<div class="card-body">-을/ㄹ 테니까 表示说话人自己的意图或推测作为前提，让对方据此采取行动，相当于"我会……，所以你……"。</div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
+  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v">用法一</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">제가 준비할 테니까 걱정하지 마세요</span><span style="font-size:16px;color:#5a4640">我来准备，请不要担心。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">뭐든지 다 잘 먹어요</span><span style="font-size:16px;color:#5a4640">什么都吃，不挑食。</span></div>
   </div>
-  <div class="cmp-block" style="border-left:4px solid #aee3d8">
-    <div class="cmp-title">-(으)니까</div>
-    <div class="cmp-row"><span class="badge">주어</span>任意人称</div>
-    <div class="cmp-row"><span class="badge">意思</span>因为……所以……</div>
-    <div class="cmp-row"><span class="badge">后句</span>命令/陈述均可</div>
-    <div class="cmp-row"><span class="ko">비가 오니까 우산 써요</span><span class="zh">因为下雨，用伞</span></div>
+  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v" style="background:#aee3d8;color:#1a7a6a">用法二</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">제가 먼저 갈 테니까 천천히 오세요</span><span style="font-size:16px;color:#5a4640">我先走，你慢慢来。</span></div>
   </div>
-</div>`,
+</div>
+<div class="reminder-box">-(이)든지 列出两个以上时：A든지 B든지 的形式。</div>
+`,
     quickTable: {
       title: '-을/ㄹ 테니까 接续形式',
-      headers: ['词干末音', '形式', '예시', '意思'],
+      headers: ['词干末音', '形式', '例句', '意思'],
       rows: [
-        [{ ko: '有收音', zh: '' }, { ko: '-을 테니까', zh: '' }, { ko: '먹을 테니까', zh: '我会吃，所以……' }, { ko: '', zh: '' }],
-        [{ ko: '无收音/ㄹ', zh: '' }, { ko: '-ㄹ 테니까', zh: '' }, { ko: '갈 테니까', zh: '我会去，所以……' }, { ko: '', zh: '' }],
-        [{ ko: '추측용법', zh: '推测' }, { ko: '명사+일 테니까', zh: '' }, { ko: '추울 테니까', zh: '一定会很冷，所以……' }, { ko: '', zh: '' }],
+        [{ ko: '有收音', zh: '' }, { ko: '-을 테니까', zh: '' }, { ko: '먹을 테니까', zh: '' }, { ko: '我会吃，所以……', zh: '' }],
+        [{ ko: '无收音/ㄹ', zh: '' }, { ko: '-ㄹ 테니까', zh: '' }, { ko: '갈 테니까', zh: '' }, { ko: '我会去，所以……', zh: '' }],
+        [{ ko: '推测用法', zh: '推测' }, { ko: '名词+일 테니까', zh: '' }, { ko: '추울 테니까', zh: '' }, { ko: '一定会很冷，所以……', zh: '' }],
       ],
     },
     specialQuiz: {
@@ -172,7 +186,7 @@ export const grammarCardsP12: GrammarCard[] = [
           prompt: '我来买单，你不用担心。→ 제가 낼 테니까 ___',
           options: ['걱정했어요', '걱정입니다', '걱정하지 마세요', '걱정하니까요'],
           answer: 2 as 0|1|2|3,
-          explanation: '-을/ㄹ 테니까 후절에 命令/부탁',
+          explanation: '-을/ㄹ 테니까 后句接命令/请求',
         },
         {
           prompt: '什么时候都可以。→ 언제___ 괜찮아요',
@@ -182,9 +196,9 @@ export const grammarCardsP12: GrammarCard[] = [
         },
         {
           prompt: '-을/ㄹ 테니까 的前句主语必须是？',
-          options: ['3인칭', '1인칭（나/우리）', '任何人称', '2인칭（너/당신）'],
+          options: ['第三人称', '第一人称（나/우리）', '任何人称', '第二人称（너/당신）'],
           answer: 1 as 0|1|2|3,
-          explanation: '-을/ㄹ 테니까 앞절 주어는 반드시 1인칭',
+          explanation: '-을/ㄹ 테니까 表意志时前句主语必须是第一人称',
         },
         {
           prompt: '我先去占位。→ 제가 먼저 자리를 맡___ 테니까 기다려요',
@@ -205,7 +219,7 @@ export const grammarCardsP12: GrammarCard[] = [
     whatItDoes: '表示"打算做某事"和"去/来做某事"',
     whatItDoesBody: '-(으)려고 하다 表示打算或意图，相当于"打算……/想要……"，强调说话人的主观意图。\n-(으)려고 가다/오다 表示为了某个目的而去/来，相当于"去/来做……"。\n两者都用 -(으)려고 作为前半，区别在于后接续的 动词不同。',
     structureNote: '-(으)려고：有收音词干 + -으려고，无收音/ㄹ词干 + -려고\n-(으)려고 하다：打算……\n-(으)려고 가다/오다：去/来做……',
-    rulesNote: '-(으)려고 하다 의 주어는 보통 의지를 가진 사람（나/우리/그 사람 등）。\n-(으)려고 가다/오다 는 목적을 나타내므로，이동사 가다/오다 와 결합。\n-러 가다/오다 와 의미가 같지만 -(으)려고 가다/오다 는 의도성이 더 강조됨。',
+    rulesNote: '-(으)려고 하다 的主语通常是有意志的人（나/우리/그 사람 등）。\n-(으)려고 가다/오다 表示目的，移动动词 가다/오다 与之搭配。\n-러 가다/오다 含义相同但 -(으)려고 가다/오다 意图性更强。',
     structures: [
       {
         ko: '내년에 한국에 유학 가려고 해요',
@@ -251,9 +265,9 @@ export const grammarCardsP12: GrammarCard[] = [
       { type: 'rule', text: '-(으)려고：有收音词干 + -으려고，无收音/ㄹ词干 + -려고', examples: '먹다→먹으려고 / 가다→가려고 / 살다→살려고 / 만들다→만들려고' },
       { type: 'rule', text: '-(으)려고 하다：表示打算/意图（앞뒤 주어 동일）', examples: '뭐 하려고 해요?（你打算做什么？）/ 한국에 가려고 해요（打算去韩国）' },
       { type: 'rule', text: '-(으)려고 가다/오다：表示为了某目的而移动', examples: '밥 먹으려고 식당에 갔어요 / 친구 만나려고 왔어요' },
-      { type: 'usage', text: '-(으)려고 앞에는 의지동사（의도적으로 하는 행동）가 와야 함，상태동사 불가', examples: '알려고 해요（× 알다는 상태）→ 알아보려고 해요（✓）' },
-      { type: 'usage', text: '-(으)려고 의 前后 주어는 반드시 동일인', examples: '제가 먹으려고 샀어요（○）/ 친구가 먹으려고 제가 샀어요（× 주어 불일치）' },
-      { type: 'note', text: '-러 가다/오다 와 -(으)려고 가다/오다 는 의미상 유사，-(으)려고 쪽이 구어체에 더 자유롭게 쓰임', examples: '밥 먹으러 갔어요 = 밥 먹으려고 갔어요' },
+      { type: 'usage', text: '-(으)려고 前必须是意志动词（有意图的动作），状态动词不可', examples: '알려고 해요（× 알다는 상태）→ 알아보려고 해요（✓）' },
+      { type: 'usage', text: '-(으)려고 的前后主语必须相同', examples: '제가 먹으려고 샀어요（○）/ 친구가 먹으려고 제가 샀어요（× 主语不一致）' },
+      { type: 'note', text: '-러 가다/오다 与 -(으)려고 가다/오다 含义相近，-(으)려고 在口语中用得更自由', examples: '밥 먹으러 갔어요 = 밥 먹으려고 갔어요' },
       { type: 'compare', text: '-(으)려고 하다 vs -(으)ㄹ 거예요：前者强调意图，后者更偏向计划/预测', examples: '가려고 해요（我有意去）vs 갈 거예요（我会去/打算去）' },
     ],
     cardExamples: [
@@ -300,17 +314,17 @@ export const grammarCardsP12: GrammarCard[] = [
     ],
     scenarios: [
       { icon: '🎓', context: '学习目标', ko: '한국어를 잘 하려고 매일 연습해요.', zh: '为了学好韩语，每天练习。' },
-      { icon: '🎵', context: 'KPOP 팬', ko: '콘서트 표를 사려고 아침 일찍 일어났어요.', zh: '为了买演唱会票，早早起床了。' },
+      { icon: '🎵', context: 'KPOP 粉丝', ko: '콘서트 표를 사려고 아침 일찍 일어났어요.', zh: '为了买演唱会票，早早起床了。' },
       { icon: '✈️', context: '旅行计划', ko: '한국 여행을 가려고 돈을 모으고 있어요.', zh: '为了去韩国旅行，正在攒钱。' },
       { icon: '🍜', context: '目的移动', ko: '유명한 냉면을 먹으려고 부산까지 갔어요.', zh: '为了吃著名的冷面，特地去了釜山。' },
-      { icon: '📚', context: '시험 준비', ko: 'TOPIK 시험을 보려고 열심히 준비 중이에요.', zh: '为了参加TOPIK考试，正在努力准备中。' },
-      { icon: '💬', context: '일상 대화', ko: 'A: 왜 왔어요? B: 선생님 만나려고 왔어요.', zh: 'A：你来干什么？B：来见老师的。' },
+      { icon: '📚', context: '考试准备', ko: 'TOPIK 시험을 보려고 열심히 준비 중이에요.', zh: '为了参加TOPIK考试，正在努力准备中。' },
+      { icon: '💬', context: '日常对话', ko: 'A: 왜 왔어요? B: 선생님 만나려고 왔어요.', zh: 'A：你来干什么？B：来见老师的。' },
     ],
     mistakes: [
       { wrong: '먹을려고 해요（不必要的 을 + 려고）', correct: '먹으려고 해요', note: '有收音词干 + -으려고，不是 -을려고。먹다 → 먹으려고（不是 먹을려고）。' },
-      { wrong: '알려고 해요（상태동사 + -(으)려고）', correct: '알아보려고 해요 또는 이해하려고 해요', note: '알다 는 상태동사，不能用 -(으)려고。需换用行为动词。' },
-      { wrong: '친구가 오려고 제가 청소했어요（前后主语不同）', correct: '친구가 오기 때문에 제가 청소했어요', note: '-(으)려고 前后 주어는 반드시 동일인。主语不同时用 -기 때문에 等。' },
-      { wrong: '가려고 갔어요（앞뒤 동사 同一 去做去）', correct: '밥 먹으려고 갔어요', note: '-(으)려고 앞에 이동 동사와 같은 동사가 오면 어색。目的动词要不同于移动动词。' },
+      { wrong: '알려고 해요（状态动词 + -(으)려고）', correct: '알아보려고 해요 / 이해하려고 해요', note: '알다 是状态动词，不能用 -(으)려고，需换用行为动词。' },
+      { wrong: '친구가 오려고 제가 청소했어요（前后主语不同）', correct: '친구가 오기 때문에 제가 청소했어요', note: '-(으)려고 前后主语必须相同。主语不同时用 -기 때문에 等。' },
+      { wrong: '가려고 갔어요（前后动词重复）', correct: '밥 먹으려고 갔어요', note: '-(으)려고 前若用与移动动词相同的动词不自然。目的动词应不同于移动动词。' },
     ],
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
@@ -322,44 +336,61 @@ export const grammarCardsP12: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title">本课语法点</div></div>
     <div class="ov-block">
       <div class="badge">打算/意图</div>
-      <div class="ko">동사 词干 + -(으)려고 하다</div>
+      <div class="ko">动词 词干 + -(으)려고 하다</div>
       <div class="zh">한국에 가려고 해요</div>
     </div>
     <div class="ov-block">
       <div class="badge">目的移动</div>
-      <div class="ko">동사 词干 + -(으)려고 가다/오다</div>
+      <div class="ko">动词 词干 + -(으)려고 가다/오다</div>
       <div class="zh">밥 먹으려고 갔어요</div>
     </div>
   </div>
 </div>`,
-    step0Html: `<div class="step0-hook">
-  <div class="hook-box">
-    <div class="hook-sent"><span class="ko">내년에 한국에 유학 가려고 해요.</span><span class="zh">打算明年去韩国留学。</span></div>
-    <div class="hook-sent"><span class="ko">책을 빌리려고 도서관에 왔어요.</span><span class="zh">为了借书来了图书馆。</span></div>
+    step0Html: `
+<div class="card-title">表示"打算做某事"和"去/来做某事"</div>
+<div class="card-body">-(으)려고 하다 表示打算或意图，相当于"打算……/想要……"，强调说话人的主观意图。</div>
+<div class="hook-box">
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说</div>
+  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+    <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">내년에 한국에 유학 가려고 해요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">打算明年去韩国留学。</div>
+    </div>
+    <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">새 옷을 사려고 백화점에 갔어요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">为了买新衣服，去了百货商店。</div>
+    </div>
   </div>
-</div>`,
+  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 这两句典型用法记住，本课基本就掌握了</div>
+</div>
+<div class="reminder-box">-(으)려고 하다 的主语通常是有意志的人（나/우리/그 사람 등）。
+-(으)려고 가다/오다 表示目的，移动动词 가다/오다 与之搭配。
+-러 가다/오다 含义相同但 -(으)려고 가다/오다 意图性更强。</div>
+`,
     compareLabel: '-(으)려고 하다 vs -ㄹ 거예요',
-    compareHtml: `<div class="compare">
-  <div class="cmp-block" style="border-left:4px solid #ff7fa8">
-    <div class="cmp-title">-(으)려고 하다</div>
-    <div class="cmp-row"><span class="badge">강조</span>意图、动机</div>
-    <div class="cmp-row"><span class="badge">语感</span>有意要做（意志性强）</div>
-    <div class="cmp-row"><span class="ko">한국에 가려고 해요</span><span class="zh">我有意去韩国</span></div>
+    compareHtml: `
+<div class="card-title">-(으)려고 하다 vs -ㄹ 거예요</div>
+<div class="card-body">-(으)려고 하다 表示打算或意图，相当于"打算……/想要……"，强调说话人的主观意图。</div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
+  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v">用法一</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">내년에 한국에 유학 가려고 해요</span><span style="font-size:16px;color:#5a4640">打算明年去韩国留学。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">한국어를 배우려고 학원에 다녀요</span><span style="font-size:16px;color:#5a4640">为了学韩语，在上补习班。</span></div>
   </div>
-  <div class="cmp-block" style="border-left:4px solid #aee3d8">
-    <div class="cmp-title">-(으)ㄹ 거예요</div>
-    <div class="cmp-row"><span class="badge">강조</span>计划、预测</div>
-    <div class="cmp-row"><span class="badge">语感</span>会去（计划性/预测）</div>
-    <div class="cmp-row"><span class="ko">한국에 갈 거예요</span><span class="zh">我会去韩国</span></div>
+  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v" style="background:#aee3d8;color:#1a7a6a">用法二</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">새 옷을 사려고 백화점에 갔어요</span><span style="font-size:16px;color:#5a4640">为了买新衣服，去了百货商店。</span></div>
   </div>
-</div>`,
+</div>
+<div class="reminder-box">-(으)려고 가다/오다 表示目的，移动动词 가다/오다 与之搭配。</div>
+`,
     quickTable: {
       title: '-(으)려고 接续形式',
-      headers: ['词干末音', '形式', '예시', '意思'],
+      headers: ['词干末音', '形式', '例句', '意思'],
       rows: [
-        [{ ko: '有收音', zh: '' }, { ko: '-으려고', zh: '' }, { ko: '먹으려고', zh: '为了吃' }, { ko: '', zh: '' }],
-        [{ ko: '无收音', zh: '' }, { ko: '-려고', zh: '' }, { ko: '가려고', zh: '为了去' }, { ko: '', zh: '' }],
-        [{ ko: 'ㄹ 词干', zh: '' }, { ko: '-려고（ㄹ不脱落）', zh: '' }, { ko: '만들려고', zh: '为了做' }, { ko: '', zh: '' }],
+        [{ ko: '有收音', zh: '' }, { ko: '-으려고', zh: '' }, { ko: '먹으려고', zh: '' }, { ko: '为了吃', zh: '' }],
+        [{ ko: '无收音', zh: '' }, { ko: '-려고', zh: '' }, { ko: '가려고', zh: '' }, { ko: '为了去', zh: '' }],
+        [{ ko: 'ㄹ 词干', zh: '' }, { ko: '-려고（ㄹ不脱落）', zh: '' }, { ko: '만들려고', zh: '' }, { ko: '为了做', zh: '' }],
       ],
     },
     specialQuiz: {
@@ -380,10 +411,10 @@ export const grammarCardsP12: GrammarCard[] = [
           explanation: '사다 无收音 → 사려고 갔어요',
         },
         {
-          prompt: '-(으)려고 前后 주어는 어때야 하나요?',
-          options: ['상관없다', '반드시 동일인', '달라야 한다', '2인칭만 가능'],
+          prompt: '-(으)려고 前后主语应该怎样？',
+          options: ['无所谓', '必须相同', '必须不同', '只能用第二人称'],
           answer: 1 as 0|1|2|3,
-          explanation: '-(으)려고 前后 주어는 반드시 동일인',
+          explanation: '-(으)려고 前后主语必须相同',
         },
         {
           prompt: '为了见朋友来了这里。→ 친구를 만나___ 여기 왔어요',
@@ -403,8 +434,8 @@ export const grammarCardsP12: GrammarCard[] = [
     title: '-(으)려고 했다, -지 그랬어(요)?',
     whatItDoes: '表示"原本打算……"和"你当时为何不……"',
     whatItDoesBody: '-(으)려고 했다 表示原本有某个意图但最终未实现，相当于"本来打算……的"，隐含实际没做到的语气。\n-지 그랬어(요)? 表示说话人建议对方当时应该做某事，含有轻微遗憾或责备语气，相当于"你那时候为什么不……呢？"。\n两者常一起出现：说明原计划→对方给出建议或遗憾。',
-    structureNote: '-(으)려고 했다：동사 词干 + -(으)려고 했다（有收音+으려고，无收音/ㄹ+려고）\n-지 그랬어(요)?：동사 词干 + -지 그랬어요?（所有词干直接+지，格式固定）',
-    rulesNote: '-(으)려고 했다 과거형表示意图未实现，若接 -는데 更自然：가려고 했는데 못 갔어요。\n-지 그랬어(요)? 의 그랬어요 는 그러다의 과거형，直译"为什么不那样做呢？"。\n두 형태 모두 후회·유감（遗憾）의 뉘앙스를 가짐。',
+    structureNote: '-(으)려고 했다：动词 词干 + -(으)려고 했다（有收音+으려고，无收音/ㄹ+려고）\n-지 그랬어(요)?：动词 词干 + -지 그랬어요?（所有词干直接+지，格式固定）',
+    rulesNote: '-(으)려고 했다 过去形表示意图未实现，若接 -는데 更自然：가려고 했는데 못 갔어요。\n-지 그랬어(요)? 中的 그랬어요 是 그러다 的过去形，直译为"为什么不那样做呢？"。\n两种形式都带有后悔/遗憾的语气。',
     structures: [
       {
         ko: '오늘 운동하려고 했는데 비가 와서 못 했어요',
@@ -444,11 +475,11 @@ export const grammarCardsP12: GrammarCard[] = [
     ],
     connectionRules: [
       { type: 'rule', text: '-(으)려고 했다：有收音词干 + -으려고 했다，无收音/ㄹ词干 + -려고 했다', examples: '먹다→먹으려고 했다 / 가다→가려고 했다 / 만들다→만들려고 했다' },
-      { type: 'rule', text: '-지 그랬어(요)?：모든 동사 词干 + -지 그랬어요?（词干不变）', examples: '가다→가지 그랬어요? / 말하다→말하지 그랬어요? / 먹다→먹지 그랬어요?' },
-      { type: 'usage', text: '-(으)려고 했는데：했다 뒤에 는데를 붙여，表示"本打算……但是……"，更口语化', examples: '자려고 했는데 잠이 안 왔어요 / 전화하려고 했는데 바빴어요' },
-      { type: 'usage', text: '-지 그랬어요? 는 상대방의 행동에 대한 가벼운 유감/충고', examples: '일찍 오지 그랬어요?（你为什么不早点来）/ 도움 요청하지 그랬어요?（你为什么不求助呢）' },
-      { type: 'note', text: '-(으)려고 했다 는 의도가 실현되지 않았음을 암시', examples: '가려고 했어요（有意但未去）vs 가려고 해요（正打算去，将来）' },
-      { type: 'note', text: '-지 그랬어요? 반말형은 -지 그랬어?，格式固定不变', examples: '그냥 먹지 그랬어?（你为啥不吃）/ 진작 말하지 그랬어?（早说不就好了）' },
+      { type: 'rule', text: '-지 그랬어(요)?：所有动词词干 + -지 그랬어요?（词干不变）', examples: '가다→가지 그랬어요? / 말하다→말하지 그랬어요? / 먹다→먹지 그랬어요?' },
+      { type: 'usage', text: '-(으)려고 했는데：在 했다 后接 -는데，表示"本打算……但是……"，更口语化', examples: '자려고 했는데 잠이 안 왔어요 / 전화하려고 했는데 바빴어요' },
+      { type: 'usage', text: '-지 그랬어요? 用于对对方行为表达轻微的遗憾或劝告', examples: '일찍 오지 그랬어요?（你为什么不早点来）/ 도움 요청하지 그랬어요?（你为什么不求助呢）' },
+      { type: 'note', text: '-(으)려고 했다 暗示意图未实现', examples: '가려고 했어요（有意但未去）vs 가려고 해요（正打算去，将来）' },
+      { type: 'note', text: '-지 그랬어요? 的平语形是 -지 그랬어?，格式固定不变', examples: '그냥 먹지 그랬어?（你为啥不吃）/ 진작 말하지 그랬어?（早说不就好了）' },
       { type: 'compare', text: '-(으)려고 했다 vs -(으)려고 하다：前者过去意图（未实现），后者当前/将来意图', examples: '가려고 했다（本打算去但没去）vs 가려고 한다（现在打算去）' },
     ],
     cardExamples: [
@@ -494,29 +525,64 @@ export const grammarCardsP12: GrammarCard[] = [
     ],
     scenarios: [
       { icon: '😅', context: '计划落空', ko: '오늘 일찍 일어나려고 했는데 알람을 못 들었어요.', zh: '今天本来打算早起，但没听到闹钟。' },
-      { icon: '🎵', context: 'KPOP 팬', ko: '콘서트에 가려고 했는데 표가 다 팔렸어요.', zh: '本来想去演唱会，但票都卖完了。' },
+      { icon: '🎵', context: 'KPOP 粉丝', ko: '콘서트에 가려고 했는데 표가 다 팔렸어요.', zh: '本来想去演唱会，但票都卖完了。' },
       { icon: '💬', context: '朋友对话', ko: 'A: 길이 막혀서 늦었어요. B: 그럼 지하철을 타지 그랬어요?', zh: 'A：堵车迟到了。B：那你为什么不坐地铁呢？' },
-      { icon: '📚', context: '학습 후회', ko: '시험 전에 더 공부하지 그랬어요.', zh: '考试前应该多学习的。' },
+      { icon: '📚', context: '学习后悔', ko: '시험 전에 더 공부하지 그랬어요.', zh: '考试前应该多学习的。' },
       { icon: '🍽️', context: '饮食场景', ko: '배고프면 먼저 먹지 그랬어요?', zh: '肚子饿的话你为什么不先吃呢？' },
       { icon: '✈️', context: '旅行计划', ko: '여행을 가려고 했는데 갑자기 일이 생겼어요.', zh: '本来打算去旅行，但突然有事了。' },
     ],
     mistakes: [
       { wrong: '가을려고 했어요（多加 을）', correct: '가려고 했어요', note: '가다 无收音词干 → 가려고（不是 가을려고），切忌多加 을。' },
-      { wrong: '먹지 그래요?（现在时）', correct: '먹지 그랬어요?（过去时）', note: '-지 그랬어요? 는 반드시 과거형（그랬어요）을 사용。现在时 그래요 不表遗憾/建议语气。' },
-      { wrong: '가려고 했는데 갔어요（前后矛盾）', correct: '가려고 했는데 못 갔어요', note: '-(으)려고 했는데 후절에는 일반적으로 의도와 다른 결과가 온다。後接못/안否定或意外情况。' },
-      { wrong: '공부하지 않지 그랬어요?', correct: '공부하지 그랬어요?', note: '-지 그랬어요? 앞에는 긍정动词词干，不需要否定形式。想表达"为什么不学习"用 공부하지 그랬어요?。' },
+      { wrong: '먹지 그래요?（现在时）', correct: '먹지 그랬어요?（过去时）', note: '-지 그랬어요? 必须用过去形（그랬어요）。现在时 그래요 不表遗憾/建议语气。' },
+      { wrong: '가려고 했는데 갔어요（前后矛盾）', correct: '가려고 했는데 못 갔어요', note: '-(으)려고 했는데 后句通常出现与意图不同的结果。后接 못/안 否定或意外情况。' },
+      { wrong: '공부하지 않지 그랬어요?', correct: '공부하지 그랬어요?', note: '-지 그랬어요? 前需用肯定动词词干，不需要否定形式。表达"为什么不学习"直接用 공부하지 그랬어요?。' },
     ],
-    overviewHtml: `<div class="overview"><div class="ov-hero"><div class="ov-hero-label">P12 · 第3课</div><div class="ov-hero-title">-(으)려고 했다, -지 그랬어(요)?</div><div class="ov-hero-sub">未实现意图与遗憾建议的表达</div></div><div class="ov-section"><div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title">本课语法点</div></div><div class="ov-block"><div class="badge">未实现意图</div><div class="ko">동사 词干 + -(으)려고 했다</div><div class="zh">本来打算……（但没做到）</div></div><div class="ov-block"><div class="badge">遗憾建议</div><div class="ko">동사 词干 + -지 그랬어(요)?</div><div class="zh">你那时候为什么不……呢？</div></div></div></div>`,
-    step0Html: `<div class="step0-hook"><div class="hook-box"><div class="hook-sent"><span class="ko">오늘 운동하려고 했는데 비가 와서 못 했어요.</span><span class="zh">本来打算运动，但下雨没能做。</span></div><div class="hook-sent"><span class="ko">그냥 전화하지 그랬어요?</span><span class="zh">你那时候为什么不直接打电话呢？</span></div></div></div>`,
+    overviewHtml: `<div class="overview"><div class="ov-hero"><div class="ov-hero-label">P12 · 第3课</div><div class="ov-hero-title">-(으)려고 했다, -지 그랬어(요)?</div><div class="ov-hero-sub">未实现意图与遗憾建议的表达</div></div><div class="ov-section"><div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title">本课语法点</div></div><div class="ov-block"><div class="badge">未实现意图</div><div class="ko">动词 词干 + -(으)려고 했다</div><div class="zh">本来打算……（但没做到）</div></div><div class="ov-block"><div class="badge">遗憾建议</div><div class="ko">动词 词干 + -지 그랬어(요)?</div><div class="zh">你那时候为什么不……呢？</div></div></div></div>`,
+    step0Html: `
+<div class="card-title">表示"原本打算……"和"你当时为何不……"</div>
+<div class="card-body">-(으)려고 했다 表示原本有某个意图但最终未实现，相当于"本来打算……的"，隐含实际没做到的语气。</div>
+<div class="hook-box">
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说</div>
+  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+    <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">오늘 운동하려고 했는데 비가 와서 못 했어요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">本来打算今天运动，但因为下雨没能做。</div>
+    </div>
+    <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">일찍 자려고 했는데 드라마를 보다가 늦게 잤어요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">本来打算早睡，但看剧看到了很晚。</div>
+    </div>
+  </div>
+  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 这两句典型用法记住，本课基本就掌握了</div>
+</div>
+<div class="reminder-box">-(으)려고 했다 过去形表示意图未实现，若接 -는데 更自然：가려고 했는데 못 갔어요。
+-지 그랬어(요)? 中的 그랬어요 是 그러다 的过去形，直译为"为什么不那样做呢？"。
+两种形式都带有后悔/遗憾的语气。</div>
+`,
     compareLabel: '-(으)려고 했다 vs -지 그랬어요?',
-    compareHtml: `<div class="compare"><div class="cmp-block" style="border-left:4px solid #ff7fa8"><div class="cmp-title">-(으)려고 했다</div><div class="cmp-row"><span class="badge">视角</span>说话人自己的意图</div><div class="cmp-row"><span class="badge">语感</span>遗憾：本来想……没做到</div><div class="cmp-row"><span class="ko">가려고 했는데 못 갔어요</span><span class="zh">本来想去但没去成</span></div></div><div class="cmp-block" style="border-left:4px solid #aee3d8"><div class="cmp-title">-지 그랬어요?</div><div class="cmp-row"><span class="badge">视角</span>建议对方当时应该做</div><div class="cmp-row"><span class="badge">语感</span>轻责：你为什么不……</div><div class="cmp-row"><span class="ko">그냥 전화하지 그랬어요?</span><span class="zh">你为什么不打电话呢</span></div></div></div>`,
+    compareHtml: `
+<div class="card-title">-(으)려고 했다 vs -지 그랬어요?</div>
+<div class="card-body">-(으)려고 했다 表示原本有某个意图但最终未实现，相当于"本来打算……的"，隐含实际没做到的语气。</div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
+  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v">用法一</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">오늘 운동하려고 했는데 비가 와서 못 했어요</span><span style="font-size:16px;color:#5a4640">本来打算今天运动，但因为下雨没能做。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">그냥 전화하지 그랬어요?</span><span style="font-size:16px;color:#5a4640">你那时候为什么不直接打电话呢？</span></div>
+  </div>
+  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v" style="background:#aee3d8;color:#1a7a6a">用法二</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">일찍 자려고 했는데 드라마를 보다가 늦게 잤어요</span><span style="font-size:16px;color:#5a4640">本来打算早睡，但看剧看到了很晚。</span></div>
+  </div>
+</div>
+<div class="reminder-box">-지 그랬어(요)? 中的 그랬어요 是 그러다 的过去形，直译为"为什么不那样做呢？"。</div>
+`,
     quickTable: {
       title: '接续形式整理',
-      headers: ['语法点', '接续', '예시', '意思'],
+      headers: ['语法点', '接续', '例句', '意思'],
       rows: [
-        [{ ko: '-(으)려고 했다', zh: '' }, { ko: '有收音+으려고 했다', zh: '' }, { ko: '먹으려고 했다', zh: '本来打算吃' }, { ko: '', zh: '' }],
-        [{ ko: '-(으)려고 했다', zh: '' }, { ko: '无收音/ㄹ+려고 했다', zh: '' }, { ko: '가려고 했다', zh: '本来打算去' }, { ko: '', zh: '' }],
-        [{ ko: '-지 그랬어요?', zh: '' }, { ko: '词干+지 그랬어요?', zh: '' }, { ko: '말하지 그랬어요?', zh: '你为什么不说呢' }, { ko: '', zh: '' }],
+        [{ ko: '-(으)려고 했다', zh: '' }, { ko: '有收音+으려고 했다', zh: '' }, { ko: '먹으려고 했다', zh: '' }, { ko: '本来打算吃', zh: '' }],
+        [{ ko: '-(으)려고 했다', zh: '' }, { ko: '无收音/ㄹ+려고 했다', zh: '' }, { ko: '가려고 했다', zh: '' }, { ko: '本来打算去', zh: '' }],
+        [{ ko: '-지 그랬어요?', zh: '' }, { ko: '词干+지 그랬어요?', zh: '' }, { ko: '말하지 그랬어요?', zh: '' }, { ko: '你为什么不说呢', zh: '' }],
       ],
     },
     specialQuiz: {
@@ -561,8 +627,8 @@ export const grammarCardsP12: GrammarCard[] = [
     title: '겸, -은/ㄴ 김에',
     whatItDoes: '表示"一举两得"和"趁着……顺便……"',
     whatItDoesBody: '겸 连接两个名词，表示同时兼顾两个目的或功能，相当于"既……又……／兼……"。\n-은/ㄴ 김에 接在过去冠词形之后，表示趁着某个已发生或正在做的事，顺便再做另一件事，相当于"趁着……，顺便……"。\n两者都传达"一石二鸟"的语感，겸 侧重并列目的，-은/ㄴ 김에 侧重借机行事。',
-    structureNote: '겸：명사 + 겸 + 명사（两个名词之间）\n-은/ㄴ 김에：동사 过去冠词形 + 김에（有收音词干+-은 김에，无收音词干+-ㄴ 김에）',
-    rulesNote: '겸 은 명사와만 결합하며，동사에 직접 붙이지 않는다。\n-은/ㄴ 김에 의 김 은 "기회/시점"을 뜻하는 의존명사。주로 이미 일어난 행동을 발판으로 추가 행동 제안 시 사용。\n-는 김에（현재진행）도 가능：청소하는 김에 정리도 해요。',
+    structureNote: '겸：名词 + 겸 + 名词（两个名词之间）\n-은/ㄴ 김에：动词 过去冠词形 + 김에（有收音词干+-은 김에，无收音词干+-ㄴ 김에）',
+    rulesNote: '겸 只与名词结合，不能直接附加在动词上。\n-은/ㄴ 김에 的 김 是表示"机会/时机"的依存名词。主要用于以已经发生的动作为基础，提议追加动作时。\n-는 김에（现在进行）也可：청소하는 김에 정리도 해요。',
     structures: [
       {
         ko: '운동 겸 산책을 했어요',
@@ -602,13 +668,13 @@ export const grammarCardsP12: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '겸：명사 + 겸 + 명사，두 가지를 동시에 겸한다는 의미', examples: '운동 겸 산책 / 식사 겸 회의 / 관광 겸 출장 / 공부 겸 여행' },
+      { type: 'rule', text: '겸：名词 + 겸 + 名词，表示两件事同时兼顾', examples: '운동 겸 산책 / 식사 겸 회의 / 관광 겸 출장 / 공부 겸 여행' },
       { type: 'rule', text: '-은/ㄴ 김에：有收音词干 + -은 김에，无收音/ㄹ词干 + -ㄴ 김에', examples: '나가다→나간 김에 / 먹다→먹은 김에 / 만들다→만든 김에' },
-      { type: 'rule', text: '-는 김에（현재）도 가능：진행 중인 행동을 발판으로 할 때', examples: '요리하는 김에 간식도 만들어요 / 운동하는 김에 스트레칭도 해요' },
-      { type: 'usage', text: '겸 앞뒤 명사는 같은 성격이거나 동시에 이룰 수 있는 것', examples: '식사 겸 미팅（餐叙）/ 휴식 겸 치료（边休养边治疗）' },
-      { type: 'usage', text: '-은/ㄴ 김에 후절에는 주로 추가 행동 제안', examples: '여기 온 김에 사진도 찍어요 / 마트 간 김에 음료수도 사 왔어요' },
-      { type: 'note', text: 'ㄹ 불규칙 동사도 -ㄴ 김에 적용：만들다→만든 김에，알다→안 김에', examples: '만든 김에 더 만들어요 / 안 김에 바로 연락했어요' },
-      { type: 'compare', text: '겸 vs -은/ㄴ 김에：겸은 병렬 목적，-은/ㄴ 김에는 이미 된 일을 발판으로 추가 행동', examples: '운동 겸 산책（并列目的）vs 나온 김에 산책도 해요（趁机追加）' },
+      { type: 'rule', text: '-는 김에（现在）也可：以进行中的动作为基础时', examples: '요리하는 김에 간식도 만들어요 / 운동하는 김에 스트레칭도 해요' },
+      { type: 'usage', text: '겸 前后的名词应是性质相同或可同时实现的', examples: '식사 겸 미팅（餐叙）/ 휴식 겸 치료（边休养边治疗）' },
+      { type: 'usage', text: '-은/ㄴ 김에 的后句主要是追加动作的建议', examples: '여기 온 김에 사진도 찍어요 / 마트 간 김에 음료수도 사 왔어요' },
+      { type: 'note', text: 'ㄹ 不规则动词也适用 -ㄴ 김에：만들다→만든 김에，알다→안 김에', examples: '만든 김에 더 만들어요 / 안 김에 바로 연락했어요' },
+      { type: 'compare', text: '겸 vs -은/ㄴ 김에：겸是并列目的，-은/ㄴ 김에是以已经做的事为基础追加动作', examples: '운동 겸 산책（并列目的）vs 나온 김에 산책도 해요（趁机追加）' },
     ],
     cardExamples: [
       {
@@ -654,29 +720,64 @@ export const grammarCardsP12: GrammarCard[] = [
     ],
     scenarios: [
       { icon: '🏃', context: '一举两得', ko: '운동 겸 산책으로 공원에 갔어요.', zh: '以锻炼兼散步为目的去了公园。' },
-      { icon: '🎵', context: 'KPOP 팬', ko: '한국에 온 김에 좋아하는 가수 콘서트도 봤어요.', zh: '趁着来韩国，顺便看了喜欢的歌手演唱会。' },
+      { icon: '🎵', context: 'KPOP 粉丝', ko: '한국에 온 김에 좋아하는 가수 콘서트도 봤어요.', zh: '趁着来韩国，顺便看了喜欢的歌手演唱会。' },
       { icon: '🛒', context: '购物场景', ko: '마트 간 김에 필요한 거 다 샀어요.', zh: '趁着去超市，把需要的东西都买了。' },
       { icon: '✈️', context: '出行兼顾', ko: '관광 겸 출장으로 일본에 다녀왔어요.', zh: '以旅游兼出差的方式去日本了。' },
       { icon: '🏠', context: '家务效率', ko: '청소하는 김에 안 쓰는 물건도 버렸어요.', zh: '趁着打扫，顺便把不用的东西扔了。' },
       { icon: '💬', context: '日常对话', ko: 'A: 왜 이렇게 늦었어요? B: 나온 김에 친구도 만났어요.', zh: 'A：怎么这么晚？B：趁着出来，顺便见了朋友。' },
     ],
     mistakes: [
-      { wrong: '공부하다 겸 여행하다 겸 갔어요（동사+겸 직접 결합）', correct: '공부 겸 여행으로 갔어요', note: '겸 은 명사와 결합，동사 원형에 직접 붙이지 않는다。동사는 명사형으로 바꿔야 함。' },
-      { wrong: '나가는 김에 어제 샀어요（前后时态不一致）', correct: '나간 김에 샀어요', note: '-은/ㄴ 김에 와 -는 김에 는 시제에 따라 구분。已完成动작→-은/ㄴ 김에，进行中→-는 김에。' },
-      { wrong: '먹을 김에 더 먹어요（未来形+김에）', correct: '먹는 김에 더 먹어요 / 먹은 김에 후식도 먹어요', note: '김에 앞에 미래형（-을）은 쓰지 않는다。현재진행（-는）이나 과거（-은/ㄴ）만 가능。' },
-      { wrong: '운동 겸 먹었어요（겸 후에 무관한 동작）', correct: '운동 겸 산책을 했어요', note: '겸 앞뒤는 동시에 이룰 수 있는 관련된 목적이나 활동이어야 자연스럽다。' },
+      { wrong: '공부하다 겸 여행하다 겸 갔어요（动词+겸 直接结合）', correct: '공부 겸 여행으로 갔어요', note: '겸 与名词搭配，动词原形不能直接附加。动词须先改为名词形。' },
+      { wrong: '나가는 김에 어제 샀어요（前后时态不一致）', correct: '나간 김에 샀어요', note: '-은/ㄴ 김에 和 -는 김에 按时态区分：已完成动作→-은/ㄴ 김에，进行中→-는 김에。' },
+      { wrong: '먹을 김에 더 먹어요（未来形+김에）', correct: '먹는 김에 더 먹어요 / 먹은 김에 후식도 먹어요', note: '김에 前不使用将来形（-을）。仅现在进行（-는）或过去（-은/ㄴ）可用。' },
+      { wrong: '운동 겸 먹었어요（겸 后接无关动作）', correct: '운동 겸 산책을 했어요', note: '겸 前后必须是可同时实现的相关目的或活动，才自然。' },
     ],
-    overviewHtml: `<div class="overview"><div class="ov-hero"><div class="ov-hero-label">P12 · 第4课</div><div class="ov-hero-title">겸, -은/ㄴ 김에</div><div class="ov-hero-sub">一举两得与顺便的表达</div></div><div class="ov-section"><div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title">本课语法点</div></div><div class="ov-block"><div class="badge">兼顾两事</div><div class="ko">명사 + 겸 + 명사</div><div class="zh">既……又……／兼……</div></div><div class="ov-block"><div class="badge">顺便</div><div class="ko">동사 + -은/ㄴ 김에</div><div class="zh">趁着……，顺便……</div></div></div></div>`,
-    step0Html: `<div class="step0-hook"><div class="hook-box"><div class="hook-sent"><span class="ko">운동 겸 산책을 했어요.</span><span class="zh">又锻炼又散步（一举两得）。</span></div><div class="hook-sent"><span class="ko">나온 김에 장도 봤어요.</span><span class="zh">趁着出来，顺便买了东西。</span></div></div></div>`,
+    overviewHtml: `<div class="overview"><div class="ov-hero"><div class="ov-hero-label">P12 · 第4课</div><div class="ov-hero-title">겸, -은/ㄴ 김에</div><div class="ov-hero-sub">一举两得与顺便的表达</div></div><div class="ov-section"><div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title">本课语法点</div></div><div class="ov-block"><div class="badge">兼顾两事</div><div class="ko">名词 + 겸 + 名词</div><div class="zh">既……又……／兼……</div></div><div class="ov-block"><div class="badge">顺便</div><div class="ko">动词 + -은/ㄴ 김에</div><div class="zh">趁着……，顺便……</div></div></div></div>`,
+    step0Html: `
+<div class="card-title">表示"一举两得"和"趁着……顺便……"</div>
+<div class="card-body">겸 连接两个名词，表示同时兼顾两个目的或功能，相当于"既……又……／兼……"。</div>
+<div class="hook-box">
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说</div>
+  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+    <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">운동 겸 산책을 했어요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">又锻炼又散步。</div>
+    </div>
+    <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">관광 겸 출장으로 서울에 갔어요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">以旅游兼出差的名义去了首尔。</div>
+    </div>
+  </div>
+  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 这两句典型用法记住，本课基本就掌握了</div>
+</div>
+<div class="reminder-box">겸 只与名词结合，不能直接附加在动词上。
+-은/ㄴ 김에 的 김 是表示"机会/时机"的依存名词。主要用于以已经发生的动作为基础，提议追加动作时。
+-는 김에（现在进行）也可：청소하는 김에 정리도 해요。</div>
+`,
     compareLabel: '겸 vs -은/ㄴ 김에',
-    compareHtml: `<div class="compare"><div class="cmp-block" style="border-left:4px solid #ff7fa8"><div class="cmp-title">겸</div><div class="cmp-row"><span class="badge">결합</span>명사 + 겸 + 명사</div><div class="cmp-row"><span class="badge">意思</span>兼顾两个目的/功能</div><div class="cmp-row"><span class="ko">관광 겸 출장</span><span class="zh">既旅游又出差</span></div></div><div class="cmp-block" style="border-left:4px solid #aee3d8"><div class="cmp-title">-은/ㄴ 김에</div><div class="cmp-row"><span class="badge">결합</span>동사 过去冠词形 + 김에</div><div class="cmp-row"><span class="badge">意思</span>趁着某动作已发生，顺便……</div><div class="cmp-row"><span class="ko">나온 김에 커피도 마셔요</span><span class="zh">趁着出来，顺便喝杯咖啡</span></div></div></div>`,
+    compareHtml: `
+<div class="card-title">겸 vs -은/ㄴ 김에</div>
+<div class="card-body">겸 连接两个名词，表示同时兼顾两个目的或功能，相当于"既……又……／兼……"。</div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
+  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v">用法一</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">운동 겸 산책을 했어요</span><span style="font-size:16px;color:#5a4640">又锻炼又散步。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">나온 김에 장도 봤어요</span><span style="font-size:16px;color:#5a4640">趁着出来，顺便买了东西。</span></div>
+  </div>
+  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v" style="background:#aee3d8;color:#1a7a6a">用法二</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">관광 겸 출장으로 서울에 갔어요</span><span style="font-size:16px;color:#5a4640">以旅游兼出差的名义去了首尔。</span></div>
+  </div>
+</div>
+<div class="reminder-box">-은/ㄴ 김에 的 김 是表示"机会/时机"的依存名词。主要用于以已经发生的动作为基础，提议追加动作时。</div>
+`,
     quickTable: {
-      title: '-은/ㄴ 김에 접속 형식',
-      headers: ['词干末音', '形式', '예시', '意思'],
+      title: '-은/ㄴ 김에 接续形式',
+      headers: ['词干末音', '形式', '例句', '意思'],
       rows: [
-        [{ ko: '有收音', zh: '' }, { ko: '-은 김에', zh: '' }, { ko: '먹은 김에', zh: '趁着吃' }, { ko: '', zh: '' }],
-        [{ ko: '无收音', zh: '' }, { ko: '-ㄴ 김에', zh: '' }, { ko: '나간 김에', zh: '趁着出去' }, { ko: '', zh: '' }],
-        [{ ko: '现在进行', zh: '' }, { ko: '-는 김에', zh: '' }, { ko: '청소하는 김에', zh: '趁着打扫' }, { ko: '', zh: '' }],
+        [{ ko: '有收音', zh: '' }, { ko: '-은 김에', zh: '' }, { ko: '먹은 김에', zh: '' }, { ko: '趁着吃', zh: '' }],
+        [{ ko: '无收音', zh: '' }, { ko: '-ㄴ 김에', zh: '' }, { ko: '나간 김에', zh: '' }, { ko: '趁着出去', zh: '' }],
+        [{ ko: '现在进行', zh: '' }, { ko: '-는 김에', zh: '' }, { ko: '청소하는 김에', zh: '' }, { ko: '趁着打扫', zh: '' }],
       ],
     },
     specialQuiz: {
@@ -688,19 +789,19 @@ export const grammarCardsP12: GrammarCard[] = [
           prompt: '趁着出来，顺便买了咖啡。→ 나___ 김에 커피도 샀어요',
           options: ['오는', '오면', '온', '올'],
           answer: 2 as 0|1|2|3,
-          explanation: '나오다 무받침 과거 관형형：나오+ㄴ=나온，题目已给出 나，填 온 → 나온 김에',
+          explanation: '나오다 无收音过去冠词形：나오+ㄴ=나온，题目已给出 나，填 온 → 나온 김에',
         },
         {
-          prompt: '겸 앞뒤에는 무엇이 와야 하나요?',
-          options: ['동사 원형', '명사', '부사', '형용사'],
+          prompt: '겸 前后必须是什么？',
+          options: ['动词原形', '名词', '副词', '形容词'],
           answer: 1 as 0|1|2|3,
-          explanation: '겸 은 명사와 결합：운동 겸 산책，명사+겸+명사 형식',
+          explanation: '겸 与名词搭配：운동 겸 산책，名词+겸+名词 的形式',
         },
         {
           prompt: '趁着打扫，顺便整理。→ 청소하___ 김에 정리도 했어요',
           options: ['을', '은', 'ㄴ', '는'],
           answer: 3 as 0|1|2|3,
-          explanation: '청소하다 + -는 김에：동작이 진행 중이거나 반복되는 상황에 사용，청소하는 김에（趁着打扫）',
+          explanation: '청소하다 + -는 김에：动作正在进行或反复发生的情境使用，청소하는 김에（趁着打扫）',
         },
         {
           prompt: '以旅游兼出差。→ 관광 ___ 출장',
@@ -719,9 +820,9 @@ export const grammarCardsP12: GrammarCard[] = [
     lessonNumber: 5,
     title: '(어)치, 짜리, 에',
     whatItDoes: '表示金额量词：价值分量、面值规格和单价',
-    whatItDoesBody: '(어)치 는 금액 뒤에 붙어 "그 금액만큼의 가치/분량"을 나타내며，"……价值的／……钱的东西"에 해당。\n짜리 는 수량이나 금액 뒤에 붙어 "그 단위나 규격의 것"을 나타내며，주로 화폐 단위나 크기에 사용。\n에 는 가격을 나타낼 때 "……에 팔다/사다" 형태로 쓰여 단가 또는 총액 표현에 사용。',
-    structureNote: '(어)치：금액(숫자+단위) + 어치（표준형，받침 유무 관계없이 어치 사용）\n짜리：숫자+단위 + 짜리（크기·면값·규격 표현）\n에：금액 + 에（～에 사다/팔다，表示价格）',
-    rulesNote: '(어)치 는 보통 어치 로 쓰이며 받침 유무와 관계없이 어치 사용이 자연스럽다：만 원어치，오천 원어치。\n짜리 는 화폐 단위 외에도 크기나 용량에 사용：100ml 짜리，3인분짜리。\n에 는 조사로 "얼마에 샀어요?"（多少钱买的？）처럼 가격 묻기에도 사용。',
+    whatItDoesBody: '(어)치 接在金额后面，表示"该金额相应的价值/分量"，相当于"……价值的／……钱的东西"。\n짜리 接在数量或金额后，表示"该单位或规格的事物"，主要用于货币单位或大小。\n에 表示价格时用"……에 팔다/사다"的形式，表达单价或总额。',
+    structureNote: '(어)치：金额（数字+单位）+ 어치（标准形，不论收音有无均用 어치）\n짜리：数字+单位 + 짜리（大小·面值·规格表达）\n에：金额 + 에（～에 사다/팔다，表示价格）',
+    rulesNote: '(어)치 通常写作 어치，不论收音有无均用 어치 较自然：만 원어치，오천 원어치。\n짜리 除货币单位外也可用于大小或容量：100ml 짜리，3인분짜리。\n에 作为助词也用于问价："얼마에 샀어요?"（多少钱买的？）。',
     structures: [
       {
         ko: '만 원어치 과자를 샀어요',
@@ -761,13 +862,13 @@ export const grammarCardsP12: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '(어)치：금액 + 어치（표준형），"그 금액에 해당하는 양"', examples: '천 원어치 / 오만 원어치 / 십만 원어치' },
-      { type: 'rule', text: '짜리：수량/금액 + 짜리，"그 단위·규격·면값의 것"', examples: '천 원짜리 동전 / 만 원짜리 지폐 / 500ml 짜리 / 1인분짜리' },
-      { type: 'rule', text: '에（가격）：금액 + 에，"～에 사다/팔다/주다" 형식으로 가격 표현', examples: '이만 원에 팔아요 / 얼마에 샀어요? / 천 원에 세 개' },
-      { type: 'usage', text: '(어)치 는 정량 구매 시 자주 사용，"얼마어치 주세요" 형태', examples: '오천 원어치 주세요（给我五千韩元的）/ 만 원어치 사과（一万韩元的苹果）' },
-      { type: 'usage', text: '짜리 는 화폐 단위 외 용량·크기·인분 등에도 사용', examples: '2리터짜리 생수（2升装水）/ 2인분짜리 세트（两人份套餐）/ 50평짜리 아파트' },
-      { type: 'note', text: '에 는 단가 표현에도 사용：개당 가격, 묶음 가격', examples: '개당 천 원에 팔아요 / 세 개에 오천 원이에요' },
-      { type: 'compare', text: '(어)치 vs 짜리：어치는 금액분량（买了多少钱的东西），짜리는 규격/面值（这是多少钱面值的）', examples: '만 원어치 샀어요（买了一万韩元的）vs 만 원짜리 지폐（一万韩元面值的纸币）' },
+      { type: 'rule', text: '(어)치：金额 + 어치（标准形），"该金额相当于的量"', examples: '천 원어치 / 오만 원어치 / 십만 원어치' },
+      { type: 'rule', text: '짜리：数量/金额 + 짜리，"该单位·规格·面值的事物"', examples: '천 원짜리 동전 / 만 원짜리 지폐 / 500ml 짜리 / 1인분짜리' },
+      { type: 'rule', text: '에（价格）：金额 + 에，用"～에 사다/팔다/주다"形式表达价格', examples: '이만 원에 팔아요 / 얼마에 샀어요? / 천 원에 세 개' },
+      { type: 'usage', text: '(어)치 常用于定量购买，"얼마어치 주세요" 形式', examples: '오천 원어치 주세요（给我五千韩元的）/ 만 원어치 사과（一万韩元的苹果）' },
+      { type: 'usage', text: '짜리 也可用于货币单位以外的容量、大小、人份等', examples: '2리터짜리 생수（2升装水）/ 2인분짜리 세트（两人份套餐）/ 50평짜리 아파트' },
+      { type: 'note', text: '에 也用于表达单价：개당价格，束装价格', examples: '개당 천 원에 팔아요 / 세 개에 오천 원이에요' },
+      { type: 'compare', text: '(어)치 vs 짜리：어치表示金额分量（买了多少钱的东西），짜리表示规格/面值（这是多少钱面值的）', examples: '만 원어치 샀어요（买了一万韩元的）vs 만 원짜리 지폐（一万韩元面值的纸币）' },
     ],
     cardExamples: [
       {
@@ -813,29 +914,64 @@ export const grammarCardsP12: GrammarCard[] = [
     ],
     scenarios: [
       { icon: '🛒', context: '市场购物', ko: '만 원어치 채소를 사 왔어요.', zh: '买了一万韩元的蔬菜回来了。' },
-      { icon: '🎵', context: 'KPOP 굿즈', ko: '아이돌 포토카드를 오만 원어치 샀어요.', zh: '买了五万韩元的偶像照片卡。' },
+      { icon: '🎵', context: 'KPOP 周边', ko: '아이돌 포토카드를 오만 원어치 샀어요.', zh: '买了五万韩元的偶像照片卡。' },
       { icon: '💵', context: '换零钱', ko: '만 원짜리 지폐를 천 원짜리로 바꿔 주세요.', zh: '请把一万韩元面值的纸币换成一千韩元的。' },
       { icon: '🍖', context: '烤肉场景', ko: '삼만 원어치 삼겹살 주세요.', zh: '请给我三万韩元的五花肉。' },
       { icon: '🏪', context: '便利店', ko: '세 개에 천 원이에요.', zh: '三个一千韩元。' },
       { icon: '💬', context: '询问价格', ko: 'A: 이거 얼마에 샀어요? B: 이만 원에 샀어요.', zh: 'A：这个多少钱买的？B：两万韩元买的。' },
     ],
     mistakes: [
-      { wrong: '만 원치 주세요（치만 사용）', correct: '만 원어치 주세요', note: '표준형은 어치。받침 유무 관계없이 어치를 사용：천 원어치，만 원어치。' },
-      { wrong: '천 원짜리어치（짜리+어치 중복）', correct: '천 원어치（금액의 양）or 천 원짜리（면값의 물건）', note: '짜리 와 어치 는 의미가 다르므로 중복 사용하지 않는다。' },
-      { wrong: '얼마에서 샀어요?（에서 사용）', correct: '얼마에 샀어요?', note: '가격을 물을 때는 에서 가 아닌 에 를 사용：얼마에 샀어요?（多少钱买的？）' },
-      { wrong: '이만 원어치짜리（어치+짜리 혼용）', correct: '이만 원어치（금액분량）or 이만 원짜리（규격/面值）', note: '어치 와 짜리 는 각각 독립적으로 사용하며 동시에 붙이지 않는다。' },
+      { wrong: '만 원치 주세요（只用 치）', correct: '만 원어치 주세요', note: '标准形是 어치。不论收音有无均用 어치：천 원어치，만 원어치。' },
+      { wrong: '천 원짜리어치（짜리+어치 重复）', correct: '천 원어치（金额分量）或 천 원짜리（面值物品）', note: '짜리 和 어치 含义不同，不能重复使用。' },
+      { wrong: '얼마에서 샀어요?（用了 에서）', correct: '얼마에 샀어요?', note: '询问价格时用 에 而非 에서：얼마에 샀어요?（多少钱买的？）' },
+      { wrong: '이만 원어치짜리（어치+짜리 混用）', correct: '이만 원어치（金额分量）或 이만 원짜리（规格/面值）', note: '어치 和 짜리 各自独立使用，不能同时附加。' },
     ],
     overviewHtml: `<div class="overview"><div class="ov-hero"><div class="ov-hero-label">P12 · 第5课</div><div class="ov-hero-title">(어)치, 짜리, 에</div><div class="ov-hero-sub">金额量词与价格表达</div></div><div class="ov-section"><div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title">本课语法点</div></div><div class="ov-block"><div class="badge">价值量</div><div class="ko">금액 + (어)치</div><div class="zh">……价值的东西／……钱的</div></div><div class="ov-block"><div class="badge">面值/规格</div><div class="ko">수 + 짜리</div><div class="zh">……面值的／……规格的</div></div><div class="ov-block"><div class="badge">单价</div><div class="ko">금액 + 에</div><div class="zh">……钱（买到/卖出）</div></div></div></div>`,
-    step0Html: `<div class="step0-hook"><div class="hook-box"><div class="hook-sent"><span class="ko">만 원어치 과자를 샀어요.</span><span class="zh">买了一万韩元的零食。</span></div><div class="hook-sent"><span class="ko">천 원짜리 동전이 있어요?</span><span class="zh">有一千韩元的硬币吗？</span></div></div></div>`,
+    step0Html: `
+<div class="card-title">表示金额量词：价值分量、面值规格和单价</div>
+<div class="card-body">(어)치 接在金额后面，表示"该金额相应的价值/分量"，相当于"……价值的／……钱的东西"。</div>
+<div class="hook-box">
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说</div>
+  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+    <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">만 원어치 과자를 샀어요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">买了一万韩元的零食。</div>
+    </div>
+    <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">천 원짜리 동전이 있어요?</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">有一千韩元面值的硬币吗？</div>
+    </div>
+  </div>
+  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 这两句典型用法记住，本课基本就掌握了</div>
+</div>
+<div class="reminder-box">(어)치 通常写作 어치，不论收音有无均用 어치 较自然：만 원어치，오천 원어치。
+짜리 除货币单位外也可用于大小或容量：100ml 짜리，3인분짜리。
+에 作为助词也用于问价："얼마에 샀어요?"（多少钱买的？）。</div>
+`,
     compareLabel: '(어)치 vs 짜리',
-    compareHtml: `<div class="compare"><div class="cmp-block" style="border-left:4px solid #ff7fa8"><div class="cmp-title">(어)치</div><div class="cmp-row"><span class="badge">용법</span>금액 뒤에 붙어 "그 금액만큼의 분량/가치"</div><div class="cmp-row"><span class="badge">예</span>만 원어치 사과（一万韩元的苹果）</div><div class="cmp-row"><span class="ko">이만 원어치 주세요</span><span class="zh">给我两万韩元的</span></div></div><div class="cmp-block" style="border-left:4px solid #aee3d8"><div class="cmp-title">짜리</div><div class="cmp-row"><span class="badge">용법</span>수량/금액 뒤에 붙어 "그 단위/규격짜리"</div><div class="cmp-row"><span class="badge">예</span>천 원짜리 지폐（一千韩元面值的纸币）</div><div class="cmp-row"><span class="ko">오백 원짜리 동전</span><span class="zh">五百韩元硬币</span></div></div></div>`,
+    compareHtml: `
+<div class="card-title">(어)치 vs 짜리</div>
+<div class="card-body">(어)치 接在金额后面，表示"该金额相应的价值/分量"，相当于"……价值的／……钱的东西"。</div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
+  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v">用法一</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">만 원어치 과자를 샀어요</span><span style="font-size:16px;color:#5a4640">买了一万韩元的零食。</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">이 가방은 오만 원에 샀어요</span><span style="font-size:16px;color:#5a4640">这个包是用五万韩元买的。</span></div>
+  </div>
+  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v" style="background:#aee3d8;color:#1a7a6a">用法二</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">천 원짜리 동전이 있어요?</span><span style="font-size:16px;color:#5a4640">有一千韩元面值的硬币吗？</span></div>
+  </div>
+</div>
+<div class="reminder-box">짜리 除货币单位外也可用于大小或容量：100ml 짜리，3인분짜리。</div>
+`,
     quickTable: {
-      title: '금액 표현 세 가지',
-      headers: ['표현', '의미', '예시', '用法'],
+      title: '金额表达三种',
+      headers: ['表达', '含义', '例句', '用法'],
       rows: [
-        [{ ko: '(어)치', zh: '' }, { ko: '금액만큼의 분량', zh: '价值量' }, { ko: '만 원어치 사과', zh: '一万韩元的苹果' }, { ko: '', zh: '' }],
-        [{ ko: '짜리', zh: '' }, { ko: '단위/규격/면값', zh: '规格/面值' }, { ko: '천 원짜리 동전', zh: '一千韩元硬币' }, { ko: '', zh: '' }],
-        [{ ko: '에', zh: '' }, { ko: '가격(단가/총액)', zh: '价格' }, { ko: '만 원에 샀어요', zh: '一万韩元买的' }, { ko: '', zh: '' }],
+        [{ ko: '(어)치', zh: '' }, { ko: '该金额的分量', zh: '价值量' }, { ko: '만 원어치 사과', zh: '' }, { ko: '一万韩元的苹果', zh: '' }],
+        [{ ko: '짜리', zh: '' }, { ko: '单位/规格/面值', zh: '规格/面值' }, { ko: '천 원짜리 동전', zh: '' }, { ko: '一千韩元硬币', zh: '' }],
+        [{ ko: '에', zh: '' }, { ko: '价格（单价/总额）', zh: '价格' }, { ko: '만 원에 샀어요', zh: '' }, { ko: '一万韩元买的', zh: '' }],
       ],
     },
     specialQuiz: {
@@ -847,7 +983,7 @@ export const grammarCardsP12: GrammarCard[] = [
           prompt: '买了一万韩元的零食。→ 만 원___ 과자를 샀어요',
           options: ['치', '어치', '짜리', '에'],
           answer: 1 as 0|1|2|3,
-          explanation: '금액만큼의 분량 → (어)치：만 원어치',
+          explanation: '该金额的分量 → (어)치：만 원어치',
         },
         {
           prompt: '一千韩元面值的硬币。→ 천 원___ 동전',
@@ -859,13 +995,13 @@ export const grammarCardsP12: GrammarCard[] = [
           prompt: '这件衣服是三万韩元买的。→ 이 옷은 삼만 원___ 샀어요',
           options: ['에', '짜리', '에서', '어치'],
           answer: 0 as 0|1|2|3,
-          explanation: '가격 표현 → 에：삼만 원에 샀어요',
+          explanation: '价格表达 → 에：삼만 원에 샀어요',
         },
         {
           prompt: '给我五千韩元的草莓。→ 오천 원___ 딸기 주세요',
           options: ['에', '만큼', '짜리', '어치'],
           answer: 3 as 0|1|2|3,
-          explanation: '금액만큼의 분량 구매 → 어치：오천 원어치 주세요',
+          explanation: '按金额定量购买 → 어치：오천 원어치 주세요',
         },
       ],
     },
@@ -878,9 +1014,9 @@ export const grammarCardsP12: GrammarCard[] = [
     lessonNumber: 6,
     title: '"ㄹ" 的不规则音变',
     whatItDoes: 'ㄹ词干动词/形容词在特定词尾前ㄹ脱落的规则',
-    whatItDoesBody: 'ㄹ 받침으로 끝나는 동사/형용사（ㄹ 词干）는 일부 어미 앞에서 ㄹ이 탈락한다。\nㄹ이 탈락하는 조건：어미가 ㄴ，ㅂ，시，오 로 시작할 때（기억법：나비시오）。\nㄹ이 유지되는 조건：어미가 아/어，고，지，면，도 등으로 시작할 때。',
-    structureNote: 'ㄹ脱落：ㄹ词干 + -(으)ㄴ/-(으)ㄹ（관형형 제외）/ -ㅂ니다/-습니다 / -(으)세요 / -(으)오\nㄹ保留：ㄹ词干 + -아/어요 / -고 / -지 / -(으)면 / -아/어도 등\n주의：관형형 -(으)ㄴ은 ㄹ脱落지만 -(으)ㄹ（미래 관형형）은 보존',
-    rulesNote: '기억법（나비시오）：ㄴ으로 시작하는 어미，ㅂ으로 시작하는 어미，시로 시작하는 어미，오로 시작하는 어미 앞에서 ㄹ 탈락。\n알다（知道）：알아요（知道）/ 아세요（知道吗/请知道）/ 압니다（知道）/ 아는（知道的）\n살다（居住）：살아요（居住）/ 사세요（请住）/ 삽니다（居住）/ 사는（居住的）\n만들다（制作）：만들어요（制作）/ 만드세요（请制作）/ 만듭니다（制作）/ 만드는（制作的）',
+    whatItDoesBody: '以 ㄹ 收音结尾的动词/形容词（ㄹ词干）在某些词尾前 ㄹ 会脱落。\nㄹ 脱落的条件：词尾以 ㄴ、ㅂ、시、오 开头时（记忆法：나비시오）。\nㄹ 保留的条件：词尾以 아/어、고、지、면、도 等开头时。',
+    structureNote: 'ㄹ脱落：ㄹ词干 + -(으)ㄴ/-(으)ㄹ（除将来冠词形）/ -ㅂ니다/-습니다 / -(으)세요 / -(으)오\nㄹ保留：ㄹ词干 + -아/어요 / -고 / -지 / -(으)면 / -아/어도 等\n注意：过去冠词形 -(으)ㄴ 时 ㄹ 脱落；但 -(으)ㄹ（将来冠词形）时保留',
+    rulesNote: '记忆法（나비시오）：以 ㄴ 开头的词尾、以 ㅂ 开头的词尾、以 시 开头的词尾、以 오 开头的词尾前 ㄹ 脱落。\n알다（知道）：알아요（知道）/ 아세요（知道吗/请知道）/ 압니다（知道）/ 아는（知道的）\n살다（居住）：살아요（居住）/ 사세요（请住）/ 삽니다（居住）/ 사는（居住的）\n만들다（制作）：만들어요（制作）/ 만드세요（请制作）/ 만듭니다（制作）/ 만드는（制作的）',
     structures: [
       {
         ko: '한국어를 잘 아세요?',
@@ -909,23 +1045,23 @@ export const grammarCardsP12: GrammarCard[] = [
         ],
       },
       {
-        ko: '노래를 잘 부르는 사람이에요',
-        zh: '是很会唱歌的人。（부르다 + -는 → 부르는，ㄹ保留）',
+        ko: '서울에 사는 친구예요',
+        zh: '是住在首尔的朋友。（살다 + -는 → 사는，ㄹ脱落）',
         tokens: [
-          { text: '노래를', role: 'object' },
-          { text: '잘 부르는', role: 'plain' },
-          { text: '사람이에요', role: 'verb' },
+          { text: '서울에', role: 'place' },
+          { text: '사는', role: 'plain' },
+          { text: '친구예요', role: 'verb' },
         ],
       },
     ],
     connectionRules: [
-      { type: 'rule', text: 'ㄹ脱落 조건（나비시오）：어미가 ㄴ/ㅂ/시/오 로 시작할 때', examples: '알다：아는（ㄴ） / 압니다（ㅂ） / 아세요（시） / 아오（오）' },
-      { type: 'rule', text: 'ㄹ保留 조건：어미가 아/어，고，지，면，도，ㄹ 등으로 시작할 때', examples: '알다：알아요 / 알고 / 알지 / 알면 / 알아도 / 알 거예요' },
-      { type: 'rule', text: '현재 관형형：ㄹ词干 + -는（ㄹ保留），过去 관형형：ㄹ词干 + -ㄴ（ㄹ脱落）', examples: '만들다：만드는 것（现在）/ 만든 것（过去）/ 만들 것（未来，ㄹ保留）' },
-      { type: 'usage', text: '주요 ㄹ 불규칙 동사：알다，살다，만들다，놀다，팔다，걸다，들다，불다，열다，울다，멀다', examples: '알다（知）/ 살다（住/生）/ 만들다（做）/ 놀다（玩）/ 팔다（卖）/ 열다（开）' },
-      { type: 'usage', text: '형용사도 동일：길다（长），달다（甜），멀다（远），가늘다（细）', examples: '길다：긴（ㄴ）/ 깁니다（ㅂ）/ 기세요（시）/ 길어요（保留）' },
-      { type: 'note', text: '-(으)ㄹ 미래 관형형에서는 ㄹ이 탈락하지 않는다', examples: '알 것 같아요（不是 아 것） / 만들 수 있어요（不是 만드 수）' },
-      { type: 'compare', text: 'ㄹ 불규칙 vs 규칙 동사：ㄹ词词干是 특정 어미 앞에서만 탈락，규칙동사는 항상 유지', examples: '살다（不规则）：사세요 vs 참다（规则）：참으세요（으 추가）' },
+      { type: 'rule', text: 'ㄹ 脱落条件（나비시오）：词尾以 ㄴ/ㅂ/시/오 开头时', examples: '알다：아는（ㄴ） / 압니다（ㅂ） / 아세요（시） / 아오（오）' },
+      { type: 'rule', text: 'ㄹ 保留条件：词尾以 아/어、고、지、면、도、ㄹ 等开头时', examples: '알다：알아요 / 알고 / 알지 / 알면 / 알아도 / 알 거예요' },
+      { type: 'rule', text: '现在冠词形：ㄹ词干 + -는（ㄹ脱落）；过去冠词形：ㄹ词干 + -ㄴ（ㄹ脱落）', examples: '만들다：만드는 것（现在）/ 만든 것（过去）/ 만들 것（将来，ㄹ保留）' },
+      { type: 'usage', text: '主要 ㄹ 不规则动词：알다、살다、만들다、놀다、팔다、걸다、들다、불다、열다、울다、멀다', examples: '알다（知）/ 살다（住/生）/ 만들다（做）/ 놀다（玩）/ 팔다（卖）/ 열다（开）' },
+      { type: 'usage', text: '形容词也相同：길다（长），달다（甜），멀다（远），가늘다（细）', examples: '길다：긴（ㄴ）/ 깁니다（ㅂ）/ 기세요（시）/ 길어요（保留）' },
+      { type: 'note', text: '-(으)ㄹ 将来冠词形中 ㄹ 不脱落', examples: '알 것 같아요（不是 아 것） / 만들 수 있어요（不是 만드 수）' },
+      { type: 'compare', text: 'ㄹ 不规则 vs 规则动词：ㄹ词干仅在特定词尾前脱落，规则动词始终保留', examples: '살다（不规则）：사세요 vs 참다（规则）：참으세요（加 으）' },
     ],
     cardExamples: [
       {
@@ -969,7 +1105,7 @@ export const grammarCardsP12: GrammarCard[] = [
       },
     ],
     scenarios: [
-      { icon: '🎵', context: 'KPOP 가사', ko: '이 노래 아세요? 제가 제일 좋아하는 곡이에요.', zh: '你知道这首歌吗？是我最喜欢的曲子。' },
+      { icon: '🎵', context: 'KPOP 歌词', ko: '이 노래 아세요? 제가 제일 좋아하는 곡이에요.', zh: '你知道这首歌吗？是我最喜欢的曲子。' },
       { icon: '🏠', context: '居住地', ko: '지금 어디 사세요? 저는 서울에 살아요.', zh: '您现在住哪里？我住在首尔。' },
       { icon: '🍰', context: '手工制作', ko: '이 케이크는 제가 직접 만든 거예요.', zh: '这个蛋糕是我亲手做的。' },
       { icon: '🎤', context: '歌手介绍', ko: '노래를 잘 부르는 가수를 좋아해요.', zh: '我喜欢唱歌好听的歌手。' },
@@ -977,24 +1113,60 @@ export const grammarCardsP12: GrammarCard[] = [
       { icon: '💬', context: '日常对话', ko: 'A: 한국어 잘 아세요? B: 조금 알아요.', zh: 'A：你韩语说得好吗？B：会一点。' },
     ],
     mistakes: [
-      { wrong: '알으세요?（ㄹ 词干 + 으세요）', correct: '아세요?', note: 'ㄹ词干 + -(으)세요 시，ㄹ 탈락 후 으 도 필요없다：알다→아세요（不是 알으세요）。' },
-      { wrong: '만들ㅂ니다（ㄹ 탈락 없이 ㅂ니다）', correct: '만듭니다', note: 'ㄹ词干 + -ㅂ니다 시，ㄹ 탈락：만들다→만듭니다（不是 만들ㅂ니다）。' },
-      { wrong: '살는 사람（ㄹ词干 + -는 관형형 직접 결합）', correct: '사는 사람', note: '살다 + -는（현재관형형）→ ㄹ 탈락：사는（不是 살는）。ㄹ词干의 현재관형형은 -는 앞에서 ㄹ이 탈락한다。' },
-      { wrong: '아ㄹ 거예요（미래 관형형에서 탈락）', correct: '알 거예요', note: '미래 관형형 -(으)ㄹ 앞에서는 ㄹ이 탈락하지 않는다：알 거예요（不是 아 거예요）。' },
+      { wrong: '알으세요?（ㄹ 词干 + 으세요）', correct: '아세요?', note: 'ㄹ词干 + -(으)세요 时，ㄹ 脱落，으 也不需要：알다→아세요（不是 알으세요）。' },
+      { wrong: '만들ㅂ니다（无 ㄹ 脱落直接加 ㅂ니다）', correct: '만듭니다', note: 'ㄹ词干 + -ㅂ니다 时，ㄹ 脱落：만들다→만듭니다（不是 만들ㅂ니다）。' },
+      { wrong: '살는 사람（ㄹ词干 + -는 冠词形直接结合）', correct: '사는 사람', note: '살다 + -는（现在冠词形）→ ㄹ 脱落：사는（不是 살는）。ㄹ词干在 -는 前 ㄹ 脱落。' },
+      { wrong: '아ㄹ 거예요（将来冠词形脱落）', correct: '알 거예요', note: '将来冠词形 -(으)ㄹ 前 ㄹ 不脱落：알 거예요（不是 아 거예요）。' },
     ],
-    overviewHtml: `<div class="overview"><div class="ov-hero"><div class="ov-hero-label">P12 · 第6课</div><div class="ov-hero-title">"ㄹ" 的不规则音变</div><div class="ov-hero-sub">ㄹ词干在특정 어미 앞에서의 탈락 규칙</div></div><div class="ov-section"><div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title">核心规则</div></div><div class="ov-block"><div class="badge">ㄹ脱落</div><div class="ko">ㄹ词干 + ㄴ/ㅂ/시/오 → ㄹ脱落</div><div class="zh">알다→아세요 / 만들다→만듭니다</div></div><div class="ov-block"><div class="badge">保留</div><div class="ko">ㄹ词干 + 아/어/고/지/면… → ㄹ保留</div><div class="zh">알다→알아요 / 만들다→만들고</div></div></div></div>`,
-    step0Html: `<div class="step0-hook"><div class="hook-box"><div class="hook-sent"><span class="ko">한국어를 잘 아세요?</span><span class="zh">你韩语说得好吗？（알다→아세요，ㄹ脱落）</span></div><div class="hook-sent"><span class="ko">제가 만들었어요.</span><span class="zh">是我做的。（만들다→만들었어요，ㄹ保留）</span></div></div></div>`,
+    overviewHtml: `<div class="overview"><div class="ov-hero"><div class="ov-hero-label">P12 · 第6课</div><div class="ov-hero-title">"ㄹ" 的不规则音变</div><div class="ov-hero-sub">ㄹ词干在特定词尾前的脱落规则</div></div><div class="ov-section"><div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title">核心规则</div></div><div class="ov-block"><div class="badge">ㄹ脱落</div><div class="ko">ㄹ词干 + ㄴ/ㅂ/시/오 → ㄹ脱落</div><div class="zh">알다→아세요 / 만들다→만듭니다</div></div><div class="ov-block"><div class="badge">保留</div><div class="ko">ㄹ词干 + 아/어/고/지/면… → ㄹ保留</div><div class="zh">알다→알아요 / 만들다→만들고</div></div></div></div>`,
+    step0Html: `
+<div class="card-title">ㄹ词干动词/形容词在特定词尾前ㄹ脱落的规则</div>
+<div class="card-body">以 ㄹ 收音结尾的动词/形容词（ㄹ词干）在某些词尾前 ㄹ 会脱落。</div>
+<div class="hook-box">
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说</div>
+  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+    <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">한국어를 잘 아세요?</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">你韩语说得好吗？（알다 + -(으)세요 → 아세요）</div>
+    </div>
+    <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">여기서 삽니다</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">住在这里。（살다 + -ㅂ니다 → 삽니다）</div>
+    </div>
+  </div>
+  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 这两句典型用法记住，本课基本就掌握了</div>
+</div>
+<div class="reminder-box">记忆法（나비시오）：以 ㄴ 开头的词尾、以 ㅂ 开头的词尾、以 시 开头的词尾、以 오 开头的词尾前 ㄹ 脱落。
+알다（知道）：알아요（知道）/ 아세요（知道吗/请知道）/ 압니다（知道）/ 아는（知道的）
+살다（居住）：살아요（居住）/ 사세요（请住）/ 삽니다（居住）/ 사는（居住的）
+만들다（制作）：만들어요（制作）/ 만드세요（请制作）/ 만듭니다（制作）/ 만드는（制作的）</div>
+`,
     compareLabel: 'ㄹ脱落 vs ㄹ保留',
-    compareHtml: `<div class="compare"><div class="cmp-block" style="border-left:4px solid #ff7fa8"><div class="cmp-title">ㄹ脱落的情况</div><div class="cmp-row"><span class="badge">条件</span>어미가 ㄴ/ㅂ/시/오 로 시작할 때</div><div class="cmp-row"><span class="ko">알다 + -(으)세요 → 아세요</span><span class="zh">ㄹ脱落</span></div><div class="cmp-row"><span class="ko">살다 + -ㅂ니다 → 삽니다</span><span class="zh">ㄹ脱落</span></div></div><div class="cmp-block" style="border-left:4px solid #aee3d8"><div class="cmp-title">ㄹ保留的情况</div><div class="cmp-row"><span class="badge">条件</span>어미가 아/어/고/지/면/도 로 시작할 때</div><div class="cmp-row"><span class="ko">알다 + -아요 → 알아요</span><span class="zh">ㄹ保留</span></div><div class="cmp-row"><span class="ko">만들다 + -고 → 만들고</span><span class="zh">ㄹ保留</span></div></div></div>`,
+    compareHtml: `
+<div class="card-title">ㄹ脱落 vs ㄹ保留</div>
+<div class="card-body">以 ㄹ 收音结尾的动词/形容词（ㄹ词干）在某些词尾前 ㄹ 会脱落。</div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
+  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v">用法一</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">한국어를 잘 아세요?</span><span style="font-size:16px;color:#5a4640">你韩语说得好吗？（알다 + -(으)세요 → 아세요）</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">직접 만든 케이크예요</span><span style="font-size:16px;color:#5a4640">是亲手做的蛋糕。（만들다 + -ㄴ → 만든）</span></div>
+  </div>
+  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v" style="background:#aee3d8;color:#1a7a6a">用法二</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">여기서 삽니다</span><span style="font-size:16px;color:#5a4640">住在这里。（살다 + -ㅂ니다 → 삽니다）</span></div>
+  </div>
+</div>
+<div class="reminder-box">알다（知道）：알아요（知道）/ 아세요（知道吗/请知道）/ 압니다（知道）/ 아는（知道的）</div>
+`,
     quickTable: {
-      title: 'ㄹ 불규칙 변화 정리（알다 예시）',
-      headers: ['어미', 'ㄹ 처리', '결과형', '意思'],
+      title: 'ㄹ 不规则变化整理（以 알다 为例）',
+      headers: ['词尾', 'ㄹ 处理', '结果形', '意思'],
       rows: [
-        [{ ko: '-(으)세요', zh: '' }, { ko: 'ㄹ 탈락', zh: '' }, { ko: '아세요', zh: '请知道/您知道吗' }, { ko: '', zh: '' }],
-        [{ ko: '-ㅂ니다', zh: '' }, { ko: 'ㄹ 탈락', zh: '' }, { ko: '압니다', zh: '知道（正式）' }, { ko: '', zh: '' }],
-        [{ ko: '-(으)ㄴ（과거관형）', zh: '' }, { ko: 'ㄹ 탈락', zh: '' }, { ko: '안（알+ㄴ，非否定词）', zh: '知道的（过去）' }, { ko: '', zh: '' }],
-        [{ ko: '-아/어요', zh: '' }, { ko: 'ㄹ 보존', zh: '' }, { ko: '알아요', zh: '知道' }, { ko: '', zh: '' }],
-        [{ ko: '-고/-면/-도', zh: '' }, { ko: 'ㄹ 보존', zh: '' }, { ko: '알고/알면/알아도', zh: '知道并/如果知道/就算知道' }, { ko: '', zh: '' }],
+        [{ ko: '-(으)세요', zh: '' }, { ko: 'ㄹ 脱落', zh: '' }, { ko: '아세요', zh: '' }, { ko: '请知道/您知道吗', zh: '' }],
+        [{ ko: '-ㅂ니다', zh: '' }, { ko: 'ㄹ 脱落', zh: '' }, { ko: '압니다', zh: '' }, { ko: '知道（正式）', zh: '' }],
+        [{ ko: '-(으)ㄴ（过去冠词形）', zh: '' }, { ko: 'ㄹ 脱落', zh: '' }, { ko: '안（알+ㄴ，非否定词）', zh: '' }, { ko: '知道的（过去）', zh: '' }],
+        [{ ko: '-아/어요', zh: '' }, { ko: 'ㄹ 保留', zh: '' }, { ko: '알아요', zh: '' }, { ko: '知道', zh: '' }],
+        [{ ko: '-고/-면/-도', zh: '' }, { ko: 'ㄹ 保留', zh: '' }, { ko: '알고/알면/알아도', zh: '' }, { ko: '知道并/如果知道/就算知道', zh: '' }],
       ],
     },
     specialQuiz: {
@@ -1006,25 +1178,25 @@ export const grammarCardsP12: GrammarCard[] = [
           prompt: '알다 + -(으)세요 = ?',
           options: ['알아세요', '아세요', '알세요', '알으세요'],
           answer: 1 as 0|1|2|3,
-          explanation: 'ㄹ词干 + 시 시작 어미 → ㄹ 탈락：알다→아세요',
+          explanation: 'ㄹ词干 + 시 开头词尾 → ㄹ 脱落：알다→아세요',
         },
         {
           prompt: '살다 + -ㅂ니다 = ?',
           options: ['살ㅂ니다', '사ㅂ니다', '살습니다', '삽니다'],
           answer: 3 as 0|1|2|3,
-          explanation: 'ㄹ词干 + ㅂ 시작 어미 → ㄹ 탈락：살다→삽니다',
+          explanation: 'ㄹ词干 + ㅂ 开头词尾 → ㄹ 脱落：살다→삽니다',
         },
         {
-          prompt: '만들다 + -는 = ?（현재 관형형）',
+          prompt: '만들다 + -는 = ?（现在 冠词形）',
           options: ['만든', '만들은', '만드는', '만들는'],
           answer: 2 as 0|1|2|3,
-          explanation: 'ㄹ词干 + -는（현재관형형） → ㄹ 탈락：만들다→만드는',
+          explanation: 'ㄹ词干 + -는（现在冠词形） → ㄹ 脱落：만들다→만드는',
         },
         {
-          prompt: 'ㄹ이 탈락하지 않는 경우는?',
-          options: ['알 거예요（미래관형）', '아세요（세요）', '압니다（ㅂ니다）', '아는（현재관형）'],
+          prompt: 'ㄹ 不脱落的情况是？',
+          options: ['알 거예요（将来冠词形）', '아세요（세요）', '압니다（ㅂ니다）', '아는（现在冠词形）'],
           answer: 0 as 0|1|2|3,
-          explanation: '미래 관형형 -(으)ㄹ 앞에서는 ㄹ 탈락 없음：알 거예요（O）',
+          explanation: '将来冠词形 -(으)ㄹ 前 ㄹ 不脱落：알 거예요（O）',
         },
       ],
     },
@@ -1036,10 +1208,10 @@ export const grammarCardsP12: GrammarCard[] = [
     partNumber: 12,
     lessonNumber: 7,
     title: '"ㅎ" 的不规则音变',
-    whatItDoes: 'ㅎ词干形容词在모음 어미 앞에서 ㅎ脱落并发生모음 축약',
-    whatItDoesBody: 'ㅎ 받침으로 끝나는 형용사（ㅎ 词干）는 모음으로 시작하는 어미 앞에서 ㅎ이 탈락하고 모음이 축약된다。\n대표적인 ㅎ 불규칙 형용사：빨갛다（红），파랗다（蓝），노랗다（黄），하얗다（白），까맣다（黑），어떻다（怎样），이렇다（这样），그렇다（那样），저렇다（那样/那边）。\n자음으로 시작하는 어미（-고，-지，-면）앞에서는 ㅎ이 그대로 유지된다。',
-    structureNote: 'ㅎ脱落：ㅎ词干 + -아/어요 → ㅎ탈락 후 앞 모음과 축약（ㅏ/ㅓ→ㅐ）\n관형형：ㅎ词干 + -(으)ㄴ → ㅎ탈락（빨간，파란，어떤，그런，이런）\nㅎ保留：ㅎ词干 + -고/-지/-면/-다 → 그대로（빨갛고，어떻지，그렇다면）',
-    rulesNote: '모음 축약 규칙：ㅎ탈락 후 앞 모음 ㅏ/ㅓ + 어미 아/어 → ㅐ로 축약。\n빨갛다（ㅏ）+ 아요 → 빨가+아요 → 빨개요\n파랗다（ㅏ）+ 아요 → 파라+아요 → 파래요\n어떻다（ㅓ）+ 어요 → 어떠+어요 → 어때요\n그렇다（ㅓ）+ 어요 → 그러+어요 → 그래요（그러+어→그래）\n하얗다 예외：하얗다 + 아요 → 하얘요（ㅑ+아→ㅒ 축약）',
+    whatItDoes: 'ㅎ词干形容词在元音词尾前 ㅎ 脱落并发生元音缩约',
+    whatItDoesBody: '以 ㅎ 收音结尾的形容词（ㅎ词干）在以元音开头的词尾前 ㅎ 脱落，并发生元音缩约。\n典型的 ㅎ 不规则形容词：빨갛다（红），파랗다（蓝），노랗다（黄），하얗다（白），까맣다（黑），어떻다（怎样），이렇다（这样），그렇다（那样），저렇다（那样/那边）。\n在以辅音开头的词尾（-고，-지，-면）前 ㅎ 保留。',
+    structureNote: 'ㅎ脱落：ㅎ词干 + -아/어요 → ㅎ脱落后与前元音缩约（ㅏ/ㅓ→ㅐ）\n冠词形：ㅎ词干 + -(으)ㄴ → ㅎ脱落（빨간，파란，어떤，그런，이런）\nㅎ保留：ㅎ词干 + -고/-지/-면/-다 → 不变（빨갛고，어떻지，그렇다면）',
+    rulesNote: '元音缩约规则：ㅎ脱落后 前元音 ㅏ/ㅓ + 词尾 아/어 → 缩约为 ㅐ。\n빨갛다（ㅏ）+ 아요 → 빨가+아요 → 빨개요\n파랗다（ㅏ）+ 아요 → 파라+아요 → 파래요\n어떻다（ㅓ）+ 어요 → 어떠+어요 → 어때요\n그렇다（ㅓ）+ 어요 → 그러+어요 → 그래요\n하얗다 例外：하얗다 + 아요 → 하얘요（ㅑ+아→ㅒ 缩约）',
     structures: [
       {
         ko: '하늘이 파래요',
@@ -1077,13 +1249,13 @@ export const grammarCardsP12: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: 'ㅎ脱落：ㅎ词干 + 모음 어미（아/어，은）→ ㅎ탈락 + 모음 축약', examples: '빨갛다→빨개요 / 파랗다→파래요 / 어떻다→어때요 / 그렇다→그래요' },
-      { type: 'rule', text: '관형형：ㅎ词干 + -(으)ㄴ → ㅎ탈락（색깔 형용사 관형형）', examples: '빨갛다→빨간 / 파랗다→파란 / 노랗다→노란 / 하얗다→하얀 / 까맣다→까만' },
-      { type: 'rule', text: 'ㅎ保留：ㅎ词干 + 자음 어미（고/지/면/다/네）→ ㅎ그대로', examples: '빨갛고（并且红）/ 어떻지（怎么样嘛）/ 그렇다면（如果那样）' },
-      { type: 'usage', text: '색깔 형용사 관형형 정리（ㅎ탈락+ㄴ）', examples: '빨간 가방 / 파란 하늘 / 노란 꽃 / 하얀 눈 / 까만 밤' },
-      { type: 'usage', text: '이렇다/그렇다/저렇다/어떻다 는 지시·의문 형용사로 활용 빈도 높음', examples: '이런 사람（这样的人）/ 그런 일（那样的事）/ 어떤 것（什么样的东西）/ 이래요/그래요/어때요' },
-      { type: 'note', text: '하얗다 의 모음 축약：하얗+아요 → 하얘요（ㅑ+ㅏ→ㅒ），규칙과 동일하지만 결과가 다름', examples: '하얀 눈（白雪）/ 하얘요（是白色的）/ 하얗고（白色并且）' },
-      { type: 'compare', text: 'ㅎ불규칙 vs ㄹ불규칙：ㅎ는 모음 어미 앞에서 탈락，ㄹ는 ㄴ/ㅂ/시/오 앞에서 탈락', examples: 'ㅎ：빨갛다→빨개요（모음앞탈락）/ ㄹ：알다→아세요（시앞탈락）' },
+      { type: 'rule', text: 'ㅎ脱落：ㅎ词干 + 元音词尾（아/어，은）→ ㅎ脱落 + 元音缩约', examples: '빨갛다→빨개요 / 파랗다→파래요 / 어떻다→어때요 / 그렇다→그래요' },
+      { type: 'rule', text: '冠词形：ㅎ词干 + -(으)ㄴ → ㅎ脱落（颜色形容词冠词形）', examples: '빨갛다→빨간 / 파랗다→파란 / 노랗다→노란 / 하얗다→하얀 / 까맣다→까만' },
+      { type: 'rule', text: 'ㅎ保留：ㅎ词干 + 辅音词尾（고/지/면/다/네）→ ㅎ 保持', examples: '빨갛고（并且红）/ 어떻지（怎么样嘛）/ 그렇다면（如果那样）' },
+      { type: 'usage', text: '颜色形容词冠词形整理（ㅎ脱落+ㄴ）', examples: '빨간 가방 / 파란 하늘 / 노란 꽃 / 하얀 눈 / 까만 밤' },
+      { type: 'usage', text: '이렇다/그렇다/저렇다/어떻다 作为指示·疑问形容词使用频率很高', examples: '이런 사람（这样的人）/ 그런 일（那样的事）/ 어떤 것（什么样的东西）/ 이래요/그래요/어때요' },
+      { type: 'note', text: '하얗다 的元音缩约：하얗+아요 → 하얘요（ㅑ+ㅏ→ㅒ），规律相同但结果不同', examples: '하얀 눈（白雪）/ 하얘요（是白色的）/ 하얗고（白色并且）' },
+      { type: 'compare', text: 'ㅎ不规则 vs ㄹ不规则：ㅎ 在元音词尾前脱落，ㄹ 在 ㄴ/ㅂ/시/오 前脱落', examples: 'ㅎ：빨갛다→빨개요（元音前脱落）/ ㄹ：알다→아세요（시前脱落）' },
     ],
     cardExamples: [
       {
@@ -1126,25 +1298,63 @@ export const grammarCardsP12: GrammarCard[] = [
     ],
     scenarios: [
       { icon: '🌈', context: '颜色描述', ko: '가을 하늘이 파랗고 높아요.', zh: '秋天的天空蓝而高。（파랗고，ㅎ保留）' },
-      { icon: '🎵', context: 'KPOP 앨범', ko: '이번 앨범 어때요? 정말 좋아요!', zh: '这次专辑怎么样？真的很好！' },
+      { icon: '🎵', context: 'KPOP 专辑', ko: '이번 앨범 어때요? 정말 좋아요!', zh: '这次专辑怎么样？真的很好！' },
       { icon: '🌸', context: '花卉描述', ko: '노란 꽃이 활짝 피었어요.', zh: '黄色的花盛开了。（노랗다+ㄴ→노란）' },
       { icon: '❄️', context: '冬天描述', ko: '눈이 와서 온 세상이 하얘요.', zh: '下雪了，整个世界都是白色的。（하얗다→하얘요）' },
       { icon: '💬', context: '日常询问', ko: 'A: 오늘 기분 어때요? B: 그냥 그래요.', zh: 'A：今天心情怎么样？B：就那样。（그렇다→그래요）' },
       { icon: '🌙', context: '夜晚描述', ko: '밤하늘이 까맣고 별이 많아요.', zh: '夜空黑黑的，星星很多。（까맣고，ㅎ保留）' },
     ],
     mistakes: [
-      { wrong: '파랗아요（ㅎ 탈락 없이 아요 결합）', correct: '파래요', note: 'ㅎ词干 + 아/어요 시，ㅎ 탈락 후 모음 축약：파랗+아요→파라+아요→파래요。' },
-      { wrong: '빨강은 가방（관형형 오류）', correct: '빨간 가방', note: 'ㅎ词干 관형형：빨갛다+ㄴ→빨간。빨강 은 명사（红色），관형형 아님。' },
-      { wrong: '어떻아요?（ㅎ 탈락 없이）', correct: '어때요?', note: '어떻다+어요→어떠+어요→어때요。ㅎ탈락 후 ㅓ+어→ㅐ 축약。' },
-      { wrong: '그렇은 사람（관형형 오류）', correct: '그런 사람', note: 'ㅎ词干 + -(으)ㄴ 관형형：그렇다+ㄴ→그런（ㅎ탈락，받침없어서 은 아닌 ㄴ 직접 결합）。' },
+      { wrong: '파랗아요（ㅎ 未脱落直接加 아요）', correct: '파래요', note: 'ㅎ词干 + 아/어요 时，ㅎ 脱落后元音缩约：파랗+아요→파라+아요→파래요。' },
+      { wrong: '빨강은 가방（冠词形错误）', correct: '빨간 가방', note: 'ㅎ词干冠词形：빨갛다+ㄴ→빨간。빨강 是名词（红色），不是冠词形。' },
+      { wrong: '어떻아요?（ㅎ 未脱落）', correct: '어때요?', note: '어떻다+어요→어떠+어요→어때요。ㅎ脱落后 ㅓ+어→ㅐ 缩约。' },
+      { wrong: '그렇은 사람（冠词形错误）', correct: '그런 사람', note: 'ㅎ词干 + -(으)ㄴ 冠词形：그렇다+ㄴ→그런（ㅎ脱落，无收音故直接接 ㄴ 而非 은）。' },
     ],
-    overviewHtml: `<div class="overview"><div class="ov-hero"><div class="ov-hero-label">P12 · 第7课</div><div class="ov-hero-title">"ㅎ" 的不规则音变</div><div class="ov-hero-sub">ㅎ词干形容词在모음 어미 앞에서의 변화 규칙</div></div><div class="ov-section"><div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title">核心规则</div></div><div class="ov-block"><div class="badge">ㅎ탈락+축약</div><div class="ko">ㅎ词干 + 아/어요 → ㅎ脱落 + 모음 축약</div><div class="zh">빨갛다→빨개요 / 어떻다→어때요</div></div><div class="ov-block"><div class="badge">ㅎ보존</div><div class="ko">ㅎ词干 + 고/지/면/다 → ㅎ保留</div><div class="zh">빨갛고 / 어떻지 / 그렇다면</div></div></div></div>`,
-    step0Html: `<div class="step0-hook"><div class="hook-box"><div class="hook-sent"><span class="ko">하늘이 파래요.</span><span class="zh">天空是蓝的。（파랗다→파래요，ㅎ脱落）</span></div><div class="hook-sent"><span class="ko">오늘 날씨 어때요?</span><span class="zh">今天天气怎么样？（어떻다→어때요，ㅎ脱落）</span></div></div></div>`,
+    overviewHtml: `<div class="overview"><div class="ov-hero"><div class="ov-hero-label">P12 · 第7课</div><div class="ov-hero-title">"ㅎ" 的不规则音变</div><div class="ov-hero-sub">ㅎ词干形容词在元音词尾前的变化规则</div></div><div class="ov-section"><div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title">核心规则</div></div><div class="ov-block"><div class="badge">ㅎ脱落+缩约</div><div class="ko">ㅎ词干 + 아/어요 → ㅎ脱落 + 元音缩约</div><div class="zh">빨갛다→빨개요 / 어떻다→어때요</div></div><div class="ov-block"><div class="badge">ㅎ保留</div><div class="ko">ㅎ词干 + 고/지/면/다 → ㅎ保留</div><div class="zh">빨갛고 / 어떻지 / 그렇다면</div></div></div></div>`,
+    step0Html: `
+<div class="card-title">ㅎ词干形容词在元音词尾前 ㅎ 脱落并发生元音缩约</div>
+<div class="card-body">以 ㅎ 收音结尾的形容词（ㅎ词干）在以元音开头的词尾前 ㅎ 脱落，并发生元音缩约。</div>
+<div class="hook-box">
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">学完这节课，你能说</div>
+  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+    <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">하늘이 파래요</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">天空是蓝色的。（파랗다→파래요）</div>
+    </div>
+    <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
+      <div style="font-size:16px;font-weight:800;color:#241917">오늘 날씨 어때요?</div>
+      <div style="font-size:16px;color:#89756e;margin-top:2px">今天天气怎么样？（어떻다→어때요）</div>
+    </div>
+  </div>
+  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 这两句典型用法记住，本课基本就掌握了</div>
+</div>
+<div class="reminder-box">元音缩约规则：ㅎ脱落后 前元音 ㅏ/ㅓ + 词尾 아/어 → 缩约为 ㅐ。
+빨갛다（ㅏ）+ 아요 → 빨가+아요 → 빨개요
+파랗다（ㅏ）+ 아요 → 파라+아요 → 파래요
+어떻다（ㅓ）+ 어요 → 어떠+어요 → 어때요
+그렇다（ㅓ）+ 어요 → 그러+어요 → 그래요
+하얗다 例外：하얗다 + 아요 → 하얘요（ㅑ+아→ㅒ 缩约）</div>
+`,
     compareLabel: 'ㅎ脱落 vs ㅎ保留',
-    compareHtml: `<div class="compare"><div class="cmp-block" style="border-left:4px solid #ff7fa8"><div class="cmp-title">ㅎ脱落（모음 어미 앞）</div><div class="cmp-row"><span class="badge">조건</span>아/어，은，을 로 시작하는 어미</div><div class="cmp-row"><span class="ko">빨갛다 + 아요 → 빨개요</span><span class="zh">ㅎ脱落+ㅏ축약→ㅐ</span></div><div class="cmp-row"><span class="ko">파랗다 + 은 → 파란</span><span class="zh">ㅎ脱落（관형형）</span></div></div><div class="cmp-block" style="border-left:4px solid #aee3d8"><div class="cmp-title">ㅎ保留（자음 어미 앞）</div><div class="cmp-row"><span class="badge">조건</span>고，지，면，다，네 로 시작하는 어미</div><div class="cmp-row"><span class="ko">빨갛다 + 고 → 빨갛고</span><span class="zh">ㅎ保留</span></div><div class="cmp-row"><span class="ko">어떻다 + 지 → 어떻지</span><span class="zh">ㅎ保留</span></div></div></div>`,
+    compareHtml: `
+<div class="card-title">ㅎ脱落 vs ㅎ保留</div>
+<div class="card-body">以 ㅎ 收音结尾的形容词（ㅎ词干）在以元音开头的词尾前 ㅎ 脱落，并发生元音缩约。</div>
+<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
+  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v">用法一</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">하늘이 파래요</span><span style="font-size:16px;color:#5a4640">天空是蓝色的。（파랗다→파래요）</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">빨간 장미를 샀어요</span><span style="font-size:16px;color:#5a4640">买了红色的玫瑰。（빨갛다+ㄴ→빨간）</span></div>
+  </div>
+  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
+    <div class="tok t-v" style="background:#aee3d8;color:#1a7a6a">用法二</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">오늘 날씨 어때요?</span><span style="font-size:16px;color:#5a4640">今天天气怎么样？（어떻다→어때요）</span></div>
+  </div>
+</div>
+<div class="reminder-box">빨갛다（ㅏ）+ 아요 → 빨가+아요 → 빨개요</div>
+`,
     quickTable: {
-      title: 'ㅎ 불규칙 변화 정리',
-      headers: ['원형', '-아/어요', '-(으)ㄴ（관형형）', '-고（보존）'],
+      title: 'ㅎ 不规则变化整理',
+      headers: ['原形', '-아/어요', '-(으)ㄴ（冠词形）', '-고（保留）'],
       rows: [
         [{ ko: '빨갛다', zh: '红' }, { ko: '빨개요', zh: '' }, { ko: '빨간', zh: '' }, { ko: '빨갛고', zh: '' }],
         [{ ko: '파랗다', zh: '蓝' }, { ko: '파래요', zh: '' }, { ko: '파란', zh: '' }, { ko: '파랗고', zh: '' }],
@@ -1162,25 +1372,25 @@ export const grammarCardsP12: GrammarCard[] = [
           prompt: '파랗다 + -아요 = ?',
           options: ['파랗아요', '파라요', '파랬어요', '파래요'],
           answer: 3 as 0|1|2|3,
-          explanation: 'ㅎ탈락 후 ㅏ+아→ㅐ 축약：파랗+아요→파래요',
+          explanation: 'ㅎ脱落后 ㅏ+아→ㅐ 缩约：파랗+아요→파래요',
         },
         {
-          prompt: '빨갛다의 관형형（ㄴ）은?',
+          prompt: '빨갛다 的冠词形（ㄴ）是？',
           options: ['빨강', '빨간', '빨개', '빨갛은'],
           answer: 1 as 0|1|2|3,
-          explanation: 'ㅎ탈락 관형형：빨갛다+ㄴ→빨간',
+          explanation: 'ㅎ脱落冠词形：빨갛다+ㄴ→빨간',
         },
         {
-          prompt: '어떻다 + -고 = ?（ㅎ 보존）',
+          prompt: '어떻다 + -고 = ?（ㅎ 保留）',
           options: ['어떻고', '어때고', '어떠고', '어떻어고'],
           answer: 0 as 0|1|2|3,
-          explanation: '자음 어미 앞에서는 ㅎ 보존：어떻다+고→어떻고',
+          explanation: '辅音词尾前 ㅎ 保留：어떻다+고→어떻고',
         },
         {
           prompt: '그렇다 + -아/어요 = ?',
           options: ['그렇아요', '그러요', '그래요', '그렇어요'],
           answer: 2 as 0|1|2|3,
-          explanation: 'ㅎ탈락 후 ㅓ+어→ㅐ 축약：그렇+어요→그러+어요→그래요',
+          explanation: 'ㅎ脱落后 ㅓ+어→ㅐ 缩约：그렇+어요→그러+어요→그래요',
         },
       ],
     },
@@ -1194,7 +1404,7 @@ export const grammarCardsP12: GrammarCard[] = [
     title: '综合练习⑫',
     isPractice: true,
     whatItDoes: 'P12 全课语法综合复习',
-    whatItDoesBody: '复习 P12 所有语法点：-을/ㄹ 테니까，-(이)든지，-(으)려고 하다/가다/오다，-(으)려고 했다，-지 그랬어요?，겸，-은/ㄴ 김에，(어)치，짜리，에，ㄹ 불규칙，ㅎ 불규칙。',
+    whatItDoesBody: '复习 P12 所有语法点：-을/ㄹ 테니까，-(이)든지，-(으)려고 하다/가다/오다，-(으)려고 했다，-지 그랬어요?，겸，-은/ㄴ 김에，(어)치，짜리，에，ㄹ 不规则，ㅎ 不规则。',
     structureNote: '',
     rulesNote: '',
     structures: [],
@@ -1202,15 +1412,10 @@ export const grammarCardsP12: GrammarCard[] = [
     cardExamples: [],
     scenarios: [],
     mistakes: [],
-    overviewHtml: `<div class="overview"><div class="ov-hero"><div class="ov-hero-label">P12 · 综合练习</div><div class="ov-hero-title">综合练习⑫</div><div class="ov-hero-sub">P12 全课复习</div></div><div class="ov-section"><div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title">本册复习要点</div></div><div class="ov-block"><div class="badge">意图表达</div><div class="ko">-을/ㄹ 테니까 / -(으)려고 했다 / -지 그랬어요?</div></div><div class="ov-block"><div class="badge">量词价格</div><div class="ko">(어)치 / 짜리 / 에</div></div><div class="ov-block"><div class="badge">不规则변화</div><div class="ko">ㄹ 불규칙 / ㅎ 불규칙</div></div></div></div>`,
+    overviewHtml: `<div class="overview"><div class="ov-hero"><div class="ov-hero-label">P12 · 综合练习</div><div class="ov-hero-title">综合练习⑫</div><div class="ov-hero-sub">P12 全课复习</div></div><div class="ov-section"><div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title">本册复习要点</div></div><div class="ov-block"><div class="badge">意图表达</div><div class="ko">-을/ㄹ 테니까 / -(으)려고 했다 / -지 그랬어요?</div></div><div class="ov-block"><div class="badge">量词价格</div><div class="ko">(어)치 / 짜리 / 에</div></div><div class="ov-block"><div class="badge">不规则变化</div><div class="ko">ㄹ 不规则 / ㅎ 不规则</div></div></div></div>`,
     step0Html: '',
     compareLabel: '',
     compareHtml: '',
-    quickTable: {
-      title: '',
-      headers: [],
-      rows: [],
-    },
     specialQuiz: {
       type: 'fill',
       title: '综合练习⑫',
@@ -1238,31 +1443,31 @@ export const grammarCardsP12: GrammarCard[] = [
           prompt: '趁着来首尔，顺便去了博物馆。→ 서울에 ___ 김에 박물관도 갔어요',
           options: ['와서', '올', '오는', '온'],
           answer: 3 as 0|1|2|3,
-          explanation: '오다 무받침 과거 관형형：오+ㄴ=온 → 서울에 온 김에',
+          explanation: '오다 无收音过去冠词形：오+ㄴ=온 → 서울에 온 김에',
         },
         {
           prompt: '买了一万韩元的零食。→ 만 원___ 과자를 샀어요',
           options: ['어치', '치', '짜리', '에'],
           answer: 0 as 0|1|2|3,
-          explanation: '금액만큼의 분량 → (어)치：만 원어치',
+          explanation: '该金额的分量 → (어)치：만 원어치',
         },
         {
-          prompt: '살다 + -(으)세요 = ?（ㄹ 불규칙）',
+          prompt: '살다 + -(으)세요 = ?（ㄹ 不规则）',
           options: ['사세요', '살아세요', '살세요', '살으세요'],
           answer: 0 as 0|1|2|3,
-          explanation: 'ㄹ词干 + 시 시작 어미 → ㄹ 탈락：살다→사세요',
+          explanation: 'ㄹ词干 + 시 开头词尾 → ㄹ 脱落：살다→사세요',
         },
         {
-          prompt: '파랗다 + -아요 = ?（ㅎ 불규칙）',
+          prompt: '파랗다 + -아요 = ?（ㅎ 不规则）',
           options: ['파랗아요', '파래요', '파랬어요', '파라요'],
           answer: 1 as 0|1|2|3,
-          explanation: 'ㅎ탈락 후 ㅏ+아→ㅐ 축약：파랗+아요→파래요',
+          explanation: 'ㅎ脱落后 ㅏ+아→ㅐ 缩约：파랗+아요→파래요',
         },
         {
-          prompt: '어떻다의 관형형（ㄴ）은?',
+          prompt: '어떻다 的冠词形（ㄴ）是？',
           options: ['어떤', '어떻는', '어때', '어떻은'],
           answer: 0 as 0|1|2|3,
-          explanation: 'ㅎ탈락 관형형：어떻다+ㄴ→어떤',
+          explanation: 'ㅎ脱落冠词形：어떻다+ㄴ→어떤',
         },
       ],
     },

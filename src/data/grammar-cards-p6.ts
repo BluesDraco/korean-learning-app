@@ -216,10 +216,10 @@ export const grammarCardsP6: GrammarCard[] = [
       { icon: '🍽️', context: '日常承诺', ko: '제가 오늘 저녁 준비할게요.', zh: '今天晚饭我来准备。' },
     ],
     mistakes: [
-      { wrong: '손창 씨가 갈게요.', correct: '손창 씨가 갈 거예요.', note: '-을/ㄹ게요 只能用第一人称主语，他人用 -을/ㄹ 거예요' },
-      { wrong: '날씨가 좋겠어요', correct: '날씨가 좋겠군요', note: '-겠군요 是对新信息的感叹/发现，-겠어요 只是单纯推测，不能表达发现新信息时的感受。' },
-      { wrong: '먹을게요. (主语是你)', correct: '드세요. / 먹어요.', note: '-을/ㄹ게요 主语只能是说话人自己' },
-      { wrong: '어제 갔겠군요. (说话者自己亲历)', correct: '어제 힘드셨겠군요.', note: '-겠군요 用于推测他人情况，不用于叙述自己亲历的事' },
+      { wrong: '손창 씨가 갈게요.', correct: '손창 씨가 갈 거예요.', note: '-을/ㄹ게요 只能用第一人称主语，他人用 -을/ㄹ 거예요。' },
+      { wrong: '내일 비 와요? / 비 올거에요', correct: '내일 비 올 거예요.', note: '-을/ㄹ 거예요 中间必须有空格、에 而不是 어：올 거예요（不是 올거에요）。' },
+      { wrong: '저는 도와줄게요?', correct: '제가 도와줄게요.', note: '-을/ㄹ게요 用陈述句承诺，不接 ? 疑问；主语自指多用 제가 而不是 저는。' },
+      { wrong: '어제 비가 올게요.', correct: '어제 비가 왔어요.', note: '-을/ㄹ게요 是承诺未来，不能用于过去事件。' },
     ],
     linkedGrammarIds: ['g51', 'g17'],
   },
@@ -318,7 +318,7 @@ export const grammarCardsP6: GrammarCard[] = [
           post: '?',
           options: ["예쁘나요", "예뻐요", "예쁜가요"],
           answer: 2,
-          explanation: '形容词有收音 + -은가요?："这件衣服好看吗？"예쁘다→예쁜가요。',
+          explanation: '形容词无收音 + -ㄴ가요?："这件衣服好看吗？"예쁘다 词干 예쁘 无收音 → 예쁘+ㄴ가요 = 예쁜가요。',
         },
         {
           pre: '저 분이',
@@ -340,7 +340,7 @@ export const grammarCardsP6: GrammarCard[] = [
     compareLabel: '-나요?（柔和疑问）vs -ㅂ니다만（正式转折）',
     structures: [
       {
-        ko: '동사/형용사 어간 + -나요?',
+        ko: '동사/형용사어간 + -나요?',
         zh: '动词/形容词词干 + -나요?',
         tokens: [
           { text: '동사/형용사', role: 'verb' },
@@ -405,10 +405,10 @@ export const grammarCardsP6: GrammarCard[] = [
         wordBlocks: [
           { text: '한국어', role: 'subject' },
           { text: '공부하기', role: 'verb' },
-          { text: '어렵나요', role: 'verb' },
+          { text: '어려운가요', role: 'verb' },
         ],
         zh: '学韩语难吗？',
-        swapWords: ['어렵나요', '재미있나요', '힘드나요'],
+        swapWords: ['어려운가요', '재미있나요', '힘든가요'],
 
         swapRole: 'verb',
       },
@@ -438,16 +438,16 @@ export const grammarCardsP6: GrammarCard[] = [
     scenarios: [
       { icon: '💬', context: '柔和询问', ko: '콘서트 티켓 예매했나요?', zh: '你预订演唱会门票了吗？' },
       { icon: '🎵', context: 'KPOP', ko: '이 가수 좋아하나요?', zh: '你喜欢这个歌手吗？' },
-      { icon: '📚', context: '学习询问', ko: '이 문법 이해됐나요?', zh: '这个语法理解了吗？' },
+      { icon: '📚', context: '学习询问', ko: '이 문법 이해됐나요?', zh: '这个문법理解了吗？' },
       { icon: '🤝', context: '正式道歉', ko: '죄송합니다만 잠깐 자리를 비웠어요.', zh: '非常抱歉，我短暂离开了一下。' },
       { icon: '📋', context: '正式说明', ko: '내용을 봤습니다만 이해가 안 됐어요.', zh: '虽然看了内容，但没有理解。' },
       { icon: '🔍', context: '确认信息', ko: '몇 시에 시작하는지 알고 있나요?', zh: '你知道几点开始吗？' },
     ],
     mistakes: [
-      { wrong: '작나요? (형용사 과거)', correct: '작았나요?', note: '形容词过去时用 -았/었나요?，现在时直接接词干' },
+      { wrong: '작나요? (형용사 过去)', correct: '작았나요?', note: '形容词过去时用 -았/었나요?，现在时直接接词干' },
       { wrong: '가ㅂ니다만', correct: '갑니다만', note: '无收音词干接 -ㅂ니다만，가+ㅂ니다만=갑니다만' },
       { wrong: '학생ㄴ가요?', correct: '학생인가요?', note: '名词用 -인가요?，不能直接接 -ㄴ가요?' },
-      { wrong: '어렵나요? (형용사 현재)', correct: '어려운가요?', note: '形容词现在时用 -은/ㄴ가요?，-나요? 是动词专用' },
+      { wrong: '어렵나요? (형용사 现在)', correct: '어려운가요?', note: '形容词现在时用 -은/ㄴ가요?，-나요? 是动词专用' },
     ],
     linkedGrammarIds: [],
   },
@@ -595,7 +595,7 @@ export const grammarCardsP6: GrammarCard[] = [
       },
       {
         ko: '저는 시간이 없어요. 내일은요?',
-        zh: '我今天没时间。那明天呢？',
+        zh: '我今天没시간。那明天呢？',
         tokens: [
           { text: '저는', role: 'subject' },
           { text: '시간이 없어요', role: 'verb' },
@@ -652,7 +652,7 @@ export const grammarCardsP6: GrammarCard[] = [
           { text: '시간이 없어요', role: 'verb' },
           { text: '내일은요', role: 'plain' },
         ],
-        zh: '今天没时间。那明天呢？',
+        zh: '今天没시간。那明天呢？',
         swapWords: ['내일은요', '모레는요', '주말은요'],
 
         swapRole: 'verb',
@@ -807,7 +807,7 @@ export const grammarCardsP6: GrammarCard[] = [
         ],
       },
       {
-        ko: '동사 어간 + -고 나서',
+        ko: '동사어간 + -고 나서',
         zh: '动词词干 + -고 나서',
         tokens: [
           { text: '동사', role: 'verb' },
@@ -970,7 +970,7 @@ export const grammarCardsP6: GrammarCard[] = [
   <div class="ov-section">
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">别踩的坑</div></div>
     <div class="ov-block">
-      <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">늦었으면 큰일이에요（已发生）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">늦으면 큰일이에요（假设未来用 면）</span></div></div>
+      <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">늦으면 큰일나요</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">늦으면 큰일이에요（더 일반적/书面更稳）</span></div></div>
       <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">하다 버리다</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">해 버리다（하다 → 해）</span></div></div>
     </div>
   </div>
@@ -979,10 +979,10 @@ export const grammarCardsP6: GrammarCard[] = [
       title: '判断对错：-(으)면 큰일이다 和 -아/어 버리다',
       body: '选出使用正确的句子。',
       questions: [
-        { options: ["지각하면 큰일이에요","지각하면 큰일나요"], answer: 0, explanation: '-(으)면 큰일이다 = "如果……就糟了"：迟到就麻烦了。' },
+        { options: ["지각하면 큰일이에요","지각으면 큰일이에요"], answer: 0, explanation: '하다 动词词干 하 无收音 → 하면（不是 하으면）。큰일이에요/큰일나요 都对，本题练 -(으)면 接续。' },
         { options: ["숙제를 다 해 버렸어요","숙제를 다 했어 버렸어요"], answer: 0, explanation: '해 버리다 表示"彻底做完"：把作业全做完啦。다 했어 버렸어요 语法不成立。' },
         { options: ["먹어 버렸어요","먹었어 버렸어요"], answer: 0, explanation: '-아/어 버리다 接在词干后：먹다→먹어 버렸어요（全吃掉啦）。不能接过去时。' },
-        { options: ["잊어버리면 큰일이에요","잊어버리었으면 큰일이에요"], answer: 0, explanation: '잊어버리다 + 면 → 잊어버리면（正确）。잊어버리었으면 在词干和 면 之间多了一层 과거시제 었，语法不成立。' },
+        { options: ["잊어버리면 큰일이에요","잊어버리었으면 큰일이에요"], answer: 0, explanation: '잊어버리다 + 면 → 잊어버리면（正确）。잊어버리었으면 在词干和 면 之间多了一层 过去시제 었，语法不成立。' },
       ],
     },
 
@@ -1090,7 +1090,7 @@ export const grammarCardsP6: GrammarCard[] = [
       { icon: '🍱', context: '吃完了', ko: '도시락을 벌써 다 먹어 버렸어요.', zh: '便当已经全吃完了。' },
     ],
     mistakes: [
-      { wrong: '가면 큰일이에요. (没明确主体)', correct: '거기에 가면 큰일이에요.', note: '큰일이다 前的条件句要明确说明什么情况，语义才清楚' },
+      { wrong: '거기 가면 큰일이에요', correct: '거기에 가면 큰일이에요.', note: '动作/方向用 -에，省略助词会让句子断节。' },
       { wrong: '먹아 버렸어요.', correct: '먹어 버렸어요.', note: '먹다 词干末元音是ㅓ，用 -어 버리다，不是 -아 버리다' },
       { wrong: '공부해서 버렸어요.', correct: '공부해 버렸어요.', note: '-아/어/여 버리다 直接接补助动词，不加 서' },
       { wrong: '늦면 큰일이에요.', correct: '늦으면 큰일이에요.', note: '늦다 是有收音词干，接 -으면，不能直接接 -면' },
@@ -1236,7 +1236,7 @@ export const grammarCardsP6: GrammarCard[] = [
         ],
       },
       {
-        ko: '형용사 어간 + -다고 생각하다',
+        ko: '형용사어간 + -다고 생각하다',
         zh: '形容词词干 + -다고 생각하다',
         tokens: [
           { text: '형용사', role: 'verb' },
@@ -1313,7 +1313,7 @@ export const grammarCardsP6: GrammarCard[] = [
     scenarios: [
       { icon: '🎤', context: 'KPOP评价', ko: '그 가수가 라이브를 정말 잘한다고 생각해요.', zh: '我觉得那个歌手现场唱得真的很好。' },
       { icon: '🌟', context: '推荐', ko: '이 앨범이 올해 최고라고 생각해요.', zh: '我觉得这张专辑是今年最棒的。' },
-      { icon: '📚', context: '学习感想', ko: '한국어 발음이 제일 어렵다고 생각해요.', zh: '我觉得韩语发音最难。' },
+      { icon: '📚', context: '学习感想', ko: '한국어 발음이 제일 어렵다고 생각해요.', zh: '我觉得韩语발음最难。' },
       { icon: '🤔', context: '意见表达', ko: '그 방법이 더 좋다고 생각해요.', zh: '我觉得那个方法更好。' },
       { icon: '👥', context: '人物评价', ko: '저는 그 사람이 정말 친절한 사람이라고 생각해요.', zh: '我觉得那个人真的是个亲切的人。' },
       { icon: '🇰🇷', context: '韩国文化', ko: '한국 음식이 정말 맛있다고 생각해요.', zh: '我觉得韩国食物真的很好吃。' },
@@ -1334,7 +1334,7 @@ export const grammarCardsP6: GrammarCard[] = [
     whatItDoes: '描述特定的日子和时刻',
     whatItDoesBody: '날 是名词，表示"日子、那天"。\n动词和形容词与 날 相连时需要搭配冠词形；\n名词直接用 (의) 날。\n用于描述某个特定时间点或特定性质的日子。\n这是第五章冠词形的延伸应用你已经学过 -는/은/ㄴ 修饰名词，这节课专门把它用在 날 上，感受"描述日子"这一高频场景。\n中文"下雨的日子"直接形容词+名词，韩语要根据动词还是形容词、有无收音分别选 -는/-은/-ㄴ，规则比中文复杂。',
     structureNote: '这节课是冠词形的专项练习：\n动词现在时(-는 날)、动词过去时(-은/ㄴ 날)、形容词(-은/ㄴ 날)三种形式修饰 날。\n核心逻辑和修饰其他名词完全一样，只是 날 这个词在日常对话里特别常用，值得单独练习。',
-    rulesNote: '动词现在冠词形：\n直接词干 + -는（不看收音）。\n动词过去冠词形：\n有收音→-은 날，无收音/ㄹ→-ㄴ 날。\n形容词冠词形：\n有收音→-은 날，无收音→-ㄴ 날（形容词现在时也用 -은/ㄴ）。\nㄹ收音动词/形容词：\nㄹ 脱落→-ㄴ 날（살다→사는 날，길다→긴 날）。',
+    rulesNote: '动词现在冠词形：\n直接词干 + -는（不看收音）。\n动词过去冠词形：\n有收音→-은 날，无收音/ㄹ→-ㄴ 날。\n形容词冠词形：\n有收音→-은 날，无收音→-ㄴ 날（形容词现在时也用 -은/ㄴ）。\nㄹ收音动词/形容词：\nㄹ 收音动词→-는 날（살다→사는 날）；形容词→-ㄴ 날（길다→긴 날）。',
     scenarioNote: '"第一次见面的那天""心情好的日子就出去逛""今天是休息的日子"描述特定日子是写日记、聊感受、回忆往事时的必备表达。\nKPOP 歌词里充满了 날 的用法，学会这节课你能读懂更多歌词。',
     step0Html: `<h1 style="font-size:25px;font-weight:800;margin:0 0 4px 0;color:#241917">-는/은/ㄴ 날</h1>
 <p style="font-size:16px;color:#89756e;margin:0 0 16px 0">描述特定的日子——做什么的日子，或心情怎样的日子。</p>
@@ -1451,7 +1451,7 @@ export const grammarCardsP6: GrammarCard[] = [
     compareLabel: '-는 날（现在/习惯）vs -은/ㄴ 날（过去那天）',
     structures: [
       {
-        ko: '동사 어간 + -는 날 (현재)',
+        ko: '동사어간 + -는 날 (현재)',
         zh: '动词词干 + -는 날（现在时）',
         tokens: [
           { text: '동사', role: 'verb' },
@@ -1552,13 +1552,13 @@ export const grammarCardsP6: GrammarCard[] = [
       { icon: '🎤', context: 'KPOP', ko: '이 가수를 처음 본 날을 기억해요.', zh: '记得第一次见到这个歌手的那天。' },
       { icon: '🌸', context: '春天', ko: '날씨가 따뜻한 날에 소풍 가고 싶어요.', zh: '天气暖和的日子想去郊游。' },
       { icon: '📅', context: '特别的日子', ko: '오늘은 아버지의 날이에요.', zh: '今天是父亲节。' },
-      { icon: '🎵', context: '学习日', ko: '오늘은 발음을 연습하는 날이에요.', zh: '今天是练习发音的日子。' },
+      { icon: '🎵', context: '学习日', ko: '오늘은 발음을 연습하는 날이에요.', zh: '今天是练习발음的日子。' },
       { icon: '🌧️', context: '下雨天', ko: '비 오는 날에는 집에서 드라마를 봐요.', zh: '下雨天就在家看剧。' },
       { icon: '😴', context: '休息日', ko: '오늘 같은 한가한 날에 푹 쉬고 싶어요.', zh: '像今天这样悠闲的日子想好好休息。' },
     ],
     mistakes: [
       { wrong: '좋는 날', correct: '좋은 날', note: '形容词用 -은/ㄴ 관형사형，不用 -는' },
-      { wrong: '먹는 날 (过去那天吃的)', correct: '먹은 날', note: '过去某天用 -은/ㄴ，현재/습관 才用 -는' },
+      { wrong: '먹는 날 (过去那天吃的)', correct: '먹은 날', note: '过去某天用 -은/ㄴ，现在/습관 才用 -는' },
       { wrong: '아버지의 날이 날이에요.', correct: '아버지의 날이에요.', note: '名词 + 의 날 后直接接述语，不重复 날' },
       { wrong: '바쁘는 날', correct: '바쁜 날', note: '바쁘다 是形容词，冠词形是 -ㄴ（바쁜），不是 -는' },
     ],
@@ -1649,9 +1649,9 @@ export const grammarCardsP6: GrammarCard[] = [
         {
           pre: '친구가 언제',
           post: '물어봤어요.',
-          options: ["(이)라고", "라고", "다고"],
+          options: ["라고", "이라고", "다고"],
           answer: 0,
-          explanation: '언제 + 라고 = 언제라고（朋友问"什么时候"）。疑问词+라고 하다。',
+          explanation: '언제 无收音 → 언제 + 라고 = 언제라고（朋友问"什么时候"）。疑问词+라고 하다。',
         },
         {
           pre: '그 사람 이름이 뭐',
@@ -1670,9 +1670,9 @@ export const grammarCardsP6: GrammarCard[] = [
         {
           pre: '친구가 어디',
           post: '물었어요.',
-          options: ["라고", "(이)라고", "다고"],
-          answer: 1,
-          explanation: '어디 + 라고 = 어디라고 물었어요（朋友问"在哪里"）。',
+          options: ["라고", "이라고", "다고"],
+          answer: 0,
+          explanation: '어디 无收音 → 어디 + 라고 = 어디라고 물었어요（朋友问"在哪里"）。',
         },
       ],
     },
@@ -1832,7 +1832,7 @@ export const grammarCardsP6: GrammarCard[] = [
   <div style="font-size:16px;color:#241917">온 지 3개월 됐어요 — 来了3个月（说明时长）</div>
   <div style="font-size:16px;color:#241917">온 지 오래됐어요 — 来了很久了（时间长）</div>
 </div>
-<div class="reminder-box">먹을 지 얼마 안 됐어요 ✗（未来形）→ 먹은 지 얼마 안 됐어요 ✓（过去冠词形）。걱정이에요 固定搭配，不说 걱정해요。-을지 걱정이다 整块记忆，不要拆开理解。</div>`,
+<div class="reminder-box">먹을 지 얼마 안 됐어요 ✗（未来形）→ 먹은 지 얼마 안 됐어요 ✓（过去冠词形）。걱정이에요 是 -을지 后的固定搭配（比 걱정해요 更自然），-을지 从句后选 걱정이다 而非 걱정하다。</div>`,
         overviewHtml: `<div class="overview">
   <div class="ov-hero">
     <div class="ov-hero-label">第 9 课 · 已完成</div>
@@ -1969,7 +1969,7 @@ export const grammarCardsP6: GrammarCard[] = [
           { text: '제대로 할 수 있을지', role: 'verb' },
           { text: '걱정이에요', role: 'verb' },
         ],
-        zh: '担心能不能把发音说好。',
+        zh: '担心能不能把발음说好。',
         swapWords: ['걱정이에요', '자신이 없어요', '모르겠어요'],
 
         swapRole: 'verb',
@@ -2006,10 +2006,10 @@ export const grammarCardsP6: GrammarCard[] = [
       { icon: '🏢', context: '新工作', ko: '이 회사에 입사한 지 얼마 안 됐어요.', zh: '进这家公司没多久。' },
     ],
     mistakes: [
-      { wrong: '갈 수 있는지 걱정이에요.', correct: '갈 수 있을지 걱정이에요.', note: '固定句式用 -을지，不是 -는지' },
-      { wrong: '온 지가 얼마 됐어요. (没多久 표현 시)', correct: '온 지 얼마 안 됐어요.', note: '表示没多久必须用否定形 안 됐어요，肯定形 됐어요 表示已经过了多久' },
-      { wrong: '먹을 지 얼마 안 됐어요.', correct: '먹은 지 얼마 안 됐어요.', note: '-은/ㄴ 지 얼마 안 되다 用过去冠词形，不能用未来形' },
-      { wrong: '-ㄴ 지가 혼자서 쓰임 (시간 없이)', correct: '온 지 얼마 안 됐어요. / 온 지 3개월 됐어요.', note: '-은/ㄴ 지 必须和时间表达或 얼마 一起使用才自然' },
+      { wrong: '갈 수 있는지 걱정이에요.', correct: '갈 수 있을지 걱정이에요.', note: '"걱정이다" 前的固定句型用 -을/ㄹ지；-는지 在其他句型可通用，本固定句首选 -을지。' },
+      { wrong: '온 지가 얼마 됐어요.', correct: '온 지 얼마 안 됐어요.', note: '想表达"才来不久"必须有否定 안 됐어요；됐어요 表示"已经过了多久"。' },
+      { wrong: '먹을 지 얼마 안 됐어요.', correct: '먹은 지 얼마 안 됐어요.', note: '-은/ㄴ 지 얼마 안 되다 用过去冠词形 -은/ㄴ，不能用未来 -을。' },
+      { wrong: '한국에 온 지예요.', correct: '한국에 온 지 3개월 됐어요.', note: '-은/ㄴ 지 必须搭配时间表达（3개월/얼마/오래）或 됐어요/안 됐어요 一起使用才自然。' },
     ],
     linkedGrammarIds: ['g67'],
   },
@@ -2169,7 +2169,7 @@ export const grammarCardsP6: GrammarCard[] = [
       { type: 'rule', text: '-을 생각도 못 하다：有收音动词词干 + -을 생각도 못 해요', examples: '먹다→먹을 생각도 못 해요 / 읽다→읽을 생각도 못 해요' },
       { type: 'rule', text: '-ㄹ 생각도 못 하다：无收音/ㄹ收音动词词干 + -ㄹ 생각도 못 해요', examples: '가다→갈 생각도 못 해요 / 살다→살 생각도 못 해요' },
       { type: 'rule', text: '이/가 그립다：有收音名词 + 이 그립다；无收音名词 + 가 그립다', examples: '가족이 그립다 / 고향이 그립다 / 친구가 그립다' },
-      { type: 'rule', text: '그립다 变形：ㅂ 不规则', examples: '그립다→그리워요（현재）/ 그리웠어요（과거）/ 그리울 거예요（미래）' },
+      { type: 'rule', text: '그립다 变形：ㅂ 不规则', examples: '그립다→그리워요（现在）/ 그리웠어요（过去）/ 그리울 거예요（将来）' },
       { type: 'note', text: '-을 생각도 못 하다 中 도 是必须的，省略则变成错误表达' },
       { type: 'compare', text: '그립다 vs 그리워하다：그립다 是说话人自己的感受；그리워하다 用于描述第三者的感受' },
       { type: 'example', text: '교재 예문：기름값이 너무 비싸서 차를 살 생각도 못 해요 / 일이 너무 바빠서 여행할 생각도 못 해요' },
@@ -2233,7 +2233,7 @@ export const grammarCardsP6: GrammarCard[] = [
     mistakes: [
       { wrong: '그립어요.', correct: '그리워요.', note: '그립다 是 ㅂ 不规则，变形：그립다→그리워요（不是 그립어요）' },
       { wrong: '가족을 그리워요.', correct: '가족이 그리워요.', note: '그립다 前用主语助词 이/가，不是宾语助词 을/를' },
-      { wrong: '갈 생각 못 해요.', correct: '갈 생각도 못 해요.', note: '固定句式必须加 도，강조"连……都"' },
+      { wrong: '갈 생각 못 해요.', correct: '갈 생각도 못 해요.', note: '固定句式必须加 도，强调"连……都"。' },
       { wrong: '친구를 그립다.', correct: '친구가 그립다.', note: '그립다 是情感形容词，思念对象用 이/가，不能用 을/를' },
     ],
     linkedGrammarIds: [],

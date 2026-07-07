@@ -1,0 +1,4737 @@
+{
+  "findings": [
+    {
+      "cardId": "card-p1-l11",
+      "kind": "practice-specialQuiz",
+      "detail": "isPractice 卡 specialQuiz.questions = 0 < 4"
+    },
+    {
+      "cardId": "card-p2-l11",
+      "kind": "practice-specialQuiz",
+      "detail": "isPractice 卡 specialQuiz.questions = 0 < 4"
+    },
+    {
+      "cardId": "card-p3-l11",
+      "kind": "practice-specialQuiz",
+      "detail": "isPractice 卡 specialQuiz.questions = 0 < 4"
+    },
+    {
+      "cardId": "card-p4-l11",
+      "kind": "practice-specialQuiz",
+      "detail": "isPractice 卡 specialQuiz.questions = 0 < 4"
+    },
+    {
+      "cardId": "card-p5-l11",
+      "kind": "practice-specialQuiz",
+      "detail": "isPractice 卡 specialQuiz.questions = 0 < 4"
+    },
+    {
+      "cardId": "card-p6-l11",
+      "kind": "practice-specialQuiz",
+      "detail": "isPractice 卡 specialQuiz.questions = 0 < 4"
+    },
+    {
+      "cardId": "card-p9-l01",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p9-l01",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p9-l02",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p9-l02",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p9-l03",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p9-l03",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p9-l04",
+      "kind": "connectionRules-low",
+      "detail": "6 < 7"
+    },
+    {
+      "cardId": "card-p9-l04",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p9-l04",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p9-l05",
+      "kind": "connectionRules-low",
+      "detail": "6 < 7"
+    },
+    {
+      "cardId": "card-p9-l05",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p9-l05",
+      "kind": "scenarios-low",
+      "detail": "5 < 6"
+    },
+    {
+      "cardId": "card-p9-l05",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p9-l06",
+      "kind": "connectionRules-low",
+      "detail": "6 < 7"
+    },
+    {
+      "cardId": "card-p9-l06",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p9-l06",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p9-l07",
+      "kind": "connectionRules-low",
+      "detail": "6 < 7"
+    },
+    {
+      "cardId": "card-p9-l07",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p9-l07",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p9-l08",
+      "kind": "connectionRules-low",
+      "detail": "6 < 7"
+    },
+    {
+      "cardId": "card-p9-l08",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p9-l08",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p10-l01",
+      "kind": "connectionRules-low",
+      "detail": "6 < 7"
+    },
+    {
+      "cardId": "card-p10-l01",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p10-l01",
+      "kind": "scenarios-low",
+      "detail": "5 < 6"
+    },
+    {
+      "cardId": "card-p10-l01",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p10-l02",
+      "kind": "connectionRules-low",
+      "detail": "6 < 7"
+    },
+    {
+      "cardId": "card-p10-l02",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p10-l02",
+      "kind": "scenarios-low",
+      "detail": "5 < 6"
+    },
+    {
+      "cardId": "card-p10-l02",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p10-l03",
+      "kind": "connectionRules-low",
+      "detail": "6 < 7"
+    },
+    {
+      "cardId": "card-p10-l03",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p10-l03",
+      "kind": "scenarios-low",
+      "detail": "5 < 6"
+    },
+    {
+      "cardId": "card-p10-l03",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p10-l04",
+      "kind": "connectionRules-low",
+      "detail": "6 < 7"
+    },
+    {
+      "cardId": "card-p10-l04",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p10-l04",
+      "kind": "scenarios-low",
+      "detail": "5 < 6"
+    },
+    {
+      "cardId": "card-p10-l04",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p10-l05",
+      "kind": "connectionRules-low",
+      "detail": "6 < 7"
+    },
+    {
+      "cardId": "card-p10-l05",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p10-l05",
+      "kind": "scenarios-low",
+      "detail": "5 < 6"
+    },
+    {
+      "cardId": "card-p10-l05",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p10-l06",
+      "kind": "connectionRules-low",
+      "detail": "6 < 7"
+    },
+    {
+      "cardId": "card-p10-l06",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p10-l06",
+      "kind": "scenarios-low",
+      "detail": "5 < 6"
+    },
+    {
+      "cardId": "card-p10-l06",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p10-l07",
+      "kind": "connectionRules-low",
+      "detail": "6 < 7"
+    },
+    {
+      "cardId": "card-p10-l07",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p10-l07",
+      "kind": "scenarios-low",
+      "detail": "5 < 6"
+    },
+    {
+      "cardId": "card-p10-l07",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p10-l08",
+      "kind": "connectionRules-low",
+      "detail": "6 < 7"
+    },
+    {
+      "cardId": "card-p10-l08",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p10-l08",
+      "kind": "scenarios-low",
+      "detail": "5 < 6"
+    },
+    {
+      "cardId": "card-p10-l08",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p10-l09",
+      "kind": "connectionRules-low",
+      "detail": "6 < 7"
+    },
+    {
+      "cardId": "card-p10-l09",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p10-l09",
+      "kind": "scenarios-low",
+      "detail": "5 < 6"
+    },
+    {
+      "cardId": "card-p10-l09",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p10-l10",
+      "kind": "connectionRules-low",
+      "detail": "6 < 7"
+    },
+    {
+      "cardId": "card-p10-l10",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p10-l10",
+      "kind": "scenarios-low",
+      "detail": "5 < 6"
+    },
+    {
+      "cardId": "card-p10-l10",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p13-l01",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p13-l01",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p13-l02",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p13-l02",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p13-l03",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p13-l03",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p13-l04",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p13-l04",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p13-l05",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p13-l05",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p13-l06",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p13-l06",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p13-l07",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p13-l07",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p13-l08",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p13-l08",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p14-l01",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p14-l01",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p14-l02",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p14-l02",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p14-l03",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p14-l03",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p14-l04",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p14-l04",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p14-l05",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p14-l05",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p14-l06",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p14-l06",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p14-l07",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p14-l07",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p14-l08",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p14-l08",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p15-l01",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p15-l01",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p15-l02",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p15-l03",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p15-l04",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p15-l04",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p15-l05",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p15-l05",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p15-l06",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p15-l07",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p15-l07",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p15-l08",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p16-l01",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p16-l01",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p16-l02",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p16-l02",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p16-l03",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p16-l03",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p16-l04",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p16-l04",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p16-l05",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p16-l05",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p16-l06",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p16-l06",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p16-l07",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p16-l07",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p16-l08",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p16-l08",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p19-l01",
+      "kind": "connectionRules-low",
+      "detail": "6 < 7"
+    },
+    {
+      "cardId": "card-p19-l02",
+      "kind": "connectionRules-low",
+      "detail": "6 < 7"
+    },
+    {
+      "cardId": "card-p19-l03",
+      "kind": "connectionRules-low",
+      "detail": "6 < 7"
+    },
+    {
+      "cardId": "card-p19-l04",
+      "kind": "connectionRules-low",
+      "detail": "6 < 7"
+    },
+    {
+      "cardId": "card-p19-l05",
+      "kind": "connectionRules-low",
+      "detail": "6 < 7"
+    },
+    {
+      "cardId": "card-p20-l01",
+      "kind": "connectionRules-low",
+      "detail": "6 < 7"
+    },
+    {
+      "cardId": "card-p20-l02",
+      "kind": "connectionRules-low",
+      "detail": "6 < 7"
+    },
+    {
+      "cardId": "card-p20-l03",
+      "kind": "connectionRules-low",
+      "detail": "6 < 7"
+    },
+    {
+      "cardId": "card-p20-l04",
+      "kind": "connectionRules-low",
+      "detail": "6 < 7"
+    },
+    {
+      "cardId": "card-p20-l05",
+      "kind": "connectionRules-low",
+      "detail": "6 < 7"
+    },
+    {
+      "cardId": "card-p24-l04",
+      "kind": "connectionRules-low",
+      "detail": "6 < 7"
+    },
+    {
+      "cardId": "card-p24-l04",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p24-l05",
+      "kind": "connectionRules-low",
+      "detail": "6 < 7"
+    },
+    {
+      "cardId": "card-p24-l05",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p24-l06",
+      "kind": "connectionRules-low",
+      "detail": "6 < 7"
+    },
+    {
+      "cardId": "card-p24-l06",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p24-l07",
+      "kind": "connectionRules-low",
+      "detail": "6 < 7"
+    },
+    {
+      "cardId": "card-p24-l07",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p24-l08",
+      "kind": "connectionRules-low",
+      "detail": "6 < 7"
+    },
+    {
+      "cardId": "card-p24-l08",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p25-l01",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p25-l02",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p25-l03",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p25-l04",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p25-l05",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p25-l06",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p25-l07",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p25-l08",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p26-l01",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p26-l01",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p26-l02",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p26-l02",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p26-l03",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p26-l03",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p26-l04",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p26-l04",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p26-l05",
+      "kind": "connectionRules-low",
+      "detail": "6 < 7"
+    },
+    {
+      "cardId": "card-p26-l05",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p26-l05",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p26-l06",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p26-l06",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p26-l07",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p26-l07",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p26-l08",
+      "kind": "connectionRules-low",
+      "detail": "6 < 7"
+    },
+    {
+      "cardId": "card-p26-l08",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p26-l08",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p27-l01",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p27-l01",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p27-l02",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p27-l02",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p27-l03",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p27-l03",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p27-l04",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p27-l04",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p27-l05",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p27-l05",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p27-l06",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p27-l06",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p27-l07",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p27-l07",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p27-l08",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p27-l08",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p28-l01",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p28-l01",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p28-l02",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p28-l02",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p28-l03",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p28-l03",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p28-l04",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p28-l04",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p28-l05",
+      "kind": "connectionRules-low",
+      "detail": "6 < 7"
+    },
+    {
+      "cardId": "card-p28-l05",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p28-l05",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p28-l06",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p28-l06",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p28-l07",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p28-l07",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p28-l08",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p28-l08",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p29-l01",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p29-l01",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p29-l02",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p29-l02",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p29-l03",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p29-l03",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p29-l04",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p29-l04",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p29-l05",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p29-l05",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p29-l06",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p29-l06",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p29-l07",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p29-l07",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p29-l08",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p29-l08",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p30-l01",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p30-l01",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p30-l02",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p30-l02",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p30-l03",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p30-l03",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p30-l04",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p30-l04",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p30-l05",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p30-l05",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p30-l06",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p30-l06",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p30-l07",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p30-l07",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p30-l08",
+      "kind": "cardExamples-low",
+      "detail": "3 < 4"
+    },
+    {
+      "cardId": "card-p30-l08",
+      "kind": "mistakes-low",
+      "detail": "3 < 4"
+    }
+  ],
+  "summary": [
+    {
+      "cardId": "card-p1-l01",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "—",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p1-l02",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p1-l03",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p1-l04",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p1-l05",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p1-l06",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p1-l07",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p1-l08",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p1-l09",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p1-l10",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p1-l11",
+      "isPractice": true,
+      "structures": 7,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 6,
+      "specialQuiz": 0,
+      "overview": "✓",
+      "step0": "—",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p2-l01",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p2-l02",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p2-l03",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p2-l04",
+      "isPractice": false,
+      "structures": 2,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p2-l05",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p2-l06",
+      "isPractice": false,
+      "structures": 2,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p2-l07",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p2-l08",
+      "isPractice": false,
+      "structures": 2,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p2-l09",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p2-l10",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 8,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 5,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p2-l11",
+      "isPractice": true,
+      "structures": 9,
+      "connectionRules": 8,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 7,
+      "specialQuiz": 0,
+      "overview": "✓",
+      "step0": "—",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p3-l01",
+      "isPractice": false,
+      "structures": 2,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p3-l02",
+      "isPractice": false,
+      "structures": 2,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p3-l03",
+      "isPractice": false,
+      "structures": 2,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p3-l04",
+      "isPractice": false,
+      "structures": 2,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p3-l05",
+      "isPractice": false,
+      "structures": 2,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p3-l06",
+      "isPractice": false,
+      "structures": 2,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p3-l07",
+      "isPractice": false,
+      "structures": 2,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p3-l08",
+      "isPractice": false,
+      "structures": 2,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p3-l09",
+      "isPractice": false,
+      "structures": 2,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p3-l10",
+      "isPractice": false,
+      "structures": 2,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p3-l11",
+      "isPractice": true,
+      "structures": 5,
+      "connectionRules": 10,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 6,
+      "specialQuiz": 0,
+      "overview": "✓",
+      "step0": "—",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p4-l01",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 9,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p4-l02",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p4-l03",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p4-l04",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 8,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p4-l05",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p4-l06",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p4-l07",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p4-l08",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p4-l09",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p4-l10",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p4-l11",
+      "isPractice": true,
+      "structures": 2,
+      "connectionRules": 10,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 10,
+      "specialQuiz": 0,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p5-l01",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 9,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p5-l02",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 8,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p5-l03",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 9,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p5-l04",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p5-l05",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 8,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p5-l06",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 9,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p5-l07",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 8,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p5-l08",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 8,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p5-l09",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p5-l10",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 9,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p5-l11",
+      "isPractice": true,
+      "structures": 2,
+      "connectionRules": 10,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 10,
+      "specialQuiz": 0,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p6-l01",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 9,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p6-l02",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 9,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p6-l03",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p6-l04",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 9,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p6-l05",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 9,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p6-l06",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 9,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p6-l07",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 10,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p6-l08",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 9,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p6-l09",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 9,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p6-l10",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 9,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p6-l11",
+      "isPractice": true,
+      "structures": 2,
+      "connectionRules": 10,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 0,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p7-l01",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p7-l02",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p7-l03",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p7-l04",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p7-l05",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p7-l06",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 10,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p7-l07",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 10,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p7-l08",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p7-l09",
+      "isPractice": true,
+      "structures": 8,
+      "connectionRules": 12,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 5,
+      "specialQuiz": 6,
+      "overview": "✓",
+      "step0": "—",
+      "compare": "—"
+    },
+    {
+      "cardId": "card-p8-l01",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p8-l02",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p8-l03",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p8-l04",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p8-l05",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p8-l06",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 8,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p8-l07",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p8-l08",
+      "isPractice": true,
+      "structures": 8,
+      "connectionRules": 12,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 5,
+      "specialQuiz": 6,
+      "overview": "✓",
+      "step0": "—",
+      "compare": "—"
+    },
+    {
+      "cardId": "card-p9-l01",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 8,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p9-l02",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p9-l03",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p9-l04",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 6,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p9-l05",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 6,
+      "cardExamples": 3,
+      "scenarios": 5,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p9-l06",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 6,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p9-l07",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 6,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p9-l08",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 6,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p9-l09",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p9-l10",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p9-l11",
+      "isPractice": true,
+      "structures": 0,
+      "connectionRules": 0,
+      "cardExamples": 0,
+      "scenarios": 0,
+      "mistakes": 0,
+      "specialQuiz": 11,
+      "overview": "✓",
+      "step0": "—",
+      "compare": "—"
+    },
+    {
+      "cardId": "card-p10-l01",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 6,
+      "cardExamples": 3,
+      "scenarios": 5,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p10-l02",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 6,
+      "cardExamples": 3,
+      "scenarios": 5,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p10-l03",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 6,
+      "cardExamples": 3,
+      "scenarios": 5,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p10-l04",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 6,
+      "cardExamples": 3,
+      "scenarios": 5,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p10-l05",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 6,
+      "cardExamples": 3,
+      "scenarios": 5,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p10-l06",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 6,
+      "cardExamples": 3,
+      "scenarios": 5,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p10-l07",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 6,
+      "cardExamples": 3,
+      "scenarios": 5,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p10-l08",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 6,
+      "cardExamples": 3,
+      "scenarios": 5,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p10-l09",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 6,
+      "cardExamples": 3,
+      "scenarios": 5,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p10-l10",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 6,
+      "cardExamples": 3,
+      "scenarios": 5,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p10-l11",
+      "isPractice": true,
+      "structures": 0,
+      "connectionRules": 0,
+      "cardExamples": 0,
+      "scenarios": 0,
+      "mistakes": 0,
+      "specialQuiz": 11,
+      "overview": "✓",
+      "step0": "—",
+      "compare": "—"
+    },
+    {
+      "cardId": "card-p11-l01",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 8,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p11-l02",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 8,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p11-l03",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p11-l04",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p11-l05",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p11-l06",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p11-l07",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p11-l08",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p11-l09",
+      "isPractice": true,
+      "structures": 0,
+      "connectionRules": 0,
+      "cardExamples": 0,
+      "scenarios": 0,
+      "mistakes": 0,
+      "specialQuiz": 6,
+      "overview": "✓",
+      "step0": "—",
+      "compare": "—"
+    },
+    {
+      "cardId": "card-p12-l01",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p12-l02",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p12-l03",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p12-l04",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p12-l05",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p12-l06",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p12-l07",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p12-l08",
+      "isPractice": true,
+      "structures": 0,
+      "connectionRules": 0,
+      "cardExamples": 0,
+      "scenarios": 0,
+      "mistakes": 0,
+      "specialQuiz": 8,
+      "overview": "✓",
+      "step0": "—",
+      "compare": "—"
+    },
+    {
+      "cardId": "card-p13-l01",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p13-l02",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p13-l03",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p13-l04",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p13-l05",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p13-l06",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p13-l07",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p13-l08",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p13-l09",
+      "isPractice": true,
+      "structures": 0,
+      "connectionRules": 0,
+      "cardExamples": 0,
+      "scenarios": 0,
+      "mistakes": 0,
+      "specialQuiz": 10,
+      "overview": "✓",
+      "step0": "—",
+      "compare": "—"
+    },
+    {
+      "cardId": "card-p14-l01",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p14-l02",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p14-l03",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p14-l04",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p14-l05",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p14-l06",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p14-l07",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p14-l08",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p14-l09",
+      "isPractice": true,
+      "structures": 0,
+      "connectionRules": 0,
+      "cardExamples": 0,
+      "scenarios": 0,
+      "mistakes": 0,
+      "specialQuiz": 10,
+      "overview": "✓",
+      "step0": "—",
+      "compare": "—"
+    },
+    {
+      "cardId": "card-p15-l01",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p15-l02",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 8,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p15-l03",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p15-l04",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 8,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p15-l05",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 9,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p15-l06",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 8,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p15-l07",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p15-l08",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 8,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p15-l09",
+      "isPractice": true,
+      "structures": 0,
+      "connectionRules": 0,
+      "cardExamples": 0,
+      "scenarios": 0,
+      "mistakes": 0,
+      "specialQuiz": 10,
+      "overview": "✓",
+      "step0": "—",
+      "compare": "—"
+    },
+    {
+      "cardId": "card-p16-l01",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p16-l02",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 8,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p16-l03",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p16-l04",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p16-l05",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 8,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p16-l06",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 8,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p16-l07",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p16-l08",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p16-l09",
+      "isPractice": true,
+      "structures": 0,
+      "connectionRules": 0,
+      "cardExamples": 0,
+      "scenarios": 0,
+      "mistakes": 0,
+      "specialQuiz": 10,
+      "overview": "✓",
+      "step0": "—",
+      "compare": "—"
+    },
+    {
+      "cardId": "card-p17-l01",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p17-l02",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p17-l03",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p17-l04",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p17-l05",
+      "isPractice": true,
+      "structures": 0,
+      "connectionRules": 0,
+      "cardExamples": 0,
+      "scenarios": 0,
+      "mistakes": 0,
+      "specialQuiz": 6,
+      "overview": "✓",
+      "step0": "—",
+      "compare": "—"
+    },
+    {
+      "cardId": "card-p18-l01",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p18-l02",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p18-l03",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p18-l04",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p18-l05",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p18-l06",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p18-l07",
+      "isPractice": true,
+      "structures": 0,
+      "connectionRules": 0,
+      "cardExamples": 0,
+      "scenarios": 0,
+      "mistakes": 0,
+      "specialQuiz": 6,
+      "overview": "✓",
+      "step0": "—",
+      "compare": "—"
+    },
+    {
+      "cardId": "card-p19-l01",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 6,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p19-l02",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 6,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p19-l03",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 6,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p19-l04",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 6,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p19-l05",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 6,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p19-l06",
+      "isPractice": true,
+      "structures": 0,
+      "connectionRules": 0,
+      "cardExamples": 0,
+      "scenarios": 0,
+      "mistakes": 0,
+      "specialQuiz": 6,
+      "overview": "✓",
+      "step0": "—",
+      "compare": "—"
+    },
+    {
+      "cardId": "card-p20-l01",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 6,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p20-l02",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 6,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p20-l03",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 6,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p20-l04",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 6,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p20-l05",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 6,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p20-l06",
+      "isPractice": true,
+      "structures": 0,
+      "connectionRules": 0,
+      "cardExamples": 0,
+      "scenarios": 0,
+      "mistakes": 0,
+      "specialQuiz": 6,
+      "overview": "✓",
+      "step0": "—",
+      "compare": "—"
+    },
+    {
+      "cardId": "card-p21-l01",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p21-l02",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p21-l03",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p21-l04",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p21-l05",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p21-l06",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p21-l07",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p21-l08",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p21-l09",
+      "isPractice": true,
+      "structures": 8,
+      "connectionRules": 8,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 7,
+      "specialQuiz": 10,
+      "overview": "✓",
+      "step0": "—",
+      "compare": "—"
+    },
+    {
+      "cardId": "card-p22-l01",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p22-l02",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p22-l03",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 8,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p22-l04",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p22-l05",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p22-l06",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p22-l07",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 8,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p22-l08",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 8,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p22-l09",
+      "isPractice": true,
+      "structures": 8,
+      "connectionRules": 8,
+      "cardExamples": 3,
+      "scenarios": 8,
+      "mistakes": 8,
+      "specialQuiz": 10,
+      "overview": "✓",
+      "step0": "—",
+      "compare": "—"
+    },
+    {
+      "cardId": "card-p23-l01",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 8,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p23-l02",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 8,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p23-l03",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p23-l04",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 8,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p23-l05",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 8,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p23-l06",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 8,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p23-l07",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 7,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p23-l08",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 8,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p23-l09",
+      "isPractice": true,
+      "structures": 8,
+      "connectionRules": 8,
+      "cardExamples": 3,
+      "scenarios": 8,
+      "mistakes": 8,
+      "specialQuiz": 10,
+      "overview": "✓",
+      "step0": "—",
+      "compare": "—"
+    },
+    {
+      "cardId": "card-p24-l01",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 8,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p24-l02",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 8,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p24-l03",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 8,
+      "cardExamples": 4,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p24-l04",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 6,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p24-l05",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 6,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p24-l06",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 6,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p24-l07",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 6,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p24-l08",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 6,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p24-l09",
+      "isPractice": true,
+      "structures": 8,
+      "connectionRules": 8,
+      "cardExamples": 3,
+      "scenarios": 8,
+      "mistakes": 8,
+      "specialQuiz": 8,
+      "overview": "✓",
+      "step0": "—",
+      "compare": "—"
+    },
+    {
+      "cardId": "card-p25-l01",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 8,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p25-l02",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 8,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p25-l03",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 8,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p25-l04",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 8,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p25-l05",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 8,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p25-l06",
+      "isPractice": false,
+      "structures": 4,
+      "connectionRules": 8,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p25-l07",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 8,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p25-l08",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 4,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p25-l09",
+      "isPractice": true,
+      "structures": 3,
+      "connectionRules": 8,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "—",
+      "compare": "—"
+    },
+    {
+      "cardId": "card-p26-l01",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p26-l02",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p26-l03",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p26-l04",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p26-l05",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 6,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p26-l06",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p26-l07",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p26-l08",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 6,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p26-l09",
+      "isPractice": true,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "—",
+      "compare": "—"
+    },
+    {
+      "cardId": "card-p27-l01",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p27-l02",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p27-l03",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p27-l04",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p27-l05",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p27-l06",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p27-l07",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p27-l08",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 8,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p27-l09",
+      "isPractice": true,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "—",
+      "compare": "—"
+    },
+    {
+      "cardId": "card-p28-l01",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p28-l02",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p28-l03",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p28-l04",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p28-l05",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 6,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p28-l06",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p28-l07",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p28-l08",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 8,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p28-l09",
+      "isPractice": true,
+      "structures": 3,
+      "connectionRules": 8,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "—",
+      "compare": "—"
+    },
+    {
+      "cardId": "card-p29-l01",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 8,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p29-l02",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p29-l03",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p29-l04",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p29-l05",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 8,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p29-l06",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p29-l07",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p29-l08",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 7,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p29-l09",
+      "isPractice": true,
+      "structures": 0,
+      "connectionRules": 0,
+      "cardExamples": 0,
+      "scenarios": 0,
+      "mistakes": 0,
+      "specialQuiz": 10,
+      "overview": "✓",
+      "step0": "—",
+      "compare": "—"
+    },
+    {
+      "cardId": "card-p30-l01",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 8,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p30-l02",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 8,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p30-l03",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 8,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p30-l04",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 8,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p30-l05",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 8,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p30-l06",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 8,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p30-l07",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 8,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p30-l08",
+      "isPractice": false,
+      "structures": 3,
+      "connectionRules": 8,
+      "cardExamples": 3,
+      "scenarios": 6,
+      "mistakes": 3,
+      "specialQuiz": 4,
+      "overview": "✓",
+      "step0": "✓",
+      "compare": "✓"
+    },
+    {
+      "cardId": "card-p30-l09",
+      "isPractice": true,
+      "structures": 0,
+      "connectionRules": 0,
+      "cardExamples": 0,
+      "scenarios": 0,
+      "mistakes": 0,
+      "specialQuiz": 10,
+      "overview": "✓",
+      "step0": "—",
+      "compare": "—"
+    }
+  ]
+}

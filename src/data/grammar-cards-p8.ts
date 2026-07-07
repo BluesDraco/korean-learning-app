@@ -6,7 +6,7 @@ export const grammarCardsP8: GrammarCard[] = [
     whatItDoes: '回忆过去曾经的状态或习惯',
     whatItDoesBody: '-던 修饰名词，表示"曾经……的（某人/某物）"，强调过去反复或持续的状态，但现在已不同。\n-았/었/였던 表示过去某个已完成动作的回忆。\n和中文"曾经……的""以前那个……"对应，但韩语用冠词形式直接修饰名词。',
     structureNote: '下面展示 -던 和 -았던 修饰名词的句型框架。\n注意：-던 强调持续/反复，-았던 强调一次性完成的回忆。',
-    rulesNote: '-던：动词/形容词词干 + 던（不看收音）+ 名词。\n-았/었/였던：과거시제 + 던 + 名词，强调已完成。\n이다 → 이었던（有收音名词）/ 였던（无收음名词）。\n-던 前的动词用原形（现在时词干），不用过去时。',
+    rulesNote: '-던：动词/形容词词干 + 던（不看收音）+ 名词。\n-았/었/였던：过去时 + 던 + 名词，强调已完成。\n이다 → 이었던（有收音名词）/ 였던（无收音名词）。\n-던 前的动词用原形（现在时词干），不用过去时。',
     scenarioNote: '回忆往事、聊旧照片、想念某人某地时最常用。\n中文"以前常去的那家咖啡店"在韩语里是"자주 가던 카페"，用 -던 修饰。',
     step0Html: `<div class="card-title">-던 · -았/었던</div>
 <div class="card-body">两种"回忆过去"的冠词形：-던 修饰曾经持续的习惯，-았던 修饰已经完成的过去经历。</div>
@@ -290,7 +290,7 @@ export const grammarCardsP8: GrammarCard[] = [
       { wordBlocks: [{ text: '노력해야만', role: 'plain' }, { text: '꿈을', role: 'object' }, { text: '이룰 수 있어요', role: 'verb' }], zh: '只有努力才能实现梦想。', swapRole: 'object', swapWords: ['꿈을', '목표를', '성공을'] },
     ],
     scenarios: [
-      { icon: '💪', context: '新年决心', ko: '이번 년에는 정말 운동을 해야겠어요. 작년엔 못 했거든요.', zh: '今年真的得运动了，去年没做到。' },
+      { icon: '💪', context: '新年决心', ko: '올해는 정말 운동을 해야겠어요. 작년엔 못 했거든요.', zh: '今年真的得运动了，去年没做到。' },
       { icon: '📚', context: '下定决心学习', ko: '한국어를 제대로 배워야겠다고 생각했어요.', zh: '我下定决心要好好学韩语。' },
       { icon: '😴', context: '健康作息', ko: '내일 일찍 일어나야 하니까 오늘은 일찍 자야겠어요.', zh: '明天要早起，所以今天得早睡了。' },
       { icon: '🏆', context: '强调唯一条件', ko: '열심히 연습해야만 무대에 설 수 있어요.', zh: '只有努力练习才能站上舞台。' },
@@ -310,7 +310,7 @@ export const grammarCardsP8: GrammarCard[] = [
     whatItDoes: '表示"差点"和夸张程度',
     whatItDoesBody: '-을/ㄹ 뻔하다 表示"差点就……（幸好没发生）"，描述险些发生的事。\n-아/어/여서 죽을 것 같다 是夸张说法"……得要死/累死了"，表示极度的程度。\n和中文"差点""累死了""饿死了"对应，是口语中表达情绪和夸张程度的常用表达。',
     structureNote: '下面展示两种夸张/险情表达的句型。\n-을 뻔하다 通常用过去时，-아서 죽을 것 같다 用现在时表达当前状态。',
-    rulesNote: '-을/ㄹ 뻔하다：词干有收음 + 을 뻔했어요，无收음 + ㄹ 뻔했어요。\n实际已没发生（侥幸），所以多用过去时 뻔했어요。\n-아/어/여서 죽을 것 같다：变形规则和 -아/어/여서 相同 + 죽을 것 같아요。',
+    rulesNote: '-을/ㄹ 뻔하다：词干有收音 + 을 뻔했어요，无收音 + ㄹ 뻔했어요。\n实际已没发生（侥幸），所以多用过去时 뻔했어요。\n-아/어/여서 죽을 것 같다：变形规则和 -아/어/여서 相同 + 죽을 것 같아요。',
     scenarioNote: '追星聊天时夸张说"太帅了要死""差点晕过去"全靠这两个表达。\n中文"累死了""差点摔倒"在韩语里直接对应这两个句型。',
     step0Html: `<div class="card-title">-을 뻔했어요 · -아서 죽을 것 같아요</div>
 <div class="card-body">-을 뻔했어요 说"差点发生了（幸好没有）"，-아서 죽을 것 같아요 是夸张表达"……死了"。两个都是情绪化口语必备。</div>
@@ -401,8 +401,8 @@ export const grammarCardsP8: GrammarCard[] = [
       { ko: '너무 웃겨서 죽을 것 같았어요', zh: '笑死了。', tokens: [{ text: '너무', role: 'plain' }, { text: '웃겨서', role: 'plain' }, { text: '죽을 것 같았어요', role: 'verb' }] },
     ],
     connectionRules: [
-      { type: 'rule', text: '动词词干 无收음 + ㄹ 뻔했어요', examples: '가다→갈 뻔했어요 / 넘어지다→넘어질 뻔했어요' },
-      { type: 'rule', text: '动词词干 有收음 + 을 뻔했어요', examples: '먹다→먹을 뻔했어요 / 잊다→잊을 뻔했어요 / 죽다→죽을 뻔했어요 / 늦다→늦을 뻔했어요' },
+      { type: 'rule', text: '动词词干 无收音 + ㄹ 뻔했어요', examples: '가다→갈 뻔했어요 / 넘어지다→넘어질 뻔했어요' },
+      { type: 'rule', text: '动词词干 有收音 + 을 뻔했어요', examples: '먹다→먹을 뻔했어요 / 잊다→잊을 뻔했어요 / 죽다→죽을 뻔했어요 / 늦다→늦을 뻔했어요' },
       { type: 'rule', text: '-아/어서 죽을 것 같다：形容词 + 아/어서 + 죽을 것 같아요', examples: '배고파서 죽을 것 같아요 / 피곤해서 죽을 것 같아요 / 더워서 죽을 것 같아요' },
       { type: 'usage', text: '-을 뻔했다 = 幸好没发生，事实结果是没有发生', examples: '✓ 넘어질 뻔했어요（没真的摔） vs ✗ 넘어졌을 뻔했어요（已经摔了就不用뻔）' },
       { type: 'usage', text: '-아서 죽을 것 같다 = 夸张表达极度程度', examples: '너무 재미있어서 죽을 것 같아요 / 너무 추워서 죽을 것 같아요' },
@@ -426,7 +426,7 @@ export const grammarCardsP8: GrammarCard[] = [
     mistakes: [
       { wrong: '진짜 넘어졌을 뻔했어요', correct: '넘어질 뻔했어요', note: '-을 뻔했다 表示幸好没发生，用未来时冠词形，不加过去时。' },
       { wrong: '배고프서 죽을 것 같아요', correct: '배고파서 죽을 것 같아요', note: '배고프다 词干末元音是 ㅡ 脱落后为 배고프 → 배고파서。' },
-      { wrong: '늦을 뻔했어요 그래서 택시를 탔어요', correct: '늦을 뻔해서 택시를 탔어요', note: '-을 뻔하다 描述险情，可以用 -아서 连接结果，更流畅。' },
+      { wrong: '늦을 뻔했어요 때문에 택시를 탔어요', correct: '늦을 뻔해서 택시를 탔어요', note: '-ㄹ 뻔하다 后面连接原因时，要用 -아/어서 连接，不能直接用 때문에 接在动词词干后。' },
       { wrong: '재미있어서 죽을 것이에요', correct: '재미있어서 죽을 것 같아요', note: '夸张程度用 -을 것 같다，不是 -을 것이다（后者像在做预测）。' },
     ],
     linkedGrammarIds: [],
@@ -586,7 +586,7 @@ export const grammarCardsP8: GrammarCard[] = [
     whatItDoes: '说"试着做"和"有没有……过的经历"',
     whatItDoesBody: '-아/어/여 보다 表示"试试看……""尝试一下……"，带有尝试或建议的语气。\n-은/ㄴ 적이 있다/없다 表示"有/没有做过……的经历"，用来交流人生经历。\n和中文"试试看""有没有……过"对应，是日常聊天中询问和分享经历最常用的句型。',
     structureNote: '下面展示两种经历/尝试表达的基本句型。\n-아/어/여 보다 强调动作尝试，-은/ㄴ 적이 있다 强调经历有无。',
-    rulesNote: '-아/어/여 보다：末元音 ㅏ/ㅗ → 아 보다，其他 → 어 보다，하다 → 해 보다。\n-은/ㄴ 적이 있다：动词词干 有收音 + 은 적이 있어요，无收음 + ㄴ 적이 있어요。\n没有经历 → -은/ㄴ 적이 없어요。\n过去曾有经历 → -은/ㄴ 적이 있어요（적 表示"那时候/那次"）。',
+    rulesNote: '-아/어/여 보다：末元音 ㅏ/ㅗ → 아 보다，其他 → 어 보다，하다 → 해 보다。\n-은/ㄴ 적이 있다：动词词干 有收音 + 은 적이 있어요，无收音 + ㄴ 적이 있어요。\n没有经历 → -은/ㄴ 적이 없어요。\n过去曾有经历 → -은/ㄴ 적이 있어요（적 表示"那时候/那次"）。',
     scenarioNote: '旅游、饮食、运动、追星经历的交流，以及建议对方试试看，全靠这两个句型。\n"你有没有去过韩国？""试试这道菜吧"是最典型的使用场景。',
     step0Html: `<div class="card-title">-아 봤어요 · -은 적이 있어요</div>
 <div class="card-body">-아 봤어요 说"试过/尝过"，-은 적이 있어요 说"有过这个经历"。聊旅行、美食、追星经历全靠这两个。</div>
@@ -675,8 +675,8 @@ export const grammarCardsP8: GrammarCard[] = [
       <div style="display:flex;flex-direction:column;gap:6px">
         <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">ㅏ/ㅗ→아 봤어요</span>：가 봤어요 / 와 봤어요</div>
         <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">其他→어 봤어요</span>：먹어 봤어요 / 들어 봤어요</div>
-        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">有收음→은 적이</span>：먹은 적이 / 읽은 적이</div>
-        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">无收음→ㄴ 적이</span>：간 적이 / 본 적이</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">有收音→은 적이</span>：먹은 적이 / 읽은 적이</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">无收音→ㄴ 적이</span>：간 적이 / 본 적이</div>
       </div>
     </div>
   </div>
@@ -707,8 +707,8 @@ export const grammarCardsP8: GrammarCard[] = [
     connectionRules: [
       { type: 'rule', text: '末元音 ㅏ/ㅗ + 아 보다 / 아 봤어요', examples: '가다→가 봤어요 / 오다→와 봤어요 / 사다→사 봤어요' },
       { type: 'rule', text: '其他元音 + 어 보다 / 어 봤어요', examples: '먹다→먹어 봤어요 / 입다→입어 봤어요 / 듣다→들어 봤어요' },
-      { type: 'rule', text: '动词词干 无收음 + ㄴ 적이 있다/없다', examples: '가다→간 적이 / 오다→온 적이 / 보다→본 적이' },
-      { type: 'rule', text: '动词词干 有收음 + 은 적이 있다/없다', examples: '먹다→먹은 적이 / 읽다→읽은 적이 / 입다→입은 적이' },
+      { type: 'rule', text: '动词词干 无收音 + ㄴ 적이 있다/없다', examples: '가다→간 적이 / 오다→온 적이 / 보다→본 적이' },
+      { type: 'rule', text: '动词词干 有收音 + 은 적이 있다/없다', examples: '먹다→먹은 적이 / 읽다→읽은 적이 / 입다→입은 적이' },
       { type: 'compare', text: '-아 보다 vs -은 적이 있다', examples: '-아 보다：尝试/建议（动作本身）/ -은 적이 있다：有无经历（人生经历）' },
       { type: 'usage', text: '-아 봐요 常用于建议对方尝试', examples: '이 노래 들어 봐요 / 김치 먹어 봐요 / 한번 해 봐요' },
       { type: 'example', text: '한국에 가 본 적이 있어요? / 이 영화 봐 봤어요? / 스키 탄 적이 없어요' },
@@ -740,7 +740,7 @@ export const grammarCardsP8: GrammarCard[] = [
     whatItDoes: '表示"即使……也……"和"可以……吗"',
     whatItDoesBody: '-아/어/여도 表示"即使……也……"，前后两个条件形成让步关系。\n-(이)라도 接在名词后，表示"就算……也好/……也行"，退而求其次的语气。\n-아/어/여도 되다/괜찮다/좋다 都表示"可以……"，用于请求或确认许可。\n되다/괜찮다/좋다 三者可互换，되다 最中性，괜찮다 带有"没问题"的语感，좋다 更口语化表示"好的可以"。\n和中文"即使……也""哪怕……也行""可以……吗"对应。',
     structureNote: '下面展示三种让步/允许表达的句型框架。\n注意：-아도 되다 请求许可，-아도 否定 是"即使……也不……"。',
-    rulesNote: '-아/어/여도：末元音 ㅏ/ㅗ → 아도，其他 → 어도，하다 → 해도。\n-(이)라도：有收음名词 + 이라도，无收음名词 + 라도。\n-아/어/여도 되다：变形规则同 -아/어/여도，后接 되다/돼요/됩니다。',
+    rulesNote: '-아/어/여도：末元音 ㅏ/ㅗ → 아도，其他 → 어도，하다 → 해도。\n-(이)라도：有收音名词 + 이라도，无收音名词 + 라도。\n-아/어/여도 되다：变形规则同 -아/어/여도，后接 되다/돼요/됩니다。',
     scenarioNote: '请求许可（도 돼요?）是日常对话最高频句型之一。\n"可以拍照吗？""可以坐这里吗？"全用 -아도 돼요?。\n-(이)라도 表示将就接受，像"有水的话，水也行"这种退而求其次。',
     step0Html: `<div class="card-title">-아도 · -(이)라도 · -아도 돼요?</div>
 <div class="card-body">三种让步/允许表达：即使也……/ 哪怕……也行 / 可以……吗。日常对话超高频，一节课全打通。</div>
@@ -865,7 +865,7 @@ export const grammarCardsP8: GrammarCard[] = [
     ],
     connectionRules: [
       { type: 'rule', text: 'ㅏ/ㅗ 结尾 + 아도 / 其他 + 어도 / 하다 → 해도', examples: '가다→가도 / 먹다→먹어도 / 공부하다→공부해도' },
-      { type: 'rule', text: '有收음名词 + 이라도 / 无收음名词 + 라도', examples: '물이라도 / 커피라도 / 버스라도 / 택시라도' },
+      { type: 'rule', text: '有收音名词 + 이라도 / 无收音名词 + 라도', examples: '물이라도 / 커피라도 / 버스라도 / 택시라도' },
       { type: 'rule', text: '-아/어도 되다/괜찮다/좋다：可以……（三者可互换）', examples: '사진 찍어도 돼요? / 사진 찍어도 괜찮아요? / 사진 찍어도 좋아요?' },
       { type: 'usage', text: '되다/괜찮다/좋다 语感差异', examples: '돼요（中性"可以"）/ 괜찮아요（"没问题"的语感）/ 좋아요（口语"好的可以"）' },
       { type: 'usage', text: '-아/어도 안 되다：让步否定，"即使……也不行"', examples: '여기서 먹어도 안 돼요（即使在这里吃也不行）；禁止说法用 먹으면 안 돼요（不可以吃）' },
@@ -889,7 +889,7 @@ export const grammarCardsP8: GrammarCard[] = [
     ],
     mistakes: [
       { wrong: '먹도 돼요?', correct: '먹어도 돼요?', note: '需要先完成 -아/어 变形，再加 도 되다，不能直接加 도。' },
-      { wrong: '물라도', correct: '물이라도', note: '물 有收음 ㄹ，所以用 이라도，不是直接加 라도。' },
+      { wrong: '물라도', correct: '물이라도', note: '물 有收音 ㄹ，所以用 이라도，不是直接加 라도。' },
       { wrong: '피곤해서 운동해요', correct: '피곤해도 운동해요', note: '-아서 表示原因，不能用于让步。"即使累也运动"要用 -아도，不是 -아서。' },
       { wrong: '사진 찍어도 돼요 안 돼요?', correct: '사진 찍어도 돼요? — 네, 돼요 / 안 돼요', note: '请求许可是疑问句，回答是分开的 돼요 或 안 돼요，不能连在一个句子里问。' },
     ],
@@ -900,7 +900,7 @@ export const grammarCardsP8: GrammarCard[] = [
     whatItDoes: '表示"不可以做"和"只要做……就行"',
     whatItDoesBody: '-(으)면 안 되다 表示禁止"不可以……"，比 -지 말다 更正式，强调如果做了就不行。\n-(으)면 되다 表示"只要……就可以了""做……就行"，说明满足条件就够了。\n和中文"不可以……""只要……就行"对应，是规则说明和简单指引的核心句型。',
     structureNote: '下面展示两种规则/条件表达的句型框架。\n注意两者都以 -(으)면 开头，但后接 안 되다 是禁止，接 되다 是充分条件。',
-    rulesNote: '-(으)면 안 되다：词干有收음 + 으면 안 돼요，无收음 + 면 안 돼요。\n-(으)면 되다：词干有收음 + 으면 돼요，无收음 + 면 돼요。\nㄹ 词干：ㄹ 不脱落，直接 + 면（알다→알면 안 돼요 / 알면 돼요）。-(으)면 的 으 在 ㄹ 后不插入，ㄹ 本身保留。',
+    rulesNote: '-(으)면 안 되다：词干有收音 + 으면 안 돼요，无收音 + 면 안 돼요。\n-(으)면 되다：词干有收音 + 으면 돼요，无收音 + 면 돼요。\nㄹ 词干：ㄹ 脱落，直接 + 면（알다→알면 안 돼요 / 알면 돼요）。',
     scenarioNote: '场所规则、操作说明、解答疑惑时最常用。\n"这里不可以拍照""按这个按钮就行了"这类提示和指引全靠这两个句型。',
     step0Html: `<div class="card-title">-(으)면 안 돼요 · -(으)면 돼요</div>
 <div class="card-body">-(으)면 안 돼요 说"不可以做"，-(으)면 돼요 说"做这个就行了"。规则说明和操作指引必备。</div>
@@ -941,7 +941,7 @@ export const grammarCardsP8: GrammarCard[] = [
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">먹지 마세요.</span><span style="font-size:16px;color:#5a4640">请不要吃。</span></div>
   </div>
 </div>
-<div class="reminder-box">먹면 돼요 ✗ → 먹으면 돼요 ✓（먹 有收음 ㄱ，加 으）。늦면 안 돼요 ✗ → 늦으면 안 돼요 ✓（늦 有收음 ㅈ，加 으）。</div>`,    specialQuiz: {
+<div class="reminder-box">먹면 돼요 ✗ → 먹으면 돼요 ✓（먹 有收音 ㄱ，加 으）。늦면 안 돼요 ✗ → 늦으면 안 돼요 ✓（늦 有收音 ㅈ，加 으）。</div>`,    specialQuiz: {
       type: 'judge',
       title: '判断对错：-(으)면 안 되다 和 -(으)면 되다',
       body: '选出使用正确的句子。',
@@ -963,8 +963,8 @@ export const grammarCardsP8: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">变形规则</div></div>
     <div class="ov-block">
       <div style="display:flex;flex-direction:column;gap:6px">
-        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">无收음+면</span>：가면 안 돼요 / 가면 돼요</div>
-        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">有收음+으면</span>：먹으면 안 돼요 / 앉으면 돼요</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">无收音+면</span>：가면 안 돼요 / 가면 돼요</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">有收音+으면</span>：먹으면 안 돼요 / 앉으면 돼요</div>
         <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#6b7ff0">ㄹ词干脱落</span>：알면 안 돼요 / 만들면 돼요</div>
       </div>
     </div>
@@ -994,8 +994,8 @@ export const grammarCardsP8: GrammarCard[] = [
       { ko: '이 양식을 작성하면 돼요', zh: '填这张表格就行了。', tokens: [{ text: '이 양식을', role: 'object' }, { text: '작성하면 돼요', role: 'verb' }] },
     ],
     connectionRules: [
-      { type: 'rule', text: '词干 无收음 + 면 안 돼요 / 면 돼요', examples: '가다→가면 안 돼요 / 하다→하면 돼요 / 쓰다→쓰면 안 돼요' },
-      { type: 'rule', text: '词干 有收음 + 으면 안 돼요 / 으면 돼요', examples: '먹다→먹으면 안 돼요 / 앉다→앉으면 돼요 / 읽다→읽으면 돼요' },
+      { type: 'rule', text: '词干 无收音 + 면 안 돼요 / 면 돼요', examples: '가다→가면 안 돼요 / 하다→하면 돼요 / 쓰다→쓰면 안 돼요' },
+      { type: 'rule', text: '词干 有收音 + 으면 안 돼요 / 으면 돼요', examples: '먹다→먹으면 안 돼요 / 앉다→앉으면 돼요 / 읽다→읽으면 돼요' },
       { type: 'compare', text: '-(으)면 안 되다 vs -지 말다', examples: '-(으)면 안 돼요：条件性禁止（如果做了就不行）/ -지 말아요：直接命令禁止' },
       { type: 'usage', text: '-(으)면 돼요 用于说明达到目标的充分条件', examples: '여기에 이름만 쓰면 돼요 / 버스 타면 돼요 / 내일까지 내면 돼요' },
       { type: 'note', text: '-(으)면 안 되다 的口语缩写', examples: '면 안 돼요 → 말아요（命令）/ 둘 다 표준어' },
@@ -1019,7 +1019,7 @@ export const grammarCardsP8: GrammarCard[] = [
     mistakes: [
       { wrong: '가면 안 돼요→想表示"必须去"', correct: '가야 해요 / 가야 돼요', note: '가면 안 돼요 是"不可以去"，"必须去"要用 가야 해요。别搞反了。' },
       { wrong: '먹면 돼요', correct: '먹으면 돼요', note: '먹 有收音 ㄱ，必须加 으 → 먹으면 돼요。' },
-      { wrong: '이것 하면 됩니다 안 됩니다', correct: '이것 하면 돼요 / 하면 안 돼요', note: '충분 조건(돼요)과 금지(안 돼요)는 서로 다른 문장，不能在同一句里同时说。' },
+      { wrong: '이것 하면 됩니다 안 됩니다', correct: '이것 하면 돼요 / 하면 안 돼요', note: '充分条件（돼요）和禁止（안 돼요）是相反的两种表达，不能在同一句里同时说。' },
       { wrong: '늦면 안 돼요', correct: '늦으면 안 돼요', note: '늦다 有收音 ㅈ，必须加 으 → 늦으면 안 돼요。' },
     ],
     linkedGrammarIds: ['g68'],
@@ -1029,6 +1029,139 @@ export const grammarCardsP8: GrammarCard[] = [
     whatItDoes: '综合复习第八章：回忆、意志、经历与许可',
     whatItDoesBody: '本章围绕"说话人的内心世界"展开：如何回忆过去的习惯与状态（-던/-았던），如何表达自己的决心与必要（-아야겠다），如何描述险些发生的事或夸张的感受（-을 뻔하다/-아서 죽을 것 같다），如何谈论别人的愿望和自己的经历（-고 싶어하다/-은 적이 있다），以及在各种让步与许可场景中如何措辞（-아도/-아도 되다/-(으)면 안 되다/-(으)면 되다）。中文里这些表达往往靠语气词和语境区分，韩语则通过专用语法形式精确传达说话人的立场和态度。',
     structureNote: '第八章七个语法点的核心要点：\n① -던：修饰"过去反复发生但现在已不做"的行为；-았/었던 强调已完成的过去状态，带有回忆色彩\n② -아/어야(만) 하다 / -아야겠다：前者说"必须做"（外部要求），后者说"我决定要做"（内心决心）\n③ -을/ㄹ 뻔하다：险些发生但没发生；-아서 죽을 것 같다：夸张表达极限感受\n④ -고 싶어하다：描述第三人称的愿望（不能用 -고 싶다）；-뿐만 아니라：不仅……而且……\n⑤ -아/어 보다：尝试做某事；-은/ㄴ 적이 있다/없다：有/没有过某种经历\n⑥ -아/어도：即使……也……（让步）；-(이)라도：哪怕……也……（退而求其次）；-아/어도 되다：允许做某事\n⑦ -(으)면 안 되다：禁止/不可以；-(으)면 되다：只要……就可以（最低条件）',
-    structures: [], connectionRules: [], cardExamples: [], scenarios: [], mistakes: [], linkedGrammarIds: [],
+    structures: [
+      { ko: '자주 가던 카페가 없어졌어요', zh: '以前常去的咖啡店消失了。', tokens: [{ text: '자주', role: 'plain' }, { text: '가던', role: 'plain' }, { text: '카페가', role: 'subject' }, { text: '없어졌어요', role: 'verb' }] },
+      { ko: '이제 운동을 시작해야겠어요', zh: '我得开始运动了。', tokens: [{ text: '이제', role: 'time' }, { text: '운동을', role: 'object' }, { text: '시작해야겠어요', role: 'verb' }] },
+      { ko: '넘어질 뻔했어요', zh: '差点摔倒了。', tokens: [{ text: '넘어질', role: 'plain' }, { text: '뻔했어요', role: 'verb' }] },
+      { ko: '친구가 한국에 가고 싶어해요', zh: '朋友想去韩国。', tokens: [{ text: '친구가', role: 'subject' }, { text: '한국에', role: 'place' }, { text: '가고 싶어해요', role: 'verb' }] },
+      { ko: '한국에 간 적이 있어요', zh: '我去过韩国。', tokens: [{ text: '한국에', role: 'place' }, { text: '간 적이 있어요', role: 'verb' }] },
+      { ko: '여기 앉아도 돼요?', zh: '可以坐这里吗？', tokens: [{ text: '여기', role: 'place' }, { text: '앉아도 돼요?', role: 'verb' }] },
+      { ko: '여기서 담배 피우면 안 돼요', zh: '这里不可以抽烟。', tokens: [{ text: '여기서', role: 'place' }, { text: '담배', role: 'object' }, { text: '피우면 안 돼요', role: 'verb' }] },
+      { ko: '이 양식을 작성하면 돼요', zh: '填这张表格就行了。', tokens: [{ text: '이 양식을', role: 'object' }, { text: '작성하면 돼요', role: 'verb' }] },
+    ],
+    connectionRules: [
+      { type: 'rule', text: '-던：过去反复/持续，现在已不同；-았/었던：已完成的过去经历', examples: '자주 가던 카페 / 한 번 갔던 카페' },
+      { type: 'rule', text: '-아/어야겠다：说话人内心的决心；-아/어야 하다：外部规则要求', examples: '운동해야겠어요（我得运动了） / 9시까지 와야 해요（必须9点到）' },
+      { type: 'rule', text: '-을/ㄹ 뻔하다：险些发生但没发生（用过去时 뻔했어요）', examples: '넘어질 뻔했어요 / 잊을 뻔했어요' },
+      { type: 'rule', text: '-아/어서 죽을 것 같다：夸张极度程度', examples: '배고파서 죽을 것 같아요 / 더워서 죽을 것 같아요' },
+      { type: 'rule', text: '-고 싶어하다 用于第三人称，第一人称用 -고 싶다', examples: '저는 가고 싶어요 / 친구가 가고 싶어해요' },
+      { type: 'rule', text: '名词 + 뿐만 아니라 → 不仅……而且……（后句常用 도 呼应）', examples: '노래뿐만 아니라 춤도 잘해요' },
+      { type: 'rule', text: '-아/어 보다 尝试；-은/ㄴ 적이 있다/없다 经历有无', examples: '먹어 봤어요 / 간 적이 있어요' },
+      { type: 'rule', text: '-아/어도 让步；-(이)라도 退而求其次；-아/어도 되다 请求许可', examples: '비가 와도 가요 / 물이라도 마실래요? / 사진 찍어도 돼요?' },
+      { type: 'rule', text: '-(으)면 안 되다 禁止；-(으)면 되다 充分条件', examples: '담배 피우면 안 돼요 / 이름만 쓰면 돼요' },
+      { type: 'compare', text: '-아야겠다 vs -아야 하다 — 主观决心 vs 客观规则', examples: '운동해야겠어요（我决定要运动） / 운동해야 해요（医生说必须运动）' },
+      { type: 'compare', text: '-아/어 보다 vs -은/ㄴ 적이 있다 — 尝试 vs 人生经历', examples: '먹어 봤어요（试过） / 먹은 적이 있어요（有过这个经历）' },
+      { type: 'compare', text: '-(으)면 안 되다 vs -아/어야 하다 — 禁止 vs 必须', examples: '가면 안 돼요（不可以去） / 가야 해요（必须去）' },
+    ],
+    cardExamples: [
+      { wordBlocks: [{ text: '자주', role: 'plain' }, { text: '가던', role: 'plain' }, { text: '카페가', role: 'subject' }, { text: '없어졌어요', role: 'verb' }], zh: '以前常去的咖啡店消失了。', swapRole: 'subject', swapWords: ['카페가', '식당이', '서점이'] },
+      { wordBlocks: [{ text: '넘어질', role: 'plain' }, { text: '뻔했어요', role: 'verb' }], zh: '差点摔倒了。', swapRole: 'plain', swapWords: ['넘어질', '늦을', '잊을'] },
+      { wordBlocks: [{ text: '여기', role: 'place' }, { text: '앉아도 돼요?', role: 'verb' }], zh: '可以坐这里吗？', swapRole: 'verb', swapWords: ['앉아도 돼요?', '사진 찍어도 돼요?', '들어가도 돼요?'] },
+      { wordBlocks: [{ text: '한국에', role: 'place' }, { text: '간 적이 있어요', role: 'verb' }], zh: '我去过韩国。', swapRole: 'place', swapWords: ['한국에', '일본에', '제주도에'] },
+    ],
+    scenarios: [
+      { icon: '☕', context: '怀念老店', ko: '학생 때 자주 가던 카페가 없어져서 너무 아쉬워요.', zh: '学生时代常去的咖啡店没了，真可惜。' },
+      { icon: '💪', context: '下决心', ko: '이제부터 진짜 운동을 시작해야겠어요.', zh: '从现在起真的得开始运动了。' },
+      { icon: '😱', context: '险些出事', ko: '길에서 차에 치일 뻔했어요. 너무 무서웠어요.', zh: '在路上差点被车撞，太可怕了。' },
+      { icon: '🍜', context: '推荐美食', ko: '이 라면 먹어 봤어요? 진짜 맛있어요.', zh: '你试过这个拉面吗？真的很好吃。' },
+      { icon: '📸', context: '请求许可', ko: '여기서 사진 찍어도 돼요?', zh: '在这里可以拍照吗？' },
+      { icon: '🚭', context: '提示禁止', ko: '죄송하지만 여기서 담배 피우면 안 돼요.', zh: '抱歉，这里不可以抽烟。' },
+    ],
+    mistakes: [
+      { wrong: '저는 가고 싶어해요', correct: '저는 가고 싶어요', note: '-고 싶어하다 用于第三人称，说自己用 -고 싶다。' },
+      { wrong: '먹은 봤어요', correct: '먹어 봤어요', note: '-아/어 보다 按末元音变形选 아/어，不能用 -은。' },
+      { wrong: '진짜 넘어졌을 뻔했어요', correct: '넘어질 뻔했어요', note: '-을 뻔하다 用未来时冠词形，表示没发生。' },
+      { wrong: '먹면 돼요', correct: '먹으면 돼요', note: '먹 有收音 ㄱ，必须加 으。' },
+      { wrong: '피곤하느라고 못 잤어요', correct: '피곤해서 못 잤어요', note: '-느라고 只接动词，形容词用 -아/어서。' },
+    ],
+    specialQuiz: {
+      type: 'fill',
+      title: '第八章综合测试',
+      body: '从本章七个语法点中选择正确的形式。',
+      questions: [
+        {
+          pre: '어릴 때',
+          post: '동네가 그리워요.',
+          options: ['살던', '살았던', '사는'],
+          answer: 1,
+          explanation: '-았던 表示已完成的过去经历：想念小时候住过的小区。',
+        },
+        {
+          pre: '이제 운동을',
+          post: '.',
+          options: ['시작할 거예요', '시작해야겠어요', '시작해야 해요'],
+          answer: 1,
+          explanation: '-아/어야겠다 表说话人的内心决心：我得开始运动了。',
+        },
+        {
+          pre: '너무 배고파서',
+          post: '.',
+          options: ['죽을 것이에요', '죽을 것 같아요', '죽었어요'],
+          answer: 1,
+          explanation: '夸张程度用 -을 것 같다，不是 -을 것이다：饿得要死。',
+        },
+        {
+          pre: '친구가 한국에',
+          post: '.',
+          options: ['가고 싶어요', '가고 싶어해요', '갈래요'],
+          answer: 1,
+          explanation: '第三人称愿望用 -고 싶어하다：朋友想去韩国。',
+        },
+        {
+          pre: '저는 김치를',
+          post: '.',
+          options: ['먹어 봤어요', '먹은 적이 없어요', '먹을 거예요'],
+          answer: 1,
+          explanation: '-은 적이 없다：我没吃过泡菜。',
+        },
+        {
+          pre: '여기서 담배',
+          post: '?',
+          options: ['피우면 안 돼요', '피우면 돼요', '피워야 해요'],
+          answer: 0,
+          explanation: '-(으)면 안 되다 禁止：这里不可以抽烟。',
+        },
+      ],
+    },
+    linkedGrammarIds: [],
+    overviewHtml: `<div class="overview">
+  <div class="ov-hero">
+    <div class="ov-hero-label">第 8 章 · 综合练习</div>
+    <div class="ov-hero-title">综合练习⑧</div>
+    <div class="ov-hero-sub">回忆 · 决心 · 经历 · 让步 · 许可</div>
+  </div>
+  <div class="ov-section">
+    <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">本章核心语法</div></div>
+    <div class="ov-block">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#ff7fa8">过去回忆</span> -던（习惯） / -았/었던（已完成）</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#2db89b">必要决心</span> -아야겠다（决心） / -아야 하다（规则）</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#6b7ff0">差点夸张</span> -을 뻔하다 / -아서 죽을 것 같다</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#e05555">愿望递进</span> -고 싶어하다（第三人称） / -뿐만 아니라</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#c89020">经历尝试</span> -아/어 보다 / -은 적이 있다/없다</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#b49ccf">让步许可</span> -아/어도 / -(이)라도 / -아/어도 돼요?</div>
+        <div style="font-size:16px;color:#241917"><span style="font-weight:700;color:#e8a87c">禁止条件</span> -(으)면 안 되다 / -(으)면 되다</div>
+      </div>
+    </div>
+  </div>
+  <div class="ov-section">
+    <div class="ov-section-hd"><div class="ov-section-line" style="background:#b49ccf"></div><div class="ov-section-title" style="color:#b49ccf">常用例句</div></div>
+    <div class="ov-block">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div><div class="tok-row"><span class="tok t-v">자주 가던 카페가 없어졌어요</span></div><div class="struct-zh">以前常去的咖啡店消失了。</div></div>
+        <div><div class="tok-row"><span class="tok t-v">넘어질 뻔했어요</span></div><div class="struct-zh">差点摔倒了。</div></div>
+        <div><div class="tok-row"><span class="tok t-v">여기 앉아도 돼요?</span></div><div class="struct-zh">可以坐这里吗？</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="ov-section">
+    <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">高频易错</div></div>
+    <div class="ov-block">
+      <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">저는 가고 싶어해요</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">저는 가고 싶어요</span></div></div>
+      <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">먹면 돼요</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">먹으면 돼요</span></div></div>
+      <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">진짜 넘어졌을 뻔했어요</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">넘어질 뻔했어요</span></div></div>
+    </div>
+  </div>
+</div>`,
   },
 ];
