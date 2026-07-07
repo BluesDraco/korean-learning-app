@@ -1908,35 +1908,6 @@ function ChaptersTab({ onOpenCard, isAdmin }: { onOpenCard: (card: GrammarCard) 
         })}
       </div>
 
-      {(() => {
-        const info = {
-          beginner: {
-            status: lang === 'en' ? 'Complete · 6 parts / 66 lessons' : '已完备 · 6 部 · 66 课',
-            gap: lang === 'en' ? '已覆盖 TOPIK 1-2 级核心考纲' : '已覆盖 TOPIK 1-2 级核心考纲',
-            color: '#2db89b',
-            bg: C.mintBg,
-          },
-          intermediate: {
-            status: lang === 'en' ? 'Complete · 10 parts / 92 lessons' : '已完备 · 10 部 · 92 课',
-            gap: lang === 'en' ? 'Optional: 방언/口语音变' : '可选补充：방언 / 口语音变',
-            color: '#6b7ff0',
-            bg: 'rgba(107,127,240,.08)',
-          },
-          advanced: {
-            status: lang === 'en' ? 'Complete · 15 parts / 116 lessons' : '已完备 · 15 部 · 116 课',
-            gap: lang === 'en' ? 'Optional: 网络新造语 / 방언 표현' : '可选补充：网络新造语、방언 표현',
-            color: '#ff7fa8',
-            bg: C.pinkSoft,
-          },
-        }[activeLevel];
-        return (
-          <div style={{ background: info.bg, border: `1px solid ${info.color}33`, borderRadius: 14, padding: '12px 14px', marginBottom: 14 }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: info.color, letterSpacing: '.4px', marginBottom: 4 }}>{info.status}</div>
-            <div style={{ fontSize: 13, color: C.ink, lineHeight: 1.5 }}>{info.gap}</div>
-          </div>
-        );
-      })()}
-
       {grammarParts.filter(part => {
         if (activeLevel === 'beginner') return part.partNumber <= 6;
         if (activeLevel === 'intermediate') return part.partNumber >= 7 && part.partNumber <= 16;
