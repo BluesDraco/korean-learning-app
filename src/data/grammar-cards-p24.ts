@@ -1800,11 +1800,181 @@ export const grammarCardsP24: GrammarCard[] = [
 </div>`,
   },
 
-  // ── 第9课：综合练习 ─────────────────────────────────────────
+  // ── 第9课：-길래 ─────────────────────────────────────────
+  {
+    id: 'card-p24-l10',
+    partNumber: 24,
+    lessonNumber: 9,
+    title: '-길래',
+    whatItDoes: '因为看到/听说，所以……',
+    whatItDoesBody: '「-길래」表示"因为观察到某情境（或听到某消息），所以做了某事"。主语常是"我"（第一人称）；前句是直接观察/所闻的情境，后句是"我"的反应。语气偏口语，与书面的 -기에 不同层次。',
+    structureNote: '动词/形容词词干 + -길래｜前句：观察/所闻｜后句：说话人的反应',
+    rulesNote: '不看받침（词干直接加）｜主语常为第一人称｜前句多为直接看到/听到；书面用 -기에',
+    structures: [
+      {
+        ko: '친구가 배고파 보이길래 뭐 좀 사 줬어요.',
+        zh: '看朋友饿了，就买了点吃的给他。',
+        tokens: [
+          { text: '친구가', role: 'subject' },
+          { text: '배고파 보이길래', role: 'verb' },
+          { text: '뭐 좀', role: 'plain' },
+          { text: '사 줬어요', role: 'verb' },
+        ],
+      },
+      {
+        ko: '비가 오길래 우산을 챙겼어요.',
+        zh: '看下雨了，就带上了伞。',
+        tokens: [
+          { text: '비가', role: 'subject' },
+          { text: '오길래', role: 'verb' },
+          { text: '우산을', role: 'object' },
+          { text: '챙겼어요', role: 'verb' },
+        ],
+      },
+      {
+        ko: '카페가 조용하길래 공부하러 갔어요.',
+        zh: '听说咖啡厅安静，就去学习了。',
+        tokens: [
+          { text: '카페가', role: 'subject' },
+          { text: '조용하길래', role: 'verb' },
+          { text: '공부하러', role: 'verb' },
+          { text: '갔어요', role: 'verb' },
+        ],
+      },
+    ],
+    connectionRules: [
+      { type: 'rule', text: '动词/形容词词干 + -길래（不看받침）', examples: '보이다 → 보이길래 / 오다 → 오길래 / 조용하다 → 조용하길래' },
+      { type: 'rule', text: '过去时 + 길래：-았/었길래', examples: '왔길래 / 좋았길래' },
+      { type: 'rule', text: '名词 + (이)길래', examples: '학생이길래 / 친구길래' },
+      { type: 'usage', text: '主语常为"我 저/나"，前句是我看到/听到的情境', examples: '(我看到) 배고파 보이길래 → (我做) 사 줬어요' },
+      { type: 'compare', text: '-길래 vs -기에 → 前者口语，后者书面/正式', examples: '(口语) 오길래 / (书面) 오기에' },
+      { type: 'compare', text: '-길래 vs -아/어서 → 前者"我做出反应的动机"，后者"客观因果"', examples: '비가 와서 길이 미끄러워요.（客观） / 비가 오길래 우산을 챙겼어요.（我的反应）' },
+      { type: 'note', text: '后句主语必须是说话人自己，不能是他人', examples: '误：비가 오길래 친구가 우산을 챙겼어요.（他人反应）→ 用 비가 와서' },
+    ],
+    cardExamples: [
+      {
+        wordBlocks: [
+          { text: '친구가', role: 'subject' },
+          { text: '배고파 보이길래', role: 'verb' },
+          { text: '사 줬어요', role: 'verb' },
+        ],
+        zh: '看朋友饿就买给他。',
+        swapWords: ['배고프다', '피곤하다', '심심하다', '아프다'],
+      },
+      {
+        wordBlocks: [
+          { text: '비가', role: 'subject' },
+          { text: '오길래', role: 'verb' },
+          { text: '우산을 챙겼어요', role: 'verb' },
+        ],
+        zh: '下雨就拿伞。',
+        swapWords: ['비가 오다', '눈이 오다', '바람이 불다', '햇빛이 나다'],
+      },
+      {
+        wordBlocks: [
+          { text: '카페가', role: 'subject' },
+          { text: '조용하길래', role: 'verb' },
+          { text: '공부하러 갔어요', role: 'verb' },
+        ],
+        zh: '咖啡厅安静就去学习。',
+        swapWords: ['조용하다', '한산하다', '분위기 좋다', '넓다'],
+      },
+    ],
+    scenarios: [
+      { icon: '🍔', context: '看到饿', ko: '친구가 배고파 보이길래 뭐 좀 사 줬어요.', zh: '看朋友饿就买。' },
+      { icon: '🌧️', context: '看到下雨', ko: '비가 오길래 우산을 챙겼어요.', zh: '下雨拿伞。' },
+      { icon: '☕', context: '听说安静', ko: '카페가 조용하길래 공부하러 갔어요.', zh: '咖啡厅静就去学。' },
+      { icon: '💰', context: '看到便宜', ko: '싸길래 두 개나 샀어요.', zh: '便宜就买了两个。' },
+      { icon: '📞', context: '听说迟到', ko: '늦는다길래 먼저 시작했어요.', zh: '听说迟到就先开始了。' },
+      { icon: '🚗', context: '看到车少', ko: '길이 한산하길래 빨리 왔어요.', zh: '路空就快点开来。' },
+    ],
+    mistakes: [
+      { wrong: '비가 오길래 친구가 우산을 챙겼어요', correct: '비가 오길래 (제가) 우산을 챙겼어요', note: '-길래 后句主语必须是说话人自己，不能是他人' },
+      { wrong: '비가 왔길래 우산을 챙겼어요', correct: '비가 오길래 우산을 챙겼어요', note: '当"看到就做"是同时反应时，用现在时词干 + -길래' },
+      { wrong: '학생길래 도와줬어요', correct: '학생이길래 도와줬어요', note: '名词后需加系词 이 → 이길래' },
+      { wrong: '(书面) 비가 오길래 취소되었습니다', correct: '비가 오기에 취소되었습니다', note: '书面/正式场合用 -기에；-길래 只用于口语' },
+    ],
+    quickTable: {
+      title: '-길래 vs -기에 vs -아/어서',
+      headers: ['形式', '语体', '主语'],
+      rows: [
+        ['-길래', '口语', '后句：说话人自己'],
+        ['-기에', '书面/正式', '后句可为任何人'],
+        ['-아/어서', '通用', '客观因果，任何主语'],
+      ],
+    },
+    specialQuiz: {
+      type: 'morph',
+      title: '-길래 用法练习',
+      body: '选择正确形式',
+      questions: [
+        {
+          prompt: '"看下雨了就带伞" 最合适？',
+          options: ['비가 와서 우산을 챙겼어요', '비가 오길래 우산을 챙겼어요', '비가 오면 우산을 챙겼어요', '비가 오니까 우산을 챙겼어요'],
+          answer: 1,
+          explanation: '"看到情境后我做反应"用 -길래，主语是"我"。',
+        },
+        {
+          prompt: '"카페가 (조용하다) 공부하러 갔어요."',
+          options: ['조용하니까', '조용해서', '조용하길래', '조용하려고'],
+          answer: 2,
+          explanation: '"听说/看到情境后自己做出反应"用 -길래 → 조용하길래。',
+        },
+        {
+          prompt: '"학생 (이다) 도와줬어요."',
+          options: ['이길래', '길래', '이니까', '라서'],
+          answer: 0,
+          explanation: '名词接 -길래 时需加系词 이 → 이길래。',
+        },
+        {
+          prompt: '-길래 与 -기에 的核心区别？',
+          options: ['完全相同', '-길래 口语；-기에 书面/正式', '-길래 只接动词，-기에 只接形容词', '-길래 表将来，-기에 表过去'],
+          answer: 1,
+          explanation: '语体差异：-길래 口语，-기에 书面。语义相同。',
+        },
+      ],
+    },
+    linkedGrammarIds: [],
+    step0Html: `<div class="hook-box"><div style="font-size:15px;color:#241917;line-height:1.8">"看下雨了就带伞""看朋友饿了就买东西" —— 韩语这种"我看到情境后自己做反应"用 <b>-길래</b>。<br>后句主语必须是"我"，语气偏口语。书面用 -기에。</div></div>`,
+    compareHtml: `<div class="cmp-block">
+  <div style="font-size:15px;color:#241917;line-height:1.8">
+    <b>-길래 vs -아/어서</b><br>
+    ・-길래 → 我的反应<br>
+    <span style="color:#89756e">비가 오길래 우산을 챙겼어요.（我拿伞）</span><br>
+    ・-아/어서 → 客观因果<br>
+    <span style="color:#89756e">비가 와서 길이 미끄러워요.（路滑）</span>
+  </div>
+</div>`,
+    compareLabel: '我做反应 vs 客观因果',
+    overviewHtml: `<div class="ov-hero">
+  <div style="font-size:20px;font-weight:700;color:#241917;margin-bottom:8px">-길래：看到情境的反应</div>
+  <div style="font-size:14px;color:#89756e">口语专用 · 后句主语=我</div>
+</div>
+<div class="ov-section">
+  <div class="ov-section-hd"><div class="ov-section-line" style="background:var(--color-pink-base)"></div><div class="ov-section-title" style="color:var(--color-pink-base)">核心规则</div></div>
+  <div class="ov-block">
+    <div style="font-size:16px;color:#241917;line-height:1.9">
+      前句：观察/所闻的情境<br>
+      后句：说话人的反应（主语=我）<br>
+      名词 → -(이)길래<br>
+      书面对应：-기에
+    </div>
+  </div>
+</div>
+<div class="ov-section">
+  <div class="ov-section-hd"><div class="ov-section-line" style="background:var(--color-status-danger)"></div><div class="ov-section-title" style="color:var(--color-status-danger)">别踩的坑</div></div>
+  <div class="ov-block">
+    <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">비가 오길래 친구가 우산을 챙겼어요</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">비가 오길래 (제가) 우산을 챙겼어요</span></div></div>
+    <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">학생길래</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">학생이길래</span></div></div>
+  </div>
+</div>`,
+  },
+
+  // ── 第10课：综合练习 ─────────────────────────────────────────
   {
     id: 'card-p24-l09',
     partNumber: 24,
-    lessonNumber: 9,
+    lessonNumber: 10,
     title: '综合练习⑱',
     whatItDoes: '第 18 部分总复习',
     whatItDoesBody: '完成这份练习，检验高级原因表达八大语法。\n覆盖：-는 바람에、-는 통에、-는 탓에、-는 덕분에、-는 나머지、-는 관계로、-는 김에、原因连接词总辨析。\n重点掌握"意外/嘈杂/归咎/感恩/极端/公告/顺便"六种因果关系。',

@@ -370,7 +370,8 @@ export const grammarParts: GrammarPart[] = [
       { lessonNumber: 6, title: '-는 관계로', cardId: 'card-p24-l06' },
       { lessonNumber: 7, title: '-는 김에', cardId: 'card-p24-l07' },
       { lessonNumber: 8, title: '原因连接词总辨析', cardId: 'card-p24-l08' },
-      { lessonNumber: 9, title: 'P24 综合练习', cardId: 'card-p24-l09' },
+      { lessonNumber: 9, title: '-길래（因看到而做）', cardId: 'card-p24-l10' },
+      { lessonNumber: 10, title: 'P24 综合练习', cardId: 'card-p24-l09' },
     ],
   },
   {
@@ -461,16 +462,6 @@ export const grammarParts: GrammarPart[] = [
       { lessonNumber: 7, title: '四字成语 · 情感与态度', cardId: 'card-p30-l07' },
       { lessonNumber: 8, title: '四字成语 · 事态与因果', cardId: 'card-p30-l08' },
       { lessonNumber: 9, title: 'P30 综合练习', cardId: 'card-p30-l09' },
-    ],
-  },
-  {
-    partNumber: 31,
-    title: 'TOPIK 高频遗漏补充',
-    lessons: [
-      { lessonNumber: 1, title: '-답다 / -스럽다 / -롭다 派生形容词', cardId: 'card-p31-l01' },
-      { lessonNumber: 2, title: '-길래（因看到而做）', cardId: 'card-p31-l02' },
-      { lessonNumber: 3, title: '(이)나 · -거나 · -든지（三种"或者"）', cardId: 'card-p31-l03' },
-      { lessonNumber: 4, title: 'P31 综合练习', cardId: 'card-p31-l04' },
     ],
   },
 ];

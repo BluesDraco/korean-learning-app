@@ -50,7 +50,6 @@ const partLoaders: Record<string, () => Promise<{ [key: string]: GrammarCard[] }
   p28: () => import('@/data/grammar-cards-p28') as any,
   p29: () => import('@/data/grammar-cards-p29') as any,
   p30: () => import('@/data/grammar-cards-p30') as any,
-  p31: () => import('@/data/grammar-cards-p31') as any,
 };
 
 const partCache: Record<string, GrammarCard[]> = {};
@@ -75,7 +74,7 @@ async function loadGrammarCard(cardId: string): Promise<GrammarCard | null> {
   return cards.find(c => c.id === cardId) ?? null;
 }
 
-const PART_ORDER = ['p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8', 'p9', 'p10', 'p11', 'p12', 'p13', 'p14', 'p15', 'p16', 'p17', 'p18', 'p19', 'p20', 'p21', 'p22', 'p23', 'p24', 'p25', 'p26', 'p27', 'p28', 'p29', 'p30', 'p31'];
+const PART_ORDER = ['p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8', 'p9', 'p10', 'p11', 'p12', 'p13', 'p14', 'p15', 'p16', 'p17', 'p18', 'p19', 'p20', 'p21', 'p22', 'p23', 'p24', 'p25', 'p26', 'p27', 'p28', 'p29', 'p30'];
 
 async function loadNextCard(cardId: string): Promise<GrammarCard | null> {
   const match = cardId.match(/^card-(p\d+)-l(\d+)$/);
