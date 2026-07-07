@@ -463,4 +463,14 @@ export const grammarParts: GrammarPart[] = [
       { lessonNumber: 9, title: 'P30 综合练习', cardId: 'card-p30-l09' },
     ],
   },
+  {
+    partNumber: 31,
+    title: 'TOPIK 高频遗漏补充',
+    lessons: [
+      { lessonNumber: 1, title: '-답다 / -스럽다 / -롭다 派生形容词', cardId: 'card-p31-l01' },
+      { lessonNumber: 2, title: '-길래（因看到而做）', cardId: 'card-p31-l02' },
+      { lessonNumber: 3, title: '(이)나 · -거나 · -든지（三种"或者"）', cardId: 'card-p31-l03' },
+      { lessonNumber: 4, title: 'P31 综合练习', cardId: 'card-p31-l04' },
+    ],
+  },
 ];
