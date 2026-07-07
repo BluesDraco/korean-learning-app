@@ -1799,7 +1799,7 @@ function ChaptersTab({ onOpenCard, isAdmin }: { onOpenCard: (card: GrammarCard) 
 
   const [continueCard, setContinueCard] = useState<GrammarCard | null>(null);
   const [continuePartTitle, setContinuePartTitle] = useState('');
-  const partNums = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二', '十三', '十四'];
+  const partNums = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九', '二十', '二十一', '二十二', '二十三', '二十四', '二十五', '二十六', '二十七', '二十八', '二十九', '三十', '三十一'];
 
   useEffect(() => {
     if (!isLoaded) return;
@@ -2498,7 +2498,7 @@ function GrammarContent() {
 
   if (activeCard) {
     const part = grammarParts.find(p => p.partNumber === activeCard.partNumber);
-    const partNums = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二', '十三', '十四'];
+    const partNums = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九', '二十', '二十一', '二十二', '二十三', '二十四', '二十五', '二十六', '二十七', '二十八', '二十九', '三十', '三十一'];
     if (activeCard.isPractice) {
       return (
         <ComprehensivePractice
