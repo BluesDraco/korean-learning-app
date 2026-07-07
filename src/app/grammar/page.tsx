@@ -1911,7 +1911,7 @@ function ChaptersTab({ onOpenCard, isAdmin }: { onOpenCard: (card: GrammarCard) 
         const info = {
           beginner: {
             status: lang === 'en' ? 'Complete · 6 parts / 66 lessons' : '已完备 · 6 部 · 66 课',
-            gap: lang === 'en' ? 'Optional: 汉/固有数词切换, 委婉请求深化' : '可选补充：汉/固有数词切换、委婉请求深化',
+            gap: lang === 'en' ? '已覆盖 TOPIK 1-2 级核心考纲' : '已覆盖 TOPIK 1-2 级核心考纲',
             color: '#2db89b',
             bg: C.mintBg,
           },
@@ -1922,7 +1922,7 @@ function ChaptersTab({ onOpenCard, isAdmin }: { onOpenCard: (card: GrammarCard) 
             bg: 'rgba(107,127,240,.08)',
           },
           advanced: {
-            status: lang === 'en' ? 'Complete · 14 parts / 114 lessons' : '已完备 · 14 部 · 114 课',
+            status: lang === 'en' ? 'Complete · 14 parts / 112 lessons' : '已完备 · 14 部 · 112 课',
             gap: lang === 'en' ? 'Optional: 网络新造语 / 방언 표현' : '可选补充：网络新造语、방언 표현',
             color: '#ff7fa8',
             bg: C.pinkSoft,

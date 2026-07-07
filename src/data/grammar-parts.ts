@@ -119,7 +119,7 @@ export const grammarParts: GrammarPart[] = [
     lessons: [
       { lessonNumber: 1, title: '처럼, 같이, 같은',                        cardId: 'card-p7-l01' },
       { lessonNumber: 2, title: '-은/ㄴ 지 나다/되다, 만에, 만이다',        cardId: 'card-p7-l02' },
-      { lessonNumber: 3, title: '-(으)ㄴ/는데, 만에, 만이다',              cardId: 'card-p7-l03' },
+      { lessonNumber: 3, title: '-(으)ㄴ/는데',                          cardId: 'card-p7-l03' },
       { lessonNumber: 4, title: '아무(名词)도, 하나도 + 否定',              cardId: 'card-p7-l04' },
       { lessonNumber: 5, title: '에다(가), 에',                            cardId: 'card-p7-l05' },
       { lessonNumber: 6, title: '-지만, -는/은/ㄴ데',                      cardId: 'card-p7-l06' },
@@ -407,15 +407,15 @@ export const grammarParts: GrammarPart[] = [
     partNumber: 27,
     title: '情态与语气强化',
     lessons: [
-      { lessonNumber: 1, title: '-기 마련이다（本来就）', cardId: 'card-p27-l01' },
-      { lessonNumber: 2, title: '-는 법이다（道理如此）', cardId: 'card-p27-l02' },
-      { lessonNumber: 3, title: '-을/ㄹ 법하다（有可能）', cardId: 'card-p27-l03' },
-      { lessonNumber: 4, title: '-기 나름이다（取决于）', cardId: 'card-p27-l04' },
-      { lessonNumber: 5, title: '-기에 달려 있다（在于）', cardId: 'card-p27-l05' },
-      { lessonNumber: 6, title: '-는 셈이다（算是）', cardId: 'card-p27-l06' },
-      { lessonNumber: 7, title: '-는 셈치다（就当作）', cardId: 'card-p27-l07' },
-      { lessonNumber: 8, title: '-는 척하다 / -는 체하다', cardId: 'card-p27-l08' },
-      { lessonNumber: 9, title: 'P27 综合练习', cardId: 'card-p27-l09' },
+      // L01「-기 마련이다」和 L02「-는 법이다」与 P22-L04/L06 完全重复，从课程中隐藏
+      // 卡片数据保留在 grammar-cards-p27.ts 供已学过的用户查阅
+      { lessonNumber: 1, title: '-을/ㄹ 법하다（有可能）', cardId: 'card-p27-l03' },
+      { lessonNumber: 2, title: '-기 나름이다（取决于）', cardId: 'card-p27-l04' },
+      { lessonNumber: 3, title: '-기에 달려 있다（在于）', cardId: 'card-p27-l05' },
+      { lessonNumber: 4, title: '-는 셈이다（算是）', cardId: 'card-p27-l06' },
+      { lessonNumber: 5, title: '-는 셈치다（就当作）', cardId: 'card-p27-l07' },
+      { lessonNumber: 6, title: '-는 척하다 / -는 체하다', cardId: 'card-p27-l08' },
+      { lessonNumber: 7, title: 'P27 综合练习', cardId: 'card-p27-l09' },
     ],
   },
   {
