@@ -1,15 +1,20 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import type { ToriDay, ToriWord } from '@/types/tori-diary';
-import { Volume2, ChevronRight, Check, X, RotateCcw, Sparkles } from 'lucide-react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import type { ToriDay, ToriWord, ToriModuleState } from '@/types/tori-diary';
+import { Volume2, ChevronRight, Check, X, RotateCcw, ArrowLeft } from 'lucide-react';
 import { speak } from '@/lib/tts';
 import { sfxCorrect, sfxWrong } from '@/lib/sfx';
 import { WordTapSheet } from '@/components/WordTapSheet';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 
 interface Props {
   day: ToriDay;
   onComplete: () => void;
+  onBack?: () => void;
+  initialState?: ToriModuleState['flashcard'];
+  onStateChange?: (patch: ToriModuleState['flashcard']) => void;
 }
 
 type Phase = 'review' | 'quiz' | 'done';
@@ -20,28 +25,42 @@ type Phase = 'review' | 'quiz' | 'done';
  * Phase 2 quiz: N 道韩→中速测，错 2 次也放过
  * Phase 3 done: 自动 onComplete
  */
-export function DiaryFlashcard({ day, onComplete }: Props) {
+export function DiaryFlashcard({ day, onComplete, onBack, initialState, onStateChange }: Props) {
+  const { lang } = useLang();
   const words = day.words;
-  const [phase, setPhase] = useState<Phase>('review');
+  const [phase, setPhase] = useState<Phase>(initialState?.phase ?? 'review');
   const [tapWord, setTapWord] = useState<string | null>(null);
+  const completedRef = useRef(false);
+  const safeComplete = () => {
+    if (completedRef.current) return;
+    completedRef.current = true;
+    onComplete();
+  };
 
   // ─── Phase 1: review ───
-  const [idx, setIdx] = useState(0);
+  const [idx, setIdx] = useState(initialState?.idx ?? 0);
   const [flipped, setFlipped] = useState(false);
-  const [seen, setSeen] = useState<Set<string>>(new Set());
+  const [seen, setSeen] = useState<Set<string>>(new Set(initialState?.seen ?? []));
 
   // ─── Phase 2: quiz ───
   const quizQs = useMemo(() => buildQuiz(words), [words]);
-  const [qIdx, setQIdx] = useState(0);
+  const [qIdx, setQIdx] = useState(initialState?.qIdx ?? 0);
   const [picked, setPicked] = useState<number | null>(null);
   const [checked, setChecked] = useState<'idle' | 'correct' | 'wrong'>('idle');
-  const [wrongCount, setWrongCount] = useState(0);
+  const [wrongCount, setWrongCount] = useState(initialState?.wrongCount ?? 0);
   const [shaking, setShaking] = useState(false);
+
+  // 保存到父级：翻卡、进入速测、切题都触发；done 是瞬时态不存
+  useEffect(() => {
+    if (phase === 'done') return;
+    onStateChange?.({ phase, idx, seen: Array.from(seen), qIdx, wrongCount });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, idx, seen, qIdx, wrongCount]);
 
   useEffect(() => {
     if (!shaking) return;
-    const t = setTimeout(() => setShaking(false), 480);
-    return () => clearTimeout(t);
+    const timer = setTimeout(() => setShaking(false), 480);
+    return () => clearTimeout(timer);
   }, [shaking]);
 
   useEffect(() => {
@@ -52,10 +71,15 @@ export function DiaryFlashcard({ day, onComplete }: Props) {
     // 没词的话直接放过（不应发生）
     return (
       <div className="diary-anim-fade-up" style={{ textAlign: 'center', padding: '40px 20px' }}>
-        <p className="diary-text-soft" style={{ marginBottom: 20 }}>今天没有新词，直接进入对话。</p>
-        <button onClick={onComplete} className="diary-btn diary-btn-primary">
-          继续 · 对话 <ChevronRight size={16} />
-        </button>
+        <p className="diary-text-soft" style={{ marginBottom: 20 }}>{t('diary.fc.noWords', lang)}</p>
+        <div style={{ display: 'flex', gap: 12 }}>
+          {onBack && (
+            <button onClick={onBack} style={{ flex: 1, height: 52, borderRadius: 14, background: 'var(--diary-paper-deep)', color: 'var(--diary-ink-2)', border: '1px solid var(--diary-line)', cursor: 'pointer', fontSize: 16, fontWeight: 600, fontFamily: 'var(--diary-font-zh)' }}>{t('diary.fc.prevStep', lang)}</button>
+          )}
+          <button onClick={safeComplete} className="diary-btn diary-btn-primary" style={{ flex: 2 }}>
+            {t('diary.fc.continueDialogue', lang)} <ChevronRight size={16} />
+          </button>
+        </div>
       </div>
     );
   }
@@ -96,27 +120,56 @@ export function DiaryFlashcard({ day, onComplete }: Props) {
 
     return (
       <div className="diary-anim-fade-up" style={{ paddingBottom: 32 }}>
-        <div style={{ marginBottom: 18 }}>
-          <span className="diary-tag diary-tag-mint">FLASHCARD · 闪卡复习</span>
-        </div>
-        <h2 className="diary-h2" style={{ marginBottom: 6 }}>过一遍今天的 {words.length} 个词</h2>
+        {onBack && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
+            <button
+              onClick={onBack}
+              aria-label={t('diary.fc.back', lang)}
+              style={{
+                background: 'transparent', border: 'none', cursor: 'pointer', padding: 0,
+                color: 'var(--diary-ink-soft)', display: 'inline-flex', alignItems: 'center',
+              }}
+            >
+              <ArrowLeft size={20} />
+            </button>
+            <span className="diary-tag diary-tag-mint">{t('diary.fc.tagFlashcard', lang)}</span>
+          </div>
+        )}
+        {!onBack && (
+          <div style={{ marginBottom: 18 }}>
+            <span className="diary-tag diary-tag-mint">{t('diary.fc.tagFlashcard', lang)}</span>
+          </div>
+        )}
+        <h2 className="diary-h2" style={{ marginBottom: 6 }}>{t('diary.fc.reviewTitle', lang, { n: words.length })}</h2>
         <p className="diary-text-soft" style={{ fontSize: 13, marginBottom: 20 }}>
-          点卡片看翻面，按 🔊 听发音 · 反面例句可点词查词 · {seen.size}/{words.length} 已看过
+          {t('diary.fc.reviewHint', lang, { seen: seen.size, total: words.length })}
         </p>
 
-        {/* 进度点 */}
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 6, marginBottom: 22 }}>
-          {words.map((w, i) => (
-            <span key={w.id} style={{
-              width: i === idx ? 18 : 6, height: 6, borderRadius: 6,
-              background: seen.has(w.id)
-                ? '#5ea886'
-                : i === idx
-                ? 'var(--color-pink-base)'
-                : 'var(--diary-line-strong)',
-              transition: 'all 0.2s',
-            }} />
-          ))}
+        {/* 进度点：已看(深绿+大点)/当前(粉条)/未看(灰圈) — 形状+颜色双重区分 */}
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 8, marginBottom: 22 }}>
+          {words.map((w, i) => {
+            const isSeenDot = seen.has(w.id);
+            const isCurrentDot = i === idx;
+            return (
+              <span key={w.id} style={{
+                width: isCurrentDot ? 22 : 10,
+                height: 10,
+                borderRadius: isCurrentDot ? 5 : '50%',
+                background: isSeenDot
+                  ? 'var(--color-mint-strong)'
+                  : isCurrentDot
+                  ? 'var(--color-pink-base)'
+                  : 'transparent',
+                border: isSeenDot
+                  ? 'none'
+                  : isCurrentDot
+                  ? 'none'
+                  : '2px solid var(--diary-line-strong)',
+                transition: 'all 0.2s',
+                boxShadow: isCurrentDot ? '0 0 0 3px rgba(255,127,168,0.18)' : 'none',
+              }} />
+            );
+          })}
         </div>
 
         {/* 闪卡本体 */}
@@ -127,43 +180,43 @@ export function DiaryFlashcard({ day, onComplete }: Props) {
           onTapWord={setTapWord}
         />
 
-        {/* 上一张 / 进度 / 下一张（顶部一栏） */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 22 }}>
-          <button
-            onClick={handlePrev}
-            disabled={idx === 0}
+        {/* 键盘导航：上一张 / 下一张 */}
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 12, marginTop: 22 }}>
+          <button onClick={handlePrev} disabled={idx === 0}
             className="diary-btn diary-btn-ghost"
-            style={{ opacity: idx === 0 ? 0.3 : 1 }}
+            style={{ fontSize: 12, padding: '4px 14px', opacity: idx === 0 ? 0.25 : 1 }}
           >
-            ← 上一张
+            {t('diary.fc.prevCard', lang)}
           </button>
-          <span className="diary-text-soft" style={{ fontSize: 12 }}>{idx + 1} / {words.length}</span>
-          {isLast ? (
-            <button
-              onClick={handleNext}
-              disabled={!allSeen}
-              className="diary-btn diary-btn-primary"
-              style={{ opacity: allSeen ? 1 : 0.4, cursor: allSeen ? 'pointer' : 'not-allowed' }}
-            >
-              开始速测 <Sparkles size={14} />
-            </button>
-          ) : (
-            <button
-              onClick={handleNext}
-              disabled={!isSeen}
-              className="diary-btn diary-btn-primary"
-              style={{ opacity: isSeen ? 1 : 0.4, cursor: isSeen ? 'pointer' : 'not-allowed' }}
-            >
-              下一张 <ChevronRight size={14} />
-            </button>
+          <span className="diary-text-soft" style={{ fontSize: 12, minWidth: '3em', textAlign: 'center' }}>{idx + 1} / {words.length}</span>
+          <button onClick={handleNext} disabled={isLast ? !allSeen : !isSeen}
+            className="diary-btn diary-btn-ghost"
+            style={{ fontSize: 12, padding: '4px 14px', opacity: (isLast ? allSeen : isSeen) ? 1 : 0.25 }}
+          >
+            {(isLast ? allSeen : isSeen) ? (isLast ? t('diary.fc.enterQuiz', lang) : t('diary.fc.nextCard', lang)) : t('diary.fc.flipFirst', lang)}
+          </button>
+        </div>
+
+        {/* 模块导航：上一步(1/3) + 开始速测(2/3) */}
+        <div style={{ display: 'flex', gap: 12, marginTop: 16 }}>
+          {onBack && (
+            <button onClick={onBack} style={{ flex: 1, height: 52, borderRadius: 14, background: 'var(--diary-paper-deep)', color: 'var(--diary-ink-2)', border: '1px solid var(--diary-line)', cursor: 'pointer', fontSize: 16, fontWeight: 600, fontFamily: 'var(--diary-font-zh)' }}>{t('diary.fc.prevStep', lang)}</button>
           )}
+          <button
+            onClick={() => { if (allSeen) setPhase('quiz'); }}
+            disabled={!allSeen}
+            className="diary-btn diary-btn-primary"
+            style={{ flex: 2, opacity: allSeen ? 1 : 0.4, cursor: allSeen ? 'pointer' : 'not-allowed' }}
+          >
+            {t('diary.fc.startQuiz', lang)} <ChevronRight size={16} />
+          </button>
         </div>
 
         {/* 「再翻一遍」按钮 — 翻完一轮才显示 */}
         {allSeen && (
           <div style={{ textAlign: 'center', marginTop: 18 }}>
             <button onClick={handleRestart} className="diary-btn diary-btn-ghost" style={{ fontSize: 12 }}>
-              <RotateCcw size={12} /> 再翻一遍
+              <RotateCcw size={12} /> {t('diary.fc.flipAgain', lang)}
             </button>
           </div>
         )}
@@ -208,26 +261,26 @@ export function DiaryFlashcard({ day, onComplete }: Props) {
     const canAdvance = checked === 'correct' || wrongCount >= 2;
 
     const handleNext = () => {
-      if (isLast) { setPhase('done'); onComplete(); return; }
+      if (isLast) { setPhase('done'); safeComplete(); return; }
       setQIdx(qIdx + 1);
     };
 
     return (
       <div className="diary-anim-fade-up" style={{ paddingBottom: 32 }}>
         <div style={{ marginBottom: 18 }}>
-          <span className="diary-tag" style={{ background: 'var(--color-pink-base)', color: '#fff' }}>QUIZ · 速测</span>
+          <span className="diary-tag" style={{ background: 'var(--color-pink-base)', color: '#fff' }}>{t('diary.fc.tagQuiz', lang)}</span>
         </div>
-        <h2 className="diary-h2" style={{ marginBottom: 6 }}>看韩文，挑对应的中文</h2>
+        <h2 className="diary-h2" style={{ marginBottom: 6 }}>{t('diary.fc.quizTitle', lang)}</h2>
         <p className="diary-text-soft" style={{ fontSize: 13, marginBottom: 20 }}>
-          {qIdx + 1}/{quizQs.length} · 答错两次也会放过你 · 点韩文查词
+          {qIdx + 1}/{quizQs.length} · {t('diary.fc.quizHint', lang)}
         </p>
 
         <div className="diary-card-paper" style={{ padding: '24px 22px', background: 'var(--diary-paper)' }}>
           {/* 韩文题面 */}
           <div style={{ textAlign: 'center', marginBottom: 22 }}>
             <button
-              onClick={() => { speak(q.ko, 0.85).catch(() => {}); }}
-              aria-label="听发音"
+              onClick={() => { speak(q.ko).catch(() => {}); }}
+              aria-label={t('diary.fc.listen', lang)}
               style={{
                 width: 40, height: 40, borderRadius: '50%',
                 background: 'var(--color-pink-base)', color: '#fff', border: 'none', cursor: 'pointer',
@@ -244,7 +297,7 @@ export function DiaryFlashcard({ day, onComplete }: Props) {
                 fontSize: 26, fontWeight: 700, color: 'var(--diary-ink)', letterSpacing: '0.01em',
                 padding: 0, lineHeight: 1.2,
               }}
-              aria-label="查词"
+              aria-label={t('diary.fc.lookup', lang)}
             >
               {q.ko}
             </button>
@@ -267,7 +320,7 @@ export function DiaryFlashcard({ day, onComplete }: Props) {
                   disabled={checked === 'correct'}
                   style={{
                     padding: '12px 16px', textAlign: 'left', borderRadius: 12,
-                    border: checked === 'correct' && opt.correct ? '1.5px solid #5ea886'
+                    border: checked === 'correct' && opt.correct ? '1.5px solid var(--color-mint-strong)'
                       : showResult && !opt.correct ? '1.5px solid var(--diary-stamp-red)'
                       : '1.5px solid var(--diary-line)',
                     background: checked === 'correct' && opt.correct ? 'rgba(94,168,134,0.16)'
@@ -279,7 +332,7 @@ export function DiaryFlashcard({ day, onComplete }: Props) {
                   }}
                 >
                   {opt.zh}
-                  {checked === 'correct' && opt.correct && <Check size={16} color="#5ea886" style={{ marginLeft: 8, display: 'inline', verticalAlign: 'middle' }} />}
+                  {checked === 'correct' && opt.correct && <Check size={16} color="var(--color-mint-strong)" style={{ marginLeft: 8, display: 'inline', verticalAlign: 'middle' }} />}
                   {showResult && !opt.correct && <X size={16} color="var(--diary-stamp-red)" style={{ marginLeft: 8, display: 'inline', verticalAlign: 'middle' }} />}
                 </button>
               );
@@ -290,28 +343,31 @@ export function DiaryFlashcard({ day, onComplete }: Props) {
           {checked === 'wrong' && wrongCount < 2 && (
             <div style={{ marginTop: 14, padding: '10px 14px', background: 'rgba(193,78,58,0.10)', borderRadius: 6, borderLeft: '3px solid var(--diary-stamp-red)', display: 'flex', alignItems: 'center', gap: 8 }}>
               <X size={16} color="var(--diary-stamp-red)" />
-              <span style={{ fontSize: 13 }}>再想想？（剩 {2 - wrongCount} 次机会）</span>
+              <span style={{ fontSize: 13 }}>{t('diary.fc.tryAgainCount', lang, { n: 2 - wrongCount })}</span>
               <button onClick={handleRetry} className="diary-btn diary-btn-ghost" style={{ padding: '4px 10px', fontSize: 11, marginLeft: 'auto' }}>
-                <RotateCcw size={12} /> 重选
+                <RotateCcw size={12} /> {t('diary.fc.reselect', lang)}
               </button>
             </div>
           )}
           {checked === 'wrong' && wrongCount >= 2 && (
             <div style={{ marginTop: 14, padding: '10px 14px', background: 'rgba(255,184,77,0.10)', borderRadius: 6, borderLeft: '3px solid var(--color-gold-base, #e0a500)', display: 'flex', alignItems: 'center', gap: 8 }}>
               <span style={{ fontSize: 18 }}>🥕</span>
-              <span style={{ fontSize: 13 }}>没关系，先继续。正确答案：<strong style={{ color: 'var(--diary-ink)' }}>{q.options.find((o) => o.correct)?.zh}</strong></span>
+              <span style={{ fontSize: 13 }}>{t('diary.fc.moveOnAnswer', lang)}<strong style={{ color: 'var(--diary-ink)' }}>{q.options.find((o) => o.correct)?.zh}</strong></span>
             </div>
           )}
         </div>
 
-        <div style={{ textAlign: 'center', marginTop: 22 }}>
+        <div style={{ display: 'flex', gap: 12, marginTop: 22 }}>
+          {onBack && (
+            <button onClick={onBack} style={{ flex: 1, height: 52, borderRadius: 14, background: 'var(--diary-paper-deep)', color: 'var(--diary-ink-2)', border: '1px solid var(--diary-line)', cursor: 'pointer', fontSize: 16, fontWeight: 600, fontFamily: 'var(--diary-font-zh)' }}>{t('diary.fc.prevStep', lang)}</button>
+          )}
           <button
             onClick={handleNext}
             className="diary-btn diary-btn-primary"
             disabled={!canAdvance}
-            style={{ opacity: canAdvance ? 1 : 0.4, cursor: canAdvance ? 'pointer' : 'not-allowed' }}
+            style={{ flex: 2, opacity: canAdvance ? 1 : 0.4, cursor: canAdvance ? 'pointer' : 'not-allowed' }}
           >
-            {isLast ? '继续 · 对话' : '下一题'} <ChevronRight size={16} />
+            {isLast ? t('diary.fc.continueDialogue', lang) : t('diary.fc.nextQuestion', lang)} <ChevronRight size={16} />
           </button>
         </div>
 
@@ -337,13 +393,14 @@ function FlashcardFace({
   word: ToriWord; flipped: boolean; onFlip: () => void;
   onTapWord: (surface: string) => void;
 }) {
+  const { lang } = useLang();
   const handleSpeak = (e: React.MouseEvent) => {
     e.stopPropagation();
-    speak(word.korean, 0.85).catch(() => {});
+    speak(word.korean).catch(() => {});
   };
   const handleSpeakExample = (e: React.MouseEvent, ko: string) => {
     e.stopPropagation();
-    speak(ko, 0.85).catch(() => {});
+    speak(ko).catch(() => {});
   };
   const handleTapKorean = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -373,7 +430,7 @@ function FlashcardFace({
     >
       <button
         onClick={handleSpeak}
-        aria-label="听发音"
+        aria-label={t('diary.fc.listen', lang)}
         style={{
           position: 'absolute', top: 14, right: 14,
           width: 36, height: 36, borderRadius: '50%',
@@ -388,11 +445,11 @@ function FlashcardFace({
       {!flipped ? (
         <>
           <div style={{ fontSize: 11, color: 'var(--diary-ink-soft)', letterSpacing: '0.08em', marginBottom: 14, textTransform: 'uppercase' }}>
-            正面 · 韩文
+            {t('diary.fc.frontLabel', lang)}
           </div>
           <button
             onClick={handleTapKorean}
-            aria-label="查词"
+            aria-label={t('diary.fc.lookup', lang)}
             style={{
               background: 'transparent', border: 'none', cursor: 'pointer', padding: 0,
               fontSize: 36, fontWeight: 700, color: 'var(--diary-ink)', textAlign: 'center', marginBottom: 8,
@@ -404,18 +461,18 @@ function FlashcardFace({
             [{word.hangul}]
           </div>
           <div style={{ marginTop: 18, fontSize: 11, color: 'var(--diary-ink-faint)', letterSpacing: '0.04em' }}>
-            点卡片查看意思 · 点单词查词
+            {t('diary.fc.frontTapHint', lang)}
           </div>
         </>
       ) : (
         <>
-          <div style={{ fontSize: 11, color: '#5ea886', letterSpacing: '0.08em', marginBottom: 12, textTransform: 'uppercase' }}>
-            反面 · 中文
+          <div style={{ fontSize: 11, color: 'var(--color-mint-strong)', letterSpacing: '0.08em', marginBottom: 12, textTransform: 'uppercase' }}>
+            {t('diary.fc.backLabel', lang)}
           </div>
           {/* 反面也保留韩文 + 罗马音，保持上下文 */}
           <button
             onClick={handleTapKorean}
-            aria-label="查词"
+            aria-label={t('diary.fc.lookup', lang)}
             style={{
               background: 'transparent', border: 'none', cursor: 'pointer', padding: 0,
               fontSize: 22, fontWeight: 700, color: 'var(--diary-ink)', textAlign: 'center', marginBottom: 4,
@@ -450,7 +507,7 @@ function FlashcardFace({
                 ))}
                 <button
                   onClick={(e) => handleSpeakExample(e, word.example.ko)}
-                  aria-label="听例句"
+                  aria-label={t('diary.fc.listenExample', lang)}
                   style={{
                     background: 'transparent', border: 'none', cursor: 'pointer', padding: 0,
                     color: 'var(--color-pink-base)', display: 'inline-flex', alignItems: 'center',

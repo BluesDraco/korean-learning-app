@@ -64,8 +64,14 @@ export function EntryCard({
 
   if (disabled) {
     return (
-      <Card variant="outlined" padding={layout === 'compact' ? 'sm' : 'md'}
-        style={{ opacity: 0.55, cursor: 'not-allowed' }}>
+      <Card
+        variant="outlined"
+        padding={layout === 'compact' ? 'sm' : 'md'}
+        as={onClick ? 'button' : 'div'}
+        onClick={onClick}
+        aria-disabled
+        style={{ opacity: 0.55, cursor: onClick ? 'pointer' : 'not-allowed' }}
+      >
         {inner}
       </Card>
     );

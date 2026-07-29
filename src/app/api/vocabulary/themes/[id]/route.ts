@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import type { WordEntry } from '@/types';
-import { themePacks, allEntriesById } from '@/data/vocabulary/vocab-data';
+import { themePacks, allEntriesById, authoritativeLevelByKorean } from '@/data/vocabulary/vocab-data';
 
 const CACHE = 'public, max-age=86400, stale-while-revalidate=604800';
 
@@ -14,6 +14,9 @@ export async function GET(
     return NextResponse.json({ theme: null, words: [] }, { headers: { 'Cache-Control': CACHE } });
   }
 
-  const words = theme.wordIds.map(wid => allEntriesById.get(wid)).filter((w): w is WordEntry => w !== undefined);
+  const words = theme.wordIds
+    .map(wid => allEntriesById.get(wid))
+    .filter((w): w is WordEntry => w !== undefined)
+    .map(w => ({ ...w, authoritativeLevel: authoritativeLevelByKorean[w.korean] }));
   return NextResponse.json({ theme, words }, { headers: { 'Cache-Control': CACHE } });
 }

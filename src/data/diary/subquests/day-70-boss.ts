@@ -1,0 +1,21 @@
+import type { BossSubQuestData } from '@/types/tori-subquest';
+
+/** Day 70 · 3-5 Boss 战 · 🎙️ 토론 대회 · Tori vs Danielle */
+export const day70Boss: BossSubQuestData = {
+  day: 10, level: 'advanced', idx: 5, kind: 'boss',
+  koTitle: '토론의 관문',
+  subtitle: '🎙️ 대강당 401 · 반대편 첫 번째 토론자',
+  intro: '周三下午。大讲堂 401。校内韩语辩论大赛。主题："체형이 실력을 결정한다."（体型决定实力。）Danielle 是正方一辩，发音干净得像播音。你抽到反方一辩。台上白光打下来，你握紧稿纸——今天要用 ~는 반면(에) 把 Day 69 演讲那份主张打磨成一段能顶住反驳的对话：체형은 작은 반면 능력은 크다 → 발음이 유창한 반면 경험이 적다 → 실력으로 증명하다.',
+  outroHook: '结果——무승부（平手）。评委给了双方相同的分。Danielle 走过来，伸出手："오늘 정정당당했어요."（今天堂堂正正。）你握住她的手，第一次觉得对手也可以是同类。（Day 71 · KTX · 첫 여행）',
+
+  tasks: [
+    { type: 'choice',  label: '听句选意',     task: { id: 'd70-b5-t1', audioKo: '체형은 작은 반면 능력은 커요.',                                        choices: [{ text: '体型小，另一方面能力很强。',            correct: true }, { text: '体型和能力都小。',                correct: false }, { text: '体型大能力也大。',                correct: false }, { text: '能力不重要。',                      correct: false }], explain: 'Day 70 主题句 · ~ㄴ 반면' } },
+    { type: 'choice',  label: '听句选意',     task: { id: 'd70-b5-t2', audioKo: '발음은 유창한 반면 경험이 적어요.',                                     choices: [{ text: '发音流利，另一方面经验少。',              correct: true }, { text: '发音差经验多。',                  correct: false }, { text: '两者都很好。',                    correct: false }, { text: '两者都没有。',                  correct: false }], explain: '~ㄴ 반면 · 客观对比' } },
+    { type: 'choice',  label: '~는/ㄴ 반면',   task: { id: 'd70-b5-t3', promptZh: '"体型小，另一方面能力大"哪句正确？',                                                                                                                                    choices: [{ text: '체형은 작는 반면 능력은 커요.',              correct: false }, { text: '체형은 작은 반면 능력은 커요.',        correct: true }, { text: '체형은 작을 반면 능력은 커요.',       correct: false }, { text: '체형은 작아서 반면 능력은 커요.',                 correct: false }], explain: 'A + (으)ㄴ 반면' } },
+    { type: 'choice',  label: '~는/ㄴ 반면',   task: { id: 'd70-b5-t4', promptZh: '"Danielle 做得好，我还差"哪句正确？',                                                                                                                                    choices: [{ text: '다니엘은 잘한 반면 저는 아직 부족해요.',      correct: false }, { text: '다니엘은 잘하는 반면 저는 아직 부족해요.',    correct: true }, { text: '다니엘은 잘할 반면 저는 아직 부족해요.',        correct: false }, { text: '다니엘은 잘해서 반면 저는 아직 부족해요.',                    correct: false }], explain: 'V + 는 반면' } },
+    { type: 'choice',  label: '认词',         task: { id: 'd70-b5-t5', promptKo: '증명하다',    promptHangul: 'jeung-myeong-ha-da',                                                                                                                             choices: [{ text: '证明',                    correct: true }, { text: '说明',                            correct: false }, { text: '证据',                            correct: false }, { text: '证实（作证）',                              correct: false }], explain: '실력으로 증명하다' } },
+    { type: 'compose', label: '组句',         task: { id: 'd70-b5-t6', zhHint: '体型小，另一方面能力很强。',                                                                                                                                            audioKo: '체형은 작은 반면 능력은 커요.',                            answer: ['체형은', '작은 반면', '능력은', '커요.'],   tokens: ['체형은', '작은 반면', '능력은', '커요.', '작는 반면', '작아서', '컸어요.', '작을 반면'],         explain: 'Day 70 反方金句' } },
+    { type: 'compose', label: '组句',         task: { id: 'd70-b5-t7', zhHint: '发音流利，另一方面经验少。',                                                                                                                                            audioKo: '발음은 유창한 반면 경험이 적어요.',                        answer: ['발음은', '유창한 반면', '경험이', '적어요.'],                              tokens: ['발음은', '유창한 반면', '경험이', '적어요.', '유창하는 반면', '유창해서', '많아요.', '적었어요.'], explain: '유창한 반면 · A + ㄴ 반면' } },
+    { type: 'choice',  label: '情景选回应',   task: { id: 'd70-b5-t8', promptZh: '赛后 Danielle 伸手说 "오늘 정정당당했어요."。你想回应最合适的一句是？',                                                                                            choices: [{ text: '네, 저도 배웠어요. 다음에도 정정당당하게 해요.',       correct: true }, { text: '토끼는 못해요.',                  correct: false }, { text: '얼마예요?',                              correct: false }, { text: '몰라요.',                                correct: false }], explain: '握手时的正向回应' } },
+  ],
+};

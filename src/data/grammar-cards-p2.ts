@@ -10,7 +10,7 @@ export const grammarCardsP2: GrammarCard[] = [
     whatItDoesBody: '两个核心：\n说目的地用 에 가요，说"和……一起"用 와/과 或 하고。\n中文的"去"和"和"是两个独立的词，韩语用助词直接贴在名词后面，不需要单独的动词。',
     structureNote: '这节课有两个句型：\n去哪里（에 가요）、和谁一起（와/과/하고）。\n先看清楚各自在句子里的位置。',
     rulesNote: '와/과 的选择只看一件事：\n前面名词最后有没有收音。\n口语直接用하고，不用考虑收音，说起来更轻松。',
-    scenarioNote: '约朋友、出行、购物是用这套문법最频繁的场景约朋友去哪里、买东西"和"什么都用得到。',
+    scenarioNote: '约朋友、出行、购物是用这套语法最频繁的场景约朋友去哪里、买东西"和"什么都用得到。',
     structures: [
       {
         ko: '카페에 가요',
@@ -46,7 +46,10 @@ export const grammarCardsP2: GrammarCard[] = [
       { type: 'usage',   text: '하고 不区分有无收音，口语中更自然',  examples: '친구하고 / 선생님하고 / 동생하고' },
       { type: 'compare', text: '와/과 vs 하고',                    examples: '와/과=书面/正式；하고=口语/日常，语意相同' },
       { type: 'usage',   text: '하고/와/과 也可并列名词',           examples: '커피하고 빵을 사요 / 책과 연필을 사요' },
-      { type: 'note',    text: '에 가요 vs 에서 가요',             examples: '目的地用 에 가요；에서 表示"在某地"，不表이동方向' },
+      { type: 'note',    text: '에 가요 vs 에서 가요',             examples: '目的地用 에 가요；에서 表示"在某地"，不表示移动方向' },
+      { type: 'usage',   text: '(이)랑 是最口语的"和"，比 하고 还随意，朋友间和 KPOP 里最常听到', examples: '친구랑 / 선생님이랑 / 동생이랑' },
+      { type: 'note',    text: '(이)랑 也按收音变形：有收音用 이랑，无收音用 랑（和 와/과 一样看收音，别把哪个配哪个记混）', examples: '친구（无）→친구랑；선생님（有）→선생님이랑' },
+      { type: 'note',    text: '助词只表示"和谁"，"一起"这层意思要靠 같이／함께，两者常搭在一起用', examples: '친구랑 같이 가요 / 엄마와 함께 병원에 가요' },
     ],
     cardExamples: [
       {
@@ -106,6 +109,7 @@ export const grammarCardsP2: GrammarCard[] = [
       { wrong: '책와 가요', correct: '책과 가요', note: '책 末尾有收音 ㄱ，选 과，不是 와。' },
       { wrong: '학교에서 가요', correct: '학교에 가요', note: '去某地用 에 가요；에서 表示"在某地做动作"。' },
       { wrong: '친구와하고 가요', correct: '친구와 가요 / 친구하고 가요', note: '와/과 和 하고 二选一，不要叠用。' },
+      { wrong: '친구이랑 가요', correct: '친구랑 가요', note: '친구 无收音，用 랑；이랑 只接有收音名词（선생님이랑）。' },
     ],
     linkedGrammarIds: ['g4', 'g12'],
     step0Html: `<h1 style="font-size:25px;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">에 가다 · 와/과 · 하고</h1>
@@ -287,9 +291,11 @@ export const grammarCardsP2: GrammarCard[] = [
       { type: 'rule',    text: '无收音名词 → 가',                  examples: '커피가 / 친구가 / 의자가 / 고양이가' },
       { type: 'usage',   text: '있어요 = 有 或 在（看有无地点）',   examples: '책이 있어요（有书）/ 카페에 있어요（在咖啡店）' },
       { type: 'usage',   text: '없어요 = 没有 或 不在',            examples: '시간이 없어요 / 지금 집에 없어요' },
-      { type: 'usage',   text: '某地有…：地点+에 + 名词 + 이/가 있어요', examples: '책상 위에 책이 있어요' },
+      { type: 'usage',   text: '某地有…：地点+에 + 名词 + 이/가 있어요', examples: '책상 위에 책이 있어요（书桌上有书。）' },
       { type: 'vocab',   text: '常用位置词',                       examples: '위(上)·아래(下)·앞(前)·뒤(后)·안(里)·밖(外)·옆(旁)' },
       { type: 'note',    text: '있다/없다 的主语必须加 이/가，不可省略', examples: '친구 있어요 ✗ → 친구가 있어요 ✓' },
+      { type: 'note',    text: '说长辈/师长"在不在"要用敬语动词 계시다，不用 있어요；中文没有专门的敬语存在词，最容易漏', examples: '선생님이 계세요（老师在）/ 할아버지가 안 계세요（爷爷不在）' },
+      { type: 'note',    text: '"有某物"的宾语用 이/가 而不是 을/를：中文"有书"里"书"像宾语，韩语却用主语助词', examples: '책이 있어요 ✓（有书）/ 책을 있어요 ✗' },
     ],
     cardExamples: [
       {
@@ -346,6 +352,8 @@ export const grammarCardsP2: GrammarCard[] = [
       { wrong: '책가 있어요', correct: '책이 있어요', note: '책 末尾有收音 ㄱ，选 이，不是 가。' },
       { wrong: '카페에서 있어요', correct: '카페에 있어요', note: '存在/所在用 에 있어요，에서 表示"在某地做某动作"。' },
       { wrong: '친구 있어요', correct: '친구가 있어요', note: '있다/없다 的主语必须加 이/가，不能省略。' },
+      { wrong: '책을 있어요', correct: '책이 있어요', note: '"有书"的"书"在韩语里是主语，用 이/가，不是宾语助词 을/를。' },
+      { wrong: '선생님이 있어요', correct: '선생님이 계세요', note: '对长辈说"在不在"要用敬语 계시다，不用普通 있어요。' },
     ],
         overviewHtml: `<div class="overview">
   <div class="ov-hero">
@@ -530,6 +538,8 @@ export const grammarCardsP2: GrammarCard[] = [
       { type: 'compare', text: '-ㅂ시다 vs -(으)세요',           examples: 'ㅂ시다=说话人也参与（一起）；세요=只请对方做' },
       { type: 'usage',   text: '-(으)십시오 最正式，用于广播/告示', examples: '안전벨트를 착용하십시오 / 기다리십시오' },
       { type: 'note',    text: 'ㄹ 词干：ㄹ 脱落后接 -ㅂ시다',   examples: '알다→압시다 / 만들다→만듭시다' },
+      { type: 'note',    text: '-ㅂ시다 只对平辈/晚辈用，对长辈或上司说会显得像命令；中文"咱们…吧"没这个限制，最容易踩', examples: '朋友：같이 갑시다 ○ / 对老师：같이 가시겠어요? / 같이 가요 更稳妥' },
+      { type: 'note',    text: '-(으)세요 是敬语，遇到特殊敬语动词要换词，不是机械加 으세요', examples: '먹다→드세요 / 자다→주무세요 / 있다→계세요 / 마시다→드세요' },
     ],
     cardExamples: [
       {
@@ -587,6 +597,7 @@ export const grammarCardsP2: GrammarCard[] = [
       { wrong: '먹세요', correct: '먹으세요', note: '먹 词干有收音，要加 으，用 먹으세요。' },
       { wrong: '앉세요', correct: '앉으세요', note: '앉 有复合收音 ㄵ，要加 으，用 앉으세요。' },
       { wrong: '같이 가세요（邀一起去）', correct: '같이 갑시다', note: '가세요 是请对方去，갑시다 是"我们一起去"。语气不同。' },
+      { wrong: '많이 먹으세요（想说"请慢用"）', correct: '많이 드세요', note: '먹다 的敬语是特殊词 드시다，请长辈用餐说 드세요，不是 먹으세요。' },
     ],
     linkedGrammarIds: ['g56', 'g58'],
     step0Html: `<h1 style="font-size:25px;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">-ㅂ시다/읍시다 · -(으)세요</h1>
@@ -773,6 +784,8 @@ export const grammarCardsP2: GrammarCard[] = [
       { type: 'vocab',   text: '汉字数词（配钱/月/日/分钟/电话）',      examples: '일·이·삼·사·오·육·칠·팔·구·십' },
       { type: 'rule',    text: '시간: 시간(小时)用固有，분(分)用汉字',  examples: '두 시간(两小时) / 삼십 분(30分)' },
       { type: 'note',    text: '固有数词和汉字数词不能混用',             examples: '두 원 ✗ → 이 원 ✓ / 이 명 ✗ → 두 명 ✓' },
+      { type: 'note',    text: '20 也要缩短：스물→스무（和 한/두/세/네 一样，量词前变短），最容易漏掉这个', examples: '스무 살 / 스무 개 / 스무 명' },
+      { type: 'note',    text: '年龄(살)用固有数词，中文"X岁"直接套汉字数词是最常见错误', examples: '스무 살(20岁) / 서른 살(30岁)；이십 살 ✗' },
       { type: 'usage',   text: '点餐/购物常用句式：物品 + 数量 + 주세요', examples: '아메리카노 한 잔 주세요 / 이거 두 개 주세요' },
     ],
     cardExamples: [
@@ -828,6 +841,7 @@ export const grammarCardsP2: GrammarCard[] = [
       { wrong: '이 명이에요（想说两个人）', correct: '두 명이에요', note: '"人数"用固有数词 둘→두，不用汉字数词 이。' },
       { wrong: '삼 개（想说三个）', correct: '세 개', note: '个数用固有数词 셋→세，不用汉字数词 삼。' },
       { wrong: '두 원（想说两韩元）', correct: '이 원', note: '韩元(원)用汉字数词，두 원 × → 이 원 ✓。' },
+      { wrong: '이십 살（想说二十岁）', correct: '스무 살', note: '年龄用固有数词，20 缩短为 스무；汉字数词 이십 不能配 살。' },
     ],
     linkedGrammarIds: [],
     step0Html: `<h1 style="font-size:25px;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">数词 · 量词</h1>
@@ -1016,10 +1030,12 @@ export const grammarCardsP2: GrammarCard[] = [
       { type: 'rule',    text: '의：名词A + 의 + 名词B = A的B',         examples: '친구의 책（朋友的书）/ 선생님의 이름（老师的名字）' },
       { type: 'usage',   text: '口语"我的"：저의→제（正式），나의→내（亲近）', examples: '제 가방 / 내 친구 / 우리 엄마' },
       { type: 'rule',    text: '도：替换 은/는/이/가/을/를，直接接名词后', examples: '저도 / 한국어도 / 커피도' },
-      { type: 'usage',   text: '도 表示"也"，前后是类似或递进정보',      examples: '저도 좋아요 / 이것도 맛있어요' },
+      { type: 'usage',   text: '도 表示"也"，前后是类似或递进信息',      examples: '저도 좋아요 / 이것도 맛있어요' },
       { type: 'rule',    text: '만：接名词后，替换其他助词，表限定',       examples: '커피만 / 오늘만 / 나만 / 한 개만' },
       { type: 'compare', text: '도 vs 만',                              examples: '도=也（扩展）；만=只（限定）' },
       { type: 'note',    text: '도/만 不能同时用在同一名词上',            examples: '커피도만 ✗ → 커피만 ✓ / 커피도 ✓' },
+      { type: 'note',    text: '도/만 只替换 은/는/이/가/을/를；碰到 에/에서/에게/(으)로 要保留，도/만 接在它们后面', examples: '집에도 / 학교에서만 / 친구한테도' },
+      { type: 'usage',   text: '의 作所属助词时读音变成 [에]，不读 [의]',   examples: '나의→나[에] / 저의→저[에] / 친구의→친구[에]' },
     ],
     cardExamples: [
       {
@@ -1076,6 +1092,7 @@ export const grammarCardsP2: GrammarCard[] = [
       { wrong: '저는도 좋아해요', correct: '저도 좋아해요', note: '도 替换 은/는，不要叠用：저는도 × → 저도 ✓。' },
       { wrong: '커피를만 마셔요', correct: '커피만 마셔요', note: '만 替换 을/를，不要叠用：커피를만 × → 커피만 ✓。' },
       { wrong: '저만도 알아요', correct: '저만 알아요', note: '도 和 만 不同时用于同一成分，意思会混乱。' },
+      { wrong: '집도 가고 싶어요', correct: '집에도 가고 싶어요', note: '"去哪里"是 집에，도 只替换 은/는/이/가/을/를，不替换 에；正确是保留 에 再加 도 → 집에도。' },
     ],
     linkedGrammarIds: ['g7', 'g6'],
     step0Html: `<h1 style="font-size:25px;font-weight:800;line-height:1.3;margin-bottom:8px;color:#241917">의 · 도 · 만</h1>
@@ -1249,9 +1266,9 @@ export const grammarCardsP2: GrammarCard[] = [
       { type: 'rule',    text: '하다 动词口语否定：名词 + 안 해요',       examples: '공부 안 해요 / 운동 안 해요（比 안 공부해요 更自然）' },
       { type: 'rule',    text: '词干 + -지 않아요（完整否定）',           examples: '가지 않아요 / 어렵지 않아요 / 공부하지 않아요' },
       { type: 'compare', text: '안 vs -지 않아요',                       examples: '안=口语简短；지 않아요=书面/正式，语气更完整' },
-      { type: 'usage',   text: '그리고：连接顺接/补充（而且/然后）',      examples: 'A. 그리고 B. — 커피를 마셨어요. 그리고 빵도 먹었어요.' },
-      { type: 'usage',   text: '그렇지만：连接转折（但是/不过）',         examples: 'A. 그렇지만 B. — 맛있어요. 그렇지만 비싸요.' },
-      { type: 'note',    text: '그리고/그렇지만 放第二句句首，前句用 。结尾', examples: '커피 안 마셔요. 그리고 차도 안 마셔요.' },
+      { type: 'usage',   text: '그리고：连接顺接/补充（而且/然后）',      examples: 'A. 그리고 B. — 커피를 마셨어요. 그리고 빵도 먹었어요.（喝了咖啡，然后还吃了面包。）' },
+      { type: 'usage',   text: '그렇지만：连接转折（但是/不过）',         examples: 'A. 그렇지만 B. — 맛있어요. 그렇지만 비싸요.（好吃，但是贵。）' },
+      { type: 'note',    text: '그리고/그렇지만 放第二句句首，前句用 。结尾', examples: '커피 안 마셔요. 그리고 차도 안 마셔요.（不喝咖啡，茶也不喝。）' },
     ],
     cardExamples: [
       {
@@ -1300,7 +1317,7 @@ export const grammarCardsP2: GrammarCard[] = [
     scenarios: [
       { icon: '🙅', context: '拒绝邀请', ko: '오늘은 시간이 없어요. 그렇지만 내일은 괜찮아요!', zh: '今天没有时间，但是明天可以！' },
       { icon: '☕', context: '饮食偏好', ko: '저는 커피를 안 마셔요. 차를 마셔요.', zh: '我不喝咖啡，喝茶。' },
-      { icon: '🎵', context: 'KPOP 评论', ko: '이 노래는 좋아요. 그렇지만 발음이 어려워요.', zh: '这首歌很好，但是발음很难。' },
+      { icon: '🎵', context: 'KPOP 评论', ko: '이 노래는 좋아요. 그렇지만 발음이 어려워요.', zh: '这首歌很好，但是发音很难。' },
       { icon: '📚', context: '学习打卡', ko: '오늘도 한국어를 공부했어요. 그리고 드라마를 봤어요.', zh: '今天也学习了韩语，而且看了电视剧。' },
       { icon: '🏃', context: '日程说明', ko: '오늘 운동 안 했어요. 내일은 꼭 할 거예요.', zh: '今天没有运动，明天一定会做。' },
       { icon: '🍽️', context: '餐厅点餐', ko: '저는 고기를 안 먹어요. 채소 요리 있어요?', zh: '我不吃肉，有蔬菜料理吗？' },
@@ -1398,7 +1415,7 @@ export const grammarCardsP2: GrammarCard[] = [
           post: ' 드라마도 봐요.',
           options: ['안', '그렇지만', '그리고'],
           answer: 2,
-          explanation: '顺接补充정보，用 그리고',
+          explanation: '顺接补充信息，用 그리고',
         },
         {
           pre: '이 노래는 좋아요.',
@@ -1485,7 +1502,7 @@ export const grammarCardsP2: GrammarCard[] = [
     connectionRules: [
       { type: 'rule',    text: '有收音名词 → 이',                          examples: '책이 / 시간이 / 사람이 / 음식이' },
       { type: 'rule',    text: '无收音名词 → 가',                          examples: '친구가 / 비가 / 의자가 / 고양이가' },
-      { type: 'usage',   text: '이/가 用于：①引入新정보 ②强调 ③있다/없다 主语', examples: '비가 와요（新信息）/ 제가 했어요（强调）' },
+      { type: 'usage',   text: '이/가 用于：①引入新信息 ②强调 ③있다/없다 主语', examples: '비가 와요（新信息）/ 제가 했어요（强调）' },
       { type: 'usage',   text: '이（이+名词）：说话人和听话人附近',          examples: '이 사람 / 이 노래 / 이 음식' },
       { type: 'usage',   text: '그（그+名词）：听话人附近或刚提到的',        examples: '그 책 / 그 배우 / 그 드라마' },
       { type: 'usage',   text: '저（저+名词）：双方都距离较远的',            examples: '저 가수 / 저 건물 / 저 사람' },
@@ -1696,7 +1713,7 @@ export const grammarCardsP2: GrammarCard[] = [
     whatItDoesBody: '부터 表示起点"从"，까지 表示终点"到"，时间说法：\n시간은 固有数词，분은 汉字数词。\n这节课把P2-L04学的数词直接用到时间表达上，同时学会说"从……到……"的范围句型。\n中文"从三点到五点"结构和韩语相同，但韩语"小时"用固有数词、"分钟"用汉字数词，两套混用是中文没有的难点。',
     structureNote: '两个核心词 부터/까지 结构很简单：\n直接贴在时间/地点词后面。\n难点在时间的读法几点用固有数词，几分用汉字数词，两套混用。',
     rulesNote: '时间读法只需记住：\n시（点）用固有数词（한/두/세…열두），분（分）用汉字数词（일/이/십…오십오）。\n特殊：\n半小时说 반（두 시 반=两点半）。\n空间起点用 에서，时间起点用 부터，不能混用。',
-    scenarioNote: '说工作时间、约定见面、描述演唱会시간부터/까지 是最常用的时间表达框架。\n掌握这节课，你能准确说出任何"从X到X"的安排。',
+    scenarioNote: '说工作时间、约定见面、描述演唱会时间，부터/까지 是最常用的时间表达框架。\n掌握这节课，你能准确说出任何"从X到X"的安排。',
     conceptCompare: {
       zh: '从三点到五点 / 上午十点半',
       ko: '세 시부터 다섯 시까지 / 오전 열 시 반',
@@ -1729,7 +1746,7 @@ export const grammarCardsP2: GrammarCard[] = [
       { type: 'rule',    text: '시（点）用固有数词',                    examples: '한 시 / 두 시 / 세 시 / 열두 시' },
       { type: 'rule',    text: '분（分）用汉字数词',                    examples: '십 분 / 삼십 분 / 오십오 분' },
       { type: 'usage',   text: '반（半）= 30分，可代替 삼십 분',        examples: '두 시 반（两点半）/ 세 시 반（三点半）' },
-      { type: 'vocab',   text: '오전/오후 放시간前',                    examples: '오전 열 시（上午十点）/ 오후 두 시（下午两点）' },
+      { type: 'vocab',   text: '오전/오후 放在时间前',                    examples: '오전 열 시（上午十点）/ 오후 두 시（下午两点）' },
     ],
     cardExamples: [
       {
@@ -1855,7 +1872,7 @@ export const grammarCardsP2: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'fill',
-      title: '选择正确的시간表达',
+      title: '选择正确的时间表达',
       body: '根据语境选择正确的填入。',
       questions: [
         {
@@ -1967,11 +1984,13 @@ export const grammarCardsP2: GrammarCard[] = [
     connectionRules: [
       { type: 'rule',    text: '에게：书面/中性，对人',                    examples: '친구에게 / 선생님에게 / 부모님에게' },
       { type: 'rule',    text: '한테：口语，对人',                         examples: '친구한테 / 엄마한테 / 동생한테' },
-      { type: 'rule',    text: '에게서/한테서：从对方处（接收）',           examples: '친구한테서 선물을 받았어요' },
+      { type: 'rule',    text: '에게서/한테서：从对方处（接收）',           examples: '친구한테서 선물을 받았어요（从朋友那儿收到了礼物。）' },
       { type: 'note',    text: '에게/한테 只用于人或动物，地点/物体用 에',  examples: '학교에게 ✗ → 학교에 ✓' },
       { type: 'rule',    text: 'ㅂ 不规则：词干末 ㅂ + 元音 → 워요',      examples: '덥다→더워요 / 춥다→추워요 / 어렵다→어려워요' },
       { type: 'vocab',   text: '常见 ㅂ 不规则形容词',                        examples: '덥다(热)·춥다(冷)·어렵다(难)·가볍다(轻)·무겁다(重)·아름답다(美丽)' },
       { type: 'note',    text: '规则 ㅂ 词（不变）',                      examples: '입다→입어요(穿) / 잡다→잡아요(抓)' },
+      { type: 'note',    text: '给长辈/上司要用 께（敬语版 에게/한테）',    examples: '선생님께 질문했어요 / 부모님께 드려요（敬语相关章节详学）' },
+      { type: 'note',    text: 'ㅂ 不规则例外：돕다/곱다 变 와（不是 워）',   examples: '돕다→도와요(帮) / 곱다→고와요(美)' },
     ],
     cardExamples: [
       {
@@ -2019,7 +2038,7 @@ export const grammarCardsP2: GrammarCard[] = [
     scenarios: [
       { icon: '💬', context: 'SNS 聊天', ko: '친구한테 카톡 보냈어요. 아직 답장이 없어요.', zh: '给朋友发了KakaoTalk，还没有回复。' },
       { icon: '🌡️', context: '天气', ko: '오늘 너무 더워요. 어제는 추웠어요.', zh: '今天太热了，昨天很冷。' },
-      { icon: '📚', context: '学习反馈', ko: '이 문법이 어려워요. 선생님한테 물어볼 거예요.', zh: '这个문법很难，要问老师。' },
+      { icon: '📚', context: '学习反馈', ko: '이 문법이 어려워요. 선생님한테 물어볼 거예요.', zh: '这个语法很难，要问老师。' },
       { icon: '🎁', context: '收礼物', ko: '친구한테 선물을 받았어요!', zh: '收到了朋友的礼物！' },
       { icon: '🎵', context: 'KPOP 评论', ko: '이 노래 가사가 너무 아름다워요.', zh: '这首歌的歌词太美了。' },
       { icon: '🏋️', context: '运动', ko: '이 가방이 너무 무거워요. 좀 들어 주세요.', zh: '这个包太重了，帮我拿一下。' },
@@ -2029,6 +2048,8 @@ export const grammarCardsP2: GrammarCard[] = [
       { wrong: '덥어요（直接套规则）', correct: '더워요', note: '덥다 是 ㅂ 不规则，ㅂ 遇元音语尾变 워，得 더워요。' },
       { wrong: '입워요（把 입다 也不规则化）', correct: '입어요', note: '입다 是规则变化，直接套用：입 + 어요 = 입어요。' },
       { wrong: '에게서/한테서 混用 에게/한테', correct: '친구한테서 받았어요', note: '从对方处"得到"要加 서：친구한테서 선물을 받았어요。' },
+      { wrong: '선생님한테 질문드렸어요（对长辈仍用 한테）', correct: '선생님께 질문드렸어요', note: '中文"给"不分对象敬否，韩语对长辈/上司要把 에게/한테 换成敬语的 께。' },
+      { wrong: '돕워요（把 돕다 套 워）', correct: '도와요', note: '돕다·곱다 是 ㅂ 不规则里的特例，变 와 不是 워：돕다→도와요。' },
     ],
     compareHtml: `<div class="card-title">에게 vs 한테 — 给谁/对谁</div>
 <div class="card-body">两个都表示动作的对象"给谁/对谁"，区别只在场合：에게 书面，한테 口语。中文"给朋友"只有一种说法，韩语要看说话场合选择。</div>
@@ -2198,6 +2219,8 @@ export const grammarCardsP2: GrammarCard[] = [
       { type: 'rule',    text: '前元音 非 ㅏ/ㅗ → 어요',                      examples: '예쁘다→예뻐요 / 기쁘다→기뻐요 / 슬프다→슬퍼요' },
       { type: 'note',    text: '单音节词干 → 어요',                        examples: '쓰다→써요 / 크다→커요 / 끄다→꺼요' },
       { type: 'note',    text: 'ㅡ 接 -고 时不脱落',                        examples: '쓰고 있어요 / 아프고 피곤해요' },
+      { type: 'note',    text: '词干末是"르"不走 ㅡ 脱落，是 르 不规则（后面章节详学）', examples: '모르다→몰라요 / 다르다→달라요（不是 모러요/다러요）' },
+      { type: 'note',    text: '同形异义：묻다 按意思分规则/不规则',        examples: '묻다(问)→물어요(ㄷ不规则) / 묻다(埋)→묻어요(规则)' },
     ],
     cardExamples: [
       {
@@ -2254,6 +2277,7 @@ export const grammarCardsP2: GrammarCard[] = [
       { wrong: '들고 있어요（想说"正在听"）', correct: '듣고 있어요', note: '接 -고 时不是元音语尾，ㄷ 不变：듣고 있어요。들다 是另一个词（拿/举）。' },
       { wrong: '아프어요', correct: '아파요', note: '아프다 的 ㅡ 脱落，前面元音 ㅏ → 아파요。' },
       { wrong: '예쁘아요', correct: '예뻐요', note: '예쁘다 的 ㅡ 脱落，前元音 ㅔ 非 ㅏ/ㅗ → 接 어요，쁘 去 ㅡ 后与 어 合并 → 뻐，得 예뻐요。' },
+      { wrong: '모르아요（把 모르다 当 ㅡ 脱落）', correct: '몰라요', note: '词干末是"르"的词走 르 不规则，不是 ㅡ 脱落：모르다→몰라요（后面章节详学）。' },
     ],
         overviewHtml: `<div class="overview">
   <div class="ov-hero">
@@ -2467,7 +2491,7 @@ export const grammarCardsP2: GrammarCard[] = [
       { wrong: '커피 하나 잔', correct: '커피 한 잔', note: '수량사 앞에서 하나 → 한' },
       { wrong: '저는도 좋아요', correct: '저도 좋아요', note: '도는 은/는을 직접 대체，겹쳐 쓰지 않음' },
       { wrong: '안 공부해요', correct: '공부 안 해요', note: '하다 动词 口语 否定: 名词 + 안 해요' },
-      { wrong: '서울부터 부산까지', correct: '서울에서 부산까지', note: '空间起点은 에서，부터는 시간/用于抽象' },
+      { wrong: '서울부터 부산까지', correct: '서울에서 부산까지', note: '空间起点은 에서，부터는 时间/用于抽象' },
       { wrong: '덥어요', correct: '더워요', note: '덥다는 ㅂ 不规则，ㅂ→워' },
       { wrong: '듣어요', correct: '들어요', note: '듣다는 ㄷ 不规则，ㄷ→ㄹ' },
     ],

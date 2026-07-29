@@ -1,0 +1,21 @@
+import type { BossSubQuestData } from '@/types/tori-subquest';
+
+/** Day 72 · 3-5 Boss 战 · 🌊 해운대 · 갈매기와 파도 */
+export const day72Boss: BossSubQuestData = {
+  day: 12, level: 'advanced', idx: 5, kind: 'boss',
+  koTitle: '해운대의 관문',
+  subtitle: '🌊 해운대 모래사장 · 갈매기와 파도',
+  intro: '中午 11 点 40。海云台。你们从地铁 2 号线冬柏站钻出来。海风扑面。Junho 张开手臂大叫，Haru 直接把鞋脱了跑向海边。你站在沙滩最边缘，60 天来第一次觉得韩国的空气有咸味。有人递过来一根새우깡。海鸥立刻围过来。今天要用 ~(으)ㄹ 만하다 把心里那句"值得来"说出来：해운대는 가 볼 만하다 → 이 회는 먹을 만하다 → 사진 찍을 만한 카페.',
+  outroHook: '傍晚。海面变金色。Haru 举起相机对你说："토리, 웃어!"（兔莉，笑一个！）快门按下的那一秒，你听到自己心里说了一句韩语——不用翻译。（Day 73 · 자갈치 · 활낙지）',
+
+  tasks: [
+    { type: 'choice',  label: '听句选意',     task: { id: 'd72-b5-t1', audioKo: '해운대는 한번 가 볼 만해요.',                                        choices: [{ text: '海云台值得去一次看看。',                    correct: true }, { text: '海云台不值得去。',              correct: false }, { text: '海云台已经去过了。',           correct: false }, { text: '不推荐海云台。',              correct: false }], explain: 'Day 72 主题句 · ~ㄹ 만하다' } },
+    { type: 'choice',  label: '听句选意',     task: { id: 'd72-b5-t2', audioKo: '사진 찍을 만한 카페예요.',                                          choices: [{ text: '是值得拍照的咖啡厅。',                       correct: true }, { text: '这里不能拍照。',                  correct: false }, { text: '咖啡厅关门了。',                  correct: false }, { text: '这里没咖啡厅。',                  correct: false }], explain: '~ㄹ 만한 + N 定语' } },
+    { type: 'choice',  label: '~ㄹ 만하다',   task: { id: 'd72-b5-t3', promptZh: '"这生鱼片值得吃"哪句正确？',                                                                                                                                    choices: [{ text: '이 회는 먹는 만해요.',                          correct: false }, { text: '이 회는 먹을 만해요.',              correct: true }, { text: '이 회는 먹은 만해요.',            correct: false }, { text: '이 회는 먹어서 만해요.',                 correct: false }], explain: '먹다 → 먹을 만하다' } },
+    { type: 'choice',  label: '定语',         task: { id: 'd72-b5-t4', promptZh: '"是值得拍照的咖啡厅"哪句正确？',                                                                                                                                    choices: [{ text: '사진 찍은 만한 카페예요.',                        correct: false }, { text: '사진 찍을 만한 카페예요.',            correct: true }, { text: '사진 찍는 만한 카페예요.',          correct: false }, { text: '사진 찍어서 만한 카페예요.',                    correct: false }], explain: '~(으)ㄹ 만한 + N' } },
+    { type: 'choice',  label: '认词',         task: { id: 'd72-b5-t5', promptKo: '갈매기',     promptHangul: 'gal-mae-gi',                                                                                                                             choices: [{ text: '海鸥',                    correct: true }, { text: '燕子',                            correct: false }, { text: '鸽子',                            correct: false }, { text: '乌鸦',                              correct: false }], explain: '해운대 名场面' } },
+    { type: 'compose', label: '组句',         task: { id: 'd72-b5-t6', zhHint: '海云台值得去一次看看。',                                                                                                                                            audioKo: '해운대는 한번 가 볼 만해요.',                       answer: ['해운대는', '한번', '가 볼 만해요.'],   tokens: ['해운대는', '한번', '가 볼 만해요.', '가는 만해요.', '간 만해요.', '가서', '갔어요.'],         explain: '가 보다 → 가 볼 만하다' } },
+    { type: 'compose', label: '组句',         task: { id: 'd72-b5-t7', zhHint: '这生鱼片真的值得吃。',                                                                                                                                            audioKo: '이 회는 진짜 먹을 만해요.',                          answer: ['이 회는', '진짜', '먹을 만해요.'],                              tokens: ['이 회는', '진짜', '먹을 만해요.', '먹는 만해요.', '먹은 만해요.', '먹어서', '먹었어요.'],           explain: '먹다 → 먹을 만하다' } },
+    { type: 'choice',  label: '情景选回应',   task: { id: 'd72-b5-t8', promptZh: 'Haru 举起相机说 "웃어!"。海面变金色。你要用一句最能反映"60 天里第一次被韩国的海接住"的心情。哪句最合适？',                                                                                            choices: [{ text: '해운대는 진짜 와 볼 만한 곳이야.',       correct: true }, { text: '해운대 싫어.',                  correct: false }, { text: '얼마예요?',                              correct: false }, { text: '몰라.',                                correct: false }], explain: '~ㄹ 만한 + N · 沉淀感' } },
+  ],
+};

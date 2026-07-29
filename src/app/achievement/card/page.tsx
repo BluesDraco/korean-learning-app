@@ -1,26 +1,21 @@
 'use client';
 
+import { SITE_URL } from '@/lib/seo';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { ArrowLeft, Download, Copy, Check, Loader2, Palette, X } from 'lucide-react';
 import Link from 'next/link';
 import { db } from '@/lib/db';
 import { getProfile } from '@/lib/gamification';
-import type { MilestoneType, UserAchievement } from '@/types';
+import { ACHIEVEMENT_BY_ID } from '@/data/achievements';
+import { useLang } from '@/components/LangProvider';
+import { t, type Lang } from '@/lib/i18n';
 
-// ── Milestone Definitions ─────────────────────────────────────────
-
-const MILESTONES: Record<MilestoneType, { title: string; subtitle: string; icon: string }> = {
-  phonetics_complete: { title: '韩文字母毕业', subtitle: '托里和你一起学完了发音', icon: '🎓' },
-  streak_7: { title: '和托里一起坚持了7天', subtitle: '一周的陪伴刚刚开始', icon: '🔥' },
-  streak_30: { title: '和托里一起坚持了30天', subtitle: '一个月的成长看得见', icon: '⭐' },
-  streak_100: { title: '和托里一起坚持了100天', subtitle: '百天的坚持是奇迹', icon: '👑' },
-  reviews_100: { title: '复习突破100词', subtitle: '每次复习都在变强', icon: '📚' },
-  reviews_500: { title: '复习突破500词', subtitle: '脑海里都是韩语了', icon: '🏆' },
-  first_picture_book: { title: '第一本绘本完成', subtitle: '和托里读完第一个故事', icon: '📖' },
-  ai_chat_10: { title: 'AI对话10轮达成', subtitle: '勇敢开口就是进步', icon: '💬' },
-  topik_perfect: { title: 'TOPIK首次满分', subtitle: '满分是对努力最好的回报', icon: '💯' },
-  days_100: { title: '学习满100天', subtitle: '和托里相伴走过百天', icon: '🌈' },
-};
+// 分享卡由成就墙以 ?type=<成就id> 驱动。展示信息统一从 achievements.ts 解析。
+function resolveAch(id: string): { title: string; subtitle: string; icon: string } | null {
+  const def = ACHIEVEMENT_BY_ID[id];
+  if (!def) return null;
+  return { title: def.title, subtitle: def.subtitle, icon: def.icon };
+}
 
 type ColorScheme = 'pink' | 'purple' | 'mint';
 
@@ -54,11 +49,12 @@ function spawnConfetti(container: HTMLElement) {
 
 function drawCard(
   canvas: HTMLCanvasElement,
-  milestone: MilestoneType,
+  def: { title: string; subtitle: string; icon: string },
   stats: { reviews: number; days: number; chats: number },
   nickname: string,
   message: string,
   scheme: ColorScheme,
+  lang: Lang,
 ) {
   const ctx = canvas.getContext('2d')!;
   const W = 1080;
@@ -67,7 +63,6 @@ function drawCard(
   canvas.height = H;
 
   const c = COLORS[scheme];
-  const def = MILESTONES[milestone];
 
   // Background
   ctx.fillStyle = '#FFFDF9';
@@ -91,7 +86,7 @@ function drawCard(
   ctx.fillStyle = '#5C4B51';
   ctx.font = 'bold 36px "Noto Sans SC", sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('韩语学习日记', W / 2, 100);
+  ctx.fillText(t('achcard.card_brand', lang), W / 2, 100);
 
   // Tori emoji
   ctx.font = '120px sans-serif';
@@ -122,7 +117,7 @@ function drawCard(
   ctx.fillStyle = '#5C4B51';
   ctx.font = 'bold 28px "Noto Sans SC", sans-serif';
   const statsY = 630;
-  const statsText = `复习 ${stats.reviews} 词  ·  学习 ${stats.days} 天  ·  AI对话 ${stats.chats} 次`;
+  const statsText = t('achcard.card_stats', lang, { reviews: stats.reviews, days: stats.days, chats: stats.chats });
   ctx.fillText(statsText, W / 2, statsY);
 
   // Custom message
@@ -149,7 +144,7 @@ function drawCard(
   // Bottom domain
   ctx.fillStyle = '#C4B5B9';
   ctx.font = '20px "Noto Sans SC", sans-serif';
-  ctx.fillText('korean-learning.app', W / 2, H - 80);
+  ctx.fillText(SITE_URL.replace('https://', ''), W / 2, H - 80);
 
   // Bottom border
   ctx.fillStyle = c.primary;
@@ -159,91 +154,37 @@ function drawCard(
 // ── Main Component ─────────────────────────────────────────────────
 
 export default function AchievementCardPage() {
+  const { lang } = useLang();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [loading, setLoading] = useState(true);
-  const [milestone, setMilestone] = useState<MilestoneType | null>(null);
+  const [milestone, setMilestone] = useState<string | null>(null);
   const [scheme, setScheme] = useState<ColorScheme>('pink');
   const [message, setMessage] = useState('');
   const [nickname, setNickname] = useState('학습자');
   const [stats, setStats] = useState({ reviews: 0, days: 0, chats: 0 });
   const [copied, setCopied] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [, setSavedId] = useState<string | null>(null);
 
-  // Check for milestone achievement
+  // 由成就墙以 ?type=<成就id> 驱动。解锁检测在墙里完成，本页只负责生成分享卡。
   useEffect(() => {
     (async () => {
       try {
         const profile = await getProfile();
         if (profile) setNickname(profile.nickname || '학습자');
 
-        // Gather stats
         const allWords = await db.words.orderBy('id').limit(2000).toArray();
         const reviewed = allWords.filter((w) => w.lastReviewed).length;
-        const longestStreak = profile?.longestStreak || 0;
-
-        // Count AI chat rounds
         let chatRounds = 0;
-        let booksRead = 0;
-        let topikPerfects = 0;
-        try {
-          chatRounds = (await db.studyLogs.filter((l) => l.action === 'ai_chat')).length;
-          booksRead = (await db.studyLogs.filter((l) => l.action === 'picture_book_complete')).length;
-          topikPerfects = (await db.studyLogs.filter((l) => l.action === 'topik_perfect')).length;
-        } catch { /* ignore */ }
-
-        // Calculate total study days
+        try { chatRounds = (await db.studyLogs.filter((l) => l.action === 'ai_chat')).length; } catch { /* ignore */ }
         const dailyLogs = await db.dailyLogs.orderBy('id').limit(1000).toArray();
-        const studyDays = dailyLogs.length;
+        setStats({ reviews: reviewed, days: dailyLogs.length, chats: chatRounds });
 
-        // Determine which milestones have been reached but not yet card-generated
-        const existingAchs = await db.userAchievements.toArray().catch(() => []);
-        const existingTypes = new Set(existingAchs.map((a) => a.achievementType));
-
-        let phComplete = false;
-        try { phComplete = (await db.studyLogs.filter(l => l.action === 'phonetics_complete')).length > 0; } catch { /* ignore */ }
-
-        const candidates: { type: MilestoneType; condition: boolean }[] = [
-          { type: 'phonetics_complete', condition: phComplete },
-          { type: 'streak_7', condition: longestStreak >= 7 },
-          { type: 'streak_30', condition: longestStreak >= 30 },
-          { type: 'streak_100', condition: longestStreak >= 100 },
-          { type: 'reviews_100', condition: reviewed >= 100 },
-          { type: 'reviews_500', condition: reviewed >= 500 },
-          { type: 'first_picture_book', condition: booksRead >= 1 },
-          { type: 'ai_chat_10', condition: chatRounds >= 10 },
-          { type: 'topik_perfect', condition: topikPerfects >= 1 },
-          { type: 'days_100', condition: studyDays >= 100 },
-        ];
-
-        // Find first unclaimed milestone
-        const unclaimed = candidates.find((c) => c.condition && !existingTypes.has(c.type));
-
-        setStats({ reviews: reviewed, days: studyDays, chats: chatRounds });
-
-        if (unclaimed) {
-          setMilestone(unclaimed.type);
+        const params = new URLSearchParams(window.location.search);
+        const typeParam = params.get('type');
+        if (typeParam && resolveAch(typeParam)) {
+          setMilestone(typeParam);
           setShowModal(true);
           spawnConfetti(document.body);
-          // Save achievement record
-          const ach: UserAchievement = {
-            id: crypto.randomUUID(),
-            achievementType: unclaimed.type,
-            achievedAt: Date.now(),
-            isCardGenerated: false,
-          };
-          await db.userAchievements.add(ach).catch(() => {});
-          setSavedId(ach.id);
-        } else {
-          // Check URL param for existing milestone (revisit)
-          const params = new URLSearchParams(window.location.search);
-          const typeParam = params.get('type') as MilestoneType | null;
-          if (typeParam && MILESTONES[typeParam]) {
-            setMilestone(typeParam);
-            // Find existing achievement
-            const existing = existingAchs.find((a) => a.achievementType === typeParam);
-            if (existing) setSavedId(existing.id);
-          }
         }
       } catch { /* db unavailable */ } finally {
         setLoading(false);
@@ -251,12 +192,14 @@ export default function AchievementCardPage() {
     })();
   }, []);
 
+  const def = milestone ? resolveAch(milestone) : null;
+
   // Draw canvas whenever inputs change
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
-    if (!canvas || !milestone) return;
-    drawCard(canvas, milestone, stats, nickname, message, scheme);
-  }, [milestone, stats, nickname, message, scheme]);
+    if (!canvas || !def) return;
+    drawCard(canvas, def, stats, nickname, message, scheme, lang);
+  }, [def, stats, nickname, message, scheme, lang]);
 
   useEffect(() => { draw(); }, [draw]);
 
@@ -264,16 +207,17 @@ export default function AchievementCardPage() {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const link = document.createElement('a');
-    link.download = `tori-milestone-${milestone}.webp`;
+    link.download = `tori-milestone-${milestone}.png`;
     link.href = canvas.toDataURL('image/png');
     link.click();
   };
 
   const handleCopyLink = async () => {
-    const token = crypto.randomUUID().replace(/-/g, '').slice(0, 12);
-    await navigator.clipboard.writeText(`${window.location.origin}/diary/share/${token}`);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    try {
+      await navigator.clipboard.writeText(`${window.location.origin}/`);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch { /* ignore */ }
   };
 
   if (loading) {
@@ -284,28 +228,27 @@ export default function AchievementCardPage() {
     );
   }
 
-  if (!milestone) {
+  if (!def) {
     return (
-      <div className="py-6 max-w-lg mx-auto text-center space-y-6">
+      <div className="py-6 max-w-lg md:max-w-none mx-auto text-center space-y-6">
         <span className="text-6xl">🐰</span>
-        <h1 className="text-xl font-bold text-[var(--text-primary)]">还没有新的里程碑</h1>
-        <p className="text-sm text-[var(--text-secondary)]">继续学习，托里会在这里等你！</p>
-        <Link href="/learn" className="inline-block px-6 py-2.5 bg-[var(--pink-primary)] text-white rounded-xl text-sm font-medium">
-          去学习
+        <h1 className="text-xl font-bold text-[var(--text-primary)]">{t('achcard.noneTitle', lang)}</h1>
+        <p className="text-sm text-[var(--text-secondary)]">{t('achcard.noneDesc', lang)}</p>
+        <Link href="/achievement" className="inline-block px-6 py-2.5 bg-[var(--pink-primary)] text-white rounded-xl text-sm font-medium">
+          {t('achcard.goStudy', lang)}
         </Link>
       </div>
     );
   }
 
-  const def = MILESTONES[milestone];
   return (
-    <div className="py-4 max-w-lg mx-auto space-y-4">
+    <div className="py-4 max-w-lg md:max-w-none mx-auto space-y-4">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <Link href="/learn" className="text-[var(--text-muted)] hover:text-[var(--text-primary)]">
+        <Link href="/achievement" className="text-[var(--text-muted)] hover:text-[var(--text-primary)]">
           <ArrowLeft size={20} />
         </Link>
-        <h1 className="text-lg font-bold text-[var(--text-primary)]">成就卡片</h1>
+        <h1 className="text-lg font-bold text-[var(--text-primary)]">{t('achcard.title', lang)}</h1>
       </div>
 
       {/* Milestone info */}
@@ -314,9 +257,9 @@ export default function AchievementCardPage() {
         <h2 className="text-xl font-bold text-[var(--text-primary)]">{def.title}</h2>
         <p className="text-sm text-[var(--text-secondary)]">{def.subtitle}</p>
         <div className="flex items-center justify-center gap-4 text-sm text-[var(--text-muted)]">
-          <span>复习 {stats.reviews} 词</span>
-          <span>学习 {stats.days} 天</span>
-          <span>对话 {stats.chats} 次</span>
+          <span>{t('achcard.statReviews', lang, { n: stats.reviews })}</span>
+          <span>{t('achcard.statDays', lang, { n: stats.days })}</span>
+          <span>{t('achcard.statChats', lang, { n: stats.chats })}</span>
         </div>
       </div>
 
@@ -332,7 +275,7 @@ export default function AchievementCardPage() {
       {/* Color scheme picker */}
       <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4">
         <p className="text-sm font-medium text-[var(--text-primary)] mb-3 flex items-center gap-2">
-          <Palette size={16} /> 选择配色
+          <Palette size={16} /> {t('achcard.pickColor', lang)}
         </p>
         <div className="flex gap-3">
           {(Object.entries(COLORS) as [ColorScheme, typeof COLORS['pink']][]).map(([key, val]) => (
@@ -346,7 +289,7 @@ export default function AchievementCardPage() {
               }}
             >
               <div className="w-8 h-8 rounded-full" style={{ backgroundColor: val.primary }} />
-              <span className="text-xs font-medium text-[var(--text-primary)]">{val.label}</span>
+              <span className="text-xs font-medium text-[var(--text-primary)]">{t(`achcard.color.${key}`, lang)}</span>
             </button>
           ))}
         </div>
@@ -354,13 +297,13 @@ export default function AchievementCardPage() {
 
       {/* Custom message */}
       <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4">
-        <p className="text-sm font-medium text-[var(--text-primary)] mb-2">写一句话（选填，最多20字）</p>
+        <p className="text-sm font-medium text-[var(--text-primary)] mb-2">{t('achcard.msgLabel', lang)}</p>
         <div className="relative">
           <input
             type="text"
             value={message}
             onChange={(e) => setMessage(e.target.value.slice(0, 20))}
-            placeholder="比如：托里，我们一起加油！"
+            placeholder={t('achcard.msgPlaceholder', lang)}
             className="w-full bg-[var(--bg-input)] border border-[var(--border-color)] rounded-xl px-4 py-2.5 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)] focus:outline-none focus:border-[var(--pink-primary)]/50"
           />
           <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[var(--text-muted)]">{message.length}/20</span>
@@ -373,14 +316,14 @@ export default function AchievementCardPage() {
           onClick={handleDownload}
           className="flex-1 flex items-center justify-center gap-2 py-3 bg-[var(--pink-primary)] text-white rounded-xl font-medium text-sm hover:opacity-90"
         >
-          <Download size={18} /> 保存图片
+          <Download size={18} /> {t('achcard.save', lang)}
         </button>
         <button
           onClick={handleCopyLink}
           className="flex items-center justify-center gap-2 px-6 py-3 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl font-medium text-sm text-[var(--text-primary)] hover:border-[var(--pink-pale)]"
         >
           {copied ? <Check size={18} className="text-[var(--mint-soft)]" /> : <Copy size={18} />}
-          {copied ? '已复制' : '复制链接'}
+          {copied ? t('achcard.copied', lang) : t('achcard.copyLink', lang)}
         </button>
       </div>
 
@@ -404,7 +347,7 @@ export default function AchievementCardPage() {
             </div>
 
             <p className="text-sm text-[var(--text-muted)]">
-              托里为你准备了一张纪念卡片<br />可以保存分享给朋友！
+              {t('achcard.modalLine1', lang)}<br />{t('achcard.modalLine2', lang)}
             </p>
 
             <button
@@ -412,7 +355,7 @@ export default function AchievementCardPage() {
               className="w-full py-3 rounded-xl font-medium text-white text-sm"
               style={{ backgroundColor: COLORS[scheme].primary }}
             >
-              查看我的卡片
+              {t('achcard.viewCard', lang)}
             </button>
           </div>
         </div>

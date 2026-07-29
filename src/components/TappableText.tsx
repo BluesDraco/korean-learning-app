@@ -63,35 +63,40 @@ export function TappableText({ text, className, style, source, highlightWord, hi
             const hwIdx = highlightWord && !highlightWord.includes(' ') ? token.indexOf(highlightWord) : -1;
             const isHighlighted = hwIdx !== -1;
 
+            const isLast = i === tokens.length - 1;
+
             if (isHighlighted && highlightWord) {
               const before = token.slice(0, hwIdx);
               const match = token.slice(hwIdx, hwIdx + highlightWord.length);
               const after = token.slice(hwIdx + highlightWord.length);
               return (
-                <span
-                  key={`${si}-${i}`}
-                  onClick={e => { e.stopPropagation(); if (key) setActiveWord(key); }}
-                  style={{ cursor: 'pointer', marginRight: 3, display: 'inline' }}
-                >
-                  {before && <span style={{ borderBottom: `1px solid ${ulColor}` }}>{before}</span>}
-                  <span style={{ color: hiColor, fontWeight: 800, borderBottom: `2px solid ${hiColor}` }}>{match}</span>
-                  {after && <span style={{ borderBottom: `1px solid ${ulColor}` }}>{after}</span>}
+                <span key={`${si}-${i}`}>
+                  <span
+                    onClick={e => { e.stopPropagation(); if (key) setActiveWord(key); }}
+                    style={{ cursor: 'pointer', display: 'inline' }}
+                  >
+                    {before && <span style={{ borderBottom: `1px solid ${ulColor}` }}>{before}</span>}
+                    <span style={{ color: hiColor, fontWeight: 800, borderBottom: `2px solid ${hiColor}` }}>{match}</span>
+                    {after && <span style={{ borderBottom: `1px solid ${ulColor}` }}>{after}</span>}
+                  </span>
+                  {!isLast && ' '}
                 </span>
               );
             }
 
             return (
-              <span
-                key={`${si}-${i}`}
-                onClick={e => { e.stopPropagation(); if (key) setActiveWord(key); }}
-                style={{
-                  cursor: key ? 'pointer' : 'default',
-                  borderBottom: key ? `1px solid ${ulColor}` : undefined,
-                  marginRight: 3,
-                  display: 'inline',
-                }}
-              >
-                {token}
+              <span key={`${si}-${i}`}>
+                <span
+                  onClick={e => { e.stopPropagation(); if (key) setActiveWord(key); }}
+                  style={{
+                    cursor: key ? 'pointer' : 'default',
+                    borderBottom: key ? `1px solid ${ulColor}` : undefined,
+                    display: 'inline',
+                  }}
+                >
+                  {token}
+                </span>
+                {!isLast && ' '}
               </span>
             );
           });

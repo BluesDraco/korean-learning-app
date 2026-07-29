@@ -7,6 +7,9 @@ export type ToriPhase = 'foundation' | 'expansion' | 'expression' | 'mastery';
 export type ToriPaletteHint = 'pink' | 'mint' | 'yellow' | 'cream' | 'gold' | 'peach' | 'purple';
 export type ToriLevel = 'beginner' | 'intermediate' | 'advanced';
 
+/** 日记图片种类：hero=横 16:9 首页大图，scene=竖 9:16 收尾图 */
+export type ToriImageKind = 'hero' | 'scene';
+
 /** 词汇卡 */
 export interface ToriWord {
   /** 形如 d01-w1 */
@@ -80,9 +83,9 @@ export interface ToriOutputTask {
   /** 连连看 · 4-5 对韩中词卡 */
   pairs?: Array<{ ko: string; zh: string }>;
   successMsg?: string;
-  /** 关卡专用：该题对应的剧情时刻，显示在题目上方（用 \n 分行） */
+  /** 已废弃字段，历史数据兼容用 */
   sceneContext?: string;
-  /** 关卡专用：故事面板左上角的标签，如"广播第三次" */
+  /** 已废弃字段，历史数据兼容用 */
   examMoment?: string;
 }
 
@@ -124,17 +127,8 @@ export interface ToriDay {
   phase: ToriPhase;
   title: string;
   subtitle: string;
-  /** 关卡天（Day 7/14/21/26/29）或最终考试 Day 30，普通天为 null/undefined */
-  isCheckpoint?: 7 | 14 | 21 | 26 | 29 | 30 | null;
-  /** 关卡专属配置（仅 isCheckpoint 天有） */
-  checkpointConfig?: {
-    /** 入场卡文本（分行数组），每条换行显示 */
-    preludeLines: string[];
-    /** CarrotHelper 锁定时显示的提示（显示在按钮旁） */
-    carrotLostMsg: string;
-    /** 通关后解锁动画的对白 */
-    unlockDialogue: { speaker: 'npc'; npcName: string; ko: string; zh: string }[];
-  };
+  /** 日记首页 hero 插图（16:9） */
+  heroImageUrl?: string;
   estimatedMin: number;
   opening: ToriOpening;
   words: ToriWord[];
@@ -144,6 +138,30 @@ export interface ToriDay {
   recap: ToriRecap;
   /** 勇气胡萝卜的提示词，引导今天的对话方向 */
   carrotHint?: string;
+}
+
+/** 每个模块的内部答题/翻卡进度（"小抄本"） */
+export interface ToriModuleState {
+  flashcard?: {
+    phase?: 'review' | 'quiz';
+    idx?: number;
+    seen?: string[];
+    qIdx?: number;
+    wrongCount?: number;
+  };
+  dialogue?: {
+    currentIdx?: number;
+    picked?: Record<number, number>;
+    shadowed?: number[];
+  };
+  output?: {
+    qIdx?: number;
+    hearts?: number;
+    results?: Array<{ taskId: string; correct: boolean; userText?: string }>;
+  };
+  words?: {
+    flippedIds?: string[];
+  };
 }
 
 /** 用户进度（一天一条） */
@@ -157,6 +175,8 @@ export interface ToriProgress {
   startedAt: number;
   completedAt?: number;
   output: Array<{ taskId: string; correct: boolean; userText?: string }>;
+  /** 每个模块的内部状态，用于中途恢复。老记录可能没有这个字段。 */
+  moduleState?: ToriModuleState;
 }
 
 /** 用户获得的贴纸 */

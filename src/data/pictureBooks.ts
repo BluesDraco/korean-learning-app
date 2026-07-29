@@ -163,7 +163,7 @@ export const pictureBooks: PictureBook[] = [
         imageUrl: '/images/picture-books/tori-day/10.webp',
         bgColor: '#F5F0FF',
         korean: '그날 밤, 토리는 이불 속에 폭 파묻혀\n마지막 떡을 먹으며\n창밖의 별을 바라봤어요.\n\'한국어는 생각보다 어렵지 않아.\n읽고 싶은 이유만 있으면 돼.\'\n안녕히 주무세요, 토리. 🌙',
-        pronunciation: 'geu-nal bam, to-ri-neun i-bul so-ge pok pa-mu-chyeo\nma-ji-mak tteo-geul meo-geu-myeo\nchang-bak-keu-i byeol-eu-ra-bwa-sseo-yo.\n\'han-gu-geo-neun saeng-gak-bo-da eo-ryeop-ji a-na.\nil-go si-peun i-yu-man i-sseu-myeon dwae.\'\nan-nyeong-hi ju-mu-se-yo, to-ri.',
+        pronunciation: 'geu-nal bam, to-ri-neun i-bul so-ge pok pa-mu-chyeo\nma-ji-mak tteo-geul meo-geu-myeo\nchang-ba-kkui byeol-eul ba-ra-bwa-sseo-yo.\n\'han-gu-geo-neun saeng-gak-bo-da eo-ryeop-ji a-na.\nil-go si-peun i-yu-man i-sseu-myeon dwae.\'\nan-nyeong-hi ju-mu-se-yo, to-ri.',
         chinese: '那天晚上，Tori埋头在被窝里，\n吃着最后一块年糕，\n望着窗外的星星。\n"韩语没有想象中那么难。\n只要有想读懂的理由就够了。"\n晚安，Tori。',
         vocab: [
           { word: '밤', meaning: '夜晚' },
@@ -314,7 +314,7 @@ export const pictureBooks: PictureBook[] = [
     titleKo: '토리의 카페 방문',
     emoji: '☕',
     level: 'beginner',
-    description: 'Tori第一次走进韩国咖啡厅！学习点单、报名字、等取餐，掌握咖啡厅必备韩语。',
+    description: 'Tori 走进第一家韩国咖啡厅，学着点单、报名字、等取餐。',
     coverImage: '/images/picture-books/tori-3/cover.webp',
     color: 'var(--pink-primary)',
     pages: [
@@ -427,7 +427,7 @@ export const pictureBooks: PictureBook[] = [
     titleKo: '토리의 지하철 여행',
     emoji: '🚇',
     level: 'beginner',
-    description: 'Tori第一次独自坐地铁去弘大！学习交通卡、换乘、问路，掌握地铁必备韩语。',
+    description: 'Tori 一个人坐地铁去弘大 —— 买交通卡、换乘、问出口。',
     coverImage: '/images/picture-books/tori-4/cover.webp',
     color: 'var(--purple-soft)',
     pages: [
@@ -539,7 +539,7 @@ export const pictureBooks: PictureBook[] = [
     titleKo: '토리의 한식당 방문',
     emoji: '🍚',
     level: 'beginner',
-    description: 'Tori第一次走进韩餐厅！从入座、点单、要求少辣、到结账离开，掌握餐厅必备韩语对话。',
+    description: 'Tori 第一次进韩餐厅：坐下、点菜、说"少辣一点"、买单离开。',
     coverImage: '/images/picture-books/tori-5/cover.webp',
     color: 'var(--mint-soft)',
     pages: [

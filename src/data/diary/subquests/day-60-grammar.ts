@@ -1,0 +1,30 @@
+import type { GrammarSubQuestData } from '@/types/tori-subquest';
+
+/** Day 60 · 2-3 문법 탐험 · ~았/었지만 结局体 · vs ~지만 */
+export const day60Grammar: GrammarSubQuestData = {
+  day: 30, level: 'intermediate', idx: 3, kind: 'grammar',
+  koTitle: '문법 탐험',
+  subtitle: '曾经 vs 现在：~았/었지만 결말체',
+
+  fix: [
+    { id: 'd60-g3-f1', promptKo: '짐을 가져오지만 지금은 집이 있어요.',      promptZh: '"虽然带来了行李，但现在有了家"哪句正确？',    choices: [{ text: '짐을 가져오지만 지금은 집이 있어요.',      correct: false }, { text: '짐을 가져왔지만 지금은 집이 있어요.', correct: true }, { text: '짐을 가져와서 지금은 집이 있어요.',      correct: false }, { text: '짐을 가져온데 지금은 집이 있어요.',         correct: false }], explain: '过去转折 · ~았/었**지만**（不是 ~지만 现在）' },
+    { id: 'd60-g3-f2', promptKo: '처음엔 어렵지만 지금은 재밌어요.',          promptZh: '"一开始难，但现在有意思"（过去 vs 现在）哪句更贴切？', choices: [{ text: '처음엔 어렵지만 지금은 재밌어요.',            correct: false }, { text: '처음엔 어려웠지만 지금은 재밌어요.',   correct: true }, { text: '처음엔 어려운데 지금은 재밌어요.',           correct: false }, { text: '처음엔 어려워서 지금은 재밌어요.',              correct: false }], explain: '过去回顾用 ~았/었지만（更强调今昔对比）' },
+    { id: 'd60-g3-f3', promptKo: '떨리지만 다 말했어요.',                    promptZh: '"虽然紧张但都说了"（过去转折）哪句正确？',    choices: [{ text: '떨리지만 다 말했어요.',                       correct: false }, { text: '떨렸지만 다 말했어요.',              correct: true }, { text: '떨려서 다 말했어요.',                       correct: false }, { text: '떨리면 다 말했어요.',                          correct: false }], explain: '떨리다 → 떨렸지만（配合结果句过去时）' },
+    { id: 'd60-g3-f4', promptKo: '서투르지만 마음은 통했어요.',              promptZh: '"虽然生疏但心意相通"（过去回顾）哪句正确？',   choices: [{ text: '서투르지만 마음은 통했어요.',                  correct: false }, { text: '서툴렀지만 마음은 통했어요.',        correct: true }, { text: '서투른데 마음은 통했어요.',                correct: false }, { text: '서툴러서 마음은 통했어요.',                     correct: false }], explain: '서투르다 르 不规则 → **서툴렀지만**' },
+    { id: 'd60-g3-f5', promptKo: '~지만 vs ~았/었지만 은 완전히 같아요.',      promptZh: '两者差别，哪句最准确？',                    choices: [{ text: '완전히 같아요.',                              correct: false }, { text: '~지만 = 现在对立 · ~았/었지만 = 过去 vs 现在对比（回顾）', correct: true }, { text: '~았/었지만 是命令形',                            correct: false }, { text: '~지만 只用于形容词',                              correct: false }], explain: '时态差 → 语义完全不同' },
+  ],
+
+  compose: [
+    { id: 'd60-g3-c1', zhHint: '虽然带来了行李，但现在有了家。',            audioKo: '짐을 가져왔지만 지금은 집이 있어요.',            answer: ['짐을', '가져왔지만', '지금은', '집이', '있어요.'],       tokens: ['짐을', '가져왔지만', '지금은', '집이', '있어요.', '가져와서', '가져오지만', '집이에요.', '가져오면'], explain: 'Tori 主题句' },
+    { id: 'd60-g3-c2', zhHint: '一开始难，但现在有意思。',                  audioKo: '처음엔 어려웠지만 지금은 재밌어요.',              answer: ['처음엔', '어려웠지만', '지금은', '재밌어요.'],           tokens: ['처음엔', '어려웠지만', '지금은', '재밌어요.', '어렵지만', '어려워서', '어려운데', '재미없어요.'],       explain: '过去 vs 现在 · ~았/었지만' },
+    { id: 'd60-g3-c3', zhHint: '虽然紧张但都说了。',                        audioKo: '떨렸지만 다 말했어요.',                              answer: ['떨렸지만', '다', '말했어요.'],                            tokens: ['떨렸지만', '다', '말했어요.', '떨리지만', '떨려서', '말해요.', '못 말했어요.'],                          explain: '떨리다 → 떨렸지만' },
+    { id: 'd60-g3-c4', zhHint: '这 60 天，你们就是我的家人。',              audioKo: '이 60일, 너희가 내 가족이었어. 진심으로 고마워.',   answer: ['이', '60일,', '너희가', '내', '가족이었어.', '진심으로', '고마워.'], tokens: ['이', '60일,', '너희가', '내', '가족이었어.', '진심으로', '고마워.', '가족이야.', '가족이에요.', '너희는'], explain: '过去时家人认同 · 感性表达' },
+  ],
+
+  rule: [
+    { id: 'd60-g3-r1', promptZh: '关于「~았/었지만」的用法，哪句最准确？',        choices: [{ text: 'V/A 过去 + 지만 = 曾经___但___ · 强调今昔对比 · 毕业演讲 / 日记回顾核心结构', correct: true }, { text: '~았/었지만 是命令形',   correct: false }, { text: '~았/었지만 只用于名词',   correct: false }, { text: '~았/었지만 只用于书面语', correct: false }], explain: 'Day 48 → Day 60 深化 · 过去回顾' },
+    { id: 'd60-g3-r2', promptZh: '关于「~지만 vs ~았/었지만」的差别，哪句最准确？', choices: [{ text: '~지만 = 现在对立（지금은 힘들지만）· ~았/었지만 = 过去 vs 现在对比（曾经 X，现在 Y）', correct: true }, { text: '两者完全一样',      correct: false }, { text: '~았/었지만 只用于形容词', correct: false }, { text: '~지만 是命令形',       correct: false }], explain: '时态差 → 语义差' },
+    { id: 'd60-g3-r3', promptZh: '关于毕业演讲结构，哪句最准确？',                choices: [{ text: '~았/었지만 + 지금은 ~ · 表达"过去 X 现在 Y"的成长收束 · 结局体常用', correct: true }, { text: '毕业演讲用 ~는데',       correct: false }, { text: '毕业演讲用 ~아/어서',    correct: false }, { text: '毕业演讲不用转折',        correct: false }], explain: '成长回顾金句结构' },
+    { id: 'd60-g3-r4', promptZh: '关于 Day 3 → Day 60 的 짐/집 首尾呼应，哪句最准确？', choices: [{ text: 'Day 3 짐(行李) / 집(家) 犯错 → Day 60 짐 → 집 收束 · 词语双关 = 60 天故事的核心隐喻', correct: true }, { text: '두 단어는 무관합니다',       correct: false }, { text: '짐 = 未来 · 집 = 过去',    correct: false }, { text: '두 단어는 완전히 같아요',    correct: false }], explain: '故事结构 · 首尾呼应' },
+  ],
+};

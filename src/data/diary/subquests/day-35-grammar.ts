@@ -1,0 +1,30 @@
+import type { GrammarSubQuestData } from '@/types/tori-subquest';
+
+/** Day 35 · 2-3 문법 탐험 · ~(으)로 方向 · ~에서 ~까지 起终点 */
+export const day35Grammar: GrammarSubQuestData = {
+  day: 5, level: 'intermediate', idx: 3, kind: 'grammar',
+  koTitle: '문법 탐험',
+  subtitle: '往___走 · 从___到___',
+
+  fix: [
+    { id: 'd35-g3-f1', promptKo: '왼쪽로 가세요.',                       promptZh: '"请往左走"哪句正确？',                                   choices: [{ text: '왼쪽로 가세요.',                     correct: false }, { text: '왼쪽으로 가세요.',                 correct: true }, { text: '왼쪽에 가세요.',                     correct: false }, { text: '왼쪽까지 가세요.',                     correct: false }], explain: '왼쪽 有收音 ㄱ → **으로**' },
+    { id: 'd35-g3-f2', promptKo: '지하철역으로 가세요.',                   promptZh: '"请往地铁站方向走"哪句正确？',                            choices: [{ text: '지하철역로 가세요.',                 correct: false }, { text: '지하철역으로 가세요.',             correct: true }, { text: '지하철역에서 가세요.',                correct: false }, { text: '지하철역까지 가세요.',                 correct: false }], explain: '지하철역 有收音 ㄱ → **으로**' },
+    { id: 'd35-g3-f3', promptKo: '집에 학교까지 5분이에요.',                 promptZh: '"从家到学校 5 分钟"哪句正确？',                            choices: [{ text: '집에 학교까지 5분이에요.',            correct: false }, { text: '집에서 학교까지 5분이에요.',         correct: true }, { text: '집로 학교까지 5분이에요.',            correct: false }, { text: '집으로 학교까지 5분이에요.',            correct: false }], explain: '起点助词 = **에서**（动作起点）· 에 只表存在位置' },
+    { id: 'd35-g3-f4', promptKo: '쭉 가고 오른쪽에 도세요.',                 promptZh: '"一直走然后往右转"哪句正确？',                              choices: [{ text: '쭉 가고 오른쪽에 도세요.',            correct: false }, { text: '쭉 가서 오른쪽으로 도세요.',         correct: true }, { text: '쭉 가고 오른쪽로 도세요.',            correct: false }, { text: '쭉 가면 오른쪽에서 도세요.',            correct: false }], explain: '~아/어서 顺序 + 방향 + **으로 돌다**' },
+    { id: 'd35-g3-f5', promptKo: '지하철으로 가세요.',                          promptZh: '"用地铁去"哪句正确？',                                   choices: [{ text: '지하철으로 가세요.',                 correct: false }, { text: '지하철로 가세요.',                 correct: true }, { text: '지하철에 가세요.',                    correct: false }, { text: '지하철까지 가세요.',                    correct: false }], explain: '지하철 末字 ㄹ收音 → 特殊用 **로**（不用 으로）' },
+  ],
+
+  compose: [
+    { id: 'd35-g3-c1', zhHint: '从 2 号出口出去，往左一直走。',            audioKo: '2번 출구로 나가서, 왼쪽으로 쭉 가세요.', answer: ['2번', '출구로', '나가서,', '왼쪽으로', '쭉', '가세요.'], tokens: ['2번', '출구로', '나가서,', '왼쪽으로', '쭉', '가세요.', '출구에서', '왼쪽로', '가고,'], explain: 'Tori 第一次指路 · 出口 + 方向 + 一直走' },
+    { id: 'd35-g3-c2', zhHint: '从家到学校 5 分钟。',                       audioKo: '집에서 학교까지 5분이에요.',            answer: ['집에서', '학교까지', '5분이에요.'],                     tokens: ['집에서', '학교까지', '5분이에요.', '집에', '학교로', '까지', '5분이 있어요.'], explain: '起终点 · 에서 ~까지' },
+    { id: 'd35-g3-c3', zhHint: '一直走然后往右转。',                        audioKo: '쭉 가서 오른쪽으로 도세요.',            answer: ['쭉', '가서', '오른쪽으로', '도세요.'],                  tokens: ['쭉', '가서', '오른쪽으로', '도세요.', '가고', '오른쪽에', '오른쪽로', '돌아요.'], explain: '~아/어서 顺序 · 오른쪽 + 으로 + 돌다' },
+    { id: 'd35-g3-c4', zhHint: '在便利店旁边。',                          audioKo: '편의점 옆에 있어요.',                    answer: ['편의점', '옆에', '있어요.'],                            tokens: ['편의점', '옆에', '있어요.', '편의점에서', '옆으로', '옆까지', '없어요.'], explain: '위치 助词 옆에 = 在旁边' },
+  ],
+
+  rule: [
+    { id: 'd35-g3-r1', promptZh: '关于「~(으)로」的用法，哪句最准确？',    choices: [{ text: '方向 / 手段助词 · 无收音 → 로；有收音 → 으로；**ㄹ收音特殊用 로**', correct: true }, { text: '所有词一律 + 로',       correct: false }, { text: '所有词一律 + 으로',    correct: false }, { text: '有收音 → 로；无收音 → 으로', correct: false }], explain: '왼쪽으로 / 출구로 / 지하철로（ㄹ收音特殊）' },
+    { id: 'd35-g3-r2', promptZh: '关于「~에서 vs ~에」的差别，哪句最准确？', choices: [{ text: '에서 = 动作起点 / 发生地；에 = 存在位置 / 目的地', correct: true }, { text: '两者完全一样',                   correct: false }, { text: '에서 只用于书面语',                correct: false }, { text: '에 只用于口语',                   correct: false }], explain: '집에서 오다（从家来）/ 집에 있다（在家）' },
+    { id: 'd35-g3-r3', promptZh: '关于「~에서 ~까지」的组合，哪句最准确？', choices: [{ text: 'N1에서 N2까지 = 从 N1 到 N2 · 起点 + 终点', correct: true }, { text: 'N1까지 N2에서 = 从 N1 到 N2',   correct: false }, { text: 'N1에서 N2에 = 从 N1 到 N2',      correct: false }, { text: 'N1에 N2에서 = 从 N1 到 N2',      correct: false }], explain: '집에서 학교까지 = 起终点固定组合' },
+    { id: 'd35-g3-r4', promptZh: '关于指路副词「쭉」的用法，哪句最准确？', choices: [{ text: '拟态词 · 与 가다/걷다 搭配 = 一直走',      correct: true }, { text: '쭉 是名词 · 一段直线',       correct: false }, { text: '쭉 是过去时',                correct: false }, { text: '쭉 只能修饰形容词',          correct: false }], explain: '쭉 가세요 = 请一直走 · 问路核心副词' },
+  ],
+};

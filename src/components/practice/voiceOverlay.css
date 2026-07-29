@@ -1,0 +1,327 @@
+/* 组件自带样式：VoiceModeOverlay.tsx 自 import，practice/companion 两页都生效。抽自旧 scene.css。 */
+
+/* Z-index scale for practice module overlays:
+ * 0-99:    inline elements (tooltips, dropdowns)
+ * 100-199: sticky headers
+ * 200-299: bottom bars
+ * 300:     voice mode overlay (.vmode-overlay)
+ * 500:     modal dialogs
+ * 8000+:   scene-specific fullscreen overlays (goal, wordbook, loader)
+ */
+/* ═════════════════════ 实时语音对话覆盖层 · 呼吸·极简沉浸 ═════════════════════ */
+/* 中央一颗随状态呼吸/变色的有机光晕 orb（即控制键），下方单行焦点字幕。 */
+/* orb 颜色用 @property 注册为可插值色，切状态时在暖粉↔薄荷↔琥珀间平滑过渡。 */
+
+@property --vmode-c1 { syntax: '<color>'; inherits: true; initial-value: #ffe0ea; }
+@property --vmode-c2 { syntax: '<color>'; inherits: true; initial-value: #ff9dbd; }
+@property --vmode-glow { syntax: '<color>'; inherits: true; initial-value: rgba(255,127,168,0.28); }
+
+.vmode-overlay {
+  /* 组件自给自足：overlay 是 fixed 挂在 .scene-practice-root / .cmc-root 下，
+     这两个容器都不定义 --hr-* token（只有 .pr-scope/.hr-scope 等定义），
+     若直接 var(--hr-surface-1) 会取空 → 背景透明 → 底层页面透出重叠。
+     在此就地兜底这 4 个 token，保证任意挂载点下都成立。 */
+  --hr-surface-1: #fffbf7;
+  --hr-ink-1: #1a1310;
+  --hr-ink-4: #b8a89c;
+  --hr-pink-base: #ff7fa8;
+  position: fixed;
+  top: 0; right: 0; bottom: 0; left: 0;
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(28px, 5vh, 52px);
+  padding: calc(env(safe-area-inset-top, 0) + 24px) 24px calc(env(safe-area-inset-bottom, 0) + 28px);
+  background: var(--hr-surface-1);
+  color: var(--hr-ink-1);
+  font-family: 'Outfit', 'Noto Sans KR', -apple-system, system-ui, sans-serif;
+  overflow: hidden;
+  animation: vmode-in 0.44s cubic-bezier(0.25, 1, 0.5, 1);
+  --vmode-c1: #ffe0ea; --vmode-c2: #ff9dbd; --vmode-glow: rgba(255,127,168,0.28);
+  transition: --vmode-c1 0.7s ease, --vmode-c2 0.7s ease, --vmode-glow 0.7s ease;
+}
+/* 桌面：不盖住左侧任务导航栏（.chatui-side 320px），语音模式仍嵌在场景页内 */
+@media (min-width: 1024px) {
+  .vmode-overlay { left: 320px; }
+}
+@keyframes vmode-in { from { opacity: 0; } to { opacity: 1; } }
+
+/* 沉浸背景：两团随状态缓移的柔光雾，跟 orb 同色系呼应 */
+.vmode-overlay::before,
+.vmode-overlay::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 0;
+  transition: background 0.7s ease;
+}
+.vmode-overlay::before {
+  width: 46vmax; height: 46vmax; top: -14vmax; left: -12vmax;
+  background: var(--vmode-c1);
+  animation: vmode-drift-a 22s ease-in-out infinite;
+}
+.vmode-overlay::after {
+  width: 40vmax; height: 40vmax; bottom: -16vmax; right: -14vmax;
+  background: color-mix(in oklch, var(--vmode-c2) 60%, transparent);
+  animation: vmode-drift-b 26s ease-in-out infinite;
+}
+@keyframes vmode-drift-a { 0%,100% { transform: translate(0,0); } 50% { transform: translate(4vmax, 5vmax); } }
+@keyframes vmode-drift-b { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-5vmax, -4vmax); } }
+
+/* 状态色板 —— listening 暖粉专注 / thinking 琥珀沉思 / speaking 薄荷（兔莉在说） */
+.vmode-overlay[data-state='listening'] { --vmode-c1: #ffd0e0; --vmode-c2: #ff7fa8; --vmode-glow: rgba(255,127,168,0.42); }
+.vmode-overlay[data-state='thinking']  { --vmode-c1: #ffe8cf; --vmode-c2: #f0b878; --vmode-glow: rgba(230,170,110,0.34); }
+.vmode-overlay[data-state='speaking']  { --vmode-c1: #d6f2ea; --vmode-c2: #8fd6c5; --vmode-glow: rgba(143,214,197,0.4); }
+.vmode-overlay[data-state='loading']   { --vmode-c1: #ece2db; --vmode-c2: #c9b8ae; --vmode-glow: rgba(160,145,135,0.28); }
+
+.vmode-x {
+  position: absolute; top: calc(env(safe-area-inset-top, 0) + 16px); right: 18px; z-index: 3;
+  width: 40px; height: 40px; border-radius: 50%; border: none; cursor: pointer;
+  background: rgba(36,25,23,0.05); color: #89756e;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s ease, transform 0.2s cubic-bezier(0.25,1,0.5,1);
+}
+.vmode-x:hover { background: rgba(36,25,23,0.1); transform: rotate(90deg); }
+
+.vmode-scene {
+  position: absolute; top: calc(env(safe-area-inset-top, 0) + 22px); left: 0; right: 0; z-index: 2;
+  text-align: center; font-size: 12.5px; font-weight: 600; letter-spacing: 0.06em;
+  color: var(--hr-ink-4); text-transform: none;
+}
+
+/* ── 音色切换：女/男 极简 pill ── */
+.vmode-voice {
+  position: absolute; top: calc(env(safe-area-inset-top, 0) + 48px); left: 0; right: 0; z-index: 2;
+  display: flex; justify-content: center; gap: 4px;
+}
+.vmode-voice-opt {
+  border: none; cursor: pointer;
+  padding: 6px 14px; border-radius: 999px;
+  font-family: inherit; font-size: 12.5px; font-weight: 600; letter-spacing: 0.04em;
+  background: transparent; color: #b5a49b;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+.vmode-voice-opt[data-on='true'] {
+  background: rgba(255,127,168,0.14); color: var(--hr-pink-base);
+}
+.vmode-voice-opt:hover[data-on='false'] { color: #89756e; }
+
+/* ── orb ── */
+.vmode-orb-wrap {
+  position: relative; z-index: 1;
+  display: flex; align-items: center; justify-content: center;
+  width: clamp(180px, 52vw, 240px); height: clamp(180px, 52vw, 240px);
+}
+.vmode-orb {
+  position: relative; z-index: 2;
+  width: clamp(128px, 38vw, 168px); height: clamp(128px, 38vw, 168px);
+  border: none; border-radius: 50%; padding: 0; cursor: pointer;
+  background: transparent;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.35s cubic-bezier(0.25,1,0.5,1);
+  -webkit-tap-highlight-color: transparent;
+}
+.vmode-orb:active { transform: scale(0.95); }
+.vmode-orb:disabled { cursor: default; }
+.vmode-orb:focus-visible { outline: none; }
+.vmode-orb:focus-visible .vmode-orb-core { box-shadow: 0 0 0 4px rgba(255,127,168,0.5), inset 0 -12px 26px rgba(255,255,255,0.4); }
+
+/* 有机光晕核心：径向渐变球体 + 缓慢呼吸缩放 */
+.vmode-orb-core {
+  position: absolute; inset: 0; border-radius: 50%;
+  background:
+    radial-gradient(circle at 34% 30%, rgba(255,255,255,0.85), transparent 42%),
+    radial-gradient(circle at 50% 55%, var(--vmode-c1), var(--vmode-c2) 78%);
+  box-shadow:
+    0 18px 46px -8px var(--vmode-glow),
+    inset 0 -12px 26px rgba(255,255,255,0.35);
+  animation: vmode-breathe 5.2s cubic-bezier(0.37,0,0.63,1) infinite;
+  transition: background 0.7s ease, box-shadow 0.7s ease;
+}
+@keyframes vmode-breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.055); }
+}
+
+/* orb 外的扩散环：listening 时向外吐纳（用户在说），speaking 时波纹（兔莉在说） */
+.vmode-orb-wrap::before,
+.vmode-orb-wrap::after {
+  content: ''; position: absolute; z-index: 1;
+  width: 100%; height: 100%; border-radius: 50%;
+  border: 1.5px solid var(--vmode-c2);
+  opacity: 0; pointer-events: none;
+}
+.vmode-overlay[data-state='listening'] .vmode-orb-wrap::before { animation: vmode-ripple 2.6s cubic-bezier(0.25,1,0.5,1) infinite; }
+.vmode-overlay[data-state='listening'] .vmode-orb-wrap::after  { animation: vmode-ripple 2.6s cubic-bezier(0.25,1,0.5,1) infinite 1.3s; }
+.vmode-overlay[data-state='speaking'] .vmode-orb-wrap::before { animation: vmode-ripple 1.7s cubic-bezier(0.25,1,0.5,1) infinite; }
+.vmode-overlay[data-state='speaking'] .vmode-orb-wrap::after  { animation: vmode-ripple 1.7s cubic-bezier(0.25,1,0.5,1) infinite 0.85s; }
+@keyframes vmode-ripple {
+  0% { transform: scale(0.72); opacity: 0.6; }
+  100% { transform: scale(1.28); opacity: 0; }
+}
+/* thinking：核心慢速旋转的光斑（用 conic 叠加），暗示"处理中" */
+.vmode-overlay[data-state='thinking'] .vmode-orb-core::after {
+  content: ''; position: absolute; inset: 6%; border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.5), transparent 55%);
+  animation: vmode-spin 1.4s linear infinite; mix-blend-mode: soft-light;
+}
+@keyframes vmode-spin { to { transform: rotate(360deg); } }
+
+.vmode-orb-mic { position: relative; z-index: 3; color: #fff; filter: drop-shadow(0 1px 3px rgba(180,60,110,0.4)); }
+
+/* ── 焦点字幕区 ── */
+.vmode-focus {
+  position: relative; z-index: 1;
+  width: min(560px, 100%); text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+}
+
+.vmode-teach {
+  color: #6B5D58; font-size: 14.5px; line-height: 1.9;
+}
+.vmode-teach-dim { color: #8B7B75; font-size: 13px; }
+
+/* 用户上一句：极小、安静浮在焦点上方 */
+.vmode-echo {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  max-width: 100%;
+}
+.vmode-echo-text {
+  font-size: 13.5px; color: #b09a90; font-style: normal;
+  line-height: 1.5; word-break: break-word;
+}
+.vmode-fix-chip {
+  align-self: center;
+  border: 1px solid rgba(255,127,168,0.4); background: rgba(255,127,168,0.08);
+  color: #e06a92; font-size: 11.5px; font-weight: 600;
+  padding: 3px 11px; border-radius: 999px; cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s cubic-bezier(0.25,1,0.5,1);
+}
+.vmode-fix-chip:hover { background: rgba(255,127,168,0.16); }
+.vmode-fix-chip:active { transform: scale(0.94); }
+
+/* 纠错软卡片：grid-rows 展开，不撑动焦点 */
+.vmode-fix-panel {
+  display: grid; grid-template-rows: 0fr; width: min(440px, 100%);
+  transition: grid-template-rows 0.4s cubic-bezier(0.25,1,0.5,1);
+}
+.vmode-fix-panel[data-open='true'] { grid-template-rows: 1fr; }
+.vmode-fix-inner {
+  overflow: hidden; min-height: 0;
+  display: flex; flex-direction: column; gap: 7px;
+  text-align: left;
+  padding: 0 2px;
+}
+.vmode-fix-panel[data-open='true'] .vmode-fix-inner {
+  padding: 12px 14px;
+  margin-top: 4px;
+  background: rgba(255,240,245,0.7);
+  border: 1px solid rgba(255,127,168,0.22);
+  border-radius: 14px;
+  backdrop-filter: blur(4px);
+}
+.vmode-fix-row { font-size: 13px; line-height: 1.6; color: #5c4a44; }
+.vmode-fix-wrong { color: #d14; text-decoration: line-through; }
+.vmode-fix-right { color: #0a8; font-weight: 700; }
+.vmode-fix-zh { color: #89756e; font-size: 12px; }
+
+/* 兔莉最新一句：大字焦点，可点词 */
+.vmode-hero {
+  font-size: clamp(20px, 5.4vw, 28px); font-weight: 600;
+  line-height: 1.5; color: #241917; word-break: break-word;
+  animation: vmode-hero-in 0.5s cubic-bezier(0.25,1,0.5,1);
+}
+@keyframes vmode-hero-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.vmode-hero-wait { color: #c9b8ae; letter-spacing: 4px; font-weight: 400; }
+
+/* 兔莉这句的翻译：按钮 + grid-rows 展开的译文卡片（同 fix-panel 手法） */
+.vmode-trans {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  margin-top: 10px; width: min(440px, 100%);
+}
+.vmode-trans-panel {
+  display: grid; grid-template-rows: 0fr; width: 100%;
+  transition: grid-template-rows 0.4s cubic-bezier(0.25,1,0.5,1);
+}
+.vmode-trans-panel[data-open='true'] { grid-template-rows: 1fr; }
+.vmode-trans-inner {
+  overflow: hidden; min-height: 0;
+  font-size: 14px; line-height: 1.6; color: #5c4a44; text-align: center;
+}
+.vmode-trans-panel[data-open='true'] .vmode-trans-inner {
+  padding: 10px 14px;
+  background: rgba(174,227,216,0.16);
+  border: 1px solid rgba(174,227,216,0.4);
+  border-radius: 14px;
+  backdrop-filter: blur(4px);
+}
+[data-theme='dark'] .vmode-trans-inner { color: #D8CCEF; }
+[data-theme='dark'] .vmode-trans-panel[data-open='true'] .vmode-trans-inner {
+  background: rgba(120,150,140,0.16);
+  border-color: rgba(174,227,216,0.25);
+}
+
+/* ── 极简状态标签 ── */
+.vmode-state {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+}
+.vmode-state-ko { font-size: 15px; font-weight: 600; color: #89756e; }
+.vmode-state-cn { font-size: 11.5px; color: #c1b0a6; letter-spacing: 0.04em; }
+
+.vmode-toast {
+  position: fixed; bottom: calc(env(safe-area-inset-bottom, 0) + 96px); left: 50%; transform: translateX(-50%);
+  background: #241917; color: #fff; padding: 10px 18px; border-radius: 20px;
+  font-size: 13px; z-index: 210; box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  animation: vmode-toast-in 0.3s cubic-bezier(0.25,1,0.5,1);
+}
+@media (min-width: 1024px) {
+  .vmode-toast { left: calc(320px + (100vw - 320px) / 2); }
+}
+@keyframes vmode-toast-in { from { opacity: 0; transform: translate(-50%, 8px); } to { opacity: 1; transform: translate(-50%, 0); } }
+
+/* ── 暗色模式 ── */
+[data-theme='dark'] .vmode-overlay { background: #1E1B2E; color: #F0E8FF; }
+[data-theme='dark'] .vmode-overlay::before,
+[data-theme='dark'] .vmode-overlay::after { opacity: 0.4; }
+[data-theme='dark'] .vmode-scene { color: #8B7CA0; }
+[data-theme='dark'] .vmode-voice-opt { color: #8B7CA0; }
+[data-theme='dark'] .vmode-voice-opt[data-on='true'] { background: rgba(255,127,168,0.18); color: #ff9dc0; }
+[data-theme='dark'] .vmode-voice-opt:hover[data-on='false'] { color: #B8A8C8; }
+[data-theme='dark'] .vmode-x { background: rgba(255,255,255,0.07); color: #B8A8C8; }
+[data-theme='dark'] .vmode-x:hover { background: rgba(255,255,255,0.12); }
+[data-theme='dark'] .vmode-teach { color: #B8A8C8; }
+[data-theme='dark'] .vmode-teach-dim { color: #8B7CA0; }
+[data-theme='dark'] .vmode-echo-text { color: #8B7CA0; }
+[data-theme='dark'] .vmode-fix-panel[data-open='true'] .vmode-fix-inner {
+  background: rgba(255,127,168,0.1); border-color: rgba(255,127,168,0.28);
+}
+[data-theme='dark'] .vmode-fix-row { color: #D8CCEF; }
+[data-theme='dark'] .vmode-fix-zh { color: #B8A8C8; }
+[data-theme='dark'] .vmode-hero { color: #F0E8FF; }
+[data-theme='dark'] .vmode-state-ko { color: #9B8DB8; }
+[data-theme='dark'] .vmode-state-cn { color: #8B7CA0; }
+[data-theme='dark'] .vmode-toast {
+  background: #F0E8FF; color: #1E1B2E; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+}
+
+/* ── 降级：尊重减少动效偏好 ── */
+@media (prefers-reduced-motion: reduce) {
+  .vmode-overlay,
+  .vmode-overlay::before,
+  .vmode-overlay::after,
+  .vmode-orb-core,
+  .vmode-orb-wrap::before,
+  .vmode-orb-wrap::after,
+  .vmode-orb-core::after,
+  .vmode-hero,
+  .vmode-toast {
+    animation: none !important;
+  }
+  .vmode-overlay { transition: none; }
+}

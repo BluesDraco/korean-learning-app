@@ -1,0 +1,311 @@
+/* ==========================================================================
+   여우의 인터뷰 카페 · 列表页（独立样式，隔离于 radio.css 以免与并发编辑冲突）
+   方向：深夜电台杂志。纵向三全宽区(刊头 / 电影感特写带 / 两列目录)，
+   每区各自铺满宽度 —— 弃掉左右分栏高度失衡、左下留白的旧结构。
+   token 复用 radio.css 的 .radio-root（两页都 import radio.css）。
+   选择器一律 .radio-root 前缀（特异性 0,2,0）压过 .radio-root button{background:none}（0,1,1），
+   杜绝深色卡被按钮 reset 洗成透明。
+   ========================================================================== */
+
+.radio-root.itv-page {
+  min-height: 100dvh;
+  background:
+    radial-gradient(140% 70% at 100% -10%, var(--rose-soft) 0%, transparent 50%),
+    var(--surface-1);
+  color: var(--ink-1);
+  padding: 0 clamp(20px, 5vw, 64px) 96px;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+/* ── 顶栏 ── */
+.radio-root .itv-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: calc(20px + env(safe-area-inset-top, 0px)) 0 4px;
+}
+.radio-root .itv-back {
+  width: 40px;
+  height: 40px;
+  font-size: 22px;
+  color: var(--ink-2);
+  transition: transform .12s var(--ease-out-quart), color .12s var(--ease-out-quart);
+}
+.radio-root .itv-back:hover { color: var(--rose); }
+.radio-root .itv-back:active { transform: scale(.9); }
+.radio-root .itv-top-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  color: var(--rose);
+}
+
+/* ── 刊头（全宽，标题与副文左右分置的编辑排版）── */
+.radio-root .itv-masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: clamp(16px, 4vw, 48px);
+  padding: clamp(24px, 6vw, 56px) 0 clamp(28px, 5vw, 44px);
+  border-bottom: 1.5px solid var(--ink-1);
+}
+.radio-root .itv-mast-kicker {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .16em;
+  color: var(--rose);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.radio-root .itv-mast-title {
+  font-family: var(--font-serif);
+  font-size: clamp(40px, 9vw, 76px);
+  font-weight: 600;
+  line-height: .98;
+  letter-spacing: -.015em;
+  color: var(--ink-1);
+}
+.radio-root .itv-mast-sub {
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--ink-3);
+  max-width: 32ch;
+  padding-bottom: 6px;
+}
+
+/* ── 本期特写（全宽电影感带，超大虚影编号做纹理）── */
+.radio-root .itv-feature {
+  position: relative;
+  display: block;
+  width: 100%;
+  margin-top: clamp(24px, 5vw, 40px);
+  padding: clamp(28px, 5vw, 52px);
+  border-radius: var(--r-lg);
+  background: linear-gradient(115deg, #3b2831 0%, #241820 52%, #2b1d25 100%);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  text-align: left;
+  cursor: pointer;
+  transition: transform .3s var(--ease-out-quart), box-shadow .3s var(--ease-out-quart);
+}
+.radio-root .itv-feature:hover { transform: translateY(-3px); }
+.radio-root .itv-feature:active { transform: scale(.995); }
+.radio-root .itv-feature-num {
+  position: absolute;
+  right: clamp(-8px, 1vw, 16px);
+  bottom: clamp(-24px, -2vw, -12px);
+  font-family: var(--font-serif);
+  font-size: clamp(180px, 34vw, 360px);
+  font-weight: 600;
+  line-height: .7;
+  color: rgba(255,255,255,.05);
+  pointer-events: none;
+  user-select: none;
+}
+.radio-root .itv-feature-glow {
+  position: absolute;
+  top: -40%;
+  left: 30%;
+  width: 340px;
+  height: 340px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(244,63,94,.32), transparent 66%);
+  pointer-events: none;
+}
+.radio-root .itv-feature-inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: min(90%, 60ch);
+}
+.radio-root .itv-feature-kicker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  color: rgba(255,255,255,.55);
+}
+.radio-root .itv-feature-live {
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(244,63,94,.35);
+  letter-spacing: .02em;
+}
+.radio-root .itv-feature-live::before { content: '● '; color: #ff7fa8; }
+.radio-root .itv-feature-title {
+  font-family: var(--font-serif);
+  font-size: clamp(24px, 4vw, 38px);
+  font-weight: 600;
+  line-height: 1.2;
+  color: #fff;
+  margin-top: 2px;
+  text-wrap: balance;
+}
+.radio-root .itv-feature-zh {
+  font-size: 14.5px;
+  color: rgba(255,255,255,.68);
+  line-height: 1.6;
+}
+.radio-root .itv-feature-foot {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+.radio-root .itv-feature-play {
+  font-size: 14px;
+  font-weight: 600;
+  color: #241820;
+  background: #fff;
+  padding: 11px 22px;
+  border-radius: 999px;
+  transition: transform .2s var(--ease-out-quart);
+}
+.radio-root .itv-feature:hover .itv-feature-play { transform: scale(1.04); }
+.radio-root .itv-feature-meta {
+  font-size: 12.5px;
+  color: rgba(255,255,255,.6);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── 往期索引 ── */
+.radio-root .itv-archive {
+  margin-top: clamp(44px, 7vw, 72px);
+}
+.radio-root .itv-archive-head {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+.radio-root .itv-archive-kicker {
+  font-family: var(--font-serif);
+  font-size: clamp(20px, 3vw, 26px);
+  font-weight: 600;
+  color: var(--ink-1);
+  white-space: nowrap;
+}
+.radio-root .itv-archive-rule {
+  flex: 1;
+  height: 1.5px;
+  background: var(--border-1);
+}
+.radio-root .itv-archive-count {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-3);
+  letter-spacing: .04em;
+  white-space: nowrap;
+}
+
+/* 两列目录网格（桌面填满宽度、左右等高；窄屏单列） */
+.radio-root .itv-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  column-gap: clamp(32px, 5vw, 64px);
+}
+@media (min-width: 760px) {
+  .radio-root .itv-grid { grid-template-columns: 1fr 1fr; }
+}
+
+.radio-root .itv-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 20px 8px;
+  text-align: left;
+  cursor: pointer;
+  border-top: 1px solid var(--border-1);
+  transition: padding-left .2s var(--ease-out-quart);
+}
+.radio-root .itv-row::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 2px;
+  background: var(--rose);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .3s var(--ease-out-quart);
+}
+.radio-root .itv-row:hover { padding-left: 14px; }
+.radio-root .itv-row:hover::after { transform: scaleX(1); }
+.radio-root .itv-row-num {
+  flex-shrink: 0;
+  width: 46px;
+  font-family: var(--font-serif);
+  font-size: 30px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--ink-4);
+  font-variant-numeric: tabular-nums;
+  transition: color .2s var(--ease-out-quart);
+}
+.radio-root .itv-row:hover .itv-row-num { color: var(--rose); }
+.radio-root .itv-row-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  flex: 1;
+}
+.radio-root .itv-row-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink-1);
+  line-height: 1.35;
+}
+.radio-root .itv-row-zh {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  line-height: 1.5;
+}
+.radio-root .itv-row-dur {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-4);
+  font-variant-numeric: tabular-nums;
+}
+.radio-root .itv-row-go {
+  flex-shrink: 0;
+  font-size: 15px;
+  color: var(--rose);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity .2s var(--ease-out-quart), transform .2s var(--ease-out-quart);
+}
+.radio-root .itv-row:hover .itv-row-go { opacity: 1; transform: translateX(0); }
+
+/* ── 暗色 ── */
+[data-theme="dark"] .radio-root.itv-page {
+  background:
+    radial-gradient(140% 70% at 100% -10%, rgba(244,63,94,.10) 0%, transparent 50%),
+    var(--surface-1);
+}
+[data-theme="dark"] .radio-root .itv-masthead { border-bottom-color: var(--ink-3); }
+[data-theme="dark"] .radio-root .itv-feature-play { background: #f7ece7; color: #241820; }
+
+/* ── 减弱动效 ── */
+@media (prefers-reduced-motion: reduce) {
+  .radio-root .itv-feature:hover { transform: none; }
+  .radio-root .itv-row:hover { padding-left: 8px; }
+  .radio-root .itv-row:hover::after { transform: scaleX(0); }
+}

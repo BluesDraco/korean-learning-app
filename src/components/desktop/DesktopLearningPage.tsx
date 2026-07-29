@@ -4,15 +4,19 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Music2, GraduationCap, BookOpen,
-  Mic, Headphones, PenLine, Edit3,
-  FileText, MessageCircle, Keyboard, Sparkles,
+  FileText, Compass, Sparkles,
 } from 'lucide-react';
-import { PageHeader, Section, Card } from '@/components/ui';
 import { getPhoneticProgress, getGrammarProgress } from '@/lib/progress/dailyHero';
+import { getProfile } from '@/lib/gamification';
+import { useAuth } from '@/components/AuthProvider';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
+import { FloatingDecorations } from '@/components/FloatingDecorations';
+import './desktop-learning-redesign.css';
 
 interface LearningEntry {
-  label: string;
-  desc: string;
+  labelKey: string;
+  descKey: string;
   href: string;
   progress?: number;
   Icon: React.ComponentType<{ size?: number; strokeWidth?: number }>;
@@ -20,44 +24,36 @@ interface LearningEntry {
 }
 
 const SYSTEM_COURSES: LearningEntry[] = [
-  { label: '韩文字母入门', desc: '从 40 音开始，听标准发音，再学习音节拼装。', href: '/phonetics', Icon: Music2,        tone: 'purple' },
-  { label: '语法入门',     desc: '14 个语法点，跟着兔莉一步步把句子的骨架理清。', href: '/grammar',   Icon: BookOpen,      tone: 'pink' },
-  { label: 'TOPIK 备考',   desc: '按题型整理词汇、阅读和写作练习路线。',           href: '/topik',     Icon: GraduationCap, tone: 'mint' },
+  { labelKey: 'learning.course_phonetics', descKey: 'learning.course_phonetics_desc', href: '/phonetics', Icon: Music2,        tone: 'purple' },
+  { labelKey: 'learning.course_grammar',   descKey: 'learning.course_grammar_desc',   href: '/grammar',   Icon: BookOpen,      tone: 'pink' },
+  { labelKey: 'learning.course_topik',     descKey: 'learning.course_topik_desc',     href: '/topik',     Icon: GraduationCap, tone: 'mint' },
 ];
 
+// 工具箱 · 4 张大行卡,视觉与上方入门顺序一致
 const TOOLBOX: LearningEntry[] = [
-  { label: '发音跟读', desc: '录音对比，纠正语调。',           href: '/pronunciation', Icon: Mic,           tone: 'pink' },
-  { label: '听说练习', desc: '看中文用韩语说出来。',           href: '/listening',     Icon: Headphones,    tone: 'peach' },
-  { label: '默写练习', desc: '看中文用韩文写出来。',           href: '/dictation',     Icon: Edit3,         tone: 'mint' },
-  { label: '写作练习', desc: '用韩语写句子，AI 给参考。',      href: '/writing',       Icon: PenLine,       tone: 'mint' },
-  { label: '文章阅读', desc: '分级阅读，沉淀长句和词。',       href: '/reading',       Icon: FileText,      tone: 'purple' },
-  { label: 'AI 场景陪练', desc: '10 个情景对话，反复练习。',   href: '/ai/chat',       Icon: MessageCircle, tone: 'pink' },
-  { label: '韩文打字', desc: '键盘从零开始练熟。',             href: '/typing',        Icon: Keyboard,      tone: 'peach' },
-  { label: '内容拆解', desc: '粘贴一句韩语，AI 帮你拆词解句。', href: '/ai/analyze',    Icon: Sparkles,      tone: 'purple' },
+  { labelKey: 'learning.tool_reading',  descKey: 'learning.tool_reading_desc',  href: '/reading',          Icon: FileText,      tone: 'peach' },
+  { labelKey: 'learning.tool_scene',    descKey: 'learning.tool_scene_desc',    href: '/animal-city.html', Icon: Compass,       tone: 'mint' },
+  { labelKey: 'learning.tool_analyze',  descKey: 'learning.tool_analyze_desc',  href: '/ai/analyze',       Icon: Sparkles,      tone: 'purple' },
+  { labelKey: 'learning.tool_practice', descKey: 'learning.tool_practice_desc', href: '/practice',         Icon: GraduationCap, tone: 'pink' },
 ];
-
-const TONE_BG: Record<'pink' | 'mint' | 'peach' | 'purple', string> = {
-  pink: 'var(--color-pink-soft)', mint: 'var(--color-mint-soft)',
-  peach: 'var(--color-peach-soft)', purple: 'var(--color-purple-soft)',
-};
-const TONE_FG: Record<'pink' | 'mint' | 'peach' | 'purple', string> = {
-  pink: 'var(--color-pink-strong)', mint: 'var(--color-mint-strong)',
-  peach: 'var(--color-peach-strong)', purple: 'var(--color-purple-strong)',
-};
 
 export function DesktopLearningPage() {
   const router = useRouter();
+  const { lang } = useLang();
+  const { user } = useAuth();
   const [phoneticPct, setPhoneticPct] = useState<number | undefined>(undefined);
   const [grammarPct, setGrammarPct] = useState<number | undefined>(undefined);
+  const [streak, setStreak] = useState<number | undefined>(undefined);
 
   useEffect(() => {
-    getPhoneticProgress().then((p) => {
+    getPhoneticProgress(user?.id).then((p) => {
       if (p.total > 0) setPhoneticPct(Math.round((p.completed / p.total) * 100));
     });
-    getGrammarProgress().then((p) => {
+    getGrammarProgress(user?.id).then((p) => {
       if (p.total > 0) setGrammarPct(Math.round((p.completed / p.total) * 100));
     });
-  }, []);
+    getProfile().then((p) => setStreak(p.streak));
+  }, [user?.id]);
 
   const systemWithProgress = SYSTEM_COURSES.map((c) => {
     if (c.href === '/phonetics' && phoneticPct !== undefined) return { ...c, progress: phoneticPct };
@@ -66,110 +62,82 @@ export function DesktopLearningPage() {
   });
 
   return (
-    <div>
-      <PageHeader
-        eyebrow="학습 · LEARN"
-        title="学习"
-        subtitle="字母、语法、TOPIK — 按入门顺序一步步来。"
-        tone="pink"
-      />
+    <div className="dl-scope">
+      <FloatingDecorations />
+      <div className="dl-stage">
+        <header className="dl-head">
+          <div className="dl-brand">
+            <div className="dl-brand-mark">Tori</div>
+            <div className="dl-brand-kr">학습</div>
+            <div className="dl-brand-sub">{t('learning.brand_sub', lang)}</div>
+          </div>
+          {streak !== undefined && streak > 0 ? (
+            <span className="dl-status">
+              <span className="dl-status-dot" aria-hidden />
+              {t('learning.streak_desktop', lang, { n: streak })}
+            </span>
+          ) : (
+            <div className="dl-brand-sub md-only">{t('learning.brand_hint', lang)}</div>
+          )}
+        </header>
 
-      {/* 上半 · 入门顺序 */}
-      <Section title="入门顺序" spacing="normal">
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          {systemWithProgress.map((entry) => (
-            <Card
-              key={entry.label}
-              as="button"
-              onClick={() => router.push(entry.href)}
-              variant="default"
-              padding="md"
-              interactive
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-                <div
-                  style={{
-                    width: 56, height: 56, borderRadius: 'var(--radius-md)',
-                    background: TONE_BG[entry.tone], color: TONE_FG[entry.tone],
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                  }}
-                  aria-hidden
-                >
-                  <entry.Icon size={24} strokeWidth={1.75} />
-                </div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <p style={{ fontSize: 16, fontWeight: 800, color: 'var(--color-ink-1)', margin: 0 }}>
-                    {entry.label}
-                  </p>
-                  <p style={{ fontSize: 13, color: 'var(--color-ink-3)', margin: '4px 0 0', lineHeight: 1.6 }}>
-                    {entry.desc}
-                  </p>
+        {/* 上半 · 入门顺序 */}
+        <section className="dl-section" style={{ '--i': 0 } as React.CSSProperties}>
+          <div className="dl-section-head">
+            <div className="dl-section-title">
+              <h2><em>{t('learning.section_courses', lang)}</em></h2>
+              <span className="dl-section-note">{t('learning.section_courses_note', lang)}</span>
+            </div>
+            <span className="dl-kr">입문 순서</span>
+          </div>
+          <div className="dl-sys-list">
+            {systemWithProgress.map((entry) => (
+              <button key={entry.labelKey} className="dl-sys-card" onClick={() => router.push(entry.href)}>
+                <span className={`dl-sys-icon ${entry.tone}`} aria-hidden>
+                  <entry.Icon size={26} strokeWidth={1.75} />
+                </span>
+                <div className="dl-sys-info">
+                  <p className="dl-sys-title">{t(entry.labelKey, lang)}</p>
+                  <p className="dl-sys-desc">{t(entry.descKey, lang)}</p>
                   {entry.progress !== undefined && (
-                    <div style={{ marginTop: 10, height: 6, borderRadius: 'var(--radius-pill)', background: 'var(--color-surface-4)', overflow: 'hidden' }}>
-                      <div
-                        style={{
-                          height: '100%', borderRadius: 'var(--radius-pill)',
-                          background: `linear-gradient(90deg, ${TONE_FG[entry.tone]}, var(--color-pink-base))`,
-                          width: `${entry.progress}%`,
-                          transition: 'width var(--dur-slow) var(--ease-soft)',
-                        }}
-                      />
+                    <div className="dl-sys-progress-bar">
+                      <div className="dl-sys-progress-fill" style={{ width: `${entry.progress}%` }} />
                     </div>
                   )}
                 </div>
-                <span
-                  style={{
-                    fontSize: 12, fontWeight: 800,
-                    color: TONE_FG[entry.tone],
-                    background: TONE_BG[entry.tone],
-                    padding: '6px 14px', borderRadius: 'var(--radius-pill)',
-                    flexShrink: 0, whiteSpace: 'nowrap',
-                  }}
-                >
-                  {entry.progress !== undefined ? `${entry.progress}%` : '开始'}
+                <span className={`dl-sys-cta ${entry.tone}`}>
+                  {entry.progress !== undefined ? `${entry.progress}%` : t('common.start', lang)}
                 </span>
-              </div>
-            </Card>
-          ))}
-        </div>
-      </Section>
+              </button>
+            ))}
+          </div>
+        </section>
 
-      {/* 下半 · 工具箱 4×2 */}
-      <Section title="工具箱" spacing="normal">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
-          {TOOLBOX.map((entry) => (
-            <Card
-              key={entry.label}
-              as="button"
-              onClick={() => router.push(entry.href)}
-              variant="default"
-              padding="md"
-              interactive
-            >
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 10 }}>
-                <div
-                  style={{
-                    width: 44, height: 44, borderRadius: 'var(--radius-md)',
-                    background: TONE_BG[entry.tone], color: TONE_FG[entry.tone],
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  }}
-                  aria-hidden
-                >
-                  <entry.Icon size={20} strokeWidth={1.75} />
+        {/* 下半 · 工具箱 · 与入门顺序同款 row 卡 */}
+        <section className="dl-section" style={{ '--i': 1 } as React.CSSProperties}>
+          <div className="dl-section-head">
+            <div className="dl-section-title">
+              <h2><em>{t('learning.section_toolbox', lang)}</em></h2>
+              <span className="dl-section-note">{t('learning.section_toolbox_note', lang)}</span>
+            </div>
+            <span className="dl-kr">도구 상자</span>
+          </div>
+          <div className="dl-sys-list">
+            {TOOLBOX.map((entry) => (
+              <button key={entry.labelKey} className="dl-sys-card" onClick={() => router.push(entry.href)}>
+                <span className={`dl-sys-icon ${entry.tone}`} aria-hidden>
+                  <entry.Icon size={26} strokeWidth={1.75} />
+                </span>
+                <div className="dl-sys-info">
+                  <p className="dl-sys-title">{t(entry.labelKey, lang)}</p>
+                  <p className="dl-sys-desc">{t(entry.descKey, lang)}</p>
                 </div>
-                <div>
-                  <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>
-                    {entry.label}
-                  </p>
-                  <p style={{ fontSize: 12, color: 'var(--color-ink-3)', margin: '4px 0 0', lineHeight: 1.5 }}>
-                    {entry.desc}
-                  </p>
-                </div>
-              </div>
-            </Card>
-          ))}
-        </div>
-      </Section>
+                <span className={`dl-sys-cta ${entry.tone}`}>{t('learning.enter', lang)}</span>
+              </button>
+            ))}
+          </div>
+        </section>
+      </div>
     </div>
   );
 }

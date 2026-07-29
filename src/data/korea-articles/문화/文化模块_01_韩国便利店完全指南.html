@@ -2,699 +2,363 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>韩国便利店完全指南 · 韩语学习日记</title>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
-    background: #FFFDF9;
-    color: #3a3a3a;
-    line-height: 1.7;
-  }
-
-  .hero {
-    background: linear-gradient(160deg, #FF8FAB 0%, #C9B8E8 50%, #A8D8D0 100%);
-    padding: 56px 24px 48px;
-    text-align: center;
-    position: relative; overflow: hidden;
-  }
-  .hero::before {
-    content: "🏪☕🍜🍡🥤🧃";
-    position: absolute; top: 14px; left: 0; right: 0;
-    font-size: 22px; letter-spacing: 18px; opacity: .22;
-  }
-  .hero-tag {
-    display: inline-block;
-    background: rgba(255,255,255,.25);
-    color: #fff; font-size: 11px; font-weight: 700;
-    padding: 4px 14px; border-radius: 20px; margin-bottom: 16px;
-    letter-spacing: 1px;
-  }
-  .hero h1 {
-    font-size: 28px; font-weight: 800; color: #fff;
-    text-shadow: 0 2px 12px rgba(0,0,0,.15);
-    line-height: 1.3; margin-bottom: 12px;
-  }
-  .hero h1 span { font-size: 14px; font-weight: 400; display: block; margin-top: 6px; opacity: .9; }
-  .hero-meta {
-    display: flex; align-items: center; justify-content: center; gap: 16px;
-    font-size: 12px; color: rgba(255,255,255,.8); margin-top: 16px;
-  }
-
-  .container { max-width: 780px; margin: 0 auto; padding: 40px 20px 80px; }
-
-  .breadcrumb {
-    font-size: 12px; color: #bbb;
-    display: flex; align-items: center; gap: 6px;
-    margin-bottom: 28px;
-  }
-  .breadcrumb span { color: #ddd; }
-
-  .intro-card {
-    background: #fff; border-radius: 20px; padding: 24px 26px;
-    box-shadow: 0 2px 20px rgba(255,143,171,.12);
-    margin-bottom: 40px;
-    border-left: 4px solid #FF8FAB;
-  }
-  .tori-says { display: flex; gap: 14px; align-items: flex-start; }
-  .tori-avatar {
-    width: 44px; height: 44px; border-radius: 50%;
-    background: linear-gradient(135deg, #FF8FAB, #C9B8E8);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px; flex-shrink: 0;
-  }
-  .tori-bubble {
-    background: linear-gradient(135deg, #fff0f5, #f5f0ff);
-    border-radius: 0 14px 14px 14px; padding: 14px 16px;
-    font-size: 13px; color: #555; line-height: 1.8; flex: 1;
-    position: relative;
-  }
-  .tori-bubble::before {
-    content: "";
-    position: absolute; left: -8px; top: 12px;
-    border: 8px solid transparent;
-    border-right-color: #fff0f5; border-left: none;
-  }
-  .tori-name { font-size: 11px; color: #FF8FAB; font-weight: 700; margin-bottom: 5px; }
-
-  .section-title {
-    font-size: 20px; font-weight: 800; color: #333;
-    margin: 44px 0 20px;
-    display: flex; align-items: center; gap: 10px;
-  }
-  .section-title .st-icon {
-    width: 36px; height: 36px; border-radius: 10px;
-    background: linear-gradient(135deg, #FF8FAB, #C9B8E8);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px; flex-shrink: 0;
-  }
-  .section-title .st-sub {
-    font-size: 12px; font-weight: 400; color: #aaa; display: block; margin-top: 2px;
-  }
-
-  .brand-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin: 20px 0; }
-  .brand-card {
-    border-radius: 16px; padding: 20px 16px; text-align: center;
-    position: relative; overflow: hidden;
-    box-shadow: 0 2px 14px rgba(0,0,0,.07);
-    transition: transform .2s;
-  }
-  .brand-card:hover { transform: translateY(-3px); }
-  .brand-card.gs  { background: linear-gradient(160deg, #fff5f5, #ffe8e8); border: 1.5px solid #ffcdd2; }
-  .brand-card.cu  { background: linear-gradient(160deg, #fff8f0, #ffecdc); border: 1.5px solid #ffe0b2; }
-  .brand-card.se  { background: linear-gradient(160deg, #f0f8ff, #e3f2fd); border: 1.5px solid #bbdefb; }
-  .brand-emoji { font-size: 36px; margin-bottom: 10px; display: block; }
-  .brand-name-ko { font-size: 18px; font-weight: 800; color: #333; margin-bottom: 3px; }
-  .brand-name-zh { font-size: 11px; color: #999; margin-bottom: 10px; }
-  .brand-tag { display: inline-block; font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px; margin-bottom: 8px; }
-  .gs .brand-tag  { background: #ffcdd2; color: #c62828; }
-  .cu .brand-tag  { background: #ffe0b2; color: #e65100; }
-  .se .brand-tag  { background: #bbdefb; color: #1565c0; }
-  .brand-desc { font-size: 12px; color: #666; line-height: 1.7; }
-  .brand-must { margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(0,0,0,.06); font-size: 11px; color: #999; }
-  .brand-must strong { color: #FF8FAB; }
-
-  .must-buy-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; margin: 20px 0; }
-  .must-card {
-    background: #fff; border-radius: 16px; padding: 18px;
-    box-shadow: 0 2px 12px rgba(255,143,171,.1);
-    border-top: 3px solid var(--mc, #FF8FAB);
-    display: flex; gap: 14px; align-items: flex-start;
-  }
-  .must-icon { font-size: 32px; flex-shrink: 0; }
-  .must-name-ko { font-size: 15px; font-weight: 700; color: #333; margin-bottom: 2px; }
-  .must-name-zh { font-size: 12px; color: var(--mc, #FF8FAB); font-weight: 600; margin-bottom: 6px; }
-  .must-desc { font-size: 12px; color: #666; line-height: 1.7; }
-  .must-tip { margin-top: 8px; font-size: 11px; color: #bbb; display: flex; align-items: center; gap: 4px; }
-  .must-tip::before { content: "💡"; font-size: 11px; }
-
-  .culture-card {
-    background: #fff; border-radius: 20px; padding: 24px;
-    box-shadow: 0 2px 16px rgba(201,184,232,.12); margin: 16px 0;
-    border: 1px solid rgba(201,184,232,.15);
-  }
-  .culture-card h3 { font-size: 15px; font-weight: 700; color: #333; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-  .culture-card p { font-size: 13px; color: #555; line-height: 1.85; margin-bottom: 10px; }
-  .culture-card p:last-child { margin-bottom: 0; }
-  .highlight {
-    background: linear-gradient(135deg, #fff0f5, #f5f0ff);
-    border-radius: 10px; padding: 12px 14px; margin: 12px 0;
-    font-size: 13px; color: #555; line-height: 1.8;
-    border-left: 3px solid #C9B8E8;
-  }
-  .highlight strong { color: #C9B8E8; }
-
-  .food-steps {
-    background: linear-gradient(135deg, #fff8fb, #f8f5ff);
-    border-radius: 18px; padding: 22px 24px; margin: 16px 0;
-    border: 1.5px dashed #C9B8E855;
-  }
-  .food-steps h3 { font-size: 14px; font-weight: 700; color: #C9B8E8; margin-bottom: 16px; }
-  .step-row { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 14px; }
-  .step-row:last-child { margin-bottom: 0; }
-  .step-circle {
-    width: 30px; height: 30px; border-radius: 50%;
-    background: linear-gradient(135deg, #FF8FAB, #C9B8E8);
-    color: #fff; font-size: 12px; font-weight: 800;
-    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-  }
-  .step-content { flex: 1; }
-  .step-title-text { font-size: 13px; font-weight: 700; color: #333; margin-bottom: 3px; }
-  .step-desc-text { font-size: 12px; color: #666; line-height: 1.7; }
-  .korean-phrase {
-    display: inline-block; margin-top: 5px;
-    background: #fff; border-radius: 8px; padding: 4px 10px;
-    font-size: 12px; color: #FF8FAB; font-weight: 600;
-    box-shadow: 0 1px 6px rgba(255,143,171,.15);
-  }
-
-  .time-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin: 16px 0; }
-  .time-card {
-    background: #fff; border-radius: 14px; padding: 16px 14px; text-align: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,.06);
-  }
-  .time-emoji { font-size: 28px; margin-bottom: 6px; display: block; }
-  .time-label { font-size: 10px; color: #bbb; margin-bottom: 4px; }
-  .time-title { font-size: 13px; font-weight: 700; color: #333; margin-bottom: 6px; }
-  .time-desc { font-size: 11px; color: #777; line-height: 1.6; }
-
-  .korean-section {
-    background: linear-gradient(135deg, #2a2420, #1e1a18);
-    border-radius: 20px; padding: 26px 24px; margin: 32px 0;
-  }
-  .ks-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
-  .ks-tori { font-size: 28px; }
-  .ks-title { font-size: 15px; font-weight: 700; color: #FDF8F0; }
-  .ks-sub { font-size: 11px; color: #888; margin-top: 2px; }
-  .phrase-list { display: flex; flex-direction: column; gap: 12px; }
-  .phrase-item {
-    background: rgba(255,255,255,.06); border-radius: 12px; padding: 14px 16px;
-    display: flex; justify-content: space-between; align-items: center; gap: 16px;
-  }
-  .phrase-ko { font-size: 16px; font-weight: 700; color: #FDF8F0; }
-  .phrase-ro { font-size: 10px; color: #888; margin-top: 2px; font-style: italic; }
-  .phrase-zh { font-size: 12px; color: #FF8FAB; font-weight: 600; flex-shrink: 0; }
-  .phrase-scene { font-size: 10px; color: #666; margin-top: 3px; }
-  .add-btn {
-    width: 28px; height: 28px; border-radius: 50%;
-    background: linear-gradient(135deg,#FF8FAB,#C9B8E8);
-    color: #fff; font-size: 14px; font-weight: 700;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; cursor: pointer;
-    box-shadow: 0 2px 8px rgba(255,143,171,.4);
-    transition: transform .15s;
-  }
-  .add-btn:hover { transform: scale(1.1); }
-
-  .trivia-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 20px 0; }
-  .trivia-card {
-    background: #fff; border-radius: 14px; padding: 16px 18px;
-    box-shadow: 0 2px 10px rgba(255,143,171,.08);
-    border-top: 3px solid var(--tc, #FF8FAB);
-  }
-  .trivia-card .tc-q { font-size: 13px; font-weight: 700; color: #333; margin-bottom: 8px; }
-  .trivia-card .tc-a { font-size: 12px; color: #666; line-height: 1.7; }
-  .trivia-card .tc-tag {
-    display: inline-block; font-size: 10px; font-weight: 700;
-    color: var(--tc,#FF8FAB); background: var(--tbg,#fff0f5);
-    padding: 2px 8px; border-radius: 10px; margin-bottom: 6px;
-  }
-
-  .compare-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 16px 0; border-radius: 14px; overflow: hidden; }
-  .compare-table th { background: linear-gradient(135deg, #FF8FAB, #C9B8E8); color: #fff; font-weight: 700; padding: 11px 14px; text-align: left; }
-  .compare-table td { padding: 11px 14px; border-bottom: 1px solid #fdf0f5; color: #444; vertical-align: top; }
-  .compare-table tr:nth-child(even) td { background: #fffafc; }
-  .compare-table tr:last-child td { border-bottom: none; }
-
-  .notice-box {
-    background: linear-gradient(135deg, #fff8f0, #fff0f5);
-    border-radius: 14px; padding: 16px 18px; margin: 16px 0;
-    border: 1.5px solid #FFE4A055;
-    font-size: 13px; color: #666; line-height: 1.8;
-  }
-  .notice-box .nt { font-weight: 700; color: #d68910; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
-
-  .divider { text-align: center; font-size: 18px; letter-spacing: 8px; opacity: .3; margin: 32px 0; }
-
-  .ending-card {
-    background: linear-gradient(135deg, #fff0f5, #f5f0ff, #f0fbf9);
-    border-radius: 20px; padding: 28px 24px; text-align: center; margin-top: 40px;
-    border: 1.5px solid rgba(201,184,232,.2);
-    position: relative; overflow: hidden;
-  }
-  .ending-card::before {
-    content: "🌸✨💜🐰⭐🌟";
-    position: absolute; top: 8px; left: 0; right: 0;
-    font-size: 16px; letter-spacing: 12px; opacity: .2;
-  }
-  .ending-tori { font-size: 52px; display: block; margin-bottom: 12px; }
-  .ending-title { font-size: 17px; font-weight: 800; color: #FF8FAB; margin-bottom: 6px; }
-  .ending-sub { font-size: 13px; color: #aaa; line-height: 1.8; margin-bottom: 20px; }
-  .next-btn {
-    display: inline-block; background: linear-gradient(135deg, #FF8FAB, #C9B8E8);
-    color: #fff; font-size: 13px; font-weight: 700;
-    padding: 10px 28px; border-radius: 24px;
-    box-shadow: 0 4px 16px rgba(255,143,171,.3);
-    text-decoration: none; margin-bottom: 8px;
-  }
-  .next-articles { margin-top: 16px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-  .next-tag {
-    font-size: 12px; color: #C9B8E8; border: 1px solid #C9B8E8;
-    padding: 4px 14px; border-radius: 20px; cursor: pointer;
-  }
-
-  .vocab-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
-  .vocab-chip {
-    background: #fff; border: 1px solid #f0e8ff;
-    border-radius: 20px; padding: 5px 14px;
-    font-size: 12px; color: #555;
-    display: flex; align-items: center; gap: 6px;
-    box-shadow: 0 1px 6px rgba(0,0,0,.04);
-  }
-  .vocab-chip .vko { font-weight: 700; color: #333; }
-  .vocab-chip .vzh { color: #C9B8E8; }
-
-  @media (max-width: 600px) {
-    .brand-grid { grid-template-columns: 1fr; }
-    .must-buy-grid { grid-template-columns: 1fr; }
-    .time-grid { grid-template-columns: 1fr; }
-    .trivia-grid { grid-template-columns: 1fr; }
-    .hero h1 { font-size: 22px; }
-  }
-</style>
 </head>
 <body>
+<div class="article-body">
 
-<div class="hero">
-  <div class="hero-tag">🇰🇷 韩国文化 · 首尔女生的日常</div>
-  <h1>
-    韩国便利店完全指南
-    <span>편의점 완전 공략 — 你在首尔不可能绕开的地方</span>
-  </h1>
-  <div class="hero-meta">
-    <span>🐰 토리亲测</span>
-    <span>📖 约10分钟读完</span>
-    <span>🗂️ 文化 · 生活</span>
-  </div>
-</div>
-
-<div class="container">
-
-  <div class="breadcrumb">
-    🏠 首页 <span>›</span> 🇰🇷 韩国 <span>›</span> 文化 <span>›</span> 便利店完全指南
+  <!-- Intro（首字下沉） -->
+  <div class="article-intro">
+    토리上周去首尔，一共去了23次便利店。不是夸张——韩国的便利店真的是另一个世界。你以为便利店只是买个水、买包薯片的地方？在韩国，它是早餐店、咖啡馆、热食餐厅、ATM机、快递站、自习室……有时候还是朋友聚会的地方。今天토리把所有踩过的坑、发现的宝藏，全部整理给你。
   </div>
 
-  <!-- 토리引言 -->
-  <div class="intro-card">
-    <div class="tori-says">
-      <div class="tori-avatar">🐰</div>
-      <div class="tori-bubble">
-        <div class="tori-name">토리 说</div>
-        토리上周去首尔，一共去了 <strong style="color:#FF8FAB;">23次便利店</strong>。不是夸张——韩国的便利店真的是另一个世界。你以为便利店只是买个水、买包薯片的地方？在韩国，它是早餐店、咖啡馆、热食餐厅、ATM机、快递站、自习室……有时候还是朋友聚会的地方。今天토리把所有踩过的坑、发现的宝藏，全部整理给你 🌸
-      </div>
-    </div>
+  <!-- Tori Quote -->
+  <div class="tori-quote">
+    <div class="quote-label">🐰 토리 说</div>
+    韩国便利店不是"便利"的商店，是"必要"的商店。去了就知道，没有它你活不了一周。
   </div>
 
-  <!-- 三大品牌 -->
-  <div class="section-title">
-    <div class="st-icon">🏪</div>
+  <div class="section-break"><span>· · ·</span></div>
+
+  <!-- Section 1: 三大品牌 -->
+  <div class="section-title section-header">
+    <div class="st-icon section-emoji">🏪</div>
     <div>
-      三大便利店，性格各不同
-      <span class="st-sub">GS25 · CU · 7-Eleven — 不是随便进哪个都一样的</span>
+      <h2>三大便利店，性格各不同</h2>
+      <span class="st-sub section-sub">GS25 · CU · 7-Eleven — 不是随便进哪个都一样的</span>
     </div>
   </div>
 
   <div class="brand-grid">
-    <div class="brand-card gs">
-      <span class="brand-emoji">🔴</span>
-      <div class="brand-name-ko">GS25</div>
-      <div class="brand-name-zh">GS二十五</div>
+    <div class="brand-card" data-brand="gs25">
+      <div class="brand-color-bar"></div>
+      <div class="brand-header">
+        <span class="brand-name">GS25</span>
+        <span class="brand-name-cn">GS二十五</span>
+      </div>
       <div class="brand-tag">最多 · 最潮</div>
       <div class="brand-desc">韩国便利店之王，门店数量第一。自有品牌产品最丰富，联名款最多，经常和韩国本土IP推出限定商品。想找最新网红零食，来这里。</div>
-      <div class="brand-must">必买：<strong>유어스 자이언트 떡볶이</strong>（自有品牌炒年糕）</div>
+      <div class="brand-buy">必买：<strong>유어스 자이언트 떡볶이</strong>（自有品牌炒年糕）</div>
     </div>
-    <div class="brand-card cu">
-      <span class="brand-emoji">🟠</span>
-      <div class="brand-name-ko">CU</div>
-      <div class="brand-name-zh">씨유</div>
+    <div class="brand-card" data-brand="cu">
+      <div class="brand-color-bar"></div>
+      <div class="brand-header">
+        <span class="brand-name">CU</span>
+        <span class="brand-name-cn">씨유</span>
+      </div>
       <div class="brand-tag">最暖 · 最有韩国味</div>
       <div class="brand-desc">前身是Family Mart，现在完全韩国化。自有品牌HereO系列性价比超高。热食区最扎实，关东煮选择多，冬天必来。整体风格最接地气。</div>
-      <div class="brand-must">必买：<strong>백종원 컵밥</strong>（白钟元杯饭系列）</div>
+      <div class="brand-buy">必买：<strong>백종원 컵밥</strong>（白钟元杯饭系列）</div>
     </div>
-    <div class="brand-card se">
-      <span class="brand-emoji">🟢</span>
-      <div class="brand-name-ko">세븐일레븐</div>
-      <div class="brand-name-zh">7-Eleven</div>
+    <div class="brand-card" data-brand="711">
+      <div class="brand-color-bar"></div>
+      <div class="brand-header">
+        <span class="brand-name">세븐일레븐</span>
+        <span class="brand-name-cn">7-Eleven</span>
+      </div>
       <div class="brand-tag">最国际 · 最稳定</div>
       <div class="brand-desc">国际品牌，品质最稳定。在旅游区和机场最容易找到。外国游客不知道买什么的时候进7-11不会踩雷。自助结账机最普及。</div>
-      <div class="brand-must">必买：<strong>세븐셀렉트 삼각김밥</strong>（三角饭团系列）</div>
+      <div class="brand-buy">必买：<strong>세븐셀렉트 삼각김밥</strong>（三角饭团系列）</div>
     </div>
   </div>
 
   <table class="compare-table">
-    <tr>
-      <th>对比项</th><th>GS25 🔴</th><th>CU 🟠</th><th>7-Eleven 🟢</th>
-    </tr>
-    <tr>
-      <td>门店数量</td><td>约17,000家（第一）</td><td>约16,000家（第二）</td><td>约11,000家（第三）</td>
-    </tr>
-    <tr>
-      <td>特色优势</td><td>联名款最多，网红产品最快</td><td>热食最好，关东煮最丰富</td><td>最稳定，旅游区最多</td>
-    </tr>
-    <tr>
-      <td>推荐人群</td><td>喜欢尝鲜的潮人</td><td>想吃饱的本地生活派</td><td>不想踩雷的初来乍到者</td>
-    </tr>
+    <thead>
+      <tr><th>对比项</th><th>GS25</th><th>CU</th><th>7-Eleven</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>门店数量</td><td>约17,000家</td><td>约16,000家</td><td>约11,000家</td></tr>
+      <tr><td>特色优势</td><td>联名款最多</td><td>热食最好</td><td>最稳定</td></tr>
+      <tr><td>推荐人群</td><td>喜欢尝鲜</td><td>本地生活派</td><td>初来乍到</td></tr>
+    </tbody>
   </table>
 
-  <div class="divider">· · ·</div>
+  <div class="section-break"><span>· · ·</span></div>
 
-  <!-- 必买清单 -->
-  <div class="section-title">
-    <div class="st-icon">🛒</div>
+  <!-- Section 2: 必买清单 -->
+  <div class="section-title section-header">
+    <div class="st-icon section-emoji">🛒</div>
     <div>
-      必买清单——토리踩过的雷都绕开了
-      <span class="st-sub">这些是真的好吃，不是因为网红</span>
+      <h2>必买清单</h2>
+      <span class="st-sub section-sub">这些是真的好吃，不是因为网红</span>
     </div>
   </div>
 
-  <div class="must-buy-grid">
-    <div class="must-card" style="--mc:#FF8FAB;">
-      <div class="must-icon">🍙</div>
-      <div>
-        <div class="must-name-ko">삼각김밥</div>
-        <div class="must-name-zh">三角饭团</div>
-        <div class="must-desc">韩国便利店的灵魂单品。金枪鱼沙拉、辣白菜、牛肉是经典口味。打开方式有讲究：按数字顺序拉，1→2→3，拉错了海苔会破。价格约1,200-1,500韩元。</div>
-        <div class="must-tip">包装上有韩文打开说明，打开前先找 토리 帮你读</div>
-      </div>
+  <div class="product-grid">
+    <div class="product-card">
+      <div class="product-emoji">🍙</div>
+      <div class="product-ko">삼각김밥</div>
+      <div class="product-cn">三角饭团</div>
+      <div class="product-desc">韩国便利店的灵魂单品。金枪鱼沙拉、辣白菜、牛肉是经典口味。打开方式有讲究：按数字顺序拉，1→2→3，拉错了海苔会破。约1,200-1,500韩元。</div>
+      <div class="product-tip">💡 包装上有韩文打开说明，打开前先找토리帮你读</div>
     </div>
-    <div class="must-card" style="--mc:#C9B8E8;">
-      <div class="must-icon">🍜</div>
-      <div>
-        <div class="must-name-ko">컵라면</div>
-        <div class="must-name-zh">杯面</div>
-        <div class="must-desc">韩国便利店有专门的热水机，就是为了泡杯面。신라면（辛拉面）是经典，육개장（牛肉汤）是传统，불닭볶음면（火鸡面）挑战你的辣度极限。约1,000-1,500韩元。</div>
-        <div class="must-tip">热水机就在收银台附近，自助使用，正常现象</div>
-      </div>
+    <div class="product-card">
+      <div class="product-emoji">🍜</div>
+      <div class="product-ko">컵라면</div>
+      <div class="product-cn">杯面</div>
+      <div class="product-desc">韩国便利店有专门的热水机，就是为了泡杯面。신라면是经典，육개장是传统，불닭볶음면挑战你的辣度极限。约1,000-1,500韩元。</div>
+      <div class="product-tip">💡 热水机在收银台附近，自助使用</div>
     </div>
-    <div class="must-card" style="--mc:#A8D8D0;">
-      <div class="must-icon">☕</div>
-      <div>
-        <div class="must-name-ko">즉석 원두커피</div>
-        <div class="must-name-zh">现磨咖啡机</div>
-        <div class="must-desc">韩国便利店的现磨咖啡性价比超高，约1,500-2,000韩元，比咖啡厅便宜5倍。GS25的"카페25"、CU的"HEYCAFE"都是自家品牌。味道认真，不是自动贩卖机那种。</div>
-        <div class="must-tip">아메리카노（美式）和 라떼（拿铁）是最安全的选择</div>
-      </div>
+    <div class="product-card">
+      <div class="product-emoji">☕</div>
+      <div class="product-ko">즉석 원두커피</div>
+      <div class="product-cn">现磨咖啡机</div>
+      <div class="product-desc">韩国便利店的现磨咖啡性价比超高，约1,500-2,000韩元，比咖啡厅便宜5倍。GS25的"카페25"、CU的"HEYCAFE"都是自家品牌。</div>
+      <div class="product-tip">💡 아메리카노 和 라떼 最安全</div>
     </div>
-    <div class="must-card" style="--mc:#FFE4A0;">
-      <div class="must-icon">🍡</div>
-      <div>
-        <div class="must-name-ko">떡볶이 · 순대</div>
-        <div class="must-name-zh">炒年糕 · 순대</div>
-        <div class="must-desc">热食区的关东煮摊，年糕和순대（血肠）是标配。站着吃，蘸辣酱，这才是最正宗的首尔街头感。按份计费，约500-1,000韩元一根。</div>
-        <div class="must-tip">冬天一定要吃，边走边吃，这才是首尔女生的样子</div>
-      </div>
+    <div class="product-card">
+      <div class="product-emoji">🍡</div>
+      <div class="product-ko">떡볶이 · 순대</div>
+      <div class="product-cn">炒年糕 · 血肠</div>
+      <div class="product-desc">热食区的关东煮摊，年糕和순대是标配。站着吃，蘸辣酱，这才是最正宗的首尔街头感。按份计费，约500-1,000韩元一根。</div>
+      <div class="product-tip">💡 冬天一定要吃，边走边吃</div>
     </div>
-    <div class="must-card" style="--mc:#FF8FAB;">
-      <div class="must-icon">🥪</div>
-      <div>
-        <div class="must-name-ko">샌드위치</div>
-        <div class="must-name-zh">三明治</div>
-        <div class="must-desc">韩国便利店三明治比日本还好吃，这不是玩笑。蛋沙拉、BLT、鸡胸肉款都是经典。切成三角形装在透明盒子里，约2,000-3,000韩元，随手一拿就是好早餐。</div>
-        <div class="must-tip">看保质期，通常当天生产，新鲜度有保障</div>
-      </div>
+    <div class="product-card">
+      <div class="product-emoji">🥪</div>
+      <div class="product-ko">샌드위치</div>
+      <div class="product-cn">三明治</div>
+      <div class="product-desc">韩国便利店三明治比日本还好吃。蛋沙拉、BLT、鸡胸肉款都是经典。切成三角形装在透明盒子里，约2,000-3,000韩元。</div>
+      <div class="product-tip">💡 看保质期，通常当天生产</div>
     </div>
-    <div class="must-card" style="--mc:#C9B8E8;">
-      <div class="must-icon">🧃</div>
-      <div>
-        <div class="must-name-ko">비타500 · 박카스</div>
-        <div class="must-name-zh">维他命饮料</div>
-        <div class="must-desc">비타500是韩国版维C饮料，박카스是韩国传说中的功能饮料。韩国年轻人考前、熬夜前必喝박카스，上班族人手一瓶비타500。约600-1,500韩元。</div>
-        <div class="must-tip">박카스是在韩国药店也能买到的药用饮料，很特别</div>
-      </div>
+    <div class="product-card">
+      <div class="product-emoji">🧃</div>
+      <div class="product-ko">비타500 · 박카스</div>
+      <div class="product-cn">维他命饮料</div>
+      <div class="product-desc">비타500是韩国版维C饮料，박카스是韩国传说中的功能饮料。韩国年轻人考前、熬夜前必喝。约600-1,500韩元。</div>
+      <div class="product-tip">💡 박카스在韩国药店也能买到</div>
     </div>
   </div>
 
-  <div class="divider">· · ·</div>
+  <div class="section-break"><span>· · ·</span></div>
 
-  <!-- 热食点单 -->
-  <div class="section-title">
-    <div class="st-icon">🔥</div>
+  <!-- Section 3: 热食区怎么点 -->
+  <div class="section-title section-header">
+    <div class="st-icon section-emoji">🔥</div>
     <div>
-      热食区怎么点——从进门到拿到手
-      <span class="st-sub">第一次在韩国便利店点热食，照着这个流程走</span>
+      <h2>热食区怎么点</h2>
+      <span class="st-sub section-sub">从进门到拿到手，照着这个流程走</span>
     </div>
   </div>
 
-  <div class="food-steps">
-    <h3>🐰 토리 的便利店热食点单全流程</h3>
-    <div class="step-row">
-      <div class="step-circle">1</div>
+  <div class="step-list">
+    <div class="step-item">
+      <div class="step-num">1</div>
       <div class="step-content">
-        <div class="step-title-text">找到热食区（关东煮摊）</div>
-        <div class="step-desc-text">通常在店内靠后方或侧面，有明显的透明玻璃柜台，里面泡着各种东西。年糕、鱼饼、순대、香肠、鸡蛋都在里面。</div>
+        <div class="step-title">找到热食区</div>
+        <div class="step-desc">通常在店内靠后方或侧面，有明显的透明玻璃柜台，里面泡着各种东西。年糕、鱼饼、순대、香肠、鸡蛋都在里面。</div>
       </div>
     </div>
-    <div class="step-row">
-      <div class="step-circle">2</div>
+    <div class="step-item">
+      <div class="step-num">2</div>
       <div class="step-content">
-        <div class="step-title-text">拿夹子自己夹，或告诉店员</div>
-        <div class="step-desc-text">有些店自助，有些店需要告诉店员你想要什么。指着说就行，店员都习惯了外国游客。</div>
-        <div class="korean-phrase">이거 주세요（i-geo ju-se-yo）— 这个给我</div>
+        <div class="step-title">拿夹子自己夹，或告诉店员</div>
+        <div class="step-desc">有些店自助，有些店需要告诉店员你想要什么。指着说就行。</div>
+        <span class="step-korean">이거 주세요 — 这个给我</span>
       </div>
     </div>
-    <div class="step-row">
-      <div class="step-circle">3</div>
+    <div class="step-item">
+      <div class="step-num">3</div>
       <div class="step-content">
-        <div class="step-title-text">拿纸杯装汤</div>
-        <div class="step-desc-text">旁边通常有免费的小纸杯，可以盛一杯汤底喝，这是韩国便利店的文化，不需要额外付费。</div>
+        <div class="step-title">拿纸杯装汤</div>
+        <div class="step-desc">旁边通常有免费的小纸杯，可以盛一杯汤底喝，这是韩国便利店的文化，不需要额外付费。</div>
       </div>
     </div>
-    <div class="step-row">
-      <div class="step-circle">4</div>
+    <div class="step-item">
+      <div class="step-num">4</div>
       <div class="step-content">
-        <div class="step-title-text">去收银台结账</div>
-        <div class="step-desc-text">拿着夹好的食物去收银台，店员会按根数计算价格。</div>
-        <div class="korean-phrase">얼마예요？（eol-ma-ye-yo？）— 多少钱？</div>
+        <div class="step-title">去收银台结账</div>
+        <div class="step-desc">拿着夹好的食物去收银台，店员会按根数计算价格。</div>
+        <span class="step-korean">얼마예요? — 多少钱？</span>
       </div>
     </div>
-    <div class="step-row">
-      <div class="step-circle">5</div>
+    <div class="step-item">
+      <div class="step-num">5</div>
       <div class="step-content">
-        <div class="step-title-text">找个地方站着吃</div>
-        <div class="step-desc-text">大多数便利店门口或店内有小台子，就是给人站着吃东西的。这就是首尔街头的节奏感。</div>
+        <div class="step-title">找个地方站着吃</div>
+        <div class="step-desc">大多数便利店门口或店内有小台子，就是给人站着吃东西的。这就是首尔街头的节奏感。</div>
       </div>
     </div>
   </div>
 
-  <div class="divider">· · ·</div>
+  <div class="section-break"><span>· · ·</span></div>
 
-  <!-- 不只是买东西 -->
-  <div class="section-title">
-    <div class="st-icon">🌆</div>
+  <!-- Section 4: 不只是买东西 -->
+  <div class="section-title section-header">
+    <div class="st-icon section-emoji">🌆</div>
     <div>
-      便利店不只是买东西的地方
-      <span class="st-sub">你可能不知道，在韩国便利店还能做这些</span>
+      <h2>便利店不只是买东西</h2>
+      <span class="st-sub section-sub">你可能不知道，在韩国便利店还能做这些</span>
     </div>
   </div>
 
-  <div class="culture-card">
-    <h3>📦 寄快递 · 取快递</h3>
-    <p>韩国便利店是最重要的快递节点。在网上购物，可以选"편의점 택배"（便利店快递）送到指定便利店取货，比送到家更安全，因为韩国很多公寓没有门卫代收。</p>
-    <p>离开韩国前，大件行李可以从便利店寄到机场。比打车便宜，比拖着行李坐地铁体面。</p>
-    <div class="highlight"><strong>怎么说：</strong>택배 보내고 싶어요（tak-bae bo-nae-go si-peo-yo）— 我想寄快递</div>
+  <div class="fact-grid">
+    <div class="fact-card">
+      <div class="fact-label">📦 快递</div>
+      <div class="fact-title">寄快递 · 取快递</div>
+      <div class="fact-body">韩国便利店是最重要的快递节点。网上购物可以选"편의점 택배"送到指定便利店取货。大件行李也能从便利店寄到机场，比打车便宜。</div>
+    </div>
+    <div class="fact-card">
+      <div class="fact-label">🏧 ATM</div>
+      <div class="fact-title">取现 · 转账</div>
+      <div class="fact-body">韩国便利店里都有ATM机，支持国际银行卡（Visa/Mastercard）。在明洞等旅游区，很多地方只收现金或韩国本地卡。手续费约3,000-5,000韩元/次。</div>
+    </div>
+    <div class="fact-card full">
+      <div class="fact-label">🎭 社交</div>
+      <div class="fact-title">深夜的社交空间</div>
+      <div class="fact-body">在韩国，深夜的便利店是一种特殊的社交空间。喝着啤酒、吃着炸鸡，坐在便利店门口的塑料椅上聊天——这是韩国年轻人最常见的夜晚形态。你在韩剧里看到的"편의점 데이트"（便利店约会），不是艺术化处理，是真实生活。</div>
+    </div>
   </div>
 
-  <div class="culture-card">
-    <h3>🏧 取现 · 转账</h3>
-    <p>韩国便利店里都有ATM机，支持国际银行卡（Visa/Mastercard）。在明洞等旅游区，很多地方只收现金或韩国本地卡，便利店ATM是最方便的取现渠道。</p>
-    <div class="highlight"><strong>小提示：</strong>手续费约3,000-5,000韩元/次，取现前先确认你的银行卡支持海外取现。</div>
+  <div class="tori-quote">
+    <div class="quote-label">🐰 토리 说</div>
+    韩国便利店的塑料椅文化，是理解韩国年轻人生活的一把钥匙。价格不高，但人情味很浓。
   </div>
 
-  <div class="culture-card">
-    <h3>🎭 深夜的社交空间</h3>
-    <p>在韩国，深夜的便利店是一种特殊的社交空间。喝着啤酒、吃着炸鸡，坐在便利店门口的塑料椅上聊天——这是韩国年轻人最常见的夜晚形态。</p>
-    <p>你在韩剧里看到的"편의점 데이트"（便利店约会），不是艺术化处理，是真实生活。买两罐맥주（啤酒）、一包과자（零食），就是一场约会的全部道具。</p>
-    <div class="highlight"><strong>토리 说：</strong>韩国便利店的塑料椅文化，是理解韩国年轻人生活的一把钥匙。价格不高，但人情味很浓。</div>
-  </div>
+  <div class="section-break"><span>· · ·</span></div>
 
-  <div class="divider">· · ·</div>
-
-  <!-- 最佳时机 -->
-  <div class="section-title">
-    <div class="st-icon">⏰</div>
+  <!-- Section 5: 什么时候去 -->
+  <div class="section-title section-header">
+    <div class="st-icon section-emoji">⏰</div>
     <div>
-      什么时候去最合适
-      <span class="st-sub">不同时段，便利店的气质完全不同</span>
+      <h2>什么时候去最合适</h2>
+      <span class="st-sub section-sub">不同时段，便利店的气质完全不同</span>
     </div>
   </div>
 
-  <div class="time-grid">
+  <div class="timeline-list">
     <div class="time-card">
-      <span class="time-emoji">🌅</span>
+      <div class="time-emoji">🌅</div>
       <div class="time-label">早上 7:00-9:00</div>
-      <div class="time-title">上班族早高峰</div>
-      <div class="time-desc">三明治、咖啡、饭团刚补货，最新鲜。跟着韩国上班族一起排队，有种奇妙的本地感。</div>
+      <div class="time-desc">上班族早高峰。三明治、咖啡、饭团刚补货，最新鲜。跟着韩国上班族一起排队，有种奇妙的本地感。</div>
     </div>
     <div class="time-card">
-      <span class="time-emoji">🌞</span>
+      <div class="time-emoji">🌞</div>
       <div class="time-label">下午 2:00-4:00</div>
-      <div class="time-title">最安静最适合闲逛</div>
-      <div class="time-desc">客人最少，可以慢慢看每一样东西。探索自有品牌、找限定款零食，最不用排队。</div>
+      <div class="time-desc">最安静。客人最少，可以慢慢看每一样东西。探索自有品牌、找限定款零食，最不用排队。</div>
     </div>
     <div class="time-card">
-      <span class="time-emoji">🌙</span>
+      <div class="time-emoji">🌙</div>
       <div class="time-label">晚上 10:00-12:00</div>
-      <div class="time-title">最有氛围感</div>
-      <div class="time-desc">韩国年轻人下班聚集，门口塑料椅坐满了人。买瓶맥주坐下来，感受真实的首尔夜晚。</div>
+      <div class="time-desc">最有氛围感。韩国年轻人下班聚集，门口塑料椅坐满了人。买瓶맥주坐下来，感受真实的首尔夜晚。</div>
     </div>
   </div>
 
-  <div class="divider">· · ·</div>
+  <div class="section-break"><span>· · ·</span></div>
 
-  <!-- 冷知识 -->
-  <div class="section-title">
-    <div class="st-icon">🔍</div>
+  <!-- Section 6: 冷知识 -->
+  <div class="section-title section-header">
+    <div class="st-icon section-emoji">🔍</div>
     <div>
-      知道了会更有趣的冷知识
-      <span class="st-sub">去之前先看，去了之后才会懂</span>
+      <h2>知道了会更有趣的冷知识</h2>
     </div>
   </div>
 
-  <div class="trivia-grid">
-    <div class="trivia-card" style="--tc:#FF8FAB;--tbg:#fff0f5;">
-      <div class="tc-tag">数字冷知识</div>
-      <div class="tc-q">韩国为什么到处都是便利店？</div>
-      <div class="tc-a">韩国人口约5,100万，便利店约5万家，平均每1,000人就有一家。首尔江南区的某些街道，走100米就能看到3家不同品牌。韩国的城市密度和长时间工作文化，让便利店成了刚需。</div>
+  <div class="fact-grid">
+    <div class="fact-card">
+      <div class="fact-label">数字冷知识</div>
+      <div class="fact-title">韩国为什么到处都是便利店？</div>
+      <div class="fact-body">韩国人口约5,100万，便利店约5万家，平均每1,000人就有一家。首尔江南区的某些街道，走100米就能看到3家不同品牌。</div>
     </div>
-    <div class="trivia-card" style="--tc:#C9B8E8;--tbg:#f5f0ff;">
-      <div class="tc-tag">起源故事</div>
-      <div class="tc-q">편의점这个词是怎么来的？</div>
-      <div class="tc-a">편의（便宜）= 方便，점（店）= 店铺。韩国第一家便利店是1982年在首尔开业的Lotte七-Eleven，但真正的爆发是1990年代经济腾飞之后。</div>
+    <div class="fact-card">
+      <div class="fact-label">起源故事</div>
+      <div class="fact-title">편의점这个词是怎么来的？</div>
+      <div class="fact-body">편의（便宜）= 方便，점（店）= 店铺。韩国第一家便利店是1982年在首尔开业的Lotte七-Eleven，真正的爆发是1990年代经济腾飞之后。</div>
     </div>
-    <div class="trivia-card" style="--tc:#A8D8D0;--tbg:#f0fbf9;">
-      <div class="tc-tag">文化观察</div>
-      <div class="tc-q">为什么韩剧里的角色总在便利店哭？</div>
-      <div class="tc-a">便利店是韩国城市里少数24小时开着、不需要理由就能进去的地方。在便利店买一罐咖啡，然后在角落站一会儿——这是被默许的城市人情绪出口。</div>
+    <div class="fact-card">
+      <div class="fact-label">文化观察</div>
+      <div class="fact-title">为什么韩剧里的角色总在便利店哭？</div>
+      <div class="fact-body">便利店是韩国城市里少数24小时开着、不需要理由就能进去的地方。在便利店买一罐咖啡，然后在角落站一会儿——这是被默许的城市人情绪出口。</div>
     </div>
-    <div class="trivia-card" style="--tc:#FFE4A0;--tbg:#fffdf0;">
-      <div class="tc-tag">购物小知识</div>
-      <div class="tc-q">买1+1和2+1哪个更划算？</div>
-      <div class="tc-a">1+1比2+1更划算——只需要买一个。遇到1+1活动，直接拿两个去结账，收银员会帮你配对，不需要自己找一样的。</div>
+    <div class="fact-card">
+      <div class="fact-label">购物小知识</div>
+      <div class="fact-title">买1+1和2+1哪个更划算？</div>
+      <div class="fact-body">1+1比2+1更划算——只需要买一个。遇到1+1活动，直接拿两个去结账，收银员会帮你配对，不需要自己找一样的。</div>
     </div>
   </div>
 
-  <div class="notice-box">
-    <div class="nt">⚠️ 去韩国便利店之前要知道</div>
-    大多数韩国便利店已经支持信用卡，但<strong>关东煮等热食可能只收现金</strong>，建议随身备一些韩元。另外，韩国便利店没有免费袋子——自带袋子，或在收银台付费购买（约50-100韩元）。
+  <div class="warning-box">
+    <strong>⚠️ 去韩国便利店之前要知道</strong><br>
+    大多数韩国便利店已支持信用卡，但关东煮等热食可能只收现金，建议随身备一些韩元。韩国便利店没有免费袋子——自带袋子，或在收银台付费购买（约50-100韩元）。
   </div>
 
-  <!-- 实用韩语 -->
-  <div class="korean-section">
-    <div class="ks-header">
-      <div class="ks-tori">🐰</div>
-      <div>
-        <div class="ks-title">토리 教你说——便利店必备韩语</div>
-        <div class="ks-sub">点击 + 可加入你的词汇本</div>
-      </div>
+  <div class="section-break"><span>· · ·</span></div>
+
+  <!-- 必备韩语（保留 phrase 交互契约 class） -->
+  <div class="vocab-section section-title" id="kn-phrase">
+    <div class="vocab-header">
+      <span class="vocab-emoji st-icon">🐰</span>
+      <div><h3>토리 教你说——便利店必备韩语</h3></div>
     </div>
-    <div class="phrase-list">
-      <div class="phrase-item">
-        <div>
-          <div class="phrase-ko">이거 주세요.</div>
-          <div class="phrase-ro">i-geo ju-se-yo</div>
-          <div class="phrase-scene">🏪 指着商品说</div>
-        </div>
-        <div class="phrase-zh">这个给我</div>
-        <div class="add-btn">+</div>
+    <div class="vocab-sub">点击 🔊 听发音，点 + 加入你的词汇本</div>
+
+    <div class="phrase-grid">
+      <div class="phrase-card phrase-item">
+        <div class="add-btn phrase-add">+</div>
+        <div class="phrase-ko">이거 주세요.</div>
+        <div class="phrase-roman">i-geo ju-se-yo</div>
+        <div class="phrase-context">🏪 指着商品说</div>
+        <div class="phrase-cn phrase-zh">这个给我</div>
       </div>
-      <div class="phrase-item">
-        <div>
-          <div class="phrase-ko">봉투 주세요.</div>
-          <div class="phrase-ro">bong-tu ju-se-yo</div>
-          <div class="phrase-scene">🛍️ 需要袋子时</div>
-        </div>
-        <div class="phrase-zh">请给我袋子</div>
-        <div class="add-btn">+</div>
+      <div class="phrase-card phrase-item">
+        <div class="add-btn phrase-add">+</div>
+        <div class="phrase-ko">봉투 주세요.</div>
+        <div class="phrase-roman">bong-tu ju-se-yo</div>
+        <div class="phrase-context">🛍️ 需要袋子时</div>
+        <div class="phrase-cn phrase-zh">请给我袋子</div>
       </div>
-      <div class="phrase-item">
-        <div>
-          <div class="phrase-ko">전자레인지 써도 돼요?</div>
-          <div class="phrase-ro">jeon-ja-re-in-ji sseo-do dwae-yo?</div>
-          <div class="phrase-scene">🍱 加热食物时</div>
-        </div>
-        <div class="phrase-zh">可以用微波炉吗？</div>
-        <div class="add-btn">+</div>
+      <div class="phrase-card phrase-item">
+        <div class="add-btn phrase-add">+</div>
+        <div class="phrase-ko">전자레인지 써도 돼요?</div>
+        <div class="phrase-roman">jeon-ja-re-in-ji sseo-do dwae-yo?</div>
+        <div class="phrase-context">🍱 加热食物时</div>
+        <div class="phrase-cn phrase-zh">可以用微波炉吗？</div>
       </div>
-      <div class="phrase-item">
-        <div>
-          <div class="phrase-ko">1+1 이에요?</div>
-          <div class="phrase-ro">il-beo-il i-e-yo?</div>
-          <div class="phrase-scene">🎁 确认优惠活动</div>
-        </div>
-        <div class="phrase-zh">这是买一送一吗？</div>
-        <div class="add-btn">+</div>
+      <div class="phrase-card phrase-item">
+        <div class="add-btn phrase-add">+</div>
+        <div class="phrase-ko">1+1 이에요?</div>
+        <div class="phrase-roman">il-beo-il i-e-yo?</div>
+        <div class="phrase-context">🎁 确认优惠</div>
+        <div class="phrase-cn phrase-zh">这是买一送一吗？</div>
       </div>
-      <div class="phrase-item">
-        <div>
-          <div class="phrase-ko">카드 돼요?</div>
-          <div class="phrase-ro">ka-deu dwae-yo?</div>
-          <div class="phrase-scene">💳 结账前确认</div>
-        </div>
-        <div class="phrase-zh">可以刷卡吗？</div>
-        <div class="add-btn">+</div>
+      <div class="phrase-card phrase-item">
+        <div class="add-btn phrase-add">+</div>
+        <div class="phrase-ko">카드 돼요?</div>
+        <div class="phrase-roman">ka-deu dwae-yo?</div>
+        <div class="phrase-context">💳 结账前确认</div>
+        <div class="phrase-cn phrase-zh">可以刷卡吗？</div>
       </div>
-      <div class="phrase-item">
-        <div>
-          <div class="phrase-ko">영수증 필요 없어요.</div>
-          <div class="phrase-ro">yeong-su-jeung pi-ryo eop-seo-yo</div>
-          <div class="phrase-scene">🧾 不需要收据时</div>
-        </div>
-        <div class="phrase-zh">不需要收据</div>
-        <div class="add-btn">+</div>
+      <div class="phrase-card phrase-item">
+        <div class="add-btn phrase-add">+</div>
+        <div class="phrase-ko">영수증 필요 없어요.</div>
+        <div class="phrase-roman">yeong-su-jeung pi-ryo eop-seo-yo</div>
+        <div class="phrase-context">🧾 不需要收据</div>
+        <div class="phrase-cn phrase-zh">不需要收据</div>
       </div>
     </div>
   </div>
 
   <!-- 本篇词汇 -->
-  <div class="section-title" style="font-size:16px;margin-top:36px;">
-    <div class="st-icon" style="width:30px;height:30px;font-size:14px;">📖</div>
-    <div>本篇出现的词汇</div>
-  </div>
-  <div class="vocab-row">
-    <div class="vocab-chip"><span class="vko">편의점</span><span class="vzh">便利店</span></div>
-    <div class="vocab-chip"><span class="vko">삼각김밥</span><span class="vzh">三角饭团</span></div>
-    <div class="vocab-chip"><span class="vko">컵라면</span><span class="vzh">杯面</span></div>
-    <div class="vocab-chip"><span class="vko">떡볶이</span><span class="vzh">炒年糕</span></div>
-    <div class="vocab-chip"><span class="vko">순대</span><span class="vzh">血肠</span></div>
-    <div class="vocab-chip"><span class="vko">맥주</span><span class="vzh">啤酒</span></div>
-    <div class="vocab-chip"><span class="vko">과자</span><span class="vzh">零食·饼干</span></div>
-    <div class="vocab-chip"><span class="vko">봉투</span><span class="vzh">袋子</span></div>
-    <div class="vocab-chip"><span class="vko">영수증</span><span class="vzh">收据</span></div>
-    <div class="vocab-chip"><span class="vko">택배</span><span class="vzh">快递</span></div>
-    <div class="vocab-chip"><span class="vko">아메리카노</span><span class="vzh">美式咖啡</span></div>
-    <div class="vocab-chip"><span class="vko">샌드위치</span><span class="vzh">三明治</span></div>
-  </div>
-
-  <!-- 结尾 -->
-  <div class="ending-card">
-    <span class="ending-tori">🐰</span>
-    <div class="ending-title">下次去首尔，토리 陪你逛便利店</div>
-    <div class="ending-sub">
-      韩国便利店是理解首尔生活的一扇窗。<br>
-      它便宜、方便、24小时开着，<br>
-      但更重要的是——它是韩国文化的缩影。<br>
-      下一篇，토리 带你去探索首尔的咖啡文化 ☕
+  <div class="vocab-section section-title" id="kn-vocab">
+    <div class="vocab-header">
+      <span class="vocab-emoji st-icon">📖</span>
+      <div><h3>本篇出现的词汇</h3></div>
     </div>
-    <a class="next-btn" href="#">下一篇：首尔咖啡文化 →</a>
-    <div class="next-articles">
-      <div class="next-tag">🍜 韩国街头小吃地图</div>
-      <div class="next-tag">🎎 韩国节日完全手册</div>
-      <div class="next-tag">📺 韩剧里的文化密码</div>
+    <div class="vocab-list">
+      <div class="vocab-item phrase-item"><div class="vocab-ko phrase-ko">편의점</div><div class="vocab-roman">pyeon-ui-jeom</div><div class="vocab-cn phrase-zh">便利店</div><div class="vocab-add add-btn">+</div></div>
+      <div class="vocab-item phrase-item"><div class="vocab-ko phrase-ko">삼각김밥</div><div class="vocab-roman">sam-gak-kim-bap</div><div class="vocab-cn phrase-zh">三角饭团</div><div class="vocab-add add-btn">+</div></div>
+      <div class="vocab-item phrase-item"><div class="vocab-ko phrase-ko">컵라면</div><div class="vocab-roman">keop-ra-myeon</div><div class="vocab-cn phrase-zh">杯面</div><div class="vocab-add add-btn">+</div></div>
+      <div class="vocab-item phrase-item"><div class="vocab-ko phrase-ko">떡볶이</div><div class="vocab-roman">tteok-bokk-i</div><div class="vocab-cn phrase-zh">炒年糕</div><div class="vocab-add add-btn">+</div></div>
+      <div class="vocab-item phrase-item"><div class="vocab-ko phrase-ko">순대</div><div class="vocab-roman">sun-dae</div><div class="vocab-cn phrase-zh">血肠</div><div class="vocab-add add-btn">+</div></div>
+      <div class="vocab-item phrase-item"><div class="vocab-ko phrase-ko">맥주</div><div class="vocab-roman">maek-ju</div><div class="vocab-cn phrase-zh">啤酒</div><div class="vocab-add add-btn">+</div></div>
+      <div class="vocab-item phrase-item"><div class="vocab-ko phrase-ko">과자</div><div class="vocab-roman">gwa-ja</div><div class="vocab-cn phrase-zh">零食</div><div class="vocab-add add-btn">+</div></div>
+      <div class="vocab-item phrase-item"><div class="vocab-ko phrase-ko">봉투</div><div class="vocab-roman">bong-tu</div><div class="vocab-cn phrase-zh">袋子</div><div class="vocab-add add-btn">+</div></div>
+      <div class="vocab-item phrase-item"><div class="vocab-ko phrase-ko">택배</div><div class="vocab-roman">taek-bae</div><div class="vocab-cn phrase-zh">快递</div><div class="vocab-add add-btn">+</div></div>
+      <div class="vocab-item phrase-item"><div class="vocab-ko phrase-ko">영수증</div><div class="vocab-roman">yeong-su-jeung</div><div class="vocab-cn phrase-zh">收据</div><div class="vocab-add add-btn">+</div></div>
+      <div class="vocab-item phrase-item"><div class="vocab-ko phrase-ko">아메리카노</div><div class="vocab-roman">a-me-ri-ka-no</div><div class="vocab-cn phrase-zh">美式咖啡</div><div class="vocab-add add-btn">+</div></div>
+      <div class="vocab-item phrase-item"><div class="vocab-ko phrase-ko">샌드위치</div><div class="vocab-roman">saen-deu-wi-chi</div><div class="vocab-cn phrase-zh">三明治</div><div class="vocab-add add-btn">+</div></div>
     </div>
   </div>
 
 </div>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a02eda72e9591979',t:'MTc3OTk4ODAyMg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>

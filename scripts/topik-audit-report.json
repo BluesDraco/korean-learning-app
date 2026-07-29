@@ -1,0 +1,64 @@
+{
+  "runAt": "2026-06-30T14:56:36.687Z",
+  "model": "deepseek-chat",
+  "total": 4,
+  "passed": 1,
+  "disagreed": 3,
+  "errors": 0,
+  "items": [
+    {
+      "id": "AR10",
+      "level": "advanced",
+      "section": "reading",
+      "number": 10,
+      "correctIdx": 0,
+      "llmPicked": 3,
+      "agree": false,
+      "llmRaw": "3",
+      "prompt": "빈칸에 가장 알맞은 것을 고르십시오.\n\n현상을 분석하는 데 ( ㉠ ) 본질을 꿰뚫는 통찰이 더 중요하다.",
+      "promptZh": "在分析现象上 _____，洞察本质更重要。",
+      "options": [
+        "그치지 않고",
+        "그치지 말고",
+        "그칠 뿐만 아니라",
+        "그칠 것이 아니라"
+      ]
+    },
+    {
+      "id": "BR09",
+      "level": "beginner",
+      "section": "reading",
+      "number": 9,
+      "correctIdx": 1,
+      "llmPicked": 0,
+      "agree": false,
+      "llmRaw": "0",
+      "prompt": "일기예보에서 말하기를, 오늘은 흐리고 _____ 가능성이 높다고 합니다.",
+      "promptZh": "天气预报说今天阴天，_____ 的可能性很高。",
+      "options": [
+        "눈",
+        "비",
+        "바람",
+        "안개"
+      ]
+    },
+    {
+      "id": "BR16",
+      "level": "beginner",
+      "section": "reading",
+      "number": 16,
+      "correctIdx": 0,
+      "llmPicked": 1,
+      "agree": false,
+      "llmRaw": "1",
+      "prompt": "한국에 _____ 한국어를 더 잘하고 싶어요.",
+      "promptZh": "_____ 韩国，想把韩语说得更好。",
+      "options": [
+        "가면",
+        "가서",
+        "가니까",
+        "가지만"
+      ]
+    }
+  ]
+}

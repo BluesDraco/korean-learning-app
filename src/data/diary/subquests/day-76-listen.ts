@@ -1,0 +1,29 @@
+import type { ListenSubQuestData } from '@/types/tori-subquest';
+
+/** Day 76 · 3-2 귀 트이기 · ~았/었지만 + 부사 · 여행 归来 */
+export const day76Listen: ListenSubQuestData = {
+  day: 16, level: 'advanced', idx: 2, kind: 'listen',
+  koTitle: '귀 트이기',
+  subtitle: 'KTX 창가 · 짧았지만 진하게 배웠어요',
+
+  meaning: [
+    { id: 'd76-l2-m1', audioKo: '짧았지만 진하게 배웠어요.',                                  choices: [{ text: '虽短但学得浓。',                          correct: true }, { text: '又短又没学到。',                    correct: false }, { text: '很长学得多。',                      correct: false }, { text: '没时间学。',                        correct: false }], explain: '~았지만 + 부사 진하게' },
+    { id: 'd76-l2-m2', audioKo: '토리, 많이 컸다.',                                            choices: [{ text: '兔莉，长大很多。',                        correct: true }, { text: '兔莉，回来了。',                    correct: false }, { text: '兔莉，累了。',                      correct: false }, { text: '兔莉，走开。',                      correct: false }], explain: 'Haru 的话 · 크다 → 컸다' },
+    { id: 'd76-l2-m3', audioKo: '진짜 기념품은 마음속에 있어요.',                              choices: [{ text: '真正的纪念品在心里。',                    correct: true }, { text: '纪念品很贵。',                      correct: false }, { text: '忘了买纪念品。',                    correct: false }, { text: '纪念品丢了。',                      correct: false }], explain: '기념품 + 마음속에 있다' },
+    { id: 'd76-l2-m4', audioKo: '벌써 서울에 도착했어요.',                                      choices: [{ text: '已经到首尔了。',                          correct: true }, { text: '还没到首尔。',                      correct: false }, { text: '不去首尔。',                        correct: false }, { text: '想去首尔。',                        correct: false }], explain: '벌써 + 도착하다' },
+    { id: 'd76-l2-m5', audioKo: '더 큰 자신을 데려왔어요.',                                     choices: [{ text: '带回了更大的自己。',                      correct: true }, { text: '带了朋友来。',                      correct: false }, { text: '把自己留下了。',                    correct: false }, { text: '忘了自己。',                        correct: false }], explain: '더 큰 자신 + 데려오다' },
+  ],
+
+  cloze: [
+    { id: 'd76-l2-c1', audioKo: '짧았지만 진하게 배웠어요.',   clozeParts: ['', ' 진하게 배웠어요.'],   choices: [{ text: '짧았지만', correct: true }, { text: '짧아서',    correct: false }, { text: '짧으면',    correct: false }, { text: '짧겠지만', correct: false }], explain: '过去转折 ~았지만' },
+    { id: 'd76-l2-c2', audioKo: '힘들었지만 즐겁게 걸었어요.',  clozeParts: ['힘들었지만 ', ' 걸었어요.'], choices: [{ text: '즐겁게', correct: true }, { text: '즐거워서',  correct: false }, { text: '즐겁다',    correct: false }, { text: '즐거우면',  correct: false }], explain: '형용사 → 부사 즐겁게' },
+    { id: 'd76-l2-c3', audioKo: '벌써 서울에 도착했어요.',      clozeParts: ['', ' 서울에 도착했어요.'], choices: [{ text: '벌써',     correct: true }, { text: '아직',      correct: false }, { text: '아마',      correct: false }, { text: '별로',      correct: false }], explain: '벌써 · 已经' },
+    { id: 'd76-l2-c4', audioKo: '더 큰 자신을 데려왔어요.',      clozeParts: ['더 큰 자신', ' 데려왔어요.'], choices: [{ text: '을',       correct: true }, { text: '이',        correct: false }, { text: '에',        correct: false }, { text: '은',        correct: false }], explain: '자신 + 宾格 을' },
+  ],
+
+  reply: [
+    { id: 'd76-l2-r1', audioKo: '이번 여행 어땠어?',                                          promptZh: 'Haru 问这次旅行怎么样。你想说"虽短但学得很浓"，最自然的一句？',                choices: [{ text: '짧았지만 진하게 많이 배웠어.',                                          correct: true }, { text: '몰라.',                                  correct: false }, { text: '얼마예요?',                              correct: false }, { text: '싫어.',                                  correct: false }], explain: '반말 + ~았지만 + 부사' },
+    { id: 'd76-l2-r2', audioKo: '혼자 다녀서 안 힘들었어?',                                    promptZh: '朋友问你一个人跑不累吗。你想说"虽累但走得快乐"，最自然的一句？',                    choices: [{ text: '힘들었지만 즐겁게 다녔어.',                                          correct: true }, { text: '하나도 안 다녔어.',                    correct: false }, { text: '얼마예요?',                              correct: false }, { text: '몰라.',                                  correct: false }], explain: '힘들었지만 + 즐겁게' },
+    { id: 'd76-l2-r3', audioKo: '뭐가 제일 기억에 남아?',                                      promptZh: 'Minji 问你最难忘的是什么。你想说"Haru 说的「长大了」那句"，最自然的一句？',                        choices: [{ text: '하루가 "많이 컸다"고 한 말이 제일 기억에 남아.',                                  correct: true }, { text: '아무것도 기억 안 나.',                    correct: false }, { text: '얼마예요?',                              correct: false }, { text: '몰라.',                                  correct: false }], explain: '~고 한 말 · 引用' },
+  ],
+};

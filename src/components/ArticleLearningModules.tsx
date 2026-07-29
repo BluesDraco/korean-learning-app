@@ -4,14 +4,17 @@ import { useState, useCallback } from 'react';
 import { Volume2, Check, X, Lightbulb, BookOpen, Edit3, ChevronDown } from 'lucide-react';
 import type { ArticleLearningData } from '@/data/articleLearning';
 import { speak, speakWord } from '@/lib/tts';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 
 export default function ArticleLearningModules({ data }: { data: ArticleLearningData }) {
+  const { lang } = useLang();
   return (
-    <div className="mt-10 space-y-6 max-w-2xl">
+    <div className="mt-10 space-y-6 max-w-2xl md:max-w-none">
       {/* Section divider */}
       <div className="flex items-center gap-3">
         <div className="h-px flex-1 bg-[var(--border-color)]" />
-        <span className="text-xs font-medium text-[var(--text-muted)] tracking-wider">📚 深度学习模块</span>
+        <span className="text-xs font-medium text-[var(--text-muted)] tracking-wider">{t('artmod.section', lang)}</span>
         <div className="h-px flex-1 bg-[var(--border-color)]" />
       </div>
 
@@ -25,17 +28,18 @@ export default function ArticleLearningModules({ data }: { data: ArticleLearning
 // ── 读前：关键词 ──────────────────────────────────────────
 
 function PreReadingKeywords({ keywords }: { keywords: ArticleLearningData['keywords'] }) {
+  const { lang } = useLang();
   const [expanded, setExpanded] = useState(true);
 
   return (
-    <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl overflow-hidden">
+    <div className="alm-keywords bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl overflow-hidden">
       <button
         onClick={() => setExpanded(!expanded)}
         className="w-full flex items-center gap-2 px-5 py-4 hover:bg-[var(--bg-card-hover)] transition-colors"
       >
         <BookOpen size={18} className="text-[var(--pink-primary)]" />
-        <span className="font-semibold text-[var(--text-primary)]">读前 · 本篇关键词</span>
-        <span className="text-xs text-[var(--text-muted)] ml-1">({keywords.length}个)</span>
+        <span className="font-semibold text-[var(--text-primary)]">{t('artmod.keywords_title', lang)}</span>
+        <span className="text-xs text-[var(--text-muted)] ml-1">{t('artmod.count', lang, { n: keywords.length })}</span>
         <ChevronDown
           size={16}
           className={`ml-auto text-[var(--text-muted)] transition-transform ${expanded ? '' : '-rotate-90'}`}
@@ -48,8 +52,8 @@ function PreReadingKeywords({ keywords }: { keywords: ArticleLearningData['keywo
             <div
               key={kw.korean}
               className="bg-[var(--bg-input)]/60 rounded-xl p-3 group cursor-pointer hover:bg-[var(--pink-primary)]/8 transition-colors"
-              onClick={() => speakWord(kw.korean, 0.75)}
-              title="点击听发音"
+              onClick={() => speakWord(kw.korean)}
+              title={t('artmod.tap_to_hear', lang)}
             >
               <div className="flex items-center gap-1.5 mb-1">
                 <span className="text-sm font-bold text-[var(--text-primary)]">{kw.korean}</span>
@@ -68,6 +72,7 @@ function PreReadingKeywords({ keywords }: { keywords: ArticleLearningData['keywo
 // ── 读后：理解题 ──────────────────────────────────────────
 
 function PostReadingQuiz({ quiz }: { quiz: ArticleLearningData['quiz'] }) {
+  const { lang } = useLang();
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [submitted, setSubmitted] = useState(false);
   const [expanded, setExpanded] = useState(true);
@@ -96,8 +101,8 @@ function PostReadingQuiz({ quiz }: { quiz: ArticleLearningData['quiz'] }) {
         className="w-full flex items-center gap-2 px-5 py-4 hover:bg-[var(--bg-card-hover)] transition-colors"
       >
         <Lightbulb size={18} className="text-[var(--amber-soft)]" />
-        <span className="font-semibold text-[var(--text-primary)]">读后 · 理解测验</span>
-        <span className="text-xs text-[var(--text-muted)] ml-1">({quiz.length}题)</span>
+        <span className="font-semibold text-[var(--text-primary)]">{t('artmod.quiz_title', lang)}</span>
+        <span className="text-xs text-[var(--text-muted)] ml-1">{t('artmod.quiz_count', lang, { n: quiz.length })}</span>
         {submitted && (
           <span className={`text-xs font-bold ml-2 ${correctCount === quiz.length ? 'text-[var(--mint-soft)]' : 'text-[var(--pink-primary)]'}`}>
             {correctCount}/{quiz.length}
@@ -160,22 +165,22 @@ function PostReadingQuiz({ quiz }: { quiz: ArticleLearningData['quiz'] }) {
                 disabled={!allAnswered}
                 className="text-xs px-4 py-2 rounded-xl bg-[var(--pink-primary)] text-white font-medium hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                提交答案
+                {t('artmod.submit', lang)}
               </button>
             ) : (
               <button
                 onClick={handleReset}
                 className="text-xs px-4 py-2 rounded-xl bg-[var(--bg-input)] text-[var(--text-secondary)] font-medium hover:text-[var(--text-primary)] transition-colors"
               >
-                重新作答
+                {t('artmod.retry', lang)}
               </button>
             )}
             {!allAnswered && !submitted && (
-              <span className="text-[11px] text-[var(--text-muted)]">请回答全部题目</span>
+              <span className="text-[11px] text-[var(--text-muted)]">{t('artmod.answer_all', lang)}</span>
             )}
             {submitted && (
               <span className="text-xs text-[var(--text-muted)]">
-                {correctCount === quiz.length ? '🎉 全部正确！' : `答对 ${correctCount}/${quiz.length} 题`}
+                {correctCount === quiz.length ? t('artmod.all_correct', lang) : t('artmod.score', lang, { correct: correctCount, total: quiz.length })}
               </span>
             )}
           </div>
@@ -188,6 +193,7 @@ function PostReadingQuiz({ quiz }: { quiz: ArticleLearningData['quiz'] }) {
 // ── 输出练习 ──────────────────────────────────────────────
 
 function OutputTask({ prompt, example }: { prompt: string; example: string }) {
+  const { lang } = useLang();
   const [showExample, setShowExample] = useState(false);
   const [expanded, setExpanded] = useState(true);
 
@@ -198,7 +204,7 @@ function OutputTask({ prompt, example }: { prompt: string; example: string }) {
         className="w-full flex items-center gap-2 px-5 py-4 hover:bg-[var(--bg-card-hover)] transition-colors"
       >
         <Edit3 size={18} className="text-[var(--purple-soft)]" />
-        <span className="font-semibold text-[var(--text-primary)]">输出 · 用今天学到的表达造句</span>
+        <span className="font-semibold text-[var(--text-primary)]">{t('artmod.output_title', lang)}</span>
         <ChevronDown
           size={16}
           className={`ml-auto text-[var(--text-muted)] transition-transform ${expanded ? '' : '-rotate-90'}`}
@@ -216,12 +222,12 @@ function OutputTask({ prompt, example }: { prompt: string; example: string }) {
             className="text-xs text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors flex items-center gap-1"
           >
             <Lightbulb size={12} />
-            {showExample ? '隐藏参考例句' : '看参考例句'}
+            {showExample ? t('artmod.hide_example', lang) : t('artmod.show_example', lang)}
           </button>
 
           {showExample && (
             <div className="bg-[var(--mint-soft)]/10 border border-[var(--mint-soft)]/20 rounded-xl p-4">
-              <p className="text-xs text-[var(--text-muted)] mb-1">参考例句：</p>
+              <p className="text-xs text-[var(--text-muted)] mb-1">{t('artmod.example_label', lang)}</p>
               <p className="text-sm text-[var(--mint-soft)] leading-relaxed whitespace-pre-line">{example}</p>
             </div>
           )}

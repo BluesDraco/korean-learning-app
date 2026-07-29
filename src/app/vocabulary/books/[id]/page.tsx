@@ -1,22 +1,26 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
+import { useIsDesktop } from '@/lib/useIsMobile';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, BookOpen, Plus, Trash2, Volume2, Search, Loader2, CheckSquare, Square, FolderInput, X, Headphones, ChevronUp, ChevronDown, BookmarkPlus } from 'lucide-react';
+import { ArrowLeft, BookOpen, Plus, Trash2, Volume2, Search, Loader2, CheckSquare, Square, FolderInput, X, ChevronDown, BookmarkPlus, Check, Eye, EyeOff } from 'lucide-react';
 import { db } from '@/lib/db';
 import { AddToBookModal } from '@/components/AddToBookModal';
-import { WordAudioPlayer } from '@/components/WordAudioPlayer';
 import { speak, speakWord } from '@/lib/tts';
 import { TappableText } from '@/components/TappableText';
+import GrammarExplainBubble from '@/components/GrammarExplainBubble';
 import { getEntryByKorean } from '@/data/vocabulary/index';
+import { displayRomanHyphen } from '@/lib/dictionary';
+import { t } from '@/lib/i18n';
+import { useLang } from '@/components/LangProvider';
 import type { WordBook, Word, WordEntry } from '@/types';
-import { useIsDesktop } from '@/lib/useIsMobile';
 
 export default function BookDetailPage() {
-  const isWideViewport = useIsDesktop();
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
+  const { lang } = useLang();
+  const isWideViewport = useIsDesktop();
   const [book, setBook] = useState<WordBook | null>(null);
   const [words, setWords] = useState<Word[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,9 +31,72 @@ export default function BookDetailPage() {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [allBooks, setAllBooks] = useState<{ id: string; name: string }[]>([]);
   const [showMoveSheet, setShowMoveSheet] = useState(false);
-  const [showAudioPlayer, setShowAudioPlayer] = useState(false);
   const [savedSentenceIds, setSavedSentenceIds] = useState<Set<string>>(new Set());
   const [entriesMap, setEntriesMap] = useState<Map<string, WordEntry>>(new Map());
+  const [filter, setFilter] = useState<'all' | 'learning'>('all');
+  const [showCn, setShowCn] = useState(true);
+
+  useEffect(() => {
+    try { if (localStorage.getItem('vocab_show_cn') === '0') setShowCn(false); } catch { /* ignore */ }
+  }, []);
+
+  const toggleCn = () => {
+    setShowCn(prev => {
+      const next = !prev;
+      try { localStorage.setItem('vocab_show_cn', next ? '1' : '0'); } catch { /* ignore */ }
+      return next;
+    });
+  };
+
+  // 按义项的"生成例句"加载态：key = `${wordId}:${meaningIndex}`
+  const [meaningExState, setMeaningExState] = useState<Record<string, 'idle' | 'loading' | 'empty' | 'error'>>({});
+
+  const generateMeaningExamples = async (word: Word, meaningIndex: number) => {
+    const m = word.meanings?.[meaningIndex];
+    if (!m) return;
+    const key = `${word.id}:${meaningIndex}`;
+    setMeaningExState((prev) => ({ ...prev, [key]: 'loading' }));
+    try {
+      const res = await fetch('/api/ai/meaning-examples', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          word: word.word,
+          baseForm: word.word,
+          meaningChinese: m.chinese,
+          meaningPartOfSpeech: m.partOfSpeech || '',
+          allMeanings: (word.meanings || []).map((x) => x.chinese),
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setMeaningExState((prev) => ({ ...prev, [key]: 'error' }));
+        return;
+      }
+      const list = Array.isArray(data.examples) ? data.examples : [];
+      if (list.length === 0) {
+        setMeaningExState((prev) => ({ ...prev, [key]: 'empty' }));
+        return;
+      }
+      const newExamples = list.map((ex: { korean: string; chinese: string }) => ({
+        text: ex.korean,
+        translation: ex.chinese,
+        source: 'manual' as const,
+      }));
+      // 写入 word.meanings[i].examples 并持久化
+      const newMeanings = (word.meanings || []).map((mm, idx) => idx === meaningIndex ? { ...mm, examples: newExamples } : mm);
+      try {
+        await db.words.update(word.id, { meanings: newMeanings });
+      } catch {
+        setMeaningExState((prev) => ({ ...prev, [key]: 'error' }));
+        return;
+      }
+      setWords((prev) => prev.map((w) => w.id === word.id ? { ...w, meanings: newMeanings } : w));
+      setMeaningExState((prev) => { const next = { ...prev }; delete next[key]; return next; });
+    } catch {
+      setMeaningExState((prev) => ({ ...prev, [key]: 'error' }));
+    }
+  };
 
   useEffect(() => {
     const needEntry = words.filter(w => {
@@ -52,7 +119,7 @@ export default function BookDetailPage() {
     if (savedSentenceIds.has(korean)) return;
     const existing = await db.sentences.where('korean').equals(korean).first().catch(() => null);
     if (!existing) {
-      await db.sentences.add({ id: crypto.randomUUID(), korean, chinese, source_type: 'vocabulary', source_id: 'book-' + id, source_title: sourceTitle, created_at: new Date().toISOString() }).catch(() => {});
+      await db.sentences.add({ id: crypto.randomUUID(), korean, chinese, source_type: 'vocabulary', source_id: 'book-' + id, source_title: sourceTitle, created_at: Date.now() }).catch(() => {});
     }
     setSavedSentenceIds((prev) => new Set(prev).add(korean));
   };
@@ -99,46 +166,77 @@ export default function BookDetailPage() {
 
   const handleBatchRemove = async () => {
     if (!book || selected.size === 0) return;
-    if (!confirm(`确定从单词本中移除这 ${selected.size} 个单词？`)) return;
+    if (!confirm(t('vocab.bd_confirm_remove_n', lang, { n: selected.size }))) return;
     const newIds = book.wordIds.filter(wid => !selected.has(wid));
-    await db.wordBooks.update(book.id, { wordIds: newIds, updatedAt: Date.now() }).catch(() => {});
-    setBook({ ...book, wordIds: newIds });
-    setWords(prev => prev.filter(w => !selected.has(w.id)));
+    // 先写库再改 UI：若 DB 失败（401/网络/SQLITE）不改 state，避免刷新后"恢复"
+    try {
+      await db.wordBooks.update(book.id, { wordIds: newIds, updatedAt: Date.now() });
+    } catch (err) {
+      alert(t('vocab.err_remove_prefix', lang) + (err instanceof Error ? err.message : t('vocab.err_retry', lang)));
+      return;
+    }
     setSelected(new Set());
     setManaging(false);
+    // 从服务端重新拉一次，确保 UI 与 DB 一致
+    await load();
   };
 
   const handleMoveToBook = async (targetBookId: string) => {
     if (!book || selected.size === 0) return;
     try {
       const targetBook = await db.wordBooks.get(targetBookId);
-      if (!targetBook) return;
+      if (!targetBook) { setShowMoveSheet(false); return; }
       const newTargetIds = [...new Set([...targetBook.wordIds, ...[...selected]])];
-      await db.wordBooks.update(targetBookId, { wordIds: newTargetIds, updatedAt: Date.now() });
       const newIds = book.wordIds.filter(wid => !selected.has(wid));
+      // 先写目标再删源：若第一步失败词仍在源本，不会丢词
+      await db.wordBooks.update(targetBookId, { wordIds: newTargetIds, updatedAt: Date.now() });
       await db.wordBooks.update(book.id, { wordIds: newIds, updatedAt: Date.now() });
-      setBook({ ...book, wordIds: newIds });
-      setWords(prev => prev.filter(w => !selected.has(w.id)));
-      setSelected(new Set());
-      setManaging(false);
+    } catch (err) {
       setShowMoveSheet(false);
-    } catch {
-      setShowMoveSheet(false);
+      alert(t('vocab.err_move_prefix', lang) + (err instanceof Error ? err.message : t('vocab.err_retry', lang)));
+      return;
+    }
+    setSelected(new Set());
+    setManaging(false);
+    setShowMoveSheet(false);
+    await load();
+  };
+
+  const markMastered = async (word: Word) => {
+    const now = Date.now();
+    try {
+      await db.words.update(word.id, {
+        mastery: 'mastered', srsLevel: 5, interval: 21,
+        nextReview: now + 21 * 86400000, lastReviewed: now,
+      });
+      setWords(prev => prev.map(w => w.id === word.id ? { ...w, mastery: 'mastered' } : w));
+    } catch (err) {
+      alert(t('vocab.err_mark_prefix', lang) + (err instanceof Error ? err.message : t('vocab.err_retry', lang)));
     }
   };
 
   const handleRemoveWord = async (wordId: string) => {
     if (!book) return;
-    if (!confirm('从单词本中移除这个单词？')) return;
+    if (!confirm(t('vocab.bd_confirm_remove_one', lang))) return;
     const newIds = book.wordIds.filter((wid) => wid !== wordId);
-    await db.wordBooks.update(book.id, { wordIds: newIds, updatedAt: Date.now() }).catch(() => {});
-    setBook({ ...book, wordIds: newIds });
-    setWords((prev) => prev.filter((w) => w.id !== wordId));
+    try {
+      await db.wordBooks.update(book.id, { wordIds: newIds, updatedAt: Date.now() });
+    } catch (err) {
+      alert(t('vocab.err_remove_prefix', lang) + (err instanceof Error ? err.message : t('vocab.err_retry', lang)));
+      return;
+    }
+    await load();
   };
 
+  const meaningOf = (w: Word) =>
+    w.meanings?.length ? w.meanings.map((m) => m.chinese).join('；') : w.meaning;
+
+  const baseWords = filter === 'learning' ? words.filter(w => w.mastery !== 'mastered') : words;
   const filteredWords = search
-    ? words.filter((w) => w.word.includes(search) || w.meaning.includes(search) || w.pronunciation.includes(search))
-    : words;
+    ? baseWords.filter((w) => w.word.includes(search) || meaningOf(w).includes(search) || w.pronunciation.includes(search))
+    : baseWords;
+  const masteredCount = words.filter(w => w.mastery === 'mastered').length;
+  const learningCount = words.length - masteredCount;
 
   if (loading) {
     return (
@@ -151,7 +249,7 @@ export default function BookDetailPage() {
   if (!book) return null;
 
   return (
-    <div className={isWideViewport ? 'py-6 max-w-5xl mx-auto px-4 space-y-5 pb-[calc(56px+env(safe-area-inset-bottom,0px)+128px)]' : 'py-4 max-w-2xl mx-auto px-4 space-y-4 pb-[calc(56px+env(safe-area-inset-bottom,0px)+128px)]'}>
+    <div className="py-4 md:py-6 w-full max-w-2xl md:max-w-none mx-auto md:mx-0 px-4 md:px-8 space-y-4 md:space-y-5 pb-[calc(56px+env(safe-area-inset-bottom,0px)+40px)]">
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 20 }}>
         <Link
@@ -164,25 +262,53 @@ export default function BookDetailPage() {
           <ArrowLeft size={20} />
         </Link>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <h1 style={{ fontSize: 22, fontWeight: 800, color: 'var(--color-ink-1)', margin: 0 }}>{book.name}</h1>
+          <h1 style={{ fontSize: 22, fontWeight: 800, color: 'var(--color-ink-1)', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{book.name}</h1>
           <p style={{ fontSize: 13, color: 'var(--color-ink-3)', margin: '2px 0 0' }}>
-            {book.description || `${words.length} 个单词`}
+            {book.description || t('vocab.bd_n_words', lang, { n: words.length })}
           </p>
         </div>
-        <Link
-          href={`/vocabulary/books/${book.id}/flashcards`}
-          style={{
-            display: 'inline-flex', alignItems: 'center', gap: 6, flexShrink: 0,
-            background: 'var(--color-pink-base)', color: '#fff',
-            borderRadius: 'var(--radius-pill)', padding: '10px 18px',
-            fontSize: 13, fontWeight: 700, textDecoration: 'none',
-            boxShadow: 'var(--shadow-sm)',
-          }}
-        >
-          <BookOpen size={16} />
-          开始学习
-        </Link>
       </div>
+
+      {/* Flashcard entry */}
+      <Link
+        href={`/vocabulary/books/${book.id}/flashcards`}
+        className="flex items-center gap-3 p-4 rounded-xl border transition-colors"
+        style={{ background: 'var(--color-pink-soft)', borderColor: 'var(--color-pink-soft)', textDecoration: 'none' }}
+      >
+        <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: 'var(--bg-card)' }}>
+          <BookOpen size={18} style={{ color: 'var(--color-pink-base)' }} />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>{t('vocab.bd_flashcard', lang)}</p>
+          <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>{t('vocab.bd_flashcard_sub', lang)}</p>
+        </div>
+        <ChevronDown size={16} style={{ color: 'var(--text-muted)', transform: 'rotate(-90deg)' }} />
+      </Link>
+
+      {/* Progress stats */}
+      {words.length > 0 && (
+        <div className="grid grid-cols-2 gap-3">
+          <button
+            onClick={() => setFilter(f => f === 'learning' ? 'all' : 'learning')}
+            className="flex flex-col items-start gap-1 p-3 rounded-2xl border transition-colors text-left"
+            style={{
+              background: filter === 'learning' ? 'var(--color-peach-soft)' : 'var(--bg-card)',
+              borderColor: filter === 'learning' ? 'var(--peach-soft)' : 'var(--border-color)',
+            }}
+          >
+            <span className="text-xs text-[var(--text-muted)]">{t('vocab.bd_learning_filter', lang)}{filter === 'learning' ? t('vocab.bd_filtering', lang) : ''}</span>
+            <span className="text-lg font-bold text-[var(--peach-soft)]">{learningCount}</span>
+          </button>
+          <Link
+            href={masteredCount > 0 ? `/vocabulary/books/${book.id}/mastered` : '#'}
+            style={{ pointerEvents: masteredCount > 0 ? 'auto' : 'none', background: 'var(--bg-card)', borderColor: 'var(--border-color)' }}
+            className="flex flex-col items-start gap-1 p-3 rounded-2xl border transition-colors text-left"
+          >
+            <span className="text-xs text-[var(--text-muted)]">{t('vocab.mastered', lang)}</span>
+            <span className="text-lg font-bold text-[var(--mint-soft)]">{masteredCount}</span>
+          </Link>
+        </div>
+      )}
 
       {/* Search + Add */}
       <div className="flex items-center gap-3">
@@ -192,23 +318,33 @@ export default function BookDetailPage() {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="搜索单词..."
+            placeholder={t('vocab.search_word_ph', lang)}
             className="w-full bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl py-2.5 pl-10 pr-4 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--pink-primary)] transition-colors"
           />
         </div>
         {!managing && (
           <button
+            onClick={toggleCn}
+            aria-label={showCn ? t('vocab.show_cn', lang) : t('vocab.hide_cn', lang)}
+            title={showCn ? t('vocab.show_cn', lang) : t('vocab.hide_cn', lang)}
+            className={`shrink-0 w-[42px] h-[42px] rounded-xl flex items-center justify-center transition-colors ${showCn ? 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)]' : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-muted)]'}`}
+          >
+            {showCn ? <Eye size={17} /> : <EyeOff size={17} />}
+          </button>
+        )}
+        {!managing && (
+          <button
             onClick={() => setShowAddModal(true)}
             className="shrink-0 flex items-center gap-1.5 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl px-4 py-2.5 text-sm text-[var(--text-primary)] hover:border-[var(--pink-primary)] transition-colors"
           >
-            <Plus size={16} />添加
+            <Plus size={16} />{t('vocab.bd_add', lang)}
           </button>
         )}
         <button
           onClick={() => { setManaging(!managing); setSelected(new Set()); }}
           className={`shrink-0 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${managing ? 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)]' : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-primary)]'}`}
         >
-          {managing ? '取消' : '管理'}
+          {managing ? t('common.cancel', lang) : t('vocab.manage', lang)}
         </button>
       </div>
 
@@ -217,33 +353,30 @@ export default function BookDetailPage() {
         <div className="text-center py-20">
           <span className="text-6xl block mb-4">📝</span>
           <p className="text-[var(--text-secondary)] text-sm mb-1">
-            {search ? '没有找到匹配的单词' : '这个单词本还是空的'}
+            {search ? t('vocab.no_match_word', lang) : t('vocab.bd_empty', lang)}
           </p>
           <p className="text-[var(--text-muted)] text-xs mb-4">
-            {search ? '换个关键词试试' : '从单词库中添加单词吧'}
+            {search ? t('vocab.try_other_keyword', lang) : t('vocab.bd_empty_hint', lang)}
           </p>
           {!search && (
-            <button onClick={() => setShowAddModal(true)} className="btn-primary">+ 添加单词</button>
+            <button onClick={() => setShowAddModal(true)} className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white" style={{ background: 'var(--color-pink-base)' }}>{t('vocab.bd_add_word', lang)}</button>
           )}
         </div>
       ) : (
-        <div className="space-y-2">
+        <>
           {managing && (
-            <button onClick={toggleSelectAll} className="text-xs text-[var(--pink-primary)] font-medium">
-              {selected.size === filteredWords.length ? '取消全选' : `全选 (${filteredWords.length})`}
+            <button onClick={toggleSelectAll} className="text-xs text-[var(--pink-primary)] font-medium min-h-11 px-3 bg-transparent border-none cursor-pointer">
+              {selected.size === filteredWords.length ? t('vocab.cancel_select_all', lang) : t('vocab.select_all_n', lang, { n: filteredWords.length })}
             </button>
           )}
-          {filteredWords.map((word) => {
+          {(() => {
+          const renderCard = (word: typeof filteredWords[number]) => {
             const isExpanded = expandedId === word.id;
-            const masteryLabels: Record<string, string> = {
-              new: '新词', learning: '学习中', reviewing: '复习中', mastered: '已掌握',
-            };
-            const masteryColors: Record<string, string> = {
-              new: 'bg-[var(--pink-primary)]/8 text-[var(--pink-primary)]',
-              learning: 'bg-[var(--peach-soft)]/15 text-[var(--peach-soft)]',
-              reviewing: 'bg-[var(--pink-primary)]/15 text-[var(--pink-primary)]',
-              mastered: 'bg-[var(--mint-soft)]/15 text-[var(--mint-soft)]',
-            };
+            const isMastered = word.mastery === 'mastered';
+            const masteryLabel = isMastered ? t('vocab.mastered', lang) : t('vocab.learning', lang);
+            const masteryColor = isMastered
+              ? 'bg-[var(--mint-soft)]/15 text-[var(--mint-soft)]'
+              : 'bg-[var(--peach-soft)]/15 text-[var(--peach-soft)]';
             return (
               <div
                 key={word.id}
@@ -252,7 +385,7 @@ export default function BookDetailPage() {
               >
                 {/* Collapsed row */}
                 <div
-                  className="flex items-center gap-3 p-3 cursor-pointer hover:bg-[var(--bg-card-hover)] transition-colors"
+                  className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-[var(--bg-card-hover)] transition-colors"
                   onClick={managing ? undefined : () => setExpandedId(isExpanded ? null : word.id)}
                 >
                   {managing && (
@@ -261,41 +394,54 @@ export default function BookDetailPage() {
                     </div>
                   )}
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-bold text-[var(--text-primary)] text-sm">{word.word}</span>
-                      <span className="text-xs text-[var(--pink-primary)] bg-[var(--pink-primary)]/5 px-1.5 py-0.5 rounded">
-                        [{word.pronunciation}]
+                    <div className="flex items-baseline gap-2.5 min-w-0">
+                      <span className="ko-text font-bold text-[var(--text-primary)] text-[19px] leading-tight whitespace-nowrap">{word.word}</span>
+                      <span className="min-w-0 truncate text-[12.5px] font-semibold tracking-wide text-[var(--pink-primary)]">
+                        [{displayRomanHyphen(word.pronunciation, word.word)}]
                       </span>
-                      {word.source === 'yonsei' && (
-                        <span className="text-xs px-1.5 py-0.5 rounded bg-[var(--purple-soft)]/15 text-[var(--purple-soft)] shrink-0 font-medium">
-                          延世单词
-                        </span>
-                      )}
                     </div>
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className="text-xs text-[var(--text-secondary)] truncate">{word.meaning}</span>
+                    <div className="flex items-center gap-2 mt-2 min-w-0">
+                      {word.partOfSpeech && (
+                        <span className="shrink-0 text-[10.5px] font-semibold px-1.5 py-0.5 rounded bg-[var(--bg-accent)] text-[var(--text-muted)]">{word.partOfSpeech}</span>
+                      )}
+                      {showCn ? (
+                        <span className="text-sm text-[var(--text-primary)] leading-snug truncate">{meaningOf(word)}</span>
+                      ) : (
+                        <span className="text-xs text-[var(--text-muted)] leading-snug truncate">{t('vocab.tap_reveal_cn', lang)}</span>
+                      )}
                       {!managing && (
-                        <span className={`text-[10px] px-1.5 py-0.5 rounded-full shrink-0 font-medium ${masteryColors[word.mastery]}`}>
-                          {masteryLabels[word.mastery]}
+                        <span className={`text-[10.5px] px-2 py-0.5 rounded-full shrink-0 font-semibold ${masteryColor}`}>
+                          {masteryLabel}
                         </span>
                       )}
                     </div>
                   </div>
                   {!managing && (
-                    <div className="flex items-center gap-1 shrink-0">
+                    <div className="flex items-center gap-0.5 shrink-0 ml-2">
                       <button
-                        onClick={(e) => { e.stopPropagation(); speakWord(word.word, 0.8); }}
-                        className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors"
+                        onClick={(e) => { e.stopPropagation(); speakWord(word.word); }}
+                        className="no-touch-min w-9 h-9 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors flex items-center justify-center"
+                        aria-label={t('vocab.play', lang)}
                       >
-                        <Volume2 size={14} />
+                        <Volume2 size={17} />
                       </button>
+                      {!isMastered && (
+                        <button
+                          onClick={(e) => { e.stopPropagation(); markMastered(word); }}
+                          className="no-touch-min w-9 h-9 rounded-lg hover:bg-[var(--mint-soft)]/15 text-[var(--text-muted)] hover:text-[var(--mint-soft)] transition-colors flex items-center justify-center"
+                          aria-label={t('vocab.bd_mark_mastered', lang)}
+                          title={t('vocab.bd_mark_mastered', lang)}
+                        >
+                          <Check size={17} />
+                        </button>
+                      )}
                       <button
                         onClick={(e) => { e.stopPropagation(); handleRemoveWord(word.id); }}
-                        className="p-1.5 rounded-lg hover:bg-[var(--color-danger-bg)] text-[var(--text-muted)] hover:text-[var(--color-danger)] transition-colors"
+                        className="no-touch-min w-9 h-9 rounded-lg hover:bg-[var(--color-danger-bg)] text-[var(--text-muted)] hover:text-[var(--color-danger)] transition-colors flex items-center justify-center"
+                        aria-label={t('vocab.delete', lang)}
                       >
-                        <Trash2 size={14} />
+                        <Trash2 size={16} />
                       </button>
-                      {isExpanded ? <ChevronUp size={14} className="text-[var(--text-muted)]" /> : <ChevronDown size={14} className="text-[var(--text-muted)]" />}
                     </div>
                   )}
                 </div>
@@ -308,29 +454,91 @@ export default function BookDetailPage() {
                     ? validExamples
                     : entry?.examples.slice(0, 3).map(ex => ({ text: ex.korean, translation: ex.chinese, source: 'dictionary' as const })) ?? [];
                   return (
-                  <div className="px-4 pb-4 border-t border-[var(--border-color)] pt-3 space-y-2 animate-fade-in">
-                    <p className="text-sm font-medium text-[var(--text-primary)]">{word.meaning}</p>
-                    {examples.length > 0 && (
-                      <div className="space-y-1.5">
-                        {examples.slice(0, 3).map((ex, i) => (
-                          <div key={i} className="flex items-start gap-2 bg-[var(--bg-input)] rounded-lg px-3 py-2">
-                            <div className="flex-1 min-w-0">
-                              <TappableText text={ex.text} className="text-sm text-[var(--text-primary)]" source="单词本" highlightWord={word.word} />
-                              <p className="text-xs text-[var(--text-secondary)] mt-0.5">{ex.translation}</p>
+                  <div className="px-4 pb-4 border-t border-[var(--border-color)] pt-3 space-y-3 animate-fade-in">
+                    {word.meanings?.length ? (
+                      <div className="space-y-2">
+                        {word.meanings.map((m, i) => {
+                          const exKey = `${word.id}:${i}`;
+                          const exState = meaningExState[exKey];
+                          const hasExamples = !!m.examples && m.examples.length > 0;
+                          return (
+                            <div key={i} className="bg-[var(--bg-input)] rounded-lg px-3 py-2">
+                              <div className="flex items-center gap-2">
+                                <span className="text-[var(--text-muted)] text-xs">{i + 1}.</span>
+                                <span className="flex-1 min-w-0 break-words text-sm font-medium text-[var(--text-primary)]">{m.chinese}</span>
+                                {m.partOfSpeech && (
+                                  <span className="text-xs text-[var(--text-muted)] font-normal">{m.partOfSpeech}</span>
+                                )}
+                                {!hasExamples && (
+                                  <button
+                                    onClick={(e) => { e.stopPropagation(); generateMeaningExamples(word, i); }}
+                                    disabled={exState === 'loading'}
+                                    aria-label={t('vocab.bd_gen_example', lang)}
+                                    title={t('vocab.bd_gen_example', lang)}
+                                    className="min-w-11 min-h-11 flex items-center justify-center rounded hover:bg-[var(--bg-accent)] text-[var(--pink-primary)] disabled:opacity-40"
+                                  >
+                                    {exState === 'loading' ? <Loader2 size={13} className="animate-spin" /> : <BookmarkPlus size={13} />}
+                                  </button>
+                                )}
+                              </div>
+                              {hasExamples && (
+                                <div className="mt-2 ml-5 space-y-2 pl-2.5" style={{ borderLeft: '2px solid var(--color-pink-soft)' }}>
+                                  {m.examples!.map((ex, j) => (
+                                    <div key={j}>
+                                      <div className="flex items-start gap-2">
+                                        <div className="flex-1 min-w-0">
+                                          <TappableText text={ex.text} className="text-[15px] leading-relaxed text-[var(--text-primary)]" source="单词本" highlightWord={word.word} />
+                                          <p className="text-[13px] text-[var(--text-secondary)] mt-1 leading-snug">{ex.translation}</p>
+                                        </div>
+                                        <button
+                                          onClick={(e) => { e.stopPropagation(); speakWord(ex.text); }}
+                                          className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-[var(--bg-accent)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] shrink-0"
+                                          aria-label={t('vocab.speak', lang)}
+                                        >
+                                          <Volume2 size={15} />
+                                        </button>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                              {exState === 'empty' && (
+                                <p className="mt-1 ml-5 text-[11px] text-[var(--text-muted)] italic">{t('vocab.bd_no_example', lang)}</p>
+                              )}
+                              {exState === 'error' && (
+                                <p className="mt-1 ml-5 text-[11px] text-red-400">{t('vocab.bd_gen_failed', lang)}</p>
+                              )}
                             </div>
-                            <button
-                              onClick={(e) => { e.stopPropagation(); speak(ex.text, 0.8); }}
-                              className="p-1 rounded-lg hover:bg-[var(--bg-accent)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] shrink-0"
-                            >
-                              <Volume2 size={14} />
-                            </button>
-                            <button
-                              onClick={(e) => { e.stopPropagation(); saveSentence(ex.text, ex.translation, word.word); }}
-                              className="p-1 rounded-lg hover:bg-[var(--bg-accent)] transition-colors shrink-0"
-                              style={{ color: savedSentenceIds.has(ex.text) ? 'var(--pink-primary)' : 'var(--text-muted)' }}
-                            >
-                              <BookmarkPlus size={14} fill={savedSentenceIds.has(ex.text) ? 'currentColor' : 'none'} />
-                            </button>
+                          );
+                        })}
+                      </div>
+                    ) : null}
+                    {examples.length > 0 && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
+                        {examples.slice(0, 4).map((ex, i) => (
+                          <div key={i} className="bg-[var(--bg-input)] rounded-lg px-3 py-2">
+                            <div className="flex items-start gap-2">
+                              <div className="flex-1 min-w-0">
+                                <TappableText text={ex.text} className="text-[15px] leading-relaxed text-[var(--text-primary)]" source="单词本" highlightWord={word.word} />
+                                <p className="text-[13px] text-[var(--text-secondary)] mt-1 leading-snug">{ex.translation}</p>
+                              </div>
+                              <button
+                                onClick={(e) => { e.stopPropagation(); speakWord(ex.text); }}
+                                className="p-1 rounded-lg hover:bg-[var(--bg-accent)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] shrink-0"
+                              >
+                                <Volume2 size={14} />
+                              </button>
+                              <button
+                                onClick={(e) => { e.stopPropagation(); saveSentence(ex.text, ex.translation, word.word); }}
+                                className="p-1 rounded-lg hover:bg-[var(--bg-accent)] transition-colors shrink-0"
+                                style={{ color: savedSentenceIds.has(ex.text) ? 'var(--pink-primary)' : 'var(--text-muted)' }}
+                              >
+                                <BookmarkPlus size={14} fill={savedSentenceIds.has(ex.text) ? 'currentColor' : 'none'} />
+                              </button>
+                            </div>
+                            <div onClick={(e) => e.stopPropagation()}>
+                              <GrammarExplainBubble sentence={ex.text} translation={ex.translation} variant="compact" />
+                            </div>
                           </div>
                         ))}
                       </div>
@@ -340,25 +548,18 @@ export default function BookDetailPage() {
                 })()}
               </div>
             );
-          })}
-        </div>
-      )}
-
-      {/* Listen button — fixed above tab bar */}
-      {words.length > 0 && !showAddModal && !showMoveSheet && (
-        <div
-          className="fixed left-0 right-0 px-4 z-[80] md:left-[208px]"
-          style={{ bottom: 'calc(56px + env(safe-area-inset-bottom, 0px) + 8px)' }}
-        >
-          <button
-            onClick={() => setShowAudioPlayer(!showAudioPlayer)}
-            className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl font-bold text-sm transition-all shadow-lg"
-            style={{ background: 'linear-gradient(135deg, #FFE4EC, #EAF8F5)', color: 'var(--pink-primary)' }}
-          >
-            <Headphones size={18} />
-            {showAudioPlayer ? '关闭听单词' : '听单词（一遍韩语一遍中文）'}
-          </button>
-        </div>
+          };
+          if (isWideViewport) {
+            return (
+              <div className="grid grid-cols-2 gap-3 items-start">
+                <div className="space-y-3">{filteredWords.filter((_, i) => i % 2 === 0).map(renderCard)}</div>
+                <div className="space-y-3">{filteredWords.filter((_, i) => i % 2 === 1).map(renderCard)}</div>
+              </div>
+            );
+          }
+          return <div className="space-y-2">{filteredWords.map(renderCard)}</div>;
+          })()}
+        </>
       )}
 
       {/* Add words modal */}
@@ -375,20 +576,20 @@ export default function BookDetailPage() {
       {managing && selected.size > 0 && (
         <div className="fixed left-0 right-0 z-[60] flex items-center justify-center gap-3 px-4 md:left-[108px] md:bottom-3" style={{ bottom: 'calc(56px + env(safe-area-inset-bottom, 0px) + 12px)' }}>
           <div className="flex items-center gap-3 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl px-4 py-3 shadow-lg">
-            <span className="text-xs text-[var(--text-secondary)]">已选 {selected.size} 个</span>
+            <span className="text-xs text-[var(--text-secondary)]">{t('vocab.selected_n', lang, { n: selected.size })}</span>
             <button
               onClick={() => setShowMoveSheet(true)}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--bg-input)] text-sm text-[var(--text-primary)] hover:border-[var(--pink-primary)]"
             >
               <FolderInput size={15} />
-              移到单词本
+              {t('vocab.move_to_book', lang)}
             </button>
             <button
               onClick={handleBatchRemove}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--color-danger-bg)] text-sm text-[var(--color-danger)]"
             >
               <Trash2 size={15} />
-              批量删除
+              {t('vocab.batch_delete', lang)}
             </button>
           </div>
         </div>
@@ -396,14 +597,14 @@ export default function BookDetailPage() {
 
       {/* Move sheet */}
       {showMoveSheet && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40" style={{ paddingBottom: 'calc(56px + env(safe-area-inset-bottom, 0px))' }} onClick={() => setShowMoveSheet(false)}>
-          <div className="w-full max-w-lg bg-[var(--bg-card)] rounded-t-2xl px-5 pt-5 pb-[calc(20px+env(safe-area-inset-bottom,0px))] flex flex-col max-h-[70dvh]" onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40" onClick={() => setShowMoveSheet(false)}>
+          <div className="w-full max-w-lg bg-[var(--bg-card)] rounded-t-2xl px-5 pt-5 pb-[calc(56px+env(safe-area-inset-bottom,0px))] flex flex-col max-h-[70dvh]" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between shrink-0 mb-3">
-              <span className="text-sm font-medium text-[var(--text-primary)]">移到单词本</span>
-              <button onClick={() => setShowMoveSheet(false)} className="p-1 text-[var(--text-muted)]"><X size={18} /></button>
+              <span className="text-sm font-medium text-[var(--text-primary)]">{t('vocab.move_to_book', lang)}</span>
+              <button onClick={() => setShowMoveSheet(false)} aria-label={t('common.close', lang)} className="min-w-11 min-h-11 flex items-center justify-center text-[var(--text-muted)]"><X size={18} /></button>
             </div>
             {allBooks.length === 0 ? (
-              <p className="text-xs text-[var(--text-muted)] py-4 text-center">没有其他单词本</p>
+              <p className="text-xs text-[var(--text-muted)] py-4 text-center">{t('vocab.bd_no_other_books', lang)}</p>
             ) : (
               <div className="space-y-2 overflow-y-auto flex-1 min-h-0" style={{ WebkitOverflowScrolling: 'touch' }}>
                 {allBooks.map(b => (
@@ -421,13 +622,6 @@ export default function BookDetailPage() {
         </div>
       )}
 
-      {/* Word audio player — hide when any modal is open */}
-      {showAudioPlayer && !showAddModal && !showMoveSheet && (
-        <WordAudioPlayer
-          words={words.map(w => ({ korean: w.word, chinese: w.meaning }))}
-          extraBottom={68}
-        />
-      )}
     </div>
   );
 }

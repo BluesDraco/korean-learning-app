@@ -2,9 +2,14 @@ import { NextResponse } from 'next/server';
 import { fetchWithTimeout } from '@/lib/fetch';
 import { filterContent } from '@/lib/contentFilter';
 import { getAuthFromCookie } from '@/lib/server/auth';
+import { checkAiQuota } from '@/lib/server/membership';
+import { recordAiUsage } from '@/lib/server/rate-limit';
+
+// 6-26 事故兜底：含鉴权/用户数据的 API 必须 force-dynamic，禁止 Next.js 自动缓存
+export const dynamic = 'force-dynamic';
 
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
-const DEEPSEEK_MODEL = 'deepseek-chat';
+const DEEPSEEK_MODEL = 'deepseek-v4-flash';
 
 interface CarrotMessage {
   role: 'user' | 'tori';
@@ -15,8 +20,8 @@ interface CarrotContext {
   day?: number;
   module?: string;
   dayTitle?: string;
+  dayHint?: string;
   completedDays?: number;
-  checkpointsCleared?: number;
   sentencesCount?: number;
   recordingsCount?: number;
 }
@@ -76,6 +81,60 @@ const CARROT_CHAT_PROMPT = `你是「勇气胡萝卜」——兔莉妈妈在她�
 
 错：「亲爱的小可爱，加油哦！相信自己你最棒！✨」——空话+emoji
 错：「根据你的数据：完成天数 12，建议复习 Day 5。」——念报表
+错：「作为一只温柔的胡萝卜，妈妈想告诉你……」——错位成妈妈
+错：「抱歉，我无法回答与学习无关的问题。」——客服机器人
+错：「今天也要元气满满地学韩语哦！」——油腻假大空`;
+
+const CARROT_GENERAL_PROMPT = `你是「勇气胡萝卜」——一个陪着用户学韩语的伙伴。你不是老师，而是一个温和、有点幽默感的学习搭子。
+
+## 你是谁
+- 知道学韩语路上哪里容易掉坑，见过各种学习者的困惑
+- 性格底色：温暖、会聊天、偶尔小幽默，但不刻意卖萌
+- 自称「我」
+- 称呼用户：「亲爱的」（固定，不要换）
+- 用户性别未知，称呼必须中性
+
+## 语气规则
+- 自然说话、像朋友聊天
+- 偶尔嵌一两句韩语短句，紧跟中文翻译（括号或破折号都行）
+- 温暖但不油腻，真诚但不肉麻
+- 全程不用 emoji，全段最多一个 🥕，能不用就不用
+
+## 你的场景
+- 用户正在 App 的各个板块里学韩语（语法、词典、TOPIK、阅读、练习等），随时可能冒出问题就来问你
+- system 末尾会告诉你用户当前在哪个板块，你可以自然结合，但别硬提、别念板块名
+
+## 边界
+- 用户聊任何话题都接得住——工作、感情、八卦、KPOP、emo
+- 先共情，再自然地回到学习
+- 不许说「我无法回答这个问题」
+- 不 push、不催、不焦虑
+
+## 绝对禁止
+- 「加油」「你最棒」「你真厉害」「相信自己」「你可以的」——空洞口号
+- 「亲」「宝」「家人们」「老铁」「姐妹」
+- 排比句喊口号
+- 装萌、「嘤嘤嘤」、「呜呜」
+- 列 1、2、3、4 条 bullet
+- markdown 格式——纯文本
+
+## 长度
+- 总字数 ≤ 80 字（中文+韩文一起算）
+- 韩语示例必须 100% 自然，0 机翻味
+
+## 正面示例
+
+用户：「이거 무슨 뜻이에요 是什么意思」
+你：「『이거 무슨 뜻이에요?』就是『这个是什么意思?』——「이거」这个、「무슨」什么、「뜻」意思。以后指着不懂的东西就能这么问了。」
+
+用户：「我背不下来单词怎么办」
+你：「换个法子——别孤零零背，塞进句子里。比如『졸려』（困了），造一句『월요일 너무 졸려』（周一困死我了），下次你就会想起来。」
+
+用户：「这个语法点我总搞混」
+你：「正常，这条确实绕。你把最容易错的那个例句发我，我帮你拆开看看到底卡在哪。」
+
+## 反面示例（这样答就崩了）
+错：「亲爱的小可爱，加油哦！相信自己你最棒！✨」——空话+emoji
 错：「作为一只温柔的胡萝卜，妈妈想告诉你……」——错位成妈妈
 错：「抱歉，我无法回答与学习无关的问题。」——客服机器人
 错：「今天也要元气满满地学韩语哦！」——油腻假大空`;
@@ -142,9 +201,6 @@ function buildContextLine(ctx: CarrotContext): string {
   if (typeof ctx.completedDays === 'number' && ctx.completedDays > 0) {
     parts.push(`累计完成 ${ctx.completedDays} 天`);
   }
-  if (typeof ctx.checkpointsCleared === 'number' && ctx.checkpointsCleared > 0) {
-    parts.push(`已通过 ${ctx.checkpointsCleared} 个关卡`);
-  }
   if (typeof ctx.sentencesCount === 'number' && ctx.sentencesCount > 0) {
     parts.push(`收藏了 ${ctx.sentencesCount} 句话`);
   }
@@ -152,9 +208,15 @@ function buildContextLine(ctx: CarrotContext): string {
     parts.push(`录音了 ${ctx.recordingsCount} 段`);
   }
 
-  return parts.length
+  let line = parts.length
     ? `\n\n用户当前学习状态：${parts.join('；')}。请你自然地参考这些信息，不要罗列数字。`
     : '';
+
+  if (ctx.dayHint && ctx.dayHint.trim()) {
+    line += `\n\n今日引导方向：${ctx.dayHint.trim()}\n（这是 Tori 老师给你的话题备忘，提示用户今天可能想问什么。可以作为话题主线，但不要原文复述，自然融入回答。）`;
+  }
+
+  return line;
 }
 
 export async function POST(req: Request) {
@@ -170,6 +232,8 @@ export async function POST(req: Request) {
   let history: CarrotMessage[] = [];
   let context: CarrotContext = {};
   let summarize = false;
+  let mode: 'diary' | 'general' = 'diary';
+  let stream = false;
   let explain: { kind?: string; zhHint?: string; userAnswer?: string; correctAnswer?: string; isCorrect?: boolean } | null = null;
 
   try {
@@ -178,6 +242,8 @@ export async function POST(req: Request) {
     history = Array.isArray(body.history) ? body.history.slice(-10) : [];
     context = body.context || {};
     summarize = body.summarize === true;
+    mode = body.mode === 'general' ? 'general' : 'diary';
+    stream = body.stream === true;
     explain = body.explain && typeof body.explain === 'object' ? body.explain : null;
   } catch {
     return NextResponse.json({ error: '请求格式错误' }, { status: 400 });
@@ -196,11 +262,27 @@ export async function POST(req: Request) {
 
   const basePrompt = explain
     ? CARROT_EXPLAIN_PROMPT
-    : summarize ? CARROT_SUMMARY_PROMPT : CARROT_CHAT_PROMPT;
+    : summarize ? CARROT_SUMMARY_PROMPT
+    : mode === 'general' ? CARROT_GENERAL_PROMPT : CARROT_CHAT_PROMPT;
   const temperature = explain ? 0.5 : summarize ? 0.4 : 0.7;
   const maxTokens = explain ? 250 : summarize ? 400 : 200;
 
-  const systemContent = basePrompt + (explain ? '' : buildContextLine(context));
+  // 通用模式只拼板块名（日记模式才用学习进度上下文）
+  const contextLine = explain
+    ? ''
+    : mode === 'general'
+    ? (context.module ? `\n\n用户当前在「${context.module}」板块。可自然结合，但别硬提板块名。` : '')
+    : buildContextLine(context);
+  const systemContent = basePrompt + contextLine;
+
+  // 会员额度闸门（chat 桶）：胡萝卜对话/总结/讲解都是 AI 调用，统一计入每日对话额度。
+  const quota = await checkAiQuota(auth.userId, 'chat');
+  if (!quota.allowed) {
+    return NextResponse.json(
+      { error: quota.limit === 0 ? '当前会员档位不含此功能，请升级后使用' : '今日对话次数已达上限，请明天再试或升级会员' },
+      { status: 429, headers: { 'X-RateLimit-Limit': String(quota.limit), 'Retry-After': '86400' } },
+    );
+  }
 
   const userPayload = explain
     ? `题型：${explain.kind ?? ''}\n中文意思：${explain.zhHint ?? '（无）'}\n正确答案：${explain.correctAnswer ?? '（无）'}\n用户的答案：${explain.userAnswer ?? '（无）'}\n是否答对：${explain.isCorrect ? '是' : '否'}\n\n用你的风格给一句解释。`
@@ -212,6 +294,69 @@ export async function POST(req: Request) {
     { role: 'user', content: userPayload },
   ];
 
+  // 流式分支：仅闲聊类请求（summarize/explain 结构化不流式）。
+  // 用原生 fetch 自管超时——fetchWithTimeout 的固定 abort 会砍断长流。
+  if (stream && !summarize && !explain) {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 30000);
+    let upstream: Response;
+    try {
+      upstream = await fetch(DEEPSEEK_API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
+        signal: ctrl.signal,
+        body: JSON.stringify({
+          model: DEEPSEEK_MODEL,
+          thinking: { type: 'disabled' },
+          messages,
+          temperature,
+          max_tokens: maxTokens,
+          stream: true,
+        }),
+      });
+    } catch {
+      clearTimeout(timer);
+      return NextResponse.json({ error: '网络问题，等下再问？' }, { status: 504 });
+    }
+    if (!upstream.ok || !upstream.body) {
+      clearTimeout(timer);
+      return NextResponse.json({ error: '助手开小差了' }, { status: 502 });
+    }
+    await recordAiUsage(auth.userId, 'chat');
+
+    // 抽出 DeepSeek SSE 的 delta.content，只吐纯文本增量给前端。
+    const encoder = new TextEncoder();
+    const decoder = new TextDecoder();
+    let buf = '';
+    const transform = new TransformStream<Uint8Array, Uint8Array>({
+      transform(chunk, controller) {
+        buf += decoder.decode(chunk, { stream: true });
+        const lines = buf.split('\n');
+        buf = lines.pop() ?? '';
+        for (const line of lines) {
+          const trimmed = line.trim();
+          if (!trimmed.startsWith('data:')) continue;
+          const payload = trimmed.slice(5).trim();
+          if (payload === '[DONE]') continue;
+          try {
+            const json = JSON.parse(payload);
+            const delta: string = json?.choices?.[0]?.delta?.content ?? '';
+            if (delta) controller.enqueue(encoder.encode(delta));
+          } catch { /* 不完整行留待下一 chunk */ }
+        }
+      },
+      flush() { clearTimeout(timer); },
+    });
+
+    return new Response(upstream.body.pipeThrough(transform), {
+      headers: {
+        'Content-Type': 'text/plain; charset=utf-8',
+        'Cache-Control': 'no-cache, no-transform',
+        Connection: 'keep-alive',
+      },
+    });
+  }
+
   try {
     const resp = await fetchWithTimeout(DEEPSEEK_API_URL, {
       method: 'POST',
@@ -221,6 +366,7 @@ export async function POST(req: Request) {
       },
       body: JSON.stringify({
         model: DEEPSEEK_MODEL,
+        thinking: { type: 'disabled' },
         messages,
         temperature,
         max_tokens: maxTokens,
@@ -235,6 +381,7 @@ export async function POST(req: Request) {
     const data = await resp.json();
     const reply: string = data?.choices?.[0]?.message?.content?.trim() ?? '让我再想想…';
 
+    await recordAiUsage(auth.userId, 'chat');
     return NextResponse.json({ reply });
   } catch (err) {
     console.error('[carrot] error', err);

@@ -1,34 +1,21 @@
 'use client';
 
-import { useState, Suspense, type CSSProperties } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
-import { Card, Button } from '@/components/ui';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
+import { EDITION } from '@/lib/membership-benefits';
+import '../auth.css';
 
-const inputStyle: CSSProperties = {
-  width: '100%',
-  background: 'var(--color-surface-1)',
-  border: '1px solid var(--color-border-2)',
-  borderRadius: 'var(--radius-md)',
-  padding: '10px 14px',
-  fontSize: 14,
-  color: 'var(--color-ink-1)',
-  outline: 'none',
-  transition: 'border-color var(--dur-fast) var(--ease-soft)',
-};
-
-const labelStyle: CSSProperties = {
-  display: 'block',
-  fontSize: 12,
-  fontWeight: 600,
-  color: 'var(--color-ink-2)',
-  marginBottom: 6,
-};
+type Method = 'phone' | 'email' | 'username';
+const IS_OVERSEAS = EDITION === 'overseas';
 
 function LoginForm() {
+  const { lang } = useLang();
   const searchParams = useSearchParams();
   const STATIC_EXT = /\.(png|jpg|jpeg|webp|gif|svg|ico|woff2?|ttf|eot|mp3|mp4|webm)$/i;
   const rawRedirect = searchParams.get('redirect');
@@ -46,15 +33,83 @@ function LoginForm() {
       }
     } catch { /* ignore */ }
   }
-  const { login } = useAuth();
+  const { login, loginWithEmail, sendPhoneCode, loginWithPhone } = useAuth();
+
+  // 海外站默认邮箱 tab；国内手机/邮箱暂未上线，默认用户名 tab
+  const [method, setMethod] = useState<Method>(IS_OVERSEAS ? 'email' : 'username');
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
+  // 手机 / 邮箱字段（UI，备案后接后端）
+  const [phone, setPhone] = useState('');
+  const [code, setCode] = useState('');
+  const [email, setEmail] = useState('');
+
+  const [countdown, setCountdown] = useState(0);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  useEffect(() => () => { if (timerRef.current) clearInterval(timerRef.current); }, []);
+
+  // 国内站手机/邮箱登录尚未上线，仅用户名可用
+  const soonMethod = (m: Method) => !IS_OVERSEAS && m !== 'username';
+
+  const switchMethod = (m: Method) => {
+    if (soonMethod(m)) return;
+    setMethod(m);
+    setError('');
+  };
+
+  const sendCode = async () => {
+    if (countdown > 0) return;
+    setError('');
+    if (method === 'phone') {
+      const result = await sendPhoneCode(phone);
+      if (result.error) { setError(result.error); return; }
+    }
+    setCountdown(60);
+    timerRef.current = setInterval(() => {
+      setCountdown(prev => {
+        if (prev <= 1) {
+          if (timerRef.current) clearInterval(timerRef.current);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await doLogin();
+    if (method === 'username') {
+      await doLogin();
+    } else if (method === 'email') {
+      await doEmailLogin();
+    } else if (method === 'phone') {
+      await doPhoneLogin();
+    }
+  };
+
+  const doPhoneLogin = async () => {
+    if (submitting) return;
+    setError('');
+    if (!/^1[3-9]\d{9}$/.test(phone)) { setError(t('auth.err_phone_format', lang)); return; }
+    if (!/^\d{6}$/.test(code)) { setError(t('auth.err_code_empty', lang)); return; }
+    setSubmitting(true);
+    try {
+      const result = await loginWithPhone(phone, code);
+      if (result.error) {
+        setError(result.error);
+      } else {
+        window.location.href = redirect;
+      }
+    } catch {
+      setError(t('auth.err_network', lang));
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const doLogin = async () => {
@@ -64,112 +119,266 @@ function LoginForm() {
     try {
       const result = await login(username, password);
       if (result.error) {
-        setError(result.error === 'Invalid credentials' ? '用户名或密码错误' : (result.error || '登录失败，请稍后重试'));
+        setError(result.error === 'Invalid credentials' ? t('auth.err_credentials', lang) : (result.error || t('auth.err_login_fail', lang)));
       } else {
         window.location.href = redirect;
       }
     } catch {
-      setError('网络错误，请检查网络连接后重试');
+      setError(t('auth.err_network', lang));
     } finally {
       setSubmitting(false);
     }
   };
 
-  return (
-    <div style={{ minHeight: 'calc(100vh - 10rem)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '32px 0' }}>
-      <div style={{ width: '100%', maxWidth: 360 }}>
-        <Link
-          href="/daily"
-          style={{
-            display: 'inline-flex', alignItems: 'center', gap: 6,
-            fontSize: 13, color: 'var(--color-ink-2)', textDecoration: 'none',
-            marginBottom: 18,
-          }}
-        >
-          <ArrowLeft size={16} />
-          返回首页
-        </Link>
+  const doEmailLogin = async () => {
+    if (submitting) return;
+    setError('');
+    if (!email) { setError(t('auth.err_email_format', lang)); return; }
+    if (!password) { setError(t('auth.err_password_short', lang)); return; }
+    setSubmitting(true);
+    try {
+      const result = await loginWithEmail(email, password);
+      if (result.error) {
+        setError(result.error);
+      } else {
+        window.location.href = redirect;
+      }
+    } catch {
+      setError(t('auth.err_network', lang));
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
-        <Card variant="default" padding="lg">
-          <div style={{ textAlign: 'center', marginBottom: 24 }}>
+  const registerHref = `/auth/register${redirect !== '/daily' ? `?redirect=${encodeURIComponent(redirect)}` : ''}`;
+
+  // 海外站：邮箱+用户名；国内：手机/邮箱（soon）+用户名
+  const TABS: { id: Method; label: string }[] = IS_OVERSEAS
+    ? [
+        { id: 'email', label: t('auth.tab_email', lang) },
+        { id: 'username', label: t('auth.tab_username', lang) },
+      ]
+    : [
+        { id: 'phone', label: t('auth.tab_phone', lang) },
+        { id: 'email', label: t('auth.tab_email', lang) },
+        { id: 'username', label: t('auth.tab_username', lang) },
+      ];
+
+  return (
+    <div className="auth-scope">
+      <div className="auth-shell">
+      <aside className="auth-aside">
+        <div className="auth-aside-brand">
+          <span className="en">Tori</span>
+          <span className="kr">토리네 한국어</span>
+        </div>
+        <div className="auth-aside-hero">
+          <div className="auth-fig-frame">
             <Image
-              src="/images/tori-poses/tori-pose-02.webp"
-              alt="Tori"
-              width={64}
-              height={64}
-              style={{ objectFit: 'contain', margin: '0 auto 8px', display: 'block' }}
+              src="/images/tori-hero-wave.webp"
+              alt={t('auth.aside_alt_login', lang)}
+              fill
+              sizes="164px"
+              className="auth-aside-fig"
+              priority
             />
-            <h1 style={{ fontSize: 22, fontWeight: 800, color: 'var(--color-ink-1)', margin: 0 }}>登录</h1>
-            <p style={{ fontSize: 12, color: 'var(--color-ink-3)', margin: '6px 0 0', lineHeight: 1.5 }}>
-              登录后可以保存你的生词、跟唱记录和学习进度
-            </p>
+          </div>
+          <h1 className="auth-aside-title" style={{ whiteSpace: 'pre-line' }}>{t('auth.aside_title_login', lang)}</h1>
+          <p className="auth-aside-sub">{t('auth.aside_sub_login', lang)}</p>
+        </div>
+        <div className="auth-aside-foot">
+          <span>{t('auth.aside_foot_read', lang)}</span>
+          <span>{t('auth.aside_foot_learn', lang)}</span>
+          <span>{t('auth.aside_foot_radio', lang)}</span>
+        </div>
+      </aside>
+
+      <div className="auth-form-wrap">
+        <div className="auth-form au-stagger">
+          <Link href="/" className="auth-back" style={{ ['--i' as string]: 0 }}>
+            <ArrowLeft size={15} /> {t('auth.back', lang)}
+          </Link>
+          <h2 className="auth-title" style={{ ['--i' as string]: 1 }}>{t('auth.login_title', lang)}</h2>
+          <p className="auth-lead" style={{ ['--i' as string]: 2 }}>
+            {t('auth.login_lead', lang)}
+          </p>
+
+          <div className="auth-tabs" style={{ ['--i' as string]: 3 }}>
+            {TABS.map(tab => {
+              const soon = soonMethod(tab.id);
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  className={'auth-tab' + (method === tab.id ? ' active' : '') + (soon ? ' soon' : '')}
+                  onClick={() => switchMethod(tab.id)}
+                  disabled={soon}
+                  aria-disabled={soon}
+                >
+                  {tab.label}
+                </button>
+              );
+            })}
           </div>
 
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            <div>
-              <label style={labelStyle}>用户名</label>
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="请输入用户名"
-                style={inputStyle}
-                autoComplete="username"
-                onFocus={(e) => (e.currentTarget.style.borderColor = 'var(--color-pink-base)')}
-                onBlur={(e) => (e.currentTarget.style.borderColor = 'var(--color-border-2)')}
-              />
-            </div>
+          {!IS_OVERSEAS && (
+            <p className="auth-notice" style={{ ['--i' as string]: 3 }}>{t('auth.login_notice_soon', lang)}</p>
+          )}
 
-            <div>
-              <label style={labelStyle}>密码</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="请输入密码"
-                style={inputStyle}
-                autoComplete="current-password"
-                onFocus={(e) => (e.currentTarget.style.borderColor = 'var(--color-pink-base)')}
-                onBlur={(e) => (e.currentTarget.style.borderColor = 'var(--color-border-2)')}
-              />
-            </div>
-
-            {error && (
-              <p style={{
-                fontSize: 12,
-                color: 'var(--color-status-danger)',
-                background: 'var(--color-status-danger-bg)',
-                borderRadius: 'var(--radius-sm)',
-                padding: '8px 12px',
-                margin: 0,
-              }}>
-                {error}
-              </p>
+          <form onSubmit={handleSubmit} className="auth-fields" style={{ ['--i' as string]: 4 }}>
+            {method === 'phone' && (
+              <>
+                <div className="auth-field">
+                  <label htmlFor="au-phone">{t('auth.phone', lang)}</label>
+                  <div className="auth-phone-row">
+                    <span className="auth-cc">+86</span>
+                    <div className="auth-input-wrap">
+                      <input
+                        id="au-phone"
+                        className="auth-input"
+                        type="tel"
+                        inputMode="numeric"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        placeholder={t('auth.phone_ph', lang)}
+                        autoComplete="tel"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="auth-field">
+                  <label htmlFor="au-code">{t('auth.code', lang)}</label>
+                  <div className="auth-code-row">
+                    <div className="auth-input-wrap">
+                      <input
+                        id="au-code"
+                        className="auth-input"
+                        type="text"
+                        inputMode="numeric"
+                        value={code}
+                        onChange={(e) => setCode(e.target.value)}
+                        placeholder={t('auth.code_ph', lang)}
+                        autoComplete="one-time-code"
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      className="auth-code-btn"
+                      onClick={sendCode}
+                      disabled={countdown > 0 || !phone}
+                    >
+                      {countdown > 0 ? t('auth.code_resend', lang, { n: String(countdown) }) : t('auth.code_send', lang)}
+                    </button>
+                  </div>
+                </div>
+              </>
             )}
 
-            <Button
-              type="button"
-              variant="primary"
-              tone="pink"
-              size="lg"
-              fullWidth
-              loading={submitting}
-              onClick={doLogin}
+            {method === 'email' && (
+              <>
+                <div className="auth-field">
+                  <label htmlFor="au-email">{t('auth.email', lang)}</label>
+                  <div className="auth-input-wrap">
+                    <input
+                      id="au-email"
+                      className="auth-input"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder={t('auth.email_ph', lang)}
+                      autoComplete="email"
+                    />
+                  </div>
+                </div>
+                <div className="auth-field">
+                  <label htmlFor="au-email-pw">{t('auth.password', lang)}</label>
+                  <div className="auth-input-wrap">
+                    <input
+                      id="au-email-pw"
+                      className="auth-input"
+                      type={showPassword ? 'text' : 'password'}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder={t('auth.login_password_ph', lang)}
+                      autoComplete="current-password"
+                    />
+                    <button
+                      type="button"
+                      className="auth-eye"
+                      onClick={() => setShowPassword(v => !v)}
+                      aria-label={showPassword ? t('auth.hide_password', lang) : t('auth.show_password', lang)}
+                    >
+                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
+                </div>
+                {IS_OVERSEAS && (
+                  <p style={{ textAlign: 'right', margin: '2px 0 0' }}>
+                    <Link href="/auth/reset-password" style={{ fontSize: 12.5, color: 'var(--au-ink-3)', textDecoration: 'none' }}>
+                      {t('auth.forgot_password', lang)}
+                    </Link>
+                  </p>
+                )}
+              </>
+            )}
+
+            {method === 'username' && (
+              <>
+                <div className="auth-field">
+                  <label htmlFor="au-username">{t('auth.username', lang)}</label>
+                  <div className="auth-input-wrap">
+                    <input
+                      id="au-username"
+                      className="auth-input"
+                      type="text"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      placeholder={t('auth.login_username_ph', lang)}
+                      autoComplete="username"
+                    />
+                  </div>
+                </div>
+                <div className="auth-field">
+                  <label htmlFor="au-password">{t('auth.password', lang)}</label>
+                  <div className="auth-input-wrap">
+                    <input
+                      id="au-password"
+                      className="auth-input"
+                      type={showPassword ? 'text' : 'password'}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder={t('auth.login_password_ph', lang)}
+                      autoComplete="current-password"
+                    />
+                    <button
+                      type="button"
+                      className="auth-eye"
+                      onClick={() => setShowPassword(v => !v)}
+                      aria-label={showPassword ? t('auth.hide_password', lang) : t('auth.show_password', lang)}
+                    >
+                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {error && <p className="auth-error">{error}</p>}
+
+            <button
+              type="submit"
+              className="auth-submit"
+              disabled={submitting}
             >
-              {submitting ? '登录中...' : '登录'}
-            </Button>
+              {submitting ? t('auth.login_submitting', lang) : t('auth.login_submit', lang)}
+            </button>
           </form>
 
-          <p style={{ textAlign: 'center', fontSize: 12, color: 'var(--color-ink-3)', margin: '20px 0 0' }}>
-            还没有账户？{' '}
-            <Link
-              href="/auth/register"
-              style={{ color: 'var(--color-pink-strong)', textDecoration: 'none', fontWeight: 600 }}
-            >
-              立即注册
-            </Link>
+          <p className="auth-switch" style={{ ['--i' as string]: 5 }}>
+            {t('auth.login_switch', lang)}<Link href={registerHref}>{t('auth.login_switch_link', lang)}</Link>
           </p>
-        </Card>
+        </div>
+      </div>
       </div>
     </div>
   );
@@ -177,15 +386,7 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <Suspense
-      fallback={
-        <div style={{ minHeight: 'calc(100vh - 10rem)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '32px 0' }}>
-          <Card variant="default" padding="lg" style={{ width: '100%', maxWidth: 360, textAlign: 'center' }}>
-            <p style={{ fontSize: 13, color: 'var(--color-ink-3)', margin: 0 }}>加载中...</p>
-          </Card>
-        </div>
-      }
-    >
+    <Suspense fallback={null}>
       <LoginForm />
     </Suspense>
   );

@@ -1,14 +1,17 @@
-'use client';
+'use client'
 
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { ThemesSection } from '@/components/vocabulary/ThemesSection';
 import { useIsDesktop } from '@/lib/useIsMobile';
 import { PageHeader } from '@/components/ui';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 
 export default function ThemesPage() {
+  const { lang } = useLang();
   const isDesktop = useIsDesktop();
-  const containerCls = isDesktop ? 'py-6 max-w-5xl mx-auto px-4 space-y-5' : 'py-4 max-w-2xl mx-auto px-4 space-y-4';
+  const containerCls = isDesktop ? 'py-6 w-full px-8 space-y-5' : 'py-4 max-w-2xl mx-auto px-4 space-y-4';
 
   return (
     <div className={containerCls}>
@@ -21,13 +24,13 @@ export default function ThemesPage() {
         }}
       >
         <ArrowLeft size={14} />
-        返回词库
+        {t('vocab.back_to_library', lang)}
       </Link>
 
       <PageHeader
         eyebrow="THEMES"
-        title="主题词包"
-        subtitle="学一个场景，拿走一套够用的词。토리陪你开口说韩语！"
+        title={t('vocab.themes_page_title', lang)}
+        subtitle={t('vocab.themes_page_subtitle', lang)}
         tone="mint"
         flat
       />

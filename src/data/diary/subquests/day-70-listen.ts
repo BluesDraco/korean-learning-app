@@ -1,0 +1,29 @@
+import type { ListenSubQuestData } from '@/types/tori-subquest';
+
+/** Day 70 · 3-2 귀 트이기 · ~는 반면(에) · 辩论赛 vs Danielle */
+export const day70Listen: ListenSubQuestData = {
+  day: 10, level: 'advanced', idx: 2, kind: 'listen',
+  koTitle: '귀 트이기',
+  subtitle: '토론 대회 · 체형 vs 능력',
+
+  meaning: [
+    { id: 'd70-l2-m1', audioKo: '오늘 토론 주제는 "체형 vs 능력"이에요.',                    choices: [{ text: '今天辩论主题是"体型 vs 能力"。',         correct: true }, { text: '今天没有辩论。',                    correct: false }, { text: '主题是"体力 vs 能力"。',              correct: false }, { text: '主题下周才定。',                    correct: false }], explain: 'Day 70 辩论主题' },
+    { id: 'd70-l2-m2', audioKo: '체형은 작은 반면 능력은 커요.',                              choices: [{ text: '体型小，另一方面能力很强。',                correct: true }, { text: '体型大，能力也大。',                correct: false }, { text: '体型和能力都小。',                    correct: false }, { text: '体型不重要。',                      correct: false }], explain: '~는 반면(에) · 主题句' },
+    { id: 'd70-l2-m3', audioKo: '다니엘은 발음이 유창한 반면 경험이 적어요.',                choices: [{ text: 'Danielle 发音流利，另一方面经验少。',      correct: true }, { text: 'Danielle 发音差。',                    correct: false }, { text: 'Danielle 经验丰富。',                  correct: false }, { text: 'Danielle 什么都不会。',              correct: false }], explain: '~ㄴ 반면 · A 词干型' },
+    { id: 'd70-l2-m4', audioKo: '토리는 작은 반면 실전 경험이 많아요.',                        choices: [{ text: '兔莉体型小，另一方面实战经验多。',           correct: true }, { text: '兔莉没有经验。',                      correct: false }, { text: '兔莉体型很大。',                      correct: false }, { text: '兔莉不参加。',                      correct: false }], explain: 'Tori 反方主张' },
+    { id: 'd70-l2-m5', audioKo: '결과는 무승부. 박수 소리가 컸어요.',                          choices: [{ text: '结果平手。掌声很大。',                     correct: true }, { text: '结果是我输。',                        correct: false }, { text: '掌声很小。',                          correct: false }, { text: '没有结果。',                        correct: false }], explain: '무승부 = 平手 · 论坛延续' },
+  ],
+
+  cloze: [
+    { id: 'd70-l2-c1', audioKo: '체형은 작은 반면 능력은 커요.',            clozeParts: ['체형은 ', ' 능력은 커요.'],            choices: [{ text: '작은 반면',    correct: true }, { text: '작는 반면',    correct: false }, { text: '작 반면',      correct: false }, { text: '작아서 반면', correct: false }], explain: 'A + (으)ㄴ 반면' },
+    { id: 'd70-l2-c2', audioKo: '다니엘은 잘하는 반면 저는 아직 부족해요.',  clozeParts: ['다니엘은 ', ' 저는 아직 부족해요.'],  choices: [{ text: '잘하는 반면',  correct: true }, { text: '잘한 반면',    correct: false }, { text: '잘할 반면',    correct: false }, { text: '잘해서 반면', correct: false }], explain: 'V + 는 반면 · 现在' },
+    { id: 'd70-l2-c3', audioKo: '발음은 유창한 반면 경험이 적어요.',          clozeParts: ['발음은 ', ' 경험이 적어요.'],          choices: [{ text: '유창한 반면',  correct: true }, { text: '유창는 반면',  correct: false }, { text: '유창하는 반면', correct: false }, { text: '유창해서 반면', correct: false }], explain: '유창하다 A → 유창한 반면' },
+    { id: 'd70-l2-c4', audioKo: '주장은 강한 반면 근거가 부족해요.',         clozeParts: ['주장은 ', ' 근거가 부족해요.'],         choices: [{ text: '강한 반면',    correct: true }, { text: '강는 반면',    correct: false }, { text: '강할 반면',    correct: false }, { text: '강해서 반면', correct: false }], explain: '강하다 A → 강한 반면' },
+  ],
+
+  reply: [
+    { id: 'd70-l2-r1', audioKo: '다니엘 씨는 어떻게 생각해요?',                                 promptZh: 'Danielle 说体型很重要。你想反驳"体型小，另一方面能力很强"，最自然的一句？',                choices: [{ text: '체형은 작은 반면 능력은 커요.',                                    correct: true }, { text: '체형은 작아서 능력이 없어요.',            correct: false }, { text: '얼마예요?',                              correct: false }, { text: '몰라요.',                                correct: false }], explain: '~ㄴ 반면 · 反驳金句' },
+    { id: 'd70-l2-r2', audioKo: '다니엘의 발음이 정말 좋네요.',                                 promptZh: '有人夸 Danielle 发音。你想说"发音流利，另一方面经验少"，最自然的一句？',                choices: [{ text: '발음이 유창한 반면 경험이 적어요.',                                correct: true }, { text: '발음이 유창해서 경험이 많아요.',        correct: false }, { text: '얼마예요?',                              correct: false }, { text: '몰라요.',                                correct: false }], explain: '유창한 반면 · A + ㄴ 반면' },
+    { id: 'd70-l2-r3', audioKo: '토리 씨, 결과 어때요?',                                        promptZh: '有人问结果。你想说"结果平手，掌声很大"，最自然的一句？',                              choices: [{ text: '결과는 무승부인데 박수 소리가 컸어요.',                             correct: true }, { text: '결과가 없어요.',                          correct: false }, { text: '얼마예요?',                              correct: false }, { text: '몰라요.',                                correct: false }], explain: '무승부 + ~ㄴ데 转折' },
+  ],
+};

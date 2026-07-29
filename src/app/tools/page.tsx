@@ -1,78 +1,109 @@
 'use client';
 
 import Link from 'next/link';
-import { BookOpen, FileText, MessageSquare, Keyboard, Sparkles } from 'lucide-react';
-import { PageHeader, Section, Card, Button, EntryCard } from '@/components/ui';
-import { DesktopToolsPage } from '@/components/desktop/DesktopToolsPage';
-import { useIsDesktop } from '@/lib/useIsMobile';
+import { SITE_URL } from '@/lib/seo';
+import { ArrowLeftRight, Keyboard, UserRoundPen } from 'lucide-react';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 
 const TOOLS = [
-  { label: '语法解释', desc: '句型例句', href: '/grammar', Icon: BookOpen, tone: 'pink' as const },
-  { label: '文章拆解', desc: '文章分析', href: '/reading', Icon: FileText, tone: 'purple' as const },
-  { label: 'AI 场景陪练', desc: '情景对话', href: '/ai/chat', Icon: MessageSquare, tone: 'mint' as const },
-  { label: '韩文打字', desc: '键盘练习', href: '/typing', Icon: Keyboard, tone: 'peach' as const },
+  { slug: 'korean-name', seoName: 'Korean Name Generator', nameKey: 'tools.name_korean_name', descKey: 'tools.desc_korean_name', Icon: UserRoundPen, tone: 'pink' },
+  { slug: 'romanization', seoName: 'Korean Romanization Converter', nameKey: 'tools.name_romanization', descKey: 'tools.desc_romanization', Icon: ArrowLeftRight, tone: 'mint' },
+  { slug: 'keyboard', seoName: 'Online Korean Keyboard', nameKey: 'tools.name_keyboard', descKey: 'tools.desc_keyboard', Icon: Keyboard, tone: 'peach' },
 ];
 
-export default function ToolsPage() {
-  const isDesktop = useIsDesktop();
+const BREADCRUMB_JSONLD = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: '首页', item: `${SITE_URL}` },
+    { '@type': 'ListItem', position: 2, name: '免费韩语工具', item: `${SITE_URL}/tools` },
+  ],
+};
 
-  if (isDesktop) return <DesktopToolsPage />;
+const ITEMLIST_JSONLD = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: '兔莉韩语工具箱',
+  itemListElement: TOOLS.map((t, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    url: `${SITE_URL}/tools/${t.slug}`,
+    name: t.seoName,
+  })),
+};
 
+export default function ToolsHubPage() {
+  const { lang } = useLang();
   return (
-    <div className="py-4 max-w-2xl mx-auto">
-      <PageHeader
-        eyebrow="도구"
-        title="工具"
-        subtitle="把你看到的韩文，变成可以学的内容。"
-        tone="mint"
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify([BREADCRUMB_JSONLD, ITEMLIST_JSONLD]) }}
       />
+      <div className="py-4 max-w-2xl md:max-w-3xl mx-auto">
+        <header style={{ padding: '4px 12px 20px' }}>
+          <p style={{ fontSize: 13, color: 'var(--color-ink-3)', margin: 0, letterSpacing: '0.1em' }}>도구</p>
+          <h1 style={{ fontSize: 26, fontWeight: 800, margin: '4px 0 8px', color: 'var(--color-ink-1)' }}>{t('tools.hub_title', lang)}</h1>
+          <p style={{ fontSize: 14, color: 'var(--color-ink-3)', margin: 0, lineHeight: 1.6 }}>
+            {t('tools.hub_subtitle', lang)}
+          </p>
+        </header>
 
-      {/* Featured: Content breakdown */}
-      <Section spacing="normal">
-        <Card variant="hero" tone="pink" padding="lg">
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
-            <div
+        <div style={{ display: 'grid', gap: 12, padding: '0 12px' }}>
+          {TOOLS.map(({ slug, nameKey, descKey, Icon, tone }) => (
+            <Link
+              key={slug}
+              href={`/tools/${slug}`}
               style={{
-                width: 44, height: 44, borderRadius: 'var(--radius-md)',
-                background: 'var(--color-surface-2)', display: 'flex',
-                alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                color: 'var(--color-pink-strong)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 14,
+                padding: 16,
+                borderRadius: 14,
+                background: 'var(--color-surface-1)',
+                border: '1px solid var(--color-line)',
+                textDecoration: 'none',
+                color: 'inherit',
               }}
-              aria-hidden
             >
-              <Sparkles size={22} strokeWidth={1.75} />
-            </div>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <p style={{ fontSize: 17, fontWeight: 800, color: 'var(--color-ink-1)', margin: 0 }}>
-                内容拆解
-              </p>
-              <p style={{ fontSize: 13, color: 'var(--color-ink-3)', margin: '4px 0 14px', lineHeight: 1.5 }}>
-                粘贴一句韩语，Tori 帮你翻译、拆词、解释句子。
-              </p>
-              <Link href="/ai/analyze" style={{ textDecoration: 'none' }}>
-                <Button variant="primary" tone="black" size="md">开始拆解</Button>
-              </Link>
-            </div>
-          </div>
-        </Card>
-      </Section>
-
-      {/* Tool grid */}
-      <Section title="全部工具" spacing="normal">
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-          {TOOLS.map(({ label, desc, href, Icon, tone }) => (
-            <EntryCard
-              key={href}
-              href={href}
-              icon={<Icon size={20} strokeWidth={1.75} />}
-              label={label}
-              detail={desc}
-              tone={tone}
-              layout="block"
-            />
+              <div
+                aria-hidden
+                style={{
+                  width: 48,
+                  height: 48,
+                  borderRadius: 12,
+                  background:
+                    tone === 'pink' ? 'var(--color-pink-soft, #fff0f5)' :
+                    tone === 'mint' ? 'var(--color-mint-soft)' :
+                    'var(--color-surface-2)',
+                  color:
+                    tone === 'pink' ? 'var(--color-pink-strong)' :
+                    tone === 'mint' ? 'var(--color-mint-strong)' :
+                    'var(--color-ink-2)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                }}
+              >
+                <Icon size={24} strokeWidth={1.75} />
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <p style={{ fontSize: 16, fontWeight: 800, color: 'var(--color-ink-1)', margin: 0 }}>{t(nameKey, lang)}</p>
+                <p style={{ fontSize: 13, color: 'var(--color-ink-3)', margin: '4px 0 0', lineHeight: 1.5 }}>{t(descKey, lang)}</p>
+              </div>
+            </Link>
           ))}
         </div>
-      </Section>
-    </div>
+
+        <section style={{ padding: '28px 12px 8px' }}>
+          <h2 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 8px', color: 'var(--color-ink-2)' }}>{t('tools.about_title', lang)}</h2>
+          <p style={{ fontSize: 13, color: 'var(--color-ink-3)', lineHeight: 1.7, margin: 0 }}>
+            {t('tools.about_desc', lang)}
+          </p>
+        </section>
+      </div>
+    </>
   );
 }

@@ -3,6 +3,9 @@ import { requireAdmin } from '@/lib/server/admin-guard';
 import { getDb } from '@/lib/server/db';
 import type { SystemResponse, HighUsageUser } from '@/types/admin';
 
+// 6-26 事故兜底：含鉴权/用户数据的 API 必须 force-dynamic，禁止 Next.js 自动缓存
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   const admin = await requireAdmin();
   if (!admin.authorized) return admin.response;
@@ -16,19 +19,16 @@ export async function GET() {
   const monthStartMs = monthStart.getTime();
 
   let totalCallsThisMonth = 0;
-  let totalCostThisMonth = 0;
-  const dailyCalls: { date: string; calls: number; tokens: number }[] = [];
+  const dailyCalls: { date: string; calls: number }[] = [];
   const topUsers: HighUsageUser[] = [];
 
   try {
     const totals = await db.exec(
-      `SELECT COUNT(*) as calls, COALESCE(SUM(cost), 0) as cost
-       FROM ai_usage WHERE created_at >= ?`,
+      `SELECT COUNT(*) as calls FROM ai_usage WHERE created_at >= ?`,
       [monthStartMs]
     );
     if (totals[0]?.values?.[0]) {
       totalCallsThisMonth = Number(totals[0].values[0][0] ?? 0);
-      totalCostThisMonth = Number(totals[0].values[0][1] ?? 0);
     }
 
     const thirtyDaysAgo = now - 30 * 24 * 60 * 60 * 1000;
@@ -43,15 +43,16 @@ export async function GET() {
       [thirtyDaysAgo]
     );
     for (const row of daily[0]?.values ?? []) {
-      dailyCalls.push({ date: row[0] as string, calls: Number(row[1]), tokens: 0 });
+      dailyCalls.push({ date: row[0] as string, calls: Number(row[1]) });
     }
   } catch (e) {
     console.error('[admin/system] ai_usage query failed', e);
   }
 
   try {
+    const now2 = Date.now();
     const topRes = await db.exec(
-      `SELECT u.username, a.user_id, COUNT(*) as calls
+      `SELECT u.username, a.user_id, COUNT(*) as calls, u.membership_type, u.membership_expiry
        FROM ai_usage a
        LEFT JOIN users u ON u.id = a.user_id
        WHERE a.created_at >= ?
@@ -60,14 +61,18 @@ export async function GET() {
        LIMIT 10`,
       [monthStartMs]
     );
+    const validTiers: HighUsageUser['membershipType'][] = ['free', 'monthly', 'yearly', 'lifetime'];
     for (const row of topRes[0]?.values ?? []) {
+      const rawTier = row[3] as string | null;
+      const expiry = typeof row[4] === 'number' ? row[4] : null;
+      let tier: HighUsageUser['membershipType'] = validTiers.includes(rawTier as HighUsageUser['membershipType'])
+        ? (rawTier as HighUsageUser['membershipType']) : 'free';
+      if (tier !== 'free' && tier !== 'lifetime' && expiry != null && expiry < now2) tier = 'free';
       topUsers.push({
         userId: row[1] as string,
         username: (row[0] as string) || 'unknown',
         totalCalls: Number(row[2]),
-        totalTokens: 0,
-        estimatedCost: 0,
-        membershipType: 'free',
+        membershipType: tier,
       });
     }
   } catch (e) {
@@ -75,12 +80,8 @@ export async function GET() {
   }
 
   const response: SystemResponse = {
-    cpuMemoryHistory: [],
-    errorLogs: [],
     aiUsage: {
       totalCallsThisMonth,
-      totalTokensThisMonth: 0,
-      totalCostThisMonth,
       dailyCalls,
     },
     topUsers,

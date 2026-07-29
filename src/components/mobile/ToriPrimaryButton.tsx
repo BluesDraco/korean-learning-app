@@ -1,6 +1,8 @@
 'use client';
 
 import { Loader2 } from 'lucide-react';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 
 interface ToriPrimaryButtonProps {
   children: React.ReactNode;
@@ -17,10 +19,12 @@ export function ToriPrimaryButton({
   onClick,
   disabled = false,
   loading = false,
-  loadingText = '处理中...',
+  loadingText,
   className = '',
   type = 'button',
 }: ToriPrimaryButtonProps) {
+  const { lang } = useLang();
+  const resolvedLoadingText = loadingText ?? t('tpbtn.loading', lang);
   return (
     <button
       type={type}
@@ -43,7 +47,7 @@ export function ToriPrimaryButton({
       {loading ? (
         <>
           <Loader2 size={16} className="animate-spin" />
-          <span>{loadingText}</span>
+          <span>{resolvedLoadingText}</span>
         </>
       ) : (
         children

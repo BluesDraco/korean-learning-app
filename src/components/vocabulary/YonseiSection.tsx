@@ -4,16 +4,9 @@ import { useState, useEffect } from 'react';
 import { GraduationCap, BookOpen, BookMarked } from 'lucide-react';
 import Link from 'next/link';
 import { db } from '@/lib/db';
-
-interface VocabUnit {
-  id: string;
-  unitNumber: number;
-  title: string;
-  titleKo: string;
-  bookTitle: string;
-  description: string;
-  words: { word: string }[];
-}
+import { loadYonseiIndex, loadSeoulIndex, loadVitaminIndex, type UnitMeta } from '@/lib/dataLoader';
+import { t } from '@/lib/i18n';
+import { useLang } from '@/components/LangProvider';
 
 const YONSEI_BOOK_COLORS = [
   'var(--mint-soft)',
@@ -31,32 +24,47 @@ const SEOUL_BOOK_COLORS = [
   'var(--purple-soft)',
 ];
 
-const YONSEI_LABELS = ['延世 1', '延世 2', '延世 3', '延世 4', '延世 5', '延世 6'];
-const SEOUL_LABELS = ['首尔 1', '首尔 2', '首尔 3', '首尔 4'];
+const VITAMIN_BOOK_COLORS = [
+  'var(--pink-primary)',
+  'var(--mint-soft)',
+  'var(--peach-soft)',
+  'var(--blue-soft)',
+];
 
-type TextbookType = 'yonsei' | 'seoul';
+// 各教材册数（book 选择器按册数生成，标签 = 教材短名 + 册号）
+const YONSEI_BOOK_COUNT = 6;
+const SEOUL_BOOK_COUNT = 4;
+const VITAMIN_BOOK_COUNT = 2;
+
+type TextbookType = 'yonsei' | 'seoul' | 'vitamin';
 
 export function YonseiSection() {
+  const { lang } = useLang();
   const [textbook, setTextbook] = useState<TextbookType>('yonsei');
   const [selectedBook, setSelectedBook] = useState(1);
-  const [units, setUnits] = useState<VocabUnit[]>([]);
+  const [units, setUnits] = useState<UnitMeta[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
+    let cancelled = false;
     setLoading(true);
+    setLoadError(false);
     (async () => {
       try {
-        const [{ yonseiUnits }, { seoulUnits }] = await Promise.all([
-          import('@/data/yonsei-books'),
-          import('@/data/seoul-books'),
-        ]);
-        setUnits(textbook === 'yonsei' ? yonseiUnits : seoulUnits);
-      } catch { setLoadError(true); } finally {
-        setLoading(false);
+        const index = textbook === 'yonsei'
+          ? await loadYonseiIndex()
+          : textbook === 'seoul'
+          ? await loadSeoulIndex()
+          : await loadVitaminIndex();
+        if (!cancelled) setUnits(index);
+      } catch { if (!cancelled) setLoadError(true); } finally {
+        if (!cancelled) setLoading(false);
       }
     })();
-  }, [textbook]);
+    return () => { cancelled = true; };
+  }, [textbook, retryCount]);
 
   useEffect(() => {
     // One-time migration: remove old yonsei words imported before v2 data correction
@@ -95,10 +103,12 @@ export function YonseiSection() {
     setSelectedBook(1);
   };
 
-  const bookLabels = textbook === 'yonsei' ? YONSEI_LABELS : SEOUL_LABELS;
-  const bookColors = textbook === 'yonsei' ? YONSEI_BOOK_COLORS : SEOUL_BOOK_COLORS;
-  const routePrefix = textbook === 'yonsei' ? 'yonsei' : 'seoul';
-  const idPrefix = textbook === 'yonsei' ? 'yonsei' : 'seoul';
+  const bookCount = textbook === 'yonsei' ? YONSEI_BOOK_COUNT : textbook === 'seoul' ? SEOUL_BOOK_COUNT : VITAMIN_BOOK_COUNT;
+  const bookShortKey = textbook === 'yonsei' ? 'vocab.ys_short_yonsei' : textbook === 'seoul' ? 'vocab.ys_short_seoul' : 'vocab.ys_short_vitamin';
+  const bookLabels = Array.from({ length: bookCount }, (_, i) => `${t(bookShortKey, lang)} ${i + 1}`);
+  const bookColors = textbook === 'yonsei' ? YONSEI_BOOK_COLORS : textbook === 'seoul' ? SEOUL_BOOK_COLORS : VITAMIN_BOOK_COLORS;
+  const routePrefix = textbook;
+  const idPrefix = textbook;
 
   const visibleUnits = units.filter(u => u.id.startsWith(`${idPrefix}-${selectedBook}-`));
 
@@ -110,21 +120,31 @@ export function YonseiSection() {
           onClick={() => handleTextbookSwitch('yonsei')}
           className="flex-1 py-2 rounded-lg text-sm font-semibold transition-all"
           style={textbook === 'yonsei'
-            ? { background: '#fff', color: '#241917', boxShadow: '0 1px 4px rgba(78,52,46,.10)' }
+            ? { background: 'var(--color-surface-1)', color: 'var(--color-ink-1)', boxShadow: '0 1px 4px rgba(78,52,46,.10)' }
             : { color: 'var(--text-secondary)' }
           }
         >
-          延世韩国语
+          {t('vocab.ys_tab_yonsei', lang)}
         </button>
         <button
           onClick={() => handleTextbookSwitch('seoul')}
           className="flex-1 py-2 rounded-lg text-sm font-semibold transition-all"
           style={textbook === 'seoul'
-            ? { background: '#fff', color: '#241917', boxShadow: '0 1px 4px rgba(78,52,46,.10)' }
+            ? { background: 'var(--color-surface-1)', color: 'var(--color-ink-1)', boxShadow: '0 1px 4px rgba(78,52,46,.10)' }
             : { color: 'var(--text-secondary)' }
           }
         >
-          首尔韩国语
+          {t('vocab.ys_tab_seoul', lang)}
+        </button>
+        <button
+          onClick={() => handleTextbookSwitch('vitamin')}
+          className="flex-1 py-2 rounded-lg text-sm font-semibold transition-all"
+          style={textbook === 'vitamin'
+            ? { background: 'var(--color-surface-1)', color: 'var(--color-ink-1)', boxShadow: '0 1px 4px rgba(78,52,46,.10)' }
+            : { color: 'var(--text-secondary)' }
+          }
+        >
+          {t('vocab.ys_tab_vitamin', lang)}
         </button>
       </div>
 
@@ -132,12 +152,14 @@ export function YonseiSection() {
         <GraduationCap size={20} className="text-[var(--purple-soft)] shrink-0 mt-0.5" />
         <div>
           <p className="text-sm font-medium text-[var(--text-primary)]">
-            {textbook === 'yonsei' ? '延世大学韩国语学堂 官方教材' : '首尔大学语言教育院 官方教材'}
+            {textbook === 'yonsei' ? t('vocab.ys_head_yonsei', lang) : textbook === 'seoul' ? t('vocab.ys_head_seoul', lang) : t('vocab.ys_head_vitamin', lang)}
           </p>
           <p className="text-xs text-[var(--text-secondary)] mt-1">
             {textbook === 'yonsei'
-              ? '词汇选自《연세 한국어 1-6》教材，按单元学习，可加入单词本复习。'
-              : '词汇选自《서울대 한국어 1-4》教材，按单元学习，可加入单词本复习。'
+              ? t('vocab.ys_desc_yonsei', lang)
+              : textbook === 'seoul'
+              ? t('vocab.ys_desc_seoul', lang)
+              : t('vocab.ys_desc_vitamin', lang)
             }
           </p>
         </div>
@@ -154,7 +176,7 @@ export function YonseiSection() {
               onClick={() => setSelectedBook(bookNum)}
               className="flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-all"
               style={isActive
-                ? { backgroundColor: bookColors[i], color: '#241917' }
+                ? { backgroundColor: bookColors[i], color: 'var(--color-ink-1)' }
                 : { backgroundColor: 'var(--bg-input)', color: 'var(--text-secondary)' }
               }
             >
@@ -164,22 +186,22 @@ export function YonseiSection() {
         })}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {loading ? (
-          <div className="col-span-2 py-12 text-center text-sm text-[var(--text-muted)]">加载中...</div>
+          <div className="col-span-2 lg:col-span-3 py-12 text-center text-sm text-[var(--text-muted)]">{t('common.loading', lang)}</div>
         ) : loadError ? (
           <div className="text-center py-16">
-            <p className="text-sm text-[var(--text-secondary)] mb-3">加载失败</p>
-            <button onClick={() => { setLoadError(false); setLoading(true); }} className="text-sm text-[var(--pink-primary)] underline">重试</button>
+            <p className="text-sm text-[var(--text-secondary)] mb-3">{t('vocab.load_failed', lang)}</p>
+            <button onClick={() => setRetryCount(c => c + 1)} className="text-sm text-[var(--pink-primary)] underline">{t('vocab.retry', lang)}</button>
           </div>
         ) : visibleUnits.length === 0 ? (
-          <div className="col-span-2 py-12 text-center text-sm text-[var(--text-muted)]">
-            暂无数据，词汇即将上线，敬请期待
+          <div className="col-span-2 lg:col-span-3 py-12 text-center text-sm text-[var(--text-muted)]">
+            {t('vocab.ys_no_data', lang)}
           </div>
         ) : visibleUnits.map((unit) => {
           const bookIdx = parseInt(unit.id.split('-')[1]) - 1;
           const color = bookColors[bookIdx % bookColors.length];
-          const isEmpty = unit.words.length === 0;
+          const isEmpty = unit.wordCount === 0;
 
           return (
             <div
@@ -198,7 +220,7 @@ export function YonseiSection() {
                     className="flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full opacity-50"
                     style={{ background: 'rgba(255,127,168,0.1)', color: 'var(--pink-primary)' }}
                   >
-                    <BookMarked size={11} />整理中
+                    <BookMarked size={11} />{t('vocab.ys_organizing', lang)}
                   </span>
                 )}
               </div>
@@ -213,19 +235,19 @@ export function YonseiSection() {
                 {unit.description}
               </p>
 
-              {unit.words.length > 0 && (
+              {unit.wordCount > 0 && (
                 <div className="flex flex-wrap gap-1 mb-4">
-                  {unit.words.slice(0, 6).map((w, wi) => (
+                  {unit.previewWords.map((w, wi) => (
                     <span
                       key={wi}
                       className="text-[11px] px-2 py-0.5 rounded-full bg-[var(--bg-input)] text-[var(--text-secondary)]"
                     >
-                      {w.word}
+                      {w}
                     </span>
                   ))}
-                  {unit.words.length > 6 && (
+                  {unit.wordCount > unit.previewWords.length && (
                     <span className="text-[11px] px-2 py-0.5 rounded-full bg-[var(--bg-input)] text-[var(--text-muted)]">
-                      +{unit.words.length - 6}
+                      +{unit.wordCount - unit.previewWords.length}
                     </span>
                   )}
                 </div>
@@ -234,7 +256,7 @@ export function YonseiSection() {
               {isEmpty ? (
                 <div className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium opacity-40 cursor-not-allowed" style={{ background: 'var(--bg-input)', color: 'var(--text-muted)' }}>
                   <BookOpen size={14} />
-                  整理中，即将上线
+                  {t('vocab.ys_organizing_soon', lang)}
                 </div>
               ) : (
                 <Link
@@ -243,7 +265,7 @@ export function YonseiSection() {
                   style={{ background: `${color}20`, color }}
                 >
                   <BookOpen size={14} />
-                  进入学习
+                  {t('vocab.ys_enter_study', lang)}
                 </Link>
               )}
             </div>

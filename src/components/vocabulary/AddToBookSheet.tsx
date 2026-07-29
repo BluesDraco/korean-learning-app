@@ -1,8 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Check, Plus, Loader2, BookMarked } from 'lucide-react';
 import { db } from '@/lib/db';
+import { t } from '@/lib/i18n';
+import { useLang } from '@/components/LangProvider';
 
 interface WordData {
   korean: string;
@@ -17,13 +20,17 @@ interface Props {
   word: WordData;
   onClose: () => void;
   onSelectBook?: (bookId: string) => Promise<void>;
+  onAdded?: () => void;
   title?: string;
 }
 
-export function AddToBookSheet({ word, onClose, onSelectBook, title }: Props) {
+export function AddToBookSheet({ word, onClose, onSelectBook, onAdded, title }: Props) {
+  const { lang } = useLang();
   const [books, setBooks] = useState<{ id: string; name: string; color: string }[]>([]);
   const [adding, setAdding] = useState<string | null>(null);
   const [done, setDone] = useState<Set<string>>(new Set());
+  // 挂载时预加载：该韩文词已经在哪些 book 里（bookId set）
+  const [alreadyIn, setAlreadyIn] = useState<Set<string>>(new Set());
   const [creating, setCreating] = useState(false);
   const [newBookName, setNewBookName] = useState('');
   const [creatingBook, setCreatingBook] = useState(false);
@@ -31,14 +38,22 @@ export function AddToBookSheet({ word, onClose, onSelectBook, title }: Props) {
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
-    return () => { document.body.style.overflow = ''; };
-  }, []);
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', onKey);
+    return () => { document.body.style.overflow = ''; document.removeEventListener('keydown', onKey); };
+  }, [onClose]);
 
   useEffect(() => {
-    db.wordBooks.toArray().then(all =>
-      setBooks(all.map(b => ({ id: b.id, name: b.name, color: b.color || 'var(--pink-primary)' })))
-    );
-  }, []);
+    (async () => {
+      const all = await db.wordBooks.toArray();
+      setBooks(all.map(b => ({ id: b.id, name: b.name, color: b.color || 'var(--pink-primary)' })));
+      // 找到这个韩文对应的 Word.id，然后看哪些 book 已包含它
+      const existing = await db.words.where('word').equals(word.korean).first().catch(() => null);
+      if (existing) {
+        setAlreadyIn(new Set(all.filter(b => b.wordIds.includes(existing.id)).map(b => b.id)));
+      }
+    })();
+  }, [word.korean]);
 
   const handleAdd = async (bookId: string) => {
     if (done.has(bookId) || adding) return;
@@ -48,37 +63,48 @@ export function AddToBookSheet({ word, onClose, onSelectBook, title }: Props) {
       if (onSelectBook) {
         await onSelectBook(bookId);
         setDone(prev => new Set(prev).add(bookId));
+        onAdded?.();
         return;
       }
       const book = await db.wordBooks.get(bookId);
-      if (!book) { setError('单词本不存在，请刷新后重试'); return; }
+      if (!book) { setError(t('vocab.atb_no_book', lang)); return; }
       const now = Date.now();
-      const wordId = crypto.randomUUID();
-      await db.words.put({
-        id: wordId,
-        word: word.korean,
-        pronunciation: word.pronunciation,
-        meaning: word.meaning,
-        partOfSpeech: word.partOfSpeech,
-        examples: (word.examples ?? []).map(ex => ({ text: ex.text, translation: ex.translation, source: 'dictionary' as const })),
-        sourceEntryId: word.sourceEntryId,
-        mastery: 'new',
-        srsLevel: 0,
-        easeFactor: 2.5,
-        interval: 0,
-        nextReview: now,
-        createdAt: now,
-        lastReviewed: null,
-        source: 'library',
-      });
-      await db.wordBooks.update(bookId, {
-        wordIds: [...book.wordIds, wordId],
-        updatedAt: now,
-      });
+      // Check if word already exists in DB to avoid duplicate entries
+      const existing = await db.words.where('word').equals(word.korean).first().catch(() => null);
+      let wordId: string;
+      if (existing) {
+        wordId = existing.id;
+      } else {
+        wordId = crypto.randomUUID();
+        await db.words.put({
+          id: wordId,
+          word: word.korean,
+          pronunciation: word.pronunciation,
+          meaning: word.meaning,
+          partOfSpeech: word.partOfSpeech,
+          examples: (word.examples ?? []).map(ex => ({ text: ex.text, translation: ex.translation, source: 'dictionary' as const })),
+          sourceEntryId: word.sourceEntryId,
+          mastery: 'new',
+          srsLevel: 0,
+          easeFactor: 2.5,
+          interval: 0,
+          nextReview: now,
+          createdAt: now,
+          lastReviewed: null,
+          source: 'library',
+        });
+      }
+      if (!book.wordIds.includes(wordId)) {
+        await db.wordBooks.update(bookId, {
+          wordIds: [...book.wordIds, wordId],
+          updatedAt: now,
+        });
+      }
       setDone(prev => new Set(prev).add(bookId));
+      onAdded?.();
     } catch (e) {
       console.error('[AddToBookSheet] handleAdd failed:', e);
-      setError('添加失败，请重试');
+      setError(t('vocab.atb_add_failed', lang));
     } finally {
       setAdding(null);
     }
@@ -87,26 +113,31 @@ export function AddToBookSheet({ word, onClose, onSelectBook, title }: Props) {
   const handleCreateBook = async () => {
     const name = newBookName.trim();
     if (!name || creatingBook) return;
+    if (name.length > 50) { setError(t('vocab.atb_name_too_long', lang)); return; }
     setCreatingBook(true);
     try {
       const now = Date.now();
       const bookId = crypto.randomUUID();
       const COLORS = ['var(--pink-primary)', 'var(--mint-soft)', 'var(--purple-soft)', 'var(--peach-soft)', 'var(--blue-soft)'];
       const color = COLORS[books.length % COLORS.length];
-      await db.wordBooks.put({ id: bookId, name, description: '', wordIds: [], color, createdAt: now, updatedAt: now }).catch(() => {});
-      const newBook = { id: bookId, name, color };
-      setBooks(prev => [...prev, newBook]);
+      await db.wordBooks.put({ id: bookId, name, description: '', wordIds: [], color, createdAt: now, updatedAt: now });
+      setBooks(prev => [...prev, { id: bookId, name, color }]);
       setNewBookName('');
       setCreating(false);
-      // Auto-add word to the newly created book
       await handleAdd(bookId);
+    } catch {
+      setError(t('vocab.atb_add_failed', lang));
     } finally {
       setCreatingBook(false);
     }
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40" style={{ paddingBottom: 'calc(56px + env(safe-area-inset-bottom, 0px))' }} onClick={onClose}>
+  // Portal 到 body：否则挂在带 `容器 > * {position:relative}` 规则的页面(learn-visual-root 等)
+  // 里会被击穿成 relative → 弹窗内联文档流、滚不动、按钮点不到（同 GoalWheelPicker 事故）
+  if (typeof window === 'undefined') return null;
+
+  return createPortal(
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40" style={{ paddingBottom: 'calc(56px + env(safe-area-inset-bottom, 0px))' }} onClick={onClose}>
       <div
         className="w-full max-w-lg bg-[var(--bg-card)] rounded-t-2xl px-5 pt-5 pb-5 flex flex-col"
         style={{ maxHeight: '65dvh' }}
@@ -117,7 +148,7 @@ export function AddToBookSheet({ word, onClose, onSelectBook, title }: Props) {
           <div>
             <p className="text-sm font-semibold text-[var(--text-primary)] flex items-center gap-1.5">
               <BookMarked size={15} className="text-[var(--pink-primary)]" />
-              {title ?? '加入单词本'}
+              {title ?? t('vocab.add_to_book', lang)}
             </p>
             {!title && (
               <p className="text-xs text-[var(--text-secondary)] mt-0.5">{word.korean} · {word.meaning}</p>
@@ -132,26 +163,34 @@ export function AddToBookSheet({ word, onClose, onSelectBook, title }: Props) {
             <p className="text-xs text-red-500 px-1 py-2">{error}</p>
           )}
           {books.length === 0 && !creating && (
-            <p className="text-sm text-[var(--text-muted)] py-4 text-center">还没有单词本，先新建一个吧</p>
+            <p className="text-sm text-[var(--text-muted)] py-4 text-center">{t('vocab.atb_no_books_create', lang)}</p>
           )}
-          {books.map(b => (
-            <button
-              key={b.id}
-              onClick={() => handleAdd(b.id)}
-              disabled={!!adding || done.has(b.id)}
-              className="w-full text-left px-4 py-3 rounded-xl bg-[var(--bg-input)] text-sm flex items-center gap-3 transition-colors hover:bg-[var(--bg-accent)] disabled:opacity-60"
-            >
-              <span className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: b.color }} />
-              <span className="flex-1 text-[var(--text-primary)] truncate">{b.name}</span>
-              {done.has(b.id) ? (
-                <Check size={16} className="text-[var(--mint-soft)] shrink-0" />
-              ) : adding === b.id ? (
-                <Loader2 size={14} className="animate-spin text-[var(--text-muted)] shrink-0" />
-              ) : (
-                <Plus size={15} className="text-[var(--text-muted)] shrink-0" />
-              )}
-            </button>
-          ))}
+          {books.map(b => {
+            const already = alreadyIn.has(b.id);
+            const finished = done.has(b.id);
+            return (
+              <button
+                key={b.id}
+                onClick={() => handleAdd(b.id)}
+                disabled={!!adding || finished || already}
+                className="w-full text-left px-4 py-3 rounded-xl bg-[var(--bg-input)] text-sm flex items-center gap-3 transition-colors hover:bg-[var(--bg-accent)] disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                <span className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: b.color }} />
+                <span className="flex-1 text-[var(--text-primary)] truncate">{b.name}</span>
+                {already ? (
+                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-[var(--mint-soft)]/20 text-[var(--mint-soft)] shrink-0 flex items-center gap-0.5">
+                    <Check size={11} />{t('vocab.atb_here', lang)}
+                  </span>
+                ) : finished ? (
+                  <Check size={16} className="text-[var(--mint-soft)] shrink-0" />
+                ) : adding === b.id ? (
+                  <Loader2 size={14} className="animate-spin text-[var(--text-muted)] shrink-0" />
+                ) : (
+                  <Plus size={15} className="text-[var(--text-muted)] shrink-0" />
+                )}
+              </button>
+            );
+          })}
 
           {/* New book input */}
           {creating && (
@@ -162,7 +201,7 @@ export function AddToBookSheet({ word, onClose, onSelectBook, title }: Props) {
                 value={newBookName}
                 onChange={e => setNewBookName(e.target.value)}
                 onKeyDown={e => { if (e.key === 'Enter') handleCreateBook(); if (e.key === 'Escape') setCreating(false); }}
-                placeholder="单词本名称"
+                placeholder={t('vocab.atb_name_ph', lang)}
                 className="flex-1 bg-[var(--bg-input)] border border-[var(--pink-primary)]/40 rounded-xl px-3 py-2 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--pink-primary)]"
               />
               <button
@@ -170,7 +209,7 @@ export function AddToBookSheet({ word, onClose, onSelectBook, title }: Props) {
                 disabled={!newBookName.trim() || creatingBook}
                 className="px-3 py-2 rounded-xl bg-[var(--pink-primary)] text-white text-sm font-medium disabled:opacity-50"
               >
-                {creatingBook ? <Loader2 size={14} className="animate-spin" /> : '创建'}
+                {creatingBook ? <Loader2 size={14} className="animate-spin" /> : t('vocab.atb_create', lang)}
               </button>
               <button onClick={() => setCreating(false)} className="p-2 text-[var(--text-muted)]">
                 <X size={16} />
@@ -186,10 +225,11 @@ export function AddToBookSheet({ word, onClose, onSelectBook, title }: Props) {
             className="shrink-0 mt-3 w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-dashed border-[var(--border-color)] text-sm text-[var(--text-secondary)] hover:border-[var(--pink-primary)] hover:text-[var(--pink-primary)] transition-colors"
           >
             <Plus size={15} />
-            新建单词本
+            {t('vocab.atb_new_book', lang)}
           </button>
         )}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

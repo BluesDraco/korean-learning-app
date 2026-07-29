@@ -6,10 +6,11 @@ import {
   Lightbulb, AlertCircle, CheckCircle2,
 } from 'lucide-react';
 import type { GrammarPoint } from '@/types';
-import { GRAMMAR_TO_COURSE_DAY } from '@/data/grammar-new';
-import { speak, cancelSpeech } from '@/lib/tts';
+import { speak, speakWord, cancelSpeech } from '@/lib/tts';
 import { db } from '@/lib/db';
 import { awardXp, XP_REWARDS } from '@/lib/gamification';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 
 interface Props {
   grammar: GrammarPoint;
@@ -28,24 +29,20 @@ function Badge({ text }: { text: string }) {
   );
 }
 
-const stepLabels: Record<StepType, string> = {
-  target: '今日目标', examples: '例句感知', rule: '规则解析',
-  substitution: '替换练习', choice: '判断对错', output: '造句输出',
-  settlement: '完成',
-};
-
 export function GrammarSession({ grammar, onClose, reviewQueue, onNextReview }: Props) {
+  const { lang } = useLang();
   const [step, setStep] = useState<StepType>('target');
   const [subIdx, setSubIdx] = useState(0);
-  const [courseRef, setCourseRef] = useState<{ day: number; title: string } | null>(null);
+  const [showExitConfirm, setShowExitConfirm] = useState(false);
 
-  useEffect(() => {
-    let cancelled = false;
-    import('@/data/thirtyDayCourse').then((m) => {
-      if (!cancelled) setCourseRef(m.getCourseDayForGrammar(grammar.id) ?? null);
-    });
-    return () => { cancelled = true; };
-  }, [grammar.id]);
+  const handleClose = () => {
+    if (step !== 'target' && step !== 'settlement') {
+      setShowExitConfirm(true);
+      return;
+    }
+    onClose();
+  };
+
   const [choiceIdx, setChoiceIdx] = useState(0);
   const [outputText, setOutputText] = useState('');
   const [choiceResult, setChoiceResult] = useState<'correct' | 'wrong' | null>(null);
@@ -56,16 +53,15 @@ export function GrammarSession({ grammar, onClose, reviewQueue, onNextReview }: 
   const correctRef = useRef(0);
   const wrongRef = useRef(0);
 
-  const subTemplates = grammar.practiceTemplates.filter((t) => t.type === 'substitution');
-  const choiceTemplates = grammar.practiceTemplates.filter((t) => t.type === 'choice');
-  const outputTemplate = grammar.practiceTemplates.find((t) => t.type === 'output');
-  const courseDay = GRAMMAR_TO_COURSE_DAY[grammar.id];
+  const subTemplates = grammar.practiceTemplates.filter((tpl) => tpl.type === 'substitution');
+  const choiceTemplates = grammar.practiceTemplates.filter((tpl) => tpl.type === 'choice');
+  const outputTemplate = grammar.practiceTemplates.find((tpl) => tpl.type === 'output');
 
   const intervalLabel = (days: number): string => {
-    if (days <= 1) return '明天';
-    if (days <= 7) return `${days} 天后`;
-    if (days <= 14) return '两周后';
-    return '一个月后';
+    if (days <= 1) return t('gsess.interval_tomorrow', lang);
+    if (days <= 7) return t('gsess.interval_days', lang, { n: days });
+    if (days <= 14) return t('gsess.interval_two_weeks', lang);
+    return t('gsess.interval_one_month', lang);
   };
 
   useEffect(() => {
@@ -77,7 +73,7 @@ export function GrammarSession({ grammar, onClose, reviewQueue, onNextReview }: 
   const playTTS = useCallback((text: string) => {
     cancelSpeech();
     setIsSpeaking(true);
-    speak(text, 0.8, () => setIsSpeaking(false));
+    speak(text, undefined, () => setIsSpeaking(false));
   }, []);
 
   // ── Compute next review interval (SRS-like) ──
@@ -106,7 +102,8 @@ export function GrammarSession({ grammar, onClose, reviewQueue, onNextReview }: 
       const now = Date.now();
       const totalCorrect = (existing?.correctCount ?? 0) + c;
       const totalWrong = (existing?.wrongCount ?? 0) + w;
-      const newStatus = w > c ? 'difficult' : getNextStatus(totalCorrect, existing?.status ?? 'new');
+      const prevStatus = existing?.status ?? 'new';
+      const newStatus = (w > c && (prevStatus === 'new' || prevStatus === 'learning')) ? 'difficult' : getNextStatus(totalCorrect, prevStatus);
       const intervalDays = getNextInterval(totalCorrect, newStatus);
       setNextReviewDays(intervalDays);
       if (existing) {
@@ -134,7 +131,7 @@ export function GrammarSession({ grammar, onClose, reviewQueue, onNextReview }: 
         });
       }
       await awardXp(XP_REWARDS.wordReviewed);
-    } catch (_e) {}
+    } catch (e) { console.warn('Failed to save grammar state:', e); }
   }, [grammar.id]);
 
   const goNextStep = useCallback(() => {
@@ -163,13 +160,11 @@ export function GrammarSession({ grammar, onClose, reviewQueue, onNextReview }: 
   // ── Substitution logic ──
   const currentSub = subTemplates[subIdx] ?? null;
 
+  // 替换练习是「读词卡+朗读」，无判定，不计入 correctCount（否则污染 SRS 掌握率）
   const handleSubNext = () => {
-    correctRef.current += 1;
     if (subIdx + 1 < subTemplates.length) {
       setSubIdx(subIdx + 1);
-      setCorrectCount((c) => c + 1);
     } else {
-      setCorrectCount((c) => c + 1);
       goNextStep();
     }
   };
@@ -202,10 +197,9 @@ export function GrammarSession({ grammar, onClose, reviewQueue, onNextReview }: 
   };
 
   // ── Output logic ──
+  // 造句是开放输出，无法自动判定对错，不计入 correctCount（否则输入任意文字都算掌握）
   const handleOutputSubmit = () => {
     if (outputText.trim()) {
-      correctRef.current += 1;
-      setCorrectCount((c) => c + 1);
       goNextStep();
     }
   };
@@ -231,51 +225,53 @@ export function GrammarSession({ grammar, onClose, reviewQueue, onNextReview }: 
   // ═══════════════════════════════ SETTLEMENT ═══════════════════════════════
   if (step === 'settlement') {
     return (
-      <div className="py-4 max-w-lg mx-auto space-y-6 text-center">
+      <div className="py-4 max-w-lg md:max-w-none mx-auto space-y-6 text-center">
         <div className="text-6xl">🐰</div>
         <div>
-          <h1 className="text-2xl font-bold text-[var(--text-primary)]">句型完成!</h1>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">{t('gsess.done_title', lang)}</h1>
           <p className="text-sm text-[var(--text-muted)] mt-1">
-            学会了：{grammar.displayTitle}
+            {t('gsess.done_learned', lang, { title: grammar.displayTitle })}
           </p>
-          {courseRef && (
-            <p className="text-xs text-[var(--mint-soft)] mt-1">
-              此句型来自 Day {courseRef.day}·{courseRef.title}
-            </p>
-          )}
         </div>
 
         <div className="grid grid-cols-2 gap-3">
           <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4">
             <CheckCircle2 size={20} className="text-[var(--mint-soft)] mx-auto mb-1" />
             <div className="text-xl font-bold text-[var(--text-primary)]">{correctCount}</div>
-            <div className="text-xs text-[var(--text-muted)]">答对</div>
+            <div className="text-xs text-[var(--text-muted)]">{t('gsess.stat_correct', lang)}</div>
           </div>
           <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4">
             <Zap size={20} className="text-[var(--peach-soft)] mx-auto mb-1" />
             <div className="text-xl font-bold text-[var(--text-primary)]">{grammar.displayTitle}</div>
-            <div className="text-xs text-[var(--text-muted)]">已学句型</div>
+            <div className="text-xs text-[var(--text-muted)]">{t('gsess.stat_learned_pattern', lang)}</div>
           </div>
         </div>
 
         <div className="bg-[var(--mint-soft)]/10 border border-[var(--mint-soft)]/20 rounded-2xl p-5 text-left">
-          <p className="text-sm font-bold text-[var(--text-primary)] mb-2">你现在可以说：</p>
+          <p className="text-sm font-bold text-[var(--text-primary)] mb-2">{t('gsess.you_can_say', lang)}</p>
           {grammar.examples.slice(0, 3).map((ex, i) => (
             <div key={i} className="flex items-center gap-2 mb-1.5">
               <span className="text-xs text-[var(--text-muted)] w-1 h-1 rounded-full bg-[var(--mint-soft)] shrink-0" />
               <span className="text-sm text-[var(--text-secondary)]">{ex.ko}</span>
+              <button
+                onClick={() => speakWord(ex.ko)}
+                aria-label={t('a11y.play_audio', lang)}
+                className="shrink-0 text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors"
+              >
+                <Volume2 size={13} />
+              </button>
               <span className="text-xs text-[var(--text-muted)]">{ex.zh}</span>
             </div>
           ))}
-          <p className="text-[10px] text-[var(--mint-soft)] mt-2">{intervalLabel(nextReviewDays)}会帮你复习这个句型</p>
+          <p className="text-[10px] text-[var(--mint-soft)] mt-2">{t('gsess.review_reminder', lang, { when: intervalLabel(nextReviewDays) })}</p>
         </div>
 
         <div className="flex gap-3">
           <button onClick={onClose} className="flex-1 py-3 rounded-xl bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-secondary)] font-medium text-sm">
-            返回句型页
+            {t('gsess.back_to_page', lang)}
           </button>
           <button onClick={handleRestart} className="flex-1 py-3 rounded-xl bg-[var(--pink-primary)] text-white font-medium text-sm">
-            再来一遍
+            {t('gsess.restart', lang)}
           </button>
         </div>
         {reviewQueue && reviewQueue.length > 0 && onNextReview && (
@@ -283,7 +279,7 @@ export function GrammarSession({ grammar, onClose, reviewQueue, onNextReview }: 
             onClick={() => onNextReview(reviewQueue[0])}
             className="w-full py-3.5 bg-gradient-to-r from-[var(--peach-soft)] to-[var(--pink-primary)] text-white rounded-2xl font-bold text-sm"
           >
-            下一个复习 ({reviewQueue.length} 个剩余)
+            {t('gsess.next_review', lang, { n: reviewQueue.length })}
           </button>
         )}
       </div>
@@ -292,13 +288,14 @@ export function GrammarSession({ grammar, onClose, reviewQueue, onNextReview }: 
 
   // ═══════════════════════════════ PRACTICE ═══════════════════════════════
   return (
-    <div className="py-4 max-w-lg mx-auto space-y-4">
+    <>
+    <div className="py-4 max-w-lg md:max-w-none mx-auto space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <button onClick={onClose} className="p-1 text-[var(--text-muted)] hover:text-[var(--text-primary)]">
+        <button onClick={handleClose} className="p-1 text-[var(--text-muted)] hover:text-[var(--text-primary)]">
           <ArrowLeft size={20} />
         </button>
-        <span className="text-xs font-medium text-[var(--text-primary)]">{stepLabels[step]}</span>
+        <span className="text-xs font-medium text-[var(--text-primary)]">{t(`gsess.step_${step}`, lang)}</span>
         <div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
           <Sparkles size={12} />{grammar.pattern}
         </div>
@@ -315,7 +312,7 @@ export function GrammarSession({ grammar, onClose, reviewQueue, onNextReview }: 
         {/* ── TARGET ── */}
         {step === 'target' && (
           <>
-            <Badge text="今日句型" />
+            <Badge text={t('gsess.badge_target', lang)} />
             <h2 className="text-2xl font-extrabold text-[var(--text-primary)]">{grammar.displayTitle}</h2>
             <p className="text-sm text-[var(--text-muted)]">{grammar.functionZh}</p>
             {grammar.useCases.length > 0 && (
@@ -326,7 +323,7 @@ export function GrammarSession({ grammar, onClose, reviewQueue, onNextReview }: 
               </div>
             )}
             <button onClick={goNextStep} className="w-full py-3 bg-[var(--pink-primary)] text-white rounded-2xl font-bold text-sm">
-              开始学习
+              {t('gsess.start_learn', lang)}
             </button>
           </>
         )}
@@ -334,8 +331,8 @@ export function GrammarSession({ grammar, onClose, reviewQueue, onNextReview }: 
         {/* ── EXAMPLES ── */}
         {step === 'examples' && (
           <>
-            <Badge text="例句感知" />
-            <p className="text-xs text-[var(--text-muted)]">先读一遍例句，感受一下这个句型</p>
+            <Badge text={t('gsess.badge_examples', lang)} />
+            <p className="text-xs text-[var(--text-muted)]">{t('gsess.examples_hint', lang)}</p>
             <div className="space-y-3 w-full">
               {grammar.examples.map((ex, i) => (
                 <div key={i} className="bg-[var(--bg-input)] rounded-xl p-4 text-left flex items-center justify-between">
@@ -353,7 +350,7 @@ export function GrammarSession({ grammar, onClose, reviewQueue, onNextReview }: 
               ))}
             </div>
             <button onClick={goNextStep} className="w-full py-3 bg-[var(--pink-primary)] text-white rounded-2xl font-bold text-sm">
-              看懂了，看规则
+              {t('gsess.examples_next', lang)}
             </button>
           </>
         )}
@@ -361,16 +358,11 @@ export function GrammarSession({ grammar, onClose, reviewQueue, onNextReview }: 
         {/* ── RULE ── */}
         {step === 'rule' && (
           <>
-            <Badge text="规则解析" />
-            {courseDay && (
-              <p className="text-[10px] text-[var(--text-muted)]">
-                在课程 Day {courseDay} 学过这个句型
-              </p>
-            )}
+            <Badge text={t('gsess.badge_rule', lang)} />
             <p className="text-sm text-[var(--text-primary)] font-bold">{grammar.shortExplanation}</p>
             {grammar.structure.length > 0 && (
               <div className="bg-[var(--bg-input)] rounded-2xl p-4 w-full text-left space-y-1.5">
-                <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">结构公式</p>
+                <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">{t('gsess.structure_formula', lang)}</p>
                 {grammar.structure.map((s, i) => (
                   <div key={i} className="text-xs text-[var(--text-secondary)] flex items-start gap-2">
                     <span className="text-[var(--mint-soft)] mt-0.5 shrink-0">{i + 1}.</span>
@@ -387,18 +379,25 @@ export function GrammarSession({ grammar, onClose, reviewQueue, onNextReview }: 
             )}
             {grammar.commonMistakes.length > 0 && (
               <div className="bg-[var(--pink-pale)]/10 border border-[var(--pink-primary)]/10 rounded-xl p-3 w-full text-left space-y-1">
-                <p className="text-[10px] text-[var(--pink-primary)] font-medium mb-1">常见错误</p>
+                <p className="text-[10px] text-[var(--pink-primary)] font-medium mb-1">{t('gsess.common_mistakes', lang)}</p>
                 {grammar.commonMistakes.map((cm, i) => (
-                  <div key={i} className="text-xs">
+                  <div key={i} className="text-xs flex items-center gap-1">
                     <span className="text-[var(--color-danger)] line-through">{cm.wrong}</span>
                     <span className="text-[var(--text-muted)] mx-1">→</span>
                     <span className="text-[var(--mint-soft)]">{cm.correct}</span>
+                    <button
+                      onClick={() => speakWord(cm.correct)}
+                      aria-label={t('a11y.play_audio', lang)}
+                      className="shrink-0 text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors"
+                    >
+                      <Volume2 size={12} />
+                    </button>
                   </div>
                 ))}
               </div>
             )}
             <button onClick={goNextStep} className="w-full py-3 bg-[var(--pink-primary)] text-white rounded-2xl font-bold text-sm">
-              {subTemplates.length > 0 ? '开始练习' : '继续'}
+              {subTemplates.length > 0 ? t('gsess.start_practice', lang) : t('gsess.continue', lang)}
             </button>
           </>
         )}
@@ -406,7 +405,7 @@ export function GrammarSession({ grammar, onClose, reviewQueue, onNextReview }: 
         {/* ── SUBSTITUTION ── */}
         {step === 'substitution' && currentSub && (
           <>
-            <Badge text="替换练习" />
+            <Badge text={t('gsess.badge_substitution', lang)} />
             <p className="text-xs text-[var(--text-muted)]">{currentSub.prompt}</p>
             {currentSub.template && (
               <h3 className="text-xl font-extrabold text-[var(--text-primary)]">{currentSub.template}</h3>
@@ -428,9 +427,9 @@ export function GrammarSession({ grammar, onClose, reviewQueue, onNextReview }: 
                 ))}
               </div>
             )}
-            <p className="text-xs text-[var(--text-muted)]">先读每个替换词，感受不同组合</p>
+            <p className="text-xs text-[var(--text-muted)]">{t('gsess.substitution_hint', lang)}</p>
             <button onClick={handleSubNext} className="w-full py-3 bg-[var(--pink-primary)] text-white rounded-2xl font-bold text-sm">
-              {subIdx + 1 < subTemplates.length ? '下一组' : '继续'}
+              {subIdx + 1 < subTemplates.length ? t('gsess.next_group', lang) : t('gsess.continue', lang)}
             </button>
           </>
         )}
@@ -438,7 +437,7 @@ export function GrammarSession({ grammar, onClose, reviewQueue, onNextReview }: 
         {/* ── CHOICE ── */}
         {step === 'choice' && currentChoice && (
           <>
-            <Badge text={`判断对错 ${choiceIdx + 1}/${choiceTemplates.length}`} />
+            <Badge text={t('gsess.badge_choice', lang, { cur: choiceIdx + 1, total: choiceTemplates.length })} />
             <p className="text-sm text-[var(--text-primary)] font-medium">{currentChoice.prompt}</p>
 
             <div className="space-y-2 w-full">
@@ -478,7 +477,7 @@ export function GrammarSession({ grammar, onClose, reviewQueue, onNextReview }: 
                 }
                 <div>
                   <p className="text-xs font-medium text-[var(--text-primary)]">
-                    {choiceResult === 'correct' ? '正确!' : '再想想'}
+                    {choiceResult === 'correct' ? t('gsess.choice_correct', lang) : t('gsess.choice_wrong', lang)}
                   </p>
                   {currentChoice.explanation && (
                     <p className="text-xs text-[var(--text-muted)] mt-0.5">{currentChoice.explanation}</p>
@@ -489,7 +488,7 @@ export function GrammarSession({ grammar, onClose, reviewQueue, onNextReview }: 
 
             {choiceResult && (
               <button onClick={handleChoiceNext} className="w-full py-3 bg-[var(--pink-primary)] text-white rounded-2xl font-bold text-sm">
-                {choiceIdx + 1 < choiceTemplates.length ? '下一题' : '继续'}
+                {choiceIdx + 1 < choiceTemplates.length ? t('gsess.next_question', lang) : t('gsess.continue', lang)}
               </button>
             )}
           </>
@@ -498,18 +497,25 @@ export function GrammarSession({ grammar, onClose, reviewQueue, onNextReview }: 
         {/* ── OUTPUT ── */}
         {step === 'output' && outputTemplate && (
           <>
-            <Badge text="造句输出" />
+            <Badge text={t('gsess.badge_output', lang)} />
             <p className="text-sm text-[var(--text-primary)] font-medium">{outputTemplate.prompt}</p>
             {outputTemplate.template && (
-              <div className="bg-[var(--bg-input)] rounded-xl px-4 py-3 w-full">
-                <p className="text-sm font-mono text-[var(--text-secondary)]">{outputTemplate.template}</p>
+              <div className="bg-[var(--bg-input)] rounded-xl px-4 py-3 w-full flex items-center gap-2">
+                <p className="text-sm font-mono text-[var(--text-secondary)] flex-1">{outputTemplate.template}</p>
+                <button
+                  onClick={() => speakWord(outputTemplate.template!)}
+                  aria-label={t('a11y.play_audio', lang)}
+                  className="shrink-0 text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors"
+                >
+                  <Volume2 size={14} />
+                </button>
               </div>
             )}
             <div className="w-full">
               <textarea
                 value={outputText}
                 onChange={(e) => setOutputText(e.target.value)}
-                placeholder="写下你的韩语句子..."
+                placeholder={t('gsess.output_placeholder', lang)}
                 rows={3}
                 className="w-full bg-[var(--bg-input)] border border-[var(--border-color)] rounded-xl p-3 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)] resize-none focus:outline-none focus:border-[var(--pink-pale)] transition-colors"
               />
@@ -523,11 +529,27 @@ export function GrammarSession({ grammar, onClose, reviewQueue, onNextReview }: 
                   : 'bg-[var(--bg-input)] text-[var(--text-muted)]'
               }`}
             >
-              完成
+              {t('gsess.finish', lang)}
             </button>
           </>
         )}
       </div>
     </div>
+
+    {/* Exit confirmation — avoids native confirm() which silently fails in iOS PWA */}
+    {showExitConfirm && (
+      <div className="fixed inset-0 z-[200] flex items-center justify-center p-6" onClick={() => setShowExitConfirm(false)}>
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="relative bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-5 w-full max-w-xs shadow-xl" onClick={e => e.stopPropagation()}>
+          <p className="text-sm font-semibold text-[var(--text-primary)] mb-1">{t('gsess.exit_title', lang)}</p>
+          <p className="text-xs text-[var(--text-muted)] mb-4">{t('gsess.exit_desc', lang)}</p>
+          <div className="flex gap-2">
+            <button onClick={() => setShowExitConfirm(false)} className="flex-1 py-2.5 rounded-xl bg-[var(--bg-soft)] text-[var(--text-secondary)] text-sm font-medium">{t('gsess.cancel', lang)}</button>
+            <button onClick={() => { setShowExitConfirm(false); onClose(); }} className="flex-1 py-2.5 rounded-xl bg-[var(--pink-primary)] text-white text-sm font-medium">{t('gsess.exit_confirm', lang)}</button>
+          </div>
+        </div>
+      </div>
+    )}
+    </>
   );
 }

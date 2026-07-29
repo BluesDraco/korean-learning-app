@@ -1,5 +1,8 @@
 'use client';
 
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
+
 const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 2] as const;
 
 interface SpeedSelectorProps {
@@ -9,6 +12,7 @@ interface SpeedSelectorProps {
 }
 
 export function SpeedSelector({ current, onSelect, platform }: SpeedSelectorProps) {
+  const { lang } = useLang();
   const isBilibili = platform === 'bilibili';
 
   return (
@@ -33,7 +37,7 @@ export function SpeedSelector({ current, onSelect, platform }: SpeedSelectorProp
         );
       })}
       {isBilibili && (
-        <span className="text-[10px] text-[var(--text-muted)] ml-1">需用播放器控件调倍速</span>
+        <span className="text-[10px] text-[var(--text-muted)] ml-1">{t('speed.bilibiliHint', lang)}</span>
       )}
     </div>
   );

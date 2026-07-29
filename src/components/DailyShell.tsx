@@ -7,7 +7,7 @@ interface DailyShellProps {
 
 export function DailyShell({ main, aside }: DailyShellProps) {
   return (
-    <div className="lg:flex lg:gap-6 lg:pr-6 xl:pr-10 py-4">
+    <div className="lg:flex lg:gap-6 lg:pr-6 xl:pr-10 py-4" style={{ paddingBottom: 'calc(1rem + env(safe-area-inset-bottom, 0px))' }}>
       <div className="flex-1 min-w-0 space-y-4">
         {main}
       </div>

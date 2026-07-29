@@ -41,13 +41,14 @@ export const grammarCardsP16: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '动物声：멍멍（汪汪）/ 야옹（喵）/ 꼬꼬댁（咯咯）/ 짹짹（叽叽）', examples: '강아지가 멍멍 짖어요.' },
-      { type: 'rule', text: '物体撞击：쨍그랑（碎裂）/ 쿵쿵（咚咚）/ 똑똑（敲）/ 콩콩（跳跃）', examples: '유리가 쨍그랑 깨졌어요.' },
-      { type: 'rule', text: '人声：쿨쿨（呼噜）/ 하하（哈哈）/ 훌쩍훌쩍（抽泣）/ 아이고（哎哟）', examples: '아기가 쿨쿨 자요.' },
-      { type: 'rule', text: '自然声：쏴（哗）/ 우르릉（隆隆）/ 뚝뚝（滴答）/ 웅웅（嗡嗡）', examples: '비가 쏴 쏟아졌어요.' },
+      { type: 'rule', text: '动物声：멍멍（汪汪）/ 야옹（喵）/ 꼬꼬댁（咯咯）/ 짹짹（叽叽）', examples: '강아지가 멍멍 짖어요.（小狗汪汪叫。）' },
+      { type: 'rule', text: '物体撞击：쨍그랑（碎裂）/ 쿵쿵（咚咚）/ 똑똑（敲）/ 콩콩（跳跃）', examples: '유리가 쨍그랑 깨졌어요.（玻璃哐当碎了。）' },
+      { type: 'rule', text: '人声：쿨쿨（呼噜）/ 하하（哈哈）/ 훌쩍훌쩍（抽泣）/ 아이고（哎哟）', examples: '아기가 쿨쿨 자요.（宝宝呼呼睡。）' },
+      { type: 'rule', text: '自然声：쏴（哗）/ 우르릉（隆隆）/ 뚝뚝（滴答）/ 웅웅（嗡嗡）', examples: '비가 쏴 쏟아졌어요.（雨哗地倾泻下来。）' },
       { type: 'usage', text: '拟声语一般作副词修饰动词', examples: '멍멍 짖어요 / 똑똑 두드렸어요' },
       { type: 'compare', text: '의성어 vs 의태어 → 前者模拟声音，后者模拟状态/动作', examples: '(의성) 쿵쿵 = 咚咚声 / (의태) 살금살금 = 蹑手蹑脚' },
       { type: 'note', text: '汉语和韩语的拟声词不能字面对译', examples: '中文"喵" ≠ 韩语"야옹"（读音也不同）' },
+      { type: 'vocab', text: '拟声语搭配的动词是固定的，凭中文猜不出来，要成组记忆：비가 주룩주룩 내리다（雨哗哗下）/ 천둥이 우르릉 치다（打雷）/ 코를 드르렁 골다（打呼噜）/ 문을 똑똑 두드리다（敲门）', examples: '打雷的动词是 치다、打呼噜的动词是 골다，都不能按中文动词直译' },
     ],
     cardExamples: [
       {
@@ -96,7 +97,7 @@ export const grammarCardsP16: GrammarCard[] = [
       headers: ['声音', '拟声语', '典型语境'],
       rows: [
         ['狗叫', '멍멍 / 왈왈', '강아지가 멍멍 짖어요'],
-        ['猫叫', '야옹', '고양이가 야옹 해요'],
+        ['猫叫', '야옹', '고양이가 야옹 울어요'],
         ['敲门', '똑똑', '똑똑 두드렸어요'],
         ['破碎', '쨍그랑', '유리가 쨍그랑 깨졌어요'],
         ['呼噜', '쿨쿨 / 드르렁', '아기가 쿨쿨 자요'],
@@ -210,14 +211,16 @@ export const grammarCardsP16: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '视觉：반짝반짝（闪闪）/ 반들반들（光溜溜）/ 알록달록（五彩缤纷）', examples: '별이 반짝반짝 빛나요.' },
-      { type: 'rule', text: '动作：살금살금（蹑手蹑脚）/ 어슬렁어슬렁（悠悠晃晃）/ 아장아장（蹒跚学步）', examples: '아이가 살금살금 걸어왔어요.' },
-      { type: 'rule', text: '心理：두근두근（怦怦）/ 두리번두리번（东张西望）/ 안절부절（坐立不安）', examples: '가슴이 두근두근 뛰어요.' },
-      { type: 'rule', text: '记忆/意识：깜빡깜빡（一闪一闪 / 忘记）/ 아리송아리송（迷迷糊糊）', examples: '요즘 자꾸 깜빡깜빡해요.' },
+      { type: 'rule', text: '视觉：반짝반짝（闪闪）/ 반들반들（光溜溜）/ 알록달록（五彩缤纷）', examples: '별이 반짝반짝 빛나요.（星星一闪一闪地亮。）' },
+      { type: 'rule', text: '动作：살금살금（蹑手蹑脚）/ 어슬렁어슬렁（悠悠晃晃）/ 아장아장（蹒跚学步）', examples: '아이가 살금살금 걸어왔어요.（孩子蹑手蹑脚地走过来。）' },
+      { type: 'rule', text: '心理：두근두근（怦怦）/ 두리번두리번（东张西望）/ 안절부절（坐立不安）', examples: '가슴이 두근두근 뛰어요.（心怦怦跳。）' },
+      { type: 'rule', text: '记忆/意识：깜빡깜빡（一闪一闪 / 忘记）/ 아리송아리송（迷迷糊糊）', examples: '요즘 자꾸 깜빡깜빡해요.（最近老是走神/丢三落四。）' },
       { type: 'usage', text: '大多是 ABAB 型 반복 形式', examples: '반짝 → 반짝반짝 / 두근 → 두근두근' },
       { type: 'usage', text: '常作副词修饰动词/形容词', examples: '반짝반짝 빛나다 / 두근두근 뛰다' },
       { type: 'compare', text: '의성어 vs 의태어', examples: '(의성) 쨍그랑 = 声音 / (의태) 반짝반짝 = 视觉状态' },
       { type: 'note', text: '拟态语学不好，韩语再流利也失去生动感', examples: '韩国儿童绘本和综艺是拟态语学习的最佳材料' },
+      { type: 'note', text: '中文没有"拟态语"这种能产词类，母语者习惯用形容词或整句来描写（如"偷偷地走过来"），结果几乎不用拟态语，句子听起来平淡。要主动把拟态语当成一个词记下来用', examples: '살금살금 걸어왔어요 一个词就说清"蹑手蹑脚走过来"，不必绕成长句' },
+      { type: 'vocab', text: '同一个拟态语常一词多义，中文母语者想不到：깜빡깜빡 既是"灯一闪一闪"，也是"眨眼睛"，还是"走神/忘事"', examples: '불이 깜빡깜빡해요（灯闪）/ 눈을 깜빡깜빡해요（眨眼）/ 자꾸 깜빡깜빡해요（老忘事）' },
     ],
     cardExamples: [
       {
@@ -389,8 +392,10 @@ export const grammarCardsP16: GrammarCard[] = [
       { type: 'rule', text: '同一词根：깡충↔껑충 / 졸졸↔줄줄 / 반짝↔번쩍', examples: '语义等级不同' },
       { type: 'usage', text: '阳性适合描写"儿童 / 动物 / 精致物"', examples: '토끼가 깡충깡충 / 아기가 방긋 웃어요' },
       { type: 'usage', text: '阴性适合描写"成人 / 大物 / 沉重感"', examples: '큰 개가 껑충껑충 / 물이 줄줄 흘러요' },
-      { type: 'compare', text: '反짝 vs 번쩍 → 前者小闪，后者强闪', examples: '별이 반짝 / 번개가 번쩍' },
+      { type: 'compare', text: '반짝 vs 번쩍 → 前者小闪，后者强闪', examples: '별이 반짝 / 번개가 번쩍' },
       { type: 'note', text: '母音选错会让描写"错位"（大狗不会 깡충깡충）', examples: '토끼 → 깡충 / 사자 → 껑충' },
+      { type: 'note', text: '别被"阴阳"这两个中文字带偏：中文里"阳"给人"强大"、"阴"给人"弱小"的感觉，韩语这里正好相反——阳性 ㅏ/ㅗ 才是小/轻/可爱，阴性 ㅓ/ㅜ 才是大/重/沉', examples: '记口诀：ㅏ/ㅗ 嘴张小=小事物，ㅓ/ㅜ 嘴张大=大事物' },
+      { type: 'note', text: '这是"语感倾向"不是死规则：不能靠随手换母音去造词，也不是每个词都成对存在，要以实际用过的词为准', examples: '반짝↔번쩍、졸졸↔줄줄 成对；但不能凭空造 *깽충 这种没人用的形式' },
     ],
     cardExamples: [
       {
@@ -565,6 +570,8 @@ export const grammarCardsP16: GrammarCard[] = [
       { type: 'usage', text: 'ABAB 强调反复性状态/延续', examples: '별이 반짝반짝 빛나요.（一直闪）' },
       { type: 'compare', text: '반짝 vs 반짝반짝 → 前者瞬时，后者持续', examples: '(瞬时) 반짝 지나갔어요 / (持续) 반짝반짝 빛나요' },
       { type: 'note', text: '选 AB 还是 ABAB 视语境判断动作是否反复', examples: '一下 vs 一直' },
+      { type: 'note', text: '中文母语者的负迁移：中文拟声/拟态词几乎全是叠的（"闪闪""蹦蹦跳跳"），所以韩语里也习惯全部说成 ABAB，结果丢掉了瞬时的 AB 形。想表达"就那一下"时，记得用单个 AB', examples: '想说"星星闪了一下"要说 반짝 빛났어요，说成 반짝반짝 就变成"一直闪"了' },
+      { type: 'vocab', text: 'ABAB 不都是同一音节翻倍，有些是 A+B 两个不同音节拼成的固定叠词，不能自己机械翻倍造出来，只能整词背：헐레벌떡（气喘吁吁）/ 티격태격（拌嘴）/ 울긋불긋（斑斓）', examples: '헐레벌떡 不是 *헐레헐레，울긋불긋 不是 *울긋울긋' },
     ],
     cardExamples: [
       {
@@ -732,14 +739,17 @@ export const grammarCardsP16: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '두근두근 → 期待/紧张的心跳', examples: '두근두근 떨려요.' },
-      { type: 'rule', text: '설레설레 → 心动/激动兴奋', examples: '고백을 앞두고 설레설레 해요.' },
-      { type: 'rule', text: '조마조마 → 提心吊胆', examples: '결과 나올 때까지 조마조마했어요.' },
-      { type: 'rule', text: '안절부절 → 坐立不安', examples: '기다리는 내내 안절부절 못 했어요.' },
-      { type: 'rule', text: '두리번두리번 → 东张西望', examples: '두리번두리번 주위를 살펴봤어요.' },
-      { type: 'rule', text: '멍하니 → 呆呆地/失神', examples: '멍하니 창밖을 봐요.' },
-      { type: 'usage', text: '安절부절는 常搭 못하다', examples: '안절부절 못 했어요（坐立不安）' },
-      { type: 'note', text: '심리감정类拟态语让韩剧台词生动化的关键', examples: '恋爱台词多用 두근두근 / 설레설레' },
+      { type: 'rule', text: '두근두근 → 期待/紧张的心跳', examples: '두근두근 떨려요.（心怦怦地紧张。）' },
+      { type: 'rule', text: '콩닥콩닥 → 心怦怦跳（比 두근두근 更急促）', examples: '첫 데이트라 콩닥콩닥 뛰었어요.（第一次约会，心怦怦直跳。）注意"心动"是动词 설레다（마음이 설레요），설레설레 其实是"摇头"的样子，别混用。' },
+      { type: 'rule', text: '조마조마 → 提心吊胆', examples: '결과 나올 때까지 조마조마했어요.（等结果出来前一直提心吊胆。）' },
+      { type: 'rule', text: '안절부절 → 坐立不安', examples: '기다리는 내내 안절부절 못 했어요.（等的时候一直坐立不安。）' },
+      { type: 'rule', text: '두리번두리번 → 东张西望', examples: '두리번두리번 주위를 살펴봤어요.（东张西望地打量四周。）' },
+      { type: 'rule', text: '멍하니 → 呆呆地/失神', examples: '멍하니 창밖을 봐요.（呆呆地望着窗外。）' },
+      { type: 'usage', text: '안절부절 常固定搭配 못하다', examples: '안절부절 못 했어요（坐立不安）' },
+      { type: 'note', text: '심리감정类拟态语让韩剧台词生动化的关键', examples: '恋爱台词多用 두근두근 / 콩닥콩닥' },
+      { type: 'compare', text: '三个中文都可译成"紧张/不安"，韩语语感分岔：두근두근=心跳（既可期待也可害怕）｜조마조마=怕结果变坏的提心吊胆｜안절부절=坐不住的焦躁不安。别混用', examples: '두근두근 떨려요（心跳）／결과까지 조마조마했어요（怕变坏）／안절부절 못 했어요（坐不住）' },
+      { type: 'note', text: '두근두근 情绪中性，靠上下文判正负；조마조마、안절부절 只形容负面焦虑，不能拿来表达开心的期待', examples: '좋은 소식을 기다리며 두근두근해요.（等好消息心怦怦，✓期待）' },
+      { type: 'note', text: '멍하니 不是 ABAB 反复形，它是 멍하다 的副词形（멍하다 → 멍하니），别照搬叠词规律写成 멍멍하니', examples: '멍하니 창밖을 봐요.（呆呆望着窗外。）' },
     ],
     cardExamples: [
       {
@@ -749,7 +759,7 @@ export const grammarCardsP16: GrammarCard[] = [
           { text: '떨려요', role: 'verb' },
         ],
         zh: '发表前紧张。',
-        swapWords: ['두근두근', '콩닥콩닥', '설레설레'],
+        swapWords: ['두근두근', '콩닥콩닥', '조마조마'],
       },
       {
         wordBlocks: [
@@ -772,7 +782,7 @@ export const grammarCardsP16: GrammarCard[] = [
     ],
     scenarios: [
       { icon: '💓', context: '紧张', ko: '두근두근 떨려요.', zh: '心怦怦跳。' },
-      { icon: '💕', context: '心动', ko: '고백 앞에서 설레설레 해요.', zh: '表白前心动。' },
+      { icon: '💕', context: '心动', ko: '고백 앞에서 마음이 설레요.', zh: '表白前心动（小鹿乱撞）。' },
       { icon: '😰', context: '提心', ko: '결과까지 조마조마했어요.', zh: '一直提心吊胆。' },
       { icon: '😵', context: '坐立不安', ko: '안절부절 못 했어요.', zh: '坐立不安。' },
       { icon: '👀', context: '东张西望', ko: '두리번두리번 살펴봤어요.', zh: '东张西望。' },
@@ -780,7 +790,7 @@ export const grammarCardsP16: GrammarCard[] = [
     ],
     mistakes: [
       { wrong: '두근두근을 뛰어요', correct: '두근두근 뛰어요', note: '拟态语不加助词' },
-      { wrong: '안절부절 있어요', correct: '안절부절 못 했어요', note: '安절부절 固定搭配 못하다（否定辅助动词）' },
+      { wrong: '안절부절 있어요', correct: '안절부절 못 했어요', note: '안절부절 固定搭配 못하다（否定辅助动词）' },
       { wrong: '조마조마 있어요', correct: '조마조마해요', note: '조마조마 + 하다 变形容词性谓语' },
     ],
     quickTable: {
@@ -788,7 +798,7 @@ export const grammarCardsP16: GrammarCard[] = [
       headers: ['拟态语', '含义', '例句'],
       rows: [
         ['두근두근', '紧张/期待心跳', '내일 두근두근 떨려요'],
-        ['설레설레', '心动/激动', '설레설레 해요'],
+        ['콩닥콩닥', '激动心跳', '가슴이 콩닥콩닥 뛰어요'],
         ['조마조마', '提心吊胆', '조마조마했어요'],
         ['안절부절', '坐立不安', '안절부절 못 했어요'],
         ['두리번두리번', '东张西望', '두리번두리번 봐요'],
@@ -827,7 +837,7 @@ export const grammarCardsP16: GrammarCard[] = [
       ],
     },
     linkedGrammarIds: ['card-p16-l02', 'card-p16-l06'],
-    step0Html: `<div class="hook-box"><div style="font-size:15px;color:#241917;line-height:1.8">心理感情类拟态语是韩剧台词的灵魂：<br><b>두근두근</b>（紧张心跳）· <b>설레설레</b>（心动）· <b>조마조마</b>（提心吊胆）· <b>안절부절</b>（坐立不安）· <b>멍하니</b>（呆呆）。</div></div>`,
+    step0Html: `<div class="hook-box"><div style="font-size:15px;color:#241917;line-height:1.8">心理感情类拟态语是韩剧台词的灵魂：<br><b>두근두근</b>（紧张心跳）· <b>콩닥콩닥</b>（激动急促心跳）· <b>조마조마</b>（提心吊胆）· <b>안절부절</b>（坐立不安）· <b>멍하니</b>（呆呆）。</div></div>`,
     compareHtml: `<div class="cmp-block">
   <div style="font-size:15px;color:#241917;line-height:1.8">
     <b>紧张 vs 焦虑</b><br>
@@ -847,7 +857,7 @@ export const grammarCardsP16: GrammarCard[] = [
   <div class="ov-block">
     <div style="font-size:16px;color:#241917;line-height:1.9">
       두근두근 → 紧张心跳<br>
-      설레설레 → 心动激动<br>
+      콩닥콩닥 → 激动急促心跳<br>
       조마조마 → 提心吊胆<br>
       안절부절（+못하다）→ 坐立不安<br>
       두리번두리번 → 东张西望<br>
@@ -904,14 +914,16 @@ export const grammarCardsP16: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '뒤뚱뒤뚱 → 一摇一摆（鸭子、企鹅、胖子）', examples: '오리가 뒤뚱뒤뚱 걸어요.' },
-      { type: 'rule', text: '엉금엉금 → 爬行（婴儿、乌龟）', examples: '아기가 엉금엉금 기어요.' },
-      { type: 'rule', text: '비틀비틀 → 踉跄（醉汉、生病）', examples: '술 취해서 비틀비틀 걸어요.' },
-      { type: 'rule', text: '허둥지둥 → 慌张（迟到）', examples: '허둥지둥 뛰어왔어요.' },
-      { type: 'rule', text: '성큼성큼 → 大步流星', examples: '성큼성큼 다가왔어요.' },
-      { type: 'rule', text: '쭈뼛쭈뼛 → 缩着身子（害羞/紧张）', examples: '쭈뼛쭈뼛 다가왔어요.' },
+      { type: 'rule', text: '뒤뚱뒤뚱 → 一摇一摆（鸭子、企鹅、胖子）', examples: '오리가 뒤뚱뒤뚱 걸어요.（鸭子摇摇摆摆地走。）' },
+      { type: 'rule', text: '엉금엉금 → 爬行（婴儿、乌龟）', examples: '아기가 엉금엉금 기어요.（宝宝慢吞吞地爬。）' },
+      { type: 'rule', text: '비틀비틀 → 踉跄（醉汉、生病）', examples: '술 취해서 비틀비틀 걸어요.（喝醉了走路摇摇晃晃。）' },
+      { type: 'rule', text: '허둥지둥 → 慌张（迟到）', examples: '허둥지둥 뛰어왔어요.（慌慌张张地跑来。）' },
+      { type: 'rule', text: '성큼성큼 → 大步流星', examples: '성큼성큼 다가왔어요.（大步流星地走近。）' },
+      { type: 'rule', text: '쭈뼛쭈뼛 → 缩着身子（害羞/紧张）', examples: '쭈뼛쭈뼛 다가왔어요.（怯生生地凑近。）' },
       { type: 'usage', text: '选拟态语时看人物身份/状态', examples: '婴儿=엉금엉금 / 醉汉=비틀비틀 / 迟到=허둥지둥' },
       { type: 'note', text: '拟态语搭错动词很奇怪', examples: '误：뒤뚱뒤뚱 뛰어요 → 正：뒤뚱뒤뚱 걸어요' },
+      { type: 'compare', text: '中文"摇摇晃晃"一个词，韩语要按原因分：뒤뚱뒤뚱=身体重/左右摇（鸭子、胖子，正常走）｜비틀비틀=站不稳/快摔倒（醉汉、生病）。译成中文都像，但不能互换', examples: '오리가 뒤뚱뒤뚱 걸어요（重心摇摆）／술 취해서 비틀비틀 걸어요（站不稳）' },
+      { type: 'note', text: '성큼성큼 是"步子大又快"，别被字面误当成慢动作；엉금엉금 才是慢吞吞地爬', examples: '성큼성큼 다가왔어요（大步快速走近）／아기가 엉금엉금 기어요（慢慢爬）' },
     ],
     cardExamples: [
       {
@@ -1076,11 +1088,13 @@ export const grammarCardsP16: GrammarCard[] = [
     connectionRules: [
       { type: 'rule', text: '拟态语 + -하다 → 中性谓语', examples: '두근두근하다 / 반짝하다 / 살랑살랑하다' },
       { type: 'rule', text: '拟态语 AB + -거리다 → 反复动作', examples: '반짝거리다 / 두근거리다 / 살랑거리다' },
-      { type: 'rule', text: '拟态语 AB + -대다 → 反复且略带贬义', examples: '반짝대다 / 시끄럽대다 / 칭얼대다' },
-      { type: 'usage', text: '同一词根三种后缀常可互换', examples: '두근두근하다 = 두근거리다 ≈ 두근대다' },
+      { type: 'rule', text: '拟态语 AB + -대다 → 反复且略带贬义', examples: '반짝대다 / 투덜대다 / 칭얼대다' },
+      { type: 'usage', text: '同一词根三种后缀常可互换', examples: '두근두근하다 = 두근거리다 ≈ 두근대다（心怦怦跳，三种说法近义）' },
       { type: 'usage', text: '-대다 语感偏负面（对说话对象不太喜欢的行为）', examples: '떠들다 → 떠들어대다（吵闹）' },
       { type: 'compare', text: '-거리다 vs -대다', examples: '(中性) 반짝거리다 / (略负) 반짝대다' },
       { type: 'note', text: 'AB (单次) + -거리다/-대다，不用 ABAB 形', examples: '误：반짝반짝거리다 → 正：반짝거리다' },
+      { type: 'note', text: '"三缀常可互换"是就成对的高频词说的，别当成"任意词根都能自造三种"。以实际存在的词为准，拿不准就用最稳的 -하다', examples: '두근두근하다/두근거리다/두근대다 ✓ 都存在；生僻词别硬凑 X대다' },
+      { type: 'note', text: '-대다 的贬义是"说话人自己的不满态度"，中文没有对应的动词后缀。夸自家宝宝可爱、或对客户说话时，别用 -대다，否则听起来像嫌弃', examples: '(嫌孩子烦) 자꾸 칭얼대요 ✓／(疼爱语气) 아기가 방긋방긋 웃어요 ✓ 不用 -대다' },
     ],
     cardExamples: [
       {
@@ -1215,11 +1229,11 @@ export const grammarCardsP16: GrammarCard[] = [
     rulesNote: '-이：多修饰视觉/动作｜-히：多修饰状态/心境｜-게：通用副词化',
     structures: [
       {
-        ko: '눈물이 반짝이 빛났어요.',
+        ko: '눈물이 반짝 빛났어요.',
         zh: '泪珠闪着光。',
         tokens: [
           { text: '눈물이', role: 'subject' },
-          { text: '반짝이', role: 'plain' },
+          { text: '반짝', role: 'plain' },
           { text: '빛났어요', role: 'verb' },
         ],
       },
@@ -1242,13 +1256,15 @@ export const grammarCardsP16: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '拟态语 + -이 → 副词化（视觉/动作）', examples: '반짝 → 반짝이 / 방긋 → 방긋이' },
+      { type: 'rule', text: '拟态语 + -이 → 副词化（视觉/动作）', examples: '방긋 → 방긋이 / 생긋 → 생긋이' },
       { type: 'rule', text: '拟态语 + -히 → 副词化（状态/心境）', examples: '살포시 / 조용히 / 가만히' },
       { type: 'rule', text: '拟态语/形容词 + -게 → 通用副词化', examples: '조용하게 / 반짝이게 / 예쁘게' },
-      { type: 'usage', text: '这些副词化形式修饰动词', examples: '살포시 미소 지었어요.' },
-      { type: 'usage', text: '有些 -이 也可作名词（반짝이=亮片）', examples: '옷에 반짝이가 붙어 있어요.' },
-      { type: 'compare', text: '-이 vs -히 → 前者多视觉动作，后者多状态心境', examples: '반짝이 vs 조용히 / 살포시' },
+      { type: 'usage', text: '这些副词化形式修饰动词', examples: '살포시 미소 지었어요.（轻轻地微笑。）' },
+      { type: 'usage', text: '有些 -이 也可作名词（반짝이=亮片）', examples: '옷에 반짝이가 붙어 있어요.（衣服上沾着亮片。）' },
+      { type: 'compare', text: '-이 vs -히 → 前者多视觉动作，后者多状态心境', examples: '방긋이 vs 조용히 / 살포시' },
       { type: 'note', text: '搭配是习惯，不能自造 -이 或 -히', examples: '误：두근이 → 正：두근두근해요 / 두근거려요' },
+      { type: 'note', text: '中文"地"一个字通吃，韩语这里没有万能标记：-이/-히 是逐词记死的固定形，不能靠语感现推。生词先查是否有副词形，没有就用 ABAB 原形或 -하게', examples: '방긋 → 방긋이（✓固定）／살포시（✓固定）；查不到就用 살랑살랑 原形' },
+      { type: 'note', text: '-게 虽通用，但不能顶替已有固定副词形。已经是副词的词（살포시、가만히）再加 -게 是错的', examples: '误：살포시게 → 正：살포시；误：가만히게 → 正：가만히' },
     ],
     cardExamples: [
       {
@@ -1287,7 +1303,7 @@ export const grammarCardsP16: GrammarCard[] = [
       { icon: '📚', context: '仔细', ko: '꼼꼼히 읽어봤어요.', zh: '仔细读了。' },
     ],
     mistakes: [
-      { wrong: '눈물이 반짝히 빛났어요', correct: '눈물이 반짝이 빛났어요', note: '반짝 + -이（固定搭配）' },
+      { wrong: '방긋히 웃었어요', correct: '방긋이 웃었어요', note: '방긋 + -이（固定搭配）' },
       { wrong: '살포시게 미소 지었어요', correct: '살포시 미소 지었어요', note: '살포시 已是副词，不用 -게' },
       { wrong: '두근이 뛰어요', correct: '두근두근 뛰어요 / 두근거려요', note: '두근 没有 -이 副词形式' },
     ],

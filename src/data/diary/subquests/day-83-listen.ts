@@ -1,0 +1,29 @@
+import type { ListenSubQuestData } from '@/types/tori-subquest';
+
+/** Day 83 · 3-2 귀 트이기 · 나중에 ~ㄹ게 + ~까지 · Haru의 真相 */
+export const day83Listen: ListenSubQuestData = {
+  day: 23, level: 'advanced', idx: 2, kind: 'listen',
+  koTitle: '귀 트이기',
+  subtitle: '301호 · 나중에 말해 줄게',
+
+  meaning: [
+    { id: 'd83-l2-m1', audioKo: '나중에 말해 줄게.',                                              choices: [{ text: '以后再告诉你。',                          correct: true }, { text: '现在就告诉你。',                    correct: false }, { text: '不告诉你。',                        correct: false }, { text: '你先说。',                          correct: false }], explain: '나중에 + ~아/어 줄게 · 承诺' },
+    { id: 'd83-l2-m2', audioKo: '오늘 말할 수 있는 건 여기까지야.',                                choices: [{ text: '今天能说的到这里为止。',                  correct: true }, { text: '今天什么都能说。',                  correct: false }, { text: '今天不想说。',                      correct: false }, { text: '从这里开始说。',                    correct: false }], explain: '~까지 · 限度' },
+    { id: 'd83-l2-m3', audioKo: '그 친구도 용기라고 쓴 당근을 갖고 있었어.',                        choices: [{ text: '那朋友也带着写着「勇气」的胡萝卜。',      correct: true }, { text: '那朋友没有胡萝卜。',                correct: false }, { text: '那朋友写了封信。',                  correct: false }, { text: '那朋友是韩国人。',                  correct: false }], explain: 'Haru 的真相 · 5年前的留学生' },
+    { id: 'd83-l2-m4', audioKo: '기다릴게. 서두르지 않을게.',                                      choices: [{ text: '我会等，不催你。',                        correct: true }, { text: '我不等，你快说。',                  correct: false }, { text: '我很着急。',                        correct: false }, { text: '你等我。',                          correct: false }], explain: '기다릴게 + 서두르지 않을게 · 承诺' },
+    { id: 'd83-l2-m5', audioKo: '조심스럽게 물었어요.',                                            choices: [{ text: '小心翼翼地问了。',                        correct: true }, { text: '大声地问了。',                      correct: false }, { text: '没有问。',                          correct: false }, { text: '生气地问了。',                      correct: false }], explain: '조심스럽다 → 조심스럽게' },
+  ],
+
+  cloze: [
+    { id: 'd83-l2-c1', audioKo: '나중에 말해 줄게.',   clozeParts: ['나중에 말해 ', '.'],   choices: [{ text: '줄게', correct: true }, { text: '주다',    correct: false }, { text: '줄까',    correct: false }, { text: '줬어', correct: false }], explain: '~아/어 줄게 · 承诺' },
+    { id: 'd83-l2-c2', audioKo: '오늘은 여기까지야.',   clozeParts: ['오늘은 여기', '.'],   choices: [{ text: '까지야', correct: true }, { text: '부터야',  correct: false }, { text: '까지가',    correct: false }, { text: '까지를', correct: false }], explain: '~까지 + 야 · 限度' },
+    { id: 'd83-l2-c3', audioKo: '당근을 가방에 넣었어.',   clozeParts: ['당근을 가방', ' 넣었어.'], choices: [{ text: '에',     correct: true }, { text: '에서',      correct: false }, { text: '을',      correct: false }, { text: '이',      correct: false }], explain: '넣다的目的地 · 가방에' },
+    { id: 'd83-l2-c4', audioKo: '기다릴게. 서두르지 않을게.',          clozeParts: ['기다릴게. 서두르지 ', '.'],             choices: [{ text: '않을게', correct: true }, { text: '마할게', correct: false }, { text: '안할게', correct: false }, { text: '못할게', correct: false }], explain: '否定承诺 ~지 않을게' },
+  ],
+
+  reply: [
+    { id: 'd83-l2-r1', audioKo: '토리, 얘기 좀 해도 돼?',                                          promptZh: 'Haru 端着柚子茶问能不能聊聊。你想温柔答应，最自然的一句？',                choices: [{ text: '응, 당연하지. 앉아.',                                          correct: true }, { text: '싫어, 지금 바빠.',                                  correct: false }, { text: '얼마예요?',                              correct: false }, { text: '몰라.',                                  correct: false }], explain: '答应 · 자연스러운 반말' },
+    { id: 'd83-l2-r2', audioKo: '오늘 말할 수 있는 건 여기까지야.',                                    promptZh: 'Haru 说今天只能说到这里。你想让她安心、表示愿意等，最自然的一句？',                    choices: [{ text: '괜찮아. 기다릴게. 서두르지 않을게.',                                          correct: true }, { text: '지금 다 말해. 궁금해.',                    correct: false }, { text: '얼마예요?',                              correct: false }, { text: '몰라.',                                  correct: false }], explain: '기다릴게 + 서두르지 않을게' },
+    { id: 'd83-l2-r3', audioKo: '그 친구 얘기, 더 듣고 싶어?',                                        promptZh: 'Haru 问你想不想多听那朋友的事。你想说"想，但以后你愿意说的时候再说"，最自然的一句？',                        choices: [{ text: '듣고 싶어. 근데 나중에 네가 말하고 싶을 때 말해 줘.',                                  correct: true }, { text: '아니, 관심 없어.',                    correct: false }, { text: '얼마예요?',                              correct: false }, { text: '몰라.',                                  correct: false }], explain: '나중에 + ~아/어 줘 · 尊重' },
+  ],
+};

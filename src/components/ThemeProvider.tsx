@@ -14,7 +14,14 @@ export function useTheme() {
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<Theme>('light');
+  // Initialize from DOM attribute set by inline script (avoids FOUC mismatch)
+  const [theme, setTheme] = useState<Theme>(() => {
+    if (typeof document !== 'undefined') {
+      const domTheme = document.documentElement.getAttribute('data-theme');
+      if (domTheme === 'dark' || domTheme === 'light') return domTheme;
+    }
+    return 'light';
+  });
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {

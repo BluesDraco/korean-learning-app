@@ -2,10 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, FileText, Plus } from 'lucide-react';
+import { ArrowLeft, FileText, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
 import { db } from '@/lib/db';
 import { useIsDesktop } from '@/lib/useIsMobile';
 import { PageHeader, Section, Card, Button } from '@/components/ui';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
+import { fmtDate } from '@/lib/datetime';
 
 interface Article {
   id: string;
@@ -17,10 +20,12 @@ interface Article {
 }
 
 export default function MineArticlesPage() {
+  const { lang } = useLang();
   const isDesktop = useIsDesktop();
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const reload = () => {
     setLoadError(false);
@@ -33,7 +38,7 @@ export default function MineArticlesPage() {
 
   useEffect(() => { reload(); }, []);
 
-  const containerCls = isDesktop ? 'py-4 max-w-5xl mx-auto' : 'py-4 max-w-2xl mx-auto';
+  const containerCls = isDesktop ? 'py-4 max-w-none mx-auto' : 'py-4 max-w-2xl mx-auto';
 
   return (
     <div className={containerCls}>
@@ -46,13 +51,13 @@ export default function MineArticlesPage() {
         }}
       >
         <ArrowLeft size={14} />
-        返回我的
+        {t('mine.back', lang)}
       </Link>
 
       <PageHeader
         eyebrow="MY ARTICLES"
-        title="我的文章"
-        subtitle={articles.length > 0 ? `共 ${articles.length} 篇` : '保存阅读过的文章，方便回顾'}
+        title={t('mine.articles_title', lang)}
+        subtitle={articles.length > 0 ? t('mine.articles_count', lang, { n: articles.length }) : t('mine.articles_subtitle', lang)}
         tone="peach"
         flat
       />
@@ -71,8 +76,8 @@ export default function MineArticlesPage() {
       ) : loadError ? (
         <Card variant="hero" padding="lg">
           <div style={{ textAlign: 'center' }}>
-            <p style={{ fontSize: 14, color: 'var(--color-ink-3)', marginBottom: 12 }}>加载失败</p>
-            <Button variant="primary" tone="black" onClick={reload}>重试</Button>
+            <p style={{ fontSize: 14, color: 'var(--color-ink-3)', marginBottom: 12 }}>{t('mine.common_load_error', lang)}</p>
+            <Button variant="primary" tone="black" onClick={reload}>{t('mine.common_retry', lang)}</Button>
           </div>
         </Card>
       ) : articles.length === 0 ? (
@@ -90,48 +95,81 @@ export default function MineArticlesPage() {
               <FileText size={28} strokeWidth={1.75} />
             </div>
             <h2 style={{ fontSize: 16, fontWeight: 800, color: 'var(--color-ink-1)', margin: '0 0 6px' }}>
-              还没有保存文章
+              {t('mine.articles_empty_title', lang)}
             </h2>
             <p style={{ fontSize: 13, color: 'var(--color-ink-3)', margin: '0 0 20px', lineHeight: 1.6 }}>
-              在阅读文章时点击保存，内容会出现在这里
+              {t('mine.articles_empty_desc', lang)}
             </p>
             <Link href="/reading" style={{ textDecoration: 'none' }}>
-              <Button variant="primary" tone="black" icon={<Plus size={15} />}>去阅读</Button>
+              <Button variant="primary" tone="black">{t('mine.articles_empty_cta', lang)}</Button>
             </Link>
           </div>
         </Card>
       ) : (
         <Section spacing="normal">
           <div style={{ display: 'grid', gridTemplateColumns: isDesktop ? '1fr 1fr' : '1fr', gap: 10 }}>
-            {articles.map((article) => (
-              <Card key={article.id} variant="default" padding="md">
-                <h3
-                  style={{
-                    fontSize: 15, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0,
-                    overflow: 'hidden', display: '-webkit-box',
-                    WebkitLineClamp: 1, WebkitBoxOrient: 'vertical' as const,
-                  }}
-                >
-                  {article.title}
-                </h3>
-                {article.originalText && (
-                  <p
-                    style={{
-                      fontSize: 12, color: 'var(--color-ink-3)', margin: '6px 0 0', lineHeight: 1.6,
-                      overflow: 'hidden', display: '-webkit-box',
-                      WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const,
-                    }}
+            {articles.map((article) => {
+              const isExpanded = expandedId === article.id;
+              return (
+                <Card key={article.id} variant="default" padding="md">
+                  <button
+                    onClick={() => setExpandedId(isExpanded ? null : article.id)}
+                    className="w-full text-left bg-transparent border-none cursor-pointer p-0"
                   >
-                    {article.originalText}
-                  </p>
-                )}
-                {article.createdAt && (
-                  <p style={{ fontSize: 11, color: 'var(--color-ink-4)', margin: '8px 0 0' }}>
-                    {new Date(article.createdAt).toLocaleDateString('zh-CN')}
-                  </p>
-                )}
-              </Card>
-            ))}
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <h3
+                          style={{
+                            fontSize: 15, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0,
+                            overflow: 'hidden', display: '-webkit-box',
+                            WebkitLineClamp: 1, WebkitBoxOrient: 'vertical' as const,
+                          }}
+                        >
+                          {article.title}
+                        </h3>
+                        {article.originalText && (
+                          <p
+                            style={{
+                              fontSize: 12, color: 'var(--color-ink-3)', margin: '6px 0 0', lineHeight: 1.6,
+                              overflow: 'hidden', display: isExpanded ? 'block' : '-webkit-box',
+                              WebkitLineClamp: isExpanded ? undefined : 2, WebkitBoxOrient: 'vertical' as const,
+                              whiteSpace: isExpanded ? 'pre-wrap' : undefined,
+                            }}
+                          >
+                            {article.originalText}
+                          </p>
+                        )}
+                      </div>
+                      <span aria-hidden style={{ flexShrink: 0, color: 'var(--color-ink-4)', marginTop: 2 }}>
+                        {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                      </span>
+                    </div>
+                  </button>
+                  {isExpanded && article.translatedText && (
+                    <div style={{ marginTop: 10, padding: 10, background: 'var(--color-surface-3)', borderRadius: 10, fontSize: 12, color: 'var(--color-ink-2)', whiteSpace: 'pre-wrap', lineHeight: 1.6 }}>
+                      {article.translatedText}
+                    </div>
+                  )}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 8, gap: 8 }}>
+                    {article.createdAt ? (
+                      <p style={{ fontSize: 11, color: 'var(--color-ink-4)', margin: 0 }}>
+                        {fmtDate(article.createdAt, lang)}
+                      </p>
+                    ) : <span />}
+                    {article.sourceUrl && (
+                      <a
+                        href={article.sourceUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11, color: 'var(--color-pink-strong)', textDecoration: 'none' }}
+                      >
+                        {t('mine.articles_source', lang)} <ExternalLink size={11} />
+                      </a>
+                    )}
+                  </div>
+                </Card>
+              );
+            })}
           </div>
         </Section>
       )}

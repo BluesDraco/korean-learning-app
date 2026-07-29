@@ -6,12 +6,29 @@ import {
   ChevronRight, Sparkles, Zap, RotateCcw, AlertTriangle
 } from 'lucide-react';
 import type { PronunciationItem } from '@/types';
-import { AudioRecorder, isRecordingSupported, revokeRecording } from '@/lib/audio/recorder';
+import { AudioRecorder, isRecordingSupported, revokeRecording, parseErrorKey } from '@/lib/audio/recorder';
 import { globalPlayer } from '@/lib/audio/player';
 import { speak, cancelSpeech } from '@/lib/tts';
+import { getStaticAudio } from '@/lib/audio/audioRegistry';
+
+// 紧音单音节 → 改播对应字母名（真人录音，正音准确）
+// TTS 对 까/따/빠/짜/싸 等单音节合成不稳，用户反馈"还是用 AI"。
+// 字母名 쌍기역/쌍디귿/쌍비읍/쌍시옷/쌍지읒 在 audioRegistry 有真人 MP3。
+// 模块级：分段播放时相互抢占，快速再点不会叠播
+let currentSegAudio: HTMLAudioElement | null = null;
+
+const TENSE_SYLLABLE_FALLBACK: Record<string, string> = {
+  '까': '쌍기역',
+  '따': '쌍디귿',
+  '빠': '쌍비읍',
+  '싸': '쌍시옷',
+  '짜': '쌍지읒',
+};
 import { db } from '@/lib/db';
 import { awardXp, XP_REWARDS } from '@/lib/gamification';
 import { playClick, playSuccess, playComplete } from '@/lib/soundManager';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 
 interface Props {
   items: PronunciationItem[];
@@ -56,6 +73,7 @@ function PlayBtn({
 }
 
 export function PronunciationSession({ items, onClose }: Props) {
+  const { lang } = useLang();
   const [itemIdx, setItemIdx] = useState(0);
   const [step, setStep] = useState<StepType>('target');
   const [slowMode, setSlowMode] = useState(false);
@@ -74,8 +92,13 @@ export function PronunciationSession({ items, onClose }: Props) {
   // All hooks must be called unconditionally (before any early return)
   useEffect(() => {
     globalPlayer.setStateChange(setPlayerState);
-    return () => { globalPlayer.stop(); cancelSpeech(); };
-  }, []);
+    return () => {
+      globalPlayer.stop();
+      cancelSpeech();
+      recorder.cancel();
+      if (currentSegAudio) { try { currentSegAudio.pause(); } catch { /* ignore */ } currentSegAudio = null; }
+    };
+  }, [recorder]);
 
   useEffect(() => {
     return () => {
@@ -89,31 +112,78 @@ export function PronunciationSession({ items, onClose }: Props) {
   const rate = slowMode ? 0.6 : 0.85;
   const currentItemId = item?.id ?? '';
 
+  const playKoreanText = useCallback((text: string, onEnd?: () => void) => {
+    const raw = text.trim();
+    const playMp3 = (url: string) => {
+      if (currentSegAudio) { try { currentSegAudio.pause(); } catch { /* ignore */ } }
+      const audio = new Audio(url);
+      currentSegAudio = audio;
+      audio.playbackRate = rate;
+      audio.onended = audio.onerror = () => {
+        if (currentSegAudio === audio) currentSegAudio = null;
+        onEnd?.();
+      };
+      audio.play().catch(() => {
+        if (currentSegAudio === audio) currentSegAudio = null;
+        onEnd?.();
+      });
+    };
+    // 1) 直接命中 audioRegistry（韩语字母名、元音、batchim 示范音）
+    const direct = getStaticAudio(raw);
+    if (direct) { playMp3(direct.url); return; }
+    // 2) 紧音单音节 → fallback 到对应字母名真人录音
+    const fallback = TENSE_SYLLABLE_FALLBACK[raw];
+    if (fallback) {
+      const entry = getStaticAudio(fallback);
+      if (entry) { playMp3(entry.url); return; }
+    }
+    // 3) 其他情况走 TTS
+    speak(raw, rate, onEnd);
+  }, [rate]);
+
   const playStandard = useCallback(() => {
     if (!item) return;
     cancelSpeech();
     setIsSpeaking(true);
-    speak(item.textKo, rate, () => setIsSpeaking(false));
-  }, [item, rate]);
+
+    // 对比卡（textKo 含 vs 或 /）或 syllable 类型（每个 segment 是独立音节，整句 TTS 不准）
+    // 都依次播放 segments，让单音节走 audioRegistry fallback
+    const isComparison = /\s+vs\s+|\s*\/\s*/i.test(item.textKo);
+    const isSyllable = item.type === 'syllable';
+    const segs = item.segments?.map((s) => s.text).filter(Boolean) ?? [];
+    if ((isComparison || isSyllable) && segs.length > 0) {
+      let i = 0;
+      const playNext = () => {
+        if (i >= segs.length) { setIsSpeaking(false); return; }
+        const seg = segs[i++];
+        playKoreanText(seg, () => setTimeout(playNext, 250));
+      };
+      playNext();
+      return;
+    }
+
+    playKoreanText(item.textKo, () => setIsSpeaking(false));
+  }, [item, rate, playKoreanText]);
 
   const playSegment = useCallback((text: string) => {
-    cancelSpeech(); setIsSpeaking(true); speak(text, rate, () => setIsSpeaking(false));
-  }, [rate]);
+    cancelSpeech(); setIsSpeaking(true); playKoreanText(text, () => setIsSpeaking(false));
+  }, [playKoreanText]);
 
   const startRecording = useCallback(async () => {
     setMicError(null);
     if (!isRecordingSupported()) {
-      setMicError('此浏览器不支持录音');
+      setMicError(t('pron.mic_unsupported', lang));
       return;
     }
     const result = await recorder.start();
     if (result.error) {
-      setMicError(result.error);
+      const parsed = parseErrorKey(result.error);
+      setMicError(t(parsed.key, lang, parsed.params));
       return;
     }
     playClick();
     setRecording(true);
-  }, [recorder]);
+  }, [recorder, lang]);
 
   const stopRecording = useCallback(async () => {
     const result = await recorder.stop();
@@ -153,11 +223,11 @@ export function PronunciationSession({ items, onClose }: Props) {
               interval: 1,
               createdAt: Date.now(),
               lastReviewed: null,
-            }).catch(() => {});
+            }).catch(e => console.error('[pronunciation] SRS word put failed:', e));
           }
         }
         await awardXp(XP_REWARDS.wordReviewed);
-      } catch (_e) {}
+      } catch (e) { console.error('[pronunciation] awardXp or attempt save failed:', e); }
     }
   }, [recorder, item, currentItemId]);
 
@@ -246,12 +316,12 @@ export function PronunciationSession({ items, onClose }: Props) {
   // Early returns happen AFTER all hooks
   if (!item) {
     return (
-      <div className="py-12 max-w-lg mx-auto text-center space-y-4">
+      <div className="py-12 max-w-lg md:max-w-none mx-auto text-center space-y-4">
         <div className="text-5xl">📭</div>
-        <h2 className="text-lg font-bold text-[var(--text-primary)]">暂无发音练习内容</h2>
-        <p className="text-sm text-[var(--text-muted)]">请先添加一些发音练习项目</p>
+        <h2 className="text-lg font-bold text-[var(--text-primary)]">{t('pron.empty_title', lang)}</h2>
+        <p className="text-sm text-[var(--text-muted)]">{t('pron.empty_sub', lang)}</p>
         <button onClick={onClose} className="px-6 py-2.5 rounded-xl bg-[var(--pink-primary)] text-white text-sm font-medium">
-          返回
+          {t('pron.back', lang)}
         </button>
       </div>
     );
@@ -262,12 +332,12 @@ export function PronunciationSession({ items, onClose }: Props) {
   // ═══════════════════════════════════════════
   if (step === 'settlement') {
     return (
-      <div className="py-4 max-w-lg mx-auto space-y-6 text-center">
+      <div className="py-4 max-w-lg md:max-w-none mx-auto space-y-6 text-center">
         <div className="text-6xl">🐰</div>
         <div>
-          <h1 className="text-2xl font-bold text-[var(--text-primary)]">发音练习完成!</h1>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">{t('pron.done_title', lang)}</h1>
           <p className="text-sm text-[var(--text-muted)] mt-1">
-            完成了 {completedItems} 个内容，开口练习 {totalAttempts} 次
+            {t('pron.done_sub', lang, { items: completedItems, attempts: totalAttempts })}
           </p>
         </div>
 
@@ -275,12 +345,12 @@ export function PronunciationSession({ items, onClose }: Props) {
           <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4">
             <Zap size={20} className="text-[var(--peach-soft)] mx-auto mb-1" />
             <div className="text-xl font-bold text-[var(--text-primary)]">{totalAttempts}</div>
-            <div className="text-xs text-[var(--text-muted)]">开口次数</div>
+            <div className="text-xs text-[var(--text-muted)]">{t('pron.stat_attempts', lang)}</div>
           </div>
           <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4">
             <Sparkles size={20} className="text-[var(--mint-soft)] mx-auto mb-1" />
             <div className="text-xl font-bold text-[var(--text-primary)]">{completedItems}</div>
-            <div className="text-xs text-[var(--text-muted)]">练习内容</div>
+            <div className="text-xs text-[var(--text-muted)]">{t('pron.stat_items', lang)}</div>
           </div>
         </div>
 
@@ -288,16 +358,16 @@ export function PronunciationSession({ items, onClose }: Props) {
           <div key={it.id} className="bg-[var(--mint-soft)]/10 border border-[var(--mint-soft)]/20 rounded-2xl p-4 text-left">
             <p className="text-sm font-bold text-[var(--text-primary)]">{it.textKo}</p>
             <p className="text-xs text-[var(--text-muted)]">{it.textZh}</p>
-            <p className="text-[10px] text-[var(--mint-soft)] mt-1">已练习</p>
+            <p className="text-[10px] text-[var(--mint-soft)] mt-1">{t('pron.practiced', lang)}</p>
           </div>
         ))}
 
         <div className="flex gap-3">
           <button onClick={onClose} className="flex-1 py-3 rounded-xl bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-secondary)] font-medium text-sm">
-            返回发音页
+            {t('pron.back_to_page', lang)}
           </button>
           <button onClick={handleRestart} className="flex-1 py-3 rounded-xl bg-[var(--pink-primary)] text-white font-medium text-sm">
-            再来一轮
+            {t('pron.restart', lang)}
           </button>
         </div>
       </div>
@@ -308,8 +378,8 @@ export function PronunciationSession({ items, onClose }: Props) {
   // PRACTICE STEPS
   // ═══════════════════════════════════════════
   const stepNames: Record<StepType, string> = {
-    target: '了解目标', listen: '听标准音', segments: '分段练习',
-    record: '开口录音', compare: '回放对比', settlement: '',
+    target: t('pron.step_target', lang), listen: t('pron.step_listen', lang), segments: t('pron.step_segments', lang),
+    record: t('pron.step_record', lang), compare: t('pron.step_compare', lang), settlement: '',
   };
 
   const currentItem = items[itemIdx];
@@ -322,19 +392,19 @@ export function PronunciationSession({ items, onClose }: Props) {
   const progress = ((doneSteps + (stepIdx >= 0 ? stepIdx : 0)) / totalSteps) * 100;
 
   return (
-    <div className="py-4 max-w-lg mx-auto space-y-4">
+    <div className="py-4 max-w-lg md:max-w-none mx-auto space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1">
           <button onClick={() => {
-            if (step !== 'target' && !confirm('确定退出？当前进度不会保存')) return;
+            if (step !== 'target' && !confirm(t('pron.exit_confirm', lang))) return;
             onClose();
           }} className="p-1 text-[var(--text-muted)] hover:text-[var(--text-primary)]">
             <ArrowLeft size={20} />
           </button>
           {(itemIdx > 0 || step !== 'target') && (
             <button onClick={goPrevStep} className="text-xs px-2 py-1 rounded-lg bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors">
-              上一步
+              {t('pron.prev_step', lang)}
             </button>
           )}
         </div>
@@ -358,7 +428,7 @@ export function PronunciationSession({ items, onClose }: Props) {
         {/* ── TARGET ── */}
         {step === 'target' && (
           <>
-            <StepBadge label="今日目标" />
+            <StepBadge label={t('pron.badge_target', lang)} />
             <div className="text-4xl">{item.type === 'sound' ? '🔤' : item.type === 'word' ? '📝' : '💬'}</div>
             <h2 className="text-2xl font-extrabold text-[var(--text-primary)]">{item.textKo}</h2>
             {item.textZh && <p className="text-sm text-[var(--text-muted)]">{item.textZh}</p>}
@@ -371,13 +441,13 @@ export function PronunciationSession({ items, onClose }: Props) {
             )}
             {item.tips && (
               <div className="bg-[var(--bg-input)] rounded-2xl p-4 text-left space-y-1 w-full">
-                {item.tips.map((t, i) => (
-                  <p key={i} className="text-xs text-[var(--text-secondary)]">💡 {t}</p>
+                {item.tips.map((tip, i) => (
+                  <p key={i} className="text-xs text-[var(--text-secondary)]">💡 {tip}</p>
                 ))}
               </div>
             )}
             <button onClick={goNextStep} className="w-full py-3 bg-[var(--pink-primary)] text-white rounded-2xl font-bold text-sm">
-              开始练习
+              {t('pron.start_practice', lang)}
             </button>
           </>
         )}
@@ -385,15 +455,15 @@ export function PronunciationSession({ items, onClose }: Props) {
         {/* ── SEGMENTS ── */}
         {step === 'segments' && item.segments && (
           <>
-            <StepBadge label="分段练习" />
-            <p className="text-xs text-[var(--text-muted)]">点击每个音听发音，注意区别</p>
+            <StepBadge label={t('pron.badge_segments', lang)} />
+            <p className="text-xs text-[var(--text-muted)]">{t('pron.segments_hint', lang)}</p>
             <div className={`w-full ${item.segments.length <= 3 ? 'flex flex-wrap gap-3 justify-center' : 'space-y-2'}`}>
               {item.segments.map((seg, i) => (
                 item.segments!.length <= 3 ? (
                   <button
                     key={i}
                     onClick={() => playSegment(seg.text)}
-                    className="flex flex-col items-center gap-2 bg-[var(--bg-card)] border border-[var(--border-color)] hover:border-[var(--pink-primary)]/50 hover:bg-[var(--pink-primary)]/5 active:scale-95 rounded-2xl px-6 py-5 transition-all min-w-[90px] shadow-sm"
+                    className="flex flex-col items-center gap-2 bg-[var(--bg-card)] border border-[var(--border-color)] hover:border-[var(--pink-primary)]/50 hover:bg-[var(--pink-primary)]/5 active:scale-95 rounded-2xl px-6 py-5 transition-colors transition-opacity transition-shadow min-w-[90px] shadow-sm"
                   >
                     <span className="text-4xl font-bold text-[var(--text-primary)]" style={{ fontFamily: "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif" }}>{seg.text}</span>
                     {seg.hint && <span className="text-[10px] text-[var(--text-muted)] text-center">{seg.hint}</span>}
@@ -416,7 +486,7 @@ export function PronunciationSession({ items, onClose }: Props) {
               ))}
             </div>
             <button onClick={goNextStep} className="w-full py-3 bg-[var(--pink-primary)] text-white rounded-2xl font-bold text-sm">
-              准备好了，录音
+              {t('pron.segments_next', lang)}
             </button>
           </>
         )}
@@ -424,27 +494,27 @@ export function PronunciationSession({ items, onClose }: Props) {
         {/* ── RECORD ── */}
         {step === 'record' && (
           <>
-            <StepBadge label="开口录音" />
-            <p className="text-sm text-[var(--text-primary)] font-bold">轮到你了</p>
+            <StepBadge label={t('pron.badge_record', lang)} />
+            <p className="text-sm text-[var(--text-primary)] font-bold">{t('pron.record_your_turn', lang)}</p>
             <h2 className="text-2xl font-extrabold text-[var(--text-primary)]">{item.textKo}</h2>
 
             {!recording ? (
               <button
                 onClick={startRecording}
-                className="p-6 rounded-full bg-[var(--pink-primary)] text-white hover:opacity-90 transition-all active:scale-95"
+                className="p-6 rounded-full bg-[var(--pink-primary)] text-white hover:opacity-90 transition-[colors,opacity] active:scale-95"
               >
                 <Mic size={32} />
               </button>
             ) : (
               <button
                 onClick={stopRecording}
-                className="p-6 rounded-full bg-[var(--color-danger)] text-white animate-pulse active:scale-95 transition-all"
+                className="p-6 rounded-full bg-[var(--color-danger)] text-white animate-pulse active:scale-95 transition-colors transition-opacity transition-shadow"
               >
                 <MicOff size={32} />
               </button>
             )}
             <p className="text-xs text-[var(--text-muted)]">
-              {recording ? '正在听你说... 再点一次结束' : '点击开始录音'}
+              {recording ? t('pron.record_listening', lang) : t('pron.record_tap_start', lang)}
             </p>
 
             {micError && (
@@ -460,7 +530,7 @@ export function PronunciationSession({ items, onClose }: Props) {
                   onClick={goNextStep}
                   className="flex-1 py-3 rounded-2xl font-medium text-sm bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
                 >
-                  跳过
+                  {t('pron.skip', lang)}
                 </button>
                 <button
                   onClick={goNextStep}
@@ -471,13 +541,13 @@ export function PronunciationSession({ items, onClose }: Props) {
                       : 'bg-[var(--bg-input)] text-[var(--text-muted)] opacity-50'
                   }`}
                 >
-                  {recordingUrl ? '听我的录音' : '请先录音'}
+                  {recordingUrl ? t('pron.hear_my_recording', lang) : t('pron.record_first', lang)}
                 </button>
               </div>
             )}
 
             {recording && (
-              <p className="text-[10px] text-[var(--text-muted)]">最长 10 秒，说完请手动结束</p>
+              <p className="text-[10px] text-[var(--text-muted)]">{t('pron.record_max_hint', lang)}</p>
             )}
           </>
         )}
@@ -485,13 +555,13 @@ export function PronunciationSession({ items, onClose }: Props) {
         {/* ── COMPARE ── */}
         {step === 'compare' && (
           <>
-            <StepBadge label="回放对比" />
-            <p className="text-xs text-[var(--text-muted)]">听听你的发音，和标准音对比</p>
+            <StepBadge label={t('pron.badge_compare', lang)} />
+            <p className="text-xs text-[var(--text-muted)]">{t('pron.compare_hint', lang)}</p>
 
             <div className="grid grid-cols-2 gap-4 w-full">
               {/* Standard */}
               <div className="bg-[var(--bg-input)] rounded-2xl p-5 text-center space-y-3">
-                <p className="text-xs text-[var(--text-muted)]">标准音</p>
+                <p className="text-xs text-[var(--text-muted)]">{t('pron.standard_audio', lang)}</p>
                 <h3 className="text-lg font-bold text-[var(--text-primary)]">{item.textKo}</h3>
                 <button onClick={playStandard} className="p-3 rounded-xl bg-[var(--mint-soft)]/10 text-[var(--mint-soft)] hover:bg-[var(--mint-soft)]/20 transition-colors">
                   <Play size={22} />
@@ -499,7 +569,7 @@ export function PronunciationSession({ items, onClose }: Props) {
               </div>
               {/* Mine */}
               <div className="bg-[var(--bg-input)] rounded-2xl p-5 text-center space-y-3">
-                <p className="text-xs text-[var(--text-muted)]">我的录音</p>
+                <p className="text-xs text-[var(--text-muted)]">{t('pron.my_recording', lang)}</p>
                 <h3 className="text-lg font-bold text-[var(--pink-primary)]">{item.textKo}</h3>
                 <button
                   onClick={playRecording}
@@ -518,9 +588,9 @@ export function PronunciationSession({ items, onClose }: Props) {
             {/* Tips reminder */}
             {item.tips && (
               <div className="bg-[var(--pink-pale)]/10 border border-[var(--pink-primary)]/10 rounded-2xl p-4 text-left w-full">
-                <p className="text-xs font-bold text-[var(--text-primary)] mb-1">重点检查</p>
-                {item.tips.map((t, i) => (
-                  <p key={i} className="text-xs text-[var(--text-secondary)]">• {t}</p>
+                <p className="text-xs font-bold text-[var(--text-primary)] mb-1">{t('pron.key_check', lang)}</p>
+                {item.tips.map((tip, i) => (
+                  <p key={i} className="text-xs text-[var(--text-secondary)]">• {tip}</p>
                 ))}
               </div>
             )}
@@ -528,10 +598,10 @@ export function PronunciationSession({ items, onClose }: Props) {
             <div className="flex gap-3 w-full">
               <button onClick={handleReRecord} className="flex-1 flex items-center justify-center gap-1.5 py-3 rounded-xl bg-[var(--bg-input)] text-[var(--text-secondary)] font-medium text-sm hover:text-[var(--text-primary)] transition-colors">
                 <RotateCcw size={14} />
-                再读一次
+                {t('pron.read_again', lang)}
               </button>
               <button onClick={goNextStep} className="flex-1 flex items-center justify-center gap-1.5 py-3 rounded-xl bg-[var(--pink-primary)] text-white font-medium text-sm">
-                {itemIdx + 1 >= items.length ? '完成练习' : '下一题'}
+                {itemIdx + 1 >= items.length ? t('pron.finish', lang) : t('pron.next_item', lang)}
                 <ChevronRight size={16} />
               </button>
             </div>

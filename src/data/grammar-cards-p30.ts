@@ -42,14 +42,16 @@ export const grammarCardsP30: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '눈이 높다 → 眼光高 / 挑剔', examples: '민수는 눈이 너무 높아서 결혼을 못 해요.' },
-      { type: 'rule', text: '눈에 밟히다 → 挂在眼前 / 忘不掉', examples: '아이 얼굴이 눈에 밟혀요.' },
-      { type: 'rule', text: '눈 밖에 나다 → 失宠 / 招人嫌', examples: '상사 눈 밖에 나면 승진하기 어려워요.' },
-      { type: 'rule', text: '눈이 빠지다 → 望眼欲穿', examples: '눈이 빠지게 기다렸어요.' },
-      { type: 'rule', text: '눈감아 주다 → 睁一眼闭一眼', examples: '이번 한 번만 눈감아 주세요.' },
-      { type: 'usage', text: '눈살을 찌푸리다 → 皱眉 / 反感', examples: '그 행동에 사람들이 눈살을 찌푸렸어요.' },
+      { type: 'rule', text: '눈이 높다 → 眼光高 / 挑剔', examples: '민수는 눈이 너무 높아서 결혼을 못 해요.（民秀眼光太高，所以结不了婚。）' },
+      { type: 'rule', text: '눈에 밟히다 → 挂在眼前 / 忘不掉', examples: '아이 얼굴이 눈에 밟혀요.（孩子的脸总浮现在眼前，让人挂念。）' },
+      { type: 'rule', text: '눈 밖에 나다 → 失宠 / 招人嫌', examples: '상사 눈 밖에 나면 승진하기 어려워요.（一旦被上司厌弃，就很难升职。）' },
+      { type: 'rule', text: '눈이 빠지다 → 望眼欲穿', examples: '눈이 빠지게 기다렸어요.（望眼欲穿地等了很久。）' },
+      { type: 'rule', text: '눈감아 주다 → 睁一眼闭一眼', examples: '이번 한 번만 눈감아 주세요.（这一次就请您睁一只眼闭一只眼，通融一下吧。）' },
+      { type: 'usage', text: '눈살을 찌푸리다 → 皱眉 / 反感', examples: '그 행동에 사람들이 눈살을 찌푸렸어요.（那个举动让大家皱起眉头，很反感。）' },
       { type: 'usage', text: '눈치 → 察言观色的能力', examples: '눈치가 빠르다（脑子快）/ 눈치를 보다（看脸色）' },
       { type: 'note', text: '这些是固定搭配，不能拆开或改助词', examples: '误：눈은 높다 / 正：눈이 높다' },
+      { type: 'vocab', text: '눈치 是中文没有精准对应词的文化概念，接近"眼力见儿、看气氛的能力"。三个高频搭配要整体记：눈치가 빠르다（机灵、会看眼色）· 눈치가 없다（不懂看气氛）· 눈치를 보다（看人脸色、揣摩心思）', examples: '민수는 눈치가 빨라요.（民秀很会看眼色，机灵。）' },
+      { type: 'note', text: '눈이 빠지다 几乎不单独用，固定为副词形"눈이 빠지게 + 기다리다/찾다"，表"望眼欲穿地等/找"', examples: '눈이 빠지게 기다렸어요.（望眼欲穿地等了很久。）' },
     ],
     cardExamples: [
       {
@@ -214,14 +216,16 @@ export const grammarCardsP30: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '손이 크다 → 大方 / 手大', examples: '엄마는 손이 크셔서 음식을 많이 하세요.' },
-      { type: 'rule', text: '손을 씻다 → 洗手不干 / 金盆洗手', examples: '이제 그 일에서 손을 씻었어요.' },
-      { type: 'rule', text: '손을 놓다 → 放手不管 / 停手', examples: '한동안 일에서 손을 놓고 쉬었어요.' },
-      { type: 'rule', text: '손이 모자라다 → 人手不够', examples: '주말이라 손이 모자라요.' },
-      { type: 'rule', text: '손을 대다 → 开始动手 / 插手', examples: '이 일에는 아직 손을 대지 않았어요.' },
-      { type: 'usage', text: '손을 잡다 → 携手合作', examples: '두 회사가 손을 잡고 새 프로젝트를 시작했어요.' },
-      { type: 'usage', text: '손사래를 치다 → 摆手拒绝', examples: '그는 손사래를 치며 사양했어요.' },
+      { type: 'rule', text: '손이 크다 → 大方 / 手大', examples: '엄마는 손이 크셔서 음식을 많이 하세요.（妈妈很大方，做饭总是做得很多。）' },
+      { type: 'rule', text: '손을 씻다 → 洗手不干 / 金盆洗手', examples: '이제 그 일에서 손을 씻었어요.（现在我已经从那件事里金盆洗手了。）' },
+      { type: 'rule', text: '손을 놓다 → 放手不管 / 停手', examples: '한동안 일에서 손을 놓고 쉬었어요.（有一阵子放下工作休息了。）' },
+      { type: 'rule', text: '손이 모자라다 → 人手不够', examples: '주말이라 손이 모자라요.（因为是周末，所以人手不够。）' },
+      { type: 'rule', text: '손을 대다 → 开始动手 / 插手', examples: '이 일에는 아직 손을 대지 않았어요.（这件事我还没着手去做。）' },
+      { type: 'usage', text: '손을 잡다 → 携手合作', examples: '두 회사가 손을 잡고 새 프로젝트를 시작했어요.（两家公司携手合作，启动了新项目。）' },
+      { type: 'usage', text: '손사래를 치다 → 摆手拒绝', examples: '그는 손사래를 치며 사양했어요.（他连连摆手，婉言谢绝了。）' },
       { type: 'note', text: '손이 크다 与身体无关，指心胸开阔/做事大方', examples: '误：손이 커요 = 手长得大 / 正：손이 커요 = 大方/爱送人' },
+      { type: 'note', text: '负迁移警告：손이 크다 是纯褒义的"大方、出手阔绰、招待人不吝啬"，别用中文"大手大脚（浪费钱）"的贬义去理解。夸主人做菜多、送礼大方就说 손이 크다', examples: '엄마는 손이 크셔서 늘 음식을 많이 하세요.（妈妈很大方，做饭总是很多。）' },
+      { type: 'compare', text: '손을 씻다 vs 손을 놓다：都像"停手"，但语感不同。손을 씻다 = 从坏事/纠纷里彻底金盆洗手，带道德色彩、不再回头；손을 놓다 = 暂时放下手中的活儿去歇一歇，中性、可以再拿起来', examples: '그 일에서 손을 씻었어요.（那件事金盆洗手了。）↔ 한동안 일에서 손을 놓고 쉬었어요.（有一阵子放下工作休息了。）' },
     ],
     cardExamples: [
       {
@@ -261,7 +265,7 @@ export const grammarCardsP30: GrammarCard[] = [
       { icon: '🖐️', context: '拒绝', ko: '그는 손사래를 치며 사양했어요.', zh: '他摆手推辞。' },
     ],
     mistakes: [
-      { wrong: '엄마는 손이 커요 = 妈妈手大', correct: '엄마는 손이 커요 = 妈妈大方', note: '손이 크다 是"大方/慷慨"，不是描述手的物理大小' },
+      { wrong: '엄마는 손을 커요', correct: '엄마는 손이 커요', note: '손이 크다 是惯用语（大方），主语助词用 이，不用 을' },
       { wrong: '손을 씻고 그 일 다시 시작할래요', correct: '손을 씻고 그 일에서 완전히 떠날래요', note: '손을 씻다 后不能再做同一件事，语义矛盾' },
       { wrong: '손이 없어서 힘들어요', correct: '손이 모자라서 힘들어요', note: '"人手不够"用 손이 모자라다，不用 손이 없다' },
     ],
@@ -386,14 +390,16 @@ export const grammarCardsP30: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '발이 넓다 → 人脉广 / 交际广', examples: '민수는 발이 넓어서 도움을 잘 받아요.' },
-      { type: 'rule', text: '발 벗고 나서다 → 挺身而出 / 卖力帮忙', examples: '친구를 위해 발 벗고 나섰어요.' },
-      { type: 'rule', text: '발을 빼다 → 抽身 / 脱离', examples: '위험한 일에서 발을 뺐어요.' },
-      { type: 'rule', text: '발이 묶이다 → 被困 / 走不了', examples: '눈이 많이 와서 공항에서 발이 묶였어요.' },
-      { type: 'rule', text: '발 뻗고 자다 → 安心睡 / 无忧无虑', examples: '일 다 끝내고 발 뻗고 자요.' },
-      { type: 'usage', text: '발 디딜 틈 없다 → 挤得没落脚地', examples: '지하철이 발 디딜 틈 없이 붐볐어요.' },
-      { type: 'usage', text: '발등에 불이 떨어지다 → 火烧眉毛', examples: '내일이 마감이라 발등에 불이 떨어졌어요.' },
+      { type: 'rule', text: '발이 넓다 → 人脉广 / 交际广', examples: '민수는 발이 넓어서 도움을 잘 받아요.（民秀人脉广，所以很容易得到帮助。）' },
+      { type: 'rule', text: '발 벗고 나서다 → 挺身而出 / 卖力帮忙', examples: '친구를 위해 발 벗고 나섰어요.（为了朋友挺身而出，全力相助。）' },
+      { type: 'rule', text: '발을 빼다 → 抽身 / 脱离', examples: '위험한 일에서 발을 뺐어요.（从危险的事情里抽身退出了。）' },
+      { type: 'rule', text: '발이 묶이다 → 被困 / 走不了', examples: '눈이 많이 와서 공항에서 발이 묶였어요.（因为下大雪，被困在机场走不了。）' },
+      { type: 'rule', text: '발 뻗고 자다 → 安心睡 / 无忧无虑', examples: '일 다 끝내고 발 뻗고 자요.（把事情都做完，安心地睡个好觉。）' },
+      { type: 'usage', text: '발 디딜 틈 없다 → 挤得没落脚地', examples: '지하철이 발 디딜 틈 없이 붐볐어요.（地铁挤得没有落脚的地方。）' },
+      { type: 'usage', text: '발등에 불이 떨어지다 → 火烧眉毛', examples: '내일이 마감이라 발등에 불이 떨어졌어요.（明天就是截止日期，真是火烧眉毛了。）' },
       { type: 'note', text: '"발이 넓다" ≠ 脚长得宽；指人脉广', examples: '误：脚长得宽 / 正：交际广' },
+      { type: 'compare', text: '발을 빼다 vs 손을 놓다：中文都可说"抽身/撒手"，但韩语分工严格。발을 빼다 = 从已经参与的事情或关系里退出、脱身（强调"不再牵扯其中"）；손을 놓다 = 停下手里正做的活、松手不再照管（强调"停止动作"）。抽身脱离用脚，停手放下用手，不能互换', examples: '위험한 일에서 발을 뺐어요.（从危险的事情里抽身退出。）↔ 한동안 일에서 손을 놓고 쉬었어요.（放下手头工作休息一阵。）' },
+      { type: 'note', text: '발 벗고 나서다 字面是"脱了鞋光着脚冲出来"，惯用义是"奋不顾身、全力帮忙、挺身而出"。别被 벗고（脱）字面义带偏，它形容的是急切主动的态度', examples: '친구가 어려울 때 발 벗고 나서 줬어요.（朋友有难时挺身而出、全力相助。）' },
     ],
     cardExamples: [
       {
@@ -485,7 +491,7 @@ export const grammarCardsP30: GrammarCard[] = [
     compareHtml: `<div class="cmp-block">
   <div style="font-size:15px;color:#241917;line-height:1.8">
     <b>参与 vs 脱离</b><br>
-    ・发 벗고 나서다 → 主动参与<br>
+    ・발 벗고 나서다 → 主动参与<br>
     <span style="color:#89756e">친구를 위해 발 벗고 나섰어요.</span><br>
     ・발을 빼다 → 主动脱离<br>
     <span style="color:#89756e">위험한 일에서 발을 뺐어요.</span>
@@ -558,14 +564,16 @@ export const grammarCardsP30: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '마음에 들다 → 中意 / 合心意', examples: '이 옷이 마음에 들어요.' },
-      { type: 'rule', text: '마음을 먹다 → 下决心', examples: '유학 가기로 마음을 먹었어요.' },
-      { type: 'rule', text: '가슴이 아프다 → 心痛（同情 / 悲伤）', examples: '뉴스를 보고 가슴이 아팠어요.' },
-      { type: 'rule', text: '가슴이 뭉클하다 → 一阵感动 / 鼻酸', examples: '어머니의 편지에 가슴이 뭉클했어요.' },
-      { type: 'rule', text: '가슴에 새기다 → 铭记于心', examples: '선생님 말씀을 가슴에 새겼어요.' },
-      { type: 'usage', text: '마음이 놓이다 → 放心 / 心里松一口气', examples: '아이가 안전하다는 말에 마음이 놓였어요.' },
-      { type: 'usage', text: '마음이 무겁다 → 心情沉重', examples: '결과를 기다리는 동안 마음이 무거웠어요.' },
+      { type: 'rule', text: '마음에 들다 → 中意 / 合心意', examples: '이 옷이 마음에 들어요.（我很中意这件衣服。）' },
+      { type: 'rule', text: '마음을 먹다 → 下决心', examples: '유학 가기로 마음을 먹었어요.（我下定决心要去留学。）' },
+      { type: 'rule', text: '가슴이 아프다 → 心痛（同情 / 悲伤）', examples: '뉴스를 보고 가슴이 아팠어요.（看了那则新闻，感到心痛。）' },
+      { type: 'rule', text: '가슴이 뭉클하다 → 一阵感动 / 鼻酸', examples: '어머니의 편지에 가슴이 뭉클했어요.（读了母亲的信，心里一阵感动。）' },
+      { type: 'rule', text: '가슴에 새기다 → 铭记于心', examples: '선생님 말씀을 가슴에 새겼어요.（把老师的话铭记在心。）' },
+      { type: 'usage', text: '마음이 놓이다 → 放心 / 心里松一口气', examples: '아이가 안전하다는 말에 마음이 놓였어요.（听说孩子平安，心里就放心了。）' },
+      { type: 'usage', text: '마음이 무겁다 → 心情沉重', examples: '결과를 기다리는 동안 마음이 무거웠어요.（等待结果的那段时间，心情很沉重。）' },
       { type: 'note', text: '마음 偏向"决心/意愿"；가슴 偏向"情感/感受"', examples: '마음을 먹다（决心）/ 가슴이 뭉클하다（感动）' },
+      { type: 'compare', text: '마음에 들다 vs 좋아하다：中文都译"喜欢"，但两点不同。①结构：좋아하다 是"我喜欢它"（人做主语、它用 를）；마음에 들다 是"它合我心"（喜欢的东西做主语、用 이/가，助词固定 마음에）。②语感：마음에 들다 偏一见就中意、合眼缘（常用于第一印象、买东西挑东西）；좋아하다 偏一贯的喜好', examples: '이 옷이 마음에 들어요.（这件衣服我一看就中意。）↔ 저는 이 옷을 좋아해요.（我喜欢这件衣服。）' },
+      { type: 'note', text: '마음을 먹다 里的 먹다 不是"吃"，是"抱定（决心）"的意思，整体记成"下定决心"；口语也常写作一个词 마음먹다', examples: '드디어 유학 가기로 마음을 먹었어요.（终于下决心去留学了。）' },
     ],
     cardExamples: [
       {
@@ -736,13 +744,13 @@ export const grammarCardsP30: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '입이 무겁다 → 守口如瓶', examples: '민수는 입이 무거워요.' },
-      { type: 'rule', text: '입이 가볍다 → 嘴不严 / 爱说', examples: '그 사람은 입이 가벼워서 조심하세요.' },
-      { type: 'rule', text: '말꼬리를 잡다 → 抠字眼 / 挑毛病', examples: '자꾸 말꼬리를 잡지 마세요.' },
-      { type: 'rule', text: '말을 아끼다 → 惜字如金 / 少说话', examples: '요즘 그는 말을 아끼고 있어요.' },
-      { type: 'rule', text: '입에 발린 말 → 花言巧语 / 敷衍话', examples: '입에 발린 말은 하지 마세요.' },
-      { type: 'usage', text: '입방아를 찧다 → 说闲话 / 八卦', examples: '동네에서 그 사람 입방아를 찧어요.' },
-      { type: 'usage', text: '말이 씨가 되다 → 一语成谶', examples: '말이 씨가 될 수 있으니 조심하세요.' },
+      { type: 'rule', text: '입이 무겁다 → 守口如瓶', examples: '민수는 입이 무거워요.（民秀嘴很严，守口如瓶。）' },
+      { type: 'rule', text: '입이 가볍다 → 嘴不严 / 爱说', examples: '그 사람은 입이 가벼워서 조심하세요.（那个人嘴不严，你要小心点。）' },
+      { type: 'rule', text: '말꼬리를 잡다 → 抠字眼 / 挑毛病', examples: '자꾸 말꼬리를 잡지 마세요.（别老是抓话柄挑字眼。）' },
+      { type: 'rule', text: '말을 아끼다 → 惜字如金 / 少说话', examples: '요즘 그는 말을 아끼고 있어요.（最近他很少说话，惜字如金。）' },
+      { type: 'rule', text: '입에 발린 말 → 花言巧语 / 敷衍话', examples: '입에 발린 말은 하지 마세요.（别说那些花言巧语的客套话。）' },
+      { type: 'usage', text: '입방아를 찧다 → 说闲话 / 八卦', examples: '동네에서 그 사람 입방아를 찧어요.（街坊邻里都在说那个人的闲话。）' },
+      { type: 'usage', text: '말이 씨가 되다 → 一语成谶', examples: '말이 씨가 될 수 있으니 조심하세요.（说出口的话可能会一语成谶，说话要小心。）' },
       { type: 'note', text: '입 vs 말 → 입 侧重"嘴的行为"，말 侧重"内容"', examples: '입이 무겁다（嘴严）/ 말이 많다（话多）' },
     ],
     cardExamples: [
@@ -784,7 +792,7 @@ export const grammarCardsP30: GrammarCard[] = [
       { icon: '💬', context: '八卦', ko: '동네에서 입방아를 찧어요.', zh: '街坊说闲话。' },
     ],
     mistakes: [
-      { wrong: '민수는 입이 무겁습니다 = 嘴巴很重', correct: '민수는 입이 무겁습니다 = 嘴很严', note: '입이 무겁다 是"守口如瓶"，不是物理重量' },
+      { wrong: '민수는 입을 무겁습니다', correct: '민수는 입이 무겁습니다', note: '입이 무겁다 是惯用语（嘴严/守口如瓶），主语助词用 이，不用 을' },
       { wrong: '말꼬리를 잡아 주세요', correct: '말꼬리를 잡지 마세요', note: '말꼬리를 잡다 含贬义"抠字眼挑毛病"，不能作为"请求"' },
       { wrong: '요즘 말이 아껴요', correct: '요즘 말을 아껴요', note: '"惜字如金"是 말을 아끼다，用 -을' },
     ],
@@ -913,13 +921,13 @@ export const grammarCardsP30: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '머리를 굴리다 → 动脑筋 / 想办法', examples: '어떻게 하지 하며 머리를 굴렸어요.' },
-      { type: 'rule', text: '머리를 맞대다 → 碰头 / 商量', examples: '팀원들이 머리를 맞대고 의논했어요.' },
-      { type: 'rule', text: '머리가 아프다 → 头疼 / 心烦', examples: '이 문제 때문에 머리가 아파요.' },
-      { type: 'rule', text: '머리가 (잘) 돌아가다 → 脑子灵 / 反应快', examples: '민수는 머리가 잘 돌아가서 답을 빨리 찾았어요.' },
-      { type: 'rule', text: '머리를 식히다 → 放空 / 透透气', examples: '산책하면서 머리를 식혔어요.' },
-      { type: 'usage', text: '머리가 지끈지끈하다 → 头突突地疼', examples: '아침부터 머리가 지끈지끈해요.' },
-      { type: 'usage', text: '머리를 짜다 → 绞尽脑汁', examples: '아이디어를 짜내려고 머리를 짜냈어요.' },
+      { type: 'rule', text: '머리를 굴리다 → 动脑筋 / 想办法', examples: '어떻게 하지 하며 머리를 굴렸어요.（一边想着该怎么办，一边动起了脑筋。）' },
+      { type: 'rule', text: '머리를 맞대다 → 碰头 / 商量', examples: '팀원들이 머리를 맞대고 의논했어요.（组员们凑在一起商量。）' },
+      { type: 'rule', text: '머리가 아프다 → 头疼 / 心烦', examples: '이 문제 때문에 머리가 아파요.（这个问题让人头疼。）' },
+      { type: 'rule', text: '머리가 (잘) 돌아가다 → 脑子灵 / 反应快', examples: '민수는 머리가 잘 돌아가서 답을 빨리 찾았어요.（民秀脑子转得快，很快就找到了答案。）' },
+      { type: 'rule', text: '머리를 식히다 → 放空 / 透透气', examples: '산책하면서 머리를 식혔어요.（一边散步，一边让头脑放松一下。）' },
+      { type: 'usage', text: '머리가 지끈지끈하다 → 头突突地疼', examples: '아침부터 머리가 지끈지끈해요.（从早上开始头就一阵阵地突突疼。）' },
+      { type: 'usage', text: '머리를 짜다 → 绞尽脑汁', examples: '아이디어를 짜내려고 머리를 짜냈어요.（为了想出点子，绞尽了脑汁。）' },
       { type: 'note', text: '머리가 아프다 既指身体也指心烦意乱', examples: '身体：감기 걸려서 머리가 아파요 / 心烦：결정하기 힘들어서 머리가 아파요' },
     ],
     cardExamples: [
@@ -1052,7 +1060,7 @@ export const grammarCardsP30: GrammarCard[] = [
     whatItDoes: '사자성어（1）',
     whatItDoesBody: '韩语四字成语（사자성어）多源自汉字典故，是韩语高级表达的标志。本课学与"情感/态度/合作"相关的六大成语：일석이조（一石二鸟）、동병상련（同病相怜）、십시일반（十匙一饭）、어부지리（渔翁得利）、자업자득（自作自受）、우유부단（优柔寡断）。',
     structureNote: '四字成语作名词使用｜句中位置灵活｜多与 이다/하다 搭配',
-    rulesNote: '읽法：일석이조[일써기조] / 어부지리[어부지리]，注意汉字词双拼读法',
+    rulesNote: '읽는 법：일석이조[일써기조] / 어부지리[어부지리]，注意汉字词双拼读法',
     structures: [
       {
         ko: '이번 여행은 관광도 하고 공부도 해서 일석이조였어요.',
@@ -1084,12 +1092,12 @@ export const grammarCardsP30: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '일석이조（一石二鸟）→ 一举两得', examples: '운동도 하고 살도 빼고 일석이조예요.' },
-      { type: 'rule', text: '동병상련（同病相怜）→ 处境相同互相同情', examples: '어려운 처지에 동병상련을 느껴요.' },
-      { type: 'rule', text: '십시일반（十匙一饭）→ 众人拾柴 / 每人出一点', examples: '십시일반으로 도와줬어요.' },
-      { type: 'rule', text: '어부지리（渔翁得利）→ 鹬蚌相争渔翁得利', examples: '두 회사 싸움에서 어부지리를 얻었어요.' },
-      { type: 'rule', text: '자업자득（自作自受）→ 自食其果', examples: '거짓말이 들통난 건 자업자득이에요.' },
-      { type: 'rule', text: '우유부단（优柔寡断）→ 犹豫不决', examples: '민수는 우유부단해서 결정을 못 해요.' },
+      { type: 'rule', text: '일석이조（一石二鸟）→ 一举两得', examples: '운동도 하고 살도 빼고 일석이조예요.（既锻炼了身体又减了肥，真是一举两得。）' },
+      { type: 'rule', text: '동병상련（同病相怜）→ 处境相同互相同情', examples: '어려운 처지에 동병상련을 느껴요.（处境同样艰难，彼此感到同病相怜。）' },
+      { type: 'rule', text: '십시일반（十匙一饭）→ 众人拾柴 / 每人出一点', examples: '십시일반으로 도와줬어요.（大家每人出一点力，众人拾柴地帮了忙。）' },
+      { type: 'rule', text: '어부지리（渔翁得利）→ 鹬蚌相争渔翁得利', examples: '두 회사 싸움에서 어부지리를 얻었어요.（在两家公司的争斗中坐收了渔翁之利。）' },
+      { type: 'rule', text: '자업자득（自作自受）→ 自食其果', examples: '거짓말이 들통난 건 자업자득이에요.（谎言被拆穿是自作自受。）' },
+      { type: 'rule', text: '우유부단（优柔寡断）→ 犹豫不决', examples: '민수는 우유부단해서 결정을 못 해요.（民秀优柔寡断，迟迟做不了决定。）' },
       { type: 'usage', text: '语用：多用书面/新闻/正式演讲', examples: '기사 등에서 자주 나오는 표현' },
       { type: 'note', text: '判读时把汉字对照：일석(一石)+이조(二鸟)', examples: '일석이조=一+石+二+鸟' },
     ],
@@ -1256,13 +1264,13 @@ export const grammarCardsP30: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '전화위복（转祸为福）→ 因祸得福', examples: '실패가 전화위복이 되었어요.' },
-      { type: 'rule', text: '오리무중（五里雾中）→ 迷茫不明', examples: '원인이 오리무중이에요.' },
-      { type: 'rule', text: '유비무환（有备无患）→ 有备无患', examples: '유비무환의 자세로 준비했어요.' },
-      { type: 'rule', text: '설상가상（雪上加霜）→ 雪上加霜', examples: '설상가상으로 폭우까지 왔어요.' },
-      { type: 'rule', text: '고진감래（苦尽甘来）→ 苦尽甘来', examples: '고진감래라, 이제 좋은 일이 생길 거예요.' },
-      { type: 'rule', text: '다다익선（多多益善）→ 多多益善', examples: '경험은 다다익선이에요.' },
-      { type: 'usage', text: '설상가상 常做副词化 → 설상가상으로', examples: '설상가상으로 차까지 고장 났어요.' },
+      { type: 'rule', text: '전화위복（转祸为福）→ 因祸得福', examples: '실패가 전화위복이 되었어요.（那次失败最终转祸为福。）' },
+      { type: 'rule', text: '오리무중（五里雾中）→ 迷茫不明', examples: '원인이 오리무중이에요.（原因扑朔迷离，令人一头雾水。）' },
+      { type: 'rule', text: '유비무환（有备无患）→ 有备无患', examples: '유비무환의 자세로 준비했어요.（本着有备无患的态度做了准备。）' },
+      { type: 'rule', text: '설상가상（雪上加霜）→ 雪上加霜', examples: '설상가상으로 폭우까지 왔어요.（雪上加霜的是，还下起了暴雨。）' },
+      { type: 'rule', text: '고진감래（苦尽甘来）→ 苦尽甘来', examples: '고진감래라, 이제 좋은 일이 생길 거예요.（苦尽甘来，接下来会有好事发生的。）' },
+      { type: 'rule', text: '다다익선（多多益善）→ 多多益善', examples: '경험은 다다익선이에요.（经验多多益善。）' },
+      { type: 'usage', text: '설상가상 常做副词化 → 설상가상으로', examples: '설상가상으로 차까지 고장 났어요.（雪上加霜的是，连车都坏了。）' },
       { type: 'note', text: '전화위복 = 好事从坏事转来；反义 = 호사다마（好事多磨）', examples: '一好一坏，语义相反' },
     ],
     cardExamples: [
@@ -1393,10 +1401,10 @@ export const grammarCardsP30: GrammarCard[] = [
     id: 'card-p30-l09',
     partNumber: 30,
     lessonNumber: 9,
-    title: 'P28 综合练习',
+    title: 'P30 综合练习',
     isPractice: true,
     whatItDoes: '惯用语综合',
-    whatItDoesBody: '本课综合 P28 全部 8 类惯用语/成语：눈/손/발/마음/입/머리 六大身体部位 + 12 个 사자성어。综合考察含义与助词搭配。',
+    whatItDoesBody: '本课综合 P30 全部 8 类惯用语/成语：눈/손/발/마음/입/머리 六大身体部位 + 12 个 사자성어。综合考察含义与助词搭配。',
     structures: [],
     connectionRules: [],
     cardExamples: [],
@@ -1404,7 +1412,7 @@ export const grammarCardsP30: GrammarCard[] = [
     mistakes: [],
     specialQuiz: {
       type: 'morph',
-      title: 'P28 综合练习',
+      title: 'P30 综合练习',
       body: '综合本章所有惯用语和成语',
       questions: [
         {
@@ -1480,7 +1488,7 @@ export const grammarCardsP30: GrammarCard[] = [
       'card-p30-l08',
     ],
     overviewHtml: `<div class="ov-hero">
-  <div style="font-size:20px;font-weight:700;color:#241917;margin-bottom:8px">P28 惯用语与四字表达总结</div>
+  <div style="font-size:20px;font-weight:700;color:#241917;margin-bottom:8px">P30 惯用语与四字表达总结</div>
   <div style="font-size:14px;color:#89756e">6 大身体部位 + 12 个成语</div>
 </div>
 <div class="ov-section">
@@ -1512,7 +1520,7 @@ export const grammarCardsP30: GrammarCard[] = [
       1. 惯用语的字面翻译几乎无用，必须整体记<br>
       2. 助词固定，误用 이/가 或 을/를 会破坏语义<br>
       3. 四字成语多做名词，与 이다/하다/으로 搭配<br>
-      4. 用错场合可能反效果（如对长辈用 -시키다）<br>
+      4. 형용사性成语（우유부단）用 -하다，别用 이다（우유부단이에요 ✗）<br>
       5. 掌握本章后，能进入韩语"生活语/新闻语"层次
     </div>
   </div>

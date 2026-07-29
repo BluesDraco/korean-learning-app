@@ -1,0 +1,131 @@
+/* ═══════════════════════════════════════════════════════════════
+   TOPIK 答题页 · 桌面专属右栏（答题速览 + 题号面板）
+   - 桌面 ≥1280 常驻：答题概览 + 题号面板 + 交卷
+   - 窄屏收起，题号仍走原弹出抽屉（tk-exam-panel-btn）
+   ═══════════════════════════════════════════════════════════════ */
+
+.tk-scope {
+  --er-coral: #e8607a;
+  --er-coral-soft: #ffe1e4;
+  --er-coral-strong: #c94860;
+}
+[data-theme='dark'] .tk-scope {
+  --er-coral: #ff8fa0;
+  --er-coral-soft: rgba(232, 96, 122, .18);
+  --er-coral-strong: #ffa9b7;
+}
+
+/* 布局壳：窄屏块级，≥1280 两栏 */
+.tk-scope .tk-exam-layout { display: block; }
+
+@media (min-width: 1280px) {
+  .tk-scope .tk-exam-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    align-items: start;
+  }
+  .tk-scope .tk-exam-col { min-width: 0; }
+  /* 桌面有常驻右栏后，进度条里的题号按钮多余 → 隐藏 */
+  .tk-scope .tk-exam-panel-btn { display: none; }
+}
+
+/* 右栏本体 */
+.tk-scope .er-rail { display: none; }
+@media (min-width: 1280px) {
+  .tk-scope .er-rail {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: sticky;
+    top: 24px;
+  }
+}
+
+/* 卡片 */
+.tk-scope .er-card {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border-1);
+  border-radius: 16px; padding: 18px;
+}
+.tk-scope .er-card-title {
+  display: flex; align-items: center; gap: 7px;
+  font-family: 'JetBrains Mono', Menlo, Consolas, monospace;
+  font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--color-ink-3); margin-bottom: 14px;
+}
+.tk-scope .er-card-title .er-ico { color: var(--er-coral); }
+
+/* 答题概览：进度环 */
+.tk-scope .er-ring-wrap { display: flex; align-items: center; gap: 16px; }
+.tk-scope .er-ring { position: relative; width: 76px; height: 76px; flex-shrink: 0; }
+.tk-scope .er-ring svg { transform: rotate(-90deg); }
+.tk-scope .er-ring-track { stroke: var(--color-border-2); }
+.tk-scope .er-ring-fill { stroke: var(--er-coral); stroke-linecap: round; transition: stroke-dashoffset .5s cubic-bezier(.2,.7,.2,1); }
+.tk-scope .er-ring-num {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: 'Fraunces', 'Source Han Serif SC', 'Noto Serif SC', serif;
+  font-weight: 600; font-size: 21px; color: var(--color-ink-1);
+}
+.tk-scope .er-ring-meta { font-size: 13px; color: var(--color-ink-3); line-height: 1.7; }
+.tk-scope .er-ring-meta b {
+  font-family: 'Fraunces', serif; font-size: 16px; color: var(--er-coral-strong); font-style: italic;
+}
+
+.tk-scope .er-stat {
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding: 8px 0; font-size: 13px; color: var(--color-ink-2, var(--color-ink-1));
+}
+.tk-scope .er-stat + .er-stat { border-top: 1px solid var(--color-border-1); }
+.tk-scope .er-stat b { font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 700; color: var(--color-ink-1); }
+.tk-scope .er-stat.timer.warn b { color: var(--er-coral-strong); }
+.tk-scope .er-stat.mark b { color: var(--color-gold-strong); }
+.tk-scope .er-overview-stats { margin-top: 12px; }
+
+/* 题号网格 */
+.tk-scope .er-qgrid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 7px; }
+.tk-scope .er-qnum {
+  aspect-ratio: 1; border-radius: 9px; padding: 0;
+  border: 1.5px solid var(--color-border-2); background: var(--color-surface-1);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', Menlo, Consolas, monospace;
+  font-size: 12px; font-weight: 700; color: var(--color-ink-3);
+  cursor: pointer; position: relative;
+  transition: transform .14s cubic-bezier(.2,.7,.2,1), border-color .14s;
+}
+.tk-scope .er-qnum:hover { border-color: var(--er-coral); transform: translateY(-1px); }
+.tk-scope .er-qnum:focus-visible { outline: 2px solid var(--er-coral); outline-offset: 2px; }
+.tk-scope .er-qnum.answered {
+  border-color: var(--color-mint-base); background: var(--color-mint-soft); color: var(--color-mint-strong);
+}
+.tk-scope .er-qnum.current {
+  border-color: var(--er-coral); background: var(--er-coral); color: #fff;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--er-coral) 16%, transparent);
+}
+.tk-scope .er-qnum .er-qflag {
+  position: absolute; top: 3px; right: 3px; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--color-gold-base);
+}
+.tk-scope .er-legend {
+  display: flex; flex-wrap: wrap; gap: 12px; margin-top: 14px;
+  font-size: 11px; color: var(--color-ink-3);
+}
+.tk-scope .er-legend span { display: flex; align-items: center; gap: 5px; }
+.tk-scope .er-legend i { width: 12px; height: 12px; border-radius: 4px; display: inline-block; }
+
+.tk-scope .er-submit {
+  width: 100%; margin-top: 14px; padding: 11px; border-radius: 12px;
+  border: 1.5px solid var(--color-border-2); background: transparent;
+  color: var(--color-ink-3); font-size: 13px; font-weight: 700; cursor: pointer;
+  font-family: 'Noto Sans SC', 'PingFang SC', system-ui, sans-serif;
+  transition: border-color .15s, color .15s;
+}
+.tk-scope .er-submit:hover { border-color: var(--er-coral); color: var(--er-coral-strong); }
+.tk-scope .er-submit:focus-visible { outline: 2px solid var(--er-coral); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tk-scope .er-qnum, .tk-scope .er-ring-fill { transition: none; }
+}

@@ -1,0 +1,21 @@
+import type { BossSubQuestData } from '@/types/tori-subquest';
+
+/** Day 65 · 3-5 Boss 战 · 🌆 北区食肉动物区 */
+export const day65Boss: BossSubQuestData = {
+  day: 5, level: 'advanced', idx: 5, kind: 'boss',
+  koTitle: '북구의 관문',
+  subtitle: '🌆 육식자 구역 · 낯선 밤',
+  intro: '周五傍晚。同学说北区有"食肉动物区"——大型动物聚居，对小型动物不太好。你好奇心冒了上来，下班后搭四号线一直坐到终点，从北区 3 号出口出来。空气立刻变了。门都在你视线之上，招牌又粗又大，路灯不亮。对面走过来一只和你差不多身高的兔子，压低嗓子说了句"조심해"，然后加快脚步走开。今天要用 ~는/(으)ㄴ/(으)ㄹ 것 같다 把这份"好像有点不对"的直觉说清楚。',
+  outroHook: '风忽然刮得很大。就在那一瞬间，你第一次觉得这座城市对你来说是陌生的。——但只是"好像"。也许明天白天再来看看，会不一样。（Day 66 · 狮子超市面试 · 直面 편견）',
+
+  tasks: [
+    { type: 'choice',  label: '听句选意',     task: { id: 'd65-b5-t1', audioKo: '북구에 육식자 구역 있는 거 알지? 가지 마.',           choices: [{ text: '北区有食肉动物区你知道吧？别去。',           correct: true }, { text: '北区没有食肉动物区。',        correct: false }, { text: '北区随便去。',                  correct: false }, { text: '北区没关系。',                    correct: false }], explain: '同学提醒 · 悬念开场' } },
+    { type: 'choice',  label: '听句选意',     task: { id: 'd65-b5-t2', audioKo: '조심해. 여기 우리한테 좋은 데 아니야.',                 choices: [{ text: '小心。这地方对我们不好。',                   correct: true }, { text: '这里很好。',                    correct: false }, { text: '来这里玩。',                    correct: false }, { text: '你走开。',                      correct: false }], explain: '兔子暗中警告' } },
+    { type: 'choice',  label: '~것 같다',    task: { id: 'd65-b5-t3', promptZh: '"这里好像危险"哪句正确？',                                                                                                                                            choices: [{ text: '여기 위험하는 것 같아요.',                     correct: false }, { text: '여기 위험한 것 같아요.',       correct: true }, { text: '여기 위험할 것 같아요.',              correct: false }, { text: '여기 위험하기 것 같아요.',                          correct: false }], explain: '形容词 · ~ㄴ 것 같다' } },
+    { type: 'choice',  label: '~것 같다',    task: { id: 'd65-b5-t4', promptZh: '"明天好像会下雨"（未来推测）哪句正确？',                                                                                                                                    choices: [{ text: '내일 비 오는 것 같아요.',                       correct: false }, { text: '내일 비 올 것 같아요.',        correct: true }, { text: '내일 비 온 것 같아요.',              correct: false }, { text: '내일 비 오은 것 같아요.',                          correct: false }], explain: '未来 · ~(으)ㄹ 것 같다' } },
+    { type: 'choice',  label: '认词',         task: { id: 'd65-b5-t5', promptKo: '육식자',      promptHangul: 'yuk-sik-ja',                                                                                                                              choices: [{ text: '食肉动物',                        correct: true }, { text: '草食动物',                      correct: false }, { text: '杂食动物',                      correct: false }, { text: '海洋动物',                          correct: false }], explain: '肉(육) + 食(식) + 者(자)' } },
+    { type: 'compose', label: '组句',         task: { id: 'd65-b5-t6', zhHint: '好像有人来。',                                                                                                                                                            audioKo: '누가 오는 것 같아요.',                                answer: ['누가', '오는 것 같아요.'],                              tokens: ['누가', '오는 것 같아요.', '오은', '온', '올', '왔어요.'],                                              explain: 'V 현재 + 는 것 같다' } },
+    { type: 'compose', label: '组句',         task: { id: 'd65-b5-t7', zhHint: '好像已经走了。',                                                                                                                                                          audioKo: '이미 간 것 같아요.',                                    answer: ['이미', '간 것 같아요.'],                                tokens: ['이미', '간 것 같아요.', '갔는', '가는', '갈', '갔어요.'],                                                explain: 'V 과거 + (으)ㄴ 것 같다' } },
+    { type: 'choice',  label: '情景选回应',   task: { id: 'd65-b5-t8', promptZh: '兔子小声警告 "조심해. 여기 우리한테 좋은 데 아니야."。你想低声道谢并准备离开，最自然的一句？',                                                                             choices: [{ text: '고마워요, 저도 곧 갈 거예요.',                                    correct: true }, { text: '내가 왜?',                          correct: false }, { text: '싫어요.',                                correct: false }, { text: '얼마예요?',                              correct: false }], explain: '低声感谢 + 意愿' } },
+  ],
+};

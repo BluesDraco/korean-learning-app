@@ -3,8 +3,8 @@
 import { useEffect, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
-import { useIsMobile } from '@/lib/useIsMobile';
-import { Sheet } from '@/components/ui/Sheet';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 
 type Size = 'sm' | 'md' | 'lg';
 
@@ -33,10 +33,10 @@ export function Modal({
   closeOnBackdrop = true,
   closeButton = true,
 }: ModalProps) {
-  const isMobile = useIsMobile();
+  const { lang } = useLang();
 
   useEffect(() => {
-    if (!open || isMobile) return;
+    if (!open) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
     };
@@ -47,45 +47,33 @@ export function Modal({
       document.removeEventListener('keydown', onKey);
       document.body.style.overflow = prev;
     };
-  }, [open, onClose, isMobile]);
+  }, [open, onClose]);
 
   if (!open) return null;
-  if (isMobile) {
-    return (
-      <Sheet open={open} onClose={onClose} title={title} closeOnBackdrop={closeOnBackdrop} closeButton={closeButton}>
-        {children}
-      </Sheet>
-    );
-  }
   if (typeof window === 'undefined') return null;
 
   return createPortal(
-    <>
-      <div
-        onClick={closeOnBackdrop ? onClose : undefined}
-        style={{
-          position: 'fixed',
-          inset: 0,
-          background: 'var(--backdrop-color-strong)',
-          zIndex: 200,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: 24,
-          animation: 'tori-fade-in var(--dur-base) var(--ease-soft)',
-        }}
-        aria-hidden
-      />
+    <div
+      onClick={closeOnBackdrop ? onClose : undefined}
+      style={{
+        position: 'fixed',
+        inset: 0,
+        background: 'var(--backdrop-color-strong)',
+        zIndex: 200,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 24,
+        animation: 'tori-fade-in var(--dur-base) var(--ease-soft)',
+      }}
+    >
       <div
         role="dialog"
         aria-modal="true"
         aria-label={title}
         onClick={(e) => e.stopPropagation()}
         style={{
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
+          position: 'relative',
           zIndex: 201,
           background: 'var(--color-surface-2)',
           borderRadius: 'var(--radius-xl)',
@@ -95,7 +83,7 @@ export function Modal({
           overflowY: 'auto',
           boxShadow: 'var(--shadow-lg)',
           border: '1px solid var(--color-border-1)',
-          animation: 'tori-scale-in var(--dur-base) var(--ease-soft)',
+          animation: 'tori-scale-in-center var(--dur-base) var(--ease-soft)',
         }}
       >
         {(title || closeButton) && (
@@ -117,13 +105,13 @@ export function Modal({
             {closeButton && (
               <button
                 onClick={onClose}
-                aria-label="关闭"
+                aria-label={t('ui.modal_close', lang)}
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  width: 32,
-                  height: 32,
+                  width: 44,
+                  height: 44,
                   borderRadius: 'var(--radius-pill)',
                   background: 'transparent',
                   border: 'none',
@@ -138,7 +126,7 @@ export function Modal({
         )}
         {children}
       </div>
-    </>,
+    </div>,
     document.body
   );
 }

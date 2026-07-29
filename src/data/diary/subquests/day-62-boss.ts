@@ -1,0 +1,21 @@
+import type { BossSubQuestData } from '@/types/tori-subquest';
+
+/** Day 62 · 3-5 Boss 战 · ☕ 곰다방 面试 · 诚实也是能力 */
+export const day62Boss: BossSubQuestData = {
+  day: 2, level: 'advanced', idx: 5, kind: 'boss',
+  koTitle: '면접의 관문',
+  subtitle: '☕ 곰다방 · 一杯咖啡的诚实',
+  intro: '周二下午。学校旁那家곰다방的窗户上贴着 A4 招聘启事。你推门进去——柜台后面站着一只穿围裙的黑熊，胸牌"사장 김"。你把简历递过去。他擦手接过，抬头："이력서 잘 봤어. 한국어는 얼마나 해?" 你犹豫了三秒。说 잘해요 是骗人，说 못해요 就没机会了，说 보통이에요 又太抽象。今天要用 ~는/은 편이에요 + 诚实主题句，把这份"有限承认 + 持续努力"的答案说出来。',
+  outroHook: '"솔직해서 좋아. 완벽한 사람 안 뽑아. 정직한 사람 뽑아." 黑熊笑出声。明天开始上班。出门时心跳很快——不是紧张，是发现原来诚实也是能力。课堂里追学分的兔莉，课堂外靠诚实拿到第一份兼职的兔莉，这两个我都是我。',
+
+  tasks: [
+    { type: 'choice',  label: '听句选意',     task: { id: 'd62-b5-t1', audioKo: '이력서 잘 봤어. 한국어는 얼마나 해?',                    choices: [{ text: '简历看了。韩语说到什么水平？',              correct: true }, { text: '简历没看。',                    correct: false }, { text: '韩语再学学。',              correct: false }, { text: '简历再交一份。',                    correct: false }], explain: '店长面试开场' } },
+    { type: 'choice',  label: '听句选意',     task: { id: 'd62-b5-t2', audioKo: '솔직해서 좋아. 완벽한 사람 안 뽑아. 정직한 사람 뽑아.', choices: [{ text: '诚实好。不招完美的人，招诚实的人。',        correct: true }, { text: '完美的人才招。',                correct: false }, { text: '诚实不好。',                    correct: false }, { text: '谁都不招。',                        correct: false }], explain: 'Day 62 核心台词' } },
+    { type: 'choice',  label: '편이에요',     task: { id: 'd62-b5-t3', promptZh: '"我算是安静的"哪句正确？',                                                                                                                                          choices: [{ text: '저는 조용하는 편이에요.',                     correct: false }, { text: '저는 조용한 편이에요.',       correct: true }, { text: '저는 조용해서 편이에요.',           correct: false }, { text: '저는 조용하고 편이에요.',                       correct: false }], explain: '形容词 · ~ㄴ 편이에요' } },
+    { type: 'choice',  label: '편이에요',     task: { id: 'd62-b5-t4', promptZh: '"我韩语算说得可以"哪句正确？',                                                                                                                                        choices: [{ text: '한국어를 잘하은 편이에요.',                    correct: false }, { text: '한국어를 잘하는 편이에요.', correct: true }, { text: '한국어를 잘하ㄴ 편이에요.',          correct: false }, { text: '한국어를 잘한 편이에요.',                          correct: false }], explain: '动词 · ~는 편이에요' } },
+    { type: 'choice',  label: '认词',         task: { id: 'd62-b5-t5', promptKo: '솔직하다',  promptHangul: 'sol-jik-ha-da',                                                                                                                            choices: [{ text: '诚实 / 坦率',                    correct: true }, { text: '狡猾',                          correct: false }, { text: '内向',                          correct: false }, { text: '开朗',                              correct: false }], explain: 'Day 62 主角词' } },
+    { type: 'compose', label: '组句',         task: { id: 'd62-b5-t6', zhHint: '一点点。但一直在学。',                                                                                                                                                audioKo: '조금요. 근데 계속 배우고 있어요.',                     answer: ['조금요.', '근데', '계속', '배우고 있어요.'],          tokens: ['조금요.', '근데', '계속', '배우고 있어요.', '완벽해요.', '몰라요.', '얼마예요?', '못해요.'],       explain: 'Tori 主题句 · 诚实 + 承诺' } },
+    { type: 'compose', label: '组句',         task: { id: 'd62-b5-t7', zhHint: '我算是安静的。',                                                                                                                                                        audioKo: '저는 조용한 편이에요.',                                answer: ['저는', '조용한 편이에요.'],                            tokens: ['저는', '조용한 편이에요.', '조용하는', '조용해서', '조용하고', '시끄러운 편이에요.'],              explain: 'A + ㄴ 편이에요' } },
+    { type: 'choice',  label: '情景选回应',   task: { id: 'd62-b5-t8', promptZh: '店长说 "내일부터 나오세요."。你想正式感谢并承诺认真做，最自然的一句？',                                                                                              choices: [{ text: '감사합니다. 열심히 하겠습니다.',                                correct: true }, { text: '싫어요, 안 갈래요.',              correct: false }, { text: '얼마예요?',                              correct: false }, { text: '몰라요.',                                correct: false }], explain: '正式感谢 + ~겠습니다' } },
+  ],
+};

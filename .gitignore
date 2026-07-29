@@ -2,6 +2,8 @@ node_modules
 .next
 .env
 .env.local
+.env.*
+!.env.example
 out
 dist
 *.tsbuildinfo
@@ -10,3 +12,26 @@ next-env.d.ts
 
 # Runtime SQLite data
 data/*.db
+
+# 调试/审计临时产物（2026-07-21 清理，自动忽略防再堆积）
+*-screenshots/
+_*
+tmp-*
+tmp_*
+*.log
+audit-*.mjs
+audit-*.cjs
+audit-*.log
+audit-report.txt
+measure-*.mjs
+repro-*.mjs
+repro-*.png
+responsive-audit*.mjs
+*.cjs
+phonetics-*.png
+*list.txt
+.audit-cache/
+.audit-results/
+.agent-backup/
+.learn-visual-backup/
+.next-old-*/

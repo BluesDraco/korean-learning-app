@@ -1,0 +1,22 @@
+import type { BossSubQuestData } from '@/types/tori-subquest';
+
+/** Day 85 · 3-5 Boss 战 · 🎒 카운트다운 · ~(으)ㄹ 때마다 */
+export const day85Boss: BossSubQuestData = {
+  day: 25, level: 'advanced', idx: 5, kind: 'boss',
+  koTitle: '카운트다운의 관문',
+  subtitle: '🎒 고급반 교실 · 5장의 종이 · 기억',
+
+  intro: '周二上午。高级班教室后墙贴着"距离毕业 5 天"的倒计时日历,Junho 做的,A4 纸五张,每天撕一张。今天还剩 5 张。Danielle 说"오늘 5장 뜯을 사람? 오늘의 이야기를 하나 나누고 뜯자"。你举了手,讲起 Day 42 火锅发表——那天全班第一次为你鼓掌。你把写着"5"的那张撕下来。你忽然意识到:每撕一张纸,一起待着的时间也被撕掉一张。今天要用 ~(으)ㄹ 때마다 说出这份感受:종이를 뜯을 때마다 함께한 시간도 줄어요 → 이 노래 들을 때마다 그때가 생각나요 → 남은 며칠, 소중하게 기억해두자。',
+  outroHook: '你把胡萝卜笔攥在手心。四张纸,四个人,四个故事,一天撕一张。Day 44 江边 Haru 那句"불가능하지만, 기억은 남아요"又浮上心头——今天,这句话你又用身体理解了一次。明天,你想再走一遍 Day 1-7 走过的那条路:仁川机场、地铁、第一家便利店、第一间教室。路还是那条路,只是这次,是最后一次。（Day 86 · 다시 걷는 길）',
+
+  tasks: [
+    { type: 'choice',  label: '听句选意',       task: { id: 'd85-b5-t1', audioKo: '종이를 뜯을 때마다 함께한 시간도 줄어요.',                                          choices: [{ text: '每撕一张纸，一起的时间也在减少。',            correct: true }, { text: '撕纸的时候时间变多了。',              correct: false }, { text: '纸撕不动。',                          correct: false }, { text: '时间不会走。',                        correct: false }], explain: 'Day 85 高潮句 · ~(으)ㄹ 때마다' } },
+    { type: 'choice',  label: '听句选意',       task: { id: 'd85-b5-t2', audioKo: '이 노래 들을 때마다 그때가 생각나요.',                                  choices: [{ text: '每次听这首歌就想起那时候。',                  correct: true }, { text: '这首歌不好听。',                      correct: false }, { text: '我没听过这首歌。',                    correct: false }, { text: '想听别的歌。',                        correct: false }], explain: '듣다 → 들을 때마다 (ㄷ 불규칙)' } },
+    { type: 'choice',  label: '~(으)ㄹ 때마다', task: { id: 'd85-b5-t3', promptZh: '"每次看到你都笑"哪句正确？',                                                                                                                                    choices: [{ text: '너를 볼 때마다 웃음이 나요.',           correct: true }, { text: '너를 보 때마다 웃음이 나요.',            correct: false }, { text: '너를 볼 때다마 웃음이 나요.',                correct: false }, { text: '너를 봐 때마다 웃음이 나요.',                  correct: false }], explain: '보다 → 볼 때마다' } },
+    { type: 'choice',  label: 'ㄷ 불규칙',       task: { id: 'd85-b5-t4', promptZh: '"每次听"（듣다）哪句正确？',                                                                                                                                    choices: [{ text: '들을 때마다',        correct: true }, { text: '듣을 때마다',          correct: false }, { text: '들를 때마다',            correct: false }, { text: '듣를 때마다',            correct: false }], explain: '듣다 ㄷ 불규칙 → 들을 때마다' } },
+    { type: 'choice',  label: '认词',           task: { id: 'd85-b5-t5', promptKo: '기억해두다', promptHangul: 'gi-eo-kae-du-da',                                                                                                                              choices: [{ text: '记住 / 记下来',                          correct: true }, { text: '忘掉',                          correct: false }, { text: '想不起',                          correct: false }, { text: '记错',                            correct: false }], explain: '기억하다 + ~아/어 두다 · 提前记好留着' } },
+    { type: 'compose', label: '组句',           task: { id: 'd85-b5-t6', zhHint: '每撕一张纸，一起的时间也在减少。',                                                                                                                                                     audioKo: '종이를 뜯을 때마다 함께한 시간도 줄어요.',                             answer: ['종이를', '뜯을 때마다', '함께한 시간도', '줄어요.'],   tokens: ['종이를', '뜯을 때마다', '함께한 시간도', '줄어요.', '뜯어서', '늘어요.', '뜯을 때'],         explain: 'Day 85 高潮句 · ~(으)ㄹ 때마다' } },
+    { type: 'compose', label: '组句',           task: { id: 'd85-b5-t7', zhHint: '剩下的几天，好好记住吧。',                                                                                                                                             audioKo: '남은 며칠, 소중하게 기억해두자.',                             answer: ['남은 며칠,', '소중하게', '기억해두자.'],                              tokens: ['남은 며칠,', '소중하게', '기억해두자.', '남을 며칠,', '잊어버리자.', '기억해두다.'],           explain: '남은 + 기억해두다(~아/어 두다)' } },
+    { type: 'choice',  label: '情景选回应',     task: { id: 'd85-b5-t8', promptZh: 'Danielle 说 "오늘 5장 뜯을 사람?"。你想主动举手、说"我来撕，我想讲一个故事"，最自然的一句？',                                                                                    choices: [{ text: '제가 뜯을게요. 이야기 하나 나눌게요.',       correct: true }, { text: '캘린더 그만 뜯어요.',                  correct: false }, { text: '얼마예요?',                              correct: false }, { text: '뜯기 싫어요.',                                correct: false }], explain: '~을게요 · 主动承担' } },
+  ],
+};

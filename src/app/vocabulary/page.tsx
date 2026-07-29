@@ -1,28 +1,35 @@
-'use client';
+'use client'
 
 import React, { useEffect, useState, useCallback, useMemo, useRef, Suspense } from 'react';
+import { createPortal } from 'react-dom';
 import { useIsDesktop } from '@/lib/useIsMobile';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import {
-  BookOpen, ArrowRight, ArrowLeft, Library,
-  Target, MessageSquare, Trash2, Volume2, CheckSquare, Square, FolderInput, X, Plus, Settings2, Check, Bookmark, BookmarkCheck, Copy, ChevronRight, ChevronDown, Loader2,
+  BookOpen, ArrowRight, Library,
+  Target, MessageSquare, Trash2, Volume2, CheckSquare, Square, FolderInput, X, Plus, Check, Bookmark, Copy, ChevronRight, ChevronDown, Loader2, Sparkles,
 } from 'lucide-react';
-import { db } from '@/lib/db';
+import { db, deleteWordIds } from '@/lib/db';
 import { useAuth } from '@/components/AuthProvider';
 import { BooksSection } from '@/components/vocabulary/BooksSection';
-import { speakWord, speak } from '@/lib/tts';
+import { speakWord } from '@/lib/tts';
 import { TappableText } from '@/components/TappableText';
-import { getEntry, getEntryByKorean } from '@/data/vocabulary/index';
 import { updateProfile } from '@/lib/gamification';
-import { PageHeader, Section, Card, Button, EntryCard } from '@/components/ui';
-import type { Word, WordBook, MasteryLevel, WordEntry } from '@/types';
+import { Section, Card, Button, EntryCard, Modal } from '@/components/ui';
+import PlaceIntro from '@/components/PlaceIntro';
+import { t, getLang } from '@/lib/i18n';
+import { useLang } from '@/components/LangProvider';
+import type { Word, WordBook, MasteryLevel } from '@/types';
+import '../learning/learning-visual.css';
 
+function DesktopVocabularyFallback() {
+  return <div style={{ padding: '80px 40px', textAlign: 'center', color: 'var(--color-ink-3)' }}>{t('vocab.load_failed_refresh', getLang())}</div>;
+}
 const DesktopVocabularyPage = dynamic(
   () => import('@/components/desktop/DesktopVocabularyPage')
     .then((m) => m.DesktopVocabularyPage)
-    .catch(() => () => <div style={{ padding: '80px 40px', textAlign: 'center', color: 'var(--color-ink-3)' }}>加载失败，请刷新页面</div>),
+    .catch(() => DesktopVocabularyFallback),
   { ssr: false }
 );
 
@@ -39,22 +46,21 @@ interface SavedSentence {
   created_at?: string;
 }
 
-const SOURCE_LABELS: Record<string, string> = {
-  analysis: '内容拆解',
-  shadowing: '影子跟读',
-  reading: '阅读',
-  review: '闪卡复习',
-  kpop: 'KPOP',
-  news_reading: '韩娱热帖',
-  writing: '写作练习',
-  vocabulary: '词汇例句',
+const SOURCE_LABEL_KEYS: Record<string, string> = {
+  analysis: 'vocab.src_analysis',
+  shadowing: 'vocab.src_shadowing',
+  reading: 'vocab.src_reading',
+  review: 'vocab.src_review',
+  news_reading: 'vocab.src_news_reading',
+  writing: 'vocab.src_writing',
+  vocabulary: 'vocab.src_vocabulary',
 };
 
 const masteryColor: Record<MasteryLevel, string> = {
-  new: 'bg-slate-500',
-  learning: 'bg-yellow-400',
-  reviewing: 'bg-blue-400',
-  mastered: 'bg-emerald-400',
+  new: 'bg-[var(--text-muted)]',
+  learning: 'bg-[var(--peach-soft)]',
+  reviewing: 'bg-[var(--blue-soft)]',
+  mastered: 'bg-[var(--mint-soft)]',
 };
 
 const GOAL_OPTIONS = [5, 10, 15, 20, 25, 30, 40, 50];
@@ -66,27 +72,41 @@ function GoalWheelPicker({ current, unmastered, onClose, onConfirm }: {
   onClose: () => void;
   onConfirm: (n: number) => Promise<void>;
 }) {
+  const { lang } = useLang();
   const initIdx = Math.max(0, GOAL_OPTIONS.indexOf(current));
   const [selectedIdx, setSelectedIdx] = useState(initIdx);
+  const [confirming, setConfirming] = useState(false);
   const wheelRef = useRef<HTMLDivElement>(null);
   const itemsRef = useRef<HTMLDivElement>(null);
   const touchStartY = useRef(0);
   const currentOffset = useRef(-initIdx * ITEM_H);
   const isDragging = useRef(false);
   const mouseStartY = useRef(0);
+  // 拖动后浏览器会补发一次 click，落在某个选项上会覆盖吸附结果（拖到30却跳成手指落点项）。
+  // 拖动位移超阈值就置真，onClick 里据此忽略这次误触。
+  const movedRef = useRef(false);
 
-  function snapToIndex(raw: number) {
-    const min = -(GOAL_OPTIONS.length - 1) * ITEM_H;
-    const clamped = Math.max(min, Math.min(0, raw));
-    const idx = Math.max(0, Math.min(GOAL_OPTIONS.length - 1, Math.round(-clamped / ITEM_H)));
-    const snapped = -idx * ITEM_H;
+  function setIndex(idx: number) {
+    const clampedIdx = Math.max(0, Math.min(GOAL_OPTIONS.length - 1, idx));
+    const snapped = -clampedIdx * ITEM_H;
     currentOffset.current = snapped;
     if (itemsRef.current) {
       itemsRef.current.style.transition = 'transform 0.2s ease-out';
       itemsRef.current.style.transform = `translateY(${ITEM_H * 2 + snapped}px)`;
       setTimeout(() => { if (itemsRef.current) itemsRef.current.style.transition = 'none'; }, 200);
     }
-    setSelectedIdx(idx);
+    setSelectedIdx(clampedIdx);
+  }
+
+  function snapToIndex(raw: number) {
+    const min = -(GOAL_OPTIONS.length - 1) * ITEM_H;
+    const clamped = Math.max(min, Math.min(0, raw));
+    setIndex(Math.round(-clamped / ITEM_H));
+  }
+
+  // 拖动/点击开始前先掐掉上一次 snap 的 0.2s 过渡，否则连续快滑会带着过渡跑 → 黏滞、跟不上手
+  function stopTransition() {
+    if (itemsRef.current) itemsRef.current.style.transition = 'none';
   }
 
   useEffect(() => {
@@ -100,7 +120,9 @@ function GoalWheelPicker({ current, unmastered, onClose, onConfirm }: {
 
     const handleTouchMove = (e: TouchEvent) => {
       e.preventDefault();
+      stopTransition();
       const dy = e.touches[0].clientY - touchStartY.current;
+      if (Math.abs(dy) > 4) movedRef.current = true;
       const raw = currentOffset.current + dy;
       const min = -(GOAL_OPTIONS.length - 1) * ITEM_H;
       const clamped = Math.max(min, Math.min(0, raw));
@@ -117,7 +139,9 @@ function GoalWheelPicker({ current, unmastered, onClose, onConfirm }: {
     // Mouse drag
     const handleMouseMove = (e: MouseEvent) => {
       if (!isDragging.current) return;
+      stopTransition();
       const dy = e.clientY - mouseStartY.current;
+      if (Math.abs(dy) > 4) movedRef.current = true;
       const raw = currentOffset.current + dy;
       const min = -(GOAL_OPTIONS.length - 1) * ITEM_H;
       const clamped = Math.max(min, Math.min(0, raw));
@@ -165,16 +189,22 @@ function GoalWheelPicker({ current, unmastered, onClose, onConfirm }: {
 
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartY.current = e.touches[0].clientY;
+    movedRef.current = false;
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
     isDragging.current = true;
     mouseStartY.current = e.clientY;
+    movedRef.current = false;
   };
 
   const days = unmastered > 0 ? Math.ceil(unmastered / GOAL_OPTIONS[selectedIdx]) : 0;
 
-  return (
+  // Portal 到 body：否则挂在 .learn-visual-root 内会被 `.learn-visual-root > * {position:relative}`
+  // (特异性高于 Tailwind .fixed) 强改成 relative，导致弹窗内联文档流、滚不动、按钮被推出屏幕
+  if (typeof window === 'undefined') return null;
+
+  return createPortal(
     <div
       className="fixed inset-0 z-[100] flex items-end justify-center"
       style={{ paddingBottom: 'calc(56px + env(safe-area-inset-bottom, 0px))' }}
@@ -187,37 +217,40 @@ function GoalWheelPicker({ current, unmastered, onClose, onConfirm }: {
         onClick={e => e.stopPropagation()}
       >
         <div className="flex items-center justify-between px-5 pt-5 pb-3">
-          <h3 className="text-base font-black" style={{ color: 'var(--color-ink-1)' }}>设置复习计划</h3>
+          <h3 className="text-base font-black" style={{ color: 'var(--color-ink-1)' }}>{t('vocab.hub_review_plan_title', lang)}</h3>
           <button onClick={onClose} style={{ color: 'var(--color-ink-3)' }}><X size={20} /></button>
         </div>
         <p className="text-xs px-5 pb-4" style={{ color: 'var(--color-ink-3)' }}>
-          共 {unmastered} 个未掌握单词 · 每天复习 {GOAL_OPTIONS[selectedIdx]} 个 · 约需 {days > 0 ? `${days} 天` : '—'}
+          {t('vocab.hub_plan_summary', lang, { total: unmastered, per: GOAL_OPTIONS[selectedIdx], days: days > 0 ? t('vocab.hub_plan_days', lang, { n: days }) : t('vocab.hub_plan_dash', lang) })}
         </p>
 
         <div
           ref={wheelRef}
           className="relative mx-auto overflow-hidden"
-          style={{ height: ITEM_H * 5, width: '100%', userSelect: 'none' }}
+          style={{ height: ITEM_H * 5, width: '100%', userSelect: 'none', touchAction: 'none' }}
           onTouchStart={handleTouchStart}
           onMouseDown={handleMouseDown}
         >
-          <div className="absolute left-0 right-0 pointer-events-none z-10" style={{
-            top: ITEM_H * 2, height: ITEM_H,
+          <div className="absolute pointer-events-none" style={{
+            top: ITEM_H * 2, left: 20, right: 20, height: ITEM_H, zIndex: 0,
             background: 'var(--color-pink-soft)',
-            borderTop: '1.5px solid var(--color-pink-base)',
-            borderBottom: '1.5px solid var(--color-pink-base)',
+            border: '1.5px solid var(--color-pink-base)',
+            borderRadius: 12,
           }} />
-          <div className="absolute inset-x-0 top-0 pointer-events-none z-10" style={{ height: ITEM_H * 2, background: 'linear-gradient(to bottom, var(--color-surface-2), transparent)' }} />
-          <div className="absolute inset-x-0 bottom-0 pointer-events-none z-10" style={{ height: ITEM_H * 2, background: 'linear-gradient(to top, var(--color-surface-2), transparent)' }} />
-          <div ref={itemsRef} style={{ transform: `translateY(${ITEM_H * 2 + (-initIdx * ITEM_H)}px)`, transition: 'none' }}>
+          <div className="absolute inset-x-0 top-0 pointer-events-none" style={{ height: ITEM_H * 2, background: 'linear-gradient(to bottom, var(--color-surface-2), transparent)', zIndex: 1 }} />
+          <div className="absolute inset-x-0 bottom-0 pointer-events-none" style={{ height: ITEM_H * 2, background: 'linear-gradient(to top, var(--color-surface-2), transparent)', zIndex: 1 }} />
+          <div ref={itemsRef} style={{ transform: `translateY(${ITEM_H * 2 + (-initIdx * ITEM_H)}px)`, transition: 'none', position: 'relative', zIndex: 2 }}>
             {GOAL_OPTIONS.map((n, i) => (
-              <div key={n} style={{
-                height: ITEM_H, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: i === selectedIdx ? 28 : 20, fontWeight: 900,
-                color: i === selectedIdx ? 'var(--color-pink-strong)' : 'var(--color-ink-4)',
-                transition: 'font-size 0.15s, color 0.15s',
-              }}>
-                {n} 个/天
+              <div key={n}
+                onClick={() => { if (movedRef.current) { movedRef.current = false; return; } setIndex(i); }}
+                style={{
+                  height: ITEM_H, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: i === selectedIdx ? 28 : 20, fontWeight: 900,
+                  color: i === selectedIdx ? 'var(--color-pink-strong)' : 'var(--color-ink-4)',
+                  transition: 'font-size 0.15s, color 0.15s',
+                  cursor: 'pointer',
+                }}>
+                {t('vocab.hub_plan_per_day', lang, { n })}
               </div>
             ))}
           </div>
@@ -225,75 +258,28 @@ function GoalWheelPicker({ current, unmastered, onClose, onConfirm }: {
 
         <div className="px-5 pt-3 pb-[calc(20px+env(safe-area-inset-bottom,0px))]">
           <button
-            onClick={() => onConfirm(GOAL_OPTIONS[selectedIdx])}
-            className="w-full py-3.5 rounded-2xl text-white font-black text-sm"
+            disabled={confirming}
+            onClick={async () => {
+              if (confirming) return;
+              setConfirming(true);
+              await onConfirm(GOAL_OPTIONS[selectedIdx]);
+              setConfirming(false);
+            }}
+            className="w-full py-3.5 rounded-2xl text-white font-black text-sm disabled:opacity-60"
             style={{ background: 'var(--color-pink-base)', boxShadow: 'var(--shadow-md)' }}
           >
-            确认
+            {confirming ? t('vocab.hub_saving', lang) : t('common.confirm', lang)}
           </button>
         </div>
       </div>
-    </div>
-  );
-}
-
-function DueWordRoman({ word, entry }: { word: Word; entry?: WordEntry }) {
-  const roman = word.pronunciation && word.pronunciation !== word.word
-    ? word.pronunciation
-    : entry?.romanization;
-  if (!roman) return null;
-  return <span className="text-xs text-[var(--text-muted)]">{roman}</span>;
-}
-
-function DueWordExpanded({ word, entry, savedExamples, setSavedExamples }: {
-  word: Word; entry?: WordEntry;
-  savedExamples: Set<string>;
-  setSavedExamples: (fn: (prev: Set<string>) => Set<string>) => void;
-}) {
-  const validExamples = (word.examples ?? []).filter(ex => ex.text && ex.text !== '[object Object]');
-  const examples = validExamples.length > 0
-    ? validExamples.map(ex => ({ korean: ex.text, chinese: ex.translation }))
-    : (entry?.examples ?? []).slice(0, 3).map(ex => ({ korean: ex.korean, chinese: ex.chinese })) ?? [];
-  return (
-    <div className="px-4 pb-3 space-y-2 border-t border-[var(--border-color)]">
-      {examples.length > 0 ? examples.map((ex, i) => (
-        <div key={i} className="flex items-start gap-2 pt-2">
-          <div className="flex-1 min-w-0">
-            <TappableText text={ex.korean} className="text-sm text-[var(--text-primary)]" source="我的词库" highlightWord={word.word} />
-            <p className="text-xs text-[var(--text-secondary)] mt-0.5">{ex.chinese}</p>
-          </div>
-          <div className="flex items-center gap-1 shrink-0">
-            <button onClick={() => speak(ex.korean, 0.85)} className="p-1 rounded-lg text-[var(--text-muted)] hover:text-[var(--pink-primary)] shrink-0">
-              <Volume2 size={13} />
-            </button>
-            <button
-              onClick={async e => {
-                e.stopPropagation();
-                if (savedExamples.has(ex.korean)) return;
-                try {
-                  const existing = await db.sentences.where('korean').equals(ex.korean).first();
-                  if (!existing) {
-                    await db.sentences.add({ id: crypto.randomUUID(), korean: ex.korean, chinese: ex.chinese, source_type: 'vocabulary', source_id: 'word-' + word.word, source_title: word.word, created_at: new Date().toISOString() });
-                  }
-                  setSavedExamples(prev => new Set([...prev, ex.korean]));
-                } catch { /* ignore */ }
-              }}
-              className="p-1 rounded-lg shrink-0"
-              style={{ color: savedExamples.has(ex.korean) ? 'var(--pink-primary)' : 'var(--text-muted)', cursor: savedExamples.has(ex.korean) ? 'default' : 'pointer' }}
-            >
-              {savedExamples.has(ex.korean) ? <BookmarkCheck size={13} /> : <Bookmark size={13} />}
-            </button>
-          </div>
-        </div>
-      )) : (
-        <p className="text-xs text-[var(--text-muted)] pt-2">暂无例句</p>
-      )}
-    </div>
+    </div>,
+    document.body,
   );
 }
 
 function VocabularyContent() {
   const { user, loading: authLoading } = useAuth();
+  const { lang } = useLang();
   const searchParams = useSearchParams();
   const router = useRouter();
   const urlTab = searchParams.get('tab');
@@ -314,71 +300,70 @@ function VocabularyContent() {
   const [wordBooks, setWordBooks] = useState<WordBook[]>([]);
   const [showMoveSheet, setShowMoveSheet] = useState(false);
   const [wordListLimit, setWordListLimit] = useState(50);
-  const [showDueSheet, setShowDueSheet] = useState(false);
-  const [dueExpandedId, setDueExpandedId] = useState<string | null>(null);
   const [dailyGoal, setDailyGoal] = useState(20);
   const [showGoalPicker, setShowGoalPicker] = useState(false);
-  const [savedExamples, setSavedExamples] = useState<Set<string>>(new Set());
   const [copiedSentenceId, setCopiedSentenceId] = useState<string | null>(null);
+  const [batchLoading, setBatchLoading] = useState(false);
+  const [showBatchDeleteConfirm, setShowBatchDeleteConfirm] = useState(false);
+  const [pendingDelete, setPendingDelete] = useState<{ type: 'word' | 'sentence'; id: string; label: string } | null>(null);
   const analysisCache = useRef<Map<string, any>>(new Map());
   const [expandedSentenceId, setExpandedSentenceId] = useState<string | null>(null);
   const [expandedAnalysis, setExpandedAnalysis] = useState<Map<string, any>>(new Map());
   const [expandedLoading, setExpandedLoading] = useState<string | null>(null);
-  const [entriesCache, setEntriesCache] = useState<Map<string, WordEntry>>(new Map());
-  const dueWordKeyRef = useRef('');
-
-  // Load dictionary entries for due words (romanization + examples fallback)
-  useEffect(() => {
-    if (!allWordsLoaded) return;
-    const now = Date.now();
-    const dueWords = allWords.filter(w => w.nextReview <= now && w.mastery !== 'mastered');
-    const key = dueWords.map(w => w.id).join(',');
-    if (key === dueWordKeyRef.current) return;
-    dueWordKeyRef.current = key;
-    (async () => {
-      const results = await Promise.all(
-        dueWords.map(w => w.sourceEntryId ? getEntry(w.sourceEntryId) : getEntryByKorean(w.word))
-      );
-      const map = new Map<string, WordEntry>();
-      dueWords.forEach((w, i) => {
-        if (results[i]) map.set(w.word, results[i]!);
-      });
-      setEntriesCache(map);
-    })();
-  }, [allWords, allWordsLoaded]);
-
   // Fast stats for home tab (counts only)
   const [quickStats, setQuickStats] = useState<{ total: number; mastered: number; learning: number; newWords: number; dueReview: number }>({ total: 0, mastered: 0, learning: 0, newWords: 0, dueReview: 0 });
+  const [homeLoadError, setHomeLoadError] = useState(false);
 
-  const switchTab = useCallback((t: 'home' | 'library' | 'books' | 'sentences' | 'mastered') => {
-    setTab(t);
+  const switchTab = useCallback((tabName: 'home' | 'library' | 'books' | 'sentences' | 'mastered') => {
+    setTab(tabName);
     setManaging(false);
     setSelected(new Set());
   }, []);
 
-  // Fast initial load: counts + wordBooks + profile in parallel, no full word array
+  // 首屏聚合接口：一次 fetch 拿齐 stats + wordBooks + dailyGoal，
+  // 替代原先并发 6 个 /api/user-data 请求（每个独立鉴权+DB），明显降低首屏卡顿
+  // 依赖 user?.id：切换账号时重新加载，避免展示旧账号数据
   useEffect(() => {
+    if (!user) {
+      // 未登录时重置所有数据状态，防止账号切换残留
+      setQuickStats({ total: 0, mastered: 0, learning: 0, newWords: 0, dueReview: 0 });
+      setWordBooks([]);
+      setDailyGoal(20);
+      setAllWords([]);
+      setAllWordsLoaded(false);
+      setHomeLoadError(false);
+      setLoading(false);
+      return;
+    }
+    setLoading(true);
+    setHomeLoadError(false);
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 8000);
     (async () => {
       try {
-        const now = Date.now();
-        const [total, mastered, learning, dueReview, books, profile] = await Promise.all([
-          db.words.count(),
-          db.words.where('mastery').equals('mastered').count(),
-          db.words.where('mastery').anyOf('learning', 'reviewing').count(),
-          db.words.where('nextReview').belowOrEqual(now).countWhere([{ field: 'mastery', op: 'neq', value: 'mastered' }]),
-          db.wordBooks.toArray(),
-          db.userProfiles.get('main'),
-        ]);
-        setQuickStats({ total, mastered, learning, newWords: Math.max(0, total - mastered - learning), dueReview });
-        setWordBooks(books);
-        if (profile?.dailyGoalWords) setDailyGoal(profile.dailyGoalWords);
+        const res = await fetch('/api/vocabulary/home', { signal: controller.signal, cache: 'no-store' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        setQuickStats(data.stats);
+        setWordBooks(Array.isArray(data.books) ? data.books : []);
+        if (data.dailyGoalWords) setDailyGoal(data.dailyGoalWords);
+        setHomeLoadError(false);
       } catch {
-        // ignore — keep empty state instead of crashing
+        setHomeLoadError(true);
       } finally {
+        clearTimeout(timer);
         setLoading(false);
       }
     })();
-  }, []);
+    return () => { clearTimeout(timer); controller.abort(); };
+  }, [user?.id]);
+
+  // user 切换时重置词库缓存，避免旧账号数据残留
+  useEffect(() => {
+    setAllWords([]);
+    setAllWordsLoaded(false);
+    setSentences([]);
+  }, [user?.id]);
 
   // Lazy-load full word list only when library tab or due-words sheet needs it
   const loadAllWords = useCallback(async () => {
@@ -391,12 +376,6 @@ function VocabularyContent() {
   useEffect(() => {
     if (tab === 'library' || tab === 'mastered') loadAllWords();
   }, [tab, loadAllWords]);
-
-  const handleOpenDueSheet = useCallback(async () => {
-    if (quickStats.dueReview === 0) return;
-    await loadAllWords();
-    setShowDueSheet(true);
-  }, [quickStats.dueReview, loadAllWords]);
 
   const toggleSelect = (id: string) => {
     setSelected(prev => {
@@ -414,24 +393,78 @@ function VocabularyContent() {
     }
   };
 
-  const handleBatchDelete = async () => {
-    if (selected.size === 0) return;
-    if (!confirm(`确定删除这 ${selected.size} 个单词？此操作不可撤销。`)) return;
-    await Promise.all([...selected].map(id => db.words.delete(id).catch(() => {})));
-    setAllWords(prev => prev.filter(w => !selected.has(w.id)));
-    setSelected(new Set());
-    setManaging(false);
+  const handleBatchDelete = () => {
+    if (selected.size === 0 || batchLoading) return;
+    setShowBatchDeleteConfirm(true);
+  };
+
+  const doBatchDelete = async () => {
+    setShowBatchDeleteConfirm(false);
+    setBatchLoading(true);
+    try {
+      const deletedIds = await deleteWordIds(selected); // 删词 + 从收藏本剔除孤儿 id
+      setAllWords(prev => prev.filter(w => !deletedIds.has(w.id)));
+      setSelected(new Set());
+      setManaging(false);
+    } finally {
+      setBatchLoading(false);
+    }
   };
 
   const handleBatchUnmaster = async () => {
-    if (selected.size === 0) return;
-    await Promise.all([...selected].map(id =>
-      db.words.update(id, { mastery: 'learning' as MasteryLevel, srsLevel: 1, interval: 1 }).catch(() => {})
-    ));
-    setAllWords(prev => prev.map(w => selected.has(w.id) ? { ...w, mastery: 'learning' as MasteryLevel } : w));
-    setSelected(new Set());
-    setManaging(false);
+    if (selected.size === 0 || batchLoading) return;
+    setBatchLoading(true);
+    try {
+      await Promise.all([...selected].map(id =>
+        db.words.update(id, { mastery: 'learning' as MasteryLevel, srsLevel: 1, interval: 1 }).catch(() => {})
+      ));
+      setAllWords(prev => prev.map(w => selected.has(w.id) ? { ...w, mastery: 'learning' as MasteryLevel } : w));
+      setSelected(new Set());
+      setManaging(false);
+    } finally {
+      setBatchLoading(false);
+    }
   };
+
+  const confirmPendingDelete = async () => {
+    if (!pendingDelete) return;
+    const { type, id } = pendingDelete;
+    setPendingDelete(null);
+    try {
+      if (type === 'word') {
+        await deleteWordIds([id]); // 删词 + 从收藏本剔除孤儿 id
+        setAllWords(prev => prev.filter(x => x.id !== id));
+      } else {
+        await db.sentences.delete(id);
+        setSentences(prev => prev.filter(s => s.id !== id));
+      }
+    } catch (err) {
+      alert(t('vocab.err_delete_prefix', lang) + (err instanceof Error ? err.message : t('vocab.err_retry', lang)));
+    }
+  };
+
+  const deleteModals = (
+    <>
+      <Modal open={showBatchDeleteConfirm} onClose={() => setShowBatchDeleteConfirm(false)} title={t('vocab.batch_delete_q', lang)} size="sm">
+        <p style={{ fontSize: 14, color: 'var(--color-ink-2)', lineHeight: 1.6, marginBottom: 20 }}>
+          {t('vocab.batch_delete_confirm', lang, { n: selected.size })}
+        </p>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <Button variant="secondary" fullWidth onClick={() => setShowBatchDeleteConfirm(false)}>{t('common.cancel', lang)}</Button>
+          <Button variant="danger" fullWidth onClick={doBatchDelete}>{t('vocab.delete', lang)}</Button>
+        </div>
+      </Modal>
+      <Modal open={pendingDelete !== null} onClose={() => setPendingDelete(null)} title={t('vocab.delete_confirm_title', lang)} size="sm">
+        <p style={{ fontSize: 14, color: 'var(--color-ink-2)', lineHeight: 1.6, marginBottom: 20 }}>
+          {t('vocab.delete_confirm_label', lang, { label: pendingDelete?.label ?? '' })}
+        </p>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <Button variant="secondary" fullWidth onClick={() => setPendingDelete(null)}>{t('common.cancel', lang)}</Button>
+          <Button variant="danger" fullWidth onClick={confirmPendingDelete}>{t('vocab.delete', lang)}</Button>
+        </div>
+      </Modal>
+    </>
+  );
 
   const handleMoveToBook = async (bookId: string) => {
     if (selected.size === 0) return;
@@ -476,18 +509,13 @@ function VocabularyContent() {
 
   const masteredWords = useMemo(() => allWords.filter(w => w.mastery === 'mastered'), [allWords]);
 
-  const dueSheetWords = useMemo(() => {
-    const now = Date.now();
-    return allWords.filter(w => w.nextReview <= now && w.mastery !== 'mastered');
-  }, [allWords]);
-
   // ── Mastered tab ──
   if (tab === 'mastered') {
     return (
       <div className="py-4 space-y-4">
         <div className="flex items-center gap-3">
-          <button onClick={() => switchTab('home')} className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)]">← 返回</button>
-          <h1 className="text-xl font-bold text-[var(--text-primary)]">已掌握单词</h1>
+          <button onClick={() => switchTab('home')} className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)]">← {t('common.back', lang)}</button>
+          <h1 className="text-xl font-bold text-[var(--text-primary)]">{t('vocab.tab_mastered_title', lang)}</h1>
         </div>
         {!allWordsLoaded ? (
           <div className="flex items-center justify-center py-10">
@@ -495,15 +523,15 @@ function VocabularyContent() {
           </div>
         ) : (
           <>
-            <p className="text-sm text-[var(--text-muted)]">共 {masteredWords.length} 个已掌握单词，不再出现在闪卡复习中</p>
+            <p className="text-sm text-[var(--text-muted)]">{t('vocab.tab_mastered_sub', lang, { n: masteredWords.length })}</p>
             <div className="flex items-center justify-between">
               {managing ? (
                 <>
-                  <button onClick={() => { setManaging(false); setSelected(new Set()); }} className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)]">取消</button>
-                  <button onClick={() => setSelected(new Set(masteredWords.map(w => w.id)))} className="text-sm text-[var(--pink-primary)] font-medium">全选</button>
+                  <button onClick={() => { setManaging(false); setSelected(new Set()); }} className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)]">{t('common.cancel', lang)}</button>
+                  <button onClick={() => setSelected(new Set(masteredWords.map(w => w.id)))} className="text-sm text-[var(--pink-primary)] font-medium">{t('vocab.select_all', lang)}</button>
                 </>
               ) : (
-                <button onClick={() => setManaging(true)} className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)] ml-auto">批量管理</button>
+                <button onClick={() => setManaging(true)} className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)] ml-auto">{t('vocab.manage', lang)}</button>
               )}
             </div>
             <div className="space-y-2">
@@ -525,38 +553,39 @@ function VocabularyContent() {
                   </div>
                   {!managing && (
                     <div className="relative z-10 flex items-center gap-1 shrink-0">
-                      <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); speakWord(w.word, 0.8); }} className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors">
+                      <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); speakWord(w.word); }} className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors">
                         <Volume2 size={14} />
                       </button>
-                      <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-[var(--mint-soft)]/10 text-[var(--mint-soft)] font-medium">已掌握</span>
+                      <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-[var(--mint-soft)]/10 text-[var(--mint-soft)] font-medium">{t('vocab.mastered', lang)}</span>
                     </div>
                   )}
                 </div>
               ))}
               {masteredWords.length > wordListLimit && (
                 <button onClick={() => setWordListLimit(l => l + 50)} className="w-full py-3 text-xs text-[var(--pink-primary)] font-medium text-center">
-                  加载更多（还有 {masteredWords.length - wordListLimit} 个）
+                  {t('vocab.tab_load_more', lang, { n: masteredWords.length - wordListLimit })}
                 </button>
               )}
               {masteredWords.length === 0 && (
-                <div className="text-center py-12 text-[var(--text-muted)] text-sm">还没有已掌握的单词</div>
+                <div className="text-center py-12 text-[var(--text-muted)] text-sm">{t('vocab.no_mastered_yet', lang)}</div>
               )}
             </div>
             {managing && selected.size > 0 && (
-              <div className="fixed bottom-[calc(56px+env(safe-area-inset-bottom,0px))] left-0 right-0 z-50 px-4 pb-3 md:left-[108px] md:bottom-0 md:pb-4">
+              <div className="fixed bottom-[calc(56px+env(safe-area-inset-bottom,0px))] left-0 right-0 z-[60] px-4 pb-3 md:left-[108px] md:bottom-0 md:pb-4">
                 <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-3 shadow-lg flex items-center gap-2">
-                  <span className="text-sm font-medium text-[var(--text-primary)] flex-1">已选 {selected.size} 个</span>
-                  <button onClick={handleBatchUnmaster} className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--mint-soft)]/10 text-[var(--mint-soft)] text-sm font-medium">
-                    <Check size={14} />取消掌握
+                  <span className="text-sm font-medium text-[var(--text-primary)] flex-1">{t('vocab.selected_n', lang, { n: selected.size })}</span>
+                  <button onClick={handleBatchUnmaster} disabled={batchLoading} className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--mint-soft)]/10 text-[var(--mint-soft)] text-sm font-medium disabled:opacity-50">
+                    <Check size={14} />{t('vocab.unmaster', lang)}
                   </button>
-                  <button onClick={handleBatchDelete} className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--color-danger-bg)] text-[var(--color-danger)] text-sm font-medium">
-                    <Trash2 size={14} />删除
+                  <button onClick={handleBatchDelete} disabled={batchLoading} className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--color-danger-bg)] text-[var(--color-danger)] text-sm font-medium disabled:opacity-50">
+                    <Trash2 size={14} />{t('vocab.delete', lang)}
                   </button>
                 </div>
               </div>
             )}
           </>
         )}
+        {deleteModals}
       </div>
     );
   }
@@ -566,19 +595,9 @@ function VocabularyContent() {
     return (
       <div className="py-4 space-y-4">
         <div className="flex items-center gap-3">
-          <button onClick={() => switchTab('home')} className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)]">← 返回</button>
-          <h1 className="text-xl font-bold text-[var(--text-primary)]">全部词库</h1>
+          <button onClick={() => switchTab('home')} className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)]">← {t('common.back', lang)}</button>
+          <h1 className="text-xl font-bold text-[var(--text-primary)]">{t('vocab.tab_library_title', lang)}</h1>
         </div>
-        <Link href="/vocabulary/library" className="block bg-gradient-to-r from-[var(--pink-primary)]/10 to-[var(--purple-soft)]/10 border border-[var(--pink-pale)] rounded-2xl p-4 hover:border-[var(--pink-primary)]/30 transition-all group">
-          <div className="flex items-center gap-3">
-            <Library size={28} className="text-[var(--pink-primary)]" />
-            <div className="flex-1">
-              <p className="text-sm font-bold text-[var(--text-primary)]">词库</p>
-              <p className="text-xs text-[var(--text-secondary)]">主题词包 · 分级词表 · 教材词汇 · 情景词典</p>
-            </div>
-            <ArrowRight size={18} className="text-[var(--text-muted)] group-hover:translate-x-1 transition-transform" />
-          </div>
-        </Link>
         {!allWordsLoaded ? (
           <div className="flex items-center justify-center py-10">
             <div className="w-6 h-6 rounded-full border-2 border-[var(--pink-primary)] border-t-transparent animate-spin" />
@@ -586,20 +605,20 @@ function VocabularyContent() {
         ) : (
           <>
             <p className="text-sm text-[var(--text-muted)] mt-4">
-              共 {allWords.length} 个单词 · 已掌握 {stats.mastered} · 学习中 {stats.learning} · 新词 {stats.newWords}
+              {t('vocab.tab_library_sub', lang, { total: allWords.length, mastered: stats.mastered, learning: stats.learning, newWords: stats.newWords })}
             </p>
             <div className="flex items-center justify-between mt-3 mb-2">
               {managing ? (
                 <>
                   <button onClick={toggleSelectAll} className="text-xs text-[var(--pink-primary)] font-medium">
-                    {selected.size === allWords.length ? '取消全选' : `全选 (${allWords.length})`}
+                    {selected.size === allWords.length ? t('vocab.cancel_select_all', lang) : t('vocab.select_all_n', lang, { n: allWords.length })}
                   </button>
                   <button onClick={() => { setManaging(false); setSelected(new Set()); }} className="text-xs text-[var(--text-muted)]">
-                    <X size={14} className="inline mr-1" />取消
+                    <X size={14} className="inline mr-1" />{t('common.cancel', lang)}
                   </button>
                 </>
               ) : (
-                <button onClick={() => setManaging(true)} className="text-xs text-[var(--pink-primary)] font-medium ml-auto">批量管理</button>
+                <button onClick={() => setManaging(true)} className="text-xs text-[var(--pink-primary)] font-medium ml-auto">{t('vocab.manage', lang)}</button>
               )}
             </div>
             <div className="space-y-2">
@@ -613,7 +632,7 @@ function VocabularyContent() {
                     </div>
                   )}
                   {!managing ? (
-                    <Link href={`/dictionary?q=${encodeURIComponent(w.word)}`} className="absolute inset-0 rounded-xl" aria-label={w.word} />
+                    <Link href={`/vocabulary/dictionary?q=${encodeURIComponent(w.word)}`} className="absolute inset-0 rounded-xl" aria-label={w.word} />
                   ) : null}
                   <div className="flex-1 min-w-0 relative pointer-events-none">
                     <span className="font-medium text-[var(--text-primary)]">{w.word}</span>
@@ -623,22 +642,25 @@ function VocabularyContent() {
                     </span>
                   </div>
                   {!managing && (
-                    <div className="relative z-10 flex items-center gap-1 shrink-0">
-                      <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); speakWord(w.word, 0.8); }} className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors">
+                    <div className="relative z-10 flex items-center gap-3 shrink-0 ml-2">
+                      <button
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); speakWord(w.word); }}
+                        className="no-touch-min w-8 h-8 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors flex items-center justify-center"
+                        aria-label={t('vocab.play', lang)}
+                      >
                         <Volume2 size={14} />
                       </button>
                       <button
-                        onClick={async (e) => {
+                        onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
-                          if (!confirm(`删除「${w.word}」？`)) return;
-                          await db.words.delete(w.id).catch(() => {});
-                          setAllWords(prev => prev.filter(x => x.id !== w.id));
+                          setPendingDelete({ type: 'word', id: w.id, label: w.word });
                         }}
-                        className="p-1.5 rounded-lg hover:bg-[var(--color-danger-bg)] text-[var(--text-muted)] hover:text-[var(--color-danger)] transition-all"
-                        title="删除"
+                        className="no-touch-min w-8 h-8 rounded-lg hover:bg-[var(--color-danger-bg)] text-[var(--text-muted)] hover:text-[var(--color-danger)] transition-all flex items-center justify-center"
+                        title={t('vocab.delete', lang)}
+                        aria-label={t('vocab.delete', lang)}
                       >
-                        <Trash2 size={14} />
+                        <Trash2 size={13} />
                       </button>
                       <span className={`w-2 h-2 rounded-full ml-1 ${masteryColor[w.mastery]}`} />
                     </div>
@@ -650,20 +672,20 @@ function VocabularyContent() {
                   onClick={() => setWordListLimit(l => l + 50)}
                   className="w-full py-3 text-xs text-[var(--pink-primary)] font-medium text-center hover:text-[var(--text-primary)] transition-colors"
                 >
-                  加载更多（还有 {allWords.length - wordListLimit} 个）
+                  {t('vocab.tab_load_more', lang, { n: allWords.length - wordListLimit })}
                 </button>
               )}
             </div>
 
             {managing && selected.size > 0 && (
-              <div className="fixed bottom-[calc(56px+env(safe-area-inset-bottom,0px))] left-0 right-0 z-50 px-4 pb-3 md:left-[108px] md:bottom-0 md:pb-4">
+              <div className="fixed bottom-[calc(56px+env(safe-area-inset-bottom,0px))] left-0 right-0 z-[60] px-4 pb-3 md:left-[108px] md:bottom-0 md:pb-4">
                 <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-3 shadow-lg flex items-center gap-2">
-                  <span className="text-sm font-medium text-[var(--text-primary)] flex-1">已选 {selected.size} 个</span>
-                  <button onClick={() => setShowMoveSheet(true)} className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--bg-soft)] text-[var(--text-primary)] text-sm font-medium">
-                    <FolderInput size={14} />移到单词本
+                  <span className="text-sm font-medium text-[var(--text-primary)] flex-1">{t('vocab.selected_n', lang, { n: selected.size })}</span>
+                  <button onClick={() => setShowMoveSheet(true)} disabled={batchLoading} className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--bg-soft)] text-[var(--text-primary)] text-sm font-medium disabled:opacity-50">
+                    <FolderInput size={14} />{t('vocab.move_to_book', lang)}
                   </button>
-                  <button onClick={handleBatchDelete} className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--color-danger-bg)] text-[var(--color-danger)] text-sm font-medium">
-                    <Trash2 size={14} />删除
+                  <button onClick={handleBatchDelete} disabled={batchLoading} className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--color-danger-bg)] text-[var(--color-danger)] text-sm font-medium disabled:opacity-50">
+                    <Trash2 size={14} />{t('vocab.delete', lang)}
                   </button>
                 </div>
               </div>
@@ -674,11 +696,11 @@ function VocabularyContent() {
                 <div className="absolute inset-0 bg-black/40" onClick={() => setShowMoveSheet(false)} />
                 <div className="relative bg-[var(--bg-card)] rounded-t-3xl lg:rounded-3xl w-full lg:max-w-sm px-5 pt-5 pb-[calc(20px+env(safe-area-inset-bottom,0px))] z-10 flex flex-col max-h-[70dvh]">
                   <div className="flex items-center justify-between mb-4 shrink-0">
-                    <h3 className="font-bold text-[var(--text-primary)]">移到单词本</h3>
+                    <h3 className="font-bold text-[var(--text-primary)]">{t('vocab.move_to_book', lang)}</h3>
                     <button onClick={() => setShowMoveSheet(false)} className="text-[var(--text-muted)]"><X size={18} /></button>
                   </div>
                   {wordBooks.length === 0 ? (
-                    <p className="text-sm text-[var(--text-muted)] text-center py-6">还没有单词本，先去创建一个</p>
+                    <p className="text-sm text-[var(--text-muted)] text-center py-6">{t('vocab.no_books_create', lang)}</p>
                   ) : (
                     <div className="space-y-2 overflow-y-auto flex-1 min-h-0" style={{ WebkitOverflowScrolling: 'touch' }}>
                       {wordBooks.map(book => (
@@ -694,6 +716,7 @@ function VocabularyContent() {
             )}
           </>
         )}
+        {deleteModals}
       </div>
     );
   }
@@ -703,8 +726,8 @@ function VocabularyContent() {
     return (
       <div className="py-4 space-y-4">
         <div className="flex items-center gap-3">
-          <button onClick={() => switchTab('home')} className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)]">← 返回</button>
-          <h1 className="text-xl font-bold text-[var(--text-primary)]">我的单词本</h1>
+          <button onClick={() => switchTab('home')} className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)]">← {t('common.back', lang)}</button>
+          <h1 className="text-xl font-bold text-[var(--text-primary)]">{t('vocab.tab_books_title', lang)}</h1>
         </div>
         <BooksSection />
       </div>
@@ -713,10 +736,8 @@ function VocabularyContent() {
 
   // ── Sentences tab ──
   if (tab === 'sentences') {
-    const handleDeleteSentence = async (id: string, korean: string) => {
-      if (!confirm(`删除这条句子？\n${korean}`)) return;
-      await db.sentences.delete(id).catch(() => {});
-      setSentences((prev) => prev.filter((s) => s.id !== id));
+    const handleDeleteSentence = (id: string, korean: string) => {
+      setPendingDelete({ type: 'sentence', id, label: korean });
     };
 
     const handleCopy = (id: string, korean: string) => {
@@ -764,25 +785,25 @@ function VocabularyContent() {
     return (
       <div className="py-4 space-y-4">
         <div className="flex items-center gap-3">
-          <button onClick={() => switchTab('home')} className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)]">← 返回</button>
-          <h1 className="text-xl font-bold text-[var(--text-primary)]">我的句子</h1>
+          <button onClick={() => switchTab('home')} className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)]">← {t('common.back', lang)}</button>
+          <h1 className="text-xl font-bold text-[var(--text-primary)]">{t('vocab.tab_sentences_title', lang)}</h1>
         </div>
 
         {sentencesLoading ? (
           <div className="flex items-center justify-center py-20">
-            <div className="w-8 h-8 border-2 border-slate-600 border-t-blue-400 rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 rounded-full animate-spin" style={{ borderColor: 'var(--border-default)', borderTopColor: 'var(--color-pink-base)' }} />
           </div>
         ) : sentences.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
             <div className="w-20 h-20 rounded-2xl bg-[var(--bg-input)]/60 flex items-center justify-center mb-5">
               <MessageSquare size={36} className="text-[var(--text-placeholder)]" />
             </div>
-            <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-2">还没有保存句子</h2>
+            <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-2">{t('vocab.sentences_none', lang)}</h2>
             <p className="text-sm text-[var(--text-muted)] max-w-xs mb-6">
-              在内容拆解、影子跟读或阅读中保存句子，会出现在这里
+              {t('vocab.sentences_none_hint', lang)}
             </p>
-            <Link href="/ai/analyze" className="flex items-center gap-2 text-sm px-5 py-2.5 rounded-xl bg-[var(--pink-primary)] text-white font-medium">
-              去拆解韩语句子 <ArrowRight size={14} />
+            <Link href={user ? '/ai/analyze' : '/auth/login?redirect=/ai/analyze'} className="flex items-center gap-2 text-sm px-5 py-2.5 rounded-xl bg-[var(--pink-primary)] text-white font-medium">
+              {t('vocab.sentences_go_analyze', lang)} <ArrowRight size={14} />
             </Link>
           </div>
         ) : (
@@ -793,16 +814,16 @@ function VocabularyContent() {
               style={{ width: '100%', padding: '12px 16px', borderRadius: 16, background: 'var(--color-mint-soft)', border: '1.5px solid var(--color-mint-base)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}
             >
               <div style={{ textAlign: 'left' }}>
-                <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>用这些句子练打字</p>
-                <p style={{ fontSize: 12, color: 'var(--color-mint-strong)', margin: '2px 0 0' }}>{sentences.length} 条句子已可用</p>
+                <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>{t('vocab.sentences_typing_cta', lang)}</p>
+                <p style={{ fontSize: 12, color: 'var(--color-mint-strong)', margin: '2px 0 0' }}>{t('vocab.sentences_typing_count', lang, { n: sentences.length })}</p>
               </div>
               <ChevronRight size={18} style={{ color: 'var(--color-mint-strong)', flexShrink: 0 }} />
             </button>
 
-            <p className="text-xs text-[var(--text-muted)]">共 {sentences.length} 条句子</p>
+            <p className="text-xs text-[var(--text-muted)]">{t('vocab.sentences_count', lang, { n: sentences.length })}</p>
             {sentences.map((s) => {
               const srcType = s.sourceType ?? s.source_type;
-              const srcLabel = srcType ? (SOURCE_LABELS[srcType] ?? srcType) : null;
+              const srcLabel = srcType ? (SOURCE_LABEL_KEYS[srcType] ? t(SOURCE_LABEL_KEYS[srcType], lang) : srcType) : null;
               const ts = s.createdAt ?? (s.created_at ? new Date(s.created_at).getTime() : null);
               const isExpanded = expandedSentenceId === s.id;
               const isLoadingThis = expandedLoading === s.id;
@@ -815,7 +836,7 @@ function VocabularyContent() {
                       className="text-[17px] font-bold text-[var(--text-primary)] leading-relaxed w-full text-left flex items-center gap-2 hover:text-[var(--pink-primary)] transition-colors"
                       style={{ fontFamily: 'system-ui, sans-serif', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
                     >
-                      <span className="flex-1">{s.korean}</span>
+                      <span className="flex-1 min-w-0 break-words">{s.korean}</span>
                       <ChevronDown size={14} className={`shrink-0 transition-transform duration-200 text-[var(--text-muted)] ${isExpanded ? 'rotate-180' : ''}`} />
                     </button>
                     <p className="text-[15px] text-[var(--text-secondary)]">{s.chinese}</p>
@@ -826,15 +847,15 @@ function VocabularyContent() {
                         )}
                         {ts ? <span>{new Date(ts).toLocaleDateString('zh-CN')}</span> : null}
                       </div>
-                      <div className="flex items-center gap-1">
-                        <button onClick={() => speakWord(s.korean, 0.75)} className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors" title="听发音">
+                      <div className="flex items-center gap-2">
+                        <button onClick={() => speakWord(s.korean)} className="no-touch-min w-8 h-8 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors flex items-center justify-center" title={t('vocab.sentences_listen', lang)} aria-label={t('vocab.sentences_listen', lang)}>
                           <Volume2 size={14} />
                         </button>
-                        <button onClick={() => handleCopy(s.id, s.korean)} className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] transition-colors" style={{ color: copiedSentenceId === s.id ? 'var(--color-mint-strong)' : 'var(--text-muted)' }} title="复制">
+                        <button onClick={() => handleCopy(s.id, s.korean)} className="no-touch-min w-8 h-8 rounded-lg hover:bg-[var(--bg-card-hover)] transition-colors flex items-center justify-center" style={{ color: copiedSentenceId === s.id ? 'var(--color-mint-strong)' : 'var(--text-muted)' }} title={t('vocab.sentences_copy', lang)} aria-label={t('vocab.sentences_copy', lang)}>
                           {copiedSentenceId === s.id ? <Check size={14} /> : <Copy size={14} />}
                         </button>
-                        <button onClick={() => handleDeleteSentence(s.id, s.korean)} className="p-1.5 rounded-lg hover:bg-red-50 text-[var(--text-muted)] hover:text-red-500 transition-colors" title="删除">
-                          <Trash2 size={14} />
+                        <button onClick={() => handleDeleteSentence(s.id, s.korean)} className="no-touch-min w-8 h-8 rounded-lg hover:bg-[var(--color-danger-bg)] text-[var(--text-muted)] hover:text-[var(--color-danger)] transition-colors flex items-center justify-center" title={t('vocab.delete', lang)} aria-label={t('vocab.delete', lang)}>
+                          <Trash2 size={13} />
                         </button>
                       </div>
                     </div>
@@ -851,7 +872,7 @@ function VocabularyContent() {
                         <div className="space-y-3">
                           {/* 点击查词 */}
                           <div>
-                            <p className="text-[10px] font-bold text-[var(--text-muted)] mb-1.5 tracking-wider">点击词语查释义</p>
+                            <p className="text-[10px] font-bold text-[var(--text-muted)] mb-1.5 tracking-wider">{t('vocab.sentences_tap_word', lang)}</p>
                             <TappableText
                               text={s.korean}
                               source="我的句子"
@@ -861,7 +882,7 @@ function VocabularyContent() {
                           {/* 语法 — 左竖线，无背景 */}
                           {(analysis.grammar ?? []).length > 0 && (
                             <div>
-                              <p className="text-[10px] font-bold text-[var(--text-muted)] mb-1.5 tracking-wider">语法</p>
+                              <p className="text-[10px] font-bold text-[var(--text-muted)] mb-1.5 tracking-wider">{t('vocab.sentences_grammar', lang)}</p>
                               <div className="space-y-2">
                                 {(analysis.grammar as any[]).map((g: any, i: number) => (
                                   <div key={i} className="pl-2 border-l-2 border-[#aee3d8]">
@@ -875,7 +896,7 @@ function VocabularyContent() {
                           {/* 助词 — inline，无方框 */}
                           {(analysis.particles ?? []).length > 0 && (
                             <div>
-                              <p className="text-[10px] font-bold text-[var(--text-muted)] mb-1.5 tracking-wider">助词</p>
+                              <p className="text-[10px] font-bold text-[var(--text-muted)] mb-1.5 tracking-wider">{t('vocab.sentences_particles', lang)}</p>
                               <div className="flex flex-wrap gap-x-4 gap-y-1">
                                 {(analysis.particles as any[]).map((p: any, i: number) => (
                                   <span key={i} className="text-[14px]">
@@ -888,7 +909,7 @@ function VocabularyContent() {
                           )}
                         </div>
                       ) : (
-                        <p className="text-xs text-[var(--text-muted)] text-center py-2">拆解失败，点击句子重试</p>
+                        <p className="text-xs text-[var(--text-muted)] text-center py-2">{t('vocab.sentences_analyze_failed', lang)}</p>
                       )}
                     </div>
                   )}
@@ -897,7 +918,7 @@ function VocabularyContent() {
             })}
           </div>
         )}
-
+        {deleteModals}
       </div>
     );
   }
@@ -906,30 +927,101 @@ function VocabularyContent() {
   const s = quickStats;
   return (
     <>
-    <div className="py-4 max-w-2xl mx-auto">
-      <PageHeader
-        eyebrow="단어"
-        title="词汇"
-        subtitle="我的单词与词库"
-        tone="pink"
-        flat
-      />
+    <div className="learn-visual-root py-4 max-w-2xl md:max-w-none mx-auto">
+      <PlaceIntro place="vocabulary" />
+      {/* 头部对齐学习页:Tori 단어 我的词汇 横向品牌栏 + 分割线 */}
+      <header className="learn-head learn-enter" style={{ '--i': 0 } as React.CSSProperties}>
+        <div className="learn-brand">
+          <span className="learn-brand-mark">Tori</span>
+          <span className="learn-brand-kr">단어</span>
+          <span className="learn-brand-sub">{t('vocab.hub_brand_sub', lang)}</span>
+        </div>
+      </header>
 
-      {/* Today task card */}
-      {!authLoading && !user && (
-        <div style={{ textAlign: 'center', padding: '32px 20px', marginBottom: 16 }}>
-          <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--color-ink-1)', marginBottom: 8 }}>登录后查看你的词汇</p>
-          <p style={{ fontSize: 12, color: 'var(--color-ink-3)', marginBottom: 16 }}>保存单词、闪卡复习、整理单词本</p>
-          <a href="/auth/login" style={{ display: 'inline-block', padding: '8px 28px', borderRadius: 999, background: 'var(--color-pink-base)', color: '#fff', fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>登录 / 注册</a>
+      {/* Auth loading 骨架 —— 让首屏不再是纯空白 */}
+      {authLoading && (
+        <div style={{ padding: '4px 0 20px' }}>
+          <div style={{ height: 160, borderRadius: 20, background: 'var(--color-surface-3)', marginBottom: 16, opacity: 0.6 }} />
+          <div style={{ height: 56, borderRadius: 12, background: 'var(--color-surface-3)', marginBottom: 12, opacity: 0.6 }} />
+          <div style={{ height: 44, borderRadius: 10, background: 'var(--color-surface-3)', marginBottom: 8, opacity: 0.5 }} />
+          <div style={{ height: 44, borderRadius: 10, background: 'var(--color-surface-3)', opacity: 0.5 }} />
         </div>
       )}
+
+      {/* 未登录引导 · 保留登录 CTA + 词库预览入口，让访客也能进入公开词表 */}
+      {!authLoading && !user && (
+        <>
+          <div style={{ textAlign: 'center', padding: '28px 20px 16px' }}>
+            <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--color-ink-1)', marginBottom: 8 }}>{t('vocab.hub_login_to_view', lang)}</p>
+            <p style={{ fontSize: 12, color: 'var(--color-ink-3)', marginBottom: 16 }}>{t('vocab.hub_login_sub', lang)}</p>
+            <a href="/auth/login?redirect=/vocabulary" style={{ display: 'inline-block', padding: '8px 28px', borderRadius: 999, background: 'var(--color-pink-base)', color: '#fff', fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>{t('vocab.hub_login_register', lang)}</a>
+          </div>
+          <div style={{ padding: '0 16px 24px' }}>
+            <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--color-ink-3)', letterSpacing: '0.06em', textTransform: 'uppercase', margin: '0 0 10px' }}>{t('vocab.hub_browse_free', lang)}</p>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+              <a href="/vocabulary/library?tab=themes" style={{
+                display: 'block', padding: '14px 12px', borderRadius: 14,
+                background: 'var(--color-surface-2)', border: '1px solid var(--color-border-1)',
+                textDecoration: 'none', color: 'var(--color-ink-1)',
+              }}>
+                <p style={{ fontSize: 14, fontWeight: 700, margin: '0 0 4px' }}>{t('vocab.hub_free_themes', lang)}</p>
+                <p style={{ fontSize: 11, color: 'var(--color-ink-3)', margin: 0 }}>{t('vocab.hub_free_themes_sub', lang)}</p>
+              </a>
+              <a href="/vocabulary/library?tab=levels" style={{
+                display: 'block', padding: '14px 12px', borderRadius: 14,
+                background: 'var(--color-surface-2)', border: '1px solid var(--color-border-1)',
+                textDecoration: 'none', color: 'var(--color-ink-1)',
+              }}>
+                <p style={{ fontSize: 14, fontWeight: 700, margin: '0 0 4px' }}>{t('vocab.hub_free_levels', lang)}</p>
+                <p style={{ fontSize: 11, color: 'var(--color-ink-3)', margin: 0 }}>{t('vocab.hub_free_levels_sub', lang)}</p>
+              </a>
+              <a href="/vocabulary/library?tab=expressions" style={{
+                display: 'block', padding: '14px 12px', borderRadius: 14, gridColumn: '1 / -1',
+                background: 'var(--color-pink-soft)', border: '1px solid var(--color-pink-base)',
+                textDecoration: 'none', color: 'var(--color-ink-1)',
+              }}>
+                <p style={{ fontSize: 14, fontWeight: 700, margin: '0 0 4px', display: 'flex', alignItems: 'center', gap: 5 }}>
+                  <Sparkles size={13} style={{ color: 'var(--color-pink-strong)' }} />
+                  {t('vocab.hub_free_expr', lang)}
+                </p>
+                <p style={{ fontSize: 11, color: 'var(--color-ink-3)', margin: 0 }}>{t('vocab.hub_free_expr_sub', lang)}</p>
+              </a>
+            </div>
+          </div>
+        </>
+      )}
       {!(authLoading || !user) && (<>
+      {/* 首屏数据加载失败提示 */}
+      {homeLoadError && !loading && (
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', marginBottom: 12, borderRadius: 'var(--radius-md)', background: 'var(--color-surface-3)', border: '1px solid var(--color-border-2)' }}>
+          <span style={{ fontSize: 13, color: 'var(--color-ink-2)' }}>{t('vocab.hub_data_load_failed', lang)}</span>
+          <button
+            onClick={() => {
+              setHomeLoadError(false);
+              setLoading(true);
+              fetch('/api/vocabulary/home', { cache: 'no-store' })
+                .then(r => r.json())
+                .then(data => {
+                  setQuickStats(data?.stats ?? null);
+                  setWordBooks(Array.isArray(data?.books) ? data.books : []);
+                  if (data?.dailyGoalWords) setDailyGoal(data.dailyGoalWords);
+                })
+                .catch(() => setHomeLoadError(true))
+                .finally(() => setLoading(false));
+            }}
+            style={{ fontSize: 13, fontWeight: 600, color: 'var(--color-pink-strong)', background: 'none', border: 'none', cursor: 'pointer', padding: '10px 18px', minHeight: 44 }}
+          >
+            {t('vocab.hub_reload', lang)}
+          </button>
+        </div>
+      )}
+      <div className="learn-enter" style={{ '--i': 1 } as React.CSSProperties}>
       <Section spacing="normal">
         <Card variant="hero" tone="pink" padding="lg">
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 16 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--color-pink-base)', display: 'inline-block' }} />
-              <span style={{ fontSize: 12, fontWeight: 800, color: 'var(--color-pink-strong)' }}>今日闪卡复习</span>
+              <span style={{ fontSize: 12, fontWeight: 800, color: 'var(--color-pink-strong)' }}>{t('vocab.hub_today_flashcard', lang)}</span>
             </div>
             <Button
               variant="primary"
@@ -938,12 +1030,12 @@ function VocabularyContent() {
               icon={<Target size={11} />}
               onClick={() => setShowGoalPicker(true)}
             >
-              设置复习计划
+              {t('vocab.hub_review_plan', lang)}
             </Button>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, marginBottom: 16 }}>
             <button
-              onClick={handleOpenDueSheet}
+              onClick={() => router.push('/vocabulary/review-pool')}
               style={{
                 borderRadius: 'var(--radius-md)', padding: 12, textAlign: 'center',
                 background: 'var(--color-surface-2)', border: '1px solid var(--color-border-1)',
@@ -956,7 +1048,7 @@ function VocabularyContent() {
                 <p style={{ fontSize: 26, fontWeight: 900, color: 'var(--color-pink-strong)', lineHeight: 1, margin: 0 }}>{s.dueReview}</p>
               )}
               <p style={{ fontSize: 10, color: 'var(--color-ink-3)', margin: '4px 0 0' }}>
-                待复习{s.dueReview > 0 ? ' →' : ''}
+                {t('vocab.hub_due_review', lang)}{s.dueReview > 0 ? ' →' : ''}
               </p>
             </button>
             <div
@@ -970,7 +1062,7 @@ function VocabularyContent() {
               ) : (
                 <p style={{ fontSize: 26, fontWeight: 900, color: 'var(--color-purple-strong)', lineHeight: 1, margin: 0 }}>{Math.min(s.newWords, 5)}</p>
               )}
-              <p style={{ fontSize: 10, color: 'var(--color-ink-3)', margin: '4px 0 0' }}>推荐新词</p>
+              <p style={{ fontSize: 10, color: 'var(--color-ink-3)', margin: '4px 0 0' }}>{t('vocab.hub_recommend_new', lang)}</p>
             </div>
             <div
               style={{
@@ -982,19 +1074,26 @@ function VocabularyContent() {
                 <div style={{ height: 32, width: 32, margin: '0 auto', borderRadius: 6, background: 'var(--color-surface-4)' }} />
               ) : (
                 <p style={{ fontSize: 26, fontWeight: 900, color: 'var(--color-ink-3)', lineHeight: 1, margin: 0 }}>
-                  {dailyGoal > 0 && s.total > 0 ? Math.ceil((s.total - s.mastered) / dailyGoal) : '—'}
+                  {dailyGoal > 0 && s.total > 0 && s.total - s.mastered > 0 ? Math.ceil((s.total - s.mastered) / dailyGoal) : '—'}
                 </p>
               )}
-              <p style={{ fontSize: 10, color: 'var(--color-ink-3)', margin: '4px 0 0' }}>预计天数</p>
+              <p style={{ fontSize: 10, color: 'var(--color-ink-3)', margin: '4px 0 0' }}>{t('vocab.hub_est_days', lang)}</p>
             </div>
           </div>
-          <Link href="/review" style={{ textDecoration: 'none' }}>
-            <Button variant="primary" tone="pink" fullWidth size="lg">
-              {s.total === 0 ? '先去词库导入单词' : s.dueReview === 0 && s.newWords === 0 ? '今日已全部完成 ✓' : '开始闪卡复习'}
+          {loading ? (
+            <Button variant="primary" tone="pink" fullWidth size="lg" disabled>
+              {t('common.loading', lang)}
             </Button>
-          </Link>
+          ) : (
+            <Link href={s.total === 0 ? '/vocabulary/library' : '/review'} style={{ textDecoration: 'none' }}>
+              <Button variant="primary" tone="pink" fullWidth size="lg">
+                {s.total === 0 ? t('vocab.hub_import_first', lang) : s.dueReview === 0 && s.newWords === 0 ? t('vocab.hub_all_done', lang) : t('vocab.hub_start_flashcard', lang)}
+              </Button>
+            </Link>
+          )}
         </Card>
       </Section>
+      </div>
 
       {showGoalPicker && (
         <GoalWheelPicker
@@ -1004,28 +1103,56 @@ function VocabularyContent() {
           onConfirm={async (n) => {
             setDailyGoal(n);
             setShowGoalPicker(false);
-            await updateProfile({ dailyGoalWords: n });
+            updateProfile({ dailyGoalWords: n }).catch(() => {});
           }}
         />
       )}
 
       {/* Library entry */}
+      <div className="learn-enter" style={{ '--i': 2 } as React.CSSProperties}>
       <Section spacing="normal">
         <EntryCard
           href="/vocabulary/library"
           icon={<Library size={20} strokeWidth={1.75} />}
-          label="韩语词库"
-          detail="主题词包 · 分级词表 · 延世教材 · 情景词典"
+          label={t('vocab.hub_lib_label', lang)}
+          detail={t('vocab.hub_lib_detail', lang)}
           tone="purple"
           layout="row"
-          cta="进入"
+          cta={t('vocab.hub_lib_enter', lang)}
         />
+        <div style={{ display: 'flex', gap: 8, marginTop: 10, overflowX: 'auto', paddingBottom: 2 }} className="scrollbar-none">
+          {[
+            { tab: 'levels', label: t('vocab.hub_q_levels', lang) },
+            { tab: 'yonsei', label: t('vocab.hub_q_yonsei', lang) },
+            { tab: 'themes', label: t('vocab.hub_q_themes', lang) },
+            { tab: 'expressions', label: t('vocab.hub_q_expressions', lang), hot: true },
+            { tab: 'dictionary', label: t('vocab.hub_q_dictionary', lang) },
+          ].map((q) => (
+            <Link
+              key={q.tab}
+              href={`/vocabulary/library?tab=${q.tab}`}
+              style={{
+                flexShrink: 0,
+                display: 'inline-flex', alignItems: 'center', gap: 5,
+                padding: '7px 14px', borderRadius: 999,
+                background: q.hot ? 'var(--color-pink-soft)' : 'var(--color-surface-2)',
+                border: `1px solid ${q.hot ? 'var(--color-pink-base)' : 'var(--color-border-1)'}`,
+                color: q.hot ? 'var(--color-pink-strong)' : 'var(--color-ink-2)',
+                fontSize: 12.5, fontWeight: 600, textDecoration: 'none',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {q.hot && <Sparkles size={12} />}
+              {q.label}
+            </Link>
+          ))}
+        </div>
       </Section>
 
       {/* Word books */}
       <Section
-        title="我的单词本"
-        action={wordBooks.length > 0 ? { label: '新建', href: '/vocabulary/books' } : undefined}
+        title={t('vocab.hub_my_books', lang)}
+        action={wordBooks.length > 0 ? { label: t('vocab.hub_new', lang), href: '/vocabulary/books' } : undefined}
         spacing="normal"
       >
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -1045,31 +1172,52 @@ function VocabularyContent() {
                 }}
               >
                 <Plus size={16} />
-                新建第一个单词本
+                {t('vocab.hub_new_first_book', lang)}
               </div>
             </Link>
           ) : (
             <>
-              {wordBooks.slice(0, 4).map((book) => (
-                <Card key={book.id} as="a" href={`/vocabulary/books/${book.id}`} variant="row" interactive>
-                  <div
-                    style={{
-                      width: 4, height: 44, borderRadius: 'var(--radius-pill)',
-                      background: book.color || 'var(--color-pink-base)',
-                      flexShrink: 0,
-                    }}
-                  />
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                      {book.name}
-                    </p>
-                    <span style={{ fontSize: 11, color: 'var(--color-ink-3)' }}>
-                      {book.wordIds.length} 个单词
-                    </span>
-                  </div>
-                  <ChevronRight size={16} color="var(--color-ink-4)" />
-                </Card>
-              ))}
+              {(() => {
+                // 一次算出每本已掌握数，避免每张卡内联 filter
+                const masteredIdSet = new Set(allWords.filter(w => w.mastery === 'mastered').map(w => w.id));
+                return wordBooks.slice(0, 4).map((book) => {
+                  const total = book.wordIds.length;
+                  const mastered = book.wordIds.filter(id => masteredIdSet.has(id)).length;
+                  const progress = total > 0 ? Math.round((mastered / total) * 100) : 0;
+                  return (
+                    <Card key={book.id} as="a" href={`/vocabulary/books/${book.id}`} variant="row" interactive>
+                      <div
+                        style={{
+                          width: 4, height: 44, borderRadius: 'var(--radius-pill)',
+                          background: book.color || 'var(--color-pink-base)',
+                          flexShrink: 0,
+                        }}
+                      />
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          {book.name}
+                        </p>
+                        <span style={{ fontSize: 11, color: 'var(--color-ink-3)' }}>
+                          {total === 0
+                            ? t('vocab.hub_book_empty', lang)
+                            : t('vocab.hub_book_progress', lang, { mastered, total, pct: progress })}
+                        </span>
+                        {total > 0 && (
+                          <div style={{ height: 3, borderRadius: 999, background: 'var(--border-default)', overflow: 'hidden', marginTop: 4 }}>
+                            <div style={{
+                              height: '100%',
+                              width: `${progress}%`,
+                              background: progress >= 100 ? 'var(--color-mint-strong)' : 'var(--color-pink-base)',
+                              transition: 'width 0.5s',
+                            }} />
+                          </div>
+                        )}
+                      </div>
+                      <ChevronRight size={16} color="var(--color-ink-4)" />
+                    </Card>
+                  );
+                });
+              })()}
               {wordBooks.length > 4 && (
                 <Link
                   href="/vocabulary/books"
@@ -1079,7 +1227,7 @@ function VocabularyContent() {
                     textDecoration: 'none',
                   }}
                 >
-                  查看全部 {wordBooks.length} 个单词本 <ArrowRight size={12} />
+                  {t('vocab.hub_view_all_books', lang, { n: wordBooks.length })} <ArrowRight size={12} />
                 </Link>
               )}
             </>
@@ -1101,72 +1249,29 @@ function VocabularyContent() {
             <Bookmark size={20} strokeWidth={1.75} />
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>我的句子</p>
+            <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>{t('vocab.hub_my_sentences', lang)}</p>
             <p style={{ fontSize: 11, color: 'var(--color-ink-3)', margin: '2px 0 0' }}>
-              保存的句子 · 语法拆解 · 打字练习
+              {t('vocab.hub_sentences_detail', lang)}
             </p>
           </div>
           <ChevronRight size={18} color="var(--color-ink-4)" />
         </Card>
       </Section>
+      </div>
       </>)}
     </div>
-
-      {showDueSheet && (
-        <div className="fixed inset-0 z-[100] flex items-end justify-center" style={{ paddingBottom: 'calc(56px + env(safe-area-inset-bottom, 0px))' }}>
-          <div className="absolute inset-0 bg-black/30" onClick={() => setShowDueSheet(false)} />
-          <div className="relative w-full max-w-lg bg-[var(--bg-card)] rounded-t-3xl flex flex-col" style={{ maxHeight: 'calc(80dvh - 56px)' }}>
-            <div className="flex items-center justify-between px-5 pt-5 pb-3 shrink-0">
-              <div>
-                <h2 className="text-base font-bold text-[var(--text-primary)]">待复习单词</h2>
-                <p className="text-xs text-[var(--text-muted)] mt-0.5">{s.dueReview} 个单词到期，点击展开例句</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <Link href="/vocabulary/review-pool" onClick={() => setShowDueSheet(false)} className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-[var(--bg-input)] text-xs text-[var(--text-secondary)] hover:text-[var(--pink-primary)] hover:bg-[var(--pink-primary)]/8 transition-colors">
-                  <Settings2 size={13} />管理词库
-                </Link>
-                <button onClick={() => setShowDueSheet(false)} className="p-1 text-[var(--text-muted)]"><X size={20} /></button>
-              </div>
-            </div>
-            <div className="flex-1 min-h-0 overflow-y-auto px-4 pb-4 space-y-2">
-              {dueSheetWords.map(word => {
-                const isExpanded = dueExpandedId === word.id;
-                return (
-                  <div key={word.id} className="bg-[var(--bg-input)] rounded-2xl overflow-hidden">
-                    <div className="flex items-center gap-3 px-4 py-3 cursor-pointer" onClick={() => setDueExpandedId(isExpanded ? null : word.id)}>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm font-bold text-[var(--text-primary)]">{word.word}</span>
-                          <DueWordRoman word={word} entry={entriesCache.get(word.word)} />
-                        </div>
-                        <p className="text-xs text-[var(--text-secondary)] truncate mt-0.5">{word.meaning}</p>
-                      </div>
-                      <button onClick={e => { e.stopPropagation(); speakWord(word.word, 0.85); }} className="p-1.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--pink-primary)] shrink-0">
-                        <Volume2 size={15} />
-                      </button>
-                      <span className="text-xs text-[var(--text-muted)]">{isExpanded ? '▲' : '▼'}</span>
-                    </div>
-                    {isExpanded && <DueWordExpanded word={word} entry={entriesCache.get(word.word)} savedExamples={savedExamples} setSavedExamples={setSavedExamples} />}
-                  </div>
-                );
-              })}
-            </div>
-            <div className="px-4 pt-3 pb-3 border-t border-[var(--border-color)] shrink-0">
-              <Link href="/review" onClick={() => setShowDueSheet(false)} className="block w-full py-3 text-center text-white text-sm font-bold rounded-2xl" style={{ background: 'var(--pink-primary)' }}>
-                开始复习这 {s.dueReview} 个单词
-              </Link>
-            </div>
-          </div>
-        </div>
-      )}
+    {deleteModals}
     </>
   );
 }
 
 function VocabularyPageInner() {
   const isDesktop = useIsDesktop();
+  const searchParams = useSearchParams();
+  // 桌面 hub 没有「我的句子」面板，卡片跳 ?tab=sentences 时回落到通用视图渲染句子 tab
+  const wantsSubTab = searchParams.get('tab') === 'sentences';
 
-  if (isDesktop) return <DesktopVocabularyPage />;
+  if (isDesktop && !wantsSubTab) return <DesktopVocabularyPage />;
 
   return (
     <Suspense fallback={<div className="flex-1 flex items-center justify-center py-20"><div className="w-6 h-6 rounded-full border-2 border-[var(--pink-primary)] border-t-transparent animate-spin" /></div>}>
@@ -1176,5 +1281,9 @@ function VocabularyPageInner() {
 }
 
 export default function VocabularyPage() {
-  return <VocabularyPageInner />;
+  return (
+    <Suspense fallback={<div className="flex-1 flex items-center justify-center py-20"><div className="w-6 h-6 rounded-full border-2 border-[var(--pink-primary)] border-t-transparent animate-spin" /></div>}>
+      <VocabularyPageInner />
+    </Suspense>
+  );
 }

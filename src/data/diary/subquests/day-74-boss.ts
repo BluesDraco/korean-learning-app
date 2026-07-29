@@ -1,0 +1,21 @@
+import type { BossSubQuestData } from '@/types/tori-subquest';
+
+/** Day 74 · 3-5 Boss 战 · 🗣️ 부산 사투리 초체험 */
+export const day74Boss: BossSubQuestData = {
+  day: 14, level: 'advanced', idx: 5, kind: 'boss',
+  koTitle: '사투리의 관문',
+  subtitle: '🗣️ 부산 골목 · 할머니 · 표준어 vs 사투리',
+  intro: '中午。부산 남포동 골목。你们迷路了。奶奶坐在小板凳上，你上前问路——她开口的一瞬，你脑子空白：억양、词汇、语速全部与首尔课堂里学的不同。你的第一反应是慌，第二反应是——记下来。今天要用 N + 마다 把这份"每处都不同"的震撼写进日记：지역마다 사투리가 있다 → 사람마다 발음이 다르다 → 단어마다 뜻이 다를 수 있다.',
+  outroHook: '奶奶最后放慢语速、用标准语补了一句："학생, 어디 가요?"（同学，去哪里？）你笑了——因为她也在为你调整。语言不是障碍，是桥。（Day 75 · 부산에서 혼자 길 찾기）',
+
+  tasks: [
+    { type: 'choice',  label: '听句选意',     task: { id: 'd74-b5-t1', audioKo: '지역마다 사투리가 있어요.',                                            choices: [{ text: '每个地区都有方言。',                    correct: true }, { text: '没有方言。',                  correct: false }, { text: '只有一种方言。',              correct: false }, { text: '方言消失了。',              correct: false }], explain: 'Day 74 主题句 · N + 마다' } },
+    { type: 'choice',  label: '听句选意',     task: { id: 'd74-b5-t2', audioKo: '사람마다 발음이 조금씩 달라요.',                                        choices: [{ text: '每个人发音都稍稍不同。',                    correct: true }, { text: '所有人发音相同。',                  correct: false }, { text: '没人会发音。',                    correct: false }, { text: '发音只学过一次。',                  correct: false }], explain: '사람마다 · 每人' } },
+    { type: 'choice',  label: 'N + 마다',     task: { id: 'd74-b5-t3', promptZh: '"每个地区都有方言"哪句正确？',                                                                                                                                    choices: [{ text: '지역에 사투리가 있어요.',                     correct: false }, { text: '지역마다 사투리가 있어요.',        correct: true }, { text: '지역에서 사투리가 있어요.',              correct: false }, { text: '지역 동안 사투리가 있어요.',                 correct: false }], explain: 'N + 마다 · 每' } },
+    { type: 'choice',  label: 'N + 마다',     task: { id: 'd74-b5-t4', promptZh: '"每个周末去旅行"哪句正确？',                                                                                                                                    choices: [{ text: '주말에마다 여행 가요.',                          correct: false }, { text: '주말마다 여행 가요.',    correct: true }, { text: '주말은 마다 여행 가요.',                    correct: false }, { text: '주말 동안 마다 여행 가요.',                    correct: false }], explain: 'N 后直接 + 마다' } },
+    { type: 'choice',  label: '认词',         task: { id: 'd74-b5-t5', promptKo: '사투리',    promptHangul: 'sa-tu-ri',                                                                                                                             choices: [{ text: '方言',                    correct: true }, { text: '外语',                            correct: false }, { text: '古语',                            correct: false }, { text: '俗语',                              correct: false }], explain: '부산 사투리' } },
+    { type: 'compose', label: '组句',         task: { id: 'd74-b5-t6', zhHint: '每个地区都有方言。',                                                                                                                                            audioKo: '지역마다 사투리가 있어요.',                            answer: ['지역마다', '사투리가', '있어요.'],   tokens: ['지역마다', '사투리가', '있어요.', '지역에', '지역에서', '없어요.', '있었어요.'],         explain: 'Day 74 主题句' } },
+    { type: 'compose', label: '组句',         task: { id: 'd74-b5-t7', zhHint: '每个人发音都稍稍不同。',                                                                                                                                            audioKo: '사람마다 발음이 조금씩 달라요.',                          answer: ['사람마다', '발음이', '조금씩', '달라요.'],                              tokens: ['사람마다', '발음이', '조금씩', '달라요.', '사람이', '똑같아요.', '달랐어요.', '사람은'],           explain: '사람마다 · 每人' } },
+    { type: 'choice',  label: '情景选回应',   task: { id: 'd74-b5-t8', promptZh: '奶奶用釜山话问路，你只懂一半。你想诚恳回应，最合适的一句？',                                                                                            choices: [{ text: '죄송해요, 사투리는 반쯤만 알아들어요.',       correct: true }, { text: '알아요, 다 알아들어요.',                  correct: false }, { text: '얼마예요?',                              correct: false }, { text: '몰라요.',                                correct: false }], explain: '诚恳 + 반쯤' } },
+  ],
+};

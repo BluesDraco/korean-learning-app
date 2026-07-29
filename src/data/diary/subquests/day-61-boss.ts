@@ -1,0 +1,21 @@
+import type { BossSubQuestData } from '@/types/tori-subquest';
+
+/** Day 61 · 3-5 Boss 战 · 🎓 高级班第一天 · 401 号大讲堂 */
+export const day61Boss: BossSubQuestData = {
+  day: 1, level: 'advanced', idx: 5, kind: 'boss',
+  koTitle: '고급의 첫 관문',
+  subtitle: '🎓 401 号大讲堂 · 원어민처럼',
+  intro: '周一上午。教室从 305 号搬到大讲堂 401——阶梯座位，一排能坐五个人。二十个新面孔，只有 Danielle 是熟脸，她坐第一排。火鹤老师放了一段三分钟的听力，播完抬眼："누가 답할래요?" Danielle 手先举起来。发音像母语者，语法一处不错，用词是新闻主播级别的。你脑子还在把第一句话翻成中文，她已经答完第三题。今天要用 ~처럼 / ~같이 把这份差距、这份敬佩、这份"我也继续走"，说出来。',
+  outroHook: '下课后你一个人站在洗手间水池前，看着镜子里的自己：「토리, 넌 왜 아직도 이만큼밖에 못 해?」（兔莉，你怎么还只能做到这么一点点？）——但火鹤老师那句"각자 속도가 있어요"还在耳边。差距是真的，节奏也是真的。明天，去咖啡馆面试打工。',
+
+  tasks: [
+    { type: 'choice',  label: '听句选意',     task: { id: 'd61-b5-t1', audioKo: '다니엘 씨는 원어민처럼 발음해요.',           choices: [{ text: 'Danielle 发音像母语者。',       correct: true }, { text: 'Danielle 想成为母语者。',   correct: false }, { text: 'Danielle 教母语者发音。',   correct: false }, { text: 'Danielle 不是母语者。',    correct: false }], explain: 'Day 61 主题句 · N + 처럼' } },
+    { type: 'choice',  label: '听句选意',     task: { id: 'd61-b5-t2', audioKo: '각자 속도가 있어요.',                         choices: [{ text: '各自有自己的节奏。',              correct: true }, { text: '大家速度都一样。',            correct: false }, { text: '没有节奏。',                    correct: false }, { text: '要跟上速度。',                  correct: false }], explain: '火鹤老师安慰 · 각자 + N' } },
+    { type: 'choice',  label: '比喻用法',     task: { id: 'd61-b5-t3', promptZh: '"眼睛像星星一样闪"哪句正确？',                                                                                                                                          choices: [{ text: '눈이 별에 빛나요.',                       correct: false }, { text: '눈이 별처럼 빛나요.',              correct: true }, { text: '눈이 별을 빛나요.',                       correct: false }, { text: '눈이 별에서 빛나요.',                          correct: false }], explain: 'N + 처럼 = 比喻 · 별 无 받침' } },
+    { type: 'choice',  label: '处럼 vs 같이', task: { id: 'd61-b5-t4', promptZh: '"像韩国人一样自然"哪句正确？',                                                                                                                                          choices: [{ text: '한국 사람에게 자연스러워요.',            correct: false }, { text: '한국 사람같이 자연스러워요.',      correct: true }, { text: '한국 사람으로 자연스러워요.',            correct: false }, { text: '한국 사람은 자연스러워요.',                    correct: false }], explain: 'N + 같이 = 처럼 同义 · 副词式修饰后句' } },
+    { type: 'choice',  label: '认词',         task: { id: 'd61-b5-t5', promptKo: '원어민',   promptHangul: 'won-eo-min',                                                                                                                                 choices: [{ text: '母语者',                        correct: true }, { text: '外国人',                        correct: false }, { text: '留学生',                        correct: false }, { text: '语言老师',                          correct: false }], explain: '原(원) + 语(어) + 民(민)' } },
+    { type: 'compose', label: '组句',         task: { id: 'd61-b5-t6', zhHint: 'Danielle 发音像母语者。',                                                                                                                                              audioKo: '다니엘 씨는 원어민처럼 발음해요.',                answer: ['다니엘 씨는', '원어민처럼', '발음해요.'],           tokens: ['다니엘 씨는', '원어민처럼', '발음해요.', '원어민한테', '원어민을', '원어민에서', '발음이에요.'],  explain: '主 · N + 처럼 · V' } },
+    { type: 'compose', label: '组句',         task: { id: 'd61-b5-t7', zhHint: '实力差距太大。',                                                                                                                                                        audioKo: '실력 차이가 너무 커요.',                            answer: ['실력', '차이가', '너무', '커요.'],                     tokens: ['실력', '차이가', '너무', '커요.', '차이는', '작아요.', '컸어요.', '실력이'],                       explain: 'Tori 内心 · 차이 + 크다' } },
+    { type: 'choice',  label: '情景选回应',   task: { id: 'd61-b5-t8', promptZh: '火鹤老师说 "토리 씨도 60일 전보다 정말 많이 늘었어요. 각자 속도가 있어요."。你想说"我会继续努力"，最自然的一句？',                                                        choices: [{ text: '네, 저도 계속 노력할게요.',                                    correct: true }, { text: '저는 이제 안 할래요.',              correct: false }, { text: '다니엘 씨가 최고예요.',                 correct: false }, { text: '얼마예요?',                              correct: false }], explain: '正式承诺 · ~ㄹ게요' } },
+  ],
+};

@@ -9,7 +9,7 @@ export const grammarCardsP20: GrammarCard[] = [
     whatItDoes: '表示"关于……/有关……"的话题指示',
     whatItDoesBody: '에 대해(서) 和 에 관해(서) 均表示"关于……"，用于指示谈论、研究、思考的对象，意思非常接近，可以互换。\n에 관한/에 대한 是冠词形（定语形），用于修饰后面的名词，相当于"关于……的（名词）"。\n에 대해서 较口语，에 관해서 较书面/正式。',
     structureNote: '名词 + 에 대해（서）：动词前，"关于……"\n名词 + 에 관해（서）：动词前，"关于……"（较正式）\n名词 + 에 관한/에 대한 + 名词：定语，"关于……的（名词）"',
-    rulesNote: '에 대해 와 에 관해 는 含义가 几乎 같지만，에 관해 는 학술/보고서 등 格式体에서 더 자연스럽다。\n에 관한/에 대한 은 뒤에 名词가 必须 온다（冠词形이므로）。动词 앞에는 에 대해/에 관해 使用。',
+    rulesNote: '에 대해 和 에 관해 含义几乎相同，但 에 관해 在学术/报告等正式文体中更自然。\n에 관한/에 대한 是冠词形，后面必须接名词。动词前用 에 대해/에 관해。',
     scenarioNote: '"환경에 대해 이야기하다"，"역사에 관한 책"般，广泛用于发表、论文、新闻、对话。',
     structures: [
       {
@@ -26,7 +26,7 @@ export const grammarCardsP20: GrammarCard[] = [
         tokens: [
           { text: '환경', role: 'plain' },
           { text: '에 관해서', role: 'plain' },
-          { text: ' 发表했어요', role: 'verb' },
+          { text: ' 발표했어요', role: 'verb' },
         ],
         zh: '就环境问题做了发表。',
       },
@@ -45,19 +45,21 @@ export const grammarCardsP20: GrammarCard[] = [
         tokens: [
           { text: '그 사건', role: 'plain' },
           { text: '에 대한', role: 'plain' },
-          { text: ' 新闻를', role: 'object' },
+          { text: ' 뉴스를', role: 'object' },
           { text: ' 봤어요', role: 'verb' },
         ],
         zh: '看了关于那件事的新闻。',
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '名词 + 에 대해（서）+ 动词：口语/书面语 모두 使用', examples: '이것에 대해 말씀드릴게요，음식에 대해서 이야기해요' },
-      { type: 'rule', text: '名词 + 에 관해（서）+ 动词：격식/학술 문체에 더 자연스러움', examples: '환경에 관해 연구했어요，역사에 관해서 发表했어요' },
-      { type: 'rule', text: '名词 + 에 대한/에 관한 + 名词：冠词形，뒤에 名词 必需', examples: '환경에 관한 책，그 문제에 대한 해결책' },
-      { type: 'compare', text: '에 대해 vs 에 관해：含义 동일，에 관해가 더 格式体', examples: '내 꿈에 대해 말했어요（口语）vs 기후에 관해 연구했어요（격식）' },
-      { type: 'note', text: '에 대해/에 관해 뒤에 바로 名词 불가，에 대한/에 관한 使用', examples: '환경에 대해 책（✗）→ 환경에 대한 책（✓）' },
-      { type: 'note', text: '서 생략 可能：에 대해서 = 에 대해，에 관해서 = 에 관해', examples: '이것에 대해 얘기해요 = 이것에 대해서 얘기해요' },
+      { type: 'rule', text: '名词 + 에 대해（서）+ 动词：口语/书面语都可用', examples: '이것에 대해 말씀드릴게요（我来讲讲这个），음식에 대해서 이야기해요（聊聊食物）' },
+      { type: 'rule', text: '名词 + 에 관해（서）+ 动词：正式/学术文体更自然', examples: '환경에 관해 연구했어요（研究了环境），역사에 관해서 발표했어요（就历史做了发表）' },
+      { type: 'rule', text: '名词 + 에 대한/에 관한 + 名词：冠词形，后面必须接名词', examples: '환경에 관한 책，그 문제에 대한 해결책' },
+      { type: 'compare', text: '에 대해 vs 에 관해：含义相同，에 관해更正式', examples: '내 꿈에 대해 말했어요（口语）vs 기후에 관해 연구했어요（正式）' },
+      { type: 'note', text: '에 대해/에 관해 后面不能直接接名词，要用 에 대한/에 관한', examples: '환경에 대해 책（✗）→ 환경에 대한 책（✓）' },
+      { type: 'note', text: '서 可省略：에 대해서 = 에 대해，에 관해서 = 에 관해', examples: '이것에 대해 얘기해요（聊这个）= 이것에 대해서 얘기해요（聊这个，两种说法通用）' },
+      { type: 'note', text: '语序陷阱：中文"关于"放在前面（关于环境），韩语 에 대해 放在名词后面。别照中文语序写成 에 대해 환경。', examples: '关于环境 → 환경에 대해（✓）；에 대해 환경（✗）' },
+      { type: 'note', text: '에 대해 只能接名词。要说"关于做某事"，得先把动作名词化再接（动词+는 것에 대해），-는 것 后面章节详学。', examples: '关于学韩语 → 한국어 공부에 대해 / 한국어를 배우는 것에 대해（✓）；배우다에 대해（✗）' },
     ],
     cardExamples: [
       {
@@ -109,10 +111,11 @@ export const grammarCardsP20: GrammarCard[] = [
       { icon: '📰', context: '新闻报道', ko: '그 사건에 대한 기사를 읽었어요.', zh: '读了关于那件事的报道。' },
     ],
     mistakes: [
-      { wrong: '환경에 대해 책을 읽었어요（에 대해 + 直接 名词）', correct: '환경에 대한 책을 읽었어요', note: '修饰名词时用 에 대한/에 관한（冠词形）。에 대해/에 관해 后接动词：에 대해 이야기하다（✓）。' },
-      { wrong: '에 관해한 책（에 관해 + 한）', correct: '에 관한 책', note: '冠词形是 에 관한。에 관해한是不存在的形式。에 관해后接动词，에 관한后接名词。' },
-      { wrong: '이것에 대하여 이야기해요（격식 대하여 口语에 使用）', correct: '이것에 대해서 이야기해요', note: '에 대하여 는 书面语/格式体 形式。口语에서는 에 대해서 또는 에 대해 가 더 자연스럽다。' },
-      { wrong: '에 관해와 에 대해를 完全 다른 表达으로 혼동', correct: '에 관해서 ≈ 에 대해서（含义 동일，격식도 차이）', note: '에 관해서 와 에 대해서 는 含义가 같다。에 관해서 가 학술/格式体에 더 어울리고，에 대해서 는 口语에서도 자연스럽다。' },
+      { wrong: '환경에 대해 책을 읽었어요（에 대해 + 直接接名词）', correct: '환경에 대한 책을 읽었어요', note: '修饰名词时用冠词形 에 대한/에 관한。에 대해/에 관해 后面接动词：에 대해 이야기하다（✓）。' },
+      { wrong: '에 관해한 책（에 관해 + 한）', correct: '에 관한 책', note: '冠词形是 에 관한，에 관해한 是不存在的形式。에 관해 后接动词，에 관한 后接名词。' },
+      { wrong: '이것에 대하여 이야기해요（正式的 대하여 用在口语）', correct: '이것에 대해서 이야기해요', note: '에 대하여 是书面语/正式体形式。口语中用 에 대해서 或 에 대해 更自然。' },
+      { wrong: '把 에 관해 和 에 대해 当成完全不同的表达', correct: '에 관해서 ≈ 에 대해서（含义相同，正式度略有差别）', note: '에 관해서 和 에 대해서 含义相同。에 관해서 更适合学术/正式文体，에 대해서 在口语中也自然。' },
+      { wrong: '선생님에 대해 질문했어요（想说"向老师提问"）', correct: '선생님에게 질문했어요', note: '中文"对"身兼两义：表"关于（某话题）"用 에 대해，表"向/对（某人）"要用 에게/한테。向人提问、对人说是"对某人"，用 에게。선생님에 대해 질문했어요 意思会变成"就老师这个话题提问"。' },
     ],
     specialQuiz: {
       type: 'fill',
@@ -126,28 +129,28 @@ export const grammarCardsP20: GrammarCard[] = [
           explanation: '名词（책）를 수식하므로 冠词形 에 관한（✓）。에 관해/에 대해/에 대해서 는 动词 앞에 쓰며 名词 直接 수식 불가。',
         },
         {
-          prompt: '기후 변화___ 发表했어요。（就气候变化做了发表。）',
+          prompt: '기후 변화___ 발표했어요。（就气候变化做了发表。）',
           options: ['에 대하여서', '에 관한', '에 관해서', '에 대한'],
           answer: 2 as 0|1|2|3,
-          explanation: '动词（发表하다）앞에는 에 관해서（✓）。에 관한/에 대한 은 冠词形으로 名词 앞에만，에 대하여서 는 不存在的形式。',
+          explanation: '动词（발표하다）前用 에 관해서（✓）。에 관한/에 대한 是冠词形，只能放在名词前；에 대하여서 是不存在的形式。',
         },
         {
           prompt: '이 문제___ 어떻게 생각해요？（关于这个问题，你怎么看？）',
           options: ['에 관하여서', '에 대해서', '에 대한', '에 관한'],
           answer: 1 as 0|1|2|3,
-          explanation: '动词（생각하다）앞 → 에 대해서（✓）。에 대한/에 관한 은 冠词形，에 관하여서 는 不存在的形式。',
+          explanation: '动词（생각하다）前 → 에 대해서（✓）。에 대한/에 관한 是冠词形；에 관하여서 是不存在的形式。',
         },
         {
-          prompt: '다음 중 올바른 句子은？',
-          options: ['음식에 에 대해 이야기해요', '환경에 대해 책을 읽었어요', '역사에 관해한 보고서', '그 사건에 대한 新闻를 봤어요'],
+          prompt: '下列哪句正确？',
+          options: ['음식에 에 대해 이야기해요', '환경에 대해 책을 읽었어요', '역사에 관해한 보고서', '그 사건에 대한 뉴스를 봤어요'],
           answer: 3 as 0|1|2|3,
-          explanation: '에 대한 + 名词（新闻）：올바른 冠词形（✓）。에 대해 + 名词 直接 수식 불가，에 관해한은 不存在的形式，에 에 대해 는 助词 중복。',
+          explanation: '에 대한 + 名词（뉴스）是正确的冠词形（✓）。에 대해 不能直接修饰名词，에 관해한 是不存在的形式，에 에 대해 是助词重复。',
         },
       ],
     },
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P14 · 第15课</div>
+    <div class="ov-hero-label">P20 · 第1课</div>
     <div class="ov-hero-title">에 대해，에 관해，에 관한</div>
     <div class="ov-hero-sub">关于…… · 有关……的</div>
   </div>
@@ -165,18 +168,18 @@ export const grammarCardsP20: GrammarCard[] = [
     </div>
   </div>
   <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#b49ccf"></div><div class="ov-section-title" style="color:#b49ccf">격식도 차이</div></div>
+    <div class="ov-section-hd"><div class="ov-section-line" style="background:#b49ccf"></div><div class="ov-section-title" style="color:#b49ccf">正式度差别</div></div>
     <div class="ov-block">
       <div style="display:flex;flex-direction:column;gap:8px">
-        <div><span style="font-weight:700">에 대해（서）</span>：口语/书面语 모두 OK</div>
-        <div><span style="font-weight:700">에 관해（서）</span>：학술/格式体에 더 자연스러움</div>
+        <div><span style="font-weight:700">에 대해（서）</span>：口语/书面语都可用</div>
+        <div><span style="font-weight:700">에 관해（서）</span>：学术/正式文体更自然</div>
       </div>
     </div>
   </div>
   <div class="ov-section">
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">别踩的坑</div></div>
     <div class="ov-block">
-      <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">환경에 대해 책（+名词 直接）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">환경에 대한 책</span></div></div>
+      <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">환경에 대해 책（直接接名词）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">환경에 대한 책</span></div></div>
       <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">에 관해한（不存在的形式）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">에 관한</span></div></div>
     </div>
   </div>
@@ -197,7 +200,7 @@ export const grammarCardsP20: GrammarCard[] = [
       <div style="font-size:16px;color:#89756e;margin-top:2px">是关于环境的书。</div>
     </div>
   </div>
-  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 뒤에 动词 → 에 대해，뒤에 名词 → 에 대한</div>
+  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 后面接动词 → 에 대해，后面接名词 → 에 대한</div>
 </div>
 <div class="reminder-box">에 관해서 = 에 대해서（意思相同，관해서 更书面）。</div>`,
     compareHtml: `<div class="card-title">에 대해 vs 에 관해 vs 에 대한 vs 에 관한</div>
@@ -205,34 +208,34 @@ export const grammarCardsP20: GrammarCard[] = [
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
   <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">에 대해（서）</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">动词 앞，口语/书面语</div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">动词前，口语/书面语</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">건강에 대해 이야기해요</span><span style="font-size:16px;color:#5a4640">聊关于健康的话题</span></div>
   </div>
   <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">에 관해（서）</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">动词 앞，격식/학술체</div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">动词前，正式/学术体</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">환경에 관해 연구해요</span><span style="font-size:16px;color:#5a4640">研究关于环境的问题</span></div>
   </div>
   <div class="tok-row" style="background:#f0f4ff;border-radius:12px;padding:12px">
     <div class="tok t-v">에 대한</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">名词 앞，口语/书面语</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">그 사건에 대한 新闻</span><span style="font-size:16px;color:#5a4640">关于那件事的新闻</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">名词前，口语/书面语</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">그 사건에 대한 뉴스</span><span style="font-size:16px;color:#5a4640">关于那件事的新闻</span></div>
   </div>
   <div class="tok-row" style="background:#f5f0ee;border-radius:12px;padding:12px">
     <div class="tok t-v">에 관한</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">名词 앞，격식/학술체</div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">名词前，正式/学术体</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">역사에 관한 책</span><span style="font-size:16px;color:#5a4640">关于历史的书</span></div>
   </div>
 </div>`,
     compareLabel: '에 대해 vs 에 관해 vs 에 대한 vs 에 관한',
     quickTable: {
-      title: '에 대해/에 관해 使用 정리',
-      headers: ['形式', '뒤에 오는 것', '격식도', '例句'],
+      title: '에 대해/에 관해 用法整理',
+      headers: ['形式', '后接', '正式度', '例句'],
       rows: [
         ['에 대해（서）', '动词', '口语/书面语', '건강에 대해 이야기해요'],
-        ['에 관해（서）', '动词', '격식/학술', '환경에 관해 연구해요'],
+        ['에 관해（서）', '动词', '正式/学术', '환경에 관해 연구해요'],
         ['에 대한', '名词', '口语/书面语', '그 문제에 대한 해결책'],
-        ['에 관한', '名词', '격식/학술', '역사에 관한 책'],
+        ['에 관한', '名词', '正式/学术', '역사에 관한 책'],
       ],
     },
     linkedGrammarIds: [],
@@ -246,7 +249,7 @@ export const grammarCardsP20: GrammarCard[] = [
     whatItDoes: '举例列举，或以某事为基准说"光是……就……"',
     whatItDoesBody: '을/를 비롯한 和 을/를 비롯해서 均表示"以……为首/包括……在内"，用于列举，说明某事物是其中代表性的例子。\n비롯한 是冠词形（定语），修饰后面的名词；비롯해서 是连用形，后接动词。\n(까지)만 해도 表示"光是……就……/即便只说……也……"，以某一具体事例强调整体程度，常带有"更不用说其他"的含义。',
     structureNote: '名词 + 을/를 비롯한 + 名词（以……为首的……）\n名词 + 을/를 비롯해서 + 动词（包括……在内，……）\n名词 + 만 해도 / 名词 + 까지만 해도（光是……就……）',
-    rulesNote: '비롯한/비롯해서 앞 名词는 전체 중 典型的 例句가 온다。\n만 해도 는 极端事例 하나를 들어 전체를 强调한다。까지 는 "극단"을 더 强调하는 보助词。',
+    rulesNote: '비롯한/비롯해서 前面的名词，是列举整体中的典型例子。\n만 해도 举出一个极端事例来强调整体。까지 是语气更强的补助词，进一步强调"极端"。',
     scenarioNote: '"BTS를 비롯한 K-POP 그룹들"般，常用于先提出代表性例子的说明/发表。\n"이것만 해도 너무 많아요"般，用于日常对话中的夸张/强调。',
     structures: [
       {
@@ -290,11 +293,13 @@ export const grammarCardsP20: GrammarCard[] = [
     ],
     connectionRules: [
       { type: 'rule', text: '收音O 名词 + 을 비롯한/비롯해서，收音X 名词 + 를 비롯한/비롯해서', examples: '음악을 비롯한（收音ㄱ），BTS를 비롯해서（收音X）' },
-      { type: 'rule', text: '비롯한 + 名词（冠词形），비롯해서 + 动词（连接형）', examples: 'BTS를 비롯한 그룹들（名词 수식）vs 서울을 비롯해서 전국이（动词 앞）' },
-      { type: 'note', text: '비롯한/비롯해서 앞 명사는 뒤에 나열될 전체의 代表 事例', examples: 'BTS를 비롯한 K-POP 그룹들（BTS가 代表 事例）' },
-      { type: 'rule', text: '名词 + 만 해도：극단 事例로 전체 强调', examples: '이것만 해도，서울만 해도，하루만 해도' },
-      { type: 'rule', text: '名词 + 까지만 해도：까지 첨가로 극단성 强调', examples: '어제까지만 해도，그것까지만 해도' },
-      { type: 'compare', text: '만 해도 vs 까지만 해도：含义 유사，까지만 해도가 더 极端', examples: '이것만 해도 많아요 vs 이것까지만 해도 已经 너무 많아요' },
+      { type: 'rule', text: '비롯한 + 名词（冠词形），비롯해서 + 动词（连接形）', examples: 'BTS를 비롯한 그룹들（修饰名词）vs 서울을 비롯해서 전국이（动词前）' },
+      { type: 'note', text: '비롯한/비롯해서 前面的名词，是后面所列举整体的代表性事例', examples: 'BTS를 비롯한 K-POP 그룹들（BTS 是代表性事例）' },
+      { type: 'rule', text: '名词 + 만 해도：以极端事例强调整体', examples: '이것만 해도，서울만 해도，하루만 해도' },
+      { type: 'rule', text: '名词 + 까지만 해도：加上 까지 强调极端性', examples: '어제까지만 해도，그것까지만 해도' },
+      { type: 'compare', text: '만 해도 vs 까지만 해도：含义相近，까지만 해도 更极端', examples: '이것만 해도 많아요（光这个就很多）vs 이것까지만 해도 이미 너무 많아요（光到这个就已经太多了）' },
+      { type: 'note', text: '만 해도 里的 해도 是固定说法，别理解成"做"。它能接跟"做"毫无关系的名词（房租、昨天），整体只是"光是…就"的举例强调，不用去想"做什么"。', examples: '집세만 해도 너무 비싸요（光房租就太贵）——这里没有"做"的意思' },
+      { type: 'compare', text: '만 vs 만 해도：만 是"只有（排他）"，만 해도 是"光是…就（举例强调，暗示还有更多）"，别混用。', examples: '이것만 비싸요（只有这个贵，别的不贵）vs 이것만 해도 비싸요（光这个就已经很贵了，暗示还有别的）' },
     ],
     cardExamples: [
       {
@@ -352,9 +357,9 @@ export const grammarCardsP20: GrammarCard[] = [
     ],
     mistakes: [
       { wrong: 'BTS를 비롯해서 그룹들이（비롯해서 + 名词 수식）', correct: 'BTS를 비롯한 그룹들이', note: '修饰名词时用冠词形 비롯한。비롯해서 是连接形用在动词前：비롯해서 모였어요（✓）。' },
-      { wrong: 'BTS를 비롯하는 그룹（비롯하는）', correct: 'BTS를 비롯한 그룹', note: '비롯한 은 비롯하다의 冠词形이다。비롯하는 은 现在형 冠词形으로 이 表达에 쓰이지 않는다。冠词形은 비롯한 이다。' },
-      { wrong: '교통비도 해도 비싸요（만 해도 대신 도 해도）', correct: '교통비만 해도 비싸요', note: '만 해도 是助词 만 + 해도 的结合。도 해도 不存在的表达。要表达"光是"的语气时 만 해도 使用。' },
-      { wrong: '음악를 비롯한（收音O 명사에 를）', correct: '음악을 비롯한', note: '음악（收音ㄱ 있음）→ 을 비롯한（✓）。收音 있는 名词 뒤에는 을，收音 없는 名词 뒤에는 使用。' },
+      { wrong: 'BTS를 비롯하는 그룹（비롯하는）', correct: 'BTS를 비롯한 그룹', note: '비롯한 是 비롯하다 的冠词形。비롯하는 是现在形冠词形，不用于这个表达。此处冠词形应为 비롯한。' },
+      { wrong: '교통비도 해도 비싸요（用 도 해도 代替 만 해도）', correct: '교통비만 해도 비싸요', note: '만 해도 是助词 만 + 해도 的结合。도 해도 是不存在的表达。要表达"光是"的语气时用 만 해도。' },
+      { wrong: '음악를 비롯한（收音O 名词用 를）', correct: '음악을 비롯한', note: '음악（有收音ㄱ）→ 을 비롯한（✓）。有收音的名词后用 을，无收音的名词后用 를。' },
     ],
     specialQuiz: {
       type: 'fill',
@@ -365,31 +370,31 @@ export const grammarCardsP20: GrammarCard[] = [
           prompt: 'BTS___ 비롯한 K-POP 그룹들이 인기예요。（以BTS为首的K-POP团体们很受欢迎。）',
           options: ['를', '가', '을', '이'],
           answer: 0 as 0|1|2|3,
-          explanation: 'BTS（收音X）→ 를 비롯한（✓）。收音 있는 名词면 을 비롯한。이/가는 주격 助词로 비롯한 앞에 쓰지 않는다。',
+          explanation: 'BTS（无收音）→ 를 비롯한（✓）。有收音的名词用 을 비롯한。이/가 是主格助词，不用在 비롯한 前面。',
         },
         {
           prompt: '서울을 비롯해서 전국___ 참가했어요。（包括首尔在内，全国各地参加了。）',
           options: ['에', '이', '에서', '을'],
           answer: 2 as 0|1|2|3,
-          explanation: '전국에서：地点+에서（행동 발생 地点）：전국에서 참가했어요（✓）。에는 目的지，이는 주격，을은 目的격으로 이 문맥에 맞지 않는다。',
+          explanation: '전국에서：地点 + 에서（表示动作发生的地点）：전국에서 참가했어요（✓）。에 表目的地，이 是主格，을 是宾格，都不合此语境。',
         },
         {
           prompt: '집세___ 해도 너무 비싸요。（光是房租就太贵了。）',
           options: ['까지', '만', '는', '도'],
           answer: 1 as 0|1|2|3,
-          explanation: '만 해도："광（光是）"强调：집세만 해도（✓）。도 해도는 不存在的表达，까지만 해도도 可能하나 만 해도가 基本形，는 해도는 다른 含义。',
+          explanation: '만 해도 强调"光是"：집세만 해도（✓）。도 해도 是不存在的表达；까지만 해도 也可以，但 만 해도 是基本形；는 해도 是另一种含义。',
         },
         {
-          prompt: '다음 중 올바른 句子은？',
+          prompt: '다음 중 올바른 문장은？',
           options: ['음악를 비롯한 예술（收音O）', '이것도 해도 많아요', 'BTS를 비롯해서 그룹들이 유명해요（수식）', '한국을 비롯한 아시아 국가들이 참가했어요'],
           answer: 3 as 0|1|2|3,
-          explanation: '한국을 비롯한 + 名词（✓）：冠词形으로 名词 수식。비롯해서는 动词 앞，음악는→을 비롯한，이것도 해도→이것만 해도。',
+          explanation: '한국을 비롯한 + 名词（✓）：用冠词形修饰名词。비롯해서 用在动词前；음악를→을 비롯한，이것도 해도→이것만 해도。',
         },
       ],
     },
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P14 · 第16课</div>
+    <div class="ov-hero-label">P20 · 第2课</div>
     <div class="ov-hero-title">비롯한，비롯해서，만 해도</div>
     <div class="ov-hero-sub">以……为首 · 光是……就……</div>
   </div>
@@ -443,38 +448,38 @@ export const grammarCardsP20: GrammarCard[] = [
 </div>
 <div class="reminder-box">收音O → 을 비롯한，收音X → 를 비롯한。</div>`,
     compareHtml: `<div class="card-title">비롯한 vs 비롯해서 / 만 해도 vs 까지만 해도</div>
-<div class="card-body">形式가 비슷한 쌍 비교。</div>
+<div class="card-body">对比形式相似的几组。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
   <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">을/를 비롯한</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">冠词形，뒤에 名词</div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">冠词形，后接名词</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">BTS를 비롯한 그룹들</span><span style="font-size:16px;color:#5a4640">以BTS为首的团体们</span></div>
   </div>
   <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">을/를 비롯해서</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">连接형，뒤에 动词절</div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">连接形，后接动词分句</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">서울을 비롯해서 전국이 참가했어요</span><span style="font-size:16px;color:#5a4640">包括首尔在内全国参加了</span></div>
   </div>
   <div class="tok-row" style="background:#f0f4ff;border-radius:12px;padding:12px">
     <div class="tok t-v">만 해도</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">극단 事例 强调（光是）</div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">以极端事例强调（光是）</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">집세만 해도 비싸요</span><span style="font-size:16px;color:#5a4640">光是房租就贵</span></div>
   </div>
   <div class="tok-row" style="background:#f5f0ee;border-radius:12px;padding:12px">
     <div class="tok t-v">까지만 해도</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">더 강한 극단 强调</div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">更强的极端强调</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">어제까지만 해도 괜찮았어요</span><span style="font-size:16px;color:#5a4640">就连昨天还好好的</span></div>
   </div>
 </div>`,
     compareLabel: '비롯한 vs 비롯해서 / 만 해도 vs 까지만 해도',
     quickTable: {
-      title: '비롯한/비롯해서/만 해도 정리',
-      headers: ['形式', '뒤에 오는 것', '기능', '例句'],
+      title: '비롯한/비롯해서/만 해도 用法整理',
+      headers: ['形式', '后接', '功能', '例句'],
       rows: [
         ['을/를 비롯한', '名词', '冠词形', 'BTS를 비롯한 그룹들'],
-        ['을/를 비롯해서', '动词', '连接형', '서울을 비롯해서 참가했어요'],
-        ['만 해도', '动词（술어）', '극단 强调', '집세만 해도 비싸요'],
-        ['까지만 해도', '动词（술어）', '더 강한 극단', '어제까지만 해도 괜찮았어요'],
+        ['을/를 비롯해서', '动词', '连接形', '서울을 비롯해서 참가했어요'],
+        ['만 해도', '动词（谓语）', '极端强调', '집세만 해도 비싸요'],
+        ['까지만 해도', '动词（谓语）', '更强极端', '어제까지만 해도 괜찮았어요'],
       ],
     },
     linkedGrammarIds: [],
@@ -484,11 +489,11 @@ export const grammarCardsP20: GrammarCard[] = [
     id: 'card-p20-l03',
     partNumber: 20,
     lessonNumber: 3,
-    title: '개나，까지（强调 보助词）',
+    title: '개나，까지（强调补助词）',
     whatItDoes: '表示数量之多令人意外，或"连……都/甚至……"',
     whatItDoesBody: '개나（도）用在数量词后，表示说话人觉得该数量多得出乎意料，相当于"竟然……个/多达……"，带有轻微惊讶或夸张语气。\n까지 作为强调助词，表示"连……都/甚至……"，强调到了意想不到的极端，可以是正面惊喜也可以是负面意外。',
     structureNote: '수량 + 개나（도）：数量 + 개/명/권 + 나（도）（竟然……个）\n名词/부사 + 까지：名词/副词 + 까지（连……都/甚至……）',
-    rulesNote: '개나 의 나 表示"比预期多"的辅助语气다。개나也可像 도 那样添加 도 来加强强调。\n까지 表示"达到极端"。用于意料之外的事态、极端事例。前面名词无论有无收音，까지 形式不变。',
+    rulesNote: '개나 中的 나 表示"比预期多"的辅助语气。나/이나 后面不能再加 도（개나도✗）。\n까지 表示"达到极端"。用于意料之外的事态、极端事例。前面名词无论有无收音，까지 形式不变。',
     scenarioNote: '"이게 벌써 세 개나 됐어？（竟然已经三个了？）"，"친구까지 나를 의심해（连朋友都怀疑我）"般，常用于表达惊讶。',
     structures: [
       {
@@ -502,11 +507,11 @@ export const grammarCardsP20: GrammarCard[] = [
         zh: '苹果竟然吃了五个。',
       },
       {
-        ko: '수량 + 이나도（强调）',
+        ko: '수량 + 이나（强调）',
         tokens: [
           { text: '실수를', role: 'object' },
           { text: ' 열 번', role: 'plain' },
-          { text: '이나도', role: 'plain' },
+          { text: '이나', role: 'plain' },
           { text: ' 했어요', role: 'verb' },
         ],
         zh: '竟然犯了十次错误。',
@@ -526,19 +531,20 @@ export const grammarCardsP20: GrammarCard[] = [
         tokens: [
           { text: '이렇게', role: 'plain' },
           { text: '까지', role: 'plain' },
-          { text: ' 할 需要는', role: 'verb' },
+          { text: ' 할 필요는', role: 'verb' },
           { text: ' 없어요', role: 'verb' },
         ],
         zh: '没必要做到这种程度。',
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '수량사 + 나：比预期多을 나타냄', examples: '다섯 개나，열 명이나，세 권이나，두 시간이나' },
-      { type: 'note', text: '나（이나）선택：앞 수량사 末자 收音 있으면 이나，없으면 나', examples: '다섯 개나（收音X），열 명이나（收音O），세 번이나（收音O）' },
-      { type: 'note', text: '나도：나 + 도를 더해 더 강한 惊讶 表达', examples: '열 개나도 먹었어요，세 번이나도 실수했어요' },
+      { type: 'rule', text: '数量词 + 나：表示比预期多', examples: '다섯 개나，열 명이나，세 권이나，두 시간이나' },
+      { type: 'note', text: '나 / 이나 的选择：前面数量词末字有收音用 이나，无收音用 나', examples: '다섯 개나（无收音），열 명이나（有收音），세 번이나（有收音）' },
+      { type: 'note', text: '나/이나 后不能再加 도：열 개나（✓），열 개나도（✗）', examples: '다섯 개나 먹었어요（竟吃了五个），세 번이나 실수했어요（竟失误了三次）' },
       { type: 'rule', text: '名词 + 까지：极端事例 强调（甚至……）', examples: '친구까지，선생님까지，그것까지，이렇게까지' },
-      { type: 'compare', text: '까지 vs 도：까지는 극단 到达，도는 포함/첨가', examples: '친구까지 왔어요（连朋友都来了）vs 친구도 왔어요（朋友也来了）' },
-      { type: 'note', text: '까지 앞 명사는 收音 유무와 관계없이 까지 形式变化 없음', examples: '친구까지，학교까지，선생님까지 모두 동일' },
+      { type: 'compare', text: '까지 vs 도：까지 强调"到极端/连…都"，도 只是"也/包含"', examples: '친구까지 왔어요（连朋友都来了，出乎意料）vs 친구도 왔어요（朋友也来了，平铺直叙）' },
+      { type: 'note', text: '까지 前面的名词无论有无收音，形式都不变', examples: '친구까지，학교까지，선생님까지 全都一样' },
+      { type: 'note', text: '이나 是多义助词，这一课只讲"数量多得意外"这个用法。它另有"或者（选择）""大约（估量）"等义，后面章节详学，别把这些混进来。', examples: '커피나 차（咖啡或茶，选择）/ 열 명이나（竟有十人，本课用法）——形一样意不同' },
     ],
     cardExamples: [
       {
@@ -592,10 +598,10 @@ export const grammarCardsP20: GrammarCard[] = [
       { icon: '😨', context: '过分了', ko: '이렇게까지 할 줄은 몰랐어요.', zh: '没想到会做到这种程度。' },
     ],
     mistakes: [
-      { wrong: '다섯 개나이（이나 앞 收音X에 이 추가）', correct: '다섯 개나', note: '개는 收音이 없으므로 나 使用：다섯 개나（✓）。이나는 收音 있는 수량사 뒤에 쓴다：세 번이나（번 收音O）。' },
-      { wrong: '친구도까지 왔어요（도 + 까지 중복）', correct: '친구까지 왔어요 또는 친구도 왔어요', note: '까지 와 도 는 같은 위치의 보助词로 同时 쓸 수 없다。까지 는 극단，도 는 포함。문맥에 맞게 하나만 선택한다。' },
-      { wrong: '열 명나（收音O 명사에 나）', correct: '열 명이나', note: '명（收音ㅇ 있음）→ 이나：열 명이나（✓）。收音 없는 수량사에만 나 使用。' },
-      { wrong: '까지도 친구가 안 왔어요（까지도 어순 오류）', correct: '친구까지도 안 왔어요', note: '까지（도）는 强调하는 名词 바로 뒤에 붙는다：친구까지도（✓）。까지도를 句子 앞에 독립적으로 쓰는 것은 어색하다。' },
+      { wrong: '다섯 개나이（无收音的 나 前又加 이）', correct: '다섯 개나', note: '개 没有收音，所以用 나：다섯 개나（✓）。이나 用在有收音的数量词后：세 번이나（번 有收音）。' },
+      { wrong: '친구도까지 왔어요（도 + 까지 重复）', correct: '친구까지 왔어요 또는 친구도 왔어요', note: '까지 和 도 是同一位置的补助词，不能同时使用。까지 表示极端，도 表示包含。按语境只选其一。' },
+      { wrong: '열 명나（有收音的名词用 나）', correct: '열 명이나', note: '명（有收音ㅇ）→ 이나：열 명이나（✓）。只有无收音的数量词才用 나。' },
+      { wrong: '까지도 친구가 안 왔어요（까지도 语序错误）', correct: '친구까지도 안 왔어요', note: '까지（도）紧跟在所强调的名词后面：친구까지도（✓）。把 까지도 独立放在句首会很别扭。' },
     ],
     specialQuiz: {
       type: 'fill',
@@ -606,31 +612,31 @@ export const grammarCardsP20: GrammarCard[] = [
           prompt: '커피를 세 잔___ 마셨어요。（竟然喝了三杯咖啡。）',
           options: ['이나', '도', '나', '까지'],
           answer: 0 as 0|1|2|3,
-          explanation: '잔（收音ㄴ 있음）→ 이나：세 잔이나（✓）。收音 없는 수량사면 나，까지는 极端强调，도는 포함。',
+          explanation: '잔（有收音ㄴ）→ 이나：세 잔이나（✓）。无收音的数量词用 나；까지 表极端强调，도 表包含。',
         },
         {
           prompt: '사과를 다섯 개___ 먹었어요。（竟然吃了五个苹果。）',
           options: ['도', '이나', '까지', '나'],
           answer: 3 as 0|1|2|3,
-          explanation: '개（收音X）→ 나：다섯 개나（✓）。收音 있는 수량사면 이나，까지/도는 다른 용법。',
+          explanation: '개（无收音）→ 나：다섯 개나（✓）。有收音的数量词用 이나；까지/도 是其他用法。',
         },
         {
           prompt: '가족___ 나를 이해 못 해요。（连家人都不理解我。）',
           options: ['나', '이나', '까지', '도'],
           answer: 2 as 0|1|2|3,
-          explanation: '극단 事例 强调（连……都）→ 까지：가족까지（✓）。나/이나는 수량사 뒤，도는 포함（家人也）으로 극단 强调 语感가 약하다。',
+          explanation: '强调极端事例（连……都）→ 까지：가족까지（✓）。나/이나 用在数量词后，도 表包含（家人也），极端强调的语气较弱。',
         },
         {
-          prompt: '다음 중 올바른 句子은？',
+          prompt: '다음 중 올바른 문장은？',
           options: ['세 개나이 먹었어요', '두 시간이나 기다렸어요', '친구도까지 왔어요', '열 명나 모였어요'],
           answer: 1 as 0|1|2|3,
-          explanation: '时间（收音ㄴ）→ 이나：두 시간이나（✓）。세 개나이→세 개나，친구도까지→친구까지（助词 중복），열 명나→열 명이나（收音O）。',
+          explanation: '시간（有收音ㄴ）→ 이나：두 시간이나（✓）。세 개나이→세 개나；친구도까지→친구까지（助词重复）；열 명나→열 명이나（有收音）。',
         },
       ],
     },
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P14 · 第17课</div>
+    <div class="ov-hero-label">P20 · 第3课</div>
     <div class="ov-hero-title">개나，까지</div>
     <div class="ov-hero-sub">竟然……个 · 连……都/甚至</div>
   </div>
@@ -651,8 +657,8 @@ export const grammarCardsP20: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#b49ccf"></div><div class="ov-section-title" style="color:#b49ccf">나/이나 선택</div></div>
     <div class="ov-block">
       <div style="display:flex;flex-direction:column;gap:8px">
-        <div>收音X → <b style="color:#ff7fa8">나</b>：다섯 개나，세 시간이나 아님→세 시간이나（时间 收音X…）</div>
-        <div>收音O → <b style="color:#ff7fa8">이나</b>：세 잔이나，두 번이나，열 명이나</div>
+        <div>无收音 → <b style="color:#ff7fa8">나</b>：다섯 개나，두 채나</div>
+        <div>有收音 → <b style="color:#ff7fa8">이나</b>：세 잔이나，두 번이나，열 명이나</div>
       </div>
     </div>
   </div>
@@ -660,14 +666,14 @@ export const grammarCardsP20: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">别踩的坑</div></div>
     <div class="ov-block">
       <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">열 명나（收音O에 나）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">열 명이나</span></div></div>
-      <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">친구도까지（보助词 중복）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">친구까지</span></div></div>
+      <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">친구도까지（助词重复）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">친구까지</span></div></div>
     </div>
   </div>
 </div>`,
     step0Html: `<div class="card-title">竟然这么多 / 连……都</div>
 <div class="card-body">数量超出预期用 나/이나，极端举例用 까지。</div>
 <div class="hook-box">
-  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">두 보助词의 차이</div>
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">两个补助词的区别</div>
   <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
     <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
       <div style="font-size:9px;font-weight:800;color:#ff7fa8;margin-bottom:4px">나/이나 — 数量惊讶</div>
@@ -680,36 +686,36 @@ export const grammarCardsP20: GrammarCard[] = [
       <div style="font-size:16px;color:#89756e;margin-top:2px">连朋友都不相信了。</div>
     </div>
   </div>
-  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 收音O → 이나，收音X → 나（까지는 변화 없음）</div>
+  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 有收音 → 이나，无收音 → 나（까지 不变化）</div>
 </div>
-<div class="reminder-box">까지 와 도 는 同时 쓰지 않는다（도까지 X）。</div>`,
+<div class="reminder-box">까지 和 도 不能同时使用（도까지 X）。</div>`,
     compareHtml: `<div class="card-title">나/이나 vs 도 vs 까지</div>
-<div class="card-body">세 보助词 含义 비교。</div>
+<div class="card-body">三个补助词的含义对比。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
   <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">나/이나</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">수량 预期 초과（惊讶）</div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">数量超出预期（惊讶）</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">세 잔이나 마셨어요</span><span style="font-size:16px;color:#5a4640">竟然喝了三杯</span></div>
   </div>
   <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">도</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">포함/첨가（也）</div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">包含/添加（也）</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">친구도 왔어요</span><span style="font-size:16px;color:#5a4640">朋友也来了</span></div>
   </div>
   <div class="tok-row" style="background:#f0f4ff;border-radius:12px;padding:12px">
     <div class="tok t-v">까지</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">극단 到达（连……都/甚至）</div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">到达极端（连……都/甚至）</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">친구까지 왔어요</span><span style="font-size:16px;color:#5a4640">连朋友都来了</span></div>
   </div>
 </div>`,
     compareLabel: '나/이나 vs 도 vs 까지',
     quickTable: {
-      title: '나/이나 收音 선택 / 까지 정리',
-      headers: ['助词', '앞 名词 条件', '기능', '例句'],
+      title: '나/이나 收音选择 / 까지 用法整理',
+      headers: ['助词', '前接名词条件', '功能', '例句'],
       rows: [
-        ['나', '收音X 수량사', '수량 초과 惊讶', '다섯 개나，두 时间나→두 시간이나（간：收音ㄴ→이나）'],
-        ['이나', '收音O 수량사', '수량 초과 惊讶', '세 잔이나，두 번이나，열 명이나'],
-        ['까지', '收音 무관', '극단 事例 强调', '친구까지，가족까지，이렇게까지'],
+        ['나', '无收音数量词', '数量超出惊讶', '다섯 개나，두 채나'],
+        ['이나', '有收音数量词', '数量超出惊讶', '세 잔이나，두 번이나，열 명이나'],
+        ['까지', '收音无关', '强调极端事例', '친구까지，가족까지，이렇게까지'],
       ],
     },
     linkedGrammarIds: ['g12'],
@@ -723,8 +729,8 @@ export const grammarCardsP20: GrammarCard[] = [
     whatItDoes: '举例列举，或表示"连最后的……都"',
     whatItDoesBody: '(이)라든가 和 (이)라든지 均用于列举若干例子，表示"……啊/……之类的"，说明不限于某一个，是其中的若干例子之一。两者意思相同，라든지 略比 라든가 更书面。\n마저 表示"连最后一个也/连剩下的也"，强调到了最后的、本不应该如此的也发生了，带有绝望或遗憾的语气，相当于"连……都……（最后的希望/剩下的也）"。',
     structureNote: '收音O 名词 + 이라든가/이라든지\n收音X 名词 + 라든가/라든지\n名词 + 마저（连最后一个也……）',
-    rulesNote: '(이)라든가/(이)라든지 뒤에는 보통 动词나 추가 列举가 이어진다。두 개 以上의 항목을 나열할 때 각 항목 뒤에 붙인다。\n마저 는 已经 나쁜 情境에서 마지막 남은 것마저 그렇게 됐다는 绝望감을 表达한다。까지 보다 否定적 语感가 강하다。',
-    scenarioNote: '"영화라든가 음악이라든가（电影啊音乐之类的）"般，列举兴趣时，\n"희망마저 消失了（连希望都消失了）"般，用于表达绝望情境。',
+    rulesNote: '(이)라든가/(이)라든지 后面通常接动词或继续列举其他项。列举两个以上项目时，加在每个项目后面。\n마저 表示在本已糟糕的情境下，连最后剩下的也变成如此的绝望感。比 까지 的否定语气更强。',
+    scenarioNote: '"영화라든가 음악이라든가（电影啊音乐之类的）"般，列举兴趣时，\n"희망마저 없어졌어요（连希望都没了）"般，用于表达绝望情境。',
     structures: [
       {
         ko: '收音X 名词 + 라든가',
@@ -768,12 +774,13 @@ export const grammarCardsP20: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '收音X 名词 + 라든가/라든지，收音O 名词 + 이라든가/이라든지', examples: '영화라든가（收音X），음악이라든가（收音ㄱ），책이라든지（收音ㄱ）' },
-      { type: 'note', text: '(이)라든가/(이)라든지 는 보통 두 개 以上 항목 列举', examples: 'A라든가 B라든가，A이라든지 B라든지 形式 나열' },
-      { type: 'compare', text: '라든가 vs 라든지：含义 동일，라든지가 약간 格式体', examples: '영화라든가（口语）vs 영화라든지（书面语/격식）' },
-      { type: 'rule', text: '名词 + 마저：마지막 남은 것마저 그렇게 됨（绝望/안타까움）', examples: '친구마저，희망마저，돈마저，건강마저' },
-      { type: 'compare', text: '마저 vs 까지：마저는 마지막 것으로 绝望 强调，까지는 극단 列举', examples: '친구까지 왔어요（中性）vs 친구마저 떠났어요（绝望）' },
-      { type: 'note', text: '마저 앞에는 "마지막 남은 것"이라는 맥락이 전제', examples: '모두 포기했고，희망마저 없어졌어요' },
+      { type: 'rule', text: '无收音名词 + 라든가/라든지，有收音名词 + 이라든가/이라든지', examples: '영화라든가（无收音），음악이라든가（收音ㄱ），책이라든지（收音ㄱ）' },
+      { type: 'note', text: '(이)라든가/(이)라든지 通常用于列举两个以上的项目', examples: 'A라든가 B라든가，A이라든지 B라든지 这样罗列' },
+      { type: 'compare', text: '라든가 vs 라든지：含义相同，라든지 略偏正式体', examples: '영화라든가（口语）vs 영화라든지（书面/正式）' },
+      { type: 'rule', text: '名词 + 마저：连最后剩下的也变成如此（绝望/惋惜）', examples: '친구마저，희망마저，돈마저，건강마저' },
+      { type: 'compare', text: '마저 vs 까지：마저 以最后一个强调绝望，까지 是极端列举', examples: '친구까지 왔어요（中性）vs 친구마저 떠났어요（绝望）' },
+      { type: 'note', text: '마저 前面以"最后剩下的东西"这一语境为前提', examples: '모두 포기했고，희망마저 없어졌어요（全都放弃了，连希望都没了）' },
+      { type: 'compare', text: '中文"连…都/也"一个词，韩语分三级：도（也，最中性）< 까지（连…都，出乎意料）< 마저（连最后仅剩的也，绝望）。按语气强弱和是否绝望来选，别一律套 마저。', examples: '친구도 왔어요（朋友也来）→ 친구까지 왔어요（连朋友都来了）→ 친구마저 떠났어요（连朋友也走了，只剩绝望）' },
     ],
     cardExamples: [
       {
@@ -828,10 +835,10 @@ export const grammarCardsP20: GrammarCard[] = [
       { icon: '😔', context: '最后的希望', ko: '마지막 기회마저 놓쳤어요.', zh: '连最后的机会都错过了。' },
     ],
     mistakes: [
-      { wrong: '음악라든가（收音O 명사에 라든가）', correct: '음악이라든가', note: '음악（收音ㄱ 있음）→ 이라든가（✓）。收音 없는 명사에만 라든가 使用：영화라든가（영화 收音X）。' },
-      { wrong: '영화이라든가（收音X 명사에 이라든가）', correct: '영화라든가', note: '영화（收音X）→ 라든가（✓）。收音 없는 명사에 이라든가 를 붙이면 틀린다。' },
-      { wrong: '친구마저도（마저 + 도 중복）', correct: '친구마저', note: '마저 뒤에 도 를 덧붙이는 것은 어색하다。마저 자체에 已经 强调의 含义가 있으므로 단독으로 쓴다。' },
-      { wrong: '마저 를 肯定적 맥락에 使用：선물마저 받았어요', correct: '선물까지 받았어요', note: '마저 는 否定적/绝望적 맥락에만 쓴다。肯定적 맥락의 "连……都"는 까지 를 써야 한다：선물까지 받았어요（✓）。' },
+      { wrong: '음악라든가（有收音名词用 라든가）', correct: '음악이라든가', note: '음악（有收音ㄱ）→ 이라든가（✓）。只有无收音的名词才用 라든가：영화라든가（영화 无收音）。' },
+      { wrong: '영화이라든가（无收音名词用 이라든가）', correct: '영화라든가', note: '영화（无收音）→ 라든가（✓）。给无收音的名词加 이라든가 是错的。' },
+      { wrong: '친구가마저 떠났어요（마저 前多了 가）', correct: '친구마저 떠났어요', note: '마저 直接接在名词后，不加主格助词 가：친구마저（✓）。마저 本身兼作助词，前面不再放 가/를。' },
+      { wrong: '在肯定语境中用 마저：선물마저 받았어요', correct: '선물까지 받았어요', note: '마저 只用于否定/绝望的语境。肯定语境的"连……都"要用 까지：선물까지 받았어요（✓）。' },
     ],
     specialQuiz: {
       type: 'fill',
@@ -839,34 +846,34 @@ export const grammarCardsP20: GrammarCard[] = [
       body: '선택지 중 맞는 것을 고르세요',
       questions: [
         {
-          prompt: '兴趣로 영화___ 음악이라든가 해요。（兴趣爱好是电影啊音乐之类的。）',
+          prompt: '취미로 영화___ 음악이라든가 해요。（兴趣爱好是电影啊音乐之类的。）',
           options: ['라든가', '까지', '마저', '이라든가'],
           answer: 0 as 0|1|2|3,
-          explanation: '영화（收音X）→ 라든가（✓）。이라든가는 收音O 명사에，마저/까지는 列举가 아니라 强调 助词。',
+          explanation: '영화（无收音）→ 라든가（✓）。이라든가 用于有收音名词；마저/까지 不是列举，而是强调助词。',
         },
         {
           prompt: '주말에는 책___ 잡지라든지 읽어요。（周末读书啊杂志之类的。）',
           options: ['마저', '라든지', '까지', '이라든지'],
           answer: 3 as 0|1|2|3,
-          explanation: '책（收音ㄱ 있음）→ 이라든지（✓）。라든지는 收音X，마저/까지는 列举 助词가 아니다。',
+          explanation: '책（有收音ㄱ）→ 이라든지（✓）。라든지 用于无收音名词；마저/까지 不是列举助词。',
         },
         {
-          prompt: '모두 잃고 희망___ 消失了。（全失去了，连希望都消失了。—绝望）',
+          prompt: '모두 잃고 희망___ 없어졌어요。（全失去了，连希望都消失了。—绝望）',
           options: ['까지', '이나', '마저', '라든가'],
           answer: 2 as 0|1|2|3,
-          explanation: '마저：마지막 남은 것마저 그렇게 됨（绝望）：희망마저（✓）。까지는 중성/肯定 극단，이나는 수량，라든가는 列举。',
+          explanation: '마저：连最后剩下的也变成如此（绝望）：희망마저（✓）。까지 是中性/肯定的极端，이나 表数量，라든가 是列举。',
         },
         {
-          prompt: '다음 중 올바른 句子은？',
-          options: ['선물마저 받았어요（肯定）', '음악이라든가 영화라든가 좋아해요', '친구마저도 왔어요', '음악라든가 좋아해요（收音O）'],
+          prompt: '다음 중 올바른 문장은？',
+          options: ['선물마저 받았어요（肯定）', '음악이라든가 영화라든가 좋아해요', '친구가마저 떠났어요', '음악라든가 좋아해요（收音O）'],
           answer: 1 as 0|1|2|3,
-          explanation: '음악이라든가（收音ㄱ→이라든가）영화라든가（收音X→라든가）（✓）。음악라든가→이라든가，마저는 否定 맥락만，마저도는 중복。',
+          explanation: '음악이라든가（收音ㄱ→이라든가）영화라든가（无收音→라든가）（✓）。음악라든가→이라든가；선물마저 받았어요 是肯定语境应用 까지；친구가마저 多了主格 가，应为 친구마저。',
         },
       ],
     },
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P14 · 第18课</div>
+    <div class="ov-hero-label">P20 · 第4课</div>
     <div class="ov-hero-title">(이)라든가，(이)라든지，마저</div>
     <div class="ov-hero-sub">……之类的 · 连最后的……都</div>
   </div>
@@ -901,9 +908,9 @@ export const grammarCardsP20: GrammarCard[] = [
   </div>
 </div>`,
     step0Html: `<div class="card-title">……之类的 / 连最后的……都</div>
-<div class="card-body">列举用라든가，绝望用마저。</div>
+<div class="card-body">列举用 라든가，绝望用 마저。</div>
 <div class="hook-box">
-  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">两种 强调 방식</div>
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">两种强调方式</div>
   <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
     <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
       <div style="font-size:9px;font-weight:800;color:#ff7fa8;margin-bottom:4px">(이)라든가/(이)라든지 — 列举</div>
@@ -916,41 +923,41 @@ export const grammarCardsP20: GrammarCard[] = [
       <div style="font-size:16px;color:#89756e;margin-top:2px">连希望都消失了。</div>
     </div>
   </div>
-  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 마저 는 必须 否定적 맥락에서만 쓴다</div>
+  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 마저 必须只用于否定语境</div>
 </div>
-<div class="reminder-box">收音O → 이라든가/이라든지，收音X → 라든가/라든지。</div>`,
+<div class="reminder-box">有收音 → 이라든가/이라든지，无收音 → 라든가/라든지。</div>`,
     compareHtml: `<div class="card-title">마저 vs 까지 / 라든가 vs 라든지</div>
-<div class="card-body">비슷한 쌍 비교。</div>
+<div class="card-body">对比相似的几组。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
   <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">마저</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">绝望/否定 맥락，마지막 것마저</div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">绝望/否定语境，连最后的也</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">친구마저 떠났어요</span><span style="font-size:16px;color:#5a4640">连朋友都走了（绝望）</span></div>
   </div>
   <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">까지</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">극단 强调，긍/否定 모두 可能</div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">极端强调，肯定/否定皆可</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">친구까지 왔어요</span><span style="font-size:16px;color:#5a4640">连朋友都来了（惊喜）</span></div>
   </div>
   <div class="tok-row" style="background:#f0f4ff;border-radius:12px;padding:12px">
     <div class="tok t-v">(이)라든가</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">口语적 列举</div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">偏口语的列举</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">영화라든가 음악이라든가</span><span style="font-size:16px;color:#5a4640">电影啊音乐之类</span></div>
   </div>
   <div class="tok-row" style="background:#f5f0ee;border-radius:12px;padding:12px">
     <div class="tok t-v">(이)라든지</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">약간 格式体 列举</div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">略偏正式的列举</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">책이라든지 잡지라든지</span><span style="font-size:16px;color:#5a4640">书啊杂志之类</span></div>
   </div>
 </div>`,
     compareLabel: '마저 vs 까지 / 라든가 vs 라든지',
     quickTable: {
-      title: '(이)라든가/(이)라든지/마저 정리',
-      headers: ['助词', '收音 条件', '기능', '例句'],
+      title: '(이)라든가/(이)라든지/마저 用法整理',
+      headers: ['助词', '收音条件', '功能', '例句'],
       rows: [
-        ['라든가/라든지', '收音X 名词', '列举（口语/격식）', '영화라든가，잡지라든지'],
-        ['이라든가/이라든지', '收音O 名词', '列举（口语/격식）', '음악이라든가，책이라든지'],
-        ['마저', '收音 무관', '绝望 극단（否定）', '친구마저，희망마저，돈마저'],
+        ['라든가/라든지', '无收音名词', '列举（口语/正式）', '영화라든가，잡지라든지'],
+        ['이라든가/이라든지', '有收音名词', '列举（口语/正式）', '음악이라든가，책이라든지'],
+        ['마저', '收音无关', '绝望极端（否定）', '친구마저，희망마저，돈마저'],
       ],
     },
     linkedGrammarIds: ['g12'],
@@ -964,8 +971,8 @@ export const grammarCardsP20: GrammarCard[] = [
     whatItDoes: '表示一面……一面……，或"也会/也有"',
     whatItDoesBody: '-는/은/ㄴ가 하면 表示两种对比或并列的情况同时存在，相当于"一方面……另一方面……/有时……有时……"，常用于描述事物的两面性。\n-기도 하다 表示在某行为或状态之外也有其他情况，相当于"也会/也有时/也是"，语气比较平和，常与 때로는、偶尔 等副词搭配。',
     structureNote: '-는/은/ㄴ가 하면：动词/形容词 冠词形 + 가 하면\n-기도 하다：动词/形容词 词干 + 기도 하다',
-    rulesNote: '-는가 하면 의 앞后句은 대조되는 내용이 온다。前句이 한 情境，后句이 반대이거나 다른 情境이다。\n-기도 하다 는 단독으로 "～하기도 해요"처럼 쓰이거나，나열 구조에서 "-기도 하고 -기도 하다"般使用。',
-    scenarioNote: '"价格便宜 하면 质量不好（一方面价格便宜，另一方面质量不好）"，\n"有些难过 하고 有些高兴 해요（既有些难过，也有些高兴）"般，用于描述复杂情感或情境。',
+    rulesNote: '-는가 하면 前后分句是相互对照的内容。前句是一种情境，后句是相反或另一种情境。\n-기도 하다 可以单独使用（如"～하기도 해요"），也可以用在罗列结构中（如"-기도 하고 -기도 하다"）。',
+    scenarioNote: '如"가격이 싼가 하면 품질이 나빠요（一方面价格便宜，另一方面质量不好）"，\n"슬프기도 하고 기쁘기도 해요（既有些难过，也有些高兴）"，用于描述复杂情感或情境。',
     structures: [
       {
         ko: '동사 -는가 하면',
@@ -979,18 +986,18 @@ export const grammarCardsP20: GrammarCard[] = [
       {
         ko: '형용사 -은/ㄴ가 하면',
         tokens: [
-          { text: '价格이', role: 'subject' },
-          { text: ' 便宜', role: 'verb' },
+          { text: '가격이', role: 'subject' },
+          { text: ' 싼가', role: 'verb' },
           { text: ' 하면', role: 'plain' },
-          { text: ' 质量이 나빠요', role: 'verb' },
+          { text: ' 품질이 나빠요', role: 'verb' },
         ],
         zh: '价格便宜，但质量不好。',
       },
       {
         ko: '词干 + 기도 하다（단독）',
         tokens: [
-          { text: '偶尔', role: 'plain' },
-          { text: ' 有些难过 해요', role: 'verb' },
+          { text: '가끔', role: 'plain' },
+          { text: ' 슬프기도 해요', role: 'verb' },
         ],
         zh: '有时也会感到悲伤。',
       },
@@ -1004,12 +1011,14 @@ export const grammarCardsP20: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '动词 + 는가 하면，形容词/动词 过去 + 은/ㄴ가 하면', examples: '웃는가 하면，便宜 하면，먹은가 하면' },
-      { type: 'note', text: '-는가 하면 앞后句은 대조 내용：A인가 하면 B（A와 B가 상반/병렬）', examples: '빠른가 하면 느리기도 해요，웃는가 하면 울기도 해요' },
-      { type: 'rule', text: '动词/形容词 词干 + 기도 하다', examples: '有些难过 해요，먹기도 해요，웃기도 해요' },
-      { type: 'note', text: '-기도 하고 -기도 하다：两种 상태나 행동을 나열', examples: '재미있기도 하고 어렵기도 해요，웃기도 하고 울기도 해요' },
-      { type: 'compare', text: '-는가 하면 vs -기도 하다：는가 하면은 대조，기도 하다는 병렬/추가', examples: '비便宜 하면 质量이 좋아요（대조）vs 비싸기도 하고 质量이 좋기도 해요（병렬）' },
-      { type: 'note', text: '-기도 하다 는 때로는，偶尔 등 빈도 부사와 经常 호응', examples: '때로는 有些难过 해요，偶尔 실수하기도 해요' },
+      { type: 'rule', text: '动词现在 + 는가 하면，形容词 + 은/ㄴ가 하면，动词过去 + 았/었는가 하면', examples: '웃는가 하면，싼가 하면，먹었는가 하면' },
+      { type: 'note', text: '-는가 하면 前后分句是对照内容：A인가 하면 B（A 与 B 相反/并列）', examples: '빠른가 하면 느리기도 해요（说快也快说慢也慢），웃는가 하면 울기도 해요（又哭又笑）' },
+      { type: 'rule', text: '动词/形容词词干 + 기도 하다', examples: '슬프기도 해요（也会难过），먹기도 해요（也会吃），웃기도 해요（也会笑）' },
+      { type: 'note', text: '-기도 하고 -기도 하다：罗列两种状态或行为', examples: '재미있기도 하고 어렵기도 해요（既有趣又难），웃기도 하고 울기도 해요（又笑又哭）' },
+      { type: 'compare', text: '-는가 하면 vs -기도 하다：는가 하면 表对照，기도 하다 表并列/补充', examples: '싼가 하면 품질이 나빠요（对照）vs 비싸기도 하고 좋기도 해요（并列）' },
+      { type: 'note', text: '-기도 하다 常与 때로는、가끔 等频率副词呼应', examples: '때로는 슬프기도 해요（有时也会难过），가끔 실수하기도 해요（偶尔也会失误）' },
+      { type: 'note', text: '别被 -는가 的疑问外形骗到。-는가 单独是疑问句尾，但 -는가 하면 是固定说法，意思是"一方面…（另一方面）/有时…有时…"，不是在提问，翻译时别加"是否"。', examples: '싼가 하면 품질이 나빠요＝一方面便宜，另一方面质量差（不是"便宜吗？"）' },
+      { type: 'compare', text: '又…又：单纯 -고 是中性并列陈述，-기도 하고…-기도 하다 强调"也有…的时候/这两种情况都存在"，语气更强。别把带感情的两面性都写成平铺的 -고。', examples: '재미있고 어려워요（有趣而且难，客观陈述）vs 재미있기도 하고 어렵기도 해요（有有趣的时候，也有难的时候）' },
     ],
     cardExamples: [
       {
@@ -1040,7 +1049,7 @@ export const grammarCardsP20: GrammarCard[] = [
           { text: ' 재미있기도 해요', role: 'verb' },
         ],
         zh: '韩语一方面很难，另一方面也很有趣。',
-        swapWords: ['复杂的가 하면', '쉬운가 하면'],
+        swapWords: ['복잡한가 하면', '쉬운가 하면'],
         swapRole: 'verb',
       },
       {
@@ -1064,10 +1073,10 @@ export const grammarCardsP20: GrammarCard[] = [
       { icon: '🍽️', context: '食物两面', ko: '맵기도 하고 맛있기도 해요.', zh: '既辣，也好吃。' },
     ],
     mistakes: [
-      { wrong: '웃은가 하면（动词 现在에 은가）', correct: '웃는가 하면', note: '动词 现在 冠词形은 -는：웃는가 하면（✓）。-은가 는 形容词나 动词 过去형에 쓴다。' },
-      { wrong: '비싸는가 하면（형용사에 -는가）', correct: '비便宜 하면', note: '形容词 冠词形은 -은/ㄴ：비싸다→비便宜 하면（✓）。형용사에 动词형 -는가 를 쓰면 틀린다。' },
-      { wrong: '먹기도하다（띄어쓰기 없음）', correct: '먹기도 하다', note: '-기도 하다 는 기도 와 하다 关系를 띄어 쓴다：먹기도 해요（✓）。붙여 쓰면 틀린 形式 보인다。' },
-      { wrong: '有些难过하고 有些高兴해요', correct: '有些难过 하고 有些高兴 해요', note: '-기도 하고 구조에서 기도 뒤와 하고 앞에 必须 띄어쓰기가 需要하다。有些难过 하고（✓）。' },
+      { wrong: '웃은가 하면（动词现在用 은가）', correct: '웃는가 하면', note: '动词现在用 -는가：웃는가 하면（✓）。-은/ㄴ가 用于形容词；动词过去用 았/었는가（먹었는가 하면）。' },
+      { wrong: '비싸는가 하면（形容词用 -는가）', correct: '비싼가 하면', note: '形容词的冠词形是 -은/ㄴ：비싸다→비싼가 하면（✓）。给形容词用动词形 -는가 是错的。' },
+      { wrong: '먹기도하다（没有分写）', correct: '먹기도 하다', note: '-기도 하다 要把 기도 和 하다 分开写：먹기도 해요（✓）。连写就是错误的形式。' },
+      { wrong: '슬프기도하고 기쁘기도해요', correct: '슬프기도 하고 기쁘기도 해요', note: '-기도 하고 结构中，기도 后面、하고 前面必须分写：슬프기도 하고（✓）。' },
     ],
     specialQuiz: {
       type: 'fill',
@@ -1078,31 +1087,31 @@ export const grammarCardsP20: GrammarCard[] = [
           prompt: '날씨가 맑___ 하면 갑자기 비가 오기도 해요。（有时晴，有时突然下雨。）',
           options: ['는가', '던가', '을가', '은가'],
           answer: 3 as 0|1|2|3,
-          explanation: '맑다（形容词）冠词形：맑은가 하면（✓）。는가는 动词 现在형，던가는 回想，을가는 不存在的形式。',
+          explanation: '맑다（形容词）的冠词形：맑은가 하면（✓）。는가 用于动词现在形，던가 表回想，을가 是不存在的形式。',
         },
         {
           prompt: '한국어가 재미있___ 하면 어렵기도 해요。（韩语一方面有趣，另一方面也难。）',
           options: ['던가', '은가', '는가', '을가'],
           answer: 2 as 0|1|2|3,
-          explanation: '재미있다（있다 系列 形容词）는 冠词形에서 例外적으로 -는 을 씁니다：재미있는가 하면（✓）。一般 형용사는 -은/ㄴ가를 쓰지만，있다/없다는 -는가 形式를 씁니다。은가/던가/을가는 이 문맥에 맞지 않습니다。',
+          explanation: '재미있다（있다 系列形容词）在冠词形上例外地用 -는：재미있는가 하면（✓）。一般形容词用 -은/ㄴ가，但 있다/없다 用 -는가 形式。은가/던가/을가 都不合此语境。',
         },
         {
           prompt: '이 음식은 맵___ 하고 짜기도 해요。（这道食物既辣又咸。）',
           options: ['기만', '기도', '은가', '는가'],
           answer: 1 as 0|1|2|3,
-          explanation: '-기도 하고 -기도 하다：맵기도 하고 짜기도 해요（✓）。는가/은가는 대조 구조，기만은 不存在的形式。',
+          explanation: '-기도 하고 -기도 하다：맵기도 하고 짜기도 해요（✓）。는가/은가 是对照结构，기만 是不存在的形式。',
         },
         {
-          prompt: '다음 중 올바른 句子은？',
-          options: ['有些难过 하고 有些高兴 해요', '웃은가 하면 또 울어요（动词 现在）', '비싸는가 하면（形容词+는가）', '먹기도하다（띄어쓰기）'],
+          prompt: '다음 중 올바른 문장은？',
+          options: ['슬프기도 하고 기쁘기도 해요', '웃은가 하면 또 울어요（动词现在）', '비싸는가 하면（形容词+는가）', '먹기도하다（分写）'],
           answer: 0 as 0|1|2|3,
-          explanation: '有些难过 하고 有些高兴 해요：올바른 나열 구조（✓）。웃은가→웃는가（动词 现在），비싸는가→비便宜（形容词），먹기도하다→먹기도 하다（띄어쓰기）。',
+          explanation: '슬프기도 하고 기쁘기도 해요：正确的罗列结构（✓）。웃은가→웃는가（动词现在），비싸는가→비싼가（形容词），먹기도하다→먹기도 하다（需分写）。',
         },
       ],
     },
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P14 · 第20课</div>
+    <div class="ov-hero-label">P20 · 第5课</div>
     <div class="ov-hero-title">-는가 하면，-기도 하다</div>
     <div class="ov-hero-sub">一面……一面…… · 也会……/也是……</div>
   </div>
@@ -1124,23 +1133,23 @@ export const grammarCardsP20: GrammarCard[] = [
     <div class="ov-block">
       <div style="display:flex;flex-direction:column;gap:8px">
         <div><span style="font-weight:700">动词 现在</span>：웃<b style="color:#ff7fa8">는가</b> 하면</div>
-        <div><span style="font-weight:700">形容词</span>：비싸<b style="color:#ff7fa8">ㄴ가</b> 하면（비便宜 하면）</div>
-        <div><span style="font-weight:700">있다/없다</span>：재미있<b style="color:#ff7fa8">는가</b> 하면（形容词이나 -는 使用）</div>
+        <div><span style="font-weight:700">形容词</span>：비싸<b style="color:#ff7fa8">ㄴ가</b> 하면（비싼가 하면）</div>
+        <div><span style="font-weight:700">있다/없다</span>：재미있<b style="color:#ff7fa8">는가</b> 하면（虽是形容词，但用 -는）</div>
       </div>
     </div>
   </div>
   <div class="ov-section">
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">别踩的坑</div></div>
     <div class="ov-block">
-      <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">비싸는가 하면（形容词+는가）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">비便宜 하면</span></div></div>
-      <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">먹기도하다（띄어쓰기）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">먹기도 하다</span></div></div>
+      <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">비싸는가 하면（形容词+는가）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">비싼가 하면</span></div></div>
+      <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">먹기도하다（分写）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">먹기도 하다</span></div></div>
     </div>
   </div>
 </div>`,
     step0Html: `<div class="card-title">一面……一面…… / 也会……</div>
 <div class="card-body">同一个人/事物有两面，或者有时还有另一种情况。</div>
 <div class="hook-box">
-  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">两种 表达 방식</div>
+  <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">两种表达方式</div>
   <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
     <div style="background:#fff0f5;border-radius:12px;padding:10px 14px">
       <div style="font-size:9px;font-weight:800;color:#ff7fa8;margin-bottom:4px">-는/은/ㄴ가 하면 — 대조</div>
@@ -1149,41 +1158,41 @@ export const grammarCardsP20: GrammarCard[] = [
     </div>
     <div style="background:#eaf8f5;border-radius:12px;padding:10px 14px">
       <div style="font-size:9px;font-weight:800;color:#5bbfb0;margin-bottom:4px">-기도 하다 — 병렬/추가</div>
-      <div style="font-size:16px;font-weight:800;color:#241917">有些难过 하고 有些高兴 해요.</div>
+      <div style="font-size:16px;font-weight:800;color:#241917">슬프기도 하고 기쁘기도 해요.</div>
       <div style="font-size:16px;color:#89756e;margin-top:2px">既悲伤，也高兴。</div>
     </div>
   </div>
-  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 形容词 + 가 하면 → 은/ㄴ가（비便宜，어려운가）</div>
+  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 形容词 + 가 하면 → 은/ㄴ가（비싼가，어려운가）</div>
 </div>
-<div class="reminder-box">-기도 하다 의 기도 와 하다 关系는 必须 띄어 쓴다。</div>`,
+<div class="reminder-box">-기도 하다 中的 기도 和 하다 必须分开写。</div>`,
     compareHtml: `<div class="card-title">-는가 하면 vs -기도 하다 / 있다 注意</div>
-<div class="card-body">类似的 구조의 차이와 있다/없다 特殊 처리。</div>
+<div class="card-body">相似结构的区别，以及 있다/없다 的特殊处理。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
   <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-는가 하면</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">앞뒤 대조，양면 描述</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">비便宜 하면 质量이 좋아요</span><span style="font-size:16px;color:#5a4640">贵是贵，但质量好</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">前后对照，描述两面</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">비싼가 하면 품질이 좋아요</span><span style="font-size:16px;color:#5a4640">贵是贵，但质量好</span></div>
   </div>
   <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-기도 하다</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">추가/나열，여러 상태 병렬</div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">补充/罗列，多种状态并列</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">맵기도 하고 달기도 해요</span><span style="font-size:16px;color:#5a4640">既辣又甜</span></div>
   </div>
   <div class="tok-row" style="background:#f0f4ff;border-radius:12px;padding:12px">
     <div class="tok t-v">있다/없다 + 는가</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">있다/없다는 形容词이나 -는가 使用</div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">있다/없다 虽是形容词但用 -는가</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">재미있는가 하면</span><span style="font-size:16px;color:#5a4640">一方面有趣</span></div>
   </div>
 </div>`,
     compareLabel: '-는가 하면 vs -기도 하다',
     quickTable: {
-      title: '-는/은/ㄴ가 하면 冠词形 선택',
-      headers: ['품사', '冠词形', '例句'],
+      title: '-는/은/ㄴ가 하면 冠词形选择',
+      headers: ['词性', '冠词形', '例句'],
       rows: [
-        ['动词 现在', '-는가', '웃는가 하면，먹는가 하면'],
-        ['形容词', '-은/ㄴ가', '비便宜 하면，어려운가 하면，좋은가 하면'],
+        ['动词现在', '-는가', '웃는가 하면，먹는가 하면'],
+        ['形容词', '-은/ㄴ가', '비싼가 하면，어려운가 하면，좋은가 하면'],
         ['있다/없다', '-는가', '재미있는가 하면，없는가 하면'],
-        ['-기도 하다', '词干 + 기도', '먹기도 해요，有些难过 해요'],
+        ['-기도 하다', '词干 + 기도', '먹기도 해요，슬프기도 해요'],
       ],
     },
     linkedGrammarIds: [],
@@ -1194,8 +1203,8 @@ export const grammarCardsP20: GrammarCard[] = [
     isPractice: true,
     partNumber: 20,
     lessonNumber: 6,
-    title: 'P16 综合练习',
-    whatItDoes: 'P14 第16～20课 综합练习',
+    title: 'P20 综合练习',
+    whatItDoes: 'P20 第1～5课 综合练习',
     whatItDoesBody: '',
     structureNote: '',
     rulesNote: '',
@@ -1211,51 +1220,51 @@ export const grammarCardsP20: GrammarCard[] = [
     linkedGrammarIds: [],
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P14 · 综合练习②</div>
-    <div class="ov-hero-title">第16～20课 복습</div>
-    <div class="ov-hero-sub">비롯한/비롯해서/만 해도 · 개나/까지 · (이)라든가/마저 · 체하다/척하다 · -는가 하면/-기도 하다</div>
+    <div class="ov-hero-label">P20 · 综合练习</div>
+    <div class="ov-hero-title">第1～5课 복습</div>
+    <div class="ov-hero-sub">에 대해/에 관해/에 관한 · 비롯한/비롯해서/만 해도 · 개나/까지 · (이)라든가/마저 · -는가 하면/-기도 하다</div>
   </div>
 </div>`,
     specialQuiz: {
       type: 'fill',
-      title: 'P16 综合练习',
+      title: 'P20 综合练习',
       body: '선택지 중 맞는 것을 고르세요',
       questions: [
         {
           prompt: 'BTS___ 비롯한 K-POP 그룹들이 인기예요。（以BTS为首的K-POP团体们很受欢迎。）',
           options: ['를', '이', '가', '을'],
           answer: 0 as 0|1|2|3,
-          explanation: 'BTS（收音X）→ 를 비롯한（✓）。收音O면 을 비롯한。이/가는 주격 助词。',
+          explanation: 'BTS（无收音）→ 를 비롯한（✓）。有收音用 을 비롯한。이/가 是主格助词。',
         },
         {
           prompt: '오늘 커피를 세 잔___ 마셨어요。（今天竟然喝了三杯咖啡。）',
           options: ['나', '이나', '마저', '까지'],
           answer: 1 as 0|1|2|3,
-          explanation: '잔（收音ㄴ 있음）→ 이나：세 잔이나（✓）。收音X면 나，까지는 극단，마저는 绝望。',
+          explanation: '잔（有收音ㄴ）→ 이나：세 잔이나（✓）。无收音用 나；까지 表极端，마저 表绝望。',
         },
         {
-          prompt: '모두 잃고 희망___ 消失了。（连希望都消失了。—绝望）',
+          prompt: '모두 잃고 희망___ 없어졌어요。（连希望都消失了。—绝望）',
           options: ['까지', '라든가', '마저', '이나'],
           answer: 2 as 0|1|2|3,
-          explanation: '마저：绝望적 맥락에서 마지막 것마저：희망마저（✓）。까지는 중성/肯定，이나는 수량，라든가는 列举。',
+          explanation: '마저：在绝望语境中连最后的也如此：희망마저（✓）。까지 是中性/肯定，이나 表数量，라든가 是列举。',
         },
         {
-          prompt: '그 사람은 나를 보고도 모르___ 척했어요。（那个人明明看到我，却假装不认识。—现在）',
-          options: ['을', 'ㄴ', '은', '는'],
-          answer: 3 as 0|1|2|3,
-          explanation: '모르다（动词）现在 冠词形：모르는 척했어요（✓）。过去라면 모른 척，은/ㄴ은 形容词나 过去형，을은 将来형。',
+          prompt: '한국 역사___ 책을 읽었어요。（读了关于韩国历史的书。）',
+          options: ['에 대해', '에 관한', '에 대해서', '에 관해'],
+          answer: 1 as 0|1|2|3,
+          explanation: '修饰名词（책）用冠词形 에 관한：역사에 관한 책（✓）。에 대해/에 관해/에 대해서 用在动词前，不能直接修饰名词。',
         },
         {
           prompt: '한국어는 어려운가 하면 재미있___ 해요。（韩语一方面难，另一方面也有趣。）',
           options: ['기도', '기가', '는가', '기만'],
           answer: 0 as 0|1|2|3,
-          explanation: '-기도 하다：추가/나열：재미있기도 해요（✓）。는가는 대조 구조 앞，기만/기가는 不存在的形式。',
+          explanation: '-기도 하다：补充/罗列：재미있기도 해요（✓）。는가 用在对照结构前，기만/기가 是不存在的形式。',
         },
         {
-          prompt: '兴趣로 영화___ 음악이라든가 해요。（兴趣爱好是电影啊音乐之类的。）',
+          prompt: '취미로 영화___ 음악이라든가 해요。（兴趣爱好是电影啊音乐之类的。）',
           options: ['라든가', '까지', '이라든가', '마저'],
           answer: 0 as 0|1|2|3,
-          explanation: '영화（收音X）→ 라든가（✓）。이라든가는 收音O 명사에，마저는 绝望，까지는 극단。',
+          explanation: '영화（无收音）→ 라든가（✓）。이라든가 用于有收音名词；마저 表绝望，까지 表极端。',
         },
       ],
     },

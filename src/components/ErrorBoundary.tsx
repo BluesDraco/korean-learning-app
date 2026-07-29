@@ -2,6 +2,7 @@
 
 import { Component } from 'react';
 import { RotateCcw, Bug } from 'lucide-react';
+import { getLang, t } from '@/lib/i18n';
 
 interface Props {
   children: React.ReactNode;
@@ -25,6 +26,7 @@ export class ErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.error) {
       if (this.props.fallback) return this.props.fallback;
+      const lang = getLang();
       return (
         <div style={{
           display: 'flex',
@@ -34,15 +36,15 @@ export class ErrorBoundary extends Component<Props, State> {
           minHeight: '100vh',
           padding: '40px 24px',
           textAlign: 'center',
-          background: 'var(--color-bg, #fffbf7)',
+          background: 'var(--color-surface-1)',
           color: 'var(--color-ink-2, #89756e)',
         }}>
           <Bug size={48} strokeWidth={1.5} style={{ marginBottom: 20, opacity: 0.4 }} />
           <h1 style={{ fontSize: 18, fontWeight: 700, marginBottom: 8, color: 'var(--color-ink-1, #241917)' }}>
-            出了点小问题
+            {t('errboundary.title', lang)}
           </h1>
           <p style={{ fontSize: 13, marginBottom: 24, maxWidth: 320, lineHeight: 1.6 }}>
-            页面加载时遇到了意外错误，请尝试刷新页面。
+            {t('errboundary.desc', lang)}
           </p>
           <button
             onClick={() => {
@@ -64,7 +66,7 @@ export class ErrorBoundary extends Component<Props, State> {
             }}
           >
             <RotateCcw size={14} />
-            刷新页面
+            {t('errboundary.refresh', lang)}
           </button>
         </div>
       );

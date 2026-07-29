@@ -40,7 +40,23 @@ const _seen = new Set<string>();
 export const allEntries: WordEntry[] = [];
 // Full id→entry map across ALL sources (including deduped-out entries) for fallback lookups
 export const allEntriesById = new Map<string, WordEntry>();
-for (const e of [...topikEntries, ...topikNewEntries1a, ...topikNewEntries1b, ...topikNewEntries1c, ...topikNewEntries1d, ...topikNewEntries1e, ...topikNewEntries1f, ...topikNewEntries2, ...topikNewEntries2b, ...topikNewEntries2c, ...topikNewEntries2d, ...topikNewEntries3, ...topikNewEntries3b, ...topikNewEntries4, ...topikNewEntries4b, ...topikNewEntries4c, ...topikNewEntries5, ...topikNewEntries5b, ...topikNewEntries5c, ...topikNewEntries5d, ...topikNewEntries6, ...topikNewEntries6b, ...topikNewEntries6c, ...topikNewEntries6d, ...topikTextbook1Entries, ...topikTextbook2Entries, ...topikTextbook3Entries, ...topikTextbook4Entries, ...topikTextbook5Entries, ...topikTextbook6Entries, ...vocabularyEntries, ...intermediateEntries, ...advancedEntries]) {
+// TOPIK 官方/教材词表：韩语原文 → level。主题词包和字典页只显示命中此表的等级。
+// 权威表本体见 authoritative-levels.generated.ts（脚本从 entries-topik*.ts + textbook 生成）。
+export { AUTHORITATIVE_TOPIK_LEVELS as authoritativeLevelByKorean } from './authoritative-levels.generated';
+
+const authoritativeSources = [
+  topikEntries,
+  topikNewEntries1a, topikNewEntries1b, topikNewEntries1c, topikNewEntries1d, topikNewEntries1e, topikNewEntries1f,
+  topikNewEntries2, topikNewEntries2b, topikNewEntries2c, topikNewEntries2d,
+  topikNewEntries3, topikNewEntries3b,
+  topikNewEntries4, topikNewEntries4b, topikNewEntries4c,
+  topikNewEntries5, topikNewEntries5b, topikNewEntries5c, topikNewEntries5d,
+  topikNewEntries6, topikNewEntries6b, topikNewEntries6c, topikNewEntries6d,
+  topikTextbook1Entries, topikTextbook2Entries, topikTextbook3Entries,
+  topikTextbook4Entries, topikTextbook5Entries, topikTextbook6Entries,
+];
+
+for (const e of [...authoritativeSources.flat(), ...vocabularyEntries, ...intermediateEntries, ...advancedEntries]) {
 
   allEntriesById.set(e.id, e);
   if (!_seen.has(e.korean)) {

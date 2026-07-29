@@ -1,0 +1,57 @@
+# 兔莉的韩语日记 (Tori Korean)
+
+> 面向中文用户的在线韩语学习平台，覆盖 40音发音、语法系统课、TOPIK 备考、每日韩语日记跟读、分级阅读、韩国文化专题。
+
+Homepage: https://torikorean.com
+Sitemap: https://torikorean.com/sitemap.xml
+Language: Simplified Chinese (zh-CN), teaching Korean (ko)
+License: 内容仅供学习交流使用，转载请注明出处
+
+## About
+
+兔莉的韩语日记是一个为中文母语者设计的韩语学习网站，从零基础到 TOPIK 高级备考全流程覆盖。教学内容由人工创作，配真人韩语录音（非机器合成）。核心特色：把每一课都设计成"跟着兔莉写日记"的沉浸式场景，30 天日记剧本 + 语法/词汇/发音闭环。
+
+## Modules
+
+- [40 音发音](https://torikorean.com/phonetics): 韩语字母表，元音 21 个、辅音 19 个、收音 27 种。渐进式解锁 + 真人录音 + 拼读练习 + 7 大连读规则。
+- [语法系统课](https://torikorean.com/grammar): P1–P8 八部分，从最基础的助词/语尾到 TOPIK II 高级句型。每课含规则卡、例句、易错点、句型练习。
+- [TOPIK 备考](https://torikorean.com/topik): TOPIK I / II 词汇表 + 语法点 + 实战模拟卷（自主命题，非真题搬运）。
+- [每日韩语日记](https://torikorean.com/diary): 30 天场景化日记，Day 1–30 完整剧本（首尔留学生生活），每天含跟读、语法、词汇、场景对话、雷区提示。
+- [分级阅读](https://torikorean.com/reading): 40 篇分级韩语文章（A1×10, A2×10, B1×5, B2×5, C1×5, C2×5），CEFR 六级覆盖。
+- [韩国文化专题](https://torikorean.com/korea): 15 篇深度专题，分为文化 5 篇（便利店/咖啡/礼仪/节日/韩剧）、美食 5 篇（烤肉/街头小吃/汤/点餐/辣）、旅行 5 篇（街区/地铁/禁忌/景点/购物）。
+- [词汇 & 主题词包](https://torikorean.com/vocabulary): 23 个主题词包（每包 40 词 + 3 对话 + 5 雷区 + 5 分组 + 语法角色），韩汉/汉韩查词。
+- [口语 · 听写 · 打字](https://torikorean.com/speaking): 口语练习(看中文说韩语、跟读、段落复述)、听写练习、韩文键盘键位训练。
+- [K-POP 跟唱](https://torikorean.com/tori): 57 首韩流歌曲逐句时间轴歌词跟唱。
+
+## Learning Paths
+
+### 零基础入门（0–3 个月）
+1. 先学 40 音: /phonetics（元音 → 辅音 → 收音，配真人录音）
+2. 打好语法地基: /grammar 从 P1 开始（助词 이/가, 은/는, 을/를）
+3. 开始日记: /diary/A1/1（Day 1 起，每天 15–20 分钟）
+4. 主题词包扩词汇: /vocabulary（家庭 / 食物 / 交通 / 校园）
+
+### TOPIK 备考（3–12 个月）
+1. TOPIK I 词表 + 语法: /topik
+2. 实战模拟: /topik 内的 E01 系列（听力 30 题 + 阅读 40 题）
+3. 分级阅读拉阅读速度: /reading（B1 → B2 → C1）
+4. 口语: /speaking 开口说韩语
+
+### 兴趣驱动（韩剧 / K-POP）
+- 看懂韩剧: /korea/drama
+- K-POP 跟唱: /tori
+
+## Key Facts
+
+- 15 篇韩国文化专题深度长文，每篇约 10 分钟阅读，配韩语核心表达
+- 40 篇分级阅读文章，CEFR A1–C2 全覆盖
+- 30 天日记剧本，共约 90 个子任务页（每天 3 个 sub quest）
+- 8 大部分语法系统课，累计数百个语法点，含大量例句和易错点
+- 韩语 40 音真人录音（不使用 TTS 合成），已注册于 audioRegistry
+- 词汇板块提供韩汉/汉韩双向查词
+- PWA 支持，可安装到手机主屏幕，离线学习基础模块
+
+## Contact
+
+站长: 兔莉 (Tori)
+Site: https://torikorean.com

@@ -1,266 +1,273 @@
 import type { ToriDay } from '@/types/tori-diary';
 
 /**
- * Day 28 · 过去时 · 韩语日记的开始
+ * Day 28 · 偶像签售会 · 对本命说真心话
  *
- * 剧情：周日上午下了一整天雨。兔莉一个人在宿舍，
- * 翻出妈妈塞给她的日记本——
- * 28 天没动过的牛皮封面，现在沉甸甸的。
- * 她坐到书桌前，第一次试着用韩语写日记。
- * 火鹤老师上周讲过："오늘은 갔어요. 먹었어요. 만났어요. 즐거웠어요."
- * 过去时——韩语真正讲故事的钥匙。
+ * 剧情：Tori一个人去偶像签售会。排队时手里攥着勇气胡萝卜。
+ * 轮到她时偶像问名字——她用28天的韩语说了一段话。
+ * 偶像在专辑上写："토리 씨, 용기를 내요."（Tori，鼓起勇气。）
  *
- * 学习目标：~았/었어요 / 过去时三规则 / 写日记的开始
- * 韩语自审：korean skill PASS (과거형 활용 + 일기체)
+ * 学习目标：签售会实战对话 / 感情表达 / 합쇼체+해요体混用
+ * 语料层级：해요体（对偶像礼貌但真诚）
+ * 韩语自审：korean skill PASS（자연성/문법/조사 三关）
  */
 export const day28: ToriDay = {
   level: 'beginner',
   day: 28,
-  phase: 'expression',
-  title: '过去时 · 韩语日记的开始',
-  subtitle: '日记本翻开第一页',
-  isCheckpoint: null,
+  phase: 'mastery',
+  title: '偶像签售会',
+  subtitle: '心跳加速，但她说出了最完美的韩语',
+  heroImageUrl: '/images/diary/day-28-hero.jpg',
   estimatedMin: 14,
 
   opening: {
-    date: '10월 1일 일요일 오후',
-    weather: '兽尔 · 雨',
+    date: '9월 28일 · 토요일 오후',
+    weather: '兽尔 · 晴朗',
     toriPose: 'shy',
-    diaryText: `10月 1日，周日下午 2 点。
+    diaryText: `9月28日，周六下午。
 
-雨从早上一直下到现在。
-窗外灰蒙蒙，
-玻璃上水珠像在赛跑。
+签售会。
+一个人来的。Junho说他抢不到号。
 
-我一个人在宿舍。
-Junho 回家见父母，
-Minji 在图书馆，
-Haru 加班。
+排队的时候手心全是汗。
+我把勇气胡萝卜从包里掏出来，攥在手里。
 
-我从行李箱底翻出来——
-妈妈塞给我的日记本。
-牛皮封面，
-"여행 일기" (旅行日记) 烫金。
-28 天没动过，
-现在沉甸甸的。
+前面还有三个人。两个人。一个人。
 
-我坐到书桌前。
-打开第一页。
-胡萝卜在桌角看着我。
+轮到我了。
 
-火鹤老师上周讲过：
-"동사 + 았/었어요 = 过去时."
-（动词 + 았/었어요 = 过去时。）
+偶像抬起头，笑着问：
+"이름이 뭐예요?"
 
-가다 → **갔어요** (去了)
-먹다 → **먹었어요** (吃了)
-하다 → **했어요** (做了)
-즐겁다 → **즐거웠어요** (开心)
+我深呼吸——
+妈妈，胡萝卜，28天。
+所有的练习，都是为了这一刻。
 
-笔尖落在纸上。
-我开始写：
+"토리예요. 중국에서 왔어요."
 
-"10월 1일 일요일.
-오늘은 비가 왔어요.
-어제 친구들이랑 삼겹살을 먹었어요.
-민지가 한턱 냈어요.
-정말 즐거웠어요.
-
-28일 전, 저는 비행기에서 떨었어요.
-하지만 지금은—
-한국이 좋아요."
-
-我合上日记本，
-胡萝卜在桌角点头。
-
-写完一页韩文日记的那一刻，
-我突然懂了——
-过去时不只是语法，
-是把日子留下来的钥匙。`,
+我的声音在抖。但每一个字，都说对了。`,
   },
 
   words: [
     {
       id: 'd28-w1',
-      korean: '갔어요',
-      hangul: 'ga-sseo-yo',
-      zh: '去了',
-      pos: '动词',
-      example: { ko: '학교에 갔어요.', zh: '去学校了。' },
-      tip: '가다 → 가 + 았어요 = 갔어요 (缩写)。最高频过去时',
+      korean: '사인',
+      hangul: 'sa-in',
+      zh: '签名',
+      pos: '名词',
+      example: { ko: '사인 해 주세요!', zh: '请签名！' },
+      tip: '英语 sign。사인회 = 签售会；사인을 받다 = 拿到签名',
     },
     {
       id: 'd28-w2',
-      korean: '먹었어요',
-      hangul: 'meo-geo-sseo-yo',
-      zh: '吃了',
-      pos: '动词',
-      example: { ko: '삼겹살을 먹었어요.', zh: '吃了五花肉。' },
-      tip: '먹다 → 먹 + 었어요 = 먹었어요。词干元음 ㅓ → 었',
+      korean: '앨범',
+      hangul: 'ael-beom',
+      zh: '专辑',
+      pos: '名词',
+      example: { ko: '새 앨범 정말 좋아요.', zh: '新专辑真好。' },
+      tip: '英语 album。앨범을 사다 = 买专辑',
     },
     {
       id: 'd28-w3',
-      korean: '했어요',
-      hangul: 'hae-sseo-yo',
-      zh: '做了',
-      pos: '动词',
-      example: { ko: '공부했어요.', zh: '学了。' },
-      tip: '하다 → 했어요. 万能"过去时하다"。공부했어요/사랑했어요/일했어요',
+      korean: '응원해요',
+      hangul: 'eung-won-hae-yo',
+      zh: '我支持你',
+      pos: '表达',
+      example: { ko: '항상 응원해요.', zh: '一直支持你。' },
+      tip: '응원하다(应援/支持) + 해요体。对偶像说的标准句',
     },
     {
       id: 'd28-w4',
-      korean: '왔어요',
-      hangul: 'wa-sseo-yo',
-      zh: '来了 / (雨)下了',
-      pos: '动词',
-      example: { ko: '비가 왔어요.', zh: '下雨了。' },
-      tip: '오다 → 오 + 았어요 → 왔어요 (缩写)。下雨用 비가 와요 / 왔어요',
+      korean: '감동',
+      hangul: 'gam-dong',
+      zh: '感动',
+      pos: '名词',
+      example: { ko: '진짜 감동이에요.', zh: '真的好感动。' },
+      tip: '감(感) + 동(动)。감동받다 = 被感动；감동을 주다 = 给予感动',
     },
     {
       id: 'd28-w5',
-      korean: '즐거웠어요',
-      hangul: 'jeul-geo-wo-sseo-yo',
-      zh: '愉快了 / 开心',
-      pos: '形容词',
-      example: { ko: '정말 즐거웠어요.', zh: '真的很开心。' },
-      tip: '즐겁다 (ㅂ 不规则) → 즐거웠어요. 日记结尾必备',
+      korean: '떨려요',
+      hangul: 'tteol-lyeo-yo',
+      zh: '紧张（发抖）',
+      pos: '动词',
+      example: { ko: '심장이 떨려요.', zh: '心脏在发抖（紧张得心慌）。' },
+      tip: '떨리다(发抖/紧张) → 떨려요。피동형(被动)：떨다→떨리다',
     },
     {
       id: 'd28-w6',
-      korean: '떨었어요',
-      hangul: 'tteo-reo-sseo-yo',
-      zh: '颤抖了 / 紧张',
-      pos: '动词',
-      example: { ko: '비행기에서 떨었어요.', zh: '在飞机上紧张了。' },
-      tip: '떨다 → 떨었어요. 描述心情：Day 2 飞机上 兔莉就是这种感觉',
+      korean: '진심',
+      hangul: 'jin-sim',
+      zh: '真心',
+      pos: '名词',
+      example: { ko: '진심으로 좋아해요.', zh: '真心喜欢。' },
+      tip: '진(真) + 심(心)。진심으로 = 真心地。으로 因为 심 有收音ㅁ',
     },
   ],
 
   dialogue: {
-    scene: '兔莉的书桌 · 第一篇韩文日记',
+    scene: '签售会·面对偶像',
     setting: {
-      time: '周日下午 2 点',
-      place: '宿舍 301',
-      npc: '胡萝卜 (内心独白)',
+      time: '周六下午',
+      place: '签售会现场',
+      npc: '偶像',
     },
     lines: [
       {
+        speaker: 'npc',
+        npcName: '偶像',
+        ko: '이름이 뭐예요?',
+        hangul: 'i-reu-mi mwo-ye-yo?',
+        zh: '你叫什么名字？',
+        practice: 'listen',
+      },
+      {
         speaker: 'tori',
-        ko: '오늘은 비가 왔어요.',
-        hangul: 'o-neul-eun bi-ga wa-sseo-yo',
-        zh: '今天下雨了。',
+        ko: '토리예요. 중국에서 왔어요.',
+        hangul: 'to-ri-ye-yo. jung-gu-ge-seo wa-sseo-yo.',
+        zh: '我叫Tori。从中国来的。',
+        practice: 'shadow',
+      },
+      {
+        speaker: 'npc',
+        npcName: '偶像',
+        ko: '한국어 잘하시네요!',
+        hangul: 'han-gu-geo jal-ha-si-ne-yo!',
+        zh: '韩语说得好啊！',
+        practice: 'listen',
+      },
+      {
+        speaker: 'tori',
+        ko: '아니요, 아직 많이 부족해요. 근데 진짜 좋아해요.',
+        hangul: 'a-ni-yo, a-jik ma-ni bu-jo-kae-yo. geun-de jin-jja jo-a-hae-yo.',
+        zh: '不，还差很多。但是真的好喜欢。',
         practice: 'shadow',
       },
       {
         speaker: 'tori',
-        ko: '어제 친구들이랑 삼겹살을 먹었어요.',
-        hangul: 'eo-je chin-gu-deul-i-rang sam-gyeop-sal-eul meo-geo-sseo-yo',
-        zh: '昨天和朋友们吃了五花肉。',
-        practice: 'shadow',
+        isInnerVoice: true,
+        ko: '떨려… 당근 잡아… 할 수 있어…',
+        hangul: 'tteol-lyeo… dang-geun ja-ba… hal su i-sseo…',
+        zh: '好紧张……抓住胡萝卜……可以的……',
+        practice: 'listen',
       },
       {
         speaker: 'tori',
-        ko: '민지가 한턱 냈어요.',
-        hangul: 'min-ji-ga han-teok nae-sseo-yo',
-        zh: 'Minji 请了客。',
+        ko: '응원해요. 건강하세요.',
+        hangul: 'eung-won-hae-yo. geon-gang-ha-se-yo.',
+        zh: '我支持你。请保重。',
         practice: 'shadow',
       },
       {
-        speaker: 'tori',
-        ko: '정말 즐거웠어요.',
-        hangul: 'jeong-mal jeul-geo-wo-sseo-yo',
-        zh: '真的很开心。',
-        practice: 'shadow',
+        speaker: 'npc',
+        npcName: '偶像',
+        ko: '토리 씨, 용기를 내요.',
+        hangul: 'to-ri ssi, yong-gi-reul nae-yo.',
+        zh: 'Tori，鼓起勇气。',
+        practice: 'listen',
       },
       {
-        speaker: 'tori',
+        speaker: 'you',
         ko: '?',
         hangul: '',
-        zh: '28 天前在飞机上的感受，用过去时怎么写？',
+        zh: '偶像在专辑上写了话递给Tori。Tori接过专辑，应该怎么说？',
         practice: 'pick',
         choices: [
-          { ko: '저는 비행기에서 떨었어요.', zh: '我在飞机上紧张了。', correct: true },
-          { ko: '저는 비행기에서 떨어요.', zh: '我在飞机上紧张。(现在时)', correct: false },
-          { ko: '저는 비행기에서 떨릴 거예요.', zh: '我会在飞机上紧张。(未来时)', correct: false },
+          { ko: '진짜 감사합니다. 평생 잊지 못할 거예요.', zh: '真的感谢。一辈子不会忘。', correct: true },
+          { ko: '앨범 얼마예요?', zh: '专辑多少钱？', correct: false },
+          { ko: '다음에 또 올게요.', zh: '下次再来。', correct: false },
         ],
       },
     ],
   },
 
   grammar: {
-    title: '韩语日记的钥匙 · 동사·형용사 + 았/었어요',
-    pattern: '동사 어간 + 았 / 었 / 했 + 어요',
-    whenToUse: '写日记、讲故事、报告昨天发生的事。今天是关卡 5 (写信) 前最重要的语法。',
+    title: '签售会 5 句 · 팬사인회 실전',
+    pattern: '자기소개 → 칭찬 응답 → 진심 고백 → 응원 → 감사',
+    whenToUse: '韩国签售会（팬사인회）30秒内要跟偶像说完所有想说的话。Day 28 Tori用了5步：自我介绍→谦虚回应→真心表白→应援→感谢。每一步都有对应的固定表达。',
     rules: [
-      '① 词干末元音 **ㅏ / ㅗ** → **았어요**: 가다 → **갔어요**, 오다 → **왔어요** (缩写)',
-      '② 其他元음 → **었어요**: 먹다 → **먹었어요**, 마시다 → **마셨어요**',
-      '③ **하다** → **했어요**: 공부하다 → **공부했어요**, 사랑하다 → **사랑했어요**',
-      'ㅂ 不规则：즐겁다 → **즐거웠어요** / 어렵다 → **어려웠어요** (ㅂ→우)',
+      '**자기소개 自我介绍**："토리예요. 중국에서 왔어요." 简短自我介绍。이름 + 예요/이에요 + 出身',
+      '**칭찬 응답 谦虚回应**：偶像夸你韩语好 → "아니요, 아직 많이 부족해요." 韩式谦虚回应。부족하다 = 不够/不足',
+      '**진심 고백 真心表白**："진짜 좋아해요." / "진심으로 응원해요." 表达真心喜欢/支持。근데(但是) 转折后说真心话',
+      '**응원 支持**："응원해요. 건강하세요." 支持+祝健康。건강하세요 = 해요体命令（请保重）',
+      '**감사 感谢**："진짜 감사합니다. 평생 잊지 못할 거예요." 합쇼체最高感谢 + 잊지 못하다(无法忘记)',
+      '**건강하세요 用法**：건강하다(健康) + 세요(尊敬命令) = 请保重/保持健康。分别时的祝福语',
+      '**평생 잊지 못할 거예요**：평생(一辈子) + 잊다(忘) + 지 못하다(无法·本 Day 首次学，Day 30 会复习) + ㄹ 거예요(将来) = 一辈子不会忘',
     ],
     examples: [
-      { ko: '학교에 갔어요.', zh: '去了学校。', highlight: '갔어요' },
-      { ko: '삼겹살을 먹었어요.', zh: '吃了五花肉。', highlight: '먹었어요' },
-      { ko: '공부했어요.', zh: '学了。', highlight: '공부했어요' },
-      { ko: '정말 즐거웠어요.', zh: '真的很开心。', highlight: '즐거웠어요' },
+      { ko: '토리예요. 중국에서 왔어요.', zh: '我叫Tori。从中国来的。', highlight: '예요 ... 에서', note: '토리 无收音→예요；중국 有收音ㄱ→에서(从)。30秒自我介绍精华' },
+      { ko: '아직 많이 부족해요.', zh: '还差很多。', highlight: '부족해요', note: '부족하다(不足) → 해요。韩式谦虚：被夸时先否认再说真心话' },
+      { ko: '진심으로 좋아해요.', zh: '真心喜欢你。', highlight: '진심으로', note: '진심(真心) 有收音ㅁ → 으로（手段/方式）。对偶像表白的最高表达' },
+      { ko: '응원해요. 건강하세요.', zh: '支持你。请保重。', highlight: '건강하세요', note: '건강하다 + 세요(尊敬命令)。签售会结束时的标准祝福' },
+      { ko: '평생 잊지 못할 거예요.', zh: '一辈子不会忘。', highlight: '잊지 못할', note: '잊다(忘) + 지 못하다(无法) + ㄹ 거예요(将来推测)。最强感动表达' },
     ],
     pitfall:
-      '韩语过去时和해요体 (Day 22) 的规则**一样**——ㅏ/ㅗ 用 았, 其他用 었, 하다 变 했。只是把「-아/어요」换成「-았/었어요」。掌握了해요体就掌握了过去时。',
+      '① 부족해요 不是"坏"的意思，是"不够/不足"——韩式谦虚用语，不是自我贬低。② 건강하세요 只对平辈或年长者用（祝福）。对年幼者说 건강해 就行。③ 평생 잊지 못할 거예요 中的 못 不能换成 안：안 잊을 거예요 = 不打算忘（意志）；못 잊을 거예요 = 无法忘（能力）。签售会要用 못（太感动忘不了）。',
   },
 
   output: [
     {
       id: 'd28-o1',
       kind: 'compose',
-      zhHint: '昨天和朋友们吃了五花肉。',
-      tokens: ['어제', '친구들이랑', '삼겹살을', '먹었어요', '먹어요', '있어요', '학교에'],
-      composeAnswer: ['어제', '친구들이랑', '삼겹살을', '먹었어요'],
-      successMsg: '✓ 你的第一行韩文日记落在了牛皮封面笔记本里。',
+      zhHint: '真的感谢。一辈子不会忘。',
+      tokens: ['진짜', '감사합니다', '평생', '잊지', '못할', '거예요', '좋아해요'],
+      composeAnswer: ['진짜', '감사합니다', '평생', '잊지', '못할', '거예요'],
+      successMsg: '진짜 감사합니다. 평생 잊지 못할 거예요. — 偶像看着Tori笑了。',
     },
     {
       id: 'd28-o2',
-      kind: 'listen-choice',
-      audioKo: '오늘은 비가 왔어요.',
-      successMsg: '✓ 「今天下雨了」。「오다」→「왔어요」(오 + 았어요 缩写)。「비가 와요」是现在时。',
-      choices: [
-        { zh: '今天下雨了。', correct: true },
-        { zh: '今天下雨。(现在时)', correct: false },
-        { zh: '今天来了。', correct: false },
-        { zh: '今天回家了。', correct: false },
-      ],
+      kind: 'compose',
+      zhHint: '我支持你。请保重。',
+      tokens: ['응원해요', '건강하세요', '사랑해요', '감사해요', '안녕하세요'],
+      composeAnswer: ['응원해요', '건강하세요'],
+      successMsg: '응원해요. 건강하세요. — 签售会最温暖的两句话。',
     },
     {
       id: 'd28-o3',
-      kind: 'zh-to-ko',
-      zhPrompt: '真的很开心。',
-      successMsg: '"즐거웠어요" — 「즐겁다」是 ㅂ 不规则：ㅂ→우 + 었어요 = 즐거웠어요。',
+      kind: 'listen-choice',
+      audioKo: '토리 씨, 용기를 내요.',
+      successMsg: '✓ 용기를 내다 = 鼓起勇气。偶像写给Tori的话——和Day 1妈妈的胡萝卜呼应。',
       choices: [
-        { ko: '정말 즐거웠어요.', correct: true },
-        { ko: '정말 즐겁었어요.', correct: false },
-        { ko: '정말 즐거워요.', correct: false },
-        { ko: '정말 즐겁어요.', correct: false },
+        { zh: 'Tori，鼓起勇气。', correct: true },
+        { zh: 'Tori，再见。', correct: false },
+        { zh: 'Tori，你好。', correct: false },
+        { zh: 'Tori，谢谢。', correct: false },
       ],
     },
     {
       id: 'd28-o4',
-      kind: 'particle-error',
-      zhHint: '我学了韩语。',
-      successMsg: '「공부하다」→「공부했어요」(하다 → 했어요)。「한국어」(无받침) → 「를」宾语。',
+      kind: 'zh-to-ko',
+      zhPrompt: '还差很多。但是真的好喜欢。',
+      successMsg: '"아직 많이 부족해요. 근데 진짜 좋아해요." — 谦虚+真心，完美。',
       choices: [
-        { ko: '한국어를 공부했어요.', correct: true },
-        { ko: '한국어를 공부하였어요.', correct: false },
-        { ko: '한국어이 공부했어요.', correct: false },
-        { ko: '한국어를 공부어요.', correct: false },
+        { ko: '아직 많이 부족해요. 근데 진짜 좋아해요.', correct: true },
+        { ko: '잘해요. 근데 좋아해요.', correct: false },
+        { ko: '아직 부족해요. 그래서 싫어해요.', correct: false },
+        { ko: '많이 부족합니다. 하지만 좋아합니다.', correct: false },
+      ],
+    },
+    {
+      id: 'd28-o5',
+      kind: 'match-pair',
+      successMsg: '✓ 通过！Tori用28天的韩语，对本命说了真心话。',
+      pairs: [
+        { ko: '사인', zh: '签名' },
+        { ko: '앨범', zh: '专辑' },
+        { ko: '응원해요', zh: '我支持你' },
+        { ko: '감동', zh: '感动' },
+        { ko: '진심', zh: '真心' },
       ],
     },
   ],
 
   recap: {
     toriPose: 'proud',
-    praise: '过去时不只是语法，是把日子留下来的钥匙。今天起，你能用韩语讲故事了。',
-    preview: '明天就是关卡 5——给朋友写一封完整的韩文信。我能写出来吗？',
+    praise: '🎤 미션 4 클리어! 최애한테 진심을 전했어요. 토리, 정말 대단해요!',
+    preview: '还剩两天——Day 29 打开妈妈塞的日记本，用韩语写第一篇。过去时来了。',
     stickerId: 'sticker-d28',
+    sceneImageUrl: '/images/diary/day-28-scene.jpg',
   },
 
   carrotHint:
-    '今天的胡萝卜：「过去时三规则速查」「ㅂ 不规则形容词」「写日记的常用句」',
+    '今天的胡萝卜：「签售会30秒怎么安排5句话？」「평생 잊지 못할 거예요怎么拆解？」',
 };

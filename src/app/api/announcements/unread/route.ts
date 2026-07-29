@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { getAuthFromCookie } from '@/lib/server/auth';
 import { getDb } from '@/lib/server/db';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   const auth = await getAuthFromCookie();
   if (!auth) {
@@ -14,9 +16,10 @@ export async function GET() {
   const result = await db.exec(
     `SELECT COUNT(*) FROM announcements a
      WHERE (a.target_user_id IS NULL OR a.target_user_id = ?)
-     AND a.id NOT IN (
-       SELECT announcement_id FROM announcement_reads WHERE user_id = ?
-     )`,
+       AND (a.is_active IS NULL OR a.is_active = 1)
+       AND a.id NOT IN (
+         SELECT announcement_id FROM announcement_reads WHERE user_id = ?
+       )`,
     [auth.userId, auth.userId]
   );
 

@@ -1,0 +1,21 @@
+import type { SceneSubQuestData } from '@/types/tori-subquest';
+
+/** Day 77 · 3-4 상황 속으로 · 여행 계획 발표·最高分 */
+export const day77Scene: SceneSubQuestData = {
+  day: 17, level: 'advanced', idx: 4, kind: 'scene',
+  koTitle: '상황 속으로',
+  subtitle: '발표 수업 · 설계 · 인정',
+
+  tasks: [
+    { type: 'situation', id: 'd77-sc-s1', scenario: '发表收尾，想概括"这份计划把自然-文化-休息的流程装进了3天"，哪句最合适？',                                                     choices: [{ ko: '자연-문화-휴식의 흐름을 3일에 담았습니다.',                zh: '把自然-文化-休息的流程装进了3天。', correct: true }, { ko: '흐름이 3일에 담았습니다.',            zh: '错——内容用 을/를，容器用 에。',           correct: false }, { ko: '얼마예요?',                          zh: '多少钱？',                 correct: false }, { ko: '몰라요.',                       zh: '不知道。',            correct: false }], explain: '내용 을 + 용기 에 + 담다' },
+    { type: 'situation', id: 'd77-sc-s2', scenario: '想强调这次旅行设计的核心理念"密度比速度更重要"，哪句最合适？',                                     choices: [{ ko: '속도보다 밀도가 중요합니다.',      zh: '密度比速度更重要。',              correct: true }, { ko: '밀도보다 속도가 중요합니다.',                  zh: '速度比密度重要。（语义反）',           correct: false }, { ko: '얼마예요?',                          zh: '多少钱？',                 correct: false }, { ko: '몰라요.',                       zh: '不知道。',            correct: false }], explain: '~보다 · 比较（Day 45）' },
+    { type: 'situation', id: 'd77-sc-s3', scenario: 'Danielle 说自己也学到了，你想说"下次也想向 Danielle 的发表学习"，哪句最合适？',                                                      choices: [{ ko: '다음엔 다니엘 발표도 배우고 싶어.',      zh: '下次也想向 Danielle 的发表学习。',              correct: true }, { ko: '내가 항상 이길 거야.',      zh: '我会一直赢的。（跑题）',           correct: false }, { ko: '얼마예요?',                          zh: '多少钱？',                 correct: false }, { ko: '몰라.',                       zh: '不知道。',            correct: false }], explain: '~고 싶어 · 谦逊回应' },
+
+    { type: 'dialogue', id: 'd77-sc-d1', lines: [{ speaker: '火鹤 선생님',   ko: '발표 주제가 뭐예요?',                zh: '发表主题是什么？' }], blankSpeaker: '토리', choices: [{ ko: '제주도 3일 여행이에요. 흐름을 3일에 담았어요.',            correct: true, zh: '济州3日游。把流程装进了3天。' }, { ko: '흐름이 3일에 담았어요.',       correct: false, zh: '错——助词错。' }, { ko: '얼마예요?',       correct: false, zh: '多少钱？' }, { ko: '몰라요.',           correct: false, zh: '不知道。（生硬）' }], explain: '~을 ~에 담다 · 介绍主题' },
+    { type: 'dialogue', id: 'd77-sc-d2', lines: [{ speaker: '火鹤 선생님',   ko: '토리 씨, 이번 발표 100점입니다.',              zh: '兔莉，本次发表100分。' }],   blankSpeaker: '토리', choices: [{ ko: '감사합니다! 부산에서 배운 걸 실천했어요.',            correct: true, zh: '谢谢！把在釜山学到的实践了。' }, { ko: '아니에요, 발표 안 했어요.',    correct: false, zh: '不，我没发表。（语义反）' }, { ko: '얼마예요?',        correct: false, zh: '多少钱？' }, { ko: '싫어요.',           correct: false, zh: '不要。' }], explain: '致谢 + 실천하다' },
+    { type: 'dialogue', id: 'd77-sc-d3', lines: [{ speaker: '다니엘', ko: '오늘 발표 정말 잘 짜여 있었어.',                       zh: '今天发表结构真好。' }], blankSpeaker: '토리', choices: [{ ko: '고마워. 다음엔 다니엘 발표도 배우고 싶어.',        correct: true, zh: '谢谢。下次也想向你的发表学习。' }, { ko: '내가 제일 잘해.',      correct: false, zh: '我最厉害。（跑题）' }, { ko: '얼마예요?',      correct: false, zh: '多少钱？' }, { ko: '몰라.',           correct: false, zh: '不知道。' }], explain: '谦逊 + ~고 싶어' },
+
+    { type: 'context', id: 'd77-sc-c1', ko: '흐름을 3일에 담았어요.',   promptZh: '这句在发表场景的意义，哪句最准确？',                                                              choices: [{ zh: 'Day 77 设计名句 · ~을/를 ~에 담다 = 把内容凝练地"装进"某个框架 · Tori 把旅行节奏浓缩进3天行程',       correct: true }, { zh: '嫌3天太短',          correct: false }, { zh: '命令别人做计划',       correct: false }, { zh: '取消旅行',                correct: false }], explain: '내용 을 + 용기 에 + 담다' },
+    { type: 'context', id: 'd77-sc-c2', ko: '속도보다 밀도가 중요합니다.', promptZh: '这句在发表场景的意义，哪句最准确？',                                                                     choices: [{ zh: '"密度比速度更重要" · Tori 从釜山旅行提炼出的理念 · 用 ~보다 做比较，成为发表的核心主张',       correct: true }, { zh: '速度最重要',                correct: false }, { zh: '要开快车',                  correct: false }, { zh: '时间不够',                correct: false }], explain: '~보다 · 核心主张' },
+  ],
+};

@@ -5,7 +5,10 @@ import { Volume2, Mic, Square, Bookmark, BookmarkCheck, Play, Save, Trash2 } fro
 import { speak } from '@/lib/tts';
 import { db } from '@/lib/db';
 import { useAuth } from '@/components/AuthProvider';
-import { AudioRecorder, isRecordingSupported, revokeRecording } from '@/lib/audio/recorder';
+import { AudioRecorder, isRecordingSupported, revokeRecording, parseErrorKey } from '@/lib/audio/recorder';
+import { saveRecording } from '@/lib/audio/saveRecording';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 
 interface Props {
   ko: string;
@@ -20,6 +23,7 @@ interface Props {
  * dialogue 行 + grammar 例句通用
  */
 export function DiaryLineActions({ ko, zh, source, showRecord = false, rate = 0.85 }: Props) {
+  const { lang } = useLang();
   const { user } = useAuth();
   const [bookmarked, setBookmarked] = useState(false);
   const [recState, setRecState] = useState<'idle' | 'recording' | 'preview'>('idle');
@@ -29,6 +33,7 @@ export function DiaryLineActions({ ko, zh, source, showRecord = false, rate = 0.
   const [saved, setSaved] = useState(false);
   const [recError, setRecError] = useState<string | null>(null);
   const recorderRef = useRef<AudioRecorder | null>(null);
+  const myAudioRef = useRef<HTMLAudioElement | null>(null);
 
   // 查询是否已收藏（按 userId 过滤，防止多账号串）
   useEffect(() => {
@@ -58,9 +63,10 @@ export function DiaryLineActions({ ko, zh, source, showRecord = false, rate = 0.
 
   const handleBookmark = async () => {
     if (bookmarked) return;
+    if (!user?.id) return;  // 未登录不允许加书签，避免空 userId 数据
     try {
       const all = await db.sentences.where('korean').equals(ko).toArray();
-      const mine = all.find((s) => !s.userId || s.userId === user?.id);
+      const mine = all.find((s) => s.userId === user.id);
       if (!mine) {
         await db.sentences.add({
           id: crypto.randomUUID(),
@@ -74,7 +80,7 @@ export function DiaryLineActions({ ko, zh, source, showRecord = false, rate = 0.
           sourceTitle: '兔莉的韩语日记',
           source_title: '兔莉的韩语日记',
           createdAt: Date.now(),
-          created_at: new Date().toISOString(),
+          created_at: Date.now(),
         });
       }
       setBookmarked(true);
@@ -83,7 +89,7 @@ export function DiaryLineActions({ ko, zh, source, showRecord = false, rate = 0.
 
   const handleStartRecord = async () => {
     if (!isRecordingSupported()) {
-      setRecError('此浏览器不支持录音');
+      setRecError(t('diary.line.noRecordSupport', lang));
       return;
     }
     setRecError(null);
@@ -91,7 +97,8 @@ export function DiaryLineActions({ ko, zh, source, showRecord = false, rate = 0.
     recorderRef.current = r;
     const res = await r.start();
     if (res.error) {
-      setRecError(res.error);
+      const parsed = parseErrorKey(res.error);
+      setRecError(t(parsed.key, lang, parsed.params));
       recorderRef.current = null;
       return;
     }
@@ -115,32 +122,28 @@ export function DiaryLineActions({ ko, zh, source, showRecord = false, rate = 0.
 
   const handlePlayMine = () => {
     if (!recUrl) return;
+    // 停掉上一个 audio 实例，防多次点击导致重叠播放 / 内存泄漏
+    if (myAudioRef.current) {
+      myAudioRef.current.pause();
+      myAudioRef.current.src = '';
+    }
     const audio = new Audio(recUrl);
+    myAudioRef.current = audio;
     audio.play().catch(() => { /* ignore */ });
   };
 
   const handleSaveRecording = async () => {
     if (!recBlob) return;
-    try {
-      const dataUrl = await blobToDataUrl(recBlob);
-      await db.recordings.add({
-        id: crypto.randomUUID(),
-        userId: user?.id,
-        type: 'shadowing',
-        sourceType: 'tori-diary',
-        source_type: 'tori-diary',
-        sourceId: source,
-        source_id: source,
-        korean: ko,
-        audioData: dataUrl,
-        audio_data: dataUrl,
-        durationMs: recDur,
-        duration_ms: recDur,
-        createdAt: Date.now(),
-        created_at: new Date().toISOString(),
-      });
-      setSaved(true);
-    } catch { /* ignore */ }
+    const id = await saveRecording({
+      blob: recBlob,
+      durationMs: recDur,
+      type: 'shadowing',
+      sourceType: 'tori-diary',
+      sourceId: source,
+      korean: ko,
+      userId: user?.id,
+    });
+    if (id) setSaved(true);
   };
 
   const handleDiscardRecording = () => {
@@ -155,23 +158,23 @@ export function DiaryLineActions({ ko, zh, source, showRecord = false, rate = 0.
   return (
     <>
       <div style={{ display: 'inline-flex', gap: 6, alignItems: 'center' }}>
-        <ActionBtn onClick={handleSpeak} ariaLabel="朗读">
+        <ActionBtn onClick={handleSpeak} ariaLabel={t('diary.line.read', lang)}>
           <Volume2 size={14} />
         </ActionBtn>
 
         {showRecord && recState === 'idle' && (
-          <ActionBtn onClick={handleStartRecord} ariaLabel="跟读录音">
+          <ActionBtn onClick={handleStartRecord} ariaLabel={t('diary.line.record', lang)}>
             <Mic size={14} />
           </ActionBtn>
         )}
         {showRecord && recState === 'recording' && (
-          <ActionBtn onClick={handleStopRecord} ariaLabel="停止录音" highlighted>
+          <ActionBtn onClick={handleStopRecord} ariaLabel={t('diary.line.stopRecord', lang)} highlighted>
             <Square size={12} fill="currentColor" />
           </ActionBtn>
         )}
 
-        <ActionBtn onClick={handleBookmark} ariaLabel="收藏到我的句子" disabled={bookmarked}>
-          {bookmarked ? <BookmarkCheck size={14} color="#5ea886" /> : <Bookmark size={14} />}
+        <ActionBtn onClick={handleBookmark} ariaLabel={t('diary.line.bookmark', lang)} disabled={bookmarked}>
+          {bookmarked ? <BookmarkCheck size={14} color="var(--color-mint-strong)" /> : <Bookmark size={14} />}
         </ActionBtn>
       </div>
 
@@ -197,30 +200,31 @@ export function DiaryLineActions({ ko, zh, source, showRecord = false, rate = 0.
           }}
         >
           <span className="diary-handwriting-zh" style={{ fontSize: 11, color: 'var(--diary-ink-soft)' }}>
-            我的录音 {(recDur / 1000).toFixed(1)}s
+            {t('diary.line.myRecording', lang, { sec: (recDur / 1000).toFixed(1) })}
           </span>
-          <ActionBtn onClick={handlePlayMine} ariaLabel="回放我的录音">
+          <ActionBtn onClick={handlePlayMine} ariaLabel={t('diary.line.playMine', lang)}>
             <Play size={12} />
           </ActionBtn>
-          <ActionBtn onClick={handleSpeak} ariaLabel="重听原句">
+          <ActionBtn onClick={handleSpeak} ariaLabel={t('diary.line.replayOriginal', lang)}>
             <Volume2 size={12} />
           </ActionBtn>
-          {!saved ? (
+          {saved ? (
+            <span className="diary-handwriting-zh" style={{ fontSize: 11, color: 'var(--color-mint-strong)' }}>
+              {t('diary.line.saved', lang)}
+            </span>
+          ) : user?.id ? (
+            // 仅登录用户显示保存按钮：未登录 saveRecording 会静默返回 null，按钮点了没反应
             <button
               onClick={handleSaveRecording}
               className="diary-btn diary-btn-ghost"
               style={{ padding: '3px 10px', fontSize: 11 }}
             >
-              <Save size={11} /> 保存
+              <Save size={11} /> {t('diary.line.save', lang)}
             </button>
-          ) : (
-            <span className="diary-handwriting-zh" style={{ fontSize: 11, color: '#5ea886' }}>
-              已保存到我的录音 ✓
-            </span>
-          )}
+          ) : null}
           <button
             onClick={handleDiscardRecording}
-            aria-label="丢弃"
+            aria-label={t('diary.line.discard', lang)}
             style={{
               border: 'none',
               background: 'transparent',
@@ -274,13 +278,4 @@ function ActionBtn({
       {children}
     </button>
   );
-}
-
-function blobToDataUrl(blob: Blob): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = reject;
-    reader.readAsDataURL(blob);
-  });
 }

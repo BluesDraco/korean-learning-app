@@ -1,0 +1,1741 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<!-- 页面对外开放；用户点具体场景卡片跳 /practice/${slug} 时，那边会拦未登录 -->
+
+<title>수울 동물시 · 兽尔动物城 · Scene Korean Practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Outfit:wght@200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Outfit:wght@200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"></noscript>
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* ⚠️ 禁止使用 oklch()
+   部分国产壳浏览器（QQ/360/老 Edge）不支持，会导致变量解析失败、整页白底黑字
+   所有颜色必须用 hex (#xxxxxx) 或 rgba(r,g,b,a) */
+:root {
+  /* === Hex 兜底（老 WebView 不支持 oklch 时用，必须放在 oklch 之前）=== */
+  --base: #f4ede1;
+  --base-2: #efe6d4;
+  --surface: #fbf8f1;
+  --surface-2: #f6efe2;
+  --ink: #1f1929;
+  --ink-2: #3d3744;
+  --ink-3: #6a6470;
+  --ink-4: #989299;
+  --line: #d9d2c4;
+  --c-transit: #3d8acb;
+  --c-life: #4ba582;
+  --c-campus: #c89233;
+  --c-culture: #c45c47;
+  --c-predator: #ac3526;
+  --c-city: #3a7c97;
+  --gold: #c8943a;
+  --coral: #cc7a5c;
+  --lavender: #8b7fb8;
+  --void: #261f33;
+  --void-2: #1d1828;
+  --shadow-surface: #322a3e;
+  --shadow-surface-2: #2a2335;
+  --shadow-ink: #dfdae2;
+  --shadow-ink-2: #a8a3ad;
+  --shadow-ink-3: #807a87;
+  --shadow-line: #423b4f;
+  --blood: #ca3a2c;
+  --toxic: #4d9c4a;
+  --midnight: #5a6cb8;
+
+  /* === 现代浏览器优先使用 oklch（解析失败时自动回退到 hex 值）=== */
+  /* Warm cream base — never pure white */
+  --base: #f4ede1;
+  --base-2: #efe6d4;
+  --surface: #fbf8f1;
+  --surface-2: #f6efe2;
+
+  /* Tinted neutrals — never pure black */
+  --ink: #1f1929;
+  --ink-2: #3d3744;
+  --ink-3: #6a6470;
+  --ink-4: #989299;
+  --line: #d9d2c4;
+
+  /* District colors */
+  --c-transit: #3d8acb;
+  --c-life: #4ba582;
+  --c-campus: #c89233;
+  --c-culture: #c45c47;
+  --c-predator: #ac3526;
+  --c-city: #3a7c97;
+
+  /* Accent */
+  --gold: #c8943a;
+  --coral: #cc7a5c;
+  --lavender: #8b7fb8;
+
+  /* Shadow district — lighter for readability */
+  --void: #261f33;
+  --void-2: #1d1828;
+  --shadow-surface: #322a3e;
+  --shadow-surface-2: #2a2335;
+  --shadow-ink: #dfdae2;
+  --shadow-ink-2: #a8a3ad;
+  --shadow-ink-3: #807a87;
+  --shadow-line: #423b4f;
+  --blood: #ca3a2c;
+  --toxic: #4d9c4a;
+  --midnight: #5a6cb8;
+
+  /* Motion */
+  --eq: cubic-bezier(0.22, 1, 0.36, 1);
+  --eq-2: cubic-bezier(0.16, 1, 0.3, 1);
+  --snap: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Type */
+  --f-ko: 'Noto Sans KR', -apple-system, system-ui, sans-serif;
+  --f-en: 'Outfit', -apple-system, system-ui, sans-serif;
+  --f-mono: 'JetBrains Mono', monospace;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--f-en), var(--f-ko);
+  background: var(--base);
+  color: var(--ink);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+::selection { background: var(--gold); color: var(--void); }
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--base-2); }
+::-webkit-scrollbar-thumb { background: var(--ink-4); border-radius: 3px; }
+
+/* ================================================================
+   BACKGROUND — Warm aurora mesh
+   ================================================================ */
+.aurora {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+}
+.aurora-blob {
+  position: absolute; border-radius: 50%; filter: blur(40px); opacity: 0.18;
+  animation: drift 24s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  .aurora-blob { animation: none; }
+}
+.aurora-blob:nth-child(1) { width: 50vw; height: 50vw; background: radial-gradient(circle, var(--gold), transparent 70%); top: -15%; left: -10%; }
+.aurora-blob:nth-child(2) { width: 45vw; height: 45vw; background: radial-gradient(circle, var(--coral), transparent 70%); bottom: 10%; right: -10%; animation-delay: -8s; }
+.aurora-blob:nth-child(3) { width: 40vw; height: 40vw; background: radial-gradient(circle, var(--lavender), transparent 70%); top: 40%; left: 30%; animation-delay: -16s; }
+.aurora-blob:nth-child(4) { width: 35vw; height: 35vw; background: radial-gradient(circle, var(--c-transit), transparent 70%); top: 60%; left: -5%; animation-delay: -12s; }
+
+@keyframes drift {
+  0% { transform: translate(0,0) scale(1); }
+  50% { transform: translate(8vw,4vh) scale(1.12); }
+  100% { transform: translate(-4vw,6vh) scale(0.88); }
+}
+
+#particles {
+  position: fixed; inset: 0; z-index: 1; pointer-events: none;
+}
+
+/* ================================================================
+   NAV — Sticky top bar
+   ================================================================ */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  /* PWA-SAFE-TOP: statusBarStyle=black-translucent,状态栏透明覆盖顶部,顶栏须垫安全区,勿删 */
+  padding-top: env(safe-area-inset-top, 0px);
+  background: rgba(244, 237, 225, 0.72);
+  backdrop-filter: blur(20px) saturate(1.3);
+  -webkit-backdrop-filter: blur(20px) saturate(1.3);
+  border-bottom: 1px solid var(--line);
+  transition: transform 0.4s var(--eq), opacity 0.4s var(--eq);
+}
+.nav.hidden { transform: translateY(-100%); opacity: 0; }
+
+.nav-inner {
+  max-width: 1320px; margin: 0 auto; padding: 0 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 60px;
+}
+
+.nav-brand {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--f-ko); font-size: 0.95rem; font-weight: 700;
+  color: var(--ink); text-decoration: none;
+}
+.nav-brand .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--gold); box-shadow: 0 0 8px var(--gold);
+}
+
+.nav-tabs { display: flex; gap: 4px; }
+.nav-tab {
+  padding: 6px 14px; border: none; background: none;
+  font-family: var(--f-en); font-size: 0.78rem; font-weight: 500;
+  color: var(--ink-3); cursor: pointer; border-radius: 6px;
+  transition: all 0.3s var(--eq);
+  text-decoration: none; display: flex; align-items: center; gap: 6px;
+}
+.nav-tab:hover { color: var(--ink); background: var(--surface-2); }
+.nav-tab.active { color: var(--ink); background: var(--surface); }
+.nav-tab .tdot { width: 6px; height: 6px; border-radius: 50%; }
+
+.nav-cta {
+  padding: 7px 18px; border-radius: 6px;
+  background: var(--ink); color: var(--base);
+  font-family: var(--f-en); font-size: 0.78rem; font-weight: 600;
+  text-decoration: none; transition: all 0.3s var(--eq);
+  border: none; cursor: pointer;
+}
+.nav-cta:hover { background: var(--ink-2); transform: translateY(-1px); }
+
+/* Mobile district tabs — show only on small screens */
+.mobile-districts {
+  display: none;
+  /* top 对齐手机 nav 实际高度 52px（见 .nav-inner @media），写 60 会漏 8px 缝隙致 tab 栏浮空 */
+  position: sticky; top: 52px; z-index: 99;
+  /* 不透明度提到 0.97 + 轻阴影替代裸 border-bottom，消除滚动时底边漏内容的飘浮感 */
+  background: rgba(244, 237, 225, 0.97); backdrop-filter: blur(12px);
+  box-shadow: 0 4px 12px rgba(31, 25, 41, 0.06);
+  overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch;
+}
+.mobile-districts .md-tab {
+  display: inline-block; padding: 10px 16px;
+  font-family: var(--f-ko); font-size: 0.82rem; font-weight: 600;
+  color: var(--ink-3); text-decoration: none;
+  transition: color 0.2s;
+}
+.mobile-districts .md-tab:hover, .mobile-districts .md-tab:active { color: var(--ink); }
+/* nav 向下滚动时会隐藏(translateY(-100%))，此时 tab 栏 sticky 在 top:52 会悬空浮起——
+   nav 隐藏时把 tab 栏顶到 top:0，贴住视口顶端，消除浮空 */
+.nav.hidden + .mobile-districts { top: 0; }
+@media (max-width: 768px) {
+  .nav-tabs { display: none; }
+  .mobile-districts { display: block; }
+  /* 手机顶栏收紧：隐藏冗余品牌名（hero 已有大标题），按钮不换行，CTA 靠右 */
+  .nav-inner { padding: 0 14px; height: 52px; gap: 8px; }
+  .nav-brand { display: none; }
+  .ac-back, .ac-home { margin-right: 0 !important; white-space: nowrap; flex-shrink: 0; }
+  .nav-cta { margin-left: auto; white-space: nowrap; flex-shrink: 0; }
+}
+
+/* ================================================================
+   HERO
+   ================================================================ */
+/* Page loader — fades out on load */
+.page-loader {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--base);
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity 0.8s var(--eq), visibility 0.8s var(--eq);
+}
+.page-loader.gone { opacity: 0; visibility: hidden; }
+.page-loader .pl-inner {
+  display: flex; flex-direction: column; align-items: center; gap: 20px;
+}
+.page-loader .pl-logo {
+  font-family: var(--f-ko); font-weight: 900;
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  color: var(--ink); letter-spacing: -0.02em;
+  opacity: 0; animation: pl-fade 0.6s var(--eq) 0.1s forwards;
+}
+.page-loader .pl-logo em { font-style: normal; color: var(--gold); }
+.page-loader .pl-bar {
+  width: 160px; height: 2px; background: var(--line); border-radius: 1px;
+  overflow: hidden; opacity: 0; animation: pl-fade 0.6s var(--eq) 0.3s forwards;
+}
+.page-loader .pl-bar::after {
+  content: ''; display: block; width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  animation: pl-sweep 1s ease-in-out infinite;
+}
+.page-loader .pl-text {
+  font-family: var(--f-mono); font-size: 0.65rem;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--ink-3); opacity: 0; animation: pl-fade 0.6s var(--eq) 0.5s forwards;
+}
+@keyframes pl-fade { to { opacity: 1; } }
+@keyframes pl-sweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Hero entrance staggered animation */
+.hero {
+  position: relative; z-index: 3;
+  padding: clamp(36px, 6vh, 64px) 32px clamp(24px, 4vh, 40px);
+  max-width: 1320px; margin: 0 auto;
+}
+.hero > * {
+  opacity: 0; transform: translateY(28px);
+  animation: hero-enter 0.9s var(--eq) forwards;
+}
+.hero > *:nth-child(1) { animation-delay: 0.15s; }
+.hero > *:nth-child(2) { animation-delay: 0.30s; }
+.hero > *:nth-child(3) { animation-delay: 0.45s; }
+.hero > *:nth-child(4) { animation-delay: 0.60s; }
+.hero > *:nth-child(5) { animation-delay: 0.75s; }
+@keyframes hero-enter {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-eyebrow {
+  font-family: var(--f-mono); font-size: 0.72rem; font-weight: 500;
+  letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--ink-3); margin-bottom: 24px;
+  display: flex; align-items: center; gap: 10px;
+}
+.hero-eyebrow::before {
+  content: ''; width: 32px; height: 1px; background: var(--ink-4);
+}
+
+.hero-title {
+  font-family: var(--f-ko); font-weight: 900;
+  font-size: clamp(2.8rem, 8vw, 5.5rem);
+  line-height: 0.95; letter-spacing: -0.025em;
+  color: var(--ink); margin-bottom: 8px;
+}
+.hero-title em {
+  font-style: normal; color: var(--gold);
+  position: relative; display: inline-block;
+}
+.hero-title em::after {
+  content: ''; position: absolute; bottom: 6px; left: 0; right: 0;
+  height: 10px; background: rgba(200, 148, 58, 0.18); z-index: -1;
+  border-radius: 4px;
+}
+
+.hero-subtitle {
+  font-family: var(--f-ko); font-weight: 400;
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  color: var(--ink-2); margin-top: 16px; max-width: 580px;
+  line-height: 1.7;
+}
+.hero-unlock-note {
+  display: inline-block; margin-top: 12px;
+  font-size: clamp(0.8rem, 1.5vw, 0.95rem); font-weight: 600;
+  color: var(--gold); line-height: 1.6;
+}
+
+.hero-stats {
+  display: flex; gap: 48px; margin-top: 48px;
+  flex-wrap: wrap;
+}
+.hero-stat { display: flex; flex-direction: column; gap: 4px; }
+.hero-stat .num {
+  font-family: var(--f-en); font-weight: 800;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  color: var(--ink); line-height: 1;
+}
+.hero-stat .label {
+  font-family: var(--f-mono); font-size: 0.68rem;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.hero-dots {
+  display: flex; gap: 10px; margin-top: 56px; flex-wrap: wrap;
+}
+.h-dot {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 16px; border-radius: 100px;
+  border: 1px solid var(--line); background: var(--surface);
+  cursor: pointer; transition: all 0.3s var(--eq);
+  text-decoration: none;
+}
+.h-dot:hover { border-color: var(--ink-4); transform: translateY(-2px); }
+.h-dot .dcolor { width: 8px; height: 8px; border-radius: 50%; }
+.h-dot .dname { font-family: var(--f-en); font-size: 0.76rem; font-weight: 500; color: var(--ink-2); }
+
+/* ================================================================
+   DISTRICT SECTIONS
+   ================================================================ */
+/* ═════ 我的场景（自定义 AI 场景）═════ */
+.my-scenes {
+  position: relative; z-index: 3;
+  padding: clamp(16px, 2.5vh, 28px) 32px 0;
+  max-width: 1320px; margin: 0 auto;
+}
+.my-scenes-head {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 24px; margin-bottom: 28px;
+  border-bottom: 1px solid var(--line); padding-bottom: 20px;
+}
+.my-scenes-head-left { display: flex; align-items: flex-end; gap: 18px; }
+.my-scenes-num { font-size: 30px; line-height: 1; }
+.my-scenes-title-wrap { display: flex; flex-direction: column; gap: 2px; }
+.my-scenes-title-ko { font-size: 26px; font-weight: 800; color: var(--ink); letter-spacing: -0.01em; }
+.my-scenes-title-cn { font-size: 13px; color: var(--ink-3); letter-spacing: 0.04em; }
+.my-scenes-desc { font-size: 14px; color: var(--ink-3); max-width: 340px; text-align: right; }
+.my-scenes-group { margin-bottom: 26px; }
+.my-scenes-group:last-child { margin-bottom: 0; }
+.my-scenes-grouphead { display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px; }
+.my-scenes-group-icon { font-size: 18px; }
+.my-scenes-group-title { font-size: 16px; font-weight: 800; color: var(--ink); letter-spacing: -0.01em; }
+.my-scenes-group-sub { font-size: 12px; color: var(--ink-3); }
+.my-scenes-row {
+  display: flex; gap: 16px; overflow-x: auto; padding-bottom: 8px;
+  -webkit-overflow-scrolling: touch; scrollbar-width: none;
+}
+.my-scenes-row::-webkit-scrollbar { display: none; }
+.my-scene-create, .my-scene-item {
+  flex: 0 0 auto; width: 200px; min-height: 130px;
+  border-radius: 18px; padding: 18px; text-decoration: none;
+  display: flex; flex-direction: column; box-sizing: border-box;
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+}
+.my-scene-create {
+  align-items: center; justify-content: center; gap: 6px; text-align: center;
+  border: 2px dashed var(--ink-4); background: var(--surface-2); color: var(--ink-2);
+}
+.my-scene-create:hover { border-color: var(--gold); transform: translateY(-2px); }
+.my-scene-create-free { border-style: solid; border-color: var(--gold); background: linear-gradient(180deg, #fdf6e9, var(--surface-2)); }
+.my-scene-create-free:hover { border-color: var(--coral); }
+.my-scene-create-plus { font-size: 28px; font-weight: 300; color: var(--gold); line-height: 1; }
+.my-scene-create-t { font-size: 15px; font-weight: 700; color: var(--ink); }
+.my-scene-create-s { font-size: 11.5px; color: var(--ink-3); }
+.my-scene-item {
+  position: relative; cursor: pointer;
+  border: 1px solid var(--line); background: var(--surface); gap: 8px;
+}
+.my-scene-item:hover { transform: translateY(-2px); box-shadow: 0 10px 28px -14px rgba(60,40,30,0.3); border-color: var(--gold); }
+.my-scene-item-icon { font-size: 26px; line-height: 1; }
+.my-scene-item-ko { font-size: 16px; font-weight: 700; color: var(--ink); line-height: 1.3;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.my-scene-item-cn { font-size: 12px; color: var(--ink-3); margin-top: auto; }
+.my-scene-del {
+  position: absolute; top: 8px; right: 8px; width: 26px; height: 26px;
+  border: none; border-radius: 8px; background: var(--surface-2); color: var(--ink-3);
+  font-size: 15px; line-height: 1; cursor: pointer; opacity: 0; transition: opacity 0.15s, background 0.15s;
+}
+.my-scene-item:hover .my-scene-del { opacity: 1; }
+.my-scene-del:hover { background: #f2c4c4; color: #a03030; }
+/* 专属陪练卡：金色描边 + 徽章 */
+.my-scene-item-free { border-color: var(--gold); background: linear-gradient(180deg, #fdf6e9, var(--surface)); }
+.my-scene-badge {
+  position: absolute; top: 8px; left: 12px;
+  font-size: 10px; font-weight: 700; color: var(--gold);
+  background: rgba(200,148,58,0.12); padding: 2px 8px; border-radius: 20px;
+  letter-spacing: 0.02em;
+}
+.my-scene-item-free .my-scene-item-icon { margin-top: 14px; }
+.my-scene-item-photo { width: 48px; height: 48px; border-radius: 14px; overflow: hidden; border: 1.5px solid #fff; box-shadow: 0 2px 8px -3px rgba(60,40,30,0.3); }
+.my-scene-item-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* 加载骨架 */
+.my-scene-skeleton {
+  flex: 0 0 auto; width: 200px; min-height: 130px; border-radius: 18px;
+  border: 1px solid var(--line); background: var(--surface-2);
+  position: relative; overflow: hidden;
+}
+.my-scene-skeleton::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  transform: translateX(-100%); animation: mysk-shimmer 1.3s infinite;
+}
+@keyframes mysk-shimmer { to { transform: translateX(100%); } }
+/* 加载失败卡 */
+.my-scene-retry {
+  flex: 0 0 auto; width: 200px; min-height: 130px; border-radius: 18px; padding: 18px;
+  border: 1px solid var(--line); background: var(--surface); box-sizing: border-box;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+  cursor: pointer; color: var(--ink-2); text-align: center;
+}
+.my-scene-retry:hover { border-color: var(--gold); }
+.my-scene-retry-icon { font-size: 24px; }
+.my-scene-retry-t { font-size: 13px; }
+/* 空态示例卡（不可点） */
+.my-scene-example {
+  flex: 0 0 auto; width: 200px; min-height: 130px; border-radius: 18px; padding: 18px;
+  border: 1px dashed var(--line); background: var(--surface-2); box-sizing: border-box;
+  display: flex; flex-direction: column; gap: 8px; position: relative; opacity: 0.85;
+}
+.my-scene-example-tag {
+  position: absolute; top: 10px; right: 10px; font-size: 10px; font-weight: 700;
+  color: var(--ink-3); background: var(--surface); border: 1px solid var(--line);
+  padding: 2px 8px; border-radius: 99px; letter-spacing: 0.05em;
+}
+.my-scene-example-icon { font-size: 26px; line-height: 1; }
+.my-scene-example-t { font-size: 15px; font-weight: 700; color: var(--ink-2); }
+.my-scene-example-s { font-size: 11.5px; color: var(--ink-3); line-height: 1.4; margin-top: auto; }
+/* 删除确认弹窗 */
+.mys-modal-backdrop {
+  position: fixed; inset: 0; z-index: 9500; display: flex; align-items: center; justify-content: center;
+  padding: 24px; background: rgba(40,28,20,0.42); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+  animation: mys-fade 0.2s ease;
+}
+@keyframes mys-fade { from { opacity: 0; } to { opacity: 1; } }
+.mys-modal {
+  width: min(360px, 100%); background: var(--surface); border-radius: 20px; padding: 24px 22px 18px;
+  box-shadow: 0 20px 60px rgba(40,28,20,0.28); text-align: center;
+}
+.mys-modal-icon { font-size: 30px; margin-bottom: 10px; }
+.mys-modal-title { font-size: 17px; font-weight: 800; color: var(--ink); margin-bottom: 6px; }
+.mys-modal-sub { font-size: 13px; color: var(--ink-3); line-height: 1.6; margin-bottom: 20px; }
+.mys-modal-btns { display: flex; gap: 10px; }
+.mys-modal-btn {
+  flex: 1; min-height: 46px; border-radius: 12px; font-size: 14.5px; font-weight: 700; cursor: pointer;
+  border: 1px solid var(--line); background: var(--surface-2); color: var(--ink-2);
+  transition: filter 0.15s, transform 0.1s;
+}
+.mys-modal-btn:active { transform: scale(0.98); }
+.mys-modal-btn.danger { border: none; background: #e0645a; color: #fff; }
+.mys-modal-btn.danger:hover { filter: brightness(1.05); }
+
+@media (max-width: 768px) {
+  .my-scenes { padding: 32px 20px 0; }
+  .my-scenes-head { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .my-scenes-desc { text-align: left; }
+  .my-scenes-title-ko { font-size: 22px; }
+}
+
+.district {
+  position: relative; z-index: 3;
+  padding: clamp(60px, 8vh, 100px) 32px;
+  max-width: 1320px; margin: 0 auto;
+}
+
+.district-head {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 24px; margin-bottom: 48px;
+  border-bottom: 1px solid var(--line); padding-bottom: 24px;
+}
+.district-head-left { display: flex; align-items: flex-end; gap: 20px; }
+.district-num {
+  font-family: var(--f-en); font-weight: 900;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  line-height: 0.8; color: var(--ink-4); opacity: 0.35;
+}
+.district-title-wrap { display: flex; flex-direction: column; gap: 4px; }
+.district-title-ko {
+  font-family: var(--f-ko); font-weight: 900;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  color: var(--ink); line-height: 1.1; letter-spacing: -0.015em;
+}
+.district-title-cn {
+  font-family: var(--f-ko); font-weight: 400;
+  font-size: 0.92rem; color: var(--ink-3);
+}
+.district-desc {
+  font-family: var(--f-ko); font-weight: 400;
+  font-size: 0.88rem; color: var(--ink-2);
+  max-width: 400px; line-height: 1.6; text-align: right;
+}
+
+@media (max-width: 768px) {
+  .district-head { flex-direction: column; align-items: flex-start; }
+  .district-desc { text-align: left; }
+}
+
+/* Bento grid */
+.bento {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+}
+@media (max-width: 900px) {
+  .bento { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 500px) {
+  .bento { grid-template-columns: 1fr; }
+}
+
+/* Card sizes */
+.loc-card { grid-column: span 2; }
+.loc-card.feat { grid-column: span 4; grid-row: span 2; }
+.loc-card.wide { grid-column: span 3; }
+@media (max-width: 900px) {
+  .loc-card, .loc-card.feat, .loc-card.wide { grid-column: span 2; grid-row: auto; }
+}
+@media (max-width: 500px) {
+  .loc-card, .loc-card.feat, .loc-card.wide { grid-column: span 1; }
+}
+
+/* Location card */
+.loc-card {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 24px;
+  cursor: pointer;
+  transition: transform 0.5s var(--eq), box-shadow 0.5s var(--eq), border-color 0.4s var(--eq);
+  overflow: hidden;
+  display: flex; flex-direction: column; gap: 14px;
+  min-height: 180px;
+  text-decoration: none;
+}
+.loc-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--dc, var(--gold)), transparent);
+  opacity: 0.5; transition: opacity 0.4s var(--eq), height 0.4s var(--eq);
+}
+.loc-card::after {
+  content: ''; position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(251, 248, 241, 0.5), transparent);
+  transition: left 0.7s var(--eq); pointer-events: none;
+}
+.loc-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 16px 40px rgba(31, 25, 41, 0.10), 0 4px 12px rgba(31, 25, 41, 0.06);
+  border-color: var(--dc, var(--gold));
+}
+.loc-card:hover::before { opacity: 1; height: 5px; }
+.loc-card:hover::after { left: 120%; }
+
+/* Banner (scene image) — 16:9 aspect ratio, 撑满卡片宽度 */
+.card-banner {
+  margin: -24px -24px 14px;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--line);
+  position: relative;
+}
+.card-banner img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.7s var(--eq);
+}
+.loc-card:hover .card-banner img { transform: scale(1.04); }
+.loc-card.feat .card-banner {
+  margin: -32px -32px 18px;
+}
+/* When card has banner, soften the top accent line so it sits on the image edge cleanly */
+.loc-card.has-img::before { opacity: 0.85; }
+/* 有图的卡不需要最小高度撑出空白（图本身已提供视觉重量） */
+.loc-card.has-img { min-height: 0; gap: 10px; }
+
+.card-top { display: flex; align-items: flex-start; justify-content: space-between; }
+.card-icon-box {
+  width: 44px; height: 44px; border-radius: 10px;
+  background: #fbf8f1;
+  border: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; transition: transform 0.4s var(--snap);
+}
+.loc-card:hover .card-icon-box {
+  transform: scale(1.1) rotate(-6deg);
+}
+.card-stars { display: flex; gap: 2px; align-items: center; }
+.star {
+  font-size: 14px; color: var(--ink-4); opacity: 0.3;
+  transition: all 0.3s var(--eq);
+}
+.star.filled { color: var(--gold); opacity: 1; }
+.loc-card:hover .star.filled { text-shadow: 0 0 6px rgba(200, 148, 58, 0.5); }
+
+.card-name-ko {
+  font-family: var(--f-ko); font-weight: 700;
+  font-size: 1.15rem; color: var(--ink); line-height: 1.3;
+}
+.card-name-cn {
+  font-family: var(--f-ko); font-weight: 400;
+  font-size: 0.82rem; color: var(--ink-3); margin-top: 2px;
+}
+.card-desc {
+  font-family: var(--f-ko); font-weight: 400;
+  font-size: 0.82rem; color: var(--ink-2); line-height: 1.6;
+  flex: 1;
+}
+.card-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.card-tag {
+  font-family: var(--f-mono); font-size: 0.65rem; font-weight: 500;
+  padding: 3px 8px; border-radius: 4px;
+  background: var(--surface-2); color: var(--ink-3);
+}
+
+/* 角标：免费 / 解锁天，浮在卡片右上角 */
+.card-badges {
+  position: absolute; top: 12px; right: 12px; z-index: 3;
+  display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end;
+}
+.card-badge {
+  font-family: var(--f-ko); font-size: 0.7rem; font-weight: 800;
+  padding: 4px 9px; border-radius: 999px; white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+.card-badge.free {
+  background: linear-gradient(135deg, #f5c451, var(--gold));
+  color: #3a2c0a;
+}
+.card-badge.day {
+  background: rgba(200, 148, 58, 0.16);
+  color: var(--gold);
+  border: 1px solid rgba(200, 148, 58, 0.4);
+}
+/* 锁定卡上的解锁天角标更醒目(金色实底) */
+.loc-card.locked .card-badge.day {
+  background: linear-gradient(135deg, #f5c451, var(--gold));
+  color: #3a2c0a; border: none;
+}
+
+/* Featured card */
+.loc-card.feat {
+  background: linear-gradient(135deg, var(--surface), var(--surface-2));
+  padding: 32px;
+}
+.loc-card.feat .card-name-ko { font-size: 1.6rem; }
+.loc-card.feat .card-desc { font-size: 0.92rem; }
+.loc-card.feat .card-icon-box { width: 56px; height: 56px; font-size: 28px; border-radius: 14px; }
+.feat-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 20px; border-radius: 8px;
+  background: var(--ink); color: var(--base);
+  font-family: var(--f-en); font-size: 0.78rem; font-weight: 600;
+  margin-top: 8px; width: fit-content;
+  transition: all 0.3s var(--eq);
+}
+.loc-card.feat:hover .feat-cta {
+  background: var(--dc, var(--gold)); color: var(--ink);
+  transform: translateX(4px);
+}
+
+/* Locked card — shadow district style */
+.loc-card.locked {
+  cursor: not-allowed;
+  background: var(--shadow-surface);
+  border-color: var(--shadow-line);
+}
+.loc-card.locked::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--blood), transparent);
+  opacity: 0.5; z-index: 1;
+}
+.loc-card.locked:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: var(--shadow-line);
+}
+.loc-card.locked .card-icon-box { opacity: 0.5; }
+.loc-card.locked .card-name-ko { color: var(--shadow-ink); }
+.loc-card.locked .card-name-cn { color: var(--shadow-ink-2); }
+.loc-card.locked .card-desc { color: var(--shadow-ink-3); }
+.loc-card.locked .card-tags .card-tag {
+  background: rgba(223, 218, 226, 0.08);
+  color: var(--shadow-ink-3);
+}
+.loc-card.locked .card-banner img {
+  filter: brightness(0.4) saturate(0.3);
+}
+.loc-card.locked .star.filled { color: var(--shadow-ink-3); }
+.loc-card.locked .star:not(.filled) { color: var(--shadow-line); }
+.lock-overlay {
+  position: absolute; inset: 0;
+  background: rgba(38, 31, 51, 0.78);
+  backdrop-filter: blur(6px);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 10px; border-radius: 14px; z-index: 5;
+}
+.lock-overlay .paw {
+  font-size: 32px; color: var(--blood); opacity: 0.8;
+  filter: drop-shadow(0 0 8px rgba(202, 58, 44, 0.4));
+}
+.lock-overlay .lock-text {
+  font-family: var(--f-mono); font-size: 0.7rem; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--shadow-ink-2);
+}
+.lock-overlay .lock-sub {
+  font-family: var(--f-ko); font-size: 0.75rem;
+  color: var(--shadow-ink-3); margin-top: 2px;
+}
+.lock-overlay.shake { animation: shake 0.4s var(--eq); }
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+/* ================================================================
+   SHADOW DISTRICT — Dark bottom section
+   ================================================================ */
+.shadow-section {
+  position: relative; z-index: 3;
+  background: linear-gradient(180deg,
+    var(--base) 0%,
+    var(--base-2) 4%,
+    #dfd5c2 10%,
+    #bcaf95 18%,
+    #7f7a8e 28%,
+    #4a4458 40%,
+    #2d2638 55%,
+    var(--void) 70%
+  );
+  padding: clamp(100px, 18vh, 200px) 32px clamp(60px, 10vh, 120px);
+  overflow: hidden;
+}
+.shadow-section::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--blood), transparent);
+  opacity: 0.4;
+}
+
+.shadow-aurora {
+  position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+}
+.shadow-aurora::before, .shadow-aurora::after {
+  content: ''; position: absolute; width: 50vw; height: 50vw;
+  border-radius: 50%; filter: blur(50px); opacity: 0.12;
+  animation: drift 30s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  .shadow-aurora::before, .shadow-aurora::after { animation: none; }
+}
+.shadow-aurora::before { background: radial-gradient(circle, var(--blood), transparent 70%); top: 10%; left: -10%; }
+.shadow-aurora::after { background: radial-gradient(circle, var(--midnight), transparent 70%); bottom: 0%; right: -10%; animation-delay: -15s; }
+
+.shadow-inner { max-width: 1320px; margin: 0 auto; position: relative; }
+
+.shadow-head { margin-bottom: 56px; }
+.shadow-eyebrow {
+  font-family: var(--f-mono); font-size: 0.72rem; font-weight: 500;
+  letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--blood); margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px;
+  opacity: 0.8;
+}
+.shadow-eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--blood); }
+
+.shadow-title {
+  font-family: var(--f-ko); font-weight: 900;
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  line-height: 1; letter-spacing: -0.025em;
+  color: #f0eef2; margin-bottom: 12px;
+}
+.shadow-title em { font-style: normal; color: var(--blood); }
+.shadow-desc {
+  font-family: var(--f-ko); font-weight: 400;
+  font-size: 0.92rem; color: var(--shadow-ink-2); max-width: 560px;
+  line-height: 1.7;
+}
+
+.shadow-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+}
+@media (max-width: 900px) { .shadow-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 500px) { .shadow-grid { grid-template-columns: 1fr; } }
+
+.shadow-card {
+  position: relative;
+  background: var(--shadow-surface);
+  border: 1px solid var(--shadow-line);
+  border-radius: 14px; padding: 28px;
+  cursor: pointer; overflow: hidden;
+  transition: all 0.4s var(--eq);
+  min-height: 200px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.shadow-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--blood), transparent);
+  opacity: 0.5;
+}
+.shadow-card:hover {
+  border-color: #80322a;
+  box-shadow: 0 0 30px rgba(202, 58, 44, 0.15);
+  transform: translateY(-4px);
+}
+.shadow-card.shake { animation: shake 0.4s var(--eq); }
+
+.shadow-card .sc-icon {
+  font-size: 28px; opacity: 0.7;
+}
+.shadow-card .sc-name-ko {
+  font-family: var(--f-ko); font-weight: 700;
+  font-size: 1.2rem; color: var(--shadow-ink);
+}
+.shadow-card .sc-name-cn {
+  font-family: var(--f-ko); font-weight: 400;
+  font-size: 0.82rem; color: var(--shadow-ink-2);
+}
+.shadow-card .sc-desc {
+  font-family: var(--f-ko); font-weight: 400;
+  font-size: 0.82rem; color: var(--shadow-ink-2); line-height: 1.6;
+  flex: 1;
+}
+.shadow-card .sc-lock {
+  position: absolute; inset: 0;
+  background: rgba(38, 31, 51, 0.82);
+  backdrop-filter: blur(6px);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 10px; border-radius: 14px; z-index: 5;
+}
+.sc-lock .paw {
+  font-size: 32px; color: var(--blood); opacity: 0.8;
+  filter: drop-shadow(0 0 8px rgba(202, 58, 44, 0.4));
+}
+.sc-lock .sc-lock-text {
+  font-family: var(--f-mono); font-size: 0.7rem; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--shadow-ink-2);
+}
+.sc-lock .sc-lock-sub {
+  font-family: var(--f-ko); font-size: 0.75rem;
+  color: var(--shadow-ink-3); margin-top: 4px;
+}
+
+/* ================================================================
+   FOOTER
+   ================================================================ */
+.footer {
+  position: relative; z-index: 3;
+  background: var(--void); padding: 40px 32px;
+  border-top: 1px solid var(--shadow-line);
+}
+.footer-inner {
+  max-width: 1320px; margin: 0 auto;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 16px;
+}
+.footer-brand {
+  font-family: var(--f-ko); font-size: 0.85rem; font-weight: 500;
+  color: var(--shadow-ink-2);
+}
+.footer-meta {
+  font-family: var(--f-mono); font-size: 0.7rem;
+  color: var(--shadow-ink-3); letter-spacing: 0.12em;
+}
+
+/* ================================================================
+   BACK TO TOP
+   ================================================================ */
+.back-top {
+  position: fixed; bottom: 24px; right: 24px;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--ink); color: var(--base);
+  border: none; cursor: pointer; z-index: 90;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; opacity: 0; pointer-events: none;
+  transition: all 0.4s var(--eq);
+}
+.back-top.visible { opacity: 1; pointer-events: auto; }
+.back-top:hover { background: var(--ink-2); transform: translateY(-4px); }
+
+/* ================================================================
+   REVEAL ANIMATION
+   ================================================================ */
+.reveal {
+  opacity: 0; transform: translateY(32px);
+  transition: opacity 0.8s var(--eq), transform 0.8s var(--eq);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- Page Loader -->
+<div class="page-loader" id="pageLoader">
+  <div class="pl-inner">
+    <div class="pl-logo">수울 <em>동물시</em></div>
+    <div class="pl-bar"></div>
+    <div class="pl-text">Loading City Map</div>
+  </div>
+</div>
+
+<!-- Background -->
+<div class="aurora">
+  <div class="aurora-blob"></div>
+  <div class="aurora-blob"></div>
+  <div class="aurora-blob"></div>
+  <div class="aurora-blob"></div>
+</div>
+<canvas id="particles"></canvas>
+
+<!-- Nav -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="/diary" class="ac-back" aria-label="返回日记" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;margin-right:8px;border-radius:10px;background:rgba(255,255,255,0.7);border:1px solid var(--ink-4,#c4a89e);color:var(--ink,#241917);text-decoration:none;font-size:14px;font-weight:600;transition:all .2s;">
+      <span style="font-size:16px;">←</span><span>返回</span>
+    </a>
+    <a href="/daily" class="ac-home" aria-label="回到主站" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;margin-right:8px;border-radius:10px;background:#d4a574;border:1.5px solid #b8894f;color:#fff;text-decoration:none;font-size:14px;font-weight:700;transition:all .2s;box-shadow:0 2px 8px rgba(184,137,79,0.25);">
+      <span style="font-size:16px;">🏠</span><span>主站</span>
+    </a>
+    <a href="/diary" class="nav-brand">
+      <span class="dot"></span>
+      수울 동물시
+    </a>
+    <div class="nav-tabs" id="navTabs"></div>
+    <a href="#shadow" class="nav-cta">어둠의 구역</a>
+  </div>
+</nav>
+
+<!-- Mobile district tabs -->
+<div class="mobile-districts" id="mobileDistricts">
+  <a href="#transit" class="md-tab">交通</a>
+  <a href="#life" class="md-tab">生活</a>
+  <a href="#campus" class="md-tab">校园</a>
+  <a href="#service" class="md-tab">服务</a>
+  <a href="#culture" class="md-tab">文化</a>
+  <a href="#predator" class="md-tab">街区</a>
+  <a href="#city" class="md-tab">探索</a>
+</div>
+
+<!-- Hero -->
+<section class="hero" id="hero">
+  <div class="hero-eyebrow">Scene Korean Practice · 场景韩语学习</div>
+  <h1 class="hero-title">수울 <em>동물시</em></h1>
+  <p class="hero-subtitle">兽尔动物城 · 36个场景地点<br>点击进入专属AI对话练习 · 麦克风或文字沟通<br><span class="hero-unlock-note">🔓 场景跟着你的日记进度解锁 · 灰色的学到对应天数就会打开，越往下走开得越多</span></p>
+  <div class="hero-stats">
+    <div class="hero-stat"><span class="num" data-target="36">0</span><span class="label">Locations</span></div>
+    <div class="hero-stat"><span class="num" data-target="6">0</span><span class="label">Districts</span></div>
+    <div class="hero-stat"><span class="num" data-target="30">0</span><span class="label">NPC Characters</span></div>
+    <div class="hero-stat"><span class="num" data-target="5">0</span><span class="label">Difficulty Levels</span></div>
+  </div>
+  <div class="hero-dots" id="heroDots"></div>
+</section>
+
+<!-- 我的场景（用户自定义 AI 场景）-->
+<section class="my-scenes" id="myScenes">
+  <div class="my-scenes-head reveal">
+    <div class="my-scenes-head-left">
+      <span class="my-scenes-num">✨</span>
+      <div class="my-scenes-title-wrap">
+        <span class="my-scenes-title-ko">나만의 장면</span>
+        <span class="my-scenes-title-cn">我的场景</span>
+      </div>
+    </div>
+    <p class="my-scenes-desc">虚构一个场景练习，或捏一个专属陪练（自担）随时陪你聊韩语</p>
+  </div>
+
+  <div class="my-scenes-group">
+    <div class="my-scenes-grouphead reveal">
+      <span class="my-scenes-group-icon">🎭</span>
+      <span class="my-scenes-group-title">场景练习</span>
+      <span class="my-scenes-group-sub">练一个具体情境</span>
+    </div>
+    <div class="my-scenes-row" id="myScenesRowScene">
+      <a class="my-scene-create" href="/practice/custom/new">
+        <span class="my-scene-create-plus">＋</span>
+        <span class="my-scene-create-t">创建场景练习</span>
+        <span class="my-scene-create-s">AI 生成 · 练一个情境</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="my-scenes-group">
+    <div class="my-scenes-grouphead reveal">
+      <span class="my-scenes-group-icon">💛</span>
+      <span class="my-scenes-group-title">专属陪练</span>
+      <span class="my-scenes-group-sub">捏一个自担陪你聊</span>
+    </div>
+    <div class="my-scenes-row" id="myScenesRowFree">
+      <a class="my-scene-create my-scene-create-free" href="/practice/custom/new?mode=free">
+        <span class="my-scene-create-plus">💛</span>
+        <span class="my-scene-create-t">捏一个专属陪练</span>
+        <span class="my-scene-create-s">起名 · 选形象 · 设口癖</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Districts container -->
+<div id="districtsContainer"></div>
+
+<!-- Shadow District -->
+<section class="shadow-section" id="shadow">
+  <div class="shadow-aurora"></div>
+  <div class="shadow-inner">
+    <div class="shadow-head reveal">
+      <div class="shadow-eyebrow">Hidden · 隐藏区域</div>
+      <h2 class="shadow-title">어둠의 <em>구역</em></h2>
+      <p class="shadow-desc">影之街区 · 通关90天课程后解锁<br>这座城市不只有阳光。</p>
+    </div>
+    <div class="shadow-grid" id="shadowGrid"></div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">수울 동물시 · 兽尔动物城</div>
+    <div class="footer-meta">SCENE KOREAN PRACTICE · V4</div>
+  </div>
+</footer>
+
+<button class="back-top" id="backTop" aria-label="Back to top">↑</button>
+
+<script>
+// ================================================================
+// SCENE SLUG MAP (与 src/data/sceneLocations.ts 同步)
+// 用户点击场景卡 → 跳到 /practice/[slug]
+// ================================================================
+const KO_TO_SLUG = {
+  '인공공항': 'incheon-airport', '지하철역': 'subway-station', '버스터미널': 'bus-terminal', '수울역': 'suul-station',
+  'CU 편의점': 'cu-mart', '하루 카페': 'haru-cafe', '한빛 기숙사': 'hanbit-dorm', '베이커리': 'bakery',
+  '홍공거리': 'hongkong-street', 'PAWS MALL': 'paws-mall', '다이소': 'daiso', '문구점': 'stationery',
+  '한빛 교실': 'hanbit-classroom', '도서관': 'library', '시험장': 'exam-hall', '학교 식당': 'school-canteen',
+  '수민은행': 'samin-bank', '약국': 'pharmacy', '병원': 'hospital', '부동산': 'real-estate',
+  '문화공원': 'culture-park', '생카카페': 'fansign-cafe', '영화관': 'cinema', '노래방': 'karaoke',
+  '중앙공원': 'central-park', '시청': 'city-hall',
+  '사냥꾼거리': 'predator-street', '포식자 상점': 'predator-store', '포식자 주점': 'predator-bar',
+  '동물문 시장': 'animal-market', '슈퍼마켓': 'supermarket', '고기집': 'bbq-house', '치킨집': 'fried-chicken',
+  '지하상가': 'underground-mall', '24시 서점': 'bookstore-24h',
+  // 影子场景
+  '지하 검투장': 'jiha-geomtujang', '도토리 흑시장': 'dotori-heuksijang',
+  '제5층': 'je5cheung', '수산 타워': 'susan-tower', '깊은 정부': 'gipeun-jeongbu',
+};
+
+// 免费场景 = sceneLocations.ts 前 5 个(会员矩阵 roleplay.free='5 个',按 sceneLocations 顺序取索引)。
+// 与 practice/[slug] 的 canAccessSceneIndex(index<5) 保持一致；此表改了那边也要跟。
+const FREE_SCENE_SLUGS = new Set([
+  'incheon-airport', 'subway-station', 'bus-terminal', 'suul-station', 'cu-mart',
+]);
+
+// ================================================================
+// DATA
+// ================================================================
+const districts = [
+  {
+    id: 'transit', num: '01', color: '#3d8acb',
+    nameKo: '교통 허브', nameCn: '交通枢纽',
+    desc: '机场、巴士、地铁——在城市的脉络中练习出行韩语',
+    locations: [
+      { ko: '인공공항', cn: '仁爪机场', stars: 2, icon: '✈️', desc: '入境、问路、行李丢失、点餐', tags: ['Day 2-3', '仙鹤空乘'], feat: true },
+      { ko: '지하철역', cn: '地铁站', stars: 3, icon: '🚇', desc: '办T-money卡、问路、被问路、紧急求助', tags: ['Day 7/17/35', '猫头鹰售票员'] },
+      { ko: '버스터미널', cn: '巴士总站', stars: 2, icon: '🚌', desc: '买票、问目的地、确认班次', tags: ['猫头鹰售票员'] },
+      { ko: '수울역', cn: '兽尔站', stars: 3, icon: '🚄', desc: '选座、和邻座聊天、看时刻表', tags: ['海豹奶奶'] },
+    ]
+  },
+  {
+    id: 'life', num: '02', color: '#4ba582',
+    nameKo: '생활 거리', nameCn: '生活街区',
+    desc: '便利店、咖啡馆、宿舍——日常生活里的韩语对话',
+    locations: [
+      { ko: 'CU 편의점', cn: 'CU便利店', stars: 1, icon: '🏪', desc: '买饭团、结账、问有没有袋子', tags: ['Day 9/53', '考拉店员'], feat: true },
+      { ko: '하루 카페', cn: '咖啡馆', stars: 3, icon: '☕', desc: '点单、打工面试、做咖啡、听订单', tags: ['Day 14/63', '金毛店员'] },
+      { ko: '한빛 기숙사', cn: '宿舍', stars: 1, icon: '🏠', desc: '入住登记、和邻居聊天、借东西', tags: ['Day 4-5', '浣熊宿管'] },
+      { ko: '베이커리', cn: '烘焙店', stars: 2, icon: '🥐', desc: '买面包、问口味、预订蛋糕', tags: ['袋鼠阿姨'] },
+      { ko: '홍공거리', cn: '弘爪街', stars: 4, icon: '🌃', desc: '追星、赶路、小巷问路、生카点单', tags: ['Day 23/52', '鹿店员'] },
+      { ko: 'PAWS MALL', cn: 'PAWS购物中心', stars: 3, icon: '🛍️', desc: '购物、试衣、结账、退换货', tags: ['熊店员'] },
+      { ko: '다이소', cn: '日用品店', stars: 2, icon: '🧴', desc: '买生活用品、이거/그거/저거练习', tags: ['Day 11/26', '羊店员'] },
+      { ko: '문구점', cn: '文具店', stars: 2, icon: '✏️', desc: '买文具、问价格、만원发音挑战', tags: ['Day 12', '羊店员'] },
+    ]
+  },
+  {
+    id: 'campus', num: '03', color: '#c89233',
+    nameKo: '캠퍼스', nameCn: '校园区',
+    desc: '教室、图书馆、考试大厅——学习场景中的韩语表达',
+    locations: [
+      { ko: '한빛 교실', cn: '教室', stars: 3, icon: '📚', desc: '自我介绍、课堂发表、学语法', tags: ['Day 6/42', '火鹤老师'], feat: true },
+      { ko: '도서관', cn: '图书馆', stars: 3, icon: '📖', desc: '借书、安静交流、讨论课题', tags: ['Danielle'] },
+      { ko: '시험장', cn: '考试大厅', stars: 5, icon: '📝', desc: '月考、毕业演讲、5分钟自述', tags: ['Day 30/60/90', '火鹤老师'] },
+      { ko: '학교 식당', cn: '食堂', stars: 2, icon: '🍽️', desc: '点餐、있어요/없어요、食堂对话', tags: ['Day 10', '袋鼠阿姨'] },
+    ]
+  },
+  {
+    id: 'service', num: '04', color: '#c45c47',
+    nameKo: '생활 서비스', nameCn: '生活服务',
+    desc: '银行、医院、药房——办理事务时的正式韩语',
+    locations: [
+      { ko: '수민은행', cn: '兽民银行', stars: 3, icon: '🏦', desc: '开户、设密码、存取款', tags: ['Day 18', '乌龟柜员'], feat: true },
+      { ko: '약국', cn: '药店', stars: 3, icon: '💊', desc: '描述症状、买药、问用法用量', tags: ['Day 13', '白鹭药剂师'] },
+      { ko: '병원', cn: '医院', stars: 4, icon: '🏥', desc: '挂号、描述病情、听医嘱', tags: ['Day 19', '兔护士'] },
+      { ko: '부동산', cn: '房产中介', stars: 4, icon: '🔑', desc: '找房、签合同、问条款细节', tags: ['Day 16/21', '老犬中介'] },
+    ]
+  },
+  {
+    id: 'culture', num: '05', color: '#b04075',
+    nameKo: '문화 엔터', nameCn: '文化娱乐',
+    desc: '公园、签售会、影院——休闲时光的韩语社交',
+    locations: [
+      { ko: '문화공원', cn: '文化公园', stars: 2, icon: '🌳', desc: '偶遇偶像、粉丝互动、演唱会应援', tags: ['Day 7', 'LUMI PAW'], feat: true },
+      { ko: '생카카페', cn: '签售会', stars: 4, icon: '🎤', desc: '对偶像说韩语、签名、表达支持', tags: ['Day 28/51', '偶像'] },
+      { ko: '영화관', cn: '影院', stars: 3, icon: '🎬', desc: '买票、选座、讨论剧情', tags: ['Day 48', 'Junho'] },
+      { ko: '노래방', cn: 'KTV', stars: 3, icon: '🎵', desc: '点歌、唱歌、和朋友互动', tags: ['Day 43', 'Junho/Minji'] },
+      { ko: '중앙공원', cn: '中央公园', stars: 2, icon: '🌸', desc: '野餐、散步聊天、户外活动', tags: ['Day 26/44', 'Minji'] },
+      { ko: '시청', cn: '市政厅', stars: 5, icon: '🏛️', desc: '正式场合、公开演讲、辩论', tags: ['火鹤老师'], locked: true },
+    ]
+  },
+  {
+    id: 'predator', num: '06', color: '#ac3526',
+    nameKo: '포식자 거리', nameCn: '猎食者街区',
+    desc: '大型动物聚集的街区——紧张氛围中的韩语应对',
+    locations: [
+      { ko: '사냥꾼거리', cn: '猎食者街道', stars: 4, icon: '🐺', desc: '迷路、被警告、紧张对话', tags: ['Day 65', '路过的兔子'], feat: true },
+      { ko: '포식자 상점', cn: '猎食者便利店', stars: 4, icon: '🦁', desc: '面试被拒、被无视、讨公道', tags: ['Day 66/68', '狮子店长'] },
+      { ko: '포식자 주점', cn: '猎食者酒馆', stars: 5, icon: '🍺', desc: '危险对话、谈判、正面交锋', tags: ['감독관'], locked: true },
+    ]
+  },
+  {
+    id: 'city', num: '07', color: '#3a7c97',
+    nameKo: '도시 산책', nameCn: '城市探索',
+    desc: '公园、市场、餐厅——在城市的角落练习日常韩语',
+    locations: [
+      { ko: '동물문 시장', cn: '动物门市场', stars: 3, icon: '👕', desc: '买衣服、试穿、砍价', tags: ['Day 54', '摊主们'] },
+      { ko: '슈퍼마켓', cn: '超市', stars: 2, icon: '🛒', desc: '买食材、认韩国蔬菜、比价格', tags: ['Day 40', 'Minji'] },
+      { ko: '고기집', cn: '烤肉店', stars: 3, icon: '🥩', desc: '点菜、请客、结账', tags: ['Day 27', '熊店员'] },
+      { ko: '치킨집', cn: '炸鸡店', stars: 2, icon: '🍗', desc: '外卖、堂食、请客', tags: ['Day 53', '熊店员'] },
+      { ko: '지하상가', cn: '地下商店街', stars: 2, icon: '🔽', desc: '地下购物、迷路、问方向', tags: ['各种店员'] },
+      { ko: '24시 서점', cn: '24小时书店', stars: 3, icon: '📕', desc: '找书、问推荐、深夜读书', tags: ['猫头鹰店员'] },
+    ]
+  },
+];
+
+const shadowLocations = [
+  { ko: '지하 검투장', cn: '地下斗兽场', icon: '⚔️', desc: '弘爪街地下三层的圆形竞技场' },
+  { ko: '도토리 흑시장', cn: '橡果黑市', icon: '🌰', desc: '便利店后门的秘密交易场所' },
+  { ko: '제5층', cn: '第五层', icon: '🚪', desc: '地铁站隐藏层，城市之下还有一层' },
+  { ko: '수산 타워', cn: '兽山塔', icon: '🗼', desc: '月之眼据点，城市最高处' },
+  { ko: '깊은 정부', cn: '深层政府', icon: '🕷️', desc: 'B4旧市政厅，十二爪议会所在' },
+];
+
+// ================================================================
+// STATE — fetched from API
+// ================================================================
+let collectedDays = new Set();
+
+function parseMinDay(tags) {
+  let min = Infinity;
+  tags.forEach(t => {
+    const matches = t.match(/Day\s*(\d+)/gi);
+    if (matches) matches.forEach(m => {
+      const d = parseInt(m.replace(/Day\s*/i, ''), 10);
+      if (d < min) min = d;
+    });
+  });
+  return min === Infinity ? 0 : min;
+}
+
+(async function loadProgress() {
+  try {
+    const res = await fetch('/api/progress');
+    const data = await res.json();
+    collectedDays = new Set(data.collectedDays || []);
+  } catch { /* fallback: empty */ }
+  finally {
+    // 场景门控：学到对应 Day(取已完成的最高天数)才解锁，与 practice/[slug] 判定一致(max >= required)
+    const maxDay = collectedDays.size ? Math.max(...collectedDays) : 0;
+    districts.forEach(d => {
+      d.locations.forEach(loc => {
+        if (loc.locked) return; // permanentLock(影之街区等)保持锁定
+        const required = parseMinDay(loc.tags);
+        if (required > 0 && maxDay < required) {
+          loc.locked = true;
+        }
+      });
+    });
+    renderDistricts();
+    renderShadowDistrict();
+    initCardInteractions();
+    // district-head 用 .reveal 类做滚动渐入，必须在 DOM 插入后绑定 observer
+    initScrollReveal();
+  }
+})();
+
+// ================================================================
+// SCENE IMAGES — slug 集合（与 /public/images/scenes/ 内文件一致）
+// ================================================================
+const SCENE_IMAGES = new Set([
+  'incheon-airport', 'subway-station', 'bus-terminal', 'suul-station',
+  'cu-mart', 'haru-cafe', 'hanbit-dorm', 'bakery',
+  'hongkong-street', 'paws-mall', 'daiso', 'stationery',
+  'hanbit-classroom', 'school-canteen', 'library', 'exam-hall',
+  'samin-bank', 'hospital',
+  // 新增 15 张主区场景
+  'pharmacy', 'real-estate',
+  'cinema', 'karaoke', 'central-park', 'fansign-cafe', 'city-hall', 'culture-park',
+  'predator-street', 'predator-store', 'predator-bar',
+  'animal-market', 'supermarket', 'bbq-house', 'fried-chicken', 'underground-mall', 'bookstore-24h',
+  // 影子场景
+  'jiha-geomtujang', 'dotori-heuksijang', 'je5cheung', 'susan-tower', 'gipeun-jeongbu',
+]);
+function sceneImage(ko) {
+  const slug = KO_TO_SLUG[ko];
+  return slug && SCENE_IMAGES.has(slug) ? `/images/scenes/${slug}.webp` : null;
+}
+function renderDistricts() {
+  const container = document.getElementById('districtsContainer');
+  let html = '';
+  districts.forEach(d => {
+    let cards = '';
+    d.locations.forEach(loc => {
+      const stars = '★★★★★'.split('').map((s, i) =>
+        `<span class="star ${i < loc.stars ? 'filled' : ''}">${s}</span>`
+      ).join('');
+      const requiredDay = parseMinDay(loc.tags);
+      const lockHtml = loc.locked
+        ? (requiredDay > 0
+            ? `<div class="lock-overlay"><span class="paw">🐾</span><span class="lock-text">Day ${requiredDay} 완료 후 해금</span><span class="lock-sub">学到 Day ${requiredDay} 解锁</span></div>`
+            : `<div class="lock-overlay"><span class="paw">🐾</span><span class="lock-text">곧 오픈 예정</span><span class="lock-sub">敬请期待</span></div>`)
+        : '';
+      const ctaHtml = loc.feat ? `<span class="feat-cta">进入场景练习 →</span>` : '';
+      const featClass = loc.feat ? ' feat' : '';
+      const lockClass = loc.locked ? ' locked' : '';
+      const imgUrl = sceneImage(loc.ko);
+      const hasImgClass = imgUrl ? ' has-img' : '';
+      const bannerHtml = imgUrl ? `<div class="card-banner"><img src="${imgUrl}" alt="${loc.ko}" loading="lazy" /></div>` : '';
+      // 角标：免费场景(金色「免费」) + 解锁天(🔒 Day N，多个 Day 只显示最小解锁天)
+      const isFree = FREE_SCENE_SLUGS.has(KO_TO_SLUG[loc.ko]);
+      const badges =
+        (isFree ? `<span class="card-badge free">免费</span>` : '') +
+        (requiredDay > 0 ? `<span class="card-badge day">🔒 Day ${requiredDay}</span>` : '');
+      const badgeHtml = badges ? `<div class="card-badges">${badges}</div>` : '';
+      cards += `
+        <div class="loc-card${featClass}${lockClass}${hasImgClass}" data-name="${loc.ko}" style="--dc: ${d.color}">
+          ${bannerHtml}
+          ${badgeHtml}
+          <div class="card-top">
+            <div class="card-icon-box">${loc.icon}</div>
+            <div class="card-stars">${stars}</div>
+          </div>
+          <div>
+            <div class="card-name-ko">${loc.ko}</div>
+            <div class="card-name-cn">${loc.cn}</div>
+          </div>
+          <div class="card-desc">${loc.desc}</div>
+          <div class="card-tags">
+            ${loc.tags.filter(t => !/Day\s*\d/i.test(t)).map(t => `<span class="card-tag">${t}</span>`).join('')}
+          </div>
+          ${ctaHtml}
+          ${lockHtml}
+        </div>`;
+    });
+    html += `
+      <section class="district" id="${d.id}">
+        <div class="district-head reveal">
+          <div class="district-head-left">
+            <span class="district-num">${d.num}</span>
+            <div class="district-title-wrap">
+              <span class="district-title-ko">${d.nameKo}</span>
+              <span class="district-title-cn">${d.nameCn}</span>
+            </div>
+          </div>
+          <p class="district-desc">${d.desc}</p>
+        </div>
+        <div class="bento">${cards}</div>
+      </section>`;
+  });
+  container.innerHTML = html;
+}
+
+// ================================================================
+// RENDER SHADOW DISTRICT
+// ================================================================
+function renderShadowDistrict() {
+  const grid = document.getElementById('shadowGrid');
+  let html = '';
+  shadowLocations.forEach(loc => {
+    const imgUrl = sceneImage(loc.ko);
+    const bannerHtml = imgUrl ? `<div class="card-banner"><img src="${imgUrl}" alt="${loc.ko}" loading="lazy" /></div>` : '';
+    const hasImgClass = imgUrl ? ' has-img' : '';
+    html += `
+      <div class="shadow-card${hasImgClass}" data-name="${loc.ko}">
+        ${bannerHtml}
+        <div class="sc-icon">${loc.icon}</div>
+        <div>
+          <div class="sc-name-ko">${loc.ko}</div>
+          <div class="sc-name-cn">${loc.cn}</div>
+        </div>
+        <div class="sc-desc">${loc.desc}</div>
+        <div class="sc-lock">
+          <span class="paw">🐾</span>
+          <span class="sc-lock-text">90일 완료 후 해금</span>
+          <span class="sc-lock-sub">通关后解锁</span>
+        </div>
+      </div>`;
+  });
+  grid.innerHTML = html;
+}
+
+// ================================================================
+// PARTICLES
+// ================================================================
+function initParticles() {
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  const colors = [
+    'rgba(200, 148, 58, 0.35)',
+    'rgba(204, 122, 92, 0.30)',
+    'rgba(139, 127, 184, 0.25)',
+    'rgba(61, 138, 203, 0.20)',
+  ];
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  for (let i = 0; i < 45; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 3 + 1,
+      vy: -(Math.random() * 0.4 + 0.1),
+      vx: (Math.random() - 0.5) * 0.2,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      opacity: Math.random() * 0.5 + 0.2,
+    });
+  }
+
+  function animate() {
+    if (document.hidden) { requestAnimationFrame(animate); return; }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      if (p.y < -10) { p.y = canvas.height + 10; p.x = Math.random() * canvas.width; }
+      if (p.x < -10) p.x = canvas.width + 10;
+      if (p.x > canvas.width + 10) p.x = -10;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.fill();
+    });
+    requestAnimationFrame(animate);
+  }
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  animate();
+}
+
+// ================================================================
+// SCROLL REVEAL
+// ================================================================
+function initScrollReveal() {
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+  // Oberve dynamically added elements
+  setTimeout(() => {
+    document.querySelectorAll('.reveal, .loc-card, .shadow-card').forEach(el => {
+      el.classList.add('reveal');
+      observer.observe(el);
+    });
+  }, 100);
+}
+
+// ================================================================
+// SCROLL NAV
+// ================================================================
+function initScrollNav() {
+  const nav = document.getElementById('nav');
+  let lastY = window.scrollY;
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if (y > lastY && y > 200) nav.classList.add('hidden');
+    else nav.classList.remove('hidden');
+    lastY = y;
+  });
+}
+
+// ================================================================
+// NAV TABS
+// ================================================================
+function initNavTabs() {
+  const tabs = document.getElementById('navTabs');
+  let html = '';
+  districts.forEach(d => {
+    html += `<a class="nav-tab" href="#${d.id}"><span class="tdot" style="background:${d.color}"></span>${d.nameKo}</a>`;
+  });
+  tabs.innerHTML = html;
+}
+
+// ================================================================
+// HERO DOTS
+// ================================================================
+function initHeroDots() {
+  const dots = document.getElementById('heroDots');
+  let html = '';
+  districts.forEach(d => {
+    html += `<a class="h-dot" href="#${d.id}"><span class="dcolor" style="background:${d.color}"></span><span class="dname">${d.nameKo}</span></a>`;
+  });
+  dots.innerHTML = html;
+}
+
+// ================================================================
+// BACK TO TOP
+// ================================================================
+function initBackTop() {
+  const btn = document.getElementById('backTop');
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 600);
+  });
+  btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+}
+
+// ================================================================
+// STATS COUNTER
+// ================================================================
+function initStatsCounter() {
+  const nums = document.querySelectorAll('.hero-stat .num');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const target = parseInt(e.target.dataset.target);
+        let current = 0;
+        const step = Math.ceil(target / 30);
+        const timer = setInterval(() => {
+          current += step;
+          if (current >= target) { current = target; clearInterval(timer); }
+          e.target.textContent = current;
+        }, 30);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  nums.forEach(n => observer.observe(n));
+}
+
+// ================================================================
+// SOUND
+// ================================================================
+let audioCtx = null;
+function getAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+function playHover() {
+  const ctx = getAudio();
+  const o = ctx.createOscillator();
+  const g = ctx.createGain();
+  o.connect(g); g.connect(ctx.destination);
+  o.frequency.value = 1200; o.type = 'sine';
+  g.gain.setValueAtTime(0.015, ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.08);
+  o.start(); o.stop(ctx.currentTime + 0.08);
+}
+function playClick() {
+  const ctx = getAudio();
+  [660, 880].forEach((freq, i) => {
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.frequency.value = freq; o.type = 'sine';
+    const t = ctx.currentTime + i * 0.05;
+    g.gain.setValueAtTime(0.02, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.12);
+    o.start(t); o.stop(t + 0.12);
+  });
+}
+function playTab() {
+  const ctx = getAudio();
+  const o = ctx.createOscillator();
+  const g = ctx.createGain();
+  o.connect(g); g.connect(ctx.destination);
+  o.frequency.value = 523; o.type = 'sine';
+  g.gain.setValueAtTime(0.02, ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.1);
+  o.start(); o.stop(ctx.currentTime + 0.1);
+}
+
+// ================================================================
+// CARD INTERACTIONS
+// ================================================================
+function initCardInteractions() {
+  document.querySelectorAll('.loc-card').forEach(card => {
+    card.addEventListener('mouseenter', playHover);
+    card.addEventListener('click', () => {
+      playClick();
+      const name = card.dataset.name;
+      const isLocked = card.classList.contains('locked');
+      if (card.dataset.shaking) return;
+      if (isLocked) {
+        const ov = card.querySelector('.lock-overlay');
+        if (ov) { ov.classList.add('shake'); setTimeout(() => ov.classList.remove('shake'), 400); }
+      card.dataset.shaking = "1"; setTimeout(() => delete card.dataset.shaking, 500);
+      } else {
+        const slug = KO_TO_SLUG[name];
+        if (slug) {
+          window.location.href = '/practice/' + slug;
+        } else {
+          console.warn('No slug for scene:', name);
+        }
+      }
+    });
+  });
+  document.querySelectorAll('.nav-tab').forEach(tab => tab.addEventListener('click', playTab));
+  document.querySelectorAll('.shadow-card').forEach(card => {
+    card.addEventListener('click', () => {
+      playClick();
+      card.classList.add('shake');
+      setTimeout(() => card.classList.remove('shake'), 400);
+    });
+  });
+}
+
+// ================================================================
+// PAGE LOADER — fade out on load
+// ================================================================
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('pageLoader').classList.add('gone');
+  }, 900);
+});
+
+// ================================================================
+// INIT
+// ================================================================
+initParticles();
+// initScrollReveal 改在 loadProgress IIFE 内 render 之后调用
+initScrollNav();
+initNavTabs();
+initHeroDots();
+initBackTop();
+initStatsCounter();
+// initCardInteractions 在 loadProgress IIFE 内 renderDistricts 之后调用（卡片渲染依赖异步 /api/progress）
+
+// ================================================================
+// 我的场景（自定义 AI 场景）— 独立于 districts 渲染，不依赖 /api/progress
+// ================================================================
+function escHtml(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+// 主题化删除确认弹窗（替代原生 confirm）
+function myScenesConfirmDelete() {
+  return new Promise(resolve => {
+    const bd = document.createElement('div');
+    bd.className = 'mys-modal-backdrop';
+    bd.innerHTML =
+      '<div class="mys-modal" role="dialog" aria-modal="true">' +
+        '<div class="mys-modal-icon">🗑️</div>' +
+        '<div class="mys-modal-title">删除这个场景？</div>' +
+        '<div class="mys-modal-sub">场景和它的对话记录都会一起清除，无法恢复。</div>' +
+        '<div class="mys-modal-btns">' +
+          '<button class="mys-modal-btn" data-act="cancel">取消</button>' +
+          '<button class="mys-modal-btn danger" data-act="ok">删除</button>' +
+        '</div>' +
+      '</div>';
+    const close = (v) => { bd.remove(); resolve(v); };
+    bd.addEventListener('click', e => {
+      if (e.target === bd) return close(false);
+      const act = e.target.closest('[data-act]');
+      if (act) close(act.dataset.act === 'ok');
+    });
+    document.body.appendChild(bd);
+  });
+}
+
+// 空态示例灵感卡（不可点）
+var MY_SCENE_EXAMPLES = [
+  { icon: '🍚', t: '餐厅点餐', s: '点招牌菜、要求少辣' },
+  { icon: '😤', t: '退货投诉', s: '礼貌说明问题、要求处理' },
+  { icon: '🧭', t: '问路换乘', s: '坐过站了，问怎么回去' },
+];
+
+// 单行渲染器：给某一行填骨架、拉数据后渲染对应 mode 的场景/陪练卡
+function renderSceneRow(rowId, mode) {
+  const row = document.getElementById(rowId);
+  if (!row) return;
+  const createCards = row.querySelectorAll('.my-scene-create');
+  const createCard = createCards[createCards.length - 1]; // 动态卡插在创建卡之后
+  const insert = (el) => { if (createCard) row.insertBefore(el, createCard.nextSibling); else row.appendChild(el); };
+  // 清掉上一轮动态卡（保留创建卡）
+  row.querySelectorAll('.my-scene-item, .my-scene-skeleton, .my-scene-retry, .my-scene-example').forEach(el => el.remove());
+
+  // 骨架
+  const skels = [];
+  for (let i = 0; i < 2; i++) {
+    const sk = document.createElement('div');
+    sk.className = 'my-scene-skeleton';
+    insert(sk);
+    skels.push(sk);
+  }
+  const clearSkels = () => skels.forEach(sk => sk.remove());
+  const showRetry = () => {
+    const retry = document.createElement('div');
+    retry.className = 'my-scene-retry';
+    retry.innerHTML = '<span class="my-scene-retry-icon">🔌</span><span class="my-scene-retry-t">加载失败，点此重试</span>';
+    retry.addEventListener('click', () => renderSceneRow(rowId, mode));
+    insert(retry);
+  };
+
+  return (async () => {
+    let res;
+    try {
+      res = await fetch('/api/practice/custom', { credentials: 'same-origin', cache: 'no-store' });
+    } catch {
+      clearSkels(); showRetry(); return;
+    }
+    clearSkels();
+    if (res.status === 401) return; // 未登录 → 只保留创建卡（预期）
+    if (!res.ok) { showRetry(); return; }
+    const data = await res.json().catch(() => ({}));
+    const all = Array.isArray(data.scenes) ? data.scenes : [];
+    const scenes = all.filter(s => mode === 'free' ? s.mode === 'free' : s.mode !== 'free');
+
+    // 空态：仅场景行放示例灵感卡（陪练行留创建卡即可）
+    if (scenes.length === 0) {
+      if (mode === 'scene') {
+        MY_SCENE_EXAMPLES.forEach(ex => {
+          const el = document.createElement('div');
+          el.className = 'my-scene-example';
+          el.innerHTML =
+            '<span class="my-scene-example-tag">示例</span>' +
+            '<div class="my-scene-example-icon">' + escHtml(ex.icon) + '</div>' +
+            '<div class="my-scene-example-t">' + escHtml(ex.t) + '</div>' +
+            '<div class="my-scene-example-s">' + escHtml(ex.s) + '</div>';
+          insert(el);
+        });
+      }
+      return;
+    }
+
+    scenes.forEach(s => {
+      const el = document.createElement('div');
+      const isFree = s.mode === 'free';
+      el.className = 'my-scene-item' + (isFree ? ' my-scene-item-free' : '');
+      el.dataset.id = s.id;
+      const badge = isFree ? '<span class="my-scene-badge">💛 陪练</span>' : '';
+      const iconHtml = (isFree && s.avatarUrl)
+        ? '<div class="my-scene-item-icon my-scene-item-photo"><img src="' + escHtml(s.avatarUrl) + '" alt=""></div>'
+        : '<div class="my-scene-item-icon">' + escHtml(s.icon || '✨') + '</div>';
+      el.innerHTML =
+        '<button class="my-scene-del" aria-label="删除">×</button>' +
+        badge +
+        iconHtml +
+        '<div class="my-scene-item-ko">' + escHtml(s.title_ko || '나의 장면') + '</div>' +
+        '<div class="my-scene-item-cn">' + escHtml(s.title || '我的场景') + '</div>';
+      el.addEventListener('click', e => {
+        if (e.target.closest('.my-scene-del')) return;
+        window.location.href = (isFree ? '/companion/' : '/practice/') + s.id;
+      });
+      el.querySelector('.my-scene-del').addEventListener('click', async e => {
+        e.stopPropagation();
+        const ok = await myScenesConfirmDelete();
+        if (!ok) return;
+        try {
+          await fetch('/api/practice/custom/' + encodeURIComponent(s.id), { method: 'DELETE', credentials: 'same-origin' });
+          el.remove();
+          // 删到空 → 重渲染出示例卡（仅场景行）
+          if (!row.querySelector('.my-scene-item')) renderSceneRow(rowId, mode);
+        } catch { /* ignore */ }
+      });
+      insert(el);
+    });
+  })();
+}
+function renderMyScenes() {
+  renderSceneRow('myScenesRowScene', 'scene');
+  renderSceneRow('myScenesRowFree', 'free');
+}
+renderMyScenes();
+</script>
+</body>
+</html>
+

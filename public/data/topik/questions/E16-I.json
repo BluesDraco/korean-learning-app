@@ -1,0 +1,1936 @@
+[
+  {
+    "id": "E16I-L01",
+    "section": "listening",
+    "level": "beginner",
+    "topic": "일상",
+    "number": 1,
+    "type": "multiple-choice",
+    "difficulty": "easy",
+    "testPoint": "좋아하다 선호 응답",
+    "audioText": "여자: 커피 좋아해요?",
+    "prompt": "남자의 대답으로 알맞은 것은?",
+    "promptZh": "你喜欢咖啡吗？（选正确答语）",
+    "options": [
+      "네, 아주 좋아해요.",
+      "아니요, 커피가 뜨거워요.",
+      "네, 커피가 비싸요.",
+      "아니요, 커피가 써요."
+    ],
+    "correctIdx": 0,
+    "explanation": "「N을/를 좋아해요?」问喜好，肯定回应须用「네, 아주 좋아해요」呼应喜好。②「뜨거워요」说温度、③「비싸요」说价格、④「써요」说味道苦——都没回答喜不喜欢，方向错。①正解。要点：좋아하다 疑问句 → 좋아해요/안 좋아해요 呼应。",
+    "vocabulary": [
+      "커피",
+      "좋아하다"
+    ],
+    "examRound": 116,
+    "questionType": "I-L-response",
+    "groupId": null
+  },
+  {
+    "id": "E16I-L02",
+    "section": "listening",
+    "level": "beginner",
+    "topic": "시간",
+    "number": 2,
+    "type": "multiple-choice",
+    "difficulty": "easy",
+    "testPoint": "시각 질문 응답",
+    "audioText": "여자: 지금 몇 시예요?",
+    "prompt": "남자의 대답으로 알맞은 것은?",
+    "promptZh": "现在几点？（选正确答语）",
+    "options": [
+      "네, 시계가 있어요.",
+      "여기는 학교예요.",
+      "지금 세 시예요.",
+      "내일 만나요."
+    ],
+    "correctIdx": 2,
+    "explanation": "「몇 시예요?」问具体时刻，须用「~시예요」作答。①答有无手表、②答地点、④答见面时间——都没说时刻，方向错。③「세 시예요」直接给出时间，正解。要点：몇 시 → N시(에) 时刻回答。",
+    "vocabulary": [
+      "시",
+      "지금"
+    ],
+    "examRound": 116,
+    "questionType": "I-L-response",
+    "groupId": null
+  },
+  {
+    "id": "E16I-L03",
+    "section": "listening",
+    "level": "beginner",
+    "topic": "쇼핑",
+    "number": 3,
+    "type": "multiple-choice",
+    "difficulty": "easy",
+    "testPoint": "가격 질문 응답",
+    "audioText": "남자: 이거 얼마예요?",
+    "prompt": "여자의 대답으로 알맞은 것은?",
+    "promptZh": "这个多少钱？（选正确答语）",
+    "options": [
+      "네, 아주 좋아요.",
+      "두 개 주세요.",
+      "저기 있어요.",
+      "오천 원이에요."
+    ],
+    "correctIdx": 3,
+    "explanation": "「얼마예요?」问价钱，须用「N원이에요」回答金额。①是评价、②是要求数量、③是位置——都没说价格。④「오천 원이에요」正解。要点：얼마 → N원 金额回答。",
+    "vocabulary": [
+      "얼마",
+      "원"
+    ],
+    "examRound": 116,
+    "questionType": "I-L-response",
+    "groupId": null
+  },
+  {
+    "id": "E16I-L04",
+    "section": "listening",
+    "level": "beginner",
+    "topic": "일상",
+    "number": 4,
+    "type": "multiple-choice",
+    "difficulty": "easy",
+    "testPoint": "과거 시제 응답",
+    "audioText": "여자: 주말에 뭐 했어요?",
+    "prompt": "남자의 대답으로 알맞은 것은?",
+    "promptZh": "周末做什么了？（选正确答语）",
+    "options": [
+      "네, 주말이에요.",
+      "학교에 갈 거예요.",
+      "지금 공부해요.",
+      "친구를 만났어요."
+    ],
+    "correctIdx": 3,
+    "explanation": "「뭐 했어요?」是过去式提问，须用过去式「~았/었어요」回答做过的事。①答非所问、②是将来式、③是现在式——时态或内容不匹配。④「친구를 만났어요」过去式且回答具体做的事，正解。要点：했어요? → 았/었어요 过去时呼应。",
+    "vocabulary": [
+      "주말",
+      "만나다"
+    ],
+    "examRound": 116,
+    "questionType": "I-L-response",
+    "groupId": null
+  },
+  {
+    "id": "E16I-L05",
+    "section": "listening",
+    "level": "beginner",
+    "topic": "인사",
+    "number": 5,
+    "type": "multiple-choice",
+    "difficulty": "easy",
+    "testPoint": "축하 인사 응답",
+    "audioText": "남자: 생일 축하해요!",
+    "prompt": "이어지는 여자의 말로 알맞은 것은?",
+    "promptZh": "生日快乐！（选合适的接续语）",
+    "options": [
+      "잘 가세요.",
+      "처음 뵙겠습니다.",
+      "고마워요.",
+      "미안해요."
+    ],
+    "correctIdx": 2,
+    "explanation": "收到「생일 축하해요」（生日祝福）的自然回应是道谢「고마워요」。①是道别、②是初次见面用语、④是道歉——都不匹配受到祝贺的场景。③正解。要点：축하 인사 → 고맙다 应答。",
+    "vocabulary": [
+      "생일",
+      "축하하다"
+    ],
+    "examRound": 116,
+    "questionType": "I-L-followup",
+    "groupId": null
+  },
+  {
+    "id": "E16I-L06",
+    "section": "listening",
+    "level": "beginner",
+    "topic": "인사",
+    "number": 6,
+    "type": "multiple-choice",
+    "difficulty": "easy",
+    "testPoint": "감사 인사 응답",
+    "audioText": "여자: 도와줘서 정말 고마워요.",
+    "prompt": "이어지는 남자의 말로 알맞은 것은?",
+    "promptZh": "谢谢你帮忙。（选合适的接续语）",
+    "options": [
+      "아니에요, 별말씀을요.",
+      "축하해요.",
+      "오랜만이에요.",
+      "잘 먹겠습니다."
+    ],
+    "correctIdx": 0,
+    "explanation": "对「고마워요」（谢谢）的自然回应是「아니에요, 별말씀을요」（不客气）。②是祝贺、③是久别重逢、④是饭前用语——都不匹配回应道谢的场景。①正解。要点：고맙다 → 별말씀을요/천만에요 应答。",
+    "vocabulary": [
+      "돕다",
+      "별말씀"
+    ],
+    "examRound": 116,
+    "questionType": "I-L-followup",
+    "groupId": null
+  },
+  {
+    "id": "E16I-L07",
+    "section": "listening",
+    "level": "beginner",
+    "topic": "장소",
+    "number": 7,
+    "type": "multiple-choice",
+    "difficulty": "easy",
+    "testPoint": "장소 추론·도서관",
+    "audioText": "남자: 이 책 언제까지 빌릴 수 있어요?\n여자: 이 주 동안 빌릴 수 있어요.",
+    "prompt": "여기는 어디입니까?",
+    "promptZh": "这里是哪里？",
+    "options": [
+      "서점",
+      "약국",
+      "우체국",
+      "도서관"
+    ],
+    "correctIdx": 3,
+    "explanation": "「책을 빌리다」（借书）+ 归还期限是图书馆的核心场景 → 도서관。①书店是买书不是借、②药店卖药、③邮局寄信，均不涉及借书。④正解。要点：책+빌리다+기간 → 도서관。",
+    "vocabulary": [
+      "책",
+      "빌리다"
+    ],
+    "examRound": 116,
+    "questionType": "I-L-place",
+    "groupId": null
+  },
+  {
+    "id": "E16I-L08",
+    "section": "listening",
+    "level": "beginner",
+    "topic": "장소",
+    "number": 8,
+    "type": "multiple-choice",
+    "difficulty": "easy",
+    "testPoint": "장소 추론·우체국",
+    "audioText": "여자: 이 소포를 부산까지 보내고 싶어요.\n남자: 네, 상자 안에 뭐가 들어 있어요?",
+    "prompt": "여기는 어디입니까?",
+    "promptZh": "这里是哪里？",
+    "options": [
+      "은행",
+      "우체국",
+      "병원",
+      "시장"
+    ],
+    "correctIdx": 1,
+    "explanation": "「소포를 보내다」（寄包裹）是邮局的典型业务 → 우체국。①银行办钱、③医院看病、④市场买卖，都不寄包裹。②正解。要点：소포+보내다 → 우체국。",
+    "vocabulary": [
+      "소포",
+      "보내다"
+    ],
+    "examRound": 116,
+    "questionType": "I-L-place",
+    "groupId": null
+  },
+  {
+    "id": "E16I-L09",
+    "section": "listening",
+    "level": "beginner",
+    "topic": "장소",
+    "number": 9,
+    "type": "multiple-choice",
+    "difficulty": "easy",
+    "testPoint": "장소 추론·병원",
+    "audioText": "남자: 어디가 아프세요?\n여자: 어제부터 목이 아프고 열이 나요.",
+    "prompt": "여기는 어디입니까?",
+    "promptZh": "这里是哪里？",
+    "options": [
+      "병원",
+      "극장",
+      "공항",
+      "식당"
+    ],
+    "correctIdx": 0,
+    "explanation": "「어디가 아프세요」（哪里不舒服）+ 「목이 아프다·열이 나다」（喉咙痛发烧）是医生问诊的场景 → 병원。②剧场看戏、③机场坐飞机、④餐厅吃饭，都不问病。①正解。要点：아프다+열이 나다 → 병원。",
+    "vocabulary": [
+      "아프다",
+      "열"
+    ],
+    "examRound": 116,
+    "questionType": "I-L-place",
+    "groupId": null
+  },
+  {
+    "id": "E16I-L10",
+    "section": "listening",
+    "level": "beginner",
+    "topic": "장소",
+    "number": 10,
+    "type": "multiple-choice",
+    "difficulty": "easy",
+    "testPoint": "장소 추론·영화관",
+    "audioText": "여자: 표 두 장 주세요.\n남자: 네, 어떤 영화를 보실 거예요?",
+    "prompt": "여기는 어디입니까?",
+    "promptZh": "这里是哪里？",
+    "options": [
+      "카페",
+      "공원",
+      "영화관",
+      "교실"
+    ],
+    "correctIdx": 2,
+    "explanation": "「표를 사다」+「영화를 보다」（买票看电影）是电影院场景 → 영화관。①咖啡厅喝咖啡、②公园散步、④教室上课，都不卖电影票。③正解。要点：표+영화 → 영화관。",
+    "vocabulary": [
+      "표",
+      "영화"
+    ],
+    "examRound": 116,
+    "questionType": "I-L-place",
+    "groupId": null
+  },
+  {
+    "id": "E16I-L11",
+    "section": "listening",
+    "level": "beginner",
+    "topic": "날씨",
+    "number": 11,
+    "type": "multiple-choice",
+    "difficulty": "easy",
+    "testPoint": "화제 파악·날씨",
+    "audioText": "남자: 오늘 정말 춥네요.\n여자: 네, 눈도 많이 와요.",
+    "prompt": "무엇에 대해 이야기하고 있습니까?",
+    "promptZh": "他们在谈论什么？",
+    "options": [
+      "계절",
+      "시간",
+      "운동",
+      "날씨"
+    ],
+    "correctIdx": 3,
+    "explanation": "「춥다」（冷）+「눈이 오다」（下雪）都是描述当天天气状况的词 → 날씨。①季节是更大的范畴、②运动、③时间都没提。④날씨 正解。要点：춥다·눈 → 날씨 화제。",
+    "vocabulary": [
+      "춥다",
+      "눈"
+    ],
+    "examRound": 116,
+    "questionType": "I-L-topic",
+    "groupId": null
+  },
+  {
+    "id": "E16I-L12",
+    "section": "listening",
+    "level": "beginner",
+    "topic": "취미",
+    "number": 12,
+    "type": "multiple-choice",
+    "difficulty": "easy",
+    "testPoint": "화제 파악·취미",
+    "audioText": "남자: 저는 주말마다 등산을 해요.\n여자: 저는 그림 그리는 걸 좋아해요.",
+    "prompt": "무엇에 대해 이야기하고 있습니까?",
+    "promptZh": "他们在谈论什么？",
+    "options": [
+      "직업",
+      "가족",
+      "여행",
+      "취미"
+    ],
+    "correctIdx": 3,
+    "explanation": "「등산을 하다」和「그림을 그리다」是各自空闲时喜欢做的事 → 취미。①职业、②家庭、③旅行都没谈。④正解。要点：좋아하는 활동 나열 → 취미 화제。",
+    "vocabulary": [
+      "등산",
+      "그림"
+    ],
+    "examRound": 116,
+    "questionType": "I-L-topic",
+    "groupId": null
+  },
+  {
+    "id": "E16I-L13",
+    "section": "listening",
+    "level": "beginner",
+    "topic": "가족",
+    "number": 13,
+    "type": "multiple-choice",
+    "difficulty": "easy",
+    "testPoint": "화제 파악·가족",
+    "audioText": "여자: 저는 언니가 한 명 있고 남동생도 있어요.\n남자: 저는 형제가 없어요.",
+    "prompt": "무엇에 대해 이야기하고 있습니까?",
+    "promptZh": "他们在谈论什么？",
+    "options": [
+      "가족",
+      "친구",
+      "나이",
+      "고향"
+    ],
+    "correctIdx": 0,
+    "explanation": "「언니·남동생·형제」都是家庭成员/兄弟姐妹关系词 → 가족。②朋友、③年龄、④故乡都没谈。①正解。要点：언니·남동생 등 가족 구성원 → 가족 화제。",
+    "vocabulary": [
+      "언니",
+      "형제"
+    ],
+    "examRound": 116,
+    "questionType": "I-L-topic",
+    "groupId": null
+  },
+  {
+    "id": "E16I-L14",
+    "section": "listening",
+    "level": "beginner",
+    "topic": "음식",
+    "number": 14,
+    "type": "multiple-choice",
+    "difficulty": "easy",
+    "testPoint": "화제 파악·음식",
+    "audioText": "남자: 김치찌개가 정말 맛있어요.\n여자: 저는 불고기를 자주 먹어요.",
+    "prompt": "무엇에 대해 이야기하고 있습니까?",
+    "promptZh": "他们在谈论什么？",
+    "options": [
+      "나라",
+      "값",
+      "음식",
+      "날씨"
+    ],
+    "correctIdx": 2,
+    "explanation": "「김치찌개」和「불고기」都是菜名，加上「맛있다·먹다」→ 음식。①国家、②价格、④天气都没谈。③正解。要点：음식 이름+맛있다/먹다 → 음식 화제。",
+    "vocabulary": [
+      "김치찌개",
+      "불고기"
+    ],
+    "examRound": 116,
+    "questionType": "I-L-topic",
+    "groupId": null
+  },
+  {
+    "id": "E16I-L15",
+    "section": "listening",
+    "level": "beginner",
+    "topic": "쇼핑",
+    "number": 15,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "看图选话·가게에서 가격 묻기",
+    "audioText": "여자: 이 가방 얼마예요?\n남자: 삼만 원이에요. 지금 세일해서 싸요.",
+    "prompt": "대화에 알맞은 그림을 고르십시오.",
+    "promptZh": "请选择与对话相符的图片。",
+    "options": [
+      "①두 사람이 공원에서 산책하고 있다",
+      "②여자가 가게에서 가방을 들고 점원에게 가격을 물어보고 있다",
+      "③여자가 집에서 가방을 정리하고 있다",
+      "④두 사람이 버스 안에서 이야기하고 있다"
+    ],
+    "correctIdx": 1,
+    "explanation": "「이 가방 얼마예요?」+「삼만 원이에요」是顾客在店里问包价、店员报价的场景。①公园散步、③在家整理包、④公交车上聊天都与“店内问价”不符。②正解。要点：가방+얼마+세일 → 가게 가격 문의 그림。",
+    "imageDescriptions": [
+      "①两人在公园散步",
+      "②女子在店里拿着包向店员询问价格",
+      "③女子在家整理包",
+      "④两人在公交车上聊天"
+    ],
+    "audioUrl": null,
+    "vocabulary": [
+      "가방",
+      "세일"
+    ],
+    "examRound": 116,
+    "questionType": "I-L-picture",
+    "groupId": null
+  },
+  {
+    "id": "E16I-L16",
+    "section": "listening",
+    "level": "beginner",
+    "topic": "교통",
+    "number": 16,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "看图选话·길 묻기",
+    "audioText": "남자: 저기요, 시청역이 어디예요?\n여자: 이쪽으로 쭉 가시면 오른쪽에 있어요.",
+    "prompt": "대화에 알맞은 그림을 고르십시오.",
+    "promptZh": "请选择与对话相符的图片。",
+    "options": [
+      "①두 사람이 식당에서 밥을 먹고 있다",
+      "②여자가 지도를 그리고 있다",
+      "③남자가 창구에서 표를 사고 있다",
+      "④남자가 길에서 여자에게 길을 물어보고 있다"
+    ],
+    "correctIdx": 3,
+    "explanation": "「시청역이 어디예요?」+「이쪽으로 쭉 가세요」是男子在路上向路人问路、女子指路的场景。①餐厅吃饭、②画地图、③窗口买票都与“街头问路”不符。④正解。要点：역+어디+쭉 가다 → 길 묻는 그림。",
+    "imageDescriptions": [
+      "①两人在餐厅吃饭",
+      "②女子在画地图",
+      "③男子在窗口买票",
+      "④男子在路上向女子问路"
+    ],
+    "audioUrl": null,
+    "vocabulary": [
+      "시청역",
+      "쭉"
+    ],
+    "examRound": 116,
+    "questionType": "I-L-picture",
+    "groupId": null
+  },
+  {
+    "id": "E16I-L17",
+    "section": "listening",
+    "level": "beginner",
+    "topic": "약속",
+    "number": 17,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "细节理解·영화 약속",
+    "audioText": "남자: 유진 씨, 이번 토요일에 같이 영화 볼래요?\n여자: 토요일은 약속이 있어요. 일요일은 괜찮아요.\n남자: 그럼 일요일 두 시에 만나요.\n여자: 네, 좋아요.",
+    "prompt": "대화 내용과 같은 것을 고르십시오.",
+    "promptZh": "请选择与对话内容一致的选项。",
+    "options": [
+      "여자는 토요일에 시간이 있습니다.",
+      "남자는 영화를 보고 싶어 하지 않습니다.",
+      "두 사람은 일요일 두 시에 만날 겁니다.",
+      "두 사람은 벌써 영화를 봤습니다."
+    ],
+    "correctIdx": 2,
+    "explanation": "男子提议看电影，两人最后定在「일요일 두 시」见面 → ③正确。①周六有约不空、②男子主动提议想看、④是将来计划还没看，均不符。③正解。要点：细节题按对话最终结论作答。",
+    "vocabulary": [
+      "영화",
+      "약속"
+    ],
+    "examRound": 116,
+    "questionType": "I-L-detail",
+    "groupId": null
+  },
+  {
+    "id": "E16I-L18",
+    "section": "listening",
+    "level": "beginner",
+    "topic": "식당",
+    "number": 18,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "细节理解·식당 예약",
+    "audioText": "남자: 여보세요, 거기 한국식당이죠? 오늘 저녁 여섯 시에 네 명 예약하고 싶어요.\n여자: 죄송합니다. 여섯 시는 자리가 없어요. 일곱 시는 괜찮아요.\n남자: 그럼 일곱 시로 해 주세요.",
+    "prompt": "대화 내용과 같은 것을 고르십시오.",
+    "promptZh": "请选择与对话内容一致的选项。",
+    "options": [
+      "남자는 일곱 시에 자리를 예약했습니다.",
+      "식당은 여섯 시에 자리가 있습니다.",
+      "남자는 혼자 식당에 갑니다.",
+      "여자는 예약을 받지 않았습니다."
+    ],
+    "correctIdx": 0,
+    "explanation": "六点没座位，男子改约「일곱 시」并被接受 → ①正确。②六点恰恰没位、③是四人不是一人、④女子最终接受了七点预约，均不符。①正解。要点：细节题抓最终成交的时间与人数。",
+    "vocabulary": [
+      "예약",
+      "자리"
+    ],
+    "examRound": 116,
+    "questionType": "I-L-detail",
+    "groupId": null
+  },
+  {
+    "id": "E16I-L19",
+    "section": "listening",
+    "level": "beginner",
+    "topic": "건강",
+    "number": 19,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "细节理解·감기 결석",
+    "audioText": "여자: 민수 씨, 어제 왜 학교에 안 왔어요?\n남자: 감기에 걸려서 병원에 갔어요.\n여자: 지금은 괜찮아요?\n남자: 네, 약을 먹고 많이 좋아졌어요.",
+    "prompt": "대화 내용과 같은 것을 고르십시오.",
+    "promptZh": "请选择与对话内容一致的选项。",
+    "options": [
+      "남자는 어제 학교에 갔습니다.",
+      "여자는 감기에 걸렸습니다.",
+      "남자는 지금도 많이 아픕니다.",
+      "남자는 어제 병원에 갔습니다."
+    ],
+    "correctIdx": 3,
+    "explanation": "男子因感冒昨天没上学、去了医院 → ④正确。①昨天没去学校、②感冒的是男子不是女子、③吃药后已好转，均不符。④正解。要点：감기 걸려서 병원에 갔다 是核心事实。",
+    "vocabulary": [
+      "감기",
+      "약"
+    ],
+    "examRound": 116,
+    "questionType": "I-L-detail",
+    "groupId": null
+  },
+  {
+    "id": "E16I-L20",
+    "section": "listening",
+    "level": "beginner",
+    "topic": "쇼핑",
+    "number": 20,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "细节理解·옷 교환",
+    "audioText": "남자: 이 옷 좀 바꾸고 싶어요. 사이즈가 좀 커요.\n여자: 영수증 있으세요?\n남자: 네, 여기요.\n여자: 작은 사이즈로 바꿔 드릴게요.",
+    "prompt": "대화 내용과 같은 것을 고르십시오.",
+    "promptZh": "请选择与对话内容一致的选项。",
+    "options": [
+      "남자는 옷을 환불받았습니다.",
+      "남자는 작은 사이즈로 옷을 바꿉니다.",
+      "여자는 영수증이 없습니다.",
+      "옷이 남자에게 너무 작습니다."
+    ],
+    "correctIdx": 1,
+    "explanation": "衣服偏大，男子换成小号 → ②正确。①是换货不是退款、③男子有收据不是女子没有、④衣服是大不是小，均不符。②正解。要点：커요 → 작은 사이즈로 교환。",
+    "vocabulary": [
+      "바꾸다",
+      "영수증"
+    ],
+    "examRound": 116,
+    "questionType": "I-L-detail",
+    "groupId": null
+  },
+  {
+    "id": "E16I-L21",
+    "section": "listening",
+    "level": "beginner",
+    "topic": "여행",
+    "number": 21,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "细节理解·제주도 여행",
+    "audioText": "여자: 다음 주에 제주도로 여행 가지요?\n남자: 네, 비행기로 갈 거예요.\n여자: 며칠 동안 있어요?\n남자: 삼 일 동안 있을 거예요.",
+    "prompt": "대화 내용과 같은 것을 고르십시오.",
+    "promptZh": "请选择与对话内容一致的选项。",
+    "options": [
+      "남자는 기차로 여행을 갑니다.",
+      "남자는 일 주일 동안 여행합니다.",
+      "남자는 비행기로 제주도에 갈 겁니다.",
+      "남자는 이미 제주도에 다녀왔습니다."
+    ],
+    "correctIdx": 2,
+    "explanation": "男子下周坐飞机去济州岛 → ③正确。①是飞机不是火车、②是三天不是一周、④是下周去还没去过，均不符。③正解。要点：비행기로+제주도+다음 주 是核心信息。",
+    "vocabulary": [
+      "제주도",
+      "비행기"
+    ],
+    "examRound": 116,
+    "questionType": "I-L-detail",
+    "groupId": null
+  },
+  {
+    "id": "E16I-L22",
+    "section": "listening",
+    "level": "beginner",
+    "topic": "건강",
+    "number": 22,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "중심 생각·계단 이용",
+    "audioText": "여자: 저는 요즘 엘리베이터 대신 계단으로 다녀요.\n남자: 힘들지 않아요?\n여자: 처음엔 힘들었는데 지금은 몸이 건강해진 것 같아요. 계단이 훨씬 좋아요.",
+    "prompt": "여자의 중심 생각으로 알맞은 것을 고르십시오.",
+    "promptZh": "请选择女子的中心想法。",
+    "options": [
+      "계단으로 다니면 건강에 좋습니다.",
+      "엘리베이터가 계단보다 편합니다.",
+      "운동은 힘들어서 하기 싫습니다.",
+      "계단은 위험해서 조심해야 합니다."
+    ],
+    "correctIdx": 0,
+    "explanation": "女子表示爬楼梯让「몸이 건강해진 것 같아요」并说「계단이 훨씬 좋아요」→ 主张爬楼有益健康。②与“计程更好”相反、③“힘들었는데 좋다”是先难后好非讨厌、④危险未提。①正解。요점：건강에 좋다 = 중심 주장。",
+    "vocabulary": [
+      "계단",
+      "건강"
+    ],
+    "examRound": 116,
+    "questionType": "I-L-mainidea",
+    "groupId": null
+  },
+  {
+    "id": "E16I-L23",
+    "section": "listening",
+    "level": "beginner",
+    "topic": "쇼핑",
+    "number": 23,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "중심 생각·가격 비교",
+    "audioText": "남자: 저는 물건을 사기 전에 항상 인터넷으로 값을 비교해요.\n여자: 시간이 많이 걸리지 않아요?\n남자: 조금 걸리지만 돈을 아낄 수 있어서 좋아요.",
+    "prompt": "남자의 중심 생각으로 알맞은 것을 고르십시오.",
+    "promptZh": "请选择男子的中心想法。",
+    "options": [
+      "인터넷 쇼핑은 시간이 오래 걸립니다.",
+      "물건은 빨리 사는 것이 좋습니다.",
+      "인터넷 값은 항상 비쌉니다.",
+      "값을 비교하면 돈을 아낄 수 있습니다."
+    ],
+    "correctIdx": 3,
+    "explanation": "男子强调比价虽费点时间但「돈을 아낄 수 있어서 좋아요」→ 主张比价能省钱。①只是次要提及非主张、②“빨리 사기”未主张、③网价总贵与“省钱”矛盾。④正解。요점：돈을 아낄 수 있다 = 중심 주장。",
+    "vocabulary": [
+      "비교하다",
+      "아끼다"
+    ],
+    "examRound": 116,
+    "questionType": "I-L-mainidea",
+    "groupId": null
+  },
+  {
+    "id": "E16I-L24",
+    "section": "listening",
+    "level": "beginner",
+    "topic": "일상",
+    "number": 24,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "중심 생각·일기 쓰기",
+    "audioText": "여자: 저는 매일 아침에 일기를 써요.\n남자: 왜 써요?\n여자: 하루를 정리할 수 있고 글쓰기 실력도 늘어요. 그래서 꼭 써요.",
+    "prompt": "여자의 중심 생각으로 알맞은 것을 고르십시오.",
+    "promptZh": "请选择女子的中心想法。",
+    "options": [
+      "일기는 아침에 써야 합니다.",
+      "일기를 쓰면 여러 가지로 도움이 됩니다.",
+      "글쓰기는 배우기 어렵습니다.",
+      "일기는 매일 쓸 필요가 없습니다."
+    ],
+    "correctIdx": 1,
+    "explanation": "女子举出写日记的好处「하루 정리+글쓰기 실력」并说「그래서 꼭 써요」→ 主张写日记好处多。①“아침”只是习惯非重点、③写作难未提、④与“꼭 써요”相反。②正解。요점：여러 장점 나열 → 도움이 된다 주장。",
+    "vocabulary": [
+      "일기",
+      "실력"
+    ],
+    "examRound": 116,
+    "questionType": "I-L-mainidea",
+    "groupId": null
+  },
+  {
+    "id": "E16I-L25",
+    "section": "listening",
+    "level": "beginner",
+    "topic": "안내방송",
+    "number": 25,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "목적 파악·마트 안내",
+    "audioText": "남자: 손님 여러분, 안내 말씀드립니다. 우리 마트는 잠시 후 아홉 시에 문을 닫습니다. 지금 이 층에서 신선한 과일을 싸게 팔고 있으니까 많이 사 가세요. 계산은 일 층에서 하시면 됩니다. 감사합니다.",
+    "prompt": "남자가 왜 이 이야기를 하고 있는지 고르십시오.",
+    "promptZh": "请选择男子说这段话的目的。",
+    "options": [
+      "과일 파는 방법을 가르쳐 주려고",
+      "새로운 마트를 소개하려고",
+      "마트 마감 시간과 할인 정보를 알려 주려고",
+      "계산하는 방법을 설명하려고"
+    ],
+    "correctIdx": 2,
+    "explanation": "广播告知「아홉 시에 문을 닫습니다」+「과일을 싸게 팔고 있으니 사 가세요」→ 通知打烊时间和折扣。①教卖法、②介绍新超市、④只是附带说结账在一楼，均非主要目的。③正解。요점：안내방송의 핵심 = 마감+할인 정보。",
+    "vocabulary": [
+      "마트",
+      "할인"
+    ],
+    "examRound": 116,
+    "questionType": "I-L-passage-purpose",
+    "groupId": "E16I-L-G25-26"
+  },
+  {
+    "id": "E16I-L26",
+    "section": "listening",
+    "level": "beginner",
+    "topic": "안내방송",
+    "number": 26,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "细节 파악·마트 안내",
+    "audioText": "남자: 손님 여러분, 안내 말씀드립니다. 우리 마트는 잠시 후 아홉 시에 문을 닫습니다. 지금 이 층에서 신선한 과일을 싸게 팔고 있으니까 많이 사 가세요. 계산은 일 층에서 하시면 됩니다. 감사합니다.",
+    "prompt": "들은 내용과 같은 것을 고르십시오.",
+    "promptZh": "请选择与所听内容一致的选项。",
+    "options": [
+      "마트는 곧 문을 닫습니다.",
+      "과일을 비싸게 팔고 있습니다.",
+      "계산은 이 층에서 합니다.",
+      "마트는 이미 문을 닫았습니다."
+    ],
+    "correctIdx": 0,
+    "explanation": "广播说「잠시 후 아홉 시에 문을 닫습니다」→ 超市即将打烊，①正确。②水果是“싸게”卖不是贵、③结账在“일 층”不是这层、④是“잠시 후”关不是已经关，均不符。①正解。요점：잠시 후 마감 = 곧 문을 닫다。",
+    "vocabulary": [
+      "닫다",
+      "계산"
+    ],
+    "examRound": 116,
+    "questionType": "I-L-passage-purpose",
+    "groupId": "E16I-L-G25-26"
+  },
+  {
+    "id": "E16I-L27",
+    "section": "listening",
+    "level": "beginner",
+    "topic": "방학",
+    "number": 27,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "화제 파악·방학 계획",
+    "audioText": "여자: 민호 씨, 이번 방학에 뭐 할 거예요?\n남자: 저는 고향에 내려가서 부모님을 도와 드릴 거예요. 지혜 씨는요?\n여자: 저는 아르바이트를 하면서 여행 갈 돈을 모으려고 해요.\n남자: 좋은 생각이에요.",
+    "prompt": "두 사람은 무엇에 대해 이야기하고 있습니까?",
+    "promptZh": "两人在谈论什么？",
+    "options": [
+      "시험 준비",
+      "아르바이트 자리",
+      "고향 음식",
+      "방학 계획"
+    ],
+    "correctIdx": 3,
+    "explanation": "对话围绕「이번 방학에 뭐 할 거예요?」展开，两人各说假期打算（回乡帮父母/打工攒旅费）→ 주제는 방학 계획。①备考、②具体兼职岗位、③家乡菜都只是次要或未提。④正解。요점：대화 전체가 다루는 개념 = 주제。",
+    "vocabulary": [
+      "방학",
+      "계획"
+    ],
+    "examRound": 116,
+    "questionType": "I-L-passage-topic",
+    "groupId": "E16I-L-G27-28"
+  },
+  {
+    "id": "E16I-L28",
+    "section": "listening",
+    "level": "beginner",
+    "topic": "방학",
+    "number": 28,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "细节 파악·방학 계획",
+    "audioText": "여자: 민호 씨, 이번 방학에 뭐 할 거예요?\n남자: 저는 고향에 내려가서 부모님을 도와 드릴 거예요. 지혜 씨는요?\n여자: 저는 아르바이트를 하면서 여행 갈 돈을 모으려고 해요.\n남자: 좋은 생각이에요.",
+    "prompt": "들은 내용과 같은 것을 고르십시오.",
+    "promptZh": "请选择与所听内容一致的选项。",
+    "options": [
+      "남자는 방학에 여행을 갈 겁니다.",
+      "여자는 아르바이트로 돈을 모으려고 합니다.",
+      "남자는 방학에 아르바이트를 합니다.",
+      "여자는 고향에 내려갈 겁니다."
+    ],
+    "correctIdx": 1,
+    "explanation": "女子说「아르바이트를 하면서 여행 갈 돈을 모으려고 해요」→ ②正确。①想旅行的是女子不是男子、③打工的是女子不是男子、④回乡的是男子不是女子，均张冠李戴。②正解。요점：누가 무엇을 하는지 정확히 매칭。",
+    "vocabulary": [
+      "아르바이트",
+      "모으다"
+    ],
+    "examRound": 116,
+    "questionType": "I-L-passage-topic",
+    "groupId": "E16I-L-G27-28"
+  },
+  {
+    "id": "E16I-L29",
+    "section": "listening",
+    "level": "beginner",
+    "topic": "취미",
+    "number": 29,
+    "type": "multiple-choice",
+    "difficulty": "hard",
+    "testPoint": "중심 생각·텃밭 가꾸기",
+    "audioText": "여자: 저는 작년부터 집 근처에서 작은 텃밭을 가꾸고 있습니다. 처음에는 채소를 어떻게 키우는지 몰라서 실수도 많이 했습니다. 하지만 매일 물을 주고 정성을 들이니까 채소가 잘 자랐습니다. 직접 기른 채소로 요리를 하면 더 맛있고, 가족들도 아주 좋아합니다. 여러분도 작은 텃밭을 한번 시작해 보세요.",
+    "prompt": "여자의 중심 생각으로 알맞은 것을 고르십시오.",
+    "promptZh": "请选择女子的中心想法。",
+    "options": [
+      "채소는 시장에서 사는 것이 좋습니다.",
+      "텃밭을 가꾸는 것은 너무 어렵습니다.",
+      "직접 텃밭을 가꾸면 여러 가지로 좋습니다.",
+      "요리는 채소로만 해야 합니다."
+    ],
+    "correctIdx": 2,
+    "explanation": "女子讲述菜长好、菜更好吃、家人喜欢，并劝「여러분도 한번 시작해 보세요」→ 主张自己种菜好处多。①去市场买与自种相反、②“실수했지만 잘 자랐다”是先难后好非太难、④“只用蔬菜做菜”未主张。③正解。요점：권유+장점 나열 → 좋다 주장。",
+    "vocabulary": [
+      "텃밭",
+      "가꾸다"
+    ],
+    "examRound": 116,
+    "questionType": "I-L-passage-main",
+    "groupId": "E16I-L-G29-30"
+  },
+  {
+    "id": "E16I-L30",
+    "section": "listening",
+    "level": "beginner",
+    "topic": "취미",
+    "number": 30,
+    "type": "multiple-choice",
+    "difficulty": "hard",
+    "testPoint": "细节 파악·텃밭 가꾸기",
+    "audioText": "여자: 저는 작년부터 집 근처에서 작은 텃밭을 가꾸고 있습니다. 처음에는 채소를 어떻게 키우는지 몰라서 실수도 많이 했습니다. 하지만 매일 물을 주고 정성을 들이니까 채소가 잘 자랐습니다. 직접 기른 채소로 요리를 하면 더 맛있고, 가족들도 아주 좋아합니다. 여러분도 작은 텃밭을 한번 시작해 보세요.",
+    "prompt": "들은 내용과 같은 것을 고르십시오.",
+    "promptZh": "请选择与所听内容一致的选项。",
+    "options": [
+      "여자는 작년부터 텃밭을 가꾸었습니다.",
+      "여자는 채소를 키우는 것을 처음부터 잘했습니다.",
+      "여자의 가족은 채소를 싫어합니다.",
+      "여자는 텃밭 가꾸기를 그만두었습니다."
+    ],
+    "correctIdx": 0,
+    "explanation": "女子说「작년부터 텃밭을 가꾸고 있습니다」→ ①正确。②一开始“실수도 많이 했다”不是本来就会、③家人“아주 좋아합니다”不是讨厌、④仍在种(가꾸고 있습니다)没放弃，均不符。①正解。요점：작년부터+현재진행 = 지금도 가꾸는 중。",
+    "vocabulary": [
+      "작년",
+      "채소"
+    ],
+    "examRound": 116,
+    "questionType": "I-L-passage-main",
+    "groupId": "E16I-L-G29-30"
+  },
+  {
+    "id": "E16I-R31",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "취미",
+    "number": 31,
+    "type": "multiple-choice",
+    "difficulty": "easy",
+    "testPoint": "중심 화제·취미",
+    "prompt": "저는 음악을 좋아합니다. 노래도 자주 부릅니다.\n\n무엇에 대한 이야기입니까?",
+    "promptZh": "我喜欢音乐。也经常唱歌。\n\n是关于什么的？",
+    "options": [
+      "운동",
+      "날씨",
+      "직업",
+      "취미"
+    ],
+    "correctIdx": 3,
+    "explanation": "「음악을 좋아하다」「노래를 부르다」都是空闲时喜欢做的事 → 취미。①运动、②职业、③天气都没提。④취미 정답。요점：좋아하는 활동 → 취미 화제。",
+    "vocabulary": [
+      "음악",
+      "노래"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-topic",
+    "groupId": null
+  },
+  {
+    "id": "E16I-R32",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "교통",
+    "number": 32,
+    "type": "multiple-choice",
+    "difficulty": "easy",
+    "testPoint": "중심 화제·교통",
+    "prompt": "저는 지하철을 탑니다. 버스도 자주 탑니다.\n\n무엇에 대한 이야기입니까?",
+    "promptZh": "我坐地铁。也经常坐公交车。\n\n是关于什么的？",
+    "options": [
+      "장소",
+      "값",
+      "교통",
+      "시간"
+    ],
+    "correctIdx": 2,
+    "explanation": "「지하철」「버스」都是交通工具，加「타다」（乘坐）→ 교통。①地点、②价格、④时间都没提。③교통 정답。요점：탈것 이름+타다 → 교통 화제。",
+    "vocabulary": [
+      "지하철",
+      "버스"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-topic",
+    "groupId": null
+  },
+  {
+    "id": "E16I-R33",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "날씨",
+    "number": 33,
+    "type": "multiple-choice",
+    "difficulty": "easy",
+    "testPoint": "중심 화제·날씨",
+    "prompt": "오늘은 비가 옵니다. 바람도 많이 붑니다.\n\n무엇에 대한 이야기입니까?",
+    "promptZh": "今天下雨。风也刮得很大。\n\n是关于什么的？",
+    "options": [
+      "계절",
+      "운동",
+      "여행",
+      "날씨"
+    ],
+    "correctIdx": 3,
+    "explanation": "「비가 오다」「바람이 불다」都是天气现象 → 날씨。①季节范畴过大、②旅行、③运动都没提。④날씨 정답。요점：비·바람 → 날씨 화제。",
+    "vocabulary": [
+      "비",
+      "바람"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-topic",
+    "groupId": null
+  },
+  {
+    "id": "E16I-R34",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "일상",
+    "number": 34,
+    "type": "multiple-choice",
+    "difficulty": "easy",
+    "testPoint": "빈칸 채우기·기본 동사",
+    "prompt": "저는 밤에 침대에서 (   ).",
+    "promptZh": "我晚上在床上（   ）。",
+    "options": [
+      "잡니다",
+      "씻습니다",
+      "만듭니다",
+      "닫습니다"
+    ],
+    "correctIdx": 0,
+    "explanation": "「밤에 침대에서」（晚上在床上）最自然搭配的动词是「자다」（睡）。②「씻다」洗-在浴室、③「만들다」做-用于制作、④「닫다」关-用于门窗，都与“床上晚上”不搭。①잡니다 정답。요점：밤+침대 → 자다。",
+    "vocabulary": [
+      "밤",
+      "자다"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-fill-verb",
+    "groupId": null
+  },
+  {
+    "id": "E16I-R35",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "학교",
+    "number": 35,
+    "type": "multiple-choice",
+    "difficulty": "easy",
+    "testPoint": "빈칸 채우기·명사",
+    "prompt": "글씨를 쓰려고 (   )을 샀습니다.",
+    "promptZh": "为了写字买了（   ）。",
+    "options": [
+      "우산",
+      "모자",
+      "가방",
+      "볼펜"
+    ],
+    "correctIdx": 3,
+    "explanation": "「글씨를 쓰다」（写字）需要的工具是「볼펜」（圆珠笔）。①「우산」伞-挡雨、②「모자」帽子-戴头上、③「가방」包-装东西，都不用来写字。④「볼펜」正确。要点：写字工具→볼펜/연필。",
+    "vocabulary": [
+      "글씨",
+      "볼펜"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-fill-noun",
+    "groupId": null
+  },
+  {
+    "id": "E16I-R36",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "일상",
+    "number": 36,
+    "type": "multiple-choice",
+    "difficulty": "easy",
+    "testPoint": "빈칸 채우기·조사",
+    "prompt": "저는 동생(   ) 같이 학교에 갑니다.",
+    "promptZh": "我和弟弟一起去学校。",
+    "options": [
+      "을",
+      "이",
+      "과",
+      "에서"
+    ],
+    "correctIdx": 2,
+    "explanation": "「같이」（一起）前表示同伴须用「과/와」（和），동생有收音用「과」。①「을」是宾格、②「이」是主格、④「에서」表场所，都与“和某人一起”不搭。③과 정답。요점：N과/와 같이 = 和N一起。",
+    "vocabulary": [
+      "동생",
+      "같이"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-fill-particle",
+    "groupId": null
+  },
+  {
+    "id": "E16I-R37",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "일상",
+    "number": 37,
+    "type": "multiple-choice",
+    "difficulty": "easy",
+    "testPoint": "빈칸 채우기·부사",
+    "prompt": "약속 시간에 늦어서 (   ) 뛰어갔습니다.",
+    "promptZh": "因为约会迟到了，（   ）跑了过去。",
+    "options": [
+      "천천히",
+      "빨리",
+      "일찍",
+      "조용히"
+    ],
+    "correctIdx": 1,
+    "explanation": "「늦어서」（迟到了）→ 为赶时间要「빨리」（快）跑。①「천천히」慢慢地与“赶”矛盾、③「일찍」早-指时间点非速度、④「조용히」安静地与跑步不搭。②빨리 정답。요점：늦다 → 빨리 서두르다。",
+    "vocabulary": [
+      "늦다",
+      "빨리"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-fill-adv",
+    "groupId": null
+  },
+  {
+    "id": "E16I-R38",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "날씨",
+    "number": 38,
+    "type": "multiple-choice",
+    "difficulty": "easy",
+    "testPoint": "빈칸 채우기·형용사",
+    "prompt": "여름이라서 날씨가 아주 (   ).",
+    "promptZh": "因为是夏天，天气非常（   ）。",
+    "options": [
+      "춥습니다",
+      "덥습니다",
+      "가볍습니다",
+      "빠릅니다"
+    ],
+    "correctIdx": 1,
+    "explanation": "「여름」（夏天）的天气特点是「덥다」（热）。①「춥다」冷是冬天、③「가볍다」轻-形容重量、④「빠르다」快-形容速度，都与夏天天气不搭。②덥습니다 정답。요점：여름 → 덥다。",
+    "vocabulary": [
+      "여름",
+      "덥다"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-fill-adj",
+    "groupId": null
+  },
+  {
+    "id": "E16I-R39",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "일상",
+    "number": 39,
+    "type": "multiple-choice",
+    "difficulty": "easy",
+    "testPoint": "빈칸 채우기·동사",
+    "prompt": "손이 더러워서 비누로 손을 (   ).",
+    "promptZh": "手脏了，用肥皂（   ）手。",
+    "options": [
+      "씻습니다",
+      "봅니다",
+      "듣습니다",
+      "탑니다"
+    ],
+    "correctIdx": 0,
+    "explanation": "「손이 더럽다」+「비누로」（用肥皂）→ 与「씻다」（洗）搭配。②「보다」看、③「듣다」听、④「타다」乘，都不能洗手。①씻습니다 정답。요점：비누+손 → 씻다。",
+    "vocabulary": [
+      "비누",
+      "씻다"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-fill-verb",
+    "groupId": null
+  },
+  {
+    "id": "E16I-R40",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "안내문",
+    "number": 40,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "내용 불일치·요리 교실 안내",
+    "prompt": "＜한국 요리 교실＞\n날짜: 매주 토요일 오후 두 시\n장소: 문화 센터 삼 층\n준비물: 앞치마\n※ 재료는 센터에서 준비합니다.\n\n윗글의 내용과 다른 것을 고르십시오.",
+    "promptZh": "＜韩国料理教室＞\n日期：每周六下午两点\n地点：文化中心三楼\n准备物品：围裙\n※ 材料由中心准备。\n\n请选择与上文内容不符的一项。",
+    "options": [
+      "요리 교실은 토요일에 합니다.",
+      "장소는 문화 센터 삼 층입니다.",
+      "학생이 재료를 사 와야 합니다.",
+      "앞치마를 준비해야 합니다."
+    ],
+    "correctIdx": 2,
+    "explanation": "告示写「재료는 센터에서 준비합니다」（材料由中心准备）→ 学生不用买材料，所以「학생이 재료를 사 와야 한다」与内容不符。①토요일 ✓、②삼 층 ✓、④앞치마 준비물 ✓，均与告示一致。③是不符项，正解。요점：不符题选与原文矛盾的一项。",
+    "vocabulary": [
+      "요리",
+      "재료"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-wrong-info",
+    "groupId": null
+  },
+  {
+    "id": "E16I-R41",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "안내문",
+    "number": 41,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "내용 불일치·도서관 이용 안내",
+    "prompt": "＜시립 도서관 안내＞\n이용 시간: 오전 아홉 시 ~ 오후 여섯 시\n쉬는 날: 매주 월요일\n한 번에 다섯 권까지 빌릴 수 있습니다.\n빌린 책은 이 주 안에 돌려주세요.\n\n윗글의 내용과 다른 것을 고르십시오.",
+    "promptZh": "＜市立图书馆须知＞\n开放时间：上午九点～下午六点\n休息日：每周一\n一次最多可借五本。\n借的书请在两周内归还。\n\n请选择与上文内容不符的一项。",
+    "options": [
+      "도서관은 월요일에 쉽니다.",
+      "책은 세 권까지 빌릴 수 있습니다.",
+      "빌린 책은 이 주 안에 돌려줘야 합니다.",
+      "도서관은 오후 여섯 시에 문을 닫습니다."
+    ],
+    "correctIdx": 1,
+    "explanation": "告示写「다섯 권까지 빌릴 수 있습니다」（最多借五本）→「세 권까지」与之不符。①월요일 휴관 ✓、③이 주 안 반납 ✓、④여섯 시 마감 ✓，均一致。②是不符项，正解。요점：수량 정보와 어긋나는 항을 찾는다。",
+    "vocabulary": [
+      "도서관",
+      "빌리다"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-wrong-info",
+    "groupId": null
+  },
+  {
+    "id": "E16I-R42",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "일상",
+    "number": 42,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "내용 불일치·짧은 글",
+    "prompt": "저는 지난 주말에 가족과 바다에 갔습니다. 날씨가 맑아서 수영을 했습니다. 점심에는 회를 먹었습니다. 저녁에 집에 돌아왔습니다.\n\n윗글의 내용과 다른 것을 고르십시오.",
+    "promptZh": "我上周末和家人去了海边。天气晴朗所以游了泳。中午吃了生鱼片。傍晚回到了家。\n\n请选择与上文内容不符的一项。",
+    "options": [
+      "저는 주말에 바다에 갔습니다.",
+      "저는 혼자 바다에 갔습니다.",
+      "저는 바다에서 수영을 했습니다.",
+      "저는 점심에 회를 먹었습니다."
+    ],
+    "correctIdx": 1,
+    "explanation": "文中「가족과 바다에 갔습니다」（和家人去）→「혼자」（独自）与之不符。①주말 바다 ✓、③수영 ✓、④점심 회 ✓，均一致。②是不符项，正解。요점：동반자 정보와 어긋나는 항을 찾는다。",
+    "vocabulary": [
+      "바다",
+      "수영"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-wrong-info",
+    "groupId": null
+  },
+  {
+    "id": "E16I-R43",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "일상",
+    "number": 43,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "내용 일치·짧은 글",
+    "prompt": "저는 어제 친구 생일 파티에 갔습니다. 친구에게 줄 선물로 예쁜 컵을 샀습니다. 파티에서 케이크도 먹고 사진도 많이 찍었습니다. 정말 즐거웠습니다.\n\n윗글의 내용과 같은 것을 고르십시오.",
+    "promptZh": "我昨天去了朋友的生日派对。买了漂亮的杯子作为送朋友的礼物。在派对上吃了蛋糕也拍了很多照片。真的很开心。\n\n请选择与上文内容一致的一项。",
+    "options": [
+      "저는 친구에게 컵을 선물했습니다.",
+      "저는 파티에서 케이크를 만들었습니다.",
+      "저는 사진을 찍지 않았습니다.",
+      "저는 파티가 재미없었습니다."
+    ],
+    "correctIdx": 0,
+    "explanation": "文中「선물로 예쁜 컵을 샀습니다」→ 送杯子给朋友，①正确。②是“먹고”吃蛋糕不是做、③“사진도 많이 찍었습니다”是拍了不是没拍、④“정말 즐거웠습니다”是开心不是没意思。①정답。요점：원문 행동과 일치하는 항을 고른다。",
+    "vocabulary": [
+      "선물",
+      "파티"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-content_match",
+    "groupId": null
+  },
+  {
+    "id": "E16I-R44",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "직장",
+    "number": 44,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "내용 일치·짧은 글",
+    "prompt": "우리 회사는 아홉 시에 일을 시작합니다. 그래서 저는 여덟 시에 집에서 나옵니다. 회사까지 지하철로 삼십 분쯤 걸립니다. 점심은 회사 근처 식당에서 먹습니다.\n\n윗글의 내용과 같은 것을 고르십시오.",
+    "promptZh": "我们公司九点开始上班。所以我八点从家里出发。到公司坐地铁大约需要三十分钟。午饭在公司附近的餐厅吃。\n\n请选择与上文内容一致的一项。",
+    "options": [
+      "회사는 여덟 시에 일을 시작합니다.",
+      "저는 지하철로 회사에 갑니다.",
+      "회사까지 한 시간이 걸립니다.",
+      "저는 집에서 점심을 먹습니다."
+    ],
+    "correctIdx": 1,
+    "explanation": "文中「지하철로 삼십 분쯤 걸립니다」→ 坐地铁上班，②正确。①上班是“아홉 시”不是八点(八点是出门)、③是“삼십 분”不是一小时、④在“회사 근처 식당”吃不是家里。②정답。요점：수단·시간 정보를 정확히 대조。",
+    "vocabulary": [
+      "회사",
+      "지하철"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-content_match",
+    "groupId": null
+  },
+  {
+    "id": "E16I-R45",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "일상",
+    "number": 45,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "내용 일치·짧은 글",
+    "prompt": "저는 강아지를 한 마리 키웁니다. 이름은 초코입니다. 초코는 산책을 아주 좋아합니다. 그래서 저는 매일 저녁에 초코와 함께 공원을 걷습니다.\n\n윗글의 내용과 같은 것을 고르십시오.",
+    "promptZh": "我养着一只小狗。名字叫巧克力。巧克力非常喜欢散步。所以我每天傍晚和巧克力一起在公园散步。\n\n请选择与上文内容一致的一项。",
+    "options": [
+      "초코는 산책을 싫어합니다.",
+      "저는 고양이를 키웁니다.",
+      "저는 아침에 공원을 걷습니다.",
+      "저는 매일 초코와 산책을 합니다."
+    ],
+    "correctIdx": 3,
+    "explanation": "文中「매일 저녁에 초코와 함께 공원을 걷습니다」→ 每天和巧克力散步，④正确。①“아주 좋아합니다”是喜欢不是讨厌、②养的是“강아지”狗不是猫、③是“저녁”傍晚不是早上。④정답。요점：매일+함께 걷다 = 매일 산책。",
+    "vocabulary": [
+      "강아지",
+      "산책"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-content_match",
+    "groupId": null
+  },
+  {
+    "id": "E16I-R46",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "환경",
+    "number": 46,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "중심 생각·장바구니",
+    "prompt": "저는 시장에 갈 때 항상 장바구니를 가지고 갑니다. 비닐봉지를 쓰지 않으면 쓰레기가 줄어듭니다. 작은 일이지만 환경을 지킬 수 있어서 뿌듯합니다.\n\n윗글의 중심 생각을 고르십시오.",
+    "promptZh": "我去市场时总是带着购物袋。不用塑料袋就能减少垃圾。虽然是小事，但能保护环境，很自豪。\n\n请选择上文的中心想法。",
+    "options": [
+      "장바구니를 쓰면 환경을 지킬 수 있습니다.",
+      "시장에는 자주 가야 합니다.",
+      "비닐봉지가 더 편리합니다.",
+      "쓰레기는 줄일 수 없습니다."
+    ],
+    "correctIdx": 0,
+    "explanation": "作者带购物袋、少用塑料袋、说「환경을 지킬 수 있어서 뿌듯합니다」→ 主张用购物袋能护环境。②去市场频率非重点、③塑料袋方便与文意相反、④“쓰레기가 줄어든다”说能减少。①정답。요점：뿌듯한 이유 = 중심 주장。",
+    "vocabulary": [
+      "장바구니",
+      "환경"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-mainidea",
+    "groupId": null
+  },
+  {
+    "id": "E16I-R47",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "건강",
+    "number": 47,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "중심 생각·아침밥",
+    "prompt": "저는 예전에 아침을 자주 굶었습니다. 그런데 요즘은 매일 아침을 챙겨 먹습니다. 아침을 먹으니까 오전에 힘이 나고 공부도 더 잘됩니다.\n\n윗글의 중심 생각을 고르십시오.",
+    "promptZh": "我以前经常不吃早饭。但最近每天都好好吃早饭。吃了早饭上午就有精神，学习也更专注。\n\n请选择上文的中心想法。",
+    "options": [
+      "아침은 굶는 것이 좋습니다.",
+      "아침을 먹으면 하루에 도움이 됩니다.",
+      "공부는 오후에 해야 합니다.",
+      "아침밥은 만들기 어렵습니다."
+    ],
+    "correctIdx": 1,
+    "explanation": "作者说吃早饭后「힘이 나고 공부도 더 잘됩니다」→ 主张吃早饭对一天有帮助。①不吃早饭好与文意相反、③学习时段非重点、④做早饭难未提。②정답。요점：장점 나열 → 도움이 된다 주장。",
+    "vocabulary": [
+      "아침",
+      "챙겨 먹다"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-mainidea",
+    "groupId": null
+  },
+  {
+    "id": "E16I-R48",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "언어",
+    "number": 48,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "중심 생각·한국어 공부",
+    "prompt": "저는 한국 드라마를 보면서 한국어를 배웁니다. 드라마는 재미있어서 지루하지 않습니다. 새로운 표현도 자연스럽게 익힐 수 있습니다.\n\n윗글의 중심 생각을 고르십시오.",
+    "promptZh": "我一边看韩剧一边学韩语。韩剧有意思所以不无聊。新的表达也能自然地掌握。\n\n请选择上文的中心想法。",
+    "options": [
+      "드라마는 시간 낭비입니다.",
+      "한국어는 배우기 어렵습니다.",
+      "드라마로 한국어를 재미있게 배울 수 있습니다.",
+      "표현은 책으로만 익혀야 합니다."
+    ],
+    "correctIdx": 2,
+    "explanation": "作者边看剧边学、说「재미있어서 지루하지 않다」+「자연스럽게 익힐 수 있다」→ 主张用韩剧能有趣地学韩语。①浪费时间与文意相反、②难未提、④“只能靠书”与用剧学相反。③정답。요점：재미+효과 → 좋은 방법 주장。",
+    "vocabulary": [
+      "드라마",
+      "표현"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-mainidea",
+    "groupId": null
+  },
+  {
+    "id": "E16I-R49",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "일상",
+    "number": 49,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "题组·빈칸 채우기·꽃 기르기",
+    "prompt": "저는 방에서 작은 꽃을 기릅니다. 매일 아침에 물을 줍니다. 그런데 지난주에 여행을 가서 삼 일 동안 물을 못 주었습니다. 집에 돌아와 보니 꽃이 (   ). 그래서 얼른 물을 주었습니다.\n\n(   )에 들어갈 알맞은 말을 고르십시오.",
+    "promptZh": "我在房间里养着一盆小花。每天早上浇水。但上周去旅行，三天没能浇水。回到家一看，花（   ）。所以赶紧浇了水。\n\n请选择填入（   ）处最合适的话。",
+    "options": [
+      "시들어 있었습니다",
+      "새로 피었습니다",
+      "더 커졌습니다",
+      "물이 많았습니다"
+    ],
+    "correctIdx": 0,
+    "explanation": "三天没浇水，回家看到花的状态且“赶紧浇水”→ 说明花「시들어 있었습니다」（蔫了）。②开新花、③更大了都是长势好，与“没浇水+赶紧补救”矛盾；④水多与“못 주었다”矛盾。①정답。요점：물 부족 → 시들다。",
+    "vocabulary": [
+      "꽃",
+      "시들다"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-passage-fill",
+    "groupId": "E16I-R-G49-50"
+  },
+  {
+    "id": "E16I-R50",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "일상",
+    "number": 50,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "题组·중심 생각·꽃 기르기",
+    "prompt": "저는 방에서 작은 꽃을 기릅니다. 매일 아침에 물을 줍니다. 그런데 지난주에 여행을 가서 삼 일 동안 물을 못 주었습니다. 집에 돌아와 보니 꽃이 시들어 있었습니다. 그래서 얼른 물을 주었습니다.\n\n윗글의 중심 생각을 고르십시오.",
+    "promptZh": "我在房间里养着一盆小花。每天早上浇水。但上周去旅行，三天没能浇水。回到家一看，花蔫了。所以赶紧浇了水。\n\n请选择上文的中心想法。",
+    "options": [
+      "여행은 자주 가는 것이 좋습니다.",
+      "꽃은 물을 주지 않아도 됩니다.",
+      "꽃은 매일 물을 잘 줘야 합니다.",
+      "꽃은 방에서 기르면 안 됩니다."
+    ],
+    "correctIdx": 2,
+    "explanation": "三天没浇水花就蔫了、回来赶紧浇 → 说明花要每天好好浇水。①旅行频率非重点、②不用浇水与“시들었다”矛盾、④不能在房间养未提。③정답。요점：물을 안 주니 시들다 → 매일 물을 줘야 한다。",
+    "vocabulary": [
+      "기르다",
+      "물"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-passage-fill",
+    "groupId": "E16I-R-G49-50"
+  },
+  {
+    "id": "E16I-R51",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "안내문",
+    "number": 51,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "题组·접속 부사·수영 강습",
+    "prompt": "우리 센터에서는 초보자를 위한 수영 강습을 시작합니다. 오전반은 아홉 시에 수업을 합니다. (   ) 오후반은 세 시에 수업을 합니다. 신청은 일 층 사무실에서 받습니다.\n\n(   )에 들어갈 알맞은 말을 고르십시오.",
+    "promptZh": "我们中心开设面向初学者的游泳课。上午班九点上课。（   ）下午班三点上课。报名在一楼办公室受理。\n\n请选择填入（   ）处最合适的话。",
+    "options": [
+      "그리고",
+      "그러나",
+      "하지만",
+      "그래서"
+    ],
+    "correctIdx": 0,
+    "explanation": "前后两句都是并列介绍时段（오전반+오후반）→ 表添加用「그리고」。②「그러나」③「하지만」表转折、④「그래서」表因果，都不匹配“并列罗列”。①정답。요점：등가 정보 병렬 → 그리고。",
+    "vocabulary": [
+      "수영",
+      "강습"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-passage-conn",
+    "groupId": "E16I-R-G51-52"
+  },
+  {
+    "id": "E16I-R52",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "안내문",
+    "number": 52,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "题组·중심 화제·수영 강습",
+    "prompt": "우리 센터에서는 초보자를 위한 수영 강습을 시작합니다. 오전반은 아홉 시에 수업을 합니다. 그리고 오후반은 세 시에 수업을 합니다. 신청은 일 층 사무실에서 받습니다.\n\n무엇에 대한 이야기입니까?",
+    "promptZh": "我们中心开设面向初学者的游泳课。上午班九点上课。而且下午班三点上课。报名在一楼办公室受理。\n\n是关于什么的？",
+    "options": [
+      "센터 이용 규칙",
+      "초보자 모집 결과",
+      "사무실 위치 안내",
+      "수영 강습 안내"
+    ],
+    "correctIdx": 3,
+    "explanation": "全文介绍游泳课的开班时间和报名方式 → 中心话题是游泳课通知。①使用规则、②办公室位置、③招募结果都只是附带或未提。④수영 강습 안내 정답。요점：글 전체가 반복하는 개념 = 주제。",
+    "vocabulary": [
+      "초보자",
+      "신청"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-passage-conn",
+    "groupId": "E16I-R-G51-52"
+  },
+  {
+    "id": "E16I-R53",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "일상",
+    "number": 53,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "题组·빈칸 채우기·자전거",
+    "prompt": "저는 회사에 갈 때 자전거를 탑니다. 자전거를 타면 길이 막혀도 (   ). 그리고 운동도 되고 기분도 좋아집니다. 그래서 저는 매일 자전거로 출근합니다.\n\n(   )에 들어갈 알맞은 말을 고르십시오.",
+    "promptZh": "我上班时骑自行车。骑自行车即使堵车也（   ）。而且能运动，心情也变好。所以我每天骑自行车上班。\n\n请选择填入（   ）处最合适的话。",
+    "options": [
+      "택시를 타야 합니다",
+      "늦지 않습니다",
+      "돈이 많이 듭니다",
+      "길이 위험합니다"
+    ],
+    "correctIdx": 1,
+    "explanation": "骑车「길이 막혀도」（即使堵车）后接的优点、且下文说运动心情好 → 应是「늦지 않습니다」（不会迟到）。①要打车、③花钱多、④路危险都是缺点，与“매일 자전거로 출근”的正面语气矛盾。②정답。요점：길이 막혀도 → 늦지 않다。",
+    "vocabulary": [
+      "자전거",
+      "출근"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-passage-fill",
+    "groupId": "E16I-R-G53-54"
+  },
+  {
+    "id": "E16I-R54",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "일상",
+    "number": 54,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "题组·내용 일치·자전거",
+    "prompt": "저는 회사에 갈 때 자전거를 탑니다. 자전거를 타면 길이 막혀도 늦지 않습니다. 그리고 운동도 되고 기분도 좋아집니다. 그래서 저는 매일 자전거로 출근합니다.\n\n윗글의 내용과 같은 것을 고르십시오.",
+    "promptZh": "我上班时骑自行车。骑自行车即使堵车也不会迟到。而且能运动，心情也变好。所以我每天骑自行车上班。\n\n请选择与上文内容一致的一项。",
+    "options": [
+      "저는 버스로 출근합니다.",
+      "자전거를 타면 운동이 안 됩니다.",
+      "저는 매일 자전거로 회사에 갑니다.",
+      "저는 가끔 자전거를 탑니다."
+    ],
+    "correctIdx": 2,
+    "explanation": "文中「매일 자전거로 출근합니다」→ 每天骑车上班，③正确。①是自行车不是公交、②“운동도 되고”是能运动、④是“매일”不是偶尔，均不符。③정답。요점：매일+자전거 출근 = 每天骑车去公司。",
+    "vocabulary": [
+      "운동",
+      "기분"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-passage-fill",
+    "groupId": "E16I-R-G53-54"
+  },
+  {
+    "id": "E16I-R55",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "직장",
+    "number": 55,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "题组·접속 부사·회의",
+    "prompt": "내일 오후에 중요한 회의가 있습니다. 그래서 자료를 미리 준비해야 합니다. (   ) 회의실이 좁아서 다른 방으로 바꾸었습니다. 모두 삼 층 큰 회의실로 오시기 바랍니다.\n\n(   )에 들어갈 알맞은 말을 고르십시오.",
+    "promptZh": "明天下午有重要会议。所以要提前准备资料。（   ）会议室太小换到了别的房间。请大家到三楼大会议室来。\n\n请选择填入（   ）处最合适的话。",
+    "options": [
+      "그리고",
+      "그런데",
+      "그러면",
+      "왜냐하면"
+    ],
+    "correctIdx": 1,
+    "explanation": "前句说准备资料，后句转到“会议室太小换房间”这一新情况 → 用表话题转换的「그런데」。①「그리고」表并列添加、③「그러면」表条件、④「왜냐하면」表原因，都不匹配“补充新情况”。②정답。요점：화제 전환·부가 상황 → 그런데。",
+    "vocabulary": [
+      "회의",
+      "자료"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-passage-conn",
+    "groupId": "E16I-R-G55-56"
+  },
+  {
+    "id": "E16I-R56",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "직장",
+    "number": 56,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "题组·내용 일치·회의",
+    "prompt": "내일 오후에 중요한 회의가 있습니다. 그래서 자료를 미리 준비해야 합니다. 그런데 회의실이 좁아서 다른 방으로 바꾸었습니다. 모두 삼 층 큰 회의실로 오시기 바랍니다.\n\n윗글의 내용과 같은 것을 고르십시오.",
+    "promptZh": "明天下午有重要会议。所以要提前准备资料。可是会议室太小换到了别的房间。请大家到三楼大会议室来。\n\n请选择与上文内容一致的一项。",
+    "options": [
+      "회의는 오전에 있습니다.",
+      "회의실을 다른 방으로 바꾸었습니다.",
+      "자료는 준비하지 않아도 됩니다.",
+      "회의실이 너무 넓습니다."
+    ],
+    "correctIdx": 1,
+    "explanation": "文中「회의실이 좁아서 다른 방으로 바꾸었습니다」→ 换了会议室，②正确。①是“오후”不是上午、③“미리 준비해야”是要准备、④是“좁아서”太小不是太宽，均不符。②정답。요점：좁아서 방을 바꾸다 = 换了会议室。",
+    "vocabulary": [
+      "회의실",
+      "바꾸다"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-passage-conn",
+    "groupId": "E16I-R-G55-56"
+  },
+  {
+    "id": "E16I-R57",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "일상",
+    "number": 57,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "문장 배열·이사",
+    "prompt": "다음을 순서에 맞게 배열한 것을 고르십시오.\n\n(가) 지난달에 새집으로 이사했습니다.\n(나) 그런데 짐이 너무 많아서 힘들었습니다.\n(다) 그래서 친구들에게 도와 달라고 했습니다.\n(라) 친구들 덕분에 이사를 빨리 끝낼 수 있었습니다.",
+    "promptZh": "请选择正确的排序。\n(가) 上个月搬到了新家。\n(나) 但是行李太多很辛苦。\n(다) 所以拜托朋友们帮忙。\n(라) 多亏朋友们才能很快搬完家。",
+    "options": [
+      "가-나-다-라",
+      "나-가-다-라",
+      "가-다-나-라",
+      "나-다-가-라"
+    ],
+    "correctIdx": 0,
+    "explanation": "先交代背景「이사했다」(가)→ 遇到问题「짐이 많아 힘들다」(나)→ 采取办法「친구에게 도움 요청」(다)→ 结果「빨리 끝냈다」(라)。②③④首句或中段顺序断裂，逻辑不连贯。①가-나-다-라 정답。요점：배경→문제→해결→결과 순서。",
+    "vocabulary": [
+      "이사",
+      "짐"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-order",
+    "groupId": null
+  },
+  {
+    "id": "E16I-R58",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "일상",
+    "number": 58,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "문장 배열·요가",
+    "prompt": "다음을 순서에 맞게 배열한 것을 고르십시오.\n\n(가) 저는 요즘 잠을 잘 못 잡니다.\n(나) 그래서 자기 전에 요가를 시작했습니다.\n(다) 요가를 하니까 몸이 편해졌습니다.\n(라) 이제는 밤에 잠도 잘 옵니다.",
+    "promptZh": "请选择正确的排序。\n(가) 我最近睡不好觉。\n(나) 所以睡前开始做瑜伽。\n(다) 做了瑜伽身体变舒服了。\n(라) 现在晚上也睡得好了。",
+    "options": [
+      "나-가-다-라",
+      "가-나-다-라",
+      "가-다-나-라",
+      "나-다-가-라"
+    ],
+    "correctIdx": 1,
+    "explanation": "先说问题「잠을 못 잔다」(가)→ 采取行动「요가 시작」(나)→ 变化「몸이 편해졌다」(다)→ 最终结果「잠도 잘 온다」(라)。①④以(나)开头缺前因、③把结果提前，逻辑断裂。②가-나-다-라 정답。요점：문제→행동→변화→결과 순서。",
+    "vocabulary": [
+      "요가",
+      "잠"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-order",
+    "groupId": null
+  },
+  {
+    "id": "E16I-R59",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "여행",
+    "number": 59,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "题组·문장 삽입·여행 준비",
+    "prompt": "다음 주에 저는 처음으로 혼자 여행을 갑니다. ㉠ 그래서 요즘 여행 준비를 하고 있습니다. ㉡ 인터넷으로 기차표도 사고 숙소도 예약했습니다. ㉢ 이제 짐만 싸면 됩니다. ㉣\n\n다음 문장이 들어갈 곳을 고르십시오.\n\n<보기>\n혼자 가는 여행이라서 조금 걱정도 됩니다.",
+    "promptZh": "下周我第一次独自去旅行。㉠所以最近在做旅行准备。㉡在网上买了火车票也订了住处。㉢现在只要收拾行李就行了。㉣\n\n请选择下列句子插入的位置。\n<보기>\n因为是独自去的旅行，有点担心。",
+    "options": [
+      "㉠",
+      "㉡",
+      "㉢",
+      "㉣"
+    ],
+    "correctIdx": 3,
+    "explanation": "示例句「혼자 가는 여행이라서 걱정도 됩니다」是对全文情绪的补充收尾，最适合放在段末㉣。㉠处刚说准备、㉡㉢正在讲具体准备事项，插入“担心”会打断准备的叙述流。④㉣ 정답。요점：감정 마무리 문장은 준비 서술이 끝난 뒤。",
+    "vocabulary": [
+      "여행",
+      "걱정"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-passage-insert",
+    "groupId": "E16I-R-G59-60"
+  },
+  {
+    "id": "E16I-R60",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "여행",
+    "number": 60,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "题组·내용 일치·여행 준비",
+    "prompt": "다음 주에 저는 처음으로 혼자 여행을 갑니다. 그래서 요즘 여행 준비를 하고 있습니다. 인터넷으로 기차표도 사고 숙소도 예약했습니다. 혼자 가는 여행이라서 조금 걱정도 됩니다. 이제 짐만 싸면 됩니다.\n\n윗글의 내용과 같은 것을 고르십시오.",
+    "promptZh": "下周我第一次独自去旅行。所以最近在做旅行准备。在网上买了火车票也订了住处。因为是独自去的旅行，有点担心。现在只要收拾行李就行了。\n\n请选择与上文内容一致的一项。",
+    "options": [
+      "저는 친구와 함께 여행을 갑니다.",
+      "저는 기차표를 인터넷으로 샀습니다.",
+      "저는 아직 숙소를 예약하지 않았습니다.",
+      "저는 벌써 짐을 다 쌌습니다."
+    ],
+    "correctIdx": 1,
+    "explanation": "文中「인터넷으로 기차표도 사고」→ 网上买了火车票，②正确。①是“혼자”独自去不是和朋友、③“숙소도 예약했습니다”已订住处、④“이제 짐만 싸면 됩니다”还没收拾行李，均不符。②정답。요점：인터넷+기차표 구매가 핵심 사실。",
+    "vocabulary": [
+      "기차표",
+      "숙소"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-passage-insert",
+    "groupId": "E16I-R-G59-60"
+  },
+  {
+    "id": "E16I-R61",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "봉사",
+    "number": 61,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "题组·빈칸 채우기·봉사 활동",
+    "prompt": "저는 한 달에 한 번 요양원에 가서 봉사 활동을 합니다. 할머니, 할아버지들과 이야기를 나누고 청소도 도와드립니다. 처음에는 어색했지만 지금은 (   ). 어르신들이 반갑게 맞아 주셔서 갈 때마다 마음이 따뜻해집니다.\n\n(   )에 들어갈 알맞은 말을 고르십시오.",
+    "promptZh": "我每个月去一次养老院做志愿活动。和爷爷奶奶们聊天，也帮忙打扫。一开始有点尴尬，但现在（   ）。老人们热情地迎接我，每次去心里都暖暖的。\n\n请选择填入（   ）处最合适的话。",
+    "options": [
+      "가기 싫습니다",
+      "너무 힘듭니다",
+      "아주 편해졌습니다",
+      "시간이 없습니다"
+    ],
+    "correctIdx": 2,
+    "explanation": "「처음에는 어색했지만 지금은」后接与下文“心里暖暖”呼应的正面变化 → 「아주 편해졌습니다」（变得很自在）。①不想去、②太累、④没时间都是负面，与“마음이 따뜻해진다”的正面语气矛盾。③정답。요점：어색했지만 → 편해지다 대조。",
+    "vocabulary": [
+      "봉사",
+      "요양원"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-passage-fill",
+    "groupId": "E16I-R-G61-62"
+  },
+  {
+    "id": "E16I-R62",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "봉사",
+    "number": 62,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "题组·중심 생각·봉사 활동",
+    "prompt": "저는 한 달에 한 번 요양원에 가서 봉사 활동을 합니다. 할머니, 할아버지들과 이야기를 나누고 청소도 도와드립니다. 처음에는 어색했지만 지금은 아주 편해졌습니다. 어르신들이 반갑게 맞아 주셔서 갈 때마다 마음이 따뜻해집니다.\n\n윗글의 중심 생각을 고르십시오.",
+    "promptZh": "我每个月去一次养老院做志愿活动。和爷爷奶奶们聊天，也帮忙打扫。一开始有点尴尬，但现在变得很自在。老人们热情地迎接我，每次去心里都暖暖的。\n\n请选择上文的中心想法。",
+    "options": [
+      "봉사 활동을 하면 마음이 따뜻해집니다.",
+      "요양원 청소는 아주 힘듭니다.",
+      "봉사 활동은 한 달에 여러 번 해야 합니다.",
+      "어르신들과 이야기하기는 어렵습니다."
+    ],
+    "correctIdx": 0,
+    "explanation": "作者说做志愿后「갈 때마다 마음이 따뜻해집니다」→ 主张做志愿让心里温暖。②打扫累、④和老人聊天难都与“편해졌다”矛盾、③次数非重点。①정답。요점：마음이 따뜻해진다 = 봉사의 보람 주장。",
+    "vocabulary": [
+      "어르신",
+      "따뜻하다"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-passage-fill",
+    "groupId": "E16I-R-G61-62"
+  },
+  {
+    "id": "E16I-R63",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "이메일",
+    "number": 63,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "题组·목적 파악·문의 메일",
+    "prompt": "받는 사람: 행복 요리 학원\n제목: 수업 문의\n\n안녕하세요. 저는 다음 달부터 한식 요리를 배우고 싶은 사람입니다. 주말에도 수업이 있는지 궁금합니다. 그리고 수업료가 얼마인지도 알려 주시면 감사하겠습니다. 답장 기다리겠습니다.\n\n이서준 드림\n\n서준 씨가 이 메일을 왜 썼는지 고르십시오.",
+    "promptZh": "收件人：幸福料理学院\n主题：课程咨询\n\n您好。我是想从下个月开始学韩餐料理的人。想知道周末是否也有课。另外如果能告知学费是多少将不胜感激。等待回信。\n\n李瑞俊 敬上\n\n请选择瑞俊写这封邮件的目的。",
+    "options": [
+      "요리 학원을 소개하려고",
+      "요리 재료를 주문하려고",
+      "수업을 취소하려고",
+      "수업 시간과 수업료를 물어보려고"
+    ],
+    "correctIdx": 3,
+    "explanation": "邮件问「주말에도 수업이 있는지」和「수업료가 얼마인지」→ 目的是咨询上课时间和学费。①介绍学院、②取消课程、③订购食材都与邮件内容不符。④수업 시간과 수업료를 물어보려고 正解。요점：궁금하다+알려 주세요 = 문의 목적。",
+    "vocabulary": [
+      "문의",
+      "수업료"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-passage-purpose",
+    "groupId": "E16I-R-G63-64"
+  },
+  {
+    "id": "E16I-R64",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "이메일",
+    "number": 64,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "题组·내용 일치·문의 메일",
+    "prompt": "받는 사람: 행복 요리 학원\n제목: 수업 문의\n\n안녕하세요. 저는 다음 달부터 한식 요리를 배우고 싶은 사람입니다. 주말에도 수업이 있는지 궁금합니다. 그리고 수업료가 얼마인지도 알려 주시면 감사하겠습니다. 답장 기다리겠습니다.\n\n이서준 드림\n\n윗글의 내용과 같은 것을 고르십시오.",
+    "promptZh": "收件人：幸福料理学院\n主题：课程咨询\n\n您好。我是想从下个月开始学韩餐料理的人。想知道周末是否也有课。另外如果能告知学费是多少将不胜感激。等待回信。\n\n李瑞俊 敬上\n\n请选择与上文内容一致的一项。",
+    "options": [
+      "서준 씨는 벌써 요리를 배우고 있습니다.",
+      "서준 씨는 양식 요리를 배우고 싶어 합니다.",
+      "서준 씨는 주말 수업이 있는지 알고 싶어 합니다.",
+      "서준 씨는 수업료를 이미 냈습니다."
+    ],
+    "correctIdx": 2,
+    "explanation": "邮件说「주말에도 수업이 있는지 궁금합니다」→ 想知道有无周末课，③正确。①是“다음 달부터 배우고 싶다”还没学、②是“한식”韩餐不是西餐、④只是问学费没交，均不符。③정답。요점：주말 수업 여부 문의가 핵심。",
+    "vocabulary": [
+      "한식",
+      "주말"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-passage-purpose",
+    "groupId": "E16I-R-G63-64"
+  },
+  {
+    "id": "E16I-R65",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "문화",
+    "number": 65,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "题组·빈칸 채우기·한복 체험",
+    "prompt": "지난 주말에 저는 친구와 함께 한복을 입어 보는 체험을 했습니다. 예쁜 한복을 입고 고궁을 걸으니까 마치 옛날 사람이 된 것 같았습니다. 사진도 많이 찍었습니다. (   ) 한복을 입은 날은 고궁 입장료가 무료여서 더 좋았습니다.\n\n(   )에 들어갈 알맞은 말을 고르십시오.",
+    "promptZh": "上周末我和朋友一起体验了穿韩服。穿着漂亮的韩服在古宫散步，就像变成了古代人一样。也拍了很多照片。（   ）穿韩服的那天古宫门票免费，就更好了。\n\n请选择填入（   ）处最合适的话。",
+    "options": [
+      "그리고",
+      "그러나",
+      "그렇지만",
+      "왜냐하면"
+    ],
+    "correctIdx": 0,
+    "explanation": "前面讲体验的好处，后句再添加“门票免费”这一好处 → 表添加用「그리고」。②「그러나」③「그렇지만」表转折，但前后都是正面无转折；④「왜냐하면」表原因也不合。①정답。요점：장점 추가 나열 → 그리고。",
+    "vocabulary": [
+      "한복",
+      "고궁"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-passage-fill",
+    "groupId": "E16I-R-G65-66"
+  },
+  {
+    "id": "E16I-R66",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "문화",
+    "number": 66,
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "testPoint": "题组·내용 일치·한복 체험",
+    "prompt": "지난 주말에 저는 친구와 함께 한복을 입어 보는 체험을 했습니다. 예쁜 한복을 입고 고궁을 걸으니까 마치 옛날 사람이 된 것 같았습니다. 사진도 많이 찍었습니다. 그리고 한복을 입은 날은 고궁 입장료가 무료여서 더 좋았습니다.\n\n윗글의 내용과 같은 것을 고르십시오.",
+    "promptZh": "上周末我和朋友一起体验了穿韩服。穿着漂亮的韩服在古宫散步，就像变成了古代人一样。也拍了很多照片。而且穿韩服的那天古宫门票免费，就更好了。\n\n请选择与上文内容一致的一项。",
+    "options": [
+      "저는 혼자 한복 체험을 했습니다.",
+      "한복을 입으면 입장료가 무료입니다.",
+      "저는 사진을 찍지 못했습니다.",
+      "한복은 입기가 불편했습니다."
+    ],
+    "correctIdx": 1,
+    "explanation": "文中「한복을 입은 날은 고궁 입장료가 무료」→ 穿韩服门票免费，②正确。①是“친구와 함께”和朋友不是独自、③“사진도 많이 찍었습니다”拍了很多、④“옛날 사람이 된 것 같았다”是好体验没说不便，均不符。②정답。요점：한복 착용 → 입장료 무료가 핵심 사실。",
+    "vocabulary": [
+      "입장료",
+      "무료"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-passage-fill",
+    "groupId": "E16I-R-G65-66"
+  },
+  {
+    "id": "E16I-R67",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "일상",
+    "number": 67,
+    "type": "multiple-choice",
+    "difficulty": "hard",
+    "testPoint": "题组·빈칸 채우기·중고 거래",
+    "prompt": "저는 요즘 안 쓰는 물건을 인터넷 중고 시장에 팝니다. 처음에는 낯선 사람과 거래하는 것이 좀 무서웠습니다. 하지만 몇 번 해 보니까 (   ). 필요 없는 물건을 팔면 돈도 생기고 집도 깨끗해집니다. 그리고 물건을 버리지 않으니까 환경에도 좋습니다.\n\n(   )에 들어갈 알맞은 말을 고르십시오.",
+    "promptZh": "我最近把不用的东西卖到网上二手市场。一开始和陌生人交易有点害怕。但做了几次以后（   ）。卖掉不需要的东西既能有钱，家里也变干净。而且东西不扔掉，对环境也好。\n\n请选择填入（   ）处最合适的话。",
+    "options": [
+      "더 무서워졌습니다",
+      "괜찮아졌습니다",
+      "그만두었습니다",
+      "물건이 없어졌습니다"
+    ],
+    "correctIdx": 1,
+    "explanation": "「처음에는 무서웠습니다. 하지만 몇 번 해 보니까」后接与下文列举好处呼应的正面变化 → 「괜찮아졌습니다」（变得没问题了）。①更害怕、③放弃了都与后文继续列好处矛盾；④东西没了与文意不搭。②정답。요점：무서웠지만 → 괜찮아지다 대조。",
+    "vocabulary": [
+      "중고",
+      "거래"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-passage-fill",
+    "groupId": "E16I-R-G67-68"
+  },
+  {
+    "id": "E16I-R68",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "일상",
+    "number": 68,
+    "type": "multiple-choice",
+    "difficulty": "hard",
+    "testPoint": "题组·중심 생각·중고 거래",
+    "prompt": "저는 요즘 안 쓰는 물건을 인터넷 중고 시장에 팝니다. 처음에는 낯선 사람과 거래하는 것이 좀 무서웠습니다. 하지만 몇 번 해 보니까 괜찮아졌습니다. 필요 없는 물건을 팔면 돈도 생기고 집도 깨끗해집니다. 그리고 물건을 버리지 않으니까 환경에도 좋습니다.\n\n윗글의 중심 생각을 고르십시오.",
+    "promptZh": "我最近把不用的东西卖到网上二手市场。一开始和陌生人交易有点害怕。但做了几次以后就没问题了。卖掉不需要的东西既能有钱，家里也变干净。而且东西不扔掉，对环境也好。\n\n请选择上文的中心想法。",
+    "options": [
+      "중고 거래는 위험해서 하면 안 됩니다.",
+      "물건은 무조건 버리는 것이 좋습니다.",
+      "중고 거래를 하면 여러 가지로 좋습니다.",
+      "안 쓰는 물건은 그냥 두어야 합니다."
+    ],
+    "correctIdx": 2,
+    "explanation": "作者列举二手交易的好处「돈+깨끗함+환경」→ 主张二手交易好处多。①危险不能做与“괜찮아졌다”矛盾、②扔东西好与“버리지 않으니 환경에 좋다”矛盾、④放着不管与“판다”矛盾。③정답。요점：여러 장점 나열 → 좋다 주장。",
+    "vocabulary": [
+      "필요",
+      "깨끗하다"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-passage-fill",
+    "groupId": "E16I-R-G67-68"
+  },
+  {
+    "id": "E16I-R69",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "일상",
+    "number": 69,
+    "type": "multiple-choice",
+    "difficulty": "hard",
+    "testPoint": "题组·심정 파악·첫 발표",
+    "prompt": "어제는 회사에서 처음으로 발표를 하는 날이었습니다. 저는 며칠 전부터 준비를 열심히 했지만 사람들 앞에 서니까 손이 떨리고 목소리도 작아졌습니다. 그런데 발표가 끝나자 부장님께서 잘했다고 칭찬해 주셨습니다. 동료들도 박수를 쳐 주었습니다. 그 순간 저는 (   ).\n\n(   )에 들어갈 알맞은 말을 고르십시오.",
+    "promptZh": "昨天是我在公司第一次做发表的日子。我从几天前就努力准备，但站到大家面前手就发抖声音也变小了。可是发表一结束，部长就夸我做得好。同事们也鼓了掌。那一刻我（   ）。\n\n请选择填入（   ）处最合适的话。",
+    "options": [
+      "너무 화가 났습니다",
+      "몹시 슬펐습니다",
+      "정말 뿌듯했습니다",
+      "많이 실망했습니다"
+    ],
+    "correctIdx": 2,
+    "explanation": "发表结束后被部长表扬、同事鼓掌 → 那一刻的心情应是「뿌듯했습니다」（自豪·欣慰）。①生气、②难过、④失望都是负面情绪，与“칭찬+박수”的正面情境矛盾。③정답。요점：칭찬+박수 → 뿌듯하다 심정。",
+    "vocabulary": [
+      "발표",
+      "칭찬"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-passage-purpose",
+    "groupId": "E16I-R-G69-70"
+  },
+  {
+    "id": "E16I-R70",
+    "section": "reading",
+    "level": "beginner",
+    "topic": "일상",
+    "number": 70,
+    "type": "multiple-choice",
+    "difficulty": "hard",
+    "testPoint": "题组·내용 일치·첫 발표",
+    "prompt": "어제는 회사에서 처음으로 발표를 하는 날이었습니다. 저는 며칠 전부터 준비를 열심히 했지만 사람들 앞에 서니까 손이 떨리고 목소리도 작아졌습니다. 그런데 발표가 끝나자 부장님께서 잘했다고 칭찬해 주셨습니다. 동료들도 박수를 쳐 주었습니다. 그 순간 저는 정말 뿌듯했습니다.\n\n윗글의 내용과 같은 것을 고르십시오.",
+    "promptZh": "昨天是我在公司第一次做发表的日子。我从几天前就努力准备，但站到大家面前手就发抖声音也变小了。可是发表一结束，部长就夸我做得好。同事们也鼓了掌。那一刻我真的很自豪。\n\n请选择与上文内容一致的一项。",
+    "options": [
+      "저는 발표 준비를 하지 않았습니다.",
+      "부장님은 저를 혼냈습니다.",
+      "저는 발표할 때 조금도 긴장하지 않았습니다.",
+      "저는 어제 처음으로 발표를 했습니다."
+    ],
+    "correctIdx": 3,
+    "explanation": "文中「어제는 처음으로 발표를 하는 날이었습니다」→ 昨天第一次发表，④正确。①“며칠 전부터 준비를 열심히 했다”是有准备、②部长是“칭찬”表扬不是骂、③“손이 떨리고 목소리도 작아졌다”是紧张了，均不符。④정답。요점：처음+발표가 핵심 사실。",
+    "vocabulary": [
+      "부장",
+      "긴장"
+    ],
+    "examRound": 116,
+    "questionType": "I-R-passage-purpose",
+    "groupId": "E16I-R-G69-70"
+  }
+]

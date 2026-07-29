@@ -1,0 +1,242 @@
+/* ==========================================================================
+   动물 도시 · 나의 집 — 「我的」板块共享视觉层
+   复用会员板块「暖奶油悬浮卡」品牌语言（--au-* oklch + 海拔阴影 + Fraunces）。
+   .mine-scope 自包含作用域，暗色靠 [data-theme="dark"] 覆盖同名变量。
+   主页 + 错题/录音/成就/消息页共用。
+   ========================================================================== */
+
+.mine-scope {
+  --au-bg: oklch(97% 0.018 75);
+  --au-aside-1: oklch(94% 0.045 70);
+  --au-aside-2: oklch(90% 0.06 45);
+  --au-surface: oklch(99.5% 0.006 75);
+  --au-surface-2: oklch(96% 0.014 72);
+  --au-ink-1: oklch(28% 0.02 55);
+  --au-ink-2: oklch(46% 0.02 55);
+  --au-ink-3: oklch(60% 0.02 55);
+  --au-ink-4: oklch(70% 0.015 55);
+  --au-line: oklch(88% 0.02 70);
+  --au-pink: oklch(72% 0.14 8);
+  --au-pink-deep: oklch(60% 0.16 10);
+  --au-pink-soft: oklch(90% 0.06 10);
+  --au-gold: oklch(76% 0.11 75);
+  --au-gold-deep: oklch(58% 0.1 72);
+  --au-gold-soft: oklch(92% 0.05 78);
+  --au-purple: oklch(66% 0.13 305);
+  --au-purple-deep: oklch(54% 0.14 305);
+  --au-purple-soft: oklch(91% 0.05 305);
+  --au-mint: oklch(72% 0.09 175);
+  --au-mint-deep: oklch(48% 0.09 175);
+  --au-mint-soft: oklch(93% 0.04 175);
+  --au-serif: 'Fraunces', 'Noto Serif SC', Georgia, serif;
+  --elev-1: 0 1px 2px oklch(50% 0.05 40 / 0.06), 0 4px 12px oklch(50% 0.05 40 / 0.06);
+  --elev-2: 0 2px 4px oklch(50% 0.06 40 / 0.07), 0 12px 30px oklch(50% 0.06 40 / 0.10);
+  --elev-3: 0 4px 8px oklch(50% 0.07 40 / 0.08), 0 24px 56px oklch(50% 0.07 40 / 0.14);
+  --sheen: inset 0 1px 0 oklch(100% 0 0 / 0.7);
+
+  color: var(--au-ink-1);
+  font-family: 'Pretendard', 'Noto Sans SC', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+[data-theme="dark"] .mine-scope {
+  --au-bg: oklch(20% 0.016 60);
+  --au-aside-1: oklch(26% 0.03 40);
+  --au-aside-2: oklch(22% 0.035 20);
+  --au-surface: oklch(24% 0.016 60);
+  --au-surface-2: oklch(27% 0.016 60);
+  --au-ink-1: oklch(94% 0.015 75);
+  --au-ink-2: oklch(76% 0.02 75);
+  --au-ink-3: oklch(62% 0.02 75);
+  --au-ink-4: oklch(54% 0.02 75);
+  --au-line: oklch(34% 0.02 60);
+  --au-pink: oklch(78% 0.13 10);
+  --au-pink-deep: oklch(80% 0.13 12);
+  --au-pink-soft: oklch(40% 0.08 10 / 0.35);
+  --au-gold: oklch(80% 0.1 78);
+  --au-gold-deep: oklch(82% 0.1 78);
+  --au-gold-soft: oklch(38% 0.07 78 / 0.35);
+  --au-purple: oklch(78% 0.12 305);
+  --au-purple-deep: oklch(82% 0.11 305);
+  --au-purple-soft: oklch(40% 0.08 305 / 0.35);
+  --au-mint: oklch(76% 0.08 175);
+  --au-mint-deep: oklch(80% 0.08 175);
+  --au-mint-soft: oklch(38% 0.06 175 / 0.35);
+  --sheen: inset 0 1px 0 oklch(100% 0 0 / 0.06);
+}
+
+/* 暖奶油径向背景。桌面上做成大圆角面板浮在主区（像会员中心那样），不再直角铺满。 */
+.mine-bg {
+  background:
+    radial-gradient(80% 60% at 8% 4%, var(--au-aside-1), transparent 55%),
+    radial-gradient(70% 70% at 92% 96%, var(--au-aside-2), transparent 55%),
+    var(--au-bg);
+  min-height: 100%;
+  width: 100%;
+}
+@media (min-width: 1024px) {
+  .mine-bg {
+    border-radius: 28px;
+    border: 1px solid var(--au-line);
+    box-shadow: var(--elev-2), var(--sheen);
+    overflow: hidden;
+    min-height: calc(100vh - 40px);
+  }
+}
+/* 移动端：让暖奶油背景铺满整个视口、消除四周白边。
+   外壳 <main> 有左右 padding(px-4/md:px-8) 和 top padding(pt-3) + 顶部 8px 安全间隔，
+   直接用负 margin 无法在 width:100% 下加宽（右边会残留白边），故：
+   - 横向：width:100vw + calc(50% - 50vw) 居中铺满整个视口宽（不依赖 padding 具体值，稳）
+   - 纵向：负 margin-top 抵消 main 的 padding-top(12) + 8px 间隔 + 安全区，铺到最顶
+   背景铺满后，内容边距由 .mine-stage 自己的 padding 提供。 */
+@media (max-width: 1023px) {
+  .mine-bg {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    margin-top: calc(-20px - env(safe-area-inset-top, 0px));
+    min-height: 100vh;
+  }
+}
+
+.mine-stage { max-width: 1200px; margin: 0 auto; padding: 4px clamp(16px, 4vw, 40px) 60px; width: 100%; }
+/* 移动端 .mine-bg 上移铺满后，内容加回顶部安全间距，避免被状态栏/顶边压住 */
+@media (max-width: 1023px) {
+  .mine-stage { padding-top: calc(20px + env(safe-area-inset-top, 0px)); }
+}
+
+/* 返回 */
+.mine-back {
+  display: inline-flex; align-items: center; gap: 6px; font-size: 14px;
+  color: var(--au-ink-2); text-decoration: none; background: none; border: none;
+  padding: 8px 0; cursor: pointer; margin: 12px 0 6px;
+}
+.mine-back:hover { color: var(--au-ink-1); }
+
+/* ── 家 · Hero ── */
+.mine-hero {
+  position: relative; overflow: hidden;
+  display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; gap: 22px;
+  background:
+    radial-gradient(120% 150% at 0% 0%, oklch(90% 0.06 10 / 0.5), transparent 46%),
+    radial-gradient(120% 160% at 100% 100%, oklch(80% 0.11 75 / 0.36), transparent 52%),
+    var(--au-surface);
+  border: 1px solid var(--au-line); border-radius: 30px;
+  padding: clamp(22px, 3vw, 32px) clamp(24px, 4vw, 40px); margin: 12px 0 26px;
+  box-shadow: var(--elev-2), var(--sheen);
+}
+.mine-settings-btn {
+  flex-shrink: 0;
+  width: 40px; height: 40px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--au-surface); border: 1px solid var(--au-line);
+  color: var(--au-ink-2); cursor: pointer; box-shadow: var(--elev-1);
+  transition: transform .18s, color .18s;
+}
+.mine-settings-btn:hover { transform: rotate(30deg); color: var(--au-ink-1); }
+.mine-avatar { width: 92px; height: 92px; border-radius: 50%; padding: 4px; background: conic-gradient(from 210deg, var(--au-pink), var(--au-purple), var(--au-gold), var(--au-pink)); box-shadow: var(--elev-1); flex-shrink: 0; }
+.mine-avatar-inner { width: 100%; height: 100%; border-radius: 50%; border: 3px solid var(--au-surface); overflow: hidden; background: var(--au-pink-soft); display: flex; align-items: center; justify-content: center; }
+.mine-avatar-inner img { width: 100%; height: 100%; object-fit: cover; }
+.mine-avatar-fallback { font-size: 34px; font-weight: 800; color: var(--au-pink-deep); }
+.mine-greet { min-width: 0; }
+.mine-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--au-pink-deep); }
+.mine-name { font-family: var(--au-serif); font-size: clamp(24px, 3vw, 30px); font-weight: 700; margin: 5px 0 3px; letter-spacing: -.01em; overflow-wrap: break-word; }
+.mine-name-greeting { display: block; }
+.mine-name-user { display: block; }
+.mine-hsub { font-size: 14px; color: var(--au-ink-2); display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.mine-mem-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 700; color: var(--au-gold-deep); background: var(--au-gold-soft); padding: 2px 10px; border-radius: 999px; }
+.mine-mini { display: flex; gap: 26px; padding-left: 26px; border-left: 1px solid var(--au-line); }
+.mine-mini-item { text-align: center; }
+.mine-mini-num { font-family: var(--au-serif); font-size: 26px; font-weight: 700; line-height: 1; }
+.mine-mini-num.pink { color: var(--au-pink-deep); } .mine-mini-num.gold { color: var(--au-gold-deep); } .mine-mini-num.purple { color: var(--au-purple-deep); }
+.mine-mini-label { font-size: 12px; color: var(--au-ink-3); margin-top: 6px; }
+
+/* ── 分区标题 ── */
+.mine-sec-head { display: flex; align-items: baseline; gap: 10px; margin: 32px 0 16px; }
+.mine-sec-title { font-family: var(--au-serif); font-size: 20px; font-weight: 600; color: var(--au-ink-1); }
+.mine-sec-kr { font-size: 13px; color: var(--au-ink-3); }
+
+/* ── 会员中心横向卡 ── */
+.mc-banner {
+  position: relative; overflow: hidden;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 24px;
+  border: 1px solid var(--au-gold); border-radius: 26px;
+  padding: clamp(22px, 3vw, 28px) clamp(24px, 4vw, 32px);
+  box-shadow: var(--elev-2), var(--sheen);
+  background:
+    radial-gradient(130% 180% at 100% 0%, oklch(80% 0.11 75 / 0.42), transparent 55%),
+    linear-gradient(150deg, oklch(94% 0.05 75), var(--au-surface));
+}
+[data-theme="dark"] .mc-banner { background: radial-gradient(130% 180% at 100% 0%, oklch(50% 0.09 75 / 0.4), transparent 55%), var(--au-surface); }
+/* 免费用户：粉色引导 */
+.mc-banner.is-free { border-color: var(--au-pink); background: radial-gradient(130% 180% at 100% 0%, oklch(85% 0.09 10 / 0.5), transparent 55%), linear-gradient(150deg, oklch(95% 0.04 20), var(--au-surface)); }
+.mc-eyebrow { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; color: var(--au-gold-deep); background: oklch(76% 0.11 75 / 0.16); padding: 4px 12px; border-radius: 999px; margin-bottom: 10px; }
+.mc-banner.is-free .mc-eyebrow { color: var(--au-pink-deep); background: var(--au-pink-soft); }
+.mc-title { font-family: var(--au-serif); font-size: clamp(19px, 2.4vw, 23px); font-weight: 700; margin-bottom: 5px; }
+.mc-desc { font-size: 14px; color: var(--au-ink-2); line-height: 1.6; max-width: 52ch; }
+.mc-cta { white-space: nowrap; padding: 14px 30px; border: none; border-radius: 999px; font-size: 15px; font-weight: 700; color: #fff; cursor: pointer; background: linear-gradient(150deg, #f0c060, #d99a3a); box-shadow: 0 6px 16px oklch(72% 0.12 75 / 0.34); transition: transform .18s; }
+.mc-banner.is-free .mc-cta { background: linear-gradient(150deg, #ff9dbb, #ff7fa8); box-shadow: 0 6px 16px oklch(70% 0.14 10 / 0.32); }
+.mc-cta:hover { transform: translateY(-1px); }
+
+/* ── 四宝卡 ── */
+.mine-grid4 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.fcard {
+  position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 14px;
+  background: var(--au-surface); border: 1px solid var(--au-line); border-radius: 26px;
+  padding: clamp(20px, 2.6vw, 26px) clamp(22px, 3vw, 28px);
+  box-shadow: var(--elev-1), var(--sheen);
+  transition: transform .24s cubic-bezier(.25,1,.5,1), box-shadow .24s; cursor: pointer;
+  text-decoration: none; color: inherit;
+}
+.fcard:hover { transform: translateY(-4px); box-shadow: var(--elev-2), var(--sheen); }
+.fcard-top { display: flex; align-items: center; gap: 14px; }
+.fcard-ic { width: 54px; height: 54px; border-radius: 17px; display: flex; align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0; box-shadow: var(--sheen); }
+.fcard-ic.pink { background: var(--au-pink-soft); } .fcard-ic.mint { background: var(--au-mint-soft); } .fcard-ic.purple { background: var(--au-purple-soft); } .fcard-ic.gold { background: var(--au-gold-soft); }
+.fcard-titles { flex: 1; min-width: 0; }
+.fcard-title { font-family: var(--au-serif); font-size: 19px; font-weight: 700; color: var(--au-ink-1); }
+.fcard-kr { font-size: 12px; color: var(--au-ink-3); margin-top: 1px; }
+.fcard-badge { font-size: 12px; font-weight: 700; padding: 4px 11px; border-radius: 999px; background: var(--au-pink-soft); color: var(--au-pink-deep); white-space: nowrap; }
+.fcard-badge.mint { background: var(--au-mint-soft); color: var(--au-mint-deep); }
+.fcard-badge.gold { background: var(--au-gold-soft); color: var(--au-gold-deep); }
+.fcard-badge.purple { background: var(--au-purple-soft); color: var(--au-purple-deep); }
+.fcard-preview { display: flex; flex-direction: column; gap: 8px; }
+.prev-row { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 12px; background: var(--au-surface-2); font-size: 13px; color: var(--au-ink-2); }
+.prev-row .ko { font-weight: 700; color: var(--au-ink-1); }
+.prev-row.strong { font-weight: 700; color: var(--au-ink-1); }
+.prev-tag { margin-left: auto; font-size: 11px; color: var(--au-ink-3); flex-shrink: 0; }
+.prev-empty { padding: 14px 12px; border-radius: 12px; background: var(--au-surface-2); font-size: 12.5px; color: var(--au-ink-3); text-align: center; }
+.wave { display: flex; align-items: center; gap: 3px; height: 22px; flex-shrink: 0; }
+.wave i { width: 3px; border-radius: 2px; background: var(--au-mint); display: block; }
+.badge-row { display: flex; gap: 10px; align-items: center; }
+.badge-ring { width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.badge-ring > span { width: 38px; height: 38px; border-radius: 50%; background: var(--au-surface); display: flex; align-items: center; justify-content: center; font-size: 20px; }
+.badge-ring.common { background: conic-gradient(#e7dbd1, #f3ebe3); }
+.badge-ring.rare { background: conic-gradient(#7fcbbd, #bfe8df, #7fcbbd); }
+.badge-ring.epic { background: conic-gradient(#b79ce8, #e0d0f7, #b79ce8); }
+.badge-ring.legend { background: conic-gradient(#ffcf6b, #ff9ec0, #c9a4f0, #ffcf6b); }
+.badge-hint { flex: 1; font-size: 12.5px; color: var(--au-ink-3); }
+.fcard-foot { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 4px; }
+.fcard-link { font-size: 13px; font-weight: 700; color: var(--au-pink-deep); display: inline-flex; align-items: center; gap: 4px; }
+.fcard-link.mint { color: var(--au-mint-deep); } .fcard-link.gold { color: var(--au-gold-deep); } .fcard-link.purple { color: var(--au-purple-deep); }
+.mini-stat { font-size: 12.5px; color: var(--au-ink-3); }
+
+.mine-note { font-size: 12px; color: var(--au-ink-3); text-align: center; margin-top: 36px; font-family: var(--au-serif); font-style: italic; }
+
+/* ── 未登录 ── */
+.mine-guest { text-align: center; padding: 60px 20px; }
+.mine-guest-ic { font-size: 56px; margin-bottom: 14px; }
+.mine-guest-t { font-size: 16px; font-weight: 700; color: var(--au-ink-1); margin-bottom: 16px; }
+.mine-guest-btn { display: inline-block; padding: 11px 28px; border-radius: 999px; background: linear-gradient(150deg, #ff9dbb, #ff7fa8); color: #fff; font-size: 14px; font-weight: 700; border: none; cursor: pointer; box-shadow: var(--elev-1); }
+
+/* ── 移动端：单列 ── */
+@media (max-width: 720px) {
+  .mine-hero { grid-template-columns: auto 1fr; gap: 18px; padding: 22px; }
+  /* 移动：齿轮回到右上角浮动，不占网格列 */
+  .mine-settings-btn { position: absolute; top: 16px; right: 16px; z-index: 2; width: 36px; height: 36px; }
+  .mine-mini { grid-column: 1 / -1; padding-left: 0; padding-top: 16px; border-left: none; border-top: 1px solid var(--au-line); justify-content: space-around; }
+  .mine-grid4 { grid-template-columns: 1fr; }
+  /* minmax(0,1fr)：默认 1fr=minmax(auto,1fr)，auto 取子元素 max-content，
+     而 .mc-cta 有 white-space:nowrap，其 max-content 会撑破轨道 → 按钮右侧溢出被切。
+     minmax(0,…) 允许轨道收缩到容器内。 */
+  .mc-banner { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .mc-cta { width: 100%; }
+}

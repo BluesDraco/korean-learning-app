@@ -11,7 +11,8 @@ export function useAdminData<T>(endpoint: string) {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(endpoint);
+      const sep = endpoint.includes('?') ? '&' : '?';
+      const res = await fetch(`${endpoint}${sep}_t=${Date.now()}`, { cache: 'no-store' });
       const json = await res.json();
       if (res.ok) {
         setData(json);

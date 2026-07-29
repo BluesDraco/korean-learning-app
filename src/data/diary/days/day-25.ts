@@ -1,88 +1,50 @@
 import type { ToriDay } from '@/types/tori-diary';
 
 /**
- * Day 25 · 한강 응원 · 演唱会·一起喊
+ * Day 25 · 兽江演唱会 · 3000人一起喊
  *
- * 剧情：周四晚上 7 点，한강공원草坪上挤了 3000 人。
- * 大屏幕亮起，Junho 老虎、Minji 水獭、Haru 仓鼠、兔莉
- * 站在最前排第三列。Junho 把应援棒塞进兔莉手里：
- * "오늘 우리가 가르쳐 줄게. 따라 해. 사랑해, 응원해, 따라해."
- * 三句应援词。第一遍兔莉羞得喊不出来，
- * 第二遍 Minji 拽着她，
- * 第三遍——3000 人一起，兔莉的声音消失在浪潮里，
- * 但她真的喊出来了。
+ * 剧情：周三晚上，兽尔江草坪挤了3000人。
+ * Junho把应援棒塞进Tori手里。大屏幕亮起。
+ * Tori第一次被韩国应援文化击中——3000人同时喊"사랑해"。
  *
- * 学习目标：응원 3 句 / ~해요 + 强调 / 集体喊
- * 韩语自审：korean skill PASS (응원 표현 + 群体语境)
+ * 学习目标：应援三句（반말命令/感叹）/ 하다类반말变位
+ * 语料层级：반말（应援口号 + 朋友间）
+ * 韩语自审：korean skill PASS（자연성/문법/반말활용 三关）
  */
 export const day25: ToriDay = {
   level: 'beginner',
   day: 25,
   phase: 'expression',
-  title: '한강 콘서트 · 3000 人一起喊',
-  subtitle: 'Junho 把应援棒塞进我手里',
-  isCheckpoint: null,
-  estimatedMin: 13,
+  title: '兽江演唱会 · 3000人一起喊',
+  subtitle: 'Junho把应援棒塞进我手里',
+  heroImageUrl: '/images/diary/day-25-hero.jpg',
+  estimatedMin: 12,
 
   opening: {
-    date: '9월 28일 목요일 저녁',
-    weather: '兽尔 · 晚风',
-    toriPose: 'celebrate',
-    diaryText: `9월 28日，周四晚上 7 点。
+    date: '9월 25일 · 수요일 저녁',
+    weather: '兽尔 · 夜晚·微凉',
+    toriPose: 'shy',
+    diaryText: `9月25日，周三晚上。
 
-한강公园草坪。
-夕阳还没完全落下，
-风把头发吹得乱七八糟。
+兽尔江（한강）草坪，3000人。
+Junho兴奋得尾巴又在抖。
 
-3000 人挤在大屏幕前。
-我们四个站在最前排第三列：
-Junho 🐯 / Minji 🦦 / Haru 🐹 / 我。
-
-Junho 从背包里掏出四根应援棒——
-他从早上就开始充电的。
-他把一根塞进我手里：
-
+他把一根发光的应援棒塞进我手里：
 "토리, 오늘 우리가 가르쳐 줄게."
-（兔莉，今天我们教你。）
-"따라 해. 세 마디만."
-（跟着喊。就三句。）
+（今天我们教你。）
 
-"사랑해. 응원해. 따라해."
-（我爱你。我支持你。我跟着你。）
+大屏幕亮了——
+音乐响起的瞬间，3000人同时举起手。
 
-第一遍。
-我嘴张了，
-但声音卡在喉咙里。
-脸热得发烫。
+Junho在我耳边喊：
+"따라 해! 사랑해! 응원해!"
 
-Minji 拽我胳膊：
-"토리, 그냥 외쳐!"
-（兔莉，就喊出来！）
+我张嘴——
+周围全是喊声，我的声音淹没在里面。
+但是，嘴角在笑。
+心脏在跳。
 
-第二遍。
-我喊了——
-但只比心跳大一点。
-
-第三遍。
-舞台灯爆开，
-3000 人同时举起应援棒。
-
-"사 랑 해—— 응 원 해—— 따 라 해——"
-
-我的声音消失在浪潮里。
-但是。
-我真的喊出来了。
-
-身边 Junho 在哭。
-Haru 也在喊，连尾巴都在抖。
-Minji 一边喊一边笑着拍我后背：
-"토리, 너 잘했어."
-
-胡萝卜在我口袋里跳。
-
-我突然懂了——
-韩语不是写在课本上的字。
-是 3000 人一起喊出来的。`,
+原来这就是应援。`,
   },
 
   words: [
@@ -90,46 +52,46 @@ Minji 一边喊一边笑着拍我后背：
       id: 'd25-w1',
       korean: '한강',
       hangul: 'han-gang',
-      zh: '汉江 (兽尔的母亲河)',
+      zh: '兽尔江',
       pos: '名词',
-      example: { ko: '한강에서 콘서트 봐요.', zh: '在汉江看演唱会。' },
-      tip: '받침 ㅇ → 「에서」: 한강에서 (在汉江)。汉江公园 = 한강공원',
+      example: { ko: '한강에서 콘서트를 했어요.', zh: '在兽尔江开了演唱会。' },
+      tip: '한강(汉江)= 首尔的母亲河。故事里中文叫「兽尔江」，韩语用真实的 한강',
     },
     {
       id: 'd25-w2',
       korean: '응원',
       hangul: 'eung-won',
-      zh: '应援 / 支持',
+      zh: '应援',
       pos: '名词',
-      example: { ko: '응원해요!', zh: '我支持你！' },
-      tip: '응원봉 (应援棒) / 응원곡 (应援歌) / 응원해요 (应援吧)',
+      example: { ko: '응원 문화가 정말 대단해요.', zh: '应援文化真的很厉害。' },
+      tip: '응(应) + 원(援)。응원하다 = 应援/支持/加油',
     },
     {
       id: 'd25-w3',
       korean: '사랑해',
       hangul: 'sa-rang-hae',
-      zh: '我爱你 (半语)',
+      zh: '爱你（반말）',
       pos: '表达',
-      example: { ko: '사랑해, 진짜!', zh: '我爱你，真的！' },
-      tip: '半语形式。敬语 = 사랑해요. 演唱会、家人、恋人间用半语',
+      example: { ko: '오빠, 사랑해!', zh: '哥哥，爱你！' },
+      tip: '사랑하다(爱) → 해(반말해요体去요)。演唱会最常喊的一句',
     },
     {
       id: 'd25-w4',
       korean: '따라 해',
       hangul: 'tta-ra hae',
-      zh: '跟着做 / 跟着喊 (半语)',
+      zh: '跟着做/跟着说',
       pos: '表达',
-      example: { ko: '따라 해, 외쳐!', zh: '跟着喊！' },
-      tip: '动词「따라하다」(跟随做) 半语形。教别人、应援都用',
+      example: { ko: '따라 해! 사랑해!', zh: '跟着喊！我爱你！' },
+      tip: '따라하다(跟随做) → 따라 해(반말命令)。舞台上常说"따라 해 주세요"',
     },
     {
       id: 'd25-w5',
       korean: '외쳐',
-      hangul: 'oe-cheo',
-      zh: '喊 / 呼喊 (半语)',
+      hangul: 'oe-chyeo',
+      zh: '喊',
       pos: '动词',
-      example: { ko: '큰 소리로 외쳐!', zh: '大声喊！' },
-      tip: '动词「외치다」(呼喊) 半语形。比 말하다 (说) 强烈',
+      example: { ko: '크게 외쳐!', zh: '大声喊！' },
+      tip: '외치다(喊叫) → 외쳐(반말命令)。ㅣ+어=여 缩合 → 외쳐',
     },
     {
       id: 'd25-w6',
@@ -137,139 +99,164 @@ Minji 一边喊一边笑着拍我后背：
       hangul: 'eung-won-bong',
       zh: '应援棒',
       pos: '名词',
-      example: { ko: '응원봉 켜요.', zh: '点亮应援棒。' },
-      tip: '받침 ㅇ → 「을」: 응원봉을. 各团有专属设计，看应援棒认偶像',
+      example: { ko: '응원봉 들어!', zh: '举起应援棒！' },
+      tip: '응원(应援) + 봉(棒)。每个偶像团体有专属应援棒造型',
     },
   ],
 
   dialogue: {
-    scene: '한강공원 草坪 · 演唱会前 5 分钟',
+    scene: '兽尔江·3000人演唱会',
     setting: {
-      time: '周四晚 7 点',
-      place: '한강 잠수교 옆 잔디밭',
-      npc: 'Junho 老虎 / Minji 水獭',
+      time: '周三晚上',
+      place: '兽尔江草坪',
+      npc: 'Junho（老虎）/ Minji（水獭）',
     },
     lines: [
       {
         speaker: 'npc',
         npcName: 'Junho',
         ko: '토리, 응원봉 받아. 오늘 우리가 가르쳐 줄게.',
-        hangul: 'to-ri, eung-won-bong ba-da. o-neul u-ri-ga ga-reu-cheo jul-ge',
+        hangul: 'to-ri, eung-won-bong ba-da. o-neul u-ri-ga ga-reu-chyeo jul-ge.',
         zh: '兔莉，拿好应援棒。今天我们教你。',
         practice: 'listen',
-      },
-      {
-        speaker: 'tori',
-        ko: '진짜? 어떻게 해요?',
-        hangul: 'jin-jja? eo-tteo-ke hae-yo',
-        zh: '真的？怎么做？',
-        practice: 'shadow',
       },
       {
         speaker: 'npc',
         npcName: 'Junho',
         ko: '세 마디만 따라 해. "사랑해, 응원해, 따라해."',
-        hangul: 'se ma-di-man tta-ra hae. sa-rang-hae, eung-won-hae, tta-ra-hae',
-        zh: '就跟着喊三句。"我爱你，支持你，跟着你。"',
-        practice: 'listen',
+        hangul: 'se ma-di-man tta-ra hae. "sa-rang-hae, eung-won-hae, tta-ra-hae."',
+        zh: '跟着喊三句："我爱你，我支持你，跟着我。"',
+        practice: 'shadow',
       },
       {
         speaker: 'npc',
         npcName: 'Minji',
         ko: '토리, 그냥 외쳐! 부끄러워하지 마!',
-        hangul: 'to-ri, geu-nyang oe-cheo! bu-kkeu-reo-wo-ha-ji ma',
+        hangul: 'to-ri, geu-nyang oe-chyeo! bu-kkeu-reo-wo-ha-ji ma!',
         zh: '兔莉，就喊出来！别害羞！',
         practice: 'listen',
       },
       {
         speaker: 'tori',
+        isInnerVoice: true,
+        ko: '3000명… 심장이 뛰어…',
+        hangul: 'sam-cheon-myeong… sim-jang-i ttwi-eo…',
+        zh: '3000人……心跳好快……',
+        practice: 'listen',
+      },
+      {
+        speaker: 'tori',
+        ko: '사랑해! 응원해! 따라해!',
+        hangul: 'sa-rang-hae! eung-won-hae! tta-ra-hae!',
+        zh: '我爱你！我支持你！跟着我！',
+        practice: 'shadow',
+      },
+      {
+        speaker: 'you',
         ko: '?',
         hangul: '',
-        zh: '舞台灯亮起，3000 人开始喊。兔莉应该跟着喊什么？',
+        zh: '大屏幕上出现"다 같이!"(大家一起！)，3000人要开始喊了。Tori该喊什么？',
         practice: 'pick',
         choices: [
-          { ko: '사랑해! 응원해! 따라해!', zh: '我爱你！我支持你！我跟着你！', correct: true },
-          { ko: '얼마예요?', zh: '多少钱？', correct: false },
-          { ko: '어디예요?', zh: '在哪里？', correct: false },
+          { ko: '사랑해! 응원해! 따라해!', zh: '我爱你！我支持你！跟着我！', correct: true },
+          { ko: '안녕하세요.', zh: '你好。', correct: false },
+          { ko: '감사합니다.', zh: '谢谢。', correct: false },
         ],
       },
     ],
   },
 
   grammar: {
-    title: '应援三句 · 半语强调',
-    pattern: '动词词干 + 해 / 아 / 어 (半语口号)',
-    whenToUse: '演唱会、应援、加油、亲密关系。半语去掉「-요」直接喊出来。',
+    title: '应援口号：하다类반말',
+    pattern: '하다 → **해** (반말)  |  해요 去掉 요 = 반말',
+    whenToUse: '韩国应援/加油时用반말（非敬语）喊口号。사랑하다→사랑해 / 응원하다→응원해 / 따라하다→따라해。演唱会、运动场、朋友间都用这套。',
     rules: [
-      '하다 动词 → **해** : 사랑하다 → 사랑**해** / 응원하다 → 응원**해**',
-      '其他动词 → **아/어** (去掉요): 따라하다 → 따라**해** / 가다 → **가**',
-      '加强语气重复连呼：「사랑해 사랑해 사랑해!」三连击应援标配',
-      '注意：半语只对**朋友/恋人/偶像/动物**用。对长辈用「사랑합니다 / 응원합니다」',
+      '**하다 → 해**：所有하다类动词的반말 = 해。사랑하다→사랑해(爱你)；응원하다→응원해(支持你)；따라하다→따라해(跟着做)',
+      '**해요 → 해**：해요体去掉 요 就是반말。공부해요→공부해；운동해요→운동해。最简单的반말变换',
+      '**非하다类 반말**：해요体去 요。가요→가(去)；먹어요→먹어(吃)；와요→와(来)。但应援口号多用하다类',
+      '**~지 마 用法**：V지 마 = 别做___（반말禁止）。부끄러워하지 마(别害羞) / 걱정하지 마(别担心)。마 = 하지 마세요 的반말',
+      '**화이팅 用法**：英语 fighting 的韩式变体。不是"打架"而是"加油"。화이팅! = 加油！파이팅 也可以',
+      '**응원 口号三连**：사랑해 + 응원해 + 따라해 是韩国演唱会经典三连喊。歌手在台上喊"따라 해 주세요"→粉丝跟着喊',
+      '**크게 외쳐 用法**：크게(大声地) + 외치다→외쳐(반말命令)。MC在台上常说"크게 외쳐!"让观众大喊',
     ],
     examples: [
-      { ko: '사랑해!', zh: '我爱你！', highlight: '사랑해' },
-      { ko: '응원해!', zh: '我支持你！', highlight: '응원해' },
-      { ko: '따라해!', zh: '跟着喊！', highlight: '따라해' },
-      { ko: '화이팅!', zh: '加油！', highlight: '화이팅' },
+      { ko: '사랑해!', zh: '爱你！', highlight: '해', note: '사랑하다 → 해。演唱会最高频口号。3000人一起喊时震撼' },
+      { ko: '응원해!', zh: '支持你！/加油！', highlight: '해', note: '응원하다 → 해。粉丝对偶像表达支持的标准句' },
+      { ko: '따라 해!', zh: '跟着做！', highlight: '해', note: '따라하다 → 따라 해。歌手教粉丝动作/口号时说的' },
+      { ko: '부끄러워하지 마!', zh: '别害羞！', highlight: '지 마', note: '부끄러워하다(害羞) + 지 마(반말禁止)。朋友鼓励时说' },
+      { ko: '화이팅!', zh: '加油！', highlight: '화이팅', note: '韩式英语。不分场合都能用。考试前/运动时/鼓励时' },
     ],
     pitfall:
-      '应援场合敬语听起来反而怪——「사랑합니다, 응원합니다」太生硬。喊半语「사랑해, 응원해」才是粉丝标配。但要分场合：握手会面对偶像本人时再用敬语「사랑해요」。',
+      '① 사랑해 是반말！对长辈/不熟的人要说 사랑해요 或 사랑합니다。演唱会喊没问题，日常对老师喊就失礼了。② 화이팅 不是"打架"的意思，很多外国人误解。③ 외쳐 的变位：외치다 词干"외치"+어→외쳐（ㅣ+ㅓ=ㅕ 缩合）。不是 외치어 ❌。',
   },
 
   output: [
     {
       id: 'd25-o1',
       kind: 'compose',
-      zhHint: '我爱你！我支持你！我跟着你！',
-      tokens: ['사랑해', '!', '응원해', '!', '따라해', '사랑해요', '응원해요'],
-      composeAnswer: ['사랑해', '!', '응원해', '!', '따라해'],
-      successMsg: '✓ 应援棒在你手里发亮。Junho 哭了，Minji 笑着拍你后背。',
+      zhHint: '我爱你！我支持你！跟着我！',
+      tokens: ['사랑해', '응원해', '따라해', '감사해', '미안해', '좋아해'],
+      composeAnswer: ['사랑해', '응원해', '따라해'],
+      successMsg: '사랑해! 응원해! 따라해! — 3000人的声音里，有你的一份。',
     },
     {
       id: 'd25-o2',
       kind: 'listen-choice',
-      audioKo: '큰 소리로 외쳐!',
-      successMsg: '✓ 「大声喊！」「큰 소리로」= 用大声音；「외쳐」= 「외치다」(呼喊) 半语命令。',
+      audioKo: '토리, 그냥 외쳐! 부끄러워하지 마!',
+      successMsg: '✓ 그냥 외쳐 = 就喊出来；부끄러워하지 마 = 别害羞。Minji的鼓励。',
       choices: [
-        { zh: '大声喊！', correct: true },
-        { zh: '小声说。', correct: false },
-        { zh: '跟着我喊。', correct: false },
-        { zh: '别害羞。', correct: false },
+        { zh: '兔莉，就喊出来！别害羞！', correct: true },
+        { zh: '兔莉，安静一点！别喊！', correct: false },
+        { zh: '兔莉，快回家！别待了！', correct: false },
+        { zh: '兔莉，别哭！', correct: false },
       ],
     },
     {
       id: 'd25-o3',
       kind: 'zh-to-ko',
-      zhPrompt: '我爱你。(对偶像本人，敬语)',
-      successMsg: '"사랑해요" — 偶像见面会用敬语，比半语「사랑해」更礼貌。',
+      zhPrompt: '别担心！加油！',
+      successMsg: '"걱정하지 마! 화이팅!" — 지 마 + 화이팅，鼓励万能组合。',
       choices: [
-        { ko: '사랑해요.', correct: true },
-        { ko: '사랑합니다요.', correct: false },
-        { ko: '사랑한다.', correct: false },
-        { ko: '사랑하다.', correct: false },
+        { ko: '걱정하지 마! 화이팅!', correct: true },
+        { ko: '걱정해! 화이팅!', correct: false },
+        { ko: '걱정하지 마세요! 파이팅!', correct: false },
+        { ko: '걱정 마! 사랑해!', correct: false },
       ],
     },
     {
       id: 'd25-o4',
       kind: 'particle-error',
-      zhHint: '在汉江看演唱会。',
-      successMsg: '「한강」(받침 ㅇ) → 「에서」(动作发生地点); 「콘서트」(无받침) → 「를」(宾语)。',
+      zhHint: '爱你！（반말）',
+      successMsg: '사랑하다 → 해（하다类반말标准变法）。不是 하여 也不是 해요。',
       choices: [
-        { ko: '한강에서 콘서트를 봐요.', correct: true },
-        { ko: '한강에 콘서트를 봐요.', correct: false },
-        { ko: '한강에서 콘서트가 봐요.', correct: false },
-        { ko: '한강를 콘서트에서 봐요.', correct: false },
+        { ko: '사랑해!', correct: true },
+        { ko: '사랑하여!', correct: false },
+        { ko: '사랑해요!', correct: false },
+        { ko: '사랑하!', correct: false },
+      ],
+    },
+    {
+      id: 'd25-o5',
+      kind: 'match-pair',
+      successMsg: '✓ Day 25 全对。今晚的兽尔江，Tori永远不会忘。',
+      pairs: [
+        { ko: '사랑해', zh: '爱你' },
+        { ko: '응원해', zh: '支持你' },
+        { ko: '따라해', zh: '跟着做' },
+        { ko: '화이팅', zh: '加油' },
+        { ko: '응원봉', zh: '应援棒' },
       ],
     },
   ],
 
   recap: {
-    toriPose: 'celebrate',
-    praise: '3000 人的浪潮里，你的声音也在。"韩语不是课本上的字。"',
-    preview: '明天就是关卡 4——一个人去偶像生咖店挑战。综合咖啡馆+应援+追星全部套路。',
+    toriPose: 'proud',
+    praise: '3000명과 함께 외쳤어요! 토리, 오늘 진짜 멋있었어요!',
+    preview: '明天再回다이소——想给自己买一根胡萝卜形状的笔。',
     stickerId: 'sticker-d25',
+    sceneImageUrl: '/images/diary/day-25-scene.jpg',
   },
 
   carrotHint:
-    '今天的胡萝卜：「KPOP 应援三句解析」「半语 vs 敬语何时用」「韩国演唱会观众文化」',
+    '今天的胡萝卜：「하다类动词怎么变반말？」「화이팅为什么是加油的意思？」',
 };

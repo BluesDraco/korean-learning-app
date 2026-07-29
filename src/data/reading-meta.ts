@@ -24,6 +24,3 @@ export const levelColor: Record<Article['level'], string> = {
   C2: 'bg-rose-100 text-rose-700',
   TOPIK: 'bg-rose-100 text-rose-700',
 };
-
-/** 主题列表 */
-export const topics = ['生活', '旅行', '咖啡', 'KPOP', '韩剧', '校园', 'TOPIK', '文化', '饮食', '娱乐'] as const;

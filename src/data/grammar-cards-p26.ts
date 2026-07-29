@@ -46,9 +46,11 @@ export const grammarCardsP26: GrammarCard[] = [
       { type: 'rule', text: '过去时：-았/었더라도', examples: '갔더라도, 먹었더라도, 좋았더라도' },
       { type: 'rule', text: '名词：-(이)라 하더라도 或 -(이)더라도', examples: '학생이라 하더라도, 친구라 하더라도' },
       { type: 'usage', text: '常与 아무리、비록 搭配，加强让步语气', examples: '아무리 바쁘더라도, 비록 어렵더라도' },
-      { type: 'usage', text: '后句多为强意志/主张/命令/义务', examples: '가더라도 조심해서 가세요.' },
+      { type: 'usage', text: '后句多为强意志/主张/命令/义务', examples: '가더라도 조심해서 가세요.（即使去也要小心。）' },
       { type: 'compare', text: '-더라도 vs -아/어도 → -더라도 更强、更假设、书面；-아/어도 更口语', examples: '비가 와도 갈 거예요.(口语) / 비가 오더라도 갈 거예요.(强调)' },
-      { type: 'note', text: '主语可省略，主语一致时不重复', examples: '(제가) 힘들더라도 (제가) 계속할게요.' },
+      { type: 'note', text: '主语可省略，主语一致时不重复', examples: '(제가) 힘들더라도 (제가) 계속할게요.（即使辛苦我也会坚持。）' },
+      { type: 'compare', text: '假设让步 vs 既成事实：-더라도 说的是还没成立的假设"就算…也"；对已经发生的既定事实，中文虽也说"即使/明明"，韩语却要用 -는데도，别硬套 -더라도', examples: '비가 오더라도 갈 거예요.（假设：还没下，也照去） / 비가 오는데도 갔어요.（事实：真下了还是去了）' },
+      { type: 'note', text: '-더라도 里的 -더- 是让步词尾的固定部件，不是"回想"的 -더-（더라고요 那个）；整体当一个词尾记，它本身不表示过去经验或亲历', examples: '가더라도 = 就算去（不含"我回想/亲眼所见"的语气）' },
     ],
     cardExamples: [
       {
@@ -168,7 +170,7 @@ export const grammarCardsP26: GrammarCard[] = [
     <div style="font-size:16px;color:#241917;line-height:1.9">
       아무리 -더라도<br>
       비록 -더라도<br>
-      후句多为意志/命令/义务
+      后句多为意志/命令/义务
     </div>
   </div>
 </div>
@@ -227,8 +229,9 @@ export const grammarCardsP26: GrammarCard[] = [
       { type: 'rule', text: '过去时：-았/었을지라도', examples: '갔을지라도, 먹었을지라도' },
       { type: 'rule', text: '名词：有받침 -이ㄹ지라도 / 无받침 -ㄹ지라도', examples: '학생일지라도, 친구일지라도' },
       { type: 'usage', text: '常与 비록、설령、설사 搭配', examples: '비록 어릴지라도 / 설령 실패할지라도' },
-      { type: 'usage', text: '语气最书面正式，多见于演讲/文学/新闻/宗教文本', examples: '비록 죽을지라도 진리를 지키겠다.' },
+      { type: 'usage', text: '语气最书面正式，多见于演讲/文学/新闻/宗教文本', examples: '비록 죽을지라도 진리를 지키겠다.（哪怕死也要坚守真理。）' },
       { type: 'compare', text: '语气强度：-아/어도 < -더라도 < -을/ㄹ지라도', examples: '가도 → 가더라도 → 갈지라도' },
+      { type: 'compare', text: '与下一课 -을/ㄹ지언정 长得几乎一样，别混：本课 -지라도 是纯让步"纵然A也照样B"，后句能肯定；-지언정 带对比取舍"宁可A也绝不B"，后句必是否定/拒绝（第3课详学）', examples: '실패할지라도 도전하겠습니다.（纵然失败也挑战） vs 굶을지언정 도움은 안 받아요.（宁可挨饿也不受助）' },
     ],
     cardExamples: [
       {
@@ -406,9 +409,11 @@ export const grammarCardsP26: GrammarCard[] = [
       { type: 'rule', text: '无받침 → -ㄹ지언정', examples: '가다 → 갈지언정 / 하다 → 할지언정' },
       { type: 'rule', text: '名词：-(이)ㄹ지언정', examples: '거지일지언정, 학생일지언정' },
       { type: 'usage', text: '语义核心：宁可 A（前句负面/极端），也不 B（后句拒绝）', examples: '죽을지언정 배신은 안 해요.（宁死不背叛）' },
-      { type: 'usage', text: '后句多为否定：-지 않다、-지 못하다、안 -', examples: '굶을지언정 도움은 안 받아요.' },
+      { type: 'usage', text: '后句多为否定：-지 않다、-지 못하다、안 -', examples: '굶을지언정 도움은 안 받아요.（宁可挨饿也不接受帮助。）' },
       { type: 'compare', text: '-을지언정 vs -을지라도 → 前者含拒绝/对比，后者纯让步', examples: '죽을지라도 갈 거예요.(纵死也去) / 죽을지언정 안 갈 거예요.(宁死不去)' },
       { type: 'note', text: '不能用于日常口语，只用于书面/演讲/文学', examples: '(书面) 굶을지언정 굴하지 않겠다.' },
+      { type: 'note', text: '看清两个格子：前句（-을지언정）放的是"愿意承受的代价、牺牲"，通常很惨很极端；不要把想要的好结果塞进前句。想要的立场/坚持放在后句', examples: '굶을지언정(愿受的苦) 도움은 받지 않겠어요(坚持).' },
+      { type: 'usage', text: '常和副词 차라리（宁可）连用，"宁可…也决不…"的决绝感更足', examples: '차라리 굶을지언정 남의 도움은 받지 않겠어요.（宁可挨饿也决不受人帮助。）' },
     ],
     cardExamples: [
       {
@@ -584,9 +589,11 @@ export const grammarCardsP26: GrammarCard[] = [
       { type: 'rule', text: '无받침 → -ㄹ망정', examples: '가다 → 갈망정 / 크다 → 클망정' },
       { type: 'rule', text: '名词：-(이)ㄹ망정', examples: '거지일망정, 학생일망정' },
       { type: 'usage', text: '语义：前句退让/负面，后句坚持底线', examples: '가난할망정 정직해요.（穷但诚实）' },
-      { type: 'usage', text: '后句常带 -지 않다、안 -、잃지 않다、-어야 하다', examples: '가난할망정 잃지 않아요.' },
+      { type: 'usage', text: '后句常带 -지 않다、안 -、잃지 않다、-어야 하다', examples: '가난할망정 잃지 않아요.（哪怕贫穷也不失去〔尊严〕。）' },
       { type: 'compare', text: '-을망정 vs -을지언정 → 语气强度：-을지언정 更强、更正式，-을망정 更常用', examples: '죽을지언정（宁死）> 죽을망정（就算死）' },
-      { type: 'note', text: '常出现于书面语和演讲，也可用于稍正式对话', examples: '작을망정 소중해요.' },
+      { type: 'note', text: '常出现于书面语和演讲，也可用于稍正式对话', examples: '작을망정 소중해요.（虽然小却珍贵。）' },
+      { type: 'note', text: '语感偏"退一步先认下不足，再守住价值"：前句常是承认自己/自家东西差一点，后句为它辩护或坚持底线。这层"知足/自辩"的味道正是它区别于 -지언정（决绝拒绝）之处', examples: '작을망정 우리 집이에요.（虽小，也是我们的家。）' },
+      { type: 'note', text: '别和另一个长得像的 -기에 망정이지 / -니 망정이지 混：那是"幸好…否则就…"的固定结构，表庆幸，跟本课让步的 -을/ㄹ망정 毫无关系', examples: '일찍 왔기에 망정이지, 큰일 날 뻔했어요.（幸好来得早，不然差点出大事。）' },
     ],
     cardExamples: [
       {
@@ -762,10 +769,12 @@ export const grammarCardsP26: GrammarCard[] = [
     connectionRules: [
       { type: 'rule', text: '动词词干 + -는 한이 있어도 / -는 한이 있더라도', examples: '실패하다 → 실패하는 한이 있어도' },
       { type: 'rule', text: '不与形容词直接连用；用形容词时改说 "그런 한이 있어도"', examples: '(避免) 예쁜 한이 있어도 → (改说) 어렵게 되는 한이 있어도' },
-      { type: 'usage', text: '前句是最坏假设，后句是坚决意志（-겠다/-을 거예요/-어야 하다）', examples: '지는 한이 있어도 끝까지 싸울게요.' },
-      { type: 'usage', text: '常见搭配：실패하다 / 그만두다 / 늦다 / 새우다 / 지다 / 죽다', examples: '죽는 한이 있어도 안 팔아요.' },
-      { type: 'note', text: '「-는 한이 있어도」比「-더라도」语气更极端，专用于"到那种地步也……"', examples: '늦더라도 갈게요 vs 늦는 한이 있어도 갈게요.' },
+      { type: 'usage', text: '前句是最坏假设，后句是坚决意志（-겠다/-을 거예요/-어야 하다）', examples: '지는 한이 있어도 끝까지 싸울게요.（哪怕会输也要战斗到底。）' },
+      { type: 'usage', text: '常见搭配：실패하다 / 그만두다 / 늦다 / 새우다 / 지다 / 죽다', examples: '죽는 한이 있어도 안 팔아요.（哪怕死也不卖。）' },
+      { type: 'note', text: '「-는 한이 있어도」比「-더라도」语气更极端，专用于"到那种地步也……"', examples: '늦더라도 갈게요（即使晚也会去）vs 늦는 한이 있어도 갈게요.（哪怕会迟到也要去〔语气更强〕）' },
       { type: 'compare', text: '与 -을지언정 相似，但前者强调"到达那种极端结果"', examples: '지는 한이 있어도 = 지더라도, 지는 상황이 되어도' },
+      { type: 'note', text: '别把结构看成黑箱：한 是名词"限度/地步"，한이 있어도 字面是"即使有落到那种地步的情况也"。理解这个字面就不会记错语序', examples: '실패하는 한이 있어도 = 即使有落到失败那一步的情况，也……' },
+      { type: 'note', text: '前句必须是"不愿发生的坏结果假设"，不能套已成事实或中性状态。中文"就算"能接"就算现在很累"（当下事实），但此结构不行——它要的是"会……的地步"这种未来风险', examples: '(✗) 지금 피곤한 한이 있어도 → (✓) 회사를 그만두는 한이 있어도（要的是坏结果假设）' },
     ],
     cardExamples: [
       {
@@ -805,7 +814,7 @@ export const grammarCardsP26: GrammarCard[] = [
       { icon: '💼', context: '辞职', ko: '회사를 그만두는 한이 있어도 이 일은 해야 해요.', zh: '就算辞职也要做这件事。' },
       { icon: '🥊', context: '拼到底', ko: '지는 한이 있어도 끝까지 싸울 거예요.', zh: '就算输也要打到底。' },
       { icon: '💰', context: '倾家', ko: '재산을 잃는 한이 있어도 약속은 지킬게요.', zh: '就算失去财产也守约。' },
-      { icon: '⚕️', context: '身体', ko: '아프는 한이 있어도 오늘은 갈 거예요.', zh: '就算生病也要今天去。' },
+      { icon: '⚕️', context: '身体', ko: '앓아눕는 한이 있어도 오늘은 갈 거예요.', zh: '哪怕病倒也要去。' },
     ],
     mistakes: [
       { wrong: '실패한 한이 있어도', correct: '실패하는 한이 있어도', note: '固定形态是 -는 한이 있어도，动词现在形不用 -은/ㄴ' },
@@ -941,12 +950,13 @@ export const grammarCardsP26: GrammarCard[] = [
     ],
     connectionRules: [
       { type: 'rule', text: '动词词干 + -고자，不看받침', examples: '가다 → 가고자 / 먹다 → 먹고자 / 만들다 → 만들고자' },
-      { type: 'rule', text: '-고자 하다 用作谓语，"打算……"', examples: '말씀드리고자 합니다.' },
+      { type: 'rule', text: '-고자 하다 用作谓语，"打算……"', examples: '말씀드리고자 합니다.（我想向您说明。）' },
       { type: 'usage', text: '不与形容词、名词、있다/없다 连用', examples: '(✗) 예쁘고자 → 只能用动词' },
-      { type: 'usage', text: '主语必须一致：前后主语必须是同一人', examples: '(제가) 배우고자 (제가) 왔어요.' },
-      { type: 'usage', text: '语气正式，多用于书面、演讲、公文', examples: '국민 여러분께 알려드리고자 합니다.' },
+      { type: 'usage', text: '主语必须一致：前后主语必须是同一人', examples: '(제가) 배우고자 (제가) 왔어요.（我为了学习而来。）' },
+      { type: 'usage', text: '语气正式，多用于书面、演讲、公文', examples: '국민 여러분께 알려드리고자 합니다.（谨向各位国民告知。）' },
       { type: 'compare', text: '-고자 vs -(으)려고 → 语义相同，前者正式书面，后者日常口语', examples: '먹으려고 왔어요.(口语) / 먹고자 왔어요.(正式)' },
       { type: 'note', text: '后句一般是动作，不能接命令/建议', examples: '(✗) 배우고자 오세요 → (✓) 배우려고 오세요' },
+      { type: 'note', text: '语体要前后一致：고자 是正式书面感，搭配 합니다体才自然；配 해요/했어요 这种日常口语尾会有违和感', examples: '(违和) 말씀드리고자 해요 → (自然) 말씀드리고자 합니다' },
     ],
     cardExamples: [
       {
@@ -1125,7 +1135,8 @@ export const grammarCardsP26: GrammarCard[] = [
       { type: 'usage', text: '语义3 -도록 하다：委婉命令/建议', examples: '늦지 않도록 하세요.（请不要迟到）' },
       { type: 'compare', text: '-도록 vs -기 위해서 → 前者更自然，含"让……"结果导向；后者纯目的', examples: '이해하도록 설명했어요.(让理解而说) / 이해하기 위해 설명했어요.(为理解而说)' },
       { type: 'note', text: '目的用法主语可不同，与 -기 위해서 不同（后者主语须一致）', examples: '아이가 잘 자도록 조용히 하세요.（主语不同）' },
-      { type: 'note', text: '-도록 하겠습니다 是正式承诺"我会做到……"', examples: '노력하도록 하겠습니다.' },
+      { type: 'note', text: '-도록 하겠습니다 是正式承诺"我会做到……"', examples: '노력하도록 하겠습니다.（我会努力的。）' },
+      { type: 'note', text: '否定用 "-지 않도록"（为了不……）是最高频形态，因为叮嘱/提醒场景多。别用命令否定 말다 去接', examples: '(标准) 늦지 않도록 하세요 / (勿写) 늦지 말도록 하세요' },
     ],
     cardExamples: [
       {
@@ -1297,11 +1308,12 @@ export const grammarCardsP26: GrammarCard[] = [
     ],
     connectionRules: [
       { type: 'rule', text: '名词 + 치고（不看받침，直接接）', examples: '학생치고, 봄치고, 외국인치고' },
-      { type: 'usage', text: '语义1 全称：N 치고 -지 않은/없는 것이 없다 = "没有一个不……"', examples: '한국 사람치고 김치를 모르는 사람은 없어요.' },
+      { type: 'usage', text: '语义1 全称：N 치고 -지 않은/없는 것이 없다 = "没有一个不……"', examples: '한국 사람치고 김치를 모르는 사람은 없어요.（凡是韩国人没有不知道泡菜的。）' },
       { type: 'usage', text: '语义2 例外：N 치고 + 意外结果 = "作为……却……"', examples: '봄치고 날씨가 너무 추워요.（作为春天却很冷）' },
-      { type: 'usage', text: '语义2 常用来称赞：外国人韩语好、老人身手灵活等', examples: '외국인치고 한국어를 잘하시네요.' },
+      { type: 'usage', text: '语义2 常用来称赞：外国人韩语好、老人身手灵活等', examples: '외국인치고 한국어를 잘하시네요.（作为外国人，您韩语说得真好。）' },
       { type: 'compare', text: '-치고 vs -(이)라면 → 前者带评价语气，后者是纯条件', examples: '학생이라면(如果是学生) / 학생치고(说到学生/作为学生)' },
       { type: 'note', text: '两种语义靠后句判断：后句双否 → 全称；后句意外 → 例外', examples: '한국 사람치고 김치 안 먹는 사람 없다.(全) / 학생치고 잘 사네요.(意外)' },
+      { type: 'compare', text: '加 는 说成 치고는，会明确锁定"例外/评价"那一层（作为……却/倒是……），基本不用于全称；想表意外反差时说 치고는 更清楚', examples: '봄치고는 날씨가 춥다.（作为春天倒是挺冷）/ 외국인치고는 발음이 좋다.（作为外国人发音倒好）' },
     ],
     cardExamples: [
       {
@@ -1365,7 +1377,7 @@ export const grammarCardsP26: GrammarCard[] = [
           prompt: '"说到韩国人没有不吃泡菜的" 韩语说……',
           options: ['한국 사람이면 김치 안 먹는 사람 없어요', '한국 사람치고 김치를 안 먹는 사람은 없어요', '한국 사람에게 김치 안 먹는 사람 없어요', '한국 사람보다 김치 안 먹는 사람 없어요'],
           answer: 1,
-          explanation: '全称"N 治고 -지 않는 사람은 없다"结构 → 한국 사람치고 김치를 안 먹는 사람은 없어요。',
+          explanation: '全称"N 치고 -지 않는 사람은 없다"结构 → 한국 사람치고 김치를 안 먹는 사람은 없어요。',
         },
         {
           prompt: '"作为春天却很冷" 韩语说……',
@@ -1438,9 +1450,9 @@ export const grammarCardsP26: GrammarCard[] = [
     id: 'card-p26-l09',
     partNumber: 26,
     lessonNumber: 9,
-    title: '综合练习⑳',
-    whatItDoes: 'P20综合复习',
-    whatItDoesBody: '本练习综合复习 P20 让步与意图强化章节的 8 个语法点：-더라도、-을/ㄹ지라도、-을/ㄹ지언정、-을/ㄹ망정、-는 한이 있어도、-고자、-도록、-치고。',
+    title: 'P26 综合练习',
+    whatItDoes: 'P26 综合复习',
+    whatItDoesBody: '本练习综合复习 P26 让步与意图强化章节的 8 个语法点：-더라도、-을/ㄹ지라도、-을/ㄹ지언정、-을/ㄹ망정、-는 한이 있어도、-고자、-도록、-치고。',
     structureNote: '综合本 Part 所有语法',
     rulesNote: '重点在让步语气强度阶梯和意图/目的三种表达的辨析',
     isPractice: true,
@@ -1528,7 +1540,7 @@ export const grammarCardsP26: GrammarCard[] = [
     linkedGrammarIds: ['card-p26-l01', 'card-p26-l02', 'card-p26-l03', 'card-p26-l04', 'card-p26-l05', 'card-p26-l06', 'card-p26-l07', 'card-p26-l08'],
     specialQuiz: {
       type: 'judge',
-      title: 'P20 综合练习',
+      title: 'P26 综合练习',
       body: '选择正确的表达',
       questions: [
         {
@@ -1558,7 +1570,7 @@ export const grammarCardsP26: GrammarCard[] = [
       ],
     },
     overviewHtml: `<div class="ov-hero">
-  <div style="font-size:20px;font-weight:700;color:#241917;margin-bottom:8px">P20 总结：让步与意图强化</div>
+  <div style="font-size:20px;font-weight:700;color:#241917;margin-bottom:8px">P26 总结：让步与意图强化</div>
   <div style="font-size:14px;color:#89756e">TOPIK 高级表现体系</div>
 </div>
 <div class="ov-section">

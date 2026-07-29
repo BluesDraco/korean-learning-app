@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>探索页 · 动物城广场 mockup v3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500;1,9..144,600&family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Sans+KR:wght@500;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --paper:#fbf6f0;
+    --surface:#fff;
+    --ink:#241917;
+    --ink-2:#4f3f38;
+    --ink-soft:#8a7268;
+    --line:#ece0d7;
+    --line-2:#e3d4c8;
+    --accent:#d9556e;
+    --accent-soft:#fbeef0;
+    --pink:#ff7fa8;
+    --gold:#f5b94a;
+    --mint:#14b8a6;
+    --purple:#8b5cf6;
+    --magenta:#d946ef;
+    --rose:#f43f5e;
+    --dark:#1c1512;
+    --fs:'Fraunces',serif;
+    --fz:'Noto Sans SC',sans-serif;
+    --fk:'Noto Sans KR',sans-serif;
+    --fm:'JetBrains Mono',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  a{color:inherit;text-decoration:none}
+  body{font-family:var(--fz);background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.5}
+  .wrap{max-width:1120px;margin:0 auto;padding:40px 28px 80px}
+
+  /* 入场:淡入上浮 */
+  @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+  .enter{animation:fadeUp .62s cubic-bezier(.16,1,.3,1) backwards}
+  .d1{animation-delay:.04s}.d2{animation-delay:.1s}.d3{animation-delay:.16s}
+  .d4{animation-delay:.22s}.d5{animation-delay:.28s}.d6{animation-delay:.34s}.d7{animation-delay:.4s}
+
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.6)}}
+  @keyframes wave{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
+  @keyframes floaty{0%,100%{transform:translateY(0) rotate(var(--r,0deg))}50%{transform:translateY(-5px) rotate(var(--r,0deg))}}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* ── 刊头 masthead ── */
+  .masthead{border-bottom:1.5px solid var(--ink);padding-bottom:18px;margin-bottom:6px;position:relative}
+  .masthead-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:20px}
+  .issue{font-family:var(--fs);font-style:italic;font-size:13px;color:var(--ink-soft);letter-spacing:.02em}
+  .issue b{color:var(--accent);font-style:normal;font-weight:600}
+  .streak{display:inline-flex;align-items:center;gap:5px;font-family:var(--fm);font-size:11px;font-weight:600;color:#c88a1e;background:#fff7e6;padding:6px 12px;border-radius:20px;border:1px solid rgba(245,185,74,.28)}
+  .eyebrow{display:flex;align-items:center;gap:7px;font-family:var(--fm);font-size:11px;font-weight:600;color:var(--ink-soft);letter-spacing:.1em;margin-bottom:10px}
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--rose);animation:pulse 1.6s ease-in-out infinite}
+  .title{font-family:var(--fz);font-weight:900;font-size:clamp(32px,7vw,52px);line-height:1.02;letter-spacing:-.01em}
+  .title .it{font-family:var(--fs);font-style:italic;font-weight:500;color:var(--accent)}
+  .dek{font-family:var(--fs);font-style:italic;font-size:15px;color:var(--ink-2);margin-top:14px;max-width:34em;line-height:1.5}
+
+  /* 通用卡片阴影/hover */
+  .card{position:relative;border-radius:22px;overflow:hidden;cursor:pointer;display:block;transition:transform .45s cubic-bezier(.16,1,.3,1),box-shadow .45s cubic-bezier(.16,1,.3,1)}
+  .card:hover{transform:translateY(-5px)}
+  .bg-text{position:absolute;font-family:var(--fs);font-weight:600;line-height:1;pointer-events:none;user-select:none;z-index:0}
+  .arrow{position:absolute;bottom:18px;right:18px;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;z-index:3;transition:transform .4s cubic-bezier(.16,1,.3,1)}
+  .card:hover .arrow{transform:translateX(4px)}
+  .kicker{display:flex;align-items:center;gap:9px;font-family:var(--fk);font-weight:700;font-size:11px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px}
+  .kicker::before{content:'';width:20px;height:1.5px;background:currentColor;opacity:.6}
+
+  /* ── 封面故事:博客(亮色发光) ── */
+  .cover{
+    display:grid;grid-template-columns:1.15fr 1fr;gap:0;margin:34px 0 16px;
+    background:linear-gradient(145deg,#fff0f4 0%,#fff8f2 60%,#fffaf6 100%);
+    border:1px solid rgba(255,127,168,.2);box-shadow:0 22px 50px -26px rgba(217,85,110,.4);
+  }
+  .cover::before{content:'';position:absolute;top:-70px;right:-40px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(255,127,168,.22),transparent 62%);pointer-events:none}
+  .cover .bg-text{top:-14px;right:8px;font-size:130px;font-style:italic;color:rgba(255,127,168,.1)}
+  .cover-body{padding:26px 36px 30px;position:relative;z-index:1}
+  .cover .kicker{color:var(--accent)}
+  .cover-av{display:flex;align-items:center;gap:13px;margin-bottom:16px}
+  .av-ring{width:52px;height:52px;border-radius:50%;background:conic-gradient(from 30deg,var(--pink),var(--gold),var(--mint),var(--purple),var(--pink));padding:2.5px;flex-shrink:0}
+  .av-ring .in{width:100%;height:100%;border-radius:50%;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:24px}
+  .av-meta .n{font-family:var(--fk);font-weight:700;font-size:15px}
+  .av-meta .h{font-family:var(--fm);font-size:10px;color:var(--ink-soft);margin-top:2px}
+  .cover-h{font-family:var(--fs);font-weight:500;font-size:30px;line-height:1.08;letter-spacing:-.01em;margin-bottom:10px}
+  .cover-p{font-size:14px;color:var(--ink-2);line-height:1.65;max-width:24em}
+  .cover-cta{display:inline-flex;align-items:center;gap:8px;margin-top:20px;font-family:var(--fs);font-style:italic;font-size:15px;color:var(--ink);border-bottom:1.5px solid var(--accent);padding-bottom:3px;transition:gap .35s cubic-bezier(.16,1,.3,1)}
+  .cover:hover .cover-cta{gap:14px}
+  .cover-fig{position:relative;z-index:1;display:flex;flex-direction:column;justify-content:center;gap:10px;padding:26px 34px 26px 0}
+  .cover-post{background:rgba(255,255,255,.72);backdrop-filter:blur(6px);border:1px solid rgba(255,127,168,.16);border-radius:14px;padding:12px 14px}
+  .cover-post .kr{font-family:var(--fk);font-weight:500;font-size:13px;color:var(--ink);line-height:1.4}
+  .cover-post .zh{font-size:11.5px;color:var(--ink-soft);margin-top:5px}
+  .cover-post .foot{display:flex;align-items:center;gap:5px;font-family:var(--fm);font-size:10px;color:var(--ink-soft);margin-top:9px}
+  .cover-post .heart{color:var(--pink)}
+
+  /* ── 电台:深色发光大卡 ── */
+  .radio{
+    background:var(--dark);color:#fff;padding:26px 28px;min-height:210px;
+    display:flex;flex-direction:column;justify-content:space-between;
+    box-shadow:0 24px 54px -26px rgba(28,21,18,.9);margin-bottom:16px;
+  }
+  .radio::before{content:'';position:absolute;top:-70px;right:-40px;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(255,127,168,.28),transparent 64%)}
+  .radio::after{content:'';position:absolute;bottom:-50px;left:-30px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(20,184,166,.12),transparent 64%)}
+  .radio .bg-text{bottom:-46px;right:18px;font-size:150px;font-weight:700;color:rgba(255,255,255,.035)}
+  .radio-top{display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:1}
+  .radio-icon{font-size:34px}
+  .badge{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:20px;font-family:var(--fm);font-size:10px;font-weight:700;letter-spacing:.06em}
+  .badge-live{background:rgba(244,63,94,.2);color:#ff8095}
+  .badge-live .dot{width:5px;height:5px;border-radius:50%;background:var(--rose);animation:pulse 1.6s ease-in-out infinite}
+  .radio-info{position:relative;z-index:1}
+  .radio-title{font-family:var(--fk);font-weight:800;font-size:24px;letter-spacing:-.01em}
+  .radio-zh{color:rgba(255,255,255,.55);font-size:13px;margin-top:3px}
+  .radio-now{font-size:12px;color:rgba(255,255,255,.5);margin-top:10px;font-family:var(--fk)}
+  .waves{display:flex;align-items:flex-end;gap:3px;height:28px;margin-top:12px}
+  .waves span{width:3.5px;background:var(--pink);border-radius:2px;animation:wave .9s ease-in-out infinite;transform-origin:bottom}
+  .waves span:nth-child(1){height:40%;animation-delay:0s}
+  .waves span:nth-child(2){height:75%;animation-delay:.12s}
+  .waves span:nth-child(3){height:100%;animation-delay:.24s}
+  .waves span:nth-child(4){height:60%;animation-delay:.18s}
+  .waves span:nth-child(5){height:45%;animation-delay:.06s}
+  .waves span:nth-child(6){height:80%;animation-delay:.3s}
+  .waves span:nth-child(7){height:55%;animation-delay:.15s}
+  .waves span:nth-child(8){height:90%;animation-delay:.22s}
+  .radio .arrow{background:rgba(255,255,255,.12);color:#fff}
+
+  /* ── 目录索引 ── */
+  .index-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:38px 0 4px}
+  .index-title{font-family:var(--fs);font-style:italic;font-size:20px;font-weight:500}
+  .index-sub{font-family:var(--fk);font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-soft)}
+
+  .rows{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+  .tile{position:relative;border-radius:20px;overflow:hidden;cursor:pointer;padding:20px;min-height:150px;display:flex;flex-direction:column;justify-content:space-between;transition:transform .45s cubic-bezier(.16,1,.3,1)}
+  .tile:hover{transform:translateY(-5px)}
+  .tile-top{display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:1}
+  .tile-emoji{font-size:26px}
+  .tile-body{position:relative;z-index:1}
+  .tile-h{font-family:var(--fk);font-weight:800;font-size:16px;letter-spacing:-.01em}
+  .tile-zh{font-size:12px;color:var(--ink-soft);margin-top:2px}
+  .tile-meta{font-family:var(--fm);font-size:10px;color:var(--ink-soft);margin-top:8px;display:flex;gap:6px;flex-wrap:wrap}
+
+  /* 露米:深色发光 */
+  .lumi{background:var(--dark);color:#fff}
+  .lumi::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(217,70,239,.24),transparent 60%)}
+  .lumi .bg-text{bottom:-12px;left:10px;font-size:64px;font-weight:700;font-style:italic;color:rgba(217,70,239,.1)}
+  .lumi-ring{position:absolute;top:14px;right:14px;width:52px;height:52px;border:1px solid rgba(217,70,239,.25);border-radius:50%;z-index:0;animation:spin 14s linear infinite}
+  .lumi-ring::before{content:'';position:absolute;inset:7px;border:1px dashed rgba(217,70,239,.18);border-radius:50%}
+  .lumi .tile-emoji{filter:drop-shadow(0 0 10px rgba(217,70,239,.5))}
+  .lumi .tile-h{font-family:var(--fs);font-weight:600;font-size:17px}
+  .lumi .tile-zh{color:rgba(255,255,255,.5)}
+  .lumi .tile-meta{color:rgba(217,70,239,.75)}
+  .lumi .badge{background:rgba(217,70,239,.18);color:#e879f9}
+  .lumi .arrow{background:rgba(217,70,239,.18);color:#e879f9}
+
+  /* 贴纸馆:金+粉发光 + 浮动装饰 + 进度 */
+  .sticker{background:linear-gradient(125deg,#fff7e6 0%,#fff0f4 50%,#f0fdfa 100%);border:1px solid rgba(245,185,74,.22)}
+  .sticker .bg-text{top:-18px;right:12px;font-size:76px;font-weight:700;color:rgba(245,185,74,.14)}
+  .sticker-decor span{position:absolute;z-index:0;filter:drop-shadow(0 2px 5px rgba(0,0,0,.08));animation:floaty 3s ease-in-out infinite}
+  .sticker-decor span:nth-child(2){animation-delay:.8s}
+  .sticker-decor span:nth-child(3){animation-delay:1.5s}
+  .prog{width:100%;height:5px;background:rgba(36,25,23,.08);border-radius:3px;overflow:hidden;margin-top:9px}
+  .prog-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--pink),var(--mint));border-radius:3px}
+  .prog-label{display:flex;justify-content:space-between;font-family:var(--fm);font-size:9px;color:var(--ink-soft);margin-top:4px}
+  .sticker .arrow{background:rgba(245,185,74,.18);color:#c88a1e}
+
+  /* 绘本馆:蜜桃暖 */
+  .book{background:linear-gradient(145deg,#ffe9de 0%,#fff4ef 100%);border:1px solid rgba(255,205,184,.35)}
+  .book .bg-text{bottom:-10px;right:8px;font-size:70px;font-weight:700;color:rgba(255,127,168,.1)}
+  .book-icon{width:40px;height:40px;border-radius:11px;background:rgba(255,255,255,.65);display:flex;align-items:center;justify-content:center;font-size:19px;border:1px solid rgba(255,255,255,.6)}
+  .book-pages{display:flex;gap:4px;margin-top:8px}
+  .book-pages .p{width:5px;height:18px;border-radius:2px;opacity:.5}
+  .book .arrow{background:rgba(255,127,168,.14);color:var(--accent)}
+
+  /* 韩国小知识:金光 */
+  .tips{background:linear-gradient(145deg,#fff7e6 0%,#fffdf8 100%);border:1px solid rgba(245,185,74,.22)}
+  .tips .bg-text{top:-8px;right:-6px;font-size:66px;font-weight:700;font-style:italic;color:rgba(245,185,74,.12)}
+  .tips-prev{font-size:11px;color:var(--ink-2);line-height:1.45;padding:8px 10px;background:rgba(255,255,255,.6);border-radius:8px;border-left:2.5px solid var(--gold);margin-top:9px}
+  .tips .badge{background:rgba(245,185,74,.2);color:#c88a1e}
+  .tips .arrow{background:rgba(245,185,74,.18);color:#c88a1e}
+
+  .colophon{text-align:center;font-family:var(--fs);font-style:italic;font-size:13px;color:var(--ink-soft);margin-top:38px}
+
+  @media (max-width:760px){
+    .wrap{padding:26px 18px 90px}
+    .cover{grid-template-columns:1fr;margin-top:26px}
+    .cover-body{padding:22px 22px 8px;order:1}
+    .cover-fig{order:2;padding:0 22px 24px}
+    .cover-h{font-size:26px}
+    .rows{grid-template-columns:1fr 1fr}
+    .book-full,.tips-full{grid-column:1 / -1}
+  }
+  @media (max-width:440px){
+    .rows{grid-template-columns:1fr}
+    .lumi,.sticker,.book,.tips{grid-column:auto}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- 刊头 -->
+    <header class="masthead enter d1">
+      <div class="masthead-top">
+        <span class="issue"><b>№ 07</b> · 兔莉的世界</span>
+        <span class="streak">🐾 每日更新</span>
+      </div>
+      <div class="eyebrow"><span class="dot"></span>EXPLORE · 동물 마을</div>
+      <h1 class="title">动物城<span class="it">广场</span></h1>
+      <p class="dek">放下课本的那一刻，兔莉的世界才刚刚开始 —— 读一篇日记，听一段电台，追一次舞台。</p>
+    </header>
+
+    <!-- 封面故事:博客 -->
+    <a class="card cover enter d2" href="#">
+      <div class="bg-text">Blog</div>
+      <div class="cover-body">
+        <span class="kicker">Cover Story · 封面</span>
+        <div class="cover-av">
+          <div class="av-ring"><div class="in">🐰</div></div>
+          <div class="av-meta">
+            <div class="n">토리 · 兔莉</div>
+            <div class="h">@tori_seoul · 动物城朋友圈</div>
+          </div>
+        </div>
+        <h2 class="cover-h">兔莉的博客</h2>
+        <p class="cover-p">首尔日记、文化俗语、动物城朋友圈。看动物邻居们的碎碎念，顺手把地道表达一句句学会。</p>
+        <span class="cover-cta">翻开这一篇 →</span>
+      </div>
+      <div class="cover-fig">
+        <div class="cover-post">
+          <div class="kr">“오늘 홍대에서 친구를 만났어요. 거리 공연이 진짜 멋졌어요!”</div>
+          <div class="zh">今天在弘大见了朋友，街头表演真的太酷了！</div>
+          <div class="foot">🐿️ 초코 · 松鼠 <span class="heart">♥</span></div>
+        </div>
+        <div class="cover-post">
+          <div class="kr">“한강에서 자전거 탔어요. 날씨 최고 🚲”</div>
+          <div class="zh">在汉江骑了自行车，天气太棒了。</div>
+          <div class="foot">🐻 곰돌 · 小熊 <span class="heart">♥</span></div>
+        </div>
+      </div>
+      <div class="arrow" style="background:var(--accent-soft);color:var(--accent)">→</div>
+    </a>
+
+    <!-- 电台:深色发光大卡 -->
+    <a class="card radio enter d3" href="#">
+      <div class="bg-text">RADIO</div>
+      <div class="radio-top">
+        <div class="radio-icon">🎙️</div>
+        <span class="badge badge-live"><span class="dot"></span>ON AIR</span>
+      </div>
+      <div class="radio-info">
+        <div class="radio-title">动物城电台</div>
+        <div class="radio-zh">동물 마을 라디오 · 边听边学</div>
+        <div class="radio-now">实时字幕 · 点词查词 · 一起听 🎧</div>
+        <div class="waves"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      </div>
+      <div class="arrow">→</div>
+    </a>
+
+    <!-- 目录索引 -->
+    <div class="index-head enter d4">
+      <span class="index-title">More in this issue</span>
+      <span class="index-sub">目录 · contents</span>
+    </div>
+
+    <div class="rows">
+      <!-- 露米爪印:深色发光 -->
+      <a class="card tile lumi enter d5" href="#">
+        <div class="bg-text">PAW</div>
+        <div class="lumi-ring"></div>
+        <div class="tile-top">
+          <div class="tile-emoji">🌟</div>
+          <span class="badge">K-POP</span>
+        </div>
+        <div class="tile-body">
+          <div class="tile-h">露米爪印</div>
+          <div class="tile-zh">루미의 발자국</div>
+          <div class="tile-meta"><span>偶像团体</span><span>·</span><span>跟唱歌词</span></div>
+        </div>
+        <div class="arrow">→</div>
+      </a>
+
+      <!-- 贴纸馆 -->
+      <a class="card tile sticker enter d5" href="#">
+        <div class="bg-text">90</div>
+        <div class="sticker-decor">
+          <span style="top:10%;right:14%;--r:-12deg;font-size:20px">🌟</span>
+          <span style="top:42%;right:7%;--r:16deg;font-size:16px">🎀</span>
+          <span style="bottom:34%;right:22%;--r:-8deg;font-size:15px">🍭</span>
+        </div>
+        <div class="tile-top"><div class="tile-emoji">✨</div></div>
+        <div class="tile-body">
+          <div class="tile-h">贴纸馆</div>
+          <div class="tile-zh">스티커관</div>
+          <div class="tile-meta"><span>收藏每日贴纸</span><span>·</span><span>集满一整册</span></div>
+        </div>
+        <div class="arrow">→</div>
+      </a>
+
+      <!-- 绘本馆 -->
+      <a class="card tile book book-full enter d6" href="#">
+        <div class="bg-text">책</div>
+        <div class="tile-top"><div class="book-icon">📖</div></div>
+        <div class="tile-body">
+          <div class="tile-h">绘本馆</div>
+          <div class="tile-zh">그림책관 · 韩语绘本故事</div>
+          <div class="book-pages">
+            <span class="p" style="background:var(--pink);opacity:.6"></span>
+            <span class="p" style="background:var(--gold);opacity:.5"></span>
+            <span class="p" style="background:var(--mint);opacity:.5"></span>
+            <span class="p" style="background:var(--purple);opacity:.4"></span>
+            <span class="p" style="background:#ffcdb8;opacity:.4"></span>
+          </div>
+        </div>
+        <div class="arrow">→</div>
+      </a>
+
+      <!-- 韩国小知识 -->
+      <a class="card tile tips tips-full enter d6" href="#">
+        <div class="bg-text">TIP</div>
+        <div class="tile-top">
+          <div class="tile-emoji">💡</div>
+          <span class="badge">TIPS</span>
+        </div>
+        <div class="tile-body">
+          <div class="tile-h">韩国小知识</div>
+          <div class="tile-zh">한국 상식 · 文化 · 美食 · 旅行</div>
+          <div class="tips-prev">한국 사람들은 목욕할 때 때수건을 써요…</div>
+        </div>
+        <div class="arrow">→</div>
+      </a>
+    </div>
+
+    <p class="colophon enter d7">더 많은 이야기가 곧 열려요 · 更多角落陆续开放中</p>
+  </div>
+</body>
+</html>

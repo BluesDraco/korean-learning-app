@@ -1,9 +1,10 @@
 'use client';
 
 import { useAdminData } from '@/lib/useAdminData';
-import type { SystemResponse } from '@/types/admin';
-import { Cpu, Zap, Coins } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
+import type { SystemResponse, ErrorLogsResponse } from '@/types/admin';
+import { Zap, AlertTriangle } from 'lucide-react';
+import { useState } from 'react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 export default function SystemPage() {
   const { data, loading } = useAdminData<SystemResponse>('/api/admin/system');
@@ -16,12 +17,6 @@ export default function SystemPage() {
     );
   }
 
-  const formatTokens = (n: number) => {
-    if (n >= 1000000) return `${(n / 1000000).toFixed(1)}M`;
-    if (n >= 1000) return `${(n / 1000).toFixed(1)}K`;
-    return String(n);
-  };
-
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-3 mb-2">
@@ -32,7 +27,7 @@ export default function SystemPage() {
         </div>
       </div>
 
-      {/* AI Usage summary cards */}
+      {/* AI Usage summary card */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-[var(--bg-card)] rounded-xl p-5 border border-[var(--border-color)]" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
           <div className="flex items-center gap-2 mb-2">
@@ -42,134 +37,130 @@ export default function SystemPage() {
           <p className="text-2xl font-extrabold text-[var(--text-primary)]">{data.aiUsage.totalCallsThisMonth.toLocaleString()}</p>
           <p className="text-xs text-[var(--text-muted)] mt-1">次</p>
         </div>
-        <div className="bg-[var(--bg-card)] rounded-xl p-5 border border-[var(--border-color)]" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-          <div className="flex items-center gap-2 mb-2">
-            <Cpu size={16} className="text-purple-400" />
-            <span className="text-xs text-[var(--text-muted)]">本月Token消耗</span>
-          </div>
-          <p className="text-2xl font-extrabold text-[var(--text-primary)]">{formatTokens(data.aiUsage.totalTokensThisMonth)}</p>
-          <p className="text-xs text-[var(--text-muted)] mt-1">tokens</p>
-        </div>
-        <div className="bg-[var(--bg-card)] rounded-xl p-5 border border-[var(--border-color)]" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-          <div className="flex items-center gap-2 mb-2">
-            <Coins size={16} className="text-amber-500" />
-            <span className="text-xs text-[var(--text-muted)]">本月AI费用</span>
-          </div>
-          <p className="text-2xl font-extrabold text-[var(--text-primary)]">¥{data.aiUsage.totalCostThisMonth.toFixed(2)}</p>
-          <p className="text-xs text-[var(--text-muted)] mt-1">DeepSeek API</p>
-        </div>
       </div>
 
-      {/* Charts: CPU/Memory 24h + Daily AI calls */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* CPU & Memory trend */}
-        <div className="bg-[var(--bg-card)] rounded-xl p-5 border border-[var(--border-color)]" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-          <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">24小时服务器资源</h3>
-          <ResponsiveContainer width="100%" height={260}>
-            <AreaChart data={data.cpuMemoryHistory}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#F5E6E0" />
-              <XAxis dataKey="time" tick={{ fontSize: 10, fill: '#999' }} />
-              <YAxis tick={{ fontSize: 10, fill: '#999' }} domain={[0, 100]} unit="%" />
-              <Tooltip contentStyle={{ borderRadius: 12, border: '1px solid #F5E6E0', fontSize: 12 }} />
-              <Area type="monotone" dataKey="cpuPercent" name="CPU" stroke="#FF8FAB" fill="#FFF0F4" strokeWidth={2} />
-              <Area type="monotone" dataKey="memoryPercent" name="内存" stroke="#A78BFA" fill="#F5F3FF" strokeWidth={2} />
-            </AreaChart>
-          </ResponsiveContainer>
-          <div className="flex items-center gap-4 mt-2 text-xs">
-            <span className="flex items-center gap-1.5"><span className="w-3 h-0.5 bg-[#FF8FAB] inline-block" /> CPU</span>
-            <span className="flex items-center gap-1.5"><span className="w-3 h-0.5 bg-[#A78BFA] inline-block" /> 内存</span>
-          </div>
-        </div>
-
-        {/* Daily AI calls */}
-        <div className="bg-[var(--bg-card)] rounded-xl p-5 border border-[var(--border-color)]" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-          <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">本月每日AI调用</h3>
-          <ResponsiveContainer width="100%" height={260}>
-            <LineChart data={data.aiUsage.dailyCalls}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#F5E6E0" />
-              <XAxis dataKey="date" tick={{ fontSize: 10, fill: '#999' }} tickFormatter={(v) => String(v).slice(8)} />
-              <YAxis tick={{ fontSize: 10, fill: '#999' }} />
-              <Tooltip contentStyle={{ borderRadius: 12, border: '1px solid #F5E6E0', fontSize: 12 }} />
-              <Line type="monotone" dataKey="calls" name="调用次数" stroke="#FF8FAB" strokeWidth={2} dot={false} />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
+      {/* Daily AI calls */}
+      <div className="bg-[var(--bg-card)] rounded-xl p-5 border border-[var(--border-color)]" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
+        <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">本月每日AI调用</h3>
+        <ResponsiveContainer width="100%" height={260}>
+          <LineChart data={data.aiUsage.dailyCalls}>
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />
+            <XAxis dataKey="date" tick={{ fontSize: 10, fill: 'var(--text-muted)' }} tickFormatter={(v) => String(v).slice(8)} />
+            <YAxis tick={{ fontSize: 10, fill: 'var(--text-muted)' }} />
+            <Tooltip contentStyle={{ borderRadius: 12, border: '1px solid var(--border-color)', fontSize: 12 }} />
+            <Line type="monotone" dataKey="calls" name="调用次数" stroke="#FF8FAB" strokeWidth={2} dot={false} />
+          </LineChart>
+        </ResponsiveContainer>
       </div>
 
-      {/* Top users + Error logs */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* Top users */}
-        <div className="bg-[var(--bg-card)] rounded-xl p-5 border border-[var(--border-color)]" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-          <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">高用量用户 TOP 10</h3>
-          <div className="overflow-x-auto">
-            <table className="w-full text-xs">
-              <thead>
-                <tr className="border-b border-[var(--border-color)]">
-                  <th className="text-left py-2 text-[var(--text-muted)] font-medium">#</th>
-                  <th className="text-left py-2 text-[var(--text-muted)] font-medium">用户</th>
-                  <th className="text-right py-2 text-[var(--text-muted)] font-medium">调用次数</th>
-                  <th className="text-right py-2 text-[var(--text-muted)] font-medium">Token</th>
-                  <th className="text-right py-2 text-[var(--text-muted)] font-medium">预估费用</th>
-                  <th className="text-right py-2 text-[var(--text-muted)] font-medium">会员</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.topUsers.map((u, i) => (
-                  <tr key={u.userId} className="border-b border-[var(--border-color)]">
-                    <td className="py-2.5">
-                      <span className={`font-bold ${
-                        i < 3 ? 'text-[var(--pink-primary)]' : 'text-[var(--text-muted)]'
-                      }`}>
-                        {i + 1}
-                      </span>
-                    </td>
-                    <td className="py-2.5 text-[var(--text-primary)] font-medium">{u.username}</td>
-                    <td className="py-2.5 text-right text-[var(--text-secondary)]">{u.totalCalls.toLocaleString()}</td>
-                    <td className="py-2.5 text-right text-[var(--text-secondary)]">{formatTokens(u.totalTokens)}</td>
-                    <td className="py-2.5 text-right text-[var(--text-primary)] font-semibold">¥{u.estimatedCost.toFixed(2)}</td>
-                    <td className="py-2.5 text-right">
-                      <span className={`text-xs px-1.5 py-0.5 rounded-full ${
-                        u.membershipType === 'yearly' ? 'bg-purple-50 text-purple-500' :
-                        u.membershipType === 'monthly' ? 'bg-blue-50 text-blue-500' :
-                        'bg-[var(--bg-input)] text-[var(--text-muted)]'
-                      }`}>
-                        {u.membershipType === 'yearly' ? '年付' : u.membershipType === 'monthly' ? '月付' : '免费'}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {/* Error logs */}
-        <div className="bg-[var(--bg-card)] rounded-xl p-5 border border-[var(--border-color)]" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-          <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">错误日志</h3>
-          <div className="space-y-2 max-h-[400px] overflow-y-auto">
-            {data.errorLogs.slice(0, 20).map((e) => (
-              <div key={e.id} className="flex items-start gap-2.5 text-xs py-1.5 border-b border-[var(--border-color)] last:border-0">
-                <span className={`px-1.5 py-0.5 rounded font-mono text-[10px] shrink-0 ${
-                  e.level === 'error' ? 'bg-red-50 text-red-500' :
-                  e.level === 'warn' ? 'bg-amber-50 text-amber-500' :
-                  'bg-blue-50 text-blue-500'
-                }`}>
-                  {e.level.toUpperCase()}
-                </span>
-                <div className="flex-1 min-w-0">
-                  <p className="text-[var(--text-secondary)]">{e.message}</p>
-                  <div className="flex items-center gap-2 mt-0.5">
-                    <span className="text-[var(--text-muted)] text-[10px]">{e.source}</span>
-                    <span className="text-[var(--text-placeholder)] text-[10px]">
-                      {new Date(e.timestamp).toLocaleString('zh-CN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+      {/* Top users */}
+      <div className="bg-[var(--bg-card)] rounded-xl p-5 border border-[var(--border-color)]" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
+        <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">高用量用户 TOP 10</h3>
+        <div className="overflow-x-auto">
+          <table className="w-full text-xs">
+            <thead>
+              <tr className="border-b border-[var(--border-color)]">
+                <th className="text-left py-2 text-[var(--text-muted)] font-medium">#</th>
+                <th className="text-left py-2 text-[var(--text-muted)] font-medium">用户</th>
+                <th className="text-right py-2 text-[var(--text-muted)] font-medium">调用次数</th>
+                <th className="text-right py-2 text-[var(--text-muted)] font-medium">会员</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.topUsers.map((u, i) => (
+                <tr key={u.userId} className="border-b border-[var(--border-color)]">
+                  <td className="py-2.5">
+                    <span className={`font-bold ${
+                      i < 3 ? 'text-[var(--pink-primary)]' : 'text-[var(--text-muted)]'
+                    }`}>
+                      {i + 1}
                     </span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+                  </td>
+                  <td className="py-2.5 text-[var(--text-primary)] font-medium">{u.username}</td>
+                  <td className="py-2.5 text-right text-[var(--text-secondary)]">{u.totalCalls.toLocaleString()}</td>
+                  <td className="py-2.5 text-right">
+                    <span className={`text-xs px-1.5 py-0.5 rounded-full ${
+                      u.membershipType === 'yearly' ? 'bg-purple-50 text-purple-500' :
+                      u.membershipType === 'monthly' ? 'bg-blue-50 text-blue-500' :
+                      'bg-[var(--bg-input)] text-[var(--text-muted)]'
+                    }`}>
+                      {u.membershipType === 'yearly' ? '年付' : u.membershipType === 'monthly' ? '月付' : '免费'}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
+
+      {/* Error logs */}
+      <ErrorLogs />
+    </div>
+  );
+}
+
+const levelStyle: Record<string, string> = {
+  critical: 'bg-red-100 text-red-600',
+  error: 'bg-red-50 text-red-500',
+  warn: 'bg-amber-50 text-amber-600',
+};
+const levelLabel: Record<string, string> = { critical: '严重', error: '错误', warn: '警告', all: '全部' };
+
+function ErrorLogs() {
+  const [level, setLevel] = useState('all');
+  const { data, loading } = useAdminData<ErrorLogsResponse>(`/api/admin/error-logs?level=${level}&pageSize=30`);
+
+  return (
+    <div className="bg-[var(--bg-card)] rounded-xl p-5 border border-[var(--border-color)]" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
+      <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
+        <h3 className="text-sm font-semibold text-[var(--text-primary)] flex items-center gap-2">
+          <AlertTriangle size={16} className="text-red-400" />
+          错误日志
+          {data && (
+            <span className="text-xs font-normal text-[var(--text-muted)]">
+              近 24h：严重 {data.last24h.critical ?? 0} · 错误 {data.last24h.error ?? 0} · 警告 {data.last24h.warn ?? 0}
+            </span>
+          )}
+        </h3>
+        <div className="flex gap-1 bg-[var(--bg-input)] rounded-lg p-0.5">
+          {['all', 'critical', 'error', 'warn'].map((k) => (
+            <button
+              key={k}
+              onClick={() => setLevel(k)}
+              className={`px-3 py-1 text-xs rounded-md transition-colors ${
+                level === k ? 'bg-[var(--bg-card)] text-[var(--pink-primary)] font-semibold shadow-sm' : 'text-[var(--text-muted)]'
+              }`}
+            >
+              {levelLabel[k]}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {loading ? (
+        <div className="py-8 text-center text-xs text-[var(--text-muted)]">加载中...</div>
+      ) : !data || data.logs.length === 0 ? (
+        <div className="py-8 text-center text-xs text-[var(--text-muted)]">暂无错误日志 🎉</div>
+      ) : (
+        <div className="space-y-2">
+          {data.logs.map((log) => (
+            <div key={log.id} className="text-xs border border-[var(--border-color)] rounded-lg p-2.5">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className={`px-1.5 py-0.5 rounded-full font-medium ${levelStyle[log.level] || levelStyle.error}`}>
+                  {levelLabel[log.level] || log.level}
+                </span>
+                <span className="font-mono text-[var(--text-muted)]">{log.source}</span>
+                <span className="text-[var(--text-placeholder)] ml-auto">{new Date(log.createdAt).toLocaleString('zh-CN')}</span>
+              </div>
+              <p className="text-[var(--text-primary)] mt-1.5">{log.message}</p>
+              {log.detail && (
+                <pre className="text-[var(--text-muted)] mt-1 whitespace-pre-wrap break-all bg-[var(--bg-soft)] rounded p-1.5 text-[11px]">{log.detail}</pre>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

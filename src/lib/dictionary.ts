@@ -2,6 +2,46 @@
  * Dictionary module: Korean word lookup, deconjugation, romanization, tokenization.
  */
 
+import { t } from './i18n';
+import type { Lang } from './i18n';
+
+/** Translate a conjugation label (Chinese) to the target language. */
+const CONJ_KEY_MAP: Record<string, string> = {
+  '词典原形': 'dict.conj_dict_form',
+  '正式体': 'dict.conj_formal',
+  '过去时': 'dict.conj_past',
+  '敬语体': 'dict.conj_honorific',
+  '半语': 'dict.conj_banmal',
+  '接续形': 'dict.conj_connective',
+  '定语形(过去)': 'dict.conj_adnominal_past',
+  '定语形(现在)': 'dict.conj_adnominal_present',
+  '定语形(将来)': 'dict.conj_adnominal_future',
+  '将来时': 'dict.conj_future',
+  '命令/请诱': 'dict.conj_imperative',
+  '名词化': 'dict.conj_nominalization',
+  '推测原形': 'dict.conj_presumptive',
+  '未知变形': 'dict.conj_unknown',
+};
+
+export function getConjugationLabel(cnLabel: string, lang: Lang): string {
+  const key = CONJ_KEY_MAP[cnLabel];
+  return key ? t(key, lang) : cnLabel;
+}
+
+/** Translate a part-of-speech label (Chinese) to the target language. */
+const POS_KEY_MAP: Record<string, string> = {
+  '动词': 'dict.pos_verb',
+  '动词/形容词': 'dict.pos_verb_adj',
+  '副词': 'dict.pos_adverb',
+  '名词': 'dict.pos_noun',
+  '助词': 'dict.pos_particle',
+};
+
+export function getPOSLabel(cnLabel: string, lang: Lang): string {
+  const key = POS_KEY_MAP[cnLabel];
+  return key ? t(key, lang) : cnLabel;
+}
+
 export interface LookupResult {
   word: string;
   dictionaryForm: string;
@@ -33,6 +73,18 @@ const jong: Record<string, string> = {
   'ㅌ': 't', 'ㅍ': 'p', 'ㅎ': 't',
 };
 
+/**
+ * 返回可信的罗马音字符串：
+ * - 若 stored 是纯拉丁（无韩文/空块）则直接用
+ * - 否则用 romanize(hangul) 从韩文现算
+ * 用于统一处理老数据里 pronunciation 被 AI 塞成韩文、或空、或等于 word 本身的脏情况。
+ */
+export function displayRoman(stored: string | null | undefined, hangul: string): string {
+  const s = (stored || '').trim();
+  if (s && s !== hangul && !/[가-힣ᄀ-ᇿ]/.test(s)) return s;
+  return romanize(hangul);
+}
+
 export function romanize(hangul: string): string {
   let result = '';
   for (const char of hangul) {
@@ -51,6 +103,38 @@ export function romanize(hangul: string): string {
     }
   }
   return result;
+}
+
+/** 按音节输出罗马音、用 - 连接（saeng-gak）。连续韩文音节组内加横杠，非韩文字符原样保留作为断点。 */
+export function romanizeHyphen(hangul: string): string {
+  const choKeys = Object.keys(cho);
+  const jungKeys = Object.keys(jung);
+  const jongKeys = Object.keys(jong);
+  let result = '';
+  let syllables: string[] = [];
+  const flush = () => { if (syllables.length) { result += syllables.join('-'); syllables = []; } };
+  for (const char of hangul) {
+    const code = char.charCodeAt(0);
+    if (code >= 0xAC00 && code <= 0xD7A3) {
+      const offset = code - 0xAC00;
+      syllables.push(
+        cho[choKeys[Math.floor(offset / 588)]] +
+        jung[jungKeys[Math.floor((offset % 588) / 28)]] +
+        jong[jongKeys[offset % 28]]
+      );
+    } else {
+      flush();
+      result += char;
+    }
+  }
+  flush();
+  return result;
+}
+
+/** displayRoman 的横杠版：含韩文则从韩文按音节重算加横杠，否则回退原逻辑。韩文判定与 displayRoman 一致。 */
+export function displayRomanHyphen(stored: string | null | undefined, hangul: string): string {
+  if (/[가-힣ᄀ-ᇿ]/.test(hangul)) return romanizeHyphen(hangul);
+  return displayRoman(stored, hangul);
 }
 
 // ====== DECONJUGATION ======

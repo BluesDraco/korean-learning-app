@@ -1,11 +1,17 @@
 // 简易答题音效 · Web Audio API 合成，无依赖、无 mp3
-// correct: 双音叮（清脆）；wrong: 低沉短促
+// correct/wrong 基础音；pop/chime/celebration 次要音（子关卡用）
+
+import { isSoundEnabled } from '@/lib/soundManager';
 
 let ctx: AudioContext | null = null;
 
 function getCtx(): AudioContext | null {
   if (typeof window === 'undefined') return null;
-  if (ctx) return ctx;
+  if (ctx) {
+    // 首次交互后可能 suspended，尽力恢复
+    if (ctx.state === 'suspended') ctx.resume().catch(() => {});
+    return ctx;
+  }
   try {
     const Ctor = (window as unknown as { AudioContext?: typeof AudioContext; webkitAudioContext?: typeof AudioContext }).AudioContext
       ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
@@ -16,6 +22,7 @@ function getCtx(): AudioContext | null {
 }
 
 function tone(freq: number, dur: number, type: OscillatorType, gain = 0.18, delay = 0): void {
+  if (!isSoundEnabled()) return;
   const ac = getCtx();
   if (!ac) return;
   const t0 = ac.currentTime + delay;
@@ -40,4 +47,22 @@ export function sfxCorrect(): void {
 export function sfxWrong(): void {
   // 下沉一声 G3
   tone(196, 0.22, 'triangle', 0.18, 0);
+}
+
+// pop: 极短闷响，选项点击 / 卡片选中（低调不刺耳）
+export function sfxPop(): void {
+  tone(380, 0.045, 'sine', 0.05, 0);
+}
+
+// chime: 柔和铃音，星星点亮 / 阶段完成
+export function sfxChime(pitch: 'low' | 'mid' | 'high' = 'mid'): void {
+  const freq = pitch === 'low' ? 523 : pitch === 'high' ? 784 : 659;
+  tone(freq, 0.45, 'sine', 0.09, 0);
+}
+
+// celebration: 4 音上升琶音，全 3 星达成
+export function sfxCelebration(): void {
+  [523, 659, 784, 1047].forEach((f, i) => {
+    tone(f, 0.4, 'triangle', 0.16, i * 0.1);
+  });
 }

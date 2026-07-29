@@ -1,0 +1,29 @@
+import type { ListenSubQuestData } from '@/types/tori-subquest';
+
+/** Day 86 · 3-2 귀 트이기 · ~은/는 그대로, ~만 달라졌다 · 重走Day 1-7的路 */
+export const day86Listen: ListenSubQuestData = {
+  day: 26, level: 'advanced', idx: 2, kind: 'listen',
+  koTitle: '귀 트이기',
+  subtitle: '같은 길 · 길은 그대로, 사람만 달라졌다',
+
+  meaning: [
+    { id: 'd86-l2-m1', audioKo: '길은 그대로, 사람만 달라졌어요.',                              choices: [{ text: '路照旧，只有人变了。',              correct: true }, { text: '路变了，人没变。',                    correct: false }, { text: '路和人都变了。',                      correct: false }, { text: '路和人都没变。',                      correct: false }], explain: 'Day 86 명제 · 은/는 그대로 + ~만 달라졌다' },
+    { id: 'd86-l2-m2', audioKo: '그때는 다 낯설었어요.',                                       choices: [{ text: '那时候一切都很陌生。',              correct: true }, { text: '那时候都很熟悉。',                    correct: false }, { text: '现在都很陌生。',                      correct: false }, { text: '什么都不记得。',                      correct: false }], explain: '낯설다 · 过去 · Day 7 的心情' },
+    { id: 'd86-l2-m3', audioKo: '승강장에서 유학생을 봤어요.',                                  choices: [{ text: '在站台上看到一个留学生。',          correct: true }, { text: '没看到人。',                          correct: false }, { text: '在教室看到老师。',                    correct: false }, { text: '在机场看到朋友。',                    correct: false }], explain: '승강장 + 유학생' },
+    { id: 'd86-l2-m4', audioKo: '러시아 억양이 있었어요.',                                      choices: [{ text: '有俄罗斯口音。',                    correct: true }, { text: '说的是俄语。',                        correct: false }, { text: '没有口音。',                          correct: false }, { text: '是韩国人。',                          correct: false }], explain: '억양 · 口音' },
+    { id: 'd86-l2-m5', audioKo: '지난 길을 다시 걸었어요.',                                     choices: [{ text: '又走了一遍走过的路。',              correct: true }, { text: '走了新的路。',                        correct: false }, { text: '没走路。',                            correct: false }, { text: '迷路了。',                            correct: false }], explain: '지난 길 + 다시 · 회고' },
+  ],
+
+  cloze: [
+    { id: 'd86-l2-c1', audioKo: '길은 그대로, 사람만 달라졌어요.',   clozeParts: ['길', ' 그대로, 사람만 달라졌어요.'],   choices: [{ text: '은',    correct: true }, { text: '이',       correct: false }, { text: '을',    correct: false }, { text: '에',      correct: false }], explain: '对比主题 · 길은' },
+    { id: 'd86-l2-c2', audioKo: '길은 그대로, 사람만 달라졌어요.',   clozeParts: ['길은 그대로, 사람', ' 달라졌어요.'],   choices: [{ text: '만',    correct: true }, { text: '도',       correct: false }, { text: '은',    correct: false }, { text: '이',      correct: false }], explain: '唯独 · 사람만' },
+    { id: 'd86-l2-c3', audioKo: '그때는 다 낯설었어요.',            clozeParts: ['그때는 다 ', '.'],                   choices: [{ text: '낯설었어요',  correct: true }, { text: '낯설어요',  correct: false }, { text: '낯설겠어요', correct: false }, { text: '낯설래요', correct: false }], explain: '낯설다 · 过去 낯설었어요' },
+    { id: 'd86-l2-c4', audioKo: '풍경은 그대로예요.',              clozeParts: ['풍경은 ', '.'],                     choices: [{ text: '그대로예요',  correct: true }, { text: '그대로에요', correct: false }, { text: '그대로여요', correct: false }, { text: '그대로예여', correct: false }], explain: '그대로 + 예요(무받침)' },
+  ],
+
+  reply: [
+    { id: 'd86-l2-r1', audioKo: '오랜만에 이 길 걸으니까 어때?',                                promptZh: 'Haru 问你重走这条老路的感受。你想说"路照旧，只有我变了"，最自然的一句？',                choices: [{ text: '길은 그대로인데, 나만 달라졌어.',                                          correct: true }, { text: '길이 다 변했어.',                        correct: false }, { text: '얼마예요?',                              correct: false }, { text: '몰라.',                                  correct: false }], explain: '은/는 그대로 + 나만 달라졌다' },
+    { id: 'd86-l2-r2', audioKo: '저기요, 한빛 어학당 어떻게 가요?',                              promptZh: '站台上一个陌生留学生问路。你想像 Day 35 那样帮他指路，最自然的一句？',                    choices: [{ text: '2번 출구로 나가서 왼쪽으로 쭉 가세요.',                                    correct: true }, { text: '저도 몰라요.',                            correct: false }, { text: '얼마예요?',                              correct: false }, { text: '싫어요.',                                correct: false }], explain: '指路 · 出口 + 方向' },
+    { id: 'd86-l2-r3', audioKo: '고마워요. 저 처음이라 너무 긴장돼요.',                          promptZh: '留学生说他第一次来、很紧张。你想安慰他"没事，我一开始也这样"，最自然的一句？',              choices: [{ text: '괜찮아요. 저도 처음엔 그랬어요.',                                          correct: true }, { text: '길 모르면 안 돼요.',                     correct: false }, { text: '얼마예요?',                              correct: false }, { text: '몰라요.',                                correct: false }], explain: '安慰对方 · 저도 처음엔 그랬어요' },
+  ],
+};

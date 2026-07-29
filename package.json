@@ -2,15 +2,26 @@
   "name": "korean-learning-app",
   "version": "0.1.0",
   "private": true,
+  "sideEffects": [
+    "*.css",
+    "./src/lib/tts.ts",
+    "./src/lib/polyfills.ts"
+  ],
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "next dev --webpack",
+    "dev:overseas": "dotenv -e .env.overseas -e .env.local -- next dev --webpack",
+    "build": "node scripts/build-guard.mjs domestic && next build",
+    "build:overseas": "dotenv -e .env.overseas -e .env.local -- node scripts/build-guard.mjs overseas && dotenv -e .env.overseas -e .env.local -- next build",
     "start": "next start",
+    "start:overseas": "dotenv -e .env.overseas -e .env.local -- next start",
     "lint": "eslint src scripts next.config.ts eslint.config.mjs",
+    "lint:diary": "node scripts/audit-diary-subquests.mjs",
+    "gen:day": "node scripts/gen-diary-day.mjs",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@libsql/client": "^0.17.3",
+    "@ricky0123/vad-web": "^0.0.30",
     "@romanize/korean": "^0.1.3",
     "bcryptjs": "^3.0.3",
     "dompurify": "^3.4.7",
@@ -18,17 +29,22 @@
     "jose": "^6.2.3",
     "lucide-react": "^1.16.0",
     "next": "16.2.6",
+    "playwright": "^1.61.1",
+    "qrcode": "^1.5.4",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "recharts": "^3.8.1"
+    "recharts": "^3.8.1",
+    "stripe": "^22.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
     "@tailwindcss/postcss": "^4",
     "@types/dompurify": "^3.0.5",
     "@types/node": "^20",
+    "@types/qrcode": "^1.5.6",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv-cli": "^11.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
     "tailwindcss": "^4",

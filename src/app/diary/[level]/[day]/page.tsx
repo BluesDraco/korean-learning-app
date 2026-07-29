@@ -1,66 +1,30 @@
-'use client';
-
-import { use, useEffect } from 'react';
-import Link from 'next/link';
-import { notFound, useRouter } from 'next/navigation';
-import { getDay } from '@/data/diary';
-import { useAuth } from '@/components/AuthProvider';
-import { DiaryDayClient } from '@/components/diary/DiaryDayClient';
+import type { Metadata } from 'next';
+import { days as diaryDays, getDay } from '@/data/diary';
 import type { ToriLevel } from '@/types/tori-diary';
-import '@/components/diary/diary.css';
+import DiaryDayClientPage from './DiaryDayClientPage';
 
-const VALID_LEVELS = new Set<ToriLevel>(['beginner', 'intermediate', 'advanced']);
+const VALID_LEVELS: ReadonlySet<ToriLevel> = new Set(['beginner', 'intermediate', 'advanced']);
+
+export function generateStaticParams() {
+  return diaryDays.map((d) => ({ level: d.level, day: String(d.day) }));
+}
+
+// 日记是付费内容 —— 用户导流到 /diary 首页即可，详情页不做 SEO 曝光
+export async function generateMetadata({ params }: { params: Promise<{ level: string; day: string }> }): Promise<Metadata> {
+  const { level, day } = await params;
+  const dayNum = parseInt(day, 10);
+  const d = VALID_LEVELS.has(level as ToriLevel) && !Number.isNaN(dayNum) ? getDay(level as ToriLevel, dayNum) : undefined;
+  return {
+    title: d ? `Day ${d.day} · ${d.title}｜韩语日记` : '韩语日记',
+    robots: { index: false, follow: false },
+    alternates: { canonical: '/diary' },
+  };
+}
 
 interface Props {
   params: Promise<{ level: string; day: string }>;
 }
 
-export default function DiaryDayPage({ params }: Props) {
-  const { level: levelStr, day: dayStr } = use(params);
-  const router = useRouter();
-  const { user, loading } = useAuth();
-
-  const level = VALID_LEVELS.has(levelStr as ToriLevel) ? (levelStr as ToriLevel) : null;
-  const dayNum = parseInt(dayStr, 10);
-
-  useEffect(() => {
-    if (loading || !user) return;
-    // non-admin: only beginner day 1 is freely accessible; others require progression
-    if (user.role !== 'admin' && !(level === 'beginner' && dayNum === 1)) {
-      router.replace('/diary');
-    }
-  }, [user, loading, router, level, dayNum]);
-
-  if (!level || Number.isNaN(dayNum) || dayNum < 1 || dayNum > 30) {
-    notFound();
-  }
-
-  if (loading || !user || (user.role !== 'admin' && !(level === 'beginner' && dayNum === 1))) {
-    return (
-      <div className="diary-root diary-page" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div className="diary-handwriting-zh" style={{ color: 'var(--diary-ink-soft)' }}>加载中…</div>
-      </div>
-    );
-  }
-
-  const day = getDay(level, dayNum);
-
-  if (!day) {
-    return (
-      <div className="diary-root diary-page" style={{ minHeight: '100vh' }}>
-        <div style={{ maxWidth: 480, margin: '0 auto', padding: '64px 24px', textAlign: 'center' }}>
-          <div style={{ fontSize: 56, marginBottom: 12 }}>🐰</div>
-          <h1 className="diary-h2 diary-handwriting-zh" style={{ marginBottom: 8 }}>Day {dayNum} 还没写好</h1>
-          <p className="diary-handwriting-zh" style={{ fontSize: 'var(--diary-text-md)', color: 'var(--diary-ink-soft)', marginBottom: 24 }}>
-            兔莉正在赶稿…先回到上一天看看吧。
-          </p>
-          <Link href="/diary" style={{ textDecoration: 'none' }}>
-            <button className="diary-btn diary-btn-primary">回到日记</button>
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
-  return <DiaryDayClient day={day} level={level} />;
+export default async function Page({ params }: Props) {
+  return <DiaryDayClientPage params={params} />;
 }

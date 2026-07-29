@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/server/db';
 import { getAuthFromCookie, generateId } from '@/lib/server/auth';
 
+// 6-26 事故兜底：含鉴权/用户数据的 API 必须 force-dynamic，禁止 Next.js 自动缓存
+export const dynamic = 'force-dynamic';
+
 const BOT_PATTERNS = [
   /bot/i, /crawler/i, /spider/i, /scraper/i, /headless/i,
   /selenium/i, /puppeteer/i, /playwright/i,

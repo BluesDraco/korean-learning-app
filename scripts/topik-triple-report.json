@@ -1,0 +1,447 @@
+{
+  "runAt": "2026-06-30T15:21:30.025Z",
+  "model": "deepseek-chat",
+  "rounds": 3,
+  "total": 972,
+  "suspicious": 16,
+  "weakDisagree": 3,
+  "items": [
+    {
+      "id": "AR10",
+      "level": "advanced",
+      "section": "reading",
+      "number": 10,
+      "correctIdx": 0,
+      "picks": [
+        3,
+        3,
+        3
+      ],
+      "consensus": 3,
+      "allDisagree": true,
+      "consistentPick": 3,
+      "prompt": "빈칸에 가장 알맞은 것을 고르십시오.\n\n현상을 분석하는 데 ( ㉠ ) 본질을 꿰뚫는 통찰이 더 중요하다.",
+      "promptZh": "在分析现象上 _____，洞察本质更重要。",
+      "options": [
+        "그치지 않고",
+        "그치지 말고",
+        "그칠 뿐만 아니라",
+        "그칠 것이 아니라"
+      ]
+    },
+    {
+      "id": "MR04",
+      "level": "intermediate",
+      "section": "reading",
+      "number": 4,
+      "correctIdx": 0,
+      "picks": [
+        2,
+        2,
+        2
+      ],
+      "consensus": 2,
+      "allDisagree": true,
+      "consistentPick": 2,
+      "prompt": "빈칸에 가장 알맞은 것을 고르십시오.\n\n날씨가 ( ㉠ ) 우산을 가져가는 게 좋겠다.",
+      "promptZh": "因为天气阴沉，最好带伞。",
+      "options": [
+        "흐린 탓에",
+        "흐리거나",
+        "흐린 편이라",
+        "흐린 편이고"
+      ]
+    },
+    {
+      "id": "T35I-R57",
+      "level": "beginner",
+      "section": "reading",
+      "number": 57,
+      "correctIdx": 3,
+      "picks": [
+        2,
+        2,
+        2
+      ],
+      "consensus": 2,
+      "allDisagree": true,
+      "consistentPick": 2,
+      "prompt": "(가) 모든 동물은 잠을 잡니다.\n(나) 하지만 개나 고양이는 열 시간쯤 잡니다.\n(다) 말은 하루에 세 시간만 자도 괜찮습니다.\n(라) 그런데 잠을 자는 시간은 동물마다 다릅니다",
+      "promptZh": "排列顺序正确的是？",
+      "options": [
+        "(가)-(나)-(다)-(라)",
+        "(가)-(다)-(나)-(라)",
+        "(가)-(라)-(나)-(다)",
+        "(가)-(라)-(다)-(나)"
+      ]
+    },
+    {
+      "id": "T35II-R13",
+      "level": "intermediate",
+      "section": "reading",
+      "number": 13,
+      "correctIdx": 0,
+      "picks": [
+        1,
+        1,
+        1
+      ],
+      "consensus": 1,
+      "allDisagree": true,
+      "consistentPick": 1,
+      "prompt": "(가) 또한 재료 가격이 싸서 제작 비용도 적게 든다.\n(나) 그중 하나가 운동선수들의 유니폼을 만드는 것이다.\n(다) 플라스틱 병을 재활용하는 방법에는 여러 가지가 있다.\n(라)",
+      "promptZh": "选排列顺序正确的选项。",
+      "options": [
+        "(다)-(나)-(라)-(가)",
+        "(다)-(라)-(나)-(가)",
+        "(라)-(가)-(나)-(다)",
+        "(라)-(나)-(가)-(다)"
+      ]
+    },
+    {
+      "id": "T35II-R14",
+      "level": "intermediate",
+      "section": "reading",
+      "number": 14,
+      "correctIdx": 3,
+      "picks": [
+        2,
+        2,
+        2
+      ],
+      "consensus": 2,
+      "allDisagree": true,
+      "consistentPick": 2,
+      "prompt": "(가) 그러자 남자는 다른 쪽 신발도 벗어 그 옆으로 떨어뜨렸다.\n(나) 남자가 신발을 주우려고 했지만 기차가 움직이기 시작했다.\n(다) 신발의 짝이 맞아야 누군가 신을 수 있다고",
+      "promptZh": "选排列顺序正确的选项。",
+      "options": [
+        "(나)-(다)-(라)-(가)",
+        "(나)-(라)-(다)-(가)",
+        "(라)-(가)-(나)-(다)",
+        "(라)-(나)-(가)-(다)"
+      ]
+    },
+    {
+      "id": "T35II-R23",
+      "level": "intermediate",
+      "section": "reading",
+      "number": 23,
+      "correctIdx": 0,
+      "picks": [
+        2,
+        2,
+        2
+      ],
+      "consensus": 2,
+      "allDisagree": true,
+      "consistentPick": 2,
+      "prompt": "내가 운영하는 회사의 사정이 점점 더 어려워졌다. 공장에 불이 나서 피해를 입은 데다가 매출까지 크게 감소한 것이다. 어쩔 수 없이 직원 수를 줄여야 했다. 나는 직원들을 한자리에",
+      "promptZh": "选划线部分体现的\"我\"的心情。",
+      "options": [
+        "곤란하다",
+        "섭섭하다",
+        "부끄럽다",
+        "당황하다"
+      ]
+    },
+    {
+      "id": "T37I-R69",
+      "level": "beginner",
+      "section": "reading",
+      "number": 69,
+      "correctIdx": 3,
+      "picks": [
+        1,
+        1,
+        1
+      ],
+      "consensus": 1,
+      "allDisagree": true,
+      "consistentPick": 1,
+      "prompt": "저는 지난 주말에 아주 특별한 사진관에 갔습니다. 그 사진관에는 사진을 찍기 위한 모든 준비가 다 되어 있었습니다. 사진을 찍기 전에 화장도 해 주고 머리도 해 주었습니다. 그리고",
+      "promptZh": "...因为可以（　）这么帅气地拍照，所以打算给朋友们介绍。\n\n㉠应填入的内容是？",
+      "options": [
+        "찍을까 해서",
+        "찍으려고 해서",
+        "찍어야 하기 때문에",
+        "찍을 수 있기 때문에"
+      ]
+    },
+    {
+      "id": "T47I-R39",
+      "level": "beginner",
+      "section": "reading",
+      "number": 39,
+      "correctIdx": 0,
+      "picks": [
+        2,
+        2,
+        2
+      ],
+      "consensus": 2,
+      "allDisagree": true,
+      "consistentPick": 2,
+      "prompt": "언니는 춤을 배웠습니다. 춤을 잘 ( ).\n\n( )에 들어갈 알맞은 것은?",
+      "promptZh": "姐姐学了舞蹈。舞跳得很（　）。\n\n填入最合适的是？",
+      "options": [
+        "춥니다",
+        "씁니다",
+        "탑니다",
+        "칩니다"
+      ]
+    },
+    {
+      "id": "T47I-R41",
+      "level": "beginner",
+      "section": "reading",
+      "number": 41,
+      "correctIdx": 3,
+      "picks": [
+        2,
+        2,
+        2
+      ],
+      "consensus": 2,
+      "allDisagree": true,
+      "consistentPick": 2,
+      "prompt": "[HANA 빌딩 안내]\n3층: 서점, 커피숍\n2층: 식당, 병원, 은행\n1층: 꽃집, 약국, 빵집\n\n맞지 않는 것은?",
+      "promptZh": "[HANA大厦]\n3层：书店、咖啡店\n2层：食堂、医院、银行\n1层：花店、药店、面包店\n\n不符合内容的是？",
+      "options": [
+        "꽃집은 일 층에 있습니다.",
+        "커피숍 옆에 서점이 있습니다.",
+        "은행 아래에 빵집이 있습니다.",
+        "병원과 약국은 같은 층에 있습니다."
+      ]
+    },
+    {
+      "id": "T47I-R51",
+      "level": "beginner",
+      "section": "reading",
+      "number": 51,
+      "correctIdx": 1,
+      "picks": [
+        2,
+        2,
+        2
+      ],
+      "consensus": 2,
+      "allDisagree": true,
+      "consistentPick": 2,
+      "prompt": "레몬은 요리에 많이 사용됩니다. 사람들은 레몬으로 차를 만들어서 마시기도 합니다. 레몬은 하얀 옷을 ( ㉠ )사용할 수도 있습니다. 레몬을 쓰면 옷이 더 하얗게 됩니다.\n\n㉠에 들",
+      "promptZh": "...柠檬在洗白衣服的（　）也可以使用。\n\n㉠应填入的内容是？",
+      "options": [
+        "빨고",
+        "빨 때",
+        "빨아서",
+        "빤 후에"
+      ]
+    },
+    {
+      "id": "T64I-R39",
+      "level": "beginner",
+      "section": "reading",
+      "number": 39,
+      "correctIdx": 0,
+      "picks": [
+        3,
+        3,
+        3
+      ],
+      "consensus": 3,
+      "allDisagree": true,
+      "consistentPick": 3,
+      "prompt": "저는 아침 일찍 일어납니다. 일찍 ( )도 합니다.\n\n( )에 들어갈 알맞은 것은?",
+      "promptZh": "我早上早起。也早（　）。\n\n填入最合适的是？",
+      "options": [
+        "잡니다",
+        "삽니다",
+        "웁니다",
+        "봅니다"
+      ]
+    },
+    {
+      "id": "T64I-R55",
+      "level": "beginner",
+      "section": "reading",
+      "number": 55,
+      "correctIdx": 2,
+      "picks": [
+        1,
+        1,
+        1
+      ],
+      "consensus": 1,
+      "allDisagree": true,
+      "consistentPick": 1,
+      "prompt": "요즘 혼자 사는 사람들이 많아졌습니다. 혼자 살면 불편한 점도 있지만 자유롭게 생활할 수 있습니다. 특히 ( ㉠ ) 혼자 먹는 것이 더 편하다고 생각하는 사람들이 많습니다.\n\n㉠에",
+      "promptZh": "...特别是（　）很多人认为一个人吃更方便。\n\n㉠应填入的内容是？",
+      "options": [
+        "음식을 만들 때",
+        "음식을 주문할 때",
+        "함께 먹을 친구가 없어서",
+        "시간이 없어서"
+      ]
+    },
+    {
+      "id": "T64I-R65",
+      "level": "beginner",
+      "section": "reading",
+      "number": 65,
+      "correctIdx": 1,
+      "picks": [
+        0,
+        0,
+        0
+      ],
+      "consensus": 0,
+      "allDisagree": true,
+      "consistentPick": 0,
+      "prompt": "저는 물건을 잘 잃어버립니다. 특히 열쇠를 자주 잃어버립니다. 그래서 저는 열쇠를 ( ㉠ ) 쉽게 찾을 수 있도록 큰 열쇠고리를 달았습니다.\n\n㉠에 들어갈 알맞은 말은?",
+      "promptZh": "...我在钥匙上挂了大钥匙扣，这样（　）就可以很快找到。\n\n㉠应填入的内容是？",
+      "options": [
+        "잃어버려도",
+        "잃어버리면",
+        "잃어버려서",
+        "잃어버리거나"
+      ]
+    },
+    {
+      "id": "T83I-R59",
+      "level": "beginner",
+      "section": "reading",
+      "number": 59,
+      "correctIdx": 1,
+      "picks": [
+        2,
+        2,
+        2
+      ],
+      "consensus": 2,
+      "allDisagree": true,
+      "consistentPick": 2,
+      "prompt": "저는 새로운 친구를 사귀는 것을 좋아합니다. ( ㉠ ) 새 친구를 만나면 설레고 기쁩니다. ( ㉡ ) 처음 만나는 사람에게 먼저 말을 겁니다. ( ㉢ ) 그래서 친구들이 많습니다.",
+      "promptZh": "下面这句话应插入哪里？\n\"不觉得害羞，反而觉得开心。\"",
+      "options": [
+        "㉠",
+        "㉡",
+        "㉢",
+        "㉣"
+      ]
+    },
+    {
+      "id": "T91I-R53",
+      "level": "beginner",
+      "section": "reading",
+      "number": 53,
+      "correctIdx": 0,
+      "picks": [
+        2,
+        2,
+        2
+      ],
+      "consensus": 2,
+      "allDisagree": true,
+      "consistentPick": 2,
+      "prompt": "저는 부모님과 같이 삽니다. 아버지는 요리를 잘 하십니다. 매주 주말에 온 가족이 함께 식사를 합니다. 함께 밥을 먹으면서 이야기를 나누는 ( ㉠ ) 우리 가족만의 소중한 시간입니",
+      "promptZh": "...一边吃饭一边聊天的（　）是我们家独特的珍贵时光。\n\n㉠应填入的内容是？",
+      "options": [
+        "것이",
+        "것을",
+        "것은",
+        "것도"
+      ]
+    },
+    {
+      "id": "T91I-R65",
+      "level": "beginner",
+      "section": "reading",
+      "number": 65,
+      "correctIdx": 3,
+      "picks": [
+        2,
+        2,
+        2
+      ],
+      "consensus": 2,
+      "allDisagree": true,
+      "consistentPick": 2,
+      "prompt": "저는 요즘 잠을 잘 못 잡니다. 밤에 스마트폰을 오래 ( ㉠ ) 잠이 안 오기 때문입니다. 의사 선생님이 잠자기 전에 스마트폰을 보지 말라고 하셨습니다.\n\n㉠에 들어갈 알맞은 말은",
+      "promptZh": "...因为晚上长时间（　）所以睡不着。\n\n㉠应填入的内容是？",
+      "options": [
+        "보면",
+        "보고나서",
+        "보기 때문에",
+        "봐서"
+      ]
+    },
+    {
+      "id": "MR62",
+      "level": "intermediate",
+      "section": "reading",
+      "number": 62,
+      "correctIdx": 0,
+      "picks": [
+        2,
+        2,
+        3
+      ],
+      "consensus": null,
+      "allDisagree": true,
+      "consistentPick": null,
+      "prompt": "[세탁기 사용 시 주의 사항]\n세탁기를 처음 사용하시는 분들께서는 다음 사항을 꼭 지켜 주세요. 첫째, 빨래는 정해진 양을 ( ㉠ ) 마세요. 너무 많이 넣으면 기계가 망가질 수 ",
+      "promptZh": "[洗衣机使用注意事项]\n初次使用洗衣机者请务必遵守以下事项。第一，衣物请勿（ ㉠ ）规定的容量。放入过多会损坏机器。第二，深色衣物和浅色衣物请分开洗。第三，洗涤结束后为防止霉菌，请暂时打开盖子。\n\n填",
+      "options": [
+        "넘기지",
+        "확인하지",
+        "줄이지",
+        "비우지"
+      ]
+    },
+    {
+      "id": "T41I-R39",
+      "level": "beginner",
+      "section": "reading",
+      "number": 39,
+      "correctIdx": 0,
+      "picks": [
+        2,
+        1,
+        1
+      ],
+      "consensus": null,
+      "allDisagree": true,
+      "consistentPick": null,
+      "prompt": "이 그림이 마음에 ( ). 이것을 사고 싶습니다.\n\n( )에 들어갈 알맞은 것은?",
+      "promptZh": "这幅画（　）心意。想买这个。\n\n填入最合适的是？",
+      "options": [
+        "듭니다",
+        "납니다",
+        "옵니다",
+        "잡니다"
+      ]
+    },
+    {
+      "id": "T91I-R46",
+      "level": "beginner",
+      "section": "reading",
+      "number": 46,
+      "correctIdx": 1,
+      "picks": [
+        2,
+        2,
+        3
+      ],
+      "consensus": null,
+      "allDisagree": true,
+      "consistentPick": null,
+      "prompt": "저는 할머니와 주말마다 전화를 합니다. 멀리 계셔서 자주 뵙지 못하지만 목소리라도 들으면 기분이 좋습니다.\n\n중심 생각은?",
+      "promptZh": "我每个周末都和奶奶打电话。虽然住得远不能经常见面，但是听到声音心情就好。\n\n中心思想是？",
+      "options": [
+        "저는 할머니와 함께 살고 싶습니다.",
+        "저는 할머니 목소리가 듣기 좋습니다.",
+        "저는 할머니에게 자주 전화합니다.",
+        "저는 할머니를 뵙고 싶습니다."
+      ]
+    }
+  ]
+}

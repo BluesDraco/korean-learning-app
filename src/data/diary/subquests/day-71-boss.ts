@@ -1,0 +1,21 @@
+import type { BossSubQuestData } from '@/types/tori-subquest';
+
+/** Day 71 · 3-5 Boss 战 · 🚄 KTX · 서울역 → 부산 */
+export const day71Boss: BossSubQuestData = {
+  day: 11, level: 'advanced', idx: 5, kind: 'boss',
+  koTitle: '첫 여행의 관문',
+  subtitle: '🚄 서울역 · KTX 3호차 · 부산행',
+  intro: '周五清晨 6 点 40。首尔站 3 号站台。天刚亮。你、Junho、Haru 三个人各自拖着一个小行李。Danielle 在广播里留言："잘 갔다 와요, 부산 좋아해요."（好好去。我喜欢釜山。）你走到售票窗口——60 天前来韩国时，你连"안녕하세요"都不敢开口；今天，你要用 N + 만에 说清一句自己的话：60일 만에 서울을 떠나요.（时隔 60 天离开首尔。）',
+  outroHook: 'KTX 冲出隧道那一刻，光扑面而来。窗外——第一次看到韩国的海。Haru 尖叫："바다다!"（是海！）你脑子里只有一句话："60일 만에 처음 보는 바다야."（时隔 60 天第一次看到的海。）——旅行才刚开始。（Day 72 · 해운대）',
+
+  tasks: [
+    { type: 'choice',  label: '听句选意',     task: { id: 'd71-b5-t1', audioKo: '60일 만에 서울을 떠나요.',                                            choices: [{ text: '时隔 60 天离开首尔。',                    correct: true }, { text: '60 天后来首尔。',              correct: false }, { text: '在首尔住 60 天。',           correct: false }, { text: '60 天前离开。',              correct: false }], explain: 'Day 71 主题句 · N + 만에' } },
+    { type: 'choice',  label: '听句选意',     task: { id: 'd71-b5-t2', audioKo: '2시간 만에 부산에 도착해요.',                                        choices: [{ text: '2 小时后到达釜山。',                       correct: true }, { text: '2 小时在釜山玩。',              correct: false }, { text: '2 小时前离开釜山。',            correct: false }, { text: '再等 2 小时。',                  correct: false }], explain: 'N + 만에 + 도착하다' } },
+    { type: 'choice',  label: 'N + 만에',      task: { id: 'd71-b5-t3', promptZh: '"时隔 60 天离开首尔"哪句正确？',                                                                                                                                    choices: [{ text: '60일 동안 서울을 떠나요.',                     correct: false }, { text: '60일 만에 서울을 떠나요.',        correct: true }, { text: '60일에 서울을 떠나요.',              correct: false }, { text: '60일 부터 서울을 떠나요.',                 correct: false }], explain: 'N + 만에 · 时隔' } },
+    { type: 'choice',  label: '~ㄴ 지 만에',   task: { id: 'd71-b5-t4', promptZh: '"距上次坐火车 60 天后去旅行"哪句正确？',                                                                                                                                    choices: [{ text: '기차를 타는 지 60일 만에 여행 가요.',              correct: false }, { text: '기차를 탄 지 60일 만에 여행 가요.',    correct: true }, { text: '기차를 탈 지 60일 만에 여행 가요.',        correct: false }, { text: '기차를 타고 지 60일 만에 여행 가요.',                    correct: false }], explain: '~(으)ㄴ 지 + N 만에' } },
+    { type: 'choice',  label: '认词',         task: { id: 'd71-b5-t5', promptKo: '설레다',    promptHangul: 'seol-le-da',                                                                                                                             choices: [{ text: '心动 / 激动',                    correct: true }, { text: '难过',                            correct: false }, { text: '疲惫',                            correct: false }, { text: '生气',                              correct: false }], explain: '여행 前的情绪' } },
+    { type: 'compose', label: '组句',         task: { id: 'd71-b5-t6', zhHint: '时隔 60 天离开首尔。',                                                                                                                                            audioKo: '60일 만에 서울을 떠나요.',                            answer: ['60일 만에', '서울을', '떠나요.'],   tokens: ['60일 만에', '서울을', '떠나요.', '60일 동안', '60일에', '떠났어요.'],         explain: 'N + 만에' } },
+    { type: 'compose', label: '组句',         task: { id: 'd71-b5-t7', zhHint: '这趟 KTX 是釜山方向。',                                                                                                                                            audioKo: '이 KTX는 부산행이에요.',                              answer: ['이 KTX는', '부산행이에요.'],                              tokens: ['이 KTX는', '부산행이에요.', '부산 행이에요.', '부산으로', '서울행이에요.', '아니에요.'],           explain: '地名 + 행' } },
+    { type: 'choice',  label: '情景选回应',   task: { id: 'd71-b5-t8', promptZh: 'Haru 尖叫 "바다다!"。你想回应最能表达"时隔 60 天第一次看到海"的心情，最合适的一句？',                                                                                            choices: [{ text: '60일 만에 처음 보는 바다야. 진짜 설레.',       correct: true }, { text: '바다 싫어.',                  correct: false }, { text: '얼마예요?',                              correct: false }, { text: '몰라.',                                correct: false }], explain: 'Day 71 收束 · 만에 + 설레다' } },
+  ],
+};

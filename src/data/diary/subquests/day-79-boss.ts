@@ -1,0 +1,22 @@
+import type { BossSubQuestData } from '@/types/tori-subquest';
+
+/** Day 79 · 3-5 Boss 战 · 🎒 제주도迷路·没信号 · 회고+대조 */
+export const day79Boss: BossSubQuestData = {
+  day: 19, level: 'advanced', idx: 5, kind: 'boss',
+  koTitle: '제주 미로의 관문',
+  subtitle: '🎒 제주 돌담길 · Day 7과 다른 결말',
+
+  intro: '周六傍晚。济州石墙路成了迷宫,左转右转,20分钟变40分钟,手机显示无信号。这和 Day 7 地铁末班车、电量1%的夜晚太像了——那次你哭了。今天呢?你深吸一口气,攥紧胡萝卜笔,走向长椅上的奶奶问路。今天要把成长说出来:Day 7 때는 울었지만 오늘은 물어봤어요 → 신호가 있었으면 좋았을 텐데 → 이제 길 잃어도 안 울어요。',
+  outroHook: '十分钟后你走到集合点。Haru 松了口气笑了,Junho 说"토리, 진짜 컸다"——这句话 Day 76 听过一次,今天是第二次,更让人安静地开心。明天回到首尔,Haru 却发起烧来——这次,轮到你照顾别人了。（Day 80 · 하루를 돌보다）',
+
+  tasks: [
+    { type: 'choice',  label: '听句选意',     task: { id: 'd79-b5-t1', audioKo: 'Day 7 때는 울었지만, 오늘은 물어봤어요.',                                            choices: [{ text: 'Day 7时哭了，但今天问了路。',                    correct: true }, { text: 'Day 7和今天都哭了。',                  correct: false }, { text: '今天也哭了。',              correct: false }, { text: '今天没问路。',              correct: false }], explain: 'Day 79 成长对比句 · ~았/었지만' } },
+    { type: 'choice',  label: '听句选意',     task: { id: 'd79-b5-t2', audioKo: '이제 길 잃어도 안 울어요.',                                        choices: [{ text: '现在即使迷路也不哭了。',                    correct: true }, { text: '现在迷路就哭。',                  correct: false }, { text: '再也不迷路了。',                    correct: false }, { text: '现在爱哭了。',                  correct: false }], explain: '~아/어도 + 안 울다' } },
+    { type: 'choice',  label: '会고+대조',     task: { id: 'd79-b5-t3', promptZh: '"Day 7时哭了，但今天问了路"哪句正确？',                                                                                                                                    choices: [{ text: 'Day 7 때는 울지만, 오늘은 물어봤어요.',                     correct: false }, { text: 'Day 7 때는 울었지만, 오늘은 물어봤어요.',        correct: true }, { text: 'Day 7 때는 울더라면, 오늘은 물어봤어요.',              correct: false }, { text: 'Day 7 때는 울면, 오늘은 물어봤어요.',                 correct: false }], explain: '回顾过去用 울었지만' } },
+    { type: 'choice',  label: '反事实',        task: { id: 'd79-b5-t4', promptZh: '"那时问了的话就不会迷路的"哪句正确？',                                                                                                                                    choices: [{ text: '그때 물어봤더라면 안 헤매을 텐데.',                          correct: false }, { text: '그때 물어봤더라면 안 헤맸을 텐데.',    correct: true }, { text: '그때 물어봤더라면 안 헤매겠 텐데.',                    correct: false }, { text: '그때 물어봤더라면 안 헤매 텐데.',                    correct: false }], explain: '反事实 ~았/었을 텐데 · 헤맸을 텐데' } },
+    { type: 'choice',  label: '认词',         task: { id: 'd79-b5-t5', promptKo: '가리키다',    promptHangul: 'ga-ri-ki-da',                                                                                                                             choices: [{ text: '指（方向）',                    correct: true }, { text: '教',                            correct: false }, { text: '看',                            correct: false }, { text: '拿',                              correct: false }], explain: '与 가르치다(教) 别混' } },
+    { type: 'compose', label: '组句',         task: { id: 'd79-b5-t6', zhHint: 'Day 7时哭了，但今天问了路。',                                                                                                                                            audioKo: 'Day 7 때는 울었지만, 오늘은 물어봤어요.',                            answer: ['Day 7 때는', '울었지만,', '오늘은', '물어봤어요.'],   tokens: ['Day 7 때는', '울었지만,', '오늘은', '물어봤어요.', '울지만,', '어제는', '물어볼래요.'],         explain: '回顾对比框架' } },
+    { type: 'compose', label: '组句',         task: { id: 'd79-b5-t7', zhHint: '有信号就好了。',                                                                                                                                            audioKo: '신호가 있었으면 좋았을 텐데.',                          answer: ['신호가', '있었으면', '좋았을', '텐데.'],                              tokens: ['신호가', '있었으면', '좋았을', '텐데.', '있으면', '신호를', '좋겠어요.'],           explain: '반사실 ~았으면 + 좋았을 텐데' } },
+    { type: 'choice',  label: '情景选回应',   task: { id: 'd79-b5-t8', promptZh: 'Haru 担心地问你为什么不接电话。你想解释并让她放心，最自然的一句？',                                                                                            choices: [{ text: '신호가 없었어. 근데 할머니한테 물어봐서 잘 찾아왔어.',       correct: true }, { text: '전화 받기 싫었어.',                  correct: false }, { text: '얼마예요?',                              correct: false }, { text: '몰라.',                                correct: false }], explain: '신호가 없다 + 물어보다 · 让对方放心' } },
+  ],
+};

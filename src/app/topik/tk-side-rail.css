@@ -1,0 +1,67 @@
+/* ═══════════════════════════════════════════════════════════════
+   TOPIK 过渡页共用右栏（考前说明 start / 练习设置 practice）
+   - 桌面 ≥1280 常驻，窄屏收起
+   - 用全局 --color-* token（自动明暗），珊瑚为 accent 色
+   - 不依赖 .tk-scope，两类页面都能用（start 页用内联色，不在 scope 内）
+   ═══════════════════════════════════════════════════════════════ */
+:root {
+  --tsr-coral: #e8607a;
+  --tsr-coral-soft: #ffe1e4;
+  --tsr-coral-strong: #c94860;
+}
+[data-theme='dark'] {
+  --tsr-coral: #ff8fa0;
+  --tsr-coral-soft: rgba(232, 96, 122, .18);
+  --tsr-coral-strong: #ffa9b7;
+}
+
+.tsr-layout { display: block; }
+@media (min-width: 1280px) {
+  .tsr-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 32px;
+    max-width: 1080px;
+    margin: 0 auto;
+    align-items: start;
+  }
+  .tsr-col { min-width: 0; }
+  /* 正文列里那个 maxWidth:640 的容器，桌面下解除居中让 grid 主导 */
+  .tsr-col > div[style] { max-width: none !important; }
+}
+
+.tsr-rail { display: none; }
+@media (min-width: 1280px) {
+  .tsr-rail {
+    display: flex; flex-direction: column; gap: 16px;
+    position: sticky; top: 24px; padding-top: 16px;
+  }
+}
+
+
+.tsr-card {
+  background: var(--color-surface-2); border: 1px solid var(--color-border-1);
+  border-radius: 16px; padding: 18px;
+}
+.tsr-card-title {
+  display: flex; align-items: center; gap: 7px;
+  font-family: 'JetBrains Mono', Menlo, Consolas, monospace;
+  font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--color-ink-3); margin-bottom: 14px;
+}
+.tsr-card-title .tsr-ico { color: var(--tsr-coral); }
+
+.tsr-stat { display: flex; justify-content: space-between; align-items: baseline; padding: 8px 0; font-size: 13px; color: var(--color-ink-2, var(--color-ink-1)); }
+.tsr-stat + .tsr-stat { border-top: 1px solid var(--color-border-1); }
+.tsr-stat b { font-family: 'JetBrains Mono', monospace; font-size: 15px; color: var(--color-ink-1); }
+.tsr-stat .tsr-stat-sub { font-size: 11px; color: var(--color-ink-3); font-weight: 400; }
+
+.tsr-tip {
+  font-size: 13px; line-height: 1.7; color: var(--color-ink-2, var(--color-ink-1));
+  padding: 12px 14px; border-radius: 10px;
+  background: var(--tsr-coral-soft); border: 1px solid var(--color-border-1);
+}
+.tsr-tip .tsr-tip-label {
+  display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--tsr-coral-strong); margin-bottom: 6px;
+}

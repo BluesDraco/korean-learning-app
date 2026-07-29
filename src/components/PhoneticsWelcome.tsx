@@ -4,12 +4,17 @@ import { useState, useEffect } from 'react';
 import { ArrowRight, X, Volume2, Sparkles, Compass } from 'lucide-react';
 import { speak, speakWord } from '@/lib/tts';
 import { useLang } from '@/components/LangProvider';
+import { useAuth } from '@/components/AuthProvider';
 import { t } from '@/lib/i18n';
 
-const WELCOME_KEY = 'phonetics-welcome-seen';
+// 6-26 串号事故教训：localStorage key 必须带 userId 前缀。
+function welcomeKey(userId: string): string {
+  return `phonetics-welcome-seen:${userId}`;
+}
 
 export default function PhoneticsWelcome({ onDone }: { onDone: () => void }) {
   const { lang } = useLang();
+  const { user } = useAuth();
   const [step, setStep] = useState(0);
   const [dismissed, setDismissed] = useState(false);
 
@@ -45,18 +50,18 @@ export default function PhoneticsWelcome({ onDone }: { onDone: () => void }) {
 
   useEffect(() => {
     if (dismissed) {
-      localStorage.setItem(WELCOME_KEY, '1');
+      if (user?.id) localStorage.setItem(welcomeKey(user.id), '1');
       onDone();
     }
-  }, [dismissed, onDone]);
+  }, [dismissed, onDone, user?.id]);
 
   const current = STEPS[step];
   const isLast = step === STEPS.length - 1;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#fff7fa]/90 backdrop-blur-md">
-      {/* White card */}
-      <div className="relative w-full max-w-[380px] max-h-[calc(100dvh-48px)] overflow-y-auto rounded-[32px] bg-white border border-pink-100 shadow-[0_18px_48px_rgba(120,70,90,0.16)] p-6 space-y-6">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[var(--bg-base)]/90 backdrop-blur-md">
+      {/* Card */}
+      <div className="relative w-full max-w-[380px] max-h-[calc(100dvh-48px)] overflow-y-auto rounded-[32px] bg-[var(--bg-card)] border border-[var(--border-color)] shadow-[0_18px_48px_rgba(120,70,90,0.16)] p-6 space-y-6">
         {/* Dismiss button */}
         <button
           onClick={() => setDismissed(true)}
@@ -110,7 +115,7 @@ export default function PhoneticsWelcome({ onDone }: { onDone: () => void }) {
               <span className="bg-[var(--purple-soft)]/10 text-[var(--purple-soft)] px-4 py-3 rounded-2xl">ㅏ</span>
               <span className="text-[var(--text-muted)]">=</span>
               <button
-                onClick={() => speakWord('가', 0.7)}
+                onClick={() => speakWord('가')}
                 className="bg-gradient-to-br from-[var(--pink-primary)]/20 to-[var(--purple-soft)]/20 text-[var(--text-primary)] px-6 py-3 rounded-2xl text-3xl hover:scale-105 transition-transform"
               >
                 가
@@ -125,7 +130,7 @@ export default function PhoneticsWelcome({ onDone }: { onDone: () => void }) {
               <span className="bg-[var(--mint-soft)]/10 text-[var(--mint-soft)] px-4 py-3 rounded-2xl">ㄴ</span>
               <span className="text-[var(--text-muted)]">=</span>
               <button
-                onClick={() => speakWord('한', 0.7)}
+                onClick={() => speakWord('한')}
                 className="bg-gradient-to-br from-[var(--pink-primary)]/20 to-[var(--purple-soft)]/20 text-[var(--text-primary)] px-6 py-3 rounded-2xl text-3xl hover:scale-105 transition-transform"
               >
                 한
@@ -161,7 +166,7 @@ export default function PhoneticsWelcome({ onDone }: { onDone: () => void }) {
           {!isLast ? (
             <button
               onClick={() => setStep(step + 1)}
-              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--purple-soft)] to-[var(--pink-primary)] text-white rounded-2xl text-sm font-bold hover:shadow-lg hover:shadow-[var(--pink-primary)]/25 transition-all active:scale-95"
+              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--purple-soft)] to-[var(--pink-primary)] text-white rounded-2xl text-sm font-bold hover:shadow-lg hover:shadow-[var(--pink-primary)]/25 transition-colors transition-opacity transition-shadow active:scale-95"
             >
               {t('phoneticsWelcome.next_button', lang)}
               <ArrowRight size={16} />
@@ -169,7 +174,7 @@ export default function PhoneticsWelcome({ onDone }: { onDone: () => void }) {
           ) : (
             <button
               onClick={() => setDismissed(true)}
-              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--pink-primary)] to-[var(--peach-soft)] text-white rounded-2xl text-sm font-bold hover:shadow-lg hover:shadow-[var(--pink-primary)]/25 transition-all active:scale-95"
+              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--pink-primary)] to-[var(--peach-soft)] text-white rounded-2xl text-sm font-bold hover:shadow-lg hover:shadow-[var(--pink-primary)]/25 transition-colors transition-opacity transition-shadow active:scale-95"
             >
               <Compass size={16} />
               {t('phoneticsWelcome.start_button', lang)}
@@ -267,7 +272,7 @@ function QuickComposeDemo() {
           <div className="inline-flex items-center gap-3 bg-gradient-to-br from-[var(--pink-primary)]/10 to-[var(--purple-soft)]/10 border-2 border-[var(--pink-primary)]/20 rounded-3xl px-8 py-5 animate-fade-in">
             <span className="text-4xl font-extrabold text-[var(--text-primary)]">{syllable}</span>
             <button
-              onClick={() => speakWord(syllable, 0.7)}
+              onClick={() => speakWord(syllable)}
               className="p-2 rounded-xl bg-[var(--pink-primary)]/10 hover:bg-[var(--pink-primary)]/20 text-[var(--pink-primary)] transition-colors"
             >
               <Volume2 size={22} />
@@ -284,9 +289,10 @@ function QuickComposeDemo() {
   );
 }
 
-export function hasSeenWelcome(): boolean {
+export function hasSeenWelcome(userId: string | undefined): boolean {
+  if (!userId) return true; // 未登录不弹窗（其他流程会处理登录）
   try {
-    return localStorage.getItem(WELCOME_KEY) === '1';
+    return localStorage.getItem(welcomeKey(userId)) === '1';
   } catch {
     return true;
   }

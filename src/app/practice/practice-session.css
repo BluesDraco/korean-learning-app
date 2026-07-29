@@ -1,0 +1,399 @@
+/* ═══════════════════════════════════════════════════════════════
+   Practice Session Shell · 4 模式共用外壳
+   sticky top + sticky bottom + stage · 手账风 · tokens 化
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Session 页面根 · 与 hub 共用 .pr-scope 上下文 */
+.pr-scope.pr-session {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ═════ Sticky Top ═════ */
+.pr-scope .pr-ss-top {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  padding-top: calc(12px + env(safe-area-inset-top, 0px));
+  background: color-mix(in srgb, var(--hr-surface-1) 90%, transparent);
+  backdrop-filter: saturate(120%) blur(10px);
+  -webkit-backdrop-filter: saturate(120%) blur(10px);
+  border-bottom: 1px solid var(--hr-border-2);
+}
+
+.pr-scope .pr-ss-back {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  width: 36px;
+  height: 36px;
+  min-width: 44px;
+  min-height: 44px;
+  justify-content: center;
+  border-radius: 10px;
+  background: transparent;
+  border: none;
+  color: var(--hr-ink-2);
+  cursor: pointer;
+  transition: background-color .2s var(--hr-ease);
+}
+.pr-scope .pr-ss-back:hover { background: rgba(24,19,16,.05); color: var(--hr-ink-1); }
+
+/* 进度:圆点(≤7) 或渐变 bar(>7) */
+.pr-scope .pr-ss-progress {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.pr-scope .pr-ss-dots {
+  display: flex;
+  gap: 5px;
+  flex: 1;
+}
+.pr-scope .pr-ss-dot {
+  flex: 1;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--hr-border-1);
+  transition: background-color .3s var(--hr-ease);
+  max-width: 24px;
+}
+.pr-scope .pr-ss-dot.done   { background: currentColor; }
+.pr-scope .pr-ss-dot.active { background: currentColor; box-shadow: 0 0 0 2px color-mix(in srgb, currentColor 20%, transparent); }
+
+.pr-scope .pr-ss-bar {
+  flex: 1;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--hr-border-1);
+  overflow: hidden;
+}
+.pr-scope .pr-ss-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, currentColor, currentColor);
+  transition: width .4s var(--hr-ease);
+}
+
+.pr-scope .pr-ss-count {
+  font-family: var(--hr-mono);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: var(--hr-ink-3);
+  letter-spacing: .04em;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* 主色映射(会话本体的调性由 tone prop 决定) */
+.pr-scope .pr-ss-top.mint   { color: var(--hr-mint-strong); }
+.pr-scope .pr-ss-top.peach  { color: var(--hr-peach-strong); }
+.pr-scope .pr-ss-top.purple { color: var(--hr-purple-strong); }
+.pr-scope .pr-ss-top.pink   { color: var(--hr-pink-strong); }
+
+.pr-scope .pr-ss-more {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: transparent;
+  border: none;
+  color: var(--hr-ink-3);
+  cursor: pointer;
+  transition: background-color .2s var(--hr-ease), color .2s var(--hr-ease);
+}
+.pr-scope .pr-ss-more:hover { background: rgba(24,19,16,.05); color: var(--hr-ink-1); }
+
+/* ═════ Stage · 中区 ═════ */
+.pr-scope .pr-ss-stage {
+  flex: 1;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 20px 16px calc(96px + env(safe-area-inset-bottom, 0px));
+}
+@media (min-width: 768px) {
+  .pr-scope .pr-ss-stage { padding: 32px 24px calc(96px + env(safe-area-inset-bottom, 0px)); max-width: 720px; }
+}
+/* 存在固定底栏(.pr-ss-bottom)时，底部留出底栏总高(≈77px)+其 bottom 偏移(56px)+余量，
+   否则内容滚到底会被固定底栏盖住最后一截 */
+.pr-scope.pr-session:has(.pr-ss-bottom) .pr-ss-stage {
+  padding-bottom: calc(140px + env(safe-area-inset-bottom, 0px));
+}
+
+/* Eyebrow · 模式名小色标 */
+.pr-scope .pr-ss-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, currentColor 10%, var(--hr-surface-2));
+  border: 1px solid color-mix(in srgb, currentColor 22%, transparent);
+  font-family: var(--hr-mono);
+  font-size: 10.5px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: currentColor;
+}
+.pr-scope .pr-ss-eyebrow-dot { width: 5px; height: 5px; border-radius: 99px; background: currentColor; }
+.pr-scope .pr-ss-eyebrow-kr {
+  font-family: var(--hr-hangul);
+  font-size: 10px;
+  color: color-mix(in srgb, currentColor 75%, var(--hr-ink-3));
+  letter-spacing: .04em;
+  font-weight: 500;
+}
+
+/* Session Card */
+.pr-scope .pr-ss-card {
+  background: var(--hr-surface-2);
+  border: 1.5px solid var(--hr-border-2);
+  border-radius: 16px;
+  padding: 24px 20px;
+  box-shadow: var(--hr-shadow-sm);
+}
+@media (min-width: 768px) {
+  .pr-scope .pr-ss-card { padding: 32px 28px; }
+}
+
+/* ═════ Sticky Bottom CTA ═════ */
+.pr-scope .pr-ss-bottom {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+  z-index: 60;
+  padding: 12px 16px;
+  background: color-mix(in srgb, var(--hr-surface-1) 92%, transparent);
+  backdrop-filter: saturate(120%) blur(10px);
+  -webkit-backdrop-filter: saturate(120%) blur(10px);
+  border-top: 1px solid var(--hr-border-2);
+}
+/* 桌面端(≥1024)AppShell 底部导航不在 fixed,让开 sidebar */
+@media (min-width: 1024px) {
+  .pr-scope .pr-ss-bottom {
+    bottom: 0;
+    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    left: 208px; /* 让开左侧 sidebar 宽度 */
+  }
+}
+.pr-scope .pr-ss-bottom-inner {
+  max-width: 640px;
+  margin: 0 auto;
+  display: flex;
+  gap: 10px;
+}
+@media (min-width: 768px) {
+  .pr-scope .pr-ss-bottom-inner { max-width: 720px; }
+}
+
+.pr-scope .pr-ss-cta {
+  flex: 1;
+  height: 52px;
+  border-radius: 14px;
+  background: var(--hr-ink-1);
+  color: var(--hr-surface-1);
+  border: none;
+  cursor: pointer;
+  font-family: var(--hr-sans);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -.005em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform .2s var(--hr-ease), background-color .2s var(--hr-ease), opacity .2s var(--hr-ease);
+}
+.pr-scope .pr-ss-cta:hover:not(:disabled) { transform: translateY(-1px); }
+.pr-scope .pr-ss-cta:disabled {
+  background: var(--hr-border-3);
+  color: var(--hr-ink-4);
+  cursor: not-allowed;
+  opacity: .8;
+}
+.pr-scope .pr-ss-cta.ghost {
+  flex: 0 0 auto;
+  min-width: 96px;
+  background: transparent;
+  border: 1.5px solid var(--hr-border-2);
+  color: var(--hr-ink-2);
+}
+.pr-scope .pr-ss-cta.ghost:hover:not(:disabled) { border-color: var(--hr-border-3); background: rgba(24,19,16,.03); }
+
+/* ═════ 结算屏 · PracticeResult ═════ */
+.pr-scope .pr-result {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 40px 20px calc(80px + env(safe-area-inset-bottom, 0px));
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+@media (min-width: 768px) {
+  .pr-scope .pr-result { padding: 60px 20px 40px; }
+}
+/* 底部「今日进度 + 按钮」收进同宽容器,统一间距,消除挤在一起的观感 */
+.pr-scope .pr-result-foot {
+  width: 100%;
+  max-width: 340px;
+  margin: 8px auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.pr-scope .pr-result-trophy {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, currentColor 12%, var(--hr-surface-2));
+  border: 1.5px solid color-mix(in srgb, currentColor 25%, transparent);
+  color: currentColor;
+}
+.pr-scope .pr-result.mint   { color: var(--hr-mint-strong); }
+.pr-scope .pr-result.peach  { color: var(--hr-peach-strong); }
+.pr-scope .pr-result.purple { color: var(--hr-purple-strong); }
+.pr-scope .pr-result.pink   { color: var(--hr-pink-strong); }
+
+.pr-scope .pr-result-score {
+  font-family: var(--hr-serif);
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(56px, 10vw, 88px);
+  color: var(--hr-ink-1);
+  line-height: 1;
+  letter-spacing: -.04em;
+  margin-bottom: 8px;
+  font-variant-numeric: tabular-nums;
+}
+.pr-scope .pr-result-score-unit {
+  font-family: var(--hr-sans);
+  font-weight: 500;
+  font-size: clamp(20px, 3vw, 28px);
+  color: var(--hr-ink-4);
+  margin-left: 4px;
+  letter-spacing: -.02em;
+}
+.pr-scope .pr-result-caption {
+  font-family: var(--hr-sans);
+  font-size: 14px;
+  color: var(--hr-ink-3);
+  letter-spacing: -.005em;
+}
+.pr-scope .pr-result-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  padding: 16px 0;
+  width: 100%;
+  max-width: 340px;
+  margin: 0;
+  border-top: 1px dashed var(--hr-border-2);
+  border-bottom: 1px dashed var(--hr-border-2);
+}
+.pr-scope .pr-result-stat        { padding: 0 6px; }
+.pr-scope .pr-result-stat-num    {
+  font-family: var(--hr-serif);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--hr-ink-1);
+  line-height: 1;
+  letter-spacing: -.02em;
+  font-variant-numeric: tabular-nums;
+}
+.pr-scope .pr-result-stat-label {
+  font-family: var(--hr-mono);
+  font-size: 9.5px;
+  letter-spacing: .14em;
+  color: var(--hr-ink-3);
+  text-transform: uppercase;
+  margin-top: 6px;
+}
+.pr-scope .pr-result-xp {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: color-mix(in srgb, currentColor 14%, var(--hr-surface-2));
+  border: 1px solid color-mix(in srgb, currentColor 26%, transparent);
+  font-family: var(--hr-sans);
+  font-weight: 600;
+  font-size: 12.5px;
+  color: currentColor;
+}
+.pr-scope .pr-result-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+/* 在结算底部容器内,今日进度框与按钮组都占满同宽,不再各自 auto 居中导致宽度参差 */
+.pr-scope .pr-result-foot .pr-next-hint,
+.pr-scope .pr-result-foot .pr-result-actions {
+  max-width: none;
+  width: 100%;
+  margin: 0;
+}
+.pr-scope .pr-result-actions .pr-ss-cta { height: 48px; }
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  .pr-scope .pr-ss-dot,
+  .pr-scope .pr-ss-bar-fill,
+  .pr-scope .pr-ss-cta,
+  .pr-scope .pr-ss-back,
+  .pr-scope .pr-ss-more { transition: none; }
+  .pr-scope .pr-ss-cta:hover:not(:disabled) { transform: none; }
+}
+
+/* Focus visibility for keyboard navigation */
+.pr-scope :focus-visible {
+  outline: 2.5px solid var(--hr-ink-2, #5c4a42);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Dark 覆盖 */
+[data-theme='dark'] .pr-scope .pr-ss-top,
+[data-theme='dark'] .pr-scope .pr-ss-bottom {
+  background: color-mix(in srgb, var(--hr-surface-1) 88%, transparent);
+}
+[data-theme='dark'] .pr-scope .pr-ss-cta {
+  background: var(--hr-pink-base);
+  color: #1E1B2E;
+}
+[data-theme='dark'] .pr-scope .pr-ss-cta:disabled {
+  background: var(--hr-border-3);
+  color: var(--hr-ink-4);
+}
+[data-theme='dark'] .pr-scope .pr-ss-cta.ghost {
+  background: transparent;
+  color: var(--hr-ink-2);
+}
+[data-theme='dark'] .pr-scope .pr-ss-back:hover { background: rgba(255,255,255,.06); }
+[data-theme='dark'] .pr-scope .pr-ss-more:hover { background: rgba(255,255,255,.06); }
+[data-theme='dark'] .pr-scope .pr-ss-cta.ghost:hover:not(:disabled) { background: rgba(255,255,255,.06); }

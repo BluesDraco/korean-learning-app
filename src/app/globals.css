@@ -1,6 +1,67 @@
 @import 'tailwindcss';
 
 /* ═══════════════════════════════════════════════════════════════
+   iPad 横屏统一缩放（一次性修复所有元素臃肿问题）
+   iPad 横屏 1024-1399px 走桌面壳，但字号按 1400+ 设计 → 全站看着很大很挤
+   用 zoom 让整个 body 等比缩小，视觉相当于把 iPad 变成 1400+ 大屏
+   input 字号补偿：iOS <16px 会自动缩放页面 → 反向放大 input 保底 16px
+   iPad 竖屏 <1024 不触发；电脑 ≥1400 不触发（保持原设计）
+   ═══════════════════════════════════════════════════════════════ */
+/* iOS Safari 兜底：手机端 input/textarea/select 字号 <16px 会触发页面自动放大。
+   全站有大量 text-sm(14px) 表单控件，统一强制 16px 防止聚焦时页面被缩放。
+   font-size 用 !important 盖过 Tailwind 的 text-sm/text-xs 等工具类。 */
+@media (max-width: 1023px) {
+  input, textarea, select { font-size: 16px !important; }
+}
+
+@media (min-width: 1024px) and (max-width: 1279px) {
+  body { zoom: 0.92; }
+  input, textarea, select { font-size: 18px; }
+  /* 场景预习页是 height 死锁 100dvh 型。zoom 后视觉 92dvh 露出底色，补偿到 108.7dvh。
+     注：电台播放器桌面壳也是 height:100dvh 定高，但它有 ::before{position:fixed;inset:0} 深色底
+     铺满视口兜底（同 radio-home 思路），zoom 下不露白，故不需补偿。 */
+  .scene-practice-root { height: 108.7dvh !important; }
+  /* 日记页 + 40音页 + 阅览室 + 地图 + 博客作者页 + 会员页 + 电台访谈页同理（min-height 版本）
+     zoom 后普通流全屏根视觉高度=92dvh，内容不足一屏时底部露白，补偿到 108.7dvh。
+     ⚠️ 必须用 dvh 不能用 vh：iOS Safari 里 vh=大视口(地址栏隐藏时的高度)，dvh=当前可见视口。
+        用 108.7vh 时，地址栏可见状态下 108.7vh×0.92 落在大视口上 → 根高过可见视口 →
+        底部出现"可无限往下拖"的幽灵滚动空白（所有补偿根都中，桌面 Chrome 复现不出因 vh≈dvh）。
+        108.7dvh×0.92=100dvh 恰好等于可见视口，既不露白也不产生幽灵空白。
+     radio-home 用 background-attachment:fixed 背景固定于视口，zoom 下不露白，不补偿。
+     注：.guide 是 map 根类（原写成 .guide-root 是死选择器，补偿从未生效）。 */
+  .diary-list-page,
+  .diary-page,
+  .hr-scope,
+  .lib-scope,
+  .guide,
+  .mb-scope,
+  .itv-page,
+  .blog-author-root { min-height: 108.7dvh !important; }
+  /* 桌面壳幽灵滚动修复：body{zoom:0.92} 下，body 作为滚动根时浏览器把 scrollHeight
+     按 内容高/0.92 放大，短内容页（explore 等）底部凭空多出约 8.7% 可下滑空背景。
+     解法：把滚动从 body 收进 .desktop-body 容器——给它 height:108.7dvh（×0.92 后
+     =100dvh=可见视口）+ overflow-y:auto。容器高度参与 zoom 正确计算，body 自身高
+     恰好等于视口不再滚动，幽灵空白消除。长内容在容器内正常滚动，sticky 侧栏相对该
+     容器仍生效。dvh 不用 svh/vh：见上方 scene 补偿注释（避免地址栏交互产生幽灵滚动）。 */
+  .desktop-body { height: 108.7dvh; overflow-y: auto; }
+}
+@media (min-width: 1280px) and (max-width: 1399px) {
+  body { zoom: 0.96; }
+  input, textarea, select { font-size: 17px; }
+  .scene-practice-root { height: 104.2dvh !important; }
+  .diary-list-page,
+  .diary-page,
+  .hr-scope,
+  .lib-scope,
+  .guide,
+  .mb-scope,
+  .itv-page,
+  .blog-author-root { min-height: 104.2dvh !important; }
+  /* 桌面壳幽灵滚动修复：同 0.92 档，zoom:0.96 → 100/0.96≈104.2dvh。 */
+  .desktop-body { height: 104.2dvh; overflow-y: auto; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
    Design Tokens (P1) — 暖手账升级版
    Tailwind v4 `@theme` block. Variables here become utility classes:
    `--color-surface-1` → `bg-surface-1` / `text-surface-1` etc.
@@ -99,6 +160,26 @@
 
   /* ── Semantic spacing token (Tailwind already has spacing scale) ── */
   --spacing-section: 32px;
+
+  /* ── Breakpoints (Tailwind v4 · 只新增 xs 覆盖小手机，其余保持默认) ──
+     xs 360  · 小手机（iPhone SE / 老安卓）
+     sm 640  · Tailwind 默认（保留）
+     md 768  · 平板起
+     lg 1024 · iPad Pro 竖屏
+     xl 1280 · 桌面起
+     2xl 1536 · 大桌面
+     用法：<div class="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3"> */
+  --breakpoint-xs: 22.5rem;
+
+  /* ── Fluid typography (响应式字号 · 覆盖 320-1440 视口) ──
+     用法：style={{ fontSize: 'var(--fs-body)' }} 或 CSS var()
+     不覆盖 --text-* Tailwind scale，仅供需要流体缩放的新组件使用 */
+  --fs-caption: clamp(11px, 0.7vw + 6px, 13px);
+  --fs-body:    clamp(14px, 0.95vw + 8px, 17px);
+  --fs-lead:    clamp(16px, 1.2vw + 8px, 20px);
+  --fs-h3:      clamp(18px, 1.4vw + 10px, 24px);
+  --fs-h2:      clamp(20px, 1.8vw + 10px, 30px);
+  --fs-h1:      clamp(24px, 2.4vw + 8px, 40px);
 }
 
 /* ── Token: motion duration (not in @theme to avoid utility bloat) ── */
@@ -196,6 +277,12 @@
   from { transform: translate(-50%, -50%) scale(0.96); opacity: 0; }
   to   { transform: translate(-50%, -50%) scale(1);    opacity: 1; }
 }
+/* Modal 用：靠 flex 居中，动画只做缩放不含 translate（含 translate 会破坏 flex 居中）。
+   注：触屏 @media(hover:none) 有 *:hover{transform:none!important}，故弹窗不能靠 transform 居中。 */
+@keyframes tori-scale-in-center {
+  from { transform: scale(0.96); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
 @keyframes tori-spin {
   to { transform: rotate(360deg); }
 }
@@ -242,6 +329,12 @@
   transform: translateY(0);
   box-shadow: var(--shadow-xs);
 }
+/* 小屏兜底：tori-btn size="sm"（inline min-height:36px）也要保证 44 触摸目标 */
+@media (max-width: 1023px) {
+  .tori-btn:not(.no-touch-min) {
+    min-height: 44px !important;
+  }
+}
 .tori-btn:focus-visible {
   outline: none;
   box-shadow: var(--focus-ring), var(--shadow-sm);
@@ -279,6 +372,13 @@
   --color-mint-soft:   #1f3530;
   --color-peach-soft:  #3a261d;
   --color-purple-soft: #2a213f;
+  --color-purple-strong: #b3a0e8;  /* 暗色下提亮，作前景文字可读 */
+  --color-vocab:     #8a7a30;  /* 暗色下降低亮度避免刺眼 */
+
+  /* Gold — dark variants */
+  --color-gold-soft:   #2e2314;
+  --color-gold-base:   #d4a96a;
+  --color-gold-strong: #e8c890;
 
   /* Status — slightly brighter for dark contrast */
   --color-status-success: #7ec5a8;
@@ -349,6 +449,7 @@
   --color-stats:    #FFE4A0;
 
   /* ── 语义别名 ── */
+  --bg-primary:     var(--bg-base);
   --bg-input:       var(--bg-soft);
   --bg-accent:      var(--bg-muted);
   --bg-card-hover:  var(--bg-soft);
@@ -381,10 +482,13 @@
   --pink-pale:      #4A3050;
   --pink-light:     #6A4A6A;
   --purple-soft:    #4A3A6A;
-  --mint-soft:      #4A6058;
-  --yellow-soft:    #6A6040;
-  --blue-soft:      #4A5870;
-  --peach-soft:     #6A4A40;
+  /* Note: mint-soft / peach-soft 在组件里普遍作前景色使用（"已掌握"数字、
+     "学习中" badge、图标）。若暗色下改成深色（如 #4A6058），会在深卡上不可读。
+     这里保留浅色的柔和亮版本，仅稍加饱和以贴近夜间视觉。 */
+  --mint-soft:      #b8e4dc;
+  --yellow-soft:    #ffe8b0;
+  --blue-soft:      #b8d0e8;
+  --peach-soft:     #ffcfb8;
   --color-danger:    #FF6B6B;
   --color-danger-light: #B05050;
   --color-danger-bg: #3A2020;
@@ -409,6 +513,7 @@
 @layer base {
   html, body {
     overflow-x: hidden;
+    overflow-x: clip;
   }
   body {
     -webkit-font-smoothing: antialiased;
@@ -422,20 +527,136 @@
    Font Settings — unlayered so they override any cascade-layer styles
    ═══════════════════════════════════════════════════════════════ */
 
-html { font-size: 16px; }
+html {
+  font-size: 16px;
+  /* 无论内容多少始终预留滚动条槽位，避免出现/隐藏滚动条时页面宽度跳变 */
+  scrollbar-gutter: stable;
+  /* iOS 横竖屏切换不自动缩放字号 */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* App 原生感：拉到顶/底不露橡皮筋回弹、不触发浏览器下拉刷新。
+     Android Chrome / 鸿蒙 ArkWeb 原生支持并禁下拉刷新；iOS Safari 15.4+ 支持 */
+  overscroll-behavior: none;
+  /* 软键盘弹起/锚点跳转触发自动滚动时，上下各留缓冲，输入框不贴死屏幕边缘，
+     跳动落点更居中温和。纯缓冲，不改变是否滚动的原生决策，副作用极小。 */
+  scroll-padding-top: 16px;
+  scroll-padding-bottom: 16px;
+}
 html[data-font-size="small"]  { font-size: 14px; }
 html[data-font-size="medium"] { font-size: 16px; }
 html[data-font-size="large"]  { font-size: 18px; }
 html[data-font-size="xlarge"] { font-size: 20px; }
 
 body {
-  font-family: system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+  /* 品牌字体：自托管思源黑体(Noto Sans SC)排最前，全平台统一，不再跟随系统黑体。
+     韩文用 Noto Sans KR/Malgun，system-ui 等仅兜底(思源未加载完/缺字时临时顶上)。 */
+  font-family: 'Noto Sans SC', system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+  /* 中韩排版三层防御：
+     word-break: keep-all → 中韩按 어절/空格换行，不在词中间断（正常情况保持整词）
+     overflow-wrap: anywhere → 全局兜底：无空格的长韩语句/复合词一旦要溢出容器，
+       就在字符间强制断行。用 anywhere 而非 break-word 是关键——anywhere 会在计算
+       min-content 时就纳入断点（min-content 塌到最窄），从根上杜绝「长韩语句撑破
+       容器 + 祖先 overflow-x:clip 裁切」这一 bug 家族；break-word 不影响 min-content
+       故拦不住。keep-all 仍主导正常换行观感，anywhere 只在真要溢出时才介入。
+     line-break: strict → 中韩标点（。，！？）不出现在行首 */
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  line-break: strict;
+  /* App 原生感：消除移动端 300ms 点击延迟（保留 pan 滚动，仅禁双击缩放），点按更跟手。
+     全平台标准属性；画板等 touch-action:none 的子元素优先级更高，不受影响 */
+  touch-action: manipulation;
+  overscroll-behavior: none;
+}
+
+/* ── 韩语单词换行规则 ──
+   主行为：keep-all → 按 어절/空格换行，不在词中间断（例：어디서 不会拆成 어 / 디서）。
+   兜底：overflow-wrap: break-word → 只当单个어절宽度超过容器时才在字符间断，避免溢出容器破版。
+   中文继续走 body 的 overflow-wrap: break-word，行为不变。
+   进一步兜底：全站 <KoAutoFit> 组件（src/components/common/KoAutoFit.tsx）在 layout.tsx 挂载，
+   检测到 scrollWidth > clientWidth 时按 5% 一档降字号。 */
+.ko-text,
+.ko-body,
+.diary-ko,
+.diary-ko-soft,
+.diary-handwriting-ko,
+.diary-detail-example-quote-ko,
+.diary-v4-ko-title,
+.diary-v4-lockover-ko,
+.diary-v4-chap-ko,
+.diary-v4-sq-label-ko,
+.subquest-encounter-ko,
+.subquest-encounter-hangul,
+.subquest-example-ko,
+.subquest-write-caption-ko,
+.chatui-msg-ko,
+.msg-ko,
+.spv2-opening-line-ko,
+.spv2-vcard-ko,
+.spv2-vcard-example-ko,
+.spv2-pcard-ko,
+.spv2-brow-ko,
+.spv2-quiz-prompt-ko,
+.spv2-quiz-prompt-ko-text,
+.spv2-dline-ko,
+.spv2-dline-ko-wrap,
+.wbp-item-ko,
+.az2-korean,
+.h-ko,
+.korea-article,
+.hr-sc-text {
+  word-break: keep-all !important;
+  overflow-wrap: anywhere !important;
+  line-break: strict !important;
+}
+
+/* ── 韩国小知识文章：修 flex:1 子项 min-width:auto 导致的溢出 + 表格/固定像素元素撑破手机屏
+   Android/宽屏窄屏都要保护；不能让整个文章横向滚 */
+.korea-article { overflow-x: hidden; }
+.korea-article img,
+.korea-article video,
+.korea-article iframe { max-width: 100%; height: auto; }
+.korea-article table { max-width: 100%; display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.korea-article .tori-bubble,
+.korea-article .step-content,
+.korea-article .dialog-content,
+.korea-article .place-body,
+.korea-article .tax-text,
+.korea-article .wrap-text {
+  min-width: 0 !important;
+  overflow-wrap: break-word !important;
+  word-break: break-word !important;
+}
+
+/* KoAutoFit 缩字号后的过渡效果（可选） */
+[data-ko-scale] {
+  transition: font-size 120ms ease-out;
+}
+
+/* ── 闪卡桌面端字号放大 ──
+   /review 和 /vocabulary/books/[id]/flashcards 用户反馈桌面端字太小。
+   给闪卡最外层 <article> / <div> 加 .flashcard-scale 类，
+   ≥1024px 时按比例放大主要文字，让例句、AI 解析、词头都更清晰。
+   手机端不受影响。 */
+@media (min-width: 1024px) {
+  .flashcard-scale .text-\[44px\] { font-size: 56px !important; line-height: 1.1; }
+  .flashcard-scale .text-\[32px\] { font-size: 40px !important; line-height: 1.15; }
+  .flashcard-scale .text-\[18px\] { font-size: 20px !important; }
+  .flashcard-scale .text-\[17px\] { font-size: 20px !important; }
+  .flashcard-scale .text-\[15px\] { font-size: 17px !important; }
+  .flashcard-scale .text-\[13px\] { font-size: 17px !important; line-height: 1.6; }
+  .flashcard-scale .text-\[11px\] { font-size: 12px !important; }
+  /* 词性等徽章保持较小以免膨胀 */
+  .flashcard-scale [class*="rounded-full"].text-\[11px\] { font-size: 12px !important; }
+  /* GrammarExplainBubble 里的按钮/文字随卡片放大 */
+  .flashcard-scale .grammar-explain-btn { font-size: 13px !important; }
 }
 
 /* Preset: cute (default) — 手账风: handwritten Chinese + rounded Korean */
 html[data-font="cute"] body,
 html:not([data-font]) body {
-  font-family: system-ui, -apple-system, 'KaiTi', 'STKaiti', 'PingFang SC', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+  /* 默认预设：自托管思源黑体排最前，全平台强制统一(不再各看各的系统黑体 Win雅黑/Mac苹方/安卓思源)。
+     系统楷体/黑体降为兜底。 */
+  font-family: 'Noto Sans SC', system-ui, -apple-system, 'KaiTi', 'STKaiti', 'LXGW WenKai Screen', 'PingFang SC', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
 }
 html[data-font="cute"] .ko-text,
 html:not([data-font]) .ko-text {
@@ -448,7 +669,7 @@ html:not([data-font]) .ko-body {
 
 /* Preset: clean — 清晰风: pure sans-serif, no handwritten font */
 html[data-font="clean"] body {
-  font-family: system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-family: 'Noto Sans SC', system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
 }
 html[data-font="clean"] .ko-text,
 html[data-font="clean"] .ko-body {
@@ -457,7 +678,7 @@ html[data-font="clean"] .ko-body {
 
 /* Preset: classic — 经典风: serif body with KaiTi */
 html[data-font="classic"] body {
-  font-family: Georgia, 'Times New Roman', 'KaiTi', 'STKaiti', 'Noto Serif KR', serif;
+  font-family: Georgia, 'Times New Roman', 'KaiTi', 'STKaiti', 'LXGW WenKai Screen', 'Noto Serif KR', serif;
 }
 html[data-font="classic"] .ko-text,
 html[data-font="classic"] .ko-body {
@@ -574,7 +795,7 @@ html[data-font="classic"] .ko-body {
   border-radius: var(--radius-card);
   border: 1.5px dashed var(--border-default);
   box-shadow: var(--shadow-card);
-  transition: all 0.2s ease;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
   transform: rotate(var(--card-rotate, 0deg));
 }
 .card-standard:hover {
@@ -589,7 +810,7 @@ html[data-font="classic"] .ko-body {
   border-radius: var(--radius-card);
   border: 1.5px solid var(--border-default);
   box-shadow: var(--shadow-sticker);
-  transition: all 0.2s ease;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 .card-washi::before {
   content: '';
@@ -615,7 +836,7 @@ html[data-font="classic"] .ko-body {
   border-radius: 2px 16px 16px 2px;
   border: 2px dashed var(--pink-pale);
   box-shadow: var(--shadow-sticker);
-  transition: all 0.2s ease;
+  transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
 }
 .card-dashed:hover {
   border-color: var(--pink-light);
@@ -635,7 +856,7 @@ html[data-font="classic"] .ko-body {
   border: 1.5px solid var(--border-default);
   box-shadow: var(--shadow-sticker), 0 0 0 4px rgba(255,143,171,0.04);
   border-radius: var(--radius-card);
-  transition: all 0.2s ease;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 .card-sticker:hover {
   box-shadow: var(--shadow-card-hover), 0 0 0 6px rgba(255,143,171,0.06);
@@ -661,7 +882,7 @@ html[data-font="classic"] .ko-body {
   box-shadow: 0 3px 10px rgba(0,0,0,0.06);
   border-radius: 2px;
   transform: rotate(var(--polaroid-rotate, -0.5deg));
-  transition: all 0.2s ease;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 .card-polaroid:hover {
   transform: rotate(0deg) scale(1.02);
@@ -684,7 +905,7 @@ html[data-font="classic"] .ko-body {
   border-radius: var(--radius-button);
   padding: 12px 32px;
   box-shadow: var(--shadow-button);
-  transition: all 0.1s ease;
+  transition: box-shadow 0.1s ease, transform 0.1s ease;
   border: none;
   cursor: pointer;
 }
@@ -700,7 +921,7 @@ html[data-font="classic"] .ko-body {
   border-radius: var(--radius-button);
   padding: 10px 24px;
   font-weight: 600;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
   cursor: pointer;
 }
 .btn-secondary:hover {
@@ -714,7 +935,7 @@ html[data-font="classic"] .ko-body {
   border-radius: var(--radius-button);
   padding: 10px 24px;
   font-weight: 600;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
   cursor: pointer;
 }
 
@@ -734,7 +955,7 @@ html[data-font="classic"] .ko-body {
     2px 0 0 0 rgba(0,0,0,0.1) inset,
     0 2px 0 0 rgba(255,255,255,0.3) inset;
   cursor: pointer;
-  transition: all 0.1s ease;
+  transition: box-shadow 0.1s ease, transform 0.1s ease;
   image-rendering: pixelated;
 }
 .btn-pixel:active {
@@ -757,7 +978,7 @@ html[data-font="classic"] .ko-body {
   background: var(--bg-card);
   font-size: 12px;
   color: var(--text-secondary);
-  transition: all 0.15s ease;
+  transition: border-color 0.15s ease, background-color 0.15s ease, transform 0.15s ease;
   cursor: pointer;
 }
 .srs-btn .emoji { font-size: 24px; }
@@ -1207,6 +1428,29 @@ html[data-font="classic"] .ko-body {
   padding-bottom: env(safe-area-inset-bottom, 1rem);
 }
 
+/* ── 横向滚动提示 ──
+   给 overflow-x: auto 的 tab 栏或筛选条加右侧渐变淡出，暗示还有更多内容可滑。
+   用法：包一层 <div class="scroll-hint-x"><div class="overflow-x-auto ...">...</div></div>
+   或直接给 overflow-x-auto 的元素加 relative + ::after 伪元素。 */
+.scroll-hint-x {
+  position: relative;
+}
+.scroll-hint-x::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 32px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, var(--bg-base, #fffbf7));
+  opacity: 0.9;
+  border-radius: 0 inherit inherit 0;
+}
+[data-theme="dark"] .scroll-hint-x::after {
+  background: linear-gradient(90deg, transparent, var(--color-surface-1, #15131c));
+}
+
 /* ── Card flip for review ── */
 .perspective-1000  { perspective: 1000px; }
 .transform-style-3d { transform-style: preserve-3d; }
@@ -1263,9 +1507,12 @@ html[data-font="classic"] .ko-body {
 
 /* ── Page container ── */
 .page-container {
-  max-width: 1280px;
+  max-width: min(1476px, 100% - 32px);
   margin: 0 auto;
   width: 100%;
+  /* 桌面档硬编码宽度组件（w-[1200px] 等）超出时被夹住，防止横向出滚动条 */
+  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1299,7 +1546,7 @@ html[data-font="classic"] .ko-body {
   margin-bottom: 4px;
 }
 .achievement-popup .desc {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-secondary);
 }
 
@@ -1383,7 +1630,7 @@ html[data-font="classic"] .ko-body {
   border: 1.5px dashed var(--pink-light);
   border-radius: var(--radius-card);
   padding: 10px 16px;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-secondary);
   max-width: 200px;
 }
@@ -1445,15 +1692,44 @@ html[data-font="classic"] .ko-body {
   .page-corner-bunny::before {
     display: none;
   }
-  /* Prevent horizontal overflow on mobile */
-  .page-container {
-    overflow-x: hidden;
+}
+
+/* dvh fallback: iOS 15.3 and older ignore dvh entirely.
+   Set --dvh as vh first (universal), then override with dvh (supported browsers only). */
+:root {
+  --vh-100: 100vh;
+  --vh-90: 90vh;
+  --vh-85: 85vh;
+  --vh-80: 80vh;
+  --vh-65: 65vh;
+}
+@supports (height: 100dvh) {
+  :root {
+    --vh-100: 100dvh;
+    --vh-90: 90dvh;
+    --vh-85: 85dvh;
+    --vh-80: 80dvh;
+    --vh-65: 65dvh;
   }
 }
 
 /* ═══════════════════════════════════════════════════════════════
    Mobile Experience Optimizations
    ═══════════════════════════════════════════════════════════════ */
+
+/* 视觉隐藏 · 供爬虫读取的 SeoShell 用（clip-path 版本比 -9999px 更 Google 友好，避免 cloaking 嫌疑） */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
 
 /* Safe area for notch / home indicator */
 .pb-safe {
@@ -1468,10 +1744,24 @@ html[data-font="classic"] .ko-body {
 .pt-safe {
   padding-top: env(safe-area-inset-top, 0px);
 }
+/* px-safe 用于 position:fixed 且 left:0/right:0 的元素（如底部 tabbar）
+   避免和已有 px-N 打架 — 有 px-N 的普通容器不需要它 */
+.px-safe {
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+}
 
-/* Minimum touch target (44x44 per Apple HIG) */
-@media (max-width: 768px) {
-  button, a, [role="button"] {
+/* iOS：消除默认点击蓝框 */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Minimum touch target (44x44 per Apple HIG)
+   加 .no-touch-min 可 opt-out，用于列表内相邻小图标按钮避免误触
+   父容器加 .no-touch-zone 让所有后代按钮 opt-out（用于工具栏、闪卡 header 等紧凑按钮组）
+   断点 1023 覆盖：iPhone / iPad 竖屏 / iPad 分屏 —— 所有走手机壳的场景 */
+@media (max-width: 1023px) {
+  button:not(.no-touch-min), a:not(.no-touch-min), [role="button"]:not(.no-touch-min) {
     min-height: 44px;
     min-width: 44px;
     touch-action: manipulation; /* eliminate 300ms tap delay */
@@ -1479,7 +1769,10 @@ html[data-font="classic"] .ko-body {
 
   /* Exceptions for inline elements */
   .touch-auto button,
-  .touch-auto a {
+  .touch-auto a,
+  .no-touch-zone button,
+  .no-touch-zone a,
+  .no-touch-zone [role="button"] {
     min-height: auto;
     min-width: auto;
   }
@@ -1489,7 +1782,9 @@ html[data-font="classic"] .ko-body {
     min-height: 52px;
     padding: 10px 6px;
   }
+}
 
+@media (max-width: 768px) {
   /* Bottom nav padding for phones */
   .mobile-nav-pb {
     padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
@@ -1511,6 +1806,26 @@ html[data-font="classic"] .ko-body {
   /* Larger text for Korean on mobile */
   .ko-text {
     font-size: 1.05em;
+  }
+  /* 闪卡词头例外：上面的 .ko-text{1.05em} 与 Tailwind 的 text-[44px] 同特异性、且在其后，
+     会把词头 44px 压成 ~16.8px（=1.05×16，就是手机端字变小的真正原因）。
+     这里按卡片设计尺寸复位（词头 44px / 释义 32px），特异性更高，稳压 1.05em。 */
+  .flashcard-scale .text-\[44px\] { font-size: 44px; }
+  .flashcard-scale .text-\[32px\] { font-size: 32px; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   触屏 hover 兜底：无 hover 能力的设备（触屏 / 触屏笔电）禁用所有
+   :hover 引起的位移/缩放/阴影效果，避免"点一次卡住变形"的现象。
+   保留背景色/边框色的 hover 反馈（对触屏也合理，第二次点会恢复）。
+   ═══════════════════════════════════════════════════════════════ */
+@media (hover: none) {
+  *:hover {
+    transform: none !important;
+  }
+  /* transition 里的 transform 也不触发过渡，避免延迟归位 */
+  *:hover {
+    transition-property: background-color, color, border-color, opacity !important;
   }
 }
 
@@ -1534,6 +1849,15 @@ html[data-reduce-motion="true"] *::after {
   scroll-behavior: auto !important;
 }
 
+/* 低端设备(data-lite, 由 layout 按内存/CPU 探测) 全局关毛玻璃：
+   backdrop-filter 在低端 GPU 滚动掉帧最严重。关掉后靠元素自身半透明底色兜底，视觉略降但流畅。 */
+html[data-lite] *,
+html[data-lite] *::before,
+html[data-lite] *::after {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
 /* ═══════════════════════════════════════════════════════════════
    Desktop 3-Column App Layout (≥1100px)
    Glass morphism sidebar + main + panel
@@ -1552,8 +1876,8 @@ html[data-reduce-motion="true"] *::after {
   --desktop-mint: var(--color-mint-soft);
   --desktop-cream: #fff8f4;
   --desktop-black: #201815;
-  --desktop-shadow: none;
-  --desktop-shadow2: none;
+  --desktop-shadow: 0 6px 18px -8px oklch(28% 0.03 30 / 0.10), 0 2px 6px -2px oklch(28% 0.02 30 / 0.05);
+  --desktop-shadow2: 0 22px 48px -16px oklch(28% 0.04 30 / 0.16), 0 6px 16px -6px oklch(28% 0.03 30 / 0.08);
   --desktop-radius: 34px;
   --desktop-radius-inner: 32px;
   --desktop-gap: 44px;
@@ -1568,35 +1892,51 @@ html[data-reduce-motion="true"] *::after {
   --desktop-line: #2e2632;
   --desktop-cream: #262232;
   --desktop-black: #f4eee8;
+  --desktop-shadow: 0 6px 20px -8px rgba(0,0,0,0.55), 0 2px 6px -2px rgba(0,0,0,0.4);
+  --desktop-shadow2: 0 24px 52px -16px rgba(0,0,0,0.6), 0 8px 18px -6px rgba(0,0,0,0.45);
 }
 
 /* Desktop background */
 .desktop-body {
+  min-height: 100vh;
+  min-height: 100svh;
+  /* 背景固定相对视口，页面无论多长，看到的都是同一片渐变，
+     避免"内容越多背景越粉"的错觉 */
   background: radial-gradient(circle at 12% 4%, rgba(255,127,168,.2), transparent 26%),
               radial-gradient(circle at 92% 0%, rgba(174,227,216,.22), transparent 26%),
               linear-gradient(180deg, #fff2f5 0%, #fffaf7 52%, #fff 100%);
+  background-attachment: fixed;
+  /* 用 cover 而非 100vw 100vh：iPad 档 body{zoom:0.92} 会让 100vh 只覆盖视口 92%，
+     固定背景平铺出现拼缝（#fff 接 #fff2f5 的粉色断裂线）。cover 随缩放铺满视口不平铺。 */
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+/* phonetics 等 wide 沉浸页：去掉粉/薄荷径向，避免在 stage 区形成"色块感" */
+.desktop-body:has(.desktop-main-rail-wide) {
+  background: #fffaf7;
 }
 [data-theme="dark"] .desktop-body {
   background: radial-gradient(circle at 12% 4%, rgba(255,127,168,.10), transparent 32%),
               radial-gradient(circle at 92% 0%, rgba(125,198,179,.10), transparent 32%),
               linear-gradient(180deg, #15131c 0%, #1a1722 52%, #15131c 100%);
 }
-[data-theme="dark"] .desktop-sidebar { background: var(--color-surface-2); }
+[data-theme="dark"] .desktop-sidebar { background: var(--color-surface-2); border-color: var(--color-border-1); }
 [data-theme="dark"] .desktop-card { background: var(--color-surface-2); border-color: var(--color-border-1); }
-[data-theme="dark"] .desktop-topbar { background: var(--color-surface-2); }
-[data-theme="dark"] .desktop-panel { background: var(--color-surface-2); }
+[data-theme="dark"] .desktop-topbar { background: var(--color-surface-2); border-color: var(--color-border-1); }
+[data-theme="dark"] .desktop-panel { background: var(--color-surface-2); border-color: var(--color-border-1); }
 [data-theme="dark"] .desktop-stat { background: var(--color-surface-2); border-color: var(--color-border-1); }
 [data-theme="dark"] .desktop-navbtn.active { background: var(--color-pink-base); color: #fff; }
 [data-theme="dark"] .desktop-module { background: var(--color-surface-2); border-color: var(--color-border-1); }
+[data-theme="dark"] .panel-card { background: var(--color-surface-2); }
 
 /* 3-column grid */
 .desktop-app {
-  height: 100vh;
+  min-height: 100vh;
+  min-height: 100svh;
   display: grid;
   grid-template-columns: var(--desktop-sidebar) minmax(0, 1fr) var(--desktop-panel);
   gap: var(--desktop-gap);
   padding: 20px;
-  overflow: hidden;
 }
 
 /* ── Sidebar ── */
@@ -1612,6 +1952,12 @@ html[data-reduce-motion="true"] *::after {
   flex-direction: column;
   align-items: center;
   gap: 12px;
+  /* 页面能滚时侧栏跟着 viewport 固定不动，不占多余高度 */
+  position: sticky;
+  top: 20px;
+  align-self: start;
+  max-height: calc(100vh - 40px);
+  max-height: calc(100svh - 40px);
 }
 
 .desktop-logo {
@@ -1657,7 +2003,7 @@ html[data-reduce-motion="true"] *::after {
   font-size: 12px;
   font-weight: 900;
   cursor: pointer;
-  transition: all .15s ease;
+  transition: background-color .15s ease;
   flex-shrink: 0;
 }
 
@@ -1687,8 +2033,7 @@ html[data-reduce-motion="true"] *::after {
 
 /* ── Main content area ── */
 .desktop-main {
-  height: 100%;
-  overflow-y: auto;
+  min-height: 100%;
   display: flex;
   justify-content: center;
 }
@@ -1700,6 +2045,22 @@ html[data-reduce-motion="true"] *::after {
   flex-direction: column;
   gap: 20px;
   padding-bottom: 32px;
+}
+
+/* Wide mode: phonetics 等沉浸式页面用，撑满主区不限宽 */
+.desktop-main.desktop-main-wide { padding: 0; background: transparent; }
+.desktop-main-rail.desktop-main-rail-wide {
+  max-width: none !important;
+  gap: 0;
+  padding-bottom: 0;
+  background: transparent;
+}
+/* wide 模式下 desktop-content 也不要画底色 */
+.desktop-main.desktop-main-wide .desktop-content { background: transparent; }
+/* 让 wide 模式吸掉外层 .desktop-app 的左 padding+gap，主区直接顶到 sidebar 右侧 */
+.desktop-app:has(.desktop-main-rail-wide) {
+  padding: 20px 12px 20px 16px;
+  gap: 8px;
 }
 
 .desktop-topbar {
@@ -1769,6 +2130,17 @@ html[data-reduce-motion="true"] *::after {
   border: 1px solid rgba(255,127,168,.16);
   white-space: nowrap;
   flex-shrink: 0;
+}
+
+/* 移动端全宽出血工具：抵消 AppShell <main> 的左右内边距(px-4=16px, md:px-8=32px)，
+   让页面自带的背景色/渐变铺满屏幕宽度、消除四周白边。
+   任何有独立背景、想全宽的移动页面加这个类即可（复用，不必每页硬编码负 margin）。
+   注意：加了它之后，内容自身的左右边距要由页面内层容器提供。 */
+@media (max-width: 767px) {
+  .full-bleed-mobile { margin-left: -16px; margin-right: -16px; }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .full-bleed-mobile { margin-left: -32px; margin-right: -32px; }
 }
 
 .desktop-content {
@@ -1951,7 +2323,7 @@ html[data-reduce-motion="true"] *::after {
   font-size: 14px;
   font-weight: 1000;
   cursor: pointer;
-  transition: all .15s ease;
+  transition: background-color .15s ease, box-shadow .15s ease, transform .15s ease;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -2044,7 +2416,7 @@ html[data-reduce-motion="true"] *::after {
   padding: 18px;
   min-height: 156px;
   cursor: pointer;
-  transition: all .15s ease;
+  transition: box-shadow .15s ease, transform .15s ease;
 }
 
 .desktop-module:hover {
@@ -2110,7 +2482,7 @@ html[data-reduce-motion="true"] *::after {
   gap: 14px;
   align-items: center;
   cursor: pointer;
-  transition: all .15s ease;
+  transition: box-shadow .15s ease, transform .15s ease;
 }
 
 .desktop-song:hover,
@@ -2435,7 +2807,7 @@ html[data-reduce-motion="true"] *::after {
   border: 1px solid rgba(255,127,168,.18);
   cursor: pointer;
   font-size: 15px;
-  transition: all .1s ease;
+  transition: background-color .1s ease, border-color .1s ease;
 }
 
 .desktop-token:hover {
@@ -2483,7 +2855,7 @@ html[data-reduce-motion="true"] *::after {
   font-size: 12px;
   font-weight: 1000;
   cursor: pointer;
-  transition: all .1s ease;
+  transition: opacity .1s ease;
 }
 
 .desktop-save-row button:first-child {
@@ -2653,7 +3025,8 @@ html[data-reduce-motion="true"] *::after {
   .desktop-panel { display: none; }
   .desktop-search { display: none; }
   .desktop-navbtn { width: 72px; }
-  .desktop-main-rail { max-width: 968px; }
+  /* iPad 横屏：主区撑满剩余空间，不再限死 968px */
+  .desktop-main-rail { max-width: 100%; }
   .desktop-module-grid,
   .desktop-grid-3 { grid-template-columns: 1fr 1fr; }
   .desktop-grid-2 { grid-template-columns: 1fr; }
@@ -2707,21 +3080,22 @@ html[data-reduce-motion="true"] *::after {
   .desktop-foot-btn { justify-content: center !important; padding: 8px !important; }
 }
 
-/* Hide desktop shell on mobile (< 768px) — mobile uses existing layout */
-@media (max-width: 767px) {
+/* Hide desktop shell on mobile (< 1024px) — 与 useIsDesktop 骨架层契约一致。
+   横屏 iPhone (≤932) 和 iPad 竖屏 (≤1023) 都走手机壳，避免视口太窄的桌面布局挤破。 */
+@media (max-width: 1023px) {
   .desktop-app {
     display: none;
   }
 }
 
-@media (min-width: 768px) {
-  /* On tablet+, hide mobile elements */
+@media (min-width: 1024px) {
+  /* On desktop (≥1024), hide mobile-only elements */
   .mobile-only {
     display: none !important;
   }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 1023px) {
   .desktop-only {
     display: none !important;
   }
@@ -2911,4 +3285,120 @@ html[data-reduce-motion="true"] *::after {
 @keyframes tori-dot-bounce {
   0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; }
   40%           { transform: scale(1);   opacity: 1; }
+}
+
+/* ── 全站禁选中 / 长按 / iOS callout 菜单（App 原生感）──
+   iOS 首次触摸立即触发系统选中，全站默认禁；输入框/文本域/.selectable 走逃生舱仍可打字/选中。
+   手写画板等触摸绘制场景天然受益，无需再单独加类。 */
+body {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+body * {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+/* tap-highlight 只对交互元素透明，避免全站按钮视觉反馈都丢 */
+body a,
+body button,
+body canvas,
+body [role="button"] {
+  -webkit-tap-highlight-color: transparent;
+}
+/* 输入框 / 文本域 / contenteditable / .selectable 逃生舱：仍可选中和长按 */
+body input,
+body textarea,
+body [contenteditable="true"],
+body .selectable,
+body .selectable * {
+  -webkit-user-select: text;
+  user-select: text;
+  -webkit-touch-callout: default;
+}
+
+/* App 原生感：输入框字号强制 ≥16px，杜绝 iOS 聚焦时自动放大页面（<16px 才会触发）。
+   仅文本类输入需要（button/checkbox/radio 等不聚焦文本，排除以免误伤）。
+   !important 盖过 Tailwind text-sm / inline style。
+   用 hover:none 判触摸设备（手机/平板任意方向都覆盖），桌面鼠标无副作用 */
+@media (hover: none) {
+  input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]),
+  textarea,
+  select {
+    font-size: max(16px, 1rem) !important;
+  }
+}
+
+/* ── StrokeCanvas 绘图状态：落笔时进一步禁竖向滚动 ──
+   手指滑出画板到正文时不会误触发页面滚动或上下文菜单 */
+body.stroke-drawing {
+  touch-action: none;
+  overscroll-behavior: contain;
+}
+
+/* ── StrokeCanvas 画板底色：默认奶白宣纸，暗色改深棕纸质 ── */
+.ph-stroke-canvas {
+  background: radial-gradient(circle at 30% 20%, #fff7f3 0%, #fdeee6 60%, #f9e1d4 100%);
+  box-shadow: inset 0 2px 6px rgba(255,127,168,0.06), 0 6px 24px rgba(255,127,168,0.10);
+}
+[data-theme="dark"] .ph-stroke-canvas {
+  background: radial-gradient(circle at 30% 20%, #2a2028 0%, #1f1922 60%, #17131a 100%);
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.3), 0 6px 24px rgba(0,0,0,0.4);
+}
+.ph-stroke-ghost { color: rgba(58,46,41,0.10); }
+[data-theme="dark"] .ph-stroke-ghost { color: rgba(244,238,232,0.12); }
+/* 描字过程中手指越出 canvas 到按钮/链接上，抬起时不应触发点击 —— 全局屏蔽非 canvas 的指针事件 */
+body.stroke-drawing button:not([data-stroke-safe]),
+body.stroke-drawing a:not([data-stroke-safe]),
+body.stroke-drawing input,
+body.stroke-drawing [role="button"] {
+  pointer-events: none;
+}
+
+/* ── Desktop fixed rail ── 让 position:fixed 底部/顶部悬浮元素对齐主内容轨道
+   移动端保持默认（left/right 相对视口）；桌面壳里覆盖为对齐 .desktop-main 中心
+   - .desktop-fixed-rail：有右面板（hidePanel:false）
+   - .desktop-fixed-rail-wide：无右面板（hidePanel:true，如 /flashcards、/review） */
+@media (min-width: 1280px) and (orientation: landscape) {
+  .desktop-fixed-rail {
+    left: calc(20px + var(--desktop-sidebar) + var(--desktop-gap)) !important;
+    right: calc(20px + var(--desktop-panel) + var(--desktop-gap)) !important;
+    bottom: 20px !important;
+  }
+  .desktop-fixed-rail-wide {
+    left: calc(20px + var(--desktop-sidebar) + var(--desktop-gap)) !important;
+    right: 20px !important;
+    bottom: 20px !important;
+  }
+}
+@media (min-width: 1024px) and (max-width: 1279px) and (orientation: landscape) {
+  .desktop-fixed-rail,
+  .desktop-fixed-rail-wide {
+    left: calc(24px + 96px + 24px) !important;
+    right: 24px !important;
+    bottom: 24px !important;
+  }
+}
+/* 桌面端无移动底 nav，把 flashcard 页 --fc-page-pb 收窄到只留悬浮胶囊空间 */
+@media (min-width: 1024px) and (orientation: landscape) {
+  .desktop-body { --fc-page-pb: 96px; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   绘本故事体 — 用设备已装的韩/中文衬线，营造"读物"质感，零网络成本
+   韩文 Batang/AppleMyungjo/Noto Serif KR；中文 Songti/宋体
+   ═══════════════════════════════════════════════════════════════ */
+.pb-serif-ko {
+  font-family: 'Apple SD Gothic Neo', 'AppleMyungjo', 'Noto Serif KR', 'Nanum Myeongjo',
+    'Batang', '바탕', 'Songti SC', 'STSong', serif;
+  letter-spacing: -0.01em;
+}
+.pb-serif-zh {
+  font-family: 'Songti SC', 'STSong', 'Noto Serif SC', 'SimSun', serif;
+}
+.pb-serif-title {
+  font-family: 'AppleMyungjo', 'Noto Serif KR', 'Nanum Myeongjo', 'Batang', '바탕',
+    'Songti SC', 'STSong', Georgia, serif;
+  letter-spacing: -0.015em;
 }

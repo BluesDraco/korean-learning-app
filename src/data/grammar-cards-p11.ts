@@ -57,6 +57,7 @@ export const grammarCardsP11: GrammarCard[] = [
       { type: 'usage', text: '口语缩略：-는다고 해요 → -는대요，-다고 해요 → -대요', examples: '온대요（他说会来）/ 바쁘대요（他说很忙）/ 학생이래요（他说是学生）' },
       { type: 'note', text: '转述主语（说话的人）通常是第三人称，原话中的我/你需要替换', examples: '원래 말: "나는 바빠요" → 전달: 친구가 자기는 바쁘다고 했어요' },
       { type: 'compare', text: '-고 하다 vs -고 했다：前者表示最近说过，后者表示较早之前说过', examples: '지금 뭐라고 해요?（他现在说什么？）vs 어제 뭐라고 했어요?（昨天说了什么？）' },
+      { type: 'note', text: '中文里"他说"后面直接跟原话、一个字都不用改；韩语必须先把原话的敬语终结语尾（-요/-습니다）去掉、换成基本阶（한다体）再接 -고。这个"先脱敬语再变形"的步骤中文没有，是本课最大的坎。', examples: '原话 내일 와요 → 转述 내일 온다고 했어요（와요 → 온다）' },
     ],
     cardExamples: [
       {
@@ -115,6 +116,7 @@ export const grammarCardsP11: GrammarCard[] = [
       { wrong: '그 사람이 의사이라고 했어요（无收音名词加 이라고）', correct: '그 사람이 의사라고 했어요', note: '名词无收音时用 -라고，有收音才用 -이라고。의사 无收音 → 의사라고.' },
       { wrong: '어제 먹었는다고 했어요（过去时加 는다고）', correct: '어제 먹었다고 했어요', note: '过去时 -았/었- 后统一用 -다고，不分动词形容词。' },
       { wrong: '오늘 가는다고 해요（无收音动词加 -는다고）', correct: '오늘 간다고 해요', note: '가다 는 无收音词干 → -ㄴ다고：가다→간다고。-는다고 只用于有收音词干（먹다→먹는다고）。' },
+      { wrong: '친구가 내일 와요고 했어요（把敬语原话原封不动加 -고）', correct: '친구가 내일 온다고 했어요', note: '不能把 -요 结尾的原话直接接 -고。要先脱掉敬语、变回基本阶 온다，再接 -고 하다。这是照搬中文"他说+原话"造成的典型错误。' },
     ],
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
@@ -172,22 +174,25 @@ export const grammarCardsP11: GrammarCard[] = [
 口语缩略：-는다고 해요 → -는대요，-다고 해요 → -대요，-(이)라고 해요 → -(이)래요。</div>
 `,
     compareLabel: '动词 vs 形容词 vs 名词',
-    compareHtml: `
-<div class="card-title">动词 vs 形容词 vs 名词</div>
-<div class="card-body">间接引语是把别人的话或自己之前说的话转述出来的语法结构。陈述句间接引语根据谓词类型分为四种形式，统一用 -고 하다 收尾。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
-  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
-    <div class="tok t-v">用法一</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">친구가 내일 온다고 했어요</span><span style="font-size:16px;color:#5a4640">朋友说明天会来。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">그 사람이 학생이라고 했어요</span><span style="font-size:16px;color:#5a4640">那个人说自己是学生。</span></div>
+    compareHtml: `<div class="card-title">按谓词类型选接续</div>
+<div class="card-body">陈述句间接引语统一用 <b>-고 하다</b> 收尾，但前面的接续随<b>谓词类型</b>而变。</div>
+<div class="compare-grid">
+  <div class="cmp-block">
+    <div class="cmp-title">动词</div>
+    <div class="cmp-row"><span class="badge">有收音</span><span class="zh">-는다고：먹다 → 먹는다고</span></div>
+    <div class="cmp-row"><span class="badge">无收音/ㄹ</span><span class="zh">-ㄴ다고：가다 → 간다고</span></div>
+    <div class="cmp-row"><span class="ko">친구가 내일 온다고 했어요</span></div>
+    <div class="cmp-row"><span class="zh">朋友说明天会来。</span></div>
   </div>
-  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
-    <div class="tok t-v" style="background:#aee3d8;color:#1a7a6a">用法二</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">선생님이 이 문제가 어렵다고 하셨어요</span><span style="font-size:16px;color:#5a4640">老师说这道题很难。</span></div>
+  <div class="cmp-block">
+    <div class="cmp-title">形容词 / 名词 / 过去</div>
+    <div class="cmp-row"><span class="badge">形容词</span><span class="zh">-다고：어렵다 → 어렵다고</span></div>
+    <div class="cmp-row"><span class="badge">名词</span><span class="zh">-(이)라고：학생 → 학생이라고</span></div>
+    <div class="cmp-row"><span class="badge">过去</span><span class="zh">统一 -았/었다고：먹었다고</span></div>
+    <div class="cmp-row"><span class="ko">그 사람이 학생이라고 했어요</span></div>
   </div>
 </div>
-<div class="reminder-box">口语缩略：-는다고 해요 → -는대요，-다고 해요 → -대요，-(이)라고 해요 → -(이)래요。</div>
-`,
+<div class="reminder-box">只有<b>动词</b>才分有无收音；<b>形容词</b>一律 -다고，<b>过去时</b>一律 -았/었다고。口语缩略：-대요 / -ㄴ대요 / -(이)래요。</div>`,
     quickTable: {
       title: '陈述句间接引语形式总览',
       headers: ['谓词类型', '接续', '例句', '缩略形'],
@@ -287,6 +292,8 @@ export const grammarCardsP11: GrammarCard[] = [
       { type: 'usage', text: '含疑问词时疑问词保留在引语中', examples: '왜 늦었냐고 물었어요 / 언제 오냐고 했어요 / 어떻게 했냐고 물었어요' },
       { type: 'note', text: '묻다/물어보다 是最常用的主动词，하다 也可以', examples: '뭐냐고 물었어요 / 뭐냐고 하던데요' },
       { type: 'compare', text: '-냐고 물었다 vs -는지 알다：前者转述提问，后者表示间接疑问', examples: '어디 사냐고 물었어요（他问住哪）vs 어디 사는지 알아요?（知道住哪吗？）' },
+      { type: 'compare', text: '⚠️易与上一课混：陈述句动词要加 -ㄴ다/-는다（온다고），疑问句动词却直接 词干+냐고，不加 -ㄴ다/-는다。刚学完陈述句的人最容易多加。', examples: '陈述 온다고 했어요（他说会来）↔ 疑问 오냐고 물었어요（他问来不来）；绝不是 온다냐고' },
+      { type: 'note', text: '中文是非问用"来不来 / 是不是"这种 V-不-V 结构，韩语转述时只用一个 -냐고 收尾，千万别把"不 / 안"也翻进去。', examples: '"问他来不来" = 오냐고 물었어요（不是 오냐 안 오냐）；"问是不是学生" = 학생이냐고 물었어요' },
     ],
     cardExamples: [
       {
@@ -343,6 +350,7 @@ export const grammarCardsP11: GrammarCard[] = [
       { wrong: '의사이냐고 물었어요（无收音名词加 이냐고）', correct: '의사냐고 물었어요', note: '无收音 名词 + 냐고，有收音 名词 + 이냐고。의사 无收音 → 의사냐고。' },
       { wrong: '어디 가느냐고 알아요?（-느냐고 与 알다 搭配）', correct: '어디 가는지 알아요?', note: '与 알다/모르다 搭配用 -는지，不用 -냐고。' },
       { wrong: '먹었는냐고 물었어요（过去时加 는냐고）', correct: '먹었냐고 물었어요', note: '过去时 -았/었- 后直接加 -냐고，不加 -는。' },
+      { wrong: '친구가 온다냐고 물었어요（把陈述句的 -ㄴ다 也带进疑问句）', correct: '친구가 오냐고 물었어요', note: '疑问句是 词干+냐고，不要 -ㄴ다/-는다。온다고 是"他说会来"（陈述），오냐고 才是"他问来不来"（疑问）。刚学完上一课的人常犯。' },
     ],
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
@@ -395,22 +403,23 @@ export const grammarCardsP11: GrammarCard[] = [
 与 알다/모르다 搭配时用 -는지/-은지/-인지，不用 -냐고。</div>
 `,
     compareLabel: '-냐고 vs -는지',
-    compareHtml: `
-<div class="card-title">-냐고 vs -는지</div>
-<div class="card-body">疑问句间接引语把别人提问的内容转述出来，根据谓词类型有不同接续形式，统一用 -냐고 하다 收尾。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
-  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
-    <div class="tok t-v">用法一</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">친구가 어디 사냐고 물었어요</span><span style="font-size:16px;color:#5a4640">朋友问住在哪里。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">엄마가 배고프냐고 하셨어요</span><span style="font-size:16px;color:#5a4640">妈妈问饿不饿。</span></div>
+    compareHtml: `<div class="card-title">-냐고 vs -는지</div>
+<div class="card-body">两者都涉及"疑问"，但一个是<b>转述别人的提问</b>，一个是<b>委婉的间接疑问</b>。</div>
+<div class="compare-grid">
+  <div class="cmp-block">
+    <div class="cmp-title">-냐고 (묻다/하다)</div>
+    <div class="cmp-row"><span class="badge">功能</span><span class="zh">转述别人问的问题</span></div>
+    <div class="cmp-row"><span class="ko">어디 사냐고 물었어요</span></div>
+    <div class="cmp-row"><span class="zh">（他）问住在哪里。</span></div>
   </div>
-  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
-    <div class="tok t-v" style="background:#aee3d8;color:#1a7a6a">用法二</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">선생님이 숙제를 했냐고 물어보셨어요</span><span style="font-size:16px;color:#5a4640">老师问作业做了吗。</span></div>
+  <div class="cmp-block">
+    <div class="cmp-title">-는지 (알다/모르다)</div>
+    <div class="cmp-row"><span class="badge">功能</span><span class="zh">间接疑问，常配 알다/모르다</span></div>
+    <div class="cmp-row"><span class="ko">어디 사는지 알아요?</span></div>
+    <div class="cmp-row"><span class="zh">你知道（他）住哪里吗？</span></div>
   </div>
 </div>
-<div class="reminder-box">与 알다/모르다 搭配时用 -는지/-은지/-인지，不用 -냐고。</div>
-`,
+<div class="reminder-box">配 <b>묻다/물어보다</b>（转述提问）用 <b>-냐고</b>；配 <b>알다/모르다</b>（间接疑问）用 <b>-는지/-은지/-인지</b>，不能用 -냐고。</div>`,
     quickTable: {
       title: '疑问句间接引语形式总览',
       headers: ['谓词类型', '接续', '例句', '意思'],
@@ -510,6 +519,8 @@ export const grammarCardsP11: GrammarCard[] = [
       { type: 'usage', text: '共动句引语的主动词：하다/제안하다/권하다 等', examples: '같이 가자고 했어요 / 같이 먹자고 제안했어요' },
       { type: 'note', text: '-아/어 주라고 하다 = 叫（帮忙）做某事（带请求语气）', examples: '도와주라고 했어요（叫帮忙）/ 가르쳐 주라고 했어요（叫教一下）' },
       { type: 'compare', text: '-(으)라고 vs -(으)세요：前者是转述，后者是直接命令/请求', examples: '직접: 앉으세요（请坐）→ 간접: 앉으라고 하셨어요（叫坐下）' },
+      { type: 'note', text: '⚠️本课最坑的例外：转述"叫给东西/帮忙"时，주다 分两个词。给的是第三方 → 주라고；给的是说话人自己 → 달라고。中文都说"给"，所以这里必错。', examples: '동생한테 책을 주라고 했어요（叫把书给弟弟）↔ 나한테 책을 달라고 했어요（叫把书给我）' },
+      { type: 'note', text: '和第1课一样要先脱原话敬语再变形，但命令/共动的原话结尾不同：原命令 -(으)세요/-아라 → -(으)라고；原提议 같이 -아요/-(으)ㅂ시다 → -자고。', examples: '앉으세요 → 앉으라고 하셨어요；같이 가요 → 같이 가자고 했어요' },
     ],
     cardExamples: [
       {
@@ -569,6 +580,7 @@ export const grammarCardsP11: GrammarCard[] = [
       { wrong: '친구가 가자라고 했어요（-자라고 不存在）', correct: '친구가 가자고 했어요', note: '共动句引语固定用 -자고，不存在 -자라고 形式。' },
       { wrong: '가지 않으라고 했어요（否定命令用 않다）', correct: '가지 말라고 했어요', note: '命令句否定固定用 -지 말라고，不用 -지 않으라고。' },
       { wrong: '먹으라고 하라고 했어요（重复 하다）', correct: '먹으라고 했어요', note: '引语动词 하다 只用一次，不重复。' },
+      { wrong: '친구가 나한테 사진을 주라고 했어요（受益者是"我"却用 주라고）', correct: '친구가 나한테 사진을 달라고 했어요', note: '受益者是说话人自己 → 用 달라고；受益者是第三方才用 주라고。中文都说"给我/给他"，韩语要分两个词。' },
     ],
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
@@ -617,22 +629,25 @@ export const grammarCardsP11: GrammarCard[] = [
 하다 자체도 해라체→하라고，하자체→하자고。</div>
 `,
     compareLabel: '-(으)라고 vs -자고',
-    compareHtml: `
-<div class="card-title">-(으)라고 vs -자고</div>
-<div class="card-body">命令句间接引语用 -(으)라고 하다 转述别人的命令或请求。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
-  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
-    <div class="tok t-v">用法一</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">선생님이 조용히 하라고 하셨어요</span><span style="font-size:16px;color:#5a4640">老师叫（大家）安静。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">친구가 같이 밥을 먹자고 했어요</span><span style="font-size:16px;color:#5a4640">朋友提议一起吃饭。</span></div>
+    compareHtml: `<div class="card-title">-(으)라고 vs -자고</div>
+<div class="card-body">都是转述别人的话，区别在于是<b>叫你做</b>还是<b>邀你一起做</b>。</div>
+<div class="compare-grid">
+  <div class="cmp-block">
+    <div class="cmp-title">-(으)라고（命令）</div>
+    <div class="cmp-row"><span class="badge">意义</span><span class="zh">转述命令/请求：叫（你）做</span></div>
+    <div class="cmp-row"><span class="badge">接续</span><span class="zh">有收音+으라고 / 无收音+라고</span></div>
+    <div class="cmp-row"><span class="badge">否定</span><span class="zh">-지 말라고（叫不要做）</span></div>
+    <div class="cmp-row"><span class="ko">빨리 일어나라고 하셨어요</span></div>
   </div>
-  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
-    <div class="tok t-v" style="background:#aee3d8;color:#1a7a6a">用法二</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">엄마가 빨리 일어나라고 하셨어요</span><span style="font-size:16px;color:#5a4640">妈妈叫快点起床。</span></div>
+  <div class="cmp-block">
+    <div class="cmp-title">-자고（共动）</div>
+    <div class="cmp-row"><span class="badge">意义</span><span class="zh">转述提议：邀（一起）做</span></div>
+    <div class="cmp-row"><span class="badge">接续</span><span class="zh">-자고（固定，不分收音）</span></div>
+    <div class="cmp-row"><span class="badge">否定</span><span class="zh">-지 말자고（提议别做）</span></div>
+    <div class="cmp-row"><span class="ko">같이 밥을 먹자고 했어요</span></div>
   </div>
 </div>
-<div class="reminder-box">-자고 형태는 固定，不变。</div>
-`,
+<div class="reminder-box">易错：命令句别误用 -자고（앉으라고 ✗앉으자고）；共动句固定 -자고，没有 -자라고 这种形式。</div>`,
     quickTable: {
       title: '命令/共动间接引语 형식',
       headers: ['类型', '形式', '例句', '意思'],
@@ -733,16 +748,18 @@ export const grammarCardsP11: GrammarCard[] = [
       { type: 'usage', text: '-아/어서 后不能接命令/提议，只能陈述结果', examples: '비가 와서 우산을 가져갔어요（OK）vs 비가 와서 우산을 가져가세요（×）' },
       { type: 'note', text: '-아/어/여 보니까 中的 보다 是补助动词"尝试"，不是"看"', examples: '살아 보니까（住了之后发现）/ 먹어 보니까（吃了之后发现）' },
       { type: 'compare', text: '-(으)니까 vs -아/어서：用法上最大区别是后句能否接命令/提议', examples: '피곤하니까 쉬세요（因为累，休息吧 ✓）vs 피곤해서 쉬세요（×）' },
+      { type: 'note', text: '道歉、感谢的理由固定用 -아/어서，绝不能用 -(으)니까。用 -(으)니까 会显得在给对方讲道理、很失礼——这是与"接命令用 -(으)니까"相反的一条边界，最容易搞反。', examples: '늦어서 죄송합니다（迟到了对不起 ✓）/ 도와줘서 고마워요（谢谢你帮忙 ✓）；说成 늦으니까 죄송합니다 就很失礼' },
+      { type: 'note', text: '中文"因为下雨了""因为去了"会诱导你在 -아/어서 前加过去时，但 -아/어서 前绝不能加 -았/었-。要点明过去，就把时态放后句，或改用能带时态的 -(으)니까。', examples: '어제 비가 와서 길이 막혔어요（✓）/ 어제 비가 왔으니까 길이 막혔어요（✓）；비가 왔어서…（×）' },
     ],
     cardExamples: [
       {
         wordBlocks: [
           { text: '날씨가', role: 'subject' },
-          { text: '춥니까', role: 'plain' },
+          { text: '추우니까', role: 'plain' },
           { text: '따뜻하게 입으세요', role: 'verb' },
         ],
         zh: '因为天气冷，穿暖和点吧。',
-        swapWords: ['춥니까 따뜻하게 입으세요', '좋으니까 산책해요', '늦으니까 빨리 가요'],
+        swapWords: ['추우니까 따뜻하게 입으세요', '좋으니까 산책해요', '늦으니까 빨리 가요'],
         swapRole: 'plain',
       },
       {
@@ -789,6 +806,8 @@ export const grammarCardsP11: GrammarCard[] = [
       { wrong: '먹어보니까（보니까 连写）', correct: '먹어 보니까', note: '-아/어/여 보니까 中 보다 是补助动词，与前面的 아/어 分开写。' },
       { wrong: '가니까서 늦었어요（混用两个原因语尾）', correct: '가니까 늦었어요 或 가서 늦었어요', note: '-니까 和 -아/어서 只能用一个，不能叠加。' },
       { wrong: '춥으니까（ㅂ불규칙 形容词 오류）', correct: '추우니까', note: '춥다 属 ㅂ 不规则变化：词干末 ㅂ + 으니까 → ㅂ 变为 우 → 추우니까。' },
+      { wrong: '늦으니까 죄송합니다（道歉理由用 -(으)니까）', correct: '늦어서 죄송합니다', note: '道歉、感谢的理由固定用 -아/어서。用 -(으)니까 像在讲道理、很失礼。' },
+      { wrong: '비가 왔어서 길이 막혔어요（-아/어서 前加过去时）', correct: '비가 와서 길이 막혔어요', note: '-아/어서 前绝不能加 -았/었-。过去意义靠后句 막혔어요 体现，前节保持 와서。' },
     ],
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
@@ -836,22 +855,25 @@ export const grammarCardsP11: GrammarCard[] = [
 -아/어/여 보니까 强调亲身做过后的新发现，前后主语通常相同。</div>
 `,
     compareLabel: '-(으)니까 vs -아/어서',
-    compareHtml: `
-<div class="card-title">-(으)니까 vs -아/어서</div>
-<div class="card-body">-(으)니까 表示原因或理由，比 -아/어서 更强调说话人的主观判断，后句可以接命令、建议、邀请。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
-  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
-    <div class="tok t-v">用法一</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">비가 오니까 우산을 가져가세요</span><span style="font-size:16px;color:#5a4640">因为下雨，带把伞去吧。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">직접 먹어 보니까 생각보다 맛있었어요</span><span style="font-size:16px;color:#5a4640">亲自吃了之后发现比想象中好吃。</span></div>
+    compareHtml: `<div class="card-title">-(으)니까 vs -아/어서</div>
+<div class="card-body">都表原因，但最关键的区别是<b>后句能否接命令/建议</b>。</div>
+<div class="compare-grid">
+  <div class="cmp-block">
+    <div class="cmp-title">-(으)니까</div>
+    <div class="cmp-row"><span class="badge">语感</span><span class="zh">主观判断的理由</span></div>
+    <div class="cmp-row"><span class="badge">后句</span><span class="zh">可接命令/建议/邀请</span></div>
+    <div class="cmp-row"><span class="ko">비가 오니까 우산을 가져가세요</span></div>
+    <div class="cmp-row"><span class="zh">因为下雨，带把伞去吧。（命令 ✓）</span></div>
   </div>
-  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
-    <div class="tok t-v" style="background:#aee3d8;color:#1a7a6a">用法二</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">피곤하니까 일찍 자는 게 좋겠어요</span><span style="font-size:16px;color:#5a4640">因为累，早点睡比较好。</span></div>
+  <div class="cmp-block">
+    <div class="cmp-title">-아/어서</div>
+    <div class="cmp-row"><span class="badge">语感</span><span class="zh">客观的因果</span></div>
+    <div class="cmp-row"><span class="badge">后句</span><span class="zh">只能陈述结果，不接命令</span></div>
+    <div class="cmp-row"><span class="ko">비가 와서 우산을 가져갔어요</span></div>
+    <div class="cmp-row"><span class="zh">因为下雨，带了伞。（陈述 ✓ / 命令 ✗）</span></div>
   </div>
 </div>
-<div class="reminder-box">-아/어/여 보니까 强调亲身做过后的新发现，前后主语通常相同。</div>
-`,
+<div class="reminder-box">口诀：后句要<b>叫人做事</b>（-세요/-ㅂ시다）只能用 <b>-(으)니까</b>；피곤해서 쉬세요 是错的，要说 피곤하니까 쉬세요。</div>`,
     quickTable: {
       title: '-(으)니까 接续形式',
       headers: ['词干末音', '形式', '例句', '意思'],
@@ -887,9 +909,9 @@ export const grammarCardsP11: GrammarCard[] = [
         },
         {
           prompt: '去了之后发现很漂亮。→ 가 ___ 정말 예쁘더라고요',
-          options: ['보니까', '보니까요', '봤더니', '봤으니까'],
+          options: ['보니까', '보니까요', '봐서', '봤으니까'],
           answer: 0 as 0|1|2|3,
-          explanation: '가다 → 가 + 보니까',
+          explanation: '-아/어 보니까 = 尝试/去了之后发现：가 보니까。보니까요 句中不加요，봐서（-아서）和 봤으니까（因为去过）都不能引出"发现"的 더라고요。',
         },
       ],
     },
@@ -951,6 +973,7 @@ export const grammarCardsP11: GrammarCard[] = [
       { type: 'usage', text: '유명하다 的否定：유명하지 않다 / 별로 안 유명해요', examples: '이 가수는 아직 별로 안 유명해요（这个歌手还不太出名）' },
       { type: 'note', text: '이/가 되다 vs 이/가 아니다：前者表变化结果，后者表否定存在', examples: '선생님이 됐어요（成为了老师）vs 선생님이 아니에요（不是老师）' },
       { type: 'compare', text: '(으)로 유명하다 vs -기로 유명하다：前者接名词，后者接动词', examples: '김치로 유명해요（名词：以泡菜著名）vs 김치를 잘 만들기로 유명해요（动词：以擅长做泡菜著名）' },
+      { type: 'note', text: '유명하다 是"著名（状态）"，유명해지다 是"变得著名（变化过程）"，场景里的 유명해졌어요 就是后者。形容词 + 아/어지다 表"变得……"，아/어지다 后面章节详学，这里先能读懂即可', examples: '지금 유명해요（现在就有名）vs 요즘 유명해졌어요（最近变有名了）' },
     ],
     cardExamples: [
       {
@@ -1008,6 +1031,7 @@ export const grammarCardsP11: GrammarCard[] = [
       { wrong: '의사이가 됐어요（이가 重复）', correct: '의사가 됐어요', note: '의사 无收音 → 의사가 되다，不加 이。이/가 只能选一个。' },
       { wrong: '그 사람은 노래로 유명해요（要表达"以唱歌好著名"）', correct: '그 사람은 노래를 잘 하기로 유명해요', note: '用动词表达"以做某事著名"时用 -기로 유명하다，用名词时用 (으)로 유명하다。' },
       { wrong: '됩니다 → 됬어요（됐의拼写错误）', correct: '됐어요', note: '되다 过去时：됐어요（되+었→됐），不是 됬어요。这是常见拼写错误。' },
+      { wrong: '저는 의사를 됐어요', correct: '저는 의사가 됐어요', note: '中文"成为医生"像及物动词带宾语，学生会误加 을/를。但 되다 是"变成"，前面的名词是变化结果，用主格 이/가，不用宾格 을/를。' },
     ],
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
@@ -1056,22 +1080,25 @@ export const grammarCardsP11: GrammarCard[] = [
 이/가 되다 前的名词根据收音选 이（有）或 가（无）。</div>
 `,
     compareLabel: '(으)로 vs -기로 유명',
-    compareHtml: `
-<div class="card-title">(으)로 vs -기로 유명</div>
-<div class="card-body">(으)로 유명하다 表示某人或某地"以某事物著名"，로 后接名词。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
-  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
-    <div class="tok t-v">用法一</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">제주도는 경치로 유명해요</span><span style="font-size:16px;color:#5a4640">济州岛以风景著名。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">저는 선생님이 되고 싶어요</span><span style="font-size:16px;color:#5a4640">我想成为老师。</span></div>
+    compareHtml: `<div class="card-title">以…著名 vs 成为…</div>
+<div class="card-body">"著名"看后面接<b>名词</b>还是<b>动词</b>；"成为"用 이/가 되다。</div>
+<div class="compare-grid">
+  <div class="cmp-block">
+    <div class="cmp-title">(으)로 / -기로 유명하다</div>
+    <div class="cmp-row"><span class="badge">名词</span><span class="zh">(으)로 유명하다</span></div>
+    <div class="cmp-row"><span class="ko">제주도는 경치로 유명해요</span></div>
+    <div class="cmp-row"><span class="badge">动词</span><span class="zh">-기로 유명하다</span></div>
+    <div class="cmp-row"><span class="ko">춤을 잘 추기로 유명해요</span></div>
   </div>
-  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
-    <div class="tok t-v" style="background:#aee3d8;color:#1a7a6a">用法二</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">그 배우는 춤을 잘 추기로 유명해요</span><span style="font-size:16px;color:#5a4640">那个演员以擅长跳舞著名。</span></div>
+  <div class="cmp-block">
+    <div class="cmp-title">이/가 되다（成为）</div>
+    <div class="cmp-row"><span class="badge">接续</span><span class="zh">有收音+이 / 无收音+가 되다</span></div>
+    <div class="cmp-row"><span class="ko">선생님이 됐어요 / 의사가 됐어요</span></div>
+    <div class="cmp-row"><span class="badge">时间</span><span class="zh">也表时候/状况到来</span></div>
+    <div class="cmp-row"><span class="ko">드디어 봄이 됐어요</span></div>
   </div>
 </div>
-<div class="reminder-box">이/가 되다 中 되다 本身可变时态：돼요/됐어요/될 거예요。</div>
-`,
+<div class="reminder-box">以名词著名用 <b>(으)로</b>（경치로），以动作著名用 <b>-기로</b>（잘 추기로）。되다 过去是 <b>됐어요</b>（되+었），不是 됬어요。</div>`,
     quickTable: {
       title: '이/가 되다 접속 형식',
       headers: ['名词末音', '形式', '例句', '意思'],
@@ -1168,6 +1195,7 @@ export const grammarCardsP11: GrammarCard[] = [
       { type: 'note', text: '-는 게 좋겠다 中的 겠 表示说话人的主观推断，不是单纯的将来时，而是推测语气。', examples: '병원에 가는 게 좋겠어요（建议你去医院）' },
       { type: 'compare', text: '-는 게 좋겠다 vs -(으)세요：建议语气从委婉到直接', examples: '쉬는 게 좋겠어요（委婉建议）< 쉬세요（直接命令）' },
       { type: 'compare', text: '-을/ㄹ 만하다 vs -을/ㄹ 것 같다：前者评价值得，后者推测', examples: '볼 만해요（值得看）vs 재미있을 것 같아요（感觉会很有趣）' },
+      { type: 'note', text: '语感提醒：-을/ㄹ 만하다 口语里常是"还行、凑合能做、过得去"的中等评价，不一定是中文"值得"那种强力推荐。想强调很棒要另说 정말 좋아요、꼭 봐야 해요', examples: '이 영화 볼 만해요（这电影还行/凑合能看）vs 이 영화 정말 좋아요（这电影真的很棒）' },
     ],
     cardExamples: [
       {
@@ -1220,9 +1248,11 @@ export const grammarCardsP11: GrammarCard[] = [
     ],
     mistakes: [
       { wrong: '이 영화는 보는 만해요（-는 만하다 不存在）', correct: '이 영화는 볼 만해요', note: '-을/ㄹ 만하다 前必须用冠词形 -을/ㄹ，不用 -는。' },
-      { wrong: '쉬겠는 게 좋겠어요（겠 位置错误）', correct: '쉬는 게 좋겠어요', note: '-는 게 좋겠다 中겠 在좋겠다 안에，动词部分用 -는，不겠 추가 금지。' },
+      { wrong: '쉬겠는 게 좋겠어요（겠 位置错误）', correct: '쉬는 게 좋겠어요', note: '겠 已包含在 좋겠다 里，动词部分用 -는，不要再加 겠。' },
       { wrong: '먹어 만해요（-아/어 만하다 不完整）', correct: '먹어 볼 만해요', note: '与 보다 结合时形式是 -아/어 볼 만하다，보다 不能省略。' },
       { wrong: '갈 만해서 가세요（-만하다 接命令）', correct: '갈 만하면 가세요 或 가 볼 만하니까 가세요', note: '-을/ㄹ 만하다 本身是形容词，其后不直接接命令，需加条件或因果连接。' },
+      { wrong: '이 영화는 안 볼 만해요（想说"不值得看"）', correct: '이 영화는 볼 만하지 않아요', note: '否定"值得"要否定 만하다 整体，用 -지 않다：볼 만하지 않아요。안 放在 볼 前面是否定"看"这个动作，意思全错。' },
+      { wrong: '지금 가지 말는 게 좋겠어요（想说"最好别去"）', correct: '지금 안 가는 게 좋겠어요 或 가지 않는 게 좋겠어요', note: '"最好别做"要用普通否定 안 -는 게 좋겠어요 或 -지 않는 게 좋겠어요，不要套禁止形 -지 말다（말다 用于命令/劝阻，接不出 말는 这种形）。' },
     ],
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
@@ -1267,22 +1297,24 @@ export const grammarCardsP11: GrammarCard[] = [
     `,
     compareLabel: '-을 만하다 vs -는 게 좋겠다',
     compareHtml: `<div class="card-title">-을/ㄹ 만하다 vs -는 게 좋겠다</div>
-<div class="card-body">两个语法都是"推荐/建议"，但视角和语气完全不同——一个评价事物，一个建议对方。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
-  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
-    <div class="tok t-v">-을/ㄹ 만하다 → 值得做（客观评价）</div>
-    <div style="font-size:16px;color:#89756e;margin-top:6px">动词词干 + -을/ㄹ 만하다 · 评价某事有意义、值得</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">이 영화는 볼 만해요.</span><span style="font-size:16px;color:#5a4640">这部电影值得看。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">한 번 가 볼 만한 곳이에요.</span><span style="font-size:16px;color:#5a4640">是值得去一次的地方。</span></div>
+<div class="card-body">两者都用于"推荐/建议"，但<b>视角</b>不同——一个评价事物，一个劝告对方。</div>
+<div class="compare-grid">
+  <div class="cmp-block">
+    <div class="cmp-title">-을/ㄹ 만하다（值得做）</div>
+    <div class="cmp-row"><span class="badge">视角</span><span class="zh">对事物的客观评价：值得</span></div>
+    <div class="cmp-row"><span class="ko">이 영화는 볼 만해요</span></div>
+    <div class="cmp-row"><span class="zh">这部电影值得看。</span></div>
+    <div class="cmp-row"><span class="ko">한 번 가 볼 만한 곳이에요</span></div>
   </div>
-  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
-    <div class="tok t-v" style="background:#aee3d8;color:#1a7a6a">-는 게 좋겠다 → 最好做（委婉建议）</div>
-    <div style="font-size:16px;color:#89756e;margin-top:6px">动词词干 + -는 게 좋겠다 · 委婉劝告对方</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">병원에 가는 게 좋겠어요.</span><span style="font-size:16px;color:#5a4640">最好去医院。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">오늘은 일찍 자는 게 좋겠어요.</span><span style="font-size:16px;color:#5a4640">今天早点睡比较好。</span></div>
+  <div class="cmp-block">
+    <div class="cmp-title">-는 게 좋겠다（最好做）</div>
+    <div class="cmp-row"><span class="badge">视角</span><span class="zh">对对方的委婉建议，比 -세요 柔和</span></div>
+    <div class="cmp-row"><span class="ko">병원에 가는 게 좋겠어요</span></div>
+    <div class="cmp-row"><span class="zh">最好去医院。</span></div>
+    <div class="cmp-row"><span class="ko">오늘은 일찍 자는 게 좋겠어요</span></div>
   </div>
 </div>
-<div class="reminder-box">看视角：<b>评价事物</b>用 <b>-을 만하다</b>（电影值得看 / 地方值得去）；<b>劝告对方</b>用 <b>-는 게 좋겠다</b>（你该去医院 / 你早点睡）。</div>`,
+<div class="reminder-box">看视角：<b>评价事物</b>用 <b>-을 만하다</b>（电影值得看）；<b>劝告对方</b>用 <b>-는 게 좋겠다</b>（你该去医院）。만하다 前必须冠词形（볼 ✓ 보는 ✗）。</div>`,
     quickTable: {
       title: '-을/ㄹ 만하다 接续形式',
       headers: ['词干末音', '形式', '例句', '意思'],
@@ -1384,6 +1416,8 @@ export const grammarCardsP11: GrammarCard[] = [
       { type: 'usage', text: '(이)나 表示"至少/大约"（强调数量多或时间长）', examples: '한 시간이나 기다렸어요（等了整整一小时）/ 열 명이나 왔어요（来了足足十个人）' },
       { type: 'note', text: '아니면 可在疑问句中用作"还是"：A 아니면 B？', examples: '커피 아니면 차? / 오늘 아니면 내일이에요?' },
       { type: 'compare', text: '(이)나 vs -거나：前者接名词，后者接动词/形容词', examples: '사과나 바나나（名词选择）vs 먹거나 마시거나（动词选择）' },
+      { type: 'compare', text: '和 vs 或 别混：两个都要用 하고/와·과（和），只选一个才用 (이)나（或）。中文习惯先想到"和"，说选择时容易错用', examples: '사과하고 바나나 샀어요（买了苹果和香蕉，两样都买）vs 사과나 바나나 살 거예요（打算买苹果或香蕉，选一样）' },
+      { type: 'note', text: '아니면 除了"或者"，还有"否则/要不然"的意思（来自 아니다＋면＝如果不是的话）。听到句首的 아니면 要按上下文判断是"或者"还是"要不然"', examples: '빨리 가요. 아니면 늦어요（快走，否则会迟到）' },
     ],
     cardExamples: [
       {
@@ -1487,22 +1521,29 @@ export const grammarCardsP11: GrammarCard[] = [
 (이)나 除了"或者"外还有"大约/至少"的意思：시간이 한 시간이나 걸려요（要花整整一小时）。</div>
 `,
     compareLabel: '(이)나 vs -거나 vs 아니면',
-    compareHtml: `
-<div class="card-title">(이)나 vs -거나 vs 아니면</div>
-<div class="card-body">아니면 是连接两个句子或词组的"或者"，用于提供另一个选项。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
-  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
-    <div class="tok t-v">用法一</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">커피 아니면 차를 마실게요</span><span style="font-size:16px;color:#5a4640">我喝咖啡或者茶。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">시간이 있거나 없거나 매일 운동해요</span><span style="font-size:16px;color:#5a4640">不管有没有时间，每天运动。</span></div>
+    compareHtml: `<div class="card-title">三个"或者"怎么选</div>
+<div class="card-body">都表"或者"，区别只在<b>接什么词</b>。</div>
+<div class="compare-grid">
+  <div class="cmp-block">
+    <div class="cmp-title">아니면</div>
+    <div class="cmp-row"><span class="badge">接</span><span class="zh">句子/词组之间</span></div>
+    <div class="cmp-row"><span class="ko">커피 아니면 차를 마실게요</span></div>
+    <div class="cmp-row"><span class="zh">喝咖啡或者茶。</span></div>
   </div>
-  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
-    <div class="tok t-v" style="background:#aee3d8;color:#1a7a6a">用法二</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">주말에 영화나 드라마를 봐요</span><span style="font-size:16px;color:#5a4640">周末看电影或者电视剧。</span></div>
+  <div class="cmp-block">
+    <div class="cmp-title">(이)나</div>
+    <div class="cmp-row"><span class="badge">接</span><span class="zh">名词后（有收音+이나 / 无+나）</span></div>
+    <div class="cmp-row"><span class="ko">영화나 드라마를 봐요</span></div>
+    <div class="cmp-row"><span class="zh">看电影或电视剧。</span></div>
+  </div>
+  <div class="cmp-block">
+    <div class="cmp-title">-거나</div>
+    <div class="cmp-row"><span class="badge">接</span><span class="zh">动词/形容词词干后</span></div>
+    <div class="cmp-row"><span class="ko">쉬거나 친구를 만나요</span></div>
+    <div class="cmp-row"><span class="zh">休息或者见朋友。</span></div>
   </div>
 </div>
-<div class="reminder-box">(이)나 除了"或者"外还有"大约/至少"的意思：시간이 한 시간이나 걸려요（要花整整一小时）。</div>
-`,
+<div class="reminder-box">名词用 <b>(이)나</b>、用言（动/形）用 <b>-거나</b>、句子间用 <b>아니면</b>，三者不叠用。另：(이)나 还表"多达/整整"——한 시간이나 걸려요（花了整整一小时）。</div>`,
     quickTable: {
       title: '세 가지 "또는" 비교',
       headers: ['形式', '接续对象', '例句', '意思'],
@@ -1591,13 +1632,14 @@ export const grammarCardsP11: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '-아/어/여 보이다：形容词 + 아/어/여 보이다（視覚的 判断）', examples: '예쁘다→예뻐 보여요 / 힘들다→힘들어 보여요 / 행복하다→행복해 보여요' },
+      { type: 'rule', text: '-아/어/여 보이다：形容词 + 아/어/여 보이다（视觉的 判断）', examples: '예쁘다→예뻐 보여요 / 힘들다→힘들어 보여요 / 행복하다→행복해 보여요' },
       { type: 'rule', text: '-나 보다：动词 词干 + -나 보다，过去 + -았/었나 보다', examples: '오다→오나 봐요 / 먹다→먹나 봐요 / 갔나 봐요（好像去了）' },
       { type: 'rule', text: '-(으)ㄴ가/는가 보다：形容词 词干 + -(으)ㄴ가 보다，动词 词干 + -는가 보다', examples: '바쁘다→바쁜가 봐요 / 크다→큰가 봐요 / 가다→가는가 봐요' },
       { type: 'usage', text: '-아/어 보이다 主要用于根据外貌或表情进行判断', examples: '어려 보여요（看起来年轻）/ 똑똑해 보여요（看起来聪明）/ 비싸 보여요（看起来很贵）' },
       { type: 'usage', text: '-나 보다 用于根据情境证据或间接信息进行推测', examples: '불이 꺼진 것 보니 없나 봐요（灯灭了，好像不在）' },
       { type: 'note', text: 'KPOP/韩剧中 -아/어 보이다 常用于夸奖外貌', examples: '오늘 진짜 예뻐 보여요 / 행복해 보여서 좋아요' },
       { type: 'compare', text: '-아/어 보이다 vs -나 보다：前者基于视觉外观，后者基于情境推测', examples: '피곤해 보여요（看起来累）vs 피곤한가 봐요（好像很累——基于行为推断）' },
+      { type: 'compare', text: '-나 보다 vs -는 것 같다（前面学过）：-나 보다 强调"根据看到的迹象断出来的"，语气像"看来/敢情"，一般说别人或情况；-는 것 같다 更广更软，也能用来委婉说自己的感觉', examples: '전화를 안 받는 걸 보니 자나 봐요（看来在睡——有依据）vs 저는 좀 피곤한 것 같아요（我好像有点累——说自己的感觉）' },
     ],
     cardExamples: [
       {
@@ -1650,9 +1692,9 @@ export const grammarCardsP11: GrammarCard[] = [
     ],
     mistakes: [
       { wrong: '피곤하아 보여요（形容词+아 보이다 连接错误）', correct: '피곤해 보여요', note: '피곤하다 → 피곤해（하다 类用 여→해）보여요。注意 하다 类的 여/해 变化。' },
-      { wrong: '행복하아 보여요（하다 类形容词连接错误）', correct: '행복해 보여요', note: '행복하다 → 행복해（하다류 여→해）보여요。모든 하다류 형용사는 해 보여요 형태。' },
-      { wrong: '바쁘나 봐요（形容词+나 보다）', correct: '바쁜가 봐요', note: '形容词 + -(으)ㄴ가 보다 更自然：바쁘다→바쁜가 봐요。-나 보다 主要用于动词。' },
+      { wrong: '행복하아 보여요（하다 类形容词连接错误）', correct: '행복해 보여요', note: '행복하다 → 행복해（하다 类用 여→해）보여요。所有 하다 类形容词都变成 해 보여요 形式。' },
       { wrong: '예뻐 보입니다（-아/어 보이다 描述自己）', correct: '예뻐 보여요（描述他人外观）', note: '-아/어 보이다 用于他人或外部事物较自然，用于自己显得不自然。' },
+      { wrong: '저는 배가 고프나 봐요（推测自己的状态）', correct: '저는 배가 고파요 或 배가 고픈 것 같아요', note: '-나 보다 是"根据迹象推测别人/情况"，自己饿不饿是直接知道的，不用推测。说自己直接讲 배가 고파요，要婉转就用 -는 것 같다。' },
     ],
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
@@ -1701,22 +1743,25 @@ export const grammarCardsP11: GrammarCard[] = [
 两个表达都表示未直接确认的推测。</div>
 `,
     compareLabel: '-아/어 보이다 vs -나 보다',
-    compareHtml: `
-<div class="card-title">-아/어 보이다 vs -나 보다</div>
-<div class="card-body">-아/어/여 보이다 表示根据外表或视觉印象判断"看起来……"，主要接形容词。</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
-  <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
-    <div class="tok t-v">用法一</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">오늘 좀 피곤해 보여요</span><span style="font-size:16px;color:#5a4640">今天看起来有点累。</span></div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-weight:700">밖에 비가 오나 봐요</span><span style="font-size:16px;color:#5a4640">外面好像在下雨。</span></div>
+    compareHtml: `<div class="card-title">-아/어 보이다 vs -나 보다</div>
+<div class="card-body">都表推测，但依据不同：一个看<b>外表</b>，一个靠<b>情境线索</b>。</div>
+<div class="compare-grid">
+  <div class="cmp-block">
+    <div class="cmp-title">-아/어 보이다（看起来）</div>
+    <div class="cmp-row"><span class="badge">依据</span><span class="zh">视觉外观、表情</span></div>
+    <div class="cmp-row"><span class="badge">接续</span><span class="zh">形容词 + 아/어/해 보이다</span></div>
+    <div class="cmp-row"><span class="ko">오늘 좀 피곤해 보여요</span></div>
+    <div class="cmp-row"><span class="zh">今天看起来有点累。</span></div>
   </div>
-  <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px;flex-direction:column;align-items:flex-start">
-    <div class="tok t-v" style="background:#aee3d8;color:#1a7a6a">用法二</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span style="font-weight:700">이 음식 맛있어 보여요</span><span style="font-size:16px;color:#5a4640">这个食物看起来很好吃。</span></div>
+  <div class="cmp-block">
+    <div class="cmp-title">-나 / -(으)ㄴ가 보다（好像）</div>
+    <div class="cmp-row"><span class="badge">依据</span><span class="zh">情境线索、间接信息的推断</span></div>
+    <div class="cmp-row"><span class="badge">接续</span><span class="zh">动词+나 보다 / 形容词+(으)ㄴ가 보다</span></div>
+    <div class="cmp-row"><span class="ko">연락이 없는 걸 보니 바쁜가 봐요</span></div>
+    <div class="cmp-row"><span class="zh">看他没联系，好像很忙。</span></div>
   </div>
 </div>
-<div class="reminder-box">-나 보다 与 -(으)ㄴ가 보다 含义几乎相同可互换，后者稍正式。</div>
-`,
+<div class="reminder-box">"直接看到累相"用 <b>피곤해 보여요</b>；"由行为推断累"用 <b>피곤한가 봐요</b>。形容词推测更标准的说法是 -(으)ㄴ가 보다（바쁜가 봐요）。</div>`,
     quickTable: {
       title: '-아/어 보이다 접속 형식',
       headers: ['形容词类型', '变化', '例句', '意思'],

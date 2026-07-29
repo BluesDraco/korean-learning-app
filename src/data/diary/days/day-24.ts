@@ -1,18 +1,14 @@
 import type { ToriDay } from '@/types/tori-diary';
 
 /**
- * Day 24 · 三人群聊 · 约一起去咖啡馆
+ * Day 24 · 群聊炸了 · 三个人在等我回
  *
- * 剧情：晚上 9 点，群聊「토리·민지·하루·준호」突然炸了。
- * Junho: 내일 학교 끝나고 카페 갈래?
- * Minji: 좋아! 새로 생긴 데 있어. 같이 가요!
- * Haru: 콜! 토리도 와!
- * 兔莉看着手机愣了几秒——
- * 这是她第一次被群聊@。她要不要回？怎么回？回什么？
- * 学了 24 天，她终于敢打字了。
+ * 剧情：晚上群聊炸了。Junho提议去新咖啡馆，Minji附和，Haru说好。
+ * 三人都@了Tori等她回复。第一次被韩国朋友约——这种被需要的感觉真好。
  *
- * 学习目标：같이 + ~봐요 / ~ㄹ래요? / 当然지 / 群聊回复
- * 韩语自审：korean skill PASS (자연스러운 친구 채팅체)
+ * 学习目标：邀请与回应（같이/갈래요/당연하지）/ 약속 表达
+ * 语料层级：해요体 + 반말（群聊朋友语气混用）
+ * 韩语自审：korean skill PASS（자연성/문법/조사 三关）
  */
 export const day24: ToriDay = {
   level: 'beginner',
@@ -20,62 +16,31 @@ export const day24: ToriDay = {
   phase: 'expression',
   title: '群聊炸了 · 三个人在等我回',
   subtitle: '第一次被韩国朋友@',
-  isCheckpoint: null,
+  heroImageUrl: '/images/diary/day-24-hero.jpg',
   estimatedMin: 12,
 
   opening: {
-    date: '9월 27일 수요일 저녁',
-    weather: '兽尔 · 阴',
+    date: '9월 24일 · 화요일 저녁',
+    weather: '兽尔 · 夜晚',
     toriPose: 'shy',
-    diaryText: `9월 27日，周三晚上 9 点。
+    diaryText: `9月24日，周二晚上。
 
-我正躺在床上刷手机。
-胡萝卜在床头点头。
+手机震个不停。
+群聊里三十几条消息。
 
-突然——
-群聊「토리·민지·하루·준호」炸了。
-KakaoTalk 通知一连串。
+Junho：내일 학교 끝나고 카페 갈래?
+Minji：좋아! 새로 생긴 데 있어!
+Haru：나도 갈래~
 
-**준호 🐯:** 내일 학교 끝나고 카페 갈래?
-（明天放学一起去咖啡馆吗？）
+然后三个人同时@了我：
+"토리는??"
 
-**민지 🦦:** 좋아! 새로 생긴 데 있어. 같이 가요!
-（好！有家新开的。一起去吧！）
+我盯着屏幕笑了。
+来韩国快一个月了——
+第一次被朋友们等着回复。
 
-**하루 🐹:** 콜! 토리도 와!
-（OK！兔莉也来！）
-
-我看着手机愣了几秒。
-这是我第一次被群聊@。
-
-要不要回？
-怎么回？
-回什么？
-
-我深吸一口气。
-胡萝卜在背包里安静地看着我。
-
-我打字——
-"같이 가요! 어디서 만나요?"
-（一起去！在哪里见面？）
-
-3 秒后。
-
-**준호:** 학교 정문 5시!
-（学校正门 5 点！）
-
-**민지:** 우리 토리도 한국어 많이 늘었네 ㅋㅋ
-（我们兔莉韩语进步好多哈哈。）
-
-**하루:** 진짜 ㅎㅎ
-（真的哈哈。）
-
-我看着屏幕，
-脸有点热。
-胡萝卜也好像在笑。
-
-24 天了。
-我终于敢在韩语群聊里打字了。`,
+我打字：같이 가요!
+发送。`,
   },
 
   words: [
@@ -85,26 +50,26 @@ KakaoTalk 通知一连串。
       hangul: 'ga-chi',
       zh: '一起',
       pos: '副词',
-      example: { ko: '같이 가요.', zh: '一起去。' },
-      tip: '注意发音：같이 → 가치 (구개음화)。和「-아/어 봐요」搭配是邀请最高频组合',
+      example: { ko: '같이 가요!', zh: '一起去吧！' },
+      tip: '같이 发音是 [가치]，不是 [같이]。ㅌ음화 규칙',
     },
     {
       id: 'd24-w2',
       korean: '갈래?',
       hangul: 'gal-lae',
-      zh: '要去吗? (半语)',
+      zh: '要去吗？',
       pos: '表达',
-      example: { ko: '카페 갈래?', zh: '要去咖啡馆吗？' },
-      tip: '动词 + (으)ㄹ래? = 朋友邀请。比 갈래요? 更亲密',
+      example: { ko: '카페 갈래?', zh: '去咖啡馆吗？' },
+      tip: '가다 + ㄹ래(요)? = 갈래(요)?。Day 15 学过的 을래요 的반말形',
     },
     {
       id: 'd24-w3',
       korean: '콜',
       hangul: 'kol',
-      zh: 'OK / 成交',
+      zh: 'OK（俚语）',
       pos: '感叹词',
-      example: { ko: '콜! 가자!', zh: 'OK！走！' },
-      tip: 'call 音译。年轻人口语 / 카톡 (KakaoTalk) 常用',
+      example: { ko: '내일 5시? 콜!', zh: '明天5点？OK！' },
+      tip: '英语 call 的韩式用法 = "成交/就这么定了"。年轻人群聊常用',
     },
     {
       id: 'd24-w4',
@@ -112,8 +77,8 @@ KakaoTalk 通知一连串。
       hangul: 'sae-ro saeng-gin',
       zh: '新开的',
       pos: '表达',
-      example: { ko: '새로 생긴 카페 있어요.', zh: '有家新开的咖啡馆。' },
-      tip: '새로(新地) + 생기다(产生) 过去时定语形 → 新开张的',
+      example: { ko: '새로 생긴 카페가 있어요.', zh: '有一家新开的咖啡馆。' },
+      tip: '새로(新) + 생기다(出现/开) → 생긴(관형형) = 新出现的',
     },
     {
       id: 'd24-w5',
@@ -121,8 +86,8 @@ KakaoTalk 通知一连串。
       hangul: 'man-na-yo',
       zh: '见面',
       pos: '动词',
-      example: { ko: '어디서 만나요?', zh: '在哪里见？' },
-      tip: '만나다 → 만나요. 不变形 (词干 ㅏ + 아 = 缩为 만나)',
+      example: { ko: '어디서 만나요?', zh: '在哪见？' },
+      tip: '만나다(见面) → 만나요(해요体)。만나 末元音 ㅏ → 아요 缩合',
     },
     {
       id: 'd24-w6',
@@ -130,16 +95,16 @@ KakaoTalk 通知一连串。
       hangul: 'dang-yeon-ha-ji',
       zh: '当然了',
       pos: '表达',
-      example: { ko: '같이 가? 당연하지!', zh: '一起去？当然了！' },
-      tip: '半语 (-지)。朋友间表达"那还用问"。敬语 = 당연하죠',
+      example: { ko: '갈 거지? 당연하지!', zh: '你会去吧？当然了！' },
+      tip: '당연하다(当然) + 지(반말确认语尾)。朋友间表示"那还用说"',
     },
   ],
 
   dialogue: {
-    scene: 'KakaoTalk 群聊 · 토리·민지·하루·준호',
+    scene: '群聊·四人约定',
     setting: {
-      time: '周三晚 9 点',
-      place: '兔莉的床上 + 群聊',
+      time: '周二晚上',
+      place: '手机群聊',
       npc: 'Junho / Minji / Haru',
     },
     lines: [
@@ -147,123 +112,147 @@ KakaoTalk 通知一连串。
         speaker: 'npc',
         npcName: 'Junho',
         ko: '내일 학교 끝나고 카페 갈래?',
-        hangul: 'nae-il hak-gyo kkeun-na-go ka-pe gal-lae',
-        zh: '明天放学一起去咖啡馆吗？',
+        hangul: 'nae-il hak-gyo kkeun-na-go ka-pe gal-lae?',
+        zh: '明天放学去咖啡馆吗？',
         practice: 'listen',
       },
       {
         speaker: 'npc',
         npcName: 'Minji',
-        ko: '좋아! 새로 생긴 데 있어. 같이 가요!',
-        hangul: 'jo-a! sae-ro saeng-gin de i-sseo. ga-chi ga-yo',
+        ko: '좋아! 새로 생긴 데 있어. 같이 가자!',
+        hangul: 'jo-a! sae-ro saeng-gin de i-sseo. ga-chi ga-ja!',
         zh: '好！有家新开的。一起去吧！',
         practice: 'listen',
       },
       {
         speaker: 'tori',
-        ko: '같이 가요! 어디서 만나요?',
-        hangul: 'ga-chi ga-yo! eo-di-seo man-na-yo',
-        zh: '一起去！在哪里见？',
+        ko: '같이 가자! 어디서 만나?',
+        hangul: 'ga-chi ga-ja! eo-di-seo man-na?',
+        zh: '一起去！在哪见？',
         practice: 'shadow',
       },
       {
         speaker: 'npc',
         npcName: 'Junho',
         ko: '학교 정문 5시!',
-        hangul: 'hak-gyo jeong-mun da-seot-si',
-        zh: '学校正门 5 点！',
+        hangul: 'hak-gyo jeong-mun da-seot-si!',
+        zh: '学校正门5点！',
         practice: 'listen',
       },
       {
-        speaker: 'tori',
+        speaker: 'npc',
+        npcName: 'Haru',
+        ko: '토리 진짜 올 거지?',
+        hangul: 'to-ri jin-jja ol geo-ji?',
+        zh: '兔莉你真的会来吧？',
+        practice: 'listen',
+      },
+      {
+        speaker: 'you',
         ko: '?',
         hangul: '',
-        zh: 'Haru 又发"토리도 진짜 올 거지?"(兔莉也真的会来吧?)，兔莉应该如何用朋友间最自然的方式回答？',
+        zh: 'Haru问Tori真的会来吗，Tori应该怎么肯定回答？',
         practice: 'pick',
         choices: [
-          { ko: '당연하지! 진짜 가요!', zh: '当然了！真的去！', correct: true },
-          { ko: '아니요, 안 가요.', zh: '不去。', correct: false },
-          { ko: '얼마예요?', zh: '多少钱？', correct: false },
+          { ko: '당연하지! 진짜 갈게!', zh: '当然了！真的去！', correct: true },
+          { ko: '몰라.', zh: '不知道。', correct: false },
+          { ko: '카페가 뭐야?', zh: '咖啡馆是什么？', correct: false },
         ],
       },
     ],
   },
 
   grammar: {
-    title: '邀请朋友 · 같이 + ~아/어요 · ~(으)ㄹ래요?',
-    pattern: '同伴 같이 + 动词 해요体 / 同伴 (으)ㄹ래요? (半语 (으)ㄹ래?)',
-    whenToUse: '邀请朋友、问对方意愿。比命令式「갑시다」更柔和、像在征求意见。',
+    title: '邀请与回应：같이 / 갈래요 / 당연하지',
+    pattern: '**같이** V요 = 一起做  |  V **ㄹ래요?** = 要不要做？  |  **당연하지!** = 当然了！',
+    whenToUse: '韩国朋友约你出去的标准三件套：提议(갈래?)→附和(같이 가요!)→确认(당연하지!)。Day 24 群聊里完美演示了这套流程。',
     rules: [
-      '**같이 + 동사 해요체** = 一起做某事 (建议)：같이 **가요** / 같이 **봐요**',
-      '**동사 + (으)ㄹ래요?** = 你要做...吗？(问意愿)：카페 **갈래요?** / 영화 **볼래요?**',
-      '朋友间半语：**(으)ㄹ래?** : 갈래? / 볼래? — 长辈/陌生人不能用',
-      '回应 "好的!" 用「좋아요 / 그래요 / 당연하지」三档亲密度',
+      '**같이 用法**：같이 + 动词해요体 = 一起做___。같이 가요(一起去) / 같이 먹어요(一起吃) / 같이 공부해요(一起学)。같이 放在动词前面',
+      '**갈래(요)? 用法**：가다 + ㄹ래요? = 要去吗？。提议/邀请的语气。반말 = 갈래?；해요체 = 갈래요?。Day 15 学过的 을래요 在这里做疑问',
+      '**당연하지 用法**：당연하다(当然) + 지(반말确认)。强烈肯定"那还用说"。해요体 = 당연하죠。比 네 更热情的回应',
+      '**콜 用法**：英语 call → "成交/就这么定"。非正式约定时年轻人爱用。"내일 5시? 콜!"（明天5点？成交！）',
+      '**어디서 만나요? 用法**：约定时间后紧接确认地点。어디서(在哪里) + 만나요(见面)。서 = 에서 的缩写，表动作发生地点',
+      '**끝나고 用法**：끝나다(结束) + 고(然后) = 结束之后。"학교 끝나고"= 放学后。고 连接两个动作的先后顺序',
+      '**새로 생긴 用法**：새로(新) + 생기다(出现) → 생긴(관형형·过去) = 新开的/新出现的。修饰后面的名词',
     ],
     examples: [
-      { ko: '같이 가요!', zh: '一起去！', highlight: '같이' },
-      { ko: '카페 갈래요?', zh: '要去咖啡馆吗？', highlight: '갈래요' },
-      { ko: '영화 볼래?', zh: '看电影吗？(朋友)', highlight: '볼래' },
-      { ko: '당연하지! 같이 가요!', zh: '当然了！一起去！', highlight: '당연하지' },
+      { ko: '같이 가요!', zh: '一起去吧！', highlight: '같이', note: '같이 + 가요。最简单的邀请附和句。발음 [가치]' },
+      { ko: '카페 갈래요?', zh: '去咖啡馆吗？', highlight: '갈래요', note: '가다 词干"가"无收音 + ㄹ래요? = 갈래요?。邀请提议句' },
+      { ko: '당연하지! 꼭 갈게.', zh: '当然了！一定去。', highlight: '당연하지', note: '당연하다 + 지(반말)。꼭 = 一定。朋友间强烈肯定' },
+      { ko: '어디서 만나요?', zh: '在哪见？', highlight: '어디서', note: '어디(哪里) + 서(에서缩写·动作地点)。约定必问句' },
+      { ko: '새로 생긴 카페가 있어.', zh: '有家新开的咖啡馆。', highlight: '새로 생긴', note: '새로(新) + 생기다→생긴(过去관형형)。修饰 카페' },
     ],
     pitfall:
-      '群聊里和朋友别用「가요」「갑시다」开头——太书面。改成「같이 가요!」或「같이 가자!」更自然。年轻人카톡里还会大量用 ㅋㅋ (哈哈) / ㅎㅎ (呵呵) — 模仿即可。',
+      '① 같이 发音是 [가치] 不是 [같이]！口盖化规则（구개음화：ㅌ+ㅣ→ㅊ）。② 갈래요 只用于第一/第二人称提议，不能说"그 사람 갈래요"（第三人称）❌。③ 당연하지 是반말！对老师/长辈要用 당연하죠 或 당연히요。',
   },
 
   output: [
     {
       id: 'd24-o1',
       kind: 'compose',
-      zhHint: '一起去！在哪里见？',
-      tokens: ['같이', '가요', '!', '어디서', '만나요', '?', '있어요', '갔어요'],
-      composeAnswer: ['같이', '가요', '!', '어디서', '만나요', '?'],
-      successMsg: 'Junho 秒回："학교 정문 5시!" ✓ 你的第一条群聊消息发出去了。',
+      zhHint: '一起去吧！在哪见？（해요体·万能礼貌）',
+      tokens: ['같이', '가요', '어디서', '만나요', '갈래요', '있어요'],
+      composeAnswer: ['같이', '가요', '어디서', '만나요'],
+      successMsg: '같이 가요! 어디서 만나요? — 해요体万能礼貌版。对朋友群聊时也可切 반말: 같이 가자! 어디서 만나?',
     },
     {
       id: 'd24-o2',
       kind: 'listen-choice',
-      audioKo: '카페 갈래?',
-      successMsg: '✓ 「要去咖啡馆吗？」「-(으)ㄹ래?」是朋友间征求意愿的半语。「갈래요?」是敬语版。',
+      audioKo: '내일 학교 끝나고 카페 갈래?',
+      successMsg: '✓ 끝나고 = 结束后；갈래? = 要去吗？。朋友的随意邀请。',
       choices: [
-        { zh: '要去咖啡馆吗？(朋友)', correct: true },
-        { zh: '要去咖啡馆吗？(对长辈)', correct: false },
-        { zh: '一起去咖啡馆。', correct: false },
-        { zh: '咖啡馆在哪里？', correct: false },
+        { zh: '明天放学去咖啡馆吗？', correct: true },
+        { zh: '明天学校结束了。', correct: false },
+        { zh: '咖啡馆在学校旁边。', correct: false },
+        { zh: '明天不去学校。', correct: false },
       ],
     },
     {
       id: 'd24-o3',
       kind: 'zh-to-ko',
-      zhPrompt: '我们看电影吗？(对朋友)',
-      successMsg: '"영화 볼래?" — 「보다」(看) 词干末 ㅗ → 「(으)ㄹ래?」直接接「볼래?」。半语对朋友。',
+      zhPrompt: '当然了！真的去！（对朋友）',
+      successMsg: '"당연하지! 진짜 갈게!" — 群聊里 반말 干脆回应朋友。',
       choices: [
-        { ko: '영화 볼래?', correct: true },
-        { ko: '영화 본래?', correct: false },
-        { ko: '영화 봐요?', correct: false },
-        { ko: '영화 보다?', correct: false },
+        { ko: '당연하지! 진짜 갈게!', correct: true },
+        { ko: '당연하지! 진짜 가요!', correct: false },
+        { ko: '당연하지! 안 갈게!', correct: false },
+        { ko: '네, 알겠습니다.', correct: false },
       ],
     },
     {
       id: 'd24-o4',
       kind: 'particle-error',
-      zhHint: '在哪里见？',
-      successMsg: '「어디」+「서」(在某处)+「만나요」(见面)。「-에서」是动作发生地点助词。',
+      zhHint: '一起去咖啡馆吗？',
+      successMsg: '같이 [가치] + 가다→갈래요?（ㄹ래요 提议）。',
       choices: [
-        { ko: '어디서 만나요?', correct: true },
-        { ko: '어디에 만나요?', correct: false },
-        { ko: '어디로 만나요?', correct: false },
-        { ko: '어디서 만나다?', correct: false },
+        { ko: '같이 카페 갈래요?', correct: true },
+        { ko: '같이 카페 갈래요.', correct: false },
+        { ko: '같이 카페 가요?', correct: false },
+        { ko: '같이 카페 갈게요?', correct: false },
+      ],
+    },
+    {
+      id: 'd24-o5',
+      kind: 'match-pair',
+      successMsg: '✓ Day 24 全对。明天정문 5시，四个人不见不散！',
+      pairs: [
+        { ko: '같이', zh: '一起' },
+        { ko: '갈래?', zh: '要去吗？' },
+        { ko: '콜', zh: 'OK/成交' },
+        { ko: '만나요', zh: '见面' },
+        { ko: '당연하지', zh: '当然了' },
       ],
     },
   ],
 
   recap: {
-    toriPose: 'happy',
-    praise: '24 天，你终于在韩语群聊里打字了。'
-      + '让 Minji 说「토리 한국어 많이 늘었네」。',
-    preview: '明天 Junho 又给了我新任务——한강公园演唱会要一起喊应援。我能跟上吗？',
+    toriPose: 'proud',
+    praise: '친구들이 기다리고 있었어요! 같이 가요, 토리!',
+    preview: '明天四人在汉江边——一起喊应援口号！사랑해! 따라해!',
     stickerId: 'sticker-d24',
+    sceneImageUrl: '/images/diary/day-24-scene.jpg',
   },
 
   carrotHint:
-    '今天的胡萝卜：「韩国 카톡 群聊 用语」「같이 vs ㄹ래 区别」「당연하지/당연하죠 何时用」',
+    '今天的胡萝卜：「같이和갈래요怎么搭配用？」「당연하지和네有什么区别？」',
 };

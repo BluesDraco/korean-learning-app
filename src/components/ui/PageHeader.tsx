@@ -1,7 +1,10 @@
 'use client';
 
 import type { ReactNode } from 'react';
+import { ArrowLeft } from 'lucide-react';
 import { ToriCardMascot, type ToriPose } from '@/components/mobile/ToriCardMascot';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 
 type Tone = 'neutral' | 'pink' | 'mint' | 'peach' | 'purple';
 
@@ -17,6 +20,26 @@ export interface PageHeaderProps {
   actions?: ReactNode;
   /** When true, no gradient background — just a typography header */
   flat?: boolean;
+  /** When provided, show a back arrow (←) at the left that calls this */
+  onBack?: () => void;
+}
+
+function BackBtn({ onBack }: { onBack: () => void }) {
+  const { lang } = useLang();
+  return (
+    <button
+      onClick={onBack}
+      aria-label={t('ui.ph_back', lang)}
+      style={{
+        flexShrink: 0, width: 38, height: 38, borderRadius: 12,
+        border: '1px solid var(--color-border-1)', background: 'var(--color-surface-1)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        color: 'var(--color-ink-2)', cursor: 'pointer', marginRight: 12,
+      }}
+    >
+      <ArrowLeft size={18} />
+    </button>
+  );
 }
 
 const TONE_GRADIENT: Record<Tone, string> = {
@@ -43,6 +66,7 @@ export function PageHeader({
   tone = 'neutral',
   actions,
   flat = false,
+  onBack,
 }: PageHeaderProps) {
   if (flat) {
     return (
@@ -91,7 +115,8 @@ export function PageHeader({
         overflow: 'hidden',
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 16, position: 'relative', zIndex: 1 }}>
+      <div style={{ display: 'flex', alignItems: onBack ? 'center' : 'flex-end', justifyContent: onBack ? 'flex-start' : 'space-between', gap: onBack ? 0 : 16, position: 'relative', zIndex: 1 }}>
+        {onBack && <BackBtn onBack={onBack} />}
         <div style={{ minWidth: 0, paddingRight: mascot !== 'none' ? 80 : 0 }}>
           {eyebrow && (
             <p

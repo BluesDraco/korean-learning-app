@@ -1,29 +1,39 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import type { ToriDay, ToriOutputTask } from '@/types/tori-diary';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import type { ToriDay, ToriOutputTask, ToriModuleState } from '@/types/tori-diary';
 import { ChevronRight, Check, X, RotateCcw, Volume2, Sparkles } from 'lucide-react';
 import { speak } from '@/lib/tts';
 import { sfxCorrect, sfxWrong } from '@/lib/sfx';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 
 interface Props {
   day: ToriDay;
   onComplete: (results: Array<{ taskId: string; correct: boolean; userText?: string }>) => void;
+  onBack?: () => void;
+  initialState?: ToriModuleState['output'];
+  onStateChange?: (patch: ToriModuleState['output']) => void;
 }
 
 type Checked = 'idle' | 'correct' | 'wrong';
 export type { Checked };
 export { synthesizeCompose };
 
-export function DiaryOutput({ day, onComplete }: Props) {
+export function DiaryOutput({ day, onComplete, onBack, initialState, onStateChange }: Props) {
+  const { lang } = useLang();
   const tasks = day.output;
-  const [qIdx, setQIdx] = useState(0);
+  const [qIdx, setQIdx] = useState(initialState?.qIdx ?? 0);
   const [checked, setChecked] = useState<Checked>('idle');
   const [shaking, setShaking] = useState(false);
-  const [results, setResults] = useState<Array<{ taskId: string; correct: boolean; userText?: string }>>([]);
-  const isCheckpointDay = !!day.isCheckpoint;
-  const maxHearts = isCheckpointDay ? 5 : 3;
-  const [hearts, setHearts] = useState(maxHearts);
+  const [results, setResults] = useState<Array<{ taskId: string; correct: boolean; userText?: string }>>(initialState?.results ?? []);
+  const maxHearts = 3;
+  const [hearts, setHearts] = useState(initialState?.hearts ?? maxHearts);
+
+  useEffect(() => {
+    onStateChange?.({ qIdx, hearts, results });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [qIdx, hearts, results]);
 
   // compose
   const [picked, setPicked] = useState<number[]>([]);
@@ -38,8 +48,8 @@ export function DiaryOutput({ day, onComplete }: Props) {
 
   useEffect(() => {
     if (!shaking) return;
-    const t = setTimeout(() => setShaking(false), 500);
-    return () => clearTimeout(t);
+    const timer = setTimeout(() => setShaking(false), 500);
+    return () => clearTimeout(timer);
   }, [shaking]);
 
   useEffect(() => {
@@ -67,26 +77,43 @@ export function DiaryOutput({ day, onComplete }: Props) {
     setHearts(h => Math.max(0, h - 1));
   };
 
-  const handleNext = () => {
+  const handlePrev = () => {
+    if (qIdx === 0) return;
+    setQIdx(qIdx - 1);
+  };
+
+  const handleCardNext = () => {
+    if (!allCleared) return;
     if (qIdx < tasks.length - 1) setQIdx(qIdx + 1);
-    else onComplete(results);
+  };
+
+  const [submittedRef] = useState({ current: false });
+  const handleModuleNext = () => {
+    if (submittedRef.current) return;
+    submittedRef.current = true;
+    onComplete(results);
   };
 
   if (hearts === 0) {
     return (
       <div className="diary-anim-fade-up" style={{ textAlign: 'center', padding: '40px 20px' }}>
-        <div style={{ fontSize: 48, marginBottom: 12 }}>🥕</div>
-        <p className="diary-h2 diary-handwriting-zh" style={{ marginBottom: 8 }}>哎呀，今天有点难…</p>
-        <p className="diary-text-soft" style={{ marginBottom: 24 }}>Tori 觉得我们需要再来一遍！</p>
-        <button onClick={() => {
+        <div style={{ fontSize: 64, marginBottom: 8, animation: 'diary-heart-break 1s ease forwards' }}>💔</div>
+        <p className="diary-h2 diary-handwriting-zh" style={{ marginBottom: 8 }}>{t('diary.out.heartsGoneTitle', lang)}</p>
+        <p className="diary-text-soft" style={{ marginBottom: 24 }}>{t('diary.out.heartsGoneDesc', lang)}</p>
+        <div style={{ display: 'flex', gap: 12 }}>
+          {onBack && (
+            <button onClick={onBack} style={{ flex: 1, height: 52, borderRadius: 14, background: 'var(--diary-paper-deep)', color: 'var(--diary-ink-2)', border: '1px solid var(--diary-line)', cursor: 'pointer', fontSize: 16, fontWeight: 600, fontFamily: 'var(--diary-font-zh)' }}>{t('diary.out.prevStep', lang)}</button>
+          )}
+          <button onClick={() => {
           setHearts(maxHearts); setQIdx(0); setResults([]);
           setChecked('idle'); setComposeChecked('idle');
           setPicked([]); setPickedIdx(null);
           setMatched(new Set()); setWrongZh(null);
           setShaking(false); setLastUserAnswer('');
-        }} className="diary-btn diary-btn-primary">
-          重新挑战 🥕
-        </button>
+        }} className="diary-btn diary-btn-primary" style={{ flex: 2 }}>
+            {t('diary.out.retryChallenge', lang)}
+          </button>
+        </div>
       </div>
     );
   }
@@ -94,36 +121,53 @@ export function DiaryOutput({ day, onComplete }: Props) {
   if (!task || tasks.length === 0) {
     return (
       <div className="diary-anim-fade-up" style={{ textAlign: 'center', padding: '40px 20px' }}>
-        <p className="diary-text-soft" style={{ marginBottom: 20 }}>今天没有练习，收尾吧。</p>
-        <button onClick={() => onComplete([])} className="diary-btn diary-btn-primary">
-          继续 · 收尾 <ChevronRight size={16} />
-        </button>
+        <p className="diary-text-soft" style={{ marginBottom: 20 }}>{t('diary.out.noPractice', lang)}</p>
+        <div style={{ display: 'flex', gap: 12 }}>
+          {onBack && (
+            <button onClick={onBack} style={{ flex: 1, height: 52, borderRadius: 14, background: 'var(--diary-paper-deep)', color: 'var(--diary-ink-2)', border: '1px solid var(--diary-line)', cursor: 'pointer', fontSize: 16, fontWeight: 600, fontFamily: 'var(--diary-font-zh)' }}>{t('diary.out.prevStep', lang)}</button>
+          )}
+          <button onClick={() => onComplete([])} className="diary-btn diary-btn-primary" style={{ flex: 2 }}>
+            {t('diary.out.continueWrapup', lang)} <ChevronRight size={16} />
+          </button>
+        </div>
       </div>
     );
   }
 
   const isCompose = task.kind === 'fill' || task.kind === 'compose';
+  const lastHeartIdx = maxHearts - hearts; // 最近碎的那个🥕的index
 
   return (
     <div className="diary-anim-fade-up">
+      {/* 顶栏：标签 + 爱心血量 */}
       <div style={{ marginBottom: 18, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span className="diary-tag" style={{ background: '#5ea886', color: '#fff' }}>OUTPUT · 输出</span>
-          {isCheckpointDay && (
-            <span className="diary-tag" style={{ background: 'var(--diary-gold-deep)', color: '#fff', fontSize: 11 }}>★ 关卡考试</span>
-          )}
+          <span className="diary-tag" style={{ background: 'var(--color-mint-strong)', color: '#fff' }}>{t('diary.out.tagOutput', lang)}</span>
         </div>
-        <div style={{ display: 'flex', gap: 3 }}>
-          {Array.from({ length: maxHearts }, (_, i) => (
-            <span key={i} style={{ fontSize: 18, opacity: i < hearts ? 1 : 0.2, transition: 'opacity 0.3s' }}>🥕</span>
-          ))}
+        <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
+          {Array.from({ length: maxHearts }, (_, i) => {
+            const lost = i < maxHearts - hearts;
+            const justBroke = lost && i === lastHeartIdx - 1;
+            return (
+              <span key={i} style={{
+                fontSize: 18,
+                opacity: lost ? 0.15 : 1,
+                transform: lost ? 'scale(.75)' : 'scale(1)',
+                transition: 'opacity .4s, transform .4s',
+                animation: justBroke ? 'diary-heart-break .5s ease forwards' : undefined,
+              }}>🥕</span>
+            );
+          })}
         </div>
       </div>
-      <h2 className="diary-h2" style={{ marginBottom: 6 }}>{KIND_TITLE[task.kind] ?? '练习'}</h2>
-      <p className="diary-text-soft" style={{ fontSize: 13, marginBottom: task.sceneContext ? 16 : 20 }}>
-        {qIdx + 1}/{tasks.length}
+
+      {/* 标题 + 进度 */}
+      <h2 className="diary-h2" style={{ marginBottom: 4 }}>{KIND_TITLE[task.kind] ? t(KIND_TITLE[task.kind]!, lang) : t('diary.out.kindDefault', lang)}</h2>
+      <p className="diary-text-soft" style={{ fontSize: 13, marginBottom: task.sceneContext ? 14 : 20 }}>
+        {qIdx + 1}/{tasks.length} · {task.kind === 'compose' || task.kind === 'fill' ? t('diary.out.hintCompose', lang) : task.kind === 'match-pair' ? t('diary.out.hintMatch', lang) : task.kind === 'listen-choice' ? t('diary.out.hintListen', lang) : t('diary.out.hintChoice', lang)}
       </p>
 
+      {/* 场景上下文 */}
       {task.sceneContext && (
         <div className="diary-scene-break diary-anim-fade-up">
           {task.sceneContext.split('\n').map((line, i, arr) => (
@@ -185,14 +229,35 @@ export function DiaryOutput({ day, onComplete }: Props) {
         />
       )}
 
-      <div style={{ textAlign: 'center', marginTop: 24 }}>
-        <button
-          onClick={handleNext}
-          className="diary-btn diary-btn-primary"
-          disabled={!allCleared}
-          style={{ opacity: allCleared ? 1 : 0.4, cursor: allCleared ? 'pointer' : 'not-allowed' }}
+      {/* 题卡导航：上一题 / 下一题 */}
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 12, marginTop: 22 }}>
+        <button onClick={handlePrev} disabled={qIdx === 0}
+          className="diary-btn diary-btn-ghost"
+          style={{ fontSize: 12, padding: '4px 14px', opacity: qIdx === 0 ? 0.25 : 1 }}
         >
-          {isLast ? '继续 · 收尾' : '下一题'} <ChevronRight size={16} />
+          {t('diary.out.prevQuestion', lang)}
+        </button>
+        <span className="diary-text-soft" style={{ fontSize: 12, minWidth: '3em', textAlign: 'center' }}>{qIdx + 1} / {tasks.length}</span>
+        <button onClick={handleCardNext} disabled={!allCleared || isLast}
+          className="diary-btn diary-btn-ghost"
+          style={{ fontSize: 12, padding: '4px 14px', opacity: (!allCleared || isLast) ? 0.25 : 1 }}
+        >
+          {!allCleared ? t('diary.out.answerFirst', lang) : t('diary.out.nextQuestion', lang)}
+        </button>
+      </div>
+
+      {/* 模块导航：上一步(1/3) + 继续·收尾(2/3) */}
+      <div style={{ display: 'flex', gap: 12, marginTop: 16 }}>
+        {onBack && (
+          <button onClick={onBack} style={{ flex: 1, height: 52, borderRadius: 14, background: 'var(--diary-paper-deep)', color: 'var(--diary-ink-2)', border: '1px solid var(--diary-line)', cursor: 'pointer', fontSize: 16, fontWeight: 600, fontFamily: 'var(--diary-font-zh)' }}>{t('diary.out.prevStep', lang)}</button>
+        )}
+        <button
+          onClick={handleModuleNext}
+          className="diary-btn diary-btn-primary"
+          disabled={!isLast || !allCleared}
+          style={{ flex: 2, opacity: (isLast && allCleared) ? 1 : 0.4, cursor: (isLast && allCleared) ? 'pointer' : 'not-allowed' }}
+        >
+          {t('diary.out.continueWrapup', lang)} <ChevronRight size={16} />
         </button>
       </div>
     </div>
@@ -200,12 +265,12 @@ export function DiaryOutput({ day, onComplete }: Props) {
 }
 
 const KIND_TITLE: Partial<Record<ToriOutputTask['kind'], string>> = {
-  fill: '组词成句',
-  compose: '组词成句',
-  'listen-choice': '听韩语选中文',
-  'zh-to-ko': '中文翻韩文',
-  'particle-error': '找正确的助词',
-  'match-pair': '韩中连连看',
+  fill: 'diary.out.kindCompose',
+  compose: 'diary.out.kindCompose',
+  'listen-choice': 'diary.out.kindListen',
+  'zh-to-ko': 'diary.out.kindZhToKo',
+  'particle-error': 'diary.out.kindParticle',
+  'match-pair': 'diary.out.kindMatch',
 };
 
 /* ═══════ Compose / Fill ═══════ */
@@ -219,15 +284,22 @@ export function ComposeBlock({
   onCorrect: () => void; onWrong: () => void;
   onUserAnswer: (s: string) => void;
 }) {
+  const { lang } = useLang();
   const compose = useMemo(() => synthesizeCompose(task), [task]);
   const userTokens = picked.map((i) => compose?.tokens[i] ?? '');
   const isFull = compose ? userTokens.length === compose.composeAnswer.length : false;
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
+    if (checked === 'idle') setSubmitted(false);
+  }, [checked]);
+
+  const handleConfirm = () => {
     if (!compose || !isFull || checked !== 'idle') return;
     const userJoin = userTokens.join(' ');
     onUserAnswer(userJoin);
     const correct = userJoin === compose.composeAnswer.join(' ');
+    setSubmitted(true);
     if (correct) {
       setChecked('correct');
       onCorrect();
@@ -236,53 +308,171 @@ export function ComposeBlock({
       setShaking(true);
       onWrong();
     }
-  }, [isFull, checked, userTokens, compose, setChecked, setShaking, onCorrect, onWrong, onUserAnswer]);
+  };
+
+  const handleReset = () => {
+    setPicked([]);
+    setChecked('idle');
+    setSubmitted(false);
+  };
 
   if (!compose) return null;
 
-  return (
-    <div className="diary-card-paper" style={{ padding: '20px 22px', background: 'var(--diary-paper)' }}>
-      <p style={{ fontSize: 15, color: 'var(--diary-ink-soft)', marginBottom: 18, textAlign: 'center' }}>
-        🎯 {task.zhHint}
-      </p>
+  const isLocked = checked === 'correct';
 
-      <div className={shaking ? 'diary-anim-shake' : ''} style={{
-        minHeight: 64, padding: '12px 14px',
-        background: checked === 'correct' ? 'rgba(94,168,134,0.1)' : checked === 'wrong' ? 'rgba(193,78,58,0.08)' : 'var(--diary-paper-deep)',
-        border: checked === 'correct' ? '1.5px solid #5ea886' : checked === 'wrong' ? '1.5px solid var(--diary-stamp-red)' : '1.5px dashed var(--diary-line-strong)',
-        borderRadius: 6, marginBottom: 16, display: 'flex', flexWrap: 'wrap', gap: 6, alignItems: 'center',
-      }}>
-        {userTokens.length === 0 ? (
-          <span style={{ fontSize: 13, color: 'var(--diary-ink-faint)', fontStyle: 'italic' }}>点下方词卡组成句子…</span>
-        ) : userTokens.map((t, i) => (
-          <button key={`${t}-${i}`} onClick={() => { if (checked !== 'correct') { setPicked((p) => p.filter((_, j) => j !== i)); setChecked('idle'); } }} disabled={checked === 'correct'}
-            className="diary-stamp-card diary-anim-fade-up" style={{ cursor: checked === 'correct' ? 'default' : 'pointer' }}>
-            <span style={{ fontSize: 15 }}>{t}</span>
-          </button>
-        ))}
-        {checked === 'correct' && <Check size={28} strokeWidth={3} color="#5ea886" style={{ marginLeft: 'auto' }} />}
-        {checked === 'wrong' && <X size={20} color="var(--diary-stamp-red)" style={{ marginLeft: 'auto' }} />}
+  return (
+    <div
+      className={`diary-card-paper${shaking ? ' diary-card-shake' : ''}`}
+      style={{ padding: '24px 22px', background: 'var(--diary-paper)', position: 'relative', overflow: 'hidden' }}
+    >
+      {checked === 'correct' && (
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'radial-gradient(circle at 50% 40%, rgba(94,168,134,.12) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }} />
+      )}
+
+      <div style={{ textAlign: 'center', marginBottom: 20, position: 'relative' }}>
+        <span style={{
+          display: 'inline-block', padding: '3px 10px', borderRadius: 6,
+          background: 'var(--diary-gold-soft)', color: 'var(--diary-gold-deep)',
+          fontSize: 11, fontWeight: 700, letterSpacing: '.06em', marginBottom: 10,
+        }}>
+          {t('diary.out.composeBadge', lang)}
+        </span>
+        <p style={{
+          fontSize: 17, fontWeight: 700, color: 'var(--diary-ink)',
+          lineHeight: 1.5, margin: 0,
+        }}>
+          {task.zhHint}
+        </p>
       </div>
 
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-        {compose.tokens.map((t, i) => {
+      {/* 已选词卡区 */}
+      <div style={{
+        minHeight: 68, padding: '16px 14px',
+        background: checked === 'correct'
+          ? 'rgba(94,168,134,.08)'
+          : checked === 'wrong'
+            ? 'rgba(193,78,58,.06)'
+            : 'var(--diary-paper-deep)',
+        border: checked === 'correct'
+          ? '2px solid var(--color-mint-strong)'
+          : checked === 'wrong'
+            ? '2px solid var(--diary-stamp-red)'
+            : '2px dashed var(--diary-line-strong)',
+        borderRadius: 14, marginBottom: 18,
+        display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center', justifyContent: 'center',
+        transition: 'border-color .25s, background .25s',
+        position: 'relative',
+      }}>
+        {userTokens.length === 0 ? (
+          <span style={{ fontSize: 13, color: 'var(--diary-ink-faint)', fontStyle: 'italic', userSelect: 'none' }}>
+            {t('diary.out.tapChipsHint', lang)}
+          </span>
+        ) : userTokens.map((tok, i) => (
+          <button
+            key={`pick-${tok}-${i}`}
+            onClick={() => {
+              if (!isLocked) { setPicked((p) => p.filter((_, j) => j !== i)); setChecked('idle'); }
+            }}
+            disabled={isLocked}
+            className="diary-chip-entrance"
+            style={{
+              padding: '8px 14px', borderRadius: 10,
+              background: isLocked ? 'rgba(94,168,134,.18)' : 'var(--diary-paper)',
+              border: isLocked ? '1.5px solid var(--color-mint-strong)' : '1.5px solid var(--diary-line-strong)',
+              cursor: isLocked ? 'default' : 'pointer',
+              fontSize: 16, fontWeight: 700, color: 'var(--diary-ink)',
+              fontFamily: 'var(--diary-font-ko)',
+              animationDelay: `${i * 60}ms`,
+              transition: 'transform .15s, box-shadow .15s',
+              boxShadow: 'var(--shadow-sm)',
+              display: 'inline-flex', alignItems: 'center', gap: 4,
+            }}
+            onMouseEnter={(e) => { if (!isLocked) { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,.08)'; } }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = ''; }}
+          >
+            <span>{tok}</span>
+            {!isLocked && <span style={{ fontSize: 10, color: 'var(--diary-ink-faint)', marginLeft: 2 }}>×</span>}
+          </button>
+        ))}
+        {checked === 'correct' && (
+          <Check size={30} strokeWidth={3} color="var(--color-mint-strong)" style={{ marginLeft: 'auto', flexShrink: 0 }} />
+        )}
+        {checked === 'wrong' && (
+          <X size={22} color="var(--diary-stamp-red)" style={{ marginLeft: 'auto', flexShrink: 0 }} />
+        )}
+      </div>
+
+      {/* 候选词卡池 */}
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'center', marginBottom: isFull && checked === 'idle' ? 14 : 0 }}>
+        {compose.tokens.map((tok, i) => {
           const used = picked.includes(i);
           return (
-            <button key={i} onClick={() => { if (!used && checked !== 'correct') { setPicked((p) => [...p, i]); setChecked('idle'); } }}
-              disabled={used || checked === 'correct'}
-              className="diary-stamp-card" style={{ opacity: used ? 0.25 : 1, cursor: used || checked === 'correct' ? 'default' : 'pointer', pointerEvents: used ? 'none' : 'auto' }}>
-              <span style={{ fontSize: 15 }}>{t}</span>
+            <button
+              key={i}
+              onClick={() => {
+                if (!used && !isLocked) { setPicked((p) => [...p, i]); setChecked('idle'); }
+              }}
+              disabled={used || isLocked}
+              className={!used && !isLocked ? 'diary-chip-entrance' : ''}
+              style={{
+                padding: '8px 14px', borderRadius: 10,
+                background: used ? 'transparent' : 'var(--diary-paper-deep)',
+                border: used ? '1.5px solid transparent' : '1.5px solid var(--diary-line)',
+                cursor: used || isLocked ? 'default' : 'pointer',
+                fontSize: 15, fontWeight: 600, color: used ? 'transparent' : 'var(--diary-ink)',
+                fontFamily: 'var(--diary-font-ko)',
+                opacity: used ? 0 : 1,
+                transition: 'transform .15s, opacity .2s, background .2s, border-color .2s',
+                pointerEvents: used ? 'none' : 'auto',
+                animationDelay: `${i * 40}ms`,
+                transform: used ? 'scale(.8)' : '',
+              }}
+              onMouseEnter={(e) => { if (!used && !isLocked) e.currentTarget.style.transform = 'translateY(-2px)'; }}
+              onMouseLeave={(e) => { if (!used && !isLocked) e.currentTarget.style.transform = ''; }}
+            >
+              {tok}
             </button>
           );
         })}
       </div>
 
+      {/* 确认 / 重置按钮 */}
+      {checked === 'idle' && isFull && (
+        <div style={{ display: 'flex', gap: 10, marginTop: 14 }}>
+          <button onClick={handleReset}
+            className="diary-btn diary-btn-ghost"
+            style={{ flex: 1, padding: '10px 16px', fontSize: 13, borderRadius: 12 }}
+          >
+            <RotateCcw size={12} /> {t('diary.out.reset', lang)}
+          </button>
+          <button onClick={handleConfirm}
+            className="diary-btn diary-btn-primary diary-confirm-glow"
+            style={{ flex: 2, fontSize: 15, borderRadius: 12, padding: '12px 20px' }}
+          >
+            {t('diary.out.confirmAnswer', lang)}
+          </button>
+        </div>
+      )}
+
+      {/* 答错反馈 */}
       {checked === 'wrong' && (
-        <div style={{ marginTop: 14, padding: '10px 14px', background: 'rgba(193,78,58,0.1)', borderRadius: 6, borderLeft: '3px solid var(--diary-stamp-red)', display: 'flex', gap: 8, alignItems: 'center' }}>
-          <X size={16} color="var(--diary-stamp-red)" />
-          <span style={{ fontSize: 13 }}>顺序不对，点已选词卡拿回来。</span>
-          <button onClick={() => { setPicked([]); setChecked('idle'); }} className="diary-btn diary-btn-ghost" style={{ padding: '4px 10px', fontSize: 11, marginLeft: 'auto' }}>
-            <RotateCcw size={12} /> 重置
+        <div style={{
+          marginTop: 16, padding: '12px 14px',
+          background: 'rgba(193,78,58,.08)', borderRadius: 10,
+          borderLeft: '3px solid var(--diary-stamp-red)',
+          display: 'flex', alignItems: 'center', gap: 10,
+        }}>
+          <X size={18} color="var(--diary-stamp-red)" style={{ flexShrink: 0 }} />
+          <span style={{ fontSize: 13, flex: 1 }}>{t('diary.out.wrongOrder', lang)}</span>
+          <button onClick={handleReset}
+            className="diary-btn diary-btn-ghost"
+            style={{ padding: '5px 12px', fontSize: 12 }}
+          >
+            <RotateCcw size={12} /> {t('diary.out.redo', lang)}
           </button>
         </div>
       )}
@@ -302,6 +492,7 @@ export function ChoiceBlock({
   onCorrect: () => void; onWrong: () => void;
   onUserAnswer: (s: string) => void;
 }) {
+  const { lang } = useLang();
   if (task.kind === 'match-pair' && task.pairs) {
     return <MatchBlock key={task.id} task={task} matched={matched} setMatched={setMatched} wrongZh={wrongZh} setWrongZh={setWrongZh} checked={checked} setChecked={setChecked} onCorrect={onCorrect} onWrong={onWrong} onUserAnswer={onUserAnswer} />;
   }
@@ -325,48 +516,128 @@ export function ChoiceBlock({
   };
 
   return (
-    <div className="diary-card-paper" style={{ padding: '20px 22px', background: 'var(--diary-paper)' }}>
-      <div style={{ textAlign: 'center', marginBottom: 18 }}>
+    <div
+      className={`diary-card-paper${shaking ? ' diary-card-shake' : ''}`}
+      style={{ padding: '24px 22px', background: 'var(--diary-paper)', position: 'relative', overflow: 'hidden' }}
+    >
+      {checked === 'correct' && (
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'radial-gradient(circle at 50% 40%, rgba(94,168,134,.12) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }} />
+      )}
+
+      {/* 标题 + 播放按钮 */}
+      <div style={{ textAlign: 'center', marginBottom: 22, position: 'relative' }}>
         {isListen && task.audioKo && (
-          <button onClick={() => { speak(task.audioKo!, 0.85).catch(() => {}); }}
-            style={{ width: 48, height: 48, borderRadius: '50%', background: 'var(--color-pink-base)', color: '#fff', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12, boxShadow: 'var(--shadow-sm)' }}>
-            <Volume2 size={22} />
+          <button
+            onClick={() => { speak(task.audioKo!).catch(() => {}); }}
+            className="diary-listen-pulse"
+            style={{
+              width: 54, height: 54, borderRadius: '50%',
+              background: 'var(--color-pink-base)', color: '#fff', border: 'none',
+              cursor: 'pointer', marginBottom: 14,
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+              transition: 'transform .15s',
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.08)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = ''; }}
+          >
+            <Volume2 size={24} />
           </button>
         )}
-        <p style={{ fontSize: 16, fontWeight: 700, color: 'var(--diary-ink)' }}>
-          {isListen ? '听一听，兔莉说的是哪句？' : task.zhPrompt ?? task.zhHint ?? '选出正确的'}
+        <p style={{ fontSize: 16, fontWeight: 700, color: 'var(--diary-ink)', margin: 0 }}>
+          {isListen ? t('diary.out.listenPrompt', lang) : task.zhPrompt ?? task.zhHint ?? t('diary.out.choicePrompt', lang)}
         </p>
+        {isListen && (
+          <p style={{ fontSize: 12, color: 'var(--diary-ink-faint)', marginTop: 6 }}>
+            {t('diary.out.replayHint', lang)}
+          </p>
+        )}
       </div>
 
-      <div className={shaking ? 'diary-anim-shake' : ''} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+      {/* 选项卡片 */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         {choices.map((c, i) => {
           const isPicked = pickedIdx === i;
           const showResult = checked !== 'idle' && isPicked;
-          const correctColor = 'rgba(94,168,134,0.16)';
-          const wrongColor = 'rgba(193,78,58,0.12)';
+          const revealCorrect = checked === 'correct' && choices[i]?.correct;
+
+          let border = '1.5px solid var(--diary-line)';
+          let bg = 'var(--diary-paper-deep)';
+          let transform = '';
+          if (revealCorrect) {
+            border = '2px solid var(--color-mint-strong)';
+            bg = 'rgba(94,168,134,.14)';
+          } else if (showResult && !choices[i]?.correct) {
+            border = '2px solid var(--diary-stamp-red)';
+            bg = 'rgba(193,78,58,.1)';
+          }
+
           return (
-            <button key={i} onClick={() => handlePick(i)}
+            <button
+              key={i}
+              onClick={() => handlePick(i)}
               disabled={checked === 'correct'}
               style={{
-                padding: '12px 16px', textAlign: 'left', borderRadius: 12,
-                border: checked === 'correct' && choices[i]?.correct ? '1.5px solid #5ea886' : showResult && !choices[i]?.correct ? '1.5px solid var(--diary-stamp-red)' : '1.5px solid var(--diary-line)',
-                background: checked === 'correct' && choices[i]?.correct ? correctColor : showResult && !choices[i]?.correct ? wrongColor : 'var(--diary-paper-deep)',
+                padding: '14px 18px', textAlign: 'left', borderRadius: 14,
+                border, background: bg,
                 cursor: checked === 'correct' ? 'default' : 'pointer',
-                fontSize: isListen ? 14 : 15, fontWeight: 600, color: 'var(--diary-ink)',
-                transition: 'all 0.15s',
+                fontSize: isListen ? 14 : 16, fontWeight: 600, color: 'var(--diary-ink)',
+                display: 'flex', alignItems: 'center', gap: 12,
+                transition: 'all .2s cubic-bezier(.34,1.56,.64,1)',
+                transform,
+                animationDelay: `${i * 50}ms`,
+                position: 'relative',
+              }}
+              className="diary-chip-entrance"
+              onMouseEnter={(e) => {
+                if (checked !== 'correct' && checked !== 'wrong') {
+                  e.currentTarget.style.transform = 'translateX(4px)';
+                  e.currentTarget.style.borderColor = 'var(--color-pink-base)';
+                  e.currentTarget.style.background = 'rgba(255,127,168,.06)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = '';
+                e.currentTarget.style.borderColor = '';
+                e.currentTarget.style.background = '';
+              }}
+            >
+              <span style={{
+                width: 28, height: 28, borderRadius: '50%',
+                background: revealCorrect ? 'var(--color-mint-strong)' : isPicked && checked === 'wrong' ? 'var(--diary-stamp-red)' : 'var(--diary-line)',
+                color: revealCorrect || (isPicked && checked === 'wrong') ? '#fff' : 'var(--diary-ink-soft)',
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 12, fontWeight: 700, flexShrink: 0,
+                transition: 'background .2s, color .2s',
               }}>
-              {c.zh ?? c.ko}
+                {revealCorrect ? <Check size={14} color="#fff" /> : isPicked && checked === 'wrong' ? <X size={14} color="#fff" /> : String.fromCharCode(65 + i)}
+              </span>
+              <span style={{ flex: 1, minWidth: 0, overflowWrap: 'break-word' }}>{c.zh ?? c.ko}</span>
+              {revealCorrect && <Check size={20} color="var(--color-mint-strong)" style={{ flexShrink: 0 }} />}
+              {showResult && !choices[i]?.correct && <X size={20} color="var(--diary-stamp-red)" style={{ flexShrink: 0 }} />}
             </button>
           );
         })}
       </div>
 
+      {/* 答错反馈 */}
       {checked === 'wrong' && (
-        <div style={{ marginTop: 14, padding: '10px 14px', background: 'rgba(193,78,58,0.1)', borderRadius: 6, borderLeft: '3px solid var(--diary-stamp-red)', display: 'flex', gap: 8, alignItems: 'center' }}>
-          <X size={16} color="var(--diary-stamp-red)" />
-          <span style={{ fontSize: 13 }}>再想想？</span>
-          <button onClick={() => { setPickedIdx(null); setChecked('idle'); }} className="diary-btn diary-btn-ghost" style={{ padding: '4px 10px', fontSize: 11, marginLeft: 'auto' }}>
-            <RotateCcw size={12} /> 重选
+        <div style={{
+          marginTop: 16, padding: '12px 14px',
+          background: 'rgba(193,78,58,.08)', borderRadius: 10,
+          borderLeft: '3px solid var(--diary-stamp-red)',
+          display: 'flex', alignItems: 'center', gap: 10,
+        }}>
+          <X size={18} color="var(--diary-stamp-red)" style={{ flexShrink: 0 }} />
+          <span style={{ fontSize: 13, flex: 1 }}>{t('diary.out.wrongTryAgain', lang)}</span>
+          <button onClick={() => { setPickedIdx(null); setChecked('idle'); }}
+            className="diary-btn diary-btn-ghost"
+            style={{ padding: '5px 12px', fontSize: 12 }}
+          >
+            <RotateCcw size={12} /> {t('diary.out.reselect', lang)}
           </button>
         </div>
       )}
@@ -384,6 +655,7 @@ function MatchBlock({
   onCorrect: () => void; onWrong: () => void;
   onUserAnswer: (s: string) => void;
 }) {
+  const { lang } = useLang();
   const pairs = task.pairs ?? [];
   const [selKo, setSelKo] = useState<string | null>(null);
   const [shake, setShake] = useState(false);
@@ -394,8 +666,8 @@ function MatchBlock({
 
   useEffect(() => {
     if (!shake) return;
-    const t = setTimeout(() => { setShake(false); setWrongZh(null); }, 480);
-    return () => clearTimeout(t);
+    const timer = setTimeout(() => { setShake(false); setWrongZh(null); }, 480);
+    return () => clearTimeout(timer);
   }, [shake, setWrongZh]);
 
   const handleKo = (ko: string) => {
@@ -428,46 +700,85 @@ function MatchBlock({
     }
   };
 
+  const allMatched = matched.size === pairs.length;
+
   return (
-    <div className="diary-card-paper" style={{ padding: '20px 22px', background: 'var(--diary-paper)' }}>
-      <p style={{ fontSize: 15, color: 'var(--diary-ink-soft)', marginBottom: 18, textAlign: 'center' }}>
-        🔗 点击韩文词卡，再点对应的中文
-      </p>
-      <div className={shake ? 'diary-anim-shake' : ''} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+    <div
+      className={`diary-card-paper${shake ? ' diary-card-shake' : ''}`}
+      style={{ padding: '24px 22px', background: 'var(--diary-paper)', position: 'relative', overflow: 'hidden' }}
+    >
+      {allMatched && checked === 'correct' && (
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'radial-gradient(circle at 50% 40%, rgba(94,168,134,.12) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }} />
+      )}
+
+      <div style={{ textAlign: 'center', marginBottom: 20 }}>
+        <span style={{
+          display: 'inline-block', padding: '3px 10px', borderRadius: 6,
+          background: 'var(--diary-gold-soft)', color: 'var(--diary-gold-deep)',
+          fontSize: 11, fontWeight: 700, letterSpacing: '.06em', marginBottom: 10,
+        }}>
+          {t('diary.out.matchBadge', lang)}
+        </span>
+        <p style={{ fontSize: 16, fontWeight: 700, color: 'var(--diary-ink)', margin: 0 }}>
+          {selKo ? t('diary.out.matchMeaningOf', lang, { ko: selKo }) : t('diary.out.matchPickHint', lang)}
+        </p>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {shuffledKo.map((ko) => {
-            const isMatched = matched.has(pairs.find((p) => p.ko === ko)?.zh ?? '');
+            const pairZh = pairs.find((p) => p.ko === ko)?.zh ?? '';
+            const isMatched = matched.has(pairZh);
+            const isSelected = selKo === ko;
             return (
-              <button key={ko} onClick={() => handleKo(ko)}
+              <button
+                key={ko}
+                onClick={() => handleKo(ko)}
                 disabled={isMatched}
+                className={!isMatched ? 'diary-chip-entrance' : ''}
                 style={{
-                  padding: '10px 12px', borderRadius: 10,
-                  border: selKo === ko ? '2px solid var(--color-pink-base)' : '1.5px solid var(--diary-line)',
-                  background: isMatched ? 'rgba(94,168,134,0.12)' : 'var(--diary-paper-deep)',
-                  cursor: isMatched ? 'default' : 'pointer', fontSize: 14, fontWeight: 600, color: 'var(--diary-ink)',
-                  opacity: isMatched ? 0.6 : 1,
-                }}>
+                  padding: '12px 14px', borderRadius: 12,
+                  border: isSelected ? '2px solid var(--color-pink-base)' : isMatched ? '1.5px solid var(--color-mint-strong)' : '1.5px solid var(--diary-line)',
+                  background: isMatched ? 'rgba(94,168,134,.12)' : isSelected ? 'rgba(255,127,168,.08)' : 'var(--diary-paper-deep)',
+                  cursor: isMatched ? 'default' : 'pointer',
+                  fontSize: 15, fontWeight: 700, color: 'var(--diary-ink)',
+                  fontFamily: 'var(--diary-font-ko)',
+                  opacity: isMatched ? 0.5 : 1,
+                  transition: 'all .15s',
+                  transform: isSelected ? 'scale(1.03)' : '',
+                }}
+              >
                 {ko}
+                {isMatched && <Check size={15} color="var(--color-mint-strong)" style={{ marginLeft: 6, verticalAlign: 'middle' }} />}
               </button>
             );
           })}
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {shuffledZh.map((zh) => {
             const isMatched = matched.has(zh);
             const isWrong = wrongZh === zh;
             return (
-              <button key={zh} onClick={() => handleZh(zh)}
+              <button
+                key={zh}
+                onClick={() => handleZh(zh)}
                 disabled={isMatched}
+                className={!isMatched ? 'diary-chip-entrance' : ''}
                 style={{
-                  padding: '10px 12px', borderRadius: 10,
-                  border: isWrong ? '2px solid var(--diary-stamp-red)' : '1.5px solid var(--diary-line)',
-                  background: isMatched ? 'rgba(94,168,134,0.12)' : isWrong ? 'rgba(193,78,58,0.14)' : 'var(--diary-paper-deep)',
-                  cursor: isMatched ? 'default' : 'pointer', fontSize: 13, color: 'var(--diary-ink)',
-                  transition: 'all 0.15s',
-                }}>
+                  padding: '12px 14px', borderRadius: 12,
+                  border: isWrong ? '2px solid var(--diary-stamp-red)' : isMatched ? '1.5px solid var(--color-mint-strong)' : '1.5px solid var(--diary-line)',
+                  background: isMatched ? 'rgba(94,168,134,.12)' : isWrong ? 'rgba(193,78,58,.14)' : 'var(--diary-paper-deep)',
+                  cursor: isMatched ? 'default' : 'pointer',
+                  fontSize: 14, fontWeight: 600, color: 'var(--diary-ink)',
+                  transition: 'all .15s',
+                }}
+              >
                 {zh}
-                {isMatched && <Check size={14} color="#5ea886" style={{ marginLeft: 6, verticalAlign: 'middle', display: 'inline' }} />}
+                {isMatched && <Check size={15} color="var(--color-mint-strong)" style={{ marginLeft: 6, verticalAlign: 'middle' }} />}
               </button>
             );
           })}
@@ -490,9 +801,13 @@ function MatchBlock({
 function CarrotExplain({
   task, isCorrect, userAnswer,
 }: { task: ToriOutputTask; isCorrect: boolean; userAnswer: string }) {
-  const [text, setText] = useState<string>(isCorrect ? (task.successMsg ?? '答对了。') : '');
+  const { lang } = useLang();
+  const [text, setText] = useState<string>(isCorrect ? (task.successMsg ?? t('diary.out.correctDefault', lang)) : '');
   const [loading, setLoading] = useState(false);
   const [requested, setRequested] = useState(false);
+  const [error, setError] = useState(false);
+  const abortRef = useRef<AbortController | null>(null);
+  useEffect(() => () => abortRef.current?.abort(), []);
 
   const correctAnswer = useMemo(() => {
     if (task.composeAnswer) return task.composeAnswer.join(' ');
@@ -508,10 +823,15 @@ function CarrotExplain({
     if (loading || requested) return;
     setLoading(true);
     setRequested(true);
+    setError(false);
+    abortRef.current?.abort();
+    const ctrl = new AbortController();
+    abortRef.current = ctrl;
     try {
       const res = await fetch('/api/ai/carrot', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        signal: ctrl.signal,
         body: JSON.stringify({
           explain: {
             kind: task.kind,
@@ -523,20 +843,27 @@ function CarrotExplain({
         }),
       });
       const data = await res.json();
-      if (res.ok && data.reply) setText(data.reply);
-      else setText('胡萝卜走神了，等一下再问。');
-    } catch {
-      setText('网络问题，胡萝卜没听清。');
+      if (res.ok && data.reply) {
+        setText(data.reply);
+      } else {
+        // AI 失败：标记 error 状态，UI 显示"再试一次"按钮而不是塞假台词
+        setError(true);
+        setRequested(false);
+      }
+    } catch (err) {
+      if ((err as Error)?.name === 'AbortError') return;
+      setError(true);
+      setRequested(false);
     } finally {
+      if (abortRef.current === ctrl) abortRef.current = null;
       setLoading(false);
     }
   };
 
-  // 答对：自动调一次（successMsg 之外补一句胡萝卜解释为什么对）
   useEffect(() => {
     if (isCorrect && !requested) {
-      const t = setTimeout(fetchExplain, 250);
-      return () => clearTimeout(t);
+      const timer = setTimeout(fetchExplain, 250);
+      return () => clearTimeout(timer);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -544,20 +871,29 @@ function CarrotExplain({
   return (
     <div className="diary-anim-fade-up" style={{
       marginTop: 14, padding: '12px 14px',
-      background: isCorrect ? 'rgba(94,168,134,0.10)' : 'rgba(255,184,77,0.10)',
-      borderRadius: 10,
-      borderLeft: `3px solid ${isCorrect ? '#5ea886' : 'var(--color-gold-base, #e0a500)'}`,
+      background: isCorrect ? 'rgba(94,168,134,.08)' : 'rgba(255,184,77,.08)',
+      borderRadius: 12,
+      borderLeft: `3px solid ${isCorrect ? 'var(--color-mint-strong)' : 'var(--color-gold-base)'}`,
     }}>
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
         <span style={{ fontSize: 22, flexShrink: 0, lineHeight: 1.1 }}>🥕</span>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--diary-ink-soft)', letterSpacing: '0.06em', marginBottom: 4 }}>
-            勇气胡萝卜
+          <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--diary-ink-soft)', letterSpacing: '.06em', marginBottom: 4 }}>
+            {t('diary.out.carrotTitle', lang)}
           </div>
           {text ? (
             <p style={{ fontSize: 13.5, lineHeight: 1.65, color: 'var(--diary-ink)', margin: 0, whiteSpace: 'pre-wrap' }}>
               {text}
             </p>
+          ) : error ? (
+            <button
+              onClick={fetchExplain}
+              disabled={loading}
+              className="diary-btn diary-btn-ghost"
+              style={{ padding: '6px 12px', fontSize: 12, gap: 6 }}
+            >
+              <Sparkles size={13} /> {loading ? t('diary.out.thinking', lang) : t('diary.out.carrotRetry', lang)}
+            </button>
           ) : (
             <button
               onClick={fetchExplain}
@@ -565,7 +901,7 @@ function CarrotExplain({
               className="diary-btn diary-btn-ghost"
               style={{ padding: '6px 12px', fontSize: 12, gap: 6 }}
             >
-              <Sparkles size={13} /> {loading ? '想一下…' : '让胡萝卜解释'}
+              <Sparkles size={13} /> {loading ? t('diary.out.thinking', lang) : t('diary.out.carrotExplain', lang)}
             </button>
           )}
         </div>
@@ -585,8 +921,8 @@ function synthesizeCompose(task: ToriOutputTask): ComposeData | null {
   if (!task.prompt || !answer) return null;
   const filled = task.prompt.replace(/_+/g, answer);
   const rawTokens = filled.trim().split(/\s+/).filter(Boolean);
-  const composeAnswer = rawTokens.map((t, i) =>
-    i === rawTokens.length - 1 ? t.replace(/[.!?。！？]+$/g, '') : t
+  const composeAnswer = rawTokens.map((tok, i) =>
+    i === rawTokens.length - 1 ? tok.replace(/[.!?。！？]+$/g, '') : tok
   ).filter(Boolean);
   if (composeAnswer.length === 0) return null;
   const distractors = [

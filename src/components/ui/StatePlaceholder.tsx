@@ -3,6 +3,8 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { Button } from './Button';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 
 export type StateKind = 'empty' | 'loading' | 'error';
 
@@ -28,16 +30,16 @@ const DEFAULT_TORI_POSE: Record<StateKind, string> = {
   error: '06',
 };
 
-const DEFAULT_TITLE: Record<StateKind, string> = {
-  empty: '还没有内容哦',
-  loading: 'Tori 正在整理你的韩语笔记…',
-  error: '哎呀，掉线了',
+const DEFAULT_TITLE_KEY: Record<StateKind, string> = {
+  empty: 'ui.sp_empty_title',
+  loading: 'ui.sp_loading_title',
+  error: 'ui.sp_error_title',
 };
 
-const DEFAULT_DESC: Record<StateKind, string> = {
-  empty: '和 Tori 一起开始吧～',
-  loading: '稍等一下，胡萝卜也在帮忙。',
-  error: 'Tori 的小胡萝卜掉线了，稍后再试试吧。',
+const DEFAULT_DESC_KEY: Record<StateKind, string> = {
+  empty: 'ui.sp_empty_desc',
+  loading: 'ui.sp_loading_desc',
+  error: 'ui.sp_error_desc',
 };
 
 /**
@@ -55,9 +57,10 @@ export function StatePlaceholder({
   className = '',
   children,
 }: StatePlaceholderProps) {
+  const { lang } = useLang();
   const pose = toriPose ?? DEFAULT_TORI_POSE[kind];
-  const _title = title ?? DEFAULT_TITLE[kind];
-  const _desc = description ?? DEFAULT_DESC[kind];
+  const _title = title ?? t(DEFAULT_TITLE_KEY[kind], lang);
+  const _desc = description ?? t(DEFAULT_DESC_KEY[kind], lang);
 
   const ariaProps =
     kind === 'loading'

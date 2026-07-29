@@ -370,8 +370,8 @@ export const grammarParts: GrammarPart[] = [
       { lessonNumber: 6, title: '-는 관계로', cardId: 'card-p24-l06' },
       { lessonNumber: 7, title: '-는 김에', cardId: 'card-p24-l07' },
       { lessonNumber: 8, title: '原因连接词总辨析', cardId: 'card-p24-l08' },
-      { lessonNumber: 9, title: '-길래（因看到而做）', cardId: 'card-p24-l10' },
-      { lessonNumber: 10, title: 'P24 综合练习', cardId: 'card-p24-l09' },
+      { lessonNumber: 9, title: '-길래（因看到而做）', cardId: 'card-p24-l09' },
+      { lessonNumber: 10, title: 'P24 综合练习', cardId: 'card-p24-l10' },
     ],
   },
   {

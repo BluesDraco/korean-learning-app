@@ -1,0 +1,210 @@
+/* ==========================================================================
+   /explore 探索页 · 动物城广场 (Animal Town Plaza)
+   --------------------------------------------------------------------------
+   头部径向光晕 + 饱和有质感的卡片(实边框+分层阴影+不褪色渐变)。
+   只有电台是深色发光卡,其余为亮色。作用域 .plaza-root,类 .pz- 前缀。
+   ========================================================================== */
+
+.plaza-root {
+  --pz-ink: #241917;
+  --pz-ink-2: #4f3f38;
+  --pz-ink-soft: #8a7268;
+  --pz-line: #efe1da;
+  --pz-accent: #e8567f;
+  --pz-pink: #ff7fa8;
+  --pz-gold: #f5b94a;
+  --pz-gold-ink: #b8801a;
+  --pz-mint: #14b8a6;
+  --pz-purple: #8b5cf6;
+  --pz-purple-ink: #6d4bc0;
+  --pz-peach: #ffcdb8;
+  --pz-rose: #f43f5e;
+  --pz-dark: #1c1512;
+  --pz-fs: 'Fraunces', serif;
+  --pz-fz: 'Noto Sans SC', system-ui, sans-serif;
+  --pz-fk: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+  --pz-fm: 'JetBrains Mono', ui-monospace, monospace;
+  --pz-ease: cubic-bezier(.16, 1, .3, 1);
+  --pz-elev: 0 10px 30px -14px rgba(74, 42, 33, .22), 0 2px 6px -3px rgba(74, 42, 33, .1);
+  --pz-elev-hi: 0 22px 46px -18px rgba(74, 42, 33, .3), 0 3px 8px -3px rgba(74, 42, 33, .14);
+  --pz-glass: inset 0 1px 0 rgba(255, 255, 255, .6);
+  color: var(--pz-ink);
+  position: relative;
+}
+/* 头部氛围光晕(制造"光彩",内容浮其上) */
+.plaza-root::before { content: ''; position: absolute; top: -50px; right: -50px; width: 360px; height: 360px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 127, 168, .18), transparent 62%); pointer-events: none; z-index: 0; }
+.plaza-root::after { content: ''; position: absolute; top: 40px; left: -70px; width: 280px; height: 280px; border-radius: 50%; background: radial-gradient(circle, rgba(245, 185, 74, .13), transparent 62%); pointer-events: none; z-index: 0; }
+.plaza-root > * { position: relative; z-index: 1; }
+
+/* 入场 */
+@keyframes pzFadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+.pz-enter { animation: pzFadeUp .62s var(--pz-ease) backwards; }
+.pz-d1 { animation-delay: .04s; } .pz-d2 { animation-delay: .1s; } .pz-d3 { animation-delay: .16s; }
+.pz-d4 { animation-delay: .22s; } .pz-d5 { animation-delay: .28s; } .pz-d6 { animation-delay: .34s; } .pz-d7 { animation-delay: .4s; }
+
+@keyframes pzPulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .3; transform: scale(.6); } }
+@keyframes pzWave { 0%, 100% { transform: scaleY(.35); } 50% { transform: scaleY(1); } }
+
+/* ── 头部 ── */
+.pz-masthead { position: relative; padding-bottom: 20px; margin-bottom: 8px; }
+.pz-eyebrow { display: flex; align-items: center; gap: 8px; font-family: var(--pz-fm); font-size: 11px; font-weight: 600; color: var(--pz-ink-soft); letter-spacing: .12em; margin-bottom: 12px; }
+.pz-eyebrow .pz-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--pz-rose); animation: pzPulse 1.6s ease-in-out infinite; }
+.pz-streak { position: absolute; top: 0; right: 0; display: inline-flex; align-items: center; gap: 5px; font-family: var(--pz-fm); font-size: 11px; font-weight: 600; color: var(--pz-gold-ink); background: #fff7e6; padding: 6px 12px; border-radius: 20px; border: 1px solid rgba(245, 185, 74, .3); white-space: nowrap; }
+.pz-title { font-family: 'Noto Serif SC', serif; font-weight: 700; font-size: clamp(40px, 8vw, 60px); line-height: 1.1; letter-spacing: .01em; }
+.pz-title em { font-family: 'Noto Serif SC', serif; font-weight: 700; font-style: normal; color: var(--pz-accent); position: relative; padding: 0 .04em; }
+.pz-title em::after { content: ''; position: absolute; left: 0; right: 0; bottom: .12em; height: .2em; background: rgba(232, 86, 127, .2); border-radius: 3px; z-index: -1; }
+.pz-dek { font-family: var(--pz-fz); font-weight: 400; font-size: 15px; color: var(--pz-ink-2); margin-top: 14px; max-width: 30em; line-height: 1.55; }
+.pz-dek .en { font-family: var(--pz-fs); font-style: italic; font-weight: 500; color: var(--pz-accent); margin-right: .3em; }
+
+/* 通用卡片 */
+.pz-card { position: relative; border-radius: 22px; overflow: hidden; cursor: pointer; display: block; width: 100%; text-align: left; border: none; font: inherit; color: inherit; background: none; padding: 0; transition: transform .45s var(--pz-ease), box-shadow .45s var(--pz-ease); }
+@media (hover: hover) { .pz-card:hover { transform: translateY(-5px); box-shadow: var(--pz-elev-hi); } }
+.pz-bgtext { position: absolute; font-family: var(--pz-fs); font-weight: 600; line-height: 1; pointer-events: none; user-select: none; z-index: 0; }
+.pz-arrow { position: absolute; bottom: 18px; right: 18px; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; z-index: 3; transition: transform .4s var(--pz-ease); }
+@media (hover: hover) { .pz-card:hover .pz-arrow { transform: translateX(4px); } }
+.pz-kicker { display: flex; align-items: center; gap: 9px; font-family: var(--pz-fk); font-weight: 700; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; margin-bottom: 14px; }
+.pz-kicker::before { content: ''; width: 20px; height: 1.5px; background: currentColor; opacity: .6; }
+
+/* ── 封面故事:博客(亮色·饱和粉) ── */
+.pz-cover { display: grid; grid-template-columns: 1.1fr .9fr; gap: 0; margin: 26px 0 16px; background: linear-gradient(150deg, #ffe6ee 0%, #fff0f4 52%, #ffe8dd 100%); border: 1.5px solid rgba(255, 127, 168, .3); box-shadow: var(--pz-elev), var(--pz-glass); border-radius: 24px; }
+.pz-cover::before { content: ''; position: absolute; top: -70px; right: -40px; width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 127, 168, .3), transparent 64%); pointer-events: none; }
+.pz-cover .pz-bgtext { top: -16px; right: 6px; font-size: 120px; font-style: italic; color: rgba(255, 127, 168, .14); }
+.pz-cover-body { padding: 26px 28px 30px 30px; position: relative; z-index: 1; display: flex; flex-direction: column; }
+.pz-cover .pz-kicker { color: var(--pz-accent); }
+.pz-cover-h { font-family: 'Noto Serif SC', serif; font-weight: 700; font-size: 30px; line-height: 1.15; letter-spacing: 0; margin-bottom: 10px; }
+.pz-cover-p { font-size: 14px; color: var(--pz-ink-2); line-height: 1.65; max-width: 22em; }
+.pz-cover-cta { display: inline-flex; align-items: center; gap: 8px; margin-top: auto; padding-top: 20px; font-family: var(--pz-fz); font-size: 15px; color: var(--pz-accent); font-weight: 600; }
+.pz-cover-cta .u { border-bottom: 1.5px solid var(--pz-accent); padding-bottom: 2px; transition: gap .35s var(--pz-ease); }
+@media (hover: hover) { .pz-cover:hover .pz-cover-cta { gap: 12px; } }
+.pz-cover-fig { position: relative; z-index: 1; display: flex; align-items: center; padding: 26px 30px 26px 8px; }
+/* 单个帖子(SNS 风) */
+.pz-post { width: 100%; background: rgba(255, 255, 255, .82); backdrop-filter: blur(8px); border: 1px solid rgba(255, 127, 168, .22); border-radius: 16px; padding: 16px; box-shadow: 0 6px 18px -10px rgba(217, 85, 110, .35); }
+.pz-post-head { display: flex; align-items: center; gap: 11px; margin-bottom: 12px; }
+.pz-av-ring { width: 44px; height: 44px; border-radius: 50%; background: conic-gradient(from 30deg, var(--pz-pink), var(--pz-gold), var(--pz-mint), var(--pz-purple), var(--pz-pink)); padding: 2.5px; flex-shrink: 0; }
+.pz-av-ring .in { width: 100%; height: 100%; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 21px; }
+.pz-post-meta .n { font-family: var(--pz-fk); font-weight: 700; font-size: 14px; color: var(--pz-ink); }
+.pz-post-meta .h { font-family: var(--pz-fm); font-size: 10px; color: var(--pz-ink-soft); margin-top: 2px; }
+.pz-post-kr { font-family: var(--pz-fk); font-weight: 500; font-size: 14px; color: var(--pz-ink); line-height: 1.5; }
+.pz-post-zh { font-size: 12px; color: var(--pz-ink-soft); margin-top: 6px; line-height: 1.5; }
+.pz-post-foot { display: flex; align-items: center; gap: 6px; font-family: var(--pz-fm); font-size: 10.5px; color: var(--pz-ink-soft); margin-top: 12px; padding-top: 11px; border-top: 1px solid rgba(255, 127, 168, .16); }
+.pz-post-foot .heart { color: var(--pz-pink); margin-left: auto; }
+
+/* ── 电台:唯一的深色发光大卡(两栏,右侧字幕预览) ── */
+.pz-radio { background: var(--pz-dark); color: #fff; display: grid; grid-template-columns: 1.05fr .95fr; gap: 0; min-height: 210px; box-shadow: 0 24px 54px -24px rgba(28, 21, 18, .85); margin-bottom: 16px; }
+.pz-radio-main { padding: 26px 24px 26px 28px; display: flex; flex-direction: column; justify-content: space-between; position: relative; z-index: 1; }
+.pz-radio::before { content: ''; position: absolute; top: -70px; right: -40px; width: 320px; height: 320px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 127, 168, .3), transparent 64%); }
+.pz-radio::after { content: ''; position: absolute; bottom: -50px; left: -30px; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(20, 184, 166, .14), transparent 64%); }
+.pz-radio .pz-bgtext { bottom: -46px; right: 18px; font-size: 150px; font-weight: 700; color: rgba(255, 255, 255, .04); }
+.pz-radio-top { display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 1; }
+.pz-radio-icon { font-size: 34px; }
+.pz-badge { display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px; border-radius: 20px; font-family: var(--pz-fm); font-size: 10px; font-weight: 700; letter-spacing: .06em; }
+.pz-badge-live { background: rgba(244, 63, 94, .2); color: #ff8095; }
+.pz-badge-live .pz-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--pz-rose); animation: pzPulse 1.6s ease-in-out infinite; }
+.pz-radio-info { position: relative; z-index: 1; }
+.pz-radio-title { font-family: var(--pz-fk); font-weight: 800; font-size: 24px; letter-spacing: -.01em; }
+.pz-radio-zh { color: rgba(255, 255, 255, .58); font-size: 13px; margin-top: 3px; }
+.pz-radio-now { font-size: 12px; color: rgba(255, 255, 255, .5); margin-top: 10px; }
+.pz-wave-row { display: flex; align-items: center; justify-content: flex-start; gap: 12px; margin-top: 14px; }
+.pz-waves { display: flex; align-items: flex-end; gap: 3px; height: 26px; }
+.pz-waves span { width: 3.5px; background: var(--pz-pink); border-radius: 2px; animation: pzWave .9s ease-in-out infinite; transform-origin: bottom; }
+.pz-waves span:nth-child(1) { height: 40%; animation-delay: 0s; }
+.pz-waves span:nth-child(2) { height: 75%; animation-delay: .12s; }
+.pz-waves span:nth-child(3) { height: 100%; animation-delay: .24s; }
+.pz-waves span:nth-child(4) { height: 60%; animation-delay: .18s; }
+.pz-waves span:nth-child(5) { height: 45%; animation-delay: .06s; }
+.pz-waves span:nth-child(6) { height: 80%; animation-delay: .3s; }
+.pz-waves span:nth-child(7) { height: 55%; animation-delay: .15s; }
+.pz-waves span:nth-child(8) { height: 90%; animation-delay: .22s; }
+/* 右侧:节目预览(长博客/对谈) */
+.pz-radio-fig { position: relative; z-index: 1; display: flex; align-items: center; padding: 22px 26px 22px 6px; }
+.pz-show { width: 100%; background: rgba(255, 255, 255, .06); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, .12); border-radius: 16px; padding: 15px 16px; }
+.pz-show-top { display: flex; align-items: center; gap: 8px; font-family: var(--pz-fm); font-size: 9.5px; letter-spacing: .1em; color: rgba(255, 255, 255, .5); text-transform: uppercase; margin-bottom: 12px; }
+.pz-show-top .eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 10px; }
+.pz-show-top .eq i { width: 2.5px; background: var(--pz-pink); border-radius: 1px; animation: pzWave .9s ease-in-out infinite; transform-origin: bottom; }
+.pz-show-top .eq i:nth-child(1) { height: 60%; } .pz-show-top .eq i:nth-child(2) { height: 100%; animation-delay: .15s; } .pz-show-top .eq i:nth-child(3) { height: 45%; animation-delay: .3s; }
+.pz-show-hosts { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.pz-show-hosts .avs { display: flex; }
+.pz-show-hosts .avs span { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 15px; background: rgba(255, 255, 255, .1); border: 1.5px solid var(--pz-dark); }
+.pz-show-hosts .avs span:nth-child(2) { margin-left: -9px; }
+.pz-show-hosts .duo { font-family: var(--pz-fm); font-size: 9.5px; color: rgba(255, 255, 255, .5); }
+.pz-show-h { font-family: var(--pz-fk); font-weight: 700; font-size: 15px; color: #fff; line-height: 1.35; }
+.pz-show-p { font-size: 11.5px; color: rgba(255, 255, 255, .55); margin-top: 6px; line-height: 1.55; }
+.pz-show-tag { display: inline-block; font-family: var(--pz-fm); font-size: 9.5px; color: rgba(255, 127, 168, .85); margin-top: 10px; padding: 3px 9px; border-radius: 20px; background: rgba(255, 127, 168, .12); }
+
+/* ── 目录索引 ── */
+.pz-index-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 36px 0 4px; }
+.pz-index-title { font-family: var(--pz-fs); font-style: italic; font-size: 20px; font-weight: 500; }
+.pz-index-sub { font-family: var(--pz-fk); font-size: 10px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--pz-ink-soft); white-space: nowrap; }
+
+.pz-rows { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
+.pz-tile { position: relative; border-radius: 20px; overflow: hidden; cursor: pointer; padding: 20px; min-height: 152px; display: flex; flex-direction: column; justify-content: space-between; width: 100%; text-align: left; border: 1.5px solid; font: inherit; color: var(--pz-ink); background: none; box-shadow: var(--pz-elev), var(--pz-glass); transition: transform .45s var(--pz-ease), box-shadow .45s var(--pz-ease); }
+@media (hover: hover) { .pz-tile:hover { transform: translateY(-5px); box-shadow: var(--pz-elev-hi); } }
+.pz-tile-top { display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 1; }
+.pz-tile-emoji { font-size: 26px; }
+.pz-tile-body { position: relative; z-index: 1; }
+.pz-tile-h { font-family: var(--pz-fk); font-weight: 800; font-size: 16px; letter-spacing: -.01em; }
+.pz-tile-zh { font-size: 12px; color: var(--pz-ink-soft); margin-top: 2px; }
+
+/* 四个 tile 统一:同高、同结构,只区分色调。角标 badge 用于"制作中"等状态 */
+.pz-tile-badge { position: absolute; top: 16px; right: 16px; z-index: 2; display: inline-flex; align-items: center; gap: 4px; padding: 4px 9px; border-radius: 20px; font-family: var(--pz-fm); font-size: 9.5px; font-weight: 600; letter-spacing: .02em; }
+
+.pz-lumi { background: linear-gradient(150deg, #efe7ff 0%, #f7f2ff 100%); border-color: rgba(139, 92, 246, .28); }
+.pz-lumi .pz-tile-h { color: var(--pz-purple-ink); }
+.pz-lumi .pz-tile-badge { background: rgba(139, 92, 246, .16); color: var(--pz-purple-ink); }
+.pz-lumi .pz-arrow { background: rgba(139, 92, 246, .16); color: var(--pz-purple-ink); }
+
+.pz-sticker { background: linear-gradient(150deg, #fff2d6 0%, #ffe6ee 100%); border-color: rgba(245, 185, 74, .32); }
+.pz-sticker .pz-arrow { background: rgba(245, 185, 74, .2); color: var(--pz-gold-ink); }
+
+.pz-book { background: linear-gradient(150deg, #ffe0d0 0%, #fff0e6 100%); border-color: rgba(255, 160, 120, .38); }
+.pz-book .pz-arrow { background: rgba(255, 127, 168, .16); color: var(--pz-accent); }
+
+.pz-tips { background: linear-gradient(150deg, #fff2cf 0%, #fffaef 100%); border-color: rgba(245, 185, 74, .32); }
+.pz-tips .pz-arrow { background: rgba(245, 185, 74, .2); color: var(--pz-gold-ink); }
+
+.pz-colophon { text-align: center; font-family: var(--pz-fk); font-size: 13px; color: var(--pz-ink-soft); margin-top: 36px; letter-spacing: .02em; }
+
+/* ── 暗色:中性面切换,亮色卡给暗色变体,电台保持深色 ── */
+[data-theme="dark"] .plaza-root {
+  --pz-ink: #f3ebe5;
+  --pz-ink-2: #cbb9ae;
+  --pz-ink-soft: #a08d82;
+  --pz-line: rgba(255, 255, 255, .12);
+  --pz-accent: #ff8098;
+  --pz-glass: inset 0 1px 0 rgba(255, 255, 255, .06);
+}
+[data-theme="dark"] .plaza-root::before { background: radial-gradient(circle, rgba(255, 127, 168, .12), transparent 62%); }
+[data-theme="dark"] .plaza-root .pz-cover { background: linear-gradient(150deg, rgba(255, 127, 168, .14), rgba(255, 180, 120, .08)); border-color: rgba(255, 127, 168, .22); }
+[data-theme="dark"] .plaza-root .pz-post { background: rgba(255, 255, 255, .07); border-color: rgba(255, 127, 168, .2); }
+[data-theme="dark"] .plaza-root .pz-post-kr, [data-theme="dark"] .plaza-root .pz-post-meta .n { color: #f3ebe5; }
+[data-theme="dark"] .plaza-root .pz-lumi { background: linear-gradient(150deg, rgba(139, 92, 246, .2), rgba(139, 92, 246, .08)); border-color: rgba(139, 92, 246, .3); }
+[data-theme="dark"] .plaza-root .pz-lumi .pz-tile-h { color: #d8c7ff; }
+[data-theme="dark"] .plaza-root .pz-lumi .pz-badge { background: rgba(139, 92, 246, .28); color: #d8c7ff; }
+[data-theme="dark"] .plaza-root .pz-sticker { background: linear-gradient(125deg, rgba(245, 185, 74, .14), rgba(255, 127, 168, .1) 52%, rgba(20, 184, 166, .1)); border-color: rgba(245, 185, 74, .28); }
+[data-theme="dark"] .plaza-root .pz-book { background: linear-gradient(150deg, rgba(255, 160, 120, .16), rgba(255, 127, 168, .06)); border-color: rgba(255, 160, 120, .28); }
+[data-theme="dark"] .plaza-root .pz-tips { background: linear-gradient(150deg, rgba(245, 185, 74, .16), rgba(255, 255, 255, .03)); border-color: rgba(245, 185, 74, .28); }
+[data-theme="dark"] .plaza-root .pz-book-icon { background: rgba(255, 255, 255, .1); border-color: rgba(255, 255, 255, .12); }
+[data-theme="dark"] .plaza-root .pz-tips-prev { background: rgba(255, 255, 255, .07); }
+[data-theme="dark"] .plaza-root .pz-streak { background: rgba(245, 185, 74, .16); color: #f5cf80; border-color: rgba(245, 185, 74, .28); }
+
+/* ── 响应式 ── */
+@media (max-width: 760px) {
+  .pz-cover { grid-template-columns: 1fr; margin-top: 22px; }
+  .pz-cover-body { padding: 22px 22px 4px; }
+  .pz-cover-fig { padding: 6px 22px 22px; }
+  .pz-cover-h { font-size: 26px; }
+  .pz-cover-cta { margin-top: 16px; }
+  .pz-radio { grid-template-columns: 1fr; }
+  .pz-radio-main { padding: 24px 22px 20px; }
+  .pz-radio-fig { padding: 0 22px 22px; }
+}
+@media (max-width: 460px) {
+  .pz-rows { grid-template-columns: 1fr; }
+}
+
+/* ── reduced-motion 兜底 ── */
+@media (prefers-reduced-motion: reduce) {
+  .pz-enter, .pz-eyebrow .pz-dot, .pz-badge-live .pz-dot, .pz-waves span, .pz-show-top .eq i { animation: none !important; }
+  .pz-card, .pz-tile, .pz-arrow, .pz-cover-cta { transition: none !important; }
+  .pz-card:hover, .pz-tile:hover { transform: none; }
+}

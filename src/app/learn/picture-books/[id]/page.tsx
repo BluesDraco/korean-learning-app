@@ -3,71 +3,25 @@
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
-import { ArrowLeft, ChevronLeft, ChevronRight, Volume2 } from 'lucide-react';
+import { useParams, useRouter } from 'next/navigation';
+import { ArrowLeft, ChevronLeft, ChevronRight, Volume2, Play, Pause, Eye, EyeOff, Check, BookmarkPlus } from 'lucide-react';
 import { pictureBooks } from '@/data/pictureBooks';
 import type { PictureBookPage } from '@/data/pictureBooks';
-import { speak } from '@/lib/tts';
+import { speak, cancelSpeech, speakPreRecorded } from '@/lib/tts';
+import { useMembership } from '@/lib/useMembership';
+import { canAccessBookIndex, isPaidTier } from '@/lib/membership-benefits';
+
+// 绘本正文预录音源路径（狐狸女声）。行索引 = page.korean.split('\n') 的下标（未过滤，跳空行保索引），
+// 与生成脚本严格一致；缺文件时 speakPreRecorded 回落 edge-tts。
+const bookLineAudioUrl = (bookId: string, pageIdx: number, lineIdx: number) =>
+  `/audio/picture-books/${bookId}/p${pageIdx}-l${lineIdx}.mp3`;
+import { TappableText } from '@/components/TappableText';
+import { savePage, markComplete, getProgress, getChinesePref, setChinesePref, saveVocabWords } from '@/lib/pictureBookProgress';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
+import './picture-book.css';
 
 const FLIP_DURATION = 600;
-
-/* ═══════════════════════════════════════════════════════
-   Seeded random decorations
-   ═══════════════════════════════════════════════════════ */
-function mulberry32(a: number) {
-  return () => {
-    a |= 0; a = a + 0x6D2B79F5 | 0;
-    let t = Math.imul(a ^ a >>> 15, 1 | a);
-    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
-    return ((t ^ t >>> 14) >>> 0) / 4294967296;
-  };
-}
-
-const DECO_STICKERS = ['⭐', '🌸', '💜', '✨', '🍀', '💖', '🌷', '🩷'];
-const TAPE_COLORS = ['rgba(255,143,171,0.55)', 'rgba(255,228,160,0.55)', 'rgba(201,184,232,0.55)', 'rgba(168,216,208,0.55)'];
-
-function PageDecorations({ pageIdx, seed }: { pageIdx: number; seed: number }) {
-  const decos = useMemo(() => {
-    const rng = mulberry32(seed + pageIdx * 137);
-    const count = rng() > 0.5 ? 2 : 1;
-    const items: { type: 'tape' | 'sticker'; x: number; y: number; rotate: number; color?: string; emoji?: string }[] = [];
-    for (let i = 0; i < count; i++) {
-      if (rng() > 0.5) {
-        items.push({
-          type: 'tape', x: 5 + rng() * 80, y: 2 + rng() * 15,
-          rotate: (rng() - 0.5) * 20,
-          color: TAPE_COLORS[Math.floor(rng() * TAPE_COLORS.length)],
-        });
-      } else {
-        items.push({
-          type: 'sticker', x: 5 + rng() * 85, y: 5 + rng() * 85,
-          rotate: (rng() - 0.5) * 30,
-          emoji: DECO_STICKERS[Math.floor(rng() * DECO_STICKERS.length)],
-        });
-      }
-    }
-    return items;
-  }, [pageIdx, seed]);
-
-  return (
-    <>
-      {decos.map((d, i) =>
-        d.type === 'tape' ? (
-          <div key={i} className="absolute z-20 pointer-events-none" style={{
-            left: `${d.x}%`, top: `${d.y}%`, width: '50px', height: '14px',
-            borderRadius: '2px', background: d.color,
-            transform: `rotate(${d.rotate}deg)`, opacity: 0.6,
-          }} />
-        ) : (
-          <span key={i} className="absolute z-20 pointer-events-none select-none" style={{
-            left: `${d.x}%`, top: `${d.y}%`, fontSize: '14px',
-            transform: `rotate(${d.rotate}deg)`, opacity: 0.7,
-          }}>{d.emoji}</span>
-        )
-      )}
-    </>
-  );
-}
 
 /* ═══════════════════════════════════════════════════════
    Illustration
@@ -79,7 +33,14 @@ function IllustrationImage({ src, fallback, alt }: { src: string; fallback: stri
   }
   return (
     <div className="relative w-full h-full">
-      <Image src={src} alt={alt} fill className="object-contain" onError={() => setError(true)} />
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        sizes="(max-width: 1024px) 100vw, 440px"
+        className="object-cover"
+        onError={() => setError(true)}
+      />
     </div>
   );
 }
@@ -87,16 +48,9 @@ function IllustrationImage({ src, fallback, alt }: { src: string; fallback: stri
 /* ═══════════════════════════════════════════════════════
    Image card
    ═══════════════════════════════════════════════════════ */
-function ImageCard({ page, pageIdx, seed }: { page: PictureBookPage; pageIdx: number; seed: number }) {
+function ImageCard({ page }: { page: PictureBookPage }) {
   return (
-    <div className="w-full h-full rounded-2xl overflow-hidden shadow-lg relative" style={{ backgroundColor: 'var(--bg-soft)' }}>
-      <div className="absolute inset-0 pointer-events-none z-10" style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E")`,
-        backgroundRepeat: 'repeat',
-      }} />
-      <div className="absolute inset-0 pointer-events-none z-10 rounded-2xl" style={{
-        boxShadow: 'inset 0 0 30px rgba(0,0,0,0.04), inset 0 0 3px rgba(0,0,0,0.03)',
-      }} />
+    <div className="w-full h-full overflow-hidden relative" style={{ backgroundColor: page.bgColor || 'var(--honey-wash)' }}>
       <div className="absolute inset-0 flex items-center justify-center">
         {page.imageUrl ? (
           <IllustrationImage src={page.imageUrl} fallback={page.illustration} alt={page.chinese} />
@@ -104,7 +58,6 @@ function ImageCard({ page, pageIdx, seed }: { page: PictureBookPage; pageIdx: nu
           <span className="text-4xl whitespace-pre-line text-center p-4">{page.illustration}</span>
         )}
       </div>
-      <PageDecorations pageIdx={pageIdx} seed={seed} />
     </div>
   );
 }
@@ -112,62 +65,48 @@ function ImageCard({ page, pageIdx, seed }: { page: PictureBookPage; pageIdx: nu
 /* ═══════════════════════════════════════════════════════
    Vocab Summary Panel — last page
    ═══════════════════════════════════════════════════════ */
-function VocabSummaryPanel({ page }: { page: PictureBookPage }) {
+function VocabSummaryPanel({ page, bookTitle, nextBookId }: { page: PictureBookPage; bookTitle: string; nextBookId: string | null }) {
+  const { lang } = useLang();
+  const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  const saveAll = async () => {
+    if (saving || saved) return;
+    setSaving(true);
+    try {
+      await saveVocabWords(page.vocab, bookTitle);
+      setSaved(true);
+    } catch { /* ignore */ } finally { setSaving(false); }
+  };
+
   return (
-    <div className="flex flex-col justify-start md:justify-center h-full py-2 overflow-y-auto">
-      <div className="space-y-5 max-w-sm mx-auto w-full">
-        {/* Header */}
-        <div className="text-center space-y-1">
-          <h2 className="text-xl sm:text-2xl font-bold text-[var(--text-primary)] tracking-tight">
-            学到的词汇
-          </h2>
-          <p className="text-xs text-[var(--text-muted)]">共 {page.vocab.length} 个单词</p>
-        </div>
+    <div className="pbr-summary">
+      <h2 className="pbr-sum-title">{t('pb.vocab_learned', lang)}</h2>
+      <p className="pbr-sum-sub">{t('pb.vocab_count', lang, { n: page.vocab.length })}</p>
 
-        {/* Word list */}
-        <div className="space-y-0.5">
-          {page.vocab.map((v, i) => (
-            <div
-              key={v.word}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[var(--bg-card)]/40 transition-colors group"
-            >
-              {/* Number */}
-              <span
-                className="text-xs font-medium text-[var(--text-muted)]/40 tabular-nums w-5 shrink-0 text-right"
-                style={{ fontFamily: 'Georgia, serif' }}
-              >
-                {String(i + 1).padStart(2, '0')}
-              </span>
+      <div style={{ margin: '18px 0 20px' }}>
+        {page.vocab.map((v, i) => (
+          <div key={v.word} className="pbr-sum-row">
+            <span className="pbr-sum-idx">{String(i + 1).padStart(2, '0')}</span>
+            <button className="pbr-sum-ko" onClick={(e) => { e.stopPropagation(); speak(v.word); }}>{v.word}</button>
+            <span className="pbr-sum-dots" />
+            <span className="pbr-sum-zh">{v.meaning}</span>
+          </div>
+        ))}
+      </div>
 
-              {/* Korean */}
-              <span className="text-lg sm:text-xl font-bold text-[var(--text-primary)] shrink-0 group-hover:text-[var(--pink-primary)] transition-colors">
-                {v.word}
-              </span>
-
-              {/* Dotted connector */}
-              <span className="flex-1 border-b border-dotted border-[var(--text-muted)]/20 min-w-[20px]" />
-
-              {/* Chinese */}
-              <span className="text-sm sm:text-base text-[var(--text-secondary)] shrink-0">
-                {v.meaning}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        {/* Footer */}
-        <div className="text-center pt-2">
-          <button
-            onClick={() => {
-              const words = page.vocab.map((v) => v.word).join(', ');
-              speak(words, 0.7);
-            }}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[var(--bg-card)]/70 border border-[var(--border-color)] text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--pink-primary)] hover:border-[var(--pink-primary)]/30 transition-all"
-          >
-            <Volume2 size={14} />
-            朗读全部词汇
-          </button>
-        </div>
+      <div className="pbr-controls" style={{ paddingLeft: 0, justifyContent: 'center', margin: 0 }}>
+        <button className="pbr-play" onClick={saveAll} disabled={saving || saved}>
+          {saved ? <><Check size={15} /> {t('pb.saved_to_book', lang)}</> : <><BookmarkPlus size={15} /> {saving ? t('pb.saving', lang) : t('pb.save_all_to_book', lang)}</>}
+        </button>
+        <button className="pbr-toggle" onClick={() => speak(page.vocab.map((v) => v.word).join(', '), 0.7)}>
+          <Volume2 size={13} /> {t('pb.read_all', lang)}
+        </button>
+        {nextBookId && (
+          <Link href={`/learn/picture-books/${nextBookId}`} className="pbr-toggle" style={{ textDecoration: 'none' }}>
+            {t('pb.next_book', lang)} <ChevronRight size={14} />
+          </Link>
+        )}
       </div>
     </div>
   );
@@ -176,9 +115,15 @@ function VocabSummaryPanel({ page }: { page: PictureBookPage }) {
 /* ═══════════════════════════════════════════════════════
    Text Panel — learning-first journal design
    ═══════════════════════════════════════════════════════ */
-function TextPanel({ page, showChinese, onToggleChinese }: { page: PictureBookPage; showChinese: boolean; onToggleChinese: () => void }) {
+function TextPanel({ page, bookId, pageIdx, bookTitle, nextBookId, showChinese, onToggleChinese, showRoman, onToggleRoman, activeLine, isPlaying, onTogglePlay }: {
+  page: PictureBookPage; bookId: string; pageIdx: number; bookTitle: string; nextBookId: string | null;
+  showChinese: boolean; onToggleChinese: () => void;
+  showRoman: boolean; onToggleRoman: () => void;
+  activeLine: number; isPlaying: boolean; onTogglePlay: () => void;
+}) {
+  const { lang } = useLang();
   if (page.isSummary) {
-    return <VocabSummaryPanel page={page} />;
+    return <VocabSummaryPanel page={page} bookTitle={bookTitle} nextBookId={nextBookId} />;
   }
 
   const koLines = page.korean.split('\n');
@@ -186,80 +131,53 @@ function TextPanel({ page, showChinese, onToggleChinese }: { page: PictureBookPa
   const zhLines = page.chinese.split('\n');
 
   return (
-    <div className="flex flex-col justify-start md:justify-center h-full overflow-y-auto">
-      <div className="space-y-2 sm:space-y-3.5">
-
-        {/* ── Sentence groups ── */}
-        {koLines.map((ko, i) => (
-          <div key={i} className="flex gap-2 sm:gap-4">
-            {/* Line number */}
-            <span
-              className="text-xs sm:text-sm text-[var(--text-muted)]/30 font-medium tabular-nums shrink-0 w-5 text-right select-none pt-1"
-              style={{ fontFamily: 'Georgia, serif' }}
-            >
-              {String(i + 1).padStart(2, '0')}
-            </span>
-
-            <div className="flex-1 min-w-0 space-y-0.5">
-              {/* Pronunciation above */}
-              <p className="text-xs sm:text-sm text-[var(--text-muted)]/55 leading-relaxed">
-                {proLines[i] ?? '…'}
-              </p>
-
-              {/* Korean + per-sentence朗读 */}
-              <div className="flex items-center gap-1.5">
-                <p className="text-xl sm:text-2xl md:text-[26px] font-bold text-[var(--text-primary)] leading-snug tracking-tight">
-                  {ko}
-                </p>
+    <div className="pbr-read">
+      <div className="pbr-lines">
+        {koLines.map((ko, i) => {
+          const active = activeLine === i;
+          return (
+            <div key={i} className={`pbr-line${active ? ' active' : ''}`} style={{ '--i': i } as React.CSSProperties}>
+              <span className="pbr-num">{String(i + 1).padStart(2, '0')}</span>
+              {showRoman && <div className="pbr-roman">{proLines[i] ?? '…'}</div>}
+              <div className="pbr-ko-row">
+                <TappableText
+                  text={ko}
+                  source={`picture-book:${bookTitle}`}
+                  className="pbr-ko"
+                />
                 <button
-                  onClick={(e) => { e.stopPropagation(); speak(ko, 0.75); }}
-                  className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center hover:bg-[var(--pink-primary)]/10 text-[var(--text-muted)] hover:text-[var(--pink-primary)] active:scale-90 transition-all"
-                  title="朗读本句"
+                  className="pbr-speak"
+                  onClick={(e) => { e.stopPropagation(); speakPreRecorded(bookLineAudioUrl(bookId, pageIdx, i), ko, 0.85); }}
+                  title={t('pb.read_this_line', lang)}
                 >
                   <Volume2 size={15} />
                 </button>
               </div>
-
-              {/* Chinese below */}
-              {showChinese && (
-                <p className="text-sm sm:text-[15px] text-[var(--text-secondary)]/70 leading-relaxed animate-slide-up">
-                  {zhLines[i] ?? '…'}
-                </p>
-              )}
+              {showChinese && <div className="pbr-zh">{zhLines[i] ?? '…'}</div>}
             </div>
-          </div>
-        ))}
+          );
+        })}
+      </div>
 
-        {/* ── Action bar ── */}
-        <div className="flex items-center gap-2 sm:gap-3 flex-wrap pl-7 sm:pl-8 pt-1">
-          <button
-            onClick={onToggleChinese}
-            className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full border text-sm font-medium transition-all ${
-              showChinese
-                ? 'bg-[var(--pink-primary)]/10 border-[var(--pink-primary)]/30 text-[var(--pink-primary)]'
-                : 'bg-[var(--bg-card)]/60 border-[var(--border-color)] text-[var(--text-muted)] hover:border-[var(--pink-primary)]/30 hover:text-[var(--pink-primary)]'
-            }`}
-          >
-            {showChinese ? '隐藏译文' : '显示译文'}
+      <div className="pbr-controls">
+        <button className="pbr-play" onClick={onTogglePlay}>
+          {isPlaying ? <><Pause size={15} /> {t('pb.pause', lang)}</> : <><Play size={15} /> {t('pb.read_page', lang)}</>}
+        </button>
+        <button className={`pbr-toggle${showChinese ? ' on' : ''}`} onClick={onToggleChinese}>
+          {showChinese ? <EyeOff size={13} /> : <Eye size={13} />} {t('pb.translation', lang)}
+        </button>
+        <button className={`pbr-toggle${showRoman ? ' on' : ''}`} onClick={onToggleRoman}>
+          {showRoman ? t('pb.hide_roman', lang) : t('pb.roman', lang)}
+        </button>
+      </div>
+
+      <div className="pbr-vocab">
+        {page.vocab.map((v) => (
+          <button key={v.word} className="pbr-chip" onClick={(e) => { e.stopPropagation(); speak(v.word); }}>
+            <span className="pbr-chip-ko">{v.word}</span>
+            <span className="pbr-chip-zh">{v.meaning}</span>
           </button>
-
-          {/* Vocab chips */}
-          <div className="flex flex-wrap gap-1.5">
-            {page.vocab.map((v) => (
-              <span key={v.word}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm"
-                style={{
-                  background: 'rgba(255,255,255,0.7)',
-                  border: '1px solid rgba(0,0,0,0.06)',
-                }}
-              >
-                <span className="font-semibold text-[var(--text-primary)]">{v.word}</span>
-                <span className="text-[var(--text-muted)]/60">·</span>
-                <span className="text-[var(--text-muted)]">{v.meaning}</span>
-              </span>
-            ))}
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );
@@ -269,20 +187,50 @@ function TextPanel({ page, showChinese, onToggleChinese }: { page: PictureBookPa
    Main Reader
    ═══════════════════════════════════════════════════════ */
 export default function PictureBookReaderPage() {
+  const { lang } = useLang();
   const { id } = useParams<{ id: string }>();
+  const router = useRouter();
   const book = pictureBooks.find((b) => b.id === id);
+  const bookIndex = pictureBooks.findIndex((b) => b.id === id);
+  const { tier, matrix, loading: memLoading } = useMembership();
 
   const [currentPage, setCurrentPage] = useState(0);
-  const [touchStartX, setTouchStartX] = useState(0);
-  const [touchStartY, setTouchStartY] = useState(0);
+  const touchStartX = useRef(0);
+  const touchStartY = useRef(0);
   const [swipeOffset, setSwipeOffset] = useState(0);
+  const swipeOffsetRef = useRef(0);
   const [isSwiping, setIsSwiping] = useState(false);
+  const isSwipingRef = useRef(false);
+  const swipeRafRef = useRef<number | null>(null);
 
   const [showChinese, setShowChinese] = useState(false);
+  const [showRoman, setShowRoman] = useState(false);
   const [flip, setFlip] = useState<{ to: number; dir: 'forward' | 'backward'; active: boolean } | null>(null);
   const flipTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const decoSeed = useMemo(() => book ? book.id.split('').reduce((a, c) => a + c.charCodeAt(0), 0) : 0, [book]);
+  // Read-along
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [activeLine, setActiveLine] = useState(-1);
+  const playSeqRef = useRef(0);
+
+  // 下一本（列表里的下一本，末尾回到 null）
+  const nextBookId = useMemo(() => {
+    if (!book) return null;
+    const idx = pictureBooks.findIndex((b) => b.id === book.id);
+    return idx >= 0 && idx < pictureBooks.length - 1 ? pictureBooks[idx + 1].id : null;
+  }, [book]);
+
+  // 恢复：续读页 + 译文偏好
+  const restoredRef = useRef(false);
+  useEffect(() => {
+    if (!book || restoredRef.current) return;
+    restoredRef.current = true;
+    setShowChinese(getChinesePref());
+    const prog = getProgress(book.id);
+    if (prog && prog.page > 0 && prog.page < book.pages.length) {
+      setCurrentPage(prog.page);
+    }
+  }, [book]);
 
   useEffect(() => {
     return () => { if (flipTimerRef.current) clearTimeout(flipTimerRef.current); };
@@ -292,7 +240,26 @@ export default function PictureBookReaderPage() {
   const canGoNext = currentPage < totalPages - 1;
   const canGoPrev = currentPage > 0;
 
+  // 存进度 + 末页标记完成
+  useEffect(() => {
+    if (!book) return;
+    savePage(book.id, currentPage);
+    if (currentPage === book.pages.length - 1) markComplete(book.id);
+  }, [book, currentPage]);
+
+  const toggleChinese = useCallback(() => {
+    setShowChinese((v) => { setChinesePref(!v); return !v; });
+  }, []);
+
+  const stopPlay = useCallback(() => {
+    playSeqRef.current++;
+    cancelSpeech();
+    setIsPlaying(false);
+    setActiveLine(-1);
+  }, []);
+
   const executeFlip = useCallback((dir: 'forward' | 'backward') => {
+    stopPlay();
     const target = dir === 'forward'
       ? Math.min(currentPage + 1, totalPages - 1)
       : Math.max(currentPage - 1, 0);
@@ -309,7 +276,7 @@ export default function PictureBookReaderPage() {
       setCurrentPage(target);
       setFlip(null);
     }, FLIP_DURATION + 20);
-  }, [currentPage, totalPages]);
+  }, [currentPage, totalPages, stopPlay]);
 
   const goNext = useCallback(() => {
     if (!canGoNext || flip) return;
@@ -323,31 +290,72 @@ export default function PictureBookReaderPage() {
 
   const jumpToPage = useCallback((target: number) => {
     if (flip || target === currentPage || target < 0 || target >= totalPages) return;
+    stopPlay();
     if (target === currentPage + 1) { executeFlip('forward'); return; }
     if (target === currentPage - 1) { executeFlip('backward'); return; }
     setCurrentPage(target);
-  }, [flip, currentPage, totalPages, executeFlip]);
+  }, [flip, currentPage, totalPages, executeFlip, stopPlay]);
+
+  // 整页跟读：逐行朗读 + 高亮，读完自动清空。
+  // 按未过滤 split 下标迭代（跳空行但保留下标），与音源路径 + 高亮下标严格一致。
+  const togglePlay = useCallback(() => {
+    if (isPlaying) { stopPlay(); return; }
+    if (!book) return;
+    const cur = book.pages[currentPage];
+    if (!cur || cur.isSummary) return;
+    const lines = cur.korean.split('\n');
+    if (!lines.some((l) => l.trim())) return;
+
+    const mySeq = ++playSeqRef.current;
+    setIsPlaying(true);
+
+    const readLine = (i: number) => {
+      if (playSeqRef.current !== mySeq) return;
+      if (i >= lines.length) { setIsPlaying(false); setActiveLine(-1); return; }
+      if (!lines[i].trim()) { readLine(i + 1); return; }
+      setActiveLine(i);
+      speakPreRecorded(bookLineAudioUrl(book.id, currentPage, i), lines[i], 0.85, () => {
+        if (playSeqRef.current !== mySeq) return;
+        readLine(i + 1);
+      });
+    };
+    readLine(0);
+  }, [isPlaying, stopPlay, book, currentPage]);
 
   const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStartX(e.touches[0].clientX);
-    setTouchStartY(e.touches[0].clientY);
+    if ((e.target as HTMLElement).closest('button')) return;
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+    swipeOffsetRef.current = 0;
+    isSwipingRef.current = false;
     setSwipeOffset(0);
     setIsSwiping(false);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    const dx = e.touches[0].clientX - touchStartX;
-    const dy = e.touches[0].clientY - touchStartY;
+    if ((e.target as HTMLElement).closest('button')) return;
+    const dx = e.touches[0].clientX - touchStartX.current;
+    const dy = e.touches[0].clientY - touchStartY.current;
     if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 5) {
-      setIsSwiping(true);
-      setSwipeOffset(Math.max(-60, Math.min(60, dx)));
+      isSwipingRef.current = true;
+      swipeOffsetRef.current = Math.max(-60, Math.min(60, dx));
+      if (!swipeRafRef.current) {
+        swipeRafRef.current = requestAnimationFrame(() => {
+          swipeRafRef.current = null;
+          setIsSwiping(true);
+          setSwipeOffset(swipeOffsetRef.current);
+        });
+      }
     }
   };
 
   const handleTouchEnd = () => {
     setIsSwiping(false);
-    if (swipeOffset > 60) goPrev();
-    else if (swipeOffset < -60) goNext();
+    isSwipingRef.current = false;
+    const offset = swipeOffsetRef.current;
+    swipeOffsetRef.current = 0;
+    if (offset > 60) goPrev();
+    else if (offset < -60) goNext();
     setSwipeOffset(0);
   };
 
@@ -360,13 +368,39 @@ export default function PictureBookReaderPage() {
     return () => window.removeEventListener('keydown', onKey);
   }, [goNext, goPrev]);
 
+  // 卸载时停朗读
+  useEffect(() => () => { playSeqRef.current++; cancelSpeech(); }, []);
+
   if (!book) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center">
           <span className="text-6xl block mb-4">📖</span>
-          <p className="text-[var(--text-secondary)] text-sm">找不到这本绘本</p>
-          <Link href="/learn/picture-books" className="text-[var(--pink-primary)] text-sm mt-2 inline-block">返回列表</Link>
+          <p className="text-[var(--text-secondary)] text-sm">{t('pb.not_found', lang)}</p>
+          <Link href="/learn/picture-books" className="text-[var(--pink-primary)] text-sm mt-2 inline-block">{t('pb.back_list', lang)}</Link>
+        </div>
+      </div>
+    );
+  }
+
+  // 会员内容墙：免费档仅前 N 本（默认 3）
+  if (!memLoading && !isPaidTier(tier) && bookIndex >= 0 && !canAccessBookIndex(matrix, tier, bookIndex)) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh] px-6">
+        <div className="text-center flex flex-col items-center gap-3">
+          <span className="text-5xl block">👑</span>
+          <p className="text-lg font-bold text-[var(--text-primary)]">{t('pb.member_book', lang)}</p>
+          <p className="text-sm text-[var(--text-secondary)] leading-relaxed max-w-xs">
+            {t('pb.member_book_sub', lang)}
+          </p>
+          <button
+            onClick={() => router.push('/membership')}
+            className="mt-2 px-6 py-2.5 rounded-full text-white text-sm font-bold"
+            style={{ background: 'linear-gradient(150deg, #ff9dbb, #ff7fa8)', boxShadow: '0 5px 15px rgba(255,127,168,0.32)' }}
+          >
+            {t('pb.unlock_hall', lang)}
+          </button>
+          <Link href="/learn/picture-books" className="text-[var(--pink-primary)] text-sm inline-block">{t('pb.back_list', lang)}</Link>
         </div>
       </div>
     );
@@ -380,110 +414,153 @@ export default function PictureBookReaderPage() {
   const leavingTransform = flipActive ? 'rotateY(-180deg)' : 'rotateY(0deg)';
   const enteringTransform = flipActive ? 'rotateY(0deg)' : 'rotateY(180deg)';
 
+  const pct = totalPages > 1 ? Math.round((currentPage / (totalPages - 1)) * 100) : 100;
+  const totalVocab = book.pages.reduce((n, p) => n + (p.vocab?.length ?? 0), 0);
+
   return (
-    <div className="flex flex-col overflow-hidden" style={{ background: 'linear-gradient(180deg, var(--bg-soft) 0%, var(--bg-input) 100%)', height: 'calc(100dvh - 96px)' }}>
-      {/* Top bar */}
-      <header className="flex items-center gap-3 px-3 sm:px-6 py-1.5 shrink-0 relative">
-        <Link
-          href="/learn/picture-books"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--bg-card)]/70 hover:bg-[var(--bg-card)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-transparent hover:border-[var(--border-color)] hover:shadow-sm transition-all text-sm sm:text-base font-medium"
-        >
-          <ArrowLeft size={16} />
-          <span className="hidden sm:inline">绘本列表</span>
-        </Link>
-        <h1 className="absolute left-1/2 -translate-x-1/2 text-sm sm:text-lg font-bold text-[var(--text-primary)] truncate max-w-[40%]">{book.title}</h1>
-      </header>
+    <div className="pb-reader-root">
+      <div className="pbr-shell">
 
-      {/* Content */}
-      <div className="flex-1 flex flex-col md:flex-row items-center md:items-center min-h-0 px-3 sm:px-4 relative gap-2 md:gap-6 overflow-y-auto">
-        {/* ── Left side nav ── */}
-        <button
-          onClick={goPrev}
-          disabled={!canGoPrev || !!flip}
-          className="absolute left-0.5 sm:left-4 top-1/2 -translate-y-1/2 z-40 w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center bg-[var(--bg-card)]/60 hover:bg-[var(--pink-primary)] text-[var(--text-muted)] hover:text-white backdrop-blur-sm shadow-sm hover:shadow-md transition-all disabled:opacity-0 disabled:pointer-events-none"
-          aria-label="上一页"
-        >
-          <ChevronLeft size={16} />
-        </button>
+        {/* Top bar */}
+        <div className="pbr-top">
+          <Link href="/learn/picture-books" className="pbr-back">
+            <ArrowLeft size={15} />
+            <span>{t('pb.book_list', lang)}</span>
+          </Link>
+          <div className="pbr-titlebox">
+            <span className="pbr-kicker">동물 도시 그림책관</span>
+            <span className="pbr-booktitle">{book.title}</span>
+          </div>
+          <div className="pbr-chapter"><b>{String(currentPage + 1).padStart(2, '0')}</b> / {totalPages}</div>
+        </div>
 
-        {/* ── Right side nav ── */}
-        <button
-          onClick={goNext}
-          disabled={!canGoNext || !!flip}
-          className="absolute right-0.5 sm:right-4 top-1/2 -translate-y-1/2 z-40 w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center bg-[var(--bg-card)]/60 hover:bg-[var(--pink-primary)] text-[var(--text-muted)] hover:text-white backdrop-blur-sm shadow-sm hover:shadow-md transition-all disabled:opacity-0 disabled:pointer-events-none"
-          aria-label="下一页"
-        >
-          <ChevronRight size={16} />
-        </button>
+        {/* 3-col stage */}
+        <div className="pbr-stage">
 
-        <div
-          className="flex flex-col md:flex-row items-center md:items-start w-full max-w-5xl gap-3 md:gap-6 md:h-full md:overflow-hidden"
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-        >
-          {/* ── Image ── */}
-          <div
-            className="relative shrink-0 transition-transform duration-150 ease-out w-[72%] sm:w-[50%] md:w-[43%] mx-auto md:mx-0"
-            style={{
-              aspectRatio: '3/4',
-              maxHeight: 'min(40vh, 320px)',
-              perspective: '1200px',
-              transform: isSwiping && !flip ? `translateX(${swipeOffset}px)` : 'translateX(0)',
-            }}
-          >
-            {flip ? (
-              <>
-                <div className="absolute inset-0 z-20 rounded-2xl overflow-hidden shadow-lg" style={{
-                  transformOrigin: 'left center', transform: leavingTransform,
-                  transition: flipActive ? `transform ${FLIP_DURATION}ms ease-in-out` : 'none',
-                  backfaceVisibility: 'hidden', backgroundColor: 'var(--bg-soft)',
-                }}>
-                  <ImageCard page={book.pages[flip.dir === 'forward' ? currentPage : flip.to]} pageIdx={flip.dir === 'forward' ? currentPage : flip.to} seed={decoSeed} />
+          {/* 左栏 目录 */}
+          <aside className="pbr-toc">
+            <div className="pbr-toc-card">
+              <div className="pbr-progress-ring">
+                <div className="pbr-ring" style={{ '--pct': `${pct}%` } as React.CSSProperties}><b>{pct}%</b></div>
+                <div className="pbr-progress-meta">
+                  <span className="big">{t('pb.reading_page', lang, { cur: currentPage + 1, total: totalPages })}</span>
+                  <span className="sm">{t('pb.total_pages', lang, { n: totalPages })}</span>
                 </div>
-                <div className="absolute inset-0 z-10 rounded-2xl overflow-hidden shadow-lg" style={{
-                  transformOrigin: 'left center', transform: enteringTransform,
-                  transition: flipActive ? `transform ${FLIP_DURATION}ms ease-in-out` : 'none',
-                  backfaceVisibility: 'hidden', backgroundColor: 'var(--bg-soft)',
-                }}>
-                  <ImageCard page={book.pages[flip.to]} pageIdx={flip.to} seed={decoSeed} />
-                </div>
-              </>
-            ) : (
-              <div className="absolute inset-0 rounded-2xl overflow-hidden shadow-lg">
-                <ImageCard page={page} pageIdx={currentPage} seed={decoSeed} />
               </div>
-            )}
+              <div className="pbr-toc-head"><span className="hdot" />{t('pb.toc', lang)}</div>
+              <div className="pbr-toc-list">
+                {book.pages.map((_, i) => (
+                  <button
+                    key={i}
+                    className={`pbr-toc-item${i === currentPage ? ' on' : ''}${i < currentPage ? ' read' : ''}`}
+                    onClick={() => jumpToPage(i)}
+                    disabled={!!flip}
+                  >
+                    <span className="pbr-toc-label">{t('pb.page_n', lang, { n: i + 1 })}</span>
+                    {i < currentPage && <Check className="pbr-toc-check" size={12} strokeWidth={3} />}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="pbr-toc-card pbr-toc-vocab">
+              <div>
+                <div className="n">{totalVocab}</div>
+                <div className="lbl">{t('pb.book_vocab', lang)}</div>
+              </div>
+            </div>
+          </aside>
 
+          {/* 中栏 拍立得插画 */}
+          <div className="pbr-photo-wrap">
+            <div
+              className="pbr-photo pb-stage"
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+              style={{ transform: isSwiping && !flip ? `rotate(-1.4deg) translateX(${swipeOffset}px)` : undefined }}
+            >
+              <span className="pbr-tape tl" aria-hidden />
+              <span className="pbr-tape br" aria-hidden />
+              <div className="pbr-photo-img" style={{ perspective: '1200px' }}>
+                {flip ? (
+                  <>
+                    <div className="pb-frame" style={{
+                      position: 'absolute', inset: 0, zIndex: 20,
+                      transformOrigin: 'left center', transform: leavingTransform,
+                      transition: flipActive ? `transform ${FLIP_DURATION}ms ease-in-out` : 'none',
+                      backfaceVisibility: 'hidden',
+                    }}>
+                      <ImageCard page={book.pages[flip.dir === 'forward' ? currentPage : flip.to]} />
+                    </div>
+                    <div className="pb-frame" style={{
+                      position: 'absolute', inset: 0, zIndex: 10,
+                      transformOrigin: 'left center', transform: enteringTransform,
+                      transition: flipActive ? `transform ${FLIP_DURATION}ms ease-in-out` : 'none',
+                      backfaceVisibility: 'hidden',
+                    }}>
+                      <ImageCard page={book.pages[flip.to]} />
+                    </div>
+                  </>
+                ) : (
+                  <div className="pb-frame" style={{ position: 'absolute', inset: 0 }}>
+                    <ImageCard page={page} />
+                  </div>
+                )}
+              </div>
+              {!displayPage.isSummary && <div className="pbr-photo-caption">{t('pb.page_n', lang, { n: (flip ? flip.to : currentPage) + 1 })}</div>}
+            </div>
           </div>
 
-          {/* ── Text ── */}
-          <div className="flex-1 md:min-w-0 w-full md:overflow-hidden md:h-full" style={{ minHeight: 0 }}>
-            <TextPanel page={displayPage} showChinese={showChinese} onToggleChinese={() => setShowChinese((v) => !v)} />
+          {/* 右栏 正文 */}
+          <TextPanel
+            page={displayPage}
+            bookId={book.id}
+            pageIdx={flip ? flip.to : currentPage}
+            bookTitle={book.title}
+            nextBookId={nextBookId}
+            showChinese={showChinese}
+            onToggleChinese={toggleChinese}
+            showRoman={showRoman}
+            onToggleRoman={() => setShowRoman((v) => !v)}
+            activeLine={flip ? -1 : activeLine}
+            isPlaying={isPlaying}
+            onTogglePlay={togglePlay}
+          />
+        </div>
+
+        {/* Footer nav */}
+        <div className="pbr-foot">
+          <button className="pbr-arrow" onClick={goPrev} disabled={!canGoPrev || !!flip} aria-label={t('pb.prev_page', lang)}>
+            <ChevronLeft size={18} />
+          </button>
+          <div className="pbr-dots">
+            {Array.from({ length: totalPages }).map((_, i) => (
+              <button
+                key={i}
+                className={`pbr-dot${i === currentPage ? ' on' : ''}${i < currentPage ? ' read' : ''}`}
+                onClick={() => jumpToPage(i)}
+                disabled={!!flip}
+                aria-label={t('pb.page_n', lang, { n: i + 1 })}
+              />
+            ))}
           </div>
+          <span className="pbr-foot-hint">← → · {t('pb.toc', lang)}</span>
+          <button className="pbr-arrow" onClick={goNext} disabled={!canGoNext || !!flip} aria-label={t('pb.next_page', lang)}>
+            <ChevronRight size={18} />
+          </button>
+        </div>
+
+        {/* 移动端悬浮翻页（滚动到哪都能切页） */}
+        <div className="pbr-float-nav" aria-hidden={false}>
+          <button className="pbr-fab" onClick={goPrev} disabled={!canGoPrev || !!flip} aria-label={t('pb.prev_page', lang)}>
+            <ChevronLeft size={20} />
+          </button>
+          <span className="pbr-fab-page">{currentPage + 1}<i>/</i>{totalPages}</span>
+          <button className="pbr-fab" onClick={goNext} disabled={!canGoNext || !!flip} aria-label={t('pb.next_page', lang)}>
+            <ChevronRight size={20} />
+          </button>
         </div>
       </div>
-
-      {/* Bottom page numbers */}
-      <nav className="flex items-center justify-center gap-1 pb-1.5 px-4 shrink-0 -mt-3">
-        <div className="flex items-center gap-0.5 bg-[var(--bg-card)]/40 backdrop-blur-sm rounded-xl px-2 py-1.5 overflow-x-auto max-w-full">
-          {Array.from({ length: totalPages }).map((_, i) => (
-            <button
-              key={i}
-              onClick={() => jumpToPage(i)}
-              disabled={!!flip}
-              className={`shrink-0 min-w-[30px] h-7 rounded-lg text-[13px] font-medium tabular-nums transition-all ${
-                i === currentPage
-                  ? 'bg-[var(--pink-primary)] text-white shadow-sm'
-                  : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card)]/70'
-              }`}
-              aria-label={`第 ${i + 1} 页`}
-            >
-              {i + 1}
-            </button>
-          ))}
-        </div>
-      </nav>
     </div>
   );
 }

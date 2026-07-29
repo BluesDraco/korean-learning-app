@@ -2,6 +2,8 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { Star } from 'lucide-react';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 
 interface Flyout {
   id: number;
@@ -32,6 +34,7 @@ export function emitStreakMilestone(streak: number) {
 }
 
 export function XpOverlay() {
+  const { lang } = useLang();
   const [flyouts, setFlyouts] = useState<Flyout[]>([]);
   const [levelUp, setLevelUp] = useState<{ show: boolean; level: number }>({ show: false, level: 0 });
   const [streakCelebration, setStreakCelebration] = useState<{ show: boolean; streak: number }>({ show: false, streak: 0 });
@@ -99,7 +102,7 @@ export function XpOverlay() {
             <div className="text-5xl mb-4">🎉</div>
             <p className="text-2xl font-extrabold text-[var(--peach-soft)] mb-2">레벨 업!</p>
             <p className="text-lg text-[var(--text-primary)]">
-              升级到 <span className="font-bold text-[var(--pink-primary)]">{levelUp.level} 级</span>
+              {t('xp.levelUpPre', lang)} <span className="font-bold text-[var(--pink-primary)]">{t('xp.levelValue', lang, { level: levelUp.level })}</span>
             </p>
           </div>
         </div>
@@ -117,12 +120,12 @@ export function XpOverlay() {
             </p>
             <p className="text-sm text-[var(--text-secondary)]">
               {streakCelebration.streak >= 100
-                ? '100天连续学习！你是真正的王者！'
+                ? t('xp.streak100', lang)
                 : streakCelebration.streak >= 30
-                  ? '30天坚持不懈！这个习惯已经养成了！'
+                  ? t('xp.streak30', lang)
                   : streakCelebration.streak >= 7
-                    ? '连续一周学习！토리为你感到骄傲！'
-                    : '连续3天！好的开始是成功的一半！'}
+                    ? t('xp.streak7', lang)
+                    : t('xp.streak3', lang)}
             </p>
             <div className="mt-4 text-4xl animate-bounce">🐰</div>
           </div>

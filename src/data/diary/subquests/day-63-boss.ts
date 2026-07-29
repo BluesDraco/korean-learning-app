@@ -1,0 +1,21 @@
+import type { BossSubQuestData } from '@/types/tori-subquest';
+
+/** Day 63 · 3-5 Boss 战 · ☕ 打工第一天 · 洒咖啡 */
+export const day63Boss: BossSubQuestData = {
+  day: 3, level: 'advanced', idx: 5, kind: 'boss',
+  koTitle: '첫 알바의 관문',
+  subtitle: '☕ 곰다방 · 洒了一杯咖啡',
+  intro: '周三下午三点。第一天上班。系上곰다방的围裙，把额发别到耳后。第一位客人是狐狸小姐——她一口气把订单说完，你只听到"아이스"。第二位——店长把两杯咖啡放到你托盘上，走过去手抖，一杯歪了，半杯洒在桌面上。躲到后厨哭了五分钟，从围裙口袋摸出胡萝卜笔，用手指摩挲上面的"용기"两个字。今天要用 ~아/어 버리다 说出这份"不小心 X 掉了"，也要用 ~아/어 드릴게요 把道歉说得得体。',
+  outroHook: '"토리야, 첫날인데 3시간 다 채웠어. 그거만으로도 잘한 거야." 下班时店长叫住你，说了这句。回家路上，这句话一直在脑子里转。第一份工作，不是"完美"，是"撑满"。',
+
+  tasks: [
+    { type: 'choice',  label: '听句选意',     task: { id: 'd63-b5-t1', audioKo: '커피를 쏟아 버렸어요.',                             choices: [{ text: '把咖啡洒了。',                              correct: true }, { text: '把咖啡装好了。',              correct: false }, { text: '把咖啡喝了。',                correct: false }, { text: '不点咖啡。',                        correct: false }], explain: 'Day 63 主题句 · ~아/어 버리다' } },
+    { type: 'choice',  label: '听句选意',     task: { id: 'd63-b5-t2', audioKo: '괜찮아요, 처음이니까.',                             choices: [{ text: '没事，第一天嘛。',                          correct: true }, { text: '不行，你走。',                correct: false }, { text: '重来一杯。',                  correct: false }, { text: '洒的不是你的错吗？',                correct: false }], explain: '~니까 表原因 · 温柔安慰' } },
+    { type: 'choice',  label: '~아/어 버리다', task: { id: 'd63-b5-t3', promptZh: '"把作业都做完了"哪句正确？',                                                                                                                                          choices: [{ text: '숙제를 다 해서 버렸어요.',                     correct: false }, { text: '숙제를 다 해 버렸어요.',       correct: true }, { text: '숙제를 다 하아 버렸어요.',           correct: false }, { text: '숙제를 다 한 버렸어요.',                        correct: false }], explain: '하다 → 해 + 버리다' } },
+    { type: 'choice',  label: '~아/어 버리다', task: { id: 'd63-b5-t4', promptZh: '"把果汁喝光了"哪句正确？',                                                                                                                                            choices: [{ text: '주스를 마시아 버렸어요.',                     correct: false }, { text: '주스를 다 마셔 버렸어요.',     correct: true }, { text: '주스를 다 마시고 버렸어요.',          correct: false }, { text: '주스를 다 마시서 버렸어요.',                    correct: false }], explain: '마시 + 어 → 마셔' } },
+    { type: 'choice',  label: '认词',         task: { id: 'd63-b5-t5', promptKo: '쏟다',       promptHangul: 'ssot-da',                                                                                                                              choices: [{ text: '洒 / 泼',                       correct: true }, { text: '装',                            correct: false }, { text: '倒进',                          correct: false }, { text: '收起',                              correct: false }], explain: 'Day 63 主角动词' } },
+    { type: 'compose', label: '组句',         task: { id: 'd63-b5-t6', zhHint: '把咖啡洒了。',                                                                                                                                                        audioKo: '커피를 쏟아 버렸어요.',                                answer: ['커피를', '쏟아 버렸어요.'],                             tokens: ['커피를', '쏟아 버렸어요.', '쏟다', '쏟은', '쏟고', '커피가', '쏟았어요.'],                              explain: '쏟다 → 쏟아 + 버리다' } },
+    { type: 'compose', label: '组句',         task: { id: 'd63-b5-t7', zhHint: '对不起，我重新准备一杯。',                                                                                                                                              audioKo: '죄송합니다. 다시 준비해 드릴게요.',                    answer: ['죄송합니다.', '다시', '준비해 드릴게요.'],              tokens: ['죄송합니다.', '다시', '준비해 드릴게요.', '준비할게요.', '준비했어요.', '괜찮아요.', '싫어요.'],       explain: '正式道歉 + ~아/어 드릴게요' } },
+    { type: 'choice',  label: '情景选回应',   task: { id: 'd63-b5-t8', promptZh: '店长下班时说 "토리야, 3시간 다 채웠어. 그거만으로도 잘한 거야."。你想承诺明天会更好，最自然的一句？',                                                                    choices: [{ text: '감사합니다. 내일은 더 잘하겠습니다.',                        correct: true }, { text: '싫어요, 안 갈래요.',              correct: false }, { text: '얼마예요?',                              correct: false }, { text: '몰라요.',                                correct: false }], explain: '正式感谢 + ~겠습니다' } },
+  ],
+};

@@ -1,0 +1,29 @@
+import type { ListenSubQuestData } from '@/types/tori-subquest';
+
+/** Day 33 · 2-2 귀 트이기 · ~고 있어요 · ~고 계세요 敬语 */
+export const day33Listen: ListenSubQuestData = {
+  day: 3, level: 'intermediate', idx: 2, kind: 'listen',
+  koTitle: '귀 트이기',
+  subtitle: '在夜里听清一封家书',
+
+  meaning: [
+    { id: 'd33-l2-m1', audioKo: '엄마, 저 잘 지내고 있어요.',                choices: [{ text: '妈妈，我过得很好。',                    correct: true }, { text: '妈妈，我过得不好。',              correct: false }, { text: '妈妈，我要去了。',              correct: false }, { text: '妈妈，我在等你。',              correct: false }], explain: '写信第一句 · 지내다 + 고 있어요 表持续状态' },
+    { id: 'd33-l2-m2', audioKo: '한국어 공부도 열심히 하고 있어요.',           choices: [{ text: '我也在努力学韩语。',                    correct: true }, { text: '我已经放弃学韩语了。',            correct: false }, { text: '韩语学得很轻松。',                correct: false }, { text: '我不想学韩语。',                  correct: false }], explain: '열심히 하다 → 열심히 하고 있어요（进行时）' },
+    { id: 'd33-l2-m3', audioKo: '엄마도 건강 조심하세요.',                    choices: [{ text: '妈妈也请注意健康。',                    correct: true }, { text: '妈妈请多关照。',                  correct: false }, { text: '妈妈感冒了吗？',                  correct: false }, { text: '妈妈别生病了。',                  correct: false }], explain: '关心长辈健康的经典句 · 조심하세요 = 请小心' },
+    { id: 'd33-l2-m4', audioKo: '엄마가 번역기로 다 읽었을까?',                 choices: [{ text: '妈妈用翻译器都读了吗？',                correct: true }, { text: '妈妈能读懂翻译吗？',              correct: false }, { text: '妈妈翻译了这封信。',              correct: false }, { text: '妈妈的翻译器坏了吗？',            correct: false }], explain: '~로 = 用（工具助词）· ~을까? 表推测' },
+    { id: 'd33-l2-m5', audioKo: '엄마는 지금 뭐 하고 계세요?',                  choices: [{ text: '妈妈现在在做什么？（敬语）',            correct: true }, { text: '妈妈想做什么？',                  correct: false }, { text: '妈妈做过什么？',                  correct: false }, { text: '妈妈打算做什么？',                correct: false }], explain: '对长辈的进行时敬语 · ~고 있어요 → ~고 계세요' },
+  ],
+
+  cloze: [
+    { id: 'd33-l2-c1', audioKo: '한국어를 배우고 있어요.',        clozeParts: ['한국어를 배우고 ', '.'],           choices: [{ text: '있어요', correct: true }, { text: '계세요', correct: false }, { text: '있으세요', correct: false }, { text: '이에요', correct: false }], explain: '进行时基本形 · V + 고 있어요' },
+    { id: 'd33-l2-c2', audioKo: '엄마는 뭐 하고 계세요?',           clozeParts: ['엄마는 뭐 하고 ', '?'],           choices: [{ text: '계세요', correct: true }, { text: '있어요', correct: false }, { text: '있으세요', correct: false }, { text: '해요',   correct: false }], explain: '对长辈问近况 · 있어요的敬语形是 **계세요**' },
+    { id: 'd33-l2-c3', audioKo: '지금 편지를 쓰고 있어요.',         clozeParts: ['지금 편지를 ', ' 있어요.'],         choices: [{ text: '쓰고', correct: true }, { text: '써서', correct: false }, { text: '써고',   correct: false }, { text: '쓰다',  correct: false }], explain: '쓰다 → 쓰고 있어요 · V 원형 + 고' },
+    { id: 'd33-l2-c4', audioKo: '어제 편지를 쓰고 있었어요.',        clozeParts: ['어제 편지를 쓰고 ', '.'],           choices: [{ text: '있었어요', correct: true }, { text: '계세요', correct: false }, { text: '있어요', correct: false }, { text: '있으니까', correct: false }], explain: '过去进行 · ~고 있었어요' },
+  ],
+
+  reply: [
+    { id: 'd33-l2-r1', audioKo: '토리, 요즘 어떻게 지내?',                             promptZh: '妈妈电话问你最近过得怎么样，最自然的一句？',     choices: [{ text: '엄마, 저 잘 지내고 있어요.',                                       correct: true }, { text: '엄마, 몰라요.',                          correct: false }, { text: '엄마, 얼마예요?',                     correct: false }, { text: '엄마, 만나서 반가워요.',              correct: false }], explain: '잘 지내고 있어요 = 报平安固定句' },
+    { id: 'd33-l2-r2', audioKo: '한국에서 뭐 하고 있어?',                                promptZh: '妈妈问你在韩国正在干什么，你说"在努力学韩语"，最标准的一句？', choices: [{ text: '한국어 공부 열심히 하고 있어요.',                                   correct: true }, { text: '한국어 공부 안 해요.',                    correct: false }, { text: '한국어 공부 잘 몰라요.',                 correct: false }, { text: '한국어 공부 얼마예요?',                correct: false }], explain: '~고 있어요 表持续状态' },
+    { id: 'd33-l2-r3', audioKo: '엄마, 지금 뭐 하고 계세요?',                            promptZh: '你问妈妈现在在做什么，用敬语。妈妈说她在做晚饭，最自然的回答方式？',       choices: [{ text: '지금 저녁 준비하고 있어. 곧 먹을 거야.',                             correct: true }, { text: '지금 저녁 준비하시고 계세요.',            correct: false }, { text: '지금 저녁 준비했어요.',                  correct: false }, { text: '지금 저녁 안 먹었어요.',                correct: false }], explain: '妈妈对孩子说话用반말 · 하고 있어（我在做）' },
+  ],
+};

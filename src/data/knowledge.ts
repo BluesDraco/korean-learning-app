@@ -10,6 +10,12 @@ export interface KnowledgeWord {
   note?: string;
 }
 
+export interface KnowledgeGroup {
+  label: string;
+  emoji: string;
+  wordIds: string[];
+}
+
 export interface KnowledgeCategory {
   id: string;
   slug: string;
@@ -69,7 +75,7 @@ export const knowledgeCategories: KnowledgeCategory[] = [
       { id: 'n14', word: '백', pronunciation: 'baek', meaning: '百', partOfSpeech: '数词', example: '백 원이에요.', exampleZh: '一百韩元。', emoji: '💯' },
       { id: 'n15', word: '천', pronunciation: 'cheon', meaning: '千', partOfSpeech: '数词', example: '천 원만 빌려 주세요.', exampleZh: '请借我一千韩元。', emoji: '💰' },
       { id: 'n16', word: '만', pronunciation: 'man', meaning: '万', partOfSpeech: '数词', example: '만 원이면 충분해요.', exampleZh: '一万韩元就够了。', emoji: '💵' },
-      { id: 'n17', word: '영', pronunciation: 'yeong', meaning: '零', partOfSpeech: '数词', example: '전화번호는 영일영이에요.', exampleZh: '电话号码是0102。', emoji: '0️⃣' },
+      { id: 'n17', word: '영', pronunciation: 'yeong', meaning: '零', partOfSpeech: '数词', example: '전화번호는 영일영이에요.', exampleZh: '电话号码是010。', emoji: '0️⃣' },
       { id: 'n18', word: '반', pronunciation: 'ban', meaning: '半', partOfSpeech: '名词', example: '한 시간 반 걸려요.', exampleZh: '需要一个半小时。', emoji: '🕐' },
       { id: 'n19', word: '살', pronunciation: 'sal', meaning: '岁(量词)', partOfSpeech: '量词', example: '스무 살이에요.', exampleZh: '二十岁。', emoji: '🎂', note: '用于年龄，使用固有词数字' },
       { id: 'n20', word: '시', pronunciation: 'si', meaning: '点(时间量词)', partOfSpeech: '量词', example: '세 시에 만나요.', exampleZh: '三点见面。', emoji: '🕒', note: '用于小时，使用固有词数字' },
@@ -143,7 +149,7 @@ export const knowledgeCategories: KnowledgeCategory[] = [
       { id: 'h10', word: '낚시', pronunciation: 'naksi', meaning: '钓鱼', partOfSpeech: '名词', example: '아버지랑 낚시 갔어요.', exampleZh: '和爸爸去钓鱼了。', emoji: '🎣' },
       { id: 'h11', word: '캠핑', pronunciation: 'kaemping', meaning: '露营', partOfSpeech: '名词', example: '가족이랑 캠핑 가는 게 좋아요.', exampleZh: '喜欢和家人去露营。', emoji: '🏕️' },
       { id: 'h12', word: '악기', pronunciation: 'akgi', meaning: '乐器', partOfSpeech: '名词', example: '악기 하나쯤 다룰 줄 알면 좋아요.', exampleZh: '会一种乐器就好了。', emoji: '🎻' },
-      { id: 'h13', word: '뜨개질', pronunciation: 'tteugaejil', meaning: '编织', partOfSpeech: '名词', example: '겨울에 뜨개질하면서 시간 보내요.', exampleZh: '冬天织东西消磨时间。', emoji: '🧶' },
+      { id: 'h13', word: '뜨개질', pronunciation: 'tteugaejil', meaning: '编织', partOfSpeech: '名词', example: '겨울에 뜨개질하면서 시간 보내요.', exampleZh: '冬天边织东西边度过时光。', emoji: '🧶' },
       { id: 'h14', word: '정원', pronunciation: 'jeongwon', meaning: '园艺', partOfSpeech: '名词', example: '엄마가 정원 가꾸기를 좋아하세요.', exampleZh: '妈妈喜欢打理花园。', emoji: '🌻' },
       { id: 'h15', word: '수집', pronunciation: 'sujip', meaning: '收集', partOfSpeech: '名词', example: '우표 수집이 취미예요.', exampleZh: '收集邮票是我的爱好。', emoji: '📮' },
       { id: 'h16', word: '공예', pronunciation: 'gongye', meaning: '工艺', partOfSpeech: '名词', example: '전통 공예에 관심이 있어요.', exampleZh: '对传统工艺有兴趣。', emoji: '🖼️' },
@@ -181,7 +187,7 @@ export const knowledgeCategories: KnowledgeCategory[] = [
   },
   {
     id: 'food', slug: 'food', name: '食物/饮食', nameKo: '음식', emoji: '🍚',
-    description: '韩国的代表性食物和日常饮食相关词汇，是了解韩国文化的必备内容',
+    description: '韩国的代表性食物和日常饮食相关词汇，是了解韩国饮食文化的常用词汇',
     words: [
       { id: 'fd1', word: '밥', pronunciation: 'bap', meaning: '饭', partOfSpeech: '名词', example: '밥 먹었어요?', exampleZh: '吃饭了吗？', emoji: '🍚', note: '也泛指一顿饭' },
       { id: 'fd2', word: '김치', pronunciation: 'gimchi', meaning: '泡菜', partOfSpeech: '名词', example: '김치 없으면 밥을 못 먹어요.', exampleZh: '没有泡菜吃不下饭。', emoji: '🥬' },
@@ -190,13 +196,13 @@ export const knowledgeCategories: KnowledgeCategory[] = [
       { id: 'fd5', word: '김밥', pronunciation: 'gimbap', meaning: '紫菜包饭', partOfSpeech: '名词', example: '소풍 갈 때 김밥 쌌어요.', exampleZh: '去郊游时包了紫菜包饭。', emoji: '🍙' },
       { id: 'fd6', word: '떡볶이', pronunciation: 'tteokbokki', meaning: '炒年糕', partOfSpeech: '名词', example: '떡볶이가 매운데 맛있어요.', exampleZh: '炒年糕虽然辣但好吃。', emoji: '🌶️' },
       { id: 'fd7', word: '라면', pronunciation: 'ramyeon', meaning: '方便面/拉面', partOfSpeech: '名词', example: '야식으로 라면 먹어요.', exampleZh: '夜宵吃方便面。', emoji: '🍜' },
-      { id: 'fd8', word: '찌개', pronunciation: 'jjigae', meaning: '汤/炖菜', partOfSpeech: '名词', example: '김치찌개가 정말 얼큰해요.', exampleZh: '泡菜汤很浓郁。', emoji: '🥘' },
+      { id: 'fd8', word: '찌개', pronunciation: 'jjigae', meaning: '炖锅/韩式炖汤', partOfSpeech: '名词', example: '김치찌개가 정말 얼큰해요.', exampleZh: '泡菜汤很浓郁。', emoji: '🥘' },
       { id: 'fd9', word: '삼겹살', pronunciation: 'samgyeopsal', meaning: '五花肉', partOfSpeech: '名词', example: '삼겹살 구워 먹으러 가요.', exampleZh: '去吃烤五花肉吧。', emoji: '🥓' },
       { id: 'fd10', word: '치킨', pronunciation: 'chikin', meaning: '炸鸡', partOfSpeech: '名词', example: '치킨 시켜서 먹을까요?', exampleZh: '叫炸鸡来吃吧？', emoji: '🍗' },
       { id: 'fd11', word: '냉면', pronunciation: 'naengmyeon', meaning: '冷面', partOfSpeech: '名词', example: '여름에는 냉면이 최고예요.', exampleZh: '夏天吃冷面最棒了。', emoji: '🍝' },
       { id: 'fd12', word: '만두', pronunciation: 'mandu', meaning: '饺子', partOfSpeech: '名词', example: '만둣국이 따뜻하고 좋아요.', exampleZh: '饺子汤热乎乎的很好。', emoji: '🥟' },
       { id: 'fd13', word: '국', pronunciation: 'guk', meaning: '汤', partOfSpeech: '名词', example: '아침에 국 먹으면 속이 편해요.', exampleZh: '早上喝汤胃很舒服。', emoji: '🍵' },
-      { id: 'fd14', word: '전', pronunciation: 'jeon', meaning: '煎饼', partOfSpeech: '名词', example: '비 오는 날에 전 부쳐 먹어요.', exampleZh: '下雨天煎饼吃。', emoji: '🥞' },
+      { id: 'fd14', word: '전', pronunciation: 'jeon', meaning: '煎饼', partOfSpeech: '名词', example: '비 오는 날에 전 부쳐 먹어요.', exampleZh: '下雨天会煎饼来吃。', emoji: '🥞' },
       { id: 'fd15', word: '계란', pronunciation: 'gyeran', meaning: '鸡蛋', partOfSpeech: '名词', example: '계란 두 개로 후라이 했어요.', exampleZh: '用两个鸡蛋煎了蛋。', emoji: '🥚' },
       { id: 'fd16', word: '두부', pronunciation: 'dubu', meaning: '豆腐', partOfSpeech: '名词', example: '두부가 부드럽고 고소해요.', exampleZh: '豆腐柔软香醇。', emoji: '🧈' },
       { id: 'fd17', word: '회', pronunciation: 'hoe', meaning: '生鱼片', partOfSpeech: '名词', example: '회를 초장에 찍어 먹어요.', exampleZh: '生鱼片蘸醋酱吃。', emoji: '🍣' },
@@ -294,7 +300,7 @@ export const knowledgeCategories: KnowledgeCategory[] = [
       { id: 'bo10', word: '다리', pronunciation: 'dari', meaning: '腿', partOfSpeech: '名词', example: '다리가 길어서 모델 같아요.', exampleZh: '腿很长所以像模特。', emoji: '🦵' },
       { id: 'bo11', word: '배', pronunciation: 'bae', meaning: '肚子', partOfSpeech: '名词', example: '배가 너무 고파요.', exampleZh: '肚子太饿了。', emoji: '🤰', note: '也指"船"和"梨"' },
       { id: 'bo12', word: '가슴', pronunciation: 'gaseum', meaning: '胸', partOfSpeech: '名词', example: '가슴이 답답할 때 운동해요.', exampleZh: '胸口闷的时候运动。', emoji: '❤️' },
-      { id: 'bo13', word: '등', pronunciation: 'deung', meaning: '背', partOfSpeech: '名词', example: '등이 가려워서 긁어 주세요.', exampleZh: '背痒请帮我挠一下。', emoji: '🧍' },
+      { id: 'bo13', word: '등', pronunciation: 'deung', meaning: '背', partOfSpeech: '名词', example: '등이 가려워서 긁어 주세요.', exampleZh: '背痒，请帮我挠一下。', emoji: '🧍' },
       { id: 'bo14', word: '목', pronunciation: 'mok', meaning: '脖子/喉咙', partOfSpeech: '名词', example: '목이 아파서 말하기 힘들어요.', exampleZh: '喉咙痛所以说话很费劲。', emoji: '🧣' },
       { id: 'bo15', word: '손가락', pronunciation: 'songarak', meaning: '手指', partOfSpeech: '名词', example: '손가락을 베였어요.', exampleZh: '割伤了手指。', emoji: '🖐️' },
       { id: 'bo16', word: '발가락', pronunciation: 'balgarak', meaning: '脚趾', partOfSpeech: '名词', example: '발가락에 물집이 잡혔어요.', exampleZh: '脚趾上起了水泡。', emoji: '🦶' },
@@ -306,7 +312,7 @@ export const knowledgeCategories: KnowledgeCategory[] = [
   },
   {
     id: 'transport', slug: 'transport', name: '交通/出行', nameKo: '교통', emoji: '🚇',
-    description: '各种交通工具和交通相关场所词汇，在韩国旅行生活必备',
+    description: '地铁、公交、出租车 —— 在韩国走每一段路都会用到的词',
     words: [
       { id: 'tr1', word: '버스', pronunciation: 'beoseu', meaning: '公交车', partOfSpeech: '名词', example: '버스 타고 학교에 가요.', exampleZh: '坐公交车去学校。', emoji: '🚌' },
       { id: 'tr2', word: '지하철', pronunciation: 'jihacheol', meaning: '地铁', partOfSpeech: '名词', example: '지하철이 제일 빨라요.', exampleZh: '地铁最快。', emoji: '🚇' },
@@ -358,7 +364,7 @@ export const knowledgeCategories: KnowledgeCategory[] = [
   },
   {
     id: 'house', slug: 'house', name: '家居/房屋', nameKo: '집/가구', emoji: '🏠',
-    description: '房屋房间和家居家具相关的韩语词汇，日常生活必备',
+    description: '客厅、卧室、厨房 —— 一个家里能指着说出名字的每样东西',
     words: [
       { id: 'ho1', word: '집', pronunciation: 'jip', meaning: '家/房子', partOfSpeech: '名词', example: '우리 집에 놀러 오세요.', exampleZh: '请来我们家玩。', emoji: '🏠' },
       { id: 'ho2', word: '방', pronunciation: 'bang', meaning: '房间', partOfSpeech: '名词', example: '방이 깨끗하고 넓어요.', exampleZh: '房间干净又宽敞。', emoji: '🚪' },
@@ -446,7 +452,7 @@ export const knowledgeCategories: KnowledgeCategory[] = [
       { id: 'em6', word: '행복하다', pronunciation: 'haengbokada', meaning: '幸福', partOfSpeech: '形容词', example: '가족이랑 있어서 행복해요.', exampleZh: '和家人在一起所以很幸福。', emoji: '🥰' },
       { id: 'em7', word: '외롭다', pronunciation: 'oeropda', meaning: '孤独/寂寞', partOfSpeech: '形容词', example: '친구가 없어서 외로워요.', exampleZh: '没有朋友所以很孤独。', emoji: '😔' },
       { id: 'em8', word: '그립다', pronunciation: 'geuripda', meaning: '想念/思念', partOfSpeech: '形容词', example: '고향이 정말 그리워요.', exampleZh: '真的很想念家乡。', emoji: '🏠' },
-      { id: 'em9', word: '부끄럽다', pronunciation: 'bukkeureopda', meaning: '害羞/丢脸', partOfSpeech: '形容词', example: '실수해서 부끄러웠어요.', exampleZh: '犯错了所以很不好意思。', emoji: '😳' },
+      { id: 'em9', word: '부끄럽다', pronunciation: 'bukkeureopda', meaning: '害羞/不好意思', partOfSpeech: '形容词', example: '실수해서 부끄러웠어요.', exampleZh: '犯错了所以很不好意思。', emoji: '😳' },
       { id: 'em10', word: '걱정되다', pronunciation: 'geokjeongdoeda', meaning: '担心/担忧', partOfSpeech: '动词', example: '친구가 아파서 걱정돼요.', exampleZh: '朋友病了所以很担心。', emoji: '😟' },
       { id: 'em11', word: '신나다', pronunciation: 'sinnada', meaning: '兴奋/开心', partOfSpeech: '动词', example: '내일 소풍 가서 신나요.', exampleZh: '明天去郊游所以很兴奋。', emoji: '🤩' },
       { id: 'em12', word: '실망하다', pronunciation: 'silmanghada', meaning: '失望', partOfSpeech: '动词', example: '기대했는데 실망했어요.', exampleZh: '本来很期待但失望了。', emoji: '😞' },
@@ -462,7 +468,7 @@ export const knowledgeCategories: KnowledgeCategory[] = [
   },
   {
     id: 'health', slug: 'health', name: '健康/医疗', nameKo: '건강', emoji: '🏥',
-    description: '健康和医疗相关的基础词汇，看病和日常健康管理必备',
+    description: '身体部位、常见症状、看病取药 —— 生病的时候说得出口',
     words: [
       { id: 'he1', word: '건강', pronunciation: 'geongang', meaning: '健康', partOfSpeech: '名词', example: '건강이 제일 중요해요.', exampleZh: '健康最重要。', emoji: '💪' },
       { id: 'he2', word: '병원', pronunciation: 'byeongwon', meaning: '医院', partOfSpeech: '名词', example: '아프면 병원에 가세요.', exampleZh: '不舒服的话请去医院。', emoji: '🏥' },
@@ -483,7 +489,7 @@ export const knowledgeCategories: KnowledgeCategory[] = [
       { id: 'he17', word: '영양', pronunciation: 'yeongyang', meaning: '营养', partOfSpeech: '名词', example: '영양 섭취가 중요해요.', exampleZh: '摄取营养很重要。', emoji: '🍎' },
       { id: 'he18', word: '비타민', pronunciation: 'bitamin', meaning: '维生素', partOfSpeech: '名词', example: '비타민을 챙겨 먹어요.', exampleZh: '按时吃维生素。', emoji: '💊' },
       { id: 'he19', word: '보험', pronunciation: 'boheom', meaning: '保险', partOfSpeech: '名词', example: '건강 보험이 있어요.', exampleZh: '有健康保险。', emoji: '🛡️' },
-      { id: 'he20', word: '진료', pronunciation: 'jillyo', meaning: '诊疗/看诊', partOfSpeech: '名词', example: '오후에 진료 예약이 있어요.', exampleZh: '下午有诊疗预约。', emoji: '🩺' },
+      { id: 'he20', word: '진료', pronunciation: 'jillyo', meaning: '诊疗/看诊', partOfSpeech: '名词', example: '오후에 진료 예약이 있어요.', exampleZh: '下午有门诊预约。', emoji: '🩺' },
     ],
   },
   {

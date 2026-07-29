@@ -41,13 +41,15 @@ export const grammarCardsP28: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '动词词干 + -기(가) + 형용사하다', examples: '배우다 → 배우기가 어렵다 / 읽다 → 읽기가 쉽다' },
-      { type: 'rule', text: '助词 -가 常省略：-기 쉽다 / -기 어렵다', examples: '읽기 쉬워요 = 읽기가 쉬워요' },
-      { type: 'usage', text: '常用搭配：-기 어렵다/쉽다/힘들다/편하다/좋다/싫다/불편하다', examples: '이 문제는 풀기 어려워요.' },
-      { type: 'usage', text: '感受类：-기 좋다/싫다/재미있다/재미없다', examples: '이 노래는 듣기 좋아요.' },
-      { type: 'usage', text: '客观评价类：-기 쉽다/어렵다/편하다/불편하다', examples: '이 신발은 신기 편해요.' },
+      { type: 'rule', text: '动词词干 + -기(가) + 形容词하다', examples: '배우다 → 배우기가 어렵다 / 읽다 → 읽기가 쉽다' },
+      { type: 'rule', text: '助词 -가 常省略：-기 쉽다 / -기 어렵다', examples: '읽기 쉬워요（读起来容易）= 읽기가 쉬워요（读起来容易，가 可省略）' },
+      { type: 'usage', text: '常用搭配：-기 어렵다/쉽다/힘들다/편하다/좋다/싫다/불편하다', examples: '이 문제는 풀기 어려워요.（这道题很难解。）' },
+      { type: 'usage', text: '感受类：-기 좋다/싫다/재미있다/재미없다', examples: '이 노래는 듣기 좋아요.（这首歌很好听。）' },
+      { type: 'usage', text: '客观评价类：-기 쉽다/어렵다/편하다/불편하다', examples: '이 신발은 신기 편해요.（这双鞋穿着舒服。）' },
       { type: 'compare', text: '-기(가) N하다 vs -기 위해서 → 前者是评价，后者是目的', examples: '배우기 쉬워요.(易学) / 배우기 위해 왔어요.(为学而来)' },
-      { type: 'note', text: '主语通常用 은/는 标记，评价对象', examples: '한국어는 배우기가 어려워요.' },
+      { type: 'note', text: '主语通常用 은/는 标记，评价对象', examples: '한국어는 배우기가 어려워요.（韩语学起来难。）' },
+      { type: 'compare', text: '中文"喜欢"别硬套：듣기 좋다＝好听/听着舒服，不是"喜欢听"（喜欢听＝듣기를 좋아하다）；하기 싫다＝不想做/讨厌做', examples: '이 노래는 듣기 좋아요.（这歌好听。）/ 이 노래를 좋아해요.（喜欢这首歌。）' },
+      { type: 'note', text: '-기 把动词变成名词当主语（中文没有这种变形）：难易的主语是"做这件事"本身，人用 은/는 当话题', examples: '저는 한국어 배우기가 어려워요.（我觉得学韩语难。）' },
     ],
     cardExamples: [
       {
@@ -97,7 +99,7 @@ export const grammarCardsP28: GrammarCard[] = [
       rows: [
         ['-기 어렵다/쉽다', '难/容易', '배우기 어려워요'],
         ['-기 힘들다/편하다', '累/舒适', '신기 편해요'],
-        ['-기 좋다/싫다', '喜欢/不喜欢', '듣기 좋아요'],
+        ['-기 좋다/싫다', '好（做）/不想做', '듣기 좋아요（好听）'],
         ['-기 재미있다/지루하다', '有趣/无聊', '읽기 재미있어요'],
       ],
     },
@@ -137,7 +139,7 @@ export const grammarCardsP28: GrammarCard[] = [
     compareHtml: `<div class="cmp-block">
   <div style="font-size:15px;color:#241917;line-height:1.8">
     <b>-기 어렵다 vs -기 위해서</b><br>
-    ・-기 + 형용사 → 评价<br>
+    ・-기 + 形容词 → 评价<br>
     <span style="color:#89756e">배우기 어려워요.（学起来难）</span><br>
     ・-기 위해서 → 目的<br>
     <span style="color:#89756e">배우기 위해서 왔어요.（为学而来）</span>
@@ -225,11 +227,13 @@ export const grammarCardsP28: GrammarCard[] = [
     connectionRules: [
       { type: 'rule', text: '动词现在：얼마나 -는지 모르다', examples: '공부하다 → 얼마나 공부하는지 몰라요' },
       { type: 'rule', text: '形容词：有받침 -은지 / 无받침 -ㄴ지', examples: '어렵다 → 얼마나 어려운지 / 예쁘다 → 얼마나 예쁜지' },
-      { type: 'rule', text: '过去：-았/었는지 모르다', examples: '얼마나 웃었는지 몰라요' },
-      { type: 'rule', text: '名词：얼마나 -인지 모르다', examples: '얼마나 좋은 사람인지 몰라요' },
+      { type: 'rule', text: '过去：-았/었는지 모르다', examples: '얼마나 웃었는지 몰라요（笑得不知道有多厉害）' },
+      { type: 'rule', text: '名词：얼마나 -인지 모르다', examples: '얼마나 좋은 사람인지 몰라요（真不知道是多好的人）' },
       { type: 'usage', text: '字面"不知有多……"，实际是强烈感叹', examples: '얼마나 좋은지 몰라요! = 好得不得了!' },
       { type: 'compare', text: '얼마나 -는지 모르다 vs -는지 모르다 → 前者感叹强调，后者是真的不知道', examples: '가는지 몰라요.(不知去否) / 얼마나 가는지 몰라요.(不知去了多少)' },
-      { type: 'note', text: '常用来夸奖/抱怨/感叹强度', examples: '얼마나 힘든지 몰라요.' },
+      { type: 'note', text: '常用来夸奖/抱怨/感叹强度', examples: '얼마나 힘든지 몰라요.（真不知道有多累。）' },
+      { type: 'note', text: '这是固定感叹惯用型：모르다 不能换成 알다/알아요，也不能真去回答"到底多少"。整句＝中文"多……啊"', examples: '얼마나 예쁜지 몰라요.（真不知道有多漂亮＝漂亮得不得了。）' },
+      { type: 'compare', text: '同一个 얼마나：疑问句里是"多久/多少/多么"（真提问）；这里是感叹（不提问）', examples: '얼마나 걸려요?（要多久？疑问）/ 얼마나 먼지 몰라요.（不知道有多远＝远得很，感叹）' },
     ],
     cardExamples: [
       {
@@ -302,7 +306,7 @@ export const grammarCardsP28: GrammarCard[] = [
           prompt: '민수가 얼마나 (공부하다) 몰라요.',
           options: ['공부한지', '공부하는지', '공부할지', '공부하기지'],
           answer: 1,
-          explanation: '公부하다 动词现在，用 -는지 → 공부하는지。',
+          explanation: '공부하다 动词现在，用 -는지 → 공부하는지。',
         },
         {
           prompt: '어제 얼마나 (웃다) 몰라요.',
@@ -407,12 +411,14 @@ export const grammarCardsP28: GrammarCard[] = [
     ],
     connectionRules: [
       { type: 'rule', text: '形容词/动词词干 + -다 못해，不看받침', examples: '파랗다 → 파랗다 못해 / 기다리다 → 기다리다 못해' },
-      { type: 'usage', text: '语义1（形容词）：达到程度后引出更极端评价', examples: '하늘이 파랗다 못해 눈부셔요.' },
+      { type: 'usage', text: '语义1（形容词）：达到程度后引出更极端评价', examples: '하늘이 파랗다 못해 눈부셔요.（天蓝得刺眼。）' },
       { type: 'usage', text: '语义2（动词）：受不了以致于采取行动', examples: '기다리다 못해 먼저 갔어요.（等不下去才先走）' },
-      { type: 'usage', text: '语义3：情绪极致导致的反应', examples: '화가 나다 못해 눈물이 났어요.' },
+      { type: 'usage', text: '语义3：情绪极致导致的反应', examples: '화가 나다 못해 눈물이 났어요.（气得都哭了。）' },
       { type: 'compare', text: '-다 못해 vs -다가 → 前者程度递进，后者动作转变', examples: '먹다 못해 토했다(吃到吐) / 먹다가 토했다(吃着吃着吐了)' },
-      { type: 'note', text: '常与"눈물이 나다/포기하다/쓰러지다"等极端反应搭配', examples: '아프다 못해 쓰러졌어요.' },
+      { type: 'note', text: '常与"눈물이 나다/포기하다/쓰러지다"等极端反应搭配', examples: '아프다 못해 쓰러졌어요.（疼得都倒下了。）' },
       { type: 'note', text: '前后主语可以是同一物/同一人的不同状态', examples: '슬프다 못해 웃음이 나요.（伤心到笑）' },
+      { type: 'compare', text: '别被 못 骗了：这里的 -다 못해 不是"不能/做不到"（那是 못하다）。它表"到极致以致于"，是程度递进不是否定', examples: '기다리다 못해 갔어요.（等到受不了才走＝去了，不是"不能等"）' },
+      { type: 'note', text: '偏书面/文艺的强调表达，日常口语更常说 너무……해서 或 -을 정도로', examples: '너무 파래서 눈이 부셔요.（口语：蓝得刺眼。）' },
     ],
     cardExamples: [
       {
@@ -590,10 +596,12 @@ export const grammarCardsP28: GrammarCard[] = [
       { type: 'rule', text: '有받침 → -을수록', examples: '먹다 → 먹을수록 / 좋다 → 좋을수록' },
       { type: 'rule', text: '无받침 → -ㄹ수록', examples: '가다 → 갈수록 / 보다 → 볼수록' },
       { type: 'rule', text: '名词：-(이)ㄹ수록', examples: '학생일수록 / 부자일수록' },
-      { type: 'usage', text: '强调形："-으면 -을수록" = 越……越……', examples: '보면 볼수록 예뻐요.' },
-      { type: 'usage', text: '前后动作/程度成正比或反比', examples: '나이가 들수록 시간이 빨라져요.' },
+      { type: 'usage', text: '强调形："-으면 -을수록" = 越……越……', examples: '보면 볼수록 예뻐요.（越看越美。）' },
+      { type: 'usage', text: '前后动作/程度成正比或反比', examples: '나이가 들수록 시간이 빨라져요.（越上年纪越觉得时间快。）' },
       { type: 'compare', text: '-을수록 vs -으면 → 后者是条件"如果"，前者是程度递进', examples: '먹으면 좋아요.(吃了就好) / 먹을수록 좋아요.(越吃越好)' },
-      { type: 'note', text: '常搭配"점점 더/갈수록"加强递进', examples: '갈수록 어려워져요.' },
+      { type: 'note', text: '常搭配"점점 더/갈수록"加强递进', examples: '갈수록 어려워져요.（越来越难。）' },
+      { type: 'compare', text: '负迁移：中文"越A越B"有两个"越"，韩语只在前句用 -을수록，后句不再加标记（想加就用 더/점점）', examples: '공부할수록 재미있어요.（越学越有趣，后句无"越"）/ 공부할수록 점점 더 재미있어요.' },
+      { type: 'note', text: '强调形 -으면 -을수록 必须重复同一个动词/形容词，不能换词', examples: '보면 볼수록（越看越）/ 알면 알수록（越了解越）' },
     ],
     cardExamples: [
       {
@@ -769,11 +777,13 @@ export const grammarCardsP28: GrammarCard[] = [
     ],
     connectionRules: [
       { type: 'rule', text: '오죽 + 动词/形容词 + -(으)면', examples: '힘들다 → 오죽 힘들면 / 아프다 → 오죽 아프면' },
-      { type: 'rule', text: '后接 -겠다/-겠어요/-을까 表推想感叹', examples: '오죽 힘들면 그랬겠어요.' },
-      { type: 'rule', text: '过去式：-았/었으면 + -았겠어요/-었을까요', examples: '오죽 배고팠으면 그렇게 먹었을까요.' },
+      { type: 'rule', text: '后接 -겠다/-겠어요/-을까 表推想感叹', examples: '오죽 힘들면 그랬겠어요.（要多难才会那样啊。）' },
+      { type: 'rule', text: '过去式：-았/었으면 + -았겠어요/-었을까요', examples: '오죽 배고팠으면 그렇게 먹었을까요.（得多饿才那样吃啊。）' },
       { type: 'usage', text: '"오죽하면" 是常见凝缩形，直接表达"何等程度……才会"', examples: '오죽하면 그러겠어요?' },
-      { type: 'usage', text: '带同情/理解/感叹的语气，不是简单陈述', examples: '오죽 답답하면 그렇게 소리쳤겠어요.' },
+      { type: 'usage', text: '带同情/理解/感叹的语气，不是简单陈述', examples: '오죽 답답하면 그렇게 소리쳤겠어요.（得多憋屈才那样喊啊。）' },
       { type: 'note', text: '通常反问形，翻译"该多……啊"或"得多么……才……"', examples: '오죽 좋으면 하루종일 웃었겠어요?' },
+      { type: 'note', text: '别把这里的 -(으)면 理解成"如果"。中文母语者常把"오죽 힘들면"读成"如果很累"，其实它是对既成事实的推想感叹："得多累才……"。', examples: '오죽 힘들면 그랬겠어요.（得多累才那样呢，不是"如果累"）' },
+      { type: 'compare', text: '오죽 vs 얼마나：얼마나 是中性的"多么/多少"，可以单纯提问；오죽 一定带同情/感叹，而且必须搭 -겠/-을까 推想，不能像 얼마나 那样单独发问。', examples: '얼마나 힘들었어요?（单纯问：有多累？）↔ 오죽 힘들면 그랬겠어요.（感叹：得多累才那样）' },
     ],
     cardExamples: [
       {
@@ -865,7 +875,7 @@ export const grammarCardsP28: GrammarCard[] = [
     compareHtml: `<div class="cmp-block">
   <div style="font-size:15px;color:#241917;line-height:1.8">
     <b>오죽 -으면 结构</b><br>
-    前句：오죽 + 형용사/동사 + -(으)면<br>
+    前句：오죽 + 形容词/动词 + -(으)면<br>
     后句：-겠어요 / -을까요（推想感叹）<br>
     <span style="color:#89756e">오죽 힘들면 그랬겠어요.（得多累才那样呢）</span><br>
     凝缩：오죽하면 -겠어요?
@@ -945,12 +955,13 @@ export const grammarCardsP28: GrammarCard[] = [
     ],
     connectionRules: [
       { type: 'rule', text: '动词/形容词词干 + -기(는) 하다', examples: '먹다 → 먹기는 하다 / 좋다 → 좋기는 하다' },
-      { type: 'rule', text: '名词 + 이기(는) 하다', examples: '학생이기는 하다' },
-      { type: 'rule', text: '-기는 하는데 / -기는 하지만 → 常见让步转折', examples: '가기는 하지만 늦게 갈 거예요.' },
-      { type: 'usage', text: '前句承认事实，后句加保留、限制、转折', examples: '재미있기는 한데 어려워요.' },
-      { type: 'usage', text: '语气比 -지만 更强调"承认" + "但是"', examples: '오기는 하는데 시간이 오래 걸려요.' },
+      { type: 'rule', text: '名词 + 이기(는) 하다', examples: '학생이기는 하다（是学生倒是学生。）' },
+      { type: 'rule', text: '-기는 하는데 / -기는 하지만 → 常见让步转折', examples: '가기는 하지만 늦게 갈 거예요.（去是去，但会晚到。）' },
+      { type: 'usage', text: '前句承认事实，后句加保留、限制、转折', examples: '재미있기는 한데 어려워요.（有意思是有意思，但难。）' },
+      { type: 'usage', text: '语气比 -지만 更强调"承认" + "但是"', examples: '오기는 하는데 시간이 오래 걸려요.（来是来，但要花很久。）' },
       { type: 'compare', text: '-기는 하다 vs -지만 → 前者带承认让步语气，后者纯转折', examples: '오지만 늦어요(转折) / 오기는 하는데 늦어요(承认+但)' },
       { type: 'note', text: '"-기는요" 是缩略形，常用于回答表委婉否认', examples: '"잘하시네요." - "잘하기는요."（哪里/也谈不上）' },
+      { type: 'note', text: '时态、否定都挂在后面的 하다 上，前面的 -기 不变形。中文母语者常把"了"往前塞成 먹었기는 —— 错。过去要说 먹기는 했다。', examples: '가기는 했는데 늦었어요.（去是去了，但迟到了）' },
     ],
     cardExamples: [
       {
@@ -996,6 +1007,7 @@ export const grammarCardsP28: GrammarCard[] = [
       { wrong: '먹는 하는데', correct: '먹기는 하는데', note: '固定为 -기(는) 하다，不用 -는' },
       { wrong: '먹기 한데', correct: '먹기는 한데', note: '让步语气需带助词 -는' },
       { wrong: '한국어가 재미있기는 해서 어려워요', correct: '한국어가 재미있기는 한데 어려워요', note: '让步转折用 -기는 한데/하지만，不用 -해서' },
+      { wrong: '먹었기는 하는데', correct: '먹기는 했는데', note: '过去式加在 하다 上（했-），不加在前面的 -기 上' },
     ],
     quickTable: {
       title: '-기(는) 하다 变体',
@@ -1125,7 +1137,8 @@ export const grammarCardsP28: GrammarCard[] = [
       { type: 'usage', text: '仅用于口语，作强烈肯定回答', examples: '"맛있어요?" - "맛있고말고요."' },
       { type: 'usage', text: '非敬语用 -고말고', examples: '"밥 먹었어?" - "먹었고말고."' },
       { type: 'compare', text: '-고말고요 vs 그럼요 → 语义相同，都表"当然"', examples: '"가실 거예요?" - "가고말고요." = "그럼요, 가요."' },
-      { type: 'note', text: '不用于陈述句，只作应答', examples: '(✗) 저는 가고말고요 시장에.' },
+      { type: 'note', text: '不用于陈述句，只作应答', examples: '(✗) 저는 가고말고요 시장에.（错误说法：고말고요 只作应答，不能这样接宾语作陈述句）' },
+      { type: 'compare', text: '这里的 -고 跟你学过的连接词尾 -고（"……而且……"）没关系，是一个整体固定词尾 -고말고요，不能拆开理解。别看到 -고 就以为要接下一个动作。', examples: '먹고 자요（先吃再睡，连接）↔ 먹고말고요（当然吃啦，应答，整体一个词）' },
     ],
     cardExamples: [
       {
@@ -1298,11 +1311,13 @@ export const grammarCardsP28: GrammarCard[] = [
       { type: 'rule', text: '有받침 → -을 따름이다', examples: '먹다 → 먹을 따름이다 / 좋다 → 좋을 따름이다' },
       { type: 'rule', text: '无받침 → -ㄹ 따름이다', examples: '가다 → 갈 따름이다 / 하다 → 할 따름이다' },
       { type: 'rule', text: '过去 → -았/었을 따름이다', examples: '갔을 따름이다 / 했을 따름이다' },
-      { type: 'rule', text: '名词 → -(이)ㄹ 따름이다', examples: '학생일 따름이다' },
+      { type: 'rule', text: '名词 → -(이)ㄹ 따름이다', examples: '학생일 따름이다（只不过是个学生罢了。）' },
       { type: 'usage', text: '强调"没别的，只有这个"，语气委婉正式', examples: '감사할 따름이에요.（只是心怀感激）' },
-      { type: 'usage', text: '常用情感表达：감사할 / 부끄러울 / 안타까울 / 죄송할', examples: '죄송할 따름입니다.' },
+      { type: 'usage', text: '常用情感表达：감사할 / 부끄러울 / 안타까울 / 죄송할', examples: '죄송할 따름입니다.（只有满心歉意。）' },
       { type: 'compare', text: '-을 따름이다 vs -을 뿐이다 → 语义几乎相同，前者更正式书面', examples: '감사할 따름 = 감사할 뿐（更书面 vs 更口语）' },
-      { type: 'note', text: '主要用于自谦、道歉、感激、遗憾的正式场合', examples: '노력했을 따름이에요.' },
+      { type: 'note', text: '主要用于自谦、道歉、感激、遗憾的正式场合', examples: '노력했을 따름이에요.（只是尽力了而已。）' },
+      { type: 'note', text: '中文的"只"能表数量（只有一千块），但 따름이다 不表数量限定。它是"心情/行为仅此而已，别无其他"。数量上的"只有"要用 밖에/뿐。', examples: '(表数量) 천 원밖에 없어요.（只有一千块）↔ (表心情) 그저 감사할 따름이에요.（只是感激）' },
+      { type: 'compare', text: '따름 只能出现在 따름이다 里，是个"专属搭档"。别拿它套 뿐 的扩展说法：뿐 有 뿐만 아니라，따름 没有 따름만 아니라。', examples: '(✓) 감사할 따름이에요. / (✓) 도움뿐만 아니라… (✗) 도움 따름만 아니라' },
     ],
     cardExamples: [
       {
@@ -1442,9 +1457,9 @@ export const grammarCardsP28: GrammarCard[] = [
     id: 'card-p28-l09',
     partNumber: 28,
     lessonNumber: 9,
-    title: '综合练习㉒',
-    whatItDoes: 'P22综合复习',
-    whatItDoesBody: '本练习综合复习 P22 强调与感叹深化章节的 8 个语法点：-기(가) N하다 / 얼마나 -는지 모르다 / -다 못해 / -을수록 / 오죽 -으면 / -기(는) 하다 / -고말고요 / -을 따름이다。',
+    title: 'P28 综合练习',
+    whatItDoes: 'P28 综合复习',
+    whatItDoesBody: '本练习综合复习 P28 强调与感叹深化章节的 8 个语法点：-기(가) N하다 / 얼마나 -는지 모르다 / -다 못해 / -을수록 / 오죽 -으면 / -기(는) 하다 / -고말고요 / -을 따름이다。',
     structureNote: '综合本 Part 所有语法',
     rulesNote: '重点辨析：感叹强度阶梯 및 让步转折与限定表达',
     isPractice: true,
@@ -1533,7 +1548,7 @@ export const grammarCardsP28: GrammarCard[] = [
     linkedGrammarIds: ['card-p28-l01', 'card-p28-l02', 'card-p28-l03', 'card-p28-l04', 'card-p28-l05', 'card-p28-l06', 'card-p28-l07', 'card-p28-l08'],
     specialQuiz: {
       type: 'judge',
-      title: 'P22 综合练习',
+      title: 'P28 综合练习',
       body: '选择正确的表达',
       questions: [
         {
@@ -1563,7 +1578,7 @@ export const grammarCardsP28: GrammarCard[] = [
       ],
     },
     overviewHtml: `<div class="ov-hero">
-  <div style="font-size:20px;font-weight:700;color:#241917;margin-bottom:8px">P22 总结：强调与感叹深化</div>
+  <div style="font-size:20px;font-weight:700;color:#241917;margin-bottom:8px">P28 总结：强调与感叹深化</div>
   <div style="font-size:14px;color:#89756e">评价 / 感叹 / 递进 / 承认 / 肯定</div>
 </div>
 <div class="ov-section">
@@ -1598,7 +1613,7 @@ export const grammarCardsP28: GrammarCard[] = [
   <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">核心易错</div></div>
   <div class="ov-block">
     <div style="font-size:16px;color:#241917;line-height:1.9">
-      1. 형용사冠形用 -은/ㄴ，不用 -는（어렵는지 ✗）<br>
+      1. 形容词冠形用 -은/ㄴ，不用 -는（어렵는지 ✗）<br>
       2. 词干直接接 -기，不做 -아/어 变形<br>
       3. -고말고요 只作应答，不能陈述<br>
       4. -을/ㄹ 따름 vs -을/ㄹ 뿐 → 正式 vs 口语

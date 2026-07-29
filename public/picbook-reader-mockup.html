@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>绘本阅读器内页重构 mockup · 三栏</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,500;1,9..144,600;1,9..144,700&family=Noto+Serif+SC:wght@500;600;700;900&family=Noto+Sans+SC:wght@400;500;700&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ==========================================================================
+   绘本阅读器内页 mockup — 暖手账绘本读物风 · 三栏
+   左栏 目录导航 | 中栏 拍立得插画 | 右栏 正文读物
+   scope: .pbr-scope
+   ========================================================================== */
+.pbr-scope {
+  --paper: oklch(97.5% 0.014 82);
+  --paper-2: oklch(99% 0.008 82);
+  --paper-3: oklch(95% 0.02 80);
+  --ink-1: oklch(28% 0.022 50);
+  --ink-2: oklch(45% 0.024 50);
+  --ink-3: oklch(62% 0.026 50);
+  --ink-4: oklch(74% 0.020 50);
+
+  --honey: oklch(74% 0.15 78);
+  --honey-deep: oklch(56% 0.14 68);
+  --honey-wash: oklch(93% 0.055 82);
+
+  --border-1: oklch(89% 0.02 78);
+  --tick: oklch(84% 0.03 70);
+
+  --shadow-photo: 0 1px 2px oklch(35% 0.03 50 / .1), 0 18px 40px -14px oklch(35% 0.04 50 / .35);
+  --shadow-soft: 0 2px 8px -3px oklch(35% 0.03 50 / .1), 0 12px 30px -14px oklch(35% 0.04 50 / .18);
+
+  --ease: cubic-bezier(.22, 1, .36, 1);
+  --serif: 'Fraunces', 'Noto Serif SC', serif;
+  --ko-serif: 'Gowun Batang', 'Noto Serif SC', serif;
+  --zh: 'Noto Sans SC', sans-serif;
+
+  font-family: 'Pretendard', var(--zh);
+  color: var(--ink-1);
+  background:
+    radial-gradient(130% 80% at 50% -10%, var(--honey-wash), transparent 45%),
+    var(--paper);
+  min-height: 100vh;
+}
+.pbr-scope *, .pbr-scope *::before, .pbr-scope *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+.pbr-scope.dark {
+  --paper: oklch(17% 0.016 300);
+  --paper-2: oklch(21% 0.02 300);
+  --paper-3: oklch(24% 0.022 300);
+  --ink-1: oklch(93% 0.015 300);
+  --ink-2: oklch(74% 0.015 300);
+  --ink-3: oklch(58% 0.014 300);
+  --ink-4: oklch(46% 0.012 300);
+  --honey: oklch(80% 0.14 82);
+  --honey-deep: oklch(82% 0.13 80);
+  --honey-wash: oklch(76% 0.13 82 / .16);
+  --border-1: oklch(94% 0.015 300 / .1);
+  --tick: oklch(94% 0.015 300 / .16);
+  --shadow-photo: 0 1px 2px oklch(0% 0 0 / .4), 0 18px 40px -14px oklch(0% 0 0 / .6);
+  --shadow-soft: 0 2px 8px -3px oklch(0% 0 0 / .4), 0 12px 30px -14px oklch(0% 0 0 / .5);
+}
+
+/* ---------- TOP BAR ---------- */
+.pbr-top {
+  display: flex; align-items: center; gap: 16px;
+  max-width: 1560px; margin: 0 auto; padding: 22px 32px 6px;
+}
+.pbr-back {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 9px 16px 9px 12px; border-radius: 999px;
+  font-size: 13px; font-weight: 600; color: var(--ink-2);
+  background: var(--paper-2); border: 1px solid var(--border-1);
+  box-shadow: var(--shadow-soft); cursor: pointer;
+  transition: transform .15s var(--ease), color .15s var(--ease);
+}
+.pbr-back:hover { transform: translateX(-2px); color: var(--ink-1); }
+/* 放大后的书名区：kicker + 大书名 */
+.pbr-titlebox { display: flex; flex-direction: column; }
+.pbr-kicker {
+  font-family: var(--serif); font-style: italic; font-weight: 600;
+  font-size: 13px; color: var(--honey-deep); letter-spacing: .04em; margin-bottom: 2px;
+}
+.pbr-booktitle {
+  font-family: var(--ko-serif); font-weight: 700; font-size: 30px; color: var(--ink-1);
+  line-height: 1.1; letter-spacing: -.01em;
+}
+.pbr-chapter {
+  margin-left: auto; font-family: var(--serif); font-style: italic;
+  font-size: 15px; color: var(--ink-4); white-space: nowrap;
+}
+.pbr-chapter b { font-style: normal; font-weight: 700; color: var(--honey-deep); font-size: 22px; }
+
+/* ---------- 3-COL STAGE ---------- */
+.pbr-stage {
+  max-width: 1560px; margin: 0 auto; padding: 14px 32px 24px;
+  display: grid;
+  grid-template-columns: 232px minmax(0, 0.9fr) minmax(0, 1.05fr);
+  gap: 40px; align-items: start;
+}
+
+/* ═══ 左栏：目录导航 ═══ */
+.pbr-toc {
+  position: sticky; top: 20px;
+  display: flex; flex-direction: column; gap: 18px;
+}
+.pbr-toc-card {
+  background: var(--paper-2); border: 1px solid var(--border-1);
+  border-radius: 20px; padding: 18px; box-shadow: var(--shadow-soft);
+}
+.pbr-toc-head {
+  font-family: var(--serif); font-weight: 700; font-size: 14px; color: var(--ink-2);
+  display: flex; align-items: center; gap: 7px; margin-bottom: 14px;
+}
+.pbr-toc-head .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--honey); }
+
+/* 进度环 */
+.pbr-progress-ring { display: flex; align-items: center; gap: 13px; margin-bottom: 16px; }
+.pbr-ring {
+  --pct: 9%;
+  width: 52px; height: 52px; border-radius: 50%; flex: 0 0 auto;
+  background: conic-gradient(var(--honey) var(--pct), var(--paper-3) 0);
+  display: grid; place-items: center; position: relative;
+}
+.pbr-ring::after {
+  content: ''; position: absolute; inset: 5px; border-radius: 50%; background: var(--paper-2);
+}
+.pbr-ring b {
+  position: relative; z-index: 1; font-family: var(--serif); font-weight: 700;
+  font-size: 15px; color: var(--honey-deep); font-variant-numeric: tabular-nums;
+}
+.pbr-progress-meta { display: flex; flex-direction: column; gap: 2px; }
+.pbr-progress-meta .big { font-size: 14px; font-weight: 700; color: var(--ink-1); }
+.pbr-progress-meta .sm { font-size: 12px; color: var(--ink-4); }
+
+/* 页面目录：竖排页项，标当前/已读 */
+.pbr-toc-list { display: flex; flex-direction: column; gap: 2px; max-height: 340px; overflow-y: auto; }
+.pbr-toc-item {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  padding: 8px 10px; border-radius: 11px; cursor: pointer; border: none; background: transparent;
+  font-family: inherit; text-align: left;
+  transition: background .18s var(--ease);
+}
+.pbr-toc-item:hover { background: var(--paper-3); }
+.pbr-toc-item.on { background: var(--honey-wash); }
+.pbr-toc-num {
+  flex: 0 0 auto; width: 24px; height: 24px; border-radius: 7px;
+  display: grid; place-items: center; font-size: 12px; font-weight: 700;
+  font-family: var(--serif); font-variant-numeric: tabular-nums;
+  color: var(--ink-4); background: var(--paper-3);
+}
+.pbr-toc-item.on .pbr-toc-num { background: var(--honey); color: #fff; }
+.pbr-toc-item.read .pbr-toc-num { color: var(--honey-deep); background: var(--honey-wash); }
+.pbr-toc-label { font-size: 13px; color: var(--ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pbr-toc-item.on .pbr-toc-label { color: var(--ink-1); font-weight: 600; }
+.pbr-toc-check { margin-left: auto; font-size: 11px; color: var(--honey-deep); }
+
+/* 累积生词小卡 */
+.pbr-toc-vocab { display: flex; align-items: center; justify-content: space-between; }
+.pbr-toc-vocab .n { font-family: var(--serif); font-weight: 900; font-size: 26px; color: var(--honey-deep); }
+.pbr-toc-vocab .lbl { font-size: 12px; color: var(--ink-3); line-height: 1.4; }
+.pbr-toc-vocab .go {
+  font-size: 12px; font-weight: 700; color: var(--honey-deep); cursor: pointer;
+}
+
+/* ═══ 中栏：拍立得插画 ═══ */
+.pbr-photo-wrap { position: relative; display: flex; justify-content: center; padding-top: 8px; }
+.pbr-photo {
+  position: relative; width: 100%; max-width: 440px;
+  background: var(--paper-2); padding: 14px 14px 46px; border-radius: 3px;
+  box-shadow: var(--shadow-photo);
+  transform: rotate(-1.4deg); transition: transform .5s var(--ease);
+}
+.pbr-photo:hover { transform: rotate(0deg) translateY(-4px); }
+.pbr-photo-img { aspect-ratio: 3/4; border-radius: 1px; overflow: hidden; background: var(--honey-wash); }
+.pbr-photo-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pbr-photo-caption {
+  position: absolute; left: 0; right: 0; bottom: 12px; text-align: center;
+  font-family: var(--serif); font-style: italic; font-size: 15px; color: var(--ink-3);
+}
+.pbr-tape { position: absolute; z-index: 3; width: 66px; height: 24px;
+  background: oklch(88% 0.09 88 / .6); box-shadow: 0 1px 3px oklch(40% 0.03 50 / .15); }
+.pbr-tape.tl { top: -10px; left: 26px; transform: rotate(-26deg); }
+.pbr-tape.br { bottom: 24px; right: 22px; transform: rotate(-20deg); background: oklch(86% 0.07 20 / .5); }
+.pbr-photo-wrap::before {
+  content: ''; position: absolute; inset: -6% -2%; z-index: -1;
+  background: radial-gradient(ellipse at 50% 45%, var(--honey-wash), transparent 68%); filter: blur(30px);
+}
+
+/* ═══ 右栏：正文读物 ═══ */
+.pbr-read { max-width: 620px; padding-top: 6px; }
+.pbr-lines { position: relative; padding-left: 26px; }
+.pbr-lines::before {
+  content: ''; position: absolute; left: 6px; top: 8px; bottom: 8px; width: 2px;
+  border-radius: 2px; background: linear-gradient(var(--tick), transparent);
+}
+.pbr-line { position: relative; padding: 10px 8px 10px 0; border-radius: 12px; transition: background .3s var(--ease); }
+.pbr-line.active { background: var(--honey-wash); }
+.pbr-line.active::before {
+  content: ''; position: absolute; left: -23px; top: 50%; transform: translateY(-50%);
+  width: 9px; height: 9px; border-radius: 50%; background: var(--honey); box-shadow: 0 0 0 4px var(--honey-wash);
+}
+.pbr-num {
+  font-family: var(--serif); font-size: 12px; color: var(--ink-4);
+  font-variant-numeric: tabular-nums; letter-spacing: .04em; margin-bottom: 3px; display: block;
+}
+.pbr-roman { font-size: 13px; color: var(--ink-4); margin-bottom: 4px; }
+.pbr-ko-row { display: flex; align-items: flex-start; gap: 8px; }
+.pbr-ko {
+  flex: 1; font-family: var(--ko-serif); font-size: 26px; font-weight: 700;
+  line-height: 1.55; color: var(--ink-1); letter-spacing: -.005em;
+}
+.pbr-line.active .pbr-ko { color: var(--honey-deep); }
+.pbr-speak {
+  flex: 0 0 auto; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center;
+  margin-top: 6px; color: var(--ink-4); background: transparent; border: none; cursor: pointer;
+  transition: color .15s var(--ease), background .15s var(--ease), transform .1s;
+}
+.pbr-speak:hover { color: var(--honey-deep); background: var(--honey-wash); }
+.pbr-speak:active { transform: scale(.88); }
+.pbr-zh { font-family: var(--zh); font-size: 14.5px; line-height: 1.65; color: var(--ink-3); margin-top: 5px; }
+
+.pbr-controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 24px 0 18px; padding-left: 26px; }
+.pbr-play {
+  display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 999px;
+  border: none; cursor: pointer; font-family: inherit; font-size: 14px; font-weight: 700; color: #fff;
+  background: linear-gradient(145deg, var(--honey), var(--honey-deep));
+  box-shadow: 0 8px 20px -8px var(--honey-deep); transition: filter .2s var(--ease), transform .1s;
+}
+.pbr-play:hover { filter: brightness(1.05); }
+.pbr-play:active { transform: scale(.97); }
+.pbr-toggle {
+  display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px; border-radius: 999px;
+  cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 600; color: var(--ink-3);
+  background: transparent; border: 1.5px solid var(--border-1);
+  transition: color .15s var(--ease), border-color .15s var(--ease), background .15s var(--ease);
+}
+.pbr-toggle:hover { color: var(--ink-1); border-color: var(--ink-4); }
+.pbr-toggle.on { color: var(--honey-deep); border-color: transparent; background: var(--honey-wash); }
+
+.pbr-vocab { display: flex; flex-wrap: wrap; gap: 8px; padding-left: 26px; }
+.pbr-chip {
+  display: inline-flex; align-items: baseline; gap: 6px; padding: 8px 14px; border-radius: 10px; cursor: pointer;
+  background: var(--paper-2); border: 1px solid var(--border-1); box-shadow: var(--shadow-soft);
+  transition: transform .15s var(--ease);
+}
+.pbr-chip:hover { transform: translateY(-2px); }
+.pbr-chip-ko { font-family: var(--ko-serif); font-weight: 700; font-size: 15px; color: var(--ink-1); }
+.pbr-chip-zh { font-size: 12.5px; color: var(--ink-3); }
+
+/* ---------- FOOTER (mobile 用；桌面靠左栏目录跳页，footer 仅箭头) ---------- */
+.pbr-foot {
+  max-width: 1560px; margin: 0 auto; padding: 0 32px 30px;
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+}
+.pbr-arrow {
+  width: 44px; height: 44px; border-radius: 50%; cursor: pointer; display: grid; place-items: center;
+  color: var(--ink-2); background: var(--paper-2); border: 1px solid var(--border-1); box-shadow: var(--shadow-soft);
+  transition: transform .15s var(--ease), color .15s;
+}
+.pbr-arrow:hover { color: var(--honey-deep); transform: scale(1.08); }
+.pbr-foot-hint { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--ink-4); }
+
+/* 手机页码点（桌面隐藏，用左栏目录） */
+.pbr-dots { display: none; align-items: center; gap: 7px; }
+.pbr-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--tick); }
+.pbr-dot.on { width: 24px; border-radius: 4px; background: var(--honey); }
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 1120px) {
+  /* 收起左栏 → 双栏（插画 | 正文），页码回到底部 */
+  .pbr-stage { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr); gap: 44px; }
+  .pbr-toc { display: none; }
+  .pbr-dots { display: flex; }
+  .pbr-foot-hint { display: none; }
+}
+@media (max-width: 780px) {
+  .pbr-stage { grid-template-columns: 1fr; gap: 18px; padding: 10px 18px 16px; }
+  .pbr-photo { max-width: 250px; padding: 10px 10px 34px; }
+  .pbr-photo-caption { font-size: 13px; bottom: 9px; }
+  .pbr-read { max-width: 100%; margin: 0 auto; }
+  .pbr-ko { font-size: 21px; }
+  .pbr-booktitle { font-size: 24px; }
+  .pbr-chapter { display: none; }
+  .pbr-top { padding: 16px 18px 4px; }
+}
+
+.mock-note { max-width:1560px; margin: 14px auto 0; padding: 12px 20px; font-size: 12.5px;
+  color:#8a6d3b; background:#fff8e6; border:1px solid #f0e0b8; border-radius:12px; font-family:system-ui; }
+.mock-toggle { position: fixed; top: 12px; right: 12px; z-index: 99; padding: 8px 14px; border-radius: 999px;
+  background:#241917; color:#fff; border:none; font-size:12px; cursor:pointer; font-family:system-ui; }
+</style>
+</head>
+<body>
+<button class="mock-toggle" onclick="document.querySelector('.pbr-scope').classList.toggle('dark')">切换暗色</button>
+
+<div class="pbr-scope">
+  <div class="mock-note">📖 三栏版：左栏目录导航 + 放大书名。窗口 &lt;1120px 收左栏成双栏，&lt;780px 单栏。右上切暗色。落地删此条。</div>
+
+  <!-- TOP -->
+  <div class="pbr-top">
+    <button class="pbr-back">← 绘本列表</button>
+    <div class="pbr-titlebox">
+      <span class="pbr-kicker">동물 도시 그림책관</span>
+      <span class="pbr-booktitle">토리의 하루</span>
+    </div>
+    <div class="pbr-chapter"><b>01</b> / 11</div>
+  </div>
+
+  <!-- STAGE -->
+  <div class="pbr-stage">
+
+    <!-- 左栏 目录导航 -->
+    <aside class="pbr-toc">
+      <div class="pbr-toc-card">
+        <div class="pbr-progress-ring">
+          <div class="pbr-ring" style="--pct:9%"><b>9%</b></div>
+          <div class="pbr-progress-meta">
+            <span class="big">读到第 1 页</span>
+            <span class="sm">共 11 页 · 还剩 10 页</span>
+          </div>
+        </div>
+        <div class="pbr-toc-head"><span class="dot"></span>目录</div>
+        <div class="pbr-toc-list">
+          <button class="pbr-toc-item on"><span class="pbr-toc-num">01</span><span class="pbr-toc-label">토리의 아침</span></button>
+          <button class="pbr-toc-item"><span class="pbr-toc-num">02</span><span class="pbr-toc-label">신비로운 소포</span></button>
+          <button class="pbr-toc-item"><span class="pbr-toc-num">03</span><span class="pbr-toc-label">편지를 읽어요</span></button>
+          <button class="pbr-toc-item"><span class="pbr-toc-num">04</span><span class="pbr-toc-label">한국으로!</span></button>
+          <button class="pbr-toc-item"><span class="pbr-toc-num">05</span><span class="pbr-toc-label">공항에서</span></button>
+          <button class="pbr-toc-item"><span class="pbr-toc-num">06</span><span class="pbr-toc-label">서울 도착</span></button>
+          <button class="pbr-toc-item"><span class="pbr-toc-num">07</span><span class="pbr-toc-label">첫 인사</span></button>
+          <button class="pbr-toc-item"><span class="pbr-toc-num">08</span><span class="pbr-toc-label">맛있는 간식</span></button>
+          <button class="pbr-toc-item"><span class="pbr-toc-num">09</span><span class="pbr-toc-label">새 친구</span></button>
+          <button class="pbr-toc-item"><span class="pbr-toc-num">10</span><span class="pbr-toc-label">즐거운 하루</span></button>
+          <button class="pbr-toc-item"><span class="pbr-toc-num">11</span><span class="pbr-toc-label">오늘의 단어</span></button>
+        </div>
+      </div>
+      <div class="pbr-toc-card pbr-toc-vocab">
+        <div>
+          <div class="n">32</div>
+          <div class="lbl">本书生词</div>
+        </div>
+        <span class="go">生词本 →</span>
+      </div>
+    </aside>
+
+    <!-- 中栏 插画 -->
+    <div class="pbr-photo-wrap">
+      <div class="pbr-photo">
+        <span class="pbr-tape tl"></span>
+        <span class="pbr-tape br"></span>
+        <div class="pbr-photo-img"><img src="/images/picture-books/tori-day/01.webp" alt="page 1"></div>
+        <div class="pbr-photo-caption">토리의 아침</div>
+      </div>
+    </div>
+
+    <!-- 右栏 正文 -->
+    <div class="pbr-read">
+      <div class="pbr-lines">
+        <div class="pbr-line active">
+          <span class="pbr-num">01</span>
+          <div class="pbr-roman">to-ri-ga ga-jang jo-a-ha-neun geo-seun</div>
+          <div class="pbr-ko-row"><span class="pbr-ko">토리가 가장 좋아하는 것은</span><button class="pbr-speak">🔊</button></div>
+          <div class="pbr-zh">Tori 最喜欢的事情</div>
+        </div>
+        <div class="pbr-line">
+          <span class="pbr-num">02</span>
+          <div class="pbr-ko-row"><span class="pbr-ko">이불 속에서 간식 먹기예요.</span><button class="pbr-speak">🔊</button></div>
+          <div class="pbr-zh">就是在被窝里吃零食。</div>
+        </div>
+        <div class="pbr-line">
+          <span class="pbr-num">03</span>
+          <div class="pbr-ko-row"><span class="pbr-ko">어느 날 아침, 문 앞에</span><button class="pbr-speak">🔊</button></div>
+          <div class="pbr-zh">有一天早上，门口</div>
+        </div>
+        <div class="pbr-line">
+          <span class="pbr-num">04</span>
+          <div class="pbr-ko-row"><span class="pbr-ko">신비로운 소포가 생겼어요.</span><button class="pbr-speak">🔊</button></div>
+          <div class="pbr-zh">出现了一个神秘的包裹。</div>
+        </div>
+      </div>
+
+      <div class="pbr-controls">
+        <button class="pbr-play">▶ 朗读整页</button>
+        <button class="pbr-toggle on">译文</button>
+        <button class="pbr-toggle">罗马音</button>
+      </div>
+
+      <div class="pbr-vocab">
+        <button class="pbr-chip"><span class="pbr-chip-ko">이불</span><span class="pbr-chip-zh">被子</span></button>
+        <button class="pbr-chip"><span class="pbr-chip-ko">간식</span><span class="pbr-chip-zh">零食</span></button>
+        <button class="pbr-chip"><span class="pbr-chip-ko">소포</span><span class="pbr-chip-zh">包裹</span></button>
+        <button class="pbr-chip"><span class="pbr-chip-ko">신비롭다</span><span class="pbr-chip-zh">神秘</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOT -->
+  <div class="pbr-foot">
+    <button class="pbr-arrow">←</button>
+    <div class="pbr-dots">
+      <span class="pbr-dot on"></span><span class="pbr-dot"></span><span class="pbr-dot"></span>
+      <span class="pbr-dot"></span><span class="pbr-dot"></span><span class="pbr-dot"></span>
+    </div>
+    <span class="pbr-foot-hint">← → 翻页，或点左侧目录跳页</span>
+    <button class="pbr-arrow">→</button>
+  </div>
+</div>
+</body>
+</html>

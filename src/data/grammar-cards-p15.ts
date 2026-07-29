@@ -146,7 +146,7 @@ export const grammarCardsP15: GrammarCard[] = [
       ],
     },
     linkedGrammarIds: ['card-p15-l02', 'card-p15-l04'],
-    step0Html: `<div class="hook-box"><div style="font-size:15px;color:#241917;line-height:1.8">对长辈/上司/客户说话时，动词要"抬高"：加 <b>-(으)시-</b>。<br>있다→계시다？"这是特殊尊敬词。本课先学万能通配公式：<b>词干 + -(으)시-</b>。</div></div>`,
+    step0Html: `<div class="hook-box"><div style="font-size:15px;color:#241917;line-height:1.8">对长辈/上司/客户说话时，动词要"抬高"：加 <b>-(으)시-</b>。<br>有些词有专门的尊敬形（있다→계시다），下一课再学；本课先掌握万能通配公式：<b>词干 + -(으)시-</b>。</div></div>`,
     compareHtml: `<div class="cmp-block">
   <div style="font-size:15px;color:#241917;line-height:1.8">
     <b>普通 vs 주체높임</b><br>
@@ -225,12 +225,13 @@ export const grammarCardsP15: GrammarCard[] = [
     connectionRules: [
       { type: 'rule', text: '있다 → 계시다（在／人存在）｜있으시다（有／所有）', examples: '할아버지가 계세요 / 시간이 있으세요?' },
       { type: 'rule', text: '먹다·마시다 → 드시다 / 잡수시다', examples: '어머니가 저녁을 드세요 / 할머니가 잡수세요' },
-      { type: 'rule', text: '자다 → 주무시다', examples: '아버지는 일찍 주무세요' },
-      { type: 'rule', text: '말하다 → 말씀하시다', examples: '선생님께서 말씀하세요' },
-      { type: 'rule', text: '아프다 → 편찮으시다', examples: '어머니께서 편찮으세요' },
-      { type: 'rule', text: '죽다 → 돌아가시다', examples: '할아버지께서 작년에 돌아가셨어요' },
+      { type: 'rule', text: '자다 → 주무시다', examples: '아버지는 일찍 주무세요（爸爸很早就睡。）' },
+      { type: 'rule', text: '말하다 → 말씀하시다', examples: '선생님께서 말씀하세요（老师在说话。）' },
+      { type: 'rule', text: '아프다 → 편찮으시다', examples: '어머니께서 편찮으세요（妈妈身体不舒服。）' },
+      { type: 'rule', text: '죽다 → 돌아가시다', examples: '할아버지께서 작년에 돌아가셨어요（爷爷去年去世了。）' },
       { type: 'usage', text: '有些动词有"人높임（계시다）"和"物높임（있으시다）"两种', examples: '(人在) 계시다 / (有钱) 돈이 있으시다' },
       { type: 'note', text: '存在动词区分：人 → 계시다，物 → 있으시다', examples: '아버지가 계세요.（在） / 시간이 있으세요?（有）' },
+      { type: 'note', text: '말씀 一词两面：长辈"讲话"用尊敬的 말씀하시다；自己"向长辈说"用谦让的 말씀드리다（客体敬语章详学），别只记一半', examples: '선생님께서 말씀하세요（老师在讲话）/ 제가 말씀드릴게요（我来向您说明）' },
     ],
     cardExamples: [
       {
@@ -274,6 +275,7 @@ export const grammarCardsP15: GrammarCard[] = [
       { wrong: '어머니가 밥을 먹으세요', correct: '어머니가 밥을 드세요', note: '"用餐"是 드시다，不是 먹으시다' },
       { wrong: '아버지가 자세요', correct: '아버지가 주무세요', note: '"就寝"是 주무시다，不是 자시다' },
       { wrong: '어머니가 아프세요', correct: '어머니가 편찮으세요', note: '对长辈"欠安"用 편찮으시다' },
+      { wrong: '저는 지금 집에 계세요', correct: '저는 지금 집에 있어요', note: '这些特殊敬语词只抬别人，绝不能套在自己身上；说自己"在"用普通的 있어요' },
     ],
     quickTable: {
       title: '주체높임 特殊词汇速查',
@@ -403,13 +405,14 @@ export const grammarCardsP15: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '주다 → 드리다（给长辈/上级）', examples: '선생님께 선물을 드렸어요.' },
-      { type: 'rule', text: '보다/만나다 → 뵙다·뵈다（拜见）', examples: '내일 부모님을 뵙기로 했어요.' },
-      { type: 'rule', text: '묻다 → 여쭙다·여쭈다（请教）', examples: '교수님께 여쭤봤어요.' },
-      { type: 'rule', text: '데리다 → 모시다（陪同长辈）', examples: '할머니를 병원에 모시고 갔어요.' },
+      { type: 'rule', text: '주다 → 드리다（给长辈/上级）', examples: '선생님께 선물을 드렸어요.（送了老师礼物。）' },
+      { type: 'rule', text: '보다/만나다 → 뵙다·뵈다（拜见）', examples: '내일 부모님을 뵙기로 했어요.（明天要去见父母。）' },
+      { type: 'rule', text: '묻다 → 여쭙다·여쭈다（请教）', examples: '교수님께 여쭤봤어요.（向教授请教了。）' },
+      { type: 'rule', text: '데리다 → 모시다（陪同长辈）', examples: '할머니를 병원에 모시고 갔어요.（陪奶奶去了医院。）' },
       { type: 'usage', text: '客体接受者助词 -에게 → -께', examples: '친구에게 → 선생님께' },
       { type: 'compare', text: '주체높임 vs 객체높임', examples: '(주체) 아버지가 오세요.（主语被抬高）/ (객체) 아버지께 선물을 드렸어요.（宾语被抬高）' },
       { type: 'note', text: '뵙다 是最正式的拜见（初次见面/正式场合）；뵈다 略随和', examples: '처음 뵙겠습니다.（初次见面）' },
+      { type: 'note', text: '中文没有"抬高接受者"这一层：决定换不换词的是"收东西/被拜见的那个人"尊不尊贵，跟主语无关 —— 就算主语是"我"，只要对象是长辈就得换词', examples: '제가 선생님께 드렸어요（主语是我，但因对象是老师，用 드리다）' },
     ],
     cardExamples: [
       {
@@ -450,9 +453,10 @@ export const grammarCardsP15: GrammarCard[] = [
     ],
     mistakes: [
       { wrong: '선생님에게 선물을 주었어요', correct: '선생님께 선물을 드렸어요', note: '给长辈 → 드리다 + 助词 -께' },
-      { wrong: '부모님을 봐요', correct: '부모님을 뵈요 / 뵙겠습니다', note: '"拜见"是 뵙다 / 뵈다' },
+      { wrong: '부모님을 봐요', correct: '부모님을 봬요 / 뵙겠습니다', note: '"拜见"是 뵙다 / 뵈다；뵈다+어요 缩合成 봬요（不是 뵈요）' },
       { wrong: '교수님에게 물어봤어요', correct: '교수님께 여쭤봤어요', note: '"请教"是 여쭙다 / 여쭈다 + 助词 -께' },
       { wrong: '할머니를 병원에 데려갔어요', correct: '할머니를 병원에 모시고 갔어요', note: '"陪同长辈"用 모시다' },
+      { wrong: '친구에게 선물을 드렸어요', correct: '친구에게 선물을 줬어요', note: '接受者是平辈朋友时不抬高，用普通的 주다 + -에게；객체높임 只对尊者用' },
     ],
     quickTable: {
       title: '객체높임 特殊动词',
@@ -579,13 +583,14 @@ export const grammarCardsP15: GrammarCard[] = [
     ],
     connectionRules: [
       { type: 'rule', text: '主语 -이/가 → -께서', examples: '선생님이 오세요 → 선생님께서 오세요' },
-      { type: 'rule', text: '话题 -은/는 → -께서는（可省 -는，只用 -께서）', examples: '교수님께서는 자상하세요' },
+      { type: 'rule', text: '话题 -은/는 → -께서는（可省 -는，只用 -께서）', examples: '교수님께서는 자상하세요（教授很和蔼。）' },
       { type: 'rule', text: '间接宾语 -에게 → -께', examples: '친구에게 → 선생님께' },
       { type: 'rule', text: '名词 + -님 表尊称', examples: '선생 → 선생님 / 사장 → 사장님 / 교수 → 교수님' },
-      { type: 'usage', text: '-께서 常与 주체높임 -시- 搭配', examples: '선생님께서 오셨어요.' },
-      { type: 'usage', text: '-께 常与 객체높임 드리다/여쭙다 搭配', examples: '선생님께 여쭤봤어요.' },
+      { type: 'usage', text: '-께서 常与 주체높임 -시- 搭配', examples: '선생님께서 오셨어요.（老师来了。）' },
+      { type: 'usage', text: '-께 常与 객체높임 드리다/여쭙다 搭配', examples: '선생님께 여쭤봤어요.（向老师请教了。）' },
       { type: 'compare', text: '普通 vs 敬语助词', examples: '아버지가 오세요 → 아버지께서 오세요（更正式）' },
       { type: 'note', text: '日常口语中 -께서/-께 可省，用 -이/가/-에게 也可以，但正式场合必须用', examples: '(口语) 선생님이 오셨어요 / (正式) 선생님께서 오셨어요' },
+      { type: 'compare', text: '只差一个"서"意思却相反：-께서 是"主语"（=이/가），-께 是"给的对象"（=에게）', examples: '선생님께서 오셨어요（老师来了，主语）/ 선생님께 드렸어요（给了老师，对象）' },
     ],
     cardExamples: [
       {
@@ -628,6 +633,7 @@ export const grammarCardsP15: GrammarCard[] = [
       { wrong: '선생님이 오셨어요', correct: '선생님께서 오셨어요', note: '正式敬语中主语用 -께서（-이/가 只用于口语）' },
       { wrong: '사장님에게 보고서를 드렸어요', correct: '사장님께 보고서를 드렸어요', note: '给尊者用 -께，不用 -에게' },
       { wrong: '선생 오셨어요', correct: '선생님 오셨어요', note: '人称名词需加 -님' },
+      { wrong: '선생님께 오셨어요', correct: '선생님께서 오셨어요', note: '"老师来了"老师是主语，用 -께서（不是给的对象，别用 -께）' },
     ],
     quickTable: {
       title: '敬语助词对照',
@@ -761,10 +767,11 @@ export const grammarCardsP15: GrammarCard[] = [
       { type: 'rule', text: '해요체（正式亲切）→ -어요 / -으세요', examples: '가요 / 가세요' },
       { type: 'rule', text: '해체（半语）→ -어 / -야', examples: '가 / 민수야' },
       { type: 'rule', text: '해라체（书面/命令）→ -는다 / -어라 / -자', examples: '간다 / 가라 / 가자' },
-      { type: 'usage', text: '正式场合（会议/演讲/客户）→ 하십시오체', examples: '회의를 시작하겠습니다.' },
+      { type: 'usage', text: '正式场合（会议/演讲/客户）→ 하십시오체', examples: '회의를 시작하겠습니다.（会议现在开始。）' },
       { type: 'usage', text: '日常礼貌（对客气对象/工作）→ 해요체', examples: '주말에 뭐 하세요?' },
       { type: 'usage', text: '亲密关系（家人/朋友/晚辈）→ 해체', examples: '뭐 해? / 밥 먹었어?' },
-      { type: 'compare', text: '同一意思，四种语体差别', examples: '갑니다 → 가요 → 가 → 간다' },
+      { type: 'compare', text: '两条独立的敬语轴，别混成一件事：语体（청자높임）尊的是"听你说话的人"，靠句尾 -요/-습니다 切换；-시-（주체높임，第1课）尊的是"句子里被谈到的人"。两者各自开关，可以只有其中一个。', examples: '할아버지께서 가세요（尊话题人物+尊听者，两轴都开）/ 저 가요（只尊听者，主语是自己不加 -시-）/ 할아버지 어디 가셔?（尊话题人物+对听者用半语）' },
+      { type: 'note', text: '해라체 -ㄴ다/-는다 是书面中性体（日记·新闻·说明文用），不等于对人没礼貌；只有面对面的随意口语才是 해체 -어。别把书面的 간다 当成失礼。', examples: '(新闻) 대통령이 오늘 방문한다.（书面中性，无失礼）/ (对朋友) 나 지금 가.（口语半语）' },
       { type: 'note', text: '语体不匹配会显得失礼或过于生分', examples: '对老板用 해체 → 失礼 / 对家人用 하십시오체 → 生分' },
     ],
     cardExamples: [
@@ -807,7 +814,7 @@ export const grammarCardsP15: GrammarCard[] = [
     mistakes: [
       { wrong: '(对老板) 사장님, 저 가.', correct: '사장님, 저 갑니다 / 가겠습니다.', note: '对老板用 하십시오체 或 해요체，不用 해체' },
       { wrong: '(对家人) 어머니, 지금 어디에 계십니까?', correct: '어머니, 지금 어디에 계세요?', note: '家人平常用 해요체 就够，하십시오체 显生分' },
-      { wrong: '아빠, 어디에 가십니까?', correct: '아빠, 어디에 가세요?', note: '对家人用 하십시오체（-십니까）显生分；해요体（-세요）更自然' },
+      { wrong: '(想对老板客气) 사장님, 저 지금 가십니다.', correct: '사장님, 저 지금 갑니다.', note: '对听者客气靠语体（-ㅂ니다），不是往自己动作上加 -시-；-시- 尊的是"话题里的人"，主语是自己时绝不能加' },
     ],
     quickTable: {
       title: '四大语体对照',
@@ -932,11 +939,13 @@ export const grammarCardsP15: GrammarCard[] = [
     connectionRules: [
       { type: 'rule', text: '나 → 저（第一人称自谦）', examples: '나는 → 저는' },
       { type: 'rule', text: '우리 → 저희（复数自谦）', examples: '우리 회사 → 저희 회사' },
-      { type: 'rule', text: '주다 → 드리다（给长辈时的自谦）', examples: '아버지께 드릴게요.' },
-      { type: 'rule', text: '말하다 → 말씀 드리다（自己"讲"面对长辈时）', examples: '자세히 말씀 드리겠습니다.' },
-      { type: 'usage', text: '正式场合演讲/自我介绍常用 저 / 저희', examples: '저는 김민수입니다.' },
+      { type: 'rule', text: '주다 → 드리다（给长辈时的自谦）', examples: '아버지께 드릴게요.（我拿给爸爸。）' },
+      { type: 'rule', text: '말하다 → 말씀 드리다（自己"讲"面对长辈时）', examples: '자세히 말씀 드리겠습니다.（我会详细说明。）' },
+      { type: 'usage', text: '正式场合演讲/自我介绍常用 저 / 저희', examples: '저는 김민수입니다.（我是金民秀。）' },
       { type: 'usage', text: '与哪些人不能自谦：同龄朋友/晚辈/亲密关系', examples: '和朋友说话用 나 / 우리 即可' },
       { type: 'compare', text: '저 vs 나 → 前者对上/正式，后者对同辈以下', examples: '(正式) 저는 학생입니다 / (亲密) 나는 학생이야' },
+      { type: 'rule', text: '저 遇到主语助词 -가 和所有格 -의 要缩合：저+가 说成/写成 제가（绝不是 저가），저+의 说成 제。这是硬变形规则，不能按原形硬拼。', examples: '제가 하겠습니다.（我来做。✓，"저가" ✗）/ 제 이름은 민수입니다.（我的名字是民秀。）' },
+      { type: 'note', text: '저희 是"排除听者"的我方（我们公司、我们家，不含你）；对同一群体内部的"我们（含你）"要用 우리。别一律把 우리 换成 저희。', examples: '(对外部客户) 저희 회사가 준비했습니다.（我方公司，不含客户）/ (对同事) 우리 같이 점심 먹어요.（我们一起，含对方）' },
       { type: 'note', text: '저희 나라 vs 우리 나라 → 前者太谦，习惯用 우리 나라', examples: '避免："저희 나라 사람들" → 用："우리 나라 사람들"' },
     ],
     cardExamples: [
@@ -980,6 +989,7 @@ export const grammarCardsP15: GrammarCard[] = [
       { wrong: '우리 회사에서는（对客户）', correct: '저희 회사에서는', note: '对外/正式用 저희' },
       { wrong: '저희 나라 사람들', correct: '우리 나라 사람들', note: '国家自称用 우리 나라（约定俗成）' },
       { wrong: '자세히 말씀 하겠습니다', correct: '자세히 말씀 드리겠습니다', note: '对客/长辈自己讲要 말씀 드리다' },
+      { wrong: '저가 하겠습니다', correct: '제가 하겠습니다', note: '저 加主语助词 -가 必须缩合成 제가，没有"저가"这种形式' },
     ],
     quickTable: {
       title: '自谦对照',
@@ -1104,12 +1114,13 @@ export const grammarCardsP15: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '身体部位 + 형용사 -(으)시-：손이 크세요 / 눈이 크세요', examples: '아버지는 손이 크세요.' },
-      { type: 'rule', text: '所有物 + 属性 -(으)시-：집이 넓으세요 / 옷이 예쁘세요', examples: '어머니 집이 넓으세요.' },
+      { type: 'rule', text: '身体部位 + 형용사 -(으)시-：손이 크세요 / 눈이 크세요', examples: '아버지는 눈이 크세요.（父亲眼睛大 — 尊者的身体部位也随之加 -시-）' },
+      { type: 'rule', text: '所有物 + 属性 -(으)시-：집이 넓으세요 / 옷이 예쁘세요', examples: '어머니 집이 넓으세요.（妈妈家很宽敞。间接尊敬：主语虽是"家"，用-으세요表达对妈妈的尊敬）' },
       { type: 'rule', text: '尊称化名词：나이 → 연세, 이름 → 성함, 밥 → 진지, 말 → 말씀, 있다 → 계시다', examples: '연세가 많으세요 / 성함이 어떻게 되세요' },
       { type: 'usage', text: '连尊者"话/意图"也间接高임', examples: '말씀 있으세요? / 어떤 뜻이신가요?' },
       { type: 'usage', text: '不能对完全无关的物体加 -(으)시-（如 물건이 예쁘세요 ✗）', examples: '误：커피가 나오셨습니다 → 应：커피 나왔습니다' },
       { type: 'compare', text: '直接高임 vs 间接高임', examples: '(直接) 아버지가 오세요 / (间接) 아버지 손이 크세요' },
+      { type: 'compare', text: '있다 有两个敬语形，别一律用 계시다：尊者本人"在/存在"用 계시다（直接）；尊者"拥有"某物、某物属于尊者时用 있으시다（间接）。判断标准是谁在做主语——是人本人还是他的东西。', examples: '사장님은 사무실에 계세요.（老板在办公室=人本人在，直接→계시다）/ 사장님, 시간이 있으세요?（老板有时间吗=时间属于老板，间接→있으시다）' },
       { type: 'note', text: '当代韩国常有"过度敬语"现象 → 커피 나오셨습니다 是错误', examples: '"物品"不能被"尊敬"' },
     ],
     cardExamples: [
@@ -1153,6 +1164,7 @@ export const grammarCardsP15: GrammarCard[] = [
       { wrong: '아버지 손이 커요', correct: '아버지 손이 크세요', note: '尊者身体也要 -(으)시-（间接尊敬）' },
       { wrong: '커피가 나오셨습니다', correct: '커피가 나왔습니다', note: '物品"咖啡"不能被尊敬（当代常见的"过度敬语"错误）' },
       { wrong: '할아버지 나이가 많아요', correct: '할아버지는 연세가 많으세요', note: '나이 → 연세（尊称化名词）+ 谓语加 -(으)시-' },
+      { wrong: '사장님, 시간이 계세요?', correct: '사장님, 시간이 있으세요?', note: '"时间"是尊者拥有的东西（间接），用 있으세요；계시다 只用于尊者本人"在"（直接）' },
     ],
     quickTable: {
       title: '尊称化名词',
@@ -1296,6 +1308,8 @@ export const grammarCardsP15: GrammarCard[] = [
       { type: 'usage', text: '现代韩国职场对압존법态度放宽 → 一般也可"팀장님이 오셨습니다"', examples: '大企业内规多允许 팀장님 加 님 + -시-' },
       { type: 'usage', text: '正式服务业错误："-님, 사이즈가 어떠세요?" → 사이즈 어떠십니까? / 어떠세요? 都好', examples: '避免："고객님 계산이 나오셨어요" → "계산 나왔어요"' },
       { type: 'compare', text: '正确 vs 过度', examples: '(错) 옷이 예쁘시네요 → (对) 옷이 예쁘네요 (物品) / 손님이 예쁘시네요 (人)' },
+      { type: 'compare', text: '压尊法分两种场合、方向相反，别一概而论：家庭里对最高长辈提中间长辈，传统上"降"中间人（不加 -시-）；但职场里国立国语院的标准反而是"不实行压尊"，对社长提组长也照样抬（加 -시-）。', examples: '(家庭·传统) 할아버지, 아버지가 아직 안 왔습니다.（对爷爷时不抬爸爸）/ (职场·标准) 사장님, 김 팀장님이 안 계십니다.（对社长仍抬组长）' },
+      { type: 'note', text: '根源一句话：-(으)시- 只看"句子主语（주체）是不是该被尊敬的人"，不看"我正在跟谁说话"。物品不是人、第一人称是自己——都不是被尊敬的主语，所以禁忌 1、2 其实是同一条规则。别因为在跟长辈说话就整句乱加 -시-。', examples: '주어是物品→不加：커피 나왔습니다 / 주어是自己→不加：제가 하겠습니다 / 주어是长辈→才加：할아버지가 오셨습니다' },
       { type: 'note', text: '"过度敬语"是当代韩国服务业普遍问题；正式考试/正确用语要区分', examples: '国立国어원 教材明确否定"物品 -시-"' },
     ],
     cardExamples: [

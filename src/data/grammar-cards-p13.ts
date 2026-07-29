@@ -48,6 +48,7 @@ export const grammarCardsP13: GrammarCard[] = [
       { type: 'usage', text: '动作已经完成的自然结果：보이다=能看到/呈现出', examples: '눈물이 보였다. / 얼굴이 창백해 보였다.' },
       { type: 'compare', text: '短形被动 vs -아/어지다 → 前者靠接尾变形（固定动词），后者靠 -아/어지다 附加（任意动词）', examples: '잡히다（固定被动）/ 만들어지다（-아/어지다 被动化）' },
       { type: 'note', text: '哪个动词接哪个接尾要记忆，不能自造', examples: '보다→보이다 ✓ / 보다→보히다 ✗' },
+      { type: 'note', text: '보이다/들리다 多是"自发·能"（映入眼帘/传入耳中），不是中文的"被人看/被人听"：主动去看用 보다，看得见用 보이다，别用中文"被"硬套', examples: '산이 보여요＝山看得见（自发）/ 소리가 들려요＝声音听得见（自发）' },
     ],
     cardExamples: [
       {
@@ -136,7 +137,17 @@ export const grammarCardsP13: GrammarCard[] = [
       ],
     },
     linkedGrammarIds: ['card-p13-l02', 'card-p13-l03'],
-    step0Html: `<div class="hook-box"><div style="font-size:15px;color:#241917;line-height:1.8">"能看见山""小偷被抓" —— 韩语最基础的被动方式：在词干里加 <b>-이/히-</b>。<br>보다→보이다，잡다→잡히다。这些不是规则可套，而是"一动词对一接尾"的固定组合。</div></div>`,
+    step0Html: `<div class="hook-box"><div style="line-height:1.8">"能看见山""小偷被抓" —— 韩语最基础的被动方式：在词干里加 <b>-이/히-</b>。这不是规则可套，而是"一动词对一接尾"的固定组合。</div></div>
+<div class="block">
+  <div class="h2">先看三个例子</div>
+  <div style="margin-bottom:10px"><div class="ko">멀리서 산이 보여요.</div><div class="zh">从远处能看到山。（보다 → 보이다）</div></div>
+  <div style="margin-bottom:10px"><div class="ko">도둑이 경찰에게 잡혔어요.</div><div class="zh">小偷被警察抓到了。（잡다 → 잡히다）</div></div>
+  <div><div class="ko">이 책은 많은 사람에게 읽혀요.</div><div class="zh">这本书被很多人阅读。（읽다 → 읽히다）</div></div>
+</div>
+<div class="block">
+  <div class="h2">本课两组接尾</div>
+  <div style="line-height:1.9"><b>-이- 类</b>：보다→보이다 / 쓰다→쓰이다 / 바꾸다→바뀌다<br><b>-히- 类</b>：잡다→잡히다 / 먹다→먹히다 / 읽다→읽히다 / 닫다→닫히다</div>
+</div>`,
     compareHtml: `<div class="cmp-block">
   <div style="font-size:15px;color:#241917;line-height:1.8">
     <b>主动 vs 被动</b><br>
@@ -227,8 +238,9 @@ export const grammarCardsP13: GrammarCard[] = [
       { type: 'rule', text: '主动改被动：A가 B를 V → B가 A에게 V-리/기-', examples: '엄마가 아기를 안았다 → 아기가 엄마에게 안겼다' },
       { type: 'usage', text: '主语受动者用 이/가；施动者用 에게（人）/ 에（自然力）', examples: '나뭇잎이 바람에 날려요. / 편지가 친구에게 전해졌어요.' },
       { type: 'usage', text: '一部分动词有"能……得了"的可能语义', examples: '문이 안 열려요.（门打不开）/ 이 문제가 안 풀려요.（解不出来）' },
-      { type: 'compare', text: '短形被动 -리/기- vs 使动 -리/기- → 后接助词不同，且语义相反', examples: '(被动) 아기가 안겼다.(婴儿被抱)｜(使动) 엄마가 아기를 안겼다.(妈妈让人抱婴儿) - 注意实际使动更多用 -이-（안다→안기다）' },
+      { type: 'compare', text: '短形被动 -리/기- vs 使动 -리/기- → 后接助词不同，且语义相反', examples: '(被动) 아기가 엄마에게 안겼다.(婴儿被妈妈抱)｜(使动) 엄마가 아기를 친구에게 안겼다.(妈妈把婴儿递给朋友抱) - 안기다 被动/使动同形，全靠助词区分' },
       { type: 'note', text: '哪个动词属哪一组不能自造，必须逐个记', examples: '듣다→들리다 ✓ / 듣다→듣이다 ✗' },
+      { type: 'note', text: '빼앗기다/쫓기다 这类"吃亏被动"：受害者才是主语（이/가·은/는），被夺走的东西仍保留 을/를，别照搬第1课"受动者一律变 이/가"', examples: '나는 소매치기에게 지갑을 빼앗겼어요.（我被扒手抢走了钱包）— 지갑 用 을，不用 이' },
     ],
     cardExamples: [
       {
@@ -377,12 +389,12 @@ export const grammarCardsP13: GrammarCard[] = [
     rulesNote: '-이/히/리/기 是被动接尾（固定动词），-아/어지다 是被动化后缀（任意动词/形容词）',
     structures: [
       {
-        ko: '이 소설은 여러 언어로 번역되어졌어요.',
+        ko: '이 소설은 여러 언어로 번역되었어요.',
         zh: '这部小说被翻译成了多国语言。',
         tokens: [
           { text: '이 소설은', role: 'subject' },
           { text: '여러 언어로', role: 'plain' },
-          { text: '번역되어졌어요', role: 'verb' },
+          { text: '번역되었어요', role: 'verb' },
         ],
       },
       {
@@ -407,11 +419,12 @@ export const grammarCardsP13: GrammarCard[] = [
     connectionRules: [
       { type: 'rule', text: '阳性词干（ㅏ/ㅗ） → -아지다', examples: '작다 → 작아지다 / 좋다 → 좋아지다' },
       { type: 'rule', text: '阴性词干（其他） → -어지다', examples: '만들다 → 만들어지다 / 예쁘다 → 예뻐지다' },
-      { type: 'rule', text: '하다 结尾 → -해지다', examples: '깨끗하다 → 깨끗해지다 / 이해되다 → 이해되어지다（口语避免）' },
-      { type: 'usage', text: '动词被动化：만들다 → 만들어지다（被制造）', examples: '이 음식은 여기서 만들어져요.' },
+      { type: 'rule', text: '하다 结尾 → -해지다', examples: '깨끗하다 → 깨끗해지다 / 편하다 → 편해지다' },
+      { type: 'usage', text: '动词被动化：만들다 → 만들어지다（被制造）', examples: '이 음식은 여기서 만들어져요.（这道菜是在这里做的。）' },
       { type: 'usage', text: '形容词接 -아/어지다 表变化："变……了"', examples: '얼굴이 창백해졌어요. / 날씨가 추워졌어요.' },
       { type: 'compare', text: '-이/히/리/기 vs -아/어지다 → 前者固定组，后者通用后缀', examples: '잡다→잡히다（固定被动）｜만들다→만들어지다（-어지다 化）' },
       { type: 'note', text: '双重被动 -이/히지다 少见但存在：보이다→보여지다（口语避免用）', examples: '避免："그렇게 보여지다"，用 "그렇게 보이다"' },
+      { type: 'note', text: '하다 动词的被动多用 -되다（번역되다/해결되다），别按"하다→해지다"套：-해지다 主要接形容词表"变……"（깨끗해지다=变干净）', examples: '번역되었어요（被翻译）✓ / 번역해졌어요 ✗｜깨끗해졌어요（变干净）✓' },
     ],
     cardExamples: [
       {
@@ -591,12 +604,13 @@ export const grammarCardsP13: GrammarCard[] = [
     ],
     connectionRules: [
       { type: 'rule', text: '动词/形容词词干 + -게 되다（不看받침）', examples: '가다 → 가게 되다 / 좋다 → 좋게 되다' },
-      { type: 'rule', text: '常用过去时 -게 되었어요 表结果', examples: '한국에 가게 되었어요.' },
+      { type: 'rule', text: '常用过去时 -게 되었어요 表结果', examples: '한국에 가게 되었어요.（结果要去韩国了。）' },
       { type: 'usage', text: '语义 1：非自愿的变化 / 外因造成', examples: '갑자기 회사를 옮기게 되었어요.（突然被安排换公司）' },
-      { type: 'usage', text: '语义 2：自然发展的结果', examples: '오래 지내다 보니 친구가 되게 되었어요.（相处久了自然成了朋友）' },
+      { type: 'usage', text: '语义 2：自然发展的结果', examples: '오래 지내다 보니 친해지게 되었어요.（相处久了自然亲近起来）' },
       { type: 'usage', text: '语义 3：谦逊表达自己的"决定"', examples: '한국어를 배우게 되었어요.（我开始学韩语了 - 谦逊）' },
       { type: 'compare', text: '-게 되다 vs -아/어지다 → 前者"进入某状态/事态"，后者"变成某状态/属性"', examples: '알게 되었어요.（"知道了"）/ 좋아졌어요.（"变好了"）' },
       { type: 'note', text: '经常被中文思路误译成"要……了"，实为"结果……了"', examples: '한국에 가게 되었다 = 结果去韩国了 / 决定去韩国' },
+      { type: 'compare', text: '想强调"是我自己拿主意决定的"别用 -게 되다（它弱化本人意志、显得顺其自然或谦逊），要用 -기로 하다（主动决定，后面章节详学）', examples: '유학 가기로 했어요.（我决定去留学·主动）/ 유학 가게 되었어요.（结果去留学了·外因或谦逊）' },
     ],
     cardExamples: [
       {
@@ -638,8 +652,8 @@ export const grammarCardsP13: GrammarCard[] = [
     ],
     mistakes: [
       { wrong: '한국에 가는 되었어요', correct: '한국에 가게 되었어요', note: '固定为 -게 되다，动词后接 -게 不是 -는' },
-      { wrong: '한국어를 배우게 됐다', correct: '한국어를 배우게 되었다', note: '되었다 是标准写法；口语可 됐다 但书面用 되었다' },
-      { wrong: '갑자기 아프게 되었어요', correct: '갑자기 아프게 됐어요 / 갑자기 아파졌어요', note: '生病的"变化"用 -아/어지다 更自然；-게 되다 更适合"事态发展"' },
+      { wrong: '한국어를 배우게 되았다', correct: '한국어를 배우게 되었다', note: '되다 的过去式是 되었다/됐다，不是 되았다' },
+      { wrong: '갑자기 아프게 되었어요', correct: '갑자기 아파졌어요', note: '表状态变化更自然用 아파지다（-아/어지다）；-게 되다 更适合"事态发展"' },
     ],
     quickTable: {
       title: '-게 되다 三大语义',
@@ -784,6 +798,8 @@ export const grammarCardsP13: GrammarCard[] = [
       { type: 'usage', text: '常用于新闻、公文、通知等书面语', examples: '규정이 개정되었습니다. / 정책이 시행되었다.' },
       { type: 'compare', text: '하다 类被动只能用 되다，不能用 -이/히-', examples: '误：공부하다→공부히다 / 正：공부하다→공부되다' },
       { type: 'note', text: '되어졌다 (되다+어지다) 是双重被动，正式书面语避免使用', examples: '避免：결정되어졌다 → 用：결정되었다' },
+      { type: 'note', text: '并非所有 하다 动词都能变 되다：感情/关系类的 사랑하다·존경하다·좋아하다 不能说 사랑되다·존경되다', examples: '误：그 가수는 사랑돼요 / 正：그 가수는 사랑받아요' },
+      { type: 'note', text: '这类感情/受害类动词改用 받다 或 당하다 表被动（第6课详解）', examples: '사랑하다→사랑받다 / 존경하다→존경받다 / 무시하다→무시당하다' },
     ],
     cardExamples: [
       {
@@ -826,6 +842,7 @@ export const grammarCardsP13: GrammarCard[] = [
       { wrong: '문제가 해결하다', correct: '문제가 해결되었다', note: '主动是 문제를 해결하다；被动改用 되다 → 해결되다' },
       { wrong: '새 정책이 발표되어졌다', correct: '새 정책이 발표되었다', note: '되다已含被动，再加 -어지다 是双重被动，规范书面语避免' },
       { wrong: '회의 시간이 변경히었어요', correct: '회의 시간이 변경되었어요', note: '하다 类动词不用 -이/히-，只能用 되다' },
+      { wrong: '그 배우는 사람들에게 사랑돼요', correct: '그 배우는 사람들에게 사랑받아요', note: '感情类 사랑하다 不能变 되다，要用 받다（第6课）' },
     ],
     quickTable: {
       title: '常用"하다 → 되다"被动一览',
@@ -932,7 +949,7 @@ export const grammarCardsP13: GrammarCard[] = [
     whatItDoes: '受害/受益被动',
     whatItDoesBody: '「당하다」表示"遭受（不好的事）"，「받다」表示"接受（中性或好的事）"。这是韩语中带情感色彩的被动方式：语义上受动，语法上是主动结构。侧重"人受影响"的语用。',
     structureNote: '汉字词 + 당하다（负面）/ 汉字词 + 받다（中性/正面）',
-    rulesNote: '当하다=遭受（受害）；받다=接受（中性/受益）；两者语法都是主动动词形式',
+    rulesNote: '당하다=遭受（受害）；받다=接受（中性/受益）；两者语法都是主动动词形式',
     structures: [
       {
         ko: '민수는 사기를 당했어요.',
@@ -972,7 +989,9 @@ export const grammarCardsP13: GrammarCard[] = [
       { type: 'usage', text: '句式：受害者 + 施动者에게 + 名词을/를 + 당/받/맞다', examples: '민수가 친구에게 배신을 당했다. / 학생이 선생님께 칭찬을 받았다.' },
       { type: 'compare', text: '당하다 vs 되다 → 前者含情感 (受害/负面)，后者中性', examples: '(负面) 무시당하다 = 被无视（受伤）｜(中性) 무시되다 = 被无视（客观陈述）' },
       { type: 'compare', text: '받다 vs 되다 → 前者含"人接受"，后者中性事态', examples: '(受益) 사랑을 받다 = 得到爱｜(中性) 결정이 되다 = 决定作出' },
-      { type: 'note', text: '当하다 只跟负面词搭配，正面/中性事件不用 당하다', examples: '误：칭찬을 당하다 / 正：칭찬을 받다' },
+      { type: 'note', text: '당하다 只跟负面词搭配，正面/中性事件不用 당하다', examples: '误：칭찬을 당하다 / 正：칭찬을 받다' },
+      { type: 'note', text: '당/받/맞 语法上是主动动词：受害者当主语(은/는·이/가)，受害名词仍带 을/를，别套上一课 되다 的"主语用 이/가、宾语消失"', examples: '误：민수는 사기가 당했어요 / 正：민수는 사기를 당했어요' },
+      { type: 'note', text: '这里的 맞다 是"挨(打/骂/雨)"，跟你先学的 맞다=对/正确 是同形异义词', examples: '답이 맞다(答案对) ↔ 매를 맞다(挨打) ↔ 비를 맞다(淋雨)' },
     ],
     cardExamples: [
       {
@@ -1014,9 +1033,10 @@ export const grammarCardsP13: GrammarCard[] = [
       { icon: '🎁', context: '被邀请', ko: '친구 결혼식에 초대를 받았어요.', zh: '被邀请参加朋友婚礼。' },
     ],
     mistakes: [
-      { wrong: '칭찬을 당했어요', correct: '칭찬을 받았어요', note: '当하다 只跟负面搭配；表扬是正面 → 받다' },
+      { wrong: '칭찬을 당했어요', correct: '칭찬을 받았어요', note: '당하다 只跟负面搭配；表扬是正面 → 받다' },
       { wrong: '사기를 받았어요', correct: '사기를 당했어요', note: '受骗是负面 → 당하다' },
       { wrong: '민수가 친구를 배신을 당했다', correct: '민수가 친구에게 배신을 당했다', note: '施动者用 에게，不用 을/를' },
+      { wrong: '민수는 사기가 당했어요', correct: '민수는 사기를 당했어요', note: '당하다 是主动动词，受害名词仍是宾语 을/를，不像 되다 用 이/가' },
     ],
     quickTable: {
       title: '당/받/맞 一览',
@@ -1052,7 +1072,7 @@ export const grammarCardsP13: GrammarCard[] = [
           explanation: '"挨训"用 맞다（야단을 맞다 是固定搭配）。',
         },
         {
-          prompt: '"当하다" 只用于哪一类语境？',
+          prompt: '"당하다" 只用于哪一类语境？',
           options: [
             '正面/受益',
             '中性/客观',
@@ -1157,9 +1177,11 @@ export const grammarCardsP13: GrammarCard[] = [
       { type: 'rule', text: '施动者是人/动物 → 에게', examples: '경찰에게 잡혔다 / 개에게 물렸다' },
       { type: 'rule', text: '施动者是物/自然力 → 에', examples: '바람에 날렸다 / 눈에 파묻혔다' },
       { type: 'rule', text: '正式书面 → 에 의해', examples: '정부에 의해 시행되었다 / 사장에 의해 결정되었다' },
-      { type: 'usage', text: '한테 是 에게 的口语替代形式', examples: '친구한테 소식이 전해졌어요.' },
+      { type: 'usage', text: '한테 是 에게 的口语替代形式', examples: '친구한테 소식이 전해졌어요.（消息传到了朋友那儿。）' },
       { type: 'compare', text: '에게 vs 에 의해 → 前者口语中性，后者书面正式', examples: '(口语) 경찰에게 잡혔다 / (书面) 경찰에 의해 잡혔다' },
       { type: 'note', text: '主动句的宾语 를 → 被动句变成主语 이/가', examples: '도둑을 잡았다 → 도둑이 잡혔다' },
+      { type: 'note', text: '这里 에게 标的是「施动者(动作发出方)」，跟你先学的 에게=给某人(接受方) 方向正好相反，别搞混谁做动作', examples: '도둑이 경찰에게 잡혔어요 → 경찰是"抓"的一方（施动者）' },
+      { type: 'usage', text: '别把中文「被/由」硬翻成 에 의해：它偏正式书面，日常人/动物施动更自然的是 에게/한테', examples: '(生硬) 친구에 의해 소식이 전해졌어요 / (自然) 친구한테 소식이 전해졌어요' },
     ],
     cardExamples: [
       {
@@ -1342,6 +1364,8 @@ export const grammarCardsP13: GrammarCard[] = [
       { type: 'usage', text: '汉字词 + 되다 + 어지다 常见错误', examples: '해결되어지다 / 발견되어지다 → 避免' },
       { type: 'compare', text: '规范书面语原则：一层被动足矣', examples: '한 번의 피동으로 충분 → 이중 피동 회피' },
       { type: 'note', text: '잊혀지다 属固化例外；其他双重被动均视为错误', examples: '잊혀지다 允许；잡혀지다/해결되어지다 不允许' },
+      { type: 'note', text: '别因怕双重被动就躲开所有 -어지다：形容词变化的 좋아지다·예뻐지다、普通动词的 만들어지다 都是对的；只有叠在"已含被动"的词(되/이/히/리/기)上才算双重', examples: '正：집이 만들어졌어요(被建成)/ 날씨가 좋아졌어요(变好) / 错：해결되어졌어요' },
+      { type: 'note', text: '보여지다·불려지다·쓰여지다 在口语和大量真实文章里很常见，但规则上仍算双重被动；考试和正式写作用单层(보이다·불리다·쓰이다)最稳', examples: '常见但不规范：산이 보여진다 / 更标准：산이 보인다' },
     ],
     cardExamples: [
       {

@@ -1,11 +1,15 @@
 import { NextResponse } from 'next/server';
 import { getAuthFromCookie } from '@/lib/server/auth';
-import { checkAiRateLimit, recordAiUsage } from '@/lib/server/rate-limit';
+import { recordAiUsage } from '@/lib/server/rate-limit';
+import { checkAiQuota } from '@/lib/server/membership';
 import { fetchWithTimeout } from '@/lib/fetch';
 import { filterContent } from '@/lib/contentFilter';
 
+// 6-26 事故兜底：含鉴权/用户数据的 API 必须 force-dynamic，禁止 Next.js 自动缓存
+export const dynamic = 'force-dynamic';
+
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
-const DEEPSEEK_MODEL = 'deepseek-chat';
+const DEEPSEEK_MODEL = 'deepseek-v4-flash';
 
 export async function POST(req: Request) {
   const auth = await getAuthFromCookie();
@@ -27,10 +31,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: writingCheck.reason }, { status: 400 });
     }
 
-    const limit = await checkAiRateLimit(auth.userId, 'analyze');
+    const limit = await checkAiQuota(auth.userId, 'judge');
     if (!limit.allowed) {
       return NextResponse.json(
-        { error: '每日AI调用次数已达上限（30次），请明天再试' },
+        { error: limit.limit === 0 ? '当前会员档位不含此功能，请升级后使用' : '今日 AI 判定次数已达上限，请明天再试或升级会员' },
         { status: 429 },
       );
     }
@@ -41,17 +45,25 @@ export async function POST(req: Request) {
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
       body: JSON.stringify({
         model: DEEPSEEK_MODEL,
+        thinking: { type: 'disabled' },
         messages: [
           {
             role: 'system',
-            content: `你是韩语写作教练。用户写了一段韩文练习，请给出简洁批改。
+            content: `你是韩语写作教练。用户写了一段韩文练习，请从多个维度批改并打分。
+
+评分维度（0-100 整数）：
+- vocabulary：词汇是否准确、丰富、用词地道
+- grammar：语法/助词/词尾是否正确
+- naturalness：整体是否像母语者的自然表达
+- overall：综合分（可加权，不必是三项平均）
 
 固定输出JSON格式：
 {
   "original": "用户原文（原样返回）",
   "corrected": "更自然的韩文写法（若原文已很自然则与original相同）",
   "reason": "中文解释改动原因，1-2句，重点说明语法或表达问题",
-  "isCorrect": true或false（原文是否已经自然正确）,
+  "isCorrect": true或false（原文是否已经自然正确，overall>=85 视为 true）,
+  "scores": { "vocabulary": 0-100, "grammar": 0-100, "naturalness": 0-100, "overall": 0-100 },
   "saveExpression": "从这段文字中提炼1个可复用的表达模板，用___占位变量部分，格式：韩文模板 — 中文说明"
 }
 
@@ -73,7 +85,19 @@ export async function POST(req: Request) {
     const cleanJson = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
     const result = JSON.parse(cleanJson);
 
-    await recordAiUsage(auth.userId, 'analyze');
+    // Safety defaults · scores clamp 0-100,缺失时兜底
+    const clamp = (n: unknown) => typeof n === 'number' ? Math.min(100, Math.max(0, Math.round(n))) : undefined;
+    const s = result.scores ?? {};
+    const overall = clamp(s.overall);
+    result.scores = {
+      vocabulary: clamp(s.vocabulary) ?? overall ?? 0,
+      grammar: clamp(s.grammar) ?? overall ?? 0,
+      naturalness: clamp(s.naturalness) ?? overall ?? 0,
+      overall: overall ?? 0,
+    };
+    if (typeof result.isCorrect !== 'boolean') result.isCorrect = result.scores.overall >= 85;
+
+    await recordAiUsage(auth.userId, 'judge');
     return NextResponse.json(result);
   } catch (err: any) {
     console.error('[ai/writing]', err);

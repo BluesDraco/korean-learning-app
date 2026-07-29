@@ -1,0 +1,107 @@
+/* ==========================================================================
+   /learning 移动端视觉质感 · 移植自 BLOG(动物城朋友圈)
+   --------------------------------------------------------------------------
+   只加皮肤,不动布局/字体。作用域 .learn-visual-root,全部类 .learn- 前缀。
+   值多数照抄 blog.css(mesh / Hero横幅 / 漂浮emoji / 入场 / 暖阴影)。
+   ========================================================================== */
+
+.learn-visual-root {
+  --learn-elev-1: 0 1px 2px rgba(74, 42, 33, .04), 0 2px 8px -4px rgba(74, 42, 33, .06);
+  --learn-elev-2: 0 2px 6px -2px rgba(74, 42, 33, .06), 0 8px 20px -8px rgba(74, 42, 33, .10);
+  --learn-elev-3: 0 4px 10px -4px rgba(74, 42, 33, .07), 0 18px 44px -14px rgba(74, 42, 33, .16);
+  --learn-ease-expo: cubic-bezier(.16, 1, .3, 1);
+  --learn-ease-quart: cubic-bezier(.25, 1, .5, 1);
+  position: relative;
+}
+
+/* ── 1. 背景素净:不加彩色 mesh,只靠 AppShell 的 FloatingDecorations 粒子。
+   内容浮在粒子层(z:0)之上。 ── */
+.learn-visual-root > * { position: relative; z-index: 1; }
+
+/* ── 2. 头部对齐桌面端:Tori 학습 学习入口 横向品牌栏 + 分割线 ── */
+.learn-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid var(--color-border-2);
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+}
+.learn-brand { display: flex; align-items: baseline; gap: 9px; min-width: 0; flex-wrap: wrap; }
+.learn-brand-mark {
+  font-family: 'Fraunces', serif;
+  font-style: italic; font-weight: 700;
+  font-size: 26px; letter-spacing: -.02em;
+  color: var(--color-pink-strong);
+}
+.learn-brand-kr {
+  font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+  font-weight: 800; font-size: 17px;
+  color: var(--color-ink-2);
+}
+.learn-brand-kr::before { content: '🐾'; font-size: 12px; margin-right: 5px; }
+.learn-brand-sub {
+  font-family: 'Fraunces', serif;
+  font-style: italic; font-weight: 500;
+  font-size: 13px;
+  color: var(--color-pink-strong);
+}
+.learn-head-status {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 600; color: var(--color-ink-3);
+  flex-shrink: 0;
+}
+.learn-status-num { color: var(--color-pink-strong); font-weight: 800; }
+.learn-status-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #35c98a;
+  box-shadow: 0 0 0 0 rgba(53, 201, 138, .6);
+  animation: learnLivePulse 2s ease-out infinite;
+}
+@keyframes learnLivePulse {
+  0%   { box-shadow: 0 0 0 0 rgba(53, 201, 138, .5); }
+  70%  { box-shadow: 0 0 0 8px rgba(53, 201, 138, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(53, 201, 138, 0); }
+}
+
+/* ── 3. 入场编排(逐条上浮,下放到每张卡) ── */
+@keyframes learnFadeUp {
+  from { opacity: 0; transform: translateY(26px) scale(.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.learn-enter {
+  animation: learnFadeUp .62s var(--learn-ease-expo) backwards;
+  animation-delay: calc(min(var(--i, 0), 8) * 75ms);
+}
+
+/* ── 4. 卡片:实底 + 暖阴影 + hover 抬升 ── */
+.learn-visual-root .tori-card {
+  box-shadow: var(--learn-elev-2) !important;
+  transition:
+    transform .25s var(--learn-ease-quart),
+    box-shadow .25s var(--learn-ease-quart),
+    border-color .2s var(--learn-ease-quart) !important;
+}
+@media (hover: hover) {
+  .learn-visual-root a:hover .tori-card,
+  .learn-visual-root .tori-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--learn-elev-3) !important;
+    border-color: var(--color-pink-base) !important;
+  }
+}
+
+/* ── 段标题:韩文小标签点缀 ── */
+.learn-visual-root section > div:first-child h2 { position: relative; }
+
+/* ── reduced-motion 兜底 ── */
+@media (prefers-reduced-motion: reduce) {
+  .learn-visual-root::before,
+  .learn-enter,
+  .learn-status-dot,
+  .learn-hero-float { animation: none; }
+  .learn-visual-root .tori-card { transition: none !important; }
+  .learn-visual-root a:hover .tori-card,
+  .learn-visual-root .tori-card:hover { transform: none; }
+}

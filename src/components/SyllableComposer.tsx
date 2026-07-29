@@ -3,6 +3,8 @@
 import { useState, useCallback } from 'react';
 import { Volume2, Shuffle, X, Sparkles } from 'lucide-react';
 import { speak, speakWord } from '@/lib/tts';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 
 const INITIALS = [
   { letter: 'ㄱ', name: '기역', rom: 'g' },
@@ -12,7 +14,7 @@ const INITIALS = [
   { letter: 'ㅁ', name: '미음', rom: 'm' },
   { letter: 'ㅂ', name: '비읍', rom: 'b' },
   { letter: 'ㅅ', name: '시옷', rom: 's' },
-  { letter: 'ㅇ', name: '이응', rom: '(无声)' },
+  { letter: 'ㅇ', name: '이응', rom: '' },
   { letter: 'ㅈ', name: '지읒', rom: 'j' },
   { letter: 'ㅊ', name: '치읓', rom: 'ch' },
   { letter: 'ㅋ', name: '키읔', rom: 'k' },
@@ -35,14 +37,14 @@ const VOWELS = [
 ];
 
 const FINALS = [
-  { letter: '없음', name: '无收音', rom: '' },
-  { letter: 'ㄱ', name: 'ㄱ收音', rom: 'k' },
-  { letter: 'ㄴ', name: 'ㄴ收音', rom: 'n' },
-  { letter: 'ㄷ', name: 'ㄷ收音', rom: 't' },
-  { letter: 'ㄹ', name: 'ㄹ收音', rom: 'l' },
-  { letter: 'ㅁ', name: 'ㅁ收音', rom: 'm' },
-  { letter: 'ㅂ', name: 'ㅂ收音', rom: 'p' },
-  { letter: 'ㅇ', name: 'ㅇ收音', rom: 'ng' },
+  { letter: '없음', rom: '' },
+  { letter: 'ㄱ', rom: 'k' },
+  { letter: 'ㄴ', rom: 'n' },
+  { letter: 'ㄷ', rom: 't' },
+  { letter: 'ㄹ', rom: 'l' },
+  { letter: 'ㅁ', rom: 'm' },
+  { letter: 'ㅂ', rom: 'p' },
+  { letter: 'ㅇ', rom: 'ng' },
 ];
 
 function composeSyllable(cho: string, jung: string, jong: string): string {
@@ -74,6 +76,7 @@ function composeSyllable(cho: string, jung: string, jong: string): string {
 }
 
 export default function SyllableComposer() {
+  const { lang } = useLang();
   const [cho, setCho] = useState<string | null>(null);
   const [jung, setJung] = useState<string | null>(null);
   const [jong, setJong] = useState<string>('');
@@ -98,10 +101,10 @@ export default function SyllableComposer() {
       <div className="text-center">
         <h2 className="text-lg font-bold text-[var(--text-primary)] flex items-center justify-center gap-2">
           <Sparkles size={18} className="text-[var(--peach-soft)]" />
-          音节拼装器
+          {t('phonetics.composer_title', lang)}
         </h2>
         <p className="text-sm text-[var(--text-secondary)] mt-1">
-          选择初声 + 中声 + 终声，直观理解韩文方块字的组合原理
+          {t('phonetics.composer_subtitle', lang)}
         </p>
       </div>
 
@@ -118,7 +121,7 @@ export default function SyllableComposer() {
             {cho ? (
               <span className="text-2xl font-bold text-[var(--text-primary)]">{cho}</span>
             ) : (
-              <span className="text-xs text-[var(--text-muted)]">初声</span>
+              <span className="text-xs text-[var(--text-muted)]">{t('phonetics.composer_initial', lang)}</span>
             )}
           </div>
 
@@ -133,7 +136,7 @@ export default function SyllableComposer() {
             {jung ? (
               <span className="text-2xl font-bold text-[var(--text-primary)]">{jung}</span>
             ) : (
-              <span className="text-xs text-[var(--text-muted)]">中声</span>
+              <span className="text-xs text-[var(--text-muted)]">{t('phonetics.composer_medial', lang)}</span>
             )}
           </div>
 
@@ -150,7 +153,7 @@ export default function SyllableComposer() {
             {jong ? (
               <span className="text-2xl font-bold text-[var(--text-primary)]">{jong}</span>
             ) : (
-              <span className="text-xs text-[var(--text-muted)]">终声</span>
+              <span className="text-xs text-[var(--text-muted)]">{t('phonetics.composer_final', lang)}</span>
             )}
           </div>
 
@@ -162,9 +165,9 @@ export default function SyllableComposer() {
               <>
                 <span className="text-3xl font-extrabold text-[var(--text-primary)]">{syllable}</span>
                 <button
-                  onClick={() => speakWord(syllable, 0.7)}
+                  onClick={() => speakWord(syllable)}
                   className="p-1 rounded-lg hover:bg-[var(--bg-accent)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors"
-                  title="听发音"
+                  title={t('phonetics.composer_hear_sound', lang)}
                 >
                   <Volume2 size={14} />
                 </button>
@@ -178,10 +181,10 @@ export default function SyllableComposer() {
         {/* Sound description */}
         {syllable && cho && jung && (
           <div className="text-center text-sm text-[var(--text-secondary)] bg-[var(--bg-input)] rounded-xl py-2 px-4">
-            {cho === 'ㅇ' ? '初声ㅇ不发音' : `${cho}(${INITIALS.find(i => i.letter === cho)?.rom})`}
+            {cho === 'ㅇ' ? t('phonetics.composer_initial_silent', lang) : `${cho}(${INITIALS.find(i => i.letter === cho)?.rom})`}
             {' + '}
             {jung}({VOWELS.find(v => v.letter === jung)?.rom})
-            {jong && jong !== '(无)' ? ` + ${jong}(收音)` : ''}
+            {jong ? ` + ${jong}(${t('phonetics.composer_batchim_suffix', lang)})` : ''}
             {' → '}
             <span className="font-bold text-[var(--text-primary)]">
               [{syllable}]
@@ -196,14 +199,14 @@ export default function SyllableComposer() {
             className="flex items-center gap-1.5 px-4 py-2 bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] text-[var(--text-primary)] rounded-xl text-sm font-medium transition-colors"
           >
             <Shuffle size={14} />
-            随机组合
+            {t('phonetics.composer_randomize', lang)}
           </button>
           <button
             onClick={reset}
             className="flex items-center gap-1.5 px-4 py-2 bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] text-[var(--text-primary)] rounded-xl text-sm font-medium transition-colors"
           >
             <X size={14} />
-            清空
+            {t('phonetics.composer_clear', lang)}
           </button>
         </div>
       </div>
@@ -214,7 +217,7 @@ export default function SyllableComposer() {
         <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4">
           <h3 className="text-sm font-medium text-[var(--text-primary)] mb-3 flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-[var(--pink-primary)]" />
-            初声 (초성)
+            {t('phonetics.composer_initial', lang)} (초성)
           </h3>
           <div className="flex flex-wrap gap-2">
             {INITIALS.map((item) => (
@@ -238,7 +241,7 @@ export default function SyllableComposer() {
         <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4">
           <h3 className="text-sm font-medium text-[var(--text-primary)] mb-3 flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-[var(--purple-soft)]" />
-            中声 (중성)
+            {t('phonetics.composer_medial', lang)} (중성)
           </h3>
           <div className="flex flex-wrap gap-2">
             {VOWELS.map((item) => (
@@ -262,7 +265,7 @@ export default function SyllableComposer() {
         <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4">
           <h3 className="text-sm font-medium text-[var(--text-primary)] mb-3 flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-[var(--mint-soft)]" />
-            终声 (종성/받침)
+            {t('phonetics.composer_final', lang)} (종성/받침)
           </h3>
           <div className="flex flex-wrap gap-2">
             {FINALS.map((item) => (
@@ -274,7 +277,7 @@ export default function SyllableComposer() {
                     ? 'bg-[var(--mint-soft)] text-white shadow-md shadow-[var(--mint-soft)]/30 scale-110'
                     : 'bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] text-[var(--text-primary)]'
                 }`}
-                title={item.name}
+                title={item.letter === '없음' ? t('phonetics.composer_final_none', lang) : `${item.letter}${t('phonetics.composer_batchim_suffix', lang)}`}
               >
                 {item.letter}
               </button>
@@ -286,22 +289,22 @@ export default function SyllableComposer() {
       {/* Common syllables examples */}
       <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4">
         <h3 className="text-sm font-medium text-[var(--text-primary)] mb-3 flex items-center gap-2">
-          <span>💡</span> 常用音节示例
+          <span>💡</span> {t('phonetics.composer_examples_title', lang)}
         </h3>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           {[
-            { syl: '가', breakdown: 'ㄱ+ㅏ', meaning: '常见音节' },
-            { syl: '는', breakdown: 'ㄴ+ㅡ+ㄴ', meaning: '은/는 助词' },
-            { syl: '한', breakdown: 'ㅎ+ㅏ+ㄴ', meaning: '韩(国)' },
-            { syl: '국', breakdown: 'ㄱ+ㅜ+ㄱ', meaning: '国' },
-            { syl: '어', breakdown: 'ㅇ+ㅓ', meaning: '语/鱼' },
-            { syl: '요', breakdown: 'ㅇ+ㅛ', meaning: '敬语词尾' },
-            { syl: '세', breakdown: 'ㅅ+ㅔ', meaning: '世/三' },
-            { syl: '입', breakdown: 'ㅇ+ㅣ+ㅂ', meaning: '嘴/入口' },
+            { syl: '가', breakdown: 'ㄱ+ㅏ', meaning: t('phonetics.composer_ex_ga', lang) },
+            { syl: '는', breakdown: 'ㄴ+ㅡ+ㄴ', meaning: t('phonetics.composer_ex_neun', lang) },
+            { syl: '한', breakdown: 'ㅎ+ㅏ+ㄴ', meaning: t('phonetics.composer_ex_han', lang) },
+            { syl: '국', breakdown: 'ㄱ+ㅜ+ㄱ', meaning: t('phonetics.composer_ex_guk', lang) },
+            { syl: '어', breakdown: 'ㅇ+ㅓ', meaning: t('phonetics.composer_ex_eo', lang) },
+            { syl: '요', breakdown: 'ㅇ+ㅛ', meaning: t('phonetics.composer_ex_yo', lang) },
+            { syl: '세', breakdown: 'ㅅ+ㅔ', meaning: t('phonetics.composer_ex_se', lang) },
+            { syl: '입', breakdown: 'ㅇ+ㅣ+ㅂ', meaning: t('phonetics.composer_ex_ip', lang) },
           ].map((item) => (
             <button
               key={item.syl}
-              onClick={() => speakWord(item.syl, 0.7)}
+              onClick={() => speakWord(item.syl)}
               className="flex items-center gap-2 p-2.5 bg-[var(--bg-input)] hover:bg-[var(--bg-accent)] rounded-xl transition-colors text-left group"
             >
               <span className="text-xl font-bold text-[var(--text-primary)]">{item.syl}</span>

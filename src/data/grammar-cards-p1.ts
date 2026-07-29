@@ -63,6 +63,8 @@ export const grammarCardsP1: GrammarCard[] = [
       { type: 'usage',   text: '先看句尾',        examples: '遇到长句跳到最后一个词，先判断「做什么/是什么」' },
       { type: 'note',    text: '主语可省略',      examples: '对话中语境清楚时，저는 可以不说，直接说 밥을 먹어요' },
       { type: 'note',    text: '否定放动词前',    examples: '안 먹어요（不吃，主观/单纯否定） / 못 가요（去不了，能力或外因受限）' },
+      { type: 'note',    text: '中文没有「助词」这个东西',  examples: '中文靠语序说清「谁做什么」，韩语靠助词（은/는・을/를・에）黏在词后标出角色——这正是韩语语序能比中文灵活的原因，也是整章要反复练的新概念' },
+      { type: 'note',    text: '「是」不是单独的一个词',    examples: '저는 학생이에요 里数不出对应「是」的那个词——「是」就藏在名词后的 이에요 里，别照中文「我·是·学生」去找中间那个「是」' },
       { type: 'example', text: '저는 밥을 먹어요 / 오늘 저는 도서관에서 책을 읽어요 / 저는 이 노래를 좋아해요' },
     ],
     cardExamples: [
@@ -133,7 +135,7 @@ export const grammarCardsP1: GrammarCard[] = [
       steps: [
         { num: 1, text: '先看<span>句尾</span>：判断动作还是状态' },
         { num: 2, text: '再看<span>谁</span>在做这件事' },
-        { num: 3, text: '最后补充<span>对象、地点、시간</span>' },
+        { num: 3, text: '最后补充<span>对象、地点、时间</span>' },
       ],
       demo: {
         ko: '저는 도서관에서 책을 읽어요.',
@@ -305,6 +307,8 @@ export const grammarCardsP1: GrammarCard[] = [
       { type: 'rule',    text: '体词（名词）→ 입니다 / 입니까?',   examples: '학생→학생입니다 / 친구→친구입니다' },
       { type: 'usage',   text: '疑问句只换词尾',                   examples: '-ㅂ니다→-ㅂ니까? / -습니다→-습니까? / 입니다→입니까?' },
       { type: 'compare', text: '正式体 vs 日常体不可混用',          examples: '입니다/합니다 是一套；이에요/해요 是另一套' },
+      { type: 'note',    text: '中文没有「说话前先选语体」这回事',  examples: '中文对领导和对朋友用词稍变，句子结构不变；韩语要先按「场合+对方身份」选一整套句尾——正式体只是第一套，说错套=失礼，不只是说错词' },
+      { type: 'note',    text: 'ㄹ 收音是例外，要脱落',            examples: '살다→삽니다・알다→압니다・만들다→만듭니다：词干带 ㄹ 收音时，ㄹ 先脱落再接 -ㅂ니다，不是 -습니다' },
       { type: 'example', text: '저는 회사원입니다 / 저는 음악을 듣습니다 / 여기는 서울입니까?' },
     ],
     cardExamples: [
@@ -359,6 +363,7 @@ export const grammarCardsP1: GrammarCard[] = [
       { wrong: '먹ㅂ니다', correct: '먹습니다', note: '먹 词干有收音，所以用 -습니다，不是 -ㅂ니다。' },
       { wrong: '가습니다', correct: '갑니다', note: '가 词干无收音，所以用 -ㅂ니다，不是 -습니다。' },
       { wrong: '학생습니다', correct: '학생입니다', note: '학생 是名词，名词后用 입니다，不是 습니다。' },
+      { wrong: '살습니다', correct: '삽니다', note: '살다 词干带 ㄹ 收音，是例外：ㄹ 要先脱落再接 -ㅂ니다，所以是 삽니다，不是 살습니다。알다→압니다、만들다→만듭니다 同理。' },
       { wrong: '저는 학생입니다. 공부해요.', correct: '저는 학생입니다. 공부합니다.', note: '입니다/합니다 是正式体；이에요/해요 是日常体，一句话里选一种，不要混用。' },
     ],
     quickTable: {
@@ -504,6 +509,8 @@ export const grammarCardsP1: GrammarCard[] = [
       { type: 'rule',    text: '无收音名词 → -예요',                  examples: '카페→카페예요 / 가수→가수예요' },
       { type: 'rule',    text: '有收音名词 → -이에요',                examples: '학생→학생이에요 / 음악→음악이에요' },
       { type: 'note',    text: 'ㅡ 脱落：词干末为 ㅡ 时 ㅡ 脱落，前音节是 ㅏ/ㅗ 接 -아요，其他接 -어요', examples: '아프다→아파요（ㅏ）/ 예쁘다→예뻐요（ㅔ） / 크다→커요（无前音节，默认 어）' },
+      { type: 'note',    text: '先分「名词」还是「动/形」，再决定接哪套',  examples: '名词（학생・카페）才接 이에요/예요；动词形容词（먹다・좋다）接 아/어요。别被中文「是」带偏——「好」是形容词 좋아요，不是 좋다예요' },
+      { type: 'note',    text: '이에요/예요 就是「是」，不用再找一个「是」',  examples: '학생이에요 已经等于「是学生」；写成 학생이에요 前面别再想补一个对应「是」的词' },
       { type: 'example', text: '저는 학생이에요 / 이 노래가 좋아요 / 여기는 카페예요 / 오늘 날씨가 좋아요' },
     ],
     cardExamples: [
@@ -560,6 +567,7 @@ export const grammarCardsP1: GrammarCard[] = [
       { wrong: '학생예요', correct: '학생이에요', note: '학생 有收音 ㅇ，所以用 이에요。记住：有收音→이에요。' },
       { wrong: '학교이에요', correct: '학교예요', note: '학교 无收音，所以用 예요。记住：无收音→예요。' },
       { wrong: '공부하요', correct: '공부해요', note: '하다 动词变日常体要变成 해요，不是 하요。하→해！' },
+      { wrong: '이 노래가 좋아이에요', correct: '이 노래가 좋아요', note: '좋다 是形容词，直接变 좋아요；이에요 只接名词。被中文「是好的」带偏了，韩语这里没有「是」。' },
       { wrong: '저는 학생입니다. 저는 카페예요.', correct: '저는 학생입니다. 저는 카페에 갑니다.', note: '正式体（입니다）和日常体（예요/이에요）不要混用，语感会很奇怪。同一段话选一种语体。' },
     ],
     quickTable: {
@@ -700,9 +708,10 @@ export const grammarCardsP1: GrammarCard[] = [
       { type: 'rule',    text: '有收音名词 → 은',   examples: '책→책은 / 학생→학생은 / 한국→한국은' },
       { type: 'rule',    text: '无收音名词 → 는',   examples: '저→저는 / 학교→학교는 / 커피→커피는' },
       { type: 'usage',   text: '用法一：提出话题',  examples: '저는 학생이에요（关于我——）' },
-      { type: 'usage',   text: '用法二：制造对比',  examples: '커피는 좋아해요. 차는 별로예요.' },
+      { type: 'usage',   text: '用法二：制造对比',  examples: '커피는 좋아해요. 차는 별로예요.（咖啡我喜欢，茶一般般。）' },
       { type: 'vocab',   text: '人称常见形',        examples: '저는（我，正式）/ 나는（我，口语）/ 우리는（我们）' },
       { type: 'note',    text: '은/는 ≠ "是"',     examples: '저는 里的 는 只是话题标记，"是"是后面的 이에요' },
+      { type: 'compare', text: '先建立语感：은/는 提「已知话题」，이/가 提「新登场/焦点」',  examples: '누가 학생이에요?（谁是学生?）→ 제가 학생이에요（是我，焦点用 가）；话题已知时才用 저는 학생이에요。이/가 后面章节专门学，这里先有个印象' },
       { type: 'example', text: '저는 중국 사람이에요 / 한국어는 재미있어요 / 오늘은 시간이 없어요' },
     ],
     cardExamples: [
@@ -756,6 +765,7 @@ export const grammarCardsP1: GrammarCard[] = [
       { wrong: '저은 학생이에요', correct: '저는 학생이에요', note: '저 无收音，所以用 는，不是 은。' },
       { wrong: '오늘는 바빠요', correct: '오늘은 바빠요', note: '오늘 末字 늘 有收音 ㄹ → 은。' },
       { wrong: '커피은 맛있어요', correct: '커피는 맛있어요', note: '커피 末字 피 无收音 → 는。' },
+      { wrong: '누가 학생이에요? — 저는 학생이에요.', correct: '누가 학생이에요? — 제가 학생이에요.', note: '这不是收音选错，是用法：回答「谁?」时焦点在自己，要用焦点助词 이/가（저+가=제가），不用话题助词 저는。이/가 后面章节详学。' },
     ],
     quickTable: {
       title: '은/는 收音速查表',
@@ -1104,8 +1114,8 @@ export const grammarCardsP1: GrammarCard[] = [
       { type: 'usage',   text: '방향: 地点 + 에 가요/와요',           examples: '학교에 가요 / 한국에 와요' },
       { type: 'usage',   text: '존재: 地点 + 에 있어요/없어요/살아요', examples: '집에 있어요 / 서울에 살아요' },
       { type: 'usage',   text: '시간: 时间词 + 에 + 动词',              examples: '세 시에 만나요 / 토요일에 가요' },
-      { type: 'note',    text: '这些시간词不加 에',                    examples: '오늘・내일・어제・지금・매일・항상' },
-      { type: 'note',    text: '에 不固定翻译为"在"，含义看搭配',     examples: '학교에 가요=去（方向） / 집에 있어요=在（存在） / 세 시에 만나요=在三点（시간点）' },
+      { type: 'note',    text: '这些时间词不加 에',                    examples: '오늘・내일・어제・지금・매일・항상' },
+      { type: 'note',    text: '에 不固定翻译为"在"，含义看搭配',     examples: '학교에 가요=去（方向） / 집에 있어요=在（存在） / 세 시에 만나요=在三点（时间点）' },
       { type: 'compare', text: '에 vs 에서',                          examples: '去/存在目标 → 에；在某地做动作 → 에서（下节课）' },
       { type: 'example', text: '학교에 가요 / 집에 있어요 / 세 시에 만나요 / 서울에 살아요' },
     ],
@@ -1171,7 +1181,7 @@ export const grammarCardsP1: GrammarCard[] = [
       body: '时间名词 + 에 / 地点名词 + 에',
       headers: ['类型', '助词', '作用', '例句'],
       rows: [
-        ['时间名词', '에', '表示시간点', '오후에, 월요일에, 세 시에'],
+        ['时间名词', '에', '表示时间点', '오후에, 월요일에, 세 시에'],
         ['方向地点', '에', '表示去向（+가다/오다）', '학교에 가요, 시장에 가요'],
         ['存在地点', '에', '表示存在位置（+있다/없다）', '집에 있어요'],
         ['居住地点', '에', '表示居住地（+살다）', '서울에 살아요'],
@@ -1487,7 +1497,9 @@ export const grammarCardsP1: GrammarCard[] = [
       { type: 'rule',    text: '하다 → 했어요',             examples: '공부하다→공부했어요 / 좋아하다→좋아했어요' },
       { type: 'rule',    text: '名词句过去时',               examples: '학생이에요→학생이었어요 / 가수예요→가수였어요' },
       { type: 'note',    text: 'ㅡ 脱落过去时',             examples: '아프다→아팠어요 / 예쁘다→예뻤어요 / 크다→컸어요' },
-      { type: 'vocab',   text: '过去시간词',                 examples: '어제（昨天）·아까（刚才）·지난주에（上周）·어젯밤에（昨晚）' },
+      { type: 'vocab',   text: '过去时间词',                 examples: '어제（昨天）·아까（刚才）·지난주에（上周）·어젯밤에（昨晚）' },
+      { type: 'note',    text: '中文形容词不变形（"昨天很好"里"好"不动），韩语形容词也要跟动词一样变过去时，规则完全相同', examples: '좋다→좋았어요 / 재미있다→재미있었어요 / 예쁘다→예뻤어요' },
+      { type: 'note',    text: '别拿中文"了"硬套：表"就要…了"的将来义（走了！/要下雨了）韩语用将来时，不能用过去时——将来时下一课详学' },
       { type: 'example', text: '어제 한국어를 공부했어요 / 지난주에 서울에 갔어요 / 이 노래가 좋았어요' },
     ],
     cardExamples: [
@@ -1548,6 +1560,7 @@ export const grammarCardsP1: GrammarCard[] = [
       { wrong: '가았어요', correct: '갔어요', note: '가았어요 → 缩写为 갔어요。' },
       { wrong: '먹았어요', correct: '먹었어요', note: '먹 的元音是 ㅓ，不是 ㅏ/ㅗ，所以用 었어요。' },
       { wrong: '어제 공부해요', correct: '어제 공부했어요', note: '어제·아까·지난주 是过去时间词，后面用过去时。' },
+      { wrong: '어제 날씨가 좋아요', correct: '어제 날씨가 좋았어요', note: '中文"昨天天气好"里"好"不变，但韩语形容词 좋다 也要变过去时 좋았어요。' },
     ],
     quickTable: {
       title: '过去时速查表',
@@ -1686,9 +1699,11 @@ export const grammarCardsP1: GrammarCard[] = [
       { type: 'rule',    text: '词干无收音 → -ㄹ 거예요',        examples: '가다→갈 거예요 / 하다→할 거예요 / 보다→볼 거예요' },
       { type: 'rule',    text: '词干有收音 → -을 거예요',        examples: '먹다→먹을 거예요 / 읽다→읽을 거예요' },
       { type: 'rule',    text: 'ㄹ 词干：本身已有 ㄹ，直接加 거예요', examples: '살다→살 거예요 / 만들다→만들 거예요' },
-      { type: 'vocab',   text: '未来시간词',                     examples: '내일・주말에・다음 주에・이따가・나중에' },
+      { type: 'vocab',   text: '未来时间词',                     examples: '내일・주말에・다음 주에・이따가・나중에' },
       { type: 'note',    text: '내일·이따가 不加 에',             examples: '내일 갈 거예요 / 이따가 먹을 거예요' },
       { type: 'compare', text: '거예요 vs 겠어요',               examples: '거예요=计划/预测；겠어요=即刻意图（中级再细分）' },
+      { type: 'note',    text: '-을/ㄹ 거예요 不只表"打算/要"，也表"推测/大概"。中文这两种意思用不同词（要 vs 大概会），韩语靠主语和语境区分：自己做→计划，说别人或天气→推测', examples: '주말에 갈 거예요（我打算去）/ 지금 집에 있을 거예요（他大概在家）' },
+      { type: 'note',    text: '中文形容词不变形，但韩语形容词和 이다 也能加 -을/ㄹ 거예요，此时意思偏"推测/应该会"', examples: '좋다→좋을 거예요（会很好）/ 이다→학생일 거예요（大概是学生）' },
       { type: 'example', text: '내일 한국어를 공부할 거예요 / 주말에 카페에 갈 거예요 / 나중에 한국에 갈 거예요' },
     ],
     cardExamples: [
@@ -1750,6 +1765,7 @@ export const grammarCardsP1: GrammarCard[] = [
       { wrong: '가을 거예요', correct: '갈 거예요', note: '가 无收音，所以用 -ㄹ 거예요。' },
       { wrong: '공부하을 거예요', correct: '공부할 거예요', note: '하다 将来时 → 할 거예요（하 + ㄹ 거예요）。' },
       { wrong: '내일 공부했어요', correct: '내일 공부할 거예요', note: '내일 是未来时间词，要配将来时。' },
+      { wrong: '갈 거에요', correct: '갈 거예요', note: '거 后面是 예요 不是 에요，写成 거에요 是最高频的拼写错误。' },
     ],
     quickTable: {
       title: '将来时速查表',
@@ -1886,6 +1902,8 @@ export const grammarCardsP1: GrammarCard[] = [
       { type: 'note',    text: '形容词不用 -고 있어요',                  examples: '좋아요（不说 좋고 있어요）/ 예뻐요（不说 예쁘고 있어요）' },
       { type: 'compare', text: '进行时 vs 普通现在时',                   examples: '공부해요（习惯）vs 공부하고 있어요（此刻正在）' },
       { type: 'note',    text: 'ㄷ 不规则接 -고 时不变',                examples: '듣다→듣고 있어요（-고 以辅音开头，不触发变化）' },
+      { type: 'note',    text: '中文"在"一词两用：表地点（在咖啡店）也表进行（在学习）。韩语分成两处——地点用 에서，进行用 -고 있어요，一句里能同时出现', examples: '카페에서 공부하고 있어요（在咖啡店 + 在学习）' },
+      { type: 'note',    text: '过去进行"（当时）正在做"：있어요 换成 있었어요 即可，和第8课过去时融合', examples: '공부하고 있어요→공부하고 있었어요 / 어제 그 노래를 듣고 있었어요（昨天正在听那首歌）' },
       { type: 'example', text: '지금 한국어를 공부하고 있어요 / 이 노래를 듣고 있어요 / 밥을 먹고 있어요' },
     ],
     structureNote: '进行时只有一套公式：\n动词词干 + 고 있어요。\n不用判断元音、不用看收音，是第一章最省心的语法。\n关键是搞清楚"正在做"和"习惯做"的区别。',
@@ -1948,6 +1966,7 @@ export const grammarCardsP1: GrammarCard[] = [
       { wrong: '지금 공부했어요', correct: '지금 공부하고 있어요', note: '공부했어요 是"学习了"（过去），공부하고 있어요 才是"正在学习"。' },
       { wrong: '좋고 있어요 / 예쁘고 있어요', correct: '좋아요 / 예뻐요', note: '形容词表示状态，不表示进行中的动作，不能加 -고 있어요。' },
       { wrong: '카페에 커피를 마시고 있어요', correct: '카페에서 커피를 마시고 있어요', note: '动作发生的场所用 에서（마시다 是动作动词）。' },
+      { wrong: '아까 노래를 들었어요', correct: '아까 노래를 듣고 있었어요', note: '想说"刚才（当时）正在听歌"要用过去进行 듣고 있었어요；单说 들었어요 只是"听了"，不含"正在"。' },
     ],
     quickTable: {
       title: '进行时速查表',
@@ -2152,7 +2171,7 @@ export const grammarCardsP1: GrammarCard[] = [
       { icon: '🏷️', context: '话题助词', ko: '저는 한국어를 공부해요.', zh: '我学韩语。은/는 标记话题。' },
       { icon: '📍', context: '地点助词', ko: '학교에서 공부해요.', zh: '在学校学习。动作发生场所用 에서。' },
       { icon: '⏳', context: '时态运用', ko: '어제 공부했어요. 내일도 공부할 거예요.', zh: '昨天学习了，明天也要学习。' },
-      { icon: '🚫', context: '否定句', ko: '오늘은 안 가요. 시간이 없어요.', zh: '今天不去。没有시간。' },
+      { icon: '🚫', context: '否定句', ko: '오늘은 안 가요. 시간이 없어요.', zh: '今天不去。没有时间。' },
     ],
     mistakes: [
       { wrong: '저은 학생이에요', correct: '저는 학생이에요', note: '저는 无收音名词后 → 는' },

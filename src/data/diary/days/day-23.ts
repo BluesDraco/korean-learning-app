@@ -1,83 +1,46 @@
 import type { ToriDay } from '@/types/tori-diary';
 
 /**
- * Day 23 · 弘大 偶像 생카 · Junho 兴奋了
+ * Day 23 · 弘爪街 생카 · 老虎追星的样子
  *
- * 剧情：放学后 Junho 拽着兔莉走："토리야, 진짜 보여줄 게 있어!"
- * 弘대街拐角，一家叫「달빛카페」的小店外面排了 30 人长队。
- * 玻璃橱窗贴满了应援横幅、明信片、生日蛋糕造型——
- * 是 Junho 老虎喜欢的男团成员"하루"今天 22 岁。
- * Junho 兴奋到颤抖："생일카페야! 줄 서자!"
- * 兔莉第一次见到老虎追星的样子。她记下今天学的所有 KPOP 词，
- * 准备明天关卡 4 一个人来挑战。
+ * 剧情：Junho拽着Tori去弘爪街拐角的달빛카페，外头排了30人。
+ * 排队时Tori觉得角落有一只灰狼盯着她看了一眼，转头就消失了。
  *
- * 学习目标：KPOP 6 词 (오빠/언니/응원/덕질/팬/콘서트) / 진짜 vs 정말
- * 韩语自审：korean skill PASS (KPOP 文化 + 强调副词)
+ * 学习目标：진짜 vs 정말 / KPOP粉丝词汇 / 感叹表达
+ * 语料层级：해요体 + 반말（Junho朋友语气）
+ * 韩语自审：korean skill PASS（자연성/문법/조사 三关）
  */
 export const day23: ToriDay = {
   level: 'beginner',
   day: 23,
   phase: 'expression',
-  title: '弘大 생카 · 老虎追星的样子',
-  subtitle: 'Junho 兴奋到尾巴在抖',
-  isCheckpoint: null,
-  estimatedMin: 13,
+  title: '弘爪街生咖 · 老虎追星的样子',
+  subtitle: 'Junho兴奋到尾巴在抖',
+  heroImageUrl: '/images/diary/day-23-hero.jpg',
+  estimatedMin: 12,
 
   opening: {
-    date: '9월 26일 화요일 오후',
-    weather: '兽尔 · 晴',
-    toriPose: 'cheer',
-    diaryText: `9월 26日，周二下午 4 点。
+    date: '9월 23일 · 월요일 오후',
+    weather: '兽尔 · 晴朗',
+    toriPose: 'shy',
+    diaryText: `9月23日，周一下午。
 
-放学铃刚响。
-Junho 老虎一把抓住我的胳膊：
-"토리야, 진짜 보여줄 게 있어!"
-（兔莉，真的有东西要给你看！）
+Junho一下课就拽着我跑：
+"토리야 빨리! 모찌 오빠 생카 오늘까지야!"
+（兔莉快点！Mochi哥生日咖啡今天结束！）
 
-我还没反应过来，
-就被他拽出校门。
-他的尾巴在抖。
+弘爪街拐角，一家叫「달빛카페」（月光咖啡）的小店，
+外头排了快30人。
+玻璃橱窗贴满粉色应援横幅。
 
-弘대街拐角。
-一家叫「달빛카페」(月光咖啡馆) 的小店——
-外面排着 30 人的长队。
-玻璃橱窗贴满了应援横幅、
-明信片、生日蛋糕造型。
-门口是一只男生的等身板——
-"하루(Haru)" — Junho 喜欢的男团成员，
-和 Haru 仓鼠重名了。
+Junho的尾巴在抖。
+我第一次见老虎这么兴奋。
 
-"오늘 하루 오빠 생일이야!"
-（今天是 Haru 哥哥的生日！）
-"생일카페야! 줄 서자!"
-（这是生日咖啡店！排队吧！）
+排队的时候——
+角落里，好像有一只灰色的狼盯着我看了一眼。
+我转头，什么都没有。
 
-Junho 兴奋到说话太快——
-我只听清了三个词：
-오빠 / 생일 / 줄.
-
-他从背包里拿出一沓应援卡：
-"이거 봐. 우리 팬클럽에서 만든 거야."
-（你看，我们粉丝俱乐部做的。）
-"진짜 정성이지."
-（真的很有诚意。）
-
-我第一次看到老虎追星的样子。
-他的眼睛亮得像孩子。
-
-排队 40 分钟。
-我们没买到限定饮料，
-但 Junho 拿到了一张小卡——
-是他抽到的。
-
-回去路上他对我说：
-"토리, 너도 한 번 와봐. 진짜 행복해."
-（兔莉，你也来一次。真的很幸福。）
-
-我点头。
-明天我要一个人来。
-
-📦 关卡 4 在等我。`,
+大概是错觉吧。`,
   },
 
   words: [
@@ -85,28 +48,28 @@ Junho 兴奋到说话太快——
       id: 'd23-w1',
       korean: '오빠',
       hangul: 'o-ppa',
-      zh: '哥哥 (女→男) / 偶像男爱称',
+      zh: '哥哥/男爱豆（女粉对男偶像的称呼）',
       pos: '名词',
-      example: { ko: '하루 오빠 좋아해요.', zh: '我喜欢 Haru 哥哥。' },
-      tip: '女生对年长男生 / 偶像粉丝对偶像。男生用 형',
+      example: { ko: '모찌 오빠 진짜 멋있어요!', zh: 'Mochi哥真帅！' },
+      tip: '오빠 本义是"亲哥哥"（女性用），追星时指男爱豆',
     },
     {
       id: 'd23-w2',
       korean: '언니',
       hangul: 'eon-ni',
-      zh: '姐姐 (女→女) / 偶像女爱称',
+      zh: '姐姐/女爱豆（女粉对女偶像的称呼）',
       pos: '名词',
-      example: { ko: '제니 언니 멋있어요.', zh: 'Jennie 姐姐很帅。' },
-      tip: '女生对年长女生。男生对女生用 누나',
+      example: { ko: '언니 노래 정말 좋아요.', zh: '姐姐的歌真的很好听。' },
+      tip: '언니 本义是"亲姐姐"（女性用），追星时指女爱豆',
     },
     {
       id: 'd23-w3',
       korean: '팬',
       hangul: 'paen',
-      zh: '粉丝 (fan)',
+      zh: '粉丝',
       pos: '名词',
-      example: { ko: '저는 팬이에요.', zh: '我是粉丝。' },
-      tip: 'fan 音译。팬클럽 (粉丝俱乐部) / 팬미팅 (见面会) / 팬싸 (签售)',
+      example: { ko: '저도 팬이 됐어요.', zh: '我也成为粉丝了。' },
+      tip: '英语 fan 的韩式外来语。팬이 되다 = 成为粉丝',
     },
     {
       id: 'd23-w4',
@@ -114,156 +77,181 @@ Junho 兴奋到说话太快——
       hangul: 'kon-seo-teu',
       zh: '演唱会',
       pos: '名词',
-      example: { ko: '콘서트 가고 싶어요.', zh: '我想去演唱会。' },
-      tip: 'concert 音译。同义 공연 (公演) 更书面',
+      example: { ko: '콘서트에 가고 싶어요.', zh: '想去演唱会。' },
+      tip: '英语 concert 的韩式外来语。콘서트 표 = 演唱会门票',
     },
     {
       id: 'd23-w5',
       korean: '진짜',
       hangul: 'jin-jja',
-      zh: '真的',
+      zh: '真的（口语/随意）',
       pos: '副词',
-      example: { ko: '진짜 좋아요!', zh: '真的好喜欢！' },
-      tip: '口语强调最高频副词。和「정말」是孪生兄弟，「진짜」更口语',
+      example: { ko: '진짜 좋아요!', zh: '真的好棒！' },
+      tip: '진짜 比 정말 更口语、更年轻人语感。朋友间常用',
     },
     {
       id: 'd23-w6',
       korean: '정말',
       hangul: 'jeong-mal',
-      zh: '真的 (稍正式)',
+      zh: '真的（正式/所有场合）',
       pos: '副词',
       example: { ko: '정말 감사합니다.', zh: '真的非常感谢。' },
-      tip: '比 진짜 稍正式。书面/对长辈用 정말 更稳。混着用就好',
+      tip: '정말 比 진짜 更正式。对长辈/正式场合优先用 정말',
     },
   ],
 
   dialogue: {
-    scene: '弘대街 · 달빛카페 排队中',
+    scene: '弘爪街·生日咖啡排队',
     setting: {
-      time: '周二下午 4 点',
-      place: '弘대 入口拐角 · 달빛카페',
-      npc: 'Junho 老虎',
+      time: '周一下午',
+      place: '달빛카페（月光咖啡）门口',
+      npc: 'Junho（老虎·班长·KPOP死忠）',
     },
     lines: [
       {
         speaker: 'npc',
-        npcName: 'Junho 老虎',
-        ko: '토리야, 여기 봐. 하루 오빠 생일카페야!',
-        hangul: 'to-ri-ya, yeo-gi bwa. ha-ru o-ppa saeng-il-ka-pe-ya',
-        zh: '兔莉你看，是 Haru 哥哥的生日咖啡店！',
+        npcName: 'Junho',
+        ko: '토리야, 여기 봐. 모찌 오빠 생일카페야!',
+        hangul: 'to-ri-ya, yeo-gi bwa. mo-jji o-ppa saeng-il-ka-pe-ya!',
+        zh: '兔莉你看，这是Mochi哥生日咖啡店！',
         practice: 'listen',
       },
       {
         speaker: 'tori',
-        ko: '와, 진짜 사람 많아요!',
-        hangul: 'wa, jin-jja sa-ram ma-na-yo',
+        ko: '와, 진짜 사람 많아!',
+        hangul: 'wa, jin-jja sa-ram ma-na!',
         zh: '哇，真的好多人！',
         practice: 'shadow',
       },
       {
         speaker: 'npc',
-        npcName: 'Junho 老虎',
+        npcName: 'Junho',
         ko: '음료 한 잔 사면 응원 카드 받을 수 있어!',
-        hangul: 'eum-ryo han jan sa-myeon eung-won ka-deu ba-deul su i-sseo',
-        zh: '买一杯饮料就能拿应援卡！',
+        hangul: 'eum-nyo han jan sa-myeon eung-won ka-deu ba-deul su i-sseo!',
+        zh: '买一杯就能拿到应援卡！',
         practice: 'listen',
       },
       {
         speaker: 'tori',
-        ko: '저도 팬이 돼도 돼요?',
-        hangul: 'jeo-do paen-i dwae-do dwae-yo',
+        ko: '나도 팬이 돼도 돼?',
+        hangul: 'na-do pae-ni dwae-do dwae?',
         zh: '我也可以当粉丝吗？',
         practice: 'shadow',
       },
       {
         speaker: 'tori',
+        isInnerVoice: true,
+        ko: '방금 늑대… 나를 봤나?',
+        hangul: 'bang-geum neuk-dae… na-reul bwat-na?',
+        zh: '刚才那个狼……看我了吗？',
+        practice: 'listen',
+      },
+      {
+        speaker: 'you',
         ko: '?',
         hangul: '',
-        zh: 'Junho 大笑："당연하지! 우리 한국에서 다 같이 콘서트 가자!"，兔莉应该如何兴奋地回应？',
+        zh: 'Junho说演唱会下周开，Tori很兴奋想去。她应该怎么说？',
         practice: 'pick',
         choices: [
-          { ko: '진짜? 정말 가고 싶어요!', zh: '真的吗？我真的想去！', correct: true },
-          { ko: '아니요, 괜찮아요.', zh: '不用了，没关系。', correct: false },
-          { ko: '얼마예요?', zh: '多少钱？', correct: false },
+          { ko: '진짜? 정말 가고 싶어요!', zh: '真的吗？真的好想去！', correct: true },
+          { ko: '콘서트가 뭐예요?', zh: '演唱会是什么？', correct: false },
+          { ko: '저는 안 가요.', zh: '我不去。', correct: false },
         ],
       },
     ],
   },
 
   grammar: {
-    title: '强调副词 · 진짜 vs 정말',
-    pattern: '진짜 / 정말 + 形容词·动词·名词',
-    whenToUse: '韩语口语高频强调。学会这两个，你的话立刻变得有感情。',
+    title: '真的：진짜 vs 정말',
+    pattern: '**진짜** = 真的（口语/年轻人/朋友间）  |  **정말** = 真的（正式/礼貌/通用）',
+    whenToUse: '两个都是"真的"，但语感和使用场景不同。Day 23 Junho说"진짜"（朋友间口语），Tori 表达"我真的想去"时特意用해요体+정말 = 郑重、认真的态度。跟朋友说话主体用반말（진짜?/사람 많아!）+ 关键情感句转해요体加重认真感——韩国年轻人真实用法。',
     rules: [
-      '**진짜** = 真的 / 真心 (口语·KPOP·朋友圈)：진짜 좋아요 / 진짜 예뻐요',
-      '**정말** = 真的 / 确实 (略正式·对长辈)：정말 감사합니다 / 정말 죄송합니다',
-      '语义几乎一样，差别在场合：朋友/偶像 → 진짜，长辈/正式 → 정말',
-      '加强语气连用：「진짜 정말!」 = "真的真的！"，但别和敬语混搭过度',
+      '**진짜 用法**：口语、朋友间、感叹时。진짜 좋아요!（真好！）/ 진짜?（真的吗？）/ 진짜 맛있어!（真好吃！）。语气更随意、更有感情色彩',
+      '**정말 用法**：所有场合通用，偏正式。정말 감사합니다（真的很感谢）/ 정말 좋아해요（真的很喜欢）。对长辈、不熟的人、正式场合用 정말',
+      '**互换规则**：정말 可以替代所有 진짜 的位置（安全选择）；진짜 不能替代所有 정말 的位置（对老师说 진짜 감사합니다 有点幼稚）',
+      '**名词用法**：진짜 还能当名词 = "真货"。이거 진짜예요?（这是真品吗？）/ 진짜 가짜?（真的假的？）。정말 没有名词用法',
+      '**感叹强调**：진짜 常单独使用表惊讶。"진짜?!"（真的？！）非常口语。정말 单独用时正式感更重："정말요?"（真的吗？）',
+      '**叠加使用**：진짜 정말（真的真的）年轻人强调时会叠用。진짜 진짜（真的真的）也常见。但不会说 정말 정말 정말（太啰嗦）',
+      '**书面 vs 口语**：写作文/邮件/报告 → 정말。聊天/短信/朋友对话 → 진짜。两个都出现在 Day 23 的对话里',
     ],
     examples: [
-      { ko: '진짜 좋아요!', zh: '真的好喜欢！', highlight: '진짜' },
-      { ko: '정말 감사합니다.', zh: '真的非常感谢。', highlight: '정말' },
-      { ko: '진짜 사람 많아요.', zh: '真的好多人。', highlight: '진짜' },
-      { ko: '정말 미안해요.', zh: '真的对不起。', highlight: '정말' },
+      { ko: '진짜 좋아요!', zh: '真的好棒！', highlight: '진짜', note: '口语感叹。朋友间表达兴奋/惊讶时最自然的选择' },
+      { ko: '정말 감사합니다.', zh: '真的非常感谢。', highlight: '정말', note: '합쇼체正式感谢。用 진짜 감사합니다 也行但语感偏年轻' },
+      { ko: '진짜? 정말 가고 싶어요!', zh: '真的吗？真的好想去！', highlight: '진짜 + 정말', note: '진짜?（惊讶反问·口语）+ 정말 가고 싶어요（认真表达愿望·稍正式）' },
+      { ko: '이 가방 진짜예요?', zh: '这包是真品吗？', highlight: '진짜', note: '진짜 当名词 = 真品/真货。정말 没有这个用法' },
+      { ko: '정말 미안해요.', zh: '真的很抱歉。', highlight: '정말', note: '道歉时用 정말 更真诚。진짜 미안해 也可以但更随意（반말）' },
     ],
     pitfall:
-      '对火鹤老师说「진짜 어려워요」会显得太随便。换成「정말 어려워요」更得体。但和 Junho 朋友说「정말 좋아요」反而像是装腔。规则：朋友追星 진짜，老师长辈 정말。',
+      '① 对长辈/老师说"진짜요?"不算错但语感偏幼稚，推荐"정말요?"更得体。② 진짜 当名词（真品）时，정말 不能替换：이거 정말이에요? ❌ → 이거 진짜예요? ✓。③ 书面语（作文/邮件）中避免 진짜，用 정말 或 참으로。',
   },
 
   output: [
     {
       id: 'd23-o1',
       kind: 'compose',
-      zhHint: '真的好多人！(对朋友的口语)',
-      tokens: ['진짜', '사람', '많아요', '정말', '있어요', '없어요'],
-      composeAnswer: ['진짜', '사람', '많아요'],
-      successMsg: 'Junho 兴奋地把应援卡塞给你："토리, 너 이제 우리 팬이야!" ✓',
+      zhHint: '真的吗？真的好想去！',
+      tokens: ['진짜', '정말', '가고', '싶어요', '좋아요', '있어요'],
+      composeAnswer: ['진짜', '정말', '가고', '싶어요'],
+      successMsg: '진짜? 정말 가고 싶어요! — 두 단어를 같이 쓰면 진심이 전해져요.',
     },
     {
       id: 'd23-o2',
       kind: 'listen-choice',
-      audioKo: '저는 하루 오빠 팬이에요.',
-      successMsg: '✓ 「我是 Haru 哥哥的粉丝」。「오빠」= 偶像男爱称；「팬이에요」无받침→이에요（워낙은 ㄴ 받침 → 「팬」末字「ㄴ」→ 이에요）。',
+      audioKo: '음료 한 잔 사면 응원 카드 받을 수 있어!',
+      successMsg: '✓ 사면 = 买了的话；받을 수 있어 = 能拿到。生日咖啡的规则。',
       choices: [
-        { zh: '我是 Haru 哥哥的粉丝。', correct: true },
-        { zh: '我是 Haru 姐姐的粉丝。', correct: false },
-        { zh: '我喜欢 Haru 哥哥。', correct: false },
-        { zh: '我想去演唱会。', correct: false },
+        { zh: '买一杯就能拿到应援卡！', correct: true },
+        { zh: '应援卡可以买一杯饮料。', correct: false },
+        { zh: '一杯饮料30块。', correct: false },
+        { zh: '不能买饮料。', correct: false },
       ],
     },
     {
       id: 'd23-o3',
       kind: 'zh-to-ko',
-      zhPrompt: '真的非常感谢。(对长辈)',
-      successMsg: '"정말 감사합니다" — 对长辈 / 正式场合用「정말」，比「진짜」更稳。',
+      zhPrompt: '真的非常感谢。',
+      successMsg: '"정말 감사합니다." — 正式感谢用 정말，不用 진짜。',
       choices: [
         { ko: '정말 감사합니다.', correct: true },
         { ko: '진짜 감사합니다.', correct: false },
-        { ko: '정말 감사해요.', correct: false },
-        { ko: '진짜 정말 감사합니다.', correct: false },
+        { ko: '정말 고마워.', correct: false },
+        { ko: '진짜 고맙습니다.', correct: false },
       ],
     },
     {
       id: 'd23-o4',
       kind: 'particle-error',
-      zhHint: '我想去演唱会。',
-      successMsg: '「콘서트」(无받침) → 「에」(去往)；「가다」+ 고 싶어요 = 가고 싶어요。',
+      zhHint: '我也成为粉丝了。',
+      successMsg: '팬 有收音ㄴ → 이 됐어요。저 无收音 → 도。',
       choices: [
-        { ko: '콘서트에 가고 싶어요.', correct: true },
-        { ko: '콘서트를 가고 싶어요.', correct: false },
-        { ko: '콘서트에 가고 있어요.', correct: false },
-        { ko: '콘서트에 갈 싶어요.', correct: false },
+        { ko: '저도 팬이 됐어요.', correct: true },
+        { ko: '저도 팬가 됐어요.', correct: false },
+        { ko: '저는도 팬이 됐어요.', correct: false },
+        { ko: '저도 팬이 됬어요.', correct: false },
+      ],
+    },
+    {
+      id: 'd23-o5',
+      kind: 'match-pair',
+      successMsg: '✓ Day 23 全对。Tori也开始追星了！',
+      pairs: [
+        { ko: '오빠', zh: '男爱豆（女粉称呼）' },
+        { ko: '팬', zh: '粉丝' },
+        { ko: '콘서트', zh: '演唱会' },
+        { ko: '진짜', zh: '真的（口语）' },
+        { ko: '정말', zh: '真的（正式）' },
       ],
     },
   ],
 
   recap: {
-    toriPose: 'celebrate',
-    praise: '老虎追星的样子记下了。生日咖啡店的玻璃门反射着你的笑脸。',
-    preview: '明天 Junho 喊我和 Minji、Haru 一起约咖啡馆。三人群聊…我能听懂吗？',
+    toriPose: 'proud',
+    praise: '첫 생카 방문 완료! 진짜 재밌었어요, 토리!',
+    preview: '明天群聊会炸——三个朋友同时 @ 我，约新开的咖啡馆。',
     stickerId: 'sticker-d23',
+    sceneImageUrl: '/images/diary/day-23-scene.jpg',
   },
 
   carrotHint:
-    '今天的胡萝卜：「KPOP 粉丝词汇大全」「진짜 vs 정말 区别」「韩国生日카페文化」',
+    '今天的胡萝卜：「진짜和정말有什么区别？」「韩国生日咖啡是什么文化？」',
 };

@@ -6,7 +6,7 @@
 // Individual vowels → pronunciation focus tags
 export const VOWEL_TO_FOCUS: Record<string, string> = {
   'ㅏ': '元音区分',
-  'ㅑ': '元音区分',
+  'ㅑ': 'ㅕ/ㅛ',
   'ㅓ': 'ㅓ/ㅗ',
   'ㅕ': 'ㅕ/ㅛ',
   'ㅗ': 'ㅓ/ㅗ',

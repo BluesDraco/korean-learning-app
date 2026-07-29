@@ -1,0 +1,49 @@
+/* 可回放语音条气泡。用 currentColor 继承外层气泡文字色，两页(cmc/chatui)通用。 */
+
+.vbubble {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 2px;
+  border: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  -webkit-tap-highlight-color: transparent;
+  min-width: 96px;
+}
+.vbubble[data-missing='true'] { cursor: default; opacity: 0.7; }
+
+.vbubble-wave {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 20px;
+  flex: 1;
+}
+.vbubble-bar {
+  width: 2.5px;
+  min-height: 3px;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: 0.55;
+}
+.vbubble-wave[data-playing='true'] .vbubble-bar {
+  animation: vbubble-pulse 0.9s ease-in-out infinite;
+}
+@keyframes vbubble-pulse {
+  0%, 100% { transform: scaleY(0.5); opacity: 0.4; }
+  50% { transform: scaleY(1); opacity: 0.85; }
+}
+
+.vbubble-dur {
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.75;
+  flex-shrink: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vbubble-wave[data-playing='true'] .vbubble-bar { animation: none; }
+}

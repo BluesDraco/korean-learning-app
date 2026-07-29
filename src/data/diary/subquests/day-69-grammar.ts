@@ -1,0 +1,30 @@
+import type { GrammarSubQuestData } from '@/types/tori-subquest';
+
+/** Day 69 · 3-3 문법 탐험 · ~기 때문에 / ~기 때문이다 · 正式因果 */
+export const day69Grammar: GrammarSubQuestData = {
+  day: 9, level: 'advanced', idx: 3, kind: 'grammar',
+  koTitle: '문법 탐험',
+  subtitle: '因为……：~기 때문에 · N + 때문에',
+
+  fix: [
+    { id: 'd69-g3-f1', promptKo: '편견하기 때문에 사람들이 상처받아요.', promptZh: '"因为偏见，人们受伤"哪句正确？',                     choices: [{ text: '편견하기 때문에 사람들이 상처받아요.',      correct: false }, { text: '편견 때문에 사람들이 상처받아요.',        correct: true }, { text: '편견하는 때문에 사람들이 상처받아요.',       correct: false }, { text: '편견해서 때문에 사람들이 상처받아요.',                 correct: false }], explain: 'N + **때문에**（不加 하기）· 편견 是名词' },
+    { id: 'd69-g3-f2', promptKo: '체형이 작는 때문에 무시받았어요.',      promptZh: '"因为体型小被轻视"哪句正确？',                       choices: [{ text: '체형이 작는 때문에 무시받았어요.',           correct: false }, { text: '체형이 작기 때문에 무시받았어요.',        correct: true }, { text: '체형이 작 때문에 무시받았어요.',                correct: false }, { text: '체형이 작아서 때문에 무시받았어요.',                     correct: false }], explain: 'A/V + **기** 때문에 · 작다 → 작기' },
+    { id: 'd69-g3-f3', promptKo: '용기를 냈기 때문에 여기까지 왔어요.',   promptZh: '"因为拿出了勇气才走到这里"（过去因）哪句正确？',      choices: [{ text: '용기를 냈기 때문에 여기까지 왔어요.',        correct: true }, { text: '용기를 내는 때문에 여기까지 왔어요.',    correct: false }, { text: '용기를 내기 때문에 여기까지 왔어요.',       correct: false }, { text: '용기를 낸 때문에 여기까지 왔어요.',                    correct: false }], explain: '过去 + **었기** 때문에 · 냈기（过去）' },
+    { id: 'd69-g3-f4', promptKo: '이건 왜 그런 것이에요? 편견 때문이에요.', promptZh: '"这为什么这样？因为偏见"哪句正确？',              choices: [{ text: '이건 왜 그런 것이에요? 편견 때문이에요.',    correct: true }, { text: '이건 왜 그런 것이에요? 편견해서예요.',    correct: false }, { text: '이건 왜 그런 것이에요? 편견 이유예요.',        correct: false }, { text: '이건 왜 그런 것이에요? 편견하기 때문이에요.',                     correct: false }], explain: 'N + **때문이다** = 是因为 N（做谓语）' },
+    { id: 'd69-g3-f5', promptZh: '关于「~기 때문에 vs ~아/어서」的差别，哪句最准确？',                                                                                                                                                                                                              choices: [{ text: '~기 때문에 = 正式 / 书面 / 强因果（演讲、论文）· ~아/어서 = 口语常用 · Day 69 演讲用 ~기 때문에', correct: true }, { text: '两者完全一样',            correct: false }, { text: '~기 때문에 是命令',        correct: false }, { text: '~기 때문에 只用于过去',       correct: false }], explain: '正式度差 · Day 69 是演讲场景 → 更适合 ~기 때문에' },
+  ],
+
+  compose: [
+    { id: 'd69-g3-c1', zhHint: '因为偏见，人们受伤。',                audioKo: '편견 때문에 사람들이 상처받아요.',       answer: ['편견 때문에', '사람들이', '상처받아요.'],       tokens: ['편견 때문에', '사람들이', '상처받아요.', '편견해서', '편견하기 때문에', '상처받았어요.'],           explain: 'N + 때문에' },
+    { id: 'd69-g3-c2', zhHint: '因为体型小被轻视了。',                audioKo: '체형이 작기 때문에 무시받았어요.',        answer: ['체형이', '작기 때문에', '무시받았어요.'],       tokens: ['체형이', '작기 때문에', '무시받았어요.', '작는', '작아서', '작 때문에', '무시받아요.'],             explain: 'A + 기 때문에' },
+    { id: 'd69-g3-c3', zhHint: '因为拿出勇气才走到这里。',              audioKo: '용기를 냈기 때문에 여기까지 왔어요.',    answer: ['용기를', '냈기 때문에', '여기까지', '왔어요.'], tokens: ['용기를', '냈기 때문에', '여기까지', '왔어요.', '내는', '내서', '낸', '갔어요.'],                     explain: '过去 · 었기 때문에' },
+    { id: 'd69-g3-c4', zhHint: '这是因为偏见。',                        audioKo: '이건 편견 때문이에요.',                    answer: ['이건', '편견 때문이에요.'],                     tokens: ['이건', '편견 때문이에요.', '편견해서예요.', '편견 이유예요.', '편견이에요.', '아니에요.'],           explain: 'N + 때문이다（谓语用法）' },
+  ],
+
+  rule: [
+    { id: 'd69-g3-r1', promptZh: '关于「N + 때문에」的形态，哪句最准确？',                             choices: [{ text: '**名词 + 때문에**（不加 기）· 편견 때문에 = 因为偏见 · 常表原因', correct: true }, { text: 'N + 하기 때문에',       correct: false }, { text: 'N + 서 때문에',          correct: false }, { text: 'N + 은 때문에',                 correct: false }], explain: 'N 直接 + 때문에' },
+    { id: 'd69-g3-r2', promptZh: '关于「V/A + 기 때문에」的形态，哪句最准确？',                        choices: [{ text: 'V/A 词干 + **기** 때문에 · 작다 → 작기 때문에 · 学生论文 / 演讲高频', correct: true }, { text: 'V + 는 때문에',       correct: false }, { text: 'V + 은 때문에',          correct: false }, { text: 'V + 을 때문에',                 correct: false }], explain: '기 名词化 + 때문에' },
+    { id: 'd69-g3-r3', promptZh: '关于「过去因」，哪句最准确？',                                        choices: [{ text: '**~았/었기 때문에** = 因为（过去）· 냈기 때문에 = 因为（过去）拿出了勇气', correct: true }, { text: '过去用 ~는 때문에',       correct: false }, { text: '过去用 ~은 때문에',        correct: false }, { text: '过去用 ~어서 때문에',            correct: false }], explain: '~었기 때문에 · 过去因' },
+    { id: 'd69-g3-r4', promptZh: '关于「~기 때문에 vs ~아/어서」的差别，哪句最准确？',                    choices: [{ text: '~기 때문에 = **正式书面**（演讲 / 论文）· ~아/어서 = **口语常用** · Day 69 演讲场景更适合 ~기 때문에', correct: true }, { text: '两者完全一样',            correct: false }, { text: '~기 때문에 是命令',        correct: false }, { text: '~아/어서 是敬语',              correct: false }], explain: '正式度差 · 场景选一个' },
+  ],
+};

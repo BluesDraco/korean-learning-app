@@ -4,16 +4,13 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ChevronRight, Target } from 'lucide-react';
 import { db } from '@/lib/db';
-
-const levelNames: Record<number, string> = {
-  1: '1级 · 入门', 2: '2级 · 基础', 3: '3级 · 进阶',
-  4: '4级 · 中级', 5: '5级 · 高级', 6: '6级 · 精通',
-};
+import { t } from '@/lib/i18n';
+import { useLang } from '@/components/LangProvider';
 
 const levelColors: Record<number, string> = {
   1: 'var(--mint-soft)', 2: 'var(--mint-soft)',
   3: 'var(--pink-primary)', 4: 'var(--pink-primary)',
-  5: 'var(--purple-soft)', 6: 'var(--purple-soft)',
+  5: 'var(--color-purple-strong)', 6: 'var(--color-purple-strong)',
 };
 
 type LevelInfo = { level: number; totalCount: number; mastered: number; learning: number };
@@ -21,8 +18,10 @@ type LevelInfo = { level: number; totalCount: number; mastered: number; learning
 const FALLBACK: LevelInfo[] = [1,2,3,4,5,6].map(level => ({ level, totalCount: 0, mastered: 0, learning: 0 }));
 
 export function LevelsSection() {
+  const { lang } = useLang();
   const [levels, setLevels] = useState<LevelInfo[]>(FALLBACK);
   const [progressLoaded, setProgressLoaded] = useState(false);
+  const [loadError, setLoadError] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -61,7 +60,7 @@ export function LevelsSection() {
           setLevels(enriched);
           setProgressLoaded(true);
         }
-      } catch { /* keep fallback */ }
+      } catch { setLoadError(true); }
     })();
     return () => { cancelled = true; };
   }, []);
@@ -78,17 +77,17 @@ export function LevelsSection() {
       >
         <div className="flex items-center justify-between mb-3">
           <span className="text-2xl font-bold" style={{ color: levelColors[lvl.level] }}>
-            {lvl.level}级
+            {t('vocab.level_n_ji', lang, { n: lvl.level })}
           </span>
           <ChevronRight size={16} className="text-[var(--text-muted)] group-hover:translate-x-0.5 transition-transform" />
         </div>
-        <p className="text-xs text-[var(--text-secondary)] mb-1">{levelNames[lvl.level]}</p>
+        <p className="text-xs text-[var(--text-secondary)] mb-1">{t(`vocab.level_name_${lvl.level}`, lang)}</p>
         <p className="text-sm font-bold text-[var(--text-primary)] mb-3">
-          {total > 0 ? `${total.toLocaleString()} 词` : '——'}
+          {total > 0 ? t('vocab.levels_n_words', lang, { n: total.toLocaleString() }) : t('vocab.hub_plan_dash', lang)}
         </p>
         <div className="space-y-1.5">
           <div className="flex justify-between text-xs text-[var(--text-muted)]">
-            <span>{progressLoaded ? `已学 ${done}/${total}` : '—'}</span>
+            <span>{progressLoaded ? t('vocab.levels_learned', lang, { done, total }) : t('vocab.hub_plan_dash', lang)}</span>
             <span>{progressLoaded ? `${pct}%` : ''}</span>
           </div>
           <div className="w-full bg-[var(--bg-input)] rounded-full h-1.5 flex overflow-hidden">
@@ -98,10 +97,10 @@ export function LevelsSection() {
           </div>
           <div className="flex gap-3 text-[13px] text-[var(--text-muted)]">
             <span className="flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--mint-soft)' }} /> 掌握 {progressLoaded ? lvl.mastered : '—'}
+              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--mint-soft)' }} /> {t('vocab.levels_masterd_n', lang, { n: progressLoaded ? lvl.mastered : t('vocab.hub_plan_dash', lang) })}
             </span>
             <span className="flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--peach-soft)' }} /> 学习 {progressLoaded ? lvl.learning : '—'}
+              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--peach-soft)' }} /> {t('vocab.levels_learning_n', lang, { n: progressLoaded ? lvl.learning : t('vocab.hub_plan_dash', lang) })}
             </span>
           </div>
         </div>
@@ -114,18 +113,25 @@ export function LevelsSection() {
       <div>
         <div className="flex items-center gap-2 mb-3">
           <div className="px-2 py-0.5 rounded-md bg-[var(--mint-soft)]/10 text-[var(--mint-soft)] text-xs font-bold">TOPIK</div>
-          <span className="text-xs text-[var(--text-muted)]">从入门 1 级到精通 6 级</span>
+          <span className="text-xs text-[var(--text-muted)]">{t('vocab.levels_from_to', lang)}</span>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-          {levels.map(renderCard)}
+          {loadError ? (
+            <div className="col-span-full flex flex-col items-center gap-3 py-8">
+              <p className="text-sm text-[var(--color-ink-3)]">{t('vocab.load_failed_refresh', lang)}</p>
+              <button onClick={() => { setLoadError(false); window.location.reload(); }} className="text-sm text-[var(--color-pink-strong)] font-medium underline">{t('vocab.hub_reload', lang)}</button>
+            </div>
+          ) : (
+            levels.map(renderCard)
+          )}
         </div>
       </div>
 
       <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 text-center">
         <Target size={20} className="text-[var(--pink-primary)] mx-auto mb-2" />
-        <p className="text-sm text-[var(--text-primary)] font-medium">系统打卡，目标明确</p>
+        <p className="text-sm text-[var(--text-primary)] font-medium">{t('vocab.levels_goal_title', lang)}</p>
         <p className="text-xs text-[var(--text-secondary)] mt-1">
-          知道自己在第几级、还差多少词、哪些词是薄弱点。有目标感，留存率高得多。
+          {t('vocab.levels_goal_sub', lang)}
         </p>
       </div>
     </div>

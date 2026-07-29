@@ -1,100 +1,108 @@
-'use client';
+'use client'
 
-import { BookImage, Lightbulb, Tv, Newspaper, Music, Mic2 } from 'lucide-react';
-import Link from 'next/link';
-import { PageHeader, Section, Card, Button, EntryCard } from '@/components/ui';
+import { useRouter } from 'next/navigation';
 import { DesktopExplorePage } from '@/components/desktop/DesktopExplorePage';
 import { useIsDesktop } from '@/lib/useIsMobile';
-
-const FEED = [
-  { label: '今日绘本', desc: '토리와 첫 만남', href: '/learn/picture-books', tone: 'mint' as const, Icon: BookImage },
-  { label: '今日韩剧表达', desc: '《眼泪女王》经典台词', href: '/korea/drama', tone: 'purple' as const, Icon: Tv },
-];
-
-const INTERESTS = [
-  { Icon: Music, label: 'KPOP 跟唱', desc: '逐句歌词 + 跟唱录音', href: '/korea/kpop', tone: 'pink' as const },
-  { Icon: Mic2, label: '影子跟读', desc: '听音模仿，纠正节奏', href: '/shadowing', tone: 'pink' as const },
-  { Icon: BookImage, label: 'Tori 绘本馆', desc: '韩语绘本故事', href: '/learn/picture-books', tone: 'mint' as const },
-  { Icon: Lightbulb, label: '韩国小知识', desc: '文化·美食·旅行', href: '/knowledge', tone: 'peach' as const },
-  { Icon: Tv, label: '韩剧表达', desc: '经典台词学韩语', href: '/korea/drama', tone: 'purple' as const },
-];
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
+import './explore-plaza.css';
 
 export default function ExplorePage() {
   const isDesktop = useIsDesktop();
+  const router = useRouter();
+  const { lang } = useLang();
 
   if (isDesktop) return <DesktopExplorePage />;
 
   return (
-    <div className="py-4 max-w-2xl mx-auto">
-      <PageHeader
-        eyebrow="탐색"
-        title="探索"
-        subtitle="用喜欢的内容学韩语。"
-        tone="pink"
-      />
+    <div className="plaza-root py-4">
+      <header className="pz-masthead pz-enter pz-d1">
+        <span className="pz-streak">{t('explore.daily_update', lang)}</span>
+        <div className="pz-eyebrow"><span className="pz-dot" />EXPLORE · 동물 도시</div>
+        <h1 className="pz-title">{t('explore.title_a', lang)}<em>{t('explore.title_b', lang)}</em></h1>
+        <p className="pz-dek"><span className="en">Plaza —</span>{t('explore.dek', lang)}</p>
+      </header>
 
-      {/* Hot posts — featured hero */}
-      <Section spacing="normal">
-        <Card variant="hero" tone="purple" padding="lg">
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
-            <div
-              style={{
-                width: 44, height: 44, borderRadius: 'var(--radius-md)',
-                background: 'var(--color-surface-2)', color: 'var(--color-purple-strong)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-              }}
-              aria-hidden
-            >
-              <Newspaper size={22} strokeWidth={1.75} />
+      <button className="pz-card pz-cover pz-enter pz-d2" onClick={() => router.push('/blog')}>
+        <div className="pz-bgtext">Blog</div>
+        <div className="pz-cover-body">
+          <span className="pz-kicker">{t('explore.cover_kicker', lang)}</span>
+          <h2 className="pz-cover-h">{t('explore.cover_title', lang)}</h2>
+          <p className="pz-cover-p">{t('explore.cover_desc', lang)}</p>
+          <span className="pz-cover-cta"><span className="u">{t('explore.cover_cta', lang)}</span> →</span>
+        </div>
+        <div className="pz-cover-fig">
+          <div className="pz-post">
+            <div className="pz-post-head">
+              <div className="pz-av-ring"><div className="in">🐰</div></div>
+              <div className="pz-post-meta">
+                <div className="n">{t('explore.post_name', lang)}</div>
+                <div className="h">@tori_seoul</div>
+              </div>
             </div>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <p style={{ fontSize: 17, fontWeight: 800, color: 'var(--color-ink-1)', margin: 0 }}>
-                韩娱热帖
-              </p>
-              <p style={{ fontSize: 13, color: 'var(--color-ink-3)', margin: '4px 0 14px', lineHeight: 1.5 }}>
-                刷热点，顺便看懂韩语。每帖逐句拆解。
-              </p>
-              <Link href="/korea/kpop/news" style={{ textDecoration: 'none' }}>
-                <Button variant="primary" tone="black" size="md">看今日热帖</Button>
-              </Link>
+            <div className="pz-post-kr">“오늘 홍대에서 친구를 만났어요. 거리 공연이 진짜 멋졌어요!”</div>
+            <div className="pz-post-zh">{t('explore.post_zh', lang)}</div>
+            <div className="pz-post-foot">{t('explore.post_foot', lang)}<span className="heart">♥ 읽고 배우기</span></div>
+          </div>
+        </div>
+      </button>
+
+      <button className="pz-card pz-radio pz-enter pz-d3" onClick={() => router.push('/radio')}>
+        <div className="pz-bgtext">RADIO</div>
+        <div className="pz-radio-main">
+          <div className="pz-radio-top">
+            <div className="pz-radio-icon">🎙️</div>
+          </div>
+          <div className="pz-radio-info">
+            <div className="pz-radio-title">{t('explore.radio_title', lang)}</div>
+            <div className="pz-radio-zh">{t('explore.radio_sub', lang)}</div>
+            <div className="pz-radio-now">{t('explore.radio_now', lang)}</div>
+            <div className="pz-wave-row">
+              <div className="pz-waves"><span /><span /><span /><span /><span /><span /><span /><span /></div>
+              <span className="pz-badge pz-badge-live"><span className="pz-dot" />ON AIR</span>
             </div>
           </div>
-        </Card>
-      </Section>
-
-      {/* Recommended */}
-      <Section title="今日推荐" spacing="normal">
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          {FEED.map(({ label, desc, href, tone, Icon }) => (
-            <EntryCard
-              key={href}
-              href={href}
-              icon={<Icon size={20} strokeWidth={1.75} />}
-              label={label}
-              detail={desc}
-              tone={tone}
-              layout="row"
-            />
-          ))}
         </div>
-      </Section>
-
-      {/* Interest grid */}
-      <Section title="按兴趣探索" spacing="normal">
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-          {INTERESTS.map(({ Icon, label, desc, href, tone }) => (
-            <EntryCard
-              key={href}
-              href={href}
-              icon={<Icon size={20} strokeWidth={1.75} />}
-              label={label}
-              detail={desc}
-              tone={tone}
-              layout="block"
-            />
-          ))}
+        <div className="pz-radio-fig">
+          <div className="pz-show">
+            <div className="pz-show-top"><span className="eq"><i /><i /><i /></span>{t('explore.radio_show_top', lang)}</div>
+            <div className="pz-show-hosts">
+              <span className="avs"><span>🦊</span><span>🐰</span></span>
+              <span className="duo">{t('explore.radio_duo', lang)}</span>
+            </div>
+            <div className="pz-show-h">{t('explore.radio_show_h', lang)}</div>
+            <div className="pz-show-p">{t('explore.radio_show_p', lang)}</div>
+            <span className="pz-show-tag">{t('explore.radio_show_tag', lang)}</span>
+          </div>
         </div>
-      </Section>
+      </button>
+
+      <div className="pz-index-head pz-enter pz-d4">
+        <span className="pz-index-title">More in this issue</span>
+        <span className="pz-index-sub">{t('explore.index_sub', lang)}</span>
+      </div>
+
+      <div className="pz-rows">
+        <button className="pz-card pz-tile pz-lumi pz-enter pz-d5" onClick={() => router.push('/lumi-paw.html')}>
+          <div className="pz-tile-top"><div className="pz-tile-emoji">🌟</div></div>
+          <div className="pz-tile-body">
+            <div className="pz-tile-h">{t('explore.tile_lumi', lang)}</div>
+            <div className="pz-tile-zh">{t('explore.tile_lumi_sub', lang)}</div>
+          </div>
+          <div className="pz-arrow">→</div>
+        </button>
+
+        <button className="pz-card pz-tile pz-sticker pz-enter pz-d5" onClick={() => router.push('/sticker.html')}>
+          <div className="pz-tile-top"><div className="pz-tile-emoji">✨</div></div>
+          <div className="pz-tile-body">
+            <div className="pz-tile-h">{t('explore.tile_sticker', lang)}</div>
+            <div className="pz-tile-zh">{t('explore.tile_sticker_sub', lang)}</div>
+          </div>
+          <div className="pz-arrow">→</div>
+        </button>
+      </div>
+
+      <p className="pz-colophon pz-enter pz-d7">{t('explore.colophon', lang)}</p>
     </div>
   );
 }

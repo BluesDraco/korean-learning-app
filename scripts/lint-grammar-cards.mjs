@@ -16,10 +16,19 @@ const root = path.resolve(__dirname, '..');
 const CARD_FILES = [
   'src/data/grammar-cards.ts',
   'src/data/grammar-cards-p1.ts',
+  'src/data/grammar-cards-p2.ts',
+  'src/data/grammar-cards-p3.ts',
+  'src/data/grammar-cards-p4.ts',
+  'src/data/grammar-cards-p5.ts',
+  'src/data/grammar-cards-p6.ts',
   'src/data/grammar-cards-p7.ts',
   'src/data/grammar-cards-p8.ts',
   'src/data/grammar-cards-p9.ts',
   'src/data/grammar-cards-p10.ts',
+  'src/data/grammar-cards-p11.ts',
+  'src/data/grammar-cards-p12.ts',
+  'src/data/grammar-cards-p13.ts',
+  'src/data/grammar-cards-p14.ts',
 ];
 
 // 汉字范围
@@ -86,8 +95,13 @@ function loadCards(filePath) {
   try {
     const match = src.match(/export const \w+[^=]*=\s*(\[[\s\S]*\]);?\s*$/);
     if (!match) return [];
+    // 去掉 TS 类型断言：`val as 0|1|2|3` / `val as const` 等
+    const cleaned = match[1]
+      .replace(/\s+as\s+const\b/g, '')
+      .replace(/\s+as\s+[A-Za-z_$][\w$]*(\s*<[^>]+>)?(\s*\|\s*[A-Za-z0-9_$|]+)*/g, '')
+      .replace(/\s+as\s+\d+(\s*\|\s*\d+)+/g, '');
     // eslint-disable-next-line no-new-func
-    const cards = Function(`"use strict"; return (${match[1]})`)();
+    const cards = Function(`"use strict"; return (${cleaned})`)();
     return Array.isArray(cards) ? cards : [];
   } catch (e) {
     console.error(`  [ERROR] 加载 ${filePath} 失败:`, e.message.slice(0, 120));

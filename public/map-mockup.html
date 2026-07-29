@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>动물 도시 地图 · mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Noto+Serif+SC:wght@500;700;900&family=Noto+Sans+SC:wght@400;500;700&family=Gaegu:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#fdf6ec;
+    --paper-deep:#f7 ebd d;
+    --ink:#3a2b23;
+    --ink-soft:#8a7060;
+    --ink-faint:#b8a596;
+    --line:#e4d3c2;
+    --pink:#e8567f;
+    --pink-soft:#ffe1ea;
+    --road:#d9b48a;
+    --road-done:#e8567f;
+    /* place accents (from places.ts) */
+    --amber:#c98a2e;      /* library */
+    --coral:#e06a6a;      /* classroom */
+    --teal:#3f9d92;       /* practice */
+    --rose:#e05a8a;       /* blog */
+    --gold:#d8a13a;       /* radio */
+    --serif:'Noto Serif SC',serif;
+    --fs:'Fraunces',serif;
+    --hand:'Gaegu',cursive;
+    --sans:'Noto Sans SC',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:var(--sans);
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 12% 8%, #fff6df 0%, transparent 40%),
+      radial-gradient(circle at 88% 92%, #ffeef3 0%, transparent 42%),
+      #fdf6ec;
+    background-attachment:fixed;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:80px;
+  }
+  /* subtle paper grain */
+  body::before{
+    content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  }
+  .wrap{max-width:480px;margin:0 auto;padding:0 18px;position:relative;z-index:1}
+
+  /* ── 顶部手账标题 ── */
+  .top{padding:26px 0 10px;text-align:center;position:relative}
+  .top .eyebrow{
+    font-family:var(--fs);font-style:italic;font-size:13px;letter-spacing:.06em;
+    color:var(--ink-soft);margin-bottom:6px;
+  }
+  .top h1{
+    font-family:var(--serif);font-weight:900;font-size:34px;letter-spacing:.02em;
+    color:var(--ink);line-height:1.1;
+  }
+  .top h1 em{font-style:normal;color:var(--pink);position:relative}
+  .top h1 em::after{content:'';position:absolute;left:-2px;right:-2px;bottom:4px;height:8px;background:var(--pink-soft);z-index:-1;border-radius:4px}
+  .top .ko{font-family:var(--sans);font-size:13px;color:var(--ink-soft);margin-top:8px;letter-spacing:.04em}
+  .tape{
+    position:absolute;top:16px;width:64px;height:22px;
+    background:rgba(255,190,120,.35);border:1px dashed rgba(200,138,46,.4);
+    transform:rotate(-6deg);border-radius:2px;
+  }
+  .tape.r{right:6px;transform:rotate(5deg);background:rgba(232,86,127,.16);border-color:rgba(232,86,127,.3)}
+
+  /* ── 主线进度卡（你在这里）── */
+  .here{
+    margin:14px 0 6px;
+    background:linear-gradient(150deg,#fff,#fff7ef);
+    border:1.5px solid var(--line);
+    border-radius:20px;padding:16px 18px;
+    box-shadow:0 8px 24px -14px rgba(120,80,50,.4);
+    display:flex;align-items:center;gap:14px;position:relative;overflow:hidden;
+  }
+  .here::after{content:'';position:absolute;top:-30px;right:-20px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(232,86,127,.12),transparent 65%)}
+  .here .tori{width:64px;height:64px;flex-shrink:0;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 3px 4px rgba(120,80,50,.25))}
+  .here .info{flex:1;min-width:0;position:relative;z-index:1}
+  .here .pin{font-family:var(--fs);font-style:italic;font-size:11px;color:var(--pink);font-weight:600;letter-spacing:.04em}
+  .here .dayt{font-family:var(--serif);font-weight:700;font-size:19px;color:var(--ink);margin:2px 0 4px;line-height:1.2}
+  .here .bar{height:6px;background:#f0e3d5;border-radius:3px;overflow:hidden;margin-top:6px}
+  .here .bar>i{display:block;height:100%;width:20%;background:linear-gradient(90deg,var(--pink),#ffa07f);border-radius:3px}
+  .here .barlabel{font-size:11px;color:var(--ink-soft);margin-top:5px}
+
+  .maptitle{
+    display:flex;align-items:center;gap:10px;margin:24px 2px 4px;
+  }
+  .maptitle span{font-family:var(--fs);font-style:italic;font-size:15px;color:var(--ink-soft)}
+  .maptitle::before,.maptitle::after{content:'';height:1px;flex:1;background:var(--line)}
+
+  /* ── 卷轴地图 ── */
+  .road{position:relative;padding:20px 0 10px}
+  /* 中央虚线小路 */
+  .road::before{
+    content:'';position:absolute;left:50%;top:0;bottom:0;width:0;
+    border-left:3px dashed var(--road);transform:translateX(-50%);
+  }
+  /* 已走过的路（前段染色）*/
+  .road .trail-done{
+    position:absolute;left:50%;top:0;height:180px;width:0;
+    border-left:3px dashed var(--road-done);transform:translateX(-50%);z-index:1;
+  }
+
+  .stop{position:relative;z-index:2;margin:0 0 34px;display:flex}
+  .stop.left{justify-content:flex-start}
+  .stop.right{justify-content:flex-end}
+  .stop.center{justify-content:center}
+
+  /* 场所卡：拍立得贴纸风 */
+  .place{
+    width:186px;background:#fff;border-radius:14px;padding:8px 8px 12px;
+    box-shadow:0 6px 20px -10px rgba(120,80,50,.5);border:1px solid #fff;
+    position:relative;text-decoration:none;color:inherit;display:block;
+    transition:transform .25s cubic-bezier(.16,1,.3,1);
+  }
+  .place:active{transform:scale(.97)}
+  .stop.left .place{transform:rotate(-2.5deg)}
+  .stop.right .place{transform:rotate(2.5deg)}
+  .place .shot{width:100%;height:104px;border-radius:9px;object-fit:cover;display:block;background:#eee}
+  .place .cap{padding:9px 4px 2px}
+  .place .cap .name{font-family:var(--serif);font-weight:700;font-size:15px;display:flex;align-items:center;gap:5px}
+  .place .cap .ko{font-size:11px;color:var(--ink-faint);margin-top:1px}
+  .place .cap .when{font-size:12px;color:var(--ink-soft);margin-top:6px;line-height:1.45;
+    border-top:1px dashed var(--line);padding-top:6px}
+  .place .badge{
+    position:absolute;top:-9px;left:12px;font-family:var(--hand);font-size:14px;
+    padding:2px 10px;border-radius:20px;color:#fff;transform:rotate(-3deg);
+    box-shadow:0 3px 8px -3px rgba(0,0,0,.3);
+  }
+  /* 胶带 */
+  .place::before{content:'';position:absolute;top:-7px;right:22px;width:44px;height:16px;
+    background:rgba(255,255,255,.6);border:1px dashed rgba(180,150,120,.35);transform:rotate(6deg);border-radius:2px}
+
+  /* accent per place */
+  .a-amber .badge{background:var(--amber)} .a-amber .name{color:#8a5e1e}
+  .a-coral .badge{background:var(--coral)} .a-coral .name{color:#b34a4a}
+  .a-teal  .badge{background:var(--teal)}  .a-teal  .name{color:#2c7168}
+  .a-rose  .badge{background:var(--rose)}  .a-rose  .name{color:#b3396a}
+  .a-gold  .badge{background:var(--gold)}  .a-gold  .name{color:#9e7420}
+
+  /* 节点圆点（挂在路上）*/
+  .dot{position:absolute;left:50%;top:44px;width:16px;height:16px;border-radius:50%;
+    background:#fff;border:3px solid var(--road);transform:translateX(-50%);z-index:3}
+  .stop.done .dot{border-color:var(--road-done);background:var(--road-done)}
+  .stop.here-node .dot{border-color:var(--pink);background:#fff;box-shadow:0 0 0 5px rgba(232,86,127,.18);animation:pulse 1.8s infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 5px rgba(232,86,127,.18)}50%{box-shadow:0 0 0 9px rgba(232,86,127,.06)}}
+
+  /* 锁定态 */
+  .place.locked{filter:grayscale(.7);opacity:.62}
+  .place.locked .shot{filter:blur(1px)}
+  .place.locked .badge{background:#a89a8c}
+  .lockicon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:30px;z-index:4}
+
+  /* 里程碑：日记章节小旗 */
+  .flag{position:relative;z-index:2;display:flex;justify-content:center;margin:0 0 34px}
+  .flag .banner{
+    background:linear-gradient(150deg,#fff,#fff2f6);border:1.5px dashed var(--pink);
+    color:var(--pink);font-family:var(--serif);font-weight:700;font-size:13px;
+    padding:8px 18px;border-radius:20px;box-shadow:0 4px 12px -8px rgba(232,86,127,.5);
+  }
+
+  /* 起点/终点 */
+  .cap-node{text-align:center;position:relative;z-index:2;margin:6px 0 30px}
+  .cap-node .em{font-size:30px}
+  .cap-node .t{font-family:var(--serif);font-weight:700;font-size:16px;margin-top:4px}
+  .cap-node .s{font-size:12px;color:var(--ink-soft);margin-top:2px}
+
+  .foot{text-align:center;font-family:var(--fs);font-style:italic;font-size:12px;color:var(--ink-faint);margin-top:20px}
+
+  .note{max-width:480px;margin:30px auto 0;padding:14px 18px;background:#fff8f0;border:1px dashed var(--line);border-radius:12px;font-size:12px;color:var(--ink-soft);line-height:1.7}
+  .note b{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <span class="tape"></span><span class="tape r"></span>
+    <div class="eyebrow">Animal City · 边逛边学</div>
+    <h1>동물 도시 <em>地图</em></h1>
+    <div class="ko">跟着兔莉走，一路上想去哪就拐进去 🥕</div>
+  </div>
+
+  <!-- 你在这里 -->
+  <div class="here">
+    <img class="tori" src="images/tori-poses/tori-pose-01.webp" alt="tori">
+    <div class="info">
+      <div class="pin">📍 你现在在这里</div>
+      <div class="dayt">Day 6 · 弘大的夜晚</div>
+      <div class="bar"><i></i></div>
+      <div class="barlabel">30 天旅程 · 已走 6 天，下一站马上解锁</div>
+    </div>
+  </div>
+
+  <div class="maptitle"><span>从这里出发</span></div>
+
+  <!-- 卷轴地图 -->
+  <div class="road">
+    <div class="trail-done"></div>
+
+    <!-- 起点 -->
+    <div class="cap-node">
+      <div class="em">🏠</div>
+      <div class="t">302 号宿舍 · 起点</div>
+      <div class="s">兔莉的新家，故事从这儿开始</div>
+    </div>
+
+    <!-- 场所 1：图书馆（右）done -->
+    <div class="stop right done">
+      <span class="dot"></span>
+      <a class="place a-amber" href="#">
+        <span class="badge">图书馆</span>
+        <img class="shot" src="images/scenes/library.webp" alt="library">
+        <div class="cap">
+          <div class="name">📚 动物城图书馆</div>
+          <div class="ko">동물 도시 도서관</div>
+          <div class="when">想读点真的韩语？来这儿挑一篇，点词就查。</div>
+        </div>
+      </a>
+    </div>
+
+    <!-- 章节旗 -->
+    <div class="flag"><div class="banner">🚩 第一章 · 첫 발자국 (Day 1–7)</div></div>
+
+    <!-- 场所 2：火鹤教室（左）here -->
+    <div class="stop left here-node">
+      <span class="dot"></span>
+      <a class="place a-coral" href="#">
+        <span class="badge">教室</span>
+        <img class="shot" src="images/scenes/hanbit-classroom.webp" alt="classroom">
+        <div class="cap">
+          <div class="name">🎓 火鹤老师的教室</div>
+          <div class="ko">홍학 선생님의 교실</div>
+          <div class="when">卡在语法或发音？火鹤老师一个点一个点带你。</div>
+        </div>
+      </a>
+    </div>
+
+    <!-- 场所 3：广场（右）-->
+    <div class="stop right">
+      <span class="dot"></span>
+      <a class="place a-rose" href="#">
+        <span class="badge">广场</span>
+        <img class="shot" src="images/scenes/central-park.webp" alt="plaza">
+        <div class="cap">
+          <div class="name">🗣️ 动物城广场</div>
+          <div class="ko">동물 도시 광장</div>
+          <div class="when">学累了？来刷动物朋友圈，边看帖子边学地道话。</div>
+        </div>
+      </a>
+    </div>
+
+    <!-- 场所 4：自习室（左）-->
+    <div class="stop left">
+      <span class="dot"></span>
+      <a class="place a-teal" href="#">
+        <span class="badge">自习室</span>
+        <img class="shot" src="images/scenes/haru-cafe.webp" alt="practice">
+        <div class="cap">
+          <div class="name">🦉 动物城自习室</div>
+          <div class="ko">동물 도시 자습실</div>
+          <div class="when">学过的想动手练？说、写、听、打字都在这。</div>
+        </div>
+      </a>
+    </div>
+
+    <!-- 章节旗 -->
+    <div class="flag"><div class="banner">🚩 第二章 · 302호의 친구들 (Day 8–14)</div></div>
+
+    <!-- 场所 5：电台（右）locked -->
+    <div class="stop right">
+      <span class="dot"></span>
+      <a class="place a-gold locked" href="#">
+        <span class="lockicon">🔒</span>
+        <span class="badge">电台</span>
+        <img class="shot" src="images/scenes/karaoke.webp" alt="radio">
+        <div class="cap">
+          <div class="name">📻 动物城电台</div>
+          <div class="ko">동물 도시 라디오</div>
+          <div class="when">Day 8 后解锁 · 边听广播边看字幕</div>
+        </div>
+      </a>
+    </div>
+
+    <!-- 场所 6：露米爪印（左）locked -->
+    <div class="stop left">
+      <span class="dot"></span>
+      <a class="place a-rose locked" href="#">
+        <span class="lockicon">🔒</span>
+        <span class="badge">追星</span>
+        <img class="shot" src="images/scenes/fansign-cafe.webp" alt="lumi">
+        <div class="cap">
+          <div class="name">🌟 露米爪印</div>
+          <div class="ko">루미의 발자국</div>
+          <div class="when">Day 6 后解锁 · 追 KPOP 偶像学韩语</div>
+        </div>
+      </a>
+    </div>
+
+    <!-- 终点 -->
+    <div class="cap-node">
+      <div class="em">🎓✨</div>
+      <div class="t">Day 30 · 이야기 하나 完结</div>
+      <div class="s">走到这里，就能推开下一段故事的门</div>
+    </div>
+  </div>
+
+  <div class="foot">더 많은 이야기가 곧 열려요 · 更多角落陆续开放中</div>
+
+  <div class="note">
+    <b>这是 mockup（示意图）</b>，用来确认方向：<br>
+    ① 手绘拼贴风 —— 场景图当拍立得招牌 + 胶带 + 纸张纹理 + 虚线小路<br>
+    ② 日记为主线 —— 中间一条路是 30 天旅程，「你在这里」标出当前 Day，走过染粉、未到雾化<br>
+    ③ 6 场所沿途分布，各带专属色 + 一句「什么时候来」，锁定态雾化+🔒<br>
+    真机上是竖屏卷轴，从上往下走。方向 OK 的话我再落地到 /map。
+  </div>
+
+</div>
+</body>
+</html>

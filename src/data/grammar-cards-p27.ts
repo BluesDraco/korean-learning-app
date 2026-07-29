@@ -41,12 +41,15 @@ export const grammarCardsP27: GrammarCard[] = [
     ],
     connectionRules: [
       { type: 'rule', text: '动词/形容词词干 + -기 마련이다，不看받침', examples: '가다 → 가기 마련이다 / 좋다 → 좋기 마련이다' },
-      { type: 'rule', text: '名词 + 이기 마련이다', examples: '학생은 공부하는 존재이기 마련이다' },
-      { type: 'usage', text: '陈述普遍真理、常识、必然结果', examples: '나이가 들면 늙기 마련이에요.' },
-      { type: 'usage', text: '前句多为条件（-면、-으면、시간이 지나면 등）', examples: '오래 쓰면 낡기 마련이다.' },
-      { type: 'compare', text: '-기 마련이다 vs -는 법이다 → 语义几乎相同，可互换；-는 법이다 更书面', examples: '노력하면 성공하기 마련이다 = 노력하면 성공하는 법이다' },
-      { type: 'note', text: '语气是客观陈述，不带主观判断', examples: '누구나 실수하기 마련이에요.' },
-      { type: 'note', text: '不与命令/建议句连用', examples: '(✗) 성공하기 마련이세요' },
+      { type: 'rule', text: '名词 + 이기 마련이다', examples: '학생은 공부하는 존재이기 마련이다（学生本就是要学习的存在。）' },
+      { type: 'usage', text: '陈述普遍真理、常识、必然结果', examples: '나이가 들면 늙기 마련이에요.（上了年纪自然会老。）' },
+      { type: 'usage', text: '前句多为条件（-면、-으면、시간이 지나면 등）', examples: '오래 쓰면 낡기 마련이다.（用久了难免会旧。）' },
+      { type: 'compare', text: '-기 마련이다 vs -는 법이다 → 语义几乎相同，可互换；-는 법이다 更书面', examples: '노력하면 성공하기 마련이다（努力就会成功）= 노력하면 성공하는 법이다（努力自然会成功）' },
+      { type: 'note', text: '语气是客观陈述，不带主观判断', examples: '누구나 실수하기 마련이에요.（谁都难免会犯错。）' },
+      { type: 'note', text: '不与命令/建议句连用', examples: '(✗) 성공하기 마련이세요（错误说法：마련이다 不能加尊敬 -세요）' },
+      { type: 'compare', text: '中文"会"有两种意思，别混：讲普遍规律的"必然会"用 마련이다；对某个具体事情的推测用 -을 거예요/-겠-。前者是"凡此类都如此"，后者是"这一件我猜会"', examples: '노력하면 성공하기 마련이에요.（普遍：凡努力必成功）↔ 그 사람은 성공할 거예요.（推测：那个人应该会成功）' },
+      { type: 'note', text: '只用于普遍规律、反复出现的现象，不能描述一次性的具体事件；具体某件事该用 -을 거예요', examples: '(✗) 내일 시험에 떨어지기 마련이에요 → (○) 오래 사귀면 싸우기 마련이에요（反复规律才行）' },
+      { type: 'note', text: '「-기 마련이다」和「-게 마련이다」两种都正确、都常见，意思一样，看到 게 형 不用当成错', examples: '싸우기 마련이에요 = 싸우게 마련이에요' },
     ],
     cardExamples: [
       {
@@ -221,11 +224,13 @@ export const grammarCardsP27: GrammarCard[] = [
     connectionRules: [
       { type: 'rule', text: '动词现在：-는 법이다', examples: '가다 → 가는 법이다 / 먹다 → 먹는 법이다' },
       { type: 'rule', text: '形容词：有받침 -은 법이다 / 无받침 -ㄴ 법이다', examples: '좋다 → 좋은 법이다 / 크다 → 큰 법이다' },
-      { type: 'rule', text: '名词：-인 법이다', examples: '진리인 법이다' },
-      { type: 'rule', text: '否定：-는 법이 없다 表"绝不会……"', examples: '거짓말은 오래가는 법이 없어요' },
-      { type: 'usage', text: '陈述普遍道理、常识、必然规律', examples: '노력하는 사람은 성공하는 법이에요.' },
-      { type: 'compare', text: '-는 법이다 vs -기 마련이다 → 前者更书面/说教，后者更口语', examples: '두 者语义近乎相同' },
-      { type: 'note', text: '常用来教训、警示、总结经验', examples: '남을 속이면 벌 받는 법이야.' },
+      { type: 'rule', text: '名词：-인 법이다', examples: '진리인 법이다（本就是真理。）' },
+      { type: 'rule', text: '否定：-는 법이 없다 表"绝不会……"', examples: '거짓말은 오래가는 법이 없어요（谎言不会长久。）' },
+      { type: 'usage', text: '陈述普遍道理、常识、必然规律', examples: '노력하는 사람은 성공하는 법이에요.（努力的人自然会成功。）' },
+      { type: 'compare', text: '-는 법이다 vs -기 마련이다 → 前者更书面/说教，后者更口语', examples: '两者语义近乎相同' },
+      { type: 'note', text: '常用来教训、警示、总结经验', examples: '남을 속이면 벌 받는 법이야.（骗人自然会遭报应。）' },
+      { type: 'compare', text: '警惕："법"本身还有"方法"的意思。区别看它后面接什么：接 이다 结句=道理/必然（本课）；接 을/를 알다·배우다·모르다=方法/做法（不是本课语法）', examples: '먹는 법이에요.（本就会吃 · 道理）↔ 먹는 법을 몰라요.（不知道吃的方法）' },
+      { type: 'note', text: '为什么动词用 -는、形容词用 -은/ㄴ？这是冠形词尾（前面章节详学），不是本课专属规则，别混：动词现在 -는，形容词 -은/ㄴ', examples: '가다(动)→가는 법 / 좋다(形)→좋은 법' },
     ],
     cardExamples: [
       {
@@ -368,7 +373,7 @@ export const grammarCardsP27: GrammarCard[] = [
     whatItDoes: '有可能……',
     whatItDoesBody: '「-을/ㄹ 법하다」表示"看起来会……""有可能……""大概会……"。用于对某种可能性做出推测，语感偏文学、书面。类似 -을/ㄹ 것 같다，但更委婉、更古典。',
     structureNote: '动词/形容词词干：有받침 -을 법하다 / 无받침 -ㄹ 법하다 · 名词 -(이)ㄹ 법하다',
-    rulesNote: '与 -는 법이다 结构相近但语义不同！-는 법이다 = 必然道理；-을/ㄹ 법하다 = 有可能。별注意区分。',
+    rulesNote: '与 -는 법이다 结构相近但语义不同！-는 법이다 = 必然道理；-을/ㄹ 법하다 = 有可能。需特别注意区分。',
     structures: [
       {
         ko: '그런 일도 있을 법한 일이에요.',
@@ -402,11 +407,13 @@ export const grammarCardsP27: GrammarCard[] = [
     connectionRules: [
       { type: 'rule', text: '有받침 → -을 법하다', examples: '있다 → 있을 법하다 / 먹다 → 먹을 법하다' },
       { type: 'rule', text: '无받침 → -ㄹ 법하다', examples: '가다 → 갈 법하다 / 크다 → 클 법하다' },
-      { type: 'rule', text: '过去推测 → -았/었을 법하다', examples: '갔을 법하다, 도착했을 법하다' },
-      { type: 'usage', text: '表达"看起来可能""大概会"，语气委婉', examples: '그런 일도 있을 법해요.' },
+      { type: 'rule', text: '过去推测 → -았/었을 법하다', examples: '갔을 법하다（很可能去了）, 도착했을 법하다（很可能到了）' },
+      { type: 'usage', text: '表达"看起来可能""大概会"，语气委婉', examples: '그런 일도 있을 법해요.（这种事也可能有。）' },
       { type: 'usage', text: '冠形形式 -을/ㄹ 법한 N 用来修饰名词', examples: '있을 법한 일 / 겪을 법한 경험' },
       { type: 'compare', text: '-을 법하다 vs -을 것 같다 → 前者书面/文学，后者口语', examples: '올 법해요.(可能会来) / 올 것 같아요.(好像会来)' },
       { type: 'note', text: '与 -는 법이다 结构相似但语义完全不同：前者可能，后者必然道理', examples: '올 법하다(可能来) ≠ 오는 법이다(自然会来)' },
+      { type: 'note', text: '别拿它当日常口语的"会/可能"。它偏书面、文学，语感是"合情合理、说得过去、想象得到"，不是简单猜概率。日常猜测请优先用 -을 것 같다', examples: '동화에 나올 법한 이야기（像是童话里会有的故事 · 合情合理）' },
+      { type: 'note', text: '最高频用法是冠形式 -을 법한 + 名词，等于"想象得到的/说得过去的那种…"，是一个固定语感，先整块记住', examples: '있을 법한 일（可能有的事）· 겪을 법한 경험（可能经历的事）' },
     ],
     cardExamples: [
       {
@@ -449,7 +456,7 @@ export const grammarCardsP27: GrammarCard[] = [
       { icon: '💭', context: '猜想', ko: '이해 못할 법한 상황은 아니에요.', zh: '不是无法理解的情况。' },
     ],
     mistakes: [
-      { wrong: '있는 법한 일', correct: '있을 법한 일', note: '推测用 -을/ㄹ 法한，不用 -는' },
+      { wrong: '있는 법한 일', correct: '있을 법한 일', note: '推测用 -을/ㄹ 법한，不用 -는' },
       { wrong: '갈 법이에요', correct: '갈 법해요', note: '固定为 -을/ㄹ 법하다，不是 -을 법이에요' },
       { wrong: '오는 법하다', correct: '올 법하다', note: '与 -는 법이다(必然) 混淆，推测用 -을/ㄹ' },
     ],
@@ -490,7 +497,7 @@ export const grammarCardsP27: GrammarCard[] = [
           prompt: '-을/ㄹ 법하다 与 -는 법이다 的区别是……',
           options: ['完全相同', '前者推测可能性，后者陈述必然', '前者过去，后者未来', '前者口语，后者书面'],
           answer: 1,
-          explanation: '两者结构相似但语义完全不同：-을/ㄹ 法하다=可能，-는 法이다=必然道理。',
+          explanation: '两者结构相似但语义完全不同：-을/ㄹ 법하다=可能，-는 법이다=必然道理。',
         },
       ],
     },
@@ -536,7 +543,7 @@ export const grammarCardsP27: GrammarCard[] = [
 <div class="ov-section">
   <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">别踩的坑</div></div>
   <div class="ov-block">
-    <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">있는 법한 일</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">있을 법한 일（-을/ㄹ 法한）</span></div></div>
+    <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">있는 법한 일</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">있을 법한 일（-을/ㄹ 법한）</span></div></div>
     <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">오는 법하다</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">올 법하다（推测用 -을/ㄹ）</span></div></div>
   </div>
 </div>`,
@@ -581,11 +588,13 @@ export const grammarCardsP27: GrammarCard[] = [
     connectionRules: [
       { type: 'rule', text: '动词词干 + -기 나름이다', examples: '노력하다 → 노력하기 나름이다 / 쓰다 → 쓰기 나름이다' },
       { type: 'rule', text: '名词 + 나름이다', examples: '사람 나름이에요 / 상황 나름이에요' },
-      { type: 'usage', text: '强调"取决于方式/方法"，前接的动作/名词是决定因素', examples: '결과는 생각하기 나름이에요.' },
+      { type: 'usage', text: '强调"取决于方式/方法"，前接的动作/名词是决定因素', examples: '결과는 생각하기 나름이에요.（结果全看你怎么想。）' },
       { type: 'usage', text: '常用于回避绝对回答：사람 나름 / 상황 나름 / 경우 나름', examples: '"맛있어요?" - "사람 나름이에요."' },
-      { type: 'usage', text: '固定搭配：마음먹기 나름 / 생각하기 나름 / 쓰기 나름', examples: '행복은 마음먹기 나름이에요.' },
-      { type: 'compare', text: '-기 나름이다 vs -기에 달려 있다 → 语义几乎相同，可互换', examples: '노력하기 나름이다 = 노력하기에 달려 있다' },
-      { type: 'note', text: '不与形容词连用', examples: '(✗) 예쁘기 나름이다' },
+      { type: 'usage', text: '固定搭配：마음먹기 나름 / 생각하기 나름 / 쓰기 나름', examples: '행복은 마음먹기 나름이에요.（幸福取决于心态。）' },
+      { type: 'compare', text: '-기 나름이다 vs -기에 달려 있다 → 语义几乎相同，可互换', examples: '노력하기 나름이다（全看努力）= 노력하기에 달려 있다（取决于努力）' },
+      { type: 'note', text: '不与形容词连用', examples: '(✗) 예쁘기 나름이다（错误说法：나름이다 不接形容词）' },
+      { type: 'compare', text: '语序和中文相反：中文"成功取决于努力"把"取决于"放中间，韩语把"依据的事(努力)"放前面 + 나름이다，把"结果(成功)"提到句首当主题 -은/는', examples: '성공은(结果·主题) 노력하기 나름이에요(依据+나름이다).（成功取决于努力）' },
+      { type: 'note', text: '注意另一个长得像的词：「나름대로」意思是"按自己的方式/自有一套"，和本课"取决于"不同，别混（这是另一个用法，日后遇到单独记）', examples: '나름대로 노력했어요.（我按自己的方式努力过了）≠ 노력하기 나름이에요（取决于努力）' },
     ],
     cardExamples: [
       {
@@ -760,11 +769,14 @@ export const grammarCardsP27: GrammarCard[] = [
     connectionRules: [
       { type: 'rule', text: '动词词干 + -기에 달려 있다', examples: '노력하다 → 노력하기에 달려 있다' },
       { type: 'rule', text: '名词 + 에 달려 있다', examples: '노력 → 노력에 달려 있다 / 선택 → 선택에 달려 있다' },
-      { type: 'usage', text: '强调关键决定因素，语气比 -기 나름이다 正式', examples: '성공은 노력하기에 달려 있어요.' },
-      { type: 'usage', text: '前面常加疑问词强调"怎么/多少"：어떻게 -기에 / 얼마나 -기에', examples: '결과는 어떻게 준비하기에 달려 있어요.' },
-      { type: 'usage', text: '书面表达常用于演讲、教育、格言', examples: '아이의 미래는 부모의 사랑에 달려 있다.' },
-      { type: 'compare', text: '-기에 달려 있다 vs -기 나름이다 → 前者更正式书面，后者口语', examples: '노력하기에 달려 있어요 = 노력하기 나름이에요' },
+      { type: 'usage', text: '强调关键决定因素，语气比 -기 나름이다 正式', examples: '성공은 노력하기에 달려 있어요.（成功取决于努力。）' },
+      { type: 'usage', text: '前面加疑问词"怎么/多少"时要用 -느냐에/-는지에，不能用 -기에', examples: '결과는 어떻게 준비하느냐에 달려 있어요.（结果取决于怎么准备。）' },
+      { type: 'usage', text: '书面表达常用于演讲、教育、格言', examples: '아이의 미래는 부모의 사랑에 달려 있다.（孩子的未来取决于父母的爱。）' },
+      { type: 'compare', text: '-기에 달려 있다 vs -기 나름이다 → 前者更正式书面，后者口语', examples: '노력하기에 달려 있어요（取决于努力）= 노력하기 나름이에요（全看努力）' },
       { type: 'note', text: '与 "달려있다"(挂着) 是不同的动词短语，需理解为"取决于"', examples: '달려 있다 在此为习惯搭配' },
+      { type: 'note', text: '取决于"是否/多么/怎样……"时，韩语把疑问嵌进去用 -느냐에／-는지에 달려 있다，不能把 얼마나/어떻게 硬接到 -기에 上（间接疑问后面章节详学）', examples: '얼마나 노력하느냐에 달려 있어요.（取决于你多努力。）' },
+      { type: 'example', text: '"成不成 / 做不做"这种正反问用 -느냐 마느냐', examples: '성공하느냐 마느냐는 마음가짐에 달려 있어요.（成不成取决于心态。）' },
+      { type: 'note', text: '别把主语和决定因素接反：被决定的结果（성공·미래）做主语带 은/는，决定因素才带 에／기에', examples: '성공은 노력에 달려 있다（○） · 노력은 성공에 달려 있다（✗ 意思反了）' },
     ],
     cardExamples: [
       {
@@ -803,7 +815,7 @@ export const grammarCardsP27: GrammarCard[] = [
       { icon: '📊', context: '结果', ko: '결과는 어떻게 준비하기에 달려 있어요.', zh: '结果看怎么准备。' },
       { icon: '🔮', context: '未来', ko: '미래는 오늘의 선택에 달려 있어요.', zh: '未来取决于今天。' },
       { icon: '💖', context: '关系', ko: '관계는 서로의 태도에 달려 있어요.', zh: '关系在于彼此态度。' },
-      { icon: '📚', context: '学习', ko: '실력은 얼마나 연습하기에 달려 있어요.', zh: '实力看练多少。' },
+      { icon: '📚', context: '学习', ko: '실력은 얼마나 연습하느냐에 달려 있어요.', zh: '实力看练多少。' },
       { icon: '🎯', context: '目标', ko: '목표 달성은 계획에 달려 있어요.', zh: '目标实现在于计划。' },
     ],
     mistakes: [
@@ -941,9 +953,11 @@ export const grammarCardsP27: GrammarCard[] = [
       { type: 'rule', text: '动词过去：-은/ㄴ 셈이다', examples: '갔다 → 간 셈이다 / 먹었다 → 먹은 셈이다' },
       { type: 'rule', text: '形容词：有받침 -은 / 无받침 -ㄴ 셈이다', examples: '좋다 → 좋은 셈이다 / 싸다 → 싼 셈이다' },
       { type: 'rule', text: '名词：-인 셈이다', examples: '학생인 셈이다 / 반은 성공인 셈이다' },
-      { type: 'usage', text: '综合考虑后的估算/评价，含"就……而言算是"', examples: '이 정도면 잘 사는 셈이에요.' },
-      { type: 'usage', text: '常见搭配：거의 다 -은 셈이다（算是快……了）', examples: '거의 다 끝난 셈이에요.' },
+      { type: 'usage', text: '综合考虑后的估算/评价，含"就……而言算是"', examples: '이 정도면 잘 사는 셈이에요.（这样算是过得不错了。）' },
+      { type: 'usage', text: '常见搭配：거의 다 -은 셈이다（算是快……了）', examples: '거의 다 끝난 셈이에요.（算是差不多结束了。）' },
       { type: 'compare', text: '-는 셈이다 vs -는 셈치다 → 前者估算评价，后者假想/就当', examples: '가는 셈이다(算是去) / 가는 셈치다(就当作去)' },
+      { type: 'compare', text: '-는 셈이다 vs -는 편이다 → 都译"算是"，但 편이다 是"在同类中偏向某一端(比较…)"，셈이다 是"折算下来相当于/几乎等于"', examples: '싼 편이에요（算是比较便宜的一类）/ 싼 셈이에요（折算下来算便宜了）' },
+      { type: 'note', text: '语义核心是"实际虽非如此、但折算/综合下来相当于"，需要一个前提或比较基准，不能当普通判断词"是"来用', examples: '거의 다 온 셈이에요.（实际还没到，但折算下来算是快到了。）' },
     ],
     cardExamples: [
       {
@@ -1119,10 +1133,12 @@ export const grammarCardsP27: GrammarCard[] = [
       { type: 'rule', text: '动词现在：-는 셈치다', examples: '쉬다 → 쉬는 셈치다 / 자다 → 자는 셈치다' },
       { type: 'rule', text: '动词过去：-은/ㄴ 셈치다', examples: '속다 → 속은 셈치다 / 잃다 → 잃은 셈치다' },
       { type: 'rule', text: '形容词/名词：-은/ㄴ 셈치다 / -인 셈치다', examples: '없는 셈치다 / 학생인 셈치다' },
-      { type: 'usage', text: '常搭配 -고 连接："-는 셈치고" + 后续行动', examples: '속은 셈치고 잊어버려요.' },
-      { type: 'usage', text: '心理调节：让自己接受损失/意外/委屈', examples: '5만 원을 잃어버린 셈치고 기부했어요.' },
+      { type: 'usage', text: '常搭配 -고 连接："-는 셈치고" + 后续行动', examples: '속은 셈치고 잊어버려요.（就当被骗了，忘了吧。）' },
+      { type: 'usage', text: '心理调节：让自己接受损失/意外/委屈', examples: '5만 원을 잃어버린 셈치고 기부했어요.（就当丢了 5 万韩元，捐了。）' },
       { type: 'compare', text: '-는 셈이다 vs -는 셈치다 → 前者综合评估的事实，后者假想让步', examples: '가는 셈이다(算是去了) / 가는 셈치자(就当去了)' },
-      { type: 'note', text: '-는 셈치다 常用建议形态"-는 셈치자/치고 -하자"', examples: '그냥 없는 셈치자.' },
+      { type: 'note', text: '-는 셈치다 常用建议形态"-는 셈치자/치고 -하자"', examples: '그냥 없는 셈치자.（就当没有吧。）' },
+      { type: 'compare', text: '-는 셈치다 vs -는 척하다 → 셈치다 是自己内心决定"就当作(接受)"，척하다 是对外"装作/假装"给别人看（척하다 后面章节详学）', examples: '못 본 셈치고 넘어가요（自己决定当没看见、放过）/ 못 본 척했어요（假装没看见、演给对方看）' },
+      { type: 'note', text: '本质是与事实相反的假想：明明发生了/存在，却决定"当作"相反，所以常带 그냥、그렇다 치고 等词缓和语气', examples: '그냥 안 들은 셈칠게요.（我就当没听到吧。）' },
     ],
     cardExamples: [
       {
@@ -1164,7 +1180,7 @@ export const grammarCardsP27: GrammarCard[] = [
     ],
     mistakes: [
       { wrong: '쉬는 셈이고', correct: '쉬는 셈치고', note: '"就当作"用 -셈치다，不是 -셈이다' },
-      { wrong: '속는 셈치고', correct: '속은 셈치고', note: '"被骗了"是完成动作，用过去冠形 -은' },
+      { wrong: '속이는 셈치고', correct: '속는 셈치고', note: '"就当上当一次"用 속다（被骗）的 속는，不是 속이다（骗别人）的 속이는' },
       { wrong: '학생 셈치다', correct: '학생인 셈치다', note: '名词需加 -인' },
     ],
     quickTable: {
@@ -1297,10 +1313,12 @@ export const grammarCardsP27: GrammarCard[] = [
       { type: 'rule', text: '动词过去：-은/ㄴ 척하다', examples: '보다 → 본 척하다 / 먹다 → 먹은 척하다' },
       { type: 'rule', text: '形容词：-은/ㄴ 척하다', examples: '아프다 → 아픈 척하다 / 좋다 → 좋은 척하다' },
       { type: 'rule', text: '名词：-인 척하다', examples: '학생인 척하다 / 부자인 척하다' },
-      { type: 'usage', text: '척하다 更口语；체하다 更书面/正式，两者可互换', examples: '못 본 척했어요 = 못 본 체했어요' },
-      { type: 'usage', text: '否定：-지 않는 척하다 / 안 -는 척하다', examples: '아프지 않은 척했어요.' },
+      { type: 'usage', text: '척하다 更口语；체하다 更书面/正式，两者可互换', examples: '못 본 척했어요 = 못 본 체했어요（假装没看见）' },
+      { type: 'usage', text: '否定：-지 않는 척하다 / 안 -는 척하다', examples: '아프지 않은 척했어요.（假装不疼。）' },
       { type: 'compare', text: '-는 척하다 vs -는 것 같다 → 前者故意装，后者是我的主观感觉', examples: '자는 척해요.(假装睡) / 자는 것 같아요.(好像睡了)' },
-      { type: 'note', text: '常见搭配 못 -는 척하다（假装做不到）', examples: '못 듣는 척하지 마세요.' },
+      { type: 'note', text: '常见搭配 못 -는 척하다（假装做不到）', examples: '못 듣는 척하지 마세요.（别假装听不见。）' },
+      { type: 'note', text: '语感：척하다 常带贬义，尤其 아는 척/잘난 척 = "显摆、自以为是"，不是中性的"假装"。中文"假装"没有这层贬义，别乱用', examples: '아는 척하지 마.（别不懂装懂/别显摆。）· 잘난 척하다（自以为了不起、摆架子）' },
+      { type: 'note', text: '척 是依存名词，可插助词或单独用：아는 척(을) 하다；连"假装"都不做时说 척도 안 하다', examples: '인사는커녕 아는 척도 안 했어요.（别说打招呼，连搭理都没搭理。）' },
     ],
     cardExamples: [
       {
@@ -1438,9 +1456,9 @@ export const grammarCardsP27: GrammarCard[] = [
     id: 'card-p27-l09',
     partNumber: 27,
     lessonNumber: 9,
-    title: '综合练习㉑',
-    whatItDoes: 'P21综合复习',
-    whatItDoesBody: '本练习综合复习 P21 情态与语气强化章节的 8 个语法点：-기 마련이다 / -는 법이다 / -을/ㄹ 법하다 / -기 나름이다 / -기에 달려 있다 / -는 셈이다 / -는 셈치다 / -는 척하다。',
+    title: 'P27 综合练习',
+    whatItDoes: 'P27 综合复习',
+    whatItDoesBody: '本练习综合复习 P27 情态与语气强化章节的 8 个语法点：-기 마련이다 / -는 법이다 / -을/ㄹ 법하다 / -기 나름이다 / -기에 달려 있다 / -는 셈이다 / -는 셈치다 / -는 척하다。',
     structureNote: '综合本 Part 所有语法',
     rulesNote: '重点辨析：-는 법이다 vs -을 법하다；-셈이다 vs -셈치다',
     isPractice: true,
@@ -1518,14 +1536,14 @@ export const grammarCardsP27: GrammarCard[] = [
       { icon: '🙈', context: '假装', ko: '민수는 모르는 척했어요.', zh: '民秀装不知道。' },
     ],
     mistakes: [
-      { wrong: '오는 법하다', correct: '올 법하다', note: '推测用 -을/ㄹ 法하다；-는 法이다 是必然道理' },
+      { wrong: '오는 법하다', correct: '올 법하다', note: '推测用 -을/ㄹ 법하다；-는 법이다 是必然道理' },
       { wrong: '가는 셈치고 놀았어요', correct: '가는 셈이에요', note: '"算是"用 -셈이다；"就当作"才用 -셈치다' },
       { wrong: '학생 척하다', correct: '학생인 척하다', note: '名词需加 -인 冠形' },
     ],
     linkedGrammarIds: ['card-p27-l01', 'card-p27-l02', 'card-p27-l03', 'card-p27-l04', 'card-p27-l05', 'card-p27-l06', 'card-p27-l07', 'card-p27-l08'],
     specialQuiz: {
       type: 'judge',
-      title: 'P21 综合练习',
+      title: 'P27 综合练习',
       body: '选择正确的表达',
       questions: [
         {
@@ -1538,7 +1556,7 @@ export const grammarCardsP27: GrammarCard[] = [
           prompt: '"那种事也可能发生"（推测）',
           options: ['있는 법이에요', '있을 법한 일이에요', '있는 셈이에요', '있는 척해요'],
           answer: 1,
-          explanation: '推测可能用 -을/ㄹ 法한 → 있을 법한 일이에요。',
+          explanation: '推测可能用 -을/ㄹ 법한 → 있을 법한 일이에요。',
         },
         {
           prompt: '"就当被骗，忘了吧"',
@@ -1555,7 +1573,7 @@ export const grammarCardsP27: GrammarCard[] = [
       ],
     },
     overviewHtml: `<div class="ov-hero">
-  <div style="font-size:20px;font-weight:700;color:#241917;margin-bottom:8px">P21 总结：情态与语气强化</div>
+  <div style="font-size:20px;font-weight:700;color:#241917;margin-bottom:8px">P27 总结：情态与语气强化</div>
   <div style="font-size:14px;color:#89756e">陈述/推测/评估/假装的完整体系</div>
 </div>
 <div class="ov-section">
@@ -1585,7 +1603,7 @@ export const grammarCardsP27: GrammarCard[] = [
   <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">核心易错</div></div>
   <div class="ov-block">
     <div style="font-size:16px;color:#241917;line-height:1.9">
-      1. -는 法이다(必然) vs -을 法하다(可能) 结构相似语义不同<br>
+      1. -는 법이다(必然) vs -을 법하다(可能) 结构相似语义不同<br>
       2. -셈이다(算是) vs -셈치다(就当作) 混用<br>
       3. 形容词用 -은/ㄴ 冠形，不用 -는<br>
       4. 名词必须加 -인 冠形

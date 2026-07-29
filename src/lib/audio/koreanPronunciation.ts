@@ -75,6 +75,8 @@ const PRONUNCIATION_EXCEPTIONS: Record<string, string> = {
   '닭은': '달근',
   '읽어': '일거',
   '읽어요': '일거요',
+  // NLS TTS 对 "나다" 单独朗读时异常（听感似 "아나라"），合并为整体词让 TTS 按复合词处理
+  '화가 나다': '화가나다',
 };
 
 export function normalizeKoreanPronunciation(text: string): string {

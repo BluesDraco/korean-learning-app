@@ -1,0 +1,21 @@
+import type { BossSubQuestData } from '@/types/tori-subquest';
+
+/** Day 73 · 3-5 Boss 战 · 🐙 자갈치 시장 · 활낙지 */
+export const day73Boss: BossSubQuestData = {
+  day: 13, level: 'advanced', idx: 5, kind: 'boss',
+  koTitle: '활낙지의 관문',
+  subtitle: '🐙 자갈치 시장 · 活章鱼 · 초장',
+  intro: '下午 3 点。자갈치 시장。腥味扑面，塑料桶里是活的章鱼、鲍鱼、海肠。摊位阿姨切下一段章鱼放进碟子——那段章鱼还在盘子里蠕动。Junho 目瞪口呆，Haru 尖叫，你握着筷子的手僵住了。60 天前你连辛拉면都嫌辣，今天要用 ~자마자 把这一段战斗写进日记：시장에 도착하자마자 회를 먹었다 → 한 입 먹자마자 매워서 눈물이 났다 → 초장에 찍으니까 조금 나았다.',
+  outroHook: 'Haru 大笑着拍照，Junho 拍你的背。你举起第二筷子——这一次没有犹豫。摊位阿姨看着你，用釜山话说了一句什么，你没完全听懂，但她笑了。（Day 74 · 부산 사투리）',
+
+  tasks: [
+    { type: 'choice',  label: '听句选意',     task: { id: 'd73-b5-t1', audioKo: '시장에 도착하자마자 회를 먹었어요.',                                    choices: [{ text: '一到市场就吃了生鱼片。',                    correct: true }, { text: '到市场没吃。',                  correct: false }, { text: '吃完才到市场。',              correct: false }, { text: '市场没有生鱼片。',              correct: false }], explain: 'Day 73 主题句 · ~자마자' } },
+    { type: 'choice',  label: '听句选意',     task: { id: 'd73-b5-t2', audioKo: '한 입 먹자마자 매워서 눈물이 났어요.',                                    choices: [{ text: '一吃一口就辣得流泪。',                       correct: true }, { text: '不辣。',                              correct: false }, { text: '一吃就想再吃。',                    correct: false }, { text: '没有眼泪。',                        correct: false }], explain: '~자마자 + 매워서' } },
+    { type: 'choice',  label: '~자마자',      task: { id: 'd73-b5-t3', promptZh: '"一到市场就吃了生鱼片"哪句正确？',                                                                                                                                    choices: [{ text: '시장에 도착하는자마자 회를 먹었어요.',                     correct: false }, { text: '시장에 도착하자마자 회를 먹었어요.',        correct: true }, { text: '시장에 도착한자마자 회를 먹었어요.',       correct: false }, { text: '시장에 도착해서자마자 회를 먹었어요.',                 correct: false }], explain: 'V 词干 + 자마자' } },
+    { type: 'choice',  label: '~자마자',      task: { id: 'd73-b5-t4', promptZh: '"一看到章鱼 Haru 就叫了"哪句正确？',                                                                                                                                    choices: [{ text: '낙지를 봤자마자 하루가 소리쳤어요.',                          correct: false }, { text: '낙지를 보자마자 하루가 소리쳤어요.',    correct: true }, { text: '낙지를 본자마자 하루가 소리쳤어요.',        correct: false }, { text: '낙지를 봐서자마자 하루가 소리쳤어요.',                    correct: false }], explain: '자마자 前永远原形' } },
+    { type: 'choice',  label: '认词',         task: { id: 'd73-b5-t5', promptKo: '초장',       promptHangul: 'cho-jang',                                                                                                                             choices: [{ text: '醋辣椒酱',                    correct: true }, { text: '酱油',                            correct: false }, { text: '芝麻油',                          correct: false }, { text: '大酱',                              correct: false }], explain: '자갈치 蘸酱' } },
+    { type: 'compose', label: '组句',         task: { id: 'd73-b5-t6', zhHint: '一到市场就吃了生鱼片。',                                                                                                                                            audioKo: '시장에 도착하자마자 회를 먹었어요.',                            answer: ['시장에', '도착하자마자', '회를', '먹었어요.'],   tokens: ['시장에', '도착하자마자', '회를', '먹었어요.', '도착하는자마자', '도착한자마자', '도착해서', '먹어요.'],         explain: 'V + 자마자' } },
+    { type: 'compose', label: '组句',         task: { id: 'd73-b5-t7', zhHint: '一吃一口就辣得流泪。',                                                                                                                                            audioKo: '한 입 먹자마자 매워서 눈물이 났어요.',                          answer: ['한 입', '먹자마자', '매워서', '눈물이', '났어요.'],                              tokens: ['한 입', '먹자마자', '매워서', '눈물이', '났어요.', '먹은자마자', '먹는자마자', '먹어서', '나요.'],           explain: '먹자마자 + 매워서' } },
+    { type: 'choice',  label: '情景选回应',   task: { id: 'd73-b5-t8', promptZh: 'Haru 说 "낙지가 움직여!"。你想举起第二筷子说"再试一次"，最合适的一句？',                                                                                            choices: [{ text: '초장에 찍으니까 조금 나아. 한 번 더 도전!',       correct: true }, { text: '싫어, 안 먹어.',                  correct: false }, { text: '얼마예요?',                              correct: false }, { text: '몰라.',                                correct: false }], explain: 'Tori 的挑战心' } },
+  ],
+};

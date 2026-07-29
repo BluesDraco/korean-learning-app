@@ -1,17 +1,32 @@
-'use client';
+'use client'
 
+import { useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
+import { useAuth } from '@/components/AuthProvider';
 import { BooksSection } from '@/components/vocabulary/BooksSection';
-import { useIsDesktop } from '@/lib/useIsMobile';
 import { PageHeader } from '@/components/ui';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 
 export default function WordBooksPage() {
-  const isDesktop = useIsDesktop();
-  const containerCls = isDesktop ? 'py-6 max-w-5xl mx-auto px-4 space-y-5' : 'py-4 max-w-2xl mx-auto px-4 space-y-4';
+  const { lang } = useLang();
+  const router = useRouter();
+  const { user, loading } = useAuth();
+
+  useEffect(() => {
+    if (!loading && !user) router.replace('/auth/login?redirect=/vocabulary/books');
+  }, [loading, user, router]);
+
+  if (loading || !user) {
+    return (
+      <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-ink-3)', fontSize: 14 }}>{t('common.loading', lang)}</div>
+    );
+  }
 
   return (
-    <div className={containerCls}>
+    <div className="py-4 md:py-6 w-full max-w-2xl md:max-w-none mx-auto md:mx-0 px-4 md:px-8 space-y-4 md:space-y-5">
       <Link
         href="/vocabulary"
         style={{
@@ -21,13 +36,13 @@ export default function WordBooksPage() {
         }}
       >
         <ArrowLeft size={14} />
-        返回词汇
+        {t('vocab.back_to_vocab', lang)}
       </Link>
 
       <PageHeader
         eyebrow="MY BOOKS"
-        title="自定义单词本"
-        subtitle="整理你的专属单词集，按主题自由归类"
+        title={t('vocab.books_page_title', lang)}
+        subtitle={t('vocab.books_page_subtitle', lang)}
         tone="pink"
         flat
       />

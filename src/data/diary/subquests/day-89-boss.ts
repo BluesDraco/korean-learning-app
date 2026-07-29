@@ -1,0 +1,22 @@
+import type { BossSubQuestData } from '@/types/tori-subquest';
+
+/** Day 89 · 3-5 Boss 战 · 🎒 毕业前夜聊天到天亮 · ~은/는 아니지? */
+export const day89Boss: BossSubQuestData = {
+  day: 29, level: 'advanced', idx: 5, kind: 'boss',
+  koTitle: '졸업 전야의 관문',
+  subtitle: '🎒 301호 · 밤샘 대화 · 새벽 6시',
+
+  intro: '周六晚 10 点到周日凌晨 6 点。四个人挤在 301 房,地上铺着被子,四只炸鸡、两瓶可乐、四杯柚子茶。Minji 提议"每人讲一个故事再睡,睡不着就通宵"——结果真通宵了。晚 11 点 Minji 讲 Day 3 机场"我的家太重了";凌晨 1 点 Junho 讲 Day 6 你被獠牙吓到的脸;凌晨 3 点 Haru 只说"지하철、배터리 1%、당근이 굴러 나오는 순간"——四个人都安静了,这个故事是他们四个的骨架。天快亮时,你轻声问出心里最怕的那句。今天要用 ~은/는 아니지? 说出这份不舍:우리, 이별은 아니지? → 오해는 아니지? → 마지막은 아니지?。',
+  outroHook: '凌晨 6 点,窗外亮了,Junho 早趴下睡着,Minji 半梦半醒。你小声问:"우리, 이별은 아니지?" Haru 看了你一眼,简短地答:"이별은 없어. 우리 넷은 계속 이어져 있을 거야. 한국어로。" 你笑了,清晨第一缕阳光落在窗玻璃上,闪了一下。明天,就是第 90 天——最后一天。毕业典礼上,你要走上讲台,做属于你的毕业演讲。（Day 90 · 졸업 연설）',
+
+  tasks: [
+    { type: 'choice',  label: '听句选意',       task: { id: 'd89-b5-t1', audioKo: '우리, 이별은 아니지?',                                            choices: [{ text: '我们，不是离别吧？',              correct: true }, { text: '我们离别了。',                    correct: false }, { text: '我们要离别。',                    correct: false }, { text: '我们不见了。',                            correct: false }], explain: 'Day 89 主题句 · ~은/는 아니지?' } },
+    { type: 'choice',  label: '听句选意',       task: { id: 'd89-b5-t2', audioKo: '이별은 없어. 계속 이어져 있을 거야.',                                             choices: [{ text: '没有离别，会一直相连的。',                    correct: true }, { text: '离别开始了。',                          correct: false }, { text: '我们断开了。',                          correct: false }, { text: '不能相连。',                        correct: false }], explain: 'Haru 的凌晨回答' } },
+    { type: 'choice',  label: '~은/는 아니지?',  task: { id: 'd89-b5-t3', promptZh: '"我们不是离别吧？"（이별 有收音）哪句正确？',                                                                                                                                    choices: [{ text: '우리, 이별이 아니지?',           correct: false }, { text: '우리, 이별은 아니지?',            correct: true }, { text: '우리, 이별을 아니지?',                correct: false }, { text: '우리, 이별에 아니지?',                  correct: false }], explain: '柔和确认用 은/는 · 有收音 은' } },
+    { type: 'choice',  label: '반말 vs 해요体',  task: { id: 'd89-b5-t4', promptZh: '想对长辈柔和确认"不是误会吧？"，哪句最自然？',                                                                                                                                    choices: [{ text: '오해은 아니에요?',            correct: false }, { text: '오해는 아니에요?',            correct: true }, { text: '오해는 아니지?',                correct: false }, { text: '오해가 아니에요?',                  correct: false }], explain: '해요体 아니에요? · 无收音 는' } },
+    { type: 'choice',  label: '认词',           task: { id: 'd89-b5-t5', promptKo: '이별', promptHangul: 'i-byeol',                                                                                                                              choices: [{ text: '离别',                          correct: true }, { text: '重逢',                          correct: false }, { text: '约定',                          correct: false }, { text: '相遇',                            correct: false }], explain: '离(이) + 别(별)' } },
+    { type: 'compose', label: '组句',           task: { id: 'd89-b5-t6', zhHint: '我们，不是离别吧？',                                                                                                                                                     audioKo: '우리, 이별은 아니지?',                             answer: ['우리,', '이별은', '아니지?'],   tokens: ['우리,', '이별은', '아니지?', '이별이', '이별을', '맞지?'],         explain: 'Day 89 主题句' } },
+    { type: 'compose', label: '组句',           task: { id: 'd89-b5-t7', zhHint: '你现在不是生气吧？',                                                                                                                                             audioKo: '너 지금 화난 건 아니지?',                             answer: ['너', '지금', '화난 건', '아니지?'],                              tokens: ['너', '지금', '화난 건', '아니지?', '화나는 건', '화날 건', '맞지?'],           explain: '过去状态 화난 + 건' } },
+    { type: 'choice',  label: '情景选回应',     task: { id: 'd89-b5-t8', promptZh: '有人天亮时轻声问"우리, 이별은 아니지?"。你想温柔地肯定"嗯，没有离别，我们用韩语继续连着"，最合适的一句？',                                                                                    choices: [{ text: '응. 이별은 없어. 계속 한국어로 이어지자.',       correct: true }, { text: '응, 이제 안 만날 거야.',                  correct: false }, { text: '얼마예요?',                              correct: false }, { text: '몰라.',                                correct: false }], explain: '이별은 없어 · 温柔肯定' } },
+  ],
+};

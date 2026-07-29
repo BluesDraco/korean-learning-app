@@ -97,6 +97,9 @@ export const Card = forwardRef<HTMLElement, CardProps>(function Card(
         : variant === 'outlined'
           ? `1.5px solid ${TONE_BORDER[tone]}`
           : '1px solid var(--color-border-1)',
+    ...(variant === 'stat' && tone !== 'neutral'
+      ? { borderLeft: `3px solid ${TONE_BORDER[tone]}` }
+      : {}),
     borderRadius:
       variant === 'hero'
         ? 'var(--radius-xl)'
@@ -108,9 +111,9 @@ export const Card = forwardRef<HTMLElement, CardProps>(function Card(
       variant === 'flat' || variant === 'outlined'
         ? 'none'
         : variant === 'hero'
-          ? 'var(--shadow-md)'
+          ? 'var(--shadow-lg)'
           : variant === 'stat'
-            ? 'var(--shadow-xs)'
+            ? 'var(--shadow-sm)'
             : 'var(--shadow-sm)',
     transition:
       'transform var(--dur-base) var(--ease-out-quart), ' +

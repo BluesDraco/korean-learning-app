@@ -47,7 +47,7 @@ export const grammarCardsP8: GrammarCard[] = [
   <div style="font-size:16px;color:#5a4640">자주 가던 카페（常去的）→ 强调习惯，现在不去了</div>
   <div style="margin-top:4px;font-size:16px;color:#5a4640">한 번 갔던 카페（去过一次的）→ 强调那次经历本身</div>
 </div>
-<div class="reminder-box">如果现在还在持续的习惯，用 -는（현재 冠词形）：자주 가는 카페（我现在常去的咖啡店）。-던 暗示"现在已不同了"。</div>`,    specialQuiz: {
+<div class="reminder-box">如果现在还在持续的习惯，用 -는（现在冠词形）：자주 가는 카페（我现在常去的咖啡店）。-던 暗示"现在已不同了"。</div>`,    specialQuiz: {
       type: 'fill',
       title: '选择正确的回忆冠词形',
       body: '根据句意选择 -던 或 -았/었던。',
@@ -62,16 +62,16 @@ export const grammarCardsP8: GrammarCard[] = [
         {
           pre: '어릴 때',
           post: '동네가 그리워요.',
-          options: ['살던', '살았던', '사는'],
+          options: ['살은', '살았던', '사는'],
           answer: 1,
-          explanation: '-았던 表示已完成的过去经历："想念小时候住过的小区。"살았던=住过的（已成回忆）。',
+          explanation: '-았던 表示已完成、已离开的过去经历：살았던 동네（住过的、现已离开的街区）。살은 是错误形（살다 是 ㄹ 词干），사는 是现在形（与"想念"矛盾）。',
         },
         {
           pre: '내가',
           post: '사람이에요.',
-          options: ['좋아했던', '좋아하는', '좋아하던'],
+          options: ['좋아했던', '좋아하는', '좋아한'],
           answer: 0,
-          explanation: '좋아했던 = "曾经喜欢过的（那个人）"。已完成的情感，用 -았던。',
+          explanation: '좋아했던 = "曾经喜欢过的（那个人）"，已完成的情感用 -았던。좋아하는 是现在形（现在喜欢），좋아한 不是 좋아하다 的正确冠形（现在用 좋아하는）。',
         },
         {
           pre: '아까',
@@ -127,7 +127,8 @@ export const grammarCardsP8: GrammarCard[] = [
       { type: 'rule', text: '动词词干 + 았/었던 + 名词 → 以前曾经……过的（已完成）', examples: '먹었던 음식 / 갔던 곳 / 만났던 사람' },
       { type: 'compare', text: '-던 vs -았던：习惯/持续 vs 完成', examples: '자주 가던 카페（常去的）/ 한 번 갔던 카페（去过一次的）' },
       { type: 'usage', text: '常见搭配：어렸을 때 / 예전에 / 학생 때 + -던', examples: '어렸을 때 좋아하던 음식 / 학생 때 다니던 학교' },
-      { type: 'note', text: '-던 前的动词用현재 词干，不用过去时', examples: '✗ 갔던（完成）→ ✓ 가던（习惯/持续）' },
+      { type: 'note', text: '-던 前的动词用现在词干，不用过去时', examples: '✗ 갔던（完成）→ ✓ 가던（习惯/持续）' },
+      { type: 'note', text: '-던 还有一层"做到一半、中断未完成、东西还在"的意思，中文"曾经的"看不出这层，别漏', examples: '마시던 커피（喝了一半还在的咖啡）/ 하던 얘기（刚才没说完的话）→ 这时不含"现在已不同"，而是"没做完"' },
       { type: 'vocab', text: '常搭配名词', examples: '카페 / 노래 / 친구 / 동네 / 음식 / 학교 / 장소（地方）' },
       { type: 'example', text: '자주 가던 카페 / 좋아하던 노래 / 어릴 때 살았던 집' },
     ],
@@ -198,7 +199,7 @@ export const grammarCardsP8: GrammarCard[] = [
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">9시까지 와야 해요.</span><span style="font-size:16px;color:#5a4640">必须9点前来。（规定）</span></div>
   </div>
 </div>
-<div class="reminder-box">공부야겠어요 ✗ → 공부해야겠어요 ✓（공부 是名词，要先 +하다 再变형）。먹아야겠다 ✗ → 먹어야겠다 ✓（먹 末元音不是 ㅏ/ㅗ）。</div>`,    specialQuiz: {
+<div class="reminder-box">공부야겠어요 ✗ → 공부해야겠어요 ✓（공부 是名词，要先 +하다 再变形）。먹아야겠다 ✗ → 먹어야겠다 ✓（먹 末元音不是 ㅏ/ㅗ）。</div>`,    specialQuiz: {
       type: 'fill',
       title: '选择正确的"必须/得"表达',
       body: '根据句意选择 -아/어야(만) 或 -아/어야겠다。',
@@ -302,6 +303,7 @@ export const grammarCardsP8: GrammarCard[] = [
       { wrong: '먹아야겠다', correct: '먹어야겠다', note: '먹다 词干元音是 ㅓ，不是 ㅏ/ㅗ，所以用 어야겠다，不是 아야겠다。' },
       { wrong: '해야겠다 하다', correct: '해야겠어요', note: '-야겠다 本身就是句尾词尾，后面不再加 하다，直接加敬语词尾 어요。' },
       { wrong: '자야만 해요（强调睡觉是唯一条件）', correct: '자야 해요（单纯必须睡）', note: '-야만 强调"只有这个条件才行"，如果只是说"必须"，用 -아야 하다 就够了。' },
+      { wrong: '동생이 일찍 자야겠어요', correct: '동생이 일찍 자야 해요', note: '-아야겠다 是说话人对自己下的决心，主语只能是"我"。说别人（弟弟）必须做，用客观的 -아야 하다。中文"弟弟得早睡了"能随便说，韩语不行。' },
     ],
     linkedGrammarIds: ['g70'],
   },
@@ -428,6 +430,7 @@ export const grammarCardsP8: GrammarCard[] = [
       { wrong: '배고프서 죽을 것 같아요', correct: '배고파서 죽을 것 같아요', note: '배고프다 词干末元音是 ㅡ 脱落后为 배고프 → 배고파서。' },
       { wrong: '늦을 뻔했어요 때문에 택시를 탔어요', correct: '늦을 뻔해서 택시를 탔어요', note: '-ㄹ 뻔하다 后面连接原因时，要用 -아/어서 连接，不能直接用 때문에 接在动词词干后。' },
       { wrong: '재미있어서 죽을 것이에요', correct: '재미있어서 죽을 것 같아요', note: '夸张程度用 -을 것 같다，不是 -을 것이다（后者像在做预测）。' },
+      { wrong: '차를 안 놓칠 뻔했어요', correct: '차를 놓칠 뻔했어요', note: '中文"差点没赶上车"其实=赶上了，容易让人多加个"没(안)"。韩语不管中文说"差点"还是"差点没"，都直接用 놓칠 뻔했다（=险些错过、结果没错过），别塞 안。' },
     ],
     linkedGrammarIds: [],
   },
@@ -475,7 +478,7 @@ export const grammarCardsP8: GrammarCard[] = [
   <div style="font-size:16px;color:#5a4640">名词+뿐만 아니라：노래뿐만 아니라 춤도 잘해요.</div>
   <div style="margin-top:4px;font-size:16px;color:#5a4640">后句必须用 도（也）来呼应：뿐만 아니라 + ……도……</div>
 </div>
-<div class="reminder-box">노래뿐 아니라 ✗ → 노래뿐만 아니라 ✓（不能省略 만）。뿐만 아니라 放句首 ✗（前面必须有名词/动词）。</div>`,    specialQuiz: {
+<div class="reminder-box">노래를 뿐만 아니라 ✗ → 노래뿐만 아니라 ✓（名词后直接接，不加助词）。뿐만 아니라 放句首 ✗（前面必须有名词/动词）。（뿐 아니라 省略 만 也正确。）</div>`,    specialQuiz: {
       type: 'fill',
       title: '选择正确的第三人称愿望/递进表达',
       body: '根据句意选择 -고 싶어하다 或 -뿐만 아니라。',
@@ -540,7 +543,7 @@ export const grammarCardsP8: GrammarCard[] = [
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">别踩的坑</div></div>
     <div class="ov-block">
       <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">저는 가고 싶어해요</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">저는 가고 싶어요</span></div></div>
-      <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">노래뿐 아니라 춤도</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">노래뿐만 아니라 춤도</span></div></div>
+      <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">노래를 뿐만 아니라 춤도</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">노래뿐만 아니라 춤도（名词后直接接，不加 를）</span></div></div>
     </div>
   </div>
 </div>`,
@@ -576,8 +579,10 @@ export const grammarCardsP8: GrammarCard[] = [
     mistakes: [
       { wrong: '저는 가고 싶어해요', correct: '저는 가고 싶어요', note: '-고 싶어하다 用于第三人称，说自己的愿望用 -고 싶다。' },
       { wrong: '친구가 가고 싶어요', correct: '친구가 가고 싶어해요', note: '说别人的内心愿望用 -고 싶어하다，直说 싶어요 语法上不自然（像在代入别人视角说话）。' },
-      { wrong: '노래뿐 아니라 춤도 잘해요', correct: '노래뿐만 아니라 춤도 잘해요', note: '完整形式是 뿐만 아니라，不能省略 만。' },
+      { wrong: '노래를 뿐만 아니라 춤도 잘해요', correct: '노래뿐만 아니라 춤도 잘해요', note: '뿐(만) 아니라 直接接在名词后，前面不加宾格 를 等助词：노래뿐만 아니라 ✓。（省略 만 的 뿐 아니라 也是正确形。）' },
       { wrong: '뿐만 아니라 춤도 잘해요', correct: '노래뿐만 아니라 춤도 잘해요', note: '뿐만 아니라 前面必须有明确的名词，不能单独放在句首。' },
+      { wrong: '너 뭐 먹고 싶어해?', correct: '너 뭐 먹고 싶어?', note: '싶어하다 只用来谈论"不在场的第三方"，直接问面前的听话人（你）时仍用 싶다。别因为"别人用 싶어하다"就连问对方也套上。' },
+      { wrong: '이 드라마는 재미있어요 뿐만 아니라 감동적이에요', correct: '이 드라마는 재미있을 뿐만 아니라 감동적이에요', note: '뿐만 아니라 只能接名词或动/形词干的 -(으)ㄹ 形（재미있을），不能接已经收尾的 -어요。中文"不仅有趣"是完整小句，直译过来就会犯这个错。' },
     ],
     linkedGrammarIds: ['g38', 'g66'],
   },
@@ -640,11 +645,11 @@ export const grammarCardsP8: GrammarCard[] = [
           explanation: '-아/어 보다 = "试试看"："请尝尝这个泡菜。"',
         },
         {
-          pre: '한국에',
+          pre: '한국에 한 번',
           post: '.',
-          options: ['갈 거예요', '가 봤어요', '가 본 적이 있어요'],
+          options: ['갈 거예요', '가고 싶어요', '가 본 적이 있어요'],
           answer: 2,
-          explanation: '-은 적이 있다 = "有过……经历"："去过韩国。"',
+          explanation: '-은 적이 있다 强调"有过…的经历"：한 번 가 본 적이 있어요（去过一次）。갈 거예요（将要去）、가고 싶어요（想去）都不表已有的经历。',
         },
         {
           pre: '이 옷을',
@@ -764,7 +769,7 @@ export const grammarCardsP8: GrammarCard[] = [
     </div>
   </div>
 </div>
-<div class="reminder-box">먹도 돼요? ✗ → 먹어도 돼요? ✓（必须先完成 -아/어 变형再加 도 되다）。</div>`,
+<div class="reminder-box">먹도 돼요? ✗ → 먹어도 돼요? ✓（必须先完成 -아/어 变形再加 도 되다）。</div>`,
     compareHtml: `<div class="card-title">-아도 / -(이)라도 / -아도 되다 三种用法对比</div>
 <div class="card-body">三者形式相近但语义不同：让步关系 / 退而求其次 / 请求许可——用错了意思就变了。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
@@ -1045,7 +1050,7 @@ export const grammarCardsP8: GrammarCard[] = [
       { type: 'rule', text: '-을/ㄹ 뻔하다：险些发生但没发生（用过去时 뻔했어요）', examples: '넘어질 뻔했어요 / 잊을 뻔했어요' },
       { type: 'rule', text: '-아/어서 죽을 것 같다：夸张极度程度', examples: '배고파서 죽을 것 같아요 / 더워서 죽을 것 같아요' },
       { type: 'rule', text: '-고 싶어하다 用于第三人称，第一人称用 -고 싶다', examples: '저는 가고 싶어요 / 친구가 가고 싶어해요' },
-      { type: 'rule', text: '名词 + 뿐만 아니라 → 不仅……而且……（后句常用 도 呼应）', examples: '노래뿐만 아니라 춤도 잘해요' },
+      { type: 'rule', text: '名词 + 뿐만 아니라 → 不仅……而且……（后句常用 도 呼应）', examples: '노래뿐만 아니라 춤도 잘해요（不仅歌唱得好，舞也跳得好。）' },
       { type: 'rule', text: '-아/어 보다 尝试；-은/ㄴ 적이 있다/없다 经历有无', examples: '먹어 봤어요 / 간 적이 있어요' },
       { type: 'rule', text: '-아/어도 让步；-(이)라도 退而求其次；-아/어도 되다 请求许可', examples: '비가 와도 가요 / 물이라도 마실래요? / 사진 찍어도 돼요?' },
       { type: 'rule', text: '-(으)면 안 되다 禁止；-(으)면 되다 充分条件', examples: '담배 피우면 안 돼요 / 이름만 쓰면 돼요' },
@@ -1082,9 +1087,9 @@ export const grammarCardsP8: GrammarCard[] = [
         {
           pre: '어릴 때',
           post: '동네가 그리워요.',
-          options: ['살던', '살았던', '사는'],
+          options: ['살은', '살았던', '사는'],
           answer: 1,
-          explanation: '-았던 表示已完成的过去经历：想念小时候住过的小区。',
+          explanation: '-았던 表示已完成、已离开的过去经历：살았던 동네。살은 是错误形（살다 是 ㄹ 词干），사는 是现在形（与"想念"矛盾）。',
         },
         {
           pre: '이제 운동을',

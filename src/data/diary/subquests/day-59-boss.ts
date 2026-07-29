@@ -1,0 +1,21 @@
+import type { BossSubQuestData } from '@/types/tori-subquest';
+
+/** Day 59 · 2-5 Boss 战 · 🎤 예행연습 · 一句 할 수 있어 */
+export const day59Boss: BossSubQuestData = {
+  day: 29, level: 'intermediate', idx: 5, kind: 'boss',
+  koTitle: '연습의 관문',
+  subtitle: '🎤 八遍稿子 · 三遍镜子',
+  intro: '周四晚 9 点。稿子摊在书桌上 —— 第 8 版。Haru 敲门："토리, 원고 몇 번 고쳤어?" 你抬头："이제 여덟 번… 아직 마음에 안 들어." Haru 笑："Day 30 에도 이거 다 했잖아. 넌 이미 할 수 있어." 你走进卫生间对着镜子。发音有点抖。第一遍。第二遍。第三遍 —— 镜子里的兔莉，笑了。',
+  outroHook: '关灯前你对镜子里的自己说 —— 할 수 있어. 화이팅. 明天中级毕业典礼。5 分钟自述。Day 30 通过了初级，Day 60 要通过中级。都能做到。',
+
+  tasks: [
+    { type: 'choice',  label: '听句选意',     task: { id: 'd59-b5-t1', audioKo: 'Day 30에도 이거 다 했잖아. 넌 이미 할 수 있어.', choices: [{ text: 'Day 30 也做过啊。你已经能做到了。', correct: true }, { text: 'Day 30 你还没做。',                      correct: false }, { text: 'Day 30 从没做过。',                      correct: false }, { text: 'Day 30 是最后的。',                        correct: false }], explain: 'Haru 鼓励' } },
+    { type: 'choice',  label: '听句选意',     task: { id: 'd59-b5-t2', audioKo: '할 수 있어. 화이팅.',                              choices: [{ text: '能做到。加油。',                    correct: true }, { text: '不能做到。别加油。',                    correct: false }, { text: '快做完了。',                          correct: false }, { text: '我不加油。',                          correct: false }], explain: 'Tori 决心' } },
+    { type: 'choice',  label: '否定惯用',     task: { id: 'd59-b5-t3', promptZh: '"还不满意"哪句正确？',                                                                                                                    choices: [{ text: '아직 마음에 못 들어.',                       correct: false }, { text: '아직 마음에 안 들어.',              correct: true }, { text: '아직 마음이 있어.',                       correct: false }, { text: '아직 마음 없어.',                          correct: false }], explain: '마음에 안 들다 = 不满意 · 惯用' } },
+    { type: 'choice',  label: '预测形',       task: { id: 'd59-b5-t4', promptZh: '"明天会能做好的"（未来预测）哪句正确？',                                                                                                    choices: [{ text: '내일 잘할 수 있어.',                          correct: false }, { text: '내일 잘할 수 있을 거예요.',        correct: true }, { text: '내일 잘할 수 없어.',                       correct: false }, { text: '내일 잘할 거예요.',                       correct: false }], explain: '~ㄹ 수 있을 거예요 未来预测' } },
+    { type: 'choice',  label: '认词',         task: { id: 'd59-b5-t5', promptKo: '예행연습', promptHangul: 'ye-haeng-yeon-seup',                                                                                          choices: [{ text: '预演 / 彩排',              correct: true }, { text: '总结',              correct: false }, { text: '开幕',              correct: false }, { text: '闭幕',                     correct: false }], explain: '예행(预行) + 연습(练习)' } },
+    { type: 'compose', label: '组句',         task: { id: 'd59-b5-t6', zhHint: '我是兔莉。现在真的住在这里了。',                                                                                                            audioKo: '저는 토리예요. 이제 정말 여기서 살아요.',        answer: ['저는', '토리예요.', '이제', '정말', '여기서', '살아요.'], tokens: ['저는', '토리예요.', '이제', '정말', '여기서', '살아요.', '살네요.', '삽니다.', '사네요.', '여기에'], explain: 'Tori 镜子前练习 · 살다 → 살아요' } },
+    { type: 'compose', label: '组句',         task: { id: 'd59-b5-t7', zhHint: '能做到。加油。',                                                                                                                              audioKo: '할 수 있어. 화이팅.',                            answer: ['할 수 있어.', '화이팅.'],                                tokens: ['할 수 있어.', '화이팅.', '할 수 없어.', '할수 있어.', '못 해.', '몰라.'],                              explain: 'Tori 自我鼓励' } },
+    { type: 'choice',  label: '情景选回应',   task: { id: 'd59-b5-t8', promptZh: 'Haru 说 "그럼 오늘 원고 다시 안 봐도 돼. 넌 이미 할 수 있어"。你想温柔接受，最自然的一句？',                                                choices: [{ text: '고마워, 하루야. 나도 그렇게 믿어볼게.',              correct: true }, { text: '아니야, 안 될 것 같아.',                  correct: false }, { text: '얼마예요?',                              correct: false }, { text: '싫어.',                                  correct: false }], explain: '感谢 + ~아/어 볼게 承诺尝试' } },
+  ],
+};

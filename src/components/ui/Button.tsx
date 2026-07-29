@@ -47,6 +47,8 @@ function fgFor(variant: Variant, tone: Tone): string {
   }
   if (variant === 'secondary') return 'var(--color-ink-1)';
   if (variant === 'primary' && tone === 'mint') return 'var(--color-ink-1)';
+  // black primary 背景用会翻转的 ink-1，文字必须用同样翻转的 surface-1，否则暗色浅底白字对比不足
+  if (variant === 'primary' && tone === 'black') return 'var(--color-surface-1)';
   return '#ffffff';
 }
 

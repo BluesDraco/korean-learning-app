@@ -102,7 +102,7 @@ export const grammarCardsP5: GrammarCard[] = [
       },
       {
         ko: '시간이 있으면 카페에 가요.',
-        zh: '如果有시간，就去咖啡店。',
+        zh: '如果有时间，就去咖啡店。',
         tokens: [
           { text: '시간이', role: 'subject' },
           { text: '있으면', role: 'verb' },
@@ -131,6 +131,8 @@ export const grammarCardsP5: GrammarCard[] = [
       { type: 'example', text: '-(으)려면 교재 예문：전자사전을 사려면 쇼핑몰에 가야 해요' },
       { type: 'usage', text: '-(으)면 可用于过去形后面', examples: '공부했으면 좋겠어요（如果学过了就好了）' },
       { type: 'note', text: '-(으)려면 后句限制：后句接命令句（-세요/-아/어요）或义务句（-아야/어야 해요）最自然' },
+      { type: 'usage', text: '高频块 -(으)면 되다 / -(으)면 안 되다：中文"这样做就行 / 不可以做"要靠 -(으)면 来说，中文母语者常想不到用条件句', examples: '이렇게 하면 돼요（这样做就行）/ 여기서 사진을 찍으면 안 돼요（这里不能拍照）/ 어떻게 하면 돼요?（怎么做才行?）' },
+      { type: 'note', text: '愿望块 -았/었으면 좋겠다："要是……就好了"。即使说的是现在或将来的愿望，也固定用过去形 -았/었-，这和中文直觉相反', examples: '시험에 합격했으면 좋겠어요（希望能通过考试）/ 비가 안 왔으면 좋겠어요（希望别下雨）' },
     ],
     cardExamples: [
       {
@@ -140,7 +142,7 @@ export const grammarCardsP5: GrammarCard[] = [
           { text: '카페에', role: 'place' },
           { text: '가요', role: 'verb' },
         ],
-        zh: '如果有시간，就去咖啡店。',
+        zh: '如果有时间，就去咖啡店。',
         swapRole: 'verb',
           swapWords: ['있으면', '없으면', '많으면'],
       },
@@ -180,7 +182,7 @@ export const grammarCardsP5: GrammarCard[] = [
     scenarios: [
       { icon: '📚', context: '学习建议', ko: '한국어를 잘하려면 매일 연습해야 해요.', zh: '想把韩语学好，就要每天练习。' },
       { icon: '🎵', context: 'KPOP 跟唱', ko: '이 노래를 부르려면 가사를 먼저 봐야 해요.', zh: '想唱这首歌，就要先看歌词。' },
-      { icon: '☕', context: '日常条件', ko: '시간이 있으면 카페에 가요.', zh: '如果有시간，就去咖啡店。' },
+      { icon: '☕', context: '日常条件', ko: '시간이 있으면 카페에 가요.', zh: '如果有时间，就去咖啡店。' },
       { icon: '😴', context: '健康提示', ko: '피곤하면 일찍 쉬세요.', zh: '如果累了，请早点休息。' },
       { icon: '📱', context: 'App 引导', ko: '단어를 저장하려면 이 버튼을 누르세요.', zh: '想保存单词，请点这个按钮。' },
       { icon: '🎓', context: '目标规划', ko: '시험에 합격하려면 열심히 공부해야 해요.', zh: '想通过考试，就要努力学习。' },
@@ -190,6 +192,7 @@ export const grammarCardsP5: GrammarCard[] = [
       { wrong: '가면 일찍 일어나야 해요. (想说想去学校的话)', correct: '가려면 일찍 일어나야 해요.', note: '目标条件用 -려면；-면 是普通"如果"' },
       { wrong: '살으면', correct: '살면', note: 'ㄹ 收音直接接 -면，不需要 으：살다→살면' },
       { wrong: '들면 (듣다+면)', correct: '들으면', note: 'ㄷ 不规则：듣다→들으면（ㄷ→ㄹ）' },
+      { wrong: '여기서 사진을 안 찍으면 돼요. (想说这里不能拍照)', correct: '여기서 사진을 찍으면 안 돼요.', note: '"不能做"是 -(으)면 안 되다，否定放在 되다 上；안 찍으면 돼요 意思变成"不拍的话就行"，完全跑偏' },
     ],
     quickTable: {
       title: '변형표',
@@ -274,9 +277,9 @@ export const grammarCardsP5: GrammarCard[] = [
           pre: '저는 매운 음식을',
           post: '.',
           prompt: '（客观原因：어릴 때부터 못 먹어요）',
-          options: ["못 먹어요", "안 먹어요", "먹지 못해요"],
+          options: ["못 먹어요", "안 먹어요", "먹지 않아요"],
           answer: 0,
-          explanation: '못 먹어요 表示"不能吃"（能力/客观原因），안 먹어요 是"不吃"（主观选择，但这里客观上吃不了）。',
+          explanation: '客观上吃不了（能力/体质原因）用 못 먹어요。안 먹어요 和 먹지 않아요 都是"不吃"（主观选择），与"从小就吃不了"的客观语境不符。',
         },
         {
           pre: '시간이 없어서 영화를',
@@ -286,11 +289,11 @@ export const grammarCardsP5: GrammarCard[] = [
           explanation: '时间不够→客观原因→못 봤어요（没能看）。',
         },
         {
-          pre: '친구가 불렀지만',
+          pre: '친구가 불렀지만 가기 싫어서',
           post: '.',
           options: ["안 갔어요", "못 갔어요", "가지 못했어요"],
           answer: 0,
-          explanation: '朋友叫了但我不去→主观选择→안 갔어요。',
+          explanation: '"因为不想去"是主观选择→안 갔어요。못 갔어요 / 가지 못했어요 都表示"去不了"（客观受阻），与"不想去"矛盾。',
         },
       ],
     },
@@ -342,7 +345,8 @@ export const grammarCardsP5: GrammarCard[] = [
       { type: 'example', text: '교재 예문（못）：저는 채식주의자라서 고기를 못 먹어요 / 일이 있어서 못 갔어요 / 알코올에 알레르기가 있어서 술을 못 마셔요' },
       { type: 'example', text: '교재 예문（안）：저는 커피를 안 마셔요 / 오늘 공부 안 해요' },
       { type: 'note', text: '못 不接形容词：날씨가 못 좋아요（✗）→ 날씨가 안 좋아요（✓）' },
-      { type: 'compare', text: '못 vs 안 总结：自愿不做用 안，조건/能力不允许用 못' },
+      { type: 'compare', text: '못 vs 안 总结：自愿不做用 안，条件/能力不允许用 못' },
+      { type: 'note', text: '有些词的否定不用 안/못，而是换成专门的反义词：있다→없다、알다→모르다、맛있다→맛없다。中文母语者最爱说错的就是 "안 있어요""못 알아요"', examples: '시간이 없어요（没时间，不是 안 있어요）/ 저는 몰라요（我不知道，不是 안 알아요）' },
     ],
     cardExamples: [
       {
@@ -362,7 +366,7 @@ export const grammarCardsP5: GrammarCard[] = [
           { text: '없어서', role: 'verb' },
           { text: '못 가요', role: 'verb' },
         ],
-        zh: '因为没시간，所以不能去。',
+        zh: '因为没时间，所以不能去。',
         swapWords: ['못 가요', '못 해요', '가지 못해요'],
 
         swapRole: 'verb',
@@ -374,7 +378,7 @@ export const grammarCardsP5: GrammarCard[] = [
           { text: '따라 하지', role: 'verb' },
           { text: '못해요', role: 'verb' },
         ],
-        zh: '因为발음快，所以跟不上。',
+        zh: '因为发音快，所以跟不上。',
         swapWords: ['따라 하지 못해요', '이해하지 못해요', '외우지 못해요'],
 
         swapRole: 'verb',
@@ -392,7 +396,7 @@ export const grammarCardsP5: GrammarCard[] = [
       },
     ],
     scenarios: [
-      { icon: '⏰', context: '日程冲突', ko: '오늘은 시간이 없어서 못 가요.', zh: '今天因为没시간，所以不能去。' },
+      { icon: '⏰', context: '日程冲突', ko: '오늘은 시간이 없어서 못 가요.', zh: '今天因为没时间，所以不能去。' },
       { icon: '📚', context: '学习困难', ko: '이 문장을 이해하지 못해요.', zh: '不能理解这个句子。' },
       { icon: '🎵', context: 'KPOP 跟读', ko: '너무 빨라서 따라 하지 못해요.', zh: '太快了，所以跟不上。' },
       { icon: '☕', context: '个人喜好', ko: '저는 커피를 안 마셔요.', zh: '我不喝咖啡。' },
@@ -404,6 +408,8 @@ export const grammarCardsP5: GrammarCard[] = [
       { wrong: '날씨가 못 좋아요.', correct: '날씨가 안 좋아요.', note: '못 不接形容词，否定形容词用 안' },
       { wrong: '가다지 못해요.', correct: '가지 못해요.', note: '-지 못하다 接词干，去掉 다 后加 지 못해요' },
       { wrong: '안 가요 / 못 가요 语气相同', correct: '안 가요（主观不去）/ 못 가요（客观不能去）', note: '안=主观选择不做；못=条件/能力不允许，语气差别大' },
+      { wrong: '저는 그 사람을 못 알아요.', correct: '저는 그 사람을 몰라요.', note: '알다 的否定不是 못/안 알다，而是专门的词 모르다；"不知道/不认识"要用 모르다' },
+      { wrong: '지금 시간이 안 있어요.', correct: '지금 시간이 없어요.', note: '있다 的否定不是 안 있다，而是专门的词 없다；"没有"一律用 없다' },
     ],
     quickTable: {
       title: '否定表达表',
@@ -433,7 +439,7 @@ export const grammarCardsP5: GrammarCard[] = [
     whatItDoes: '说打算做什么，大概会怎样',
     whatItDoesBody: '-(으)려고 해요 表示"打算/准备做某事"；\n아마 -을/ㄹ 거예요 表示"大概会……"的推测。\n前者是P1将来时 -을/ㄹ 거예요 的延伸将来时说"会做"，这节课的 -(으)려고 해요 强调"已有计划/意图"。\n中文"打算去"和"会去"都靠独立词区分，韩语用不同词尾直接嵌入动词末尾表达。',
     structureNote: '两块内容：①-(으)려고 해요（计划/意图）有收音接 으려고，无收音接 려고；\n②아마 -을/ㄹ 거예요（推测）-을/ㄹ 거예요 已学过，加 아마 表示"大概/可能"。',
-    rulesNote: '-(으)려고 해요 的主语必须是有意志的人/动物，天气等无意志主语不能用（날씨가 따뜻하려고 해요 ✗）。\n推测的강도：\n갈 거예요（会去）→ 아마 갈 거예요（大概会去）。\nㅂ 不规则触发：\n어렵다→어려울 거예요。',
+    rulesNote: '-(으)려고 해요 的主语必须是有意志的人/动物，天气等无意志主语不能用（날씨가 따뜻하려고 해요 ✗）。\n推测的强度：\n갈 거예요（会去）→ 아마 갈 거예요（大概会去）。\nㅂ 不规则触发：\n어렵다→어려울 거예요。',
     scenarioNote: '"今天打算复习单词""打算去演唱会""票大概会很贵"计划和推测是学习日记、聊天、讨论未来时最常用的表达。\n掌握这节课，你能说出自己的计划也能猜测别人的情况。',
     step0Html: `<h1 style="font-size:25px;font-weight:800;margin:0 0 4px 0;color:#241917">-(으)려고 하다 · 아마 -을/ㄹ 것이다</h1>
 <p style="font-size:16px;color:#89756e;margin:0 0 16px 0">说打算做什么，或大概会怎样。</p>
@@ -551,8 +557,10 @@ export const grammarCardsP5: GrammarCard[] = [
       { type: 'note', text: 'ㅂ 不规则', examples: '어렵다→어려울 거예요 / 춥다→추울 거예요 / 쉽다→쉬울 거예요' },
       { type: 'note', text: '-(으)려고 해요 的主语必须是有意志的，天气等无意志主语不可用' },
       { type: 'example', text: '교재 예문：오늘 한국어를 공부하려고 해요 / 이 노래를 따라 하려고 해요 / 아마 내일 비가 올 거예요' },
-      { type: 'usage', text: '过去 추측：-았/었을 거예요', examples: '갔을 거예요（可能去了）/ 먹었을 거예요（可能吃了）' },
+      { type: 'usage', text: '过去推测：-았/었을 거예요', examples: '갔을 거예요（可能去了）/ 먹었을 거예요（可能吃了）' },
       { type: 'example', text: '추가 교재 예문：콘서트가 재미있을 거예요（演唱会应该很有趣）/ 내일도 날씨가 좋을 거예요' },
+      { type: 'compare', text: '"打算做"用 -(으)려고 하다；"去做／来做（移动目的）"用 -(으)러 가다/오다。中文都说"去买"，韩语要分家', examples: '밥을 먹으려고 해요（打算吃饭）/ 밥을 먹으러 가요（去吃饭）' },
+      { type: 'rule', text: '이다 的推测：아마 …일 거예요，用来猜"大概是……"的身份或现状', examples: '그 사람은 아마 학생일 거예요（他大概是学生）/ 여기가 아마 입구일 거예요（这里大概是入口）' },
     ],
     cardExamples: [
       {
@@ -593,7 +601,7 @@ export const grammarCardsP5: GrammarCard[] = [
           { text: '이 문법은', role: 'subject' },
           { text: '어려울 거예요', role: 'verb' },
         ],
-        zh: '这个문법大概会难。',
+        zh: '这个语法大概会难。',
         swapWords: ['어려울 거예요', '재미있을 거예요', '도움이 될 거예요'],
 
         swapRole: 'verb',
@@ -605,13 +613,14 @@ export const grammarCardsP5: GrammarCard[] = [
       { icon: '🌤️', context: '天气预测', ko: '아마 내일 날씨가 좋을 거예요.', zh: '明天天气大概会好。' },
       { icon: '🌧️', context: '下雨预报', ko: '아마 내일 비가 올 거예요.', zh: '明天大概会下雨。' },
       { icon: '📖', context: '课程计划', ko: '시험이 있어서 복습하려고 해요.', zh: '因为有考试，所以打算复习。' },
-      { icon: '😅', context: '难度预判', ko: '아마 이 문법은 어려울 거예요.', zh: '这个문법大概会难。' },
+      { icon: '😅', context: '难度预判', ko: '아마 이 문법은 어려울 거예요.', zh: '这个语法大概会难。' },
     ],
     mistakes: [
       { wrong: '먹려고 해요.', correct: '먹으려고 해요.', note: '먹다 有收音，用 -으려고 해요' },
       { wrong: '비가 오려고 해요. (天气打算下雨)', correct: '아마 비가 올 거예요.', note: '无意志主语不能用 -려고 해요，天气预测用 -을/ㄹ 거예요' },
       { wrong: '아마 꼭 갈 거예요', correct: '아마 갈 거예요', note: '아마（可能）和 꼭（一定）语义矛盾不能同用。아마 降低确定性，꼭 强调确定性。' },
       { wrong: '들려고 해요. (듣다+려고)', correct: '들으려고 해요.', note: 'ㄷ 不规则：듣다→들으려고 해요' },
+      { wrong: '어제 갔으려고 했어요. (想说昨天打算去)', correct: '어제 가려고 했어요.', note: '过去时加在 하다 上（하려고 했어요），不是加在前面的动词上；前面的动词永远保持 -(으)려고 原形' },
     ],
     quickTable: {
       title: '변형표',
@@ -683,11 +692,11 @@ export const grammarCardsP5: GrammarCard[] = [
       body: '根据句意选择 이/가 아니다 或 -는 게 아니라。',
       questions: [
         {
-          pre: '이거는 제',
+          pre: '아니요, 이거는 제',
           post: '.',
-          options: ["가방는 게 아니라", "가방이에요", "가방이 아니에요"],
-          answer: 2,
-          explanation: '名词 + 이/가 아니다："这不是我的包。"',
+          options: ["가방인 게 아니라", "가방이 아니에요", "가방는 게 아니라"],
+          answer: 1,
+          explanation: '"不，这不是我的包"用 名词 + 이/가 아니에요：가방이 아니에요。아니라 是"不是A而是B"的连接形，不能单独结句；가방는 的助词也错（有收音应 은/인）。',
         },
         {
           pre: '그건 사과',
@@ -699,9 +708,9 @@ export const grammarCardsP5: GrammarCard[] = [
         {
           pre: '돈이 없어서',
           post: '못 산 거예요.',
-          options: ['안 산 게 아니라', '사지 않은 게 아니라', '안 산 것이 아니고'],
+          options: ['안 산 게 아니라', '안 산 게 아니면', '못 산 게 아니라'],
           answer: 0,
-          explanation: '-는 게 아니라 表示"不是……而是……"：不是不想买，是没钱买不了。',
+          explanation: '"不是不买（而是买不起）"用 안 산 게 아니라。아니면 是"如果不是"（假设），接续不对；못 산 게 아니라（不是买不到）语义与"没钱买不了"矛盾。',
         },
         {
           pre: '이건 한국',
@@ -759,6 +768,8 @@ export const grammarCardsP5: GrammarCard[] = [
       { type: 'compare', text: '이/가 아니라 vs 이/가 아니에요：아니에요 单纯否定；아니라 必须有对比答案' },
       { type: 'example', text: '교재 예문：이건 커피가 아니라 차예요 / 외우는 게 아니라 이해해야 해요 / 이건 번역이 아니라 발음 연습이에요' },
       { type: 'example', text: '추가 예문：이 음료수는 바나나 우유가 아니에요（这不是香蕉牛奶）/ 여기가 명동이 아니에요' },
+      { type: 'note', text: '아니다 前的名词要带 이/가（这里是补格助词，不是主语）。中文"不是学生"里"学生"像宾语，中文母语者很容易误加 을/를', examples: '저는 학생이 아니에요（○）/ 저는 학생을 아니에요（✗）' },
+      { type: 'note', text: '아니다 的过去式是 아니었어요。说"（当时）不是……"要变词尾，中文只靠"不是"没有对应变化，别拿现在的 아니에요 说过去', examples: '작년에는 학생이 아니었어요（去年还不是学生）/ 그건 제 잘못이 아니었어요（那不是我的错）' },
     ],
     cardExamples: [
       {
@@ -808,7 +819,7 @@ export const grammarCardsP5: GrammarCard[] = [
       { icon: '👤', context: '身份说明', ko: '저는 선생님이 아니에요.', zh: '我不是老师。' },
       { icon: '☕', context: '物品纠正', ko: '이건 커피가 아니라 차예요.', zh: '这不是咖啡，而是茶。' },
       { icon: '📚', context: '学习方法', ko: '외우는 게 아니라 이해해야 해요.', zh: '不是背，而是要理解。' },
-      { icon: '🎵', context: 'KPOP 练习', ko: '이건 번역이 아니라 발음 연습이에요.', zh: '这不是翻译，而是발음练习。' },
+      { icon: '🎵', context: 'KPOP 练习', ko: '이건 번역이 아니라 발음 연습이에요.', zh: '这不是翻译，而是发音练习。' },
       { icon: '💬', context: '纠正误解', ko: '그게 아니라 이렇게 하는 거예요.', zh: '不是那样，而是这样做。' },
       { icon: '🏫', context: '课程说明', ko: '이건 시험이 아니라 연습이에요.', zh: '这不是考试，而是练习。' },
     ],
@@ -817,6 +828,8 @@ export const grammarCardsP5: GrammarCard[] = [
       { wrong: '커피가 아니에요 차예요. (想说不是咖啡而是茶)', correct: '커피가 아니라 차예요.', note: '对比纠正用 아니라，不是两个独立句' },
       { wrong: '보다는 게 아니라', correct: '보는 게 아니라', note: '-는 게 아니라 接词干：보다→보는 게 아니라' },
       { wrong: '커피이 아니에요.', correct: '커피가 아니에요.', note: '커피 无收音，用 가 아니에요' },
+      { wrong: '저는 가수를 아니에요.', correct: '저는 가수가 아니에요.', note: '아니다 前的名词用 이/가（补格助词），不能因为"是宾语的感觉"就加 을/를' },
+      { wrong: '작년에는 학생이 아니에요. (想说去年不是学生)', correct: '작년에는 학생이 아니었어요.', note: '说过去"（当时）不是……"要用过去式 아니었어요，不能用现在的 아니에요' },
     ],
     quickTable: {
       title: '부정 구조표',
@@ -906,7 +919,7 @@ export const grammarCardsP5: GrammarCard[] = [
           post: '영화 정말 재미있었어요.',
           options: ["보는", "본", "볼"],
           answer: 1,
-          explanation: '动词过去时冠词形：보다→본（昨天看的电影）。有收音时用 -은。',
+          explanation: '动词过去时冠词形：无收音词干直接加 -ㄴ，보다→본（昨天看的电影）。若词干有收音则加 -은（먹다→먹은）。',
         },
         {
           pre: '이건 정말',
@@ -973,6 +986,8 @@ export const grammarCardsP5: GrammarCard[] = [
       { type: 'rule', text: '形容词有收音 -은', examples: '좋다→좋은 / 작다→작은 / 많다→많은' },
       { type: 'rule', text: '形容词无收音 -ㄴ', examples: '예쁘다→예쁜 / 바쁘다→바쁜 / 크다→큰' },
       { type: 'note', text: 'ㅂ 不规则', examples: '어렵다→어려운 / 가볍다→가벼운' },
+      { type: 'note', text: 'ㄹ 脱落：词干末尾是 ㄹ 时，接 -는/-ㄴ 会先掉 ㄹ 再接（不是加 -을）', examples: '살다→사는 사람 / 만들다→만드는 것 / 알다→아는 사람 / 형容词 길다→긴 / 멀다→먼 곳' },
+      { type: 'note', text: '재미있다·맛있다·멋있다 结尾是 있다，跟 있다/없다 一样用 -는，不用 -은', examples: '재미있는 영화 / 맛있는 음식 / 멋있는 사람（재미있은 ✗）' },
       { type: 'rule', text: '动词未来冠词形 -을/ㄹ：有收音→-을；无收音→-ㄹ', examples: '먹다→먹을 / 가다→갈 / 보다→볼 / 듣다（ㄷ不规则）→들을' },
       { type: 'note', text: '动词过去冠词形 -은/ㄴ（已完成）：和形容词 -은/ㄴ 同形，靠词性区分', examples: '먹다→먹은 음식（吃过的食物）；가다→간 곳（去过的地方）' },
       { type: 'example', text: '교재 예문：한국어를 공부하는 사람 / 좋은 노래를 들어요 / 내일 갈 곳이 있어요 / 오늘 배울 문법' },
@@ -1006,7 +1021,7 @@ export const grammarCardsP5: GrammarCard[] = [
           { text: '문법은', role: 'subject' },
           { text: '천천히 공부해요', role: 'verb' },
         ],
-        zh: '难的문법慢慢学。',
+        zh: '难的语法慢慢学。',
         swapRole: 'subject',
           swapWords: ['어려운 문법', '재미있는 문법', '중요한 문법'],
       },
@@ -1024,9 +1039,9 @@ export const grammarCardsP5: GrammarCard[] = [
     scenarios: [
       { icon: '👤', context: '描述人物', ko: '한국어를 공부하는 사람이에요.', zh: '是学习韩语的人。' },
       { icon: '🎵', context: 'KPOP 歌曲', ko: '지금 듣는 노래가 정말 좋아요.', zh: '现在听的歌真的很好听。' },
-      { icon: '📚', context: '内容拆解', ko: '오늘 배울 문법이 어렵지 않아요.', zh: '今天要学的문법不难。' },
+      { icon: '📚', context: '内容拆解', ko: '오늘 배울 문법이 어렵지 않아요.', zh: '今天要学的语法不难。' },
       { icon: '🗺️', context: '旅行计划', ko: '내일 갈 곳을 찾고 있어요.', zh: '正在找明天要去的地方。' },
-      { icon: '✏️', context: '学习建议', ko: '어려운 문법은 천천히 공부하세요.', zh: '难的문법请慢慢学。' },
+      { icon: '✏️', context: '学习建议', ko: '어려운 문법은 천천히 공부하세요.', zh: '难的语法请慢慢学。' },
       { icon: '🍜', context: '饮食选择', ko: '먹을 음식을 골라요.', zh: '选要吃的食物。' },
     ],
     mistakes: [
@@ -1034,6 +1049,7 @@ export const grammarCardsP5: GrammarCard[] = [
       { wrong: '공부한 사람 (想说学习的人)', correct: '공부하는 사람', note: '-은/ㄴ 接动词表示已完成（过去），现在/习惯用 -는' },
       { wrong: '내일 가는 곳 (强调将要去)', correct: '내일 갈 곳', note: '未来/未完成用 -을/ㄹ：가다→갈 곳' },
       { wrong: '어렵는 문법', correct: '어려운 문법', note: 'ㅂ 不规则：어렵다→어려운（ㅂ→우）' },
+      { wrong: '살는 사람', correct: '사는 사람', note: 'ㄹ 脱落：词干末尾 ㄹ 接 -는 要先掉 ㄹ，만들다→만드는、알다→아는 同理' },
     ],
     quickTable: {
       title: '冠词形变形表',
@@ -1166,7 +1182,7 @@ export const grammarCardsP5: GrammarCard[] = [
       },
       {
         ko: '이 문법은 어렵지요?',
-        zh: '这个문법很难吧？',
+        zh: '这个语法很难吧？',
         tokens: [
           { text: '이 문법은', role: 'subject' },
           { text: '어렵지요', role: 'verb' },
@@ -1179,8 +1195,10 @@ export const grammarCardsP5: GrammarCard[] = [
       { type: 'usage', text: '-아/어/여 줘요：为对方做某事（非请求）', examples: '친구에게 알려 줘요（告诉朋友）' },
       { type: 'note', text: '-지요 可缩略成 -죠', examples: '어렵죠? / 좋죠? / 재미있죠?（口语常用）' },
       { type: 'note', text: '-지요? 是确认，不是否定', examples: '어렵지요?（很难吧）≠ 어렵지 않아요（不难）' },
+      { type: 'compare', text: '别把 주세요 当成"更礼貌的 -(으)세요"：주다 强调"替我做、帮我这个忙（恩惠）"，-(으)세요 只是指示/邀请。日常"请坐"是 앉으세요，不是 앉아 주세요', examples: '사진 좀 찍어 주세요（请帮我拍张照，恩惠）/ 여기 앉으세요（请坐，邀请）' },
+      { type: 'note', text: '-지요? 用在你心里已经这么想、只是求对方点头认同；真正问未知信息要用普通疑问 -아요?/-어요?', examples: '이거 맞지요?（这个对吧？— 我觉得对，求确认）/ 이거 맞아요?（这个对吗？— 真不知道，在问）' },
       { type: 'example', text: '교재 예문：다시 말해 주세요 / 이 단어를 알려 주세요 / 천천히 들려 주세요 / 이 문법은 어렵지요?' },
-      { type: 'usage', text: '주다 敬語：주세요（请给/请做）→ 드리다（我给长辈）', examples: '선생님께 드려요（我给老师）' },
+      { type: 'usage', text: '주다 敬语：주세요（请给/请做）→ 드리다（我给长辈）', examples: '선생님께 드려요（我给老师）' },
       { type: 'vocab', text: '드리다 用法', examples: '선생님께 말씀드려요 / 부모님께 선물을 드려요（드리다 = 주다 的谦让形）' },
       { type: 'example', text: '-지요? 过去形：-았지요?/-었지요?', examples: '어제 공부했지요?（昨天学习了吧？）/ 맛있었지요?（很好吃吧？）' },
     ],
@@ -1229,7 +1247,7 @@ export const grammarCardsP5: GrammarCard[] = [
       { icon: '🗣️', context: '课堂请求', ko: '다시 한번 말해 주세요.', zh: '请再说一遍。' },
       { icon: '📱', context: 'App 功能', ko: '이 단어를 저장해 주세요.', zh: '请保存这个单词。' },
       { icon: '🎵', context: 'KPOP 跟唱', ko: '천천히 들려 주세요.', zh: '请慢慢放给我听。' },
-      { icon: '💬', context: '学习确认', ko: '이 문법은 어렵지요?', zh: '这个문법很难吧？' },
+      { icon: '💬', context: '学习确认', ko: '이 문법은 어렵지요?', zh: '这个语法很难吧？' },
       { icon: '🤝', context: '请求帮忙', ko: '좀 도와주세요.', zh: '请帮帮我。' },
       { icon: '✅', context: '互动确认', ko: '재미있죠?', zh: '有意思吧？' },
     ],
@@ -1238,6 +1256,7 @@ export const grammarCardsP5: GrammarCard[] = [
       { wrong: '어렵지요? / 어렵지 않아요. (混淆)', correct: '어렵지요?（难吧）vs 어렵지 않아요.（不难）', note: '-지요? 是确认疑问；-지 않아요 是否定陈述' },
       { wrong: '도움 주세요. (想说请帮忙)', correct: '도와주세요.', note: '도와주다 是固定合写形，帮忙=도와주세요' },
       { wrong: '기다리어 주세요.', correct: '기다려 주세요.', note: '기다리다 词干末元音 ㅣ+어→여：기다려 주세요' },
+      { wrong: '여기 앉아 주세요. (只想说请坐)', correct: '여기 앉으세요.', note: '单纯请人坐用 -(으)세요；-아/어 주세요 是"帮我这个忙"，加了不必要的恩惠语气' },
     ],
     quickTable: {
       title: '변형표',
@@ -1333,9 +1352,9 @@ export const grammarCardsP5: GrammarCard[] = [
         {
           pre: '사과',
           post: '주세요.',
-          options: ['세 개를', '세 개', '삼 개'],
+          options: ['세 잔', '세 개', '삼 개'],
           answer: 1,
-          explanation: '数量用固有数词：세 개（三个）。삼 개 是错误说法。',
+          explanation: '数苹果用固有数词 + 量词 개：세 개（三个）。잔 是杯子的量词（配饮品），삼 개 用了汉字数词，都不对。',
         },
       ],
     },
@@ -1385,7 +1404,7 @@ export const grammarCardsP5: GrammarCard[] = [
       { type: 'rule', text: '电话号码用汉字数词逐个读', examples: '0=공 / 1=일 / 2=이 / 3=삼 / 4=사 / 5=오 / 6=육 / 7=칠 / 8=팔 / 9=구' },
       { type: 'example', text: '전화번호 읽는 법', examples: '010-1234-5678 → 공일공 일이삼사 오육칠팔（分组读，用停顿隔开）' },
       { type: 'rule', text: '时间：시（点）用固有数词，분（分）用汉字数词', examples: '한 시 / 두 시 / 세 시 / 네 시 / 다섯 시…열두 시 / 십 분 / 삼십 분 / 오십오 분' },
-      { type: 'rule', text: '时间 + 에：시간点助词', examples: '세 시에 만나요 / 오전 열 시에 시작해요' },
+      { type: 'rule', text: '时间 + 에：时间点助词', examples: '세 시에 만나요 / 오전 열 시에 시작해요' },
       { type: 'usage', text: '부터…까지：시간/장소 범위', examples: '세 시부터 다섯 시까지 / 월요일부터 금요일까지' },
       { type: 'example', text: '교재 예문：전화번호가 뭐예요? / 팬미팅은 오후 두 시에 시작해요 / 수업은 열 시부터 열한 시까지예요' },
       { type: 'vocab', text: '전화번호 형식', examples: '02-1234-5678（지역번호-국번-번호）/ 핸드폰：010-xxxx-xxxx' },
@@ -1507,7 +1526,7 @@ export const grammarCardsP5: GrammarCard[] = [
 <div style="background:#fff8fb;border-radius:10px;padding:10px 12px;margin-bottom:10px">
   <div style="font-size:16px;font-weight:700;color:#ff7fa8;margin-bottom:6px">(으)로 收音规则</div>
   <div style="font-size:16px;color:#241917">无收音 / ㄹ收音 → <b>로</b>：버스로 / 택시로 / 지하철로 / 자전거로</div>
-  <div style="font-size:16px;color:#241917">有收音（非ㄹ）→ <b>으로</b>：（交通工具中少见，일반적으로 无收音/ㄹ收音 적용）</div>
+  <div style="font-size:16px;color:#241917">有收音（非ㄹ）→ <b>으로</b>（交通工具多为无收音/ㄹ收音，一般用 로）</div>
   <div style="font-size:16px;color:#89756e;margin-top:4px">걸어서 가요（走路去）— 走路固定用 걸어서，不能说 발로 가요</div>
 </div>
 <div class="reminder-box">버스를 타고 가요 = 버스로 가요 — 两种说法都正确。걸어로 가요 ✗ → 걸어서 가요 ✓ — 走路固定用 걸어서。지하철을 타고 vs 지하철로：타고 更强调动作过程，로 更简洁。</div>`,    specialQuiz: {
@@ -1532,9 +1551,9 @@ export const grammarCardsP5: GrammarCard[] = [
         {
           pre: '버스',
           post: '회사에 가요.',
-          options: ["에", "로", "를 타고"],
+          options: ["에", "로", "에서"],
           answer: 1,
-          explanation: '(으)로 가다 也可表示交通方式：버스로 가요（坐公交去）。',
+          explanation: '(으)로 가다 表示交通方式：버스로 가요（坐公交去）。에 表方向/存在、에서 表动作发生地，都不能标交通工具。',
         },
         {
           pre: '택시를',
@@ -1589,7 +1608,7 @@ export const grammarCardsP5: GrammarCard[] = [
     ],
     connectionRules: [
       { type: 'rule', text: '을/를 타다：交通工具 + 目的格助词', examples: '버스를 타요 / 지하철을 타요 / 택시를 타요 / 비행기를 타요' },
-      { type: 'rule', text: '타고 가다/오다：坐上后连接이동', examples: '버스를 타고 가요 / 택시를 타고 와요' },
+      { type: 'rule', text: '타고 가다/오다：坐上后连接移动', examples: '버스를 타고 가요 / 택시를 타고 와요' },
       { type: 'rule', text: '(으)로 가다：ㄹ收音/无收音→로；有收音（非ㄹ）→으로', examples: '지하철로 / 버스로 / 택시로' },
       { type: 'note', text: '지하철 是 ㄹ 收音，用 로', examples: '지하철로（不是 지하철으로）' },
       { type: 'compare', text: '两种表达都可以：버스를 타고 가요 ＝ 버스로 가요（语感略有不同，口语都自然）' },
@@ -1727,11 +1746,11 @@ export const grammarCardsP5: GrammarCard[] = [
       body: '根据句意选择 갈아타다 的正确搭配。',
       questions: [
         {
-          pre: '서울역에서 2호선을',
+          pre: '1호선을 타고 가다가 서울역에서 2호선을',
           post: '.',
           options: ["내리세요", "타세요", "갈아타세요"],
           answer: 2,
-          explanation: '을/를 갈아타다 表示换乘某线路：请换乘2号线。',
+          explanation: '已经坐着1号线，在首尔站换成2号线→用 을/를 갈아타다：2호선을 갈아타세요。타세요（乘车）此时不合，因为已经在车上；내리세요 是下车。',
         },
         {
           pre: '버스에서 지하철',
@@ -1743,16 +1762,16 @@ export const grammarCardsP5: GrammarCard[] = [
         {
           pre: '다음 역에서 3호선',
           post: '가능합니다.',
-          options: ["에 타기가", "으로 갈아타기가", "을 갈아타기가"],
+          options: ["에 타기가", "으로 갈아타기가", "에서 갈아타기가"],
           answer: 1,
-          explanation: '(으)로 갈아타기 = 换乘到……："下一站可换乘3号线。"',
+          explanation: '(으)로 갈아타기 = 换乘到3号线（强调换到哪条线）。에 타기（타다用을/를，不用에）、에서 갈아타기（3호선是目标线路而非地点，不用 에서）都不对。',
         },
         {
-          pre: '여기서 버스를',
+          pre: '지하철을 타고 오다가 여기서 버스로',
           post: '가야 해요.',
-          options: ["갈아타고", "내리고", "타고"],
+          options: ["갈아타고", "내려서", "타고"],
           answer: 0,
-          explanation: '갈아타고 가다 = 换乘后去……',
+          explanation: '坐着地铁过来、在这里换成公交→버스로 갈아타고 가야 해요。내려서（下车）、타고（单纯乘坐）都不含"从一种交通工具换到另一种"的换乘义。',
         },
       ],
     },
@@ -1770,7 +1789,7 @@ export const grammarCardsP5: GrammarCard[] = [
       },
       {
         ko: '교통수단 + (으)로 갈아타요',
-        zh: '换成……（방향 강조）',
+        zh: '换成……（强调方向）',
         tokens: [
           { text: '교통수단', role: 'plain' },
           { text: '(으)로', role: 'plain' },
@@ -1804,6 +1823,7 @@ export const grammarCardsP5: GrammarCard[] = [
       { type: 'vocab', text: '换乘次数表达', examples: '한 번 갈아타요（换乘一次）/ 두 번 갈아타야 해요（要换乘两次）' },
       { type: 'example', text: '교재 예문：버스에서 지하철로 갈아타요 / 학교에 가려면 지하철로 갈아타야 해요 / 콘서트장에 가려면 두 번 갈아타야 해요' },
       { type: 'example', text: '추가 교재 예문：텐진에서 비행기로 갈아타요（在天津换乘飞机）' },
+      { type: 'compare', text: '中文"换乘"一个词，韩语两种选法看你说不说清"换成哪个"：点名换成什么目标（哪条线/哪种工具）用 (으)로，常跟 에서 一起（버스에서 지하철로）；只泛说换乘某类工具、不点目标时用 을/를（지하철을 갈아타요）。拿不准就用 (으)로，最不会错。', examples: '버스에서 지하철로 갈아타요（点名换成地铁）↔ 지하철을 갈아타요（泛说换地铁）' },
     ],
     cardExamples: [
       {
@@ -1880,7 +1900,7 @@ export const grammarCardsP5: GrammarCard[] = [
   <div class='ov-sec'><span class='badge' style='background:#ff7fa8;color:white'>B로 갈아타요</span> 换成地铁：지하철로 갈아타요</div>
   <div class='ov-sec'><span class='badge' style='background:#6b7ff0;color:white'>A에서 B로</span> 从公交换地铁</div>
   <div class='ov-sec'><span class='badge' style='background:#2db89b;color:white'>N번 갈아타야 해요</span> 换乘N次</div>
-  <div class='ov-sec'><span class='badge' style='background:#e05555;color:white'>주의</span> 타다（乘坐）≠ 갈아타다（換乘）</div>
+  <div class='ov-sec'><span class='badge' style='background:#e05555;color:white'>주의</span> 타다（乘坐）≠ 갈아타다（换乘）</div>
 </div>`,
     linkedGrammarIds: ['g9'],
   },
@@ -2012,9 +2032,10 @@ export const grammarCardsP5: GrammarCard[] = [
       { type: 'vocab', text: '后句常见搭配', examples: '잠들다 / 울다 / 웃다 / 만나다 / 보다（中断/切换/意外/发现）' },
       { type: 'compare', text: '-다가 vs -고：-고 是A完成后B；-다가 是做A途中B发生，前句动作未完成' },
       { type: 'example', text: '교재 예문：공부하다가 잠들었어요 / 드라마를 보다가 울었어요 / 길을 걷다가 친구를 만났어요 / 노래를 듣다가 가사를 봤어요' },
-      { type: 'usage', text: '-다가 方向转换：常与이동动词搭配', examples: '먼저 5번 버스를 타고 가다가 명동역에서 내리세요' },
+      { type: 'usage', text: '-다가 方向转换：常与移动动词搭配', examples: '먼저 5번 버스를 타고 가다가 명동역에서 내리세요（先坐5路公交，中途在明洞站下车。）' },
       { type: 'usage', text: '-다가 动作中断', examples: '똑바로 가다가 저기 백화점에서 내려 주세요（一直走，在那个百货店下）' },
       { type: 'note', text: '前后主语一致：-다가 前后主语必须是同一个人/物' },
+      { type: 'note', text: '进阶提醒：动词过去式词干 + -다가（即 -았/었다가）意思完全不同——不是"途中"，而是"先做完 A，再转向/回头做 B"。가다가（去的路上、途中）和 갔다가（去了以后又…）只差一个字，意思两样。这节课先掌握"途中变化"的 -다가，완료형 -았/었다가 后面章节详学。', examples: '가다가 친구를 만났어요（去的路上遇见了朋友）↔ 학교에 갔다가 왔어요（去了学校又回来了）' },
     ],
     cardExamples: [
       {
@@ -2074,7 +2095,7 @@ export const grammarCardsP5: GrammarCard[] = [
       { wrong: '공부하다가 밥을 먹어요.', correct: '공부하고 밥을 먹어요.', note: '只想表达"先 A 后 B"的顺序时用 -고。-다가 暗示中途变化（学到一半改去吃饭），两种场景不同。' },
       { wrong: '듣다가 노래를 봤어요.', correct: '듣다가 가사를 봤어요.', note: '听歌时看歌词才合逻辑，보다 对象是 가사（歌词）；본 노래（看歌）语义不通。' },
       { wrong: '공부하다가 계속 공부했어요', correct: '공부하다가 잠들었어요', note: '-다가 后句应有变化、中断或意外，不能前后完全无关或单调延续。' },
-      { wrong: '먹다가 그만뒀어요. (完成后想说停下)', correct: '먹다가 그만뒀어요.（吃到一半停了）/ 먹고 그만뒀어요.（吃完后停了）', note: '注意场景：-다가 是动作中断；-고 是动作完成。' },
+      { wrong: '먹고 그만뒀어요.', correct: '먹다가 그만뒀어요.', note: '表动作中途转换用 -다가，用 -고 会变成"做完再…"。' },
     ],
     quickTable: {
       title: '-다가 변형표',
@@ -2144,11 +2165,11 @@ export const grammarCardsP5: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: 'L01 -(으)면：如果……；-(으)려면：想要……的话（目标조건）', examples: '시간이 있으면 가요 / 잘하려면 매일 연습해야 해요' },
+      { type: 'rule', text: 'L01 -(으)면：如果……；-(으)려면：想要……的话（目标条件）', examples: '시간이 있으면 가요 / 잘하려면 매일 연습해야 해요' },
       { type: 'rule', text: 'L02 못/-지 못하다：客观做不到；안/-지 않다：主观不想做', examples: '피곤해서 못 가요 / 오늘은 안 가요' },
       { type: 'rule', text: 'L03 -(으)려고 해요：打算做；아마 -을/ㄹ 거예요：大概会……', examples: '한국에 가려고 해요 / 아마 비가 올 거예요' },
       { type: 'rule', text: 'L04 이/가 아니라：不是……（名词纠正）；-는 게 아니라：不是在做……（动词纠正）', examples: '학생이 아니라 선생님이에요 / 노는 게 아니라 공부해요' },
-      { type: 'rule', text: 'L05 动词现在冠词형：-는；动词过去：-은/ㄴ；形容词：-은/ㄴ；将来：-을/ㄹ', examples: '먹는 사람 / 먹은 음식 / 예쁜 꽃 / 먹을 것' },
+      { type: 'rule', text: 'L05 动词现在冠词形：-는；动词过去：-은/ㄴ；形容词：-은/ㄴ；将来：-을/ㄹ', examples: '먹는 사람 / 먹은 음식 / 예쁜 꽃 / 먹을 것' },
       { type: 'rule', text: 'L06 -아/어/여 주세요：请帮我做；-지요?/-죠?：对吧？（确认）', examples: '도와주세요 / 한국 사람이지요?' },
       { type: 'rule', text: 'L07 전화번호：공（0）, 일이삼...으로 읽기；시간：에（时刻）/부터…까지（时段）', examples: '010-1234-5678 / 세 시에 / 두 시부터 네 시까지' },
       { type: 'rule', text: 'L08 을/를 타다：乘坐；타고 가다/오다：坐着去/来；(으)로 가다：用某方式去', examples: '지하철을 타요 / 버스를 타고 가요 / 택시로 가요' },
@@ -2163,7 +2184,7 @@ export const grammarCardsP5: GrammarCard[] = [
           { text: '노래를', role: 'object' },
           { text: '들어요', role: 'verb' },
         ],
-        zh: '如果有시간，就听歌。',
+        zh: '如果有时间，就听歌。',
         swapWords: ['있으면', '없으면', '많으면'],
       },
       {
@@ -2173,7 +2194,7 @@ export const grammarCardsP5: GrammarCard[] = [
           { text: '따라 하지', role: 'verb' },
           { text: '못해요', role: 'verb' },
         ],
-        zh: '因为발음快，跟不上。',
+        zh: '因为发音快，跟不上。',
         swapWords: ['따라 하지 못해요', '이해하지 못해요', '외우지 못해요'],
 
         swapRole: 'verb',
@@ -2208,7 +2229,7 @@ export const grammarCardsP5: GrammarCard[] = [
       { icon: '🎵', context: 'KPOP 跟唱', ko: '노래를 듣다가 가사를 봤어요.', zh: '听歌听着听着看了歌词。' },
       { icon: '🚇', context: '交通换乘', ko: '버스에서 지하철로 갈아타요.', zh: '从公交换乘地铁。' },
       { icon: '💬', context: '礼貌请求', ko: '다시 말해 주세요.', zh: '请再说一遍。' },
-      { icon: '📖', context: '冠词修饰', ko: '오늘 배울 문법이 재미있어요.', zh: '今天要学的문법很有意思。' },
+      { icon: '📖', context: '冠词修饰', ko: '오늘 배울 문법이 재미있어요.', zh: '今天要学的语法很有意思。' },
       { icon: '🚫', context: '否定纠正', ko: '외우는 게 아니라 이해해야 해요.', zh: '不是背，而是要理解。' },
     ],
     mistakes: [

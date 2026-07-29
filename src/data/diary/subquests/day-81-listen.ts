@@ -1,0 +1,29 @@
+import type { ListenSubQuestData } from '@/types/tori-subquest';
+
+/** Day 81 · 3-2 귀 트이기 · N(이)면 / ~(으)면 · Minji와 냉전 */
+export const day81Listen: ListenSubQuestData = {
+  day: 21, level: 'advanced', idx: 2, kind: 'listen',
+  koTitle: '귀 트이기',
+  subtitle: '냉전 3일 · 진짜 친구면 먼저 가',
+
+  meaning: [
+    { id: 'd81-l2-m1', audioKo: '진짜 친구면 먼저 가.',                                          choices: [{ text: '真朋友的话就先去（低头）。',              correct: true }, { text: '不是朋友就别去。',                  correct: false }, { text: '朋友先走了。',                      correct: false }, { text: '和朋友一起去。',                    correct: false }], explain: 'N(이)면 · 身份条件 · Junho 原话' },
+    { id: 'd81-l2-m2', audioKo: '자존심보다 우정이 커요.',                                        choices: [{ text: '友情比自尊大。',                        correct: true }, { text: '自尊比友情大。',                    correct: false }, { text: '两个一样。',                        correct: false }, { text: '都不重要。',                        correct: false }], explain: '~보다 · 比较' },
+    { id: 'd81-l2-m3', audioKo: '작은 오해에서 시작됐어요.',                                      choices: [{ text: '从小误会开始的。',                      correct: true }, { text: '没有误会。',                        correct: false }, { text: '故意吵的。',                        correct: false }, { text: '误会解开了。',                      correct: false }], explain: '오해에서 시작되다' },
+    { id: 'd81-l2-m4', audioKo: '삼 일의 침묵을 깼어요.',                                          choices: [{ text: '打破了3天的沉默。',                      correct: true }, { text: '沉默了3天。',                      correct: false }, { text: '保持沉默。',                        correct: false }, { text: '不想说话。',                        correct: false }], explain: '침묵을 깨다' },
+    { id: 'd81-l2-m5', audioKo: '오해면 풀면 돼요.',                                              choices: [{ text: '是误会的话解开就好。',                  correct: true }, { text: '误会不能解开。',                    correct: false }, { text: '不是误会。',                        correct: false }, { text: '误会越来越深。',                    correct: false }], explain: 'N면 + V(으)면 双重条件' },
+  ],
+
+  cloze: [
+    { id: 'd81-l2-c1', audioKo: '진짜 친구면 먼저 가.',   clozeParts: ['진짜 ', ' 먼저 가.'],   choices: [{ text: '친구면', correct: true }, { text: '친구이면',    correct: false }, { text: '친구으면',    correct: false }, { text: '친구라서', correct: false }], explain: '친구(无收音) + 면' },
+    { id: 'd81-l2-c2', audioKo: '학생이면 공부해야 돼요.',   clozeParts: ['', ' 공부해야 돼요.'],   choices: [{ text: '학생이면', correct: true }, { text: '학생면',  correct: false }, { text: '학생으면',    correct: false }, { text: '학생라면', correct: false }], explain: '학생(有收音) + 이면' },
+    { id: 'd81-l2-c3', audioKo: '자존심보다 우정이 커요.',      clozeParts: ['자존심', ' 우정이 커요.'], choices: [{ text: '보다',     correct: true }, { text: '처럼',      correct: false }, { text: '마다',      correct: false }, { text: '밖에',      correct: false }], explain: '~보다 · 比较' },
+    { id: 'd81-l2-c4', audioKo: '삼 일의 침묵을 깼어요.',          clozeParts: ['삼 일의 침묵', ' 깼어요.'],             choices: [{ text: '을', correct: true }, { text: '이', correct: false }, { text: '에', correct: false }, { text: '은', correct: false }], explain: '침묵 + 宾格 을' },
+  ],
+
+  reply: [
+    { id: 'd81-l2-r1', audioKo: '너네 두 명 진짜 왜 그래?',                                          promptZh: 'Junho 问你俩到底怎么了。你想说"从小误会开始，现在尴尬到说不出话"，最自然的一句？',                choices: [{ text: '작은 오해에서 시작됐어. 근데 이제 어색해서 말도 못 걸어.',                                          correct: true }, { text: '몰라.',                                  correct: false }, { text: '얼마예요?',                              correct: false }, { text: '싫어.',                                  correct: false }], explain: '오해에서 시작되다 + 어색해서' },
+    { id: 'd81-l2-r2', audioKo: '먼저 사과하기 싫지?',                                    promptZh: '朋友问你不想先道歉吧。你想说"是真朋友的话，我先去是对的"，最自然的一句？',                    choices: [{ text: '진짜 친구면 내가 먼저 가는 게 맞아.',                                          correct: true }, { text: '민지가 먼저 와야 돼.',                    correct: false }, { text: '얼마예요?',                              correct: false }, { text: '몰라.',                                  correct: false }], explain: 'N(이)면 · 身份条件' },
+    { id: 'd81-l2-r3', audioKo: '자존심 안 상해?',                                        promptZh: 'Junho 问你自尊不受伤吗。你想说"友情比自尊大"，最自然的一句？',                        choices: [{ text: '상하지. 근데 자존심보다 우정이 크잖아.',                                  correct: true }, { text: '아니, 자존심이 제일 커.',                    correct: false }, { text: '얼마예요?',                              correct: false }, { text: '몰라.',                                  correct: false }], explain: '~보다 + ~잖아' },
+  ],
+};

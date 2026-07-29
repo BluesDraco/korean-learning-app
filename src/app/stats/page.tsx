@@ -1,22 +1,18 @@
-'use client';
+'use client'
 
 import { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import {
   BarChart3, BookOpen, Bookmark, TrendingUp, Loader2, Flame, Zap,
-  Award, Star, Target, Brain, AlertTriangle, Activity, ArrowLeft,
+  Target, Brain, AlertTriangle, Activity, ArrowLeft,
 } from 'lucide-react';
-import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, PieChart, Pie, Cell,
-  RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar,
-  Area, AreaChart,
-} from 'recharts';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import { useSmartBack } from '@/lib/useSmartBack';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 import { db } from '@/lib/db';
-import { ACHIEVEMENT_DEFS } from '@/types';
 import { memoryHealthScore, retentionDistribution, generateCurvePoints, wordStability, atRiskWords, type RetentionBucket } from '@/lib/forgetting-curve';
-import type { Word, Achievement, MasteryLevel, UserProfile } from '@/types';
+import type { Word, MasteryLevel, UserProfile } from '@/types';
 
 interface Stats {
   totalWords: number;
@@ -38,7 +34,14 @@ interface Stats {
   totalSavedItems: number;
 }
 
-const COLORS = ['var(--text-muted)', 'var(--color-highlight)', 'var(--pink-primary)', 'var(--mint-soft)'];
+// 图表用 dynamic({ ssr:false }) 懒加载，把 recharts(含 d3) 移出 /stats 首屏 bundle。
+const chartLoading = () => <div style={{ height: 200 }} className="flex items-center justify-center"><Loader2 size={20} className="animate-spin text-[var(--text-muted)]" /></div>;
+const WeekReviewChart = dynamic(() => import('./StatsCharts').then((m) => m.WeekReviewChart), { ssr: false, loading: chartLoading });
+const MasteryPieChart = dynamic(() => import('./StatsCharts').then((m) => m.MasteryPieChart), { ssr: false, loading: chartLoading });
+const SrsBinsChart = dynamic(() => import('./StatsCharts').then((m) => m.SrsBinsChart), { ssr: false, loading: chartLoading });
+const SkillsRadarChart = dynamic(() => import('./StatsCharts').then((m) => m.SkillsRadarChart), { ssr: false, loading: chartLoading });
+const RetentionBucketsChart = dynamic(() => import('./StatsCharts').then((m) => m.RetentionBucketsChart), { ssr: false, loading: chartLoading });
+const ForgettingCurveChart = dynamic(() => import('./StatsCharts').then((m) => m.ForgettingCurveChart), { ssr: false, loading: chartLoading });
 
 function totalXpForLevel(level: number): number {
   let total = 0;
@@ -50,8 +53,9 @@ function totalXpForLevel(level: number): number {
 
 export default function StatsPage() {
   const router = useRouter();
+  const smartBack = useSmartBack('/mine');
+  const { lang } = useLang();
   const [stats, setStats] = useState<Stats | null>(null);
-  const [achievements, setAchievements] = useState<Achievement[]>([]);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -59,12 +63,10 @@ export default function StatsPage() {
     let cancelled = false;
     const load = async () => {
       try {
-      const [words, sessions, dictationRecords, shadowingRecords, achs, p, articleProgress] = await Promise.all([
+      const [words, sessions, dictationRecords, p, articleProgress] = await Promise.all([
         db.words.orderBy('id').limit(3000).toArray(),
         db.reviewSessions.orderBy('date').reverse().limit(1000).toArray(),
         db.dictationRecords.orderBy('id').limit(1000).toArray(),
-        db.shadowingRecords.orderBy('id').limit(1000).toArray(),
-        db.achievements.toArray(),
         db.userProfiles.get('main'),
         db.userArticleProgress.orderBy('id').limit(1000).toArray(),
       ]);
@@ -76,7 +78,7 @@ export default function StatsPage() {
       const masteredWords = words.filter((w) => w.mastery === 'mastered').length;
       const totalReviews = sessions.reduce((s, r) => s + r.wordsReviewed, 0);
       const totalDictations = dictationRecords.length;
-      const totalShadowings = shadowingRecords.length;
+      const totalShadowings = 0;
       const todayReviews = sessions.filter((s) => s.date >= todayStart).reduce((s, r) => s + r.wordsReviewed, 0);
       const totalXp = p ? totalXpForLevel(p.level) + p.xp : 0;
 
@@ -94,10 +96,10 @@ export default function StatsPage() {
       const masteryCount: Record<MasteryLevel, number> = { new: 0, learning: 0, reviewing: 0, mastered: 0 };
       words.forEach((w) => { masteryCount[w.mastery]++; });
       const masteryDistribution = [
-        { name: '新词', value: masteryCount.new },
-        { name: '学习中', value: masteryCount.learning },
-        { name: '复习中', value: masteryCount.reviewing },
-        { name: '已掌握', value: masteryCount.mastered },
+        { name: 'stats.mastery_new', value: masteryCount.new },
+        { name: 'stats.mastery_learning', value: masteryCount.learning },
+        { name: 'stats.mastery_reviewing', value: masteryCount.reviewing },
+        { name: 'stats.mastery_mastered', value: masteryCount.mastered },
       ];
 
       // SRS level bins
@@ -121,12 +123,12 @@ export default function StatsPage() {
       const grammarScore = Math.min(100, Math.round((masteredWords / Math.max(1, totalWords)) * 80));
       const dailyScore = p ? Math.min(100, p.streak * 5) : 0;
       const skills = [
-        { skill: '词汇量', score: vocabScore, fullMark: 100 },
-        { skill: '听力', score: listeningScore, fullMark: 100 },
-        { skill: '口语', score: speakingScore, fullMark: 100 },
-        { skill: '掌握率', score: reviewScore, fullMark: 100 },
-        { skill: '语法', score: grammarScore, fullMark: 100 },
-        { skill: '坚持', score: dailyScore, fullMark: 100 },
+        { skill: 'stats.skill_vocab', score: vocabScore, fullMark: 100 },
+        { skill: 'stats.skill_listening', score: listeningScore, fullMark: 100 },
+        { skill: 'stats.skill_speaking', score: speakingScore, fullMark: 100 },
+        { skill: 'stats.skill_mastery', score: reviewScore, fullMark: 100 },
+        { skill: 'stats.skill_grammar', score: grammarScore, fullMark: 100 },
+        { skill: 'stats.skill_persistence', score: dailyScore, fullMark: 100 },
       ];
 
       const healthScore = memoryHealthScore(words);
@@ -143,7 +145,6 @@ export default function StatsPage() {
 
       if (cancelled) return;
       setStats({ totalWords, masteredWords, totalReviews, totalDictations, totalShadowings, todayReviews, weekReviews, masteryDistribution, srsBins, totalXp, skills, healthScore, retentionBuckets, curvePoints, atRisk, totalRead, totalSavedItems });
-      setAchievements(achs);
       setProfile(p || null);
       if (!cancelled) setLoading(false);
       } catch {
@@ -164,28 +165,25 @@ export default function StatsPage() {
 
   if (!stats) return null;
 
-  const earnedTypes = new Set<string>(achievements.map((a) => a.type));
-  const achievementEntries = Object.entries(ACHIEVEMENT_DEFS) as [string, { title: string; description: string; icon: string }][];
-
   const xpPercent = profile
-    ? Math.min(100, Math.round((profile.xp / profile.xpToNextLevel) * 100))
+    ? Math.min(100, Math.round((profile.xp / Math.max(1, profile.xpToNextLevel)) * 100))
     : 0;
 
   return (
-    <div className="py-4 space-y-4 max-w-2xl mx-auto md:max-w-3xl">
+    <div className="py-4 space-y-4 max-w-2xl mx-auto md:max-w-none">
       {/* Header */}
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
-          <Link href="/mine" className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"><ArrowLeft size={20} /></Link>
+          <button onClick={smartBack} className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors bg-transparent border-none p-0 cursor-pointer"><ArrowLeft size={20} /></button>
           <div>
-            <h1 className="text-2xl font-bold text-[var(--text-primary)]">学习统计</h1>
-            <p className="text-[var(--text-secondary)] text-sm mt-1">追踪你的学习进度与成就</p>
+            <h1 className="text-2xl font-bold text-[var(--text-primary)]">{t('stats.title', lang)}</h1>
+            <p className="text-[var(--text-secondary)] text-sm mt-1">{t('stats.subtitle', lang)}</p>
           </div>
         </div>
         {profile && (
           <div className="shrink-0 bg-[var(--bg-input)] rounded-xl px-4 py-2 text-center">
             <div className="text-[var(--pink-primary)] font-bold text-lg">{profile.level}</div>
-            <div className="text-[13px] text-[var(--text-secondary)]">等级</div>
+            <div className="text-[13px] text-[var(--text-secondary)]">{t('stats.level_badge', lang)}</div>
           </div>
         )}
       </div>
@@ -198,17 +196,17 @@ export default function StatsPage() {
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <Zap size={18} className="text-[var(--peach-soft)]" />
-                <span className="text-sm font-medium text-[var(--text-primary)]">等级进度</span>
+                <span className="text-sm font-medium text-[var(--text-primary)]">{t('stats.level_progress', lang)}</span>
               </div>
               <span className="text-xs text-[var(--text-muted)]">Lv.{profile.level}</span>
             </div>
             <div className="flex items-baseline gap-2 mb-3">
               <span className="text-3xl font-bold text-[var(--text-primary)]">{stats.totalXp.toLocaleString()}</span>
-              <span className="text-sm text-[var(--text-muted)]">总 XP</span>
+              <span className="text-sm text-[var(--text-muted)]">{t('stats.total_xp', lang)}</span>
             </div>
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs text-[var(--text-secondary)]">
-                {xpPercent}% 到等级 {profile.level + 1}
+                {t('stats.xp_to_next', lang, { pct: xpPercent, next: profile.level + 1 })}
               </span>
               <span className="text-xs text-[var(--text-muted)]">{profile.xp}/{profile.xpToNextLevel} XP</span>
             </div>
@@ -225,18 +223,18 @@ export default function StatsPage() {
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <Flame size={18} className={profile.streak > 0 ? 'text-[var(--peach-soft)]' : 'text-[var(--text-muted)]'} />
-                <span className="text-sm font-medium text-[var(--text-primary)]">学习连续</span>
+                <span className="text-sm font-medium text-[var(--text-primary)]">{t('stats.streak_title', lang)}</span>
               </div>
-              {profile.streak >= 7 && <span className="text-xs text-[var(--peach-soft)] font-medium">火爆!</span>}
+              {profile.streak >= 7 && <span className="text-xs text-[var(--peach-soft)] font-medium">{t('stats.streak_hot', lang)}</span>}
             </div>
             <div className="flex items-baseline gap-2 mb-1">
               <span className={`text-3xl font-bold ${profile.streak > 0 ? 'text-[var(--peach-soft)]' : 'text-[var(--text-secondary)]'}`}>
                 {profile.streak}
               </span>
-              <span className="text-sm text-[var(--text-muted)]">天</span>
+              <span className="text-sm text-[var(--text-muted)]">{t('common.days', lang)}</span>
             </div>
             <p className="text-xs text-[var(--text-muted)]">
-              最长连续 {profile.longestStreak} 天
+              {t('stats.longest_streak', lang, { n: profile.longestStreak })}
             </p>
           </div>
         </div>
@@ -245,15 +243,15 @@ export default function StatsPage() {
       {/* Summary Cards - Core Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {[
-          { label: '总单词', value: stats.totalWords, icon: BookOpen, color: 'text-[var(--pink-primary)]', bg: 'bg-[var(--pink-primary)]/10' },
-          { label: '已掌握', value: stats.masteredWords, icon: TrendingUp, color: 'text-[var(--mint-soft)]', bg: 'bg-[var(--mint-soft)]/15' },
-          { label: '连续天数', value: profile?.streak ?? 0, icon: Flame, color: 'text-[var(--peach-soft)]', bg: 'bg-[var(--peach-soft)]/15' },
-          { label: '总 XP', value: stats.totalXp.toLocaleString(), icon: Zap, color: 'text-[var(--peach-soft)]', bg: 'bg-yellow-500/10' },
+          { label: 'stats.card_total_words', value: stats.totalWords, icon: BookOpen, color: 'text-[var(--pink-primary)]', bg: 'bg-[var(--pink-primary)]/10' },
+          { label: 'stats.card_mastered', value: stats.masteredWords, icon: TrendingUp, color: 'text-[var(--mint-soft)]', bg: 'bg-[var(--mint-soft)]/15' },
+          { label: 'stats.card_streak', value: profile?.streak ?? 0, icon: Flame, color: 'text-[var(--peach-soft)]', bg: 'bg-[var(--peach-soft)]/15' },
+          { label: 'stats.card_xp', value: stats.totalXp.toLocaleString(), icon: Zap, color: 'text-[var(--peach-soft)]', bg: 'bg-yellow-500/10' },
         ].map(({ label, value, icon: Icon, color, bg }) => (
           <div key={label} className={`${bg} rounded-xl p-4`}>
             <Icon size={18} className={color} />
             <div className={`text-2xl font-bold mt-2 ${color}`}>{value}</div>
-            <div className="text-[var(--text-secondary)] text-xs mt-1">{label}</div>
+            <div className="text-[var(--text-secondary)] text-xs mt-1">{t(label, lang)}</div>
           </div>
         ))}
       </div>
@@ -261,16 +259,16 @@ export default function StatsPage() {
       {/* Secondary Stats Row */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {[
-          { label: '总复习次数', value: stats.totalReviews, icon: BarChart3, color: 'text-[var(--purple-soft)]' },
-          { label: '今日复习', value: stats.todayReviews, icon: Target, color: 'text-[var(--blue-soft)]', href: '/review' },
-          { label: '已读文章', value: stats.totalRead, icon: BookOpen, color: 'text-[var(--mint-soft)]', href: '/reading' },
-          { label: '收藏词句', value: stats.totalSavedItems, icon: Bookmark, color: 'text-[var(--purple-soft)]' },
+          { label: 'stats.card_total_reviews', value: stats.totalReviews, icon: BarChart3, color: 'text-[var(--purple-soft)]' },
+          { label: 'stats.card_today_reviews', value: stats.todayReviews, icon: Target, color: 'text-[var(--blue-soft)]', href: '/review' },
+          { label: 'stats.card_read', value: stats.totalRead, icon: BookOpen, color: 'text-[var(--mint-soft)]', href: '/reading' },
+          { label: 'stats.card_saved', value: stats.totalSavedItems, icon: Bookmark, color: 'text-[var(--purple-soft)]' },
         ].map(({ label, value, icon: Icon, color, href }) => {
           const card = (
             <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-4 text-center">
               <Icon size={16} className={`${color} mx-auto mb-1`} />
               <div className={`text-xl font-bold ${color}`}>{value}</div>
-              <div className="text-[13px] text-[var(--text-muted)] mt-0.5">{label}</div>
+              <div className="text-[13px] text-[var(--text-muted)] mt-0.5">{t(label, lang)}</div>
             </div>
           );
           if (href) {
@@ -282,7 +280,7 @@ export default function StatsPage() {
               >
                 <Icon size={16} className={`${color} mx-auto mb-1`} />
                 <div className={`text-xl font-bold ${color}`}>{value}</div>
-                <div className="text-[13px] text-[var(--text-muted)] mt-0.5">{label}</div>
+                <div className="text-[13px] text-[var(--text-muted)] mt-0.5">{t(label, lang)}</div>
               </button>
             );
           }
@@ -292,89 +290,34 @@ export default function StatsPage() {
 
       {/* Weekly Review Chart */}
       <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-5">
-        <h3 className="text-sm font-medium text-[var(--text-primary)] mb-4">本周复习</h3>
-        <ResponsiveContainer width="100%" height={200}>
-          <BarChart data={stats.weekReviews}>
-            <CartesianGrid strokeDasharray="3 3" stroke="var(--border-default)" />
-            <XAxis dataKey="date" tick={{ fill: 'var(--text-muted)', fontSize: 12 }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fill: 'var(--text-muted)', fontSize: 12 }} axisLine={false} tickLine={false} allowDecimals={false} />
-            <Tooltip contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border-default)', borderRadius: '8px', color: 'var(--text-primary)' }} />
-            <Bar dataKey="count" fill="var(--pink-primary)" radius={[4, 4, 0, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
+        <h3 className="text-sm font-medium text-[var(--text-primary)] mb-4">{t('stats.chart_week', lang)}</h3>
+        <WeekReviewChart data={stats.weekReviews} />
       </div>
 
       {/* Two-column charts */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Mastery Pie */}
         <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-5">
-          <h3 className="text-sm font-medium text-[var(--text-primary)] mb-4">掌握分布</h3>
-          <ResponsiveContainer width="100%" height={220}>
-            <PieChart>
-              <Pie data={stats.masteryDistribution} cx="50%" cy="50%" innerRadius={50} outerRadius={80} paddingAngle={2} dataKey="value">
-                {stats.masteryDistribution.map((_, i) => (
-                  <Cell key={i} fill={COLORS[i % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border-default)', borderRadius: '8px', color: 'var(--text-primary)' }} />
-            </PieChart>
-          </ResponsiveContainer>
-          <div className="flex flex-wrap gap-3 justify-center mt-2">
-            {stats.masteryDistribution.map((item, i) => (
-              <div key={item.name} className="flex items-center gap-1.5 text-xs text-[var(--text-secondary)]">
-                <div className="w-3 h-3 rounded-sm" style={{ background: COLORS[i % COLORS.length] }} />
-                {item.name} ({item.value})
-              </div>
-            ))}
-          </div>
+          <h3 className="text-sm font-medium text-[var(--text-primary)] mb-4">{t('stats.chart_mastery', lang)}</h3>
+          <MasteryPieChart data={stats.masteryDistribution} />
         </div>
 
         {/* SRS Level Bars */}
         <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-5">
-          <h3 className="text-sm font-medium text-[var(--text-primary)] mb-4">SRS 等级分布</h3>
-          <ResponsiveContainer width="100%" height={220}>
-            <BarChart data={stats.srsBins} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--border-default)" />
-              <XAxis type="number" tick={{ fill: 'var(--text-muted)', fontSize: 12 }} axisLine={false} tickLine={false} allowDecimals={false} />
-              <YAxis dataKey="level" type="category" tick={{ fill: 'var(--text-muted)', fontSize: 12 }} axisLine={false} tickLine={false} width={40} />
-              <Tooltip contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border-default)', borderRadius: '8px', color: 'var(--text-primary)' }} />
-              <Bar dataKey="count" fill="var(--purple-soft)" radius={[0, 4, 4, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
+          <h3 className="text-sm font-medium text-[var(--text-primary)] mb-4">{t('stats.chart_srs', lang)}</h3>
+          <SrsBinsChart data={stats.srsBins} />
         </div>
       </div>
 
       {/* Skills Radar Chart */}
       <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-5">
-        <h3 className="text-sm font-medium text-[var(--text-primary)] mb-4">能力雷达图</h3>
-        <ResponsiveContainer width="100%" height={320}>
-          <RadarChart data={stats.skills} cx="50%" cy="50%" outerRadius="70%">
-            <PolarGrid stroke="var(--border-color)" strokeDasharray="3 3" />
-            <PolarAngleAxis
-              dataKey="skill"
-              tick={{ fill: 'var(--text-secondary)', fontSize: 12 }}
-            />
-            <PolarRadiusAxis
-              angle={30}
-              domain={[0, 100]}
-              tick={{ fill: 'var(--text-muted)', fontSize: 10 }}
-              axisLine={false}
-            />
-            <Radar
-              name="能力值"
-              dataKey="score"
-              stroke="var(--pink-primary)"
-              fill="var(--pink-primary)"
-              fillOpacity={0.2}
-              strokeWidth={2}
-            />
-          </RadarChart>
-        </ResponsiveContainer>
+        <h3 className="text-sm font-medium text-[var(--text-primary)] mb-4">{t('stats.chart_radar', lang)}</h3>
+        <SkillsRadarChart data={stats.skills} />
         <div className="grid grid-cols-3 gap-2 mt-3">
           {stats.skills.map((s) => (
             <div key={s.skill} className="text-center">
               <div className="text-lg font-bold text-[var(--text-primary)]">{s.score}</div>
-              <div className="text-[13px] text-[var(--text-muted)]">{s.skill}</div>
+              <div className="text-[13px] text-[var(--text-muted)]">{t(s.skill, lang)}</div>
             </div>
           ))}
         </div>
@@ -386,7 +329,7 @@ export default function StatsPage() {
         <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-5">
           <div className="flex items-center gap-2 mb-3">
             <Brain size={18} className="text-[var(--purple-soft)]" />
-            <span className="text-sm font-medium text-[var(--text-primary)]">记忆健康度</span>
+            <span className="text-sm font-medium text-[var(--text-primary)]">{t('stats.chart_health', lang)}</span>
           </div>
           <div className="flex items-center gap-4">
             <div className="relative w-20 h-20 shrink-0">
@@ -408,23 +351,23 @@ export default function StatsPage() {
             <div className="flex-1 space-y-2">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-sm bg-[var(--mint-soft)]" />
-                <span className="text-xs text-[var(--text-secondary)]">90%+ 牢固记忆</span>
-                <span className="text-xs font-medium text-[var(--text-primary)] ml-auto">{stats.retentionBuckets[0].count} 词</span>
+                <span className="text-xs text-[var(--text-secondary)]">{t('stats.health_90', lang)}</span>
+                <span className="text-xs font-medium text-[var(--text-primary)] ml-auto">{t('stats.health_words', lang, { n: stats.retentionBuckets[0].count })}</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-sm bg-[var(--blue-soft)]" />
-                <span className="text-xs text-[var(--text-secondary)]">70-90% 正常范围</span>
-                <span className="text-xs font-medium text-[var(--text-primary)] ml-auto">{stats.retentionBuckets[1].count} 词</span>
+                <span className="text-xs text-[var(--text-secondary)]">{t('stats.health_70', lang)}</span>
+                <span className="text-xs font-medium text-[var(--text-primary)] ml-auto">{t('stats.health_words', lang, { n: stats.retentionBuckets[1].count })}</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-sm bg-[var(--peach-soft)]" />
-                <span className="text-xs text-[var(--text-secondary)]">40-70% 需要复习</span>
-                <span className="text-xs font-medium text-[var(--text-primary)] ml-auto">{stats.retentionBuckets[2].count} 词</span>
+                <span className="text-xs text-[var(--text-secondary)]">{t('stats.health_40', lang)}</span>
+                <span className="text-xs font-medium text-[var(--text-primary)] ml-auto">{t('stats.health_words', lang, { n: stats.retentionBuckets[2].count })}</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-sm bg-[var(--color-danger)]" />
-                <span className="text-xs text-[var(--text-secondary)]">&lt;40% 即将遗忘</span>
-                <span className="text-xs font-medium text-[var(--text-primary)] ml-auto">{stats.retentionBuckets[3].count} 词</span>
+                <span className="text-xs text-[var(--text-secondary)]">{t('stats.health_low', lang)}</span>
+                <span className="text-xs font-medium text-[var(--text-primary)] ml-auto">{t('stats.health_words', lang, { n: stats.retentionBuckets[3].count })}</span>
               </div>
             </div>
           </div>
@@ -434,21 +377,9 @@ export default function StatsPage() {
         <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-5">
           <div className="flex items-center gap-2 mb-3">
             <Activity size={18} className="text-[var(--blue-soft)]" />
-            <span className="text-sm font-medium text-[var(--text-primary)]">记忆保持分布</span>
+            <span className="text-sm font-medium text-[var(--text-primary)]">{t('stats.chart_retention', lang)}</span>
           </div>
-          <ResponsiveContainer width="100%" height={180}>
-            <BarChart data={stats.retentionBuckets} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--border-default)" horizontal={false} />
-              <XAxis type="number" tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
-              <YAxis dataKey="label" type="category" tick={{ fill: 'var(--text-secondary)', fontSize: 11 }} axisLine={false} tickLine={false} width={60} />
-              <Tooltip contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border-default)', borderRadius: '8px', color: 'var(--text-primary)' }} />
-              <Bar dataKey="count" radius={[0, 4, 4, 0]}>
-                {stats.retentionBuckets.map((b, i) => (
-                  <Cell key={i} fill={b.color} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
+          <RetentionBucketsChart data={stats.retentionBuckets} />
         </div>
       </div>
 
@@ -457,50 +388,13 @@ export default function StatsPage() {
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <TrendingUp size={18} className="text-[var(--pink-primary)]" />
-            <span className="text-sm font-medium text-[var(--text-primary)]">艾宾浩斯遗忘曲线</span>
+            <span className="text-sm font-medium text-[var(--text-primary)]">{t('stats.chart_curve', lang)}</span>
           </div>
-          <span className="text-xs text-[var(--text-muted)]">基于你的平均记忆稳定度</span>
+          <span className="text-xs text-[var(--text-muted)]">{t('stats.curve_note', lang)}</span>
         </div>
-        <ResponsiveContainer width="100%" height={220}>
-          <AreaChart data={stats.curvePoints}>
-            <defs>
-              <linearGradient id="retentionGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="var(--pink-primary)" stopOpacity={0.3} />
-                <stop offset="100%" stopColor="var(--pink-primary)" stopOpacity={0} />
-              </linearGradient>
-            </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="var(--border-default)" />
-            <XAxis
-              dataKey="day"
-              label={{ value: '距上次复习（天）', position: 'insideBottom', offset: -5, fill: 'var(--text-muted)', fontSize: 11 }}
-              tick={{ fill: 'var(--text-muted)', fontSize: 11 }}
-              axisLine={false}
-              tickLine={false}
-            />
-            <YAxis
-              domain={[0, 100]}
-              label={{ value: '记忆保持率 (%)', angle: -90, position: 'insideLeft', fill: 'var(--text-muted)', fontSize: 11 }}
-              tick={{ fill: 'var(--text-muted)', fontSize: 11 }}
-              axisLine={false}
-              tickLine={false}
-            />
-            <Tooltip
-              contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border-default)', borderRadius: '8px', color: 'var(--text-primary)' }}
-              formatter={(v: any) => [`${v}%`, '记忆保持率']}
-            />
-            <Area
-              type="monotone"
-              dataKey="retention"
-              stroke="var(--pink-primary)"
-              strokeWidth={2}
-              fill="url(#retentionGradient)"
-              dot={false}
-              activeDot={{ r: 4, fill: 'var(--pink-primary)' }}
-            />
-          </AreaChart>
-        </ResponsiveContainer>
+        <ForgettingCurveChart data={stats.curvePoints} />
         <p className="text-xs text-[var(--text-muted)] mt-2">
-          曲线下方的面积越小、下降越快，说明需要更频繁复习。蓝色区域越大越好。
+          {t('stats.curve_hint', lang)}
         </p>
       </div>
 
@@ -509,14 +403,14 @@ export default function StatsPage() {
         <div className="bg-[var(--bg-card)] border border-[var(--color-danger)]/20 rounded-2xl p-5">
           <div className="flex items-center gap-2 mb-3">
             <AlertTriangle size={18} className="text-[var(--color-danger)]" />
-            <span className="text-sm font-medium text-[var(--text-primary)]">即将遗忘的词汇</span>
-            <span className="text-xs text-[var(--text-muted)]">建议尽快复习</span>
+            <span className="text-sm font-medium text-[var(--text-primary)]">{t('stats.atrisk_title', lang)}</span>
+            <span className="text-xs text-[var(--text-muted)]">{t('stats.atrisk_note', lang)}</span>
           </div>
           <div className="flex flex-wrap gap-2">
             {stats.atRisk.map((w) => (
               <button
                 key={w.id}
-                onClick={() => router.push('/review')}
+                onClick={() => router.push(`/review?wordIds=${encodeURIComponent(stats.atRisk.map((a) => a.id).join(','))}`)}
                 className="px-3 py-2 rounded-xl bg-[var(--color-danger)]/5 border border-[var(--color-danger)]/15 text-sm text-[var(--text-primary)] hover:bg-[var(--color-danger)]/10 transition-colors"
               >
                 <span className="font-medium">{w.word}</span>
@@ -527,54 +421,6 @@ export default function StatsPage() {
         </div>
       )}
 
-      {/* Achievements Section */}
-      <div>
-        <div className="flex items-center gap-2 mb-4">
-          <Award size={18} className="text-[var(--peach-soft)]" />
-          <h2 className="text-sm font-medium text-[var(--text-primary)] uppercase tracking-wider">成就徽章</h2>
-          <span className="text-xs text-[var(--text-muted)] ml-1">
-            {achievements.length}/{achievementEntries.length}
-          </span>
-        </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-          {achievementEntries.map(([type, def]) => {
-            const earned = earnedTypes.has(type as string);
-            const earnedData = achievements.find((a) => (a.type as string) === type);
-            return (
-              <div
-                key={type}
-                className={`rounded-xl p-3 text-center border transition-all ${
-                  earned
-                    ? 'bg-[var(--bg-card)] border-[var(--pink-pale)] hover:border-amber-500/50'
-                    : 'bg-[var(--bg-card)]/40 border-[var(--border-color)]/50 opacity-50'
-                }`}
-              >
-                <div className={`text-2xl mb-1.5 ${earned ? '' : 'grayscale'}`}>
-                  {def.icon}
-                </div>
-                <div className={`text-xs font-medium ${earned ? 'text-[var(--text-primary)]' : 'text-[var(--text-muted)]'}`}>
-                  {def.title}
-                </div>
-                <div className={`text-[13px] mt-0.5 line-clamp-2 ${earned ? 'text-[var(--text-secondary)]' : 'text-[var(--text-placeholder)]'}`}>
-                  {def.description}
-                </div>
-                {earned && earnedData ? (
-                  <div className="flex items-center justify-center gap-1 mt-1.5 text-[13px] text-[var(--peach-soft)]/70">
-                    <Star size={10} className="fill-amber-400/70" />
-                    {new Date(earnedData.earnedAt).toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' })}
-                  </div>
-                ) : (
-                  <div className="mt-1.5">
-                    <span className="inline-block text-[13px] text-[var(--text-placeholder)] w-5 h-5 rounded-full border border-[var(--pink-pale)] leading-5">
-                      ?
-                    </span>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </div>
     </div>
   );
 }

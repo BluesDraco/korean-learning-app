@@ -8,9 +8,7 @@ import { Search } from 'lucide-react';
 
 const statusTabs = [
   { key: 'all', label: '全部' },
-  { key: 'active', label: '活跃' },
   { key: 'vip', label: 'VIP' },
-  { key: 'banned', label: '已封禁' },
 ];
 
 export default function AdminUsersPage() {
@@ -97,7 +95,7 @@ export default function AdminUsersPage() {
                 <th className="text-left px-4 py-3 text-xs text-[var(--text-muted)] font-medium">用户</th>
                 <th className="text-left px-4 py-3 text-xs text-[var(--text-muted)] font-medium">邮箱</th>
                 <th className="text-center px-4 py-3 text-xs text-[var(--text-muted)] font-medium">会员</th>
-                <th className="text-center px-4 py-3 text-xs text-[var(--text-muted)] font-medium">学习天数</th>
+                <th className="text-center px-4 py-3 text-xs text-[var(--text-muted)] font-medium">连签</th>
                 <th className="text-center px-4 py-3 text-xs text-[var(--text-muted)] font-medium">经验值</th>
                 <th className="text-center px-4 py-3 text-xs text-[var(--text-muted)] font-medium">单词</th>
                 <th className="text-center px-4 py-3 text-xs text-[var(--text-muted)] font-medium">录音</th>
@@ -123,11 +121,12 @@ export default function AdminUsersPage() {
                   <td className="px-4 py-3 text-xs text-[var(--text-muted)] max-w-[140px] truncate">{u.email || '-'}</td>
                   <td className="px-4 py-3 text-center">
                     <span className={`text-xs px-2 py-0.5 rounded-full ${
+                      u.membershipType === 'lifetime' ? 'bg-amber-50 text-amber-600' :
                       u.membershipType === 'yearly' ? 'bg-purple-50 text-purple-500' :
                       u.membershipType === 'monthly' ? 'bg-blue-50 text-blue-500' :
                       'bg-[var(--bg-input)] text-[var(--text-muted)]'
                     }`}>
-                      {u.membershipType === 'yearly' ? '年付' : u.membershipType === 'monthly' ? '月付' : '免费'}
+                      {u.membershipType === 'lifetime' ? '买断' : u.membershipType === 'yearly' ? '年付' : u.membershipType === 'monthly' ? '月付' : '免费'}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-center text-xs text-[var(--text-secondary)]">{u.studyDays}天</td>

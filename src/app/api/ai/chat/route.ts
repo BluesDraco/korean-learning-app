@@ -1,12 +1,17 @@
 import { NextResponse } from 'next/server';
 import { chatResponseDeepSeek } from '@/lib/deepseek';
-import { getAuthFromCookie } from '@/lib/server/auth';
-import { checkAiRateLimit, recordAiUsage } from '@/lib/server/rate-limit';
+import { getAuthFromCookie, assertActiveUser } from '@/lib/server/auth';
+import { recordAiUsage } from '@/lib/server/rate-limit';
+import { checkAiQuota } from '@/lib/server/membership';
 import { filterContent } from '@/lib/contentFilter';
+
+// 6-26 事故兜底：含鉴权/用户数据的 API 必须 force-dynamic，禁止 Next.js 自动缓存
+export const dynamic = 'force-dynamic';
 
 export async function POST(req: Request) {
   const auth = await getAuthFromCookie();
   if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if (!(await assertActiveUser(auth.userId))) return NextResponse.json({ error: '账号状态异常' }, { status: 403 });
 
   const apiKey = process.env.DEEPSEEK_CHAT_KEY;
   if (!apiKey) {
@@ -14,7 +19,7 @@ export async function POST(req: Request) {
   }
 
   try {
-    const { scenario, context, userMessage } = await req.json();
+    const { scenario, context, userMessage, currentTask, rephraseOf } = await req.json();
     if (!userMessage || typeof userMessage !== 'string') {
       return NextResponse.json({ error: 'Missing userMessage' }, { status: 400 });
     }
@@ -26,16 +31,32 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: chatCheck.reason }, { status: 400 });
     }
 
-    const limit = await checkAiRateLimit(auth.userId, 'chat');
+    // Prompt injection 二次防护：context 里的 user 消息也过一遍
+    // （客户端可能被篡改把越权指令塞进历史）
+    if (Array.isArray(context)) {
+      for (const msg of context) {
+        if (msg?.role === 'user' && typeof msg.content === 'string') {
+          const check = filterContent(msg.content, 'ai_input');
+          if (!check.ok) {
+            return NextResponse.json({ error: '对话历史包含违规内容' }, { status: 400 });
+          }
+        }
+      }
+    }
+    if (typeof rephraseOf === 'string' && rephraseOf.length > 500) {
+      return NextResponse.json({ error: 'rephraseOf too long' }, { status: 400 });
+    }
+
+    const limit = await checkAiQuota(auth.userId, 'chat');
     if (!limit.allowed) {
       return NextResponse.json(
-        { error: '每日AI调用次数已达上限（30次），请明天再试' },
-        { status: 429, headers: { 'X-RateLimit-Limit': '30', 'Retry-After': '86400' } },
+        { error: limit.limit === 0 ? '当前会员档位不含此功能，请升级后使用' : '今日对话次数已达上限，请明天再试或升级会员' },
+        { status: 429, headers: { 'X-RateLimit-Limit': String(limit.limit), 'Retry-After': '86400' } },
       );
     }
 
     const result = await chatResponseDeepSeek(
-      { scenario, context, userMessage },
+      { scenario, context, userMessage, currentTask, rephraseOf },
       apiKey
     );
     await recordAiUsage(auth.userId, 'chat');

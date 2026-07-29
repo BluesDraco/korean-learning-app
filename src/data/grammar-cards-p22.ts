@@ -57,6 +57,8 @@ export const grammarCardsP22: GrammarCard[] = [
       { type: 'usage', text: '后半句常接避免担心的动作或 걱정이에요', examples: '비가 올까 봐 우산을 챙겼어요 / 떨어질까 봐 걱정이에요' },
       { type: 'compare', text: '和 -을 것 같아서 差别：-을까 봐 强调担心，-을 것 같아서 强调推测', examples: '비가 올까 봐 우산을 챙겼어요（担心）/ 비가 올 것 같아서 우산을 챙겼어요（推测）' },
       { type: 'note', text: '常和 걱정하다、두렵다、조마조마하다 等心情词搭配', examples: '떨어질까 봐 걱정돼요 / 늦을까 봐 두려워요' },
+      { type: 'note', text: '后半句只能是"已经采取的行动"或 걱정이에요 这类陈述，不能接命令或提议。想说"怕迟到快走吧"得换 -(으)면 안 되니까', examples: '✗늦을까 봐 서두르세요 → ○늦으면 안 되니까 서두르세요' },
+      { type: 'note', text: '中文"怕不/怕没……"的否定要放进 -을까 봐 从句里（못/안 + 动词 + 을까 봐），别挪到后半句', examples: '怕来不了 → 못 올까 봐 / 怕考不好 → 시험 못 볼까 봐' },
       { type: 'example', text: '비가 올까 봐 / 늦을까 봐 / 시험에 떨어질까 봐' },
     ],
     cardExamples: [
@@ -203,7 +205,7 @@ export const grammarCardsP22: GrammarCard[] = [
     compareLabel: '-을까 봐 vs -을까 하다',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P16 · 第 1 课</div>
+    <div class="ov-hero-label">P22 · 第 1 课</div>
     <div class="ov-hero-title">-을/ㄹ까 봐</div>
     <div class="ov-hero-sub">"怕会……" · 担心+采取行动</div>
   </div>
@@ -292,6 +294,8 @@ export const grammarCardsP22: GrammarCard[] = [
       { type: 'rule', text: '名词 + 일지도 모르다', examples: '학생일지도 몰라요 / 사실일지도 몰라요' },
       { type: 'usage', text: '推测确定性最低，接近"没准儿"、"或许"', examples: '올지도 몰라요（说不定会来）< 올 것 같아요（好像会来）< 올 거예요（会来吧）' },
       { type: 'compare', text: '和 -을 수도 있다 差别：前者主观猜测，后者客观可能性', examples: '올지도 몰라요（我猜）/ 올 수도 있어요（有这种可能）' },
+      { type: 'note', text: '结尾的 모르다 是 르 不规则：说成 몰라요 / 몰랐어요 / 모르겠어요，绝不是 모르어요 / 모르었어요', examples: '갈지도 몰라요 / 갔을지도 몰랐어요' },
+      { type: 'note', text: '中文"说不定"能提到句首单独用，韩语 -을지도 모르다 必须整句作谓语放句末。想在句首点出不确定，加副词 아마 / 어쩌면', examples: '说不定他会来 → 어쩌면 그 사람이 올지도 몰라요' },
       { type: 'example', text: '비가 올지도 몰라요 / 어려울지도 모르겠어요 / 학생일지도 몰라요' },
     ],
     cardExamples: [
@@ -434,7 +438,7 @@ export const grammarCardsP22: GrammarCard[] = [
     compareLabel: '-을지도 모르다 vs -을 수도 있다',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P16 · 第 2 课</div>
+    <div class="ov-hero-label">P22 · 第 2 课</div>
     <div class="ov-hero-title">-을/ㄹ지도 모르다</div>
     <div class="ov-hero-sub">"说不定……" · 最不确定的推测</div>
   </div>
@@ -523,6 +527,8 @@ export const grammarCardsP22: GrammarCard[] = [
       { type: 'usage', text: '强烈否定推测，语气比 안 -을 것이다 更强', examples: '거짓말을 할 리가 없어요（绝不可能说谎）' },
       { type: 'usage', text: '反问形 -을 리가 있어요? 意思等同 -을 리가 없어요', examples: '그게 사실일 리가 있어요?（那怎么可能是真的？）' },
       { type: 'compare', text: '和 -을지도 모르다 完全相反：一个断言不可能，一个说说不定', examples: '갈 리가 없어요（不可能去）↔ 갈지도 몰라요（说不定去）' },
+      { type: 'note', text: '中文"不可能"有两义，别混：-을 리가 없다 是"按道理断定不会（推测）"；能力上"做不到"要用 못 하다 / -을 수 없다', examples: '그가 거짓말할 리가 없어요（断定不会）↔ 저는 그거 못 해요（我做不到）' },
+      { type: 'note', text: '独立成句回应对方说法是高频用法：그럴 리가 없어요 / 그럴 리가!，相当于"不至于吧/怎么可能"', examples: '— 민수가 시험에 떨어졌대. — 그럴 리가 없어요!' },
       { type: 'example', text: '그럴 리가 없어요 / 몰랐을 리가 없어요 / 사실일 리가 있어요?' },
     ],
     cardExamples: [
@@ -664,7 +670,7 @@ export const grammarCardsP22: GrammarCard[] = [
     compareLabel: '-을 리가 없다 vs 안 -을 것이다',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P16 · 第 3 课</div>
+    <div class="ov-hero-label">P22 · 第 3 课</div>
     <div class="ov-hero-title">-을/ㄹ 리가 없다</div>
     <div class="ov-hero-sub">"不可能……" · 强烈否定推测</div>
   </div>
@@ -756,6 +762,8 @@ export const grammarCardsP22: GrammarCard[] = [
       { type: 'usage', text: '陈述自然规律或普遍真理，不用于个别偶然事件', examples: '사람은 실수하기 마련이에요（普遍）/ 오늘 지각하기 마련이에요 ✗（个别）' },
       { type: 'usage', text: '常和 누구나、다들、항상 等强调普遍性的词搭配', examples: '누구나 실수하기 마련이에요 / 다들 힘들기 마련이에요' },
       { type: 'compare', text: '和 -는 법이다 差别：-기 마련이다 偏"自然规律"，-는 법이다 偏"社会道理"', examples: '늙기 마련이에요（生理规律）/ 잘못하면 벌 받는 법이에요（道理规律）' },
+      { type: 'compare', text: '别和 -게 되다 混：-기 마련이다 是"本来必然如此"的通则；-게 되다 是"（因某原因）变成这样"的结果变化', examples: '노력하면 성공하게 마련이에요（必然规律）/ 열심히 하다 보니 성공하게 됐어요（结果变化）' },
+      { type: 'note', text: '主语必须是泛指（사람은 / 누구나），不能拿它讲某一个人的习惯。想说"我总迟到"用普通现在时，别套 마련이다', examples: '누구나 실수하기 마련이에요 ○ / 저는 지각하기 마련이에요 ✗ → 저는 자주 지각해요' },
       { type: 'example', text: '누구나 실수하기 마련이에요 / 나이 들면 늙기 마련이에요 / 노력하면 성공하게 마련이에요' },
     ],
     cardExamples: [
@@ -819,12 +827,12 @@ export const grammarCardsP22: GrammarCard[] = [
       body: '不看收音，所有词类同一接法。',
       headers: ['原形', '词类', '-기 마련이다', '中文'],
       rows: [
-        ['실수하다', '动词', { ko: '실수하기 마련이다', zh: '자연스러운 규칙' }, '难免犯错'],
-        ['늙다', '动词', { ko: '늙기 마련이다', zh: '자연스러운 규칙' }, '难免会老'],
-        ['힘들다', '形容词', { ko: '힘들기 마련이다', zh: '자연스러운 규칙' }, '难免会累'],
-        ['잊다', '动词', { ko: '잊기 마련이다', zh: '자연스러운 규칙' }, '难免会忘'],
-        ['후회하다', '动词', { ko: '후회하기 마련이다', zh: '자연스러운 규칙' }, '难免会后悔'],
-        ['아프다', '形容词', { ko: '아프기 마련이다', zh: '자연스러운 규칙' }, '难免会不适' ],
+        ['실수하다', '动词', { ko: '실수하기 마련이다', zh: '自然会犯错' }, '难免犯错'],
+        ['늙다', '动词', { ko: '늙기 마련이다', zh: '自然会老' }, '难免会老'],
+        ['힘들다', '形容词', { ko: '힘들기 마련이다', zh: '自然会累' }, '难免会累'],
+        ['잊다', '动词', { ko: '잊기 마련이다', zh: '自然会忘' }, '难免会忘'],
+        ['후회하다', '动词', { ko: '후회하기 마련이다', zh: '自然会后悔' }, '难免会后悔'],
+        ['아프다', '形容词', { ko: '아프기 마련이다', zh: '自然会不适' }, '难免会不适' ],
       ],
     },
     specialQuiz: {
@@ -901,11 +909,11 @@ export const grammarCardsP22: GrammarCard[] = [
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">잘못하면 벌을 받는 법이에요.</span><span style="font-size:16px;color:#5a4640">做错了自然要受罚。（道理）</span></div>
   </div>
 </div>
-<div class="reminder-box">两者接近但侧重不同：생리/자연 규칙用 마련이다；도리/이치 用 법이다。</div>`,
+<div class="reminder-box">两者接近但侧重不同：生理/自然规律用 마련이다；道理/事理 用 법이다。</div>`,
     compareLabel: '-기 마련이다 vs -는 법이다',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P16 · 第 4 课</div>
+    <div class="ov-hero-label">P22 · 第 4 课</div>
     <div class="ov-hero-title">-기 마련이다</div>
     <div class="ov-hero-sub">"自然会……" · 陈述普遍规律</div>
   </div>
@@ -993,6 +1001,7 @@ export const grammarCardsP22: GrammarCard[] = [
       { type: 'usage', text: '主要用于负面结果的高概率发生，含警告/劝告语气', examples: '급하게 먹으면 체하기 십상이에요（劝告）' },
       { type: 'usage', text: '前半句常是条件（-면、-으니까 等）', examples: '늦게 자면 지각하기 십상이에요 / 미끄러우니까 넘어지기 십상이에요' },
       { type: 'compare', text: '和 -기 마련이다 差别：中性规律 vs 负面警告', examples: '늙기 마련이에요（自然规律）/ 넘어지기 십상이에요（容易摔倒）' },
+      { type: 'compare', text: '别拿中文"容易"硬套成 -기 쉽다：쉽다 只是中性"容易做到"，십상이다 强调"负面结果十有八九会发生"且带警告语气', examples: '실수하기 쉬워요（中性：容易出错）/ 실수하기 십상이에요（警告：一不小心准出错）' },
       { type: 'note', text: '不接形容词，只接动词', examples: '피곤하기 십상이에요 ✗ → 피곤해지기 십상이에요 ✓' },
       { type: 'example', text: '넘어지기 십상이에요 / 체하기 십상이에요 / 후회하기 십상이에요' },
     ],
@@ -1135,7 +1144,7 @@ export const grammarCardsP22: GrammarCard[] = [
     compareLabel: '-기 마련이다 vs -기 십상이다',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P16 · 第 5 课</div>
+    <div class="ov-hero-label">P22 · 第 5 课</div>
     <div class="ov-hero-title">-기 십상이다</div>
     <div class="ov-hero-sub">"十有八九会……" · 负面高概率警告</div>
   </div>
@@ -1162,7 +1171,7 @@ export const grammarCardsP22: GrammarCard[] = [
   <div class="ov-section">
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">别踩的坑</div></div>
     <div class="ov-block">
-      <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">피곤하기 십상이에요</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">피곤해지기 십상이에요（형용사 → 动词化）</span></div></div>
+      <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">피곤하기 십상이에요</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">피곤해지기 십상이에요（形容词 → 动词化）</span></div></div>
       <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">늙기 십상이에요</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">늙기 마련이에요（中性规律）</span></div></div>
     </div>
   </div>
@@ -1178,7 +1187,7 @@ export const grammarCardsP22: GrammarCard[] = [
     whatItDoes: '本来就……（道理规律）/ 从不……',
     whatItDoesBody: '-는 법이다 表达"按道理/情理就是这样"的规律。\n-는 법이 없다 相反，表达"从来不这样"的固定否定。\n侧重"应然"或"惯例"，比 -기 마련이다 更偏道德/社会规律。',
     structureNote: '结构：\n· 动词词干 + 는 법이다（现在规律）\n· 形容词词干（无收音+ㄴ；有收音+은）+ 법이다\n· 名词 + 인 법이다\n否定：-는 법이 없다（从来不）',
-    rulesNote: '和 -기 마련이다 的选择：\n· -기 마련이다：自然/生理 규칙\n· -는 법이다：社会/道理 规律\n· 두 개 意思接近，可以互换的场景多，微妙差别是"侧重生理"还是"侧重道理"。',
+    rulesNote: '和 -기 마련이다 的选择：\n· -기 마련이다：偏自然/生理规律\n· -는 법이다：偏社会/道理规律\n· 两者意思接近、可互换的场景多，微妙差别只在"侧重生理"还是"侧重道理"。',
     structures: [
       {
         ko: '잘못하면 벌을 받는 법이에요',
@@ -1225,6 +1234,7 @@ export const grammarCardsP22: GrammarCard[] = [
       { type: 'rule', text: '名词 + 인 법이다', examples: '사실인 법이다 / 규칙인 법이다' },
       { type: 'usage', text: '陈述道理/惯例/社会规律，偏"应然"', examples: '잘못하면 벌 받는 법이에요（道理）/ 성실하면 성공하는 법이에요（惯例）' },
       { type: 'compare', text: '和 -기 마련이다 差别：道理规律 vs 自然规律', examples: '벌 받는 법이에요（社会道理）/ 늙기 마련이에요（生理规律）' },
+      { type: 'note', text: '别把这里的 법 当成"方法"！你先学过 법 = 方法（做法 하는 법），但 -는 법이다 里的 법是"道理、规律"。所以 어기는 법이 없어요 不是"没有违约的方法"，而是"从不违约"', examples: '한국어 하는 법（方法：怎么说韩语）/ 약속을 어기는 법이 없어요（规律：他从不违约）' },
       { type: 'example', text: '벌 받는 법이에요 / 웃는 법이 없어요 / 좋은 사람은 좋은 결과가 따르는 법이에요' },
     ],
     cardExamples: [
@@ -1288,9 +1298,9 @@ export const grammarCardsP22: GrammarCard[] = [
       body: '选择合适的语法最能显示韩语功底。',
       headers: ['结构', '侧重', '语气', '例句'],
       rows: [
-        [{ ko: '-기 마련이다', zh: '자연 규칙' }, { ko: '生理/自然', zh: '中性' }, { ko: '늙기 마련', zh: '会老' }, { ko: '누구나 늙기 마련이에요', zh: '人自然会老' }],
-        [{ ko: '-기 십상이다', zh: '부정적 高확률' }, { ko: '不好的容易发生', zh: '警告' }, { ko: '넘어지기 십상', zh: '容易摔' }, { ko: '급하면 넘어지기 십상이에요', zh: '急了容易摔' }],
-        [{ ko: '-는 법이다', zh: '도리/이치' }, { ko: '社会/道理', zh: '中性偏严' }, { ko: '벌 받는 법', zh: '应受罚' }, { ko: '잘못하면 벌 받는 법이에요', zh: '错了自然受罚' }],
+        [{ ko: '-기 마련이다', zh: '自然规律' }, { ko: '生理/自然', zh: '中性' }, { ko: '늙기 마련', zh: '会老' }, { ko: '누구나 늙기 마련이에요', zh: '人自然会老' }],
+        [{ ko: '-기 십상이다', zh: '否定的高概率' }, { ko: '不好的容易发生', zh: '警告' }, { ko: '넘어지기 십상', zh: '容易摔' }, { ko: '급하면 넘어지기 십상이에요', zh: '急了容易摔' }],
+        [{ ko: '-는 법이다', zh: '道理/事理' }, { ko: '社会/道理', zh: '中性偏严' }, { ko: '벌 받는 법', zh: '应受罚' }, { ko: '잘못하면 벌 받는 법이에요', zh: '错了自然受罚' }],
         [{ ko: '-는 법이 없다', zh: '否定固定' }, { ko: '从不……', zh: '习惯性' }, { ko: '화내는 법이 없다', zh: '从不发火' }, { ko: '민수 씨는 화내는 법이 없어요', zh: '敏秀从不发火' }],
       ],
     },
@@ -1353,7 +1363,7 @@ export const grammarCardsP22: GrammarCard[] = [
     </div>
   </div>
 </div>
-<div class="reminder-box">法이다 侧重"应然/道理"，比 -기 마련이다 更偏社会规律或个人习惯。</div>`,
+<div class="reminder-box">법이다 侧重"应然/道理"，比 -기 마련이다 更偏社会规律或个人习惯。</div>`,
     compareHtml: `<div class="card-title">规律三兄弟 · 用法对比</div>
 <div class="card-body">-기 마련이다、-기 십상이다、-는 법이다 · 都表达"自然会"，但选哪个各有讲究。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
@@ -1374,7 +1384,7 @@ export const grammarCardsP22: GrammarCard[] = [
     compareLabel: '规律三兄弟对比',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P16 · 第 6 课</div>
+    <div class="ov-hero-label">P22 · 第 6 课</div>
     <div class="ov-hero-title">-는 법이다 / -는 법이 없다</div>
     <div class="ov-hero-sub">"本来就……" · 道理规律与固定习惯</div>
   </div>
@@ -1464,6 +1474,7 @@ export const grammarCardsP22: GrammarCard[] = [
       { type: 'rule', text: '名词 + 인 게 뻔하다', examples: '거짓말인 게 뻔하다 / 짝퉁인 게 뻔하다' },
       { type: 'usage', text: '根据眼前情况做强推测，带"心知肚明"的语感', examples: '표정 보니까 화난 게 뻔해요（看表情就知道生气了）' },
       { type: 'compare', text: '和 -을 리가 없다 相反：断言"显然会" vs 断言"绝不可能"', examples: '올 게 뻔해요（显然会来）↔ 올 리가 없어요（不可能来）' },
+      { type: 'compare', text: '最容易混：뻔하다 有两副面孔！有没有 게（=것이）意思完全相反。-을 뻔하다=差点儿…（结果没发生）；-을 게 뻔하다=显然会…（判断一定会）', examples: '늦을 뻔했어요（差点儿迟到，其实没迟）/ 늦을 게 뻔해요（显然会迟到）' },
       { type: 'example', text: '늦을 게 뻔해요 / 화난 게 뻔해요 / 짝퉁인 게 뻔해요' },
     ],
     cardExamples: [
@@ -1606,7 +1617,7 @@ export const grammarCardsP22: GrammarCard[] = [
     compareLabel: '-는 게 뻔하다 vs -을 게 틀림없다',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P16 · 第 7 课</div>
+    <div class="ov-hero-label">P22 · 第 7 课</div>
     <div class="ov-hero-title">-는/은/ㄴ 게 뻔하다</div>
     <div class="ov-hero-sub">"显然是……" · 强推测（心知肚明）</div>
   </div>
@@ -1695,6 +1706,7 @@ export const grammarCardsP22: GrammarCard[] = [
       { type: 'rule', text: '名词 + 인 게 틀림없다', examples: '민수 씨인 게 틀림없다 / 사실인 게 틀림없다' },
       { type: 'usage', text: '推测确定性最高，接近"确信"', examples: '노력하니까 성공할 게 틀림없어요（几乎肯定）' },
       { type: 'compare', text: '和 -는 게 뻔하다 差别：客观证据 vs 主观判断', examples: '통계상 그럴 게 틀림없어요（客观）/ 보니까 뻔해요（主观）' },
+      { type: 'note', text: '别被结尾的 없다 骗了！它不是否定。틀림없다 是一个整体词（틀림=错误，없다=没有→"没有错、确信无疑"），所以 성공할 게 틀림없어요 是"肯定会成功"，绝不是"不会成功"', examples: '성공할 게 틀림없어요 = 肯定会成功（✓ 强肯定，不是否定）' },
       { type: 'example', text: '갈 게 틀림없다 / 자고 있는 게 틀림없다 / 사실인 게 틀림없다' },
     ],
     cardExamples: [
@@ -1745,23 +1757,23 @@ export const grammarCardsP22: GrammarCard[] = [
       { icon: '🎯', context: '结果预判', ko: '이 팀은 이번에 우승할 게 틀림없어요.', zh: '这支队伍这次肯定会夺冠。' },
     ],
     mistakes: [
-      { wrong: '갈 것 틀림없어요', correct: '갈 게 틀림없어요', note: '固定形是 -을/ㄹ 게 틀림없다，중간에 것 사이 助词가 없다. 것 → 게（缩合）。' },
+      { wrong: '갈 것 틀림없어요', correct: '갈 게 틀림없어요', note: '固定形是 -을/ㄹ 게 틀림없다，中间 것 与后续之间没有助词。것 → 게（缩合）。' },
       { wrong: '학생 게 틀림없어요', correct: '학생인 게 틀림없어요', note: '名词 + 인 게 틀림없다。학생 + 인 게 틀림없어요。' },
       { wrong: '어제 갔을 게 틀림없어요', correct: '어제 간 게 틀림없어요', note: '过去动作用过去冠形 -은/ㄴ。갔을 是错误的形态。' },
       { wrong: '노력하니까 성공할 리가 없어요（想说肯定成功）', correct: '노력하니까 성공할 게 틀림없어요', note: '-을 리가 없다 是"不可能"（负面否定），"肯定"必须用 -을 게 틀림없다。' },
     ],
     quickTable: {
       title: '推测确定性总梯度',
-      body: '整个 P16 学过的推测语法全对比。',
+      body: '整个 P22 学过的推测语法全对比。',
       headers: ['结构', '确定性', '语感', '例句'],
       rows: [
-        [{ ko: '-을지도 모르다', zh: '★ 说不定' }, { ko: '20%', zh: '很不确定' }, { ko: '猜测', zh: '주관적' }, { ko: '갈지도 몰라요', zh: '说不定去' }],
+        [{ ko: '-을지도 모르다', zh: '★ 说不定' }, { ko: '20%', zh: '很不确定' }, { ko: '猜测', zh: '主观' }, { ko: '갈지도 몰라요', zh: '说不定去' }],
         [{ ko: '-을 수도 있다', zh: '★★ 可能' }, { ko: '40%', zh: '客观可能性' }, { ko: '可能性', zh: '가능성' }, { ko: '갈 수도 있어요', zh: '也可能去' }],
         [{ ko: '-을 것 같다', zh: '★★★ 好像' }, { ko: '60%', zh: '有点感觉' }, { ko: '주관 감각', zh: '感觉' }, { ko: '갈 것 같아요', zh: '好像会去' }],
         [{ ko: '-을 것이다', zh: '★★★★ 会' }, { ko: '80%', zh: '较肯定' }, { ko: '一般预期', zh: '기대' }, { ko: '갈 거예요', zh: '会去的' }],
         [{ ko: '-는 게 뻔하다', zh: '★★★★★ 显然' }, { ko: '95%', zh: '主观确信' }, { ko: '心知肚明', zh: '주관' }, { ko: '갈 게 뻔해요', zh: '显然会去' }],
-        [{ ko: '-을 게 틀림없다', zh: '★★★★★ 肯定' }, { ko: '95%', zh: '客观确信' }, { ko: '证据充足', zh: '객관' }, { ko: '갈 게 틀림없어요', zh: '肯定会去' }],
-        [{ ko: '-을 리가 없다', zh: '✗ 不可能' }, { ko: '0%', zh: '断言否定' }, { ko: '绝对不可能', zh: '부정 확신' }, { ko: '갈 리가 없어요', zh: '不可能去' }],
+        [{ ko: '-을 게 틀림없다', zh: '★★★★★ 肯定' }, { ko: '95%', zh: '客观确信' }, { ko: '证据充足', zh: '客观' }, { ko: '갈 게 틀림없어요', zh: '肯定会去' }],
+        [{ ko: '-을 리가 없다', zh: '✗ 不可能' }, { ko: '0%', zh: '断言否定' }, { ko: '绝对不可能', zh: '否定确信' }, { ko: '갈 리가 없어요', zh: '不可能去' }],
       ],
     },
     specialQuiz: {
@@ -1837,7 +1849,7 @@ export const grammarCardsP22: GrammarCard[] = [
     compareLabel: '-을 게 틀림없다 vs -을 리가 없다',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P16 · 第 8 课</div>
+    <div class="ov-hero-label">P22 · 第 8 课</div>
     <div class="ov-hero-title">-을/ㄹ 게 틀림없다</div>
     <div class="ov-hero-sub">"肯定会……" · 最高确定性推测</div>
   </div>
@@ -1877,11 +1889,11 @@ export const grammarCardsP22: GrammarCard[] = [
     id: 'card-p22-l09',
     partNumber: 22,
     lessonNumber: 9,
-    title: '综合练习⑯',
-    whatItDoes: '第 16 部分总复习',
+    title: 'P22 综合练习',
+    whatItDoes: 'P22 第1～8课 总复习',
     whatItDoesBody: '完成这份练习，检验担忧、推测与规律八大语法。\n覆盖：-을까 봐、-을지도 모르다、-을 리가 없다、-기 마련이다、-기 십상이다、-는 법이다、-는 게 뻔하다、-을 게 틀림없다。\n重点掌握推测确定性梯度与规律语法的选择。',
     isPractice: true,
-    structureNote: 'P16 八大语法分组：\n【担忧】L01 -을까 봐\n【推测】L02 -을지도 모르다（说不定）· L03 -을 리가 없다（不可能）· L07 -는 게 뻔하다（显然是）· L08 -을 게 틀림없다（肯定）\n【规律】L04 -기 마련이다（自然规律）· L05 -기 십상이다（负面警告）· L06 -는 법이다（道理规律）',
+    structureNote: 'P22 八大语法分组：\n【担忧】L01 -을까 봐\n【推测】L02 -을지도 모르다（说不定）· L03 -을 리가 없다（不可能）· L07 -는 게 뻔하다（显然是）· L08 -을 게 틀림없다（肯定）\n【规律】L04 -기 마련이다（自然规律）· L05 -기 십상이다（负面警告）· L06 -는 법이다（道理规律）',
     structures: [
       { ko: '비가 올까 봐 우산을 챙겼어요', zh: '怕下雨带了伞。', tokens: [{ text: '비가', role: 'subject' }, { text: '올까 봐', role: 'verb' }, { text: '우산을', role: 'object' }, { text: '챙겼어요', role: 'verb' }] },
       { ko: '내일 비가 올지도 몰라요', zh: '明天说不定下雨。', tokens: [{ text: '내일', role: 'time' }, { text: '비가', role: 'subject' }, { text: '올지도 몰라요', role: 'verb' }] },
@@ -1893,14 +1905,14 @@ export const grammarCardsP22: GrammarCard[] = [
       { ko: '노력하니까 성공할 게 틀림없어요', zh: '这么努力肯定会成功。', tokens: [{ text: '노력하니까', role: 'verb' }, { text: '성공할 게 틀림없어요', role: 'verb' }] },
     ],
     connectionRules: [
-      { type: 'rule', text: '担心 → -을까 봐 + 主句', examples: '늦을까 봐 뛰었어요' },
-      { type: 'rule', text: '低概率推测（说不定）→ -을지도 모르다', examples: '올지도 몰라요' },
-      { type: 'rule', text: '绝对否定推测 → -을 리가 없다', examples: '올 리가 없어요' },
-      { type: 'rule', text: '自然规律 → -기 마련이다', examples: '누구나 늙기 마련이에요' },
-      { type: 'rule', text: '负面警告（容易发生坏事）→ -기 십상이다', examples: '급하면 넘어지기 십상이에요' },
+      { type: 'rule', text: '担心 → -을까 봐 + 主句', examples: '늦을까 봐 뛰었어요（怕迟到所以跑了。）' },
+      { type: 'rule', text: '低概率推测（说不定）→ -을지도 모르다', examples: '올지도 몰라요（说不定会来。）' },
+      { type: 'rule', text: '绝对否定推测 → -을 리가 없다', examples: '올 리가 없어요（不可能来。）' },
+      { type: 'rule', text: '自然规律 → -기 마련이다', examples: '누구나 늙기 마련이에요（谁都难免会老。）' },
+      { type: 'rule', text: '负面警告（容易发生坏事）→ -기 십상이다', examples: '급하면 넘어지기 십상이에요（一急就容易摔倒。）' },
       { type: 'rule', text: '道理规律 → -는 법이다 / 从不 → -는 법이 없다', examples: '벌 받는 법이에요 / 화내는 법이 없어요' },
-      { type: 'rule', text: '主观强推测 → -는 게 뻔하다', examples: '올 게 뻔해요' },
-      { type: 'rule', text: '客观强推测 → -을 게 틀림없다', examples: '올 게 틀림없어요' },
+      { type: 'rule', text: '主观强推测 → -는 게 뻔하다', examples: '올 게 뻔해요（肯定会来，来是明摆着的。）' },
+      { type: 'rule', text: '客观强推测 → -을 게 틀림없다', examples: '올 게 틀림없어요（一定会来，毫无疑问。）' },
     ],
     cardExamples: [
       {
@@ -2011,14 +2023,14 @@ export const grammarCardsP22: GrammarCard[] = [
             '所有推测语法确定性相同',
           ],
           answer: 2,
-          explanation: 'P16 推测光谱：说不定（-을지도 모르다）< 好像（-을 것 같다）< 会（-을 것이다）< 肯定（-을 게 틀림없다）↔ 不可能（-을 리가 없다）。',
+          explanation: 'P22 推测光谱：说不定（-을지도 모르다）< 好像（-을 것 같다）< 会（-을 것이다）< 肯定（-을 게 틀림없다）↔ 不可能（-을 리가 없다）。',
         },
       ],
     },
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P16 · 综合练习</div>
-    <div class="ov-hero-title">综合练习⑯</div>
+    <div class="ov-hero-label">P22 · 综合练习</div>
+    <div class="ov-hero-title">P22 综合练习</div>
     <div class="ov-hero-sub">担忧、推测与规律 · 八大语法总复习</div>
   </div>
   <div class="ov-section">

@@ -6,16 +6,20 @@ import Link from 'next/link';
 import { ArrowLeft, Heart, Loader2 } from 'lucide-react';
 import { db } from '@/lib/db';
 import { getProfile } from '@/lib/gamification';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 import type { BuddyRelation, UserProfile } from '@/types';
 
 export default function BuddyDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const { lang } = useLang();
   const [loading, setLoading] = useState(true);
   const [relation, setRelation] = useState<BuddyRelation | null>(null);
   const [myProfile, setMyProfile] = useState<UserProfile | null>(null);
   const [buddyProfile, setBuddyProfile] = useState<UserProfile | null>(null);
   const [cheered, setCheered] = useState(false);
   const [cheeredToday, setCheeredToday] = useState(false);
+  const [myWordCount, setMyWordCount] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -26,12 +30,13 @@ export default function BuddyDetailPage() {
 
         const me = await getProfile();
         setMyProfile(me);
+        db.words.count().then(setMyWordCount).catch(() => {});
 
         // Try to get buddy profile (simplified - in production, use a proper API)
         const bid = me?.id === rel.userAId ? rel.userBId : rel.userAId;
         try {
           const bps = await db.userProfiles.toArray();
-          const bp = bps.find((p) => p.id.includes(bid.slice(0, 8)));
+          const bp = bps.find((p) => p.id === bid);
           if (bp) setBuddyProfile(bp);
         } catch { /* ignore */ }
 
@@ -76,8 +81,8 @@ export default function BuddyDetailPage() {
     return (
       <div className="py-16 text-center space-y-4">
         <span className="text-5xl">🐰</span>
-        <h1 className="text-lg font-bold text-[var(--text-primary)]">搭子关系不存在</h1>
-        <Link href="/buddy" className="text-sm text-[var(--pink-primary)]">返回搭子广场</Link>
+        <h1 className="text-lg font-bold text-[var(--text-primary)]">{t('buddy.not_found', lang)}</h1>
+        <Link href="/buddy" className="text-sm text-[var(--pink-primary)]">{t('buddy.back_square', lang)}</Link>
       </div>
     );
   }
@@ -86,12 +91,12 @@ export default function BuddyDetailPage() {
   const buddyStreak = buddyProfile?.streak || 0;
 
   return (
-    <div className="py-4 max-w-lg mx-auto space-y-6">
+    <div className="py-4 max-w-lg md:max-w-none mx-auto space-y-6">
       <div className="flex items-center gap-3">
         <Link href="/buddy" className="text-[var(--text-muted)] hover:text-[var(--text-primary)]">
           <ArrowLeft size={20} />
         </Link>
-        <h1 className="text-lg font-bold text-[var(--text-primary)]">学习搭子</h1>
+        <h1 className="text-lg font-bold text-[var(--text-primary)]">{t('buddy.detail_title', lang)}</h1>
       </div>
 
       {/* Two buddies */}
@@ -101,7 +106,7 @@ export default function BuddyDetailPage() {
           <span className="text-5xl">🐰</span>
           <p className="text-sm font-bold text-[var(--text-primary)]">{myProfile?.nickname || '나'}</p>
           <p className="text-xs text-[var(--text-muted)]">
-            {(myProfile?.streak || 0) > 0 ? '🔥' : '🌙'} {myProfile?.streak || 0} 天
+            {(myProfile?.streak || 0) > 0 ? '🔥' : '🌙'} {t('buddy.days', lang, { n: myProfile?.streak || 0 })}
           </p>
         </div>
 
@@ -112,7 +117,7 @@ export default function BuddyDetailPage() {
           <span className="text-5xl">🐰</span>
           <p className="text-sm font-bold text-[var(--text-primary)]">{buddyName}</p>
           <p className="text-xs text-[var(--text-muted)]">
-            {buddyStreak > 0 ? '🔥' : '🌙'} {buddyStreak} 天
+            {buddyStreak > 0 ? '🔥' : '🌙'} {t('buddy.days', lang, { n: buddyStreak })}
           </p>
         </div>
       </div>
@@ -120,12 +125,12 @@ export default function BuddyDetailPage() {
       {/* Stats */}
       <div className="grid grid-cols-2 gap-3">
         <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 text-center">
-          <p className="text-xs text-[var(--text-muted)]">累计词数</p>
-          <p className="text-lg font-bold text-[var(--text-primary)]">{myProfile?.xp ? Math.floor(myProfile.xp / 10) : 0}</p>
+          <p className="text-xs text-[var(--text-muted)]">{t('buddy.my_words', lang)}</p>
+          <p className="text-lg font-bold text-[var(--text-primary)]">{myWordCount}</p>
         </div>
         <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 text-center">
-          <p className="text-xs text-[var(--text-muted)]">伙伴词数</p>
-          <p className="text-lg font-bold text-[var(--text-primary)]">{buddyProfile?.xp ? Math.floor(buddyProfile.xp / 10) : 0}</p>
+          <p className="text-xs text-[var(--text-muted)]">{t('buddy.buddy_xp', lang)}</p>
+          <p className="text-lg font-bold text-[var(--text-primary)]">{buddyProfile?.xp ?? 0}</p>
         </div>
       </div>
 
@@ -142,11 +147,11 @@ export default function BuddyDetailPage() {
         }`}
       >
         <Heart size={20} className={cheered ? 'fill-current' : ''} />
-        {cheered ? '加油已发送！🐰' : cheeredToday ? '今天已经加过油了' : '为搭子加油'}
+        {cheered ? t('buddy.cheer_sent', lang) : cheeredToday ? t('buddy.cheered_today', lang) : t('buddy.cheer', lang)}
       </button>
 
       <p className="text-xs text-[var(--text-muted)] text-center">
-        每天可以为搭子加油一次
+        {t('buddy.cheer_once', lang)}
       </p>
     </div>
   );

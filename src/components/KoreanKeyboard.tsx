@@ -4,6 +4,8 @@ import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { X, Delete } from 'lucide-react';
 import { useIsMobile } from '@/lib/useIsMobile';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 
 // ═══════════════════════════════════════════════════════════════
 // Hangul Composition Engine
@@ -257,6 +259,7 @@ interface KoreanKeyboardProps {
 }
 
 export function KoreanKeyboard({ value, onChange, visible, onClose, onSend }: KoreanKeyboardProps) {
+  const { lang } = useLang();
   const isMobile = useIsMobile();
   const [shift, setShift] = useState(false);
   const [buffer, setBuffer] = useState<string[]>([]);
@@ -493,7 +496,7 @@ export function KoreanKeyboard({ value, onChange, visible, onClose, onSend }: Ko
             ? 'calc(56px + env(safe-area-inset-bottom, 0px))'
             : '24px',
           // Cap height so keyboard never overflows on small screens
-          maxHeight: isMobile ? 'calc(100dvh - 56px - env(safe-area-inset-bottom, 0px) - 8px)' : undefined,
+          maxHeight: isMobile ? 'calc(var(--vh-100) - 56px - env(safe-area-inset-bottom, 0px) - 8px)' : undefined,
           overflowY: isMobile ? 'auto' : undefined,
           // Desktop: nudge right by half the sidebar width so keyboard sits
           // over the main content column rather than the sidebar
@@ -515,7 +518,7 @@ export function KoreanKeyboard({ value, onChange, visible, onClose, onSend }: Ko
           >
             <div className="flex-1 min-h-[26px] flex items-center gap-2">
               <span className={`${isMobile ? 'text-base' : 'text-sm'} font-bold text-gray-900 dark:text-gray-100`}>
-                {composed || <span className="text-gray-400 dark:text-gray-500 font-normal text-xs">输入韩文...</span>}
+                {composed || <span className="text-gray-400 dark:text-gray-500 font-normal text-xs">{t('kkey.inputPlaceholder', lang)}</span>}
               </span>
               {showRawJamo && (
                 <span className="text-[11px] text-gray-400 dark:text-gray-500 font-mono">{buffer.join(' ')}</span>
@@ -564,7 +567,7 @@ export function KoreanKeyboard({ value, onChange, visible, onClose, onSend }: Ko
                       className={`${bg} ${keyH} flex items-center justify-center rounded-[8px] font-medium
                         text-[var(--text-primary)] shadow-[0_1px_2px_rgba(0,0,0,.15)]
                         active:scale-[0.92] active:brightness-90
-                        transition-all duration-75 select-none`}
+                        transition-colors transition-opacity transition-shadow duration-75 select-none`}
                       style={{ flex }}
                     >
                       {key.type === 'backspace' ? (
@@ -595,10 +598,10 @@ export function KoreanKeyboard({ value, onChange, visible, onClose, onSend }: Ko
                 onMouseDown={(e) => e.preventDefault()}
                 onTouchStart={(e) => e.preventDefault()}
                 onTouchEnd={(e) => { e.preventDefault(); handleKey({ label: '', type: 'space', flex: 1 }); }}
-                className={`bg-white dark:bg-[var(--bg-card)] flex items-center justify-center ${keyH} rounded-[8px] text-xs font-medium text-[var(--text-muted)] shadow-[0_1px_2px_rgba(0,0,0,.15)] active:scale-[0.96] transition-all select-none`}
+                className={`bg-white dark:bg-[var(--bg-card)] flex items-center justify-center ${keyH} rounded-[8px] text-xs font-medium text-[var(--text-muted)] shadow-[0_1px_2px_rgba(0,0,0,.15)] active:scale-[0.96] transition-colors transition-opacity transition-shadow select-none`}
                 style={{ flex: 5 }}
               >
-                空格
+                {t('kkey.space', lang)}
               </button>
               {onSend ? (
                 <button
@@ -607,10 +610,10 @@ export function KoreanKeyboard({ value, onChange, visible, onClose, onSend }: Ko
                   onMouseDown={(e) => e.preventDefault()}
                   onTouchStart={(e) => e.preventDefault()}
                   onTouchEnd={(e) => { e.preventDefault(); handleSend(); }}
-                  className={`bg-[var(--pink-primary)] flex items-center justify-center ${keyH} rounded-[8px] text-sm font-bold text-white shadow-[0_1px_2px_rgba(0,0,0,.15)] active:scale-[0.96] transition-all select-none`}
+                  className={`bg-[var(--pink-primary)] flex items-center justify-center ${keyH} rounded-[8px] text-sm font-bold text-white shadow-[0_1px_2px_rgba(0,0,0,.15)] active:scale-[0.96] transition-colors transition-opacity transition-shadow select-none`}
                   style={{ flex: 2 }}
                 >
-                  发送
+                  {t('kkey.send', lang)}
                 </button>
               ) : (
                 <button
@@ -619,10 +622,10 @@ export function KoreanKeyboard({ value, onChange, visible, onClose, onSend }: Ko
                   onMouseDown={(e) => e.preventDefault()}
                   onTouchStart={(e) => e.preventDefault()}
                   onTouchEnd={(e) => { e.preventDefault(); handleKey({ label: '', type: 'done', flex: 1 }); }}
-                  className={`bg-[var(--pink-primary)] flex items-center justify-center ${keyH} rounded-[8px] text-sm font-bold text-white shadow-[0_1px_2px_rgba(0,0,0,.15)] active:scale-[0.96] transition-all select-none`}
+                  className={`bg-[var(--pink-primary)] flex items-center justify-center ${keyH} rounded-[8px] text-sm font-bold text-white shadow-[0_1px_2px_rgba(0,0,0,.15)] active:scale-[0.96] transition-colors transition-opacity transition-shadow select-none`}
                   style={{ flex: 2 }}
                 >
-                  完成
+                  {t('kkey.done', lang)}
                 </button>
               )}
             </div>
@@ -649,6 +652,7 @@ interface KoreanInputProps {
 }
 
 export function KoreanInput({ value, onChange, placeholder, className = '', id, autoFocus }: KoreanInputProps) {
+  const { lang } = useLang();
   const [showKeyboard, setShowKeyboard] = useState(false);
 
   return (
@@ -672,7 +676,7 @@ export function KoreanInput({ value, onChange, placeholder, className = '', id, 
               ? 'bg-[var(--pink-primary)]/20 text-[var(--pink-primary)]'
               : 'text-[var(--text-muted)] hover:text-[var(--pink-primary)] hover:bg-[var(--pink-pale)]/30'
           }`}
-          title="韩文键盘"
+          title={t('kkey.keyboardTitle', lang)}
         >
           한
         </button>

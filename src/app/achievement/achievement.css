@@ -1,0 +1,153 @@
+/* ==========================================================================
+   动物城成就墙 · 样式
+   token 全部走全站 --color-* 桥接，暗色自动适配。稀有度色环用 conic-gradient。
+   ========================================================================== */
+
+.ach-wall { padding: 4px 0 40px; width: 100%; }
+
+/* ── 英雄区 ── */
+.ach-hero {
+  position: relative;
+  background: linear-gradient(150deg, var(--au-pink-soft), var(--au-purple-soft) 55%, var(--au-mint-soft));
+  border: 1px solid var(--au-line);
+  border-radius: var(--radius-xl, 24px);
+  padding: 24px 22px 20px;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+.ach-hero-eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--au-pink-deep);
+}
+.ach-hero-title {
+  font-family: var(--au-serif, 'Fraunces', 'Noto Serif SC', Georgia, serif);
+  font-size: 27px; font-weight: 700; line-height: 1.15; margin: 6px 0 3px;
+  color: var(--au-ink-1);
+}
+.ach-hero-ko { font-size: 13px; color: var(--au-ink-3); font-weight: 500; }
+
+/* 用户头像：品牌渐变环 */
+.ach-avatar {
+  position: absolute; right: 16px; top: 14px;
+  width: 72px; height: 72px; border-radius: 50%; padding: 3px;
+  background: conic-gradient(from 210deg, var(--au-pink), var(--au-purple), var(--au-mint), var(--au-pink));
+  box-shadow: var(--shadow-md, 0 6px 20px -8px rgba(120,80,60,.24));
+}
+.ach-avatar-inner {
+  width: 100%; height: 100%; border-radius: 50%; border: 2px solid var(--au-surface);
+  overflow: hidden; display: flex; align-items: center; justify-content: center;
+  background: var(--au-pink-soft);
+}
+.ach-avatar-inner img { width: 100%; height: 100%; object-fit: cover; }
+.ach-avatar-fallback { font-size: 28px; font-weight: 800; color: var(--au-pink-deep); }
+
+/* 概览卡 */
+.ach-overview { display: flex; gap: 10px; margin-top: 18px; position: relative; z-index: 1; }
+.ach-ov-card {
+  flex: 1; background: var(--au-surface); border: 1px solid var(--au-line);
+  border-radius: 16px; padding: 12px 8px; text-align: center;
+}
+.ach-ov-num { font-size: 23px; font-weight: 800; line-height: 1; color: var(--au-ink-1); }
+.ach-ov-num small { font-size: 13px; color: var(--au-ink-3); font-weight: 600; }
+.ach-ov-num.pink { color: var(--au-pink-deep); }
+.ach-ov-num.gold { color: var(--au-gold-deep); }
+.ach-ov-label { font-size: 11px; color: var(--au-ink-3); margin-top: 5px; font-weight: 500; }
+.ach-ring { position: relative; width: 46px; height: 46px; margin: 0 auto 4px; }
+.ach-ring svg { transform: rotate(-90deg); }
+.ach-ring-txt { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: var(--au-pink-deep); }
+
+/* ── 分类筛选 ── */
+.ach-filters { display: flex; gap: 8px; overflow-x: auto; padding: 2px 0 12px; margin-bottom: 4px; }
+.ach-filters::-webkit-scrollbar { display: none; }
+.ach-chip {
+  white-space: nowrap; padding: 8px 15px; border-radius: var(--radius-pill, 999px);
+  font-size: 13px; font-weight: 700; border: 1px solid var(--au-line);
+  background: var(--au-surface); color: var(--au-ink-3); cursor: pointer;
+  transition: all var(--dur-fast, .18s) var(--ease-soft, ease); flex-shrink: 0;
+}
+.ach-chip.active { background: var(--au-ink-1); color: #fff; border-color: var(--au-ink-1); }
+
+/* ── 分组 ── */
+.ach-group { margin-bottom: 26px; }
+.ach-group-head { display: flex; align-items: center; gap: 9px; margin-bottom: 13px; padding-left: 2px; }
+.ach-group-emoji { font-size: 19px; }
+.ach-group-title { font-size: 19px; font-weight: 800; color: var(--au-ink-1); }
+.ach-group-ko { font-size: 12px; color: var(--au-ink-3); font-weight: 500; }
+.ach-group-count { margin-left: auto; font-size: 12px; font-weight: 700; color: var(--au-ink-3); background: var(--au-surface-2); padding: 3px 10px; border-radius: 999px; }
+
+.ach-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
+
+/* ── 成就卡 ── */
+.ach-card {
+  position: relative; background: var(--au-surface); border: 1px solid var(--au-line);
+  border-radius: var(--radius-lg, 20px); padding: 16px 14px 14px;
+  box-shadow: var(--shadow-xs, 0 1px 2px rgba(90,60,45,.04));
+  transition: transform var(--dur-fast, .2s) var(--ease-soft, ease), box-shadow var(--dur-fast, .2s) var(--ease-soft, ease);
+  overflow: hidden;
+}
+.ach-card.locked { background: var(--au-surface-2); border-style: dashed; border-color: var(--au-line); }
+.ach-card.locked .ach-icon, .ach-card.locked .ach-title, .ach-card.locked .ach-ko { filter: grayscale(1); opacity: .5; }
+
+.ach-icon-wrap { position: relative; width: 58px; height: 58px; margin: 0 auto 10px; }
+.ach-icon-ring { position: absolute; inset: 0; border-radius: 50%; }
+.ach-icon-ring::after { content: ""; position: absolute; inset: 4px; border-radius: 50%; background: var(--au-surface); }
+.ach-card.locked .ach-icon-ring::after { background: var(--au-surface-2); }
+.ach-icon { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 30px; z-index: 1; }
+.r-common .ach-icon-ring { background: conic-gradient(#e7dbd1, #f3ebe3); }
+.r-rare   .ach-icon-ring { background: conic-gradient(#7fcbbd, #bfe8df, #7fcbbd); }
+.r-epic   .ach-icon-ring { background: conic-gradient(#b79ce8, #e0d0f7, #b79ce8); }
+.r-legend .ach-icon-ring { background: conic-gradient(#ffcf6b, #ff9ec0, #c9a4f0, #ffcf6b); }
+
+.ach-title { font-size: 14px; font-weight: 700; text-align: center; line-height: 1.3; color: var(--au-ink-1); }
+.ach-ko { font-size: 11px; color: var(--au-ink-3); text-align: center; margin-top: 1px; font-weight: 500; }
+.ach-sub { font-size: 11px; color: var(--au-ink-3); text-align: center; margin-top: 7px; line-height: 1.45; }
+
+.ach-date { margin-top: 10px; font-size: 10px; font-weight: 700; text-align: center; color: var(--au-mint-deep); background: var(--au-mint-soft); border-radius: 999px; padding: 4px 0; }
+
+.ach-prog { margin-top: 10px; }
+.ach-prog-bar { height: 6px; border-radius: 999px; background: var(--au-surface-2); overflow: hidden; }
+.ach-prog-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--au-pink), var(--au-pink-deep)); }
+.ach-prog-txt { font-size: 10px; color: var(--au-ink-3); text-align: center; margin-top: 5px; font-weight: 600; }
+
+.ach-rarity-tag { position: absolute; top: 10px; right: 10px; font-size: 9px; font-weight: 700; letter-spacing: .06em; padding: 2px 7px; border-radius: 999px; }
+.r-common .ach-rarity-tag { background: #f3ebe3; color: #a08b7e; }
+.r-rare   .ach-rarity-tag { background: var(--au-mint-soft); color: var(--au-mint-deep); }
+.r-epic   .ach-rarity-tag { background: var(--au-purple-soft); color: var(--au-purple-deep); }
+.r-legend .ach-rarity-tag { background: linear-gradient(90deg, #fff0d4, #ffe3ef); color: #d98a3c; }
+
+.ach-new { position: absolute; top: 9px; left: 9px; font-size: 9px; font-weight: 800; color: #fff; background: var(--au-pink-deep); border-radius: 999px; padding: 2px 7px; }
+
+.ach-note { font-size: 11px; color: var(--au-ink-3); text-align: center; margin: 30px 0 0; line-height: 1.7; }
+
+/* ── 桌面版 ── */
+.ach-desk-hero { display: flex; align-items: center; gap: 36px; padding: 32px 38px; }
+.ach-desk-hero .ach-avatar { position: static; width: 92px; height: 92px; }
+.ach-desk-hero-left { display: flex; align-items: center; gap: 22px; flex: 1; }
+.ach-desk-hero .ach-hero-title { font-size: 34px; }
+.ach-desk-overview { margin-top: 0; }
+.ach-desk-ov-card { width: 118px; }
+
+/* 桌面：铺满整个主区，右栏固定，主区弹性 */
+.ach-cols { display: grid; grid-template-columns: 1fr 340px; gap: 30px; align-items: start; }
+.ach-cols .ach-grid { grid-template-columns: repeat(3, 1fr); gap: 14px; }
+/* 宽屏主区铺 4 列，卡片不稀疏 */
+@media (min-width: 1500px) {
+  .ach-cols .ach-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+.ach-rail { position: sticky; top: 20px; display: flex; flex-direction: column; gap: 16px; }
+.ach-rail-card { background: var(--au-surface); border: 1px solid var(--au-line); border-radius: 20px; padding: 18px; box-shadow: var(--shadow-xs, 0 1px 2px rgba(90,60,45,.04)); }
+.ach-rail-h { font-size: 15px; font-weight: 800; margin-bottom: 13px; display: flex; align-items: center; gap: 7px; color: var(--au-ink-1); }
+.ach-nextup { background: linear-gradient(135deg, var(--au-pink-soft), var(--au-purple-soft)); border: 1px solid var(--au-line); border-radius: 20px; padding: 18px; }
+.ach-nextup-icon { width: 44px; height: 44px; border-radius: 14px; background: var(--au-surface); display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: var(--shadow-xs); margin-bottom: 12px; }
+.ach-nextup-t { font-size: 14px; font-weight: 700; margin-bottom: 3px; color: var(--au-ink-1); }
+.ach-nextup-d { font-size: 12px; color: var(--au-ink-3); line-height: 1.5; margin-bottom: 12px; }
+.ach-leg { display: flex; align-items: center; gap: 10px; margin-bottom: 11px; font-size: 13px; color: var(--au-ink-2); }
+.ach-leg:last-child { margin-bottom: 0; }
+.ach-leg-dot { width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0; }
+.ach-leg-dot.common { background: conic-gradient(#e7dbd1, #f3ebe3); }
+.ach-leg-dot.rare { background: conic-gradient(#7fcbbd, #bfe8df, #7fcbbd); }
+.ach-leg-dot.epic { background: conic-gradient(#b79ce8, #e0d0f7, #b79ce8); }
+.ach-leg-dot.legend { background: conic-gradient(#ffcf6b, #ff9ec0, #c9a4f0, #ffcf6b); }
+.ach-leg-count { margin-left: auto; font-weight: 700; color: var(--au-ink-3); font-size: 12px; }

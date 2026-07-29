@@ -1,0 +1,21 @@
+import type { BossSubQuestData } from '@/types/tori-subquest';
+
+/** Day 64 · 3-5 Boss 战 · ☕ 打工两周后 · 变得会……了 */
+export const day64Boss: BossSubQuestData = {
+  day: 4, level: 'advanced', idx: 5, kind: 'boss',
+  koTitle: '2주 후의 관문',
+  subtitle: '☕ 곰다방 · 익숙해진 손',
+  intro: '周二晚上。곰다방打工两周。第一周天天出错——听错单、托盘倾斜、连打印机都要喊店长。现在呢？中杯冰美式去糖浆冰少——一次听完直接输入 POS。美式和拿铁各一杯刷卡——从收款到端咖啡一气呵成。今天要用 ~게 되다 把这份"变得会 X 了"说清楚，也要在店长夸你时守住那句谦逊金句：아직 부족하지만 노력하고 있어요。',
+  outroHook: '"토리, 진짜 빨리 늘었어. 다른 알바생 3개월 걸린 걸 2주에 했네." 下班时店长这么说。回家路上，Day 33 学过的"잘 지내고 있어요"，两周后长成了"열심히 하고 있어요"。学习就是——把昨天和今天的差距，每天一点点往前推。',
+
+  tasks: [
+    { type: 'choice',  label: '听句选意',     task: { id: 'd64-b5-t1', audioKo: '진짜 빨리 늘었어. 3개월 걸린 걸 2주에 했네.',           choices: [{ text: '真的进步快。别人 3 个月的，你 2 周做到了。',       correct: true }, { text: '进步太慢。',                    correct: false }, { text: '3 周就够了。',                  correct: false }, { text: '没有进步。',                        correct: false }], explain: '店长夸奖 · 늘다' } },
+    { type: 'choice',  label: '听句选意',     task: { id: 'd64-b5-t2', audioKo: '아직 부족하지만 노력하고 있어요.',                     choices: [{ text: '还差得远，不过在努力。',                            correct: true }, { text: '已经完美了。',                  correct: false }, { text: '不需要努力。',                  correct: false }, { text: '完全不行。',                        correct: false }], explain: 'Tori 谦逊金句' } },
+    { type: 'choice',  label: '~게 되다',     task: { id: 'd64-b5-t3', promptZh: '"变得能一次听完订单了"哪句正确？',                                                                                                                                    choices: [{ text: '주문을 다 듣기 됐어요.',                              correct: false }, { text: '주문을 다 듣게 됐어요.',        correct: true }, { text: '주문을 다 듣아 됐어요.',                correct: false }, { text: '주문을 다 듣고 됐어요.',                            correct: false }], explain: 'V + 게 + 되다' } },
+    { type: 'choice',  label: '~게 되다',     task: { id: 'd64-b5-t4', promptZh: '"打工变得有趣了"哪句正确？',                                                                                                                                          choices: [{ text: '알바가 재미있어게 됐어요.',                          correct: false }, { text: '알바가 재미있게 됐어요.',       correct: true }, { text: '알바가 재미있기 됐어요.',              correct: false }, { text: '알바가 재미있는 됐어요.',                          correct: false }], explain: 'A + 게 + 되다' } },
+    { type: 'choice',  label: '认词',         task: { id: 'd64-b5-t5', promptKo: '흐름',        promptHangul: 'heu-reum',                                                                                                                            choices: [{ text: '流程 / 节奏',                    correct: true }, { text: '停顿',                          correct: false }, { text: '声音',                          correct: false }, { text: '味道',                              correct: false }], explain: '흐르다（流）+ ㅁ' } },
+    { type: 'compose', label: '组句',         task: { id: 'd64-b5-t6', zhHint: '变得能自然地说韩语了。',                                                                                                                                              audioKo: '한국어를 자연스럽게 말하게 됐어요.',                            answer: ['한국어를', '자연스럽게', '말하게 됐어요.'],           tokens: ['한국어를', '자연스럽게', '말하게 됐어요.', '말한', '말해', '말하기', '말했어요.'],                              explain: '~게 되다 · 能力变化' } },
+    { type: 'compose', label: '组句',         task: { id: 'd64-b5-t7', zhHint: '还差得远，不过在努力。',                                                                                                                                                audioKo: '아직 부족하지만 노력하고 있어요.',                             answer: ['아직', '부족하지만', '노력하고 있어요.'],              tokens: ['아직', '부족하지만', '노력하고 있어요.', '완벽해요.', '노력해요.', '노력했어요.', '몰라요.'],                explain: '~지만 + ~고 있어요 · 谦逊' } },
+    { type: 'choice',  label: '情景选回应',   task: { id: 'd64-b5-t8', promptZh: '同事说 "주문 다 듣기가 어려워요…"。你想安慰他"两周左右就会熟"，最自然的一句？',                                                                                       choices: [{ text: '2주 정도 하면 익숙해지게 될 거예요.',                          correct: true }, { text: '평생 안 될 거예요.',              correct: false }, { text: '얼마예요?',                              correct: false }, { text: '몰라요.',                                correct: false }], explain: '~게 되다 未来 · ~ㄹ 거예요' } },
+  ],
+};

@@ -3,6 +3,9 @@ import { requireAdmin } from '@/lib/server/admin-guard';
 import { getDb } from '@/lib/server/db';
 import type { ResolveFeedbackBody } from '@/types/admin';
 
+// 6-26 事故兜底：含鉴权/用户数据的 API 必须 force-dynamic，禁止 Next.js 自动缓存
+export const dynamic = 'force-dynamic';
+
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }

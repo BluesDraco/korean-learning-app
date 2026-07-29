@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import { getAuthFromCookie, generateId } from '@/lib/server/auth';
 import { getDb } from '@/lib/server/db';
 
+// 6-26 事故兜底：含鉴权/用户数据的 API 必须 force-dynamic，禁止 Next.js 自动缓存
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: Request) {
   const auth = await getAuthFromCookie();
   if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -62,5 +65,5 @@ export async function POST(req: Request) {
   // Delete the invite (consumed)
   await db.run('DELETE FROM buddy_invites WHERE id = ?', [inviteId]);
 
-  return NextResponse.json({ ok: true, buddyId: inviterId });
+  return NextResponse.json({ ok: true, relationId, buddyId: inviterId });
 }

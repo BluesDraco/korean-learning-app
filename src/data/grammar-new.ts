@@ -158,7 +158,7 @@ export const sentencePatterns: GrammarPoint[] = [
     level: 'absolute_beginner',
     topikLevel: 1,
     category: '句型',
-    functionZh: '请求别人给自己某物，点单、购物必备',
+    functionZh: '请求别人给自己某物，点餐、购物必备',
     shortExplanation: '주세요 来自 주다（给）+ 세요（请）。前面加想要的东西，礼貌地请求别人给。',
     structure: ['名词 + 주세요'],
     tags: ['点单', '购物', '请求', '初级必备'],
@@ -925,7 +925,7 @@ export const sentencePatterns: GrammarPoint[] = [
     ],
     compareWith: ['gp-20'],
     difference: '은/는 = 主题（大话题，"至于……"），이/가 = 主语（聚焦"谁/什么"）。',
-    toriTip: '은/는 像是舞台上的聚光灯，把一个人/东西"打到台前"来说。',
+    toriTip: '은/는 像是在舞台上先布好背景，告诉大家\'接下来要说的是关于XX的事\'',
   },
 
   {
@@ -1192,7 +1192,7 @@ export const sentencePatterns: GrammarPoint[] = [
     topikLevel: 1,
     category: '连接',
     functionZh: '连接两个动作或两个事物，"和/然后"',
-    shortExplanation: '-고 连接两个动词或两个名词，表示并列或先后顺序。',
+    shortExplanation: '-고 连接两个动词表示并列或先后；名词并列用 하고',
     structure: ['动词词干 + 고 + 动词', '名词 + 하고 + 名词（口语）'],
     tags: ['连接', '并列', '初级必备'],
     useCases: ['列举动作', '说先后顺序', '列举事物'],
@@ -1461,26 +1461,6 @@ export const sentencePatterns: GrammarPoint[] = [
 
 ];
 
-/** Grammar ID → course day mapping (reverse of COURSE_GRAMMAR_MAP in recordLesson.ts) */
-export const GRAMMAR_TO_COURSE_DAY: Record<string, number> = {
-  'gp-02': 1,
-  'gp-19': 2,
-  'gp-04': 3,
-  'gp-20': 4,
-  'gp-08': 5,
-  'gp-13': 7,
-  'gp-14': 8,
-  'gp-10': 11,
-  'gp-26': 15,
-  'gp-27': 16,
-  'gp-09': 19,
-  'gp-29': 21,
-  'gp-24': 22,
-  'gp-23': 24,
-  'gp-30': 25,
-  'gp-28': 27,
-};
-
 /** Get today's grammar pattern (cycles through 30 patterns by day) */
 const LEVEL_ORDER: Record<string, number> = {
   absolute_beginner: 0,
@@ -1490,6 +1470,7 @@ const LEVEL_ORDER: Record<string, number> = {
 };
 
 export function getTodayPattern(studiedIds?: string[]): GrammarPoint {
+  if (sentencePatterns.length === 0) throw new Error('sentencePatterns is empty');
   // Prefer an unstudied pattern for today
   if (studiedIds && studiedIds.length > 0) {
     const unstudied = sentencePatterns.filter((g) => !studiedIds.includes(g.id));

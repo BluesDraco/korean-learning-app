@@ -1,0 +1,85 @@
+{
+  "total": 53671,
+  "withZhCount": 51985,
+  "onlyKoCount": 1686,
+  "index": [
+    "ㄱ",
+    "ㄴ",
+    "ㄷ",
+    "ㄹ",
+    "ㅁ",
+    "ㅂ",
+    "ㅅ",
+    "ㅇ",
+    "ㅈ",
+    "ㅊ",
+    "ㅋ",
+    "ㅌ",
+    "ㅍ",
+    "ㅎ",
+    "#"
+  ],
+  "buckets": {
+    "ㄱ": {
+      "file": "cho-0",
+      "count": 8419
+    },
+    "ㄴ": {
+      "file": "cho-1",
+      "count": 2088
+    },
+    "ㄷ": {
+      "file": "cho-2",
+      "count": 3918
+    },
+    "ㄹ": {
+      "file": "cho-3",
+      "count": 196
+    },
+    "ㅁ": {
+      "file": "cho-4",
+      "count": 3373
+    },
+    "ㅂ": {
+      "file": "cho-5",
+      "count": 4914
+    },
+    "ㅅ": {
+      "file": "cho-6",
+      "count": 6063
+    },
+    "ㅇ": {
+      "file": "cho-7",
+      "count": 7526
+    },
+    "ㅈ": {
+      "file": "cho-8",
+      "count": 6028
+    },
+    "ㅊ": {
+      "file": "cho-9",
+      "count": 2527
+    },
+    "ㅋ": {
+      "file": "cho-10",
+      "count": 517
+    },
+    "ㅌ": {
+      "file": "cho-11",
+      "count": 1218
+    },
+    "ㅍ": {
+      "file": "cho-12",
+      "count": 1577
+    },
+    "ㅎ": {
+      "file": "cho-13",
+      "count": 3444
+    },
+    "#": {
+      "file": "etc",
+      "count": 1863
+    }
+  },
+  "source": "국립국어원 한국어기초사전 (KRDict) · CC BY-SA 2.0"
+}

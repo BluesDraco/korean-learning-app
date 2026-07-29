@@ -1,0 +1,31 @@
+/* 邀请活动页布局：手机单列，桌面加宽 + 双列填充横向空白 */
+.ia-container {
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.ia-col {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 桌面：加宽容器，进度条全宽，其余分两列铺满 */
+@media (min-width: 900px) {
+  .ia-container {
+    max-width: 940px;
+  }
+  .ia-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: start;
+    margin-top: 16px;
+  }
+  .ia-col > * {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+  .ia-col > * + * {
+    margin-top: 16px !important;
+  }
+}

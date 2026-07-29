@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>나의 스티커 · 我的贴纸 · Tori's Collection</title>
+<script>
+// 鉴权守卫：先隐藏页面，调 /api/auth/me 检测登录态后再显示
+// token 是 httpOnly 的，前端不能直接读 cookie，必须走 API 探活
+// 防 CDN 缓存 HTML 绕过 middleware
+(function () {
+  try {
+    // 立即隐藏页面，防止未登录用户在 fetch 期间看到内容
+    document.documentElement.style.visibility = 'hidden';
+    var done = function () { document.documentElement.style.visibility = ''; };
+    fetch('/api/auth/me', { credentials: 'same-origin', cache: 'no-store' })
+      .then(function (r) {
+        if (r.ok) {
+          done();
+        } else {
+          location.replace('/auth/login?redirect=/sticker.html');
+        }
+      })
+      .catch(done);  // 网络抖动等异常：放行，让 middleware/API 自己鉴权兜底
+  } catch (e) {
+    document.documentElement.style.visibility = '';
+  }
+})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Outfit:wght@200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ================================================================
+   나의 스티커 · 我的贴纸 · Tori's Collection
+   ──────────────────────────────────────────────────────────────
+   Design: Dark holographic card collection
+   Reference: LUMI PAW dark stage aesthetic + TCG rarity system
+   Principles: OKLCH dark palette · Holographic foils · Particle systems
+               Card flip reveal · 3D tilt · Glow tiers · Sound design
+   ================================================================ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ⚠️ 禁止使用 oklch()
+   部分国产壳浏览器（QQ/360/老 Edge）不支持，会导致变量解析失败、整页白底黑字
+   所有颜色必须用 hex (#xxxxxx) 或 rgba(r,g,b,a) */
+:root {
+  /* Dark palette — tinted with depth, never pure black */
+  --void:    #060612;
+  --deep:    #0e0d1f;
+  --mid:     #191a33;
+  --light:   #2a2d4d;
+  --glow:    #3e4783;
+  --star:    #d2d5f2;
+
+  /* Text */
+  --t1: #f0f1fa;
+  --t2: #a8aab9;
+  --t3: #666875;
+  --t4: #40424b;
+
+  /* Card rarity tiers */
+  --r-common:   #81849e;
+  --r-exam:     #efa831;
+  --r-milestone: #e175d9;
+  --r-graduate: #ff9630;
+
+  /* Accent */
+  --gold:   #f5b75b;
+  --neon:   #9e8eef;
+  --lumi:   #9088f0;
+  --cocoa:  #dd84af;
+  --mint:   #3fbe90;
+
+  /* Easing */
+  --eq:  cubic-bezier(0.25, 1, 0.5, 1);
+  --ex:  cubic-bezier(0.16, 1, 0.3, 1);
+  --back: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --snap: cubic-bezier(0.34, 1.8, 0.64, 1);
+
+  /* Layout */
+  --max: 1400px;
+  --pad: clamp(20px, 5vw, 64px);
+
+  /* Type */
+  --f-ko: 'Noto Sans KR', -apple-system, system-ui, sans-serif;
+  --f-en: 'Outfit', -apple-system, system-ui, sans-serif;
+  --f-mono: 'JetBrains Mono', monospace;
+  --f-display: 'Black Han Sans', 'Noto Sans KR', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--f-en), var(--f-ko);
+  background: var(--void);
+  color: var(--t1);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+::selection { background: var(--gold); color: var(--void); }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--deep); }
+::-webkit-scrollbar-thumb { background: var(--light); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--glow); }
+
+/* ================================================================
+   AURORA BACKGROUND
+   ================================================================ */
+.aurora-bg {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+}
+.aurora-bg::before, .aurora-bg::after {
+  content: ''; position: absolute; width: 60vw; height: 60vw;
+  border-radius: 50%; filter: blur(100px); opacity: 0.28;
+  animation: aurora-drift 25s ease-in-out infinite alternate;
+}
+.aurora-bg::before {
+  background: radial-gradient(circle, var(--lumi), transparent 70%);
+  top: -10%; left: -10%;
+}
+.aurora-bg::after {
+  background: radial-gradient(circle, var(--cocoa), transparent 70%);
+  bottom: -10%; right: -10%;
+  animation-delay: -12s;
+}
+@keyframes aurora-drift {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(8vw, 5vh) scale(1.1); }
+  100% { transform: translate(-5vw, 8vh) scale(0.9); }
+}
+
+/* Starfield — twinkle layer for depth */
+#starfield {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+}
+.star {
+  position: absolute; border-radius: 50%;
+  background: var(--star);
+  animation: twinkle var(--tw, 3s) ease-in-out infinite;
+}
+@keyframes twinkle {
+  0%, 100% { opacity: var(--op-min, 0.15); transform: scale(1); }
+  50% { opacity: var(--op-max, 0.7); transform: scale(1.4); }
+}
+
+/* Distant nebula glow — 3rd depth layer */
+.nebula {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 40% 30% at 20% 15%, rgba(62, 71, 131, 0.06), transparent 60%),
+    radial-gradient(ellipse 35% 25% at 80% 50%, rgba(148, 67, 109, 0.05), transparent 60%),
+    radial-gradient(ellipse 30% 20% at 50% 85%, rgba(0, 102, 71, 0.04), transparent 60%);
+}
+
+/* Particle canvas */
+#particles {
+  position: fixed; inset: 0; z-index: 1; pointer-events: none;
+}
+
+/* Cursor glow */
+.cursor-glow {
+  position: fixed; width: 500px; height: 500px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(144, 136, 240, 0.06), transparent 60%);
+  pointer-events: none; z-index: 2; opacity: 0;
+  transition: opacity 0.4s var(--eq); mix-blend-mode: screen;
+}
+
+/* ================================================================
+   PAGE LOADER
+   ================================================================ */
+.page-loader {
+  position: fixed; inset: 0; z-index: 9999; background: var(--void);
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity 0.8s var(--eq), visibility 0.8s var(--eq);
+}
+.page-loader.gone { opacity: 0; visibility: hidden; }
+.pl-inner { display: flex; flex-direction: column; align-items: center; gap: 24px; }
+.pl-logo {
+  font-family: var(--f-display); font-size: clamp(1.6rem, 5vw, 2.8rem);
+  color: var(--t1); letter-spacing: -0.02em; opacity: 0;
+  animation: pl-fade 0.6s var(--eq) 0.1s forwards;
+}
+.pl-logo em { font-style: normal; color: var(--gold); }
+.pl-bar {
+  width: 180px; height: 2px; background: var(--light); border-radius: 1px;
+  overflow: hidden; opacity: 0; animation: pl-fade 0.6s var(--eq) 0.3s forwards;
+}
+.pl-bar::after {
+  content: ''; display: block; width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  animation: pl-sweep 1.2s ease-in-out infinite;
+}
+.pl-text {
+  font-family: var(--f-mono); font-size: 0.65rem;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--t3); opacity: 0; animation: pl-fade 0.6s var(--eq) 0.5s forwards;
+}
+@keyframes pl-fade { to { opacity: 1; } }
+@keyframes pl-sweep { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+
+/* ================================================================
+   NAV
+   ================================================================ */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  /* PWA-SAFE-TOP: statusBarStyle=black-translucent,状态栏透明覆盖顶部,顶栏须垫安全区,勿删 */
+  padding-top: env(safe-area-inset-top, 0px);
+  background: rgba(3, 2, 10, 0.7); backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(35, 38, 68, 0.3);
+  transition: transform 0.4s var(--eq);
+}
+.nav.hidden { transform: translateY(-100%); }
+.nav-inner {
+  max-width: var(--max); margin: 0 auto; padding: 0 var(--pad);
+  display: flex; align-items: center; justify-content: space-between; height: 60px;
+}
+.nav-brand {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--f-ko); font-size: 0.95rem; font-weight: 700;
+  color: var(--t1); text-decoration: none;
+}
+.nav-brand .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--gold); box-shadow: 0 0 10px var(--gold);
+}
+.nav-stats {
+  display: flex; gap: 24px; align-items: center;
+}
+.nav-stat {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--f-mono); font-size: 0.75rem; color: var(--t2);
+}
+.nav-stat .val { color: var(--gold); font-weight: 700; }
+
+/* ================================================================
+   HERO
+   ================================================================ */
+.hero {
+  position: relative; z-index: 3;
+  padding: clamp(100px, 16vh, 180px) var(--pad) clamp(40px, 6vh, 80px);
+  max-width: var(--max); margin: 0 auto;
+}
+.hero > * {
+  opacity: 0; transform: translateY(28px);
+  animation: hero-enter 0.9s var(--eq) forwards;
+}
+.hero > *:nth-child(1) { animation-delay: 0.2s; }
+.hero > *:nth-child(2) { animation-delay: 0.35s; }
+.hero > *:nth-child(3) { animation-delay: 0.5s; }
+.hero > *:nth-child(4) { animation-delay: 0.65s; }
+@keyframes hero-enter { to { opacity: 1; transform: translateY(0); } }
+
+.hero-eyebrow {
+  font-family: var(--f-mono); font-size: 0.72rem; font-weight: 500;
+  letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--t3); margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+.hero-eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--t4); }
+
+.hero-title {
+  font-family: var(--f-display); font-weight: 900;
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  line-height: 0.95; letter-spacing: -0.025em;
+  color: var(--t1); margin-bottom: 8px;
+}
+.hero-title em { font-style: normal; color: var(--gold); }
+.hero-title-en {
+  font-family: var(--f-en); font-weight: 300;
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  color: var(--t3); margin-bottom: 12px; letter-spacing: 0.02em;
+}
+
+.hero-sub {
+  font-family: var(--f-ko); font-weight: 400;
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  color: var(--t2); max-width: 580px; line-height: 1.7;
+}
+
+/* Progress ring + stats */
+.hero-progress {
+  display: flex; align-items: center; gap: 40px; margin-top: 48px;
+  flex-wrap: wrap;
+}
+.progress-ring {
+  position: relative; width: 120px; height: 120px; flex-shrink: 0;
+}
+.progress-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.progress-ring circle { fill: none; stroke-width: 4; }
+.progress-ring .track { stroke: var(--light); }
+.progress-ring .fill {
+  stroke: var(--gold);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1.5s var(--eq);
+  filter: drop-shadow(0 0 6px rgba(245, 183, 91, 0.5));
+}
+.progress-ring .pct {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  font-family: var(--f-en); font-weight: 800; font-size: 1.6rem; color: var(--t1);
+}
+.progress-ring .pct small { font-size: 0.65rem; color: var(--t3); font-weight: 400; }
+
+.hero-numbers {
+  display: flex; gap: 36px; flex-wrap: wrap;
+}
+.hero-num { display: flex; flex-direction: column; gap: 4px; }
+.hero-num .n {
+  font-family: var(--f-en); font-weight: 800;
+  font-size: clamp(1.4rem, 3vw, 2.2rem); color: var(--t1); line-height: 1;
+}
+.hero-num .l {
+  font-family: var(--f-mono); font-size: 0.65rem;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--t3);
+}
+.hero-num .n.gold { color: var(--gold); }
+.hero-num .n.milestone { color: var(--r-milestone); }
+.hero-num .n.graduate { color: var(--r-graduate); }
+
+/* Phase filter */
+.phase-filter {
+  display: flex; gap: 8px; margin-top: 40px; flex-wrap: wrap;
+}
+.phase-pill {
+  padding: 10px 20px; border-radius: 100px;
+  background: rgba(18, 19, 42, 0.6); backdrop-filter: blur(8px);
+  border: 1px solid rgba(35, 38, 68, 0.4);
+  font-family: var(--f-ko); font-size: 0.82rem; font-weight: 500;
+  color: var(--t2); cursor: pointer; transition: all 0.4s var(--eq);
+  display: flex; align-items: center; gap: 8px;
+}
+.phase-pill:hover { border-color: var(--glow); color: var(--t1); transform: translateY(-2px); }
+.phase-pill.active {
+  background: var(--gold); border-color: var(--gold); color: var(--void); font-weight: 700;
+}
+.phase-pill .pdot { width: 6px; height: 6px; border-radius: 50%; }
+.phase-pill[data-phase="all"] .pdot { background: var(--t2); }
+.phase-pill[data-phase="1"] .pdot { background: var(--mint); }
+.phase-pill[data-phase="2"] .pdot { background: var(--gold); }
+.phase-pill[data-phase="3"] .pdot { background: var(--r-milestone); }
+
+/* ================================================================
+   CARD GRID
+   ================================================================ */
+.card-section {
+  position: relative; z-index: 3;
+  max-width: var(--max); margin: 0 auto;
+  padding: 0 var(--pad) 80px;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+/* Card wrapper — 9:16 aspect ratio */
+.card-wrap {
+  position: relative;
+  aspect-ratio: 9 / 16;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.card-inner {
+  position: relative; width: 100%; height: 100%;
+  transition: transform 0.6s var(--back);
+  transform-style: preserve-3d;
+}
+.card-wrap.flipped .card-inner { transform: rotateY(180deg); }
+
+.card-face {
+  position: absolute; inset: 0;
+  border-radius: 16px; overflow: hidden;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+}
+
+/* Card back (locked / unrevealed) */
+.card-back {
+  background: linear-gradient(135deg, #0c0b1a, #17182d);
+  border: 2px solid rgba(53, 56, 84, 0.5);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 16px;
+}
+.card-back::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    repeating-linear-gradient(45deg, transparent 0 20px, rgba(53, 61, 114, 0.04) 20px 21px),
+    radial-gradient(circle at 50% 40%, rgba(53, 61, 114, 0.12), transparent 70%);
+}
+.card-back-logo {
+  font-family: var(--f-display); font-size: 1.8rem;
+  color: #353d72; letter-spacing: -0.02em; z-index: 1;
+}
+.card-back-day {
+  font-family: var(--f-mono); font-size: 0.7rem;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--t4); z-index: 1;
+}
+.card-back-paw {
+  font-size: 28px; opacity: 0.15; z-index: 1;
+}
+
+/* Card front (revealed) */
+.card-front {
+  transform: rotateY(180deg);
+  background: #0a0a15;
+  border: 2px solid rgba(54, 56, 79, 0.6);
+  display: flex; flex-direction: column;
+}
+
+/* Rarity borders & glows — clear visual hierarchy */
+.card-wrap[data-rarity="common"] .card-front {
+  border: 2px solid rgba(72, 75, 99, 0.55);
+  box-shadow: 0 0 0 1px rgba(72, 75, 99, 0.15), 0 4px 16px rgba(3, 2, 10, 0.4);
+}
+.card-wrap[data-rarity="exam"] .card-front {
+  border: 2px solid rgba(225, 160, 53, 0.55);
+  box-shadow:
+    0 0 0 1px rgba(225, 160, 53, 0.2),
+    0 0 24px rgba(225, 160, 53, 0.12),
+    inset 0 0 30px rgba(225, 160, 53, 0.04),
+    0 4px 16px rgba(3, 2, 10, 0.4);
+}
+.card-wrap[data-rarity="milestone"] .card-front {
+  border: 2px solid rgba(225, 117, 217, 0.55);
+  box-shadow:
+    0 0 0 1px rgba(225, 117, 217, 0.2),
+    0 0 28px rgba(225, 117, 217, 0.18),
+    inset 0 0 40px rgba(225, 117, 217, 0.05),
+    0 4px 16px rgba(3, 2, 10, 0.4);
+}
+.card-wrap[data-rarity="graduate"] .card-front {
+  border: 2px solid rgba(255, 150, 66, 0.6);
+  box-shadow:
+    0 0 0 1px rgba(255, 150, 66, 0.25),
+    0 0 36px rgba(255, 150, 66, 0.22),
+    inset 0 0 50px rgba(255, 150, 66, 0.07),
+    0 4px 16px rgba(3, 2, 10, 0.4);
+}
+
+/* Holographic overlay for exam+ */
+.card-wrap[data-rarity="exam"] .card-front::before,
+.card-wrap[data-rarity="milestone"] .card-front::before,
+.card-wrap[data-rarity="graduate"] .card-front::before {
+  content: ''; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: linear-gradient(125deg,
+    transparent 30%,
+    rgba(239, 168, 49, 0.08) 40%,
+    rgba(225, 117, 217, 0.08) 50%,
+    rgba(144, 136, 240, 0.08) 60%,
+    transparent 70%
+  );
+  background-size: 200% 200%;
+  animation: holo-shift 4s ease-in-out infinite;
+}
+@keyframes holo-shift {
+  0%, 100% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+}
+
+/* Milestone rainbow border */
+.card-wrap[data-rarity="milestone"] .card-front::after {
+  content: ''; position: absolute; inset: -1px; z-index: 0; pointer-events: none;
+  border-radius: 16px;
+  background: linear-gradient(135deg,
+    #fb6ca0, #f38300, #97b300,
+    #00c7a9, #00b0ff, #b786ff, #fb6ca0
+  );
+  background-size: 300% 300%;
+  animation: rainbow-flow 6s ease-in-out infinite;
+  opacity: 0.3;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude; -webkit-mask-composite: xor;
+  padding: 1px;
+}
+@keyframes rainbow-flow {
+  0%, 100% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+}
+
+/* Graduate permanent sparkle */
+.card-wrap[data-rarity="graduate"] .card-front::after {
+  content: ''; position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(255, 150, 48, 0.15) 0%, transparent 8%),
+    radial-gradient(circle at 80% 60%, rgba(255, 150, 48, 0.12) 0%, transparent 6%),
+    radial-gradient(circle at 50% 85%, rgba(255, 150, 48, 0.1) 0%, transparent 5%);
+  animation: sparkle-pulse 3s ease-in-out infinite;
+}
+@keyframes sparkle-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* Card image area (placeholder for Tori images) */
+.card-image {
+  position: relative; flex: 1; overflow: hidden;
+  background: linear-gradient(135deg, #151423, #232641);
+  z-index: 1;
+}
+.card-image::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(6, 6, 17, 0.95) 100%);
+  z-index: 2;
+}
+
+/* Placeholder pattern for unreleased images */
+.card-placeholder {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--f-display); font-size: 3rem;
+  color: rgba(72, 81, 129, 0.2);
+  z-index: 1;
+}
+.card-placeholder::after {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(62, 71, 131, 0.1), transparent 50%),
+    radial-gradient(circle at 70% 80%, rgba(144, 136, 240, 0.08), transparent 50%);
+}
+
+/* Locked card — 未收集态：模糊场景预览 + 遮罩 + 爪印（仿 어둠의 구역 隐藏区）*/
+.card-wrap.is-locked { cursor: default; }
+.card-locked {
+  position: absolute; inset: 0;
+  border-radius: 16px; overflow: hidden;
+  background: linear-gradient(135deg, #0c0b1a, #17182d);
+  border: 2px solid rgba(53, 56, 84, 0.5);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 9px;
+}
+.card-locked-bg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover;
+  filter: blur(7px) brightness(0.5) saturate(0.85);
+  transform: scale(1.12);
+  opacity: 0.5;
+}
+.card-locked-veil {
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 50% 42%, rgba(12, 11, 26, 0.5), rgba(6, 6, 17, 0.92) 80%);
+}
+.card-locked-paw {
+  position: relative; z-index: 1;
+  font-size: 30px; opacity: 0.85;
+  filter: drop-shadow(0 0 10px rgba(144, 136, 240, 0.45));
+}
+.card-locked-day {
+  position: relative; z-index: 1;
+  font-family: var(--f-mono); font-size: 0.62rem; font-weight: 500;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--t2);
+}
+.card-locked-hint {
+  position: relative; z-index: 1;
+  font-family: var(--f-ko); font-size: 0.64rem; font-weight: 400;
+  color: var(--t3); text-align: center; line-height: 1.55; padding: 0 14px;
+}
+.card-wrap.is-locked:hover .card-locked { border-color: rgba(144, 136, 240, 0.4); }
+.card-wrap.is-locked:hover .card-locked-bg { opacity: 0.6; }
+
+/* Rarity badge */
+.card-rarity {
+  position: absolute; top: 12px; right: 12px; z-index: 3;
+  padding: 3px 10px; border-radius: 100px;
+  font-family: var(--f-mono); font-size: 0.58rem; font-weight: 700;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  backdrop-filter: blur(8px);
+}
+.card-wrap[data-rarity="common"] .card-rarity {
+  background: rgba(18, 19, 42, 0.7); color: var(--t3); border: 1px solid rgba(53, 61, 114, 0.3);
+}
+.card-wrap[data-rarity="exam"] .card-rarity {
+  background: rgba(239, 168, 49, 0.15); color: var(--gold); border: 1px solid rgba(239, 168, 49, 0.3);
+}
+.card-wrap[data-rarity="milestone"] .card-rarity {
+  background: rgba(225, 117, 217, 0.15); color: var(--r-milestone); border: 1px solid rgba(225, 117, 217, 0.4);
+}
+.card-wrap[data-rarity="graduate"] .card-rarity {
+  background: rgba(255, 150, 48, 0.15); color: var(--r-graduate); border: 1px solid rgba(255, 150, 48, 0.4);
+}
+
+/* Day number on card */
+.card-day {
+  position: absolute; top: 12px; left: 12px; z-index: 3;
+  font-family: var(--f-en); font-weight: 900; font-size: 0.85rem;
+  color: #f0f1fa;
+  text-shadow: 0 2px 8px rgba(1, 1, 5, 0.9), 0 0 4px rgba(1, 1, 5, 0.6);
+  letter-spacing: 0.02em;
+}
+
+/* Card info area (bottom) — strong contrast for readability */
+.card-info {
+  position: relative; z-index: 3;
+  padding: 14px 14px 16px;
+  background: linear-gradient(180deg, transparent, rgba(4, 4, 11, 0.97));
+  display: flex; flex-direction: column; gap: 4px;
+}
+.card-title-ko {
+  font-family: var(--f-ko); font-weight: 700;
+  font-size: 0.88rem; color: #f0f1fa; line-height: 1.3;
+  text-shadow: 0 1px 4px rgba(1, 1, 5, 0.6);
+}
+.card-title-cn {
+  font-family: var(--f-ko); font-weight: 400;
+  font-size: 0.72rem; color: #bbbdc9;
+}
+.card-vocab {
+  font-family: var(--f-mono); font-size: 0.6rem;
+  color: #8b8ea2; margin-top: 4px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* Card hover effects */
+.card-wrap:not(.flipped):hover .card-front {
+  transform: translateY(-8px);
+}
+.card-wrap:not(.flipped):hover .card-front {
+  box-shadow: 0 12px 40px rgba(3, 2, 10, 0.5);
+}
+
+/* Light sweep on hover */
+.card-front .sweep {
+  position: absolute; inset: 0; z-index: 4; pointer-events: none;
+  background: linear-gradient(110deg, transparent 30%, rgba(240, 241, 250, 0.12) 50%, transparent 70%);
+  background-size: 200% 100%; background-position: -100% 0;
+  transition: background-position 0.6s var(--eq);
+}
+.card-wrap:hover .card-front .sweep { background-position: 100% 0; }
+
+/* ================================================================
+   REVEAL ANIMATION — Card flip + gold burst
+   ================================================================ */
+.card-wrap.revealing { z-index: 50; }
+.card-wrap.revealing .card-inner {
+  animation: card-reveal 1.2s var(--back) forwards;
+}
+@keyframes card-reveal {
+  0% { transform: rotateY(0) scale(1); }
+  20% { transform: rotateY(0) scale(1.08); }
+  40% { transform: rotateY(90deg) scale(1.12); }
+  60% { transform: rotateY(180deg) scale(1.12); }
+  80% { transform: rotateY(180deg) scale(1.08); }
+  100% { transform: rotateY(180deg) scale(1); }
+}
+
+/* Gold burst */
+.gold-burst {
+  position: absolute; inset: 0; z-index: 10; pointer-events: none;
+  opacity: 0;
+}
+.card-wrap.revealing .gold-burst {
+  animation: burst 1.2s ease-out forwards;
+}
+@keyframes burst {
+  0% { opacity: 0; transform: scale(0.5); }
+  30% { opacity: 1; transform: scale(1.2); }
+  100% { opacity: 0; transform: scale(2); }
+}
+.gold-burst::before {
+  content: ''; position: absolute; inset: 0; border-radius: 16px;
+  background: radial-gradient(circle, rgba(245, 183, 91, 0.6), transparent 60%);
+}
+
+/* ================================================================
+   CARD DETAIL MODAL
+   ================================================================ */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(3, 2, 10, 0.85); backdrop-filter: blur(12px);
+  display: none; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.4s var(--eq);
+  padding: 20px;
+}
+.modal-overlay.show { display: flex; opacity: 1; }
+
+.modal-card {
+  position: relative;
+  width: min(360px, 90vw);
+  aspect-ratio: 9 / 16;
+  max-height: 85vh;
+  border-radius: 20px; overflow: hidden;
+  transform: scale(0.8); transition: transform 0.5s var(--back);
+  box-shadow: 0 30px 80px rgba(3, 2, 10, 0.8);
+}
+.modal-overlay.show .modal-card { transform: scale(1); }
+
+.modal-card .mc-image {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, var(--mid), var(--light));
+}
+.modal-card .mc-placeholder {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--f-display); font-size: 5rem;
+  color: rgba(53, 61, 114, 0.12);
+}
+.modal-card .mc-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(3, 2, 10, 0.3) 0%, transparent 30%, rgba(3, 2, 10, 0.95) 100%);
+}
+.modal-card .mc-info {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 24px;
+}
+.modal-card .mc-day {
+  font-family: var(--f-mono); font-size: 0.7rem; font-weight: 700;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 8px;
+}
+.modal-card .mc-title-ko {
+  font-family: var(--f-ko); font-weight: 900;
+  font-size: 1.3rem; color: var(--t1); line-height: 1.3;
+}
+.modal-card .mc-title-cn {
+  font-family: var(--f-ko); font-weight: 400;
+  font-size: 0.9rem; color: var(--t2); margin-bottom: 12px;
+}
+.modal-card .mc-vocab {
+  font-family: var(--f-mono); font-size: 0.7rem;
+  color: var(--t3); line-height: 1.6;
+  padding-top: 12px; border-top: 1px solid rgba(35, 38, 68, 0.4);
+}
+.modal-card .mc-rarity {
+  position: absolute; top: 16px; right: 16px;
+  padding: 4px 12px; border-radius: 100px;
+  font-family: var(--f-mono); font-size: 0.62rem; font-weight: 700;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  backdrop-filter: blur(8px);
+}
+
+.modal-close {
+  position: absolute; top: 20px; right: 20px; z-index: 210;
+  width: 40px; height: 40px; border-radius: 50%;
+  background: rgba(18, 19, 42, 0.7); backdrop-filter: blur(8px);
+  border: 1px solid rgba(35, 38, 68, 0.4);
+  color: var(--t1); font-size: 1.2rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.3s var(--eq);
+}
+.modal-close:hover { background: var(--light); transform: rotate(90deg); }
+
+/* ================================================================
+   SECTION DIVIDERS
+   ================================================================ */
+.section-divider {
+  position: relative; z-index: 3;
+  max-width: var(--max); margin: 0 auto;
+  padding: 0 var(--pad);
+  margin-bottom: 32px;
+}
+.section-label {
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 8px;
+}
+.section-label .sline { flex: 1; height: 1px; background: rgba(35, 38, 68, 0.3); }
+.section-label .stext {
+  font-family: var(--f-mono); font-size: 0.68rem; font-weight: 500;
+  letter-spacing: 0.25em; text-transform: uppercase; color: var(--t3);
+}
+.section-label .snum {
+  font-family: var(--f-en); font-weight: 900; font-size: 1rem; color: var(--gold);
+}
+
+/* ================================================================
+   FOOTER
+   ================================================================ */
+.footer {
+  position: relative; z-index: 3;
+  text-align: center; padding: 60px var(--pad) 40px;
+  border-top: 1px solid rgba(35, 38, 68, 0.2);
+}
+.footer-text {
+  font-family: var(--f-mono); font-size: 0.7rem;
+  color: var(--t4); letter-spacing: 0.15em;
+}
+
+/* ================================================================
+   REVEAL ON SCROLL
+   ================================================================ */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s var(--eq), transform 0.7s var(--eq); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ================================================================
+   BURST PARTICLES (for reveal)
+   ================================================================ */
+.burst-particle {
+  position: absolute; width: 4px; height: 4px; border-radius: 50%;
+  pointer-events: none; z-index: 60;
+}
+
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
+@media (max-width: 768px) {
+  .card-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; }
+  .hero-progress { flex-direction: column; align-items: flex-start; gap: 24px; }
+  .nav-stats { display: none; }
+}
+@media (max-width: 480px) {
+  .card-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .card-title-ko { font-size: 0.78rem; }
+  .card-title-cn { font-size: 0.65rem; }
+  .card-vocab { font-size: 0.55rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- Page Loader -->
+<div class="page-loader" id="pageLoader">
+  <div class="pl-inner">
+    <div class="pl-logo">나의 <em>스티커</em></div>
+    <div class="pl-bar"></div>
+    <div class="pl-text">Loading Collection</div>
+  </div>
+</div>
+
+<!-- Background -->
+<div class="nebula"></div>
+<div class="aurora-bg"></div>
+<div id="starfield"></div>
+<canvas id="particles"></canvas>
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- Nav -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="/explore" class="nav-brand" onclick="if(document.referrer&&new URL(document.referrer).origin===location.origin){event.preventDefault();history.back();}"><span class="dot"></span> ← 返回</a>
+    <div class="nav-stats">
+      <div class="nav-stat"><span class="val" id="navCollected">0</span> / 90</div>
+      <div class="nav-stat"><span class="val" id="navPercent">0%</span></div>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-eyebrow">Tori's Sticker Collection · 90 Days</div>
+  <h1 class="hero-title">나의 <em>스티커</em></h1>
+  <p class="hero-sub">我的贴纸 · 每完成一天，收集一张Tori卡片<br>90天的故事，90张回忆</p>
+  <div style="margin-top:18px;padding:12px 16px;background:rgba(18, 19, 42, 0.5);border-left:3px solid var(--gold);border-radius:6px;max-width:580px;font-family:var(--f-ko);font-size:0.85rem;line-height:1.7;color:var(--t2);">
+    这里不只是贴纸馆，更是你复习挑战的地方。<br>
+    <span style="color:var(--gold);font-weight:600;">30 天全部完成后开启二周目难度挑战，奋力攒 ⭐ 吧！</span>
+  </div>
+  <div class="hero-progress">
+    <div class="progress-ring">
+      <svg viewBox="0 0 120 120">
+        <circle class="track" cx="60" cy="60" r="52"/>
+        <circle class="fill" id="progressFill" cx="60" cy="60" r="52" stroke-dasharray="326.7" stroke-dashoffset="326.7"/>
+      </svg>
+      <div class="pct"><span id="pctNum">0</span><small>/ 90</small></div>
+    </div>
+    <div class="hero-numbers">
+      <div class="hero-num"><span class="n" id="numCommon">0</span><span class="l">普通卡</span></div>
+      <div class="hero-num"><span class="n gold" id="numExam">0</span><span class="l">考试卡</span></div>
+      <div class="hero-num"><span class="n milestone" id="numMilestone">0</span><span class="l">里程碑</span></div>
+      <div class="hero-num"><span class="n graduate" id="numGraduate">0</span><span class="l">毕业卡</span></div>
+    </div>
+  </div>
+  <div class="phase-filter">
+    <div class="phase-pill active" data-phase="all"><span class="pdot"></span>전체 All</div>
+    <div class="phase-pill" data-phase="1"><span class="pdot"></span>초급 初级</div>
+    <div class="phase-pill" data-phase="2"><span class="pdot"></span>중급 中级</div>
+    <div class="phase-pill" data-phase="3"><span class="pdot"></span>고급 高级</div>
+  </div>
+</section>
+
+<!-- Card Grid -->
+<section class="card-section">
+  <div class="section-divider">
+    <div class="section-label">
+      <span class="snum" id="sectionNum">01</span>
+      <span class="stext" id="sectionText">All Cards · 전체</span>
+      <span class="sline"></span>
+    </div>
+  </div>
+  <div class="card-grid" id="cardGrid"></div>
+  <div id="emptyHint" style="display:none; text-align:center; padding:60px 20px; color:var(--t3); font-family:var(--f-ko); font-size:0.95rem; line-height:1.8;">
+    ✨ 完成日记课程后<br>贴纸将在这里解锁
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-text">나의 스티커 · 수울 동물시 · V1</div>
+</footer>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal">
+  <button class="modal-close" id="modalClose">✕</button>
+  <div class="modal-card" id="modalCard">
+    <div class="mc-image" id="mcImage"></div>
+    <div class="mc-overlay"></div>
+    <div class="mc-rarity" id="mcRarity"></div>
+    <div class="mc-info">
+      <div class="mc-day" id="mcDay"></div>
+      <div class="mc-title-ko" id="mcTitleKo"></div>
+      <div class="mc-title-cn" id="mcTitleCn"></div>
+      <div class="mc-vocab" id="mcVocab"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ================================================================
+// CARD DATA — 90 days
+// ================================================================
+const cardData = [
+  { day:1, phase:1, rarity:'milestone', titleKo:'출발 전날', titleCn:'出发前夜', vocab:'용기 · 당근 · 엄마', emoji:'🥕' },
+  { day:2, phase:1, rarity:'common', titleKo:'비행기', titleCn:'飞机上', vocab:'주세요 · 감사합니다 · 콜라', emoji:'✈️' },
+  { day:3, phase:1, rarity:'common', titleKo:'인공공항', titleCn:'仁爪机场', vocab:'짐 · 집 · 무거워요', emoji:'🛬' },
+  { day:4, phase:1, rarity:'common', titleKo:'한빛 기숙사', titleCn:'宿舍报到', vocab:'기숙사 · 방 · 열쇠', emoji:'🏠' },
+  { day:5, phase:1, rarity:'common', titleKo:'하루와 만남', titleCn:'遇见Haru', vocab:'안녕하세요 · 친구 · 이웃', emoji:'🐹' },
+  { day:6, phase:1, rarity:'common', titleKo:'한빛 교실', titleCn:'教室·Junho班长', vocab:'교실 · 멤버 · 자기소개', emoji:'📚' },
+  { day:7, phase:1, rarity:'exam', titleKo:'지하철 말차', titleCn:'地铁末班车', vocab:'지하철 · 문 · 도와주세요', emoji:'🚇' },
+  { day:8, phase:1, rarity:'common', titleKo:'첫날 밤', titleCn:'第一晚想家', vocab:'보고 싶어 · 혼자 · 편의점', emoji:'🌙' },
+  { day:9, phase:1, rarity:'common', titleKo:'CU 편의점', titleCn:'第一次自己买饭', vocab:'이거 · 주세요 · 삼각김밥', emoji:'🏪' },
+  { day:10, phase:1, rarity:'common', titleKo:'학교 식당', titleCn:'学校食堂', vocab:'있어요 · 없어요 · 된장국', emoji:'🍽️' },
+  { day:11, phase:1, rarity:'common', titleKo:'다이소', titleCn:'日用品店', vocab:'이거 · 그거 · 저거', emoji:'🧴' },
+  { day:12, phase:1, rarity:'common', titleKo:'문구점', titleCn:'文具店', vocab:'만 원 · 볼펜 · 노트', emoji:'✏️' },
+  { day:13, phase:1, rarity:'common', titleKo:'약국', titleCn:'感冒了', vocab:'감기 · 콧물 · 약', emoji:'💊' },
+  { day:14, phase:1, rarity:'exam', titleKo:'카페 주문', titleCn:'咖啡馆点单', vocab:'라떼 · 뜨거운 · 차가운', emoji:'☕' },
+  { day:15, phase:1, rarity:'common', titleKo:'라면 벽', titleCn:'泡面墙', vocab:'라면 · 맵다 · 맛있어요', emoji:'🍜' },
+  { day:16, phase:1, rarity:'common', titleKo:'부동산', titleCn:'找房', vocab:'방 · 원룸 · 월세', emoji:'🔑' },
+  { day:17, phase:1, rarity:'common', titleKo:'티머니카드', titleCn:'交通卡', vocab:'카드 · 충전 · 만 원', emoji:'💳' },
+  { day:18, phase:1, rarity:'common', titleKo:'수민은행', titleCn:'兽民银行', vocab:'은행 · 통장 · 비밀번호', emoji:'🏦' },
+  { day:19, phase:1, rarity:'common', titleKo:'병원', titleCn:'去医院', vocab:'병원 · 열 · 머리가 아파요', emoji:'🏥' },
+  { day:20, phase:1, rarity:'common', titleKo:'계약 전날', titleCn:'合同预告', vocab:'계약 · 도장 · 내일', emoji:'📜' },
+  { day:21, phase:1, rarity:'exam', titleKo:'집주인 계약', titleCn:'房东签合同', vocab:'계약서 · 도장 · 당근', emoji:'🖊️' },
+  { day:22, phase:1, rarity:'common', titleKo:'해요체', titleCn:'해요体登场', vocab:'해요체 · 존댓말 · 선생님', emoji:'🗣️' },
+  { day:23, phase:1, rarity:'common', titleKo:'홍공거리 생카', titleCn:'弘爪街生카', vocab:'생카 · 팬 · 응원', emoji:'🎤' },
+  { day:24, phase:1, rarity:'common', titleKo:'단톡방', titleCn:'群聊炸了', vocab:'단톡 · 언제 · 어디서', emoji:'💬' },
+  { day:25, phase:1, rarity:'common', titleKo:'수울강 콘서트', titleCn:'兽尔江演唱会', vocab:'응원 · 사랑해 · 외쳐', emoji:'🎶' },
+  { day:26, phase:1, rarity:'common', titleKo:'당근 볼펜', titleCn:'胡萝卜笔', vocab:'필요하다 · 사다 · 귀여워요', emoji:'🥕' },
+  { day:27, phase:1, rarity:'common', titleKo:'회식', titleCn:'烤肉聚餐', vocab:'회식 · 고기 · 잘 먹겠습니다', emoji:'🥩' },
+  { day:28, phase:1, rarity:'exam', titleKo:'팬싸인회', titleCn:'偶像签售会', vocab:'사인 · 좋아해요 · 응원해요', emoji:'💫' },
+  { day:29, phase:1, rarity:'common', titleKo:'과거시제', titleCn:'过去时·日记', vocab:'았어요 · 었어요 · 어제', emoji:'📖' },
+  { day:30, phase:1, rarity:'milestone', titleKo:'초급 졸업', titleCn:'初级月考通过', vocab:'짐 · 집 · 행복', emoji:'🎓' },
+  { day:31, phase:2, rarity:'common', titleKo:'중급반', titleCn:'升入中级班', vocab:'중급 · 다니엘 · 새 반', emoji:'🏫' },
+  { day:32, phase:2, rarity:'common', titleKo:'추석', titleCn:'中秋节', vocab:'추석 · 송편 · 혼자', emoji:'🌕' },
+  { day:33, phase:2, rarity:'common', titleKo:'엄마에게 편지', titleCn:'第一封家书', vocab:'편지 · 보고 싶어 · 사랑해', emoji:'✉️' },
+  { day:34, phase:2, rarity:'common', titleKo:'하루의 비밀', titleCn:'Haru的秘密', vocab:'비밀 · 왜 · 도와줬어', emoji:'🤫' },
+  { day:35, phase:2, rarity:'exam', titleKo:'길을 묻다', titleCn:'被问路·角色反转', vocab:'길 · 오른쪽 · 왼쪽', emoji:'🧭' },
+  { day:36, phase:2, rarity:'common', titleKo:'소포 도착', titleCn:'收到包裹', vocab:'소포 · 엄마 · 훠궈', emoji:'📦' },
+  { day:37, phase:2, rarity:'common', titleKo:'훠거 파티', titleCn:'火锅派对', vocab:'훠거 · 매워요 · 맛있어요', emoji:'🍲' },
+  { day:38, phase:2, rarity:'common', titleKo:'요리 성공', titleCn:'第一次做饭没翻车', vocab:'요리 · 만들다 · 잘 됐어', emoji:'👨‍🍳' },
+  { day:39, phase:2, rarity:'common', titleKo:'한글날', titleCn:'韩国节日', vocab:'한글날 · 글자 · 역사', emoji:'🇰🇷' },
+  { day:40, phase:2, rarity:'common', titleKo:'민지네 집', titleCn:'Minji家做客', vocab:'집 · 가족 · 맛있어요', emoji:'🚪' },
+  { day:41, phase:2, rarity:'common', titleKo:'발표 준비', titleCn:'课堂发表准备', vocab:'발표 · 준비 · 중국', emoji:'📝' },
+  { day:42, phase:2, rarity:'exam', titleKo:'중국 소개 발표', titleCn:'课堂发表·火锅', vocab:'발표 · 훠궈 · 문화', emoji:'🎤' },
+  { day:43, phase:2, rarity:'common', titleKo:'노래방', titleCn:'KTV唱歌', vocab:'노래 · 부르다 · KPOP', emoji:'🎵' },
+  { day:44, phase:2, rarity:'common', titleKo:'수울강 피크닉', titleCn:'兽尔江野餐', vocab:'피크닉 · 김밥 · 딸기', emoji:'🌸' },
+  { day:45, phase:2, rarity:'common', titleKo:'중급 월말고사', titleCn:'中级月考', vocab:'시험 · 쉽다 · 통과', emoji:'📋' },
+  { day:46, phase:2, rarity:'common', titleKo:'하루 생일', titleCn:'Haru的生日', vocab:'생일 · 축하 · 선물', emoji:'🎂' },
+  { day:47, phase:2, rarity:'common', titleKo:'엄마 영상통화', titleCn:'想家夜晚', vocab:'영상통화 · 보고 싶어 · 울었어', emoji:'📱' },
+  { day:48, phase:2, rarity:'common', titleKo:'영화관', titleCn:'看电影', vocab:'영화 · 표 · 재미있어요', emoji:'🎬' },
+  { day:49, phase:2, rarity:'exam', titleKo:'갈등 조율', titleCn:'调解矛盾', vocab:'진심 · 미안해 · 화해', emoji:'🤝' },
+  { day:50, phase:2, rarity:'common', titleKo:'첫눈', titleCn:'初雪', vocab:'눈 · 예뻐요 · 첫눈', emoji:'❄️' },
+  { day:51, phase:2, rarity:'common', titleKo:'혼자 생카', titleCn:'一个人追星', vocab:'혼자 · 팬 · 사진카드', emoji:'🦌' },
+  { day:52, phase:2, rarity:'common', titleKo:'홍공거리 질주', titleCn:'弘爪街狂奔', vocab:'뛰다 · 늦었어 · 목장', emoji:'🏃' },
+  { day:53, phase:2, rarity:'common', titleKo:'치킨 회식', titleCn:'Tori请客', vocab:'치킨 · 내가 쏠게 · 맛있어', emoji:'🍗' },
+  { day:54, phase:2, rarity:'common', titleKo:'동물문 시장', titleCn:'动物门市场', vocab:'시장 · 옷 · 깎아주세요', emoji:'👕' },
+  { day:55, phase:2, rarity:'common', titleKo:'일기 회고', titleCn:'55天的变化', vocab:'변화 · 비교 · 성장', emoji:'📔' },
+  { day:56, phase:2, rarity:'exam', titleKo:'새내기 짐/집', titleCn:'成为别人的光', vocab:'짐 · 집 · 괜찮아요', emoji:'🐰' },
+  { day:57, phase:2, rarity:'common', titleKo:'편지 30통', titleCn:'30封回信', vocab:'편지 · 고마워 · 친구', emoji:'💌' },
+  { day:58, phase:2, rarity:'common', titleKo:'첫날 다시 걷기', titleCn:'重走第一天', vocab:'기억 · 공항 · 지하철', emoji:'🚶' },
+  { day:59, phase:2, rarity:'common', titleKo:'졸업 예행연습', titleCn:'毕业预演', vocab:'연습 · 긴장 · 내일', emoji:'😰' },
+  { day:60, phase:2, rarity:'milestone', titleKo:'중급 졸업', titleCn:'中级毕业·5分钟自述', vocab:'짐 · 집 · 행복 · 잘 살게요', emoji:'🎓' },
+  { day:61, phase:3, rarity:'common', titleKo:'고급반 첫날', titleCn:'高级班·Danielle', vocab:'고급 · 다니엘 · 완벽', emoji:'🦊' },
+  { day:62, phase:3, rarity:'common', titleKo:'카페 면접', titleCn:'打工面试', vocab:'아르바이트 · 면접 · 조금요', emoji:'☕' },
+  { day:63, phase:3, rarity:'common', titleKo:'알바 첫날', titleCn:'打工第一天翻车', vocab:'주문 · 틀렸어요 · 죄송', emoji:'😵' },
+  { day:64, phase:3, rarity:'common', titleKo:'알바 성장', titleCn:'打工成长', vocab:'이제 · 알아듣다 · 익숙', emoji:'💪' },
+  { day:65, phase:3, rarity:'common', titleKo:'포식자 거리', titleCn:'猎食者街区', vocab:'크다 · 무서워 · 조심', emoji:'🐺' },
+  { day:66, phase:3, rarity:'common', titleKo:'체격 차별', titleCn:'体型歧视', vocab:'작다 · 차별 · 거절', emoji:'😢' },
+  { day:67, phase:3, rarity:'common', titleKo:'길을 잃다', titleCn:'迷路·恐惧', vocab:'길을 잃다 · 무서워 · 어두워', emoji:'🌑' },
+  { day:68, phase:3, rarity:'common', titleKo:'무시당함', titleCn:'被无视', vocab:'무시 · 화가 나 · 참았어', emoji:'😤' },
+  { day:69, phase:3, rarity:'common', titleKo:'차별 발언', titleCn:'反歧视发言', vocab:'차별 · 하지 마 · 공평', emoji:'📢' },
+  { day:70, phase:3, rarity:'exam', titleKo:'토론대회', titleCn:'辩论赛', vocab:'토론 · 작지만 · 강해요', emoji:'🗣️' },
+  { day:71, phase:3, rarity:'common', titleKo:'포산 출발', titleCn:'出发爪山', vocab:'고속열차 · 기차 · 포산', emoji:'🚄' },
+  { day:72, phase:3, rarity:'common', titleKo:'해운만', titleCn:'海云湾·大海', vocab:'바다 · 예뻐요 · 시원해', emoji:'🌊' },
+  { day:73, phase:3, rarity:'common', titleKo:'포산 시장', titleCn:'爪山海鲜市场', vocab:'산낙지 · 움직여 · 신선해', emoji:'🐙' },
+  { day:74, phase:3, rarity:'common', titleKo:'포산 사투리', titleCn:'爪山方言', vocab:'사투리 · 가가 · 다르다', emoji:'🏝️' },
+  { day:75, phase:3, rarity:'common', titleKo:'포산 길 잃음', titleCn:'爪山迷路', vocab:'길 · 혼자 · 용기', emoji:'🧭' },
+  { day:76, phase:3, rarity:'common', titleKo:'여행의 의미', titleCn:'旅行的意义', vocab:'여행 · 배우다 · 추억', emoji:'📸' },
+  { day:77, phase:3, rarity:'exam', titleKo:'여행 계획 발표', titleCn:'旅行计划·最高分', vocab:'제수도 · 코스 · 최고점', emoji:'🗺️' },
+  { day:78, phase:3, rarity:'common', titleKo:'제수도', titleCn:'济兽岛·矮马橘子', vocab:'조랑말 · 감귤 · 돌하르방', emoji:'🐴' },
+  { day:79, phase:3, rarity:'common', titleKo:'제수도 길 잃음', titleCn:'济兽岛迷路', vocab:'신호 · 없어 · 할머니', emoji:'📶' },
+  { day:80, phase:3, rarity:'common', titleKo:'하루 간병', titleCn:'照顾Haru', vocab:'열 · 약 · 죽 · 고마워', emoji:'🤒' },
+  { day:81, phase:3, rarity:'common', titleKo:'민지와 다툼', titleCn:'和Minji吵架', vocab:'싸우다 · 화났어 · 보고 싶어', emoji:'💢' },
+  { day:82, phase:3, rarity:'common', titleKo:'수울강 다리 화해', titleCn:'兽尔江大桥和好', vocab:'미안해 · 변했어 · 진심', emoji:'🌉' },
+  { day:83, phase:3, rarity:'common', titleKo:'하루의 진실', titleCn:'Haru的真相', vocab:'용기대 · 당근 · 기억', emoji:'🕯️' },
+  { day:84, phase:3, rarity:'exam', titleKo:'공개 연설', titleCn:'公开演讲', vocab:'연설 · 잊어버렸어 · 용기', emoji:'🎤' },
+  { day:85, phase:3, rarity:'common', titleKo:'졸업 카운트다운', titleCn:'毕业倒计时', vocab:'졸업 · 준비 · 5일', emoji:'⏳' },
+  { day:86, phase:3, rarity:'common', titleKo:'마지막 수업', titleCn:'最后一课', vocab:'마지막 · 선생님 · 감사', emoji:'📖' },
+  { day:87, phase:3, rarity:'common', titleKo:'엄마 방문', titleCn:'妈妈来了', vocab:'엄마 · 한국 · 함께', emoji:'👩‍👧' },
+  { day:88, phase:3, rarity:'common', titleKo:'졸업 사진', titleCn:'毕业照', vocab:'학사모 · 사진 · 네 사람', emoji:'📸' },
+  { day:89, phase:3, rarity:'common', titleKo:'졸업 전날 밤', titleCn:'毕业前夜', vocab:'밤 · 대화 · 추억', emoji:'🌙' },
+  { day:90, phase:3, rarity:'graduate', titleKo:'졸업 연설', titleCn:'毕业演讲', vocab:'짐 · 집 · 잘 살게요', emoji:'🎓' },
+];
+
+// ================================================================
+// STATE — fetched from API
+// ================================================================
+let collectedDays = new Set();
+let newCards = new Set();
+(async function loadProgress() {
+  try {
+    const res = await fetch('/api/progress');
+    const data = await res.json();
+    collectedDays = new Set(data.collectedDays || []);
+    newCards = new Set(data.newDays || []);
+  } catch { /* fallback: empty */ }
+  finally { renderCards(); }
+})();
+
+// ================================================================
+// RENDER CARDS
+// ================================================================
+function renderCards(phaseFilter = 'all') {
+  const grid = document.getElementById('cardGrid');
+  let html = '';
+  let visibleCount = 0;
+
+  cardData.forEach(card => {
+    if (phaseFilter !== 'all' && card.phase !== parseInt(phaseFilter)) return;
+    visibleCount++;
+
+    const isCollected = collectedDays.has(card.day);
+    const isNew = newCards.has(card.day);
+    const rarityLabels = { common:'Normal', exam:'Exam', milestone:'Milestone', graduate:'Graduate' };
+
+    if (isCollected) {
+      html += `
+        <div class="card-wrap flipped${isNew ? ' revealing' : ''}" data-day="${card.day}" data-rarity="${card.rarity}" data-phase="${card.phase}">
+          <div class="card-inner">
+            <div class="card-face card-back">
+              <div class="card-back-day">DAY ${String(card.day).padStart(2,'0')}</div>
+              <div class="card-back-paw">🐾</div>
+            </div>
+            <div class="card-face card-front">
+              <div class="card-image">
+                <img src="/images/diary/day-${String(card.day).padStart(2,'0')}-scene.jpg" alt="${card.titleKo}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<div class=\\'card-placeholder\\'>'+this.dataset.emoji+'</div>');" data-emoji="${card.emoji}" /></div>
+              <div class="card-day">DAY ${String(card.day).padStart(2,'0')}</div>
+              <div class="card-rarity">${rarityLabels[card.rarity]}</div>
+              <div class="card-info">
+                <div class="card-title-ko">${card.titleKo}</div>
+                <div class="card-title-cn">${card.titleCn}</div>
+                <div class="card-vocab">${card.vocab}</div>
+              </div>
+              <div class="sweep"></div>
+            </div>
+          </div>
+          <div class="gold-burst"></div>
+        </div>`;
+    } else {
+      html += `
+        <div class="card-wrap is-locked" data-day="${card.day}" data-rarity="${card.rarity}" data-phase="${card.phase}">
+          <div class="card-locked">
+            <img class="card-locked-bg" src="/images/diary/day-${String(card.day).padStart(2,'0')}-scene.jpg" alt="" loading="lazy" onerror="this.remove();" />
+            <div class="card-locked-veil"></div>
+            <span class="card-locked-paw">🐾</span>
+            <span class="card-locked-day">DAY ${String(card.day).padStart(2,'0')}</span>
+            <span class="card-locked-hint">아직 획득하지 못했어요<br>일기를 완료하면 열려요</span>
+          </div>
+        </div>`;
+    }
+  });
+
+  grid.innerHTML = html;
+  document.getElementById('emptyHint').style.display = collectedDays.size === 0 ? 'block' : 'none';
+  updateStats();
+  initCardClicks();
+  initRevealingCards();
+}
+
+// ================================================================
+// STATS UPDATE
+// ================================================================
+function updateStats() {
+  const total = cardData.length;
+  const collected = collectedDays.size;
+  const pct = Math.round((collected / total) * 100);
+
+  document.getElementById('navCollected').textContent = collected;
+  document.getElementById('navPercent').textContent = pct + '%';
+  document.getElementById('pctNum').textContent = collected;
+
+  // Progress ring
+  const circumference = 2 * Math.PI * 52;
+  const offset = circumference - (collected / total) * circumference;
+  document.getElementById('progressFill').style.strokeDashoffset = offset;
+
+  // Rarity counts
+  let common=0, exam=0, milestone=0, graduate=0;
+  cardData.forEach(c => {
+    if (!collectedDays.has(c.day)) return;
+    if (c.rarity === 'common') common++;
+    else if (c.rarity === 'exam') exam++;
+    else if (c.rarity === 'milestone') milestone++;
+    else if (c.rarity === 'graduate') graduate++;
+  });
+  document.getElementById('numCommon').textContent = common;
+  document.getElementById('numExam').textContent = exam;
+  document.getElementById('numMilestone').textContent = milestone;
+  document.getElementById('numGraduate').textContent = graduate;
+}
+
+// ================================================================
+// CARD CLICKS — flip + open modal
+// ================================================================
+function initCardClicks() {
+  document.querySelectorAll('.card-wrap').forEach(card => {
+    card.addEventListener('click', () => {
+      const day = parseInt(card.dataset.day);
+      if (collectedDays.has(day)) {
+        playClick();
+        openModal(day);
+      } else {
+        playLocked();
+      }
+    });
+  });
+}
+
+// ================================================================
+// REVEALING CARDS — flip animation + gold burst + particles
+// ================================================================
+function initRevealingCards() {
+  document.querySelectorAll('.card-wrap.revealing').forEach(card => {
+    // Start with card showing back (not flipped) for reveal animation
+    card.classList.remove('flipped');
+
+    setTimeout(() => {
+      playReveal();
+      // Create burst particles
+      createBurstParticles(card);
+      // Flip to front during reveal animation
+      card.classList.add('flipped');
+
+      // After reveal animation, remove revealing class
+      setTimeout(() => {
+        card.classList.remove('revealing');
+        newCards.delete(parseInt(card.dataset.day));
+      }, 1500);
+    }, 500);
+  });
+}
+
+// ================================================================
+// BURST PARTICLES — gold particles on card reveal
+// ================================================================
+function createBurstParticles(card) {
+  const rect = card.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  const colors = [
+    '#f5b75b',
+    '#efa831',
+    '#e175d9',
+    '#9088f0',
+    '#ff9630',
+  ];
+
+  for (let i = 0; i < 24; i++) {
+    const p = document.createElement('div');
+    p.className = 'burst-particle';
+    p.style.left = cx + 'px';
+    p.style.top = cy + 'px';
+    p.style.background = colors[Math.floor(Math.random() * colors.length)];
+    p.style.boxShadow = `0 0 6px ${colors[Math.floor(Math.random() * colors.length)]}`;
+    document.body.appendChild(p);
+
+    const angle = (i / 24) * Math.PI * 2;
+    const distance = 80 + Math.random() * 120;
+    const tx = Math.cos(angle) * distance;
+    const ty = Math.sin(angle) * distance;
+    const duration = 800 + Math.random() * 600;
+
+    p.animate([
+      { transform: 'translate(0, 0) scale(1)', opacity: 1 },
+      { transform: `translate(${tx}px, ${ty}px) scale(0)`, opacity: 0 }
+    ], { duration, easing: 'cubic-bezier(0.25, 1, 0.5, 1)' });
+
+    setTimeout(() => p.remove(), duration);
+  }
+}
+
+// ================================================================
+// MODAL
+// ================================================================
+function openModal(day) {
+  const card = cardData.find(c => c.day === day);
+  if (!card) return;
+
+  const rarityLabels = { common:'Normal', exam:'Exam', milestone:'Milestone', graduate:'Graduate' };
+  const rarityColors = { common:'var(--t3)', exam:'var(--gold)', milestone:'var(--r-milestone)', graduate:'var(--r-graduate)' };
+
+  document.getElementById('mcDay').textContent = `DAY ${String(day).padStart(2,'0')} · PHASE ${card.phase}`;
+  document.getElementById('mcTitleKo').textContent = card.titleKo;
+  document.getElementById('mcTitleCn').textContent = card.titleCn;
+  document.getElementById('mcVocab').textContent = card.vocab;
+  document.getElementById('mcRarity').textContent = rarityLabels[card.rarity];
+  document.getElementById('mcRarity').style.color = rarityColors[card.rarity];
+  document.getElementById('mcRarity').style.borderColor = rarityColors[card.rarity];
+  document.getElementById('mcRarity').style.background = `${rarityColors[card.rarity].replace(')', ' / 0.15)')}`;
+  const imgUrl = `/images/diary/day-${String(day).padStart(2,'0')}-scene.jpg`;
+  document.getElementById('mcImage').style.backgroundImage = `url(${imgUrl})`;
+  document.getElementById('mcImage').style.backgroundSize = 'cover';
+  document.getElementById('mcImage').style.backgroundPosition = 'center';
+
+  const modal = document.getElementById('modal');
+  modal.classList.add('show');
+
+  // 3D tilt on hover
+  const modalCard = document.getElementById('modalCard');
+  modalCard.onmousemove = (e) => {
+    const rect = modalCard.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    modalCard.style.transform = `scale(1) rotateY(${x * 8}deg) rotateX(${-y * 8}deg)`;
+  };
+  modalCard.onmouseleave = () => {
+    modalCard.style.transform = 'scale(1) rotateY(0) rotateX(0)';
+  };
+}
+
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.addEventListener("keydown", function(e) { if (e.key === "Escape") closeModal(); });
+document.getElementById('modal').addEventListener('click', (e) => {
+  if (e.target.id === 'modal') closeModal();
+});
+function closeModal() {
+  document.getElementById('modal').classList.remove('show');
+}
+
+// ================================================================
+// PHASE FILTER
+// ================================================================
+document.querySelectorAll('.phase-pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    document.querySelectorAll('.phase-pill').forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+    const phase = pill.dataset.phase;
+    const labels = { all:'All Cards · 전체', '1':'Phase 1 · 초급', '2':'Phase 2 · 중급', '3':'Phase 3 · 고급' };
+    const nums = { all:'01', '1':'02', '2':'03', '3':'04' };
+    document.getElementById('sectionText').textContent = labels[phase];
+    document.getElementById('sectionNum').textContent = nums[phase];
+    playTab();
+    renderCards(phase);
+  });
+});
+
+// ================================================================
+// PARTICLES
+// ================================================================
+function initParticles() {
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  const colors = [
+    'rgba(144, 136, 240, 0.25)',
+    'rgba(221, 132, 175, 0.2)',
+    'rgba(245, 183, 91, 0.2)',
+    'rgba(63, 190, 144, 0.15)',
+  ];
+
+  function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  resize(); window.addEventListener('resize', resize);
+
+  for (let i = 0; i < 35; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 2.5 + 0.5,
+      vy: -(Math.random() * 0.3 + 0.05),
+      vx: (Math.random() - 0.5) * 0.15,
+      color: colors[Math.floor(Math.random() * colors.length)],
+    });
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      if (p.y < -10) { p.y = canvas.height + 10; p.x = Math.random() * canvas.width; }
+      if (p.x < -10) p.x = canvas.width + 10;
+      if (p.x > canvas.width + 10) p.x = -10;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.fill();
+    });
+    requestAnimationFrame(animate);
+  }
+  animate();
+}
+
+// ================================================================
+// CURSOR GLOW
+// ================================================================
+function initCursorGlow() {
+  const glow = document.getElementById('cursorGlow');
+  let mx = 0, my = 0, gx = 0, gy = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; glow.style.opacity = '1'; });
+  document.addEventListener('mouseleave', () => glow.style.opacity = '0');
+  (function loop() {
+    gx += (mx - gx) * 0.08; gy += (my - gy) * 0.08;
+    glow.style.transform = `translate(${gx}px, ${gy}px) translate(-50%, -50%)`;
+    requestAnimationFrame(loop);
+  })();
+}
+
+// ================================================================
+// SCROLL NAV
+// ================================================================
+function initScrollNav() {
+  const nav = document.getElementById('nav');
+  let lastY = window.scrollY;
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if (y > lastY && y > 200) nav.classList.add('hidden');
+    else nav.classList.remove('hidden');
+    lastY = y;
+  });
+}
+
+// ================================================================
+// SCROLL REVEAL
+// ================================================================
+function initScrollReveal() {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  setTimeout(() => {
+    document.querySelectorAll('.card-wrap').forEach(el => { el.classList.add('reveal'); obs.observe(el); });
+  }, 200);
+}
+
+// ================================================================
+// SOUND
+// ================================================================
+let audioCtx = null;
+function getAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); return audioCtx; }
+
+function playHover() {
+  const ctx = getAudio();
+  const o = ctx.createOscillator(); const g = ctx.createGain();
+  o.connect(g); g.connect(ctx.destination);
+  o.frequency.value = 1200; o.type = 'sine';
+  g.gain.setValueAtTime(0.012, ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.06);
+  o.start(); o.stop(ctx.currentTime + 0.06);
+}
+
+function playClick() {
+  const ctx = getAudio();
+  [660, 880].forEach((freq, i) => {
+    const o = ctx.createOscillator(); const g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.frequency.value = freq; o.type = 'sine';
+    const t = ctx.currentTime + i * 0.05;
+    g.gain.setValueAtTime(0.02, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.12);
+    o.start(t); o.stop(t + 0.12);
+  });
+}
+
+function playTab() {
+  const ctx = getAudio();
+  const o = ctx.createOscillator(); const g = ctx.createGain();
+  o.connect(g); g.connect(ctx.destination);
+  o.frequency.value = 523; o.type = 'sine';
+  g.gain.setValueAtTime(0.02, ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.1);
+  o.start(); o.stop(ctx.currentTime + 0.1);
+}
+
+function playLocked() {
+  const ctx = getAudio();
+  const o = ctx.createOscillator(); const g = ctx.createGain();
+  o.connect(g); g.connect(ctx.destination);
+  o.frequency.value = 200; o.type = 'sawtooth';
+  g.gain.setValueAtTime(0.03, ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.15);
+  o.start(); o.stop(ctx.currentTime + 0.15);
+}
+
+function playReveal() {
+  const ctx = getAudio();
+  // Whoosh + chime
+  const o1 = ctx.createOscillator(); const g1 = ctx.createGain();
+  o1.connect(g1); g1.connect(ctx.destination);
+  o1.frequency.setValueAtTime(400, ctx.currentTime);
+  o1.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.3);
+  o1.type = 'sine';
+  g1.gain.setValueAtTime(0.03, ctx.currentTime);
+  g1.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.4);
+  o1.start(); o1.stop(ctx.currentTime + 0.4);
+
+  // Sparkle
+  setTimeout(() => {
+    [880, 1108, 1318].forEach((freq, i) => {
+      const o = ctx.createOscillator(); const g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.frequency.value = freq; o.type = 'sine';
+      const t = ctx.currentTime + i * 0.08;
+      g.gain.setValueAtTime(0.015, t);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.3);
+      o.start(t); o.stop(t + 0.3);
+    });
+  }, 300);
+}
+
+// ================================================================
+// PAGE LOADER
+// ================================================================
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('pageLoader').classList.add('gone'), 900);
+});
+
+// ================================================================
+// STARFIELD — twinkling stars for depth
+// ================================================================
+function initStarfield() {
+  const container = document.getElementById('starfield');
+  const count = 80;
+  for (let i = 0; i < count; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    const size = Math.random() * 2 + 0.5;
+    star.style.width = size + 'px';
+    star.style.height = size + 'px';
+    star.style.left = Math.random() * 100 + '%';
+    star.style.top = Math.random() * 100 + '%';
+    star.style.setProperty('--tw', (Math.random() * 4 + 2) + 's');
+    star.style.setProperty('--op-min', (Math.random() * 0.1 + 0.05).toFixed(2));
+    star.style.setProperty('--op-max', (Math.random() * 0.4 + 0.4).toFixed(2));
+    star.style.animationDelay = (Math.random() * 5) + 's';
+    container.appendChild(star);
+  }
+}
+
+// ================================================================
+// INIT
+// ================================================================
+initStarfield();
+initParticles();
+initCursorGlow();
+initScrollNav();
+initScrollReveal();
+
+// Add hover sound to cards after render
+setTimeout(() => {
+  document.querySelectorAll('.card-wrap').forEach(card => {
+    card.addEventListener('mouseenter', playHover);
+  });
+}, 300);
+
+</script>
+
+</body>
+</html>

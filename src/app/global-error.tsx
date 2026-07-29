@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect } from 'react';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 
 export default function GlobalError({
   error,
@@ -9,6 +11,8 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const { lang } = useLang();
+
   useEffect(() => {
     console.error(error);
   }, [error]);
@@ -28,8 +32,8 @@ export default function GlobalError({
         }}>
           <div style={{ fontSize: 48 }}>🐰</div>
           <div>
-            <h1 style={{ fontSize: 18, fontWeight: 700, color: '#241917', margin: '0 0 6px' }}>页面出了点问题</h1>
-            <p style={{ fontSize: 14, color: '#89756e', margin: 0 }}>请尝试刷新，或返回主页</p>
+            <h1 style={{ fontSize: 18, fontWeight: 700, color: '#241917', margin: '0 0 6px' }}>{t('gerr.title', lang)}</h1>
+            <p style={{ fontSize: 14, color: '#89756e', margin: 0 }}>{t('gerr.desc', lang)}</p>
           </div>
           <div style={{ display: 'flex', gap: 12 }}>
             <button
@@ -39,7 +43,7 @@ export default function GlobalError({
                 color: '#fff', fontSize: 14, fontWeight: 600, border: 'none', cursor: 'pointer',
               }}
             >
-              重试
+              {t('gerr.retry', lang)}
             </button>
             <a
               href="/daily"
@@ -49,7 +53,7 @@ export default function GlobalError({
                 textDecoration: 'none', display: 'inline-block',
               }}
             >
-              回主页
+              {t('gerr.home', lang)}
             </a>
           </div>
         </div>

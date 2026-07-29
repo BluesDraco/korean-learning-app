@@ -1,0 +1,112 @@
+/* ═══════════════════════════════════════════════════════════════
+   TOPIK 成绩报告页 · 桌面专属右栏（成绩速览 + 复盘操作）
+   - 桌面 ≥1280 sticky：成绩概要 + 最弱题型 + 复盘操作
+   - 窄屏收起，正文本身已含完整成绩内容
+   ═══════════════════════════════════════════════════════════════ */
+
+.tk-scope {
+  --rr-coral: #e8607a;
+  --rr-coral-soft: #ffe1e4;
+  --rr-coral-strong: #c94860;
+}
+[data-theme='dark'] .tk-scope {
+  --rr-coral: #ff8fa0;
+  --rr-coral-soft: rgba(232, 96, 122, .18);
+  --rr-coral-strong: #ffa9b7;
+}
+
+/* 布局壳：窄屏块级，≥1280 两栏 */
+.tk-scope .tk-result-layout { display: block; }
+@media (min-width: 1280px) {
+  .tk-scope .tk-result-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 32px;
+    max-width: 1140px;
+    margin: 0 auto;
+    align-items: start;
+  }
+  /* 正文列内的 .hr-stage 去掉自身居中和窄限，交给 grid */
+  .tk-scope .tk-result-layout > .tk-result-col .hr-stage {
+    max-width: none !important;
+    margin: 0 !important;
+  }
+}
+
+.tk-scope .rr-rail { display: none; }
+@media (min-width: 1280px) {
+  .tk-scope .rr-rail {
+    display: flex; flex-direction: column; gap: 16px;
+    position: sticky; top: 24px; padding-top: 24px;
+  }
+}
+
+.tk-scope .rr-card {
+  background: var(--color-surface-2); border: 1px solid var(--color-border-1);
+  border-radius: 16px; padding: 18px;
+}
+.tk-scope .rr-card-title {
+  display: flex; align-items: center; gap: 7px;
+  font-family: 'JetBrains Mono', Menlo, Consolas, monospace;
+  font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--color-ink-3); margin-bottom: 14px;
+}
+.tk-scope .rr-card-title .rr-ico { color: var(--rr-coral); }
+
+/* 成绩环 */
+.tk-scope .rr-ring-wrap { display: flex; align-items: center; gap: 16px; }
+.tk-scope .rr-ring { position: relative; width: 78px; height: 78px; flex-shrink: 0; }
+.tk-scope .rr-ring svg { transform: rotate(-90deg); }
+.tk-scope .rr-ring-track { stroke: var(--color-border-2); }
+.tk-scope .rr-ring-fill { stroke-linecap: round; transition: stroke-dashoffset .6s cubic-bezier(.2,.7,.2,1); }
+.tk-scope .rr-ring-fill.pass { stroke: var(--color-mint-strong); }
+.tk-scope .rr-ring-fill.fail { stroke: var(--rr-coral); }
+.tk-scope .rr-ring-num {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; line-height: 1;
+}
+.tk-scope .rr-ring-num b {
+  font-family: 'Fraunces', 'Source Han Serif SC', 'Noto Serif SC', serif;
+  font-weight: 600; font-size: 22px; color: var(--color-ink-1);
+}
+.tk-scope .rr-ring-num span {
+  font-size: 9px; color: var(--color-ink-4); font-family: 'JetBrains Mono', monospace;
+  margin-top: 2px; letter-spacing: .05em;
+}
+.tk-scope .rr-ring-meta { font-size: 13px; color: var(--color-ink-3); line-height: 1.7; }
+.tk-scope .rr-ring-meta b { font-family: 'Fraunces', serif; font-style: italic; font-size: 16px; color: var(--color-ink-1); }
+.tk-scope .rr-ring-meta .mint { color: var(--color-mint-strong); }
+.tk-scope .rr-ring-meta .coral { color: var(--rr-coral-strong); }
+
+.tk-scope .rr-stat { display: flex; justify-content: space-between; align-items: baseline; padding: 8px 0; font-size: 13px; color: var(--color-ink-2, var(--color-ink-1)); }
+.tk-scope .rr-stat + .rr-stat { border-top: 1px solid var(--color-border-1); }
+.tk-scope .rr-stat b { font-family: 'JetBrains Mono', monospace; font-size: 15px; color: var(--color-ink-1); }
+.tk-scope .rr-stat-grid { margin-top: 12px; }
+
+/* 最弱题型 */
+.tk-scope .rr-weak-row { padding: 9px 0; }
+.tk-scope .rr-weak-row + .rr-weak-row { border-top: 1px solid var(--color-border-1); }
+.tk-scope .rr-weak-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+.tk-scope .rr-weak-label { font-size: 13px; color: var(--color-ink-1); font-weight: 500; }
+.tk-scope .rr-weak-count { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--color-ink-3); }
+.tk-scope .rr-weak-bar { height: 6px; border-radius: 3px; background: var(--color-surface-4); overflow: hidden; }
+.tk-scope .rr-weak-fill { height: 100%; border-radius: 3px; background: var(--rr-coral); }
+
+/* 操作按钮 */
+.tk-scope .rr-actions { display: flex; flex-direction: column; gap: 8px; }
+.tk-scope .rr-btn {
+  width: 100%; padding: 12px; border-radius: 12px; border: none; cursor: pointer;
+  font-family: 'Noto Sans SC', 'PingFang SC', system-ui, sans-serif;
+  font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 6px;
+  transition: filter .15s, border-color .15s, color .15s;
+}
+.tk-scope .rr-btn.primary { background: var(--rr-coral); color: #fff; }
+.tk-scope .rr-btn.primary:hover { filter: brightness(1.05); }
+.tk-scope .rr-btn.ghost { background: transparent; border: 1.5px solid var(--color-border-2); color: var(--color-ink-3); }
+.tk-scope .rr-btn.ghost:hover { border-color: var(--rr-coral); color: var(--rr-coral-strong); }
+.tk-scope .rr-btn:focus-visible { outline: 2px solid var(--rr-coral); outline-offset: 2px; }
+.tk-scope .rr-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tk-scope .rr-ring-fill { transition: none; }
+}

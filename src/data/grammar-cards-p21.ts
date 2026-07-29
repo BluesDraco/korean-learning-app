@@ -60,6 +60,7 @@ export const grammarCardsP21: GrammarCard[] = [
       { type: 'usage', text: '表达无法改变的过去的遗憾或推测', examples: '이미 벌어진 일에 대한 반사실 가정' },
       { type: 'compare', text: '和 -(으)면 的区别：现在/将来的一般条件 vs 过去的反事实假设', examples: '비가 오면 안 갈 거예요（可能下雨）/ 비가 왔더라면 안 갔을 거예요（当时下了雨/没下雨都可）' },
       { type: 'note', text: '书面语色彩较强，日常口语常换成 -았/었으면', examples: '갔더라면（书面）≈ 갔으면（口语）' },
+      { type: 'note', text: '后半句时态跟着"结果发生在何时"走：结果指过去用 -았을 텐데/거예요；结果指现在则用现在推测形 -을 텐데/거예요，不必都变过去。', examples: '부자였더라면 그 집을 샀을 텐데요（过去结果）/ 부자였더라면 지금 이 집에 살 텐데요（现在结果）' },
       { type: 'example', text: '조금만 일찍 왔더라면 만날 수 있었을 텐데요 / 그때 참았더라면 후회하지 않았을 거예요' },
     ],
     cardExamples: [
@@ -205,7 +206,7 @@ export const grammarCardsP21: GrammarCard[] = [
     compareLabel: '-(으)면 vs -았/었더라면',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P15 · 第 1 课</div>
+    <div class="ov-hero-label">P21 · 第 1 课</div>
     <div class="ov-hero-title">-았/었더라면</div>
     <div class="ov-hero-sub">对不可改变的过去做反事实假设</div>
   </div>
@@ -286,10 +287,11 @@ export const grammarCardsP21: GrammarCard[] = [
     connectionRules: [
       { type: 'rule', text: '无收音词干 + ㄹ 걸 그랬다', examples: '가다→갈 걸 그랬다 / 사다→살 걸 그랬다 / 하다→할 걸 그랬다' },
       { type: 'rule', text: '有收音词干 + 을 걸 그랬다', examples: '먹다→먹을 걸 그랬다 / 읽다→읽을 걸 그랬다 / 앉다→앉을 걸 그랬다' },
-      { type: 'rule', text: 'ㄹ 词干 ㄹ 脱落 + ㄹ 걸 그랬다', examples: '만들다→만들 걸 그랬다（保留）/ 살다→살 걸 그랬다（保留）' },
+      { type: 'rule', text: 'ㄹ 词干：ㄹ 保留，词干直接 + 걸 그랬다', examples: '만들다→만들 걸 그랬다 / 살다→살 걸 그랬다' },
       { type: 'usage', text: '主语通常是说话人自己，表达"我当时要是做了……就好了"', examples: '나 그때 고백할 걸 그랬어 / 저 그거 살 걸 그랬어요' },
       { type: 'compare', text: '和 -을 걸（省略 그랬다）：完整形对听者说话，省略形自言自语', examples: '갈 걸 그랬어요（跟朋友说）/ 갈걸…（一个人叹气）' },
       { type: 'note', text: '和 -았/었더라면 的区别：这里是"我没做"，那里是"当时的情况如果……"', examples: '살 걸 그랬어（我没买）/ 그때 값이 쌌더라면（当时价格如果便宜）' },
+      { type: 'compare', text: '当心同形 -을걸：本课后悔义讲"过去没做"、语调下降；另有一个推测义 -을걸（"大概……吧"）讲现在/将来猜测、语调上扬，是完全不同的用法（后面章节详学）。', examples: '그때 살걸…（后悔·下降：当时早该买）/ 지금쯤 비쌀걸?（推测·上扬：现在大概挺贵吧）' },
       { type: 'example', text: '전화할 걸 그랬어요 / 미리 예약할 걸 그랬어요 / 참을걸…' },
     ],
     cardExamples: [
@@ -434,7 +436,7 @@ export const grammarCardsP21: GrammarCard[] = [
     compareLabel: '-을 걸 그랬다 vs -았더라면',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P15 · 第 2 课</div>
+    <div class="ov-hero-label">P21 · 第 2 课</div>
     <div class="ov-hero-title">-을/ㄹ 걸 그랬다</div>
     <div class="ov-hero-sub">"早知道就……了" · 对自己当时没做的后悔</div>
   </div>
@@ -519,7 +521,8 @@ export const grammarCardsP21: GrammarCard[] = [
       { type: 'rule', text: '不看收音，所有动词接法一样', examples: '하다→하지 말 걸 / 읽다→읽지 말 걸 / 만들다→만들지 말 걸' },
       { type: 'usage', text: '主语通常是说话人自己，后悔自己做了不该做的事', examples: '내가 그때 화내지 말 걸 그랬어 / 저 그거 사지 말 걸 그랬어요' },
       { type: 'compare', text: '和 -을 걸 그랬다 成对：应该做没做 vs 做了不该做', examples: '전화할 걸 그랬어요（应该打没打）/ 전화하지 말 걸 그랬어요（打了不该打）' },
-      { type: 'note', text: '常和"괜히、공연히（白白地）"等副词搭配，加强懊悔语气', examples: '괜히 말할 걸… / 공연히 사지 말 걸…' },
+      { type: 'note', text: '常和"괜히、공연히（白白地）"等副词搭配，加强懊悔语气', examples: '괜히 말하지 말 걸… / 공연히 사지 말 걸…' },
+      { type: 'compare', text: '和 -지 말았어야 했는데 意思相近：本课偏个人懊悔、口语；-지 말았어야 했는데 带"本不该·义务责任"语气、更书面（是第4课 -았/었어야 했는데 的否定版，后面章节详学）。', examples: '그런 말 하지 말 걸 그랬어요（个人后悔）/ 그런 말 하지 말았어야 했는데（本就不该说，责任语气）' },
       { type: 'note', text: '只能接动词，不能接形容词', examples: '예쁘지 말 걸 그랬어요 ✗（形容词不能用）' },
       { type: 'example', text: '먹지 말 걸 그랬어요 / 늦잠 자지 말 걸 그랬어요 / 그런 말 하지 말걸…' },
     ],
@@ -661,7 +664,7 @@ export const grammarCardsP21: GrammarCard[] = [
     compareLabel: '-을 걸 그랬다 vs -지 말 걸 그랬다',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P15 · 第 3 课</div>
+    <div class="ov-hero-label">P21 · 第 3 课</div>
     <div class="ov-hero-title">-지 말 걸 그랬다</div>
     <div class="ov-hero-sub">"当时不该……的" · 对做了的事情后悔</div>
   </div>
@@ -703,7 +706,7 @@ export const grammarCardsP21: GrammarCard[] = [
     title: '-았/었어야 했는데',
     whatItDoes: '本来应该……的（懊悔+义务感）',
     whatItDoesBody: '表达"本来应当做某事，但实际上没做"的懊悔。\n和 -을 걸 그랬다 类似但语气更强：不仅是后悔，还带有"本来是义务/责任"的语感。\n后半句常省略，或接 -지 못했어요 / 못 했어요 表达实际结果。',
-    structureNote: '结构：动词过去词干（-았/었-）+ 어야 했는데。\n可看作 -아/어야 하다（必须）的过去+回忆形态。\n주어可以是自己也可以是别人，比 -을 걸 그랬다 灵活。',
+    structureNote: '结构：动词过去词干（-았/었-）+ 어야 했는데。\n可看作 -아/어야 하다（必须）的过去+回忆形态。\n主语可以是自己也可以是别人，比 -을 걸 그랬다 灵活。',
     rulesNote: '判断口诀：既有"没做"的懊悔，又有"本该是义务"的意味。\n-을 걸 그랬다 偏个人愿望，-았어야 했는데 偏责任义务。\n对别人评价时也用这个：너 그때 갔어야 했는데（你当时该去的）。',
     structures: [
       {
@@ -752,6 +755,8 @@ export const grammarCardsP21: GrammarCard[] = [
       { type: 'usage', text: '后半句常接 -지 못했다 / 못 -았다 说明实际没做', examples: '전화했어야 했는데 못 했어요 / 갔어야 했는데 시간이 없었어요' },
       { type: 'compare', text: '和 -을 걸 그랬다 的区别：这里有"义务/责任感"，那里是"个人愿望"', examples: '사과했어야 했는데（本是责任）/ 사과할 걸 그랬어요（我个人后悔没做）' },
       { type: 'note', text: '常独立作为独立句，后半句省略也可', examples: '아, 그때 도와줬어야 했는데… / 미리 알렸어야 했는데…' },
+      { type: 'note', text: '两处都要过去：前半 -았어야（本该）+ 后半 -했는데（过去回想·实际没做），两个"过去"缺一不可。丢掉后一个变 -았어야 하는데（现在时）就没了懊悔味，只剩"现在得做"。', examples: '갔어야 했는데（本该去·没去，懊悔）✓ / 갔어야 하는데（现在还得去）✗语气不对' },
+      { type: 'rule', text: '"本不该做却做了"的否定：动词 + 지 말았어야 했는데', examples: '그 말을 하지 말았어야 했는데 / 늦게까지 게임하지 말았어야 했는데' },
       { type: 'example', text: '전화했어야 했는데 / 미리 예약했어야 했는데 / 좀 더 참았어야 했는데' },
     ],
     cardExamples: [
@@ -897,7 +902,7 @@ export const grammarCardsP21: GrammarCard[] = [
     compareLabel: '-을 걸 그랬다 vs -았어야 했는데',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P15 · 第 4 课</div>
+    <div class="ov-hero-label">P21 · 第 4 课</div>
     <div class="ov-hero-title">-았/었어야 했는데</div>
     <div class="ov-hero-sub">"本来该……的" · 带义务责任感的懊悔</div>
   </div>
@@ -986,6 +991,7 @@ export const grammarCardsP21: GrammarCard[] = [
       { type: 'usage', text: '主语可以是自己、别人或情况本身', examples: '내가 갔으면 / 친구가 왔으면 / 날씨가 좋았으면' },
       { type: 'compare', text: '和 -았더라면 差别：口语性 vs 书面性，意思几乎相同', examples: '왔으면 좋았을 텐데（日常）/ 왔더라면 좋았을 텐데（书面）' },
       { type: 'note', text: '现在的愿望用 -았/었으면 좋겠다（未来指向）', examples: '내일 비가 안 왔으면 좋겠다（希望明天不下雨）/ 어제 비가 안 왔으면 좋았을 텐데（昨天要是没下雨就好了）' },
+      { type: 'note', text: '为什么结尾是 텐데 而不是 좋았어요：这件好事其实没发生，韩语要把"（那样的话）本会是好的"标成推测形 좋았을 텐데。中文"就好了"里没有这种"推测"标记，学习者常误写成陈述句 좋았어요', examples: '왔으면 좋았을 텐데（推测·本会好·遗憾）↔ 왔으면 좋았어요（陈述·实际就是好·用于反事实是错的）' },
       { type: 'example', text: '따뜻했으면 좋았을 텐데요 / 시간이 있었으면 좋았을 텐데요 / 알았으면 좋았을 텐데요' },
     ],
     cardExamples: [
@@ -1129,7 +1135,7 @@ export const grammarCardsP21: GrammarCard[] = [
     compareLabel: '-았더라면 vs -았으면 좋았을 텐데',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P15 · 第 5 课</div>
+    <div class="ov-hero-label">P21 · 第 5 课</div>
     <div class="ov-hero-title">-았/었으면 좋았을 텐데</div>
     <div class="ov-hero-sub">"要是……就好了" · 对过去的口语感叹</div>
   </div>
@@ -1217,6 +1223,7 @@ export const grammarCardsP21: GrammarCard[] = [
       { type: 'usage', text: '表达"差点儿发生但没发生"，通常庆幸事情没成真', examples: '넘어질 뻔했어요（差点摔倒，但没摔）/ 지각할 뻔했어요（差点迟到，但没迟到）' },
       { type: 'note', text: '结尾必须是 뻔했다（过去形），不能用现在形 뻔한다 或 뻔해요', examples: '지각할 뻔했어요 ✓ / 지각할 뻔해요 ✗' },
       { type: 'compare', text: '和 -았을 것 같다 差别：뻔했다=没成，-았을 것 같다=已成推测', examples: '넘어질 뻔했다（差点摔）/ 넘어졌을 것 같다（好像摔了）' },
+      { type: 'note', text: '别被中文"差点没"骗了：中文"差点没赶上"其实=赶上了（庆幸），"差点摔了"=没摔。-을 뻔했다 只有一个意思——"险些发生但没发生"，永远不带这个"没"。想说"差点没赶上（但赶上了）"要说 겨우 탔어요/거의 못 탈 뻔했다 另想，别直译成 못 탈 뻔했어요', examples: '差点摔了→넘어질 뻔했어요（没摔）/ 差点没赶上（=赶上了）≠ 못 탈 뻔했어요' },
       { type: 'example', text: '넘어질 뻔했어요 / 지각할 뻔했어요 / 잊어버릴 뻔했어요' },
     ],
     cardExamples: [
@@ -1359,7 +1366,7 @@ export const grammarCardsP21: GrammarCard[] = [
     compareLabel: '-을 뻔했다 vs -았을 것 같다',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P15 · 第 6 课</div>
+    <div class="ov-hero-label">P21 · 第 6 课</div>
     <div class="ov-hero-title">-을/ㄹ 뻔했다</div>
     <div class="ov-hero-sub">"差点儿……" · 险些发生但没发生</div>
   </div>
@@ -1446,6 +1453,7 @@ export const grammarCardsP21: GrammarCard[] = [
       { type: 'usage', text: '语气比字面上"看起来温和"更重，带责备意味，慎用于长辈', examples: '对朋友：피곤하면 쉬지 그랬어 / 对陌生长辈用 -았어야 했는데' },
       { type: 'compare', text: '和 -을 걸 그랬다 配对：一个说自己，一个说别人', examples: '내가 갈 걸 그랬어（我该去的）/ 너 가지 그랬어（你怎么没去）' },
       { type: 'note', text: '否定形 -지 말지 그랬어요：你当时怎么不别……', examples: '그렇게 화내지 말지 그랬어요（你当时怎么不别发火）' },
+      { type: 'note', text: '中文"你怎么不休息"能翻成两句韩语，含义不同：왜 안 쉬었어요? 只是纯问原因（想听答案）；쉬지 그랬어요 带"本该休息却没休息"的建议+轻责，不追问原因。学习者常只会用问句 왜 안…，丢了本课的"该做而没做"语气', examples: '왜 안 물어봤어요?（单纯问：为什么没问）/ 물어보지 그랬어요（你当时该问一下的·轻责+建议）' },
       { type: 'example', text: '쉬지 그랬어요 / 물어보지 그랬어 / 미리 말하지 그랬어요' },
     ],
     cardExamples: [
@@ -1586,7 +1594,7 @@ export const grammarCardsP21: GrammarCard[] = [
     compareLabel: '-지 그랬어요 vs -지 마세요',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P15 · 第 7 课</div>
+    <div class="ov-hero-label">P21 · 第 7 课</div>
     <div class="ov-hero-title">-지 그랬어요</div>
     <div class="ov-hero-sub">"你怎么不……呢" · 对他人过去行为的责备</div>
   </div>
@@ -1676,6 +1684,7 @@ export const grammarCardsP21: GrammarCard[] = [
       { type: 'compare', text: '和 -았더라면 对立：一个假设结果会好，一个假设结果照样不好', examples: '갔더라면 만났을 거예요（去了就能见）/ 갔어도 못 만났을 거예요（去了也见不到）' },
       { type: 'compare', text: '和 -아/어도 差别：现在假设 vs 过去反事实', examples: '가도 안 만나요（现在去也见不到，一般规律）/ 갔어도 못 만났을 거예요（当时去了也见不到）' },
       { type: 'note', text: '后半句常配 -았을 것이다 / -았을 텐데 / 못 -았을 것이다', examples: '알았어도 소용없었을 거예요 / 참았어도 결과는 같았을 거예요' },
+      { type: 'note', text: '核心是"结果和这个条件无关、照旧"，不是"结果一定坏"。后半句多为负面只是习惯，正面也完全成立', examples: '비가 왔어도 갔을 거예요（即使下雨也照样会去·正面）/ 갔어도 못 만났을 거예요（去了也见不到·负面）' },
       { type: 'example', text: '갔어도 못 만났을 거예요 / 알았어도 소용없었을 거예요 / 부자였어도 못 샀을 거예요' },
     ],
     cardExamples: [
@@ -1729,7 +1738,7 @@ export const grammarCardsP21: GrammarCard[] = [
       { icon: '🙅', context: '劝阻无效', ko: '말렸어도 결국 그 사람은 그렇게 했을 거예요.', zh: '就算劝了，那个人最终也还是会那样做。' },
     ],
     mistakes: [
-      { wrong: '갔어도 만났을 거예요（想表达"就算去了也见不到"）', correct: '갔어도 못 만났을 거예요', note: '-았어도 表示"改变了也没用"，后半句必须是负面结果。要说"就能见到"用 -았더라면。' },
+      { wrong: '갔어도 만났을 거예요（想表达"就算去了也见不到"）', correct: '갔어도 못 만났을 거예요', note: '想说"见不到"就得加 못。这里错在漏了否定，不是句型错。（갔어도 만났을 거예요 本身是对的句子，意思是"即使去了也照样能见到"。）' },
       { wrong: '가도 못 만났을 거예요（想表达过去反事实）', correct: '갔어도 못 만났을 거예요', note: '-아/어도（现在时）表一般规律；过去反事实必须用 -았/었어도。' },
       { wrong: '알았어도 도와줄 수 없어요', correct: '알았어도 도와줄 수 없었을 거예요', note: '前后时态一致：前半过去 → 后半也用过去推测形 -았을 것이다。' },
       { wrong: '학생어도 이해 못 했을 거예요', correct: '학생이었어도 이해 못 했을 거예요', note: '名词有收音 → 이었어도。학생 + 이었어도。' },
@@ -1818,7 +1827,7 @@ export const grammarCardsP21: GrammarCard[] = [
     compareLabel: '-았어도 vs -아/어도',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P15 · 第 8 课</div>
+    <div class="ov-hero-label">P21 · 第 8 课</div>
     <div class="ov-hero-title">-았/었어도</div>
     <div class="ov-hero-sub">"即使当时……也……" · 过去反事实让步</div>
   </div>
@@ -1857,11 +1866,11 @@ export const grammarCardsP21: GrammarCard[] = [
     id: 'card-p21-l09',
     partNumber: 21,
     lessonNumber: 9,
-    title: '综合练习⑮',
-    whatItDoes: '第 15 部分总复习',
+    title: 'P21 综合练习',
+    whatItDoes: 'P21 第1～8课 总复习',
     whatItDoesBody: '完成这份练习，检验假设与后悔八大语法是否掌握。\n共 10 题，覆盖 -았더라면、-을 걸 그랬다、-지 말 걸 그랬다、-았어야 했는데、-았으면 좋았을 텐데、-을 뻔했다、-지 그랬어요、-았어도。',
     isPractice: true,
-    structureNote: 'P15 假设与后悔八大语法：\n1. -았더라면（书面反事实）\n2. -을 걸 그랬다（自责该做的没做）\n3. -지 말 걸 그랬다（自责不该做的做了）\n4. -았어야 했는데（义务责任型懊悔）\n5. -았으면 좋았을 텐데（口语过去感叹）\n6. -을 뻔했다（差点儿）\n7. -지 그랬어요（责别人过去没做）\n8. -았어도（过去反事实让步）',
+    structureNote: 'P21 假设与后悔八大语法：\n1. -았더라면（书面反事实）\n2. -을 걸 그랬다（自责该做的没做）\n3. -지 말 걸 그랬다（自责不该做的做了）\n4. -았어야 했는데（义务责任型懊悔）\n5. -았으면 좋았을 텐데（口语过去感叹）\n6. -을 뻔했다（差点儿）\n7. -지 그랬어요（责别人过去没做）\n8. -았어도（过去反事实让步）',
     structures: [
       { ko: '일찍 갔더라면 만났을 텐데요', zh: '要是早去就能见到了。', tokens: [{ text: '일찍', role: 'plain' }, { text: '갔더라면', role: 'verb' }, { text: '만났을 텐데요', role: 'verb' }] },
       { ko: '그 옷을 살 걸 그랬어요', zh: '当时该买那件衣服的。', tokens: [{ text: '그 옷을', role: 'object' }, { text: '살 걸 그랬어요', role: 'verb' }] },
@@ -1873,14 +1882,14 @@ export const grammarCardsP21: GrammarCard[] = [
       { ko: '갔어도 못 만났을 거예요', zh: '去了也见不到。', tokens: [{ text: '갔어도', role: 'verb' }, { text: '못 만났을 거예요', role: 'verb' }] },
     ],
     connectionRules: [
-      { type: 'rule', text: '书面反事实假设 → -았더라면 + -았을 텐데', examples: '갔더라면 만났을 텐데요' },
-      { type: 'rule', text: '口语过去感叹 → -았으면 좋았을 텐데', examples: '갔으면 좋았을 텐데요' },
-      { type: 'rule', text: '自责该做没做 → -을/ㄹ 걸 그랬다', examples: '갈 걸 그랬어요' },
-      { type: 'rule', text: '自责做了不该做 → -지 말 걸 그랬다', examples: '먹지 말 걸 그랬어요' },
-      { type: 'rule', text: '义务责任懊悔 → -았어야 했는데', examples: '갔어야 했는데 못 갔어요' },
-      { type: 'rule', text: '差点发生 → -을/ㄹ 뻔했다', examples: '넘어질 뻔했어요' },
-      { type: 'rule', text: '责别人过去没做 → -지 그랬어요', examples: '가지 그랬어요' },
-      { type: 'rule', text: '过去反事实让步 → -았/었어도 + -았을 것이다', examples: '갔어도 못 만났을 거예요' },
+      { type: 'rule', text: '书面反事实假设 → -았더라면 + -았을 텐데', examples: '갔더라면 만났을 텐데요（要是去了的话就能见到了。）' },
+      { type: 'rule', text: '口语过去感叹 → -았으면 좋았을 텐데', examples: '갔으면 좋았을 텐데요（要是去了就好了。）' },
+      { type: 'rule', text: '自责该做没做 → -을/ㄹ 걸 그랬다', examples: '갈 걸 그랬어요（早知道就去了，真该去的。）' },
+      { type: 'rule', text: '自责做了不该做 → -지 말 걸 그랬다', examples: '먹지 말 걸 그랬어요（早知道就不吃了。）' },
+      { type: 'rule', text: '义务责任懊悔 → -았어야 했는데', examples: '갔어야 했는데 못 갔어요（本该去的，却没能去。）' },
+      { type: 'rule', text: '差点发生 → -을/ㄹ 뻔했다', examples: '넘어질 뻔했어요（差点摔倒。）' },
+      { type: 'rule', text: '责别人过去没做 → -지 그랬어요', examples: '가지 그랬어요（你当时去了就好了，怎么不去呢。）' },
+      { type: 'rule', text: '过去反事实让步 → -았/었어도 + -았을 것이다', examples: '갔어도 못 만났을 거예요（就算去了也见不到吧。）' },
     ],
     cardExamples: [
       {
@@ -1907,7 +1916,7 @@ export const grammarCardsP21: GrammarCard[] = [
       { icon: '💭', context: '自责', ko: '진작 사과할 걸 그랬어요.', zh: '早该道歉的。' },
       { icon: '⚠️', context: '责别人', ko: '피곤하면 좀 쉬지 그랬어요.', zh: '累了怎么不休息呢。' },
       { icon: '😅', context: '差点闯祸', ko: '큰일 날 뻔했어요.', zh: '差点出大事。' },
-      { icon: '🚫', context: '让步反事실', ko: '전화했어도 못 받았을 거예요.', zh: '打了也接不到。' },
+      { icon: '🚫', context: '让步反事实', ko: '전화했어도 못 받았을 거예요.', zh: '打了也接不到。' },
       { icon: '📝', context: '义务反省', ko: '미리 준비했어야 했는데 그러지 못했습니다.', zh: '本该提前准备没做到。' },
     ],
     mistakes: [
@@ -1994,8 +2003,8 @@ export const grammarCardsP21: GrammarCard[] = [
     },
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P15 · 综合练习</div>
-    <div class="ov-hero-title">综合练习⑮</div>
+    <div class="ov-hero-label">P21 · 综合练习</div>
+    <div class="ov-hero-title">P21 综合练习</div>
     <div class="ov-hero-sub">假设与后悔 · 八大语法总复习</div>
   </div>
   <div class="ov-section">

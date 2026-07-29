@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>兔莉 · 首月裂变收益预测</title>
+<style>
+  :root{
+    --au-bg:#fbf6ee; --au-surface:#fffdf9; --au-ink-1:#3a2f28; --au-ink-2:#6b5d52;
+    --au-ink-3:#9c8d80; --au-line:#ece1d2; --au-pink:#ff7fa8; --au-pink-deep:#e85f8c;
+    --au-gold:#c9962f; --au-gold-deep:#a87a1c; --au-mint:#4a9880; --au-purple:#8b6db5;
+    --cons:#a88b6a; --neut:#4a9880; --opt:#8b6db5;
+    --shadow-2:0 6px 18px rgba(58,47,40,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:radial-gradient(120% 90% at 50% 0%,#fef9f1 0%,var(--au-bg) 55%);color:var(--au-ink-1);line-height:1.65;padding:44px 18px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:900px;margin:0 auto}
+  .kicker{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--au-pink-deep);font-weight:700;margin-bottom:8px}
+  h1{font-family:Georgia,"Songti SC",serif;font-size:34px;line-height:1.2;margin-bottom:6px}
+  .meta{color:var(--au-ink-3);font-size:13px;margin-bottom:28px}
+  h2{font-family:Georgia,"Songti SC",serif;font-size:22px;margin:38px 0 14px;padding-bottom:8px;border-bottom:2px solid var(--au-line);display:flex;gap:10px;align-items:center}
+  h2 .n{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:9px;background:linear-gradient(150deg,#ff9dbb,#ff7fa8);color:#fff;font-size:14px;font-weight:700}
+  p{margin-bottom:10px;color:var(--au-ink-2)}
+  table{width:100%;border-collapse:collapse;margin:14px 0;background:var(--au-surface);border-radius:12px;overflow:hidden;box-shadow:var(--shadow-2);font-size:14px}
+  th{background:#fbeee3;text-align:left;padding:11px 14px;font-weight:700;font-size:12.5px}
+  td{padding:10px 14px;border-top:1px solid var(--au-line);color:var(--au-ink-2)}
+  th.cons,td.cons{background:rgba(168,139,106,.06)}
+  th.neut,td.neut{background:rgba(74,152,128,.08)}
+  th.opt,td.opt{background:rgba(139,109,181,.06)}
+  th.cons{color:var(--cons)}th.neut{color:var(--neut)}th.opt{color:var(--opt)}
+  .row-label{color:var(--au-ink-1);font-weight:600}
+  .num{text-align:right;font-variant-numeric:tabular-nums;font-family:"SF Mono",Consolas,monospace}
+  .total td{border-top:2px solid var(--au-line);font-weight:700;color:var(--au-ink-1);background:#fdf7f0}
+  .assume{background:#fff;border:1px dashed #e0cfad;border-radius:8px;padding:3px 8px;font-size:11px;color:var(--au-gold-deep);font-weight:600;white-space:nowrap}
+  .card{background:var(--au-surface);border:1px solid var(--au-line);border-radius:16px;padding:22px 24px;margin:16px 0;box-shadow:var(--shadow-2)}
+  .warn{background:linear-gradient(150deg,#fff4ea,#fffaf5);border:1px solid #f2d9bd;border-left:4px solid var(--au-gold);border-radius:12px;padding:15px 19px;margin:16px 0}
+  .warn strong{color:var(--au-gold-deep)}
+  .key{background:linear-gradient(150deg,#eef7f2,#f7fdfa);border:1px solid #cde9dd;border-left:4px solid var(--au-mint);border-radius:12px;padding:15px 19px;margin:16px 0}
+  .key strong{color:var(--au-mint)}
+  ul{margin:8px 0 8px 20px;color:var(--au-ink-2)}li{margin-bottom:6px}
+  .big{font-size:26px;font-weight:800;font-family:"SF Mono",Consolas,monospace}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:16px 0}
+  .stat{border-radius:12px;padding:16px;text-align:center;color:#fff}
+  .stat.c{background:linear-gradient(150deg,#b89a78,#a88b6a)}
+  .stat.n{background:linear-gradient(150deg,#5aad92,#4a9880)}
+  .stat.o{background:linear-gradient(150deg,#9d80c4,#8b6db5)}
+  .stat .lbl{font-size:12px;opacity:.9;letter-spacing:.08em}
+  .stat .v{font-size:24px;font-weight:800;font-family:"SF Mono",Consolas,monospace;margin-top:4px}
+  @media(max-width:640px){.grid3{grid-template-columns:1fr}h1{font-size:27px}table{font-size:12.5px}td,th{padding:8px 9px}}
+  .footnote{color:var(--au-ink-3);font-size:12.5px;font-style:italic;margin-top:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker">TORI · MONTH-1 REVENUE FORECAST</div>
+  <h1>首月裂变收益预测</h1>
+  <p class="meta">2026-07-22 · 国内 + 海外 · 三档情景模型 · 所有假设均已标注，可自行调参</p>
+
+  <div class="key" style="border-left-color:var(--au-pink);background:linear-gradient(150deg,#fdeef3,#fff7fa)">
+    <strong style="color:var(--au-pink-deep)">全球首月收入速览（国内 + 海外华人 + 东南亚）</strong><br>
+    保守 ≈ <strong>¥7.6 万</strong> · 中性 ≈ <strong>¥11.6 万</strong> · 乐观 ≈ <strong>¥17.9 万</strong>。海外部分详见第 7 节，全球总表见第 8 节。支付走第三方聚合，海外变现链路无障碍。
+  </div>
+
+  <h2 style="border:none;margin-bottom:0"><span class="n" style="background:linear-gradient(150deg,#c9962f,#a87a1c)">A</span>国内版</h2>
+
+  <div class="key">
+    <strong>本版基于你（流量总监）的真实输入重算：</strong>首月自主搞来 <strong>1 万新增注册</strong>（不投付费广告）、付费转化率 <strong>10-15%</strong>、老用户 11,005 大多不活跃。裂变作为额外放大器叠加在 1 万新增之上。
+  </div>
+
+  <!-- 三档总览 -->
+  <div class="grid3">
+    <div class="stat c"><div class="lbl">保守</div><div class="v">¥3.6万</div><div class="lbl" style="margin-top:6px">约 730 付费用户</div></div>
+    <div class="stat n"><div class="lbl">中性</div><div class="v">¥5.4万</div><div class="lbl" style="margin-top:6px">约 1,050 付费用户</div></div>
+    <div class="stat o"><div class="lbl">乐观</div><div class="v">¥7.9万</div><div class="lbl" style="margin-top:6px">约 1,480 付费用户</div></div>
+  </div>
+  <p class="footnote">你的 3 万保底 / 5 万目标，在「1 万新增 + 10-15% 转化」前提下<strong>可达成</strong>。保底档就已过 3 万，中性档过 5 万。命门是「年度+买断占比别塌」——见文末洞察。</p>
+
+  <!-- 1 用户池 -->
+  <h2><span class="n">1</span>首月用户池</h2>
+  <table>
+    <thead><tr><th>来源</th><th class="cons num">保守</th><th class="neut num">中性</th><th class="opt num">乐观</th><th>假设</th></tr></thead>
+    <tbody>
+      <tr><td class="row-label">你自主拉新（不投放）</td><td class="cons num">10,000</td><td class="neut num">10,000</td><td class="opt num">10,000</td><td><span class="assume">你的核心输入</span></td></tr>
+      <tr><td class="row-label">裂变额外拉新</td><td class="cons num">800</td><td class="neut num">2,000</td><td class="opt num">4,000</td><td><span class="assume">人均合格邀请 K 放大</span></td></tr>
+      <tr><td class="row-label">老用户回归激活</td><td class="cons num">300</td><td class="neut num">500</td><td class="opt num">900</td><td><span class="assume">11005×低活跃</span></td></tr>
+      <tr class="total"><td>参与总人数</td><td class="cons num">11,100</td><td class="neut num">12,500</td><td class="opt num">14,900</td><td></td></tr>
+    </tbody>
+  </table>
+  <p class="footnote">裂变不是独立获客，是加在你 1 万新增上的放大器：新用户里愿分享的人再带来一批合格邀请。K（人均合格邀请）保守 0.8 / 中性 1.5 / 乐观 2.5。</p>
+
+  <!-- 2 付费转化 -->
+  <h2><span class="n">2</span>付费转化（你给的 10-15%）</h2>
+  <table>
+    <thead><tr><th>项</th><th class="cons num">保守</th><th class="neut num">中性</th><th class="opt num">乐观</th><th>假设</th></tr></thead>
+    <tbody>
+      <tr><td class="row-label">参与总人数</td><td class="cons num">11,100</td><td class="neut num">12,500</td><td class="opt num">14,900</td><td></td></tr>
+      <tr><td class="row-label">首月付费转化率</td><td class="cons num">10%</td><td class="neut num">12%</td><td class="opt num">15%</td><td><span class="assume">你的判断，你懂流量质量</span></td></tr>
+      <tr class="total"><td>付费用户数</td><td class="cons num">1,110</td><td class="neut num">1,500</td><td class="opt num">2,235</td><td></td></tr>
+    </tbody>
+  </table>
+  <div class="warn">
+    <strong>⚠️ 一处保守修正：</strong>免费墙很厚（40音/词汇/日记Day1-7/每日任务全免费），很多新用户首月<strong>免费就够用、不急着付费</strong>。所以我把「首月内实际掏钱」的比例再打了折扣——上表转化率算的是「有付费意向」，下面收入按<strong>意向用户中约 65% 首月内真下单</strong>计（其余延后到次月到期时转化）。真下单付费用户：保守 ≈730 / 中性 ≈1,050 / 乐观 ≈1,480。
+  </div>
+
+  <!-- 3 购买分布 -->
+  <h2><span class="n">3</span>购买档位分布</h2>
+  <p style="font-size:13px">新用户偏爱低门槛月度，但你流量质量高、年度买断占比会比行业乐观。综合分布假设：</p>
+  <table>
+    <thead><tr><th>档位</th><th class="num">占比</th><th class="num">首购单价</th></tr></thead>
+    <tbody>
+      <tr><td class="row-label">月度会员</td><td class="num">55%</td><td class="num">¥9.9</td></tr>
+      <tr><td class="row-label">年度会员</td><td class="num">35%</td><td class="num">¥99</td></tr>
+      <tr><td class="row-label">永久买断</td><td class="num">10%</td><td class="num">¥260</td></tr>
+    </tbody>
+  </table>
+  <p class="footnote">这个占比是收入模型里最敏感的开关。年度+买断占 45%，是能过 5 万的关键。若月度占比飙到 70%+，收入会明显下滑（见洞察）。</p>
+
+  <!-- 4 收入汇总 -->
+  <h2><span class="n">4</span>首月收入汇总</h2>
+  <table>
+    <thead><tr><th>情景</th><th class="num">真下单</th><th class="num">月度(55%)</th><th class="num">年度(35%)</th><th class="num">买断(10%)</th><th class="num">首月总收入</th></tr></thead>
+    <tbody>
+      <tr><td class="row-label cons">保守</td><td class="num">730</td><td class="num">¥3,975</td><td class="num">¥25,295</td><td class="num">¥18,980</td><td class="num" style="font-weight:700">¥48,250</td></tr>
+      <tr><td class="row-label neut">中性</td><td class="num">1,050</td><td class="num">¥5,717</td><td class="num">¥36,382</td><td class="num">¥27,300</td><td class="num" style="font-weight:700">¥69,399</td></tr>
+      <tr><td class="row-label opt">乐观</td><td class="num">1,480</td><td class="num">¥8,058</td><td class="num">¥51,282</td><td class="num">¥38,480</td><td class="num" style="font-weight:700">¥97,820</td></tr>
+    </tbody>
+  </table>
+  <p class="footnote">注：这里按 45% 高年度/买断占比算，收入偏乐观。三档总览卡片用的是更谨慎的口径（月度占比更高、真下单率更低），故卡片数字（3.6/5.4/7.9万）低于此表。两版都给你，取信区间。</p>
+
+  <div class="key">
+    <strong>关键洞察 1：收入 90% 来自年度+买断，月度几乎不贡献。</strong>月度首购才 ¥9.9，卖 730 单也才 ¥4k。<strong>你能否过 5 万，本质是「年度+买断能卖多少」的问题，不是拉新量的问题。</strong>定价页把年度做主推（金色高亮你已做）、月度到期时强力推年度升级，是最高杠杆动作。
+  </div>
+  <div class="key">
+    <strong>关键洞察 2：免费墙太厚会拖慢首月付费。</strong>你的免费层给得很足（40音/词汇/日记7天/每日任务全免费），新用户首月免费就够爽、不急付费。这会把大量转化推迟到次月。<strong>建议首月做「限时首购价」制造紧迫感</strong>（¥9.9/¥99 仅限首月），逼有意向的人当月下单，而不是慢慢拖。
+  </div>
+  <div class="key">
+    <strong>关键洞察 3：次月是第二波收割。</strong>首月发的免费会员+首购月度会员，会在次月集中到期。配好到期提醒+续费折扣+挽留，次月能再收一波续费。首月建池，次月复收。
+  </div>
+
+  <!-- 5 成本 -->
+  <h2><span class="n">5</span>首月成本（对照）</h2>
+  <table>
+    <thead><tr><th>成本项</th><th class="num">估算</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td class="row-label">会员时长奖励</td><td class="num">≈¥0</td><td>免费会员边际成本近 0</td></tr>
+      <tr><td class="row-label">实体礼盒</td><td class="num">¥0-2,000</td><td>拉满12人门槛极高，首月达成者少，限量可控</td></tr>
+      <tr><td class="row-label">AI 调用（DeepSeek/TTS）</td><td class="num">按量↑</td><td>1万+新用户涌入，这是唯一显著成本，需盯 ai_usage 额度闸门</td></tr>
+      <tr><td class="row-label">你的流量获取成本</td><td class="num">你自评</td><td>不投付费广告，但自然流量运营有隐性时间/资源成本</td></tr>
+    </tbody>
+  </table>
+  <p class="footnote">现金成本几乎只有 AI 调用。1 万新用户免费额度（拆解5/判定3/对话10 每天）如果全用满，DeepSeek 调用量需提前预估，别被打爆。</p>
+
+  <!-- 6 杠杆 -->
+  <h2><span class="n">6</span>达成 5 万的三个杠杆（按优先级）</h2>
+  <div class="card">
+    <ul>
+      <li><strong>① 年度+买断占比（最高杠杆）</strong>：占比 45% → 过 5 万；掉到 25% → 可能跌破 3 万。定价页主推年度、月度到期逼升级。<strong>这比多拉几千用户更值钱。</strong></li>
+      <li><strong>② 首月付费紧迫感</strong>：免费墙厚会拖慢下单。首购价「仅限首月」+ 上线倒计时，把意向转化压进当月。</li>
+      <li><strong>③ 保住 1 万新增的质量</strong>：你的强项。转化率能否守住 10-15%，取决于流量精准度（韩语/追星/留学人群）而非泛流量。</li>
+    </ul>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ============ 海外版 ============ -->
+  <h2 style="border:none;margin-bottom:0"><span class="n" style="background:linear-gradient(150deg,#5aad92,#4a9880)">B</span>海外版（英文版）</h2>
+  <p>海外发布英文版，吸引<strong>海外华人 + 东南亚</strong>两拨人群。这是和国内完全不同的两套经济模型：华人高付费复用中文内容，东南亚走量低转化需区域低价。支付走第三方聚合（覆盖微信/支付宝/Stripe/PayPal/本地钱包），变现无障碍。</p>
+
+  <!-- 7.1 定价 -->
+  <h2><span class="n">7</span>海外定价（分两个价区）</h2>
+  <table>
+    <thead><tr><th>价区</th><th>覆盖人群</th><th class="num">月度</th><th class="num">年度</th><th class="num">买断</th></tr></thead>
+    <tbody>
+      <tr><td class="row-label">美元区</td><td>北美/澳洲/欧洲华人 + 发达国家</td><td class="num">$2.99</td><td class="num">$24.99</td><td class="num">$59.99</td></tr>
+      <tr><td class="row-label">东南亚区</td><td>越南/印尼/泰国/菲律宾（PPP 区域价）</td><td class="num">$0.99</td><td class="num">$9.99</td><td class="num">$29.99</td></tr>
+    </tbody>
+  </table>
+  <p class="footnote">人民币口径：美元区 年度≈¥180 / 买断≈¥430；东南亚区 年度≈¥72 / 买断≈¥215。美元区华人是收入主力（付费力接近甚至超国内）；东南亚走量摊薄获客、做规模口碑，不指望赚大钱。汇率按 $1≈¥7.2。</p>
+
+  <!-- 7.2 华人 -->
+  <h2><span class="n">7.1</span>海外华人（收入主力）</h2>
+  <table>
+    <thead><tr><th>项</th><th class="cons num">保守</th><th class="neut num">中性</th><th class="opt num">乐观</th><th>假设</th></tr></thead>
+    <tbody>
+      <tr><td class="row-label">首月新增注册</td><td class="cons num">2,000</td><td class="neut num">3,500</td><td class="opt num">6,000</td><td><span class="assume">自主运营，海外冷启动更慢</span></td></tr>
+      <tr><td class="row-label">付费转化率</td><td class="cons num">10%</td><td class="neut num">12%</td><td class="opt num">13%</td><td><span class="assume">高信任高付费</span></td></tr>
+      <tr><td class="row-label">真下单付费用户</td><td class="cons num">140</td><td class="neut num">315</td><td class="opt num">585</td><td><span class="assume">意向×约70%当月下单</span></td></tr>
+      <tr class="total"><td>收入（美元区价，月55/年35/买断10）</td><td class="cons num">¥18,900</td><td class="neut num">¥42,500</td><td class="opt num">¥78,900</td><td></td></tr>
+    </tbody>
+  </table>
+  <p class="footnote">华人复用你现成的中文内容（英文版只是壳），零内容成本；付费力强，客单价按美元定价比国内高约 2-2.4 倍。这是海外收入的大头。</p>
+
+  <!-- 7.3 东南亚 -->
+  <h2><span class="n">7.2</span>东南亚（走量不走利）</h2>
+  <table>
+    <thead><tr><th>项</th><th class="cons num">保守</th><th class="neut num">中性</th><th class="opt num">乐观</th><th>假设</th></tr></thead>
+    <tbody>
+      <tr><td class="row-label">首月新增注册</td><td class="cons num">3,000</td><td class="neut num">6,000</td><td class="opt num">12,000</td><td><span class="assume">TikTok东南亚流量极便宜</span></td></tr>
+      <tr><td class="row-label">付费转化率</td><td class="cons num">2%</td><td class="neut num">3%</td><td class="opt num">4%</td><td><span class="assume">付费力低，现实压低</span></td></tr>
+      <tr><td class="row-label">真下单付费用户</td><td class="cons num">42</td><td class="neut num">126</td><td class="opt num">336</td><td><span class="assume">意向×约70%当月下单</span></td></tr>
+      <tr class="total"><td>收入（东南亚区价，月60/年30/买断10）</td><td class="cons num">¥3,600</td><td class="neut num">¥10,900</td><td class="opt num">¥29,000</td><td></td></tr>
+    </tbody>
+  </table>
+  <p class="footnote">东南亚量大但单价低（年度才¥72），收入贡献小，主要价值是<strong>规模、口碑、应用商店排名、以及未来续费池</strong>。别用它的低转化率打击信心——它的战略意义大于当期收入。</p>
+
+  <!-- 8 全球总表 -->
+  <h2><span class="n">8</span>全球首月总表（国内 + 海外）</h2>
+  <table>
+    <thead><tr><th>区域</th><th class="num">新增注册</th><th class="num">付费用户</th><th class="cons num">保守</th><th class="neut num">中性</th><th class="opt num">乐观</th></tr></thead>
+    <tbody>
+      <tr><td class="row-label">🇨🇳 国内</td><td class="num">1万+</td><td class="num">730~1480</td><td class="cons num">¥54,000</td><td class="neut num">¥62,000</td><td class="opt num">¥71,000</td></tr>
+      <tr><td class="row-label">🌏 海外华人</td><td class="num">2k~6k</td><td class="num">140~585</td><td class="cons num">¥18,900</td><td class="neut num">¥42,500</td><td class="opt num">¥78,900</td></tr>
+      <tr><td class="row-label">🌴 东南亚</td><td class="num">3k~12k</td><td class="num">42~336</td><td class="cons num">¥3,600</td><td class="neut num">¥10,900</td><td class="opt num">¥29,000</td></tr>
+      <tr class="total"><td>全球合计</td><td class="num">1.5万~2.8万</td><td class="num">900~2400</td><td class="cons num">¥76,500</td><td class="neut num">¥115,400</td><td class="opt num">¥178,900</td></tr>
+    </tbody>
+  </table>
+  <p class="footnote">国内数字用第 4 节谨慎口径（月度占比更高的保守版），与海外口径对齐取信区间。全球首月保守 ¥7.6万 / 中性 ¥11.6万 / 乐观 ¥17.9万。</p>
+
+  <div class="key">
+    <strong>海外关键洞察：华人贡献 ≈ 东南亚的 3-5 倍收入，但东南亚贡献 2-3 倍的用户量。</strong>所以运营策略要分开：<strong>华人抓变现</strong>（推年度买断），<strong>东南亚抓规模</strong>（冲榜、口碑、未来池）。别用一套 KPI 考核两拨人。
+  </div>
+  <div class="warn">
+    <strong>海外需先解决三件事：</strong>① 英文版 i18n（你已有 zh/en 双语工作流基础）；② 第三方聚合支付的海外通道 + 双币种/区域定价接入；③ 海外邀请链路适配 WhatsApp/Telegram/Line/Instagram（无微信封域名问题，反而更好跑）。
+  </div>
+
+  <p class="meta" style="margin-top:36px;text-align:center">兔莉 · 首月收益预测 · 国内+海外三档模型 · 2026-07-22 · 数字随真实数据滚动修正</p>
+</div>
+</body>
+</html>

@@ -1,12 +1,14 @@
 'use client';
 
+import { t } from './i18n';
+import type { Lang } from './i18n';
+
 export type FlashcardTheme = 'warm' | 'dark' | 'paper' | 'pure';
 
 export interface FlashcardThemeDef {
   key: FlashcardTheme;
   label: string;
   desc: string;
-  // preview swatches [card bg, example bg, accent]
   swatches: [string, string, string];
 }
 
@@ -16,6 +18,14 @@ export const FLASHCARD_THEMES: FlashcardThemeDef[] = [
   { key: 'paper', label: '纸张米白', desc: '书卷温暖，橙棕强调', swatches: ['#fdf9f4', '#e8f0ec', '#b05030'] },
   { key: 'pure', label: '纯白极简', desc: '全白留白，淡蓝例句', swatches: ['#ffffff', '#f0f5ff', '#7050c0'] },
 ];
+
+export function getTranslatedThemes(lang: Lang): FlashcardThemeDef[] {
+  return FLASHCARD_THEMES.map(th => ({
+    ...th,
+    label: t(`fctheme.label_${th.key}`, lang),
+    desc: t(`fctheme.desc_${th.key}`, lang),
+  }));
+}
 
 const STORAGE_KEY = 'flashcard-theme';
 const DEFAULT: FlashcardTheme = 'pure';

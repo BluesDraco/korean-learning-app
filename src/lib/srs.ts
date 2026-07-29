@@ -86,14 +86,13 @@ export async function getDueWords(db: any, limit: number = 20) {
     .then((words: any[]) => words.slice(0, limit));
 }
 
+import { t } from './i18n';
+import type { Lang } from './i18n';
+
 /**
  * Quality descriptions for the review UI.
  */
-export const QUALITY_LABELS: Record<number, string> = {
-  0: '完全忘了',
-  1: '见过但不记得意思',
-  2: '犹豫后勉强想起',
-  3: '想起来了，有点慢',
-  4: '比较顺利，偶有卡顿',
-  5: '脱口而出',
-};
+export function getQualityLabel(quality: number, lang: Lang): string {
+  const key = `srs.level_${quality}` as `srs.level_${0|1|2|3|4|5}`;
+  return t(key, lang);
+}

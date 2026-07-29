@@ -3,6 +3,8 @@
 import { useEffect, useRef, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 
 export interface SheetProps {
   open: boolean;
@@ -26,6 +28,7 @@ export function Sheet({
   closeOnBackdrop = true,
   closeButton = true,
 }: SheetProps) {
+  const { lang } = useLang();
   const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -74,7 +77,7 @@ export function Sheet({
           borderRadius: 'var(--radius-xl) var(--radius-xl) 0 0',
           padding: '16px 20px calc(env(safe-area-inset-bottom, 0px) + 20px)',
           boxShadow: 'var(--shadow-lg)',
-          maxHeight: '90vh',
+          maxHeight: 'var(--vh-90)',
           overflowY: 'auto',
           animation: 'tori-slide-up var(--dur-slow) var(--ease-soft)',
         }}
@@ -110,13 +113,13 @@ export function Sheet({
             {closeButton && (
               <button
                 onClick={onClose}
-                aria-label="关闭"
+                aria-label={t('ui.sheet_close', lang)}
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  width: 32,
-                  height: 32,
+                  width: 44,
+                  height: 44,
                   borderRadius: 'var(--radius-pill)',
                   background: 'transparent',
                   border: 'none',

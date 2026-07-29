@@ -4,6 +4,8 @@ import { memo, useRef, useEffect } from 'react';
 import { RefreshCw } from 'lucide-react';
 import type { TokenInfo } from '@/lib/dictionary';
 import type { StudySubtitle } from '@/types';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 
 interface SubtitlePanelProps {
   subtitles: StudySubtitle[];
@@ -24,6 +26,7 @@ export const SubtitlePanel = memo(function SubtitlePanel({
   onLoopClick,
   loopIndex,
 }: SubtitlePanelProps) {
+  const { lang } = useLang();
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll within the subtitle container only — don't affect page scroll
@@ -45,7 +48,7 @@ export const SubtitlePanel = memo(function SubtitlePanel({
   if (subtitleMode === 'hidden') {
     return (
       <div className="flex items-center justify-center py-16 text-[var(--text-muted)] text-sm">
-        字幕已隐藏 · 练听力模式
+        {t('subp.hidden', lang)}
       </div>
     );
   }
@@ -53,7 +56,7 @@ export const SubtitlePanel = memo(function SubtitlePanel({
   if (subtitles.length === 0) {
     return (
       <div className="flex items-center justify-center py-16 text-[var(--text-muted)] text-sm">
-        暂无字幕，请上传SRT文件
+        {t('subp.empty', lang)}
       </div>
     );
   }
@@ -90,7 +93,7 @@ export const SubtitlePanel = memo(function SubtitlePanel({
                     ? 'bg-[var(--peach-soft)]/15 text-[var(--peach-soft)]'
                     : 'text-[var(--text-muted)] hover:text-[var(--peach-soft)] opacity-0 group-hover:opacity-100'
                 }`}
-                title={isLooping ? '退出循环' : '循环影子跟读此句'}
+                title={isLooping ? t('subp.loop_exit', lang) : t('subp.loop_start', lang)}
               >
                 <RefreshCw size={12} className={isLooping ? 'animate-spin' : ''} />
               </button>

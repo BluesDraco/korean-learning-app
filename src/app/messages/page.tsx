@@ -4,12 +4,17 @@ import { useEffect, useState, useCallback } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Mail, Sparkles, Bell, Megaphone, FileText, ChevronDown, Loader2, ArrowLeft } from 'lucide-react';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 import type { Announcement, AnnouncementType } from '@/types';
+import '../mine/mine-home.css';
+import './messages.css';
 
-const TYPE_CONFIG: Record<AnnouncementType, { label: string; icon: React.ComponentType<{ size?: number; className?: string; color?: string }>; color: string }> = {
-  update_log: { label: '更新日志', icon: FileText, color: 'var(--mint-soft)' },
-  announcement: { label: '公告', icon: Megaphone, color: 'var(--purple-soft)' },
-  private_message: { label: '私信', icon: Bell, color: 'var(--pink-primary)' },
+const TYPE_CONFIG: Record<AnnouncementType, { label: string; icon: React.ComponentType<{ size?: number; color?: string }>; soft: string; strong: string }> = {
+  update_log:      { label: 'messages.type_update_log',  icon: FileText,  soft: 'var(--color-mint-soft)',   strong: 'var(--color-mint-strong)' },
+  announcement:    { label: 'messages.type_announcement', icon: Megaphone, soft: 'var(--color-purple-soft)', strong: 'var(--color-purple-strong)' },
+  private_message: { label: 'messages.type_private',      icon: Bell,      soft: 'var(--color-pink-soft)',   strong: 'var(--color-pink-strong)' },
+  popup:           { label: 'messages.type_popup',        icon: Sparkles,  soft: 'var(--color-peach-soft)',  strong: 'var(--color-peach-strong)' },
 };
 
 async function markRead(announcementId: string) {
@@ -21,149 +26,131 @@ async function markRead(announcementId: string) {
 }
 
 export default function MessagesPage() {
+  const { lang } = useLang();
   const router = useRouter();
   const [messages, setMessages] = useState<(Announcement & { read: boolean })[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [needLogin, setNeedLogin] = useState(false);
 
   useEffect(() => {
-    fetch('/api/announcements')
-      .then((r) => r.json())
-      .then((data) => {
+    const controller = new AbortController();
+    fetch('/api/announcements', { signal: controller.signal })
+      .then(async (r) => {
+        if (r.status === 401) { setNeedLogin(true); setLoading(false); return; }
+        const data = await r.json();
         const list = Array.isArray(data) ? data : [];
         setMessages(list);
         setLoading(false);
-        const firstUnread = list.find((m: any) => !m.read);
+        const firstUnread = list.find((m: Announcement & { read: boolean }) => !m.read);
         if (firstUnread) setExpandedId(firstUnread.id);
       })
-      .catch(() => setLoading(false));
+      .catch((e) => { if (e?.name !== 'AbortError') setLoading(false); });
+    return () => controller.abort();
   }, []);
 
   const handleExpand = useCallback(async (id: string, read: boolean) => {
-    setExpandedId(expandedId === id ? null : id);
+    setExpandedId((prev) => (prev === id ? null : id));
     if (!read) {
       await markRead(id);
       setMessages((prev) => prev.map((m) => m.id === id ? { ...m, read: true } : m));
     }
-  }, [expandedId]);
+  }, []);
 
   const unreadCount = messages.filter((m) => !m.read).length;
 
   if (loading) {
     return (
       <div className="flex items-center justify-center py-32">
-        <Loader2 size={32} className="animate-spin text-[var(--text-secondary)]" />
+        <Loader2 size={30} className="animate-spin" style={{ color: 'var(--color-ink-4)' }} />
+      </div>
+    );
+  }
+
+  if (needLogin) {
+    return (
+      <div className="mine-scope mine-bg">
+      <div className="msg-wrap mx-auto">
+        <div className="msg-empty">
+          <div className="msg-empty-ic"><Mail size={30} /></div>
+          <p className="msg-empty-t">{t('messages.login_required', lang)}</p>
+          <p className="msg-empty-d">{t('messages.login_sub', lang)}</p>
+          <a href="/auth/login?redirect=/messages" className="msg-login-btn">{t('messages.login_cta', lang)}</a>
+        </div>
+      </div>
       </div>
     );
   }
 
   return (
-    <div className="py-6 max-w-lg mx-auto space-y-6">
-      <button onClick={() => router.back()} className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
-        <ArrowLeft size={16} /> 返回
+    <div className="mine-scope mine-bg">
+    <div className="msg-wrap mx-auto">
+      <button onClick={() => router.push('/mine')} className="msg-back">
+        <ArrowLeft size={15} /> {t('messages.back', lang)}
       </button>
-      {/* Header */}
-      <div className="text-center space-y-3">
-        <div className="relative inline-block">
-          <Image
-            src="/images/tori-poses/tori-pose-01.webp"
-            alt="Tori"
-            width={80}
-            height={80}
-            className="object-contain mx-auto"
-          />
-          {unreadCount > 0 && <span className="absolute -top-1 -right-2 bg-[var(--pink-primary)] text-white w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold">{unreadCount}</span>}
+
+      {/* 英雄区 */}
+      <div className="msg-hero">
+        <div className="msg-hero-tori">
+          <Image src="/images/tori-poses/tori-pose-01.webp" alt="Tori" width={76} height={76} />
+          {unreadCount > 0 && <span className="msg-unread-dot">{unreadCount}</span>}
         </div>
-        <h1 className="text-2xl font-bold text-[var(--text-primary)] section-header">
-          내 편지함
-        </h1>
-        <p className="text-sm text-[var(--text-secondary)]">
-          {unreadCount > 0 ? `你有 ${unreadCount} 条未读消息` : '所有消息已读'}
+        <h1 className="msg-hero-title">내 편지함</h1>
+        <p className="msg-hero-sub">
+          {unreadCount > 0 ? t('messages.unread_notice', lang, { n: unreadCount }) : t('messages.all_read', lang)}
         </p>
+        {messages.length > 0 && (
+          <div className="msg-stats">
+            <span className="msg-chip"><Mail size={13} />{t('messages.count', lang, { n: messages.length })}</span>
+            {unreadCount > 0 && (
+              <span className="msg-chip accent"><Sparkles size={13} />{t('messages.unread_count', lang, { n: unreadCount })}</span>
+            )}
+          </div>
+        )}
       </div>
 
-      {/* Stats row */}
-      {messages.length > 0 && (
-        <div className="flex items-center gap-3 justify-center">
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[var(--bg-card)] border border-[var(--border-color)] text-xs text-[var(--text-secondary)]">
-            <Mail size={13} />
-            <span>{messages.length} 条消息</span>
-          </div>
-          {unreadCount > 0 && (
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[var(--pink-primary)]/10 border border-[var(--pink-primary)]/20 text-xs text-[var(--pink-primary)] font-medium">
-              <Sparkles size={13} />
-              <span>{unreadCount} 条未读</span>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Messages list */}
+      {/* 列表 */}
       {messages.length === 0 ? (
-        <div className="text-center py-16 space-y-4">
-          <Mail size={48} className="text-[var(--text-placeholder)] mx-auto" />
-          <p className="text-[var(--text-secondary)] text-sm">还没有收到任何消息</p>
-          <p className="text-[var(--text-muted)] text-xs">管理员发布公告或更新日志后会出现在这里</p>
+        <div className="msg-empty">
+          <div className="msg-empty-ic"><Mail size={30} /></div>
+          <p className="msg-empty-t">{t('messages.empty', lang)}</p>
+          <p className="msg-empty-d">{t('messages.empty_sub', lang)}</p>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="msg-list">
           {messages.map((msg) => {
             const config = TYPE_CONFIG[msg.type] ?? TYPE_CONFIG.announcement;
             const Icon = config.icon;
             const isExpanded = expandedId === msg.id;
 
             return (
-              <div
-                key={msg.id}
-                className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl overflow-hidden transition-all hover:shadow-sm"
-              >
-                <button
-                  onClick={() => handleExpand(msg.id, msg.read)}
-                  className="w-full flex items-center gap-3 p-4 text-left"
-                >
-                  {/* Type icon + unread dot */}
-                  <div className="relative shrink-0">
-                    <div
-                      className="w-9 h-9 rounded-xl flex items-center justify-center"
-                      style={{ backgroundColor: config.color + '18' }}
-                    >
-                      <Icon size={17} color={config.color} />
+              <div key={msg.id} className={`msg-card ${msg.read ? '' : 'unread'} ${isExpanded ? 'expanded' : ''}`}>
+                <button className="msg-card-btn" onClick={() => handleExpand(msg.id, msg.read)}>
+                  <div className="msg-ic-wrap">
+                    <div className="msg-ic" style={{ background: config.soft }}>
+                      <Icon size={18} color={config.strong} />
                     </div>
-                    {!msg.read && (
-                      <div className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-[var(--pink-primary)] rounded-full border-2 border-[var(--bg-card)]" />
-                    )}
+                    {!msg.read && <span className="msg-ic-dot" />}
                   </div>
 
-                  {/* Title + type + time */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className={`text-sm truncate ${!msg.read ? 'font-bold text-[var(--text-primary)]' : 'text-[var(--text-primary)]'}`}>
-                        {msg.title}
-                      </span>
-                      <span
-                        className="shrink-0 text-[11px] px-1.5 py-0.5 rounded-md font-medium"
-                        style={{ backgroundColor: config.color + '15', color: config.color }}
-                      >
-                        {config.label}
+                  <div className="msg-body">
+                    <div className="msg-titleline">
+                      <span className={`msg-title ${msg.read ? '' : 'strong'}`}>{msg.title}</span>
+                      <span className="msg-type-tag" style={{ background: config.soft, color: config.strong }}>
+                        {t(config.label, lang)}
                       </span>
                     </div>
-                    <p className="text-xs text-[var(--text-muted)] mt-0.5">
-                      {new Date(msg.createdAt).toLocaleDateString('zh-CN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                    <p className="msg-time">
+                      {new Date(msg.createdAt).toLocaleDateString(lang === 'en' ? 'en-US' : 'zh-CN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                     </p>
                   </div>
 
-                  <ChevronDown
-                    size={16}
-                    className={`shrink-0 text-[var(--text-muted)] transition-transform ${isExpanded ? 'rotate-180' : ''}`}
-                  />
+                  <ChevronDown size={17} className={`msg-chevron ${isExpanded ? 'open' : ''}`} />
                 </button>
 
-                {/* Expanded content */}
                 {isExpanded && (
-                  <div className="px-4 pb-4 border-t border-[var(--border-color)]">
-                    <div className="pt-3 text-sm text-[var(--text-secondary)] leading-relaxed whitespace-pre-wrap">
-                      {msg.content}
-                    </div>
+                  <div className="msg-expand">
+                    <div className="msg-expand-inner">{msg.content}</div>
                   </div>
                 )}
               </div>
@@ -171,6 +158,7 @@ export default function MessagesPage() {
           })}
         </div>
       )}
+    </div>
     </div>
   );
 }

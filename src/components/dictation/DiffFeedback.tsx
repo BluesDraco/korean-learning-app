@@ -1,6 +1,8 @@
 'use client';
 
 import { getCharDiff, normalizeKorean } from '@/lib/koreanDiff';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 
 interface DiffFeedbackProps {
   userInput: string;
@@ -8,6 +10,7 @@ interface DiffFeedbackProps {
 }
 
 export function DiffFeedback({ userInput, correct }: DiffFeedbackProps) {
+  const { lang } = useLang();
   const { userDiff, correctDiff, notes } = getCharDiff(
     userInput.replace(/\s/g, ''),
     correct.replace(/\s/g, '')
@@ -16,9 +19,9 @@ export function DiffFeedback({ userInput, correct }: DiffFeedbackProps) {
 
   if (isCorrect) {
     return (
-      <div style={{ background: '#eaf8f5', borderRadius: 16, padding: '14px 18px', display: 'flex', alignItems: 'center', gap: 10 }}>
+      <div style={{ background: 'var(--color-mint-soft)', borderRadius: 16, padding: '14px 18px', display: 'flex', alignItems: 'center', gap: 10 }}>
         <span style={{ fontSize: 22 }}>✓</span>
-        <span style={{ fontSize: 15, fontWeight: 700, color: '#3aafa9' }}>回答正确！</span>
+        <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--color-mint-strong)' }}>{t('ddiff.correct', lang)}</span>
       </div>
     );
   }
@@ -26,8 +29,8 @@ export function DiffFeedback({ userInput, correct }: DiffFeedbackProps) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
       {/* 你的答案 */}
-      <div style={{ background: '#fff0f0', borderRadius: 14, padding: '12px 16px' }}>
-        <p style={{ fontSize: 11, color: '#e04a6a', fontWeight: 700, marginBottom: 8, letterSpacing: '0.05em' }}>你的答案</p>
+      <div style={{ background: 'rgba(214,86,86,0.08)', borderRadius: 14, padding: '12px 16px' }}>
+        <p style={{ fontSize: 11, color: 'var(--color-status-danger)', fontWeight: 700, marginBottom: 8, letterSpacing: '0.05em' }}>{t('ddiff.yourAnswer', lang)}</p>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
           {userDiff.length > 0 ? userDiff.map((seg, i) => (
             <span key={i} style={{
@@ -39,22 +42,22 @@ export function DiffFeedback({ userInput, correct }: DiffFeedbackProps) {
               borderRadius: 8,
               fontSize: 18,
               fontWeight: 700,
-              background: seg.status === 'correct' ? '#eaf8f5' : seg.status === 'wrong' ? '#ffd6de' : '#fff3cd',
-              color: seg.status === 'correct' ? '#3aafa9' : seg.status === 'wrong' ? '#e04a6a' : '#b07d00',
+              background: seg.status === 'correct' ? 'var(--color-mint-soft)' : seg.status === 'wrong' ? 'rgba(214,86,86,0.15)' : 'rgba(199,153,0,0.12)',
+              color: seg.status === 'correct' ? 'var(--color-mint-strong)' : seg.status === 'wrong' ? 'var(--color-status-danger)' : 'var(--color-status-warning)',
               textDecoration: seg.status === 'wrong' ? 'line-through' : 'none',
-              border: seg.status === 'extra' ? '1px dashed #e04a6a' : 'none',
+              border: seg.status === 'extra' ? '1px dashed var(--color-status-danger)' : 'none',
             }}>
               {seg.char}
             </span>
           )) : (
-            <span style={{ fontSize: 14, color: '#e04a6a', fontStyle: 'italic' }}>（未输入）</span>
+            <span style={{ fontSize: 14, color: 'var(--color-status-danger)', fontStyle: 'italic' }}>{t('ddiff.noInput', lang)}</span>
           )}
         </div>
       </div>
 
       {/* 正确答案 */}
-      <div style={{ background: '#eaf8f5', borderRadius: 14, padding: '12px 16px' }}>
-        <p style={{ fontSize: 11, color: '#3aafa9', fontWeight: 700, marginBottom: 8, letterSpacing: '0.05em' }}>正确答案</p>
+      <div style={{ background: 'var(--color-mint-soft)', borderRadius: 14, padding: '12px 16px' }}>
+        <p style={{ fontSize: 11, color: 'var(--color-mint-strong)', fontWeight: 700, marginBottom: 8, letterSpacing: '0.05em' }}>{t('ddiff.correctAnswer', lang)}</p>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
           {correctDiff.map((seg, i) => (
             <span key={i} style={{
@@ -66,9 +69,9 @@ export function DiffFeedback({ userInput, correct }: DiffFeedbackProps) {
               borderRadius: 8,
               fontSize: 18,
               fontWeight: 700,
-              background: seg.status === 'correct' ? '#d0f2ed' : seg.status === 'missing' ? '#fff3cd' : '#ffd6de',
-              color: seg.status === 'correct' ? '#3aafa9' : seg.status === 'missing' ? '#b07d00' : '#e04a6a',
-              border: seg.status === 'missing' ? '1px dashed #b07d00' : 'none',
+              background: seg.status === 'correct' ? 'rgba(58,175,169,0.15)' : seg.status === 'missing' ? 'rgba(199,153,0,0.12)' : 'rgba(214,86,86,0.15)',
+              color: seg.status === 'correct' ? 'var(--color-mint-strong)' : seg.status === 'missing' ? 'var(--color-status-warning)' : 'var(--color-status-danger)',
+              border: seg.status === 'missing' ? '1px dashed var(--color-status-warning)' : 'none',
             }}>
               {seg.char}
             </span>
@@ -78,11 +81,11 @@ export function DiffFeedback({ userInput, correct }: DiffFeedbackProps) {
 
       {/* 错误分析 */}
       {notes.length > 0 && (
-        <div style={{ background: '#f5ede8', borderRadius: 14, padding: '10px 14px' }}>
-          <p style={{ fontSize: 11, color: '#89756e', fontWeight: 700, marginBottom: 6, letterSpacing: '0.05em' }}>错误分析</p>
+        <div style={{ background: 'var(--color-surface-3)', borderRadius: 14, padding: '10px 14px' }}>
+          <p style={{ fontSize: 11, color: 'var(--color-ink-3)', fontWeight: 700, marginBottom: 6, letterSpacing: '0.05em' }}>{t('ddiff.errorAnalysis', lang)}</p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
             {notes.map((note, i) => (
-              <p key={i} style={{ fontSize: 13, color: '#5a4640', margin: 0 }}>· {note}</p>
+              <p key={i} style={{ fontSize: 13, color: 'var(--color-ink-2)', margin: 0 }}>· {note}</p>
             ))}
           </div>
         </div>

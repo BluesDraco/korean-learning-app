@@ -1,0 +1,22 @@
+import type { BossSubQuestData } from '@/types/tori-subquest';
+
+/** Day 87 · 3-5 Boss 战 · 🎒 妈妈来接机 · ~(으)면서 */
+export const day87Boss: BossSubQuestData = {
+  day: 27, level: 'advanced', idx: 5, kind: 'boss',
+  koTitle: '엄마 마중의 관문',
+  subtitle: '🎒 인천 공항 · 4호선 · 가장 소중한 청중',
+
+  intro: '周四下午 3 点。仁川机场到达大厅。87 天前,你就是从这里走出去的——行李箱压得肩膀发疼,还把"짐"(行李)说成"집"(家)。今天,你在这里接妈妈。CN123 航班的灯变绿,自动门打开,妈妈拎着一袋饺子出来了,一声"闺女!"让你三秒说不出话。坐四号线进城的路上,你一边看窗外一边用韩语一一讲给她听:仁川、弘爪、葫芦游乐场。妈妈不懂韩语,却一直点头、一直笑。今天要用 ~(으)면서 说出这一路:엄마가 웃으면서 안았어요 → 창밖을 보면서 설명했어요 → 엄마는 한국어를 모르면서도 웃었어요。',
+  outroHook: '你的手很自然地挽上了妈妈的胳膊。87 天前,你不愿意挽着妈妈,想显得像个大人;现在,挽着她,你一点也不觉得难为情了。"안녕하세요, 엄마. 저는 토리예요. 저는 지금, 서울에 살아요。"你韩语最重要的一位听众,终于到了。明天,你们四个人——你、Junho、Minji、Haru——要穿上学士服拍毕业照,胡萝卜笔就别在学士帽上。（Day 88 · 졸업 사진）',
+
+  tasks: [
+    { type: 'choice',  label: '听句选意',       task: { id: 'd87-b5-t1', audioKo: '엄마가 웃으면서 안았어요.',                                            choices: [{ text: '妈妈笑着抱了我。',              correct: true }, { text: '妈妈哭着走了。',                    correct: false }, { text: '妈妈没抱我。',                    correct: false }, { text: '妈妈生气了。',                            correct: false }], explain: 'Day 87 主题句 · 웃 + 으면서' } },
+    { type: 'choice',  label: '听句选意',       task: { id: 'd87-b5-t2', audioKo: '엄마는 한국어를 모르면서도 웃었어요.',                                             choices: [{ text: '妈妈不懂韩语却笑了。',                    correct: true }, { text: '妈妈懂韩语。',                          correct: false }, { text: '妈妈没笑。',                          correct: false }, { text: '妈妈会说韩语。',                        correct: false }], explain: '~(으)면서도 · 明知却' } },
+    { type: 'choice',  label: '~(으)면서',       task: { id: 'd87-b5-t3', promptZh: '"妈妈笑着抱了"哪句正确？',                                                                                                                                    choices: [{ text: '엄마가 웃면서 안았어요.',           correct: false }, { text: '엄마가 웃으면서 안았어요.',            correct: true }, { text: '엄마가 웃는면서 안았어요.',                correct: false }, { text: '엄마가 웃을면서 안았어요.',                  correct: false }], explain: '有收音 → 웃 + 으면서' } },
+    { type: 'choice',  label: '~(으)면서',       task: { id: 'd87-b5-t4', promptZh: '"一边看窗外一边解释"哪句正确？',                                                                                                                                    choices: [{ text: '창밖을 봐면서 설명했어요.',            correct: false }, { text: '창밖을 보면서 설명했어요.',            correct: true }, { text: '창밖을 보은면서 설명했어요.',                correct: false }, { text: '창밖을 볼면서 설명했어요.',                  correct: false }], explain: '无收音 → 보 + 면서' } },
+    { type: 'choice',  label: '认词',           task: { id: 'd87-b5-t5', promptKo: '청중', promptHangul: 'cheong-jung',                                                                                                                              choices: [{ text: '听众',                          correct: true }, { text: '观众',                          correct: false }, { text: '演员',                          correct: false }, { text: '主持人',                            correct: false }], explain: '听(청) + 众(중)' } },
+    { type: 'compose', label: '组句',           task: { id: 'd87-b5-t6', zhHint: '妈妈笑着抱了我。',                                                                                                                                                     audioKo: '엄마가 웃으면서 안았어요.',                             answer: ['엄마가', '웃으면서', '안았어요.'],   tokens: ['엄마가', '웃으면서', '안았어요.', '웃면서', '웃고', '웃어서'],         explain: 'Day 87 主题句' } },
+    { type: 'compose', label: '组句',           task: { id: 'd87-b5-t7', zhHint: '妈妈不懂韩语却笑了。',                                                                                                                                             audioKo: '엄마는 한국어를 모르면서도 웃었어요.',                             answer: ['엄마는', '한국어를', '모르면서도', '웃었어요.'],                              tokens: ['엄마는', '한국어를', '모르면서도', '웃었어요.', '모르면서', '모르고', '모르지만'],           explain: '矛盾 · ~(으)면서도' } },
+    { type: 'choice',  label: '情景选回应',     task: { id: 'd87-b5-t8', promptZh: '妈妈说她一句韩语都听不懂。你想说"没关系，你就是我最珍贵的听众"，最合适的一句？',                                                                                    choices: [{ text: '괜찮아요. 엄마가 제 한국어의 가장 소중한 청중이에요.',       correct: true }, { text: '그럼 한국어 안 할래요.',                  correct: false }, { text: '얼마예요?',                              correct: false }, { text: '몰라요.',                                correct: false }], explain: '청중 · 灵魂回应' } },
+  ],
+};

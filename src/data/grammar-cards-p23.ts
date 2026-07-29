@@ -60,10 +60,12 @@ export const grammarCardsP23: GrammarCard[] = [
       { type: 'rule', text: '形容词无收音 + ㄴ 반면에 / 有收音 + 은 반면에', examples: '크다→큰 반면에 / 좋다→좋은 반면에 / 어렵다→어려운 반면에' },
       { type: 'rule', text: '动词过去 + 은/ㄴ 반면에', examples: '가다→간 반면에 / 먹다→먹은 반면에' },
       { type: 'rule', text: '名词 + 인 반면에', examples: '학생인 반면에 / 장점인 반면에' },
-      { type: 'usage', text: '표현同一主体或相关主体的两个对立特征', examples: '커피는 맛있는 반면에 가격이 비싸요（好喝 vs 贵）' },
+      { type: 'usage', text: '表达同一主体或相关主体的两个对立特征', examples: '커피는 맛있는 반면에 가격이 비싸요（好喝 vs 贵）' },
       { type: 'compare', text: '和 -지만 差别：单纯转折 vs 强调对立特征', examples: '맛있지만 비싸요（转折）/ 맛있는 반면 비싸요（对立特征）' },
       { type: 'note', text: '"에" 可省略为 -는 반면，语感更书面', examples: '어려운 반면에 → 어려운 반면（书面）' },
       { type: 'example', text: '문법이 어려운 반면에 발음은 쉬워요 / 이 일은 힘든 반면 보람도 커요' },
+      { type: 'compare', text: '和 -는 대신에 区别：대신에 含"代价/交换"（贵，但换来质量好），반면에 只是中性并列两个对立特征、无交换含义', examples: '비싼 대신에 질이 좋아요（贵，但换来质量好）/ 비싼 반면에 질이 좋아요（贵，相反质量好）' },
+      { type: 'note', text: '对比的两边常用对比助词 은/는 来凸显"对立"，比 이/가 更地道，不过用 이/가 也不算错', examples: '형은 활발한 반면에 동생은 조용해요（两边都用 은，对立更清晰）' },
     ],
     cardExamples: [
       {
@@ -212,7 +214,7 @@ export const grammarCardsP23: GrammarCard[] = [
     compareLabel: '-는 반면에 vs -는데',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P17 · 第 1 课</div>
+    <div class="ov-hero-label">P23 · 第 1 课</div>
     <div class="ov-hero-title">-는/은/ㄴ 반면에</div>
     <div class="ov-hero-sub">"与此相反……" · 对立特征并存</div>
   </div>
@@ -291,10 +293,10 @@ export const grammarCardsP23: GrammarCard[] = [
         ],
       },
       {
-        ko: '이 집은 학생인 데다가 아르바이트도 하고 있어요',
+        ko: '이 사람은 학생인 데다가 아르바이트도 하고 있어요',
         zh: '这个人不仅是学生，还在做兼职。',
         tokens: [
-          { text: '이 집은', role: 'subject' },
+          { text: '이 사람은', role: 'subject' },
           { text: '학생인 데다가', role: 'verb' },
           { text: '아르바이트도', role: 'object' },
           { text: '하고 있어요', role: 'verb' },
@@ -309,6 +311,8 @@ export const grammarCardsP23: GrammarCard[] = [
       { type: 'usage', text: '后半句常配 -까지、-도、더욱 等加强词', examples: '비가 오는 데다가 바람까지 불어요 / 예쁜 데다가 가격도 싸요' },
       { type: 'compare', text: '和 -고 差别：并列 vs 累加加强', examples: '예쁘고 저렴해요（并列）/ 예쁜 데다가 저렴해요（累加，强调"上加"）' },
       { type: 'note', text: '前后句情感倾向必须一致（都正面或都负面）', examples: '예쁜 데다가 저렴해요（都正面 ✓）/ 예쁜 데다가 비싸요（矛盾 ✗）' },
+      { type: 'compare', text: '和 -을 뿐 아니라（本章后面详学）区别：데다가 更口语、多用于日常；을 뿐 아니라 中性、口语书面都常用', examples: '예쁜 데다가 싸요（口语）≈ 예쁠 뿐 아니라 싸요（通用）' },
+      { type: 'note', text: '这里的 데 是"累加"专用，别和表场所/情况的 -는 데（如 가는 데 시간이 걸려요＝去…花时间）混淆：判断标志是后面跟 -가/-다가', examples: '오는 데다가 바람도（累加）≠ 사는 데 돈이 들어요（场所/情况）' },
       { type: 'example', text: '공부도 잘하는 데다가 운동도 잘해요 / 오늘 비가 오는 데다가 바람까지 불어요' },
     ],
     cardExamples: [
@@ -459,7 +463,7 @@ export const grammarCardsP23: GrammarCard[] = [
     compareLabel: '-는 데다가 vs -는 반면에',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P17 · 第 2 课</div>
+    <div class="ov-hero-label">P23 · 第 2 课</div>
     <div class="ov-hero-title">-는/은/ㄴ 데다가</div>
     <div class="ov-hero-sub">"不仅……而且……" · 累加加强</div>
   </div>
@@ -549,6 +553,8 @@ export const grammarCardsP23: GrammarCard[] = [
       { type: 'usage', text: '后半句常配 -도、-까지 等强调助词', examples: '밥도 못 먹었어요 / 인사조차 못 해요' },
       { type: 'compare', text: '和 -지 않다 差别：语气强度差别大', examples: '쉬지 않았어요（客观事实）/ 쉬기는커녕 밥도 못 먹었어요（强烈失望）' },
       { type: 'note', text: '前后必须是"预期落空"关系：预期高 → 实际低于预期', examples: '칭찬 → 혼남 / 쉬기 → 밥 못 먹음 / 잘하기 → 인사도 못함' },
+      { type: 'compare', text: '和 -조차/-마저（连…都）区别：조차/마저 只是"连极端的也…"，커녕 还多一层"别说前面那个了"的排除+失望', examples: '밥조차 못 먹었어요（连饭都没吃）/ 쉬기는커녕 밥도 못 먹었어요（别说休息，连饭都…）' },
+      { type: 'note', text: '커녕 前项本身已带否定语气，A 部分不要再加 안/못；否定只落在后半句', examples: '쉬기는커녕 …（✓）不是 쉬지 못하기는커녕 …' },
       { type: 'example', text: '칭찬은커녕 혼났어요 / 도움은커녕 방해가 됐어요 / 쉬기는커녕 밤을 새웠어요' },
     ],
     cardExamples: [
@@ -691,7 +697,7 @@ export const grammarCardsP23: GrammarCard[] = [
     compareLabel: '-기는커녕 vs -는 반면에',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P17 · 第 3 课</div>
+    <div class="ov-hero-label">P23 · 第 3 课</div>
     <div class="ov-hero-title">-기는커녕 / 은/는커녕</div>
     <div class="ov-hero-sub">"别说……了，反而……" · 预期落空</div>
   </div>
@@ -781,12 +787,14 @@ export const grammarCardsP23: GrammarCard[] = [
     ],
     connectionRules: [
       { type: 'rule', text: '无收音词干 + ㄹ뿐더러', examples: '좋다→좋을뿐더러 / 하다→할뿐더러 / 예쁘다→예쁠뿐더러' },
-      { type: 'rule', text: '有收음词干 + 을뿐더러', examples: '먹다→먹을뿐더러 / 좋다→좋을뿐더러（ㅎ 前后无关）' },
+      { type: 'rule', text: '有收音词干 + 을뿐더러', examples: '먹다→먹을뿐더러 / 좋다→좋을뿐더러（ㅎ 前后无关）' },
       { type: 'rule', text: '过去 → -았/었을뿐더러', examples: '갔을뿐더러 / 했을뿐더러' },
       { type: 'rule', text: '名词 + 일뿐더러', examples: '학생일뿐더러 / 전문가일뿐더러' },
       { type: 'usage', text: '书面/正式场合累加同类特征', examples: 'TOPIK 写作 / 公司报告 / 演讲' },
       { type: 'compare', text: '和 -는 데다가 差别：书面语感 vs 口语通用', examples: '좋을뿐더러（书面）≈ 좋은 데다가（日常）' },
       { type: 'note', text: '前后句同倾向（都正面或都负面）', examples: '좋을뿐더러 합리적이다（都正面）/ 어려울뿐더러 복잡하다（都负面）' },
+      { type: 'rule', text: 'ㄹ词干不规则：词干以 ㄹ 结尾时直接 +뿐더러，不再加 을', examples: '살다→살뿐더러 / 만들다→만들뿐더러（不是 살을뿐더러 ✗）' },
+      { type: 'compare', text: '和长得几乎一样的 -을 뿐(만) 아니라（本章 L07 详学）区别：뿐더러 是融合词尾、不空格；뿐 아니라 要空格且口语书面都通用', examples: '좋을뿐더러（一个词，偏书面）/ 좋을 뿐 아니라（短语，通用）' },
       { type: 'example', text: '품질이 좋을뿐더러 가격도 합리적입니다 / 성실할뿐더러 능력도 있어요' },
     ],
     cardExamples: [
@@ -860,7 +868,7 @@ export const grammarCardsP23: GrammarCard[] = [
         ['잘하다', '动词하다类', { ko: '잘하+ㄹ뿐더러', zh: '-ㄹ뿐더러' }, { ko: '잘할뿐더러', zh: '不仅擅长' }],
         ['먹다', '动词有收音', { ko: '먹+을뿐더러', zh: '-을뿐더러' }, { ko: '먹을뿐더러', zh: '不仅吃' }],
         ['갔다', '过去', { ko: '갔+을뿐더러', zh: '过去+을뿐더러' }, { ko: '갔을뿐더러', zh: '不仅去了' }],
-        ['학생이다', '名词有收음', { ko: '학생+일뿐더러', zh: '名词+일뿐더러' }, { ko: '학생일뿐더러', zh: '不仅是学生' }],
+        ['학생이다', '名词有收音', { ko: '학생+일뿐더러', zh: '名词+일뿐더러' }, { ko: '학생일뿐더러', zh: '不仅是学生' }],
       ],
     },
     specialQuiz: {
@@ -936,7 +944,7 @@ export const grammarCardsP23: GrammarCard[] = [
     compareLabel: '-을뿐더러 vs -는 데다가',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P17 · 第 4 课</div>
+    <div class="ov-hero-label">P23 · 第 4 课</div>
     <div class="ov-hero-title">-을/ㄹ뿐더러</div>
     <div class="ov-hero-sub">"不仅……而且……" · 书面正式累加</div>
   </div>
@@ -1026,10 +1034,12 @@ export const grammarCardsP23: GrammarCard[] = [
       { type: 'rule', text: '动词/形容词词干 + 거니와', examples: '있다→있거니와 / 좋다→좋거니와 / 하다→하거니와' },
       { type: 'rule', text: '过去 → -았/었거니와', examples: '갔거니와 / 했거니와' },
       { type: 'rule', text: '名词有收音 + 이거니와', examples: '학자이거니와 / 학생이거니와' },
-      { type: 'rule', text: '名词无收음 + 거니와', examples: '가수거니와 / 배우거니와' },
+      { type: 'rule', text: '名词无收音 + 거니와', examples: '가수거니와 / 배우거니와' },
       { type: 'usage', text: '书面/文语累加，前后同倾向', examples: '재미있거니와 유익하다 / 성실하거니와 책임감도 강하다' },
       { type: 'usage', text: '后半句常配 -도 强调"也"', examples: '좋거니와 바람도 시원합니다 / 있거니와 유익하기도 하다' },
-      { type: 'compare', text: '和 -을뿐더러 差别：더러 更强调"进一步加"，거니와 更"两者并列"', examples: '두 개 모두 서면적/공적 언어에 적합' },
+      { type: 'compare', text: '和 -을뿐더러 差别：더러 更强调"进一步加"，거니와 更"两者并列"', examples: '재미있거니와 유익하거든요（有趣而且有益）' },
+      { type: 'note', text: '语体禁忌：仅用于书面/正式语（TOPIK 阅读、报道、评论、演讲）。日常口语几乎不说，用出来会显得书生气；同样的"不仅…也"口语里用 -고 或 -은/는 데다가。' },
+      { type: 'note', text: '语义细腻处：前项通常是"已知/理所当然"的事，后项再补一件相关的。国立国语院释义为"承认前句事实的同时，接着说相关的另一事"——所以两边不只是并列，更是"A 本就如此，B 也……"。' },
       { type: 'example', text: '재미있거니와 유익하다 / 성실하거니와 책임감도 강해요' },
     ],
     cardExamples: [
@@ -1087,7 +1097,7 @@ export const grammarCardsP23: GrammarCard[] = [
     ],
     mistakes: [
       { wrong: '재미있는거니와', correct: '재미있거니와', note: '거니와 直接接词干，不需要冠形。재미있 + 거니와 = 재미있거니와。' },
-      { wrong: '학자거니와', correct: '학자이거니와', note: '名词有收音 → 이거니와。学자 有收音 ㅏ 는 없지만 ㅏ + 자 中 자 无收音，但 학자 视为一个词，需加 이 → 학자이거니와。'.replace('学자', '학자') },
+      { wrong: '학자거니와', correct: '학자이거니와', note: '名词 + 이다 → 이거니와。학자 + 이 + 거니와 = 학자이거니와。' },
       { wrong: '좋거니와 나쁘다', correct: '좋거니와 좋기도 하다 / 좋지만 나쁘다', note: '前后必须同倾向。矛盾用 -지만。' },
       { wrong: '먹었은거니와', correct: '먹었거니와', note: '过去 -았/었 后直接接 거니와，不加冠形。' },
     ],
@@ -1179,7 +1189,7 @@ export const grammarCardsP23: GrammarCard[] = [
     compareLabel: '-거니와 vs -을뿐더러',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P17 · 第 5 课</div>
+    <div class="ov-hero-label">P23 · 第 5 课</div>
     <div class="ov-hero-title">-거니와</div>
     <div class="ov-hero-sub">"不仅……也……" · 书面并列累加</div>
   </div>
@@ -1274,7 +1284,9 @@ export const grammarCardsP23: GrammarCard[] = [
       { type: 'rule', text: '名词 + 인 한편', examples: '학생인 한편 / 아버지인 한편' },
       { type: 'usage', text: '描述同一主体的两个平行方面或活动', examples: '일하는 한편 공부하다 / 전통을 지키는 한편 새 문화 받아들이다' },
       { type: 'compare', text: '和 -는 반면에 差别：平行 vs 对立', examples: '지키는 한편 받아들여요（平行）/ 잘하는 반면 못해요（对立）' },
+      { type: 'note', text: '负迁移陷阱：中文"一方面…另一方面…"既能表对立也能表平行，给不出选词信号，所以别照中文直译挑。判断法：后半句是否推翻/否定前半句？是→用 -는 반면에（对立）；只是补充同时存在的另一件事→用 -는 한편（平行）。' },
       { type: 'note', text: '文章分析、新闻报道、商务表达中常见', examples: '매출 증가 + 복지 개선 / 전통 + 현대' },
+      { type: 'note', text: '别和句首独立的 한편, 混淆：新闻里常见句子开头单独一个"한편,"（另一方面/再者），那是承接上文换话题的副词用法，不接冠形词尾，和本课"冠形+한편"的连接用法不是一回事（后续阅读会大量遇到）。' },
       { type: 'example', text: '일하는 한편 공부도 해요 / 매출이 증가하는 한편 복지도 개선하고 있어요' },
     ],
     cardExamples: [
@@ -1422,7 +1434,7 @@ export const grammarCardsP23: GrammarCard[] = [
     compareLabel: '-는 한편 vs -는 반면에',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P17 · 第 6 课</div>
+    <div class="ov-hero-label">P23 · 第 6 课</div>
     <div class="ov-hero-title">-는/은/ㄴ 한편</div>
     <div class="ov-hero-sub">"一方面……另一方面……" · 平行并存</div>
   </div>
@@ -1510,6 +1522,7 @@ export const grammarCardsP23: GrammarCard[] = [
       { type: 'usage', text: '前后是同一主体的意外反差事件', examples: '먹고도 배 안 부르다 / 알고도 모른 척하다 / 보고도 못 알아보다' },
       { type: 'usage', text: '常用固定搭配', examples: '보고도 (못 알아보다) / 알고도 (모른 척하다) / 자고도 (피곤하다)' },
       { type: 'compare', text: '和 -지만 差别：语气更强、聚焦"事件+意外结果"', examples: '먹었지만 배고파요（转折）/ 먹고도 배가 고파요（意外反差）' },
+      { type: 'note', text: '还有第二个意思——"既…又…/而且（更进一层）"：前后不是矛盾而是两个相容的（多为褒义）特征叠加时，-고도 不译"却"而译"又/而且"。判断法：后半句推翻前半→译"却"；后半句是加分项→译"又"。', examples: '크고도 넓다（又大又宽）/ 싸고도 좋다（既便宜又好）/ 곱고도 아름답다（既清秀又美丽）' },
       { type: 'note', text: '前后主语必须一致', examples: '내가 먹고도 내가 배고파요 ✓ / 내가 먹고도 네가 배고파요 ✗' },
       { type: 'example', text: '알고도 모른 척했어요 / 보고도 못 알아봤어요 / 먹고도 배 안 불러요' },
     ],
@@ -1531,7 +1544,7 @@ export const grammarCardsP23: GrammarCard[] = [
           { text: '모른 척했어요', role: 'verb' },
         ],
         zh: '明明知道却装作不知道。',
-        swapWords: ['알고도', '봤고도', '들었고도'],
+        swapWords: ['알고도', '보고도', '듣고도'],
         swapRole: 'verb',
       },
       {
@@ -1600,7 +1613,7 @@ export const grammarCardsP23: GrammarCard[] = [
           prompt: '"虽是富人却穿旧衣" → 그 사람은 ___ 낡은 옷을 입어요.',
           options: ['부자고도', '부자이고도', '부자를고도', '부자는고도'],
           answer: 1,
-          explanation: '名词有收音 → 이고도。부자 有收音 ㅏ 는 없지만 부자 视为一个词，用 이고도 = 부자이고도。',
+          explanation: '名词 + 이다 → 이고도。부자 + 이 + 고도 = 부자이고도。',
         },
         {
           prompt: '关于 -고도 的用法，哪句最准确？',
@@ -1652,7 +1665,7 @@ export const grammarCardsP23: GrammarCard[] = [
     compareLabel: '-고도 vs -는데도',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P17 · 第 7 课</div>
+    <div class="ov-hero-label">P23 · 第 7 课</div>
     <div class="ov-hero-title">-고도</div>
     <div class="ov-hero-sub">"虽然……却……" · 同一主体的强反差</div>
   </div>
@@ -1744,8 +1757,10 @@ export const grammarCardsP23: GrammarCard[] = [
       { type: 'rule', text: '有收音词干 + 을 뿐 아니라', examples: '먹다→먹을 뿐 아니라 / 좋다→좋을 뿐 아니라' },
       { type: 'rule', text: '过去 → -았/었을 뿐 아니라', examples: '갔을 뿐 아니라 / 잘했을 뿐 아니라' },
       { type: 'rule', text: '名词 + 뿐 아니라（直接接）', examples: '나뿐 아니라 / 학생뿐 아니라' },
-      { type: 'usage', text: '前后同倾向累加，口语书面都通用', examples: '커피가 맛있을 뿐 아니라 분위기도 좋아요' },
+      { type: 'usage', text: '前后同倾向累加，口语书面都通用', examples: '커피가 맛있을 뿐 아니라 분위기도 좋아요（咖啡不仅好喝，氛围也好。）' },
       { type: 'compare', text: '和 -을뿐더러 差别：-을 뿐 아니라 更通用，-을뿐더러 更书面', examples: '두 개 意思接近，但 -을 뿐 아니라 使用范围更广' },
+      { type: 'note', text: '更常见的写法是加 만：뿐만 아니라 / -을 뿐만 아니라，意思完全相同，实际阅读和口语里 만 版本出现得更多。会了本课就等于会了 뿐만 아니라。', examples: '나뿐만 아니라 / 맛있을 뿐만 아니라（= 뿐 아니라）' },
+      { type: 'compare', text: '别和 -을 뿐이다 混：两者都带"-을 뿐"，区别全在 뿐 后面接谁——接 아니라 是"不仅"（还有下文），接 이다 是"只是/仅仅"（到此为止，语气收束）。', examples: '먹을 뿐 아니라 자기도 해요（不仅吃还睡）/ 그냥 먹을 뿐이에요（只是吃罢了）' },
       { type: 'note', text: '空格：-을 뿐 아니라（뿐 前后空格）', examples: '먹을 뿐 아니라 ✓ / 먹을뿐아니라 ✗' },
       { type: 'example', text: '맛있을 뿐 아니라 분위기도 좋아요 / 노래를 잘할 뿐 아니라 춤도 잘 춰요' },
     ],
@@ -1830,7 +1845,7 @@ export const grammarCardsP23: GrammarCard[] = [
           prompt: '"这书有趣也有益" → 이 책은 ___ 유익하기도 해요.',
           options: ['재미있는 뿐 아니라', '재미있는데 뿐 아니라', '재미있을 뿐 아니라', '재미있고 뿐 아니라'],
           answer: 2,
-          explanation: '뿐 아니라 前用 -을/ㄹ 冠形。재미있다 有收음 → 재미있을 뿐 아니라。',
+          explanation: '뿐 아니라 前用 -을/ㄹ 冠形。재미있다 有收音 → 재미있을 뿐 아니라。',
         },
         {
           prompt: '"不仅我别人也这么想" → ___ 다른 사람들도 그렇게 생각해요.',
@@ -1896,7 +1911,7 @@ export const grammarCardsP23: GrammarCard[] = [
     compareLabel: '-을 뿐 아니라 vs -을뿐더러',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P17 · 第 8 课</div>
+    <div class="ov-hero-label">P23 · 第 8 课</div>
     <div class="ov-hero-title">-을/ㄹ 뿐 아니라</div>
     <div class="ov-hero-sub">"不仅仅……" · 最通用的累加</div>
   </div>
@@ -1936,11 +1951,11 @@ export const grammarCardsP23: GrammarCard[] = [
     id: 'card-p23-l09',
     partNumber: 23,
     lessonNumber: 9,
-    title: '综合练习⑰',
-    whatItDoes: '第 17 部分总复习',
+    title: 'P23 综合练习',
+    whatItDoes: 'P23 第1～8课 总复习',
     whatItDoesBody: '完成这份练习，检验高级连接与对比八大语法。\n覆盖：-는 반면에、-는 데다가、-기는커녕、-을뿐더러、-거니와、-는 한편、-고도、-을 뿐 아니라。\n重点掌握"对立/累加/反差/平行"四种关系的分辨。',
     isPractice: true,
-    structureNote: 'P17 语法分组：\n【对立】L01 -는 반면에\n【累加】L02 -는 데다가 · L04 -을뿐더러 · L05 -거니와 · L08 -을 뿐 아니라\n【反差】L03 -기는커녕 · L07 -고도\n【平行】L06 -는 한편',
+    structureNote: 'P23 语法分组：\n【对立】L01 -는 반면에\n【累加】L02 -는 데다가 · L04 -을뿐더러 · L05 -거니와 · L08 -을 뿐 아니라\n【反差】L03 -기는커녕 · L07 -고도\n【平行】L06 -는 한편',
     structures: [
       { ko: '커피는 맛있는 반면 가격이 비싸요', zh: '咖啡好喝但价格贵。', tokens: [{ text: '커피는', role: 'subject' }, { text: '맛있는 반면', role: 'verb' }, { text: '가격이', role: 'subject' }, { text: '비싸요', role: 'verb' }] },
       { ko: '이 옷은 예쁜 데다가 저렴해요', zh: '这衣服不仅漂亮还便宜。', tokens: [{ text: '이 옷은', role: 'subject' }, { text: '예쁜 데다가', role: 'verb' }, { text: '저렴해요', role: 'verb' }] },
@@ -1952,14 +1967,14 @@ export const grammarCardsP23: GrammarCard[] = [
       { ko: '맛있을 뿐 아니라 분위기도 좋아요', zh: '不仅好吃气氛也好。', tokens: [{ text: '맛있을 뿐 아니라', role: 'verb' }, { text: '분위기도', role: 'subject' }, { text: '좋아요', role: 'verb' }] },
     ],
     connectionRules: [
-      { type: 'rule', text: '对立特征 → -는 반면에', examples: '어려운 반면 발음은 쉬워요' },
-      { type: 'rule', text: '累加加强（日常）→ -는 데다가', examples: '예쁜 데다가 저렴해요' },
-      { type: 'rule', text: '预期落空 → -기는커녕 / 은/는커녕', examples: '칭찬은커녕 혼났어요' },
-      { type: 'rule', text: '累加加强（书面）→ -을뿐더러', examples: '좋을뿐더러 합리적입니다' },
-      { type: 'rule', text: '累加并列（文语）→ -거니와', examples: '재미있거니와 유익하다' },
-      { type: 'rule', text: '平行并存 → -는 한편', examples: '일하는 한편 공부도 해요' },
-      { type: 'rule', text: '意外反差 → -고도', examples: '먹고도 배가 고파요' },
-      { type: 'rule', text: '通用累加 → -을 뿐 아니라', examples: '맛있을 뿐 아니라 분위기도 좋아요' },
+      { type: 'rule', text: '对立特征 → -는 반면에', examples: '어려운 반면 발음은 쉬워요（语法难，发音却简单。）' },
+      { type: 'rule', text: '累加加强（日常）→ -는 데다가', examples: '예쁜 데다가 저렴해요（又漂亮又便宜。）' },
+      { type: 'rule', text: '预期落空 → -기는커녕 / 은/는커녕', examples: '칭찬은커녕 혼났어요（别说表扬，反倒挨骂了。）' },
+      { type: 'rule', text: '累加加强（书面）→ -을뿐더러', examples: '좋을뿐더러 합리적입니다（不但好，而且合理。）' },
+      { type: 'rule', text: '累加并列（文语）→ -거니와', examples: '재미있거니와 유익하다（既有趣又有益。）' },
+      { type: 'rule', text: '平行并存 → -는 한편', examples: '일하는 한편 공부도 해요（一边工作一边也学习。）' },
+      { type: 'rule', text: '意外反差 → -고도', examples: '먹고도 배가 고파요（吃了也还是饿。）' },
+      { type: 'rule', text: '通用累加 → -을 뿐 아니라', examples: '맛있을 뿐 아니라 분위기도 좋아요（不仅好吃，氛围也好。）' },
     ],
     cardExamples: [
       {
@@ -1978,7 +1993,7 @@ export const grammarCardsP23: GrammarCard[] = [
         wordBlocks: [{ text: '알고도', role: 'verb' }, { text: '모른 척했어요', role: 'verb' }],
         zh: '明知却装不知。',
         swapRole: 'verb',
-        swapWords: ['알고도', '보고도', '들었고도'],
+        swapWords: ['알고도', '보고도', '듣고도'],
       },
     ],
     scenarios: [
@@ -2062,7 +2077,7 @@ export const grammarCardsP23: GrammarCard[] = [
           explanation: '主体的多面性/两个平行身份 → -는/인 한편。학생인 한편。',
         },
         {
-          prompt: '关于 P17 语法选择，哪句最准确？',
+          prompt: '关于 P23 语法选择，哪句最准确？',
           options: [
             '所有累加语法都可以互换',
             '-는 반면에（对立）、-는 데다가（同向累加）、-기는커녕（落空）、-는 한편（平行）关系完全不同',
@@ -2070,14 +2085,14 @@ export const grammarCardsP23: GrammarCard[] = [
             '-거니와 只能用于口语',
           ],
           answer: 1,
-          explanation: 'P17 语法有严格的语义分工：对立、累加、落空、反差、平行各有专用连接词，选错会闹逻辑笑话。',
+          explanation: 'P23 语法有严格的语义分工：对立、累加、落空、反差、平行各有专用连接词，选错会闹逻辑笑话。',
         },
       ],
     },
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P17 · 综合练习</div>
-    <div class="ov-hero-title">综合练习⑰</div>
+    <div class="ov-hero-label">P23 · 综合练习</div>
+    <div class="ov-hero-title">P23 综合练习</div>
     <div class="ov-hero-sub">高级连接与对比 · 八大语法总复习</div>
   </div>
   <div class="ov-section">

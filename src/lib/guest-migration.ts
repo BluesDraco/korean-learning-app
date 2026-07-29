@@ -3,20 +3,18 @@
 const GUEST_KEYS = {
   words: 'guest_words',
   sentences: 'guest_sentences',
-  kpopProgress: 'guest_kpop_progress',
   recordingsMeta: 'guest_recordings_meta',
 };
 
 export interface GuestData {
   words: unknown[];
   sentences: unknown[];
-  kpopProgress: unknown[];
   recordingsMeta: unknown[];
   hasAny: boolean;
 }
 
 export function getGuestData(): GuestData {
-  const result: GuestData = { words: [], sentences: [], kpopProgress: [], recordingsMeta: [], hasAny: false };
+  const result: GuestData = { words: [], sentences: [], recordingsMeta: [], hasAny: false };
   try {
     for (const [key, lsKey] of Object.entries(GUEST_KEYS)) {
       const raw = localStorage.getItem(lsKey);
@@ -59,19 +57,6 @@ export async function migrateGuestData(): Promise<{ synced: number; errors: numb
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'add', table: 'sentences', data: sentence }),
-      });
-      if (res.ok) synced++;
-      else errors++;
-    } catch { errors++; }
-  }
-
-  // Sync KPOP progress
-  for (const prog of guest.kpopProgress) {
-    try {
-      const res = await fetch('/api/kpop/progress', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(prog),
       });
       if (res.ok) synced++;
       else errors++;

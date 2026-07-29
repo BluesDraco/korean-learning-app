@@ -1,0 +1,8 @@
+/* Pretendard Variable — 自托管（原从 cdn.jsdelivr.net 加载，大陆常超时阻塞韩文渲染） */
+@font-face {
+  font-family: 'Pretendard Variable';
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/pretendard/PretendardVariable.woff2') format('woff2-variations');
+}

@@ -11,8 +11,7 @@ export type AudioContentType =
   | 'word'
   | 'sentence'
   | 'paragraph'
-  | 'video_original'
-  | 'kpop_original';
+  | 'video_original';
 
 export type AudioSource = 'browser_tts' | 'cached_qwen_tts' | 'static_audio' | 'original_video' | 'original_music';
 
@@ -38,7 +37,6 @@ const QWEN_ALLOWED_TYPES: Set<AudioContentType> = new Set([
 
 const ORIGINAL_ONLY_TYPES: Set<AudioContentType> = new Set([
   'video_original',
-  'kpop_original',
 ]);
 
 /** Classify text into a content type based on heuristics */
@@ -83,8 +81,9 @@ export function resolveAudioPolicy(type: AudioContentType): AudioPolicyResult {
   return { source: 'cached_qwen_tts', shouldCache: true, reason: '默认策略：Qwen TTS + 浏览器回退' };
 }
 
-/** Sanitize text before passing to browser TTS. Strips markers that confuse TTS. */
-export function sanitizeTTSText(text: string, hint?: AudioContentType): string {
+/** Sanitize text before passing to browser TTS. Strips markers that confuse TTS.
+ *  skipNormalize=true 时不做连音规则化 —— 用于"写/读"对比场景的字面读音播放。 */
+export function sanitizeTTSText(text: string, hint?: AudioContentType, skipNormalize = false): string {
   const cleaned = text
     .replace(/🔊/g, '')
     .replace(/[●◉○◈◇◆▸►▻]/g, '')
@@ -95,5 +94,5 @@ export function sanitizeTTSText(text: string, hint?: AudioContentType): string {
     .replace(/^,\s*/, '')
     .replace(/,\s*$/, '')
     .trim();
-  return normalizeKoreanPronunciation(cleaned);
+  return skipNormalize ? cleaned : normalizeKoreanPronunciation(cleaned);
 }

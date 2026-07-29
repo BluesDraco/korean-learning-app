@@ -1,37 +1,46 @@
-'use client';
+'use client'
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Trash2, PenLine } from 'lucide-react';
+import { useSmartBack } from '@/lib/useSmartBack';
+import { ArrowLeft, CheckCircle, PenLine, RotateCcw } from 'lucide-react';
 import { db } from '@/lib/db';
 import type { TopikMistake } from '@/types';
 import type { TopikQuestion } from '@/data/topik-questions';
-import { useTheme } from '@/components/ThemeProvider';
-import { LIGHT_C as _LIGHT_C, DARK_C as _DARK_C } from '@/lib/theme';
-
-const LIGHT_C = { ..._LIGHT_C, dateMuted: '#c4a89e' };
-const DARK_C  = { ..._DARK_C, dateMuted: '#9A8AB0' };
+import { loadTopikQuestionsByIds } from '@/lib/dataLoader';
+import { saveProgress, TTL_EXAM } from '@/lib/progress-storage';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
+import '../topik-redesign.css';
 
 interface MistakeRow {
   mistake: TopikMistake;
   question: TopikQuestion;
 }
 
+interface UndoState {
+  id: string;
+  row: MistakeRow;
+  timer: ReturnType<typeof setTimeout>;
+}
+
 export default function TopikMistakesPage() {
-  const { theme } = useTheme();
-  const C = theme === 'dark' ? DARK_C : LIGHT_C;
+  const { lang } = useLang();
   const router = useRouter();
+  const smartBack = useSmartBack('/topik');
   const [rows, setRows] = useState<MistakeRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [undoState, setUndoState] = useState<UndoState | null>(null);
+  const undoRef = useRef<UndoState | null>(null);
 
   async function load() {
     try {
-      const [{ topikQuestions }, mistakes] = await Promise.all([
-        import('@/data/topik-questions'),
-        db.topikMistakes.filter((m: TopikMistake) => m.mastered === 0),
-      ]);
+      const mistakes = await db.topikMistakes.filter((m: TopikMistake) => m.mastered === 0);
+      const ids = Array.from(new Set(mistakes.map((m: TopikMistake) => m.questionId)));
+      const topikQuestions = await loadTopikQuestionsByIds(ids);
+      const qById = new Map(topikQuestions.map(q => [q.id, q]));
       const withQ = mistakes
-        .map((m: TopikMistake) => ({ mistake: m, question: topikQuestions.find(q => q.id === m.questionId) }))
+        .map((m: TopikMistake) => ({ mistake: m, question: qById.get(m.questionId) }))
         .filter((r: { question: TopikQuestion | undefined }) => r.question) as MistakeRow[];
       withQ.sort((a, b) => b.mistake.wrongCount - a.mistake.wrongCount);
       setRows(withQ);
@@ -44,26 +53,67 @@ export default function TopikMistakesPage() {
 
   useEffect(() => { load(); }, []);
 
-  async function handleMastered(id: string) {
-    try {
-      await db.topikMistakes.update(id, { mastered: 1 });
-      setRows(prev => prev.filter(r => r.mistake.id !== id));
-    } catch { /* ignore */ }
+  // 组件卸载时立即提交挂起的已掌握操作
+  useEffect(() => {
+    return () => {
+      const pending = undoRef.current;
+      if (pending) {
+        clearTimeout(pending.timer);
+        db.topikMistakes.update(pending.id, { mastered: 1 }).catch(e => console.error('[topik] mistakes cleanup update failed:', e));
+      }
+    };
+  }, []);
+
+  function handleMastered(id: string) {
+    const row = rows.find(r => r.mistake.id === id);
+    if (!row) return;
+
+    // 取消上一条还在等待的撤销（立即提交）
+    if (undoRef.current) {
+      clearTimeout(undoRef.current.timer);
+      db.topikMistakes.update(undoRef.current.id, { mastered: 1 }).catch(e => console.error('[topik] mistakes undo update failed:', e));
+    }
+
+    // 乐观移除
+    setRows(prev => prev.filter(r => r.mistake.id !== id));
+
+    // 3 秒后真正写 DB
+    const timer = setTimeout(() => {
+      db.topikMistakes.update(id, { mastered: 1 }).catch(e => console.error('[topik] mistakes master update failed:', e));
+      setUndoState(null);
+      undoRef.current = null;
+    }, 3000);
+
+    const next = { id, row, timer };
+    undoRef.current = next;
+    setUndoState(next);
+  }
+
+  function handleUndo() {
+    if (!undoState) return;
+    clearTimeout(undoState.timer);
+    // 把移除的行放回原位（按 wrongCount 排序）
+    setRows(prev => {
+      const restored = [...prev, undoState.row];
+      restored.sort((a, b) => b.mistake.wrongCount - a.mistake.wrongCount);
+      return restored;
+    });
+    setUndoState(null);
+    undoRef.current = null;
   }
 
   function startPractice() {
     if (rows.length === 0) return;
     const sessionId = crypto.randomUUID();
-    try {
-      sessionStorage.setItem(`topik-exam-${sessionId}`, JSON.stringify({
-        questionIds: rows.map(r => r.question.id),
-        mode: 'mistakes',
-        timeLeft: -1,
-        idx: 0,
-        answers: [],
-        startedAt: Date.now(),
-      }));
-    } catch { /* ignore */ }
+    saveProgress(`topik-exam-${sessionId}`, {
+      sectionId: 'mistakes-review',
+      questionIds: rows.map(r => r.question.id),
+      mode: 'mistakes',
+      timeLeft: -1,
+      idx: 0,
+      answers: [],
+      startedAt: Date.now(),
+    }, TTL_EXAM);
     router.push(`/topik/exam/${sessionId}`);
   }
 
@@ -73,56 +123,77 @@ export default function TopikMistakesPage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: C.bg, paddingBottom: 40 }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '16px 16px 0' }}>
-        <button onClick={() => router.back()} style={{ width: 36, height: 36, borderRadius: '50%', border: `1px solid ${C.line}`, background: C.card, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-          <ArrowLeft size={16} color={C.muted} />
-        </button>
-        <div>
-          <h1 style={{ fontSize: 18, fontWeight: 900, color: C.ink, margin: 0 }}>TOPIK 错题本</h1>
-          <p style={{ fontSize: 12, color: C.muted, margin: 0 }}>{rows.length} 题需要加强</p>
-        </div>
-      </div>
+    <div className="tk-scope">
+      <div className="hr-stage" style={{ maxWidth: 720, margin: '0 auto' }}>
 
-      <div style={{ padding: '16px 16px 0' }}>
+        <div className="hr-mobile-back">
+          <button className="hr-mobile-back-btn" onClick={smartBack} aria-label={t('topik.back', lang)}>
+            <ArrowLeft size={14} /> {t('topik.back', lang)}
+          </button>
+        </div>
+
+        <header className="hr-page-head">
+          <div className="hr-brand">
+            <div className="hr-brand-mark">Tori</div>
+            <div className="hr-brand-kr">오답</div>
+            <div className="hr-brand-sub">{t('topik.mt_brand_sub', lang)}</div>
+          </div>
+          <div className="hr-brand-sub" data-md-show>{t('topik.mt_need_strengthen', lang, { n: rows.length })}</div>
+        </header>
+
         {loading ? (
-          <div style={{ textAlign: 'center', paddingTop: 60, color: C.muted, fontSize: 14 }}>加载中...</div>
-        ) : rows.length === 0 ? (
-          <div style={{ textAlign: 'center', paddingTop: 60 }}>
-            <div style={{ fontSize: 48, marginBottom: 12 }}>🎉</div>
-            <p style={{ fontSize: 16, fontWeight: 700, color: C.ink }}>暂无错题</p>
-            <p style={{ fontSize: 13, color: C.muted, marginTop: 4 }}>完成练习后，答错的题会出现在这里</p>
-            <button onClick={() => router.push('/topik')} style={{ marginTop: 20, padding: '12px 28px', borderRadius: 14, background: C.pink, color: '#fff', fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer' }}>
-              去练习
-            </button>
+          <div className="tk-fullpage-msg">
+            <div className="hint">{t('topik.loading', lang)}</div>
+          </div>
+        ) : rows.length === 0 && !undoState ? (
+          <div className="tk-empty" style={{ paddingTop: 60 }}>
+            <div style={{ fontSize: 48, marginBottom: 10 }}>🎉</div>
+            <p className="tk-empty-title">{t('topik.mt_empty', lang)}</p>
+            <p className="tk-empty-hint">{t('topik.mt_empty_hint', lang)}</p>
+            <button className="tk-goto-btn" onClick={smartBack}>{t('topik.go_practice', lang)}</button>
           </div>
         ) : (
           <>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <div className="tk-mistake-list">
               {rows.map(({ mistake, question }) => (
-                <div key={mistake.id} style={{ background: C.card, borderRadius: 16, border: `1px solid ${C.line}`, padding: '14px 16px', display: 'flex', gap: 12 }}>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4, flexWrap: 'wrap' }}>
-                      {question.topic && <span style={{ fontSize: 11, fontWeight: 700, color: C.pink, background: C.pinkSoft, borderRadius: 6, padding: '2px 7px' }}>#{question.topic}</span>}
-                      <span style={{ fontSize: 11, fontWeight: 700, color: C.pink, background: C.pinkSoft, borderRadius: 6, padding: '2px 7px' }}>×{mistake.wrongCount}</span>
-                      {question.testPoint && <span style={{ fontSize: 11, color: C.muted }}>考点: {question.testPoint}</span>}
+                <div key={mistake.id} className="tk-mistake-card">
+                  <div className="tk-mistake-body">
+                    <div className="tk-mistake-tags">
+                      {question.topic && <span className="tk-mistake-tag">#{question.topic}</span>}
+                      <span className="tk-mistake-tag">×{mistake.wrongCount}</span>
+                      {question.testPoint && <span className="tk-mistake-testpoint">{t('topik.mt_testpoint', lang, { point: question.testPoint })}</span>}
                     </div>
-                    <p style={{ fontSize: 13, color: C.ink, margin: '0 0 4px', lineHeight: 1.5 }}>{question.prompt}</p>
-                    <p style={{ fontSize: 11, color: C.dateMuted, margin: 0 }}>最近出错 {formatDate(mistake.lastWrongAt)}</p>
+                    <p className="tk-mistake-prompt">{question.prompt}</p>
+                    <div className="tk-mistake-when">{t('topik.mt_last_wrong', lang, { date: formatDate(mistake.lastWrongAt) })}</div>
                   </div>
-                  <button onClick={() => handleMastered(mistake.id)} style={{ width: 34, height: 34, borderRadius: 10, border: `1px solid ${C.line}`, background: C.card, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0, alignSelf: 'center' }} title="已掌握，移除">
-                    <Trash2 size={15} color={C.muted} />
+                  <button className="tk-mistake-mark" onClick={() => handleMastered(mistake.id)} aria-label={t('topik.mt_mastered', lang)} title={t('topik.mt_mastered', lang)}>
+                    <CheckCircle size={16} />
                   </button>
                 </div>
               ))}
             </div>
 
-            <button onClick={startPractice} style={{ width: '100%', marginTop: 20, padding: '14px 0', borderRadius: 14, background: C.ink, color: '#fff', fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-              <PenLine size={16} />再练一遍 ({rows.length}题)
-            </button>
+            {rows.length > 0 && (
+              <button className="tk-practice-btn" onClick={startPractice}>
+                <PenLine size={16} />{t('topik.mt_practice_again', lang, { n: rows.length })}
+              </button>
+            )}
           </>
         )}
       </div>
+
+      {undoState && (
+        <div className="tk-undo-bar">
+          <div className="tk-undo-bar-body">
+            <CheckCircle size={16} color="var(--hr-mint-base)" />
+            <span className="msg">{t('topik.mt_marked_mastered', lang)}</span>
+            <button className="tk-undo-btn" onClick={handleUndo}>
+              <RotateCcw size={12} />{t('topik.mt_undo', lang)}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+

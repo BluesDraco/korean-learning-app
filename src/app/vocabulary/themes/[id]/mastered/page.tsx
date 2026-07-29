@@ -3,15 +3,18 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Volume2, ChevronDown, ChevronUp, Check, Trash2, BookmarkPlus, CheckSquare, Square } from 'lucide-react';
-import { db } from '@/lib/db';
-import { speak } from '@/lib/tts';
+import { db, deleteWordsByText } from '@/lib/db';
+import { speak, speakWord } from '@/lib/tts';
 import { getTheme, getThemeWords } from '@/data/vocabulary';
 import { AddToBookSheet } from '@/components/vocabulary/AddToBookSheet';
 import type { WordEntry } from '@/types';
 import { useIsDesktop } from '@/lib/useIsMobile';
+import { t } from '@/lib/i18n';
+import { useLang } from '@/components/LangProvider';
 
 export default function ThemeMasteredPage() {
   const isDesktop = useIsDesktop();
+  const { lang } = useLang();
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
 
@@ -22,6 +25,7 @@ export default function ThemeMasteredPage() {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [expandedWord, setExpandedWord] = useState<string | null>(null);
   const [deletePending, setDeletePending] = useState(false);
+  const [unmasterPending, setUnmasterPending] = useState(false);
   const [showAddBook, setShowAddBook] = useState(false);
 
   useEffect(() => {
@@ -50,48 +54,48 @@ export default function ThemeMasteredPage() {
 
   const batchUnmaster = async () => {
     const now = Date.now();
-    try {
-      for (const k of selected) {
-        const existing = await db.words.where('word').equals(k).first();
-        if (existing) await db.words.update(existing.id, { mastery: 'learning', srsLevel: 1, interval: 1, nextReview: now });
-      }
-      setMasteredWords(prev => prev.filter(e => !selected.has(e.korean)));
-    } catch { /* ignore */ }
-    setSelected(new Set()); setManaging(false);
+    const keys = [...selected];
+    const results = await Promise.allSettled(keys.map(async k => {
+      const existing = await db.words.where('word').equals(k).first();
+      if (existing) await db.words.update(existing.id, { mastery: 'learning', srsLevel: 1, interval: 1, nextReview: now });
+    }));
+    const doneKeys = new Set(keys.filter((_, i) => results[i].status === 'fulfilled'));
+    setMasteredWords(prev => prev.filter(e => !doneKeys.has(e.korean)));
+    setSelected(new Set(keys.filter(k => !doneKeys.has(k)))); setManaging(false);
+    if (doneKeys.size < keys.length) alert(t('vocab.err_partial_mark', lang));
   };
 
   const batchDelete = async () => {
-    try {
-      for (const k of selected) {
-        const existing = await db.words.where('word').equals(k).first();
-        if (existing) await db.words.delete(existing.id);
-      }
-      setMasteredWords(prev => prev.filter(e => !selected.has(e.korean)));
-    } catch { /* ignore */ }
+    await deleteWordsByText(selected); // 删词 + 从收藏本剔除孤儿 id
+    setMasteredWords(prev => prev.filter(e => !selected.has(e.korean)));
     setSelected(new Set()); setManaging(false); setDeletePending(false);
   };
 
   const unmaster = async (entry: WordEntry) => {
     const now = Date.now();
     try {
-      const existing = await db.words.where('word').equals(entry.korean).first();
-      if (existing) await db.words.update(existing.id, { mastery: 'learning', srsLevel: 1, interval: 1, nextReview: now });
+      const rows = await db.words.where('word').equals(entry.korean).toArray();
+      if (rows.length) {
+        await db.words.bulkUpdate(
+          rows.map(w => ({ id: w.id, mastery: 'learning', srsLevel: 1, interval: 1, nextReview: now }))
+        );
+      }
       setMasteredWords(prev => prev.filter(e => e.korean !== entry.korean));
-    } catch { /* ignore */ }
+    } catch { alert(t('vocab.err_partial_mark', lang)); }
   };
 
   return (
-    <div className="min-h-screen pb-24" style={{ background: 'var(--color-surface-1)' }}>
+    <div className="min-h-screen pb-[calc(40px+env(safe-area-inset-bottom,0px))]" style={{ background: 'var(--color-surface-1)' }}>
       {/* Header */}
       <div className="sticky top-0 z-10" style={{ background: 'var(--color-surface-1)', borderBottom: '1px solid var(--color-border-1)' }}>
         <div className={isDesktop ? 'max-w-5xl mx-auto' : ''} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px' }}>
-          <button onClick={() => router.back()} style={{ padding: 6, background: 'transparent', border: 'none', color: 'var(--color-ink-3)', cursor: 'pointer' }}>
+          <button onClick={() => router.push(`/vocabulary/themes/${id}`)} style={{ padding: 6, background: 'transparent', border: 'none', color: 'var(--color-ink-3)', cursor: 'pointer' }}>
             <ArrowLeft size={20} />
           </button>
-          <h1 style={{ fontSize: 16, fontWeight: 700, color: 'var(--color-ink-1)', flex: 1, margin: 0 }}>已掌握单词 · {themeName}</h1>
+          <h1 style={{ fontSize: 16, fontWeight: 700, color: 'var(--color-ink-1)', flex: 1, margin: 0 }}>{t('vocab.td_mastered_title', lang)} · {themeName}</h1>
           {masteredWords.length > 0 && (
-            <button onClick={() => { setManaging(m => !m); setSelected(new Set()); setDeletePending(false); }} style={{ fontSize: 13, color: 'var(--color-ink-3)', background: 'transparent', border: 'none', cursor: 'pointer' }}>
-              {managing ? '取消' : '批量管理'}
+            <button onClick={() => { setManaging(m => !m); setSelected(new Set()); setDeletePending(false); setUnmasterPending(false); }} style={{ fontSize: 13, color: 'var(--color-ink-3)', background: 'transparent', border: 'none', cursor: 'pointer' }}>
+              {managing ? t('common.cancel', lang) : t('vocab.manage', lang)}
             </button>
           )}
         </div>
@@ -101,9 +105,9 @@ export default function ThemeMasteredPage() {
         <div style={{ background: 'var(--color-surface-1)', borderBottom: '1px solid var(--color-border-1)' }}>
           <div className={isDesktop ? 'max-w-5xl mx-auto' : ''} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 16px' }}>
             <button onClick={() => setSelected(allSelected ? new Set() : new Set(masteredWords.map(e => e.korean)))} style={{ fontSize: 13, fontWeight: 600, color: 'var(--color-pink-strong)', background: 'transparent', border: 'none', cursor: 'pointer' }}>
-              {allSelected ? '取消全选' : '全选'}
+              {allSelected ? t('vocab.cancel_select_all', lang) : t('vocab.select_all', lang)}
             </button>
-            <span style={{ fontSize: 12, color: 'var(--color-ink-3)' }}>已选 {selected.size} 个</span>
+            <span style={{ fontSize: 12, color: 'var(--color-ink-3)' }}>{t('vocab.selected_n', lang, { n: selected.size })}</span>
           </div>
         </div>
       )}
@@ -116,16 +120,16 @@ export default function ThemeMasteredPage() {
           </div>
         ) : masteredWords.length === 0 ? (
           <div className="text-center py-16">
-            <p className="text-sm text-[var(--text-muted)]">还没有已掌握的单词</p>
-            <button onClick={() => router.back()} className="mt-4 text-sm text-[var(--pink-primary)] underline underline-offset-2">回到词库</button>
+            <p className="text-sm text-[var(--text-muted)]">{t('vocab.no_mastered_yet', lang)}</p>
+            <button onClick={() => router.back()} className="mt-4 text-sm text-[var(--pink-primary)] underline underline-offset-2">{t('vocab.ld_back_to_lib', lang)}</button>
           </div>
         ) : (
           masteredWords.map(entry => {
             const isExpanded = expandedWord === entry.korean;
             return (
               <div key={entry.id} className={`border rounded-xl overflow-hidden transition-colors ${managing && selected.has(entry.korean) ? 'border-[var(--mint-soft)]' : 'border-[var(--border-color)]'}`}
-                style={{ background: managing && selected.has(entry.korean) ? 'rgba(174,227,216,0.08)' : 'white' }}>
-                <div className="flex items-center gap-3 px-3 py-2.5" onClick={managing ? () => toggleSelect(entry.korean) : undefined}>
+                style={{ background: managing && selected.has(entry.korean) ? 'rgba(174,227,216,0.08)' : 'var(--color-surface-2)' }}>
+                <div className="flex items-center gap-3 px-4 py-2.5" onClick={managing ? () => toggleSelect(entry.korean) : undefined}>
                   {managing && (
                     <div className="shrink-0 text-[var(--mint-soft)]">
                       {selected.has(entry.korean) ? <CheckSquare size={16} /> : <Square size={16} className="text-[var(--text-muted)]" />}
@@ -134,18 +138,18 @@ export default function ThemeMasteredPage() {
                   <span className="text-xl shrink-0">{entry.emoji}</span>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className="font-bold text-sm text-[var(--text-primary)]">{entry.korean}</span>
+                      <span className="ko-text font-bold text-sm text-[var(--text-primary)]">{entry.korean}</span>
                       {entry.partOfSpeech && <span className="text-[10px] px-1.5 py-0.5 rounded bg-[var(--bg-accent)] text-[var(--text-muted)]">{entry.partOfSpeech}</span>}
                     </div>
                     <span className="text-xs text-[var(--text-muted)]">{entry.meanings[0]?.chinese}</span>
                   </div>
                   {!managing && (
                     <>
-                      <button onClick={(e) => { e.stopPropagation(); speak(entry.korean, 0.75); }} className="p-1.5 text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors shrink-0">
+                      <button onClick={(e) => { e.stopPropagation(); speakWord(entry.korean); }} className="p-1.5 text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors shrink-0">
                         <Volume2 size={14} />
                       </button>
                       <button onClick={(e) => { e.stopPropagation(); unmaster(entry); }} className="text-xs px-2 py-1 rounded-lg bg-[var(--mint-soft)]/10 text-[var(--mint-soft)] hover:bg-[var(--mint-soft)]/20 transition-colors shrink-0">
-                        取消掌握
+                        {t('vocab.unmaster', lang)}
                       </button>
                       {entry.examples.length > 0 && (
                         <button onClick={(e) => { e.stopPropagation(); setExpandedWord(isExpanded ? null : entry.korean); }} className="p-1.5 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors shrink-0">
@@ -160,10 +164,10 @@ export default function ThemeMasteredPage() {
                     {entry.examples.map((ex, i) => (
                       <div key={i} className="flex items-start gap-2 bg-[var(--bg-input)] rounded-lg px-3 py-2">
                         <div className="flex-1 min-w-0">
-                          <p className="text-xs text-[var(--text-primary)]">{ex.korean}</p>
-                          <p className="text-[11px] text-[var(--text-muted)] mt-0.5">{ex.chinese}</p>
+                          <p className="text-[15px] leading-relaxed text-[var(--text-primary)]">{ex.korean}</p>
+                          <p className="text-[13px] text-[var(--text-muted)] mt-1 leading-snug">{ex.chinese}</p>
                         </div>
-                        <button onClick={() => speak(ex.korean, 0.75)} className="p-1 text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors shrink-0">
+                        <button onClick={() => speakWord(ex.korean)} className="p-1 text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors shrink-0">
                           <Volume2 size={12} />
                         </button>
                       </div>
@@ -178,22 +182,29 @@ export default function ThemeMasteredPage() {
       </div>
 
       {managing && selected.size > 0 && (
-        <div className="fixed bottom-[calc(56px+env(safe-area-inset-bottom,0px))] left-0 right-0 z-20 px-4 pb-3 md:left-[208px] md:bottom-0 md:pb-4">
-          <div className="rounded-2xl border border-[var(--border-color)] p-3 flex items-center gap-2 shadow-lg" style={{ background: '#fffbf7' }}>
+        <div className="fixed bottom-[calc(56px+env(safe-area-inset-bottom,0px))] left-0 right-0 z-[60] px-4 pb-3 md:left-[208px] md:bottom-0 md:pb-4">
+          <div className="rounded-2xl border border-[var(--border-color)] p-3 flex items-center gap-2 shadow-lg" style={{ background: 'var(--color-surface-1)' }}>
             {deletePending ? (
               <>
-                <button onClick={() => setDeletePending(false)} className="flex-1 py-2.5 rounded-xl bg-[var(--bg-accent)] text-[var(--text-muted)] text-sm font-medium">取消</button>
+                <button onClick={() => setDeletePending(false)} className="flex-1 py-2.5 rounded-xl bg-[var(--bg-accent)] text-[var(--text-muted)] text-sm font-medium">{t('common.cancel', lang)}</button>
                 <button onClick={batchDelete} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-red-500 text-white text-sm font-medium">
-                  <Trash2 size={14} />确认删除 {selected.size} 个
+                  <Trash2 size={14} />{t('vocab.confirm_delete_n', lang, { n: selected.size })}
+                </button>
+              </>
+            ) : unmasterPending ? (
+              <>
+                <button onClick={() => setUnmasterPending(false)} className="flex-1 py-2.5 rounded-xl bg-[var(--bg-accent)] text-[var(--text-muted)] text-sm font-medium">{t('common.cancel', lang)}</button>
+                <button onClick={() => { batchUnmaster(); setUnmasterPending(false); }} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[var(--mint-soft)] text-white text-sm font-medium">
+                  <Check size={14} />{t('vocab.confirm_unmaster_n', lang, { n: selected.size })}
                 </button>
               </>
             ) : (
               <>
                 <button onClick={() => setShowAddBook(true)} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] text-sm font-medium">
-                  <BookmarkPlus size={14} />加入单词本
+                  <BookmarkPlus size={14} />{t('vocab.add_to_book', lang)}
                 </button>
-                <button onClick={batchUnmaster} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[var(--mint-soft)]/10 text-[var(--mint-soft)] text-sm font-medium">
-                  <Check size={14} />取消掌握
+                <button onClick={() => setUnmasterPending(true)} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[var(--mint-soft)]/10 text-[var(--mint-soft)] text-sm font-medium">
+                  <Check size={14} />{t('vocab.unmaster', lang)}
                 </button>
                 <button onClick={() => setDeletePending(true)} className="flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-red-50 text-red-500 text-sm font-medium">
                   <Trash2 size={14} />
@@ -207,7 +218,7 @@ export default function ThemeMasteredPage() {
       {showAddBook && (
         <AddToBookSheet
           word={{ korean: '', pronunciation: '', meaning: '', partOfSpeech: '' }}
-          title={`加入单词本（${selected.size} 个词）`}
+          title={t('vocab.add_to_book_n', lang, { n: selected.size })}
           onClose={() => setShowAddBook(false)}
           onSelectBook={async (bookId) => {
             try {

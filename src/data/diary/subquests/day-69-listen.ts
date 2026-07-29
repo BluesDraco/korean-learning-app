@@ -1,0 +1,29 @@
+import type { ListenSubQuestData } from '@/types/tori-subquest';
+
+/** Day 69 · 3-2 귀 트이기 · ~기 때문에 · 反歧视论坛 */
+export const day69Listen: ListenSubQuestData = {
+  day: 9, level: 'advanced', idx: 2, kind: 'listen',
+  koTitle: '귀 트이기',
+  subtitle: '반차별 학생 논단 · 3분 발표',
+
+  meaning: [
+    { id: 'd69-l2-m1', audioKo: '저는 토끼예요. 60일 전에 한국에 왔어요.',                choices: [{ text: '我是一只兔子。60 天前来到韩国。',        correct: true }, { text: '我不是兔子。',                    correct: false }, { text: '60 天后要回国。',                  correct: false }, { text: '一直住在韩国。',                  correct: false }], explain: '演讲开场自介' },
+    { id: 'd69-l2-m2', audioKo: '체형은 중요하지 않아요. 능력이 중요해요.',                choices: [{ text: '体型不重要，能力才重要。',              correct: true }, { text: '体型才重要。',                    correct: false }, { text: '两者都不重要。',                  correct: false }, { text: '没有关系。',                      correct: false }], explain: 'Day 68 → 69 主张升级' },
+    { id: 'd69-l2-m3', audioKo: '편견은 언어로 깨야 해요.',                                 choices: [{ text: '偏见要用语言打破。',                    correct: true }, { text: '偏见不能打破。',                  correct: false }, { text: '语言就是偏见。',                  correct: false }, { text: '语言不重要。',                    correct: false }], explain: 'Day 69 演讲主题句 · ~야 하다' },
+    { id: 'd69-l2-m4', audioKo: '토끼도 할 수 있어요.',                                       choices: [{ text: '兔子也做得到。',                        correct: true }, { text: '兔子做不到。',                    correct: false }, { text: '只有兔子做得到。',                correct: false }, { text: '不是兔子做的。',                  correct: false }], explain: 'Day 69 收束句 · ~도 할 수 있다' },
+    { id: 'd69-l2-m5', audioKo: '3초 정적. 그리고 첫 박수.',                                  choices: [{ text: '3 秒静默。然后第一声掌声。',            correct: true }, { text: '没有掌声。',                      correct: false }, { text: '3 秒后走人。',                    correct: false }, { text: '一直静默。',                      correct: false }], explain: '论坛现场反应 · 정적 = 静默' },
+  ],
+
+  cloze: [
+    { id: 'd69-l2-c1', audioKo: '편견 때문에 상처받아요.',              clozeParts: ['', ' 상처받아요.'],                choices: [{ text: '편견 때문에',   correct: true }, { text: '편견하기 때문에',    correct: false }, { text: '편견해서 때문에',    correct: false }, { text: '편견은 때문에', correct: false }], explain: 'N + 때문에' },
+    { id: 'd69-l2-c2', audioKo: '체형이 작기 때문에 무시받았어요.',      clozeParts: ['체형이 ', ' 무시받았어요.'],       choices: [{ text: '작기 때문에',   correct: true }, { text: '작는 때문에',    correct: false }, { text: '작아서 때문에',    correct: false }, { text: '작 때문에', correct: false }], explain: 'A + 기 때문에' },
+    { id: 'd69-l2-c3', audioKo: '용기를 냈기 때문에 여기까지 왔어요.',   clozeParts: ['용기를 ', ' 여기까지 왔어요.'],   choices: [{ text: '냈기 때문에',   correct: true }, { text: '내기 때문에',    correct: false }, { text: '내는 때문에',    correct: false }, { text: '낸 때문에', correct: false }], explain: '过去 · 었기 때문에' },
+    { id: 'd69-l2-c4', audioKo: '편견은 언어로 깨야 해요.',                 clozeParts: ['편견은 언어로 ', ' 해요.'],       choices: [{ text: '깨야',   correct: true }, { text: '깨는',    correct: false }, { text: '깨서',    correct: false }, { text: '깨기', correct: false }], explain: '깨 + 야 하다 = 必须打破' },
+  ],
+
+  reply: [
+    { id: 'd69-l2-r1', audioKo: '주말에 무슨 일 있었어요?',                                     promptZh: '有人在论坛前问你周末怎么了。你想说"因为狮子的偏见，我很生气"，最自然的一句？',              choices: [{ text: '사자의 편견 때문에 화가 났어요.',                              correct: true }, { text: '주말은 재미있었어요.',              correct: false }, { text: '얼마예요?',                              correct: false }, { text: '몰라요.',                                correct: false }], explain: 'N + 때문에 · 因果表达' },
+    { id: 'd69-l2-r2', audioKo: '왜 여기 서 계세요?',                                              promptZh: '有人问你为什么站上论坛麦克风。你想说"因为偏见要用语言打破"，最自然的一句？',              choices: [{ text: '편견은 언어로 깨야 하기 때문에 여기 서 있어요.',                correct: true }, { text: '몰라요. 그냥 왔어요.',              correct: false }, { text: '얼마예요?',                              correct: false }, { text: '싫어요.',                                correct: false }], explain: '~기 때문에 · 正式因果表达' },
+    { id: 'd69-l2-r3', audioKo: '토끼도 할 수 있어요.',                                             promptZh: 'Danielle 上前说"你说得好"。你想说"因为拿出了勇气才走到这里"，最自然的一句？',            choices: [{ text: '용기를 냈기 때문에 여기까지 왔어요.',                          correct: true }, { text: '용기가 없기 때문에 여기까지 왔어요.', correct: false }, { text: '얼마예요?',                              correct: false }, { text: '몰라요.',                                correct: false }], explain: '过去 · 았/었기 때문에' },
+  ],
+};

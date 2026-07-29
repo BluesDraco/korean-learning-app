@@ -3,6 +3,17 @@ import { getAuthFromCookie } from '@/lib/server/auth';
 import { getDb } from '@/lib/server/db';
 import { filterContent } from '@/lib/contentFilter';
 
+// 6-26 事故兜底：所有用户私人数据 API 必须 force-dynamic + private no-store
+// 这是中央 user-data 路由，承载笔记/日记/句子/进度/词库 等所有用户数据
+export const dynamic = 'force-dynamic';
+
+const NO_STORE = { 'Cache-Control': 'private, no-store' };
+
+// 包装 NextResponse.json 自动加 private, no-store 头
+function j(body: unknown, init?: { status?: number }): NextResponse {
+  return NextResponse.json(body, { status: init?.status, headers: NO_STORE });
+}
+
 // Field-level length limits for user-generated text fields
 const FIELD_MAX_LENGTH: Record<string, Record<string, number>> = {
   diary: { title: 100, content: 5000 },
@@ -51,7 +62,7 @@ type Writable = 'all' | 'readonly';
 const TABLE_COLS: Record<string, { cols: string[]; pk: string; table: string; userScope: UserScope; writable: Writable }> = {
   words: {
     table: 'user_words',
-    cols: ['id', 'user_id', 'word', 'pronunciation', 'meaning', 'part_of_speech', 'examples', 'source_entry_id', 'source_video_id', 'source_subtitle_id', 'source', 'source_detail', 'mastery', 'srs_level', 'next_review', 'ease_factor', 'interval', 'correct_count', 'wrong_count', 'created_at', 'last_reviewed'],
+    cols: ['id', 'user_id', 'word', 'pronunciation', 'meaning', 'meanings', 'part_of_speech', 'examples', 'source_entry_id', 'source_video_id', 'source_subtitle_id', 'source', 'source_detail', 'mastery', 'srs_level', 'next_review', 'ease_factor', 'interval', 'correct_count', 'wrong_count', 'consecutive_correct', 'created_at', 'last_reviewed'],
     pk: 'id', userScope: 'user_id', writable: 'all',
   },
   reviewSessions: {
@@ -62,11 +73,6 @@ const TABLE_COLS: Record<string, { cols: string[]; pk: string; table: string; us
   dictationRecords: {
     table: 'dictation_records',
     cols: ['id', 'user_id', 'word_id', 'meaning', 'date', 'correct', 'user_input'],
-    pk: 'id', userScope: 'user_id', writable: 'all',
-  },
-  shadowingRecords: {
-    table: 'shadowing_records',
-    cols: ['id', 'user_id', 'subtitle_id', 'date', 'score'],
     pk: 'id', userScope: 'user_id', writable: 'all',
   },
   userProfiles: {
@@ -169,11 +175,6 @@ const TABLE_COLS: Record<string, { cols: string[]; pk: string; table: string; us
     cols: ['id', 'user_id', 'type', 'source_id', 'line_id', 'audio_url', 'korean', 'audio_data', 'source_type', 'duration_ms', 'created_at', 'updated_at'],
     pk: 'id', userScope: 'user_id', writable: 'all',
   },
-  kpopProgress: {
-    table: 'user_kpop_progress',
-    cols: ['id', 'user_id', 'song_id', 'current_line_index', 'practiced_lines', 'completed_lines', 'total_lines', 'total_recordings', 'total_practice_seconds', 'last_practiced_at', 'status', 'created_at', 'updated_at'],
-    pk: 'id', userScope: 'user_id', writable: 'all',
-  },
   diary: {
     table: 'user_diary',
     cols: ['id', 'user_id', 'title', 'content', 'mood', 'created_at', 'updated_at'],
@@ -194,6 +195,56 @@ const TABLE_COLS: Record<string, { cols: string[]; pk: string; table: string; us
     cols: ['id', 'user_id', 'day_num', 'card_type', 'action', 'detail', 'timestamp'],
     pk: 'id', userScope: 'user_id', writable: 'all',
   },
+  phoneticMistakes: {
+    table: 'phonetic_mistakes',
+    cols: ['id', 'user_id', 'target_jamo', 'wrong_jamo', 'stage', 'wrong_count', 'last_wrong_at', 'resolved', 'created_at'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
+  phoneticSrs: {
+    table: 'phonetic_srs',
+    cols: ['id', 'user_id', 'jamo', 'stage', 'srs_level', 'ease_factor', 'interval', 'next_review_at', 'seen_count', 'correct_count', 'wrong_count', 'created_at'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
+  userPhoneticSteps: {
+    table: 'user_phonetic_steps',
+    cols: ['id', 'user_id', 'completed_at'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
+  userGrammarFavorites: {
+    table: 'user_grammar_favorites',
+    cols: ['id', 'user_id', 'created_at'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
+  typingPackProgress: {
+    table: 'typing_pack_progress',
+    cols: ['id', 'user_id', 'completed_at', 'best_wpm', 'best_accuracy', 'practice_count', 'updated_at'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
+  typingMastery: {
+    table: 'typing_mastery',
+    cols: ['id', 'user_id', 'theme_id', 'item_key', 'streak', 'updated_at'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
+  writingHistory: {
+    table: 'writing_history',
+    cols: ['id', 'user_id', 'date', 'mode', 'mode_label', 'score', 'snippet', 'details_json', 'created_at'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
+  aiAnalyzeHistory: {
+    table: 'ai_analyze_history',
+    cols: ['id', 'user_id', 'timestamp', 'original', 'full_translation', 'result_json'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
+  userVocabLastVisit: {
+    table: 'user_vocab_last_visit',
+    cols: ['id', 'user_id', 'source', 'unit_id', 'unit_title', 'updated_at'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
+  userExpressionAdded: {
+    table: 'user_expression_added',
+    cols: ['id', 'user_id', 'created_at'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
   userGrammarStates: {
     table: 'user_grammar_states',
     cols: ['id', 'user_id', 'status', 'seen_count', 'correct_count', 'wrong_count', 'last_seen_at', 'next_review_at', 'source', 'created_at', 'updated_at'],
@@ -201,7 +252,7 @@ const TABLE_COLS: Record<string, { cols: string[]; pk: string; table: string; us
   },
   userArticleProgress: {
     table: 'user_article_progress',
-    cols: ['id', 'user_id', 'article_id', 'status', 'read_sentence_ids', 'saved_sentence_ids', 'saved_word_ids', 'quiz_score', 'quiz_answers', 'output_answer', 'completed_at', 'last_read_at', 'created_at', 'updated_at'],
+    cols: ['id', 'user_id', 'article_id', 'status', 'read_sentence_ids', 'saved_sentence_ids', 'saved_word_ids', 'quiz_score', 'quiz_answers', 'output_answer', 'output_score', 'completed_at', 'last_read_at', 'created_at', 'updated_at'],
     pk: 'id', userScope: 'user_id', writable: 'all',
   },
   articleLearningEvents: {
@@ -209,9 +260,14 @@ const TABLE_COLS: Record<string, { cols: string[]; pk: string; table: string; us
     cols: ['id', 'user_id', 'article_id', 'sentence_id', 'action', 'payload', 'created_at'],
     pk: 'id', userScope: 'user_id', writable: 'all',
   },
+  practiceScores: {
+    table: 'practice_scores',
+    cols: ['id', 'user_id', 'scene_slug', 'scene_cn', 'natural', 'grammar', 'politeness', 'task', 'overall', 'tips_json', 'highlight', 'msg_count', 'mistake_count', 'created_at'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
   readingProgress: {
     table: 'reading_progress',
-    cols: ['id', 'user_id', 'post_id', 'read_at'],
+    cols: ['id', 'user_id', 'post_id', 'read_at', 'completed_at'],
     pk: 'id', userScope: 'user_id', writable: 'all',
   },
   topikSessions: {
@@ -224,6 +280,21 @@ const TABLE_COLS: Record<string, { cols: string[]; pk: string; table: string; us
     cols: ['id', 'user_id', 'question_id', 'session_id', 'wrong_count', 'last_wrong_at', 'mastered', 'created_at'],
     pk: 'id', userScope: 'user_id', writable: 'all',
   },
+  topikTypeMastery: {
+    table: 'topik_type_mastery',
+    cols: ['id', 'user_id', 'question_type', 'attempts', 'correct', 'last_practiced_at', 'created_at'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
+  topikUserGoals: {
+    table: 'topik_user_goals',
+    cols: ['id', 'user_id', 'target_date', 'target_level', 'daily_question_count', 'updated_at', 'created_at'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
+  topikDailyPlans: {
+    table: 'topik_daily_plans',
+    cols: ['id', 'user_id', 'date', 'question_ids', 'reason_map', 'target_level', 'created_at', 'completed_at', 'session_id'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
   aiChatMistakes: {
     table: 'ai_chat_mistakes',
     cols: ['id', 'user_id', 'scenario_id', 'scenario_name', 'user_input', 'wrong_part', 'correct_part', 'grammar_error', 'reviewed', 'created_at'],
@@ -234,18 +305,59 @@ const TABLE_COLS: Record<string, { cols: string[]; pk: string; table: string; us
     cols: ['id', 'user_id', 'ko', 'zh', 'part_of_speech', 'scenario_id', 'created_at'],
     pk: 'id', userScope: 'user_id', writable: 'all',
   },
+  toriProgress: {
+    table: 'user_tori_progress',
+    cols: ['id', 'user_id', 'level', 'day', 'modules_done', 'output_json', 'started_at', 'completed_at', 'module_state'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
+  toriStickersOwned: {
+    table: 'user_tori_stickers',
+    cols: ['id', 'user_id', 'sticker_id', 'acquired_at'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
+  toriSubQuestProgress: {
+    table: 'user_tori_subquest_progress',
+    cols: ['id', 'user_id', 'level', 'day', 'idx', 'kind', 'stars', 'wrong_count', 'attempts', 'first_cleared_at', 'updated_at'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
+  spelling_mistakes: {
+    table: 'spelling_mistakes',
+    cols: ['id', 'user_id', 'word_id', 'word', 'meaning', 'user_input', 'correct_answer', 'mistake_type', 'created_at'],
+    pk: 'id', userScope: 'user_id', writable: 'all',
+  },
 };
 
 function toSnake(s: string) {
   return s.replace(/[A-Z]/g, (m) => '_' + m.toLowerCase());
 }
 
-function toSnakeObj(obj: Record<string, unknown>): Record<string, unknown> {
+/** Per-table field name remap (前端 key → DB col)，处理无法自动 snake_case 推导的字段 */
+const FIELD_ALIAS: Record<string, Record<string, string>> = {
+  toriProgress: { output: 'output_json' },
+  practiceScores: { tips: 'tips_json' },
+};
+
+const FIELD_ALIAS_REVERSE: Record<string, Record<string, string>> = {};
+for (const [t, m] of Object.entries(FIELD_ALIAS)) {
+  FIELD_ALIAS_REVERSE[t] = Object.fromEntries(Object.entries(m).map(([k, v]) => [v, k]));
+}
+
+function toSnakeObj(obj: Record<string, unknown>, tableKey?: string): Record<string, unknown> {
+  const alias = tableKey ? FIELD_ALIAS[tableKey] : undefined;
   const out: Record<string, unknown> = {};
   for (const [k, v] of Object.entries(obj)) {
-    out[toSnake(k)] = v;
+    out[(alias && alias[k]) || toSnake(k)] = v;
   }
   return out;
+}
+
+// 6-28 SQLITE_CORRUPT 事故修复：表的 created_at / updated_at 是 NOT NULL，
+// 客户端漏传会触发 NOT NULL CONSTRAINT 错误，导致进程崩溃 + pm2 重启循环 + WAL 损坏。
+// 在 INSERT 路径统一兜底，缺什么补什么。
+function fillTimestampDefaults(snakeData: Record<string, unknown>, cols: string[]): void {
+  const now = Date.now();
+  if (cols.includes('created_at') && snakeData.created_at == null) snakeData.created_at = now;
+  if (cols.includes('updated_at') && snakeData.updated_at == null) snakeData.updated_at = now;
 }
 
 function normalizeSqlValue(value: unknown): unknown {
@@ -261,13 +373,27 @@ function normalizeSqlValues(values: unknown[]): unknown[] {
   return values.map(normalizeSqlValue);
 }
 
-function rowToObj(cols: string[], row: unknown[]): Record<string, unknown> {
+function rowToObj(cols: string[], row: unknown[], tableKey?: string, userId?: string): Record<string, unknown> {
+  const aliasRev = tableKey ? FIELD_ALIAS_REVERSE[tableKey] : undefined;
   const obj: Record<string, unknown> = {};
   for (let i = 0; i < cols.length; i++) {
-    const camelKey = cols[i].replace(/_([a-z])/g, (_, c) => c.toUpperCase());
+    const dbKey = cols[i];
+    const camelKey = (aliasRev && aliasRev[dbKey]) || dbKey.replace(/_([a-z])/g, (_, c) => c.toUpperCase());
     let val = row[i];
-    if (['examples', 'word_ids', 'tokens', 'words_added', 'practiced_lines', 'completed_lines', 'read_sentence_ids', 'saved_sentence_ids', 'saved_word_ids', 'quiz_answers'].includes(cols[i]) || ['examples', 'wordIds', 'tokens', 'wordsAdded', 'practicedLines', 'completedLines', 'readSentenceIds', 'savedSentenceIds', 'savedWordIds', 'quizAnswers'].includes(camelKey)) {
+    if (['examples', 'meanings', 'word_ids', 'tokens', 'words_added', 'practiced_lines', 'completed_lines', 'read_sentence_ids', 'saved_sentence_ids', 'saved_word_ids', 'quiz_answers', 'modules_done', 'output_json', 'module_state', 'question_ids', 'reason_map', 'tips_json'].includes(cols[i]) || ['examples', 'meanings', 'wordIds', 'tokens', 'wordsAdded', 'practicedLines', 'completedLines', 'readSentenceIds', 'savedSentenceIds', 'savedWordIds', 'quizAnswers', 'modulesDone', 'output', 'moduleState', 'questionIds', 'reasonMap', 'tips'].includes(camelKey)) {
       try { val = JSON.parse(val as string); } catch { /* keep raw */ }
+    }
+    // 读回时反向剥离前缀：写入时给这些表加了 ${userId}: 前缀，客户端预期不带前缀
+    // singleton 表读回时保留 raw userId（buddy/admin 等消费方依赖 profile.id === userId）
+    if (
+      camelKey === 'id'
+      && typeof val === 'string'
+      && tableKey
+      && userId
+      && USER_OWNED_DETERMINISTIC_TABLES.has(tableKey)
+      && val.startsWith(`${userId}:`)
+    ) {
+      val = val.slice(userId.length + 1);
     }
     obj[camelKey] = val;
   }
@@ -288,9 +414,13 @@ function buildUserClause(scope: UserScope, userId: string): { clause: string; pa
 
 /** Only allow keys that exist in the table's column whitelist */
 function validateColumns(data: Record<string, unknown>, cols: string[]): string[] {
+  // 未知列改为软失败：从 data 剔除并 warn，不 throw
+  // 之前 throw 会导致整条 update 500，客户端静默 .catch(() => {}) 后**用户数据完全没写入**。
+  // 现在允许剔除未知字段，其他有效字段仍然写入。开发时看服务端 log 排查拼写错误。
   const unknown = Object.keys(data).filter((k) => !cols.includes(k));
   if (unknown.length > 0) {
-    throw new Error(`Unknown columns: ${unknown.join(', ')}`);
+    console.warn(`[user-data] Dropping unknown columns: ${unknown.join(', ')}`);
+    for (const k of unknown) delete data[k];
   }
   return Object.keys(data);
 }
@@ -302,8 +432,17 @@ function requireWritable(info: { writable: Writable; table: string }) {
   }
 }
 
-const LOGICAL_SINGLETON_TABLES = new Set(['userProfiles', 'settings']);
-const USER_OWNED_DETERMINISTIC_TABLES = new Set(['words', 'dailyLogs']);
+const LOGICAL_SINGLETON_TABLES = new Set(['userProfiles', 'settings', 'userVocabLastVisit']);
+const USER_OWNED_DETERMINISTIC_TABLES = new Set([
+  'words', 'dailyLogs',
+  'userPhoneticSteps',
+  'userGrammarFavorites',
+  'userGrammarStates',
+  'userArticleProgress',
+  'typingPackProgress',
+  'typingMastery',
+  'userExpressionAdded',
+]);
 
 function resolveStorageId(tableKey: string, id: unknown, userId: string): unknown {
   if (typeof id !== 'string') return id;
@@ -356,7 +495,7 @@ function canReadInviteByToken(tableKey: string, field: string, op: unknown): boo
 export async function POST(req: Request) {
   const auth = await getAuthFromCookie();
   if (!auth) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return j({ error: 'Unauthorized' }, { status: 401 });
   }
 
   const db = await getDb();
@@ -365,34 +504,34 @@ export async function POST(req: Request) {
   try {
     body = await req.json();
   } catch {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+    return j({ error: 'Invalid JSON' }, { status: 400 });
   }
   const { action, table, id, data } = body;
 
   if (!table || !TABLE_COLS[table]) {
-    return NextResponse.json({ error: `Unknown table: ${table}` }, { status: 400 });
+    return j({ error: `Unknown table: ${table}` }, { status: 400 });
   }
   if (!action) {
-    return NextResponse.json({ error: 'Missing action' }, { status: 400 });
+    return j({ error: 'Missing action' }, { status: 400 });
   }
 
   try {
     const info = TABLE_COLS[table];
     if (!info) {
-      return NextResponse.json({ error: `Unknown table: ${table}` }, { status: 400 });
+      return j({ error: `Unknown table: ${table}` }, { status: 400 });
     }
 
     const { cols, pk, userScope } = info;
 
     switch (action) {
       case 'getAll': {
-        const limit = typeof data?.limit === 'number' && data.limit >= 0 ? data.limit : 2000;
+        const limit = typeof data?.limit === 'number' && data.limit >= 0 ? data.limit : 5000;
         const u = buildUserClause(userScope, auth.userId);
         let sql = `SELECT ${cols.join(', ')} FROM ${info.table}${u.clause ? ` WHERE ${u.clause}` : ''}`;
         if (limit > 0) sql += ` LIMIT ${limit}`;
         const result = await db.exec(sql, u.params);
-        const rows = result[0]?.values.map((r: unknown[]) => rowToObj(cols, r)) ?? [];
-        return NextResponse.json(rows);
+        const rows = result[0]?.values.map((r: unknown[]) => rowToObj(cols, r, table, auth.userId)) ?? [];
+        return j(rows);
       }
 
       case 'get': {
@@ -401,19 +540,20 @@ export async function POST(req: Request) {
         const storageId = resolveStorageId(table, id, auth.userId);
         const result = await db.exec(sql, [storageId, ...u.params]);
         const row = result[0]?.values[0];
-        return NextResponse.json(row ? rowToObj(cols, row) : null);
+        return j(row ? rowToObj(cols, row, table, auth.userId) : null);
       }
 
       case 'add': {
         requireWritable(info);
-        const snakeData = toSnakeObj(data);
+        const snakeData = toSnakeObj(data, table);
         applyStorageIds(table, snakeData, pk, auth.userId);
         applyUserScopeForWrite(table, snakeData, userScope, auth.userId);
+        fillTimestampDefaults(snakeData, cols);
         validateColumns(snakeData, cols);
         const lenErr = checkFieldLengths(table, snakeData);
-        if (lenErr) return NextResponse.json({ error: lenErr }, { status: 400 });
+        if (lenErr) return j({ error: lenErr }, { status: 400 });
         const addFilterErr = checkPoliticalFields(table, snakeData);
-        if (addFilterErr) return NextResponse.json({ error: addFilterErr }, { status: 400 });
+        if (addFilterErr) return j({ error: addFilterErr }, { status: 400 });
         const colNames = Object.keys(snakeData);
         const placeholders = colNames.map(() => '?');
         const values = normalizeSqlValues(colNames.map((c) => snakeData[c]));
@@ -421,7 +561,7 @@ export async function POST(req: Request) {
           `INSERT INTO ${info.table} (${colNames.join(', ')}) VALUES (${placeholders.join(', ')})`,
           values
         );
-        return NextResponse.json({ ok: true });
+        return j({ ok: true });
       }
 
       case 'put': {
@@ -433,9 +573,10 @@ export async function POST(req: Request) {
           : `DELETE FROM ${info.table} WHERE ${pk} = ?`;
         const deleteParams: unknown[] = u.clause ? [idVal, ...u.params] : [idVal];
 
-        const snakeData = toSnakeObj(data);
+        const snakeData = toSnakeObj(data, table);
         applyStorageIds(table, snakeData, pk, auth.userId);
         applyUserScopeForWrite(table, snakeData, userScope, auth.userId);
+        fillTimestampDefaults(snakeData, cols);
         validateColumns(snakeData, cols);
         const colNames = Object.keys(snakeData);
         const placeholders = colNames.map(() => '?');
@@ -445,12 +586,12 @@ export async function POST(req: Request) {
           { sql: deleteSql, args: deleteParams },
           { sql: `INSERT INTO ${info.table} (${colNames.join(', ')}) VALUES (${placeholders.join(', ')})`, args: values as unknown[] },
         ]);
-        return NextResponse.json({ ok: true });
+        return j({ ok: true });
       }
 
       case 'update': {
         requireWritable(info);
-        const snakeData = toSnakeObj(data);
+        const snakeData = toSnakeObj(data, table);
         delete snakeData[pk];
         if (userScope === 'user_id') {
           delete snakeData.user_id;
@@ -461,20 +602,23 @@ export async function POST(req: Request) {
         }
         validateColumns(snakeData, cols);
         const updateLenErr = checkFieldLengths(table, snakeData);
-        if (updateLenErr) return NextResponse.json({ error: updateLenErr }, { status: 400 });
+        if (updateLenErr) return j({ error: updateLenErr }, { status: 400 });
         const updateFilterErr = checkPoliticalFields(table, snakeData);
-        if (updateFilterErr) return NextResponse.json({ error: updateFilterErr }, { status: 400 });
+        if (updateFilterErr) return j({ error: updateFilterErr }, { status: 400 });
         if (Object.keys(snakeData).length === 0) {
-          return NextResponse.json({ ok: true });
+          return j({ ok: true });
         }
         const sets = Object.keys(snakeData).map((c) => `${c} = ?`);
         const values = normalizeSqlValues(Object.keys(snakeData).map((c) => snakeData[c]));
         const u = buildUserClause(userScope, auth.userId);
-        await db.run(
+        const upd = await db.run(
           `UPDATE ${info.table} SET ${sets.join(', ')} WHERE ${pk} = ?${u.clause ? ` AND ${u.clause}` : ''}`,
           [...values, resolveStorageId(table, id, auth.userId), ...u.params]
         );
-        return NextResponse.json({ ok: true });
+        if (upd.rowsAffected === 0) {
+          return j({ error: 'not found' }, { status: 404 });
+        }
+        return j({ ok: true });
       }
 
       case 'delete': {
@@ -482,19 +626,20 @@ export async function POST(req: Request) {
         const u = buildUserClause(userScope, auth.userId);
         const sql = `DELETE FROM ${info.table} WHERE ${pk} = ?${u.clause ? ` AND ${u.clause}` : ''}`;
         await db.run(sql, [resolveStorageId(table, id, auth.userId), ...u.params]);
-        return NextResponse.json({ ok: true });
+        return j({ ok: true });
       }
 
       case 'bulkPut': {
         requireWritable(info);
         if (!Array.isArray(data)) {
-          return NextResponse.json({ error: 'data must be an array' }, { status: 400 });
+          return j({ error: 'data must be an array' }, { status: 400 });
         }
         const statements: { sql: string; args: unknown[] }[] = [];
         for (const item of data) {
-          const snakeData = toSnakeObj(item);
+          const snakeData = toSnakeObj(item, table);
           applyStorageIds(table, snakeData, pk, auth.userId);
           applyUserScopeForWrite(table, snakeData, userScope, auth.userId);
+          fillTimestampDefaults(snakeData, cols);
           validateColumns(snakeData, cols);
           const idVal = resolveStorageId(table, snakeData[pk] ?? snakeData.id, auth.userId);
           const u = buildUserClause(userScope, auth.userId);
@@ -509,17 +654,17 @@ export async function POST(req: Request) {
           statements.push({ sql: `INSERT INTO ${info.table} (${colNames.join(', ')}) VALUES (${placeholders.join(', ')})`, args: values as unknown[] });
         }
         await db.batch(statements);
-        return NextResponse.json({ ok: true });
+        return j({ ok: true });
       }
 
       case 'bulkUpdate': {
         requireWritable(info);
         if (!Array.isArray(data)) {
-          return NextResponse.json({ error: 'data must be an array' }, { status: 400 });
+          return j({ error: 'data must be an array' }, { status: 400 });
         }
         const statements: { sql: string; args: unknown[] }[] = [];
         for (const item of data) {
-          const snakeData = toSnakeObj(item);
+          const snakeData = toSnakeObj(item, table);
           const itemId = resolveStorageId(table, snakeData[pk] ?? snakeData.id, auth.userId);
           delete snakeData[pk];
           if (userScope === 'user_id') delete snakeData.user_id;
@@ -534,13 +679,13 @@ export async function POST(req: Request) {
           });
         }
         if (statements.length > 0) await db.batch(statements);
-        return NextResponse.json({ ok: true });
+        return j({ ok: true });
       }
 
       case 'bulkDelete': {
         requireWritable(info);
         if (!Array.isArray(data)) {
-          return NextResponse.json({ error: 'data must be an array' }, { status: 400 });
+          return j({ error: 'data must be an array' }, { status: 400 });
         }
         const u = buildUserClause(userScope, auth.userId);
         const delSql = `DELETE FROM ${info.table} WHERE ${pk} = ?${u.clause ? ` AND ${u.clause}` : ''}`;
@@ -549,14 +694,14 @@ export async function POST(req: Request) {
           args: [resolveStorageId(table, itemId, auth.userId), ...u.params],
         }));
         if (statements.length > 0) await db.batch(statements);
-        return NextResponse.json({ ok: true });
+        return j({ ok: true });
       }
 
       case 'query': {
         const { field, op, value, orderBy, reverse, limit } = data || {};
         const snField = toSnake(field || '');
         if (!cols.includes(snField)) {
-          return NextResponse.json({ error: `Unknown field: ${field}` }, { status: 400 });
+          return j({ error: `Unknown field: ${field}` }, { status: 400 });
         }
         const opMap: Record<string, string> = { eq: '=', lt: '<', lte: '<=', gt: '>', gte: '>=' };
         const skipUserScope = canReadInviteByToken(table, snField, op);
@@ -574,7 +719,7 @@ export async function POST(req: Request) {
         }
 
         if (op === 'in' && Array.isArray(scopedValue)) {
-          if (scopedValue.length === 0) return NextResponse.json([]);
+          if (scopedValue.length === 0) return j([]);
           const resolvedValues = snField === pk
             ? scopedValue.map((v) => resolveStorageId(table, v, auth.userId))
             : scopedValue;
@@ -595,21 +740,21 @@ export async function POST(req: Request) {
         if (orderBy) {
           const snOrderBy = toSnake(orderBy);
           if (!cols.includes(snOrderBy)) {
-            return NextResponse.json({ error: `Unknown orderBy field: ${orderBy}` }, { status: 400 });
+            return j({ error: `Unknown orderBy field: ${orderBy}` }, { status: 400 });
           }
           sql += ` ORDER BY ${snOrderBy} ${reverse ? 'DESC' : 'ASC'}`;
         }
         if (limit) {
           const n = Number(limit);
-          if (!Number.isFinite(n) || n < 1 || n > 200) {
-            return NextResponse.json({ error: 'limit must be 1-200' }, { status: 400 });
+          if (!Number.isFinite(n) || n < 1 || n > 5000) {
+            return j({ error: 'limit must be 1-5000' }, { status: 400 });
           }
           sql += ` LIMIT ?`;
           params.push(n);
         }
         const result = await db.exec(sql, params);
-        const rows = result[0]?.values.map((r: unknown[]) => rowToObj(cols, r)) ?? [];
-        return NextResponse.json(rows);
+        const rows = result[0]?.values.map((r: unknown[]) => rowToObj(cols, r, table, auth.userId)) ?? [];
+        return j(rows);
       }
 
       case 'list': {
@@ -624,21 +769,21 @@ export async function POST(req: Request) {
         if (orderBy) {
           const snOrderBy = toSnake(orderBy);
           if (!cols.includes(snOrderBy)) {
-            return NextResponse.json({ error: `Unknown orderBy field: ${orderBy}` }, { status: 400 });
+            return j({ error: `Unknown orderBy field: ${orderBy}` }, { status: 400 });
           }
           sql += ` ORDER BY ${snOrderBy} ${reverse ? 'DESC' : 'ASC'}`;
         }
         if (limit) {
           const n = Number(limit);
-          if (!Number.isFinite(n) || n < 1 || n > 200) {
-            return NextResponse.json({ error: 'limit must be 1-200' }, { status: 400 });
+          if (!Number.isFinite(n) || n < 1 || n > 5000) {
+            return j({ error: 'limit must be 1-5000' }, { status: 400 });
           }
           sql += ` LIMIT ?`;
           params.push(n);
         }
         const result = await db.exec(sql, params);
-        const rows = result[0]?.values.map((r: unknown[]) => rowToObj(cols, r)) ?? [];
-        return NextResponse.json(rows);
+        const rows = result[0]?.values.map((r: unknown[]) => rowToObj(cols, r, table, auth.userId)) ?? [];
+        return j(rows);
       }
 
       case 'count': {
@@ -689,14 +834,14 @@ export async function POST(req: Request) {
 
         const sql = `SELECT COUNT(*) FROM ${info.table}${conditions.length > 0 ? ` WHERE ${conditions.join(' AND ')}` : ''}`;
         const result = await db.exec(sql, params);
-        return NextResponse.json({ count: result[0]?.values[0]?.[0] ?? 0 });
+        return j({ count: result[0]?.values[0]?.[0] ?? 0 });
       }
 
       default:
-        return NextResponse.json({ error: `Unknown action: ${action}` }, { status: 400 });
+        return j({ error: `Unknown action: ${action}` }, { status: 400 });
     }
   } catch (err: any) {
     console.error('[user-data]', err);
-    return NextResponse.json({ error: 'Operation failed' }, { status: 500 });
+    return j({ error: 'Operation failed' }, { status: 500 });
   }
 }

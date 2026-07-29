@@ -1,51 +1,173 @@
 'use client';
 
-import { useState, type CSSProperties } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
-import { Card, Button } from '@/components/ui';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
+import { useSearchParams } from 'next/navigation';
+import { EDITION } from '@/lib/membership-benefits';
+import '../auth.css';
 
-const inputStyle: CSSProperties = {
-  width: '100%',
-  background: 'var(--color-surface-1)',
-  border: '1px solid var(--color-border-2)',
-  borderRadius: 'var(--radius-md)',
-  padding: '10px 14px',
-  fontSize: 14,
-  color: 'var(--color-ink-1)',
-  outline: 'none',
-  transition: 'border-color var(--dur-fast) var(--ease-soft)',
-};
-
-const labelStyle: CSSProperties = {
-  display: 'block',
-  fontSize: 12,
-  fontWeight: 600,
-  color: 'var(--color-ink-2)',
-  marginBottom: 6,
-};
+type Method = 'phone' | 'email' | 'username';
+const IS_OVERSEAS = EDITION === 'overseas';
 
 export default function RegisterPage() {
-  const { register } = useAuth();
+  return (
+    <Suspense fallback={null}>
+      <RegisterContent />
+    </Suspense>
+  );
+}
+
+function RegisterContent() {
+  const { lang } = useLang();
+  const { register, sendEmailCode, registerWithEmail, sendPhoneCode, loginWithPhone } = useAuth();
+  const searchParams = useSearchParams();
+  const STATIC_EXT = /\.(png|jpg|jpeg|webp|gif|svg|ico|woff2?|ttf|eot|mp3|mp4|webm)$/i;
+  const rawRedirect = searchParams.get('redirect');
+  let redirectTo = '/daily';
+  if (rawRedirect) {
+    try {
+      const pathname = new URL(rawRedirect, 'http://localhost').pathname;
+      if (pathname.startsWith('/') && !STATIC_EXT.test(pathname) && pathname !== '/auth/login' && pathname !== '/auth/register') {
+        redirectTo = pathname;
+      }
+    } catch { /* ignore */ }
+  }
+
+  // 海外站默认邮箱 tab；国内手机/邮箱暂未上线，默认用户名 tab
+  const [method, setMethod] = useState<Method>(IS_OVERSEAS ? 'email' : 'username');
+
+  // 用户名注册（现有真实逻辑）
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+
+  // 手机 / 邮箱字段（UI，备案后接后端）
+  const [phone, setPhone] = useState('');
+  const [code, setCode] = useState('');
+  const [email, setEmail] = useState('');
+
+  // 验证码倒计时
+  const [countdown, setCountdown] = useState(0);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  useEffect(() => () => { if (timerRef.current) clearInterval(timerRef.current); }, []);
+
+  // 国内站手机/邮箱注册尚未上线，仅用户名可用
+  const soonMethod = (m: Method) => !IS_OVERSEAS && m !== 'username';
+
+  const switchMethod = (m: Method) => {
+    if (soonMethod(m)) return;
+    setMethod(m);
+    setError('');
+  };
+
+  const sendCode = async () => {
+    if (countdown > 0) return;
+    setError('');
+    if (method === 'phone') {
+      const result = await sendPhoneCode(phone);
+      if (result.error) { setError(result.error); return; }
+    } else if (method === 'email') {
+      // 邮箱验证码（海外 Resend / 国内腾讯云 SES，后端已分流）
+      const result = await sendEmailCode(email);
+      if (result.error) { setError(result.error); return; }
+    }
+    setCountdown(60);
+    timerRef.current = setInterval(() => {
+      setCountdown(prev => {
+        if (prev <= 1) {
+          if (timerRef.current) clearInterval(timerRef.current);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await doRegister();
+    if (method === 'username') {
+      await doRegister();
+    } else if (method === 'email') {
+      await doEmailRegister();
+    } else if (method === 'phone') {
+      await doPhoneRegister();
+    }
+  };
+
+  const doPhoneRegister = async () => {
+    if (submitting) return;
+    setError('');
+    if (!/^1[3-9]\d{9}$/.test(phone)) { setError(t('auth.err_phone_format', lang)); return; }
+    if (!/^\d{6}$/.test(code)) { setError(t('auth.err_code_empty', lang)); return; }
+    setSubmitting(true);
+    try {
+      const result = await loginWithPhone(phone, code);
+      if (result.error) {
+        setError(result.error);
+      } else {
+        window.location.href = '/daily';
+      }
+    } catch {
+      setError(t('auth.err_network', lang));
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const doEmailRegister = async () => {
+    if (submitting) return;
+    setError('');
+    if (!email) { setError(t('auth.err_email_format', lang)); return; }
+    if (password.length < 6) { setError(t('auth.err_password_short', lang)); return; }
+    if (password.length > 200) { setError(t('auth.err_password_long', lang)); return; }
+    if (!code) { setError(t('auth.err_code_empty', lang)); return; }
+    setSubmitting(true);
+    try {
+      const result = await registerWithEmail(email, password, code);
+      if (result.error) {
+        setError(result.error);
+      } else {
+        window.location.href = '/daily';
+      }
+    } catch {
+      setError(t('auth.err_network', lang));
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const doRegister = async () => {
     if (submitting) return;
     setError('');
 
+    const USERNAME_RE = /^[a-zA-Z0-9一-龥_-]{2,20}$/;
+    if (!username) {
+      setError(t('auth.err_username_empty', lang));
+      return;
+    }
+    if (!USERNAME_RE.test(username)) {
+      setError(t('auth.err_username_format', lang));
+      return;
+    }
+    if (password.length < 6) {
+      setError(t('auth.err_password_short', lang));
+      return;
+    }
+    if (password.length > 200) {
+      setError(t('auth.err_password_long', lang));
+      return;
+    }
     if (password !== confirmPassword) {
-      setError('两次输入的密码不一致');
+      setError(t('auth.err_password_mismatch', lang));
       return;
     }
 
@@ -58,124 +180,279 @@ export default function RegisterPage() {
         window.location.href = '/daily';
       }
     } catch {
-      setError('网络错误，请检查网络连接后重试');
+      setError(t('auth.err_network', lang));
     } finally {
       setSubmitting(false);
     }
   };
 
-  return (
-    <div style={{ minHeight: 'calc(100vh - 10rem)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '32px 0' }}>
-      <div style={{ width: '100%', maxWidth: 360 }}>
-        <Link
-          href="/daily"
-          style={{
-            display: 'inline-flex', alignItems: 'center', gap: 6,
-            fontSize: 13, color: 'var(--color-ink-2)', textDecoration: 'none',
-            marginBottom: 18,
-          }}
-        >
-          <ArrowLeft size={16} />
-          返回首页
-        </Link>
+  const loginHref = `/auth/login${redirectTo !== '/daily' ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`;
 
-        <Card variant="default" padding="lg">
-          <div style={{ textAlign: 'center', marginBottom: 24 }}>
+  const TABS: { id: Method; label: string }[] = IS_OVERSEAS
+    ? [
+        { id: 'email', label: t('auth.tab_email', lang) },
+        { id: 'username', label: t('auth.tab_username', lang) },
+      ]
+    : [
+        { id: 'phone', label: t('auth.tab_phone', lang) },
+        { id: 'email', label: t('auth.tab_email', lang) },
+        { id: 'username', label: t('auth.tab_username', lang) },
+      ];
+
+  return (
+    <div className="auth-scope">
+      <div className="auth-shell">
+      <aside className="auth-aside">
+        <div className="auth-aside-brand">
+          <span className="en">Tori</span>
+          <span className="kr">토리네 한국어</span>
+        </div>
+        <div className="auth-aside-hero">
+          <div className="auth-fig-frame">
             <Image
-              src="/images/tori-poses/tori-pose-03.webp"
-              alt="Tori"
-              width={56}
-              height={56}
-              style={{ objectFit: 'contain', margin: '0 auto 8px', display: 'block' }}
+              src="/images/tori-hero-wave.webp"
+              alt={t('auth.aside_alt_register', lang)}
+              fill
+              sizes="164px"
+              className="auth-aside-fig"
+              priority
             />
-            <h1 style={{ fontSize: 22, fontWeight: 800, color: 'var(--color-ink-1)', margin: 0 }}>注册</h1>
-            <p style={{ fontSize: 12, color: 'var(--color-ink-3)', margin: '6px 0 0', lineHeight: 1.5 }}>
-              用户名是你的登录账号，登录后可以保存学习记录
-            </p>
-            <p style={{ fontSize: 11, color: 'var(--color-ink-4)', margin: '6px 0 0' }}>
-              暂时使用用户名注册，后续会支持绑定邮箱和手机号。
-            </p>
+          </div>
+          <h1 className="auth-aside-title" style={{ whiteSpace: 'pre-line' }}>{t('auth.aside_title_register', lang)}</h1>
+          <p className="auth-aside-sub">{t('auth.aside_sub_register', lang)}</p>
+        </div>
+        <div className="auth-aside-foot">
+          <span>{t('auth.aside_foot_diary', lang)}</span>
+          <span>{t('auth.aside_foot_skills', lang)}</span>
+        </div>
+      </aside>
+
+      <div className="auth-form-wrap">
+        <div className="auth-form au-stagger">
+          <Link href="/" className="auth-back" style={{ ['--i' as string]: 0 }}>
+            <ArrowLeft size={15} /> {t('auth.back', lang)}
+          </Link>
+          <h2 className="auth-title" style={{ ['--i' as string]: 1 }}>{t('auth.register_title', lang)}</h2>
+          <p className="auth-lead" style={{ ['--i' as string]: 2 }}>
+            {t('auth.register_lead', lang)}
+          </p>
+
+          <div className="auth-tabs" style={{ ['--i' as string]: 3 }}>
+            {TABS.map(tab => {
+              const soon = soonMethod(tab.id);
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  className={'auth-tab' + (method === tab.id ? ' active' : '') + (soon ? ' soon' : '')}
+                  onClick={() => switchMethod(tab.id)}
+                  disabled={soon}
+                  aria-disabled={soon}
+                >
+                  {tab.label}
+                </button>
+              );
+            })}
           </div>
 
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            <div>
-              <label style={labelStyle}>用户名</label>
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="2-20 个字符"
-                style={inputStyle}
-                autoComplete="username"
-                onFocus={(e) => (e.currentTarget.style.borderColor = 'var(--color-pink-base)')}
-                onBlur={(e) => (e.currentTarget.style.borderColor = 'var(--color-border-2)')}
-              />
-            </div>
+          {!IS_OVERSEAS && (
+            <p className="auth-notice" style={{ ['--i' as string]: 3 }}>{t('auth.register_notice_soon', lang)}</p>
+          )}
 
-            <div>
-              <label style={labelStyle}>密码</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="至少 6 位密码"
-                style={inputStyle}
-                autoComplete="new-password"
-                onFocus={(e) => (e.currentTarget.style.borderColor = 'var(--color-pink-base)')}
-                onBlur={(e) => (e.currentTarget.style.borderColor = 'var(--color-border-2)')}
-              />
-            </div>
-
-            <div>
-              <label style={labelStyle}>确认密码</label>
-              <input
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="再次输入密码"
-                style={inputStyle}
-                autoComplete="new-password"
-                onFocus={(e) => (e.currentTarget.style.borderColor = 'var(--color-pink-base)')}
-                onBlur={(e) => (e.currentTarget.style.borderColor = 'var(--color-border-2)')}
-              />
-            </div>
-
-            {error && (
-              <p style={{
-                fontSize: 12,
-                color: 'var(--color-status-danger)',
-                background: 'var(--color-status-danger-bg)',
-                borderRadius: 'var(--radius-sm)',
-                padding: '8px 12px',
-                margin: 0,
-              }}>
-                {error}
-              </p>
+          <form onSubmit={handleSubmit} className="auth-fields" style={{ ['--i' as string]: 4 }}>
+            {method === 'phone' && (
+              <>
+                <div className="auth-field">
+                  <label htmlFor="au-phone">{t('auth.phone', lang)}</label>
+                  <div className="auth-phone-row">
+                    <span className="auth-cc">+86</span>
+                    <div className="auth-input-wrap">
+                      <input
+                        id="au-phone"
+                        className="auth-input"
+                        type="tel"
+                        inputMode="numeric"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        placeholder={t('auth.phone_ph', lang)}
+                        autoComplete="tel"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="auth-field">
+                  <label htmlFor="au-code">{t('auth.code', lang)}</label>
+                  <div className="auth-code-row">
+                    <div className="auth-input-wrap">
+                      <input
+                        id="au-code"
+                        className="auth-input"
+                        type="text"
+                        inputMode="numeric"
+                        value={code}
+                        onChange={(e) => setCode(e.target.value)}
+                        placeholder={t('auth.code_ph', lang)}
+                        autoComplete="one-time-code"
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      className="auth-code-btn"
+                      onClick={sendCode}
+                      disabled={countdown > 0 || !phone}
+                    >
+                      {countdown > 0 ? t('auth.code_resend', lang, { n: String(countdown) }) : t('auth.code_send', lang)}
+                    </button>
+                  </div>
+                </div>
+              </>
             )}
 
-            <Button
-              type="button"
-              variant="primary"
-              tone="pink"
-              size="lg"
-              fullWidth
-              loading={submitting}
-              onClick={doRegister}
+            {method === 'email' && (
+              <>
+                <div className="auth-field">
+                  <label htmlFor="au-email">{t('auth.email', lang)}</label>
+                  <div className="auth-input-wrap">
+                    <input
+                      id="au-email"
+                      className="auth-input"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder={t('auth.email_ph', lang)}
+                      autoComplete="email"
+                    />
+                  </div>
+                </div>
+                <div className="auth-field">
+                  <label htmlFor="au-email-pw">{t('auth.password', lang)}</label>
+                  <div className="auth-input-wrap">
+                    <input
+                      id="au-email-pw"
+                      className="auth-input"
+                      type={showPassword ? 'text' : 'password'}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder={t('auth.email_password_ph', lang)}
+                      autoComplete="new-password"
+                    />
+                    <button
+                      type="button"
+                      className="auth-eye"
+                      onClick={() => setShowPassword(v => !v)}
+                      aria-label={showPassword ? t('auth.hide_password', lang) : t('auth.show_password', lang)}
+                    >
+                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
+                </div>
+                <div className="auth-field">
+                  <label htmlFor="au-email-code">{t('auth.code', lang)}</label>
+                  <div className="auth-code-row">
+                    <div className="auth-input-wrap">
+                      <input
+                        id="au-email-code"
+                        className="auth-input"
+                        type="text"
+                        inputMode="numeric"
+                        value={code}
+                        onChange={(e) => setCode(e.target.value)}
+                        placeholder={t('auth.code_ph', lang)}
+                        autoComplete="one-time-code"
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      className="auth-code-btn"
+                      onClick={sendCode}
+                      disabled={countdown > 0 || !email}
+                    >
+                      {countdown > 0 ? t('auth.code_resend', lang, { n: String(countdown) }) : t('auth.code_send', lang)}
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {method === 'username' && (
+              <>
+                <div className="auth-field">
+                  <label htmlFor="au-username">{t('auth.username', lang)}</label>
+                  <div className="auth-input-wrap">
+                    <input
+                      id="au-username"
+                      className="auth-input"
+                      type="text"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      placeholder={t('auth.register_username_ph', lang)}
+                      autoComplete="username"
+                    />
+                  </div>
+                </div>
+                <div className="auth-field">
+                  <label htmlFor="au-password">{t('auth.password', lang)}</label>
+                  <div className="auth-input-wrap">
+                    <input
+                      id="au-password"
+                      className="auth-input"
+                      type={showPassword ? 'text' : 'password'}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder={t('auth.register_password_ph', lang)}
+                      autoComplete="new-password"
+                    />
+                    <button
+                      type="button"
+                      className="auth-eye"
+                      onClick={() => setShowPassword(v => !v)}
+                      aria-label={showPassword ? t('auth.hide_password', lang) : t('auth.show_password', lang)}
+                    >
+                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
+                </div>
+                <div className="auth-field">
+                  <label htmlFor="au-confirm">{t('auth.confirm', lang)}</label>
+                  <div className="auth-input-wrap">
+                    <input
+                      id="au-confirm"
+                      className="auth-input"
+                      type={showConfirm ? 'text' : 'password'}
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder={t('auth.register_confirm_ph', lang)}
+                      autoComplete="new-password"
+                    />
+                    <button
+                      type="button"
+                      className="auth-eye"
+                      onClick={() => setShowConfirm(v => !v)}
+                      aria-label={showConfirm ? t('auth.hide_password', lang) : t('auth.show_password', lang)}
+                    >
+                      {showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {error && <p className="auth-error">{error}</p>}
+
+            <button
+              type="submit"
+              className="auth-submit"
+              disabled={submitting}
             >
-              {submitting ? '注册中...' : '注册'}
-            </Button>
+              {submitting ? t('auth.register_submitting', lang) : t('auth.register_submit', lang)}
+            </button>
           </form>
 
-          <p style={{ textAlign: 'center', fontSize: 12, color: 'var(--color-ink-3)', margin: '20px 0 0' }}>
-            已有账户？{' '}
-            <Link
-              href="/auth/login"
-              style={{ color: 'var(--color-pink-strong)', textDecoration: 'none', fontWeight: 600 }}
-            >
-              立即登录
-            </Link>
+          <p className="auth-switch" style={{ ['--i' as string]: 5 }}>
+            {t('auth.register_switch', lang)}<Link href={loginHref}>{t('auth.register_switch_link', lang)}</Link>
           </p>
-        </Card>
+        </div>
+      </div>
       </div>
     </div>
   );

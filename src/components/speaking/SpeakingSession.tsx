@@ -1,25 +1,48 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Mic, MicOff, ChevronRight, Trophy, Volume2 } from 'lucide-react';
-import { KoreanSpeechRecognizer, isSpeechRecognitionSupported } from '@/lib/audio/speechRecognition';
+import { Mic, MicOff } from 'lucide-react';
+import { useMicRecorder } from '@/lib/audio/useMicRecorder';
+import { playCorrectSound, playWrongSound } from '@/lib/audio/sfx';
 import { normalizeKorean } from '@/lib/koreanDiff';
-import { speak } from '@/lib/tts';
-import { awardXp } from '@/lib/gamification';
+import { awardXp, updateStreak } from '@/lib/gamification';
+import { PracticeFeedbackCard } from '@/components/practice/PracticeFeedbackCard';
 import { db } from '@/lib/db';
 import { calculateSRS } from '@/lib/srs';
 import { useIsDesktop } from '@/lib/useIsMobile';
+import { useAuth } from '@/components/AuthProvider';
+import { pushSpeakingHistory } from '@/lib/practice/aggregate';
+import { OriginBadge } from '@/components/practice/OriginBadge';
+import type { OriginKind } from '@/components/practice/OriginBadge';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
+import { getGuestId } from '@/lib/guestId';
+import { saveProgress, loadProgress, clearProgress, TTL_FLASHCARD } from '@/lib/progress-storage';
+
+function itemsPosKey(prefix: string, uid: string, items: { korean: string }[]): string {
+  let h = 0;
+  const s = items.map(i => i.korean).join('|');
+  for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+  return `${prefix}:${uid}:${items.length}:${h.toString(36)}`;
+}
 
 export interface SpeakingItem {
   korean: string;
   meaning: string;
   type: 'word' | 'sentence';
+  alternatives?: string[];
+  origin?: OriginKind;
+  originLabel?: string;
 }
 
 interface SpeakingSessionProps {
   items: SpeakingItem[];
-  onExit: () => void;
-  exitLabel?: string;
+  /** 通知外部当前进度 */
+  onProgress?: (current: number, total: number) => void;
+  /** 完成时的结算屏 · 必须传 */
+  renderDone: (stats: { correct: number; acceptable: number; total: number; xp: number; onRetry: () => void }) => React.ReactNode;
+  /** 通知外部会话结束 */
+  onFinished?: () => void;
 }
 
 interface JudgeResult {
@@ -29,6 +52,7 @@ interface JudgeResult {
   alternativeAnswers: string[];
   errorReason: string | null;
   tip: string | null;
+  grammar: string | null;
 }
 
 function getSimilarity(a: string, b: string): number {
@@ -50,22 +74,30 @@ function getSimilarity(a: string, b: string): number {
   return 1 - dp[na.length][nb.length] / maxLen;
 }
 
-function fallbackJudge(spoken: string, target: string): JudgeResult {
-  const sim = getSimilarity(spoken, target);
+function fallbackJudge(spoken: string, target: string, alternatives: string[] = []): JudgeResult {
+  const candidates = [target, ...alternatives];
+  const sim = Math.max(...candidates.map(c => getSimilarity(spoken, c)));
   const result = sim >= 0.85 ? 'correct' : sim >= 0.6 ? 'acceptable' : 'wrong';
-  return { result, score: Math.round(sim * 100), correctAnswer: target, alternativeAnswers: [], errorReason: null, tip: null };
+  return { result, score: Math.round(sim * 100), correctAnswer: target, alternativeAnswers: alternatives, errorReason: null, tip: null, grammar: null };
 }
 
-const RESULT_CONFIG = {
-  correct:    { label: '正确', color: '#3aafa9', bg: '#eaf8f5', emoji: '✅' },
-  acceptable: { label: '接近', color: '#e8a87c', bg: '#fff6ee', emoji: '⚠️' },
-  wrong:      { label: '错误', color: '#e04a6a', bg: '#fff0f4', emoji: '❌' },
-};
+const SPEAKING_KEYFRAMES = `
+  @keyframes pulse { 0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(255,127,168,.4)}50%{transform:scale(1.05);box-shadow:0 0 0 10px rgba(255,127,168,0)} }
+  @keyframes spin { to{transform:rotate(360deg)} }
+  @keyframes sp-bounce { 0%,80%,100%{transform:scale(.5);opacity:.4} 40%{transform:scale(1);opacity:1} }
+  @keyframes sp-pop { 0%{transform:scale(.96)} 60%{transform:scale(1.015)} 100%{transform:scale(1)} }
+`;
 
-export function SpeakingSession({ items, onExit, exitLabel = '返回配置' }: SpeakingSessionProps) {
-  const [index, setIndex] = useState(0);
-  const [phase, setPhase] = useState<'prompt' | 'listening' | 'judging' | 'result'>('prompt');
-  const [interim, setInterim] = useState('');
+export function SpeakingSession({ items, onProgress, renderDone, onFinished }: SpeakingSessionProps) {
+  const { user } = useAuth();
+  const { lang } = useLang();
+  const posKey = itemsPosKey('speaking-say-pos', user?.id ?? 'guest', items);
+  const [index, setIndex] = useState(() => {
+    const saved = loadProgress<{ idx: number; total: number }>(posKey);
+    if (saved && saved.total === items.length && saved.idx > 0 && saved.idx < items.length) return saved.idx;
+    return 0;
+  });
+  const [phase, setPhase] = useState<'prompt' | 'recording' | 'recognizing' | 'judging' | 'result'>('prompt');
   const [finalText, setFinalText] = useState('');
   const [judgeResult, setJudgeResult] = useState<JudgeResult | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -73,51 +105,70 @@ export function SpeakingSession({ items, onExit, exitLabel = '返回配置' }: S
   const [acceptableCount, setAcceptableCount] = useState(0);
   const [xpTotal, setXpTotal] = useState(0);
   const [done, setDone] = useState(false);
-  const recognizerRef = useRef<KoreanSpeechRecognizer | null>(null);
-  const [supported] = useState(() => isSpeechRecognitionSupported());
   const isDesktop = useIsDesktop();
+  // 已经计分过的题号,retry 不重复发 XP / 加计数
+  const scoredIndicesRef = useRef<Set<number>>(new Set());
+  // 当前题/题号的最新引用 · 供 ASR 异步回调取值
+  const currentRef = useRef({ item: items[0], index: 0 });
+
+  useEffect(() => {
+    onProgress?.(index + 1, items.length);
+  }, [index, items.length, onProgress]);
+
+  useEffect(() => {
+    if (done) { clearProgress(posKey); return; }
+    saveProgress(posKey, { idx: index, total: items.length }, TTL_FLASHCARD);
+  }, [index, done, posKey, items.length]);
 
   const current = items[index];
+  currentRef.current = { item: current, index };
 
-  useEffect(() => {
-    return () => { recognizerRef.current?.abort(); };
-  }, []);
-
-  useEffect(() => {
-    setPhase('prompt');
-    setInterim('');
-    setFinalText('');
-    setJudgeResult(null);
-    setError(null);
-    recognizerRef.current?.abort();
-  }, [index]);
-
-  const judgeSpoken = useCallback(async (spoken: string, item: SpeakingItem) => {
+  const judgeSpoken = useCallback(async (spoken: string, item: SpeakingItem, idxForScore: number) => {
+    if (!normalizeKorean(spoken)) {
+      setPhase('prompt');
+      setError(t('sp.asr_fail', lang));
+      return;
+    }
+    setFinalText(spoken);
     setPhase('judging');
     let jr: JudgeResult;
+    const alternatives = item.alternatives ?? [];
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000);
       const res = await fetch('/api/ai/speaking-judge', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ spoken, target: item.korean, meaning: item.meaning, type: item.type }),
+        body: JSON.stringify({ spoken, target: item.korean, meaning: item.meaning, type: item.type, alternatives }),
+        signal: controller.signal,
       });
+      clearTimeout(timeoutId);
       if (!res.ok) throw new Error(`${res.status}`);
       jr = await res.json();
     } catch {
-      jr = fallbackJudge(spoken, item.korean);
+      jr = fallbackJudge(spoken, item.korean, alternatives);
     }
 
     setJudgeResult(jr);
     setPhase('result');
+    // 答对/一般给正反馈音,错给克制音 · 与打字体验一致
+    if (jr.result === 'wrong') playWrongSound(); else playCorrectSound();
 
-    if (jr.result === 'correct') {
-      setCorrectCount(c => c + 1);
-      awardXp(10).catch(() => {});
-      setXpTotal(x => x + 10);
-    } else if (jr.result === 'acceptable') {
-      setAcceptableCount(c => c + 1);
-      awardXp(4).catch(() => {});
-      setXpTotal(x => x + 4);
+    // 同题重试不重复计分/发 XP
+    const alreadyScored = scoredIndicesRef.current.has(idxForScore);
+    if (!alreadyScored) {
+      if (jr.result === 'correct') {
+        setCorrectCount(c => c + 1);
+        awardXp(10).catch(e => console.error('[speaking] awardXp (correct) failed', e));
+        setXpTotal(x => x + 10);
+        scoredIndicesRef.current.add(idxForScore);
+      } else if (jr.result === 'acceptable') {
+        setAcceptableCount(c => c + 1);
+        awardXp(4).catch(e => console.error('[speaking] awardXp (acceptable) failed', e));
+        setXpTotal(x => x + 4);
+        scoredIndicesRef.current.add(idxForScore);
+      }
+      // wrong 不加入 scored,允许 retry 后答对再计分
     }
 
     const quality = jr.result === 'correct' ? 4 : jr.result === 'acceptable' ? 2 : 1;
@@ -129,121 +180,132 @@ export function SpeakingSession({ items, onExit, exitLabel = '返回配置' }: S
         partOfSpeech: '', examples: [], source: 'speaking', sourceDetail: item.type,
         mastery: jr.result === 'correct' ? 'learning' : 'new',
         ...srsResult, createdAt: existing?.createdAt ?? Date.now(), lastReviewed: Date.now(),
-      }).catch(() => {});
-    }).catch(() => {});
-  }, []);
+      }).catch(e => console.error('[speaking] db.words.put failed', e));
+    }).catch(e => console.error('[speaking] db.words.get failed', e));
+
+    // 所有答题（对/错）都写入共享错题本，保持练习历史完整
+    // correct 字段区分正误，错题可在默写「错题重练」集中攻克
+    const isCorrect = jr.result !== 'wrong';
+    db.dictationRecords.add({
+      id: `speak-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+      userId: user?.id || getGuestId(),
+      wordId: item.korean,
+      meaning: item.meaning,
+      date: Date.now(),
+      correct: isCorrect,
+      userInput: normalizeKorean(spoken),
+    }).catch(e => console.error('[speaking] dictationRecords.add failed', e));
+  }, [user?.id, lang]);
+
+  const mic = useMicRecorder({
+    onResult: (text) => {
+      const { item, index: idx } = currentRef.current;
+      judgeSpoken(text, item, idx);
+    },
+    onError: (msg) => { setPhase('prompt'); setError(msg); },
+  });
 
   const startListening = useCallback(() => {
-    if (!supported) { setError('当前浏览器不支持语音识别，请使用 Chrome 浏览器。'); return; }
     setError(null);
-    setInterim('');
     setFinalText('');
     setJudgeResult(null);
-    setPhase('listening');
-    const recognizer = new KoreanSpeechRecognizer();
-    recognizerRef.current = recognizer;
-    recognizer
-      .onInterim(t => setInterim(t))
-      .onFinal(t => { setFinalText(t); setInterim(''); judgeSpoken(t, current); })
-      .onError(reason => {
-        setPhase('prompt');
-        recognizerRef.current = null;
-        if (reason === 'denied') setError('麦克风权限被拒绝，请在浏览器设置中允许麦克风。');
-        else if (reason === 'not-supported') setError('当前浏览器不支持语音识别，请使用 Chrome 浏览器。');
-        else if (reason === 'network') setError('网络异常导致识别失败，请检查网络后重试。');
-        else setError('未能识别到语音，请重新说一次。');
-      });
-    recognizer.start();
-  }, [current, supported, judgeSpoken]);
+    setPhase('recording');
+    mic.start();
+  }, [mic]);
 
-  const stopListening = useCallback(() => { recognizerRef.current?.stop(); }, []);
+  const stopListening = useCallback(() => {
+    setPhase('recognizing');
+    mic.stop();
+  }, [mic]);
+
+  // 切题时重置 · 取消在途录音/识别
+  useEffect(() => {
+    setPhase('prompt');
+    setFinalText('');
+    setJudgeResult(null);
+    setError(null);
+    mic.cancel();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [index]);
 
   function handleNext() {
-    if (index + 1 >= items.length) setDone(true);
+    if (index + 1 >= items.length) {
+      pushSpeakingHistory(user?.id || getGuestId(), correctCount + acceptableCount, items.length);
+      updateStreak().catch(e => console.error('[speaking] updateStreak failed', e));
+      setDone(true);
+      onFinished?.();
+    }
     else setIndex(i => i + 1);
   }
 
   function handleRetry() {
-    setPhase('prompt');
     setFinalText('');
     setJudgeResult(null);
-    setInterim('');
+    // 直接开麦,避免多一次点击
+    startListening();
+  }
+
+  function handleSkip() {
+    // 跳过 = 不计分/不写 SRS,视作未过(wrong),不推高命中率
+    mic.cancel();
+    setFinalText(t('sp.skipped', lang));
+    setError(null);
+    setJudgeResult({
+      result: 'wrong',
+      score: 0,
+      correctAnswer: current.korean,
+      alternativeAnswers: current.alternatives ?? [],
+      errorReason: null,
+      tip: t('sp.skip_tip', lang),
+      grammar: null,
+    });
+    setPhase('result');
   }
 
   function handleRestart() {
-    recognizerRef.current?.abort();
+    mic.cancel();
+    scoredIndicesRef.current.clear();
     setIndex(0); setCorrectCount(0); setAcceptableCount(0); setXpTotal(0);
     setDone(false); setPhase('prompt'); setFinalText(''); setJudgeResult(null);
-    setInterim(''); setError(null);
+    setError(null);
   }
 
-  // ── Done screen ──
+  // ── Done screen · 完全由外层 renderDone 掌控 ──
   if (done) {
-    const total = items.length;
-    const pct = Math.round((correctCount / total) * 100);
-    return (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', gap: 20, padding: '0 20px' }}>
-        <div style={{ background: '#fff0f5', borderRadius: '50%', width: 80, height: 80, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Trophy size={36} style={{ color: '#ff7fa8' }} />
-        </div>
-        <div style={{ textAlign: 'center' }}>
-          <p style={{ fontSize: 28, fontWeight: 900, color: '#241917', margin: 0 }}>{pct}%</p>
-          <p style={{ fontSize: 14, color: '#89756e', marginTop: 4 }}>
-            {correctCount} 正确 · {acceptableCount} 接近 · {total - correctCount - acceptableCount} 错误
-          </p>
-        </div>
-        <div style={{ background: '#eaf8f5', borderRadius: 14, padding: '10px 20px' }}>
-          <span style={{ fontSize: 13, color: '#3aafa9', fontWeight: 700 }}>+{xpTotal} XP 已获得</span>
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, width: '100%', maxWidth: 400, marginTop: 8 }}>
-          <button onClick={handleRestart} style={{ padding: '13px 0', borderRadius: 14, background: '#241917', color: '#fff', fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer' }}>再来一轮</button>
-          <button onClick={onExit} style={{ padding: '13px 0', borderRadius: 14, background: '#f5ede8', color: '#5a4640', fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer' }}>{exitLabel}</button>
-        </div>
-      </div>
-    );
+    return <>{renderDone({
+      correct: correctCount,
+      acceptable: acceptableCount,
+      total: items.length,
+      xp: xpTotal,
+      onRetry: handleRestart,
+    })}</>;
   }
 
-  const cfg = judgeResult ? RESULT_CONFIG[judgeResult.result] : null;
+  const originBadge = <OriginBadge origin={current.origin} label={current.originLabel} />;
 
   // ── Result feedback block (shared between mobile and desktop) ──
-  const resultBlock = cfg && judgeResult && (
-    <div style={{ background: cfg.bg, borderRadius: 16, padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: 10 }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <span style={{ fontSize: 20 }}>{cfg.emoji}</span>
-        <span style={{ fontSize: 15, fontWeight: 800, color: cfg.color }}>{cfg.label}</span>
-        <span style={{ fontSize: 12, color: '#89756e', marginLeft: 'auto' }}>{judgeResult.score}分</span>
-      </div>
-      <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-        <span style={{ fontSize: 12, color: '#89756e', flexShrink: 0 }}>你说的：</span>
-        <span style={{ fontSize: 15, color: '#241917', fontWeight: 600 }}>{finalText || '（未识别）'}</span>
-      </div>
-      <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-        <span style={{ fontSize: 12, color: '#89756e', flexShrink: 0 }}>标准答案：</span>
-        <span style={{ fontSize: 15, color: cfg.color, fontWeight: 700 }}>{judgeResult.correctAnswer}</span>
-        <button onClick={() => speak(judgeResult.correctAnswer)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 2, flexShrink: 0 }}>
-          <Volume2 size={15} style={{ color: '#89756e' }} />
-        </button>
-      </div>
-      {judgeResult.alternativeAnswers.length > 0 && (
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-          <span style={{ fontSize: 12, color: '#89756e', flexShrink: 0, paddingTop: 2 }}>其他说法：</span>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-            {judgeResult.alternativeAnswers.map((alt, i) => (
-              <button key={i} onClick={() => speak(alt)} style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'rgba(0,0,0,0.05)', border: 'none', borderRadius: 99, padding: '3px 10px', cursor: 'pointer', fontSize: 13, color: '#241917', fontWeight: 600 }}>
-                {alt}<Volume2 size={12} style={{ color: '#89756e' }} />
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-      {judgeResult.errorReason && (
-        <div style={{ background: 'rgba(224,74,106,0.08)', borderRadius: 10, padding: '8px 12px' }}>
-          <p style={{ fontSize: 12, color: '#e04a6a', margin: 0, lineHeight: 1.6 }}><span style={{ fontWeight: 700 }}>错误原因：</span>{judgeResult.errorReason}</p>
-        </div>
-      )}
-      {judgeResult.tip && (
-        <div style={{ background: 'rgba(58,175,169,0.08)', borderRadius: 10, padding: '8px 12px' }}>
-          <p style={{ fontSize: 12, color: '#3aafa9', margin: 0, lineHeight: 1.6 }}><span style={{ fontWeight: 700 }}>小提示：</span>{judgeResult.tip}</p>
+  const resultBlock = judgeResult && (
+    <div style={{ animation: 'sp-pop .32s var(--hr-ease)' }}>
+      <PracticeFeedbackCard
+        verdict={judgeResult.result}
+        score={judgeResult.score}
+        yourValue={finalText}
+        yourLabel={t('sp.your_words', lang)}
+        target={judgeResult.correctAnswer}
+        alternatives={judgeResult.alternativeAnswers}
+        reason={judgeResult.errorReason}
+        tip={judgeResult.tip}
+        grammar={judgeResult.grammar}
+        onNext={handleNext}
+        nextLabel={index + 1 >= items.length ? t('sp.view_result', lang) : t('sp.next_q', lang)}
+        onRetry={handleRetry}
+        retryLabel={t('sp.say_again', lang)}
+        ttsEnabled
+      />
+      {judgeResult.result === 'wrong' && (
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, marginTop: 10, background: 'var(--hr-surface-3)', border: '1px solid var(--hr-border-2)', borderRadius: 999, padding: '5px 12px' }}>
+          <span style={{ fontSize: 13 }} aria-hidden>🧠</span>
+          <span style={{ fontSize: 12, color: 'var(--hr-ink-2)', fontWeight: 600 }}>{t('sp.added_to_mistakes_dict', lang)}</span>
         </div>
       )}
     </div>
@@ -253,37 +315,43 @@ export function SpeakingSession({ items, onExit, exitLabel = '返回配置' }: S
   const micBlock = (
     <>
       {phase === 'prompt' && (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
-          {error && <p style={{ fontSize: 13, color: '#e04a6a', textAlign: 'center', margin: 0 }}>{error}</p>}
-          {!supported && <p style={{ fontSize: 13, color: '#e04a6a', textAlign: 'center', margin: 0 }}>当前浏览器不支持语音识别，请使用 Chrome 浏览器。</p>}
-          <button onClick={startListening} disabled={!supported} style={{ width: 80, height: 80, borderRadius: '50%', background: supported ? '#aee3d8' : '#eee0d8', border: 'none', cursor: supported ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'transform 0.1s' }}>
-            <Mic size={32} style={{ color: supported ? '#241917' : '#89756e' }} />
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, padding: 24 }}>
+          {error && <p style={{ fontSize: 13, color: 'var(--hr-pink-strong)', textAlign: 'center', margin: 0 }}>{error}</p>}
+          <button onClick={startListening} style={{ width: 88, height: 88, borderRadius: '50%', background: 'var(--hr-mint-base)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'transform 0.1s', boxShadow: '0 8px 24px rgba(125,198,179,.35)' }}>
+            <Mic size={34} style={{ color: 'var(--hr-surface-1)' }} />
           </button>
-          <p style={{ fontSize: 13, color: '#89756e', margin: 0 }}>点击麦克风开始说话</p>
+          <p style={{ fontSize: 13, color: 'var(--hr-ink-3)', margin: 0 }}>{t('sp.tap_mic_speak', lang)}</p>
+          <button
+            onClick={handleSkip}
+            style={{
+              marginTop: 4, background: 'transparent', border: 'none', cursor: 'pointer',
+              color: 'var(--hr-ink-3)', fontSize: 12, textDecoration: 'underline',
+              textDecorationStyle: 'dashed', textUnderlineOffset: 3, padding: '4px 8px',
+            }}
+          >
+            {t('sp.view_answer_skip', lang)}
+          </button>
         </div>
       )}
-      {phase === 'listening' && (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
-          <button onClick={stopListening} style={{ width: 80, height: 80, borderRadius: '50%', background: '#ff7fa8', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'pulse 1.2s infinite' }}>
-            <MicOff size={32} style={{ color: 'white' }} />
+      {phase === 'recording' && (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, padding: 24 }}>
+          <button onClick={stopListening} style={{ width: 88, height: 88, borderRadius: '50%', background: 'var(--hr-pink-strong)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'pulse 1.2s infinite', boxShadow: '0 8px 24px rgba(229,90,135,.35)' }}>
+            <MicOff size={34} style={{ color: 'var(--hr-surface-1)' }} />
           </button>
-          <p style={{ fontSize: 13, color: '#89756e', margin: 0 }}>正在听...点击停止</p>
-          {interim && <p style={{ fontSize: 16, color: '#241917', fontWeight: 600, margin: 0, textAlign: 'center' }}>{interim}</p>}
+          <p style={{ fontSize: 13, color: 'var(--hr-ink-3)', margin: 0 }}>{t('sp.recording_stop', lang)}</p>
         </div>
       )}
-      {phase === 'judging' && (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, padding: '20px 0' }}>
-          <div style={{ width: 40, height: 40, borderRadius: '50%', border: '3px solid #aee3d8', borderTopColor: '#3aafa9', animation: 'spin 0.8s linear infinite' }} />
-          <p style={{ fontSize: 13, color: '#89756e', margin: 0 }}>AI 正在评估...</p>
-          {finalText && <p style={{ fontSize: 15, color: '#241917', fontWeight: 600, margin: 0, textAlign: 'center' }}>「{finalText}」</p>}
-        </div>
-      )}
-      {phase === 'result' && (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
-          <button onClick={startListening} disabled={!supported} style={{ width: 80, height: 80, borderRadius: '50%', background: supported ? '#aee3d8' : '#eee0d8', border: 'none', cursor: supported ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'transform 0.1s' }}>
-            <Mic size={32} style={{ color: supported ? '#241917' : '#89756e' }} />
-          </button>
-          <p style={{ fontSize: 13, color: '#89756e', margin: 0 }}>再说一遍</p>
+      {(phase === 'recognizing' || phase === 'judging') && (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14, padding: '34px 24px' }}>
+          <div style={{ display: 'flex', gap: 7, alignItems: 'center' }} aria-hidden>
+            {[0, 1, 2].map(i => (
+              <span key={i} style={{ width: 10, height: 10, borderRadius: '50%', background: 'var(--hr-mint-base)', animation: `sp-bounce 1.2s ${i * 0.16}s infinite ease-in-out` }} />
+            ))}
+          </div>
+          <p style={{ fontSize: 13, color: 'var(--hr-ink-2)', margin: 0, fontWeight: 600 }}>
+            {phase === 'recognizing' ? t('sp.tori_listening', lang) : t('sp.tori_reviewing', lang)}
+          </p>
+          {phase === 'judging' && finalText && <p style={{ fontFamily: 'var(--hr-hangul)', fontSize: 15, color: 'var(--hr-ink-1)', fontWeight: 600, margin: 0, textAlign: 'center' }}>「{finalText}」</p>}
         </div>
       )}
     </>
@@ -292,44 +360,34 @@ export function SpeakingSession({ items, onExit, exitLabel = '返回配置' }: S
   // ── Desktop layout ──
   if (isDesktop) {
     return (
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, paddingBottom: 24 }}>
-        {/* Progress bar — full width */}
-        <div style={{ gridColumn: '1 / -1', display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{ flex: 1, height: 6, background: '#eee0d8', borderRadius: 999, overflow: 'hidden' }}>
-            <div style={{ height: '100%', width: `${(index / items.length) * 100}%`, background: '#aee3d8', borderRadius: 999, transition: 'width 0.3s' }} />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 20, paddingBottom: 24, maxWidth: 720, margin: '0 auto' }}>
+        {/* Prompt 卡 · 中文题干 · padding-top 加大避让徽章 */}
+        <div style={{
+          background: 'var(--hr-surface-2)', border: '1.5px solid var(--hr-border-2)',
+          borderRadius: 16, padding: '36px 32px 28px', display: 'flex', flexDirection: 'column',
+          alignItems: 'center', gap: 12, boxShadow: 'var(--hr-shadow-sm)',
+          position: 'relative',
+        }}>
+          {originBadge}
+          <p style={{ fontFamily: 'var(--hr-mono)', fontSize: 10.5, color: 'var(--hr-ink-3)', letterSpacing: '.14em', textTransform: 'uppercase', margin: 0 }}>{t('sp.say_in_korean', lang)}</p>
+          <p style={{ fontSize: 36, fontWeight: 800, color: 'var(--hr-ink-1)', margin: 0, textAlign: 'center', lineHeight: 1.3, letterSpacing: '-.01em' }}>{current.meaning}</p>
+          <span style={{ fontFamily: 'var(--hr-mono)', fontSize: 10.5, color: 'var(--hr-ink-3)', background: 'var(--hr-surface-3)', border: '1px solid var(--hr-border-2)', borderRadius: 99, padding: '3px 12px', letterSpacing: '.14em', textTransform: 'uppercase' }}>
+            {current.type === 'word' ? 'Word' : 'Sentence'}
+          </span>
+        </div>
+
+        {/* 答题区 · 反馈展开时取代 mic 区 */}
+        {phase === 'result' && resultBlock ? resultBlock : (
+          <div style={{
+            background: 'var(--hr-surface-2)', border: '1.5px solid var(--hr-border-2)',
+            borderRadius: 16, display: 'flex', flexDirection: 'column', alignItems: 'stretch',
+            justifyContent: 'center', minHeight: 220, boxShadow: 'var(--hr-shadow-sm)', overflow: 'hidden',
+          }}>
+            {micBlock}
           </div>
-          <span style={{ fontSize: 12, color: '#89756e', whiteSpace: 'nowrap' }}>{index + 1} / {items.length}</span>
-        </div>
+        )}
 
-        {/* Left — prompt + result */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <div className="desktop-card" style={{ padding: 32, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14, minHeight: 240 }}>
-            <p style={{ fontSize: 13, color: '#89756e', margin: 0 }}>用韩语说出下面的意思</p>
-            <p style={{ fontSize: 40, fontWeight: 900, color: '#241917', margin: 0, textAlign: 'center', lineHeight: 1.3 }}>{current.meaning}</p>
-            <span style={{ fontSize: 12, color: '#89756e', background: '#f5ede8', borderRadius: 99, padding: '4px 12px' }}>
-              {current.type === 'word' ? '单词' : '句子'}
-            </span>
-          </div>
-          {phase === 'result' && resultBlock && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {resultBlock}
-              <button onClick={handleNext} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '13px 0', borderRadius: 14, background: '#aee3d8', color: '#241917', fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer' }}>
-                {index + 1 >= items.length ? '查看结果' : '下一题'}<ChevronRight size={16} />
-              </button>
-              <button onClick={handleRetry} style={{ padding: '10px 0', borderRadius: 14, background: 'transparent', color: '#89756e', fontSize: 13, fontWeight: 600, border: '1px solid #eee0d8', cursor: 'pointer' }}>再说一次</button>
-            </div>
-          )}
-        </div>
-
-        {/* Right — mic interaction */}
-        <div className="desktop-card" style={{ padding: 32, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 280, gap: 0 }}>
-          {micBlock}
-        </div>
-
-        <style>{`
-          @keyframes pulse { 0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(255,127,168,.4)}50%{transform:scale(1.05);box-shadow:0 0 0 10px rgba(255,127,168,0)} }
-          @keyframes spin { to{transform:rotate(360deg)} }
-        `}</style>
+        <style>{SPEAKING_KEYFRAMES}</style>
       </div>
     );
   }
@@ -337,37 +395,19 @@ export function SpeakingSession({ items, onExit, exitLabel = '返回配置' }: S
   // ── Mobile layout ──
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16, paddingBottom: 20 }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-        <div style={{ flex: 1, height: 6, background: '#eee0d8', borderRadius: 999, overflow: 'hidden' }}>
-          <div style={{ height: '100%', width: `${(index / items.length) * 100}%`, background: '#aee3d8', borderRadius: 999, transition: 'width 0.3s' }} />
-        </div>
-        <span style={{ fontSize: 12, color: '#89756e', whiteSpace: 'nowrap' }}>{index + 1} / {items.length}</span>
-      </div>
-
-      <div style={{ background: 'white', borderRadius: 20, border: '1px solid #eee0d8', padding: '32px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
-        <p style={{ fontSize: 13, color: '#89756e', margin: 0 }}>用韩语说出下面的意思</p>
-        <p style={{ fontSize: 32, fontWeight: 900, color: '#241917', margin: 0, textAlign: 'center', lineHeight: 1.3 }}>{current.meaning}</p>
-        <span style={{ fontSize: 11, color: '#89756e', background: '#f5ede8', borderRadius: 99, padding: '3px 10px' }}>
-          {current.type === 'word' ? '单词' : '句子'}
+      <div style={{ background: 'var(--hr-surface-2)', borderRadius: 16, border: '1.5px solid var(--hr-border-2)', padding: '38px 20px 28px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, boxShadow: 'var(--hr-shadow-sm)', position: 'relative' }}>
+        {originBadge}
+        <p style={{ fontFamily: 'var(--hr-mono)', fontSize: 10.5, color: 'var(--hr-ink-3)', letterSpacing: '.14em', textTransform: 'uppercase', margin: 0 }}>{t('sp.say_in_korean', lang)}</p>
+        <p style={{ fontSize: 32, fontWeight: 800, color: 'var(--hr-ink-1)', margin: 0, textAlign: 'center', lineHeight: 1.3, letterSpacing: '-.01em' }}>{current.meaning}</p>
+        <span style={{ fontFamily: 'var(--hr-mono)', fontSize: 10, color: 'var(--hr-ink-3)', background: 'var(--hr-surface-3)', border: '1px solid var(--hr-border-2)', borderRadius: 99, padding: '3px 10px', letterSpacing: '.14em', textTransform: 'uppercase' }}>
+          {current.type === 'word' ? 'Word' : 'Sentence'}
         </span>
       </div>
 
-      {micBlock}
+      {/* 反馈展开时取代 mic 区,不共存 */}
+      {phase === 'result' && resultBlock ? resultBlock : micBlock}
 
-      {phase === 'result' && resultBlock && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          {resultBlock}
-          <button onClick={handleNext} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '13px 0', borderRadius: 14, background: '#aee3d8', color: '#241917', fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer' }}>
-            {index + 1 >= items.length ? '查看结果' : '下一题'}<ChevronRight size={16} />
-          </button>
-          <button onClick={handleRetry} style={{ padding: '10px 0', borderRadius: 14, background: 'transparent', color: '#89756e', fontSize: 13, fontWeight: 600, border: '1px solid #eee0d8', cursor: 'pointer' }}>再说一次</button>
-        </div>
-      )}
-
-      <style>{`
-        @keyframes pulse { 0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(255,127,168,.4)}50%{transform:scale(1.05);box-shadow:0 0 0 10px rgba(255,127,168,0)} }
-        @keyframes spin { to{transform:rotate(360deg)} }
-      `}</style>
+      <style>{SPEAKING_KEYFRAMES}</style>
     </div>
   );
 }

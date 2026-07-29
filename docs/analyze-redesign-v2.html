@@ -1,0 +1,748 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>内容拆解 · v2 简洁版</title>
+<style>
+:root {
+  --bg: #fafaf9;
+  --surface: #ffffff;
+  --ink: #171514;
+  --ink-2: #5a5350;
+  --ink-3: #8a8380;
+  --line: #eae5e0;
+  --line-strong: #d8d1cb;
+  --pink: #e63f76;
+  --pink-soft: #fdeff4;
+  --mint: #4a9c85;
+  --mint-soft: #e8f4ef;
+  --hover: #f5f2ee;
+  --font: system-ui, -apple-system, "Segoe UI", "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --ko: "Noto Sans KR", "Malgun Gothic", var(--font);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--font); font-size: 14px; line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+input, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--pink); outline-offset: 2px; border-radius: 2px; }
+h1, h2, h3, h4 { font-weight: 600; color: var(--ink); }
+
+/* ── Top bar (thin) ─────────────────────────────────── */
+.topbar {
+  display: grid; grid-template-columns: auto 1fr auto auto;
+  gap: 12px; align-items: center;
+  padding: 12px 24px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+.back-btn {
+  width: 30px; height: 30px; border-radius: 6px;
+  color: var(--ink-2);
+  display: grid; place-items: center;
+  font-size: 18px;
+}
+.back-btn:hover { background: var(--hover); }
+.title { font-size: 15px; font-weight: 600; }
+.title-sub { font-size: 12px; color: var(--ink-3); margin-left: 8px; font-weight: 400; }
+
+.mode-toggle {
+  display: inline-flex; gap: 0;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.mode-toggle button {
+  padding: 6px 12px; font-size: 13px; font-weight: 500;
+  color: var(--ink-2);
+}
+.mode-toggle button.active { background: var(--ink); color: #fff; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px; border-radius: 4px;
+  background: var(--pink-soft); color: var(--pink);
+  font-size: 12px; font-weight: 500;
+}
+.badge::before {
+  content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--pink);
+}
+
+/* ── Workspace ──────────────────────────────────────── */
+.workspace {
+  display: grid;
+  grid-template-columns: 380px minmax(0, 1fr);
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0;
+}
+@media (max-width: 860px) {
+  .workspace { grid-template-columns: 1fr; }
+}
+
+/* ── Left: input panel ──────────────────────────────── */
+.input-panel {
+  border-right: 1px solid var(--line);
+  padding: 24px;
+  min-height: calc(100vh - 55px);
+  position: sticky; top: 0;
+  align-self: start;
+  background: var(--surface);
+}
+@media (max-width: 860px) {
+  .input-panel { border-right: 0; border-bottom: 1px solid var(--line); min-height: auto; position: static; }
+}
+
+.section-label {
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 8px;
+}
+
+.input-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 8px;
+}
+.dir-tag {
+  font-family: var(--mono); font-size: 11px;
+  color: var(--mint); font-weight: 500;
+  padding: 3px 8px; background: var(--mint-soft);
+  border-radius: 4px;
+}
+
+textarea.input {
+  width: 100%;
+  min-height: 168px;
+  padding: 14px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--ko);
+  font-size: 15px; line-height: 26px;
+  resize: vertical;
+  outline: none;
+  transition: border-color .16s;
+}
+textarea.input:focus { border-color: var(--ink-3); background: var(--surface); }
+textarea.input::placeholder { color: var(--ink-3); }
+
+.meta-row {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 8px;
+  font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+}
+
+.actions {
+  display: grid; grid-template-columns: 1fr auto; gap: 8px;
+  margin-top: 16px;
+}
+.btn-primary {
+  height: 40px; border-radius: 8px;
+  background: var(--ink); color: #fff;
+  font-size: 13px; font-weight: 500;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  transition: opacity .12s;
+}
+.btn-primary:hover { opacity: 0.85; }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-secondary {
+  height: 40px; padding: 0 16px; border-radius: 8px;
+  background: transparent; color: var(--ink-2);
+  border: 1px solid var(--line);
+  font-size: 13px; font-weight: 500;
+}
+.btn-secondary:hover { background: var(--hover); }
+
+.shortcut-hint {
+  margin-top: 10px;
+  font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+}
+.shortcut-hint kbd {
+  padding: 1px 5px; border: 1px solid var(--line); border-radius: 3px;
+  background: var(--bg); font-family: inherit; font-size: 10px;
+}
+
+.hint-box {
+  margin-top: 12px;
+  padding: 10px 12px; border-radius: 6px;
+  background: var(--bg); border: 1px solid var(--line);
+  font-size: 12px; color: var(--ink-2); line-height: 1.55;
+}
+.hint-box strong { color: var(--pink); font-weight: 500; }
+
+.history-block { margin-top: 32px; }
+.history-block h4 {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 8px;
+}
+.history-block h4 button {
+  font-family: var(--font); font-size: 10px; letter-spacing: 0;
+  text-transform: none; font-weight: 500;
+  color: var(--ink-3);
+}
+.history-list { display: flex; flex-direction: column; }
+.history-item {
+  display: block; width: 100%; text-align: left;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+.history-item:last-child { border-bottom: 0; }
+.history-item:hover .h-ko { color: var(--pink); }
+.h-ko {
+  font-family: var(--ko); font-size: 13px; font-weight: 500;
+  color: var(--ink); line-height: 1.4;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  transition: color .12s;
+}
+.h-zh {
+  font-size: 12px; color: var(--ink-3); margin-top: 2px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.h-time {
+  font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+  margin-top: 4px;
+}
+
+/* ── Right: result column ───────────────────────────── */
+.result-col {
+  padding: 24px 32px 48px;
+  min-width: 0;
+  max-width: 900px;
+}
+@media (max-width: 860px) {
+  .result-col { padding: 16px; }
+}
+
+.result-head {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+.result-head h2 {
+  font-size: 16px; font-weight: 600;
+  display: flex; align-items: baseline; gap: 8px;
+}
+.result-head h2 .n {
+  font-family: var(--mono); font-size: 12px; color: var(--ink-3); font-weight: 400;
+}
+.action-group { display: flex; gap: 6px; }
+.icon-btn {
+  height: 30px; padding: 0 10px; border-radius: 6px;
+  border: 1px solid var(--line);
+  background: transparent; color: var(--ink-2);
+  font-size: 12px; font-weight: 500;
+  display: inline-flex; align-items: center; gap: 5px;
+}
+.icon-btn:hover { background: var(--hover); border-color: var(--line-strong); }
+.icon-btn.mint { color: var(--mint); border-color: var(--mint); background: var(--mint-soft); }
+.icon-btn.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+.icon-btn.primary:hover { opacity: 0.85; background: var(--ink); }
+
+/* ── Section block ──────────────────────────────────── */
+.section {
+  margin-bottom: 32px;
+}
+.section > .section-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 12px;
+}
+.section > .section-header h3 {
+  font-size: 13px; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--ink-3);
+  display: flex; align-items: baseline; gap: 8px;
+}
+.section > .section-header h3 .n {
+  font-family: var(--mono); font-size: 12px; color: var(--pink); font-weight: 500;
+  letter-spacing: 0;
+}
+.section > .section-header .link {
+  font-size: 11px; color: var(--ink-3); font-weight: 500;
+}
+
+/* ── Translation ────────────────────────────────────── */
+.translation-korean {
+  font-family: var(--ko);
+  font-size: 22px; line-height: 1.55;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.translation-korean .token {
+  display: inline-block;
+  padding: 1px 2px; margin: 0 -1px;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: background .12s;
+}
+.translation-korean .token:hover { background: #fff2c8; }
+.translation-korean .particle {
+  color: var(--pink);
+  border-bottom: 1.5px solid var(--pink);
+  border-radius: 0;
+}
+.romanization {
+  font-family: var(--mono); font-size: 12px;
+  color: var(--ink-3);
+  margin-bottom: 16px;
+  padding-left: 2px;
+}
+.zh-full {
+  font-size: 16px; line-height: 1.65;
+  color: var(--ink-2);
+  padding: 12px 14px;
+  background: var(--surface);
+  border-left: 3px solid var(--pink);
+  border-radius: 0 4px 4px 0;
+}
+.quick-tools {
+  display: flex; gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.quick-tools button {
+  height: 30px; padding: 0 12px; border-radius: 6px;
+  background: transparent; color: var(--ink-2);
+  border: 1px solid var(--line);
+  font-size: 12px; font-weight: 500;
+}
+.quick-tools button:hover { background: var(--hover); }
+.quick-tools button.saved { color: var(--mint); border-color: var(--mint); background: var(--mint-soft); }
+
+/* ── Grammar list ───────────────────────────────────── */
+.grammar-card {
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+}
+.grammar-card:first-of-type { border-top: 0; padding-top: 0; }
+.grammar-card:last-of-type { padding-bottom: 0; }
+.g-head {
+  display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+.g-pattern {
+  font-family: var(--ko);
+  font-size: 15px; font-weight: 600;
+  color: var(--pink);
+}
+.g-level {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  padding: 2px 6px; border-radius: 3px;
+  background: var(--bg); color: var(--ink-3);
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+.g-title {
+  font-size: 14px; font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.g-usage {
+  font-size: 13px; line-height: 1.6;
+  color: var(--ink-2);
+  margin-bottom: 10px;
+}
+.g-usage strong { color: var(--pink); font-weight: 600; }
+.g-examples { display: flex; flex-direction: column; gap: 6px; }
+.g-ex {
+  display: grid; grid-template-columns: 20px 1fr;
+  gap: 8px;
+  font-size: 13px; line-height: 1.55;
+}
+.g-ex-num {
+  font-family: var(--mono); font-size: 11px;
+  color: var(--ink-3); font-weight: 500;
+  padding-top: 2px;
+}
+.g-ex-ko {
+  font-family: var(--ko); font-weight: 500;
+  color: var(--ink);
+}
+.g-ex-ko em { color: var(--pink); font-style: normal; font-weight: 600; }
+.g-ex-zh {
+  color: var(--ink-3); font-size: 12px;
+  margin-top: 1px;
+}
+
+/* ── Vocab table ────────────────────────────────────── */
+.vocab-table {
+  display: flex; flex-direction: column;
+  border-top: 1px solid var(--line);
+}
+.vocab-row {
+  display: grid; grid-template-columns: 100px 100px 1fr auto;
+  gap: 12px; align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.v-ko {
+  font-family: var(--ko); font-size: 15px; font-weight: 600;
+  color: var(--ink);
+}
+.v-romanize {
+  font-family: var(--mono); font-size: 11px;
+  color: var(--ink-3);
+}
+.v-meaning {
+  font-size: 13px; color: var(--ink-2);
+}
+.v-meaning .pos {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  color: var(--ink-3);
+  letter-spacing: 0.06em; text-transform: uppercase;
+  margin-right: 6px;
+}
+.v-actions { display: flex; gap: 4px; }
+.v-btn {
+  width: 26px; height: 26px; border-radius: 5px;
+  background: transparent; color: var(--ink-3);
+  border: 1px solid var(--line);
+  display: grid; place-items: center;
+  font-size: 13px;
+}
+.v-btn:hover { background: var(--hover); color: var(--ink); }
+.v-btn.saved { background: var(--mint-soft); color: var(--mint); border-color: var(--mint); }
+.v-btn.add:hover { color: var(--pink); border-color: var(--pink); background: var(--pink-soft); }
+
+@media (max-width: 640px) {
+  .vocab-row {
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+  }
+  .v-ko { grid-column: 1; grid-row: 1; }
+  .v-romanize { grid-column: 1; grid-row: 2; margin-top: 2px; }
+  .v-meaning { grid-column: 1 / 3; grid-row: 3; margin-top: 4px; }
+  .v-actions { grid-column: 2; grid-row: 1 / 3; align-self: center; }
+}
+
+/* ── Structure map ──────────────────────────────────── */
+.structure-map {
+  padding: 12px 14px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+.structure-row {
+  display: grid; grid-template-columns: 60px 1fr;
+  gap: 12px; align-items: center;
+  padding: 5px 0;
+}
+.structure-row .role {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--ink-3); font-weight: 500;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  text-align: right;
+}
+.structure-row .role.subj { color: var(--pink); }
+.structure-row .role.pred { color: var(--mint); }
+.structure-row .content {
+  font-family: var(--ko); font-size: 14px; font-weight: 500;
+  color: var(--ink);
+}
+
+/* ── Suggestion box ─────────────────────────────────── */
+.suggestion {
+  padding: 14px 16px;
+  border-left: 3px solid var(--pink);
+  background: var(--pink-soft);
+  border-radius: 0 4px 4px 0;
+}
+.suggestion h4 {
+  font-size: 12px; font-weight: 600;
+  color: var(--pink); margin-bottom: 4px;
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+.suggestion p {
+  font-size: 13px; line-height: 1.6;
+  color: var(--ink-2);
+}
+
+.spec-note {
+  max-width: 1360px; margin: 0 auto; padding: 0 32px 40px;
+  font-family: var(--mono); font-size: 11px;
+  color: var(--ink-3); line-height: 1.7;
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <button class="back-btn" aria-label="返回">←</button>
+  <div>
+    <span class="title">内容拆解</span>
+    <span class="title-sub">Sentence Breakdown</span>
+  </div>
+  <div class="mode-toggle" role="tablist">
+    <button class="active">学习模式</button>
+    <button>深读模式</button>
+  </div>
+  <span class="badge">正式功能</span>
+</header>
+
+<main class="workspace">
+
+  <!-- Left: Input -->
+  <aside class="input-panel">
+    <div class="input-header">
+      <span class="section-label">粘贴韩语</span>
+      <span class="dir-tag">KO → ZH</span>
+    </div>
+
+    <textarea class="input" placeholder="粘贴或输入一句韩语">어제 카페에서 친구를 만나서 커피를 마셨어요.</textarea>
+
+    <div class="meta-row">
+      <span>27 chars · Sentence</span>
+      <span>Learn mode</span>
+    </div>
+
+    <div class="actions">
+      <button class="btn-primary">开始拆解</button>
+      <button class="btn-secondary">清空</button>
+    </div>
+
+    <p class="shortcut-hint"><kbd>Ctrl</kbd> + <kbd>Enter</kbd> 快速分析</p>
+
+    <div class="hint-box">
+      当前是<strong>学习模式</strong>，超过 50 字建议切换到深读模式。
+    </div>
+
+    <div class="history-block">
+      <h4>
+        最近拆解
+        <button>清空</button>
+      </h4>
+      <div class="history-list">
+        <button class="history-item">
+          <div class="h-ko">비가 오니까 우산을 가져가세요.</div>
+          <div class="h-zh">因为下雨，请带上雨伞。</div>
+          <div class="h-time">JUL 02 · 14:22</div>
+        </button>
+        <button class="history-item">
+          <div class="h-ko">한국어 공부는 재미있어요.</div>
+          <div class="h-zh">学韩语很有趣。</div>
+          <div class="h-time">JUL 02 · 09:18</div>
+        </button>
+        <button class="history-item">
+          <div class="h-ko">주말에 뭐 할 거예요?</div>
+          <div class="h-zh">周末打算做什么？</div>
+          <div class="h-time">JUL 01 · 21:47</div>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Right: Results -->
+  <section class="result-col">
+
+    <div class="result-head">
+      <h2>拆解结果 <span class="n">学习模式</span></h2>
+      <div class="action-group">
+        <button class="icon-btn">复制</button>
+        <button class="icon-btn mint">✓ 已保存</button>
+        <button class="icon-btn primary">+ 加复习</button>
+      </div>
+    </div>
+
+    <!-- Translation -->
+    <div class="section">
+      <div class="section-header">
+        <h3>翻译 <span class="n">KO → ZH</span></h3>
+        <button class="link">🔊 朗读原文</button>
+      </div>
+
+      <div class="translation-korean">
+        <span class="token">어제</span>
+        <span class="token">카페<span class="particle">에서</span></span>
+        <span class="token">친구<span class="particle">를</span></span>
+        <span class="token">만나서</span>
+        <span class="token">커피<span class="particle">를</span></span>
+        <span class="token">마셨어요.</span>
+      </div>
+      <div class="romanization">eo-je ka-pe-e-seo chin-gu-reul man-na-seo keo-pi-reul ma-syeoss-eo-yo.</div>
+      <div class="zh-full">昨天在咖啡馆和朋友见面，喝了咖啡。</div>
+
+      <div class="quick-tools">
+        <button>复制翻译</button>
+        <button class="saved">✓ 已保存句子</button>
+        <button>🔊 中文朗读</button>
+        <button>字面直译</button>
+      </div>
+    </div>
+
+    <!-- Structure -->
+    <div class="section">
+      <div class="section-header">
+        <h3>句子结构</h3>
+      </div>
+      <div class="structure-map">
+        <div class="structure-row">
+          <span class="role">时间</span>
+          <span class="content">어제</span>
+        </div>
+        <div class="structure-row">
+          <span class="role subj">地点</span>
+          <span class="content">카페에서</span>
+        </div>
+        <div class="structure-row">
+          <span class="role">宾语</span>
+          <span class="content">친구를</span>
+        </div>
+        <div class="structure-row">
+          <span class="role pred">谓语①</span>
+          <span class="content">만나서</span>
+        </div>
+        <div class="structure-row">
+          <span class="role">宾语</span>
+          <span class="content">커피를</span>
+        </div>
+        <div class="structure-row">
+          <span class="role pred">谓语②</span>
+          <span class="content">마셨어요</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vocabulary -->
+    <div class="section">
+      <div class="section-header">
+        <h3>词汇 <span class="n">04</span></h3>
+        <button class="link">一键入库</button>
+      </div>
+      <div class="vocab-table">
+        <div class="vocab-row">
+          <span class="v-ko">어제</span>
+          <span class="v-romanize">eo-je</span>
+          <span class="v-meaning"><span class="pos">名词</span>昨天</span>
+          <div class="v-actions">
+            <button class="v-btn" title="朗读">🔊</button>
+            <button class="v-btn add" title="加入词库">+</button>
+          </div>
+        </div>
+        <div class="vocab-row">
+          <span class="v-ko">카페</span>
+          <span class="v-romanize">ka-pe</span>
+          <span class="v-meaning"><span class="pos">名词</span>咖啡馆</span>
+          <div class="v-actions">
+            <button class="v-btn" title="朗读">🔊</button>
+            <button class="v-btn saved" title="已保存">✓</button>
+          </div>
+        </div>
+        <div class="vocab-row">
+          <span class="v-ko">친구</span>
+          <span class="v-romanize">chin-gu</span>
+          <span class="v-meaning"><span class="pos">名词</span>朋友</span>
+          <div class="v-actions">
+            <button class="v-btn" title="朗读">🔊</button>
+            <button class="v-btn add" title="加入词库">+</button>
+          </div>
+        </div>
+        <div class="vocab-row">
+          <span class="v-ko">마시다</span>
+          <span class="v-romanize">ma-si-da</span>
+          <span class="v-meaning"><span class="pos">动词</span>喝（过去 마셨어요）</span>
+          <div class="v-actions">
+            <button class="v-btn" title="朗读">🔊</button>
+            <button class="v-btn add" title="加入词库">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grammar -->
+    <div class="section">
+      <div class="section-header">
+        <h3>语法 <span class="n">02</span></h3>
+      </div>
+
+      <div class="grammar-card">
+        <div class="g-head">
+          <span class="g-pattern">N + 에서</span>
+          <span class="g-level">A1</span>
+          <span class="g-level">地点助词</span>
+        </div>
+        <div class="g-title">在某个地点做动作</div>
+        <div class="g-usage">
+          <strong>에서</strong> 接在场所名词后，表示"在～"，说明动作发生的地点。与只表示位置的 <strong>에</strong> 不同：<strong>에서</strong> 强调"在这个地方发生了动作"。
+        </div>
+        <div class="g-examples">
+          <div class="g-ex">
+            <span class="g-ex-num">01</span>
+            <div>
+              <div class="g-ex-ko">카페<em>에서</em> 커피를 마셔요.</div>
+              <div class="g-ex-zh">在咖啡馆喝咖啡。</div>
+            </div>
+          </div>
+          <div class="g-ex">
+            <span class="g-ex-num">02</span>
+            <div>
+              <div class="g-ex-ko">학교<em>에서</em> 한국어를 배워요.</div>
+              <div class="g-ex-zh">在学校学习韩语。</div>
+            </div>
+          </div>
+          <div class="g-ex">
+            <span class="g-ex-num">03</span>
+            <div>
+              <div class="g-ex-ko">집<em>에서</em> 쉬어요.</div>
+              <div class="g-ex-zh">在家休息。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grammar-card">
+        <div class="g-head">
+          <span class="g-pattern">V + 아/어서</span>
+          <span class="g-level">A2</span>
+          <span class="g-level">连接语尾</span>
+        </div>
+        <div class="g-title">"先做前一动作，再做后一动作"</div>
+        <div class="g-usage">
+          表示两个连续动作，前一动作是后一动作的<strong>前提或方式</strong>。与 <strong>-고</strong> 不同：<strong>-아/어서</strong> 强调前后动作紧密连接。
+        </div>
+        <div class="g-examples">
+          <div class="g-ex">
+            <span class="g-ex-num">01</span>
+            <div>
+              <div class="g-ex-ko">친구를 만나<em>서</em> 밥을 먹었어요.</div>
+              <div class="g-ex-zh">见了朋友，然后一起吃了饭。</div>
+            </div>
+          </div>
+          <div class="g-ex">
+            <span class="g-ex-num">02</span>
+            <div>
+              <div class="g-ex-ko">학교에 가<em>서</em> 공부해요.</div>
+              <div class="g-ex-zh">去学校学习。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Suggestion -->
+    <div class="section">
+      <div class="suggestion">
+        <h4>学习建议</h4>
+        <p>今天学的两个语法都是"日常场景连接词"。挑一个咖啡厅或学校的场景，用 <strong>-에서</strong> + <strong>-아/어서</strong> 造 3 个新句子。</p>
+      </div>
+    </div>
+
+  </section>
+</main>
+
+<div class="spec-note">
+  v2 · Minimal — 双栏 <strong>380 + 1fr</strong>，桌面 sticky 输入栏；无卡片背景色，用分隔线和字体级别做层级；粉色只出现在助词、动作按钮、CTA；灰阶为主。
+</div>
+
+</body>
+</html>

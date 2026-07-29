@@ -58,7 +58,8 @@ export const grammarCardsP24: GrammarCard[] = [
       { type: 'rule', text: '动词词干 + 는 바람에', examples: '오다→오는 바람에 / 나다→나는 바람에 / 하다→하는 바람에' },
       { type: 'rule', text: '不接形容词，不接名词', examples: '피곤한 바람에 ✗ / 학생 바람에 ✗' },
       { type: 'rule', text: '后半句必须是过去时', examples: '늦었어요 / 젖었어요 / 못 지켰어요' },
-      { type: 'usage', text: '前后主语可以不同（这是 -는 바람에 的特点）', examples: '지하철이 고장 나는 바람에 (내가) 늦었어요' },
+      { type: 'rule', text: '바람에 前的动词永远用 -는（现在冠形），即使原因已经发生也不变时态', examples: '비가 오는 바람에（○，即使雨已经下过）/ 비가 온 바람에（✗）' },
+      { type: 'usage', text: '前后主语可以不同（这是 -는 바람에 的特点）', examples: '지하철이 고장 나는 바람에 (내가) 늦었어요（因为地铁故障，我迟到了。）' },
       { type: 'usage', text: '后半句通常是负面/意外结果', examples: '옷이 젖었어요 / 다쳤어요 / 놓쳤어요 / 약속을 못 지켰어요' },
       { type: 'compare', text: '和 -기 때문에 差别：客观原因 vs 意外突发', examples: '비 때문에 늦었어요（一般）/ 비가 오는 바람에 늦었어요（意外突发）' },
       { type: 'note', text: '常和 갑자기（突然）搭配，强调意外性', examples: '갑자기 비가 오는 바람에 / 갑자기 전화가 오는 바람에' },
@@ -124,6 +125,7 @@ export const grammarCardsP24: GrammarCard[] = [
       { wrong: '비가 오는 바람에 옷이 젖어요', correct: '비가 오는 바람에 옷이 젖었어요', note: '后半句必须是过去时。-는 바람에 描述已发生的意外结果。' },
       { wrong: '오는 바람에 좋은 일이 생겼어요', correct: '오는 바람에 안 좋은 일이 생겼어요', note: '-는 바람에 后半句通常是负面结果。正面结果用 -는 덕분에。' },
       { wrong: '학생이는 바람에', correct: '학생이라서 / 학생이기 때문에', note: '-는 바람에 只接动词。名词用 이다 类的原因表达。' },
+      { wrong: '비가 온 바람에 늦었어요', correct: '비가 오는 바람에 늦었어요', note: '前动词永远用 -는，不因原因已发生而变过去（-은/ㄴ）。变时态的是后半句，不是 바람에 前面。' },
     ],
     quickTable: {
       title: '-는 바람에 用法要点',
@@ -214,7 +216,7 @@ export const grammarCardsP24: GrammarCard[] = [
     compareLabel: '-는 바람에 vs -기 때문에',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P18 · 第 1 课</div>
+    <div class="ov-hero-label">P24 · 第 1 课</div>
     <div class="ov-hero-title">-는 바람에</div>
     <div class="ov-hero-sub">"因为（意外）……" · 突发原因+意外结果</div>
   </div>
@@ -255,7 +257,7 @@ export const grammarCardsP24: GrammarCard[] = [
     title: '-는 통에',
     whatItDoes: '因为（乱糟糟的）……',
     whatItDoesBody: '和 -는 바람에 相似，但 -는 통에 语气更强，强调"因为混乱/干扰的场面"导致后果。\n"通"字暗示"闹哄哄、乱七八糟"的场景。\n常用于人多、噪声大、事件复杂等场合。',
-    structureNote: '结构：动词词干 + 는 통에。\n和 바람에 一样只接动词、后半通常过去时、负面结果。\n差别：바람에 强调"突发"，통에 强调"混乱/干扰"。',
+    structureNote: '结构：动词词干 + 는 통에；表混乱状态的形容词 + 은 통에（如 많은 통에、시끄러운 통에）。\n后半通常过去时、负面结果。\n差别：바람에 强调"突发"，통에 强调"混乱/干扰"。',
     rulesNote: '典型场景：\n1. 人多闹哄哄（사람이 많은 통에）\n2. 打闹分心（싸우는 통에）\n3. 事件干扰（전화 오는 통에）\n\n和 -는 바람에 可以互换的场景很多，但 통에 语气更强，多用于负面吐槽。',
     structures: [
       {
@@ -304,6 +306,7 @@ export const grammarCardsP24: GrammarCard[] = [
     connectionRules: [
       { type: 'rule', text: '动词词干 + 는 통에', examples: '오다→오는 통에 / 떠들다→떠드는 통에 / 지르다→지르는 통에' },
       { type: 'rule', text: '也接部分形容词（如 많다）+ 은 통에', examples: '많다→많은 통에 / 시끄럽다→시끄러운 통에' },
+      { type: 'note', text: '能接的形容词只限"描述吵闹/拥挤/混乱场面"的那几个；表个人状态的形容词（피곤하다、바쁘다）不能接', examples: '많은 통에 ○ / 시끄러운 통에 ○ / 피곤한 통에 ✗（用 피곤해서）' },
       { type: 'rule', text: '后半句必须是过去时或状态描述', examples: '못 잤어요 / 정신이 없어요' },
       { type: 'usage', text: '强调"混乱/干扰"的场景，比 바람에 语气更强', examples: '아이들이 소리 지르는 통에 / 사람이 많은 통에' },
       { type: 'compare', text: '和 -는 바람에 差别：突发 vs 混乱', examples: '지하철 고장 나는 바람에（突发）/ 사람 많은 통에（混乱）' },
@@ -369,7 +372,7 @@ export const grammarCardsP24: GrammarCard[] = [
     ],
     mistakes: [
       { wrong: '피곤한 통에', correct: '피곤해서 / 피곤한 나머지', note: '피곤 是形容词表达状态，不表混乱场景。用 -아/어서 或 -는 나머지（下一课）。' },
-      { wrong: '떠드는 통에 좋은 일이 생겼어요', correct: '떠드는 통에 잠 못 잤어요', note: '通에 后半句必须是负面/干扰结果，不能是正面结果。' },
+      { wrong: '떠드는 통에 좋은 일이 생겼어요', correct: '떠드는 통에 잠 못 잤어요', note: '통에 后半句必须是负面/干扰结果，不能是正面结果。' },
       { wrong: '학생 통에', correct: '학생 때문에', note: '통에 不接名词（"많은 통에"是特例形容词化）。名词表原因用 -기 때문에 或 때문에。' },
       { wrong: '떠들 통에', correct: '떠드는 통에', note: '前必须是 -는 冠形形（现在时），不用未来 -을。' },
     ],
@@ -397,7 +400,7 @@ export const grammarCardsP24: GrammarCard[] = [
           prompt: '"人太多没找到朋友" → 사람이 너무 ___ 친구를 못 찾았어요.',
           options: ['많기 때문에', '많은 통에', '많으니까', '많아서'],
           answer: 1,
-          explanation: '人多混乱的场景 → 형容词 + 은 통에。많은 통에。',
+          explanation: '人多混乱的场景 → 形容词 + 은 통에。많은 통에。',
         },
         {
           prompt: '哪个句子使用 -는 통에 最合适？',
@@ -408,7 +411,7 @@ export const grammarCardsP24: GrammarCard[] = [
             '학생 통에 힘들어요',
           ],
           answer: 2,
-          explanation: '通에 用于混乱/干扰导致的负面结果。电话不断→工作没做 完全符合。',
+          explanation: '통에 用于混乱/干扰导致的负面结果。电话不断→工作没做 完全符合。',
         },
         {
           prompt: '关于 -는 통에 和 -는 바람에 的区别，哪句最准确？',
@@ -460,7 +463,7 @@ export const grammarCardsP24: GrammarCard[] = [
     compareLabel: '-는 통에 vs -는 바람에',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P18 · 第 2 课</div>
+    <div class="ov-hero-label">P24 · 第 2 课</div>
     <div class="ov-hero-title">-는 통에</div>
     <div class="ov-hero-sub">"因为（乱糟糟的）……" · 混乱场景导致负面</div>
   </div>
@@ -548,6 +551,7 @@ export const grammarCardsP24: GrammarCard[] = [
     connectionRules: [
       { type: 'rule', text: '动词现在 + 는 탓에', examples: '막히다→막히는 탓에 / 하다→하는 탓에' },
       { type: 'rule', text: '动词过去 + 은/ㄴ 탓에', examples: '자다→잔 탓에 / 오다→온 탓에' },
+      { type: 'note', text: '动词选 -는 还是 -은/ㄴ？看原因动作：仍在持续/反复 → 现在 -는；已经完成 → 过去 -은/ㄴ', examples: '길이 막히는 탓에（堵着，持续）/ 늦게 잔 탓에（睡这件事已完成）' },
       { type: 'rule', text: '形容词 + 은/ㄴ 탓에', examples: '피곤하다→피곤한 탓에 / 어렵다→어려운 탓에' },
       { type: 'rule', text: '名词 + 탓에（直接接）', examples: '비 탓에 / 실수 탓에 / 날씨 탓에' },
       { type: 'usage', text: '后半句必须是负面结果，带"归咎"语气', examples: '늦게 잔 탓에 피곤해요 / 실수 탓에 손해 봤어요' },
@@ -611,8 +615,8 @@ export const grammarCardsP24: GrammarCard[] = [
     mistakes: [
       { wrong: '알람 탓에 안 늦었어요（正面结果）', correct: '알람 덕분에 안 늦었어요', note: '탓에 只用于负面结果的归咎。正面结果用 -는 덕분에。' },
       { wrong: '자는 탓에 피곤해요（想说睡晚了）', correct: '늦게 잔 탓에 피곤해요', note: '"睡晚了"是过去动作 → -은/ㄴ 탓에。자는 탓에 表示"现在在睡"，语义不对。' },
-      { wrong: '학생인 탓에 힘들어요', correct: '학생인 탓에 힘들어요（也可）/ 학생이라서 힘들어요', note: '语法上可以，但名词直接 + 탓에 更自然：학생 신분 탓에。' },
-      { wrong: '내 탓이야（正确）却在正面结果中用', correct: '正面结果用 덕분에', note: '탓 / 덕분 是对立方向，选错方向就是逻辑错误。' },
+      { wrong: '학생 탓에 힘들어요', correct: '학생인 탓에 힘들어요', note: '名词表判断接 탓에 时需要 인。学生 + 인 탓에 才是"因为是学生"。' },
+      { wrong: '열심히 한 탓에 성공했어요', correct: '열심히 한 덕분에 성공했어요', note: '탓에 用于负面原因，正面结果要用 덕분에。' },
     ],
     quickTable: {
       title: '탓 vs 덕분：归咎与感激',
@@ -701,7 +705,7 @@ export const grammarCardsP24: GrammarCard[] = [
     compareLabel: '-는 탓에 vs -는 바람에',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P18 · 第 3 课</div>
+    <div class="ov-hero-label">P24 · 第 3 课</div>
     <div class="ov-hero-title">-는/은/ㄴ 탓에</div>
     <div class="ov-hero-sub">"都怪……才……" · 负面归咎</div>
   </div>
@@ -744,7 +748,7 @@ export const grammarCardsP24: GrammarCard[] = [
     title: '-는 덕분에 vs -는 탓에',
     whatItDoes: '多亏 vs 都怪',
     whatItDoesBody: '这一课把两个"归因型"连接词彻底分开。\n덕분에：多亏 · 感恩 · 后半句必须是正面结果。\n탓에：都怪 · 责怪 · 后半句必须是负面结果。\n韩国人口语里两个词区分很严格，用错会显得没礼貌或语义颠倒。',
-    structureNote: '덕分에 结构：\n动词现在 → -는 덕분에\n动词过去/形容词 → -은/ㄴ 덕분에\n名词 → (이)ㄴ 덕분에 / 명사 덕분에\n\n탓에 结构对称，只是后半句必须负面。',
+    structureNote: '덕분에 结构：\n动词现在 → -는 덕분에\n动词过去/形容词 → -은/ㄴ 덕분에\n名词 → (이)ㄴ 덕분에 / 명사 덕분에\n\n탓에 结构对称，只是后半句必须负面。',
     rulesNote: '判断口诀：\n1. 结果好 → 덕분에（好事归功）\n2. 结果坏 → 탓에（坏事归咎）\n3. 客观陈述用 -기 때문에\n4. 意外突发用 -는 바람에\n\n덕분에 也可以单独作副词："덕분에 잘 지내요"（多亏问候语）。',
     structures: [
       {
@@ -783,10 +787,11 @@ export const grammarCardsP24: GrammarCard[] = [
     ],
     connectionRules: [
       { type: 'rule', text: '덕분에 后必须接正面结果，탓에 后必须接负面结果。', examples: '엄마 덕분에 살았어요 / 엄마 탓에 늦었어요' },
-      { type: 'rule', text: '两者接续规则相同：动词现在 -는, 动词过去/形容词 -은/ㄴ, 名词 직접连接。', examples: '오는 덕분에 / 온 덕분에 / 비 덕분에' },
-      { type: 'usage', text: '덕분에 常用于客套感谢，如 "덕분에 잘 지내요"（多亏您问候，我过得挺好）。', examples: '오랜만이에요, 덕분에 잘 지내요' },
+      { type: 'rule', text: '两者接续规则相同：动词现在 -는, 动词过去/形容词 -은/ㄴ, 名词直接连接。', examples: '오는 덕분에 / 온 덕분에 / 비 덕분에' },
+      { type: 'usage', text: '덕분에 常用于客套感谢，如 "덕분에 잘 지내요"（多亏您问候，我过得挺好）。', examples: '오랜만이에요, 덕분에 잘 지내요（好久不见，托您的福过得挺好。）' },
       { type: 'usage', text: '탓에 语气重，含责怪意味；如果只想说客观原因，用 -기 때문에。', examples: '비 탓에（都怪雨）vs 비가 오기 때문에（因为下雨）' },
       { type: 'compare', text: '덕분에 vs 때문에：덕분에 只用于好事；때문에 中性可正可负。', examples: '너 덕분에 성공했어 vs 너 때문에 성공/실패했어' },
+      { type: 'note', text: '感谢别人帮忙时别用中性的 때문에 —— 对恩人用 때문에 会显得冷淡甚至像埋怨，正面结果一定用 덕분에', examples: '선생님 덕분에 합격했어요（得体的感谢）/ 선생님 때문에 합격했어요（听起来在怪老师，失礼）' },
       { type: 'note', text: '"내 덕분에" 说自己的功劳会显得自大，通常说 "제 덕에" 或让别人夸自己。', examples: '× 내 덕분에 잘됐어요 → 격식 낮음' },
     ],
     cardExamples: [
@@ -911,7 +916,7 @@ export const grammarCardsP24: GrammarCard[] = [
     compareLabel: '덕분에 vs 탓에',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P18 · 第 4 课</div>
+    <div class="ov-hero-label">P24 · 第 4 课</div>
     <div class="ov-hero-title">-는 덕분에 vs -는 탓에</div>
     <div class="ov-hero-sub">感恩用 덕분에，责怪用 탓에</div>
   </div>
@@ -993,9 +998,10 @@ export const grammarCardsP24: GrammarCard[] = [
     connectionRules: [
       { type: 'rule', text: '动词过去用 -은/ㄴ 나머지，动词现在用 -는 나머지。', examples: '놀란 나머지 / 걱정하는 나머지' },
       { type: 'rule', text: '形容词现在用 -(으)ㄴ 나머지，如 기쁘다 → 기쁜 나머지。', examples: '기쁜 나머지 / 슬픈 나머지' },
-      { type: 'usage', text: '前半通常是"极端心理/生理状态"：긴장, 놀라, 화나, 기쁘, 슬프, 무서워。', examples: '무서운 나머지 소리를 질렀어요' },
-      { type: 'usage', text: '后半必须是过去时，且是"通常不做的极端反应"。', examples: '화가 난 나머지 물건을 던졌다' },
+      { type: 'usage', text: '前半通常是"极端心理/生理状态"：긴장, 놀라, 화나, 기쁘, 슬프, 무서워。', examples: '무서운 나머지 소리를 질렀어요（吓得叫出了声。）' },
+      { type: 'usage', text: '后半必须是过去时，且是"通常不做的极端反应"。', examples: '화가 난 나머지 물건을 던졌다（气得把东西扔了。）' },
       { type: 'note', text: '口语中很少用，多在小说、新闻、正式书面语出现。', examples: '书: 그는 놀란 나머지 / 口: 너무 놀라서' },
+      { type: 'note', text: '前后两个小句必须是同一个主语：情绪满溢的人和做出反应的人是同一个。中文能换主语（他一激动，我就哭了），韩语的 나머지 不行，前半的"놀란"和后半"소리를 지른"必须是同一人。', examples: '(내가) 놀란 나머지 (내가) 소리를 질렀어요（同一人：吓到→自己叫出声）' },
       { type: 'compare', text: '和 -아서 比：-아서 通用；나머지 强调"情绪太满以至于失控"，书面色彩。', examples: '놀라서 소리쳤다 / 놀란 나머지 소리쳤다' },
     ],
     cardExamples: [
@@ -1118,7 +1124,7 @@ export const grammarCardsP24: GrammarCard[] = [
     compareLabel: '-아서 vs 나머지',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P18 · 第 5 课</div>
+    <div class="ov-hero-label">P24 · 第 5 课</div>
     <div class="ov-hero-title">-는/은 나머지</div>
     <div class="ov-hero-sub">"情绪太满以至于……" · 书面语</div>
   </div>
@@ -1203,10 +1209,11 @@ export const grammarCardsP24: GrammarCard[] = [
     connectionRules: [
       { type: 'rule', text: '动词现在用 -는 관계로，动词过去/形容词用 -은/ㄴ 관계로。', examples: '오는 관계로 / 온 관계로 / 바쁜 관계로' },
       { type: 'rule', text: '名词用 -인 관계로 或 명사 관계로（第二种直接跟）。', examples: '공사 관계로 / 학생인 관계로' },
-      { type: 'usage', text: '公告、通知常用格式："(원인) 관계로 (결과)"。', examples: '점검 관계로 서비스가 중단됩니다' },
+      { type: 'usage', text: '公告、通知常用格式："(원인) 관계로 (결과)"。', examples: '점검 관계로 서비스가 중단됩니다（因检修，服务暂停。）' },
       { type: 'usage', text: '口语几乎不用，同义口语表达是 -기 때문에 / -아서。', examples: '书: 공사 관계로 휴무 / 口: 공사 때문에 문 닫아요' },
       { type: 'note', text: '不用于个人情感原因；不说 "슬픈 관계로 못 갔어요"。', examples: '× 슬픈 관계로 → ○ 슬퍼서 / 개인 사정 관계로' },
-      { type: 'compare', text: '관계로 vs 때문에：관계로 更客观、公文化；때문에 中性通用。', examples: '공사 관계로 휴무 vs 공사 때문에 쉬어요' },
+      { type: 'compare', text: '관계로 vs 때문에：관계로 更客观、公文化；때문에 中性通用。', examples: '공사 관계로 휴무（因施工歇业〔书面/正式〕）vs 공사 때문에 쉬어요（因为施工休息〔口语〕）' },
+      { type: 'note', text: '中文的"由于"习惯带一整句（由于台风来袭……），学员就跟着把动词全变形成 -는 관계로。但真实公告最爱把原因压缩成一个名词直接接 관계로，更简洁地道；动词变形式虽不算错，语感偏重。', examples: '真实公告更常说 태풍 관계로 행사가 취소됐습니다，而非 태풍이 오는 관계로（后者语法对但偏累赘）' },
     ],
     cardExamples: [
       {
@@ -1335,7 +1342,7 @@ export const grammarCardsP24: GrammarCard[] = [
     compareLabel: '때문에 vs 관계로',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P18 · 第 6 课</div>
+    <div class="ov-hero-label">P24 · 第 6 课</div>
     <div class="ov-hero-title">-는 관계로</div>
     <div class="ov-hero-sub">"由于……" · 公告/公文书面体</div>
   </div>
@@ -1419,10 +1426,11 @@ export const grammarCardsP24: GrammarCard[] = [
     connectionRules: [
       { type: 'rule', text: '动词现在用 -는 김에，动词过去用 -은/ㄴ 김에。', examples: '가는 김에 / 온 김에' },
       { type: 'rule', text: '只接动词，不接形容词、名词。', examples: '× 예쁜 김에 / × 학생 김에' },
-      { type: 'usage', text: '前后动作应"顺便相关"：出门→买东西、见面→聊事、打扫→擦窗。', examples: '외출하는 김에 편지도 부쳤어요' },
-      { type: 'usage', text: '常和 "도"（也）搭配，强调"顺便还……"。', examples: '가는 김에 우유도, 빵도 샀어요' },
+      { type: 'usage', text: '前后动作应"顺便相关"：出门→买东西、见面→聊事、打扫→擦窗。', examples: '외출하는 김에 편지도 부쳤어요（趁外出顺便寄了信。）' },
+      { type: 'usage', text: '常和 "도"（也）搭配，强调"顺便还……"。', examples: '가는 김에 우유도, 빵도 샀어요（去的路上顺便买了牛奶和面包。）' },
       { type: 'compare', text: '김에 vs 겸：김에 强调"顺便"；-(으)ㄹ 겸 强调"兼有两个目的"。', examples: '가는 김에 사 왔어요 / 운동할 겸 걸어요' },
-      { type: 'note', text: '"이왕 …는 김에" 语气更强，"既然都做了那就……"。', examples: '이왕 온 김에 커피 한잔해요' },
+      { type: 'note', text: '"이왕 …는 김에" 语气更强，"既然都做了那就……"。', examples: '이왕 온 김에 커피 한잔해요（既然来了，就喝杯咖啡吧。）' },
+      { type: 'compare', text: '和长得几乎一样的 -는 길에 分清：길에 是"在去/来的路上"，只能接 가다/오다 等移动动词，强调路途中；김에 是"借这个机会"，任何动作都能接。所以打扫这种非移动动作只能用 김에，不能用 길에。', examples: '청소하는 김에 창문도 닦았어요（○ 趁打扫顺便）／ 청소하는 길에（× 打扫不是移动，不能用 길에）' },
     ],
     cardExamples: [
       {
@@ -1542,7 +1550,7 @@ export const grammarCardsP24: GrammarCard[] = [
     compareLabel: '김에 vs 겸',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P18 · 第 7 课</div>
+    <div class="ov-hero-label">P24 · 第 7 课</div>
     <div class="ov-hero-title">-는 김에</div>
     <div class="ov-hero-sub">"趁着 · 顺便" · 高频口语</div>
   </div>
@@ -1584,7 +1592,7 @@ export const grammarCardsP24: GrammarCard[] = [
     lessonNumber: 8,
     title: '原因连接词总辨析',
     whatItDoes: '4大原因连接词的选择',
-    whatItDoesBody: '这一课把 P18 学到的所有"原因"型连接词汇总起来做区分。\n共 5 个高频候选：-기 때문에 / -아서 / -는 바람에 / -는 통에 / -는 탓에。\n通过语义、色彩、后半句限制三个维度选择正确的一个。',
+    whatItDoesBody: '这一课把本章学到的所有"原因"型连接词汇总起来做区分。\n共 5 个高频候选：-기 때문에 / -아서 / -는 바람에 / -는 통에 / -는 탓에。\n通过语义、色彩、后半句限制三个维度选择正确的一个。',
     structureNote: '五连接词接续总览：\n-기 때문에：动词+기 / 形容词+기 / 名词+이기\n-아/어서：动词形容词根据 ㅏㅗ/其他\n-는 바람에：只接动词现在冠形\n-는 통에：只接动词现在冠形\n-는/은 탓에：动词现在 -는 / 动词过去·形容词 -은/ㄴ / 名词 탓에',
     rulesNote: '选择判断树：\n1. 是不是客观陈述？→ -기 때문에 / -아서\n2. 结果是不是意外/突发？→ -는 바람에\n3. 是不是混乱嘈杂让主人公受苦？→ -는 통에\n4. 是不是负面 + 归咎？→ -는 탓에\n5. 是不是正面感恩？→ -는 덕분에',
     structures: [
@@ -1624,11 +1632,13 @@ export const grammarCardsP24: GrammarCard[] = [
     ],
     connectionRules: [
       { type: 'compare', text: '-기 때문에：客观陈述型，任何词类都可接，正负结果都行。', examples: '더워서 / 더웠기 때문에' },
-      { type: 'compare', text: '-아서：口语通用型，客观 + 语气轻。', examples: '비가 와서 못 갔어요' },
+      { type: 'compare', text: '-아서：口语通用型，客观 + 语气轻。', examples: '비가 와서 못 갔어요（因为下雨没能去。）' },
       { type: 'compare', text: '-는 바람에：意外 + 突发原因导致意外结果，后半必过去。', examples: '차가 고장 나는 바람에' },
-      { type: 'compare', text: '-는 통에：混乱嘈杂状况，主人公受苦或做不了事。', examples: '공사하는 통에 시끄러웠어요' },
+      { type: 'compare', text: '-는 통에：混乱嘈杂状况，主人公受苦或做不了事。', examples: '공사하는 통에 시끄러웠어요（施工闹得很吵。）' },
       { type: 'compare', text: '-는/은 탓에：负面归咎，后半必负面。正面用 덕분에。', examples: '늦잠을 잔 탓에' },
       { type: 'note', text: '选择技巧：客观陈述 → 때문에；意外突发 → 바람에；混乱嘈杂 → 통에；归咎负面 → 탓에；感恩正面 → 덕분에。', examples: '5 种搭配需按语义配对' },
+      { type: 'compare', text: '바람에 和 통에 都是"负面+后半过去"，最难分：바람에 是"一个突发单次事件"引出意外后果；통에 是"持续的混乱嘈杂状况"折腾得主人公受苦、做不成事。', examples: '지하철이 멈춘 바람에 지각했어요（地铁一下停了→迟到，单次突发）／ 아이들이 뛰는 통에 잠을 못 잤어요（孩子一直闹→睡不着，持续折腾）' },
+      { type: 'note', text: '这五个后半都不能接命令句或劝诱句（～하세요 / ～합시다）。中文"因为下雨，你带把伞吧"这种"原因+建议"，韩语要改用 -(으)니까（另课详学），不能用这里任何一个。', examples: '× 비가 와서 우산 가져가세요 / × 비가 오기 때문에 가져가세요 → ○ 비가 오니까 우산 가져가세요' },
     ],
     cardExamples: [
       {
@@ -1761,7 +1771,7 @@ export const grammarCardsP24: GrammarCard[] = [
     compareLabel: '五大原因连接词对比',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P18 · 第 8 课</div>
+    <div class="ov-hero-label">P24 · 第 8 课</div>
     <div class="ov-hero-title">原因连接词总辨析</div>
     <div class="ov-hero-sub">5 大 "因为" 的场景分工</div>
   </div>
@@ -1802,7 +1812,7 @@ export const grammarCardsP24: GrammarCard[] = [
 
   // ── 第9课：-길래 ─────────────────────────────────────────
   {
-    id: 'card-p24-l10',
+    id: 'card-p24-l09',
     partNumber: 24,
     lessonNumber: 9,
     title: '-길래',
@@ -1972,14 +1982,14 @@ export const grammarCardsP24: GrammarCard[] = [
 
   // ── 第10课：综合练习 ─────────────────────────────────────────
   {
-    id: 'card-p24-l09',
+    id: 'card-p24-l10',
     partNumber: 24,
     lessonNumber: 10,
-    title: '综合练习⑱',
-    whatItDoes: '第 18 部分总复习',
+    title: 'P24 综合练习',
+    whatItDoes: 'P24 第1～8课 总复习',
     whatItDoesBody: '完成这份练习，检验高级原因表达八大语法。\n覆盖：-는 바람에、-는 통에、-는 탓에、-는 덕분에、-는 나머지、-는 관계로、-는 김에、原因连接词总辨析。\n重点掌握"意外/嘈杂/归咎/感恩/极端/公告/顺便"六种因果关系。',
     isPractice: true,
-    structureNote: 'P18 语法分组：\n【意外突发】L01 -는 바람에\n【混乱受苦】L02 -는 통에\n【归咎负面】L03 -는/은 탓에\n【感恩正面】L04 -는 덕분에\n【情绪极端】L05 -는/은 나머지\n【公告文体】L06 -는 관계로\n【顺便借机】L07 -는 김에\n【总辨析】L08 五大原因连接词对比',
+    structureNote: 'P24 语法分组：\n【意外突发】L01 -는 바람에\n【混乱受苦】L02 -는 통에\n【归咎负面】L03 -는/은 탓에\n【感恩正面】L04 -는 덕분에\n【情绪极端】L05 -는/은 나머지\n【公告文体】L06 -는 관계로\n【顺便借机】L07 -는 김에\n【总辨析】L08 五大原因连接词对比',
     structures: [
       { ko: '지하철이 고장 나는 바람에 지각했어요', zh: '地铁故障导致迟到。', tokens: [{ text: '지하철이', role: 'subject' }, { text: '고장 나는 바람에', role: 'verb' }, { text: '지각했어요', role: 'verb' }] },
       { ko: '아이들이 뛰는 통에 잠을 못 잤어요', zh: '孩子们跑来跑去害我没睡着。', tokens: [{ text: '아이들이', role: 'subject' }, { text: '뛰는 통에', role: 'verb' }, { text: '잠을', role: 'object' }, { text: '못 잤어요', role: 'verb' }] },
@@ -1991,13 +2001,13 @@ export const grammarCardsP24: GrammarCard[] = [
       { ko: '옆집이 시끄러운 통에 집중이 안 됐어요', zh: '隔壁太吵没法集中。', tokens: [{ text: '옆집이', role: 'subject' }, { text: '시끄러운 통에', role: 'verb' }, { text: '집중이', role: 'subject' }, { text: '안 됐어요', role: 'verb' }] },
     ],
     connectionRules: [
-      { type: 'rule', text: '意外突发 → -는 바람에（后半过去+负面）', examples: '차가 고장 나는 바람에 늦었어요' },
-      { type: 'rule', text: '混乱嘈杂受苦 → -는 통에', examples: '아이가 우는 통에 못 잤어요' },
-      { type: 'rule', text: '归咎负面 → -는/은 탓에', examples: '늦잠을 잔 탓에 지각했어요' },
-      { type: 'rule', text: '感恩正面 → -는 덕분에', examples: '선생님 덕분에 합격했어요' },
-      { type: 'rule', text: '情绪极端书面 → -는/은 나머지', examples: '기쁜 나머지 눈물이 났어요' },
-      { type: 'rule', text: '公告公文 → -는 관계로 + -ㅂ니다', examples: '공사 관계로 임시 휴업합니다' },
-      { type: 'rule', text: '顺便借机 → -는 김에（只接动词，前后动作相关）', examples: '가는 김에 우유도 사 왔어요' },
+      { type: 'rule', text: '意外突发 → -는 바람에（后半过去+负面）', examples: '차가 고장 나는 바람에 늦었어요（因为车故障迟到了。）' },
+      { type: 'rule', text: '混乱嘈杂受苦 → -는 통에', examples: '아이가 우는 통에 못 잤어요（孩子哭闹得没睡成。）' },
+      { type: 'rule', text: '归咎负面 → -는/은 탓에', examples: '늦잠을 잔 탓에 지각했어요（因为睡懒觉迟到了。）' },
+      { type: 'rule', text: '感恩正面 → -는 덕분에', examples: '선생님 덕분에 합격했어요（多亏老师我才合格。）' },
+      { type: 'rule', text: '情绪极端书面 → -는/은 나머지', examples: '기쁜 나머지 눈물이 났어요（高兴得掉了眼泪。）' },
+      { type: 'rule', text: '公告公文 → -는 관계로 + -ㅂ니다', examples: '공사 관계로 임시 휴업합니다（因施工临时停业。）' },
+      { type: 'rule', text: '顺便借机 → -는 김에（只接动词，前后动作相关）', examples: '가는 김에 우유도 사 왔어요（去的路上顺便买了牛奶回来。）' },
       { type: 'compare', text: '语气梯度：客观(때문에/아서) → 意外(바람에) → 受苦(통에) → 归咎(탓에) → 感恩(덕분에) → 公告(관계로)', examples: '同一件事按语气不同选词' },
     ],
     cardExamples: [
@@ -2044,7 +2054,7 @@ export const grammarCardsP24: GrammarCard[] = [
     specialQuiz: {
       type: 'judge',
       title: '高级原因表达 · 综合测验',
-      body: '本课综合 P18 全部语法：-는 바람에 / -는 통에 / -는 탓에 / -는 덕분에 / -는 나머지 / -는 관계로 / -는 김에。',
+      body: '本课综合 P24 全部语法：-는 바람에 / -는 통에 / -는 탓에 / -는 덕분에 / -는 나머지 / -는 관계로 / -는 김에。',
       questions: [
         {
           prompt: '"车突然坏了导致迟到"最自然：',
@@ -2138,12 +2148,12 @@ export const grammarCardsP24: GrammarCard[] = [
     },
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P18 · 第 9 课</div>
+    <div class="ov-hero-label">P24 · 综合练习</div>
     <div class="ov-hero-title">高级原因表达 · 综合练习</div>
     <div class="ov-hero-sub">本 Part 全部 8 个语法点回顾</div>
   </div>
   <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">Part 18 学过的语法</div></div>
+    <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">本 Part 学过的语法</div></div>
     <div class="ov-block">
       <div style="font-size:15px;color:#241917;line-height:2">
         1. <b>-는 바람에</b>：意外突发 · 后半负面<br>

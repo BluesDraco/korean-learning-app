@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import { ChevronRight, BookOpen, NotebookPen, Music2, FileText } from 'lucide-react';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 
 interface CardProgress {
   label: string;
@@ -45,46 +47,50 @@ function pct(n: number, d: number): number {
  * 手机：日记图片卡首位 + 3 张行卡
  * 桌面：日记图片卡跨两列 + 词汇/字母/语法 三栏
  */
-export function HeroFourCards({ data, layout = 'mobile' }: { data: HeroProgressData; layout?: 'mobile' | 'desktop' }) {
+export function HeroFourCards({ data, layout = 'mobile', guestRedirect }: { data: HeroProgressData; layout?: 'mobile' | 'desktop'; guestRedirect?: string }) {
+  const { lang } = useLang();
+  // 游客：四张卡一律指向登录（与「未登录任何交互跳登录」意图一致）
+  const linkFor = (href: string) => guestRedirect || href;
   const diaryCard: CardProgress = {
-    label: '兔莉的韩语日记',
-    detail: data.diary.currentDay > 1 ? `继续 Day ${data.diary.currentDay} / 30` : '从 Day 1 开始',
-    href: '/diary',
+    label: t('hero4.diary.label', lang),
+    detail: data.diary.currentDay > 1 ? t('hero4.diary.continue', lang, { day: data.diary.currentDay }) : t('hero4.diary.start', lang),
+    href: linkFor('/diary'),
     Icon: NotebookPen,
     tone: 'pink',
     progress: pct(data.diary.currentDay - 1, data.diary.total),
-    progressText: `Day ${data.diary.currentDay - 1}/${data.diary.total}`,
+    // 显示「已完成天数 / 总天数」，新用户为 0/N（不再出现误导的「Day 0」）
+    progressText: `${data.diary.currentDay - 1}/${data.diary.total}`,
     imageUrl: data.diary.sceneImageUrl,
   };
 
   const vocabCard: CardProgress = {
-    label: '词汇',
-    detail: data.vocab.lastUnitTitle ? `继续：${data.vocab.lastUnitTitle}` : '从词库开始',
-    href: data.vocab.href || '/vocabulary',
+    label: t('hero4.vocab.label', lang),
+    detail: data.vocab.lastUnitTitle ? t('hero4.vocab.continue', lang, { title: data.vocab.lastUnitTitle }) : t('hero4.vocab.start', lang),
+    href: linkFor(data.vocab.href || '/vocabulary'),
     Icon: BookOpen,
     tone: 'purple',
     progress: data.vocab.total > 0 ? pct(data.vocab.mastered, data.vocab.total) : 0,
-    progressText: data.vocab.total > 0 ? `${data.vocab.mastered}/${data.vocab.total}` : '开始',
+    progressText: data.vocab.total > 0 ? `${data.vocab.mastered}/${data.vocab.total}` : t('hero4.begin', lang),
   };
 
   const phoneticCard: CardProgress = {
-    label: '韩文字母',
-    detail: data.phonetic.completed > 0 ? `已学 ${data.phonetic.completed} 步` : '从 40 音开始',
-    href: '/phonetics',
+    label: t('hero4.phonetic.label', lang),
+    detail: data.phonetic.completed > 0 ? t('hero4.phonetic.continue', lang, { n: data.phonetic.completed }) : t('hero4.phonetic.start', lang),
+    href: linkFor('/phonetics'),
     Icon: Music2,
     tone: 'mint',
     progress: pct(data.phonetic.completed, data.phonetic.total),
-    progressText: data.phonetic.total > 0 ? `${data.phonetic.completed}/${data.phonetic.total}` : '开始',
+    progressText: data.phonetic.total > 0 ? `${data.phonetic.completed}/${data.phonetic.total}` : t('hero4.begin', lang),
   };
 
   const grammarCard: CardProgress = {
-    label: '语法入门',
-    detail: data.grammar.completed > 0 ? `已学 ${data.grammar.completed} 张语法卡` : '从 P1 第 1 张开始',
-    href: '/grammar',
+    label: t('hero4.grammar.label', lang),
+    detail: data.grammar.completed > 0 ? t('hero4.grammar.continue', lang, { n: data.grammar.completed }) : t('hero4.grammar.start', lang),
+    href: linkFor('/grammar'),
     Icon: FileText,
     tone: 'peach',
     progress: pct(data.grammar.completed, data.grammar.total),
-    progressText: data.grammar.total > 0 ? `${data.grammar.completed}/${data.grammar.total}` : '开始',
+    progressText: data.grammar.total > 0 ? `${data.grammar.completed}/${data.grammar.total}` : t('hero4.begin', lang),
   };
 
   if (layout === 'desktop') {
@@ -118,6 +124,7 @@ export function HeroFourCards({ data, layout = 'mobile' }: { data: HeroProgressD
    桌面 日记 Row Card：图在左 1/3，文字在右
    ═══════════════════════════════════ */
 function DiaryRowCard({ card }: { card: CardProgress }) {
+  const { lang } = useLang();
   const { label, detail, href, tone, progress, progressText, imageUrl } = card;
   return (
     <Link href={href} style={{ textDecoration: 'none' }}>
@@ -152,7 +159,7 @@ function DiaryRowCard({ card }: { card: CardProgress }) {
         )}
         <div style={{ padding: '40px 44px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           <p style={{ fontSize: 13, fontWeight: 700, color: TONE_FG[tone], letterSpacing: '0.14em', textTransform: 'uppercase', margin: 0 }}>
-            tori&apos;s diary · 王牌
+            tori&apos;s diary · {t('hero4.kicker', lang)}
           </p>
           <h2 style={{ fontSize: 38, fontWeight: 800, color: 'var(--color-ink-1)', margin: '18px 0 18px', lineHeight: 1.3 }}>
             {label}
@@ -186,6 +193,7 @@ function DiaryRowCard({ card }: { card: CardProgress }) {
    日记 Feature Card：图片 + 文字 + 进度
    ═══════════════════════════════════ */
 function DiaryFeatureCard({ card }: { card: CardProgress }) {
+  const { lang } = useLang();
   const { label, detail, href, tone, progress, progressText, imageUrl } = card;
   return (
     <Link href={href} style={{ textDecoration: 'none' }}>
@@ -220,7 +228,7 @@ function DiaryFeatureCard({ card }: { card: CardProgress }) {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
             <div style={{ minWidth: 0 }}>
               <p style={{ fontSize: 10, fontWeight: 700, color: TONE_FG[tone], letterSpacing: '0.1em', textTransform: 'uppercase', margin: 0 }}>
-                tori&apos;s diary · 王牌
+                tori&apos;s diary · {t('hero4.kicker', lang)}
               </p>
               <h2 style={{ fontSize: 20, fontWeight: 800, color: 'var(--color-ink-1)', margin: '4px 0 4px', lineHeight: 1.2 }}>
                 {label}

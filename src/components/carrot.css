@@ -1,0 +1,322 @@
+/* ==========================================================================
+   全站悬浮 AI 助手（勇气胡萝卜）—— 自包含暖奶油卡样式
+   对齐品牌基准 auth.css 的 .auth-scope：oklch 暖奶油 token + 海拔阴影 + dark 覆盖。
+   关键：token 直接定义在每个 fixed 根元素都带的 .carrot-scope 上，
+   不依赖 diary.css / display:contents 继承 —— 规避原透明 bug。
+   ========================================================================== */
+.carrot-scope {
+  --ct-accent: oklch(74% 0.16 55);
+  --ct-accent-2: oklch(82% 0.14 70);
+  --ct-accent-deep: oklch(64% 0.16 45);
+  --ct-accent-soft: oklch(93% 0.05 60);
+  --ct-surface: oklch(99% 0.008 75);
+  --ct-surface-2: oklch(97% 0.014 72);
+  --ct-surface-3: oklch(94.5% 0.02 68);
+  --ct-border: oklch(89% 0.02 60);
+  --ct-ink-1: oklch(28% 0.02 55);
+  --ct-ink-2: oklch(46% 0.02 55);
+  --ct-ink-3: oklch(62% 0.02 55);
+  --ct-user-bubble: oklch(30% 0.02 55);
+  --ct-user-ink: oklch(97% 0.01 75);
+  --ct-mint: oklch(72% 0.09 165);
+  --ct-mint-soft: oklch(94% 0.04 165);
+  --ct-danger: oklch(58% 0.14 25);
+  --ct-danger-soft: oklch(94% 0.04 25);
+  --ct-serif: 'Fraunces', 'Noto Serif SC', Georgia, serif;
+  --ct-font: 'Pretendard', 'Noto Sans SC', system-ui, sans-serif;
+}
+
+[data-theme="dark"] .carrot-scope {
+  --ct-accent: oklch(78% 0.14 58);
+  --ct-accent-2: oklch(72% 0.13 48);
+  --ct-accent-deep: oklch(82% 0.13 62);
+  --ct-accent-soft: oklch(40% 0.06 55 / 0.4);
+  --ct-surface: oklch(24% 0.016 60);
+  --ct-surface-2: oklch(28% 0.018 60);
+  --ct-surface-3: oklch(32% 0.02 58);
+  --ct-border: oklch(94% 0.015 75 / 0.14);
+  --ct-ink-1: oklch(94% 0.015 75);
+  --ct-ink-2: oklch(76% 0.015 60);
+  --ct-ink-3: oklch(60% 0.014 60);
+  --ct-user-bubble: oklch(80% 0.12 58);
+  --ct-user-ink: oklch(20% 0.02 55);
+  --ct-mint: oklch(78% 0.1 165);
+  --ct-mint-soft: oklch(32% 0.05 165 / 0.4);
+  --ct-danger: oklch(74% 0.13 25);
+  --ct-danger-soft: oklch(36% 0.07 25 / 0.4);
+}
+
+/* ── FAB ─────────────────────────────────────────── */
+.carrot-fab {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--ct-accent-deep), var(--ct-accent-2));
+  border: none;
+  box-shadow:
+    inset 0 1px 0 oklch(100% 0 0 / 0.35),
+    0 8px 22px -4px oklch(64% 0.16 45 / 0.5),
+    0 2px 6px oklch(64% 0.16 45 / 0.3);
+  color: #fff; font-size: 28px;
+  cursor: grab; touch-action: none;
+  display: flex; align-items: center; justify-content: center;
+  user-select: none; -webkit-user-select: none;
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+.carrot-fab:hover { transform: translateY(-2px) scale(1.04); }
+.carrot-fab:active { cursor: grabbing; transform: scale(0.96); }
+
+.carrot-restore-dot {
+  position: fixed; right: 8px;
+  bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+  z-index: 249; width: 28px; height: 28px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--ct-accent-deep), var(--ct-accent-2));
+  opacity: 0.5; border: none; cursor: pointer;
+  box-shadow: 0 2px 8px oklch(64% 0.16 45 / 0.35);
+  transition: opacity 0.2s;
+}
+.carrot-restore-dot:hover { opacity: 0.9; }
+
+/* ── 面板 ─────────────────────────────────────────── */
+.carrot-panel {
+  z-index: 250;
+  width: min(420px, calc(100vw - 32px));
+  height: min(600px, calc(100vh - 120px));
+  background: var(--ct-surface);
+  border: 1px solid var(--ct-border);
+  border-radius: 24px;
+  box-shadow:
+    0 1px 2px oklch(50% 0.08 40 / 0.06),
+    0 24px 60px -12px oklch(50% 0.1 40 / 0.28);
+  display: flex; flex-direction: column; overflow: hidden;
+  font-family: var(--ct-font);
+  animation: carrot-panel-in 0.22s cubic-bezier(0.2, 0.9, 0.3, 1) backwards;
+}
+[data-theme="dark"] .carrot-panel {
+  box-shadow: 0 24px 70px -16px oklch(0% 0 0 / 0.6);
+}
+@keyframes carrot-panel-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+
+.carrot-header {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--ct-border);
+  background: linear-gradient(135deg, var(--ct-accent-soft), var(--ct-surface));
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none;
+}
+.carrot-header-brand { display: flex; align-items: center; gap: 10px; }
+.carrot-header-badge {
+  width: 34px; height: 34px; border-radius: 11px; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--ct-accent-deep), var(--ct-accent-2));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 19px;
+  box-shadow: inset 0 1px 0 oklch(100% 0 0 / 0.3), 0 4px 10px -2px oklch(64% 0.16 45 / 0.4);
+}
+.carrot-header-name {
+  font-family: var(--ct-serif);
+  font-size: 15px; font-weight: 700; color: var(--ct-ink-1); margin: 0;
+  letter-spacing: -0.01em;
+}
+.carrot-header-tag { font-size: 11px; color: var(--ct-ink-3); margin: 1px 0 0; }
+.carrot-header-btn {
+  width: 32px; height: 32px; border-radius: 10px;
+  background: transparent; border: none; color: var(--ct-ink-2); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s;
+}
+.carrot-header-btn:hover { background: var(--ct-surface-3); }
+
+/* ── 模式 tab 条 ─────────────────────────────────── */
+.carrot-tabs {
+  display: flex; gap: 4px; padding: 8px 12px;
+  border-bottom: 1px solid var(--ct-border);
+  background: var(--ct-surface-2);
+}
+.carrot-tab {
+  flex: 1; padding: 7px 4px; border-radius: 10px;
+  background: transparent; border: 1px solid transparent;
+  color: var(--ct-ink-2); font-size: 12px; font-weight: 600;
+  font-family: var(--ct-font);
+  cursor: pointer; transition: all 0.15s;
+  display: flex; align-items: center; justify-content: center; gap: 4px;
+  white-space: nowrap;
+}
+.carrot-tab:hover { background: var(--ct-surface-3); }
+.carrot-tab.active {
+  background: var(--ct-surface);
+  border-color: var(--ct-accent);
+  color: var(--ct-accent-deep);
+  box-shadow: 0 1px 4px oklch(64% 0.16 45 / 0.14);
+}
+
+/* ── 对话区 ───────────────────────────────────────── */
+.carrot-scroll {
+  flex: 1; overflow-y: auto; padding: 16px;
+  display: flex; flex-direction: column; gap: 10px;
+  background: var(--ct-surface);
+}
+.carrot-empty { text-align: center; padding: 24px 8px; }
+.carrot-empty-emoji { font-size: 34px; }
+.carrot-empty-text {
+  font-size: 13px; color: var(--ct-ink-2); margin: 12px 0; line-height: 1.7; padding: 0 8px;
+}
+.carrot-empty-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 7px; margin-top: 14px; }
+.carrot-empty-chip {
+  padding: 7px 13px; font-size: 13px; color: var(--ct-ink-1);
+  background: var(--ct-surface-2); border: 1px solid var(--ct-border);
+  border-radius: 999px; cursor: pointer;
+  font-family: var(--ct-font); transition: all 0.15s;
+}
+.carrot-empty-chip:hover { border-color: var(--ct-accent); background: var(--ct-accent-soft); color: var(--ct-accent); }
+
+.carrot-bubble {
+  max-width: 86%; padding: 9px 13px; border-radius: 15px;
+  font-size: 13.5px; line-height: 1.65; white-space: pre-wrap;
+  word-break: break-word;
+}
+.carrot-bubble.user {
+  align-self: flex-end;
+  background: var(--ct-user-bubble); color: var(--ct-user-ink);
+  border-bottom-right-radius: 5px;
+}
+.carrot-bubble.tori {
+  align-self: flex-start;
+  background: var(--ct-surface-2); color: var(--ct-ink-1);
+  border: 1px solid var(--ct-border); border-bottom-left-radius: 5px;
+}
+.carrot-loading {
+  align-self: flex-start; padding: 9px 13px;
+  background: var(--ct-surface-2); border: 1px solid var(--ct-border);
+  border-radius: 15px; color: var(--ct-ink-3); font-size: 12.5px;
+  display: flex; align-items: center; gap: 6px;
+}
+.carrot-speak-btn {
+  background: transparent; border: none; cursor: pointer; padding: 2px 4px;
+  color: var(--color-pink-base); display: inline-flex; align-items: center;
+  vertical-align: middle; border-radius: 4px;
+}
+
+/* tori 消息 + 操作条 */
+.carrot-msg-tori { align-self: flex-start; max-width: 86%; display: flex; flex-direction: column; gap: 3px; }
+.carrot-msg-tori .carrot-bubble { max-width: 100%; }
+.carrot-msg-actions { display: flex; gap: 4px; padding-left: 4px; }
+.carrot-msg-action {
+  background: transparent; border: none; cursor: pointer;
+  color: var(--ct-ink-3); padding: 3px; border-radius: 6px;
+  display: inline-flex; align-items: center; transition: all 0.15s;
+}
+.carrot-msg-action:hover { color: var(--ct-accent-deep); background: var(--ct-surface-3); }
+
+.carrot-stop { background: var(--ct-danger) !important; box-shadow: none !important; }
+
+/* 查词卡：加入生词本 */
+.carrot-card-fav {
+  margin-left: auto; display: inline-flex; align-items: center; gap: 3px;
+  padding: 4px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 600;
+  background: var(--ct-accent-soft); color: var(--ct-accent-deep);
+  border: 1px solid var(--ct-accent); cursor: pointer; font-family: var(--ct-font);
+  transition: all 0.15s;
+}
+.carrot-card-fav:hover { background: var(--ct-accent); color: #fff; }
+
+/* 划词查词气泡 */
+.carrot-sel-chip {
+  transform: translate(-50%, -100%);
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 7px 13px; border-radius: 999px;
+  font-size: 12.5px; font-weight: 600; font-family: var(--ct-font);
+  background: linear-gradient(135deg, var(--ct-accent-deep), var(--ct-accent-2));
+  color: #fff; border: none; cursor: pointer; white-space: nowrap;
+  box-shadow: 0 6px 18px -4px oklch(64% 0.16 45 / 0.55);
+  animation: carrot-panel-in 0.14s ease backwards;
+}
+.carrot-sel-chip:active { transform: translate(-50%, -100%) scale(0.94); }
+
+/* ── 结构化卡片 ───────────────────────────────────── */
+.carrot-card {
+  align-self: stretch; max-width: 100%;
+  background: var(--ct-surface-2); border: 1px solid var(--ct-border);
+  border-radius: 15px; padding: 14px; border-bottom-left-radius: 5px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.carrot-card-head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.carrot-card-ko {
+  font-size: 20px; font-weight: 700; color: var(--ct-ink-1);
+  font-family: var(--ct-serif); letter-spacing: -0.01em;
+}
+.carrot-card-rom { font-size: 12.5px; color: var(--ct-ink-3); }
+.carrot-card-sec-label {
+  font-size: 10.5px; font-weight: 700; color: var(--ct-ink-3);
+  text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px;
+}
+.carrot-card-meaning-row {
+  display: flex; align-items: baseline; gap: 8px; padding: 3px 0;
+}
+.carrot-pos-tag {
+  flex-shrink: 0; font-size: 10.5px; padding: 1px 7px; border-radius: 999px;
+  background: var(--ct-accent-soft); color: var(--ct-accent-deep); font-weight: 600;
+}
+.carrot-card-meaning-txt { font-size: 13.5px; color: var(--ct-ink-1); }
+.carrot-card-note {
+  font-size: 12px; color: var(--ct-ink-2); background: var(--ct-mint-soft);
+  border-radius: 9px; padding: 7px 10px; line-height: 1.5;
+}
+.carrot-eg {
+  padding: 8px 10px; background: var(--ct-surface); border: 1px solid var(--ct-border);
+  border-radius: 10px; display: flex; flex-direction: column; gap: 3px;
+}
+.carrot-eg-ko { font-size: 13.5px; color: var(--ct-ink-1); display: flex; align-items: baseline; gap: 4px; }
+.carrot-eg-zh { font-size: 12px; color: var(--ct-ink-3); }
+.carrot-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 10px; border-radius: 9px; font-size: 12.5px;
+  background: var(--ct-surface); border: 1px solid var(--ct-border);
+}
+.carrot-chip .k { color: var(--ct-accent-deep); font-weight: 700; }
+.carrot-chip .r { color: var(--ct-ink-2); }
+.carrot-chip-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
+.carrot-skeleton {
+  display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+}
+.carrot-skeleton-part {
+  padding: 5px 11px; border-radius: 9px; font-size: 14px; font-weight: 600;
+  background: var(--ct-accent-soft); color: var(--ct-accent-deep);
+}
+.carrot-pitfall {
+  font-size: 12.5px; color: var(--ct-danger); background: var(--ct-danger-soft);
+  border-radius: 9px; padding: 7px 10px; line-height: 1.5;
+  display: flex; gap: 6px;
+}
+.carrot-pitfall::before { content: '!'; flex-shrink: 0; font-weight: 800; }
+.carrot-card-tr {
+  font-size: 13.5px; color: var(--ct-ink-1); font-weight: 600;
+  padding: 8px 10px; background: var(--ct-mint-soft); border-radius: 9px;
+}
+
+/* ── 输入区 ───────────────────────────────────────── */
+.carrot-input-bar {
+  padding: 12px 14px; border-top: 1px solid var(--ct-border);
+  display: flex; gap: 8px; background: var(--ct-surface-2);
+}
+.carrot-input {
+  flex: 1; padding: 9px 14px; font-size: 13.5px;
+  background: var(--ct-surface); border: 1px solid var(--ct-border);
+  border-radius: 999px; outline: none; color: var(--ct-ink-1);
+  font-family: var(--ct-font); transition: border-color 0.15s;
+}
+.carrot-input:focus { border-color: var(--ct-accent); }
+.carrot-input::placeholder { color: var(--ct-ink-3); }
+.carrot-send {
+  width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+  border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, var(--ct-accent-deep), var(--ct-accent-2));
+  color: #fff; transition: opacity 0.15s, transform 0.1s;
+  box-shadow: 0 4px 12px -2px oklch(64% 0.16 45 / 0.4);
+}
+.carrot-send:active { transform: scale(0.92); }
+.carrot-send:disabled {
+  background: var(--ct-surface-3); color: var(--ct-ink-3);
+  cursor: not-allowed; box-shadow: none;
+}

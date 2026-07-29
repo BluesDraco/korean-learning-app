@@ -1,0 +1,126 @@
+/* ==========================================================================
+   내 편지함 · 私信/消息页视觉
+   对齐品牌基准（暖奶油英雄 + 悬浮卡 + 海拔阴影 + 衬线标题），走全局 --color-* token。
+   逻辑不变，只做视觉升级。
+   ========================================================================== */
+
+.msg-wrap { padding: 4px 0 44px; max-width: 32rem; }  /* 移动：约 max-w-lg */
+
+.msg-back {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 13px; color: var(--au-ink-2); background: none; border: none;
+  cursor: pointer; margin-bottom: 14px; padding: 0;
+}
+.msg-back:hover { color: var(--au-ink-1); }
+
+/* ── 英雄区：暖奶油渐变 + Tori + 未读徽章 ── */
+.msg-hero {
+  position: relative; overflow: hidden;
+  background: linear-gradient(150deg, var(--au-pink-soft), var(--au-purple-soft) 60%, var(--au-mint-soft));
+  border: 1px solid var(--au-line);
+  border-radius: var(--radius-xl, 24px);
+  padding: 26px 22px 22px;
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+  margin-bottom: 20px;
+}
+.msg-hero::after {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(circle at 82% 12%, rgba(255,255,255,.55), transparent 42%);
+  pointer-events: none;
+}
+.msg-hero-tori {
+  position: relative; display: inline-block; margin: 0 auto 10px;
+}
+.msg-hero-tori img { display: block; width: 76px; height: 76px; object-fit: contain; }
+.msg-unread-dot {
+  position: absolute; top: -2px; right: -6px; min-width: 26px; height: 26px; padding: 0 7px;
+  border-radius: 999px; background: var(--au-pink-deep); color: #fff;
+  font-size: 12px; font-weight: 800; display: flex; align-items: center; justify-content: center;
+  border: 2px solid var(--au-surface); box-shadow: var(--shadow-sm);
+}
+.msg-hero-title {
+  font-family: var(--font-serif, 'Fraunces', 'Noto Serif SC', Georgia, serif);
+  font-size: 26px; font-weight: 600; color: var(--au-ink-1); margin: 0 0 4px; letter-spacing: -.01em;
+}
+.msg-hero-sub { font-size: 13px; color: var(--au-ink-3); margin: 0; }
+
+/* stats 胶囊 */
+.msg-stats { display: flex; gap: 8px; justify-content: center; margin-top: 14px; position: relative; z-index: 1; }
+.msg-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 999px;
+  background: var(--au-surface); border: 1px solid var(--au-line); color: var(--au-ink-3);
+}
+.msg-chip.accent { background: var(--au-pink-soft); border-color: transparent; color: var(--au-pink-deep); font-weight: 700; }
+
+/* ── 消息卡列表 ── */
+.msg-list { display: flex; flex-direction: column; gap: 11px; }
+
+.msg-card {
+  background: var(--au-surface); border: 1px solid var(--au-line);
+  border-radius: var(--radius-lg, 18px); overflow: hidden;
+  box-shadow: var(--shadow-xs, 0 1px 2px rgba(90,60,45,.04));
+  transition: box-shadow var(--dur-fast, .2s) var(--ease-soft, ease), border-color var(--dur-fast, .2s) var(--ease-soft, ease);
+}
+.msg-card:hover { box-shadow: var(--shadow-sm); }
+.msg-card.unread { border-color: var(--color-pink-pale, var(--au-pink-soft)); }
+
+.msg-card-btn {
+  width: 100%; display: flex; align-items: center; gap: 13px; padding: 15px 16px;
+  background: none; border: none; text-align: left; cursor: pointer;
+}
+
+/* 类型图标 + 色环 */
+.msg-ic-wrap { position: relative; flex-shrink: 0; width: 42px; height: 42px; }
+.msg-ic {
+  width: 42px; height: 42px; border-radius: 13px;
+  display: flex; align-items: center; justify-content: center;
+}
+.msg-ic-dot {
+  position: absolute; top: -2px; right: -2px; width: 11px; height: 11px; border-radius: 50%;
+  background: var(--au-pink-deep); border: 2px solid var(--au-surface);
+}
+
+.msg-body { flex: 1; min-width: 0; }
+.msg-titleline { display: flex; align-items: center; gap: 8px; }
+.msg-title { font-size: 14.5px; color: var(--au-ink-1); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.msg-title.strong { font-weight: 700; }
+.msg-type-tag { flex-shrink: 0; font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 6px; }
+.msg-time { font-size: 11.5px; color: var(--au-ink-4); margin-top: 3px; }
+
+.msg-chevron { flex-shrink: 0; color: var(--au-ink-4); transition: transform var(--dur-fast, .2s) var(--ease-soft, ease); }
+.msg-chevron.open { transform: rotate(180deg); }
+
+.msg-expand { padding: 0 16px 16px 71px; border-top: 1px solid var(--au-line); }
+.msg-expand-inner { padding-top: 12px; font-size: 13.5px; color: var(--au-ink-2); line-height: 1.7; white-space: pre-wrap; }
+
+/* ── 空态 / 登录态 ── */
+.msg-empty { text-align: center; padding: 56px 20px; }
+.msg-empty-ic {
+  width: 72px; height: 72px; border-radius: 22px; margin: 0 auto 16px;
+  background: var(--au-surface-2); color: var(--au-ink-4);
+  display: flex; align-items: center; justify-content: center;
+}
+.msg-empty-t { font-size: 16px; font-weight: 700; color: var(--au-ink-1); margin: 0 0 6px; }
+.msg-empty-d { font-size: 13px; color: var(--au-ink-3); margin: 0; line-height: 1.6; }
+.msg-login-btn {
+  display: inline-block; margin-top: 18px; padding: 10px 26px; border-radius: 999px;
+  background: var(--au-pink); color: #fff; font-size: 14px; font-weight: 700;
+  border: none; cursor: pointer; text-decoration: none; box-shadow: var(--shadow-sm);
+}
+
+/* 桌面：铺满主区，消息列表铺成多列，不再一条窄栏浪费两侧 */
+@media (min-width: 1024px) {
+  .msg-wrap { max-width: 1200px; width: 100%; margin-left: auto; margin-right: auto; }
+  .msg-hero { padding: 34px 34px 28px; }
+  .msg-hero-title { font-size: 32px; }
+  .msg-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    align-items: start;
+  }
+  /* 展开中的消息占满整行，正文有足够宽度阅读 */
+  .msg-card.expanded { grid-column: 1 / -1; }
+}

@@ -61,6 +61,8 @@ export const grammarCardsP25: GrammarCard[] = [
       { type: 'note', text: '하다 是主动词，可以按敬语和时态自由变化', examples: '한다 / 해요 / 했어요 / 하셨어요' },
       { type: 'compare', text: '和 直接引用 差别：直接引语保留原话敬语；间接引语把敬语脱下', examples: '"가요" 하고 말했어요 → 간다고 했어요' },
       { type: 'usage', text: '常用简写形态：-대（-다고 해 → -대）· -는대 · -래', examples: '간대 / 먹는대 / 학생이래' },
+      { type: 'note', text: '中文没有的关键动作："脱敬语"。原话不管多客气（가요 / 갑니다 / 가십니다），转述时动词一律回到平语 한다체（간다고），礼貌只体现在句尾的 하다 上。中文"他说\'我去\'"原样保留，韩语必须先脱掉再重穿。', examples: '가요 → 간다고 해요 / 갑니다 → 간다고 하셨어요' },
+      { type: 'note', text: '例外：있다 / 없다 归形容词类接续，用 -다고，不加 -는。这是陈述现在时最常踩的例外。', examples: '재미있다 → 재미있다고 / 재미없다 → 재미없다고 / 맛있다 → 맛있다고' },
     ],
     cardExamples: [
       {
@@ -110,6 +112,8 @@ export const grammarCardsP25: GrammarCard[] = [
       { wrong: '언니가 밥을 먹다고 했어요.', correct: '언니가 밥을 먹는다고 했어요.', note: '动词现在时有收音 → -는다고，不能直接 -다고。' },
       { wrong: '오늘 날씨가 춥는다고 해요.', correct: '오늘 날씨가 춥다고 해요.', note: '形容词不加 -는/-ㄴ，直接 -다고。' },
       { wrong: '저 사람이 학생다고 해요.', correct: '저 사람이 학생이라고 해요.', note: '名词用 -(이)라고 하다，不用 -다고。' },
+      { wrong: '민수가 학교에 가요고 했어요.', correct: '민수가 학교에 간다고 했어요.', note: '不能把原话的敬语 -요 塞进引用。转述时要先脱敬语回到平语 → 간다고。' },
+      { wrong: '언니가 케이크를 만들었는다고 했어요.', correct: '언니가 케이크를 만들었다고 했어요.', note: '过去时 -았/었 后直接 -다고，不再加 -는。' },
     ],
     quickTable: {
       title: '陈述句间接引用总表',
@@ -181,7 +185,7 @@ export const grammarCardsP25: GrammarCard[] = [
     compareLabel: '直接引用 vs 间接引用',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P19 · 第 1 课</div>
+    <div class="ov-hero-label">P25 · 第 1 课</div>
     <div class="ov-hero-title">陈述句间接引用</div>
     <div class="ov-hero-sub">"（某人）说……" 的四种基本形态</div>
   </div>
@@ -278,6 +282,8 @@ export const grammarCardsP25: GrammarCard[] = [
       { type: 'note', text: '书面正规版：动词 -느냐고，形容词 -(으)냐고', examples: '먹느냐고 / 예쁘냐고 / 좋으냐고' },
       { type: 'compare', text: '-냐고 vs -다고：-냐고 是问句，-다고 是陈述句', examples: '오냐고 물었어요（问） / 온다고 했어요（陈述）' },
       { type: 'example', text: '简写 -냬：언제 오냬? / 왜 안 먹었냬?' },
+      { type: 'note', text: '中文没有的坑：转述问题时，中文的"吗/呢"在韩语里彻底消失。是非问（去不去）和特指问（去哪儿）都只靠 -냐고 这个结尾承担疑问语气，句中不再有任何"吗"的对应词。', examples: '가냐고 물었어요（问去不去）/ 어디 가냐고 물었어요（问去哪儿）' },
+      { type: 'compare', text: '别和 -는지 混：-냐고 하다 是"转述某人问了这个问题"；-는지 알다/모르다 是"（不）知道某事如何"（后面章节详学）。', examples: '뭐 하냐고 물었어요（他问你在干嘛）/ 뭐 하는지 몰라요（不知道他在干嘛）' },
     ],
     cardExamples: [
       {
@@ -388,7 +394,7 @@ export const grammarCardsP25: GrammarCard[] = [
     compareLabel: '-다고 vs -냐고',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P19 · 第 2 课</div>
+    <div class="ov-hero-label">P25 · 第 2 课</div>
     <div class="ov-hero-title">-냐고 하다</div>
     <div class="ov-hero-sub">"（某人）问……" · 疑问句间接引用</div>
   </div>
@@ -477,6 +483,7 @@ export const grammarCardsP25: GrammarCard[] = [
       { type: 'note', text: '简写 -쟤：같이 가쟤! / 놀러 가쟤!', examples: '민수가 같이 밥 먹쟤' },
       { type: 'compare', text: '-자고 vs -(으)라고：-자고 是共动"一起"；-(으)라고 是命令"你去做"', examples: '같이 가자고（一起）vs 가라고（你去）' },
       { type: 'example', text: '친구가 같이 커피 마시자고 했어요 / 오늘은 놀지 말자고 해요' },
+      { type: 'note', text: '原话不管用哪种"提议"说法，转述时全部收拢成 -자고。像 하자 / 할까요? / 합시다 / 할래요? 这些不同的原句，间接引用都变同一个 -자고，学习者不用记原句是哪种。', examples: '갈까요? → 가자고 / 갑시다 → 가자고 / 갈래요? → 가자고' },
     ],
     cardExamples: [
       {
@@ -593,7 +600,7 @@ export const grammarCardsP25: GrammarCard[] = [
     compareLabel: '-자고 vs -(으)라고',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P19 · 第 3 课</div>
+    <div class="ov-hero-label">P25 · 第 3 课</div>
     <div class="ov-hero-title">-자고 하다</div>
     <div class="ov-hero-sub">"（某人）提议一起……" · 共动句</div>
   </div>
@@ -690,6 +697,7 @@ export const grammarCardsP25: GrammarCard[] = [
       { type: 'note', text: '简写：-래 (-라고 해 → -래)', examples: '빨리 오래! / 숙제 하래!' },
       { type: 'compare', text: '-(으)라고 vs -자고：命令(听话人做) vs 共动(一起做)', examples: '가라고（你去）vs 가자고（一起去）' },
       { type: 'example', text: '엄마가 빨리 오라고 하셨어요 / 조용히 하라고 했어요' },
+      { type: 'note', text: '负迁移警告：中文的"让/叫"有两种意思，只有"吩咐某人做某动作"这一种对应 -(으)라고。表"使／致使"（这首歌让我开心）的"让"不能用 -(으)라고，那要用 -게 하다／-게 만들다（后面章节详学）。', examples: '엄마가 청소하라고 했어요（吩咐→라고）/ 이 노래가 나를 기쁘게 해요（致使→게 하다）' },
     ],
     cardExamples: [
       {
@@ -712,7 +720,7 @@ export const grammarCardsP25: GrammarCard[] = [
         ],
         zh: '老师叫（我们）读书。',
         swapRole: 'verb',
-        swapWords: ['읽으라고', '풀으라고', '외우라고'],
+        swapWords: ['읽으라고', '배우라고', '외우라고'],
       },
       {
         wordBlocks: [
@@ -800,7 +808,7 @@ export const grammarCardsP25: GrammarCard[] = [
     compareLabel: '-(으)라고 vs -자고',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P19 · 第 4 课</div>
+    <div class="ov-hero-label">P25 · 第 4 课</div>
     <div class="ov-hero-title">-(으)라고 하다</div>
     <div class="ov-hero-sub">"（某人）叫别人做……" · 命令句</div>
   </div>
@@ -881,10 +889,12 @@ export const grammarCardsP25: GrammarCard[] = [
       { type: 'rule', text: '动词现在 → -는다고/ㄴ다고 해서 / -는다길래/ㄴ다길래', examples: '먹는다고 해서 / 간다길래' },
       { type: 'rule', text: '形容词 → -다고 해서 / -다길래', examples: '유명하다고 해서 / 춥다길래' },
       { type: 'rule', text: '名词 → -(이)라고 해서 / -(이)라길래', examples: '학생이라고 해서 / 의사라길래' },
-      { type: 'usage', text: '-는다길래 是口语，带一丝"我因为听了才做"的私人感', examples: '맛있다길래 사 봤어요' },
+      { type: 'usage', text: '-는다길래 是口语，带一丝"我因为听了才做"的私人感', examples: '맛있다길래 사 봤어요（听说好吃就买来尝了尝。）' },
       { type: 'note', text: '-는다길래 前后主语要不同', examples: '민수가 온다길래 (내가) 기다렸어요 ✓ / (내가) 간다길래 갔어요 ✗' },
       { type: 'compare', text: '-다고 해서 vs -기 때문에：前者是"因听说"，后者是"直接原因"', examples: '온다고 해서 기다렸어요 / 왔기 때문에 기다렸어요' },
       { type: 'example', text: '뉴스에서 비 온다고 해서 우산 챙겼어요 / 맛있다길래 시켰어요' },
+      { type: 'compare', text: '-길래 是口语；同义的 -기에 是书面/正式说法，意思一样', examples: '비가 온다길래 우산을 챙겼어요（口语）/ 비가 온다기에 우산을 챙겼다（书面）' },
+      { type: 'note', text: '-다고 (해서) 还有一个高频用法：否定「只凭这个理由」，译作"并不是……就……"，不是转述', examples: '비싸다고 다 좋은 것은 아니에요.（并不是贵就都好。）' },
     ],
     cardExamples: [
       {
@@ -1009,7 +1019,7 @@ export const grammarCardsP25: GrammarCard[] = [
     compareLabel: '-다고 해서 vs -는다길래',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P19 · 第 5 课</div>
+    <div class="ov-hero-label">P25 · 第 5 课</div>
     <div class="ov-hero-title">-다고 해서 / -는다길래</div>
     <div class="ov-hero-sub">"听说……所以……"</div>
   </div>
@@ -1097,9 +1107,11 @@ export const grammarCardsP25: GrammarCard[] = [
       { type: 'rule', text: '形容词 → -다면서?', examples: '예쁘다면서? / 좋다면서?' },
       { type: 'rule', text: '名词 → -(이)라면서?', examples: '학생이라면서? / 의사라면서?' },
       { type: 'usage', text: '敬语加 -요：-다면서요?', examples: '결혼한다면서요? / 예쁘다면서요?' },
-      { type: 'usage', text: '带确认+惊喜/意外的复合语气', examples: '合격했다면서요? / 다음 주에 이사한다면서요?' },
+      { type: 'usage', text: '带确认+惊喜/意外的复合语气', examples: '합격했다면서요? / 다음 주에 이사한다면서요?' },
       { type: 'note', text: '简写：-다며? / -다며요?', examples: '민수 결혼한다며? / 예쁘다며?' },
       { type: 'compare', text: '-다면서? vs -잖아요：前者求证；后者提醒对方已知信息', examples: '결혼한다면서요?（问） / 결혼하잖아요（提醒）' },
+      { type: 'usage', text: '不只用于喜讯：常带"责备/埋怨"语气，追问对方言行不一，译作"你不是说……吗？"', examples: '온다면서 왜 안 왔어요?（你不是说来吗，怎么没来？）/ 다이어트한다면서 그걸 먹어요?' },
+      { type: 'compare', text: '-다면서? 是直接向"当事人本人"当面求证；单纯转述别人的话用 -다고 들었어요（我听说）', examples: '결혼한다면서요?（当面问本人） / 결혼한다고 들었어요（我听说他要结婚，非当面）' },
     ],
     cardExamples: [
       {
@@ -1207,7 +1219,7 @@ export const grammarCardsP25: GrammarCard[] = [
     compareLabel: '-다면서? vs -잖아요',
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P19 · 第 6 课</div>
+    <div class="ov-hero-label">P25 · 第 6 课</div>
     <div class="ov-hero-title">-다면서? / -다면서요?</div>
     <div class="ov-hero-sub">"听说是……对吗？" · 求证型问句</div>
   </div>
@@ -1288,8 +1300,10 @@ export const grammarCardsP25: GrammarCard[] = [
       { type: 'rule', text: '名词：有받침 → -이라니 / 无받침 → -라니', examples: '학생이라니, 의사라니, 친구라니' },
       { type: 'usage', text: '语气核心是「惊讶/感叹/不敢相信」，不是转述', examples: '벌써 여름이라니! → 居然已经夏天了！' },
       { type: 'usage', text: '-다니요 是敬语形式，用于对长辈或对方表达惊讶', examples: '어머, 결혼하신다니요?' },
-      { type: 'note', text: '句末可接感叹词或形容词表达情绪：놀랐어요 / 믿을 수 없어요 / 대단해요', examples: '이렇게 잘하다니 대단해요.' },
+      { type: 'note', text: '句末可接感叹词或形容词表达情绪：놀랐어요 / 믿을 수 없어요 / 대단해요', examples: '이렇게 잘하다니 대단해요.（竟然这么厉害，真了不起。）' },
       { type: 'compare', text: '-다니 vs -다고요? → -다니 表惊讶，-다고요? 表反问/再确认', examples: '갔다니? 惊讶 / 갔다고요? 你说他走了？' },
+      { type: 'compare', text: '易混警报：-다니（惊讶）和 -다니까（重申"我都说了……"）只差一个 까，意思完全不同', examples: '벌써 갔다니!（居然已经走了！惊讶）/ 벌써 갔다니까!（我都说了他已经走了！不耐烦地重申）' },
+      { type: 'note', text: '-다니 可单独成句当感叹，后面不用接 하다 或其他动词', examples: '벌써 여름이라니!（居然已经夏天了！）— 句子到此结束也成立' },
     ],
     cardExamples: [
       {
@@ -1475,8 +1489,10 @@ export const grammarCardsP25: GrammarCard[] = [
       { type: 'rule', text: '形容词：-다는', examples: '좋다는 소문, 예쁘다는 이야기' },
       { type: 'rule', text: '名词：有받침 → -이라는 / 无받침 → -라는', examples: '학생이라는 사실, 의사라는 소문' },
       { type: 'usage', text: '本质是 -다고 하는 的省略，用来把间接引用变成定语', examples: '결혼한다고 하는 소식 = 결혼한다는 소식' },
-      { type: 'usage', text: '后接名词高频：소식/이야기/사실/소문/생각/말/뜻/의미', examples: '한국어가 어렵다는 생각이 들었어요.' },
+      { type: 'usage', text: '后接名词高频：소식/이야기/사실/소문/생각/말/뜻/의미', examples: '한국어가 어렵다는 생각이 들었어요.（我觉得韩语很难。）' },
       { type: 'note', text: '否定形式：-지 않는다는 / -지 않다는', examples: '먹지 않는다는 소문, 좋지 않다는 이야기' },
+      { type: 'compare', text: '别拿中文"的"硬套成普通定语 -는：修饰"消息/传闻/事实"这类"话的内容"名词时，必须用引用型 -다는', examples: '결혼한다는 소식 ✓（要结婚的消息）/ 결혼하는 소식 ✗（错，결혼하는 只能修饰人或场合）' },
+      { type: 'note', text: '口语里 -다는 常缩略成 -단', examples: '결혼한다는 소식 → 결혼한단 소식 / 좋다는 얘기 → 좋단 얘기（后面章节详学缩略）' },
     ],
     cardExamples: [
       {
@@ -1619,9 +1635,9 @@ export const grammarCardsP25: GrammarCard[] = [
     id: 'card-p25-l09',
     partNumber: 25,
     lessonNumber: 9,
-    title: '综合练习⑲',
-    whatItDoes: 'P19综合复习',
-    whatItDoesBody: '本练习综合复习 P19 高级引用与转述章节的 8 个语法点，帮助巩固间接引用的完整体系。',
+    title: 'P25 综合练习',
+    whatItDoes: 'P25 综合复习',
+    whatItDoesBody: '本练习综合复习 P25 高级引用与转述章节的 8 个语法点，帮助巩固间接引用的完整体系。',
     structureNote: '综合本 Part 所有语法',
     rulesNote: '重点在识别不同引用形式的使用场景',
     isPractice: true,
@@ -1636,11 +1652,11 @@ export const grammarCardsP25: GrammarCard[] = [
         ],
       },
       {
-        ko: '어디에 가느냐고 물었어요.',
+        ko: '어디에 가냐고 물었어요.',
         zh: '问了要去哪里。',
         tokens: [
           { text: '어디에', role: 'place' },
-          { text: '가느냐고', role: 'verb' },
+          { text: '가냐고', role: 'verb' },
           { text: '물었어요', role: 'verb' },
         ],
       },
@@ -1678,7 +1694,7 @@ export const grammarCardsP25: GrammarCard[] = [
       {
         wordBlocks: [
           { text: '어디에', role: 'place' },
-          { text: '사느냐고', role: 'verb' },
+          { text: '사냐고', role: 'verb' },
           { text: '물었어요', role: 'verb' },
         ],
         zh: '问了住在哪里。',
@@ -1697,7 +1713,7 @@ export const grammarCardsP25: GrammarCard[] = [
     ],
     scenarios: [
       { icon: '💬', context: '转述', ko: '민수가 온다고 했어요.', zh: '民秀说要来。' },
-      { icon: '❓', context: '间接问', ko: '어디에 가느냐고 물었어요.', zh: '问了要去哪里。' },
+      { icon: '❓', context: '间接问', ko: '어디에 가냐고 물었어요.', zh: '问了要去哪里。' },
       { icon: '🤝', context: '间接建议', ko: '같이 가자고 했어요.', zh: '说一起去吧。' },
       { icon: '📢', context: '间接命令', ko: '빨리 오라고 했어요.', zh: '让快点来。' },
       { icon: '😲', context: '惊讶', ko: '그렇게 잘한다니 놀랐어요.', zh: '居然做得这么好，吃惊了。' },
@@ -1711,7 +1727,7 @@ export const grammarCardsP25: GrammarCard[] = [
     linkedGrammarIds: ['card-p25-l01', 'card-p25-l02', 'card-p25-l03', 'card-p25-l04', 'card-p25-l05', 'card-p25-l06', 'card-p25-l07', 'card-p25-l08'],
     specialQuiz: {
       type: 'judge',
-      title: 'P19 综合练习',
+      title: 'P25 综合练习',
       body: '选择正确的间接引用形式',
       questions: [
         {
@@ -1722,9 +1738,9 @@ export const grammarCardsP25: GrammarCard[] = [
         },
         {
           prompt: '민수가 "어디에 살아요?"라고 물었어요. → 民秀问……',
-          options: ['어디에 산다고 물었어요', '어디에 사느냐고 물었어요', '어디에 살자고 물었어요', '어디에 살라고 물었어요'],
+          options: ['어디에 산다고 물었어요', '어디에 사냐고 물었어요', '어디에 살자고 물었어요', '어디에 살라고 물었어요'],
           answer: 1,
-          explanation: '疑问句转述用 -냐고 하다/물어보다 → 사느냐고 물었어요。',
+          explanation: '疑问句转述用 -냐고 하다/물어보다 → 사냐고 물었어요。',
         },
         {
           prompt: '민수가 "같이 갑시다"라고 했어요. → 民秀说……',
@@ -1741,7 +1757,7 @@ export const grammarCardsP25: GrammarCard[] = [
       ],
     },
     overviewHtml: `<div class="ov-hero">
-  <div style="font-size:20px;font-weight:700;color:#241917;margin-bottom:8px">P19 总结：高级引用与转述</div>
+  <div style="font-size:20px;font-weight:700;color:#241917;margin-bottom:8px">P25 总结：高级引用与转述</div>
   <div style="font-size:14px;color:#89756e">完整间接引用系统</div>
 </div>
 <div class="ov-section">

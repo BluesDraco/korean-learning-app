@@ -1,0 +1,566 @@
+/* 学习路线 = 动物城寻宝地图。手绘脚印小路串起 7 个地标贴纸 + 手账便签卡。
+   手机单列（奇偶左右轻摆），桌面左右交替（小路走中线 + 驿站圆点）。
+   颜色克制：文字统一暖墨色，全局只留一个陶土红做强调（编号旗 / 何时来）。 */
+
+.guide {
+  --paper: var(--bg-base, #fffbf7);
+  --note: var(--bg-card, #fffdf8);
+  --edge: color-mix(in oklch, var(--color-ink-3, #a99a8a) 34%, transparent);
+  --path: oklch(78% 0.055 20);         /* 小路：暖粉调 */
+  --flag: var(--color-pink-strong, #e55a87);   /* 唯一强调：品牌粉 */
+  --tape: color-mix(in oklch, var(--flag) 20%, transparent);
+  min-height: 100dvh;
+  background:
+    radial-gradient(130% 62% at 50% -12%, color-mix(in oklch, var(--color-pink-base, #ff7fa8) 12%, transparent), transparent 58%),
+    radial-gradient(100% 55% at 100% 106%, color-mix(in oklch, var(--color-pink-soft, #ffe4ee) 40%, transparent), transparent 55%),
+    radial-gradient(80% 50% at 0% 40%, color-mix(in oklch, var(--color-peach-strong, #d97a55) 5%, transparent), transparent 50%),
+    var(--paper);
+  padding: max(env(safe-area-inset-top), 16px) 18px calc(64px + env(safe-area-inset-bottom));
+}
+
+.guide__back {
+  position: fixed;
+  top: max(env(safe-area-inset-top), 14px);
+  left: 14px;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1.5px solid var(--edge);
+  background: color-mix(in oklch, var(--note) 82%, transparent);
+  backdrop-filter: blur(6px);
+  color: var(--color-ink-2, #6b5d52);
+  cursor: pointer;
+  box-shadow: 0 3px 10px -4px color-mix(in oklch, var(--flag) 40%, transparent);
+  transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.guide__back:hover { transform: translateX(-2px); }
+.guide__back:focus-visible { outline: 2px solid var(--flag); outline-offset: 2px; }
+
+.guide__wrap { max-width: 620px; margin: 0 auto; }
+
+/* ── 卷首标题：手账扉页 ── */
+.guide__head {
+  padding: 48px 24px 8px;
+  text-align: center;
+  animation: guide-rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+.guide__title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(27px, 6vw, 34px);
+  font-weight: 600;
+  color: var(--color-ink-1, #3f352e);
+  margin: 0 0 8px;
+  line-height: 1.14;
+  letter-spacing: 0.01em;
+}
+.guide__sub { font-size: 13.5px; color: var(--color-ink-2, #8a7a6c); margin: 0; line-height: 1.6; }
+.guide__now {
+  display: block;
+  width: fit-content;
+  margin: 16px auto 0;
+  padding: 5px 16px 4px;
+  border-radius: 999px;
+  background: var(--note);
+  border: 1.5px dashed var(--path);
+  font-family: 'Caveat', cursive;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--flag);
+  box-shadow: 0 4px 12px -6px color-mix(in oklch, var(--flag) 50%, transparent);
+}
+
+/* ── Tab 切换：装到桌面 / 学习路线 ── */
+.guide__tabs {
+  display: flex;
+  gap: 6px;
+  max-width: 320px;
+  margin: 18px auto 4px;
+  padding: 5px;
+  border-radius: 999px;
+  background: color-mix(in oklch, var(--flag) 8%, var(--note));
+  border: 1px solid var(--edge);
+}
+.guide__tab {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 9px 12px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--color-ink-2, #8a7a6c);
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+}
+.guide__tab svg { flex-shrink: 0; }
+.guide__tab.is-active {
+  background: var(--flag);
+  color: #fff;
+  box-shadow: 0 4px 12px -4px color-mix(in oklch, var(--flag) 60%, transparent);
+}
+.guide__tab:focus-visible { outline: 2px solid var(--flag); outline-offset: 2px; }
+
+/* ── 路线容器 ── */
+.guide__route { position: relative; list-style: none; margin: 0; padding: 28px 6px 16px; }
+
+.guide__path { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.guide__path--phone { width: 100%; height: 100%; }
+.guide__path--desk  { display: none; }
+
+/* ── 站点 ── */
+.guide__stop {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 30px;
+  animation: guide-rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: calc(var(--i, 0) * 65ms);
+}
+/* 整站单一链接 = 布局容器（图 + 卡）。手机单列居中，桌面成对（见媒体查询）。 */
+.guide__stop-link {
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+  text-align: center;
+  color: inherit;
+  text-decoration: none;
+}
+.guide__stop:nth-child(odd)  { transform: translateX(-13px); }
+.guide__stop:nth-child(even) { transform: translateX(13px); }
+@keyframes guide-rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; }
+}
+
+/* 地标贴纸：白边落影 + 轻微旋转 */
+.guide__pin-cell { display: block; }
+.guide__pin {
+  position: relative;
+  display: block;
+  width: 150px;
+  height: 150px;
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.guide__pin img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 14px color-mix(in oklch, var(--flag) 26%, transparent));
+}
+.guide__stop:nth-child(3n+1) .guide__pin { transform: rotate(-3deg); }
+.guide__stop:nth-child(3n+2) .guide__pin { transform: rotate(2.5deg); }
+.guide__stop:nth-child(3n)   .guide__pin { transform: rotate(-1.5deg); }
+.guide__stop:hover .guide__pin { transform: scale(1.05) rotate(0deg); }
+
+/* 编号：陶土小旗，插在地标一角 */
+.guide__num {
+  position: absolute;
+  top: -6px;
+  left: -4px;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50% 50% 50% 6px;
+  background: var(--flag);
+  color: #fff;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 17px;
+  font-weight: 700;
+  transform: rotate(-8deg);
+  border: 2px solid color-mix(in oklch, var(--paper) 70%, #fff);
+  box-shadow: 0 5px 12px -3px color-mix(in oklch, var(--flag) 60%, transparent);
+}
+
+/* 驿站圆点：桌面中线用，手机隐藏 */
+.guide__waypoint { display: none; }
+
+/* 便签卡：手账纸片 + 纸胶带 + 针脚线 */
+.guide__note-cell { display: grid; width: 100%; justify-items: center; }
+.guide__note {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  max-width: 290px;
+  width: 100%;
+  padding: 15px 18px 14px;
+  background: var(--note);
+  border: 1px solid var(--edge);
+  border-radius: 14px;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 10px 22px -14px color-mix(in oklch, var(--flag) 45%, transparent);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.guide__note::before {  /* 纸胶带 */
+  content: "";
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1.5deg);
+  width: 74px;
+  height: 18px;
+  background: var(--tape);
+  border-left: 1px dashed color-mix(in oklch, var(--flag) 35%, transparent);
+  border-right: 1px dashed color-mix(in oklch, var(--flag) 35%, transparent);
+}
+.guide__note:hover { transform: translateY(-3px); box-shadow: 0 16px 28px -14px color-mix(in oklch, var(--flag) 50%, transparent); }
+.guide__note:focus-visible { outline: 2px solid var(--flag); outline-offset: 2px; }
+
+.guide__note-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-ink-1, #3f352e);
+  letter-spacing: 0.01em;
+}
+.guide__note-when {
+  align-self: flex-start;
+  margin-top: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px 3px 8px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--flag);
+  background: color-mix(in oklch, var(--flag) 12%, var(--note));
+  border: 1px solid color-mix(in oklch, var(--flag) 24%, transparent);
+}
+.guide__note-when svg { flex-shrink: 0; }
+.guide__note-what {
+  margin-top: 8px;
+  font-size: 12.8px;
+  color: var(--color-ink-2, #8a7a6c);
+  line-height: 1.65;
+}
+.guide__note-prog {
+  margin-top: 11px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--edge);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: color-mix(in oklch, var(--flag) 90%, var(--color-ink-2));
+}
+
+/* ── 收尾块：把兔莉加到桌面（手账大卡 + iOS/安卓双栏） ── */
+.guide__install {
+  position: relative;
+  max-width: 520px;
+  margin: 22px auto 26px;
+  padding: 26px 22px 24px;
+  background: var(--note);
+  border: 1px solid var(--edge);
+  border-radius: 18px;
+  box-shadow: 0 14px 30px -18px color-mix(in oklch, var(--flag) 45%, transparent);
+  animation: guide-rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+.guide__install::before {  /* 纸胶带 */
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1.5deg);
+  width: 92px;
+  height: 20px;
+  background: var(--tape);
+  border-left: 1px dashed color-mix(in oklch, var(--flag) 35%, transparent);
+  border-right: 1px dashed color-mix(in oklch, var(--flag) 35%, transparent);
+}
+.guide__install-head { text-align: center; margin-bottom: 20px; }
+.guide__install-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  margin-bottom: 10px;
+  border-radius: 14px;
+  color: #fff;
+  background: var(--flag);
+  box-shadow: 0 6px 14px -5px color-mix(in oklch, var(--flag) 60%, transparent);
+}
+.guide__install-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(20px, 4.5vw, 24px);
+  font-weight: 600;
+  color: var(--color-ink-1, #3f352e);
+  margin: 0 0 6px;
+  letter-spacing: 0.01em;
+}
+.guide__install-sub {
+  font-size: 12.8px;
+  line-height: 1.6;
+  color: var(--color-ink-2, #8a7a6c);
+  margin: 0;
+}
+/* 一键安装（仅安卓/桌面 Chrome·Edge 支持时显示） */
+.guide__install-onetap { text-align: center; margin-bottom: 18px; }
+.guide__install-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 26px;
+  border: none;
+  border-radius: 999px;
+  background: var(--flag);
+  color: #fff;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 18px -6px color-mix(in oklch, var(--flag) 60%, transparent);
+  transition: transform 0.16s cubic-bezier(0.22, 1, 0.36, 1), filter 0.16s ease;
+}
+.guide__install-btn svg { flex-shrink: 0; }
+.guide__install-btn:hover { transform: translateY(-2px); filter: brightness(1.04); }
+.guide__install-btn:active { transform: scale(0.97); }
+.guide__install-btn:focus-visible { outline: 2px solid var(--flag); outline-offset: 3px; }
+.guide__install-onetap-hint {
+  margin: 9px 0 0;
+  font-size: 11.5px;
+  color: var(--color-ink-3, #a99a8a);
+}
+
+.guide__install-cols {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+.guide__install-col {
+  padding: 14px 16px 4px;
+  border-radius: 13px;
+  background: color-mix(in oklch, var(--flag) 5%, var(--paper));
+  border: 1px solid color-mix(in oklch, var(--edge) 70%, transparent);
+}
+.guide__install-col-head {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--flag);
+  margin-bottom: 6px;
+}
+.guide__install-col-head svg { flex-shrink: 0; }
+.guide__install-steps {
+  list-style: none;
+  counter-reset: step;
+  margin: 0;
+  padding: 0;
+}
+.guide__install-steps li {
+  counter-increment: step;
+  position: relative;
+  padding: 7px 0 7px 30px;
+  font-size: 12.8px;
+  line-height: 1.5;
+  color: var(--color-ink-2, #6b5d52);
+  border-top: 1px dashed color-mix(in oklch, var(--edge) 60%, transparent);
+}
+.guide__install-steps li:first-child { border-top: none; }
+.guide__install-steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 6px;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: color-mix(in oklch, var(--flag) 14%, var(--note));
+  border: 1px solid color-mix(in oklch, var(--flag) 30%, transparent);
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--flag);
+}
+
+/* 宽屏 iOS/安卓/电脑三栏并排 */
+@media (min-width: 720px) {
+  .guide__install { max-width: 1040px; padding: 36px 40px 32px; }
+  .guide__install-cols { grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .guide__install-col { padding: 18px 20px 6px; }
+}
+/* 大屏铺开：加桌面 tab 放开外层容器宽度限制，充分利用横向空间，不再挤在中间。
+   用 .guide 前缀提高特异性，压过 @1024px 的 .guide__wrap{max-width:1120px} */
+@media (min-width: 1200px) {
+  .guide .guide__wrap--install { max-width: 1320px; }
+  .guide__install { max-width: 100%; padding: 40px 56px 36px; }
+  .guide__install-cols { gap: 32px; }
+  .guide__install-col { padding: 22px 26px 10px; }
+  .guide__install-steps li { font-size: 14.5px; }
+}
+@media (min-width: 1500px) {
+  .guide .guide__wrap--install { max-width: 1440px; }
+}
+
+.guide__foot {
+  text-align: center;
+  font-family: 'Caveat', cursive;
+  font-size: 19px;
+  font-weight: 700;
+  color: color-mix(in oklch, var(--flag) 78%, var(--color-ink-2));
+  margin-top: 8px;
+}
+
+/* ─────────────────────────────────────
+   窄桌面 768–1023：图 + 卡成对居中，蜿蜒曲线穿过每站圆点（不散布，防拥挤）
+───────────────────────────────────── */
+@media (min-width: 768px) {
+  .guide__wrap { max-width: 720px; }
+  .guide__route { max-width: 640px; margin: 0 auto; padding: 26px 0 16px; }
+
+  .guide__path--phone { display: none; }
+  .guide__path--desk { display: block; }
+
+  .guide__stop { margin-bottom: 16px; transform: none; }
+  .guide__stop:nth-child(odd),
+  .guide__stop:nth-child(even) { transform: none; }
+
+  .guide__stop-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+  }
+  .guide__stop:nth-child(even) .guide__stop-link { flex-direction: row-reverse; }
+
+  .guide__pin-cell { display: block; }
+  .guide__pin { width: 168px; height: 168px; }
+
+  .guide__note-cell { display: block; width: 296px; flex: 0 0 296px; }
+  .guide__note { max-width: none; width: 100%; }
+  /* 偶数：卡片在图左侧，文字右对齐 */
+  .guide__stop:nth-child(even) .guide__note { text-align: right; }
+  .guide__stop:nth-child(even) .guide__note::before { left: auto; right: 24px; transform: rotate(2deg); }
+  .guide__stop:nth-child(even) .guide__note-when { align-self: flex-end; }
+
+  /* 驿站圆点：钉在地标图片底部中心，曲线经过它 */
+  .guide__pin::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 10px;
+    transform: translateX(-50%);
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: var(--note);
+    border: 3px solid var(--flag);
+    z-index: 4;
+    box-shadow: 0 0 0 5px color-mix(in oklch, var(--paper) 75%, #fff);
+  }
+}
+
+/* ─────────────────────────────────────
+   宽桌面 ≥1024：寻宝地图。7 地标沿羊皮纸画布左右散布，小路蜿蜒串联。
+   地标贴外沿、卡片朝中心；曲线动态穿过每站圆点（读真实坐标生成）。
+───────────────────────────────────── */
+@media (min-width: 1024px) {
+  .guide {
+    --grass: #cdd9a8;
+    --water: #bcd6dd;
+    --contour: color-mix(in oklch, var(--edge) 24%, transparent);
+  }
+  .guide__wrap {
+    max-width: 1120px;
+    padding: 34px 30px 26px;
+    border-radius: 20px;
+    position: relative;
+  }
+  .guide__wrap > * { position: relative; z-index: 1; }
+
+  /* 寻宝地图地形（草地/水塘/等高线）只在学习路线 tab 显示，不污染加桌面 tab */
+  .guide__route {
+    max-width: none;
+    margin: 0 auto;
+    padding: 28px 24px 20px;
+    border-radius: 18px;
+    position: relative;
+    background:
+      radial-gradient(38% 24% at 20% 32%, color-mix(in oklch, var(--grass) 42%, transparent) 0%, transparent 70%),
+      radial-gradient(34% 20% at 82% 60%, color-mix(in oklch, var(--grass) 34%, transparent) 0%, transparent 70%),
+      radial-gradient(30% 18% at 64% 14%, color-mix(in oklch, var(--water) 40%, transparent) 0%, transparent 72%),
+      radial-gradient(26% 16% at 28% 86%, color-mix(in oklch, var(--water) 30%, transparent) 0%, transparent 70%),
+      repeating-radial-gradient(circle at 50% 42%, transparent 0 46px, var(--contour) 46px 47px),
+      var(--paper);
+    box-shadow: 0 30px 70px -34px color-mix(in oklch, var(--flag) 40%, #6b4f2e);
+  }
+  /* 做旧暗角 */
+  .guide__route::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: 18px;
+    box-shadow: inset 0 0 120px 16px color-mix(in oklch, var(--flag) 12%, transparent);
+    background: radial-gradient(120% 100% at 50% 50%, transparent 64%, color-mix(in oklch, var(--flag) 10%, transparent) 100%);
+    z-index: 0;
+  }
+  /* 地标提层，但不碰绝对定位的小路 SVG（.guide__path），否则它会掉进文档流撑爆高度 */
+  .guide__route > .guide__stop { position: relative; z-index: 1; }
+
+  .guide__stop { margin-bottom: 6px; }
+
+  /* 地标贴外沿、卡片朝中心：奇数靠左、偶数靠右、末站居中 */
+  .guide__stop-link {
+    justify-content: flex-start;
+    gap: 26px;
+    width: min(760px, 72%);
+  }
+  .guide__stop:nth-child(even) .guide__stop-link {
+    justify-content: flex-start;
+    margin-left: auto;
+  }
+  .guide__stop:last-child .guide__stop-link {
+    margin: 0 auto;
+    width: min(560px, 56%);
+    justify-content: center;
+  }
+
+  .guide__pin { width: 176px; height: 176px; }
+}
+
+/* 暗色：纸纹压深、小路提亮，token 已随全站自动切换 */
+[data-theme="dark"] .guide {
+  --path: oklch(64% 0.05 20);
+  --flag: oklch(74% 0.13 10);   /* 暗色品牌粉 */
+}
+/* 暗色寻宝地图：羊皮纸压深、地形色块降饱和，与深色页面融为一体 */
+@media (min-width: 1024px) {
+  [data-theme="dark"] .guide {
+    --grass: oklch(46% 0.05 140);
+    --water: oklch(48% 0.045 230);
+    --contour: color-mix(in oklch, #fff 6%, transparent);
+  }
+  [data-theme="dark"] .guide__route {
+    background:
+      radial-gradient(38% 24% at 20% 32%, color-mix(in oklch, var(--grass) 30%, transparent) 0%, transparent 70%),
+      radial-gradient(34% 20% at 82% 60%, color-mix(in oklch, var(--grass) 24%, transparent) 0%, transparent 70%),
+      radial-gradient(30% 18% at 64% 14%, color-mix(in oklch, var(--water) 28%, transparent) 0%, transparent 72%),
+      radial-gradient(26% 16% at 28% 86%, color-mix(in oklch, var(--water) 20%, transparent) 0%, transparent 70%),
+      repeating-radial-gradient(circle at 50% 42%, transparent 0 46px, var(--contour) 46px 47px),
+      var(--paper);
+    box-shadow: 0 30px 70px -34px rgba(0,0,0,.5);
+  }
+  [data-theme="dark"] .guide__route::after {
+    box-shadow: inset 0 0 120px 20px rgba(0,0,0,.35);
+    background: radial-gradient(120% 100% at 50% 50%, transparent 60%, rgba(0,0,0,.3) 100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .guide *, .guide *::before, .guide *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+  }
+}

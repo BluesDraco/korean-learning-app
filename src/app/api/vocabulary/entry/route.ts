@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
   const ids = searchParams.get('ids');
 
   if (ids) {
-    const idList = ids.split(',').filter(Boolean);
+    const idList = ids.split(',').filter(Boolean).slice(0, 200);
     const entries = idList.map(i => allEntriesById.get(i)).filter((e): e is WordEntry => e !== undefined);
     return NextResponse.json({ entries }, { headers: { 'Cache-Control': CACHE } });
   }

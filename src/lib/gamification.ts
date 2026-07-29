@@ -56,12 +56,36 @@ export async function getProfile(): Promise<UserProfile> {
     onboardingComplete: false,
     createdAt: Date.now(),
   };
-  await db.userProfiles.put(defaults);
-  return (await db.userProfiles.get('main')) || defaults;
+  // 创建默认档案，失败也不抛错——让 UI 仍可用默认值渲染
+  try { await db.userProfiles.put(defaults); } catch { /* ignore */ }
+  return defaults;
 }
 
 export async function updateProfile(updates: Partial<UserProfile>): Promise<void> {
-  await db.userProfiles.update('main', updates);
+  const existing = await db.userProfiles.get('main');
+  if (existing) {
+    await db.userProfiles.update('main', updates);
+  } else {
+    // 行不存在时 update 影响 0 行会静默丢失设置。回退到 put 重建整行。
+    const defaults: UserProfile = {
+      id: 'main',
+      nickname: '学习者',
+      level: 1,
+      xp: 0,
+      xpToNextLevel: xpForLevel(1),
+      streak: 0,
+      longestStreak: 0,
+      lastStudyDate: 0,
+      targetLevel: 'beginner',
+      dailyGoalMinutes: 15,
+      dailyGoalWords: 10,
+      currentUnit: 1,
+      onboardingComplete: false,
+      createdAt: Date.now(),
+      ...updates,
+    };
+    await db.userProfiles.put(defaults);
+  }
 }
 
 // Get or create today's daily log
@@ -85,39 +109,42 @@ export async function getTodayLog(): Promise<DailyLog> {
 }
 
 export async function updateTodayLog(updates: Partial<DailyLog>): Promise<void> {
-  const todayStart = new Date().setHours(0, 0, 0, 0);
-  await db.dailyLogs.update(`log-${todayStart}`, updates);
+  // 跨天场景：若用户 0 点前进入 review，0 点后完成一张卡，updates 会打向"新一天"
+  // 的 log 行，但该行还未创建 —— dexie 的 update 影响 0 行，静默丢数据。
+  // 先走 getTodayLog 保底创建当天 log。
+  const today = await getTodayLog();
+  const merged = { ...today, ...updates };
+  await db.dailyLogs.put(merged);
 }
 
 // Award XP and update profile
+// 后端 API 不支持原子累加；用模块级 promise 队列串行化调用，避免快速连点导致的读-改-写竞态。
+// 局限：只保护同一浏览器窗口/tab 内的并发，跨 tab 依然可能丢；但这是最常见的场景。
+let xpQueue: Promise<unknown> = Promise.resolve();
+
 export async function awardXp(amount: number): Promise<{ leveledUp: boolean; newLevel: number }> {
-  const profile = await getProfile();
-  // Calculate XP and level
-  let xp = profile.xp + amount;
-  let lvl = profile.level;
-  let xpToNxt = profile.xpToNextLevel;
-  let leveledUp = false;
+  const next = xpQueue.then(async () => {
+    const profile = await getProfile();
+    let xp = profile.xp + amount;
+    let lvl = profile.level;
+    let xpToNxt = profile.xpToNextLevel;
+    let leveledUp = false;
 
-  while (xp >= xpToNxt) {
-    xp -= xpToNxt;
-    lvl++;
-    xpToNxt = xpForLevel(lvl);
-    leveledUp = true;
-  }
+    while (xp >= xpToNxt) {
+      xp -= xpToNxt;
+      lvl++;
+      xpToNxt = xpForLevel(lvl);
+      leveledUp = true;
+    }
 
-  await db.userProfiles.update('main', {
-    xp,
-    level: lvl,
-    xpToNextLevel: xpToNxt,
+    await db.userProfiles.update('main', { xp, level: lvl, xpToNextLevel: xpToNxt });
+    await updateTodayLog({ xpEarned: (await getTodayLog()).xpEarned + amount });
+    await checkAchievements(lvl);
+
+    return { leveledUp, newLevel: lvl };
   });
-
-  // Update daily log
-  await updateTodayLog({ xpEarned: (await getTodayLog()).xpEarned + amount });
-
-  // Check achievements
-  await checkAchievements(lvl);
-
-  return { leveledUp, newLevel: lvl };
+  xpQueue = next.catch(() => undefined);
+  return next;
 }
 
 // Update streak — returns info for UI feedback
@@ -201,8 +228,7 @@ export async function checkAchievements(level: number): Promise<Achievement[]> {
   const totalReviews = reviews.reduce((s, r) => s + r.wordsReviewed, 0);
   const dictations = await db.dictationRecords.toArray();
   const totalDictations = dictations.filter((d) => d.correct).length;
-  const shadowings = await db.shadowingRecords.toArray().catch(() => []);
-  const totalShadowings = shadowings.length;
+  const totalShadowings = 0;
 
   const checks: [AchievementType, boolean][] = [
     ['first_word', totalWords >= 1],

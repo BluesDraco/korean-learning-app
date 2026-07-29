@@ -1,0 +1,22 @@
+import type { BossSubQuestData } from '@/types/tori-subquest';
+
+/** Day 86 · 3-5 Boss 战 · 🎒 重走Day 1-7的路 · ~은/는 그대로, ~만 달라졌다 */
+export const day86Boss: BossSubQuestData = {
+  day: 26, level: 'advanced', idx: 5, kind: 'boss',
+  koTitle: '다시 걷는 길의 관문',
+  subtitle: '🎒 4호선 · 弘爪 승강장 · 같은 길',
+
+  intro: '周三,一整天。你决定再走一遍 Day 1-7 走过的那条路——首尔站四号线、弘爪站二号线站台、한빛语言学院门口、宿舍大堂、葫芦游乐场。Day 3 你第一次坐这条线,行李压得肩膀生疼;Day 7 你在弘爪站台电量 1% 时怕过。今天,肩膀不疼了,一个人,不慌了。在站台上你看到一个张望的俄罗斯留学生——像 Day 7 的你——你走过去,像 Day 35 那样帮他指路。今天要用 ~은/는 그대로, ~만 달라졌다 说出这份领悟:길은 그대로, 사람만 달라졌다 → 승강장은 그대로, 나만 달라졌다 → 풍경은 그대로, 마음만 달라졌다.',
+  outroHook: '傍晚,你在笔记本上写下一行字:"길은 그대로. 사람만 달라졌다."（路是原来的路。变的只是人。）Day 44 江边 Haru 那句"불가능하지만, 기억은 남아요"又回来了——今天你在同一个站台看见了三个版本的自己:Day 7 的、Day 35 的、Day 86 的。明天,妈妈从中国飞来兽尔,参加你的毕业典礼。（Day 87 · 엄마가 온다）',
+
+  tasks: [
+    { type: 'choice',  label: '听句选意',       task: { id: 'd86-b5-t1', audioKo: '길은 그대로, 사람만 달라졌어요.',                                          choices: [{ text: '路照旧，只有人变了。',                    correct: true }, { text: '路变了，人没变。',                    correct: false }, { text: '路和人都变了。',              correct: false }, { text: '路和人都没变。',              correct: false }], explain: 'Day 86 명제 · 은/는 그대로 + ~만 달라졌다' } },
+    { type: 'choice',  label: '听句选意',       task: { id: 'd86-b5-t2', audioKo: '풍경은 그대로, 마음만 달라졌어요.',                        choices: [{ text: '风景照旧，只有心变了。',              correct: true }, { text: '风景变了。',                    correct: false }, { text: '心没变。',                            correct: false }, { text: '风景和心都变了。',                            correct: false }], explain: '은/는 그대로 + 마음만' } },
+    { type: 'choice',  label: '~은/는 그대로',   task: { id: 'd86-b5-t3', promptZh: '"路照旧，只有人变了"哪句正确？',                                                                                                                                    choices: [{ text: '길이 그대로, 사람만 달라졌어요.',           correct: false }, { text: '길은 그대로, 사람만 달라졌어요.',            correct: true }, { text: '길을 그대로, 사람이 달라졌어요.',                correct: false }, { text: '길은 그대로, 사람이 달라졌어요.',                  correct: false }], explain: '对比主题 은/는 + 唯独 ~만' } },
+    { type: 'choice',  label: '~만',             task: { id: 'd86-b5-t4', promptZh: '想强调"唯独心变了"，用哪个助词？',                                                                                                                              choices: [{ text: '마음만',       correct: true }, { text: '마음도',   correct: false }, { text: '마음은',                  correct: false }, { text: '마음이',                    correct: false }], explain: '~만 = 唯独 / 只有' } },
+    { type: 'choice',  label: '认词',           task: { id: 'd86-b5-t5', promptKo: '그대로', promptHangul: 'geu-dae-ro',                                                                                                                              choices: [{ text: '照旧 / 原样',                          correct: true }, { text: '立刻',                          correct: false }, { text: '完全',                          correct: false }, { text: '偶尔',                            correct: false }], explain: '그(那) + 대로(照) · 维持原样' } },
+    { type: 'compose', label: '组句',           task: { id: 'd86-b5-t6', zhHint: '路照旧，只有人变了。',                                                                                                                                                     audioKo: '길은 그대로, 사람만 달라졌어요.',                             answer: ['길은', '그대로,', '사람만', '달라졌어요.'],   tokens: ['길은', '그대로,', '사람만', '달라졌어요.', '길이', '사람이', '달라져요.'],         explain: 'Day 86 명제' } },
+    { type: 'compose', label: '组句',           task: { id: 'd86-b5-t7', zhHint: '站台照旧，只有我变了。',                                                                                                                                             audioKo: '승강장은 그대로, 나만 달라졌어요.',                             answer: ['승강장은', '그대로,', '나만', '달라졌어요.'],                              tokens: ['승강장은', '그대로,', '나만', '달라졌어요.', '승강장이', '내가', '나도'],           explain: '은/는 그대로 + 나만' } },
+    { type: 'choice',  label: '情景选回应',     task: { id: 'd86-b5-t8', promptZh: '站台上陌生留学生说他第一次来、很紧张。你想安慰他"没事，我一开始也这样"，最合适的一句？',                                                                                    choices: [{ text: '괜찮아요. 저도 처음엔 그랬어요.',       correct: true }, { text: '길 모르면 안 돼요.',                  correct: false }, { text: '얼마예요?',                              correct: false }, { text: '몰라요.',                                correct: false }], explain: '共感 · 저도 처음엔 그랬어요' } },
+  ],
+};

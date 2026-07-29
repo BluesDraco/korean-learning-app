@@ -1,0 +1,29 @@
+import type { ListenSubQuestData } from '@/types/tori-subquest';
+
+/** Day 50 · 2-2 귀 트이기 · ~(으)면 深化 · N + (이)면 */
+export const day50Listen: ListenSubQuestData = {
+  day: 20, level: 'intermediate', idx: 2, kind: 'listen',
+  koTitle: '귀 트이기',
+  subtitle: '한빛 학원 前广场 · 初雪',
+
+  meaning: [
+    { id: 'd50-l2-m1', audioKo: '토리! 첫눈이야!!',                                       choices: [{ text: '兔莉！是初雪！',                     correct: true }, { text: '兔莉，下雪了没？',                        correct: false }, { text: '兔莉！好冷！',                            correct: false }, { text: '兔莉，明天下雪。',                        correct: false }], explain: 'Haru 兴奋叫 · 반말' },
+    { id: 'd50-l2-m2', audioKo: '한국에서는 첫눈이 오면 소원을 빌면 이뤄진대.',           choices: [{ text: '韩国说初雪时许愿会成真。',           correct: true }, { text: '韩国初雪时不能许愿。',                    correct: false }, { text: '许愿了雪就会下。',                        correct: false }, { text: '韩国不下初雪。',                          correct: false }], explain: 'Haru 传说 · 双 (으)면' },
+    { id: 'd50-l2-m3', audioKo: '비밀이야. 말하면 안 이뤄진대.',                          choices: [{ text: '是秘密。说了就不灵了。',             correct: true }, { text: '不是秘密。可以说。',                      correct: false }, { text: '说了才会实现。',                          correct: false }, { text: '别说秘密。',                            correct: false }], explain: 'Tori 挡箭牌' },
+    { id: 'd50-l2-m4', audioKo: '나도 하나 빌었어. 나도 비밀.',                            choices: [{ text: '我也许了一个。也是秘密。',           correct: true }, { text: '我不许愿。',                                correct: false }, { text: '我说出来。',                              correct: false }, { text: '我不知道。',                              correct: false }], explain: 'Haru 说 · 双方都保密' },
+    { id: 'd50-l2-m5', audioKo: '주말이면 늦잠을 자요.',                                  choices: [{ text: '一到周末就睡懒觉。',                 correct: true }, { text: '周末不能睡懒觉。',                        correct: false }, { text: '周末已经睡过了。',                        correct: false }, { text: '周末想睡也睡不着。',                      correct: false }], explain: '名词 + 이면 = 习惯性条件' },
+  ],
+
+  cloze: [
+    { id: 'd50-l2-c1', audioKo: '첫눈이 오면 소원이 이뤄져.',    clozeParts: ['첫눈이 ', ' 소원이 이뤄져.'],   choices: [{ text: '오면',   correct: true }, { text: '와서',   correct: false }, { text: '오고',   correct: false }, { text: '오니까', correct: false }], explain: '假设 → ~(으)면 · 오다 无收音' },
+    { id: 'd50-l2-c2', audioKo: '말하면 안 이뤄진대.',              clozeParts: ['말하면 ', ' 이뤄진대.'],       choices: [{ text: '안',   correct: true }, { text: '못',       correct: false }, { text: '있',   correct: false }, { text: '지',       correct: false }], explain: '~(으)면 **안** 이뤄지다 = 就不实现' },
+    { id: 'd50-l2-c3', audioKo: '주말이면 늦잠을 자요.',            clozeParts: ['주말', ' 늦잠을 자요.'],         choices: [{ text: '이면', correct: true }, { text: '면',   correct: false }, { text: '이라면', correct: false }, { text: '으면', correct: false }], explain: '주말 有收音 → **이면**（名词句）' },
+    { id: 'd50-l2-c4', audioKo: '소원을 빌면 이뤄진대.',            clozeParts: ['소원을 ', ' 이뤄진대.'],       choices: [{ text: '빌면', correct: true }, { text: '빌으면', correct: false }, { text: '비면',   correct: false }, { text: '빌고',   correct: false }], explain: 'ㄹ 收音特殊 · 빌다 → **빌면**（不加 으）' },
+  ],
+
+  reply: [
+    { id: 'd50-l2-r1', audioKo: '토리! 첫눈이야!!',                            promptZh: 'Haru 兴奋喊初雪。你想温柔应答"在韩国第一次看到雪"，最自然的一句？',   choices: [{ text: '나 한국에서 첫눈 처음이야.',                              correct: true }, { text: '눈은 없어.',                              correct: false }, { text: '얼마예요?',                          correct: false }, { text: '싫어.',                            correct: false }], explain: '~에서 + 처음이야 · Tori 内心' },
+    { id: 'd50-l2-r2', audioKo: '한국에서는 첫눈이 오면 소원을 빌면 이뤄진대.', promptZh: 'Haru 说初雪许愿会成真。你想温柔回应"那我也许一个"，最自然的一句？', choices: [{ text: '진짜? 그럼 나도 하나 빌게.',                            correct: true }, { text: '나 소원 없어.',                          correct: false }, { text: '얼마예요?',                          correct: false }, { text: '싫어.',                            correct: false }], explain: '~ㄹ게 承诺 · Tori 原句' },
+    { id: 'd50-l2-r3', audioKo: '뭐 빌었어?',                                    promptZh: 'Haru 问你许了什么。你不想说，最自然的一句？',                        choices: [{ text: '비밀이야. 말하면 안 이뤄진대.',                          correct: true }, { text: '나도 몰라.',                              correct: false }, { text: '너 먼저 말해.',                          correct: false }, { text: '얼마예요?',                          correct: false }], explain: 'Tori 原句 · 借用传说挡回去' },
+  ],
+};

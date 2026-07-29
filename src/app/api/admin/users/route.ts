@@ -3,6 +3,9 @@ import { requireAdmin } from '@/lib/server/admin-guard';
 import { getDb } from '@/lib/server/db';
 import type { AdminUser, AdminUsersResponse } from '@/types/admin';
 
+// 6-26 事故兜底：含鉴权/用户数据的 API 必须 force-dynamic，禁止 Next.js 自动缓存
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   const adminCheck = await requireAdmin();
   if (!adminCheck.authorized) return adminCheck.response;
@@ -15,6 +18,7 @@ export async function GET(request: NextRequest) {
   const pageSize = Math.min(50, Math.max(1, Number(searchParams.get('pageSize')) || 20));
 
   const db = await getDb();
+  const now = Date.now();
 
   // Build WHERE clause
   let whereClause = 'WHERE 1=1';
@@ -26,12 +30,18 @@ export async function GET(request: NextRequest) {
     params.push(q, q, q);
   }
 
+  // VIP filter at SQL level (with expiry fallback) so pagination/total stay correct
+  if (status === 'vip') {
+    whereClause += " AND membership_type != 'free' AND (membership_type = 'lifetime' OR membership_expiry IS NULL OR membership_expiry >= ?)";
+    params.push(now);
+  }
+
   // COUNT query for pagination total
   const countResult = await db.exec(`SELECT COUNT(*) as total FROM users ${whereClause}`, params);
   const totalCount = countResult.length > 0 ? Number(countResult[0].values[0]?.[0] ?? 0) : 0;
 
   // Main query with SQL-level pagination
-  let sql = `SELECT id, username, nickname, email, role, created_at FROM users ${whereClause}`;
+  let sql = `SELECT id, username, nickname, email, role, created_at, membership_type, membership_expiry FROM users ${whereClause}`;
   if (sort === 'newest') sql += ' ORDER BY created_at DESC';
   else if (sort === 'oldest') sql += ' ORDER BY created_at ASC';
 
@@ -40,16 +50,25 @@ export async function GET(request: NextRequest) {
   const queryParams = [...params, pageSize, offset];
 
   const result = await db.exec(sql, queryParams);
-  const rawUsers: { id: string; username: string; nickname: string; email: string; role: string; createdAt: number }[] =
+  const rawUsers: { id: string; username: string; nickname: string; email: string; role: string; createdAt: number; membershipType: AdminUser['membershipType'] }[] =
     result.length > 0
-      ? result[0].values.map((row) => ({
-          id: row[0] as string,
-          username: row[1] as string,
-          nickname: row[2] as string,
-          email: row[3] as string,
-          role: row[4] as string,
-          createdAt: row[5] as number,
-        }))
+      ? result[0].values.map((row) => {
+          const rawTier = row[6] as string | null;
+          const expiry = typeof row[7] === 'number' ? row[7] : null;
+          const validTiers: AdminUser['membershipType'][] = ['free', 'monthly', 'yearly', 'lifetime'];
+          let tier: AdminUser['membershipType'] = validTiers.includes(rawTier as AdminUser['membershipType'])
+            ? (rawTier as AdminUser['membershipType']) : 'free';
+          if (tier !== 'free' && tier !== 'lifetime' && expiry != null && expiry < now) tier = 'free';
+          return {
+            id: row[0] as string,
+            username: row[1] as string,
+            nickname: row[2] as string,
+            email: row[3] as string,
+            role: row[4] as string,
+            createdAt: row[5] as number,
+            membershipType: tier,
+          };
+        })
       : [];
 
   // Batch-query real stats
@@ -107,9 +126,7 @@ export async function GET(request: NextRequest) {
 
   const users: AdminUser[] = rawUsers.map((u) => ({
     ...u,
-    membershipType: 'free' as AdminUser['membershipType'],
     membershipExpiry: null,
-    banned: false,
     studyDays: statsMap[u.id]?.studyDays ?? 0,
     totalXp: statsMap[u.id]?.xp ?? 0,
     wordsLearned: statsMap[u.id]?.words ?? 0,
@@ -119,13 +136,6 @@ export async function GET(request: NextRequest) {
     diaryCount: statsMap[u.id]?.diary ?? 0,
   } as AdminUser));
 
-  // Status filtering in JS
-  let filtered = users;
-  if (status === 'banned') filtered = users.filter((u) => u.banned);
-  else if (status === 'vip') filtered = users.filter((u) => u.membershipType !== 'free');
-
-  const total = totalCount;
-
-  const response: AdminUsersResponse = { users: filtered, total, page, pageSize };
+  const response: AdminUsersResponse = { users, total: totalCount, page, pageSize };
   return NextResponse.json(response);
 }

@@ -8,9 +8,9 @@ export const grammarCardsP18: GrammarCard[] = [
     title: '-테요，-던데요，-더라',
     whatItDoes: '表示推测、回顾或感叹',
     whatItDoesBody: '-테요 表示说话者的推测或意志，相当于"应该……吧/我会……"，含主观判断语气。\n-던데요 表示说话者回忆起过去的亲身经历，带有轻微的感叹或提示语气，相当于"（我记得/之前）……呢"。\n-더라 表示说话者回顾自己的亲身经历后发表感叹，是口语体，多用于描述过去观察到的事实，相当于"……啊/果然……"。',
-    structureNote: '-테요：动词/形容词 词干 + 테요（을 테요 / ㄹ 테요）\n-던데요：动词/形容词 词干 + 던데요（过去 경험 回想）\n-더라：动词/形容词 词干 + 더라（口语体 경험 감탄）',
+    structureNote: '-테요：动词/形容词 词干 + 테요（을 테요 / ㄹ 테요）\n-던데요：动词/形容词 词干 + 던데요（过去经验回想）\n-더라：动词/形容词 词干 + 더라（口语体经验感叹）',
     rulesNote: '-테요 以 -(으)ㄹ 테요 形式表示推测（날씨가 좋을 테니까）或意志（제가 할 테요）。\n-던데요 也用于根据前句中回想的事实，在后句传达意见时（어제 봤던데요，제 생각엔…）。\n-더라 主语是第一人称时表意志/发现，第三人称时表观察报告。口语中也用 -더라고요 的形式。',
-    scenarioNote: '-테요 는 "제가 할 테요" 또는 "힘들 테니까 쉬세요"처럼，常用于表达对对方的体谅或推测。\n-던데요 는 "어제 거기 가 봤던데요，정말 맛있더라고요"처럼，基于经验进行推荐或传达意见。\n-더라 는 "가 봤더니 생각보다 좋더라"처럼，表达直接经验后的感叹或发现。',
+    scenarioNote: '-테요 常用在 "제가 할 테요" 或 "힘들 테니까 쉬세요" 这样的句子中，表达对对方的体谅或推测。\n-던데요 常用在 "어제 거기 가 봤던데요，정말 맛있더라고요" 这样的句子中，基于经验进行推荐或传达意见。\n-더라 常用在 "가 봤더니 생각보다 좋더라" 这样的句子中，表达直接经验后的感叹或发现。',
     step0Html: `<div class="card-title">推测、回忆、感叹</div>
 <div class="card-body">三个表达都带有说话者的主观色彩。</div>
 <div class="hook-box">
@@ -34,9 +34,9 @@ export const grammarCardsP18: GrammarCard[] = [
   </div>
   <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 都是包含说话人主观判断和经验的表达</div>
 </div>
-<div class="reminder-box">-테요 는 推测/意志，-던데요/-더라 는 过去 경험 回想。</div>`,
+<div class="reminder-box">-테요 表示推测/意志，-던데요/-더라 表示过去经验回想。</div>`,
     compareHtml: `<div class="card-title">-테요 vs -던데요 vs -더라</div>
-<div class="card-body">세 表达의 语气 차이를 비교합니다。</div>
+<div class="card-body">比较三种表达的语气差异。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
   <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-테요</div>
@@ -45,16 +45,16 @@ export const grammarCardsP18: GrammarCard[] = [
   </div>
   <div class="tok-row" style="background:#f0f4ff;border-radius:12px;padding:12px">
     <div class="tok t-v">-던데요</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">过去 直接 경험 回想，向听话人传达하는 어감</div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">过去直接经验回想，向听话人传达的语气</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">어제 거기 사람 많던데요</span><span style="font-size:16px;color:#5a4640">昨天那里人很多呢</span></div>
   </div>
   <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-더라</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">过去 直接 경험 후 감탄/发现，口语体</div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">过去直接经验后的感叹/发现，口语体</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">먹어 봤더니 진짜 맛있더라</span><span style="font-size:16px;color:#5a4640">吃了一下，真的很好吃啊</span></div>
   </div>
 </div>
-<div class="reminder-box">-던데요 는 听话人 体谅，-더라 는 독백/친한 关系 감탄，-테요 는 现在·将来 推测/意志。</div>`,
+<div class="reminder-box">-던데요 体谅听话人，-더라 用于独白/亲近关系的感叹，-테요 表示现在·将来的推测/意志。</div>`,
     compareLabel: '-테요 vs -던데요 vs -더라',
     structures: [
       {
@@ -97,12 +97,14 @@ export const grammarCardsP18: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '-테요：词干 + (을/ㄹ) 테요（收音 O → 을 테요，없/ㄹ → ㄹ 테요）', examples: '먹을 테요 / 갈 테요 / 피곤할 테니까 / 할 테요' },
-      { type: 'rule', text: '-던데요：词干 + 던데요（过去 回想，收音 유무 무관）', examples: '맛있던데요 / 많던데요 / 오던데요 / 좋던데요' },
-      { type: 'rule', text: '-더라：词干 + 더라（口语体 감탄，收音 유무 무관）', examples: '맛있더라 / 춥더라 / 예쁘더라 / 힘들더라' },
-      { type: 'usage', text: '-테요 의 두 가지 용법：① 推测（힘들 테니까 쉬세요）② 意志（제가 할 테요）', examples: '날씨가 추울 테니까 코트 입으세요（推测） / 내가 다 할 테요（意志）' },
-      { type: 'note', text: '-더라 는 主语가 第一人称이면 发现/意志，第三人称이면 观察 보고。-더라고요 形式 격식 변환 可能', examples: '내가 해 보니까 어렵더라（第一人称 发现） / 그 사람 노래 잘하더라（第三人称 观察）' },
-      { type: 'compare', text: '-던데요 vs -더라：던데요 는 向听话人传达하는 语气，더라 는 독백이나 친한 关系 감탄', examples: '거기 맛있던데요，한번 가 봐요（听话人 体谅） / 거기 맛있더라（독백/친구）' },
+      { type: 'rule', text: '-테요：词干 + (을/ㄹ) 테요（有收音 → 을 테요，无/ㄹ → ㄹ 테요）', examples: '먹을 테요 / 갈 테요 / 피곤할 테니까 / 할 테요' },
+      { type: 'rule', text: '-던데요：词干 + 던데요（过去 回想，与收音有无无关）', examples: '맛있던데요 / 많던데요 / 오던데요 / 좋던데요' },
+      { type: 'rule', text: '-더라：词干 + 더라（口语体 感叹，与收音有无无关）', examples: '맛있더라 / 춥더라 / 예쁘더라 / 힘들더라' },
+      { type: 'usage', text: '-테요 的两种用法：① 推测（힘들 테니까 쉬세요）② 意志（제가 할 테요）', examples: '날씨가 추울 테니까 코트 입으세요（推测） / 내가 다 할 테요（意志）' },
+      { type: 'note', text: '-더라：主语是第一人称时表发现/意志，第三人称时表观察报告。可转为格式体 -더라고요', examples: '내가 해 보니까 어렵더라（第一人称 发现） / 그 사람 노래 잘하더라（第三人称 观察）' },
+      { type: 'compare', text: '-던데요 vs -더라：던데요 是向听话人传达的语气，더라 用于独白或亲近关系的感叹', examples: '거기 맛있던데요，한번 가 봐요（体谅听话人） / 거기 맛있더라（독백/친구）' },
+      { type: 'note', text: '中文没有"回想体"：-던데요 / -더라 里的 -더- 表示"这是我过去亲眼看到、亲身经历过的"。中文只能用"（我记得）""当时""原来"之类补出来，不是普通的过去时。漏掉这层"亲历"语气，是中文母语者最常犯的理解错误。', examples: '거기 음식이 정말 맛있던데요（我亲自尝过才这么说） / 가 봤더니 생각보다 훨씬 좋더라（去了才发现）' },
+      { type: 'note', text: '正因为 -더- 是"亲眼观察 / 才发现"的视角，不能拿 -더라 来叙述自己的普通过去动作。想说"我昨天看了电影"要用普通过去时（봤어），不是 봤더라；第一人称只在"连自己都没料到的发现"时才用 -더라。', examples: '내가 해 보니까 어렵더라（自己才发现，可以） / 어제 영화 봤어（普通叙述，不用 봤더라）' },
       { type: 'example', text: '힘들 테니까 쉬세요 / 어제 거기 사람 많던데요 / 먹어 보니까 진짜 맛있더라' },
     ],
     cardExamples: [
@@ -157,17 +159,17 @@ export const grammarCardsP18: GrammarCard[] = [
     ],
     mistakes: [
       { wrong: '피곤할 테요니까 쉬세요（테요 + 니까 语序错误）', correct: '피곤할 테니까 쉬세요', note: '-테니까 是由 테 + 니까 结合的形式，作为一个词尾使用。테요 后面不能再加 니까。' },
-      { wrong: '어제 거기 맛있었던데요（过去 时态 중복）', correct: '어제 거기 맛있던데요', note: '-던데요 자체가 过去 回想 意思 포함하므로 었/았 过去 时态를 중복하지 않는다。맛있었던데요는 부자연스럽다。' },
-      { wrong: '그 영화 재미있더라요（더라 + 요 중복）', correct: '그 영화 재미있더라 또는 재미있더라고요', note: '-더라 는 口语体 종결词尾로 后面 요를 바로 붙이지 않는다。格式体로는 -더라고요 形式를 쓴다。' },
-      { wrong: '내가 할 테요을 준비했어요（테요 + 을 조사）', correct: '내가 할 테요（단독 종결）또는 내가 준비할 테요', note: '-테요 는 종결词尾이므로 后面 조사를 붙이지 않는다。' },
+      { wrong: '어제 거기 맛있었던데요（过去时态重复）', correct: '어제 거기 맛있던데요', note: '-던데요 本身就包含过去回想的意思，所以不再重复 었/았 过去时态。맛있었던데요 不自然。' },
+      { wrong: '그 영화 재미있더라요（더라 + 요 重复）', correct: '그 영화 재미있더라 또는 재미있더라고요', note: '-더라 是口语体终结词尾，后面不直接加 요。要用格式体时用 -더라고요 的形式。' },
+      { wrong: '내가 할 테요을 준비했어요（테요 + 을 助词）', correct: '내가 할 테요（单独结句）또는 내가 준비할 테요', note: '-테요 是终结词尾，后面不加助词。' },
     ],
     quickTable: {
-      title: '-테요 / -던데요 / -더라 用法対比',
+      title: '-테요 / -던데요 / -더라 用法对比',
       headers: ['表达', '时态', '语气', '例句'],
       rows: [
         ['-테요（-(으)ㄹ 테요）', '现在/将来', '推测或意志', '피곤할 테니까 / 제가 할 테요'],
-        ['-던데요', '过去 回想', '경험 根据 전달', '맛있던데요 / 많던데요'],
-        ['-더라', '过去 回想', '直接 경험 감탄（口语）', '좋더라 / 맛있더라'],
+        ['-던데요', '过去 回想', '根据经验传达', '맛있던데요 / 많던데요'],
+        ['-더라', '过去 回想', '直接经验感叹（口语）', '좋더라 / 맛있더라'],
       ],
     },
     specialQuiz: {
@@ -179,19 +181,19 @@ export const grammarCardsP18: GrammarCard[] = [
           prompt: '오늘 많이 피곤할 ___ 일찍 들어가세요。（今天应该很累，请早点回去。）',
           options: ['더라', '던데요', '테요만', '테니까'],
           answer: 3 as 0|1|2|3,
-          explanation: '-테니까：-(으)ㄹ 테니까 는 推测을 根据로 后面 劝说나 부탁을 전달할 때 쓴다。피곤할 테니까 일찍 들어가세요 ✓。던데요/더라 는 过去 경험 回想이라 将来 推测 맥락에 맞지 않는다。',
+          explanation: '-테니까：-(으)ㄹ 테니까 用于在推测的基础上传达劝说或请求。피곤할 테니까 일찍 들어가세요 ✓。던데요/더라 表示过去经验回想，不符合将来推测的语境。',
         },
         {
           prompt: '어제 그 식당 음식이 정말 맛있___。（昨天那家餐厅的食物真的很好吃呢。）',
           options: ['을 테요', '었던데요', '던데요', '더라요'],
           answer: 2 as 0|1|2|3,
-          explanation: '-던데요：过去 直接 경험을 向听话人传达하는 表达。었던데요는 过去 时态 중복으로 부자연스럽고，더라요는 不存在的形式。',
+          explanation: '-던데요：把过去直接经验向听话人传达的表达。었던데요 因过去时态重复而不自然，더라요 是不存在的形式。',
         },
         {
           prompt: '直接 가 봤는데 경치가 정말 아름다웠___。（亲自去了一趟，风景真的很美啊。）',
           options: ['테요', '더라', '던데요', '더라요'],
           answer: 1 as 0|1|2|3,
-          explanation: '-더라：直接 경험 후 감탄을 나타내는 口语体 종결词尾。던데요도 可能但是 直接 감탄을 表达하는 독백체는 더라。더라요는 不存在的形式。',
+          explanation: '-더라：表示直接经验后感叹的口语体终结词尾。던데요 也可以，但表达直接感叹的独白体是 더라。더라요 是不存在的形式。',
         },
         {
           prompt: '제가 다 ___ 걱정하지 마세요。（我来全部做，不用担心。）',
@@ -203,7 +205,7 @@ export const grammarCardsP18: GrammarCard[] = [
     },
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P13 · 第5课</div>
+    <div class="ov-hero-label">P18 · 第1课</div>
     <div class="ov-hero-title">-테요，-던데요，-더라</div>
     <div class="ov-hero-sub">推测/意志 · 回忆提示 · 经历感叹</div>
   </div>
@@ -254,9 +256,9 @@ export const grammarCardsP18: GrammarCard[] = [
     title: '-았/었/였더니，-더니',
     whatItDoes: '表示前后动作的因果或对比关系（基于亲身经历）',
     whatItDoesBody: '-았/었/였더니 表示说话者亲身做了某事之后发现了某种结果，相当于"（我）做了……之后/结果……"，主语通常是第一人称。\n-더니 表示回忆过去观察到的事实，并引出与之相关的结果或对比，相当于"（之前）……，（所以/但是）……"，主语通常是第三人称或自然现象。',
-    structureNote: '-았/었/였더니：动词 词干 + 았/었/였더니（아/어/여 词干에 따라）\n-더니：动词/形容词 词干 + 더니（过去 回想，收音 유무 무관）',
-    rulesNote: '-았더니 主语必须是第一人称（나/저）才自然。用于第三人称主语时不自然或可能成为病句。\n-더니 主语为第三人称或自然现象时较自然。"비가 오더니 개었어요"般，表示前句与后句关系的转换。',
-    scenarioNote: '-았더니 는 "먹었더니 배불러요"처럼，常用于陈述直接经验后的结果。\n-더니 는 "아이가 울더니 갑자기 웃었어요"처럼，常用于观察第三人称行为变化后传达。',
+    structureNote: '-았/었/였더니：动词 词干 + 았/었/였더니（依据 아/어/여 词干变化）\n-더니：动词/形容词 词干 + 더니（过去回想，与收音有无无关）',
+    rulesNote: '-았더니 主语必须是第一人称（나/저）才自然。用于第三人称主语时不自然或可能成为病句。\n-더니 主语为第三人称或自然现象时较自然。如 "비가 오더니 개었어요"，表示前句与后句关系的转换。',
+    scenarioNote: '-았더니 常用在 "먹었더니 배불러요" 这样的句子中，陈述直接经验后的结果。\n-더니 常用在 "아이가 울더니 갑자기 웃었어요" 这样的句子中，观察第三人称行为变化后传达。',
     step0Html: `<div class="card-title">做了之后……之前……结果……</div>
 <div class="card-body">亲身经历的前后关系，主语决定选哪个。</div>
 <div class="hook-box">
@@ -273,29 +275,29 @@ export const grammarCardsP18: GrammarCard[] = [
       <div style="font-size:16px;color:#89756e;margin-top:2px">之前下着雨，突然放晴了。</div>
     </div>
   </div>
-  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 았더니 앞 主语 = 나/저，더니 앞 主语 = 第三人称/自然现象</div>
+  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 았더니 前的主语 = 나/저，더니 前的主语 = 第三人称/自然现象</div>
 </div>
-<div class="reminder-box">-았더니 는 第一人称 경험 结果，-더니 는 第三人称 观察 转换。</div>`,
+<div class="reminder-box">-았더니 表示第一人称经验的结果，-더니 表示第三人称观察到的转换。</div>`,
     compareHtml: `<div class="card-title">-았더니 vs -더니 vs -(으)니까</div>
-<div class="card-body">모두 전후 관계를 나타내지만 主语와 语气가 다릅니다。</div>
+<div class="card-body">都表示前后关系，但主语和语气不同。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
   <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-았더니</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">第一人称 直接 경험 후 结果 发现</div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">第一人称直接经验后发现结果</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">약을 먹었더니 나았어요</span><span style="font-size:16px;color:#5a4640">吃了药之后好了</span></div>
   </div>
   <div class="tok-row" style="background:#f0f4ff;border-radius:12px;padding:12px">
     <div class="tok t-v">-더니</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">第三人称 观察 후 转换/结果</div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">第三人称观察后的转换/结果</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">아이가 울더니 잠들었어요</span><span style="font-size:16px;color:#5a4640">孩子哭着哭着睡着了</span></div>
   </div>
   <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-(으)니까</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">原因/理由（主语 제한 없음）</div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">原因/理由（主语无限制）</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">약을 먹으니까 나았어요</span><span style="font-size:16px;color:#5a4640">因为吃了药所以好了</span></div>
   </div>
 </div>
-<div class="reminder-box">-았더니 와 -더니 는 主语 人称이 핵심 区分 기준。</div>`,
+<div class="reminder-box">-았더니 和 -더니 的核心区分标准是主语的人称。</div>`,
     compareLabel: '-았더니 vs -더니 vs -(으)니까',
     structures: [
       {
@@ -342,11 +344,13 @@ export const grammarCardsP18: GrammarCard[] = [
     ],
     connectionRules: [
       { type: 'rule', text: '-았/었/였더니：词干 + 았/었/였더니（아 词干→았더니，어/여 词干→었더니/였더니）', examples: '먹었더니 / 운동했더니 / 잤더니 / 공부했더니' },
-      { type: 'rule', text: '-더니：词干 + 더니（收音 유무 무관）', examples: '울더니 / 오더니 / 먹더니 / 춥더니' },
-      { type: 'usage', text: '-았더니 的主语必须是第一人称（나/저）。用于第三人称主语时부자연스럽다', examples: '내가 먹었더니 배불러요（✓）/ 친구가 먹었더니 배불렀어요（✗ 부자연스럽다）' },
+      { type: 'rule', text: '-더니：词干 + 더니（与收音有无无关）', examples: '울더니 / 오더니 / 먹더니 / 춥더니' },
+      { type: 'usage', text: '-았더니 的主语必须是第一人称（나/저）。用于第三人称主语时不自然', examples: '내가 먹었더니 배불러요（✓）/ 친구가 먹었더니 배불렀어요（✗ 不自然）' },
       { type: 'usage', text: '-더니 的主语是第三人称或自然现象时较自然', examples: '그 사람이 공부하더니 합격했어요 / 비가 오더니 개었어요' },
-      { type: 'note', text: '-더니 는 前句과 后面 절 关系에 转换（변화）이나 结果 관계를 나타낸다', examples: '어렸을 때 키가 작더니 지금은 크네요（변화）/ 열심히 하더니 결국 해냈어요（结果）' },
+      { type: 'note', text: '-더니 表示前句与后句之间的转换（变化）或结果关系', examples: '어렸을 때 키가 작더니 지금은 크네요（变化）/ 열심히 하더니 결국 해냈어요（结果）' },
       { type: 'compare', text: '-았더니 vs -(으)니까：았더니 表示第一人称直接经验的结果，(으)니까 表示原因/理由，主语无限制', examples: '약을 먹었더니 나았어요（直接经验结果）/ 약을 먹으니까 나았어요（原因说明）' },
+      { type: 'note', text: '-았더니 和 -더니 都含"回想体"-더-，中文没有对应：前一小句必须是说话人亲身经历（았더니）或亲眼观察到（더니）的事，不能用于只是听说、自己没亲历的事。这层"亲历"语气是中文母语者最容易忽略的。', examples: '내가 먹었더니 배불러요（亲身经历）/ 그 사람이 공부하더니 합격했어요（亲眼观察）' },
+      { type: 'note', text: '-았더니 后一小句要的是"因前面动作而出现的结果/发现"，不能是说话人自己接着又做的新动作。想说"我吃了饭然后学习"这种连续动作，要用 -고 나서 / -고，别用 -았더니。', examples: '약을 먹었더니 금방 나았어요（自然出现的结果，✓）/ 밥을 먹고 나서 공부했어요（自己接着做的动作，用 -고 나서）' },
       { type: 'example', text: '잠을 잤더니 피로가 풀렸어요 / 그 가수가 노래하더니 관객이 환호했어요 / 날씨가 맑더니 갑자기 비가 왔어요' },
     ],
     cardExamples: [
@@ -400,18 +404,18 @@ export const grammarCardsP18: GrammarCard[] = [
       { icon: '📈', context: '努力有结果', ko: '열심히 공부하더니 결국 합격했어요.', zh: '之前努力学习，最终合格了。' },
     ],
     mistakes: [
-      { wrong: '친구가 먹었더니 배불렀어요（第三人称 + 았더니）', correct: '친구가 먹더니 배부른 것 같았어요 또는 내가 먹었더니 배불렀어요', note: '-았더니 앞 주어는 第一人称이어야 한다。第三人称 주어에는 -더니 를 쓴다。' },
+      { wrong: '친구가 먹었더니 배불렀어요（第三人称 + 았더니）', correct: '친구가 먹더니 배부른 것 같았어요 또는 내가 먹었더니 배불렀어요', note: '-았더니 前的主语必须是第一人称。第三人称主语要用 -더니。' },
       { wrong: '비가 왔더니 길이 미끄러워요（自然现象 + 았더니）', correct: '비가 오더니 길이 미끄러워졌어요', note: '自然现象作主语时用 -더니 较自然。-았더니 只用于第一人称直接经验。' },
-      { wrong: '잠을 자더니 피로가 풀렸어요（第一人称 경험에 더니）', correct: '잠을 잤더니 피로가 풀렸어요', note: '나/저의 直接 경험 후 결과를 말할 때는 -았더니 를 쓴다。第一人称 주어에 -더니 만 쓰면 부자연스럽다。' },
-      { wrong: '운동했더니에 살이 빠졌어요（았더니 + 에 조사）', correct: '운동했더니 살이 빠졌어요', note: '-았더니 는 接续词尾이므로 后面 조사를 붙이지 않는다。' },
+      { wrong: '잠을 자더니 피로가 풀렸어요（第一人称 经验用 더니）', correct: '잠을 잤더니 피로가 풀렸어요', note: '要说 나/저 的直接经验后的结果时用 -았더니。第一人称主语只用 -더니 会不自然。' },
+      { wrong: '운동했더니에 살이 빠졌어요（았더니 + 에 助词）', correct: '운동했더니 살이 빠졌어요', note: '-았더니 是接续词尾，后面不加助词。' },
     ],
     quickTable: {
-      title: '-았더니 vs -더니 핵심 차이',
+      title: '-았더니 vs -더니 核心差异',
       headers: ['항목', '-았더니', '-더니'],
       rows: [
-        ['主语 人称', '第一人称（나/저）', '第三人称/自然现象'],
-        ['时态', '过去 完成（았/었）', '过去 进行/상태'],
-        ['语气', '直接 경험 후 结果 发现', '观察한 변화/转换'],
+        ['主语人称', '第一人称（나/저）', '第三人称/自然现象'],
+        ['时态', '过去完成（았/었）', '过去进行/状态'],
+        ['语气', '直接经验后发现结果', '观察到的变化/转换'],
         ['例句', '먹었더니 배불러요', '울더니 잠들었어요'],
       ],
     },
@@ -424,13 +428,13 @@ export const grammarCardsP18: GrammarCard[] = [
           prompt: '약을 ___ 금방 나았어요。（吃了药之后，很快好了。）',
           options: ['먹었더니요', '먹으니더니', '먹더니', '먹었더니'],
           answer: 3 as 0|1|2|3,
-          explanation: '내가 약을 먹은 直接 경험 후 结果 → -았더니。먹다 词干 먹（收音 ㄱ）+ 었더니 = 먹었더니。먹더니는 第三人称 观察에 쓰는 形式。',
+          explanation: '我亲自吃药的直接经验后的结果 → -았더니。먹다 词干 먹（收音 ㄱ）+ 었더니 = 먹었더니。먹더니 是用于第三人称观察的形式。',
         },
         {
           prompt: '아이가 ___ 갑자기 잠들었어요。（孩子哭着哭着突然睡着了。）',
           options: ['울더니', '울더니요', '우니더니', '울었더니'],
           answer: 0 as 0|1|2|3,
-          explanation: '아이（第三人称）의 행동 변화 观察 → -더니。울다 词干 울（ㄹ收音）+ 더니 = 울더니。울었더니는 第一人称 경험 结果 表达이라 第三人称 주어에 부자연스럽다。',
+          explanation: '观察 아이（第三人称）的行为变化 → -더니。울다 词干 울（ㄹ收音）+ 더니 = 울더니。울었더니 是第一人称经验结果的表达，用于第三人称主语时不自然。',
         },
         {
           prompt: '다음 중 -았더니 가 올바르게 쓰인 것은？',
@@ -442,31 +446,31 @@ export const grammarCardsP18: GrammarCard[] = [
           prompt: '날씨가 맑___ 갑자기 비가 왔어요。（之前天气晴朗，突然下起了雨。）',
           options: ['더니를', '았더니', '더니', '더니요'],
           answer: 2 as 0|1|2|3,
-          explanation: '날씨（自然现象）의 변화 观察 → -더니。맑다 词干 맑（收音 ㄱ）+ 더니 = 맑더니。았더니는 第一人称 경험 表达이라 自然现象 주어에 부자연스럽다。',
+          explanation: '观察 날씨（自然现象）的变化 → -더니。맑다 词干 맑（收音 ㄱ）+ 더니 = 맑더니。았더니 是第一人称经验的表达，用于自然现象主语时不自然。',
         },
       ],
     },
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P13 · 第6课</div>
+    <div class="ov-hero-label">P18 · 第2课</div>
     <div class="ov-hero-title">-았더니，-더니</div>
-    <div class="ov-hero-sub">第一人称 경험 结果 · 第三人称 观察 转换</div>
+    <div class="ov-hero-sub">第一人称经验结果 · 第三人称观察转换</div>
   </div>
   <div class="ov-section">
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#ff7fa8"></div><div class="ov-section-title" style="color:#ff7fa8">本课语法点</div></div>
     <div class="ov-block">
-      <div class="badge">第一人称 경험 结果</div>
+      <div class="badge">第一人称经验结果</div>
       <div class="ko">词干 + 았/었더니</div>
       <div class="zh">我做了……之后（结果）</div>
     </div>
     <div class="ov-block">
-      <div class="badge">第三人称 观察 转换</div>
+      <div class="badge">第三人称观察转换</div>
       <div class="ko">词干 + 더니</div>
       <div class="zh">（之前）……（然后/但是）……</div>
     </div>
   </div>
   <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#b49ccf"></div><div class="ov-section-title" style="color:#b49ccf">핵심 区分</div></div>
+    <div class="ov-section-hd"><div class="ov-section-line" style="background:#b49ccf"></div><div class="ov-section-title" style="color:#b49ccf">核心区分</div></div>
     <div class="ov-block">
       <div style="display:flex;flex-direction:column;gap:8px">
         <div><span style="font-weight:700">나/저 + 았더니</span>：약을 먹<b style="color:#ff7fa8">었더니</b> 나았어요</div>
@@ -493,9 +497,9 @@ export const grammarCardsP18: GrammarCard[] = [
     title: '(으)로 인하여，(으)로 인한，-길래',
     whatItDoes: '表示原因（正式）或说话者的反应动机',
     whatItDoesBody: '(으)로 인하여 表示原因，相当于"由于……/因为……"，比 때문에 更正式，多用于书面语和新闻报道。\n(으)로 인한 是 (으)로 인하여 的冠词形，修饰后面的名词，相当于"由于……导致的……"。\n-길래 表示说话者因为观察到某种情况而做出相应的行动，相当于"因为（看到/听到）……所以……"，带有直接动机语气。',
-    structureNote: '(으)로 인하여：名词 + (으)로 인하여（收音 O → 으로 인하여，없/ㄹ → 로 인하여）\n(으)로 인한：名词 + (으)로 인한 + 名词（冠词形）\n-길래：动词/形容词 词干 + 길래（口语体，收音 유무 무관）',
-    rulesNote: '(으)로 인하여 는 -로 인해서 / -로 인해 로도 可替换。书面体에서는 (으)로 인하여，口语体에서는 -로 인해 가 더 自然。\n-길래 는 前句의 情境을 直接 观察하거나 듣고 그에 반응하는 행동을 后句에 쓴다。主语가 第一人称인 경우가 많다。',
-    scenarioNote: '(으)로 인하여 는 뉴스，보고서，공문에서 "태풍으로 인하여 항공편이 결항됐습니다"처럼，用于正式原因表达。\n-길래 는 "왜 그랬어?"라는 물음에 "배가 고프길래 먹었어"처럼，用于说明直接动机。',
+    structureNote: '(으)로 인하여：名词 + (으)로 인하여（有收音 → 으로 인하여，无/ㄹ → 로 인하여）\n(으)로 인한：名词 + (으)로 인한 + 名词（冠词形）\n-길래：动词/形容词 词干 + 길래（口语体，与收音有无无关）',
+    rulesNote: '(으)로 인하여 也可替换为 -로 인해서 / -로 인해。书面体用 (으)로 인하여，口语体用 -로 인해 更自然。\n-길래 是说话人直接观察或听到前句的情境后，在后句写出相应的反应行动。主语多为第一人称。',
+    scenarioNote: '(으)로 인하여 用在新闻、报告书、公文中，如 "태풍으로 인하여 항공편이 결항됐습니다"，表达正式原因。\n-길래 用在回答 "왜 그랬어?" 时，如 "배가 고프길래 먹었어"，用于说明直接动机。',
     step0Html: `<div class="card-title">由于……因为看到……所以</div>
 <div class="card-body">两种原因表达，一正式一口语。</div>
 <div class="hook-box">
@@ -516,25 +520,25 @@ export const grammarCardsP18: GrammarCard[] = [
 </div>
 <div class="reminder-box">(으)로 인하여 前接名词，-길래 前接动词/形容词 词干。</div>`,
     compareHtml: `<div class="card-title">(으)로 인하여 vs -때문에 vs -길래</div>
-<div class="card-body">모두 원인을 나타내지만 문체와 语气가 다릅니다。</div>
+<div class="card-body">都表示原因，但文体和语气不同。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
   <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">(으)로 인하여</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">名词 뒤，正式书面，新闻/公文</div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">名词后，正式书面，新闻/公文</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">사고로 인하여 도로가 통제됐습니다</span><span style="font-size:16px;color:#5a4640">由于事故，道路被封锁</span></div>
   </div>
   <div class="tok-row" style="background:#f0f4ff;border-radius:12px;padding:12px">
     <div class="tok t-v">-때문에</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">名词/动词 뒤，口语书面均可</div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">名词/动词后，口语书面均可</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">비 때문에 못 나갔어요</span><span style="font-size:16px;color:#5a4640">因为下雨没能出去</span></div>
   </div>
   <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-길래</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">动词/形容词 뒤，口语体，直接 동기</div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">动词/形容词后，口语体，直接动机</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">맛있어 보이길래 시켜 봤어요</span><span style="font-size:16px;color:#5a4640">看起来好吃，所以点了一下</span></div>
   </div>
 </div>
-<div class="reminder-box">-길래 는 第一人称의 反应行动이 后句에 온다는 점이 특징。</div>`,
+<div class="reminder-box">-길래 的特点是后句为第一人称的反应行动。</div>`,
     compareLabel: '(으)로 인하여 vs -때문에 vs -길래',
     structures: [
       {
@@ -576,12 +580,15 @@ export const grammarCardsP18: GrammarCard[] = [
     ],
     connectionRules: [
       { type: 'rule', text: '(으)로 인하여：收音 O → 으로 인하여，收音 X/ㄹ → 로 인하여', examples: '사고로 인하여 / 태풍으로 인하여 / 질병으로 인하여 / 화재로 인하여' },
-      { type: 'rule', text: '(으)로 인한：名词 + (으)로 인한 + 名词（冠词形으로 뒤 名词 수식）', examples: '사고로 인한 부상 / 태풍으로 인한 피해 / 스트레스로 인한 두통' },
-      { type: 'rule', text: '-길래：动词/形容词 词干 + 길래（收音 유무 무관）', examples: '배고프길래 / 맛있어 보이길래 / 불이 켜져 있길래 / 오길래' },
-      { type: 'usage', text: '(으)로 인하여 의 줄임형：로 인해（口语）/ 로 인해서（口语/书面语 중간），세 形式는 可替换', examples: '태풍으로 인해 결항됐어요 / 사고로 인해서 늦었어요' },
+      { type: 'rule', text: '(으)로 인한：名词 + (으)로 인한 + 名词（用冠词形修饰后面的名词）', examples: '사고로 인한 부상 / 태풍으로 인한 피해 / 스트레스로 인한 두통' },
+      { type: 'rule', text: '-길래：动词/形容词 词干 + 길래（与收音有无无关）', examples: '배고프길래 / 맛있어 보이길래 / 불이 켜져 있길래 / 오길래' },
+      { type: 'usage', text: '(으)로 인하여 的缩略形：로 인해（口语）/ 로 인해서（口语与书面语之间），三种形式可替换', examples: '태풍으로 인해 결항됐어요 / 사고로 인해서 늦었어요' },
       { type: 'usage', text: '-길래 前句的情境由说话人直接感知，后句采取反应行动', examples: '싸길래 많이 샀어요 / 전화가 오길래 받았어요 / 문이 열려 있길래 들어갔어요' },
-      { type: 'note', text: '-길래 는 后句 主语가 第一人称이어야 自然。命令문·共动句과는 함께 쓸 수 없다', examples: '배고프길래 먹었어요（✓）/ 배고프길래 먹어요（✗ 命令 불가）' },
-      { type: 'compare', text: '(으)로 인하여 vs (으)로 해서：인하여는 더 正式이고 书面体，해서는 口语/书面语 중간 수준', examples: '태풍으로 인하여（보고서） / 태풍으로 해서（日常대화 可能）' },
+      { type: 'note', text: '-길래 的后句主语必须是第一人称才自然。不能与命令句·共动句一起使用', examples: '배고프길래 먹었어요（✓）/ 배고프길래 먹어요（✗ 不能用于命令）' },
+      { type: 'compare', text: '(으)로 인하여 vs (으)로 해서：인하여 更正式、更书面，해서 处于口语与书面语之间', examples: '태풍으로 인하여（报告书） / 태풍으로 해서（日常对话可用）' },
+      { type: 'note', text: '负迁移陷阱：中文"由于"可以直接领起一整句（"由于下雨"），但 (으)로 인하여 前面只能接名词。要先把动作名词化再接，或干脆改用接词干的 -아서/때문에。', examples: '비로 인하여 항공편이 결항됐습니다（名词，✓）/ 비가 오로 인하여（✗，动词干不能接）→ 비가 와서 / 비 때문에' },
+      { type: 'compare', text: '-길래 vs -아서/-(으)니까：길래 强调"因(刚)观察·感觉到的情况→我随即做出反应"，后句多为过去、且不能接命令/劝诱；아서/니까 是一般因果，主语不限，后句可命令/劝诱', examples: '싸길래 많이 샀어요（我的临时反应，✓）/ 싸니까 많이 사세요（一般理由+劝诱，用 니까）' },
+      { type: 'note', text: '-길래 的后句必须是"我"针对刚感知到的情况所做出的主观反应或行动，不能是与我无关的客观结果。中文"所以"两种都能带，别照搬。', examples: '전화가 오길래 받았어요（我的反应，✓）/ 客观结果"雨下所以路滑"要用 비가 와서 길이 미끄러워요，不用 길래' },
     ],
     cardExamples: [
       {
@@ -634,14 +641,14 @@ export const grammarCardsP18: GrammarCard[] = [
       { icon: '🍽️', context: '点菜理由', ko: '맛있다고 하길래 저도 시켜 봤어요.', zh: '因为听说好吃，我也点了一份试试。' },
     ],
     mistakes: [
-      { wrong: '태풍이로 인하여 결항됐습니다（名词 + 이로 인하여）', correct: '태풍으로 인하여 결항됐습니다', note: '태풍의 末字 풍은 收音 ㅇ → 으로 인하여。이로는 不存在的形式，(으)로 인하여 前面 이를 삽입하지 않는다。' },
-      { wrong: '배고프길래 먹어라（길래 + 命令문）', correct: '배고프길래 뭔가 먹었어요', note: '-길래 后面不能接命令句或共动句。后句必须是说话人的反应行动（过去时/现在时）。' },
-      { wrong: '사고로 인한 때문에 도로가 막혔어요（인한 + 때문에 중복）', correct: '사고로 인하여 도로가 막혔어요 또는 사고 때문에 도로가 막혔어요', note: '(으)로 인하여 와 때문에 는 相同的 原因 기능이므로 同时 쓰지 않는다。' },
-      { wrong: '맛있어 보이길래서 시켰어요（길래 + 서 중복）', correct: '맛있어 보이길래 시켰어요', note: '-길래 는 接续词尾로 后面 서를 붙이지 않는다。길래서는 不存在的形式。' },
+      { wrong: '태풍이로 인하여 결항됐습니다（名词 + 이로 인하여）', correct: '태풍으로 인하여 결항됐습니다', note: '태풍 的末字 풍收音为 ㅇ → 으로 인하여。이로 是不存在的形式，(으)로 인하여 前面不插入 이。' },
+      { wrong: '배고프길래 먹어라（길래 + 命令句）', correct: '배고프길래 뭔가 먹었어요', note: '-길래 后面不能接命令句或共动句。后句必须是说话人的反应行动（过去时/现在时）。' },
+      { wrong: '사고로 인한 때문에 도로가 막혔어요（인한 + 때문에 重复）', correct: '사고로 인하여 도로가 막혔어요 또는 사고 때문에 도로가 막혔어요', note: '(으)로 인하여 和 때문에 都是相同的表原因功能，所以不同时使用。' },
+      { wrong: '맛있어 보이길래서 시켰어요（길래 + 서 重复）', correct: '맛있어 보이길래 시켰어요', note: '-길래 是接续词尾，后面不加 서。길래서 是不存在的形式。' },
     ],
     quickTable: {
       title: '(으)로 인하여 接续形式',
-      headers: ['名词 末음', '形式', '例句', '意味'],
+      headers: ['名词末音', '形式', '例句', '意思'],
       rows: [
         ['收音 O', '으로 인하여', '태풍으로 인하여', '由于台风'],
         ['收音 X/ㄹ', '로 인하여', '사고로 인하여', '由于事故'],
@@ -657,31 +664,31 @@ export const grammarCardsP18: GrammarCard[] = [
           prompt: '태풍___ 인하여 항공편이 결항됐습니다。（由于台风，航班取消了。）',
           options: ['로의', '으로', '이로', '으로의'],
           answer: 1 as 0|1|2|3,
-          explanation: '태풍의 末字 풍은 收音 ㅇ → 收音 있음 → 으로 인하여。이로는 不存在的形式，으로의/로意图 不存在的形式。',
+          explanation: '태풍 的末字 풍收音为 ㅇ → 有收音 → 으로 인하여。이로 是不存在的形式，으로의/로의 也是不存在的形式。',
         },
         {
           prompt: '싸___ 두 개 샀어요。（因为便宜，买了两个。）',
           options: ['길래요', '기 때문에', '길래', '길래서'],
           answer: 2 as 0|1|2|3,
-          explanation: '싸다 词干 싸（收音X）+ 길래 = 싸길래。-길래 는 口语体 直接 동기 表达。길래서는 不存在的形式，기 때문에는 더 正式 原因 表达。',
+          explanation: '싸다 词干 싸（无收音）+ 길래 = 싸길래。-길래 是口语体表直接动机的表达。길래서 是不存在的形式，기 때문에 是更正式的表原因表达。',
         },
         {
           prompt: '다음 중 (으)로 인한이 올바르게 쓰인 것은？',
           options: ['스트레스로 인한 두통', '스트레스로 인하여 두통', '스트레스이로 인한 두통', '스트레스로 인한 때문에 두통'],
           answer: 0 as 0|1|2|3,
-          explanation: '(으)로 인한은 名词 수식 冠词形：스트레스로 인한 두통（由压力引起的头痛）。인하여 두통은 后面 명사만 올 수 없고，인한 때문에는 중복，이로 인한은 이 삽입 오류。',
+          explanation: '(으)로 인한 是修饰名词的冠词形：스트레스로 인한 두통（由压力引起的头痛）。인하여 后面不能只接名词，인한 때문에 是重复，이로 인한 是错误插入 이。',
         },
         {
           prompt: '불이 켜져 있___ 들어가 봤어요。（因为灯亮着，就进去看了看。）',
           options: ['길래요', '으므로', '길래서', '길래'],
           answer: 3 as 0|1|2|3,
-          explanation: '켜져 있다 词干 있（收音 ㅅ, 有收音）이지만 -길래는 收音 유무와 무관하게 词干에 直接 接续：있길래。길래서는 不存在的形式，으므로는 격식 书面体。',
+          explanation: '켜져 있다 词干 있（收音 ㅅ，有收音），但 -길래 与收音有无无关，直接接在词干后：있길래。길래서 是不存在的形式，으므로 是正式书面体。',
         },
       ],
     },
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P13 · 第7课</div>
+    <div class="ov-hero-label">P18 · 第3课</div>
     <div class="ov-hero-title">(으)로 인하여，(으)로 인한，-길래</div>
     <div class="ov-hero-sub">正式原因 · 名词修饰 · 口语动机</div>
   </div>
@@ -716,7 +723,7 @@ export const grammarCardsP18: GrammarCard[] = [
   <div class="ov-section">
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">别踩的坑</div></div>
     <div class="ov-block">
-      <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">배고프길래 먹어라（길래 + 命令문）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">배고프길래 먹었어요（反应行动）</span></div></div>
+      <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">배고프길래 먹어라（길래 + 命令句）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">배고프길래 먹었어요（反应行动）</span></div></div>
       <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">맛있어 보이길래서（길래 + 서）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">맛있어 보이길래（길래서 不存在的形式）</span></div></div>
     </div>
   </div>
@@ -731,11 +738,11 @@ export const grammarCardsP18: GrammarCard[] = [
     title: '-는/은/ㄴ 듯하다，-는/은/ㄴ/을 모양이다',
     whatItDoes: '表示推测或判断（好像……/看来……）',
     whatItDoesBody: '-는/은/ㄴ 듯하다 表示根据某种迹象做出推测，相当于"好像……/似乎……"，语气较温和，也可用于比喻。\n-는/은/ㄴ/을 모양이다 表示根据观察到的状况推测某种情况，相当于"看来……/好像……"，比 듯하다 更强调外部迹象。',
-    structureNote: '-는/은/ㄴ 듯하다：动词 现在형（-는 듯하다）/ 形容词（-은/ㄴ 듯하다）/ 过去（-은/ㄴ 듯하다）\n-는/은/ㄴ/을 모양이다：动词 现在（-는 모양이다）/ 过去（-은/ㄴ 모양이다）/ 将来（-을/ㄹ 모양이다）/ 形容词（-은/ㄴ 모양이다）',
-    rulesNote: '-듯하다 除推测外，也用于"마치 ~인 것처럼"的比喻表达（눈이 녹듯 사라졌어요）。\n-모양이다 是基于眼前情境或间接证据的推测，比듯하다的推测根据更偏外形。',
-    scenarioNote: '-듯하다 는 "피곤한 듯해요"처럼，用于谨慎推测对方状态。\n-모양이다 는 "비가 올 모양이에요"처럼，常用于观察天气或情境后进行预测。',
+    structureNote: '-는/은/ㄴ 듯하다：动词现在（-는 듯하다）/ 形容词（-은/ㄴ 듯하다）/ 过去（-은/ㄴ 듯하다）\n-는/은/ㄴ/을 모양이다：动词现在（-는 모양이다）/ 过去（-은/ㄴ 모양이다）/ 将来（-을/ㄹ 모양이다）/ 形容词（-은/ㄴ 모양이다）',
+    rulesNote: '-듯하다 除推测外，也用于"마치 ~인 것처럼"的比喻表达（눈이 녹듯 사라졌어요）。\n-모양이다 是基于眼前情境或间接证据的推测，比 듯하다 的推测根据更偏外在迹象。',
+    scenarioNote: '-듯하다 用在 "피곤한 듯해요" 这样的句子中，用于谨慎推测对方状态。\n-모양이다 用在 "비가 올 모양이에요" 这样的句子中，常用于观察天气或情境后进行预测。',
     step0Html: `<div class="card-title">好像……看来……</div>
-<div class="card-body">두 表达 모두 推测이지만 根据의 성격이 다릅니다。</div>
+<div class="card-body">两种表达都是推测，但推测依据的性质不同。</div>
 <div class="hook-box">
   <div style="font-size:16px;font-weight:800;color:#89756e;letter-spacing:.06em;margin-bottom:12px">推测 두 가지 방식</div>
   <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
@@ -750,29 +757,29 @@ export const grammarCardsP18: GrammarCard[] = [
       <div style="font-size:16px;color:#89756e;margin-top:2px">看来要下雨了。</div>
     </div>
   </div>
-  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 듯하다 는 比喻도 可能，모양이다 는 외부 증거 기반</div>
+  <div style="font-size:16px;color:#ff7fa8;font-weight:700">👆 듯하다 也能用于比喻，모양이다 基于外部证据</div>
 </div>
-<div class="reminder-box">冠词形 接续에 注意：动词 现在는 -는，形容词는 -은/ㄴ。</div>`,
+<div class="reminder-box">注意冠词形接续：动词现在用 -는，形容词用 -은/ㄴ。</div>`,
     compareHtml: `<div class="card-title">-듯하다 vs -모양이다 vs -(으)ㄹ 것 같다</div>
-<div class="card-body">推测 表达 세 가지를 비교합니다。</div>
+<div class="card-body">比较三种推测表达。</div>
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
   <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-듯하다</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">推测 + 比喻 可能，主观的 인상</div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">推测 + 可用于比喻，主观印象</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">모르는 듯해요</span><span style="font-size:16px;color:#5a4640">好像不知道</span></div>
   </div>
   <div class="tok-row" style="background:#f0f4ff;border-radius:12px;padding:12px">
     <div class="tok t-v">-모양이다</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">외부 증거 기반 推测，客观的 观察</div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">基于外部证据的推测，客观观察</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">늦을 모양이에요</span><span style="font-size:16px;color:#5a4640">看来要迟到了</span></div>
   </div>
   <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-(으)ㄹ 것 같다</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">가장 一처럼적 推测，在口语中 가장 흔함</div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">最常见的推测，口语中最常用</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">비가 올 것 같아요</span><span style="font-size:16px;color:#5a4640">好像要下雨了</span></div>
   </div>
 </div>
-<div class="reminder-box">세 表达은 可替换한 경우가 많지만，듯하다 는 比喻，모양이다 는 외부 观察에 더 특화。</div>`,
+<div class="reminder-box">三种表达很多时候可以替换，但 듯하다 偏比喻，모양이다 更专用于外部观察。</div>`,
     compareLabel: '-듯하다 vs -모양이다 vs -(으)ㄹ 것 같다',
     structures: [
       {
@@ -807,18 +814,19 @@ export const grammarCardsP18: GrammarCard[] = [
         zh: '看来还没能到达。',
         tokens: [
           { text: '아직', role: 'plain' },
-          { text: '到达을', role: 'object' },
+          { text: '도착을', role: 'object' },
           { text: '못 한 모양이에요', role: 'verb' },
         ],
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '-듯하다 接续：动词 现在 冠词形 + 듯하다（먹는 듯하다），形容词 冠词形 + 듯하다（피곤한 듯하다），过去（먹은 듯하다）', examples: '모르는 듯하다 / 피곤한 듯하다 / 먹은 듯하다 / 떠난 듯하다' },
-      { type: 'rule', text: '-모양이다 接续：动词 现在（-는 모양이다）/ 过去（-은/ㄴ 모양이다）/ 将来（-을/ㄹ 모양이다）/ 形容词（-은/ㄴ 모양이다）', examples: '오는 모양이다 / 간 모양이다 / 올 모양이다 / 바쁜 모양이다' },
-      { type: 'usage', text: '-듯하다 의 比喻 용법："마치 ~인 것처럼"의 意思 用法（눈이 녹듯 사라졌어요）', examples: '꿈을 꾸는 듯한 풍경이에요 / 봄이 온 듯한 날씨네요' },
-      { type: 'usage', text: '-모양이다 는 외부에서 观察 可能한 根据가 있을 때 더 自然', examples: '구름이 많으니 비가 올 모양이에요 / 불이 꺼진 걸 보니 잔 모양이에요' },
-      { type: 'note', text: '-듯하다 与 -모양이다 在句末形分别为 -듯해요，-모양이에요', examples: '피곤한 듯해요 / 늦을 모양이에요' },
-      { type: 'compare', text: '-듯하다 vs -(으)ㄹ 것 같다：두 表达은 可替换한 경우가 많지만，듯하다 는 比喻에도 用法', examples: '모르는 듯해요 ↔ 모르는 것 같아요（可替换）/ 꿈을 꾸는 듯한（比喻，것 相同的 으로 교체 부자연스럽다）' },
+      { type: 'rule', text: '-듯하다 接续：动词现在冠词形 + 듯하다（먹는 듯하다），形容词冠词形 + 듯하다（피곤한 듯하다），过去（먹은 듯하다）', examples: '모르는 듯하다 / 피곤한 듯하다 / 먹은 듯하다 / 떠난 듯하다' },
+      { type: 'rule', text: '-모양이다 接续：动词现在（-는 모양이다）/ 过去（-은/ㄴ 모양이다）/ 将来（-을/ㄹ 모양이다）/ 形容词（-은/ㄴ 모양이다）', examples: '오는 모양이다 / 간 모양이다 / 올 모양이다 / 바쁜 모양이다' },
+      { type: 'usage', text: '-듯하다 的比喻用法："마치 ~인 것처럼"（好像……一样）的意思（눈이 녹듯 사라졌어요）', examples: '꿈을 꾸는 듯한 풍경이에요 / 봄이 온 듯한 날씨네요' },
+      { type: 'usage', text: '-모양이다 在有外部可观察到的依据时更自然', examples: '구름이 많으니 비가 올 모양이에요 / 불이 꺼진 걸 보니 잔 모양이에요' },
+      { type: 'note', text: '-듯하다 与 -모양이다 的句末形分别为 -듯해요，-모양이에요', examples: '피곤한 듯해요 / 늦을 모양이에요' },
+      { type: 'compare', text: '-듯하다 vs -(으)ㄹ 것 같다：两者很多时候可以替换，但 듯하다 还可用于比喻', examples: '모르는 듯해요 ↔ 모르는 것 같아요（可替换）/ 꿈을 꾸는 듯한（比喻，换成 것 같다 不自然）' },
+      { type: 'note', text: '-모양이다 是"根据外部迹象推测别人或情况"，不能用来说自己的主观感觉。想说"我好像感冒了"这类关于自己身体/心情的推测，要用 -것 같다，不能用 -모양이다', examples: '감기에 걸린 것 같아요（我好像感冒了，✓）/ 感觉别人感冒了可说 감기에 걸린 모양이에요' },
       { type: 'example', text: '모르는 듯해요 / 피곤한 듯해요 / 비가 올 모양이에요 / 이미 온 모양이에요' },
     ],
     cardExamples: [
@@ -867,23 +875,23 @@ export const grammarCardsP18: GrammarCard[] = [
       { icon: '😴', context: '看出疲劳', ko: '눈이 빨간 걸 보니 많이 피곤한 듯해요.', zh: '看眼睛红红的，好像很累。' },
       { icon: '🤔', context: '对方不知道', ko: '표정을 보니 잘 모르는 듯해요.', zh: '看表情，好像不太清楚。' },
       { icon: '🌧️', context: '预测下雨', ko: '구름이 많이 끼었으니 비가 올 모양이에요.', zh: '乌云很多，看来要下雨了。' },
-      { icon: '📵', context: '对方忙碎', ko: '전화를 속 받는 걸 보니 바쁜 모양이에요.', zh: '看不接电话的样子，看来很忙。' },
+      { icon: '📵', context: '对方很忙', ko: '전화를 안 받는 걸 보니 바쁜 모양이에요.', zh: '看不接电话的样子，看来很忙。' },
       { icon: '🚗', context: '已经离开', ko: '차가 없는 걸 보니 먼저 간 모양이에요.', zh: '看没有车，看来先走了。' },
       { icon: '🌸', context: '春天来了', ko: '날씨가 봄이 온 듯한 느낌이에요.', zh: '天气有种春天来了的感觉。' },
     ],
     mistakes: [
-      { wrong: '피곤하는 듯해요（形容词 + 는 듯하다）', correct: '피곤한 듯해요', note: '形容词 冠词形은 -는 이 아니라 -은/ㄴ 이다。피곤하다 → 피곤한 듯해요。동사에만 现在형 -는 을 쓴다。' },
-      { wrong: '비가 올 모양이다（단독 종결 부자연스럽다）', correct: '비가 올 모양이에요（口语 자연스러운 形式）', note: '모양이다 단독 종결은 在口语中 부자연스럽다。在口语中는 모양이에요，격식에서는 모양입니다 가 자연。' },
-      { wrong: '모르은 모양이에요（收音 없는 동사에 收音 있는 冠词形 词尾 적용）', correct: '모르는 모양이에요', note: '모르다는 동사이며 现在 冠词形은 -는 이다。收音 유무와 관계없이 动词 现在형에는 -는 을 쓴다。收音 있는 形式인 -은 은 形容词나 动词 过去형에 使用한다。' },
-      { wrong: '비가 오는 듯한 것 같아요（듯하다 + 것 같다 중복）', correct: '비가 오는 듯해요 또는 비가 올 것 같아요', note: '-듯하다 와 -것 같다 는 동일 기능의 推测 表达이므로 同时 쓰지 않는다。' },
+      { wrong: '피곤하는 듯해요（形容词 + 는 듯하다）', correct: '피곤한 듯해요', note: '形容词的冠词形不是 -는 而是 -은/ㄴ。피곤하다 → 피곤한 듯해요。只有动词才用现在形 -는。' },
+      { wrong: '비가 올 모양이다（单独结句不自然）', correct: '비가 올 모양이에요（口语自然形式）', note: '모양이다 单独结句在口语中不自然。口语中用 모양이에요，正式场合用 모양입니다 更自然。' },
+      { wrong: '모르은 모양이에요（给无收音动词用有收音的冠词形词尾）', correct: '모르는 모양이에요', note: '모르다 是动词，现在冠词形是 -는。无论收音有无，动词现在形都用 -는。有收音的形式 -은 用于形容词或动词过去形。' },
+      { wrong: '비가 오는 듯한 것 같아요（듯하다 + 것 같다 重复）', correct: '비가 오는 듯해요 또는 비가 올 것 같아요', note: '-듯하다 和 -것 같다 是相同功能的推测表达，所以不同时使用。' },
     ],
     quickTable: {
       title: '-듯하다 / -모양이다 冠词形 接续',
-      headers: ['时态/품사', '듯하다 앞', '모양이다 앞', '例句'],
+      headers: ['时态/词性', '듯하다 前', '모양이다 前', '例句'],
       rows: [
-        ['动词 现在', '-는', '-는', '먹는 듯하다 / 오는 모양이다'],
-        ['动词 过去', '-은/ㄴ', '-은/ㄴ', '먹은 듯하다 / 간 모양이다'],
-        ['动词 将来', '(-을 듯하다 可能)', '-을/ㄹ', '올 듯하다 / 올 모양이다'],
+        ['动词现在', '-는', '-는', '먹는 듯하다 / 오는 모양이다'],
+        ['动词过去', '-은/ㄴ', '-은/ㄴ', '먹은 듯하다 / 간 모양이다'],
+        ['动词将来', '(-을 듯하다 可用)', '-을/ㄹ', '올 듯하다 / 올 모양이다'],
         ['形容词', '-은/ㄴ', '-은/ㄴ', '피곤한 듯하다 / 바쁜 모양이다'],
       ],
     },
@@ -896,31 +904,31 @@ export const grammarCardsP18: GrammarCard[] = [
           prompt: '얼굴을 보니 많이 피곤___ 듯해요。（看脸色，好像很累。）',
           options: ['했는', '하던', '하는', '한'],
           answer: 3 as 0|1|2|3,
-          explanation: '피곤하다는 形容词 → 冠词形 -은/ㄴ：피곤하+ㄴ = 피곤한 듯해요。형용사에 动词형 -는 을 쓰면 오류。',
+          explanation: '피곤하다 是形容词 → 冠词形 -은/ㄴ：피곤하+ㄴ = 피곤한 듯해요。给形容词用动词形 -는 是错误的。',
         },
         {
           prompt: '전화를 안 받는 걸 보니 바쁜 ___。（看不接电话，看来很忙。）',
           options: ['모양이에요', '모양해요', '듯이에요', '듯모양이에요'],
           answer: 0 as 0|1|2|3,
-          explanation: '-모양이다 종결형：모양이에요（口语）。듯이에요/모양해요/듯모양이에요는 不存在的形式。',
+          explanation: '-모양이다 的终结形：모양이에요（口语）。듯이에요/모양해요/듯모양이에요 都是不存在的形式。',
         },
         {
-          prompt: '비가 오___ 듯해요。（好像要下雨。）— 动词 现在 冠词形을 고르세요',
+          prompt: '비가 오___ 듯해요。（好像要下雨。）— 请选出动词现在冠词形',
           options: ['왔는', '온', '오는', '올'],
           answer: 2 as 0|1|2|3,
-          explanation: '오다（动词）现在 冠词形은 -는 이다：오는 듯해요（✓）。온 은 过去형（온 듯하다），올 은 将来형，왔는 은 비표준형이다。',
+          explanation: '오다（动词）的现在冠词形是 -는：오는 듯해요（✓）。온 是过去形（온 듯하다），올 是将来形，왔는 是非标准形式。',
         },
         {
           prompt: '다음 중 -듯하다 가 올바르게 쓰인 것은？',
           options: ['가는듯이에요', '모르는 듯해요', '피곤하는 듯해요', '먹를 듯해요'],
           answer: 1 as 0|1|2|3,
-          explanation: '모르다（动词）现在 冠词形：모르는 듯해요（✓）。피곤하는은 형용사에 动词형 词尾 오류，먹를은 不存在的形式，가는듯이에요는 없는 종결형。',
+          explanation: '모르다（动词）现在冠词形：모르는 듯해요（✓）。피곤하는 是给形容词用动词形词尾的错误，먹를 是不存在的形式，가는듯이에요 是不存在的终结形。',
         },
       ],
     },
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P13 · 第8课</div>
+    <div class="ov-hero-label">P18 · 第4课</div>
     <div class="ov-hero-title">-듯하다，-모양이다</div>
     <div class="ov-hero-sub">好像……/似乎 · 看来……/看起来</div>
   </div>
@@ -934,7 +942,7 @@ export const grammarCardsP18: GrammarCard[] = [
     <div class="ov-block">
       <div class="badge">看来</div>
       <div class="ko">冠词形 + 모양이다</div>
-      <div class="zh">看来……（외부 观察 기반）</div>
+      <div class="zh">看来……（基于外部观察）</div>
     </div>
   </div>
   <div class="ov-section">
@@ -968,10 +976,10 @@ export const grammarCardsP18: GrammarCard[] = [
     whatItDoesBody: '-을/ㄹ 텐데 在推测或预料某种状况的前提下，表达说话者的期待、担忧或遗憾，相当于"应该……/想必……（所以……）"。\n-더러/보고 均表示行为的对象，相当于"叫……/对……说"，主要用于命令、请求、传话等句子中。더러 比 보고 语气稍正式。',
     structureNote: '-을/ㄹ 텐데：动词/形容词 词干 + (으)ㄹ 텐데（有收音 + 을 텐데，无收音/ㄹ + ㄹ 텐데）\n더러/보고：名词（사람） + 더러/보고 + 动词（命令/请求句）',
     rulesNote: '-을/ㄹ 텐데 前句主语可以是说话人自己或第三人称。后面接请求、担忧、建议等。\n더러/보고 的前面必须是人物名词，不能用事物或抽象名词。',
-    scenarioNote: '-을/ㄹ 텐데 는 "피곤할 텐데 쉬세요"처럼，常用于体谅对方。\n더러/보고 는 전달 动词（말하다/시키다/부탁하다）와 함께 "누구보고 가라고 했어？"처럼，经常使用。',
+    scenarioNote: '-을/ㄹ 텐데 常用于体谅对方，如 "피곤할 텐데 쉬세요"。\n더러/보고 常与传话动词（말하다/시키다/부탁하다）连用，如 "누구보고 가라고 했어？"。',
     structures: [
       {
-        ko: '동사/形容词 词干 + (으)ㄹ 텐데',
+        ko: '动词/形容词 词干 + (으)ㄹ 텐데',
         tokens: [
           { text: '피곤', role: 'plain' },
           { text: '할', role: 'verb' },
@@ -992,7 +1000,7 @@ export const grammarCardsP18: GrammarCard[] = [
         zh: '应该吃了很多，想必很饱。',
       },
       {
-        ko: '명사 + 더러',
+        ko: '名词 + 더러',
         tokens: [
           { text: '선생님이', role: 'subject' },
           { text: ' 나', role: 'object' },
@@ -1003,7 +1011,7 @@ export const grammarCardsP18: GrammarCard[] = [
         zh: '老师叫我去发表。',
       },
       {
-        ko: '명사 + 보고',
+        ko: '名词 + 보고',
         tokens: [
           { text: '친구', role: 'object' },
           { text: '보고', role: 'plain' },
@@ -1017,11 +1025,13 @@ export const grammarCardsP18: GrammarCard[] = [
     connectionRules: [
       { type: 'rule', text: '动词/形容词 有收音 词干 + 을 텐데', examples: '먹을 텐데，읽을 텐데，좋을 텐데' },
       { type: 'rule', text: '动词/形容词 无收音/ㄹ 词干 + ㄹ 텐데', examples: '가다→갈 텐데，오다→올 텐데，알다→알 텐데' },
-      { type: 'note', text: '-을/ㄹ 텐데 后面는 부탁、担忧、建议 表达이 따른다', examples: '바쁠 텐데 괜찮으세요？/ 힘들 텐데 도와드릴게요' },
-      { type: 'compare', text: '-을/ㄹ 텐데 vs -겠지만：텐데表示说话人的推测+体谅，겠지만表示让步（虽然…但）' },
+      { type: 'note', text: '-을/ㄹ 텐데 后面跟随请求、担忧、建议等表达', examples: '바쁠 텐데 괜찮으세요？/ 힘들 텐데 도와드릴게요' },
+      { type: 'compare', text: '-을/ㄹ 텐데 vs -겠지만：텐데 表示说话人的推测+体谅，겠지만 表示让步（虽然…但）' },
       { type: 'rule', text: '人物名词 + 더러/보고 + 命令/共动 간접인용', examples: '동생더러 오라고 했어요 / 친구보고 기다리라고 했어요' },
-      { type: 'compare', text: '더러 vs 보고：含义 동일，더러가 약간 格式体', examples: '어머니더러 말했어요（격식）/ 친구보고 말했어요（口语）' },
-      { type: 'note', text: '더러/보고 前面는 人物명사만 可能，事物 名词 불가', examples: '책보고 읽으라고 했어요（✗） → 친구보고 읽으라고 했어요（✓）' },
+      { type: 'compare', text: '더러 vs 보고：含义相同，더러 稍正式', examples: '어머니더러 말했어요（正式）/ 친구보고 말했어요（口语）' },
+      { type: 'note', text: '더러/보고 前面只能接人物名词，不能用事物名词', examples: '책보고 읽으라고 했어요（✗） → 친구보고 읽으라고 했어요（✓）' },
+      { type: 'note', text: '更关键的限制：더러/보고 后面只能跟命令/请求/共动的间接引语（-라고/-자고/-달라고），不能跟陈述句（-다고）。想说"对某人说（某件事）"这种陈述内容，要用 에게/한테，不能用 보고/더러', examples: '친구보고 오라고 했어요（✓，命令）/ 친구보고 예쁘다고 했어요（✗，陈述）→ 친구한테 예쁘다고 했어요（✓）' },
+      { type: 'usage', text: '-았/었을 텐데 表示对过去的反事实推测，相当于"本来会……（可惜没做到）"，常带遗憾语气', examples: '일찍 출발했으면 안 늦었을 텐데（要是早点出发就不会迟到了，可惜迟到了）' },
     ],
     cardExamples: [
       {
@@ -1079,10 +1089,10 @@ export const grammarCardsP18: GrammarCard[] = [
       { icon: '😟', context: '担心朋友', ko: '힘들 텐데 제가 도와드릴게요.', zh: '应该很难，我来帮您吧。' },
     ],
     mistakes: [
-      { wrong: '피곤을 텐데（名词 뒤 을 텐데）', correct: '피곤할 텐데', note: '피곤하다는 형용사가므로 词干 피곤하- 에 ㄹ 텐데를 붙인다：피곤할 텐데。명사에는 直接 을 텐데를 붙이지 않는다。' },
-      { wrong: '갈 텐데요（단독 종결）', correct: '갈 텐데 조심하세요 등 후반절이 필요', note: '-을/ㄹ 텐데 는 보통 단독 종결이 부자연스럽다。后面 부탁/担忧/建议 절이 이어져야 자연。' },
-      { wrong: '책보고 읽으라고 했어요（事物 名词 + 보고）', correct: '동생보고 읽으라고 했어요', note: '더러/보고 는 人物名词 后面만 쓸 수 있다。책、가방 등 事物에는 쓸 수 없다。' },
-      { wrong: '친구더러게 말했어요（더러 + 에게 중복）', correct: '친구더러 말했어요 또는 친구에게 말했어요', note: '더러 와 에게 는 동일 기능의 조关系므로 중복 使用하지 않는다。' },
+      { wrong: '피곤을 텐데（名词后接 을 텐데）', correct: '피곤할 텐데', note: '피곤하다 是形容词，所以在词干 피곤하- 后加 ㄹ 텐데：피곤할 텐데。名词后不直接加 을 텐데。' },
+      { wrong: '갈 텐데요（单独结句）', correct: '갈 텐데 조심하세요 等需要后半句', note: '-을/ㄹ 텐데 通常单独结句不自然。后面需要接请求/担忧/建议的从句才自然。' },
+      { wrong: '책보고 읽으라고 했어요（事物名词 + 보고）', correct: '동생보고 읽으라고 했어요', note: '더러/보고 只能用在人物名词后面。책、가방 等事物不能用。' },
+      { wrong: '친구더러게 말했어요（더러 + 에게 重复）', correct: '친구더러 말했어요 또는 친구에게 말했어요', note: '더러 和 에게 是相同功能的助词，所以不重复使用。' },
     ],
     specialQuiz: {
       type: 'fill',
@@ -1093,31 +1103,31 @@ export const grammarCardsP18: GrammarCard[] = [
           prompt: '오늘 많이 ___ 텐데 쉬세요。（今天应该很累，请休息。）',
           options: ['피곤하는', '피곤한', '피곤을', '피곤할'],
           answer: 3 as 0|1|2|3,
-          explanation: '피곤하다（形容词）词干 피곤하- + ㄹ 텐데：피곤할 텐데（✓）。피곤을/피곤하는/피곤한 텐데는 모두 病句이다。',
+          explanation: '피곤하다（形容词）词干 피곤하- + ㄹ 텐데：피곤할 텐데（✓）。피곤을/피곤하는/피곤한 텐데 都是病句。',
         },
         {
           prompt: '비가 ___ 텐데 우산을 가져가세요。（应该会下雨，带把伞去吧。）',
           options: ['올', '오을', '온', '오는'],
           answer: 0 as 0|1|2|3,
-          explanation: '오다（动词）无收音 词干 오- + ㄹ 텐데：올 텐데（✓）。오는 은 现在 冠词形，온 은 过去형，오을 은 不存在的形式。',
+          explanation: '오다（动词）无收音词干 오- + ㄹ 텐데：올 텐데（✓）。오는 是现在冠词形，온 是过去形，오을 是不存在的形式。',
         },
         {
           prompt: '선생님이 나___ 발표하라고 하셨어요。（老师叫我去发表。）',
           options: ['로', '더러', '한테서', '에서'],
           answer: 1 as 0|1|2|3,
-          explanation: '더러 는 "叫某人（做某事）"의 행동 对象 조사。에서는 地点/출발점，한테서는 출발점，로는 방향/수단 조사로 이 문맥에 맞지 않는다。',
+          explanation: '더러 是表示 "叫某人（做某事）" 的行为对象助词。에서 是地点/出发点，한테서 是出发点，로 是方向/手段助词，都不符合此语境。',
         },
         {
-          prompt: '다음 중 올바른 句子은？',
+          prompt: '다음 중 올바른 문장은？',
           options: ['책더러 읽으라고 했어요', '날씨보고 좋아지라고 했어요', '동생보고 기다리라고 했어요', '가방보고 들고 가라고 했어요'],
           answer: 2 as 0|1|2|3,
-          explanation: '보고/더러 는 人物名词 后面만 쓴다。동생（사람）보고（✓）。가방/날씨/책은 모두 事物이므로 보고/더러 使用 불가。',
+          explanation: '보고/더러 只能用在人物名词后面。동생（人）보고（✓）。가방/날씨/책 都是事物，不能用 보고/더러。',
         },
       ],
     },
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P13 · 第9课</div>
+    <div class="ov-hero-label">P18 · 第5课</div>
     <div class="ov-hero-title">-을/ㄹ 텐데，더러/보고</div>
     <div class="ov-hero-sub">推测+期待 · 叫某人做某事</div>
   </div>
@@ -1135,7 +1145,7 @@ export const grammarCardsP18: GrammarCard[] = [
     </div>
   </div>
   <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#b49ccf"></div><div class="ov-section-title" style="color:#b49ccf">接续 형식</div></div>
+    <div class="ov-section-hd"><div class="ov-section-line" style="background:#b49ccf"></div><div class="ov-section-title" style="color:#b49ccf">接续形式</div></div>
     <div class="ov-block">
       <div style="display:flex;flex-direction:column;gap:8px">
         <div><span style="font-weight:700">有收音</span>：먹<b style="color:#ff7fa8">을</b> 텐데，읽<b style="color:#ff7fa8">을</b> 텐데</div>
@@ -1202,7 +1212,7 @@ export const grammarCardsP18: GrammarCard[] = [
       rows: [
         ['有收音 词干', '+ 을 텐데', '먹을 텐데，읽을 텐데，좋을 텐데'],
         ['无收音/ㄹ 词干', '+ ㄹ 텐데', '갈 텐데，올 텐데，알 텐데'],
-        ['더러（약간 격식）', '사람 + 더러', '나더러，학생더러，선생님더러'],
+        ['더러（稍正式）', '사람 + 더러', '나더러，학생더러，선생님더러'],
         ['보고（口语）', '사람 + 보고', '친구보고，동생보고，그 사람보고'],
       ],
     },
@@ -1217,11 +1227,11 @@ export const grammarCardsP18: GrammarCard[] = [
     whatItDoes: '确认共识，或补充说明理由',
     whatItDoesBody: '-잖아요 用于确认说话双方都知道的事实，带有"你不是知道吗/你看……不是……嘛"的语气，暗示听话人应该已经了解该信息。\n-거든요 用于补充说话人认为对方不知道的背景信息或理由，相当于"因为……（你可能不知道）/其实……"，语气比 -니까 更温和，有轻微说明/解释感。',
     structureNote: '-잖아요：动词/形容词/이다 词干 + 잖아요（现在），+ 았/었잖아요（过去）\n-거든요：动词/形容词/이다 词干 + 거든요（现在），+ 았/었거든요（过去）',
-    rulesNote: '-잖아요 用于说话人和听话人共享的信息。用于听话人完全不知道的信息时부자연스럽다。\n-거든요 用于将只有说话人知道的信息告诉对方。单独用于句末或，用于原因从句。',
-    scenarioNote: '-잖아요 는 "그 사람 알잖아요！（你认识那个人的嘛！）"처럼，也用于轻微的抗议或唤起注意。\n-거든요 는 "사실 저 한국 사람이거든요（其实我是韩国人）"처럼，常用于自然引入新的背景信息。',
+    rulesNote: '-잖아요 用于说话人和听话人共享的信息。用于听话人完全不知道的信息时不自然。\n-거든요 用于将只有说话人知道的信息告诉对方。可单独用于句末，也可用于原因从句。',
+    scenarioNote: '-잖아요 用在 "그 사람 알잖아요！（你认识那个人的嘛！）" 这样的句子中，也用于轻微的抗议或唤起注意。\n-거든요 用在 "사실 저 한국 사람이거든요（其实我是韩国人）" 这样的句子中，常用于自然引入新的背景信息。',
     structures: [
       {
-        ko: '동사/形容词 词干 + 잖아요',
+        ko: '动词/形容词 词干 + 잖아요',
         tokens: [
           { text: '그 영화', role: 'subject' },
           { text: ' 재미있잖아요', role: 'verb' },
@@ -1237,7 +1247,7 @@ export const grammarCardsP18: GrammarCard[] = [
         zh: '我说过嘛（你知道的）。',
       },
       {
-        ko: '동사/形容词 词干 + 거든요',
+        ko: '动词/形容词 词干 + 거든요',
         tokens: [
           { text: '오늘', role: 'time' },
           { text: ' 좀', role: 'plain' },
@@ -1259,11 +1269,12 @@ export const grammarCardsP18: GrammarCard[] = [
     connectionRules: [
       { type: 'rule', text: '动词/形容词 词干 + 잖아요（现在）', examples: '알잖아요，바쁘잖아요，좋잖아요' },
       { type: 'rule', text: '动词/形容词 词干 + 았/었잖아요（过去）', examples: '말했잖아요，갔잖아요，먹었잖아요' },
-      { type: 'note', text: '-잖아요 는 说话人·听话人 仅用于共享信息，对初次见面的人使用부자연스럽다', examples: '"그 사람 알잖아요"→仅在熟识时才自然' },
-      { type: 'rule', text: '动词/形容词 词干 + 거든요（现在）', examples: '바쁘거든요，한국 사람이거든요' },
+      { type: 'note', text: '-잖아요 只用于说话人和听话人共享的信息，对初次见面的人使用不自然', examples: '"그 사람 알잖아요"→仅在熟识时才自然' },
+      { type: 'rule', text: '动词/形容词 词干 + 거든요（现在）', examples: '바쁘거든요，한국 사람이거든요（因为忙嘛、因为是韩国人嘛）' },
       { type: 'rule', text: '动词/形容词 词干 + 았/었거든요（过去）', examples: '먹었거든요，갔었거든요，했거든요' },
-      { type: 'compare', text: '-거든요 vs -니까：거든요는 새 信息 引入，니까는 直接的 理由 제시', examples: '늦었거든요（背景설명） vs 늦었으니까 빨리 가요（直接 理由）' },
-      { type: 'note', text: '-거든요 단독 종결 시 설명/해명 语气', examples: '왜 왔어요？— 바빴거든요' },
+      { type: 'compare', text: '-거든요 vs -니까：거든요 引入新信息，니까 直接提出理由', examples: '늦었거든요（背景说明） vs 늦었으니까 빨리 가요（直接理由）' },
+      { type: 'note', text: '-거든요 单独结句时带有说明/解释的语气', examples: '왜 왔어요？— 바빴거든요（为什么来了？——因为之前忙嘛。）' },
+      { type: 'note', text: '语气提醒：-잖아요 不是中文那种中性的"……嘛"。它暗含"你早就该知道"，对长辈或上级使用容易显得责怪、教训。对长辈请改用陈述句或敬语说明，别用 -잖아요 来提醒对方', examples: '（对朋友）아까 말했잖아요（✓）/（对上司）아까 말씀드렸잖아요 会显得在责怪 → 改说 아까 말씀드렸는데요' },
     ],
     cardExamples: [
       {
@@ -1274,7 +1285,7 @@ export const grammarCardsP18: GrammarCard[] = [
           { text: ' 친구잖아요', role: 'verb' },
         ],
         zh: '你认识那个人嘛，是我们班同学嘛。',
-        swapWords: ['相同的 회사잖아요', '熟识잖아요'],
+        swapWords: ['같은 회사잖아요', '잘 아는 사이잖아요'],
         swapRole: 'verb',
       },
       {
@@ -1320,10 +1331,10 @@ export const grammarCardsP18: GrammarCard[] = [
       { icon: '📖', context: '说明理由', ko: '지금 공부 중이거든요，나중에 얘기해요.', zh: '我现在在学习（你不知道），待会儿再聊吧。' },
     ],
     mistakes: [
-      { wrong: '初次见面的 사람에게：그 노래 알잖아요（共享 信息 아님）', correct: '그 노래 아세요？', note: '-잖아요 는 听话人가 已经 알고 있는 정보에만 쓴다。初次见面的 사람에게는 부자연스럽다。모르는 信息라면 의문문을 쓰는 것이 자연。' },
-      { wrong: '왜 늦었어요？— 바빴잖아요（听话人가 모르는 情境）', correct: '바빴거든요', note: '表达对方不知道的理由用 -거든요。-잖아요 用于唤起听话人已知的事实。' },
-      { wrong: '피곤하거든요잖아요（거든요 + 잖아요 중복）', correct: '피곤하거든요 또는 피곤하잖아요', note: '-거든요 와 -잖아요 는 不能同时使用。两个词尾用于不同的信息共享情境。' },
-      { wrong: '먹었잖아요（내가 먹은 사실 상대가 모르는 情境）', correct: '먹었거든요', note: '상대방이 모르는 정보를 전달할 때는 -거든요 를 쓴다。-잖아요 는 함께 경험하거나 상대가 已经 알고 있을 때만 쓴다。' },
+      { wrong: '对初次见面的人：그 노래 알잖아요（并非共享信息）', correct: '그 노래 아세요？', note: '-잖아요 只用于听话人已经知道的信息。对初次见面的人使用不自然。如果是对方不知道的信息，用疑问句更自然。' },
+      { wrong: '왜 늦었어요？— 바빴잖아요（听话人不知道的情境）', correct: '바빴거든요', note: '表达对方不知道的理由用 -거든요。-잖아요 用于唤起听话人已知的事实。' },
+      { wrong: '피곤하거든요잖아요（거든요 + 잖아요 重复）', correct: '피곤하거든요 또는 피곤하잖아요', note: '-거든요 和 -잖아요 不能同时使用。两个词尾用于不同的信息共享情境。' },
+      { wrong: '먹었잖아요（我吃了这一事实对方不知道的情境）', correct: '먹었거든요', note: '传达对方不知道的信息时用 -거든요。-잖아요 只在共同经历过或对方已经知道时使用。' },
     ],
     specialQuiz: {
       type: 'fill',
@@ -1334,31 +1345,31 @@ export const grammarCardsP18: GrammarCard[] = [
           prompt: '（两人都去过那里）거기 좋___ 우리 또 가요！（那里很好嘛，我们再去吧！）',
           options: ['았거든요', '잖아요', '거든요', '겠잖아요'],
           answer: 1 as 0|1|2|3,
-          explanation: '두 사람 모두 아는 사실 唤起注意할 때는 -잖아요 를 쓴다：좋잖아요（✓）。-거든요 는 상대가 모르는 새 정보에 쓴다。',
+          explanation: '唤起两人都知道的事实时用 -잖아요：좋잖아요（✓）。-거든요 用于对方不知道的新信息。',
         },
         {
           prompt: '왜 일찍 왔어요？— 오늘 약속이 있___ 일찍 왔어요。（因为今天有约，所以早来了。）',
           options: ['거든요', '잖아요', '았잖아요', '는데요'],
           answer: 0 as 0|1|2|3,
-          explanation: '상대가 모르는 理由를 설명할 때는 -거든요：있거든요（✓）。-잖아요 는 共享 정보에만 쓴다。',
+          explanation: '说明对方不知道的理由时用 -거든요：있거든요（✓）。-잖아요 只用于共享信息。',
         },
         {
           prompt: '다음 중 -잖아요 를 올바르게 쓴 것은？',
           options: ['그 영화 좋잖아요（상대가 전혀 모름）', '왜 왔어요？ — 바빴잖아요（상대가 모름）', '우리 같이 봤잖아요，기억 안 나요？', '사실 저 한국 사람잖아요（처음 만남）'],
           answer: 2 as 0|1|2|3,
-          explanation: '같이 봤잖아요：두 사람이 함께 경험한 共享 信息 → -잖아요（✓）。나머지는 모두 상대가 모르는 정보에 -잖아요 를 쓴 오류。',
+          explanation: '같이 봤잖아요：两人共同经历的共享信息 → -잖아요（✓）。其余都是对对方不知道的信息误用 -잖아요。',
         },
         {
-          prompt: '사실 저 요즘 한국어 배우고 있___ 所以 잘 알아요。（其实我最近在学韩语，所以很了解。）',
+          prompt: '사실 저 요즘 한국어 배우고 있___ 그래서 잘 알아요。（其实我最近在学韩语，所以很了解。）',
           options: ['았잖아요', '는데잖아요', '잖아요', '거든요'],
           answer: 3 as 0|1|2|3,
-          explanation: '对方不知道的背景信息（사실 등）用 -거든요 引入：배우고 있거든요（✓）。-잖아요 仅用于共享信息·唤起注意。',
+          explanation: '对方不知道的背景信息（如 사실）用 -거든요 引入：배우고 있거든요（✓）。-잖아요 仅用于共享信息·唤起注意。',
         },
       ],
     },
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P13 · 第10课</div>
+    <div class="ov-hero-label">P18 · 第6课</div>
     <div class="ov-hero-title">-잖아요，-거든요</div>
     <div class="ov-hero-sub">你知道的嘛 · 其实是这样（你不知道）</div>
   </div>
@@ -1376,19 +1387,19 @@ export const grammarCardsP18: GrammarCard[] = [
     </div>
   </div>
   <div class="ov-section">
-    <div class="ov-section-hd"><div class="ov-section-line" style="background:#b49ccf"></div><div class="ov-section-title" style="color:#b49ccf">핵심 구별법</div></div>
+    <div class="ov-section-hd"><div class="ov-section-line" style="background:#b49ccf"></div><div class="ov-section-title" style="color:#b49ccf">核心辨析</div></div>
     <div class="ov-block">
       <div style="display:flex;flex-direction:column;gap:8px">
         <div><span style="font-weight:700">잖아요</span>：听话人已知信息 → <b style="color:#ff7fa8">共享信息·唤起注意</b></div>
-        <div><span style="font-weight:700">거든요</span>：听话人가 모르는 信息 → <b style="color:#ff7fa8">새 信息 引入</b></div>
+        <div><span style="font-weight:700">거든요</span>：听话人不知道的信息 → <b style="color:#ff7fa8">引入新信息</b></div>
       </div>
     </div>
   </div>
   <div class="ov-section">
     <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">别踩的坑</div></div>
     <div class="ov-block">
-      <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">初次见面的 사람에게：알잖아요</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">아세요？（不能用잖아요）</span></div></div>
-      <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">理由 설명：바빴잖아요（상대 모름）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">바빴거든요</span></div></div>
+      <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">对初次见面的人：알잖아요</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">아세요？（不能用 잖아요）</span></div></div>
+      <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">说明理由：바빴잖아요（对方不知道）</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">바빴거든요</span></div></div>
     </div>
   </div>
 </div>`,
@@ -1416,29 +1427,29 @@ export const grammarCardsP18: GrammarCard[] = [
 <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
   <div class="tok-row" style="background:#fff0f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-잖아요</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">확인/唤起注意：双方都知道，说话人提醒</div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">确认/唤起注意：双方都知道，说话人提醒</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">바쁘잖아요，그러니까요</span><span style="font-size:16px;color:#5a4640">不是挺忙的嘛</span></div>
   </div>
   <div class="tok-row" style="background:#f0f4ff;border-radius:12px;padding:12px">
     <div class="tok t-v">-거든요</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">설명/引入：对方不知道，说话人说明</div>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">바쁘거든요，所以 못 가요</span><span style="font-size:16px;color:#5a4640">因为我很忙（你不知道）</span></div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">说明/引入：对方不知道，说话人说明</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">바쁘거든요, 그래서 못 가요</span><span style="font-size:16px;color:#5a4640">因为我很忙（你不知道）</span></div>
   </div>
   <div class="tok-row" style="background:#eaf8f5;border-radius:12px;padding:12px">
     <div class="tok t-v">-니까</div>
-    <div style="font-size:16px;color:#89756e;margin-top:2px">直接 理由 제시，命令/共动句에 经常 使用</div>
+    <div style="font-size:16px;color:#89756e;margin-top:2px">直接提出理由，常用于命令/共动句</div>
     <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span style="font-weight:700">바쁘니까 나중에 얘기해요</span><span style="font-size:16px;color:#5a4640">因为忙，之后再说吧</span></div>
   </div>
 </div>`,
     compareLabel: '-잖아요 vs -거든요 vs -니까',
     quickTable: {
       title: '-잖아요 / -거든요 비교',
-      headers: ['词尾', '使用 条件', '语气', '例句'],
+      headers: ['词尾', '使用条件', '语气', '例句'],
       rows: [
-        ['-잖아요', '共享 信息', '확인·唤起注意', '알잖아요，바쁘잖아요'],
-        ['-았/었잖아요', '共享 过去 信息', '过去 확인', '말했잖아요，갔잖아요'],
-        ['-거든요', '새 信息', '설명·引入', '바쁘거든요，한국 사람이거든요'],
-        ['-았/었거든요', '새 过去 信息', '过去 설명', '먹었거든요，갔었거든요'],
+        ['-잖아요', '共享信息', '确认·唤起注意', '알잖아요，바쁘잖아요'],
+        ['-았/었잖아요', '共享过去信息', '过去确认', '말했잖아요，갔잖아요'],
+        ['-거든요', '新信息', '说明·引入', '바쁘거든요，한국 사람이거든요'],
+        ['-았/었거든요', '新的过去信息', '过去说明', '먹었거든요，갔었거든요'],
       ],
     },
     linkedGrammarIds: ['g18', 'g19'],
@@ -1449,8 +1460,8 @@ export const grammarCardsP18: GrammarCard[] = [
     isPractice: true,
     partNumber: 18,
     lessonNumber: 7,
-    title: 'P14 综合练习',
-    whatItDoes: 'P13 第6～10课 综합练习',
+    title: 'P18 综合练习',
+    whatItDoes: 'P18 第1～6课 综合练习',
     whatItDoesBody: '',
     structureNote: '',
     rulesNote: '',
@@ -1466,51 +1477,51 @@ export const grammarCardsP18: GrammarCard[] = [
     linkedGrammarIds: [],
     overviewHtml: `<div class="overview">
   <div class="ov-hero">
-    <div class="ov-hero-label">P13 · 综合练习②</div>
-    <div class="ov-hero-title">第6～10课 복습</div>
-    <div class="ov-hero-sub">-았더니/-더니 · (으)로 인하여/-길래 · -듯하다/-모양이다 · -을/ㄹ 텐데 · -잖아요/-거든요</div>
+    <div class="ov-hero-label">P18 · 综合练习</div>
+    <div class="ov-hero-title">第1～6课 복습</div>
+    <div class="ov-hero-sub">-테요/-던데요/-더라 · -았더니/-더니 · (으)로 인하여/-길래 · -듯하다/-모양이다 · -을/ㄹ 텐데 · -잖아요/-거든요</div>
   </div>
 </div>`,
     specialQuiz: {
       type: 'fill',
-      title: 'P14 综合练习',
+      title: 'P18 综合练习',
       body: '선택지 중 맞는 것을 고르세요',
       questions: [
         {
           prompt: '태풍___ 인하여 행사가 취소됐어요。（因台风，活动取消了。）',
           options: ['이', '로', '을', '으로'],
           answer: 3 as 0|1|2|3,
-          explanation: '태풍의 마지막 글자 풍은 收音 ㅇ이 있다（有收音）→ 으로 인하여（✓）。收音 없는 名词나 ㄹ收音이면 로 인하여를 쓴다。',
+          explanation: '태풍 的最后一个字 풍带有收音 ㅇ（有收音）→ 으로 인하여（✓）。无收音的名词或 ㄹ 收音则用 로 인하여。',
         },
         {
           prompt: '비가 오___ 우산을 샀어요。（因为下雨，买了雨伞。）',
           options: ['더니', '았더니', '도록', '길래'],
           answer: 3 as 0|1|2|3,
-          explanation: '-길래：说话人观察到的情境作为理由立即行动：오길래（✓）。도록表示限度/目的，더니/았더니表达不同的结果/发现。',
+          explanation: '-길래：把说话人观察到的情境作为理由立即行动：오길래（✓）。도록 表示限度/目的，더니/았더니 表达不同的结果/发现。',
         },
         {
           prompt: '얼굴을 보니 많이 피곤___ 듯해요。（看脸色好像很累。）',
           options: ['했는', '한', '하는', '할'],
           answer: 1 as 0|1|2|3,
-          explanation: '피곤하다（形容词）冠词形：피곤한 듯해요（✓）。形容词 现在 冠词形은 -은/ㄴ，동사에만 -는 을 쓴다。',
+          explanation: '피곤하다（形容词）冠词形：피곤한 듯해요（✓）。形容词现在冠词形是 -은/ㄴ，只有动词才用 -는。',
         },
         {
           prompt: '손님이 오실 ___ 음식 준비해야겠어요。（客人应该会来，得准备食物。）',
           options: ['거든요', '잖아요', '텐데', '더니'],
           answer: 2 as 0|1|2|3,
-          explanation: '-을/ㄹ 텐데：推测 전제 + 后面 建议/担忧：오실 텐데（✓）。거든요는 새 信息，잖아요는 共享 信息，더니는 순차/대조。',
+          explanation: '-을/ㄹ 텐데：推测前提 + 后面接建议/担忧：오실 텐데（✓）。거든요 是新信息，잖아요 是共享信息，더니 表示顺承/对比。',
         },
         {
           prompt: '그 영화 재미있___ 우리 또 봐요！（那部电影很有趣嘛，我们再看吧！—双方都看过）',
           options: ['거든요', '더라', '잖아요', '았더니'],
           answer: 2 as 0|1|2|3,
-          explanation: '-잖아요：두 사람이 함께 본 共享 경험 唤起注意：재미있잖아요（✓）。거든요는 새 信息，더라는 감탄，았더니는 행동 후 结果。',
+          explanation: '-잖아요：唤起两人共同看过的共享经验：재미있잖아요（✓）。거든요 是新信息，더라 表示感叹，았더니 表示行动后的结果。',
         },
         {
-          prompt: '사실 저 거기 살았___ 所以 잘 알아요。（其实我在那里住过，所以很熟。）',
+          prompt: '사실 저 거기 살았___ 그래서 잘 알아요。（其实我在那里住过，所以很熟。）',
           options: ['거든요', '도록', '더니', '잖아요'],
           answer: 0 as 0|1|2|3,
-          explanation: '-거든요：상대가 모르는 背景 信息（사실…）引入：살았거든요（✓）。잖아요는 共享 信息，더니/도록은 不同的 용법。',
+          explanation: '-거든요：引入对方不知道的背景信息（사실…）：살았거든요（✓）。잖아요 是共享信息，더니/도록 是不同的用法。',
         },
       ],
     },

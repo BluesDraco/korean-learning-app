@@ -1,0 +1,133 @@
+import type { BossSubQuestData } from '@/types/tori-subquest';
+
+/**
+ * Day 11 · 1-5 Boss 战 · 指示词升级综合大考
+ * 8 题混合：听句选意×2 + 助词/形态改错×1 + 认词×1 + 组句×2 + 听对话选回应×1 + 情景选回应×1
+ * outroHook 衔接 Day 12：Minji 教韩币"만 원"
+ */
+export const day11Boss: BossSubQuestData = {
+  day: 11, level: 'beginner', idx: 5, kind: 'boss',
+  koTitle: '최후의 관문',
+  subtitle: '다이소通关 · 이/그/저 三层空间 + 数量',
+  intro: '收银台前，塑料袋鼓鼓地装着：三瓶洗发水、两条毛巾、一双拖鞋、一个胡萝卜钥匙扣。羊店员的白围裙上有一小片货架标签。Junho 用手机拍你——这一关，你要靠自己念出总价的数字。',
+  outroHook: '通过！Junho 帮你拎袋子回宿舍。「토리야, 너 한국 돈 봤어?」——他问你看过韩币没。你摇摇头，他笑得意味深长。明天下午 Minji 会拉你去文具店，教你念 「만 원」——舌头准备打结。',
+
+  tasks: [
+    {
+      type: 'choice',
+      label: '听句选意',
+      task: {
+        id: 'd11-b5-t1',
+        audioKo: '저거 얼마예요?',
+        choices: [
+          { text: '这个多少钱？', correct: false },
+          { text: '那个（远处）多少钱？', correct: true },
+          { text: '那个（对方那）多少钱？', correct: false },
+          { text: '这里多少钱？', correct: false },
+        ],
+        explain: '저(远) 是空间三层的第三层。远处货架问价用 저거',
+      },
+    },
+    {
+      type: 'choice',
+      label: '听句选意',
+      task: {
+        id: 'd11-b5-t2',
+        audioKo: '이것도 주세요.',
+        choices: [
+          { text: '这个不要。', correct: false },
+          { text: '这个也请给我。', correct: true },
+          { text: '这个是什么？', correct: false },
+          { text: '这个多少钱？', correct: false },
+        ],
+        explain: '이것 + 도(也) + 주세요。CU/다이소 结账追加商品黄金句',
+      },
+    },
+    {
+      type: 'choice',
+      label: '助词/形态改错',
+      task: {
+        id: 'd11-b5-t3',
+        promptZh: '"喜欢这个胡萝卜钥匙扣"最标准的说法？',
+        choices: [
+          { text: '이 당근 키링 좋아요.', correct: false },
+          { text: '이 당근 키링 좋아해요.', correct: true },
+          { text: '이거 당근 키링 좋아해요.', correct: false },
+          { text: '이 당근 키링 좋다.', correct: false },
+        ],
+        explain: '좋다(好·형용사) vs 좋아하다(喜欢·동사)。喜欢用动词。이 + 名词 = 这~（限定词）',
+      },
+    },
+    {
+      type: 'choice',
+      label: '认词',
+      task: {
+        id: 'd11-b5-t4',
+        promptKo: '필요해요',
+        promptHangul: 'pi-ryo-hae-yo',
+        choices: [
+          { text: '需要', correct: true },
+          { text: '想要', correct: false },
+          { text: '有', correct: false },
+          { text: '喜欢', correct: false },
+        ],
+        explain: '汉字词 필요(必要) + 하다。前用主格 이/가',
+      },
+    },
+    {
+      type: 'compose',
+      label: '组句',
+      task: {
+        id: 'd11-b5-t5',
+        zhHint: '请给我三个那个（远处）。',
+        audioKo: '저거 세 개 주세요.',
+        answer: ['저거', '세', '개', '주세요.'],
+        tokens: ['저거', '세', '개', '주세요.', '셋', '삼', '병'],
+        explain: '저거 + 固有数 세(3) + 개(通用量词) + 주세요',
+      },
+    },
+    {
+      type: 'compose',
+      label: '组句',
+      task: {
+        id: 'd11-b5-t6',
+        zhHint: '这个也请给我。',
+        audioKo: '이것도 주세요.',
+        answer: ['이것도', '주세요.'],
+        tokens: ['이것도', '주세요.', '이거가', '이것을', '저것을', '이거는'],
+        explain: '이것(这个·书面) + 도(也) + 주세요',
+      },
+    },
+    {
+      type: 'choice',
+      label: '听对话选回应',
+      task: {
+        id: 'd11-b5-t7',
+        audioKo: '저거 얼마예요?',
+        promptZh: '客人指着远处货架问「저거 얼마예요?」你（店员）应该？',
+        choices: [
+          { text: '저거요? 천 원이에요.', correct: false },
+          { text: '그거요? 천 원이에요.', correct: true },
+          { text: '이거요? 천 원이에요.', correct: false },
+          { text: '얼마예요? 몰라요.', correct: false },
+        ],
+        explain: '客人 저거 → 店员 그거（客人指的那个）。空间指代换视角',
+      },
+    },
+    {
+      type: 'choice',
+      label: '情景选回应',
+      task: {
+        id: 'd11-b5-t8',
+        promptZh: '"需要洗发水"最标准的说法？',
+        choices: [
+          { text: '샴푸가 필요해요.', correct: true },
+          { text: '샴푸를 필요해요.', correct: false },
+          { text: '샴푸에 필요해요.', correct: false },
+          { text: '샴푸는 필요해요.', correct: false },
+        ],
+        explain: '필요하다 前用主格 이/가（感受类动词）。샴푸 무받침 → 가',
+      },
+    },
+  ],
+};

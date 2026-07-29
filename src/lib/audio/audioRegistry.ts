@@ -5,7 +5,12 @@
 type AudioEntry = {
   url: string;
   slowUrl?: string;
+  // 预生成时烘焙进文件的语速（如 0.75）。播放时按 用户rate/baseRate 设 playbackRate 补偿，
+  // 使语速设置对静态词汇音频仍生效。40音真人录音不设此字段 → 原速播放，不变速。
+  baseRate?: number;
 };
+
+export type { AudioEntry };
 
 const registry = new Map<string, AudioEntry>();
 
@@ -27,7 +32,29 @@ export function hasStaticAudio(text: string): boolean {
   return registry.has(text.trim());
 }
 
-// ── 40音 phonetics (real human recordings) ──
+// 词汇/例句预生成音频索引（public/audio/vocab/vocab-index.json）。
+// 客户端启动时异步加载一次并注册，使 speak() 命中静态文件、绕开实时 TTS。
+// 失败静默：index 缺失只是回落实时 TTS，不影响功能。
+const VOCAB_BASE_RATE = 0.75; // 与 scripts/gen-vocab-audio.mjs 的 -25% 一致
+let vocabIndexLoaded = false;
+export async function loadVocabAudioIndex(): Promise<void> {
+  if (vocabIndexLoaded || typeof window === 'undefined') return;
+  vocabIndexLoaded = true;
+  try {
+    const res = await fetch('/audio/vocab/vocab-index.json');
+    if (!res.ok) return;
+    const map = (await res.json()) as Record<string, string>;
+    for (const [text, url] of Object.entries(map)) {
+      // 已有 40 音真人录音优先，不被词汇文件覆盖
+      if (registry.has(text.trim())) continue;
+      registry.set(text.trim(), { url, baseRate: VOCAB_BASE_RATE });
+    }
+  } catch { /* 加载失败回落实时 TTS */ }
+}
+
+// ── 40音 phonetics (real human recordings, 47 entries) ──
+// 范围：仅四十音核心字母。拼字示例 / 连读规则例句 / 综合拼读 / 合成器 / 练习题
+// 全部走 Edge-TTS（sunhi 声），不在此注册。
 registerMany({
   '아': { url: '/audio/phonetics/v-01.mp3' },
   '야': { url: '/audio/phonetics/v-02.mp3' },
@@ -70,14 +97,12 @@ registerMany({
   '쌍비읍': { url: '/audio/phonetics/c-17.mp3' },
   '쌍시옷': { url: '/audio/phonetics/c-18.mp3' },
   '쌍지읒': { url: '/audio/phonetics/c-19.mp3' },
-  // Consonant demo syllables (phonetics page uses CONSONANT_DEMO mapping)
-  '차': { url: '/audio/phonetics/c-10.mp3' },
-  '카': { url: '/audio/phonetics/c-11.mp3' },
-  '타': { url: '/audio/phonetics/c-12.mp3' },
-  '파': { url: '/audio/phonetics/c-13.mp3' },
-  '까': { url: '/audio/phonetics/c-15.mp3' },
-  '따': { url: '/audio/phonetics/c-16.mp3' },
-  '빠': { url: '/audio/phonetics/c-17.mp3' },
-  '싸': { url: '/audio/phonetics/c-18.mp3' },
-  '짜': { url: '/audio/phonetics/c-19.mp3' },
+  // Batchim demo words (b-01 ~ b-07)
+  '박': { url: '/audio/phonetics/b-01.mp3' },
+  '산': { url: '/audio/phonetics/b-02.mp3' },
+  '옷': { url: '/audio/phonetics/b-03.mp3' },
+  '말': { url: '/audio/phonetics/b-04.mp3' },
+  '밤': { url: '/audio/phonetics/b-05.mp3' },
+  '밥': { url: '/audio/phonetics/b-06.mp3' },
+  '강': { url: '/audio/phonetics/b-07.mp3' },
 });

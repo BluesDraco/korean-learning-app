@@ -1,0 +1,29 @@
+import type { ListenSubQuestData } from '@/types/tori-subquest';
+
+/** Day 65 · 3-2 귀 트이기 · ~는/(으)ㄴ 것 같다 · 北区食肉动物区 */
+export const day65Listen: ListenSubQuestData = {
+  day: 5, level: 'advanced', idx: 2, kind: 'listen',
+  koTitle: '귀 트이기',
+  subtitle: '북구 · 낯설게 느껴지는 밤',
+
+  meaning: [
+    { id: 'd65-l2-m1', audioKo: '북구에 육식자 구역 있는 거 알지? 가지 마.',    choices: [{ text: '北区有食肉动物区你知道吧？别去。',    correct: true }, { text: '北区没有食肉动物区。',        correct: false }, { text: '北区随便去。',                    correct: false }, { text: '北区没关系。',                  correct: false }], explain: '同学提醒 · Day 65 悬念开场' },
+    { id: 'd65-l2-m2', audioKo: '큰 동물들만 사는 데예요.',                        choices: [{ text: '专门住大型动物的地方。',            correct: true }, { text: '大型动物不住的地方。',        correct: false }, { text: '什么动物都住。',                  correct: false }, { text: '不住动物。',                    correct: false }], explain: '~들만 사는 데 = 只有 X 住的地方' },
+    { id: 'd65-l2-m3', audioKo: '조심해. 여기 우리한테 좋은 데 아니야.',           choices: [{ text: '小心。这地方对我们不好。',           correct: true }, { text: '这里很好。',                    correct: false }, { text: '来这里玩。',                    correct: false }, { text: '你走开。',                      correct: false }], explain: '兔子暗中警告 · Day 65 关键台词' },
+    { id: 'd65-l2-m4', audioKo: '여기 위험한 것 같아요.',                            choices: [{ text: '这里好像危险。',                        correct: true }, { text: '这里很安全。',                    correct: false }, { text: '这里没人。',                      correct: false }, { text: '这里在开门。',                    correct: false }], explain: 'A + ㄴ 것 같다 = 好像 X' },
+    { id: 'd65-l2-m5', audioKo: '누가 오는 것 같아요.',                              choices: [{ text: '好像有人来。',                          correct: true }, { text: '没人来。',                        correct: false }, { text: '有人走了。',                      correct: false }, { text: '不知道谁来。',                    correct: false }], explain: 'V 현재 + 는 것 같다 = 好像 V' },
+  ],
+
+  cloze: [
+    { id: 'd65-l2-c1', audioKo: '여기 위험한 것 같아요.',           clozeParts: ['여기 위험', ' 것 같아요.'],     choices: [{ text: '한',   correct: true }, { text: '하는',    correct: false }, { text: '할',    correct: false }, { text: '해서', correct: false }], explain: 'A + ㄴ/은 것 같다 · 위험하다 → 위험한' },
+    { id: 'd65-l2-c2', audioKo: '누가 오는 것 같아요.',              clozeParts: ['누가 오', ' 것 같아요.'],       choices: [{ text: '는',   correct: true }, { text: '은',    correct: false }, { text: '을',    correct: false }, { text: '아서', correct: false }], explain: 'V 현재 + 는 것 같다 · 오다 → 오는' },
+    { id: 'd65-l2-c3', audioKo: '이미 간 것 같아요.',                clozeParts: ['이미 ', ' 것 같아요.'],         choices: [{ text: '간',   correct: true }, { text: '가는',    correct: false }, { text: '갈',    correct: false }, { text: '갔는', correct: false }], explain: 'V 과거 + (으)ㄴ 것 같다 · 가다 → 간' },
+    { id: 'd65-l2-c4', audioKo: '내일 비 올 것 같아요.',              clozeParts: ['내일 비 ', ' 것 같아요.'],       choices: [{ text: '올',   correct: true }, { text: '오는',    correct: false }, { text: '온',    correct: false }, { text: '왔', correct: false }], explain: '미래 + (으)ㄹ 것 같다 · 오다 → 올' },
+  ],
+
+  reply: [
+    { id: 'd65-l2-r1', audioKo: '북구에 육식자 구역 있는 거 알지? 가지 마.',              promptZh: '同学劝你别去北区。你想说"我好奇，只是过去看看"，最自然的一句？',       choices: [{ text: '궁금해서 잠깐 가 볼래.',                                        correct: true }, { text: '싫어. 절대 안 가.',              correct: false }, { text: '얼마예요?',                              correct: false }, { text: '몰라.',                                  correct: false }], explain: '好奇心 · ~해서 + V 볼래' },
+    { id: 'd65-l2-r2', audioKo: '조심해. 여기 우리한테 좋은 데 아니야.',                  promptZh: '兔子小声警告你。你想低声道谢并准备离开，最自然的一句？',            choices: [{ text: '고마워요, 저도 곧 갈 거예요.',                                    correct: true }, { text: '내가 왜?',                          correct: false }, { text: '싫어요.',                                correct: false }, { text: '얼마예요?',                              correct: false }], explain: '低声感谢 + 意愿' },
+    { id: 'd65-l2-r3', audioKo: '여기 어때?',                                              promptZh: '朋友晚上问北区感受。你想说"这里好像对我们不好"，最自然的一句？',    choices: [{ text: '여기 우리한테 좋은 데 아닌 것 같아.',                             correct: true }, { text: '여기 최고예요.',                    correct: false }, { text: '얼마예요?',                              correct: false }, { text: '몰라.',                                  correct: false }], explain: '~ㄴ 것 같다 · 委婉否定' },
+  ],
+};

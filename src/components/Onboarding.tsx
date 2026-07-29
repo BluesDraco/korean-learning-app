@@ -1,181 +1,140 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { ArrowRight, Globe } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { updateProfile, awardXp, updateStreak } from '@/lib/gamification';
-import { useLang } from '@/components/LangProvider';
-import { t, type Lang, setLang } from '@/lib/i18n';
+import { useAuth } from '@/components/AuthProvider';
+import { useTheme } from '@/components/ThemeProvider';
+import { setLang, getLang, t, type Lang } from '@/lib/i18n';
+import './place-intro.css';
 
 interface Props {
   onComplete: () => void;
 }
 
-const FEATURES = [
-  { emoji: '🎬', label: '影子跟读', desc: '用韩剧、采访片段一句一句练听说' },
-  { emoji: '🎵', label: 'KPOP 跟唱', desc: '跟着喜欢的歌学韩语，边唱边记' },
-  { emoji: '🔍', label: '内容拆解', desc: '粘贴韩文，马上看懂意思和用法' },
-  { emoji: '📖', label: '语法课程', desc: '30天入门，系统打好语法基础' },
-  { emoji: '🃏', label: '闪卡复习', desc: 'SRS间隔重复，高效记忆单词' },
-  { emoji: '🗞️', label: '韩娱热帖', desc: '读真实的韩娱内容，顺便学韩语' },
+// 首次登录 · 欢迎来到动物城（改造自旧功能引导，视觉对齐 PlaceIntro）。
+// 保留原有门控（profile.onboardingComplete）+ XP + streak 奖励逻辑。
+const PLACE_IDS = [
+  { icon: '📚', id: 'library',  kr: '도서관' },
+  { icon: '🎓', id: 'classroom', kr: '교실' },
+  { icon: '🦉', id: 'study',    kr: '자습실' },
+  { icon: '📻', id: 'radio',    kr: '라디오' },
+  { icon: '🗣️', id: 'plaza',    kr: '광장' },
+  { icon: '📓', id: 'diary',    kr: '일기' },
+];
+
+const LANGS: { code: Lang; label: string; sub: string; flag: string }[] = [
+  { code: 'zh', label: '简体中文', sub: '中文界面', flag: '🇨🇳' },
+  { code: 'en', label: 'English', sub: 'English UI', flag: '🇬🇧' },
 ];
 
 export default function Onboarding({ onComplete }: Props) {
   const router = useRouter();
-  const { lang, setLang: setContextLang } = useLang();
-  // step -1 = language select, 0 = greeting, 1 = feature showcase
-  const [step, setStep] = useState<-1 | 0 | 1>(-1);
-  const [animating, setAnimating] = useState(false);
+  const { refreshUser } = useAuth();
+  const { theme } = useTheme();
+  const [step, setStep] = useState(0);
+  const [lang, setLangState] = useState<Lang>(() => getLang());
 
-  const completeAndRedirect = useCallback(async () => {
+  const chooseLang = useCallback((code: Lang) => {
+    setLang(code);
+    setLangState(code);
+  }, []);
+
+  const finish = useCallback(async () => {
     try { await updateProfile({ onboardingComplete: true }); } catch { /* not critical */ }
-    fetch('/api/auth/onboarding', { method: 'POST' }).catch(() => {});
+    try { await fetch('/api/auth/onboarding', { method: 'POST' }); } catch { /* not critical */ }
+    // 刷新内存 user，使 user.onboardingCompleted 变 true，否则 daily 会反复重弹
+    try { await refreshUser(); } catch { /* not critical */ }
     try { await awardXp(10); } catch { /* not critical */ }
     try { await updateStreak(); } catch { /* not critical */ }
     onComplete();
     router.replace('/daily');
-  }, [onComplete, router]);
+  }, [onComplete, router, refreshUser]);
 
-  const pickLang = useCallback(async (l: Lang) => {
-    setLang(l);
-    setContextLang(l);
-    setAnimating(true);
-    await new Promise((r) => setTimeout(r, 300));
-    setAnimating(false);
-    setStep(0);
-  }, [setContextLang]);
-
-  const handleNext = useCallback(async () => {
-    setAnimating(true);
-    await new Promise((r) => setTimeout(r, 400));
-    setAnimating(false);
-    setStep(1);
-  }, []);
-
-  const totalSteps = 2;
+  const isLast = step === 2;
 
   return (
-    <div className="fixed inset-0 z-[100] bg-[var(--bg-base)] flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-
-        {/* Progress dots */}
-        {step >= 0 && (
-          <div className="flex justify-center gap-2 mb-8">
-            {Array.from({ length: totalSteps }).map((_, i) => (
-              <div
-                key={i}
-                className={`h-1.5 rounded-full transition-all duration-500 ${
-                  i === step
-                    ? 'w-10 bg-[var(--pink-primary)]'
-                    : i < step
-                      ? 'w-5 bg-[var(--mint-soft)]'
-                      : 'w-5 bg-[var(--bg-muted)]'
-                }`}
-              />
-            ))}
-          </div>
+    <div
+      className={`place-intro${theme === 'dark' ? ' pi-dark' : ''}`}
+      style={{ '--pi-accent': 'oklch(64% 0.17 12)', '--pi-accent-soft': 'oklch(92% 0.05 12)' } as React.CSSProperties}
+    >
+      <div className="pi-card">
+        {step === 0 ? (
+          <>
+            <div className="pi-emoji" aria-hidden>🌏</div>
+            <h2 className="pi-title">언어를 선택하세요</h2>
+            <p className="pi-title-zh">{t('lang.choose_prompt', lang)}</p>
+            <div className="pi-langs">
+              {LANGS.map((l) => (
+                <button
+                  type="button"
+                  key={l.code}
+                  className={`pi-lang${lang === l.code ? ' on' : ''}`}
+                  onClick={() => chooseLang(l.code)}
+                  aria-pressed={lang === l.code}
+                >
+                  <span className="pi-lang-flag" aria-hidden>{l.flag}</span>
+                  <span className="pi-lang-label">{l.label}</span>
+                  <span className="pi-lang-sub">{l.sub}</span>
+                </button>
+              ))}
+            </div>
+          </>
+        ) : step === 1 ? (
+          <>
+            <div className="pi-emoji" aria-hidden>🐰</div>
+            <h2 className="pi-title">동물 도시에 온 걸 환영해요!</h2>
+            <p className="pi-title-zh">{t('onboard.welcomeTitle', lang)}</p>
+            <div className="pi-body">
+              <p>
+                <b>여긴 토리랑 친구들이 사는 동네예요.</b>
+                <span className="pi-zh">{t('onboard.welcomeP1', lang)}</span>
+              </p>
+              <p>
+                <b>사실 동물 도시는 여러분이 배우는 한국이에요.</b>
+                <span className="pi-zh">{t('onboard.welcomeP2', lang)}</span>
+              </p>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="pi-emoji" aria-hidden>🗺️</div>
+            <h2 className="pi-title">어디부터 가 볼까요?</h2>
+            <p className="pi-title-zh">{t('onboard.placesTitle', lang)}</p>
+            <div className="pi-places">
+              {PLACE_IDS.map((p) => (
+                <div className="pi-place" key={p.id}>
+                  <span className="pi-place-ico" aria-hidden>{p.icon}</span>
+                  <span className="pi-place-name">{t(`onboard.place.${p.id}.name`, lang)}<span className="kr">{p.kr}</span></span>
+                  <span className="pi-place-desc">{t(`onboard.place.${p.id}.desc`, lang)}</span>
+                </div>
+              ))}
+            </div>
+            <div className="pi-note">🥕 천천히 해요, 토리가 기다릴게요 · {t('onboard.note', lang)}</div>
+          </>
         )}
 
-        {/* Card */}
-        <div
-          className={`bg-[var(--bg-card)] border border-[var(--border-color)] rounded-3xl p-8 text-center shadow-lg transition-all duration-300 ${
-            animating ? 'opacity-0 translate-y-4' : 'opacity-100'
-          }`}
-        >
+        <div className="pi-dots" aria-hidden>
+          <span className={`pi-dot${step === 0 ? ' on' : ''}`} />
+          <span className={`pi-dot${step === 1 ? ' on' : ''}`} />
+          <span className={`pi-dot${step === 2 ? ' on' : ''}`} />
+        </div>
 
-          {/* ── Step -1: Language selection ── */}
-          {step === -1 && (
-            <div className="space-y-6">
-              <div className="space-y-2">
-                <div className="flex justify-center mb-2">
-                  <Globe size={36} className="text-[var(--pink-primary)]" />
-                </div>
-                <h2 className="text-xl font-bold text-[var(--text-primary)]">
-                  Choose your language / 选择语言
-                </h2>
-                <p className="text-xs text-[var(--text-muted)]">
-                  Can be changed in Settings / 可在设置页随时修改
-                </p>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  onClick={() => pickLang('zh')}
-                  className="flex flex-col items-center gap-2 p-5 rounded-2xl border-2 border-[var(--border-color)] hover:border-[var(--pink-primary)]/50 hover:bg-[var(--pink-primary)]/5 transition-all active:scale-95"
-                >
-                  <span className="text-3xl">🇨🇳</span>
-                  <span className="font-bold text-[var(--text-primary)]">中文</span>
-                  <span className="text-xs text-[var(--text-muted)]">Chinese</span>
-                </button>
-                <button
-                  onClick={() => pickLang('en')}
-                  className="flex flex-col items-center gap-2 p-5 rounded-2xl border-2 border-[var(--border-color)] hover:border-[var(--pink-primary)]/50 hover:bg-[var(--pink-primary)]/5 transition-all active:scale-95"
-                >
-                  <span className="text-3xl">🇺🇸</span>
-                  <span className="font-bold text-[var(--text-primary)]">English</span>
-                  <span className="text-xs text-[var(--text-muted)]">英文</span>
-                </button>
-              </div>
-            </div>
+        <div className="pi-nav">
+          {step > 0 && (
+            <button type="button" className="pi-prev" onClick={() => setStep(step - 1)}>
+              이전
+            </button>
           )}
-
-          {/* ── Step 0: Tori greeting ── */}
-          {step === 0 && (
-            <div className="space-y-6">
-              <div>
-                <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-2">
-                  {t('onboarding.greeting_title', lang)}
-                </h2>
-                <p className="text-[var(--text-secondary)] leading-relaxed whitespace-pre-line">
-                  {t('onboarding.greeting_lines', lang).split(' / ').join('\n')}
-                </p>
-              </div>
-              <button
-                onClick={handleNext}
-                className="w-full flex items-center justify-center gap-2 py-3.5 bg-[var(--pink-primary)] hover:brightness-90 text-white rounded-2xl font-bold text-sm transition-all active:scale-95"
-              >
-                {t('onboarding.greeting_btn', lang)}
-                <ArrowRight size={18} />
-              </button>
-            </div>
-          )}
-
-          {/* ── Step 1: Feature showcase ── */}
-          {step === 1 && (
-            <div className="space-y-5">
-              <div>
-                <h2 className="text-xl font-bold text-[var(--text-primary)] mb-1">
-                  Tori 能帮你做什么？
-                </h2>
-                <p className="text-sm text-[var(--text-muted)]">
-                  所有功能随时可用，想从哪里开始都行。
-                </p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2 text-left">
-                {FEATURES.map((f) => (
-                  <div
-                    key={f.label}
-                    className="flex flex-col gap-1 p-3 rounded-xl bg-[var(--bg-soft)] border border-[var(--border-color)]"
-                  >
-                    <span className="text-xl">{f.emoji}</span>
-                    <div className="text-xs font-semibold text-[var(--text-primary)]">{f.label}</div>
-                    <div className="text-[11px] text-[var(--text-muted)] leading-snug">{f.desc}</div>
-                  </div>
-                ))}
-              </div>
-
-              <button
-                onClick={completeAndRedirect}
-                className="w-full flex items-center justify-center gap-2 py-3.5 bg-[var(--pink-primary)] hover:brightness-90 text-white rounded-2xl font-bold text-sm transition-all active:scale-95"
-              >
-                开始使用 Tori
-                <ArrowRight size={18} />
-              </button>
-            </div>
-          )}
+          <button
+            type="button"
+            className="pi-next"
+            onClick={() => (isLast ? finish() : setStep(step + 1))}
+          >
+            {isLast ? `동물 도시 시작하기 · ${t('onboard.start', lang)}` : `다음 · ${t('onboard.next', lang)}`}
+          </button>
         </div>
       </div>
     </div>
   );
 }
-

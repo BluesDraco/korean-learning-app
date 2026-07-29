@@ -1,44 +1,57 @@
-'use client';
+'use client'
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSmartBack } from '@/lib/useSmartBack';
 import { ArrowLeft, Trophy, AlertCircle } from 'lucide-react';
 import { db } from '@/lib/db';
-import { topikSections } from '@/data/topik-questions';
+import type { TopikSection } from '@/data/topik-questions';
+import { loadTopikSections } from '@/lib/dataLoader';
 import type { TopikSession } from '@/types';
-import { useTheme } from '@/components/ThemeProvider';
-import { LIGHT_C as _LIGHT_C, DARK_C as _DARK_C } from '@/lib/theme';
-
-const LIGHT_C = { ..._LIGHT_C, tagBg: '#f0ece8' };
-const DARK_C  = { ..._DARK_C, tagBg: '#252040' };
+import { isSessionPassed } from '@/lib/topik/examRules';
+import { questionTypeMap } from '@/data/topikQuestionTypes';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
+import '../topik-redesign.css';
 
 export default function TopikHistoryPage() {
-  const { theme } = useTheme();
-  const C = theme === 'dark' ? DARK_C : LIGHT_C;
+  const { lang } = useLang();
   const router = useRouter();
+  const smartBack = useSmartBack('/topik');
   const [sessions, setSessions] = useState<TopikSession[]>([]);
+  const [topikSections, setTopikSections] = useState<TopikSection[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    loadTopikSections().then(setTopikSections).catch(e => console.error('[topik] history failed to load sections:', e));
     db.topikSessions.toArray()
       .then(all => {
         const sorted = [...all].sort((a, b) => b.completedAt - a.completedAt);
         setSessions(sorted);
       })
-      .catch(() => setSessions([]))
+      .catch(e => { console.error('[topik] history failed to load sessions:', e); setSessions([]); })
       .finally(() => setLoading(false));
   }, []);
 
   function sectionLabel(sectionId: string) {
+    if (sectionId === 'mistakes-review') return t('topik.label_mistakes_review', lang);
+    if (sectionId === 'sim-free') return t('topik.label_sim_free', lang);
+    if (sectionId === 'daily-training') return t('topik.label_daily_training', lang);
+    if (sectionId.startsWith('type-')) {
+      const key = sectionId.slice(5);
+      const meta = questionTypeMap[key];
+      return meta ? t('topik.section_type_prefix', lang, { label: lang === 'en' ? meta.labelZhEn ?? meta.labelZh : meta.labelZh }) : sectionId;
+    }
     return topikSections.find(s => s.id === sectionId)?.title || sectionId;
   }
 
   function modeLabel(mode: string) {
     switch (mode) {
-      case 'exam': return '真题';
-      case 'practice': return '模拟';
-      case 'mistakes': return '错题';
-      default: return '专项';
+      case 'exam': return t('topik.mode_exam', lang);
+      case 'simulate': return t('topik.mode_simulate', lang);
+      case 'mistakes': return t('topik.mode_mistakes', lang);
+      case 'practice': return t('topik.mode_practice', lang);
+      default: return t('topik.mode_practice', lang);
     }
   }
 
@@ -50,7 +63,7 @@ export default function TopikHistoryPage() {
   function formatDuration(sec: number) {
     const m = Math.floor(sec / 60);
     const s = sec % 60;
-    return `${m}分${s.toString().padStart(2, '0')}秒`;
+    return t('topik.hi_duration', lang, { m, s: s.toString().padStart(2, '0') });
   }
 
   // Group by section for mini trend
@@ -63,68 +76,80 @@ export default function TopikHistoryPage() {
   const trendData = trendSection ? trendSection[1].slice(0, 6).reverse() : [];
 
   return (
-    <div style={{ minHeight: '100vh', background: C.bg, paddingBottom: 40 }}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 960, margin: '0 auto', padding: '0 16px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, paddingTop: 16 }}>
-          <button onClick={() => router.back()} style={{ width: 36, height: 36, borderRadius: '50%', border: `1px solid ${C.line}`, background: C.card, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-            <ArrowLeft size={16} color={C.muted} />
+    <div className="tk-scope">
+      <div className="hr-stage" style={{ maxWidth: 960, margin: '0 auto' }}>
+
+        <div className="hr-mobile-back">
+          <button className="hr-mobile-back-btn" onClick={smartBack} aria-label={t('topik.back', lang)}>
+            <ArrowLeft size={14} /> {t('topik.back', lang)}
           </button>
-          <div>
-            <h1 style={{ fontSize: 18, fontWeight: 900, color: C.ink, margin: 0 }}>成绩历史</h1>
-            <p style={{ fontSize: 12, color: C.muted, margin: 0 }}>共 {sessions.length} 次练习记录</p>
-          </div>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-
-        {/* Trend chart */}
-        {trendData.length >= 2 && (
-          <div style={{ background: C.card, borderRadius: 16, border: `1px solid ${C.line}`, padding: '14px 16px' }}>
-            <p style={{ fontSize: 12, fontWeight: 700, color: C.muted, margin: '0 0 12px' }}>
-              近{trendData.length}次得分趋势 · {sectionLabel(trendSection![0])}
-            </p>
-            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 6, height: 52 }}>
-              {trendData.map((s, i) => (
-                <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3 }}>
-                  <div style={{ width: '100%', borderRadius: '4px 4px 0 0', background: s.score >= 60 ? C.mint : C.pink, height: `${Math.max(s.score * 0.52, 4)}px`, transition: 'height 0.3s' }} />
-                  <span style={{ fontSize: 9, color: C.muted }}>{s.score}</span>
-                </div>
-              ))}
-            </div>
+        <header className="hr-page-head">
+          <div className="hr-brand">
+            <div className="hr-brand-mark">Tori</div>
+            <div className="hr-brand-kr">기록</div>
+            <div className="hr-brand-sub">{t('topik.hi_brand_sub', lang)}</div>
           </div>
-        )}
+          <div className="hr-brand-sub" data-md-show>{t('topik.hi_record_count', lang, { n: sessions.length })}</div>
+        </header>
 
-        {/* Session list */}
+        {/* Trend */}
+        {trendData.length >= 2 && (() => {
+          const maxScore = Math.max(...trendData.map(s => s.score), 1);
+          return (
+            <div className="tk-card">
+              <div className="tk-card-head">
+                <p className="tk-card-title">{t('topik.hi_trend', lang, { n: trendData.length })}</p>
+                <span className="tk-card-hint">{sectionLabel(trendSection![0])}</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'flex-end', gap: 6, height: 60 }}>
+                {trendData.map((s, i) => {
+                  const passed = isSessionPassed(s);
+                  return (
+                    <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+                      <div style={{ width: '100%', borderRadius: '4px 4px 0 0', background: passed ? 'var(--hr-mint-base)' : 'var(--hr-pink-base)', height: `${Math.max((s.score / maxScore) * 48, 4)}px`, transition: 'height 0.4s' }} />
+                      <span style={{ fontSize: 10, color: 'var(--hr-ink-3)', fontFamily: 'var(--hr-mono)' }}>{s.score}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })()}
+
         {loading ? (
-          <div style={{ textAlign: 'center', paddingTop: 40, color: C.muted, fontSize: 14 }}>加载中...</div>
+          <div className="tk-fullpage-msg">
+            <div className="hint">{t('topik.loading', lang)}</div>
+          </div>
         ) : sessions.length === 0 ? (
-          <div style={{ textAlign: 'center', paddingTop: 60 }}>
-            <p style={{ fontSize: 16, fontWeight: 700, color: C.ink }}>还没有练习记录</p>
-            <p style={{ fontSize: 13, color: C.muted, marginTop: 4 }}>完成一次练习后，记录将显示在这里</p>
-            <button onClick={() => router.push('/topik')} style={{ marginTop: 16, padding: '12px 28px', borderRadius: 14, background: C.pink, color: '#fff', fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer' }}>
-              去练习
-            </button>
+          <div className="tk-empty">
+            <p className="tk-empty-title">{t('topik.hi_empty', lang)}</p>
+            <p className="tk-empty-hint">{t('topik.hi_empty_hint', lang)}</p>
+            <button className="tk-goto-btn" onClick={smartBack}>{t('topik.go_practice', lang)}</button>
           </div>
         ) : (
-          sessions.map(s => (
-            <div key={s.id} style={{ background: C.card, borderRadius: 14, border: `1px solid ${C.line}`, padding: '12px 14px', display: 'flex', alignItems: 'center', gap: 12 }}>
-              <div style={{ width: 48, height: 48, borderRadius: 12, background: s.score >= 60 ? C.mintBg : C.pinkSoft, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, fontWeight: 900, color: s.score >= 60 ? 'var(--color-mint-strong)' : C.pink, flexShrink: 0 }}>
-                {s.score}
-              </div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <p style={{ fontSize: 14, fontWeight: 700, color: C.ink, margin: 0 }}>{sectionLabel(s.section)}</p>
-                  <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 6px', borderRadius: 6, background: C.tagBg, color: C.muted }}>{modeLabel(s.mode)}</span>
-                </div>
-                <p style={{ fontSize: 11, color: C.muted, margin: '2px 0 0' }}>
-                  {formatDate(s.completedAt)} · {s.correctCount}/{s.totalCount} · {formatDuration(s.durationSec)}
-                </p>
-              </div>
-              {s.score >= 60 ? <Trophy size={16} color={C.mint} /> : <AlertCircle size={16} color={C.pink} />}
-            </div>
-          ))
+          <div className="tk-recent-list">
+            {sessions.map(s => {
+              const passed = isSessionPassed(s);
+              return (
+                <button key={s.id} className="tk-recent-item" onClick={() => router.push(`/topik/result/${s.id}`)} style={{ width: '100%', textAlign: 'left', cursor: 'pointer', border: 'none', background: 'transparent', padding: 0 }}>
+                  <div className={`tk-recent-score ${passed ? 'pass' : 'fail'}`}>{s.score}</div>
+                  <div className="tk-recent-info">
+                    <p className="tk-recent-name">
+                      {sectionLabel(s.section)}
+                      <span style={{ marginLeft: 8, fontFamily: 'var(--hr-mono)', fontSize: 10, letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--hr-ink-3)', fontWeight: 700 }}>{modeLabel(s.mode)}</span>
+                    </p>
+                    <div className="tk-recent-meta">
+                      {formatDate(s.completedAt)} · {s.correctCount}/{s.totalCount} · {formatDuration(s.durationSec)}
+                    </div>
+                  </div>
+                  {passed ? <Trophy size={16} color="var(--hr-mint-strong)" /> : <AlertCircle size={16} color="var(--hr-pink-strong)" />}
+                </button>
+              );
+            })}
+          </div>
         )}
-      </div>
       </div>
     </div>
   );

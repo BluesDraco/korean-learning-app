@@ -58,14 +58,16 @@ export async function checkRateLimit(key: string): Promise<{ allowed: boolean; r
   return checkRateLimitByKey(normalized);
 }
 
-// Check login by both IP and username — serial to avoid double-recording on blocked requests
+// Check login by both IP and username — parallel for speed
 export async function checkLoginRateLimit(
   ip: string,
   username: string,
 ): Promise<{ allowed: boolean; retryAfterSeconds?: number }> {
-  const ipResult = await checkRateLimitByKey(`ip:${ip}`);
+  const [ipResult, userResult] = await Promise.all([
+    checkRateLimitByKey(`ip:${ip}`),
+    checkRateLimitByKey(`user:${username.toLowerCase()}`),
+  ]);
   if (!ipResult.allowed) return ipResult;
-  const userResult = await checkRateLimitByKey(`user:${username.toLowerCase()}`);
   if (!userResult.allowed) return userResult;
   return { allowed: true };
 }
@@ -84,9 +86,9 @@ export async function resetLoginRateLimit(ip: string, username: string): Promise
   ]);
 }
 
-// ─── AI daily rate limit (per-user, per-endpoint, 30/day) ───
+// ─── AI daily rate limit (per-user, per-endpoint) ───
 
-const AI_DAILY_LIMIT = 30;
+const AI_DAILY_LIMIT = 200;
 
 export interface AiRateLimitResult {
   allowed: boolean;
@@ -122,7 +124,7 @@ export async function checkAiRateLimit(
 export async function recordAiUsage(
   userId: string,
   endpoint: string,
-  model: string = 'deepseek-chat',
+  model: string = 'deepseek-v4-flash',
 ): Promise<void> {
   const db = await getDb();
   await db.run(
@@ -140,12 +142,15 @@ export function aiRateLimitHeaders(result: AiRateLimitResult): Record<string, st
 
 const GUEST_AI_DAILY_LIMIT = 10;
 
-// DB-backed guest rate limit — survives pm2 restarts unlike in-memory maps
+// DB-backed guest rate limit — survives pm2 restarts unlike in-memory maps.
+// customLimit：给非 AI 的公开高频接口（如 TTS 发音）用高阈值，只挡脚本刷带宽、不误伤正常用户。
 export async function checkGuestAiRateLimit(
   ip: string,
   endpoint: string,
+  customLimit?: number,
 ): Promise<{ allowed: boolean; remaining: number }> {
   const db = await getDb();
+  const limit = customLimit ?? GUEST_AI_DAILY_LIMIT;
   const today = new Date().toISOString().slice(0, 10);
   const key = `guest-ai:${endpoint}:${ip}:${today}`;
 
@@ -160,7 +165,7 @@ export async function checkGuestAiRateLimit(
   );
   const count = (result[0]?.values[0]?.[0] ?? 0) as number;
 
-  if (count >= GUEST_AI_DAILY_LIMIT) {
+  if (count >= limit) {
     return { allowed: false, remaining: 0 };
   }
 
@@ -169,5 +174,5 @@ export async function checkGuestAiRateLimit(
     [generateId(), key],
   );
 
-  return { allowed: true, remaining: GUEST_AI_DAILY_LIMIT - count - 1 };
+  return { allowed: true, remaining: limit - count - 1 };
 }

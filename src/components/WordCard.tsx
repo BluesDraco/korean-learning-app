@@ -1,7 +1,10 @@
 'use client';
 
+import { useState } from 'react';
 import { Plus, Check, Loader2 } from 'lucide-react';
 import { HighlightedExample } from '@/components/vocabulary/HighlightedExample';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 
 export interface WordCardData {
   originalText: string;
@@ -18,11 +21,24 @@ interface WordCardProps {
   data: WordCardData | null;
   loading: boolean;
   onClose: () => void;
-  onAdd: () => void;
+  onAdd: () => Promise<void> | void;
 }
 
 export function WordCard({ data, loading, onClose, onAdd }: WordCardProps) {
+  const { lang } = useLang();
+  const [adding, setAdding] = useState(false);
+
   if (!data && !loading) return null;
+
+  const handleAdd = async () => {
+    if (adding || data?.alreadySaved) return;
+    setAdding(true);
+    try {
+      await onAdd();
+    } finally {
+      setAdding(false);
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center" style={{ paddingBottom: 'calc(56px + env(safe-area-inset-bottom, 0px))' }} onClick={onClose}>
@@ -64,13 +80,13 @@ export function WordCard({ data, loading, onClose, onAdd }: WordCardProps) {
             </div>
 
             <div className="bg-[var(--bg-input)] rounded-xl p-3 mb-3">
-              <p className="text-xs text-[var(--text-secondary)] font-medium mb-1">释义</p>
+              <p className="text-xs text-[var(--text-secondary)] font-medium mb-1">{t('wcard.meaning', lang)}</p>
               <p className="text-[var(--text-primary)] text-sm">{data.meaning}</p>
             </div>
 
             {data.example.text && (
               <div className="space-y-2 mb-4">
-                <p className="text-xs text-[var(--text-muted)] font-medium">例句</p>
+                <p className="text-xs text-[var(--text-muted)] font-medium">{t('wcard.example', lang)}</p>
                 <div className="bg-[var(--bg-input)] rounded-lg p-3">
                   <HighlightedExample text={data.example.text} word={data.dictionaryForm} className="text-sm text-[var(--text-primary)]" />
                   <p className="text-xs text-[var(--text-secondary)] mt-1">{data.example.translation}</p>
@@ -79,24 +95,22 @@ export function WordCard({ data, loading, onClose, onAdd }: WordCardProps) {
             )}
 
             <button
-              onClick={onAdd}
-              disabled={data.alreadySaved}
+              onClick={handleAdd}
+              disabled={data.alreadySaved || adding}
               className={`w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                 data.alreadySaved
                   ? 'bg-[var(--mint-soft)]/15 text-[var(--mint-soft)] cursor-default'
-                  : 'bg-[var(--pink-primary)] hover:bg-[var(--pink-primary)] text-[var(--text-primary)]'
+                  : adding
+                  ? 'bg-[var(--pink-primary)]/60 text-white cursor-not-allowed'
+                  : 'bg-[var(--pink-primary)] hover:opacity-90 text-white'
               }`}
             >
               {data.alreadySaved ? (
-                <>
-                  <Check size={16} />
-                  已加入词汇本
-                </>
+                <><Check size={16} />{t('wcard.saved', lang)}</>
+              ) : adding ? (
+                <><Loader2 size={16} className="animate-spin" />{t('wcard.adding', lang)}</>
               ) : (
-                <>
-                  <Plus size={16} />
-                  加入词汇本
-                </>
+                <><Plus size={16} />{t('wcard.add', lang)}</>
               )}
             </button>
           </>
