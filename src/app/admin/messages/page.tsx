@@ -12,7 +12,7 @@ const TYPE_LABEL: Record<string, string> = {
   popup: '弹窗公告',
 };
 
-export default function AdminMessagesPage() {
+function AdminMessagesContent() {
   const searchParams = useSearchParams();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');

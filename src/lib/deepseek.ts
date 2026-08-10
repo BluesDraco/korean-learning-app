@@ -201,14 +201,10 @@ export async function chatResponseDeepSeek(
         },
         { role: 'user', content: `对话历史：\n${history}\n\n用户最新消息：${params.userMessage}\n\n请以角色身份回复。` },
       ],
-      temperature: 0.7,
-      max_tokens: 900,
-    }),
-  });
+      apiKey,
+      { temperature: 0.7, max_tokens: 900 }
+    );
 
-  if (!res.ok) throw new Error(`DeepSeek chat error: ${res.status}`);
-  const json = await res.json();
-  const content = json.choices[0].message.content.trim();
   const cleanJson = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
   const parsed = JSON.parse(cleanJson);
   // Ensure wrongPart/correctPart always exist

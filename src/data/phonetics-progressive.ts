@@ -1051,3 +1051,6 @@ export const HOMOPHONE_GROUPS: Record<string, string> = {
 export function homophoneKey(jamo: string): string {
   return HOMOPHONE_GROUPS[jamo] || jamo;
 }
+
+export const homophoneGroups = HOMOPHONE_GROUPS;
+export function confusableNameKey(jamo: string): string { return jamo; }

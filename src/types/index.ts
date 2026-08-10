@@ -1,4 +1,4 @@
-// ===== User Profile & Gamification =====
+﻿// ===== User Profile & Gamification =====
 export interface UserProfile {
   id: string;
   nickname: string;
@@ -162,41 +162,7 @@ export interface ThemePackSentence {
   chinese: string;
   situation?: string;
   situationNote?: string;
-<<<<<<< HEAD
-  /**
-   * 语法拆解。role 是语法角色（主语/宾语/敬语终结/请求...），note 是可选的中文含义。
-   * 旧数据用 partOfSpeech 存词性，UI 会 fallback 显示。
-   */
-  breakdown?: { text: string; role?: string; note?: string; meaning?: string; partOfSpeech?: string }[];
-}
-
-export interface ThemePackDialogueTurn {
-  speaker: 'me' | 'them';        // me=学习者，them=店员/对方
-  korean: string;
-  chinese: string;
-  note?: string;                 // 单轮小提示
-}
-
-export interface ThemePackDialogue {
-  title: string;                 // 对话主题，如 "点一杯冰美式带走"
-  scene?: string;                // 场景补充，如 "工作日午后，星巴克"
-  turns: ThemePackDialogueTurn[];
-}
-
-export interface ThemePackWordGroup {
-  label: string;                 // 分组名，如 "饮品"
-  emoji?: string;                // 分组图标，如 "☕"
-  wordIds: string[];             // 归属该组的 wordIds
-}
-
-export interface ThemePackPitfall {
-  title: string;                 // 短标题，如 "砍价只用于传统市场"
-  detail: string;                // 详细说明：为什么错、后果、正确做法
-  wrong?: string;                // 反例（可选）
-  right?: string;                // 正例（可选）
-=======
   breakdown?: { text: string; meaning: string; partOfSpeech: string }[];
->>>>>>> recovery-branch
 }
 
 // ===== Level Word List =====
@@ -523,55 +489,18 @@ export interface GrammarScenario {
   ko: string;
   zh: string;
   tip?: string;
-<<<<<<< HEAD
-=======
   highlights?: string[];
->>>>>>> recovery-branch
 }
 
 export interface SpecialQuizQuestion {
   prompt?: string;
   pre?: string;
   post?: string;
-<<<<<<< HEAD
-  /** 建议恰好 4 个选项，不能有占位符 '—'（由 lint-grammar-cards 脚本强制检查） */
-  options: string[];
-  /** 0-3，对应 options 索引 */
-  answer: 0 | 1 | 2 | 3;
-  explanation: string;
-}
-
-// 综合练习卡（isPractice）的分组数据：五种题型
-export interface PracticeGroups {
-  /** 排序题：把打乱的词块按正确顺序拼回原句 */
-  sort?: { words: string[]; answer: string[]; hint: string }[];
-  /** 填空题①（一般是 이에요/예요 / 은는 类）*/
-  fill1?: { pre: string; post: string; opts: string[]; ans: string; why: string }[];
-  /** 填空题②（一般是 을를 / 에에서 类）*/
-  fill2?: { pre: string; post: string; opts: string[]; ans: string; why: string }[];
-  /** 变形题：动词变形（합니다体、疑问句等）*/
-  morph?: { label: string; opts: string[]; ans: string; why: string }[];
-  /** 判断题：A/B 二选一 */
-  judge?: { A: string; B: string; ans: 'A' | 'B'; why: string }[];
-  /** 改错题：先看错句，点击揭晓正确写法 */
-  err?: { wrong: string; right: string; why: string }[];
-  /** 情景应用题：给情景选正确韩语句（正确项与诱答项都来自已审 scenarios，不生成新韩语） */
-  scenario?: { icon: string; context: string; zh: string; ans: string; options: string[] }[];
-  /** 词块填空题：从已审例句挖掉一个词块，诱答项取同池同 role 的已审词块（不生成新韩语）。hint 是句义，答题前显示。 */
-  cloze?: { pre: string; post: string; opts: string[]; ans: string; why: string; hint: string }[];
-  /** 听力题：听韩语句选中文意思。ko=题干韩语（已审例句），ans=正确中文，options=含正确项的中文选项。 */
-  listening?: { ko: string; ans: string; options: string[] }[];
-  /** 听写题（综合测验）：听韩语句写出来，本地 normalizeKorean 比对。ko=源句，zh=句义提示。 */
-  dictation?: { ko: string; zh: string }[];
-}
-
-=======
   options: string[];
   answer: number;
   explanation: string;
 }
 
->>>>>>> recovery-branch
 export interface GrammarCard {
   id: string;
   partNumber: number;
@@ -605,17 +534,9 @@ export interface GrammarCard {
     zh?: string;
     tokens: { text: string; role: 'subject' | 'object' | 'verb' | 'place' | 'time' | 'plain' }[];
   }[];
-<<<<<<< HEAD
-  /** 接续规则 / 用法提示（不允许裸字符串，由 lint-grammar-cards 脚本强制检查） */
-  connectionRules: ConnectionRule[];
-  cardExamples: GrammarCardExample[];
-  scenarios: GrammarScenario[];
-  /** wrong 和 correct 不得填写相同内容 */
-=======
   connectionRules: (ConnectionRule | string)[];
   cardExamples: GrammarCardExample[];
   scenarios: GrammarScenario[];
->>>>>>> recovery-branch
   mistakes: { wrong: string; correct: string; note: string }[];
   specialQuiz?: {
     type: 'morph' | 'judge' | 'fill';
@@ -628,11 +549,6 @@ export interface GrammarCard {
   compareHtml?: string;
   compareLabel?: string;
   overviewHtml?: string;
-<<<<<<< HEAD
-  /** 综合练习专属：5 种题型分组数据（isPractice=true 时使用） */
-  practiceGroups?: PracticeGroups;
-=======
->>>>>>> recovery-branch
 }
 
 export interface UserGrammarState {
@@ -802,11 +718,7 @@ export interface ArticleLearningEvent {
 export interface TopikSession {
   id: string;
   userId: string;
-<<<<<<< HEAD
-  mode: 'exam' | 'practice' | 'mistakes' | 'simulate';
-=======
   mode: 'exam' | 'practice' | 'mistakes';
->>>>>>> recovery-branch
   examSetId?: string;
   section: string;
   score: number;
@@ -828,46 +740,6 @@ export interface TopikMistake {
   createdAt: number;
 }
 
-<<<<<<< HEAD
-export interface TopikTypeMastery {
-  id: string;
-  userId: string;
-  questionType: string;
-  attempts: number;
-  correct: number;
-  lastPracticedAt: number;
-  createdAt: number;
-}
-
-export interface TopikUserGoal {
-  id: string;              // 与 userId 同值，一人一行
-  userId: string;
-  targetDate?: number;     // 目标 TOPIK 考试日期 (ms 时间戳，未设置=undefined)
-  targetLevel?: 'I' | 'II';
-  dailyQuestionCount: number;  // 每日训练题量 10 / 20 / 30，默认 10
-  updatedAt: number;
-  createdAt: number;
-}
-
-export interface TopikDailyReason {
-  type: 'weak' | 'mistake' | 'new' | 'baseline';
-  text: string;
-}
-
-export interface TopikDailyPlan {
-  id: string;              // dp-{userId}-{YYYY-MM-DD}
-  userId: string;
-  date: string;            // 本地时区 YYYY-MM-DD
-  questionIds: string[];
-  reasonMap: Record<string, TopikDailyReason>;  // qid -> reason
-  targetLevel: 'beginner' | 'intermediate' | 'advanced';
-  createdAt: number;
-  completedAt: number | null;
-  sessionId: string | null;
-}
-
-=======
->>>>>>> recovery-branch
 // ===== 韩娱热点阅读 (Korean Entertainment Hot Topic Reading) =====
 
 export interface KoreanReadingToken {
@@ -945,10 +817,7 @@ export interface KoreanHotReading {
   publishStatus: 'draft' | 'review' | 'published';
 }
 
-<<<<<<< HEAD
-=======
 // ===== Spelling / Sentence Mistakes =====
->>>>>>> recovery-branch
 export interface SpellingMistake {
   id: string;
   wordId?: string;
@@ -956,467 +825,6 @@ export interface SpellingMistake {
   meaning: string;
   userInput: string;
   correctAnswer: string;
-<<<<<<< HEAD
-  mistakeType: 'spelling' | 'sentence' | 'spelling-ai-unavailable';
-  createdAt: number;
-}
-
-// ===== AI Chat =====
-export interface AiChatMistake {
-  id: string;
-  userId?: string;
-  scenarioId: string;
-  scenarioName: string;
-  userInput: string;
-  wrongPart: string;
-  correctPart: string;
-  grammarError: string;
-  createdAt: number;
-  reviewed: number; // 0=未复习, 1=已复习
-}
-
-export interface AiChatNewWord {
-  id: string;
-  userId?: string;
-  ko: string;
-  zh: string;
-  partOfSpeech: string;
-  scenarioId: string;
-  createdAt: number;
-}
-
-// ===== CloudTable typed tables (replacing CloudTable<any>) =====
-
-export interface SavedSentence {
-  id?: string;  // optional — CloudTable auto-generates if missing
-  userId?: string;
-  korean: string;
-  chinese?: string;
-  sourceType?: string;
-  sourceId?: string;
-  sourceTitle?: string;
-  source?: string;           // kpop pages use `source: "${title} - ${artist}"`
-  source_type?: string;      // snake_case aliases for sync compatibility
-  source_id?: string;
-  source_title?: string;
-  startTime?: number;
-  start_time?: number | string;
-  endTime?: number;
-  end_time?: number | string;
-  note?: string;
-  createdAt?: number;
-  created_at?: number | string;
-  updatedAt?: number;
-}
-
-export interface SavedArticle {
-  id: string;
-  userId?: string;
-  title: string;
-  originalText?: string;
-  translatedText?: string;
-  sourceType?: string;
-  sourceUrl?: string;
-  createdAt?: number;
-  updatedAt?: number;
-}
-
-export interface SavedNote {
-  id: string;
-  userId?: string;
-  title: string;
-  content?: string;
-  sourceType?: string;
-  sourceId?: string;
-  createdAt?: number;
-  updatedAt?: number;
-}
-
-export interface UserRecording {
-  id?: string;  // optional — CloudTable auto-generates if missing
-  userId?: string;
-  type?: string;              // 'shadowing' | 'pronunciation' | 'retell'
-  sourceId?: string;
-  sourceType?: string;
-  source_id?: string;          // snake_case alias
-  source_type?: string;
-  lineId?: string;
-  line_id?: string;
-  korean?: string;
-  audioUrl?: string;
-  audio_url?: string;          // snake_case alias
-  audioData?: string;
-  audio_data?: string;
-  durationMs?: number;
-  duration_ms?: number;
-  createdAt?: number;
-  created_at?: number | string;
-  updatedAt?: number;
-}
-
-export interface DiaryEntry {
-  id: string;
-  userId?: string;
-  title: string;
-  content: string;
-  mood?: string;
-  createdAt?: number;
-  updatedAt?: number;
-}
-
-export interface NewsReadingProgress {
-  id: string;
-  userId?: string;
-  postId: string;
-  readAt: number;
-  completedAt?: number;
-}
-
-export interface PhoneticMistake {
-  id: string;
-  userId?: string;
-  targetJamo: string;
-  wrongJamo: string;
-  stage: number;
-  wrongCount: number;
-  lastWrongAt: number;
-  resolved: number;       // 0 / 1
-  createdAt: number;
-}
-
-export interface PhoneticSrsItem {
-  id: string;
-  userId?: string;
-  jamo: string;
-  stage: number;
-  srsLevel: number;
-  easeFactor: number;
-  interval: number;       // days, can be fractional for sub-day intervals
-  nextReviewAt: number;
-  seenCount: number;
-  correctCount: number;
-  wrongCount: number;
-  createdAt: number;
-}
-
-export interface UserPhoneticStep {
-  id: string;
-  completedAt: number;
-}
-
-export interface GrammarFavorite {
-  id: string;              // grammarId
-  createdAt: number;
-}
-
-export interface TypingPackProgress {
-  id: string;              // themeId
-  completedAt: number;
-  bestWpm: number;
-  bestAccuracy: number;
-  practiceCount: number;
-  updatedAt: number;
-}
-
-export interface TypingMastery {
-  id: string;              // `${themeId}:${type}:${korean}`
-  themeId: string;
-  itemKey: string;         // `${type}:${korean}`
-  streak: number;
-  updatedAt: number;
-}
-
-export interface WritingHistoryRecord {
-  id: string;
-  date: string;
-  mode: string;
-  modeLabel: string;
-  score: string;
-  snippet: string;
-  detailsJson: string;     // JSON 序列化的原 details
-  createdAt: number;
-}
-
-export interface AiAnalyzeHistoryItem {
-  id: string;
-  timestamp: number;
-  original: string;
-  fullTranslation: string;
-  resultJson?: string;     // JSON 序列化的 AnalysisResult
-}
-
-export interface UserVocabLastVisit {
-  id: string;              // 固定 'main'（单例）
-  source?: 'yonsei' | 'seoul' | 'vitamin' | 'levels' | 'themes' | 'books';
-  unitId?: string;
-  unitTitle?: string;
-  updatedAt: number;
-}
-
-export interface UserExpressionAdded {
-  id: string;              // expressionId
-  createdAt: number;
-}
-
-export interface PracticeScore {
-  id: string;              // ${userId}:${slug}:${completedAt}
-  userId: string;
-  sceneSlug: string;
-  sceneCn: string;
-  natural: number;         // 0-100
-  grammar: number;
-  politeness: number;
-  task: number;
-  overall: number;
-  tips: string[];          // 最多 3 条，每条 ≤ 30 字
-  highlight: string | null;
-  msgCount: number;
-  mistakeCount: number;
-  createdAt: number;
-}
-
-// ===== 兔莉的博客 (Tori's Blog) =====
-export type BlogLevel = '초급' | '중급' | '고급';
-// 일상 = 动物们的日常短分享；소식 = 动物城新闻/公告
-export type BlogCategory = '일상' | '소식' | '서울 일기' | '문화 노트' | '속담';
-
-// 正文里的一个词汇（inline 展开卡用）：韩语词 + 读法 + 中文释义
-export interface BlogVocab {
-  word: string;      // 韩语词，用于匹配正文中的 .word span
-  reading: string;   // 罗马音/读法，可空
-  meaning: string;   // 中文释义
-}
-
-// 正文的一句：韩语 + 中文翻译（桌面阅读栏可不显示中文）
-export interface BlogSentence {
-  ko: string;
-  zh: string;
-  t?: [number, number];   // [startSec, endSec] 在整段 audioUrl 里的位置;点单句跳播整段这一段。无则回落 edge-tts
-}
-
-// 一道测验题
-export interface BlogQuizItem {
-  question: string;      // 题干（中文或韩语）
-  options: string[];     // 选项
-  answerIndex: number;   // 正确选项下标
-  explanation?: string;  // 解析，可空
-}
-
-// 动物伙伴的一条评论（评论区=偷偷的口语课）
-export interface BlogComment {
-  animalId: string;   // 对应 BLOG_CAST 里的 id
-  ko: string;         // 韩语留言
-  zh: string;         // 中文小字注释
-  audioUrl?: string;  // 预录评论语音(角色音色);无则实时合成(动态回复恒无)
-}
-
-// 帖子里的一张图（NPC 提前做 / 用户上传通用）。存真实宽高，前端按比例自适应（ins 式）。
-export interface BlogImage {
-  url: string;
-  w: number;   // 原始像素宽
-  h: number;   // 原始像素高
-}
-
-// content_json 反序列化后的结构
-export interface BlogContent {
-  sentences: BlogSentence[];
-  vocab: BlogVocab[];
-  quiz: BlogQuizItem[];
-  comments: BlogComment[];   // 动物伙伴评论流
-  likedBy: string[];         // 点赞的动物 id（社交证明用，如 "곰돌이님 외 24명"）
-  images?: BlogImage[];      // 帖子配图（1-10 张，横竖方自适应+可轮播）。空/无=纯文字帖
-}
-
-// 封面主题色（渐变），预留真实封面图前的占位配色
-export type BlogCoverTheme = 'pink' | 'gold' | 'purple' | 'mint';
-
-// 动物作者/伙伴
-export interface BlogAuthor {
-  id: string;
-  emoji: string;
-  name: string;       // 韩文名，如 토리
-  handle: string;     // @tori.seoul
-  badge?: string;     // 名字旁小图标 emoji
-  theme: BlogCoverTheme;
-  bio?: string;       // 作者主页一句人设简介（韩文）
-  bioZh?: string;     // 简介中文
-  imageUrl?: string;  // 头像图（有则渲染图，无则回落 emoji）
-}
-
-export interface BlogPost {
-  id: string;
-  slug: string;
-  titleKo: string;
-  titleZh: string;
-  excerptKo: string;
-  level: BlogLevel;
-  category: BlogCategory;
-  content: BlogContent;      // 由 content_json 解析而来
-  audioUrl: string;
-  audioDuration: number;     // 秒
-  coverEmoji: string;
-  coverImageUrl: string;     // 单图兜底 URL（旧数据/榜单用）；多图/带宽高走 content.images
-  coverTheme: BlogCoverTheme;
-  authorId: string;          // 哪只动物发的（NPC 帖用；user 帖此处存 user_id）
-  likeCount: number;         // 基础点赞数（动物/虚拟社交证明）
-  publishedAt: number;
-  isFeatured: boolean;
-  unlockDay: number;         // Day 门控：0=始终显示，>0 需用户日记进度达到该 Day
-  authorKind: 'npc' | 'user' | 'passerby'; // passerby=首尔市民路人，不门控、不进主角侧栏
-  score?: BlogPostScore;     // 用户帖的多维评分结果（NPC 帖无）
-  aiStatus: 'pending' | 'passed' | 'blocked'; // 一审：AI 自动审核结果（NPC 默认 passed）
-  aiReason: string;          // 一审拦截原因（blocked 时给作者看）
-  moderatedText: string;     // 二审：管理员改写后的公开正文（入选榜单用）
-  featureDate: string;       // 二审：入选公开榜单的日期 'YYYY-MM-DD'，空=未入选
-  featureRank: number;       // 二审：当日榜单名次（1-3），0=未入选
-  liked?: boolean;           // 当前用户是否点赞（真实持久化）
-  saved?: boolean;           // 当前用户是否收藏
-}
-
-// 用户帖的 DeepSeek 多维评分（中文），韩语回应从安全池选
-export interface BlogPostScore {
-  overall: number;           // 总分 0-100
-  dimensions: {              // 各维度得分 0-100
-    grammar: number;         // 语法/句型正确
-    vocabulary: number;      // 词汇运用
-    expression: number;      // 表达达意
-  };
-  usedTargetGrammar: boolean; // 是否用上了当天学的句型
-  comment: string;           // 一句中文点评/鼓励
-  xpEarned: number;          // 本次获得经验
-}
-
-// 博客专属用户档案（选的动物形象 + 经验/等级）
-export interface BlogUserStats {
-  userId: string;
-  animalId: string;          // 选的预制动物形象 id（见 blogAvatars）
-  nickname: string;
-  xp: number;
-  level: number;
-  postCount: number;
-}
-
-// 博客通知（动物点赞/评论了你的帖子）。发帖时预写、读时按 createdAt 揭晓
-export interface BlogNotification {
-  id: string;
-  type: 'like' | 'comment' | 'radio' | 'follow_post';
-  postSlug: string;
-  fromAnimalId: string;      // 触发通知的动物 id（对应 BLOG_CAST）
-  messageKo: string;
-  messageZh: string;
-  createdAt: number;
-  isRead: boolean;
-}
-
-// 用户在 NPC 帖下的私密评论 + 动物回应（只对本人可见，按 user_id 隔离）。
-// 发评论时立刻可见；动物回复在未来 reveal 时间揭晓（同 growth/通知的"冻结+揭晓、无 cron"哲学）。
-export interface BlogUserComment {
-  id: string;
-  author: 'me' | 'animal';   // me = 用户本人；animal = NPC 作者回应
-  animalId: string;          // author='animal' 时为回应的动物 id；'me' 时空
-  ko: string;                // 正文（用户写的原文 / 动物回应韩语）
-  zh: string;                // 动物回应的中文小字（用户评论为空）
-  createdAt: number;         // 揭晓时间（用户评论=此刻；动物回复=未来 reveal ts）
-}
-
-// 预制动物形象（用户从画廊选一只作为自己的社媒身份）
-export interface BlogAvatar {
-  id: string;
-  name: string;              // 韩文名
-  imageUrl: string;          // 提前生成的形象图
-  emoji: string;             // 列表/评论区省流占位
-}
-
-// 混入博客 feed 的电台卡（轻量 DTO，服务端从 radioCast 取，不含字幕/生词，避免 300KB 进客户端包）
-export interface RadioCard {
-  id: string;                // 电台 episode id，点击跳 /radio/{id}
-  program: string;           // 节目基 id：squirrel-morning / animal-news / bear-night / fox-cafe
-  title: string;             // 韩语标题
-  titleZh: string;           // 中文标题
-  host: string;              // 主持动物
-  hostEmoji: string;
-  level: string;             // 초급 / 중급 / 고급
-  duration: string;          // "3:30"
-  scheduleTime: string;      // "07:00"
-  coverColor: string;        // 节目色 token 名
-  category: string;          // 아침 인사 / 뉴스 / 이야기 / 토크
-  day: number;               // 对应日记 Day（与 blog unlock_day 同一时间轴）
-}
-
-// ===== 词典百科 (KRDict 국립국어원 한국어기초사전, CC BY-SA 2.0) =====
-// 服务端数据，短字段名压缩体积；不进前端 bundle，走 /api/dict/*
-export interface DictSenseExample {
-  t: string;                 // 类型：구(词组) / 문장(句子) / 대화(对话)
-  ex: string;                // 例句韩语原文
-}
-export interface DictSense {
-  defKo: string;             // 韩语释义（官方）
-  zh?: string;               // 中文对译词（없으면 생략；占位符已剔除）
-  defZh?: string;            // 中文释义（官方）
-  ex?: DictSenseExample[];   // 例句（最多 6 条）
-}
-export interface DictEntry {
-  id: string;                // KRDict 词条 id
-  k: string;                 // 表题词（한글）
-  h?: string;                // 同形异义号（homonym）
-  pos?: string;              // 词性（명사/동사/…）
-  pron?: string;             // 发音
-  snd?: string;              // 官方发音音频 URL
-  lv?: string;               // 难度：초급 / 중급 / 고급
-  cat?: string;              // 语义分类
-  s: DictSense[];            // 义项列表
-}
-// 浏览/搜索列表项（不含义项详情，减小传输）
-export interface DictListItem {
-  id: string;
-  k: string;
-  h?: string;
-  pos?: string;
-  pron?: string;
-  lv?: string;
-  zh?: string;               // 首义项中文对译（列表速览）
-  defZh?: string;            // 首义项中文释义（zh 缺失时兜底）
-  defKo?: string;            // 韩语释义（zh/defZh 都缺时兜底）
-}
-
-// ===== 邀请裂变 =====
-export interface Invitation {
-  id: string;
-  inviterId: string;
-  inviteeId: string;
-  code: string;
-  status: 'pending' | 'qualified';
-  deviceHash: string;
-  ip: string;
-  createdAt: number;
-  qualifiedAt?: number;
-}
-export interface InviteReward {
-  id: string;
-  userId: string;
-  threshold: number;
-  daysGranted: number;
-  rewardType: string;
-  status: 'pending' | 'granted' | 'won' | 'lost';
-  createdAt: number;
-  grantedAt?: number;
-}
-export interface InviteShipment {
-  id: string;
-  userId: string;
-  threshold: number;
-  boxType: string;
-  status: 'pending' | 'approved' | 'shipped' | 'done' | 'rejected';
-  recipient: string;
-  phone: string;
-  address: string;
-  trackingNo: string;
-  detail: string;
-  createdAt: number;
-  updatedAt: number;
-}
-=======
   mistakeType: 'spelling' | 'sentence';
   createdAt: number;
 }
->>>>>>> recovery-branch

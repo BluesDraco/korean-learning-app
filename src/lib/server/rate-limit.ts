@@ -58,32 +58,6 @@ export async function checkRateLimit(key: string): Promise<{ allowed: boolean; r
   return checkRateLimitByKey(normalized);
 }
 
-// Check login by both IP and username — serial to avoid double-recording on blocked requests
-export async function checkLoginRateLimit(
-  ip: string,
-  username: string,
-): Promise<{ allowed: boolean; retryAfterSeconds?: number }> {
-  const ipResult = await checkRateLimitByKey(`ip:${ip}`);
-  if (!ipResult.allowed) return ipResult;
-  const userResult = await checkRateLimitByKey(`user:${username.toLowerCase()}`);
-  if (!userResult.allowed) return userResult;
-  return { allowed: true };
-}
-
-export async function resetRateLimit(key: string): Promise<void> {
-  const db = await getDb();
-  const normalized = key.startsWith('login:') ? key.slice(6) : key;
-  await db.run(`DELETE FROM login_attempts WHERE ip = ?`, [normalized]);
-}
-
-export async function resetLoginRateLimit(ip: string, username: string): Promise<void> {
-  const db = await getDb();
-  await Promise.all([
-    db.run(`DELETE FROM login_attempts WHERE ip = ?`, [`ip:${ip}`]),
-    db.run(`DELETE FROM login_attempts WHERE ip = ?`, [`user:${username.toLowerCase()}`]),
-  ]);
-}
-
 // Check login by both IP and username — parallel for speed
 export async function checkLoginRateLimit(
   ip: string,

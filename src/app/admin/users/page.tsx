@@ -158,8 +158,7 @@ export default function AdminUsersPage() {
                     </Link>
                   </td>
                 </tr>
-              ))}
-              )}
+              )))}
             </tbody>
           </table>
         </div>

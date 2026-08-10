@@ -397,3 +397,5 @@ registerMany({
   "기초를 다 배워서 정말 뿌듯해요.": { url: "/audio/course/s_d133c4937512.mp3" },
   "이제 중급으로 도전해 볼 거예요!": { url: "/audio/course/s_51f59b690585.mp3" },
 });
+
+export async function loadVocabAudioIndex() {}

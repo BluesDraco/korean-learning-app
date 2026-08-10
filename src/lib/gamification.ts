@@ -1,4 +1,4 @@
-import { db } from '@/lib/db';
+﻿import { db } from '@/lib/db';
 import type { UserProfile, DailyLog, Achievement, AchievementType } from '@/types';
 
 // XP rewards for each action
@@ -55,6 +55,9 @@ export async function getProfile(): Promise<UserProfile> {
     currentUnit: 1,
     onboardingComplete: false,
     createdAt: Date.now(),
+    checkInStreak: 0,
+    checkInLongest: 0,
+    lastCheckInDate: 0,
   };
   // 创建默认档案，失败也不抛错——让 UI 仍可用默认值渲染
   try { await db.userProfiles.put(defaults); } catch { /* ignore */ }
@@ -82,6 +85,9 @@ export async function updateProfile(updates: Partial<UserProfile>): Promise<void
       currentUnit: 1,
       onboardingComplete: false,
       createdAt: Date.now(),
+      checkInStreak: 0,
+      checkInLongest: 0,
+      lastCheckInDate: 0,
       ...updates,
     };
     await db.userProfiles.put(defaults);
@@ -103,6 +109,9 @@ export async function getTodayLog(): Promise<DailyLog> {
     shadowingDone: 0,
     minutesStudied: 0,
     xpEarned: 0,
+    grammarCompleted: 0,
+    articlesRead: 0,
+    diaryCompleted: 0,
   };
   await db.dailyLogs.put(log);
   return log;
@@ -115,6 +124,15 @@ export async function updateTodayLog(updates: Partial<DailyLog>): Promise<void> 
   const today = await getTodayLog();
   const merged = { ...today, ...updates };
   await db.dailyLogs.put(merged);
+}
+
+export async function incrementTodayLog(field: 'grammarCompleted' | 'articlesRead' | 'diaryCompleted' | 'wordsReviewed'): Promise<void> {
+  const today = await getTodayLog();
+  const n = (today[field] as number) || 0;
+  await updateTodayLog({ [field]: n + 1 } as Partial<DailyLog>);
+  // 这些日常活动（语法/阅读/日记）也算"今天学过"，必须推进连击。
+  // 放在 incrementTodayLog（不在 awardXp→updateTodayLog 链上，无递归）而非各调用点，一处覆盖。
+  updateStreak().catch(() => {});
 }
 
 // Award XP and update profile
@@ -216,6 +234,17 @@ export async function addStudyMinutes(minutes: number): Promise<void> {
   await updateTodayLog({ minutesStudied: log.minutesStudied + minutes });
 }
 
+// 从 session 开始时间戳算实际分钟并记入今日时长。
+// 下限 1 分钟（避免几十秒的 session 记成 0），上限 capMin（防挂机虚高）。
+// startMs 为 0/无效时不记录。返回记入的分钟数。
+export async function recordElapsedMinutes(startMs: number, capMin: number): Promise<number> {
+  if (!startMs || startMs <= 0) return 0;
+  const raw = Math.round((Date.now() - startMs) / 60000);
+  const minutes = Math.max(1, Math.min(raw, capMin));
+  await addStudyMinutes(minutes);
+  return minutes;
+}
+
 // Achievement checking
 export async function checkAchievements(level: number): Promise<Achievement[]> {
   const newAchievements: Achievement[] = [];
@@ -228,7 +257,12 @@ export async function checkAchievements(level: number): Promise<Achievement[]> {
   const totalReviews = reviews.reduce((s, r) => s + r.wordsReviewed, 0);
   const dictations = await db.dictationRecords.toArray();
   const totalDictations = dictations.filter((d) => d.correct).length;
-  const totalShadowings = 0;
+  const grammarStates = await db.userGrammarStates.toArray().catch(() => []);
+  const totalGrammar = (grammarStates as any[]).filter((g: any) => g.status === 'mastered').length;
+  const toriProgress = await db.toriProgress.toArray().catch(() => []);
+  const totalDiary = (toriProgress as any[]).filter((tp: any) => tp.completedAt != null).length;
+  const articleProgress = await db.userArticleProgress.toArray().catch(() => []);
+  const totalRead = (articleProgress as any[]).filter((ap: any) => ap.status === 'completed').length;
 
   const checks: [AchievementType, boolean][] = [
     ['first_word', totalWords >= 1],
@@ -239,7 +273,11 @@ export async function checkAchievements(level: number): Promise<Achievement[]> {
     ['reviews_100', totalReviews >= 100],
     ['reviews_1000', totalReviews >= 1000],
     ['dictation_50', totalDictations >= 50],
-    ['shadowing_10', totalShadowings >= 10],
+    ['grammar_10', totalGrammar >= 10],
+    ['grammar_50', totalGrammar >= 50],
+    ['diary_7', totalDiary >= 7],
+    ['diary_30', totalDiary >= 30],
+    ['reading_10', totalRead >= 10],
     ['level_5', level >= 5],
     ['level_10', level >= 10],
     ['level_20', level >= 20],
@@ -303,10 +341,67 @@ export async function getWeekStreak(): Promise<{ date: string; dayLabel: string;
     return {
       date: `${d.getMonth() + 1}/${d.getDate()}`,
       dayLabel: dayNames[d.getDay()],
-      studied: log ? log.wordsLearned > 0 || log.wordsReviewed > 0 : false,
+      studied: log ? log.wordsReviewed > 0 || log.grammarCompleted > 0 || log.articlesRead > 0 || log.diaryCompleted > 0 : false,
       isToday: i === 6,
     };
   });
+}
+
+// 每日签到（登录即签到，独立于 study streak）
+// 基础 +10 XP，连续 ≥7 天翻倍 +20。当天已签到直接返回，天然防重复领取。
+export const CHECKIN_XP_BASE = 10;
+export const CHECKIN_XP_BONUS = 20;
+
+export async function checkInToday(): Promise<{
+  alreadyChecked: boolean;
+  streak: number;
+  xpGained: number;
+}> {
+  const profile = await getProfile();
+  const todayStart = new Date().setHours(0, 0, 0, 0);
+  const yesterdayStart = todayStart - 86400000;
+  const last = profile.lastCheckInDate ?? 0;
+
+  if (last >= todayStart) {
+    return { alreadyChecked: true, streak: profile.checkInStreak ?? 0, xpGained: 0 };
+  }
+
+  const newStreak = last >= yesterdayStart ? (profile.checkInStreak ?? 0) + 1 : 1;
+  const longest = Math.max(newStreak, profile.checkInLongest ?? 0);
+  await db.userProfiles.update('main', {
+    checkInStreak: newStreak,
+    checkInLongest: longest,
+    lastCheckInDate: todayStart,
+  });
+
+  const xpGained = newStreak >= 7 ? CHECKIN_XP_BONUS : CHECKIN_XP_BASE;
+  await awardXp(xpGained);
+
+  return { alreadyChecked: false, streak: newStreak, xpGained };
+}
+
+// 近 7 天签到状态（点亮 = 当天已签到），用于日历带
+export async function getWeekCheckIn(): Promise<{ dayLabel: string; checked: boolean; isToday: boolean }[]> {
+  const profile = await getProfile();
+  const todayStart = new Date().setHours(0, 0, 0, 0);
+  const last = profile.lastCheckInDate ?? 0;
+  const streak = profile.checkInStreak ?? 0;
+  const dayNames = ['日', '一', '二', '三', '四', '五', '六'];
+
+  // 已签到的最早一天 = last - (streak-1) 天；范围内的天都点亮
+  const earliestChecked = streak > 0 ? last - (streak - 1) * 86400000 : Infinity;
+
+  const out: { dayLabel: string; checked: boolean; isToday: boolean }[] = [];
+  for (let i = 6; i >= 0; i--) {
+    const dayStart = todayStart - i * 86400000;
+    const d = new Date(dayStart);
+    out.push({
+      dayLabel: dayNames[d.getDay()],
+      checked: streak > 0 && dayStart >= earliestChecked && dayStart <= last,
+      isToday: i === 0,
+    });
+  }
+  return out;
 }
 
 // Check if all goals met for the perfect week achievement
@@ -319,10 +414,16 @@ export async function checkPerfectWeek(): Promise<void> {
   if (existingTypes.has('perfect_week')) return;
 
   let perfectDays = 0;
+  const ids: string[] = [];
+  for (let i = 1; i <= 7; i++) {
+    ids.push(`log-${todayStart - i * 86400000}`);
+  }
+  const logs = await db.dailyLogs.where('id').anyOf(ids).toArray();
+  const logByDay = new Map(logs.map((l) => [l.id, l]));
   for (let i = 1; i <= 7; i++) {
     const dayStart = todayStart - i * 86400000;
-    const log = await db.dailyLogs.get(`log-${dayStart}`);
-    if (log && log.wordsLearned >= profile.dailyGoalWords) {
+    const log = logByDay.get(`log-${dayStart}`);
+    if (log && (log.wordsReviewed >= profile.dailyGoalWords || log.grammarCompleted > 0 || log.articlesRead > 0 || log.diaryCompleted > 0)) {
       perfectDays++;
     }
   }

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -23,20 +23,6 @@ interface LearningEntry {
   tone: 'pink' | 'mint' | 'peach' | 'purple';
 }
 
-<<<<<<< HEAD
-const SYSTEM_COURSES: LearningEntry[] = [
-  { labelKey: 'learning.course_phonetics', descKey: 'learning.course_phonetics_desc', href: '/phonetics', Icon: Music2,        tone: 'purple' },
-  { labelKey: 'learning.course_grammar',   descKey: 'learning.course_grammar_desc',   href: '/grammar',   Icon: BookOpen,      tone: 'pink' },
-  { labelKey: 'learning.course_topik',     descKey: 'learning.course_topik_desc',     href: '/topik',     Icon: GraduationCap, tone: 'mint' },
-];
-
-// 工具箱 · 4 张大行卡,视觉与上方入门顺序一致
-const TOOLBOX: LearningEntry[] = [
-  { labelKey: 'learning.tool_reading',  descKey: 'learning.tool_reading_desc',  href: '/reading',          Icon: FileText,      tone: 'peach' },
-  { labelKey: 'learning.tool_scene',    descKey: 'learning.tool_scene_desc',    href: '/animal-city.html', Icon: Compass,       tone: 'mint' },
-  { labelKey: 'learning.tool_analyze',  descKey: 'learning.tool_analyze_desc',  href: '/ai/analyze',       Icon: Sparkles,      tone: 'purple' },
-  { labelKey: 'learning.tool_practice', descKey: 'learning.tool_practice_desc', href: '/practice',         Icon: GraduationCap, tone: 'pink' },
-=======
 const ENTRIES: LearningEntry[] = [
   {
     label: '韩文字母入门',
@@ -86,7 +72,6 @@ const ENTRIES: LearningEntry[] = [
     icon: '写',
     color: '#81b5a1',
   },
->>>>>>> recovery-branch
 ];
 
 export function DesktopLearningPage() {
@@ -140,9 +125,6 @@ export function DesktopLearningPage() {
               <h2><em>{t('learning.section_courses', lang)}</em></h2>
               <span className="dl-section-note">{t('learning.section_courses_note', lang)}</span>
             </div>
-<<<<<<< HEAD
-            <span className="dl-kr">입문 순서</span>
-=======
             <div style={{ background: '#fdfaf5', borderRadius: 16, padding: '14px 16px', marginBottom: 16 }}>
               <p style={{ fontSize: 13, color: '#2f2a26', lineHeight: 1.6, textAlign: 'center' }}>
                 这个学习路线会在正式版上线后开放。内测阶段你可以先去词汇模块，按级别和场景学习常用韩语单词。
@@ -162,7 +144,6 @@ export function DesktopLearningPage() {
             >
               ×
             </button>
->>>>>>> recovery-branch
           </div>
           <div className="dl-sys-list">
             {systemWithProgress.map((entry) => (

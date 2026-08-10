@@ -39,3 +39,6 @@ export function useIsDesktop() {
 
   return isDesktop;
 }
+
+export const isTouchDevice = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+export function getIsDesktopViewport() { return window.innerWidth >= 1024; }

@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 
 // 本站绝对地址：env 驱动，支持国内 .com / 海外 .cn 双部署。
 // 未设 env 时回落 torikorean.com（国内默认）。上线海外站只需在 .env.overseas 填 NEXT_PUBLIC_SITE_URL。
@@ -32,7 +32,7 @@ export function readingArticleMetadata(a: {
       description,
       url,
       locale: 'zh_CN',
-      siteName: '兔莉的韩语日记', siteNameEn: 'Tori\'s Korean Diary',
+      siteName: '兔莉的韩语日记',
       images: [{ url: image, width: 1200, height: 630, alt: a.title }],
     },
     twitter: {
@@ -75,7 +75,7 @@ export function readingArticleJsonLd(a: {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: '首页', item: BASE },
-          { '@type': 'ListItem', position: 2, name: '韩语分级阅读', nameEn: 'Graded Korean Reading', item: `${BASE}/reading` },
+          { '@type': 'ListItem', position: 2, name: '韩语分级阅读', item: `${BASE}/reading` },
           { '@type': 'ListItem', position: 3, name: a.title, item: url },
         ],
       },
@@ -103,7 +103,7 @@ export function diaryDayMetadata(d: {
       description,
       url,
       locale: 'zh_CN',
-      siteName: '兔莉的韩语日记', siteNameEn: 'Tori\'s Korean Diary',
+      siteName: '兔莉的韩语日记',
       images: [{ url: image, width: 1200, height: 630, alt: `Day ${d.day} · ${d.title}` }],
     },
     twitter: {
@@ -120,9 +120,9 @@ function stripHtml(s: string): string {
 }
 
 const LEVEL_LABEL_CN: Record<'beginner' | 'intermediate' | 'advanced', string> = {
-  beginner: '初级', beginnerEn: 'Beginner',
-  intermediate: '中级', intermediateEn: 'intermediate level',
-  advanced: '高级', advancedEn: 'Advanced',
+  beginner: '初级',
+  intermediate: '中级',
+  advanced: '高级',
 };
 
 export function grammarLibraryMetadata(gp: {
@@ -150,7 +150,7 @@ export function grammarLibraryMetadata(gp: {
       description,
       url,
       locale: 'zh_CN',
-      siteName: '兔莉的韩语日记', siteNameEn: 'Tori\'s Korean Diary',
+      siteName: '兔莉的韩语日记',
       images: [{ url: image, width: 1200, height: 630, alt: `${gp.pattern} · ${gp.title}` }],
     },
     twitter: {
@@ -196,8 +196,8 @@ export function grammarLibraryJsonLd(gp: {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: '首页', item: BASE },
-          { '@type': 'ListItem', position: 2, name: '韩语语法', nameEn: 'Korean Grammar', item: `${BASE}/grammar` },
-          { '@type': 'ListItem', position: 3, name: '语法库', nameEn: 'Grammar Library', item: `${BASE}/grammar?tab=library` },
+          { '@type': 'ListItem', position: 2, name: '韩语语法', item: `${BASE}/grammar` },
+          { '@type': 'ListItem', position: 3, name: '语法库', item: `${BASE}/grammar?tab=library` },
           { '@type': 'ListItem', position: 4, name: `${gp.pattern} · ${gp.title}`, item: url },
         ],
       },
@@ -233,7 +233,7 @@ export function diaryDayJsonLd(d: {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: '首页', item: BASE },
-          { '@type': 'ListItem', position: 2, name: '韩语日记', nameEn: 'Korean diary', item: `${BASE}/diary` },
+          { '@type': 'ListItem', position: 2, name: '韩语日记', item: `${BASE}/diary` },
           { '@type': 'ListItem', position: 3, name: `Day ${d.day}`, item: url },
         ],
       },
@@ -281,7 +281,7 @@ export function vocabularyThemeMetadata(theme: {
       description,
       url,
       locale: 'zh_CN',
-      siteName: '兔莉的韩语日记', siteNameEn: 'Tori\'s Korean Diary',
+      siteName: '兔莉的韩语日记',
       images: [{ url: image, width: 1200, height: 630, alt: title }],
     },
     twitter: {
@@ -322,8 +322,8 @@ export function vocabularyThemeJsonLd(theme: {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: '首页', item: BASE },
-          { '@type': 'ListItem', position: 2, name: '韩语词汇', nameEn: 'Korean Vocabulary', item: `${BASE}/vocabulary` },
-          { '@type': 'ListItem', position: 3, name: '主题词包', nameEn: 'Theme Word Packs', item: `${BASE}/vocabulary/library?tab=themes` },
+          { '@type': 'ListItem', position: 2, name: '韩语词汇', item: `${BASE}/vocabulary` },
+          { '@type': 'ListItem', position: 3, name: '主题词包', item: `${BASE}/vocabulary/library?tab=themes` },
           { '@type': 'ListItem', position: 4, name: theme.name, item: url },
         ],
       },
@@ -350,7 +350,7 @@ export function vocabularyLevelMetadata(l: {
       description,
       url,
       locale: 'zh_CN',
-      siteName: '兔莉的韩语日记', siteNameEn: 'Tori\'s Korean Diary',
+      siteName: '兔莉的韩语日记',
       images: [{ url: image, width: 1200, height: 630, alt: title }],
     },
     twitter: {
@@ -387,8 +387,8 @@ export function vocabularyLevelJsonLd(l: {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: '首页', item: BASE },
-          { '@type': 'ListItem', position: 2, name: '韩语词汇', nameEn: 'Korean Vocabulary', item: `${BASE}/vocabulary` },
-          { '@type': 'ListItem', position: 3, name: 'TOPIK 词表', nameEn: 'TOPIK Word List', item: `${BASE}/vocabulary/library?tab=levels` },
+          { '@type': 'ListItem', position: 2, name: '韩语词汇', item: `${BASE}/vocabulary` },
+          { '@type': 'ListItem', position: 3, name: 'TOPIK 词表', item: `${BASE}/vocabulary/library?tab=levels` },
           { '@type': 'ListItem', position: 4, name: levelLabel, item: url },
         ],
       },
@@ -519,7 +519,7 @@ export function practiceHubJsonLd(h: {
 
 // ═════════════ TOPIK 题型 SEO ═════════════
 
-const TOPIK_SECTION_LABEL = { listening: '听力', listeningEn: 'Listening', reading: '阅读', readingEn: 'reading' } as const;
+const TOPIK_SECTION_LABEL = { listening: '听力', reading: '阅读' } as const;
 const TOPIK_LEVEL_BAND: Record<'beginner' | 'intermediate' | 'advanced', 'I' | 'II'> = {
   beginner: 'I',
   intermediate: 'II',
@@ -552,7 +552,7 @@ export function topikTypeMetadata(t: {
       description,
       url,
       locale: 'zh_CN',
-      siteName: '兔莉的韩语日记', siteNameEn: 'Tori\'s Korean Diary',
+      siteName: '兔莉的韩语日记',
       images: [{ url: image, width: 1200, height: 630, alt: `${t.labelZh} · TOPIK ${band} ${sec}` }],
     },
     twitter: {
@@ -591,7 +591,7 @@ export function topikTypeJsonLd(t: {
         learningResourceType: 'Reference',
         educationalLevel: `TOPIK ${band}｜${sec}`,
         teaches: t.labelZh,
-        about: 'TOPIK 韩语能力考试', aboutEn: 'TOPIK Korean Proficiency Test',
+        about: 'TOPIK 韩语能力考试',
         isPartOf: { '@id': `${BASE}/#website` },
         publisher: { '@id': `${BASE}/#org` },
       },
@@ -599,7 +599,7 @@ export function topikTypeJsonLd(t: {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: '首页', item: BASE },
-          { '@type': 'ListItem', position: 2, name: 'TOPIK 韩语考试', nameEn: 'TOPIK Korean Test', item: `${BASE}/topik` },
+          { '@type': 'ListItem', position: 2, name: 'TOPIK 韩语考试', item: `${BASE}/topik` },
           { '@type': 'ListItem', position: 3, name: `TOPIK ${band} ${sec}`, item: `${BASE}/topik` },
           { '@type': 'ListItem', position: 4, name: t.labelZh, item: url },
         ],
@@ -658,7 +658,6 @@ export function hreflangFor(path: string, bilingual: boolean, lang?: UiLang): No
 // 英文用真实搜索词，非中文直译。key = 裸路径。
 
 interface PageCopy {
-  [k: string]: unknown;
   title: { zh: string; en: string };
   description: { zh: string; en: string };
 }
@@ -667,11 +666,11 @@ export const SITE_NAME = { zh: '兔莉的韩语日记', en: "Tori's Korean Diary
 
 export const HOME_COPY: PageCopy = {
   title: {
-    zh: '兔莉的韩语日记 · 在线学韩语｜40音·语法·TOPIK·日记', zhEn: 'Tori\'s Korean Diary · Learn Korean Online | 40 Sounds · Grammar · TOPIK · Diary',
+    zh: '兔莉的韩语日记 · 在线学韩语｜40音·语法·TOPIK·日记',
     en: "Learn Korean Online Free — Hangul, Grammar, TOPIK Prep | Tori's Korean Diary",
   },
   description: {
-    zh: '系统学韩语：40音发音、语法课程、TOPIK 备考、每日韩语日记跟读、韩语阅读、听力训练。零基础到进阶一站式学习。', zhEn: 'Learn Korean systematically: 40-sound pronunciation, grammar courses, TOPIK prep, daily Korean diary shadowing, reading, and listening practice. One-stop learning from beginner to advanced.',
+    zh: '系统学韩语：40音发音、语法课程、TOPIK 备考、每日韩语日记跟读、韩语阅读、听力训练。零基础到进阶一站式学习。',
     en: 'Learn Korean from zero: Hangul alphabet, grammar lessons, TOPIK practice tests, daily reading & listening, shadowing diaries. A complete free Korean learning app.',
   },
 };
@@ -686,90 +685,429 @@ export const HOME_KEYWORDS_EN = [
 // 各 hub 框架页的双语标题/描述。key = 裸路径。未列入的页面不挂 en。
 export const HUB_COPY: Record<string, PageCopy> = {
   '/phonetics': {
-    title: { zh: '韩语40音发音表', zhEn: 'Korean 40-Sound Pronunciation Chart', en: 'Korean Alphabet (Hangul) — Learn All 40 Letters with Audio' },
+    title: { zh: '韩语40音发音表', en: 'Korean Alphabet (Hangul) — Learn All 40 Letters with Audio' },
     description: {
-      zh: '韩语40音发音表，真人录音，元音辅音收音一次学会。', zhEn: 'Korean 40-sound pronunciation chart with real audio. Master vowels, consonants, and final consonants all at once.',
+      zh: '韩语40音发音表，真人录音，元音辅音收音一次学会。',
       en: 'Master the Korean alphabet (Hangul): all 40 vowels and consonants with native audio, stroke order, and pronunciation practice.',
     },
   },
   '/grammar': {
-    title: { zh: '韩语语法课程', zhEn: 'Korean Grammar Course', en: 'Korean Grammar Lessons — From Beginner to Advanced' },
+    title: { zh: '韩语语法课程', en: 'Korean Grammar Lessons — From Beginner to Advanced' },
     description: {
-      zh: '系统韩语语法课程，从入门到高级，例句+练习+易错点。', zhEn: 'Systematic Korean grammar course from beginner to advanced, with example sentences, exercises, and common mistakes.',
+      zh: '系统韩语语法课程，从入门到高级，例句+练习+易错点。',
       en: 'Learn Korean grammar step by step: 200+ grammar points with examples, exercises, and common mistakes, from beginner to TOPIK advanced.',
     },
   },
   '/topik': {
-    title: { zh: 'TOPIK 韩语能力考试备考', zhEn: 'TOPIK Exam Prep', en: 'TOPIK Practice Tests — Free Korean Proficiency Exam Prep' },
+    title: { zh: 'TOPIK 韩语能力考试备考', en: 'TOPIK Practice Tests — Free Korean Proficiency Exam Prep' },
     description: {
-      zh: 'TOPIK I / II 听力阅读题型讲解与模拟练习，附解题技巧。', zhEn: 'TOPIK I / II listening and reading question walkthroughs with mock practice and test-taking tips.',
+      zh: 'TOPIK I / II 听力阅读题型讲解与模拟练习，附解题技巧。',
       en: 'Free TOPIK practice tests for TOPIK I & II: listening and reading questions with explanations and test-taking strategies.',
     },
   },
   '/reading': {
-    title: { zh: '韩语分级阅读', zhEn: 'Graded Korean Reading', en: 'Korean Reading Practice — Graded Articles by Level' },
+    title: { zh: '韩语分级阅读', en: 'Korean Reading Practice — Graded Articles by Level' },
     description: {
-      zh: '按等级划分的韩语阅读文章，点词查词、跟读、测验一体。', zhEn: 'Leveled Korean reading articles with tap-to-look-up words, shadowing, and quizzes all in one.',
+      zh: '按等级划分的韩语阅读文章，点词查词、跟读、测验一体。',
       en: 'Graded Korean reading practice: leveled articles with tap-to-translate, shadowing audio, and comprehension quizzes.',
     },
   },
   '/vocabulary': {
-    title: { zh: '韩语单词主题词包', zhEn: 'Korean Vocabulary Theme Packs', en: 'Korean Vocabulary — Themed Word Lists & TOPIK Words' },
+    title: { zh: '韩语单词主题词包', en: 'Korean Vocabulary — Themed Word Lists & TOPIK Words' },
     description: {
-      zh: '主题词包 + TOPIK 分级词表，含发音、例句、场景对话。', zhEn: 'Theme packs + TOPIK graded word lists, with pronunciation, example sentences, and scenario dialogues.',
+      zh: '主题词包 + TOPIK 分级词表，含发音、例句、场景对话。',
       en: 'Learn Korean vocabulary by theme and TOPIK level: pronunciation, example sentences, and real-life dialogues.',
     },
   },
   '/diary': {
-    title: { zh: '兔莉的韩语日记 · 每日跟读', zhEn: 'Tori\'s Korean Diary · Daily Read-Along', en: "Tori's Korean Diary — Daily Story-Based Korean Practice" },
+    title: { zh: '兔莉的韩语日记 · 每日跟读', en: "Tori's Korean Diary — Daily Story-Based Korean Practice" },
     description: {
-      zh: '跟着兔莉的留学故事，每天一篇场景化韩语日记跟读。', zhEn: 'Follow Tori\'s study-abroad story with a daily scenario-based Korean diary read-along.',
+      zh: '跟着兔莉的留学故事，每天一篇场景化韩语日记跟读。',
       en: 'Learn Korean through a daily story: follow Tori\'s study-abroad diary with scene-based shadowing, grammar, and vocabulary.',
     },
   },
   '/listening': {
-    title: { zh: '韩语听力训练', zhEn: 'Korean Listening Practice', en: 'Korean Listening Practice — Train Your Ear' },
+    title: { zh: '韩语听力训练', en: 'Korean Listening Practice — Train Your Ear' },
     description: {
-      zh: '分级韩语听力训练，边听边学。', zhEn: 'Graded Korean listening practice, learn while you listen.',
+      zh: '分级韩语听力训练，边听边学。',
       en: 'Improve your Korean listening with graded audio exercises and interactive transcripts.',
     },
   },
   '/speaking': {
-    title: { zh: '韩语口语练习', zhEn: 'Korean Speaking Practice', en: 'Korean Speaking Practice — Shadowing & AI Conversation' },
+    title: { zh: '韩语口语练习', en: 'Korean Speaking Practice — Shadowing & AI Conversation' },
     description: {
-      zh: '韩语口语跟读与 AI 对话练习。', zhEn: 'Korean speaking read-along and AI conversation practice.',
+      zh: '韩语口语跟读与 AI 对话练习。',
       en: 'Practice speaking Korean with shadowing exercises and AI-powered conversation partners.',
     },
   },
   '/tools': {
-    title: { zh: '免费韩语工具箱', zhEn: 'Free Korean Toolbox', en: 'Free Korean Tools — Romanizer, Keyboard, Name Generator' },
+    title: { zh: '免费韩语工具箱', en: 'Free Korean Tools — Romanizer, Keyboard, Name Generator' },
     description: {
-      zh: '韩语罗马音转换、韩文键盘、韩语名字生成等免费工具。', zhEn: 'Free tools like Korean romanization converter, Hangul keyboard, and Korean name generator.',
+      zh: '韩语罗马音转换、韩文键盘、韩语名字生成等免费工具。',
       en: 'Free Korean tools: Romanization converter, online Korean keyboard, and Korean name generator.',
     },
   },
   '/typing': {
-    title: { zh: '韩语打字练习', zhEn: 'Korean Typing Practice', en: 'Korean Typing Practice — Master Hangul Keyboard' },
+    title: { zh: '韩语打字练习', en: 'Korean Typing Practice — Master Hangul Keyboard' },
     description: {
-      zh: '在线韩语打字练习，熟悉韩文键盘布局，提升打字速度。', zhEn: 'Online Korean typing practice to get familiar with the Hangul keyboard layout and improve typing speed.',
+      zh: '在线韩语打字练习，熟悉韩文键盘布局，提升打字速度。',
       en: 'Practice Korean typing online: learn the Hangul keyboard layout and improve your typing speed.',
     },
   },
   '/dictation': {
-    title: { zh: '韩语听写练习', zhEn: 'Korean Dictation Practice', en: 'Korean Dictation Practice — Train Your Ear & Spelling' },
+    title: { zh: '韩语听写练习', en: 'Korean Dictation Practice — Train Your Ear & Spelling' },
     description: {
-      zh: '韩语听写训练，边听边写，提升听力和拼写能力。', zhEn: 'Korean dictation training, listen and write to improve listening and spelling skills.',
+      zh: '韩语听写训练，边听边写，提升听力和拼写能力。',
       en: 'Korean dictation exercises: listen and type to improve your listening and Hangul spelling.',
     },
   },
   '/writing': {
-    title: { zh: '韩语写作练习', zhEn: 'Korean Writing Practice', en: 'Korean Writing Practice — Compose with Confidence' },
+    title: { zh: '韩语写作练习', en: 'Korean Writing Practice — Compose with Confidence' },
     description: {
-      zh: '在线韩语写作练习，AI 批改，提升书面表达。', zhEn: 'Online Korean writing practice with AI feedback to improve written expression.',
+      zh: '在线韩语写作练习，AI 批改，提升书面表达。',
       en: 'Practice Korean writing online with AI feedback to improve your written expression.',
     },
   },
   '/review': {
-    title: { zh: '韩语复习中心', zhEn: 'Korean Review Center', en: 'Korean Review Center — Spaced Repetition Practice System' },
+    title: { zh: '韩语复习中心', en: 'Korean Review Center — Spaced Repetition Practice' },
+    description: {
+      zh: '韩语单词、语法、句子卡间隔复习，巩固记忆。',
+      en: 'Review Korean vocabulary, grammar, and sentences with spaced repetition to lock in what you learn.',
+    },
+  },
+  '/practice': {
+    title: { zh: '韩语场景练习', en: 'Korean Conversation Practice — Real-Life Scenarios with AI' },
+    description: {
+      zh: '35个真实韩语场景，AI语音对话陪练，从点咖啡到办签证全覆盖。',
+      en: 'Practice Korean in 35 real-life scenarios with AI conversation partners: cafes, airports, hospitals, and more.',
+    },
+  },
+  '/explore': {
+    title: { zh: '韩语学习探索', en: 'Explore Korean Learning — Topics & Scenarios' },
+    description: {
+      zh: '按主题探索韩语学习内容：日常、旅行、职场、文化。',
+      en: 'Explore Korean learning content by topic: daily life, travel, work, and culture.',
+    },
+  },
+  '/korea': {
+    title: { zh: '韩国专题', en: 'Korea Guide — Culture, Food, Travel & Drama' },
+    description: {
+      zh: '韩国文化、美食、旅行、韩剧专题文章合集。',
+      en: 'Articles about Korean culture, food, travel, and K-dramas — for learners who want the full picture.',
+    },
+  },
+  '/blog': {
+    title: { zh: '兔莉的博客', en: "Tori's Blog — Seoul Diaries & Korean Culture" },
+    description: {
+      zh: '兔莉的韩语博客：首尔日记、文化笔记、韩语俗语。',
+      en: "Tori's Korean blog: Seoul diaries, culture notes, and Korean idioms — read and tap to learn.",
+    },
+  },
+  '/radio': {
+    title: { zh: '动物城电台', en: 'Animal City Radio — Korean Podcasts for Learners' },
+    description: {
+      zh: '韩语播客电台，实时字幕+点词查词，边听边学。',
+      en: 'Korean podcasts with live subtitles and tap-to-translate: learn Korean by listening to real content.',
+    },
+  },
+  '/ai/analyze': {
+    title: { zh: 'AI 韩语句子拆解', en: 'AI Korean Sentence Analyzer — Word-by-Word Breakdown' },
+    description: {
+      zh: '粘贴韩文句子，AI自动拆解词汇、语法、罗马音与翻译。',
+      en: 'Paste any Korean sentence and get an AI-powered breakdown: vocabulary, grammar, romanization, and translation.',
+    },
+  },
+  '/learning': {
+    title: { zh: '韩语学习入口', en: 'Korean Learning Hub — Start Here' },
+    description: {
+      zh: '韩语学习入口：选择学习方向，开始系统学习。',
+      en: 'Korean learning hub: pick your path and start learning systematically.',
+    },
+  },
+  '/learn': {
+    title: { zh: '韩语学习', en: 'Learn Korean — Free Online Courses & Tools' },
+    description: {
+      zh: '免费在线学韩语：40音入门、语法课程、TOPIK备考、词汇学习。',
+      en: 'Learn Korean online for free: Hangul alphabet, grammar courses, TOPIK prep, and vocabulary.',
+    },
+  },
+  '/learn/picture-books': {
+    title: { zh: '韩语绘本馆', en: 'Korean Picture Books — Stories for Learners' },
+    description: {
+      zh: '韩语绘本跟读，边看故事边学韩语。',
+      en: 'Korean picture books with audio: read along and learn Korean through stories.',
+    },
   },
 };
+
+/** 取某框架页的语言化 metadata（title/description/OG）。path 不在 HUB_COPY 中返回 null。 */
+export function hubMetadata(path: string, lang: UiLang): Metadata | null {
+  const copy = path === '/' || path === '' ? HOME_COPY : HUB_COPY[path];
+  if (!copy) return null;
+  const title = copy.title[lang];
+  const description = copy.description[lang];
+  const ogLocale = lang === 'en' ? 'en_US' : 'zh_CN';
+  return {
+    title,
+    description,
+    ...(lang === 'en' && (path === '/' || path === '') ? { keywords: HOME_KEYWORDS_EN } : {}),
+    alternates: hreflangFor(path, true, lang),
+    openGraph: {
+      type: 'website',
+      siteName: SITE_NAME[lang],
+      title,
+      description,
+      url: lang === 'en' ? `${SITE_URL}/en${path === '/' ? '' : path}` : `${SITE_URL}${path === '/' ? '/' : path}`,
+      locale: ogLocale,
+      images: [{ url: `${SITE_URL}/tori-og-v2.webp`, width: 1200, height: 630, alt: SITE_NAME[lang] }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [`${SITE_URL}/tori-og-v2.webp`],
+    },
+  };
+}
+
+// ═════════════ 知识分类词汇 SEO ═════════════
+
+export function knowledgeCategoryMetadata(cat: {
+  slug: string;
+  name: string;
+  nameKo: string;
+  description: string;
+  emoji: string;
+  words: { length: number };
+}): Metadata {
+  const url = `${BASE}/knowledge/${cat.slug}`;
+  const title = `${cat.name}词汇表 · 韩语${cat.nameKo}常用词｜${cat.words.length}词`;
+  const description = `${cat.description}。含${cat.words.length}个韩语${cat.name}相关词汇，附带发音、词性、中文释义和实用例句。`;
+  const image = `${BASE}/tori-og-v2.webp`;
+  return {
+    title,
+    description,
+    alternates: { canonical: `/knowledge/${cat.slug}` },
+    openGraph: {
+      type: 'article',
+      title,
+      description,
+      url,
+      locale: 'zh_CN',
+      siteName: '兔莉的韩语日记',
+      images: [{ url: image, width: 1200, height: 630, alt: title }],
+    },
+    twitter: { card: 'summary_large_image', title, description, images: [image] },
+  };
+}
+
+export function knowledgeCategoryJsonLd(cat: {
+  slug: string;
+  name: string;
+  description: string;
+}) {
+  const url = `${BASE}/knowledge/${cat.slug}`;
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'LearningResource',
+        name: `${cat.name} · 韩语分类词汇`,
+        description: cat.description,
+        url,
+        inLanguage: 'zh-CN',
+        learningResourceType: 'Vocabulary',
+        teaches: cat.name,
+        educationalUse: 'Vocabulary Learning',
+        isPartOf: { '@id': `${BASE}/#website` },
+        publisher: { '@id': `${BASE}/#org` },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: '首页', item: BASE },
+          { '@type': 'ListItem', position: 2, name: '韩语词汇', item: `${BASE}/vocabulary` },
+          { '@type': 'ListItem', position: 3, name: '分类词汇', item: `${BASE}/knowledge` },
+          { '@type': 'ListItem', position: 4, name: cat.name, item: url },
+        ],
+      },
+    ],
+  };
+}
+
+// ═════════════ 韩语俗语惯用语 SEO ═════════════
+
+export function expressionsIndexMetadata(): Metadata {
+  const url = `${BASE}/expressions`;
+  const title = '韩语俗语惯用语大全｜196个常用韩语惯用表达';
+  const description = '196个韩语惯用语（俗语/成语），附字面义、实际含义、中文对应说法、韩语例句。按身体/食物/情感/生活等分类，即查即学。';
+  const image = `${BASE}/tori-og-v2.webp`;
+  return {
+    title,
+    description,
+    alternates: { canonical: '/expressions' },
+    openGraph: {
+      type: 'article',
+      title,
+      description,
+      url,
+      locale: 'zh_CN',
+      siteName: '兔莉的韩语日记',
+      images: [{ url: image, width: 1200, height: 630, alt: title }],
+    },
+    twitter: { card: 'summary_large_image', title, description, images: [image] },
+  };
+}
+
+export function idiomMetadata(i: {
+  id: string;
+  expression: string;
+  literalMeaning: string;
+  actualMeaning: string;
+  chineseEquivalent: string;
+  example: string;
+  exampleZh: string;
+}): Metadata {
+  const url = `${BASE}/expressions/idiom/${i.id}`;
+  const title = `韩语"${i.expression}"什么意思｜${i.actualMeaning.slice(0, 40)}｜韩语俗语`;
+  const descRaw = `韩语惯用语"${i.expression}"，字面意为"${i.literalMeaning}"，实际指${i.actualMeaning}。对应中文"${i.chineseEquivalent}"。例句：${i.exampleZh}`;
+  const description = descRaw.slice(0, 160);
+  const image = `${BASE}/tori-og-v2.webp`;
+  return {
+    title,
+    description,
+    alternates: { canonical: `/expressions/idiom/${i.id}` },
+    openGraph: {
+      type: 'article',
+      title,
+      description,
+      url,
+      locale: 'zh_CN',
+      siteName: '兔莉的韩语日记',
+      images: [{ url: image, width: 1200, height: 630, alt: title }],
+    },
+    twitter: { card: 'summary_large_image', title, description, images: [image] },
+  };
+}
+
+export function idiomJsonLd(i: {
+  id: string;
+  expression: string;
+  actualMeaning: string;
+  tags: string[];
+}) {
+  const url = `${BASE}/expressions/idiom/${i.id}`;
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'LearningResource',
+        name: `韩语俗语：${i.expression}`,
+        description: i.actualMeaning,
+        url,
+        inLanguage: 'zh-CN',
+        learningResourceType: 'Phrase',
+        teaches: i.expression,
+        about: i.tags.join(', '),
+        isPartOf: { '@id': `${BASE}/#website` },
+        publisher: { '@id': `${BASE}/#org` },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: '首页', item: BASE },
+          { '@type': 'ListItem', position: 2, name: '韩语俗语惯用语', item: `${BASE}/expressions` },
+          { '@type': 'ListItem', position: 3, name: i.expression, item: url },
+        ],
+      },
+    ],
+  };
+}
+
+// ═════════════ 40音字母 SEO ═════════════
+
+export function hangulLetterMetadata(l: {
+  id: string;
+  letter: string;
+  name: string;
+  sound: string;
+}): Metadata {
+  const url = `${BASE}/hangul/${l.id}`;
+  const title = `韩语${l.letter}(${l.name})怎么读｜${l.sound.slice(0, 20)}｜韩语40音`;
+  const description = `韩语字母${l.letter}(${l.name})的发音方法、罗马音、记忆技巧和笔顺。${l.sound.slice(0, 100)}。`;
+  const image = `${BASE}/tori-og-v2.webp`;
+  return {
+    title,
+    description,
+    alternates: { canonical: `/hangul/${l.id}` },
+    openGraph: {
+      type: 'article',
+      title,
+      description,
+      url,
+      locale: 'zh_CN',
+      siteName: '兔莉的韩语日记',
+      images: [{ url: image, width: 1200, height: 630, alt: title }],
+    },
+    twitter: { card: 'summary_large_image', title, description, images: [image] },
+  };
+}
+
+export function hangulLetterJsonLd(l: {
+  id: string;
+  letter: string;
+  name: string;
+  sound: string;
+}) {
+  const url = `${BASE}/hangul/${l.id}`;
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'LearningResource',
+        name: `韩语字母${l.letter} · ${l.name}`,
+        description: l.sound,
+        url,
+        inLanguage: 'zh-CN',
+        learningResourceType: 'Pronunciation',
+        teaches: `韩语${l.letter}发音`,
+        isPartOf: { '@id': `${BASE}/#website` },
+        publisher: { '@id': `${BASE}/#org` },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: '首页', item: BASE },
+          { '@type': 'ListItem', position: 2, name: '韩语40音', item: `${BASE}/phonetics` },
+          { '@type': 'ListItem', position: 3, name: `${l.letter}(${l.name})`, item: url },
+        ],
+      },
+    ],
+  };
+}
+
+export function hangulBatchimMetadata(b: {
+  id: string;
+  name: string;
+  sound: string;
+}): Metadata {
+  const url = `${BASE}/hangul/batchim/${b.id}`;
+  const title = `韩语${b.name}发音规则｜韩语收音教学`;
+  const description = b.sound.slice(0, 150);
+  const image = `${BASE}/tori-og-v2.webp`;
+  return {
+    title,
+    description,
+    alternates: { canonical: `/hangul/batchim/${b.id}` },
+    openGraph: {
+      type: 'article',
+      title,
+      description,
+      url,
+      locale: 'zh_CN',
+      siteName: '兔莉的韩语日记',
+      images: [{ url: image, width: 1200, height: 630, alt: title }],
+    },
+    twitter: { card: 'summary_large_image', title, description, images: [image] },
+  };
+}

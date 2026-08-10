@@ -145,3 +145,6 @@ export function markEpisodeListened(id: string): void {
     writeJSON(LISTENED_KEY, list);
   }
 }
+
+export function computeRadioProgress(): number { return 0; }
+export function groupArchiveByDay(items: any[]): Record<string, any[]> { return {}; }

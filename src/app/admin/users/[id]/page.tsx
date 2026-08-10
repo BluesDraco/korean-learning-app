@@ -398,4 +398,4 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
       </div>
     </div>
   );
-}
+}}
