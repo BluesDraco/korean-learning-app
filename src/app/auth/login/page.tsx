@@ -35,8 +35,8 @@ function LoginForm() {
   }
   const { login, loginWithEmail, sendPhoneCode, loginWithPhone } = useAuth();
 
-  // 海外站默认邮箱 tab；国内手机/邮箱暂未上线，默认用户名 tab
-  const [method, setMethod] = useState<Method>(IS_OVERSEAS ? 'email' : 'username');
+  // 海外站默认邮箱 tab；国内默认邮箱 tab（手机暂未上线）
+  const [method, setMethod] = useState<Method>(IS_OVERSEAS ? 'email' : 'email');
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -53,8 +53,8 @@ function LoginForm() {
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   useEffect(() => () => { if (timerRef.current) clearInterval(timerRef.current); }, []);
 
-  // 国内站手机/邮箱登录尚未上线，仅用户名可用
-  const soonMethod = (m: Method) => !IS_OVERSEAS && m !== 'username';
+  // 国内站仅手机暂未上线，邮箱和用户名可用
+  const soonMethod = (m: Method) => !IS_OVERSEAS && m === 'phone';
 
   const switchMethod = (m: Method) => {
     if (soonMethod(m)) return;
@@ -117,7 +117,7 @@ function LoginForm() {
     setError('');
     setSubmitting(true);
     try {
-      const result = await login(username, password);
+      const result = await login(username.trim(), password);
       if (result.error) {
         setError(result.error === 'Invalid credentials' ? t('auth.err_credentials', lang) : (result.error || t('auth.err_login_fail', lang)));
       } else {
@@ -159,7 +159,6 @@ function LoginForm() {
         { id: 'username', label: t('auth.tab_username', lang) },
       ]
     : [
-        { id: 'phone', label: t('auth.tab_phone', lang) },
         { id: 'email', label: t('auth.tab_email', lang) },
         { id: 'username', label: t('auth.tab_username', lang) },
       ];
@@ -220,10 +219,6 @@ function LoginForm() {
               );
             })}
           </div>
-
-          {!IS_OVERSEAS && (
-            <p className="auth-notice" style={{ ['--i' as string]: 3 }}>{t('auth.login_notice_soon', lang)}</p>
-          )}
 
           <form onSubmit={handleSubmit} className="auth-fields" style={{ ['--i' as string]: 4 }}>
             {method === 'phone' && (
@@ -312,13 +307,11 @@ function LoginForm() {
                     </button>
                   </div>
                 </div>
-                {IS_OVERSEAS && (
-                  <p style={{ textAlign: 'right', margin: '2px 0 0' }}>
-                    <Link href="/auth/reset-password" style={{ fontSize: 12.5, color: 'var(--au-ink-3)', textDecoration: 'none' }}>
-                      {t('auth.forgot_password', lang)}
-                    </Link>
-                  </p>
-                )}
+                <p style={{ textAlign: 'right', margin: '2px 0 0' }}>
+                  <Link href="/auth/reset-password" style={{ fontSize: 12.5, color: 'var(--au-ink-3)', textDecoration: 'none' }}>
+                    {t('auth.forgot_password', lang)}
+                  </Link>
+                </p>
               </>
             )}
 
@@ -335,6 +328,7 @@ function LoginForm() {
                       onChange={(e) => setUsername(e.target.value)}
                       placeholder={t('auth.login_username_ph', lang)}
                       autoComplete="username"
+                      autoCapitalize="none"
                     />
                   </div>
                 </div>
@@ -368,7 +362,7 @@ function LoginForm() {
             <button
               type="submit"
               className="auth-submit"
-              disabled={submitting}
+              disabled={submitting || soonMethod(method)}
             >
               {submitting ? t('auth.login_submitting', lang) : t('auth.login_submit', lang)}
             </button>
