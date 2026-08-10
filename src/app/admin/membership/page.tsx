@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { Crown, Save, RotateCcw, Loader2, Check, Infinity as InfinityIcon } from 'lucide-react';
 import {
-  CURRENCY_SYMBOL,
+  CURRENCY_SYMBOL, formatAmount,
   type Tier, type BenefitGroup, type BenefitMatrix, type BenefitValue,
   type TierPricing,
 } from '@/lib/membership-benefits';
@@ -16,7 +16,7 @@ interface BenefitsResponse {
   matrix: BenefitMatrix;
 }
 
-type TabId = 'benefits' | 'members' | 'lifetime';
+type TabId = 'benefits' | 'members' | 'lifetime' | 'payments';
 
 const TIER_ACCENT: Record<Tier, string> = {
   free: 'var(--text-muted)',
@@ -103,7 +103,7 @@ export default function MembershipAdminPage() {
         <Crown size={28} className="text-[var(--pink-primary)]" />
         <div>
           <h1 className="text-xl font-bold text-[var(--text-primary)]">会员管理</h1>
-          <p className="text-sm text-[var(--text-muted)]">权益矩阵 · 会员名单 · 永久档履约</p>
+          <p className="text-sm text-[var(--text-muted)]">权益矩阵 · 会员名单 · 永久档履约 · 充值记录</p>
         </div>
       </div>
 
@@ -113,6 +113,7 @@ export default function MembershipAdminPage() {
           { id: 'benefits', label: '权益总览' },
           { id: 'members', label: '会员名单' },
           { id: 'lifetime', label: '永久档履约' },
+          { id: 'payments', label: '充值记录' },
         ] as { id: TabId; label: string }[]).map((t) => (
           <button
             key={t.id}
@@ -145,6 +146,7 @@ export default function MembershipAdminPage() {
 
       {tab === 'members' && <MembersTab tierLabels={data?.tierLabels} />}
       {tab === 'lifetime' && <LifetimeTab />}
+      {tab === 'payments' && <PaymentsTab />}
     </div>
   );
 }
@@ -562,8 +564,13 @@ function GrantModal({
 }) {
   const [tier, setTier] = useState<Tier>(member.effectiveTier);
   const [note, setNote] = useState('');
+  const [extend, setExtend] = useState(false);
   const [saving, setSaving] = useState(false);
   const [err, setErr] = useState(false);
+
+  const isTimed = tier === 'monthly' || tier === 'yearly';
+  // 有未过期的付费时长时，延长才有意义（否则等同覆盖）
+  const hasActiveExpiry = member.effectiveTier !== 'free' && member.effectiveTier !== 'lifetime' && member.expiry != null && member.expiry > Date.now();
 
   const submit = async () => {
     // 降级到免费=退权，属敏感操作，二次确认
@@ -574,7 +581,7 @@ function GrantModal({
       const res = await fetch('/api/admin/members', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: member.id, tier, note }),
+        body: JSON.stringify({ userId: member.id, tier, note, extend: extend && isTimed }),
       });
       if (!res.ok) throw new Error();
       onDone();
@@ -612,12 +619,42 @@ function GrantModal({
             ))}
           </div>
           <p className="text-[10px] text-[var(--text-muted)]">
-            {tier === 'monthly' && '开通后 30 天到期'}
-            {tier === 'yearly' && '开通后 365 天到期'}
+            {tier === 'monthly' && (extend ? '在当前到期日基础上延长 30 天' : '从今天起算 30 天到期')}
+            {tier === 'yearly' && (extend ? '在当前到期日基础上延长 365 天' : '从今天起算 365 天到期')}
             {tier === 'lifetime' && '永久有效，自动建周边/开发履约行'}
             {tier === 'free' && `降级为免费（记一条 ${CURRENCY_SYMBOL}0 订单留痕）`}
           </p>
         </div>
+
+        {/* 重设 vs 延长（仅月度/年度） */}
+        {isTimed && (
+          <div className="space-y-2">
+            <label className="text-xs text-[var(--text-muted)]">到期计算方式</label>
+            <div className="grid grid-cols-2 gap-1.5">
+              <button
+                onClick={() => setExtend(false)}
+                className={`py-2 px-2 text-xs rounded-lg border transition-colors ${
+                  !extend ? 'border-[var(--pink-primary)] bg-[var(--pink-primary)] text-white font-semibold' : 'border-[var(--border-color)] text-[var(--text-muted)]'
+                }`}
+              >
+                从今天重算
+              </button>
+              <button
+                onClick={() => setExtend(true)}
+                className={`py-2 px-2 text-xs rounded-lg border transition-colors ${
+                  extend ? 'border-[var(--pink-primary)] bg-[var(--pink-primary)] text-white font-semibold' : 'border-[var(--border-color)] text-[var(--text-muted)]'
+                }`}
+              >
+                延长时长
+              </button>
+            </div>
+            {extend && !hasActiveExpiry && (
+              <p className="text-[10px] text-[var(--color-gold-strong)]">
+                该用户当前没有未过期的会员时长，延长将等同于从今天起算。
+              </p>
+            )}
+          </div>
+        )}
 
         <div className="space-y-1.5">
           <label className="text-xs text-[var(--text-muted)]">备注（可选，如微信付款）</label>
@@ -779,6 +816,259 @@ function LifetimeTab() {
                 ))}
               </tbody>
             </table>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── 充值记录 tab ──
+
+interface PaymentRow {
+  id: string;
+  userId: string;
+  username: string;
+  tier: string;
+  amount: number;
+  currency: string;
+  source: string;
+  channel: string;
+  status: string;
+  note: string;
+  operator: string;
+  createdAt: number;
+  paidAt: number | null;
+  outTradeNo: string;
+}
+
+const SOURCE_LABEL: Record<string, string> = {
+  manual: '后台开通',
+  stripe: 'Stripe',
+  xorpay: 'XorPay',
+  xunhupay: '虎皮椒',
+  mock: 'Mock',
+};
+
+const STATUS_LABEL: Record<string, string> = {
+  paid: '已支付',
+  pending: '待支付',
+  refunded: '已退款',
+};
+
+function PaymentsTab() {
+  const [payments, setPayments] = useState<PaymentRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [searchInput, setSearchInput] = useState('');
+  const [search, setSearch] = useState('');
+  const [tierFilter, setTierFilter] = useState<'all' | Tier>('all');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const abortRef = useRef<AbortController | null>(null);
+  const PAGE_SIZE = 20;
+
+  useEffect(() => {
+    const t = setTimeout(() => setSearch(searchInput.trim()), 300);
+    return () => clearTimeout(t);
+  }, [searchInput]);
+
+  useEffect(() => { setPage(1); }, [search, tierFilter, statusFilter]);
+
+  const load = useCallback(async () => {
+    // 取消上一个未完成的请求，避免快速切筛选时旧结果覆盖新结果
+    abortRef.current?.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
+
+    setLoading(true);
+    setError(false);
+    try {
+      const qs = new URLSearchParams();
+      if (search) qs.set('search', search);
+      if (tierFilter !== 'all') qs.set('tier', tierFilter);
+      if (statusFilter !== 'all') qs.set('status', statusFilter);
+      qs.set('page', String(page));
+      qs.set('pageSize', String(PAGE_SIZE));
+      const res = await fetch(`/api/admin/payments?${qs.toString()}`, { signal: controller.signal });
+      if (!res.ok) throw new Error();
+      const json = await res.json();
+      setPayments(json.payments);
+      setTotal(json.total ?? 0);
+    } catch (err) {
+      if (err instanceof DOMException && err.name === 'AbortError') return;
+      setError(true);
+    } finally {
+      if (abortRef.current === controller) abortRef.current = null;
+      setLoading(false);
+    }
+  }, [search, tierFilter, statusFilter, page]);
+
+  useEffect(() => { load(); }, [load]);
+
+  // 卸载时取消进行中的请求
+  useEffect(() => {
+    return () => { abortRef.current?.abort(); };
+  }, []);
+
+  const tierLabels: Record<Tier, string> = { free: '免费', monthly: '月度', yearly: '年度', lifetime: '永久' };
+
+  return (
+    <div className="space-y-4">
+      {/* 搜索 + 筛选 */}
+      <div className="flex items-center gap-2 flex-wrap">
+        <input
+          type="text"
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          placeholder="搜索用户名 / 昵称 / 邮箱"
+          className="flex-1 min-w-[160px] px-3 py-2 text-sm rounded-lg border border-[var(--border-color)] bg-[var(--bg-input)] text-[var(--text-primary)] focus:border-[var(--pink-primary)] focus:outline-none"
+        />
+        {/* 档位筛选 */}
+        <div className="flex gap-1">
+          {(['all', 'monthly', 'yearly', 'lifetime'] as const).map((t) => (
+            <button
+              key={t}
+              onClick={() => setTierFilter(t)}
+              className={`text-xs px-2.5 py-1.5 rounded-full transition-colors whitespace-nowrap ${
+                tierFilter === t ? 'bg-[var(--pink-primary)] text-white' : 'bg-[var(--bg-input)] text-[var(--text-muted)]'
+              }`}
+            >
+              {t === 'all' ? '全部档位' : tierLabels[t]}
+            </button>
+          ))}
+        </div>
+        {/* 状态筛选 */}
+        <div className="flex gap-1">
+          {(['all', 'paid', 'pending', 'refunded'] as const).map((s) => (
+            <button
+              key={s}
+              onClick={() => setStatusFilter(s)}
+              className={`text-xs px-2.5 py-1.5 rounded-full transition-colors whitespace-nowrap ${
+                statusFilter === s ? 'bg-[var(--pink-primary)] text-white' : 'bg-[var(--bg-input)] text-[var(--text-muted)]'
+              }`}
+            >
+              {s === 'all' ? '全部状态' : STATUS_LABEL[s]}
+            </button>
+          ))}
+        </div>
+        {(tierFilter !== 'all' || statusFilter !== 'all') && (
+          <button
+            onClick={() => { setTierFilter('all'); setStatusFilter('all'); }}
+            className="text-xs text-[var(--text-muted)] hover:text-[var(--pink-primary)] whitespace-nowrap"
+          >
+            清除筛选
+          </button>
+        )}
+      </div>
+
+      {/* 加载失败提示 */}
+      {error && !loading && (
+        <div className="flex items-center justify-between px-4 py-3 rounded-lg bg-red-50 border border-red-200 dark:bg-red-950/30 dark:border-red-900">
+          <span className="text-sm text-red-600 dark:text-red-400">加载失败，请检查网络后重试</span>
+          <button
+            onClick={() => load()}
+            className="text-xs px-3 py-1 rounded-lg border border-red-300 text-red-600 dark:border-red-800 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors"
+          >
+            重试
+          </button>
+        </div>
+      )}
+
+      {/* 表格 */}
+      <div className="bg-[var(--bg-card)] rounded-xl border border-[var(--border-color)] overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
+        {loading ? (
+          <div className="flex items-center justify-center py-16 text-[var(--text-muted)]"><Loader2 className="animate-spin" size={20} /></div>
+        ) : error ? (
+          <div className="py-16 text-center text-sm text-[var(--text-muted)]">加载失败 · <button onClick={() => load()} className="text-[var(--pink-primary)] underline">点此重试</button></div>
+        ) : payments.length === 0 ? (
+          <div className="py-16 text-center text-sm text-[var(--text-muted)]">暂无充值记录</div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-[var(--bg-soft)] border-b border-[var(--border-color)] text-xs text-[var(--text-muted)]">
+                  <th className="text-left px-4 py-3 font-medium">用户</th>
+                  <th className="text-left px-4 py-3 font-medium">档位</th>
+                  <th className="text-right px-4 py-3 font-medium">金额</th>
+                  <th className="text-left px-4 py-3 font-medium">渠道</th>
+                  <th className="text-left px-4 py-3 font-medium">状态</th>
+                  <th className="text-left px-4 py-3 font-medium">操作人</th>
+                  <th className="text-left px-4 py-3 font-medium">时间</th>
+                  <th className="text-left px-4 py-3 font-medium">备注</th>
+                </tr>
+              </thead>
+              <tbody>
+                {payments.map((p) => (
+                  <tr key={p.id} className="border-b border-[var(--border-color)] hover:bg-[var(--bg-soft)] transition-colors">
+                    <td className="px-4 py-2.5">
+                      <div className="text-[var(--text-primary)] font-medium">{p.username}</div>
+                      <div className="text-[10px] text-[var(--text-muted)] font-mono">{p.userId.slice(0, 8)}…</div>
+                    </td>
+                    <td className="px-4 py-2.5">
+                      <span className="text-xs font-semibold" style={{ color: TIER_ACCENT[p.tier as Tier] ?? 'var(--text-muted)' }}>
+                        {tierLabels[p.tier as Tier] ?? p.tier}
+                      </span>
+                    </td>
+                    <td className="px-4 py-2.5 text-right tabular-nums">
+                      <span className="text-[var(--text-primary)] font-medium">
+                        {p.currency === 'USD' ? '$' : '¥'}{formatAmount(p.amount)}
+                      </span>
+                    </td>
+                    <td className="px-4 py-2.5">
+                      <span className="text-xs text-[var(--text-muted)]">
+                        {(SOURCE_LABEL[p.source] ?? p.source) || '—'}
+                        {p.channel ? ` · ${p.channel}` : ''}
+                      </span>
+                    </td>
+                    <td className="px-4 py-2.5">
+                      <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                        p.status === 'paid' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                        : p.status === 'pending' ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
+                        : 'bg-[var(--bg-input)] text-[var(--text-muted)]'
+                      }`}>
+                        {STATUS_LABEL[p.status] ?? p.status}
+                      </span>
+                    </td>
+                    <td className="px-4 py-2.5 text-xs text-[var(--text-muted)]">
+                      {p.operator || '—'}
+                    </td>
+                    <td className="px-4 py-2.5 text-xs text-[var(--text-muted)] whitespace-nowrap">
+                      {fmtDate(p.createdAt)}
+                      <div className="text-[10px]">{new Date(p.createdAt).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })}</div>
+                    </td>
+                    <td className="px-4 py-2.5 text-xs text-[var(--text-muted)] max-w-[140px] truncate" title={p.note || undefined}>
+                      {p.note || '—'}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {/* 分页 */}
+        {!loading && !error && total > 0 && (
+          <div className="flex items-center justify-between px-4 py-3 border-t border-[var(--border-color)]">
+            <span className="text-xs text-[var(--text-muted)]">共 {total} 条记录</span>
+            <div className="flex gap-2 items-center">
+              <button
+                onClick={() => setPage(Math.max(1, page - 1))}
+                disabled={page === 1}
+                className="px-3 py-1 text-xs rounded-lg border border-[var(--border-color)] text-[var(--text-muted)] disabled:opacity-30 hover:border-[var(--pink-primary)] transition-colors"
+              >
+                上一页
+              </button>
+              <span className="px-2 py-1 text-xs text-[var(--text-muted)]">第 {page} / {Math.max(1, Math.ceil(total / PAGE_SIZE))} 页</span>
+              <button
+                onClick={() => setPage(page + 1)}
+                disabled={page * PAGE_SIZE >= total}
+                className="px-3 py-1 text-xs rounded-lg border border-[var(--border-color)] text-[var(--text-muted)] disabled:opacity-30 hover:border-[var(--pink-primary)] transition-colors"
+              >
+                下一页
+              </button>
+            </div>
           </div>
         )}
       </div>
