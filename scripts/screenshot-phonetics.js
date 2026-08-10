@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-require-imports, no-unused-vars */
+ 
 // 双端适配截图脚本：5 档宽度 × 5 个 tab，截 /phonetics
 const { chromium } = require('playwright');
 const fs = require('fs');

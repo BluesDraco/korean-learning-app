@@ -8,6 +8,7 @@
  */
 
 export interface KoreanSurname {
+  [k: string]: unknown;
   hangul: string;
   roman: string;
   hanja: string;
@@ -19,6 +20,7 @@ export type NameStyle = 'classic' | 'modern' | 'idol' | 'literary';
 export type Gender = 'M' | 'F' | 'U'; // U = 中性名，男女通用
 
 export interface KoreanName {
+  [k: string]: unknown;
   hangul: string;
   roman: string;
   hanja: string;         // 汉字写法（可能为空——现代韩国名有些不指定汉字）
@@ -32,26 +34,26 @@ export interface KoreanName {
 
 // ═════════════ 姓氏（2015 人口普查 Top 20） ═════════════
 export const SURNAMES: KoreanSurname[] = [
-  { hangul: '김', roman: 'Kim',   hanja: '金', percentage: 21.5 },
-  { hangul: '이', roman: 'Lee',   hanja: '李', percentage: 14.7 },
-  { hangul: '박', roman: 'Park',  hanja: '朴', percentage: 8.4  },
-  { hangul: '최', roman: 'Choi',  hanja: '崔', percentage: 4.7  },
-  { hangul: '정', roman: 'Jung',  hanja: '鄭', percentage: 4.3  },
-  { hangul: '강', roman: 'Kang',  hanja: '姜', percentage: 2.4  },
-  { hangul: '조', roman: 'Cho',   hanja: '趙', percentage: 2.1  },
-  { hangul: '윤', roman: 'Yoon',  hanja: '尹', percentage: 2.1  },
-  { hangul: '장', roman: 'Jang',  hanja: '張', percentage: 2.0  },
-  { hangul: '임', roman: 'Lim',   hanja: '林', percentage: 1.7  },
-  { hangul: '한', roman: 'Han',   hanja: '韓', percentage: 1.4  },
-  { hangul: '오', roman: 'Oh',    hanja: '吳', percentage: 1.4  },
-  { hangul: '서', roman: 'Seo',   hanja: '徐', percentage: 1.3  },
-  { hangul: '신', roman: 'Shin',  hanja: '申', percentage: 1.3  },
-  { hangul: '권', roman: 'Kwon',  hanja: '權', percentage: 1.3  },
-  { hangul: '황', roman: 'Hwang', hanja: '黃', percentage: 1.3  },
-  { hangul: '안', roman: 'Ahn',   hanja: '安', percentage: 1.2  },
-  { hangul: '송', roman: 'Song',  hanja: '宋', percentage: 1.4  },
-  { hangul: '류', roman: 'Ryu',   hanja: '柳', percentage: 1.3  },
-  { hangul: '홍', roman: 'Hong',  hanja: '洪', percentage: 1.1  },
+  { hangul: '김', roman: 'Kim',   hanja: '金', hanjaEn: 'Kim', percentage: 21.5 },
+  { hangul: '이', roman: 'Lee',   hanja: '李', hanjaEn: 'Lee', percentage: 14.7 },
+  { hangul: '박', roman: 'Park',  hanja: '朴', hanjaEn: 'Park', percentage: 8.4  },
+  { hangul: '최', roman: 'Choi',  hanja: '崔', hanjaEn: 'Choi', percentage: 4.7  },
+  { hangul: '정', roman: 'Jung',  hanja: '鄭', hanjaEn: 'Jung', percentage: 4.3  },
+  { hangul: '강', roman: 'Kang',  hanja: '姜', hanjaEn: 'Kang', percentage: 2.4  },
+  { hangul: '조', roman: 'Cho',   hanja: '趙', hanjaEn: 'Cho', percentage: 2.1  },
+  { hangul: '윤', roman: 'Yoon',  hanja: '尹', hanjaEn: 'Yoon', percentage: 2.1  },
+  { hangul: '장', roman: 'Jang',  hanja: '張', hanjaEn: 'Zhang', percentage: 2.0  },
+  { hangul: '임', roman: 'Lim',   hanja: '林', hanjaEn: 'Lin', percentage: 1.7  },
+  { hangul: '한', roman: 'Han',   hanja: '韓', hanjaEn: 'Han', percentage: 1.4  },
+  { hangul: '오', roman: 'Oh',    hanja: '吳', hanjaEn: 'Wu', percentage: 1.4  },
+  { hangul: '서', roman: 'Seo',   hanja: '徐', hanjaEn: 'Seo', percentage: 1.3  },
+  { hangul: '신', roman: 'Shin',  hanja: '申', hanjaEn: 'Shin', percentage: 1.3  },
+  { hangul: '권', roman: 'Kwon',  hanja: '權', hanjaEn: 'Kwon', percentage: 1.3  },
+  { hangul: '황', roman: 'Hwang', hanja: '黃', hanjaEn: 'Hwang', percentage: 1.3  },
+  { hangul: '안', roman: 'Ahn',   hanja: '安', hanjaEn: 'Ahn', percentage: 1.2  },
+  { hangul: '송', roman: 'Song',  hanja: '宋', hanjaEn: 'Song', percentage: 1.4  },
+  { hangul: '류', roman: 'Ryu',   hanja: '柳', hanjaEn: 'Yoo', percentage: 1.3  },
+  { hangul: '홍', roman: 'Hong',  hanja: '洪', hanjaEn: 'Hong', percentage: 1.1  },
 ];
 
 // ═════════════ 名字库（分文件维护，主文件负责合并导出） ═════════════

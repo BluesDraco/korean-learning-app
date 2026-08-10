@@ -36,6 +36,7 @@ const MODULE_LABEL_KEYS: Record<ToriModuleKind, string> = {
 };
 
 interface Props {
+  [k: string]: unknown;
   day: ToriDay;
   level: ToriLevel;
 }

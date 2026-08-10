@@ -6,6 +6,7 @@
  * 长期目标：每页改完后删除该 import，最后删此文件。
  */
 export interface ThemeColors {
+  [k: string]: unknown;
   ink: string;
   muted: string;
   line: string;

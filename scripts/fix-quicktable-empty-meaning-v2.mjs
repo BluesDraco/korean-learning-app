@@ -15,7 +15,7 @@ let totalFixed = 0;
 
 for (const part of TARGETS) {
   const file = path.join(dataDir, `grammar-cards-${part}.ts`);
-  let src = readFileSync(file, 'utf8');
+  const src = readFileSync(file, 'utf8');
 
   // 通用：四列 row，第3列 zh 非空，第4列 ko/zh 全空
   // [{ ko: '...', zh: '...' }, { ko: '...', zh: '...' }, { ko: '...', zh: 'CHN' }, { ko: '', zh: '' }],

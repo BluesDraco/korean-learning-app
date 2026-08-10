@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react';
 import { WordTapSheet } from '@/components/WordTapSheet';
 
 interface TappableTextProps {
+  [k: string]: unknown;
   text: string;
   className?: string;
   style?: React.CSSProperties;

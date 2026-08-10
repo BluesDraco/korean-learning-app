@@ -1,6 +1,7 @@
 // 填空模式句型库：按用户日记 Day 分三档难度，每档 5 个模板。
 // {} 表示一个空格，用户只填关键词；grammar 作为 targetGrammar 传给评分器。
 export interface FillTemplate {
+  [k: string]: unknown;
   id: string;
   grammar: string;    // 目标句型标签（评分器据此判断有没有用上）
   template: string;   // 用 {} 标记空格，如 '오늘은 {}에 갔어요.'

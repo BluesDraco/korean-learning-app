@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { mergeMatrix, type Tier, type BenefitMatrix } from '@/lib/membership-benefits';
 
 export interface MembershipState {
+  [k: string]: unknown;
   tier: Tier;
   expiry: number | null;
   matrix: BenefitMatrix;

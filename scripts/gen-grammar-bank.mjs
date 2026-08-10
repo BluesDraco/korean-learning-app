@@ -177,7 +177,7 @@ async function main() {
   console.log(`P${part}: ${targets.length} 课待生成（N=${N_PER_TYPE}/类型${DRY ? '，DRY' : ''}）`);
 
   const entries = {};
-  let aiJudged = 0, dropped = 0;
+  const aiJudged = 0, dropped = 0;
   for (let i = 0; i < targets.length; i += CONCURRENCY) {
     const chunk = targets.slice(i, i + CONCURRENCY);
     const results = await Promise.all(chunk.map(c =>

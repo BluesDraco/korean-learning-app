@@ -14,6 +14,7 @@ const CONFIDENCE_THRESHOLD = 0.85;
 const CACHE_TTL_MS = 30 * 24 * 60 * 60 * 1000;
 
 interface Body {
+  [k: string]: unknown;
   word: string;
   baseForm?: string;
   meaningChinese: string;
@@ -22,6 +23,7 @@ interface Body {
 }
 
 interface ExamplePair {
+  [k: string]: unknown;
   korean: string;
   chinese: string;
 }

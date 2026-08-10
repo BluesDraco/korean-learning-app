@@ -6,7 +6,7 @@
   "display": "standalone",
   "background_color": "#fbf4e9",
   "theme_color": "#fbf4e9",
-  "orientation": "any",
+  "orientation": "portrait",
   "categories": ["education", "productivity"],
   "lang": "zh-CN",
   "icons": [

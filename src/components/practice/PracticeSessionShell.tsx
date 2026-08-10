@@ -10,6 +10,7 @@ import '../../app/practice/practice-session.css';
 export type PracticeTone = 'mint' | 'peach' | 'purple' | 'pink';
 
 interface PracticeSessionShellProps {
+  [k: string]: unknown;
   tone: PracticeTone;
   /** 模式中文名(如「默写练习」) */
   modeName: string;

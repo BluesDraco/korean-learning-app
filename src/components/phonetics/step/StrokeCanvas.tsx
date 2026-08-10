@@ -11,6 +11,7 @@ export type StrokeFeedback =
   | { kind: 'order'; expected: number; actual: number };  // 笔顺：实际更像 actual+1 笔
 
 interface Props {
+  [k: string]: unknown;
   targetStrokeCount: number;
   ghostChar?: string;
   idealStrokes?: ProgressiveStroke[];  // 传入则启用路径匹配

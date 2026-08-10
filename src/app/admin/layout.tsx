@@ -6,13 +6,14 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
   LayoutDashboard, DollarSign, Users, FileText, Activity, Mail,
-  ShieldAlert, LogOut, Home, Menu, X, BarChart2, BookOpen, Award, Images, Crown, Gift, Star,
+  ShieldAlert, LogOut, Home, Menu, X, BarChart2, BookOpen, Award, Images, Crown, Gift, Star, Package,
 } from 'lucide-react';
 
 const navItems = [
   { href: '/admin/dashboard', label: '仪表盘', icon: LayoutDashboard },
   { href: '/admin/revenue', label: '收入中心', icon: DollarSign },
   { href: '/admin/membership', label: '会员管理', icon: Crown },
+  { href: '/admin/lifetime-gifts', label: '永久礼盒', icon: Package },
   { href: '/admin/invite', label: '邀请裂变', icon: Gift },
   { href: '/admin/users', label: '用户管理', icon: Users },
   { href: '/admin/users/registrations', label: '注册分析', icon: BarChart2 },

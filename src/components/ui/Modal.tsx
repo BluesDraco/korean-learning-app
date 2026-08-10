@@ -9,6 +9,7 @@ import { t } from '@/lib/i18n';
 type Size = 'sm' | 'md' | 'lg';
 
 export interface ModalProps {
+  [k: string]: unknown;
   open: boolean;
   onClose: () => void;
   title?: string;

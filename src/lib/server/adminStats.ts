@@ -29,6 +29,7 @@ function dateKey(ts: number): string {
 }
 
 export interface RevenueParams {
+  [k: string]: unknown;
   page: number;
   pageSize: number;
   type: string;
@@ -240,20 +241,20 @@ export async function computeDashboard(): Promise<DashboardResponse> {
     [todayStart - 7 * 86400000],
   );
   const sectionRules: { prefix: string; feature: string; icon: string }[] = [
-    { prefix: '/dictation', feature: '听写练习', icon: '🎧' },
-    { prefix: '/diary', feature: '日记', icon: '📔' },
-    { prefix: '/grammar', feature: '语法', icon: '📐' },
-    { prefix: '/vocabulary', feature: '词汇', icon: '📖' },
-    { prefix: '/reading', feature: '阅读', icon: '📄' },
-    { prefix: '/radio', feature: '电台', icon: '📻' },
-    { prefix: '/blog', feature: '动物城', icon: '🐰' },
-    { prefix: '/practice', feature: 'AI练习', icon: '🤖' },
-    { prefix: '/phonetics', feature: '发音', icon: '🔤' },
-    { prefix: '/review', feature: '复习', icon: '🔁' },
-    { prefix: '/map', feature: '地图', icon: '🗺️' },
-    { prefix: '/explore', feature: '探索', icon: '🧭' },
-    { prefix: '/learning', feature: '学习中心', icon: '📚' },
-    { prefix: '/daily', feature: '今日任务', icon: '☀️' },
+    { prefix: '/dictation', feature: '听写练习', featureEn: 'Dictation Practice', icon: '🎧' },
+    { prefix: '/diary', feature: '日记', featureEn: 'Diary', icon: '📔' },
+    { prefix: '/grammar', feature: '语法', featureEn: 'Grammar', icon: '📐' },
+    { prefix: '/vocabulary', feature: '词汇', featureEn: 'Vocabulary', icon: '📖' },
+    { prefix: '/reading', feature: '阅读', featureEn: 'reading', icon: '📄' },
+    { prefix: '/radio', feature: '电台', featureEn: 'Radio', icon: '📻' },
+    { prefix: '/blog', feature: '动物城', featureEn: 'Animal Town', icon: '🐰' },
+    { prefix: '/practice', feature: 'AI练习', featureEn: 'AI Practice', icon: '🤖' },
+    { prefix: '/phonetics', feature: '发音', featureEn: 'pronunciation', icon: '🔤' },
+    { prefix: '/review', feature: '复习', featureEn: 'review', icon: '🔁' },
+    { prefix: '/map', feature: '地图', featureEn: 'map', icon: '🗺️' },
+    { prefix: '/explore', feature: '探索', featureEn: 'Explore', icon: '🧭' },
+    { prefix: '/learning', feature: '学习中心', featureEn: 'Learning Center', icon: '📚' },
+    { prefix: '/daily', feature: '今日任务', featureEn: 'Today\'s Tasks', icon: '☀️' },
   ];
   const sectionCounts: Record<string, number> = {};
   let totalSectionViews = 0;
@@ -443,10 +444,10 @@ export async function computeDashboard(): Promise<DashboardResponse> {
 
   return {
     overview: {
-      revenue: { value: todayRevenue / 100, change: pctChange(todayRevenue, yesterdayRevenue), yesterdayValue: yesterdayRevenue / 100, label: '今日收入' },
-      newUsers: { value: todayUsers, change: pctChange(todayUsers, yesterdayUsers), yesterdayValue: yesterdayUsers, label: '新增用户' },
-      conversionRate: { value: todayConversion, change: 0, yesterdayValue: 0, label: '付费转化率' },
-      aiCalls: { value: todayAiCalls, change: pctChange(todayAiCalls, yesterdayAiCalls), yesterdayValue: yesterdayAiCalls, label: 'AI调用量' },
+      revenue: { value: todayRevenue / 100, change: pctChange(todayRevenue, yesterdayRevenue), yesterdayValue: yesterdayRevenue / 100, label: '今日收入', labelEn: 'Today\'s Revenue' },
+      newUsers: { value: todayUsers, change: pctChange(todayUsers, yesterdayUsers), yesterdayValue: yesterdayUsers, label: '新增用户', labelEn: 'New Users' },
+      conversionRate: { value: todayConversion, change: 0, yesterdayValue: 0, label: '付费转化率', labelEn: 'Paid Conversion Rate' },
+      aiCalls: { value: todayAiCalls, change: pctChange(todayAiCalls, yesterdayAiCalls), yesterdayValue: yesterdayAiCalls, label: 'AI调用量', labelEn: 'AI Calls' },
     },
     revenueTrend,
     serverRealtime: { cpuPercent, memoryPercent, apiRequestsToday: todayPageViews, pendingFeedbackCount: pendingFeedback },
@@ -467,7 +468,7 @@ export async function scopedDashboard(scope: AdminScope): Promise<ScopedDashboar
     return { scope, self: await computeDashboard(), peer: null };
   }
   if (!hasPeerConfigured()) {
-    return { scope, self: await computeDashboard(), peer: null, peerError: '海外站未配置（PEER_SITE_URL / INTERNAL_API_SECRET）' };
+    return { scope, self: await computeDashboard(), peer: null, peerError: '海外站未配置（PEER_SITE_URL / INTERNAL_API_SECRET）', peerErrorEn: 'Overseas site not configured (PEER_SITE_URL / INTERNAL_API_SECRET)' };
   }
   // 本地查询与跨站请求无依赖，并行以省一个往返延迟
   const [self, peerResult] = await Promise.all([
@@ -479,7 +480,7 @@ export async function scopedDashboard(scope: AdminScope): Promise<ScopedDashboar
   ]);
   return peerResult.ok
     ? { scope, self, peer: peerResult.peer }
-    : { scope, self, peer: null, peerError: '海外站数据获取失败' };
+    : { scope, self, peer: null, peerError: '海外站数据获取失败', peerErrorEn: 'Failed to fetch data from overseas site' };
 }
 
 export async function scopedRevenue(scope: AdminScope, params: RevenueParams): Promise<ScopedRevenueResponse> {
@@ -487,7 +488,7 @@ export async function scopedRevenue(scope: AdminScope, params: RevenueParams): P
     return { scope, self: await computeRevenue(params), peer: null };
   }
   if (!hasPeerConfigured()) {
-    return { scope, self: await computeRevenue(params), peer: null, peerError: '海外站未配置（PEER_SITE_URL / INTERNAL_API_SECRET）' };
+    return { scope, self: await computeRevenue(params), peer: null, peerError: '海外站未配置（PEER_SITE_URL / INTERNAL_API_SECRET）', peerErrorEn: 'Overseas site not configured (PEER_SITE_URL / INTERNAL_API_SECRET)' };
   }
   const qs = `?page=${params.page}&pageSize=${params.pageSize}&type=${encodeURIComponent(params.type)}&status=${encodeURIComponent(params.statusParam)}${params.exportAll ? '&export=1' : ''}`;
   const [self, peerResult] = await Promise.all([
@@ -499,12 +500,13 @@ export async function scopedRevenue(scope: AdminScope, params: RevenueParams): P
   ]);
   return peerResult.ok
     ? { scope, self, peer: peerResult.peer }
-    : { scope, self, peer: null, peerError: '海外站数据获取失败' };
+    : { scope, self, peer: null, peerError: '海外站数据获取失败', peerErrorEn: 'Failed to fetch data from overseas site' };
 }
 
 // ── Registration analysis ──
 
 export interface RegParams {
+  [k: string]: unknown;
   limit: number;
   offset: number;
   search: string;
@@ -554,7 +556,7 @@ export async function scopedRegistrations(scope: AdminScope, params: RegParams):
     return { scope, self: await computeRegistrations(params), peer: null };
   }
   if (!hasPeerConfigured()) {
-    return { scope, self: await computeRegistrations(params), peer: null, peerError: '海外站未配置（PEER_SITE_URL / INTERNAL_API_SECRET）' };
+    return { scope, self: await computeRegistrations(params), peer: null, peerError: '海外站未配置（PEER_SITE_URL / INTERNAL_API_SECRET）', peerErrorEn: 'Overseas site not configured (PEER_SITE_URL / INTERNAL_API_SECRET)' };
   }
   const qs = `?limit=${params.limit}&offset=${params.offset}&search=${encodeURIComponent(params.search)}`;
   const [self, peerResult] = await Promise.all([
@@ -566,5 +568,5 @@ export async function scopedRegistrations(scope: AdminScope, params: RegParams):
   ]);
   return peerResult.ok
     ? { scope, self, peer: peerResult.peer }
-    : { scope, self, peer: null, peerError: '海外站数据获取失败' };
+    : { scope, self, peer: null, peerError: '海外站数据获取失败', peerErrorEn: 'Failed to fetch data from overseas site' };
 }

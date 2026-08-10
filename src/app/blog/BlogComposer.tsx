@@ -12,6 +12,7 @@ import { useIsDesktop } from '@/lib/useIsMobile';
 type Mode = 'fill' | 'free';
 
 interface PostResult {
+  [k: string]: unknown;
   slug: string;
   aiStatus: 'passed' | 'blocked';
   aiReason?: string;
@@ -27,6 +28,7 @@ const DRAFT_TTL = 7 * 24 * 60 * 60 * 1000;
 const MAX_IMAGES = 10;
 
 interface Draft {
+  [k: string]: unknown;
   mode: Mode;
   text: string;
   blanks: string[];

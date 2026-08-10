@@ -103,7 +103,7 @@ export async function POST(request: Request) {
     }
 
     const token = await signToken({ userId: user.id, username: user.username, role: user.role });
-    const res = NextResponse.json({ success: true, user }, { headers: NO_STORE });
+    const res = NextResponse.json({ success: true, token, user }, { headers: NO_STORE });
     setTokenCookie(res, token);
     return res;
   } catch (err) {

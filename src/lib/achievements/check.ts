@@ -38,6 +38,7 @@ function listenedRadioCount(): number {
 }
 
 interface Metrics {
+  [k: string]: unknown;
   words: number;
   reviews: number;
   dictations: number;

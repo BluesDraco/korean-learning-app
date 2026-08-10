@@ -8,6 +8,7 @@ import type { Lang } from '@/lib/i18n';
 type Box = [x: number, y: number, w: number, h: number];
 
 interface TrackTable {
+  [k: string]: unknown;
   cho: Box;
   jung: Box;
   jong?: Box;

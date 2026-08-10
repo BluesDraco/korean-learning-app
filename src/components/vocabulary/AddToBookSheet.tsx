@@ -8,6 +8,7 @@ import { t } from '@/lib/i18n';
 import { useLang } from '@/components/LangProvider';
 
 interface WordData {
+  [k: string]: unknown;
   korean: string;
   pronunciation: string;
   meaning: string;
@@ -17,6 +18,7 @@ interface WordData {
 }
 
 interface Props {
+  [k: string]: unknown;
   word: WordData;
   onClose: () => void;
   onSelectBook?: (bookId: string) => Promise<void>;

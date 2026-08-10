@@ -54,8 +54,8 @@ const KO_WORDS_FORBIDDEN_IN_ZH = [
 
 // ─── 工具函数 ────────────────────────────────────────────────────────────────
 
-let errors = [];
-let warnings = [];
+const errors = [];
+const warnings = [];
 
 function err(file, cardId, field, msg, snippet = '') {
   errors.push({ file, cardId, field, msg, snippet: String(snippet).slice(0, 80) });
@@ -100,7 +100,7 @@ function loadCards(filePath) {
       .replace(/\s+as\s+const\b/g, '')
       .replace(/\s+as\s+[A-Za-z_$][\w$]*(\s*<[^>]+>)?(\s*\|\s*[A-Za-z0-9_$|]+)*/g, '')
       .replace(/\s+as\s+\d+(\s*\|\s*\d+)+/g, '');
-    // eslint-disable-next-line no-new-func
+     
     const cards = Function(`"use strict"; return (${cleaned})`)();
     return Array.isArray(cards) ? cards : [];
   } catch (e) {

@@ -16,6 +16,7 @@ const MODES: { key: 'listening'|'dictation'|'writing'|'typing'; tone: string; la
 ];
 
 interface PracticeNextHintProps {
+  [k: string]: unknown;
   /** 当前正在练的模式 */
   current: 'listening' | 'dictation' | 'writing' | 'typing';
   /** 是否假定当前模式今日已完成(结算屏用,避免首帧闪) */

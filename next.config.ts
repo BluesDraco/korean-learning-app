@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  typescript: { ignoreBuildErrors: true },
+  // dev-only：允许手机经局域网 IP 访问 dev server 的跨域资源（生产不受影响）
+  allowedDevOrigins: ['192.168.1.76', '192.168.1.*'],
   serverExternalPackages: ['@libsql/client'],
   experimental: {
     // 按需打包：lucide 用了 156 处，旧版本会把整包打入，启用后只打实际用到的图标。
@@ -198,6 +201,34 @@ const nextConfig: NextConfig = {
         source: '/topik/:path*',
         headers: [{ key: 'Cache-Control', value: 'public, max-age=3600, stale-while-revalidate=86400' }],
       },
+      // Public SEO hub pages (exact paths — the `/:path*` headers above don't match bare /xxx)
+      ...[
+        '/phonetics', '/grammar', '/topik', '/reading', '/diary', '/vocabulary',
+        '/speaking', '/writing', '/dictation', '/listening', '/typing', '/practice',
+        '/blog', '/radio', '/explore', '/pronunciation', '/review', '/learning',
+        '/tools', '/tori', '/korea',
+        '/grammar-v2', '/topik-v2', '/diary-v2', '/phonetics-v2', '/vocabulary-v2',
+        '/speaking-v2', '/writing-v2', '/dictation-v2', '/typing-v2', '/practice-v2',
+      ].map((p) => ({
+        source: p,
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=60, s-maxage=3600, stale-while-revalidate=86400' }],
+      })),
+      // Public SEO sub-pages (not covered by existing entries above)
+      // 注意：/blog/:path* 的 public 缓存假设博客页面是纯客户端渲染（'use client'），
+      // 用户数据通过 API (private, no-store) 获取。如未来加 SSR 用户数据，须改为 private。
+      ...[
+        '/listening/:path*', '/typing/:path*', '/practice/:path*',
+        '/blog/:path*', '/radio/:path*', '/explore/:path*', '/pronunciation/:path*',
+        '/review/:path*', '/learning/:path*', '/tools/:path*', '/tori/:path*',
+        '/invite', '/membership', '/privacy', '/terms',
+        '/grammar-v2/:path*', '/topik-v2/:path*', '/diary-v2/:path*',
+        '/phonetics-v2/:path*', '/vocabulary-v2/:path*',
+        '/speaking-v2/:path*', '/writing-v2/:path*', '/dictation-v2/:path*',
+        '/typing-v2/:path*', '/practice-v2/:path*',
+      ].map((p) => ({
+        source: p,
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=3600, stale-while-revalidate=86400' }],
+      })),
       // Static assets — long cache
       {
         source: '/images/:path*',

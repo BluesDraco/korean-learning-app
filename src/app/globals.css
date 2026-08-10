@@ -494,6 +494,10 @@
   --color-danger-bg: #3A2020;
   --color-highlight: #B09830;
   --text-on-pink:   #F0E8FF;
+  --mint-bg:        #1E3530;
+  --purple-bg:      #2A2040;
+  --btn-dark-bg:    #3A3060;
+  --btn-dark-text:  #F0E8FF;
 }
 
 /* Tori mascot visibility in dark mode — subtle glow instead of hard backdrop */
@@ -1876,8 +1880,8 @@ html[data-lite] *::after {
   --desktop-mint: var(--color-mint-soft);
   --desktop-cream: #fff8f4;
   --desktop-black: #201815;
-  --desktop-shadow: 0 6px 18px -8px oklch(28% 0.03 30 / 0.10), 0 2px 6px -2px oklch(28% 0.02 30 / 0.05);
-  --desktop-shadow2: 0 22px 48px -16px oklch(28% 0.04 30 / 0.16), 0 6px 16px -6px oklch(28% 0.03 30 / 0.08);
+  --desktop-shadow: none;
+  --desktop-shadow2: none;
   --desktop-radius: 34px;
   --desktop-radius-inner: 32px;
   --desktop-gap: 44px;
@@ -1937,6 +1941,7 @@ html[data-lite] *::after {
   grid-template-columns: var(--desktop-sidebar) minmax(0, 1fr) var(--desktop-panel);
   gap: var(--desktop-gap);
   padding: 20px;
+  overflow: hidden;
 }
 
 /* ── Sidebar ── */
@@ -2033,7 +2038,8 @@ html[data-lite] *::after {
 
 /* ── Main content area ── */
 .desktop-main {
-  min-height: 100%;
+  height: 100%;
+  overflow-y: auto;
   display: flex;
   justify-content: center;
 }
@@ -2045,22 +2051,6 @@ html[data-lite] *::after {
   flex-direction: column;
   gap: 20px;
   padding-bottom: 32px;
-}
-
-/* Wide mode: phonetics 等沉浸式页面用，撑满主区不限宽 */
-.desktop-main.desktop-main-wide { padding: 0; background: transparent; }
-.desktop-main-rail.desktop-main-rail-wide {
-  max-width: none !important;
-  gap: 0;
-  padding-bottom: 0;
-  background: transparent;
-}
-/* wide 模式下 desktop-content 也不要画底色 */
-.desktop-main.desktop-main-wide .desktop-content { background: transparent; }
-/* 让 wide 模式吸掉外层 .desktop-app 的左 padding+gap，主区直接顶到 sidebar 右侧 */
-.desktop-app:has(.desktop-main-rail-wide) {
-  padding: 20px 12px 20px 16px;
-  gap: 8px;
 }
 
 .desktop-topbar {
@@ -2146,8 +2136,6 @@ html[data-lite] *::after {
 .desktop-content {
   min-height: 0;
   flex: 1;
-  display: flex;
-  flex-direction: column;
   overflow-y: visible;
   scrollbar-width: none;
   padding-right: 4px;
@@ -3016,11 +3004,11 @@ html[data-lite] *::after {
      768–1023  2 columns tablet (sidebar 80 icon-only + main 720)
    ═══════════════════════════════════════════════════════════════ */
 
-@media (min-width: 1024px) and (max-width: 1279px) {
+@media (max-width: 1280px) {
   .desktop-app {
-    grid-template-columns: 96px minmax(0, 1fr);
-    padding: 24px;
-    gap: 24px;
+    grid-template-columns: 92px minmax(0, 1fr);
+    padding: 16px;
+    gap: 16px;
   }
   .desktop-panel { display: none; }
   .desktop-search { display: none; }
@@ -3034,68 +3022,21 @@ html[data-lite] *::after {
   .desktop-stat-row { grid-template-columns: repeat(2, 1fr); }
 }
 
-@media (min-width: 768px) and (max-width: 1023px) {
-  .desktop-app {
-    grid-template-columns: 80px minmax(0, 1fr);
-    padding: 16px;
-    gap: 16px;
-  }
-  .desktop-panel { display: none; }
-  .desktop-search { display: none; }
-  .desktop-sidebar {
-    border-radius: var(--radius-lg);
-    padding: 14px 8px;
-    gap: 4px;
-  }
-  .desktop-navbtn {
-    width: 60px;
-    min-height: 56px;
-    font-size: 0; /* hide text */
-    gap: 0;
-    border-radius: var(--radius-md);
-  }
-  .desktop-navbtn .desktop-navico {
-    font-size: 22px;
-  }
-  .desktop-logo {
-    width: 56px;
-    height: 56px;
-  }
-  .desktop-logo::before,
-  .desktop-logo::after { display: none; }
-  .desktop-main-rail { max-width: 800px; }
-  .desktop-topbar {
-    padding: 16px 20px;
-    border-radius: var(--radius-lg);
-  }
-  .desktop-topbar h1 { font-size: 22px; }
-  .desktop-module-grid,
-  .desktop-grid-3,
-  .desktop-grid-2 { grid-template-columns: 1fr 1fr; }
-  .desktop-stat-row { grid-template-columns: repeat(2, 1fr); }
-  .desktop-content {
-    padding-inline: 4px;
-  }
-  .desktop-foot-label { display: none; }
-  .desktop-foot-btn { justify-content: center !important; padding: 8px !important; }
-}
-
-/* Hide desktop shell on mobile (< 1024px) — 与 useIsDesktop 骨架层契约一致。
-   横屏 iPhone (≤932) 和 iPad 竖屏 (≤1023) 都走手机壳，避免视口太窄的桌面布局挤破。 */
-@media (max-width: 1023px) {
+/* Hide desktop shell on mobile (< 768px) — mobile uses existing layout */
+@media (max-width: 767px) {
   .desktop-app {
     display: none;
   }
 }
 
-@media (min-width: 1024px) {
-  /* On desktop (≥1024), hide mobile-only elements */
+@media (min-width: 768px) {
+  /* On tablet+, hide mobile elements */
   .mobile-only {
     display: none !important;
   }
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 767px) {
   .desktop-only {
     display: none !important;
   }
@@ -3273,132 +3214,4 @@ html[data-lite] *::after {
   --fc-dot-active: #7050c0;
   --fc-dot-inactive: #e0e0e0;
   --fc-progress-bg: #e8e8e8;
-}
-
-/* ── ProgressBar indeterminate animation ── */
-@keyframes tori-progress-indet {
-  0%   { left: -40%; }
-  100% { left: 100%; }
-}
-
-/* ── StatePlaceholder loading dots ── */
-@keyframes tori-dot-bounce {
-  0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; }
-  40%           { transform: scale(1);   opacity: 1; }
-}
-
-/* ── 全站禁选中 / 长按 / iOS callout 菜单（App 原生感）──
-   iOS 首次触摸立即触发系统选中，全站默认禁；输入框/文本域/.selectable 走逃生舱仍可打字/选中。
-   手写画板等触摸绘制场景天然受益，无需再单独加类。 */
-body {
-  -webkit-user-select: none;
-  user-select: none;
-  -webkit-touch-callout: none;
-}
-body * {
-  -webkit-user-select: none;
-  user-select: none;
-  -webkit-touch-callout: none;
-}
-/* tap-highlight 只对交互元素透明，避免全站按钮视觉反馈都丢 */
-body a,
-body button,
-body canvas,
-body [role="button"] {
-  -webkit-tap-highlight-color: transparent;
-}
-/* 输入框 / 文本域 / contenteditable / .selectable 逃生舱：仍可选中和长按 */
-body input,
-body textarea,
-body [contenteditable="true"],
-body .selectable,
-body .selectable * {
-  -webkit-user-select: text;
-  user-select: text;
-  -webkit-touch-callout: default;
-}
-
-/* App 原生感：输入框字号强制 ≥16px，杜绝 iOS 聚焦时自动放大页面（<16px 才会触发）。
-   仅文本类输入需要（button/checkbox/radio 等不聚焦文本，排除以免误伤）。
-   !important 盖过 Tailwind text-sm / inline style。
-   用 hover:none 判触摸设备（手机/平板任意方向都覆盖），桌面鼠标无副作用 */
-@media (hover: none) {
-  input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]),
-  textarea,
-  select {
-    font-size: max(16px, 1rem) !important;
-  }
-}
-
-/* ── StrokeCanvas 绘图状态：落笔时进一步禁竖向滚动 ──
-   手指滑出画板到正文时不会误触发页面滚动或上下文菜单 */
-body.stroke-drawing {
-  touch-action: none;
-  overscroll-behavior: contain;
-}
-
-/* ── StrokeCanvas 画板底色：默认奶白宣纸，暗色改深棕纸质 ── */
-.ph-stroke-canvas {
-  background: radial-gradient(circle at 30% 20%, #fff7f3 0%, #fdeee6 60%, #f9e1d4 100%);
-  box-shadow: inset 0 2px 6px rgba(255,127,168,0.06), 0 6px 24px rgba(255,127,168,0.10);
-}
-[data-theme="dark"] .ph-stroke-canvas {
-  background: radial-gradient(circle at 30% 20%, #2a2028 0%, #1f1922 60%, #17131a 100%);
-  box-shadow: inset 0 2px 6px rgba(0,0,0,0.3), 0 6px 24px rgba(0,0,0,0.4);
-}
-.ph-stroke-ghost { color: rgba(58,46,41,0.10); }
-[data-theme="dark"] .ph-stroke-ghost { color: rgba(244,238,232,0.12); }
-/* 描字过程中手指越出 canvas 到按钮/链接上，抬起时不应触发点击 —— 全局屏蔽非 canvas 的指针事件 */
-body.stroke-drawing button:not([data-stroke-safe]),
-body.stroke-drawing a:not([data-stroke-safe]),
-body.stroke-drawing input,
-body.stroke-drawing [role="button"] {
-  pointer-events: none;
-}
-
-/* ── Desktop fixed rail ── 让 position:fixed 底部/顶部悬浮元素对齐主内容轨道
-   移动端保持默认（left/right 相对视口）；桌面壳里覆盖为对齐 .desktop-main 中心
-   - .desktop-fixed-rail：有右面板（hidePanel:false）
-   - .desktop-fixed-rail-wide：无右面板（hidePanel:true，如 /flashcards、/review） */
-@media (min-width: 1280px) and (orientation: landscape) {
-  .desktop-fixed-rail {
-    left: calc(20px + var(--desktop-sidebar) + var(--desktop-gap)) !important;
-    right: calc(20px + var(--desktop-panel) + var(--desktop-gap)) !important;
-    bottom: 20px !important;
-  }
-  .desktop-fixed-rail-wide {
-    left: calc(20px + var(--desktop-sidebar) + var(--desktop-gap)) !important;
-    right: 20px !important;
-    bottom: 20px !important;
-  }
-}
-@media (min-width: 1024px) and (max-width: 1279px) and (orientation: landscape) {
-  .desktop-fixed-rail,
-  .desktop-fixed-rail-wide {
-    left: calc(24px + 96px + 24px) !important;
-    right: 24px !important;
-    bottom: 24px !important;
-  }
-}
-/* 桌面端无移动底 nav，把 flashcard 页 --fc-page-pb 收窄到只留悬浮胶囊空间 */
-@media (min-width: 1024px) and (orientation: landscape) {
-  .desktop-body { --fc-page-pb: 96px; }
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   绘本故事体 — 用设备已装的韩/中文衬线，营造"读物"质感，零网络成本
-   韩文 Batang/AppleMyungjo/Noto Serif KR；中文 Songti/宋体
-   ═══════════════════════════════════════════════════════════════ */
-.pb-serif-ko {
-  font-family: 'Apple SD Gothic Neo', 'AppleMyungjo', 'Noto Serif KR', 'Nanum Myeongjo',
-    'Batang', '바탕', 'Songti SC', 'STSong', serif;
-  letter-spacing: -0.01em;
-}
-.pb-serif-zh {
-  font-family: 'Songti SC', 'STSong', 'Noto Serif SC', 'SimSun', serif;
-}
-.pb-serif-title {
-  font-family: 'AppleMyungjo', 'Noto Serif KR', 'Nanum Myeongjo', 'Batang', '바탕',
-    'Songti SC', 'STSong', Georgia, serif;
-  letter-spacing: -0.015em;
 }

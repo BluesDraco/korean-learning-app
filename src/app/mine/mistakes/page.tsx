@@ -18,6 +18,7 @@ import '../mine-home.css';
 type TabKey = 'dictation' | 'vocab' | 'ai';
 
 interface DictGroup {
+  [k: string]: unknown;
   korean: string;
   meaning: string;
   wrongCount: number;

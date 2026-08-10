@@ -25,7 +25,7 @@ export async function POST(req: Request) {
   const db = await getDb();
 
   // ── invoice.paid：订阅续费 ──
-  if (verify.eventType === 'invoice.paid' && verify.stripeCustomerId) {
+  if ((verify.eventType === 'invoice.paid' || verify.eventType === 'subscription.paid' || verify.eventType === 'subscription.active') && (verify.stripeCustomerId || verify.subscriptionId)) {
     const sub = await getUserByStripeCustomerId(verify.stripeCustomerId);
     if (!sub) {
       await logError('payment.callback', '续费回调找不到对应用户', { level: 'critical', detail: { customerId: verify.stripeCustomerId } });
@@ -57,7 +57,7 @@ export async function POST(req: Request) {
   }
 
   // ── customer.subscription.deleted：订阅取消 ──
-  if (verify.eventType === 'customer.subscription.deleted' && verify.subscriptionId) {
+  if ((verify.eventType === 'customer.subscription.deleted' || verify.eventType === 'subscription.canceled' || verify.eventType === 'subscription.expired') && verify.subscriptionId) {
     await db.run(
       `UPDATE subscriptions SET status = 'canceled', cancel_at_period_end = 0, updated_at = ? WHERE stripe_subscription_id = ?`,
       [Date.now(), verify.subscriptionId],

@@ -9,6 +9,7 @@ import { setLang, getLang, t, type Lang } from '@/lib/i18n';
 import './place-intro.css';
 
 interface Props {
+  [k: string]: unknown;
   onComplete: () => void;
 }
 

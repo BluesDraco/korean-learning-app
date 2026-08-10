@@ -10,6 +10,7 @@ import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
 
 interface Props {
+  [k: string]: unknown;
   day: ToriDay;
   onComplete: () => void;
 }

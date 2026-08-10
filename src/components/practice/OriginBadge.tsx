@@ -11,6 +11,7 @@ import { t } from '@/lib/i18n';
 export type OriginKind = 'mistake' | 'my-sentence' | 'my-word' | 'reading' | 'ai-chat' | 'diary' | 'system';
 
 interface OriginBadgeProps {
+  [k: string]: unknown;
   origin?: OriginKind;
   label?: string; // 具体来源描述,如 "已错 3 次" / "咖啡厅主题包"
   /** 定位模式 · absolute=覆盖在卡右上;inline=行内显示 */

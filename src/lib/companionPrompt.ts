@@ -3,12 +3,13 @@
 export type CompanionDifficulty = 'beginner' | 'intermediate' | 'advanced';
 
 const DIFF_HINT: Record<CompanionDifficulty, string> = {
-  beginner: '难度初级：用最基础的高频词和短句，语法简单。',
-  intermediate: '难度中级：日常自然表达，适度用连接词和常见语法。',
-  advanced: '难度高级：地道丰富的表达，可用更复杂的句式。',
+  beginner: '难度初级：用最基础的高频词和短句，语法简单。', beginnerEn: 'Beginner level: Use the most basic high-frequency words and short sentences with simple grammar.',
+  intermediate: '难度中级：日常自然表达，适度用连接词和常见语法。', intermediateEn: 'Intermediate level: Natural everyday expressions, moderate use of connectors and common grammar.',
+  advanced: '难度高级：地道丰富的表达，可用更复杂的句式。', advancedEn: 'Advanced level: Authentic and rich expressions, can use more complex sentence structures.',
 };
 
 export interface CompanionPromptInput {
+  [k: string]: unknown;
   companionName: string;   // 用户给陪练起的名字（韩语），空则回落形象名
   characterNameZh: string; // 形象参考中文名（cast）
   verbalTic: string;       // 人设·提示词（性格/口癖/说话习惯）

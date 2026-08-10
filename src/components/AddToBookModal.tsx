@@ -13,6 +13,7 @@ import { t } from '@/lib/i18n';
 import type { WordBook, Word, WordEntry, Example } from '@/types';
 
 interface Props {
+  [k: string]: unknown;
   mode: 'select-books' | 'select-words';
   preSelectedWordIds?: string[];
   bookId?: string;
@@ -33,6 +34,7 @@ type MeaningRow = {
 };
 
 interface LookupResult {
+  [k: string]: unknown;
   korean: string;
   romanization: string;
   meaning?: string;                   // 兜底（旧接口）

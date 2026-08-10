@@ -10,7 +10,7 @@ const DEEPSEEK_URL = 'https://api.deepseek.com/chat/completions';
 const BATCH_SIZE = 20;
 
 // Read and parse all _(...) lines
-let content = fs.readFileSync(KPOP_FILE, 'utf8');
+const content = fs.readFileSync(KPOP_FILE, 'utf8');
 
 // Match: _(t(...), t(...), "korean", "romanized", '')
 const lineRegex = /(_\(t\(\d+,[\d.]+\)(?:,\s*t\(\d+,[\d.]+\))?),\s*"([^"]*)",\s*"([^"]*)",\s*''\)/g;

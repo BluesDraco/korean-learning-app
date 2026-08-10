@@ -4,6 +4,7 @@ import { stripParticle } from '@/lib/koreanParticles';
 const KEY = 'pb_progress';
 
 export interface PBProgress {
+  [k: string]: unknown;
   page: number;
   completed: boolean;
   updatedAt: number;
@@ -66,7 +67,7 @@ export async function saveVocabWord(word: string, meaning: string, bookTitle: st
     await db.words.put({
       id: wordId, word: clean,
       pronunciation: '', meaning,
-      partOfSpeech: '单词', examples: [], source: 'reading',
+      partOfSpeech: '单词', partOfSpeechEn: 'Word', examples: [], source: 'reading',
       sourceDetail: bookTitle, mastery: 'new', srsLevel: 0,
       easeFactor: 2.5, interval: 0, nextReview: Date.now(),
       correctCount: 0, wrongCount: 0, createdAt: Date.now(), lastReviewed: null,
@@ -96,7 +97,7 @@ export async function saveVocabWords(
       await db.words.put({
         id: wordId, word: clean,
         pronunciation: '', meaning: v.meaning,
-        partOfSpeech: '单词', examples: [], source: 'reading',
+        partOfSpeech: '单词', partOfSpeechEn: 'Word', examples: [], source: 'reading',
         sourceDetail: bookTitle, mastery: 'new', srsLevel: 0,
         easeFactor: 2.5, interval: 0, nextReview: Date.now(),
         correctCount: 0, wrongCount: 0, createdAt: Date.now(), lastReviewed: null,

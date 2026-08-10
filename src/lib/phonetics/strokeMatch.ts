@@ -116,6 +116,7 @@ function avg(arr: number[]): number {
 const THRESHOLD = 60;       // 60px ≈ 23% canvas 高度，宽松
 
 export interface StrokeMatchResult {
+  [k: string]: unknown;
   distance: number;
   ok: boolean;
   orderHint?: number;       // 用户实际更像第 N 笔

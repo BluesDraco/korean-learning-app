@@ -7,6 +7,7 @@ import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
 
 interface Props {
+  [k: string]: unknown;
   ko: string;
   zh?: string;
   start: number;
@@ -21,6 +22,7 @@ type Panel = 'none' | 'shadow' | 'grammar';
 interface GrammarParticle { text: string; role: string; }
 interface GrammarEnding { text: string; base: string; meaning: string; }
 interface GrammarExplain {
+  [k: string]: unknown;
   skeleton: { subject: string; predicate: string; object: string };
   translation: string;
   particles: GrammarParticle[];

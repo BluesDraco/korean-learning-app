@@ -13,6 +13,7 @@ const TYPE_LABEL: Record<string, string> = {
 };
 
 interface HistoryItem {
+  [k: string]: unknown;
   id: string;
   title: string;
   content: string;

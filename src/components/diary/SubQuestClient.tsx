@@ -70,6 +70,7 @@ const PHASE_ICONS: Record<CorePhase, string> = {
 const XP_PER_TASK = 5;
 
 interface Props {
+  [k: string]: unknown;
   data: VocabSubQuestData;
   level: ToriLevel;
   day: number;
@@ -524,6 +525,7 @@ export function SubQuestClient({ data, level, day }: Props) {
 // ═════════════════════════════════════════════════════════
 
 interface PhaseContentProps {
+  [k: string]: unknown;
   phase: PhaseKind;
   justFinishedPhase: CorePhase | null;
   phaseWrongMap: Record<CorePhase, number>;

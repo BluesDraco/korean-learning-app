@@ -39,7 +39,7 @@ for (let i = marks.length - 1; i >= 0; i--) {
   const id = marks[i].id;
   const start = marks[i].at;
   const end = i + 1 < marks.length ? marks[i + 1].at : src.length;
-  let block = src.slice(start, end);
+  const block = src.slice(start, end);
 
   if (!/audioUrl:/.test(block)) continue;
 

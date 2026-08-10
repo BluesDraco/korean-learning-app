@@ -769,4 +769,5 @@ export const HUB_COPY: Record<string, PageCopy> = {
     },
   },
   '/review': {
-    title: { zh: '韩语复习中心', en: 'Korean Review Center — Spaced Repetition Pract
+    title: { zh: '韩语复习中心', en: 'Korean Review Center' },  },
+};

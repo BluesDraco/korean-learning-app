@@ -97,6 +97,7 @@ export async function requestMicPermission(): Promise<'granted' | 'denied' | 'un
 }
 
 export interface RecordingResult {
+  [k: string]: unknown;
   blob: Blob;
   url: string;
   durationMs: number;
@@ -118,7 +119,7 @@ export class AudioRecorder {
   get state() { return this._state; }
 
   async start(): Promise<{ error?: string; errorType?: 'denied' | 'unavailable' }> {
-    if (this._state === 'recording') return { error: '已经在录音' };
+    if (this._state === 'recording') return { error: '已经在录音', errorEn: 'Already recording.' };
     const pre = precheckRecordingEnv();
     if (pre) return { error: pre, errorType: 'unavailable' };
     if (!isRecordingSupported()) return { error: 'audio.browser_unsupported', errorType: 'unavailable' };

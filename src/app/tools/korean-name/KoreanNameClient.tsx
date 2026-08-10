@@ -20,6 +20,7 @@ import {
 } from '@/data/tools/korean-names';
 
 interface Candidate {
+  [k: string]: unknown;
   surname: KoreanSurname;
   name: KoreanName;
 }

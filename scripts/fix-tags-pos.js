@@ -65,7 +65,7 @@ for (const file of files) {
   if (slug === 'haru-cafe') continue; // skip — fully enriched
 
   const fp = path.join(dir, file);
-  let txt = fs.readFileSync(fp, 'utf8');
+  const txt = fs.readFileSync(fp, 'utf8');
   const orig = txt;
 
   // 提取每个 group 的 context，然后为该 group 的每个 tags: [] 添加标签

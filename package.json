@@ -29,7 +29,7 @@
     "jose": "^6.2.3",
     "lucide-react": "^1.16.0",
     "next": "16.2.6",
-    "playwright": "^1.61.1",
+    "onnxruntime-web": "^1.27.0",
     "qrcode": "^1.5.4",
     "react": "19.2.4",
     "react-dom": "19.2.4",
@@ -47,6 +47,8 @@
     "dotenv-cli": "^11.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
+    "opencc-js": "^1.4.1",
+    "playwright": "^1.62.0",
     "tailwindcss": "^4",
     "tsx": "^4.22.3",
     "typescript": "^5"

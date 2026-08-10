@@ -3,6 +3,7 @@ import { t } from './i18n';
 import type { Lang } from './i18n';
 
 export interface CarrotProgressLike {
+  [k: string]: unknown;
   completedDays: number;
   sentencesCount: number;
   recordingsCount: number;

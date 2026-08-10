@@ -72,7 +72,7 @@ console.log(`Collapsed ${lines.length - output.length} broken lines`);
 const lyricRegex = /(_\(t\(\d+,[\d.]+\)(?:,\s*t\(\d+,[\d.]+\))?),\s*"([^"]*)",\s*"([^"]*)",\s*'([^']*)'\)/g;
 
 let replaced = 0;
-let errors = 0;
+const errors = 0;
 
 content = content.replace(lyricRegex, (match, prefix, korean, romanized, chinese) => {
   // Look up clean translation

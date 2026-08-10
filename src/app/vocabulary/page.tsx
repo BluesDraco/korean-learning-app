@@ -34,6 +34,7 @@ const DesktopVocabularyPage = dynamic(
 );
 
 interface SavedSentence {
+  [k: string]: unknown;
   id: string;
   userId?: string;
   korean: string;

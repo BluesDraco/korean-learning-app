@@ -95,6 +95,7 @@ export interface DiffSegment { char: string; status: 'correct' | 'wrong' | 'extr
 // getCharDiff 按位置硬比，中间漏/多一字会导致其后全部错位标红。
 // 跟读场景（识别文本 vs 目标）用 Needleman-Wunsch 对齐，把漏字/多字/错字分开。
 export interface AlignedCell {
+  [k: string]: unknown;
   status: 'ok' | 'sub' | 'ins' | 'missing'; // ins=用户多说, missing=用户漏说
   char: string;   // 展示用：ok/sub/ins 取用户字，missing 取目标字
   target?: string; // sub 时的正确字

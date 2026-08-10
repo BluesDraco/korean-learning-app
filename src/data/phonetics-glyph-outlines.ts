@@ -2,6 +2,7 @@
 // 每个 jamo 的字形 outline + 每笔的裁剪矩形数组 (每笔可包含多个 rect union，用于 L 型笔画)
 
 export interface GlyphOutline {
+  [k: string]: unknown;
   d: string;
   // 每笔一个 Rect[]，多个 rect 用于表示 L 型等复合形状（union）
   strokes: [number, number, number, number][][];

@@ -49,7 +49,7 @@ async function main() {
   const urls = await fetchSitemapUrls();
   console.log(`共 ${urls.length} 条国内 URL 待推送`);
   if (urls.length === 0) {
-    console.error('❌ sitemap 没解析到 URL，检查 SITE_URL 是否已改成 https://torikorean.com');
+    console.error(`❌ sitemap 没解析到 URL，检查 ${SITEMAP_URL} 是否可访问`);
     process.exit(1);
   }
 

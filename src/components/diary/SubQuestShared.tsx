@@ -58,6 +58,7 @@ export function shuffleArray<T>(arr: T[]): T[] {
 // ═══════════════════════════════════════════════════════════
 
 export interface AnswerLog {
+  [k: string]: unknown;
   taskId: string;
   prompt: string;
   hangul?: string;

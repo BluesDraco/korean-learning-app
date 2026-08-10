@@ -1,6 +1,7 @@
 import React from 'react';
 
 interface Props {
+  [k: string]: unknown;
   text: string;
   word: string;
   className?: string;

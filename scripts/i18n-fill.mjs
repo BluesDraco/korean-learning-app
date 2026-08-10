@@ -50,7 +50,7 @@ function parseLocale(file) {
 
   // 用 Function 求值对象体，安全提取 key→value（JS 对象字面量支持 // 注释和 trailing comma）
   const body = bodyLines.join('\n');
-  // eslint-disable-next-line no-new-func
+   
   const map = Function(`"use strict"; return {${body}};`)();
   return { bodyLines, map };
 }

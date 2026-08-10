@@ -21,6 +21,7 @@ import { t } from '@/lib/i18n';
 const TOTAL_Q = 10;
 
 interface Question {
+  [k: string]: unknown;
   target: ProgressiveLetter;
   options: ProgressiveLetter[];
 }

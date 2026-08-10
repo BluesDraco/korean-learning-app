@@ -8,6 +8,7 @@ import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
 
 interface Props {
+  [k: string]: unknown;
   korean: string;
   chinese?: string;
   /** db.sentences 的 source_id，如 'seoul-<unitId>' */

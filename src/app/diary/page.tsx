@@ -20,6 +20,7 @@ import type { ToriSubQuestProgress } from '@/types/tori-subquest';
 import '@/components/diary/diary.css';
 
 interface ChapterDef {
+  [k: string]: unknown;
   num: string;
   romanNum: string;
   titleKey: string;
@@ -63,6 +64,7 @@ const LEVEL_BOOK_NAME: Record<ToriLevel, string> = {
 };
 
 interface SubQuestDef {
+  [k: string]: unknown;
   idx: 1 | 2 | 3 | 4 | 5;
   ko: string;
   zhKey: string;

@@ -22,7 +22,7 @@ const BETA_AI_TIER: Tier = 'monthly';
 // ⚠️ 会员中心暂停开放（免费体验期）。true 时 /membership 对普通用户显示占位页、无法购买。恢复付费＝改 false。
 // 单一事实来源：/membership 页的暂停遮罩、以及各内容墙的「解锁」CTA 是否可跳转，都读这一个开关。
 // 与 BETA_UNLOCK 独立，但两者组合决定内容墙行为——见 canPurchaseMembership() 防止两开关不同步造成死锁。
-export const MEMBERSHIP_PAUSED = true;
+export const MEMBERSHIP_PAUSED = false;
 
 // 会员是否可购买：暂停期（含普通用户）不可购买。内容墙的「解锁全部」CTA 用它决定跳 /membership 还是显示「即将开放」，
 // 避免「BETA_UNLOCK=false 收紧内容墙」但「MEMBERSHIP_PAUSED=true 付费页未开」的中间态里，用户点解锁跳去撞占位页的死路。

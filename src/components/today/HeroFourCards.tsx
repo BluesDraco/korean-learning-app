@@ -6,6 +6,7 @@ import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
 
 interface CardProgress {
+  [k: string]: unknown;
   label: string;
   detail: string;
   href: string;
@@ -30,6 +31,7 @@ const TONE_FG: Record<CardProgress['tone'], string> = {
 };
 
 export interface HeroProgressData {
+  [k: string]: unknown;
   vocab: { mastered: number; total: number; lastUnitTitle?: string; href: string };
   diary: { currentDay: number; total: number; sceneImageUrl?: string };
   phonetic: { completed: number; total: number };

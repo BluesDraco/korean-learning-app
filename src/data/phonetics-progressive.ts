@@ -1,6 +1,7 @@
 // 分步学习 · Stage 数据（Stage 1~4：元音/辅音/紧音）
 
 export interface ProgressiveCombo {
+  [k: string]: unknown;
   syllable: string;
   meaning: string;
   meaningEn?: string;
@@ -8,6 +9,7 @@ export interface ProgressiveCombo {
 }
 
 export interface ProgressiveConfused {
+  [k: string]: unknown;
   jamo: string;       // 易混字母
   syllable: string;   // 对照发音用的 syllable（命中 audioRegistry）
   tip: string;        // 区分要点
@@ -15,6 +17,7 @@ export interface ProgressiveConfused {
 }
 
 export interface ProgressiveStroke {
+  [k: string]: unknown;
   d: string;          // 中心线 SVG path（M/L/C），用于匹配 + 动画基准
   arrow: { x: number; y: number; rot: number };  // 箭头位置+旋转
   hint: string;       // '竖线 上→下'
@@ -22,6 +25,7 @@ export interface ProgressiveStroke {
 }
 
 export interface ProgressiveLetter {
+  [k: string]: unknown;
   jamo: string;       // 'ㅏ' / 'ㄱ'
   syllable: string;   // '아' / '박'（用于真人音频 key）
   romanization: string;
@@ -37,6 +41,7 @@ export interface ProgressiveLetter {
 }
 
 export interface ProgressiveStage {
+  [k: string]: unknown;
   id: number;
   name: string;
   nameEn?: string;
@@ -51,11 +56,11 @@ export interface ProgressiveStage {
 // ── Stage 1 · 基本元音 10 个 ──
 const stage1Letters: ProgressiveLetter[] = [
   {
-    jamo: 'ㅏ', syllable: '아', romanization: 'a', cnApprox: '啊',
+    jamo: 'ㅏ', syllable: '아', romanization: 'a', cnApprox: '啊', cnApproxEn: 'ah',
     cnApproxEn: 'like "ah"',
-    mouthHint: '嘴巴自然张开，发音时舌面后部稍微抬起，唇形略扁。',
+    mouthHint: '嘴巴自然张开，发音时舌面后部稍微抬起，唇形略扁。', mouthHintEn: 'Open your mouth naturally, slightly raise the back of your tongue, and keep your lips somewhat flat.',
     mouthHintEn: 'Open the mouth naturally; the back of the tongue rises slightly and the lips are somewhat flat.',
-    mnemonic: '想象「a」=「啊」最响亮的元音，竖线像人，旁边一横像伸出的手臂。',
+    mnemonic: '想象「a」=「啊」最响亮的元音，竖线像人，旁边一横像伸出的手臂。', mnemonicEn: 'Imagine \'a\' = \'ah\', the most resonant vowel. The vertical line is like a person, and the horizontal line beside it is like an outstretched arm.',
     mnemonicEn: 'Picture "a" = the most resonant vowel; the vertical line is a person and the short stroke beside it is an outstretched arm.',
     combos: [
       { syllable: '아', romanization: 'a', meaning: '啊（感叹）', meaningEn: 'ah (exclamation)' },
@@ -70,11 +75,11 @@ const stage1Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㅑ', syllable: '야', romanization: 'ya', cnApprox: '呀',
+    jamo: 'ㅑ', syllable: '야', romanization: 'ya', cnApprox: '呀', cnApproxEn: 'Ya',
     cnApproxEn: 'like "ya"',
-    mouthHint: '由 y 滑音快速过渡到 ㅏ，发音时先发 y 音然后迅速过渡到「啊」，整体读作「呀」。',
+    mouthHint: '由 y 滑音快速过渡到 ㅏ，发音时先发 y 音然后迅速过渡到「啊」，整体读作「呀」。', mouthHintEn: 'Glide quickly from a \'y\' sound into ㅏ. Say \'y\' first, then transition rapidly to \'ah\', making it \'ya\'.',
     mouthHintEn: 'Glide from a y-onset quickly into ㅏ: start with the y sound, then slide rapidly into "ah", read as one "ya".',
-    mnemonic: 'ㅏ 右边多一道短横 = 给「啊」加上 y 起音，写作「ya」=「呀」。',
+    mnemonic: 'ㅏ 右边多一道短横 = 给「啊」加上 y 起音，写作「ya」=「呀」。', mnemonicEn: 'An extra short stroke on the right of ㅏ = adding a \'y\' onset to \'ah\', written as \'ya\' = \'ya\'.',
     mnemonicEn: 'ㅏ with an extra short stroke on the right = adding a y-onset to "ah", written "ya".',
     combos: [
       { syllable: '야', romanization: 'ya', meaning: '喂（招呼）', meaningEn: 'hey (calling out)' },
@@ -90,11 +95,11 @@ const stage1Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㅓ', syllable: '어', romanization: 'eo', cnApprox: '呃',
+    jamo: 'ㅓ', syllable: '어', romanization: 'eo', cnApprox: '呃', cnApproxEn: 'Eo',
     cnApproxEn: 'like "uh"',
-    mouthHint: '发音时口型比 ㅏ 稍小，舌位更低，双唇放松，不要撅圆嘴。',
+    mouthHint: '发音时口型比 ㅏ 稍小，舌位更低，双唇放松，不要撅圆嘴。', mouthHintEn: 'When pronouncing, the mouth shape is slightly smaller than ㅏ, tongue lower, lips relaxed—don\'t round them.',
     mouthHintEn: 'The mouth opening is a bit smaller than ㅏ, the tongue lower, lips relaxed; do not round or purse the lips.',
-    mnemonic: 'ㅏ 的「啊」翻转 → 短横移到左边，发音也从张开变成往后收，听感介于「哦」和「呃」之间。',
+    mnemonic: 'ㅏ 的「啊」翻转 → 短横移到左边，发音也从张开变成往后收，听感介于「哦」和「呃」之间。', mnemonicEn: 'Flip the \'ah\' of ㅏ → the short stroke moves to the left, and the sound shifts from open to pulled back, between \'oh\' and \'uh\'.',
     mnemonicEn: 'Flip ㅏ ("ah") → the short stroke moves to the left; the sound also shifts from open to pulled back, landing between "oh" and "uh".',
     combos: [
       { syllable: '어', romanization: 'eo', meaning: '嗯/啊（感叹）', meaningEn: 'uh / oh (exclamation)' },
@@ -109,11 +114,11 @@ const stage1Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㅕ', syllable: '여', romanization: 'yeo', cnApprox: '哟（扁嘴，非圆嘴 ㅛ）',
+    jamo: 'ㅕ', syllable: '여', romanization: 'yeo', cnApprox: '哟（扁嘴，非圆嘴 ㅛ）', cnApproxEn: 'Yo (flat lips, not rounded like ㅛ)',
     cnApproxEn: 'like "yaw" (flat lips, not rounded like ㅛ)',
-    mouthHint: '由 y 滑音快速过渡到 ㅓ，发音类似「哟」，注意嘴不要撅圆。',
+    mouthHint: '由 y 滑音快速过渡到 ㅓ，发音类似「哟」，注意嘴不要撅圆。', mouthHintEn: 'Glide quickly from a \'y\' sound into ㅓ, similar to \'yo\', but keep your lips flat, not rounded.',
     mouthHintEn: 'Glide from a y-onset quickly into ㅓ, sounding like "yaw"; keep the lips from rounding.',
-    mnemonic: 'ㅓ 左边多一道短横 = 给 ㅓ 加上 y 起音，写作「yeo」。',
+    mnemonic: 'ㅓ 左边多一道短横 = 给 ㅓ 加上 y 起音，写作「yeo」。', mnemonicEn: 'An extra short stroke on the left of ㅓ = adding a \'y\' onset to ㅓ, written as \'yeo\'.',
     mnemonicEn: 'ㅓ with an extra short stroke on the left = adding a y-onset to ㅓ, written "yeo".',
     combos: [
       { syllable: '여자', romanization: 'yeo-ja', meaning: '女人', meaningEn: 'woman' },
@@ -129,11 +134,11 @@ const stage1Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㅗ', syllable: '오', romanization: 'o', cnApprox: '哦',
+    jamo: 'ㅗ', syllable: '오', romanization: 'o', cnApprox: '哦', cnApproxEn: 'oh',
     cnApproxEn: 'like "oh"',
-    mouthHint: '嘴巴略微收圆，舌面后部抬起，发音较饱满。',
+    mouthHint: '嘴巴略微收圆，舌面后部抬起，发音较饱满。', mouthHintEn: 'Round your lips slightly, raise the back of your tongue, and pronounce it fully.',
     mouthHintEn: 'Round the lips slightly, raise the back of the tongue; the sound is full and rounded.',
-    mnemonic: '一横上面加一短竖 = 太阳从地平线升起，发圆唇的「o」。',
+    mnemonic: '一横上面加一短竖 = 太阳从地平线升起，发圆唇的「o」。', mnemonicEn: 'A horizontal line with a short vertical above = the sun rising over the horizon, pronounced with rounded lips as \'o\'.',
     mnemonicEn: 'A short vertical stroke above a horizontal line = the sun rising over the horizon, giving a rounded-lip "o".',
     combos: [
       { syllable: '오빠', romanization: 'o-ppa', meaning: '哥哥（女生称）', meaningEn: 'older brother (said by a girl)' },
@@ -148,11 +153,11 @@ const stage1Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㅛ', syllable: '요', romanization: 'yo', cnApprox: '哟',
+    jamo: 'ㅛ', syllable: '요', romanization: 'yo', cnApprox: '哟', cnApproxEn: 'yo',
     cnApproxEn: 'like "yo"',
-    mouthHint: '由 y 滑音快速过渡到 ㅗ，发音时嘴唇收圆并突出。',
+    mouthHint: '由 y 滑音快速过渡到 ㅗ，发音时嘴唇收圆并突出。', mouthHintEn: 'Glide quickly from a y sound to ㅗ, rounding and protruding your lips.',
     mouthHintEn: 'Glide from a y-onset quickly into ㅗ; round and protrude the lips as you sound it.',
-    mnemonic: 'ㅗ 上方加双竖 = 给「o」加上 y 起音，写作「yo」=「哟」。',
+    mnemonic: 'ㅗ 上方加双竖 = 给「o」加上 y 起音，写作「yo」=「哟」。', mnemonicEn: 'Adding double verticals above ㅗ = adding a y onset to \'o\', written as \'yo\' = \'yo\'.',
     mnemonicEn: 'ㅗ with two short strokes above = adding a y-onset to "o", written "yo".',
     combos: [
       { syllable: '요리', romanization: 'yo-ri', meaning: '料理', meaningEn: 'cooking / dish' },
@@ -168,11 +173,11 @@ const stage1Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㅜ', syllable: '우', romanization: 'u', cnApprox: '乌',
+    jamo: 'ㅜ', syllable: '우', romanization: 'u', cnApprox: '乌', cnApproxEn: 'u',
     cnApproxEn: 'like "oo"',
-    mouthHint: '发音时嘴唇收得很圆很小，舌面后部高高抬起。',
+    mouthHint: '发音时嘴唇收得很圆很小，舌面后部高高抬起。', mouthHintEn: 'Pronounce with lips very rounded and small, tongue back raised high.',
     mouthHintEn: 'Purse the lips into a small tight circle and raise the back of the tongue high.',
-    mnemonic: '一横下面加一短竖 = 水滴往下掉，发嘟嘴的「u」。',
+    mnemonic: '一横下面加一短竖 = 水滴往下掉，发嘟嘴的「u」。', mnemonicEn: 'A horizontal line with a short vertical below = a water drop falling, pronounced with pouted lips as \'u\'.',
     mnemonicEn: 'A short vertical stroke below a horizontal line = a water drop falling down, giving a pushed-lip "u".',
     combos: [
       { syllable: '우유', romanization: 'u-yu', meaning: '牛奶', meaningEn: 'milk' },
@@ -187,11 +192,11 @@ const stage1Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㅠ', syllable: '유', romanization: 'yu', cnApprox: '由',
+    jamo: 'ㅠ', syllable: '유', romanization: 'yu', cnApprox: '由', cnApproxEn: 'yu',
     cnApproxEn: 'like "yoo"',
-    mouthHint: '由 y 滑音快速过渡到 ㅜ，发音时嘴唇收得很圆很小。',
+    mouthHint: '由 y 滑音快速过渡到 ㅜ，发音时嘴唇收得很圆很小。', mouthHintEn: 'Glide quickly from a y sound to ㅜ, keeping lips very rounded and small.',
     mouthHintEn: 'Glide from a y-onset quickly into ㅜ; purse the lips into a small tight circle.',
-    mnemonic: 'ㅜ 下方加双竖 = 给「u」加上 y 起音，写作「yu」=「由」。',
+    mnemonic: 'ㅜ 下方加双竖 = 给「u」加上 y 起音，写作「yu」=「由」。', mnemonicEn: 'Adding double verticals below ㅜ = adding a y onset to \'u\', written as \'yu\' = \'yu\'.',
     mnemonicEn: 'ㅜ with two short strokes below = adding a y-onset to "u", written "yu".',
     combos: [
       { syllable: '우유', romanization: 'u-yu', meaning: '牛奶', meaningEn: 'milk' },
@@ -207,11 +212,11 @@ const stage1Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㅡ', syllable: '으', romanization: 'eu', cnApprox: '呃（嘴扁）',
+    jamo: 'ㅡ', syllable: '으', romanization: 'eu', cnApprox: '呃（嘴扁）', cnApproxEn: 'Uh (flattened lips)',
     cnApproxEn: 'like "eu" [ɯ] (flat lips)',
-    mouthHint: '发音时嘴唇稍微扁平，舌面中部抬起，气流从舌面和硬腭之间通过。中文里没有完全对应的音。',
+    mouthHint: '发音时嘴唇稍微扁平，舌面中部抬起，气流从舌面和硬腭之间通过。中文里没有完全对应的音。', mouthHintEn: 'When pronouncing, the lips are slightly flattened, the middle of the tongue rises, and air passes between the tongue surface and the hard palate. There\'s no exact equivalent in Chinese.',
     mouthHintEn: 'Keep the lips slightly flat, raise the middle of the tongue, and let air pass between the tongue and hard palate. There is no exact English equivalent.',
-    mnemonic: '形状就是一条横线 = 嘴唇也压扁成一条线。',
+    mnemonic: '形状就是一条横线 = 嘴唇也压扁成一条线。', mnemonicEn: 'The shape is a horizontal line = lips also pressed flat into a line.',
     mnemonicEn: 'The shape is just a horizontal line = flatten the lips into a line too.',
     combos: [
       { syllable: '그', romanization: 'geu', meaning: '那（指示）', meaningEn: 'that (demonstrative)' },
@@ -225,11 +230,11 @@ const stage1Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㅣ', syllable: '이', romanization: 'i', cnApprox: '一/衣',
+    jamo: 'ㅣ', syllable: '이', romanization: 'i', cnApprox: '一/衣', cnApproxEn: 'One/clothes',
     cnApproxEn: 'like "ee"',
-    mouthHint: '舌尖抵住下齿龈，舌面前部高高抬起，接近硬腭前部形成缝隙，发清晰的「一」。',
+    mouthHint: '舌尖抵住下齿龈，舌面前部高高抬起，接近硬腭前部形成缝隙，发清晰的「一」。', mouthHintEn: 'Press the tip of your tongue against the lower gum, raise the front of the tongue high, forming a gap near the front of the hard palate, and make a clear \'ee\' sound.',
     mouthHintEn: 'Rest the tongue tip against the lower gum, raise the front of the tongue high toward the front of the hard palate to form a narrow gap, giving a clear "ee".',
-    mnemonic: '一根竖线 = 一个人站立的形状，正好对应中文「一」的发音。',
+    mnemonic: '一根竖线 = 一个人站立的形状，正好对应中文「一」的发音。', mnemonicEn: 'A vertical line = the shape of a person standing, which matches the Chinese \'one\' sound.',
     mnemonicEn: 'A single vertical line = the shape of a standing person, matching a clear "ee".',
     combos: [
       { syllable: '이', romanization: 'i', meaning: '这（如 이 사람=这个人）', meaningEn: 'this (e.g. 이 사람 = this person)' },
@@ -247,11 +252,11 @@ const stage1Letters: ProgressiveLetter[] = [
 // ── Stage 2 · 合成元音 11 个 ──
 const stage2Letters: ProgressiveLetter[] = [
   {
-    jamo: 'ㅐ', syllable: '애', romanization: 'ae', cnApprox: '欸',
+    jamo: 'ㅐ', syllable: '애', romanization: 'ae', cnApprox: '欸', cnApproxEn: 'Eh',
     cnApproxEn: 'like "eh" (as in "bed")',
-    mouthHint: '发音时口型介于 ㅏ 和 ㅔ 之间（比 ㅏ 略小、比 ㅔ 略大），舌面位置较低；是单元音 [ɛ]，不要读成「哎」（ai）的双元音。',
+    mouthHint: '发音时口型介于 ㅏ 和 ㅔ 之间（比 ㅏ 略小、比 ㅔ 略大），舌面位置较低；是单元音 [ɛ]，不要读成「哎」（ai）的双元音。', mouthHintEn: 'When pronouncing, the mouth shape is between ㅏ and ㅔ (slightly smaller than ㅏ, slightly larger than ㅔ), with the tongue lower; it\'s a monophthong [ɛ], don\'t read it as the diphthong \'ai\'.',
     mouthHintEn: 'The mouth opening falls between ㅏ and ㅔ (a little smaller than ㅏ, a little larger than ㅔ) with the tongue fairly low; it is a monophthong [ɛ], not the diphthong "ai".',
-    mnemonic: 'ㅏ + ㅣ → ae，嘴张得比 ㅏ 小一些',
+    mnemonic: 'ㅏ + ㅣ → ae，嘴张得比 ㅏ 小一些', mnemonicEn: 'ㅏ + ㅣ → ae, mouth opens slightly smaller than ㅏ',
     mnemonicEn: 'ㅏ + ㅣ → ae; open the mouth a bit less than for ㅏ.',
     combos: [
       { syllable: '애', meaning: '小孩', meaningEn: 'child' }, { syllable: '내', meaning: '我的', meaningEn: 'my' },
@@ -265,11 +270,11 @@ const stage2Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㅒ', syllable: '얘', romanization: 'yae', cnApprox: '耶',
+    jamo: 'ㅒ', syllable: '얘', romanization: 'yae', cnApprox: '耶', cnApproxEn: 'Yeah',
     cnApproxEn: 'like "yeh"',
-    mouthHint: '先发 y 滑音再过渡到 ㅐ，与 ㅖ 在口语中同音。',
+    mouthHint: '先发 y 滑音再过渡到 ㅐ，与 ㅖ 在口语中同音。', mouthHintEn: 'Start with a y glide then transition to ㅐ, same sound as ㅖ in speech.',
     mouthHintEn: 'Start with a y-onset then glide into ㅐ; in speech it sounds the same as ㅖ.',
-    mnemonic: 'ㅑ + ㅣ → yae（口语缩略词 얘 = 这孩子）',
+    mnemonic: 'ㅑ + ㅣ → yae（口语缩略词 얘 = 这孩子）', mnemonicEn: 'ㅑ + ㅣ → yae (colloquial abbreviation 얘 = this kid)',
     mnemonicEn: 'ㅑ + ㅣ → yae (the colloquial contraction 얘 = this kid).',
     combos: [
       { syllable: '얘', meaning: '这孩子', meaningEn: 'this kid' }, { syllable: '걔', meaning: '那孩子', meaningEn: 'that kid' },
@@ -284,11 +289,11 @@ const stage2Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㅔ', syllable: '에', romanization: 'e', cnApprox: '诶',
+    jamo: 'ㅔ', syllable: '에', romanization: 'e', cnApprox: '诶', cnApproxEn: 'eh',
     cnApproxEn: 'like "eh" (as in "pet")',
-    mouthHint: '发音时口型比 ㅐ 更小更扁，舌面位置更高，发短促清晰的「诶」。',
+    mouthHint: '发音时口型比 ㅐ 更小更扁，舌面位置更高，发短促清晰的「诶」。', mouthHintEn: 'When pronouncing, the mouth shape is smaller and flatter than ㅐ, the tongue position is higher, producing a short, clear "eh."',
     mouthHintEn: 'The mouth is smaller and flatter than for ㅐ with the tongue higher, giving a short, clear "eh".',
-    mnemonic: 'ㅓ + ㅣ → e，与 ㅐ 现代口语同音',
+    mnemonic: 'ㅓ + ㅣ → e，与 ㅐ 现代口语同音', mnemonicEn: 'ㅓ + ㅣ → e, same sound as ㅐ in modern speech',
     mnemonicEn: 'ㅓ + ㅣ → e; a homophone of ㅐ in modern speech.',
     combos: [
       { syllable: '에', meaning: '在', meaningEn: 'at / in (particle)' }, { syllable: '게', meaning: '螃蟹', meaningEn: 'crab' },
@@ -302,11 +307,11 @@ const stage2Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㅖ', syllable: '예', romanization: 'ye', cnApprox: '耶',
+    jamo: 'ㅖ', syllable: '예', romanization: 'ye', cnApprox: '耶', cnApproxEn: 'Yeah',
     cnApproxEn: 'like "yeh"',
-    mouthHint: '发音时口型介于 ㅕ 和 ㅣ 之间，舌面位置较高。',
+    mouthHint: '发音时口型介于 ㅕ 和 ㅣ 之间，舌面位置较高。', mouthHintEn: 'When pronouncing, the mouth shape is between ㅕ and ㅣ, with a higher tongue position.',
     mouthHintEn: 'The mouth opening falls between ㅕ and ㅣ with the tongue held fairly high.',
-    mnemonic: 'ㅕ + ㅣ → ye，出现在 예/계/시계 等词',
+    mnemonic: 'ㅕ + ㅣ → ye，出现在 예/계/시계 等词', mnemonicEn: 'ㅕ + ㅣ → ye, appears in words like 예/계/시계',
     mnemonicEn: 'ㅕ + ㅣ → ye; appears in words like 예/계/시계.',
     combos: [
       { syllable: '예', meaning: '是、对（敬体回答）', meaningEn: 'yes, that\'s right (polite reply)' }, { syllable: '계산', meaning: '计算', meaningEn: 'calculation' },
@@ -321,9 +326,9 @@ const stage2Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㅘ', syllable: '와', romanization: 'wa', cnApprox: '哇',
+    jamo: 'ㅘ', syllable: '와', romanization: 'wa', cnApprox: '哇', cnApproxEn: 'wow',
     cnApproxEn: 'like "wah"',
-    mouthHint: '由 ㅗ 和 ㅏ 结合而成，发音时先发 ㅗ 的音然后迅速过渡到 ㅏ。',
+    mouthHint: '由 ㅗ 和 ㅏ 结合而成，发音时先发 ㅗ 的音然后迅速过渡到 ㅏ。', mouthHintEn: 'Formed by combining ㅗ and ㅏ; when pronouncing, first make the ㅗ sound then quickly transition to ㅏ.',
     mouthHintEn: 'A combination of ㅗ and ㅏ: sound the ㅗ first, then glide quickly into ㅏ.',
     mnemonic: 'ㅗ + ㅏ → wa',
     mnemonicEn: 'ㅗ + ㅏ → wa',
@@ -340,9 +345,9 @@ const stage2Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㅙ', syllable: '왜', romanization: 'wae', cnApprox: '喂（现代同 ㅚ/ㅞ we）',
+    jamo: 'ㅙ', syllable: '왜', romanization: 'wae', cnApprox: '喂（现代同 ㅚ/ㅞ we）', cnApproxEn: 'yeah (modern same as ㅚ/ㅞ we)',
     cnApproxEn: 'like "weh" (modern-day same as ㅚ/ㅞ we)',
-    mouthHint: '发音时口型介于 ㅘ 和 ㅐ 之间，口语与 ㅚ/ㅞ 同音。',
+    mouthHint: '发音时口型介于 ㅘ 和 ㅐ 之间，口语与 ㅚ/ㅞ 同音。', mouthHintEn: 'The mouth shape is between ㅘ and ㅐ; in speech, it sounds the same as ㅚ/ㅞ.',
     mouthHintEn: 'The mouth opening falls between ㅘ and ㅐ; in speech it is a homophone of ㅚ/ㅞ.',
     mnemonic: 'ㅗ + ㅐ → wae',
     mnemonicEn: 'ㅗ + ㅐ → wae',
@@ -360,9 +365,9 @@ const stage2Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㅚ', syllable: '외', romanization: 'oe', cnApprox: '喂（现代同 ㅙ/ㅞ we）',
+    jamo: 'ㅚ', syllable: '외', romanization: 'oe', cnApprox: '喂（现代同 ㅙ/ㅞ we）', cnApproxEn: 'Hey (modern: same as ㅙ/ㅞ \'we\')',
     cnApproxEn: 'like "weh" (modern-day same as ㅙ/ㅞ we)',
-    mouthHint: '现代口语读 we，标准音为圆唇单元音 [ø]。',
+    mouthHint: '现代口语读 we，标准音为圆唇单元音 [ø]。', mouthHintEn: 'In modern speech it\'s \'we\', but the standard sound is the rounded vowel [ø].',
     mouthHintEn: 'Pronounced "we" in modern speech; the standard sound is the rounded monophthong [ø].',
     mnemonic: 'ㅗ + ㅣ → oe',
     mnemonicEn: 'ㅗ + ㅣ → oe',
@@ -378,9 +383,9 @@ const stage2Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㅝ', syllable: '워', romanization: 'wo', cnApprox: 'w+呃（非圆嘴 ㅗ）',
+    jamo: 'ㅝ', syllable: '워', romanization: 'wo', cnApprox: 'w+呃（非圆嘴 ㅗ）', cnApproxEn: 'w + uh (unrounded ㅗ)',
     cnApproxEn: 'w + "uh" (unrounded, not ㅗ)',
-    mouthHint: '由 ㅜ（现代口语中滑至 ㅗ 类似）和 ㅓ 结合而成，发音时嘴唇稍微收圆。',
+    mouthHint: '由 ㅜ（现代口语中滑至 ㅗ 类似）和 ㅓ 结合而成，发音时嘴唇稍微收圆。', mouthHintEn: 'Formed by combining ㅜ (which in modern speech glides toward ㅗ) and ㅓ; round your lips slightly when pronouncing.',
     mouthHintEn: 'A combination of ㅜ (which glides toward something like ㅗ in modern speech) and ㅓ; round the lips slightly as you sound it.',
     mnemonic: 'ㅜ + ㅓ → wo',
     mnemonicEn: 'ㅜ + ㅓ → wo',
@@ -397,9 +402,9 @@ const stage2Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㅞ', syllable: '웨', romanization: 'we', cnApprox: '喂',
+    jamo: 'ㅞ', syllable: '웨', romanization: 'we', cnApprox: '喂', cnApproxEn: 'hello (on phone)',
     cnApproxEn: 'like "weh"',
-    mouthHint: '发音时口型介于 ㅝ 和 ㅔ 之间，与 ㅚ/ㅙ 同音。',
+    mouthHint: '发音时口型介于 ㅝ 和 ㅔ 之间，与 ㅚ/ㅙ 同音。', mouthHintEn: 'The mouth shape is between ㅝ and ㅔ, and it sounds the same as ㅚ/ㅙ.',
     mouthHintEn: 'The mouth opening falls between ㅝ and ㅔ; a homophone of ㅚ/ㅙ.',
     mnemonic: 'ㅜ + ㅔ → we',
     mnemonicEn: 'ㅜ + ㅔ → we',
@@ -417,9 +422,9 @@ const stage2Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㅟ', syllable: '위', romanization: 'wi', cnApprox: '乌一（w+i 直接拼）',
+    jamo: 'ㅟ', syllable: '위', romanization: 'wi', cnApprox: '乌一（w+i 直接拼）', cnApproxEn: 'oo + i (w + i blended directly)',
     cnApproxEn: 'like "wee" (w + ee blended directly)',
-    mouthHint: '先嘟起嘴唇发 ㅜ，再快速滑到 ㅣ，整体接近中文「威」。',
+    mouthHint: '先嘟起嘴唇发 ㅜ，再快速滑到 ㅣ，整体接近中文「威」。', mouthHintEn: 'Pucker your lips for ㅜ, then quickly glide to ㅣ — overall it sounds like Chinese \'wēi\'.',
     mouthHintEn: 'Start with the lips pursed for ㅜ, then glide quickly into ㅣ, sounding close to "wee".',
     mnemonic: 'ㅜ + ㅣ → wi',
     mnemonicEn: 'ㅜ + ㅣ → wi',
@@ -435,11 +440,11 @@ const stage2Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㅢ', syllable: '의', romanization: 'ui', cnApprox: '呃一',
+    jamo: 'ㅢ', syllable: '의', romanization: 'ui', cnApprox: '呃一', cnApproxEn: 'uh + i',
     cnApproxEn: 'like "eu" + "ee"',
-    mouthHint: '先发 ㅡ 扁嘴再快速滑到 ㅣ，词中位置常省略。',
+    mouthHint: '先发 ㅡ 扁嘴再快速滑到 ㅣ，词中位置常省略。', mouthHintEn: 'Start with ㅡ with flat lips, then quickly glide to ㅣ; it\'s often dropped in the middle of words.',
     mouthHintEn: 'Start with the flat-lipped ㅡ then glide quickly into ㅣ; it is often reduced when it appears mid-word.',
-    mnemonic: 'ㅡ + ㅣ → ui（助词 의 表示"的"）',
+    mnemonic: 'ㅡ + ㅣ → ui（助词 의 表示"的"）', mnemonicEn: 'ㅡ + ㅣ → ui (the particle 의 means "of")',
     mnemonicEn: 'ㅡ + ㅣ → ui (the particle 의 means "of / \'s").',
     combos: [
       { syllable: '의자', meaning: '椅子', meaningEn: 'chair' }, { syllable: '의사', meaning: '医生', meaningEn: 'doctor' },
@@ -456,11 +461,11 @@ const stage2Letters: ProgressiveLetter[] = [
 // ── Stage 3 · 基本辅音 14 个 ──
 const stage3Letters: ProgressiveLetter[] = [
   {
-    jamo: 'ㄱ', syllable: '기역', romanization: 'g/k', cnApprox: '哥',
+    jamo: 'ㄱ', syllable: '기역', romanization: 'g/k', cnApprox: '哥', cnApproxEn: 'Oppa',
     cnApproxEn: 'like the "g" in "go"',
-    mouthHint: '发音时舌根紧贴软腭阻塞气流，然后突然放开使气流爆破而出，类似中文「哥」的声母。',
+    mouthHint: '发音时舌根紧贴软腭阻塞气流，然后突然放开使气流爆破而出，类似中文「哥」的声母。', mouthHintEn: 'When pronouncing, the back of the tongue blocks airflow at the soft palate, then releases suddenly to create a burst, similar to the initial consonant of Chinese "gē."',
     mouthHintEn: 'Press the back of the tongue against the soft palate to block the airflow, then release suddenly so the air bursts out; like the "g" in "go".',
-    mnemonic: '像一把刀的形状',
+    mnemonic: '像一把刀的形状', mnemonicEn: 'shaped like a knife',
     mnemonicEn: 'Shaped like a knife.',
     combos: [
       { syllable: '가족', meaning: '家族', meaningEn: 'family' }, { syllable: '고기', meaning: '肉', meaningEn: 'meat' },
@@ -472,11 +477,11 @@ const stage3Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㄴ', syllable: '니은', romanization: 'n', cnApprox: '呢',
+    jamo: 'ㄴ', syllable: '니은', romanization: 'n', cnApprox: '呢', cnApproxEn: 'ne',
     cnApproxEn: 'like the "n" in "no"',
-    mouthHint: '发音时舌尖抵住上齿龈阻碍气流并通过鼻腔发出声音，类似中文「呢」的声母。',
+    mouthHint: '发音时舌尖抵住上齿龈阻碍气流并通过鼻腔发出声音，类似中文「呢」的声母。', mouthHintEn: 'When pronouncing, the tip of the tongue touches the upper gum to block airflow and sound comes through the nose, similar to the initial consonant of Chinese "ne."',
     mouthHintEn: 'Rest the tongue tip against the upper gum to block the airflow and voice it through the nasal cavity; like the "n" in "no".',
-    mnemonic: '像一个角，舌头抵上颚的形状',
+    mnemonic: '像一个角，舌头抵上颚的形状', mnemonicEn: 'shaped like a horn, with the tongue touching the palate',
     mnemonicEn: 'Like a corner, mirroring the tongue pressing against the palate.',
     combos: [
       { syllable: '나라', meaning: '国家', meaningEn: 'country' }, { syllable: '노래', meaning: '歌曲', meaningEn: 'song' },
@@ -488,11 +493,11 @@ const stage3Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㄷ', syllable: '디귿', romanization: 'd/t', cnApprox: '的',
+    jamo: 'ㄷ', syllable: '디귿', romanization: 'd/t', cnApprox: '的', cnApproxEn: 'of',
     cnApproxEn: 'like the "d" in "do"',
-    mouthHint: '发音时舌尖抵住上齿龈阻塞气流然后突然放开使气流爆破而出，类似中文「的」的声母。',
+    mouthHint: '发音时舌尖抵住上齿龈阻塞气流然后突然放开使气流爆破而出，类似中文「的」的声母。', mouthHintEn: 'When pronouncing, the tip of the tongue blocks airflow at the upper gum, then releases suddenly to create a burst, similar to the initial consonant of Chinese "de."',
     mouthHintEn: 'Rest the tongue tip against the upper gum to block the airflow, then release suddenly so the air bursts out; like the "d" in "do".',
-    mnemonic: '像一扇门的形状',
+    mnemonic: '像一扇门的形状', mnemonicEn: 'shaped like a door',
     mnemonicEn: 'Shaped like a door.',
     combos: [
       { syllable: '다리', meaning: '腿、桥', meaningEn: 'leg / bridge' }, { syllable: '도시', meaning: '城市', meaningEn: 'city' },
@@ -505,11 +510,11 @@ const stage3Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㄹ', syllable: '리을', romanization: 'r/l', cnApprox: '啦',
+    jamo: 'ㄹ', syllable: '리을', romanization: 'r/l', cnApprox: '啦', cnApproxEn: 'la',
     cnApproxEn: 'between "r" and "l"',
-    mouthHint: '发音时舌尖卷起接触或接近硬腭后部发出颤音或边音。元音间为弹舌音 [ɾ]，收音位置为侧音 [l]。中文没有对应音，「啦」最接近但不精确。',
+    mouthHint: '发音时舌尖卷起接触或接近硬腭后部发出颤音或边音。元音间为弹舌音 [ɾ]，收音位置为侧音 [l]。中文没有对应音，「啦」最接近但不精确。', mouthHintEn: 'When pronouncing, the tip of the tongue curls up to touch or approach the back of the hard palate to produce a trill or lateral sound. Between vowels it\'s a flap [ɾ], and in final position it\'s a lateral [l]. Chinese has no exact equivalent; "la" is closest but not precise.',
     mouthHintEn: 'Curl the tongue tip to touch or approach the back of the hard palate, producing a flap or lateral. Between vowels it is a flap [ɾ]; in the final position it is a lateral [l]. English has no exact match, though "l" is the closest.',
-    mnemonic: '像蜿蜒的小路 → 舌尖像路一样弹过去',
+    mnemonic: '像蜿蜒的小路 → 舌尖像路一样弹过去', mnemonicEn: 'Like a winding path → the tongue flicks across like a road',
     mnemonicEn: 'Like a winding path → the tongue tip flicks across like a road.',
     combos: [
       { syllable: '라면', meaning: '拉面', meaningEn: 'ramen / instant noodles' }, { syllable: '러시아', meaning: '俄罗斯', meaningEn: 'Russia' },
@@ -523,11 +528,11 @@ const stage3Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㅁ', syllable: '미음', romanization: 'm', cnApprox: '么',
+    jamo: 'ㅁ', syllable: '미음', romanization: 'm', cnApprox: '么', cnApproxEn: 'what',
     cnApproxEn: 'like the "m" in "mom"',
-    mouthHint: '发音时双唇紧闭阻塞气流然后通过鼻腔发出声音，类似中文「妈」的声母。',
+    mouthHint: '发音时双唇紧闭阻塞气流然后通过鼻腔发出声音，类似中文「妈」的声母。', mouthHintEn: 'Close both lips to block airflow, then release through the nose, similar to the initial consonant of Chinese \'ma\' (妈).',
     mouthHintEn: 'Close the lips tightly to block the airflow and voice it through the nasal cavity; like the "m" in "mom".',
-    mnemonic: '像一个口字的形状',
+    mnemonic: '像一个口字的形状', mnemonicEn: 'like the shape of the character 口',
     mnemonicEn: 'Shaped like a mouth / box.',
     combos: [
       { syllable: '마음', meaning: '心、内心', meaningEn: 'heart / mind' }, { syllable: '모자', meaning: '帽子', meaningEn: 'hat' },
@@ -541,11 +546,11 @@ const stage3Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㅂ', syllable: '비읍', romanization: 'b/p', cnApprox: '波',
+    jamo: 'ㅂ', syllable: '비읍', romanization: 'b/p', cnApprox: '波', cnApproxEn: 'wave',
     cnApproxEn: 'like the "b" in "boy"',
-    mouthHint: '发音时双唇紧闭阻塞气流然后突然放开使气流爆破而出，类似中文「波」的声母。',
+    mouthHint: '发音时双唇紧闭阻塞气流然后突然放开使气流爆破而出，类似中文「波」的声母。', mouthHintEn: 'Close both lips to block airflow, then release suddenly for a burst, similar to the initial consonant of Chinese \'bo\' (波).',
     mouthHintEn: 'Close the lips tightly to block the airflow, then release suddenly so the air bursts out; like the "b" in "boy".',
-    mnemonic: '像一个水桶的形状',
+    mnemonic: '像一个水桶的形状', mnemonicEn: 'like the shape of a bucket',
     mnemonicEn: 'Shaped like a bucket.',
     combos: [
       { syllable: '바다', meaning: '海', meaningEn: 'sea' }, { syllable: '비', meaning: '雨', meaningEn: 'rain' },
@@ -560,11 +565,11 @@ const stage3Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㅅ', syllable: '시옷', romanization: 's', cnApprox: '丝',
+    jamo: 'ㅅ', syllable: '시옷', romanization: 's', cnApprox: '丝', cnApproxEn: 'silk',
     cnApproxEn: 'like the "s" in "see"',
-    mouthHint: '发音时舌尖抵住下齿背靠近齿龈阻碍气流并从舌尖和齿龈间空隙中流出；遇 ㅣ 和 y 系半元音（ㅑ/ㅕ/ㅛ/ㅠ）时腭化为 [ɕ]（类似 sh）。',
+    mouthHint: '发音时舌尖抵住下齿背靠近齿龈阻碍气流并从舌尖和齿龈间空隙中流出；遇 ㅣ 和 y 系半元音（ㅑ/ㅕ/ㅛ/ㅠ）时腭化为 [ɕ]（类似 sh）。', mouthHintEn: 'Place the tongue tip against the lower teeth near the gums to block airflow, then let it escape through the gap; before ㅣ and y-series semivowels (ㅑ/ㅕ/ㅛ/ㅠ), it palatalizes to [ɕ] (like \'sh\').',
     mouthHintEn: 'Rest the tongue tip behind the lower teeth near the gum, obstructing the airflow so it streams out through the narrow gap; before ㅣ and the y-glide vowels (ㅑ/ㅕ/ㅛ/ㅠ) it palatalizes to [ɕ] (like "sh").',
-    mnemonic: '像一座山的形状',
+    mnemonic: '像一座山的形状', mnemonicEn: 'like the shape of a mountain',
     mnemonicEn: 'Shaped like a mountain.',
     combos: [
       { syllable: '사람', meaning: '人', meaningEn: 'person' }, { syllable: '소금', meaning: '盐', meaningEn: 'salt' },
@@ -577,11 +582,11 @@ const stage3Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㅇ', syllable: '이응', romanization: '–/ng', cnApprox: '（初声不发音）',
+    jamo: 'ㅇ', syllable: '이응', romanization: '–/ng', cnApprox: '（初声不发音）', cnApproxEn: '(Silent as initial consonant)',
     cnApproxEn: '(silent as an initial)',
-    mouthHint: '作初声时不发音，只是占位；作终声时发 ng。',
+    mouthHint: '作初声时不发音，只是占位；作终声时发 ng。', mouthHintEn: 'Silent as an initial, just a placeholder; pronounced as \'ng\' as a final.',
     mouthHintEn: 'Silent as an initial (just a placeholder); pronounced "ng" as a final.',
-    mnemonic: '像数字 0，代表空/无',
+    mnemonic: '像数字 0，代表空/无', mnemonicEn: 'Like the number 0, representing emptiness/nothing',
     mnemonicEn: 'Like the number 0, standing for empty / nothing.',
     combos: [
       { syllable: '아기', meaning: '婴儿', meaningEn: 'baby' }, { syllable: '오빠', meaning: '哥哥（妹称）', meaningEn: 'older brother (said by a girl)' },
@@ -593,11 +598,11 @@ const stage3Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㅈ', syllable: '지읒', romanization: 'j', cnApprox: '机',
+    jamo: 'ㅈ', syllable: '지읒', romanization: 'j', cnApprox: '机', cnApproxEn: 'Machine',
     cnApproxEn: 'like the "j" in "jeep"',
-    mouthHint: '舌面贴硬腭爆破+摩擦，类似英语 jeep 的 j。',
+    mouthHint: '舌面贴硬腭爆破+摩擦，类似英语 jeep 的 j。', mouthHintEn: 'Tongue against hard palate, plosive + fricative, similar to \'j\' in English \'jeep\'.',
     mouthHintEn: 'Press the tongue body against the hard palate for a stop plus friction; like the "j" in "jeep".',
-    mnemonic: '像一个人伸出手臂',
+    mnemonic: '像一个人伸出手臂', mnemonicEn: 'Like a person extending an arm',
     mnemonicEn: 'Like a person stretching out their arms.',
     combos: [
       { syllable: '자전거', meaning: '自行车', meaningEn: 'bicycle' }, { syllable: '조용', meaning: '安静', meaningEn: 'quiet' },
@@ -611,11 +616,11 @@ const stage3Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㅊ', syllable: '치읓', romanization: 'ch', cnApprox: '七',
+    jamo: 'ㅊ', syllable: '치읓', romanization: 'ch', cnApprox: '七', cnApproxEn: 'Seven',
     cnApproxEn: 'like the "ch" in "cheese"',
-    mouthHint: '舌面贴硬腭爆破+强送气，不卷舌，类似中文"七"的声母 [tɕʰ]。',
+    mouthHint: '舌面贴硬腭爆破+强送气，不卷舌，类似中文"七"的声母 [tɕʰ]。', mouthHintEn: 'Tongue against hard palate, plosive with strong aspiration, not retroflex, similar to the initial [tɕʰ] in Chinese \'qi\'.',
     mouthHintEn: 'Press the tongue body against the hard palate for a stop plus strong aspiration, without curling the tongue; [tɕʰ], like a strongly aspirated "ch".',
-    mnemonic: 'ㅈ 加一短横 → 送气版',
+    mnemonic: 'ㅈ 加一短横 → 送气版', mnemonicEn: 'ㅈ plus a short stroke → aspirated version',
     mnemonicEn: 'ㅈ with an extra short stroke → the aspirated version.',
     combos: [
       { syllable: '차', meaning: '茶、车', meaningEn: 'tea / car' }, { syllable: '책', meaning: '书', meaningEn: 'book' },
@@ -630,11 +635,11 @@ const stage3Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㅋ', syllable: '키읔', romanization: 'k', cnApprox: '科',
+    jamo: 'ㅋ', syllable: '키읔', romanization: 'k', cnApprox: '科', cnApproxEn: 'Department',
     cnApproxEn: 'like the "k" in "key"',
-    mouthHint: '发音时舌根贴紧软腭阻塞气流然后突然放开并送气发出声音，类似英语 key 的 k。',
+    mouthHint: '发音时舌根贴紧软腭阻塞气流然后突然放开并送气发出声音，类似英语 key 的 k。', mouthHintEn: 'The tongue root presses against the soft palate to block airflow, then releases with aspiration, similar to \'k\' in English \'key\'.',
     mouthHintEn: 'Press the back of the tongue against the soft palate to block the airflow, then release with aspiration; like the "k" in "key".',
-    mnemonic: 'ㄱ 加一中横 → 送气版',
+    mnemonic: 'ㄱ 加一中横 → 送气版', mnemonicEn: 'Add a horizontal stroke to ㄱ → aspirated version',
     mnemonicEn: 'ㄱ with an extra middle stroke → the aspirated version.',
     combos: [
       { syllable: '카드', meaning: '卡片', meaningEn: 'card' }, { syllable: '코', meaning: '鼻子', meaningEn: 'nose' },
@@ -647,11 +652,11 @@ const stage3Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㅌ', syllable: '티읕', romanization: 't', cnApprox: '他',
+    jamo: 'ㅌ', syllable: '티읕', romanization: 't', cnApprox: '他', cnApproxEn: 'he',
     cnApproxEn: 'like the "t" in "tea"',
-    mouthHint: '发音时舌尖抵住上齿龈阻塞气流然后突然放开并送气发出声音，类似中文「他」的声母。',
+    mouthHint: '发音时舌尖抵住上齿龈阻塞气流然后突然放开并送气发出声音，类似中文「他」的声母。', mouthHintEn: 'When pronouncing, the tip of the tongue blocks airflow at the upper gum, then releases suddenly with aspiration, similar to the initial consonant of Chinese \'ta\' (他).',
     mouthHintEn: 'Rest the tongue tip against the upper gum to block the airflow, then release with aspiration; like the "t" in "tea".',
-    mnemonic: 'ㄷ 加一中横 → 送气版',
+    mnemonic: 'ㄷ 加一中横 → 送气版', mnemonicEn: 'Add a horizontal stroke to ㄷ → aspirated version',
     mnemonicEn: 'ㄷ with an extra middle stroke → the aspirated version.',
     combos: [
       { syllable: '타조', meaning: '鸵鸟', meaningEn: 'ostrich' }, { syllable: '토끼', meaning: '兔子', meaningEn: 'rabbit' },
@@ -665,11 +670,11 @@ const stage3Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㅍ', syllable: '피읖', romanization: 'p', cnApprox: '坡',
+    jamo: 'ㅍ', syllable: '피읖', romanization: 'p', cnApprox: '坡', cnApproxEn: 'slope',
     cnApproxEn: 'like the "p" in "pin"',
-    mouthHint: '发音方法与 ㅂ 相同但力度更强，为送气音，类似英语 pin 的 p。',
+    mouthHint: '发音方法与 ㅂ 相同但力度更强，为送气音，类似英语 pin 的 p。', mouthHintEn: 'Pronounced like ㅂ but with more force, aspirated, similar to the \'p\' in English \'pin\'.',
     mouthHintEn: 'Same articulation as ㅂ but stronger and aspirated; like the "p" in "pin".',
-    mnemonic: 'ㅂ 横版形状 → 送气版',
+    mnemonic: 'ㅂ 横版形状 → 送气版', mnemonicEn: 'ㅂ horizontal shape → aspirated version',
     mnemonicEn: 'A horizontal version of ㅂ → the aspirated version.',
     combos: [
       { syllable: '파', meaning: '葱', meaningEn: 'green onion' }, { syllable: '포도', meaning: '葡萄', meaningEn: 'grapes' },
@@ -684,11 +689,11 @@ const stage3Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㅎ', syllable: '히읗', romanization: 'h', cnApprox: '喝',
+    jamo: 'ㅎ', syllable: '히읗', romanization: 'h', cnApprox: '喝', cnApproxEn: 'Drink',
     cnApproxEn: 'like the "h" in "ha"',
-    mouthHint: '发音时舌根和软腭放松让气流从口腔自由呼出产生摩擦声，类似中文「哈」的声母。',
+    mouthHint: '发音时舌根和软腭放松让气流从口腔自由呼出产生摩擦声，类似中文「哈」的声母。', mouthHintEn: 'When pronouncing, relax the back of the tongue and soft palate to let air flow freely out of the mouth, creating friction, similar to the initial consonant of Chinese \'ha\' (哈).',
     mouthHintEn: 'Relax the back of the tongue and soft palate so the air flows freely out of the mouth with friction; like the "h" in "ha".',
-    mnemonic: '上方一点+一横+下方圆圈',
+    mnemonic: '上方一点+一横+下方圆圈', mnemonicEn: 'a dot on top + a horizontal stroke + a circle below',
     mnemonicEn: 'A dot on top + a horizontal stroke + a circle below.',
     combos: [
       { syllable: '하늘', meaning: '天空', meaningEn: 'sky' }, { syllable: '호랑이', meaning: '老虎', meaningEn: 'tiger' },
@@ -706,11 +711,11 @@ const stage3Letters: ProgressiveLetter[] = [
 // ── Stage 4 · 紧音 5 个 ──
 const stage4Letters: ProgressiveLetter[] = [
   {
-    jamo: 'ㄲ', syllable: '쌍기역', romanization: 'kk', cnApprox: '嘎（紧）',
+    jamo: 'ㄲ', syllable: '쌍기역', romanization: 'kk', cnApprox: '嘎（紧）', cnApproxEn: 'ga (tense)',
     cnApproxEn: 'a tense "g" (like "gg", pronounced with a tight throat)',
-    mouthHint: '声带紧绷，不送气，比 ㄱ 更用力的"嘎"。',
+    mouthHint: '声带紧绷，不送气，比 ㄱ 更用力的"嘎"。', mouthHintEn: 'Vocal cords are tense, not aspirated, a stronger \'ga\' than ㄱ.',
     mouthHintEn: 'Tense the vocal cords, no aspiration; a harder version of ㄱ.',
-    mnemonic: '两个 ㄱ 叠加 → 紧音版',
+    mnemonic: '两个 ㄱ 叠加 → 紧音版', mnemonicEn: 'Two ㄱ stacked → tense version',
     mnemonicEn: 'Two ㄱ side by side → the tense version.',
     combos: [
       { syllable: '꼬리', meaning: '尾巴', meaningEn: 'tail' }, { syllable: '꽃', meaning: '花', meaningEn: 'flower' },
@@ -723,11 +728,11 @@ const stage4Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㄸ', syllable: '쌍디귿', romanization: 'tt', cnApprox: '哒（紧）',
+    jamo: 'ㄸ', syllable: '쌍디귿', romanization: 'tt', cnApprox: '哒（紧）', cnApproxEn: 'Tight \'da\'',
     cnApproxEn: 'a tense "d" (like "dd", pronounced with a tight throat)',
-    mouthHint: '声带紧绷，不送气，比 ㄷ 更用力的"哒"。',
+    mouthHint: '声带紧绷，不送气，比 ㄷ 更用力的"哒"。', mouthHintEn: 'Vocal cords tense, unaspirated, a stronger \'da\' than ㄷ.',
     mouthHintEn: 'Tense the vocal cords, no aspiration; a harder version of ㄷ.',
-    mnemonic: '两个 ㄷ 叠加 → 紧音版',
+    mnemonic: '两个 ㄷ 叠加 → 紧音版', mnemonicEn: 'Two ㄷ combined → tense version',
     mnemonicEn: 'Two ㄷ side by side → the tense version.',
     combos: [
       { syllable: '딸', meaning: '女儿', meaningEn: 'daughter' }, { syllable: '땅', meaning: '土地', meaningEn: 'land / ground' },
@@ -742,11 +747,11 @@ const stage4Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㅃ', syllable: '쌍비읍', romanization: 'pp', cnApprox: '吧（紧）',
+    jamo: 'ㅃ', syllable: '쌍비읍', romanization: 'pp', cnApprox: '吧（紧）', cnApproxEn: 'Tight \'ba\'',
     cnApproxEn: 'a tense "b" (like "bb", pronounced with a tight throat)',
-    mouthHint: '声带紧绷，不送气，比 ㅂ 更用力的"吧"。',
+    mouthHint: '声带紧绷，不送气，比 ㅂ 更用力的"吧"。', mouthHintEn: 'Vocal cords tense, unaspirated, a stronger \'ba\' than ㅂ.',
     mouthHintEn: 'Tense the vocal cords, no aspiration; a harder version of ㅂ.',
-    mnemonic: '两个 ㅂ 叠加 → 紧音版',
+    mnemonic: '两个 ㅂ 叠加 → 紧音版', mnemonicEn: 'Two ㅂ combined → tense version',
     mnemonicEn: 'Two ㅂ side by side → the tense version.',
     combos: [
       { syllable: '빵', meaning: '面包', meaningEn: 'bread' }, { syllable: '뼈', meaning: '骨头', meaningEn: 'bone' },
@@ -765,11 +770,11 @@ const stage4Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㅆ', syllable: '쌍시옷', romanization: 'ss', cnApprox: '撒（紧）',
+    jamo: 'ㅆ', syllable: '쌍시옷', romanization: 'ss', cnApprox: '撒（紧）', cnApproxEn: 'tight (tense)',
     cnApproxEn: 'a tense "s" (like "ss", pronounced with a tight throat)',
-    mouthHint: '声带紧绷的摩擦音，比 ㅅ 更短促有力。',
+    mouthHint: '声带紧绷的摩擦音，比 ㅅ 更短促有力。', mouthHintEn: 'A tense fricative with a tight vocal cord, shorter and more forceful than ㅅ.',
     mouthHintEn: 'A fricative with tensed vocal cords, shorter and more forceful than ㅅ.',
-    mnemonic: '两个 ㅅ 叠加 → 紧音版',
+    mnemonic: '两个 ㅅ 叠加 → 紧音版', mnemonicEn: 'Two ㅅ combined → tense version',
     mnemonicEn: 'Two ㅅ side by side → the tense version.',
     combos: [
       { syllable: '쌀', meaning: '大米', meaningEn: 'rice (uncooked)' }, { syllable: '쌍둥이', meaning: '双胞胎', meaningEn: 'twins' },
@@ -784,11 +789,11 @@ const stage4Letters: ProgressiveLetter[] = [
       ],
   },
   {
-    jamo: 'ㅉ', syllable: '쌍지읒', romanization: 'jj', cnApprox: '机（紧，不卷舌）',
+    jamo: 'ㅉ', syllable: '쌍지읒', romanization: 'jj', cnApprox: '机（紧，不卷舌）', cnApproxEn: 'machine (tense, not retroflex)',
     cnApproxEn: 'a tense "j" (like "jj", pronounced with a tight throat, no tongue-curl)',
-    mouthHint: '声带紧绷的塞擦音，比 ㅈ 更用力。',
+    mouthHint: '声带紧绷的塞擦音，比 ㅈ 更用力。', mouthHintEn: 'A tense affricate with a tight vocal cord, more forceful than ㅈ.',
     mouthHintEn: 'An affricate with tensed vocal cords, more forceful than ㅈ.',
-    mnemonic: '两个 ㅈ 叠加 → 紧音版',
+    mnemonic: '两个 ㅈ 叠加 → 紧音版', mnemonicEn: 'Two ㅈ combined → tense version',
     mnemonicEn: 'Two ㅈ side by side → the tense version.',
     combos: [
       { syllable: '짜장면', meaning: '炸酱面', meaningEn: 'jjajangmyeon (black-bean noodles)' }, { syllable: '쪽', meaning: '边、页', meaningEn: 'side / page' },

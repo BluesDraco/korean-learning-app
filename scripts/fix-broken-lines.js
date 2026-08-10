@@ -17,7 +17,7 @@ let i = 0;
 let fixedCount = 0;
 
 while (i < lines.length) {
-  let line = lines[i];
+  const line = lines[i];
 
   // Check if this line has an unterminated _(...) call
   // An unterminated line would be one that starts with _( or has _( but doesn't end with ');

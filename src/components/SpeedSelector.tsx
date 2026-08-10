@@ -6,6 +6,7 @@ import { t } from '@/lib/i18n';
 const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 2] as const;
 
 interface SpeedSelectorProps {
+  [k: string]: unknown;
   current: number;
   onSelect: (speed: number) => void;
   platform: 'bilibili' | 'youtube';

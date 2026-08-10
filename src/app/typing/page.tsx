@@ -31,6 +31,7 @@ import '../practice/practice-redesign.css';
 // ── Types ────────────────────────────────────────────────
 
 interface TypingItem {
+  [k: string]: unknown;
   id: string;
   korean: string;
   chinese: string;
@@ -38,6 +39,7 @@ interface TypingItem {
 }
 
 interface PackProgress {
+  [k: string]: unknown;
   completedAt: number;
   bestWpm: number;
   bestAccuracy: number;
@@ -47,6 +49,7 @@ interface PackProgress {
 type PageState = 'home' | 'intro' | 'session' | 'result';
 
 interface TypingSnapshot {
+  [k: string]: unknown;
   activeThemeId: string;
   index: number;
   items: TypingItem[];

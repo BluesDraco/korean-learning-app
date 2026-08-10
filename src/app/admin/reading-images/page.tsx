@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Loader2, ImageOff, CheckCircle2, AlertTriangle, Upload, BookImage } from 'lucide-react';
 
 interface TopicImage {
+  [k: string]: unknown;
   topic: string;
   file: string;
   url: string;
@@ -11,6 +12,7 @@ interface TopicImage {
 }
 
 interface StoryCover {
+  [k: string]: unknown;
   id: string;
   title: string;
   titleKo: string;

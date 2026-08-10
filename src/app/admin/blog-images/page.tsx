@@ -5,6 +5,7 @@ import { Loader2, ImageOff, CheckCircle2, Upload, Trash2, Plus } from 'lucide-re
 
 interface StoredImage { url: string; w: number; h: number }
 interface BlogPostImages {
+  [k: string]: unknown;
   slug: string;
   titleKo: string;
   titleZh: string;

@@ -103,6 +103,7 @@ export function totalMinutes(sessions: TopikSession[]): number {
 
 // 弱项题型（按 mastery 排序，取最需要练的 N 个）
 export interface WeakType {
+  [k: string]: unknown;
   meta: TopikQuestionTypeMeta;
   attempts: number;
   correct: number;
@@ -133,6 +134,7 @@ export function recommendedDailyCount(dailyGoal: number, targetDate?: number, la
 
 // 徽章清单（成就系统）
 export interface Badge {
+  [k: string]: unknown;
   key: string;
   name: string;
   desc: string;

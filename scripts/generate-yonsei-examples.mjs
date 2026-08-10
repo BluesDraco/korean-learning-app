@@ -78,7 +78,7 @@ async function processBatch(batch, batchIndex, total) {
 }
 
 async function main() {
-  let content = readFileSync(filePath, 'utf-8');
+  const content = readFileSync(filePath, 'utf-8');
 
   // Extract all words
   const wordRegex = /\{ word: "([^"]+)", pronunciation: "[^"]+", meaning: "([^"]+)", partOfSpeech: '[^']*' , examples: \[\] \}/g;

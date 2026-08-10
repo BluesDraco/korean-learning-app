@@ -9,12 +9,14 @@ import { romanize } from '@/lib/dictionary';
 import { sfxPop } from '@/lib/sfx';
 import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
+import type { KoZh, KoZhHighlight } from '@/types/inline';
 
 type BreakdownToken = { text: string; role: string };
 // Module-level cache: sentence → tokens
 const breakdownCache = new Map<string, BreakdownToken[]>();
 
 interface Props {
+  [k: string]: unknown;
   day: ToriDay;
   onComplete: () => void;
   onBack?: () => void;
@@ -245,7 +247,8 @@ export function DiaryGrammar({ day, onComplete, onBack }: Props) {
 }
 
 interface ExampleRowProps {
-  ex: { ko: string; zh: string; highlight?: string; note?: string };
+  [k: string]: unknown;
+  ex: KoZhHighlight;
   grammar: ToriGrammar;
   source: string;
   index: number;

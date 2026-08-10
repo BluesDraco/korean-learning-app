@@ -10,6 +10,7 @@ import {
   getStaticFeedPosts, getNpcPostsUpToDay, getPasserbyPosts,
   getStaticPostBySlug, getStaticPostById, getNpcPostsByAuthor, sortByTierBoost,
 } from '@/lib/server/blogStatic';
+import type { KoZh } from '@/types/inline';
 
 const EMPTY_CONTENT: BlogContent = { sentences: [], vocab: [], quiz: [], comments: [], likedBy: [], images: [] };
 
@@ -195,6 +196,7 @@ export async function getUserCurrentDay(userId?: string): Promise<number> {
 }
 
 export interface BlogPostPage {
+  [k: string]: unknown;
   posts: BlogPost[];
   page: number;
   hasMore: boolean;
@@ -370,6 +372,7 @@ export async function getBlogFollowerCount(animalId: string): Promise<number> {
 // 管理员二审入选的帖子，按 feature_date 当日 + feature_rank 排序，全站可见。
 // 公开正文用 moderated_text（管理员改写版），作者身份只用动物昵称/形象，绝不暴露真实账号。
 export interface RankingEntry {
+  [k: string]: unknown;
   slug: string;
   rank: number;
   text: string;              // 公开正文（管理员改写版）
@@ -403,6 +406,7 @@ export async function getRankingBoard(date: string): Promise<RankingEntry[]> {
 // —— 后台审核：列出待二审的帖子（一审已通过的 user 帖）——
 // 附综合分（score.overall）+ 当前真实点赞/评论数，供管理员判断是否入选。
 export interface AdminReviewPost {
+  [k: string]: unknown;
   id: string;
   slug: string;
   authorId: string;
@@ -615,6 +619,7 @@ function randomAnimals(n: number): string[] {
 }
 
 export interface CreateUserPostInput {
+  [k: string]: unknown;
   userId: string;
   text: string;                     // 用户写的韩语正文
   images?: BlogImage[];             // 配图（可选，0-10 张，带宽高）
@@ -896,13 +901,13 @@ function rowToUserComment(row: Record<string, unknown>): BlogUserComment {
   };
 }
 
-function pickReplyLine(): { ko: string; zh: string } {
+function pickReplyLine(): KoZh {
   // 用户评论内容不做 AI 生成回应，只从人工审过的正向安全池选句（praise/encourage/topicReact）
   const cats: BlogReplyCategory[] = ['praise', 'encourage', 'topicReact'];
   const cat = cats[Math.floor(Math.random() * cats.length)];
   const pool = BLOG_REPLY_POOL[cat] ?? BLOG_REPLY_POOL.encourage;
   const line = pool[Math.floor(Math.random() * pool.length)];
-  if (!line) return { ko: '고마워요! 잘 읽었어요 🙂', zh: '谢谢你！我认真看啦' };
+  if (!line) return { ko: '고마워요! 잘 읽었어요 🙂', zh: '谢谢你！我认真看啦', zhEn: 'Thank you! I read it carefully' };
   return { ko: line.ko, zh: line.zh };
 }
 
@@ -1006,7 +1011,7 @@ export async function generateAnimalReply(userId: string, slug: string, skipAi =
   const bio = getBlogAuthor(authorId).bio || '';
 
   // 生成回复：DeepSeek 优先，任何异常回落静态池
-  let reply: { ko: string; zh: string };
+  let reply: KoZh;
   try {
     if (skipAi) throw new Error('skip ai'); // 超限：直接回落静态池
     const apiKey = process.env.DEEPSEEK_LOOKUP_KEY;

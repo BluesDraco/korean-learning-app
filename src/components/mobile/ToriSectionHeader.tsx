@@ -1,4 +1,5 @@
 interface Props {
+  [k: string]: unknown;
   title: string;
   subtitle?: string;
   className?: string;

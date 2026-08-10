@@ -21,9 +21,9 @@ const eslintConfig = defineConfig([
       'prefer-const': 'warn',
     },
   },
-  // scripts/ 目录是 Node CommonJS 一次性脚本，允许 require
+  // scripts/ 目录是 Node 一次性脚本，允许 require（含 .mjs 里内联 require('fs') 等）
   {
-    files: ['scripts/**/*.js', 'scripts/**/*.cjs'],
+    files: ['scripts/**/*.js', 'scripts/**/*.cjs', 'scripts/**/*.mjs'],
     rules: {
       '@typescript-eslint/no-require-imports': 'off',
     },
@@ -72,6 +72,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // 手写模型训练目录的 Python venv / 产物，不是前端源码，勿 lint
+    "scripts/ml-handwriting/.venv/**",
+    "scripts/ml-handwriting/output*/**",
+    "scripts/ml-handwriting/__pycache__/**",
   ]),
 ]);
 

@@ -16,6 +16,7 @@ export type AudioContentType =
 export type AudioSource = 'browser_tts' | 'cached_qwen_tts' | 'static_audio' | 'original_video' | 'original_music';
 
 export interface AudioPolicyResult {
+  [k: string]: unknown;
   source: AudioSource;
   shouldCache: boolean;
   reason: string;
@@ -69,16 +70,16 @@ export function classifyContent(text: string, hint?: AudioContentType): AudioCon
 /** Determine the audio source policy for a given content type */
 export function resolveAudioPolicy(type: AudioContentType): AudioPolicyResult {
   if (STATIC_ONLY_TYPES.has(type)) {
-    return { source: 'static_audio', shouldCache: false, reason: '基础发音内容，必须使用固定标准音频，不可使用任何形式的 TTS' };
+    return { source: 'static_audio', shouldCache: false, reason: '基础发音内容，必须使用固定标准音频，不可使用任何形式的 TTS', reasonEn: 'Basic pronunciation content; must use fixed standard audio, no TTS of any kind.' };
   }
   if (QWEN_ALLOWED_TYPES.has(type)) {
-    return { source: 'cached_qwen_tts', shouldCache: true, reason: '可缓存 Qwen TTS，失败回退浏览器' };
+    return { source: 'cached_qwen_tts', shouldCache: true, reason: '可缓存 Qwen TTS，失败回退浏览器', reasonEn: 'Qwen TTS can be cached; fall back to browser if it fails.' };
   }
   if (ORIGINAL_ONLY_TYPES.has(type)) {
-    return { source: 'original_video', shouldCache: false, reason: '必须使用原视频/原曲音频' };
+    return { source: 'original_video', shouldCache: false, reason: '必须使用原视频/原曲音频', reasonEn: 'Must use the original video/original song audio.' };
   }
   // Default: allow Qwen with cache
-  return { source: 'cached_qwen_tts', shouldCache: true, reason: '默认策略：Qwen TTS + 浏览器回退' };
+  return { source: 'cached_qwen_tts', shouldCache: true, reason: '默认策略：Qwen TTS + 浏览器回退', reasonEn: 'Default strategy: Qwen TTS + browser fallback.' };
 }
 
 /** Sanitize text before passing to browser TTS. Strips markers that confuse TTS.

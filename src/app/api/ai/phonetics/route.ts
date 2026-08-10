@@ -14,6 +14,7 @@ const CACHE_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 天
 type Mode = 'letter' | 'examples' | 'confused' | 'mistake';
 
 interface Payload {
+  [k: string]: unknown;
   mode: Mode;
   key: string;
   // 各模式所需上下文

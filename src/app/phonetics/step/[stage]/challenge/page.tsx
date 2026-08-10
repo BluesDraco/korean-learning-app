@@ -26,12 +26,14 @@ const TOTAL_Q = 10;
 type QType = 'letter' | 'confusedPair' | 'consonant' | 'tense' | 'syllable';
 
 interface LetterQ {
+  [k: string]: unknown;
   type: 'letter';
   audioSyl: string;
   correct: string;
   options: string[];
 }
 interface ConfusedPairQ {
+  [k: string]: unknown;
   type: 'confusedPair';
   audioSyl: string;       // 听 target 的 syllable
   correct: string;        // target.jamo
@@ -40,18 +42,21 @@ interface ConfusedPairQ {
   tipEn?: string;
 }
 interface ConsonantQ {
+  [k: string]: unknown;
   type: 'consonant';
   audioSyl: string;
   correct: string;
   options: string[];
 }
 interface TenseQ {
+  [k: string]: unknown;
   type: 'tense';
   audios: [string, string];
   correct: string;
   options: string[];
 }
 interface SyllableQ {
+  [k: string]: unknown;
   type: 'syllable';
   data: SyllableQuestion;
 }

@@ -8,6 +8,7 @@ import { db } from '@/lib/db';
 import { putVoice, deleteVoice } from './voiceStore';
 
 export interface SaveRecordingInput {
+  [k: string]: unknown;
   blob: Blob;
   durationMs: number;
   type: string;         // 'shadowing' | 'pronunciation' | 'retell'

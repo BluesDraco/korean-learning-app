@@ -11,6 +11,7 @@ import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
 
 interface Props {
+  [k: string]: unknown;
   locked: boolean;
   children: React.ReactNode;
   // 达到哪个档位可解锁（决定文案），默认 monthly

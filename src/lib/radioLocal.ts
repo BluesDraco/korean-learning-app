@@ -12,6 +12,7 @@ export const MODE_KEY = 'radio_broadcast_mode';
 export type BroadcastMode = 'live' | 'free';
 
 export interface RadioStreak {
+  [k: string]: unknown;
   dates: string[]; // YYYY-MM-DD，已打卡日期
   currentStreak: number;
   longestStreak: number;

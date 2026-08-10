@@ -22,6 +22,7 @@ import { getGuestId } from '@/lib/guestId';
 import '@/app/practice/practice-redesign.css';
 
 export interface DictationItem {
+  [k: string]: unknown;
   korean: string;
   meaning: string;
   type: 'word' | 'sentence';
@@ -34,6 +35,7 @@ export interface DictationItem {
 }
 
 interface DictationSessionProps {
+  [k: string]: unknown;
   items: DictationItem[];
   onExit: () => void;
   exitLabel?: string;

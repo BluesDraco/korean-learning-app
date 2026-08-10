@@ -8,6 +8,7 @@ import { tc3Post } from '@/lib/server/tencentSign';
 const RESEND_API = 'https://api.resend.com/emails';
 
 export interface SendEmailInput {
+  [k: string]: unknown;
   to: string;
   subject: string;
   html: string;

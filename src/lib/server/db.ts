@@ -113,6 +113,7 @@ export function startReplicaSync() {
 }
 
 export interface Db {
+  [k: string]: unknown;
   exec: (sql: string, params?: unknown[]) => Promise<Array<{ columns: string[]; values: unknown[][] }>>;
   run: (sql: string, params?: unknown[]) => Promise<{ rowsAffected: number }>;
   batch: (statements: { sql: string; args: unknown[] }[]) => Promise<void>;

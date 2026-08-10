@@ -8,6 +8,7 @@ import { t } from '@/lib/i18n';
 interface GrammarParticle { text: string; role: string; }
 interface GrammarEnding { text: string; base: string; meaning: string; }
 interface GrammarExplain {
+  [k: string]: unknown;
   skeleton: { subject: string; predicate: string; object: string };
   translation: string;
   particles: GrammarParticle[];
@@ -16,6 +17,7 @@ interface GrammarExplain {
 }
 
 interface Props {
+  [k: string]: unknown;
   sentence: string;
   translation?: string;
   /** 'inline' 跟在例句下方；'compact' 更紧凑（卡片内嵌） */

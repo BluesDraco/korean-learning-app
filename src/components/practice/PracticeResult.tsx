@@ -11,6 +11,7 @@ import '../../app/practice/practice-session.css';
 export interface PracticeResultStat { num: number | string; label: string; }
 
 interface PracticeResultProps {
+  [k: string]: unknown;
   tone: PracticeTone;
   /** 主分数(0-100 或纯数字如 WPM) */
   score: number;

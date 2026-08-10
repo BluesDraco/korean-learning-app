@@ -6,6 +6,7 @@ import { t } from '@/lib/i18n';
 import type { Lang } from '@/lib/i18n';
 
 export interface JudgeResult {
+  [k: string]: unknown;
   isCorrect: boolean;
   score: number;
   wrongPart: string;

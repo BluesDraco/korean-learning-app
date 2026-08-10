@@ -75,7 +75,7 @@ export async function POST(request: Request) {
     );
 
     const token = await signToken({ userId: id, username, role: 'user' });
-    const res = NextResponse.json({ success: true, user: { id, username, role: 'user' } }, { headers: NO_STORE });
+    const res = NextResponse.json({ success: true, token, user: { id, username, role: 'user' } }, { headers: NO_STORE });
     setTokenCookie(res, token);
     return res;
   } catch (err: unknown) {

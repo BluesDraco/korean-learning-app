@@ -8,6 +8,7 @@ import { useLang } from '@/components/LangProvider';
 const OPEN_KEY = 'tori-tracepad-open';
 
 interface Props {
+  [k: string]: unknown;
   word: string;
 }
 

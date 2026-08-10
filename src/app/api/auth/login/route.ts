@@ -81,7 +81,8 @@ export async function POST(request: Request) {
     db.run('UPDATE users SET last_login_at = ? WHERE id = ?', [Date.now(), id]).catch(() => { /* 列可能不存在或写失败，不影响登录 */ });
 
     const token = await signToken({ userId: id, username: uname, role });
-    const res = NextResponse.json({ success: true, user: { id, username: uname, role } }, { headers: NO_STORE });
+    // token 同时回传响应体：移动端 App 走 Bearer；网页版仍用下面的 Cookie
+    const res = NextResponse.json({ success: true, token, user: { id, username: uname, role } }, { headers: NO_STORE });
     setTokenCookie(res, token);
     return res;
   } catch (err) {

@@ -43,6 +43,7 @@ export function getPOSLabel(cnLabel: string, lang: Lang): string {
 }
 
 export interface LookupResult {
+  [k: string]: unknown;
   word: string;
   dictionaryForm: string;
   conjugation: string;
@@ -140,6 +141,7 @@ export function displayRomanHyphen(stored: string | null | undefined, hangul: st
 // ====== DECONJUGATION ======
 
 export interface DeconjugateResult {
+  [k: string]: unknown;
   dictionaryForm: string;
   conjugation: string;
 }
@@ -152,18 +154,18 @@ export interface DeconjugateResult {
 export function deconjugate(word: string): DeconjugateResult {
   // Already a dictionary form (ends in 다)
   if (word.endsWith('다') && word.length >= 2) {
-    return { dictionaryForm: word, conjugation: '词典原形' };
+    return { dictionaryForm: word, conjugation: '词典原形', conjugationEn: 'Dictionary form' };
   }
 
   // ----- FORMAL (합쇼체) -----
   if (word.endsWith('습니다') || word.endsWith('읍니다')) {
     const stem = word.slice(0, -4); // 습니다 = 3 chars, but ㅂ니다 has different structure
     // Actually 습니다 and ㅂ니다: "습니다" is 3 chars, stem before it
-    return { dictionaryForm: stem + '다', conjugation: '正式体' };
+    return { dictionaryForm: stem + '다', conjugation: '正式体', conjugationEn: 'Formal style' };
   }
   if (word.endsWith('ㅂ니다') && word.length >= 3) {
     const stem = word.slice(0, -3);
-    return { dictionaryForm: stem + '다', conjugation: '正式体' };
+    return { dictionaryForm: stem + '다', conjugation: '正式体', conjugationEn: 'Formal style' };
   }
 
   // ----- PAST POLITE (했어요/갔어요/했었어요) -----
@@ -178,7 +180,7 @@ export function deconjugate(word: string): DeconjugateResult {
     // But the stem reconstruction depends on whether the vowel merged
     // Just return root + '다' as best guess, marking as past
     const dictForm = tryStemToDictionary(stem, suffix);
-    return { dictionaryForm: dictForm, conjugation: '过去时' };
+    return { dictionaryForm: dictForm, conjugation: '过去时', conjugationEn: 'Past tense' };
   }
 
   // ----- POLITE (해요체: 아요/어요/여요) -----
@@ -187,7 +189,7 @@ export function deconjugate(word: string): DeconjugateResult {
     const stem = politeMatch[1];
     const ending = politeMatch[2];
     const dictForm = reversePoliteEnding(stem, ending);
-    return { dictionaryForm: dictForm, conjugation: '敬语体' };
+    return { dictionaryForm: dictForm, conjugation: '敬语体', conjugationEn: 'Honorific style' };
   }
 
   // ----- CASUAL (해체: 아/어/여) -----
@@ -196,7 +198,7 @@ export function deconjugate(word: string): DeconjugateResult {
     const stem = casualMatch[1];
     const ending = casualMatch[2];
     const dictForm = reverseCasualEnding(stem, ending);
-    return { dictionaryForm: dictForm, conjugation: '半语' };
+    return { dictionaryForm: dictForm, conjugation: '半语', conjugationEn: 'Banmal (informal speech)' };
   }
 
   // ----- CONNECTIVE ENDINGS -----
@@ -206,7 +208,7 @@ export function deconjugate(word: string): DeconjugateResult {
   for (const ending of connectiveEndings) {
     if (word.endsWith(ending) && word.length > ending.length + 1) {
       const stem = word.slice(0, -ending.length);
-      return { dictionaryForm: stem + '다', conjugation: '接续形' };
+      return { dictionaryForm: stem + '다', conjugation: '接续形', conjugationEn: 'Connective form' };
     }
   }
 
@@ -216,31 +218,31 @@ export function deconjugate(word: string): DeconjugateResult {
     const stem = word.slice(0, -ending.length);
     // Reconstruct for irregular stems
     const dictForm = tryStemToDictionary(stem, '');
-    return { dictionaryForm: dictForm, conjugation: '定语形(过去)' };
+    return { dictionaryForm: dictForm, conjugation: '定语形(过去)', conjugationEn: 'Attributive form (past)' };
   }
   if (word.match(/[가-힯]는$/) && word.length >= 3) {
     const stem = word.slice(0, -1); // drop 는
     const dictForm = tryStemToDictionary(stem, '');
-    return { dictionaryForm: dictForm, conjugation: '定语形(现在)' };
+    return { dictionaryForm: dictForm, conjugation: '定语形(现在)', conjugationEn: 'Attributive form (present)' };
   }
   if (word.endsWith('ㄹ') || word.endsWith('을')) {
     const ending = word.endsWith('을') ? '을' : 'ㄹ';
     const stem = word.slice(0, -ending.length);
-    return { dictionaryForm: tryStemToDictionary(stem, ''), conjugation: '定语形(将来)' };
+    return { dictionaryForm: tryStemToDictionary(stem, ''), conjugation: '定语形(将来)', conjugationEn: 'Attributive form (future)' };
   }
 
   // ----- FUTURE -----
   if (word.endsWith('겠다') || word.endsWith('겠어요') || word.endsWith('겠어')) {
     const endLen = word.endsWith('겠어요') ? 4 : word.endsWith('겠다') ? 2 : 2;
     const stem = word.slice(0, -endLen);
-    return { dictionaryForm: stem + '다', conjugation: '将来时' };
+    return { dictionaryForm: stem + '다', conjugation: '将来时', conjugationEn: 'Future tense' };
   }
 
   // ----- IMPERATIVE / PROPOSITIVE -----
   if (word.endsWith('세요') || word.endsWith('십시오')) {
     const endLen = word.endsWith('세요') ? 3 : 4;
     const stem = word.slice(0, -endLen);
-    return { dictionaryForm: tryStemToDictionary(stem, ''), conjugation: '命令/请诱' };
+    return { dictionaryForm: tryStemToDictionary(stem, ''), conjugation: '命令/请诱', conjugationEn: 'Imperative/Invitation' };
   }
 
   // ----- NOMINALIZATION -----
@@ -249,16 +251,16 @@ export function deconjugate(word: string): DeconjugateResult {
     if (word.endsWith('음')) stem = word.slice(0, -1);
     else if (word.endsWith('ㅁ')) stem = word.slice(0, -1);
     else stem = word.slice(0, -1); // 기
-    return { dictionaryForm: stem + '다', conjugation: '名词化' };
+    return { dictionaryForm: stem + '다', conjugation: '名词化', conjugationEn: 'Nominalization' };
   }
 
   // ----- COMMON SUFFIX DROPS (just return word as is or word+다) -----
   // Try stripping final particles and adding 다
   if (word.length <= 6) {
-    return { dictionaryForm: word + '다', conjugation: '推测原形' };
+    return { dictionaryForm: word + '다', conjugation: '推测原形', conjugationEn: 'Presumptive base form' };
   }
 
-  return { dictionaryForm: word, conjugation: '未知变形' };
+  return { dictionaryForm: word, conjugation: '未知变形', conjugationEn: 'Unknown conjugation' };
 }
 
 /**
@@ -420,6 +422,7 @@ function tryStemToDictionary(stem: string, _suffix: string): string {
 // ====== TOKENIZATION ======
 
 export interface TokenInfo {
+  [k: string]: unknown;
   text: string;
   isKoreanWord: boolean;
   dictionaryForm?: string;

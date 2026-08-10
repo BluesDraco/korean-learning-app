@@ -3,6 +3,7 @@ import { normalizeKorean } from '@/lib/koreanDiff';
 export type PronunciationVerdict = 'correct' | 'acceptable' | 'wrong';
 
 export interface PronunciationResult {
+  [k: string]: unknown;
   score: number; // 0-100
   verdict: PronunciationVerdict;
 }

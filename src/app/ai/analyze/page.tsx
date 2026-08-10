@@ -22,6 +22,7 @@ import { GrammarTeachingCard } from '@/components/analyze/GrammarTeachingCard';
 import { AnalyzeQuiz } from '@/components/analyze/AnalyzeQuiz';
 import { FloatingKoreanKeyboard } from '@/components/FloatingKoreanKeyboard';
 import PlaceIntro from '@/components/PlaceIntro';
+import type { KoZh } from '@/types/inline';
 
 const LIGHT_C = { ..._LIGHT_C, cream: '#fff8f4', mintText: '#4e746d', zhText: '#7e6b64', shadow: '0 16px 42px rgba(78,52,46,.10)', strong: '0 28px 72px rgba(78,52,46,.18)' };
 const DARK_C  = { ..._DARK_C, cream: '#252040', mintText: '#5ecfb8', zhText: '#9A8AB0', shadow: '0 16px 42px rgba(0,0,0,.30)', strong: '0 28px 72px rgba(0,0,0,.40)' };
@@ -36,6 +37,7 @@ interface CultureNote { anchor: string; explanation: string }
 
 type QuizType = 'meaning' | 'cloze' | 'translate' | 'grammar';
 interface QuizQuestion {
+  [k: string]: unknown;
   type: QuizType;
   question: string;
   options: string[];
@@ -45,6 +47,7 @@ interface QuizQuestion {
 }
 
 interface AnalysisResult {
+  [k: string]: unknown;
   original: string;
   fullTranslation: string;
   alternativeTranslations?: Array<{ ko: string; context: string }>;
@@ -75,7 +78,7 @@ interface AnalysisResult {
     contrast?: string;
     mistake?: string;
     meaning?: string;
-    examples: { ko: string; zh: string }[] | string[];
+    examples: KoZh[] | string[];
   }[];
   sentences?: { korean: string; chinese: string; structure?: string }[];
   suggestion?: string;
@@ -340,7 +343,7 @@ const particleExplanations: Record<string, string> = {
 const verbEndings = ['습니다', 'ㅂ니다', '아요', '어요', '해요', '세요', '으세요', '았어요', '었어요', '했어요', '겠습니다', 'ㄹ게요', '을게요', '네요', '고요', '니까', '면서', '지만', '는데', '거나'];
 
 // 例句兼容：新版 { ko, zh } 对象 + 旧版 localStorage string[]
-function normalizeExample(ex: { ko: string; zh: string } | string): { ko: string; zh: string } {
+function normalizeExample(ex: KoZh | string): KoZh {
   return typeof ex === 'string' ? { ko: ex, zh: '' } : ex;
 }
 // ── Offline analyze (fallback) ─────────────────────────
@@ -438,6 +441,7 @@ function detectDirection(text: string): { from: string; to: string } {
 
 // ── History ────────────────────────────────────────────
 interface HistoryItem {
+  [k: string]: unknown;
   id: string;
   timestamp: number;
   original: string;

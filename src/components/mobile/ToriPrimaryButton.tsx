@@ -5,6 +5,7 @@ import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
 
 interface ToriPrimaryButtonProps {
+  [k: string]: unknown;
   children: React.ReactNode;
   onClick?: () => void;
   disabled?: boolean;

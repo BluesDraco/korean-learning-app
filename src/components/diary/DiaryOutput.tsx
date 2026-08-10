@@ -9,6 +9,7 @@ import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
 
 interface Props {
+  [k: string]: unknown;
   day: ToriDay;
   onComplete: (results: Array<{ taskId: string; correct: boolean; userText?: string }>) => void;
   onBack?: () => void;

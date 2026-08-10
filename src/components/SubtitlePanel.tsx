@@ -8,6 +8,7 @@ import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
 
 interface SubtitlePanelProps {
+  [k: string]: unknown;
   subtitles: StudySubtitle[];
   activeIndex: number;
   subtitleMode: 'bilingual' | 'korean' | 'chinese' | 'hidden';

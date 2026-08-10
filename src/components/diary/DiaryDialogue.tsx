@@ -10,8 +10,10 @@ import { DiaryLineActions } from './DiaryLineActions';
 import { sfxCorrect, sfxWrong, sfxPop } from '@/lib/sfx';
 import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
+import type { KoZhChoice } from '@/types/inline';
 
 interface Props {
+  [k: string]: unknown;
   day: ToriDay;
   onComplete: () => void;
   onBack?: () => void;
@@ -164,6 +166,7 @@ export function DiaryDialogue({ day, onComplete, onBack, initialState, onStateCh
 }
 
 interface LineProps {
+  [k: string]: unknown;
   line: ToriDialogueLine;
   idx: number;
   day: number;
@@ -469,7 +472,7 @@ function ShadowRecordBlock({ ko, onDone }: { ko: string; onDone: () => void }) {
 function PickChoice({
   c, ci, bg, border, correctPicked, onPick,
 }: {
-  c: { ko: string; zh: string; correct: boolean };
+  c: KoZhChoice;
   ci: number;
   bg: string;
   border: string;

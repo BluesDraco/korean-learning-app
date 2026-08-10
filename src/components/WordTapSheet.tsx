@@ -13,6 +13,7 @@ import { t } from '@/lib/i18n';
 import type { WordBook } from '@/types';
 
 interface LookupResult {
+  [k: string]: unknown;
   korean: string;
   romanization: string;
   meaning: string;
@@ -26,6 +27,7 @@ interface LookupResult {
 const lookupCache = new Map<string, LookupResult>();
 
 interface WordTapSheetProps {
+  [k: string]: unknown;
   surface: string;
   source?: string;
   onClose: () => void;

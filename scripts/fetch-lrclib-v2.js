@@ -72,7 +72,7 @@ async function main() {
 
     // Search with "Artist Title"
     const query = `${song.artist} ${song.title}`;
-    let searchResults = await searchLRC(query);
+    const searchResults = await searchLRC(query);
     await sleep(400);
 
     if (!searchResults || searchResults.length === 0) {

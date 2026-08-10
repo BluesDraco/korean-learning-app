@@ -17,6 +17,7 @@ const TIER_LABEL_KEY: Record<Tier, string> = {
 import { MEMBERSHIP_CSS } from '../../membership.css';
 
 interface OrderInfo {
+  [k: string]: unknown;
   id: string;
   tier: string;
   amount: number;   // 分

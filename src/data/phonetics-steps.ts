@@ -1,6 +1,7 @@
 import { vowels, consonants, batchimSounds, type PhoneticLetter } from '@/data/phonetics';
 
 export interface ProgressiveStep {
+  [k: string]: unknown;
   id: string;
   title: string;
   titleEn?: string;
@@ -17,11 +18,11 @@ export interface ProgressiveStep {
 export const progressiveSteps: ProgressiveStep[] = [
   {
     id: 'basic-vowels',
-    title: '基础元音（10个）',
+    title: '基础元音（10个）', titleEn: 'Basic Vowels (10)',
     titleEn: 'Basic Vowels (10)',
     titleKo: '단모음',
     emoji: '',
-    description: '10个基础元音，是韩语的发音基石。每个元音都由天、地、人三个元素演化而来。',
+    description: '10个基础元音，是韩语的发音基石。每个元音都由天、地、人三个元素演化而来。', descriptionEn: 'The 10 basic vowels are the foundation of Korean pronunciation. Each vowel evolved from the three elements: heaven, earth, and human.',
     descriptionEn: 'The 10 basic vowels are the foundation of Korean pronunciation. Each vowel evolved from three elements: heaven, earth, and human.',
     letters: vowels.filter((v) => v.subtype === 'basic'),
     confusedPairs: [
@@ -43,11 +44,11 @@ export const progressiveSteps: ProgressiveStep[] = [
   },
   {
     id: 'compound-vowels',
-    title: '合成元音（11个）',
+    title: '合成元音（11个）', titleEn: 'Compound Vowels (11)',
     titleEn: 'Compound Vowels (11)',
     titleKo: '이중모음',
     emoji: '',
-    description: '11个合成元音，由基础元音组合而成。掌握基础元音后，合成元音就是简单的拼合。',
+    description: '11个合成元音，由基础元音组合而成。掌握基础元音后，合成元音就是简单的拼合。', descriptionEn: 'The 11 compound vowels are formed by combining basic vowels. Once you master the basic vowels, compound vowels are simple combinations.',
     descriptionEn: 'The 11 compound vowels are formed by combining basic vowels. Once you master the basic vowels, compound vowels are just simple blends.',
     letters: vowels.filter((v) => v.subtype === 'compound'),
     confusedPairs: [
@@ -70,11 +71,11 @@ export const progressiveSteps: ProgressiveStep[] = [
   },
   {
     id: 'basic-consonants',
-    title: '基础辅音（14个）',
+    title: '基础辅音（14个）', titleEn: 'Basic consonants (14)',
     titleEn: 'Basic Consonants (14)',
     titleKo: '기본 자음',
     emoji: '',
-    description: '14个基础辅音（含5个送气音），模仿发音器官的形状创造。韩语辅音的关键是"松紧"和"送气"。',
+    description: '14个基础辅音（含5个送气音），模仿发音器官的形状创造。韩语辅音的关键是"松紧"和"送气"。', descriptionEn: '14 basic consonants (including 5 aspirated ones), created by imitating the shape of the speech organs. The key to Korean consonants is "tenseness" and "aspiration."',
     descriptionEn: 'The 14 basic consonants (including 5 aspirated sounds) were created to mimic the shapes of the speech organs. The keys to Korean consonants are "tension" and "aspiration".',
     letters: consonants.filter((c) => c.subtype === 'basic'),
     confusedPairs: [
@@ -98,11 +99,11 @@ export const progressiveSteps: ProgressiveStep[] = [
   },
   {
     id: 'double-consonants',
-    title: '紧音（5个）',
+    title: '紧音（5个）', titleEn: 'Tense consonants (5)',
     titleEn: 'Tense Consonants (5)',
     titleKo: '된소리',
     emoji: '',
-    description: '5个紧音（双写辅音），发音时喉部肌肉紧张、声带紧闭。想象你在用力搬重物时的感觉。',
+    description: '5个紧音（双写辅音），发音时喉部肌肉紧张、声带紧闭。想象你在用力搬重物时的感觉。', descriptionEn: '5 tense consonants (doubled consonants). When pronouncing, the throat muscles tighten and the vocal cords close. Imagine the feeling of straining to lift something heavy.',
     descriptionEn: 'The 5 tense consonants (doubled consonants) are pronounced with tight throat muscles and closed vocal cords. Imagine the feeling of straining to lift something heavy.',
     letters: consonants.filter((c) => c.subtype === 'double'),
     confusedPairs: [
@@ -114,11 +115,11 @@ export const progressiveSteps: ProgressiveStep[] = [
   },
   {
     id: 'batchim',
-    title: '收音（终声）',
+    title: '收音（终声）', titleEn: 'Batchim (final consonants)',
     titleEn: 'Final Consonants (Batchim)',
     titleKo: '받침',
     emoji: '',
-    description: '7种收音发音，是韩语区别于中文的重要特征。一个音节末尾的辅音不发全、只做口型。',
+    description: '7种收音发音，是韩语区别于中文的重要特征。一个音节末尾的辅音不发全、只做口型。', descriptionEn: '7 batchim sounds — a key feature that sets Korean apart from Chinese. A consonant at the end of a syllable isn\'t fully pronounced; you just form the mouth shape.',
     descriptionEn: 'The 7 final consonant sounds are an important feature that distinguishes Korean from Chinese. A consonant at the end of a syllable is not fully released, only the mouth shape is formed.',
     letters: batchimSounds,
     confusedPairs: [
@@ -130,11 +131,11 @@ export const progressiveSteps: ProgressiveStep[] = [
   },
   {
     id: 'reading',
-    title: '综合拼读',
+    title: '综合拼读', titleEn: 'Combined reading',
     titleEn: 'Reading Practice',
     titleKo: '읽기 연습',
     emoji: '',
-    description: '把前面学的字母拼起来，读真正的韩文单词。看到词 → 试着读 → 听发音验证。读完这些你就真的能用韩文了！',
+    description: '把前面学的字母拼起来，读真正的韩文单词。看到词 → 试着读 → 听发音验证。读完这些你就真的能用韩文了！', descriptionEn: 'Put the letters you\'ve learned together and read real Korean words. See the word → try to read it → listen to verify. Finish these and you\'ll really be able to use Korean!',
     descriptionEn: 'Put together the letters you have learned and read real Korean words. See the word → try to read it → listen to the audio to check. Once you finish these, you can really use Hangul!',
     letters: [],
     confusedPairs: [],

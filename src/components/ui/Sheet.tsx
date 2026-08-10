@@ -7,6 +7,7 @@ import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
 
 export interface SheetProps {
+  [k: string]: unknown;
   open: boolean;
   onClose: () => void;
   title?: string;

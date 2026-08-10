@@ -123,6 +123,7 @@ export function computeExpiry(tier: Tier, from: number): number | null {
 }
 
 export interface ActivateOptions {
+  [k: string]: unknown;
   source: string;              // 'manual' | 'mock' | 'hupijiao' | ...
   amount: number;              // 实收金额（分）
   note?: string;

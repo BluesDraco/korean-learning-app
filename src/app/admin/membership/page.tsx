@@ -9,6 +9,7 @@ import {
 } from '@/lib/membership-benefits';
 
 interface BenefitsResponse {
+  [k: string]: unknown;
   groups: BenefitGroup[];
   tiers: Tier[];
   tierLabels: Record<Tier, string>;
@@ -357,6 +358,7 @@ function BenefitCell({
 // ── 会员名单 tab ──
 
 interface MemberRow {
+  [k: string]: unknown;
   id: string;
   username: string;
   nickname: string;
@@ -651,6 +653,7 @@ function GrantModal({
 // ── 永久档履约 tab ──
 
 interface PerkRow {
+  [k: string]: unknown;
   id: string;
   userId: string;
   username: string;

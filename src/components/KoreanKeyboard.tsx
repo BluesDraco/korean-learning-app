@@ -207,6 +207,7 @@ for (const [qKey, m] of Object.entries(QWERTY_TO_JAMO)) {
 // ═══════════════════════════════════════════════════════════════
 
 interface KeyDef {
+  [k: string]: unknown;
   label: string;
   shiftLabel?: string;
   type?: 'shift' | 'backspace' | 'space' | 'done';
@@ -251,6 +252,7 @@ const ROWS: KeyDef[][] = [
 ];
 
 interface KoreanKeyboardProps {
+  [k: string]: unknown;
   value: string;
   onChange: (value: string) => void;
   visible: boolean;
@@ -643,6 +645,7 @@ export function KoreanKeyboard({ value, onChange, visible, onClose, onSend }: Ko
 // ═══════════════════════════════════════════════════════════════
 
 interface KoreanInputProps {
+  [k: string]: unknown;
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;

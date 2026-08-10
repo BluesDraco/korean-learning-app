@@ -4,6 +4,7 @@
 
 export interface RetellSentence { ko: string; zh: string; }
 export interface RetellPassage {
+  [k: string]: unknown;
   id: string;
   source: 'dialogue' | 'reading';
   title: string;

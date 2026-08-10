@@ -11,6 +11,7 @@ import '../../app/practice/practice-flow.css';
 export type FeedbackVerdict = 'correct' | 'acceptable' | 'wrong';
 
 interface PracticeFeedbackCardProps {
+  [k: string]: unknown;
   verdict: FeedbackVerdict;
   /** 0-100 分数(可选) */
   score?: number;

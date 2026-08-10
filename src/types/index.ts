@@ -1,5 +1,7 @@
+import type { KoZh, BreakdownItem, SegmentHint, LabelText, ZhKoNote, NumText, KoZhGrammarNote, GrammarStructureEntry } from '@/types/inline';
 // ===== User Profile & Gamification =====
 export interface UserProfile {
+  [k: string]: unknown;
   id: string;
   nickname: string;
   level: number;
@@ -24,6 +26,7 @@ export interface UserProfile {
 }
 
 export interface DailyLog {
+  [k: string]: unknown;
   id: string;
   date: number;
   wordsLearned: number;
@@ -35,6 +38,7 @@ export interface DailyLog {
 }
 
 export interface Achievement {
+  [k: string]: unknown;
   id: string;
   type: AchievementType;
   earnedAt: number;
@@ -81,6 +85,7 @@ export const ACHIEVEMENT_DEFS: Record<AchievementType, { title: string; descript
 
 // ===== Vocabulary Word (User's learning state, IndexedDB) =====
 export interface Word {
+  [k: string]: unknown;
   id: string;
   word: string;
   pronunciation: string;
@@ -107,6 +112,7 @@ export interface Word {
 
 // ===== Unified Vocabulary Entry (static rich data) =====
 export interface WordEntry {
+  [k: string]: unknown;
   id: string;
   korean: string;
   romanization: string;
@@ -126,12 +132,14 @@ export interface WordEntry {
 }
 
 export interface WordMeaning {
+  [k: string]: unknown;
   chinese: string;
   nuance: string;                // "正式", "口语", "书面", "网络"...
   register: string;              // Use context: "通用", "职场", "日常生活"...
 }
 
 export interface WordEntryExample {
+  [k: string]: unknown;
   korean: string;
   chinese: string;
   scene: string;                 // Scene tag matching ThemePack
@@ -139,6 +147,7 @@ export interface WordEntryExample {
 
 // ===== Theme Pack =====
 export interface ThemePack {
+  [k: string]: unknown;
   id: string;
   name: string;
   emoji: string;
@@ -158,6 +167,7 @@ export interface ThemePack {
 }
 
 export interface ThemePackSentence {
+  [k: string]: unknown;
   korean: string;
   chinese: string;
   situation?: string;
@@ -166,10 +176,11 @@ export interface ThemePackSentence {
    * 语法拆解。role 是语法角色（主语/宾语/敬语终结/请求...），note 是可选的中文含义。
    * 旧数据用 partOfSpeech 存词性，UI 会 fallback 显示。
    */
-  breakdown?: { text: string; role?: string; note?: string; meaning?: string; partOfSpeech?: string }[];
+  breakdown?: BreakdownItem[];
 }
 
 export interface ThemePackDialogueTurn {
+  [k: string]: unknown;
   speaker: 'me' | 'them';        // me=学习者，them=店员/对方
   korean: string;
   chinese: string;
@@ -177,18 +188,21 @@ export interface ThemePackDialogueTurn {
 }
 
 export interface ThemePackDialogue {
+  [k: string]: unknown;
   title: string;                 // 对话主题，如 "点一杯冰美式带走"
   scene?: string;                // 场景补充，如 "工作日午后，星巴克"
   turns: ThemePackDialogueTurn[];
 }
 
 export interface ThemePackWordGroup {
+  [k: string]: unknown;
   label: string;                 // 分组名，如 "饮品"
   emoji?: string;                // 分组图标，如 "☕"
   wordIds: string[];             // 归属该组的 wordIds
 }
 
 export interface ThemePackPitfall {
+  [k: string]: unknown;
   title: string;                 // 短标题，如 "砍价只用于传统市场"
   detail: string;                // 详细说明：为什么错、后果、正确做法
   wrong?: string;                // 反例（可选）
@@ -197,12 +211,14 @@ export interface ThemePackPitfall {
 
 // ===== Level Word List =====
 export interface LevelWordList {
+  [k: string]: unknown;
   level: number;                 // 1-6
   wordIds: string[];
   totalCount: number;
 }
 
 export interface Example {
+  [k: string]: unknown;
   text: string;
   translation: string;
   source: 'dictionary' | 'video' | 'manual';
@@ -212,6 +228,7 @@ export type MasteryLevel = 'new' | 'learning' | 'reviewing' | 'mastered';
 
 // ===== Custom Word Book =====
 export interface WordBook {
+  [k: string]: unknown;
   id: string;
   name: string;
   description: string;
@@ -223,6 +240,7 @@ export interface WordBook {
 
 // ===== SRS Review =====
 export interface ReviewSession {
+  [k: string]: unknown;
   id: string;
   date: number;
   wordsReviewed: number;
@@ -233,6 +251,7 @@ export interface ReviewSession {
 
 // ===== Dictation =====
 export interface DictationRecord {
+  [k: string]: unknown;
   id: string;
   userId?: string;
   wordId: string;
@@ -245,6 +264,7 @@ export interface DictationRecord {
 
 // ===== App Settings =====
 export interface AppSettings {
+  [k: string]: unknown;
   id: string;
   dailyWordGoal: number;
   defaultPlaybackRate: number;
@@ -255,6 +275,7 @@ export interface AppSettings {
 export type VideoPlatform = 'bilibili' | 'youtube';
 
 export interface StudyVideo {
+  [k: string]: unknown;
   id: string;
   url: string;
   platform: VideoPlatform;
@@ -267,6 +288,7 @@ export interface StudyVideo {
 }
 
 export interface StudySubtitle {
+  [k: string]: unknown;
   id: string;
   videoId: string;
   index: number;
@@ -278,6 +300,7 @@ export interface StudySubtitle {
 }
 
 export interface StudyLog {
+  [k: string]: unknown;
   id: string;
   videoId: string;
   date: number;
@@ -290,6 +313,7 @@ export interface StudyLog {
 export type AnnouncementType = 'announcement' | 'update_log' | 'private_message' | 'popup';
 
 export interface Announcement {
+  [k: string]: unknown;
   id: string;
   title: string;
   content: string;
@@ -314,6 +338,7 @@ export type MilestoneType =
   | 'days_100';             // 学习满100天
 
 export interface UserAchievement {
+  [k: string]: unknown;
   id: string;
   // 旧值为 MilestoneType；新成就系统用 src/data/achievements.ts 的成就 id（string）
   achievementType: MilestoneType | string;
@@ -326,6 +351,7 @@ export type AchievementCategory = 'start' | 'streak' | 'collect' | 'explore' | '
 export type AchievementRarity = 'common' | 'rare' | 'epic' | 'legend';
 
 export interface AchievementDef {
+  [k: string]: unknown;
   id: string;
   category: AchievementCategory;
   rarity: AchievementRarity;
@@ -341,6 +367,7 @@ export interface AchievementDef {
 
 /** 一次成就检测的结果：解锁状态 + 进度 */
 export interface AchievementProgress {
+  [k: string]: unknown;
   id: string;
   unlocked: boolean;
   current: number;              // 当前进度值
@@ -350,6 +377,7 @@ export interface AchievementProgress {
 
 /** 成就检测的整体结果：各成就进度 + 概览用的原始指标（未封顶） */
 export interface AchievementResult {
+  [k: string]: unknown;
   list: AchievementProgress[];
   unlockedCount: number;
   level: number;                // 原始等级（不封顶）
@@ -358,6 +386,7 @@ export interface AchievementResult {
 
 // ===== Share Links & Public Diary =====
 export interface UserShareLink {
+  [k: string]: unknown;
   id: string;
   token: string;
   expiresAt: number | null;  // null = permanent
@@ -367,6 +396,7 @@ export interface UserShareLink {
 
 // ===== Sticker Packs =====
 export interface StickerPack {
+  [k: string]: unknown;
   id: string;
   name: string;
   description: string;
@@ -376,6 +406,7 @@ export interface StickerPack {
 }
 
 export interface Sticker {
+  [k: string]: unknown;
   id: string;
   packId: string;
   imageUrl: string;
@@ -385,6 +416,7 @@ export interface Sticker {
 }
 
 export interface StickerDownload {
+  [k: string]: unknown;
   id: string;
   packId: string;
   userId: string | null;
@@ -393,6 +425,7 @@ export interface StickerDownload {
 
 // ===== Study Buddy =====
 export interface BuddyRelation {
+  [k: string]: unknown;
   id: string;
   userAId: string;
   userBId: string;
@@ -401,6 +434,7 @@ export interface BuddyRelation {
 }
 
 export interface BuddyInvite {
+  [k: string]: unknown;
   id: string;
   userId: string;
   inviteToken: string;
@@ -413,6 +447,7 @@ export interface BuddyInvite {
 
 // ===== Ambassador =====
 export interface AmbassadorInfo {
+  [k: string]: unknown;
   isAmbassador: boolean;
   ambassadorSince: number | null;
   ambassadorReason: string | null;
@@ -422,6 +457,7 @@ export interface AmbassadorInfo {
 export type PronunciationItemType = 'sound' | 'syllable' | 'word' | 'phrase' | 'sentence';
 
 export interface PronunciationItem {
+  [k: string]: unknown;
   id: string;
   textKo: string;
   textZh?: string;
@@ -432,10 +468,11 @@ export interface PronunciationItem {
   source?: string;
   sourceId?: string;
   tips?: string[];
-  segments?: { text: string; hint?: string }[];
+  segments?: SegmentHint[];
 }
 
 export interface PronunciationAttempt {
+  [k: string]: unknown;
   id: string;
   itemId: string;
   durationMs: number;
@@ -446,6 +483,7 @@ export interface PronunciationAttempt {
 
 // ===== Grammar (Sentence Pattern) Practice =====
 export interface GrammarPracticeTemplate {
+  [k: string]: unknown;
   id: string;
   type: 'substitution' | 'choice' | 'fill_blank' | 'output';
   prompt: string;
@@ -457,12 +495,14 @@ export interface GrammarPracticeTemplate {
 }
 
 export interface CommonMistake {
+  [k: string]: unknown;
   wrong: string;
   correct: string;
   reason: string;
 }
 
 export interface GrammarExample {
+  [k: string]: unknown;
   ko: string;
   zh: string;
   romanization?: string;
@@ -470,6 +510,7 @@ export interface GrammarExample {
 }
 
 export interface GrammarPoint {
+  [k: string]: unknown;
   id: string;
   title: string;
   displayTitle: string;
@@ -496,17 +537,20 @@ export interface GrammarPoint {
 // ═══════════════════════════════════════════
 
 export interface GrammarWordBlock {
+  [k: string]: unknown;
   text: string;
   role: 'subject' | 'object' | 'verb' | 'place' | 'plain' | 'time';
 }
 
 export interface ConnectionRule {
+  [k: string]: unknown;
   type: 'rule' | 'note' | 'compare' | 'example' | 'vocab' | 'usage';
   text: string;
   examples?: string;
 }
 
 export interface GrammarCardExample {
+  [k: string]: unknown;
   wordBlocks: GrammarWordBlock[];
   zh: string;
   swapWords?: string[];
@@ -514,6 +558,7 @@ export interface GrammarCardExample {
 }
 
 export interface GrammarScenario {
+  [k: string]: unknown;
   icon: string;
   context: string;
   ko: string;
@@ -522,6 +567,7 @@ export interface GrammarScenario {
 }
 
 export interface SpecialQuizQuestion {
+  [k: string]: unknown;
   prompt?: string;
   pre?: string;
   post?: string;
@@ -534,6 +580,7 @@ export interface SpecialQuizQuestion {
 
 // 综合练习卡（isPractice）的分组数据：五种题型
 export interface PracticeGroups {
+  [k: string]: unknown;
   /** 排序题：把打乱的词块按正确顺序拼回原句 */
   sort?: { words: string[]; answer: string[]; hint: string }[];
   /** 填空题①（一般是 이에요/예요 / 은는 类）*/
@@ -553,10 +600,11 @@ export interface PracticeGroups {
   /** 听力题：听韩语句选中文意思。ko=题干韩语（已审例句），ans=正确中文，options=含正确项的中文选项。 */
   listening?: { ko: string; ans: string; options: string[] }[];
   /** 听写题（综合测验）：听韩语句写出来，本地 normalizeKorean 比对。ko=源句，zh=句义提示。 */
-  dictation?: { ko: string; zh: string }[];
+  dictation?: KoZh[];
 }
 
 export interface GrammarCard {
+  [k: string]: unknown;
   id: string;
   partNumber: number;
   lessonNumber: number;
@@ -567,28 +615,20 @@ export interface GrammarCard {
   structureNote?: string;
   rulesNote?: string;
   scenarioNote?: string;
-  conceptCompare?: {
-    zh: string;
-    ko: string;
-    note: string;
-  };
+  conceptCompare?: ZhKoNote;
   readingGuide?: {
     title: string;
     body: string;
-    steps: { num: number; text: string }[];
-    demo: { ko: string; rows: { label: string; text: string }[]; result: string };
+    steps: NumText[];
+    demo: { ko: string; rows: LabelText[]; result: string; [k: string]: unknown };
   };
   quickTable?: {
     title: string;
     body?: string;
     headers: string[];
-    rows: (string | { ko: string; zh: string })[][];
+    rows: (string | KoZh)[][];
   };
-  structures: {
-    ko: string;
-    zh?: string;
-    tokens: { text: string; role: 'subject' | 'object' | 'verb' | 'place' | 'time' | 'plain' }[];
-  }[];
+  structures: GrammarStructureEntry[];
   /** 接续规则 / 用法提示（不允许裸字符串，由 lint-grammar-cards 脚本强制检查） */
   connectionRules: ConnectionRule[];
   cardExamples: GrammarCardExample[];
@@ -611,6 +651,7 @@ export interface GrammarCard {
 }
 
 export interface UserGrammarState {
+  [k: string]: unknown;
   id: string;
   status: 'new' | 'learning' | 'familiar' | 'mastered' | 'difficult';
   seenCount: number;
@@ -629,6 +670,7 @@ export interface UserGrammarState {
 
 /** 听力题：听 ko 选中文意思。字段与 PracticeGroups['listening'] 对齐，可直接喂 ListeningMCStep。 */
 export interface GrammarBankListening {
+  [k: string]: unknown;
   ko: string;          // 全新原创韩语句（非卡片例句）
   ans: string;         // 正确中文意思
   options: string[];   // 恰 4 个中文选项（含 ans），答案位置已均匀化
@@ -636,12 +678,14 @@ export interface GrammarBankListening {
 
 /** 听写题：听 ko 写出来，本地 normalizeKorean 比对。对齐 PracticeGroups['dictation']。 */
 export interface GrammarBankDictation {
+  [k: string]: unknown;
   ko: string;
   zh: string;          // 句义提示
 }
 
 /** 仿写题（重设计）：给模板句 + 换词槽提示，用户保结构换内容。 */
 export interface GrammarBankImitate {
+  [k: string]: unknown;
   ko: string;                          // 模板句（新造）
   zh: string;
   swapSlot: string;                    // 中文方向提示，如「把宾语换成别的东西」
@@ -650,6 +694,7 @@ export interface GrammarBankImitate {
 
 /** 续写题（重设计）：opener 是问句/悬念句，用户用目标语法作答。 */
 export interface GrammarBankContinue {
+  [k: string]: unknown;
   ko: string;          // opener（问句或悬念句，新造）
   zh: string;
   expectHint: string;  // 中文作答提示，如「用『-고 싶다』说出你想做的事」
@@ -657,6 +702,7 @@ export interface GrammarBankContinue {
 
 /** 单卡题库条目。grammarPoint/whatItDoes 冗余存储，供判分与 UI 直接用。 */
 export interface GrammarBankEntry {
+  [k: string]: unknown;
   cardId: string;                      // 'card-p3-l07'
   grammarPoint: string;                // = card.title
   whatItDoes: string;                  // = card.whatItDoes
@@ -668,6 +714,7 @@ export interface GrammarBankEntry {
 
 /** 一个 part 的题库文件。entries 按 cardId 索引；文件内所有 item 均已过 QA。 */
 export interface GrammarBankFile {
+  [k: string]: unknown;
   part: number;
   specVersion: string;                 // 生成规范版本，便于将来重生
   generatedAt: string;                 // ISO
@@ -680,6 +727,7 @@ export interface GrammarBankFile {
 // ═══════════════════════════════════════════
 
 export interface ArticleSentence {
+  [k: string]: unknown;
   id: string;
   ko: string;
   zh: string;
@@ -693,13 +741,15 @@ export interface ArticleSentence {
 }
 
 export interface ArticleWord {
+  [k: string]: unknown;
   word: string;
   meaning: string;
   pronunciation?: string;
-  examples?: { ko: string; zh: string }[];
+  examples?: KoZh[];
 }
 
 export interface ArticleQuestion {
+  [k: string]: unknown;
   id: string;
   type: 'main_idea' | 'detail' | 'vocab' | 'grammar' | 'true_false';
   prompt: string;      // 韩语题干（对标 TOPIK 阅读题）
@@ -710,6 +760,7 @@ export interface ArticleQuestion {
 }
 
 export interface ArticleOutputTask {
+  [k: string]: unknown;
   type: 'fill_blank' | 'complete_sentence' | 'choose_and_say';
   template: string;
   hint?: string;
@@ -718,6 +769,7 @@ export interface ArticleOutputTask {
 }
 
 export interface Article {
+  [k: string]: unknown;
   id: string;
   title: string;
   titleKo: string;
@@ -729,11 +781,7 @@ export interface Article {
   coreWords: ArticleWord[];
   grammarIds: string[];
   sentences: ArticleSentence[];
-  keySentence?: {
-    ko: string;
-    zh: string;
-    grammarNote: string;
-  };
+  keySentence?: KoZhGrammarNote;
   questions: ArticleQuestion[];
   outputTask?: ArticleOutputTask;
   tags?: string[];
@@ -746,6 +794,7 @@ export interface Article {
 }
 
 export interface UserArticleProgress {
+  [k: string]: unknown;
   id: string;
   articleId: string;
   userId?: string;
@@ -764,6 +813,7 @@ export interface UserArticleProgress {
 }
 
 export interface ArticleLearningEvent {
+  [k: string]: unknown;
   id: string;
   articleId: string;
   sentenceId?: string;
@@ -775,6 +825,7 @@ export interface ArticleLearningEvent {
 // ===== TOPIK =====
 
 export interface TopikSession {
+  [k: string]: unknown;
   id: string;
   userId: string;
   mode: 'exam' | 'practice' | 'mistakes' | 'simulate';
@@ -789,6 +840,7 @@ export interface TopikSession {
 }
 
 export interface TopikMistake {
+  [k: string]: unknown;
   id: string;
   userId: string;
   questionId: string;
@@ -800,6 +852,7 @@ export interface TopikMistake {
 }
 
 export interface TopikTypeMastery {
+  [k: string]: unknown;
   id: string;
   userId: string;
   questionType: string;
@@ -810,6 +863,7 @@ export interface TopikTypeMastery {
 }
 
 export interface TopikUserGoal {
+  [k: string]: unknown;
   id: string;              // 与 userId 同值，一人一行
   userId: string;
   targetDate?: number;     // 目标 TOPIK 考试日期 (ms 时间戳，未设置=undefined)
@@ -820,11 +874,13 @@ export interface TopikUserGoal {
 }
 
 export interface TopikDailyReason {
+  [k: string]: unknown;
   type: 'weak' | 'mistake' | 'new' | 'baseline';
   text: string;
 }
 
 export interface TopikDailyPlan {
+  [k: string]: unknown;
   id: string;              // dp-{userId}-{YYYY-MM-DD}
   userId: string;
   date: string;            // 本地时区 YYYY-MM-DD
@@ -839,6 +895,7 @@ export interface TopikDailyPlan {
 // ===== 韩娱热点阅读 (Korean Entertainment Hot Topic Reading) =====
 
 export interface KoreanReadingToken {
+  [k: string]: unknown;
   surface: string;       // surface form as it appears in the sentence
   baseForm: string;      // dictionary/base form
   meaning: string;       // Chinese meaning
@@ -847,6 +904,7 @@ export interface KoreanReadingToken {
 }
 
 export interface KoreanGrammarNote {
+  [k: string]: unknown;
   pattern: string;           // grammar pattern, e.g. '-고 있다', '-면'
   meaning: string;           // short meaning, e.g. '正在做...'
   explanation: string;       // detailed explanation
@@ -854,6 +912,7 @@ export interface KoreanGrammarNote {
 }
 
 export interface KoreanReadingSentence {
+  [k: string]: unknown;
   id: string;
   korean: string;
   chinese: string;
@@ -862,6 +921,7 @@ export interface KoreanReadingSentence {
 }
 
 export interface KoreanReadingParagraph {
+  [k: string]: unknown;
   id: string;
   korean: string;
   chinese: string;
@@ -869,6 +929,7 @@ export interface KoreanReadingParagraph {
 }
 
 export interface KoreanReadingStatus {
+  [k: string]: unknown;
   sourceReady: boolean;      // body parsed from source
   translationReady: boolean; // full Chinese translation done
   tokenReady: boolean;       // per-word token breakdown done
@@ -878,6 +939,7 @@ export interface KoreanReadingStatus {
 }
 
 export interface KoreanHotReading {
+  [k: string]: unknown;
   id: string;
 
   // Source
@@ -914,6 +976,7 @@ export interface KoreanHotReading {
 }
 
 export interface SpellingMistake {
+  [k: string]: unknown;
   id: string;
   wordId?: string;
   word: string;
@@ -926,6 +989,7 @@ export interface SpellingMistake {
 
 // ===== AI Chat =====
 export interface AiChatMistake {
+  [k: string]: unknown;
   id: string;
   userId?: string;
   scenarioId: string;
@@ -939,6 +1003,7 @@ export interface AiChatMistake {
 }
 
 export interface AiChatNewWord {
+  [k: string]: unknown;
   id: string;
   userId?: string;
   ko: string;
@@ -951,6 +1016,7 @@ export interface AiChatNewWord {
 // ===== CloudTable typed tables (replacing CloudTable<any>) =====
 
 export interface SavedSentence {
+  [k: string]: unknown;
   id?: string;  // optional — CloudTable auto-generates if missing
   userId?: string;
   korean: string;
@@ -973,6 +1039,7 @@ export interface SavedSentence {
 }
 
 export interface SavedArticle {
+  [k: string]: unknown;
   id: string;
   userId?: string;
   title: string;
@@ -985,6 +1052,7 @@ export interface SavedArticle {
 }
 
 export interface SavedNote {
+  [k: string]: unknown;
   id: string;
   userId?: string;
   title: string;
@@ -996,6 +1064,7 @@ export interface SavedNote {
 }
 
 export interface UserRecording {
+  [k: string]: unknown;
   id?: string;  // optional — CloudTable auto-generates if missing
   userId?: string;
   type?: string;              // 'shadowing' | 'pronunciation' | 'retell'
@@ -1018,6 +1087,7 @@ export interface UserRecording {
 }
 
 export interface DiaryEntry {
+  [k: string]: unknown;
   id: string;
   userId?: string;
   title: string;
@@ -1028,6 +1098,7 @@ export interface DiaryEntry {
 }
 
 export interface NewsReadingProgress {
+  [k: string]: unknown;
   id: string;
   userId?: string;
   postId: string;
@@ -1036,6 +1107,7 @@ export interface NewsReadingProgress {
 }
 
 export interface PhoneticMistake {
+  [k: string]: unknown;
   id: string;
   userId?: string;
   targetJamo: string;
@@ -1048,6 +1120,7 @@ export interface PhoneticMistake {
 }
 
 export interface PhoneticSrsItem {
+  [k: string]: unknown;
   id: string;
   userId?: string;
   jamo: string;
@@ -1063,16 +1136,19 @@ export interface PhoneticSrsItem {
 }
 
 export interface UserPhoneticStep {
+  [k: string]: unknown;
   id: string;
   completedAt: number;
 }
 
 export interface GrammarFavorite {
+  [k: string]: unknown;
   id: string;              // grammarId
   createdAt: number;
 }
 
 export interface TypingPackProgress {
+  [k: string]: unknown;
   id: string;              // themeId
   completedAt: number;
   bestWpm: number;
@@ -1082,6 +1158,7 @@ export interface TypingPackProgress {
 }
 
 export interface TypingMastery {
+  [k: string]: unknown;
   id: string;              // `${themeId}:${type}:${korean}`
   themeId: string;
   itemKey: string;         // `${type}:${korean}`
@@ -1090,6 +1167,7 @@ export interface TypingMastery {
 }
 
 export interface WritingHistoryRecord {
+  [k: string]: unknown;
   id: string;
   date: string;
   mode: string;
@@ -1101,6 +1179,7 @@ export interface WritingHistoryRecord {
 }
 
 export interface AiAnalyzeHistoryItem {
+  [k: string]: unknown;
   id: string;
   timestamp: number;
   original: string;
@@ -1109,6 +1188,7 @@ export interface AiAnalyzeHistoryItem {
 }
 
 export interface UserVocabLastVisit {
+  [k: string]: unknown;
   id: string;              // 固定 'main'（单例）
   source?: 'yonsei' | 'seoul' | 'vitamin' | 'levels' | 'themes' | 'books';
   unitId?: string;
@@ -1117,11 +1197,13 @@ export interface UserVocabLastVisit {
 }
 
 export interface UserExpressionAdded {
+  [k: string]: unknown;
   id: string;              // expressionId
   createdAt: number;
 }
 
 export interface PracticeScore {
+  [k: string]: unknown;
   id: string;              // ${userId}:${slug}:${completedAt}
   userId: string;
   sceneSlug: string;
@@ -1145,6 +1227,7 @@ export type BlogCategory = '일상' | '소식' | '서울 일기' | '문화 노�
 
 // 正文里的一个词汇（inline 展开卡用）：韩语词 + 读法 + 中文释义
 export interface BlogVocab {
+  [k: string]: unknown;
   word: string;      // 韩语词，用于匹配正文中的 .word span
   reading: string;   // 罗马音/读法，可空
   meaning: string;   // 中文释义
@@ -1152,6 +1235,7 @@ export interface BlogVocab {
 
 // 正文的一句：韩语 + 中文翻译（桌面阅读栏可不显示中文）
 export interface BlogSentence {
+  [k: string]: unknown;
   ko: string;
   zh: string;
   t?: [number, number];   // [startSec, endSec] 在整段 audioUrl 里的位置;点单句跳播整段这一段。无则回落 edge-tts
@@ -1159,6 +1243,7 @@ export interface BlogSentence {
 
 // 一道测验题
 export interface BlogQuizItem {
+  [k: string]: unknown;
   question: string;      // 题干（中文或韩语）
   options: string[];     // 选项
   answerIndex: number;   // 正确选项下标
@@ -1167,6 +1252,7 @@ export interface BlogQuizItem {
 
 // 动物伙伴的一条评论（评论区=偷偷的口语课）
 export interface BlogComment {
+  [k: string]: unknown;
   animalId: string;   // 对应 BLOG_CAST 里的 id
   ko: string;         // 韩语留言
   zh: string;         // 中文小字注释
@@ -1175,6 +1261,7 @@ export interface BlogComment {
 
 // 帖子里的一张图（NPC 提前做 / 用户上传通用）。存真实宽高，前端按比例自适应（ins 式）。
 export interface BlogImage {
+  [k: string]: unknown;
   url: string;
   w: number;   // 原始像素宽
   h: number;   // 原始像素高
@@ -1182,6 +1269,7 @@ export interface BlogImage {
 
 // content_json 反序列化后的结构
 export interface BlogContent {
+  [k: string]: unknown;
   sentences: BlogSentence[];
   vocab: BlogVocab[];
   quiz: BlogQuizItem[];
@@ -1195,6 +1283,7 @@ export type BlogCoverTheme = 'pink' | 'gold' | 'purple' | 'mint';
 
 // 动物作者/伙伴
 export interface BlogAuthor {
+  [k: string]: unknown;
   id: string;
   emoji: string;
   name: string;       // 韩文名，如 토리
@@ -1207,6 +1296,7 @@ export interface BlogAuthor {
 }
 
 export interface BlogPost {
+  [k: string]: unknown;
   id: string;
   slug: string;
   titleKo: string;
@@ -1238,6 +1328,7 @@ export interface BlogPost {
 
 // 用户帖的 DeepSeek 多维评分（中文），韩语回应从安全池选
 export interface BlogPostScore {
+  [k: string]: unknown;
   overall: number;           // 总分 0-100
   dimensions: {              // 各维度得分 0-100
     grammar: number;         // 语法/句型正确
@@ -1251,6 +1342,7 @@ export interface BlogPostScore {
 
 // 博客专属用户档案（选的动物形象 + 经验/等级）
 export interface BlogUserStats {
+  [k: string]: unknown;
   userId: string;
   animalId: string;          // 选的预制动物形象 id（见 blogAvatars）
   nickname: string;
@@ -1261,6 +1353,7 @@ export interface BlogUserStats {
 
 // 博客通知（动物点赞/评论了你的帖子）。发帖时预写、读时按 createdAt 揭晓
 export interface BlogNotification {
+  [k: string]: unknown;
   id: string;
   type: 'like' | 'comment' | 'radio' | 'follow_post';
   postSlug: string;
@@ -1274,6 +1367,7 @@ export interface BlogNotification {
 // 用户在 NPC 帖下的私密评论 + 动物回应（只对本人可见，按 user_id 隔离）。
 // 发评论时立刻可见；动物回复在未来 reveal 时间揭晓（同 growth/通知的"冻结+揭晓、无 cron"哲学）。
 export interface BlogUserComment {
+  [k: string]: unknown;
   id: string;
   author: 'me' | 'animal';   // me = 用户本人；animal = NPC 作者回应
   animalId: string;          // author='animal' 时为回应的动物 id；'me' 时空
@@ -1284,6 +1378,7 @@ export interface BlogUserComment {
 
 // 预制动物形象（用户从画廊选一只作为自己的社媒身份）
 export interface BlogAvatar {
+  [k: string]: unknown;
   id: string;
   name: string;              // 韩文名
   imageUrl: string;          // 提前生成的形象图
@@ -1292,6 +1387,7 @@ export interface BlogAvatar {
 
 // 混入博客 feed 的电台卡（轻量 DTO，服务端从 radioCast 取，不含字幕/生词，避免 300KB 进客户端包）
 export interface RadioCard {
+  [k: string]: unknown;
   id: string;                // 电台 episode id，点击跳 /radio/{id}
   program: string;           // 节目基 id：squirrel-morning / animal-news / bear-night / fox-cafe
   title: string;             // 韩语标题
@@ -1309,16 +1405,19 @@ export interface RadioCard {
 // ===== 词典百科 (KRDict 국립국어원 한국어기초사전, CC BY-SA 2.0) =====
 // 服务端数据，短字段名压缩体积；不进前端 bundle，走 /api/dict/*
 export interface DictSenseExample {
+  [k: string]: unknown;
   t: string;                 // 类型：구(词组) / 문장(句子) / 대화(对话)
   ex: string;                // 例句韩语原文
 }
 export interface DictSense {
+  [k: string]: unknown;
   defKo: string;             // 韩语释义（官方）
   zh?: string;               // 中文对译词（없으면 생략；占位符已剔除）
   defZh?: string;            // 中文释义（官方）
   ex?: DictSenseExample[];   // 例句（最多 6 条）
 }
 export interface DictEntry {
+  [k: string]: unknown;
   id: string;                // KRDict 词条 id
   k: string;                 // 表题词（한글）
   h?: string;                // 同形异义号（homonym）
@@ -1331,6 +1430,7 @@ export interface DictEntry {
 }
 // 浏览/搜索列表项（不含义项详情，减小传输）
 export interface DictListItem {
+  [k: string]: unknown;
   id: string;
   k: string;
   h?: string;
@@ -1344,6 +1444,7 @@ export interface DictListItem {
 
 // ===== 邀请裂变 =====
 export interface Invitation {
+  [k: string]: unknown;
   id: string;
   inviterId: string;
   inviteeId: string;
@@ -1355,6 +1456,7 @@ export interface Invitation {
   qualifiedAt?: number;
 }
 export interface InviteReward {
+  [k: string]: unknown;
   id: string;
   userId: string;
   threshold: number;
@@ -1365,6 +1467,7 @@ export interface InviteReward {
   grantedAt?: number;
 }
 export interface InviteShipment {
+  [k: string]: unknown;
   id: string;
   userId: string;
   threshold: number;

@@ -13,6 +13,7 @@ import { t } from '@/lib/i18n';
 const TOTAL_LESSONS_PER_STAGE = 4;
 
 interface DailyStat {
+  [k: string]: unknown;
   streak: number;
   minutesToday: number;
   totalAttempts: number;
@@ -20,6 +21,7 @@ interface DailyStat {
 }
 
 interface GoalState {
+  [k: string]: unknown;
   letterToday: boolean;
   writeToday: boolean;
   quizToday: boolean;

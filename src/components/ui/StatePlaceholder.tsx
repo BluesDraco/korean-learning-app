@@ -9,6 +9,7 @@ import { t } from '@/lib/i18n';
 export type StateKind = 'empty' | 'loading' | 'error';
 
 export interface StatePlaceholderProps {
+  [k: string]: unknown;
   kind: StateKind;
   title?: string;
   description?: string;

@@ -85,7 +85,7 @@ async function main() {
 
     // Strategy 1: "Artist Title" (full)
     const q1 = `${song.artist} ${song.title}`;
-    let results = await searchLRC(q1);
+    const results = await searchLRC(q1);
     await sleep(500);
 
     // Strategy 2: Just title (if strategy 1 failed or had poor results)

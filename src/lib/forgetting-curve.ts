@@ -34,6 +34,7 @@ export function generateCurvePoints(stability: number, maxDays: number = 30): { 
 
 /** Retention buckets for aggregate chart. */
 export interface RetentionBucket {
+  [k: string]: unknown;
   label: string;
   count: number;
   color: string;

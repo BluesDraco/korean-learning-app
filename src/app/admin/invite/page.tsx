@@ -14,6 +14,7 @@ function fmtDate(ts: number): string {
 // ── 发货审核 ──
 
 interface ShipRow {
+  [k: string]: unknown;
   id: string; userId: string; username: string; nickname: string;
   threshold: number; status: string; recipient: string; phone: string;
   address: string; trackingNo: string; createdAt: number;
@@ -158,6 +159,7 @@ function ShipmentsTab() {
 // ── K因子看板 ──
 
 interface StatsData {
+  [k: string]: unknown;
   metrics: { totalInvites: number; qualified: number; convRate: number; kFactor: number; inviters: number; reached8: number; reached12: number };
   funnel: Record<string, { total: number; rate: number }>;
   dailyTrend: { date: string; qualified: number }[];

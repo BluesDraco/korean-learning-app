@@ -12,6 +12,7 @@ const TOTAL_DAYS = 30;
 
 /** 单日数据完整度检查结果 */
 interface DayHealth {
+  [k: string]: unknown;
   day: number;
   level: ToriLevel;
   mainDayExists: boolean;

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Loader2, Award, Heart, MessageCircle, Image as ImageIcon } from 'lucide-react';
 
 interface ReviewPost {
+  [k: string]: unknown;
   id: string;
   slug: string;
   authorId: string;

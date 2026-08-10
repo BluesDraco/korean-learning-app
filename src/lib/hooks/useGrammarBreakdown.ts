@@ -1,6 +1,7 @@
 import { useCallback, useRef, useState } from 'react';
 
 export interface GrammarToken {
+  [k: string]: unknown;
   text: string;
   role: string;
 }
@@ -8,6 +9,7 @@ export interface GrammarToken {
 type ErrorKind = 'auth' | 'network' | 'parse' | null;
 
 interface State {
+  [k: string]: unknown;
   tokens: GrammarToken[] | null;
   loading: boolean;
   error: ErrorKind;

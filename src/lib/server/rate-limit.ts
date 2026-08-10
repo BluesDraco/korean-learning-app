@@ -91,6 +91,7 @@ export async function resetLoginRateLimit(ip: string, username: string): Promise
 const AI_DAILY_LIMIT = 200;
 
 export interface AiRateLimitResult {
+  [k: string]: unknown;
   allowed: boolean;
   remaining: number;
   limit: number;

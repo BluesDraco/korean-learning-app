@@ -26,6 +26,7 @@ const XP_PER_LESSON: Record<PhoneticLessonKey, number> = {
 };
 
 export interface RecordOptions {
+  [k: string]: unknown;
   correctCount?: number;
   wrongCount?: number;
   studyMinutes?: number;

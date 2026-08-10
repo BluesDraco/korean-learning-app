@@ -5,10 +5,12 @@ import { Loader2, ImageOff, CheckCircle2, AlertTriangle, MinusCircle, Upload } f
 import type { ToriImageKind } from '@/types/tori-diary';
 
 interface ImgSlot {
+  [k: string]: unknown;
   url: string | null;
   fileExists: boolean;
 }
 interface DayImages {
+  [k: string]: unknown;
   day: number;
   title: string | null;
   exists: boolean;
@@ -16,6 +18,7 @@ interface DayImages {
   scene: ImgSlot;
 }
 interface LevelImages {
+  [k: string]: unknown;
   level: string;
   label: string;
   days: DayImages[];

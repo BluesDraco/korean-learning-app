@@ -25,6 +25,7 @@ export function isFeatureAnnouncementPending(userId: string): boolean {
 }
 
 interface Props {
+  [k: string]: unknown;
   userId: string;
 }
 

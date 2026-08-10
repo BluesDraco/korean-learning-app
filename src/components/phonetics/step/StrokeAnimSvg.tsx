@@ -6,6 +6,7 @@ import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
 
 interface Props {
+  [k: string]: unknown;
   strokes: ProgressiveStroke[];
   size?: number;
   ghostChar?: string;

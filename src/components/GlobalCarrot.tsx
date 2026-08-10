@@ -16,6 +16,7 @@ import './carrot.css';
 type CarrotMode = 'chat' | 'lookup' | 'grammar' | 'correct';
 
 interface LookupCard {
+  [k: string]: unknown;
   korean: string;
   romanization: string;
   meanings: { chinese: string; partOfSpeech: string }[];
@@ -24,6 +25,7 @@ interface LookupCard {
   examples: { korean: string; chinese: string }[];
 }
 interface GrammarCard {
+  [k: string]: unknown;
   skeleton: { subject: string; predicate: string; object: string };
   translation: string;
   particles: { text: string; role: string }[];
