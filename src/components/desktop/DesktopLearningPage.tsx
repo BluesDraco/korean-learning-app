@@ -15,7 +15,6 @@ import { FloatingDecorations } from '@/components/FloatingDecorations';
 import './desktop-learning-redesign.css';
 
 interface LearningEntry {
-  [k: string]: unknown;
   labelKey: string;
   descKey: string;
   href: string;
@@ -24,6 +23,7 @@ interface LearningEntry {
   tone: 'pink' | 'mint' | 'peach' | 'purple';
 }
 
+<<<<<<< HEAD
 const SYSTEM_COURSES: LearningEntry[] = [
   { labelKey: 'learning.course_phonetics', descKey: 'learning.course_phonetics_desc', href: '/phonetics', Icon: Music2,        tone: 'purple' },
   { labelKey: 'learning.course_grammar',   descKey: 'learning.course_grammar_desc',   href: '/grammar',   Icon: BookOpen,      tone: 'pink' },
@@ -36,6 +36,57 @@ const TOOLBOX: LearningEntry[] = [
   { labelKey: 'learning.tool_scene',    descKey: 'learning.tool_scene_desc',    href: '/animal-city.html', Icon: Compass,       tone: 'mint' },
   { labelKey: 'learning.tool_analyze',  descKey: 'learning.tool_analyze_desc',  href: '/ai/analyze',       Icon: Sparkles,      tone: 'purple' },
   { labelKey: 'learning.tool_practice', descKey: 'learning.tool_practice_desc', href: '/practice',         Icon: GraduationCap, tone: 'pink' },
+=======
+const ENTRIES: LearningEntry[] = [
+  {
+    label: '韩文字母入门',
+    desc: '从 40 音开始，听标准发音，再学习音节拼装。',
+    href: '/phonetics',
+    available: true,
+    progress: 58,
+    icon: '音',
+    color: '#b49ccf',
+  },
+  {
+    label: '30 天入门模板',
+    desc: '适合第一次开始自学韩语的人，每天一个小任务。',
+    available: false,
+    icon: '课',
+    color: '#e47a94',
+  },
+  {
+    label: 'TOPIK 备考模板',
+    desc: '按题型整理词汇、阅读和写作练习路线。',
+    href: '/topik',
+    available: true,
+    icon: '考',
+    color: '#b49ccf',
+  },
+  {
+    label: '发音跟读',
+    desc: '录音对比标准发音，练习韩语语调和单音。',
+    href: '/pronunciation',
+    available: true,
+    icon: '音',
+    color: '#e47a94',
+  },
+  {
+    label: '听写练习',
+    desc: '听韩语单词和句子，用打字或手写完成听写。',
+    href: '/dictation',
+    available: true,
+    icon: '听',
+    color: '#e8a87c',
+  },
+  {
+    label: '写作练习',
+    desc: '用韩语写句子，AI 给出参考例句对照。',
+    href: '/writing',
+    available: true,
+    icon: '写',
+    color: '#81b5a1',
+  },
+>>>>>>> recovery-branch
 ];
 
 export function DesktopLearningPage() {
@@ -89,7 +140,29 @@ export function DesktopLearningPage() {
               <h2><em>{t('learning.section_courses', lang)}</em></h2>
               <span className="dl-section-note">{t('learning.section_courses_note', lang)}</span>
             </div>
+<<<<<<< HEAD
             <span className="dl-kr">입문 순서</span>
+=======
+            <div style={{ background: '#fdfaf5', borderRadius: 16, padding: '14px 16px', marginBottom: 16 }}>
+              <p style={{ fontSize: 13, color: '#2f2a26', lineHeight: 1.6, textAlign: 'center' }}>
+                这个学习路线会在正式版上线后开放。内测阶段你可以先去词汇模块，按级别和场景学习常用韩语单词。
+              </p>
+            </div>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <button
+                onClick={() => { setModalEntry(null); router.push('/vocabulary'); }}
+                style={{ flex: 1, padding: '10px 0', borderRadius: 14, border: '1px solid #efe4d8', background: '#fff', color: '#2f2a26', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}
+              >
+                先去词汇模块
+              </button>
+            </div>
+            <button
+              onClick={() => setModalEntry(null)}
+              style={{ position: 'absolute', top: 16, right: 16, width: 32, height: 32, borderRadius: 999, background: '#f5f0ea', border: 'none', cursor: 'pointer', fontSize: 16, color: '#8c8177', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            >
+              ×
+            </button>
+>>>>>>> recovery-branch
           </div>
           <div className="dl-sys-list">
             {systemWithProgress.map((entry) => (
