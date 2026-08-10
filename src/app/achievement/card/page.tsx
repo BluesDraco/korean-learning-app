@@ -172,19 +172,73 @@ export default function AchievementCardPage() {
         const profile = await getProfile();
         if (profile) setNickname(profile.nickname || '학습자');
 
-        const allWords = await db.words.orderBy('id').limit(2000).toArray();
+        // Gather stats
+        const allWords = await db.words.toArray();
         const reviewed = allWords.filter((w) => w.lastReviewed).length;
-        let chatRounds = 0;
-        try { chatRounds = (await db.studyLogs.filter((l) => l.action === 'ai_chat')).length; } catch { /* ignore */ }
-        const dailyLogs = await db.dailyLogs.orderBy('id').limit(1000).toArray();
-        setStats({ reviews: reviewed, days: dailyLogs.length, chats: chatRounds });
+        const longestStreak = profile?.longestStreak || 0;
 
-        const params = new URLSearchParams(window.location.search);
-        const typeParam = params.get('type');
-        if (typeParam && resolveAch(typeParam)) {
-          setMilestone(typeParam);
+        // Count AI chat rounds
+        let chatRounds = 0;
+        let booksRead = 0;
+        let topikPerfects = 0;
+        try {
+          chatRounds = (await db.studyLogs.filter((l) => l.action === 'ai_chat')).length;
+          booksRead = (await db.studyLogs.filter((l) => l.action === 'picture_book_complete')).length;
+          topikPerfects = (await db.studyLogs.filter((l) => l.action === 'topik_perfect')).length;
+        } catch { /* ignore */ }
+
+        // Calculate total study days
+        const dailyLogs = await db.dailyLogs.toArray();
+        const studyDays = dailyLogs.length;
+
+        // Determine which milestones have been reached but not yet card-generated
+        const existingAchs = await db.userAchievements.toArray().catch(() => []);
+        const existingTypes = new Set(existingAchs.map((a) => a.achievementType));
+
+        let phComplete = false;
+        try { phComplete = (await db.studyLogs.filter(l => l.action === 'phonetics_complete')).length > 0; } catch { /* ignore */ }
+
+        const candidates: { type: MilestoneType; condition: boolean }[] = [
+          { type: 'phonetics_complete', condition: phComplete },
+          { type: 'streak_7', condition: longestStreak >= 7 },
+          { type: 'streak_30', condition: longestStreak >= 30 },
+          { type: 'streak_100', condition: longestStreak >= 100 },
+          { type: 'reviews_100', condition: reviewed >= 100 },
+          { type: 'reviews_500', condition: reviewed >= 500 },
+          { type: 'first_picture_book', condition: booksRead >= 1 },
+          { type: 'ai_chat_10', condition: chatRounds >= 10 },
+          { type: 'topik_perfect', condition: topikPerfects >= 1 },
+          { type: 'days_100', condition: studyDays >= 100 },
+        ];
+
+        // Find first unclaimed milestone
+        const unclaimed = candidates.find((c) => c.condition && !existingTypes.has(c.type));
+
+        setStats({ reviews: reviewed, days: studyDays, chats: chatRounds });
+
+        if (unclaimed) {
+          setMilestone(unclaimed.type);
           setShowModal(true);
           spawnConfetti(document.body);
+          // Save achievement record
+          const ach: UserAchievement = {
+            id: crypto.randomUUID(),
+            achievementType: unclaimed.type,
+            achievedAt: Date.now(),
+            isCardGenerated: false,
+          };
+          await db.userAchievements.add(ach).catch(() => {});
+          setSavedId(ach.id);
+        } else {
+          // Check URL param for existing milestone (revisit)
+          const params = new URLSearchParams(window.location.search);
+          const typeParam = params.get('type') as MilestoneType | null;
+          if (typeParam && MILESTONES[typeParam]) {
+            setMilestone(typeParam);
+            // Find existing achievement
+            const existing = existingAchs.find((a) => a.achievementType === typeParam);
+            if (existing) setSavedId(existing.id);
+          }
         }
       } catch { /* db unavailable */ } finally {
         setLoading(false);

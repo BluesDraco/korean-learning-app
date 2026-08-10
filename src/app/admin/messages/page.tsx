@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useCallback, useEffect, useRef, Suspense } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Send, Loader2, Check, User, Sparkles, Trash2, ChevronDown, ChevronUp, Rocket } from 'lucide-react';
-import { FEATURE_ANNOUNCEMENT } from '@/data/feature-announcement';
+import { Send, Loader2, Check, User, Megaphone, FileText, Bell } from 'lucide-react';
+import type { AnnouncementType } from '@/types';
 
 const TYPE_LABEL: Record<string, string> = {
   announcement: '公告',
@@ -12,18 +12,7 @@ const TYPE_LABEL: Record<string, string> = {
   popup: '弹窗公告',
 };
 
-interface HistoryItem {
-  id: string;
-  title: string;
-  content: string;
-  type: string;
-  targetUserId: string | null;
-  targetUsername: string | null;
-  createdAt: number;
-  isActive: boolean;
-}
-
-function AdminMessagesContent() {
+export default function AdminMessagesPage() {
   const searchParams = useSearchParams();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -42,17 +31,34 @@ function AdminMessagesContent() {
   const [showHistory, setShowHistory] = useState(false);
   const [historyLoading, setHistoryLoading] = useState(false);
 
-  const loadHistory = useCallback(async () => {
-    setHistoryLoading(true);
-    try {
-      const res = await fetch(`/api/admin/announcements?_t=${Date.now()}`, { cache: 'no-store' });
-      if (res.ok) {
-        const data = await res.json();
-        setHistory(Array.isArray(data) ? data : []);
-      }
-    } catch { /* ignore */ }
-    setHistoryLoading(false);
-  }, []);
+  useEffect(() => {
+    const userId = searchParams.get('userId');
+
+    // Load user list
+    fetch('/api/admin/users?pageSize=50')
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.users) setUsers(data.users);
+      })
+      .catch(() => {});
+
+    // If coming from feedback reply, fetch the specific user directly
+    if (userId) {
+      setType('private_message');
+      setTargetUserId(userId);
+      fetch(`/api/admin/users/${userId}`)
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.id) {
+            setUsers((prev) => {
+              const exists = prev.some((u) => u.id === data.id);
+              return exists ? prev : [{ id: data.id, username: data.username, nickname: data.nickname }, ...prev];
+            });
+          }
+        })
+        .catch(() => {});
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     const userId = searchParams.get('userId');

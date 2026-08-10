@@ -4,22 +4,34 @@ import { useAdminData } from '@/lib/useAdminData';
 import type { UserDetail, UpdateUserBody } from '@/types/admin';
 import { useState, use } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Sparkles, ShieldOff, KeyRound, Trash2 } from 'lucide-react';
+import { ArrowLeft, Sparkles } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip } from 'recharts';
 import { useAuth } from '@/components/AuthProvider';
 
 export default function UserDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const { data, loading, refetch } = useAdminData<UserDetail>(`/api/admin/users/${id}`);
   const { user: currentAdmin } = useAuth();
+  const router = useRouter();
   const [saving, setSaving] = useState(false);
   const [membershipType, setMembershipType] = useState<string>('');
+  const [banned, setBanned] = useState<boolean | null>(null);
+  const [adminNote, setAdminNote] = useState('');
   const [role, setRole] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [phone, setPhone] = useState<string>('');
-  const [newPassword, setNewPassword] = useState<string>('');
-  const [busy, setBusy] = useState(false);
 
   const isSelf = currentAdmin?.id === id;
+
+  const handleSave = async () => {
+    if (role && role !== (data?.role || 'user')) {
+      const action = role === 'admin' ? '设为管理员' : '降为普通用户';
+      if (!confirm(`确认将 ${data?.username} ${action}？此操作会立即生效。`)) return;
+    }
+    setSaving(true);
+    const body: UpdateUserBody = {};
+    if (membershipType) body.membershipType = membershipType as UpdateUserBody['membershipType'];
+    if (banned !== null) body.banned = banned;
+    if (adminNote) body.adminNote = adminNote;
+    if (role) body.role = role as UpdateUserBody['role'];
 
   // 通用 PATCH：供封禁/改密码/改联系方式等独立操作复用
   const patchUser = async (body: UpdateUserBody, confirmMsg?: string): Promise<boolean> => {
@@ -66,6 +78,8 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
       }
       refetch();
       setMembershipType('');
+      setBanned(null);
+      setAdminNote('');
       setRole('');
     } finally {
       setSaving(false);
@@ -210,7 +224,7 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
           <Sparkles size={16} className="text-[var(--pink-primary)]" />
           管理操作
         </h3>
-        <div className={`grid grid-cols-1 gap-4 ${isSelf ? '' : 'md:grid-cols-2'}`}>
+        <div className={`grid grid-cols-1 gap-4 ${isSelf ? 'md:grid-cols-3' : 'md:grid-cols-4'}`}>
           {/* Role — 不允许修改自己的权限 */}
           {!isSelf && (
           <div>
@@ -246,7 +260,7 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
 
         <button
           onClick={handleSave}
-          disabled={saving || (!membershipType && !role)}
+          disabled={saving || (!membershipType && banned === null && !adminNote && !role)}
           className="mt-4 px-6 py-2 rounded-lg text-sm font-semibold text-white disabled:opacity-40 transition-colors"
           style={{ background: 'linear-gradient(135deg, #FF8FAB, #FFB8C9)' }}
         >

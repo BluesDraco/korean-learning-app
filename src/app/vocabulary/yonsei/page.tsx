@@ -14,27 +14,16 @@ export default function YonseiBooksPage() {
   const containerCls = isDesktop ? 'py-6 w-full px-8 space-y-5' : 'py-4 max-w-2xl mx-auto px-4 space-y-4';
 
   return (
-    <div className={containerCls}>
-      <Link
-        href="/vocabulary/library"
-        style={{
-          display: 'inline-flex', alignItems: 'center', gap: 6,
-          fontSize: 13, color: 'var(--color-ink-2)', textDecoration: 'none',
-          marginBottom: 14,
-        }}
-      >
-        <ArrowLeft size={14} />
-        {t('vocab.back_to_library', lang)}
-      </Link>
-
-      <PageHeader
-        eyebrow="TEXTBOOKS"
-        title={t('vocab.yonsei_page_title', lang)}
-        subtitle={t('vocab.yonsei_page_subtitle', lang)}
-        tone="peach"
-        flat
-      />
-
+    <div className="py-4 space-y-5">
+      <div className="flex items-center gap-3">
+        <Link href="/vocabulary/library" className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
+          <ArrowLeft size={20} />
+        </Link>
+        <div>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)] section-header">教材词汇</h1>
+          <p className="text-sm text-[var(--text-secondary)] mt-1">延世・首尔韩国语官方教材同步词汇，按单元学习</p>
+        </div>
+      </div>
       <YonseiSection />
     </div>
   );

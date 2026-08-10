@@ -4,8 +4,6 @@ import { useEffect, useState, useCallback } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Mail, Sparkles, Bell, Megaphone, FileText, ChevronDown, Loader2, ArrowLeft } from 'lucide-react';
-import { useLang } from '@/components/LangProvider';
-import { t } from '@/lib/i18n';
 import type { Announcement, AnnouncementType } from '@/types';
 import '../mine/mine-home.css';
 import './messages.css';
@@ -26,7 +24,6 @@ async function markRead(announcementId: string) {
 }
 
 export default function MessagesPage() {
-  const { lang } = useLang();
   const router = useRouter();
   const [messages, setMessages] = useState<(Announcement & { read: boolean })[]>([]);
   const [loading, setLoading] = useState(true);
@@ -34,15 +31,13 @@ export default function MessagesPage() {
   const [needLogin, setNeedLogin] = useState(false);
 
   useEffect(() => {
-    const controller = new AbortController();
-    fetch('/api/announcements', { signal: controller.signal })
-      .then(async (r) => {
-        if (r.status === 401) { setNeedLogin(true); setLoading(false); return; }
-        const data = await r.json();
+    fetch('/api/announcements')
+      .then((r) => r.json())
+      .then((data) => {
         const list = Array.isArray(data) ? data : [];
         setMessages(list);
         setLoading(false);
-        const firstUnread = list.find((m: Announcement & { read: boolean }) => !m.read);
+        const firstUnread = list.find((m: any) => !m.read);
         if (firstUnread) setExpandedId(firstUnread.id);
       })
       .catch((e) => { if (e?.name !== 'AbortError') setLoading(false); });
@@ -83,17 +78,21 @@ export default function MessagesPage() {
   }
 
   return (
-    <div className="mine-scope mine-bg">
-    <div className="msg-wrap mx-auto">
-      <button onClick={() => router.push('/mine')} className="msg-back">
-        <ArrowLeft size={15} /> {t('messages.back', lang)}
+    <div className="py-6 max-w-lg mx-auto space-y-6">
+      <button onClick={() => router.back()} className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
+        <ArrowLeft size={16} /> 返回
       </button>
-
-      {/* 英雄区 */}
-      <div className="msg-hero">
-        <div className="msg-hero-tori">
-          <Image src="/images/tori-poses/tori-pose-01.webp" alt="Tori" width={76} height={76} />
-          {unreadCount > 0 && <span className="msg-unread-dot">{unreadCount}</span>}
+      {/* Header */}
+      <div className="text-center space-y-3">
+        <div className="relative inline-block">
+          <Image
+            src="/images/tori-poses/tori-pose-01.webp"
+            alt="Tori"
+            width={80}
+            height={80}
+            className="object-contain mx-auto"
+          />
+          {unreadCount > 0 && <span className="absolute -top-1 -right-2 bg-[var(--pink-primary)] text-white w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold">{unreadCount}</span>}
         </div>
         <h1 className="msg-hero-title">내 편지함</h1>
         <p className="msg-hero-sub">

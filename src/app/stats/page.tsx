@@ -4,12 +4,10 @@ import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import {
   BarChart3, BookOpen, Bookmark, TrendingUp, Loader2, Flame, Zap,
-  Target, Brain, AlertTriangle, Activity, ArrowLeft,
+  Award, Star, Target, Brain, AlertTriangle, Activity, ArrowLeft,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useSmartBack } from '@/lib/useSmartBack';
-import { useLang } from '@/components/LangProvider';
-import { t } from '@/lib/i18n';
+import Link from 'next/link';
 import { db } from '@/lib/db';
 import { memoryHealthScore, retentionDistribution, generateCurvePoints, wordStability, atRiskWords, type RetentionBucket } from '@/lib/forgetting-curve';
 import type { Word, MasteryLevel, UserProfile } from '@/types';
@@ -63,10 +61,12 @@ export default function StatsPage() {
     let cancelled = false;
     const load = async () => {
       try {
-      const [words, sessions, dictationRecords, p, articleProgress] = await Promise.all([
-        db.words.orderBy('id').limit(3000).toArray(),
-        db.reviewSessions.orderBy('date').reverse().limit(1000).toArray(),
-        db.dictationRecords.orderBy('id').limit(1000).toArray(),
+      const [words, sessions, dictationRecords, shadowingRecords, achs, p, articleProgress] = await Promise.all([
+        db.words.toArray(),
+        db.reviewSessions.orderBy('date').reverse().toArray(),
+        db.dictationRecords.toArray(),
+        db.shadowingRecords.toArray(),
+        db.achievements.toArray(),
         db.userProfiles.get('main'),
         db.userArticleProgress.orderBy('id').limit(1000).toArray(),
       ]);
@@ -146,9 +146,9 @@ export default function StatsPage() {
       if (cancelled) return;
       setStats({ totalWords, masteredWords, totalReviews, totalDictations, totalShadowings, todayReviews, weekReviews, masteryDistribution, srsBins, totalXp, skills, healthScore, retentionBuckets, curvePoints, atRisk, totalRead, totalSavedItems });
       setProfile(p || null);
-      if (!cancelled) setLoading(false);
+      setLoading(false);
       } catch {
-        if (!cancelled) setLoading(false);
+        setLoading(false);
       }
     };
     load();
@@ -174,7 +174,7 @@ export default function StatsPage() {
       {/* Header */}
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
-          <button onClick={smartBack} className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors bg-transparent border-none p-0 cursor-pointer"><ArrowLeft size={20} /></button>
+          <Link href="/mine" className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"><ArrowLeft size={20} /></Link>
           <div>
             <h1 className="text-2xl font-bold text-[var(--text-primary)]">{t('stats.title', lang)}</h1>
             <p className="text-[var(--text-secondary)] text-sm mt-1">{t('stats.subtitle', lang)}</p>

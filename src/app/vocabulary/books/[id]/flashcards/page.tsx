@@ -2,28 +2,13 @@
 
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { TappableText } from '@/components/TappableText';
-import GrammarExplainBubble from '@/components/GrammarExplainBubble';
 import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, Volume2, ChevronLeft, ChevronRight, Loader2, Star, Shuffle, Check, RotateCcw, ArrowLeftRight, BookmarkPlus } from 'lucide-react';
-import { AddToBookSheet } from '@/components/vocabulary/AddToBookSheet';
-import { TracePad } from '@/components/vocabulary/TracePad';
-import { RepeatToggleButton } from '@/components/vocabulary/RepeatToggleButton';
-import { SentenceBookmarkButton } from '@/components/vocabulary/SentenceBookmarkButton';
-
-const DIRECTION_KEY = 'flashcards-direction';
-type FlashDirection = 'ko-zh' | 'zh-ko';
+import { useParams } from 'next/navigation';
+import { ArrowLeft, Volume2, ChevronLeft, ChevronRight, Loader2, Star, Shuffle } from 'lucide-react';
 import { db, ensureFavoritesBook, FAVORITES_BOOK_ID } from '@/lib/db';
-import { speakWord, speakWordRepeated, speak, cancelSpeech } from '@/lib/tts';
+import { speakWord, speak } from '@/lib/tts';
 import { getEntryByKorean } from '@/data/vocabulary/index';
-import { displayRoman } from '@/lib/dictionary';
-import type { WordBook, Word, WordEntry } from '@/types';
-import { saveProgress, loadProgress, TTL_FLASHCARD } from '@/lib/progress-storage';
-import { WordTapSheet } from '@/components/WordTapSheet';
-import { useToast } from '@/hooks/useToast';
-import { t } from '@/lib/i18n';
-import { getFlashcardTheme, applyFlashcardTheme } from '@/lib/flashcardTheme';
-import { useLang } from '@/components/LangProvider';
+import type { WordBook, Word } from '@/types';
 
 export default function FlashcardStudyPage() {
   const { id } = useParams<{ id: string }>();
@@ -36,32 +21,10 @@ export default function FlashcardStudyPage() {
   const [shuffled, setShuffled] = useState(false);
   const [displayWords, setDisplayWords] = useState<typeof words>([]);
   const [revealed, setRevealed] = useState(false);
-  const [direction, setDirection] = useState<FlashDirection>('ko-zh');
   const [swipeOffset, setSwipeOffset] = useState(0);
-
-  useEffect(() => {
-    try {
-      applyFlashcardTheme(getFlashcardTheme()); // 兜底重贴闪卡配色，防 FOUC 脚本竞态/SPA 导航丢失导致回退默认蓝色
-      const v = localStorage.getItem(DIRECTION_KEY);
-      if (v === 'zh-ko') setDirection('zh-ko');
-    } catch { /* ignore */ }
-  }, []);
-
-  const toggleDirection = () => {
-    setDirection(prev => {
-      const next: FlashDirection = prev === 'ko-zh' ? 'zh-ko' : 'ko-zh';
-      try { localStorage.setItem(DIRECTION_KEY, next); } catch { /* ignore */ }
-      setRevealed(false);
-      return next;
-    });
-  };
-  const swipeOffsetRef = useRef(0);
   const [isSwiping, setIsSwiping] = useState(false);
-  const isSwipingRef = useRef(false);
-  const swipeRafRef = useRef<number | null>(null);
   const [exiting, setExiting] = useState<'left' | 'right' | null>(null);
   const [favoritedIds, setFavoritedIds] = useState<Set<string>>(new Set());
-  const [entryCache, setEntryCache] = useState<WordEntry | null>(null);
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -97,68 +60,45 @@ export default function FlashcardStudyPage() {
   }, [id]);
 
   // sync displayWords with words, restoring session progress if available
-  // progressInitialized guard ensures we only restore once per mount
   useEffect(() => {
     if (words.length === 0) return;
-    if (progressInitialized.current) {
-      // words changed after init (mastery update) — only sync content, keep position
-      setDisplayWords(prev => prev.map(w => {
-        const updated = words.find(x => x.id === w.id);
-        return updated ?? w;
-      }));
-      return;
-    }
-    progressInitialized.current = true;
-    const KEY = `fc-progress-book-${id}`;
-    const saved = loadProgress<{ idx: number; order?: string[] }>(KEY, TTL_FLASHCARD);
-    if (saved) {
-      const { idx, order } = saved;
-      if (order && order.length === words.length) {
-        const map = new Map(words.map(w => [w.id, w]));
-        const restored = order.map(k => map.get(k)).filter(Boolean) as typeof words;
-        if (restored.length === words.length) {
-          setDisplayWords(restored);
-          setShuffled(true);
-          setCurrentIdx(Math.min(idx, restored.length - 1));
-          return;
+    const SESSION_KEY = `fc-progress-book-${id}`;
+    try {
+      const saved = sessionStorage.getItem(SESSION_KEY);
+      if (saved) {
+        const { idx, order } = JSON.parse(saved) as { idx: number; order?: string[] };
+        if (order && order.length === words.length) {
+          const map = new Map(words.map(w => [w.id, w]));
+          const restored = order.map(k => map.get(k)).filter(Boolean) as typeof words;
+          if (restored.length === words.length) {
+            setDisplayWords(restored);
+            setShuffled(true);
+            setCurrentIdx(Math.min(idx, restored.length - 1));
+            return;
+          }
         }
+        setDisplayWords([...words]);
+        setCurrentIdx(Math.min(idx, words.length - 1));
+        return;
       }
-      setDisplayWords([...words]);
-      setCurrentIdx(Math.min(idx, words.length - 1));
-      return;
-    }
+    } catch { /* ignore */ }
     setDisplayWords(words);
     setCurrentIdx(0);
-  }, [words, id]);
+  }, [words]);
 
-  // persist progress on every card change (skip until init done)
+  // persist progress on every card change
   useEffect(() => {
-    if (!progressInitialized.current) return;
     if (displayWords.length === 0) return;
-    const order = shuffled ? displayWords.map(w => w.id) : undefined;
-    saveProgress(`fc-progress-book-${id}`, { idx: currentIdx, order }, TTL_FLASHCARD);
-  }, [currentIdx, displayWords, shuffled, id]);
-
-  // auto-play audio when card changes (also fires on shuffle-from-index-0)
-  const currentWordText = displayWords[currentIdx]?.word ?? '';
-  useEffect(() => {
-    if (loading || !currentWordText) return;
-    const raf = requestAnimationFrame(() => playAudioRef.current?.());
-    return () => cancelAnimationFrame(raf);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentIdx, loading, currentWordText]);
-
-  playAudioRef.current = () => {
-    const w = displayWords[currentIdx];
-    if (!w) return;
-    cancelSpeech();
-    speakWordRepeated(w.word, 0.85).catch(() => {});
-  };
+    const SESSION_KEY = `fc-progress-book-${id}`;
+    try {
+      const order = shuffled ? displayWords.map(w => w.id) : undefined;
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify({ idx: currentIdx, order }));
+    } catch { /* ignore */ }
+  }, [currentIdx, displayWords, shuffled]);
 
   const toggleShuffle = () => {
     if (shuffled) {
       setDisplayWords([...words]);
-      showToast(t('vocab.fc_restore_order', lang), 'info');
     } else {
       const arr = [...words];
       for (let i = arr.length - 1; i > 0; i--) {
@@ -166,7 +106,6 @@ export default function FlashcardStudyPage() {
         [arr[i], arr[j]] = [arr[j], arr[i]];
       }
       setDisplayWords(arr);
-      showToast(t('vocab.fc_shuffled', lang), 'info');
     }
     setShuffled(v => !v);
     setCurrentIdx(0);
@@ -174,80 +113,37 @@ export default function FlashcardStudyPage() {
   };
 
   const goTo = useCallback((idx: number, list: Word[]) => {
-    if (idx < 0 || idx >= list.length) {
-      if (idx >= list.length) setCompleted(true);
-      return;
-    }
+    if (idx < 0 || idx >= list.length) return;
     setRevealed(false);
     setSwipeOffset(0);
     setExiting(null);
     setCurrentIdx(idx);
-    if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  // 收藏操作用 promise 队列串行化 + 基于 DB 最新数据判断 isFav，避免 read-modify-write 快点两次互相覆盖
-  const favQueueRef = useRef<Promise<unknown>>(Promise.resolve());
   const toggleFavorite = useCallback(async (w: Word) => {
-    const next = favQueueRef.current.then(async () => {
-      try {
-        const bookId = await ensureFavoritesBook();
-        const favBook = await db.wordBooks.get(bookId);
-        if (!favBook) return;
-        const isFavInDb = favBook.wordIds.includes(w.id);
-        const now = Date.now();
-        if (isFavInDb) {
-          await db.wordBooks.update(bookId, { wordIds: favBook.wordIds.filter(id => id !== w.id), updatedAt: now });
-          setFavoritedIds(prev => { const s = new Set(prev); s.delete(w.id); return s; });
-        } else {
-          await db.wordBooks.update(bookId, { wordIds: [...favBook.wordIds, w.id], updatedAt: now });
-          setFavoritedIds(prev => new Set(prev).add(w.id));
-        }
-      } catch {
-        showToast(t('vocab.fc_fav_failed', lang), 'error');
-      }
-    });
-    favQueueRef.current = next.catch(() => {});
-    return next;
-  }, [showToast]);
-
-  const setMastery = useCallback(async (w: Word, mastery: 'mastered' | 'learning') => {
-    // mastered: SRS 拉到 21 天后再来；learning: 立即 due
-    // 若只写 mastery 字段，/review 依然按 nextReview <= now 拉出这个词，导致"已掌握"无效
+    const isFav = favoritedIds.has(w.id);
+    const bookId = await ensureFavoritesBook();
+    const favBook = await db.wordBooks.get(bookId);
+    if (!favBook) return;
     const now = Date.now();
-    const patch = mastery === 'mastered'
-      ? { mastery, srsLevel: 5, interval: 21, nextReview: now + 21 * 86400000, lastReviewed: now }
-      : { mastery, srsLevel: 1, interval: 1, nextReview: now };
-    try {
-      await db.words.update(w.id, patch);
-      setWords(prev => prev.map(x => x.id === w.id ? { ...x, ...patch } : x));
-      setDisplayWords(prev => prev.map(x => x.id === w.id ? { ...x, ...patch } : x));
-      showToast(mastery === 'mastered' ? `${t('vocab.mastered', lang)} ✓` : t('vocab.learning', lang), 'success');
-    } catch {
-      showToast(t('vocab.fc_op_failed', lang), 'error');
-    }
-  }, [showToast]);
-
-  // Load dictionary entry for current word (fallback for examples)
-  useEffect(() => {
-    const curWord = displayWords[currentIdx];
-    if (!curWord) { setEntryCache(null); return; }
-    const valid = (curWord.examples ?? []).filter(ex => ex.text && ex.text !== '[object Object]');
-    if (valid.length > 0) { setEntryCache(null); return; }
-    let cancelled = false;
-    // 带助词的短语命中不到 → 剥掉尾部助词再查一次
-    const stripParticle = (s: string) => s.replace(/(이랑|에서|부터|까지|보다|처럼|을|를|이|가|은|는|에|의|도|만|과|와|랑)$/, '');
-    getEntryByKorean(curWord.word).then(async e => {
-      if (cancelled) return;
-      if (!e) {
-        const stripped = stripParticle(curWord.word);
-        if (stripped && stripped !== curWord.word) {
-          e = await getEntryByKorean(stripped) ?? undefined;
-        }
+    if (isFav) {
+      await db.wordBooks.update(bookId, { wordIds: favBook.wordIds.filter(id => id !== w.id), updatedAt: now });
+      setFavoritedIds(prev => { const s = new Set(prev); s.delete(w.id); return s; });
+    } else {
+      if (!favBook.wordIds.includes(w.id)) {
+        await db.wordBooks.update(bookId, { wordIds: [...favBook.wordIds, w.id], updatedAt: now });
       }
-      if (!cancelled) setEntryCache(e ?? null);
-    });
-    return () => { cancelled = true; };
-  }, [currentIdx, displayWords]);
+      setFavoritedIds(prev => new Set(prev).add(w.id));
+    }
+  }, [favoritedIds]);
+
+  // Auto-play on card change
+  useEffect(() => {
+    if (!loading && displayWords[currentIdx]) {
+      const t = setTimeout(() => speakWord(displayWords[currentIdx].word, 0.85), 300);
+      return () => clearTimeout(t);
+    }
+  }, [currentIdx, loading, displayWords]);
 
   // Keyboard
   useEffect(() => {
@@ -261,12 +157,10 @@ export default function FlashcardStudyPage() {
   }, [currentIdx, goTo, displayWords]);
 
   const handleTouchStart = (e: React.TouchEvent) => {
-    // 如果起点在按钮上，直接放弃 swipe 判定，把事件让给按钮
-    if ((e.target as HTMLElement).closest('button, canvas')) return;
     touchStartX.current = e.touches[0].clientX;
     touchStartY.current = e.touches[0].clientY;
-    swipeOffsetRef.current = 0;
-    isSwipingRef.current = false;
+    setSwipeOffset(0);
+    setIsSwiping(false);
     setExiting(null);
   };
 
@@ -274,11 +168,9 @@ export default function FlashcardStudyPage() {
     const el = cardRef.current;
     if (!el) return;
     const onTouchMove = (e: TouchEvent) => {
-      // 起点在按钮上时不拦默认行为，让点击生效
-      if ((e.target as HTMLElement).closest('button, canvas')) return;
       const dx = e.touches[0].clientX - touchStartX.current;
       const dy = e.touches[0].clientY - touchStartY.current;
-      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 10) {
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 5) {
         e.preventDefault();
       }
     };
@@ -287,56 +179,36 @@ export default function FlashcardStudyPage() {
   }, []);
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    // 起点在按钮上时 handleTouchStart 已 return，touchStartX 还是上次的值——用 isSwipingRef 短路
-    if ((e.target as HTMLElement).closest('button, canvas')) return;
     const dx = e.touches[0].clientX - touchStartX.current;
     const dy = e.touches[0].clientY - touchStartY.current;
-    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 10) {
-      isSwipingRef.current = true;
-      swipeOffsetRef.current = dx;
-      if (!swipeRafRef.current) {
-        swipeRafRef.current = requestAnimationFrame(() => {
-          swipeRafRef.current = null;
-          setIsSwiping(true);
-          setSwipeOffset(swipeOffsetRef.current);
-        });
-      }
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 5) {
+      setIsSwiping(true);
+      setSwipeOffset(dx);
     }
   };
 
   const handleTouchEnd = () => {
     if (!isSwipingRef.current) return;
     setIsSwiping(false);
-    isSwipingRef.current = false;
-    const offset = swipeOffsetRef.current;
-    swipeOffsetRef.current = 0;
-    // threshold 从 80 降到 60，iPad 屏幕大更好划动
-    if (offset > 60 && currentIdx > 0) setExiting('right');
-    else if (offset < -60 && currentIdx < displayWords.length - 1) setExiting('left');
-    else if (offset < -60 && currentIdx === displayWords.length - 1) setExiting('left');
+    if (swipeOffset > 80 && currentIdx > 0) setExiting('right');
+    else if (swipeOffset < -80 && currentIdx < displayWords.length - 1) setExiting('left');
     else setSwipeOffset(0);
   };
 
   const handleTransitionEnd = () => {
-    if (exiting === 'left') {
-      if (currentIdx === displayWords.length - 1) setCompleted(true);
-      else goTo(currentIdx + 1, displayWords);
-    } else if (exiting === 'right') goTo(currentIdx - 1, displayWords);
+    if (exiting === 'left') goTo(currentIdx + 1, displayWords);
+    else if (exiting === 'right') goTo(currentIdx - 1, displayWords);
   };
 
   const handleCardClick = (e: React.MouseEvent) => {
-    if ((e.target as HTMLElement).closest('button, canvas')) return;
-    if (!isSwiping && Math.abs(swipeOffset) < 15) {
-      if (!revealed) setHasSeenHint(true);
-      setRevealed(r => !r);
-    }
+    if ((e.target as HTMLElement).closest('button')) return;
+    if (!isSwiping && Math.abs(swipeOffset) < 10) setRevealed(r => !r);
   };
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center py-32 gap-3">
-        <Loader2 size={32} className="animate-spin" style={{ color: 'var(--text-muted)' }} />
-        <span className="text-sm" style={{ color: 'var(--text-muted)' }}>{t('vocab.loading_word', lang)}</span>
+      <div className="flex items-center justify-center py-32">
+        <Loader2 size={32} className="animate-spin" style={{ color: '#89756e' }} />
       </div>
     );
   }
@@ -344,14 +216,14 @@ export default function FlashcardStudyPage() {
   if (!book || words.length === 0) {
     return (
       <div className="py-4 space-y-4">
-        <Link href={`/vocabulary/books/${id}`} className="flex items-center gap-2 text-sm" style={{ color: 'var(--text-muted)' }}>
-          <ArrowLeft size={18} /> {t('common.back', lang)}
+        <Link href={`/vocabulary/books/${id}`} className="flex items-center gap-2 text-sm" style={{ color: '#89756e' }}>
+          <ArrowLeft size={18} /> 返回
         </Link>
         <div className="text-center py-20">
           <span className="text-5xl block mb-4">📝</span>
-          <p className="text-sm mb-4" style={{ color: 'var(--text-muted)' }}>{t('vocab.fc_empty_book', lang)}</p>
-          <Link href={`/vocabulary/books/${id}`} className="inline-flex items-center px-5 py-2.5 rounded-full text-white text-sm font-bold" style={{ background: 'var(--color-pink-base)' }}>
-            {t('vocab.fc_go_add', lang)}
+          <p className="text-sm mb-4" style={{ color: '#89756e' }}>这个单词本还是空的</p>
+          <Link href={`/vocabulary/books/${id}`} className="inline-flex items-center px-5 py-2.5 rounded-full text-white text-sm font-bold" style={{ background: '#ff7fa8' }}>
+            去添加单词
           </Link>
         </div>
       </div>
@@ -359,13 +231,7 @@ export default function FlashcardStudyPage() {
   }
 
   const word = displayWords[currentIdx];
-  if (!word) {
-    return (
-      <div className="flex items-center justify-center py-32">
-        <Loader2 size={32} className="animate-spin" style={{ color: 'var(--text-muted)' }} />
-      </div>
-    );
-  }
+  if (!word) return null;
   const progress = ((currentIdx + 1) / displayWords.length) * 100;
 
   const getTransform = () => {
@@ -377,51 +243,34 @@ export default function FlashcardStudyPage() {
 
   return (
     <div
-      className="flex flex-col px-4 md:px-8 pt-4 max-w-2xl md:max-w-none mx-auto w-full"
-      style={{ minHeight: 'calc(100dvh - 56px - env(safe-area-inset-bottom, 0px))', paddingBottom: 'var(--fc-page-pb, calc(56px + 80px + env(safe-area-inset-bottom, 0px)))' }}
+      className="flex flex-col px-4 pt-4"
+      style={{ minHeight: 'calc(100dvh - 56px - env(safe-area-inset-bottom, 0px))', paddingBottom: 'calc(16px + env(safe-area-inset-bottom, 0px))' }}
     >
       {/* Header */}
-      <div className="no-touch-zone flex items-center gap-1.5 mb-4 shrink-0 flex-wrap">
-        <Link href={`/vocabulary/books/${id}`} style={{ color: 'var(--text-muted)' }}>
+      <div className="flex items-center gap-3 mb-4 shrink-0">
+        <Link href={`/vocabulary/books/${id}`} style={{ color: '#89756e' }}>
           <ArrowLeft size={20} />
         </Link>
         <div className="flex-1 min-w-0">
           <h1 className="text-[15px] font-bold truncate" style={{ color: 'var(--fc-meaning-color)' }}>{book.name}</h1>
         </div>
         <button
-          onClick={toggleDirection}
-          className="h-8 px-2.5 rounded-full flex items-center gap-1 text-[11px] font-bold transition-colors"
-          style={{ border: '1px solid var(--fc-nav-border)', background: direction === 'zh-ko' ? 'var(--fc-dot-active)' : 'var(--fc-nav-bg)', color: direction === 'zh-ko' ? '#fff' : 'var(--fc-nav-color)' }}
-          title={direction === 'ko-zh' ? t('vocab.fc_to_zh_kr', lang) : t('vocab.fc_to_kr_zh', lang)}
-        >
-          <ArrowLeftRight size={12} />
-          {direction === 'ko-zh' ? t('vocab.fc_kr_zh', lang) : t('vocab.fc_zh_kr', lang)}
-        </button>
-        <button
           onClick={toggleShuffle}
           className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
           style={{ border: '1px solid var(--fc-nav-border)', background: shuffled ? 'var(--fc-dot-active)' : 'var(--fc-nav-bg)', color: shuffled ? '#fff' : 'var(--fc-nav-color)' }}
-          title={shuffled ? t('vocab.fc_cancel_shuffle', lang) : t('vocab.fc_shuffle', lang)}
+          title={shuffled ? '取消乱序' : '随机乱序'}
         >
           <Shuffle size={14} />
         </button>
         <button
           onClick={e => { e.stopPropagation(); toggleFavorite(word); }}
           className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
-          style={{ border: '1px solid var(--fc-card-border)', color: favoritedIds.has(word.id) ? 'var(--color-gold-base)' : 'var(--text-muted)', background: favoritedIds.has(word.id) ? 'var(--color-gold-soft)' : 'transparent' }}
-          title={favoritedIds.has(word.id) ? t('vocab.fc_cancel_fav', lang) : t('vocab.fc_fav', lang)}
+          style={{ border: '1px solid var(--fc-card-border)', color: favoritedIds.has(word.id) ? '#f5a623' : '#89756e', background: favoritedIds.has(word.id) ? 'rgba(245,166,35,0.08)' : 'transparent' }}
+          title={favoritedIds.has(word.id) ? '取消收藏' : '收藏'}
         >
-          <Star size={14} fill={favoritedIds.has(word.id) ? 'var(--color-gold-base)' : 'none'} />
+          <Star size={14} fill={favoritedIds.has(word.id) ? '#f5a623' : 'none'} />
         </button>
-        <button
-          onClick={e => { e.stopPropagation(); setAddToBookWord(word); }}
-          className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
-          style={{ border: '1px solid var(--fc-card-border)', color: 'var(--text-muted)', background: 'transparent' }}
-          title={t('vocab.fc_add_other_book', lang)}
-        >
-          <BookmarkPlus size={14} />
-        </button>
-        <span className="text-[12px] font-black tabular-nums" style={{ color: 'var(--color-ink-3)' }}>
+        <span className="text-[12px] font-black tabular-nums" style={{ color: '#a08f87' }}>
           {currentIdx + 1} / {displayWords.length}
         </span>
       </div>
@@ -430,14 +279,14 @@ export default function FlashcardStudyPage() {
       <div className="h-[5px] rounded-full mb-5 shrink-0 overflow-hidden" style={{ background: 'var(--fc-progress-bg)' }}>
         <div
           className="h-full rounded-full transition-all duration-500"
-          style={{ width: `${progress}%`, background: 'linear-gradient(90deg, var(--color-mint-base), var(--color-pink-base))' }}
+          style={{ width: `${progress}%`, background: 'linear-gradient(90deg, #aee3d8, #ff7fa8)' }}
         />
       </div>
 
       {/* Card */}
       <div className="flex justify-center">
         <div
-          className="w-full max-w-sm md:max-w-2xl"
+          className="w-full max-w-sm"
           style={{ cursor: 'pointer', userSelect: 'none' }}
           ref={cardRef}
           onTouchStart={handleTouchStart}
@@ -447,7 +296,7 @@ export default function FlashcardStudyPage() {
           onTransitionEnd={handleTransitionEnd}
         >
           <div
-            className="flashcard-scale rounded-[28px] flex flex-col"
+            className="rounded-[28px] flex flex-col"
             style={{
               background: 'var(--fc-card-bg)',
               border: '1px solid var(--fc-card-border)',
@@ -458,16 +307,10 @@ export default function FlashcardStudyPage() {
               padding: '24px',
             }}
           >
-            {/* Repeat toggle + mastery badge + audio */}
-            <div className="flex justify-between items-center mb-2">
-              <div className="flex items-center gap-2">
-                <RepeatToggleButton />
-                {word.mastery === 'mastered' && (
-                  <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full" style={{ background: 'var(--fc-badge-bg)', color: 'var(--fc-badge-color)' }}>{t('vocab.mastered', lang)}</span>
-                )}
-              </div>
+            {/* Audio button */}
+            <div className="flex justify-end mb-2">
               <button
-                onClick={e => { e.stopPropagation(); speakWord(word.word); }}
+                onClick={e => { e.stopPropagation(); speakWord(word.word, 0.85); }}
                 className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
                 style={{ border: '1px solid var(--fc-audio-border)', color: 'var(--fc-audio-color)' }}
               >
@@ -475,20 +318,14 @@ export default function FlashcardStudyPage() {
               </button>
             </div>
 
-            {/* Front */}
+            {/* Front: Korean word */}
             <div className="flex-1 flex flex-col items-center justify-center text-center py-4">
-              {direction === 'ko-zh' ? (
-                <div className="ko-text text-[44px] font-black leading-tight tracking-tight mb-3" style={{ color: 'var(--fc-word-color)', wordBreak: 'keep-all' }}>
-                  {word.word}
-                </div>
-              ) : (
-                <div className="text-[32px] font-black leading-tight mb-3" style={{ color: 'var(--fc-word-color)' }}>
-                  {word.meanings?.length ? word.meanings.map(m => m.chinese).join('；') : word.meaning}
-                </div>
-              )}
-              {!revealed && !hasSeenHint && (
+              <div className="text-[44px] font-black leading-tight tracking-tight mb-3" style={{ color: 'var(--fc-word-color)', wordBreak: 'keep-all' }}>
+                {word.word}
+              </div>
+              {!revealed && (
                 <div className="text-[13px] font-semibold mt-1" style={{ color: 'var(--fc-hint-color)' }}>
-                  {direction === 'ko-zh' ? t('vocab.fc_tap_answer', lang) : t('vocab.fc_tap_kr', lang)}
+                  点击查看答案
                 </div>
               )}
             </div>
@@ -496,137 +333,76 @@ export default function FlashcardStudyPage() {
             {/* Back: revealed content */}
             {revealed && (
               <div className="border-t pt-4 space-y-3" style={{ borderColor: 'var(--fc-divider)' }}>
-                {direction === 'zh-ko' && (
-                  <div className="ko-text text-[32px] font-black text-center leading-tight" style={{ color: 'var(--fc-meaning-color)', wordBreak: 'keep-all' }}>
-                    {word.word}
-                  </div>
-                )}
                 {/* Romanization */}
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-xs font-semibold px-2 py-0.5 rounded" style={{ background: 'var(--fc-roman-bg)', color: 'var(--fc-roman-color)' }}>
-                    [{displayRoman(word.pronunciation, word.word)}]
-                  </span>
-                </div>
+                {word.pronunciation && (
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-xs font-semibold px-2 py-0.5 rounded" style={{ background: 'var(--fc-roman-bg)', color: 'var(--fc-roman-color)' }}>
+                      [{word.pronunciation}]
+                    </span>
+                  </div>
+                  );
+                })()}
 
-                {/* Meaning（zh-ko 模式下正面已显示，此处隐藏） */}
-                {direction === 'ko-zh' && (
+                {/* Meaning */}
                 <div className="rounded-[16px] p-3.5" style={{ background: 'var(--fc-meaning-bg)', border: '1px solid var(--fc-meaning-border)' }}>
-                  {word.meanings?.length ? (
-                    <div className="space-y-1">
-                      {word.meanings.map((m, i) => (
-                        <div key={i} className="flex items-baseline gap-2 flex-wrap">
-                          {word.meanings && word.meanings.length > 1 && (
-                            <span className="text-[11px] shrink-0" style={{ color: 'var(--fc-pos-color)', opacity: 0.7 }}>{i + 1}.</span>
-                          )}
-                          {m.partOfSpeech && (
-                            <span className="text-[11px] font-medium px-1.5 py-0.5 rounded shrink-0" style={{ background: 'var(--fc-pos-bg)', color: 'var(--fc-pos-color)' }}>{m.partOfSpeech}</span>
-                          )}
-                          <strong className="text-[17px] font-black" style={{ color: 'var(--fc-meaning-color)' }}>{m.chinese}</strong>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="flex items-baseline gap-2 flex-wrap">
-                      {word.partOfSpeech && (
-                        <span className="text-[11px] font-medium px-1.5 py-0.5 rounded shrink-0" style={{ background: 'var(--fc-pos-bg)', color: 'var(--fc-pos-color)' }}>{word.partOfSpeech}</span>
-                      )}
-                      <strong className="text-[17px] font-black" style={{ color: 'var(--fc-meaning-color)' }}>{word.meaning}</strong>
-                    </div>
-                  )}
+                  <div className="flex items-baseline gap-2 flex-wrap">
+                    {word.partOfSpeech && (
+                      <span className="text-[11px] font-medium px-1.5 py-0.5 rounded shrink-0" style={{ background: 'var(--fc-pos-bg)', color: 'var(--fc-pos-color)' }}>{word.partOfSpeech}</span>
+                    )}
+                    <strong className="text-[17px] font-black" style={{ color: 'var(--fc-meaning-color)' }}>{word.meaning}</strong>
+                  </div>
                 </div>
-                )}
 
                 {/* Examples */}
                 {(() => {
-                  const validExamples = (word.examples ?? []).filter(ex => ex.text && ex.text !== '[object Object]');
-                  const entry = validExamples.length === 0 ? entryCache : null;
+                  const validExamples = word.examples.filter(ex => ex.text && ex.text !== '[object Object]');
+                  const entry = validExamples.length === 0 ? getEntryByKorean(word.word) : null;
                   const examples = validExamples.length > 0
                     ? validExamples
-                    : (entry?.examples ?? []).slice(0, 2).map(ex => ({ text: ex.korean, translation: ex.chinese, source: 'dictionary' as const }));
+                    : entry?.examples.slice(0, 2).map(ex => ({ text: ex.korean, translation: ex.chinese, source: 'dictionary' as const })) ?? [];
                   if (examples.length === 0) return null;
                   return (
                   <div className="space-y-2">
                     {examples.slice(0, 2).map((ex, i) => (
                       <div
                         key={i}
-                        className="rounded-[14px] px-3.5 py-2"
+                        className="rounded-[14px] px-3.5 py-2.5 flex items-start gap-2"
                         style={{ background: 'var(--fc-example-bg)' }}
                       >
-                        <div className="flex items-start gap-2">
-                          <div className="flex-1 min-w-0">
-                            <p className="text-[16px] leading-relaxed" style={{ color: 'var(--fc-example-ko)' }}><TappableText text={ex.text} highlightWord={word.word} source="闪卡" highlightColor="var(--fc-example-hi-color)" underlineColor="var(--fc-example-hi-color)" /></p>
-                            <p className="text-[12px] mt-0.5" style={{ color: 'var(--fc-example-zh)' }}>{ex.translation}</p>
-                          </div>
-                          <SentenceBookmarkButton korean={ex.text} chinese={ex.translation} sourceId={`book-${id}`} sourceTitle={book?.name} />
-                          <button
-                            onClick={e => { e.stopPropagation(); speakWord(ex.text); }}
-                            className="shrink-0 p-1.5 -m-0.5 rounded-lg"
-                            style={{ color: 'var(--fc-example-zh)' }}
-                          >
-                            <Volume2 size={13} />
-                          </button>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-[13px] leading-relaxed" style={{ color: 'var(--fc-example-ko)' }}><TappableText text={ex.text} highlightWord={word.word} source="闪卡" highlightColor="var(--fc-example-hi-color)" underlineColor="var(--fc-example-hi-color)" /></p>
+                          <p className="text-[12px] mt-0.5" style={{ color: 'var(--fc-example-zh)' }}>{ex.translation}</p>
                         </div>
-                        <div onClick={(e) => e.stopPropagation()}>
-                          <GrammarExplainBubble sentence={ex.text} translation={ex.translation} variant="compact" />
-                        </div>
+                        <button
+                          onClick={e => { e.stopPropagation(); speak(ex.text, 0.85); }}
+                          className="shrink-0 mt-0.5"
+                          style={{ color: 'var(--fc-example-zh)' }}
+                        >
+                          <Volume2 size={13} />
+                        </button>
                       </div>
                     ))}
                   </div>
                   );
                 })()}
-
-                <TracePad word={word.word} />
-
-                {/* Mastery 按钮 */}
-                <div className="flex gap-2 pt-1">
-                  <button
-                    onClick={e => { e.stopPropagation(); setMastery(word, 'mastered'); }}
-                    className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold transition-colors"
-                    style={{ background: 'var(--color-mint-soft)', color: 'var(--color-mint-strong)', border: '1px solid var(--color-mint-base)' }}
-                  >
-                    <Check size={13} /> {t('vocab.mastered', lang)}
-                  </button>
-                  <button
-                    onClick={e => { e.stopPropagation(); setMastery(word, 'learning'); }}
-                    className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold transition-colors"
-                    style={{ background: 'var(--color-surface-3)', color: 'var(--color-ink-3)', border: '1px solid var(--color-border-2)' }}
-                  >
-                    <RotateCcw size={13} /> {t('vocab.fc_relearn', lang)}
-                  </button>
-                </div>
               </div>
             )}
           </div>
         </div>
       </div>
 
-      {/* Navigation — fixed 悬浮胶囊 */}
-      <div
-        className="flex items-center justify-center gap-4 desktop-fixed-rail-wide"
-        style={{
-          position: 'fixed',
-          left: 12, right: 12,
-          bottom: 'calc(56px + env(safe-area-inset-bottom, 0px) + 8px)',
-          zIndex: 40,
-          maxWidth: 640,
-          marginLeft: 'auto', marginRight: 'auto',
-          padding: '10px 14px',
-          borderRadius: 999,
-          background: 'var(--bg-card, #fff)',
-          border: '1px solid var(--fc-nav-border)',
-          boxShadow: '0 8px 32px rgba(78,52,46,.16)',
-        }}
-      >
+      {/* Navigation */}
+      <div className="flex items-center justify-center gap-6 mt-4">
         <button
           onClick={() => goTo(currentIdx - 1, displayWords)}
           disabled={currentIdx === 0}
-          className="w-11 h-11 rounded-full flex items-center justify-center transition-all disabled:opacity-25 shrink-0"
-          style={{ background: 'var(--fc-nav-bg)', border: '1px solid var(--fc-nav-border)', color: 'var(--fc-nav-color)' }}
-          aria-label={t('vocab.fc_prev', lang)}
+          className="w-11 h-11 rounded-full flex items-center justify-center transition-all disabled:opacity-25"
+          style={{ background: 'var(--fc-nav-bg)', border: '1px solid var(--fc-nav-border)', color: 'var(--fc-nav-color)', boxShadow: '0 4px 12px rgba(78,52,46,.08)' }}
         >
           <ChevronLeft size={20} />
         </button>
 
+        {/* Dot indicators (max 7) */}
         <div className="flex items-center gap-1.5">
           {displayWords.slice(Math.max(0, currentIdx - 3), Math.min(displayWords.length, currentIdx + 4)).map((_, i) => {
             const realIdx = Math.max(0, currentIdx - 3) + i;
@@ -646,9 +422,9 @@ export default function FlashcardStudyPage() {
 
         <button
           onClick={() => goTo(currentIdx + 1, displayWords)}
-          className="w-11 h-11 rounded-full flex items-center justify-center transition-all shrink-0"
-          style={{ background: currentIdx === displayWords.length - 1 ? 'var(--color-pink-soft)' : 'var(--fc-nav-bg)', border: currentIdx === displayWords.length - 1 ? '1.5px solid var(--color-pink-base)' : '1px solid var(--fc-nav-border)', color: currentIdx === displayWords.length - 1 ? 'var(--color-pink-strong)' : 'var(--fc-nav-color)' }}
-          aria-label={currentIdx === displayWords.length - 1 ? t('vocab.fc_finish', lang) : t('vocab.fc_next', lang)}
+          disabled={currentIdx === displayWords.length - 1}
+          className="w-11 h-11 rounded-full flex items-center justify-center transition-all disabled:opacity-25"
+          style={{ background: 'var(--fc-nav-bg)', border: '1px solid var(--fc-nav-border)', color: 'var(--fc-nav-color)', boxShadow: '0 4px 12px rgba(78,52,46,.08)' }}
         >
           {currentIdx === displayWords.length - 1 ? <Check size={20} /> : <ChevronRight size={20} />}
         </button>

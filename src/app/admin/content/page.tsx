@@ -36,7 +36,6 @@ export default function ContentPage() {
   const [status, setStatus] = useState('pending');
   const { data, loading, refetch } = useAdminData<ContentResponse>(`/api/admin/content?feedbackStatus=${status}`);
   const router = useRouter();
-  const [acting, setActing] = useState<string | null>(null);
 
   const handleResolve = async (id: string, newStatus: 'resolved' | 'ignored') => {
     setActing(id);
@@ -154,6 +153,13 @@ export default function ContentPage() {
                     ) : (
                       <span className="text-[10px] text-[var(--text-placeholder)]" title="匿名提交">匿名</span>
                     )}
+                    <button
+                      onClick={() => router.push(`/admin/messages?userId=${f.userId}`)}
+                      className="p-1.5 rounded-lg hover:bg-[var(--pink-primary)]/10 text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors"
+                      title="发私信"
+                    >
+                      <MessageCircle size={16} />
+                    </button>
                     <button
                       onClick={() => handleResolve(f.id, 'resolved')}
                       disabled={acting === f.id}

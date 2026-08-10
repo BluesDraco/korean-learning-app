@@ -4,24 +4,18 @@ import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
-  ArrowLeft, BookOpen, Target, Volume2, ChevronDown,
+  ArrowLeft, BookOpen, Target, Volume2, ChevronDown, ChevronUp,
   Loader2, BarChart3, BookmarkPlus, Layers, Check, Trash2, CheckSquare, Square, ListChecks, CheckCircle,
-  Eye, EyeOff, MoreHorizontal,
 } from 'lucide-react';
-import { DropdownMenu } from '@/components/ui/DropdownMenu';
-import { db, deleteWordsByText } from '@/lib/db';
+import { db } from '@/lib/db';
 import { getLevel, getLevelWords } from '@/data/vocabulary';
 import type { WordEntry, LevelWordList } from '@/types';
-import { speak, speakWord } from '@/lib/tts';
-import { displayRomanHyphen } from '@/lib/dictionary';
+import { speak } from '@/lib/tts';
 import { useAuth } from '@/components/AuthProvider';
 import { TappableText } from '@/components/TappableText';
 
 const PAGE_SIZE = 50;
 import { AddToBookSheet } from '@/components/vocabulary/AddToBookSheet';
-import { useIsDesktop } from '@/lib/useIsMobile';
-import { useLang } from '@/components/LangProvider';
-import { t } from '@/lib/i18n';
 
 const levelNames: Record<number, string> = {
   1: '1级 · 入门', 2: '2级 · 基础', 3: '3级 · 进阶',
@@ -46,7 +40,6 @@ export default function LevelDetailPage() {
   const [partFilter, setPartFilter] = useState<string>('全部');
   const [displayCount, setDisplayCount] = useState(PAGE_SIZE);
   const sentinelRef = useRef<HTMLDivElement>(null);
-  const firstUntouchedRef = useRef<HTMLDivElement>(null);
   const { user, loading: authLoading } = useAuth();
   const [sheetWord, setSheetWord] = useState<WordEntry | null>(null);
   const [addingAll, setAddingAll] = useState(false);
@@ -58,13 +51,65 @@ export default function LevelDetailPage() {
   const [selectedWords, setSelectedWords] = useState<Set<string>>(new Set());
   const [deletePending, setDeletePending] = useState(false);
   const [masterPending, setMasterPending] = useState(false);
-  const [savedSentenceIds, setSavedSentenceIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (managing) document.body.setAttribute('data-batch-managing', '1');
     else document.body.removeAttribute('data-batch-managing');
     return () => document.body.removeAttribute('data-batch-managing');
   }, [managing]);
+
+  // Swipe state: entryId → current translateX offset
+  const swipeOffsets = useRef<Map<string, number>>(new Map());
+  const swipeStart = useRef<{ id: string; x: number; y: number } | null>(null);
+  const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+  const isDesktop = typeof window !== 'undefined' && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  const setSwipeOffset = useCallback((id: string, offset: number) => {
+    swipeOffsets.current.set(id, offset);
+    const el = cardRefs.current.get(id);
+    if (el) el.style.transform = `translateX(${offset}px)`;
+  }, []);
+
+  const closeAllSwipes = useCallback((exceptId?: string) => {
+    for (const [id] of swipeOffsets.current) {
+      if (id !== exceptId) setSwipeOffset(id, 0);
+    }
+  }, [setSwipeOffset]);
+
+  const handleTouchStart = useCallback((e: React.TouchEvent, id: string) => {
+    swipeStart.current = { id, x: e.touches[0].clientX, y: e.touches[0].clientY };
+  }, []);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent, id: string) => {
+    if (!swipeStart.current || swipeStart.current.id !== id) return;
+    const dx = e.touches[0].clientX - swipeStart.current.x;
+    const dy = e.touches[0].clientY - swipeStart.current.y;
+    if (Math.abs(dy) > Math.abs(dx)) return; // vertical scroll, ignore
+    const base = swipeOffsets.current.get(id) ?? 0;
+    const raw = Math.min(0, Math.max(-140, base + dx));
+    const el = cardRefs.current.get(id);
+    if (el) el.style.transform = `translateX(${raw}px)`;
+  }, []);
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent, id: string) => {
+    if (!swipeStart.current || swipeStart.current.id !== id) return;
+    const dx = e.changedTouches[0].clientX - swipeStart.current.x;
+    swipeStart.current = null;
+    if (dx < -60) {
+      closeAllSwipes(id);
+      setSwipeOffset(id, -140);
+    } else {
+      setSwipeOffset(id, 0);
+    }
+  }, [closeAllSwipes, setSwipeOffset]);
+
+  useEffect(() => {
+    if (isNaN(level) || level < 1 || level > 6) { router.replace('/vocabulary/levels'); return; }
+    const l = getLevel(level);
+    if (!l) { router.replace('/vocabulary/levels'); return; }
+    setLvl(l);
+    const w = getLevelWords(level);
+    setWords(w);
 
   const swipeOffsets = useRef<Map<string, number>>(new Map());
   const swipeStart = useRef<{ id: string; x: number; y: number } | null>(null);
@@ -113,25 +158,16 @@ export default function LevelDetailPage() {
     if (isNaN(level) || level < 1 || level > 6) { router.replace('/vocabulary/levels'); return; }
     (async () => {
       try {
-        const l = await getLevel(level);
-        if (!l) { router.replace('/vocabulary/levels'); return; }
-        setLvl(l);
-        const { recordVocabVisit } = await import('@/lib/progress/dailyHero');
-        recordVocabVisit({ source: 'levels', unitId: String(level), unitTitle: levelNames[level] ?? `${level}级` });
-        const w = await getLevelWords(level);
-        setWords(w);
-        try {
-          const koreanWords = new Set(w.map((e) => e.korean));
-          const allUserWords = await db.words.where('word').anyOf([...koreanWords]).toArray();
-          const userWords = allUserWords.filter((uw) => koreanWords.has(uw.word));
-          const mSet = new Set(userWords.filter((uw) => uw.mastery === 'mastered').map((uw) => uw.word));
-          const lSet = new Set(userWords.filter((uw) => uw.mastery !== 'mastered' && uw.mastery !== 'new').map((uw) => uw.word));
-          setMasteredSet(mSet);
-          setLearningSet(lSet);
-        } catch {
-          // db error — show words without mastery state
-        }
-      } catch { /* ignore */ } finally {
+        const koreanWords = new Set(w.map((e) => e.korean));
+        const allUserWords = await db.words.toArray();
+        const userWords = allUserWords.filter((uw) => koreanWords.has(uw.word));
+        const mSet = new Set(userWords.filter((uw) => uw.mastery === 'mastered').map((uw) => uw.word));
+        const lSet = new Set(userWords.filter((uw) => uw.mastery !== 'mastered' && uw.mastery !== 'new').map((uw) => uw.word));
+        setMasteredSet(mSet);
+        setLearningSet(lSet);
+      } catch {
+        // db error — show words without mastery state
+      } finally {
         setLoading(false);
       }
     })();
@@ -152,66 +188,19 @@ export default function LevelDetailPage() {
     return ['全部', ...Array.from(parts)];
   }, [words]);
 
-  const [showMastered, setShowMastered] = useState(false);
-  const [showCn, setShowCn] = useState(true);
-
-  useEffect(() => {
-    try { if (localStorage.getItem('vocab_show_cn') === '0') setShowCn(false); } catch { /* ignore */ }
-  }, []);
-
-  const toggleCn = () => {
-    setShowCn(prev => {
-      const next = !prev;
-      try { localStorage.setItem('vocab_show_cn', next ? '1' : '0'); } catch { /* ignore */ }
-      return next;
-    });
-  };
-
   const filteredWords = useMemo(() => {
-    let list = partFilter === '全部' ? words : words.filter((w) => w.partOfSpeech === partFilter);
-    if (!showMastered) list = list.filter((w) => !masteredSet.has(w.korean));
-    return list;
-  }, [words, partFilter, masteredSet, showMastered]);
-
-  useEffect(() => {
     setAddedAll(false);
     setDisplayCount(PAGE_SIZE);
     setSelectedWords(new Set());
-  }, [words, partFilter, showMastered]);
+    if (partFilter === '全部') return words;
+    return words.filter((w) => w.partOfSpeech === partFilter);
+  }, [words, partFilter]);
 
   const visibleWords = filteredWords.slice(0, displayCount);
 
-  const firstUntouchedIdx = filteredWords.findIndex(e => !masteredSet.has(e.korean) && !learningSet.has(e.korean));
-
-  const scrollPendingRef = useRef(false);
-
-  const scrollToFirstUntouched = useCallback(() => {
-    if (firstUntouchedIdx === -1) return;
-    if (firstUntouchedIdx >= displayCount) {
-      scrollPendingRef.current = true;
-      setDisplayCount(firstUntouchedIdx + 1);
-    } else {
-      firstUntouchedRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  }, [firstUntouchedIdx, displayCount]);
-
-  useEffect(() => {
-    if (scrollPendingRef.current && firstUntouchedRef.current) {
-      scrollPendingRef.current = false;
-      firstUntouchedRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  });
-
-  const filteredLengthRef = useRef(filteredWords.length);
-  filteredLengthRef.current = filteredWords.length;
-
   const loadMore = useCallback(() => {
-    if (filteredLengthRef.current <= 0) return;
-    setDisplayCount(c => {
-      if (c >= filteredLengthRef.current) return c;
-      return Math.min(c + PAGE_SIZE, filteredLengthRef.current);
-    });
-  }, []);
+    setDisplayCount(c => Math.min(c + PAGE_SIZE, filteredWords.length));
+  }, [filteredWords.length]);
 
   useEffect(() => {
     const sentinel = sentinelRef.current;
@@ -221,36 +210,21 @@ export default function LevelDetailPage() {
     }, { threshold: 0.1 });
     observer.observe(sentinel);
     return () => observer.disconnect();
-  }, [loadMore, loading]);
+  }, [loadMore]);
 
   const handleMasterAll = async () => {
     if (masteringAll) return;
     setMasteringAll(true);
     const now = Date.now();
-    const targets = filteredWords.filter(e => !masteredSet.has(e.korean));
-    const koreans = targets.map(e => e.korean);
     try {
-      // 一次批量查已有词，再拆成 bulkUpdate + bulkPut 两批 IO
-      const existingRows = koreans.length
-        ? await db.words.where('word').anyOf(koreans).toArray()
-        : [];
-      // 收集同韩文的所有行 id，避免 Map 只保留最后一条导致重复行遗漏
-      const existingByKorean = new Map<string, string[]>();
-      for (const r of existingRows) {
-        const ids = existingByKorean.get(r.word);
-        if (ids) ids.push(r.id); else existingByKorean.set(r.word, [r.id]);
-      }
-
-      const updates = [];
-      const puts = [];
-      for (const entry of targets) {
-        const existingIds = existingByKorean.get(entry.korean);
-        if (existingIds?.length) {
-          for (const id of existingIds) {
-            updates.push({ id, mastery: 'mastered' as const, srsLevel: 5, interval: 21, nextReview: now + 21 * 86400000, lastReviewed: now });
-          }
+      const newSet = new Set(masteredSet);
+      for (const entry of filteredWords) {
+        if (masteredSet.has(entry.korean)) continue;
+        const existing = await db.words.where('word').equals(entry.korean).first();
+        if (existing) {
+          await db.words.update(existing.id, { mastery: 'mastered', srsLevel: 5, interval: 21, nextReview: now + 21 * 86400000, lastReviewed: now });
         } else {
-          puts.push({
+          await db.words.put({
             id: crypto.randomUUID(),
             word: entry.korean,
             pronunciation: entry.romanization,
@@ -258,7 +232,7 @@ export default function LevelDetailPage() {
             partOfSpeech: entry.partOfSpeech,
             examples: entry.examples.map(ex => ({ text: ex.korean, translation: ex.chinese, source: 'dictionary' as const })),
             sourceEntryId: entry.id,
-            mastery: 'mastered' as const,
+            mastery: 'mastered',
             srsLevel: 5,
             easeFactor: 2.5,
             interval: 21,
@@ -268,19 +242,12 @@ export default function LevelDetailPage() {
             source: 'library',
           });
         }
+        newSet.add(entry.korean);
       }
-      await Promise.all([
-        updates.length ? db.words.bulkUpdate(updates) : Promise.resolve(),
-        puts.length ? db.words.bulkPut(puts) : Promise.resolve(),
-      ]);
-      const newSet = new Set(masteredSet);
-      for (const e of targets) newSet.add(e.korean);
       setMasteredSet(newSet);
-      setLearningSet(prev => { const s = new Set(prev); newSet.forEach(k => s.delete(k)); return s; });
+      setLearningSet(prev => { const s = new Set(prev); filteredWords.forEach(e => s.delete(e.korean)); return s; });
       setMasteredAll(true);
       setTimeout(() => setMasteredAll(false), 3000);
-    } catch {
-      alert(t('vocab.err_check_login', lang));
     } finally {
       setMasteringAll(false);
     }
@@ -292,7 +259,7 @@ export default function LevelDetailPage() {
     try {
       const [book, allUserWords] = await Promise.all([
         db.wordBooks.get(bookId),
-        db.words.where('word').anyOf(filteredWords.map(e => e.korean)).toArray(),
+        db.words.toArray(),
       ]);
       if (!book) return;
       const now = Date.now();
@@ -322,7 +289,7 @@ export default function LevelDetailPage() {
       ]);
       setAddedAll(true);
       setTimeout(() => setAddedAll(false), 3000);
-    } catch { /* ignore */ } finally {
+    } finally {
       setAddingAll(false);
       setAddAllBook(false);
     }
@@ -330,57 +297,38 @@ export default function LevelDetailPage() {
 
   const toggleMastered = async (entry: WordEntry) => {
     const now = Date.now();
-    const wasMastered = masteredSet.has(entry.korean);
-    // 乐观更新：先立即变色，DB 失败再回滚
-    if (wasMastered) {
+    if (masteredSet.has(entry.korean)) {
+      const existing = await db.words.where('word').equals(entry.korean).first();
+      if (existing) {
+        await db.words.update(existing.id, { mastery: 'learning', srsLevel: 1, interval: 1, nextReview: now });
+      }
       setMasteredSet(prev => { const s = new Set(prev); s.delete(entry.korean); return s; });
       setLearningSet(prev => new Set(prev).add(entry.korean));
     } else {
+      const existing = await db.words.where('word').equals(entry.korean).first();
+      if (existing) {
+        await db.words.update(existing.id, { mastery: 'mastered', srsLevel: 5, interval: 21, nextReview: now + 21 * 86400000, lastReviewed: now });
+      } else {
+        await db.words.put({
+          id: crypto.randomUUID(),
+          word: entry.korean,
+          pronunciation: entry.romanization,
+          meaning: entry.meanings[0]?.chinese || '',
+          partOfSpeech: entry.partOfSpeech,
+          examples: entry.examples.map(ex => ({ text: ex.korean, translation: ex.chinese, source: 'dictionary' as const })),
+          sourceEntryId: entry.id,
+          mastery: 'mastered',
+          srsLevel: 5,
+          easeFactor: 2.5,
+          interval: 21,
+          nextReview: now + 21 * 86400000,
+          createdAt: now,
+          lastReviewed: now,
+          source: 'library',
+        });
+      }
       setMasteredSet(prev => new Set(prev).add(entry.korean));
       setLearningSet(prev => { const s = new Set(prev); s.delete(entry.korean); return s; });
-    }
-    try {
-      const rows = await db.words.where('word').equals(entry.korean).toArray();
-      if (wasMastered) {
-        if (rows.length) {
-          await db.words.bulkUpdate(
-            rows.map(w => ({ id: w.id, mastery: 'learning', srsLevel: 1, interval: 1, nextReview: now }))
-          );
-        }
-      } else {
-        if (rows.length) {
-          await db.words.bulkUpdate(
-            rows.map(w => ({ id: w.id, mastery: 'mastered', srsLevel: 5, interval: 21, nextReview: now + 21 * 86400000, lastReviewed: now }))
-          );
-        } else {
-          await db.words.put({
-            id: crypto.randomUUID(),
-            word: entry.korean,
-            pronunciation: entry.romanization,
-            meaning: entry.meanings[0]?.chinese || '',
-            partOfSpeech: entry.partOfSpeech,
-            examples: entry.examples.map(ex => ({ text: ex.korean, translation: ex.chinese, source: 'dictionary' as const })),
-            sourceEntryId: entry.id,
-            mastery: 'mastered',
-            srsLevel: 5,
-            easeFactor: 2.5,
-            interval: 21,
-            nextReview: now + 21 * 86400000,
-            createdAt: now,
-            lastReviewed: now,
-            source: 'library',
-          });
-        }
-      }
-    } catch {
-      // 回滚
-      if (wasMastered) {
-        setMasteredSet(prev => new Set(prev).add(entry.korean));
-        setLearningSet(prev => { const s = new Set(prev); s.delete(entry.korean); return s; });
-      } else {
-        setMasteredSet(prev => { const s = new Set(prev); s.delete(entry.korean); return s; });
-        setLearningSet(prev => { const s = new Set(prev); s.delete(entry.korean); return s; });
-      }
     }
   };
 
@@ -402,7 +350,7 @@ export default function LevelDetailPage() {
     const now = Date.now();
     const selected = words.filter(e => selectedWords.has(e.korean));
     // One fetch for all user words, then one bulk write — 2 HTTP requests total
-    const allUserWords = await db.words.where('word').anyOf(selected.map(e => e.korean)).toArray();
+    const allUserWords = await db.words.toArray();
     const userWordMap = new Map(allUserWords.map(w => [w.word, w]));
     const toUpdate: { id: string; mastery: string; srsLevel: number; interval: number; nextReview: number; lastReviewed: number }[] = [];
     const toInsert: any[] = [];
@@ -420,21 +368,19 @@ export default function LevelDetailPage() {
         });
       }
     }
-    try {
-      await Promise.all([
-        toUpdate.length > 0 ? db.words.bulkUpdate(toUpdate) : Promise.resolve(),
-        toInsert.length > 0 ? db.words.bulkPut(toInsert) : Promise.resolve(),
-      ]);
-    } catch {
-      alert(t('vocab.err_partial_mark', lang));
-    }
+    await Promise.all([
+      toUpdate.length > 0 ? db.words.bulkUpdate(toUpdate) : Promise.resolve(),
+      toInsert.length > 0 ? db.words.bulkPut(toInsert) : Promise.resolve(),
+    ]);
     setMasteredSet(prev => { const s = new Set(prev); selectedWords.forEach(w => s.add(w)); return s; });
     setLearningSet(prev => { const s = new Set(prev); selectedWords.forEach(w => s.delete(w)); return s; });
     exitManage();
   };
 
   const batchDelete = async () => {
-    await deleteWordsByText(selectedWords); // 删词 + 从收藏本剔除孤儿 id
+    const allUserWords = await db.words.toArray();
+    const ids = allUserWords.filter(w => selectedWords.has(w.word)).map(w => w.id);
+    await db.words.bulkDelete(ids);
     setMasteredSet(prev => { const s = new Set(prev); selectedWords.forEach(w => s.delete(w)); return s; });
     setLearningSet(prev => { const s = new Set(prev); selectedWords.forEach(w => s.delete(w)); return s; });
     exitManage();
@@ -456,19 +402,12 @@ export default function LevelDetailPage() {
   const untouched = total - mastered - learning;
 
   return (
-    <div className={isWideViewport ? 'py-6 w-full pb-8 px-8 space-y-5' : 'py-4 max-w-2xl mx-auto pb-8 px-4 space-y-4'}>
+    <div className="py-4 space-y-5 pb-8">
       {/* Header */}
-      <div style={{ marginBottom: 20 }}>
-        <Link
-          href="/vocabulary/library?tab=levels"
-          style={{
-            display: 'inline-flex', alignItems: 'center', gap: 6,
-            fontSize: 13, color: 'var(--color-ink-2)', textDecoration: 'none',
-            marginBottom: 14,
-          }}
-        >
-          <ArrowLeft size={14} />
-          {t('vocab.ld_back_to_levels', lang)}
+      <div>
+        <Link href="/vocabulary/library?tab=levels" className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] mb-3">
+          <ArrowLeft size={16} />
+          返回分级词表
         </Link>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
           <span style={{ fontSize: 32, fontWeight: 800, color: 'var(--color-pink-strong)' }}>{t('vocab.level_n_ji', lang, { n: level })}</span>
@@ -485,16 +424,16 @@ export default function LevelDetailPage() {
       <Link
         href={`/vocabulary/levels/${level}/flashcards`}
         className="flex items-center gap-3 p-4 rounded-xl border transition-colors"
-        style={{ background: 'var(--color-pink-soft)', borderColor: 'var(--color-pink-soft)' }}
+        style={{ background: 'rgba(255,127,168,0.05)', borderColor: 'rgba(255,127,168,0.25)' }}
       >
-        <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: 'var(--bg-card)' }}>
-          <Layers size={18} style={{ color: 'var(--color-pink-base)' }} />
+        <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: 'rgba(255,127,168,0.12)' }}>
+          <Layers size={18} style={{ color: '#ff7fa8' }} />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>{t('vocab.bd_flashcard', lang)}</p>
-          <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>{t('vocab.ld_flashcard_sub', lang)}</p>
+          <p className="text-sm font-bold" style={{ color: '#241917' }}>闪卡学习</p>
+          <p className="text-xs mt-0.5" style={{ color: '#89756e' }}>翻卡记词，未接触优先 · 可标记已掌握</p>
         </div>
-        <ChevronDown size={16} style={{ color: 'var(--text-muted)', transform: 'rotate(-90deg)' }} />
+        <ChevronDown size={16} style={{ color: '#89756e', transform: 'rotate(-90deg)' }} />
       </Link>
 
       {/* Stats cards */}
@@ -567,67 +506,32 @@ export default function LevelDetailPage() {
       <div className="mb-3">
         <h2 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2 mb-2">
           <BookOpen size={15} className="text-[var(--pink-primary)]" />
-          {t('vocab.ld_word_list_n', lang, { n: filteredWords.length })} {!showMastered && <span className="text-[10px] font-normal text-[var(--text-muted)]">{t('vocab.ld_mastered_hidden', lang)}</span>}
+          词条列表 ({filteredWords.length})
         </h2>
         <div className="flex items-center gap-2 flex-wrap">
-          {managing ? (
+          <Link
+            href={`/vocabulary/levels/${level}/mastered`}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--mint-soft)]/10 text-[var(--mint-soft)] text-xs font-medium hover:bg-[var(--mint-soft)]/20 transition-colors"
+          >
+            <Check size={12} />
+            已掌握 ({Array.from(masteredSet).filter(w => words.some(e => e.korean === w)).length})
+          </Link>
+          <button
+            onClick={() => managing ? exitManage() : (closeAllSwipes(), setManaging(true))}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-colors ${managing ? 'bg-[var(--pink-primary)] text-white' : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:border-[var(--pink-primary)]/30'}`}
+          >
+            <ListChecks size={12} />
+            {managing ? '取消批量管理' : '批量管理'}
+          </button>
+          {!managing && (
             <button
-              onClick={exitManage}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium bg-[var(--pink-primary)] text-white transition-colors"
+              onClick={() => { if (authLoading) return; if (!user) { window.location.href = '/auth/login?redirect=' + window.location.pathname; return; } setAddAllBook(true); }}
+              disabled={addingAll || addedAll}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] text-xs font-medium hover:bg-[var(--pink-primary)]/20 disabled:opacity-50 transition-colors"
             >
-              <ListChecks size={12} />
-              {t('vocab.cancel_manage', lang)}
+              {addingAll ? <Loader2 size={12} className="animate-spin" /> : <BookmarkPlus size={12} />}
+              {addedAll ? '已加入' : '全部加入单词本'}
             </button>
-          ) : (
-            <>
-              <button
-                onClick={toggleCn}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-colors ${showCn ? 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)]' : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:border-[var(--pink-primary)]/30'}`}
-              >
-                {showCn ? <Eye size={12} /> : <EyeOff size={12} />}
-                {showCn ? t('vocab.show_cn', lang) : t('vocab.hide_cn', lang)}
-              </button>
-              <button
-                onClick={() => { if (authLoading) return; if (!user) { router.push('/auth/login?redirect=' + window.location.pathname); return; } setAddAllBook(true); }}
-                disabled={addingAll || addedAll}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] text-xs font-medium hover:bg-[var(--pink-primary)]/20 disabled:opacity-50 transition-colors"
-              >
-                {addingAll ? <Loader2 size={12} className="animate-spin" /> : <BookmarkPlus size={12} />}
-                {addedAll ? t('vocab.added', lang) : t('vocab.add_all_to_book', lang)}
-              </button>
-              <DropdownMenu
-                triggerAriaLabel={t('vocab.more', lang)}
-                triggerClassName="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:border-[var(--pink-primary)]/30 transition-colors"
-                trigger={<><MoreHorizontal size={14} />{t('vocab.more', lang)}</>}
-              >
-                {(close) => (
-                  <>
-                    <Link
-                      href={`/vocabulary/levels/${level}/mastered`}
-                      onClick={close}
-                      className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-[var(--text-primary)] hover:bg-[var(--bg-input)] transition-colors"
-                    >
-                      <Check size={16} className="text-[var(--mint-soft)]" />
-                      {t('vocab.ld_mastered_n', lang, { n: Array.from(masteredSet).filter(w => words.some(e => e.korean === w)).length })}
-                    </Link>
-                    <button
-                      onClick={() => { setShowMastered(v => !v); close(); }}
-                      className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-[var(--text-primary)] hover:bg-[var(--bg-input)] transition-colors text-left"
-                    >
-                      {showMastered ? <EyeOff size={16} className="text-[var(--text-muted)]" /> : <Eye size={16} className="text-[var(--text-muted)]" />}
-                      {showMastered ? t('vocab.ld_hide_mastered', lang) : t('vocab.ld_show_mastered', lang)}
-                    </button>
-                    <button
-                      onClick={() => { closeAllSwipes(); setManaging(true); close(); }}
-                      className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-[var(--text-primary)] hover:bg-[var(--bg-input)] transition-colors text-left"
-                    >
-                      <ListChecks size={16} className="text-[var(--text-muted)]" />
-                      {t('vocab.manage', lang)}
-                    </button>
-                  </>
-                )}
-              </DropdownMenu>
-            </>
           )}
         </div>
       </div>
@@ -637,25 +541,23 @@ export default function LevelDetailPage() {
         <div className="flex items-center justify-between px-1 mb-2">
           <button onClick={toggleSelectAll} className="flex items-center gap-1.5 text-xs text-[var(--pink-primary)] font-medium">
             {allSelected ? <CheckSquare size={14} /> : <Square size={14} />}
-            {allSelected ? t('vocab.cancel_select_all', lang) : t('vocab.select_all_unmastered', lang)}
+            {allSelected ? '取消全选' : '全选未掌握'}
           </button>
-          <span className="text-xs text-[var(--text-muted)]">{t('vocab.selected_n', lang, { n: selectedWords.size })}</span>
+          <span className="text-xs text-[var(--text-muted)]">已选 {selectedWords.size} 个</span>
         </div>
       )}
 
-      {(() => {
-        const renderCard = (entry: typeof visibleWords[number]) => {
+      <div className="space-y-2">
+        {visibleWords.map((entry) => {
           const isExpanded = expandedId === entry.id;
           const isMastered = masteredSet.has(entry.korean);
           const isLearning = learningSet.has(entry.korean);
           const isSaved = isMastered || isLearning;
           const isSelected = selectedWords.has(entry.korean);
-          const isFirstUntouched = firstUntouchedIdx === filteredWords.indexOf(entry);
 
           return (
             <div
               key={entry.id}
-              ref={isFirstUntouched ? firstUntouchedRef : undefined}
               className={`relative overflow-hidden rounded-xl ${isSelected ? 'ring-2 ring-[var(--mint-soft)]' : ''}`}
             >
               {/* Swipe action backdrop — hidden in manage mode */}
@@ -663,29 +565,25 @@ export default function LevelDetailPage() {
                 <button
                   onClick={() => { toggleMastered(entry); setSwipeOffset(entry.id, 0); }}
                   className="flex flex-col items-center justify-center gap-0.5 px-4 text-white text-xs font-medium"
-                  style={{ background: isMastered ? 'var(--text-muted)' : 'var(--color-mint-strong)', minWidth: 70 }}
+                  style={{ background: isMastered ? '#89756e' : '#3aafa9', minWidth: 70 }}
                 >
                   <Check size={16} />
-                  {isMastered ? t('common.cancel', lang) : t('vocab.mastered', lang)}
+                  {isMastered ? '取消' : '已掌握'}
                 </button>
                 {isSaved && (
                   <button
                     onClick={async () => {
-                      try {
-                        await deleteWordsByText([entry.korean]); // 删词 + 从收藏本剔除孤儿 id
-                      } catch (err) {
-                        alert(t('vocab.err_delete_prefix', lang) + (err instanceof Error ? err.message : t('vocab.err_retry', lang)));
-                        return;
-                      }
+                      const existing = await db.words.where('word').equals(entry.korean).first();
+                      if (existing) await db.words.delete(existing.id);
                       setMasteredSet(prev => { const s = new Set(prev); s.delete(entry.korean); return s; });
                       setLearningSet(prev => { const s = new Set(prev); s.delete(entry.korean); return s; });
                       setSwipeOffset(entry.id, 0);
                     }}
                     className="flex flex-col items-center justify-center gap-0.5 px-4 text-white text-xs font-medium"
-                    style={{ background: 'var(--color-pink-base)', minWidth: 70 }}
+                    style={{ background: '#ff7fa8', minWidth: 70 }}
                   >
                     <Trash2 size={16} />
-                    {t('vocab.delete', lang)}
+                    删除
                   </button>
                 )}
               </div>}
@@ -699,7 +597,7 @@ export default function LevelDetailPage() {
                 onTouchMove={isDesktop || managing ? undefined : (e) => handleTouchMove(e, entry.id)}
                 onTouchEnd={isDesktop || managing ? undefined : (e) => handleTouchEnd(e, entry.id)}
               >
-                <div className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-[var(--bg-card-hover)] transition-colors">
+                <div className="w-full flex items-center gap-3 p-3 text-left hover:bg-[var(--bg-card-hover)] transition-colors">
                   {managing && !isMastered && (
                     <div
                       className={`w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-colors cursor-pointer ${isSelected ? 'bg-[var(--mint-soft)] border-[var(--mint-soft)]' : 'border-[var(--border-color)] bg-white'}`}
@@ -712,60 +610,64 @@ export default function LevelDetailPage() {
                     onClick={() => { if (managing && !isMastered) { toggleSelect(entry.korean); return; } closeAllSwipes(); setExpandedId(isExpanded ? null : entry.id); }}
                     className="flex-1 flex items-center gap-3 min-w-0 text-left"
                   >
+                    <span className="text-lg shrink-0">{entry.emoji}</span>
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-baseline gap-2.5 min-w-0">
-                        <span className="ko-text font-bold text-[var(--text-primary)] text-[19px] leading-tight whitespace-nowrap">{entry.korean}</span>
-                        <span className="min-w-0 truncate text-[12.5px] font-semibold tracking-wide text-[var(--pink-primary)]">
-                          [{displayRomanHyphen(entry.romanization, entry.korean)}]
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="font-bold text-[var(--text-primary)] text-sm">{entry.korean}</span>
+                        <span className="text-xs text-[var(--pink-primary)] bg-[var(--pink-primary)]/5 px-1.5 py-0.5 rounded">
+                          [{entry.romanization}]
                         </span>
-                      </div>
-                      <div className="flex items-center gap-2 mt-2 min-w-0">
                         {entry.partOfSpeech && (
-                          <span className="shrink-0 text-[10.5px] font-semibold px-1.5 py-0.5 rounded bg-[var(--bg-accent)] text-[var(--text-muted)]">{entry.partOfSpeech}</span>
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-[var(--bg-accent)] text-[var(--text-muted)]">{entry.partOfSpeech}</span>
                         )}
-                        {showCn ? (
-                          <span className="text-sm text-[var(--text-primary)] leading-snug truncate">{entry.meanings.map((m) => m.chinese).join('；')}</span>
-                        ) : (
-                          <span className="text-xs text-[var(--text-muted)] leading-snug truncate">{t('vocab.tap_reveal_cn', lang)}</span>
-                        )}
+                      </div>
+                      <div className="flex items-center gap-2 mt-1">
+                        <div className="flex gap-0.5">
+                          {Array.from({ length: entry.frequency }).map((_, i) => (
+                            <span key={i} className="text-[14px] text-[var(--peach-soft)]">★</span>
+                          ))}
+                        </div>
                         {isMastered && (
-                          <span className="shrink-0 text-[10.5px] font-semibold px-2 py-0.5 rounded-full bg-[var(--mint-soft)]/12 text-[var(--mint-soft)]">{t('vocab.mastered', lang)}</span>
+                          <span className="text-xs px-1.5 py-0.5 rounded-full bg-[var(--mint-soft)]/10 text-[var(--mint-soft)]">已掌握</span>
                         )}
                         {isLearning && (
-                          <span className="shrink-0 text-[10.5px] font-semibold px-2 py-0.5 rounded-full bg-[var(--peach-soft)]/12 text-[var(--peach-soft)]">{t('vocab.learning', lang)}</span>
+                          <span className="text-xs px-1.5 py-0.5 rounded-full bg-[var(--peach-soft)]/10 text-[var(--peach-soft)]">学习中</span>
                         )}
                       </div>
                     </div>
                   </button>
-                  <div className="flex items-center gap-0.5 shrink-0">
+                  <div className="flex items-center gap-2 shrink-0">
                     {!managing && (
                       <>
+                        {/* Desktop: show mastered button inline */}
+                        {isDesktop && (
+                          <button
+                            onClick={(e) => { e.stopPropagation(); toggleMastered(entry); }}
+                            className={`p-1.5 rounded-lg transition-colors ${isMastered ? 'text-[var(--mint-soft)] bg-[var(--mint-soft)]/10' : 'text-[var(--text-muted)] hover:text-[var(--mint-soft)]'}`}
+                            title={isMastered ? '取消已掌握' : '标记为已掌握'}
+                          >
+                            <Check size={14} />
+                          </button>
+                        )}
                         <button
-                          onClick={() => speakWord(entry.korean)}
-                          className="no-touch-min w-9 h-9 rounded-lg flex items-center justify-center hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors"
-                          aria-label={t('vocab.play', lang)}
+                          onClick={() => speak(entry.korean, 0.75)}
+                          className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors"
                         >
-                          <Volume2 size={17} />
+                          <Volume2 size={14} />
                         </button>
                         <button
-                          onClick={(e) => { e.stopPropagation(); toggleMastered(entry); }}
-                          className={`no-touch-min w-9 h-9 rounded-lg flex items-center justify-center transition-colors ${isMastered ? 'text-[var(--mint-soft)] bg-[var(--mint-soft)]/12' : 'text-[var(--text-muted)] hover:bg-[var(--mint-soft)]/12 hover:text-[var(--mint-soft)]'}`}
-                          title={isMastered ? t('vocab.unmaster', lang) : t('vocab.mark_mastered', lang)}
-                          aria-label={isMastered ? t('vocab.unmaster', lang) : t('vocab.mark_mastered', lang)}
+                          onClick={() => { if (authLoading) return; if (!user) { window.location.href = '/auth/login?redirect=' + window.location.pathname; return; } setSheetWord(entry); }}
+                          className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors"
                         >
-                          <Check size={17} />
+                          <BookmarkPlus size={14} />
                         </button>
-                        <button
-                          onClick={() => { if (authLoading) return; if (!user) { router.push('/auth/login?redirect=' + window.location.pathname); return; } setSheetWord(entry); }}
-                          className="no-touch-min w-9 h-9 rounded-lg flex items-center justify-center hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors"
-                          aria-label={t('vocab.add_to_book', lang)}
-                        >
-                          <BookmarkPlus size={17} />
+                        <button onClick={() => { closeAllSwipes(); setExpandedId(isExpanded ? null : entry.id); }}>
+                          {isExpanded ? <ChevronUp size={16} className="text-[var(--text-muted)]" /> : <ChevronDown size={16} className="text-[var(--text-muted)]" />}
                         </button>
                       </>
                     )}
                     {managing && isMastered && (
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--mint-soft)]/10 text-[var(--mint-soft)]">{t('vocab.mastered', lang)}</span>
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--mint-soft)]/10 text-[var(--mint-soft)]">已掌握</span>
                     )}
                   </div>
                 </div>
@@ -783,28 +685,21 @@ export default function LevelDetailPage() {
                             {m.register}
                           </span>
                         </div>
-                        {!showCn && <p className="text-sm text-[var(--text-primary)]">{m.chinese}</p>}
+                        <p className="text-sm text-[var(--text-primary)]">{m.chinese}</p>
                       </div>
                     ))}
 
                     {entry.examples.map((ex, i) => (
                       <div key={i} className="bg-[var(--bg-input)] rounded-lg p-3 flex items-start gap-2">
                         <div className="flex-1 min-w-0">
-                          <TappableText text={ex.korean} className="text-[15px] leading-relaxed text-[var(--text-primary)]" source={t('vocab.src_level', lang)} highlightWord={entry.korean} />
-                          <p className="text-[13px] text-[var(--text-secondary)] mt-1 leading-snug">{ex.chinese}</p>
+                          <TappableText text={ex.korean} className="text-sm text-[var(--text-primary)]" source="级别词库" highlightWord={entry.korean} />
+                          <p className="text-xs text-[var(--text-secondary)] mt-0.5">{ex.chinese}</p>
                         </div>
                         <button
-                          onClick={(e) => { e.stopPropagation(); speakWord(ex.korean); }}
+                          onClick={(e) => { e.stopPropagation(); speak(ex.korean, 0.75); }}
                           className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors shrink-0"
                         >
                           <Volume2 size={14} />
-                        </button>
-                        <button
-                          onClick={(e) => { e.stopPropagation(); saveSentence(ex.korean, ex.chinese, entry.korean); }}
-                          className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] transition-colors shrink-0"
-                          style={{ color: savedSentenceIds.has(ex.korean) ? 'var(--pink-primary)' : 'var(--text-muted)' }}
-                        >
-                          <BookmarkPlus size={14} fill={savedSentenceIds.has(ex.korean) ? 'currentColor' : 'none'} />
                         </button>
                       </div>
                     ))}
@@ -836,6 +731,13 @@ export default function LevelDetailPage() {
         )}
       </div>
 
+      {/* Infinite scroll sentinel */}
+      {displayCount < filteredWords.length && (
+        <div ref={sentinelRef} className="flex justify-center py-4">
+          <Loader2 size={20} className="animate-spin text-[var(--text-muted)]" />
+        </div>
+      )}
+
       {filteredWords.length === 0 && words.length > 0 && (
         <div className="text-center py-8">
           <p className="text-sm text-[var(--text-secondary)]">
@@ -863,7 +765,7 @@ export default function LevelDetailPage() {
       {addAllBook && (
         <AddToBookSheet
           word={{ korean: '', pronunciation: '', meaning: '', partOfSpeech: '' }}
-          title={t('vocab.add_to_book_n', lang, { n: filteredWords.length })}
+          title={`全部加入单词本（${filteredWords.length} 词）`}
           onClose={() => setAddAllBook(false)}
           onSelectBook={handleAddAllToBook}
         />
@@ -871,30 +773,30 @@ export default function LevelDetailPage() {
 
       {/* Batch action bar */}
       {managing && selectedWords.size > 0 && (
-        <div className="fixed bottom-[calc(56px+env(safe-area-inset-bottom,0px))] left-0 right-0 z-[60] flex justify-center pointer-events-none">
-          <div className="pointer-events-auto w-full max-w-lg mx-4 mb-3 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-3 shadow-xl flex gap-2">
+        <div className="fixed bottom-[calc(56px+env(safe-area-inset-bottom,0px))] left-0 right-0 z-30 flex justify-center px-4 pb-3 pointer-events-none">
+          <div className="pointer-events-auto w-full max-w-lg bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-3 shadow-xl flex gap-2">
             {masterPending ? (
               <>
                 <button onClick={() => setMasterPending(false)} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[var(--bg-input)] text-[var(--text-secondary)] text-sm font-semibold">
-                  {t('common.cancel', lang)}
+                  取消
                 </button>
                 <button onClick={batchMaster} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[var(--mint-soft)] text-white text-sm font-semibold">
-                  <CheckCircle size={14} /> {t('vocab.mark_mastered_n', lang, { n: selectedWords.size })}
+                  <CheckCircle size={14} /> 确认标记 {selectedWords.size} 个已掌握
                 </button>
               </>
             ) : deletePending ? (
               <>
                 <button onClick={() => setDeletePending(false)} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[var(--bg-input)] text-[var(--text-secondary)] text-sm font-semibold">
-                  {t('common.cancel', lang)}
+                  取消
                 </button>
                 <button onClick={batchDelete} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-red-500 text-white text-sm font-semibold">
-                  <Trash2 size={14} /> {t('vocab.confirm_delete_n', lang, { n: selectedWords.size })}
+                  <Trash2 size={14} /> 确认删除 {selectedWords.size} 个
                 </button>
               </>
             ) : (
               <>
                 <button onClick={() => setMasterPending(true)} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[var(--mint-soft)]/15 text-[var(--mint-soft)] text-sm font-semibold hover:bg-[var(--mint-soft)]/25 transition-colors">
-                  <CheckCircle size={14} /> {t('vocab.mark_mastered_n', lang, { n: selectedWords.size })}
+                  <CheckCircle size={14} /> 标记已掌握 ({selectedWords.size})
                 </button>
                 <button onClick={() => setDeletePending(true)} className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-red-50 text-red-500 text-sm font-semibold hover:bg-red-100 transition-colors">
                   <Trash2 size={14} />

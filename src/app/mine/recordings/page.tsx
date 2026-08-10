@@ -1,18 +1,11 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
-import { ArrowLeft, Mic, Play, Pause, Trash2, Volume2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { ArrowLeft, Mic, Play, Trash2, Volume2 } from 'lucide-react';
 import { db } from '@/lib/db';
 import { useAuth } from '@/components/AuthProvider';
 import { speak } from '@/lib/tts';
-import { getVoiceURL, deleteVoice } from '@/lib/audio/voiceStore';
-import { useIsDesktop } from '@/lib/useIsMobile';
-import { PageHeader, Section, Card } from '@/components/ui';
-import { useLang } from '@/components/LangProvider';
-import { t } from '@/lib/i18n';
-import { fmtDate } from '@/lib/datetime';
-import '../mine-home.css';
 
 interface Recording {
   id: string;
@@ -21,9 +14,15 @@ interface Recording {
   korean?: string;
   text?: string;
   textZh?: string;
+  source?: string;
   sourceType?: string;
   sourceId?: string;
-  audioData?: string;   // 旧记录：base64 dataUrl 存云
+  lineId?: string;
+  audioDataUrl?: string;
+  audioData?: string;
+  audioUrl?: string;
+  duration?: number;
+  durationMs?: number;
   createdAt?: number;
 }
 
@@ -158,18 +157,40 @@ export default function MineRecordingsPage() {
 
   useEffect(() => {
     if (!user) { setLoading(false); return; }
-    load();
-  }, [user, load]);
+    db.recordings.orderBy('createdAt').reverse().toArray()
+      .then((rows) => setRecordings(rows as Recording[]))
+      .catch(() => setRecordings([]))
+      .finally(() => setLoading(false));
+  }, [user]);
+
+  const handlePlay = async (recording: Recording) => {
+    if (audioEl) { audioEl.pause(); setPlaying(null); }
+
+    // Resolve audio source: base64 data, data URL, or server download URL
+    let src: string | null =
+      recording.audioDataUrl ||
+      recording.audioData ||
+      null;
+
+    // KPOP recordings: fetch from server if no local data
+    if (!src && recording.sourceType === 'kpop' && recording.sourceId && recording.lineId != null) {
+      src = `/api/kpop/recording?download=1&songId=${encodeURIComponent(recording.sourceId)}&lineIndex=${encodeURIComponent(recording.lineId)}`;
+    }
+
+    if (!src) return;
+
+    const audio = new Audio(src);
+    audio.onended = () => setPlaying(null);
+    audio.onerror = () => setPlaying(null);
+    audio.play().catch(() => setPlaying(null));
+    setAudioEl(audio);
+    setPlaying(recording.id);
+  };
 
   const handleDelete = async (id: string) => {
-    if (!confirm(t('mine.recordings_delete_confirm', lang))) return;
-    try {
-      await db.recordings.delete(id);
-    } catch (err) {
-      alert(t('mine.recordings_delete_failed', lang) + (err instanceof Error ? err.message : t('mine.recordings_please_retry', lang)));
-      return;
-    }
-    await deleteVoice(id);
+    if (!confirm('删除这条录音？')) return;
+    if (audioEl && playing === id) { audioEl.pause(); setPlaying(null); }
+    await db.recordings.delete(id);
     setRecordings((prev) => prev.filter((r) => r.id !== id));
   };
 
@@ -220,12 +241,69 @@ export default function MineRecordingsPage() {
             <p style={{ fontSize: 14, color: 'var(--color-ink-3)', marginBottom: 12 }}>{t('mine.common_load_error', lang)}</p>
             <button onClick={load} style={{ fontSize: 13, color: 'var(--color-pink-base)', textDecoration: 'underline', background: 'none', border: 'none', cursor: 'pointer' }}>{t('mine.common_retry', lang)}</button>
           </div>
-        </Card>
-      ) : recordings.length === 0 ? (
-        <Card variant="hero" tone="mint" padding="lg">
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ width: 64, height: 64, borderRadius: 'var(--radius-lg)', background: 'var(--color-surface-2)', color: 'var(--color-mint-strong)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }} aria-hidden>
-              <Mic size={28} strokeWidth={1.75} />
+          <h2 className="text-[16px] font-bold text-[#2f2a26] mb-2">这里会展示你的录音</h2>
+          <p className="text-[13px] text-[#8b766e] max-w-xs leading-relaxed">
+            在影子跟读、KPOP 跟唱和发音练习中录制的音频，会出现在这里
+          </p>
+        </div>
+      ) : (
+        <div className="space-y-2">
+          <p className="text-[12px] text-[#8c8177]">共 {recordings.length} 条录音</p>
+          {recordings.map((rec) => (
+            <div
+              key={rec.id}
+              className="bg-white border border-[#efe4d8] rounded-[18px] p-4 shadow-[0_2px_8px_rgba(92,64,38,0.03)]"
+            >
+              <div className="flex items-start justify-between gap-3 mb-2">
+                <div className="flex-1 min-w-0">
+                  <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-md bg-[#f5f0ea] text-[#8c8177]">
+                    {typeLabel(rec.type)}
+                  </span>
+                  {(rec.korean || rec.text) && (
+                    <p className="text-[14px] font-bold text-[#2f2a26] mt-1.5 leading-relaxed">
+                      {rec.korean || rec.text}
+                    </p>
+                  )}
+                  {rec.textZh && (
+                    <p className="text-[12px] text-[#8b766e] mt-0.5">{rec.textZh}</p>
+                  )}
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                {(rec.korean || rec.text) && (
+                  <button
+                    onClick={() => speak(rec.korean || rec.text || '', 0.8)}
+                    className="p-1.5 rounded-xl text-[#c7b7b0] hover:text-[#e47a94] hover:bg-[#f5f0ea] transition-colors"
+                    title="听发音"
+                  >
+                    <Volume2 size={14} />
+                  </button>
+                )}
+                {(rec.audioDataUrl || rec.audioData || (rec.sourceType === 'kpop' && rec.sourceId)) && (
+                  <button
+                    onClick={() => handlePlay(rec)}
+                    className={`inline-flex items-center gap-1.5 text-[11px] font-medium px-3 py-1.5 rounded-xl transition-all ${
+                      playing === rec.id
+                        ? 'bg-[#e47a94]/15 text-[#e47a94]'
+                        : 'bg-[#f5f0ea] text-[#8c8177] hover:bg-[#efe4d8] active:scale-95'
+                    }`}
+                  >
+                    <Play size={12} />
+                    {playing === rec.id ? '播放中' : '播放'}
+                  </button>
+                )}
+                <button
+                  onClick={() => handleDelete(rec.id)}
+                  className="inline-flex items-center gap-1 text-[11px] px-2 py-1.5 rounded-xl text-[#c7b7b0] hover:text-red-400 hover:bg-red-50 transition-colors"
+                >
+                  <Trash2 size={12} />
+                </button>
+                {rec.createdAt && (
+                  <span className="text-[10px] text-[#c7b7b0] ml-auto">
+                    {new Date(rec.createdAt).toLocaleDateString('zh-CN')}
+                  </span>
+                )}
+              </div>
             </div>
             <h2 style={{ fontSize: 16, fontWeight: 800, color: 'var(--color-ink-1)', margin: '0 0 6px' }}>{t('mine.recordings_empty_title', lang)}</h2>
             <p style={{ fontSize: 13, color: 'var(--color-ink-3)', margin: 0, lineHeight: 1.6 }}>{t('mine.recordings_empty_desc', lang)}</p>

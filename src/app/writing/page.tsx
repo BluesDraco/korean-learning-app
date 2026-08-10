@@ -1,16 +1,12 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { PenLine, Sparkles, BookOpen, Clock, ChevronDown, ChevronUp, Trophy, Loader2, BookmarkCheck, Bookmark, ArrowLeft, Lightbulb } from 'lucide-react';
-import { useLang } from '@/components/LangProvider';
-import { t } from '@/lib/i18n';
-import '../practice/practice-redesign.css';
-import '../practice/practice-flow.css';
+import { useState } from 'react';
+import Link from 'next/link';
+import { PenLine, Check, X, Lightbulb, RefreshCw, Sparkles, BookOpen, Clock, ChevronDown, ChevronUp, Trophy, Loader2, BookmarkCheck, Bookmark, ArrowLeft } from 'lucide-react';
+import { useIsMobile } from '@/lib/useIsMobile';
+import { KoreanKeyboard } from '@/components/KoreanKeyboard';
 import { useIsDesktop } from '@/lib/useIsMobile';
-import { KoreanKeyboardDisplay } from '@/components/dictation/KoreanKeyboardDisplay';
-import { useHangulIme } from '@/lib/useHangulIme';
-import { FloatingKoreanKeyboard } from '@/components/FloatingKoreanKeyboard';
+import { useFeedback } from '@/hooks/useFeedback';
 import { useAuth } from '@/components/AuthProvider';
 import { db } from '@/lib/db';
 import { useToast } from '@/hooks/useToast';
@@ -92,17 +88,12 @@ export default function WritingPage() {
   };
 
   return (
-    <div className="pr-scope">
-      <div className="hr-stage" style={{ paddingBottom: 'calc(56px + env(safe-area-inset-bottom, 0px))' }}>
-        <div className="hr-mobile-back" style={{ display: 'block' }}>
-          <button
-            className="hr-mobile-back-btn"
-            onClick={smartBack}
-            aria-label={t('writing.back_to_practice_aria', lang)}
-            style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
-          >
-            <ArrowLeft size={14} /> {t('writing.back_to_practice', lang)}
-          </button>
+    <div className="py-4 space-y-3 max-w-2xl mx-auto md:max-w-3xl">
+      <div className="flex items-center gap-3">
+        <Link href="/tools" className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors shrink-0"><ArrowLeft size={20} /></Link>
+        <div>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">写作练习</h1>
+          <p className="text-[var(--text-secondary)] text-sm mt-1">三种模式，从仿写到自由表达，逐步提升韩语写作能力</p>
         </div>
 
         <header className="hr-page-head">
@@ -153,26 +144,15 @@ export default function WritingPage() {
 }
 
 function ImitationMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord, 'id' | 'date'>) => void }) {
+  const isMobile = useIsMobile();
+  const { success: feedbackSuccess, error: feedbackError, click: feedbackClick } = useFeedback();
   const isDesktop = useIsDesktop();
-  const { lang } = useLang();
-  const { user } = useAuth();
-  const router = useRouter();
   const [currentIdx, setCurrentIdx] = useState(0);
   const [userInput, setUserInput] = useState('');
   const [inputMode, setInputMode] = useState<'type' | 'hand'>('type');
   const [submitted, setSubmitted] = useState(false);
-  const [skipped, setSkipped] = useState(false);
-  const submitRef = useRef<() => void>(() => {});
-  const ime = useHangulIme({ onChange: setUserInput, onEnter: () => submitRef.current() });
+  const [showKeyboard, setShowKeyboard] = useState(false);
   const [score, setScore] = useState(0);
-  const [wrongCount, setWrongCount] = useState(0);
-  const [xpEarned, setXpEarned] = useState(0);
-  const [finished, setFinished] = useState(false);
-  const [judging, setJudging] = useState(false);
-  // 判定结果 · exact/acceptable 都算过,wrong 才算错
-  const [verdict, setVerdict] = useState<'correct' | 'acceptable' | 'wrong'>('wrong');
-  const [aiReason, setAiReason] = useState<string | null>(null);
-  const [aiTip, setAiTip] = useState<string | null>(null);
 
   const prompt = imitationPrompts[currentIdx];
 
@@ -421,44 +401,27 @@ function ImitationMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord, '
                 if (e.key === 'Enter' && !e.shiftKey) {
                   e.preventDefault();
                   if (!submitted && userInput.trim()) handleSubmit();
+                  else if (submitted) handleNext();
                 }
               }}
-              placeholder={t('writing.input_placeholder', lang)}
+              readOnly={submitted}
+              placeholder="在这里输入韩语..."
               rows={2}
-              style={{
-                width: '100%', padding: '14px 16px', borderRadius: 14,
-                border: '2px solid var(--hr-border-2)', fontSize: 17, color: 'var(--hr-ink-1)',
-                outline: 'none', fontFamily: 'var(--hr-hangul)', boxSizing: 'border-box',
-                background: 'var(--hr-surface-2)', caretColor: 'var(--hr-purple-strong)', resize: 'none',
-                transition: 'border-color .15s var(--hr-ease), box-shadow .15s var(--hr-ease)',
-              }}
-              onFocus={e => { e.target.style.borderColor = 'var(--hr-purple-base)'; e.target.style.boxShadow = '0 0 0 4px rgba(168,150,217,.15)'; }}
-              onBlur={e => { e.target.style.borderColor = 'var(--hr-border-2)'; e.target.style.boxShadow = 'none'; }}
+              className={`flex-1 bg-[var(--bg-input)] border border-[var(--pink-pale)] rounded-xl p-4 text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)] text-base text-center resize-none focus:outline-none focus:border-[var(--pink-primary)]/50 ${submitted ? 'opacity-60 cursor-default' : ''}`}
+              style={{ fontFamily: "'system-ui', 'sans-serif'" }}
             />
-          )}
-          {inputMode === 'type' && !isDesktop && <KeyboardHint />}
-          {inputMode === 'type' && isDesktop && !submitted && (
-            <div style={{ marginTop: 10 }}>
-              <KoreanKeyboardDisplay composingText={userInput} pressedKey={ime.pressedKey} onJamo={ime.inputJamo} onBackspace={ime.backspace} onSpace={ime.space} />
-            </div>
-          )}
-          <div style={{ display: 'flex', gap: 10, marginTop: 4 }}>
-            <button
-              onClick={handleSkip}
-              className="pr-btn ghost"
-              style={{ padding: isDesktop ? '14px 22px' : '13px 18px', whiteSpace: 'nowrap' }}
-            >{t('writing.skip_show_answer', lang)}</button>
-            <button
-              onClick={handleSubmit}
-              disabled={!userInput.trim() || judging}
-              className="pr-btn primary"
-              style={{
-                flex: 1, minWidth: 0, padding: isDesktop ? '14px 0' : '13px 0',
-                cursor: userInput.trim() && !judging ? 'pointer' : 'not-allowed',
-                transition: 'background .15s var(--hr-ease)',
-              }}
-            >{judging ? t('writing.judging', lang) : t('writing.submit', lang)}</button>
+            {isDesktop && (
+              <button
+                type="button"
+                onClick={() => setShowKeyboard(!showKeyboard)}
+                className={`self-start px-3 py-3 rounded-xl transition-colors text-sm font-medium ${showKeyboard ? 'bg-[var(--pink-primary)]/20 text-[var(--pink-primary)]' : 'bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--pink-primary)]'}`}
+              >한</button>
+            )}
           </div>
+          <p className="text-[11px] text-[var(--text-muted)] mt-1">请切换系统键盘为韩语后输入</p>
+          {isDesktop && (
+            <KoreanKeyboard value={userInput} onChange={setUserInput} visible={showKeyboard} onClose={() => setShowKeyboard(false)} />
+          )}
         </div>
       ) : (
         <PracticeFeedbackCard
@@ -495,25 +458,22 @@ function ImitationMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord, '
 }
 
 function FreeWritingMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord, 'id' | 'date'>) => void }) {
+  const isMobile = useIsMobile();
   const isDesktop = useIsDesktop();
-  const { lang } = useLang();
   const { user } = useAuth();
   const router = useRouter();
   const { showToast } = useToast();
   const [selectedTopic, setSelectedTopic] = useState(0);
   const [text, setText] = useState('');
   const [wordCount, setWordCount] = useState(0);
+  const [uniqueWords, setUniqueWords] = useState(0);
   const [showKeyboard, setShowKeyboard] = useState(false);
-  const [inputMode, setInputMode] = useState<'type' | 'hand'>('type');
   const [scoring, setScoring] = useState(false);
   const [feedback, setFeedback] = useState<{
     original: string; corrected: string; reason: string; isCorrect: boolean; saveExpression: string;
     scores?: { vocabulary: number; grammar: number; naturalness: number; overall: number };
   } | null>(null);
   const [expressionSaved, setExpressionSaved] = useState(false);
-  const [sessionWritten, setSessionWritten] = useState(0);
-  const [totalXp, setTotalXp] = useState(0);
-  const [showSummary, setShowSummary] = useState(false);
 
   const topic = freeTopics[selectedTopic];
 
@@ -651,77 +611,30 @@ function FreeWritingMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord,
       </div>
 
       {/* Writing area */}
-      <div style={{
-        background: 'var(--hr-surface-2)', border: '1.5px solid var(--hr-border-2)',
-        borderRadius: 16, padding: 16, display: 'flex', flexDirection: 'column', gap: 10,
-        boxShadow: 'var(--hr-shadow-sm)',
-      }}>
-        <div style={{ display: 'flex', gap: 4, background: 'var(--hr-surface-3)', borderRadius: 999, padding: 4 }}>
-          {(['type', 'hand'] as const).map(m => (
-            <button
-              key={m}
-              type="button"
-              onClick={() => setInputMode(m)}
-              style={{
-                flex: 1, padding: '9px 0', borderRadius: 999, border: 'none', cursor: 'pointer',
-                fontSize: 13.5, fontWeight: 700, fontFamily: 'var(--hr-hangul)',
-                background: inputMode === m ? 'var(--hr-surface-1)' : 'transparent',
-                color: inputMode === m ? 'var(--hr-purple-strong)' : 'var(--hr-ink-3)',
-                boxShadow: inputMode === m ? '0 2px 8px rgba(58,46,41,.08)' : 'none',
-                transition: 'all .2s var(--hr-ease)',
-              }}
-            >
-              {m === 'type' ? t('writing.input_type', lang) : t('writing.input_hand', lang)}
-            </button>
-          ))}
-        </div>
-        {inputMode === 'hand' ? (
-          isDesktop ? (
-            <p style={{ fontSize: 13, color: 'var(--hr-ink-3)', textAlign: 'center', lineHeight: 1.6, padding: '16px 12px', margin: 0 }}>
-              {t('prac.hw_guide_desktop', lang)}
-            </p>
-          ) : (
-            <div style={{ padding: '8px 2px' }}>
-              <KeyboardHint text={t('prac.hw_guide_mobile', lang)} />
-            </div>
-          )
-        ) : (
-        <div style={{ display: 'flex', gap: 8 }}>
-          <textarea
-            value={text}
-            onChange={(e) => updateStats(e.target.value)}
-            placeholder={t('writing.free_placeholder', lang)}
+      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4">
+        <div className="flex gap-2">
+          <textarea value={text} onChange={(e) => updateStats(e.target.value)}
+            placeholder="在这里自由书写韩语（1-3句即可）..."
             rows={6}
-            style={{
-              flex: 1, minWidth: 0, background: 'transparent', color: 'var(--hr-ink-1)',
-              fontSize: 15, resize: 'none', outline: 'none', border: 'none',
-              fontFamily: 'var(--hr-hangul)', lineHeight: 1.6,
-            }}
+            className="flex-1 bg-transparent text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)] text-sm resize-none focus:outline-none"
+            style={{ fontFamily: "'system-ui', 'sans-serif'" }}
           />
           {isDesktop && (
-            <button
-              type="button"
-              onClick={() => setShowKeyboard(!showKeyboard)}
-              style={{
-                alignSelf: 'flex-start', padding: '10px 12px', borderRadius: 12, fontSize: 14, fontWeight: 700, cursor: 'pointer',
-                border: '1.5px solid var(--hr-border-2)',
-                background: showKeyboard ? 'var(--hr-purple-soft)' : 'var(--hr-surface-3)',
-                color: showKeyboard ? 'var(--hr-purple-strong)' : 'var(--hr-ink-3)',
-              }}
+            <button type="button" onClick={() => setShowKeyboard(!showKeyboard)}
+              className={`self-start px-3 py-3 rounded-xl transition-colors text-sm font-medium ${showKeyboard ? 'bg-[var(--pink-primary)]/20 text-[var(--pink-primary)]' : 'bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--pink-primary)]'}`}
             >한</button>
           )}
         </div>
+        {isDesktop && (
+          <KoreanKeyboard value={text} onChange={(val) => updateStats(val)} visible={showKeyboard} onClose={() => setShowKeyboard(false)} />
         )}
-        {/* 自由写是长文(多行/字数统计),需真 textarea 的光标与选中,故桌面用可拖拽悬浮键盘;
-            而仿写是单句,用 inline 只读显示区 + 常驻键盘(见 ImitationMode)。两种形态刻意不同。 */}
-        {inputMode === 'type' && isDesktop && (
-          <FloatingKoreanKeyboard value={text} onChange={(val) => updateStats(val)} visible={showKeyboard} onClose={() => setShowKeyboard(false)} />
-        )}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8, borderTop: '1px solid var(--hr-border-1)', fontSize: 11, color: 'var(--hr-ink-3)', fontFamily: 'var(--hr-mono)', letterSpacing: '.05em' }}>
-          <span>{t('writing.word_count', lang, { n: wordCount })}</span>
+        <div className="flex items-center justify-between pt-3 border-t border-[var(--border-color)] text-xs text-[var(--text-muted)]">
+          <span>{wordCount} 词</span>
+          {!user && <span className="text-[var(--pink-primary)]">登录后可使用 AI 批改</span>}
         </div>
         {inputMode === 'type' && !isDesktop && <KeyboardHint />}
       </div>
+      <p className="text-[11px] text-[var(--text-muted)]">请切换系统键盘为韩语后输入</p>
 
       {/* Submit button */}
       {!feedback && (
@@ -932,14 +845,11 @@ function ClozeMode({ onAddRecord }: { onAddRecord: (r: Omit<HistoryRecord, 'id' 
         playComplete();
         setAllDone(true);
       } else {
-        if (!xpAwardedRef.current) {
-          awardXp(10).catch(e => console.error('[writing] awardXp failed', e));
-          if (!streakUpdatedRef.current) {
-            streakUpdatedRef.current = true;
-            updateStreak().catch(e => console.error('[writing] updateStreak failed', e));
-          }
-        }
-        setShowWrongReview(true);
+        feedbackError(`得分 ${Math.round((score / clozeExercises.length) * 100)}%，需要 80% 才能通关，重新来过`);
+        setCurrentIdx(0);
+        setScore(0);
+        setSelectedAnswer(null);
+        setAnswered(false);
       }
     } else {
       setCurrentIdx(currentIdx + 1);
