@@ -1,11 +1,12 @@
 'use client';
 
 import { useAdminData } from '@/lib/useAdminData';
-import type { DashboardResponse, TrendGranularity, ActivityFeedItem, FeatureUsage, UserFunnel, ServerRealtime, RevenueTrendPoint, MetricCard, RegTrendPoint, RegUser } from '@/types/admin';
+import type { ScopedDashboardResponse, DashboardResponse, ActivityFeedItem, FeatureUsage, UserFunnel, ServerRealtime, RevenueTrendPoint, MetricCard, RegTrendPoint, RegUser, DailyCountPoint, AdminScope } from '@/types/admin';
 import { useState } from 'react';
 import Link from 'next/link';
 import { TrendingUp, TrendingDown, Server, Cpu, HardDrive, AlertTriangle } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { ScopeSwitcher, PeerErrorBanner } from '@/components/admin/ScopeSwitcher';
 
 function curSymbol(currency: 'CNY' | 'USD'): string {
   return currency === 'USD' ? '$' : '¥';
@@ -229,145 +230,7 @@ function ActivityFeed({ activities }: { activities: ActivityFeedItem[] }) {
   );
 }
 
-function UserRegPanel({ stats }: { stats: { daily: RegTrendPoint[]; allDaily: RegTrendPoint[]; monthly: RegTrendPoint[]; recentUsers: RegUser[] } }) {
-  type RegTab = 'daily' | 'monthly' | 'users';
-  const [tab, setTab] = useState<RegTab>('daily');
-  const [showAllDays, setShowAllDays] = useState(false);
-
-  const tabs: { key: RegTab; label: string }[] = [
-    { key: 'daily', label: '每日注册' },
-    { key: 'monthly', label: '每月注册' },
-    { key: 'users', label: '用户列表' },
-  ];
-
-  const dailyData = showAllDays ? stats.allDaily : stats.daily;
-
-  return (
-    <div className="bg-[var(--bg-card)] rounded-xl p-5 border border-[var(--border-color)]" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-semibold text-[var(--text-primary)]">用户注册分析</h3>
-        <div className="flex gap-1 bg-[var(--bg-input)] rounded-lg p-0.5">
-          {tabs.map((t) => (
-            <button
-              key={t.key}
-              onClick={() => setTab(t.key)}
-              className={`px-3 py-1 text-xs rounded-md transition-colors ${
-                tab === t.key ? 'bg-[var(--bg-card)] text-[var(--pink-primary)] font-semibold shadow-sm' : 'text-[var(--text-muted)]'
-              }`}
-            >
-              {t.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Daily chart */}
-      {tab === 'daily' && (
-        <div>
-          <div className="flex items-center justify-between mb-3">
-            <p className="text-xs text-[var(--text-muted)]">
-              {showAllDays ? `全部 ${dailyData.length} 天` : '近30天'} 每日新增 & 累计用户数
-            </p>
-            <button
-              onClick={() => setShowAllDays(v => !v)}
-              className="text-xs px-2.5 py-1 rounded-lg border border-[var(--border-color)] text-[var(--text-secondary)] hover:border-[var(--pink-primary)] hover:text-[var(--pink-primary)] transition-colors"
-            >
-              {showAllDays ? '近30天' : '显示全部'}
-            </button>
-          </div>
-          <ResponsiveContainer width="100%" height={240}>
-            <BarChart data={dailyData} barSize={showAllDays ? 3 : 8}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#F5E6E0" />
-              <XAxis dataKey="date" tick={{ fontSize: 9, fill: '#999' }} tickFormatter={(v) => String(v).slice(5)} interval={showAllDays ? Math.max(0, Math.floor(dailyData.length / 10) - 1) : 4} />
-              <YAxis yAxisId="left" tick={{ fontSize: 9, fill: '#999' }} />
-              <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 9, fill: '#999' }} />
-              <Tooltip
-                contentStyle={{ borderRadius: 12, border: '1px solid #F5E6E0', fontSize: 11 }}
-                formatter={(value: unknown, name: unknown) => [String(value), name === 'count' ? '当日新增' : '累计总量']}
-                labelFormatter={(l) => String(l)}
-              />
-              <Bar yAxisId="left" dataKey="count" name="count" fill="#FF8FAB" radius={[3,3,0,0]} />
-              <Line yAxisId="right" type="monotone" dataKey="cumulative" name="cumulative" stroke="#A78BFA" strokeWidth={2} dot={false} />
-            </BarChart>
-          </ResponsiveContainer>
-          <div className="flex gap-4 mt-2 justify-end">
-            <span className="flex items-center gap-1 text-[10px] text-[var(--text-muted)]"><span className="w-2 h-2 rounded-sm inline-block" style={{background:'#FF8FAB'}}/>当日新增</span>
-            <span className="flex items-center gap-1 text-[10px] text-[var(--text-muted)]"><span className="w-4 h-0.5 inline-block" style={{background:'#A78BFA'}}/>累计总量</span>
-          </div>
-        </div>
-      )}
-
-      {/* Monthly chart */}
-      {tab === 'monthly' && (
-        <div>
-          <p className="text-xs text-[var(--text-muted)] mb-3">建站至今全部 {stats.monthly.length} 个月 · 每月新增 & 累计用户数</p>
-          <ResponsiveContainer width="100%" height={240}>
-            <BarChart data={stats.monthly} barSize={stats.monthly.length > 24 ? 6 : 16}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#F5E6E0" />
-              <XAxis dataKey="date" tick={{ fontSize: 9, fill: '#999' }} tickFormatter={(v) => String(v).slice(2)} interval={Math.max(0, Math.floor(stats.monthly.length / 12) - 1)} />
-              <YAxis yAxisId="left" tick={{ fontSize: 9, fill: '#999' }} />
-              <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 9, fill: '#999' }} />
-              <Tooltip
-                contentStyle={{ borderRadius: 12, border: '1px solid #F5E6E0', fontSize: 11 }}
-                formatter={(value: unknown, name: unknown) => [String(value), name === 'count' ? '当月新增' : '累计总量']}
-                labelFormatter={(l) => String(l)}
-              />
-              <Bar yAxisId="left" dataKey="count" name="count" fill="#FF8FAB" radius={[3,3,0,0]} />
-              <Line yAxisId="right" type="monotone" dataKey="cumulative" name="cumulative" stroke="#A78BFA" strokeWidth={2} dot={false} />
-            </BarChart>
-          </ResponsiveContainer>
-          <div className="flex gap-4 mt-2 justify-end">
-            <span className="flex items-center gap-1 text-[10px] text-[var(--text-muted)]"><span className="w-2 h-2 rounded-sm inline-block" style={{background:'#FF8FAB'}}/>当月新增</span>
-            <span className="flex items-center gap-1 text-[10px] text-[var(--text-muted)]"><span className="w-4 h-0.5 inline-block" style={{background:'#A78BFA'}}/>累计总量</span>
-          </div>
-        </div>
-      )}
-
-      {/* Users list */}
-      {tab === 'users' && (
-        <div>
-          <p className="text-xs text-[var(--text-muted)] mb-3">最近注册的100位用户</p>
-          {stats.recentUsers.length === 0 ? (
-            <div className="text-center py-8 text-xs text-[var(--text-muted)]">暂无注册用户</div>
-          ) : (
-          <div className="overflow-auto max-h-[320px] rounded-lg border border-[var(--border-color)]">
-            <table className="w-full text-xs">
-              <thead className="sticky top-0 bg-[var(--bg-input)]">
-                <tr>
-                  <th className="text-left px-3 py-2 text-[var(--text-muted)] font-medium">#</th>
-                  <th className="text-left px-3 py-2 text-[var(--text-muted)] font-medium">用户名</th>
-                  <th className="text-left px-3 py-2 text-[var(--text-muted)] font-medium">注册时间</th>
-                  <th className="text-left px-3 py-2 text-[var(--text-muted)] font-medium">操作</th>
-                </tr>
-              </thead>
-              <tbody>
-                {stats.recentUsers.map((u, i) => (
-                  <tr key={u.id} className="border-t border-[var(--border-color)] hover:bg-[var(--bg-input)] transition-colors">
-                    <td className="px-3 py-2 text-[var(--text-muted)]">{i + 1}</td>
-                    <td className="px-3 py-2 font-medium text-[var(--text-primary)]">{u.username}</td>
-                    <td className="px-3 py-2 text-[var(--text-secondary)] tabular-nums">
-                      {new Date(u.createdAt).toLocaleString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
-                    </td>
-                    <td className="px-3 py-2">
-                      <Link href={`/admin/users/${u.id}`} className="text-[var(--pink-primary)] hover:underline">
-                        详情
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
-}
-
-export default function DashboardPage() {
-  const { data, loading } = useAdminData<DashboardResponse>('/api/admin/dashboard');
-  const [granularity, setGranularity] = useState<TrendGranularity>('day');
+type RegStats = { daily: RegTrendPoint[]; allDaily: RegTrendPoint[]; monthly: RegTrendPoint[]; recentUsers: RegUser[]; dailyLogins: DailyCountPoint[]; todayLogins: number; yesterdayLogins: number };
 
 function mergeRegTrends(a: RegTrendPoint[], b: RegTrendPoint[]): RegTrendPoint[] {
   const map = new Map<string, number>();
@@ -677,7 +540,7 @@ export default function DashboardPage() {
       </div>
 
       {/* User Registration Analysis */}
-      <UserRegPanel stats={data.userRegStats} />
+      <UserRegPanel stats={data.userRegStats} peerStats={combined && peer ? peer.userRegStats : null} />
     </div>
   );
 }

@@ -4,42 +4,145 @@ import { getStaticAudio, loadVocabAudioIndex } from '@/lib/audio/audioRegistry';
 let currentAudio: HTMLAudioElement | null = null;
 let currentAudioSource: AudioBufferSourceNode | null = null;
 let currentFetchController: AbortController | null = null;
-let nlsFailedUntil = 0;
+let currentAudioEls: HTMLAudioElement[] = [];
+// 每 text 独立黑名单：某一句 NLS 失败只短暂拒绝该句，其他句子仍尝试
+// 之前是全局 nlsFailedUntil，导致 challenge 页面快速切题时后续题目静音
+const nlsTextBlacklist = new Map<string, number>();
+function isNlsBlacklisted(text: string): boolean {
+  const until = nlsTextBlacklist.get(text);
+  if (!until) return false;
+  if (Date.now() > until) { nlsTextBlacklist.delete(text); return false; }
+  return true;
+}
+function markNlsFailed(text: string): void {
+  nlsTextBlacklist.set(text, Date.now() + 500);
+  // 兜底清理：超过 100 条时清除已过期项
+  if (nlsTextBlacklist.size > 100) {
+    const now = Date.now();
+    for (const [k, v] of nlsTextBlacklist) if (v <= now) nlsTextBlacklist.delete(k);
+  }
+}
 let speakSeq = 0;
+// 只在 cancelSpeech() 里自增：用于 speakWordRepeated 判断"这段连读有没有被别人打断"。
+// 连读循环自己每调一次 speak() 会触发恰好一次 cancelSpeech()（+1），路径不同（NLS/缓存/
+// 浏览器兜底）都不影响这个计数；外部翻页/新点击也各 +1。故循环可用「预测 +1」精确核对。
+let cancelGen = 0;
 let audioCtxUnlocked = false;
+let sharedAudioCtx: AudioContext | null = null;
+let browserVoicesTried = false;
+
+// URL ?debug=audio 时打开音频诊断日志（生产可用于排查 iOS 无声）
+function isAudioDebug(): boolean {
+  if (typeof window === 'undefined') return false;
+  try { return new URLSearchParams(window.location.search).has('debug'); } catch { return false; }
+}
+function audioLog(...args: unknown[]): void {
+  if (isAudioDebug()) console.log('[audio]', ...args);
+}
+
+export function isAudioContextRunning(): boolean {
+  if (typeof window === 'undefined') return false;
+  return !!sharedAudioCtx && sharedAudioCtx.state === 'running';
+}
+
+function getAudioContext(): AudioContext | null {
+  if (typeof window === 'undefined') return null;
+  if (sharedAudioCtx && sharedAudioCtx.state !== 'closed') return sharedAudioCtx;
+  try {
+    // 旧 ctx 已关闭，AudioBuffer 缓存与旧 ctx 绑定，必须清空
+    if (sharedAudioCtx && sharedAudioCtx.state === 'closed') {
+      dialogCache.clear();
+    }
+    const Ctor = (window as unknown as { AudioContext?: typeof AudioContext; webkitAudioContext?: typeof AudioContext }).AudioContext
+      ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+    if (!Ctor) return null;
+    sharedAudioCtx = new Ctor();
+    return sharedAudioCtx;
+  } catch {
+    return null;
+  }
+}
 
 // Minimal silent MP3 (0.1s) as a data URI — used to unlock iOS audio on first gesture
 const SILENT_MP3 = 'data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjI5LjEwMAAAAAAAAAAAAAAA//OEAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAABAAABIADAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA//MUZAAAAAGkAAAAAAAAA0gAAAAATEFN//MUZAMAAAGkAAAAAAAAA0gAAAAATEFN//MUZAYAAAGkAAAAAAAAA0gAAAAATEFN//MUZAkAAAGkAAAAAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV';
 
 let unlockedAudio: HTMLAudioElement | null = null;
-
-// Unlock iOS/WeChat audio on first user gesture so async audio.play() works
-export function unlockAudioContext() {
-  if (audioCtxUnlocked || typeof window === 'undefined') return;
-  try {
-    // Unlock HTMLAudioElement for WeChat/iOS WebView
-    const a = new Audio(SILENT_MP3);
-    a.onended = () => { a.src = ''; };  // clear data: src so reuse check works
-    a.play().catch(() => {});
-    unlockedAudio = a;
-
-    // Also unlock AudioContext for browsers that need it
-    const ctx = new AudioContext();
-    const buf = ctx.createBuffer(1, 1, 22050);
-    const src = ctx.createBufferSource();
-    src.buffer = buf;
-    src.connect(ctx.destination);
-    src.start(0);
-    ctx.close();
-    audioCtxUnlocked = true;
-  } catch { /* ignore */ }
+// iOS 复用池：用户手势解锁过的 audio 元素能在后续异步栈内直接 .src = ...; .play()
+// 大小 8 够多段对话/多词循环并行使用
+const iosAudioPool: HTMLAudioElement[] = [];
+let iosAudioPoolCursor = 0;
+function getIosAudio(): HTMLAudioElement {
+  const a = iosAudioPool[iosAudioPoolCursor];
+  iosAudioPoolCursor = (iosAudioPoolCursor + 1) % iosAudioPool.length;
+  return a;
 }
 
-// Auto-unlock on first touchstart/click so all subsequent audio.play() calls work on iOS
+// Unlock iOS/WeChat audio on first user gesture so async audio.play() works.
+// 必须在**用户手势的同步栈**里调用，不能 await 之后再调。
+// iOS 长时间无操作后 AudioContext 会自动 suspended，所以每次手势都要重新 resume + 静音 start。
+export function unlockAudioContext() {
+  if (typeof window === 'undefined') return;
+  try {
+    // 首次：起一批 <audio> 静音 MP3，把 HTMLAudioElement 通道也解锁
+    // iOS 上同一个 audio 元素被手势 play() 过一次后，之后异步 .src=; .play() 就不需要手势
+    if (!audioCtxUnlocked) {
+      const a = new Audio(SILENT_MP3);
+      a.onended = () => { a.src = ''; };
+      a.play().catch(() => {});
+      unlockedAudio = a;
+      if (iosAudioPool.length === 0) {
+        for (let i = 0; i < 8; i++) {
+          const b = new Audio(SILENT_MP3);
+          b.onended = () => { b.src = ''; b.onended = null; };
+          b.play().catch(() => {});
+          iosAudioPool.push(b);
+        }
+      }
+    } else if (iosAudioPool.length > 0) {
+      // 后续手势：只对完全空闲（无 src）且不在正在使用列表里的池元素心跳一次静音
+      // 有 src 的元素说明是业务音频（正在播 / 播完暂停 / 被 cancel 后残留），绝不能重播
+      // currentAudioEls 覆盖 speakDialog fetch 中但 src 未设置的空窗期，防止 race
+      const inUse = new Set(currentAudioEls);
+      for (const b of iosAudioPool) {
+        if (b.src || inUse.has(b)) continue;
+        try {
+          b.src = SILENT_MP3;
+          b.onended = () => { b.src = ''; b.onended = null; };
+          b.play().catch(() => {});
+        } catch { /* ignore */ }
+      }
+    }
+
+    const ctx = getAudioContext();
+    if (ctx) {
+      // iOS: resume 必须在 source.start() 之前，否则 suspended context 上调度的 source 会在 resume 时被清掉
+      if (ctx.state === 'suspended') ctx.resume().catch(() => {});
+      const buf = ctx.createBuffer(1, 1, 22050);
+      const src = ctx.createBufferSource();
+      src.buffer = buf;
+      src.connect(ctx.destination);
+      src.start(0);
+      audioLog('unlock', { state: ctx.state, sr: ctx.sampleRate });
+    }
+    audioCtxUnlocked = true;
+  } catch (err) {
+    // 一次失败不代表永久失败，下次手势再试
+    audioCtxUnlocked = false;
+    unlockedAudio = null;
+    audioLog('unlock failed', err);
+  }
+}
+
+// Auto-unlock on first user gesture so audio.play() works on iOS / WeChat.
+// 不用 { once: true } —— unlock 失败时 listener 已被消费，后续点击再也触发不到。
+// 改为 unlock 成功后才解绑。
 if (typeof window !== 'undefined') {
+  // 每次手势都跑一遍 unlockAudioContext（内部按需 resume + 静音 start），不解绑
   const autoUnlock = () => { unlockAudioContext(); };
-  window.addEventListener('touchstart', autoUnlock, { once: true, passive: true });
-  window.addEventListener('click', autoUnlock, { once: true, passive: true });
+  window.addEventListener('touchstart', autoUnlock, { passive: true });
+  window.addEventListener('click', autoUnlock, { passive: true });
+  // 词汇/例句预生成音频索引：加载后 speak() 命中静态文件，绕开实时 TTS
+  loadVocabAudioIndex();
 }
 
 const TTS_SPEED_KEY = 'tts-speed';
@@ -80,22 +183,96 @@ export function setSpeechRate(rate: number): void {
   } catch { /* ignore */ }
 }
 
-/** Word TTS — uses NLS for consistent Korean pronunciation including on iOS. */
-export async function speakWord(text: string, rate?: number): Promise<void> {
+const TTS_REPEAT_KEY = 'tts-repeat';
+const REPEAT_GAP_MS = 1000; // 每遍之间静音 1 秒
+
+/** 闪卡自动朗读遍数（1/2/3/5），默认 1。 */
+export function getSpeakRepeat(): number {
+  if (typeof window === 'undefined') return 1;
+  try {
+    const v = parseInt(localStorage.getItem(TTS_REPEAT_KEY) || '1', 10);
+    return Number.isFinite(v) && v >= 1 ? v : 1;
+  } catch {
+    return 1;
+  }
+}
+
+export function setSpeakRepeat(count: number): void {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(TTS_REPEAT_KEY, String(count));
+  } catch { /* ignore */ }
+}
+
+/** Word TTS — uses NLS for consistent Korean pronunciation including on iOS.
+ * 单词/例句朗读统一走用户设置语速：忽略调用方传入的 rate(历史上各页硬编码 0.7~0.85,
+ * 导致设置页调倍速对例句/单词全无效)。需要独立语速的场景(发音教学/对话)直接调 speak()。 */
+export async function speakWord(text: string, _rate?: number): Promise<void> {
   if (typeof window === 'undefined') return;
   const cleaned = cleanText(text);
   if (!cleaned) return;
   cancelSpeech();
-  await speak(cleaned, rate ?? getSpeechRate());
+  await speak(cleaned, getSpeechRate());
+}
+
+/**
+ * 连读同一个词 N 遍，每遍间隔 1 秒。闪卡自动播放用。
+ * count 省略时读用户设置的遍数。切卡/新点击（会调 cancelSpeech / 新 speak）→ speakSeq 变化 → 间隔期间检测到后停，不再排下一遍。
+ * 每遍播完后捕获 speakSeq 稳定值；间隔期间若被外部调用改动则中断（speak 内部自己的 ++speakSeq 已在捕获前完成，不会误判）。
+ */
+export async function speakWordRepeated(text: string, rate?: number, count?: number): Promise<void> {
+  if (typeof window === 'undefined') return;
+  const cleaned = cleanText(text);
+  if (!cleaned) return;
+  const times = Math.max(1, count ?? getSpeakRepeat());
+  const r = rate ?? getSpeechRate();
+  // 用 cancelGen 判断连读是否被打断。循环自己每调一次 speak() 会触发恰好一次
+  // cancelSpeech()（cancelGen +1），无论走 NLS/缓存/浏览器兜底哪条路都一样。外部翻页/
+  // 新点击也各 +1。故每遍后的预测值就是 expected+1；对不上=有别人插进来，立刻停，
+  // 绝不再排下一遍——否则上一张卡的剩余连读会和新卡音频叠在一起。
+  let expected = cancelGen;
+  for (let i = 0; i < times; i++) {
+    await speak(cleaned, r);
+    expected += 1; // 本遍自己的 speak() 触发了一次 cancelSpeech()
+    if (cancelGen !== expected) return; // 播放期间被抢占
+    if (i === times - 1) return;
+    await new Promise((res) => setTimeout(res, REPEAT_GAP_MS));
+    if (cancelGen !== expected) return; // 间隔期间被抢占
+  }
 }
 
 /** Browser-compatible TTS — routes through speak() so NLS is used where available. */
-export async function speakBrowser(text: string, rate?: number): Promise<void> {
+export async function speakBrowser(text: string, rate?: number, voice?: string): Promise<void> {
   if (typeof window === 'undefined') return;
   const cleaned = cleanText(text);
   if (!cleaned) return;
   cancelSpeech();
-  await speak(cleaned, rate ?? getSpeechRate());
+  await speak(cleaned, rate ?? getSpeechRate(), undefined, voice);
+}
+
+/**
+ * 播放预录音源（绘本狐狸配音等），命中则播文件，缺文件/失败回落 edge-tts。
+ * 复用 speak() 的 iOS 解锁 + cancelSpeech + speakSeq + playUrl 路径，翻页/暂停可中断。
+ */
+export async function speakPreRecorded(
+  url: string,
+  fallbackText: string,
+  rate?: number,
+  onEnd?: () => void,
+): Promise<void> {
+  if (typeof window === 'undefined') { onEnd?.(); return; }
+  unlockAudioContext();
+  cancelSpeech();
+  const seq = ++speakSeq;
+  try {
+    await playUrl(url, seq);
+    onEnd?.();
+  } catch {
+    // 被新点击抢占则静默退出，不回落（否则会叠播）
+    if (seq !== speakSeq) { onEnd?.(); return; }
+    // 文件缺失/解码失败 → 回落 edge-tts（speak 内部自带 unlock/cancel/seq）
+    await speak(fallbackText, rate, onEnd);
+  }
 }
 
 export function cancelSpeech() {
@@ -119,6 +296,7 @@ export function cancelSpeech() {
   currentAudioEls = [];
   window.speechSynthesis?.cancel();
   speakSeq++; // invalidate in-flight NLS requests
+  cancelGen++; // 供 speakWordRepeated 判断连读是否被打断
 }
 
 function cleanText(text: string): string {
@@ -231,18 +409,8 @@ export async function speak(
     return;
   }
 
-  // If static audio exists for this text, always prefer it over NLS.
-  // Note: explicitRate/slowUrl are intentionally ignored here — all registered
-  // entries currently use a single pre-recorded file at natural speed.
-  const staticForWord = getStaticAudio(cleaned);
-  if (staticForWord) {
-    try { await playUrl(staticForWord.url, seq); } catch { /* silent */ }
-    onEnd?.();
-    return;
-  }
-
-  // Check cache first (for NLS-allowed content types)
-  const cacheKey = `${rate}:${sanitizeTTSText(cleaned)}`;
+  // Check cache first (for Edge-TTS content). Cache key must include voice + literal flag.
+  const cacheKey = `${voiceId}:${rate}:${literal ? 'L:' : ''}${cleaned}`;
   const cached = audioCache.get(cacheKey);
   if (cached && Date.now() - cached.ts < CACHE_TTL) {
     try {
@@ -259,7 +427,7 @@ export async function speak(
   // If text is Chinese, skip NLS and go straight to browser TTS
   if (isChineseText(cleaned)) {
     try {
-      await speakViaBrowser(sanitizeTTSText(cleaned), rate);
+      await speakViaBrowser(sanitizeTTSText(cleaned, undefined, literal), rate);
     } catch {
       // failed silently
     }
@@ -268,10 +436,13 @@ export async function speak(
   }
 
   // Aliyun NLS TTS (best Korean pronunciation, works on iOS/iPad)
-  const nlsAvailable = Date.now() > nlsFailedUntil;
+  // sanitizeTTSText 兜底：清理 vs / 斜杠等分隔符，防 NLS 把它们朗读出来
+  // literal=true 时跳过 normalize，保留字面写法（"写"按钮场景）
+  const cleanedForTts = sanitizeTTSText(cleaned, undefined, literal);
+  const nlsAvailable = !isNlsBlacklisted(cleanedForTts);
   if (nlsAvailable) {
     try {
-      const blobUrl = await speakViaNls(sanitizeTTSText(cleaned), seq);
+      const blobUrl = await speakViaNls(cleanedForTts, seq, rate, voiceId);
       if (blobUrl) {
         if (audioCache.size >= CACHE_MAX) {
           const first = audioCache.keys().next().value;
@@ -291,34 +462,99 @@ export async function speak(
       // User cancelled (AbortError) — not an NLS failure, just exit silently
       if (err instanceof Error && err.name === 'AbortError') { onEnd?.(); return; }
       if (seq !== speakSeq) { onEnd?.(); return; }
-      // NLS failed — retry once before falling back to browser TTS
-      try {
-        const blobUrl = await speakViaNls(sanitizeTTSText(cleaned), seq);
-        if (blobUrl) {
-          audioCache.set(cacheKey, { url: blobUrl, ts: Date.now() });
-          onEnd?.();
-          return;
-        }
-      } catch (err2: unknown) {
-        // Abort on retry also means user moved on — don't blacklist NLS
-        if (err2 instanceof Error && err2.name === 'AbortError') { onEnd?.(); return; }
-        // Genuine NLS failure — blacklist and fall through to browser TTS
-        nlsFailedUntil = Date.now() + 3 * 1000;
-      }
-      if (seq !== speakSeq) { onEnd?.(); return; }
+      // NLS failed — blacklist briefly. Do NOT fall back to system speechSynthesis:
+      // user devices (esp. low-end Android / iOS without ko voice pack) produce
+      // robotic, non-human Korean that users find disturbing. Prefer silence.
+      markNlsFailed(cleanedForTts);
     }
   }
 
-  // Browser speechSynthesis fallback
-  try {
-    await speakViaBrowser(cleaned, rate);
-  } catch {
-    // both failed, give up silently
-  }
   onEnd?.();
 }
 
-/** Chinese TTS via Aliyun NLS (Meimei voice), falls back to browser speechSynthesis. */
+/**
+ * 语音对话专用 TTS — 走 MiniMax(Korean_SweetGirl)，与其他板块的 edge-tts 分离。
+ * 签名对齐 speak()：(text, rate, onEnd)。复用 speakSeq/cancelSpeech 及 iOS 音频池播放路径。
+ */
+export async function speakViaMinimax(text: string, rate?: number, onEnd?: () => void, voice?: 'male' | 'female', animalId?: string): Promise<void> {
+  if (typeof window === 'undefined') { onEnd?.(); return; }
+  const cleaned = cleanText(text);
+  if (!cleaned) { onEnd?.(); return; }
+
+  unlockAudioContext();
+  cancelSpeech();
+  const seq = ++speakSeq;
+
+  try {
+    const controller = new AbortController();
+    currentFetchController = controller;
+    const timeoutId = setTimeout(() => controller.abort(), 15000);
+    let res: Response;
+    try {
+      res = await fetch('/api/tts/minimax', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        // animalId 命中卡司则服务端用角色音色，否则回落 voice(male/female)
+        body: JSON.stringify({ text: cleaned, rate: rate ?? getSpeechRate(), voice: voice ?? 'female', animalId: animalId ?? '' }),
+        signal: controller.signal,
+      });
+    } finally {
+      clearTimeout(timeoutId);
+      if (currentFetchController === controller) currentFetchController = null;
+    }
+    if (seq !== speakSeq) { onEnd?.(); return; }
+    if (!res.ok) { onEnd?.(); return; } // 失败静默(与 edge-tts 一致，不回落系统 TTS)
+    const blob = await res.blob();
+    if (seq !== speakSeq) { onEnd?.(); return; }
+    const url = URL.createObjectURL(blob);
+    try {
+      await playUrlViaPool(url, seq);
+    } finally {
+      URL.revokeObjectURL(url);
+    }
+  } catch (err) {
+    if (err instanceof Error && err.name === 'AbortError') { onEnd?.(); return; }
+    // 合成/播放失败静默
+  }
+  if (seq === speakSeq) onEnd?.();
+}
+
+/** 预加载音频到缓存 — 后台静默生成，不播放。进入页面时调用，后续点击秒播。 */
+export async function prefetchAudio(text: string, rate?: number): Promise<void> {
+  if (typeof window === 'undefined') return;
+  const cleaned = cleanText(text);
+  if (!cleaned || isChineseText(cleaned)) return;
+
+  const r = rate ?? getSpeechRate();
+  // 与 speak() 的 key 一致（voiceId:rate:literal:text），确保 prefetch 后 speak() 命中缓存
+  const cacheKey = `sunhi:${r}:${cleaned}`;
+  if (audioCache.has(cacheKey)) return; // 已缓存
+
+  // 静态音频不需要预加载
+  if (getStaticAudio(cleaned)) return;
+
+  if (isNlsBlacklisted(cleaned)) return;
+
+  try {
+    const controller = new AbortController();
+    const rateStr = getEdgeTtsRate(r);
+    const ttsUrl = `/api/tts/edge?text=${encodeURIComponent(cleaned)}&voice=sunhi&rate=${encodeURIComponent(rateStr)}`;
+    const res = await fetch(ttsUrl, { signal: controller.signal });
+    if (!res.ok) return;
+    const blob = await res.blob();
+    const blobUrl = URL.createObjectURL(blob);
+    // 仅缓存，不播放
+    if (audioCache.size >= CACHE_MAX) {
+      const first = audioCache.keys().next().value;
+      if (first) {
+        const old = audioCache.get(first);
+        if (old) URL.revokeObjectURL(old.url);
+        audioCache.delete(first);
+      }
+    }
+    audioCache.set(cacheKey, { url: blobUrl, ts: Date.now() });
+  } catch { /* 预加载失败不影响使用，点击时再试 */ }
+}
 export async function speakChinese(
   text: string,
   rate?: number,
@@ -328,21 +564,21 @@ export async function speakChinese(
   const cleaned = cleanText(text);
   if (!cleaned) { onEnd?.(); return; }
 
-  cancelSpeech();
-  const seq = speakSeq;
+  // 自建独立 seq token（与 speak() 对齐），否则先前的 cancelSpeech 会作废本次调用
+  const seq = ++speakSeq;
 
   try {
     const controller = new AbortController();
     currentFetchController = controller;
+    const timeoutId = setTimeout(() => controller.abort(), 8000);
     let res: Response;
+    const rateStr = getEdgeTtsRate(rate ?? getSpeechRate());
     try {
-      res = await fetch('/api/tts/aliyun', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: cleaned, voice: 'zhiyue' }),
+      res = await fetch(`/api/tts/edge?text=${encodeURIComponent(cleaned)}&voice=zh-CN-XiaoxiaoNeural&rate=${encodeURIComponent(rateStr)}`, {
         signal: controller.signal,
       });
     } finally {
+      clearTimeout(timeoutId);
       if (currentFetchController === controller) currentFetchController = null;
     }
     if (seq !== speakSeq) { onEnd?.(); return; }
@@ -396,16 +632,20 @@ async function speakViaBrowser(text: string, rate: number): Promise<void> {
     utter.lang = lang;
     utter.rate = rate;
 
-    // Prefer a native voice for the target language so we don't fall through to
-    // the system default (often zh-CN on Chinese devices), which mispronounces Korean.
-    const voices = synth.getVoices();
     if (voices.length > 0) {
-      const match = voices.find((v) => v.lang === lang) ?? voices.find((v) => v.lang.startsWith(lang.slice(0, 2)));
+      // 匹配顺序：完全匹配 → 前缀匹配（zh 或 ko）→ 系统默认
+      const exact = voices.find((v) => v.lang === lang);
+      const prefix = lang === 'zh-CN'
+        ? voices.find((v) => v.lang.toLowerCase().startsWith('zh'))
+        : voices.find((v) => v.lang.toLowerCase().startsWith('ko'));
+      const match = exact ?? prefix;
       if (match) utter.voice = match;
     }
 
-    utter.onend = () => resolve();
-    utter.onerror = () => resolve();
+    let done = false;
+    const finish = () => { if (!done) { done = true; resolve(); } };
+    utter.onend = finish;
+    utter.onerror = finish;
     synth.speak(utter);
     // 兜底超时：iOS 有时 onend 不触发，按文本长度估算 max
     const estMs = Math.min(15000, Math.max(2000, text.length * 300));
@@ -413,49 +653,74 @@ async function speakViaBrowser(text: string, rate: number): Promise<void> {
   });
 }
 
-async function speakViaNls(text: string, seq: number): Promise<string | null> {
+function getEdgeTtsRate(userRate: number): string {
+  const pct = Math.round((userRate - 1) * 100);
+  if (pct >= 0) return `+${pct}%`;
+  return `${pct}%`;
+}
+
+async function speakViaNls(text: string, seq: number, rate?: number, voice?: string): Promise<string | null> {
   const controller = new AbortController();
   currentFetchController = controller;
+  // 8 秒超时兜底：Edge TTS 偶发慢请求时不让用户干等
+  const timeoutId = setTimeout(() => controller.abort(), 8000);
+  const rateStr = getEdgeTtsRate(rate ?? getSpeechRate());
+  const voiceId = voice ?? 'sunhi';
+  const ttsUrl = `/api/tts/edge?text=${encodeURIComponent(text)}&voice=${encodeURIComponent(voiceId)}&rate=${encodeURIComponent(rateStr)}`;
   let res: Response;
   try {
-    res = await fetch('/api/tts/aliyun', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text }),
-      signal: controller.signal,
-    });
+    res = await fetch(ttsUrl, { signal: controller.signal });
   } finally {
+    clearTimeout(timeoutId);
     if (currentFetchController === controller) currentFetchController = null;
   }
-  if (!res.ok) throw new Error('NLS failed');
+  if (!res.ok) throw new Error('TTS failed');
 
   if (seq !== speakSeq) return null;
 
   const blob = await res.blob();
   if (seq !== speakSeq) return null;
 
-  const url = URL.createObjectURL(blob);
+  const blobUrl = URL.createObjectURL(blob);
   try {
-    await playUrlViaElement(url, seq);
+    await playUrlViaElement(blobUrl, seq);
   } catch {
-    URL.revokeObjectURL(url);
-    throw new Error('NLS audio playback failed');
+    URL.revokeObjectURL(blobUrl);
+    throw new Error('TTS audio playback failed');
   }
-  return url;
+  return blobUrl;
 }
 
 
-async function playUrl(url: string, seq: number): Promise<void> {
-  await playUrlViaElement(url, seq);
+async function playUrl(url: string, seq: number, playbackRate?: number): Promise<void> {
+  await playUrlViaElement(url, seq, playbackRate);
 }
 
-async function playUrlViaElement(url: string, seq: number): Promise<void> {
+// iOS 专用：语音对话的兔莉发声在 VAD 异步回调里触发，脱离用户手势栈，
+// new Audio().play() 会被 iOS Safari 静默拒绝（症状：能识别、有文字、无声）。
+// 复用点 orb 时 unlockAudioContext() 解锁过的池元素——它们被手势 play() 过，
+// 之后异步 .src=;.play() 不再需要手势。非 iOS 走原路径。
+async function playUrlViaPool(url: string, seq: number): Promise<void> {
+  const isIOS = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent);
+  if (!isIOS || iosAudioPool.length === 0) {
+    await playUrlViaElement(url, seq);
+    return;
+  }
+  const a = getIosAudio();
+  currentAudioEls = [a];
   await new Promise<void>((resolve) => {
-    // Reuse the unlocked Audio element for WeChat/iOS WebView compatibility.
-    // WeChat blocks audio.play() after async operations unless the element was
-    // already unlocked in a prior gesture handler.
-    const audio = unlockedAudio ?? new Audio();
-    audio.src = url;
+    a.onended = () => { a.onended = null; a.src = ''; resolve(); };
+    a.onerror = () => { a.onerror = null; a.src = ''; resolve(); };
+    a.src = url;
+    a.play().catch(() => { a.src = ''; resolve(); });
+  });
+  currentAudioEls = [];
+}
+
+async function playUrlViaElement(url: string, seq: number, playbackRate?: number): Promise<void> {
+  await new Promise<void>((resolve, reject) => {
+    const audio = new Audio(url);
+    if (playbackRate && playbackRate > 0) audio.playbackRate = playbackRate;
     currentAudio = audio;
     audio.onended = () => {
       if (currentAudio === audio) currentAudio = null;
@@ -463,9 +728,15 @@ async function playUrlViaElement(url: string, seq: number): Promise<void> {
     };
     audio.onerror = () => {
       if (currentAudio === audio) currentAudio = null;
-      resolve();
+      // 被新点击抢占（cancelSpeech 把 src='' 触发 onerror）→ 静默
+      if (seq !== speakSeq) { resolve(); return; }
+      reject(new Error('audio playback failed'));
     };
-    audio.play().catch(() => resolve());
+    audio.play().catch((err) => {
+      if (currentAudio === audio) currentAudio = null;
+      if (seq !== speakSeq) { resolve(); return; }
+      reject(err instanceof Error ? err : new Error('audio play rejected'));
+    });
   });
 }
 

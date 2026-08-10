@@ -395,101 +395,18 @@ class XorPayProvider implements PaymentProvider {
   }
 }
 
-// ── CreemProvider：海外站 MoR（商家代理），支持订阅+买断，大陆个人支付宝提现 ──
+// ── CreemProvider：海外站 MoR（商家代理），支持订阅+买断 ──
 class CreemProvider implements PaymentProvider {
   readonly channel = 'creem';
-  private apiKey: string;
-  private webhookSecret: string;
-  private baseUrl: string;
-
-  constructor() {
-    const key = process.env.CREEM_API_KEY;
-    if (!key) throw new Error('CREEM_API_KEY 未配置');
-    this.apiKey = key;
-    this.webhookSecret = process.env.CREEM_WEBHOOK_SECRET || '';
-    this.baseUrl = process.env.CREEM_API_BASE || 'https://api.creem.io';
-  }
-
-  private getProductId(tier: Tier): string | undefined {
-    const map: Record<string, string | undefined> = {
-      monthly: process.env.CREEM_PRODUCT_MONTHLY,
-      yearly: process.env.CREEM_PRODUCT_YEARLY,
-      lifetime: process.env.CREEM_PRODUCT_LIFETIME,
-    };
-    return map[tier];
-  }
-
-  async createCharge(input: CreateChargeInput): Promise<CreateChargeResult> {
-    const pid = this.getProductId(input.tier);
-    if (!pid) throw new Error(`Creem 未配置 ${input.tier} 档产品 ID`);
-
-    const base = process.env.NEXT_PUBLIC_SITE_URL || '';
-    const body: Record<string, unknown> = {
-      product_id: pid,
-      success_url: `${base}/membership/success?order=${input.orderId}`,
-      metadata: { outTradeNo: input.outTradeNo, orderId: input.orderId, userId: input.userId },
-    };
-
-    const res = await fetch(`${this.baseUrl}/v1/checkouts`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': this.apiKey },
-      body: JSON.stringify(body),
-    });
-
-    if (!res.ok) {
-      const errText = await res.text().catch(() => '');
-      throw new Error(`Creem checkout 失败 (${res.status}): ${errText}`);
-    }
-    const data = await res.json();
-    if (!data.checkout_url) throw new Error('Creem 未返回 checkout_url');
-    return { checkoutUrl: data.checkout_url };
-  }
-
-  async verifyCallback(req: Request): Promise<VerifyResult> {
-    const sig = req.headers.get('creem-signature') || '';
-    const raw = await req.text();
-
-    if (!sig) return { ok: false, outTradeNo: '', rawPayload: raw };
-    if (!this.webhookSecret) return { ok: false, outTradeNo: '', rawPayload: raw };
-
-    const computed = createHmac('sha256', this.webhookSecret).update(raw).digest('hex');
-    if (computed !== sig) return { ok: false, outTradeNo: '', rawPayload: raw };
-
-    let payload: Record<string, unknown> = {};
-    try { payload = JSON.parse(raw); } catch { return { ok: false, outTradeNo: '', rawPayload: raw }; }
-
-    const eventType = (payload.eventType || payload.event_type || payload.type || '') as string;
-    const obj = (payload.object || (payload as any).data?.object || {}) as Record<string, unknown>;
-    const meta = (obj.metadata || payload.metadata || {}) as Record<string, unknown>;
-
-    if (eventType === 'checkout.completed') {
-      const outTradeNo = (meta.outTradeNo as string) || '';
-      const subscriptionId = obj.subscription_id as string | undefined;
-      const customerId = (obj.customer_id || (obj.customer as Record<string, unknown>)?.id) as string | undefined;
-      const rawAmount = obj.amount_total ?? obj.amount ?? (obj.order as any)?.amount;
-      const amountCents = (typeof rawAmount === 'number' ? rawAmount : typeof rawAmount === 'string' ? Number(rawAmount) : undefined);
-      return { ok: true, outTradeNo, rawPayload: raw, eventType, subscriptionId, stripeCustomerId: customerId, amount: amountCents };
-    }
-
-    if (eventType === 'subscription.active' || eventType === 'subscription.paid') {
-      const outTradeNo = (meta.outTradeNo as string) || '';
-      const subId = obj.id as string | undefined;
-      const rawPeriodEnd = obj.current_period_end;
-      const d = rawPeriodEnd ? new Date(rawPeriodEnd as string) : new Date(NaN);
-      return { ok: true, outTradeNo, rawPayload: raw, eventType, subscriptionId: subId, currentPeriodEnd: isNaN(d.getTime()) ? undefined : d.getTime() };
-    }
-
-    if (eventType === 'subscription.canceled' || eventType === 'subscription.expired') {
-      return { ok: true, outTradeNo: '', rawPayload: raw, eventType, subscriptionId: obj.id as string | undefined };
-    }
-
-    return { ok: true, outTradeNo: '', rawPayload: raw, eventType };
-  }
-
+  private apiKey: string; private webhookSecret: string; private baseUrl: string;
+  constructor() { const key = process.env.CREEM_API_KEY; if (!key) throw new Error('CREEM_API_KEY 未配置'); this.apiKey = key; this.webhookSecret = process.env.CREEM_WEBHOOK_SECRET || ''; this.baseUrl = process.env.CREEM_API_BASE || 'https://api.creem.io'; }
+  private getProductId(tier: Tier): string | undefined { return { monthly: process.env.CREEM_PRODUCT_MONTHLY, yearly: process.env.CREEM_PRODUCT_YEARLY, lifetime: process.env.CREEM_PRODUCT_LIFETIME }[tier]; }
+  async createCharge(input: CreateChargeInput): Promise<CreateChargeResult> { const pid = this.getProductId(input.tier); if (!pid) throw new Error(`Creem 未配置 ${input.tier} 档产品 ID`); const base = process.env.NEXT_PUBLIC_SITE_URL || ''; const res = await fetch(`${this.baseUrl}/v1/checkouts`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-api-key': this.apiKey }, body: JSON.stringify({ product_id: pid, success_url: `${base}/membership/success?order=${input.orderId}`, metadata: { outTradeNo: input.outTradeNo, orderId: input.orderId, userId: input.userId } }) }); if (!res.ok) { const errText = await res.text().catch(() => ''); throw new Error(`Creem checkout 失败 (${res.status}): ${errText}`); } const data = await res.json(); if (!data.checkout_url) throw new Error('Creem 未返回 checkout_url'); return { checkoutUrl: data.checkout_url }; }
+  async verifyCallback(req: Request): Promise<VerifyResult> { const sig = req.headers.get('creem-signature') || ''; const raw = await req.text(); if (!sig || !this.webhookSecret) return { ok: false, outTradeNo: '', rawPayload: raw }; const computed = createHmac('sha256', this.webhookSecret).update(raw).digest('hex'); if (computed !== sig) return { ok: false, outTradeNo: '', rawPayload: raw }; let payload: Record<string, unknown> = {}; try { payload = JSON.parse(raw); } catch { return { ok: false, outTradeNo: '', rawPayload: raw }; } const eventType = (payload.eventType || payload.event_type || payload.type || '') as string; const obj = (payload.object || (payload as any).data?.object || {}) as Record<string, unknown>; const meta = (obj.metadata || payload.metadata || {}) as Record<string, unknown>; if (eventType === 'checkout.completed') { const outTradeNo = (meta.outTradeNo as string) || ''; const subId = obj.subscription_id as string | undefined; const cid = (obj.customer_id || (obj.customer as any)?.id) as string | undefined; const rawAmount = obj.amount_total ?? obj.amount ?? (obj.order as any)?.amount; const amountCents = (typeof rawAmount === 'number' ? rawAmount : typeof rawAmount === 'string' ? Number(rawAmount) : undefined); return { ok: true, outTradeNo, rawPayload: raw, eventType, subscriptionId: subId, stripeCustomerId: cid, amount: amountCents }; } if (eventType === 'subscription.active' || eventType === 'subscription.paid') { const outTradeNo = (meta.outTradeNo as string) || ''; const subId = obj.id as string | undefined; const rawPeriodEnd = obj.current_period_end; const d = rawPeriodEnd ? new Date(rawPeriodEnd as string) : new Date(NaN); return { ok: true, outTradeNo, rawPayload: raw, eventType, subscriptionId: subId, currentPeriodEnd: isNaN(d.getTime()) ? undefined : d.getTime() }; } if (eventType === 'subscription.canceled' || eventType === 'subscription.expired') { return { ok: true, outTradeNo: '', rawPayload: raw, eventType, subscriptionId: obj.id as string | undefined }; } return { ok: true, outTradeNo: '', rawPayload: raw, eventType }; }
   successResponse(): Response { return NextResponse.json({ received: true }); }
 }
 
-// 真渠道 provider 在这里加 case
+// 真渠道 provider
 export function getPaymentProvider(): PaymentProvider {
   const name = process.env.PAYMENT_PROVIDER || 'mock';
   if (name === 'mock' && process.env.NODE_ENV === 'production') {
