@@ -2,15 +2,18 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Sparkles, BookOpen, Settings, GraduationCap, Compass } from 'lucide-react';
+import { Sparkles, BookOpen, NotebookPen, GraduationCap, Compass } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 
 const tabs = [
-  { label: '今日', href: '/daily', icon: Sparkles },
-  { label: '词汇', href: '/vocabulary', icon: BookOpen },
-  { label: '工具', href: '/tools', icon: Settings },
-  { label: '学习', href: '/learning', icon: GraduationCap },
-  { label: '探索', href: '/explore', icon: Compass },
+  { labelKey: 'nav.today', href: '/daily', icon: Sparkles },
+  { labelKey: 'nav.vocab', href: '/vocabulary', icon: BookOpen },
+  // 日记位居中，是王牌产品入口；图标 NotebookPen 暂用，待用户提供专属图标替换
+  { labelKey: 'nav.diary', href: '/diary', icon: NotebookPen, featured: true },
+  { labelKey: 'nav.learn', href: '/learning', icon: GraduationCap },
+  { labelKey: 'nav.explore', href: '/explore', icon: Compass },
 ];
 
 export function BottomTabBar() {
@@ -18,17 +21,45 @@ export function BottomTabBar() {
   const pathname = usePathname();
   const [hidden, setHidden] = useState(false);
 
+  // Paths that belong to the "学习" tab but don't start with /learning
+  const LEARNING_PATHS = ['/review', '/grammar', '/reading', '/typing', '/writing', '/phonetics', '/dictation', '/ai', '/listen', '/practice'];
+  // Paths that belong to "词汇" tab
+  const VOCAB_PATHS = ['/mine'];
+
+  function isTabActive(href: string): boolean {
+    if (href === '/daily') return pathname === '/daily';
+    if (href === '/learning') return pathname.startsWith('/learning') || LEARNING_PATHS.some(p => pathname.startsWith(p));
+    if (href === '/explore') {
+      if (pathname.startsWith('/explore')) return true;
+      // /learn exactly or /learn/... but NOT /learning
+      if (pathname === '/learn' || pathname.startsWith('/learn/')) return true;
+      return ['/korea', '/knowledge'].some(p => pathname.startsWith(p));
+    }
+    if (href === '/vocabulary') return pathname.startsWith('/vocabulary') || VOCAB_PATHS.some(p => pathname.startsWith(p));
+    return pathname.startsWith(href);
+  }
+
   // Hide when system keyboard is visible (visualViewport shrinks significantly)
   useEffect(() => {
     const vv = window.visualViewport;
     if (!vv) return;
+    let rafId = 0;
     const check = () => {
-      const ratio = vv.height / window.innerHeight;
-      setHidden(ratio < 0.75);
+      if (rafId) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = 0;
+        const ratio = vv.height / window.innerHeight;
+        setHidden(prev => {
+          // Hysteresis: prevent flickering when viewport ratio oscillates near threshold
+          if (prev) return ratio < 0.85;
+          return ratio < 0.75;
+        });
+      });
     };
     vv.addEventListener('resize', check);
     vv.addEventListener('scroll', check);
     return () => {
+      if (rafId) cancelAnimationFrame(rafId);
       vv.removeEventListener('resize', check);
       vv.removeEventListener('scroll', check);
     };
@@ -37,7 +68,7 @@ export function BottomTabBar() {
   if (hidden) return null;
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-[var(--border-color)] bg-[var(--bg-card)] pb-[env(safe-area-inset-bottom,0px)]">
+    <nav className="fixed bottom-0 left-0 right-0 z-[60] border-t border-[var(--border-color)] bg-[var(--bg-card)] pb-[env(safe-area-inset-bottom,0px)] px-safe">
       <div className="mx-auto grid h-[56px] max-w-screen-sm grid-cols-5 px-2">
         {tabs.map((tab) => {
           const active = isTabActive(tab.href);
