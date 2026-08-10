@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSmartBack } from '@/lib/useSmartBack';
 import { speak } from '@/lib/tts';
-import { db } from '@/lib/db';
+import { db, ensureFavoritesBook } from '@/lib/db';
 import { stripParticle } from '@/lib/koreanParticles';
 import { displayRoman } from '@/lib/dictionary';
 import { useRequireLoginAction } from '@/hooks/useRequireLoginAction';
@@ -22,7 +22,6 @@ import { GrammarTeachingCard } from '@/components/analyze/GrammarTeachingCard';
 import { AnalyzeQuiz } from '@/components/analyze/AnalyzeQuiz';
 import { FloatingKoreanKeyboard } from '@/components/FloatingKoreanKeyboard';
 import PlaceIntro from '@/components/PlaceIntro';
-import type { KoZh } from '@/types/inline';
 
 const LIGHT_C = { ..._LIGHT_C, cream: '#fff8f4', mintText: '#4e746d', zhText: '#7e6b64', shadow: '0 16px 42px rgba(78,52,46,.10)', strong: '0 28px 72px rgba(78,52,46,.18)' };
 const DARK_C  = { ..._DARK_C, cream: '#252040', mintText: '#5ecfb8', zhText: '#9A8AB0', shadow: '0 16px 42px rgba(0,0,0,.30)', strong: '0 28px 72px rgba(0,0,0,.40)' };
@@ -37,7 +36,6 @@ interface CultureNote { anchor: string; explanation: string }
 
 type QuizType = 'meaning' | 'cloze' | 'translate' | 'grammar';
 interface QuizQuestion {
-  [k: string]: unknown;
   type: QuizType;
   question: string;
   options: string[];
@@ -47,7 +45,6 @@ interface QuizQuestion {
 }
 
 interface AnalysisResult {
-  [k: string]: unknown;
   original: string;
   fullTranslation: string;
   alternativeTranslations?: Array<{ ko: string; context: string }>;
@@ -78,7 +75,7 @@ interface AnalysisResult {
     contrast?: string;
     mistake?: string;
     meaning?: string;
-    examples: KoZh[] | string[];
+    examples: { ko: string; zh: string }[] | string[];
   }[];
   sentences?: { korean: string; chinese: string; structure?: string }[];
   suggestion?: string;
@@ -343,7 +340,7 @@ const particleExplanations: Record<string, string> = {
 const verbEndings = ['습니다', 'ㅂ니다', '아요', '어요', '해요', '세요', '으세요', '았어요', '었어요', '했어요', '겠습니다', 'ㄹ게요', '을게요', '네요', '고요', '니까', '면서', '지만', '는데', '거나'];
 
 // 例句兼容：新版 { ko, zh } 对象 + 旧版 localStorage string[]
-function normalizeExample(ex: KoZh | string): KoZh {
+function normalizeExample(ex: { ko: string; zh: string } | string): { ko: string; zh: string } {
   return typeof ex === 'string' ? { ko: ex, zh: '' } : ex;
 }
 // ── Offline analyze (fallback) ─────────────────────────
@@ -441,7 +438,6 @@ function detectDirection(text: string): { from: string; to: string } {
 
 // ── History ────────────────────────────────────────────
 interface HistoryItem {
-  [k: string]: unknown;
   id: string;
   timestamp: number;
   original: string;
@@ -1154,7 +1150,106 @@ const ANALYZE_STYLES = `
   color: var(--color-surface-2);
 }
 @media (min-width: 768px) { .az2-dock { display: none; } }
+
+/* ════════ 移动端原生两态流 (azm-) · 见 docs/analyze-native-v2.html ════════ */
+/* JS 按 !isDesktop 渲染，无需 media query 隔离 */
+.azm-nav {
+  display: flex; align-items: center; gap: 12px;
+  padding: calc(12px + env(safe-area-inset-top,0px)) 18px 12px;
+  position: sticky; top: 0; z-index: 20;
+  background: linear-gradient(to bottom, var(--hr-surface-1) 82%, transparent);
+}
+.azm-nav-back {
+  width: 36px; height: 36px; border-radius: 12px;
+  border: 1px solid var(--hr-border-2); background: var(--hr-surface-2);
+  display: grid; place-items: center; font-size: 19px; color: var(--hr-ink-2);
+  flex-shrink: 0; cursor: pointer;
+  box-shadow: 0 1px 2px rgba(58,46,41,.04), 0 2px 8px rgba(58,46,41,.05);
+}
+.azm-nav-title { flex: 1; min-width: 0; }
+.azm-nav-title .kr { font-family: var(--hr-hangul); font-weight: 900; font-size: 15px; color: var(--hr-ink-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.azm-nav-title .sub { font-family: var(--hr-mono); font-size: 9.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--hr-ink-3); margin-top: 1px; }
+.azm-nav-mark { font-family: var(--hr-serif); font-style: italic; font-weight: 700; font-size: 19px; color: var(--hr-pink-strong); flex-shrink: 0; }
+
+/* 输入态 */
+.azm-in { padding: 8px 20px 20px; display: flex; flex-direction: column; }
+.azm-lead { font-family: var(--hr-serif); font-weight: 700; font-size: 23px; line-height: 1.32; color: var(--hr-ink-1); margin: 14px 2px 4px; letter-spacing: -.01em; }
+.azm-lead em { font-style: italic; color: var(--hr-pink-strong); }
+.azm-lead-sub { font-size: 13px; color: var(--hr-ink-3); margin: 0 2px 18px; line-height: 1.6; }
+.azm-dir { display: inline-flex; align-items: center; gap: 6px; font-family: var(--hr-mono); font-size: 10px; font-weight: 700; letter-spacing: .1em; color: var(--hr-mint-strong); background: var(--hr-mint-soft); padding: 5px 11px; border-radius: 999px; margin-bottom: 10px; align-self: flex-start; }
+.azm-dir::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--hr-mint-strong); }
+.azm-field { background: var(--hr-surface-2); border: 1.5px solid var(--hr-pink-base); border-radius: 18px; padding: 16px 16px 12px; box-shadow: 0 0 0 4px rgba(255,127,168,.10), 0 2px 6px rgba(58,46,41,.06), 0 12px 28px rgba(58,46,41,.10); }
+.azm-field textarea { width: 100%; border: 0; outline: 0; resize: none; background: transparent; font-family: var(--hr-hangul); font-size: 17px; line-height: 1.6; color: var(--hr-ink-1); min-height: 96px; }
+.azm-field textarea::placeholder { color: var(--hr-ink-4); font-family: var(--hr-sans); }
+.azm-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; padding-top: 10px; border-top: 1px solid var(--hr-border-1); font-family: var(--hr-mono); font-size: 10px; letter-spacing: .1em; color: var(--hr-ink-3); }
+.azm-kbd { width: 30px; height: 30px; border-radius: 9px; border: 1px solid var(--hr-border-1); background: var(--hr-surface-1); display: grid; place-items: center; font-size: 15px; cursor: pointer; }
+.azm-modes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+.azm-mode { border: 1.5px solid var(--hr-border-2); background: var(--hr-surface-2); border-radius: 16px; padding: 13px 14px; cursor: pointer; transition: .2s var(--hr-ease); text-align: left; }
+.azm-mode .mt { font-weight: 700; font-size: 14px; color: var(--hr-ink-1); display: flex; align-items: center; gap: 7px; }
+.azm-mode .md { font-size: 11px; color: var(--hr-ink-3); margin-top: 4px; line-height: 1.5; }
+.azm-mode .mt svg { width: 20px; height: 20px; flex-shrink: 0; }
+.azm-mode.on { border-color: var(--hr-pink-base); background: linear-gradient(160deg, var(--hr-surface-2), var(--hr-pink-soft)); box-shadow: 0 0 0 3px rgba(255,127,168,.12); }
+.azm-mode.on .mt { color: var(--hr-pink-strong); }
+.azm-recent { margin-top: 24px; }
+.azm-recent-h { display: flex; justify-content: space-between; align-items: center; font-family: var(--hr-mono); font-size: 10px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--hr-ink-3); margin-bottom: 10px; padding: 0 2px; }
+.azm-recent-h button { font-family: var(--hr-sans); font-size: 10px; letter-spacing: 0; text-transform: none; font-weight: 500; color: var(--hr-ink-3); background: transparent; border: 0; cursor: pointer; }
+.azm-recent-item { display: flex; align-items: center; gap: 11px; padding: 11px 2px; border-bottom: 1px solid var(--hr-border-1); width: 100%; background: transparent; border-left: 0; border-right: 0; border-top: 0; text-align: left; cursor: pointer; }
+.azm-recent-item:last-child { border-bottom: 0; }
+.azm-recent-ic { width: 34px; height: 34px; border-radius: 11px; background: var(--hr-surface-3); display: grid; place-items: center; flex-shrink: 0; color: var(--hr-pink-strong); }
+.azm-recent-tx { flex: 1; min-width: 0; }
+.azm-recent-tx .r1 { font-family: var(--hr-hangul), var(--hr-sans); font-size: 13.5px; font-weight: 500; color: var(--hr-ink-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.azm-recent-tx .r2 { font-family: var(--hr-hangul), var(--hr-sans); font-size: 11.5px; color: var(--hr-ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
+.azm-recent-tx .r3 { font-family: var(--hr-mono); font-size: 9px; color: var(--hr-ink-4); margin-top: 3px; letter-spacing: .05em; }
+
+/* 结果态 hero */
+.azm-hero { padding: 6px 20px 22px; border-bottom: 1px solid var(--hr-border-1); }
+.azm-hero-orig { display: flex; align-items: flex-start; gap: 10px; }
+.azm-hero-orig .kr { flex: 1; min-width: 0; font-family: var(--hr-hangul); font-weight: 700; font-size: 25px; line-height: 1.42; color: var(--hr-ink-1); letter-spacing: -.01em; overflow-wrap: anywhere; }
+.azm-spk { width: 38px; height: 38px; border-radius: 13px; border: 1px solid var(--hr-border-2); background: var(--hr-surface-2); flex-shrink: 0; display: grid; place-items: center; color: var(--hr-pink-strong); cursor: pointer; box-shadow: 0 1px 2px rgba(58,46,41,.04), 0 2px 8px rgba(58,46,41,.05); }
+.azm-spk svg { width: 18px; height: 18px; }
+.azm-hero-rom { font-family: var(--hr-mono); font-size: 12px; color: var(--hr-ink-3); margin-top: 9px; letter-spacing: .02em; }
+.azm-hero-zh { font-size: 16.5px; line-height: 1.6; color: var(--hr-ink-2); margin-top: 14px; font-weight: 500; overflow-wrap: anywhere; }
+.azm-hero-tags { display: flex; gap: 7px; margin-top: 14px; flex-wrap: wrap; }
+.azm-htag { font-family: var(--hr-mono); font-size: 10px; font-weight: 700; letter-spacing: .06em; padding: 5px 10px; border-radius: 8px; background: var(--hr-surface-3); color: var(--hr-ink-3); }
+.azm-htag.diff { background: var(--hr-mint-soft); color: var(--hr-mint-strong); }
+
+/* 结果态浮动 dock — 沿用 az2-dock 定位公式 */
+.azm-dock {
+  position: fixed; left: 12px; right: 12px;
+  bottom: calc(56px + env(safe-area-inset-bottom,0px) + 8px);
+  z-index: 60; display: grid; gap: 8px; padding: 8px; border-radius: 20px;
+  background: var(--hr-surface-2);
+  border: 1px solid var(--hr-border-1);
+  box-shadow: 0 -4px 16px rgba(0,0,0,.04), 0 16px 36px rgba(78,52,46,.18);
+}
+[data-theme="dark"] .azm-dock { background: var(--hr-surface-2); }
+@supports (backdrop-filter: blur(16px)) {
+  .azm-dock { background: rgba(255,251,247,.86); backdrop-filter: blur(16px); }
+  [data-theme="dark"] .azm-dock { background: rgba(40,36,64,.86); }
+}
+.azm-rd-ic { width: 48px; height: 48px; border-radius: 14px; border: 1px solid var(--hr-border-2); background: var(--hr-surface-2); display: grid; place-items: center; color: var(--hr-ink-2); cursor: pointer; }
+.azm-rd-ic svg { width: 20px; height: 20px; }
+.azm-rd-main { height: 48px; border-radius: 14px; border: 0; background: var(--hr-ink-1); color: var(--hr-surface-1); font-family: var(--hr-sans); font-weight: 700; font-size: 14.5px; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; }
+.azm-rd-main svg { width: 18px; height: 18px; }
+.azm-rd-main.ghost { background: var(--hr-surface-2); color: var(--hr-ink-2); border: 1px solid var(--hr-border-2); }
+.azm-rd-main:disabled { opacity: .5; }
+
+/* 结果态分段外壳（复用现有 az2-card 子组件） */
+.azm-res { padding-bottom: calc(120px + env(safe-area-inset-bottom,0px)); }
+.azm-sec { padding: 22px 20px 4px; }
+.azm-sec-h { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px; }
+.azm-sec-h .lbl { font-family: var(--hr-mono); font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--hr-ink-3); display: flex; align-items: baseline; gap: 9px; }
+.azm-sec-h .lbl .n { font-family: var(--hr-serif); font-style: italic; font-size: 15px; color: var(--hr-pink-strong); font-weight: 700; letter-spacing: 0; }
+.azm-sec-h .act { font-family: var(--hr-sans); font-size: 11.5px; font-weight: 600; color: var(--hr-pink-strong); background: none; border: 0; cursor: pointer; }
 `;
+
+// 描线 SVG 图标（移动端两态流用，不用 emoji 做控件）
+const svgBase = { fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const };
+const RefreshIcon = () => <svg width="16" height="16" viewBox="0 0 24 24" {...svgBase}><path d="M3 12a9 9 0 1 0 9-9 9.7 9.7 0 0 0-6.7 2.9L3 8"/><path d="M3 3v5h5"/></svg>;
+const PenIcon = () => <svg viewBox="0 0 24 24" {...svgBase}><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>;
+const SearchIcon = () => <svg viewBox="0 0 24 24" {...svgBase}><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>;
+const SpeakIcon = () => <svg viewBox="0 0 24 24" {...svgBase}><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a9 9 0 0 1 0 14"/></svg>;
+const PlusIcon = () => <svg viewBox="0 0 24 24" {...svgBase} strokeWidth={2.2}><path d="M12 5v14M5 12h14"/></svg>;
 
 export default function AnalyzePage() {
   const { theme } = useTheme();
@@ -1246,7 +1341,16 @@ export default function AnalyzePage() {
         setResult(r);
         saveToHistory(r);
       } else {
-        showToastMsg(t('analyze.toast_failed', lang));
+        // 只对面向用户的中文错误（429 额度/400 校验）采用后端文案，
+        // 其余（401/500/503 等内部状态）保持本地化通用提示，避免把 'Unauthorized'/'API key not configured' 等英文/内部信息暴露给用户
+        let msg = t('analyze.toast_failed', lang);
+        if (res.status === 429 || res.status === 400) {
+          try {
+            const errData = await res.json();
+            if (errData?.error) msg = String(errData.error);
+          } catch { /* 非 JSON 响应，用通用提示 */ }
+        }
+        showToastMsg(msg);
       }
     } catch {
       if (timedOut) return;
@@ -1301,22 +1405,47 @@ export default function AnalyzePage() {
 
   async function handleSaveWord(text: string, meaning: string) {
     const cleanText = stripParticle(text);
-    if (savedWords.has(cleanText)) { showToastMsg(t('analyze.toast_saved_word', lang)); return; }
+    const alreadySaved = savedWords.has(text);
     requireLogin(async () => {
       try {
+        if (alreadySaved) {
+          try {
+            const existing = await db.words.where('word').equals(cleanText).first();
+            if (existing) {
+              const bookId = await ensureFavoritesBook(lang);
+              const book = await db.wordBooks.get(bookId);
+              if (book && book.wordIds.includes(existing.id)) {
+                await db.wordBooks.update(bookId, { wordIds: book.wordIds.filter(id => id !== existing.id), updatedAt: Date.now() });
+              }
+            }
+            setSavedWords(prev => { const s = new Set(prev); s.delete(text); return s; });
+          } catch (e) { console.error('[analyze] removeWord from favorites failed:', e); }
+          return;
+        }
         const existing = await db.words.where('word').equals(cleanText).first();
+        const rowId = existing?.id || 'analyze-' + cleanText;
         if (!existing) {
           await db.words.add({
-            id: 'analyze-' + cleanText,
+            id: rowId,
             word: cleanText, pronunciation: '', meaning,
             partOfSpeech: '', examples: [], mastery: 'new' as const,
             srsLevel: 0, nextReview: Date.now(), easeFactor: 2.5, interval: 1,
             createdAt: Date.now(), lastReviewed: null,
           });
         }
+        try {
+          const bookId = await ensureFavoritesBook(lang);
+          const book = await db.wordBooks.get(bookId);
+          if (book && !book.wordIds.includes(rowId)) {
+            await db.wordBooks.update(bookId, { wordIds: [...book.wordIds, rowId], updatedAt: Date.now() });
+          }
+        } catch { /* 收藏本步骤失败不影响词已存进词库 */ }
         setSavedWords(prev => new Set([...prev, text]));
-        showToastMsg(t('analyze.toast_saved_word', lang));
-      } catch { showToastMsg(t('analyze.toast_save_fail', lang)); }
+        showToastMsg(t('analyze.toast_saved_word', lang), '/vocabulary?tab=books');
+      } catch (err: any) {
+        console.error('[analyze] saveWord failed:', err?.message || err);
+        showToastMsg(t('analyze.toast_save_fail', lang));
+      }
     });
   }
 
@@ -1331,15 +1460,16 @@ export default function AnalyzePage() {
       setPackingAllWords(true);
       try {
         const newlySaved = new Set<string>();
+        const savedIds: string[] = [];
         for (const w of unsaved) {
           const cleanText = stripParticle(w.text);
           try {
-            const existing = await db.words.where('word').equals(cleanText).first();
+            let existing = await db.words.where('word').equals(cleanText).first();
             if (!existing) {
               const wordExamples = w.examples && w.examples.length > 0
                 ? w.examples.map((ex) => ({ text: normalizeExample(ex).ko, translation: normalizeExample(ex).zh || '', source: 'manual' as const }))
                 : (w.example ? [{ text: w.example, translation: '', source: 'manual' as const }] : []);
-              await db.words.add({
+              const newWord = {
                 id: 'analyze-' + cleanText,
                 word: cleanText,
                 pronunciation: w.romanization || w.pronunciation || '',
@@ -1349,13 +1479,27 @@ export default function AnalyzePage() {
                 mastery: 'new' as const,
                 srsLevel: 0, nextReview: Date.now(), easeFactor: 2.5, interval: 1,
                 createdAt: Date.now(), lastReviewed: null,
-              });
+              };
+              await db.words.add(newWord);
+              existing = newWord;
             }
+            savedIds.push(existing.id);
             newlySaved.add(w.text);
           } catch { /* skip this word */ }
         }
+        // 批量加入默认单词本「我的收藏」，和其他来源一致，便于复习
+        try {
+          const bookId = await ensureFavoritesBook(lang);
+          const book = await db.wordBooks.get(bookId);
+          if (book) {
+            const merged = [...new Set([...book.wordIds, ...savedIds])];
+            if (merged.length !== book.wordIds.length) {
+              await db.wordBooks.update(bookId, { wordIds: merged, updatedAt: Date.now() });
+            }
+          }
+        } catch { /* 加入收藏本失败不影响已存入词库 */ }
         setSavedWords(prev => new Set([...prev, ...newlySaved]));
-        showToastMsg(t('analyze.toast_saved_word', lang));
+        showToastMsg(t('analyze.toast_saved_word', lang), '/vocabulary?tab=books');
       } finally {
         setPackingAllWords(false);
       }
@@ -1603,6 +1747,321 @@ export default function AnalyzePage() {
         {[t('analyze.mode_learn', lang), t('analyze.mode_deep', lang)][i]}
       </button>
     ));
+  }
+
+  // 移动端结果体分段（复用桌面同款子组件，保持功能同步）
+  function renderResultSections() {
+    if (!result) return null;
+    return (
+      <>
+        {mode === 'deep' && (result.overview?.topic || result.overview?.scenario || result.difficultyReason) && (
+          <div className="azm-sec">
+            <div className="azm-sec-h"><span className="lbl">{t('analyze.deep.overview_title', lang)}</span></div>
+            <div className="az2-card" style={{ margin: 0 }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                {[
+                  { key: 'topic_label', v: result.overview?.topic },
+                  { key: 'scenario_label', v: result.overview?.scenario },
+                ].filter(x => x.v).map((x, i) => (
+                  <span key={i} className="az2-chip"><span className="label">{t('analyze.deep.' + x.key, lang)}:</span><strong>{x.v}</strong></span>
+                ))}
+              </div>
+              {result.difficultyReason && (
+                <div className="az2-diff-reason"><strong style={{ marginRight: 4 }}>{t('analyze.deep.difficulty_reason_label', lang)}:</strong>{result.difficultyReason}</div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {result.structure && result.structure.length > 0 && (
+          <div className="azm-sec">
+            <div className="az2-card" style={{ margin: 0 }}>
+              <SentenceStructureChart items={result.structure} />
+            </div>
+          </div>
+        )}
+
+        {result.words.length > 0 && (
+          <div className="azm-sec">
+            <div className="azm-sec-h">
+              <span className="lbl">{lang === 'en' ? 'Vocabulary' : '词汇'} <span className="n">{String(result.words.length).padStart(2, '0')}</span></span>
+              {(() => {
+                const unsaved = result.words.filter(w => !savedWords.has(w.text)).length;
+                if (unsaved === 0) return null;
+                return <button className="act" onClick={handlePackAllWords} disabled={packingAllWords}>{packingAllWords ? '…' : t('analyze.deep.pack_all_words', lang, { n: String(unsaved) })}</button>;
+              })()}
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {result.words.slice(0, showAllWords ? undefined : 6).map((w, i) => (
+                <AnalyzeWordCard key={i} word={w} saved={savedWords.has(w.text)} onSave={() => handleSaveWord(w.text, w.meaning)} onSpeak={(text) => speak(text)} />
+              ))}
+            </div>
+            {result.words.length > 6 && (
+              <button className="az2-icon-btn" style={{ marginTop: 12, width: '100%', justifyContent: 'center' }} onClick={() => setShowAllWords(v => !v)}>
+                {showAllWords ? t('analyze.btn_collapse', lang) : t('analyze.btn_show_all', lang, { n: String(result.words.length) })}
+              </button>
+            )}
+          </div>
+        )}
+
+        {result.grammar.length > 0 && (
+          <div className="azm-sec">
+            <div className="azm-sec-h"><span className="lbl">{t('analyze.grammar_title', lang)} <span className="n">{String(result.grammar.length).padStart(2, '0')}</span></span></div>
+            <div className="az2-card" style={{ margin: 0 }}>
+              {result.grammar.slice(0, mode === 'learn' && !showAllGrammar ? 3 : undefined).map((g, i) => (
+                <GrammarTeachingCard key={i} g={g} />
+              ))}
+              {mode === 'learn' && result.grammar.length > 3 && (
+                <button className="az2-icon-btn" style={{ marginTop: 12, width: '100%', justifyContent: 'center' }} onClick={() => setShowAllGrammar(v => !v)}>
+                  {showAllGrammar ? t('analyze.btn_collapse_grammar', lang) : t('analyze.btn_show_all_grammar', lang, { n: String(result.grammar.length) })}
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+
+        {mode === 'deep' && result.sentences && result.sentences.length > 0 && (
+          <div className="azm-sec">
+            <div className="azm-sec-h"><span className="lbl">{t('analyze.sentences_title', lang)}</span></div>
+            <div className="az2-card" style={{ margin: 0 }}>
+              {result.sentences.map((s, i) => {
+                const added = addedSentences.has(s.korean) || savedSentences.has(result.original);
+                return (
+                  <div key={i} className="az2-sentence-row">
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 }}>
+                      <p style={{ margin: 0, fontFamily: 'var(--az2-ko)', fontSize: 15, fontWeight: 500, lineHeight: 1.6, flex: 1, minWidth: 0, color: 'var(--color-ink-1)' }}>{s.korean}</p>
+                      <div style={{ display: 'flex', gap: 4, alignItems: 'center', flexShrink: 0 }}>
+                        {renderSpeakBtn(s.korean, '🔊')}
+                        <button onClick={() => handleAddSentenceToReview(s)} disabled={added} className={'az2-icon-btn' + (added ? ' mint' : '')} style={{ height: 26, padding: '0 8px', fontSize: 11 }}>
+                          {added ? t('analyze.deep.sentence_added_review', lang) : t('analyze.deep.sentence_add_review', lang)}
+                        </button>
+                      </div>
+                    </div>
+                    <p style={{ margin: '6px 0 0', fontSize: 13, color: C.zhText, lineHeight: 1.5 }}>{s.chinese}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {mode === 'deep' && result.cultureNotes && result.cultureNotes.length > 0 && (
+          <div className="azm-sec">
+            <div className="azm-sec-h"><span className="lbl">{t('analyze.deep.culture_title', lang)}</span></div>
+            {result.cultureNotes.map((n, i) => (
+              <div key={i} className="az2-culture"><strong>{n.anchor}</strong><p>{n.explanation}</p></div>
+            ))}
+          </div>
+        )}
+
+        {mode === 'deep' && result.quiz && result.quiz.length > 0 && (
+          <div className="azm-sec">
+            <div className="azm-sec-h"><span className="lbl">{t('analyze.quiz.title', lang)}</span></div>
+            <div className="az2-card" style={{ margin: 0 }}>
+              <AnalyzeQuiz key={result.original} questions={result.quiz} onWrongAnswer={handleQuizWrong} onComplete={(score, total) => showToastMsg(t('analyze.quiz.complete_toast', lang, { s: String(score), t: String(total) }))} />
+            </div>
+          </div>
+        )}
+
+        {result.suggestion && (
+          <div className="azm-sec">
+            <div className="az2-suggestion"><h4>{t('analyze.suggestion_title', lang)}</h4><p>{result.suggestion}</p></div>
+          </div>
+        )}
+      </>
+    );
+  }
+
+  // ══════ 移动端原生两态流 ══════
+  if (!isDesktop) {
+    const speakTarget = dir.from === '中文' ? result?.fullTranslation : result?.original;
+    return (
+      <div className="az2-root">
+        <style>{ANALYZE_STYLES}</style>
+        <PlaceIntro place="analyze" dark={theme === 'dark'} />
+        {toast && (
+          <div className="az2-toast">
+            {toast.msg}
+            {toast.href && <a href={toast.href} style={{ color: 'var(--color-mint-soft)', fontSize: 12, fontWeight: 600, textDecoration: 'none' }}>{t('analyze.view_arrow', lang)}</a>}
+          </div>
+        )}
+
+        <header className="azm-nav">
+          <button className="azm-nav-back" onClick={result || showHistory ? () => { setResult(null); setShowHistory(false); } : smartBack} aria-label="back">←</button>
+          <div className="azm-nav-title">
+            <div className="kr">{result ? result.original.slice(0, 14) : showHistory ? t('analyze.history_title', lang) : '분석'}</div>
+            <div className="sub">{result ? (mode === 'learn' ? t('analyze.mode_learn', lang) : t('analyze.mode_deep', lang)) + ' · Result' : 'Content Breakdown'}</div>
+          </div>
+          <span className="azm-nav-mark">Tori</span>
+        </header>
+
+        {/* 分析中 */}
+        {analyzing && !result && (
+          <div className="az2-analyzing" style={{ margin: '40px 20px' }}>
+            <div className="az2-spinner" />
+            <p style={{ fontSize: 13, fontWeight: 500 }}>{t('analyze.btn_analyzing', lang)}</p>
+          </div>
+        )}
+
+        {/* 历史全屏 */}
+        {showHistory && !analyzing && (
+          <div className="azm-in">
+            <div className="azm-recent">
+              <div className="azm-recent-h">
+                <span>{t('analyze.history_title', lang)}</span>
+                {historyResults.length > 0 && <button onClick={clearHistory}>{t('analyze.history_clear', lang)}</button>}
+              </div>
+              {historyResults.length === 0 ? (
+                <p style={{ color: 'var(--hr-ink-3)', fontSize: 13, textAlign: 'center', padding: '32px 0' }}>{t('analyze.history_empty', lang)}</p>
+              ) : historyResults.slice(0, 20).map((h, i) => (
+                <button key={i} className="azm-recent-item" onClick={() => loadFromHistory(h)}>
+                  <span className="azm-recent-ic"><RefreshIcon /></span>
+                  <span className="azm-recent-tx">
+                    <span className="r1">{h.original.slice(0, 40)}</span>
+                    <span className="r2">{h.fullTranslation.slice(0, 50)}</span>
+                    <span className="r3">{new Date(h.timestamp).toLocaleString('zh-CN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* 输入态 */}
+        {!result && !showHistory && !analyzing && (
+          <div className="azm-in">
+            {!isLoggedIn && (
+              <div style={{ margin: '4px 0 14px', padding: '10px 14px', borderRadius: 12, background: 'var(--hr-pink-soft)', border: '1px solid var(--hr-border-1)', display: 'flex', alignItems: 'center', gap: 10, fontSize: 12 }}>
+                <span>💡</span>
+                <span style={{ flex: 1, minWidth: 0, overflowWrap: 'break-word', color: 'var(--hr-ink-2)', fontWeight: 500, lineHeight: 1.4 }}>{t('analyze.login_hint', lang)}</span>
+                <button onClick={() => router.push('/auth/login?redirect=/ai/analyze')} style={{ height: 28, padding: '0 12px', borderRadius: 8, border: 0, background: 'var(--hr-ink-1)', color: 'var(--hr-surface-1)', fontSize: 11, fontWeight: 600, cursor: 'pointer', flexShrink: 0 }}>{t('analyze.login_btn', lang)}</button>
+              </div>
+            )}
+            <div className="azm-lead">{t('analyze.input_title', lang)}</div>
+            <div className="azm-lead-sub">{t('analyze.desktop_empty_sub', lang)}</div>
+            <div className="azm-dir">{dir.from} → {dir.to}</div>
+            <div className="azm-field">
+              <textarea
+                value={input}
+                onChange={e => setInput(e.target.value)}
+                placeholder={t('analyze.input_placeholder', lang)}
+                rows={4}
+              />
+              <div className="azm-meta">
+                <span>{charCount.len} {lang === 'en' ? 'chars' : '字符'} · {charCount.label}</span>
+              </div>
+            </div>
+
+            <div className="azm-modes">
+              {(['learn', 'deep'] as Mode[]).map((m, i) => (
+                <button key={m} className={'azm-mode' + (mode === m ? ' on' : '')} onClick={() => setMode(m)}>
+                  <span className="mt">{m === 'learn' ? <PenIcon /> : <SearchIcon />}{[t('analyze.mode_learn', lang), t('analyze.mode_deep', lang)][i]}</span>
+                  <span className="md">{[t('analyze.mode_learn_desc', lang), t('analyze.mode_deep_desc', lang)][i]}</span>
+                </button>
+              ))}
+            </div>
+
+            {input.trim() && mode === 'learn' && charCount.len >= 50 && (
+              <div className="az2-hint" style={{ marginTop: 12 }}>💡 {t('analyze.input_hint_too_long', lang)}</div>
+            )}
+            {input.trim() && mode === 'deep' && charCount.len > 0 && charCount.len < 50 && (
+              <div className="az2-hint" style={{ marginTop: 12 }}>💡 {t('analyze.input_hint_too_short_for_deep', lang)}</div>
+            )}
+
+            {historyResults.length > 0 && (
+              <div className="azm-recent">
+                <div className="azm-recent-h">
+                  <span>{t('analyze.history_title', lang)}</span>
+                  <button onClick={clearHistory}>{t('analyze.history_clear', lang)}</button>
+                </div>
+                {historyResults.slice(0, 5).map((h, i) => (
+                  <button key={i} className="azm-recent-item" onClick={() => loadFromHistory(h)}>
+                    <span className="azm-recent-ic"><RefreshIcon /></span>
+                    <span className="azm-recent-tx">
+                      <span className="r1">{h.original.slice(0, 40)}</span>
+                      <span className="r2">{h.fullTranslation.slice(0, 50)}</span>
+                      <span className="r3">{new Date(h.timestamp).toLocaleString('zh-CN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* 输入态钉底主按钮 */}
+        {!result && !showHistory && !analyzing && (
+          <div className="az2-dock" style={{ gridTemplateColumns: '1fr' }}>
+            <button className="primary" style={{ minWidth: 0 }} onClick={handleAnalyze} disabled={!input.trim() || analyzing}>
+              {analyzing ? t('analyze.btn_analyzing', lang) : t('analyze.btn_analyze', lang)}
+            </button>
+          </div>
+        )}
+
+        {/* 结果态 */}
+        {result && !showHistory && (
+          <div className="azm-res">
+            {result._degraded && (
+              <div style={{ margin: '10px 20px 0', padding: '9px 14px', borderRadius: 10, background: 'rgba(255,200,100,.12)', border: '1px solid rgba(255,180,60,.28)', fontSize: 12, color: 'var(--color-gold-strong)', fontWeight: 500 }}>
+                {t('analyze.degraded_notice', lang)}
+              </div>
+            )}
+            {/* 翻译 hero */}
+            <div className="azm-hero">
+              <div className="azm-hero-orig">
+                <div className="kr">
+                  {dir.from === '中文'
+                    ? <TappableText text={result.fullTranslation} source="analyze" />
+                    : <TappableText text={result.original} source="analyze" />}
+                </div>
+                <button className="azm-spk" onClick={() => speakTarget && handleSpeak(speakTarget)} aria-label="speak">
+                  {speakingText === speakTarget ? <span className="az2-wave" aria-hidden><span/><span/><span/></span> : <SpeakIcon />}
+                </button>
+              </div>
+              {dir.from !== '中文' && result.romanization && (
+                <div className="azm-hero-rom">{displayRoman(result.romanization, result.original)}</div>
+              )}
+              <div className="azm-hero-zh">
+                {dir.from === '中文' ? result.original : (result.fullTranslation || t('analyze.no_translation', lang))}
+              </div>
+              {(result.difficulty || result.overview?.tone) && (
+                <div className="azm-hero-tags">
+                  {result.difficulty && <span className="azm-htag diff">{result.difficulty}</span>}
+                  {result.overview?.tone && <span className="azm-htag">{result.overview.tone}</span>}
+                </div>
+              )}
+              {result.note && mode !== 'deep' && <div className="az2-note" style={{ marginTop: 12 }}>{result.note}</div>}
+            </div>
+
+            {/* 分段结果体（复用子组件） */}
+            {renderResultSections()}
+          </div>
+        )}
+
+        {/* 结果态钉底 dock */}
+        {result && !showHistory && (
+          mode === 'deep' ? (
+            <div className="azm-dock" style={{ gridTemplateColumns: result.words.length > 0 ? '1fr 1fr' : '1fr' }}>
+              {result.words.length > 0 && (
+                <button className={'azm-rd-main ghost'} onClick={handlePackAllWords} disabled={packingAllWords || result.words.every(w => savedWords.has(w.text))}>
+                  {result.words.every(w => savedWords.has(w.text)) ? t('analyze.deep.pack_all_words_done', lang) : t('analyze.btn_save', lang)}
+                </button>
+              )}
+              <button className="azm-rd-main" onClick={handlePackAllReview} disabled={packingAllReview || savedSentences.has(result.original)}>
+                {savedSentences.has(result.original) ? t('analyze.deep.pack_all_review_done', lang) : '+ ' + t('analyze.btn_add_review', lang)}
+              </button>
+            </div>
+          ) : (
+            <div className="azm-dock" style={{ gridTemplateColumns: 'auto 1fr' }}>
+              <button className="azm-rd-ic" onClick={openHistory} aria-label={t('analyze.btn_history', lang)}><RefreshIcon /></button>
+              <button className="azm-rd-main" onClick={handlePackAllReview} disabled={packingAllReview || savedSentences.has(result.original)}>
+                <PlusIcon />{savedSentences.has(result.original) ? t('analyze.deep.pack_all_review_done', lang) : t('analyze.btn_add_review', lang)}
+              </button>
+            </div>
+          )
+        )}
+      </div>
+    );
   }
 
   return (
