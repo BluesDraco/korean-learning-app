@@ -2,12 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { MessageSquare, BookOpen, Sparkles, Loader2 } from 'lucide-react';
+import { Clock, BookOpen, Sparkles, Loader2 } from 'lucide-react';
 import type { ThemePack } from '@/types';
 import { knowledgeCategories } from '@/data/knowledge';
-import { db } from '@/lib/db';
-import { t } from '@/lib/i18n';
-import { useLang } from '@/components/LangProvider';
 
 const categoryEmojiKeys: Record<string, string> = {
   '生活场景': 'vocab.cat_life',
@@ -46,69 +43,22 @@ const difficultyBg: Record<string, { color: string; bg: string }> = {
 type ThemeProgress = { mastered: number; learning: number };
 
 export function ThemesSection() {
-  const { lang } = useLang();
   const [themes, setThemes] = useState<ThemePack[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
-  const [loadError, setLoadError] = useState(false);
-  const [progress, setProgress] = useState<Map<string, ThemeProgress>>(new Map());
-
-  const load = (isCancelled: () => boolean = () => false) => {
-    setLoadError(false);
-    setLoading(true);
-    import('@/data/vocabulary').then(async ({ getAllThemes, getThemeCategories }) => {
-      const [themesData, cats] = await Promise.all([getAllThemes(), getThemeCategories()]);
-      if (isCancelled()) return;
-      setThemes(themesData);
-      setCategories(cats);
-      setLoading(false);
-
-      // Phase 2: 异步加载进度（不阻塞渲染）
-      try {
-        const allUserWords = await db.words.toArray();
-        if (isCancelled()) return;
-        // sourceEntryId === wordId (e.g. 'food-03') — same ID system as ThemePack.wordIds
-        const masteredIds = new Set(
-          allUserWords.filter(w => w.mastery === 'mastered' && w.sourceEntryId).map(w => w.sourceEntryId!)
-        );
-        const learningIds = new Set(
-          allUserWords.filter(w => w.mastery !== 'mastered' && w.mastery !== 'new' && w.sourceEntryId).map(w => w.sourceEntryId!)
-        );
-        const map = new Map<string, ThemeProgress>();
-        for (const theme of themesData) {
-          map.set(theme.id, {
-            mastered: theme.wordIds.filter(id => masteredIds.has(id)).length,
-            learning: theme.wordIds.filter(id => learningIds.has(id)).length,
-          });
-        }
-        if (!isCancelled()) setProgress(map);
-      } catch { /* keep empty progress */ }
-    }).catch(() => {
-      if (isCancelled()) return;
-      setLoadError(true);
-      setLoading(false);
-    });
-  };
 
   useEffect(() => {
-    let cancelled = false;
-    load(() => cancelled);
-    return () => { cancelled = true; };
+    import('@/data/vocabulary').then(({ getAllThemes, getThemeCategories }) => {
+      setThemes(getAllThemes());
+      setCategories(getThemeCategories());
+      setLoading(false);
+    }).catch(() => setLoading(false));
   }, []);
 
   if (loading) {
     return (
       <div className="flex items-center justify-center py-16">
         <Loader2 size={24} className="animate-spin text-[var(--text-secondary)]" />
-      </div>
-    );
-  }
-
-  if (loadError) {
-    return (
-      <div className="text-center py-16">
-        <p className="text-sm text-[var(--text-secondary)] mb-3">{t('vocab.load_failed', lang)}</p>
-        <button onClick={() => load()} className="text-sm text-[var(--pink-primary)] underline">{t('vocab.retry', lang)}</button>
       </div>
     );
   }
@@ -233,56 +183,29 @@ export function ThemesSection() {
         );
       })}
 
-      {/* 基础词汇 */}
-      <div>
+      {/* 基础词汇 — 来自知识分类 */}
+      <div className="border-t border-[var(--border-color)] pt-6">
         <h2 className="text-sm font-medium text-[var(--text-secondary)] uppercase tracking-wider mb-3 flex items-center gap-2">
           <span>📚</span>
-          {t('vocab.th_basic_vocab', lang)}
-          <span className="text-xs text-[var(--text-muted)] normal-case">{t('vocab.th_category_count', lang, { n: knowledgeCategories.length })}</span>
+          基础词汇
+          <span className="text-xs text-[var(--text-muted)] normal-case">({knowledgeCategories.length}个分类)</span>
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
           {knowledgeCategories.map((cat) => (
             <Link
               key={cat.id}
               href={`/knowledge/${cat.slug}`}
-              className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 hover:border-[var(--purple-soft)]/50 hover:shadow-[var(--shadow-md)] hover:-translate-y-0.5 transition-all duration-200 group flex flex-col"
+              className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 hover:border-[var(--purple-soft)]/50 hover:shadow-[var(--shadow-md)] hover:-translate-y-0.5 transition-all duration-200"
+              style={{ background: 'var(--bg-card)' }}
             >
-              {/* Emoji + Korean label badge */}
-              <div className="flex items-start justify-between mb-2">
-                <div className="text-3xl" aria-hidden="true">{cat.emoji}</div>
-                <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-md shrink-0 text-[var(--purple-soft)] bg-[color-mix(in_srgb,var(--purple-soft)_12%,transparent)]">
-                  {cat.nameKo}
-                </span>
-              </div>
-
-              {/* Name */}
-              <h3 className="font-semibold text-[var(--text-primary)] text-sm leading-tight mb-1">
+              <div className="text-3xl mb-3">{cat.emoji}</div>
+              <h3 className="font-semibold text-[var(--text-primary)] text-sm leading-tight mb-0.5">
                 {cat.name}
               </h3>
-
-              {/* Description */}
-              <p className="text-xs text-[var(--text-muted)] line-clamp-1 mb-2">
-                {cat.description}
-              </p>
-
-              {/* Preview word chips */}
-              {cat.words.length > 0 && (
-                <div className="flex flex-wrap gap-1 mb-3">
-                  {cat.words.slice(0, 4).map((w) => (
-                    <span
-                      key={w.id}
-                      className="text-[10px] px-1.5 py-0.5 rounded-full bg-[var(--bg-input)] text-[var(--text-secondary)]"
-                    >
-                      {w.word}
-                    </span>
-                  ))}
-                </div>
-              )}
-
-              {/* Bottom meta */}
-              <div className="mt-auto flex items-center gap-1 text-xs text-[var(--text-muted)]">
+              <p className="text-xs text-[var(--purple-soft)] mb-2">{cat.nameKo}</p>
+              <div className="flex items-center gap-1 text-xs text-[var(--text-muted)]">
                 <BookOpen size={11} />
-                {t('vocab.th_n_words', lang, { n: cat.words.length })}
+                {cat.words.length}词
               </div>
             </Link>
           ))}

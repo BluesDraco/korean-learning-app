@@ -82,51 +82,11 @@ export interface RegUser {
   createdAt: number;
 }
 
-// 注册分析页：用户明细（比 RegUser 多字段）
-export interface RegUserDetail {
-  id: string;
-  username: string;
-  nickname: string;
-  email: string;
-  createdAt: number;
-  lastLoginAt: number | null;
-  source?: 'domestic' | 'overseas'; // combined 模式下标记来源；单站模式由 API 层按 scope 填入
-}
-
-export interface DailyStat {
-  date: string; // YYYY-MM-DD (UTC+8)
-  count: number;
-}
-
-export interface RegistrationsResponse {
-  users: RegUserDetail[];
-  dailyStats: DailyStat[];
-  total: number;
-  limit: number;
-  offset: number;
-}
-
-export interface ScopedRegistrationsResponse {
-  scope: AdminScope;
-  self: RegistrationsResponse;
-  peer: RegistrationsResponse | null;
-  peerError?: string;
-}
-
-// 每日登录去重人数（含新增+老用户），来自 page_views 中 user_id 非空的去重
-export interface DailyCountPoint {
-  date: string;
-  count: number;
-}
-
 export interface UserRegStats {
   daily: RegTrendPoint[];
   allDaily: RegTrendPoint[];
   monthly: RegTrendPoint[];
   recentUsers: RegUser[];
-  dailyLogins: DailyCountPoint[]; // 近30天每日登录用户数
-  todayLogins: number;
-  yesterdayLogins: number;
 }
 
 // ── Dashboard Response ──
@@ -138,15 +98,6 @@ export interface DashboardResponse {
   featureUsage: FeatureUsage[];
   activityFeed: ActivityFeedItem[];
   userRegStats: UserRegStats;
-  currency: 'CNY' | 'USD'; // 该份数据来自哪个部署（收入相关的币种）
-}
-
-// scope 包装：domestic/overseas 时只有 self；combined 时带对方分段 + 可能的降级提示。
-export interface ScopedDashboardResponse {
-  scope: AdminScope;
-  self: DashboardResponse;
-  peer: DashboardResponse | null; // combined 时的对方站；overseas/domestic 为 null
-  peerError?: string;             // 对方站不可达时的降级提示
 }
 
 // ===== Revenue =====
@@ -272,11 +223,9 @@ export interface UserDetail {
 export interface UpdateUserBody {
   membershipType?: 'free' | 'monthly' | 'yearly' | 'lifetime';
   membershipExpiry?: number | null;
+  banned?: boolean;
+  adminNote?: string;
   role?: 'user' | 'admin';
-  status?: 'active' | 'banned';
-  newPassword?: string;
-  email?: string;
-  phone?: string;
 }
 
 // ===== Content =====

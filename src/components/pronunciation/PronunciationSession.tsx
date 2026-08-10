@@ -6,24 +6,9 @@ import {
   ChevronRight, Sparkles, Zap, RotateCcw, AlertTriangle
 } from 'lucide-react';
 import type { PronunciationItem } from '@/types';
-import { AudioRecorder, isRecordingSupported, revokeRecording, parseErrorKey } from '@/lib/audio/recorder';
+import { AudioRecorder, isRecordingSupported, revokeRecording } from '@/lib/audio/recorder';
 import { globalPlayer } from '@/lib/audio/player';
 import { speak, cancelSpeech } from '@/lib/tts';
-import { getStaticAudio } from '@/lib/audio/audioRegistry';
-
-// 紧音单音节 → 改播对应字母名（真人录音，正音准确）
-// TTS 对 까/따/빠/짜/싸 等单音节合成不稳，用户反馈"还是用 AI"。
-// 字母名 쌍기역/쌍디귿/쌍비읍/쌍시옷/쌍지읒 在 audioRegistry 有真人 MP3。
-// 模块级：分段播放时相互抢占，快速再点不会叠播
-let currentSegAudio: HTMLAudioElement | null = null;
-
-const TENSE_SYLLABLE_FALLBACK: Record<string, string> = {
-  '까': '쌍기역',
-  '따': '쌍디귿',
-  '빠': '쌍비읍',
-  '싸': '쌍시옷',
-  '짜': '쌍지읒',
-};
 import { db } from '@/lib/db';
 import { awardXp, XP_REWARDS } from '@/lib/gamification';
 import { playClick, playSuccess, playComplete } from '@/lib/soundManager';
@@ -92,13 +77,8 @@ export function PronunciationSession({ items, onClose }: Props) {
   // All hooks must be called unconditionally (before any early return)
   useEffect(() => {
     globalPlayer.setStateChange(setPlayerState);
-    return () => {
-      globalPlayer.stop();
-      cancelSpeech();
-      recorder.cancel();
-      if (currentSegAudio) { try { currentSegAudio.pause(); } catch { /* ignore */ } currentSegAudio = null; }
-    };
-  }, [recorder]);
+    return () => { globalPlayer.stop(); cancelSpeech(); };
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -145,34 +125,17 @@ export function PronunciationSession({ items, onClose }: Props) {
     if (!item) return;
     cancelSpeech();
     setIsSpeaking(true);
-
-    // 对比卡（textKo 含 vs 或 /）或 syllable 类型（每个 segment 是独立音节，整句 TTS 不准）
-    // 都依次播放 segments，让单音节走 audioRegistry fallback
-    const isComparison = /\s+vs\s+|\s*\/\s*/i.test(item.textKo);
-    const isSyllable = item.type === 'syllable';
-    const segs = item.segments?.map((s) => s.text).filter(Boolean) ?? [];
-    if ((isComparison || isSyllable) && segs.length > 0) {
-      let i = 0;
-      const playNext = () => {
-        if (i >= segs.length) { setIsSpeaking(false); return; }
-        const seg = segs[i++];
-        playKoreanText(seg, () => setTimeout(playNext, 250));
-      };
-      playNext();
-      return;
-    }
-
-    playKoreanText(item.textKo, () => setIsSpeaking(false));
-  }, [item, rate, playKoreanText]);
+    speak(item.textKo, rate, () => setIsSpeaking(false));
+  }, [item, rate]);
 
   const playSegment = useCallback((text: string) => {
-    cancelSpeech(); setIsSpeaking(true); playKoreanText(text, () => setIsSpeaking(false));
-  }, [playKoreanText]);
+    cancelSpeech(); setIsSpeaking(true); speak(text, rate, () => setIsSpeaking(false));
+  }, [rate]);
 
   const startRecording = useCallback(async () => {
     setMicError(null);
     if (!isRecordingSupported()) {
-      setMicError(t('pron.mic_unsupported', lang));
+      setMicError('此浏览器不支持录音');
       return;
     }
     const result = await recorder.start();
@@ -237,29 +200,6 @@ export function PronunciationSession({ items, onClose }: Props) {
 
   const goPrevStep = useCallback(() => {
     if (!item) return;
-    const seq: StepType[] = item.segments?.length
-      ? ['target', 'segments', 'record', 'compare']
-      : ['target', 'record', 'compare'];
-    const idx = seq.indexOf(step);
-    if (idx > 0) {
-      const prevStep = seq[idx - 1];
-      if (prevStep === 'compare') {
-        setStep('record');
-      } else {
-        setStep(prevStep);
-      }
-    } else if (itemIdx > 0) {
-      const prevItem = items[itemIdx - 1];
-      setItemIdx(itemIdx - 1);
-      setStep(prevItem.segments?.length ? 'segments' : 'target');
-      setRecordingUrl(null);
-      setMicError(null);
-      setSlowMode(false);
-    }
-  }, [step, itemIdx, items, item]);
-
-  const goNextStep = useCallback(() => {
-    if (!item) return;
     const goNext = () => {
       if (itemIdx + 1 < items.length) {
         setItemIdx(itemIdx + 1);
@@ -276,7 +216,6 @@ export function PronunciationSession({ items, onClose }: Props) {
     const seq: StepType[] = item.segments?.length
       ? ['target', 'segments', 'record', 'compare']
       : ['target', 'record', 'compare'];
-
     const idx = seq.indexOf(step);
     if (idx >= 0 && idx < seq.length - 1) {
       // skip compare if no recording and coming from record via skip
@@ -395,19 +334,12 @@ export function PronunciationSession({ items, onClose }: Props) {
     <div className="py-4 max-w-lg md:max-w-none mx-auto space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-1">
-          <button onClick={() => {
-            if (step !== 'target' && !confirm(t('pron.exit_confirm', lang))) return;
-            onClose();
-          }} className="p-1 text-[var(--text-muted)] hover:text-[var(--text-primary)]">
-            <ArrowLeft size={20} />
-          </button>
-          {(itemIdx > 0 || step !== 'target') && (
-            <button onClick={goPrevStep} className="text-xs px-2 py-1 rounded-lg bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors">
-              {t('pron.prev_step', lang)}
-            </button>
-          )}
-        </div>
+        <button onClick={() => {
+          if (step !== 'target' && !confirm('确定退出？当前进度不会保存')) return;
+          onClose();
+        }} className="p-1 text-[var(--text-muted)] hover:text-[var(--text-primary)]">
+          <ArrowLeft size={20} />
+        </button>
         <div className="flex flex-col items-center">
           <span className="text-xs font-medium text-[var(--text-primary)]">{stepNames[step]}</span>
           <span className="text-[10px] text-[var(--text-muted)]">{itemIdx + 1} / {items.length}</span>
@@ -455,15 +387,15 @@ export function PronunciationSession({ items, onClose }: Props) {
         {/* ── SEGMENTS ── */}
         {step === 'segments' && item.segments && (
           <>
-            <StepBadge label={t('pron.badge_segments', lang)} />
-            <p className="text-xs text-[var(--text-muted)]">{t('pron.segments_hint', lang)}</p>
+            <StepBadge label="分段练习" />
+            <p className="text-xs text-[var(--text-muted)]">点击每个音听发音，注意区别</p>
             <div className={`w-full ${item.segments.length <= 3 ? 'flex flex-wrap gap-3 justify-center' : 'space-y-2'}`}>
               {item.segments.map((seg, i) => (
                 item.segments!.length <= 3 ? (
                   <button
                     key={i}
                     onClick={() => playSegment(seg.text)}
-                    className="flex flex-col items-center gap-2 bg-[var(--bg-card)] border border-[var(--border-color)] hover:border-[var(--pink-primary)]/50 hover:bg-[var(--pink-primary)]/5 active:scale-95 rounded-2xl px-6 py-5 transition-colors transition-opacity transition-shadow min-w-[90px] shadow-sm"
+                    className="flex flex-col items-center gap-2 bg-[var(--bg-card)] border border-[var(--border-color)] hover:border-[var(--pink-primary)]/50 hover:bg-[var(--pink-primary)]/5 active:scale-95 rounded-2xl px-6 py-5 transition-all min-w-[90px] shadow-sm"
                   >
                     <span className="text-4xl font-bold text-[var(--text-primary)]" style={{ fontFamily: "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif" }}>{seg.text}</span>
                     {seg.hint && <span className="text-[10px] text-[var(--text-muted)] text-center">{seg.hint}</span>}
@@ -530,7 +462,7 @@ export function PronunciationSession({ items, onClose }: Props) {
                   onClick={goNextStep}
                   className="flex-1 py-3 rounded-2xl font-medium text-sm bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
                 >
-                  {t('pron.skip', lang)}
+                  跳过
                 </button>
                 <button
                   onClick={goNextStep}
@@ -541,7 +473,7 @@ export function PronunciationSession({ items, onClose }: Props) {
                       : 'bg-[var(--bg-input)] text-[var(--text-muted)] opacity-50'
                   }`}
                 >
-                  {recordingUrl ? t('pron.hear_my_recording', lang) : t('pron.record_first', lang)}
+                  {recordingUrl ? '听我的录音' : '请先录音'}
                 </button>
               </div>
             )}

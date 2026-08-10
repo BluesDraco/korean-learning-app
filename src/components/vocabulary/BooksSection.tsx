@@ -3,7 +3,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Plus, X, Search, Loader2, Star } from 'lucide-react';
 import { db, FAVORITES_BOOK_ID } from '@/lib/db';
-import { useToast } from '@/hooks/useToast';
 import { WordBookCard } from '@/components/WordBookCard';
 import { t } from '@/lib/i18n';
 import { useLang } from '@/components/LangProvider';
@@ -37,33 +36,17 @@ export function BooksSection() {
   const { lang } = useLang();
 
   const load = useCallback(async () => {
-    try {
-      const list = await db.wordBooks.orderBy('createdAt').reverse().toArray();
-      // 「我的收藏」置顶
-      const favIdx = list.findIndex(b => b.id === FAVORITES_BOOK_ID);
-      if (favIdx > 0) {
-        const [fav] = list.splice(favIdx, 1);
-        list.unshift(fav);
-      }
-      setBooks(list);
-      const counts: Record<string, number> = {};
-      for (const b of list) {
-        counts[b.id] = b.wordIds.length;
-      }
-      setWordCounts(counts);
-      // 汇总所有 wordIds 一次批量查 mastery，再按本分组统计
-      const allIds = Array.from(new Set(list.flatMap(b => b.wordIds)));
-      const mastered: Record<string, number> = {};
-      if (allIds.length > 0) {
-        const rows = await db.words.where('id').anyOf(allIds).toArray();
-        const masteredIdSet = new Set(rows.filter(r => r.mastery === 'mastered').map(r => r.id));
-        for (const b of list) {
-          mastered[b.id] = b.wordIds.filter(id => masteredIdSet.has(id)).length;
-        }
-      }
-      setMasteredCounts(mastered);
-    } catch { setLoadError(true); } finally {
-      setLoading(false);
+    const list = await db.wordBooks.orderBy('createdAt').reverse().toArray();
+    // 「我的收藏」置顶
+    const favIdx = list.findIndex(b => b.id === FAVORITES_BOOK_ID);
+    if (favIdx > 0) {
+      const [fav] = list.splice(favIdx, 1);
+      list.unshift(fav);
+    }
+    setBooks(list);
+    const counts: Record<string, number> = {};
+    for (const b of list) {
+      counts[b.id] = b.wordIds.length;
     }
   }, []);
 
