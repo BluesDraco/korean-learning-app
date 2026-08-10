@@ -6,11 +6,22 @@ import { fetchWithTimeout } from '@/lib/fetch';
 import { getDb } from '@/lib/server/db';
 import { filterContent } from '@/lib/contentFilter';
 
-// 6-26 事故兜底：含鉴权/用户数据的 API 必须 force-dynamic，禁止 Next.js 自动缓存
-export const dynamic = 'force-dynamic';
-
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
-const DEEPSEEK_MODEL = 'deepseek-v4-flash';
+const DEEPSEEK_MODEL = 'deepseek-chat';
+
+// In-memory guest rate limit: key = "ip:date", value = call count
+const guestAnalyzeCount = new Map<string, number>();
+
+// Prune yesterday's entries once per day
+let lastPruneDate = '';
+function pruneGuestCount() {
+  const today = new Date().toISOString().slice(0, 10);
+  if (today === lastPruneDate) return;
+  lastPruneDate = today;
+  for (const key of guestAnalyzeCount.keys()) {
+    if (!key.endsWith(today)) guestAnalyzeCount.delete(key);
+  }
+}
 
 /**
  * 矫正 AI 返回的 schema —— DeepSeek 偶尔会把数组返回成字符串、对象或 null。
@@ -370,14 +381,27 @@ export async function POST(req: Request) {
     }
     const analyzeCheck = filterContent(sentence, 'ai_input');
     if (!analyzeCheck.ok) {
-      // 不回传具体过滤原因，避免泄露内部规则名/关键词库
-      return NextResponse.json({ error: '内容不符合社区规范，请修改后重试' }, { status: 400 });
+      return NextResponse.json({ error: analyzeCheck.reason }, { status: 400 });
     }
 
     const userId = auth.userId;
 
-    {
-      const limit = await checkAiQuota(userId, 'analyze');
+    // Guest rate limit: 10 calls per day tracked by IP in memory
+    if (!userId) {
+      pruneGuestCount();
+      const ip = (req.headers.get('x-forwarded-for') || 'unknown').split(',')[0].trim();
+      const today = new Date().toISOString().slice(0, 10);
+      const key = `${ip}:${today}`;
+      const count = guestAnalyzeCount.get(key) ?? 0;
+      if (count >= 10) {
+        return NextResponse.json(
+          { error: '今日免费次数已用完（10次），请登录后继续使用' },
+          { status: 429, headers: { 'Retry-After': '86400' } },
+        );
+      }
+      guestAnalyzeCount.set(key, count + 1);
+    } else {
+      const limit = await checkAiRateLimit(userId, 'analyze');
       if (!limit.allowed) {
         return NextResponse.json(
           { error: limit.limit === 0 ? '当前会员档位不含此功能，请升级后使用' : '今日 AI 拆解次数已达上限，请明天再试或升级会员' },
@@ -389,8 +413,6 @@ export async function POST(req: Request) {
     const effectiveMode = mode || 'learn';
     const isLong = sentence.replace(/\s/g, '').length >= 50;
     const resolvedMode = (effectiveMode === 'deep' && !isLong) ? 'learn' : effectiveMode;
-    const direction = detectIsKoreanInput(sentence) ? 'ko-zh' : 'zh-ko';
-    const cacheText = `${sentence.trim()}|${direction}`;
     const TTL_MS = 30 * 24 * 60 * 60 * 1000;
 
     // Check analyze cache
@@ -398,11 +420,11 @@ export async function POST(req: Request) {
       const db = await getDb();
       const cached = await db.exec(
         'SELECT result FROM analyze_cache WHERE text = ? AND mode = ? AND created_at > ?',
-        [cacheText, resolvedMode, Date.now() - TTL_MS]
+        [sentence.trim(), resolvedMode, Date.now() - TTL_MS]
       );
       const row = cached[0]?.values?.[0]?.[0];
       if (row) {
-        await recordAiUsage(userId, 'analyze');
+        if (userId) await recordAiUsage(userId, 'analyze');
         const parsed = JSON.parse(row as string);
         return NextResponse.json(resolvedMode !== effectiveMode ? { ...parsed, _downgraded: true } : parsed);
       }
@@ -413,20 +435,20 @@ export async function POST(req: Request) {
     // Deep mode requires 50+ chars; downgrade to learn if too short
     if (resolvedMode === 'learn' && effectiveMode === 'deep') {
       result = await analyzeModeLearn(sentence, apiKey);
+    } else if (resolvedMode === 'translate') {
+      result = await analyzeModeTranslate(sentence, apiKey);
     } else if (resolvedMode === 'deep') {
       result = await analyzeModeDeep(sentence, apiKey);
     } else {
       result = await analyzeModeLearn(sentence, apiKey);
     }
 
-    result = sanitizeAnalyzeResult(result);
-
-    await recordAiUsage(userId, 'analyze');
+    if (userId) await recordAiUsage(userId, 'analyze');
 
     // Write to cache (fire and forget)
     getDb().then(db => db.run(
       'INSERT OR REPLACE INTO analyze_cache (id, text, mode, result, created_at) VALUES (?, ?, ?, ?, ?)',
-      [crypto.randomUUID(), cacheText, resolvedMode, JSON.stringify(result), Date.now()]
+      [crypto.randomUUID(), sentence.trim(), resolvedMode, JSON.stringify(result), Date.now()]
     )).catch(() => {});
 
     return NextResponse.json(resolvedMode !== effectiveMode ? { ...result, _downgraded: true } : result);

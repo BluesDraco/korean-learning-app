@@ -4,8 +4,6 @@ import { Pencil, Trash2, BookOpen, Star } from 'lucide-react';
 import Link from 'next/link';
 import type { WordBook } from '@/types';
 import { FAVORITES_BOOK_ID } from '@/lib/db';
-import { useLang } from '@/components/LangProvider';
-import { t } from '@/lib/i18n';
 
 interface Props {
   book: WordBook;
@@ -15,9 +13,7 @@ interface Props {
   onDelete: (id: string) => void;
 }
 
-export function WordBookCard({ book, wordCount, masteredCount = 0, onRename, onDelete }: Props) {
-  const { lang } = useLang();
-  const progress = wordCount > 0 ? Math.round((masteredCount / wordCount) * 100) : 0;
+export function WordBookCard({ book, wordCount, onRename, onDelete }: Props) {
   const isFavorites = book.id === FAVORITES_BOOK_ID;
 
   return (
@@ -39,22 +35,20 @@ export function WordBookCard({ book, wordCount, masteredCount = 0, onRename, onD
             href={`/vocabulary/books/${book.id}`}
             className="text-base font-bold text-[var(--text-primary)] hover:text-[var(--pink-primary)] transition-colors line-clamp-1 flex-1 mr-2 flex items-center gap-1.5"
           >
-            {isFavorites && <Star size={14} fill="var(--color-vocab, #f5a623)" style={{ color: 'var(--color-vocab, #f5a623)', flexShrink: 0 }} />}
+            {isFavorites && <Star size={14} fill="#f5a623" style={{ color: '#f5a623', flexShrink: 0 }} />}
             {book.name}
           </Link>
           {!isFavorites && (
-            <div className="flex items-center gap-3 shrink-0">
+            <div className="flex items-center gap-0.5 shrink-0">
               <button
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); onRename(book); }}
-                className="no-touch-min w-8 h-8 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors flex items-center justify-center"
-                aria-label={t('wbcard.rename', lang)}
+                className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
               >
                 <Pencil size={13} />
               </button>
               <button
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDelete(book.id); }}
-                className="no-touch-min w-8 h-8 rounded-lg hover:bg-[var(--color-danger-bg)] text-[var(--text-muted)] hover:text-[var(--color-danger)] transition-colors flex items-center justify-center"
-                aria-label={t('wbcard.delete', lang)}
+                className="p-1.5 rounded-lg hover:bg-[var(--color-danger-bg)] text-[var(--text-muted)] hover:text-[var(--color-danger)] transition-colors"
               >
                 <Trash2 size={13} />
               </button>

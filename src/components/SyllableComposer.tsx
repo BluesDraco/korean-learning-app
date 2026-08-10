@@ -37,14 +37,14 @@ const VOWELS = [
 ];
 
 const FINALS = [
-  { letter: '없음', rom: '' },
-  { letter: 'ㄱ', rom: 'k' },
-  { letter: 'ㄴ', rom: 'n' },
-  { letter: 'ㄷ', rom: 't' },
-  { letter: 'ㄹ', rom: 'l' },
-  { letter: 'ㅁ', rom: 'm' },
-  { letter: 'ㅂ', rom: 'p' },
-  { letter: 'ㅇ', rom: 'ng' },
+  { letter: '없음', name: '无收音', rom: '' },
+  { letter: 'ㄱ', name: 'ㄱ收音', rom: 'k' },
+  { letter: 'ㄴ', name: 'ㄴ收音', rom: 'n' },
+  { letter: 'ㄷ', name: 'ㄷ收音', rom: 't' },
+  { letter: 'ㄹ', name: 'ㄹ收音', rom: 'l' },
+  { letter: 'ㅁ', name: 'ㅁ收音', rom: 'm' },
+  { letter: 'ㅂ', name: 'ㅂ收音', rom: 'p' },
+  { letter: 'ㅇ', name: 'ㅇ收音', rom: 'ng' },
 ];
 
 function composeSyllable(cho: string, jung: string, jong: string): string {

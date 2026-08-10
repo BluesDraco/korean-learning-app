@@ -6,7 +6,9 @@ import {
   Lightbulb, AlertCircle, CheckCircle2,
 } from 'lucide-react';
 import type { GrammarPoint } from '@/types';
-import { speak, speakWord, cancelSpeech } from '@/lib/tts';
+import { GRAMMAR_TO_COURSE_DAY } from '@/data/grammar-new';
+import { getCourseDayForGrammar } from '@/data/thirtyDayCourse';
+import { speak, cancelSpeech } from '@/lib/tts';
 import { db } from '@/lib/db';
 import { awardXp, XP_REWARDS } from '@/lib/gamification';
 import { useLang } from '@/components/LangProvider';
@@ -73,7 +75,7 @@ export function GrammarSession({ grammar, onClose, reviewQueue, onNextReview }: 
   const playTTS = useCallback((text: string) => {
     cancelSpeech();
     setIsSpeaking(true);
-    speak(text, undefined, () => setIsSpeaking(false));
+    speak(text, 0.8, () => setIsSpeaking(false));
   }, []);
 
   // ── Compute next review interval (SRS-like) ──

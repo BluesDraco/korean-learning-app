@@ -4,8 +4,7 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { ChevronDown, ChevronUp, Check, X, ArrowRight, RotateCcw, Trophy, Sparkles, Lock, Volume2, Ear } from 'lucide-react';
 import { progressiveSteps } from '@/data/phonetics-steps';
 import type { PhoneticLetter } from '@/data/phonetics';
-import { unlockAudioContext } from '@/lib/tts';
-import { playPhoneticAudio, getSpeakText as sharedGetSpeakText, BATCHIM_DEMO } from '@/lib/audio/phoneticsPlayer';
+import { speak, speakWord, unlockAudioContext } from '@/lib/tts';
 import { emitXpFlyout } from '@/components/XpOverlay';
 import ReadingPractice from '@/components/ReadingPractice';
 import { useAuth } from '@/components/AuthProvider';
@@ -32,16 +31,32 @@ function getQuizLetter(l: PhoneticLetter) {
   return (l as PhoneticLetter & { quizLetter?: string }).quizLetter ?? l.letter;
 }
 
-const BATCHIM_TYPE_LABEL_KEY: Record<string, string> = {
-  stop: 'phonetics.subtype_stop', nasal: 'phonetics.subtype_nasal', liquid: 'phonetics.subtype_liquid',
-};
-const BATCHIM_IPA: Record<string, string> = {
-  'ㄱ': '[k̚]', 'ㄴ': '[n]', 'ㄷ': '[t̚]', 'ㄹ': '[l]', 'ㅁ': '[m]', 'ㅂ': '[p̚]', 'ㅇ': '[ŋ]',
+const CONSONANT_DEMO: Record<string, string> = {
+  'ㄱ': '가', 'ㄴ': '나', 'ㄷ': '다', 'ㄹ': '라', 'ㅁ': '마',
+  'ㅂ': '바', 'ㅅ': '사', 'ㅇ': '아', 'ㅈ': '자', 'ㅊ': '차',
+  'ㅋ': '카', 'ㅌ': '타', 'ㅍ': '파', 'ㅎ': '하',
+  'ㄲ': '까', 'ㄸ': '따', 'ㅃ': '빠', 'ㅆ': '싸', 'ㅉ': '짜',
 };
 
-const getSpeakText = sharedGetSpeakText;
+const BATCHIM_DEMO: Record<string, string> = {
+  'ㄱ': '악', 'ㄴ': '안', 'ㄷ': '앋', 'ㄹ': '알', 'ㅁ': '암',
+  'ㅂ': '압', 'ㅇ': '앙',
+};
 
-function generateStepQuiz(letters: PhoneticLetter[], lang: Lang) {
+function getSpeakText(l: PhoneticLetter): string {
+  if (l.type === 'vowel') return l.name;
+  if (l.type === 'consonant' || l.type === 'double') {
+    const jamo = l.letter.split('/')[0];
+    return CONSONANT_DEMO[jamo] ?? l.name;
+  }
+  if (l.type === 'batchim') {
+    const jamo = l.letter.split('/')[0];
+    return BATCHIM_DEMO[jamo] ?? CONSONANT_DEMO[jamo] ?? l.name;
+  }
+  return l.name;
+}
+
+function generateStepQuiz(letters: PhoneticLetter[]) {
   const pool = [...letters].sort(() => Math.random() - 0.5).slice(0, Math.min(6, letters.length));
   return pool.map((item) => {
     const isLetterQ = Math.random() > 0.5;
@@ -56,9 +71,8 @@ function generateStepQuiz(letters: PhoneticLetter[], lang: Lang) {
     return {
       id: item.id,
       prompt: isLetterQ
-        ? t('phonetics.prog_quiz_prompt_letter', lang, { letter: getQuizLetter(item) })
-        : t('phonetics.prog_quiz_prompt_roman', lang, { roman: getQuizRomanization(item) }),
-      isLetterQ,
+        ? `"${getQuizLetter(item)}" 的发音是？`
+        : `发音 "${getQuizRomanization(item)}" 对应哪个字母？`,
       correctAnswer,
       options: shuffleArray([correctAnswer, ...wrongOptions]),
       item,
@@ -151,7 +165,7 @@ export default function ProgressivePhonetics() {
     if (mode === 'listen' && listenQuestions.length > 0 && !audioPlayedRef.current && quizAnswer === null && !quizComplete) {
       audioPlayedRef.current = true;
       const item = listenQuestions[quizIdx];
-      playPhoneticAudio(getSpeakText(item.item), 0.7);
+      speakWord(getSpeakText(item.item), 0.7);
     }
   }, [mode, listenQuestions, quizIdx, quizComplete]); // quizAnswer intentionally excluded — resetting it must not retrigger playback
 
@@ -188,7 +202,7 @@ export default function ProgressivePhonetics() {
     const questions = mode === 'listen' ? listenQuestions : quizQuestions;
     if (questions[quizIdx]) {
       unlockAudioContext();
-      playPhoneticAudio(getSpeakText(questions[quizIdx].item), 0.7);
+      speakWord(getSpeakText(questions[quizIdx].item), 0.7);
     }
   };
 
@@ -209,6 +223,7 @@ export default function ProgressivePhonetics() {
         {progressiveSteps.map((step, i) => {
           const isCurrent = i === activeStepIdx;
           const isDone = completedSteps.has(step.id);
+          const isLocked = false;
           return (
             <button
               key={step.id}
@@ -348,7 +363,7 @@ export default function ProgressivePhonetics() {
                   }`}
                 >
                   <button
-                    onClick={() => { unlockAudioContext(); playPhoneticAudio(getSpeakText(letter), 0.7); }}
+                    onClick={() => { unlockAudioContext(); speakWord(getSpeakText(letter), 0.7); }}
                     className="w-full text-3xl font-extrabold text-[var(--text-primary)] mb-1 text-center block hover:text-[var(--pink-primary)] transition-colors"
                     style={{ fontFamily: "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif" }}
                     title={t('phonetics.prog_tap_to_hear', lang)}
@@ -356,14 +371,14 @@ export default function ProgressivePhonetics() {
                     {letter.letter}
                   </button>
                   <div className="text-sm text-[var(--text-secondary)] text-center mb-1">
-                    {enText(letter.name, letter.nameEn)} <span className="text-[var(--text-muted)]">[{letter.romanization}]</span>
+                    {letter.name} <span className="text-[var(--text-muted)]">[{letter.romanization}]</span>
                   </div>
                   <button
-                    onClick={() => { unlockAudioContext(); playPhoneticAudio(getSpeakText(letter), 0.7); }}
+                    onClick={() => { unlockAudioContext(); speakWord(getSpeakText(letter), 0.7); }}
                     className="flex items-center justify-center gap-1 w-full py-1 rounded-lg text-[var(--pink-primary)] hover:bg-[var(--pink-primary)]/10 transition-colors text-xs mb-1"
                   >
                     <Volume2 size={12} />
-                    {t('phonetics.prog_hear_sound', lang)}
+                    听发音
                   </button>
                   <button
                     onClick={() => toggleCard(letter.id)}
@@ -408,14 +423,14 @@ export default function ProgressivePhonetics() {
               <div className="space-y-4">
                 {activeStep.confusedPairs.map((pair) => (
                   <div key={pair.id}>
-                    <div className="text-xs text-[var(--text-muted)] mb-2 px-1">{enText(pair.tip, pair.tipEn)}</div>
+                    <div className="text-xs text-[var(--text-muted)] mb-2 px-1">{pair.tip}</div>
                     <div className="flex flex-wrap gap-2">
                       {pair.letters.map((l) => (
                         <button
                           key={l.id}
-                          onClick={() => { unlockAudioContext(); playPhoneticAudio(getSpeakText(l), 0.7); }}
-                          className="flex flex-col items-center gap-1.5 bg-[var(--bg-card)] border border-[var(--peach-soft)]/30 hover:border-[var(--pink-primary)]/50 hover:bg-[var(--bg-accent)] active:scale-95 rounded-2xl px-5 py-4 transition-colors transition-opacity transition-shadow min-w-[80px] shadow-sm"
-                          title={t('phonetics.prog_tap_to_hear', lang)}
+                          onClick={() => { unlockAudioContext(); speakWord(getSpeakText(l), 0.7); }}
+                          className="flex flex-col items-center gap-1.5 bg-[var(--bg-card)] border border-[var(--peach-soft)]/30 hover:border-[var(--pink-primary)]/50 hover:bg-[var(--bg-accent)] active:scale-95 rounded-2xl px-5 py-4 transition-all min-w-[80px] shadow-sm"
+                          title="点击听发音"
                         >
                           <span className="text-3xl font-bold text-[var(--text-primary)]" style={{ fontFamily: "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif" }}>
                             {l.letter}
@@ -511,14 +526,14 @@ export default function ProgressivePhonetics() {
                     btnClass = 'bg-[var(--bg-input)] border-[var(--border-color)] opacity-50';
                   }
                 }
-                const isKoreanChar = mode === 'listen' || (mode === 'quiz' && !quizQuestions[quizIdx].isLetterQ);
+                const isKoreanChar = mode === 'listen' || (mode === 'quiz' && quizQuestions[quizIdx].prompt.includes('发音'));
                 if (mode === 'listen') {
                   return (
                     <button
                       key={i}
                       onClick={() => quizAnswer === null && handleQuizAnswer(opt)}
                       disabled={quizAnswer !== null}
-                      className={`flex flex-col items-center gap-1.5 rounded-2xl px-5 py-4 transition-colors transition-opacity transition-shadow active:scale-95 min-w-[80px] ${btnClass} font-bold`}
+                      className={`flex flex-col items-center gap-1.5 rounded-2xl px-5 py-4 transition-all active:scale-95 min-w-[80px] ${btnClass} font-bold`}
                       style={{ fontFamily: "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif" }}
                     >
                       <span className="text-3xl">{opt}</span>

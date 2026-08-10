@@ -3,8 +3,6 @@
 import { useState } from 'react';
 import { Plus, Check, Loader2 } from 'lucide-react';
 import { HighlightedExample } from '@/components/vocabulary/HighlightedExample';
-import { useLang } from '@/components/LangProvider';
-import { t } from '@/lib/i18n';
 
 export interface WordCardData {
   originalText: string;

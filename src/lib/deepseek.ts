@@ -6,7 +6,7 @@
 import { fetchWithTimeout } from './fetch';
 
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
-export const DEEPSEEK_MODEL = 'deepseek-v4-flash';
+export const DEEPSEEK_MODEL = 'deepseek-chat';
 const AI_TIMEOUT = 30_000; // 30 seconds for AI requests
 
 export interface DeepSeekConfig {
@@ -164,10 +164,7 @@ export async function chatResponseDeepSeek(
   apiKey: string
 ): Promise<{
   aiResponse: { ko: string; zh: string };
-  feedback: { natural: string; grammarError: string; betterWay: string; betterWayZh: string; wrongPart: string; correctPart: string };
-  suggestion: { ko: string; zh: string };  // 建议用户下一句怎么回（对话指引）
-  newWords: { ko: string; zh: string; partOfSpeech: string }[];
-  taskCompleted?: boolean;
+  feedback: { natural: string; grammarError: string; betterWay: string; wrongPart: string; correctPart: string };
 }> {
   const scenarioDesc = `场景：${params.scenario.nameZh}（${params.scenario.nameKo}），难度：${params.scenario.level}`;
   const extraHint = params.scenario.systemHint ? `\n角色补充说明：${params.scenario.systemHint}` : '';
@@ -186,46 +183,37 @@ export async function chatResponseDeepSeek(
       { role: 'system', content: `你是韩语情景对话的AI对手（店员/路人等角色）。${scenarioDesc}${extraHint}${taskHint}${rephraseHint}
 
 规则：
-1. 用韩语回复用户，保持角色一致，语气自然口语化
-2. 韩语句子必须正确分词（띄어쓰기）：名词后助词不空格，但词和词之间要空格。例如 "짐 찾는 곳은 저쪽이에요" 而非 "짐찾는곳은저쪽이에요"
-3. 回复后提供反馈和新词，返回以下JSON格式：
+1. 用韩语回复用户，保持角色一致
+2. 回复后提供中文反馈，包含5个字段
+3. wrongPart 必须是用户原句的子串（完全匹配），无错误时返回空字符串
+4. 返回JSON格式：
 {
-  "aiResponse": {"ko": "韩语回复（正确分词）", "zh": "中文翻译"},
+  "aiResponse": {"ko": "韩语回复", "zh": "中文翻译"},
   "feedback": {
-    "natural": "用一句中文点评用户韩语的自然度（如：表达自然 / 略生硬但可懂 / 口语用法稍重）。如果用户没用韩语就返回空字符串",
-    "grammarError": "若有语法错误用中文简要说明，无则返回空字符串",
-    "betterWay": "如果有更地道的韩语版本就给出（必须是韩语，不是中文！），与 correctPart 不重复，无则返回空字符串",
-    "betterWayZh": "betterWay 字段的中文翻译，无则返回空字符串",
-    "wrongPart": "用户原句中错误的精确子串，无错误返回空字符串",
-    "correctPart": "对应正确写法（韩语），无错误返回空字符串"
-  },
-  "suggestion": {"ko": "给学习者的一句参考回应——针对你(NPC)这次回复，学习者接下来可以怎么用韩语接话。必须是自然、难度匹配的完整韩语句子", "zh": "该建议句的中文翻译"},
-  "newWords": [{"ko": "단어", "zh": "中文义", "partOfSpeech": "名词/动词/形容词/副词"}],
-  "taskCompleted": true 或 false（仅当有【当前引导任务】时填；用户语义完成任务则 true，否则 false；无任务则始终 false）
+    "natural": "表达自然度评价",
+    "grammarError": "语法错误说明，无错误返回空字符串",
+    "betterWay": "更地道的说法",
+    "wrongPart": "用户原句中错误的子串，无错误返回空字符串",
+    "correctPart": "对应正确写法，无错误返回空字符串"
+  }
 }
+只返回JSON，不要markdown代码块。`,
+        },
+        { role: 'user', content: `对话历史：\n${history}\n\n用户最新消息：${params.userMessage}\n\n请以角色身份回复。` },
+      ],
+      temperature: 0.7,
+      max_tokens: 900,
+    }),
+  });
 
-特别规则：
-- 如果用户输入完全没有韩语字符（全中文/英文）→ 把这句话当成"用户想知道这句韩语怎么说"。aiResponse.ko 用单段融合：先给一句韩语教学引导（如「'짐 찾는 곳이 어디예요?' 이렇게 물어볼 수 있어요.」），紧接 NPC 角色本来要说的台词（如「짐 찾는 곳은 저쪽이에요.」），合并为一条 NPC 气泡的连续韩语。zh 字段给完整中文翻译。feedback.correctPart 填教学给出的韩语版本，feedback.natural 填空字符串。
-- betterWay 字段绝对不能写中文评论——只写韩语句子或空字符串。
-- 韩语句子各词之间必须有空格（띄어쓰기），不要把整句连起来。
-
-newWords 填写本轮AI回复中对中级以下学习者可能陌生的词，1-3个，无则返回空数组。
-wrongPart 必须是用户原句的精确子串，不能改写。
-只返回JSON，不要markdown代码块，不要任何其他文字。` },
-      { role: 'user', content: `对话历史：\n${history}\n\n用户最新消息：${params.userMessage}\n\n请以角色身份回复。` },
-    ],
-    apiKey,
-    { temperature: 0.7, maxTokens: 1000 }
-  );
-
-  const parsed = parseJsonResponse(content) as Awaited<ReturnType<typeof chatResponseDeepSeek>>;
-  if (!parsed.newWords) parsed.newWords = [];
-  if (!parsed.feedback.wrongPart) parsed.feedback.wrongPart = '';
-  if (!parsed.feedback.correctPart) parsed.feedback.correctPart = '';
-  if (!parsed.suggestion || typeof parsed.suggestion !== 'object') parsed.suggestion = { ko: '', zh: '' };
-  if (typeof parsed.suggestion.ko !== 'string') parsed.suggestion.ko = '';
-  if (typeof parsed.suggestion.zh !== 'string') parsed.suggestion.zh = '';
-  if (typeof parsed.taskCompleted !== 'boolean') parsed.taskCompleted = false;
+  if (!res.ok) throw new Error(`DeepSeek chat error: ${res.status}`);
+  const json = await res.json();
+  const content = json.choices[0].message.content.trim();
+  const cleanJson = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+  const parsed = JSON.parse(cleanJson);
+  // Ensure wrongPart/correctPart always exist
+  parsed.feedback.wrongPart = parsed.feedback.wrongPart ?? '';
+  parsed.feedback.correctPart = parsed.feedback.correctPart ?? '';
   return parsed;
 }
 /**

@@ -4,8 +4,6 @@ import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { X, Delete } from 'lucide-react';
 import { useIsMobile } from '@/lib/useIsMobile';
-import { useLang } from '@/components/LangProvider';
-import { t } from '@/lib/i18n';
 
 // ═══════════════════════════════════════════════════════════════
 // Hangul Composition Engine
@@ -598,7 +596,7 @@ export function KoreanKeyboard({ value, onChange, visible, onClose, onSend }: Ko
                 onMouseDown={(e) => e.preventDefault()}
                 onTouchStart={(e) => e.preventDefault()}
                 onTouchEnd={(e) => { e.preventDefault(); handleKey({ label: '', type: 'space', flex: 1 }); }}
-                className={`bg-white dark:bg-[var(--bg-card)] flex items-center justify-center ${keyH} rounded-[8px] text-xs font-medium text-[var(--text-muted)] shadow-[0_1px_2px_rgba(0,0,0,.15)] active:scale-[0.96] transition-colors transition-opacity transition-shadow select-none`}
+                className={`bg-white dark:bg-[var(--bg-card)] flex items-center justify-center ${keyH} rounded-[8px] text-xs font-medium text-[var(--text-muted)] shadow-[0_1px_2px_rgba(0,0,0,.15)] active:scale-[0.96] transition-all select-none`}
                 style={{ flex: 5 }}
               >
                 {t('kkey.space', lang)}
@@ -610,7 +608,7 @@ export function KoreanKeyboard({ value, onChange, visible, onClose, onSend }: Ko
                   onMouseDown={(e) => e.preventDefault()}
                   onTouchStart={(e) => e.preventDefault()}
                   onTouchEnd={(e) => { e.preventDefault(); handleSend(); }}
-                  className={`bg-[var(--pink-primary)] flex items-center justify-center ${keyH} rounded-[8px] text-sm font-bold text-white shadow-[0_1px_2px_rgba(0,0,0,.15)] active:scale-[0.96] transition-colors transition-opacity transition-shadow select-none`}
+                  className={`bg-[var(--pink-primary)] flex items-center justify-center ${keyH} rounded-[8px] text-sm font-bold text-white shadow-[0_1px_2px_rgba(0,0,0,.15)] active:scale-[0.96] transition-all select-none`}
                   style={{ flex: 2 }}
                 >
                   {t('kkey.send', lang)}
@@ -622,7 +620,7 @@ export function KoreanKeyboard({ value, onChange, visible, onClose, onSend }: Ko
                   onMouseDown={(e) => e.preventDefault()}
                   onTouchStart={(e) => e.preventDefault()}
                   onTouchEnd={(e) => { e.preventDefault(); handleKey({ label: '', type: 'done', flex: 1 }); }}
-                  className={`bg-[var(--pink-primary)] flex items-center justify-center ${keyH} rounded-[8px] text-sm font-bold text-white shadow-[0_1px_2px_rgba(0,0,0,.15)] active:scale-[0.96] transition-colors transition-opacity transition-shadow select-none`}
+                  className={`bg-[var(--pink-primary)] flex items-center justify-center ${keyH} rounded-[8px] text-sm font-bold text-white shadow-[0_1px_2px_rgba(0,0,0,.15)] active:scale-[0.96] transition-all select-none`}
                   style={{ flex: 2 }}
                 >
                   {t('kkey.done', lang)}

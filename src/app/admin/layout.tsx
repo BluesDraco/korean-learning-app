@@ -7,6 +7,7 @@ import Link from 'next/link';
 import {
   LayoutDashboard, DollarSign, Users, FileText, Activity, Mail,
   ShieldAlert, LogOut, Home, Menu, X, Music, MessageSquare, Video,
+  Crown, Package, Gift, BarChart2, Star,
 } from 'lucide-react';
 
 const navItems = [

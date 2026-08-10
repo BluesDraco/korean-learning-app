@@ -5,11 +5,8 @@ import { checkAiQuota } from '@/lib/server/membership';
 import { fetchWithTimeout } from '@/lib/fetch';
 import { filterContent } from '@/lib/contentFilter';
 
-// 6-26 事故兜底：含鉴权/用户数据的 API 必须 force-dynamic，禁止 Next.js 自动缓存
-export const dynamic = 'force-dynamic';
-
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
-const DEEPSEEK_MODEL = 'deepseek-v4-flash';
+const DEEPSEEK_MODEL = 'deepseek-chat';
 
 export async function POST(req: Request) {
   const auth = await getAuthFromCookie();

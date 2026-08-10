@@ -81,10 +81,10 @@ export function resolveAudioPolicy(type: AudioContentType): AudioPolicyResult {
   return { source: 'cached_qwen_tts', shouldCache: true, reason: '默认策略：Qwen TTS + 浏览器回退' };
 }
 
-/** Sanitize text before passing to browser TTS. Strips markers that confuse TTS.
- *  skipNormalize=true 时不做连音规则化 —— 用于"写/读"对比场景的字面读音播放。 */
-export function sanitizeTTSText(text: string, hint?: AudioContentType, skipNormalize = false): string {
+/** Sanitize text before passing to TTS engine. Strips markers that confuse TTS. */
+export function sanitizeTTSText(text: string, hint?: AudioContentType): string {
   const cleaned = text
+    // Remove speaker icon emoji
     .replace(/🔊/g, '')
     .replace(/[●◉○◈◇◆▸►▻]/g, '')
     .replace(/\bvs\.?\b/gi, ',')
@@ -94,5 +94,12 @@ export function sanitizeTTSText(text: string, hint?: AudioContentType, skipNorma
     .replace(/^,\s*/, '')
     .replace(/,\s*$/, '')
     .trim();
-  return skipNormalize ? cleaned : normalizeKoreanPronunciation(cleaned);
+  const normalized = normalizeKoreanPronunciation(cleaned);
+  // Wrap short Korean words in sentence context so Kyong's language model
+  // activates properly — improves stability for 위기/중요/영향을 etc.
+  const type = hint ?? classifyContent(cleaned);
+  if ((type === 'word' || type === 'short_word') && /^[가-힣\s]+$/.test(normalized)) {
+    return '。' + normalized + '。';
+  }
+  return normalized;
 }

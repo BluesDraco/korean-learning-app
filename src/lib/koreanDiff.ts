@@ -11,12 +11,6 @@ const DOUBLE_JAMO: Record<string, string> = {
   'ㄹㅂ':'ㄼ','ㄹㅅ':'ㄽ','ㄹㅌ':'ㄾ','ㄹㅍ':'ㄿ','ㄹㅎ':'ㅀ','ㅂㅅ':'ㅄ',
 };
 
-// 相邻裸元音合并成复合元音(ㅗ+ㅏ→ㅘ, ㅡ+ㅣ→ㅢ 等),使分开打与整体打判定等价
-const COMPOUND_VOWEL: Record<string, string> = {
-  'ㅗㅏ':'ㅘ','ㅗㅐ':'ㅙ','ㅗㅣ':'ㅚ',
-  'ㅜㅓ':'ㅝ','ㅜㅔ':'ㅞ','ㅜㅣ':'ㅟ','ㅡㅣ':'ㅢ',
-};
-
 function isSyllable(c: string) { const code = c.charCodeAt(0); return code >= 0xAC00 && code <= 0xD7A3; }
 
 export function composeJamo(s: string): string {
@@ -25,24 +19,11 @@ export function composeJamo(s: string): string {
   let i = 0;
   while (i < chars.length) {
     const c0 = chars[i];
-    if (isSyllable(c0) || !INITIALS.includes(c0)) {
-      // 裸元音打头时,尝试与下一个裸元音合并成复合元音
-      if (MEDIALS.includes(c0) && i + 1 < chars.length) {
-        const merged = COMPOUND_VOWEL[c0 + chars[i + 1]];
-        if (merged) { out.push(merged); i += 2; continue; }
-      }
-      out.push(c0); i++; continue;
-    }
+    if (isSyllable(c0) || !INITIALS.includes(c0)) { out.push(c0); i++; continue; }
     if (i + 1 >= chars.length || !MEDIALS.includes(chars[i + 1])) { out.push(c0); i++; continue; }
     const choIdx = INITIALS.indexOf(c0);
-    let jung = chars[i + 1];
+    const jungIdx = MEDIALS.indexOf(chars[i + 1]);
     i += 2;
-    // 中声后若跟可组合的裸元音,合并成复合元音(ㄱ+ㅜ+ㅣ→귀)
-    if (i < chars.length) {
-      const merged = COMPOUND_VOWEL[jung + chars[i]];
-      if (merged) { jung = merged; i++; }
-    }
-    const jungIdx = MEDIALS.indexOf(jung);
     let jongIdx = 0;
     if (i < chars.length && INITIALS.includes(chars[i])) {
       let jongCh = chars[i];
@@ -71,9 +52,7 @@ export function composeJamo(s: string): string {
 }
 
 export function normalizeKorean(s: string): string {
-  return composeJamo(s.normalize('NFC'))
-    .replace(/[。？！，,.?!、…～~·ㆍ「」『』（）()《》〈〉""''\-—\s]+/g, '')
-    .trim();
+  return composeJamo(s.normalize('NFC')).replace(/[。？！，,.?!、…\s]+/g, '').trim();
 }
 
 function isKorean(ch: string) {
