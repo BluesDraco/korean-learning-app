@@ -946,7 +946,7 @@ export const advancedEntries: WordEntry[] = [
     tags: ['日常', '韩流'], emotionTags: ['紧张'], relatedWords: [],
   },
   {
-    id: 'idiom-09', korean: '꿩 먹고 알 먹기', romanization: 'kkwong meokgo al meokgi', baseForm: '꿩 먹고 알 먹기', partOfSpeech: '惯用语',
+    id: 'idiom-09', korean: '꿩 먹고 알 먹기', romanization: 'kkwong meokgo al meokgi', baseForm: '꿩 먹고 알 먹기', partOfSpeech: '俗语',
     level: '6', frequency: 2,
     meanings: [{ chinese: '一举两得', nuance: '正面', register: '通用' }],
     examples: [
@@ -955,7 +955,7 @@ export const advancedEntries: WordEntry[] = [
     tags: ['日常'], emotionTags: [], relatedWords: [],
   },
   {
-    id: 'idiom-10', korean: '티끌 모아 태산', romanization: 'tikkeul moa taesan', baseForm: '티끌 모아 태산', partOfSpeech: '惯用语',
+    id: 'idiom-10', korean: '티끌 모아 태산', romanization: 'tikkeul moa taesan', baseForm: '티끌 모아 태산', partOfSpeech: '俗语',
     level: '6', frequency: 2,
     meanings: [{ chinese: '积少成多', nuance: '正面/励志', register: '通用' }],
     examples: [
@@ -964,7 +964,7 @@ export const advancedEntries: WordEntry[] = [
     tags: ['日常', '经济'], emotionTags: [], relatedWords: [],
   },
   {
-    id: 'idiom-11', korean: '가는 말이 고와야 오는 말이 곱다', romanization: 'ganeun mari gowaya oneun mari gopda', baseForm: '가는 말이 고와야 오는 말이 곱다', partOfSpeech: '惯用语',
+    id: 'idiom-11', korean: '가는 말이 고와야 오는 말이 곱다', romanization: 'ganeun mari gowaya oneun mari gopda', baseForm: '가는 말이 고와야 오는 말이 곱다', partOfSpeech: '俗语',
     level: '6', frequency: 2,
     meanings: [{ chinese: '你说得好听对方才会说得好听/人心换人心', nuance: '教诲', register: '通用' }],
     examples: [
@@ -973,7 +973,7 @@ export const advancedEntries: WordEntry[] = [
     tags: ['社交', '日常'], emotionTags: [], relatedWords: [],
   },
   {
-    id: 'idiom-12', korean: '배보다 배꼽이 더 크다', romanization: 'baeboda baekkobi deo keuda', baseForm: '배보다 배꼽이 더 크다', partOfSpeech: '惯用语',
+    id: 'idiom-12', korean: '배보다 배꼽이 더 크다', romanization: 'baeboda baekkobi deo keuda', baseForm: '배보다 배꼽이 더 크다', partOfSpeech: '俗语',
     level: '6', frequency: 2,
     meanings: [{ chinese: '本末倒置/肚脐比肚子还大（得不偿失）', nuance: '口语', register: '通用' }],
     examples: [

@@ -4,11 +4,6 @@ import { hashPassword, signToken, generateId, isLaunchGateBlocked, LAUNCH_GATE_M
 import { checkRateLimit } from '@/lib/server/rate-limit';
 import { filterContent } from '@/lib/contentFilter';
 
-// 6-26 事故兜底：鉴权路由必须 force-dynamic
-export const dynamic = 'force-dynamic';
-
-const NO_STORE = { 'Cache-Control': 'private, no-store' };
-
 function getClientIp(request: Request): string {
   const forwarded = request.headers.get('x-forwarded-for');
   return forwarded?.split(',')[0]?.trim() || '127.0.0.1';
@@ -56,11 +51,11 @@ export async function POST(request: Request) {
 
     const usernameCheck = filterContent(username, 'username');
     if (!usernameCheck.ok) {
-      return NextResponse.json({ error: usernameCheck.reason }, { status: 400, headers: NO_STORE });
+      return NextResponse.json({ error: usernameCheck.reason }, { status: 400 });
     }
 
-    if (password.length < 6 || password.length > 200) {
-      return NextResponse.json({ error: '密码长度必须在 6-200 之间' }, { status: 400, headers: NO_STORE });
+    if (password.length < 6) {
+      return NextResponse.json({ error: '密码长度不能少于6位' }, { status: 400 });
     }
 
     const db = await getDb();

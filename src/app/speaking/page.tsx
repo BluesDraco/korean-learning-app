@@ -10,6 +10,7 @@ import '../practice/practice-redesign.css';
 import '../practice/practice-flow.css';
 
 interface SubMode {
+  [k: string]: unknown;
   num: string;
   en: string;
   name: string;

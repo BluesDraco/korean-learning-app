@@ -1,12 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/server/db';
-import { verifyPassword, signToken, isLaunchGateBlocked, LAUNCH_GATE_MESSAGE } from '@/lib/server/auth';
+import { verifyPassword, signToken, setAuthCookie } from '@/lib/server/auth';
 import { checkLoginRateLimit, resetLoginRateLimit } from '@/lib/server/rate-limit';
-
-// 6-26 事故兜底：鉴权路由必须 force-dynamic，禁止 CDN/Next 缓存
-export const dynamic = 'force-dynamic';
-
-const NO_STORE = { 'Cache-Control': 'private, no-store' };
 
 function getClientIp(request: Request): string {
   const forwarded = request.headers.get('x-forwarded-for');
@@ -28,13 +23,7 @@ export async function POST(request: Request) {
     const { username, password } = await request.json();
 
     if (!username || !password) {
-      return NextResponse.json({ error: '用户名和密码不能为空' }, { status: 400, headers: NO_STORE });
-    }
-    if (typeof username !== 'string' || typeof password !== 'string') {
-      return NextResponse.json({ error: '用户名和密码不能为空' }, { status: 400, headers: NO_STORE });
-    }
-    if (username.length > 100 || password.length > 200) {
-      return NextResponse.json({ error: '用户名或密码错误' }, { status: 401, headers: NO_STORE });
+      return NextResponse.json({ error: '用户名和密码不能为空' }, { status: 400 });
     }
 
     const ip = getClientIp(request);
@@ -42,7 +31,7 @@ export async function POST(request: Request) {
     if (!rateCheck.allowed) {
       return NextResponse.json(
         { error: `请求过于频繁，请${rateCheck.retryAfterSeconds}秒后重试` },
-        { status: 429, headers: NO_STORE }
+        { status: 429 }
       );
     }
 
@@ -69,10 +58,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: '用户名或密码错误' }, { status: 401, headers: NO_STORE });
     }
 
-    // 上线预告门控：国内版普通用户暂不可登录，仅管理员放行
-    if (isLaunchGateBlocked(role)) {
-      return NextResponse.json({ error: LAUNCH_GATE_MESSAGE }, { status: 403, headers: NO_STORE });
-    }
+    await resetLoginRateLimit(ip, username);
 
     // 异步清空 rate-limit 计数器——不阻塞响应
     resetLoginRateLimit(ip, username).catch(() => { /* 清空失败不影响登录 */ });

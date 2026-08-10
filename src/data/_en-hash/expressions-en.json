@@ -1,0 +1,2154 @@
+{
+  "耳朵薄": {
+    "hash": "e10f3182376f",
+    "en": "thin ears"
+  },
+  "耳根子软，容易听信别人的话": {
+    "hash": "bd17647971eb",
+    "en": "gullible, easily swayed by others"
+  },
+  "耳根软": {
+    "hash": "660b47e04211",
+    "en": "soft ears / gullible"
+  },
+  "嘴短": {
+    "hash": "92ac6691ec6f",
+    "en": "short mouth"
+  },
+  "挑食，吃得少": {
+    "hash": "d5bb23c884b5",
+    "en": "picky eater, eats little"
+  },
+  "嘴刁 / 吃得少": {
+    "hash": "e4efd998b3d9",
+    "en": "picky eater / eats little"
+  },
+  "手大": {
+    "hash": "0a8ee1c9c7c9",
+    "en": "big hands"
+  },
+  "大方，出手阔绰；做饭时量做得多": {
+    "hash": "b3994cfb1964",
+    "en": "generous, lavish; cooks large portions"
+  },
+  "出手大方": {
+    "hash": "0b27b0678045",
+    "en": "generous with money"
+  },
+  "脚宽": {
+    "hash": "7ba18ab19c47",
+    "en": "wide feet"
+  },
+  "人脉广，交际圈大": {
+    "hash": "cad2121da24c",
+    "en": "well-connected, large social circle"
+  },
+  "人脉广 / 路子野": {
+    "hash": "2d0cf806df31",
+    "en": "well-connected / resourceful"
+  },
+  "眼睛高": {
+    "hash": "16c2e0d8cb15",
+    "en": "high eyes"
+  },
+  "眼光高，标准高": {
+    "hash": "f235a26c4d76",
+    "en": "high standards, demanding"
+  },
+  "眼光高": {
+    "hash": "36e6f1e65a97",
+    "en": "high standards"
+  },
+  "鼻子高": {
+    "hash": "35fae2a7bf01",
+    "en": "high nose"
+  },
+  "高傲，自以为是": {
+    "hash": "969d33d85d69",
+    "en": "arrogant, self-righteous"
+  },
+  "目中无人 / 眼高于顶": {
+    "hash": "43daca4eaffc",
+    "en": "looking down on others / thinking one is above others"
+  },
+  "嘴重": {
+    "hash": "62376466f918",
+    "en": "heavy mouth"
+  },
+  "嘴严，能保守秘密": {
+    "hash": "0f0e086ff2a6",
+    "en": "tight-lipped, able to keep secrets"
+  },
+  "嘴严": {
+    "hash": "e35c508aba98",
+    "en": "tight-lipped"
+  },
+  "嘴轻": {
+    "hash": "970ac354b75a",
+    "en": "light mouth"
+  },
+  "嘴快，守不住秘密": {
+    "hash": "c517efe386ba",
+    "en": "loose-lipped, unable to keep secrets"
+  },
+  "嘴不严 / 大嘴巴": {
+    "hash": "d4222a3285d0",
+    "en": "not tight-lipped / big mouth"
+  },
+  "肝大": {
+    "hash": "7ae9ab06d629",
+    "en": "big liver"
+  },
+  "胆子大，无所畏惧": {
+    "hash": "ff52a6ca962e",
+    "en": "bold, fearless"
+  },
+  "胆大包天": {
+    "hash": "398ebc217800",
+    "en": "audacious, extremely bold"
+  },
+  "肝小": {
+    "hash": "54da049413ca",
+    "en": "small liver"
+  },
+  "胆子小，怯懦": {
+    "hash": "c609d3d9c52c",
+    "en": "timid, cowardly"
+  },
+  "胆小如鼠": {
+    "hash": "1158b2723d21",
+    "en": "timid as a mouse"
+  },
+  "脸厚": {
+    "hash": "ce72b2fd5513",
+    "en": "thick face"
+  },
+  "脸皮厚，不知羞耻": {
+    "hash": "57728c9ff979",
+    "en": "shameless, thick-skinned"
+  },
+  "脸皮厚": {
+    "hash": "0c0b53c0d478",
+    "en": "thick-skinned"
+  },
+  "脸皮薄": {
+    "hash": "eea3c11e7c5c",
+    "en": "thin face"
+  },
+  "脸皮薄，容易害羞、不好意思（与 얼굴이 두껍다 相对）": {
+    "hash": "922d918851bc",
+    "en": "thin-skinned, easily embarrassed (opposite of 얼굴이 두껍다)"
+  },
+  "手辣": {
+    "hash": "321d96a6580f",
+    "en": "spicy hands"
+  },
+  "下手重、打人很疼；做事麻利利落": {
+    "hash": "b3b53bf21b64",
+    "en": "hits hard, hurts when struck; works quickly and efficiently"
+  },
+  "下手重 / 手脚麻利": {
+    "hash": "26e23f13e83b",
+    "en": "heavy-handed / quick and nimble"
+  },
+  "合嘴": {
+    "hash": "184102a676da",
+    "en": "close mouth"
+  },
+  "合口味，对胃口": {
+    "hash": "c26b354af63a",
+    "en": "suits one's taste, agreeable to the palate"
+  },
+  "对胃口": {
+    "hash": "dce166378459",
+    "en": "to one's taste"
+  },
+  "没有口味": {
+    "hash": "050c21c1c825",
+    "en": "no taste"
+  },
+  "没胃口，食欲不振": {
+    "hash": "906480c5ee2c",
+    "en": "no appetite, loss of appetite"
+  },
+  "没胃口": {
+    "hash": "cc2bdd09070a",
+    "en": "no appetite"
+  },
+  "嘴里口水干了": {
+    "hash": "e05b0e42d34c",
+    "en": "mouth saliva dried up"
+  },
+  "说得口干舌燥；反复称赞": {
+    "hash": "593dca412323",
+    "en": "talk until one's mouth is dry; praise repeatedly"
+  },
+  "说得口干舌燥 / 赞不绝口": {
+    "hash": "f00792dfbfbc",
+    "en": "talk until dry-mouthed / praise endlessly"
+  },
+  "甩动舌头": {
+    "hash": "c4ee6cb59b52",
+    "en": "swing tongue"
+  },
+  "惊叹不已，咋舌": {
+    "hash": "a80302f63d7d",
+    "en": "amazed, clicking one's tongue in wonder"
+  },
+  "咋舌 / 惊叹": {
+    "hash": "d225f6e93a14",
+    "en": "clicking one's tongue / marveling"
+  },
+  "眼睛翻过来": {
+    "hash": "3aa1900e95ef",
+    "en": "eyes turned over"
+  },
+  "气得发疯，失去理智": {
+    "hash": "6e7320fe83c2",
+    "en": "furious, losing one's mind"
+  },
+  "气疯了": {
+    "hash": "2fc992e76848",
+    "en": "going crazy with anger"
+  },
+  "眼睛都要掉了似的等": {
+    "hash": "2ed62b1a3f2b",
+    "en": "waiting as if one's eyes are about to fall out"
+  },
+  "望眼欲穿地等待": {
+    "hash": "05bd924c245f",
+    "en": "waiting with eager anticipation"
+  },
+  "望眼欲穿": {
+    "hash": "aed252b7f825",
+    "en": "waiting eagerly, eyes straining"
+  },
+  "睁眼鼻子的空都没有": {
+    "hash": "bb321928884c",
+    "en": "no room even for open eyes and nose"
+  },
+  "忙得不可开交": {
+    "hash": "8dfa146299d8",
+    "en": "extremely busy, swamped"
+  },
+  "眼睛熟悉": {
+    "hash": "6ee653f9fb09",
+    "en": "eyes familiar"
+  },
+  "看着眼熟": {
+    "hash": "d8214a6bd1e2",
+    "en": "looks familiar"
+  },
+  "眼熟": {
+    "hash": "696e095f0aaf",
+    "en": "look familiar"
+  },
+  "帮忙闭上眼睛": {
+    "hash": "f1a18eb44225",
+    "en": "help close the eyes"
+  },
+  "睁一只眼闭一只眼，装作没看见": {
+    "hash": "cd337628589c",
+    "en": "turn a blind eye, pretend not to see"
+  },
+  "睁一只眼闭一只眼": {
+    "hash": "15dfeea35ac4",
+    "en": "turn a blind eye"
+  },
+  "转动眼睛": {
+    "hash": "6f01b586fd58",
+    "en": "turn the eyes"
+  },
+  "转移注意力，把目光转向": {
+    "hash": "5fdf6c0df943",
+    "en": "shift attention, turn one's gaze to"
+  },
+  "把目光转向": {
+    "hash": "798589da6af8",
+    "en": "turn one's gaze to"
+  },
+  "被眼睛踩到": {
+    "hash": "e73a942f894f",
+    "en": "stepped on by the eyes"
+  },
+  "（人或事物）不断在脑海里浮现": {
+    "hash": "108f0efd4377",
+    "en": "(a person or thing) keeps appearing in one's mind"
+  },
+  "历历在目 / 挥之不去": {
+    "hash": "9c69076425e9",
+    "en": "vividly in mind / lingering"
+  },
+  "耳朵熟悉": {
+    "hash": "d3a7bb26a0db",
+    "en": "ears are familiar"
+  },
+  "听着耳熟": {
+    "hash": "bf6e8fc8c176",
+    "en": "sounds familiar"
+  },
+  "耳熟": {
+    "hash": "fbac4bf0d7a1",
+    "en": "familiar to the ear"
+  },
+  "侧过耳朵": {
+    "hash": "36d7b4059ee6",
+    "en": "tilt one's ear"
+  },
+  "仔细倾听": {
+    "hash": "39cb1987b658",
+    "en": "listen carefully"
+  },
+  "侧耳倾听": {
+    "hash": "6a985888a69d",
+    "en": "listen attentively"
+  },
+  "耳朵里长了茧子": {
+    "hash": "d3b42b27efec",
+    "en": "callus grew in the ear"
+  },
+  "听得耳朵都起茧了（反复听同样的内容）": {
+    "hash": "153178fdf878",
+    "en": "heard it so many times it's like a callus in the ear (repeatedly hearing the same thing)"
+  },
+  "耳朵起茧": {
+    "hash": "1a621320c6a5",
+    "en": "ear callus / heard it a thousand times"
+  },
+  "耳朵痒": {
+    "hash": "834ede6474df",
+    "en": "ear itches"
+  },
+  "感觉有人在背后议论自己": {
+    "hash": "e305f558e21c",
+    "en": "feels like someone is talking about you behind your back"
+  },
+  "耳朵发热 / 有人在念叨": {
+    "hash": "da293c851f16",
+    "en": "ears burning / someone is talking about you"
+  },
+  "嘴挂到耳朵上": {
+    "hash": "1203df03c1db",
+    "en": "mouth hanging on the ears"
+  },
+  "笑得合不拢嘴": {
+    "hash": "93d116710114",
+    "en": "grinning from ear to ear"
+  },
+  "鼻涕流了三尺长": {
+    "hash": "16e8c761e80a",
+    "en": "snot running three feet long"
+  },
+  "自顾不暇（自己的鼻水都三尺长了还管别人）": {
+    "hash": "9125d86e1585",
+    "en": "unable to take care of oneself (one's own snot is three feet long, yet still worrying about others)"
+  },
+  "自顾不暇": {
+    "hash": "51c8770defa9",
+    "en": "unable to take care of oneself"
+  },
+  "鼻梁高": {
+    "hash": "ffcd8dab38d9",
+    "en": "high nose bridge"
+  },
+  "目中无人，自视甚高": {
+    "hash": "7e38d23e80e4",
+    "en": "arrogant, looking down on others, thinking highly of oneself"
+  },
+  "目中无人 / 高傲": {
+    "hash": "ef38d2ad7b7c",
+    "en": "looking down on others / arrogant"
+  },
+  "肩膀重": {
+    "hash": "6de488bbd8e9",
+    "en": "heavy shoulders"
+  },
+  "感到责任重大，压力很大": {
+    "hash": "0d3358186967",
+    "en": "feeling great responsibility, under heavy pressure"
+  },
+  "责任重大 / 压力山大": {
+    "hash": "dcb2007ba92e",
+    "en": "great responsibility / overwhelming pressure"
+  },
+  "展开肩膀": {
+    "hash": "937177db1f3f",
+    "en": "spreading one's shoulders"
+  },
+  "扬眉吐气，有自信": {
+    "hash": "7d8289c9d78e",
+    "en": "feeling proud and confident, holding one's head high"
+  },
+  "扬眉吐气": {
+    "hash": "ea923b99e6e8",
+    "en": "feeling proud and elated"
+  },
+  "手熟悉": {
+    "hash": "da3f28b0728f",
+    "en": "hands are familiar"
+  },
+  "做熟了，上手了": {
+    "hash": "fe2bcdbb83b5",
+    "en": "skilled and accustomed to doing something"
+  },
+  "上手了 / 熟练了": {
+    "hash": "93ce786865b1",
+    "en": "got the hang of it / proficient"
+  },
+  "手脚合拍": {
+    "hash": "d3aae43755eb",
+    "en": "hands and feet in sync"
+  },
+  "配合默契": {
+    "hash": "e0ace6758156",
+    "en": "working in perfect harmony"
+  },
+  "脚被绑住": {
+    "hash": "85213a093385",
+    "en": "feet tied up"
+  },
+  "被困住无法离开": {
+    "hash": "4357fdf0c931",
+    "en": "trapped and unable to leave"
+  },
+  "被困住 / 脱不开身": {
+    "hash": "3185de1e7605",
+    "en": "stuck / unable to get away"
+  },
+  "脚麻": {
+    "hash": "d5daaa75b564",
+    "en": "numb feet"
+  },
+  "做了亏心事心里不安": {
+    "hash": "00d7c68e02d6",
+    "en": "feeling uneasy due to a guilty conscience"
+  },
+  "心虚": {
+    "hash": "168f622b662b",
+    "en": "guilty conscience"
+  },
+  "脚背上着火": {
+    "hash": "492b88c54f2f",
+    "en": "fire on the back of the foot"
+  },
+  "火烧眉毛，事到临头": {
+    "hash": "1484cfd774ea",
+    "en": "urgent, at the last moment"
+  },
+  "火烧眉毛": {
+    "hash": "c9b8825e9bc6",
+    "en": "eyebrows on fire"
+  },
+  "脱了鞋站出来": {
+    "hash": "c2c090af26c7",
+    "en": "take off shoes and step forward"
+  },
+  "积极出手帮忙": {
+    "hash": "ee4f92c001ce",
+    "en": "actively lend a hand"
+  },
+  "挺身而出": {
+    "hash": "f16b169a19c6",
+    "en": "step up / come forward"
+  },
+  "弯下腰": {
+    "hash": "63823b7f74e9",
+    "en": "bend at the waist"
+  },
+  "恭敬地行礼；谦卑待人": {
+    "hash": "c690bee3db5a",
+    "en": "bow respectfully; be humble toward others"
+  },
+  "鞠躬 / 谦恭": {
+    "hash": "ec9b36fa8f09",
+    "en": "bow / humility"
+  },
+  "低下头": {
+    "hash": "fa343ea99a74",
+    "en": "lower one's head"
+  },
+  "认输，低头认错": {
+    "hash": "1c5d00c859a4",
+    "en": "admit defeat, bow and apologize"
+  },
+  "低头认错": {
+    "hash": "330dfaa86591",
+    "en": "hang one's head in apology"
+  },
+  "头重": {
+    "hash": "c7e133ba2725",
+    "en": "heavy head"
+  },
+  "头脑昏沉，心事重重": {
+    "hash": "8a38491ac92a",
+    "en": "feeling dizzy and weighed down by worries"
+  },
+  "头昏脑涨": {
+    "hash": "e84996feebf2",
+    "en": "dizzy and muddled"
+  },
+  "胸口发热": {
+    "hash": "d037595bdd45",
+    "en": "chest feels hot"
+  },
+  "心潮澎湃，深受感动": {
+    "hash": "15d94f64bb99",
+    "en": "heart racing with emotion, deeply moved"
+  },
+  "心潮澎湃": {
+    "hash": "3ae5039068cd",
+    "en": "heart surging with emotion"
+  },
+  "里面凉爽": {
+    "hash": "3954e9f3c651",
+    "en": "cool inside"
+  },
+  "心里痛快，舒畅": {
+    "hash": "74931f2ce6a3",
+    "en": "feeling relieved and at ease"
+  },
+  "痛快 / 舒畅": {
+    "hash": "d947b250e6cd",
+    "en": "relieved / comfortable"
+  },
+  "心口刺痛": {
+    "hash": "167bdab3fc3d",
+    "en": "heart stings"
+  },
+  "深受感动，心头一酸": {
+    "hash": "d4aa3cb5662e",
+    "en": "deeply moved, heart aches with emotion"
+  },
+  "感动 / 心酸": {
+    "hash": "ed9f8aea0acf",
+    "en": "moved / heartache"
+  },
+  "抚摸胸口": {
+    "hash": "e804f737de2f",
+    "en": "patting one's chest"
+  },
+  "松了一口气，放下心来": {
+    "hash": "e6e71c7f7ec7",
+    "en": "to feel relieved, to let go of worry"
+  },
+  "松了一口气": {
+    "hash": "b4563f6e60f8",
+    "en": "to breathe a sigh of relief"
+  },
+  "里面烧起来": {
+    "hash": "188385178f1c",
+    "en": "burning inside"
+  },
+  "心急如焚，非常焦虑": {
+    "hash": "c86d359d6423",
+    "en": "extremely anxious, burning with worry"
+  },
+  "心急如焚": {
+    "hash": "fd75350c2ccc",
+    "en": "burning with anxiety"
+  },
+  "进入心里": {
+    "hash": "012f74bd0707",
+    "en": "to enter the heart"
+  },
+  "满意，喜欢，中意": {
+    "hash": "ba737288d970",
+    "en": "to be satisfied, to like, to be pleased with"
+  },
+  "中意 / 满意": {
+    "hash": "023ca5d04468",
+    "en": "to take a liking to / to be satisfied"
+  },
+  "心被放下": {
+    "hash": "98b317582fe7",
+    "en": "heart set down"
+  },
+  "放心了，安心了": {
+    "hash": "500655d152f6",
+    "en": "to be relieved, to feel at ease"
+  },
+  "放心了": {
+    "hash": "a62da513d716",
+    "en": "to be relieved"
+  },
+  "心重": {
+    "hash": "0a0de5c268bf",
+    "en": "heavy heart"
+  },
+  "心情沉重": {
+    "hash": "eb6a0dc30839",
+    "en": "feeling heavy-hearted"
+  },
+  "心相通": {
+    "hash": "8cb4ac07aab0",
+    "en": "hearts connected"
+  },
+  "心有灵犀，志趣相投": {
+    "hash": "ce096e7c3f6b",
+    "en": "having a tacit understanding, sharing similar interests"
+  },
+  "心有灵犀": {
+    "hash": "4554b49a04fb",
+    "en": "having a tacit understanding"
+  },
+  "凝结在胸口": {
+    "hash": "69275b5b782b",
+    "en": "congealed in the chest"
+  },
+  "心里有疙瘩，有怨恨": {
+    "hash": "24f53eb6e0c8",
+    "en": "holding a grudge, harboring resentment"
+  },
+  "耿耿于怀": {
+    "hash": "55341527ff39",
+    "en": "brooding over something"
+  },
+  "肠子烧起来": {
+    "hash": "8e92607b0224",
+    "en": "intestines burning up"
+  },
+  "焦急万分": {
+    "hash": "d540743bb856",
+    "en": "extremely anxious"
+  },
+  "挤出黏汗": {
+    "hash": "99fdeec90f22",
+    "en": "squeezing out sticky sweat"
+  },
+  "费尽力气、焦头烂额地应付": {
+    "hash": "2f27dbed5727",
+    "en": "struggling desperately, dealing with things in a frantic state"
+  },
+  "费尽九牛二虎之力 / 焦头烂额": {
+    "hash": "b7bf49578d71",
+    "en": "going to great lengths / being overwhelmed"
+  },
+  "气被堵住": {
+    "hash": "fc88078d8fe0",
+    "en": "air is blocked"
+  },
+  "无语，哭笑不得，荒唐得说不出话": {
+    "hash": "cd033d30035c",
+    "en": "speechless,哭笑不得, absurd to the point of being unable to speak"
+  },
+  "无语 / 哭笑不得": {
+    "hash": "4c8a5d21a68d",
+    "en": "speechless /哭笑不得"
+  },
+  "砍断脚": {
+    "hash": "8d656db299e8",
+    "en": "cut off the feet"
+  },
+  "断绝往来，不再去某个地方": {
+    "hash": "e774bc8b2c89",
+    "en": "cut off ties, stop going to a place"
+  },
+  "断绝往来 / 洗手不干": {
+    "hash": "0ff096b0be41",
+    "en": "cut off ties / wash one's hands of it"
+  },
+  "洗手": {
+    "hash": "fd6d26e916d8",
+    "en": "wash hands"
+  },
+  "洗手不干，金盆洗手（改掉坏习惯）": {
+    "hash": "1045fe2a0ec1",
+    "en": "wash one's hands of it, quit a bad habit"
+  },
+  "金盆洗手": {
+    "hash": "7290073c5ed5",
+    "en": "wash one's hands of it"
+  },
+  "牵手": {
+    "hash": "a487dabb766d",
+    "en": "hold hands"
+  },
+  "携手合作": {
+    "hash": "f6f7186a69e6",
+    "en": "work together, cooperate"
+  },
+  "松手": {
+    "hash": "7a61b7d35d8c",
+    "en": "let go of the hand"
+  },
+  "放下手中的工作，暂停": {
+    "hash": "22fafdbf6afc",
+    "en": "put down what you're doing, pause"
+  },
+  "停手 / 放下": {
+    "hash": "09398dc22464",
+    "en": "stop / put down"
+  },
+  "把手拿开": {
+    "hash": "629320402ada",
+    "en": "take the hand away"
+  },
+  "退出项目/事务，不再参与": {
+    "hash": "54a52037d8a3",
+    "en": "withdraw from a project/affair, no longer participate"
+  },
+  "撤手不管": {
+    "hash": "b724ad08e6d1",
+    "en": "pull out and leave it alone"
+  },
+  "把脚放进去": {
+    "hash": "48e7326cc8a5",
+    "en": "put the foot in"
+  },
+  "踏入，涉足某个领域或地方": {
+    "hash": "c620da40d95d",
+    "en": "step into, set foot in a field or place"
+  },
+  "踏入 / 涉足": {
+    "hash": "cbddfadda599",
+    "en": "step into / set foot in"
+  },
+  "卖一眼": {
+    "hash": "907923d1cbea",
+    "en": "sell a glance"
+  },
+  "走神，分心，注意力不集中": {
+    "hash": "8c88db68134f",
+    "en": "zone out, get distracted, lose focus"
+  },
+  "走神 / 分心": {
+    "hash": "0ba4aa976507",
+    "en": "zone out / get distracted"
+  },
+  "筑墙": {
+    "hash": "fcefe4c684af",
+    "en": "build a wall"
+  },
+  "断绝关系，不再来往": {
+    "hash": "44791da1931d",
+    "en": "to cut ties and stop all contact"
+  },
+  "断绝关系": {
+    "hash": "e2da762ba361",
+    "en": "to sever ties"
+  },
+  "拔出刀": {
+    "hash": "bd0ba74bff26",
+    "en": "to draw a knife"
+  },
+  "采取强硬手段，下决心行动": {
+    "hash": "888f1c1c9cf7",
+    "en": "to take drastic measures, to act with determination"
+  },
+  "动真格的 / 大刀阔斧": {
+    "hash": "aa954cbfb54d",
+    "en": "to get serious / to act boldly and decisively"
+  },
+  "放火": {
+    "hash": "fe24bd35be1f",
+    "en": "to set fire"
+  },
+  "煽风点火，挑事": {
+    "hash": "a35238f12b07",
+    "en": "to stir up trouble, to provoke"
+  },
+  "煽风点火": {
+    "hash": "ca6216518888",
+    "en": "to fan the flames"
+  },
+  "搓手": {
+    "hash": "4646c7867387",
+    "en": "to rub one's hands"
+  },
+  "哀求，恳求": {
+    "hash": "5a4da0dbbb97",
+    "en": "to beg, to plead earnestly"
+  },
+  "苦苦哀求": {
+    "hash": "febd5b0e70b7",
+    "en": "to beg desperately"
+  },
+  "伸出鸭掌": {
+    "hash": "f2972e3eec7b",
+    "en": "to stretch out a duck's foot"
+  },
+  "假装不知情，装无辜": {
+    "hash": "b9a6d7206c13",
+    "en": "pretending not to know, playing innocent"
+  },
+  "装蒜 / 装无辜": {
+    "hash": "678dc3f5ce39",
+    "en": "playing dumb / playing innocent"
+  },
+  "脚出汗": {
+    "hash": "50f40ddb1aee",
+    "en": "feet sweating"
+  },
+  "为了某事到处奔波": {
+    "hash": "c7cf391f15aa",
+    "en": "running around for something"
+  },
+  "到处奔波 / 跑断腿": {
+    "hash": "c1ee8bc49a61",
+    "en": "running around / wearing out one's shoes"
+  },
+  "让风吹": {
+    "hash": "fd33d6d91e2b",
+    "en": "let the wind blow"
+  },
+  "出轨，有外遇": {
+    "hash": "776eebf44b99",
+    "en": "having an affair, cheating"
+  },
+  "出轨": {
+    "hash": "0ab02a08f9d3",
+    "en": "cheating"
+  },
+  "泼冷水": {
+    "hash": "72c88abf9221",
+    "en": "pouring cold water"
+  },
+  "泼冷水，扫兴": {
+    "hash": "9b0b785c274e",
+    "en": "dampening enthusiasm, spoiling the mood"
+  },
+  "在着火的房子扇扇子": {
+    "hash": "8d005a9bc2f7",
+    "en": "fanning a burning house"
+  },
+  "火上浇油": {
+    "hash": "c8be89e579b6",
+    "en": "adding fuel to the fire"
+  },
+  "往破底罐里灌水": {
+    "hash": "6770260c0924",
+    "en": "pouring water into a broken-bottomed jar"
+  },
+  "徒劳无功，白费力气": {
+    "hash": "ca07b53fbb2a",
+    "en": "futile effort, wasting one's energy"
+  },
+  "竹篮打水一场空": {
+    "hash": "9995a94a7745",
+    "en": "drawing water with a bamboo basket (all in vain)"
+  },
+  "丢了牛才修牛棚": {
+    "hash": "c08c5174d9e7",
+    "en": "mending the cowshed only after losing the cow"
+  },
+  "亡羊补牢（但已太迟）": {
+    "hash": "f5cefcc27544",
+    "en": "fixing things after the damage is done (but too late)"
+  },
+  "亡羊补牢": {
+    "hash": "9b40579d0a5c",
+    "en": "mending the fold after the sheep is lost"
+  },
+  "溪沟里出龙": {
+    "hash": "c2bfbaa8306d",
+    "en": "a dragon emerging from a small stream"
+  },
+  "鸡窝里飞出金凤凰；寒门出贵子": {
+    "hash": "241c4708327e",
+    "en": "a phoenix flying out of a chicken coop; a great person from a humble background"
+  },
+  "寒门出贵子": {
+    "hash": "ca2300fc9903",
+    "en": "a noble son from a poor family"
+  },
+  "摸着地游泳": {
+    "hash": "e13dbf674c99",
+    "en": "swimming while touching the ground"
+  },
+  "极其容易，易如反掌": {
+    "hash": "7e02a2737610",
+    "en": "extremely easy, as easy as turning one's hand"
+  },
+  "易如反掌": {
+    "hash": "5ef8ef0b6094",
+    "en": "as easy as turning one's palm"
+  },
+  "摘天上的星星": {
+    "hash": "c0102954cd4a",
+    "en": "pluck a star from the sky"
+  },
+  "比登天还难": {
+    "hash": "4b49a347260d",
+    "en": "harder than climbing to heaven; extremely difficult"
+  },
+  "石桥也要敲着过": {
+    "hash": "57c82d620f04",
+    "en": "even a stone bridge should be crossed by knocking on it"
+  },
+  "万事都要谨慎确认": {
+    "hash": "453fe3c128ee",
+    "en": "be cautious and verify everything"
+  },
+  "小心驶得万年船": {
+    "hash": "9ca99b00d207",
+    "en": "caution is the parent of safety"
+  },
+  "像死老鼠一样": {
+    "hash": "735e5e279b5a",
+    "en": "like a dead mouse"
+  },
+  "鸦雀无声，非常安静": {
+    "hash": "d1fed15a967b",
+    "en": "dead silent, not a sound"
+  },
+  "鸦雀无声": {
+    "hash": "ca8bf47aa2f5",
+    "en": "dead silent / not a peep"
+  },
+  "毛毛雨也会淋湿衣服": {
+    "hash": "9614593e9da6",
+    "en": "even a drizzle can soak your clothes"
+  },
+  "积少成多，小问题积累成大麻烦": {
+    "hash": "354968e418a2",
+    "en": "small things add up; minor issues accumulate into big trouble"
+  },
+  "积少成多 / 水滴石穿": {
+    "hash": "6822e92c241e",
+    "en": "little strokes fell great oaks / drip wears away stone"
+  },
+  "躺着吃年糕": {
+    "hash": "e420074756e3",
+    "en": "eat rice cake while lying down"
+  },
+  "轻而易举，小菜一碟": {
+    "hash": "dbe76ec6e2bc",
+    "en": "a piece of cake, easy as pie"
+  },
+  "小菜一碟": {
+    "hash": "118ad9720361",
+    "en": "a piece of cake"
+  },
+  "喝海带汤": {
+    "hash": "d0eda264bb83",
+    "en": "drink seaweed soup"
+  },
+  "考试落榜/被炒鱿鱼（韩国生日喝海带汤，考试前喝不吉利）": {
+    "hash": "214acb07463d",
+    "en": "to fail an exam / to get fired (Koreans drink seaweed soup on birthdays; drinking it before an exam is considered unlucky)"
+  },
+  "落榜 / 被炒": {
+    "hash": "55adb9300bc2",
+    "en": "to fail / to get fired"
+  },
+  "发霉陈旧": {
+    "hash": "02bcff4eabe6",
+    "en": "moldy and stale"
+  },
+  "陈旧的，老掉牙的": {
+    "hash": "8e67ac45b7ec",
+    "en": "outdated, old-fashioned"
+  },
+  "陈旧的 / 老掉牙的": {
+    "hash": "e28d2d18bb54",
+    "en": "outdated / old-fashioned"
+  },
+  "尾巴长": {
+    "hash": "290be60bd811",
+    "en": "long tail"
+  },
+  "坏事干多了、干久了，迟早会败露（常用「꼬리가 길면 밟힌다」）": {
+    "hash": "77e6a9a779b2",
+    "en": "if you do bad things for too long, they will eventually be exposed (commonly used as '꼬리가 길면 밟힌다')"
+  },
+  "夜路走多了总会撞鬼 / 纸包不住火": {
+    "hash": "7e878a903ee2",
+    "en": "if you walk the night path often, you'll eventually meet a ghost / you can't wrap fire in paper"
+  },
+  "耳朵暗": {
+    "hash": "2beb4d730722",
+    "en": "dark ears"
+  },
+  "听力不好，消息不灵通": {
+    "hash": "9c771268f3be",
+    "en": "hard of hearing, out of the loop"
+  },
+  "耳朵背": {
+    "hash": "d0eb671c93a3",
+    "en": "hard of hearing"
+  },
+  "头疼的疙瘩": {
+    "hash": "3e3b934614ab",
+    "en": "a headache-inducing lump"
+  },
+  "总是惹麻烦的人或事物，令人头疼的存在": {
+    "hash": "642b882c3144",
+    "en": "a person or thing that constantly causes trouble, a headache"
+  },
+  "让人头疼的家伙": {
+    "hash": "5121b614a757",
+    "en": "a real headache"
+  },
+  "像烟囱一样": {
+    "hash": "011167bbaa38",
+    "en": "like a chimney"
+  },
+  "非常想做某事，内心急切渴望（像烟囱冒烟一样涌上心头）": {
+    "hash": "60cc8f79c8b8",
+    "en": "desperately wanting to do something, burning desire (welling up like smoke from a chimney)"
+  },
+  "迫不及待 / 一心想着": {
+    "hash": "2767008d28bf",
+    "en": "can't wait / can't stop thinking about"
+  },
+  "吃面条": {
+    "hash": "2ec4373b4405",
+    "en": "eating noodles"
+  },
+  "参加婚礼（源自韩国婚礼上招待面条的习俗）": {
+    "hash": "b2c65ce4c4d0",
+    "en": "attending a wedding (from the Korean custom of serving noodles at weddings)"
+  },
+  "吃喜面": {
+    "hash": "2007a0123207",
+    "en": "eating wedding noodles"
+  },
+  "出嫁": {
+    "hash": "3ecf4f04d86a",
+    "en": "getting married"
+  },
+  "女子结婚": {
+    "hash": "d0008115128a",
+    "en": "a woman gets married"
+  },
+  "娶媳妇": {
+    "hash": "51d7340d5b5e",
+    "en": "to take a wife"
+  },
+  "男子结婚": {
+    "hash": "ec813616574e",
+    "en": "a man gets married"
+  },
+  "肚子疼": {
+    "hash": "9541ed33a96b",
+    "en": "stomach ache"
+  },
+  "看到别人过得好心里嫉妒、不舒服": {
+    "hash": "b8e18b0edbf3",
+    "en": "feeling jealous and uncomfortable when seeing others do well"
+  },
+  "肚子疼/眼红": {
+    "hash": "abf020670086",
+    "en": "stomach ache / green-eyed"
+  },
+  "清空内心": {
+    "hash": "e8b521594668",
+    "en": "to empty the mind"
+  },
+  "放下贪念和执著": {
+    "hash": "500b1f424526",
+    "en": "to let go of greed and attachment"
+  },
+  "看开 / 放下": {
+    "hash": "892c742d0af4",
+    "en": "to see through / let go"
+  },
+  "抓住肚脐": {
+    "hash": "563b621bc581",
+    "en": "to grab one's navel"
+  },
+  "太好笑了，笑得直不起腰": {
+    "hash": "c831641f373c",
+    "en": "so funny that one cannot straighten up from laughing"
+  },
+  "捧腹大笑": {
+    "hash": "ba21d23d5b90",
+    "en": "to laugh one's head off"
+  },
+  "肚子饱": {
+    "hash": "ffd107637478",
+    "en": "stomach full"
+  },
+  "非常满足，别无所求": {
+    "hash": "4ae28a4654d2",
+    "en": "completely satisfied, wanting nothing more"
+  },
+  "肚子饱了/满足": {
+    "hash": "0693abd080b2",
+    "en": "full stomach / satisfied"
+  },
+  "感觉别人在背后说自己闲话": {
+    "hash": "5f91ab0265e4",
+    "en": "feeling that others are gossiping about you behind your back"
+  },
+  "进入眼里": {
+    "hash": "0e669966d5a7",
+    "en": "enter the eyes"
+  },
+  "讨人喜欢，获得好感": {
+    "hash": "bfe7d95423f5",
+    "en": "pleasing, gaining favor"
+  },
+  "入眼/被看中": {
+    "hash": "5b1f2705207a",
+    "en": "catch the eye / be favored"
+  },
+  "耳朵都疼了": {
+    "hash": "d033f5081be1",
+    "en": "ears hurt"
+  },
+  "同样的话听太多遍听得烦死了": {
+    "hash": "3258d7d94757",
+    "en": "sick of hearing the same thing too many times"
+  },
+  "合口味的年糕": {
+    "hash": "20e19900ef13",
+    "en": "rice cake that suits the taste"
+  },
+  "正合心意的事或物": {
+    "hash": "9f6f7539daa2",
+    "en": "something that fits one's wishes perfectly"
+  },
+  "正中下怀/对胃口的糕": {
+    "hash": "97f6d7b35420",
+    "en": "hit the mark / cake that suits the palate"
+  },
+  "露脸": {
+    "hash": "2420175f9aea",
+    "en": "show face"
+  },
+  "在聚会或活动中露面、参加一下": {
+    "hash": "ae35b90d22d8",
+    "en": "to show up or participate briefly in a gathering or event"
+  },
+  "跺脚": {
+    "hash": "f412ea8e7aa1",
+    "en": "stomp feet"
+  },
+  "因懊恼、气愤或焦急而直跺脚": {
+    "hash": "c042bb91bfd2",
+    "en": "to stomp one's feet in frustration, anger, or anxiety"
+  },
+  "气饱了": {
+    "hash": "8c6f6a89ea2b",
+    "en": "full from anger"
+  },
+  "荒唐得说不出话，无语气愤": {
+    "hash": "4e5f21039588",
+    "en": "so absurd that one is speechless, speechless with anger"
+  },
+  "哭笑不得 / 无语": {
+    "hash": "d9ccd6ffde18",
+    "en": "not know whether to laugh or cry / speechless"
+  },
+  "泄气": {
+    "hash": "74ab78d732f6",
+    "en": "release air"
+  },
+  "气势受挫，失去干劲和信心": {
+    "hash": "9b3cce542239",
+    "en": "to lose momentum, drive, and confidence"
+  },
+  "人手不够": {
+    "hash": "e4cc657a5ab1",
+    "en": "not enough hands"
+  },
+  "干活的人手不足": {
+    "hash": "fbf8fa08764a",
+    "en": "short of workers or manpower"
+  },
+  "起风": {
+    "hash": "59ebcd2a8457",
+    "en": "wind rises"
+  },
+  "起了外心，心浮气躁": {
+    "hash": "b93a8191b568",
+    "en": "having wandering thoughts, restless and impatient"
+  },
+  "起心思": {
+    "hash": "80d220444ea2",
+    "en": "to have thoughts/ideas"
+  },
+  "喝一杯": {
+    "hash": "8b57313118f0",
+    "en": "drink a cup"
+  },
+  "喝一杯酒": {
+    "hash": "2288dc71b558",
+    "en": "drink a glass of alcohol"
+  },
+  "灌进风/打气": {
+    "hash": "718aa21e3d2c",
+    "en": "pour in wind / pump up"
+  },
+  "挑拨、煽动别人去做不好的事": {
+    "hash": "b2ba47964f0a",
+    "en": "to instigate or incite someone to do something bad"
+  },
+  "小酌一杯": {
+    "hash": "598264847a01",
+    "en": "have a small drink"
+  },
+  "轻松地喝一杯酒": {
+    "hash": "d8a824f69be8",
+    "en": "casually have a glass of alcohol"
+  },
+  "脸发烫": {
+    "hash": "5f51d6bf224a",
+    "en": "face feels hot"
+  },
+  "因为丢脸而感到脸上挂不住": {
+    "hash": "0b2321c2aefc",
+    "en": "feeling embarrassed or losing face due to shame"
+  },
+  "敬酒": {
+    "hash": "9cc266b872d8",
+    "en": "offer a toast"
+  },
+  "向长辈恭敬地敬酒": {
+    "hash": "7e153b94731a",
+    "en": "respectfully offer a toast to an elder"
+  },
+  "害羞或尴尬得脸红发烫": {
+    "hash": "d7b9d7b7f1a4",
+    "en": "to blush or feel hot in the face from shyness or embarrassment"
+  },
+  "请客/做东": {
+    "hash": "61b4955eb73b",
+    "en": "to treat someone / to be the host"
+  },
+  "请客，请吃饭或喝酒": {
+    "hash": "0e0a58f1ba1a",
+    "en": "to treat someone, to pay for a meal or drinks"
+  },
+  "流大汗": {
+    "hash": "93180e0f5cea",
+    "en": "to sweat profusely"
+  },
+  "费尽心力做困难的事，累得满头大汗": {
+    "hash": "4d7f19cce784",
+    "en": "to work extremely hard on a difficult task, sweating from exhaustion"
+  },
+  "鼻尖发酸": {
+    "hash": "87c2ef1c3dfc",
+    "en": "nose tip tingling"
+  },
+  "感动或悲伤得快要流泪": {
+    "hash": "bd52bffc0cc9",
+    "en": "to be moved or saddened to the point of tears"
+  },
+  "流血流汗": {
+    "hash": "f62ec8e4ff0c",
+    "en": "to bleed and sweat"
+  },
+  "拼死拼活地付出极大努力": {
+    "hash": "769b0de2fa35",
+    "en": "to put in tremendous effort, working desperately hard"
+  },
+  "心痛": {
+    "hash": "63e982f5ed89",
+    "en": "heartache"
+  },
+  "因为悲伤或惋惜而心里难受": {
+    "hash": "4940eb384aef",
+    "en": "to feel distressed from sadness or regret"
+  },
+  "逼到鼻子前": {
+    "hash": "f2cf84f1786b",
+    "en": "to be pushed right up to the nose"
+  },
+  "某事迫在眉睫，已经到眼前了": {
+    "hash": "e8b33c553ba3",
+    "en": "Something is imminent, right at hand"
+  },
+  "迫在眉睫": {
+    "hash": "96f3035c3265",
+    "en": "imminent, at hand"
+  },
+  "挽袖子上阵": {
+    "hash": "50dcac98f728",
+    "en": "roll up sleeves and go into action"
+  },
+  "积极主动地站出来参与": {
+    "hash": "cb873ddfb27d",
+    "en": "proactively step forward to participate"
+  },
+  "刺鼻": {
+    "hash": "8bfe1f402c0f",
+    "en": "pungent, stinging to the nose"
+  },
+  "散发出难闻的刺鼻气味": {
+    "hash": "84c838284f12",
+    "en": "emitting an unpleasant, pungent smell"
+  },
+  "只抱着胳膊": {
+    "hash": "65a1f3fdcc83",
+    "en": "just holding arms"
+  },
+  "什么也不做，只在旁边看着": {
+    "hash": "7e2f62713a9f",
+    "en": "doing nothing, just watching from the sidelines"
+  },
+  "袖手旁观": {
+    "hash": "07673caa4f45",
+    "en": "stand by and do nothing"
+  },
+  "头疼/伤脑筋": {
+    "hash": "13ed3a7d2da4",
+    "en": "headache / troubling"
+  },
+  "因为烦心事而头疼、伤脑筋": {
+    "hash": "89a059a52b00",
+    "en": "having a headache or worrying over troublesome matters"
+  },
+  "肩膀轻": {
+    "hash": "d24108877889",
+    "en": "light shoulders"
+  },
+  "卸下责任或负担后一身轻松": {
+    "hash": "ac344d18a695",
+    "en": "feeling relieved after shedding responsibility or burden"
+  },
+  "如释重负": {
+    "hash": "47dfc30614dc",
+    "en": "a weight off one's shoulders"
+  },
+  "害头疼病": {
+    "hash": "26f7790d9050",
+    "en": "suffering from a headache"
+  },
+  "为麻烦事苦恼不已": {
+    "hash": "93125dd037a0",
+    "en": "agonizing over troublesome matters"
+  },
+  "伤透脑筋": {
+    "hash": "8895bc3a3df3",
+    "en": "racking one's brains"
+  },
+  "较量/匹敌": {
+    "hash": "f0aa43e5a76f",
+    "en": "to contend / to match"
+  },
+  "相互比试实力，一争高下": {
+    "hash": "faf2ad022c85",
+    "en": "competing in strength to see who is better"
+  },
+  "像老鼠死了一样": {
+    "hash": "270eb722faac",
+    "en": "like a dead mouse"
+  },
+  "非常安静，连呼吸声都听不到": {
+    "hash": "7d062eab07a2",
+    "en": "so quiet that not even a breath is heard"
+  },
+  "钻进老鼠洞": {
+    "hash": "3184821878d1",
+    "en": "crawling into a mouse hole"
+  },
+  "丢脸得想找个地缝钻进去": {
+    "hash": "eac3293aa29f",
+    "en": "so embarrassed one wishes to crawl into a hole"
+  },
+  "想钻进地缝": {
+    "hash": "09d33eb7cce4",
+    "en": "wanting to crawl into a hole"
+  },
+  "把眼睛狠狠一闭": {
+    "hash": "46f1d9e955b5",
+    "en": "squeeze one's eyes shut tightly"
+  },
+  "下定决心豁出去做某事": {
+    "hash": "fe06aac9dad5",
+    "en": "to steel oneself and go for something despite risks"
+  },
+  "把心一横/咬牙闭眼": {
+    "hash": "f22e4d7f7ec2",
+    "en": "steel one's heart / grit one's teeth and close one's eyes"
+  },
+  "眼冒火光": {
+    "hash": "742173d9b8b0",
+    "en": "eyes shooting flames"
+  },
+  "对某事极度热衷、全力以赴": {
+    "hash": "e37095635e59",
+    "en": "extremely passionate and fully committed to something"
+  },
+  "脖子都要伸断了": {
+    "hash": "5062f1f392df",
+    "en": "neck about to stretch to breaking point"
+  },
+  "焦急万分地等待，脖子都快伸断了": {
+    "hash": "10f9d68d220f",
+    "en": "waiting anxiously, as if one's neck would stretch out from straining"
+  },
+  "对眼/看对眼": {
+    "hash": "b5926f0ecc96",
+    "en": "meet eyes / lock eyes"
+  },
+  "两人相互看对眼，心意相通": {
+    "hash": "91dfc01f0539",
+    "en": "two people connect at first sight, understanding each other's hearts"
+  },
+  "挨风吹": {
+    "hash": "df3646818968",
+    "en": "to be blown by the wind"
+  },
+  "被对方放了鸽子，约好了不联系也不出现": {
+    "hash": "0a62fbf5132f",
+    "en": "to be stood up; the other party agreed to meet but never showed up or contacted"
+  },
+  "被放鸽子": {
+    "hash": "91a298ec65ab",
+    "en": "to be stood up"
+  },
+  "让别人挨风吹": {
+    "hash": "c0699c64dd32",
+    "en": "let others get blown by the wind"
+  },
+  "约好了却不出现，放对方鸽子": {
+    "hash": "10d2274f5417",
+    "en": "to stand someone up after agreeing to meet"
+  },
+  "放别人鸽子": {
+    "hash": "123df363d46e",
+    "en": "to stand someone up"
+  },
+  "映入眼帘": {
+    "hash": "05e5c404be9c",
+    "en": "come into view"
+  },
+  "突出显眼，引人注目": {
+    "hash": "66ef89e37559",
+    "en": "stand out, be noticeable and eye-catching"
+  },
+  "显眼/出众": {
+    "hash": "bb2f31222b2f",
+    "en": "eye-catching / outstanding"
+  },
+  "吹吹风": {
+    "hash": "ecfd806ba151",
+    "en": "blow in the wind"
+  },
+  "出门透透气、转换心情": {
+    "hash": "3ff4a4522ad0",
+    "en": "go out for fresh air, clear one's mind"
+  },
+  "兜风/散心": {
+    "hash": "8cb263e95b5f",
+    "en": "take a drive / relax one's mind"
+  },
+  "眼前一黑": {
+    "hash": "348c6e292d3d",
+    "en": "everything goes dark before one's eyes"
+  },
+  "茫然不知所措，眼前一片黑暗": {
+    "hash": "f1f5a0f41568",
+    "en": "feel lost and helpless, as if plunged into darkness"
+  },
+  "折断鼻梁": {
+    "hash": "ad554d36d692",
+    "en": "break one's nose bridge"
+  },
+  "打掉傲慢之人的气焰": {
+    "hash": "cd8d0a3e37e3",
+    "en": "to take down an arrogant person's pride"
+  },
+  "挫其锐气": {
+    "hash": "673364b67dcd",
+    "en": "to deflate someone's ego"
+  },
+  "鼻子碰地": {
+    "hash": "8106e081f2e4",
+    "en": "nose touching the ground"
+  },
+  "极其恭敬地深深行礼": {
+    "hash": "ffcfec392599",
+    "en": "to bow deeply with utmost respect"
+  },
+  "五体投地": {
+    "hash": "cb1ca55fb361",
+    "en": "to prostrate oneself in admiration"
+  },
+  "灭掉脚背上的火": {
+    "hash": "4053063bb2bf",
+    "en": "to put out a fire on the back of one's foot"
+  },
+  "解决眼前紧急的问题": {
+    "hash": "fe807050cea4",
+    "en": "to solve an urgent problem at hand"
+  },
+  "解燃眉之急": {
+    "hash": "43cd4c752ecc",
+    "en": "to address an immediate crisis"
+  },
+  "迈不开步子": {
+    "hash": "d5feb1f76b3f",
+    "en": "unable to take a step"
+  },
+  "心里放不下，舍不得离开": {
+    "hash": "ee8c9f025786",
+    "en": "to be reluctant to leave because of emotional attachment"
+  },
+  "顶着瓢": {
+    "hash": "43f7a0509e2c",
+    "en": "to carry a gourd on one's head"
+  },
+  "被收取远高于实际价格的费用": {
+    "hash": "3afca52d3074",
+    "en": "to be charged far more than the actual price"
+  },
+  "挨宰": {
+    "hash": "f4d0c39c8bae",
+    "en": "rip off / overcharge"
+  },
+  "给…扣上瓢": {
+    "hash": "8af3c54664f8",
+    "en": "put a gourd on someone"
+  },
+  "以高于实际价格出售东西，宰客": {
+    "hash": "9be005cb8a95",
+    "en": "to sell something at a price higher than its actual value, to rip off customers"
+  },
+  "宰客": {
+    "hash": "01296cc681e1",
+    "en": "rip off / overcharge"
+  },
+  "肝缩成豆子那么大": {
+    "hash": "160bc70b7cd7",
+    "en": "liver shrinks to the size of a bean"
+  },
+  "吓得魂飞魄散，非常害怕": {
+    "hash": "c082f1fa191a",
+    "en": "scared out of one's wits, extremely frightened"
+  },
+  "吓破胆 / 胆战心惊": {
+    "hash": "9ffebb045419",
+    "en": "scared stiff / trembling with fear"
+  },
+  "刮瓢": {
+    "hash": "567330e14007",
+    "en": "scrape the gourd"
+  },
+  "（通常是妻子对丈夫）不停地唠叨抱怨": {
+    "hash": "7a75a6db9aa0",
+    "en": "(usually a wife to her husband) to nag and complain endlessly"
+  },
+  "唠叨不停": {
+    "hash": "89dfb35b38e7",
+    "en": "nag incessantly"
+  },
+  "肝掉下来": {
+    "hash": "1a046032223c",
+    "en": "liver drops out"
+  },
+  "吓了一大跳，魂都掉了": {
+    "hash": "f419d7b6e4c6",
+    "en": "to be startled out of one's wits, to be scared to death"
+  },
+  "吓破胆": {
+    "hash": "36c01f86e0ec",
+    "en": "scared out of one's wits"
+  },
+  "用飞机载": {
+    "hash": "6e283e92f5fd",
+    "en": "carrying by airplane"
+  },
+  "过度夸奖吹捧，捧上天": {
+    "hash": "070184b33218",
+    "en": "to excessively praise or flatter, to put on a pedestal"
+  },
+  "捧上天": {
+    "hash": "405f2dcf8193",
+    "en": "to put on a pedestal"
+  },
+  "抓脚踝": {
+    "hash": "5e3df4cee7f4",
+    "en": "grabbing the ankle"
+  },
+  "拖后腿，阻碍进展": {
+    "hash": "5fc51bf12289",
+    "en": "to hold back, to hinder progress"
+  },
+  "拖后腿": {
+    "hash": "4ad25f48dcf8",
+    "en": "to hold back / to hinder"
+  },
+  "坐在荆棘垫子上": {
+    "hash": "569ae66cf594",
+    "en": "sitting on a thorn cushion"
+  },
+  "处境非常不安和不自在": {
+    "hash": "327e1d135ec7",
+    "en": "to be in a very uneasy and uncomfortable situation"
+  },
+  "如坐针毡": {
+    "hash": "e67159b7a712",
+    "en": "like sitting on pins and needles"
+  },
+  "被抓住脚踝": {
+    "hash": "03f9cf974d1b",
+    "en": "having one's ankle grabbed"
+  },
+  "被某事缠住动弹不得": {
+    "hash": "eb6fa7cae7f0",
+    "en": "to be entangled by something and unable to move"
+  },
+  "被拖住后腿": {
+    "hash": "50b2ab89e411",
+    "en": "held back / hindered"
+  },
+  "走荆棘路": {
+    "hash": "7b306fc518a0",
+    "en": "walking a thorny path"
+  },
+  "过着非常艰难痛苦的生活": {
+    "hash": "4f66ef16ff17",
+    "en": "living a very hard and painful life"
+  },
+  "走荆棘之路": {
+    "hash": "d20dc94734b0",
+    "en": "walking a path of thorns"
+  },
+  "坐在钱垫上": {
+    "hash": "67d53efd45ca",
+    "en": "sitting on a money cushion"
+  },
+  "突然暴富，得到很多钱": {
+    "hash": "ab7df66bd61d",
+    "en": "suddenly becoming rich, getting a lot of money"
+  },
+  "坐在钱堆上/暴富": {
+    "hash": "7e36c1e82d7c",
+    "en": "sitting on a pile of money / striking it rich"
+  },
+  "嘴张不开": {
+    "hash": "a374ab1bd82f",
+    "en": "mouth won't open"
+  },
+  "难以启齿，说不出口": {
+    "hash": "862c76bc25cf",
+    "en": "hard to say, unable to bring oneself to speak"
+  },
+  "难以启齿": {
+    "hash": "dca5205768dc",
+    "en": "hard to bring up / difficult to say"
+  },
+  "嘴巴寂寞": {
+    "hash": "270f9885e74d",
+    "en": "lonely mouth"
+  },
+  "嘴里闲得慌，老想吃东西": {
+    "hash": "78e2d8f48540",
+    "en": "mouth feels idle, always wanting to eat something"
+  },
+  "嘴巴寂寞/嘴馋": {
+    "hash": "731508e479c3",
+    "en": "mouth lonely / craving food"
+  },
+  "手快": {
+    "hash": "0479e0957f0b",
+    "en": "quick hands"
+  },
+  "做事手脚麻利，动作快": {
+    "hash": "f7f5743c35f9",
+    "en": "nimble and quick in doing things"
+  },
+  "手脚麻利": {
+    "hash": "8cb62e7f1c55",
+    "en": "quick and nimble"
+  },
+  "耳朵磨破": {
+    "hash": "65b6451badb7",
+    "en": "ears worn out"
+  },
+  "同样的话听太多遍，耳朵都快磨破": {
+    "hash": "34b27fc5bd00",
+    "en": "heard the same thing so many times that your ears are nearly worn out"
+  },
+  "耳朵磨破了": {
+    "hash": "ed3756fa3f28",
+    "en": "ears worn out"
+  },
+  "连老鼠和鸟都不知道": {
+    "hash": "69cd3b5ae1a2",
+    "en": "not even mice and birds know"
+  },
+  "神不知鬼不觉，偷偷地": {
+    "hash": "f883475f9944",
+    "en": "secretly, without anyone knowing"
+  },
+  "神不知鬼不觉": {
+    "hash": "6d89f7102113",
+    "en": "without a trace, secretly"
+  },
+  "眼睛都不眨一下": {
+    "hash": "5e178d53f89c",
+    "en": "without blinking an eye"
+  },
+  "面不改色，泰然自若，眼皮都不抬": {
+    "hash": "40b054460693",
+    "en": "unfazed, calm and composed, without even raising an eyelid"
+  },
+  "摘掉猎鹰尾上的名牌": {
+    "hash": "ee756904c283",
+    "en": "remove the name tag from the falcon's tail"
+  },
+  "明明知道却装作不知道，装蒜": {
+    "hash": "11de852ca347",
+    "en": "pretending not to know something you clearly know; playing dumb"
+  },
+  "装蒜/装不知道": {
+    "hash": "5689be28168c",
+    "en": "playing dumb / pretending not to know"
+  },
+  "转眼之间": {
+    "hash": "bee616bbbecb",
+    "en": "in the blink of an eye"
+  },
+  "极其短暂的一瞬间": {
+    "hash": "70d300708d35",
+    "en": "an extremely brief moment"
+  },
+  "碍眼": {
+    "hash": "4d479c12813a",
+    "en": "eyesore"
+  },
+  "看着不顺眼，让人心里不痛快": {
+    "hash": "be9e8fc10719",
+    "en": "unpleasant to look at, causing discomfort"
+  },
+  "长出翅膀": {
+    "hash": "ebe20d8e8bf8",
+    "en": "grow wings"
+  },
+  "商品销量飞涨，像长了翅膀一样": {
+    "hash": "2b2b92782e35",
+    "en": "sales skyrocket, as if the product has grown wings"
+  },
+  "畅销/如虎添翼": {
+    "hash": "2e703c7998ea",
+    "en": "selling like hotcakes / adding wings to a tiger"
+  },
+  "再添一勺": {
+    "hash": "f8ef5857160a",
+    "en": "add one more spoonful"
+  },
+  "比别人更过分，雪上加霜": {
+    "hash": "48d415483078",
+    "en": "going further than others, adding insult to injury"
+  },
+  "变本加厉": {
+    "hash": "e2c69a2a5af5",
+    "en": "go from bad to worse"
+  },
+  "砌墙": {
+    "hash": "e6fdbac3f6a9",
+    "en": "build a wall"
+  },
+  "断绝关系或阻碍沟通": {
+    "hash": "6dd2d77b4fdb",
+    "en": "to cut off relations or hinder communication"
+  },
+  "筑起高墙": {
+    "hash": "cd36331832b0",
+    "en": "build a high wall"
+  },
+  "放大声": {
+    "hash": "86c8fd8e8cb9",
+    "en": "amplify one's voice"
+  },
+  "夸下海口，吹牛说大话": {
+    "hash": "b9ff262588aa",
+    "en": "to boast, to brag and talk big"
+  },
+  "说大话/夸海口": {
+    "hash": "99ee4d62c36a",
+    "en": "talk big / boast"
+  },
+  "投以眼毒": {
+    "hash": "7f8a593846e9",
+    "en": "cast a venomous eye"
+  },
+  "觊觎，眼红地盯着想要的东西": {
+    "hash": "aa6b4a454eb5",
+    "en": "to covet, to eye something enviously"
+  },
+  "眼馋/觊觎": {
+    "hash": "e958155e7199",
+    "en": "covet / eye enviously"
+  },
+  "放进眼睛里也不疼": {
+    "hash": "d421ed52f9ff",
+    "en": "doesn't hurt even if placed in the eye"
+  },
+  "疼爱得不得了，含在嘴里怕化了": {
+    "hash": "900bf39e3a0d",
+    "en": "to dote on someone immensely, as if afraid they'd melt in your mouth"
+  },
+  "含在嘴里怕化了": {
+    "hash": "4b88bd3b2249",
+    "en": "to hold in the mouth for fear it melts"
+  },
+  "眼中的刺": {
+    "hash": "c153b24dc386",
+    "en": "a thorn in the eye"
+  },
+  "眼中钉，碍眼的人": {
+    "hash": "b4f0ace6f20c",
+    "en": "a thorn in one's side; an eyesore"
+  },
+  "眼中钉": {
+    "hash": "b545955e0fc6",
+    "en": "a thorn in one's side"
+  },
+  "把嘴聚在一起": {
+    "hash": "bbcda64272cf",
+    "en": "to gather mouths together"
+  },
+  "众人异口同声地说": {
+    "hash": "c82b52669941",
+    "en": "to speak in unison"
+  },
+  "异口同声": {
+    "hash": "4d862d19694f",
+    "en": "in unison"
+  },
+  "焖着": {
+    "hash": "63f170ad36e4",
+    "en": "to stew"
+  },
+  "说话或做决定时犹豫不决，吊人胃口": {
+    "hash": "e361981d97c1",
+    "en": "to hesitate in speech or decision, keeping others in suspense"
+  },
+  "卖关子/犹豫": {
+    "hash": "2f2333e776eb",
+    "en": "to keep in suspense / to hesitate"
+  },
+  "尝到味道": {
+    "hash": "8d8802fcb885",
+    "en": "to taste the flavor"
+  },
+  "对某事上瘾，尝到了甜头就停不下来": {
+    "hash": "31213156d766",
+    "en": "to get addicted to something, unable to stop after a taste of the sweet reward"
+  },
+  "上瘾/尝到甜头": {
+    "hash": "0e96d5957c80",
+    "en": "addicted / got a taste of it"
+  },
+  "伸直腿睡觉": {
+    "hash": "f7a8310bb1b8",
+    "en": "sleep with legs stretched out"
+  },
+  "无忧无虑地安心生活": {
+    "hash": "05f177ba481d",
+    "en": "live worry-free and at ease"
+  },
+  "高枕无忧": {
+    "hash": "e56b58b2f0f8",
+    "en": "rest easy / sleep soundly"
+  },
+  "脸上铺铁板": {
+    "hash": "4ad9a2ee7eda",
+    "en": "iron plate on the face"
+  },
+  "厚着脸皮，不知羞耻": {
+    "hash": "fef6e40c8b5c",
+    "en": "shameless, thick-skinned"
+  },
+  "厚着脸皮": {
+    "hash": "cb01ccc08e4e",
+    "en": "thick-skinned / brazen"
+  },
+  "累成烂草": {
+    "hash": "4ddc536e78c1",
+    "en": "worn out like rotten grass"
+  },
+  "累垮了，筋疲力尽": {
+    "hash": "83c6f5e925c4",
+    "en": "exhausted, completely worn out"
+  },
+  "累垮了": {
+    "hash": "423e4b0893ec",
+    "en": "worn out / exhausted"
+  },
+  "身体酸痛发作": {
+    "hash": "158016739597",
+    "en": "body aches flare up"
+  },
+  "过度疲劳导致身体酸痛生病": {
+    "hash": "da77e2cc0d67",
+    "en": "overexertion causing body aches and illness"
+  },
+  "积劳成疾": {
+    "hash": "c202ea364222",
+    "en": "fall ill from overwork"
+  },
+  "掉出眼睛之外": {
+    "hash": "5eaca2c60e0f",
+    "en": "fall out of one's eyes"
+  },
+  "失去信任和宠爱，被冷落": {
+    "hash": "3d5fd00619aa",
+    "en": "lose trust and favor, be neglected"
+  },
+  "失宠/被冷落": {
+    "hash": "9f29016727ce",
+    "en": "fall out of favor / be neglected"
+  },
+  "把身体放入": {
+    "hash": "aa6c1ed2418f",
+    "en": "put one's body into"
+  },
+  "投身于某个领域从事工作": {
+    "hash": "caf2cdb2dc49",
+    "en": "devote oneself to a field of work"
+  },
+  "投身于": {
+    "hash": "c6875c0d5f57",
+    "en": "devote oneself to"
+  },
+  "不分水火": {
+    "hash": "7f02e78361cf",
+    "en": "not distinguishing water from fire"
+  },
+  "不择手段，什么方法都用": {
+    "hash": "71c49955594d",
+    "en": "stop at nothing, use any means"
+  },
+  "赴汤蹈火/不择手段": {
+    "hash": "43bbcea62a3f",
+    "en": "go through fire and water / stop at nothing"
+  },
+  "胸口被刺": {
+    "hash": "861ba75ec946",
+    "en": "stabbed in the chest"
+  },
+  "良心受到谴责，心里愧疚": {
+    "hash": "bbc1ad7b5d71",
+    "en": "conscience-stricken, feeling guilty"
+  },
+  "良心受到谴责": {
+    "hash": "a58bd799467f",
+    "en": "conscience-stricken"
+  },
+  "水和油": {
+    "hash": "c08561f35b03",
+    "en": "water and oil"
+  },
+  "水火不容，完全合不来的关系": {
+    "hash": "7c4a70044c53",
+    "en": "incompatible, completely unable to get along"
+  },
+  "水火不容": {
+    "hash": "5e12f55e74a4",
+    "en": "like oil and water"
+  },
+  "心往下沉": {
+    "hash": "0fde4d087562",
+    "en": "heart sinks"
+  },
+  "吓了一大跳，心猛地一沉": {
+    "hash": "3139cce02d3c",
+    "en": "startled, heart suddenly drops"
+  },
+  "心往下一沉": {
+    "hash": "86d9ddf5de4a",
+    "en": "heart sinks"
+  },
+  "手里攥着汗": {
+    "hash": "4cfa7b373c97",
+    "en": "holding sweat in one's hand"
+  },
+  "非常紧张，手心冒汗": {
+    "hash": "30abc271bd50",
+    "en": "extremely nervous, palms sweating"
+  },
+  "捏一把汗": {
+    "hash": "31be37241d4d",
+    "en": "break out in a cold sweat"
+  },
+  "吃苦头": {
+    "hash": "8c36cfba3235",
+    "en": "eat bitterness"
+  },
+  "吃苦头，受罪，费劲": {
+    "hash": "cb003d8d7dc9",
+    "en": "suffer hardships, endure pain, go through trouble"
+  },
+  "勒紧腰带": {
+    "hash": "a274a9fd19b5",
+    "en": "tighten one's belt"
+  },
+  "勒紧裤腰带节衣缩食过日子": {
+    "hash": "11e3d48b4ddc",
+    "en": "tighten one's belt and live frugally"
+  },
+  "勒紧裤腰带": {
+    "hash": "ab11cb654c18",
+    "en": "tighten one's belt"
+  },
+  "鼻子被压扁": {
+    "hash": "d45821c209b8",
+    "en": "nose flattened"
+  },
+  "自以为是的在更强的人面前气焰全消": {
+    "hash": "109e3d9a9528",
+    "en": "one's arrogance is deflated when facing someone stronger"
+  },
+  "鼻子被压扁/气焰被压": {
+    "hash": "ef436082fb30",
+    "en": "nose flattened / arrogance deflated"
+  },
+  "在自己眼里是眼镜": {
+    "hash": "aeb269a21e31",
+    "en": "in one's own eyes, it's glasses"
+  },
+  "情人眼里出西施，自己中意就觉得什么都好": {
+    "hash": "a2281deb6b79",
+    "en": "beauty is in the eye of the beholder; if you like it, everything seems good"
+  },
+  "情人眼里出西施": {
+    "hash": "2f0fea0ca0d6",
+    "en": "beauty is in the eye of the beholder"
+  },
+  "碰伤大鼻子": {
+    "hash": "7c1e0786c493",
+    "en": "bruise one's big nose"
+  },
+  "吃大亏或丢大脸": {
+    "hash": "9de4caa86a8f",
+    "en": "suffer a big loss or lose face badly"
+  },
+  "碰一鼻子灰/吃大亏": {
+    "hash": "3f71cc9b6746",
+    "en": "get a cold shoulder / suffer a big loss"
+  },
+  "出勇气": {
+    "hash": "e30ed6faadfa",
+    "en": "bring out courage"
+  },
+  "鼓起勇气": {
+    "hash": "583665b55f09",
+    "en": "pluck up courage"
+  },
+  "拆掉墙": {
+    "hash": "571c85380ea8",
+    "en": "tear down the wall"
+  },
+  "消除彼此之间的隔阂，拉近关系": {
+    "hash": "ff361194805c",
+    "en": "remove barriers between people, bring them closer"
+  },
+  "打破隔阂": {
+    "hash": "ff66e8fa135f",
+    "en": "break down barriers"
+  },
+  "腰断了": {
+    "hash": "4b87a6e91f31",
+    "en": "waist breaks"
+  },
+  "极其辛苦，累到腰都要断了": {
+    "hash": "0dcc4b9f78b3",
+    "en": "extremely exhausting, so tired your back feels like it's breaking"
+  },
+  "累断腰": {
+    "hash": "732f83bd4d30",
+    "en": "break one's back"
+  },
+  "张开翅膀": {
+    "hash": "8ac7459c5d83",
+    "en": "spread wings"
+  },
+  "尽情发挥才能和潜力": {
+    "hash": "04285d2226dd",
+    "en": "fully unleash one's talents and potential"
+  },
+  "展翅高飞": {
+    "hash": "fabfce101da3",
+    "en": "spread wings and soar high"
+  },
+  "坐在针垫上": {
+    "hash": "b214d3c527d6",
+    "en": "sitting on a pin cushion"
+  },
+  "非常不安，坐立难安": {
+    "hash": "95a352f5bc89",
+    "en": "extremely restless, unable to sit still"
+  },
+  "变成蔫掉的葱泡菜": {
+    "hash": "87b6f50e932b",
+    "en": "become wilted scallion kimchi"
+  },
+  "非常疲惫，累到散架": {
+    "hash": "ca3b38bc8f92",
+    "en": "extremely exhausted, worn out to the point of falling apart"
+  },
+  "累成狗": {
+    "hash": "693d38032ee7",
+    "en": "dog-tired"
+  },
+  "心里咯噔一下": {
+    "hash": "ce6017a2b3b0",
+    "en": "heart skips a beat"
+  },
+  "良心受谴责，心头一紧": {
+    "hash": "30b1c8721ca1",
+    "en": "conscience-stricken, heart tightens"
+  },
+  "不分前后": {
+    "hash": "79694e9297ac",
+    "en": "without distinguishing front and back"
+  },
+  "不慎重，行事莽撞轻率": {
+    "hash": "0e351f25dacb",
+    "en": "careless, reckless and hasty in actions"
+  },
+  "不顾前后/莽撞": {
+    "hash": "f5fb98cc0c00",
+    "en": "reckless / without regard for consequences"
+  },
+  "睁着眼也看不下去": {
+    "hash": "80be96ea6995",
+    "en": "can't bear to watch even with eyes open"
+  },
+  "惨状让人不忍直视": {
+    "hash": "35d5dc70c239",
+    "en": "the misery is too painful to look at"
+  },
+  "惨不忍睹": {
+    "hash": "faf8782f3b00",
+    "en": "too horrible to look at"
+  },
+  "闭上眼睛": {
+    "hash": "c6bc9a534125",
+    "en": "close one's eyes"
+  },
+  "去世，离开人世": {
+    "hash": "48ea0567d672",
+    "en": "to pass away, to die"
+  },
+  "闭眼/离世": {
+    "hash": "c9b6a4094b46",
+    "en": "close one's eyes / pass away"
+  },
+  "无忧无虑，安心过日子": {
+    "hash": "ea5ddea102e9",
+    "en": "carefree, living peacefully without worries"
+  },
+  "架桥": {
+    "hash": "7a7c2a2fc727",
+    "en": "build a bridge"
+  },
+  "在人与人之间牵线、介绍关系": {
+    "hash": "14c8694dc51a",
+    "en": "to connect people, to introduce relationships"
+  },
+  "牵线搭桥": {
+    "hash": "6b167c161959",
+    "en": "act as a matchmaker / bridge the gap"
+  },
+  "眼睛暗/看不清": {
+    "hash": "2034a42a6d89",
+    "en": "eyes dark / unable to see clearly"
+  },
+  "因贪欲而丧失判断力": {
+    "hash": "03ec25d8a53f",
+    "en": "lose judgment due to greed"
+  },
+  "利令智昏": {
+    "hash": "d5fe317545b9",
+    "en": "blinded by greed"
+  }
+}

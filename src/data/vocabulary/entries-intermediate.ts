@@ -695,7 +695,7 @@ export const intermediateEntries: WordEntry[] = [
   {
     id: 'festival-05', korean: '세뱃돈', romanization: 'sebaetdon', baseForm: '세뱃돈', partOfSpeech: '名词',
     level: '4', frequency: 2,
-    meanings: [{ chinese: '压岁钱', nuance: '세배(拜年礼)+돈(钱)，설날长辈给晚辈的压岁钱', register: '通用' }],
+    meanings: [{ chinese: '压岁钱', nuance: '세배(拜年礼)+돈(钱)，设날长辈给晚辈的压岁钱', register: '通用' }],
     examples: [
       { korean: '세뱃돈 받았어요!', chinese: '收到压岁钱了！', scene: '节日' },
       { korean: '세뱃돈을 저금할 거예요.', chinese: '要把压岁钱存起来。', scene: '节日' },

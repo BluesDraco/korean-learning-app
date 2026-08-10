@@ -1,20 +1,16 @@
 'use client';
 
-import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import './library.css';
+
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import {
-  BookOpen, Sparkles, Clock, Target, ChevronRight,
-  Hash, Bookmark, TrendingUp, ArrowLeft,
-  Search, Sun, Moon, X, Menu, Lock,
-} from 'lucide-react';
-import { readingArticles, getTodayArticle, levelColor } from '@/data/reading-new';
-import { db } from '@/lib/db';
-import type { Article, UserArticleProgress } from '@/types';
+import { ArrowLeft, Search, Clock, Sun, Moon, X, Menu, Lock } from 'lucide-react';
 import { levelLabel } from '@/data/reading-meta';
+import { db } from '@/lib/db';
 import { useMembership } from '@/lib/useMembership';
 import { readingLockState, freeStoryIds, storyLockState } from '@/lib/membership-benefits';
 import { useAuth } from '@/components/AuthProvider';
+import type { Article, UserArticleProgress } from '@/types';
 import LibrarySidebar from './_components/LibrarySidebar';
 import { TOPIC_META } from './_components/topics';
 import { topicImage } from './_components/topicImage';
@@ -191,19 +187,11 @@ export default function ReadingPage() {
   };
 
   return (
-    <div className="py-4 space-y-5 max-w-2xl mx-auto md:max-w-3xl">
-      {/* Header */}
-      <div>
-        <div className="flex items-center gap-2 mb-1">
-          <Link href="/tools" className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"><ArrowLeft size={20} /></Link>
-        </div>
-        <h1 className="text-2xl font-bold text-[var(--text-primary)] flex items-center gap-2">
-          <BookOpen size={22} className="text-[var(--mint-soft)]" />
-          文章阅读
-        </h1>
-        <p className="text-xs text-[var(--text-muted)] mt-1">
-          分级输入 · 句子点读 · 词句沉淀 · 理解检测 · 轻输出
-        </p>
+    <div ref={scopeRef} className={`lib-scope${dark ? ' lib-dark' : ''}`}>
+      <PlaceIntro place="library" dark={dark} reopenSignal={introSignal} />
+      <div className={`lib-theme-toggle${drawerOpen ? ' drawer-open' : ''}`}>
+        <button className={`lib-theme-btn${!dark ? ' active' : ''}`} onClick={() => setDark(false)}><Sun size={13} /> 밝게</button>
+        <button className={`lib-theme-btn${dark ? ' active' : ''}`} onClick={() => setDark(true)}><Moon size={13} /> 어둡게</button>
       </div>
       <div className="lib-shell">
         <LibrarySidebar

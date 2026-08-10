@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>首尔街头小吃地图 · 韩语学习日记</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #FFFDF9; color: #3a3a3a; line-height: 1.7;
+  }
+
+  .hero {
+    background: linear-gradient(160deg, #FFE4A0 0%, #FF8FAB 45%, #C9B8E8 100%);
+    padding: 56px 24px 48px; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: "🍡🌭🥚🍢🥞🧁";
+    position: absolute; top: 14px; left: 0; right: 0;
+    font-size: 22px; letter-spacing: 18px; opacity: .22;
+  }
+  .hero-tag {
+    display: inline-block; background: rgba(255,255,255,.25);
+    color: #fff; font-size: 11px; font-weight: 700;
+    padding: 4px 14px; border-radius: 20px; margin-bottom: 16px; letter-spacing: 1px;
+  }
+  .hero h1 {
+    font-size: 28px; font-weight: 800; color: #fff;
+    text-shadow: 0 2px 12px rgba(0,0,0,.15); line-height: 1.3; margin-bottom: 12px;
+  }
+  .hero h1 span { font-size: 14px; font-weight: 400; display: block; margin-top: 6px; opacity: .9; }
+  .hero-meta {
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+    font-size: 12px; color: rgba(255,255,255,.85); margin-top: 16px; flex-wrap: wrap;
+  }
+
+  .container { max-width: 780px; margin: 0 auto; padding: 40px 20px 80px; }
+
+  .breadcrumb {
+    font-size: 12px; color: #bbb; display: flex; align-items: center; gap: 6px; margin-bottom: 28px;
+  }
+  .breadcrumb span { color: #ddd; }
+
+  /* 토리引言 */
+  .intro-card {
+    background: #fff; border-radius: 20px; padding: 24px 26px;
+    box-shadow: 0 2px 20px rgba(255,228,160,.2); margin-bottom: 40px;
+    border-left: 4px solid #FFE4A0;
+  }
+  .tori-says { display: flex; gap: 14px; align-items: flex-start; }
+  .tori-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: linear-gradient(135deg, #FFE4A0, #FF8FAB);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+  }
+  .tori-bubble {
+    background: linear-gradient(135deg, #fffdf0, #fff0f5);
+    border-radius: 0 14px 14px 14px; padding: 14px 16px;
+    font-size: 13px; color: #555; line-height: 1.8; flex: 1; position: relative;
+  }
+  .tori-bubble::before {
+    content: ""; position: absolute; left: -8px; top: 12px;
+    border: 8px solid transparent; border-right-color: #fffdf0; border-left: none;
+  }
+  .tori-name { font-size: 11px; color: #d68910; font-weight: 700; margin-bottom: 5px; }
+
+  /* 章节标题 */
+  .section-title {
+    font-size: 20px; font-weight: 800; color: #333; margin: 44px 0 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-title .st-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, #FFE4A0, #FF8FAB);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .section-title .st-sub { font-size: 12px; font-weight: 400; color: #aaa; display: block; margin-top: 2px; }
+
+  /* 小吃大卡片 */
+  .snack-big-card {
+    background: #fff; border-radius: 20px; overflow: hidden;
+    box-shadow: 0 4px 20px rgba(255,228,160,.18); margin: 16px 0;
+  }
+  .snack-header {
+    padding: 18px 22px 14px;
+    background: linear-gradient(135deg, var(--sh1,#FFE4A0), var(--sh2,#FF8FAB));
+    display: flex; align-items: center; gap: 14px;
+  }
+  .snack-emoji-big { font-size: 44px; flex-shrink: 0; }
+  .snack-header-info { flex: 1; }
+  .snack-name-ko { font-size: 22px; font-weight: 800; color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,.12); }
+  .snack-name-zh { font-size: 13px; color: rgba(255,255,255,.9); margin-top: 2px; }
+  .snack-price-tag {
+    background: rgba(255,255,255,.25); color: #fff;
+    font-size: 11px; font-weight: 700; padding: 3px 12px; border-radius: 20px;
+    white-space: nowrap; align-self: flex-start; margin-top: 4px;
+  }
+  .snack-body { padding: 18px 22px; }
+  .snack-body p { font-size: 13px; color: #555; line-height: 1.85; margin-bottom: 10px; }
+  .snack-body p:last-child { margin-bottom: 0; }
+
+  /* 小吃小网格 */
+  .snack-mini-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; margin: 16px 0; }
+  .snack-mini-card {
+    background: #fff; border-radius: 14px; padding: 16px 16px;
+    box-shadow: 0 2px 12px rgba(255,228,160,.15);
+    border-left: 3px solid var(--mc, #FFE4A0);
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .smc-emoji { font-size: 28px; flex-shrink: 0; }
+  .smc-name-ko { font-size: 14px; font-weight: 700; color: #333; margin-bottom: 2px; }
+  .smc-name-zh { font-size: 11px; color: var(--mc,#d68910); font-weight: 600; margin-bottom: 6px; }
+  .smc-desc { font-size: 12px; color: #666; line-height: 1.65; }
+  .smc-price { margin-top: 6px; font-size: 10px; color: #bbb; }
+
+  /* 문화 깊이 카드 */
+  .culture-card {
+    background: #fff; border-radius: 20px; padding: 24px;
+    box-shadow: 0 2px 16px rgba(255,228,160,.12); margin: 16px 0;
+    border: 1px solid rgba(255,228,160,.25);
+  }
+  .culture-card h3 { font-size: 15px; font-weight: 700; color: #333; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .culture-card p { font-size: 13px; color: #555; line-height: 1.85; margin-bottom: 10px; }
+  .culture-card p:last-child { margin-bottom: 0; }
+
+  .highlight {
+    background: linear-gradient(135deg, #fffdf0, #fff0f5);
+    border-radius: 10px; padding: 12px 14px; margin: 12px 0;
+    font-size: 13px; color: #555; line-height: 1.8; border-left: 3px solid #FFE4A0;
+  }
+  .highlight strong { color: #d68910; }
+
+  /* 토리 mini */
+  .tori-mini {
+    display: flex; gap: 10px; align-items: flex-start;
+    background: linear-gradient(135deg, #fffdf0, #fff0f5);
+    border-radius: 12px; padding: 12px 14px; margin-top: 12px;
+  }
+  .tori-mini-avatar { font-size: 18px; flex-shrink: 0; }
+  .tori-mini-text { font-size: 12px; color: #666; line-height: 1.75; }
+  .tori-mini-text strong { color: #FF8FAB; }
+
+  /* 街区地图 */
+  .street-list { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+  .street-item {
+    background: #fff; border-radius: 14px; padding: 16px 18px;
+    box-shadow: 0 2px 10px rgba(255,228,160,.15);
+    display: flex; gap: 14px; align-items: flex-start;
+    border-left: 4px solid var(--sc, #FFE4A0);
+  }
+  .street-emoji { font-size: 28px; flex-shrink: 0; width: 44px; text-align: center; }
+  .street-name { font-size: 14px; font-weight: 700; color: #333; margin-bottom: 2px; }
+  .street-name-ko { font-size: 11px; color: var(--sc,#d68910); font-weight: 600; margin-bottom: 6px; }
+  .street-desc { font-size: 12px; color: #666; line-height: 1.7; }
+  .street-must { margin-top: 6px; font-size: 11px; color: #bbb; }
+  .street-must strong { color: #FF8FAB; }
+
+  /* 季节卡片 */
+  .season-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; margin: 16px 0; }
+  .season-card {
+    border-radius: 14px; padding: 16px 16px;
+    border: 1.5px solid var(--sec, #FFE4A0);
+    background: var(--sebg, #fffdf5);
+  }
+  .season-badge { font-size: 10px; font-weight: 700; color: var(--sec,#d68910); margin-bottom: 6px; }
+  .season-title { font-size: 13px; font-weight: 700; color: #333; margin-bottom: 6px; }
+  .season-items { font-size: 12px; color: #666; line-height: 1.8; }
+
+  /* 냉知识 */
+  .trivia-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 20px 0; }
+  .trivia-card {
+    background: #fff; border-radius: 14px; padding: 16px 18px;
+    box-shadow: 0 2px 10px rgba(255,228,160,.12);
+    border-top: 3px solid var(--tc, #FFE4A0);
+  }
+  .trivia-card .tc-tag {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    color: var(--tc,#d68910); background: var(--tbg,#fffdf0);
+    padding: 2px 8px; border-radius: 10px; margin-bottom: 6px;
+  }
+  .trivia-card .tc-q { font-size: 13px; font-weight: 700; color: #333; margin-bottom: 8px; }
+  .trivia-card .tc-a { font-size: 12px; color: #666; line-height: 1.7; }
+
+  /* 주문 가이드 */
+  .order-guide {
+    background: linear-gradient(135deg, #fffdf0, #fff8fb);
+    border-radius: 18px; padding: 22px 24px; margin: 16px 0;
+    border: 1.5px dashed #FFE4A044;
+  }
+  .order-guide h3 { font-size: 14px; font-weight: 700; color: #d68910; margin-bottom: 14px; }
+  .order-row { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+  .order-row:last-child { margin-bottom: 0; }
+  .order-num {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: linear-gradient(135deg, #FFE4A0, #FF8FAB);
+    color: #fff; font-size: 11px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .order-text { font-size: 13px; color: #444; line-height: 1.7; flex: 1; }
+  .order-text strong { color: #d68910; }
+  .korean-phrase {
+    display: inline-block; margin-top: 4px;
+    background: #fff; border-radius: 8px; padding: 3px 10px;
+    font-size: 12px; color: #FF8FAB; font-weight: 600;
+    box-shadow: 0 1px 6px rgba(255,143,171,.15);
+  }
+
+  /* 실용 韩语 */
+  .korean-section {
+    background: linear-gradient(135deg, #2a2218, #1e1a10);
+    border-radius: 20px; padding: 26px 24px; margin: 32px 0;
+  }
+  .ks-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  .ks-tori { font-size: 28px; }
+  .ks-title { font-size: 15px; font-weight: 700; color: #FDF8F0; }
+  .ks-sub { font-size: 11px; color: #888; margin-top: 2px; }
+  .phrase-list { display: flex; flex-direction: column; gap: 12px; }
+  .phrase-item {
+    background: rgba(255,255,255,.06); border-radius: 12px; padding: 14px 16px;
+    display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  }
+  .phrase-ko { font-size: 15px; font-weight: 700; color: #FDF8F0; }
+  .phrase-ro { font-size: 10px; color: #888; margin-top: 2px; font-style: italic; }
+  .phrase-zh { font-size: 12px; color: #FFE4A0; font-weight: 600; flex-shrink: 0; }
+  .phrase-scene { font-size: 10px; color: #666; margin-top: 3px; }
+  .add-btn {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: linear-gradient(135deg,#FFE4A0,#FF8FAB);
+    color: #fff; font-size: 14px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; cursor: pointer;
+    box-shadow: 0 2px 8px rgba(255,228,160,.4); transition: transform .15s;
+  }
+  .add-btn:hover { transform: scale(1.1); }
+
+  /* 词汇 */
+  .vocab-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+  .vocab-chip {
+    background: #fff; border: 1px solid #fff3d0;
+    border-radius: 20px; padding: 5px 14px;
+    font-size: 12px; color: #555;
+    display: flex; align-items: center; gap: 6px;
+    box-shadow: 0 1px 6px rgba(0,0,0,.04);
+  }
+  .vocab-chip .vko { font-weight: 700; color: #333; }
+  .vocab-chip .vzh { color: #d68910; }
+
+  /* 注意 */
+  .notice-box {
+    background: linear-gradient(135deg, #fffdf0, #fff0f5);
+    border-radius: 14px; padding: 16px 18px; margin: 16px 0;
+    border: 1.5px solid #FFE4A033; font-size: 13px; color: #666; line-height: 1.8;
+  }
+  .notice-box .nt { font-weight: 700; color: #d68910; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
+
+  .divider { text-align: center; font-size: 18px; letter-spacing: 8px; opacity: .3; margin: 32px 0; }
+
+  /* 结尾 */
+  .ending-card {
+    background: linear-gradient(135deg, #fffdf0, #fff0f5, #f5f0ff);
+    border-radius: 20px; padding: 28px 24px; text-align: center; margin-top: 40px;
+    border: 1.5px solid rgba(255,228,160,.25); position: relative; overflow: hidden;
+  }
+  .ending-card::before {
+    content: "🍡🌭🥚🍢✨🧁";
+    position: absolute; top: 8px; left: 0; right: 0;
+    font-size: 16px; letter-spacing: 12px; opacity: .2;
+  }
+  .ending-tori { font-size: 52px; display: block; margin-bottom: 12px; }
+  .ending-title { font-size: 17px; font-weight: 800; color: #d68910; margin-bottom: 6px; }
+  .ending-sub { font-size: 13px; color: #aaa; line-height: 1.8; margin-bottom: 20px; }
+  .next-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #FFE4A0, #FF8FAB);
+    color: #fff; font-size: 13px; font-weight: 700;
+    padding: 10px 28px; border-radius: 24px;
+    box-shadow: 0 4px 16px rgba(255,228,160,.35);
+    text-decoration: none; margin-bottom: 8px;
+  }
+  .next-articles { margin-top: 16px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .next-tag {
+    font-size: 12px; color: #C9B8E8; border: 1px solid #C9B8E8;
+    padding: 4px 14px; border-radius: 20px; cursor: pointer;
+  }
+
+  @media (max-width: 600px) {
+    .snack-mini-grid { grid-template-columns: 1fr; }
+    .season-grid { grid-template-columns: 1fr; }
+    .trivia-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-tag">🇰🇷 韩国美食 · 每道菜背后都有一个故事</div>
+  <h1>
+    首尔街头小吃地图
+    <span>길거리 음식 — 最真实的韩国味道，藏在街边摊上</span>
+  </h1>
+  <div class="hero-meta">
+    <span>🐰 토리 探吃</span>
+    <span>📖 约12分钟读完</span>
+    <span>🗂️ 美食 · 街头</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="breadcrumb">
+    🏠 首页 <span>›</span> 🇰🇷 韩国 <span>›</span> 美食 <span>›</span> 街头小吃地图
+  </div>
+
+  <div class="intro-card">
+    <div class="tori-says">
+      <div class="tori-avatar">🐰</div>
+      <div class="tori-bubble">
+        <div class="tori-name">토리 说</div>
+        토리觉得了解一个地方最快的方式，就是站在街边吃东西。首尔的街头小吃不只是"便宜的食物"，是这座城市最有温度的部分。下午四点的弘大，高中生放学后围着떡볶이摊；冬天的명동，每个人手里都捧着一个热腾腾的호떡；深夜的포장마차，陌生人坐在一起喝소주。今天토리 带你把首尔街头从头吃到尾 🍡
+      </div>
+    </div>
+  </div>
+
+  <!-- 떡볶이 -->
+  <div class="section-title">
+    <div class="st-icon">🍡</div>
+    <div>
+      떡볶이——韩国街头的灵魂
+      <span class="st-sub">不只是辣年糕，是一整套文化</span>
+    </div>
+  </div>
+
+  <div class="snack-big-card">
+    <div class="snack-header" style="--sh1:#FF8FAB;--sh2:#FFE4A0;">
+      <div class="snack-emoji-big">🍡</div>
+      <div class="snack-header-info">
+        <div class="snack-name-ko">떡볶이</div>
+        <div class="snack-name-zh">炒年糕 · 韩国街头第一小吃</div>
+        <div class="snack-price-tag">약 3,000–5,000원</div>
+      </div>
+    </div>
+    <div class="snack-body">
+      <p>年糕条（떡）加上辣椒酱（고추장）炒制而成，是韩国街头出现频率最高的食物。你在任何분식집（小吃店）门口都能看到它，在便利店里有杯装版，在高档餐厅里有精致版，甚至有整条街专门卖떡볶이。</p>
+      <p>떡볶이最早出现在朝鲜时代宫廷里，叫做<strong style="color:#FF8FAB;">궁중떡볶이</strong>，用酱油调味，是高雅的宫廷料理。今天我们吃到的红色辣味版本，是1950年代以后才出现的平民化改良版——用当时大量涌入的美军带来的辣椒酱取代酱油，才变成了今天这个味道。</p>
+      <div class="highlight">
+        <strong>토리 说：</strong>떡볶이的辣度因店而异，差距极大。外国人第一次建议先点普通版，不要点불닭떡볶이（火鸡辣）。吃辣能力强的可以直接挑战，但先问一句 맵지 않은 걸로 주세요（给我不辣的）很重要。
+      </div>
+      <div class="tori-mini">
+        <div class="tori-mini-avatar">🐰</div>
+        <div class="tori-mini-text">떡볶이配上튀김（炸物）和순대（血肠）是固定组合，叫做<strong>분식 3종 세트</strong>。街边摊上三样加起来约7,000–10,000원，是最正宗的首尔放学后的味道。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 떡볶이的三种形态 -->
+  <div class="snack-mini-grid">
+    <div class="snack-mini-card" style="--mc:#FF8FAB;">
+      <div class="smc-emoji">🍡</div>
+      <div>
+        <div class="smc-name-ko">일반 떡볶이</div>
+        <div class="smc-name-zh">普通炒年糕</div>
+        <div class="smc-desc">고추장（辣椒酱）底，微辣到中辣，配鱼饼、水煮蛋一起煮。最平民最日常的版本，街边摊标配。</div>
+        <div class="smc-price">约 3,000–4,000원</div>
+      </div>
+    </div>
+    <div class="snack-mini-card" style="--mc:#C9B8E8;">
+      <div class="smc-emoji">🧀</div>
+      <div>
+        <div class="smc-name-ko">로제 떡볶이</div>
+        <div class="smc-name-zh">奶油粉红炒年糕</div>
+        <div class="smc-desc">辣椒酱加奶油调成玫瑰色酱汁，近年韩国最流行的新版本。奶香中带微辣，不那么刺激，适合辣度低的人。</div>
+        <div class="smc-price">约 5,000–8,000원</div>
+      </div>
+    </div>
+    <div class="snack-mini-card" style="--mc:#A8D8D0;">
+      <div class="smc-emoji">👑</div>
+      <div>
+        <div class="smc-name-ko">궁중떡볶이</div>
+        <div class="smc-name-zh">宫廷炒年糕</div>
+        <div class="smc-desc">酱油底，不辣，加牛肉和蔬菜，是最古老的版本。想吃不辣的떡볶이，点这个。高档餐厅和百货美食区有售。</div>
+        <div class="smc-price">约 8,000–15,000원</div>
+      </div>
+    </div>
+    <div class="snack-mini-card" style="--mc:#FFE4A0;">
+      <div class="smc-emoji">🔥</div>
+      <div>
+        <div class="smc-name-ko">엽기떡볶이</div>
+        <div class="smc-name-zh">变态辣炒年糕</div>
+        <div class="smc-desc">连锁品牌"엽기떡볶이"出品，辣度分级，最高级别是韩国辣度天花板。有粉丝专门去挑战，但토리 不太推荐初次体验。</div>
+        <div class="smc-price">约 15,000원起（两人份）</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 순대 -->
+  <div class="section-title">
+    <div class="st-icon">🌭</div>
+    <div>
+      순대——韩国版血肠，比你想象的好吃
+      <span class="st-sub">不要因为"血肠"两个字望而却步</span>
+    </div>
+  </div>
+
+  <div class="snack-big-card">
+    <div class="snack-header" style="--sh1:#C9B8E8;--sh2:#A8D8D0;">
+      <div class="snack-emoji-big">🌭</div>
+      <div class="snack-header-info">
+        <div class="snack-name-ko">순대</div>
+        <div class="snack-name-zh">韩国血肠 · 你一定要试一次</div>
+        <div class="snack-price-tag">약 3,000–5,000원</div>
+      </div>
+    </div>
+    <div class="snack-body">
+      <p>순대是把猪血、糯米、蔬菜、粉丝塞进猪肠衣里蒸制而成的食物。这个描述听起来复杂，但吃起来出乎意料地温和——不像中式血肠那么浓郁的血腥气，糯米让口感变得软糯，配上소금（盐）和辣椒粉蘸着吃，完全是另一个味道。</p>
+      <p>순대通常和떡볶이、튀김放在同一个摊位上，是韩国분식（小吃）文化的三位一体。한국사람들은 순대를 먹을 때 반드시 소금에 찍어 먹어요——吃순대一定要蘸盐，这是本地人的吃法，不要蘸辣酱。</p>
+      <div class="highlight"><strong>兔莉推荐：</strong>순대국밥（순대汤饭）是把순대切块放进猪骨汤里煮成的汤饭，是韩国人最爱的宿醉解酒食物之一，也是冬天最暖心的一碗。</div>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 계란빵 호떡 -->
+  <div class="section-title">
+    <div class="st-icon">🥚</div>
+    <div>
+      겨울 간식——冬天街头的两大神物
+      <span class="st-sub">冷风里一口热的，这是首尔冬天的仪式感</span>
+    </div>
+  </div>
+
+  <div class="snack-mini-grid">
+    <div class="snack-mini-card" style="--mc:#FFE4A0;">
+      <div class="smc-emoji">🥚</div>
+      <div>
+        <div class="smc-name-ko">계란빵</div>
+        <div class="smc-name-zh">鸡蛋面包</div>
+        <div class="smc-desc">长方形的烤饼，中间嵌着整颗鸡蛋一起烤。外皮焦香，鸡蛋半熟，是首尔冬天街头最温暖的小吃之一。명동街头最多，边走边吃最地道。</div>
+        <div class="smc-price">약 1,500–2,000원</div>
+      </div>
+    </div>
+    <div class="snack-mini-card" style="--mc:#FF8FAB;">
+      <div class="smc-emoji">🥞</div>
+      <div>
+        <div class="smc-name-ko">호떡</div>
+        <div class="smc-name-zh">호떡·韩国糖饼</div>
+        <div class="smc-desc">发酵面团包着黑糖、肉桂、花生炸制，咬开一口，黑糖浆流出来。烫手烫嘴，但停不下来。冬天必吃，夏天也有店在卖。</div>
+        <div class="smc-price">약 1,000–2,000원</div>
+      </div>
+    </div>
+    <div class="snack-mini-card" style="--mc:#C9B8E8;">
+      <div class="smc-emoji">🐟</div>
+      <div>
+        <div class="smc-name-ko">붕어빵</div>
+        <div class="smc-name-zh">鲫鱼饼·红豆鱼形饼</div>
+        <div class="smc-desc">鱼形铁模烤出来的饼，内馅传统上是红豆，现在有奶油、地瓜等多种口味。韩国人对붕어빵有极深的情感记忆，是"爸爸的味道"。</div>
+        <div class="smc-price">약 1,000원/个</div>
+      </div>
+    </div>
+    <div class="snack-mini-card" style="--mc:#A8D8D0;">
+      <div class="smc-emoji">🌽</div>
+      <div>
+        <div class="smc-name-ko">군고구마 / 군밤</div>
+        <div class="smc-name-zh">烤地瓜 / 烤板栗</div>
+        <div class="smc-desc">首尔冬天街头的移动烤炉，烤地瓜和烤板栗装在报纸袋里递给你，握在手里先暖手再吃。这个场景在韩剧里出现过太多次了。</div>
+        <div class="smc-price">약 2,000–5,000원</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 튀김 오뎅 -->
+  <div class="section-title">
+    <div class="st-icon">🍢</div>
+    <div>
+      튀김과 오뎅——炸物和鱼饼
+      <span class="st-sub">분식집的另外两个主角</span>
+    </div>
+  </div>
+
+  <div class="snack-mini-grid">
+    <div class="snack-mini-card" style="--mc:#FF8FAB;">
+      <div class="smc-emoji">🍤</div>
+      <div>
+        <div class="smc-name-ko">튀김</div>
+        <div class="smc-name-zh">韩式炸物</div>
+        <div class="smc-desc">炸年糕、炸蔬菜、炸虾、炸乌贼圈……韩式튀김用薄薄的面衣炸得酥脆，比日式天妇罗更厚实。蘸떡볶이酱汁一起吃，是标准搭配。</div>
+        <div class="smc-price">약 500–1,000원/개</div>
+      </div>
+    </div>
+    <div class="snack-mini-card" style="--mc:#A8D8D0;">
+      <div class="smc-emoji">🍢</div>
+      <div>
+        <div class="smc-name-ko">오뎅 (어묵)</div>
+        <div class="smc-name-zh">鱼饼串·关东煮</div>
+        <div class="smc-desc">鱼饼串在热汤里泡着，一串一串插在铁签上。汤本身也很好喝，通常可以免费喝一杯。冬天站在街边喝一口热鱼饼汤，是首尔最朴实的温暖。</div>
+        <div class="smc-price">약 500–1,000원/串</div>
+      </div>
+    </div>
+    <div class="snack-mini-card" style="--mc:#C9B8E8;">
+      <div class="smc-emoji">🐔</div>
+      <div>
+        <div class="smc-name-ko">닭꼬치</div>
+        <div class="smc-name-zh">烤鸡肉串</div>
+        <div class="smc-desc">韩式烤鸡肉串，刷上甜辣酱或原味，在炭火或铁板上烤制。弘大和홍대 앞附近的夜市最多，是夜晚逛街必吃的小吃。</div>
+        <div class="smc-price">약 2,000–3,500원/串</div>
+      </div>
+    </div>
+    <div class="snack-mini-card" style="--mc:#FFE4A0;">
+      <div class="smc-emoji">🥔</div>
+      <div>
+        <div class="smc-name-ko">회오리 감자</div>
+        <div class="smc-name-zh">旋风土豆</div>
+        <div class="smc-desc">整颗土豆螺旋切开、串在棍子上炸制，撒上各种调味粉。在名洞、홍대的街头小吃区最常见，颜值高，边走边吃方便，是很多人来首尔必拍的小吃。</div>
+        <div class="smc-price">약 3,000–4,000원</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 必去街区 -->
+  <div class="section-title">
+    <div class="st-icon">🗺️</div>
+    <div>
+      首尔街头小吃必去地点
+      <span class="st-sub">不同街区有不同的街头食物性格</span>
+    </div>
+  </div>
+
+  <div class="street-list">
+    <div class="street-item" style="--sc:#FF8FAB;">
+      <div class="street-emoji">🛍️</div>
+      <div>
+        <div class="street-name">명동</div>
+        <div class="street-name-ko">明洞 · 街头小吃最密集的地方</div>
+        <div class="street-desc">首尔街头小吃的集中展示区，从傍晚到深夜，街道两侧全是小吃摊。旋风土豆、계란빵、닭꼬치、韩式年糕冰激凌……种类最全，但价格比其他区略高，游客众多。</div>
+        <div class="street-must">토리 必吃：<strong>계란빵 + 회오리 감자</strong>，边走边吃，体验명동夜晚</div>
+      </div>
+    </div>
+    <div class="street-item" style="--sc:#FFE4A0;">
+      <div class="street-emoji">🎨</div>
+      <div>
+        <div class="street-name">홍대 앞</div>
+        <div class="street-name-ko">弘大 · 年轻人的街头食物圣地</div>
+        <div class="street-desc">韩国大学文化聚集地，주변에 분식집과 포차（路边摊酒馆）最多。这里的떡볶이和튀김是大学生的日常，价格比명동便宜，更接地气。深夜还有포장마차（小摊酒馆）开着。</div>
+        <div class="street-must">토리 必吃：<strong>분식집의 떡볶이+순대+튀김 세트</strong>，大学生同款</div>
+      </div>
+    </div>
+    <div class="street-item" style="--sc:#C9B8E8;">
+      <div class="street-emoji">🏛️</div>
+      <div>
+        <div class="street-name">광장시장</div>
+        <div class="street-name-ko">广藏市场 · 首尔最古老的室内市场</div>
+        <div class="street-desc">1905年开业，是首尔历史最悠久的市场之一。这里的街头食物更传统——마약김밥（迷你紫菜卷）、빈대떡（绿豆煎饼）、육회비빔밥（牛肉拌饭）是代表作。曾被Netflix美食节目专门介绍。</div>
+        <div class="street-must">토리 必吃：<strong>마약김밥</strong>，一口一个，蘸芥末酱油，停不下来</div>
+      </div>
+    </div>
+    <div class="street-item" style="--sc:#A8D8D0;">
+      <div class="street-emoji">🌙</div>
+      <div>
+        <div class="street-name">포장마차 골목</div>
+        <div class="street-name-ko">路边摊酒馆小巷 · 深夜首尔最真实的地方</div>
+        <div class="street-desc">포장마차是用塑料帐篷搭成的流动摊位，通常在深夜出现，卖소주、맥주、오뎅、순대。坐在折叠椅上，和陌生人相邻而坐，这是韩剧里反复出现的"真实首尔深夜"的场景。</div>
+        <div class="street-must">토리 推荐：东大门周边和弘大某些小巷，深夜10点后最热闹</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 광장시장 특별 -->
+  <div class="section-title">
+    <div class="st-icon">⭐</div>
+    <div>
+      광장시장의 마약김밥——上瘾的小紫菜卷
+      <span class="st-sub">마약 = 毒品，因为吃了停不下来</span>
+    </div>
+  </div>
+
+  <div class="culture-card">
+    <h3>🍱 마약김밥是什么</h3>
+    <p>마약（마약，毒品）+ 김밥（紫菜卷）= 让人上瘾的紫菜卷。광장시장里的마약김밥是迷你版김밥，比普通김밥细很多，里面只有萝卜、菠菜、鸡蛋、胡萝卜几样简单的蔬菜，配上芥末（겨자）酱油蘸着吃。</p>
+    <p>神奇的地方在于——食材简单到极致，但配合比例和芥末酱油，吃第一个就停不下来。광장시장的阿줌마（阿姨）们在这里卖마약김밥已经几十年了，配方代代相传，每天从早卖到晚。</p>
+    <div class="highlight"><strong>토리 실전 경험：</strong>토리 第一次去，买了1人份（약 3,000원），吃完立刻再买了一份。阿줌마笑着说"마약이라서（因为是마약）"。不是玩笑，真的停不下来。</div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 季节性小吃 -->
+  <div class="section-title">
+    <div class="st-icon">🗓️</div>
+    <div>
+      不同季节，街头不同味道
+      <span class="st-sub">去首尔的时间不同，吃到的也不同</span>
+    </div>
+  </div>
+
+  <div class="season-grid">
+    <div class="season-card" style="--sec:#FF8FAB;--sebg:#fff5f8;">
+      <div class="season-badge">🌸 春天 · 3–5月</div>
+      <div class="season-title">草莓季 + 樱花小吃</div>
+      <div class="season-items">딸기 (草莓) 甜品大爆发<br>딸기찹쌀떡（草莓麻薯）<br>벚꽃 (樱花) 限定饮品和甜点<br>광장시장的春季鲜蔬煎饼</div>
+    </div>
+    <div class="season-card" style="--sec:#A8D8D0;--sebg:#f0fbf9;">
+      <div class="season-badge">☀️ 夏天 · 6–8月</div>
+      <div class="season-title">冰品天下</div>
+      <div class="season-items">팥빙수（刨冰+红豆）韩国夏天必吃<br>옥수수 아이스크림（玉米冰淇淋）<br>수박주스（西瓜汁）街边现榨<br>냉면 (冷面) 流行于夏日</div>
+    </div>
+    <div class="season-card" style="--sec:#FFE4A0;--sebg:#fffdf5;">
+      <div class="season-badge">🍂 秋天 · 9–11月</div>
+      <div class="season-title">糕点和板栗季</div>
+      <div class="season-items">군밤（烤板栗）开始上市<br>고구마 (地瓜) 甜品全面上线<br>수능 (高考) 时节的엿（麦芽糖）<br>추석 송편（松糕）在传统市场</div>
+    </div>
+    <div class="season-card" style="--sec:#C9B8E8;--sebg:#f8f5ff;">
+      <div class="season-badge">❄️ 冬天 · 12–2月</div>
+      <div class="season-title">热食和暖意</div>
+      <div class="season-items">호떡 (糖饼) 冬天街头必备<br>군고구마（烤地瓜）暖手又暖胃<br>붕어빵（鲫鱼饼）冬天专属<br>어묵탕（关东煮汤）站着喝</div>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- 点单指南 -->
+  <div class="section-title">
+    <div class="st-icon">💬</div>
+    <div>
+      街头小吃怎么点——분식집实战指南
+      <span class="st-sub">没有菜单，没有服务员，但很好操作</span>
+    </div>
+  </div>
+
+  <div class="order-guide">
+    <h3>🐰 토리 的분식集点餐流程</h3>
+    <div class="order-row">
+      <div class="order-num">1</div>
+      <div class="order-text"><strong>走近摊位看清楚卖什么</strong>——通常会有价格牌，或者直接看锅里有什么。不确定就指着说이거（这个）。</div>
+    </div>
+    <div class="order-row">
+      <div class="order-num">2</div>
+      <div class="order-text"><strong>说你要什么和数量</strong>——最简单的方式是直接指着说"이거 하나（一个这个）"或"이거 두 개（两个这个）"。</div>
+    </div>
+    <div class="order-row">
+      <div class="order-num">3</div>
+      <div class="order-text"><strong>说辣度要求</strong>（如果有）
+        <div class="korean-phrase">덜 맵게 해주세요（少放辣椒酱）</div>
+        <div class="korean-phrase">맵지 않게 해주세요（不要辣）</div>
+      </div>
+    </div>
+    <div class="order-row">
+      <div class="order-num">4</div>
+      <div class="order-text"><strong>付钱</strong>——通常边点边结账。街边摊多数接受卡，但小摊位有时只收现금（现金），建议备一些小额韩元现金。</div>
+    </div>
+    <div class="order-row">
+      <div class="order-num">5</div>
+      <div class="order-text"><strong>站着或找台子吃</strong>——大部分街头小吃没有座位，就是站着吃。找摊位旁边的高台或边上任何地方放下就是你的临时餐桌。</div>
+    </div>
+  </div>
+
+  <!-- 冷知识 -->
+  <div class="section-title">
+    <div class="st-icon">🔍</div>
+    <div>
+      街头小吃冷知识
+      <span class="st-sub">吃之前知道，吃的时候更有感触</span>
+    </div>
+  </div>
+
+  <div class="trivia-grid">
+    <div class="trivia-card" style="--tc:#FF8FAB;--tbg:#fff0f5;">
+      <div class="tc-tag">분식 문화</div>
+      <div class="tc-q">분식이란 무엇인가？（分食是什么）</div>
+      <div class="tc-a">분식（分食）字面意思是"分粮食"，起源于1960–70年代韩国粮食匮乏时期，政府推广 减少大米消耗的运动，鼓励用面粉制品代替米饭。떡볶이、순대、라면都是这个时代的产物。从政策变成了一种深入人心的饮食文化，如今분식집是韩国最亲民的餐厅类型。</div>
+    </div>
+    <div class="trivia-card" style="--tc:#FFE4A0;--tbg:#fffdf0;">
+      <div class="tc-tag">오뎅 vs 어묵</div>
+      <div class="tc-q">오뎅和어묵有什么区别？</div>
+      <div class="tc-a">어묵是鱼饼的正式韩语名，오뎅是从日语おでん（关东煮）借来的词。两个词在韩国都在用——어묵更正式、更书面，오뎅更口语、更像街头说法。在분식집摊位上的价格牌写的通常是어묵，但很多韩国人说오뎅하나 주세요（给我一串오뎅）。</div>
+    </div>
+    <div class="trivia-card" style="--tc:#C9B8E8;--tbg:#f5f0ff;">
+      <div class="tc-tag">포장마차 문화</div>
+      <div class="tc-q">포장마차在韩国有什么特殊意义？</div>
+      <div class="tc-a">포장마차（包装马车，即帐篷摊位）在1980–90年代的首尔是重要的社会空间——劳动者、学生、普通市民在这里喝酒聊天。后来城市化管理让许多포장마차消失，但它在韩剧中的出现让它成为了"真实韩国"的文化符号。现在부산 포장마차（釜山路边摊）和首尔东大门一带仍然有保留。</div>
+    </div>
+    <div class="trivia-card" style="--tc:#A8D8D0;--tbg:#f0fbf9;">
+      <div class="tc-tag">가격 문화</div>
+      <div class="tc-q">韩国街头小吃为什么这么便宜？</div>
+      <div class="tc-a">韩国政府长期对基本食品价格有补贴和管控传统，특히（特别是）떡볶이, 라면, 순대 这类平民食物的价格增幅远低于其他物价。一碗떡볶이几十年来价格变化幅度极小，这是韩国政府对"서민 음식（平民食物）"的一种隐性保护。</div>
+    </div>
+  </div>
+
+  <div class="notice-box">
+    <div class="nt">🍡 逛首尔街头小吃之前要知道</div>
+    街头小吃摊<strong>通常不提供湿纸巾</strong>，建议自己带。另外，很多小摊位不提供垃圾桶，韩国街头垃圾桶很少，要把包装带到便利店旁边的垃圾桶扔掉，或者找最近的分类垃圾桶。吃完东西在街上随手乱扔，会被认为非常没有素质。
+  </div>
+
+  <!-- 실용 韩语 -->
+  <div class="korean-section">
+    <div class="ks-header">
+      <div class="ks-tori">🐰</div>
+      <div>
+        <div class="ks-title">토리 教你说——街头小吃必备韩语</div>
+        <div class="ks-sub">点击 + 可加入你的词汇本</div>
+      </div>
+    </div>
+    <div class="phrase-list">
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">떡볶이 하나 주세요.</div>
+          <div class="phrase-ro">tteok-bo-kki ha-na ju-se-yo</div>
+          <div class="phrase-scene">🍡 点떡볶이</div>
+        </div>
+        <div class="phrase-zh">给我一份炒年糕</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">덜 맵게 해주세요.</div>
+          <div class="phrase-ro">deol maep-ge hae-ju-se-yo</div>
+          <div class="phrase-scene">🌶️ 要求减辣</div>
+        </div>
+        <div class="phrase-zh">请少放辣椒酱</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">이거랑 이거 주세요.</div>
+          <div class="phrase-ro">i-geo-rang i-geo ju-se-yo</div>
+          <div class="phrase-scene">👆 指着两样东西点</div>
+        </div>
+        <div class="phrase-zh">这个和这个都给我</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">얼마예요?</div>
+          <div class="phrase-ro">eol-ma-ye-yo?</div>
+          <div class="phrase-scene">💰 问价格</div>
+        </div>
+        <div class="phrase-zh">多少钱？</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">카드 되나요?</div>
+          <div class="phrase-ro">ka-deu doe-na-yo?</div>
+          <div class="phrase-scene">💳 确认能否刷卡</div>
+        </div>
+        <div class="phrase-zh">可以刷卡吗？</div>
+        <div class="add-btn">+</div>
+      </div>
+      <div class="phrase-item">
+        <div>
+          <div class="phrase-ko">국물도 마실 수 있어요?</div>
+          <div class="phrase-ro">gung-mul-do ma-sil su i-sseo-yo?</div>
+          <div class="phrase-scene">🍜 鱼饼摊喝汤</div>
+        </div>
+        <div class="phrase-zh">汤也可以喝吗？</div>
+        <div class="add-btn">+</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 词汇 -->
+  <div class="section-title" style="font-size:16px;margin-top:36px;">
+    <div class="st-icon" style="width:30px;height:30px;font-size:14px;">📖</div>
+    <div>本篇出现的词汇</div>
+  </div>
+  <div class="vocab-row">
+    <div class="vocab-chip"><span class="vko">떡볶이</span><span class="vzh">炒年糕</span></div>
+    <div class="vocab-chip"><span class="vko">순대</span><span class="vzh">血肠</span></div>
+    <div class="vocab-chip"><span class="vko">튀김</span><span class="vzh">炸物</span></div>
+    <div class="vocab-chip"><span class="vko">오뎅</span><span class="vzh">鱼饼串</span></div>
+    <div class="vocab-chip"><span class="vko">호떡</span><span class="vzh">糖饼</span></div>
+    <div class="vocab-chip"><span class="vko">붕어빵</span><span class="vzh">鲫鱼饼</span></div>
+    <div class="vocab-chip"><span class="vko">계란빵</span><span class="vzh">鸡蛋面包</span></div>
+    <div class="vocab-chip"><span class="vko">군고구마</span><span class="vzh">烤地瓜</span></div>
+    <div class="vocab-chip"><span class="vko">마약김밥</span><span class="vzh">上瘾紫菜卷</span></div>
+    <div class="vocab-chip"><span class="vko">분식</span><span class="vzh">小吃·面食</span></div>
+    <div class="vocab-chip"><span class="vko">포장마차</span><span class="vzh">路边摊酒馆</span></div>
+    <div class="vocab-chip"><span class="vko">국물</span><span class="vzh">汤·汤汁</span></div>
+  </div>
+
+  <!-- 结尾 -->
+  <div class="ending-card">
+    <span class="ending-tori">🐰</span>
+    <div class="ending-title">首尔的味道，藏在街边的烟气里</div>
+    <div class="ending-sub">
+      不需要预约，不需要太多钱，<br>
+      走进一条小巷，跟着香味走，<br>
+      那就是最真实的首尔。<br>
+      下一篇，토리 带你探索韩国人为什么这么爱喝汤 🍲
+    </div>
+    <a class="next-btn" href="#">下一篇：韩国人为什么这么爱喝汤 →</a>
+    <div class="next-articles">
+      <div class="next-tag">🥩 韩国烤肉完全指南</div>
+      <div class="next-tag">📺 跟着韩剧学点餐</div>
+      <div class="next-tag">🌶️ 韩国辣文化</div>
+    </div>
+  </div>
+
+</div>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a02edaa54c6d1979',t:'MTc3OTk4ODAzMA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

@@ -1,0 +1,1686 @@
+{
+  "时间": {
+    "hash": "19fcb9eb2594",
+    "en": "time"
+  },
+  "最常见的\"时间\"表达": {
+    "hash": "ab9f5100a58b",
+    "en": "The most common expression for \"time\""
+  },
+  "今天": {
+    "hash": "800dfdd90200",
+    "en": "today"
+  },
+  "明天": {
+    "hash": "8bcbd77d1fd9",
+    "en": "tomorrow"
+  },
+  "日常高频用词": {
+    "hash": "2f2f3456a59c",
+    "en": "High-frequency daily word"
+  },
+  "昨天": {
+    "hash": "2f8d6f1584b7",
+    "en": "yesterday"
+  },
+  "现在": {
+    "hash": "505ccfb0e8b6",
+    "en": "now"
+  },
+  "早上": {
+    "hash": "c8c0ba481d74",
+    "en": "morning"
+  },
+  "傍晚/晚上": {
+    "hash": "571d408dbf29",
+    "en": "evening/night"
+  },
+  "夜晚": {
+    "hash": "86de2bc5f95c",
+    "en": "night"
+  },
+  "上午": {
+    "hash": "f8fbeae19402",
+    "en": "a.m. (morning)"
+  },
+  "下午": {
+    "hash": "e2eb289cc375",
+    "en": "p.m. (afternoon)"
+  },
+  "周末": {
+    "hash": "c17375d125d2",
+    "en": "weekend"
+  },
+  "平日/工作日": {
+    "hash": "1a666e8a17cf",
+    "en": "weekday/workday"
+  },
+  "星期一": {
+    "hash": "5ce438210f58",
+    "en": "Monday"
+  },
+  "韩语星期=日月火水木金土": {
+    "hash": "773844e9f95d",
+    "en": "Korean weekdays = sun, moon, fire, water, wood, metal, earth"
+  },
+  "星期日": {
+    "hash": "67b19578d075",
+    "en": "Sunday"
+  },
+  "今年": {
+    "hash": "d3dbc7a7fd9f",
+    "en": "this year"
+  },
+  "去年": {
+    "hash": "3a88df8846e0",
+    "en": "last year"
+  },
+  "日期": {
+    "hash": "4ff1e74e43a3",
+    "en": "date"
+  },
+  "每天": {
+    "hash": "78623eaefcda",
+    "en": "every day"
+  },
+  "春天": {
+    "hash": "3a864e53ae59",
+    "en": "spring"
+  },
+  "夏天": {
+    "hash": "860176ffdb1f",
+    "en": "summer"
+  },
+  "秋天": {
+    "hash": "7dd7fb711151",
+    "en": "autumn"
+  },
+  "冬天": {
+    "hash": "8f5324a6322e",
+    "en": "winter"
+  },
+  "一": {
+    "hash": "7941da94db2a",
+    "en": "one"
+  },
+  "汉字词数字，用于日期、分钟、价格等": {
+    "hash": "e49bd8125b62",
+    "en": "Sino-Korean number, used for dates, minutes, prices, etc."
+  },
+  "二": {
+    "hash": "2d8be272c9e7",
+    "en": "two"
+  },
+  "三": {
+    "hash": "e662ff59a0da",
+    "en": "three"
+  },
+  "四": {
+    "hash": "21716cf31107",
+    "en": "four"
+  },
+  "五": {
+    "hash": "1fcc29d077c0",
+    "en": "five"
+  },
+  "一(固有)": {
+    "hash": "719131c9d020",
+    "en": "one (native)"
+  },
+  "固有词数字，用于计数物品、年龄、小时等": {
+    "hash": "672b0563b29c",
+    "en": "Native Korean number, used for counting items, age, hours, etc."
+  },
+  "二(固有)": {
+    "hash": "9cec9d2ac857",
+    "en": "two (native)"
+  },
+  "三(固有)": {
+    "hash": "48d6da3f6c4c",
+    "en": "three (native)"
+  },
+  "第一": {
+    "hash": "918024a67763",
+    "en": "first"
+  },
+  "个(量词)": {
+    "hash": "bfd518173e42",
+    "en": "counter (measure word)"
+  },
+  "最常用的物品量词": {
+    "hash": "dcf433712a02",
+    "en": "most common counter for objects"
+  },
+  "名(量词)": {
+    "hash": "69b8a47ff266",
+    "en": "counter (measure word)"
+  },
+  "用于人数计数": {
+    "hash": "2190e4a02ff1",
+    "en": "used for counting people"
+  },
+  "只(量词)": {
+    "hash": "1581a9d11680",
+    "en": "counter (measure word)"
+  },
+  "用于动物计数": {
+    "hash": "527349f18f9a",
+    "en": "used for counting animals"
+  },
+  "号/次": {
+    "hash": "58a951267802",
+    "en": "number/times"
+  },
+  "百": {
+    "hash": "81ec89a2a8c4",
+    "en": "hundred"
+  },
+  "千": {
+    "hash": "c821e5223135",
+    "en": "thousand"
+  },
+  "万": {
+    "hash": "9d0320667182",
+    "en": "ten thousand"
+  },
+  "零": {
+    "hash": "777fda6c519c",
+    "en": "zero"
+  },
+  "半": {
+    "hash": "2475dea6e829",
+    "en": "half"
+  },
+  "岁(量词)": {
+    "hash": "a32391d33c0d",
+    "en": "years (counter)"
+  },
+  "用于年龄，使用固有词数字": {
+    "hash": "429b82998f5f",
+    "en": "Used for age, with native Korean numerals"
+  },
+  "点(时间量词)": {
+    "hash": "e39cb02cd335",
+    "en": "o'clock (time counter)"
+  },
+  "用于小时，使用固有词数字": {
+    "hash": "f2cc0c2da8dc",
+    "en": "Used for hours, with native Korean numerals"
+  },
+  "苹果": {
+    "hash": "e6803e21b9c6",
+    "en": "apple"
+  },
+  "香蕉": {
+    "hash": "b7c03bbf2b8b",
+    "en": "banana"
+  },
+  "葡萄": {
+    "hash": "05b1b3102be2",
+    "en": "grape"
+  },
+  "西瓜": {
+    "hash": "b9af3fd5d3ec",
+    "en": "watermelon"
+  },
+  "草莓": {
+    "hash": "4e9244f80edc",
+    "en": "strawberry"
+  },
+  "橙子": {
+    "hash": "f24b6a378162",
+    "en": "orange"
+  },
+  "桃子": {
+    "hash": "6bdfe0af87eb",
+    "en": "peach"
+  },
+  "梨": {
+    "hash": "9213c6fc891f",
+    "en": "pear"
+  },
+  "柠檬": {
+    "hash": "b463653188fc",
+    "en": "lemon"
+  },
+  "芒果": {
+    "hash": "eb8c504251ae",
+    "en": "mango"
+  },
+  "樱桃": {
+    "hash": "09051825305f",
+    "en": "cherry"
+  },
+  "柿子": {
+    "hash": "02590a70e133",
+    "en": "persimmon"
+  },
+  "橘子": {
+    "hash": "8130753d07bd",
+    "en": "orange"
+  },
+  "菠萝": {
+    "hash": "4993e606341a",
+    "en": "pineapple"
+  },
+  "猕猴桃": {
+    "hash": "880b9460958a",
+    "en": "kiwi"
+  },
+  "蓝莓": {
+    "hash": "a96ab3d9cc56",
+    "en": "blueberry"
+  },
+  "李子": {
+    "hash": "8fdec89f652e",
+    "en": "plum"
+  },
+  "石榴": {
+    "hash": "485bddb433cb",
+    "en": "pomegranate"
+  },
+  "甜瓜": {
+    "hash": "1e27ba790a03",
+    "en": "melon"
+  },
+  "椰子": {
+    "hash": "ffcb6768ad0a",
+    "en": "coconut"
+  },
+  "运动": {
+    "hash": "37b6debeb44d",
+    "en": "sports"
+  },
+  "足球": {
+    "hash": "ed05233ac827",
+    "en": "soccer"
+  },
+  "棒球": {
+    "hash": "df878fd7fa9f",
+    "en": "baseball"
+  },
+  "篮球": {
+    "hash": "ea2eed1fb5e1",
+    "en": "basketball"
+  },
+  "排球": {
+    "hash": "234d99c51b1c",
+    "en": "volleyball"
+  },
+  "乒乓球": {
+    "hash": "571c4d3c5031",
+    "en": "table tennis"
+  },
+  "游泳": {
+    "hash": "221486055c9c",
+    "en": "swimming"
+  },
+  "网球": {
+    "hash": "fa81cc28057c",
+    "en": "tennis"
+  },
+  "高尔夫": {
+    "hash": "b99285704fdf",
+    "en": "golf"
+  },
+  "保龄球": {
+    "hash": "deb9bee0bd5c",
+    "en": "bowling"
+  },
+  "滑雪": {
+    "hash": "79b3c280d887",
+    "en": "skiing"
+  },
+  "登山": {
+    "hash": "843574dcfb82",
+    "en": "mountain climbing"
+  },
+  "自行车": {
+    "hash": "b73c6e34a130",
+    "en": "bicycle"
+  },
+  "瑜伽": {
+    "hash": "5a78432c4d26",
+    "en": "yoga"
+  },
+  "跆拳道": {
+    "hash": "c6405be1dfd0",
+    "en": "taekwondo"
+  },
+  "跑步": {
+    "hash": "7b385d028431",
+    "en": "running"
+  },
+  "健身": {
+    "hash": "c24d6f13a44a",
+    "en": "fitness"
+  },
+  "滑冰": {
+    "hash": "efb346d8885b",
+    "en": "ice skating"
+  },
+  "冲浪": {
+    "hash": "27432794a709",
+    "en": "surfing"
+  },
+  "骑马": {
+    "hash": "fa68ddb96331",
+    "en": "horseback riding"
+  },
+  "读书": {
+    "hash": "a25661f0fb2a",
+    "en": "reading"
+  },
+  "电影": {
+    "hash": "51e9743451d4",
+    "en": "movie"
+  },
+  "音乐": {
+    "hash": "95521bb74446",
+    "en": "music"
+  },
+  "烹饪": {
+    "hash": "c5df2d642235",
+    "en": "cooking"
+  },
+  "摄影": {
+    "hash": "4c8bd0af0f90",
+    "en": "photography"
+  },
+  "旅行": {
+    "hash": "87483408cfa6",
+    "en": "travel"
+  },
+  "游戏": {
+    "hash": "ba08216f13dd",
+    "en": "game"
+  },
+  "舞蹈": {
+    "hash": "53b22a23411f",
+    "en": "dance"
+  },
+  "绘画": {
+    "hash": "c6e7d6435e59",
+    "en": "painting"
+  },
+  "钓鱼": {
+    "hash": "34e96bf784a0",
+    "en": "fishing"
+  },
+  "露营": {
+    "hash": "0f299ef48207",
+    "en": "camping"
+  },
+  "乐器": {
+    "hash": "deb1b2db043c",
+    "en": "musical instrument"
+  },
+  "编织": {
+    "hash": "3987f69d86ab",
+    "en": "knitting"
+  },
+  "园艺": {
+    "hash": "c5cbab585a78",
+    "en": "gardening"
+  },
+  "收集": {
+    "hash": "c6dcd4b09a95",
+    "en": "collecting"
+  },
+  "工艺": {
+    "hash": "ec9875c10f40",
+    "en": "craft"
+  },
+  "唱歌": {
+    "hash": "d49c9b66f60f",
+    "en": "to sing"
+  },
+  "钢琴": {
+    "hash": "3b4d64666ded",
+    "en": "piano"
+  },
+  "吉他": {
+    "hash": "34344ef02096",
+    "en": "guitar"
+  },
+  "围棋": {
+    "hash": "64408f178591",
+    "en": "Go (board game)"
+  },
+  "家人/家庭": {
+    "hash": "e7003936da12",
+    "en": "family"
+  },
+  "父母": {
+    "hash": "b23382279833",
+    "en": "parents"
+  },
+  "敬语形式，부모+님": {
+    "hash": "249d7a492fec",
+    "en": "Honorific form, 부모+님"
+  },
+  "父亲": {
+    "hash": "a93e956a9307",
+    "en": "father"
+  },
+  "敬称，对外称自己父亲时也可用": {
+    "hash": "9b7612d8a998",
+    "en": "Honorific; also used when referring to one's own father to others"
+  },
+  "母亲": {
+    "hash": "b27f597c4667",
+    "en": "mother"
+  },
+  "敬称": {
+    "hash": "b424e86c682f",
+    "en": "Honorific"
+  },
+  "爸爸": {
+    "hash": "0d00c80f61a7",
+    "en": "dad"
+  },
+  "妈妈": {
+    "hash": "e6c7ee60031d",
+    "en": "mother"
+  },
+  "儿子": {
+    "hash": "4f11098f3444",
+    "en": "son"
+  },
+  "女儿": {
+    "hash": "b62d330b5ae5",
+    "en": "daughter"
+  },
+  "爷爷/外公": {
+    "hash": "d34714bc9839",
+    "en": "grandfather"
+  },
+  "奶奶/外婆": {
+    "hash": "9a44b04f3c98",
+    "en": "grandmother"
+  },
+  "哥哥(男称)": {
+    "hash": "139f58dea5e2",
+    "en": "older brother (male speaker)"
+  },
+  "男性称呼哥哥时用": {
+    "hash": "63d33edcd43c",
+    "en": "Used by males when addressing an older brother"
+  },
+  "哥哥(女称)": {
+    "hash": "e31d0455505d",
+    "en": "older brother (female speaker)"
+  },
+  "女性称呼哥哥时用": {
+    "hash": "7815a4a10d23",
+    "en": "Used by females when addressing an older brother"
+  },
+  "姐姐(男称)": {
+    "hash": "4db64bdc5358",
+    "en": "older sister (male speaker)"
+  },
+  "男性称呼姐姐时用": {
+    "hash": "23d6d33e5521",
+    "en": "Used by males when addressing an older sister"
+  },
+  "姐姐(女称)": {
+    "hash": "c32e184ca838",
+    "en": "older sister (female speaker)"
+  },
+  "女性称呼姐姐时用": {
+    "hash": "3d04dbb03456",
+    "en": "Used by women when addressing an older sister"
+  },
+  "弟弟/妹妹": {
+    "hash": "fabdbb2d95a6",
+    "en": "younger brother/sister"
+  },
+  "丈夫": {
+    "hash": "a583eae02364",
+    "en": "husband"
+  },
+  "妻子": {
+    "hash": "97795c81672e",
+    "en": "wife"
+  },
+  "叔叔": {
+    "hash": "b25d78653337",
+    "en": "uncle"
+  },
+  "姨妈/阿姨": {
+    "hash": "dc2216f11e13",
+    "en": "aunt"
+  },
+  "侄子/侄女": {
+    "hash": "91f676c73c4d",
+    "en": "nephew/niece"
+  },
+  "饭": {
+    "hash": "094f7310ef02",
+    "en": "rice"
+  },
+  "也泛指一顿饭": {
+    "hash": "6d8239d2ef4a",
+    "en": "also refers to a meal in general"
+  },
+  "泡菜": {
+    "hash": "9f9a1a2b4c5a",
+    "en": "kimchi"
+  },
+  "韩式烤肉": {
+    "hash": "2396318a0e3a",
+    "en": "Korean barbecue"
+  },
+  "韩式拌饭": {
+    "hash": "cff4195fd389",
+    "en": "Korean mixed rice bowl"
+  },
+  "紫菜包饭": {
+    "hash": "991c1074f66e",
+    "en": "gimbap (seaweed rice roll)"
+  },
+  "炒年糕": {
+    "hash": "9bfe4c5b6ef8",
+    "en": "tteokbokki (stir-fried rice cakes)"
+  },
+  "方便面/拉面": {
+    "hash": "0cb4430c75ca",
+    "en": "instant noodles / ramen"
+  },
+  "炖锅/韩式炖汤": {
+    "hash": "262ce75f6392",
+    "en": "jjigae (Korean stew)"
+  },
+  "五花肉": {
+    "hash": "b656b886afe7",
+    "en": "pork belly"
+  },
+  "炸鸡": {
+    "hash": "9e3e19143797",
+    "en": "fried chicken"
+  },
+  "冷面": {
+    "hash": "4f8e94d34032",
+    "en": "naengmyeon (cold noodles)"
+  },
+  "饺子": {
+    "hash": "dc02d72e23e1",
+    "en": "dumplings"
+  },
+  "汤": {
+    "hash": "9c6d2f2f451d",
+    "en": "soup"
+  },
+  "煎饼": {
+    "hash": "e0488900a24d",
+    "en": "jeon (Korean pancake)"
+  },
+  "鸡蛋": {
+    "hash": "bd29625b4835",
+    "en": "egg"
+  },
+  "豆腐": {
+    "hash": "763476725bf0",
+    "en": "tofu"
+  },
+  "生鱼片": {
+    "hash": "68c963458ee4",
+    "en": "sashimi"
+  },
+  "粥": {
+    "hash": "575b7a4dca51",
+    "en": "porridge"
+  },
+  "面包": {
+    "hash": "e51a45076710",
+    "en": "bread"
+  },
+  "牛奶": {
+    "hash": "7a5794ace915",
+    "en": "milk"
+  },
+  "红色": {
+    "hash": "52636511861a",
+    "en": "red"
+  },
+  "蓝色": {
+    "hash": "9c9aabab3f76",
+    "en": "blue"
+  },
+  "黄色": {
+    "hash": "ddb86dd31ce7",
+    "en": "yellow"
+  },
+  "绿色": {
+    "hash": "b2c712c788d3",
+    "en": "green"
+  },
+  "白色": {
+    "hash": "2fc96b2704b0",
+    "en": "white"
+  },
+  "黑色": {
+    "hash": "9d2d1f62ae2c",
+    "en": "black"
+  },
+  "橙色": {
+    "hash": "d9bbeb4427a7",
+    "en": "orange"
+  },
+  "紫色": {
+    "hash": "e1e14bd3b8fa",
+    "en": "purple"
+  },
+  "粉色": {
+    "hash": "97542386a90f",
+    "en": "pink"
+  },
+  "褐色/棕色": {
+    "hash": "8b0fa55da098",
+    "en": "brown"
+  },
+  "灰色": {
+    "hash": "fca97e7866a8",
+    "en": "gray"
+  },
+  "深蓝色/靛色": {
+    "hash": "ba21891d1b40",
+    "en": "dark blue/indigo"
+  },
+  "天蓝色": {
+    "hash": "9e6aea8ea62e",
+    "en": "sky blue"
+  },
+  "浅绿色": {
+    "hash": "54a92697fcac",
+    "en": "light green"
+  },
+  "金色": {
+    "hash": "454b22f95d16",
+    "en": "gold"
+  },
+  "狗": {
+    "hash": "5090e44ef940",
+    "en": "dog"
+  },
+  "猫": {
+    "hash": "b655de688e0a",
+    "en": "cat"
+  },
+  "兔子": {
+    "hash": "4c16854a6f9f",
+    "en": "rabbit"
+  },
+  "大象": {
+    "hash": "e33d101cae2f",
+    "en": "elephant"
+  },
+  "老虎": {
+    "hash": "38a3d1ca0b66",
+    "en": "tiger"
+  },
+  "狮子": {
+    "hash": "a44a2ad494be",
+    "en": "lion"
+  },
+  "熊": {
+    "hash": "8df702f4accf",
+    "en": "bear"
+  },
+  "猴子": {
+    "hash": "5f024c07f43c",
+    "en": "monkey"
+  },
+  "长颈鹿": {
+    "hash": "128cb009db78",
+    "en": "giraffe"
+  },
+  "马": {
+    "hash": "4e2572e0c729",
+    "en": "horse"
+  },
+  "牛": {
+    "hash": "a933ef6a9bf8",
+    "en": "cow"
+  },
+  "猪": {
+    "hash": "e4dc9ec18785",
+    "en": "pig"
+  },
+  "羊": {
+    "hash": "a136f339af8c",
+    "en": "sheep"
+  },
+  "鸡": {
+    "hash": "ef2712b1bb1f",
+    "en": "chicken"
+  },
+  "鸭子": {
+    "hash": "450c4dd8b08a",
+    "en": "duck"
+  },
+  "鸟": {
+    "hash": "cdd7ce48a936",
+    "en": "bird"
+  },
+  "鱼": {
+    "hash": "0857fa4e346f",
+    "en": "fish"
+  },
+  "蛇": {
+    "hash": "37e76c8a4168",
+    "en": "snake"
+  },
+  "乌龟/龟": {
+    "hash": "4bc9a79da265",
+    "en": "turtle/tortoise"
+  },
+  "企鹅": {
+    "hash": "4d1e3cb110c0",
+    "en": "penguin"
+  },
+  "天气": {
+    "hash": "265f273cf1a7",
+    "en": "weather"
+  },
+  "晴朗": {
+    "hash": "fff79e47da2e",
+    "en": "clear (weather)"
+  },
+  "发音为[막따]": {
+    "hash": "5876e420df3d",
+    "en": "pronounced as [maktta]"
+  },
+  "阴天/阴沉": {
+    "hash": "605f68b15f7c",
+    "en": "cloudy/overcast"
+  },
+  "雨": {
+    "hash": "95433763b346",
+    "en": "rain"
+  },
+  "비가 오다 = 下雨": {
+    "hash": "43fd287a915e",
+    "en": "비가 오다 = to rain"
+  },
+  "雪": {
+    "hash": "c4fccd8dd11f",
+    "en": "snow"
+  },
+  "눈이 오다 = 下雪": {
+    "hash": "b51f4924199d",
+    "en": "눈이 오다 = to snow"
+  },
+  "风": {
+    "hash": "b24891983d09",
+    "en": "wind"
+  },
+  "云": {
+    "hash": "a45fb6bbf291",
+    "en": "cloud"
+  },
+  "台风": {
+    "hash": "647d33aff1e4",
+    "en": "typhoon"
+  },
+  "雾": {
+    "hash": "090606faf9f8",
+    "en": "fog"
+  },
+  "气温": {
+    "hash": "245af8c4bab7",
+    "en": "temperature"
+  },
+  "湿度": {
+    "hash": "fad8fb07ebca",
+    "en": "humidity"
+  },
+  "炎热/酷暑": {
+    "hash": "7fd8a4b826d6",
+    "en": "heat / scorching heat"
+  },
+  "寒冷": {
+    "hash": "22460b8473e7",
+    "en": "cold"
+  },
+  "洪水": {
+    "hash": "2c1f228bc104",
+    "en": "flood"
+  },
+  "干旱": {
+    "hash": "5f776911566e",
+    "en": "drought"
+  },
+  "雷": {
+    "hash": "65ad96dabec3",
+    "en": "thunder"
+  },
+  "闪电": {
+    "hash": "6259d676f095",
+    "en": "lightning"
+  },
+  "冰雹": {
+    "hash": "33788212340f",
+    "en": "hail"
+  },
+  "沙尘/黄沙": {
+    "hash": "6ea53ec720df",
+    "en": "sand dust / yellow sand"
+  },
+  "微尘/雾霾": {
+    "hash": "bc004029fadd",
+    "en": "fine dust / haze"
+  },
+  "头": {
+    "hash": "4be2abbcf7d3",
+    "en": "head"
+  },
+  "也指\"头发\"": {
+    "hash": "66d2f925395b",
+    "en": "also refers to \"hair\""
+  },
+  "脸": {
+    "hash": "390eddf63a28",
+    "en": "face"
+  },
+  "眼睛": {
+    "hash": "946f5c8c6903",
+    "en": "eye"
+  },
+  "和\"雪\"同音异义": {
+    "hash": "60c3563cadac",
+    "en": "homophone with \"snow\""
+  },
+  "鼻子": {
+    "hash": "e6134a29931a",
+    "en": "nose"
+  },
+  "嘴": {
+    "hash": "3697bfcf41bf",
+    "en": "mouth"
+  },
+  "耳朵": {
+    "hash": "62507462c9a2",
+    "en": "ear"
+  },
+  "手": {
+    "hash": "3c7d183f1b71",
+    "en": "hand"
+  },
+  "脚": {
+    "hash": "5297c0172742",
+    "en": "foot"
+  },
+  "胳膊": {
+    "hash": "22954d76f3bf",
+    "en": "arm"
+  },
+  "腿": {
+    "hash": "9d023c6d9baa",
+    "en": "leg"
+  },
+  "肚子": {
+    "hash": "6a3a1a2cb60d",
+    "en": "belly"
+  },
+  "也指\"船\"和\"梨\"": {
+    "hash": "34cd58cc9f11",
+    "en": "Also refers to \"boat\" and \"pear\""
+  },
+  "胸": {
+    "hash": "88ed7a21ee63",
+    "en": "chest"
+  },
+  "背": {
+    "hash": "a6d9108337c6",
+    "en": "back"
+  },
+  "脖子/喉咙": {
+    "hash": "6cb78755e563",
+    "en": "neck/throat"
+  },
+  "手指": {
+    "hash": "7f3784c85051",
+    "en": "finger"
+  },
+  "脚趾": {
+    "hash": "0dec398e6543",
+    "en": "toe"
+  },
+  "膝盖": {
+    "hash": "facb2fcf2d4a",
+    "en": "knee"
+  },
+  "韵尾ㅍ实际发作ㅂ音（不送气），发音[무릅]": {
+    "hash": "45110d2c6447",
+    "en": "The final consonant ㅍ is actually pronounced as ㅂ (unaspirated), so it sounds like [무릅]"
+  },
+  "肩膀": {
+    "hash": "3307b29dbab1",
+    "en": "shoulder"
+  },
+  "腰": {
+    "hash": "e8c529feb4df",
+    "en": "waist"
+  },
+  "额头": {
+    "hash": "9b21301e397a",
+    "en": "forehead"
+  },
+  "公交车": {
+    "hash": "70b46ee9e8ad",
+    "en": "bus"
+  },
+  "地铁": {
+    "hash": "9266202469b6",
+    "en": "subway"
+  },
+  "出租车": {
+    "hash": "4f5289fad3f8",
+    "en": "taxi"
+  },
+  "火车": {
+    "hash": "e7e95e681311",
+    "en": "train"
+  },
+  "飞机": {
+    "hash": "16678800cfd0",
+    "en": "airplane"
+  },
+  "汽车": {
+    "hash": "b64c41208359",
+    "en": "car"
+  },
+  "摩托车": {
+    "hash": "fed19a817b34",
+    "en": "motorcycle"
+  },
+  "船": {
+    "hash": "7def9ee0ca92",
+    "en": "boat"
+  },
+  "公交站/站点": {
+    "hash": "a782a87d95b6",
+    "en": "bus stop/station"
+  },
+  "地铁站/火车站": {
+    "hash": "77daf80e8d43",
+    "en": "subway/train station"
+  },
+  "机场": {
+    "hash": "9fb66e93bc41",
+    "en": "airport"
+  },
+  "票": {
+    "hash": "e46f3b4fe1a0",
+    "en": "ticket"
+  },
+  "交通卡": {
+    "hash": "3d7182bde7e1",
+    "en": "transportation card"
+  },
+  "韩国常用T-money卡": {
+    "hash": "497154e258b9",
+    "en": "Commonly used T-money card in Korea"
+  },
+  "人行横道": {
+    "hash": "55caec4d5210",
+    "en": "crosswalk"
+  },
+  "红绿灯": {
+    "hash": "35240a5c3f4e",
+    "en": "traffic light"
+  },
+  "高速巴士": {
+    "hash": "c3879e56dc63",
+    "en": "express bus"
+  },
+  "韩国高铁": {
+    "hash": "de8664a45b10",
+    "en": "high-speed train"
+  },
+  "路": {
+    "hash": "d047a27f42ed",
+    "en": "road"
+  },
+  "停车场": {
+    "hash": "81413c510ebe",
+    "en": "parking lot"
+  },
+  "衣服": {
+    "hash": "6e06060b4830",
+    "en": "clothes"
+  },
+  "衬衫": {
+    "hash": "e91bb131a258",
+    "en": "shirt"
+  },
+  "裤子": {
+    "hash": "f2bdf96832bf",
+    "en": "pants"
+  },
+  "裙子": {
+    "hash": "556b6f00f4d6",
+    "en": "skirt"
+  },
+  "连衣裙": {
+    "hash": "1493b706df45",
+    "en": "dress"
+  },
+  "夹克": {
+    "hash": "29ae9cb38de1",
+    "en": "jacket"
+  },
+  "大衣": {
+    "hash": "87051845f176",
+    "en": "coat"
+  },
+  "鞋子": {
+    "hash": "820e83cbe0dc",
+    "en": "shoes"
+  },
+  "运动鞋": {
+    "hash": "8b1f418f9ee6",
+    "en": "sneakers"
+  },
+  "皮鞋": {
+    "hash": "82a54445ffdb",
+    "en": "leather shoes"
+  },
+  "帽子": {
+    "hash": "5cb80710c36b",
+    "en": "hat"
+  },
+  "围巾": {
+    "hash": "2f633da924e7",
+    "en": "scarf"
+  },
+  "手套": {
+    "hash": "54f7397f987f",
+    "en": "gloves"
+  },
+  "袜子": {
+    "hash": "b23963f121e5",
+    "en": "socks"
+  },
+  "领带": {
+    "hash": "d0e1641c8da4",
+    "en": "tie"
+  },
+  "牛仔裤": {
+    "hash": "587b5aa9df79",
+    "en": "jeans"
+  },
+  "短裤": {
+    "hash": "9dfb53f11336",
+    "en": "shorts"
+  },
+  "毛衣": {
+    "hash": "32d5f4e754e3",
+    "en": "sweater"
+  },
+  "T恤": {
+    "hash": "531dc5a8354d",
+    "en": "T-shirt"
+  },
+  "包": {
+    "hash": "5442dfce9bae",
+    "en": "bag"
+  },
+  "家/房子": {
+    "hash": "1c3e83d21b26",
+    "en": "home/house"
+  },
+  "房间": {
+    "hash": "9bdfe95fda10",
+    "en": "room"
+  },
+  "客厅": {
+    "hash": "c3f6b1963eda",
+    "en": "living room"
+  },
+  "厨房": {
+    "hash": "2c444dddb34c",
+    "en": "kitchen"
+  },
+  "卧室": {
+    "hash": "749e19ca5c6a",
+    "en": "bedroom"
+  },
+  "卫生间": {
+    "hash": "23aa53900593",
+    "en": "bathroom"
+  },
+  "门": {
+    "hash": "a4960087a90f",
+    "en": "door"
+  },
+  "窗户": {
+    "hash": "56c15f3b4042",
+    "en": "window"
+  },
+  "床": {
+    "hash": "1696a5960259",
+    "en": "bed"
+  },
+  "书桌": {
+    "hash": "305147d12767",
+    "en": "desk"
+  },
+  "椅子": {
+    "hash": "43876e08258b",
+    "en": "chair"
+  },
+  "沙发": {
+    "hash": "9ffb45209ed1",
+    "en": "sofa"
+  },
+  "桌子": {
+    "hash": "9e2fde20b6aa",
+    "en": "table"
+  },
+  "衣柜": {
+    "hash": "c6691d2ef9ac",
+    "en": "wardrobe"
+  },
+  "冰箱": {
+    "hash": "acea20811781",
+    "en": "refrigerator"
+  },
+  "洗衣机": {
+    "hash": "640c8a8005ca",
+    "en": "washing machine"
+  },
+  "电话": {
+    "hash": "5a93d3f72d13",
+    "en": "telephone"
+  },
+  "电视": {
+    "hash": "3a2f904027d7",
+    "en": "television"
+  },
+  "电脑": {
+    "hash": "e855972ea937",
+    "en": "computer"
+  },
+  "空调": {
+    "hash": "5656ad7a1491",
+    "en": "air conditioner"
+  },
+  "学校": {
+    "hash": "413b738061f6",
+    "en": "school"
+  },
+  "学生": {
+    "hash": "35d9969dfa48",
+    "en": "student"
+  },
+  "老师": {
+    "hash": "295af37e0588",
+    "en": "teacher"
+  },
+  "선생+님，敬称": {
+    "hash": "1b323f411d4b",
+    "en": "선생+님, honorific"
+  },
+  "教室": {
+    "hash": "28c2fc3de887",
+    "en": "classroom"
+  },
+  "书": {
+    "hash": "2f3703e4272d",
+    "en": "book"
+  },
+  "笔记本": {
+    "hash": "1873eaa866aa",
+    "en": "notebook"
+  },
+  "铅笔": {
+    "hash": "ffa77d1bfcf1",
+    "en": "pencil"
+  },
+  "文具盒": {
+    "hash": "ab67c9b3cc2c",
+    "en": "pencil case"
+  },
+  "书包": {
+    "hash": "999f3de2cf01",
+    "en": "schoolbag"
+  },
+  "作业": {
+    "hash": "116e07721979",
+    "en": "homework"
+  },
+  "考试": {
+    "hash": "7746fb87c607",
+    "en": "exam"
+  },
+  "成绩": {
+    "hash": "38c1268c392f",
+    "en": "grade"
+  },
+  "学期": {
+    "hash": "8864f99788fd",
+    "en": "semester"
+  },
+  "假期": {
+    "hash": "4a503947d420",
+    "en": "vacation"
+  },
+  "图书馆": {
+    "hash": "9e08ed8ec578",
+    "en": "library"
+  },
+  "课/上课": {
+    "hash": "9a2ca4c03052",
+    "en": "class/lesson"
+  },
+  "专业": {
+    "hash": "a7ad35acaea5",
+    "en": "major"
+  },
+  "科目/课程": {
+    "hash": "b221173ac855",
+    "en": "subject/course"
+  },
+  "毕业": {
+    "hash": "b285411eaa64",
+    "en": "to graduate"
+  },
+  "入学": {
+    "hash": "ea1f1dc46559",
+    "en": "to enroll"
+  },
+  "公司": {
+    "hash": "41716f87c375",
+    "en": "company"
+  },
+  "办公室": {
+    "hash": "93cfc1e1108f",
+    "en": "office"
+  },
+  "员工/职员": {
+    "hash": "ddc329d9eb00",
+    "en": "employee/staff"
+  },
+  "老板/社长": {
+    "hash": "696774b611a5",
+    "en": "boss/owner"
+  },
+  "同事": {
+    "hash": "3a1ff305f35c",
+    "en": "colleague"
+  },
+  "上班": {
+    "hash": "b4f0388f1ee9",
+    "en": "to go to work"
+  },
+  "下班": {
+    "hash": "96ed60cdcb75",
+    "en": "to get off work"
+  },
+  "会议": {
+    "hash": "ebcb811c5535",
+    "en": "meeting"
+  },
+  "业务/工作任务": {
+    "hash": "fa873e054ea5",
+    "en": "business/work task"
+  },
+  "月薪/工资": {
+    "hash": "ba8b2cab6f95",
+    "en": "monthly salary/wages"
+  },
+  "简历": {
+    "hash": "d0d74b61e91c",
+    "en": "resume"
+  },
+  "面试": {
+    "hash": "1573c74e227f",
+    "en": "interview"
+  },
+  "休假": {
+    "hash": "62a8cf0af7cd",
+    "en": "vacation"
+  },
+  "名片": {
+    "hash": "758853cd8372",
+    "en": "business card"
+  },
+  "部门": {
+    "hash": "1e1459eeed6d",
+    "en": "department"
+  },
+  "项目": {
+    "hash": "31ecc0e65b4c",
+    "en": "project"
+  },
+  "报告": {
+    "hash": "a5cd4ea1820d",
+    "en": "report"
+  },
+  "合同": {
+    "hash": "f5dc10e438e3",
+    "en": "contract"
+  },
+  "晋升/升职": {
+    "hash": "109eef082a1f",
+    "en": "promotion"
+  },
+  "加班": {
+    "hash": "b64a21731238",
+    "en": "overtime work"
+  },
+  "高兴/喜悦": {
+    "hash": "862d12d48f53",
+    "en": "happiness/joy"
+  },
+  "悲伤/难过": {
+    "hash": "49a67c92155f",
+    "en": "sadness/grief"
+  },
+  "生气/发火": {
+    "hash": "10e87911a497",
+    "en": "anger"
+  },
+  "害怕/恐惧": {
+    "hash": "7a2109f1235b",
+    "en": "fear"
+  },
+  "惊讶/吓到": {
+    "hash": "7a022033b6dc",
+    "en": "surprised/startled"
+  },
+  "幸福": {
+    "hash": "8196d4f75295",
+    "en": "happiness"
+  },
+  "孤独/寂寞": {
+    "hash": "49cf4a778e54",
+    "en": "loneliness"
+  },
+  "想念/思念": {
+    "hash": "40f9513c0efc",
+    "en": "missing/longing"
+  },
+  "害羞/不好意思": {
+    "hash": "c341626da2a7",
+    "en": "shy/embarrassed"
+  },
+  "担心/担忧": {
+    "hash": "4735c9d48bbc",
+    "en": "worry/concern"
+  },
+  "兴奋/开心": {
+    "hash": "e90503ca6e30",
+    "en": "excitement/joy"
+  },
+  "失望": {
+    "hash": "d7bc83b243ea",
+    "en": "disappointment"
+  },
+  "感谢/感激": {
+    "hash": "0fabee7928d0",
+    "en": "gratitude/appreciation"
+  },
+  "舒服/安适": {
+    "hash": "f59b29359730",
+    "en": "comfortable/at ease"
+  },
+  "紧张": {
+    "hash": "2ca174f49736",
+    "en": "nervousness"
+  },
+  "自豪/骄傲": {
+    "hash": "0c2f1bb1ef35",
+    "en": "pride"
+  },
+  "郁闷/憋闷": {
+    "hash": "4610878a76da",
+    "en": "depressed/stifled"
+  },
+  "遗憾/不舍": {
+    "hash": "e90db2b2f2af",
+    "en": "regretful/reluctant"
+  },
+  "委屈/冤枉": {
+    "hash": "8d748d44ab03",
+    "en": "wronged/unjustly treated"
+  },
+  "尴尬/难为情": {
+    "hash": "4f46c7a1f767",
+    "en": "embarrassed/awkward"
+  },
+  "健康": {
+    "hash": "fbc026c9fb55",
+    "en": "health"
+  },
+  "医院": {
+    "hash": "071bd02a3624",
+    "en": "hospital"
+  },
+  "医生": {
+    "hash": "6d7c1afb0792",
+    "en": "doctor"
+  },
+  "护士": {
+    "hash": "f12b8cc82e18",
+    "en": "nurse"
+  },
+  "药": {
+    "hash": "60cb730b1ea9",
+    "en": "medicine"
+  },
+  "处方": {
+    "hash": "ab4ba60191e6",
+    "en": "prescription"
+  },
+  "感冒": {
+    "hash": "68448a045ccd",
+    "en": "cold"
+  },
+  "发烧/热度": {
+    "hash": "27433b69ae96",
+    "en": "fever/heat"
+  },
+  "头痛": {
+    "hash": "4a41d9917e45",
+    "en": "headache"
+  },
+  "腹痛": {
+    "hash": "5f99a6d3a2d3",
+    "en": "abdominal pain"
+  },
+  "牙科": {
+    "hash": "06d5027042f3",
+    "en": "dentistry"
+  },
+  "眼科": {
+    "hash": "ab5129ad1b01",
+    "en": "ophthalmology"
+  },
+  "手术": {
+    "hash": "0bbac04c6ad8",
+    "en": "surgery"
+  },
+  "注射/打针": {
+    "hash": "12741aab79cc",
+    "en": "injection"
+  },
+  "减肥/节食": {
+    "hash": "30234fb9cf41",
+    "en": "dieting"
+  },
+  "营养": {
+    "hash": "b9c641fca7b2",
+    "en": "nutrition"
+  },
+  "维生素": {
+    "hash": "5fb5391ad439",
+    "en": "vitamin"
+  },
+  "保险": {
+    "hash": "b73b757f8ac0",
+    "en": "insurance"
+  },
+  "诊疗/看诊": {
+    "hash": "5c983aa5b46b",
+    "en": "medical consultation"
+  },
+  "自然": {
+    "hash": "bcda6f79f3ec",
+    "en": "nature"
+  },
+  "山": {
+    "hash": "86fa9c82d812",
+    "en": "mountain"
+  },
+  "江/河": {
+    "hash": "7c5dd5323671",
+    "en": "river"
+  },
+  "大海": {
+    "hash": "8ed231e76fc5",
+    "en": "sea"
+  },
+  "湖": {
+    "hash": "3849c239c7dd",
+    "en": "lake"
+  },
+  "森林/树林": {
+    "hash": "958abd07a21e",
+    "en": "forest"
+  },
+  "天空": {
+    "hash": "1667312395ee",
+    "en": "sky"
+  },
+  "星星": {
+    "hash": "f26ad073e289",
+    "en": "star"
+  },
+  "月亮": {
+    "hash": "3b373249de71",
+    "en": "moon"
+  },
+  "太阳": {
+    "hash": "d32b766612e5",
+    "en": "sun"
+  },
+  "花": {
+    "hash": "22dbba75b9b0",
+    "en": "flower"
+  },
+  "树": {
+    "hash": "302f276a934f",
+    "en": "tree"
+  },
+  "草": {
+    "hash": "7d3cfe8c4ecb",
+    "en": "grass"
+  },
+  "空气": {
+    "hash": "8ba12c2c3d1f",
+    "en": "air"
+  },
+  "土/泥土": {
+    "hash": "ea5a23f0b2e7",
+    "en": "soil/earth"
+  },
+  "石头": {
+    "hash": "452d1576b0e0",
+    "en": "stone"
+  },
+  "岛": {
+    "hash": "1ec268bbef6d",
+    "en": "island"
+  },
+  "瀑布": {
+    "hash": "eb4631046115",
+    "en": "waterfall"
+  },
+  "田野/平原": {
+    "hash": "2375c712dc48",
+    "en": "field/plain"
+  },
+  "岩石": {
+    "hash": "00b9732f7c57",
+    "en": "rock"
+  },
+  "场所/地点": {
+    "hash": "df898bad91ca",
+    "en": "place/location"
+  },
+  "餐厅": {
+    "hash": "a67e3999d3c5",
+    "en": "restaurant"
+  },
+  "咖啡厅": {
+    "hash": "86a9519ee2d1",
+    "en": "cafe"
+  },
+  "电影院": {
+    "hash": "4a1636146d03",
+    "en": "cinema"
+  },
+  "超市/大卖场": {
+    "hash": "d295ec2bea38",
+    "en": "supermarket/hypermarket"
+  },
+  "便利店": {
+    "hash": "77256a3ded67",
+    "en": "convenience store"
+  },
+  "银行": {
+    "hash": "f14b4f28c44e",
+    "en": "bank"
+  },
+  "邮局": {
+    "hash": "ed44bc36609d",
+    "en": "post office"
+  },
+  "药房/药店": {
+    "hash": "3f71e1d98a1f",
+    "en": "pharmacy/drugstore"
+  },
+  "公园": {
+    "hash": "249bdde95549",
+    "en": "park"
+  },
+  "游泳池": {
+    "hash": "b4229190a8d3",
+    "en": "swimming pool"
+  },
+  "体育馆": {
+    "hash": "1800a879f682",
+    "en": "gym"
+  },
+  "教会/教堂": {
+    "hash": "e8801f2ec17b",
+    "en": "church"
+  },
+  "寺庙": {
+    "hash": "5ac2524fedb6",
+    "en": "temple"
+  },
+  "博物馆": {
+    "hash": "75454b6f4dc8",
+    "en": "museum"
+  },
+  "美术馆": {
+    "hash": "3e00fe4658f4",
+    "en": "art museum"
+  },
+  "书店": {
+    "hash": "18c0b9dca7eb",
+    "en": "bookstore"
+  },
+  "面包店": {
+    "hash": "94f1c5f002f4",
+    "en": "bakery"
+  },
+  "美发屋/美容室": {
+    "hash": "c10cc6770483",
+    "en": "hair salon / beauty salon"
+  }
+}

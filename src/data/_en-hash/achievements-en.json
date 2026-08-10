@@ -1,0 +1,314 @@
+{
+  "启程": {
+    "hash": "aedf0e67e0f0",
+    "en": "Set Off"
+  },
+  "坚持": {
+    "hash": "5207208b135b",
+    "en": "Keep Going"
+  },
+  "积累": {
+    "hash": "c6f31e64f2ad",
+    "en": "Build Up"
+  },
+  "探索": {
+    "hash": "fc6c4c40d219",
+    "en": "Explore"
+  },
+  "精通": {
+    "hash": "f25dcd22fb1a",
+    "en": "Mastery"
+  },
+  "落地动物城": {
+    "hash": "45a9d84ccaa2",
+    "en": "Animal Town Arrival"
+  },
+  "和兔莉学会的第一个词": {
+    "hash": "bf8e221cd2e8",
+    "en": "First Word with Luly"
+  },
+  "火鹤老师的毕业证": {
+    "hash": "48dd34827a1e",
+    "en": "Flamingo Teacher's Diploma"
+  },
+  "火鹤老师为你骄傲": {
+    "hash": "8e2672113748",
+    "en": "Flamingo Teacher Is Proud"
+  },
+  "去教室学完 40 音 →": {
+    "hash": "1da593fa0f26",
+    "en": "Finish all 40 sounds in class →"
+  },
+  "兔莉日记第一页": {
+    "hash": "5252f7a28341",
+    "en": "Luly's Diary Page One"
+  },
+  "写下和兔莉的第一天": {
+    "hash": "ca253cb9b0fe",
+    "en": "Write Your First Day with Luly"
+  },
+  "读完日记第一天 →": {
+    "hash": "295e5a4e32a2",
+    "en": "Read the first day's diary entry →"
+  },
+  "鼓起勇气开口": {
+    "hash": "aa6af8c0d45e",
+    "en": "Find Your Voice"
+  },
+  "勇敢和兔莉说了韩语": {
+    "hash": "63cebb3276d4",
+    "en": "Brave Talk with Ruri"
+  },
+  "去自习室开口说一句 →": {
+    "hash": "fa95957226d3",
+    "en": "Say one sentence in the study room →"
+  },
+  "猫头鹰的第一课": {
+    "hash": "704cf92fc4ef",
+    "en": "Owl's First Lesson"
+  },
+  "听着写下第一个词": {
+    "hash": "dde6a5d9fe60",
+    "en": "First Word Written"
+  },
+  "去自习室试试听写 →": {
+    "hash": "c719f1d17ea2",
+    "en": "Try dictation in the study room →"
+  },
+  "松鼠铺的第一颗松果": {
+    "hash": "584def3bfaaf",
+    "en": "Squirrel's First Acorn"
+  },
+  "收藏了第一个生词": {
+    "hash": "c3455c1548a3",
+    "en": "First Word Saved"
+  },
+  "收藏一个想背的词 →": {
+    "hash": "0d268bac12f3",
+    "en": "Save a word you want to learn →"
+  },
+  "三日之约": {
+    "hash": "a94cc9053074",
+    "en": "Three-Day Promise"
+  },
+  "好的开始": {
+    "hash": "d4021260f63d",
+    "en": "A Good Start"
+  },
+  "一周同行": {
+    "hash": "bc6df92c076b",
+    "en": "One Week Together"
+  },
+  "一周的陪伴刚开始": {
+    "hash": "984d635806ac",
+    "en": "A week of companionship begins"
+  },
+  "满月之友": {
+    "hash": "5895aec6c3c7",
+    "en": "Month-Long Friend"
+  },
+  "一个月的成长看得见": {
+    "hash": "d9468a25ac38",
+    "en": "A month of visible growth"
+  },
+  "百日勋章": {
+    "hash": "d92c8b98d86d",
+    "en": "100-Day Medal"
+  },
+  "百天的坚持是奇迹": {
+    "hash": "232ed4337b96",
+    "en": "A hundred days of persistence is a miracle"
+  },
+  "完美的一周": {
+    "hash": "5b5afdb9dbcd",
+    "en": "Perfect Week"
+  },
+  "连续七天都完成了目标": {
+    "hash": "2004a8105211",
+    "en": "Hit your goals seven days straight"
+  },
+  "囤了 10 颗松果": {
+    "hash": "a7a4c8b5c908",
+    "en": "10 Acorns Saved"
+  },
+  "词汇一点点攒起来": {
+    "hash": "053ec83b7a9e",
+    "en": "Words pile up little by little"
+  },
+  "囤了 50 颗松果": {
+    "hash": "64dbbc7b6ee6",
+    "en": "50 Acorns Saved"
+  },
+  "单词铺越来越满": {
+    "hash": "c8bba2161d15",
+    "en": "Your word board is filling up"
+  },
+  "囤了 100 颗松果": {
+    "hash": "73e367d2c126",
+    "en": "100 Acorns Stored"
+  },
+  "百词傍身": {
+    "hash": "aad841ef6884",
+    "en": "A Hundred Words Strong"
+  },
+  "囤了 500 颗松果": {
+    "hash": "7224ace3e23c",
+    "en": "500 Acorns Stored"
+  },
+  "脑海里都是韩语了": {
+    "hash": "37488cd757ec",
+    "en": "Korean on the Brain"
+  },
+  "复习百词": {
+    "hash": "dfde0a32a11b",
+    "en": "Review 100 Words"
+  },
+  "每次复习都在变强": {
+    "hash": "53b766836a80",
+    "en": "Stronger with Every Review"
+  },
+  "复习千词": {
+    "hash": "00e601888f8b",
+    "en": "Review 1,000 Words"
+  },
+  "千锤百炼": {
+    "hash": "554ff65f4467",
+    "en": "Forged by Repetition"
+  },
+  "默写达人": {
+    "hash": "58e0d3653114",
+    "en": "Dictation Master"
+  },
+  "猫头鹰都佩服你": {
+    "hash": "6991973b8549",
+    "en": "Even Owls Are Impressed"
+  },
+  "图书馆读书证": {
+    "hash": "f790ca7bf0d4",
+    "en": "Library Card"
+  },
+  "读完第一篇真正的韩语文章": {
+    "hash": "07b371800ebd",
+    "en": "Read Your First Real Korean Article"
+  },
+  "去图书馆读一篇 →": {
+    "hash": "6ff697885d93",
+    "en": "Head to the library and read one →"
+  },
+  "绘本馆第一个故事": {
+    "hash": "a0240b1b1e9a",
+    "en": "First Story in the Picture Book Room"
+  },
+  "和兔莉读完第一个绘本": {
+    "hash": "9c7de47e6ad1",
+    "en": "Finished the First Picture Book with Tuli"
+  },
+  "去绘本馆读一本 →": {
+    "hash": "01b10fb454b0",
+    "en": "Go to the picture book room and read one →"
+  },
+  "拧开电台旋钮": {
+    "hash": "0b9ab0d412f3",
+    "en": "Turn the Radio Dial"
+  },
+  "听了动物城的第一档节目": {
+    "hash": "d6a77e093093",
+    "en": "Listened to the First Show in Animal City"
+  },
+  "去电台听一期 →": {
+    "hash": "cb25553ab55b",
+    "en": "Go to the radio and listen to one →"
+  },
+  "广场初发声": {
+    "hash": "4b4acb6de735",
+    "en": "First Post in the Square"
+  },
+  "在动物城广场发了第一条": {
+    "hash": "9ddd57a22dfd",
+    "en": "Posted the First Message in Animal City Square"
+  },
+  "去广场发条帖子 →": {
+    "hash": "752a9a0f80c1",
+    "en": "Go to the square and post one →"
+  },
+  "考试教室初战": {
+    "hash": "e545b8ac9348",
+    "en": "First Exam Room Challenge"
+  },
+  "第一次挑战 TOPIK": {
+    "hash": "992dba34d298",
+    "en": "Took the First TOPIK Test"
+  },
+  "去考试教室练一次 →": {
+    "hash": "705370e3e7be",
+    "en": "Try the exam room once →"
+  },
+  "满分传说": {
+    "hash": "5aadf44a6d99",
+    "en": "Perfect Score Legend"
+  },
+  "满分是对努力最好的回报": {
+    "hash": "64f1887b2b69",
+    "en": "A perfect score is the best reward for hard work"
+  },
+  "在 TOPIK 里拿一次满分 →": {
+    "hash": "c0284515425b",
+    "en": "Score a perfect on TOPIK →"
+  },
+  "逛遍动物城": {
+    "hash": "fc5967cd05bb",
+    "en": "Animal City Explorer"
+  },
+  "走遍了动物城的每个角落": {
+    "hash": "14ca0cfe8b02",
+    "en": "Visited every corner of Animal City"
+  },
+  "去逛逛还没到过的地方 →": {
+    "hash": "d208992a8d35",
+    "en": "Explore places you haven't been yet →"
+  },
+  "语法教室毕业": {
+    "hash": "4c935131c4b5",
+    "en": "Grammar Class Graduate"
+  },
+  "掌握了 30 个语法点": {
+    "hash": "c955c8288f7e",
+    "en": "Mastered 30 grammar points"
+  },
+  "见习留学生": {
+    "hash": "53a2686034fd",
+    "en": "Trainee Exchange Student"
+  },
+  "在动物城站稳了脚跟": {
+    "hash": "bab6e3f58342",
+    "en": "Got a foothold in Animal City"
+  },
+  "动物城常驻": {
+    "hash": "20a319324b46",
+    "en": "Animal City Regular"
+  },
+  "大家都认识你了": {
+    "hash": "60e448b677dd",
+    "en": "Everyone Knows You"
+  },
+  "兽尔名誉市民": {
+    "hash": "e8b785a40bf6",
+    "en": "Honorary Citizen of Zootopia"
+  },
+  "动物城因你而骄傲": {
+    "hash": "6821ec051265",
+    "en": "Zootopia Proud of You"
+  },
+  "语言学校优等生": {
+    "hash": "07f0f7fff35b",
+    "en": "Language School Top Student"
+  },
+  "满级又坚持满月，兔莉的骄傲": {
+    "hash": "b67cdd80117f",
+    "en": "Max Level, Month Strong, Tori's Pride"
+  },
+  "满级 + 连续 30 天 →": {
+    "hash": "addda1c22ace",
+    "en": "Max level + 30 days straight →"
+  }
+}

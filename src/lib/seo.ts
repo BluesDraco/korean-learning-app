@@ -32,7 +32,7 @@ export function readingArticleMetadata(a: {
       description,
       url,
       locale: 'zh_CN',
-      siteName: '兔莉的韩语日记',
+      siteName: '兔莉的韩语日记', siteNameEn: 'Tori\'s Korean Diary',
       images: [{ url: image, width: 1200, height: 630, alt: a.title }],
     },
     twitter: {
@@ -75,7 +75,7 @@ export function readingArticleJsonLd(a: {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: '首页', item: BASE },
-          { '@type': 'ListItem', position: 2, name: '韩语分级阅读', item: `${BASE}/reading` },
+          { '@type': 'ListItem', position: 2, name: '韩语分级阅读', nameEn: 'Graded Korean Reading', item: `${BASE}/reading` },
           { '@type': 'ListItem', position: 3, name: a.title, item: url },
         ],
       },
@@ -103,7 +103,7 @@ export function diaryDayMetadata(d: {
       description,
       url,
       locale: 'zh_CN',
-      siteName: '兔莉的韩语日记',
+      siteName: '兔莉的韩语日记', siteNameEn: 'Tori\'s Korean Diary',
       images: [{ url: image, width: 1200, height: 630, alt: `Day ${d.day} · ${d.title}` }],
     },
     twitter: {
@@ -120,9 +120,9 @@ function stripHtml(s: string): string {
 }
 
 const LEVEL_LABEL_CN: Record<'beginner' | 'intermediate' | 'advanced', string> = {
-  beginner: '初级',
-  intermediate: '中级',
-  advanced: '高级',
+  beginner: '初级', beginnerEn: 'Beginner',
+  intermediate: '中级', intermediateEn: 'intermediate level',
+  advanced: '高级', advancedEn: 'Advanced',
 };
 
 export function grammarLibraryMetadata(gp: {
@@ -150,7 +150,7 @@ export function grammarLibraryMetadata(gp: {
       description,
       url,
       locale: 'zh_CN',
-      siteName: '兔莉的韩语日记',
+      siteName: '兔莉的韩语日记', siteNameEn: 'Tori\'s Korean Diary',
       images: [{ url: image, width: 1200, height: 630, alt: `${gp.pattern} · ${gp.title}` }],
     },
     twitter: {
@@ -196,8 +196,8 @@ export function grammarLibraryJsonLd(gp: {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: '首页', item: BASE },
-          { '@type': 'ListItem', position: 2, name: '韩语语法', item: `${BASE}/grammar` },
-          { '@type': 'ListItem', position: 3, name: '语法库', item: `${BASE}/grammar?tab=library` },
+          { '@type': 'ListItem', position: 2, name: '韩语语法', nameEn: 'Korean Grammar', item: `${BASE}/grammar` },
+          { '@type': 'ListItem', position: 3, name: '语法库', nameEn: 'Grammar Library', item: `${BASE}/grammar?tab=library` },
           { '@type': 'ListItem', position: 4, name: `${gp.pattern} · ${gp.title}`, item: url },
         ],
       },
@@ -233,7 +233,7 @@ export function diaryDayJsonLd(d: {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: '首页', item: BASE },
-          { '@type': 'ListItem', position: 2, name: '韩语日记', item: `${BASE}/diary` },
+          { '@type': 'ListItem', position: 2, name: '韩语日记', nameEn: 'Korean diary', item: `${BASE}/diary` },
           { '@type': 'ListItem', position: 3, name: `Day ${d.day}`, item: url },
         ],
       },
@@ -281,7 +281,7 @@ export function vocabularyThemeMetadata(theme: {
       description,
       url,
       locale: 'zh_CN',
-      siteName: '兔莉的韩语日记',
+      siteName: '兔莉的韩语日记', siteNameEn: 'Tori\'s Korean Diary',
       images: [{ url: image, width: 1200, height: 630, alt: title }],
     },
     twitter: {
@@ -322,8 +322,8 @@ export function vocabularyThemeJsonLd(theme: {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: '首页', item: BASE },
-          { '@type': 'ListItem', position: 2, name: '韩语词汇', item: `${BASE}/vocabulary` },
-          { '@type': 'ListItem', position: 3, name: '主题词包', item: `${BASE}/vocabulary/library?tab=themes` },
+          { '@type': 'ListItem', position: 2, name: '韩语词汇', nameEn: 'Korean Vocabulary', item: `${BASE}/vocabulary` },
+          { '@type': 'ListItem', position: 3, name: '主题词包', nameEn: 'Theme Word Packs', item: `${BASE}/vocabulary/library?tab=themes` },
           { '@type': 'ListItem', position: 4, name: theme.name, item: url },
         ],
       },
@@ -350,7 +350,7 @@ export function vocabularyLevelMetadata(l: {
       description,
       url,
       locale: 'zh_CN',
-      siteName: '兔莉的韩语日记',
+      siteName: '兔莉的韩语日记', siteNameEn: 'Tori\'s Korean Diary',
       images: [{ url: image, width: 1200, height: 630, alt: title }],
     },
     twitter: {
@@ -387,8 +387,8 @@ export function vocabularyLevelJsonLd(l: {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: '首页', item: BASE },
-          { '@type': 'ListItem', position: 2, name: '韩语词汇', item: `${BASE}/vocabulary` },
-          { '@type': 'ListItem', position: 3, name: 'TOPIK 词表', item: `${BASE}/vocabulary/library?tab=levels` },
+          { '@type': 'ListItem', position: 2, name: '韩语词汇', nameEn: 'Korean Vocabulary', item: `${BASE}/vocabulary` },
+          { '@type': 'ListItem', position: 3, name: 'TOPIK 词表', nameEn: 'TOPIK Word List', item: `${BASE}/vocabulary/library?tab=levels` },
           { '@type': 'ListItem', position: 4, name: levelLabel, item: url },
         ],
       },
@@ -519,7 +519,7 @@ export function practiceHubJsonLd(h: {
 
 // ═════════════ TOPIK 题型 SEO ═════════════
 
-const TOPIK_SECTION_LABEL = { listening: '听力', reading: '阅读' } as const;
+const TOPIK_SECTION_LABEL = { listening: '听力', listeningEn: 'Listening', reading: '阅读', readingEn: 'reading' } as const;
 const TOPIK_LEVEL_BAND: Record<'beginner' | 'intermediate' | 'advanced', 'I' | 'II'> = {
   beginner: 'I',
   intermediate: 'II',
@@ -552,7 +552,7 @@ export function topikTypeMetadata(t: {
       description,
       url,
       locale: 'zh_CN',
-      siteName: '兔莉的韩语日记',
+      siteName: '兔莉的韩语日记', siteNameEn: 'Tori\'s Korean Diary',
       images: [{ url: image, width: 1200, height: 630, alt: `${t.labelZh} · TOPIK ${band} ${sec}` }],
     },
     twitter: {
@@ -591,7 +591,7 @@ export function topikTypeJsonLd(t: {
         learningResourceType: 'Reference',
         educationalLevel: `TOPIK ${band}｜${sec}`,
         teaches: t.labelZh,
-        about: 'TOPIK 韩语能力考试',
+        about: 'TOPIK 韩语能力考试', aboutEn: 'TOPIK Korean Proficiency Test',
         isPartOf: { '@id': `${BASE}/#website` },
         publisher: { '@id': `${BASE}/#org` },
       },
@@ -599,7 +599,7 @@ export function topikTypeJsonLd(t: {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: '首页', item: BASE },
-          { '@type': 'ListItem', position: 2, name: 'TOPIK 韩语考试', item: `${BASE}/topik` },
+          { '@type': 'ListItem', position: 2, name: 'TOPIK 韩语考试', nameEn: 'TOPIK Korean Test', item: `${BASE}/topik` },
           { '@type': 'ListItem', position: 3, name: `TOPIK ${band} ${sec}`, item: `${BASE}/topik` },
           { '@type': 'ListItem', position: 4, name: t.labelZh, item: url },
         ],
@@ -658,6 +658,7 @@ export function hreflangFor(path: string, bilingual: boolean, lang?: UiLang): No
 // 英文用真实搜索词，非中文直译。key = 裸路径。
 
 interface PageCopy {
+  [k: string]: unknown;
   title: { zh: string; en: string };
   description: { zh: string; en: string };
 }
@@ -666,11 +667,11 @@ export const SITE_NAME = { zh: '兔莉的韩语日记', en: "Tori's Korean Diary
 
 export const HOME_COPY: PageCopy = {
   title: {
-    zh: '兔莉的韩语日记 · 在线学韩语｜40音·语法·TOPIK·日记',
+    zh: '兔莉的韩语日记 · 在线学韩语｜40音·语法·TOPIK·日记', zhEn: 'Tori\'s Korean Diary · Learn Korean Online | 40 Sounds · Grammar · TOPIK · Diary',
     en: "Learn Korean Online Free — Hangul, Grammar, TOPIK Prep | Tori's Korean Diary",
   },
   description: {
-    zh: '系统学韩语：40音发音、语法课程、TOPIK 备考、每日韩语日记跟读、韩语阅读、听力训练。零基础到进阶一站式学习。',
+    zh: '系统学韩语：40音发音、语法课程、TOPIK 备考、每日韩语日记跟读、韩语阅读、听力训练。零基础到进阶一站式学习。', zhEn: 'Learn Korean systematically: 40-sound pronunciation, grammar courses, TOPIK prep, daily Korean diary shadowing, reading, and listening practice. One-stop learning from beginner to advanced.',
     en: 'Learn Korean from zero: Hangul alphabet, grammar lessons, TOPIK practice tests, daily reading & listening, shadowing diaries. A complete free Korean learning app.',
   },
 };
@@ -685,89 +686,90 @@ export const HOME_KEYWORDS_EN = [
 // 各 hub 框架页的双语标题/描述。key = 裸路径。未列入的页面不挂 en。
 export const HUB_COPY: Record<string, PageCopy> = {
   '/phonetics': {
-    title: { zh: '韩语40音发音表', en: 'Korean Alphabet (Hangul) — Learn All 40 Letters with Audio' },
+    title: { zh: '韩语40音发音表', zhEn: 'Korean 40-Sound Pronunciation Chart', en: 'Korean Alphabet (Hangul) — Learn All 40 Letters with Audio' },
     description: {
-      zh: '韩语40音发音表，真人录音，元音辅音收音一次学会。',
+      zh: '韩语40音发音表，真人录音，元音辅音收音一次学会。', zhEn: 'Korean 40-sound pronunciation chart with real audio. Master vowels, consonants, and final consonants all at once.',
       en: 'Master the Korean alphabet (Hangul): all 40 vowels and consonants with native audio, stroke order, and pronunciation practice.',
     },
   },
   '/grammar': {
-    title: { zh: '韩语语法课程', en: 'Korean Grammar Lessons — From Beginner to Advanced' },
+    title: { zh: '韩语语法课程', zhEn: 'Korean Grammar Course', en: 'Korean Grammar Lessons — From Beginner to Advanced' },
     description: {
-      zh: '系统韩语语法课程，从入门到高级，例句+练习+易错点。',
+      zh: '系统韩语语法课程，从入门到高级，例句+练习+易错点。', zhEn: 'Systematic Korean grammar course from beginner to advanced, with example sentences, exercises, and common mistakes.',
       en: 'Learn Korean grammar step by step: 200+ grammar points with examples, exercises, and common mistakes, from beginner to TOPIK advanced.',
     },
   },
   '/topik': {
-    title: { zh: 'TOPIK 韩语能力考试备考', en: 'TOPIK Practice Tests — Free Korean Proficiency Exam Prep' },
+    title: { zh: 'TOPIK 韩语能力考试备考', zhEn: 'TOPIK Exam Prep', en: 'TOPIK Practice Tests — Free Korean Proficiency Exam Prep' },
     description: {
-      zh: 'TOPIK I / II 听力阅读题型讲解与模拟练习，附解题技巧。',
+      zh: 'TOPIK I / II 听力阅读题型讲解与模拟练习，附解题技巧。', zhEn: 'TOPIK I / II listening and reading question walkthroughs with mock practice and test-taking tips.',
       en: 'Free TOPIK practice tests for TOPIK I & II: listening and reading questions with explanations and test-taking strategies.',
     },
   },
   '/reading': {
-    title: { zh: '韩语分级阅读', en: 'Korean Reading Practice — Graded Articles by Level' },
+    title: { zh: '韩语分级阅读', zhEn: 'Graded Korean Reading', en: 'Korean Reading Practice — Graded Articles by Level' },
     description: {
-      zh: '按等级划分的韩语阅读文章，点词查词、跟读、测验一体。',
+      zh: '按等级划分的韩语阅读文章，点词查词、跟读、测验一体。', zhEn: 'Leveled Korean reading articles with tap-to-look-up words, shadowing, and quizzes all in one.',
       en: 'Graded Korean reading practice: leveled articles with tap-to-translate, shadowing audio, and comprehension quizzes.',
     },
   },
   '/vocabulary': {
-    title: { zh: '韩语单词主题词包', en: 'Korean Vocabulary — Themed Word Lists & TOPIK Words' },
+    title: { zh: '韩语单词主题词包', zhEn: 'Korean Vocabulary Theme Packs', en: 'Korean Vocabulary — Themed Word Lists & TOPIK Words' },
     description: {
-      zh: '主题词包 + TOPIK 分级词表，含发音、例句、场景对话。',
+      zh: '主题词包 + TOPIK 分级词表，含发音、例句、场景对话。', zhEn: 'Theme packs + TOPIK graded word lists, with pronunciation, example sentences, and scenario dialogues.',
       en: 'Learn Korean vocabulary by theme and TOPIK level: pronunciation, example sentences, and real-life dialogues.',
     },
   },
   '/diary': {
-    title: { zh: '兔莉的韩语日记 · 每日跟读', en: "Tori's Korean Diary — Daily Story-Based Korean Practice" },
+    title: { zh: '兔莉的韩语日记 · 每日跟读', zhEn: 'Tori\'s Korean Diary · Daily Read-Along', en: "Tori's Korean Diary — Daily Story-Based Korean Practice" },
     description: {
-      zh: '跟着兔莉的留学故事，每天一篇场景化韩语日记跟读。',
+      zh: '跟着兔莉的留学故事，每天一篇场景化韩语日记跟读。', zhEn: 'Follow Tori\'s study-abroad story with a daily scenario-based Korean diary read-along.',
       en: 'Learn Korean through a daily story: follow Tori\'s study-abroad diary with scene-based shadowing, grammar, and vocabulary.',
     },
   },
   '/listening': {
-    title: { zh: '韩语听力训练', en: 'Korean Listening Practice — Train Your Ear' },
+    title: { zh: '韩语听力训练', zhEn: 'Korean Listening Practice', en: 'Korean Listening Practice — Train Your Ear' },
     description: {
-      zh: '分级韩语听力训练，边听边学。',
+      zh: '分级韩语听力训练，边听边学。', zhEn: 'Graded Korean listening practice, learn while you listen.',
       en: 'Improve your Korean listening with graded audio exercises and interactive transcripts.',
     },
   },
   '/speaking': {
-    title: { zh: '韩语口语练习', en: 'Korean Speaking Practice — Shadowing & AI Conversation' },
+    title: { zh: '韩语口语练习', zhEn: 'Korean Speaking Practice', en: 'Korean Speaking Practice — Shadowing & AI Conversation' },
     description: {
-      zh: '韩语口语跟读与 AI 对话练习。',
+      zh: '韩语口语跟读与 AI 对话练习。', zhEn: 'Korean speaking read-along and AI conversation practice.',
       en: 'Practice speaking Korean with shadowing exercises and AI-powered conversation partners.',
     },
   },
   '/tools': {
-    title: { zh: '免费韩语工具箱', en: 'Free Korean Tools — Romanizer, Keyboard, Name Generator' },
+    title: { zh: '免费韩语工具箱', zhEn: 'Free Korean Toolbox', en: 'Free Korean Tools — Romanizer, Keyboard, Name Generator' },
     description: {
-      zh: '韩语罗马音转换、韩文键盘、韩语名字生成等免费工具。',
+      zh: '韩语罗马音转换、韩文键盘、韩语名字生成等免费工具。', zhEn: 'Free tools like Korean romanization converter, Hangul keyboard, and Korean name generator.',
       en: 'Free Korean tools: Romanization converter, online Korean keyboard, and Korean name generator.',
     },
   },
   '/typing': {
-    title: { zh: '韩语打字练习', en: 'Korean Typing Practice — Master Hangul Keyboard' },
+    title: { zh: '韩语打字练习', zhEn: 'Korean Typing Practice', en: 'Korean Typing Practice — Master Hangul Keyboard' },
     description: {
-      zh: '在线韩语打字练习，熟悉韩文键盘布局，提升打字速度。',
+      zh: '在线韩语打字练习，熟悉韩文键盘布局，提升打字速度。', zhEn: 'Online Korean typing practice to get familiar with the Hangul keyboard layout and improve typing speed.',
       en: 'Practice Korean typing online: learn the Hangul keyboard layout and improve your typing speed.',
     },
   },
   '/dictation': {
-    title: { zh: '韩语听写练习', en: 'Korean Dictation Practice — Train Your Ear & Spelling' },
+    title: { zh: '韩语听写练习', zhEn: 'Korean Dictation Practice', en: 'Korean Dictation Practice — Train Your Ear & Spelling' },
     description: {
-      zh: '韩语听写训练，边听边写，提升听力和拼写能力。',
+      zh: '韩语听写训练，边听边写，提升听力和拼写能力。', zhEn: 'Korean dictation training, listen and write to improve listening and spelling skills.',
       en: 'Korean dictation exercises: listen and type to improve your listening and Hangul spelling.',
     },
   },
   '/writing': {
-    title: { zh: '韩语写作练习', en: 'Korean Writing Practice — Compose with Confidence' },
+    title: { zh: '韩语写作练习', zhEn: 'Korean Writing Practice', en: 'Korean Writing Practice — Compose with Confidence' },
     description: {
-      zh: '在线韩语写作练习，AI 批改，提升书面表达。',
+      zh: '在线韩语写作练习，AI 批改，提升书面表达。', zhEn: 'Online Korean writing practice with AI feedback to improve written expression.',
       en: 'Practice Korean writing online with AI feedback to improve your written expression.',
     },
   },
   '/review': {
-    title: { zh: '韩语复习中心', en: 'Korean Review Center' },  },
+    title: { zh: '韩语复习中心', zhEn: 'Korean Review Center', en: 'Korean Review Center — Spaced Repetition Practice System' },
+  },
 };
