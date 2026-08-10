@@ -7,10 +7,10 @@ export const grammarCardsP26: GrammarCard[] = [
     partNumber: 26,
     lessonNumber: 1,
     title: '-더라도',
-    whatItDoes: '即使/纵使',
-    whatItDoesBody: '「-더라도」表示强让步，"就算……也……""即使……也……"。用于假设的情况，强调不管前提如何，后面的动作/状态不变。语气比 -아/어도 更强、更书面。',
-    structureNote: '动词/形容词词干 + -더라도 · 名词 + -(이)라 하더라도',
-    rulesNote: '直接连接词干，不看받침；过去 -았/었더라도；名词用 -(이)라 하더라도',
+    whatItDoes: '即使/纵使', english: 'Even if / Even though',
+    whatItDoesBody: '「-더라도」表示强让步，"就算……也……""即使……也……"。用于假设的情况，强调不管前提如何，后面的动作/状态不变。语气比 -아/어도 更强、更书面。', english: '「-더라도」 expresses strong concession, meaning "even if..." or "even though...". It is used for hypothetical situations, emphasizing that regardless of the premise, the following action/state remains unchanged. The tone is stronger and more formal than -아/어도.',
+    structureNote: '动词/形容词词干 + -더라도 · 名词 + -(이)라 하더라도', english: 'Verb/Adjective stem + -더라도 · Noun + -(이)라 하더라도',
+    rulesNote: '直接连接词干，不看收音；过去 -았/었더라도；名词用 -(이)라 하더라도', english: 'Attach directly to the stem regardless of final consonant; past tense -았/었더라도; for nouns use -(이)라 하더라도',
     structures: [
       {
         ko: '비가 오더라도 저는 갈 거예요.',
@@ -42,7 +42,7 @@ export const grammarCardsP26: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '动词/形容词：词干 + -더라도，不看받침', examples: '가다 → 가더라도 / 먹다 → 먹더라도 / 좋다 → 좋더라도' },
+      { type: 'rule', text: '动词/形容词：词干 + -더라도，不看收音', examples: '가다 → 가더라도 / 먹다 → 먹더라도 / 좋다 → 좋더라도' },
       { type: 'rule', text: '过去时：-았/었더라도', examples: '갔더라도, 먹었더라도, 좋았더라도' },
       { type: 'rule', text: '名词：-(이)라 하더라도 或 -(이)더라도', examples: '학생이라 하더라도, 친구라 하더라도' },
       { type: 'usage', text: '常与 아무리、비록 搭配，加强让步语气', examples: '아무리 바쁘더라도, 비록 어렵더라도' },
@@ -98,7 +98,7 @@ export const grammarCardsP26: GrammarCard[] = [
       { wrong: '아무리 힘들었더라도 참았어요', correct: '아무리 힘들더라도 참을 거예요', note: '假设让步搭配未来/意志，不是过去描述' },
     ],
     quickTable: {
-      title: '-더라도 形态一览',
+      title: '-더라도 形态一览', english: '-더라도 Form Overview',
       headers: ['词类', '规则', '例子'],
       rows: [
         ['动词', '词干 + -더라도', '가더라도, 먹더라도'],
@@ -109,7 +109,7 @@ export const grammarCardsP26: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '-더라도 变形练习',
+      title: '-더라도 变形练习', english: '-더라도 Conjugation Practice',
       body: '选择正确的 -더라도 形式',
       questions: [
         {
@@ -189,10 +189,10 @@ export const grammarCardsP26: GrammarCard[] = [
     partNumber: 26,
     lessonNumber: 2,
     title: '-을/ㄹ지라도',
-    whatItDoes: '即使/纵然',
-    whatItDoesBody: '「-을/ㄹ지라도」是最书面、最强的让步表达，"即使……也……""纵然……也……"。多用于文学、演讲、正式书面语。语感比 -더라도 更古典、更正式。',
-    structureNote: '动词/形容词词干：有받침 + -을지라도 / 无받침 + -ㄹ지라도 · 名词 -(이)ㄹ지라도',
-    rulesNote: '受받침影响：有받침 -을지라도，无받침 -ㄹ지라도；过去 -았/었을지라도；名词 -(이)ㄹ지라도',
+    whatItDoes: '即使/纵然', english: 'Even if / Even though',
+    whatItDoesBody: '「-을/ㄹ지라도」是最书面、最强的让步表达，"即使……也……""纵然……也……"。多用于文学、演讲、正式书面语。语感比 -더라도 更古典、更正式。', english: '「-을/ㄹ지라도」 is the most formal and strongest concessive expression, meaning "even if..." or "even though...". It is commonly used in literature, speeches, and formal writing. Its nuance is more classical and formal than -더라도.',
+    structureNote: '动词/形容词词干：有收音 + -을지라도 / 无收音 + -ㄹ지라도 · 名词 -(이)ㄹ지라도', english: 'Verb/Adjective stem: with final consonant + -을지라도 / without final consonant + -ㄹ지라도 · Noun + -(이)ㄹ지라도',
+    rulesNote: '受收音影响：有收音 -을지라도，无收音 -ㄹ지라도；过去 -았/었을지라도；名词 -(이)ㄹ지라도', english: 'Affected by final consonant: with final consonant -을지라도, without final consonant -ㄹ지라도; past tense -았/었을지라도; for nouns use -(이)ㄹ지라도',
     structures: [
       {
         ko: '비록 실패할지라도 도전하겠습니다.',
@@ -224,10 +224,10 @@ export const grammarCardsP26: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '有받침 → -을지라도', examples: '먹다 → 먹을지라도 / 있다 → 있을지라도 / 좋다 → 좋을지라도' },
-      { type: 'rule', text: '无받침 → -ㄹ지라도', examples: '가다 → 갈지라도 / 하다 → 할지라도 / 크다 → 클지라도' },
+      { type: 'rule', text: '有收音 → -을지라도', examples: '먹다 → 먹을지라도 / 있다 → 있을지라도 / 좋다 → 좋을지라도' },
+      { type: 'rule', text: '无收音 → -ㄹ지라도', examples: '가다 → 갈지라도 / 하다 → 할지라도 / 크다 → 클지라도' },
       { type: 'rule', text: '过去时：-았/었을지라도', examples: '갔을지라도, 먹었을지라도' },
-      { type: 'rule', text: '名词：有받침 -이ㄹ지라도 / 无받침 -ㄹ지라도', examples: '학생일지라도, 친구일지라도' },
+      { type: 'rule', text: '名词：有收音 -이ㄹ지라도 / 无收音 -ㄹ지라도', examples: '학생일지라도, 친구일지라도' },
       { type: 'usage', text: '常与 비록、설령、설사 搭配', examples: '비록 어릴지라도 / 설령 실패할지라도' },
       { type: 'usage', text: '语气最书面正式，多见于演讲/文学/新闻/宗教文本', examples: '비록 죽을지라도 진리를 지키겠다.（哪怕死也要坚守真理。）' },
       { type: 'compare', text: '语气强度：-아/어도 < -더라도 < -을/ㄹ지라도', examples: '가도 → 가더라도 → 갈지라도' },
@@ -272,49 +272,49 @@ export const grammarCardsP26: GrammarCard[] = [
       { icon: '🌱', context: '希望', ko: '희망이 작을지라도 꺼지지 않아요.', zh: '纵然希望微小也不熄灭。' },
     ],
     mistakes: [
-      { wrong: '가을지라도', correct: '갈지라도', note: '가다 无받침，用 -ㄹ지라도' },
-      { wrong: '먹ㄹ지라도', correct: '먹을지라도', note: '먹다 有받침，用 -을지라도' },
+      { wrong: '가을지라도', correct: '갈지라도', note: '가다 无收音，用 -ㄹ지라도' },
+      { wrong: '먹ㄹ지라도', correct: '먹을지라도', note: '먹다 有收音，用 -을지라도' },
       { wrong: '학생지라도', correct: '학생일지라도', note: '名词需加系词 이 后再变形' },
     ],
     quickTable: {
-      title: '-을/ㄹ지라도 形态一览',
+      title: '-을/ㄹ지라도 形态一览', english: '-을/ㄹ지라도 Form Overview',
       headers: ['词类', '规则', '例子'],
       rows: [
-        ['动词/形容词有받침', '-을지라도', '먹을지라도, 좋을지라도'],
-        ['动词/形容词无받침', '-ㄹ지라도', '갈지라도, 클지라도'],
+        ['动词/形容词有收音', '-을지라도', '먹을지라도, 좋을지라도'],
+        ['动词/形容词无收音', '-ㄹ지라도', '갈지라도, 클지라도'],
         ['过去', '-았/었을지라도', '갔을지라도'],
-        ['名词有받침', '-이ㄹ지라도', '학생일지라도'],
-        ['名词无받침', '-ㄹ지라도', '친구일지라도'],
+        ['名词有收音', '-이ㄹ지라도', '학생일지라도'],
+        ['名词无收音', '-ㄹ지라도', '친구일지라도'],
       ],
     },
     specialQuiz: {
       type: 'morph',
-      title: '-을/ㄹ지라도 变形',
-      body: '根据받침和词类选择正确形式',
+      title: '-을/ㄹ지라도 变形', english: '-을/ㄹ지라도 Conjugation',
+      body: '根据收音和词类选择正确形式',
       questions: [
         {
           prompt: '비록 (실패하다) 도전하겠습니다.',
           options: ['실패하을지라도', '실패할지라도', '실패했을지라도', '실패하지라도'],
           answer: 1,
-          explanation: '실패하다 词干 실패하 无받침，用 -ㄹ지라도 → 실패할지라도。',
+          explanation: '실패하다 词干 실패하 无收音，用 -ㄹ지라도 → 실패할지라도。',
         },
         {
           prompt: '어려움이 (있다) 끝까지 갈 거예요.',
           options: ['있ㄹ지라도', '있을지라도', '있았을지라도', '있는지라도'],
           answer: 1,
-          explanation: '있다 词干 있 有받침，用 -을지라도 → 있을지라도。',
+          explanation: '있다 词干 있 有收音，用 -을지라도 → 있을지라도。',
         },
         {
           prompt: '(학생) 규칙은 지켜야 해요.',
           options: ['학생지라도', '학생을지라도', '학생일지라도', '학생라지라도'],
           answer: 2,
-          explanation: '名词有받침加 이 变形 → 학생이 + ㄹ지라도 = 학생일지라도。',
+          explanation: '名词有收音加 이 变形 → 학생이 + ㄹ지라도 = 학생일지라도。',
         },
         {
           prompt: '아무리 (좋다) 저는 안 살 거예요.',
           options: ['좋ㄹ지라도', '좋을지라도', '좋았을지라도', '좋라지라도'],
           answer: 1,
-          explanation: '좋다 词干 좋 有받침，用 -을지라도 → 좋을지라도。',
+          explanation: '좋다 词干 좋 有收音，用 -을지라도 → 좋을지라도。',
         },
       ],
     },
@@ -338,8 +338,8 @@ export const grammarCardsP26: GrammarCard[] = [
   <div class="ov-section-hd"><div class="ov-section-line" style="background:#b49ccf"></div><div class="ov-section-title" style="color:#b49ccf">核心形态</div></div>
   <div class="ov-block">
     <div style="font-size:16px;color:#241917;line-height:1.9">
-      有받침 → <b>-을지라도</b>：먹을지라도<br>
-      无받침 → <b>-ㄹ지라도</b>：갈지라도<br>
+      有收音 → <b>-을지라도</b>：먹을지라도<br>
+      无收音 → <b>-ㄹ지라도</b>：갈지라도<br>
       过去 → <b>-았/었을지라도</b>：갔을지라도<br>
       名词 → <b>-(이)ㄹ지라도</b>：학생일지라도
     </div>
@@ -358,7 +358,7 @@ export const grammarCardsP26: GrammarCard[] = [
 <div class="ov-section">
   <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">别踩的坑</div></div>
   <div class="ov-block">
-    <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">가을지라도</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">갈지라도（无받침加 -ㄹ지라도）</span></div></div>
+    <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">가을지라도</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">갈지라도（无收音加 -ㄹ지라도）</span></div></div>
     <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">학생지라도</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">학생일지라도</span></div></div>
   </div>
 </div>`,
@@ -370,10 +370,10 @@ export const grammarCardsP26: GrammarCard[] = [
     partNumber: 26,
     lessonNumber: 3,
     title: '-을/ㄹ지언정',
-    whatItDoes: '宁可/宁愿',
-    whatItDoesBody: '「-을/ㄹ지언정」表达强烈的"宁可A也不B""哪怕A也不做B"，前句是宁愿接受的负面情况，后句是绝不做的事。语气非常坚决、正式，多见书面语。',
-    structureNote: '词干：有받침 + -을지언정 / 无받침 + -ㄹ지언정 · 名词 -(이)ㄹ지언정',
-    rulesNote: '与 -을/ㄹ지라도 结构相同，但语义不同：前者纯让步"纵然"，后者带对比"宁可"',
+    whatItDoes: '宁可/宁愿', english: 'Rather / Prefer',
+    whatItDoesBody: '「-을/ㄹ지언정」表达强烈的"宁可A也不B""哪怕A也不做B"，前句是宁愿接受的负面情况，后句是绝不做的事。语气非常坚决、正式，多见书面语。', english: '「-을/ㄹ지언정」 expresses a strong sense of "rather A than B" or "even if A, never B." The first clause presents a negative situation one is willing to accept, while the second clause states something one absolutely refuses to do. The tone is very firm and formal, commonly found in written language.',
+    structureNote: '词干：有收音 + -을지언정 / 无收音 + -ㄹ지언정 · 名词 -(이)ㄹ지언정', english: 'Verb stem: with final consonant + -을지언정 / without final consonant + -ㄹ지언정 · Noun + -(이)ㄹ지언정',
+    rulesNote: '与 -을/ㄹ지라도 结构相同，但语义不同：前者纯让步"纵然"，后者带对比"宁可"', english: 'It has the same structure as -을/ㄹ지라도, but the meaning differs: the former is purely concessive ("even if"), while the latter carries contrast ("rather").',
     structures: [
       {
         ko: '굶을지언정 남의 도움은 받지 않겠어요.',
@@ -405,8 +405,8 @@ export const grammarCardsP26: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '有받침 → -을지언정', examples: '먹다 → 먹을지언정 / 죽다 → 죽을지언정' },
-      { type: 'rule', text: '无받침 → -ㄹ지언정', examples: '가다 → 갈지언정 / 하다 → 할지언정' },
+      { type: 'rule', text: '有收音 → -을지언정', examples: '먹다 → 먹을지언정 / 죽다 → 죽을지언정' },
+      { type: 'rule', text: '无收音 → -ㄹ지언정', examples: '가다 → 갈지언정 / 하다 → 할지언정' },
       { type: 'rule', text: '名词：-(이)ㄹ지언정', examples: '거지일지언정, 학생일지언정' },
       { type: 'usage', text: '语义核心：宁可 A（前句负面/极端），也不 B（后句拒绝）', examples: '죽을지언정 배신은 안 해요.（宁死不背叛）' },
       { type: 'usage', text: '后句多为否定：-지 않다、-지 못하다、안 -', examples: '굶을지언정 도움은 안 받아요.（宁可挨饿也不接受帮助。）' },
@@ -456,41 +456,41 @@ export const grammarCardsP26: GrammarCard[] = [
     ],
     mistakes: [
       { wrong: '죽을지언정 갈 거예요', correct: '죽을지언정 안 갈 거예요', note: '-을지언정 后句必须是否定/拒绝，不是肯定' },
-      { wrong: '가을지언정', correct: '갈지언정', note: '가다 无받침，用 -ㄹ지언정' },
+      { wrong: '가을지언정', correct: '갈지언정', note: '가다 无收音，用 -ㄹ지언정' },
       { wrong: '학생지언정', correct: '학생일지언정', note: '名词需加 이 变形' },
     ],
     quickTable: {
-      title: '-을/ㄹ지언정 形态一览',
+      title: '-을/ㄹ지언정 形态一览', english: '-을/ㄹ지언정 Form Overview',
       headers: ['词类', '规则', '例子'],
       rows: [
-        ['有받침', '-을지언정', '먹을지언정, 죽을지언정'],
-        ['无받침', '-ㄹ지언정', '갈지언정, 할지언정'],
-        ['名词有받침', '-이ㄹ지언정', '학생일지언정'],
-        ['名词无받침', '-ㄹ지언정', '거지일지언정'],
+        ['有收音', '-을지언정', '먹을지언정, 죽을지언정'],
+        ['无收音', '-ㄹ지언정', '갈지언정, 할지언정'],
+        ['名词有收音', '-이ㄹ지언정', '학생일지언정'],
+        ['名词无收音', '-ㄹ지언정', '거지일지언정'],
       ],
     },
     specialQuiz: {
       type: 'morph',
-      title: '-을/ㄹ지언정 综合练习',
+      title: '-을/ㄹ지언정 综合练习', english: '-을/ㄹ지언정 Comprehensive Practice',
       body: '选择正确形式',
       questions: [
         {
           prompt: '(굶다) 남의 도움은 받지 않겠어요.',
           options: ['굶ㄹ지언정', '굶을지언정', '굶었을지언정', '굶는지언정'],
           answer: 1,
-          explanation: '굶다 有받침，用 -을지언정 → 굶을지언정。',
+          explanation: '굶다 有收音，用 -을지언정 → 굶을지언정。',
         },
         {
           prompt: '(죽다) 거짓말은 하지 않아요.',
           options: ['죽ㄹ지언정', '죽을지언정', '죽는지언정', '죽라지언정'],
           answer: 1,
-          explanation: '죽다 有받침，用 -을지언정 → 죽을지언정。',
+          explanation: '죽다 有收音，用 -을지언정 → 죽을지언정。',
         },
         {
           prompt: '(늦다) 대충하지는 마세요.',
           options: ['늦지언정', '늦ㄹ지언정', '늦을지언정', '늦었지언정'],
           answer: 2,
-          explanation: '늦다 有받침，用 -을지언정 → 늦을지언정。',
+          explanation: '늦다 有收音，用 -을지언정 → 늦을지언정。',
         },
         {
           prompt: '-을지언정 语义是……',
@@ -520,8 +520,8 @@ export const grammarCardsP26: GrammarCard[] = [
   <div class="ov-section-hd"><div class="ov-section-line" style="background:#b49ccf"></div><div class="ov-section-title" style="color:#b49ccf">核心形态</div></div>
   <div class="ov-block">
     <div style="font-size:16px;color:#241917;line-height:1.9">
-      有받침 → <b>-을지언정</b>：굶을지언정<br>
-      无받침 → <b>-ㄹ지언정</b>：갈지언정<br>
+      有收音 → <b>-을지언정</b>：굶을지언정<br>
+      无收音 → <b>-ㄹ지언정</b>：갈지언정<br>
       名词 → <b>-(이)ㄹ지언정</b>：학생일지언정
     </div>
   </div>
@@ -551,10 +551,10 @@ export const grammarCardsP26: GrammarCard[] = [
     partNumber: 26,
     lessonNumber: 4,
     title: '-을/ㄹ망정',
-    whatItDoes: '即使/宁可',
-    whatItDoesBody: '「-을/ㄹ망정」表达"就算……也……""哪怕……也……"，含有"退一步也可以，但底线不变"的语气。前句是最低限度的让步，后句强调不能突破的底线。',
-    structureNote: '词干：有받침 -을망정 / 无받침 -ㄹ망정 · 名词 -(이)ㄹ망정',
-    rulesNote: '结构类似 -을지언정，但语气比 -을지언정 稍弱，更常用；后句常为消极/否定/义务表达',
+    whatItDoes: '即使/宁可', english: 'Even if / Rather',
+    whatItDoesBody: '「-을/ㄹ망정」表达"就算……也……""哪怕……也……"，含有"退一步也可以，但底线不变"的语气。前句是最低限度的让步，后句强调不能突破的底线。', english: '「-을/ㄹ망정」 expresses "even if... still..." or "even if... at least...", carrying a nuance of "conceding a step, but the bottom line remains unchanged." The first clause is a minimal concession, while the second clause emphasizes a boundary that cannot be crossed.',
+    structureNote: '词干：有收音 -을망정 / 无收音 -ㄹ망정 · 名词 -(이)ㄹ망정', english: 'Verb stem: with final consonant -을망정 / without final consonant -ㄹ망정 · Noun + -(이)ㄹ망정',
+    rulesNote: '结构类似 -을지언정，但语气比 -을지언정 稍弱，更常用；后句常为消极/否定/义务表达', english: 'The structure is similar to -을지언정, but the tone is slightly weaker and more commonly used; the following clause often expresses a negative, negative, or obligatory meaning.',
     structures: [
       {
         ko: '가난할망정 자존심은 잃지 않아요.',
@@ -585,8 +585,8 @@ export const grammarCardsP26: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '有받침 → -을망정', examples: '먹다 → 먹을망정 / 작다 → 작을망정' },
-      { type: 'rule', text: '无받침 → -ㄹ망정', examples: '가다 → 갈망정 / 크다 → 클망정' },
+      { type: 'rule', text: '有收音 → -을망정', examples: '먹다 → 먹을망정 / 작다 → 작을망정' },
+      { type: 'rule', text: '无收音 → -ㄹ망정', examples: '가다 → 갈망정 / 크다 → 클망정' },
       { type: 'rule', text: '名词：-(이)ㄹ망정', examples: '거지일망정, 학생일망정' },
       { type: 'usage', text: '语义：前句退让/负面，后句坚持底线', examples: '가난할망정 정직해요.（穷但诚实）' },
       { type: 'usage', text: '后句常带 -지 않다、안 -、잃지 않다、-어야 하다', examples: '가난할망정 잃지 않아요.（哪怕贫穷也不失去〔尊严〕。）' },
@@ -635,42 +635,42 @@ export const grammarCardsP26: GrammarCard[] = [
       { icon: '⚔️', context: '正义', ko: '질망정 정정당당하게 싸울 거예요.', zh: '就算输也要堂堂正正打。' },
     ],
     mistakes: [
-      { wrong: '가망정', correct: '갈망정', note: '무받침 加 -ㄹ망정（词干+ㄹ）' },
-      { wrong: '먹ㄹ망정', correct: '먹을망정', note: '有받침 加 -을망정' },
+      { wrong: '가망정', correct: '갈망정', note: '无收音 加 -ㄹ망정（词干+ㄹ）' },
+      { wrong: '먹ㄹ망정', correct: '먹을망정', note: '有收音 加 -을망정' },
       { wrong: '학생망정', correct: '학생일망정', note: '名词需加系词 이 后变形' },
     ],
     quickTable: {
-      title: '-을/ㄹ망정 形态一览',
+      title: '-을/ㄹ망정 形态一览', english: '-을/ㄹ망정 Form Overview',
       headers: ['词类', '规则', '例子'],
       rows: [
-        ['有받침', '-을망정', '먹을망정, 작을망정'],
-        ['无받침', '-ㄹ망정', '갈망정, 클망정'],
-        ['名词有받침', '-이ㄹ망정', '학생일망정'],
-        ['名词无받침', '-ㄹ망정', '거지일망정'],
+        ['有收音', '-을망정', '먹을망정, 작을망정'],
+        ['无收音', '-ㄹ망정', '갈망정, 클망정'],
+        ['名词有收音', '-이ㄹ망정', '학생일망정'],
+        ['名词无收音', '-ㄹ망정', '거지일망정'],
       ],
     },
     specialQuiz: {
       type: 'morph',
-      title: '-을/ㄹ망정 变形练习',
-      body: '根据받침选择',
+      title: '-을/ㄹ망정 变形练习', english: '-을/ㄹ망정 Conjugation Practice',
+      body: '根据收音选择',
       questions: [
         {
           prompt: '(가난하다) 자존심은 잃지 않아요.',
           options: ['가난하망정', '가난할망정', '가난했을망정', '가난하는망정'],
           answer: 1,
-          explanation: '가난하다 词干 가난하 无받침，加 -ㄹ망정 → 가난할망정。',
+          explanation: '가난하다 词干 가난하 无收音，加 -ㄹ망정 → 가난할망정。',
         },
         {
           prompt: '(먹다) 훔치지는 않아요.',
           options: ['먹ㄹ망정', '먹을망정', '먹었을망정', '먹는망정'],
           answer: 1,
-          explanation: '먹다 有받침，用 -을망정 → 먹을망정。',
+          explanation: '먹다 有收音，用 -을망정 → 먹을망정。',
         },
         {
           prompt: '(작다) 우리 집이에요.',
           options: ['작망정', '작을망정', '작ㄹ망정', '작았망정'],
           answer: 1,
-          explanation: '작다 有받침，用 -을망정 → 작을망정。',
+          explanation: '작다 有收音，用 -을망정 → 작을망정。',
         },
         {
           prompt: '-을망정 后句一般是……',
@@ -700,8 +700,8 @@ export const grammarCardsP26: GrammarCard[] = [
   <div class="ov-section-hd"><div class="ov-section-line" style="background:#b49ccf"></div><div class="ov-section-title" style="color:#b49ccf">核心形态</div></div>
   <div class="ov-block">
     <div style="font-size:16px;color:#241917;line-height:1.9">
-      有받침 → <b>-을망정</b>：먹을망정<br>
-      无받침 → <b>-ㄹ망정</b>：갈망정<br>
+      有收音 → <b>-을망정</b>：먹을망정<br>
+      无收音 → <b>-ㄹ망정</b>：갈망정<br>
       名词 → <b>-(이)ㄹ망정</b>：학생일망정
     </div>
   </div>
@@ -719,7 +719,7 @@ export const grammarCardsP26: GrammarCard[] = [
 <div class="ov-section">
   <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">别踩的坑</div></div>
   <div class="ov-block">
-    <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">가망정</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">갈망정（无받침加 -ㄹ망정）</span></div></div>
+    <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">가망정</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">갈망정（无收音加 -ㄹ망정）</span></div></div>
     <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">학생망정</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">학생일망정</span></div></div>
   </div>
 </div>`,
@@ -731,10 +731,10 @@ export const grammarCardsP26: GrammarCard[] = [
     partNumber: 26,
     lessonNumber: 5,
     title: '-는 한이 있어도',
-    whatItDoes: '即便到……的地步',
-    whatItDoesBody: '「-는 한이 있어도 / -는 한이 있더라도」表示"即便到了……的地步也……"，前句是最极端/最坏的结果，后句表达坚决意志。语气很强，多用于书面语和坚定表态。',
-    structureNote: '动词词干 + -는 한이 있어도 / -는 한이 있더라도',
-    rulesNote: '固定搭配 "N + 한이 있어도" 或直接接动词 -는 한이 있어도；名词用 -(이)라는 한이 있어도',
+    whatItDoes: '即便到……的地步', english: 'Even if it comes to the point of...',
+    whatItDoesBody: '「-는 한이 있어도 / -는 한이 있더라도」表示"即便到了……的地步也……"，前句是最极端/最坏的结果，后句表达坚决意志。语气很强，多用于书面语和坚定表态。', english: '「-는 한이 있어도 / -는 한이 있더라도」means "even if it comes to the point of..." The preceding clause presents the most extreme/worst outcome, and the following clause expresses a firm determination. The tone is strong and is mainly used in written language and firm statements.',
+    structureNote: '动词词干 + -는 한이 있어도 / -는 한이 있더라도', english: 'Verb stem + -는 한이 있어도 / -는 한이 있더라도',
+    rulesNote: '固定搭配 "N + 한이 있어도" 或直接接动词 -는 한이 있어도；名词用 -(이)라는 한이 있어도', english: 'Fixed expression "N + 한이 있어도" or directly attach to verbs as -는 한이 있어도; for nouns, use -(이)라는 한이 있어도',
     structures: [
       {
         ko: '실패하는 한이 있어도 도전해 보고 싶어요.',
@@ -822,7 +822,7 @@ export const grammarCardsP26: GrammarCard[] = [
       { wrong: '실패하는 한이 있으면', correct: '실패하는 한이 있어도', note: '固定为 -어도/-더라도 让步，不用 -으면 条件' },
     ],
     quickTable: {
-      title: '-는 한이 있어도 结构一览',
+      title: '-는 한이 있어도 结构一览', english: '-는 한이 있어도 Structure Overview',
       headers: ['要点', '规则', '例子'],
       rows: [
         ['结构', '动词 + -는 한이 있어도', '실패하는 한이 있어도'],
@@ -833,7 +833,7 @@ export const grammarCardsP26: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '-는 한이 있어도 练习',
+      title: '-는 한이 있어도 练习', english: '-는 한이 있어도 Practice',
       body: '选择正确形式',
       questions: [
         {
@@ -914,10 +914,10 @@ export const grammarCardsP26: GrammarCard[] = [
     partNumber: 26,
     lessonNumber: 6,
     title: '-고자 / -고자 하다',
-    whatItDoes: '意图/打算（正式）',
-    whatItDoesBody: '「-고자 / -고자 하다」表示意图、目的、打算，"想……""打算……""为了……"。语气正式，多用于书面语、演讲、新闻、正式文件。相当于口语中的 -(으)려고 / -(으)려고 하다 的正式版。',
-    structureNote: '动词词干 + -고자（连接） · 动词词干 + -고자 하다（做谓语）',
-    rulesNote: '主语必须一致；不与形容词/名词连用；-고자 直接接词干，不看받침',
+    whatItDoes: '意图/打算（正式）', english: 'Intention/Plan (Formal)',
+    whatItDoesBody: '「-고자 / -고자 하다」表示意图、目的、打算，"想……""打算……""为了……"。语气正式，多用于书面语、演讲、新闻、正式文件。相当于口语中的 -(으)려고 / -(으)려고 하다 的正式版。', english: '「-고자 / -고자 하다」 expresses intention, purpose, or plan, meaning "want to..." "plan to..." "in order to...". The tone is formal and is mainly used in written language, speeches, news, and official documents. It is the formal equivalent of the colloquial -(으)려고 / -(으)려고 하다.',
+    structureNote: '动词词干 + -고자（连接） · 动词词干 + -고자 하다（做谓语）', english: 'Verb stem + -고자 (connective) · Verb stem + -고자 하다 (as predicate)',
+    rulesNote: '主语必须一致；不与形容词/名词连用；-고자 直接接词干，不看收音', english: 'The subject must be consistent; cannot be used with adjectives or nouns; -고자 attaches directly to the stem regardless of the final consonant.',
     structures: [
       {
         ko: '한국어를 배우고자 왔어요.',
@@ -949,7 +949,7 @@ export const grammarCardsP26: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '动词词干 + -고자，不看받침', examples: '가다 → 가고자 / 먹다 → 먹고자 / 만들다 → 만들고자' },
+      { type: 'rule', text: '动词词干 + -고자，不看收音', examples: '가다 → 가고자 / 먹다 → 먹고자 / 만들다 → 만들고자' },
       { type: 'rule', text: '-고자 하다 用作谓语，"打算……"', examples: '말씀드리고자 합니다.（我想向您说明。）' },
       { type: 'usage', text: '不与形容词、名词、있다/없다 连用', examples: '(✗) 예쁘고자 → 只能用动词' },
       { type: 'usage', text: '主语必须一致：前后主语必须是同一人', examples: '(제가) 배우고자 (제가) 왔어요.（我为了学习而来。）' },
@@ -1003,7 +1003,7 @@ export const grammarCardsP26: GrammarCard[] = [
       { wrong: '엄마가 요리하고자 제가 먹어요', correct: '엄마가 요리하려고 해요 / 저는 먹고자 왔어요', note: '前后主语必须一致' },
     ],
     quickTable: {
-      title: '-고자 使用要点',
+      title: '-고자 使用要点', english: 'Key Points for Using -고자',
       headers: ['要点', '规则', '例子'],
       rows: [
         ['连接', '动词词干 + -고자', '가고자, 배우고자'],
@@ -1015,7 +1015,7 @@ export const grammarCardsP26: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '-고자 / -고자 하다 综合',
+      title: '-고자 / -고자 하다 综合', english: '-고자 / -고자 하다 Overview',
       body: '选出正确表达',
       questions: [
         {
@@ -1096,10 +1096,10 @@ export const grammarCardsP26: GrammarCard[] = [
     partNumber: 26,
     lessonNumber: 7,
     title: '-도록',
-    whatItDoes: '为了/使得',
-    whatItDoesBody: '「-도록」有多义：① 目的"为了……""让……"，② 程度"到……地步"，③ 命令/建议的委婉表达（-도록 하다）。核心语义是"引导某种结果或状态"。',
-    structureNote: '动词/形容词词干 + -도록（不看받침） · -도록 하다 委婉命令',
-    rulesNote: '语义1：目的（다치지 않도록）；语义2：程度（밤이 새도록）；语义3：委婉命令（시간을 지키도록 하세요）',
+    whatItDoes: '为了/使得', english: 'In order to / so that',
+    whatItDoesBody: '「-도록」有多义：① 目的"为了……""让……"，② 程度"到……地步"，③ 命令/建议的委婉表达（-도록 하다）。核心语义是"引导某种结果或状态"。', english: '「-도록」 has multiple meanings: ① purpose "in order to..." "so that...", ② degree "to the point of...", ③ euphemistic command/suggestion (-도록 하다). The core meaning is "to lead to a certain result or state".',
+    structureNote: '动词/形容词词干 + -도록（不看收音） · -도록 하다 委婉命令', english: 'Verb/Adjective stem + -도록 (regardless of final consonant) · -도록 하다 for euphemistic commands',
+    rulesNote: '语义1：目的（다치지 않도록）；语义2：程度（밤이 새도록）；语义3：委婉命令（시간을 지키도록 하세요）', english: 'Meaning 1: purpose (다치지 않도록); Meaning 2: degree (밤이 새도록); Meaning 3: euphemistic command (시간을 지키도록 하세요)',
     structures: [
       {
         ko: '다치지 않도록 조심하세요.',
@@ -1129,7 +1129,7 @@ export const grammarCardsP26: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '动词/形容词词干 + -도록，不看받침', examples: '먹다 → 먹도록 / 가다 → 가도록 / 좋다 → 좋도록' },
+      { type: 'rule', text: '动词/形容词词干 + -도록，不看收音', examples: '먹다 → 먹도록 / 가다 → 가도록 / 좋다 → 좋도록' },
       { type: 'usage', text: '语义1 目的："为了让……"，后句多为动作/命令', examples: '다치지 않도록 조심하세요.（为不受伤而小心）' },
       { type: 'usage', text: '语义2 程度/时间："到……地步/一直到"', examples: '밤이 새도록 공부했어요.（学到天亮）' },
       { type: 'usage', text: '语义3 -도록 하다：委婉命令/建议', examples: '늦지 않도록 하세요.（请不要迟到）' },
@@ -1181,7 +1181,7 @@ export const grammarCardsP26: GrammarCard[] = [
       { wrong: '먹도록 오세요', correct: '먹으러 오세요', note: '"为了吃而来"这种直接目的用 -(으)러，不用 -도록' },
     ],
     quickTable: {
-      title: '-도록 三大用法',
+      title: '-도록 三大用法', english: 'Three Main Uses of -도록',
       headers: ['用法', '含义', '例子'],
       rows: [
         ['目的', '为了/使得', '다치지 않도록 조심하세요'],
@@ -1192,7 +1192,7 @@ export const grammarCardsP26: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'judge',
-      title: '-도록 用法辨析',
+      title: '-도록 用法辨析', english: 'Distinguishing the Uses of -도록',
       body: '选择正确的表达',
       questions: [
         {
@@ -1272,10 +1272,10 @@ export const grammarCardsP26: GrammarCard[] = [
     partNumber: 26,
     lessonNumber: 8,
     title: '-치고',
-    whatItDoes: '说到……都',
-    whatItDoesBody: '「N + 치고」有两种用法：① 全称"说到……没有例外/都是……"，② 例外/例外让步"作为……来说，(意外地)……"。语义靠语境判断。',
-    structureNote: '名词 + 치고 · 常见搭配 "N 치고 -지 않은/없는 것이 없다"（全称） 或 "N 치고 意外结果"（例外）',
-    rulesNote: '语义1 全称：后接双否定"没有不……的"；语义2 例外：后接与常识相反的结果',
+    whatItDoes: '说到……都', english: 'Speaking of... all / As for...',
+    whatItDoesBody: '「N + 치고」有两种用法：① 全称"说到……没有例外/都是……"，② 例外/例外让步"作为……来说，(意外地)……"。语义靠语境判断。', english: '「N + 치고」has two usages: ① Universal statement "Speaking of..., there is no exception / all are...", ② Exception or concessive "As for..., (surprisingly)...". The meaning is determined by context.',
+    structureNote: '名词 + 치고 · 常见搭配 "N 치고 -지 않은/없는 것이 없다"（全称） 或 "N 치고 意外结果"（例外）', english: 'Noun + 치고 · Common collocations "N 치고 -지 않은/없는 것이 없다" (universal) or "N 치고 unexpected result" (exception)',
+    rulesNote: '语义1 全称：后接双否定"没有不……的"；语义2 例外：后接与常识相反的结果', english: 'Meaning 1 (universal): followed by double negation "there is none that is not..."; Meaning 2 (exception): followed by a result contrary to common sense',
     structures: [
       {
         ko: '한국 사람치고 김치를 안 먹는 사람은 없어요.',
@@ -1307,7 +1307,7 @@ export const grammarCardsP26: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '名词 + 치고（不看받침，直接接）', examples: '학생치고, 봄치고, 외국인치고' },
+      { type: 'rule', text: '名词 + 치고（不看收音，直接接）', examples: '학생치고, 봄치고, 외국인치고' },
       { type: 'usage', text: '语义1 全称：N 치고 -지 않은/없는 것이 없다 = "没有一个不……"', examples: '한국 사람치고 김치를 모르는 사람은 없어요.（凡是韩国人没有不知道泡菜的。）' },
       { type: 'usage', text: '语义2 例外：N 치고 + 意外结果 = "作为……却……"', examples: '봄치고 날씨가 너무 추워요.（作为春天却很冷）' },
       { type: 'usage', text: '语义2 常用来称赞：外国人韩语好、老人身手灵活等', examples: '외국인치고 한국어를 잘하시네요.（作为外国人，您韩语说得真好。）' },
@@ -1360,7 +1360,7 @@ export const grammarCardsP26: GrammarCard[] = [
       { wrong: '외국인 치고 한국어 잘하네', correct: '외국인치고 한국어를 잘하시네요', note: '치고 直接连名词，中间不能空格；对方能力用敬语' },
     ],
     quickTable: {
-      title: '-치고 两大语义',
+      title: '-치고 两大语义', english: '-치고 Two Main Meanings',
       headers: ['语义', '句式', '例子'],
       rows: [
         ['全称', 'N 치고 -지 않은/없는 없다', '한국 사람치고 김치 안 먹는 사람 없어요'],
@@ -1370,7 +1370,7 @@ export const grammarCardsP26: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'judge',
-      title: '-치고 用法辨析',
+      title: '-치고 用法辨析', english: '-치고 Usage Distinction',
       body: '选择正确的句子',
       questions: [
         {
@@ -1450,11 +1450,11 @@ export const grammarCardsP26: GrammarCard[] = [
     id: 'card-p26-l09',
     partNumber: 26,
     lessonNumber: 9,
-    title: 'P26 综合练习',
-    whatItDoes: 'P26 综合复习',
-    whatItDoesBody: '本练习综合复习 P26 让步与意图强化章节的 8 个语法点：-더라도、-을/ㄹ지라도、-을/ㄹ지언정、-을/ㄹ망정、-는 한이 있어도、-고자、-도록、-치고。',
-    structureNote: '综合本 Part 所有语法',
-    rulesNote: '重点在让步语气强度阶梯和意图/目的三种表达的辨析',
+    title: 'P26 综合练习', english: 'P26 Comprehensive Practice',
+    whatItDoes: 'P26 综合复习', english: 'P26 Comprehensive Review',
+    whatItDoesBody: '本练习综合复习 P26 让步与意图强化章节的 8 个语法点：-더라도、-을/ㄹ지라도、-을/ㄹ지언정、-을/ㄹ망정、-는 한이 있어도、-고자、-도록、-치고。', english: 'This exercise comprehensively reviews the 8 grammar points from the P26 concession and intention reinforcement chapter: -더라도, -을/ㄹ지라도, -을/ㄹ지언정, -을/ㄹ망정, -는 한이 있어도, -고자, -도록, -치고.',
+    structureNote: '综合本 Part 所有语法', english: 'Comprehensive review of all grammar points in this Part',
+    rulesNote: '重点在让步语气强度阶梯和意图/目的三种表达的辨析', english: 'Focus on the intensity hierarchy of concessive tones and the distinction among the three expressions of intention/purpose',
     isPractice: true,
     structures: [
       {
@@ -1540,7 +1540,7 @@ export const grammarCardsP26: GrammarCard[] = [
     linkedGrammarIds: ['card-p26-l01', 'card-p26-l02', 'card-p26-l03', 'card-p26-l04', 'card-p26-l05', 'card-p26-l06', 'card-p26-l07', 'card-p26-l08'],
     specialQuiz: {
       type: 'judge',
-      title: 'P26 综合练习',
+      title: 'P26 综合练习', english: 'P26 Comprehensive Practice',
       body: '选择正确的表达',
       questions: [
         {

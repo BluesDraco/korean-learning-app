@@ -7,10 +7,10 @@ export const grammarCardsP22: GrammarCard[] = [
     partNumber: 22,
     lessonNumber: 1,
     title: '-을/ㄹ까 봐',
-    whatItDoes: '担心/怕会……',
-    whatItDoesBody: '表达对某种（不希望发生的）情况的担心。\n后半句通常是为避免这个担心而采取的行动。\n口语和写作里都极高频，是韩语最重要的"担心表达"。',
-    structureNote: '结构：动词/形容词词干（无收音+ㄹ；有收音+을）+ 까 봐。\n可看作 -을까?（是否会）+ 봐（担心） 的融合，直译"看会不会……"。\n后半句常有 걱정하다、안 하다、챙기다、준비하다 等避免担心的动作。',
-    rulesNote: '常见搭配套路：\n1. -을까 봐 걱정이에요（担心……）\n2. -을까 봐 [动作]（怕……所以做了……）\n3. -을까 봐서（连接形，加서 强调原因）\n过去时用 -았/었을까 봐（怕当时……了）。',
+    whatItDoes: '担心/怕会……', english: 'Worried that / afraid that...',
+    whatItDoesBody: '表达对某种（不希望发生的）情况的担心。\n后半句通常是为避免这个担心而采取的行动。\n口语和写作里都极高频，是韩语最重要的"担心表达"。', english: 'Expresses worry about an (unwanted) situation.\\nThe second half of the sentence is usually an action taken to avoid that worry.\\nExtremely common in both speech and writing—it\'s the most important "worry expression" in Korean.',
+    structureNote: '结构：动词/形容词词干（无收音+ㄹ；有收音+을）+ 까 봐。\n可看作 -을까?（是否会）+ 봐（担心） 的融合，直译"看会不会……"。\n后半句常有 걱정하다、안 하다、챙기다、준비하다 等避免担心的动作。', english: 'Structure: verb/adjective stem (no batchim + ㄹ; with batchim + 을) + 까 봐.\\nCan be seen as a blend of -을까? (whether it will) + 봐 (worry), literally "seeing whether..."\\nThe second half often contains actions like 걱정하다, 안 하다, 챙기다, 준비하다 to avoid the worry.',
+    rulesNote: '常见搭配套路：\n1. -을까 봐 걱정이에요（担心……）\n2. -을까 봐 [动作]（怕……所以做了……）\n3. -을까 봐서（连接形，加서 强调原因）\n过去时用 -았/었을까 봐（怕当时……了）。', english: 'Common patterns:\\n1. -을까 봐 걱정이에요 (worried that...)\\n2. -을까 봐 [action] (afraid that... so I did...)\\n3. -을까 봐서 (connective form, adding 서 to emphasize the reason)\\nPast tense uses -았/었을까 봐 (was afraid that... at the time).',
     structures: [
       {
         ko: '비가 올까 봐 우산을 챙겼어요',
@@ -120,13 +120,13 @@ export const grammarCardsP22: GrammarCard[] = [
       { wrong: '비가 올까 봤어요', correct: '비가 올까 봐 우산을 챙겼어요', note: '-을까 봐 是连接形，后面必须接主句动词。올까 봤어요 是不存在的形式。' },
     ],
     quickTable: {
-      title: '-을/ㄹ까 봐 变形速查',
+      title: '-을/ㄹ까 봐 变形速查', english: '-을/ㄹ까 봐 Conjugation Quick Reference',
       body: '按词干收音和时态选正确形态。',
       headers: ['原形', '词干', '现在担心', '过去担心'],
       rows: [
-        ['가다', '가（무받침）', { ko: '갈까 봐', zh: '怕去/会去' }, { ko: '갔을까 봐', zh: '怕已经去了' }],
+        ['가다', '가（无收音）', { ko: '갈까 봐', zh: '怕去/会去' }, { ko: '갔을까 봐', zh: '怕已经去了' }],
         ['먹다', '먹（有ㄱ）', { ko: '먹을까 봐', zh: '怕吃/会吃' }, { ko: '먹었을까 봐', zh: '怕已经吃了' }],
-        ['하다', '하（무받침）', { ko: '할까 봐', zh: '怕做' }, { ko: '했을까 봐', zh: '怕已经做了' }],
+        ['하다', '하（无收音）', { ko: '할까 봐', zh: '怕做' }, { ko: '했을까 봐', zh: '怕已经做了' }],
         ['늦다', '늦（有ㅈ）', { ko: '늦을까 봐', zh: '怕迟到' }, { ko: '늦었을까 봐', zh: '怕已经迟了' }],
         ['알다', '알（ㄹ词干）', { ko: '알까 봐', zh: '怕（他）知道' }, { ko: '알았을까 봐', zh: '怕（他）已经知道了' }],
         ['잊다', '잊（有ㅈ）', { ko: '잊을까 봐', zh: '怕忘' }, { ko: '잊었을까 봐', zh: '怕忘了' }],
@@ -134,7 +134,7 @@ export const grammarCardsP22: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '-을/ㄹ까 봐 变形练习',
+      title: '-을/ㄹ까 봐 变形练习', english: '-을/ㄹ까 봐 Conjugation Practice',
       body: '根据词干和语境选出正确形态。',
       questions: [
         {
@@ -245,10 +245,10 @@ export const grammarCardsP22: GrammarCard[] = [
     partNumber: 22,
     lessonNumber: 2,
     title: '-을/ㄹ지도 모르다',
-    whatItDoes: '说不定/可能……',
-    whatItDoesBody: '表达低概率的推测，"说不定会……"、"没准儿……"。\n比 -을 것 같다（好像）更弱、更不确定，只是提出一种可能性。\n"我不确定，但也许会"的语气，中级韩语里的高频表达。',
-    structureNote: '结构：动词/形容词词干（无收音+ㄹ；有收音+을）+ 지도 모르다。\n直译"连（是否）……也不知道"，引申为"说不定"。\n结尾常用 몰라요 / 모르겠어요，比较委婉。',
-    rulesNote: '推测的确定性梯度（从低到高）：\n1. -을지도 모르다（说不定）— 最不确定\n2. -을 수도 있다（也可能）— 客观可能\n3. -을 것 같다（好像）— 有点感觉\n4. -을 것이다（应该会）— 较肯定\n5. -을 게 틀림없다（肯定）— 最确定',
+    whatItDoes: '说不定/可能……', english: 'Might / could possibly...',
+    whatItDoesBody: '表达低概率的推测，"说不定会……"、"没准儿……"。\n比 -을 것 같다（好像）更弱、更不确定，只是提出一种可能性。\n"我不确定，但也许会"的语气，中级韩语里的高频表达。', english: 'Expresses a low-probability guess: "might...", "could be..."\\nWeaker and more uncertain than -을 것 같다 (seems like), just suggesting a possibility.\\nCarries the nuance of "I\'m not sure, but maybe"—a high-frequency expression in intermediate Korean.',
+    structureNote: '结构：动词/形容词词干（无收音+ㄹ；有收音+을）+ 지도 모르다。\n直译"连（是否）……也不知道"，引申为"说不定"。\n结尾常用 몰라요 / 모르겠어요，比较委婉。', english: 'Structure: verb/adjective stem (no batchim + ㄹ; with batchim + 을) + 지도 모르다.\\nLiterally "don\'t even know (whether)...", extended to mean "might"\\nCommon endings: 몰라요 / 모르겠어요, which sound more polite and tentative.',
+    rulesNote: '推测的确定性梯度（从低到高）：\n1. -을지도 모르다（说不定）— 最不确定\n2. -을 수도 있다（也可能）— 客观可能\n3. -을 것 같다（好像）— 有点感觉\n4. -을 것이다（应该会）— 较肯定\n5. -을 게 틀림없다（肯定）— 最确定', english: 'Certainty scale (from low to high):\\n1. -을지도 모르다 (might) — least certain\\n2. -을 수도 있다 (could also) — objective possibility\\n3. -을 것 같다 (seems like) — some feeling\\n4. -을 것이다 (probably will) — fairly sure\\n5. -을 게 틀림없다 (must be) — most certain',
     structures: [
       {
         ko: '내일 비가 올지도 몰라요',
@@ -354,7 +354,7 @@ export const grammarCardsP22: GrammarCard[] = [
       { wrong: '어제 갈지도 몰라요（想说昨天可能去了）', correct: '어제 갔을지도 몰라요', note: '对已发生事情的推测用过去 -았을지도 모르다。' },
     ],
     quickTable: {
-      title: '推测确定性梯度',
+      title: '推测确定性梯度', english: 'Gradation of Certainty in Speculation',
       body: '同样是"可能"，语气有从弱到强的层级。',
       headers: ['结构', '中文', '确定性', '例句'],
       rows: [
@@ -367,7 +367,7 @@ export const grammarCardsP22: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '-을/ㄹ지도 모르다 变形练习',
+      title: '-을/ㄹ지도 모르다 变形练习', english: '-을/ㄹ지도 모르다 Conjugation Practice',
       body: '根据词性和时态选出正确形态。',
       questions: [
         {
@@ -479,10 +479,10 @@ export const grammarCardsP22: GrammarCard[] = [
     partNumber: 22,
     lessonNumber: 3,
     title: '-을/ㄹ 리가 없다',
-    whatItDoes: '不可能……（强烈否定推测）',
-    whatItDoesBody: '强烈否定某种可能性："那怎么可能"、"不可能"。\n和 -을 리가 있어요? （疑问反问）是一对，都表达"完全不信"的语气。\n对话里常回应对方的假设，表达"不至于/绝不可能"。',
-    structureNote: '结构：动词/形容词词干（无收音+ㄹ；有收音+을）+ 리가 없다。\n리 = 道理/理由（依存名词），"没有这个道理" → "不可能"。\n过去推测用 -았/었을 리가 없다。',
-    rulesNote: '和 -지 않을 것이다（不会）差别：\n· -을 리가 없다：语气强烈，几乎断言"绝不可能"\n· 지 않을 것이다：普通否定推测，"应该不会"\n\n口语常用 -을 리가 있어요?（反问：怎么可能？），意思等同 -을 리가 없다。',
+    whatItDoes: '不可能……（强烈否定推测）', english: 'It can\'t be... (strongly negating a possibility)',
+    whatItDoesBody: '强烈否定某种可能性："那怎么可能"、"不可能"。\n和 -을 리가 있어요? （疑问反问）是一对，都表达"完全不信"的语气。\n对话里常回应对方的假设，表达"不至于/绝不可能"。', english: 'Strongly denies a possibility: "How could that be?" or "No way."\\nIt pairs with -을 리가 있어요? (rhetorical question), both expressing complete disbelief.\\nIn conversation, it\'s often used to respond to someone\'s assumption, conveying "that\'s not possible" or "absolutely not."',
+    structureNote: '结构：动词/形容词词干（无收音+ㄹ；有收音+을）+ 리가 없다。\n리 = 道理/理由（依存名词），"没有这个道理" → "不可能"。\n过去推测用 -았/었을 리가 없다。', english: 'Structure: Verb/Adjective stem (no batchim + ㄹ; with batchim + 을) + 리가 없다.\\n리 = reason/logic (dependent noun), "there\'s no such logic" → "impossible."\\nFor past speculation, use -았/었을 리가 없다.',
+    rulesNote: '和 -지 않을 것이다（不会）差别：\n· -을 리가 없다：语气强烈，几乎断言"绝不可能"\n· 지 않을 것이다：普通否定推测，"应该不会"\n\n口语常用 -을 리가 있어요?（反问：怎么可能？），意思等同 -을 리가 없다。', english: 'Difference from -지 않을 것이다 (won\'t):\\n· -을 리가 없다: Strong tone, almost asserting "absolutely impossible"\\n· 지 않을 것이다: Ordinary negative speculation, "probably won\'t"\\n\\nIn spoken language, -을 리가 있어요? (rhetorical: how could it be?) is commonly used and means the same as -을 리가 없다.',
     structures: [
       {
         ko: '그 사람이 거짓말을 할 리가 없어요',
@@ -586,7 +586,7 @@ export const grammarCardsP22: GrammarCard[] = [
       { wrong: '어제 왔을 리가 있어요（想说确实来了）', correct: '어제 왔을 거예요 / 어제 왔어요', note: '-을 리가 있다 是反问句 "怎么可能"，意思其实是否定。想肯定用 -을 것이다 或直接过去时。' },
     ],
     quickTable: {
-      title: '推测两极：说不定 vs 不可能',
+      title: '推测两极：说不定 vs 不可能', english: 'Two Extremes of Speculation: Maybe vs. Impossible',
       body: '同样是推测语法，语气可以完全相反。',
       headers: ['结构', '含义', '例句', '中文'],
       rows: [
@@ -599,7 +599,7 @@ export const grammarCardsP22: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'fill',
-      title: '-을/ㄹ 리가 없다 用法练习',
+      title: '-을/ㄹ 리가 없다 用法练习', english: '-을/ㄹ 리가 없다 Usage Practice',
       body: '根据语境选出正确表达。',
       questions: [
         {
@@ -712,10 +712,10 @@ export const grammarCardsP22: GrammarCard[] = [
     partNumber: 22,
     lessonNumber: 4,
     title: '-기 마련이다 / -게 마련이다',
-    whatItDoes: '本来就会……（自然规律）',
-    whatItDoesBody: '表达"某种情况自然而然会发生"的规律性判断。\n带有"这是天经地义"的语感，常用于陈述普遍真理、生活规律。\n-기 마련이다 和 -게 마련이다 意思完全相同，都可以用。',
-    structureNote: '结构：动词/形容词词干 + 기 마련이다（或 -게 마련이다）。\n마련이다 直译"是准备好的" → 引申为"自然就是这样"。\n不看收音，直接接词干。',
-    rulesNote: '两个变体：\n1. -기 마련이다：TOPIK 高频，日常也用\n2. -게 마련이다：口语稍多，语感略更强\n意思完全一样，选哪个都对。\n\n配套用法：常和 누구나（谁都）、다들（大家）等词一起，加强普遍性。',
+    whatItDoes: '本来就会……（自然规律）', english: 'It\'s bound to... (natural law)',
+    whatItDoesBody: '表达"某种情况自然而然会发生"的规律性判断。\n带有"这是天经地义"的语感，常用于陈述普遍真理、生活规律。\n-기 마련이다 和 -게 마련이다 意思完全相同，都可以用。', english: 'Expresses a judgment that something naturally and inevitably happens.\\nCarries the nuance of "it\'s only natural," often used to state universal truths or life patterns.\\n-기 마련이다 and -게 마련이다 have exactly the same meaning and can be used interchangeably.',
+    structureNote: '结构：动词/形容词词干 + 기 마련이다（或 -게 마련이다）。\n마련이다 直译"是准备好的" → 引申为"自然就是这样"。\n不看收音，直接接词干。', english: 'Structure: Verb/Adjective stem + 기 마련이다 (or -게 마련이다).\\n마련이다 literally means "is prepared" → extended to "it\'s naturally like this."\\nAttach directly to the stem regardless of the final consonant.',
+    rulesNote: '两个变体：\n1. -기 마련이다：TOPIK 高频，日常也用\n2. -게 마련이다：口语稍多，语感略更强\n意思完全一样，选哪个都对。\n\n配套用法：常和 누구나（谁都）、다들（大家）等词一起，加强普遍性。', english: 'Two variants:\\n1. -기 마련이다: High frequency in TOPIK, also used in daily speech\\n2. -게 마련이다: Slightly more common in spoken language, with a slightly stronger nuance\\nThe meaning is exactly the same—either one is correct.\\n\\nCommon usage: Often paired with words like 누구나 (anyone), 다들 (everyone) to emphasize universality.',
     structures: [
       {
         ko: '사람은 누구나 실수하기 마련이에요',
@@ -823,7 +823,7 @@ export const grammarCardsP22: GrammarCard[] = [
       { wrong: '내일 늙기 마련이에요', correct: '나이 들면 늙기 마련이에요', note: '-기 마련이다 陈述规律，前面通常是条件（-면）而不是特定时间点。' },
     ],
     quickTable: {
-      title: '-기 마련이다 变形速查',
+      title: '-기 마련이다 变形速查', english: '-기 마련이다 Conjugation Quick Reference',
       body: '不看收音，所有词类同一接法。',
       headers: ['原形', '词类', '-기 마련이다', '中文'],
       rows: [
@@ -837,7 +837,7 @@ export const grammarCardsP22: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'fill',
-      title: '-기 마련이다 用法练习',
+      title: '-기 마련이다 用法练习', english: '-기 마련이다 Usage Practice',
       body: '根据语境选出正确形态或语法搭配。',
       questions: [
         {
@@ -953,10 +953,10 @@ export const grammarCardsP22: GrammarCard[] = [
     partNumber: 22,
     lessonNumber: 5,
     title: '-기 십상이다',
-    whatItDoes: '十有八九会……（多为负面）',
-    whatItDoesBody: '表达"某种情况很容易发生"，通常指不好的结果。\n和 -기 마련이다 结构相似，但语气更强、更偏负面。\n常出现在警告、劝告、担忧的语境里。',
-    structureNote: '结构：动词词干 + 기 십상이다。\n십상 是汉字词"十上"，"十次里有十次" → "十有八九"。\n多接动词，主要用于负面结果的高概率发生。',
-    rulesNote: '语感差别：\n· -기 마련이다：中性，指普遍规律\n· -기 십상이다：偏负面，指容易出错\n\n例：\n· 늙기 마련이다（会老）— 客观规律\n· 넘어지기 십상이다（容易摔倒）— 警告',
+    whatItDoes: '十有八九会……（多为负面）', english: 'It\'s very likely to... (usually negative)',
+    whatItDoesBody: '表达"某种情况很容易发生"，通常指不好的结果。\n和 -기 마련이다 结构相似，但语气更强、更偏负面。\n常出现在警告、劝告、担忧的语境里。', english: 'Expresses that "a certain situation easily happens," usually referring to a bad outcome.\\nIt\'s structurally similar to -기 마련이다, but with a stronger and more negative tone.\\nIt often appears in contexts of warning, advice, or concern.',
+    structureNote: '结构：动词词干 + 기 십상이다。\n십상 是汉字词"十上"，"十次里有十次" → "十有八九"。\n多接动词，主要用于负面结果的高概率发生。', english: 'Structure: Verb stem + 기 십상이다.\\n십상 is a Sino-Korean word meaning "ten out of ten" → "nine times out of ten."\\nIt mainly attaches to verbs and is used for the high probability of negative outcomes.',
+    rulesNote: '语感差别：\n· -기 마련이다：中性，指普遍规律\n· -기 십상이다：偏负面，指容易出错\n\n例：\n· 늙기 마련이다（会老）— 客观规律\n· 넘어지기 십상이다（容易摔倒）— 警告', english: 'Nuance difference:\\n· -기 마련이다: Neutral, refers to a general rule\\n· -기 십상이다: Negative, refers to being prone to mistakes\\n\\nExamples:\\n· 늙기 마련이다 (gets old) — objective rule\\n· 넘어지기 십상이다 (likely to fall) — warning',
     structures: [
       {
         ko: '길이 미끄러우니까 넘어지기 십상이에요',
@@ -1073,7 +1073,7 @@ export const grammarCardsP22: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'fill',
-      title: '-기 십상이다 用法练习',
+      title: '-기 십상이다 用法练习', english: '-기 십상이다 Usage Practice',
       body: '根据语境判断该用哪个语法。',
       questions: [
         {
@@ -1184,10 +1184,10 @@ export const grammarCardsP22: GrammarCard[] = [
     partNumber: 22,
     lessonNumber: 6,
     title: '-는 법이다 / -는 법이 없다',
-    whatItDoes: '本来就……（道理规律）/ 从不……',
-    whatItDoesBody: '-는 법이다 表达"按道理/情理就是这样"的规律。\n-는 법이 없다 相反，表达"从来不这样"的固定否定。\n侧重"应然"或"惯例"，比 -기 마련이다 更偏道德/社会规律。',
-    structureNote: '结构：\n· 动词词干 + 는 법이다（现在规律）\n· 形容词词干（无收音+ㄴ；有收音+은）+ 법이다\n· 名词 + 인 법이다\n否定：-는 법이 없다（从来不）',
-    rulesNote: '和 -기 마련이다 的选择：\n· -기 마련이다：偏自然/生理规律\n· -는 법이다：偏社会/道理规律\n· 两者意思接近、可互换的场景多，微妙差别只在"侧重生理"还是"侧重道理"。',
+    whatItDoes: '本来就……（道理规律）/ 从不……', english: 'It\'s only natural that... (by rule/logic) / Never...',
+    whatItDoesBody: '-는 법이다 表达"按道理/情理就是这样"的规律。\n-는 법이 없다 相反，表达"从来不这样"的固定否定。\n侧重"应然"或"惯例"，比 -기 마련이다 更偏道德/社会规律。', english: '-는 법이다 expresses a rule that "by logic or common sense, this is how it is."\\n-는 법이 없다 is the opposite, expressing a fixed negation meaning "this never happens."\\nIt emphasizes "what should be" or "convention," leaning more toward moral/social rules than -기 마련이다.',
+    structureNote: '结构：\n· 动词词干 + 는 법이다（现在规律）\n· 形容词词干（无收音+ㄴ；有收音+은）+ 법이다\n· 名词 + 인 법이다\n否定：-는 법이 없다（从来不）', english: 'Structure:\\n· Verb stem + 는 법이다 (present rule)\\n· Adjective stem (no batchim + ㄴ; with batchim + 은) + 법이다\\n· Noun + 인 법이다\\nNegation: -는 법이 없다 (never)',
+    rulesNote: '和 -기 마련이다 的选择：\n· -기 마련이다：偏自然/生理规律\n· -는 법이다：偏社会/道理规律\n· 两者意思接近、可互换的场景多，微妙差别只在"侧重生理"还是"侧重道理"。', english: 'Choosing between -기 마련이다 and -는 법이다:\\n· -기 마련이다: leans toward natural/physiological rules\\n· -는 법이다: leans toward social/logical rules\\n· They are often interchangeable, with the subtle difference being whether the focus is on "physiology" or "logic."',
     structures: [
       {
         ko: '잘못하면 벌을 받는 법이에요',
@@ -1294,7 +1294,7 @@ export const grammarCardsP22: GrammarCard[] = [
       { wrong: '학생 법이에요', correct: '학생인 법이에요', note: '名词 + 인 법이다。' },
     ],
     quickTable: {
-      title: '"自然会/规律"三大表达对照',
+      title: '"自然会/规律"三大表达对照', english: 'Comparison of Three Expressions for "Naturally/By Rule"',
       body: '选择合适的语法最能显示韩语功底。',
       headers: ['结构', '侧重', '语气', '例句'],
       rows: [
@@ -1306,7 +1306,7 @@ export const grammarCardsP22: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'fill',
-      title: '-는 법이다 / -는 법이 없다 用法练习',
+      title: '-는 법이다 / -는 법이 없다 用法练习', english: '-는 법이다 / -는 법이 없다 Usage Practice',
       body: '根据语境选出正确表达。',
       questions: [
         {
@@ -1425,10 +1425,10 @@ export const grammarCardsP22: GrammarCard[] = [
     partNumber: 22,
     lessonNumber: 7,
     title: '-는/은/ㄴ 게 뻔하다',
-    whatItDoes: '显然是……（心里有数）',
-    whatItDoesBody: '表达"根据情况判断，事情显然会是这样"的强推测。\n뻔하다 就是"明摆着、显而易见"的意思。\n带主观判断色彩，说话人对结论很有把握。',
-    structureNote: '结构：\n· 动词 + 는 게 뻔하다（现在/将来）\n· 动词 + 은/ㄴ 게 뻔하다（过去）\n· 形容词 + 은/ㄴ 게 뻔하다\n· 名词 + 인 게 뻔하다\n\n뻔하다 本身是形容词"显而易见"。',
-    rulesNote: '和 -을 리가 없다 相反：\n· -을 리가 없다 = 断言"不可能"\n· -는 게 뻔하다 = 断言"显然会"\n\n和 -을 게 틀림없다（下一课）差别微妙：\n· -는 게 뻔하다 = 从眼前情况推断\n· -을 게 틀림없다 = 从证据/规律推断',
+    whatItDoes: '显然是……（心里有数）', english: 'It\'s obviously... (you know it for sure)',
+    whatItDoesBody: '表达"根据情况判断，事情显然会是这样"的强推测。\n뻔하다 就是"明摆着、显而易见"的意思。\n带主观判断色彩，说话人对结论很有把握。', english: 'Expresses a strong guess that "based on the situation, things will obviously turn out this way."\\n뻔하다 means "clear, obvious, evident."\\nIt carries a subjective judgment, with the speaker feeling very confident about the conclusion.',
+    structureNote: '结构：\n· 动词 + 는 게 뻔하다（现在/将来）\n· 动词 + 은/ㄴ 게 뻔하다（过去）\n· 形容词 + 은/ㄴ 게 뻔하다\n· 名词 + 인 게 뻔하다\n\n뻔하다 本身是形容词"显而易见"。', english: 'Structure:\\n· Verb + 는 게 뻔하다 (present/future)\\n· Verb + 은/ㄴ 게 뻔하다 (past)\\n· Adjective + 은/ㄴ 게 뻔하다\\n· Noun + 인 게 뻔하다\\n\\n뻔하다 itself is an adjective meaning "obvious."',
+    rulesNote: '和 -을 리가 없다 相反：\n· -을 리가 없다 = 断言"不可能"\n· -는 게 뻔하다 = 断言"显然会"\n\n和 -을 게 틀림없다（下一课）差别微妙：\n· -는 게 뻔하다 = 从眼前情况推断\n· -을 게 틀림없다 = 从证据/规律推断', english: 'Opposite of -을 리가 없다:\\n· -을 리가 없다 = asserting "impossible"\\n· -는 게 뻔하다 = asserting "obviously will"\\n\\nSubtle difference from -을 게 틀림없다 (next lesson):\\n· -는 게 뻔하다 = inferred from the situation at hand\\n· -을 게 틀림없다 = inferred from evidence/rules',
     structures: [
       {
         ko: '민수 씨는 또 늦게 올 게 뻔해요',
@@ -1533,7 +1533,7 @@ export const grammarCardsP22: GrammarCard[] = [
       { wrong: '어렵는 게 뻔해요', correct: '어려운 게 뻔해요', note: '形容词用 -은/ㄴ 冠形。어렵다 → 어려운 게 뻔해요。' },
     ],
     quickTable: {
-      title: '-는/은/ㄴ/을 게 뻔하다 · 冠形选择',
+      title: '-는/은/ㄴ/을 게 뻔하다 · 冠形选择', english: '-는/은/ㄴ/을 게 뻔하다 · Choosing the Adnominal Form',
       body: '按词性和时态选择正确冠形。',
       headers: ['词性', '时态', '冠形', '例句'],
       rows: [
@@ -1546,7 +1546,7 @@ export const grammarCardsP22: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'fill',
-      title: '-는/은/ㄴ/을 게 뻔하다 用法练习',
+      title: '-는/은/ㄴ/을 게 뻔하다 用法练习', english: '-는/은/ㄴ/을 게 뻔하다 Usage Practice',
       body: '根据词性和时态选出正确冠形。',
       questions: [
         {
@@ -1659,10 +1659,10 @@ export const grammarCardsP22: GrammarCard[] = [
     partNumber: 22,
     lessonNumber: 8,
     title: '-을/ㄹ 게 틀림없다',
-    whatItDoes: '肯定会……（无疑）',
-    whatItDoesBody: '表达"根据证据/规律，一定会……"的最高确定性推测。\n틀림없다 直译"没有错误"→"确信无疑"。\n和 -을 리가 없다 是同一光谱的两端：一个断言"肯定"，一个断言"不可能"。',
-    structureNote: '结构：\n· 动词/形容词 + 을/ㄹ 게 틀림없다（未来推测）\n· 动词过去 + 은/ㄴ 게 틀림없다（过去推测）\n· 名词 + 인 게 틀림없다\n\n틀림없다 也可单独使用，等于 "그렇다"。',
-    rulesNote: '推测确定性最高级：\n· -을지도 모르다（20%）\n· -을 것 같다（60%）\n· -을 것이다（80%）\n· -을 게 틀림없다（95%）— 这一课\n\n和 -는 게 뻔하다 意思接近但语感不同：\n· 뻔하다：主观判断"看着就知道"\n· 틀림없다：客观证据"根据规律"',
+    whatItDoes: '肯定会……（无疑）', english: 'Surely will... (without a doubt)',
+    whatItDoesBody: '表达"根据证据/规律，一定会……"的最高确定性推测。\n틀림없다 直译"没有错误"→"确信无疑"。\n和 -을 리가 없다 是同一光谱的两端：一个断言"肯定"，一个断言"不可能"。', english: 'Expresses the highest level of certainty in a prediction, meaning "based on evidence/rules, it will definitely..."\\n틀림없다 literally means "no mistake" → "certain and without doubt."\\nIt is the opposite end of the spectrum from -을 리가 없다: one asserts "definitely yes," the other "definitely no."',
+    structureNote: '结构：\n· 动词/形容词 + 을/ㄹ 게 틀림없다（未来推测）\n· 动词过去 + 은/ㄴ 게 틀림없다（过去推测）\n· 名词 + 인 게 틀림없다\n\n틀림없다 也可单独使用，等于 "그렇다"。', english: 'Structure:\\n· Verb/Adjective + 을/ㄹ 게 틀림없다 (future prediction)\\n· Past verb + 은/ㄴ 게 틀림없다 (past prediction)\\n· Noun + 인 게 틀림없다\\n\\n틀림없다 can also be used alone, meaning "that\'s right."',
+    rulesNote: '推测确定性最高级：\n· -을지도 모르다（20%）\n· -을 것 같다（60%）\n· -을 것이다（80%）\n· -을 게 틀림없다（95%）— 这一课\n\n和 -는 게 뻔하다 意思接近但语感不同：\n· 뻔하다：主观判断"看着就知道"\n· 틀림없다：客观证据"根据规律"', english: 'Highest level of certainty in predictions:\\n· -을지도 모르다 (20%)\\n· -을 것 같다 (60%)\\n· -을 것이다 (80%)\\n· -을 게 틀림없다 (95%) — this lesson\\n\\nSimilar to -는 게 뻔하다 but with a different nuance:\\n· 뻔하다: subjective judgment "you can tell at a glance"\\n· 틀림없다: objective evidence "based on rules"',
     structures: [
       {
         ko: '이 시간에 오는 사람은 민수 씨일 게 틀림없어요',
@@ -1763,7 +1763,7 @@ export const grammarCardsP22: GrammarCard[] = [
       { wrong: '노력하니까 성공할 리가 없어요（想说肯定成功）', correct: '노력하니까 성공할 게 틀림없어요', note: '-을 리가 없다 是"不可能"（负面否定），"肯定"必须用 -을 게 틀림없다。' },
     ],
     quickTable: {
-      title: '推测确定性总梯度',
+      title: '推测确定性总梯度', english: 'Prediction Certainty Gradient',
       body: '整个 P22 学过的推测语法全对比。',
       headers: ['结构', '确定性', '语感', '例句'],
       rows: [
@@ -1778,7 +1778,7 @@ export const grammarCardsP22: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'fill',
-      title: '-을/ㄹ 게 틀림없다 用法练习',
+      title: '-을/ㄹ 게 틀림없다 用法练习', english: '-을/ㄹ 게 틀림없다 Usage Practice',
       body: '根据词性、时态和语境选出正确形态。',
       questions: [
         {
@@ -1889,11 +1889,11 @@ export const grammarCardsP22: GrammarCard[] = [
     id: 'card-p22-l09',
     partNumber: 22,
     lessonNumber: 9,
-    title: 'P22 综合练习',
-    whatItDoes: 'P22 第1～8课 总复习',
-    whatItDoesBody: '完成这份练习，检验担忧、推测与规律八大语法。\n覆盖：-을까 봐、-을지도 모르다、-을 리가 없다、-기 마련이다、-기 십상이다、-는 법이다、-는 게 뻔하다、-을 게 틀림없다。\n重点掌握推测确定性梯度与规律语法的选择。',
+    title: 'P22 综合练习', english: 'P22 Comprehensive Practice',
+    whatItDoes: 'P22 第1～8课 总复习', english: 'P22 Lessons 1–8 Total Review',
+    whatItDoesBody: '完成这份练习，检验担忧、推测与规律八大语法。\n覆盖：-을까 봐、-을지도 모르다、-을 리가 없다、-기 마련이다、-기 십상이다、-는 법이다、-는 게 뻔하다、-을 게 틀림없다。\n重点掌握推测确定性梯度与规律语法的选择。', english: 'Complete this practice to test the eight grammar points covering worry, speculation, and rules.\\nCovered: -을까 봐, -을지도 모르다, -을 리가 없다, -기 마련이다, -기 십상이다, -는 법이다, -는 게 뻔하다, -을 게 틀림없다.\\nFocus on mastering the prediction certainty gradient and choosing the right rule-based grammar.',
     isPractice: true,
-    structureNote: 'P22 八大语法分组：\n【担忧】L01 -을까 봐\n【推测】L02 -을지도 모르다（说不定）· L03 -을 리가 없다（不可能）· L07 -는 게 뻔하다（显然是）· L08 -을 게 틀림없다（肯定）\n【规律】L04 -기 마련이다（自然规律）· L05 -기 십상이다（负面警告）· L06 -는 법이다（道理规律）',
+    structureNote: 'P22 八大语法分组：\n【担忧】L01 -을까 봐\n【推测】L02 -을지도 모르다（说不定）· L03 -을 리가 없다（不可能）· L07 -는 게 뻔하다（显然是）· L08 -을 게 틀림없다（肯定）\n【规律】L04 -기 마련이다（自然规律）· L05 -기 십상이다（负面警告）· L06 -는 법이다（道理规律）', english: 'P22 Eight Grammar Points Grouped:\\n【Worry】L01 -을까 봐\\n【Speculation】L02 -을지도 모르다 (might) · L03 -을 리가 없다 (impossible) · L07 -는 게 뻔하다 (obviously) · L08 -을 게 틀림없다 (definitely)\\n【Rules】L04 -기 마련이다 (natural rule) · L05 -기 십상이다 (negative warning) · L06 -는 법이다 (principle/rule)',
     structures: [
       { ko: '비가 올까 봐 우산을 챙겼어요', zh: '怕下雨带了伞。', tokens: [{ text: '비가', role: 'subject' }, { text: '올까 봐', role: 'verb' }, { text: '우산을', role: 'object' }, { text: '챙겼어요', role: 'verb' }] },
       { ko: '내일 비가 올지도 몰라요', zh: '明天说不定下雨。', tokens: [{ text: '내일', role: 'time' }, { text: '비가', role: 'subject' }, { text: '올지도 몰라요', role: 'verb' }] },
@@ -1957,7 +1957,7 @@ export const grammarCardsP22: GrammarCard[] = [
     linkedGrammarIds: [],
     specialQuiz: {
       type: 'fill',
-      title: '综合练习 · 担忧、推测与规律',
+      title: '综合练习 · 担忧、推测与规律', english: 'Comprehensive Practice · Worry, Speculation, and Patterns',
       body: '根据语境选出最合适的表达。',
       questions: [
         {

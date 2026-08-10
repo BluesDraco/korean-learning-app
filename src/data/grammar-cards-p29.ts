@@ -7,10 +7,10 @@ export const grammarCardsP29: GrammarCard[] = [
     partNumber: 29,
     lessonNumber: 1,
     title: '-(으)ㄴ/는 것으로 알려지다/전해지다',
-    whatItDoes: '据悉/据传',
-    whatItDoesBody: '「-(으)ㄴ/는 것으로 알려지다/전해지다」是新闻报道最常用的引述句式，表示"据悉""据报道""据传"。将某消息作为"已知事实"传达出去，不指明信息源。알려지다 侧重"广为人知"，전해지다 侧重"消息传来"。',
-    structureNote: '动词现在 -는 + 것으로 + 알려지다/전해지다｜形容词/过去 -(으)ㄴ + 것으로',
-    rulesNote: '알려지다=被知晓；전해지다=被传告；名词 -인 것으로；否定 -지 않은 것으로',
+    whatItDoes: '据悉/据传', english: 'It is known/reported',
+    whatItDoesBody: '「-(으)ㄴ/는 것으로 알려지다/전해지다」是新闻报道最常用的引述句式，表示"据悉""据报道""据传"。将某消息作为"已知事实"传达出去，不指明信息源。알려지다 侧重"广为人知"，전해지다 侧重"消息传来"。', english: '「-(으)ㄴ/는 것으로 알려지다/전해지다」 is the most common quotative pattern used in news reports, meaning "it is known," "according to reports," or "it is said." It conveys a piece of information as a "known fact" without specifying the source. 알려지다 emphasizes "widely known," while 전해지다 emphasizes "news coming in."',
+    structureNote: '动词现在 -는 + 것으로 + 알려지다/전해지다｜形容词/过去 -(으)ㄴ + 것으로', english: 'Verb present -는 + 것으로 + 알려지다/전해지다｜Adjective/past -(으)ㄴ + 것으로',
+    rulesNote: '알려지다=被知晓；전해지다=被传告；名词 -인 것으로；否定 -지 않은 것으로', english: '알려지다 = to be known; 전해지다 = to be reported; Noun -인 것으로; Negative -지 않은 것으로',
     structures: [
       {
         ko: '이번 사고는 운전자의 부주의로 발생한 것으로 알려졌다.',
@@ -101,7 +101,7 @@ export const grammarCardsP29: GrammarCard[] = [
       { wrong: '두 회사는 협력하는 알려졌다', correct: '두 회사는 협력하고 있는 것으로 알려졌다', note: '缺 "것으로"，句式必须完整' },
     ],
     quickTable: {
-      title: '"것으로 알려지다/전해지다" 冠形规则',
+      title: '"것으로 알려지다/전해지다" 冠形规则', english: '"것으로 알려지다/전해지다" Adnominal Rules',
       headers: ['词类/时态', '结构', '例子'],
       rows: [
         ['动词现在', '-는 것으로', '유지하고 있는 것으로'],
@@ -113,7 +113,7 @@ export const grammarCardsP29: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '"것으로 알려지다/전해지다" 练习',
+      title: '"것으로 알려지다/전해지다" 练习', english: '"것으로 알려지다/전해지다" Practice',
       body: '选择正确形式',
       questions: [
         {
@@ -195,10 +195,10 @@ export const grammarCardsP29: GrammarCard[] = [
     partNumber: 29,
     lessonNumber: 2,
     title: '-(으)ㄴ/는 것으로 나타나다/드러나다',
-    whatItDoes: '数据/调查显示',
-    whatItDoesBody: '「-(으)ㄴ/는 것으로 나타나다/드러나다」表示"（据调查/数据）显示""结果表明"。나타나다 侧重"显示/呈现"（中性数据），드러나다 侧重"暴露/揭露"（隐藏事实被查出）。报社、政府报告、白皮书高频结构。',
-    structureNote: '동사/형용사 -(으)ㄴ/는 것으로 + 나타나다 / 드러나다',
-    rulesNote: '나타나다=（结果）显示｜드러나다=（隐藏的）被揭露｜句尾用过去 -았/었다',
+    whatItDoes: '数据/调查显示', english: 'Data/survey shows',
+    whatItDoesBody: '「-(으)ㄴ/는 것으로 나타나다/드러나다」表示"（据调查/数据）显示""结果表明"。나타나다 侧重"显示/呈现"（中性数据），드러나다 侧重"暴露/揭露"（隐藏事实被查出）。报社、政府报告、白皮书高频结构。', english: '「-(으)ㄴ/는 것으로 나타나다/드러나다」 means "(according to surveys/data) it shows" or "the results indicate." 나타나다 emphasizes "showing/appearing" (neutral data), while 드러나다 emphasizes "being exposed/revealed" (hidden facts uncovered). This is a high-frequency structure in newspapers, government reports, and white papers.',
+    structureNote: '동사/형용사 -(으)ㄴ/는 것으로 + 나타나다 / 드러나다', english: 'Verb/adjective -(으)ㄴ/는 것으로 + 나타나다 / 드러나다',
+    rulesNote: '나타나다=（结果）显示｜드러나다=（隐藏的）被揭露｜句尾用过去 -았/었다', english: '나타나다 = (results) show｜드러나다 = (hidden) is revealed｜Use past -았/었다 at sentence end',
     structures: [
       {
         ko: '설문 조사 결과 응답자의 70%가 반대하는 것으로 나타났다.',
@@ -301,7 +301,7 @@ export const grammarCardsP29: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '"나타나다/드러나다" 练习',
+      title: '"나타나다/드러나다" 练习', english: '"나타나다/드러나다" Practice',
       body: '选择正确形式或用词',
       questions: [
         {
@@ -382,10 +382,10 @@ export const grammarCardsP29: GrammarCard[] = [
     partNumber: 29,
     lessonNumber: 3,
     title: '-(으)ㄹ 전망이다 / -(으)ㄹ 것으로 보이다',
-    whatItDoes: '预计/预测',
-    whatItDoesBody: '「-(으)ㄹ 전망이다」和「-(으)ㄹ 것으로 보이다/예상되다」都是新闻体"预计/预测"的固定表达。前者语气更断定（"有……的前景"），后者更委婉（"看起来……"）。表示对未来趋势、经济走势、政策走向的客观预测。',
-    structureNote: '动词/形容词词干 + -(으)ㄹ + 전망이다｜-(으)ㄹ + 것으로 + 보이다 / 예상되다',
-    rulesNote: '有받침 -을，无받침 -ㄹ；名词 -일 전망이다；否定 -지 않을 전망이다',
+    whatItDoes: '预计/预测', english: 'Expected/Predicted',
+    whatItDoesBody: '「-(으)ㄹ 전망이다」和「-(으)ㄹ 것으로 보이다/예상되다」都是新闻体"预计/预测"的固定表达。前者语气更断定（"有……的前景"），后者更委婉（"看起来……"）。表示对未来趋势、经济走势、政策走向的客观预测。', english: '「-(으)ㄹ 전망이다」 and 「-(으)ㄹ 것으로 보이다/예상되다」 are both fixed expressions in news style meaning "expected/predicted." The former has a more definitive tone ("there is a prospect of..."), while the latter is more tentative ("it appears..."). They are used to express objective predictions about future trends, economic developments, and policy directions.',
+    structureNote: '动词/形容词词干 + -(으)ㄹ + 전망이다｜-(으)ㄹ + 것으로 + 보이다 / 예상되다', english: 'Verb/Adjective stem + -(으)ㄹ + 전망이다｜-(으)ㄹ + 것으로 + 보이다 / 예상되다',
+    rulesNote: '有收音 -을，无收音 -ㄹ；名词 -일 전망이다；否定 -지 않을 전망이다', english: 'Use -을 after a final consonant, -ㄹ after no final consonant; for nouns, use -일 전망이다; for negation, use -지 않을 전망이다',
     structures: [
       {
         ko: '올해 경제 성장률은 3%대에 머무를 전망이다.',
@@ -420,8 +420,8 @@ export const grammarCardsP29: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '动词/形容词有받침 → -을 전망이다', examples: '머무르다 → 머무를 전망이다（받침×，但 르→ㄹ）' },
-      { type: 'rule', text: '动词/形容词无받침 → -ㄹ 전망이다', examples: '가다 → 갈 전망이다 / 늘어나다 → 늘어날 전망이다' },
+      { type: 'rule', text: '动词/形容词有收音 → -을 전망이다', examples: '머무르다 → 머무를 전망이다（收音×，但 르→ㄹ）' },
+      { type: 'rule', text: '动词/形容词无收音 → -ㄹ 전망이다', examples: '가다 → 갈 전망이다 / 늘어나다 → 늘어날 전망이다' },
       { type: 'rule', text: '名词 → N일 전망이다', examples: '큰 변화 → 큰 변화일 전망이다' },
       { type: 'usage', text: '전망이다：语气略断定，多用于经济/政策预测', examples: '수출이 증가할 전망이다.（预计出口将增长。）' },
       { type: 'usage', text: '것으로 보이다/예상된다：语气委婉，多用于天气/走势/民意', examples: '기온이 떨어질 것으로 보인다.（预计气温将下降。）' },
@@ -476,7 +476,7 @@ export const grammarCardsP29: GrammarCard[] = [
       { wrong: '정부는 정책을 발표할 것으로 예상됐다', correct: '정부는 정책을 발표할 것으로 예상된다', note: '预测句尾用现在 -된다 / -이다，不用 -었다' },
     ],
     quickTable: {
-      title: '预测句式对照',
+      title: '预测句式对照', english: 'Comparison of Prediction Patterns',
       headers: ['句式', '语气', '典型语境'],
       rows: [
         ['-(으)ㄹ 전망이다', '断定', '经济 / 政策 / 走势'],
@@ -487,7 +487,7 @@ export const grammarCardsP29: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '"전망이다 / 것으로 보이다" 练习',
+      title: '"전망이다 / 것으로 보이다" 练习', english: '"전망이다 / 것으로 보이다" Practice',
       body: '选择正确形式',
       questions: [
         {
@@ -568,10 +568,10 @@ export const grammarCardsP29: GrammarCard[] = [
     partNumber: 29,
     lessonNumber: 4,
     title: '-기에 앞서 / -에 앞서',
-    whatItDoes: '在……之前',
-    whatItDoesBody: '「-기에 앞서 / -에 앞서」是"在……之前"的书面表达，比口语的 -기 전에 更正式。多用于新闻、致辞、报告开头，表示某项正式动作/仪式前需先做的事。动词接 -기에 앞서，名词接 -에 앞서。',
-    structureNote: '动词词干 + -기에 앞서｜名词 + -에 앞서',
-    rulesNote: '书面正式；后文常接告知/说明/致谢；不用于日常口语',
+    whatItDoes: '在……之前', english: 'Before (doing something)',
+    whatItDoesBody: '「-기에 앞서 / -에 앞서」是"在……之前"的书面表达，比口语的 -기 전에 更正式。多用于新闻、致辞、报告开头，表示某项正式动作/仪式前需先做的事。动词接 -기에 앞서，名词接 -에 앞서。', english: '「-기에 앞서 / -에 앞서」 is a written expression meaning "before (doing something)," more formal than the colloquial -기 전에. It is often used in news, speeches, and report openings to indicate something that must be done before a formal action or ceremony. Verbs take -기에 앞서, and nouns take -에 앞서.',
+    structureNote: '动词词干 + -기에 앞서｜名词 + -에 앞서', english: 'Verb stem + -기에 앞서｜Noun + -에 앞서',
+    rulesNote: '书面正式；后文常接告知/说明/致谢；不用于日常口语', english: 'Formal in writing; often followed by notifications, explanations, or thanks; not used in everyday speech.',
     structures: [
       {
         ko: '회의를 시작하기에 앞서 참석자 여러분께 감사의 말씀을 드립니다.',
@@ -671,7 +671,7 @@ export const grammarCardsP29: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '"-기에 앞서 / -에 앞서" 练习',
+      title: '"-기에 앞서 / -에 앞서" 练习', english: '"-기에 앞서 / -에 앞서" Practice',
       body: '选正确形式',
       questions: [
         {
@@ -752,10 +752,10 @@ export const grammarCardsP29: GrammarCard[] = [
     partNumber: 29,
     lessonNumber: 5,
     title: '-기(를) 요구하다 / 촉구하다 / 당부하다',
-    whatItDoes: '要求/敦促/呼吁',
-    whatItDoesBody: '「-기(를) 요구하다/촉구하다/당부하다」是新闻/公文报道公众诉求或官员发言的正式句式。요구하다=要求（强）；촉구하다=催促、敦促（正式/媒体）；당부하다=郑重叮嘱、呼吁（客气/上级对下）。',
-    structureNote: '动词词干 + -기(를) + 요구하다 / 촉구하다 / 당부하다',
-    rulesNote: '助词 -를 常可省；主语多为 团体/官方；否定用 -지 않기(를)',
+    whatItDoes: '要求/敦促/呼吁', english: 'To demand / urge / request',
+    whatItDoesBody: '「-기(를) 요구하다/촉구하다/당부하다」是新闻/公文报道公众诉求或官员发言的正式句式。요구하다=要求（强）；촉구하다=催促、敦促（正式/媒体）；당부하다=郑重叮嘱、呼吁（客气/上级对下）。', english: '「-기(를) 요구하다/촉구하다/당부하다」 is a formal pattern used in news and official documents to report public demands or officials\' statements. 요구하다 = to demand (strong); 촉구하다 = to urge, press (formal/media); 당부하다 = to earnestly request, appeal (polite/superior to subordinate).',
+    structureNote: '动词词干 + -기(를) + 요구하다 / 촉구하다 / 당부하다', english: 'Verb stem + -기(를) + 요구하다 / 촉구하다 / 당부하다',
+    rulesNote: '助词 -를 常可省；主语多为 团体/官方；否定用 -지 않기(를)', english: 'The particle -를 is often omitted; the subject is usually a group or official body; negation uses -지 않기(를).',
     structures: [
       {
         ko: '시민들은 정부에 정책 재검토를 요구했다.',
@@ -845,7 +845,7 @@ export const grammarCardsP29: GrammarCard[] = [
       { wrong: '시민들은 정부를 재검토를 요구했다', correct: '시민들은 정부에 재검토를 요구했다', note: '"要求政府"里的政府是对象方，用 -에；一句话只有一个 -를 宾语（被要求的内容）' },
     ],
     quickTable: {
-      title: '要求/敦促/呼吁 强弱对照',
+      title: '要求/敦促/呼吁 强弱对照', english: 'Demand / Urge / Request: Strength Comparison',
       headers: ['动词', '语气', '常见主语'],
       rows: [
         ['요구하다', '强 · 诉求', '市民 / 工会 / 政党'],
@@ -856,7 +856,7 @@ export const grammarCardsP29: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '"요구/촉구/당부" 练习',
+      title: '"요구/촉구/당부" 练习', english: '"요구/촉구/당부" Practice',
       body: '选合适的动词或形式',
       questions: [
         {
@@ -939,10 +939,10 @@ export const grammarCardsP29: GrammarCard[] = [
     partNumber: 29,
     lessonNumber: 6,
     title: '-는 데 그치다 / -에 그치다',
-    whatItDoes: '仅限于/停留在',
-    whatItDoesBody: '「-는 데 그치다 / -에 그치다」表示"仅仅停留在……""只做到……为止"，暗含"未能进一步/未达预期"的批评或惋惜。是新闻分析、评论最常见的评价句式。动词接 -는 데 그치다，名词接 -에 그치다。',
-    structureNote: '动词词干 + -는 데 그치다｜名词 + -에 그치다',
-    rulesNote: '句尾常用 -았/었다 表示结果；含消极评价（"未达预期"）',
+    whatItDoes: '仅限于/停留在', english: 'To be limited to / to stop at',
+    whatItDoesBody: '「-는 데 그치다 / -에 그치다」表示"仅仅停留在……""只做到……为止"，暗含"未能进一步/未达预期"的批评或惋惜。是新闻分析、评论最常见的评价句式。动词接 -는 데 그치다，名词接 -에 그치다。', english: '「-는 데 그치다 / -에 그치다」 means "to stop at just..." or "to only go as far as...", implying criticism or regret that something did not go further or meet expectations. It is the most common evaluative expression in news analysis and commentary. Verbs take -는 데 그치다, and nouns take -에 그치다.',
+    structureNote: '动词词干 + -는 데 그치다｜名词 + -에 그치다', english: 'Verb stem + -는 데 그치다｜Noun + -에 그치다',
+    rulesNote: '句尾常用 -았/었다 表示结果；含消极评价（"未达预期"）', english: 'Often used with -았/었다 at the end to indicate a result; carries a negative evaluation ("did not meet expectations")',
     structures: [
       {
         ko: '이번 회의는 원론적인 논의를 하는 데 그쳤다.',
@@ -1023,7 +1023,7 @@ export const grammarCardsP29: GrammarCard[] = [
       { wrong: '대책은 임시 조치가 그쳤다', correct: '대책은 임시 조치에 그쳤다', note: '"停留在"用 -에 그치다，不是 -가 그치다' },
     ],
     quickTable: {
-      title: '"…에/데 그치다" 用法',
+      title: '"…에/데 그치다" 用法', english: 'Usage of "…에/데 그치다"',
       headers: ['形式', '含义', '例子'],
       rows: [
         ['V + -는 데 그치다', '只做到……', '논의하는 데 그쳤다'],
@@ -1034,7 +1034,7 @@ export const grammarCardsP29: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '"-에 그치다 / -는 데 그치다" 练习',
+      title: '"-에 그치다 / -는 데 그치다" 练习', english: 'Practice: "-에 그치다 / -는 데 그치다"',
       body: '选正确形式',
       questions: [
         {
@@ -1115,10 +1115,10 @@ export const grammarCardsP29: GrammarCard[] = [
     partNumber: 29,
     lessonNumber: 7,
     title: '-자',
-    whatItDoes: '一……就……',
-    whatItDoesBody: '「-자」是"一……就……"的书面语连接词尾，语义与 -자마자 相近但更简洁、正式，专用于书面/新闻/文学。前后动作紧接发生，多用于客观陈述过去事件。不能用命令/请求句尾。',
-    structureNote: '动词词干 + -자 + 后续动作',
-    rulesNote: '仅接动词；主语可不同也可相同；不能与命令/请求/劝诱形式搭配；不含"预期外"语气',
+    whatItDoes: '一……就……', english: 'As soon as...',
+    whatItDoesBody: '「-자」是"一……就……"的书面语连接词尾，语义与 -자마자 相近但更简洁、正式，专用于书面/新闻/文学。前后动作紧接发生，多用于客观陈述过去事件。不能用命令/请求句尾。', english: '「-자」 is a written-language connective ending meaning "as soon as...", similar in meaning to -자마자 but more concise and formal, used specifically in written, news, or literary contexts. The actions occur in immediate succession and are often used to objectively state past events. It cannot be used with imperative or request endings.',
+    structureNote: '动词词干 + -자 + 后续动作', english: 'Verb stem + -자 + following action',
+    rulesNote: '仅接动词；主语可不同也可相同；不能与命令/请求/劝诱形式搭配；不含"预期外"语气', english: 'Only attaches to verbs; subjects can be different or the same; cannot be used with imperative, request, or suggestion forms; does not carry an "unexpected" nuance',
     structures: [
       {
         ko: '문이 열리자 사람들이 우르르 몰려 나왔다.',
@@ -1154,7 +1154,7 @@ export const grammarCardsP29: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '动词词干 + -자（不分有无받침）', examples: '열리다 → 열리자 / 그치다 → 그치자 / 발표되다 → 발표되자' },
+      { type: 'rule', text: '动词词干 + -자（不分有无收音）', examples: '열리다 → 열리자 / 그치다 → 그치자 / 발표되다 → 발표되자' },
       { type: 'rule', text: '不接形容词、名词（不用 이자）', examples: '误：예쁘자 / 误：학생이자（除非表并列身份则另外语义）' },
       { type: 'usage', text: '前后动作紧接（一……就……）', examples: '문이 열리자 사람들이 몰려 나왔다.（门一打开，人们就涌了出来。）' },
       { type: 'usage', text: '主语可不同也可相同', examples: '(不同) 비가 그치자 아이들이 나갔다 / (相同) 그는 도착하자 인사를 했다' },
@@ -1221,7 +1221,7 @@ export const grammarCardsP29: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '"-자" 练习',
+      title: '"-자" 练习', english: 'Practice: "-자"',
       body: '选择正确用法',
       questions: [
         {
@@ -1307,10 +1307,10 @@ export const grammarCardsP29: GrammarCard[] = [
     partNumber: 29,
     lessonNumber: 8,
     title: '이래(로) / -(으)ㄴ 이래',
-    whatItDoes: '自从……以来',
-    whatItDoesBody: '「이래(로) / -(으)ㄴ 이래」表示"自从……以来（一直……）"，比 -(으)ㄴ 후로 / -고 나서 语气更正式、书面。名词后接 이래(로)，动词过去分词后接 -(으)ㄴ 이래。多见于报道回顾、历史陈述。',
-    structureNote: '名词 + 이래(로)｜动词 -(으)ㄴ + 이래',
-    rulesNote: '이래(로) 中的 -로 可省；后文常接"最……""持续……""从未……"表述长期状态',
+    whatItDoes: '自从……以来', english: 'Since... (ever since)',
+    whatItDoesBody: '「이래(로) / -(으)ㄴ 이래」表示"自从……以来（一直……）"，比 -(으)ㄴ 후로 / -고 나서 语气更正式、书面。名词后接 이래(로)，动词过去分词后接 -(으)ㄴ 이래。多见于报道回顾、历史陈述。', english: '「이래(로) / -(으)ㄴ 이래」 means "since... (continuously up to now)" and is more formal and written in tone than -(으)ㄴ 후로 / -고 나서. Attach 이래(로) to nouns and -(으)ㄴ 이래 to the past adnominal form of verbs. It is commonly found in news retrospectives and historical statements.',
+    structureNote: '名词 + 이래(로)｜动词 -(으)ㄴ + 이래', english: 'Noun + 이래(로) ｜ Verb -(으)ㄴ + 이래',
+    rulesNote: '이래(로) 中的 -로 可省；后文常接"最……""持续……""从未……"表述长期状态', english: 'The -로 in 이래(로) can be omitted; the following clause often describes a long-term state such as "the most...", "continuously...", or "never..."',
     structures: [
       {
         ko: '창사 이래 최대 실적을 기록했다.',
@@ -1397,7 +1397,7 @@ export const grammarCardsP29: GrammarCard[] = [
       { wrong: '관측을 이래로', correct: '관측 이래로', note: '이래(로) 前不加 -을/를，名词直接接' },
     ],
     quickTable: {
-      title: '"이래 / -(으)ㄴ 이래" 用法',
+      title: '"이래 / -(으)ㄴ 이래" 用法', english: 'Usage of "이래 / -(으)ㄴ 이래"',
       headers: ['形式', '用于', '例子'],
       rows: [
         ['N + 이래(로)', '名词起点', '창사 이래 / 관측 이래로'],
@@ -1408,7 +1408,7 @@ export const grammarCardsP29: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '"이래 / -(으)ㄴ 이래" 练习',
+      title: '"이래 / -(으)ㄴ 이래" 练习', english: 'Practice: "이래 / -(으)ㄴ 이래"',
       body: '选择正确形式',
       questions: [
         {
@@ -1487,10 +1487,10 @@ export const grammarCardsP29: GrammarCard[] = [
     id: 'card-p29-l09',
     partNumber: 29,
     lessonNumber: 9,
-    title: 'P29 综合练习',
+    title: 'P29 综合练习', english: 'P29 Comprehensive Practice',
     isPractice: true,
-    whatItDoes: '书面/新闻体综合',
-    whatItDoesBody: '本课综合 P29 全部 8 个书面/新闻体语法点：것으로 알려지다/전해지다、것으로 나타나다/드러나다、-(으)ㄹ 전망이다、-기에 앞서、-기를 촉구/당부하다、-에 그치다、-자、이래(로)。测试书面语敏感度。',
+    whatItDoes: '书面/新闻体综合', english: 'Comprehensive Written/News Style',
+    whatItDoesBody: '本课综合 P29 全部 8 个书面/新闻体语法点：것으로 알려지다/전해지다、것으로 나타나다/드러나다、-(으)ㄹ 전망이다、-기에 앞서、-기를 촉구/당부하다、-에 그치다、-자、이래(로)。测试书面语敏感度。', english: 'This lesson covers all 8 written/news-style grammar points from P29: 것으로 알려지다/전해지다, 것으로 나타나다/드러나다, -(으)ㄹ 전망이다, -기에 앞서, -기를 촉구/당부하다, -에 그치다, -자, 이래(로). Test your sensitivity to written language.',
     structures: [],
     connectionRules: [],
     cardExamples: [],
@@ -1498,7 +1498,7 @@ export const grammarCardsP29: GrammarCard[] = [
     mistakes: [],
     specialQuiz: {
       type: 'morph',
-      title: 'P29 综合练习',
+      title: 'P29 综合练习', english: 'P29 Comprehensive Practice',
       body: '综合本章所有语法点',
       questions: [
         {

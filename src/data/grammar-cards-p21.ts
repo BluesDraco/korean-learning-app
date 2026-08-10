@@ -7,10 +7,10 @@ export const grammarCardsP21: GrammarCard[] = [
     partNumber: 21,
     lessonNumber: 1,
     title: '-았/었더라면',
-    whatItDoes: '如果当时……的话',
-    whatItDoesBody: '表达对过去已经发生（或未发生）的事情的反向假设。\n和 -(으)면 不同：-(으)면 讲一般条件，-았/었더라면 讲不能改变的过去。\n后半句常配 -았을 텐데 / -았을 것이다，表达遗憾或推测。',
-    structureNote: '结构：过去词干（-았/었-）+ 더라면 + 后句（常用 -았을 텐데）。\n前后两句都是过去时，因为讨论的是无法回到的过去。',
-    rulesNote: '判断口诀：一件事已经发生（或没发生），无法改变，只能"想想当时如果……"。\n和 -(으)면 的最大区别就是"能不能改变"。\n和 -았/었으면 좋았을 텐데 意思接近但语气更书面。',
+    whatItDoes: '如果当时……的话', english: 'If only it had been... (counterfactual about the past)',
+    whatItDoesBody: '表达对过去已经发生（或未发生）的事情的反向假设。\n和 -(으)면 不同：-(으)면 讲一般条件，-았/었더라면 讲不能改变的过去。\n后半句常配 -았을 텐데 / -았을 것이다，表达遗憾或推测。', english: 'Expresses a counterfactual assumption about something that already happened (or didn\'t happen) in the past.\\nUnlike -(으)면, which describes general conditions, -았/었더라면 refers to an unchangeable past.\\nThe second clause often pairs with -았을 텐데 / -았을 것이다 to express regret or speculation.',
+    structureNote: '结构：过去词干（-았/었-）+ 더라면 + 后句（常用 -았을 텐데）。\n前后两句都是过去时，因为讨论的是无法回到的过去。', english: 'Structure: past stem (-았/었-) + 더라면 + following clause (often with -았을 텐데).\\nBoth clauses are in the past tense because the discussion is about a past that cannot be revisited.',
+    rulesNote: '判断口诀：一件事已经发生（或没发生），无法改变，只能"想想当时如果……"。\n和 -(으)면 的最大区别就是"能不能改变"。\n和 -았/었으면 좋았을 텐데 意思接近但语气更书面。', english: 'Rule of thumb: If something has already happened (or hasn\'t) and cannot be changed, you can only "imagine what if..."\\nThe key difference from -(으)면 is "whether it can be changed."\\nIt\'s similar in meaning to -았/었으면 좋았을 텐데 but has a more formal tone.',
     structures: [
       {
         ko: '조금만 더 일찍 출발했더라면 지각하지 않았을 텐데요',
@@ -124,7 +124,7 @@ export const grammarCardsP21: GrammarCard[] = [
       { wrong: '학생더라면 이해했을 거예요', correct: '학생이었더라면 이해했을 거예요', note: '名词 + 이었더라면 / 였더라면。学生有收音 → 학생이었더라면。' },
     ],
     quickTable: {
-      title: '-았/었더라면 变形速查',
+      title: '-았/었더라면 变形速查', english: '-았/었더라면 Conjugation Quick Reference',
       body: '按词干末字/词类查找相应过去形，再加 더라면。',
       headers: ['原形', '词类', '过去词干', '完整形态'],
       rows: [
@@ -138,7 +138,7 @@ export const grammarCardsP21: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '-았/었더라면 变形练习',
+      title: '-았/었더라면 变形练习', english: '-았/었더라면 Conjugation Practice',
       body: '根据原形和过去反事实假设的语境，选出正确形态。',
       questions: [
         {
@@ -244,10 +244,10 @@ export const grammarCardsP21: GrammarCard[] = [
     partNumber: 21,
     lessonNumber: 2,
     title: '-을/ㄹ 걸 그랬다',
-    whatItDoes: '早知道就……了（后悔没做）',
-    whatItDoesBody: '表达说话人对"当时没做某事"的后悔。\n和 -았/었더라면 不同：这里只对说话人自己的行为遗憾，不是对情况本身。\n口语中常省略 그랬다，只说 -을걸（有拖音），带一种自言自语的懊悔感。',
-    structureNote: '结构：动词词干（无收音 + ㄹ 걸；有收音 + 을 걸）+ 그랬다。\n主语通常是说话人自己（第一人称），感慨"当时我要是做了就好了"。',
-    rulesNote: '两个变体：\n1. 完整形 -을/ㄹ 걸 그랬다：对听话人陈述后悔。\n2. 省略形 -을/ㄹ걸（拖音）：自言自语式的懊悔感叹，句尾语调下降。',
+    whatItDoes: '早知道就……了（后悔没做）', english: 'I should have... (regret for not doing something)',
+    whatItDoesBody: '表达说话人对"当时没做某事"的后悔。\n和 -았/었더라면 不同：这里只对说话人自己的行为遗憾，不是对情况本身。\n口语中常省略 그랬다，只说 -을걸（有拖音），带一种自言自语的懊悔感。', english: 'Expresses the speaker\'s regret about "not having done something" at the time.\\nUnlike -았/었더라면, this only expresses regret about the speaker\'s own actions, not about the situation itself.\\nIn speech, 그랬다 is often omitted, leaving just -을걸 (with a drawn-out sound), conveying a self-muttering sense of remorse.',
+    structureNote: '结构：动词词干（无收音 + ㄹ 걸；有收音 + 을 걸）+ 그랬다。\n主语通常是说话人自己（第一人称），感慨"当时我要是做了就好了"。', english: 'Structure: verb stem (no final consonant + ㄹ 걸; with final consonant + 을 걸) + 그랬다.\\nThe subject is usually the speaker (first person), lamenting "I wish I had done it back then."',
+    rulesNote: '两个变体：\n1. 完整形 -을/ㄹ 걸 그랬다：对听话人陈述后悔。\n2. 省略形 -을/ㄹ걸（拖音）：自言自语式的懊悔感叹，句尾语调下降。', english: 'Two variants:\\n1. Full form -을/ㄹ 걸 그랬다: states regret to the listener.\\n2. Shortened form -을/ㄹ걸 (drawn-out): a self-muttering sigh of regret, with falling intonation at the end.',
     structures: [
       {
         ko: '어제 일찍 잘 걸 그랬어요',
@@ -351,21 +351,21 @@ export const grammarCardsP21: GrammarCard[] = [
       { wrong: '내일 일찍 일어날 걸 그랬어요', correct: '어제 일찍 일어날 걸 그랬어요', note: '-을 걸 그랬다 是对过去行为的后悔，不能配未来时间词。' },
     ],
     quickTable: {
-      title: '-을/ㄹ 걸 그랬다 变形速查',
+      title: '-을/ㄹ 걸 그랬다 变形速查', english: '-을/ㄹ 걸 그랬다 Conjugation Quick Reference',
       body: '看词干收音选 을 걸 或 ㄹ 걸。',
       headers: ['原形', '词干', '收音', '完整形态'],
       rows: [
-        ['가다', '가', { ko: '무받침', zh: '无收音' }, { ko: '갈 걸 그랬다', zh: '当时该去的' }],
+        ['가다', '가', { ko: '无收音', zh: '无收音' }, { ko: '갈 걸 그랬다', zh: '当时该去的' }],
         ['먹다', '먹', { ko: 'ㄱ 있음', zh: '有收音' }, { ko: '먹을 걸 그랬다', zh: '当时该吃的' }],
-        ['사다', '사', { ko: '무받침', zh: '无收音' }, { ko: '살 걸 그랬다', zh: '当时该买的' }],
-        ['공부하다', '공부하', { ko: '무받침', zh: '无收音' }, { ko: '공부할 걸 그랬다', zh: '当时该学的' }],
+        ['사다', '사', { ko: '无收音', zh: '无收音' }, { ko: '살 걸 그랬다', zh: '当时该买的' }],
+        ['공부하다', '공부하', { ko: '无收音', zh: '无收音' }, { ko: '공부할 걸 그랬다', zh: '当时该学的' }],
         ['앉다', '앉', { ko: 'ㄵ 있음', zh: '有收音' }, { ko: '앉을 걸 그랬다', zh: '当时该坐下的' }],
         ['살다', '살', { ko: 'ㄹ 词干', zh: 'ㄹ 保留' }, { ko: '살 걸 그랬다', zh: '当时该住的' }],
       ],
     },
     specialQuiz: {
       type: 'morph',
-      title: '-을/ㄹ 걸 그랬다 变形练习',
+      title: '-을/ㄹ 걸 그랬다 变形练习', english: '-을/ㄹ 걸 그랬다 Conjugation Practice',
       body: '根据词干末字选出正确的后悔表达。',
       questions: [
         {
@@ -476,10 +476,10 @@ export const grammarCardsP21: GrammarCard[] = [
     partNumber: 21,
     lessonNumber: 3,
     title: '-지 말 걸 그랬다',
-    whatItDoes: '早知道就不该……（后悔做了）',
-    whatItDoesBody: '和上一课的 -을 걸 그랬다 相反，这个表示"我当时不该做的"的后悔。\n结构：动词词干 + 지 말 걸 그랬다，其中 말다 = 不要（禁止/停止）。\n口语常缩略为 -지 말걸，带自责语气。',
-    structureNote: '结构：动词词干 + 지 말 걸 그랬다。\n말다 是"停止/不做"的动词，加 -을 걸 → 말 걸。\n可看作 -을 걸 그랬다 的否定版本。',
-    rulesNote: '"应该做没做" → -을 걸 그랬다\n"做了不该做" → -지 말 걸 그랬다\n两个语法配对使用，成对记忆最快。',
+    whatItDoes: '早知道就不该……（后悔做了）', english: 'I shouldn\'t have... (regret over doing something)',
+    whatItDoesBody: '和上一课的 -을 걸 그랬다 相反，这个表示"我当时不该做的"的后悔。\n结构：动词词干 + 지 말 걸 그랬다，其中 말다 = 不要（禁止/停止）。\n口语常缩略为 -지 말걸，带自责语气。', english: 'Opposite of -을 걸 그랬다 from the previous lesson, this expresses regret over "something I shouldn\'t have done."\\nStructure: verb stem + 지 말 걸 그랬다, where 말다 = to not do (prohibit/stop).\\nIn speech, it\'s often shortened to -지 말걸, carrying a self-reproachful tone.',
+    structureNote: '结构：动词词干 + 지 말 걸 그랬다。\n말다 是"停止/不做"的动词，加 -을 걸 → 말 걸。\n可看作 -을 걸 그랬다 的否定版本。', english: 'Structure: verb stem + 지 말 걸 그랬다.\\n말다 is the verb for "to stop/not do," and adding -을 걸 gives 말 걸.\\nThink of it as the negative version of -을 걸 그랬다.',
+    rulesNote: '"应该做没做" → -을 걸 그랬다\n"做了不该做" → -지 말 걸 그랬다\n两个语法配对使用，成对记忆最快。', english: '"Should have done but didn\'t" → -을 걸 그랬다\\n"Did something I shouldn\'t have" → -지 말 걸 그랬다\\nThese two grammar points are paired—memorize them together for best results.',
     structures: [
       {
         ko: '어제 그렇게 많이 먹지 말 걸 그랬어요',
@@ -581,11 +581,11 @@ export const grammarCardsP21: GrammarCard[] = [
       { wrong: '친구가 오지 말 걸 그랬어요（想说朋友不该来）', correct: '친구가 안 왔으면 좋았을 텐데요', note: '主语必须是说话人自己。评价别人的行为用 -았/었으면 좋았을 텐데。' },
     ],
     quickTable: {
-      title: '成对记忆：-을 걸 그랬다 vs -지 말 걸 그랬다',
+      title: '成对记忆：-을 걸 그랬다 vs -지 말 걸 그랬다', english: 'Paired Memory: -을 걸 그랬다 vs -지 말 걸 그랬다',
       body: '两个语法方向相反，配对记忆效率最高。',
       headers: ['情况', '结构', '例句', '中文'],
       rows: [
-        [{ ko: '应该做没做', zh: '后悔没做' }, { ko: '-을/ㄹ 걸 그랬다', zh: '무받침 ㄹ / 받침 을' }, { ko: '전화할 걸 그랬어요', zh: '当时该打的' }, '当时应该打电话的（没打）'],
+        [{ ko: '应该做没做', zh: '后悔没做' }, { ko: '-을/ㄹ 걸 그랬다', zh: '无收音 ㄹ / 收音 을' }, { ko: '전화할 걸 그랬어요', zh: '当时该打的' }, '当时应该打电话的（没打）'],
         [{ ko: '做了不该做', zh: '后悔做了' }, { ko: '-지 말 걸 그랬다', zh: '统一接法' }, { ko: '전화하지 말 걸 그랬어요', zh: '当时不该打的' }, '当时不该打电话的（打了）'],
         [{ ko: '应该说没说', zh: '后悔没说' }, { ko: '-을 걸 그랬다', zh: '无收音+ㄹ 걸' }, { ko: '말할 걸 그랬어요', zh: '当时该说的' }, '当时应该说的（没说）'],
         [{ ko: '不该说说了', zh: '后悔说了' }, { ko: '-지 말 걸 그랬다', zh: '否定式' }, { ko: '말하지 말 걸 그랬어요', zh: '当时不该说的' }, '当时不该说的（说了）'],
@@ -593,7 +593,7 @@ export const grammarCardsP21: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'fill',
-      title: '-을 걸 그랬다 还是 -지 말 걸 그랬다？',
+      title: '-을 걸 그랬다 还是 -지 말 걸 그랬다？', english: '-을 걸 그랬다 or -지 말 걸 그랬다?',
       body: '根据后悔的方向选出正确表达。',
       questions: [
         {
@@ -704,10 +704,10 @@ export const grammarCardsP21: GrammarCard[] = [
     partNumber: 21,
     lessonNumber: 4,
     title: '-았/었어야 했는데',
-    whatItDoes: '本来应该……的（懊悔+义务感）',
-    whatItDoesBody: '表达"本来应当做某事，但实际上没做"的懊悔。\n和 -을 걸 그랬다 类似但语气更强：不仅是后悔，还带有"本来是义务/责任"的语感。\n后半句常省略，或接 -지 못했어요 / 못 했어요 表达实际结果。',
-    structureNote: '结构：动词过去词干（-았/었-）+ 어야 했는데。\n可看作 -아/어야 하다（必须）的过去+回忆形态。\n主语可以是自己也可以是别人，比 -을 걸 그랬다 灵活。',
-    rulesNote: '判断口诀：既有"没做"的懊悔，又有"本该是义务"的意味。\n-을 걸 그랬다 偏个人愿望，-았어야 했는데 偏责任义务。\n对别人评价时也用这个：너 그때 갔어야 했는데（你当时该去的）。',
+    whatItDoes: '本来应该……的（懊悔+义务感）', english: 'I should have... (regret + sense of obligation)',
+    whatItDoesBody: '表达"本来应当做某事，但实际上没做"的懊悔。\n和 -을 걸 그랬다 类似但语气更强：不仅是后悔，还带有"本来是义务/责任"的语感。\n后半句常省略，或接 -지 못했어요 / 못 했어요 表达实际结果。', english: 'Expresses regret over "something I should have done but didn\'t."\\nSimilar to -을 걸 그랬다 but stronger in tone: it\'s not just regret, but also carries a sense of "it was my duty/responsibility."\\nThe second half is often omitted, or followed by -지 못했어요 / 못 했어요 to state the actual outcome.',
+    structureNote: '结构：动词过去词干（-았/었-）+ 어야 했는데。\n可看作 -아/어야 하다（必须）的过去+回忆形态。\n主语可以是自己也可以是别人，比 -을 걸 그랬다 灵活。', english: 'Structure: past verb stem (-았/었-) + 어야 했는데.\\nCan be seen as the past + recollective form of -아/어야 하다 (must).\\nThe subject can be yourself or someone else, making it more flexible than -을 걸 그랬다.',
+    rulesNote: '判断口诀：既有"没做"的懊悔，又有"本该是义务"的意味。\n-을 걸 그랬다 偏个人愿望，-았어야 했는데 偏责任义务。\n对别人评价时也用这个：너 그때 갔어야 했는데（你当时该去的）。', english: 'Memory tip: It combines regret over something not done with a sense of obligation.\\n-을 걸 그랬다 leans toward personal wish, while -았어야 했는데 leans toward duty or responsibility.\\nIt\'s also used when judging others: 너 그때 갔어야 했는데 (You should have gone then).',
     structures: [
       {
         ko: '어제 일찍 잤어야 했는데 못 잤어요',
@@ -816,7 +816,7 @@ export const grammarCardsP21: GrammarCard[] = [
       { wrong: '했어야 했는데요 그런데 못 했어요', correct: '했어야 했는데 못 했어요', note: '-았어야 했는데 本身就是连接形，后面直接接实际结果，不加"그런데"。' },
     ],
     quickTable: {
-      title: '-았/었어야 했는데 变形速查',
+      title: '-았/었어야 했는데 变形速查', english: '-았/었어야 했는데 Conjugation Quick Reference',
       body: '按词类和末字选正确过去词干。',
       headers: ['原形', '类型', '过去词干', '完整形态'],
       rows: [
@@ -830,7 +830,7 @@ export const grammarCardsP21: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '-았/었어야 했는데 变形练习',
+      title: '-았/었어야 했는데 变形练习', english: '-았/었어야 했는데 Conjugation Practice',
       body: '根据语境选出正确形态。',
       questions: [
         {
@@ -942,10 +942,10 @@ export const grammarCardsP21: GrammarCard[] = [
     partNumber: 21,
     lessonNumber: 5,
     title: '-았/었으면 좋았을 텐데',
-    whatItDoes: '要是……就好了（遗憾感叹）',
-    whatItDoesBody: '对过去情况的遗憾感叹，比 -았더라면 更口语化。\n"要是……就好了" —— 事实上没那样，只能感慨。\n和 -았더라면 结构相似，但更常用于日常对话；-았더라면 偏书面。',
-    structureNote: '结构：动词/形容词过去词干 + 으면 좋았을 텐데。\n可看作 -았/었으면 좋겠다（希望）的过去回想形态。\n后面常独立成句，或省略后半句。',
-    rulesNote: '和 -았더라면 的选择：\n1. 日常口语：-았으면 좋았을 텐데\n2. 书面/正式：-았더라면 -았을 텐데\n意思几乎相同，可以互换。',
+    whatItDoes: '要是……就好了（遗憾感叹）', english: 'If only... (regretful sigh)',
+    whatItDoesBody: '对过去情况的遗憾感叹，比 -았더라면 更口语化。\n"要是……就好了" —— 事实上没那样，只能感慨。\n和 -았더라면 结构相似，但更常用于日常对话；-았더라면 偏书面。', english: 'A regretful sigh about a past situation, more colloquial than -았더라면.\\n"If only..." — in reality it didn\'t happen that way, so you can only sigh.\\nSimilar in structure to -았더라면, but more commonly used in everyday conversation; -았더라면 leans toward written language.',
+    structureNote: '结构：动词/形容词过去词干 + 으면 좋았을 텐데。\n可看作 -았/었으면 좋겠다（希望）的过去回想形态。\n后面常独立成句，或省略后半句。', english: 'Structure: verb/adjective past stem + 으면 좋았을 텐데.\\nCan be seen as the past reflective form of -았/었으면 좋겠다 (hope).\\nIt often stands alone as a sentence, or the latter half is omitted.',
+    rulesNote: '和 -았더라면 的选择：\n1. 日常口语：-았으면 좋았을 텐데\n2. 书面/正式：-았더라면 -았을 텐데\n意思几乎相同，可以互换。', english: 'Choosing between -았더라면:\\n1. Everyday speech: -았으면 좋았을 텐데\\n2. Written/formal: -았더라면 -았을 텐데\\nThe meaning is almost the same, and they can be used interchangeably.',
     structures: [
       {
         ko: '어제 날씨가 좀 더 따뜻했으면 좋았을 텐데요',
@@ -1050,7 +1050,7 @@ export const grammarCardsP21: GrammarCard[] = [
       { wrong: '학생면 좋았을 텐데요', correct: '학생이었으면 좋았을 텐데요', note: '名词有收音 → 이었으면。학생 + 이었으면。' },
     ],
     quickTable: {
-      title: '-았/었으면 좋았을 텐데 变形速查',
+      title: '-았/었으면 좋았을 텐데 变形速查', english: '-았/었으면 좋았을 텐데 Conjugation Quick Reference',
       body: '按词类选择正确过去形态。',
       headers: ['原形', '类型', '过去+으면', '完整形态'],
       rows: [
@@ -1064,7 +1064,7 @@ export const grammarCardsP21: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '-았/었으면 좋았을 텐데 变形练习',
+      title: '-았/었으면 좋았을 텐데 变形练习', english: '-았/었으면 좋았을 텐데 Conjugation Practice',
       body: '根据语境选出正确形态。',
       questions: [
         {
@@ -1174,10 +1174,10 @@ export const grammarCardsP21: GrammarCard[] = [
     partNumber: 21,
     lessonNumber: 6,
     title: '-을/ㄹ 뻔했다',
-    whatItDoes: '差点儿……（没发生但险些发生）',
-    whatItDoesBody: '表达"差一点就发生了但幸好没发生"。\n主要功能是庆幸没发生某件（通常不好的）事情。\n结构简单，但要注意：这里的 -을/ㄹ 뻔했다 中的动词永远用未来冠形形态。',
-    structureNote: '结构：动词词干（无收音 + ㄹ；有收音 + 을）+ 뻔했다。\n뻔하다 是"差点"的固定动词，永远用过去形 뻔했다。\n虽然是"没发生"，但用未来冠形形态，因为"当时差点就要"发生。',
-    rulesNote: '这个语法看似简单，但学习者容易混淆两点：\n1. 结尾必须是过去形 뻔했다，不能是 뻔한다 或 뻔해요。\n2. 前面用未来冠形（-을/ㄹ），不能用过去冠形（-은/ㄴ）。',
+    whatItDoes: '差点儿……（没发生但险些发生）', english: 'Almost... (didn\'t happen but nearly did)',
+    whatItDoesBody: '表达"差一点就发生了但幸好没发生"。\n主要功能是庆幸没发生某件（通常不好的）事情。\n结构简单，但要注意：这里的 -을/ㄹ 뻔했다 中的动词永远用未来冠形形态。', english: 'Expresses "it almost happened, but fortunately it didn\'t."\\nIts main function is to express relief that something (usually bad) didn\'t happen.\\nThe structure is simple, but note: the verb before -을/ㄹ 뻔했다 always takes the future adnominal form.',
+    structureNote: '结构：动词词干（无收音 + ㄹ；有收音 + 을）+ 뻔했다。\n뻔하다 是"差点"的固定动词，永远用过去形 뻔했다。\n虽然是"没发生"，但用未来冠形形态，因为"当时差点就要"发生。', english: 'Structure: verb stem (no final consonant + ㄹ; with final consonant + 을) + 뻔했다.\\n뻔하다 is the fixed verb for "almost," always used in the past form 뻔했다.\\nEven though it didn\'t happen, the future adnominal form is used because it "was about to" happen at that time.',
+    rulesNote: '这个语法看似简单，但学习者容易混淆两点：\n1. 结尾必须是过去形 뻔했다，不能是 뻔한다 或 뻔해요。\n2. 前面用未来冠形（-을/ㄹ），不能用过去冠形（-은/ㄴ）。', english: 'This grammar looks simple, but learners often confuse two points:\\n1. The ending must be the past form 뻔했다, not 뻔한다 or 뻔해요.\\n2. The preceding part uses the future adnominal form (-을/ㄹ), not the past adnominal form (-은/ㄴ).',
     structures: [
       {
         ko: '길에서 넘어질 뻔했어요',
@@ -1281,13 +1281,13 @@ export const grammarCardsP21: GrammarCard[] = [
       { wrong: '아파 뻔했어요', correct: '아플 뻔했어요', note: '뻔하다 前必须完整接冠形形态 -(을/ㄹ)，不能只有词干。' },
     ],
     quickTable: {
-      title: '-을/ㄹ 뻔했다 变形速查',
+      title: '-을/ㄹ 뻔했다 变形速查', english: '-을/ㄹ 뻔했다 Conjugation Quick Reference',
       body: '看词干收音选正确形态。',
       headers: ['原形', '词干', '收音', '完整形态'],
       rows: [
-        ['넘어지다', '넘어지', { ko: '무받침', zh: '无收音' }, { ko: '넘어질 뻔했다', zh: '差点摔倒' }],
+        ['넘어지다', '넘어지', { ko: '无收音', zh: '无收音' }, { ko: '넘어질 뻔했다', zh: '差点摔倒' }],
         ['먹다', '먹', { ko: 'ㄱ 있음', zh: '有收音' }, { ko: '먹을 뻔했다', zh: '差点吃了' }],
-        ['하다', '하', { ko: '무받침', zh: '无收音' }, { ko: '할 뻔했다', zh: '差点做了' }],
+        ['하다', '하', { ko: '无收音', zh: '无收音' }, { ko: '할 뻔했다', zh: '差点做了' }],
         ['잊다', '잊', { ko: 'ㅈ 있음', zh: '有收音' }, { ko: '잊을 뻔했다', zh: '差点忘了' }],
         ['죽다', '죽', { ko: 'ㄱ 있음', zh: '有收音' }, { ko: '죽을 뻔했다', zh: '差点死了' }],
         ['눕다', '눕', { ko: 'ㅂ 不规则', zh: 'ㅂ→우' }, { ko: '누울 뻔했다', zh: '差点躺下' }],
@@ -1295,7 +1295,7 @@ export const grammarCardsP21: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '-을/ㄹ 뻔했다 变形练习',
+      title: '-을/ㄹ 뻔했다 变形练习', english: '-을/ㄹ 뻔했다 Conjugation Practice',
       body: '根据词干选出正确形态。',
       questions: [
         {
@@ -1406,10 +1406,10 @@ export const grammarCardsP21: GrammarCard[] = [
     partNumber: 21,
     lessonNumber: 7,
     title: '-지 그랬어요',
-    whatItDoes: '你怎么不……呢（含责备的建议）',
-    whatItDoesBody: '对别人过去没做的事表达"当时怎么不这样呢"的责备+建议。\n可以看作 -을 걸 그랬다 的"对人"版本：一个自责，一个说他人。\n结尾必须过去形 그랬어요，说的是"对方过去的行为选择"。',
-    structureNote: '结构：动词词干 + 지 그랬어요。\n注意：-지 마세요（禁止）和 -지 그랬어요（责备）看起来相似，但意思完全不同。\n只接动词，不接形容词。',
-    rulesNote: '和 -을 걸 그랬다 配对：\n1. 自责：-을 걸 그랬다（我该……的）\n2. 责别人：-지 그랬어요（你怎么不……）\n\n和 -지 마세요 完全不同：-지 마세요 = 请不要做；-지 그랬어요 = 你怎么当时没做。',
+    whatItDoes: '你怎么不……呢（含责备的建议）', english: 'Why didn\'t you... (suggestion with reproach)',
+    whatItDoesBody: '对别人过去没做的事表达"当时怎么不这样呢"的责备+建议。\n可以看作 -을 걸 그랬다 的"对人"版本：一个自责，一个说他人。\n结尾必须过去形 그랬어요，说的是"对方过去的行为选择"。', english: 'Expresses "why didn\'t you do it then" with reproach and advice about something the other person didn\'t do in the past.\\nIt can be seen as the "for others" version of -을 걸 그랬다: one is self-reproach, the other addresses someone else.\\nThe ending must be the past form 그랬어요, as it refers to "the other person\'s past choice of action."',
+    structureNote: '结构：动词词干 + 지 그랬어요。\n注意：-지 마세요（禁止）和 -지 그랬어요（责备）看起来相似，但意思完全不同。\n只接动词，不接形容词。', english: 'Structure: verb stem + 지 그랬어요.\\nNote: -지 마세요 (prohibition) and -지 그랬어요 (reproach) look similar, but their meanings are completely different.\\nIt only attaches to verbs, not adjectives.',
+    rulesNote: '和 -을 걸 그랬다 配对：\n1. 自责：-을 걸 그랬다（我该……的）\n2. 责别人：-지 그랬어요（你怎么不……）\n\n和 -지 마세요 完全不同：-지 마세요 = 请不要做；-지 그랬어요 = 你怎么当时没做。', english: 'Pairs with -을 걸 그랬다:\\n1. Self-reproach: -을 걸 그랬다 (I should have...)\\n2. Reproaching others: -지 그랬어요 (Why didn\'t you...)\\n\\nCompletely different from -지 마세요: -지 마세요 = please don\'t do; -지 그랬어요 = why didn\'t you do it then.',
     structures: [
       {
         ko: '피곤하면 좀 쉬지 그랬어요',
@@ -1511,7 +1511,7 @@ export const grammarCardsP21: GrammarCard[] = [
       { wrong: '예쁘지 그랬어요', correct: '-지 그랬어요 只接动词', note: '不能接形容词。形容词表达当时状态用 -았/었으면 좋았을 텐데。' },
     ],
     quickTable: {
-      title: '自责 vs 责别人：语法配对表',
+      title: '自责 vs 责别人：语法配对表', english: 'Self-Reproach vs. Reproaching Others: Grammar Pairing Table',
       body: '这两个语法一定要成对记，方向相反。',
       headers: ['谁在后悔', '结构', '例句', '中文'],
       rows: [
@@ -1523,7 +1523,7 @@ export const grammarCardsP21: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'fill',
-      title: '-지 그랬어요 用法练习',
+      title: '-지 그랬어요 用法练习', english: '-지 그랬어요 Usage Practice',
       body: '根据谁在后悔选出正确表达。',
       questions: [
         {
@@ -1634,10 +1634,10 @@ export const grammarCardsP21: GrammarCard[] = [
     partNumber: 21,
     lessonNumber: 8,
     title: '-았/었어도',
-    whatItDoes: '即使当时……了（反事实让步）',
-    whatItDoesBody: '表达"即使过去做了/是了，结果也不会变"的让步语气。\n和 -아/어도（即使……）是同一结构的过去反事实版本。\n常和 -았을 것이다 / -았을 텐데 搭配，强调"改变过去也没用"。',
-    structureNote: '结构：动词/形容词过去词干（-았/었-）+ 어도。\n跟第一课 -았더라면 结构相似，但意思相反：\n· -았더라면 = "要是当时……的话"（假设改变）\n· -았어도 = "即使当时……了"（改变了也没用）',
-    rulesNote: '判断口诀：\n· 假设改变过去，好结果会发生 → -았더라면\n· 假设改变过去，结果照样不好 → -았어도\n后半句通常带否定或负面含义。',
+    whatItDoes: '即使当时……了（反事实让步）', english: 'Even if (something) had happened (counterfactual concession)',
+    whatItDoesBody: '表达"即使过去做了/是了，结果也不会变"的让步语气。\n和 -아/어도（即使……）是同一结构的过去反事实版本。\n常和 -았을 것이다 / -았을 텐데 搭配，强调"改变过去也没用"。', english: 'Expresses a concessive tone meaning "even if (something) had been done or had happened in the past, the result wouldn\'t have changed."\\nIt is the past counterfactual version of -아/어도 (even if).\\nOften used with -았을 것이다 / -았을 텐데 to emphasize that "changing the past wouldn\'t have helped."',
+    structureNote: '结构：动词/形容词过去词干（-았/었-）+ 어도。\n跟第一课 -았더라면 结构相似，但意思相反：\n· -았더라면 = "要是当时……的话"（假设改变）\n· -았어도 = "即使当时……了"（改变了也没用）', english: 'Structure: verb/adjective past stem (-았/었-) + 어도.\\nSimilar in structure to -았더라면 from Lesson 1, but opposite in meaning:\\n· -았더라면 = "if (something) had happened" (hypothetical change)\\n· -았어도 = "even if (something) had happened" (change wouldn\'t have helped)',
+    rulesNote: '判断口诀：\n· 假设改变过去，好结果会发生 → -았더라면\n· 假设改变过去，结果照样不好 → -았어도\n后半句通常带否定或负面含义。', english: 'Quick rule of thumb:\\n· Hypothesizing a change in the past that would lead to a good result → -았더라면\\n· Hypothesizing a change in the past that still wouldn\'t improve the outcome → -았어도\\nThe second clause usually carries a negative or unfavorable meaning.',
     structures: [
       {
         ko: '어제 갔어도 못 만났을 거예요',
@@ -1744,7 +1744,7 @@ export const grammarCardsP21: GrammarCard[] = [
       { wrong: '학생어도 이해 못 했을 거예요', correct: '학생이었어도 이해 못 했을 거예요', note: '名词有收音 → 이었어도。학생 + 이었어도。' },
     ],
     quickTable: {
-      title: '-았더라면 vs -았어도 · 反事实两方向',
+      title: '-았더라면 vs -았어도 · 反事实两方向', english: '-았더라면 vs -았어도 · Two Directions of Counterfactuals',
       body: '两个语法结构相似，但方向完全相反。',
       headers: ['结构', '含义', '例句', '中文'],
       rows: [
@@ -1756,7 +1756,7 @@ export const grammarCardsP21: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'fill',
-      title: '-았더라면 还是 -았어도？',
+      title: '-았더라면 还是 -았어도？', english: '-았더라면 or -았어도?',
       body: '根据前后句关系选出正确表达。',
       questions: [
         {
@@ -1866,11 +1866,11 @@ export const grammarCardsP21: GrammarCard[] = [
     id: 'card-p21-l09',
     partNumber: 21,
     lessonNumber: 9,
-    title: 'P21 综合练习',
-    whatItDoes: 'P21 第1～8课 总复习',
-    whatItDoesBody: '完成这份练习，检验假设与后悔八大语法是否掌握。\n共 10 题，覆盖 -았더라면、-을 걸 그랬다、-지 말 걸 그랬다、-았어야 했는데、-았으면 좋았을 텐데、-을 뻔했다、-지 그랬어요、-았어도。',
+    title: 'P21 综合练习', english: 'P21 Comprehensive Practice',
+    whatItDoes: 'P21 第1～8课 总复习', english: 'P21 Lessons 1–8 Comprehensive Review',
+    whatItDoesBody: '完成这份练习，检验假设与后悔八大语法是否掌握。\n共 10 题，覆盖 -았더라면、-을 걸 그랬다、-지 말 걸 그랬다、-았어야 했는데、-았으면 좋았을 텐데、-을 뻔했다、-지 그랬어요、-았어도。', english: 'Complete this practice to test your mastery of the eight grammar points for hypotheses and regrets.\\nThere are 10 questions covering -았더라면, -을 걸 그랬다, -지 말 걸 그랬다, -았어야 했는데, -았으면 좋았을 텐데, -을 뻔했다, -지 그랬어요, and -았어도.',
     isPractice: true,
-    structureNote: 'P21 假设与后悔八大语法：\n1. -았더라면（书面反事实）\n2. -을 걸 그랬다（自责该做的没做）\n3. -지 말 걸 그랬다（自责不该做的做了）\n4. -았어야 했는데（义务责任型懊悔）\n5. -았으면 좋았을 텐데（口语过去感叹）\n6. -을 뻔했다（差点儿）\n7. -지 그랬어요（责别人过去没做）\n8. -았어도（过去反事实让步）',
+    structureNote: 'P21 假设与后悔八大语法：\n1. -았더라면（书面反事实）\n2. -을 걸 그랬다（自责该做的没做）\n3. -지 말 걸 그랬다（自责不该做的做了）\n4. -았어야 했는데（义务责任型懊悔）\n5. -았으면 좋았을 텐데（口语过去感叹）\n6. -을 뻔했다（差点儿）\n7. -지 그랬어요（责别人过去没做）\n8. -았어도（过去反事实让步）', english: 'P21\'s eight grammar points for hypotheses and regrets:\\n1. -았더라면 (written counterfactual)\\n2. -을 걸 그랬다 (self-blame for not doing something you should have)\\n3. -지 말 걸 그랬다 (self-blame for doing something you shouldn\'t have)\\n4. -았어야 했는데 (obligation/responsibility-type regret)\\n5. -았으면 좋았을 텐데 (colloquial past lament)\\n6. -을 뻔했다 (almost / nearly)\\n7. -지 그랬어요 (blaming others for not doing something in the past)\\n8. -았어도 (past counterfactual concession)',
     structures: [
       { ko: '일찍 갔더라면 만났을 텐데요', zh: '要是早去就能见到了。', tokens: [{ text: '일찍', role: 'plain' }, { text: '갔더라면', role: 'verb' }, { text: '만났을 텐데요', role: 'verb' }] },
       { ko: '그 옷을 살 걸 그랬어요', zh: '当时该买那件衣服的。', tokens: [{ text: '그 옷을', role: 'object' }, { text: '살 걸 그랬어요', role: 'verb' }] },
@@ -1931,7 +1931,7 @@ export const grammarCardsP21: GrammarCard[] = [
     linkedGrammarIds: [],
     specialQuiz: {
       type: 'fill',
-      title: '综合练习 · 假设与后悔八大语法',
+      title: '综合练习 · 假设与后悔八大语法', english: 'Comprehensive Practice · Eight Grammar Points for Hypotheses and Regrets',
       body: '根据语境选出最合适的表达。',
       questions: [
         {

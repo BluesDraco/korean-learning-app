@@ -16,7 +16,7 @@ interface BenefitsResponse {
   matrix: BenefitMatrix;
 }
 
-type TabId = 'benefits' | 'members' | 'lifetime' | 'payments';
+type TabId = 'benefits' | 'members' | 'lifetime' | 'payments' | 'shipments';
 
 const TIER_ACCENT: Record<Tier, string> = {
   free: 'var(--text-muted)',
@@ -110,10 +110,11 @@ export default function MembershipAdminPage() {
       {/* Tabs */}
       <div className="flex gap-1 bg-[var(--bg-input)] rounded-lg p-1 w-fit">
         {([
-          { id: 'benefits', label: '权益总览' },
-          { id: 'members', label: '会员名单' },
-          { id: 'lifetime', label: '永久档履约' },
-          { id: 'payments', label: '充值记录' },
+          { id: 'benefits', label: '权益总览', english: 'Benefits Overview' },
+          { id: 'members', label: '会员名单', english: 'Member List' },
+          { id: 'lifetime', label: '永久档履约', english: 'Permanent plan fulfillment' },
+          { id: 'payments', label: '充值记录', english: 'Recharge history' },
+          { id: 'shipments', label: '礼盒发货', english: 'Gift box shipping' },
         ] as { id: TabId; label: string }[]).map((t) => (
           <button
             key={t.id}
@@ -147,6 +148,7 @@ export default function MembershipAdminPage() {
       {tab === 'members' && <MembersTab tierLabels={data?.tierLabels} />}
       {tab === 'lifetime' && <LifetimeTab />}
       {tab === 'payments' && <PaymentsTab />}
+      {tab === 'shipments' && <ShipmentsTab />}
     </div>
   );
 }
@@ -380,6 +382,7 @@ function MembersTab({ tierLabels }: { tierLabels?: Record<Tier, string> }) {
   const [counts, setCounts] = useState<Record<Tier, number> | null>(null);
   const [members, setMembers] = useState<MemberRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [searchInput, setSearchInput] = useState('');
   const [search, setSearch] = useState('');
   const [tierFilter, setTierFilter] = useState<'all' | Tier>('all');
@@ -400,6 +403,7 @@ function MembersTab({ tierLabels }: { tierLabels?: Record<Tier, string> }) {
 
   const load = useCallback(async () => {
     setLoading(true);
+    setLoadError(false);
     try {
       const qs = new URLSearchParams();
       if (search) qs.set('search', search);
@@ -415,6 +419,7 @@ function MembersTab({ tierLabels }: { tierLabels?: Record<Tier, string> }) {
       setTotal(json.total ?? 0);
     } catch {
       setMembers([]);
+      setLoadError(true);
     } finally {
       setLoading(false);
     }
@@ -471,7 +476,10 @@ function MembersTab({ tierLabels }: { tierLabels?: Record<Tier, string> }) {
         {loading ? (
           <div className="flex items-center justify-center py-16 text-[var(--text-muted)]"><Loader2 className="animate-spin" size={20} /></div>
         ) : members.length === 0 ? (
-          <div className="py-16 text-center text-sm text-[var(--text-muted)]">没有匹配的用户</div>
+          <div className="py-16 text-center space-y-2">
+            <p className="text-sm text-[var(--text-muted)]">{loadError ? '加载失败，请检查网络后重试' : '没有匹配的用户'}</p>
+            {loadError && <button onClick={load} className="text-xs text-[var(--pink-primary)] underline">重试</button>}
+          </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
@@ -700,14 +708,14 @@ interface PerkRow {
 }
 
 const PERK_TYPE_LABEL: Record<string, string> = {
-  merch: '🎁 定制周边',
-  devservice: '🛠 产品共建',
-  vip: '💎 VIP 通道',
+  merch: '🎁 定制周边', english: '🎁 Custom merchandise',
+  devservice: '🛠 产品共建', english: '🛠 Product co-building',
+  vip: '💎 VIP 通道', english: '💎 VIP access',
 };
 const PERK_STATUS_LABEL: Record<string, string> = {
-  pending: '待处理',
-  in_progress: '进行中',
-  done: '已完成',
+  pending: '待处理', english: 'Pending',
+  in_progress: '进行中', english: 'In progress',
+  done: '已完成', english: 'Completed',
 };
 const PERK_STATUS_NEXT: Record<string, string> = {
   pending: 'in_progress',
@@ -718,10 +726,12 @@ const PERK_STATUS_NEXT: Record<string, string> = {
 function LifetimeTab() {
   const [perks, setPerks] = useState<PerkRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [statusFilter, setStatusFilter] = useState<'all' | string>('all');
 
   const load = useCallback(async () => {
     setLoading(true);
+    setLoadError(false);
     try {
       const qs = statusFilter !== 'all' ? `?status=${statusFilter}` : '';
       const res = await fetch(`/api/admin/lifetime-perks${qs}`);
@@ -730,6 +740,7 @@ function LifetimeTab() {
       setPerks(json.perks);
     } catch {
       setPerks([]);
+      setLoadError(true);
     } finally {
       setLoading(false);
     }
@@ -778,7 +789,10 @@ function LifetimeTab() {
         {loading ? (
           <div className="flex items-center justify-center py-16 text-[var(--text-muted)]"><Loader2 className="animate-spin" size={20} /></div>
         ) : perks.length === 0 ? (
-          <div className="py-16 text-center text-sm text-[var(--text-muted)]">暂无永久档履约记录</div>
+          <div className="py-16 text-center space-y-2">
+            <p className="text-sm text-[var(--text-muted)]">{loadError ? '加载失败，请检查网络后重试' : '暂无永久档履约记录'}</p>
+            {loadError && <button onClick={load} className="text-xs text-[var(--pink-primary)] underline">重试</button>}
+          </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
@@ -843,17 +857,17 @@ interface PaymentRow {
 }
 
 const SOURCE_LABEL: Record<string, string> = {
-  manual: '后台开通',
+  manual: '后台开通', english: 'Backend activation',
   stripe: 'Stripe',
   xorpay: 'XorPay',
-  xunhupay: '虎皮椒',
+  xunhupay: '虎皮椒', english: 'Tiger Pepper',
   mock: 'Mock',
 };
 
 const STATUS_LABEL: Record<string, string> = {
-  paid: '已支付',
-  pending: '待支付',
-  refunded: '已退款',
+  paid: '已支付', english: 'Paid',
+  pending: '待支付', english: 'Pending payment',
+  refunded: '已退款', english: 'Refunded',
 };
 
 function PaymentsTab() {
@@ -1071,6 +1085,72 @@ function PaymentsTab() {
             </div>
           </div>
         )}
+      </div>
+    </div>
+  );
+}
+
+// ── 礼盒发货 tab ──
+function ShipmentsTab() {
+  const [shipments, setShipments] = useState<Array<{
+    id: string; userId: string; username: string; nickname: string;
+    wechat: string; email: string; recipient: string; phone: string; address: string;
+    status: string; trackingNo: string; note: string; updatedAt: number;
+  }>>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
+
+  const loadShipments = useCallback(() => {
+    setLoading(true);
+    setLoadError(false);
+    fetch('/api/admin/lifetime-shipments', { cache: 'no-store' })
+      .then(r => r.ok ? r.json() : Promise.reject(new Error()))
+      .then(d => { setShipments(d.shipments); setLoading(false); })
+      .catch(() => { setLoadError(true); setLoading(false); });
+  }, []);
+
+  useEffect(() => { loadShipments(); }, [loadShipments]);
+
+  if (loading) return <div className="flex items-center justify-center py-16 text-[var(--text-muted)]"><Loader2 className="animate-spin" size={20} /></div>;
+  if (loadError) return <div className="py-16 text-center space-y-2"><p className="text-sm text-[var(--text-muted)]">加载失败，请检查网络后重试</p><button onClick={loadShipments} className="text-xs text-[var(--pink-primary)] underline">重试</button></div>;
+  if (shipments.length === 0) return <div className="py-16 text-center text-sm text-[var(--text-muted)]">暂无礼盒发货记录</div>;
+
+  return (
+    <div className="space-y-4">
+      <div className="text-xs text-[var(--text-muted)]">共 {shipments.length} 条发货记录</div>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="bg-[var(--bg-soft)] border-b border-[var(--border-color)] text-xs text-[var(--text-muted)]">
+              <th className="text-left px-3 py-2 font-medium">用户</th>
+              <th className="text-left px-3 py-2 font-medium">微信</th>
+              <th className="text-left px-3 py-2 font-medium">邮箱</th>
+              <th className="text-left px-3 py-2 font-medium">收件人</th>
+              <th className="text-left px-3 py-2 font-medium">电话</th>
+              <th className="text-left px-3 py-2 font-medium">地址</th>
+              <th className="text-left px-3 py-2 font-medium">状态</th>
+              <th className="text-left px-3 py-2 font-medium">更新时间</th>
+            </tr>
+          </thead>
+          <tbody>
+            {shipments.map((s) => (
+              <tr key={s.id} className="border-b border-[var(--border-color)] hover:bg-[var(--bg-soft)]">
+                <td className="px-3 py-2"><span className="font-medium">{s.nickname || s.username}</span><div className="text-xs text-[var(--text-muted)]">@{s.username}</div></td>
+                <td className="px-3 py-2">{s.wechat || '-'}</td>
+                <td className="px-3 py-2">{s.email || '-'}</td>
+                <td className="px-3 py-2">{s.recipient || '-'}</td>
+                <td className="px-3 py-2">{s.phone || '-'}</td>
+                <td className="px-3 py-2 max-w-[200px] truncate" title={s.address}>{s.address || '-'}</td>
+                <td className="px-3 py-2">
+                  <span className={`text-xs px-2 py-0.5 rounded-full ${s.status === 'done' ? 'bg-green-100 text-green-700' : s.status === 'shipped' ? 'bg-blue-100 text-blue-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                    {s.status === 'pending' ? '待处理' : s.status === 'shipped' ? '已发货' : s.status === 'done' ? '已完成' : s.status}
+                  </span>
+                </td>
+                <td className="px-3 py-2 text-xs text-[var(--text-muted)]">{new Date(s.updatedAt).toLocaleDateString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

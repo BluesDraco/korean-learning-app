@@ -6,11 +6,11 @@ export const grammarCardsP15: GrammarCard[] = [
     id: 'card-p15-l01',
     partNumber: 15,
     lessonNumber: 1,
-    title: '주체높임법 -(으)시-',
-    whatItDoes: '主体尊敬',
-    whatItDoesBody: '주체높임 是韩语敬语体系的核心：在动词/形容词词干加 -(으)시-，抬高句子主语（长辈/上司/客户）。有받침 -으시-，无받침 -시-。句尾时态与 -시- 融合：现재 -세요/-십니다，过去 -셨어요/-셨습니다。',
-    structureNote: '动词/形容词词干 + -(으)시- + 语尾｜有받침 -으시- / 无받침 -시-',
-    rulesNote: '现在 -세요/-십니다｜过去 -셨어요/-셨습니다｜将来 -실 거예요｜请求 -(으)세요',
+    title: '주체높임법 -(으)시-', english: 'Subject Honorification -(으)시-',
+    whatItDoes: '主体尊敬', english: 'Subject Honorification',
+    whatItDoesBody: '주체높임 是韩语敬语体系的核心：在动词/形容词词干加 -(으)시-，抬高句子主语（长辈/上司/客户）。有收音 -으시-，无收音 -시-。句尾时态与 -시- 融合：现재 -세요/-십니다，过去 -셨어요/-셨습니다。', english: 'Subject honorification is the core of the Korean honorific system: add -(으)시- to the verb/adjective stem to elevate the sentence subject (elders, superiors, customers). Use -으시- after a final consonant, -시- after a vowel. At the end of a sentence, tense merges with -시-: present -세요/-십니다, past -셨어요/-셨습니다.',
+    structureNote: '动词/形容词词干 + -(으)시- + 语尾｜有收音 -으시- / 无收音 -시-', english: 'Verb/Adjective stem + -(으)시- + ending ｜ -으시- after consonant / -시- after vowel',
+    rulesNote: '现在 -세요/-십니다｜过去 -셨어요/-셨습니다｜将来 -실 거예요｜请求 -(으)세요', english: 'Present -세요/-십니다 ｜ Past -셨어요/-셨습니다 ｜ Future -실 거예요 ｜ Request -(으)세요',
     structures: [
       {
         ko: '아버지는 지금 신문을 읽으세요.',
@@ -44,8 +44,8 @@ export const grammarCardsP15: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '有받침词干 → -으시-', examples: '읽다 → 읽으시다 → 읽으세요' },
-      { type: 'rule', text: '无받침词干 → -시-', examples: '가다 → 가시다 → 가세요' },
+      { type: 'rule', text: '有收音词干 → -으시-', examples: '읽다 → 읽으시다 → 읽으세요' },
+      { type: 'rule', text: '无收音词干 → -시-', examples: '가다 → 가시다 → 가세요' },
       { type: 'rule', text: '过去时：-(으)시- + -었- → -(으)셨-', examples: '오다 → 오시다 → 오셨어요' },
       { type: 'rule', text: '将来时：-(으)실 거예요', examples: '가다 → 가실 거예요' },
       { type: 'usage', text: '请求 -(으)세요 也是 -시- 的应用', examples: '앉으세요 / 드세요' },
@@ -98,7 +98,7 @@ export const grammarCardsP15: GrammarCard[] = [
       { wrong: '저는 갔으세요', correct: '저는 갔어요', note: '不能对"我"自己用 -시-' },
     ],
     quickTable: {
-      title: '주체높임 时态变化',
+      title: '주체높임 时态变化', english: 'Tense Changes with Subject Honorification',
       headers: ['时态', '普通', '높임'],
       rows: [
         ['现在', '가요', '가세요'],
@@ -111,7 +111,7 @@ export const grammarCardsP15: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '주체높임 -(으)시- 练习',
+      title: '주체높임 -(으)시- 练习', english: 'Practice: Subject Honorification -(으)시-',
       body: '选择正确形式',
       questions: [
         {
@@ -124,7 +124,7 @@ export const grammarCardsP15: GrammarCard[] = [
           prompt: '아버지는 신문을 (읽다) 세요.',
           options: ['읽으', '읽어', '읽으시', '읽'],
           answer: 0,
-          explanation: '읽다（有받침）→ -으시- → 읽으세요。',
+          explanation: '읽다（有收音）→ -으시- → 읽으세요。',
         },
         {
           prompt: '할머니는 내일 병원에 (가다) 거예요.',
@@ -186,11 +186,11 @@ export const grammarCardsP15: GrammarCard[] = [
     id: 'card-p15-l02',
     partNumber: 15,
     lessonNumber: 2,
-    title: '주체높임 特殊词汇',
-    whatItDoes: '特殊尊敬词',
-    whatItDoesBody: '一些高频动词/形容词的敬语形式不是加 -(으)시-，而是换成另一个词：있다→계시다（在）、먹다/마시다→드시다·잡수시다（用膳）、자다→주무시다（就寝）、죽다→돌아가시다（去世）、말하다→말씀하시다（讲话）、아프다→편찮으시다（欠安）。这些是必背清单。',
-    structureNote: '不加 -시-，直接换特殊词｜多为身体活动/生命状态相关动词',
-    rulesNote: '있다→계시다/있으시다｜먹다→드시다｜자다→주무시다｜말하다→말씀하시다｜아프다→편찮으시다｜죽다→돌아가시다',
+    title: '주체높임 特殊词汇', english: 'Special Vocabulary for Subject Honorification',
+    whatItDoes: '特殊尊敬词', english: 'Special Honorific Words',
+    whatItDoesBody: '一些高频动词/形容词的敬语形式不是加 -(으)시-，而是换成另一个词：있다→계시다（在）、먹다/마시다→드시다·잡수시다（用膳）、자다→주무시다（就寝）、죽다→돌아가시다（去世）、말하다→말씀하시다（讲话）、아프다→편찮으시다（欠安）。这些是必背清单。', english: 'Some high-frequency verbs/adjectives have honorific forms that replace the word entirely rather than adding -(으)시-: 있다→계시다 (to be/exist), 먹다/마시다→드시다·잡수시다 (to eat/drink), 자다→주무시다 (to sleep), 죽다→돌아가시다 (to pass away), 말하다→말씀하시다 (to speak), 아프다→편찮으시다 (to be unwell). These are essential to memorize.',
+    structureNote: '不加 -시-，直接换特殊词｜多为身体活动/生命状态相关动词', english: 'No -시- added; use the special word directly ｜ Mostly verbs related to physical activities or life states',
+    rulesNote: '있다→계시다/있으시다｜먹다→드시다｜자다→주무시다｜말하다→말씀하시다｜아프다→편찮으시다｜죽다→돌아가시다', english: '있다→계시다/있으시다 ｜ 먹다→드시다 ｜ 자다→주무시다 ｜ 말하다→말씀하시다 ｜ 아프다→편찮으시다 ｜ 죽다→돌아가시다',
     structures: [
       {
         ko: '할아버지는 지금 방에 계세요.',
@@ -278,7 +278,7 @@ export const grammarCardsP15: GrammarCard[] = [
       { wrong: '저는 지금 집에 계세요', correct: '저는 지금 집에 있어요', note: '这些特殊敬语词只抬别人，绝不能套在自己身上；说自己"在"用普通的 있어요' },
     ],
     quickTable: {
-      title: '주체높임 特殊词汇速查',
+      title: '주체높임 特殊词汇速查', english: 'Subject Honorific Special Vocabulary Quick Reference',
       headers: ['普通', '높임', '语义'],
       rows: [
         ['있다（人）', '계시다', '（人）在'],
@@ -292,7 +292,7 @@ export const grammarCardsP15: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '주체높임 特殊词汇 练习',
+      title: '주체높임 特殊词汇 练习', english: 'Subject Honorific Special Vocabulary Practice',
       body: '选择正确的敬语',
       questions: [
         {
@@ -370,11 +370,11 @@ export const grammarCardsP15: GrammarCard[] = [
     id: 'card-p15-l03',
     partNumber: 15,
     lessonNumber: 3,
-    title: '객체높임 特殊动词',
-    whatItDoes: '客体尊敬',
-    whatItDoesBody: '객체높임 抬高动作"接受者"（宾语/间接宾语）。这类动词多是"给/见/问/带"这些涉及"对方"的动词：주다→드리다（给长辈）、보다→뵙다（拜见）、묻다→여쭙다（请教）、데리다→모시다（陪同）。',
-    structureNote: '换成特殊动词｜受动者用 -께 助词｜多与 주체높임 -시- 一起用',
-    rulesNote: '주다→드리다｜보다/만나다→뵙다·뵈다｜묻다→여쭙다·여쭈다｜데리다→모시다',
+    title: '객체높임 特殊动词', english: 'Object Honorific Special Verbs',
+    whatItDoes: '客体尊敬', english: 'Object Honorifics',
+    whatItDoesBody: '객체높임 抬高动作"接受者"（宾语/间接宾语）。这类动词多是"给/见/问/带"这些涉及"对方"的动词：주다→드리다（给长辈）、보다→뵙다（拜见）、묻다→여쭙다（请教）、데리다→모시다（陪同）。', english: 'Object honorifics elevate the "receiver" of the action (object or indirect object). These verbs typically involve "giving/seeing/asking/bringing" toward the other person: 주다→드리다 (to give to an elder), 보다→뵙다 (to meet respectfully), 묻다→여쭙다 (to ask respectfully), 데리다→모시다 (to accompany).',
+    structureNote: '换成特殊动词｜受动者用 -께 助词｜多与 주체높임 -시- 一起用', english: 'Replace with special verb ｜ Receiver uses -께 particle ｜ Often used with subject honorific -시-',
+    rulesNote: '주다→드리다｜보다/만나다→뵙다·뵈다｜묻다→여쭙다·여쭈다｜데리다→모시다', english: '주다→드리다 ｜ 보다/만나다→뵙다·뵈다 ｜ 묻다→여쭙다·여쭈다 ｜ 데리다→모시다',
     structures: [
       {
         ko: '선생님께 선물을 드렸어요.',
@@ -459,7 +459,7 @@ export const grammarCardsP15: GrammarCard[] = [
       { wrong: '친구에게 선물을 드렸어요', correct: '친구에게 선물을 줬어요', note: '接受者是平辈朋友时不抬高，用普通的 주다 + -에게；객체높임 只对尊者用' },
     ],
     quickTable: {
-      title: '객체높임 特殊动词',
+      title: '객체높임 特殊动词', english: 'Object Honorific Special Verbs',
       headers: ['普通', '높임', '语义'],
       rows: [
         ['주다', '드리다', '给（长辈）'],
@@ -471,7 +471,7 @@ export const grammarCardsP15: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '객체높임 特殊动词 练习',
+      title: '객체높임 特殊动词 练习', english: 'Object Honorific Special Verbs Practice',
       body: '选择正确形式',
       questions: [
         {
@@ -547,11 +547,11 @@ export const grammarCardsP15: GrammarCard[] = [
     id: 'card-p15-l04',
     partNumber: 15,
     lessonNumber: 4,
-    title: '높임 조사 -께서·-께·-님',
-    whatItDoes: '尊敬助词',
-    whatItDoesBody: '敬语系统的助词升级：主语的 -이/가 → -께서；给的对象 -에게 → -께；名词加 -님 表尊称。三者配合动词 -시- 或换词，构成完整敬语句。',
-    structureNote: '主语 -이/가 → -께서｜给 -에게 → -께｜N + -님',
-    rulesNote: '-께서 与 -이/가 语法功能同（主语标记）｜-께 与 -에게 同（间接宾语）｜-님 加在人称名词后',
+    title: '높임 조사 -께서·-께·-님', english: 'Honorific Particles -께서·-께·-님',
+    whatItDoes: '尊敬助词', english: 'Honorific Particles',
+    whatItDoesBody: '敬语系统的助词升级：主语的 -이/가 → -께서；给的对象 -에게 → -께；名词加 -님 表尊称。三者配合动词 -시- 或换词，构成完整敬语句。', english: 'Particle upgrades in the honorific system: subject -이/가 → -께서; recipient -에게 → -께; nouns add -님 for respectful titles. These three combine with the verb -시- or verb substitution to form complete honorific sentences.',
+    structureNote: '主语 -이/가 → -께서｜给 -에게 → -께｜N + -님', english: 'Subject -이/가 → -께서 ｜ Recipient -에게 → -께 ｜ N + -님',
+    rulesNote: '-께서 与 -이/가 语法功能同（主语标记）｜-께 与 -에게 同（间接宾语）｜-님 加在人称名词后', english: '-께서 has the same grammatical function as -이/가 (subject marker) | -께 is the same as -에게 (indirect object) | -님 is added after person nouns',
     structures: [
       {
         ko: '선생님께서 학교에 오셨어요.',
@@ -636,7 +636,7 @@ export const grammarCardsP15: GrammarCard[] = [
       { wrong: '선생님께 오셨어요', correct: '선생님께서 오셨어요', note: '"老师来了"老师是主语，用 -께서（不是给的对象，别用 -께）' },
     ],
     quickTable: {
-      title: '敬语助词对照',
+      title: '敬语助词对照', english: 'Honorific Particle Comparison',
       headers: ['普通', '敬语', '用法'],
       rows: [
         ['-이/가', '-께서', '主语'],
@@ -648,7 +648,7 @@ export const grammarCardsP15: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '敬语助词 练习',
+      title: '敬语助词 练习', english: 'Honorific Particle Practice',
       body: '选择正确助词',
       questions: [
         {
@@ -728,11 +728,11 @@ export const grammarCardsP15: GrammarCard[] = [
     id: 'card-p15-l05',
     partNumber: 15,
     lessonNumber: 5,
-    title: '청자높임 语体切换',
-    whatItDoes: '听者尊敬',
-    whatItDoesBody: '청자높임 靠句尾语体表达对"听者"的尊敬程度，是韩语敬语的第三个维度。四大语体：하십시오체（最正式，-습니다）、해요체（正式亲切，-어요）、해체（半语，-어）、해라체（书面/命令）。选错语体就选错关系。',
-    structureNote: '句尾语体 → 하십시오체 / 해요체 / 해체 / 해라체｜按听者身份切换',
-    rulesNote: '하십시오체（-습니다/-십니다） · 해요체（-어요/-으세요） · 해체（-어/-야 · 半语） · 해라체（-는다/-어라）',
+    title: '청자높임 语体切换', english: 'Cheongja-nopim Speech Level Switching',
+    whatItDoes: '听者尊敬', english: 'Listener honorification',
+    whatItDoesBody: '청자높임 靠句尾语体表达对"听者"的尊敬程度，是韩语敬语的第三个维度。四大语体：하십시오체（最正式，-습니다）、해요체（正式亲切，-어요）、해체（半语，-어）、해라체（书面/命令）。选错语体就选错关系。', english: 'Cheongja-nopim expresses the degree of respect toward the "listener" through sentence-ending speech levels, and is the third dimension of Korean honorifics. The four speech levels: Hasipsio-che (most formal, -습니다), Haeyo-che (formal and friendly, -어요), Hae-che (banmal, -어), and Haera-che (written/command). Choosing the wrong speech level means choosing the wrong relationship.',
+    structureNote: '句尾语体 → 하십시오체 / 해요체 / 해체 / 해라체｜按听者身份切换', english: 'Sentence-ending speech level → Hasipsio-che / Haeyo-che / Hae-che / Haera-che | Switch according to the listener\'s status',
+    rulesNote: '하십시오체（-습니다/-십니다） · 해요체（-어요/-으세요） · 해체（-어/-야 · 半语） · 해라체（-는다/-어라）', english: 'Hasipsio-che (-습니다/-십니다) · Haeyo-che (-어요/-으세요) · Hae-che (-어/-야 · banmal) · Haera-che (-는다/-어라)',
     structures: [
       {
         ko: '안녕하십니까? 저는 김민수입니다.',
@@ -817,7 +817,7 @@ export const grammarCardsP15: GrammarCard[] = [
       { wrong: '(想对老板客气) 사장님, 저 지금 가십니다.', correct: '사장님, 저 지금 갑니다.', note: '对听者客气靠语体（-ㅂ니다），不是往自己动作上加 -시-；-시- 尊的是"话题里的人"，主语是自己时绝不能加' },
     ],
     quickTable: {
-      title: '四大语体对照',
+      title: '四大语体对照', english: 'Comparison of the Four Speech Styles',
       headers: ['语体', '结尾', '典型场景'],
       rows: [
         ['하십시오체', '-습니다 / -십니다', '面试 / 演讲 / 首次见客户'],
@@ -828,7 +828,7 @@ export const grammarCardsP15: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'judge',
-      title: '语体切换 练习',
+      title: '语体切换 练习', english: 'Speech Style Switching Practice',
       body: '判断哪种语体最合适',
       questions: [
         {
@@ -904,10 +904,10 @@ export const grammarCardsP15: GrammarCard[] = [
     partNumber: 15,
     lessonNumber: 6,
     title: '자기낮춤 저·저희',
-    whatItDoes: '自谦',
-    whatItDoesBody: '韩语敬语系统的另一半是"自谦（낮춤）"：把自己/自己群体压低，也是尊敬对方的一种方式。第一人称 나→저、우리→저희、주다→드리다（给长辈）、말하다→말씀하다（自己说时也可）都是自谦形式。',
-    structureNote: '나→저｜우리→저희｜주다→드리다｜말하다→말씀 드리다',
-    rulesNote: '자기낮춤 用于面对长辈/正式场合时降低自己的位阶',
+    whatItDoes: '自谦', english: 'Self-Humbling',
+    whatItDoesBody: '韩语敬语系统的另一半是"自谦（낮춤）"：把自己/自己群体压低，也是尊敬对方的一种方式。第一人称 나→저、우리→저희、주다→드리다（给长辈）、말하다→말씀하다（自己说时也可）都是自谦形式。', english: 'The other half of the Korean honorific system is "self-humbling (낮춤)": lowering yourself or your group is also a way to show respect to the other person. First-person forms like 나→저, 우리→저희, 주다→드리다 (when giving to elders), and 말하다→말씀하다 (also used when speaking about yourself) are all humble forms.',
+    structureNote: '나→저｜우리→저희｜주다→드리다｜말하다→말씀드리다', english: '나→저 | 우리→저희 | 주다→드리다 | 말하다→말씀드리다',
+    rulesNote: '자기낮춤 用于面对长辈/正式场合时降低自己的位阶', english: '자기낮춤 is used to lower one\'s own status when addressing elders or in formal situations.',
     structures: [
       {
         ko: '저는 김민수라고 합니다.',
@@ -940,13 +940,13 @@ export const grammarCardsP15: GrammarCard[] = [
       { type: 'rule', text: '나 → 저（第一人称自谦）', examples: '나는 → 저는' },
       { type: 'rule', text: '우리 → 저희（复数自谦）', examples: '우리 회사 → 저희 회사' },
       { type: 'rule', text: '주다 → 드리다（给长辈时的自谦）', examples: '아버지께 드릴게요.（我拿给爸爸。）' },
-      { type: 'rule', text: '말하다 → 말씀 드리다（自己"讲"面对长辈时）', examples: '자세히 말씀 드리겠습니다.（我会详细说明。）' },
+      { type: 'rule', text: '말하다 → 말씀드리다（自己"讲"面对长辈时）', examples: '자세히 말씀 드리겠습니다.（我会详细说明。）' },
       { type: 'usage', text: '正式场合演讲/自我介绍常用 저 / 저희', examples: '저는 김민수입니다.（我是金民秀。）' },
       { type: 'usage', text: '与哪些人不能自谦：同龄朋友/晚辈/亲密关系', examples: '和朋友说话用 나 / 우리 即可' },
       { type: 'compare', text: '저 vs 나 → 前者对上/正式，后者对同辈以下', examples: '(正式) 저는 학생입니다 / (亲密) 나는 학생이야' },
       { type: 'rule', text: '저 遇到主语助词 -가 和所有格 -의 要缩合：저+가 说成/写成 제가（绝不是 저가），저+의 说成 제。这是硬变形规则，不能按原形硬拼。', examples: '제가 하겠습니다.（我来做。✓，"저가" ✗）/ 제 이름은 민수입니다.（我的名字是民秀。）' },
       { type: 'note', text: '저희 是"排除听者"的我方（我们公司、我们家，不含你）；对同一群体内部的"我们（含你）"要用 우리。别一律把 우리 换成 저희。', examples: '(对外部客户) 저희 회사가 준비했습니다.（我方公司，不含客户）/ (对同事) 우리 같이 점심 먹어요.（我们一起，含对方）' },
-      { type: 'note', text: '저희 나라 vs 우리 나라 → 前者太谦，习惯用 우리 나라', examples: '避免："저희 나라 사람들" → 用："우리 나라 사람들"' },
+      { type: 'note', text: '저희 나라 vs 우리나라 → 前者太谦，习惯用 우리나라', examples: '避免："저희 나라 사람들" → 用："우리나라 사람들"' },
     ],
     cardExamples: [
       {
@@ -982,29 +982,29 @@ export const grammarCardsP15: GrammarCard[] = [
       { icon: '💌', context: '致函', ko: '자세히 말씀 드리겠습니다.', zh: '详情将告知。' },
       { icon: '🎁', context: '送礼', ko: '이것은 제가 준비한 선물입니다.', zh: '这是我准备的礼物。' },
       { icon: '📞', context: '电话', ko: '저희 팀장님을 바꿔 드리겠습니다.', zh: '为您转组长。' },
-      { icon: '🌏', context: '国家称呼', ko: '우리 나라 문화입니다.', zh: '我国文化。' },
+      { icon: '🌏', context: '国家称呼', ko: '우리나라 문화입니다.', zh: '我国文化。' },
     ],
     mistakes: [
       { wrong: '나는 김민수입니다', correct: '저는 김민수입니다', note: '正式自介用 저，不用 나' },
       { wrong: '우리 회사에서는（对客户）', correct: '저희 회사에서는', note: '对外/正式用 저희' },
-      { wrong: '저희 나라 사람들', correct: '우리 나라 사람들', note: '国家自称用 우리 나라（约定俗成）' },
-      { wrong: '자세히 말씀 하겠습니다', correct: '자세히 말씀 드리겠습니다', note: '对客/长辈自己讲要 말씀 드리다' },
+      { wrong: '저희 나라 사람들', correct: '우리나라 사람들', note: '国家自称用 우리나라（约定俗成）' },
+      { wrong: '자세히 말씀 하겠습니다', correct: '자세히 말씀 드리겠습니다', note: '对客/长辈自己讲要 말씀드리다' },
       { wrong: '저가 하겠습니다', correct: '제가 하겠습니다', note: '저 加主语助词 -가 必须缩合成 제가，没有"저가"这种形式' },
     ],
     quickTable: {
-      title: '自谦对照',
+      title: '自谦对照', english: 'Self-Humbling Contrast',
       headers: ['普通', '自谦', '使用场景'],
       rows: [
         ['나', '저', '对上/正式'],
-        ['우리', '저희', '对外/正式（除"우리 나라"）'],
+        ['우리', '저희', '对外/正式（除"우리나라"）'],
         ['주다', '드리다', '给长辈/客户'],
-        ['말하다', '말씀 드리다', '自己讲(面对尊者)'],
+        ['말하다', '말씀드리다', '自己讲(面对尊者)'],
         ['이름', '성함', '姓名（尊称对方）'],
       ],
     },
     specialQuiz: {
       type: 'morph',
-      title: '자기낮춤 练习',
+      title: '자기낮춤 练习', english: '자기낮춤 Practice',
       body: '选择正确的自谦形式',
       questions: [
         {
@@ -1021,9 +1021,9 @@ export const grammarCardsP15: GrammarCard[] = [
         },
         {
           prompt: '"我们国家" 最自然的说法？',
-          options: ['저희 나라', '우리 나라', '내 나라', '한 나라'],
+          options: ['저희 나라', '우리나라', '내 나라', '한 나라'],
           answer: 1,
-          explanation: '国家自称习惯用 우리 나라（不用 저희 나라，这样反而不自然）。',
+          explanation: '国家自称习惯用 우리나라（不用 저희 나라，这样反而不自然）。',
         },
         {
           prompt: '"我会详细告诉您" 最合适？',
@@ -1034,12 +1034,12 @@ export const grammarCardsP15: GrammarCard[] = [
             '자세히 말할 것입니다',
           ],
           answer: 1,
-          explanation: '面对长辈/客户，自己"讲"用 말씀 드리다（自谦 + 客体高임）。',
+          explanation: '面对长辈/客户，自己"讲"用 말씀드리다（自谦 + 客体高임）。',
         },
       ],
     },
     linkedGrammarIds: ['card-p15-l03', 'card-p15-l05'],
-    step0Html: `<div class="hook-box"><div style="font-size:15px;color:#241917;line-height:1.8">敬语的另一半是<b>自谦（낮춤）</b>：把自己压低。<br>나→<b>저</b> · 우리→<b>저희</b> · 주다→<b>드리다</b> · 말하다→<b>말씀 드리다</b>。<br>特殊：<b>우리 나라</b> 约定俗成，不用 저희 나라。</div></div>`,
+    step0Html: `<div class="hook-box"><div style="font-size:15px;color:#241917;line-height:1.8">敬语的另一半是<b>自谦（낮춤）</b>：把自己压低。<br>나→<b>저</b> · 우리→<b>저희</b> · 주다→<b>드리다</b> · 말하다→<b>말씀드리다</b>。<br>特殊：<b>우리나라</b> 约定俗成，不用 저희 나라。</div></div>`,
     compareHtml: `<div class="cmp-block">
   <div style="font-size:15px;color:#241917;line-height:1.8">
     <b>普通 vs 自谦</b><br>
@@ -1059,16 +1059,16 @@ export const grammarCardsP15: GrammarCard[] = [
   <div class="ov-block">
     <div style="font-size:16px;color:#241917;line-height:1.9">
       나 → <b>저</b><br>
-      우리 → <b>저희</b>（除"우리 나라"）<br>
+      우리 → <b>저희</b>（除"우리나라"）<br>
       주다 → <b>드리다</b><br>
-      말하다 → <b>말씀 드리다</b>
+      말하다 → <b>말씀드리다</b>
     </div>
   </div>
 </div>
 <div class="ov-section">
   <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">别踩的坑</div></div>
   <div class="ov-block">
-    <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">저희 나라</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">우리 나라</span></div></div>
+    <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">저희 나라</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">우리나라</span></div></div>
     <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">나는 김민수입니다</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">저는 김민수입니다</span></div></div>
   </div>
 </div>`,
@@ -1079,11 +1079,11 @@ export const grammarCardsP15: GrammarCard[] = [
     id: 'card-p15-l07',
     partNumber: 15,
     lessonNumber: 7,
-    title: '간접높임（间接尊敬）',
-    whatItDoes: '身体/所有物 간접높임',
-    whatItDoesBody: '当句子主语不是尊者本人，而是他"身体的一部分""所有物""所属"时，动词/形容词仍要加 -(으)시-。这叫 간접높임（间接尊敬）：抬高 A 的东西 = 抬高 A。',
-    structureNote: '尊者的身体/所有物/所属 + V-(으)시-｜通过间接对象抬高本人',
-    rulesNote: '주체는 사람 아닌 그 사람의 "무엇"｜典型：손, 눈, 마음, 성함, 연세, 말씀 등',
+    title: '간접높임（间接尊敬）', english: 'Indirect Honorification (간접높임)',
+    whatItDoes: '身体/所有物 간접높임', english: 'Indirect honorification for body parts/possessions',
+    whatItDoesBody: '当句子主语不是尊者本人，而是他"身体的一部分""所有物""所属"时，动词/形容词仍要加 -(으)시-。这叫 간접높임（间接尊敬）：抬高 A 的东西 = 抬高 A。', english: 'When the sentence subject is not the honored person themselves, but rather a "body part," "possession," or "affiliation" of theirs, the verb/adjective still takes -(으)시-. This is called 간접높임 (indirect honorification): elevating A\'s thing = elevating A.',
+    structureNote: '尊者的身体/所有物/所属 + V-(으)시-｜通过间接对象抬高本人', english: 'Honored person\'s body/possession/affiliation + V-(으)시-｜Elevate the person indirectly through the object',
+    rulesNote: '주체는 사람 아닌 그 사람의 "무엇"｜典型：손, 눈, 마음, 성함, 연세, 말씀 등', english: 'The subject is not a person but that person\'s "something"｜Typical examples: 손, 눈, 마음, 성함, 연세, 말씀, etc.',
     structures: [
       {
         ko: '아버지는 손이 크세요.',
@@ -1167,7 +1167,7 @@ export const grammarCardsP15: GrammarCard[] = [
       { wrong: '사장님, 시간이 계세요?', correct: '사장님, 시간이 있으세요?', note: '"时间"是尊者拥有的东西（间接），用 있으세요；계시다 只用于尊者本人"在"（直接）' },
     ],
     quickTable: {
-      title: '尊称化名词',
+      title: '尊称化名词', english: 'Honorific Nouns',
       headers: ['普通', '尊称', '语境'],
       rows: [
         ['나이', '연세', '年龄'],
@@ -1180,7 +1180,7 @@ export const grammarCardsP15: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '간접높임 练习',
+      title: '간접높임 练习', english: '간접높임 Practice',
       body: '选择正确表达',
       questions: [
         {
@@ -1266,11 +1266,11 @@ export const grammarCardsP15: GrammarCard[] = [
     id: 'card-p15-l08',
     partNumber: 15,
     lessonNumber: 8,
-    title: '높임 误用禁忌与압존',
-    whatItDoes: '禁忌与압존법',
-    whatItDoesBody: '本课系统整理韩语敬语最容易踩的坑：过度敬语（커피 나오셨습니다）、압존법（面对最高尊者时抬他下面的人是否降低）、对陌生人的默认语体、职场敬语的边界。这些是韩语高级学习者的必修。',
-    structureNote: '禁忌 · 压尊 · 默认语体｜四大常见错误',
-    rulesNote: '过度敬语｜압존법（对老板讲组长时"降"组长）｜第一人称不加 -시-｜物品不加 -시-',
+    title: '높임 误用禁忌与압존', english: 'Honorific Misuse Taboos and 압존',
+    whatItDoes: '禁忌与압존법', english: 'Taboos and 압존법',
+    whatItDoesBody: '本课系统整理韩语敬语最容易踩的坑：过度敬语（커피 나오셨습니다）、압존법（面对最高尊者时抬他下面的人是否降低）、对陌生人的默认语体、职场敬语的边界。这些是韩语高级学习者的必修。', english: 'This lesson systematically covers the most common pitfalls in Korean honorifics: over-honorifics (커피 나오셨습니다), 압존법 (whether to lower the status of someone below the highest authority when speaking in their presence), the default speech style for strangers, and the boundaries of honorifics in the workplace. These are essential for advanced Korean learners.',
+    structureNote: '禁忌 · 压尊 · 默认语体｜四大常见错误', english: 'Taboos · 압존법 · Default Speech Style | Four Common Mistakes',
+    rulesNote: '过度敬语｜압존법（对老板讲组长时"降"组长）｜第一人称不加 -시-｜物品不加 -시-', english: 'Over-honorifics | 압존법 (lowering the team leader when speaking to the boss) | No -시- for first person | No -시- for objects',
     structures: [
       {
         ko: '주문하신 커피 나왔습니다.',
@@ -1356,7 +1356,7 @@ export const grammarCardsP15: GrammarCard[] = [
       { wrong: '옷이 예쁘시네요（对客人时形容衣服）', correct: '옷이 예쁘네요 / 손님이 예뻐 보이세요', note: '尊敬人本身，不尊敬"物品"' },
     ],
     quickTable: {
-      title: '常见误用与修正',
+      title: '常见误用与修正', english: 'Common Misuses and Corrections',
       headers: ['错误类型', '错', '正'],
       rows: [
         ['物品尊敬', '커피 나오셨어요', '커피 나왔어요'],
@@ -1368,7 +1368,7 @@ export const grammarCardsP15: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'judge',
-      title: '误用判断',
+      title: '误用判断', english: 'Misuse Identification',
       body: '选出用得对的表达',
       questions: [
         {
@@ -1458,10 +1458,10 @@ export const grammarCardsP15: GrammarCard[] = [
     id: 'card-p15-l09',
     partNumber: 15,
     lessonNumber: 9,
-    title: 'P15 综合练习',
+    title: 'P15 综合练习', english: 'P15 Comprehensive Practice',
     isPractice: true,
-    whatItDoes: '敬语综合',
-    whatItDoesBody: '本课综合 P15 全部 8 类敬语内容：주체높임 -(으)시- / 特殊词汇 / 객체높임 换词 / 助词 -께서·-께·-님 / 语体切换 / 자기낮춤 / 간접높임 / 误用禁忌。',
+    whatItDoes: '敬语综合', english: 'Comprehensive Honorifics',
+    whatItDoesBody: '本课综合 P15 全部 8 类敬语内容：주체높임 -(으)시- / 特殊词汇 / 객체높임 换词 / 助词 -께서·-께·-님 / 语体切换 / 자기낮춤 / 간접높임 / 误用禁忌。', english: 'This lesson covers all 8 types of honorifics from P15: subject honorification -(으)시- / special vocabulary / object honorification word substitution / particles -께서·-께·-님 / speech style switching / self-lowering / indirect honorification / misuse taboos.',
     structures: [],
     connectionRules: [],
     cardExamples: [],
@@ -1469,7 +1469,7 @@ export const grammarCardsP15: GrammarCard[] = [
     mistakes: [],
     specialQuiz: {
       type: 'morph',
-      title: 'P15 综合练习',
+      title: 'P15 综合练习', english: 'P15 Comprehensive Practice',
       body: '综合本章所有敬语内容',
       questions: [
         {

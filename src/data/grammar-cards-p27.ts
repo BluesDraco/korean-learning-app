@@ -7,10 +7,10 @@ export const grammarCardsP27: GrammarCard[] = [
     partNumber: 27,
     lessonNumber: 1,
     title: '-기 마련이다',
-    whatItDoes: '本来就……',
-    whatItDoesBody: '「-기 마련이다」表示"本来就……""必然会……""理所当然……"。用于陈述普遍规律、常识、必然结果。语气偏客观，常用于说教、经验总结。',
-    structureNote: '动词/形容词词干 + -기 마련이다 · 名词 + 이기 마련이다',
-    rulesNote: '直接接词干，不看받침；名词加系词 이 后再接；等同 -는 법이다',
+    whatItDoes: '本来就……', english: 'It\'s only natural that...',
+    whatItDoesBody: '「-기 마련이다」表示"本来就……""必然会……""理所当然……"。用于陈述普遍规律、常识、必然结果。语气偏客观，常用于说教、经验总结。', english: '\'-기 마련이다\' means "it\'s only natural that..." "it\'s bound to..." "it\'s理所当然 that...". It is used to state universal rules, common sense, or inevitable results. The tone is relatively objective and is often used in moralizing or summarizing experiences.',
+    structureNote: '动词/形容词词干 + -기 마련이다 · 名词 + 이기 마련이다', english: 'Verb/Adjective stem + -기 마련이다 · Noun + 이기 마련이다',
+    rulesNote: '直接接词干，不看收音；名词加系词 이 后再接；等同 -는 법이다', english: 'Attach directly to the stem regardless of the final consonant; for nouns, add the copula 이 first; equivalent to -는 법이다',
     structures: [
       {
         ko: '노력하면 성공하기 마련이에요.',
@@ -40,7 +40,7 @@ export const grammarCardsP27: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '动词/形容词词干 + -기 마련이다，不看받침', examples: '가다 → 가기 마련이다 / 좋다 → 좋기 마련이다' },
+      { type: 'rule', text: '动词/形容词词干 + -기 마련이다，不看收音', examples: '가다 → 가기 마련이다 / 좋다 → 좋기 마련이다' },
       { type: 'rule', text: '名词 + 이기 마련이다', examples: '학생은 공부하는 존재이기 마련이다（学生本就是要学习的存在。）' },
       { type: 'usage', text: '陈述普遍真理、常识、必然结果', examples: '나이가 들면 늙기 마련이에요.（上了年纪自然会老。）' },
       { type: 'usage', text: '前句多为条件（-면、-으면、시간이 지나면 등）', examples: '오래 쓰면 낡기 마련이다.（用久了难免会旧。）' },
@@ -96,7 +96,7 @@ export const grammarCardsP27: GrammarCard[] = [
       { wrong: '성공하기 마련이세요', correct: '성공하기 마련이에요', note: '客观陈述句，不能敬语命令' },
     ],
     quickTable: {
-      title: '-기 마련이다 一览',
+      title: '-기 마련이다 一览', english: '-기 마련이다 Overview',
       headers: ['词类', '规则', '例子'],
       rows: [
         ['动词/形容词', '词干 + -기 마련이다', '성공하기 마련이다'],
@@ -107,7 +107,7 @@ export const grammarCardsP27: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '-기 마련이다 变形',
+      title: '-기 마련이다 变形', english: '-기 마련이다 Conjugation',
       body: '选择正确形式',
       questions: [
         {
@@ -188,10 +188,10 @@ export const grammarCardsP27: GrammarCard[] = [
     partNumber: 27,
     lessonNumber: 2,
     title: '-는 법이다',
-    whatItDoes: '道理如此',
-    whatItDoesBody: '「-는 법이다 / -은/ㄴ 법이다」表示"本来就……""按道理讲……""自然而然……"。用于陈述普遍规律、道理，语气较书面，含说教/警示意味。也常用于 -는 법이 없다 表"绝不会……"。',
-    structureNote: '动词现在 -는 법이다 · 形容词 -은/ㄴ 법이다 · 名词 -인 법이다 · 否定 -는 법이 없다',
-    rulesNote: '动词冠形 -는，形容词冠形 -은/ㄴ；否定用 -는 법이 없다 表强烈否认',
+    whatItDoes: '道理如此', english: 'That\'s the way it is',
+    whatItDoesBody: '「-는 법이다 / -은/ㄴ 법이다」表示"本来就……""按道理讲……""自然而然……"。用于陈述普遍规律、道理，语气较书面，含说教/警示意味。也常用于 -는 법이 없다 表"绝不会……"。', english: '\'-는 법이다 / -은/ㄴ 법이다\' means "it\'s only natural that..." "by all logic..." "naturally...". It is used to state universal rules or principles, with a more literary tone and a moralizing/warning nuance. It is also commonly used in the form -는 법이 없다 to mean "will never..."',
+    structureNote: '动词现在 -는 법이다 · 形容词 -은/ㄴ 법이다 · 名词 -인 법이다 · 否定 -는 법이 없다', english: 'Verb present -는 법이다 · Adjective -은/ㄴ 법이다 · Noun -인 법이다 · Negative -는 법이 없다',
+    rulesNote: '动词冠形 -는，形容词冠形 -은/ㄴ；否定用 -는 법이 없다 表强烈否认', english: 'Use the adnominal form -는 for verbs and -은/ㄴ for adjectives; the negative form -는 법이 없다 expresses strong denial',
     structures: [
       {
         ko: '노력하는 사람은 성공하는 법이에요.',
@@ -223,7 +223,7 @@ export const grammarCardsP27: GrammarCard[] = [
     ],
     connectionRules: [
       { type: 'rule', text: '动词现在：-는 법이다', examples: '가다 → 가는 법이다 / 먹다 → 먹는 법이다' },
-      { type: 'rule', text: '形容词：有받침 -은 법이다 / 无받침 -ㄴ 법이다', examples: '좋다 → 좋은 법이다 / 크다 → 큰 법이다' },
+      { type: 'rule', text: '形容词：有收音 -은 법이다 / 无收音 -ㄴ 법이다', examples: '좋다 → 좋은 법이다 / 크다 → 큰 법이다' },
       { type: 'rule', text: '名词：-인 법이다', examples: '진리인 법이다（本就是真理。）' },
       { type: 'rule', text: '否定：-는 법이 없다 表"绝不会……"', examples: '거짓말은 오래가는 법이 없어요（谎言不会长久。）' },
       { type: 'usage', text: '陈述普遍道理、常识、必然规律', examples: '노력하는 사람은 성공하는 법이에요.（努力的人自然会成功。）' },
@@ -278,19 +278,19 @@ export const grammarCardsP27: GrammarCard[] = [
       { wrong: '거짓말은 오래가는 법이 있어요', correct: '거짓말은 오래가는 법이 없어요', note: '否定"绝不"是 -는 법이 없다' },
     ],
     quickTable: {
-      title: '-는 법이다 冠形变化',
+      title: '-는 법이다 冠形变化', english: '-는 법이다 Adnominal Changes',
       headers: ['词类', '规则', '例子'],
       rows: [
         ['动词现在', '-는 법이다', '가는 법이다'],
-        ['形容词有받침', '-은 법이다', '좋은 법이다'],
-        ['形容词无받침', '-ㄴ 법이다', '큰 법이다'],
+        ['形容词有收音', '-은 법이다', '좋은 법이다'],
+        ['形容词无收音', '-ㄴ 법이다', '큰 법이다'],
         ['名词', '-인 법이다', '진리인 법이다'],
         ['否定', '-는 법이 없다', '오래가는 법이 없다'],
       ],
     },
     specialQuiz: {
       type: 'morph',
-      title: '-는 법이다 冠形',
+      title: '-는 법이다 冠形', english: '-는 법이다 (Adnominal)',
       body: '选正确冠形',
       questions: [
         {
@@ -303,7 +303,7 @@ export const grammarCardsP27: GrammarCard[] = [
           prompt: '(착하다) 사람은 언제나 착한 법이에요.',
           options: ['착하는', '착한', '착할', '착하기'],
           answer: 1,
-          explanation: '착하다 是形容词，无받침加 -ㄴ → 착한。',
+          explanation: '착하다 是形容词，无收音加 -ㄴ → 착한。',
         },
         {
           prompt: '거짓말은 오래가는 법이 (없다/있다).',
@@ -315,7 +315,7 @@ export const grammarCardsP27: GrammarCard[] = [
           prompt: '(좋다) 법이에요.',
           options: ['좋는', '좋은', '좋을', '좋기'],
           answer: 1,
-          explanation: '좋다 形容词有받침，冠形用 -은 → 좋은 법이에요。',
+          explanation: '좋다 形容词有收音，冠形用 -은 → 좋은 법이에요。',
         },
       ],
     },
@@ -370,10 +370,10 @@ export const grammarCardsP27: GrammarCard[] = [
     partNumber: 27,
     lessonNumber: 3,
     title: '-을/ㄹ 법하다',
-    whatItDoes: '有可能……',
-    whatItDoesBody: '「-을/ㄹ 법하다」表示"看起来会……""有可能……""大概会……"。用于对某种可能性做出推测，语感偏文学、书面。类似 -을/ㄹ 것 같다，但更委婉、更古典。',
-    structureNote: '动词/形容词词干：有받침 -을 법하다 / 无받침 -ㄹ 법하다 · 名词 -(이)ㄹ 법하다',
-    rulesNote: '与 -는 법이다 结构相近但语义不同！-는 법이다 = 必然道理；-을/ㄹ 법하다 = 有可能。需特别注意区分。',
+    whatItDoes: '有可能……', english: 'It seems likely that...',
+    whatItDoesBody: '「-을/ㄹ 법하다」表示"看起来会……""有可能……""大概会……"。用于对某种可能性做出推测，语感偏文学、书面。类似 -을/ㄹ 것 같다，但更委婉、更古典。', english: '「-을/ㄹ 법하다」 expresses "it looks like..." "it\'s possible that..." "it probably will...". It is used to make a guess about a possibility, with a slightly literary and formal tone. It is similar to -을/ㄹ 것 같다, but more euphemistic and classical.',
+    structureNote: '动词/形容词词干：有收音 -을 법하다 / 无收音 -ㄹ 법하다 · 名词 -(이)ㄹ 법하다', english: 'Verb/Adjective stem: with final consonant -을 법하다 / without final consonant -ㄹ 법하다 · Noun -(이)ㄹ 법하다',
+    rulesNote: '与 -는 법이다 结构相近但语义不同！-는 법이다 = 必然道理；-을/ㄹ 법하다 = 有可能。需特别注意区分。', english: 'It is structurally similar to -는 법이다 but semantically different! -는 법이다 = inevitable rule; -을/ㄹ 법하다 = possible. Pay special attention to distinguish them.',
     structures: [
       {
         ko: '그런 일도 있을 법한 일이에요.',
@@ -405,8 +405,8 @@ export const grammarCardsP27: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '有받침 → -을 법하다', examples: '있다 → 있을 법하다 / 먹다 → 먹을 법하다' },
-      { type: 'rule', text: '无받침 → -ㄹ 법하다', examples: '가다 → 갈 법하다 / 크다 → 클 법하다' },
+      { type: 'rule', text: '有收音 → -을 법하다', examples: '있다 → 있을 법하다 / 먹다 → 먹을 법하다' },
+      { type: 'rule', text: '无收音 → -ㄹ 법하다', examples: '가다 → 갈 법하다 / 크다 → 클 법하다' },
       { type: 'rule', text: '过去推测 → -았/었을 법하다', examples: '갔을 법하다（很可能去了）, 도착했을 법하다（很可能到了）' },
       { type: 'usage', text: '表达"看起来可能""大概会"，语气委婉', examples: '그런 일도 있을 법해요.（这种事也可能有。）' },
       { type: 'usage', text: '冠形形式 -을/ㄹ 법한 N 用来修饰名词', examples: '있을 법한 일 / 겪을 법한 경험' },
@@ -461,11 +461,11 @@ export const grammarCardsP27: GrammarCard[] = [
       { wrong: '오는 법하다', correct: '올 법하다', note: '与 -는 법이다(必然) 混淆，推测用 -을/ㄹ' },
     ],
     quickTable: {
-      title: '-을/ㄹ 법하다 一览',
+      title: '-을/ㄹ 법하다 一览', english: '-을/ㄹ 법하다 Overview',
       headers: ['词类', '规则', '例子'],
       rows: [
-        ['有받침', '-을 법하다', '있을 법하다'],
-        ['无받침', '-ㄹ 법하다', '갈 법하다'],
+        ['有收音', '-을 법하다', '있을 법하다'],
+        ['无收音', '-ㄹ 법하다', '갈 법하다'],
         ['过去', '-았/었을 법하다', '도착했을 법하다'],
         ['冠形', '-을/ㄹ 법한 + N', '있을 법한 일'],
       ],
@@ -522,8 +522,8 @@ export const grammarCardsP27: GrammarCard[] = [
   <div class="ov-section-hd"><div class="ov-section-line" style="background:#b49ccf"></div><div class="ov-section-title" style="color:#b49ccf">核心形态</div></div>
   <div class="ov-block">
     <div style="font-size:16px;color:#241917;line-height:1.9">
-      有받침 → <b>-을 법하다</b>：있을 법하다<br>
-      无받침 → <b>-ㄹ 법하다</b>：갈 법하다<br>
+      有收音 → <b>-을 법하다</b>：있을 법하다<br>
+      无收音 → <b>-ㄹ 법하다</b>：갈 법하다<br>
       过去 → <b>-았/었을 법하다</b>：도착했을 법하다<br>
       冠形 → <b>-을/ㄹ 법한 N</b>：있을 법한 일
     </div>
@@ -555,10 +555,10 @@ export const grammarCardsP27: GrammarCard[] = [
     partNumber: 27,
     lessonNumber: 4,
     title: '-기 나름이다',
-    whatItDoes: '取决于……',
-    whatItDoesBody: '「-기 나름이다」表示"取决于……的方式/程度""看你怎么……"。前接动词表达"结果依赖于此动作/方式"。名词版本是 "N 나름이다"（看N而定）。',
-    structureNote: '动词词干 + -기 나름이다 · 名词 + 나름이다',
-    rulesNote: '动词接 -기 后 + 나름이다；名词直接 + 나름이다；不与形容词连用',
+    whatItDoes: '取决于……', english: 'It depends on...',
+    whatItDoesBody: '「-기 나름이다」表示"取决于……的方式/程度""看你怎么……"。前接动词表达"结果依赖于此动作/方式"。名词版本是 "N 나름이다"（看N而定）。', english: '「-기 나름이다」 means "it depends on how..." or "it\'s up to how you...". It is attached to a verb to express that the result depends on that action or method. The noun version is "N 나름이다" (depends on N).',
+    structureNote: '动词词干 + -기 나름이다 · 名词 + 나름이다', english: 'Verb stem + -기 나름이다 · Noun + 나름이다',
+    rulesNote: '动词接 -기 后 + 나름이다；名词直接 + 나름이다；不与形容词连用', english: 'Attach -기 to a verb stem, then add 나름이다; attach directly to a noun; not used with adjectives.',
     structures: [
       {
         ko: '성공은 노력하기 나름이에요.',
@@ -639,7 +639,7 @@ export const grammarCardsP27: GrammarCard[] = [
       { wrong: '사람 나름이 있어요', correct: '사람 나름이에요', note: '固定为 나름이다，不加 있다' },
     ],
     quickTable: {
-      title: '-기 나름이다 用法',
+      title: '-기 나름이다 用法', english: 'Usage of -기 나름이다',
       headers: ['类型', '规则', '例子'],
       rows: [
         ['动词', '-기 나름이다', '노력하기 나름이다'],
@@ -650,7 +650,7 @@ export const grammarCardsP27: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '-기 나름이다 练习',
+      title: '-기 나름이다 练习', english: 'Practice: -기 나름이다',
       body: '选择正确形式',
       questions: [
         {
@@ -731,10 +731,10 @@ export const grammarCardsP27: GrammarCard[] = [
     partNumber: 27,
     lessonNumber: 5,
     title: '-기에 달려 있다',
-    whatItDoes: '在于……',
-    whatItDoesBody: '「-기에 달려 있다」表示"取决于……""在于……""看……"。用于强调事情的关键决定因素。名词版本是 "N에 달려 있다"。语气比 -기 나름이다 更正式书面。',
-    structureNote: '动词词干 + -기에 달려 있다 · 名词 + 에 달려 있다',
-    rulesNote: '固定搭配"-기에 달려 있다"；主语常为决定的对象（성공/실패/미래 等）',
+    whatItDoes: '在于……', english: 'Depends on...',
+    whatItDoesBody: '「-기에 달려 있다」表示"取决于……""在于……""看……"。用于强调事情的关键决定因素。名词版本是 "N에 달려 있다"。语气比 -기 나름이다 更正式书面。', english: '\'-기에 달려 있다\' means \'depends on...\', \'lies in...\', or \'is up to...\'. It is used to emphasize the key determining factor of a situation. The noun version is \'N에 달려 있다\'. Its tone is more formal and written than -기 나름이다.',
+    structureNote: '动词词干 + -기에 달려 있다 · 名词 + 에 달려 있다', english: 'Verb stem + -기에 달려 있다 · Noun + 에 달려 있다',
+    rulesNote: '固定搭配"-기에 달려 있다"；主语常为决定的对象（성공/실패/미래 等）', english: 'Fixed expression \'-기에 달려 있다\'; the subject is often the thing being determined (e.g., 성공/실패/미래).',
     structures: [
       {
         ko: '성공은 노력하기에 달려 있어요.',
@@ -746,12 +746,12 @@ export const grammarCardsP27: GrammarCard[] = [
         ],
       },
       {
-        ko: '결과는 어떻게 준비하기에 달려 있어요.',
+        ko: '결과는 어떻게 준비하느냐에 달려 있어요.',
         zh: '结果取决于怎么准备。',
         tokens: [
           { text: '결과는', role: 'subject' },
           { text: '어떻게', role: 'plain' },
-          { text: '준비하기에', role: 'verb' },
+          { text: '준비하느냐에', role: 'verb' },
           { text: '달려 있어요', role: 'verb' },
         ],
       },
@@ -793,11 +793,11 @@ export const grammarCardsP27: GrammarCard[] = [
         wordBlocks: [
           { text: '결과는', role: 'subject' },
           { text: '어떻게', role: 'plain' },
-          { text: '준비하기에', role: 'verb' },
+          { text: '준비하느냐에', role: 'verb' },
           { text: '달려 있어요', role: 'verb' },
         ],
         zh: '结果看怎么准备。',
-        swapWords: ['준비하다', '접근하다', '진행하다', '대응하다'],
+        swapWords: ['준비하느냐에', '접근하느냐에', '진행하느냐에', '대응하느냐에'],
       },
       {
         wordBlocks: [
@@ -812,7 +812,7 @@ export const grammarCardsP27: GrammarCard[] = [
     ],
     scenarios: [
       { icon: '🏆', context: '成功', ko: '성공은 노력하기에 달려 있어요.', zh: '成功在于努力。' },
-      { icon: '📊', context: '结果', ko: '결과는 어떻게 준비하기에 달려 있어요.', zh: '结果看怎么准备。' },
+      { icon: '📊', context: '结果', ko: '결과는 어떻게 준비하느냐에 달려 있어요.', zh: '结果看怎么准备。' },
       { icon: '🔮', context: '未来', ko: '미래는 오늘의 선택에 달려 있어요.', zh: '未来取决于今天。' },
       { icon: '💖', context: '关系', ko: '관계는 서로의 태도에 달려 있어요.', zh: '关系在于彼此态度。' },
       { icon: '📚', context: '学习', ko: '실력은 얼마나 연습하느냐에 달려 있어요.', zh: '实力看练多少。' },
@@ -820,22 +820,22 @@ export const grammarCardsP27: GrammarCard[] = [
     ],
     mistakes: [
       { wrong: '노력하는 데 달려 있다', correct: '노력하기에 달려 있다', note: '固定搭配是 -기에 달려 있다' },
-      { wrong: '노력에 달렸어요', correct: '노력에 달려 있어요', note: '正确形是 달려 있다（不是 달렸다）' },
+      { wrong: '노력에 달렸어요', correct: '노력에 달려 있어요', note: '달렸다(N에 달리다)도 "取决于"义常见于书面/格言。本课以 달려 있다 为标准教学形。' },
       { wrong: '노력하기 달려 있다', correct: '노력하기에 달려 있다', note: '必须有 에；-기에 是固定接续' },
     ],
     quickTable: {
-      title: '-기에 달려 있다 用法',
+      title: '-기에 달려 있다 用法', english: 'Usage of -기에 달려 있다',
       headers: ['类型', '规则', '例子'],
       rows: [
         ['动词', '-기에 달려 있다', '노력하기에 달려 있다'],
         ['名词', '에 달려 있다', '선택에 달려 있다'],
-        ['强调', '어떻게/얼마나 + -기에', '어떻게 준비하기에'],
+        ['强调', '어떻게/얼마나 + -느냐에', '어떻게 준비하느냐에'],
         ['同义', '-기 나름이다', '两者可互换'],
       ],
     },
     specialQuiz: {
       type: 'morph',
-      title: '-기에 달려 있다 练习',
+      title: '-기에 달려 있다 练习', english: 'Practice: -기에 달려 있다',
       body: '选择正确形式',
       questions: [
         {
@@ -898,7 +898,7 @@ export const grammarCardsP27: GrammarCard[] = [
       성공은 노력하기에 달려 있다.<br>
       미래는 오늘의 선택에 달려 있다.<br>
       관계는 서로의 태도에 달려 있다.<br>
-      실력은 얼마나 연습하기에 달려 있다.
+      실력은 얼마나 연습하느냐에 달려 있다.
     </div>
   </div>
 </div>
@@ -917,10 +917,10 @@ export const grammarCardsP27: GrammarCard[] = [
     partNumber: 27,
     lessonNumber: 6,
     title: '-는 셈이다',
-    whatItDoes: '算是……',
-    whatItDoesBody: '「-는/은/ㄴ 셈이다」表示"算是……""相当于……""可以说是……"。用于综合考虑各方面后做出的估算/评价。多用于总结、评估、比较后的结论。',
-    structureNote: '动词现在 -는 셈이다 · 形容词 -은/ㄴ 셈이다 · 名词 -인 셈이다 · 过去 -은/ㄴ 셈이다',
-    rulesNote: '关注冠形选择：动词现在 -는，动词过去 -은/ㄴ，形容词 -은/ㄴ，名词 -인',
+    whatItDoes: '算是……', english: 'Can be considered as...',
+    whatItDoesBody: '「-는/은/ㄴ 셈이다」表示"算是……""相当于……""可以说是……"。用于综合考虑各方面后做出的估算/评价。多用于总结、评估、比较后的结论。', english: 'The expression \'-는/은/ㄴ 셈이다\' means "it counts as...", "it is equivalent to...", or "it can be said that...". It is used to make an estimation or evaluation after considering various aspects. It is often used in conclusions drawn from summarizing, assessing, or comparing.',
+    structureNote: '动词现在 -는 셈이다 · 形容词 -은/ㄴ 셈이다 · 名词 -인 셈이다 · 过去 -은/ㄴ 셈이다', english: 'Verb present: -는 셈이다 · Adjective: -은/ㄴ 셈이다 · Noun: -인 셈이다 · Past: -은/ㄴ 셈이다',
+    rulesNote: '关注冠形选择：动词现在 -는，动词过去 -은/ㄴ，形容词 -은/ㄴ，名词 -인', english: 'Pay attention to the adnominal form selection: verb present -는, verb past -은/ㄴ, adjective -은/ㄴ, noun -인',
     structures: [
       {
         ko: '이 정도면 잘 사는 셈이에요.',
@@ -951,7 +951,7 @@ export const grammarCardsP27: GrammarCard[] = [
     connectionRules: [
       { type: 'rule', text: '动词现在：-는 셈이다', examples: '가다 → 가는 셈이다 / 먹다 → 먹는 셈이다' },
       { type: 'rule', text: '动词过去：-은/ㄴ 셈이다', examples: '갔다 → 간 셈이다 / 먹었다 → 먹은 셈이다' },
-      { type: 'rule', text: '形容词：有받침 -은 / 无받침 -ㄴ 셈이다', examples: '좋다 → 좋은 셈이다 / 싸다 → 싼 셈이다' },
+      { type: 'rule', text: '形容词：有收音 -은 / 无收音 -ㄴ 셈이다', examples: '좋다 → 좋은 셈이다 / 싸다 → 싼 셈이다' },
       { type: 'rule', text: '名词：-인 셈이다', examples: '학생인 셈이다 / 반은 성공인 셈이다' },
       { type: 'usage', text: '综合考虑后的估算/评价，含"就……而言算是"', examples: '이 정도면 잘 사는 셈이에요.（这样算是过得不错了。）' },
       { type: 'usage', text: '常见搭配：거의 다 -은 셈이다（算是快……了）', examples: '거의 다 끝난 셈이에요.（算是差不多结束了。）' },
@@ -1003,19 +1003,19 @@ export const grammarCardsP27: GrammarCard[] = [
       { wrong: '가는 셈쳤어요', correct: '가는 셈이에요', note: '-셈이다 是评估，-셈치다 是假想，需区分' },
     ],
     quickTable: {
-      title: '-는 셈이다 冠形',
+      title: '-는 셈이다 冠形', english: '-는 셈이다 Adnominal Form',
       headers: ['词类', '规则', '例子'],
       rows: [
         ['动词现在', '-는 셈이다', '가는 셈이다'],
         ['动词过去', '-은/ㄴ 셈이다', '간 셈이다'],
-        ['形容词有받침', '-은 셈이다', '좋은 셈이다'],
-        ['形容词无받침', '-ㄴ 셈이다', '싼 셈이다'],
+        ['形容词有收音', '-은 셈이다', '좋은 셈이다'],
+        ['形容词无收音', '-ㄴ 셈이다', '싼 셈이다'],
         ['名词', '-인 셈이다', '학생인 셈이다'],
       ],
     },
     specialQuiz: {
       type: 'morph',
-      title: '-는 셈이다 冠形选择',
+      title: '-는 셈이다 冠形选择', english: '-는 셈이다 Adnominal Form Selection',
       body: '选正确冠形',
       questions: [
         {
@@ -1028,7 +1028,7 @@ export const grammarCardsP27: GrammarCard[] = [
           prompt: '5만 원이면 (싸다) 셈이에요.',
           options: ['싸는', '싼', '싼다는', '쌀'],
           answer: 1,
-          explanation: '싸다 形容词无받침，冠形 -ㄴ → 싼 셈이에요。',
+          explanation: '싸다 形容词无收音，冠形 -ㄴ → 싼 셈이에요。',
         },
         {
           prompt: '민수는 거의 다 (오다) 셈이에요.',
@@ -1096,10 +1096,10 @@ export const grammarCardsP27: GrammarCard[] = [
     partNumber: 27,
     lessonNumber: 7,
     title: '-는 셈치다',
-    whatItDoes: '就当作……',
-    whatItDoesBody: '「-는/은/ㄴ 셈치다」表示"就当作……""假设……""视为……"。用于假想、心理让步或安慰自己接受某种情况。语气类似"就当没发生"。',
-    structureNote: '动词现在 -는 셈치다 · 动词过去 -은/ㄴ 셈치다 · 形容词 -은/ㄴ 셈치다 · 名词 -인 셈치다',
-    rulesNote: '常搭配 -고 用作连接："-는 셈치고" = 就当作……，然后……',
+    whatItDoes: '就当作……', english: 'Just consider it as...',
+    whatItDoesBody: '「-는/은/ㄴ 셈치다」表示"就当作……""假设……""视为……"。用于假想、心理让步或安慰自己接受某种情况。语气类似"就当没发生"。', english: 'The expression \'-는/은/ㄴ 셈치다\' means "just consider it as...", "suppose that...", or "regard it as...". It is used for hypothetical situations, mental concessions, or comforting oneself to accept a certain situation. The tone is similar to "let\'s pretend it didn\'t happen".',
+    structureNote: '动词现在 -는 셈치다 · 动词过去 -은/ㄴ 셈치다 · 形容词 -은/ㄴ 셈치다 · 名词 -인 셈치다', english: 'Verb present: -는 셈치다 · Verb past: -은/ㄴ 셈치다 · Adjective: -은/ㄴ 셈치다 · Noun: -인 셈치다',
+    rulesNote: '常搭配 -고 用作连接："-는 셈치고" = 就当作……，然后……', english: 'Often used with -고 as a connective: "-는 셈치고" = just consider it as..., and then...',
     structures: [
       {
         ko: '오늘은 쉬는 셈치고 아무 것도 안 할래요.',
@@ -1184,7 +1184,7 @@ export const grammarCardsP27: GrammarCard[] = [
       { wrong: '학생 셈치다', correct: '학생인 셈치다', note: '名词需加 -인' },
     ],
     quickTable: {
-      title: '-는 셈치다 用法',
+      title: '-는 셈치다 用法', english: '-는 셈치다 Usage',
       headers: ['类型', '规则', '例子'],
       rows: [
         ['动词现在', '-는 셈치다', '쉬는 셈치다'],
@@ -1277,11 +1277,11 @@ export const grammarCardsP27: GrammarCard[] = [
     id: 'card-p27-l08',
     partNumber: 27,
     lessonNumber: 8,
-    title: '-는 척하다 / -는 체하다 深化',
-    whatItDoes: '假装……',
-    whatItDoesBody: '「-는/은/ㄴ 척하다 / -는/은/ㄴ 체하다」表示"假装……""装作……"。两者语义几乎相同，척하다 更口语，체하다 更书面。冠形变化按词类而定，与 -셈이다 相同。',
-    structureNote: '动词现在 -는 척하다 · 动词过去 -은/ㄴ 척하다 · 形容词 -은/ㄴ 척하다 · 名词 -인 척하다',
-    rulesNote: '척하다=체하다 语义相同；否定用 -지 않는 척하다 / 안 -는 척하다',
+    title: '-는 척하다 / -는 체하다 深化', english: '-는 척하다 / -는 체하다 Deep Dive',
+    whatItDoes: '假装……', english: 'To pretend...',
+    whatItDoesBody: '「-는/은/ㄴ 척하다 / -는/은/ㄴ 체하다」表示"假装……""装作……"。两者语义几乎相同，척하다 更口语，체하다 更书面。冠形变化按词类而定，与 -셈이다 相同。', english: '「-는/은/ㄴ 척하다 / -는/은/ㄴ 체하다」 means "to pretend..." or "to act as if...". The two forms are nearly identical in meaning, with 척하다 being more colloquial and 체하다 more formal. The adnominal (modifier) form changes depending on the part of speech, just like with -셈이다.',
+    structureNote: '动词现在 -는 척하다 · 动词过去 -은/ㄴ 척하다 · 形容词 -은/ㄴ 척하다 · 名词 -인 척하다', english: 'Verb present: -는 척하다 · Verb past: -은/ㄴ 척하다 · Adjective: -은/ㄴ 척하다 · Noun: -인 척하다',
+    rulesNote: '척하다=체하다 语义相同；否定用 -지 않는 척하다 / 안 -는 척하다', english: '척하다 = 체하다 (same meaning); negation uses -지 않는 척하다 / 안 -는 척하다',
     structures: [
       {
         ko: '민수는 모르는 척했어요.',
@@ -1363,7 +1363,7 @@ export const grammarCardsP27: GrammarCard[] = [
       { wrong: '학생 척하다', correct: '학생인 척하다', note: '名词需加 -인' },
     ],
     quickTable: {
-      title: '-는 척하다/체하다 冠形',
+      title: '-는 척하다/체하다 冠形', english: '-는 척하다/체하다 Adnominal Forms',
       headers: ['词类', '规则', '例子'],
       rows: [
         ['动词现在', '-는 척하다', '모르는 척하다'],
@@ -1375,7 +1375,7 @@ export const grammarCardsP27: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '-는 척하다 冠形选择',
+      title: '-는 척하다 冠形选择', english: 'Choosing the Adnominal Form for -는 척하다',
       body: '选正确冠形',
       questions: [
         {
@@ -1456,11 +1456,11 @@ export const grammarCardsP27: GrammarCard[] = [
     id: 'card-p27-l09',
     partNumber: 27,
     lessonNumber: 9,
-    title: 'P27 综合练习',
-    whatItDoes: 'P27 综合复习',
-    whatItDoesBody: '本练习综合复习 P27 情态与语气强化章节的 8 个语法点：-기 마련이다 / -는 법이다 / -을/ㄹ 법하다 / -기 나름이다 / -기에 달려 있다 / -는 셈이다 / -는 셈치다 / -는 척하다。',
-    structureNote: '综合本 Part 所有语法',
-    rulesNote: '重点辨析：-는 법이다 vs -을 법하다；-셈이다 vs -셈치다',
+    title: 'P27 综合练习', english: 'P27 Comprehensive Practice',
+    whatItDoes: 'P27 综合复习', english: 'P27 Comprehensive Review',
+    whatItDoesBody: '本练习综合复习 P27 情态与语气强化章节的 8 个语法点：-기 마련이다 / -는 법이다 / -을/ㄹ 법하다 / -기 나름이다 / -기에 달려 있다 / -는 셈이다 / -는 셈치다 / -는 척하다。', english: 'This exercise comprehensively reviews the 8 grammar points from the P27 Modality and Tone Reinforcement chapter: -기 마련이다 / -는 법이다 / -을/ㄹ 법하다 / -기 나름이다 / -기에 달려 있다 / -는 셈이다 / -는 셈치다 / -는 척하다.',
+    structureNote: '综合本 Part 所有语法', english: 'Comprehensive review of all grammar points in this Part',
+    rulesNote: '重点辨析：-는 법이다 vs -을 법하다；-셈이다 vs -셈치다', english: 'Key distinctions: -는 법이다 vs -을 법하다; -셈이다 vs -셈치다',
     isPractice: true,
     structures: [
       {
@@ -1543,7 +1543,7 @@ export const grammarCardsP27: GrammarCard[] = [
     linkedGrammarIds: ['card-p27-l01', 'card-p27-l02', 'card-p27-l03', 'card-p27-l04', 'card-p27-l05', 'card-p27-l06', 'card-p27-l07', 'card-p27-l08'],
     specialQuiz: {
       type: 'judge',
-      title: 'P27 综合练习',
+      title: 'P27 综合练习', english: 'P27 Comprehensive Practice',
       body: '选择正确的表达',
       questions: [
         {

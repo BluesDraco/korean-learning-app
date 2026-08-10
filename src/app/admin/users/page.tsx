@@ -25,7 +25,7 @@ export default function AdminUsersPage() {
   params.set('page', String(page));
   params.set('pageSize', '20');
 
-  const { data, loading } = useAdminData<AdminUsersResponse>(`/api/admin/users?${params.toString()}`);
+  const { data, loading, error, refetch } = useAdminData<AdminUsersResponse>(`/api/admin/users?${params.toString()}`);
 
   const handleSearch = useCallback(() => {
     setSearch(searchInput);
@@ -35,7 +35,14 @@ export default function AdminUsersPage() {
   if (loading || !data) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-2 border-[var(--pink-primary)] border-t-transparent" />
+        {error ? (
+          <div className="text-center space-y-2">
+            <p className="text-sm text-red-500">{error}</p>
+            <button onClick={refetch} className="text-xs text-[var(--pink-primary)] underline">重试</button>
+          </div>
+        ) : (
+          <div className="animate-spin rounded-full h-8 w-8 border-2 border-[var(--pink-primary)] border-t-transparent" />
+        )}
       </div>
     );
   }
@@ -105,7 +112,12 @@ export default function AdminUsersPage() {
               </tr>
             </thead>
             <tbody>
-              {data.users.map((u) => (
+              {data.users.length === 0 ? (
+                <tr>
+                  <td colSpan={10} className="px-4 py-16 text-center text-sm text-[var(--text-muted)]">暂无用户数据</td>
+                </tr>
+              ) : (
+                data.users.map((u) => (
                 <tr key={u.id} className="border-b border-[var(--border-color)] hover:bg-[var(--bg-soft)] transition-colors">
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
@@ -147,6 +159,7 @@ export default function AdminUsersPage() {
                   </td>
                 </tr>
               ))}
+              )}
             </tbody>
           </table>
         </div>

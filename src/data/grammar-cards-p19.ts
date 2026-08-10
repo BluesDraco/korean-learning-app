@@ -6,11 +6,11 @@ export const grammarCardsP19: GrammarCard[] = [
     partNumber: 19,
     lessonNumber: 1,
     title: '-아/어/여다 주다/드리다',
-    whatItDoes: '表示把某动作的结果转移或提供给他人',
-    whatItDoesBody: '-아/어/여다 주다 表示做完某动作后把结果给对方，相当于"……给……/帮……做……"，比 -아/어/여 주다 多一层"把结果带来/带去"的移动感。\n-아/어/여다 드리다 是敬语形式，用于对长辈或地位高的人。\n常与"사다 주다（买来给）""가져다 주다（拿来给）""데려다 주다（送到）"等移动性动词搭配。',
-    structureNote: '-아/어/여다 주다：动词词干 + 아/어/여다 주다\n词干元音为 ㅏ/ㅗ → 아다，其他 → 어다，하다 动词 → 여다（해다）\n-아/어/여다 드리다：주다 换成 드리다（尊敬）',
-    rulesNote: '-아/어/여다 주다 vs -아/어 주다：前者带有把结果送过去的移动语气，后者只是单纯帮忙/服务。\n给长辈时把 주다 换成敬语 드리다：가져다 드리다，사다 드리다。',
-    scenarioNote: '-아/어/여다 주다 常与"사다 주다（买来给）""가져다 주다（拿来给）""데려다 주다（送去）"等移动性动词搭配。',
+    whatItDoes: '表示把某动作的结果转移或提供给他人', english: 'Indicates transferring or providing the result of an action to someone else',
+    whatItDoesBody: '-아/어/여다 주다 表示做完某动作后把结果给对方，相当于"……给……/帮……做……"，比 -아/어/여 주다 多一层"把结果带来/带去"的移动感。\n-아/어/여다 드리다 是敬语形式，用于对长辈或地位高的人。\n常与"사다 주다（买来给）""가져다주다（拿来给）""데려다주다（送到）"等移动性动词搭配。', english: '-아/어/여다 주다 means doing an action and then giving the result to someone, equivalent to "...for someone / do something for someone." Compared to -아/어/여 주다, it adds a sense of movement, like "bringing/taking the result."\\n-아/어/여다 드리다 is the honorific form, used for elders or people of higher status.\\nIt is often used with verbs of movement like "사다 주다 (buy and give)" "가져다주다 (bring and give)" "데려다주다 (take someone to)".',
+    structureNote: '-아/어/여다 주다：动词词干 + 아/어/여다 주다\n词干元音为 ㅏ/ㅗ → 아다，其他 → 어다，하다 动词 → 여다（해다）\n-아/어/여다 드리다：주다 换成 드리다（尊敬）', english: '-아/어/여다 주다: verb stem + 아/어/여다 주다\\nIf the stem vowel is ㅏ/ㅗ → 아다, otherwise → 어다, 하다 verbs → 여다 (해다)\\n-아/어/여다 드리다: replace 주다 with 드리다 (honorific)',
+    rulesNote: '-아/어/여다 주다 vs -아/어 주다：前者带有把结果送过去的移动语气，后者只是单纯帮忙/服务。\n给长辈时把 주다 换成敬语 드리다：가져다 드리다，사다 드리다。', english: '-아/어/여다 주다 vs -아/어 주다: the former carries a sense of moving the result over, while the latter simply means helping or doing a favor.\\nWhen speaking to elders, replace 주다 with the honorific 드리다: 가져다 드리다, 사다 드리다.',
+    scenarioNote: '-아/어/여다 주다 常与"사다 주다（买来给）""가져다주다（拿来给）""데려다주다（送去）"等移动性动词搭配。', english: '-아/어/여다 주다 is often used with verbs of movement like "사다 주다 (buy and give)" "가져다주다 (bring and give)" "데려다주다 (take someone to)".',
     structures: [
       {
         ko: '동사 词干 + 아다/어다 주다',
@@ -43,7 +43,7 @@ export const grammarCardsP19: GrammarCard[] = [
         zh: '把药拿去给奶奶了。',
       },
       {
-        ko: '데려다 주다（送到）',
+        ko: '데려다주다（送到）',
         tokens: [
           { text: '친구를', role: 'object' },
           { text: ' 집에', role: 'place' },
@@ -55,12 +55,12 @@ export const grammarCardsP19: GrammarCard[] = [
     ],
     connectionRules: [
       { type: 'rule', text: 'ㅏ/ㅗ 元音 词干 + 아다 주다', examples: '사다 주다（买来给），놓아다 주다（放好给）' },
-      { type: 'rule', text: '그 외 元音 词干 + 어다 주다', examples: '가져다 주다（拿来给），데려다 주다（带〔人〕过去），만들어다 주다（做好给）' },
+      { type: 'rule', text: '그 외 元音 词干 + 어다 주다', examples: '가져다주다（拿来给），데려다주다（带〔人〕过去），만들어다 주다（做好给）' },
       { type: 'rule', text: '하다 动词 → 해다 주다', examples: '준비해다 주다（准备好给），청소해다 주다（打扫好给）' },
       { type: 'compare', text: '-아/어다 주다 vs -아/어 주다：有无移动语感', examples: '사다 주다（买来给，有移动）vs 사 주다（买给，纯帮助）' },
       { type: 'note', text: '드리다：주다 的敬语，用于给长辈时', examples: '선생님께 가져다 드렸어요（给老师拿去了），부모님께 사다 드려요（给父母买去）' },
-      { type: 'note', text: '데려다 주다：把人送到某处（移动性动词的常见搭配）', examples: '친구를 집에 데려다 줬어요（把朋友送到家），아이를 학교에 데려다 줘요（把孩子送到学校）' },
-      { type: 'compare', text: '中文"带"不分人和物，韩语必须分：送人用 데리다，拿物用 가지다，不能混用', examples: '친구를 데려다 줬어요（送朋友，人✓）vs 책을 가져다 줬어요（拿书来给，物✓）；사람에 가져다 주다 ✗、물건을 데려다 주다 ✗' },
+      { type: 'note', text: '데려다주다：把人送到某处（移动性动词的常见搭配）', examples: '친구를 집에 데려다 줬어요（把朋友送到家），아이를 학교에 데려다 줘요（把孩子送到学校）' },
+      { type: 'compare', text: '中文"带"不分人和物，韩语必须分：送人用 데리다，拿物用 가지다，不能混用', examples: '친구를 데려다 줬어요（送朋友，人✓）vs 책을 가져다 줬어요（拿书来给，物✓）；사람에 가져다주다 ✗、물건을 데려다주다 ✗' },
       { type: 'note', text: '注意被送的人是 데리다 的宾语，用 를；而 사다 주다 的收受者才用 한테/께', examples: '친구를 데려다 줬어요（把朋友送到，친구+를）vs 친구한테 책을 사다 줬어요（给朋友买书，친구+한테）' },
     ],
     cardExamples: [
@@ -152,7 +152,7 @@ export const grammarCardsP19: GrammarCard[] = [
           prompt: '다음 중 올바른 문장은？',
           options: ['할머니께 가져다 줬어요（尊敬）', '사줬드려요', '친구 집에 데려다 줬어요', '가져어다 줬어요'],
           answer: 2 as 0|1|2|3,
-          explanation: '데려다 줬어요：平辈关系用 데려다 주다（✓）。할머니께 要用 드렸어요，사줬드려요 是双重敬语，가져어다 是不存在的形式。',
+          explanation: '데려다 줬어요：平辈关系用 데려다주다（✓）。할머니께 要用 드렸어요，사줬드려요 是双重敬语，가져어다 是不存在的形式。',
         },
       ],
     },
@@ -180,7 +180,7 @@ export const grammarCardsP19: GrammarCard[] = [
     <div class="ov-block">
       <div style="display:flex;flex-direction:column;gap:8px">
         <div><span style="font-weight:700">ㅏ/ㅗ 元音</span>：사다 주다，놓아다 주다</div>
-        <div><span style="font-weight:700">그 외 元音</span>：가져다 주다，만들어다 주다</div>
+        <div><span style="font-weight:700">그 외 元音</span>：가져다주다，만들어다 주다</div>
         <div><span style="font-weight:700">하다 动词</span>：준비해다 주다，청소해다 주다</div>
       </div>
     </div>
@@ -233,11 +233,11 @@ export const grammarCardsP19: GrammarCard[] = [
 </div>`,
     compareLabel: '-아/어다 주다 vs -아/어 주다 vs 드리다',
     quickTable: {
-      title: '-아/어다 주다 词干结合',
+      title: '-아/어다 주다 词干结合', english: '-아/어다 주다 Stem Combination',
       headers: ['元音类型', '结合形', '例句'],
       rows: [
         ['ㅏ/ㅗ 元音', '+ 아다 주다', '사다 주다，놓아다 주다'],
-        ['그 외 元音', '+ 어다 주다', '가져다 주다，만들어다 주다'],
+        ['그 외 元音', '+ 어다 주다', '가져다주다，만들어다 주다'],
         ['하다 动词', '+ 해다 주다', '준비해다 주다，청소해다 주다'],
         ['윗사람（尊敬）', '주다 → 드리다', '사다 드리다，가져다 드리다'],
       ],
@@ -249,12 +249,12 @@ export const grammarCardsP19: GrammarCard[] = [
     id: 'card-p19-l02',
     partNumber: 19,
     lessonNumber: 2,
-    title: '-아/어다 오다，주다（연속 동작）',
-    whatItDoes: '表示做完某动作后来/回来，或连续动作',
-    whatItDoesBody: '-아/어다 오다 表示做完某事后来（到说话现场），相当于"做了……来了/带来了"，强调结果在此处。\n-아/어다 주다 在本课重点复习"拿来给"的移动方向区别：오다 强调向说话人方向移动，가다 强调离开说话人方向移动。\n两种表达的核心变量是移动方向：사다 오다（买来），사다 가다（买去）。',
-    structureNote: '动词 词干 + 아/어다 오다/가다\n词干 元音 ㅏ/ㅗ → 아다，그 외 → 어다\n方向：오다（向说话人）vs 가다（离开说话人）',
-    rulesNote: '-아/어다 오다 与 -아/어다 가다 的区别在于移动方向。以说话人位置为基准，判断结果物是过来还是过去。\n주다/드리다 与之结合时为 오다 系列：把结果带到说话人一方。',
-    scenarioNote: '像"밥을 해다 오다（做了饭来）""빨래를 해다 가다（洗了衣服去）"这样，常出现在家务动作中。',
+    title: '-아/어다 오다，주다（연속 동작）', english: '-아/어다 오다, 주다 (Sequential Actions)',
+    whatItDoes: '表示做完某动作后来/回来，或连续动作', english: 'Indicates coming/returning after doing something, or a sequence of actions',
+    whatItDoesBody: '-아/어다 오다 表示做完某事后来（到说话现场），相当于"做了……来了/带来了"，强调结果在此处。\n-아/어다 주다 在本课重点复习"拿来给"的移动方向区别：오다 强调向说话人方向移动，가다 强调离开说话人方向移动。\n两种表达的核心变量是移动方向：사다 오다（买来），사다 가다（买去）。', english: '-아/어다 오다 means doing something and then coming (to the speaker\'s location), equivalent to "did... and came/brought it," emphasizing that the result is here.\\n-아/어다 주다 in this lesson focuses on reviewing the direction of movement in "bring and give": 오다 emphasizes movement toward the speaker, while 가다 emphasizes movement away from the speaker.\\nThe core variable in both expressions is the direction of movement: 사다 오다 (buy and come/bring), 사다 가다 (buy and go/take).',
+    structureNote: '动词 词干 + 아/어다 오다/가다\n词干 元音 ㅏ/ㅗ → 아다，그 외 → 어다\n方向：오다（向说话人）vs 가다（离开说话人）', english: 'Verb stem + 아/어다 오다/가다\\nStem vowel ㅏ/ㅗ → 아다, otherwise → 어다\\nDirection: 오다 (toward speaker) vs 가다 (away from speaker)',
+    rulesNote: '-아/어다 오다 与 -아/어다 가다 的区别在于移动方向。以说话人位置为基准，判断结果物是过来还是过去。\n주다/드리다 与之结合时为 오다 系列：把结果带到说话人一方。', english: 'The difference between -아/어다 오다 and -아/어다 가다 lies in the direction of movement. Based on the speaker\'s position, determine whether the result comes toward or goes away.\\nWhen combined with 주다/드리다, it belongs to the 오다 series: bringing the result to the speaker\'s side.',
+    scenarioNote: '像"밥을 해다 오다（做了饭来）""빨래를 해다 가다（洗了衣服去）"这样，常出现在家务动作中。', english: 'Like "밥을 해다 오다 (cook and come)" or "빨래를 해다 가다 (do laundry and go)," this often appears in household chore actions.',
     structures: [
       {
         ko: '동사 词干 + 아/어다 오다',
@@ -476,7 +476,7 @@ export const grammarCardsP19: GrammarCard[] = [
 </div>`,
     compareLabel: '-아/어다 오다 vs -아/어 오다 vs 갔다 오다',
     quickTable: {
-      title: '-아/어다 + 移动动词 方向 정리',
+      title: '-아/어다 + 移动动词 方向 정리', english: '-아/어다 + Movement Verb Direction Summary',
       headers: ['形式', '方向', '含义', '例句'],
       rows: [
         ['-아/어다 오다', '朝说话人一侧', '做完带来', '사다 왔어요，만들어다 왔어요'],
@@ -492,12 +492,12 @@ export const grammarCardsP19: GrammarCard[] = [
     id: 'card-p19-l03',
     partNumber: 19,
     lessonNumber: 3,
-    title: '-다니요，-고 말고요',
-    whatItDoes: '表示惊讶/反问，或强调"当然是/那还用说"',
-    whatItDoesBody: '-다니요 用于对听到的内容表示惊讶、意外或质疑，相当于"竟然……？/……这是什么意思？"，是对前句信息的反应性追问。\n-고 말고요 用于强烈肯定对方的提议或疑问，相当于"当然……/那还用说……"，语气坚定积极。',
-    structureNote: '-다니요：动词/形容词基本形（终止形）+ 다니요，이다 → 이라니요，있다/없다 → 있다니요/없다니요\n-고 말고요：动词/形容词词干 + 고 말고요（无条件肯定）',
-    rulesNote: '-다니요 原样重复或引用对方的话语来表示惊讶，接近直接引用。\n-고 말고요 是对提问的强烈肯定，比"물론이죠"更带感情。可以单独使用，也可以接在句子后面。',
-    scenarioNote: '-다니요 如"그게 사실이라니요！（那竟是真的？！）"，常用于震惊或难以置信的情境。\n-고 말고요 如"같이 가고 말고요！（当然一起去！）"，用于热情同意对方的建议。',
+    title: '-다니요，-고 말고요', english: '-다니요, -고 말고요',
+    whatItDoes: '表示惊讶/反问，或强调"当然是/那还用说"', english: 'Expresses surprise/rhetorical question, or emphasizes "of course/needless to say"',
+    whatItDoesBody: '-다니요 用于对听到的内容表示惊讶、意外或质疑，相当于"竟然……？/……这是什么意思？"，是对前句信息的反应性追问。\n-고 말고요 用于强烈肯定对方的提议或疑问，相当于"当然……/那还用说……"，语气坚定积极。', english: '-다니요 is used to express surprise, disbelief, or questioning about something heard, equivalent to "...really?/What do you mean by...?" It is a reactive follow-up question to the previous statement.\\n-고 말고요 is used to strongly affirm the other person\'s suggestion or question, equivalent to "Of course.../Needless to say..." with a firm and positive tone.',
+    structureNote: '-다니요：动词/形容词基本形（终止形）+ 다니요，이다 → 이라니요，있다/없다 → 있다니요/없다니요\n-고 말고요：动词/形容词词干 + 고 말고요（无条件肯定）', english: '-다니요: Verb/adjective basic form (ending form) + 다니요, 이다 → 이라니요, 있다/없다 → 있다니요/없다니요\\n-고 말고요: Verb/adjective stem + 고 말고요 (unconditional affirmation)',
+    rulesNote: '-다니요 原样重复或引用对方的话语来表示惊讶，接近直接引用。\n-고 말고요 是对提问的强烈肯定，比"물론이죠"更带感情。可以单独使用，也可以接在句子后面。', english: '-다니요 repeats or quotes the other person\'s words as-is to express surprise, similar to direct quotation.\\n-고 말고요 is a strong affirmation to a question, more emotional than "물론이죠". It can be used alone or attached to a sentence.',
+    scenarioNote: '-다니요 如"그게 사실이라니요！（那竟是真的？！）"，常用于震惊或难以置信的情境。\n-고 말고요 如"같이 가고 말고요！（当然一起去！）"，用于热情同意对方的建议。', english: '-다니요: e.g., "그게 사실이라니요! (That\'s actually true?!)", often used in shocking or unbelievable situations.\\n-고 말고요: e.g., "같이 가고 말고요! (Of course, let\'s go together!)", used to enthusiastically agree with someone\'s suggestion.',
     structures: [
       {
         ko: '동사 基本形 + 다니요',
@@ -604,7 +604,7 @@ export const grammarCardsP19: GrammarCard[] = [
     ],
     specialQuiz: {
       type: 'fill',
-      title: '-다니요，-고 말고요',
+      title: '-다니요，-고 말고요', english: '-다니요, -고 말고요',
       body: '선택지 중 맞는 것을 고르세요',
       questions: [
         {
@@ -714,7 +714,7 @@ export const grammarCardsP19: GrammarCard[] = [
 </div>`,
     compareLabel: '-다니요 vs -잖아요 / -고 말고요 vs 물론이죠',
     quickTable: {
-      title: '-다니요 / -고 말고요 정리',
+      title: '-다니요 / -고 말고요 정리', english: '-다니요 / -고 말고요 Summary',
       headers: ['词尾', '功能', '接续', '例句'],
       rows: [
         ['-다니요', '惊讶/反问', '接基本形/过去形后', '떠났다니요，좋다니요'],
@@ -729,12 +729,12 @@ export const grammarCardsP19: GrammarCard[] = [
     id: 'card-p19-l04',
     partNumber: 19,
     lessonNumber: 4,
-    title: '-아/어 오다，-아/어 가다',
-    whatItDoes: '表示状态/动作从过去持续到现在，或向未来延续',
-    whatItDoesBody: '-아/어 오다 表示某状态或动作从过去持续到现在，相当于"一直……到现在/……起来了"，强调变化的到达点是当下。\n-아/어 가다 表示某状态或动作从现在向未来延续，相当于"越来越……/逐渐……下去"，强调变化的方向是未来。\n两种表达的核心是时间方向：오다（过去→现在），가다（现在→未来）。',
-    structureNote: '动词/形容词词干 + 아/어 오다（过去→现在）\n动词/形容词词干 + 아/어 가다（现在→未来）\n词干元音 ㅏ/ㅗ → 아，其他 → 어，하다 → 해',
-    rulesNote: '-아/어 오다 主要与"지금까지"搭配，表示过去的持续。\n-아/어 가다 与"점점""서서히"等搭配，表示朝未来方向的变化。',
-    scenarioNote: '像"한국어를 배워 오다（一直在学韩语）" vs "한국어 실력이 늘어 가다（韩语水平在提高）"，即使是同一主题，时间方向也不同。',
+    title: '-아/어 오다，-아/어 가다', english: '-아/어 오다, -아/어 가다',
+    whatItDoes: '表示状态/动作从过去持续到现在，或向未来延续', english: 'Indicates a state/action continuing from the past to the present, or extending into the future',
+    whatItDoesBody: '-아/어 오다 表示某状态或动作从过去持续到现在，相当于"一直……到现在/……起来了"，强调变化的到达点是当下。\n-아/어 가다 表示某状态或动作从现在向未来延续，相当于"越来越……/逐渐……下去"，强调变化的方向是未来。\n两种表达的核心是时间方向：오다（过去→现在），가다（现在→未来）。', english: '-아/어 오다 indicates that a state or action has continued from the past to the present, equivalent to "has been... until now/...has come about", emphasizing that the arrival point of change is the present.\\n-아/어 가다 indicates that a state or action continues from the present into the future, equivalent to "becoming more and more.../gradually...", emphasizing that the direction of change is the future.\\nThe core of both expressions is temporal direction: 오다 (past → present), 가다 (present → future).',
+    structureNote: '动词/形容词词干 + 아/어 오다（过去→现在）\n动词/形容词词干 + 아/어 가다（现在→未来）\n词干元音 ㅏ/ㅗ → 아，其他 → 어，하다 → 해', english: 'Verb/adjective stem + 아/어 오다 (past → present)\\nVerb/adjective stem + 아/어 가다 (present → future)\\nStem vowel ㅏ/ㅗ → 아, others → 어, 하다 → 해',
+    rulesNote: '-아/어 오다 主要与"지금까지"搭配，表示过去的持续。\n-아/어 가다 与"점점""서서히"等搭配，表示朝未来方向的变化。', english: '-아/어 오다 is mainly used with "지금까지" to indicate continuation from the past.\\n-아/어 가다 is used with "점점", "서서히", etc., to indicate change toward the future.',
+    scenarioNote: '像"한국어를 배워 오다（一直在学韩语）" vs "한국어 실력이 늘어 가다（韩语水平在提高）"，即使是同一主题，时间方向也不同。', english: 'Like "한국어를 배워 오다 (have been learning Korean)" vs "한국어 실력이 늘어 가다 (Korean skills are improving)", even with the same topic, the temporal direction differs.',
     structures: [
       {
         ko: '词干 + 아/어 오다（过去→现在）',
@@ -850,7 +850,7 @@ export const grammarCardsP19: GrammarCard[] = [
     ],
     specialQuiz: {
       type: 'fill',
-      title: '-아/어 오다，-아/어 가다',
+      title: '-아/어 오다，-아/어 가다', english: '-아/어 오다, -아/어 가다',
       body: '선택지 중 맞는 것을 고르세요',
       questions: [
         {
@@ -955,7 +955,7 @@ export const grammarCardsP19: GrammarCard[] = [
 </div>`,
     compareLabel: '-아/어 오다 vs -아/어 가다 vs -아/어다 오다',
     quickTable: {
-      title: '-아/어 오다 / -아/어 가다 정리',
+      title: '-아/어 오다 / -아/어 가다 정리', english: '-아/어 오다 / -아/어 가다 Summary',
       headers: ['形式', '时间方向', '呼应副词', '例句'],
       rows: [
         ['-아/어 오다', '过去→现在', '지금까지，그동안', '배워 왔어요，해 왔어요'],
@@ -969,12 +969,12 @@ export const grammarCardsP19: GrammarCard[] = [
     id: 'card-p19-l05',
     partNumber: 19,
     lessonNumber: 5,
-    title: '-는/은/ㄴ 체하다，-는/은/ㄴ 척하다',
-    whatItDoes: '表示假装做某动作或处于某状态',
-    whatItDoesBody: '-는/은/ㄴ 체하다 和 -는/은/ㄴ 척하다 意思完全相同，均表示"假装……/装作……"，说明实际并非如此，只是表面上做出那种样子。\n척하다 在口语中更常用，체하다 略偏书面语。两种表达可以自由替换。',
-    structureNote: '动词现在冠词形（-는）+ 체하다/척하다\n形容词/动词过去冠词形（-은/ㄴ）+ 체하다/척하다\n动词/形容词将来冠词形（-을/ㄹ）+ 체하다/척하다',
-    rulesNote: '冠词形词尾选择：动词现在用 -는，动词/形容词过去用 -은/ㄴ，形容词现在用 -은/ㄴ\n注意别把 체하다/척하다 与表示"消化不良"的 체하다 混淆（체하다 = 食积，척하다 = 假装）。',
-    scenarioNote: '像"자는 척하다（假装睡觉）""모르는 체하다（假装不知道）"，是日常中常用的表达。',
+    title: '-는/은/ㄴ 체하다，-는/은/ㄴ 척하다', english: '-는/은/ㄴ 체하다, -는/은/ㄴ 척하다',
+    whatItDoes: '表示假装做某动作或处于某状态', english: 'Indicates pretending to do an action or be in a certain state',
+    whatItDoesBody: '-는/은/ㄴ 체하다 和 -는/은/ㄴ 척하다 意思完全相同，均表示"假装……/装作……"，说明实际并非如此，只是表面上做出那种样子。\n척하다 在口语中更常用，체하다 略偏书面语。两种表达可以自由替换。', english: '-는/은/ㄴ 체하다 and -는/은/ㄴ 척하다 have exactly the same meaning, both expressing "pretend to.../act as if...", indicating that it\'s not actually true, just putting on that appearance on the surface.\\n척하다 is more common in spoken language, while 체하다 is slightly more formal/written. The two expressions can be used interchangeably.',
+    structureNote: '动词现在冠词形（-는）+ 체하다/척하다\n形容词/动词过去冠词形（-은/ㄴ）+ 체하다/척하다\n动词/形容词将来冠词形（-을/ㄹ）+ 체하다/척하다', english: 'Verb present adnominal form (-는) + 체하다/척하다\\nAdjective/Verb past adnominal form (-은/ㄴ) + 체하다/척하다\\nVerb/Adjective future adnominal form (-을/ㄹ) + 체하다/척하다',
+    rulesNote: '冠词形词尾选择：动词现在用 -는，动词/形容词过去用 -은/ㄴ，形容词现在用 -은/ㄴ\n注意别把 체하다/척하다 与表示"消化不良"的 체하다 混淆（체하다 = 食积，척하다 = 假装）。', english: 'Adnominal ending selection: verbs in present tense use -는, verbs/adjectives in past tense use -은/ㄴ, adjectives in present tense use -은/ㄴ\\nBe careful not to confuse 체하다/척하다 with 체하다 meaning "indigestion" (체하다 = food stagnation, 척하다 = pretend).',
+    scenarioNote: '像"자는 척하다（假装睡觉）""모르는 체하다（假装不知道）"，是日常中常用的表达。', english: 'Expressions like "자는 척하다 (pretend to sleep)" or "모르는 체하다 (pretend not to know)" are commonly used in everyday conversation.',
     structures: [
       {
         ko: '동사 -는 체하다/척하다（现在）',
@@ -1078,7 +1078,7 @@ export const grammarCardsP19: GrammarCard[] = [
     ],
     specialQuiz: {
       type: 'fill',
-      title: '-는/은/ㄴ 체하다，척하다',
+      title: '-는/은/ㄴ 체하다，척하다', english: '-는/은/ㄴ 체하다, 척하다',
       body: '선택지 중 맞는 것을 고르세요',
       questions: [
         {
@@ -1184,7 +1184,7 @@ export const grammarCardsP19: GrammarCard[] = [
 </div>`,
     compareLabel: '动词 现在/过去 vs 形容词 冠词形 + 척하다',
     quickTable: {
-      title: '-는/은/ㄴ 체하다/척하다 冠词形',
+      title: '-는/은/ㄴ 체하다/척하다 冠词形', english: '-는/은/ㄴ 체하다/척하다 Adnominal Forms',
       headers: ['词性/时态', '冠词形', '例句'],
       rows: [
         ['动词现在', '-는', '자는 척，먹는 체，보는 척'],
@@ -1201,8 +1201,8 @@ export const grammarCardsP19: GrammarCard[] = [
     isPractice: true,
     partNumber: 19,
     lessonNumber: 6,
-    title: 'P19 综合练习',
-    whatItDoes: 'P19 第1～5课 综合练习',
+    title: 'P19 综合练习', english: 'P19 Comprehensive Practice',
+    whatItDoes: 'P19 第1～5课 综合练习', english: 'P19 Lessons 1–5 Comprehensive Practice',
     whatItDoesBody: '',
     structureNote: '',
     rulesNote: '',
@@ -1225,7 +1225,7 @@ export const grammarCardsP19: GrammarCard[] = [
 </div>`,
     specialQuiz: {
       type: 'fill',
-      title: 'P19 综合练习',
+      title: 'P19 综合练习', english: 'P19 Comprehensive Practice',
       body: '선택지 중 맞는 것을 고르세요',
       questions: [
         {

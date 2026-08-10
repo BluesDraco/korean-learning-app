@@ -7,10 +7,10 @@ export const grammarCardsP28: GrammarCard[] = [
     partNumber: 28,
     lessonNumber: 1,
     title: '-기(가) N하다',
-    whatItDoes: '做……真是',
-    whatItDoesBody: '「-기(가) + 形容词/名词하다」表示"做……是……的""……起来……"。把动词转成主语，后接形容词评价难易、感受。核心表达：어렵다/쉽다/힘들다/편하다/좋다 等。',
-    structureNote: '动词词干 + -기(가) + 形容词/名词하다',
-    rulesNote: '常用搭配：-기 어렵다/쉽다/힘들다/편하다/좋다/싫다；助词 -가 可省略',
+    whatItDoes: '做……真是', english: 'Doing something is really...',
+    whatItDoesBody: '「-기(가) + 形容词/名词하다」表示"做……是……的""……起来……"。把动词转成主语，后接形容词评价难易、感受。核心表达：어렵다/쉽다/힘들다/편하다/좋다 等。', english: '「-기(가) + adjective/noun하다」 means "doing something is..." or "it is... to do." It turns a verb into a subject and is followed by an adjective that evaluates difficulty or feeling. Core expressions include: 어렵다/쉽다/힘들다/편하다/좋다, etc.',
+    structureNote: '动词词干 + -기(가) + 形容词/名词하다', english: 'Verb stem + -기(가) + adjective/noun하다',
+    rulesNote: '常用搭配：-기 어렵다/쉽다/힘들다/편하다/좋다/싫다；助词 -가 可省略', english: 'Common combinations: -기 어렵다/쉽다/힘들다/편하다/좋다/싫다; the particle -가 can be omitted',
     structures: [
       {
         ko: '한국어는 배우기가 어려워요.',
@@ -90,11 +90,11 @@ export const grammarCardsP28: GrammarCard[] = [
     ],
     mistakes: [
       { wrong: '한국어는 배워기가 어려워요', correct: '한국어는 배우기가 어려워요', note: '词干直接接 -기，不要变形' },
-      { wrong: '읽는 것이 쉬워요', correct: '읽기(가) 쉬워요', note: '固定搭配是 -기 쉽다，不用 -는 것' },
+      { wrong: '읽는 것이 쉬워요', correct: '읽기(가) 쉬워요', note: '-기 쉽다 是更惯用的固定搭配。-는 것이 쉬워요 语法正确但不自然，TOPIK/口语优先用 -기 形。' },
       { wrong: '이 신발은 신기가 편이에요', correct: '이 신발은 신기가 편해요', note: '편하다 是形容词 → 편해요' },
     ],
     quickTable: {
-      title: '-기(가) N하다 常用搭配',
+      title: '-기(가) N하다 常用搭配', english: '-기(가) N하다 Common Combinations',
       headers: ['结构', '含义', '例子'],
       rows: [
         ['-기 어렵다/쉽다', '难/容易', '배우기 어려워요'],
@@ -105,7 +105,7 @@ export const grammarCardsP28: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '-기(가) N하다 练习',
+      title: '-기(가) N하다 练习', english: '-기(가) N하다 Practice',
       body: '选择正确形式',
       questions: [
         {
@@ -187,10 +187,10 @@ export const grammarCardsP28: GrammarCard[] = [
     partNumber: 28,
     lessonNumber: 2,
     title: '얼마나 -는지/은지 모르다',
-    whatItDoes: '不知有多……',
-    whatItDoesBody: '「얼마나 + -는지/은지 + 모르다」表示"不知有多……""……得不得了"。用于强烈感叹某种程度之深，虽然字面是"不知道"，实际是强调"非常/极其"。',
-    structureNote: '얼마나 + 动词现在 -는지 / 形容词有받침 -은지 / 无받침 -ㄴ지 + 모르다',
-    rulesNote: '动词现在 -는지；形容词 -은/ㄴ지；过去 -았/었는지；名词 -인지',
+    whatItDoes: '不知有多……', english: 'You have no idea how much...',
+    whatItDoesBody: '「얼마나 + -는지/은지 + 모르다」表示"不知有多……""……得不得了"。用于强烈感叹某种程度之深，虽然字面是"不知道"，实际是强调"非常/极其"。', english: '「얼마나 + -는지/은지 + 모르다」 means "you have no idea how..." or "so... that it\'s beyond words." It is used to strongly exclaim about the depth of a degree. Although it literally means "don\'t know," it actually emphasizes "very" or "extremely."',
+    structureNote: '얼마나 + 动词现在 -는지 / 形容词有收音 -은지 / 无收音 -ㄴ지 + 모르다', english: '얼마나 + verb present -는지 / adjective with final consonant -은지 / without final consonant -ㄴ지 + 모르다',
+    rulesNote: '动词现在 -는지；形容词 -은/ㄴ지；过去 -았/었는지；名词 -인지', english: 'Verb present: -는지; adjective: -은/ㄴ지; past: -았/었는지; noun: -인지',
     structures: [
       {
         ko: '한국어가 얼마나 어려운지 몰라요.',
@@ -226,7 +226,7 @@ export const grammarCardsP28: GrammarCard[] = [
     ],
     connectionRules: [
       { type: 'rule', text: '动词现在：얼마나 -는지 모르다', examples: '공부하다 → 얼마나 공부하는지 몰라요' },
-      { type: 'rule', text: '形容词：有받침 -은지 / 无받침 -ㄴ지', examples: '어렵다 → 얼마나 어려운지 / 예쁘다 → 얼마나 예쁜지' },
+      { type: 'rule', text: '形容词：有收音 -은지 / 无收音 -ㄴ지', examples: '어렵다 → 얼마나 어려운지 / 예쁘다 → 얼마나 예쁜지' },
       { type: 'rule', text: '过去：-았/었는지 모르다', examples: '얼마나 웃었는지 몰라요（笑得不知道有多厉害）' },
       { type: 'rule', text: '名词：얼마나 -인지 모르다', examples: '얼마나 좋은 사람인지 몰라요（真不知道是多好的人）' },
       { type: 'usage', text: '字面"不知有多……"，实际是强烈感叹', examples: '얼마나 좋은지 몰라요! = 好得不得了!' },
@@ -281,26 +281,26 @@ export const grammarCardsP28: GrammarCard[] = [
       { wrong: '얼마나 웃었지 몰라요', correct: '얼마나 웃었는지 몰라요', note: '固定为 -는/은지 모르다，不能省 -는' },
     ],
     quickTable: {
-      title: '얼마나 -는지/은지 冠形',
+      title: '얼마나 -는지/은지 冠形', english: '얼마나 -는지/은지 Adnominal',
       headers: ['词类', '规则', '例子'],
       rows: [
         ['动词现在', '얼마나 -는지', '얼마나 공부하는지'],
-        ['形容词有받침', '얼마나 -은지', '얼마나 어려운지'],
-        ['形容词无받침', '얼마나 -ㄴ지', '얼마나 예쁜지'],
+        ['形容词有收音', '얼마나 -은지', '얼마나 어려운지'],
+        ['形容词无收音', '얼마나 -ㄴ지', '얼마나 예쁜지'],
         ['过去', '얼마나 -았/었는지', '얼마나 웃었는지'],
         ['名词', '얼마나 -인지', '얼마나 좋은 사람인지'],
       ],
     },
     specialQuiz: {
       type: 'morph',
-      title: '얼마나 -는지/은지 综合',
+      title: '얼마나 -는지/은지 综合', english: '얼마나 -는지/은지 Comprehensive',
       body: '选正确形式',
       questions: [
         {
           prompt: '한국어가 얼마나 (어렵다) 몰라요.',
           options: ['어렵는지', '어려운지', '어려울지', '어렵기지'],
           answer: 1,
-          explanation: '어렵다 形容词有받침，用 -은지 → 어려운지。',
+          explanation: '어렵다 形容词有收音，用 -은지 → 어려운지。',
         },
         {
           prompt: '민수가 얼마나 (공부하다) 몰라요.',
@@ -375,10 +375,10 @@ export const grammarCardsP28: GrammarCard[] = [
     partNumber: 28,
     lessonNumber: 3,
     title: '-다 못해',
-    whatItDoes: '甚至……到',
-    whatItDoesBody: '「-다 못해」表示"……到甚至……的地步""……以致于……"。前项达到某种程度后，导致更极端的后项。核心是"程度递进+超出常规"的强调。',
-    structureNote: '形容词/动词词干 + -다 못해',
-    rulesNote: '直接接词干，不看받침；后接更极端的状态/结果',
+    whatItDoes: '甚至……到', english: 'To the point of... / Even to the extent of...',
+    whatItDoesBody: '「-다 못해」表示"……到甚至……的地步""……以致于……"。前项达到某种程度后，导致更极端的后项。核心是"程度递进+超出常规"的强调。', english: '\'-다 못해\' means \'to the point of...\' or \'so much that...\'. The preceding clause reaches a certain degree, leading to a more extreme following clause. The core emphasis is on \'degree progression + exceeding the norm\'.',
+    structureNote: '形容词/动词词干 + -다 못해', english: 'Adjective/Verb stem + -다 못해',
+    rulesNote: '直接接词干，不看收音；后接更极端的状态/结果', english: 'Attach directly to the stem regardless of final consonant; followed by a more extreme state/result',
     structures: [
       {
         ko: '하늘이 파랗다 못해 눈이 부실 정도예요.',
@@ -410,7 +410,7 @@ export const grammarCardsP28: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '形容词/动词词干 + -다 못해，不看받침', examples: '파랗다 → 파랗다 못해 / 기다리다 → 기다리다 못해' },
+      { type: 'rule', text: '形容词/动词词干 + -다 못해，不看收音', examples: '파랗다 → 파랗다 못해 / 기다리다 → 기다리다 못해' },
       { type: 'usage', text: '语义1（形容词）：达到程度后引出更极端评价', examples: '하늘이 파랗다 못해 눈부셔요.（天蓝得刺眼。）' },
       { type: 'usage', text: '语义2（动词）：受不了以致于采取行动', examples: '기다리다 못해 먼저 갔어요.（等不下去才先走）' },
       { type: 'usage', text: '语义3：情绪极致导致的反应', examples: '화가 나다 못해 눈물이 났어요.（气得都哭了。）' },
@@ -466,7 +466,7 @@ export const grammarCardsP28: GrammarCard[] = [
       { wrong: '슬프다 못하고', correct: '슬프다 못해', note: '固定是 -다 못해，不用 -다 못하고' },
     ],
     quickTable: {
-      title: '-다 못해 用法',
+      title: '-다 못해 用法', english: '-다 못해 Usage',
       headers: ['类型', '语义', '例子'],
       rows: [
         ['形容词', '程度极致导致新状态', '파랗다 못해 눈부시다'],
@@ -476,7 +476,7 @@ export const grammarCardsP28: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '-다 못해 综合练习',
+      title: '-다 못해 综合练习', english: '-다 못해 Comprehensive Practice',
       body: '选择正确表达',
       questions: [
         {
@@ -558,10 +558,10 @@ export const grammarCardsP28: GrammarCard[] = [
     partNumber: 28,
     lessonNumber: 4,
     title: '-을/ㄹ수록',
-    whatItDoes: '越……越……',
-    whatItDoesBody: '「-을/ㄹ수록」表示"越……越……"，随着前项程度增加，后项程度也相应变化。常与"-으면 -을수록"搭配加强语气。',
-    structureNote: '词干：有받침 -을수록 / 无받침 -ㄹ수록 · 名词 -(이)ㄹ수록',
-    rulesNote: '常见强调形："-으면 -을수록"（越……越……）；前后主语通常一致',
+    whatItDoes: '越……越……', english: 'The more..., the more...',
+    whatItDoesBody: '「-을/ㄹ수록」表示"越……越……"，随着前项程度增加，后项程度也相应变化。常与"-으면 -을수록"搭配加强语气。', english: '\'-을/ㄹ수록\' means \'the more..., the more...\'. As the degree of the preceding clause increases, the degree of the following clause changes accordingly. It is often used with \'-으면 -을수록\' to strengthen the emphasis.',
+    structureNote: '词干：有收音 -을수록 / 无收音 -ㄹ수록 · 名词 -(이)ㄹ수록', english: 'Stem: with final consonant -을수록 / without final consonant -ㄹ수록 · Noun -(이)ㄹ수록',
+    rulesNote: '常见强调形："-으면 -을수록"（越……越……）；前后主语通常一致', english: 'Common emphatic form: "-으면 -을수록" (the more..., the more...); the subject before and after is usually the same.',
     structures: [
       {
         ko: '한국어는 공부할수록 재미있어요.',
@@ -593,8 +593,8 @@ export const grammarCardsP28: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '有받침 → -을수록', examples: '먹다 → 먹을수록 / 좋다 → 좋을수록' },
-      { type: 'rule', text: '无받침 → -ㄹ수록', examples: '가다 → 갈수록 / 보다 → 볼수록' },
+      { type: 'rule', text: '有收音 → -을수록', examples: '먹다 → 먹을수록 / 좋다 → 좋을수록' },
+      { type: 'rule', text: '无收音 → -ㄹ수록', examples: '가다 → 갈수록 / 보다 → 볼수록' },
       { type: 'rule', text: '名词：-(이)ㄹ수록', examples: '학생일수록 / 부자일수록' },
       { type: 'usage', text: '强调形："-으면 -을수록" = 越……越……', examples: '보면 볼수록 예뻐요.（越看越美。）' },
       { type: 'usage', text: '前后动作/程度成正比或反比', examples: '나이가 들수록 시간이 빨라져요.（越上年纪越觉得时间快。）' },
@@ -642,36 +642,36 @@ export const grammarCardsP28: GrammarCard[] = [
       { icon: '❤️', context: '感情', ko: '만날수록 정이 들어요.', zh: '见面越多越有感情。' },
     ],
     mistakes: [
-      { wrong: '가을수록', correct: '갈수록', note: '가다 无받침，用 -ㄹ수록' },
-      { wrong: '먹ㄹ수록', correct: '먹을수록', note: '먹다 有받침，用 -을수록' },
+      { wrong: '가을수록', correct: '갈수록', note: '가다 无收音，用 -ㄹ수록' },
+      { wrong: '먹ㄹ수록', correct: '먹을수록', note: '먹다 有收音，用 -을수록' },
       { wrong: '학생수록', correct: '학생일수록', note: '名词需加系词 이 变形' },
     ],
     quickTable: {
-      title: '-을/ㄹ수록 一览',
+      title: '-을/ㄹ수록 一览', english: '-을/ㄹ수록 Overview',
       headers: ['词类', '规则', '例子'],
       rows: [
-        ['有받침', '-을수록', '먹을수록, 좋을수록'],
-        ['无받침', '-ㄹ수록', '갈수록, 볼수록'],
+        ['有收音', '-을수록', '먹을수록, 좋을수록'],
+        ['无收音', '-ㄹ수록', '갈수록, 볼수록'],
         ['名词', '-(이)ㄹ수록', '학생일수록'],
         ['强调形', '-으면 -을수록', '보면 볼수록'],
       ],
     },
     specialQuiz: {
       type: 'morph',
-      title: '-을/ㄹ수록 变形',
+      title: '-을/ㄹ수록 变形', english: '-을/ㄹ수록 Conjugation',
       body: '选正确形式',
       questions: [
         {
           prompt: '한국어는 (공부하다) 재미있어요.',
           options: ['공부할수록', '공부하을수록', '공부했수록', '공부는수록'],
           answer: 0,
-          explanation: '공부하다 词干 공부하 无받침，用 -ㄹ수록 → 공부할수록。',
+          explanation: '공부하다 词干 공부하 无收音，用 -ㄹ수록 → 공부할수록。',
         },
         {
           prompt: '(먹다) 맛있어요.',
           options: ['먹수록', '먹ㄹ수록', '먹을수록', '먹었수록'],
           answer: 2,
-          explanation: '먹다 有받침，用 -을수록 → 먹을수록。',
+          explanation: '먹다 有收音，用 -을수록 → 먹을수록。',
         },
         {
           prompt: '(보다) 볼수록 예뻐요.',
@@ -707,8 +707,8 @@ export const grammarCardsP28: GrammarCard[] = [
   <div class="ov-section-hd"><div class="ov-section-line" style="background:#b49ccf"></div><div class="ov-section-title" style="color:#b49ccf">核心形态</div></div>
   <div class="ov-block">
     <div style="font-size:16px;color:#241917;line-height:1.9">
-      有받침 → <b>-을수록</b>：먹을수록<br>
-      无받침 → <b>-ㄹ수록</b>：갈수록<br>
+      有收音 → <b>-을수록</b>：먹을수록<br>
+      无收音 → <b>-ㄹ수록</b>：갈수록<br>
       名词 → <b>-(이)ㄹ수록</b>：학생일수록<br>
       强调形 → <b>-으면 -을수록</b>：보면 볼수록
     </div>
@@ -728,7 +728,7 @@ export const grammarCardsP28: GrammarCard[] = [
 <div class="ov-section">
   <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">别踩的坑</div></div>
   <div class="ov-block">
-    <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">가을수록</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">갈수록（无받침 -ㄹ수록）</span></div></div>
+    <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">가을수록</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">갈수록（无收音 -ㄹ수록）</span></div></div>
     <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">학생수록</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">학생일수록</span></div></div>
   </div>
 </div>`,
@@ -740,10 +740,10 @@ export const grammarCardsP28: GrammarCard[] = [
     partNumber: 28,
     lessonNumber: 5,
     title: '오죽 -으면',
-    whatItDoes: '该多……',
-    whatItDoesBody: '「오죽 -으면」是一种感叹反问："该多……啊""得多么……才……"。常与后句"-겠어요/-겠니"配合，表达对某程度深切的推想/共情。',
-    structureNote: '오죽 + 动词/形容词 + -으면 + ...겠다',
-    rulesNote: '"오죽" 本身是"多么/该多"的意思；结构 "오죽 -으면 -겠어요" 是固定感叹表达',
+    whatItDoes: '该多……', english: 'How much...!',
+    whatItDoesBody: '「오죽 -으면」是一种感叹反问："该多……啊""得多么……才……"。常与后句"-겠어요/-겠니"配合，表达对某程度深切的推想/共情。', english: '「오죽 -으면」 is an exclamatory rhetorical question: "How much...!" or "To what extent...!" It is often paired with the following clause "-겠어요/-겠니" to express a deep inference or empathy about a certain degree.',
+    structureNote: '오죽 + 动词/形容词 + -으면 + ...겠다', english: '오죽 + Verb/Adjective + -으면 + ...겠다',
+    rulesNote: '"오죽" 本身是"多么/该多"的意思；结构 "오죽 -으면 -겠어요" 是固定感叹表达', english: '"오죽" itself means "how much" or "to what extent"; the structure "오죽 -으면 -겠어요" is a fixed exclamatory expression.',
     structures: [
       {
         ko: '오죽 힘들면 그런 말을 했겠어요.',
@@ -825,12 +825,12 @@ export const grammarCardsP28: GrammarCard[] = [
       { icon: '😊', context: '好', ko: '오죽 좋으면 하루종일 웃었겠어요?', zh: '得多开心才笑一整天呢？' },
     ],
     mistakes: [
-      { wrong: '오죽 힘들어면', correct: '오죽 힘들면', note: '词干 힘들 有받침，加 -으면 → 힘들면（ㄹ 已在词干中）' },
+      { wrong: '오죽 힘들어면', correct: '오죽 힘들면', note: '词干 힘들 有收音，加 -으면 → 힘들면（ㄹ 已在词干中）' },
       { wrong: '오죽 힘들면 그래요', correct: '오죽 힘들면 그러겠어요', note: '后句必须用推想感叹 -겠어요/-을까요' },
       { wrong: '오죽하다면', correct: '오죽하면', note: '오죽하면 是固定凝缩形，不用 -다면' },
     ],
     quickTable: {
-      title: '오죽 -으면 结构',
+      title: '오죽 -으면 结构', english: '오죽 -으면 Structure',
       headers: ['要点', '规则', '例子'],
       rows: [
         ['前句', '오죽 + 词干 + -(으)면', '오죽 힘들면'],
@@ -841,7 +841,7 @@ export const grammarCardsP28: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '오죽 -으면 综合练习',
+      title: '오죽 -으면 综合练习', english: '오죽 -으면 Comprehensive Practice',
       body: '选择正确形式',
       questions: [
         {
@@ -920,11 +920,11 @@ export const grammarCardsP28: GrammarCard[] = [
     id: 'card-p28-l06',
     partNumber: 28,
     lessonNumber: 6,
-    title: '-기(는) 하다 深化',
-    whatItDoes: '虽然……但',
-    whatItDoesBody: '「-기(는) 하다」表示"虽然……但""……倒是……"。前项承认某事实，后接转折或补充。是让步语气，常与 -지만/-는데 搭配。',
-    structureNote: '动词/形容词词干 + -기(는) 하다 · 名词 + 이기(는) 하다',
-    rulesNote: '常用形式：-기는 하다 / -기는 하지만 / -기는 한데；作让步转折',
+    title: '-기(는) 하다 深化', english: '-기(는) 하다 Deep Dive',
+    whatItDoes: '虽然……但', english: 'Although... but',
+    whatItDoesBody: '「-기(는) 하다」表示"虽然……但""……倒是……"。前项承认某事实，后接转折或补充。是让步语气，常与 -지만/-는데 搭配。', english: '「-기(는) 하다」 expresses "although... but" or "...indeed...". The first part acknowledges a fact, followed by a contrast or additional comment. It conveys a concessive tone and is often used with -지만/-는데.',
+    structureNote: '动词/形容词词干 + -기(는) 하다 · 名词 + 이기(는) 하다', english: 'Verb/Adjective stem + -기(는) 하다 · Noun + 이기(는) 하다',
+    rulesNote: '常用形式：-기는 하다 / -기는 하지만 / -기는 한데；作让步转折', english: 'Common forms: -기는 하다 / -기는 하지만 / -기는 한데; used for concession or contrast',
     structures: [
       {
         ko: '먹기는 하는데 맛이 없어요.',
@@ -1010,7 +1010,7 @@ export const grammarCardsP28: GrammarCard[] = [
       { wrong: '먹었기는 하는데', correct: '먹기는 했는데', note: '过去式加在 하다 上（했-），不加在前面的 -기 上' },
     ],
     quickTable: {
-      title: '-기(는) 하다 变体',
+      title: '-기(는) 하다 变体', english: '-기(는) 하다 Variations',
       headers: ['形式', '用法', '例子'],
       rows: [
         ['-기는 하다', '基本承认', '먹기는 해요'],
@@ -1021,7 +1021,7 @@ export const grammarCardsP28: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '-기(는) 하다 综合',
+      title: '-기(는) 하다 综合', english: '-기(는) 하다 Comprehensive',
       body: '选择正确形式',
       questions: [
         {
@@ -1103,10 +1103,10 @@ export const grammarCardsP28: GrammarCard[] = [
     partNumber: 28,
     lessonNumber: 7,
     title: '-고말고요',
-    whatItDoes: '当然……了',
-    whatItDoesBody: '「-고말고요 / -고말고」表示"当然……了""那还用说""……不用说"。用于强烈肯定/赞同对方的话，语气热情、直接、口语化。相当于中文的"当然啊""必须的"。',
-    structureNote: '动词/形容词词干 + -고말고요',
-    rulesNote: '直接接词干，不看받침；只用于口语回应；名词用 -이고말고요',
+    whatItDoes: '当然……了', english: 'Of course...!',
+    whatItDoesBody: '「-고말고요 / -고말고」表示"当然……了""那还用说""……不用说"。用于强烈肯定/赞同对方的话，语气热情、直接、口语化。相当于中文的"当然啊""必须的"。', english: '「-고말고요 / -고말고」 means "of course...!" "that goes without saying" "needless to say...". It is used to strongly affirm or agree with what someone said, with a warm, direct, and colloquial tone. It\'s equivalent to "of course!" or "absolutely!" in Chinese.',
+    structureNote: '动词/形容词词干 + -고말고요', english: 'Verb/Adjective stem + -고말고요',
+    rulesNote: '直接接词干，不看收音；只用于口语回应；名词用 -이고말고요', english: 'Attach directly to the stem regardless of final consonant; used only in spoken responses; for nouns, use -이고말고요',
     structures: [
       {
         ko: '"영화 재미있었어요?" "재미있고말고요."',
@@ -1180,7 +1180,7 @@ export const grammarCardsP28: GrammarCard[] = [
       { wrong: '학생고말고요', correct: '학생이고말고요', note: '名词需加系词 이' },
     ],
     quickTable: {
-      title: '-고말고요 用法',
+      title: '-고말고요 用法', english: '-고말고요 Usage',
       headers: ['结构', '用法', '例子'],
       rows: [
         ['-고말고요', '敬语回答', '가고말고요'],
@@ -1191,7 +1191,7 @@ export const grammarCardsP28: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '-고말고요 综合',
+      title: '-고말고요 综合', english: '-고말고요 Comprehensive',
       body: '选择正确形式',
       questions: [
         {
@@ -1274,10 +1274,10 @@ export const grammarCardsP28: GrammarCard[] = [
     partNumber: 28,
     lessonNumber: 8,
     title: '-을/ㄹ 따름이다',
-    whatItDoes: '只是……而已',
-    whatItDoesBody: '「-을/ㄹ 따름이다」表示"只是……而已""不过是……"。用于强调"没有其他，仅此而已"的心情。语感书面正式，常用于自谦、遗憾、无奈、感激的表达。',
-    structureNote: '动词/形容词词干：有받침 -을 따름이다 / 无받침 -ㄹ 따름이다',
-    rulesNote: '"따름" 意为"仅仅/只是"；-을/ㄹ 따름이다 是固定搭配；名词 -(이)ㄹ 따름이다',
+    whatItDoes: '只是……而已', english: 'Just... that\'s all',
+    whatItDoesBody: '「-을/ㄹ 따름이다」表示"只是……而已""不过是……"。用于强调"没有其他，仅此而已"的心情。语感书面正式，常用于自谦、遗憾、无奈、感激的表达。', english: '「-을/ㄹ 따름이다」 means "just... that\'s all" or "merely...". It is used to emphasize the feeling of "there is nothing else, only this." The tone is formal and literary, often used in expressions of humility, regret, helplessness, or gratitude.',
+    structureNote: '动词/形容词词干：有收音 -을 따름이다 / 无收音 -ㄹ 따름이다', english: 'Verb/Adjective stem: with final consonant -을 따름이다 / without final consonant -ㄹ 따름이다',
+    rulesNote: '"따름" 意为"仅仅/只是"；-을/ㄹ 따름이다 是固定搭配；名词 -(이)ㄹ 따름이다', english: '"따름" means "merely/just"; -을/ㄹ 따름이다 is a fixed expression; for nouns, use -(이)ㄹ 따름이다',
     structures: [
       {
         ko: '그저 감사할 따름이에요.',
@@ -1308,8 +1308,8 @@ export const grammarCardsP28: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '有받침 → -을 따름이다', examples: '먹다 → 먹을 따름이다 / 좋다 → 좋을 따름이다' },
-      { type: 'rule', text: '无받침 → -ㄹ 따름이다', examples: '가다 → 갈 따름이다 / 하다 → 할 따름이다' },
+      { type: 'rule', text: '有收音 → -을 따름이다', examples: '먹다 → 먹을 따름이다 / 좋다 → 좋을 따름이다' },
+      { type: 'rule', text: '无收音 → -ㄹ 따름이다', examples: '가다 → 갈 따름이다 / 하다 → 할 따름이다' },
       { type: 'rule', text: '过去 → -았/었을 따름이다', examples: '갔을 따름이다 / 했을 따름이다' },
       { type: 'rule', text: '名词 → -(이)ㄹ 따름이다', examples: '학생일 따름이다（只不过是个学生罢了。）' },
       { type: 'usage', text: '强调"没别的，只有这个"，语气委婉正式', examples: '감사할 따름이에요.（只是心怀感激）' },
@@ -1359,15 +1359,15 @@ export const grammarCardsP28: GrammarCard[] = [
     ],
     mistakes: [
       { wrong: '감사하는 따름이다', correct: '감사할 따름이다', note: '固定为 -을/ㄹ 따름이다，不用 -는' },
-      { wrong: '가을 따름이다', correct: '갈 따름이다', note: '가다 无받침，用 -ㄹ 따름이다' },
+      { wrong: '가을 따름이다', correct: '갈 따름이다', note: '가다 无收音，用 -ㄹ 따름이다' },
       { wrong: '학생 따름이다', correct: '학생일 따름이다', note: '名词需加系词 이 变形' },
     ],
     quickTable: {
-      title: '-을/ㄹ 따름이다 一览',
+      title: '-을/ㄹ 따름이다 一览', english: '-을/ㄹ 따름이다 Overview',
       headers: ['词类', '规则', '例子'],
       rows: [
-        ['有받침', '-을 따름이다', '먹을 따름이다'],
-        ['无받침', '-ㄹ 따름이다', '할 따름이다'],
+        ['有收音', '-을 따름이다', '먹을 따름이다'],
+        ['无收音', '-ㄹ 따름이다', '할 따름이다'],
         ['过去', '-았/었을 따름이다', '했을 따름이다'],
         ['名词', '-(이)ㄹ 따름이다', '학생일 따름이다'],
         ['同义', '-을/ㄹ 뿐이다', '更口语版本'],
@@ -1375,14 +1375,14 @@ export const grammarCardsP28: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '-을/ㄹ 따름이다 变形',
+      title: '-을/ㄹ 따름이다 变形', english: '-을/ㄹ 따름이다 Conjugation',
       body: '选择正确形式',
       questions: [
         {
           prompt: '그저 (감사하다) 따름이에요.',
           options: ['감사한', '감사할', '감사하는', '감사해서'],
           answer: 1,
-          explanation: '감사하다 词干 감사하 无받침，用 -ㄹ 따름이다 → 감사할 따름이에요。',
+          explanation: '감사하다 词干 감사하 无收音，用 -ㄹ 따름이다 → 감사할 따름이에요。',
         },
         {
           prompt: '제 할 일을 (하다) 따름이에요.',
@@ -1425,8 +1425,8 @@ export const grammarCardsP28: GrammarCard[] = [
   <div class="ov-section-hd"><div class="ov-section-line" style="background:#b49ccf"></div><div class="ov-section-title" style="color:#b49ccf">核心形态</div></div>
   <div class="ov-block">
     <div style="font-size:16px;color:#241917;line-height:1.9">
-      有받침 → <b>-을 따름이다</b>：먹을 따름<br>
-      无받침 → <b>-ㄹ 따름이다</b>：할 따름<br>
+      有收音 → <b>-을 따름이다</b>：먹을 따름<br>
+      无收音 → <b>-ㄹ 따름이다</b>：할 따름<br>
       过去 → <b>-았/었을 따름이다</b>：했을 따름<br>
       名词 → <b>-(이)ㄹ 따름이다</b>：학생일 따름
     </div>
@@ -1457,11 +1457,11 @@ export const grammarCardsP28: GrammarCard[] = [
     id: 'card-p28-l09',
     partNumber: 28,
     lessonNumber: 9,
-    title: 'P28 综合练习',
-    whatItDoes: 'P28 综合复习',
-    whatItDoesBody: '本练习综合复习 P28 强调与感叹深化章节的 8 个语法点：-기(가) N하다 / 얼마나 -는지 모르다 / -다 못해 / -을수록 / 오죽 -으면 / -기(는) 하다 / -고말고요 / -을 따름이다。',
-    structureNote: '综合本 Part 所有语法',
-    rulesNote: '重点辨析：感叹强度阶梯 및 让步转折与限定表达',
+    title: 'P28 综合练习', english: 'P28 Comprehensive Practice',
+    whatItDoes: 'P28 综合复习', english: 'P28 Comprehensive Review',
+    whatItDoesBody: '本练习综合复习 P28 强调与感叹深化章节的 8 个语法点：-기(가) N하다 / 얼마나 -는지 모르다 / -다 못해 / -을수록 / 오죽 -으면 / -기(는) 하다 / -고말고요 / -을 따름이다。', english: 'This exercise comprehensively reviews the 8 grammar points from the P28 chapter on emphasis and exclamation: -기(가) N하다 / 얼마나 -는지 모르다 / -다 못해 / -을수록 / 오죽 -으면 / -기(는) 하다 / -고말고요 / -을 따름이다.',
+    structureNote: '综合本 Part 所有语法', english: 'Comprehensive review of all grammar points in this Part',
+    rulesNote: '重点辨析：感叹强度阶梯 및 让步转折与限定表达', english: 'Key distinctions: the intensity scale of exclamations and expressions of concession/concession-contrast and limitation',
     isPractice: true,
     structures: [
       {
@@ -1548,7 +1548,7 @@ export const grammarCardsP28: GrammarCard[] = [
     linkedGrammarIds: ['card-p28-l01', 'card-p28-l02', 'card-p28-l03', 'card-p28-l04', 'card-p28-l05', 'card-p28-l06', 'card-p28-l07', 'card-p28-l08'],
     specialQuiz: {
       type: 'judge',
-      title: 'P28 综合练习',
+      title: 'P28 综合练习', english: 'P28 Comprehensive Practice',
       body: '选择正确的表达',
       questions: [
         {

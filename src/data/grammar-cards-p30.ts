@@ -7,10 +7,10 @@ export const grammarCardsP30: GrammarCard[] = [
     partNumber: 30,
     lessonNumber: 1,
     title: '눈 관용어',
-    whatItDoes: '眼睛惯用语',
-    whatItDoesBody: '韩语里"눈（眼睛）"的惯用语最多、最活。掌握 눈이 높다（眼光高）、눈에 밟히다（挂在眼前）、눈 밖에 나다（失宠）、눈이 빠지다（望眼欲穿）等，是从"考试韩语"进入"生活韩语"的分水岭。',
-    structureNote: '눈 + 助词 + 动词/形容词｜熟词组，语义与字面常不一致',
-    rulesNote: '눈이 높다 眼光高 / 눈에 밟히다 挂心上 / 눈 밖에 나다 失宠 / 눈이 빠지다 望穿眼 / 눈감아 주다 睁一眼闭一眼',
+    whatItDoes: '眼睛惯用语', english: 'Eye Idioms',
+    whatItDoesBody: '韩语里"눈（眼睛）"的惯用语最多、最活。掌握 눈이 높다（眼光高）、눈에 밟히다（挂在眼前）、눈 밖에 나다（失宠）、눈이 빠지다（望眼欲穿）等，是从"考试韩语"进入"生活韩语"的分水岭。', english: 'In Korean, idioms using "눈 (eye)" are the most numerous and most commonly used. Mastering expressions like 눈이 높다 (to have high standards), 눈에 밟히다 (to linger in one\'s mind), 눈 밖에 나다 (to fall out of favor), and 눈이 빠지다 (to wait eagerly) marks the transition from "exam Korean" to "everyday Korean."',
+    structureNote: '눈 + 助词 + 动词/形容词｜熟词组，语义与字面常不一致', english: '눈 + particle + verb/adjective | Idiomatic phrase; meaning often differs from literal words',
+    rulesNote: '눈이 높다 眼光高 / 눈에 밟히다 挂心上 / 눈 밖에 나다 失宠 / 눈이 빠지다 望穿眼 / 눈감아 주다 睁一眼闭一眼', english: '눈이 높다 to have high standards / 눈에 밟히다 to be on one\'s mind / 눈 밖에 나다 to fall out of favor / 눈이 빠지다 to wait eagerly / 눈감아 주다 to turn a blind eye',
     structures: [
       {
         ko: '민수는 눈이 너무 높아서 아직도 결혼을 못 했어요.',
@@ -95,7 +95,7 @@ export const grammarCardsP30: GrammarCard[] = [
       { wrong: '눈이 감아 주세요', correct: '눈감아 주세요', note: '固定组合 눈감아 주다，不加 이/가' },
     ],
     quickTable: {
-      title: '눈 관용어 速查',
+      title: '눈 관용어 速查', english: '눈 Idioms Quick Reference',
       headers: ['惯用语', '含义', '例子'],
       rows: [
         ['눈이 높다', '眼光高', '눈이 높아서 못 골라요'],
@@ -108,7 +108,7 @@ export const grammarCardsP30: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '눈 관용어 练习',
+      title: '눈 관용어 练习', english: '눈 Idioms Practice',
       body: '选择正确含义',
       questions: [
         {
@@ -180,10 +180,10 @@ export const grammarCardsP30: GrammarCard[] = [
     partNumber: 30,
     lessonNumber: 2,
     title: '손 관용어',
-    whatItDoes: '手 惯用语',
-    whatItDoesBody: '"손（手）"的惯用语大多与"做事、参与、慷慨、放弃"相关：손이 크다（大方）、손을 씻다（洗手不干）、손을 놓다（放手不管）、손이 모자라다（人手不够）、손을 대다（插手/开始动手）。',
-    structureNote: '손 + 助词 + 动词｜多表"做事/参与/放弃"',
-    rulesNote: '손이 크다 大方 / 손을 씻다 洗手不干 / 손을 놓다 放手不管 / 손이 모자라다 人手不够 / 손을 대다 开始动手',
+    whatItDoes: '手 惯用语', english: 'Hand Idioms',
+    whatItDoesBody: '"손（手）"的惯用语大多与"做事、参与、慷慨、放弃"相关：손이 크다（大方）、손을 씻다（洗手不干）、손을 놓다（放手不管）、손이 모자라다（人手不够）、손을 대다（插手/开始动手）。', english: 'Idioms with "손 (hand)" mostly relate to "doing, participating, generosity, or giving up": 손이 크다 (generous), 손을 씻다 (wash one\'s hands of it), 손을 놓다 (let go / stop managing), 손이 모자라다 (short-handed), 손을 대다 (get involved / start working on).',
+    structureNote: '손 + 助词 + 动词｜多表"做事/参与/放弃"', english: '손 + particle + verb | Often expresses "doing / participating / giving up"',
+    rulesNote: '손이 크다 大方 / 손을 씻다 洗手不干 / 손을 놓다 放手不管 / 손이 모자라다 人手不够 / 손을 대다 开始动手', english: '손이 크다 generous / 손을 씻다 to wash one\'s hands of it / 손을 놓다 to let go / 손이 모자라다 to be short-handed / 손을 대다 to start working on',
     structures: [
       {
         ko: '엄마는 손이 크셔서 늘 음식을 많이 하세요.',
@@ -270,7 +270,7 @@ export const grammarCardsP30: GrammarCard[] = [
       { wrong: '손이 없어서 힘들어요', correct: '손이 모자라서 힘들어요', note: '"人手不够"用 손이 모자라다，不用 손이 없다' },
     ],
     quickTable: {
-      title: '손 관용어 速查',
+      title: '손 관용어 速查', english: '손 Idioms Quick Reference',
       headers: ['惯用语', '含义', '例子'],
       rows: [
         ['손이 크다', '大方 / 爱送', '엄마는 손이 크세요'],
@@ -283,7 +283,7 @@ export const grammarCardsP30: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '손 관용어 练习',
+      title: '손 관용어 练习', english: '손 Idioms Practice',
       body: '选择正确含义',
       questions: [
         {
@@ -356,10 +356,10 @@ export const grammarCardsP30: GrammarCard[] = [
     partNumber: 30,
     lessonNumber: 3,
     title: '발 관용어',
-    whatItDoes: '脚 惯用语',
-    whatItDoesBody: '"발（脚）"的惯用语多围绕"人脉、参与、脱身"：발이 넓다（人脉广）、발 벗고 나서다（挺身而出）、발을 빼다（抽身脱离）、발이 묶이다（被困住）、발 뻗고 자다（安心睡）。',
-    structureNote: '발 + 助词 + 动词｜多表"人脉/参与/脱身/被困"',
-    rulesNote: '발이 넓다 人脉广 / 발 벗고 나서다 挺身而出 / 발을 빼다 抽身 / 발이 묶이다 被困 / 발 뻗고 자다 安心睡',
+    whatItDoes: '脚 惯用语', english: 'Foot Idioms',
+    whatItDoesBody: '"발（脚）"的惯用语多围绕"人脉、参与、脱身"：발이 넓다（人脉广）、발 벗고 나서다（挺身而出）、발을 빼다（抽身脱离）、발이 묶이다（被困住）、발 뻗고 자다（安心睡）。', english: 'Idioms with "발 (foot)" often revolve around "connections, participation, or getting away": 발이 넓다 (well-connected), 발 벗고 나서다 (step forward / throw oneself in), 발을 빼다 (pull out / extricate oneself), 발이 묶이다 (to be tied up / stuck), 발 뻗고 자다 (sleep peacefully).',
+    structureNote: '발 + 助词 + 动词｜多表"人脉/参与/脱身/被困"', english: '발 + particle + verb ｜ Often expresses "connections / participation / getting away / being stuck"',
+    rulesNote: '발이 넓다 人脉广 / 발 벗고 나서다 挺身而出 / 발을 빼다 抽身 / 발이 묶이다 被困 / 발 뻗고 자다 安心睡', english: '발이 넓다 to have many connections / 발 벗고 나서다 to step forward actively / 발을 빼다 to pull out (of a situation) / 발이 묶이다 to be tied up / 발 뻗고 자다 to sleep soundly',
     structures: [
       {
         ko: '민수는 발이 넓어서 아는 사람이 많아요.',
@@ -444,7 +444,7 @@ export const grammarCardsP30: GrammarCard[] = [
       { wrong: '눈이 와서 발이 잡혔어요', correct: '눈이 와서 발이 묶였어요', note: '"被困"固定用 발이 묶이다' },
     ],
     quickTable: {
-      title: '발 관용어 速查',
+      title: '발 관용어 速查', english: '발 Idioms Quick Reference',
       headers: ['惯用语', '含义', '例子'],
       rows: [
         ['발이 넓다', '人脉广', '민수는 발이 넓어요'],
@@ -457,7 +457,7 @@ export const grammarCardsP30: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '발 관용어 练习',
+      title: '발 관용어 练习', english: '발 Idioms Practice',
       body: '选择正确含义',
       questions: [
         {
@@ -530,10 +530,10 @@ export const grammarCardsP30: GrammarCard[] = [
     partNumber: 30,
     lessonNumber: 4,
     title: '마음 · 가슴 관용어',
-    whatItDoes: '心 惯用语',
-    whatItDoesBody: '"마음（心/心情）"和"가슴（胸/心窝）"是韩语情感表达的两大核心：마음에 들다（喜欢/合心意）、마음을 먹다（下决心）、가슴이 아프다（心痛）、가슴이 뭉클하다（感动）、가슴에 새기다（铭记于心）。',
-    structureNote: '마음/가슴 + 助词 + 动词/形容词｜表情感/决心',
-    rulesNote: '마음에 들다 合心意 / 마음을 먹다 下决心 / 가슴이 아프다 心痛 / 가슴이 뭉클하다 感动 / 가슴에 새기다 铭记',
+    whatItDoes: '心 惯用语', english: 'Heart Idioms',
+    whatItDoesBody: '"마음（心/心情）"和"가슴（胸/心窝）"是韩语情感表达的两大核心：마음에 들다（喜欢/合心意）、마음을 먹다（下决心）、가슴이 아프다（心痛）、가슴이 뭉클하다（感动）、가슴에 새기다（铭记于心）。', english: '"마음 (heart/mind)" and "가슴 (chest/heart)" are the two core words for expressing emotions in Korean: 마음에 들다 (to like / to be to one\'s liking), 마음을 먹다 (to make up one\'s mind), 가슴이 아프다 (heartache), 가슴이 뭉클하다 (to be moved), 가슴에 새기다 (to engrave in one\'s heart).',
+    structureNote: '마음/가슴 + 助词 + 动词/形容词｜表情感/决心', english: '마음/가슴 + particle + verb/adjective ｜ Expresses emotions / determination',
+    rulesNote: '마음에 들다 合心意 / 마음을 먹다 下决心 / 가슴이 아프다 心痛 / 가슴이 뭉클하다 感动 / 가슴에 새기다 铭记', english: '마음에 들다 to be to one\'s liking / 마음을 먹다 to make up one\'s mind / 가슴이 아프다 to have a heartache / 가슴이 뭉클하다 to be deeply moved / 가슴에 새기다 to engrave in one\'s heart',
     structures: [
       {
         ko: '이 옷이 정말 마음에 들어요.',
@@ -618,7 +618,7 @@ export const grammarCardsP30: GrammarCard[] = [
       { wrong: '뉴스를 보고 마음이 아팠어요', correct: '뉴스를 보고 가슴이 아팠어요', note: '"心痛"用 가슴이 아프다 更自然（同情/悲伤）；마음이 아프다 也可但语感偏内心懊悔' },
     ],
     quickTable: {
-      title: '마음 · 가슴 관용어 速查',
+      title: '마음 · 가슴 관용어 速查', english: '마음 · 가슴 Idioms Quick Reference',
       headers: ['惯用语', '含义', '例子'],
       rows: [
         ['마음에 들다', '合心意 / 中意', '이 옷이 마음에 들어요'],
@@ -631,7 +631,7 @@ export const grammarCardsP30: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '마음 · 가슴 练习',
+      title: '마음 · 가슴 练习', english: '마음 · 가슴 Practice',
       body: '选择正确的搭配',
       questions: [
         {
@@ -709,10 +709,10 @@ export const grammarCardsP30: GrammarCard[] = [
     partNumber: 30,
     lessonNumber: 5,
     title: '입 · 말 관용어',
-    whatItDoes: '嘴/话 惯用语',
-    whatItDoesBody: '"입（嘴）"和"말（话）"的惯用语多与"保密/传播/说话方式"相关：입이 무겁다（守口如瓶）、입이 가볍다（嘴不严）、말꼬리를 잡다（抠字眼）、말을 아끼다（惜字如金）、입에 발린 말（花言巧语）。',
-    structureNote: '입/말 + 助词 + 动词/形容词｜表说话方式与信任',
-    rulesNote: '입이 무겁다 守口 / 입이 가볍다 嘴松 / 말꼬리를 잡다 抠字眼 / 말을 아끼다 惜字如金 / 입에 발린 말 花言巧语',
+    whatItDoes: '嘴/话 惯用语', english: 'Mouth/Speech Idioms',
+    whatItDoesBody: '"입（嘴）"和"말（话）"的惯用语多与"保密/传播/说话方式"相关：입이 무겁다（守口如瓶）、입이 가볍다（嘴不严）、말꼬리를 잡다（抠字眼）、말을 아끼다（惜字如金）、입에 발린 말（花言巧语）。', english: 'Idioms using "입 (mouth)" and "말 (speech)" often relate to "keeping secrets / spreading rumors / speaking style": 입이 무겁다 (to be tight-lipped), 입이 가볍다 (to be loose-lipped), 말꼬리를 잡다 (to nitpick someone\'s words), 말을 아끼다 (to be sparing with words), 입에 발린 말 (sweet talk / flattery).',
+    structureNote: '입/말 + 助词 + 动词/形容词｜表说话方式与信任', english: '입/말 + particle + verb/adjective | Expresses manner of speech and trust',
+    rulesNote: '입이 무겁다 守口 / 입이 가볍다 嘴松 / 말꼬리를 잡다 抠字眼 / 말을 아끼다 惜字如金 / 입에 발린 말 花言巧语', english: '입이 무겁다 keep a secret / 입이 가볍다 loose-lipped / 말꼬리를 잡다 nitpick / 말을 아끼다 be sparing with words / 입에 발린 말 sweet talk',
     structures: [
       {
         ko: '민수는 입이 무거워서 비밀을 말해도 안전해요.',
@@ -797,7 +797,7 @@ export const grammarCardsP30: GrammarCard[] = [
       { wrong: '요즘 말이 아껴요', correct: '요즘 말을 아껴요', note: '"惜字如金"是 말을 아끼다，用 -을' },
     ],
     quickTable: {
-      title: '입 · 말 관용어 速查',
+      title: '입 · 말 관용어 速查', english: '입 · 말 Idioms Quick Reference',
       headers: ['惯用语', '含义', '例子'],
       rows: [
         ['입이 무겁다', '嘴严 / 守口如瓶', '민수는 입이 무거워요'],
@@ -810,7 +810,7 @@ export const grammarCardsP30: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '입 · 말 练习',
+      title: '입 · 말 练习', english: '입 · 말 Practice',
       body: '选择正确含义',
       questions: [
         {
@@ -888,10 +888,10 @@ export const grammarCardsP30: GrammarCard[] = [
     partNumber: 30,
     lessonNumber: 6,
     title: '머리 관용어',
-    whatItDoes: '头 惯用语',
-    whatItDoesBody: '"머리（头）"的惯用语多与思考、方案、合作、烦恼相关：머리를 굴리다（动脑筋）、머리를 맞대다（碰头商量）、머리가 아프다（头疼/烦）、머리가 잘 돌아가다（脑子灵）、머리를 식히다（透透气）。',
-    structureNote: '머리 + 助词 + 动词/形容词｜表思考/方案/烦恼',
-    rulesNote: '머리를 굴리다 动脑 / 머리를 맞대다 碰头 / 머리가 아프다 头疼/烦 / 머리가 잘 돌아가다 脑子灵 / 머리를 식히다 透气',
+    whatItDoes: '头 惯用语', english: 'Head Idioms',
+    whatItDoesBody: '"머리（头）"的惯用语多与思考、方案、合作、烦恼相关：머리를 굴리다（动脑筋）、머리를 맞대다（碰头商量）、머리가 아프다（头疼/烦）、머리가 잘 돌아가다（脑子灵）、머리를 식히다（透透气）。', english: 'Idioms using "머리 (head)" often relate to thinking, planning, cooperation, and worries: 머리를 굴리다 (rack your brain), 머리를 맞대다 (put heads together), 머리가 아프다 (have a headache / be troubled), 머리가 잘 돌아가다 (be quick-witted), 머리를 식히다 (clear your head).',
+    structureNote: '머리 + 助词 + 动词/形容词｜表思考/方案/烦恼', english: '머리 + particle + verb/adjective | Expresses thinking/planning/worries',
+    rulesNote: '머리를 굴리다 动脑 / 머리를 맞대다 碰头 / 머리가 아프다 头疼/烦 / 머리가 잘 돌아가다 脑子灵 / 머리를 식히다 透气', english: '머리를 굴리다 rack your brain / 머리를 맞대다 put heads together / 머리가 아프다 have a headache / be troubled / 머리가 잘 돌아가다 be quick-witted / 머리를 식히다 clear your head',
     structures: [
       {
         ko: '이 문제를 풀려고 머리를 굴렸어요.',
@@ -971,7 +971,7 @@ export const grammarCardsP30: GrammarCard[] = [
       { wrong: '이 문제로 머리가 아프고 있어요', correct: '이 문제로 머리가 아파요', note: '머리가 아프다 是状态动词，不用 -고 있다' },
     ],
     quickTable: {
-      title: '머리 관용어 速查',
+      title: '머리 관용어 速查', english: '머리 Idioms Quick Reference',
       headers: ['惯用语', '含义', '例子'],
       rows: [
         ['머리를 굴리다', '动脑筋', '머리를 굴려서 답을 찾았어요'],
@@ -984,7 +984,7 @@ export const grammarCardsP30: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '머리 관용어 练习',
+      title: '머리 관용어 练习', english: '머리 Idioms Practice',
       body: '选择正确含义或搭配',
       questions: [
         {
@@ -1056,11 +1056,11 @@ export const grammarCardsP30: GrammarCard[] = [
     id: 'card-p30-l07',
     partNumber: 30,
     lessonNumber: 7,
-    title: '四字成语 · 情感与态度',
-    whatItDoes: '사자성어（1）',
-    whatItDoesBody: '韩语四字成语（사자성어）多源自汉字典故，是韩语高级表达的标志。本课学与"情感/态度/合作"相关的六大成语：일석이조（一石二鸟）、동병상련（同病相怜）、십시일반（十匙一饭）、어부지리（渔翁得利）、자업자득（自作自受）、우유부단（优柔寡断）。',
-    structureNote: '四字成语作名词使用｜句中位置灵活｜多与 이다/하다 搭配',
-    rulesNote: '읽는 법：일석이조[일써기조] / 어부지리[어부지리]，注意汉字词双拼读法',
+    title: '四字成语 · 情感与态度', english: 'Four-Character Idioms · Emotions and Attitudes',
+    whatItDoes: '사자성어（1）', english: '사자성어 (1)',
+    whatItDoesBody: '韩语四字成语（사자성어）多源自汉字典故，是韩语高级表达的标志。本课学与"情感/态度/合作"相关的六大成语：일석이조（一石二鸟）、동병상련（同病相怜）、십시일반（十匙一饭）、어부지리（渔翁得利）、자업자득（自作自受）、우유부단（优柔寡断）。', english: 'Korean four-character idioms (사자성어) mostly originate from Chinese classical stories and are a hallmark of advanced Korean expression. This lesson covers six idioms related to "emotions/attitudes/cooperation": 일석이조 (one stone, two birds), 동병상련 (misery loves company), 십시일반 (many hands make light work), 어부지리 (the fisherman\'s gain), 자업자득 (reap what you sow), and 우유부단 (indecisive).',
+    structureNote: '四字成语作名词使用｜句中位置灵活｜多与 이다/하다 搭配', english: 'Four-character idioms are used as nouns | flexible position in sentences | often paired with 이다/하다',
+    rulesNote: '읽는 법：일석이조[일써기조] / 어부지리[어부지리]，注意汉字词双拼读法', english: 'Pronunciation: 일석이조[일써기조] / 어부지리[어부지리], note the double-consonant reading of Sino-Korean words',
     structures: [
       {
         ko: '이번 여행은 관광도 하고 공부도 해서 일석이조였어요.',
@@ -1144,7 +1144,7 @@ export const grammarCardsP30: GrammarCard[] = [
       { wrong: '우유부단이에요', correct: '우유부단해요', note: '우유부단하다 是形容词性，用 -해요' },
     ],
     quickTable: {
-      title: '情感态度类 사자성어',
+      title: '情感态度类 사자성어', english: 'Emotion & Attitude 사자성어',
       headers: ['成语', '汉字', '含义'],
       rows: [
         ['일석이조', '一石二鸟', '一举两得'],
@@ -1157,7 +1157,7 @@ export const grammarCardsP30: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '情感态度 사자성어 练习',
+      title: '情感态度 사자성어 练习', english: 'Emotion & Attitude 사자성어 Practice',
       body: '选择正确的成语',
       questions: [
         {
@@ -1229,11 +1229,11 @@ export const grammarCardsP30: GrammarCard[] = [
     id: 'card-p30-l08',
     partNumber: 30,
     lessonNumber: 8,
-    title: '四字成语 · 事态与因果',
-    whatItDoes: '사자성어（2）',
-    whatItDoesBody: '本课学与"事态/因果/得失"相关的六大成语：전화위복（转祸为福）、오리무중（五里雾中）、유비무환（有备无患）、설상가상（雪上加霜）、고진감래（苦尽甘来）、다다익선（多多益善）。',
-    structureNote: '同前课，作名词使用 · 与 이다/하다/-으로 搭配',
-    rulesNote: '注意汉字对照：전화(转祸)+위복(为福) / 설상(雪上)+가상(加霜)',
+    title: '四字成语 · 事态与因果', english: 'Four-Character Idioms · Situations & Causality',
+    whatItDoes: '사자성어（2）', english: '사자성어 (2)',
+    whatItDoesBody: '本课学与"事态/因果/得失"相关的六大成语：전화위복（转祸为福）、오리무중（五里雾中）、유비무환（有备无患）、설상가상（雪上加霜）、고진감래（苦尽甘来）、다다익선（多多益善）。', english: 'This lesson covers six idioms related to "situations/causality/gain and loss": 전화위복 (turning misfortune into fortune), 오리무중 (lost in a fog), 유비무환 (preparedness prevents calamity), 설상가상 (adding frost to snow), 고진감래 (sweet comes after bitter), and 다다익선 (the more, the better).',
+    structureNote: '同前课，作名词使用 · 与 이다/하다/-으로 搭配', english: 'Same as the previous lesson, used as nouns | paired with 이다/하다/-으로',
+    rulesNote: '注意汉字对照：전화(转祸)+위복(为福) / 설상(雪上)+가상(加霜)', english: 'Note the Chinese character correspondences: 전화(转祸)+위복(为福) / 설상(雪上)+가상(加霜)',
     structures: [
       {
         ko: '큰 실패였지만 결국 전화위복이 되었어요.',
@@ -1316,7 +1316,7 @@ export const grammarCardsP30: GrammarCard[] = [
       { wrong: '유비무환하게 준비', correct: '유비무환의 자세로 준비', note: '유비무환 是名词，不做副词，需借 "-의 자세로"' },
     ],
     quickTable: {
-      title: '事态因果类 사자성어',
+      title: '事态因果类 사자성어', english: 'Situation & Causality 사자성어',
       headers: ['成语', '汉字', '含义'],
       rows: [
         ['전화위복', '转祸为福', '因祸得福'],
@@ -1329,7 +1329,7 @@ export const grammarCardsP30: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '事态因果 사자성어 练习',
+      title: '事态因果 사자성어 练习', english: 'Situation & Causality 사자성어 Practice',
       body: '选择正确成语',
       questions: [
         {
@@ -1401,10 +1401,10 @@ export const grammarCardsP30: GrammarCard[] = [
     id: 'card-p30-l09',
     partNumber: 30,
     lessonNumber: 9,
-    title: 'P30 综合练习',
+    title: 'P30 综合练习', english: 'P30 Comprehensive Practice',
     isPractice: true,
-    whatItDoes: '惯用语综合',
-    whatItDoesBody: '本课综合 P30 全部 8 类惯用语/成语：눈/손/발/마음/입/머리 六大身体部位 + 12 个 사자성어。综合考察含义与助词搭配。',
+    whatItDoes: '惯用语综合', english: 'Comprehensive Idioms',
+    whatItDoesBody: '本课综合 P30 全部 8 类惯用语/成语：눈/손/발/마음/입/머리 六大身体部位 + 12 个 사자성어。综合考察含义与助词搭配。', english: 'This lesson covers all 8 types of idioms/idiomatic expressions from P30: six body parts (눈/손/발/마음/입/머리) plus 12 four-character idioms (사자성어). It tests both meaning and particle usage comprehensively.',
     structures: [],
     connectionRules: [],
     cardExamples: [],
@@ -1412,7 +1412,7 @@ export const grammarCardsP30: GrammarCard[] = [
     mistakes: [],
     specialQuiz: {
       type: 'morph',
-      title: 'P30 综合练习',
+      title: 'P30 综合练习', english: 'P30 Comprehensive Practice',
       body: '综合本章所有惯用语和成语',
       questions: [
         {

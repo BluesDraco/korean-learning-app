@@ -7,10 +7,10 @@ export const grammarCardsP25: GrammarCard[] = [
     partNumber: 25,
     lessonNumber: 1,
     title: '-는다고/-ㄴ다고/-다고/이라고 하다',
-    whatItDoes: '"（某人）说……"',
-    whatItDoesBody: '把别人的原话转述给第三者，就是"间接引用"。\n韩语间接引用比中文更严格：动词、形容词、名词各有自己的形态。\n这一课把陈述句的间接引用四种基本形态一次讲清。',
-    structureNote: '陈述句间接引用结构：\n动词现在（有받침）→ -는다고 하다\n动词现在（无받침）→ -ㄴ다고 하다\n动词过去 → -았/었다고 하다\n形容词 → -다고 하다\n名词 → -(이)라고 하다',
-    rulesNote: '核心规则：\n1. 直接引语的敬语级要"脱下"再"重穿" → 하다 层级决定\n2. 时态在动词/形容词上标，而不是在 하다 上\n3. 名词用 -(이)라고，不用 -다고\n4. 하다 可以变 → 그러다 / 그랬다 / 물어보다 等',
+    whatItDoes: '"（某人）说……"', english: '"(Someone) says that…"',
+    whatItDoesBody: '把别人的原话转述给第三者，就是"间接引用"。\n韩语间接引用比中文更严格：动词、形容词、名词各有自己的形态。\n这一课把陈述句的间接引用四种基本形态一次讲清。', english: 'To relay someone else\'s original words to a third person is called "indirect quotation."\\nKorean indirect quotation is stricter than in Chinese: verbs, adjectives, and nouns each have their own forms.\\nThis lesson explains the four basic forms of indirect quotation for declarative sentences all at once.',
+    structureNote: '陈述句间接引用结构：\n动词现在（有收音）→ -는다고 하다\n动词现在（无收音）→ -ㄴ다고 하다\n动词过去 → -았/었다고 하다\n形容词 → -다고 하다\n名词 → -(이)라고 하다', english: 'Declarative indirect quotation structure:\\nVerb present (with final consonant) → -는다고 하다\\nVerb present (no final consonant) → -ㄴ다고 하다\\nVerb past → -았/었다고 하다\\nAdjective → -다고 하다\\nNoun → -(이)라고 하다',
+    rulesNote: '核心规则：\n1. 直接引语的敬语级要"脱下"再"重穿" → 하다 层级决定\n2. 时态在动词/形容词上标，而不是在 하다 上\n3. 名词用 -(이)라고，不用 -다고\n4. 하다 可以变 → 그러다 / 그랬다 / 물어보다 等', english: 'Core rules:\\n1. The politeness level of the direct quote must be "taken off" and "put back on" → determined by the level of 하다\\n2. Tense is marked on the verb/adjective, not on 하다\\n3. Nouns use -(이)라고, not -다고\\n4. 하다 can change → 그러다 / 그랬다 / 물어보다, etc.',
     structures: [
       {
         ko: '민수가 학교에 간다고 해요.',
@@ -116,12 +116,12 @@ export const grammarCardsP25: GrammarCard[] = [
       { wrong: '언니가 케이크를 만들었는다고 했어요.', correct: '언니가 케이크를 만들었다고 했어요.', note: '过去时 -았/었 后直接 -다고，不再加 -는。' },
     ],
     quickTable: {
-      title: '陈述句间接引用总表',
+      title: '陈述句间接引用总表', english: 'Declarative Indirect Quotation Summary Table',
       body: '按词类和时态选择正确形态。',
       headers: ['词类', '时态', '形式', '例'],
       rows: [
-        [{ ko: '동사', zh: '动词' }, { ko: '현재·받침○', zh: '现在有收音' }, '-는다고 하다', '먹는다고 해요'],
-        [{ ko: '동사', zh: '动词' }, { ko: '현재·받침×', zh: '现在无收音' }, '-ㄴ다고 하다', '간다고 해요'],
+        [{ ko: '동사', zh: '动词' }, { ko: '현재·收音○', zh: '现在有收音' }, '-는다고 하다', '먹는다고 해요'],
+        [{ ko: '동사', zh: '动词' }, { ko: '현재·收音×', zh: '现在无收音' }, '-ㄴ다고 하다', '간다고 해요'],
         [{ ko: '동사', zh: '动词' }, { ko: '과거', zh: '过去' }, '-았/었다고 하다', '갔다고 해요'],
         [{ ko: '형용사', zh: '形容词' }, { ko: '현재', zh: '现在' }, '-다고 하다', '춥다고 해요'],
         [{ ko: '명사', zh: '名词' }, { ko: '현재', zh: '现在' }, '-(이)라고 하다', '학생이라고 해요'],
@@ -129,7 +129,7 @@ export const grammarCardsP25: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '陈述句间接引用变形',
+      title: '陈述句间接引用变形', english: 'Declarative Indirect Quotation Transformations',
       body: '把直接引语改成间接引用。',
       questions: [
         {
@@ -227,10 +227,10 @@ export const grammarCardsP25: GrammarCard[] = [
     partNumber: 25,
     lessonNumber: 2,
     title: '-냐고 하다',
-    whatItDoes: '"（某人）问……"',
-    whatItDoesBody: '把别人的问句转述给第三者，用 -냐고 하다 / -느냐고 하다。\n"你要不要来？" → 그가 오냐고 물었어요.\n口语中动词和形容词都可直接用 -냐고，书面偏正规则再区分。',
-    structureNote: '结构（口语通用）：\n动词/形容词现在 → -냐고 하다\n动词/形容词过去 → -았/었냐고 하다\n名词 → -(이)냐고 하다\n\n书面规则版：动词 -느냐고，形容词 -(으)냐고。',
-    rulesNote: '要点：\n1. 하다 可以换 물어보다 / 궁금해하다 表"问/好奇"\n2. 疑问词（뭐, 언제, 어디, 왜）可以夹在中间\n3. 简写：-냬（-냐고 해 → -냬）\n4. 名词后必须加 -(이)냐고，不用 -냐고',
+    whatItDoes: '"（某人）问……"', english: '"(Someone) asks..."',
+    whatItDoesBody: '把别人的问句转述给第三者，用 -냐고 하다 / -느냐고 하다。\n"你要不要来？" → 그가 오냐고 물었어요.\n口语中动词和形容词都可直接用 -냐고，书面偏正规则再区分。', english: 'To relay someone else\'s question to a third person, use -냐고 하다 / -느냐고 하다.\\n"Are you coming?" → 그가 오냐고 물었어요.\\nIn spoken Korean, both verbs and adjectives can directly use -냐고; in written Korean, the more formal rules distinguish between them.',
+    structureNote: '结构（口语通用）：\n动词/形容词现在 → -냐고 하다\n动词/形容词过去 → -았/었냐고 하다\n名词 → -(이)냐고 하다\n\n书面规则版：动词 -느냐고，形容词 -(으)냐고。', english: 'Structure (common in speech):<br>Verb/Adjective present → -냐고 하다<br>Verb/Adjective past → -았/었냐고 하다<br>Noun → -(이)냐고 하다<br><br>Formal written version: Verb -느냐고, Adjective -(으)냐고.',
+    rulesNote: '要点：\n1. 하다 可以换 물어보다 / 궁금해하다 表"问/好奇"\n2. 疑问词（뭐, 언제, 어디, 왜）可以夹在中间\n3. 简写：-냬（-냐고 해 → -냬）\n4. 名词后必须加 -(이)냐고，不用 -냐고', english: 'Key points:<br>1. 하다 can be replaced with 물어보다 / 궁금해하다 to mean "ask/wonder"<br>2. Question words (뭐, 언제, 어디, 왜) can be inserted in the middle<br>3. Shortened form: -냬 (-냐고 해 → -냬)<br>4. After nouns, you must use -(이)냐고, not -냐고',
     structures: [
       {
         ko: '민수가 어디에 가냐고 물었어요.',
@@ -335,7 +335,7 @@ export const grammarCardsP25: GrammarCard[] = [
       { wrong: '민수가 오는다고 물었어요.', correct: '민수가 오냐고 물었어요.', note: '疑问句直接用 -냐고，不加 -는/-ㄴ。' },
     ],
     quickTable: {
-      title: '疑问句间接引用总表',
+      title: '疑问句间接引用总表', english: 'Summary Table: Indirect Quotation of Questions',
       body: '口语通用版，学习者优先记这一列。',
       headers: ['词类', '时态', '形式', '例'],
       rows: [
@@ -347,7 +347,7 @@ export const grammarCardsP25: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '疑问句间接引用变形',
+      title: '疑问句间接引用变形', english: 'Indirect Quotation of Questions: Transformations',
       body: '把直接问句改成间接疑问。',
       questions: [
         {
@@ -435,10 +435,10 @@ export const grammarCardsP25: GrammarCard[] = [
     partNumber: 25,
     lessonNumber: 3,
     title: '-자고 하다',
-    whatItDoes: '"（某人）提议一起……"',
-    whatItDoesBody: '把别人的"我们一起……吧"这种共动/建议句转述给第三者，用 -자고 하다。\n"같이 밥 먹자." → 친구가 같이 밥 먹자고 했어요.\n只接动词，不接形容词或名词。',
-    structureNote: '结构：\n动词现在 → -자고 하다\n否定 → -지 말자고 하다\n名词 × / 形容词 × （不能用）\n\n하다 可换 제안하다 / 권하다。',
-    rulesNote: '要点：\n1. 只接动词，且必须是共同动作（一起做的动作）\n2. 说话人和听话人都可以是执行者\n3. 否定用 -지 말자고 하다（"我们不要……吧"）\n4. 简写：-쟤（-자고 해 → -쟤）',
+    whatItDoes: '"（某人）提议一起……"', english: '"(Someone) suggests doing... together"',
+    whatItDoesBody: '把别人的"我们一起……吧"这种共动/建议句转述给第三者，用 -자고 하다。\n"같이 밥 먹자." → 친구가 같이 밥 먹자고 했어요.\n只接动词，不接形容词或名词。', english: 'Use -자고 하다 to relay someone else\'s suggestion or proposal ("Let\'s... together") to a third person.\\n"같이 밥 먹자." → 친구가 같이 밥 먹자고 했어요.\\nIt only attaches to verbs, not adjectives or nouns.',
+    structureNote: '结构：\n动词现在 → -자고 하다\n否定 → -지 말자고 하다\n名词 × / 形容词 × （不能用）\n\n하다 可换 제안하다 / 권하다。', english: 'Structure:\\nVerb (present) → -자고 하다\\nNegative → -지 말자고 하다\\nNoun × / Adjective × (cannot be used)\\n\\n하다 can be replaced with 제안하다 / 권하다.',
+    rulesNote: '要点：\n1. 只接动词，且必须是共同动作（一起做的动作）\n2. 说话人和听话人都可以是执行者\n3. 否定用 -지 말자고 하다（"我们不要……吧"）\n4. 简写：-쟤（-자고 해 → -쟤）', english: 'Key points:\\n1. Only attaches to verbs, and the action must be a joint action (done together)\\n2. Both the speaker and the listener can be the doers\\n3. Negative uses -지 말자고 하다 ("Let\'s not...")\\n4. Contracted form: -쟤 (-자고 해 → -쟤)',
     structures: [
       {
         ko: '친구가 같이 영화 보자고 했어요.',
@@ -536,7 +536,7 @@ export const grammarCardsP25: GrammarCard[] = [
       { wrong: '민수가 학생자고 했어요.', correct: '민수가 학생이라고 했어요.', note: '-자고 不接名词。名词陈述用 -(이)라고。' },
     ],
     quickTable: {
-      title: '共动/建议句间接引用',
+      title: '共动/建议句间接引用', english: 'Indirect Quotation of Proposals/Suggestions',
       body: '只接动词。',
       headers: ['形式', '否定', '例', '说明'],
       rows: [
@@ -548,7 +548,7 @@ export const grammarCardsP25: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '共动句间接引用变形',
+      title: '共动句间接引用变形', english: 'Indirect Quotation Transformation for Proposals',
       body: '把提议句改成间接引用。',
       questions: [
         {
@@ -641,10 +641,10 @@ export const grammarCardsP25: GrammarCard[] = [
     partNumber: 25,
     lessonNumber: 4,
     title: '-(으)라고 하다',
-    whatItDoes: '"（某人）叫别人做……"',
-    whatItDoesBody: '把命令句"你去做！"转述给第三者，用 -(으)라고 하다。\n"빨리 와!" → 엄마가 빨리 오라고 하셨어요.\n只接动词，且执行者是听话人（不是说话人自己）。',
-    structureNote: '结构：\n动词有收音 → -으라고 하다\n动词无收音 → -라고 하다\n否定 → -지 말라고 하다\n\n名词 × / 形容词 × （命令不接名词、形容词）',
-    rulesNote: '要点：\n1. 只接动词，执行者是听话人\n2. 有收音加 -으라고，无收音加 -라고\n3. 否定 -지 말라고 하다 ("别做")\n4. 特殊动词 주다 → 달라고 하다（要求给自己）/ 주라고 하다（要求给别人）',
+    whatItDoes: '"（某人）叫别人做……"', english: '"(Someone) tells someone else to do..."',
+    whatItDoesBody: '把命令句"你去做！"转述给第三者，用 -(으)라고 하다。\n"빨리 와!" → 엄마가 빨리 오라고 하셨어요.\n只接动词，且执行者是听话人（不是说话人自己）。', english: 'Use -(으)라고 하다 to relay a command ("You do it!") to a third person.\\n"빨리 와!" → 엄마가 빨리 오라고 하셨어요.\\nIt only attaches to verbs, and the doer is the listener (not the speaker).',
+    structureNote: '结构：\n动词有收音 → -으라고 하다\n动词无收音 → -라고 하다\n否定 → -지 말라고 하다\n\n名词 × / 形容词 × （命令不接名词、形容词）', english: 'Structure:\\nVerb with final consonant → -으라고 하다\\nVerb without final consonant → -라고 하다\\nNegative → -지 말라고 하다\\n\\nNoun × / Adjective × (commands don\'t take nouns or adjectives)',
+    rulesNote: '要点：\n1. 只接动词，执行者是听话人\n2. 有收音加 -으라고，无收音加 -라고\n3. 否定 -지 말라고 하다 ("别做")\n4. 特殊动词 주다 → 달라고 하다（要求给自己）/ 주라고 하다（要求给别人）', english: 'Key points:\\n1. Only attaches to verbs, and the doer is the listener\\n2. Add -으라고 after a final consonant, -라고 after no final consonant\\n3. Negative uses -지 말라고 하다 ("Don\'t do...")\\n4. Special verb 주다 → 달라고 하다 (asking for oneself) / 주라고 하다 (asking for someone else)',
     structures: [
       {
         ko: '엄마가 빨리 오라고 하셨어요.',
@@ -749,19 +749,19 @@ export const grammarCardsP25: GrammarCard[] = [
       { wrong: '민수가 볼펜을 주라고 했어요.', correct: '민수가 볼펜을 달라고 했어요.', note: '"要给自己"用 달라고 하다；"要给他人"才用 주라고 하다。' },
     ],
     quickTable: {
-      title: '命令句间接引用',
+      title: '命令句间接引用', english: 'Indirect Quotation of Imperative Sentences',
       body: '只接动词，执行者是听话人。',
       headers: ['前项', '形式', '否定', '例'],
       rows: [
-        [{ ko: '동사·받침×', zh: '动词无收音' }, '-라고 하다', '-지 말라고 하다', '오라고 / 오지 말라고'],
-        [{ ko: '동사·받침○', zh: '动词有收音' }, '-으라고 하다', '-지 말라고 하다', '읽으라고 / 읽지 말라고'],
+        [{ ko: '동사·收音×', zh: '动词无收音' }, '-라고 하다', '-지 말라고 하다', '오라고 / 오지 말라고'],
+        [{ ko: '동사·收音○', zh: '动词有收音' }, '-으라고 하다', '-지 말라고 하다', '읽으라고 / 읽지 말라고'],
         [{ ko: '주다·자기', zh: '要给自己' }, '달라고 하다', '주지 말라고', '나한테 달라고'],
         [{ ko: '주다·타인', zh: '要给他人' }, '주라고 하다', '주지 말라고', '민수한테 주라고'],
       ],
     },
     specialQuiz: {
       type: 'morph',
-      title: '命令句间接引用变形',
+      title: '命令句间接引用变形', english: 'Imperative Sentence Indirect Quotation Conjugation',
       body: '把命令句改成间接引用。',
       questions: [
         {
@@ -849,10 +849,10 @@ export const grammarCardsP25: GrammarCard[] = [
     partNumber: 25,
     lessonNumber: 5,
     title: '-다고 해서 / -는다길래',
-    whatItDoes: '"听说……所以……"',
-    whatItDoesBody: '别人说的话成为"我做某事"的依据，用 -다고 해서 或 -는다길래。\n"听说那家咖啡有名，所以我去了"。\n-다고 해서 中性通用，-는다길래 口语生动。',
-    structureNote: '结构：\n动词现在 → -는다고 해서 / -는다길래（无收音 -ㄴ다길래）\n动词过去 → -았/었다고 해서 / -았/었다길래\n形容词 → -다고 해서 / -다길래\n名词 → -(이)라고 해서 / -(이)라길래',
-    rulesNote: '要点：\n1. 前项是"听/得知"的内容，后项是自己的反应\n2. -다고 해서：书面·中性；-는다길래：口语·带感情\n3. -는다길래 前后主语必须不同（听说的和做的不是同一人）\n4. 后半常表意外/理由/反应',
+    whatItDoes: '"听说……所以……"', english: '"Heard that... so..."',
+    whatItDoesBody: '别人说的话成为"我做某事"的依据，用 -다고 해서 或 -는다길래。\n"听说那家咖啡有名，所以我去了"。\n-다고 해서 中性通用，-는다길래 口语生动。', english: 'When someone else\'s words become the reason for "what I did," use -다고 해서 or -는다길래.\\n"I heard that café is famous, so I went."\\n-다고 해서 is neutral and general, while -는다길래 is more colloquial and vivid.',
+    structureNote: '结构：\n动词现在 → -는다고 해서 / -는다길래（无收音 -ㄴ다길래）\n动词过去 → -았/었다고 해서 / -았/었다길래\n形容词 → -다고 해서 / -다길래\n名词 → -(이)라고 해서 / -(이)라길래', english: 'Structure:\\nVerb present → -는다고 해서 / -는다길래 (no batchim: -ㄴ다길래)\\nVerb past → -았/었다고 해서 / -았/었다길래\\nAdjective → -다고 해서 / -다길래\\nNoun → -(이)라고 해서 / -(이)라길래',
+    rulesNote: '要点：\n1. 前项是"听/得知"的内容，后项是自己的反应\n2. -다고 해서：书面·中性；-는다길래：口语·带感情\n3. -는다길래 前后主语必须不同（听说的和做的不是同一人）\n4. 后半常表意外/理由/反应', english: 'Key points:\\n1. The first clause is what you "heard/learned," and the second clause is your reaction\\n2. -다고 해서: written/neutral; -는다길래: colloquial/emotional\\n3. With -는다길래, the subjects of the two clauses must be different (the one who heard and the one who acted are not the same person)\\n4. The second clause often expresses surprise/reason/reaction',
     structures: [
       {
         ko: '민수가 온다고 해서 기다렸어요.',
@@ -945,7 +945,7 @@ export const grammarCardsP25: GrammarCard[] = [
       { wrong: '학생다고 해서 할인을 받았어요.', correct: '학생이라고 해서 할인을 받았어요.', note: '名词用 -(이)라고 해서。' },
     ],
     quickTable: {
-      title: '"听说……所以……"两种表达',
+      title: '"听说……所以……"两种表达', english: 'Two Expressions for "Heard that... so..."',
       body: '中性 vs 口语。',
       headers: ['连接词', '语气', '前后主语', '例'],
       rows: [
@@ -957,7 +957,7 @@ export const grammarCardsP25: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'judge',
-      title: '"听说……所以……" 选择',
+      title: '"听说……所以……" 选择', english: 'Choosing Between "Heard that... so..." Expressions',
       body: '选择自然的说法。',
       questions: [
         {
@@ -1060,10 +1060,10 @@ export const grammarCardsP25: GrammarCard[] = [
     partNumber: 25,
     lessonNumber: 6,
     title: '-다면서? / -다면서요?',
-    whatItDoes: '"听说是……对吗？"',
-    whatItDoesBody: '把听到的传闻拿去向本人或他人求证，用 -다면서? / -다면서요?。\n"听说你考上了大学？" → 대학교 합격했다면서요?\n带有惊讶/兴奋/确认的语气。',
-    structureNote: '结构（问句·带 ? 号）：\n动词现在 → -는다면서?/ㄴ다면서?\n动词过去 → -았/었다면서?\n形容词 → -다면서?\n名词 → -(이)라면서?\n\n敬语加 -요：-다면서요?',
-    rulesNote: '要点：\n1. 语气：既有"确认"又有"惊喜/意外"\n2. 只用于问句（有 ? 号）\n3. 一般用 -다면서요? 而不是 -다면서? （尊敬对方时）\n4. 对话中简写 -다며? / -다며요?',
+    whatItDoes: '"听说是……对吗？"', english: '"I heard that... right?"',
+    whatItDoesBody: '把听到的传闻拿去向本人或他人求证，用 -다면서? / -다면서요?。\n"听说你考上了大学？" → 대학교 합격했다면서요?\n带有惊讶/兴奋/确认的语气。', english: 'Use -다면서? / -다면서요? to confirm something you heard with the person involved or with others.\\n"I heard you got into college?" → 대학교 합격했다면서요?\\nIt carries a tone of surprise/excitement/confirmation.',
+    structureNote: '结构（问句·带 ? 号）：\n动词现在 → -는다면서?/ㄴ다면서?\n动词过去 → -았/었다면서?\n形容词 → -다면서?\n名词 → -(이)라면서?\n\n敬语加 -요：-다면서요?', english: 'Structure (questions with ?):\\nVerb present → -는다면서?/ㄴ다면서?\\nVerb past → -았/었다면서?\\nAdjective → -다면서?\\nNoun → -(이)라면서?\\n\\nAdd -요 for polite form: -다면서요?',
+    rulesNote: '要点：\n1. 语气：既有"确认"又有"惊喜/意外"\n2. 只用于问句（有 ? 号）\n3. 一般用 -다면서요? 而不是 -다면서? （尊敬对方时）\n4. 对话中简写 -다며? / -다며요?', english: 'Key points:\\n1. Tone: combines "confirmation" with "surprise/unexpectedness"\\n2. Used only in questions (with ?)\\n3. Generally use -다면서요? instead of -다면서? (when showing respect)\\n4. In conversation, shortened to -다며? / -다며요?',
     structures: [
       {
         ko: '민수 씨, 결혼한다면서요?',
@@ -1160,7 +1160,7 @@ export const grammarCardsP25: GrammarCard[] = [
       { wrong: '어제 갔는다면서요?', correct: '어제 갔다면서요?', note: '过去 -았/었다면서?，不加 -는。' },
     ],
     quickTable: {
-      title: '-다면서? 一览',
+      title: '-다면서? 一览', english: '-다면서? Overview',
       body: '求证 + 惊喜的问句。',
       headers: ['词类', '时态', '形式', '例'],
       rows: [
@@ -1172,7 +1172,7 @@ export const grammarCardsP25: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '-다면서? 变形',
+      title: '-다면서? 变形', english: '-다면서? Conjugation',
       body: '选择正确形式。',
       questions: [
         {
@@ -1260,10 +1260,10 @@ export const grammarCardsP25: GrammarCard[] = [
     partNumber: 25,
     lessonNumber: 7,
     title: '-다니 / -다니요',
-    whatItDoes: '表达惊讶',
-    whatItDoesBody: '「-다니 / -다니요」用于对听到的事实表示惊讶、感叹、意外或不敢相信，中文常译为"居然……""竟然……""怎么会……"。是间接引用 -다고 하다 的省略变形。',
-    structureNote: '动词现在 -는/ㄴ다니 · 动词过去 -았/었다니 · 形容词 -다니 · 名词 -(이)라니。加"요"变敬语：-다니요',
-    rulesNote: '动词现在（有받침）→ -는다니；动词现在（无받침）→ -ㄴ다니；动词过去 → -았/었다니；形容词 → -다니；名词（有받침）→ -이라니，（无받침）→ -라니',
+    whatItDoes: '表达惊讶', english: 'Express surprise',
+    whatItDoesBody: '「-다니 / -다니요」用于对听到的事实表示惊讶、感叹、意外或不敢相信，中文常译为"居然……""竟然……""怎么会……"。是间接引用 -다고 하다 的省略变形。', english: '「-다니 / -다니요」 is used to express surprise, exclamation, unexpectedness, or disbelief about something you\'ve heard. It can be translated as "to think that..." "how could..." or "no way..." in English. It is a shortened form of the indirect quotation -다고 하다.',
+    structureNote: '动词现在 -는/ㄴ다니 · 动词过去 -았/었다니 · 形容词 -다니 · 名词 -(이)라니。加"요"变敬语：-다니요', english: 'Verb present -는/ㄴ다니 · Verb past -았/었다니 · Adjective -다니 · Noun -(이)라니. Add "요" for polite form: -다니요',
+    rulesNote: '动词现在（有收音）→ -는다니；动词现在（无收音）→ -ㄴ다니；动词过去 → -았/었다니；形容词 → -다니；名词（有收音）→ -이라니，（无收音）→ -라니', english: 'Verb present (with final consonant) → -는다니; Verb present (no final consonant) → -ㄴ다니; Verb past → -았/었다니; Adjective → -다니; Noun (with final consonant) → -이라니, (no final consonant) → -라니',
     structures: [
       {
         ko: '그렇게 비싸다니 놀랐어요.',
@@ -1294,10 +1294,10 @@ export const grammarCardsP25: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '动词现在：有받침 → -는다니 / 无받침 → -ㄴ다니', examples: '먹다 → 먹는다니 / 가다 → 간다니' },
+      { type: 'rule', text: '动词现在：有收音 → -는다니 / 无收音 → -ㄴ다니', examples: '먹다 → 먹는다니 / 가다 → 간다니' },
       { type: 'rule', text: '动词过去：-았/었다니', examples: '갔다니, 먹었다니, 봤다니' },
       { type: 'rule', text: '形容词：-다니', examples: '예쁘다니, 크다니, 좋다니' },
-      { type: 'rule', text: '名词：有받침 → -이라니 / 无받침 → -라니', examples: '학생이라니, 의사라니, 친구라니' },
+      { type: 'rule', text: '名词：有收音 → -이라니 / 无收音 → -라니', examples: '학생이라니, 의사라니, 친구라니' },
       { type: 'usage', text: '语气核心是「惊讶/感叹/不敢相信」，不是转述', examples: '벌써 여름이라니! → 居然已经夏天了！' },
       { type: 'usage', text: '-다니요 是敬语形式，用于对长辈或对方表达惊讶', examples: '어머, 결혼하신다니요?' },
       { type: 'note', text: '句末可接感叹词或形容词表达情绪：놀랐어요 / 믿을 수 없어요 / 대단해요', examples: '이렇게 잘하다니 대단해요.（竟然这么厉害，真了不起。）' },
@@ -1345,27 +1345,27 @@ export const grammarCardsP25: GrammarCard[] = [
       { icon: '❓', context: '反问', ko: '민수가 벌써 갔다니요?', zh: '民秀居然已经走了？' },
     ],
     mistakes: [
-      { wrong: '가다니', correct: '간다니', note: '动词现在无받침加 -ㄴ다니' },
-      { wrong: '먹다니', correct: '먹는다니', note: '动词现在有받침加 -는다니' },
-      { wrong: '의사다니', correct: '의사라니', note: '名词无받침用 -라니' },
-      { wrong: '학생다니', correct: '학생이라니', note: '名词有받침用 -이라니' },
+      { wrong: '가다니', correct: '간다니', note: '动词现在无收音加 -ㄴ다니' },
+      { wrong: '먹다니', correct: '먹는다니', note: '动词现在有收音加 -는다니' },
+      { wrong: '의사다니', correct: '의사라니', note: '名词无收音用 -라니' },
+      { wrong: '학생다니', correct: '학생이라니', note: '名词有收音用 -이라니' },
     ],
     quickTable: {
-      title: '-다니 形态一览',
+      title: '-다니 形态一览', english: '-다니 Form Overview',
       headers: ['词类', '规则', '例子'],
       rows: [
-        ['动词现在（有받침）', '-는다니', '먹는다니'],
-        ['动词现在（无받침）', '-ㄴ다니', '간다니'],
+        ['动词现在（有收音）', '-는다니', '먹는다니'],
+        ['动词现在（无收音）', '-ㄴ다니', '간다니'],
         ['动词过去', '-았/었다니', '갔다니'],
         ['形容词', '-다니', '예쁘다니'],
-        ['名词（有받침）', '-이라니', '학생이라니'],
-        ['名词（无받침）', '-라니', '의사라니'],
+        ['名词（有收音）', '-이라니', '학생이라니'],
+        ['名词（无收音）', '-라니', '의사라니'],
       ],
     },
     specialQuiz: {
       type: 'morph',
-      title: '选正确的 -다니 形式',
-      body: '根据词类和받침选择正确形式',
+      title: '选正确的 -다니 形式', english: 'Choose the correct -다니 form',
+      body: '根据词类和收音选择正确形式',
       questions: [
         {
           prompt: '민수가 벌써 (가다) 놀랐어요.',
@@ -1377,13 +1377,13 @@ export const grammarCardsP25: GrammarCard[] = [
           prompt: '그 사람이 (의사) 믿을 수 없어요.',
           options: ['의사다니', '의사이다니', '의사라니', '의사는다니'],
           answer: 2,
-          explanation: '名词 의사 无받침，用 -라니 → 의사라니。',
+          explanation: '名词 의사 无收音，用 -라니 → 의사라니。',
         },
         {
           prompt: '이렇게 잘 (먹다) 대단해요.',
           options: ['먹다니', '먹는다니', '먹은다니', '먹라니'],
           answer: 1,
-          explanation: '动词现在有받침，用 -는다니 → 먹는다니。',
+          explanation: '动词现在有收音，用 -는다니 → 먹는다니。',
         },
         {
           prompt: '그렇게 (예쁘다) 부러워요.',
@@ -1413,8 +1413,8 @@ export const grammarCardsP25: GrammarCard[] = [
   <div class="ov-section-hd"><div class="ov-section-line" style="background:#b49ccf"></div><div class="ov-section-title" style="color:#b49ccf">核心形态</div></div>
   <div class="ov-block">
     <div style="font-size:16px;color:#241917;line-height:1.9">
-      动词现在（有받침）→ <b>-는다니</b>：먹는다니<br>
-      动词现在（无받침）→ <b>-ㄴ다니</b>：간다니<br>
+      动词现在（有收音）→ <b>-는다니</b>：먹는다니<br>
+      动词现在（无收音）→ <b>-ㄴ다니</b>：간다니<br>
       动词过去 → <b>-았/었다니</b>：갔다니<br>
       形容词 → <b>-다니</b>：예쁘다니<br>
       名词 → <b>-(이)라니</b>：학생이라니 / 의사라니
@@ -1434,8 +1434,8 @@ export const grammarCardsP25: GrammarCard[] = [
 <div class="ov-section">
   <div class="ov-section-hd"><div class="ov-section-line" style="background:#e05555"></div><div class="ov-section-title" style="color:#e05555">别踩的坑</div></div>
   <div class="ov-block">
-    <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">가다니</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">간다니（动词无받침加 -ㄴ）</span></div></div>
-    <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">의사다니</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">의사라니（名词无받침用 -라니）</span></div></div>
+    <div class="mistake" style="margin-bottom:8px"><div class="m-w"><span class="bx">✗</span><span class="m-txt">가다니</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">간다니（动词无收音加 -ㄴ）</span></div></div>
+    <div class="mistake"><div class="m-w"><span class="bx">✗</span><span class="m-txt">의사다니</span></div><div class="m-r"><span class="bo">✓</span><span class="m-txt">의사라니（名词无收音用 -라니）</span></div></div>
   </div>
 </div>`,
   },
@@ -1446,10 +1446,10 @@ export const grammarCardsP25: GrammarCard[] = [
     partNumber: 25,
     lessonNumber: 8,
     title: '-다는 N / -는다는 N',
-    whatItDoes: '"说……的" 冠形',
-    whatItDoesBody: '「-다는 / -는다는 / -ㄴ다는 / -(이)라는」是间接引用 -다고 하다 的冠形形态，把"说……"变成修饰名词的定语，中文对应"说……的（消息/传闻/事实）"。是新闻、书面语高频结构。',
-    structureNote: '动词现在（有받침）-는다는 / 动词现在（无받침）-ㄴ다는 / 动词过去 -았/었다는 / 形容词 -다는 / 名词 -(이)라는',
-    rulesNote: '这是 -다고 하는 的省略。核心公式：现在 -는/ㄴ다는 · 过去 -았/었다는 · 形容词 -다는 · 名词 -(이)라는。后面接名词如 소식/이야기/사실/소문/생각',
+    whatItDoes: '"说……的" 冠形', english: 'Adnominal form of "saying..."',
+    whatItDoesBody: '「-다는 / -는다는 / -ㄴ다는 / -(이)라는」是间接引用 -다고 하다 的冠形形态，把"说……"变成修饰名词的定语，中文对应"说……的（消息/传闻/事实）"。是新闻、书面语高频结构。', english: '「-다는 / -는다는 / -ㄴ다는 / -(이)라는」 is the adnominal form of the indirect quotation -다고 하다, turning "saying..." into a modifier for a noun. In Chinese, it corresponds to "the (news/rumor/fact) that says...". It is a high-frequency structure in news and written language.',
+    structureNote: '动词现在（有收音）-는다는 / 动词现在（无收音）-ㄴ다는 / 动词过去 -았/었다는 / 形容词 -다는 / 名词 -(이)라는', english: 'Verb present (with final consonant) -는다는 / Verb present (no final consonant) -ㄴ다는 / Verb past -았/었다는 / Adjective -다는 / Noun -(이)라는',
+    rulesNote: '这是 -다고 하는 的省略。核心公式：现在 -는/ㄴ다는 · 过去 -았/었다는 · 形容词 -다는 · 名词 -(이)라는。后面接名词如 소식/이야기/사실/소문/생각', english: 'This is a shortened form of -다고 하는. Core formula: Present -는/ㄴ다는 · Past -았/었다는 · Adjective -다는 · Noun -(이)라는. Followed by nouns such as 소식/이야기/사실/소문/생각',
     structures: [
       {
         ko: '그가 결혼한다는 소식을 들었어요.',
@@ -1484,10 +1484,10 @@ export const grammarCardsP25: GrammarCard[] = [
       },
     ],
     connectionRules: [
-      { type: 'rule', text: '动词现在：有받침 → -는다는 / 无받침 → -ㄴ다는', examples: '먹다 → 먹는다는 / 가다 → 간다는' },
+      { type: 'rule', text: '动词现在：有收音 → -는다는 / 无收音 → -ㄴ다는', examples: '먹다 → 먹는다는 / 가다 → 간다는' },
       { type: 'rule', text: '动词过去：-았/었다는', examples: '갔다는 소식, 결혼했다는 이야기' },
       { type: 'rule', text: '形容词：-다는', examples: '좋다는 소문, 예쁘다는 이야기' },
-      { type: 'rule', text: '名词：有받침 → -이라는 / 无받침 → -라는', examples: '학생이라는 사실, 의사라는 소문' },
+      { type: 'rule', text: '名词：有收音 → -이라는 / 无收音 → -라는', examples: '학생이라는 사실, 의사라는 소문' },
       { type: 'usage', text: '本质是 -다고 하는 的省略，用来把间接引用变成定语', examples: '결혼한다고 하는 소식 = 결혼한다는 소식' },
       { type: 'usage', text: '后接名词高频：소식/이야기/사실/소문/생각/말/뜻/의미', examples: '한국어가 어렵다는 생각이 들었어요.（我觉得韩语很难。）' },
       { type: 'note', text: '否定形式：-지 않는다는 / -지 않다는', examples: '먹지 않는다는 소문, 좋지 않다는 이야기' },
@@ -1535,33 +1535,33 @@ export const grammarCardsP25: GrammarCard[] = [
       { icon: '📢', context: '公告', ko: '내일 시험이 없다는 공지를 받았어요.', zh: '收到明天没有考试的通知。' },
     ],
     mistakes: [
-      { wrong: '결혼하다는 소식', correct: '결혼한다는 소식', note: '动词现在无받침加 -ㄴ다는' },
-      { wrong: '먹다는 이야기', correct: '먹는다는 이야기', note: '动词现在有받침加 -는다는' },
-      { wrong: '의사다는 소문', correct: '의사라는 소문', note: '名词无받침用 -라는' },
+      { wrong: '결혼하다는 소식', correct: '결혼한다는 소식', note: '动词现在无收音加 -ㄴ다는' },
+      { wrong: '먹다는 이야기', correct: '먹는다는 이야기', note: '动词现在有收音加 -는다는' },
+      { wrong: '의사다는 소문', correct: '의사라는 소문', note: '名词无收音用 -라는' },
       { wrong: '좋는다는 이야기', correct: '좋다는 이야기', note: '形容词直接用 -다는，不加 -는/ㄴ' },
     ],
     quickTable: {
-      title: '-다는 冠形形态',
+      title: '-다는 冠形形态', english: '-다는 Adnominal Form',
       headers: ['词类', '规则', '例子'],
       rows: [
-        ['动词现在（有받침）', '-는다는', '먹는다는 이야기'],
-        ['动词现在（无받침）', '-ㄴ다는', '간다는 소식'],
+        ['动词现在（有收音）', '-는다는', '먹는다는 이야기'],
+        ['动词现在（无收音）', '-ㄴ다는', '간다는 소식'],
         ['动词过去', '-았/었다는', '갔다는 소문'],
         ['形容词', '-다는', '좋다는 이야기'],
-        ['名词（有받침）', '-이라는', '학생이라는 사실'],
-        ['名词（无받침）', '-라는', '의사라는 소문'],
+        ['名词（有收音）', '-이라는', '학생이라는 사실'],
+        ['名词（无收音）', '-라는', '의사라는 소문'],
       ],
     },
     specialQuiz: {
       type: 'morph',
-      title: '选正确的 -다는 冠形',
-      body: '根据词类和받침选择',
+      title: '选正确的 -다는 冠形', english: 'Choose the Correct -다는 Adnominal Form',
+      body: '根据词类和收音选择',
       questions: [
         {
           prompt: '그가 곧 (결혼하다) 소식을 들었어요.',
           options: ['결혼하다는', '결혼한다는', '결혼했다는', '결혼하라는'],
           answer: 1,
-          explanation: '"要结婚"是现在的引用，动词无받침加 -ㄴ다는 → 결혼한다는。',
+          explanation: '"要结婚"是现在的引用，动词无收音加 -ㄴ다는 → 결혼한다는。',
         },
         {
           prompt: '한국어가 (어렵다) 생각이 들었어요.',
@@ -1573,7 +1573,7 @@ export const grammarCardsP25: GrammarCard[] = [
           prompt: '민수가 (의사) 소문이 있어요.',
           options: ['의사다는', '의사이는', '의사라는', '의사는다는'],
           answer: 2,
-          explanation: '名词 의사 无받침，用 -라는 → 의사라는。',
+          explanation: '名词 의사 无收音，用 -라는 → 의사라는。',
         },
         {
           prompt: '민수가 어제 부산에 (가다) 이야기를 들었어요.',
@@ -1603,8 +1603,8 @@ export const grammarCardsP25: GrammarCard[] = [
   <div class="ov-section-hd"><div class="ov-section-line" style="background:#b49ccf"></div><div class="ov-section-title" style="color:#b49ccf">核心形态</div></div>
   <div class="ov-block">
     <div style="font-size:16px;color:#241917;line-height:1.9">
-      动词现在（有받침）→ <b>-는다는</b>：먹는다는 이야기<br>
-      动词现在（无받침）→ <b>-ㄴ다는</b>：간다는 소식<br>
+      动词现在（有收音）→ <b>-는다는</b>：먹는다는 이야기<br>
+      动词现在（无收音）→ <b>-ㄴ다는</b>：간다는 소식<br>
       动词过去 → <b>-았/었다는</b>：갔다는 소문<br>
       形容词 → <b>-다는</b>：좋다는 이야기<br>
       名词 → <b>-(이)라는</b>：학생이라는 사실
@@ -1635,11 +1635,11 @@ export const grammarCardsP25: GrammarCard[] = [
     id: 'card-p25-l09',
     partNumber: 25,
     lessonNumber: 9,
-    title: 'P25 综合练习',
-    whatItDoes: 'P25 综合复习',
-    whatItDoesBody: '本练习综合复习 P25 高级引用与转述章节的 8 个语法点，帮助巩固间接引用的完整体系。',
-    structureNote: '综合本 Part 所有语法',
-    rulesNote: '重点在识别不同引用形式的使用场景',
+    title: 'P25 综合练习', english: 'P25 Comprehensive Practice',
+    whatItDoes: 'P25 综合复习', english: 'P25 Comprehensive Review',
+    whatItDoesBody: '本练习综合复习 P25 高级引用与转述章节的 8 个语法点，帮助巩固间接引用的完整体系。', english: 'This exercise comprehensively reviews the 8 grammar points from the P25 Advanced Quotation and Reported Speech chapter, helping to solidify the complete system of indirect quotation.',
+    structureNote: '综合本 Part 所有语法', english: 'Comprehensive review of all grammar points in this Part',
+    rulesNote: '重点在识别不同引用形式的使用场景', english: 'Focus on identifying the usage contexts of different quotation forms',
     isPractice: true,
     structures: [
       {
@@ -1727,14 +1727,14 @@ export const grammarCardsP25: GrammarCard[] = [
     linkedGrammarIds: ['card-p25-l01', 'card-p25-l02', 'card-p25-l03', 'card-p25-l04', 'card-p25-l05', 'card-p25-l06', 'card-p25-l07', 'card-p25-l08'],
     specialQuiz: {
       type: 'judge',
-      title: 'P25 综合练习',
+      title: 'P25 综合练习', english: 'P25 Comprehensive Practice',
       body: '选择正确的间接引用形式',
       questions: [
         {
           prompt: '민수가 "학교에 가요"라고 말했어요. → 民秀说……',
           options: ['학교에 간다고 했어요', '학교에 가느냐고 했어요', '학교에 가자고 했어요', '학교에 가라고 했어요'],
           answer: 0,
-          explanation: '陈述句转述用 -는/ㄴ다고 하다，动词无받침 → 간다고 했어요。',
+          explanation: '陈述句转述用 -는/ㄴ다고 하다，动词无收音 → 간다고 했어요。',
         },
         {
           prompt: '민수가 "어디에 살아요?"라고 물었어요. → 民秀问……',
@@ -1789,7 +1789,7 @@ export const grammarCardsP25: GrammarCard[] = [
       1. 疑问用 -냐고，不用 -다고<br>
       2. 建议用 -자고，不用 -다고<br>
       3. 命令用 -(으)라고，不用 -다고<br>
-      4. 名词无받침用 -라고 / -라니 / -라는
+      4. 名词无收音用 -라고 / -라니 / -라는
     </div>
   </div>
 </div>`,

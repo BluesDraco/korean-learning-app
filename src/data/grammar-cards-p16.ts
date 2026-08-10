@@ -6,11 +6,11 @@ export const grammarCardsP16: GrammarCard[] = [
     id: 'card-p16-l01',
     partNumber: 16,
     lessonNumber: 1,
-    title: '의성어（拟声语）基础',
-    whatItDoes: '模拟声音',
-    whatItDoesBody: '의성어（拟声语）是模拟自然界声音的词：멍멍（汪汪）、야옹（喵）、쨍그랑（哐当）、쿵쿵（咚咚）、똑똑（当当敲门）、쿨쿨（呼噜）。韩语拟声语极其丰富，是漫画、儿童文学、日常对话的重要组成部分。',
-    structureNote: '声音模拟词 → 独立使用或作定语｜多数含 반복（重复）',
-    rulesNote: '动物声音 / 物体撞击 / 人的声音 / 自然声音 四大类',
+    title: '의성어（拟声语）基础', english: 'Basics of 의성어 (Onomatopoeia)',
+    whatItDoes: '模拟声音', english: 'Mimicking sounds',
+    whatItDoesBody: '의성어（拟声语）是模拟自然界声音的词：멍멍（汪汪）、야옹（喵）、쨍그랑（哐当）、쿵쿵（咚咚）、똑똑（当当敲门）、쿨쿨（呼噜）。韩语拟声语极其丰富，是漫画、儿童文学、日常对话的重要组成部分。', english: '의성어 (onomatopoeia) are words that mimic natural sounds: 멍멍 (woof woof), 야옹 (meow), 쨍그랑 (clang), 쿵쿵 (thump thump), 똑똑 (knock knock), 쿨쿨 (snore). Korean onomatopoeia is extremely rich and forms an important part of comics, children\'s literature, and everyday conversation.',
+    structureNote: '声音模拟词 → 独立使用或作定语｜多数含 반복（重复）', english: 'Onomatopoeia → used independently or as modifiers ｜ Most contain repetition (반복)',
+    rulesNote: '动物声音 / 物体撞击 / 人的声音 / 自然声音 四大类', english: 'Four categories: animal sounds / object impacts / human sounds / natural sounds',
     structures: [
       {
         ko: '강아지가 멍멍 짖어요.',
@@ -93,7 +93,7 @@ export const grammarCardsP16: GrammarCard[] = [
       { wrong: '고양이가 야옹 짖어요', correct: '고양이가 야옹 울어요', note: '狗用 짖다（吠），猫用 울다（叫）；动词搭配要对' },
     ],
     quickTable: {
-      title: '常见 의성어',
+      title: '常见 의성어', english: 'Common 의성어 (Onomatopoeia)',
       headers: ['声音', '拟声语', '典型语境'],
       rows: [
         ['狗叫', '멍멍 / 왈왈', '강아지가 멍멍 짖어요'],
@@ -106,7 +106,7 @@ export const grammarCardsP16: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '의성어 练习',
+      title: '의성어 练习', english: '의성어 Practice',
       body: '选择正确的拟声语',
       questions: [
         {
@@ -176,11 +176,11 @@ export const grammarCardsP16: GrammarCard[] = [
     id: 'card-p16-l02',
     partNumber: 16,
     lessonNumber: 2,
-    title: '의태어（拟态语）基础',
-    whatItDoes: '模拟状态/动作',
-    whatItDoesBody: '의태어（拟态语）模拟看得见的动作或状态，是韩语最独特的词汇宝藏。반짝반짝（闪闪）、살금살금（蹑手蹑脚）、두근두근（怦怦跳）、깜빡깜빡（一闪一闪/忘）、헐레벌떡（气喘吁吁）。韩语文学与对话生动感的核心。',
-    structureNote: '模拟状态/动作的副词｜多为 ABAB 型 반복 形式',
-    rulesNote: '视觉/听觉/心理/动作 四大类｜多以 반복형 出现（AB AB → ABAB）',
+    title: '의태어（拟态语）基础', english: 'Basics of 의태어 (Mimetic Words)',
+    whatItDoes: '模拟状态/动作', english: 'Describes states/actions',
+    whatItDoesBody: '의태어（拟态语）模拟看得见的动作或状态，是韩语最独特的词汇宝藏。반짝반짝（闪闪）、살금살금（蹑手蹑脚）、두근두근（怦怦跳）、깜빡깜빡（一闪一闪/忘）、헐레벌떡（气喘吁吁）。韩语文学与对话生动感的核心。', english: '의태어 (mimetic words) describe visible actions or states and are one of the most unique treasures of the Korean vocabulary. 반짝반짝 (sparkling), 살금살금 (sneaking), 두근두근 (thumping), 깜빡깜빡 (blinking/forgetting), 헐레벌떡 (panting). They are the core of vividness in Korean literature and conversation.',
+    structureNote: '模拟状态/动作的副词｜多为 ABAB 型 반복 形式', english: 'Adverbs describing states/actions ｜ Mostly ABAB repeating forms',
+    rulesNote: '视觉/听觉/心理/动作 四大类｜多以 반복형 出现（AB AB → ABAB）', english: 'Four categories: visual / auditory / psychological / action ｜ Mostly appear in repeated forms (AB AB → ABAB)',
     structures: [
       {
         ko: '별이 반짝반짝 빛나요.',
@@ -265,7 +265,7 @@ export const grammarCardsP16: GrammarCard[] = [
       { wrong: '가슴이 두근두근', correct: '가슴이 두근두근 뛰어요', note: '拟态语后必须接动词，不能单独作谓语' },
     ],
     quickTable: {
-      title: '常见 의태어',
+      title: '常见 의태어', english: 'Common 의태어 (Mimetic Words)',
       headers: ['状态', '拟态语', '例句'],
       rows: [
         ['闪光', '반짝반짝', '별이 반짝반짝 빛나요'],
@@ -278,7 +278,7 @@ export const grammarCardsP16: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '의태어 练习',
+      title: '의태어 练习', english: '의태어 Practice',
       body: '选择正确的拟态语',
       questions: [
         {
@@ -352,11 +352,11 @@ export const grammarCardsP16: GrammarCard[] = [
     id: 'card-p16-l03',
     partNumber: 16,
     lessonNumber: 3,
-    title: 'AB형·阴阳母音对比',
-    whatItDoes: '음성/양성 交替',
-    whatItDoesBody: '韩语拟声/拟态语最独特的规律：<b>阳性母音（ㅏ/ㅗ）</b>用于"小/亮/轻/可爱"，<b>阴性母音（ㅓ/ㅜ）</b>用于"大/暗/重/沉"。同一词根换母音，语感截然不同：깡충깡충（小兔跳）vs 껑충껑충（大跳）；졸졸（小水流）vs 줄줄（大流）。',
-    structureNote: '换母音：ㅏ/ㅗ ↔ ㅓ/ㅜ｜阳性→小可爱 / 阴性→大沉重',
-    rulesNote: 'ㅏ/ㅗ = 양성 = 小/亮/可爱｜ㅓ/ㅜ = 음성 = 大/暗/沉重',
+    title: 'AB형·阴阳母音对比', english: 'AB-type · Yin-Yang Vowel Contrast',
+    whatItDoes: '음성/양성 交替', english: 'Yin/Yang Vowel Alternation',
+    whatItDoesBody: '韩语拟声/拟态语最独特的规律：<b>阳性母音（ㅏ/ㅗ）</b>用于"小/亮/轻/可爱"，<b>阴性母音（ㅓ/ㅜ）</b>用于"大/暗/重/沉"。同一词根换母音，语感截然不同：깡충깡충（小兔跳）vs 껑충껑충（大跳）；졸졸（小水流）vs 줄줄（大流）。', english: 'The most distinctive rule of Korean onomatopoeia/mimetic words: <b>positive vowels (ㅏ/ㅗ)</b> are used for "small/bright/light/cute," while <b>negative vowels (ㅓ/ㅜ)</b> are used for "big/dark/heavy/somber." Changing the vowel in the same root creates a completely different nuance: 깡충깡충 (small rabbit hops) vs 껑충껑충 (big leaps); 졸졸 (small stream) vs 줄줄 (large flow).',
+    structureNote: '换母音：ㅏ/ㅗ ↔ ㅓ/ㅜ｜阳性→小可爱 / 阴性→大沉重', english: 'Vowel change: ㅏ/ㅗ ↔ ㅓ/ㅜ｜Positive → small/cute / Negative → big/heavy',
+    rulesNote: 'ㅏ/ㅗ = 양성 = 小/亮/可爱｜ㅓ/ㅜ = 음성 = 大/暗/沉重', english: 'ㅏ/ㅗ = positive = small/bright/cute｜ㅓ/ㅜ = negative = big/dark/heavy',
     structures: [
       {
         ko: '토끼가 깡충깡충 뛰어요.',
@@ -440,7 +440,7 @@ export const grammarCardsP16: GrammarCard[] = [
       { wrong: '토끼가 껑충껑충 뛰어요', correct: '토끼가 깡충깡충 뛰어요', note: '兔子小 → 阳性 깡충' },
     ],
     quickTable: {
-      title: '阳性 vs 阴性 拟态对比',
+      title: '阳性 vs 阴性 拟态对比', english: 'Positive vs Negative Mimetic Comparison',
       headers: ['意象', '阳性（小/亮）', '阴性（大/沉）'],
       rows: [
         ['跳', '깡충깡충（小兔）', '껑충껑충（大狗）'],
@@ -453,7 +453,7 @@ export const grammarCardsP16: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '阴阳母音 练习',
+      title: '阴阳母音 练习', english: 'Yin/Yang Vowel Practice',
       body: '选择合适的拟态语',
       questions: [
         {
@@ -528,11 +528,11 @@ export const grammarCardsP16: GrammarCard[] = [
     id: 'card-p16-l04',
     partNumber: 16,
     lessonNumber: 4,
-    title: '반복형 拟态语',
-    whatItDoes: 'AB→ABAB 反复',
-    whatItDoesBody: '韩语拟态语的另一个规律：单音节/双音节的"AB形"往往变成"ABAB形"来强调反复/持续。반짝→반짝반짝、두근→두근두근、헐레→헐레벌떡（例外）、깜빡→깜빡깜빡。ABAB形 强调"多次/持续"，AB形 强调"一次/瞬间"。',
-    structureNote: 'AB → ABAB → 反复形态｜同词根，重复=持续/多次',
-    rulesNote: 'AB = 一次/瞬时｜ABAB = 反复/持续｜有些词只有 ABAB 形',
+    title: '반복형 拟态语', english: 'Repeated Form Mimetic Words',
+    whatItDoes: 'AB→ABAB 反复', english: 'AB → ABAB Repetition',
+    whatItDoesBody: '韩语拟态语的另一个规律：单音节/双音节的"AB形"往往变成"ABAB形"来强调反复/持续。반짝→반짝반짝、두근→두근두근、헐레→헐레벌떡（例外）、깜빡→깜빡깜빡。ABAB形 强调"多次/持续"，AB形 强调"一次/瞬间"。', english: 'Another rule of Korean mimetic words: single/double-syllable "AB forms" often become "ABAB forms" to emphasize repetition/continuation. 반짝→반짝반짝, 두근→두근두근, 헐레→헐레벌떡 (exception), 깜빡→깜빡깜빡. ABAB forms emphasize "multiple times/continuous," while AB forms emphasize "once/momentary."',
+    structureNote: 'AB → ABAB → 反复形态｜同词根，重复=持续/多次', english: 'AB → ABAB → repeated form｜Same root, repetition = continuous/multiple times',
+    rulesNote: 'AB = 一次/瞬时｜ABAB = 反复/持续｜有些词只有 ABAB 形', english: 'AB = once/momentary｜ABAB = repeated/continuous｜Some words only have ABAB forms',
     structures: [
       {
         ko: '별이 반짝 빛났어요.',
@@ -629,7 +629,7 @@ export const grammarCardsP16: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '反复形拟态 练习',
+      title: '反复形拟态 练习', english: 'Reduplicated Mimetic Words Practice',
       body: '选择合适的形式',
       questions: [
         {
@@ -704,11 +704,11 @@ export const grammarCardsP16: GrammarCard[] = [
     id: 'card-p16-l05',
     partNumber: 16,
     lessonNumber: 5,
-    title: '심리·감정 拟态语',
-    whatItDoes: '心理感情',
-    whatItDoesBody: '心理/感情类拟态语让韩语情感表达立体：두근두근（怦怦紧张）、설레설레（心动）、안절부절（坐立不安）、조마조마（提心吊胆）、두리번두리번（东张西望）、멍하니（呆呆地）。恋爱剧和心理描写不可缺。',
-    structureNote: '拟态语 + 动词/形容词｜多为反复形 ABAB',
-    rulesNote: '두근두근/설레설레→期待｜조마조마/안절부절→焦虑｜멍하니/두리번두리번→迷茫',
+    title: '심리·감정 拟态语', english: 'Psychological & Emotional Mimetic Words',
+    whatItDoes: '心理感情', english: 'Psychological & Emotional',
+    whatItDoesBody: '心理/感情类拟态语让韩语情感表达立体：두근두근（怦怦紧张）、설레설레（心动）、안절부절（坐立不安）、조마조마（提心吊胆）、두리번두리번（东张西望）、멍하니（呆呆地）。恋爱剧和心理描写不可缺。', english: 'Psychological/emotional mimetic words make Korean emotional expressions vivid: 두근두근 (heart pounding with nervousness), 설레설레 (heart fluttering), 안절부절 (restless), 조마조마 (anxious), 두리번두리번 (looking around), 멍하니 (blankly). Essential in romance dramas and psychological descriptions.',
+    structureNote: '拟态语 + 动词/形容词｜多为反复形 ABAB', english: 'Mimetic word + verb/adjective ｜ Often reduplicated ABAB form',
+    rulesNote: '두근두근/설레설레→期待｜조마조마/안절부절→焦虑｜멍하니/두리번두리번→迷茫', english: '두근두근/설레설레 → anticipation ｜ 조마조마/안절부절 → anxiety ｜ 멍하니/두리번두리번 → confusion',
     structures: [
       {
         ko: '내일 발표라 두근두근 떨려요.',
@@ -794,7 +794,7 @@ export const grammarCardsP16: GrammarCard[] = [
       { wrong: '조마조마 있어요', correct: '조마조마해요', note: '조마조마 + 하다 变形容词性谓语' },
     ],
     quickTable: {
-      title: '심리·감정 拟态语',
+      title: '심리·감정 拟态语', english: 'Psychological & Emotional Mimetic Words',
       headers: ['拟态语', '含义', '例句'],
       rows: [
         ['두근두근', '紧张/期待心跳', '내일 두근두근 떨려요'],
@@ -807,7 +807,7 @@ export const grammarCardsP16: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '심리감정 练习',
+      title: '심리감정 练习', english: 'Psychological & Emotional Practice',
       body: '选择合适拟态语',
       questions: [
         {
@@ -879,11 +879,11 @@ export const grammarCardsP16: GrammarCard[] = [
     id: 'card-p16-l06',
     partNumber: 16,
     lessonNumber: 6,
-    title: '움직임·모양 拟态语',
-    whatItDoes: '动作与形态',
-    whatItDoesBody: '动作/形态拟态语让描写立体：뒤뚱뒤뚱（一摇一摆）、엉금엉금（爬）、비틀비틀（踉跄）、허둥지둥（慌张）、성큼성큼（大步流星）、쭈뼛쭈뼛（缩着身子/害羞）。用对拟态语，人物形象立现。',
-    structureNote: '拟态语 + 动词｜多为 ABAB 反复',
-    rulesNote: '步态类 / 姿势类 / 速度类 / 慌乱类',
+    title: '움직임·모양 拟态语', english: 'Movement & Shape Mimetic Words',
+    whatItDoes: '动作与形态', english: 'Movement & Shape',
+    whatItDoesBody: '动作/形态拟态语让描写立体：뒤뚱뒤뚱（一摇一摆）、엉금엉금（爬）、비틀비틀（踉跄）、허둥지둥（慌张）、성큼성큼（大步流星）、쭈뼛쭈뼛（缩着身子/害羞）。用对拟态语，人物形象立现。', english: 'Movement/shape mimetic words make descriptions vivid: 뒤뚱뒤뚱 (waddling), 엉금엉금 (crawling), 비틀비틀 (staggering), 허둥지둥 (flustered), 성큼성큼 (striding), 쭈뼛쭈뼛 (shrinking/shy). Using mimetic words correctly brings characters to life.',
+    structureNote: '拟态语 + 动词｜多为 ABAB 反复', english: 'Mimetic word + verb ｜ Often ABAB reduplication',
+    rulesNote: '步态类 / 姿势类 / 速度类 / 慌乱类', english: 'Gait type / Posture type / Speed type / Flustered type',
     structures: [
       {
         ko: '오리가 뒤뚱뒤뚱 걸어요.',
@@ -968,7 +968,7 @@ export const grammarCardsP16: GrammarCard[] = [
       { wrong: '민수가 성큼성큼 기어와요', correct: '민수가 성큼성큼 다가왔어요', note: '성큼성큼 搭配"大步走"，不搭 기다' },
     ],
     quickTable: {
-      title: '动作类拟态语',
+      title: '动作类拟态语', english: 'Action Mimetic Words',
       headers: ['拟态语', '含义', '搭配'],
       rows: [
         ['뒤뚱뒤뚱', '一摇一摆', '걷다'],
@@ -981,7 +981,7 @@ export const grammarCardsP16: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '动作拟态 练习',
+      title: '动作拟态 练习', english: 'Action Mimetic Practice',
       body: '选择合适的拟态语',
       questions: [
         {
@@ -1054,10 +1054,10 @@ export const grammarCardsP16: GrammarCard[] = [
     partNumber: 16,
     lessonNumber: 7,
     title: '+ -하다/-거리다/-대다',
-    whatItDoes: '词化 派生动词',
-    whatItDoesBody: '拟声/拟态语加上 -하다 / -거리다 / -대다 后缀，就变成动词/形容词。语感有别：-하다 中性（두근두근하다=心跳）、-거리다 强调反复动作、-대다 强调反复且带负面感（贬义）。掌握后可自由造词。',
-    structureNote: '拟态语 + -하다 / -거리다 / -대다 → 派生动词',
-    rulesNote: '-하다 中性 / -거리다 反复 / -대다 反复+略贬｜三者常可互换但语感不同',
+    whatItDoes: '词化 派生动词', english: 'Lexicalization and derived verbs',
+    whatItDoesBody: '拟声/拟态语加上 -하다 / -거리다 / -대다 后缀，就变成动词/形容词。语感有别：-하다 中性（두근두근하다=心跳）、-거리다 强调反复动作、-대다 强调反复且带负面感（贬义）。掌握后可自由造词。', english: 'Adding the suffixes -하다 / -거리다 / -대다 to onomatopoeic/mimetic words turns them into verbs/adjectives. The nuance differs: -하다 is neutral (두근두근하다 = heart pounding), -거리다 emphasizes repeated action, -대다 emphasizes repetition with a negative connotation (pejorative). Once mastered, you can freely create new words.',
+    structureNote: '拟态语 + -하다 / -거리다 / -대다 → 派生动词', english: 'Mimetic word + -하다 / -거리다 / -대다 → derived verb',
+    rulesNote: '-하다 中性 / -거리다 反复 / -대다 反复+略贬｜三者常可互换但语感不同', english: '-하다 neutral / -거리다 repetitive / -대다 repetitive + slightly negative｜The three are often interchangeable but differ in nuance.',
     structures: [
       {
         ko: '가슴이 두근두근해요.',
@@ -1137,7 +1137,7 @@ export const grammarCardsP16: GrammarCard[] = [
       { wrong: '(对客户) 이 시계가 반짝대요', correct: '이 시계가 반짝반짝해요 / 반짝거려요', note: '-대다 略负面，正式场合避用' },
     ],
     quickTable: {
-      title: '拟态派生动词',
+      title: '拟态派生动词', english: 'Mimetic Derived Verbs',
       headers: ['形式', '语感', '例子'],
       rows: [
         ['ABAB + -하다', '中性/描写状态', '두근두근하다 / 반짝반짝하다'],
@@ -1148,7 +1148,7 @@ export const grammarCardsP16: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '派生动词 练习',
+      title: '派生动词 练习', english: 'Derived Verb Practice',
       body: '选择合适形式',
       questions: [
         {
@@ -1222,11 +1222,11 @@ export const grammarCardsP16: GrammarCard[] = [
     id: 'card-p16-l08',
     partNumber: 16,
     lessonNumber: 8,
-    title: '拟态语 + -이/-히/-게 搭配',
-    whatItDoes: '副词化搭配',
-    whatItDoesBody: '除了 -하다 / -거리다 / -대다，拟态语还可以搭 -이/-히/-게 变成"副词化描写"：반짝이（闪着）、살포시（轻轻地）、살랑살랑（微风飘）、가만히（悄悄地）。三者搭配规则不同，需按词记。',
-    structureNote: '拟态语 + -이 / -히 / -게 → 副词化｜按词固定搭配',
-    rulesNote: '-이：多修饰视觉/动作｜-히：多修饰状态/心境｜-게：通用副词化',
+    title: '拟态语 + -이/-히/-게 搭配', english: 'Mimetic Words + -이/-히/-게 Combinations',
+    whatItDoes: '副词化搭配', english: 'Adverbial Combinations',
+    whatItDoesBody: '除了 -하다 / -거리다 / -대다，拟态语还可以搭 -이/-히/-게 变成"副词化描写"：반짝이（闪着）、살포시（轻轻地）、살랑살랑（微风飘）、가만히（悄悄地）。三者搭配规则不同，需按词记。', english: 'Besides -하다 / -거리다 / -대다, mimetic words can also combine with -이/-히/-게 to form "adverbial descriptions": 반짝이 (sparkling), 살포시 (gently), 살랑살랑 (fluttering in the breeze), 가만히 (quietly). The combination rules differ for each, so they must be memorized word by word.',
+    structureNote: '拟态语 + -이 / -히 / -게 → 副词化｜按词固定搭配', english: 'Onomatopoeic/mimetic word + -이 / -히 / -게 → adverbialization｜fixed combinations depending on the word',
+    rulesNote: '-이：多修饰视觉/动作｜-히：多修饰状态/心境｜-게：通用副词化', english: '-이: mostly modifies visual/action｜-히: mostly modifies state/mood｜-게: general adverbialization',
     structures: [
       {
         ko: '눈물이 반짝 빛났어요.',
@@ -1308,7 +1308,7 @@ export const grammarCardsP16: GrammarCard[] = [
       { wrong: '두근이 뛰어요', correct: '두근두근 뛰어요 / 두근거려요', note: '두근 没有 -이 副词形式' },
     ],
     quickTable: {
-      title: '拟态语副词化',
+      title: '拟态语副词化', english: 'Adverbialization of Mimetic Words',
       headers: ['形式', '语感', '例子'],
       rows: [
         ['AB + -이', '视觉/动作副词', '반짝이 / 방긋이 / 살랑이'],
@@ -1319,7 +1319,7 @@ export const grammarCardsP16: GrammarCard[] = [
     },
     specialQuiz: {
       type: 'morph',
-      title: '副词化搭配 练习',
+      title: '副词化搭配 练习', english: 'Adverbialization Combinations Practice',
       body: '选择正确形式',
       questions: [
         {
@@ -1394,10 +1394,10 @@ export const grammarCardsP16: GrammarCard[] = [
     id: 'card-p16-l09',
     partNumber: 16,
     lessonNumber: 9,
-    title: 'P16 综合练习',
+    title: 'P16 综合练习', english: 'P16 Comprehensive Practice',
     isPractice: true,
-    whatItDoes: '拟声/拟态语综合',
-    whatItDoesBody: '本课综合 P16 全部内容：의성어（拟声）· 의태어（拟态）· 阴阳母音对比 · 反复形 · 심리감정 · 움직임모양 · -하다/-거리다/-대다 · -이/-히/-게。',
+    whatItDoes: '拟声/拟态语综合', english: 'Comprehensive onomatopoeia/mimetic words',
+    whatItDoesBody: '本课综合 P16 全部内容：의성어（拟声）· 의태어（拟态）· 阴阳母音对比 · 反复形 · 심리감정 · 움직임모양 · -하다/-거리다/-대다 · -이/-히/-게。', english: 'This lesson covers all of P16: 의성어 (onomatopoeia) · 의태어 (mimetic words) · vowel harmony between bright and dark vowels · reduplicated forms · psychological feelings · movement shapes · -하다/-거리다/-대다 · -이/-히/-게.',
     structures: [],
     connectionRules: [],
     cardExamples: [],
@@ -1405,7 +1405,7 @@ export const grammarCardsP16: GrammarCard[] = [
     mistakes: [],
     specialQuiz: {
       type: 'morph',
-      title: 'P16 综合练习',
+      title: 'P16 综合练习', english: 'P16 Comprehensive Practice',
       body: '综合本章拟声/拟态内容',
       questions: [
         {

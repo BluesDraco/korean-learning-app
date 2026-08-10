@@ -5,12 +5,12 @@ export const grammarCardsP18: GrammarCard[] = [
     id: 'card-p18-l01',
     partNumber: 18,
     lessonNumber: 1,
-    title: '-테요，-던데요，-더라',
-    whatItDoes: '表示推测、回顾或感叹',
-    whatItDoesBody: '-테요 表示说话者的推测或意志，相当于"应该……吧/我会……"，含主观判断语气。\n-던데요 表示说话者回忆起过去的亲身经历，带有轻微的感叹或提示语气，相当于"（我记得/之前）……呢"。\n-더라 表示说话者回顾自己的亲身经历后发表感叹，是口语体，多用于描述过去观察到的事实，相当于"……啊/果然……"。',
-    structureNote: '-테요：动词/形容词 词干 + 테요（을 테요 / ㄹ 테요）\n-던데요：动词/形容词 词干 + 던데요（过去经验回想）\n-더라：动词/形容词 词干 + 더라（口语体经验感叹）',
-    rulesNote: '-테요 以 -(으)ㄹ 테요 形式表示推测（날씨가 좋을 테니까）或意志（제가 할 테요）。\n-던데요 也用于根据前句中回想的事实，在后句传达意见时（어제 봤던데요，제 생각엔…）。\n-더라 主语是第一人称时表意志/发现，第三人称时表观察报告。口语中也用 -더라고요 的形式。',
-    scenarioNote: '-테요 常用在 "제가 할 테요" 或 "힘들 테니까 쉬세요" 这样的句子中，表达对对方的体谅或推测。\n-던데요 常用在 "어제 거기 가 봤던데요，정말 맛있더라고요" 这样的句子中，基于经验进行推荐或传达意见。\n-더라 常用在 "가 봤더니 생각보다 좋더라" 这样的句子中，表达直接经验后的感叹或发现。',
+    title: '-테요，-던데요，-더라', english: '-테요, -던데요, -더라',
+    whatItDoes: '表示推测、回顾或感叹', english: 'Expresses conjecture, recollection, or exclamation',
+    whatItDoesBody: '-테요 表示说话者的推测或意志，相当于"应该……吧/我会……"，含主观判断语气。\n-던데요 表示说话者回忆起过去的亲身经历，带有轻微的感叹或提示语气，相当于"（我记得/之前）……呢"。\n-더라 表示说话者回顾自己的亲身经历后发表感叹，是口语体，多用于描述过去观察到的事实，相当于"……啊/果然……"。', english: '-테요 indicates the speaker\'s conjecture or intention, equivalent to "should.../I will...", carrying a subjective judgment.\\n-던데요 indicates the speaker recalls a past personal experience, with a slight exclamatory or suggestive tone, equivalent to "(I remember/before)..."\\n-더라 indicates the speaker reflects on a past personal experience and expresses an exclamation; it is colloquial and often used to describe observed facts, equivalent to "...indeed/...as expected".',
+    structureNote: '-테요：动词/形容词 词干 + 테요（을 테요 / ㄹ 테요）\n-던데요：动词/形容词 词干 + 던데요（过去经验回想）\n-더라：动词/形容词 词干 + 더라（口语体经验感叹）', english: '-테요: Verb/Adjective stem + 테요 (을 테요 / ㄹ 테요)\\n-던데요: Verb/Adjective stem + 던데요 (recalling past experience)\\n-더라: Verb/Adjective stem + 더라 (colloquial exclamation from experience)',
+    rulesNote: '-테요 以 -(으)ㄹ 테요 形式表示推测（날씨가 좋을 테니까）或意志（제가 할 테요）。\n-던데요 也用于根据前句中回想的事实，在后句传达意见时（어제 봤던데요，제 생각엔…）。\n-더라 主语是第一人称时表意志/发现，第三人称时表观察报告。口语中也用 -더라고요 的形式。', english: '-테요 in the form -(으)ㄹ 테요 expresses conjecture (날씨가 좋을 테니까) or intention (제가 할 테요).\\n-던데요 is also used to convey an opinion based on a fact recalled from a previous sentence (어제 봤던데요, 제 생각엔...).\\n-더라 with a first-person subject expresses intention/discovery, while with a third-person subject it reports an observation. In colloquial speech, -더라고요 is also used.',
+    scenarioNote: '-테요 常用在 "제가 할 테요" 或 "힘들 테니까 쉬세요" 这样的句子中，表达对对方的体谅或推测。\n-던데요 常用在 "어제 거기 가 봤던데요，정말 맛있더라고요" 这样的句子中，基于经验进行推荐或传达意见。\n-더라 常用在 "가 봤더니 생각보다 좋더라" 这样的句子中，表达直接经验后的感叹或发现。', english: '-테요 is often used in sentences like "제가 할 테요" or "힘들 테니까 쉬세요" to express consideration for the other person or conjecture.\\n-던데요 is often used in sentences like "어제 거기 가 봤던데요, 정말 맛있더라고요" to recommend or convey an opinion based on experience.\\n-더라 is often used in sentences like "가 봤더니 생각보다 좋더라" to express an exclamation or discovery after direct experience.',
     step0Html: `<div class="card-title">推测、回忆、感叹</div>
 <div class="card-body">三个表达都带有说话者的主观色彩。</div>
 <div class="hook-box">
@@ -164,7 +164,7 @@ export const grammarCardsP18: GrammarCard[] = [
       { wrong: '내가 할 테요을 준비했어요（테요 + 을 助词）', correct: '내가 할 테요（单独结句）또는 내가 준비할 테요', note: '-테요 是终结词尾，后面不加助词。' },
     ],
     quickTable: {
-      title: '-테요 / -던데요 / -더라 用法对比',
+      title: '-테요 / -던데요 / -더라 用法对比', english: '-테요 / -던데요 / -더라 Usage Comparison',
       headers: ['表达', '时态', '语气', '例句'],
       rows: [
         ['-테요（-(으)ㄹ 테요）', '现在/将来', '推测或意志', '피곤할 테니까 / 제가 할 테요'],
@@ -253,12 +253,12 @@ export const grammarCardsP18: GrammarCard[] = [
     id: 'card-p18-l02',
     partNumber: 18,
     lessonNumber: 2,
-    title: '-았/었/였더니，-더니',
-    whatItDoes: '表示前后动作的因果或对比关系（基于亲身经历）',
-    whatItDoesBody: '-았/었/였더니 表示说话者亲身做了某事之后发现了某种结果，相当于"（我）做了……之后/结果……"，主语通常是第一人称。\n-더니 表示回忆过去观察到的事实，并引出与之相关的结果或对比，相当于"（之前）……，（所以/但是）……"，主语通常是第三人称或自然现象。',
-    structureNote: '-았/었/였더니：动词 词干 + 았/었/였더니（依据 아/어/여 词干变化）\n-더니：动词/形容词 词干 + 더니（过去回想，与收音有无无关）',
-    rulesNote: '-았더니 主语必须是第一人称（나/저）才自然。用于第三人称主语时不自然或可能成为病句。\n-더니 主语为第三人称或自然现象时较自然。如 "비가 오더니 개었어요"，表示前句与后句关系的转换。',
-    scenarioNote: '-았더니 常用在 "먹었더니 배불러요" 这样的句子中，陈述直接经验后的结果。\n-더니 常用在 "아이가 울더니 갑자기 웃었어요" 这样的句子中，观察第三人称行为变化后传达。',
+    title: '-았/었/였더니，-더니', english: '-았/었/였더니, -더니',
+    whatItDoes: '表示前后动作的因果或对比关系（基于亲身经历）', english: 'Indicates a causal or contrastive relationship between actions (based on personal experience)',
+    whatItDoesBody: '-았/었/였더니 表示说话者亲身做了某事之后发现了某种结果，相当于"（我）做了……之后/结果……"，主语通常是第一人称。\n-더니 表示回忆过去观察到的事实，并引出与之相关的结果或对比，相当于"（之前）……，（所以/但是）……"，主语通常是第三人称或自然现象。', english: '-았/었/였더니 indicates that the speaker discovered a certain result after personally doing something, equivalent to "(I) did... and then/result..." The subject is usually first person.\\n-더니 indicates recalling a fact observed in the past and introducing a related result or contrast, equivalent to "(previously)... (so/but)..." The subject is usually third person or a natural phenomenon.',
+    structureNote: '-았/었/였더니：动词 词干 + 았/었/였더니（依据 아/어/여 词干变化）\n-더니：动词/形容词 词干 + 더니（过去回想，与收音有无无关）', english: '-았/었/였더니: Verb stem + 았/었/였더니 (based on 아/어/여 stem changes)\\n-더니: Verb/Adjective stem + 더니 (past recollection, regardless of final consonant presence)',
+    rulesNote: '-았더니 主语必须是第一人称（나/저）才自然。用于第三人称主语时不自然或可能成为病句。\n-더니 主语为第三人称或自然现象时较自然。如 "비가 오더니 개었어요"，表示前句与后句关系的转换。', english: 'For -았더니, the subject must be first person (나/저) to sound natural. Using it with a third-person subject sounds unnatural or may be grammatically incorrect.\\nFor -더니, a third-person subject or natural phenomenon sounds natural. For example, "비가 오더니 개었어요" expresses a transition between the preceding and following clauses.',
+    scenarioNote: '-았더니 常用在 "먹었더니 배불러요" 这样的句子中，陈述直接经验后的结果。\n-더니 常用在 "아이가 울더니 갑자기 웃었어요" 这样的句子中，观察第三人称行为变化后传达。', english: '-았더니 is commonly used in sentences like "먹었더니 배불러요" to state the result of a direct experience.\\n-더니 is commonly used in sentences like "아이가 울더니 갑자기 웃었어요" to convey observed changes in a third person\'s behavior.',
     step0Html: `<div class="card-title">做了之后……之前……结果……</div>
 <div class="card-body">亲身经历的前后关系，主语决定选哪个。</div>
 <div class="hook-box">
@@ -410,7 +410,7 @@ export const grammarCardsP18: GrammarCard[] = [
       { wrong: '운동했더니에 살이 빠졌어요（았더니 + 에 助词）', correct: '운동했더니 살이 빠졌어요', note: '-았더니 是接续词尾，后面不加助词。' },
     ],
     quickTable: {
-      title: '-았더니 vs -더니 核心差异',
+      title: '-았더니 vs -더니 核心差异', english: '-았더니 vs -더니: Core Differences',
       headers: ['항목', '-았더니', '-더니'],
       rows: [
         ['主语人称', '第一人称（나/저）', '第三人称/自然现象'],
@@ -494,12 +494,12 @@ export const grammarCardsP18: GrammarCard[] = [
     id: 'card-p18-l03',
     partNumber: 18,
     lessonNumber: 3,
-    title: '(으)로 인하여，(으)로 인한，-길래',
-    whatItDoes: '表示原因（正式）或说话者的反应动机',
-    whatItDoesBody: '(으)로 인하여 表示原因，相当于"由于……/因为……"，比 때문에 更正式，多用于书面语和新闻报道。\n(으)로 인한 是 (으)로 인하여 的冠词形，修饰后面的名词，相当于"由于……导致的……"。\n-길래 表示说话者因为观察到某种情况而做出相应的行动，相当于"因为（看到/听到）……所以……"，带有直接动机语气。',
-    structureNote: '(으)로 인하여：名词 + (으)로 인하여（有收音 → 으로 인하여，无/ㄹ → 로 인하여）\n(으)로 인한：名词 + (으)로 인한 + 名词（冠词形）\n-길래：动词/形容词 词干 + 길래（口语体，与收音有无无关）',
-    rulesNote: '(으)로 인하여 也可替换为 -로 인해서 / -로 인해。书面体用 (으)로 인하여，口语体用 -로 인해 更自然。\n-길래 是说话人直接观察或听到前句的情境后，在后句写出相应的反应行动。主语多为第一人称。',
-    scenarioNote: '(으)로 인하여 用在新闻、报告书、公文中，如 "태풍으로 인하여 항공편이 결항됐습니다"，表达正式原因。\n-길래 用在回答 "왜 그랬어?" 时，如 "배가 고프길래 먹었어"，用于说明直接动机。',
+    title: '(으)로 인하여，(으)로 인한，-길래', english: '(으)로 인하여, (으)로 인한, -길래',
+    whatItDoes: '表示原因（正式）或说话者的反应动机', english: 'Indicates cause (formal) or the speaker\'s motivation for reacting',
+    whatItDoesBody: '(으)로 인하여 表示原因，相当于"由于……/因为……"，比 때문에 更正式，多用于书面语和新闻报道。\n(으)로 인한 是 (으)로 인하여 的冠词形，修饰后面的名词，相当于"由于……导致的……"。\n-길래 表示说话者因为观察到某种情况而做出相应的行动，相当于"因为（看到/听到）……所以……"，带有直接动机语气。', english: '(으)로 인하여 indicates cause, equivalent to "due to.../because of..." It is more formal than 때문에 and is often used in written language and news reports.\\n(으)로 인한 is the adnominal form of (으)로 인하여, modifying the following noun, equivalent to "...caused by..."\\n-길래 indicates that the speaker takes action because of something observed, equivalent to "because (I saw/heard)... so..." It carries a direct motivational tone.',
+    structureNote: '(으)로 인하여：名词 + (으)로 인하여（有收音 → 으로 인하여，无/ㄹ → 로 인하여）\n(으)로 인한：名词 + (으)로 인한 + 名词（冠词形）\n-길래：动词/形容词 词干 + 길래（口语体，与收音有无无关）', english: '(으)로 인하여: Noun + (으)로 인하여 (with final consonant → 으로 인하여, without final consonant or with ㄹ → 로 인하여)\\n(으)로 인한: Noun + (으)로 인한 + Noun (adnominal form)\\n-길래: Verb/Adjective stem + 길래 (colloquial, regardless of final consonant)',
+    rulesNote: '(으)로 인하여 也可替换为 -로 인해서 / -로 인해。书面体用 (으)로 인하여，口语体用 -로 인해 更自然。\n-길래 是说话人直接观察或听到前句的情境后，在后句写出相应的反应行动。主语多为第一人称。', english: '(으)로 인하여 can also be replaced with -로 인해서 / -로 인해. In written style, use (으)로 인하여; in spoken style, -로 인해 sounds more natural.\\n-길래 is used when the speaker directly observes or hears the situation in the preceding clause, then states their corresponding reaction or action in the following clause. The subject is usually first person.',
+    scenarioNote: '(으)로 인하여 用在新闻、报告书、公文中，如 "태풍으로 인하여 항공편이 결항됐습니다"，表达正式原因。\n-길래 用在回答 "왜 그랬어?" 时，如 "배가 고프길래 먹었어"，用于说明直接动机。', english: '(으)로 인하여 is used in news, reports, and official documents, e.g., "태풍으로 인하여 항공편이 결항됐습니다", to express a formal reason.\\n-길래 is used when answering "왜 그랬어?", e.g., "배가 고프길래 먹었어", to explain a direct motive.',
     step0Html: `<div class="card-title">由于……因为看到……所以</div>
 <div class="card-body">两种原因表达，一正式一口语。</div>
 <div class="hook-box">
@@ -647,7 +647,7 @@ export const grammarCardsP18: GrammarCard[] = [
       { wrong: '맛있어 보이길래서 시켰어요（길래 + 서 重复）', correct: '맛있어 보이길래 시켰어요', note: '-길래 是接续词尾，后面不加 서。길래서 是不存在的形式。' },
     ],
     quickTable: {
-      title: '(으)로 인하여 接续形式',
+      title: '(으)로 인하여 接续形式', english: '(으)로 인하여 Connective Forms',
       headers: ['名词末音', '形式', '例句', '意思'],
       rows: [
         ['收音 O', '으로 인하여', '태풍으로 인하여', '由于台风'],
@@ -735,12 +735,12 @@ export const grammarCardsP18: GrammarCard[] = [
     id: 'card-p18-l04',
     partNumber: 18,
     lessonNumber: 4,
-    title: '-는/은/ㄴ 듯하다，-는/은/ㄴ/을 모양이다',
-    whatItDoes: '表示推测或判断（好像……/看来……）',
-    whatItDoesBody: '-는/은/ㄴ 듯하다 表示根据某种迹象做出推测，相当于"好像……/似乎……"，语气较温和，也可用于比喻。\n-는/은/ㄴ/을 모양이다 表示根据观察到的状况推测某种情况，相当于"看来……/好像……"，比 듯하다 更强调外部迹象。',
-    structureNote: '-는/은/ㄴ 듯하다：动词现在（-는 듯하다）/ 形容词（-은/ㄴ 듯하다）/ 过去（-은/ㄴ 듯하다）\n-는/은/ㄴ/을 모양이다：动词现在（-는 모양이다）/ 过去（-은/ㄴ 모양이다）/ 将来（-을/ㄹ 모양이다）/ 形容词（-은/ㄴ 모양이다）',
-    rulesNote: '-듯하다 除推测外，也用于"마치 ~인 것처럼"的比喻表达（눈이 녹듯 사라졌어요）。\n-모양이다 是基于眼前情境或间接证据的推测，比 듯하다 的推测根据更偏外在迹象。',
-    scenarioNote: '-듯하다 用在 "피곤한 듯해요" 这样的句子中，用于谨慎推测对方状态。\n-모양이다 用在 "비가 올 모양이에요" 这样的句子中，常用于观察天气或情境后进行预测。',
+    title: '-는/은/ㄴ 듯하다，-는/은/ㄴ/을 모양이다', english: '-는/은/ㄴ 듯하다, -는/은/ㄴ/을 모양이다',
+    whatItDoes: '表示推测或判断（好像……/看来……）', english: 'Expresses conjecture or judgment (seems like... / looks like...)',
+    whatItDoesBody: '-는/은/ㄴ 듯하다 表示根据某种迹象做出推测，相当于"好像……/似乎……"，语气较温和，也可用于比喻。\n-는/은/ㄴ/을 모양이다 表示根据观察到的状况推测某种情况，相当于"看来……/好像……"，比 듯하다 更强调外部迹象。', english: '-는/은/ㄴ 듯하다 expresses a conjecture based on some indication, equivalent to "seems like... / appears...", with a softer tone; it can also be used for metaphors.\\n-는/은/ㄴ/을 모양이다 expresses a conjecture based on observed circumstances, equivalent to "looks like... / seems...", and emphasizes external evidence more than 듯하다.',
+    structureNote: '-는/은/ㄴ 듯하다：动词现在（-는 듯하다）/ 形容词（-은/ㄴ 듯하다）/ 过去（-은/ㄴ 듯하다）\n-는/은/ㄴ/을 모양이다：动词现在（-는 모양이다）/ 过去（-은/ㄴ 모양이다）/ 将来（-을/ㄹ 모양이다）/ 形容词（-은/ㄴ 모양이다）', english: '-는/은/ㄴ 듯하다: Verb present (-는 듯하다) / Adjective (-은/ㄴ 듯하다) / Past (-은/ㄴ 듯하다)\\n-는/은/ㄴ/을 모양이다: Verb present (-는 모양이다) / Past (-은/ㄴ 모양이다) / Future (-을/ㄹ 모양이다) / Adjective (-은/ㄴ 모양이다)',
+    rulesNote: '-듯하다 除推测外，也用于"마치 ~인 것처럼"的比喻表达（눈이 녹듯 사라졌어요）。\n-모양이다 是基于眼前情境或间接证据的推测，比 듯하다 的推测根据更偏外在迹象。', english: '-듯하다 is also used for metaphorical expressions like "마치 ~인 것처럼" (e.g., 눈이 녹듯 사라졌어요), in addition to conjecture.\\n-모양이다 is a conjecture based on the situation at hand or indirect evidence, with the basis leaning more toward external signs than 듯하다.',
+    scenarioNote: '-듯하다 用在 "피곤한 듯해요" 这样的句子中，用于谨慎推测对方状态。\n-모양이다 用在 "비가 올 모양이에요" 这样的句子中，常用于观察天气或情境后进行预测。', english: '-듯하다 is used in sentences like "피곤한 듯해요" to cautiously guess about someone\'s condition.\\n-모양이다 is used in sentences like "비가 올 모양이에요", often to predict based on observing the weather or situation.',
     step0Html: `<div class="card-title">好像……看来……</div>
 <div class="card-body">两种表达都是推测，但推测依据的性质不同。</div>
 <div class="hook-box">
@@ -886,7 +886,7 @@ export const grammarCardsP18: GrammarCard[] = [
       { wrong: '비가 오는 듯한 것 같아요（듯하다 + 것 같다 重复）', correct: '비가 오는 듯해요 또는 비가 올 것 같아요', note: '-듯하다 和 -것 같다 是相同功能的推测表达，所以不同时使用。' },
     ],
     quickTable: {
-      title: '-듯하다 / -모양이다 冠词形 接续',
+      title: '-듯하다 / -모양이다 冠词形 接续', english: '-듯하다 / -모양이다 Adnominal Connections',
       headers: ['时态/词性', '듯하다 前', '모양이다 前', '例句'],
       rows: [
         ['动词现在', '-는', '-는', '먹는 듯하다 / 오는 모양이다'],
@@ -913,7 +913,7 @@ export const grammarCardsP18: GrammarCard[] = [
           explanation: '-모양이다 的终结形：모양이에요（口语）。듯이에요/모양해요/듯모양이에요 都是不存在的形式。',
         },
         {
-          prompt: '비가 오___ 듯해요。（好像要下雨。）— 请选出动词现在冠词形',
+          prompt: '비가 오___ 듯해요。（好像在下雨。）— 请选出动词现在冠词形',
           options: ['왔는', '온', '오는', '올'],
           answer: 2 as 0|1|2|3,
           explanation: '오다（动词）的现在冠词形是 -는：오는 듯해요（✓）。온 是过去形（온 듯하다），올 是将来形，왔는 是非标准形式。',
@@ -971,12 +971,12 @@ export const grammarCardsP18: GrammarCard[] = [
     id: 'card-p18-l05',
     partNumber: 18,
     lessonNumber: 5,
-    title: '-을/ㄹ 텐데，더러/보고',
-    whatItDoes: '推测前提下的期待/担忧，以及"叫某人/对某人"的表达',
-    whatItDoesBody: '-을/ㄹ 텐데 在推测或预料某种状况的前提下，表达说话者的期待、担忧或遗憾，相当于"应该……/想必……（所以……）"。\n-더러/보고 均表示行为的对象，相当于"叫……/对……说"，主要用于命令、请求、传话等句子中。더러 比 보고 语气稍正式。',
-    structureNote: '-을/ㄹ 텐데：动词/形容词 词干 + (으)ㄹ 텐데（有收音 + 을 텐데，无收音/ㄹ + ㄹ 텐데）\n더러/보고：名词（사람） + 더러/보고 + 动词（命令/请求句）',
-    rulesNote: '-을/ㄹ 텐데 前句主语可以是说话人自己或第三人称。后面接请求、担忧、建议等。\n더러/보고 的前面必须是人物名词，不能用事物或抽象名词。',
-    scenarioNote: '-을/ㄹ 텐데 常用于体谅对方，如 "피곤할 텐데 쉬세요"。\n더러/보고 常与传话动词（말하다/시키다/부탁하다）连用，如 "누구보고 가라고 했어？"。',
+    title: '-을/ㄹ 텐데，더러/보고', english: '-을/ㄹ 텐데, 더러/보고',
+    whatItDoes: '推测前提下的期待/担忧，以及"叫某人/对某人"的表达', english: 'Expressing expectation or concern based on a supposition, and "telling someone / to someone"',
+    whatItDoesBody: '-을/ㄹ 텐데 在推测或预料某种状况的前提下，表达说话者的期待、担忧或遗憾，相当于"应该……/想必……（所以……）"。\n-더러/보고 均表示行为的对象，相当于"叫……/对……说"，主要用于命令、请求、传话等句子中。더러 比 보고 语气稍正式。', english: '-을/ㄹ 텐데 expresses the speaker\'s expectation, concern, or regret based on a supposition or anticipated situation, equivalent to "should be... / must be... (so...)".\\n-더러/보고 both indicate the recipient of an action, equivalent to "tell... / say to...", mainly used in commands, requests, or relaying messages. 더러 is slightly more formal than 보고.',
+    structureNote: '-을/ㄹ 텐데：动词/形容词 词干 + (으)ㄹ 텐데（有收音 + 을 텐데，无收音/ㄹ + ㄹ 텐데）\n더러/보고：名词（사람） + 더러/보고 + 动词（命令/请求句）', english: '-을/ㄹ 텐데: verb/adjective stem + (으)ㄹ 텐데 (with final consonant + 을 텐데, without final consonant or with ㄹ + ㄹ 텐데)\\n더러/보고: noun (person) + 더러/보고 + verb (command/request sentence)',
+    rulesNote: '-을/ㄹ 텐데 前句主语可以是说话人自己或第三人称。后面接请求、担忧、建议等。\n더러/보고 的前面必须是人物名词，不能用事物或抽象名词。', english: 'The subject of the preceding clause with -을/ㄹ 텐데 can be the speaker or a third person. It is followed by requests, concerns, suggestions, etc.\\n더러/보고 must be preceded by a person noun; things or abstract nouns cannot be used.',
+    scenarioNote: '-을/ㄹ 텐데 常用于体谅对方，如 "피곤할 텐데 쉬세요"。\n더러/보고 常与传话动词（말하다/시키다/부탁하다）连用，如 "누구보고 가라고 했어？"。', english: '-을/ㄹ 텐데 is often used to show consideration for the other person, e.g., "피곤할 텐데 쉬세요".\\n더러/보고 is often used with verbs of relaying (말하다/시키다/부탁하다), e.g., "누구보고 가라고 했어？".',
     structures: [
       {
         ko: '动词/形容词 词干 + (으)ㄹ 텐데',
@@ -1096,7 +1096,7 @@ export const grammarCardsP18: GrammarCard[] = [
     ],
     specialQuiz: {
       type: 'fill',
-      title: '-을/ㄹ 텐데，더러/보고',
+      title: '-을/ㄹ 텐데，더러/보고', english: '-을/ㄹ 텐데, 더러/보고',
       body: '선택지 중 맞는 것을 고르세요',
       questions: [
         {
@@ -1207,7 +1207,7 @@ export const grammarCardsP18: GrammarCard[] = [
 </div>`,
     compareLabel: '-을/ㄹ 텐데 vs -겠지만 / 더러 vs 에게',
     quickTable: {
-      title: '-을/ㄹ 텐데 接续 / 더러·보고 비교',
+      title: '-을/ㄹ 텐데 接续 / 더러·보고 비교', english: '-을/ㄹ 텐데 Connective / 더러·보고 Comparison',
       headers: ['区分', '形式', '例句'],
       rows: [
         ['有收音 词干', '+ 을 텐데', '먹을 텐데，읽을 텐데，좋을 텐데'],
@@ -1223,12 +1223,12 @@ export const grammarCardsP18: GrammarCard[] = [
     id: 'card-p18-l06',
     partNumber: 18,
     lessonNumber: 6,
-    title: '-잖아요，-거든요',
-    whatItDoes: '确认共识，或补充说明理由',
-    whatItDoesBody: '-잖아요 用于确认说话双方都知道的事实，带有"你不是知道吗/你看……不是……嘛"的语气，暗示听话人应该已经了解该信息。\n-거든요 用于补充说话人认为对方不知道的背景信息或理由，相当于"因为……（你可能不知道）/其实……"，语气比 -니까 更温和，有轻微说明/解释感。',
-    structureNote: '-잖아요：动词/形容词/이다 词干 + 잖아요（现在），+ 았/었잖아요（过去）\n-거든요：动词/形容词/이다 词干 + 거든요（现在），+ 았/었거든요（过去）',
-    rulesNote: '-잖아요 用于说话人和听话人共享的信息。用于听话人完全不知道的信息时不自然。\n-거든요 用于将只有说话人知道的信息告诉对方。可单独用于句末，也可用于原因从句。',
-    scenarioNote: '-잖아요 用在 "그 사람 알잖아요！（你认识那个人的嘛！）" 这样的句子中，也用于轻微的抗议或唤起注意。\n-거든요 用在 "사실 저 한국 사람이거든요（其实我是韩国人）" 这样的句子中，常用于自然引入新的背景信息。',
+    title: '-잖아요，-거든요', english: '-잖아요, -거든요',
+    whatItDoes: '确认共识，或补充说明理由', english: 'Confirming shared knowledge, or adding explanatory reasons',
+    whatItDoesBody: '-잖아요 用于确认说话双方都知道的事实，带有"你不是知道吗/你看……不是……嘛"的语气，暗示听话人应该已经了解该信息。\n-거든요 用于补充说话人认为对方不知道的背景信息或理由，相当于"因为……（你可能不知道）/其实……"，语气比 -니까 更温和，有轻微说明/解释感。', english: '-잖아요 is used to confirm facts both the speaker and listener know, carrying a tone of "you know, right? / see, isn\'t it...?", implying the listener should already be aware of the information.\\n-거든요 is used to add background information or reasons the speaker thinks the listener doesn\'t know, equivalent to "because... (you might not know) / actually...", with a softer tone than -니까, giving a slight explanatory feel.',
+    structureNote: '-잖아요：动词/形容词/이다 词干 + 잖아요（现在），+ 았/었잖아요（过去）\n-거든요：动词/形容词/이다 词干 + 거든요（现在），+ 았/었거든요（过去）', english: '-잖아요: verb/adjective/이다 stem + 잖아요 (present), + 았/었잖아요 (past)\\n-거든요: verb/adjective/이다 stem + 거든요 (present), + 았/었거든요 (past)',
+    rulesNote: '-잖아요 用于说话人和听话人共享的信息。用于听话人完全不知道的信息时不自然。\n-거든요 用于将只有说话人知道的信息告诉对方。可单独用于句末，也可用于原因从句。', english: '-잖아요 is used for information shared between the speaker and the listener. It sounds unnatural when used with information the listener doesn\'t know at all.\\n-거든요 is used to tell the listener information that only the speaker knows. It can be used alone at the end of a sentence or in a reason clause.',
+    scenarioNote: '-잖아요 用在 "그 사람 알잖아요！（你认识那个人的嘛！）" 这样的句子中，也用于轻微的抗议或唤起注意。\n-거든요 用在 "사실 저 한국 사람이거든요（其实我是韩国人）" 这样的句子中，常用于自然引入新的背景信息。', english: '-잖아요 is used in sentences like "그 사람 알잖아요! (You know that person, right!)" and is also used for mild protest or to draw attention.\\n-거든요 is used in sentences like "사실 저 한국 사람이거든요 (Actually, I\'m Korean)" and is often used to naturally introduce new background information.',
     structures: [
       {
         ko: '动词/形容词 词干 + 잖아요',
@@ -1338,7 +1338,7 @@ export const grammarCardsP18: GrammarCard[] = [
     ],
     specialQuiz: {
       type: 'fill',
-      title: '-잖아요，-거든요',
+      title: '-잖아요，-거든요', english: '-잖아요, -거든요',
       body: '선택지 중 맞는 것을 고르세요',
       questions: [
         {
@@ -1443,7 +1443,7 @@ export const grammarCardsP18: GrammarCard[] = [
 </div>`,
     compareLabel: '-잖아요 vs -거든요 vs -니까',
     quickTable: {
-      title: '-잖아요 / -거든요 비교',
+      title: '-잖아요 / -거든요 비교', english: '-잖아요 / -거든요 Comparison',
       headers: ['词尾', '使用条件', '语气', '例句'],
       rows: [
         ['-잖아요', '共享信息', '确认·唤起注意', '알잖아요，바쁘잖아요'],
@@ -1460,8 +1460,8 @@ export const grammarCardsP18: GrammarCard[] = [
     isPractice: true,
     partNumber: 18,
     lessonNumber: 7,
-    title: 'P18 综合练习',
-    whatItDoes: 'P18 第1～6课 综合练习',
+    title: 'P18 综合练习', english: 'P18 Comprehensive Practice',
+    whatItDoes: 'P18 第1～6课 综合练习', english: 'Comprehensive practice for P18 Lessons 1–6',
     whatItDoesBody: '',
     structureNote: '',
     rulesNote: '',
@@ -1484,7 +1484,7 @@ export const grammarCardsP18: GrammarCard[] = [
 </div>`,
     specialQuiz: {
       type: 'fill',
-      title: 'P18 综合练习',
+      title: 'P18 综合练习', english: 'P18 Comprehensive Practice',
       body: '선택지 중 맞는 것을 고르세요',
       questions: [
         {

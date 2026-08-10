@@ -5,12 +5,12 @@ export const grammarCardsP17: GrammarCard[] = [
     id: 'card-p17-l01',
     partNumber: 17,
     lessonNumber: 1,
-    title: '(으)로 해서，-는 길에',
-    whatItDoes: '说明原因/手段，或顺路做某事',
-    whatItDoesBody: '(으)로 해서 表示原因或手段，相当于"因为……/由于……/通过……"，书面和口语均可用，语气比 -기 때문에 更正式。\n-는 길에 表示在去某地或回来的途中顺便做某事，相当于"在……的路上/顺路……"，只能接移动动词（가다/오다/다니다 等）。',
-    structureNote: '(으)로 해서：名词 + (으)로 해서（有收音 + 으로 해서，无收音/ㄹ + 로 해서）\n-는 길에：가는 길에 / 오는 길에 / 퇴근하는 길에 等，动词 冠词形 + 길에',
-    rulesNote: '(으)로 해서 前面接表示原因或手段的名词。多用于书面体，可与 -로 인해서 替换。\n-는 길에 只接在移动动词（가다/오다/다니다）的冠词形后面。表示的是持续的移动过程，而非瞬间移动。',
-    scenarioNote: '(으)로 해서 常出现在事故经过说明、报告书、新闻等正式场合。\n-는 길에 在日常对话中如"오는 길에 뭐 사 왔어？"般，自然使用。',
+    title: '(으)로 해서，-는 길에', english: '(으)로 해서, -는 길에',
+    whatItDoes: '说明原因/手段，或顺路做某事', english: 'Indicates cause/means, or doing something on the way',
+    whatItDoesBody: '(으)로 해서 表示原因或手段，相当于"因为……/由于……/通过……"，书面和口语均可用，语气比 -기 때문에 更正式。\n-는 길에 表示在去某地或回来的途中顺便做某事，相当于"在……的路上/顺路……"，只能接移动动词（가다/오다/다니다 等）。', english: '(으)로 해서 indicates a cause or means, equivalent to "because of.../due to.../through...", usable in both written and spoken language, with a more formal tone than -기 때문에.\\n-는 길에 indicates doing something in passing while on the way to or from a place, equivalent to "on the way.../in passing...", and can only be used with movement verbs (가다/오다/다니다, etc.).',
+    structureNote: '(으)로 해서：名词 + (으)로 해서（有收音 + 으로 해서，无收音/ㄹ + 로 해서）\n-는 길에：가는 길에 / 오는 길에 / 퇴근하는 길에 等，动词 冠词形 + 길에', english: '(으)로 해서: noun + (으)로 해서 (with final consonant + 으로 해서, without final consonant/ㄹ + 로 해서)\\n-는 길에: 가는 길에 / 오는 길에 / 퇴근하는 길에, etc., verb adnominal form + 길에',
+    rulesNote: '(으)로 해서 前面接表示原因或手段的名词。多用于书面体，可与 -로 인해서 替换。\n-는 길에 只接在移动动词（가다/오다/다니다）的冠词形后面。表示的是持续的移动过程，而非瞬间移动。', english: '(으)로 해서 is preceded by a noun indicating cause or means. Mostly used in written style, and can be replaced with -로 인해서.\\n-는 길에 is only attached to the adnominal form of movement verbs (가다/오다/다니다). It indicates an ongoing movement process, not an instantaneous movement.',
+    scenarioNote: '(으)로 해서 常出现在事故经过说明、报告书、新闻等正式场合。\n-는 길에 在日常对话中如"오는 길에 뭐 사 왔어？"般，自然使用。', english: '(으)로 해서 often appears in formal contexts such as accident reports, official documents, and news. \\n-는 길에 is used naturally in everyday conversation, like "오는 길에 뭐 사 왔어?".',
     step0Html: `<div class="card-title">因为……顺路……</div>
 <div class="card-body">同一段路，两种表达方式。</div>
 <div class="hook-box">
@@ -153,10 +153,10 @@ export const grammarCardsP17: GrammarCard[] = [
       { wrong: '비가 오로 해서 못 나가요（动词 + 로 해서）', correct: '비로 해서 못 나가요 또는 비가 오기 때문에 못 나가요', note: '(으)로 해서 前面只能接名词。要把动词作为原因时，用 -기 때문에。' },
       { wrong: '집에 간 길에 편의점에 들렀어요（过去冠词形 + 길에）', correct: '집에 가는 길에 편의점에 들렀어요', note: '-는 길에 只能接现在冠词形（가는/오는），不能用过去形 간/온。' },
       { wrong: '학교로 해서 친구를 사귀었어요（地点 + 로 해서）', correct: '학교에서 친구를 사귀었어요 또는 학교를 통해서 친구를 사귀었어요', note: '(으)로 해서 要接在表示原因或手段的名词后面才自然。单纯的地点则不自然。' },
-      { wrong: '오는 길에 비가 왔어요（与移动主体无关的事件）', correct: '오는 길에 비를 맞았어요', note: '-는 길에 后面要接移动主体亲自做的行为才自然。用于描述自然现象不合适。' },
+      { wrong: '오는 길에 비가 왔어요（与移动主体无关的事件）', correct: '오는 길에 비를 맞았어요', note: '오는 길에 비가 왔어요도 자연스럽지만, -는 길에 뒤에 이동 주체의 행동(비를 맞다)을 넣으면 더 완성도 높은 문장이 됩니다.' },
     ],
     quickTable: {
-      title: '(으)로 해서 接续形式',
+      title: '(으)로 해서 接续形式', english: '(으)로 해서 Connective Forms',
       headers: ['名词末音', '形式', '例句', '意思'],
       rows: [
         ['有收音（收音 O）', '으로 해서', '인터넷으로 해서', '通过网络'],
@@ -239,12 +239,12 @@ export const grammarCardsP17: GrammarCard[] = [
     id: 'card-p17-l02',
     partNumber: 17,
     lessonNumber: 2,
-    title: '-을/를 만큼，-을/를 정도로',
-    whatItDoes: '表示程度相当或达到某种程度',
-    whatItDoesBody: '-을/를 만큼 表示程度相当，相当于"像……那样多/那种程度"，可接名词或动词冠词形。\n-을/를 정도로 表示达到某种程度，相当于"到……的程度"，强调程度之深，常用于夸张或说明极端情况。',
-    structureNote: '-을/를 만큼：名词 + 만큼（直接 接续）/ 动词·形容词 冠词形 + 만큼\n-을/를 정도로：名词 + 정도로 / 动词·形容词 冠词形 + 정도로',
-    rulesNote: '-만큼 也可以表示比较基准（키가 나만큼 커요）；表达程度时，冠词形 + 만큼 的形式被广泛使用。\n-정도로 常用于强调极端程度，后面的谓语表示与该程度相应的结果。',
-    scenarioNote: '-만큼 常像"그 정도만큼 해줘"这样，在日常对话中自然使用。\n-정도로 常像"죽을 정도로 힘들었어"这样，在表达极端状态时出现。',
+    title: '-을/를 만큼，-을/를 정도로', english: '-을/를 만큼, -을/를 정도로',
+    whatItDoes: '表示程度相当或达到某种程度', english: 'Indicates a comparable degree or reaching a certain extent',
+    whatItDoesBody: '-을/를 만큼 表示程度相当，相当于"像……那样多/那种程度"，可接名词或动词冠词形。\n-을/를 정도로 表示达到某种程度，相当于"到……的程度"，强调程度之深，常用于夸张或说明极端情况。', english: '-을/를 만큼 indicates a comparable degree, equivalent to "as much as..." or "to that extent," and can be attached to nouns or the adnominal form of verbs. \\n-을/를 정도로 indicates reaching a certain extent, equivalent to "to the point of..." and emphasizes the depth of the degree, often used for exaggeration or describing extreme situations.',
+    structureNote: '-을/를 만큼：名词 + 만큼（直接 接续）/ 动词·形容词 冠词形 + 만큼\n-을/를 정도로：名词 + 정도로 / 动词·形容词 冠词形 + 정도로', english: '-을/를 만큼: Noun + 만큼 (direct attachment) / Adnominal form of verb·adjective + 만큼 \\n-을/를 정도로: Noun + 정도로 / Adnominal form of verb·adjective + 정도로',
+    rulesNote: '-만큼 也可以表示比较基准（키가 나만큼 커요）；表达程度时，冠词形 + 만큼 的形式被广泛使用。\n-정도로 常用于强调极端程度，后面的谓语表示与该程度相应的结果。', english: '-만큼 can also indicate a comparison standard (키가 나만큼 커요); when expressing degree, the form adnominal + 만큼 is widely used. \\n-정도로 is often used to emphasize an extreme degree, with the following predicate indicating the result corresponding to that degree.',
+    scenarioNote: '-만큼 常像"그 정도만큼 해줘"这样，在日常对话中自然使用。\n-정도로 常像"죽을 정도로 힘들었어"这样，在表达极端状态时出现。', english: '-만큼 is used naturally in everyday conversation, like "그 정도만큼 해줘". \\n-정도로 appears when expressing extreme states, like "죽을 정도로 힘들었어".',
     step0Html: `<div class="card-title">像那样……到那种程度</div>
 <div class="card-body">两个表达都说"程度"，侧重点不同。</div>
 <div class="hook-box">
@@ -391,7 +391,7 @@ export const grammarCardsP17: GrammarCard[] = [
       { wrong: '눈물이 날 정도가 감동적이에요（정도로 → 정도가）', correct: '눈물이 날 정도로 감동적이에요', note: '这里需要用 정도로（로 助词）来充当程度状语。정도가 会变成主语，句子不通。' },
     ],
     quickTable: {
-      title: '-만큼 / -정도로 接续形式',
+      title: '-만큼 / -정도로 接续形式', english: '-만큼 / -정도로 Connective Forms',
       headers: ['前接成分', '形式', '例句', '意思'],
       rows: [
         ['名词', '名词 + 만큼', '나만큼 / 산만큼', '像我那样 / 像山那样'],
@@ -475,12 +475,12 @@ export const grammarCardsP17: GrammarCard[] = [
     id: 'card-p17-l03',
     partNumber: 17,
     lessonNumber: 3,
-    title: '-도록，-을/를 수 있게，-게 하기 위하여',
-    whatItDoes: '表示目的或使某事成为可能',
-    whatItDoesBody: '-도록 表示目的或程度，相当于"为了……/直到……"，连接前后两个动作，前句是目的/标准，后句是行为。\n-을/를 수 있게 表示"使得能够……"，强调创造条件让某事成为可能。\n-게 하기 위하여 表示"为了……"，比 -도록 更正式，书面语常用。',
-    structureNote: '-도록：动词 词干 + 도록（收音 유무 무관）\n-을/를 수 있게：动词 词干 + (을/ㄹ) 수 있게\n-게 하기 위하여：动词 词干 + 게 하기 위하여（위해서도 可能）',
-    rulesNote: '-도록 有目的（~하도록 노력하다）和程度（밤새도록 공부하다）两种意思。\n-을/를 수 있게 是在 수 있다（能力/可能）后接连接词尾 -게 的形式，让对方或情境变得可能的语气较强。\n-게 하기 위하여 比 -도록 更正式，意图性更强。也可换用 위해서。',
-    scenarioNote: '-도록 在日常口语中常像"늦지 않도록 서둘러!"这样，用于指示或劝告。\n-을 수 있게 常像"볼 수 있게 자리를 양보해 줬어요"这样，出现在体谅或提供条件的情境中。\n-게 하기 위하여 在报告、公文、新闻中使用，如"이해할 수 있게 하기 위하여 예시를 추가했습니다"。',
+    title: '-도록，-을/를 수 있게，-게 하기 위하여', english: '-도록, -을/를 수 있게, -게 하기 위하여',
+    whatItDoes: '表示目的或使某事成为可能', english: 'Indicates purpose or making something possible',
+    whatItDoesBody: '-도록 表示目的或程度，相当于"为了……/直到……"，连接前后两个动作，前句是目的/标准，后句是行为。\n-을/를 수 있게 表示"使得能够……"，强调创造条件让某事成为可能。\n-게 하기 위하여 表示"为了……"，比 -도록 更正式，书面语常用。', english: '-도록 indicates purpose or degree, equivalent to "in order to.../until...", connecting two actions where the first clause is the purpose/standard and the second is the action.\\n-을/를 수 있게 means "to make it possible to...", emphasizing creating conditions that allow something to happen.\\n-게 하기 위하여 means "in order to...", more formal than -도록 and commonly used in written language.',
+    structureNote: '-도록：动词 词干 + 도록（收音 유무 무관）\n-을/를 수 있게：动词 词干 + (을/ㄹ) 수 있게\n-게 하기 위하여：动词 词干 + 게 하기 위하여（위해서도 可能）', english: '-도록: verb stem + 도록 (regardless of final consonant)\\n-을/를 수 있게: verb stem + (을/ㄹ) 수 있게\\n-게 하기 위하여: verb stem + 게 하기 위하여 (위해서 is also possible)',
+    rulesNote: '-도록 有目的（~하도록 노력하다）和程度（밤새도록 공부하다）两种意思。\n-을/를 수 있게 是在 수 있다（能力/可能）后接连接词尾 -게 的形式，让对方或情境变得可能的语气较强。\n-게 하기 위하여 比 -도록 更正式，意图性更强。也可换用 위해서。', english: '-도록 has two meanings: purpose (~하도록 노력하다) and degree (밤새도록 공부하다).\\n-을/를 수 있게 is the form of 수 있다 (ability/possibility) followed by the connective ending -게, giving a strong sense of enabling someone or a situation.\\n-게 하기 위하여 is more formal and intentional than -도록. It can also be replaced with 위해서.',
+    scenarioNote: '-도록 在日常口语中常像"늦지 않도록 서둘러!"这样，用于指示或劝告。\n-을 수 있게 常像"볼 수 있게 자리를 양보해 줬어요"这样，出现在体谅或提供条件的情境中。\n-게 하기 위하여 在报告、公文、新闻中使用，如"이해할 수 있게 하기 위하여 예시를 추가했습니다"。', english: '-도록 is often used in everyday speech for instructions or advice, like "늦지 않도록 서둘러!" (Hurry so you won\'t be late!).\\n-을 수 있게 often appears in contexts of consideration or providing conditions, like "볼 수 있게 자리를 양보해 줬어요" (I gave up my seat so (they) could see).\\n-게 하기 위하여 is used in reports, official documents, and news, such as "이해할 수 있게 하기 위하여 예시를 추가했습니다" (I added examples to make it understandable).',
     step0Html: `<div class="card-title">为了……使得能够……</div>
 <div class="card-body">三个表达都说目的，语气各不同。</div>
 <div class="hook-box">
@@ -632,7 +632,7 @@ export const grammarCardsP17: GrammarCard[] = [
       { wrong: '아이가 잘 자기 위해서 불을 껐어요（目的从句主语≠主句主语）', correct: '아이가 잘 자도록 불을 껐어요', note: '中文"为了"两处都能用，但 -기 위해서 要求目的从句和主句是同一个主语。这里"孩子睡"和"我关灯"主语不同，必须用 -도록。' },
     ],
     quickTable: {
-      title: '-도록 / -을 수 있게 / -게 하기 위하여 接续',
+      title: '-도록 / -을 수 있게 / -게 하기 위하여 接续', english: '-도록 / -을 수 있게 / -게 하기 위하여 Connective Endings',
       headers: ['表达', '接续 形式', '例句', '语气'],
       rows: [
         ['-도록', '动词 词干 + 도록', '늦도록 / 먹도록', '目的·정도，口语自然'],
@@ -720,12 +720,12 @@ export const grammarCardsP17: GrammarCard[] = [
     id: 'card-p17-l04',
     partNumber: 17,
     lessonNumber: 4,
-    title: '-(으)ㄹ 지경이다，-을수록',
-    whatItDoes: '表示极端程度或越……越……',
-    whatItDoesBody: '-을 지경이다 表示情况已到了某种极端程度，相当于"到了……的地步/程度"，含有负面或夸张语气。\n-(으)면 -(으)ㄹ수록 表示"越……越……"，前后两个动词/形容词形成递进关系，程度随条件加深。',
-    structureNote: '-을 지경이다：动词/形容词 冠词形（을/ㄹ）+ 지경이다\n-(으)ㄹ수록：动词/形容词 词干 + (으)ㄹ수록（前面常配 -(으)면 一起使用）',
-    rulesNote: '-을 지경이다 前面是表达消极或极端状态的冠词形。否定句中也常用（못 참을 지경이다）。\n-(으)ㄹ수록 的前后句主语相同或不同都自然。前面加 -(으)면 时更自然（먹으면 먹을수록）。',
-    scenarioNote: '-을 지경이다 般，如"너무 힘들어서 쓰러질 지경이에요"，用于表达夸张或极端状态。\n-(으)ㄹ수록 般，如"알면 알수록 더 재미있어요"，用于说明渐进变化。',
+    title: '-(으)ㄹ 지경이다，-을수록', english: '-(으)ㄹ 지경이다, -을수록',
+    whatItDoes: '表示极端程度或越……越……', english: 'Indicates extreme degree or "the more... the more..."',
+    whatItDoesBody: '-을 지경이다 表示情况已到了某种极端程度，相当于"到了……的地步/程度"，含有负面或夸张语气。\n-(으)면 -(으)ㄹ수록 表示"越……越……"，前后两个动词/形容词形成递进关系，程度随条件加深。', english: '-을 지경이다 indicates that a situation has reached an extreme degree, equivalent to "to the point of.../to the extent of...", carrying a negative or exaggerated tone.\\n-(으)면 -(으)ㄹ수록 means "the more... the more...", where the two verbs/adjectives form a progressive relationship, with the degree deepening as the condition increases.',
+    structureNote: '-을 지경이다：动词/形容词 冠词形（을/ㄹ）+ 지경이다\n-(으)ㄹ수록：动词/形容词 词干 + (으)ㄹ수록（前面常配 -(으)면 一起使用）', english: '-을 지경이다: verb/adjective adnominal form (을/ㄹ) + 지경이다\\n-(으)ㄹ수록: verb/adjective stem + (으)ㄹ수록 (often used together with -(으)면 before it)',
+    rulesNote: '-을 지경이다 前面是表达消极或极端状态的冠词形。否定句中也常用（못 참을 지경이다）。\n-(으)ㄹ수록 的前后句主语相同或不同都自然。前面加 -(으)면 时更自然（먹으면 먹을수록）。', english: '-을 지경이다 is preceded by an adnominal form expressing a negative or extreme state. It is also commonly used in negative sentences (못 참을 지경이다).\\nFor -(으)ㄹ수록, the subjects of the preceding and following clauses can be the same or different. Adding -(으)면 before it sounds more natural (먹으면 먹을수록).',
+    scenarioNote: '-을 지경이다 般，如"너무 힘들어서 쓰러질 지경이에요"，用于表达夸张或极端状态。\n-(으)ㄹ수록 般，如"알면 알수록 더 재미있어요"，用于说明渐进变化。', english: '-을 지경이다, as in "너무 힘들어서 쓰러질 지경이에요", is used to express exaggeration or an extreme state.\\n-(으)ㄹ수록, as in "알면 알수록 더 재미있어요", is used to indicate gradual change.',
     step0Html: `<div class="card-title">到了那种地步……越来越……</div>
 <div class="card-body">一个说极端，一个说递进。</div>
 <div class="hook-box">
@@ -872,7 +872,7 @@ export const grammarCardsP17: GrammarCard[] = [
       { wrong: '행복할 지경이에요（积极状态 + 지경이다）', correct: '너무 행복해요 / 행복해서 눈물이 날 지경이에요', note: '-을 지경이다 用于消极或极端情境较自然。像 행복하다 这种积极状态使用时不自然。' },
     ],
     quickTable: {
-      title: '-을 지경이다 / -(으)ㄹ수록 接续',
+      title: '-을 지경이다 / -(으)ㄹ수록 接续', english: '-을 지경이다 / -(으)ㄹ수록 Connective Endings',
       headers: ['表达', '收音 O', '收音 X/ㄹ', '例句'],
       rows: [
         ['-을 지경이다', '먹을 지경이다', '쓰러질 지경이다', '못 참을 지경이다'],
@@ -955,8 +955,8 @@ export const grammarCardsP17: GrammarCard[] = [
     isPractice: true,
     partNumber: 17,
     lessonNumber: 5,
-    title: 'P17 综合练习',
-    whatItDoes: 'P17 第1～4课 综合练习',
+    title: 'P17 综合练习', english: 'P17 Comprehensive Practice',
+    whatItDoes: 'P17 第1～4课 综合练习', english: 'P17 Lessons 1–4 Comprehensive Practice',
     whatItDoesBody: '',
     structureNote: '',
     rulesNote: '',
@@ -979,7 +979,7 @@ export const grammarCardsP17: GrammarCard[] = [
 </div>`,
     specialQuiz: {
       type: 'fill',
-      title: 'P17 综合练习',
+      title: 'P17 综合练习', english: 'P17 Comprehensive Practice',
       body: '선택지 중 맞는 것을 고르세요',
       questions: [
         {

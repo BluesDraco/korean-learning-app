@@ -5,12 +5,12 @@ export const grammarCardsP20: GrammarCard[] = [
     id: 'card-p20-l01',
     partNumber: 20,
     lessonNumber: 1,
-    title: '에 대해(서)，에 관해서，에 관한',
-    whatItDoes: '表示"关于……/有关……"的话题指示',
-    whatItDoesBody: '에 대해(서) 和 에 관해(서) 均表示"关于……"，用于指示谈论、研究、思考的对象，意思非常接近，可以互换。\n에 관한/에 대한 是冠词形（定语形），用于修饰后面的名词，相当于"关于……的（名词）"。\n에 대해서 较口语，에 관해서 较书面/正式。',
-    structureNote: '名词 + 에 대해（서）：动词前，"关于……"\n名词 + 에 관해（서）：动词前，"关于……"（较正式）\n名词 + 에 관한/에 대한 + 名词：定语，"关于……的（名词）"',
-    rulesNote: '에 대해 和 에 관해 含义几乎相同，但 에 관해 在学术/报告等正式文体中更自然。\n에 관한/에 대한 是冠词形，后面必须接名词。动词前用 에 대해/에 관해。',
-    scenarioNote: '"환경에 대해 이야기하다"，"역사에 관한 책"般，广泛用于发表、论文、新闻、对话。',
+    title: '에 대해(서)，에 관해서，에 관한', english: '에 대해(서), 에 관해서, 에 관한',
+    whatItDoes: '表示"关于……/有关……"的话题指示', english: 'Indicates the topic of "about.../regarding..."',
+    whatItDoesBody: '에 대해(서) 和 에 관해(서) 均表示"关于……"，用于指示谈论、研究、思考的对象，意思非常接近，可以互换。\n에 관한/에 대한 是冠词形（定语形），用于修饰后面的名词，相当于"关于……的（名词）"。\n에 대해서 较口语，에 관해서 较书面/正式。', english: '에 대해(서) and 에 관해(서) both mean "about...", used to indicate the object of discussion, research, or thought. Their meanings are very similar and they can be used interchangeably.\\n에 관한/에 대한 are adnominal (attributive) forms used to modify the noun that follows, equivalent to "(noun) about...".\\n에 대해서 is more colloquial, while 에 관해서 is more formal/written.',
+    structureNote: '名词 + 에 대해（서）：动词前，"关于……"\n名词 + 에 관해（서）：动词前，"关于……"（较正式）\n名词 + 에 관한/에 대한 + 名词：定语，"关于……的（名词）"', english: 'Noun + 에 대해(서): before a verb, "about..."<br>Noun + 에 관해(서): before a verb, "about..." (more formal)<br>Noun + 에 관한/에 대한 + Noun: attributive form, "(noun) about..."',
+    rulesNote: '에 대해 和 에 관해 含义几乎相同，但 에 관해 在学术/报告等正式文体中更自然。\n에 관한/에 대한 是冠词形，后面必须接名词。动词前用 에 대해/에 관해。', english: '에 대해 and 에 관해 have nearly the same meaning, but 에 관해 sounds more natural in formal contexts like academic writing or reports.<br>에 관한/에 대한 are attributive forms and must be followed by a noun. Use 에 대해/에 관해 before a verb.',
+    scenarioNote: '"환경에 대해 이야기하다"，"역사에 관한 책"般，广泛用于发表、论文、新闻、对话。', english: 'Used widely in presentations, papers, news, and conversations, such as "환경에 대해 이야기하다" (talk about the environment) or "역사에 관한 책" (a book about history).',
     structures: [
       {
         ko: '명사 + 에 대해（서）+ 动词',
@@ -113,13 +113,13 @@ export const grammarCardsP20: GrammarCard[] = [
     mistakes: [
       { wrong: '환경에 대해 책을 읽었어요（에 대해 + 直接接名词）', correct: '환경에 대한 책을 읽었어요', note: '修饰名词时用冠词形 에 대한/에 관한。에 대해/에 관해 后面接动词：에 대해 이야기하다（✓）。' },
       { wrong: '에 관해한 책（에 관해 + 한）', correct: '에 관한 책', note: '冠词形是 에 관한，에 관해한 是不存在的形式。에 관해 后接动词，에 관한 后接名词。' },
-      { wrong: '이것에 대하여 이야기해요（正式的 대하여 用在口语）', correct: '이것에 대해서 이야기해요', note: '에 대하여 是书面语/正式体形式。口语中用 에 대해서 或 에 대해 更自然。' },
+      { wrong: '이것에 대하여 이야기해요（正式的 대하여 用在口语）', correct: '이것에 대해서 이야기해요', note: '에 대하여 是书面/正式体。口语中更自然用 에 대해서 或 에 대해。非语法错误，属语体差异。' },
       { wrong: '把 에 관해 和 에 대해 当成完全不同的表达', correct: '에 관해서 ≈ 에 대해서（含义相同，正式度略有差别）', note: '에 관해서 和 에 대해서 含义相同。에 관해서 更适合学术/正式文体，에 대해서 在口语中也自然。' },
       { wrong: '선생님에 대해 질문했어요（想说"向老师提问"）', correct: '선생님에게 질문했어요', note: '中文"对"身兼两义：表"关于（某话题）"用 에 대해，表"向/对（某人）"要用 에게/한테。向人提问、对人说是"对某人"，用 에게。선생님에 대해 질문했어요 意思会变成"就老师这个话题提问"。' },
     ],
     specialQuiz: {
       type: 'fill',
-      title: '에 대해(서)，에 관해서，에 관한',
+      title: '에 대해(서)，에 관해서，에 관한', english: '에 대해(서), 에 관해서, 에 관한',
       body: '선택지 중 맞는 것을 고르세요',
       questions: [
         {
@@ -229,7 +229,7 @@ export const grammarCardsP20: GrammarCard[] = [
 </div>`,
     compareLabel: '에 대해 vs 에 관해 vs 에 대한 vs 에 관한',
     quickTable: {
-      title: '에 대해/에 관해 用法整理',
+      title: '에 대해/에 관해 用法整理', english: 'Summary of 에 대해/에 관해 Usage',
       headers: ['形式', '后接', '正式度', '例句'],
       rows: [
         ['에 대해（서）', '动词', '口语/书面语', '건강에 대해 이야기해요'],
@@ -245,12 +245,12 @@ export const grammarCardsP20: GrammarCard[] = [
     id: 'card-p20-l02',
     partNumber: 20,
     lessonNumber: 2,
-    title: '을/를 비롯한，비롯해서，만 해도',
-    whatItDoes: '举例列举，或以某事为基准说"光是……就……"',
-    whatItDoesBody: '을/를 비롯한 和 을/를 비롯해서 均表示"以……为首/包括……在内"，用于列举，说明某事物是其中代表性的例子。\n비롯한 是冠词形（定语），修饰后面的名词；비롯해서 是连用形，后接动词。\n(까지)만 해도 表示"光是……就……/即便只说……也……"，以某一具体事例强调整体程度，常带有"更不用说其他"的含义。',
-    structureNote: '名词 + 을/를 비롯한 + 名词（以……为首的……）\n名词 + 을/를 비롯해서 + 动词（包括……在内，……）\n名词 + 만 해도 / 名词 + 까지만 해도（光是……就……）',
-    rulesNote: '비롯한/비롯해서 前面的名词，是列举整体中的典型例子。\n만 해도 举出一个极端事例来强调整体。까지 是语气更强的补助词，进一步强调"极端"。',
-    scenarioNote: '"BTS를 비롯한 K-POP 그룹들"般，常用于先提出代表性例子的说明/发表。\n"이것만 해도 너무 많아요"般，用于日常对话中的夸张/强调。',
+    title: '을/를 비롯한，비롯해서，만 해도', english: '을/를 비롯한, 비롯해서, 만 해도',
+    whatItDoes: '举例列举，或以某事为基准说"光是……就……"', english: 'To list examples, or to use something as a baseline to say "just... already..."',
+    whatItDoesBody: '을/를 비롯한 和 을/를 비롯해서 均表示"以……为首/包括……在内"，用于列举，说明某事物是其中代表性的例子。\n비롯한 是冠词形（定语），修饰后面的名词；비롯해서 是连用形，后接动词。\n(까지)만 해도 表示"光是……就……/即便只说……也……"，以某一具体事例强调整体程度，常带有"更不用说其他"的含义。', english: '을/를 비롯한 and 을/를 비롯해서 both mean "with... at the forefront/including..." and are used to list examples, indicating that something is a representative example among them.<br>비롯한 is the attributive form (modifier) and modifies the following noun; 비롯해서 is the connective form and is followed by a verb.<br>(까지)만 해도 means "just... already.../even just mentioning..." and uses a specific example to emphasize the overall degree, often carrying the nuance of "let alone the rest."',
+    structureNote: '名词 + 을/를 비롯한 + 名词（以……为首的……）\n名词 + 을/를 비롯해서 + 动词（包括……在内，……）\n名词 + 만 해도 / 名词 + 까지만 해도（光是……就……）', english: 'Noun + 을/를 비롯한 + Noun (with... at the forefront)<br>Noun + 을/를 비롯해서 + Verb (including..., ...)<br>Noun + 만 해도 / Noun + 까지만 해도 (just... already...)',
+    rulesNote: '비롯한/비롯해서 前面的名词，是列举整体中的典型例子。\n만 해도 举出一个极端事例来强调整体。까지 是语气更强的补助词，进一步强调"极端"。', english: 'The noun before 비롯한/비롯해서 is a typical example within the overall list.<br>만 해도 gives an extreme example to emphasize the overall degree. 까지 is a stronger particle that further emphasizes the "extremeness."',
+    scenarioNote: '"BTS를 비롯한 K-POP 그룹들"般，常用于先提出代表性例子的说明/发表。\n"이것만 해도 너무 많아요"般，用于日常对话中的夸张/强调。', english: 'Used in explanations/presentations that first present a representative example, like "BTS를 비롯한 K-POP 그룹들" (K-pop groups including BTS).<br>Used in everyday conversation for exaggeration/emphasis, like "이것만 해도 너무 많아요" (Just this alone is already too much).',
     structures: [
       {
         ko: '을/를 비롯한 + 名词',
@@ -363,7 +363,7 @@ export const grammarCardsP20: GrammarCard[] = [
     ],
     specialQuiz: {
       type: 'fill',
-      title: '을/를 비롯한，비롯해서，만 해도',
+      title: '을/를 비롯한，비롯해서，만 해도', english: '을/를 비롯한, 비롯해서, 만 해도',
       body: '선택지 중 맞는 것을 고르세요',
       questions: [
         {
@@ -473,7 +473,7 @@ export const grammarCardsP20: GrammarCard[] = [
 </div>`,
     compareLabel: '비롯한 vs 비롯해서 / 만 해도 vs 까지만 해도',
     quickTable: {
-      title: '비롯한/비롯해서/만 해도 用法整理',
+      title: '비롯한/비롯해서/만 해도 用法整理', english: 'Summary of 비롯한/비롯해서/만 해도 Usage',
       headers: ['形式', '后接', '功能', '例句'],
       rows: [
         ['을/를 비롯한', '名词', '冠词形', 'BTS를 비롯한 그룹들'],
@@ -489,12 +489,12 @@ export const grammarCardsP20: GrammarCard[] = [
     id: 'card-p20-l03',
     partNumber: 20,
     lessonNumber: 3,
-    title: '개나，까지（强调补助词）',
-    whatItDoes: '表示数量之多令人意外，或"连……都/甚至……"',
-    whatItDoesBody: '개나（도）用在数量词后，表示说话人觉得该数量多得出乎意料，相当于"竟然……个/多达……"，带有轻微惊讶或夸张语气。\n까지 作为强调助词，表示"连……都/甚至……"，强调到了意想不到的极端，可以是正面惊喜也可以是负面意外。',
-    structureNote: '수량 + 개나（도）：数量 + 개/명/권 + 나（도）（竟然……个）\n名词/부사 + 까지：名词/副词 + 까지（连……都/甚至……）',
-    rulesNote: '개나 中的 나 表示"比预期多"的辅助语气。나/이나 后面不能再加 도（개나도✗）。\n까지 表示"达到极端"。用于意料之外的事态、极端事例。前面名词无论有无收音，까지 形式不变。',
-    scenarioNote: '"이게 벌써 세 개나 됐어？（竟然已经三个了？）"，"친구까지 나를 의심해（连朋友都怀疑我）"般，常用于表达惊讶。',
+    title: '개나，까지（强调补助词）', english: '개나, 까지 (Emphatic Particles)',
+    whatItDoes: '表示数量之多令人意外，或"连……都/甚至……"', english: 'Indicates that a quantity is surprisingly large, or means "even.../including..."',
+    whatItDoesBody: '개나（도）用在数量词后，表示说话人觉得该数量多得出乎意料，相当于"竟然……个/多达……"，带有轻微惊讶或夸张语气。\n까지 作为强调助词，表示"连……都/甚至……"，强调到了意想不到的极端，可以是正面惊喜也可以是负面意外。', english: '개나(도) is used after a number or quantity word to express that the speaker finds the amount surprisingly large, equivalent to "as many as.../a whole...", with a slight tone of surprise or exaggeration.\\n까지 is an emphatic particle meaning "even.../including...", emphasizing that something has reached an unexpected extreme, which can be either a pleasant surprise or an unpleasant shock.',
+    structureNote: '수량 + 개나（도）：数量 + 개/명/권 + 나（도）（竟然……个）\n名词/부사 + 까지：名词/副词 + 까지（连……都/甚至……）', english: 'Quantity + 개나(도): number + 개/명/권 + 나(도) (as many as...)\\nNoun/adverb + 까지: noun/adverb + 까지 (even.../including...)',
+    rulesNote: '개나 中的 나 表示"比预期多"的辅助语气。나/이나 后面不能再加 도（개나도✗）。\n까지 表示"达到极端"。用于意料之外的事态、极端事例。前面名词无论有无收音，까지 形式不变。', english: 'In 개나, 나 adds the nuance of "more than expected." 나/이나 cannot be followed by 도 (개나도✗).\\n까지 means "reaching an extreme." It is used for unexpected situations or extreme examples. The form of 까지 remains the same regardless of whether the preceding noun ends in a consonant or vowel.',
+    scenarioNote: '"이게 벌써 세 개나 됐어？（竟然已经三个了？）"，"친구까지 나를 의심해（连朋友都怀疑我）"般，常用于表达惊讶。', english: 'Used to express surprise, as in "이게 벌써 세 개나 됐어? (It\'s already three of these?)" or "친구까지 나를 의심해 (Even my friend doubts me)."',
     structures: [
       {
         ko: '수량 + 개나（의외의 많음）',
@@ -605,7 +605,7 @@ export const grammarCardsP20: GrammarCard[] = [
     ],
     specialQuiz: {
       type: 'fill',
-      title: '개나，까지',
+      title: '개나，까지', english: '개나, 까지',
       body: '선택지 중 맞는 것을 고르세요',
       questions: [
         {
@@ -710,7 +710,7 @@ export const grammarCardsP20: GrammarCard[] = [
 </div>`,
     compareLabel: '나/이나 vs 도 vs 까지',
     quickTable: {
-      title: '나/이나 收音选择 / 까지 用法整理',
+      title: '나/이나 收音选择 / 까지 用法整理', english: '나/이나 Consonant/Vowel Selection / Summary of 까지 Usage',
       headers: ['助词', '前接名词条件', '功能', '例句'],
       rows: [
         ['나', '无收音数量词', '数量超出惊讶', '다섯 개나，두 채나'],
@@ -725,12 +725,12 @@ export const grammarCardsP20: GrammarCard[] = [
     id: 'card-p20-l04',
     partNumber: 20,
     lessonNumber: 4,
-    title: '(이)라든가，(이)라든지，마저',
-    whatItDoes: '举例列举，或表示"连最后的……都"',
-    whatItDoesBody: '(이)라든가 和 (이)라든지 均用于列举若干例子，表示"……啊/……之类的"，说明不限于某一个，是其中的若干例子之一。两者意思相同，라든지 略比 라든가 更书面。\n마저 表示"连最后一个也/连剩下的也"，强调到了最后的、本不应该如此的也发生了，带有绝望或遗憾的语气，相当于"连……都……（最后的希望/剩下的也）"。',
-    structureNote: '收音O 名词 + 이라든가/이라든지\n收音X 名词 + 라든가/라든지\n名词 + 마저（连最后一个也……）',
-    rulesNote: '(이)라든가/(이)라든지 后面通常接动词或继续列举其他项。列举两个以上项目时，加在每个项目后面。\n마저 表示在本已糟糕的情境下，连最后剩下的也变成如此的绝望感。比 까지 的否定语气更强。',
-    scenarioNote: '"영화라든가 음악이라든가（电影啊音乐之类的）"般，列举兴趣时，\n"희망마저 없어졌어요（连希望都没了）"般，用于表达绝望情境。',
+    title: '(이)라든가，(이)라든지，마저', english: '(이)라든가, (이)라든지, 마저',
+    whatItDoes: '举例列举，或表示"连最后的……都"', english: 'Used to list examples, or to mean "even the last..."',
+    whatItDoesBody: '(이)라든가 和 (이)라든지 均用于列举若干例子，表示"……啊/……之类的"，说明不限于某一个，是其中的若干例子之一。两者意思相同，라든지 略比 라든가 更书面。\n마저 表示"连最后一个也/连剩下的也"，强调到了最后的、本不应该如此的也发生了，带有绝望或遗憾的语气，相当于"连……都……（最后的希望/剩下的也）"。', english: '(이)라든가 and (이)라든지 are both used to list several examples, meaning "...or something like.../...and the like," indicating that it is not limited to one specific thing but is one of several examples. The two have the same meaning, with 라든지 being slightly more formal than 라든가.\\n마저 means "even the last one/even what remains," emphasizing that even the final thing that should not have happened has occurred, carrying a sense of despair or regret, equivalent to "even... (the last hope/remaining one)."',
+    structureNote: '收音O 名词 + 이라든가/이라든지\n收音X 名词 + 라든가/라든지\n名词 + 마저（连最后一个也……）', english: 'Noun ending in consonant + 이라든가/이라든지\\nNoun ending in vowel + 라든가/라든지\\nNoun + 마저 (even the last one...)',
+    rulesNote: '(이)라든가/(이)라든지 后面通常接动词或继续列举其他项。列举两个以上项目时，加在每个项目后面。\n마저 表示在本已糟糕的情境下，连最后剩下的也变成如此的绝望感。比 까지 的否定语气更强。', english: '(이)라든가/(이)라든지 is usually followed by a verb or continues listing other items. When listing two or more items, it is attached after each item.\\n마저 expresses the despair that, in an already bad situation, even the last remaining thing has turned out this way. Its negative nuance is stronger than that of 까지.',
+    scenarioNote: '"영화라든가 음악이라든가（电影啊音乐之类的）"般，列举兴趣时，\n"희망마저 없어졌어요（连希望都没了）"般，用于表达绝望情境。', english: 'Like "영화라든가 음악이라든가" (movies, music, and the like) when listing interests, or "희망마저 없어졌어요" (even hope disappeared) to express a hopeless situation.',
     structures: [
       {
         ko: '收音X 名词 + 라든가',
@@ -842,7 +842,7 @@ export const grammarCardsP20: GrammarCard[] = [
     ],
     specialQuiz: {
       type: 'fill',
-      title: '(이)라든가，(이)라든지，마저',
+      title: '(이)라든가，(이)라든지，마저', english: '(이)라든가, (이)라든지, 마저',
       body: '선택지 중 맞는 것을 고르세요',
       questions: [
         {
@@ -952,7 +952,7 @@ export const grammarCardsP20: GrammarCard[] = [
 </div>`,
     compareLabel: '마저 vs 까지 / 라든가 vs 라든지',
     quickTable: {
-      title: '(이)라든가/(이)라든지/마저 用法整理',
+      title: '(이)라든가/(이)라든지/마저 用法整理', english: 'Summary of (이)라든가/(이)라든지/마저 Usage',
       headers: ['助词', '收音条件', '功能', '例句'],
       rows: [
         ['라든가/라든지', '无收音名词', '列举（口语/正式）', '영화라든가，잡지라든지'],
@@ -967,12 +967,12 @@ export const grammarCardsP20: GrammarCard[] = [
     id: 'card-p20-l05',
     partNumber: 20,
     lessonNumber: 5,
-    title: '-는가 하면，-기도 하다',
-    whatItDoes: '表示一面……一面……，或"也会/也有"',
-    whatItDoesBody: '-는/은/ㄴ가 하면 表示两种对比或并列的情况同时存在，相当于"一方面……另一方面……/有时……有时……"，常用于描述事物的两面性。\n-기도 하다 表示在某行为或状态之外也有其他情况，相当于"也会/也有时/也是"，语气比较平和，常与 때로는、偶尔 等副词搭配。',
-    structureNote: '-는/은/ㄴ가 하면：动词/形容词 冠词形 + 가 하면\n-기도 하다：动词/形容词 词干 + 기도 하다',
-    rulesNote: '-는가 하면 前后分句是相互对照的内容。前句是一种情境，后句是相反或另一种情境。\n-기도 하다 可以单独使用（如"～하기도 해요"），也可以用在罗列结构中（如"-기도 하고 -기도 하다"）。',
-    scenarioNote: '如"가격이 싼가 하면 품질이 나빠요（一方面价格便宜，另一方面质量不好）"，\n"슬프기도 하고 기쁘기도 해요（既有些难过，也有些高兴）"，用于描述复杂情感或情境。',
+    title: '-는가 하면，-기도 하다', english: '-는가 하면, -기도 하다',
+    whatItDoes: '表示一面……一面……，或"也会/也有"', english: 'Indicates "on one hand... on the other hand..." or "also/sometimes"',
+    whatItDoesBody: '-는/은/ㄴ가 하면 表示两种对比或并列的情况同时存在，相当于"一方面……另一方面……/有时……有时……"，常用于描述事物的两面性。\n-기도 하다 表示在某行为或状态之外也有其他情况，相当于"也会/也有时/也是"，语气比较平和，常与 때로는、偶尔 等副词搭配。', english: '-는/은/ㄴ가 하면 expresses two contrasting or parallel situations coexisting, equivalent to "on one hand... on the other hand.../sometimes... sometimes...", often used to describe two sides of something.\\n-기도 하다 indicates that in addition to a certain action or state, there are other situations, equivalent to "also/sometimes/also is", with a calm tone, often used with adverbs like 때로는 (sometimes).',
+    structureNote: '-는/은/ㄴ가 하면：动词/形容词 冠词形 + 가 하면\n-기도 하다：动词/形容词 词干 + 기도 하다', english: '-는/은/ㄴ가 하면: Verb/Adjective adnominal form + 가 하면\\n-기도 하다: Verb/Adjective stem + 기도 하다',
+    rulesNote: '-는가 하면 前后分句是相互对照的内容。前句是一种情境，后句是相反或另一种情境。\n-기도 하다 可以单独使用（如"～하기도 해요"），也可以用在罗列结构中（如"-기도 하고 -기도 하다"）。', english: 'In -는가 하면, the clauses before and after are contrasting. The first clause describes one situation, and the second describes an opposite or different one.\\n-기도 하다 can be used alone (e.g., "~하기도 해요") or in a listing structure (e.g., "-기도 하고 -기도 하다").',
+    scenarioNote: '如"가격이 싼가 하면 품질이 나빠요（一方面价格便宜，另一方面质量不好）"，\n"슬프기도 하고 기쁘기도 해요（既有些难过，也有些高兴）"，用于描述复杂情感或情境。', english: 'Like "가격이 싼가 하면 품질이 나빠요" (on one hand the price is cheap, on the other hand the quality is bad), or "슬프기도 하고 기쁘기도 해요" (I feel both sad and happy), used to describe complex emotions or situations.',
     structures: [
       {
         ko: '동사 -는가 하면',
@@ -1080,7 +1080,7 @@ export const grammarCardsP20: GrammarCard[] = [
     ],
     specialQuiz: {
       type: 'fill',
-      title: '-는가 하면，-기도 하다',
+      title: '-는가 하면，-기도 하다', english: '-는가 하면, -기도 하다',
       body: '선택지 중 맞는 것을 고르세요',
       questions: [
         {
@@ -1186,7 +1186,7 @@ export const grammarCardsP20: GrammarCard[] = [
 </div>`,
     compareLabel: '-는가 하면 vs -기도 하다',
     quickTable: {
-      title: '-는/은/ㄴ가 하면 冠词形选择',
+      title: '-는/은/ㄴ가 하면 冠词形选择', english: 'Choosing the Adnominal Form for -는/은/ㄴ가 하면',
       headers: ['词性', '冠词形', '例句'],
       rows: [
         ['动词现在', '-는가', '웃는가 하면，먹는가 하면'],
@@ -1203,8 +1203,8 @@ export const grammarCardsP20: GrammarCard[] = [
     isPractice: true,
     partNumber: 20,
     lessonNumber: 6,
-    title: 'P20 综合练习',
-    whatItDoes: 'P20 第1～5课 综合练习',
+    title: 'P20 综合练习', english: 'P20 Comprehensive Practice',
+    whatItDoes: 'P20 第1～5课 综合练习', english: 'Comprehensive practice for Lessons 1-5 of P20',
     whatItDoesBody: '',
     structureNote: '',
     rulesNote: '',
@@ -1227,7 +1227,7 @@ export const grammarCardsP20: GrammarCard[] = [
 </div>`,
     specialQuiz: {
       type: 'fill',
-      title: 'P20 综合练习',
+      title: 'P20 综合练习', english: 'P20 Comprehensive Practice',
       body: '선택지 중 맞는 것을 고르세요',
       questions: [
         {
