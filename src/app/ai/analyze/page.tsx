@@ -10,23 +10,22 @@ import { displayRoman } from '@/lib/dictionary';
 import { useRequireLoginAction } from '@/hooks/useRequireLoginAction';
 import { useAuth } from '@/components/AuthProvider';
 import { knowledgeCategories } from '@/data/knowledge';
-import { grammarPoints } from '@/data/grammar';
 import { useTheme } from '@/components/ThemeProvider';
+import { LIGHT_C as _LIGHT_C, DARK_C as _DARK_C } from '@/lib/theme';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
+import { useIsDesktop } from '@/lib/useIsMobile';
+import { SentenceStructureChart } from '@/components/analyze/SentenceStructureChart';
+import { TappableText } from '@/components/TappableText';
+import { AnalyzeWordCard } from '@/components/analyze/AnalyzeWordCard';
+import { GrammarTeachingCard } from '@/components/analyze/GrammarTeachingCard';
+import { AnalyzeQuiz } from '@/components/analyze/AnalyzeQuiz';
+import { FloatingKoreanKeyboard } from '@/components/FloatingKoreanKeyboard';
+import PlaceIntro from '@/components/PlaceIntro';
+import type { KoZh } from '@/types/inline';
 
-const LIGHT_C = {
-  ink: '#241917', muted: '#89756e', line: '#eee0d8', pink: '#ff7fa8',
-  pinkSoft: '#fff0f5', mint: '#aee3d8', cream: '#fff8f4', black: '#201815',
-  mintBg: '#eaf8f5', mintText: '#4e746d', zhText: '#7e6b64',
-  shadow: '0 16px 42px rgba(78,52,46,.10)', strong: '0 28px 72px rgba(78,52,46,.18)',
-  card: '#fff',
-};
-const DARK_C = {
-  ink: '#F0E8FF', muted: '#B8A8C8', line: '#3A3060', pink: '#ff7fa8',
-  pinkSoft: '#2D2848', mint: '#4A6058', cream: '#232040', black: '#3A3060',
-  mintBg: '#1E3530', mintText: '#5ecfb8', zhText: '#B8A8C8',
-  shadow: '0 16px 42px rgba(78,52,46,.10)', strong: '0 28px 72px rgba(78,52,46,.18)',
-  card: '#282440',
-};
+const LIGHT_C = { ..._LIGHT_C, cream: '#fff8f4', mintText: '#4e746d', zhText: '#7e6b64', shadow: '0 16px 42px rgba(78,52,46,.10)', strong: '0 28px 72px rgba(78,52,46,.18)' };
+const DARK_C  = { ..._DARK_C, cream: '#252040', mintText: '#5ecfb8', zhText: '#9A8AB0', shadow: '0 16px 42px rgba(0,0,0,.30)', strong: '0 28px 72px rgba(0,0,0,.40)' };
 
 type Mode = 'learn' | 'deep';
 
@@ -38,6 +37,7 @@ interface CultureNote { anchor: string; explanation: string }
 
 type QuizType = 'meaning' | 'cloze' | 'translate' | 'grammar';
 interface QuizQuestion {
+  [k: string]: unknown;
   type: QuizType;
   question: string;
   options: string[];
@@ -47,6 +47,7 @@ interface QuizQuestion {
 }
 
 interface AnalysisResult {
+  [k: string]: unknown;
   original: string;
   fullTranslation: string;
   alternativeTranslations?: Array<{ ko: string; context: string }>;
@@ -77,7 +78,7 @@ interface AnalysisResult {
     contrast?: string;
     mistake?: string;
     meaning?: string;
-    examples: { ko: string; zh: string }[] | string[];
+    examples: KoZh[] | string[];
   }[];
   sentences?: { korean: string; chinese: string; structure?: string }[];
   suggestion?: string;
@@ -342,7 +343,7 @@ const particleExplanations: Record<string, string> = {
 const verbEndings = ['습니다', 'ㅂ니다', '아요', '어요', '해요', '세요', '으세요', '았어요', '었어요', '했어요', '겠습니다', 'ㄹ게요', '을게요', '네요', '고요', '니까', '면서', '지만', '는데', '거나'];
 
 // 例句兼容：新版 { ko, zh } 对象 + 旧版 localStorage string[]
-function normalizeExample(ex: { ko: string; zh: string } | string): { ko: string; zh: string } {
+function normalizeExample(ex: KoZh | string): KoZh {
   return typeof ex === 'string' ? { ko: ex, zh: '' } : ex;
 }
 // ── Offline analyze (fallback) ─────────────────────────
@@ -440,6 +441,7 @@ function detectDirection(text: string): { from: string; to: string } {
 
 // ── History ────────────────────────────────────────────
 interface HistoryItem {
+  [k: string]: unknown;
   id: string;
   timestamp: number;
   original: string;
@@ -1211,16 +1213,12 @@ export default function AnalyzePage() {
 
     const TIMEOUT_MS = 15000;
     let timedOut = false;
+    const controller = new AbortController();
     const timeoutId = setTimeout(() => {
       timedOut = true;
+      controller.abort();
       setAnalyzing(false);
-      showToastMsg('请求超时，已切换离线模式');
-      const r = analyzeOffline(input.trim());
-      setResult(r);
-      saveToHistory(r);
-      setSavedWords(new Set());
-      setSavedSentences(new Set());
-      setShowAlt(false);
+      showToastMsg(t('analyze.toast_timeout', lang));
     }, TIMEOUT_MS);
 
     try {
@@ -1248,33 +1246,38 @@ export default function AnalyzePage() {
         setResult(r);
         saveToHistory(r);
       } else {
-        const r = analyzeOffline(input.trim());
-        r._degraded = true;
-        setResult(r);
-        saveToHistory(r);
+        showToastMsg(t('analyze.toast_failed', lang));
       }
     } catch {
       if (timedOut) return;
       clearTimeout(timeoutId);
-      const r = analyzeOffline(input.trim());
-      r._degraded = true;
-      setResult(r);
-      saveToHistory(r);
+      showToastMsg(t('analyze.toast_failed', lang));
     }
 
     if (!timedOut) {
       setAnalyzing(false);
       setSavedWords(new Set());
       setSavedSentences(new Set());
-      setShowAlt(false);
+      setAddedSentences(new Set());
       setShowAllWords(false);
       setShowAllGrammar(false);
+      setShowLiteral(false);
     }
+  }
+
+  // 入库句子的 korean/chinese 字段要按实际语言方向对齐
+  function getSentenceFields() {
+    if (!result) return { korean: '', chinese: '' };
+    const isZhInput = dir.from === '中文';
+    return {
+      korean: isZhInput ? result.fullTranslation : result.original,
+      chinese: isZhInput ? result.original : result.fullTranslation,
+    };
   }
 
   async function handleSaveSentence() {
     if (!result) return;
-    if (savedSentences.has(result.original)) { showToastMsg('已保存到我的句子'); return; }
+    if (savedSentences.has(result.original)) { showToastMsg(t('analyze.toast_already_saved_sentence', lang), '/vocabulary?tab=sentences'); return; }
     requireLogin(async () => {
       try {
         const { korean, chinese } = getSentenceFields();
@@ -1297,14 +1300,15 @@ export default function AnalyzePage() {
   }
 
   async function handleSaveWord(text: string, meaning: string) {
-    if (savedWords.has(text)) { showToastMsg('已保存到词库'); return; }
+    const cleanText = stripParticle(text);
+    if (savedWords.has(cleanText)) { showToastMsg(t('analyze.toast_saved_word', lang)); return; }
     requireLogin(async () => {
       try {
-        const existing = await db.words.where('word').equals(text).first();
+        const existing = await db.words.where('word').equals(cleanText).first();
         if (!existing) {
           await db.words.add({
-            id: 'analyze-' + text,
-            word: text, pronunciation: '', meaning,
+            id: 'analyze-' + cleanText,
+            word: cleanText, pronunciation: '', meaning,
             partOfSpeech: '', examples: [], mastery: 'new' as const,
             srsLevel: 0, nextReview: Date.now(), easeFactor: 2.5, interval: 1,
             createdAt: Date.now(), lastReviewed: null,
@@ -1475,7 +1479,7 @@ export default function AnalyzePage() {
   }
 
   function handleClear() {
-    if (result && !confirm('清空输入和分析结果？')) return;
+    // 清空可通过左侧"最近拆解"历史恢复，无需原生 confirm 弹窗（移动端样式突兀且与全站 toast 风格不一致）
     setInput('');
     setResult(null);
   }
@@ -1509,7 +1513,16 @@ export default function AnalyzePage() {
     setShowHistory(false);
     setSavedWords(new Set());
     setSavedSentences(new Set());
+    setAddedSentences(new Set());
+    setShowAllWords(false);
+    setShowAllGrammar(false);
+    setShowLiteral(false);
     if (item.result) {
+      // Legacy: 旧记录里 mode='translate' 已下线，只显示翻译，提示用户重新分析
+      const legacyMode = (item.result as unknown as { mode?: string }).mode;
+      if (legacyMode === 'translate') {
+        showToastMsg(t('analyze.legacy_translate_notice', lang));
+      }
       setResult(item.result);
       return;
     }
@@ -1520,21 +1533,21 @@ export default function AnalyzePage() {
       setAnalyzing(true);
       (async () => {
         try {
-          const res = await fetch('/api/ai/analyze', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sentence: trimmed, mode }) });
+          const res = await fetch('/api/ai/analyze', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sentence: trimmed, mode, lang }) });
           if (res.ok) {
             const data = await res.json();
             const r: AnalysisResult = {
-              original: trimmed, fullTranslation: data.fullTranslation || data.overview || '',
+              ...data,
+              original: trimmed,
+              fullTranslation: data.fullTranslation || '',
               words: data.words || [], particles: data.particles || [], grammar: data.grammar || [],
-              sentences: data.sentences, suggestion: data.suggestion, difficulty: data.difficulty,
+              _degraded: data._downgraded || data._degraded,
             };
             setResult(r);
             saveToHistory(r);
           } else throw new Error('');
         } catch {
-          const r = analyzeOffline(trimmed);
-          r._degraded = true;
-          setResult(r);
+          showToastMsg(t('analyze.toast_failed', lang));
         }
         setAnalyzing(false);
       })();
@@ -1548,6 +1561,8 @@ export default function AnalyzePage() {
 
   const [showAllWords, setShowAllWords] = useState(false);
   const [showAllGrammar, setShowAllGrammar] = useState(false);
+  const [showLiteral, setShowLiteral] = useState(false);
+  const isDesktop = useIsDesktop();
 
   // ── Render helpers ──────────────────────────────────
   const [speakingText, setSpeakingText] = useState<string | null>(null);
@@ -1577,229 +1592,138 @@ export default function AnalyzePage() {
     );
   }
 
-  function renderTokenizedKorean(text: string) {
-    // Simply split by spaces and wrap each word as a token-like span
-    const words = text.split(/(\s+)/).filter(Boolean);
-    return words.map((w, i) =>
-      w.trim() ? (
-        <span key={i} onClick={() => {
-          const word = w.replace(/[.,!?~]+$/, '');
-          const found = result?.words.find(wo => wo.text === word);
-          if (found) showToastMsg(found.meaning);
-        }} style={{ display: 'inline-flex', margin: '2px 2px', padding: '2px 5px', borderRadius: 8, background: C.pinkSoft, color: '#5a423b', border: '1px solid rgba(255,127,168,.18)', cursor: 'pointer' }}>{w}</span>
-      ) : <span key={i}>{w}</span>
-    );
-  }
-
-  function renderQuickTools() {
-    const isChinese = dir.from === '中文';
-    const hasKoreanTranslation = isChinese && /[가-힣]/.test(result?.fullTranslation || '');
-    const speakText = isChinese ? result?.fullTranslation : result?.original;
-    const canSpeak = isChinese ? hasKoreanTranslation : !!result?.original;
-    return (
-      <div style={{ display: 'grid', gridTemplateColumns: canSpeak ? '1fr 1fr 1fr' : '1fr 1fr', gap: 8, padding: '0 16px 16px' }}>
-        <button onClick={handleCopy} style={{ height: 38, borderRadius: 999, border: '1px solid ' + C.line, background: C.card, color: '#5a4640', fontSize: 12, fontWeight: 800, cursor: 'pointer' }}>复制翻译</button>
-        <button onClick={handleSaveSentence} style={{ height: 38, borderRadius: 999, border: '1px solid ' + C.line, background: savedSentences.has(result?.original || '') ? C.mintBg : '#fff', color: savedSentences.has(result?.original || '') ? C.mintText : '#5a4640', fontSize: 12, fontWeight: 800, cursor: 'pointer' }}>{savedSentences.has(result?.original || '') ? '✓ 已保存' : '保存句子'}</button>
-        {canSpeak && (
-          <button onClick={() => { if (speakText) handleSpeak(speakText); }} style={{ height: 38, borderRadius: 999, border: '1px solid ' + C.line, background: (speakingText === result?.original || speakingText === result?.fullTranslation) ? C.pinkSoft : '#fff', color: (speakingText === result?.original || speakingText === result?.fullTranslation) ? '#f0799b' : '#5a4640', fontSize: 12, fontWeight: 800, cursor: 'pointer' }}>
-            {(speakingText === result?.original || speakingText === result?.fullTranslation) ? '⏹ 停止' : (isChinese ? '朗读韩译' : '朗读原文')}
-          </button>
-        )}
-      </div>
-    );
-  }
-
-  function renderModeDescription() {
-    const descs = [
-      { label: '快速翻译', desc: '只看意思' },
-      { label: '学习拆解', desc: '翻译 + 词句' },
-      { label: '深度解析', desc: '长文精读' },
-    ];
-    return (
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, margin: '-4px 0 14px' }}>
-        {descs.map((d, i) => {
-          const isActive = (i === 0 && mode === 'translate') || (i === 1 && mode === 'learn') || (i === 2 && mode === 'deep');
-          return (
-            <div key={d.label} style={{ borderRadius: 20, padding: '10px 6px', textAlign: 'center', background: isActive ? C.pinkSoft : '#fff', border: '1px solid ' + (isActive ? 'rgba(255,127,168,.28)' : C.line), boxShadow: C.shadow }}>
-              <strong style={{ display: 'block', fontSize: 12 }}>{d.label}</strong>
-              <span style={{ display: 'block', marginTop: 4, color: isActive ? '#f0799b' : C.muted, fontSize: 10, fontWeight: 900 }}>{d.desc}</span>
-            </div>
-          );
-        })}
-      </div>
-    );
-  }
-
-  function renderModeExplanation() {
-    const items = [
-      { title: '快速翻译', desc: '只要自然翻译、复制、朗读。适合只想快速知道意思。' },
-      { title: '学习拆解', desc: '翻译 + 关键词 + 简单语法 + 保存词句。适合短句和普通段落。' },
-      { title: '深度解析（长文）', desc: '适合长段落、文章、新闻和热帖，输出全文翻译、逐句对照、重点词汇、语法解析和学完建议。' },
-    ];
-    return (
-      <>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', margin: '22px 2px 12px' }}>
-          <h2 style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-.3px', color: C.ink, margin: 0 }}>三个模式有什么区别</h2>
-          <span style={{ fontSize: 12, color: '#f0799b', fontWeight: 700 }}>输出深度</span>
-        </div>
-        {items.map(item => (
-          <div key={item.title} style={{ borderRadius: 26, padding: 14, background: C.card, border: '1px solid ' + C.line, boxShadow: '0 10px 26px rgba(78,52,46,.06)', marginBottom: 12 }}>
-            <h3 style={{ margin: 0, fontSize: 15 }}>{item.title}</h3>
-            <p style={{ margin: '7px 0 0', fontSize: 12, lineHeight: 1.55, color: C.muted }}>{item.desc}</p>
-          </div>
-        ))}
-      </>
-    );
+  // Shared mode toggle buttons
+  function renderModeButtons() {
+    return (['learn', 'deep'] as Mode[]).map((m, i) => (
+      <button
+        key={m}
+        onClick={() => setMode(m)}
+        className={mode === m ? 'active' : ''}
+      >
+        {[t('analyze.mode_learn', lang), t('analyze.mode_deep', lang)][i]}
+      </button>
+    ));
   }
 
   return (
-    <div style={{ paddingBottom: 152 }}>
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+    <div className="az2-root">
+      <style>{ANALYZE_STYLES}</style>
+      <PlaceIntro place="analyze" dark={theme === 'dark'} />
+
       {toast && (
-        <div style={{ position: 'fixed', top: 60, left: '50%', transform: 'translateX(-50%)', background: C.black, color: '#fff', borderRadius: 999, padding: '9px 20px', fontSize: 13, fontWeight: 700, zIndex: 300, whiteSpace: 'nowrap', boxShadow: C.strong }}>
-          {toast}
+        <div className="az2-toast">
+          {toast.msg}
+          {toast.href && (
+            <a href={toast.href} style={{ color: 'var(--color-mint-soft)', fontSize: 12, fontWeight: 600, textDecoration: 'none' }}>
+              {t('analyze.view_arrow', lang)}
+            </a>
+          )}
         </div>
       )}
 
-      {/* Back bar */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, marginBottom: 14 }}>
-        <button onClick={() => router.push('/tools')} style={{ width: 38, height: 38, borderRadius: 16, background: C.card, border: '1px solid ' + C.line, fontSize: 20, color: '#4d3933', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}>‹</button>
-        <div style={{ flex: 1 }}>
-          <div style={{ fontSize: 17, fontWeight: 800, color: C.ink }}>内容拆解</div>
-          <div style={{ fontSize: 12, color: C.muted, fontWeight: 700, marginTop: 2 }}>翻译 + 学习拆解</div>
+      {/* Top bar */}
+      <header className="az2-topbar">
+        <button className="az2-back" onClick={smartBack} aria-label="back">←</button>
+        <div className="az2-brand" style={{ minWidth: 0 }}>
+          <span className="az2-brand-mark">Tori</span>
+          <span className="az2-brand-kr">분석</span>
+          <span className="az2-brand-sub">{t('analyze.page_title', lang)}</span>
         </div>
-        <div style={{ height: 30, padding: '0 11px', borderRadius: 999, background: C.pinkSoft, color: '#f0799b', fontSize: 11, fontWeight: 800, border: '1px solid rgba(255,127,168,.16)', display: 'flex', alignItems: 'center', flexShrink: 0 }}>正式功能</div>
-      </div>
+        {isDesktop && (
+          <div className="az2-mode-toggle desktop-only" role="tablist">
+            {renderModeButtons()}
+          </div>
+        )}
+        <span className="az2-badge" title={t('analyze.badge_official', lang)}>
+          <span className="az2-badge-label">{t('analyze.badge_official', lang)}</span>
+        </span>
+      </header>
 
       {!isLoggedIn && (
-        <div style={{ borderRadius: 14, padding: '10px 14px', background: 'rgba(255,127,168,.10)', border: '1px solid rgba(255,127,168,.24)', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 10 }}>
-          <span style={{ fontSize: 12 }}>💡</span>
-          <span style={{ fontSize: 12, color: '#a05a70', fontWeight: 700, lineHeight: 1.4, flex: 1 }}>
-            登录后每天可 AI 拆解 30 次，游客限 5 次
+        <div style={{ margin: '12px 24px 0', padding: '10px 14px', borderRadius: 6, background: 'var(--color-pink-soft)', border: '1px solid var(--color-border-1)', display: 'flex', alignItems: 'center', gap: 10, fontSize: 12 }}>
+          <span>💡</span>
+          <span style={{ flex: 1, minWidth: 0, overflowWrap: 'break-word', color: 'var(--az2-ink-2)', fontWeight: 500, lineHeight: 1.4 }}>
+            {t('analyze.login_hint', lang)}
           </span>
-          <button onClick={() => router.push('/auth/login?redirect=/ai/analyze')} style={{ height: 28, padding: '0 12px', borderRadius: 999, border: 0, background: '#201815', color: '#fff', fontSize: 11, fontWeight: 800, cursor: 'pointer', flexShrink: 0 }}>登录</button>
+          <button onClick={() => router.push('/auth/login?redirect=/ai/analyze')} style={{ height: 28, padding: '0 12px', borderRadius: 6, border: 0, background: 'var(--color-ink-1)', color: 'var(--color-surface-2)', fontSize: 11, fontWeight: 600, cursor: 'pointer' }}>
+            {t('analyze.login_btn', lang)}
+          </button>
         </div>
       )}
 
-      {/* Hero */}
-      <div style={{ borderRadius: 32, padding: 20, background: 'radial-gradient(circle at 88% 78%, rgba(255,255,255,.58), transparent 24%), linear-gradient(135deg, #fff2f7, #fffdf8 48%, #eaf8f5)', boxShadow: C.strong, border: '1px solid rgba(255,255,255,.92)', marginBottom: 14, overflow: 'hidden', position: 'relative', minHeight: 180 }}>
-        <div style={{ height: 34, padding: '0 13px', borderRadius: 999, background: 'rgba(255,255,255,.72)', color: '#f0799b', fontWeight: 800, fontSize: 12, border: '1px solid rgba(255,127,168,.14)', display: 'inline-flex', alignItems: 'center' }}>Translate & Break Down</div>
-        <h1 style={{ margin: '14px 0 0', maxWidth: 270, fontSize: 28, lineHeight: 1.12, letterSpacing: '-.8px', fontWeight: 800 }}>自动识别语言，选择输出深度</h1>
-        <p style={{ margin: '10px 0 0', maxWidth: 270, fontSize: 13, lineHeight: 1.55, color: '#7f6b64' }}>快速翻译看意思，学习拆解看词句，长文再进入深度解析。</p>
-        <div style={{ position: 'absolute', right: 10, bottom: 0, width: 120, height: 142, pointerEvents: 'none' }}>
-          <div style={{ position: 'absolute', right: -36, bottom: -58, width: 180, height: 180, borderRadius: '50%', background: 'rgba(255,127,168,.10)' }} />
-          <div style={{ position: 'absolute', top: 2, left: 36, width: 25, height: 68, borderRadius: 999, background: 'linear-gradient(180deg,#fff,#fff5f8)', border: '1px solid rgba(255,127,168,.14)', transform: 'rotate(-12deg)' }} />
-          <div style={{ position: 'absolute', top: 2, right: 24, width: 25, height: 68, borderRadius: 999, background: 'linear-gradient(180deg,#fff,#fff5f8)', border: '1px solid rgba(255,127,168,.14)', transform: 'rotate(15deg)' }} />
-          <div style={{ position: 'absolute', top: 48, right: 13, width: 88, height: 78, borderRadius: 42, background: 'linear-gradient(180deg,#fff,#fff8fa)', boxShadow: '0 16px 34px rgba(80,52,46,.12)' }}>
-            <div style={{ position: 'absolute', top: 34, left: 29, width: 7, height: 7, borderRadius: '50%', background: '#241917' }} />
-            <div style={{ position: 'absolute', top: 34, right: 29, width: 7, height: 7, borderRadius: '50%', background: '#241917' }} />
-          </div>
-        </div>
-      </div>
+      <main className="az2-workspace">
 
-      {/* Mode tabs */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, padding: 6, borderRadius: 999, background: 'rgba(255,255,255,.74)', border: '1px solid ' + C.line, boxShadow: '0 8px 22px rgba(78,52,46,.06)', marginBottom: 14 }}>
-        {(['translate', 'learn', 'deep'] as Mode[]).map((m, i) => (
-          <button key={m} onClick={() => setMode(m)} style={{
-            height: 36, border: 0, borderRadius: 999, background: mode === m ? C.black : 'transparent',
-            color: mode === m ? '#fff' : '#8b766e', fontSize: 12, fontWeight: 800, cursor: 'pointer',
-          }}>
-            {['快速翻译', '学习拆解', '深度解析（长文）'][i]}
-          </button>
-        ))}
-      </div>
-
-      {/* Input card */}
-      <div style={{ borderRadius: 30, background: C.card, border: '1px solid ' + C.line, boxShadow: C.shadow, marginBottom: 14, padding: 16 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10 }}>
-          <h2 style={{ margin: 0, fontSize: 18, letterSpacing: '-.3px' }}>输入内容</h2>
-          <div style={{ display: 'flex', gap: 6, alignItems: 'center', color: C.muted, fontSize: 12, fontWeight: 900 }}>
-            <span style={{ height: 28, display: 'inline-flex', alignItems: 'center', padding: '0 9px', borderRadius: 999, background: C.cream, border: '1px solid ' + C.line }}>自动识别</span>
+        {/* Left · Input panel */}
+        <aside className="az2-input-panel">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+            <span className="az2-section-label">{t('analyze.input_title', lang)}</span>
+            <span className="az2-dir-tag">{dir.from} → {dir.to}</span>
           </div>
-        </div>
-        <p style={{ margin: '8px 0 0', color: C.muted, fontSize: 13, lineHeight: 1.55 }}>
-          可以只输一个词、一句话，也可以粘贴一整段。语言方向由系统自动识别；三个按钮只决定结果要输出到什么深度。
-        </p>
-        <textarea
-          value={input}
-          onChange={e => setInput(e.target.value)}
-          onKeyDown={e => { if (e.key === 'Enter' && e.ctrlKey) handleAnalyze(); }}
-          placeholder="粘贴韩文、中文内容..."
-          rows={4}
-          style={{ marginTop: 14, minHeight: 148, borderRadius: 24, padding: 14, background: C.cream, border: '1px solid rgba(239,224,217,.92)', color: '#6f5c55', fontSize: 15, lineHeight: 1.7, width: '100%', boxSizing: 'border-box', resize: 'vertical', outline: 'none', fontFamily: 'inherit' }}
-        />
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 10, color: '#a08f87', fontSize: 11, fontWeight: 900 }}>
-          <span>{charCount.len} 字符 · {charCount.label}</span>
-          <span>当前：{['快速翻译', '学习拆解', '深度解析（长文）'][['translate', 'learn', 'deep'].indexOf(mode)]}</span>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginTop: 12 }}>
-          <button onClick={handleAnalyze} disabled={!input.trim() || analyzing} style={{
-            height: 44, border: 0, borderRadius: 999, background: C.black, color: '#fff', fontSize: 13, fontWeight: 800,
-            boxShadow: '0 12px 26px rgba(32,24,21,.16)', cursor: input.trim() && !analyzing ? 'pointer' : 'not-allowed', opacity: input.trim() && !analyzing ? 1 : 0.5,
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-          }}>
-            {analyzing && <span style={{ width: 14, height: 14, border: '2px solid rgba(255,255,255,.3)', borderTopColor: '#fff', borderRadius: '50%', display: 'inline-block', animation: 'spin 0.7s linear infinite' }} />}
-            {analyzing ? '处理中...' : '开始处理'}
-          </button>
-          <button onClick={handleClear} style={{ height: 44, border: '1px solid ' + C.line, borderRadius: 999, background: C.card, color: '#5a4640', fontSize: 13, fontWeight: 800, cursor: 'pointer' }}>清空</button>
-        </div>
-        <p style={{ margin: '8px 2px 0', fontSize: 11, color: C.muted, fontWeight: 700 }}>提示：Ctrl + Enter 快速开始处理</p>
-      </div>
 
-      {/* History view */}
-      {showHistory && (
-        <div style={{ borderRadius: 30, background: C.card, border: '1px solid ' + C.line, boxShadow: C.shadow, marginBottom: 14, padding: 16 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <h2 style={{ margin: 0, fontSize: 18, letterSpacing: '-.3px' }}>历史记录</h2>
-            <div style={{ display: 'flex', gap: 8 }}>
-              {historyResults.length > 0 && (
-                <button onClick={clearHistory} style={{ height: 28, padding: '0 10px', borderRadius: 999, border: '1px solid ' + C.line, background: C.card, color: C.muted, fontSize: 11, fontWeight: 800, cursor: 'pointer' }}>清除</button>
-              )}
-              <button onClick={() => setShowHistory(false)} style={{ height: 28, padding: '0 10px', borderRadius: 999, border: '1px solid ' + C.line, background: C.card, color: C.muted, fontSize: 11, fontWeight: 800, cursor: 'pointer' }}>关闭</button>
-            </div>
+          <textarea
+            className="az2-textarea"
+            value={input}
+            onChange={e => setInput(e.target.value)}
+            onKeyDown={e => { if (e.key === 'Enter' && e.ctrlKey) handleAnalyze(); }}
+            placeholder={t('analyze.input_placeholder', lang)}
+            rows={4}
+          />
+
+          <div className="az2-meta-row">
+            <span>{charCount.len} {lang === 'en' ? 'chars' : '字符'} · {charCount.label}</span>
+            <span>{mode === 'learn' ? t('analyze.mode_learn', lang) : t('analyze.mode_deep', lang)}</span>
           </div>
-          {historyResults.length === 0 ? (
-            <p style={{ color: C.muted, fontSize: 13, textAlign: 'center', padding: '24px 0' }}>暂无分析记录</p>
-          ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              {historyResults.slice(0, 10).map((r, i) => (
-                <button key={i} onClick={() => loadFromHistory(r)} style={{ width: '100%', textAlign: 'left', borderRadius: 20, padding: 12, background: C.cream, border: '1px solid ' + C.line, cursor: 'pointer' }}>
-                  <div style={{ fontSize: 13, color: C.muted, marginBottom: 4 }}>{new Date(r.timestamp).toLocaleString('zh-CN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</div>
-                  <div style={{ fontSize: 14, fontWeight: 700, color: C.ink, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.original.slice(0, 60)}</div>
-                  <div style={{ fontSize: 12, color: C.muted, marginTop: 4, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.fullTranslation.slice(0, 80)}</div>
-                </button>
-              ))}
-            </div>
+
+          {isDesktop && (
+          <button
+            type="button"
+            onClick={() => setShowKeyboard(v => !v)}
+            aria-label={t('keyboard.toggle', lang)}
+            style={{
+              marginTop: 8, padding: '4px 12px', borderRadius: 99, fontSize: 13, fontWeight: 700,
+              border: 'none', cursor: 'pointer',
+              background: showKeyboard ? 'var(--hr-purple-soft)' : 'var(--hr-surface-2)',
+              color: showKeyboard ? 'var(--hr-purple-strong)' : 'var(--hr-ink-3)',
+            }}
+          >⌨️ {t('keyboard.toggle', lang)}</button>
           )}
-        </div>
-      )}
+          {isDesktop && <FloatingKoreanKeyboard value={input} onChange={setInput} visible={showKeyboard} onClose={() => setShowKeyboard(false)} />}
 
-      {/* Results */}
-      {result && !showHistory && (
-        <>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', margin: '4px 2px 12px' }}>
-            <h2 style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-.3px', color: C.ink, margin: 0 }}>当前模式结果</h2>
-            <span style={{ fontSize: 12, color: '#f0799b', fontWeight: 700 }}>
-            {mode === 'deep' && result && result._degraded
-                ? '学习拆解（内容较短，已自动切换）'
-                : ['快速翻译', '学习拆解', '深度解析（长文）'][['translate', 'learn', 'deep'].indexOf(mode)]}
-            </span>
+          <div className="az2-actions">
+            <button className="az2-btn-primary" onClick={handleAnalyze} disabled={!input.trim() || analyzing}>
+              {analyzing && <span style={{ width: 12, height: 12, border: '2px solid rgba(255,255,255,.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.7s linear infinite' }} />}
+              {analyzing ? t('analyze.btn_analyzing', lang) : t('analyze.btn_analyze', lang)}
+            </button>
+            <button className="az2-btn-secondary" onClick={handleClear}>{t('analyze.btn_clear', lang)}</button>
           </div>
 
-          {/* Degraded notice */}
-          {result._degraded && (
-            <div style={{ borderRadius: 14, padding: '9px 14px', background: 'rgba(255,200,100,.12)', border: '1px solid rgba(255,180,60,.28)', marginBottom: 12, fontSize: 12, color: '#8a6a30', fontWeight: 700 }}>
-              AI 服务暂时不可用，已切换为离线词典模式，结果仅供参考
+          {!isDesktop && (
+            <div className="az2-mode-toggle" style={{ marginTop: 12, display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+              {renderModeButtons()}
             </div>
           )}
 
-          {/* Translation card (all modes) */}
-          <div style={{ borderRadius: 30, background: C.card, border: '1px solid ' + C.line, boxShadow: C.shadow, marginBottom: 14, overflow: 'hidden' }}>
-            <div style={{ padding: '15px 16px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h2 style={{ margin: 0, fontSize: 18 }}>自然翻译</h2>
-              <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-                {renderSpeakBtn(dir.from === '中文' ? result.fullTranslation : result.original, dir.from === '中文' ? '🔊 听韩译' : '🔊 听原文')}
-                <span style={{ height: 28, display: 'inline-flex', alignItems: 'center', padding: '0 9px', borderRadius: 999, background: C.mintBg, color: C.mintText, fontSize: 11, fontWeight: 800 }}>{dir.from} → {dir.to}</span>
+          {input.trim() && mode === 'learn' && charCount.len >= 50 && (
+            <div className="az2-hint">💡 {t('analyze.input_hint_too_long', lang)}</div>
+          )}
+          {input.trim() && mode === 'deep' && charCount.len > 0 && charCount.len < 50 && (
+            <div className="az2-hint">💡 {t('analyze.input_hint_too_short_for_deep', lang)}</div>
+          )}
+
+          {historyResults.length > 0 && (
+            <div className="az2-history-block az2-only-desktop">
+              <div className="az2-history-head">
+                <span>{t('analyze.history_title', lang)}</span>
+                <button onClick={clearHistory}>{t('analyze.history_clear', lang)}</button>
+              </div>
+              <div>
+                {historyResults.slice(0, 6).map((h, i) => (
+                  <button key={i} className="az2-history-item" onClick={() => loadFromHistory(h)}>
+                    <div className="h-ko">{h.original.slice(0, 40)}</div>
+                    <div className="h-zh">{h.fullTranslation.slice(0, 50)}</div>
+                    <div className="h-time">{new Date(h.timestamp).toLocaleString('zh-CN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</div>
+                  </button>
+                ))}
               </div>
             </div>
           )}
@@ -1851,11 +1775,24 @@ export default function AnalyzePage() {
                   ))}
                 </div>
               )}
-              {/* Alternative translation (quick translate mode) */}
-              {mode === 'translate' && result.alternativeTranslation && (
-                <div style={{ marginTop: 8 }}>
-                  <button onClick={() => setShowAlt(!showAlt)} style={{ height: 30, padding: '0 10px', borderRadius: 999, border: '1px solid ' + C.line, background: C.card, color: '#5a4640', fontSize: 11, fontWeight: 800, cursor: 'pointer' }}>
-                    更自然译法 {showAlt ? '▲' : '▼'}
+            </div>
+          )}
+
+          {/* Result blocks */}
+          {result && !showHistory && (
+            <>
+              <div className="az2-result-head">
+                <h2>
+                  {t('analyze.result_title', lang)}
+                  <span className="n">{mode === 'deep' && result._degraded ? t('analyze.result_mode_degraded', lang) : (mode === 'learn' ? t('analyze.mode_learn', lang) : t('analyze.mode_deep', lang))}</span>
+                </h2>
+                <div style={{ display: 'flex', gap: 6 }}>
+                  <button className="az2-icon-btn" onClick={handleCopy}>{t('analyze.btn_copy', lang)}</button>
+                  <button
+                    className={'az2-icon-btn' + (savedSentences.has(result.original) ? ' mint' : '')}
+                    onClick={handleSaveSentence}
+                  >
+                    {savedSentences.has(result.original) ? '✓ ' + t('analyze.btn_saved', lang) : '☆ ' + t('analyze.btn_save', lang)}
                   </button>
                   <button className="az2-icon-btn primary" onClick={handlePackAllReview} disabled={savedSentences.has(result.original) || packingAllReview}>
                     + {t('analyze.btn_add_review', lang)}
@@ -2094,33 +2031,32 @@ export default function AnalyzePage() {
                 </div>
               )}
 
-          {/* Learn mode: sentence breakdown */}
-          {mode === 'learn' && result.words.length > 0 && (
-            <>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', margin: '4px 2px 12px' }}>
-                <h2 style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-.3px', color: C.ink, margin: 0 }}>句子拆解</h2>
-                <span style={{ fontSize: 12, color: '#f0799b', fontWeight: 700 }}>可保存</span>
-              </div>
-              <div style={{ borderRadius: 26, padding: 15, background: C.card, border: '1px solid ' + C.line, boxShadow: C.shadow, marginBottom: 12 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'center', marginBottom: 12 }}>
-                  <span style={{ display: 'inline-flex', alignItems: 'center', height: 26, padding: '0 10px', borderRadius: 999, background: C.black, color: '#fff', fontSize: 11, fontWeight: 700 }}>原句</span>
-                  <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-                    {renderSpeakBtn(dir.from === '中文' ? result.fullTranslation : result.original, dir.from === '中文' ? '🔊 听韩译' : '🔊 听原句')}
-                    <span style={{ height: 26, display: 'inline-flex', alignItems: 'center', padding: '0 10px', borderRadius: 999, background: C.mintBg, color: C.mintText, fontSize: 11, fontWeight: 700 }}>口语表达</span>
+              {/* Deep mode: sentences */}
+              {mode === 'deep' && result.sentences && result.sentences.length > 0 && (
+                <div className="az2-card">
+                  <div className="az2-card-head">
+                    <h3>{t('analyze.sentences_title', lang)}</h3>
                   </div>
-                </div>
-                <p style={{ fontSize: 17, lineHeight: 1.6, fontWeight: 900, margin: 0 }}>
-                  {renderTokenizedKorean(result.original)}
-                </p>
-                <p style={{ margin: '10px 0 0', color: C.muted, fontSize: 13, lineHeight: 1.6 }}>{result.fullTranslation}</p>
-
-                {/* Word breakdown */}
-                <div style={{ display: 'grid', gap: 8, marginTop: 12 }}>
-                  {result.words.slice(0, showAllWords ? undefined : 8).map((w, i) => (
-                    <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 10, alignItems: 'center', padding: '10px 11px', borderRadius: 18, background: C.cream, border: '1px solid rgba(239,224,217,.86)', fontSize: 13 }}>
-                      <div>
-                        <strong style={{ display: 'block' }}>{w.text}</strong>
-                        <span style={{ color: C.muted, fontSize: 12 }}>{w.meaning}</span>
+                  {result.sentences.map((s, i) => {
+                    const added = addedSentences.has(s.korean) || savedSentences.has(result.original);
+                    return (
+                      <div key={i} className="az2-sentence-row">
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 }}>
+                          <p style={{ margin: 0, fontFamily: 'var(--az2-ko)', fontSize: 15, fontWeight: 500, lineHeight: 1.6, flex: 1, minWidth: 0, color: 'var(--color-ink-1)' }}>{s.korean}</p>
+                          <div style={{ display: 'flex', gap: 4, alignItems: 'center', flexShrink: 0 }}>
+                            {renderSpeakBtn(s.korean, '🔊')}
+                            <button
+                              onClick={() => handleAddSentenceToReview(s)}
+                              disabled={added}
+                              className={'az2-icon-btn' + (added ? ' mint' : '')}
+                              style={{ height: 26, padding: '0 8px', fontSize: 11 }}
+                            >
+                              {added ? t('analyze.deep.sentence_added_review', lang) : t('analyze.deep.sentence_add_review', lang)}
+                            </button>
+                          </div>
+                        </div>
+                        <p style={{ margin: '6px 0 0', fontSize: 13, color: C.zhText, lineHeight: 1.5 }}>{s.chinese}</p>
+                        {s.structure && <p style={{ margin: '6px 0 0', fontSize: 12, color: 'var(--color-ink-3)', fontStyle: 'italic' }}>{s.structure}</p>}
                       </div>
                     );
                   })}
@@ -2158,129 +2094,101 @@ export default function AnalyzePage() {
                       <p>{n.explanation}</p>
                     </div>
                   ))}
-                  {result.words.length > 8 && (
-                    <button onClick={() => setShowAllWords(v => !v)} style={{ height: 32, border: '1px solid ' + C.line, borderRadius: 999, background: C.card, color: C.muted, fontSize: 12, fontWeight: 800, cursor: 'pointer' }}>
-                      {showAllWords ? '收起' : `显示全部 ${result.words.length} 个词 ▼`}
-                    </button>
-                  )}
                 </div>
               )}
 
-                {/* Grammar */}
-                {result.grammar.slice(0, showAllGrammar ? undefined : 2).map((g, i) => (
-                  <div key={i} style={{ marginTop: 10, padding: 12, borderRadius: 20, background: C.mintBg, fontSize: 13, lineHeight: 1.58, color: '#416b63' }}>
-                    <strong>{g.pattern}：</strong>{g.usage}
-                  </div>
-                ))}
-                {result.grammar.length > 2 && (
-                  <button onClick={() => setShowAllGrammar(v => !v)} style={{ marginTop: 8, height: 32, border: '1px solid ' + C.line, borderRadius: 999, background: C.card, color: C.muted, fontSize: 12, fontWeight: 800, cursor: 'pointer', width: '100%' }}>
-                    {showAllGrammar ? '收起语法' : `显示全部 ${result.grammar.length} 条语法 ▼`}
+              {/* Deep mode: pack all buttons */}
+              {mode === 'deep' && (
+                <div style={{ display: 'grid', gridTemplateColumns: result.words.length > 0 ? '1fr 1fr' : '1fr', gap: 8, marginBottom: 20 }}>
+                  {result.words.length > 0 && (() => {
+                    const unsavedCount = result.words.filter(w => !savedWords.has(w.text)).length;
+                    const allSaved = unsavedCount === 0;
+                    return (
+                      <button
+                        onClick={handlePackAllWords}
+                        disabled={allSaved || packingAllWords}
+                        className={'az2-icon-btn' + (allSaved ? ' mint' : ' primary')}
+                        style={{ height: 40, fontSize: 13, justifyContent: 'center' }}
+                      >
+                        {allSaved
+                          ? t('analyze.deep.pack_all_words_done', lang)
+                          : packingAllWords
+                            ? t('analyze.deep.packing', lang)
+                            : t('analyze.deep.pack_all_words', lang, { n: String(unsavedCount) })}
+                      </button>
+                    );
+                  })()}
+                  <button
+                    onClick={handlePackAllReview}
+                    disabled={packingAllReview || savedSentences.has(result.original)}
+                    className={'az2-icon-btn' + (savedSentences.has(result.original) ? ' mint' : ' primary')}
+                    style={{ height: 40, fontSize: 13, justifyContent: 'center' }}
+                  >
+                    {savedSentences.has(result.original)
+                      ? t('analyze.deep.pack_all_review_done', lang)
+                      : packingAllReview
+                        ? t('analyze.deep.packing', lang)
+                        : t('analyze.deep.pack_all_review', lang)}
                   </button>
-                )}
-              </div>
+                </div>
+              )}
+
+              {/* Deep mode: quiz */}
+              {mode === 'deep' && result.quiz && result.quiz.length > 0 && (
+                <div className="az2-card">
+                  <div className="az2-card-head">
+                    <h3>{t('analyze.quiz.title', lang)}</h3>
+                  </div>
+                  <AnalyzeQuiz
+                    key={result.original}
+                    questions={result.quiz}
+                    onWrongAnswer={handleQuizWrong}
+                    onComplete={(score, total) => {
+                      showToastMsg(t('analyze.quiz.complete_toast', lang, { s: String(score), t: String(total) }));
+                    }}
+                  />
+                </div>
+              )}
+
+              {/* Suggestion */}
+              {result.suggestion && (
+                <div className="az2-suggestion">
+                  <h4>{t('analyze.suggestion_title', lang)}</h4>
+                  <p>{result.suggestion}</p>
+                </div>
+              )}
             </>
           )}
 
-          {/* Deep mode: full article report */}
-          {mode === 'deep' && (
-            <div style={{ borderRadius: 30, background: C.card, border: '1px solid ' + C.line, boxShadow: C.shadow, marginBottom: 14, padding: 16 }}>
-              <h2 style={{ margin: '0 0 12px', fontSize: 18, letterSpacing: '-.3px' }}>
-                深度解析
-                {result.difficulty && <span style={{ marginLeft: 8, fontSize: 12, color: '#f0799b', fontWeight: 700 }}>· {result.difficulty}</span>}
-              </h2>
-
-              {result.sentences && result.sentences.length > 0 && (
-                <div style={{ marginBottom: 16 }}>
-                  <h3 style={{ fontSize: 14, fontWeight: 800, margin: '0 0 10px', color: C.muted }}>逐句对照</h3>
-                  {result.sentences.map((s, i) => (
-                    <div key={i} style={{ padding: '12px 0', borderBottom: i < result.sentences!.length - 1 ? '1px solid ' + C.line : 'none' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 }}>
-                        <p style={{ margin: 0, fontSize: 15, fontWeight: 700, lineHeight: 1.6, flex: 1 }}>{s.korean}</p>
-                        {renderSpeakBtn(s.korean, '🔊')}
-                      </div>
-                      <p style={{ margin: '6px 0 0', fontSize: 13, color: C.zhText, lineHeight: 1.5 }}>{s.chinese}</p>
-                      {s.structure && <p style={{ margin: '6px 0 0', fontSize: 12, color: C.muted }}>{s.structure}</p>}
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {result.words.length > 0 && (
-                <div style={{ marginBottom: 16 }}>
-                  <h3 style={{ fontSize: 14, fontWeight: 800, margin: '0 0 10px', color: C.muted }}>重点词汇（{result.words.length} 个）</h3>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                    {result.words.slice(0, showAllWords ? undefined : 12).map((w, i) => (
-                      <span key={i} style={{ height: 30, padding: '0 10px', borderRadius: 999, background: C.pinkSoft, border: '1px solid rgba(255,127,168,.18)', color: '#5a423b', fontSize: 12, fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-                        {w.text}
-                        <button onClick={() => handleSaveWord(w.text, w.meaning)} style={{ border: 'none', background: 'none', padding: 0, cursor: 'pointer', fontSize: 11, color: savedWords.has(w.text) ? C.mintText : '#f0799b', fontWeight: 800 }}>
-                          {savedWords.has(w.text) ? '✓' : '+'}
-                        </button>
-                      </span>
-                    ))}
-                  </div>
-                  {result.words.length > 12 && (
-                    <button onClick={() => setShowAllWords(v => !v)} style={{ marginTop: 8, height: 30, border: '1px solid ' + C.line, borderRadius: 999, background: C.card, color: C.muted, fontSize: 11, fontWeight: 800, cursor: 'pointer', padding: '0 12px' }}>
-                      {showAllWords ? '收起' : `显示全部 ${result.words.length} 个 ▼`}
-                    </button>
-                  )}
-                </div>
-              )}
-
-              {result.grammar.length > 0 && (
-                <div style={{ marginBottom: 16 }}>
-                  <h3 style={{ fontSize: 14, fontWeight: 800, margin: '0 0 10px', color: C.muted }}>语法解析</h3>
-                  {result.grammar.slice(0, showAllGrammar ? undefined : 3).map((g, i) => (
-                    <div key={i} style={{ padding: 12, borderRadius: 20, background: C.mintBg, marginBottom: 8, fontSize: 13, lineHeight: 1.58, color: '#416b63' }}>
-                      <strong>{g.pattern}</strong> {g.usage}
-                    </div>
-                  ))}
-                  {result.grammar.length > 3 && (
-                    <button onClick={() => setShowAllGrammar(v => !v)} style={{ height: 30, border: '1px solid ' + C.line, borderRadius: 999, background: C.card, color: C.muted, fontSize: 11, fontWeight: 800, cursor: 'pointer', padding: '0 12px' }}>
-                      {showAllGrammar ? '收起' : `显示全部 ${result.grammar.length} 条 ▼`}
-                    </button>
-                  )}
-                </div>
-              )}
-
-              {result.suggestion && (
-                <div style={{ padding: 14, borderRadius: 20, background: C.pinkSoft, border: '1px solid rgba(255,127,168,.18)' }}>
-                  <h3 style={{ fontSize: 13, fontWeight: 800, margin: '0 0 6px', color: '#f0799b' }}>学完建议</h3>
-                  <p style={{ margin: 0, fontSize: 13, lineHeight: 1.55, color: '#5a423b' }}>{result.suggestion}</p>
-                </div>
-              )}
+          {/* Mobile-only history — 移到结果列最下方 */}
+          {historyResults.length > 0 && !showHistory && (
+            <div className="az2-history-block az2-only-mobile" style={{ marginTop: 24 }}>
+              <div className="az2-history-head">
+                <span>{t('analyze.history_title', lang)}</span>
+                <button onClick={clearHistory}>{t('analyze.history_clear', lang)}</button>
+              </div>
+              <div>
+                {historyResults.slice(0, 6).map((h, i) => (
+                  <button key={i} className="az2-history-item" onClick={() => loadFromHistory(h)}>
+                    <div className="h-ko">{h.original.slice(0, 40)}</div>
+                    <div className="h-zh">{h.fullTranslation.slice(0, 50)}</div>
+                    <div className="h-time">{new Date(h.timestamp).toLocaleString('zh-CN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</div>
+                  </button>
+                ))}
+              </div>
             </div>
           )}
         </section>
       </main>
 
-      {/* Mode explanation (no result) */}
-      {!result && !showHistory && renderModeExplanation()}
-
-      {/* Bottom bar */}
-      <div className="md:left-[108px] md:!bottom-0" style={{
-        position: 'fixed', left: 0, right: 0, bottom: 'calc(56px + env(safe-area-inset-bottom, 0px))', height: 88,
-        padding: '12px 18px 16px', background: 'rgba(255,255,255,.99)',
-        borderTop: '1px solid ' + C.line, zIndex: 100,
-      }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, height: '100%', maxWidth: 640, margin: '0 auto' }}>
-          <button onClick={openHistory} style={{ borderRadius: 20, fontSize: 12, fontWeight: 800, background: C.cream, color: '#6b5851', border: '1px solid ' + C.line, cursor: 'pointer' }}>历史记录</button>
-          <button onClick={handleSaveSentence} disabled={!result} style={{ borderRadius: 20, fontSize: 12, fontWeight: 800, background: result ? C.black : C.cream, color: result ? '#fff' : '#6b5851', border: result ? 'none' : '1px solid ' + C.line, cursor: result ? 'pointer' : 'not-allowed', opacity: result ? 1 : 0.5 }}>
-            {savedSentences.has(result?.original || '') ? '已保存' : '保存结果'}
+      {/* Mobile dock */}
+      {!isDesktop && result && !showHistory && (
+        <div className="az2-dock">
+          <button onClick={openHistory}>⟲ {t('analyze.btn_history', lang)}</button>
+          <button className="primary" onClick={handleSaveSentence}>
+            {savedSentences.has(result.original) ? '✓ ' + t('analyze.btn_saved', lang) : '☆ ' + t('analyze.btn_save', lang)}
           </button>
-          <button onClick={async () => {
-            if (!result) return;
-            try {
-              await db.sentences.add({
-                korean: result.original, chinese: result.fullTranslation, source_type: 'analysis',
-                source_id: 'review-' + Date.now(), source_title: '内容拆解',
-                created_at: new Date().toISOString(),
-              });
-              showToastMsg('已加入复习队列');
-            } catch (e: any) {
-              if (e?.name === 'ConstraintError') showToastMsg('已在复习队列中');
-              else showToastMsg('加入失败');
-            }
-          }} disabled={!result} style={{ borderRadius: 20, fontSize: 12, fontWeight: 800, background: C.cream, color: '#6b5851', border: '1px solid ' + C.line, cursor: result ? 'pointer' : 'not-allowed', opacity: result ? 1 : 0.5 }}>加入复习</button>
+          <button onClick={handlePackAllReview}>+ {t('analyze.btn_add_review', lang)}</button>
         </div>
       )}
     </div>

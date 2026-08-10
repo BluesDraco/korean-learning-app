@@ -16,6 +16,7 @@ import '../../topik-redesign.css';
 import './result-rail.css';
 
 interface ResultData {
+  [k: string]: unknown;
   sectionId: string;
   examSetId?: string;
   examRound?: number;

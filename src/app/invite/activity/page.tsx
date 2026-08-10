@@ -15,6 +15,7 @@ import './activity.css';
 interface Reward { threshold: number; daysGranted: number; status: string }
 interface ShipmentState { threshold: number; status: string }
 interface Progress {
+  [k: string]: unknown;
   code: string; qualifiedCount: number; totalDays: number; pendingDays: number; rewards: Reward[];
   lottery: 'won' | 'lost' | null;
   shipments: ShipmentState[];

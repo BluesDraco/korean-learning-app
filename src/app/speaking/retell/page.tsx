@@ -25,6 +25,7 @@ const READING_LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1'];
 const PASSAGES_PER_SESSION = 5;
 
 interface RetellVerdict {
+  [k: string]: unknown;
   score: number;
   coverage: number;
   coveredPoints: string[];

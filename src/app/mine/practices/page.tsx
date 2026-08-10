@@ -4,33 +4,27 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Dumbbell, Edit3 } from 'lucide-react';
 import { db } from '@/lib/db';
-import { useAuth } from '@/components/AuthProvider';
+import { useIsDesktop } from '@/lib/useIsMobile';
+import { PageHeader, Section, Card } from '@/components/ui';
+import { useLang } from '@/components/LangProvider';
+import { t } from '@/lib/i18n';
 
 export default function MinePracticesPage() {
-  const { user } = useAuth();
-  const isAdmin = user?.role === 'admin';
+  const { lang } = useLang();
+  const isDesktop = useIsDesktop();
   const [dictationCount, setDictationCount] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    Promise.all([
-      db.dictationRecords.count().catch(() => 0),
-      db.pronunciationAttempts.count().catch(() => 0),
-      db.shadowingRecords.count().catch(() => 0),
-    ]).then(([d, p, s]) => {
-      setDictationCount(d);
-      setPronunciationCount(p);
-      setShadowingCount(s);
-      setLoading(false);
-    }).catch(() => setLoading(false));
+    db.dictationRecords.count()
+      .then((d) => { setDictationCount(d); setLoading(false); })
+      .catch(() => setLoading(false));
   }, []);
 
   const total = dictationCount ?? 0;
 
   const items = [
-    { icon: <Headphones size={20} className="text-[var(--blue-soft)]" />, label: '听写练习', count: dictationCount, href: '/dictation', desc: '次' },
-    { icon: <Mic size={20} className="text-[var(--mint-soft)]" />, label: '发音练习', count: pronunciationCount, href: '/pronunciation', desc: '次' },
-    ...(isAdmin ? [{ icon: <PenLine size={20} className="text-[var(--purple-soft)]" />, label: '影子跟读', count: shadowingCount, href: '/shadowing', desc: '次' }] : []),
+    { Icon: Edit3, label: t('mine.practices_dictation', lang), count: dictationCount, href: '/dictation', tone: 'mint' as const },
   ];
 
   const TONE_BG: Record<'pink' | 'mint' | 'purple', string> = {

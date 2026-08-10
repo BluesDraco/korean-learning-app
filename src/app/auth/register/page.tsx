@@ -94,7 +94,55 @@ function RegisterContent() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await doRegister();
+    if (method === 'username') {
+      await doRegister();
+    } else if (method === 'email') {
+      await doEmailRegister();
+    } else if (method === 'phone') {
+      await doPhoneRegister();
+    }
+  };
+
+  const doPhoneRegister = async () => {
+    if (submitting) return;
+    setError('');
+    if (!/^1[3-9]\d{9}$/.test(phone)) { setError(t('auth.err_phone_format', lang)); return; }
+    if (!/^\d{6}$/.test(code)) { setError(t('auth.err_code_empty', lang)); return; }
+    setSubmitting(true);
+    try {
+      const result = await loginWithPhone(phone, code);
+      if (result.error) {
+        setError(result.error);
+      } else {
+        window.location.href = '/daily';
+      }
+    } catch {
+      setError(t('auth.err_network', lang));
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const doEmailRegister = async () => {
+    if (submitting) return;
+    setError('');
+    if (!email) { setError(t('auth.err_email_format', lang)); return; }
+    if (password.length < 6) { setError(t('auth.err_password_short', lang)); return; }
+    if (password.length > 200) { setError(t('auth.err_password_long', lang)); return; }
+    if (!code) { setError(t('auth.err_code_empty', lang)); return; }
+    setSubmitting(true);
+    try {
+      const result = await registerWithEmail(email, password, code);
+      if (result.error) {
+        setError(result.error);
+      } else {
+        window.location.href = '/daily';
+      }
+    } catch {
+      setError(t('auth.err_network', lang));
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const doRegister = async () => {
@@ -260,11 +308,141 @@ function RegisterContent() {
               </>
             )}
 
-            <ToriPrimaryButton
-              type="button"
-              onClick={doRegister}
-              loading={submitting}
-              loadingText="注册中..."
+            {method === 'email' && (
+              <>
+                <div className="auth-field">
+                  <label htmlFor="au-email">{t('auth.email', lang)}</label>
+                  <div className="auth-input-wrap">
+                    <input
+                      id="au-email"
+                      className="auth-input"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder={t('auth.email_ph', lang)}
+                      autoComplete="email"
+                    />
+                  </div>
+                </div>
+                <div className="auth-field">
+                  <label htmlFor="au-email-pw">{t('auth.password', lang)}</label>
+                  <div className="auth-input-wrap">
+                    <input
+                      id="au-email-pw"
+                      className="auth-input"
+                      type={showPassword ? 'text' : 'password'}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder={t('auth.email_password_ph', lang)}
+                      autoComplete="new-password"
+                    />
+                    <button
+                      type="button"
+                      className="auth-eye"
+                      onClick={() => setShowPassword(v => !v)}
+                      aria-label={showPassword ? t('auth.hide_password', lang) : t('auth.show_password', lang)}
+                    >
+                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
+                </div>
+                <div className="auth-field">
+                  <label htmlFor="au-email-code">{t('auth.code', lang)}</label>
+                  <div className="auth-code-row">
+                    <div className="auth-input-wrap">
+                      <input
+                        id="au-email-code"
+                        className="auth-input"
+                        type="text"
+                        inputMode="numeric"
+                        value={code}
+                        onChange={(e) => setCode(e.target.value)}
+                        placeholder={t('auth.code_ph', lang)}
+                        autoComplete="one-time-code"
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      className="auth-code-btn"
+                      onClick={sendCode}
+                      disabled={countdown > 0 || !email}
+                    >
+                      {countdown > 0 ? t('auth.code_resend', lang, { n: String(countdown) }) : t('auth.code_send', lang)}
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {method === 'username' && (
+              <>
+                <div className="auth-field">
+                  <label htmlFor="au-username">{t('auth.username', lang)}</label>
+                  <div className="auth-input-wrap">
+                    <input
+                      id="au-username"
+                      className="auth-input"
+                      type="text"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      placeholder={t('auth.register_username_ph', lang)}
+                      autoComplete="username"
+                    />
+                  </div>
+                </div>
+                <div className="auth-field">
+                  <label htmlFor="au-password">{t('auth.password', lang)}</label>
+                  <div className="auth-input-wrap">
+                    <input
+                      id="au-password"
+                      className="auth-input"
+                      type={showPassword ? 'text' : 'password'}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder={t('auth.register_password_ph', lang)}
+                      autoComplete="new-password"
+                    />
+                    <button
+                      type="button"
+                      className="auth-eye"
+                      onClick={() => setShowPassword(v => !v)}
+                      aria-label={showPassword ? t('auth.hide_password', lang) : t('auth.show_password', lang)}
+                    >
+                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
+                </div>
+                <div className="auth-field">
+                  <label htmlFor="au-confirm">{t('auth.confirm', lang)}</label>
+                  <div className="auth-input-wrap">
+                    <input
+                      id="au-confirm"
+                      className="auth-input"
+                      type={showConfirm ? 'text' : 'password'}
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder={t('auth.register_confirm_ph', lang)}
+                      autoComplete="new-password"
+                    />
+                    <button
+                      type="button"
+                      className="auth-eye"
+                      onClick={() => setShowConfirm(v => !v)}
+                      aria-label={showConfirm ? t('auth.hide_password', lang) : t('auth.show_password', lang)}
+                    >
+                      {showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {error && <p className="auth-error">{error}</p>}
+
+            <button
+              type="submit"
+              className="auth-submit"
+              disabled={submitting}
             >
               {submitting ? t('auth.register_submitting', lang) : t('auth.register_submit', lang)}
             </button>

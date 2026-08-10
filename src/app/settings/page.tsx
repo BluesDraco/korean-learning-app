@@ -2,7 +2,9 @@
 
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, User, Target, Flame, Save, Loader2, Trophy, Volume2, VolumeX, Zap, Type, LogOut, Moon, Sun } from 'lucide-react';
+import { useSmartBack } from '@/lib/useSmartBack';
+import { ArrowLeft, User, Sliders, Save, Loader2, Volume2, VolumeX, Zap, Palette, LogOut, Moon, Sun, Flame, Camera, Map as MapIcon, Mail, ShieldCheck, MessageSquare } from 'lucide-react';
+import { useMapEntryHidden } from '@/lib/mapEntryPref';
 import { useAuth } from '@/components/AuthProvider';
 import { getProfile, updateProfile } from '@/lib/gamification';
 import { useToast } from '@/hooks/useToast';
@@ -12,9 +14,10 @@ import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
 import { setSpeechRate, getSpeechRate, setSpeakRepeat, getSpeakRepeat } from '@/lib/tts';
 import { isSoundEnabled, setSoundEnabled } from '@/lib/soundManager';
-import { FONT_PRESETS, FONT_SIZES } from '@/lib/fontSettings';
-import { FLASHCARD_THEMES, getFlashcardTheme, saveFlashcardTheme, applyFlashcardTheme, type FlashcardTheme } from '@/lib/flashcardTheme';
-import { useTheme } from '@/components/ThemeProvider';
+import { FLASHCARD_THEMES, getTranslatedThemes, getFlashcardTheme, saveFlashcardTheme, applyFlashcardTheme, type FlashcardTheme } from '@/lib/flashcardTheme';
+import { PageHeader, Section, Card, Button } from '@/components/ui';
+import UserAvatar from '@/components/UserAvatar';
+import { FeedbackModal } from '@/components/FeedbackModal';
 
 const REDUCE_MOTION_KEY = 'tori_reduce_motion';
 
@@ -105,9 +108,11 @@ function ToggleRow({
 
 export default function SettingsPage() {
   const router = useRouter();
-  const { user, loading: authLoading } = useAuth();
-  const { settings: fontSettings, previewPreset, previewSize, commitFontSettings } = useFontSettings();
+  const smartBack = useSmartBack('/mine');
+  const { user, loading: authLoading, logout, refreshUser } = useAuth();
   const { theme, toggle: toggleTheme } = useTheme();
+  const { showToast } = useToast();
+  const { lang, setLang } = useLang();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -115,17 +120,22 @@ export default function SettingsPage() {
   const [soundOn, setSoundOn] = useState(true);
   const [ttsRepeat, setTtsRepeat] = useState(1);
   const [reduceMotion, setReduceMotionState] = useState(false);
+  const [mapEntryHidden, setMapEntryHidden] = useMapEntryHidden();
   const [fcTheme, setFcTheme] = useState<FlashcardTheme>('pure');
+  const [avatarUploading, setAvatarUploading] = useState(false);
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  useEffect(() => {
-    setFcTheme(getFlashcardTheme());
-  }, []);
-
-  const handleFcTheme = (t: FlashcardTheme) => {
-    setFcTheme(t);
-    saveFlashcardTheme(t);
-    applyFlashcardTheme(t);
-  };
+  // 邮箱绑定
+  const [bindSheetOpen, setBindSheetOpen] = useState(false);
+  const [bindEmail, setBindEmail] = useState('');
+  const [bindCode, setBindCode] = useState('');
+  const [bindStep, setBindStep] = useState<'email' | 'code'>('email');
+  const [bindCountdown, setBindCountdown] = useState(0);
+  const [bindError, setBindError] = useState('');
+  const [bindSubmitting, setBindSubmitting] = useState(false);
+  const bindTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  useEffect(() => () => { if (bindTimerRef.current) clearInterval(bindTimerRef.current); }, []);
 
   useEffect(() => {
     setFcTheme(getFlashcardTheme());
@@ -253,13 +263,20 @@ export default function SettingsPage() {
     const load = async () => {
       try {
         const p = await getProfile();
-        setProfile({ ...p, ttsSpeed: getSpeechRate() });
-        const achs = await db.achievements.toArray();
-        setAchievements(achs);
+        const prefs = loadLocalPrefs();
+        setProfile({
+          ...p,
+          ttsSpeed: prefs.ttsSpeed ?? getSpeechRate(),
+        });
         setSoundOn(isSoundEnabled());
+        setTtsRepeat(getSpeakRepeat());
         setReduceMotionState(getReduceMotion());
       } catch {
-        // db unavailable — show page without data
+        const prefs = loadLocalPrefs();
+        setProfile({
+          nickname: '', dailyGoalMinutes: 30, dailyGoalWords: 10, targetLevel: 'beginner',
+          ttsSpeed: prefs.ttsSpeed ?? getSpeechRate(),
+        } as UserProfile);
       } finally {
         setLoading(false);
       }
@@ -270,17 +287,42 @@ export default function SettingsPage() {
   const handleSave = async () => {
     if (!profile) return;
     setSaving(true);
-    commitFontSettings();
-    await updateProfile({
-      nickname: profile.nickname,
-      dailyGoalMinutes: profile.dailyGoalMinutes,
-      dailyGoalWords: profile.dailyGoalWords,
-      targetLevel: profile.targetLevel,
-      reviewBatchSize: profile.reviewBatchSize,
-    });
-    setSaving(false);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    try {
+      // 昵称必须写到服务器（IndexedDB 的 updateProfile 不会同步到 users 表）
+      const nicknameTrimmed = profile.nickname.trim();
+      if (nicknameTrimmed) {
+        const res = await fetch('/api/user/profile', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nickname: nicknameTrimmed }),
+        });
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          throw new Error(data.error || '保存失败');
+        }
+        await refreshUser();
+      }
+      // 本地画像 IndexedDB 保存其余字段（服务器 users 表不存这些）
+      await updateProfile({
+        nickname: profile.nickname,
+      });
+      // 本地偏好写 localStorage per-user（合并写，勿覆盖 /review 管理的 spellingStrictness）：
+      try {
+        const prefKey = `tori_settings_prefs_${user?.id ?? 'guest'}`;
+        const raw = localStorage.getItem(prefKey);
+        const prev = raw ? JSON.parse(raw) : {};
+        localStorage.setItem(prefKey, JSON.stringify({
+          ...prev,
+          ttsSpeed: profile.ttsSpeed ?? 0.75,
+        }));
+      } catch { /* ignore */ }
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } catch {
+      showToast(t('settings.save_failed_retry', lang), 'error');
+    } finally {
+      setSaving(false);
+    }
   };
 
   if (loading) {
@@ -316,355 +358,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="py-4 space-y-4 max-w-2xl mx-auto">
-      {/* Header */}
-      <div className="flex items-center gap-4">
-        <button onClick={() => router.back()} className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
-          <ArrowLeft size={20} />
-        </button>
-        <div>
-          <h1 className="text-2xl font-bold text-[var(--text-primary)]">设置</h1>
-          <p className="text-[var(--text-secondary)] text-sm mt-1">个性化你的学习体验</p>
-        </div>
-      </div>
-
-      {/* Profile Section */}
-      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 space-y-4">
-        <div className="flex items-center gap-3 mb-4">
-          <User size={20} className="text-[var(--pink-primary)]" />
-          <h2 className="text-lg font-medium text-[var(--text-primary)]">个人资料</h2>
-        </div>
-
-        {/* Nickname */}
-        <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">昵称</label>
-          <input
-            type="text"
-            value={profile.nickname}
-            onChange={(e) => setProfile({ ...profile, nickname: e.target.value })}
-            className="w-full bg-[var(--bg-input)] border border-[var(--pink-pale)] rounded-xl py-3 px-4 text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--pink-primary)] transition-colors"
-          />
-        </div>
-
-        {/* Level display */}
-        <div className="flex items-center gap-4 bg-[var(--bg-input)] rounded-xl p-4">
-          <div className="w-12 h-12 rounded-full bg-[var(--pink-primary)]/15 flex items-center justify-center">
-            <span className="text-[var(--pink-primary)] font-bold text-lg">{profile.level}</span>
-          </div>
-          <div className="flex-1">
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-sm text-[var(--text-primary)] font-medium">等级 {profile.level}</span>
-              <span className="text-xs text-[var(--text-secondary)]">{profile.xp}/{profile.xpToNextLevel} XP</span>
-            </div>
-            <div className="w-full bg-[var(--bg-accent)] rounded-full h-2">
-              <div
-                className="bg-[var(--pink-primary)] h-2 rounded-full transition-all"
-                style={{ width: `${(profile.xp / profile.xpToNextLevel) * 100}%` }}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Streak */}
-        <div className="flex items-center gap-3 bg-[var(--bg-input)] rounded-xl p-4">
-          <Flame size={20} className="text-[var(--peach-soft)]" />
-          <div>
-            <div className="text-sm text-[var(--text-primary)] font-medium">连续学习 {profile.streak} 天</div>
-            <div className="text-xs text-[var(--text-secondary)]">最长记录: {profile.longestStreak} 天</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Goals Section */}
-      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 space-y-4">
-        <div className="flex items-center gap-3 mb-4">
-          <Target size={20} className="text-[var(--mint-soft)]" />
-          <h2 className="text-lg font-medium text-[var(--text-primary)]">学习目标</h2>
-        </div>
-
-        {/* Target Level */}
-        <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">当前水平</label>
-          <select
-            value={profile.targetLevel}
-            onChange={(e) => setProfile({ ...profile, targetLevel: e.target.value as UserProfile['targetLevel'] })}
-            className="w-full bg-[var(--bg-input)] border border-[var(--pink-pale)] rounded-xl py-3 px-4 text-[var(--text-primary)] focus:outline-none focus:border-[var(--pink-primary)] transition-colors"
-          >
-            <option value="beginner">初级 (TOPIK 1-2)</option>
-            <option value="intermediate">中级 (TOPIK 3-4)</option>
-            <option value="advanced">高级 (TOPIK 5-6)</option>
-          </select>
-        </div>
-
-        {/* Daily Goal Words */}
-        <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">每日学习单词: {profile.dailyGoalWords} 个</label>
-          <input
-            type="range"
-            min="5"
-            max="50"
-            step="5"
-            value={profile.dailyGoalWords}
-            onChange={(e) => setProfile({ ...profile, dailyGoalWords: Number(e.target.value) })}
-            className="w-full accent-[var(--pink-primary)]"
-          />
-          <div className="flex justify-between text-xs text-[var(--text-placeholder)] mt-1">
-            <span>5</span><span>50</span>
-          </div>
-        </div>
-
-        {/* Daily Goal Minutes */}
-        <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">每日学习时间: {profile.dailyGoalMinutes} 分钟</label>
-          <input
-            type="range"
-            min="5"
-            max="120"
-            step="5"
-            value={profile.dailyGoalMinutes}
-            onChange={(e) => setProfile({ ...profile, dailyGoalMinutes: Number(e.target.value) })}
-            className="w-full accent-[var(--pink-primary)]"
-          />
-          <div className="flex justify-between text-xs text-[var(--text-placeholder)] mt-1">
-            <span>5分钟</span><span>2小时</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Preferences Section */}
-      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 space-y-4">
-        <div className="flex items-center gap-3 mb-4">
-          <Flame size={20} className="text-[var(--purple-soft)]" />
-          <h2 className="text-lg font-medium text-[var(--text-primary)]">偏好设置</h2>
-        </div>
-
-        {/* TTS Speed */}
-        <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">朗读语速: {profile.ttsSpeed ?? 0.8}x</label>
-          <input
-            type="range"
-            min="0.5"
-            max="1.2"
-            step="0.1"
-            value={profile.ttsSpeed ?? 0.8}
-            onChange={(e) => { const v = parseFloat(e.target.value); setSpeechRate(v); setProfile({ ...profile, ttsSpeed: v }); }}
-            className="w-full accent-[var(--purple-soft)]"
-          />
-          <div className="flex justify-between text-xs text-[var(--text-placeholder)] mt-1">
-            <span>0.5x 慢</span><span>1.2x 快</span>
-          </div>
-        </div>
-
-        {/* Review batch size */}
-        <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-1.5 block">每次复习数量: {profile.reviewBatchSize ?? 10} 个</label>
-          <select
-            value={profile.reviewBatchSize ?? 10}
-            onChange={(e) => setProfile({ ...profile, reviewBatchSize: Number(e.target.value) })}
-            className="w-full bg-[var(--bg-input)] border border-[var(--border-color)] rounded-xl py-3 px-4 text-[var(--text-primary)] focus:outline-none focus:border-[var(--purple-soft)] transition-colors"
-          >
-            <option value={5}>5 个</option>
-            <option value={10}>10 个</option>
-            <option value={15}>15 个</option>
-            <option value={20}>20 个</option>
-            <option value={30}>30 个</option>
-          </select>
-        </div>
-
-        {/* Sound toggle */}
-        <div className="flex items-center justify-between bg-[var(--bg-input)] rounded-xl p-4">
-          <div className="flex items-center gap-3">
-            {soundOn ? <Volume2 size={20} className="text-[var(--purple-soft)]" /> : <VolumeX size={20} className="text-[var(--text-muted)]" />}
-            <div>
-              <p className="text-sm text-[var(--text-primary)] font-medium">音效</p>
-              <p className="text-xs text-[var(--text-secondary)]">轻量操作反馈音效（音量很低）</p>
-            </div>
-          </div>
-          <button
-            onClick={() => { const v = !soundOn; setSoundOn(v); setSoundEnabled(v); }}
-            className={`relative w-12 h-7 rounded-full transition-colors ${soundOn ? 'bg-[var(--purple-soft)]' : 'bg-[var(--bg-accent)]'}`}
-          >
-            <div className={`absolute top-0.5 w-6 h-6 rounded-full bg-white shadow transition-transform ${soundOn ? 'translate-x-6' : 'translate-x-0.5'}`} />
-          </button>
-        </div>
-
-        {/* Reduce motion toggle */}
-        <div className="flex items-center justify-between bg-[var(--bg-input)] rounded-xl p-4">
-          <div className="flex items-center gap-3">
-            <Zap size={20} className={reduceMotion ? 'text-[var(--text-muted)]' : 'text-[var(--peach-soft)]'} />
-            <div>
-              <p className="text-sm text-[var(--text-primary)] font-medium">减少动效</p>
-              <p className="text-xs text-[var(--text-secondary)]">关闭弹跳、呼吸等动画效果</p>
-            </div>
-          </div>
-          <button
-            onClick={() => { const v = !reduceMotion; setReduceMotionState(v); setReduceMotion(v); }}
-            className={`relative w-12 h-7 rounded-full transition-colors ${reduceMotion ? 'bg-[var(--bg-accent)]' : 'bg-[var(--peach-soft)]'}`}
-          >
-            <div className={`absolute top-0.5 w-6 h-6 rounded-full bg-white shadow transition-transform ${reduceMotion ? 'translate-x-0.5' : 'translate-x-6'}`} />
-          </button>
-        </div>
-
-        {/* Dark mode toggle */}
-        <div className="flex items-center justify-between bg-[var(--bg-input)] rounded-xl p-4">
-          <div className="flex items-center gap-3">
-            {theme === 'dark' ? <Moon size={20} className="text-[var(--purple-soft)]" /> : <Sun size={20} className="text-[var(--yellow-soft)]" />}
-            <div>
-              <p className="text-sm text-[var(--text-primary)] font-medium">暗色模式</p>
-              <p className="text-xs text-[var(--text-secondary)]">{theme === 'dark' ? '当前：深色界面' : '当前：亮色界面'}</p>
-            </div>
-          </div>
-          <button
-            onClick={toggleTheme}
-            className={`relative w-12 h-7 rounded-full transition-colors ${theme === 'dark' ? 'bg-[var(--purple-soft)]' : 'bg-[var(--bg-accent)]'}`}
-          >
-            <div className={`absolute top-0.5 w-6 h-6 rounded-full bg-white shadow transition-transform ${theme === 'dark' ? 'translate-x-6' : 'translate-x-0.5'}`} />
-          </button>
-        </div>
-      </div>
-
-      {/* Font Settings */}
-      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 space-y-5">
-        <div className="flex items-center gap-3 mb-4">
-          <Type size={28} className="text-[var(--text-primary)]" />
-          <h2 className="text-lg font-medium text-[var(--text-primary)]">显示设置</h2>
-        </div>
-
-        {/* Font preset */}
-        <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-2 block">字体风格</label>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-            {FONT_PRESETS.map((p) => (
-              <button
-                key={p.key}
-                onClick={() => previewPreset(p.key)}
-                className={`rounded-xl p-3 text-center border transition-all ${
-                  fontSettings.preset === p.key
-                    ? 'border-[var(--pink-primary)] bg-[var(--pink-primary)]/8 shadow-sm'
-                    : 'border-[var(--border-color)] hover:border-[var(--border-hover)]'
-                }`}
-              >
-                <p className={`text-xs font-semibold mb-1 ${
-                  fontSettings.preset === p.key ? 'text-[var(--pink-primary)]' : 'text-[var(--text-primary)]'
-                }`}>
-                  {p.label}
-                </p>
-                <p className="text-[10px] text-[var(--text-muted)] leading-tight">{p.desc}</p>
-                <p
-                  className="mt-1.5 text-[9px] text-[var(--text-muted)] truncate"
-                  style={{ fontFamily: p.key === 'cute' ? "'KaiTi','STKaiti','Malgun Gothic',sans-serif" : p.key === 'clean' ? "system-ui,'Segoe UI','PingFang SC',sans-serif" : "Georgia,'KaiTi','STKaiti',serif" }}
-                >
-                  {p.preview}
-                </p>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Font size */}
-        <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-2 block">字号大小</label>
-          <div className="flex gap-2">
-            {FONT_SIZES.map((s) => (
-              <button
-                key={s.key}
-                onClick={() => previewSize(s.key)}
-                className={`flex-1 rounded-xl py-2.5 text-center border transition-all ${
-                  fontSettings.size === s.key
-                    ? 'border-[var(--pink-primary)] bg-[var(--pink-primary)]/8 shadow-sm'
-                    : 'border-[var(--border-color)] hover:border-[var(--border-hover)]'
-                }`}
-              >
-                <span className={`text-xs ${
-                  fontSettings.size === s.key ? 'text-[var(--pink-primary)] font-semibold' : 'text-[var(--text-primary)]'
-                }`}>
-                  {s.label}
-                </span>
-                <span className={`block ${
-                  fontSettings.size === s.key ? 'text-[var(--pink-primary)]' : 'text-[var(--text-muted)]'
-                }`} style={{ fontSize: `${s.px}px` }}>
-                  Aa
-                </span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Live preview */}
-        <div className="bg-[var(--bg-base)] border border-[var(--border-color)] rounded-xl p-4 space-y-2">
-          <p className="text-[13px] text-[var(--text-muted)] mb-1">预览效果</p>
-          <p className="text-lg font-semibold text-[var(--text-primary)]">
-            안녕하세요! 좋은 아침이에요.
-          </p>
-          <p className="text-sm text-[var(--text-secondary)]">
-            你好！这是一段中文预览文本，用于展示当前字体和字号的实际效果。
-          </p>
-          <p className="text-xs text-[var(--text-muted)]">
-            The quick brown fox jumps over the lazy dog. 12345
-          </p>
-        </div>
-
-        {/* Flashcard theme */}
-        <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-2 block">闪卡配色</label>
-          <div className="grid grid-cols-2 gap-2">
-            {FLASHCARD_THEMES.map((t) => (
-              <button
-                key={t.key}
-                onClick={() => handleFcTheme(t.key)}
-                className={`rounded-xl p-3 text-left border transition-all ${
-                  fcTheme === t.key
-                    ? 'border-[var(--pink-primary)] bg-[var(--pink-primary)]/8 shadow-sm'
-                    : 'border-[var(--border-color)] hover:border-[var(--border-hover)]'
-                }`}
-              >
-                <div className="flex items-center gap-1.5 mb-1.5">
-                  {t.swatches.map((c, i) => (
-                    <span key={i} className="w-4 h-4 rounded-full border border-black/5 inline-block flex-shrink-0" style={{ background: c }} />
-                  ))}
-                </div>
-                <p className={`text-xs font-semibold ${fcTheme === t.key ? 'text-[var(--pink-primary)]' : 'text-[var(--text-primary)]'}`}>
-                  {t.label}
-                </p>
-                <p className="text-[11px] text-[var(--text-muted)] mt-0.5">{t.desc}</p>
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Achievements */}
-      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 space-y-4">
-        <div className="flex items-center gap-3 mb-4">
-          <Trophy size={20} className="text-[var(--peach-soft)]" />
-          <h2 className="text-lg font-medium text-[var(--text-primary)]">
-            成就 ({earnedAchievements.length}/{allTypes.length})
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-          {allTypes.map((type) => {
-            const def = ACHIEVEMENT_DEFS[type];
-            const earned = earnedTypes.has(type);
-            return (
-              <div
-                key={type}
-                className={`rounded-xl p-3 text-center transition-all ${
-                  earned
-                    ? 'bg-[var(--yellow-soft)]/20 border border-[var(--yellow-soft)]/30'
-                    : 'bg-[var(--bg-input)] border border-[var(--pink-pale)]/50 opacity-40'
-                }`}
-              >
-                <div className="text-2xl mb-1">{def.icon}</div>
-                <div className="text-xs text-[var(--text-primary)] font-medium">{def.title}</div>
-                <div className="text-[13px] text-[var(--text-secondary)] mt-0.5">{def.description}</div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Save Button */}
+    <div className="py-4 px-4 lg:px-6">
       <button
         onClick={smartBack}
         style={{
@@ -677,12 +371,16 @@ export default function SettingsPage() {
         {t('ui.ph_back', lang)}
       </button>
 
-      {/* Logout */}
-      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-medium text-[var(--text-primary)]">当前账号</p>
-            <p className="text-xs text-[var(--text-muted)] mt-0.5">{authLoading ? '加载中...' : (user?.nickname ?? '未登录')}</p>
+      <div>
+
+      {/* Profile */}
+      <Section spacing="normal">
+        <Card variant="default" padding="lg">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+            <User size={18} color="var(--color-pink-strong)" />
+            <h2 style={{ fontSize: 16, fontWeight: 700, color: 'var(--color-ink-1)', margin: 0 }}>
+              {t('settings.profile', lang)}
+            </h2>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>

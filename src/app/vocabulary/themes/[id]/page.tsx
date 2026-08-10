@@ -4,18 +4,24 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import {
-  ArrowLeft, BookOpen, Clock, Volume2, Sparkles, Target,
+  ArrowLeft, Volume2,
   ChevronDown, ChevronUp, Loader2, BookmarkPlus, Check, Trash2, CheckSquare, Square, ListChecks, CheckCircle,
+  Eye, EyeOff, MoreHorizontal,
 } from 'lucide-react';
 import { DropdownMenu } from '@/components/ui/DropdownMenu';
 import { getTheme, getThemeWords } from '@/data/vocabulary';
 import { displayRomanHyphen } from '@/lib/dictionary';
 import { db, deleteWordsByText } from '@/lib/db';
 import type { WordEntry, ThemePack } from '@/types';
-import { speak } from '@/lib/tts';
+import { speak, speakWord } from '@/lib/tts';
 import { useAuth } from '@/components/AuthProvider';
 import { TappableText } from '@/components/TappableText';
 import { AddToBookSheet } from '@/components/vocabulary/AddToBookSheet';
+import { useIsDesktop } from '@/lib/useIsMobile';
+import { t } from '@/lib/i18n';
+import { useLang } from '@/components/LangProvider';
+
+type TabKey = 'words' | 'dialogues' | 'pitfalls' | 'sentences';
 
 export default function ThemeDetailPage() {
   const isWideViewport = useIsDesktop();
@@ -43,17 +49,12 @@ export default function ThemeDetailPage() {
   const [managing, setManaging] = useState(false);
   const [selectedWords, setSelectedWords] = useState<Set<string>>(new Set());
   const [deletePending, setDeletePending] = useState(false);
+  const [savedSentenceIds, setSavedSentenceIds] = useState<Set<string>>(new Set());
+  const [showCn, setShowCn] = useState(true);
 
   useEffect(() => {
-    if (managing) document.body.setAttribute('data-batch-managing', '1');
-    else document.body.removeAttribute('data-batch-managing');
-    return () => document.body.removeAttribute('data-batch-managing');
-  }, [managing]);
-
-  useEffect(() => {
-    const t = getTheme(id);
-    if (!t) { router.replace('/vocabulary/library'); return; }
-    setTheme(t);
+    try { if (localStorage.getItem('vocab_show_cn') === '0') setShowCn(false); } catch { /* ignore */ }
+  }, []);
 
   const toggleCn = () => {
     setShowCn(prev => {
@@ -80,36 +81,58 @@ export default function ThemeDetailPage() {
   useEffect(() => {
     (async () => {
       try {
-        const koreanWords = new Set(w.map((e) => e.korean));
-        const allUserWords = await db.words.toArray();
-        const userWords = allUserWords.filter((uw) => koreanWords.has(uw.word));
-        const mastered = new Set<string>();
-        const learning = new Set<string>();
-        for (const uw of userWords) {
-          if (uw.mastery === 'mastered') mastered.add(uw.word);
-          else if (uw.mastery !== 'new') learning.add(uw.word);
+        const t = await getTheme(id);
+        if (!t) { router.replace('/vocabulary/library'); return; }
+        setTheme(t);
+
+        const { recordVocabVisit } = await import('@/lib/progress/dailyHero');
+        recordVocabVisit({ source: 'themes', unitId: id, unitTitle: t.name });
+
+        const w = await getThemeWords(id);
+        setWords(w);
+        try {
+          const koreanWords = w.map((e) => e.korean);
+          const userWords = koreanWords.length
+            ? await db.words.where('word').anyOf(koreanWords).toArray()
+            : [];
+          const mastered = new Set<string>();
+          const learning = new Set<string>();
+          for (const uw of userWords) {
+            if (uw.mastery === 'mastered') mastered.add(uw.word);
+            else if (uw.mastery !== 'new') learning.add(uw.word);
+          }
+          setMasteredIds(mastered);
+          setLearningIds(learning);
+        } catch {
+          // db error — show words without mastery state
         }
-        setMasteredIds(mastered);
-        setLearningIds(learning);
-      } catch {
-        // db error — show words without mastery state
-      } finally {
+      } catch { /* ignore */ } finally {
         setLoading(false);
       }
     })();
   }, [id, router]);
 
+  const saveSentence = async (korean: string, chinese: string, sourceTitle: string) => {
+    if (savedSentenceIds.has(korean)) return;
+    const existing = await db.sentences.where('korean').equals(korean).first().catch(() => null);
+    if (!existing) {
+      await db.sentences.add({ id: crypto.randomUUID(), korean, chinese, source_type: 'vocabulary', source_id: 'theme-' + id, source_title: sourceTitle, created_at: Date.now() }).catch(() => {});
+    }
+    setSavedSentenceIds((prev) => new Set(prev).add(korean));
+  };
+
   const handleAddAllToBook = async (bookId: string) => {
     if (!theme || addingAll) return;
     setAddingAll(true);
     try {
-      const [book, allUserWords] = await Promise.all([
+      const themeKoreans = words.map(e => e.korean);
+      const [book, scopedUserWords] = await Promise.all([
         db.wordBooks.get(bookId),
-        db.words.toArray(),
+        themeKoreans.length ? db.words.where('word').anyOf(themeKoreans).toArray() : Promise.resolve([]),
       ]);
       if (!book) return;
       const now = Date.now();
-      const userWordMap = new Map(allUserWords.map(w => [w.word, w]));
+      const userWordMap = new Map(scopedUserWords.map(w => [w.word, w]));
       const existingBookIdSet = new Set(book.wordIds);
       const toInsert: any[] = [];
       const newWordIds: string[] = [];
@@ -130,8 +153,8 @@ export default function ThemeDetailPage() {
         }
       }
       await Promise.all([
-        toInsert.length > 0 ? db.words.bulkPut(toInsert) : Promise.resolve(),
-        newWordIds.length > 0 ? db.wordBooks.update(bookId, { wordIds: [...book.wordIds, ...newWordIds], updatedAt: now }) : Promise.resolve(),
+        toInsert.length > 0 ? db.words.bulkPut(toInsert).catch(() => {}) : Promise.resolve(),
+        newWordIds.length > 0 ? db.wordBooks.update(bookId, { wordIds: [...book.wordIds, ...newWordIds], updatedAt: now }).catch(() => {}) : Promise.resolve(),
       ]);
       setAddedAll(true);
       setTimeout(() => setAddedAll(false), 3000);
@@ -155,11 +178,47 @@ export default function ThemeDetailPage() {
 
   const exitManage = () => { setManaging(false); setSelectedWords(new Set()); setDeletePending(false); };
 
+  const toggleMastered = async (entry: WordEntry) => {
+    const now = Date.now();
+    const isMastered = masteredIds.has(entry.korean);
+    const rows = await db.words.where('word').equals(entry.korean).toArray();
+    try {
+      if (isMastered) {
+        if (rows.length) {
+          await db.words.bulkUpdate(
+            rows.map(r => ({ id: r.id, mastery: 'learning', srsLevel: 1, interval: 1, nextReview: now }))
+          );
+        }
+        setMasteredIds(prev => { const s = new Set(prev); s.delete(entry.korean); return s; });
+        setLearningIds(prev => new Set(prev).add(entry.korean));
+      } else {
+        if (rows.length) {
+          await db.words.bulkUpdate(
+            rows.map(r => ({ id: r.id, mastery: 'mastered', srsLevel: 5, interval: 21, nextReview: now + 21 * 86400000, lastReviewed: now }))
+          );
+        } else {
+          await db.words.put({
+            id: crypto.randomUUID(), word: entry.korean, pronunciation: entry.romanization,
+            meaning: entry.meanings[0]?.chinese || '', partOfSpeech: entry.partOfSpeech,
+            examples: entry.examples.map(ex => ({ text: ex.korean, translation: ex.chinese, source: 'dictionary' as const })),
+            sourceEntryId: entry.id, mastery: 'mastered', srsLevel: 5, easeFactor: 2.5, interval: 21,
+            nextReview: now + 21 * 86400000, createdAt: now, lastReviewed: now, source: 'library',
+          });
+        }
+        setMasteredIds(prev => new Set(prev).add(entry.korean));
+        setLearningIds(prev => { const s = new Set(prev); s.delete(entry.korean); return s; });
+      }
+    } catch {
+      alert(t('vocab.err_check_login', lang));
+    }
+  };
+
   const batchMaster = async () => {
     const now = Date.now();
     const selected = words.filter(e => selectedWords.has(e.korean));
-    const allUserWords = await db.words.toArray();
-    const userWordMap = new Map(allUserWords.map(w => [w.word, w]));
+    const selectedKoreans = selected.map(e => e.korean);
+    const scopedUserWords = selectedKoreans.length ? await db.words.where('word').anyOf(selectedKoreans).toArray() : [];
+    const userWordMap = new Map(scopedUserWords.map(w => [w.word, w]));
     const toUpdate: any[] = [];
     const toInsert: any[] = [];
     for (const entry of selected) {
@@ -176,19 +235,21 @@ export default function ThemeDetailPage() {
         });
       }
     }
-    await Promise.all([
-      toUpdate.length > 0 ? db.words.bulkUpdate(toUpdate) : Promise.resolve(),
-      toInsert.length > 0 ? db.words.bulkPut(toInsert) : Promise.resolve(),
-    ]);
-    setMasteredIds(prev => { const s = new Set(prev); selectedWords.forEach(w => s.add(w)); return s; });
-    setLearningIds(prev => { const s = new Set(prev); selectedWords.forEach(w => s.delete(w)); return s; });
-    exitManage();
+    try {
+      await Promise.all([
+        toUpdate.length > 0 ? db.words.bulkUpdate(toUpdate) : Promise.resolve(),
+        toInsert.length > 0 ? db.words.bulkPut(toInsert) : Promise.resolve(),
+      ]);
+      setMasteredIds(prev => { const s = new Set(prev); selectedWords.forEach(w => s.add(w)); return s; });
+      setLearningIds(prev => { const s = new Set(prev); selectedWords.forEach(w => s.delete(w)); return s; });
+      exitManage();
+    } catch {
+      alert(t('vocab.err_check_login', lang));
+    }
   };
 
   const batchDelete = async () => {
-    const allUserWords = await db.words.toArray();
-    const ids = allUserWords.filter(w => selectedWords.has(w.word)).map(w => w.id);
-    await db.words.bulkDelete(ids);
+    await deleteWordsByText(selectedWords); // 删词 + 从收藏本剔除孤儿 id
     setMasteredIds(prev => { const s = new Set(prev); selectedWords.forEach(w => s.delete(w)); return s; });
     setLearningIds(prev => { const s = new Set(prev); selectedWords.forEach(w => s.delete(w)); return s; });
     exitManage();
@@ -222,12 +283,19 @@ export default function ThemeDetailPage() {
   const tabs = allTabs.filter(tab => tab.count > 0 || tab.key === 'words');
 
   return (
-    <div className="py-4 space-y-5 pb-8">
+    <div className={isWideViewport ? 'py-6 w-full px-8 pb-8' : 'py-4 max-w-2xl mx-auto px-4 pb-8'}>
       {/* Header */}
-      <div>
-        <Link href="/vocabulary/library?tab=themes" className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] mb-3">
-          <ArrowLeft size={16} />
-          返回词包列表
+      <div style={{ marginBottom: 16 }}>
+        <Link
+          href="/vocabulary/library?tab=themes"
+          style={{
+            display: 'inline-flex', alignItems: 'center', gap: 6,
+            fontSize: 13, color: 'var(--color-ink-2)', textDecoration: 'none',
+            marginBottom: 14,
+          }}
+        >
+          <ArrowLeft size={14} />
+          {t('vocab.td_back_to_themes', lang)}
         </Link>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
           <span style={{ fontSize: 44, lineHeight: 1 }}>{theme.emoji}</span>
@@ -255,41 +323,293 @@ export default function ThemeDetailPage() {
         </div>
       </div>
 
-      {/* Tori quote */}
-      <div className="bg-gradient-to-r from-[var(--pink-primary)]/10 to-[var(--purple-soft)]/10 border border-[var(--pink-pale)] rounded-2xl p-4 flex items-start gap-3">
-        <span className="text-2xl shrink-0">🐰</span>
-        <div>
-          <p className="text-sm text-[var(--text-primary)] font-medium">토리</p>
-          <p className="text-xs text-[var(--text-secondary)] mt-0.5">{theme.toriQuote}</p>
+      {/* Sticky Tab Bar */}
+      <div
+        className="sticky z-10 -mx-4 md:-mx-8 px-4 md:px-8 mb-4"
+        style={{
+          top: 'var(--top-safe, 0)',
+          background: 'var(--color-surface-1)',
+          borderBottom: '1px solid var(--border-color)',
+        }}
+      >
+        <div style={{ display: 'flex', gap: 4, overflowX: 'auto' }}>
+          {tabs.map((tab) => {
+            const active = currentTab === tab.key;
+            return (
+              <button
+                key={tab.key}
+                onClick={() => switchTab(tab.key)}
+                style={{
+                  position: 'relative',
+                  display: 'inline-flex', alignItems: 'center', gap: 6,
+                  padding: '10px 14px',
+                  fontSize: 14,
+                  fontWeight: active ? 700 : 500,
+                  color: active ? 'var(--pink-primary)' : 'var(--text-secondary)',
+                  background: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  whiteSpace: 'nowrap',
+                  transition: 'color 200ms cubic-bezier(0.16, 1, 0.3, 1)',
+                }}
+              >
+                {t(tab.labelKey, lang)}
+                <span
+                  style={{
+                    fontSize: 11, fontWeight: 600,
+                    padding: '1px 6px',
+                    borderRadius: 999,
+                    background: active ? 'rgba(255,127,168,0.14)' : 'var(--bg-input)',
+                    color: active ? 'var(--pink-primary)' : 'var(--text-muted)',
+                    minWidth: 20,
+                    textAlign: 'center',
+                  }}
+                >
+                  {tab.count}
+                </span>
+                {active && (
+                  <span
+                    style={{
+                      position: 'absolute',
+                      left: 8, right: 8, bottom: -1,
+                      height: 2,
+                      background: 'var(--pink-primary)',
+                      borderRadius: 2,
+                    }}
+                  />
+                )}
+              </button>
+            );
+          })}
         </div>
       </div>
 
-      {/* Stats bar */}
-      <div className="grid grid-cols-3 gap-3">
-        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-3 text-center">
-          <BookOpen size={16} className="text-[var(--pink-primary)] mx-auto mb-1" />
-          <p className="text-lg font-bold text-[var(--text-primary)]">{totalWords}</p>
-          <p className="text-xs text-[var(--text-muted)]">总词数</p>
-        </div>
-        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-3 text-center">
-          <Clock size={16} className="text-[var(--peach-soft)] mx-auto mb-1" />
-          <p className="text-lg font-bold text-[var(--text-primary)]">{theme.estimatedMinutes}</p>
-          <p className="text-xs text-[var(--text-muted)]">分钟</p>
-        </div>
-        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-3 text-center">
-          <Target size={16} className="text-[var(--mint-soft)] mx-auto mb-1" />
-          <p className="text-lg font-bold text-[var(--text-primary)]">{progressPercent}%</p>
-          <p className="text-xs text-[var(--text-muted)]">已学习</p>
-        </div>
-      </div>
+      {/* Tab · Dialogues */}
+      {currentTab === 'dialogues' && theme.dialogues && theme.dialogues.length > 0 && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+          {theme.dialogues.map((d, di) => (
+            <div
+              key={di}
+              style={{
+                background: 'var(--bg-card)',
+                border: '1px solid var(--border-color)',
+                borderRadius: 16,
+                overflow: 'hidden',
+                boxShadow: '0 1px 2px rgba(36, 25, 23, 0.04)',
+              }}
+            >
+              {/* Scene header — 卡片头部带渐变底 */}
+              <div
+                style={{
+                  padding: isWideViewport ? '20px 28px 16px' : '16px 18px 14px',
+                  background: 'linear-gradient(180deg, rgba(255,127,168,0.06) 0%, transparent 100%)',
+                  borderBottom: '1px solid var(--border-color)',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: 12 }}>
+                  <span
+                    style={{
+                      fontSize: isWideViewport ? 22 : 20,
+                      fontWeight: 800,
+                      color: 'var(--pink-primary)',
+                      fontFamily: 'ui-monospace, "SF Mono", Menlo, monospace',
+                      lineHeight: 1,
+                      letterSpacing: '-.02em',
+                    }}
+                  >
+                    {String(di + 1).padStart(2, '0')}
+                  </span>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{ fontSize: isWideViewport ? 17 : 15, fontWeight: 700, color: 'var(--text-primary)', margin: 0, lineHeight: 1.35 }}>
+                      {d.title}
+                    </p>
+                    {d.scene && (
+                      <p style={{ fontSize: 12, color: 'var(--text-muted)', margin: '4px 0 0', fontStyle: 'italic', lineHeight: 1.5 }}>
+                        {d.scene}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
 
-      {/* Sentence patterns */}
-      {theme.sentences.length > 0 && (
+              {/* Script turns — 大 padding + 更宽 gap */}
+              <div style={{ padding: isWideViewport ? '20px 28px 24px' : '14px 18px 18px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: isWideViewport ? 20 : 16 }}>
+                  {d.turns.map((turn, ti) => {
+                    const isMe = turn.speaker === 'me';
+                    return (
+                      <div
+                        key={ti}
+                        style={{
+                          display: 'grid',
+                          gridTemplateColumns: `${isWideViewport ? 64 : 48}px 1fr auto`,
+                          gap: isWideViewport ? 20 : 12,
+                          alignItems: 'baseline',
+                        }}
+                      >
+                        <span
+                          style={{
+                            fontSize: 11,
+                            fontWeight: 700,
+                            letterSpacing: '.14em',
+                            textTransform: 'uppercase',
+                            color: isMe ? 'var(--pink-primary)' : 'var(--text-muted)',
+                            textAlign: 'right',
+                            paddingTop: 3,
+                            userSelect: 'none',
+                          }}
+                        >
+                          {isMe ? t('vocab.td_role_me', lang) : t('vocab.td_role_clerk', lang)}
+                        </span>
+                        <div style={{ minWidth: 0 }}>
+                          <TappableText
+                            text={turn.korean}
+                            className="break-words"
+                            style={{ fontSize: 18, fontWeight: 600, color: 'var(--text-primary)', lineHeight: 1.5 }}
+                            source="实景对话"
+                          />
+                          <p style={{ fontSize: 14, color: 'var(--text-secondary)', margin: '6px 0 0', lineHeight: 1.6 }}>{turn.chinese}</p>
+                          {turn.note && (
+                            <p style={{
+                              fontSize: 12, color: 'var(--text-muted)',
+                              margin: '8px 0 0', lineHeight: 1.6,
+                              padding: '6px 10px',
+                              background: 'var(--bg-input)',
+                              borderLeft: '2px solid var(--pink-pale)',
+                              borderRadius: '0 6px 6px 0',
+                            }}>
+                              {turn.note}
+                            </p>
+                          )}
+                        </div>
+                        <button
+                          onClick={() => speakWord(turn.korean)}
+                          className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors shrink-0"
+                          style={{ alignSelf: 'start' }}
+                        >
+                          <Volume2 size={14} />
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Tab · Pitfalls */}
+      {currentTab === 'pitfalls' && theme.pitfalls && theme.pitfalls.length > 0 && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+          {theme.pitfalls.map((p, i) => (
+            <div
+              key={i}
+              style={{
+                background: 'var(--bg-card)',
+                border: '1px solid var(--border-color)',
+                borderRadius: 16,
+                overflow: 'hidden',
+                boxShadow: '0 1px 2px rgba(36, 25, 23, 0.04)',
+              }}
+            >
+              {/* Card header — 编号 + 标题 */}
+              <div
+                style={{
+                  padding: isWideViewport ? '18px 28px 14px' : '14px 18px 12px',
+                  background: 'linear-gradient(180deg, rgba(255,183,77,0.08) 0%, transparent 100%)',
+                  borderBottom: '1px solid var(--border-color)',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: 12 }}>
+                  <span
+                    style={{
+                      fontSize: isWideViewport ? 22 : 20,
+                      fontWeight: 800,
+                      color: 'var(--peach-soft)',
+                      fontFamily: 'ui-monospace, "SF Mono", Menlo, monospace',
+                      lineHeight: 1,
+                      letterSpacing: '-.02em',
+                    }}
+                  >
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <p style={{ fontSize: isWideViewport ? 17 : 15, fontWeight: 700, color: 'var(--text-primary)', margin: 0, lineHeight: 1.4, flex: 1, minWidth: 0, overflowWrap: 'break-word' }}>
+                    <span style={{ marginRight: 6 }}>⚠️</span>{p.title}
+                  </p>
+                </div>
+              </div>
+
+              <div style={{ padding: isWideViewport ? '20px 28px 24px' : '16px 18px 18px' }}>
+                {/* Compare card */}
+                {(p.wrong || p.right) && (
+                  <div
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: isWideViewport ? '1fr 1fr' : '1fr',
+                      gap: isWideViewport ? 0 : 10,
+                      borderRadius: 12,
+                      overflow: 'hidden',
+                      marginBottom: 16,
+                      border: isWideViewport ? '1px solid var(--border-color)' : 'none',
+                    }}
+                  >
+                    {p.wrong && (
+                      <div
+                        style={{
+                          padding: isWideViewport ? '14px 18px' : '12px 14px',
+                          background: 'rgba(239,68,68,0.05)',
+                          borderRight: isWideViewport ? '1px solid var(--border-color)' : 'none',
+                          border: isWideViewport ? 'none' : '1px solid rgba(239,68,68,0.2)',
+                          borderRadius: isWideViewport ? 0 : 10,
+                        }}
+                      >
+                        <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.14em', color: 'rgb(220,38,38)', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 5, textTransform: 'uppercase' }}>
+                          <span style={{ fontSize: 12 }}>✗</span> {t('vocab.td_dont_say', lang)}
+                        </div>
+                        <div style={{ fontSize: 18, fontWeight: 600, color: 'var(--text-primary)', lineHeight: 1.55 }}>
+                          <TappableText text={p.wrong} className="break-words" source="雷区" />
+                        </div>
+                      </div>
+                    )}
+                    {p.right && (
+                      <div
+                        style={{
+                          padding: isWideViewport ? '14px 18px' : '12px 14px',
+                          background: 'rgba(174,227,216,0.12)',
+                          border: isWideViewport ? 'none' : '1px solid rgba(174,227,216,0.35)',
+                          borderRadius: isWideViewport ? 0 : 10,
+                        }}
+                      >
+                        <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.14em', color: 'var(--mint-soft)', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 5, textTransform: 'uppercase' }}>
+                          <span style={{ fontSize: 12 }}>✓</span> {t('vocab.td_should_say', lang)}
+                        </div>
+                        <div style={{ fontSize: 18, fontWeight: 600, color: 'var(--text-primary)', lineHeight: 1.55 }}>
+                          <TappableText text={p.right} className="break-words" source="雷区" />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Detail */}
+                <p style={{
+                  fontSize: 13,
+                  color: 'var(--text-secondary)',
+                  lineHeight: 1.75,
+                  margin: 0,
+                }}>
+                  {p.detail}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Tab · Sentences */}
+      {currentTab === 'sentences' && theme.sentences.length > 0 && (
         <div>
-          <h2 className="text-sm font-bold text-[var(--text-primary)] mb-3 flex items-center gap-2">
-            <Sparkles size={15} className="text-[var(--purple-soft)]" />
-            场景句型
-          </h2>
           <div className="space-y-2">
             {theme.sentences.map((s, i) => {
               const isExpanded = expandedSentence === i;
@@ -315,12 +635,12 @@ export default function ThemeDetailPage() {
                           )}
                         </div>
                       )}
-                      <TappableText text={s.korean} className="text-sm font-medium text-[var(--text-primary)]" source="场景句型" />
+                      <TappableText text={s.korean} className="break-words" style={{ fontSize: 18, fontWeight: 600, color: 'var(--text-primary)', lineHeight: 1.5 }} source="场景句型" />
                       <p className="text-xs text-[var(--text-secondary)] mt-0.5">{s.chinese}</p>
                     </div>
                     <div className="flex items-center gap-1 shrink-0">
                       <button
-                        onClick={(e) => { e.stopPropagation(); speak(s.korean, 0.75); }}
+                        onClick={(e) => { e.stopPropagation(); speakWord(s.korean); }}
                         className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors shrink-0"
                       >
                         <Volume2 size={14} />
@@ -333,15 +653,47 @@ export default function ThemeDetailPage() {
                     </div>
                   </div>
                   {isExpanded && hasBreakdown && (
-                    <div className="px-3 pb-3 pt-0 border-t border-[var(--border-color)]">
-                      <div className="flex flex-wrap gap-2 mt-2">
-                        {s.breakdown!.map((b, j) => (
-                          <div key={j} className="bg-[var(--pink-pale)] rounded-lg px-2 py-1.5 text-center min-w-[52px]">
-                            <p className="text-xs font-bold text-[var(--text-primary)]">{b.text}</p>
-                            <p className="text-[10px] text-[var(--pink-primary)] mt-0.5">{b.meaning}</p>
-                            <p className="text-[10px] text-[var(--text-muted)]">{b.partOfSpeech}</p>
-                          </div>
-                        ))}
+                    <div style={{ padding: '10px 14px 14px', borderTop: '1px solid var(--border-color)', background: 'var(--bg-input)' }}>
+                      <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.12em', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: 8 }}>
+                        {t('vocab.td_grammar', lang)}
+                      </p>
+                      <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        {s.breakdown!.map((b, j) => {
+                          const role = b.role || b.partOfSpeech || '';
+                          const note = b.note || b.meaning || '';
+                          return (
+                            <div
+                              key={j}
+                              style={{
+                                display: 'grid',
+                                gridTemplateColumns: '84px 1fr',
+                                gap: 12,
+                                alignItems: 'baseline',
+                                padding: '6px 0',
+                                borderBottom: j < s.breakdown!.length - 1 ? '1px dashed var(--border-color)' : 'none',
+                              }}
+                            >
+                              <span
+                                style={{
+                                  fontSize: 10,
+                                  fontWeight: 700,
+                                  letterSpacing: '.08em',
+                                  color: 'var(--pink-primary)',
+                                  textAlign: 'right',
+                                  wordBreak: 'keep-all',
+                                }}
+                              >
+                                {role}
+                              </span>
+                              <div style={{ minWidth: 0 }}>
+                                <TappableText text={b.text} className="text-[15px] font-semibold" source="语法拆解" />
+                                {note && (
+                                  <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 2, lineHeight: 1.5 }}>{note}</p>
+                                )}
+                              </div>
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                   )}
@@ -356,34 +708,58 @@ export default function ThemeDetailPage() {
       {currentTab === 'words' && (
       <div>
         <div className="mb-3">
-          <h2 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2 mb-2">
-            <BookOpen size={15} className="text-[var(--pink-primary)]" />
-            词条列表 ({totalWords})
-          </h2>
           <div className="flex items-center gap-2 flex-wrap">
-            <Link
-              href={`/vocabulary/themes/${id}/mastered`}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--mint-soft)]/10 text-[var(--mint-soft)] text-xs font-medium hover:bg-[var(--mint-soft)]/20 transition-colors"
-            >
-              <Check size={12} />
-              已掌握 ({words.filter(e => masteredIds.has(e.korean)).length})
-            </Link>
-            <button
-              onClick={() => managing ? exitManage() : setManaging(true)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-colors ${managing ? 'bg-[var(--pink-primary)] text-white' : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:border-[var(--pink-primary)]/30'}`}
-            >
-              <ListChecks size={12} />
-              {managing ? '取消批量管理' : '批量管理'}
-            </button>
-            {!managing && (
+            {managing ? (
               <button
-                onClick={() => { if (authLoading) return; if (!user) { window.location.href = '/auth/login?redirect=' + window.location.pathname; return; } setAddAllBook(true); }}
-                disabled={addingAll || addedAll}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] text-xs font-medium hover:bg-[var(--pink-primary)]/20 disabled:opacity-50 transition-colors"
+                onClick={exitManage}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium bg-[var(--pink-primary)] text-white transition-colors"
               >
-                {addingAll ? <Loader2 size={12} className="animate-spin" /> : <BookmarkPlus size={12} />}
-                {addedAll ? '已加入' : '全部加入单词本'}
+                <ListChecks size={12} />
+                {t('vocab.cancel_manage', lang)}
               </button>
+            ) : (
+              <>
+                <button
+                  onClick={toggleCn}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-colors ${showCn ? 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)]' : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:border-[var(--pink-primary)]/30'}`}
+                >
+                  {showCn ? <Eye size={12} /> : <EyeOff size={12} />}
+                  {showCn ? t('vocab.show_cn', lang) : t('vocab.hide_cn', lang)}
+                </button>
+                <button
+                  onClick={() => { if (authLoading) return; if (!user) { router.push('/auth/login?redirect=' + window.location.pathname); return; } setAddAllBook(true); }}
+                  disabled={addingAll || addedAll}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--pink-primary)]/10 text-[var(--pink-primary)] text-xs font-medium hover:bg-[var(--pink-primary)]/20 disabled:opacity-50 transition-colors"
+                >
+                  {addingAll ? <Loader2 size={12} className="animate-spin" /> : <BookmarkPlus size={12} />}
+                  {addedAll ? t('vocab.added', lang) : t('vocab.add_all_to_book', lang)}
+                </button>
+                <DropdownMenu
+                  triggerAriaLabel={t('vocab.more', lang)}
+                  triggerClassName="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:border-[var(--pink-primary)]/30 transition-colors"
+                  trigger={<><MoreHorizontal size={14} />{t('vocab.more', lang)}</>}
+                >
+                  {(close) => (
+                    <>
+                      <Link
+                        href={`/vocabulary/themes/${id}/mastered`}
+                        onClick={close}
+                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-[var(--text-primary)] hover:bg-[var(--bg-input)] transition-colors"
+                      >
+                        <Check size={16} className="text-[var(--mint-soft)]" />
+                        {t('vocab.ld_mastered_n', lang, { n: words.filter(e => masteredIds.has(e.korean)).length })}
+                      </Link>
+                      <button
+                        onClick={() => { setManaging(true); close(); }}
+                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-[var(--text-primary)] hover:bg-[var(--bg-input)] transition-colors text-left"
+                      >
+                        <ListChecks size={16} className="text-[var(--text-muted)]" />
+                        {t('vocab.manage', lang)}
+                      </button>
+                    </>
+                  )}
+                </DropdownMenu>
+              </>
             )}
           </div>
         </div>
@@ -393,14 +769,50 @@ export default function ThemeDetailPage() {
           <div className="flex items-center justify-between px-1 mb-2">
             <button onClick={toggleSelectAll} className="flex items-center gap-1.5 text-xs text-[var(--pink-primary)] font-medium">
               {allSelected ? <CheckSquare size={14} /> : <Square size={14} />}
-              {allSelected ? '取消全选' : '全选未掌握'}
+              {allSelected ? t('vocab.cancel_select_all', lang) : t('vocab.select_all_unmastered', lang)}
             </button>
-            <span className="text-xs text-[var(--text-muted)]">已选 {selectedWords.size} 个</span>
+            <span className="text-xs text-[var(--text-muted)]">{t('vocab.selected_n', lang, { n: selectedWords.size })}</span>
           </div>
         )}
 
-        <div className="space-y-2">
-          {words.map((entry) => {
+        {(() => {
+          const wordByKo = new Map(words.map(w => [w.korean, w]));
+          const koById = new Map(theme.wordIds.map((id, i) => [id, words[i]?.korean]));
+          const usedKo = new Set<string>();
+          const renderGroups: { label: string; emoji?: string; items: WordEntry[] }[] = [];
+          if (theme.wordGroups && theme.wordGroups.length > 0) {
+            for (const g of theme.wordGroups) {
+              const items: WordEntry[] = [];
+              for (const wid of g.wordIds) {
+                const ko = koById.get(wid);
+                const w = ko ? wordByKo.get(ko) : undefined;
+                if (w && !usedKo.has(w.korean)) {
+                  items.push(w);
+                  usedKo.add(w.korean);
+                }
+              }
+              if (items.length > 0) renderGroups.push({ label: g.label, emoji: g.emoji, items });
+            }
+            const leftover = words.filter(w => !usedKo.has(w.korean));
+            if (leftover.length > 0) renderGroups.push({ label: t('vocab.td_group_other', lang), emoji: '🔖', items: leftover });
+          } else {
+            renderGroups.push({ label: '', items: words });
+          }
+
+          return renderGroups.map((group, gi) => (
+            <div key={gi} style={{ marginBottom: gi < renderGroups.length - 1 ? 24 : 0 }}>
+              {group.label && (
+                <p style={{
+                  fontSize: 11, fontWeight: 700, letterSpacing: '.14em', textTransform: 'uppercase',
+                  color: 'var(--text-muted)', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6,
+                }}>
+                  {group.emoji && <span style={{ fontSize: 14 }}>{group.emoji}</span>}
+                  <span>{group.label}</span>
+                  <span style={{ marginLeft: 4, fontSize: 10, opacity: 0.6 }}>· {group.items.length}</span>
+                </p>
+              )}
+              {(() => {
+                const renderCard = (entry: typeof group.items[number]) => {
             const isExpanded = expandedWord === entry.id;
             const isMastered = masteredIds.has(entry.korean);
             const isLearning = learningIds.has(entry.korean);
@@ -412,10 +824,10 @@ export default function ThemeDetailPage() {
                 className={`bg-[var(--bg-card)] border rounded-xl overflow-hidden transition-colors ${isSelected ? 'border-[var(--mint-soft)] bg-[var(--mint-soft)]/5' : 'border-[var(--border-color)]'}`}
               >
                 {/* Summary row */}
-                <div className="w-full flex items-center gap-3 p-3 text-left hover:bg-[var(--bg-card-hover)] transition-colors">
+                <div className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-[var(--bg-card-hover)] transition-colors">
                   {managing && !isMastered && (
                     <div
-                      className={`w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-colors cursor-pointer ${isSelected ? 'bg-[var(--mint-soft)] border-[var(--mint-soft)]' : 'border-[var(--border-color)] bg-white'}`}
+                      className={`w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-colors cursor-pointer ${isSelected ? 'bg-[var(--mint-soft)] border-[var(--mint-soft)]' : 'border-[var(--border-color)] bg-[var(--bg-card)]'}`}
                       onClick={() => toggleSelect(entry.korean)}
                     >
                       {isSelected && <Check size={12} className="text-white" />}
@@ -425,48 +837,58 @@ export default function ThemeDetailPage() {
                     onClick={() => { if (managing && !isMastered) { toggleSelect(entry.korean); return; } setExpandedWord(isExpanded ? null : entry.id); }}
                     className="flex-1 flex items-center gap-3 min-w-0 text-left"
                   >
-                    <span className="text-xl shrink-0">{entry.emoji}</span>
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-bold text-[var(--text-primary)] text-sm">{entry.korean}</span>
-                        <span className="text-xs text-[var(--pink-primary)] bg-[var(--pink-primary)]/5 px-1.5 py-0.5 rounded">
-                          [{entry.romanization}]
+                      <div className="flex items-baseline gap-2.5 min-w-0">
+                        <span className="ko-text font-bold text-[var(--text-primary)] text-[19px] leading-tight whitespace-nowrap">{entry.korean}</span>
+                        <span className="min-w-0 truncate text-[12.5px] font-semibold tracking-wide text-[var(--pink-primary)]">
+                          [{displayRomanHyphen(entry.romanization, entry.korean)}]
                         </span>
+                      </div>
+                      <div className="flex items-center gap-2 mt-2 min-w-0">
+                        {entry.partOfSpeech && (
+                          <span className="shrink-0 text-[10.5px] font-semibold px-1.5 py-0.5 rounded bg-[var(--bg-accent)] text-[var(--text-muted)]">{entry.partOfSpeech}</span>
+                        )}
+                        {showCn ? (
+                          <span className="text-sm text-[var(--text-primary)] leading-snug truncate">{entry.meanings.map((m) => m.chinese).join('；')}</span>
+                        ) : (
+                          <span className="text-xs text-[var(--text-muted)] leading-snug truncate">{t('vocab.tap_reveal_cn', lang)}</span>
+                        )}
+                        {entry.authoritativeLevel && (
+                          <span className="shrink-0 text-[11px] text-[var(--text-muted)] font-medium">{t('vocab.td_topik_level', lang, { n: entry.authoritativeLevel })}</span>
+                        )}
                         {isMastered && (
-                          <span className="text-xs px-1.5 py-0.5 rounded-full bg-[var(--mint-soft)]/10 text-[var(--mint-soft)]">已掌握</span>
+                          <span className="shrink-0 text-[10.5px] font-semibold px-2 py-0.5 rounded-full bg-[var(--mint-soft)]/12 text-[var(--mint-soft)]">{t('vocab.mastered', lang)}</span>
                         )}
                         {isLearning && (
-                          <span className="text-xs px-1.5 py-0.5 rounded-full bg-[var(--peach-soft)]/10 text-[var(--peach-soft)]">学习中</span>
+                          <span className="shrink-0 text-[10.5px] font-semibold px-2 py-0.5 rounded-full bg-[var(--peach-soft)]/12 text-[var(--peach-soft)]">{t('vocab.learning', lang)}</span>
                         )}
-                      </div>
-                      <p className="text-xs text-[var(--text-secondary)] mt-0.5 truncate">
-                        {entry.meanings.map((m) => m.chinese).join('；')}
-                      </p>
-                      <div className="flex items-center gap-0.5 mt-1">
-                        {Array.from({ length: entry.frequency }).map((_, i) => (
-                          <span key={i} className="text-[14px] text-[var(--peach-soft)]">★</span>
-                        ))}
-                        <span className="text-[13px] text-[var(--text-muted)] ml-1">TOPIK {entry.level}级</span>
                       </div>
                     </div>
                   </button>
-                  <div className="flex items-center gap-2 shrink-0">
+                  <div className="flex items-center gap-0.5 shrink-0">
                     {!managing && (
                       <>
                         <button
-                          onClick={() => speak(entry.korean, 0.75)}
-                          className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors"
+                          onClick={() => speakWord(entry.korean)}
+                          className="no-touch-min w-9 h-9 rounded-lg flex items-center justify-center hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors"
+                          aria-label={t('vocab.play', lang)}
                         >
-                          <Volume2 size={14} />
+                          <Volume2 size={17} />
                         </button>
                         <button
-                          onClick={() => { if (authLoading) return; if (!user) { window.location.href = '/auth/login?redirect=' + window.location.pathname; return; } setSheetWord(entry); }}
-                          className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors"
+                          onClick={(e) => { e.stopPropagation(); toggleMastered(entry); }}
+                          className={`no-touch-min w-9 h-9 rounded-lg flex items-center justify-center transition-colors ${isMastered ? 'text-[var(--mint-soft)] bg-[var(--mint-soft)]/12' : 'text-[var(--text-muted)] hover:bg-[var(--mint-soft)]/12 hover:text-[var(--mint-soft)]'}`}
+                          title={isMastered ? t('vocab.unmaster', lang) : t('vocab.mark_mastered', lang)}
+                          aria-label={isMastered ? t('vocab.unmaster', lang) : t('vocab.mark_mastered', lang)}
                         >
-                          <BookmarkPlus size={14} />
+                          <Check size={17} />
                         </button>
-                        <button onClick={() => setExpandedWord(isExpanded ? null : entry.id)}>
-                          {isExpanded ? <ChevronUp size={16} className="text-[var(--text-muted)]" /> : <ChevronDown size={16} className="text-[var(--text-muted)]" />}
+                        <button
+                          onClick={() => { if (authLoading) return; if (!user) { router.push('/auth/login?redirect=' + window.location.pathname); return; } setSheetWord(entry); }}
+                          className="no-touch-min w-9 h-9 rounded-lg flex items-center justify-center hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors"
+                          aria-label={t('vocab.add_to_book', lang)}
+                        >
+                          <BookmarkPlus size={17} />
                         </button>
                       </>
                     )}
@@ -498,8 +920,8 @@ export default function ThemeDetailPage() {
                         {entry.examples.map((ex, i) => (
                           <div key={i} className="bg-[var(--bg-input)] rounded-lg p-3 flex items-start gap-2">
                             <div className="flex-1 min-w-0">
-                              <TappableText text={ex.korean} className="text-sm text-[var(--text-primary)]" source="主题词库" highlightWord={entry.korean} />
-                              <p className="text-xs text-[var(--text-secondary)] mt-0.5">{ex.chinese}</p>
+                              <TappableText text={ex.korean} className="text-[var(--text-primary)]" style={{ fontSize: 18, fontWeight: 600, lineHeight: 1.5 }} source="主题词库" highlightWord={entry.korean} />
+                              <p className="text-[13px] text-[var(--text-secondary)] mt-1 leading-snug">{ex.chinese}</p>
                               {ex.scene && (
                                 <span className="inline-block text-[13px] text-[var(--text-muted)] mt-1 bg-[var(--bg-card)] px-1.5 py-0.5 rounded">
                                   {ex.scene}
@@ -507,7 +929,7 @@ export default function ThemeDetailPage() {
                               )}
                             </div>
                             <button
-                              onClick={(e) => { e.stopPropagation(); speak(ex.korean, 0.75); }}
+                              onClick={(e) => { e.stopPropagation(); speakWord(ex.korean); }}
                               className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors shrink-0"
                             >
                               <Volume2 size={14} />
@@ -575,7 +997,7 @@ export default function ThemeDetailPage() {
       {addAllBook && (
         <AddToBookSheet
           word={{ korean: '', pronunciation: '', meaning: '', partOfSpeech: '' }}
-          title={`全部加入单词本（${totalWords} 词）`}
+          title={t('vocab.add_to_book_n', lang, { n: totalWords })}
           onClose={() => setAddAllBook(false)}
           onSelectBook={handleAddAllToBook}
         />
@@ -583,21 +1005,21 @@ export default function ThemeDetailPage() {
 
       {/* Batch action bar */}
       {managing && selectedWords.size > 0 && (
-        <div className="fixed bottom-[calc(56px+env(safe-area-inset-bottom,0px))] left-0 right-0 z-30 flex justify-center px-4 pb-3 pointer-events-none">
-          <div className="pointer-events-auto w-full max-w-lg bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-3 shadow-xl flex gap-2">
+        <div className="fixed bottom-[calc(56px+env(safe-area-inset-bottom,0px))] left-0 right-0 z-[60] flex justify-center pointer-events-none">
+          <div className="pointer-events-auto w-full max-w-lg mx-4 mb-3 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-3 shadow-xl flex gap-2">
             {deletePending ? (
               <>
                 <button onClick={() => setDeletePending(false)} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[var(--bg-input)] text-[var(--text-secondary)] text-sm font-semibold">
-                  取消
+                  {t('common.cancel', lang)}
                 </button>
                 <button onClick={batchDelete} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-red-500 text-white text-sm font-semibold">
-                  <Trash2 size={14} /> 确认删除 {selectedWords.size} 个
+                  <Trash2 size={14} /> {t('vocab.confirm_delete_n', lang, { n: selectedWords.size })}
                 </button>
               </>
             ) : (
               <>
                 <button onClick={batchMaster} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[var(--mint-soft)]/15 text-[var(--mint-soft)] text-sm font-semibold hover:bg-[var(--mint-soft)]/25 transition-colors">
-                  <CheckCircle size={14} /> 标记已掌握 ({selectedWords.size})
+                  <CheckCircle size={14} /> {t('vocab.mark_mastered_n', lang, { n: selectedWords.size })}
                 </button>
                 <button onClick={() => setDeletePending(true)} className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-red-50 text-red-500 text-sm font-semibold hover:bg-red-100 transition-colors">
                   <Trash2 size={14} />

@@ -11,6 +11,7 @@ import { t } from '@/lib/i18n';
 import { fmtDate } from '@/lib/datetime';
 
 interface Article {
+  [k: string]: unknown;
   id: string;
   title: string;
   originalText?: string;

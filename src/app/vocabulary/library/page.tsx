@@ -3,28 +3,72 @@
 import { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, BarChart3, GraduationCap, Library, MessageCircle } from 'lucide-react';
-import { ThemesSection } from '@/components/vocabulary/ThemesSection';
-import { LevelsSection } from '@/components/vocabulary/LevelsSection';
-import { YonseiSection } from '@/components/vocabulary/YonseiSection';
-import { ExpressionsSection } from '@/components/vocabulary/ExpressionsSection';
+import dynamic from 'next/dynamic';
+import { ArrowLeft, BarChart3, GraduationCap, Library, MessageCircle, BookText } from 'lucide-react';
+import { useIsDesktop } from '@/lib/useIsMobile';
+import { t } from '@/lib/i18n';
+import { useLang } from '@/components/LangProvider';
+
+const SectionLoading = () => (
+  <div style={{ display: 'flex', justifyContent: 'center', padding: '60px 0' }}>
+    <div style={{ width: 24, height: 24, borderRadius: '50%', border: '2px solid var(--color-pink-base)', borderTopColor: 'transparent', animation: 'tori-spin 0.7s linear infinite' }} />
+  </div>
+);
+
+function SectionErrorFallback() {
+  const { lang } = useLang();
+  return (
+    <div style={{ textAlign: 'center', padding: '48px 0' }}>
+      <p style={{ fontSize: 13, color: 'var(--color-ink-3)', marginBottom: 8 }}>{t('vocab.load_failed_refresh', lang)}</p>
+    </div>
+  );
+}
+const ThemesSection = dynamic(
+  () => import('@/components/vocabulary/ThemesSection').then(m => m.ThemesSection).catch(() => SectionErrorFallback),
+  { loading: SectionLoading }
+);
+const LevelsSection = dynamic(
+  () => import('@/components/vocabulary/LevelsSection').then(m => m.LevelsSection).catch(() => SectionErrorFallback),
+  { loading: SectionLoading }
+);
+const YonseiSection = dynamic(
+  () => import('@/components/vocabulary/YonseiSection').then(m => m.YonseiSection).catch(() => SectionErrorFallback),
+  { loading: SectionLoading }
+);
+const ExpressionsSection = dynamic(
+  () => import('@/components/vocabulary/ExpressionsSection').then(m => m.ExpressionsSection).catch(() => SectionErrorFallback),
+  { loading: SectionLoading }
+);
+const DictEncyclopediaSection = dynamic(
+  () => import('@/components/vocabulary/DictEncyclopediaSection').then(m => m.DictEncyclopediaSection).catch(() => SectionErrorFallback),
+  { loading: SectionLoading }
+);
 
 const tabs = [
-  { key: 'levels',      label: 'TOPIK词表', icon: BarChart3 },
-  { key: 'yonsei',      label: '教材词汇',  icon: GraduationCap },
-  { key: 'themes',      label: '主题词包',  icon: Library },
-  { key: 'expressions', label: '活用表达',  icon: MessageCircle },
+  { key: 'levels',      labelKey: 'vocab.lib_tab_levels',      Icon: BarChart3 },
+  { key: 'yonsei',      labelKey: 'vocab.lib_tab_yonsei',      Icon: GraduationCap },
+  { key: 'themes',      labelKey: 'vocab.lib_tab_themes',      Icon: Library },
+  { key: 'expressions', labelKey: 'vocab.lib_tab_expressions', Icon: MessageCircle },
+  { key: 'dictionary',  labelKey: 'vocab.lib_tab_dictionary',  Icon: BookText },
 ] as const;
 
 type TabKey = (typeof tabs)[number]['key'];
-const validKeys = tabs.map(t => t.key) as string[];
+const validKeys = tabs.map(tab => tab.key) as string[];
 
 function LibraryContent() {
+  const { lang } = useLang();
+  const isDesktop = useIsDesktop();
   const searchParams = useSearchParams();
   const urlTab = searchParams.get('tab');
   const [tab, setTab] = useState<TabKey>(() =>
     validKeys.includes(urlTab ?? '') ? (urlTab as TabKey) : 'levels'
   );
+
+  // 桌面端：主内容槽由 AppShell 控制（--desktop-main-rail: 1088px），
+  // 这里让内容占满主槽宽度即可；手机端保持原 max-w-2xl 不动
+  const containerCls = isDesktop
+    ? 'py-6 w-full px-8 space-y-8'
+    : 'py-4 max-w-2xl mx-auto px-4 space-y-4';
 
   return (
     <div className={containerCls}>
@@ -40,27 +84,38 @@ function LibraryContent() {
         {t('vocab.back_to_vocab', lang)}
       </Link>
 
-      {/* Tabs */}
-      <div className="flex gap-2 border-b border-[var(--border-color)] overflow-x-auto flex-nowrap">
-        {tabs.map((t) => {
-          const Icon = t.icon;
-          const isActive = tab === t.key;
-          return (
-            <button
-              key={t.key}
-              onClick={() => setTab(t.key)}
-              className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-all whitespace-nowrap ${
-                isActive
-                  ? 'border-[var(--pink-primary)] text-[var(--pink-primary)]'
-                  : 'border-transparent text-[var(--text-muted)] hover:text-[var(--text-primary)]'
-              }`}
-            >
-              <Icon size={16} />
-              {t.label}
-            </button>
-          );
-        })}
-      </div>
+      {/* ═════ HERO ═════ */}
+      {isDesktop ? (
+        <section
+          style={{
+            position: 'relative',
+            padding: '36px 40px 32px',
+            borderRadius: 'var(--radius-xl)',
+            background: 'linear-gradient(135deg, var(--color-purple-soft), var(--color-surface-2) 70%)',
+            border: '1px solid var(--color-border-1)',
+            boxShadow: 'var(--shadow-sm)',
+            overflow: 'hidden',
+          }}
+        >
+          {/* 背景"단어"淡衬 */}
+          <span
+            aria-hidden
+            style={{
+              position: 'absolute',
+              top: -30, right: -20,
+              fontFamily: "'Noto Serif KR', 'Noto Sans KR', serif",
+              fontWeight: 900,
+              fontSize: 240,
+              lineHeight: 1,
+              color: 'var(--color-purple-base)',
+              opacity: 0.08,
+              letterSpacing: '-0.05em',
+              pointerEvents: 'none',
+              userSelect: 'none',
+            }}
+          >
+            단어
+          </span>
 
           <div style={{ position: 'relative', zIndex: 1 }}>
             <div>
@@ -209,6 +264,7 @@ function LibraryContent() {
         {tab === 'yonsei'      && <YonseiSection />}
         {tab === 'themes'      && <ThemesSection />}
         {tab === 'expressions' && <ExpressionsSection />}
+        {tab === 'dictionary'  && <DictEncyclopediaSection />}
       </div>
     </div>
   );
@@ -216,7 +272,17 @@ function LibraryContent() {
 
 export default function LibraryPage() {
   return (
-    <Suspense fallback={<div className="flex-1 flex items-center justify-center py-20"><div className="w-6 h-6 rounded-full border-2 border-[var(--pink-primary)] border-t-transparent animate-spin" /></div>}>
+    <Suspense fallback={
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '80px 0' }}>
+        <div
+          style={{
+            width: 24, height: 24, borderRadius: '50%',
+            border: '2px solid var(--color-pink-base)', borderTopColor: 'transparent',
+            animation: 'tori-spin 0.7s linear infinite',
+          }}
+        />
+      </div>
+    }>
       <LibraryContent />
     </Suspense>
   );
