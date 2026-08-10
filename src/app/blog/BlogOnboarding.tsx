@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import { BLOG_AVATARS } from '@/data/blogAvatars';
 import type { BlogUserStats } from '@/types';
@@ -14,6 +15,8 @@ export default function BlogOnboarding({ onDone, onClose }: { onDone: (stats: Bl
   const [nickname, setNickname] = useState('');
   const [saving, setSaving] = useState(false);
   const [err, setErr] = useState('');
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
 
   const canSubmit = animalId && nickname.trim().length > 0 && nickname.trim().length <= 20;
 
@@ -28,7 +31,6 @@ export default function BlogOnboarding({ onDone, onClose }: { onDone: (stats: Bl
         body: JSON.stringify({ animalId, nickname: nickname.trim() }),
       });
       if (!res.ok) {
-        const j = await res.json().catch(() => ({}));
         setErr(t('blog.onb_save_failed', lang));
         setSaving(false);
         return;
@@ -41,8 +43,9 @@ export default function BlogOnboarding({ onDone, onClose }: { onDone: (stats: Bl
     }
   };
 
-  return (
-    <div className="blog-onb" onClick={onClose}>
+  if (!mounted) return null;
+  return createPortal(
+    <div className="blog-root blog-onb" onClick={onClose}>
       <div className="blog-onb-card" onClick={(e) => e.stopPropagation()}>
         <button
           type="button"
@@ -94,6 +97,7 @@ export default function BlogOnboarding({ onDone, onClose }: { onDone: (stats: Bl
           {saving ? t('blog.onb_saving', lang) : t('blog.onb_start', lang)}
         </button>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

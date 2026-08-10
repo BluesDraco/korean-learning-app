@@ -394,8 +394,79 @@ function FraudTab() {
   );
 }
 
+// ── 奖励素材（8人档贴纸+壁纸）──
+
+function RewardsTab() {
+  const [data, setData] = useState<{ stickers: string[]; wallpapers: string[] } | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [busy, setBusy] = useState('');
+  const [bust, setBust] = useState<Record<string, number>>({});
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/admin/invite/rewards');
+      if (!res.ok) throw new Error();
+      setData(await res.json());
+    } catch { setData(null); } finally { setLoading(false); }
+  }, []);
+  useEffect(() => { load(); }, [load]);
+
+  const nameOf = (url: string) => url.split('/').pop() || '';
+
+  const upload = async (url: string, fileList: FileList | null) => {
+    const file = fileList?.[0];
+    if (!file) return;
+    const name = nameOf(url);
+    setBusy(name);
+    try {
+      const fd = new FormData();
+      fd.append('name', name);
+      fd.append('file', file);
+      const res = await fetch('/api/admin/invite/rewards', { method: 'POST', body: fd });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) { alert(`上传失败：${json.error || res.status}`); return; }
+      setBust((b) => ({ ...b, [name]: Date.now() }));
+    } finally { setBusy(''); }
+  };
+
+  if (loading) return <div className="flex items-center justify-center py-16 text-[var(--text-muted)]"><Loader2 className="animate-spin" size={20} /></div>;
+  if (!data) return <div className="py-16 text-center text-sm text-[var(--text-muted)]">加载失败</div>;
+
+  const section = (title: string, items: string[]) => (
+    <div>
+      <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-3">{title}（{items.length} 张）</h3>
+      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
+        {items.map((url) => {
+          const name = nameOf(url);
+          const src = bust[name] ? `${url}?t=${bust[name]}` : url;
+          return (
+            <label key={url} className="relative cursor-pointer group">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={src} alt={name} className="w-full aspect-square object-cover rounded-lg border border-[var(--border-color)]" />
+              <div className="absolute inset-0 rounded-lg bg-black/0 group-hover:bg-black/40 flex items-center justify-center transition-colors">
+                <span className="text-white text-xs opacity-0 group-hover:opacity-100">{busy === name ? '上传中…' : '点击替换'}</span>
+              </div>
+              <input type="file" accept="image/*" className="hidden" disabled={busy === name}
+                onChange={(e) => upload(url, e.target.files)} />
+            </label>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="space-y-6">
+      <p className="text-xs text-[var(--text-muted)]">点击任意图片替换素材（会裁成 800×800 webp）。替换后需重新部署才在前端生效。</p>
+      {section('活动贴纸', data.stickers)}
+      {section('壁纸原画集', data.wallpapers)}
+    </div>
+  );
+}
+
 export default function AdminInvitePage() {
-  const [tab, setTab] = useState<'shipments' | 'stats' | 'campaign' | 'fraud'>('shipments');
+  const [tab, setTab] = useState<'shipments' | 'stats' | 'campaign' | 'fraud' | 'rewards'>('shipments');
   return (
     <div className="p-1 space-y-5">
       <div>
@@ -403,7 +474,7 @@ export default function AdminInvitePage() {
         <p className="text-sm text-[var(--text-muted)] mt-1">发货审核 · 数据看板 · 活动配置 · 防刷监控</p>
       </div>
       <div className="flex gap-1 bg-[var(--bg-input)] rounded-lg p-0.5 w-fit flex-wrap">
-        {([['shipments', '发货审核'], ['stats', 'K因子看板'], ['campaign', '活动配置'], ['fraud', '防刷监控']] as const).map(([k, label]) => (
+        {([['shipments', '发货审核'], ['stats', 'K因子看板'], ['campaign', '活动配置'], ['fraud', '防刷监控'], ['rewards', '奖励素材']] as const).map(([k, label]) => (
           <button key={k} onClick={() => setTab(k)}
             className={`px-4 py-1.5 text-sm rounded-md transition-colors ${
               tab === k ? 'bg-[var(--bg-card)] text-[var(--pink-primary)] font-semibold shadow-sm' : 'text-[var(--text-muted)]'
@@ -416,6 +487,7 @@ export default function AdminInvitePage() {
       {tab === 'stats' && <StatsTab />}
       {tab === 'campaign' && <CampaignTab />}
       {tab === 'fraud' && <FraudTab />}
+      {tab === 'rewards' && <RewardsTab />}
     </div>
   );
 }

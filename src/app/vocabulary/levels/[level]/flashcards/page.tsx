@@ -3,15 +3,17 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Volume2, ChevronLeft, ChevronRight, Loader2, CheckCircle, RotateCcw, Shuffle, Star, ArrowLeftRight } from 'lucide-react';
+import { ArrowLeft, Volume2, ChevronLeft, ChevronRight, Loader2, CheckCircle, RotateCcw, Star, SlidersHorizontal, Repeat } from 'lucide-react';
 
 const DIRECTION_KEY = 'flashcards-direction';
 type FlashDirection = 'ko-zh' | 'zh-ko';
 import { db } from '@/lib/db';
 import { ensureFavoritesBook, FAVORITES_BOOK_ID } from '@/lib/db';
-import { speakWord, speakWordRepeated, speak, cancelSpeech } from '@/lib/tts';
+import { speakWord, speakWordRepeated, cancelSpeech } from '@/lib/tts';
 import { displayRoman } from '@/lib/dictionary';
 import { getLevelWords } from '@/data/vocabulary';
+import { ChoiceQuiz, type QuizItem } from '@/components/vocabulary/ChoiceQuiz';
+import { FlashcardStartScreen } from '@/components/vocabulary/FlashcardStartScreen';
 import { TappableText } from '@/components/TappableText';
 import { WordTapSheet } from '@/components/WordTapSheet';
 import type { WordEntry } from '@/types';
@@ -19,6 +21,7 @@ import { saveProgress, loadProgress, TTL_FLASHCARD } from '@/lib/progress-storag
 import { useToast } from '@/hooks/useToast';
 import { TracePad } from '@/components/vocabulary/TracePad';
 import { RepeatToggleButton } from '@/components/vocabulary/RepeatToggleButton';
+import { useAutoAudio, AutoAudioToggle } from '@/components/vocabulary/AutoAudioToggle';
 import { SentenceBookmarkButton } from '@/components/vocabulary/SentenceBookmarkButton';
 import GrammarExplainBubble from '@/components/GrammarExplainBubble';
 import { getFlashcardTheme, applyFlashcardTheme } from '@/lib/flashcardTheme';
@@ -30,7 +33,7 @@ const levelNames: Record<number, string> = {
   4: '4级 · 中级', 5: '5级 · 高级', 6: '6级 · 精通',
 };
 
-type CardWord = WordEntry & { mastery: 'new' | 'learning' | 'reviewing' | 'mastered' };
+type CardWord = WordEntry & { mastery: 'new' | 'learning' | 'reviewing' | 'mastered'; srsLevel?: number; interval?: number; id?: string };
 
 export default function TopikFlashcardsPage() {
   const { lang } = useLang();
@@ -47,22 +50,32 @@ export default function TopikFlashcardsPage() {
   const [direction, setDirection] = useState<FlashDirection>('ko-zh');
   const [swipeOffset, setSwipeOffset] = useState(0);
 
+  const [studyMode, setStudyMode] = useState<'flip' | 'quiz'>('flip');
+  const [autoAdvance, setAutoAdvance] = useState(true);
+  const [quizRound, setQuizRound] = useState(0);
+  const [started, setStarted] = useState(false);
+  const MIN_QUIZ_WORDS = 4;
+  const [autoAudio, toggleAutoAudio] = useAutoAudio();
+
   useEffect(() => {
     try {
       applyFlashcardTheme(getFlashcardTheme()); // 兜底重贴闪卡配色，防 FOUC 脚本竞态/SPA 导航丢失导致回退默认蓝色
       const v = localStorage.getItem(DIRECTION_KEY);
       if (v === 'zh-ko') setDirection('zh-ko');
+      if (localStorage.getItem('flashcards-study-mode') === 'quiz') setStudyMode('quiz');
+      if (localStorage.getItem('flashcards-quiz-pace') === 'manual') setAutoAdvance(false);
     } catch { /* ignore */ }
   }, []);
 
-  const toggleDirection = () => {
-    setDirection(prev => {
-      const next: FlashDirection = prev === 'ko-zh' ? 'zh-ko' : 'ko-zh';
-      try { localStorage.setItem(DIRECTION_KEY, next); } catch { /* ignore */ }
-      setRevealed(false);
-      return next;
-    });
-  };
+  // WordEntry（korean/romanization/meanings[].chinese/examples{korean,chinese}）→ 中立 QuizItem
+  const toQuizItem = (e: CardWord): QuizItem => ({
+    id: e.korean, word: e.korean, pronunciation: e.romanization,
+    meaning: e.meanings[0]?.chinese || '',
+    meanings: e.meanings.map(m => ({ chinese: m.chinese, partOfSpeech: e.partOfSpeech })),
+    partOfSpeech: e.partOfSpeech,
+    examples: (e.examples ?? []).map(x => ({ text: x.korean, translation: x.chinese })),
+  });
+
   const dirLockRef = useRef<'h' | 'v' | null>(null);
   const swipeOffsetRef = useRef(0);
   const [isSwiping, setIsSwiping] = useState(false);
@@ -155,13 +168,15 @@ export default function TopikFlashcardsPage() {
   // auto-play audio when card changes (also fires on shuffle-from-index-0)
   const currentWordText = displayWords[currentIdx]?.korean ?? '';
   useEffect(() => {
-    if (loading || !currentWordText) return;
+    if (!autoAudio || loading || !currentWordText || !started || (studyMode === 'quiz' && displayWords.length >= MIN_QUIZ_WORDS)) return;
     const raf = requestAnimationFrame(() => playAudioRef.current?.());
-    return () => cancelAnimationFrame(raf);
+    // 翻卡瞬间同步打断上一张的连读(含 gap 等待中的),不等下一帧 rAF——否则第二张会听到第一张的读音
+    return () => { cancelAnimationFrame(raf); cancelSpeech(); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentIdx, loading, currentWordText]);
+  }, [autoAudio, currentIdx, loading, currentWordText, started, studyMode]);
 
   playAudioRef.current = () => {
+    if (!autoAudio) return;
     const w = displayWords[currentIdx];
     if (!w) return;
     cancelSpeech();
@@ -179,22 +194,32 @@ export default function TopikFlashcardsPage() {
     })().catch(() => {});
   }, []);
 
-  const toggleShuffle = () => {
-    if (shuffled) {
-      setDisplayWords([...words]);
-      showToast(t('vocab.fc_restore_order', lang), 'info');
-    } else {
+  const handleStart = (cfg: { mode: 'flip' | 'quiz'; direction: FlashDirection; autoAdvance: boolean; shuffle: boolean }) => {
+    setDirection(cfg.direction);
+    setStudyMode(cfg.mode);
+    setAutoAdvance(cfg.autoAdvance);
+    try {
+      localStorage.setItem(DIRECTION_KEY, cfg.direction);
+      localStorage.setItem('flashcards-study-mode', cfg.mode);
+      localStorage.setItem('flashcards-quiz-pace', cfg.autoAdvance ? 'auto' : 'manual');
+    } catch { /* ignore */ }
+    if (cfg.shuffle) {
       const arr = [...words];
       for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [arr[i], arr[j]] = [arr[j], arr[i]];
       }
       setDisplayWords(arr);
-      showToast(t('vocab.fc_shuffled', lang), 'info');
+      setShuffled(true);
+    } else {
+      setDisplayWords([...words]);
+      setShuffled(false);
     }
-    setShuffled(v => !v);
     setCurrentIdx(0);
     setRevealed(false);
+    setCompleted(false);
+    setQuizRound(r => r + 1);
+    setStarted(true);
   };
 
   const goTo = useCallback((idx: number) => {
@@ -207,6 +232,14 @@ export default function TopikFlashcardsPage() {
     setCurrentIdx(idx);
     if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [displayWords.length, completed]);
+
+  // 翻卡模式自动翻页：翻到背面后停留 2.5s 自动进入下一张（切卡/翻回/卸载即清除）
+  const isFlipMode = !(studyMode === 'quiz' && displayWords.length >= MIN_QUIZ_WORDS);
+  useEffect(() => {
+    if (!started || !isFlipMode || !autoAdvance || !revealed || completed) return;
+    const timer = setTimeout(() => goTo(currentIdx + 1), 2500);
+    return () => clearTimeout(timer);
+  }, [started, isFlipMode, autoAdvance, revealed, completed, currentIdx, goTo]);
 
   // 词典条目在 IndexedDB 无行时先建一条 new 行，返回其 id（收藏本按 id 存取）
   const ensureFavRow = async (entry: CardWord): Promise<string> => {
@@ -238,19 +271,23 @@ export default function TopikFlashcardsPage() {
   const favQueueRef = useRef<Promise<unknown>>(Promise.resolve());
   const toggleFavorite = (entry: CardWord) => {
     const next = favQueueRef.current.then(async () => {
-      const bookId = await ensureFavoritesBook();
-      const favBook = await db.wordBooks.get(bookId);
-      if (!favBook) return;
-      const now = Date.now();
-      const existing = await db.words.where('word').equals(entry.korean).first();
-      const rowId = existing?.id;
-      if (rowId && favBook.wordIds.includes(rowId)) {
-        await db.wordBooks.update(bookId, { wordIds: favBook.wordIds.filter(id => id !== rowId), updatedAt: now });
-        setFavoritedIds(prev => { const s = new Set(prev); s.delete(entry.korean); return s; });
-      } else {
-        const id = rowId ?? await ensureFavRow(entry);
-        await db.wordBooks.update(bookId, { wordIds: [...new Set([...favBook.wordIds, id])], updatedAt: now });
-        setFavoritedIds(prev => new Set(prev).add(entry.korean));
+      try {
+        const bookId = await ensureFavoritesBook();
+        const favBook = await db.wordBooks.get(bookId);
+        if (!favBook) return;
+        const now = Date.now();
+        const existing = await db.words.where('word').equals(entry.korean).first();
+        const rowId = existing?.id;
+        if (rowId && favBook.wordIds.includes(rowId)) {
+          await db.wordBooks.update(bookId, { wordIds: favBook.wordIds.filter(id => id !== rowId), updatedAt: now });
+          setFavoritedIds(prev => { const s = new Set(prev); s.delete(entry.korean); return s; });
+        } else {
+          const id = rowId ?? await ensureFavRow(entry);
+          await db.wordBooks.update(bookId, { wordIds: [...new Set([...favBook.wordIds, id])], updatedAt: now });
+          setFavoritedIds(prev => new Set(prev).add(entry.korean));
+        }
+      } catch {
+        showToast(t('vocab.fc_fav_failed', lang), 'error');
       }
     });
     favQueueRef.current = next.catch(() => {});
@@ -265,9 +302,13 @@ export default function TopikFlashcardsPage() {
         if (cur && cur.mastery === 'new') {
           // 词库词首次翻卡即入库为 learning（无行则建行），否则学习进度读不回
           (async () => {
-            const id = await ensureFavRow(cur);
-            await db.words.update(id, { mastery: 'learning', srsLevel: 1, interval: 1, nextReview: Date.now() });
-          })().catch(() => {});
+            try {
+              const id = await ensureFavRow(cur);
+              await db.words.update(id, { mastery: 'learning', srsLevel: 1, interval: 1, nextReview: Date.now() });
+            } catch {
+              showToast(t('vocab.fc_progress_save_failed', lang), 'error');
+            }
+          })();
           setWords(prev => prev.map(w => w.korean === cur.korean ? { ...w, mastery: 'learning' } : w));
         }
       }
@@ -277,6 +318,7 @@ export default function TopikFlashcardsPage() {
 
   // Keyboard
   useEffect(() => {
+    if (!started || (studyMode === 'quiz' && displayWords.length >= MIN_QUIZ_WORDS)) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft') goTo(currentIdx - 1);
       else if (e.key === 'ArrowRight') goTo(currentIdx + 1);
@@ -284,48 +326,77 @@ export default function TopikFlashcardsPage() {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [currentIdx, goTo]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentIdx, goTo, started, studyMode, displayWords.length]);
 
   const toggleMastered = async (entry: CardWord) => {
     const now = Date.now();
     const isMastered = masteredSet.has(entry.korean);
-    const rows = await db.words.where('word').equals(entry.korean).toArray();
+    try {
+      const rows = await db.words.where('word').equals(entry.korean).toArray();
 
-    if (isMastered) {
-      if (rows.length) {
-        await db.words.bulkUpdate(
-          rows.map(r => ({ id: r.id, mastery: 'learning', srsLevel: 1, interval: 1, nextReview: now }))
-        ).catch(() => {});
-      }
-      setMasteredSet(prev => { const s = new Set(prev); s.delete(entry.korean); return s; });
-      setWords(prev => prev.map(w => w.korean === entry.korean ? { ...w, mastery: 'learning' } : w));
-    } else {
-      if (rows.length) {
-        await db.words.bulkUpdate(
-          rows.map(r => ({ id: r.id, mastery: 'mastered', srsLevel: 5, interval: 21, nextReview: now + 21 * 86400000, lastReviewed: now }))
-        ).catch(() => {});
+      if (isMastered) {
+        if (rows.length) {
+          await db.words.bulkUpdate(
+            rows.map(r => ({ id: r.id, mastery: 'learning', srsLevel: 1, interval: 1, nextReview: now }))
+          );
+        }
+        setMasteredSet(prev => { const s = new Set(prev); s.delete(entry.korean); return s; });
+        setWords(prev => prev.map(w => w.korean === entry.korean ? { ...w, mastery: 'learning' } : w));
       } else {
-        await db.words.put({
-          id: crypto.randomUUID(),
-          word: entry.korean,
-          pronunciation: entry.romanization,
-          meaning: entry.meanings[0]?.chinese || '',
-          partOfSpeech: entry.partOfSpeech,
-          examples: entry.examples.map(ex => ({ text: ex.korean, translation: ex.chinese, source: 'dictionary' as const })),
-          sourceEntryId: entry.id,
-          mastery: 'mastered',
-          srsLevel: 5,
-          easeFactor: 2.5,
-          interval: 21,
-          nextReview: now + 21 * 86400000,
-          createdAt: now,
-          lastReviewed: now,
-          source: 'library',
-        }).catch(() => {});
+        if (rows.length) {
+          await db.words.bulkUpdate(
+            rows.map(r => ({ id: r.id, mastery: 'mastered', srsLevel: 5, interval: 21, nextReview: now + 21 * 86400000, lastReviewed: now }))
+          );
+        } else {
+          await db.words.put({
+            id: crypto.randomUUID(),
+            word: entry.korean,
+            pronunciation: entry.romanization,
+            meaning: entry.meanings[0]?.chinese || '',
+            partOfSpeech: entry.partOfSpeech,
+            examples: entry.examples.map(ex => ({ text: ex.korean, translation: ex.chinese, source: 'dictionary' as const })),
+            sourceEntryId: entry.id,
+            mastery: 'mastered',
+            srsLevel: 5,
+            easeFactor: 2.5,
+            interval: 21,
+            nextReview: now + 21 * 86400000,
+            createdAt: now,
+            lastReviewed: now,
+            source: 'library',
+          });
+        }
+        setMasteredSet(prev => new Set(prev).add(entry.korean));
+        setWords(prev => prev.map(w => w.korean === entry.korean ? { ...w, mastery: 'mastered' } : w));
       }
-      setMasteredSet(prev => new Set(prev).add(entry.korean));
-      setWords(prev => prev.map(w => w.korean === entry.korean ? { ...w, mastery: 'mastered' } : w));
+    } catch {
+      showToast(t('vocab.fc_save_failed', lang), 'error');
     }
+  };
+
+  // 重新学：标记 learning 并把当前词移到本轮牌堆末尾稍后再练
+  const relearnWord = (w: CardWord) => {
+    if (w.mastery === 'new') {
+      (async () => {
+        try {
+          const id = await ensureFavRow(w);
+          await db.words.update(id, { mastery: 'learning', srsLevel: 1, interval: 1, nextReview: Date.now() });
+          setWords(prev => prev.map(c => c.korean === w.korean ? { ...c, mastery: 'learning' } : c));
+        } catch { /* ignore */ }
+      })();
+    }
+    setRevealed(false);
+    setDisplayWords(prev => {
+      if (prev.length <= 1) return prev;
+      const idx = prev.findIndex(c => c.korean === w.korean);
+      if (idx === -1) return prev;
+      const next = [...prev];
+      const [moved] = next.splice(idx, 1);
+      next.push(moved);
+      return next;
+    });
+    if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -430,6 +501,7 @@ export default function TopikFlashcardsPage() {
   const isMastered = masteredSet.has(word.korean);
   const progress = ((currentIdx + 1) / displayWords.length) * 100;
   const masteredCount = masteredSet.size;
+  const effectiveMode = studyMode === 'quiz' && displayWords.length >= MIN_QUIZ_WORDS ? 'quiz' : 'flip';
 
   return (
     <div
@@ -449,45 +521,82 @@ export default function TopikFlashcardsPage() {
             {t('vocab.fc_mastered_of', lang, { mastered: masteredCount, total: words.length })}
           </p>
         </div>
+        {started && (<>
         <button
-          onClick={toggleDirection}
+          onClick={() => setStarted(false)}
           className="shrink-0 h-8 px-2.5 rounded-full flex items-center gap-1 text-[11px] font-bold transition-colors"
-          style={{ border: '1px solid var(--fc-nav-border)', background: direction === 'zh-ko' ? 'var(--fc-dot-active)' : 'var(--fc-nav-bg)', color: direction === 'zh-ko' ? '#fff' : 'var(--fc-nav-color)' }}
-          title={direction === 'ko-zh' ? t('vocab.fc_to_zh_kr', lang) : t('vocab.fc_to_kr_zh', lang)}
+          style={{ border: '1px solid var(--fc-nav-border)', background: 'var(--fc-nav-bg)', color: 'var(--fc-nav-color)' }}
         >
-          <ArrowLeftRight size={12} />
-          {direction === 'ko-zh' ? t('vocab.fc_kr_zh', lang) : t('vocab.fc_zh_kr', lang)}
-        </button>
-        <button
-          onClick={toggleShuffle}
-          className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-colors"
-          style={{ border: '1px solid var(--fc-nav-border)', background: shuffled ? 'var(--fc-dot-active)' : 'var(--fc-nav-bg)', color: shuffled ? '#fff' : 'var(--fc-nav-color)' }}
-          title={shuffled ? t('vocab.fc_cancel_shuffle', lang) : t('vocab.fc_shuffle', lang)}
-        >
-          <Shuffle size={14} />
+          <SlidersHorizontal size={12} />
+          {t('vocab.fc_reselect', lang)}
         </button>
         <button
           onClick={e => { e.stopPropagation(); toggleFavorite(word); }}
           className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-colors"
           style={{ border: '1px solid var(--fc-card-border)', color: favoritedIds.has(word.korean) ? 'var(--color-gold-base)' : 'var(--text-muted)', background: favoritedIds.has(word.korean) ? 'var(--color-gold-soft)' : 'transparent' }}
-          title={favoritedIds.has(word.korean) ? t('vocab.fc_cancel_fav', lang) : t('vocab.fc_fav', lang)}
+          aria-label={t('vocab.fc_fav', lang)}
         >
           <Star size={14} fill={favoritedIds.has(word.korean) ? 'var(--color-gold-base)' : 'none'} />
         </button>
         <span className="text-[12px] font-black tabular-nums shrink-0" style={{ color: 'var(--color-ink-3)' }}>
           {currentIdx + 1} / {displayWords.length}
         </span>
+        </>)}
       </div>
 
+      {/* 开始配置屏 */}
+      {!started && (
+        <FlashcardStartScreen
+          wordCount={words.length}
+          initial={{ mode: studyMode, direction, autoAdvance, shuffle: shuffled }}
+          onStart={handleStart}
+        />
+      )}
+
       {/* Progress bar */}
+      {started && (
       <div className="h-[5px] rounded-full mb-5 shrink-0 overflow-hidden" style={{ background: 'var(--fc-progress-bg)' }}>
         <div
           className="h-full rounded-full transition-all duration-500"
           style={{ width: `${progress}%`, background: 'linear-gradient(90deg, var(--color-mint-base), var(--color-pink-base))' }}
         />
       </div>
+      )}
 
-      {/* Card */}
+      {/* 选词义测验模式 */}
+      {started && effectiveMode === 'quiz' && (
+        <ChoiceQuiz
+          key={`${direction}-${quizRound}-${displayWords.map(w => w.korean).join(',')}`}
+          words={displayWords.map(toQuizItem)}
+          bookWords={words.map(toQuizItem)}
+          direction={direction}
+          autoAdvance={autoAdvance}
+          bookName={`TOPIK ${t('vocab.level_name_' + level, lang)}`}
+          sourceId={`level-${level}`}
+          onProgress={setCurrentIdx}
+          onWrong={(qi) => { const real = words.find(x => x.korean === qi.id); if (real && real.mastery === 'new') { (async () => { try { const rid = await ensureFavRow(real); await db.words.update(rid, { mastery: 'learning', srsLevel: 1, interval: 1, nextReview: Date.now() }); setWords(prev => prev.map(w => w.korean === real.korean ? { ...w, mastery: 'learning' } : w)); } catch { /* ignore */ } })(); } }}
+          onComplete={(correct, total) => {
+            const now = Date.now();
+            for (const dw of displayWords) {
+              const real = words.find(x => x.korean === dw.korean);
+              if (!real) continue;
+              try {
+                const newSrs = Math.min(5, (real.srsLevel ?? 0) + 1);
+                const newInt = Math.max(1, (real.interval ?? 1) * 2);
+                db.words.update(real.id, {
+                  srsLevel: newSrs, interval: newInt, easeFactor: 2.5,
+                  nextReview: now + newInt * 86400000, lastReviewed: now,
+                  mastery: newSrs >= 5 ? 'mastered' as const : 'reviewing' as const,
+                }).catch(() => {});
+              } catch { /* ignore */ }
+            }
+            setCompleted(true);
+          }}
+        />
+      )}
+
+      {/* Card（翻卡） */}
+      {started && effectiveMode === 'flip' && (<>
       <div className="flex justify-center">
         <div
           className="w-full max-w-sm md:max-w-2xl"
@@ -519,13 +628,17 @@ export default function TopikFlashcardsPage() {
                   <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full" style={{ background: 'var(--fc-badge-bg)', color: 'var(--fc-badge-color)' }}>{t('vocab.mastered', lang)}</span>
                 )}
               </div>
-              <button
-                onClick={e => { e.stopPropagation(); speakWord(word.korean); }}
-                className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
-                style={{ border: '1px solid var(--fc-audio-border)', color: 'var(--fc-audio-color)' }}
-              >
-                <Volume2 size={14} />
-              </button>
+              <div className="flex items-center gap-2">
+                <AutoAudioToggle autoAudio={autoAudio} onToggle={toggleAutoAudio} className="w-8 h-8 rounded-full flex items-center justify-center transition-colors" style={{ border: '1px solid var(--fc-audio-border)', color: 'var(--fc-audio-color)' }} />
+                <button
+                  onClick={e => { e.stopPropagation(); speakWord(word.korean); }}
+                  className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+                  style={{ border: '1px solid var(--fc-audio-border)', color: 'var(--fc-audio-color)' }}
+                  aria-label={t('vocab.play', lang)}
+                >
+                  <Volume2 size={14} />
+                </button>
+              </div>
             </div>
 
             {/* Front */}
@@ -594,6 +707,7 @@ export default function TopikFlashcardsPage() {
                         onClick={e => { e.stopPropagation(); speakWord(ex.korean); }}
                         className="shrink-0 p-1.5 -m-0.5 rounded-lg"
                         style={{ color: 'var(--fc-example-zh)' }}
+                        aria-label={t('vocab.play', lang)}
                       >
                         <Volume2 size={13} />
                       </button>
@@ -608,19 +722,20 @@ export default function TopikFlashcardsPage() {
                 <TracePad word={word.korean} />
 
                 {/* Mastery button */}
-                <button
-                  onClick={e => { e.stopPropagation(); toggleMastered(word); }}
-                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-[14px] font-semibold text-[14px] transition-colors mt-1"
-                  style={isMastered
-                    ? { background: 'var(--fc-badge-bg)', color: 'var(--fc-badge-color)', border: '1.5px solid var(--fc-btn-mastered-border)' }
-                    : { background: 'var(--fc-roman-bg)', color: 'var(--fc-roman-color)', border: '1.5px solid var(--fc-btn-unmastered-border)' }
-                  }
-                >
-                  {isMastered
-                    ? <><RotateCcw size={15} /> {t('vocab.unmaster', lang)}</>
-                    : <><CheckCircle size={15} /> {t('vocab.mark_mastered', lang)}</>
-                  }
-                </button>
+                <div className="flex gap-2 mt-1">
+                  {isMastered ? (
+                    <button onClick={e => { e.stopPropagation(); toggleMastered(word); }} className="flex items-center justify-center gap-2 py-2.5 rounded-[14px] font-semibold text-[14px] transition-colors w-full" style={{ background: 'var(--fc-badge-bg)', color: 'var(--fc-badge-color)', border: '1.5px solid var(--fc-btn-mastered-border)' }}>
+                      <RotateCcw size={15} /> {t('vocab.unmaster', lang)}
+                    </button>
+                  ) : (<>
+                    <button onClick={e => { e.stopPropagation(); relearnWord(word); }} className="flex items-center justify-center gap-2 py-2.5 rounded-[14px] font-semibold text-[14px] transition-colors flex-1" style={{ background: 'var(--fc-nav-bg)', color: 'var(--fc-nav-color)', border: '1.5px solid var(--fc-nav-border)' }}>
+                      <Repeat size={15} /> {t('vocab.fc_relearn', lang)}
+                    </button>
+                    <button onClick={e => { e.stopPropagation(); toggleMastered(word); }} className="flex items-center justify-center gap-2 py-2.5 rounded-[14px] font-semibold text-[14px] transition-colors flex-1" style={{ background: 'var(--fc-roman-bg)', color: 'var(--fc-roman-color)', border: '1.5px solid var(--fc-btn-unmastered-border)' }}>
+                      <CheckCircle size={15} /> {t('vocab.mark_mastered', lang)}
+                    </button>
+                  </>)}
+                </div>
               </div>
             )}
           </div>
@@ -680,7 +795,7 @@ export default function TopikFlashcardsPage() {
           {currentIdx === displayWords.length - 1 ? <CheckCircle size={20} /> : <ChevronRight size={20} />}
         </button>
       </div>
-
+      </>)}
 
       {completed && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, background: 'rgba(0,0,0,.4)' }}>
@@ -692,7 +807,7 @@ export default function TopikFlashcardsPage() {
               {t('vocab.fc_topik_level_mastered', lang, { name: t('vocab.level_name_' + level, lang), n: masteredCount })}
             </p>
             <div style={{ display: 'flex', gap: 10, paddingBottom: 'calc(24px + env(safe-area-inset-bottom, 0px))' }}>
-              <button onClick={() => { setCompleted(false); setCurrentIdx(0); setRevealed(false); setHasSeenHint(false); }} style={{ flex: 1, padding: '12px 0', borderRadius: 999, border: '1px solid var(--color-border-2)', background: 'transparent', color: 'var(--color-ink-2)', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
+              <button onClick={() => { setCompleted(false); setCurrentIdx(0); setRevealed(false); setHasSeenHint(false); setQuizRound(r => r + 1); setStarted(false); }} style={{ flex: 1, padding: '12px 0', borderRadius: 999, border: '1px solid var(--color-border-2)', background: 'transparent', color: 'var(--color-ink-2)', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
                 <RotateCcw size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} />{t('vocab.fc_again', lang)}
               </button>
               <button onClick={() => router.push(`/vocabulary/levels/${level}`)} style={{ flex: 1, padding: '12px 0', borderRadius: 999, border: 'none', background: 'var(--color-pink-base)', color: '#fff', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>

@@ -5,11 +5,11 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
   ArrowLeft, Search, Trash2, Volume2, CheckSquare, Square,
-  FolderInput, X, Plus, Loader2,
+  FolderInput, X, Plus, Loader2, Eye, EyeOff, Languages,
 } from 'lucide-react';
 import { db } from '@/lib/db';
 import { useAuth } from '@/components/AuthProvider';
-import { speak, speakWord } from '@/lib/tts';
+import { speakWord } from '@/lib/tts';
 import { TappableText } from '@/components/TappableText';
 import GrammarExplainBubble from '@/components/GrammarExplainBubble';
 import { getEntryByKorean } from '@/data/vocabulary/index';
@@ -54,6 +54,33 @@ function ReviewPoolContent() {
   const [entriesMap, setEntriesMap] = useState<Map<string, WordEntry>>(new Map());
   const [showBatchDeleteConfirm, setShowBatchDeleteConfirm] = useState(false);
   const [pendingDelete, setPendingDelete] = useState<{ id: string; label: string } | null>(null);
+  const [showCn, setShowCn] = useState(true);
+
+  useEffect(() => {
+    try { if (localStorage.getItem('vocab_show_cn') === '0') setShowCn(false); } catch { /* ignore */ }
+  }, []);
+
+  const toggleCn = () => {
+    setShowCn(prev => {
+      const next = !prev;
+      try { localStorage.setItem('vocab_show_cn', next ? '1' : '0'); } catch { /* ignore */ }
+      return next;
+    });
+  };
+
+  const [showRn, setShowRn] = useState(true);
+
+  useEffect(() => {
+    try { if (localStorage.getItem('vocab_show_rn') === '0') setShowRn(false); } catch { /* ignore */ }
+  }, []);
+
+  const toggleRn = () => {
+    setShowRn(prev => {
+      const next = !prev;
+      try { localStorage.setItem('vocab_show_rn', next ? '1' : '0'); } catch { /* ignore */ }
+      return next;
+    });
+  };
 
   useEffect(() => {
     const needEntry = words.filter(w => {
@@ -199,7 +226,7 @@ function ReviewPoolContent() {
         await db.words.update(w.id, { nextReview: now });
       }
       await load();
-    } catch { /* ignore */ } finally {
+    } catch (e) { console.error('Failed to import book words', e); } finally {
       setImportingBook(null);
       setShowImportSheet(false);
     }
@@ -293,12 +320,28 @@ function ReviewPoolContent() {
           />
         </div>
         {!managing && (
-          <button
-            onClick={() => setShowImportSheet(true)}
-            className="shrink-0 flex items-center gap-1.5 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl px-3 py-2.5 text-sm text-[var(--text-primary)] hover:border-[var(--pink-primary)] transition-colors"
-          >
-            <Plus size={15} />{t('vocab.rp_import', lang)}
-          </button>
+          <>
+            <button
+              onClick={toggleCn}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-colors ${showCn ? 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)]' : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:border-[var(--pink-primary)]/30'}`}
+            >
+              {showCn ? <Eye size={12} /> : <EyeOff size={12} />}
+              {showCn ? t('vocab.hide_cn', lang) : t('vocab.show_cn', lang)}
+            </button>
+            <button
+              onClick={toggleRn}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-colors ${showRn ? 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)]' : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:border-[var(--pink-primary)]/30'}`}
+            >
+              <Languages size={12} />
+              {showRn ? t('vocab.hide_rn', lang) : t('vocab.show_rn', lang)}
+            </button>
+            <button
+              onClick={() => setShowImportSheet(true)}
+              className="shrink-0 flex items-center gap-1.5 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl px-3 py-2.5 text-sm text-[var(--text-primary)] hover:border-[var(--pink-primary)] transition-colors"
+            >
+              <Plus size={15} />{t('vocab.rp_import', lang)}
+            </button>
+          </>
         )}
         <button
           onClick={() => { setManaging(!managing); setSelected(new Set()); }}
@@ -351,15 +394,19 @@ function ReviewPoolContent() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-baseline gap-2.5 min-w-0">
                       <span className="ko-text font-bold text-[var(--text-primary)] text-[19px] leading-tight whitespace-nowrap">{word.word}</span>
-                      <span className="min-w-0 truncate text-[12.5px] font-semibold tracking-wide text-[var(--pink-primary)]">
+                      {showRn && <span className="min-w-0 truncate text-[12.5px] font-semibold tracking-wide text-[var(--pink-primary)]">
                         [{displayRomanHyphen(word.pronunciation, word.word)}]
-                      </span>
+                      </span>}
                     </div>
                     <div className="flex items-center gap-2 mt-2 min-w-0">
                       {word.partOfSpeech && (
                         <span className="shrink-0 text-[10.5px] font-semibold px-1.5 py-0.5 rounded bg-[var(--bg-accent)] text-[var(--text-muted)]">{word.partOfSpeech}</span>
                       )}
-                      <span className="text-sm text-[var(--text-primary)] leading-snug truncate">{word.meaning}</span>
+                      {showCn ? (
+                        <span className="text-sm text-[var(--text-primary)] leading-snug truncate">{word.meaning}</span>
+                      ) : (
+                        <span className="text-xs text-[var(--text-muted)] leading-snug truncate">{t('vocab.tap_reveal_cn', lang)}</span>
+                      )}
                       {!managing && (
                         <span className={`text-[10.5px] px-2 py-0.5 rounded-full shrink-0 font-semibold ${masteryColors[word.mastery]}`}>
                           {masteryLabels[word.mastery]}
@@ -398,7 +445,7 @@ function ReviewPoolContent() {
                     : entry?.examples.slice(0, 3).map(ex => ({ text: ex.korean, translation: ex.chinese, source: 'dictionary' as const })) ?? [];
                   return (
                     <div className="px-4 pb-4 border-t border-[var(--border-color)] pt-3 space-y-3 animate-fade-in">
-                      <p className="text-sm font-medium text-[var(--text-primary)]">{word.meaning}</p>
+                      {showCn && <p className="text-sm font-medium text-[var(--text-primary)]">{word.meaning}</p>}
                       {examples.length > 0 && (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
                           {examples.slice(0, 4).map((ex, i) => (
@@ -406,10 +453,11 @@ function ReviewPoolContent() {
                               <div className="flex items-start gap-2">
                                 <div className="flex-1 min-w-0">
                                   <TappableText text={ex.text} className="text-[15px] leading-relaxed text-[var(--text-primary)]" source={t('vocab.src_review', lang)} highlightWord={word.word} />
-                                  <p className="text-[13px] text-[var(--text-secondary)] mt-1 leading-snug">{ex.translation}</p>
+                                  {showCn && <p className="text-[13px] text-[var(--text-secondary)] mt-1 leading-snug">{ex.translation}</p>}
                                 </div>
                                 <button
                                   onClick={e => { e.stopPropagation(); speakWord(ex.text); }}
+                                  aria-label={t('vocab.play', lang)}
                                   className="p-1 rounded-lg hover:bg-[var(--bg-accent)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] shrink-0"
                                 >
                                   <Volume2 size={14} />

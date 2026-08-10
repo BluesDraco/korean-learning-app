@@ -4,6 +4,7 @@ import { SITE_URL } from '@/lib/seo';
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 import QRCode from 'qrcode';
 import { useAuth } from '@/components/AuthProvider';
 import { useLang } from '@/components/LangProvider';
@@ -15,7 +16,6 @@ import './activity.css';
 interface Reward { threshold: number; daysGranted: number; status: string }
 interface ShipmentState { threshold: number; status: string }
 interface Progress {
-  [k: string]: unknown;
   code: string; qualifiedCount: number; totalDays: number; pendingDays: number; rewards: Reward[];
   lottery: 'won' | 'lost' | null;
   shipments: ShipmentState[];
@@ -285,6 +285,9 @@ export default function InviteActivityPage() {
     <div className="auth-scope">
       <div style={{ width: '100%', minHeight: '100dvh', background: 'var(--au-bg)', color: 'var(--au-ink-1)', padding: '32px 20px', boxSizing: 'border-box' }}>
         <div className="ia-container">
+          <Link href="/membership" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 14, color: 'var(--au-ink-2)', textDecoration: 'none', marginBottom: 16 }}>
+            <ArrowLeft size={16} /> {tr('invite.back', lang)}
+          </Link>
           {/* 头图 */}
           <div style={{ textAlign: 'center', marginBottom: 8 }}>
             <div style={{ position: 'relative', width: 120, height: 120, margin: '0 auto' }}>
@@ -320,7 +323,7 @@ export default function InviteActivityPage() {
                 </div>
                 <p style={{ fontSize: 13, color: 'var(--au-ink-2)', textAlign: 'center', margin: '14px 0 0' }}
                   {...(nextTier
-                    ? { dangerouslySetInnerHTML: { __html: tr('invite.unlock_next', lang, { n: `<b style="color:var(--au-pink-deep)">${remain}</b>`, reward: tr(nextTier.reward, lang) }) } }
+                    ? { dangerouslySetInnerHTML: { __html: tr('invite.unlock_next', lang, { n: remain, reward: tr(nextTier.reward, lang) }) } }
                     : { children: tr('invite.all_done', lang) })}
                 />
 
@@ -336,7 +339,7 @@ export default function InviteActivityPage() {
 
               {data.pendingDays > 0 && (
                 <div style={{ ...card, background: 'var(--au-pink-soft)', fontSize: 13, color: 'var(--au-ink-2)', lineHeight: 1.6 }}
-                  dangerouslySetInnerHTML={{ __html: tr('invite.pending_days', lang, { days: `<b style="color:var(--au-pink-deep)">${data.pendingDays}</b>` }) }}
+                  dangerouslySetInnerHTML={{ __html: tr('invite.pending_days', lang, { days: data.pendingDays }) }}
                 />
               )}
 
@@ -349,6 +352,11 @@ export default function InviteActivityPage() {
                       <div>
                         <div style={{ fontWeight: 600 }}>{tr(t.label, lang)}</div>
                         <div style={{ fontSize: 12, color: 'var(--au-ink-3)', marginTop: 2 }}>{tr(t.reward, lang)}</div>
+                        {t.count === 8 && hit && (
+                          <Link href="/invite/rewards" style={{ display: 'inline-block', fontSize: 12, fontWeight: 700, color: 'var(--au-pink-deep)', marginTop: 6 }}>
+                            {tr('invite.view_reward_pack', lang)} →
+                          </Link>
+                        )}
                       </div>
                       {renderTierAction(t, hit)}
                     </div>

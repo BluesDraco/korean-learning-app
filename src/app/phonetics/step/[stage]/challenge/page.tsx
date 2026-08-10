@@ -5,7 +5,7 @@ import { useSmartBack } from '@/lib/useSmartBack';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, X, Volume2 } from 'lucide-react';
 import {
-  getStage, TENSE_PAIRS, buildSyllableQuestion, slotPlaySyllable, HOMOPHONE_GROUPS, homophoneKey,
+  getStage, TENSE_PAIRS, buildSyllableQuestion, slotPlaySyllable, HOMOPHONE_GROUPS, homophoneKey, confusableNameKey,
   type ProgressiveLetter, type SyllableQuestion,
 } from '@/data/phonetics-progressive';
 import { unlockAudioContext } from '@/lib/tts';
@@ -26,14 +26,12 @@ const TOTAL_Q = 10;
 type QType = 'letter' | 'confusedPair' | 'consonant' | 'tense' | 'syllable';
 
 interface LetterQ {
-  [k: string]: unknown;
   type: 'letter';
   audioSyl: string;
   correct: string;
   options: string[];
 }
 interface ConfusedPairQ {
-  [k: string]: unknown;
   type: 'confusedPair';
   audioSyl: string;       // 听 target 的 syllable
   correct: string;        // target.jamo
@@ -42,21 +40,18 @@ interface ConfusedPairQ {
   tipEn?: string;
 }
 interface ConsonantQ {
-  [k: string]: unknown;
   type: 'consonant';
   audioSyl: string;
   correct: string;
   options: string[];
 }
 interface TenseQ {
-  [k: string]: unknown;
   type: 'tense';
   audios: [string, string];
   correct: string;
   options: string[];
 }
 interface SyllableQ {
-  [k: string]: unknown;
   type: 'syllable';
   data: SyllableQuestion;
 }
@@ -81,12 +76,15 @@ function questionTypesOfStage(stageId: number): QType[] {
 function buildLetter(pool: ProgressiveLetter[]): LetterQ {
   const target = pool[Math.floor(Math.random() * pool.length)];
   const targetGroup = homophoneKey(target.jamo);
+  const targetNameGroup = confusableNameKey(target.jamo);
   const wrongs: string[] = [];
   for (const cand of shuffle(pool)) {
     if (wrongs.length >= 3) break;
     if (cand.jamo === target.jamo) continue;
     if (homophoneKey(cand.jamo) === targetGroup) continue;
+    if (confusableNameKey(cand.jamo) === targetNameGroup) continue;
     if (wrongs.some((w) => homophoneKey(w) === homophoneKey(cand.jamo))) continue;
+    if (wrongs.some((w) => confusableNameKey(w) === confusableNameKey(cand.jamo))) continue;
     wrongs.push(cand.jamo);
   }
   return { type: 'letter', audioSyl: target.syllable, correct: target.jamo, options: shuffle([target.jamo, ...wrongs]) };
@@ -118,11 +116,15 @@ function buildConfusedPair(pool: ProgressiveLetter[]): ConfusedPairQ | LetterQ {
 function buildConsonant(consonants: ProgressiveLetter[]): ConsonantQ {
   const pool = consonants.filter((c) => c.jamo !== 'ㅇ');
   const target = pool[Math.floor(Math.random() * pool.length)];
+  const targetNameGroup = confusableNameKey(target.jamo);
   const audioSyl = slotPlaySyllable('cho', target.jamo);
   const wrongs: string[] = [];
   for (const c of shuffle(pool)) {
     if (wrongs.length >= 3) break;
-    if (c.jamo !== target.jamo && !wrongs.includes(c.jamo)) wrongs.push(c.jamo);
+    if (c.jamo === target.jamo || wrongs.includes(c.jamo)) continue;
+    if (confusableNameKey(c.jamo) === targetNameGroup) continue;
+    if (wrongs.some((w) => confusableNameKey(w) === confusableNameKey(c.jamo))) continue;
+    wrongs.push(c.jamo);
   }
   return { type: 'consonant', audioSyl, correct: target.jamo, options: shuffle([target.jamo, ...wrongs]) };
 }
@@ -177,7 +179,7 @@ const CHALLENGE_CSS = `
   /* 双栏仅在 ≥1400px 桌面启用；iPad 横屏保持单栏 */
   @media (min-width: 1400px) {
     .ph-ds-challenge { max-width: 1080px; }
-    .ph-chal-card { display: grid; grid-template-columns: 1fr 1fr; gap: 0; min-height: 620px; overflow: hidden; }
+    .ph-chal-card { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; min-height: 620px; overflow: hidden; }
     .ph-chal-hero { padding: 48px 36px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; text-align: center; }
     .ph-chal-content { padding: 36px 32px; display: flex; flex-direction: column; overflow-y: auto; -webkit-overflow-scrolling: touch; }
   }
@@ -206,6 +208,20 @@ export default function ChallengePage({ params }: { params: Promise<{ stage: str
   const [wrong, setWrong] = useState(0);
   const [elapsed, setElapsed] = useState(0);
   const [showExitConfirm, setShowExitConfirm] = useState(false);
+
+  // Exit dialog: Escape to close + body scroll lock
+  useEffect(() => {
+    if (!showExitConfirm) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setShowExitConfirm(false); };
+    window.addEventListener('keydown', onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [showExitConfirm]);
+
   const rightRef = useRef(0);
   const wrongRef = useRef(0);
   const startRef = useRef(Date.now());
@@ -242,9 +258,10 @@ export default function ChallengePage({ params }: { params: Promise<{ stage: str
   }, []);
 
   const playSyl = useCallback((syl: string) => {
+    clearTimer();
     unlockAudioContext();
     playPhoneticAudio(syl);
-  }, []);
+  }, [clearTimer]);
 
   const playTenseSequence = useCallback((audios: [string, string]) => {
     unlockAudioContext();
@@ -293,10 +310,10 @@ export default function ChallengePage({ params }: { params: Promise<{ stage: str
         // syllable 题：错题本写真 jamo，从选项里反查
         const wrongOpt = q.data.options.find((o) => o.roman === opt);
         if (wrongOpt) {
-          recordPhoneticMistake(q.data.targetJamo, wrongOpt.jamo, stageId, user?.id).catch(() => { /* ignore */ });
+          recordPhoneticMistake(q.data.targetJamo, wrongOpt.jamo, stageId, user?.id).catch((e) => { console.error('phonetics/challenge: recordPhoneticMistake failed (syllable)', e); });
         }
       } else {
-        recordPhoneticMistake(q.correct, opt, stageId, user?.id).catch(() => { /* ignore */ });
+        recordPhoneticMistake(q.correct, opt, stageId, user?.id).catch((e) => { console.error('phonetics/challenge: recordPhoneticMistake failed (jamo)', e); });
       }
       // 1.5s 后允许重试（不泄题、不出下一题按钮）
       if (retryTimerRef.current) clearTimeout(retryTimerRef.current);
@@ -315,7 +332,7 @@ export default function ChallengePage({ params }: { params: Promise<{ stage: str
         wrongCount: wrongRef.current,
         studyMinutes: 3,
       });
-    } catch { /* ignore */ }
+    } catch (e) { console.error('phonetics/challenge: recordPhoneticStep failed — stage completion progress may not be saved', e); }
     const params = new URLSearchParams({
       stars: String(stars),
       right: String(rightRef.current),
@@ -427,7 +444,7 @@ export default function ChallengePage({ params }: { params: Promise<{ stage: str
           )}
 
           <div style={{
-            display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8,
+            display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 8,
             marginTop: 4, padding: '10px 12px',
             background: 'var(--color-surface-2)',
             border: '1px solid var(--color-border-1)',
@@ -444,7 +461,7 @@ export default function ChallengePage({ params }: { params: Promise<{ stage: str
             {t('phonetics.challenge_choose_answer', lang)}
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: isSyllable ? 'repeat(2, 1fr)' : 'repeat(2, 1fr)', gap: 12 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: 12 }}>
             {currentOptions.map((opt) => {
               const isOptCorrect = opt.value === currentCorrect;
               const isPicked = picked === opt.value;

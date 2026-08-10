@@ -8,15 +8,17 @@ import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
 
 // ins 式比例边界：竖图最高 4:5、横图最宽 1.91:1，区间内按原图比例，超出裁切。
+// 单图不夹比例——容器按原图等比，配合 object-fit:contain 零裁切。
 const PORTRAIT_MIN = 0.8;   // 4:5
 const LANDSCAPE_MAX = 1.91; // 1.91:1
-const TAP_SLOP = 10;        // 指针位移超过此值视为滑动，不触发点按/导航
+const TAP_SLOP = 10;
 
-// 整帖用第一张图的比例定容器高度（同 ins：轮播里所有图统一裁到首图框，避免逐张跳高）
 function coverRatio(images: BlogImage[]): number {
   const first = images[0];
-  if (!first || !first.w || !first.h) return 1; // 缺宽高兜底成方形
-  return Math.min(LANDSCAPE_MAX, Math.max(PORTRAIT_MIN, first.w / first.h));
+  if (!first || !first.w || !first.h) return 1;
+  const raw = first.w / first.h;
+  if (images.length === 1) return raw;
+  return Math.min(LANDSCAPE_MAX, Math.max(PORTRAIT_MIN, raw));
 }
 
 // 自适应图片轮播。
@@ -74,7 +76,7 @@ export default function PostGallery({
   };
 
   const style = { aspectRatio: String(ar) } as CSSProperties;
-  const className = `blog-cover blog-gallery theme-${theme}`;
+  const className = `blog-cover blog-gallery theme-${theme}${multi ? '' : ' single'}`;
 
   const inner = (
     <>
@@ -97,24 +99,28 @@ export default function PostGallery({
               <span key={`${img.url}-${i}`} className={`blog-gallery-dot${idx === i ? ' on' : ''}`} />
             ))}
           </div>
-          <button
-            type="button"
+          <span
+            role="button"
+            tabIndex={idx === 0 ? -1 : 0}
             className="blog-gallery-arrow left"
             aria-label={t('blog.gallery_prev', lang)}
-            disabled={idx === 0}
-            onClick={(e) => stopArrow(e, idx - 1)}
+            aria-disabled={idx === 0}
+            onClick={(e) => { if (idx > 0) stopArrow(e, idx - 1); }}
+            onKeyDown={(e) => { if (e.key === ' ') e.preventDefault(); }}
           >
             ‹
-          </button>
-          <button
-            type="button"
+          </span>
+          <span
+            role="button"
+            tabIndex={idx === images.length - 1 ? -1 : 0}
             className="blog-gallery-arrow right"
             aria-label={t('blog.gallery_next', lang)}
-            disabled={idx === images.length - 1}
-            onClick={(e) => stopArrow(e, idx + 1)}
+            aria-disabled={idx === images.length - 1}
+            onClick={(e) => { if (idx < images.length - 1) stopArrow(e, idx + 1); }}
+            onKeyDown={(e) => { if (e.key === ' ') e.preventDefault(); }}
           >
             ›
-          </button>
+          </span>
         </>
       )}
 

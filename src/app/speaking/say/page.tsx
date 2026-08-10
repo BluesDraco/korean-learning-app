@@ -126,6 +126,8 @@ export default function SpeakingSayPage() {
           setPhase('session');
         }}
         onBack={smartBack}
+        railMode="listening"
+        railChip="speak"
         ctaLabel={items && items.length > 0 ? t('sp.start', lang) : (loadError ? t('sp.change_source', lang) : t('sp.preparing', lang))}
         ctaDisabled={(!items || items.length === 0) && !loadError}
         extra={
@@ -150,7 +152,7 @@ export default function SpeakingSayPage() {
 
   if (!items) {
     return (
-      <PracticeSessionShell tone="mint" modeName={t('sp.say_mode', lang)} modeKr="말하기" onBack={smartBack}>
+      <PracticeSessionShell tone="mint" modeName={t('sp.say_mode', lang)} modeKr="말하기" onBack={smartBack} railMode="listening" railChip="speak">
         <div className="pr-ss-card" style={{ textAlign: 'center' }}>
           {loadError ? (
             <>
@@ -212,6 +214,8 @@ function SpeakingShell({ items, total, onBack, router }: { items: SpeakingItem[]
       current={finished ? undefined : current}
       total={finished ? undefined : total}
       onBack={onBack}
+      railMode="listening"
+      railChip="speak"
     >
       <SpeakingSession
         items={items}

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import type { BlogPostScore, BlogComment, BlogUserStats, BlogCategory, BlogImage } from '@/types';
 import { getBlogAuthor } from '@/data/blogCast';
 import { templatesForDay, splitTemplate, composeFilled, type FillTemplate } from '@/data/blogFillTemplates';
@@ -108,12 +109,16 @@ export default function BlogComposer({
   const [text, setText] = useState('');
   const [showKeyboard, setShowKeyboard] = useState(false);
   const [tpl, setTpl] = useState<FillTemplate>(() => templates[Math.floor(Math.random() * templates.length)]);
-  const [blanks, setBlanks] = useState<string[]>(() => templates[0] ? [] : []);
+  const [blanks, setBlanks] = useState<string[]>(() => []);
   const [category, setCategory] = useState<BlogCategory>('서울 일기');
   const [images, setImages] = useState<BlogImage[]>([]);
   const [joinContest, setJoinContest] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const submittingRef = useRef(false);
+  const attemptedRef = useRef(false);
+  const imagesRef = useRef(images);
+  imagesRef.current = images;
   const [err, setErr] = useState('');
   const [result, setResult] = useState<PostResult | null>(null);
   const [draftRestored, setDraftRestored] = useState(false);
@@ -126,7 +131,7 @@ export default function BlogComposer({
   // 填空模式：当前模板拼出的完整句
   const blankCount = mode === 'fill' ? splitTemplate(tpl.template).length - 1 : 0;
   const filledText = mode === 'fill' ? composeFilled(tpl.template, blanks) : text.trim();
-  const allBlanksFilled = mode !== 'fill' || blanks.slice(0, blankCount).every((b) => b?.trim());
+  const allBlanksFilled = mode !== 'fill' || (blanks.length === blankCount && blanks.every((b) => b?.trim()));
 
   // ── 草稿恢复（挂载一次）──
   useEffect(() => {
@@ -264,8 +269,8 @@ export default function BlogComposer({
 
   // ── 提交中：分步进度面板 ──
   if (submitting && !result) {
-    return (
-      <div className="blog-composer-overlay">
+    return createPortal(
+      <div className="blog-root blog-composer-overlay">
         <div className="blog-progress-panel" onClick={(e) => e.stopPropagation()}>
           <div className="blog-progress-title">{t('blog.publishing', lang)}</div>
           <div className="blog-progress-steps">
@@ -285,14 +290,15 @@ export default function BlogComposer({
             {slowNet ? t('blog.slow_net', lang) : t('blog.usual_wait', lang)}
           </div>
         </div>
-      </div>
+      </div>,
+      document.body,
     );
   }
 
   // 一审被拦截视图
   if (result && result.aiStatus === 'blocked') {
-    return (
-      <div className="blog-composer-overlay" onClick={onClose}>
+    return createPortal(
+      <div className="blog-root blog-composer-overlay" onClick={onClose}>
         <div className="blog-score-card blog-score-blocked" onClick={(e) => e.stopPropagation()}>
           <div className="blog-blocked-icon">🚫</div>
           <div className="blog-blocked-title">{t('blog.blocked_title', lang)}</div>
@@ -302,7 +308,8 @@ export default function BlogComposer({
             {t('blog.ok_button', lang)}
           </button>
         </div>
-      </div>
+      </div>,
+      document.body,
     );
   }
 
@@ -310,8 +317,8 @@ export default function BlogComposer({
   if (result && result.score && result.reply) {
     const animal = getBlogAuthor(result.reply.animalId);
     const { score } = result;
-    return (
-      <div className="blog-composer-overlay" onClick={onClose}>
+    return createPortal(
+      <div className="blog-root blog-composer-overlay" onClick={onClose}>
         <div className="blog-score-card" onClick={(e) => e.stopPropagation()}>
           <div className="blog-score-xp">+{score.xpEarned} XP</div>
           <div className="blog-score-overall">{t('blog.score_points', lang, { n: score.overall })}</div>
@@ -336,14 +343,15 @@ export default function BlogComposer({
             {t('blog.confirm', lang)}
           </button>
         </div>
-      </div>
+      </div>,
+      document.body,
     );
   }
 
   const tplParts = splitTemplate(tpl.template);
 
-  return (
-    <div className="blog-composer-overlay" onClick={requestClose}>
+  return createPortal(
+    <div className="blog-root blog-composer-overlay" onClick={requestClose}>
       <div className="blog-composer-modal" onClick={(e) => e.stopPropagation()}>
         <div className="blog-composer-head">
           <span className="blog-composer-title">{t('blog.composer_title', lang)}</span>
@@ -516,6 +524,7 @@ export default function BlogComposer({
           {t('blog.publish', lang)}
         </button>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

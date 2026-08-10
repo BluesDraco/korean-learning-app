@@ -33,6 +33,7 @@ export default function TopikStartPage() {
   const [mode, setMode] = useState<ExamMode>('real');
   // 该套在「模拟卷」有序列表里的下标（用于免费档前 N 套判断），-1 表示未定位
   const [examOrdinal, setExamOrdinal] = useState(-1);
+  const [submitting, setSubmitting] = useState(false);
   const { tier, matrix, loading: memLoading } = useMembership();
 
   useEffect(() => {
@@ -105,7 +106,8 @@ export default function TopikStartPage() {
   const noData = totalCount === 0;
 
   function startExam() {
-    if (!examSet || noData) return;
+    if (!examSet || noData || submitting) return;
+    setSubmitting(true);
     // 过滤掉数据库里找不到的题 id，避免答题页题数对不上
     const qIdSet = new Set(allQs.map(q => q.id));
     const effectiveListen = listenIds.filter(id => qIdSet.has(id));
@@ -233,7 +235,7 @@ export default function TopikStartPage() {
         </div>
 
         {/* 开始按钮 */}
-        <button onClick={startExam} disabled={noData} style={{ width: '100%', padding: '16px 0', borderRadius: 14, background: noData ? C.line : C.ink, color: noData ? C.muted : '#fff', fontSize: 15, fontWeight: 800, border: 'none', cursor: noData ? 'not-allowed' : 'pointer' }}>
+        <button onClick={startExam} disabled={noData || submitting} style={{ width: '100%', padding: '16px 0', borderRadius: 14, background: noData ? C.line : C.ink, color: noData ? C.muted : '#fff', fontSize: 15, fontWeight: 800, border: 'none', cursor: noData ? 'not-allowed' : 'pointer' }}>
           {noData ? t('topik.st_no_data', lang) : t('topik.st_start_exam', lang)}
         </button>
       </div>

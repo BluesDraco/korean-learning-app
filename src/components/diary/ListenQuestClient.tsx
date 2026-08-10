@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { ListenSubQuestData } from '@/types/tori-subquest';
 import {
@@ -30,12 +30,15 @@ export default function ListenQuestClient({ data }: { data: ListenSubQuestData }
   const { wrongCount, epoch, startRef, carrots, xp, recordLog, reset } = useSubQuestState();
   const persist = usePersistResult(data.level, data.day, data.idx, data.kind);
 
-  /* eslint-disable react-hooks/exhaustive-deps */
-  // epoch 是 handleRetry 触发新 shuffle 的信号，故意作为依赖
-  const shuffledMeaning = useMemo(() => shuffle(data.meaning), [data.meaning, epoch]);
-  const shuffledCloze   = useMemo(() => shuffle(data.cloze),   [data.cloze, epoch]);
-  const shuffledReply   = useMemo(() => shuffle(data.reply),   [data.reply, epoch]);
-  /* eslint-enable react-hooks/exhaustive-deps */
+  // 用 ref 渲染期缓存，仅在 epoch(重试信号) 变化时重洗一次。data 是静态常量引用恒稳。
+  // 不用 useMemo：缓存会被 React 丢弃重算，做题中途题目顺序突变。
+  const shufRef = useRef<{ sig: number; src: typeof data.meaning; m: typeof data.meaning; c: typeof data.cloze; r: typeof data.reply } | null>(null);
+  if (!shufRef.current || shufRef.current.sig !== epoch || shufRef.current.src !== data.meaning) {
+    shufRef.current = { sig: epoch, src: data.meaning, m: shuffle(data.meaning), c: shuffle(data.cloze), r: shuffle(data.reply) };
+  }
+  const shuffledMeaning = shufRef.current.m;
+  const shuffledCloze   = shufRef.current.c;
+  const shuffledReply   = shufRef.current.r;
 
   const taskMap: Record<Exclude<Phase, 'result'>, typeof data.meaning> = {
     meaning: shuffledMeaning,
@@ -72,8 +75,7 @@ export default function ListenQuestClient({ data }: { data: ListenSubQuestData }
   const handlePhaseJump = useCallback((key: string) => {
     const p = key as Phase;
     setPhase(p); setTaskIdx(0);
-    reset();
-  }, [reset]);
+  }, []);
 
   const stepIdx = PHASE_ORDER.indexOf(phase);
   const isResult = phase === 'result';

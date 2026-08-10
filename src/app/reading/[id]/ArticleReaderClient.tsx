@@ -7,23 +7,23 @@ import {
   ArrowLeft, Volume2, ChevronRight, Check, Sparkles,
   Trophy, BookOpen, Target, Lightbulb, Bookmark, Star, X,
   Headphones, Square, Menu, Sun, Moon, Play, Pause, Gauge, Mic,
-  Languages, Puzzle,
+  Languages, Puzzle, Keyboard, PenLine,
 } from 'lucide-react';
 import { levelLabel, levelColor } from '@/data/reading-meta';
-import { speak, speakWord, cancelSpeech } from '@/lib/tts';
+import { speak, speakWord, cancelSpeech, unlockAudioContext } from '@/lib/tts';
 import GrammarExplainBubble from '@/components/GrammarExplainBubble';
 import GrammarPointCard from '../_components/GrammarPointCard';
 import type { GrammarCard } from '@/types';
 import { loadGrammarCards } from '../_components/loadGrammarCard';
 import { saveRecording } from '@/lib/audio/saveRecording';
-import { encodeToWav16kMono } from '@/lib/audio/webmToWav';
-import { describeMicError, parseErrorKey, precheckRecordingEnv } from '@/lib/audio/recorder';
+import { useMicRecorder } from '@/lib/audio/useMicRecorder';
 import { db, ensureFavoritesBook } from '@/lib/db';
 import { stripParticle } from '@/lib/koreanParticles';
-import { awardXp, addStudyMinutes } from '@/lib/gamification';
+import { awardXp, addStudyMinutes, incrementTodayLog } from '@/lib/gamification';
 import { useFeedback } from '@/hooks/useFeedback';
 import { WordTapSheet } from '@/components/WordTapSheet';
-import type { Article, ArticleQuestion, ArticleWord, UserArticleProgress } from '@/types';
+import AnnotationLayer from './AnnotationLayer';
+import type { Article, ArticleQuestion, ArticleWord, UserArticleProgress, AnnotationStroke } from '@/types';
 import { saveProgress, loadProgress, clearProgress, TTL_FLASHCARD } from '@/lib/progress-storage';
 import { useAuth } from '@/components/AuthProvider';
 import { useMembership } from '@/lib/useMembership';
@@ -31,6 +31,8 @@ import { readingLockState, freeStoryIds, storyLockState } from '@/lib/membership
 import LibrarySidebar from '../_components/LibrarySidebar';
 import { TOPIC_META } from '../_components/topics';
 import { useLang } from '@/components/LangProvider';
+import { useIsDesktop } from '@/lib/useIsMobile';
+import { FloatingKoreanKeyboard } from '@/components/FloatingKoreanKeyboard';
 import { useSmartBack } from '@/lib/useSmartBack';
 import { t, type Lang } from '@/lib/i18n';
 import '../library.css'; // reader 页复用 library 样式（侧栏、暗色等）
@@ -75,20 +77,10 @@ function ShadowingModal({ ko, zh, audioUrl, start, end, onClose, lang, dark }: {
   const [saved, setSaved] = useState(false);
   const { user } = useAuth();
 
-  const mediaRecRef = useRef<MediaRecorder | null>(null);
-  const streamRef = useRef<MediaStream | null>(null);
-  const chunksRef = useRef<Blob[]>([]);
   const myBlobRef = useRef<Blob | null>(null);
-  const recStartRef = useRef<number>(0);
+  const durationRef = useRef<number>(0);
   const origAudioRef = useRef<HTMLAudioElement | null>(null);
   const mineAudioRef = useRef<HTMLAudioElement | null>(null);
-  const abortRef = useRef<AbortController | null>(null);
-
-  // 卸载时释放麦克风、中止在途识别请求（只在卸载时执行一次）
-  useEffect(() => () => {
-    streamRef.current?.getTracks().forEach((t) => t.stop());
-    abortRef.current?.abort();
-  }, []);
   // 录音 URL 变化时回收上一个 blob URL，防内存泄漏
   useEffect(() => () => { if (myAudioUrl) URL.revokeObjectURL(myAudioUrl); }, [myAudioUrl]);
 
@@ -98,7 +90,8 @@ function ShadowingModal({ ko, zh, audioUrl, start, end, onClose, lang, dark }: {
     if (!a) return;
     if (!a.paused) { a.pause(); return; }
     if (typeof start === 'number') a.currentTime = start;
-    a.play().then(() => setPlayingOrig(true)).catch(() => {});
+    unlockAudioContext();
+    a.play().then(() => setPlayingOrig(true)).catch(() => { setPlayingOrig(false); });
   };
   const onOrigTime = () => {
     const a = origAudioRef.current;
@@ -122,98 +115,51 @@ function ShadowingModal({ ko, zh, audioUrl, start, end, onClose, lang, dark }: {
     } catch { setErr(t('reading.network_error', lang)); setPhase('idle'); }
   };
 
-  // 录完的音频 → 转 16k WAV → 服务端阿里云韩语 ASR → judge 打分。
-  // 弃用浏览器 Web Speech API：iOS 需单独的「语音识别」权限(用户拒绝后不再弹)且移动端极不稳，
-  // 全站其他录音入口早已改走 /api/asr/aliyun，此处对齐。
-  const recognizeAndJudge = async (blob: Blob) => {
-    if (blob.size === 0) { setErr(t('audio.no_sound', lang)); setPhase('idle'); return; }
-    setPhase('judging');
-    let wav: Blob;
-    try {
-      wav = await encodeToWav16kMono(blob);
-    } catch {
-      setErr(t('audio.process_failed', lang)); setPhase('idle'); return;
-    }
-    const controller = new AbortController();
-    abortRef.current = controller;
-    let text = '';
-    try {
-      const resp = await fetch('/api/asr/aliyun', {
-        method: 'POST', headers: { 'Content-Type': 'audio/wav' }, body: wav, signal: controller.signal,
-      });
-      if (resp.status === 401) { setErr(t('reading.please_login', lang)); setPhase('idle'); return; }
-      if (resp.status === 429) { setErr(t('audio.quota_exhausted', lang)); setPhase('idle'); return; }
-      if (!resp.ok) { setErr(t('reading.recognize_failed', lang)); setPhase('idle'); return; }
-      const data = await resp.json();
-      text = (data.text || '').trim();
-    } catch (e) {
-      if (e instanceof Error && e.name === 'AbortError') return; // 关闭弹窗/卸载主动中止，不提示
-      setErr(t('audio.recognition_network_error', lang)); setPhase('idle'); return;
-    } finally {
-      if (abortRef.current === controller) abortRef.current = null;
-    }
-    if (!text) { setErr(t('reading.not_caught', lang)); setPhase('idle'); return; }
-    setSpoken(text);
-    judge(text);
-  };
+  // 录音走全站统一的 useMicRecorder：AudioRecorder 直捕 16k 无损 PCM → /api/asr/aliyun。
+  // 绕过 MediaRecorder 的 Opus 有损压缩，辅音特征不丢，识别更准（与 speaking/companion 等入口一致）。
+  // onResult 的 meta.wav 同时用于「回放对比」与「保存到我的录音」。
+  const mic = useMicRecorder({
+    onResult: (text, meta) => {
+      if (meta) {
+        myBlobRef.current = meta.wav;
+        durationRef.current = meta.durationMs;
+        setMyAudioUrl(prev => { if (prev) URL.revokeObjectURL(prev); return URL.createObjectURL(meta.wav); });
+      }
+      setSpoken(text);
+      judge(text);
+    },
+    onError: (msg) => { setErr(msg); setPhase('idle'); },
+    minMs: 500,
+    tooShortMsg: t('audio.too_short', lang),
+  });
 
-  // 开始录音：只用 MediaRecorder 抓音频，停止后统一走服务端 ASR
-  const startRecording = async () => {
+  const startRecording = () => {
     setErr(null); setRes(null); setSpoken(''); setSaved(false);
-    const pre = precheckRecordingEnv();
-    if (pre) { setErr(t(pre, lang)); return; }
     if (myAudioUrl) { URL.revokeObjectURL(myAudioUrl); setMyAudioUrl(null); }
     myBlobRef.current = null;
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      streamRef.current = stream;
-      chunksRef.current = [];
-      recStartRef.current = Date.now();
-      const mr = new MediaRecorder(stream);
-      mediaRecRef.current = mr;
-      mr.ondataavailable = (e) => { if (e.data.size > 0) chunksRef.current.push(e.data); };
-      mr.onstop = () => {
-        const blob = new Blob(chunksRef.current, { type: mr.mimeType || 'audio/webm' });
-        myBlobRef.current = blob;
-        setMyAudioUrl(URL.createObjectURL(blob));
-        streamRef.current?.getTracks().forEach((t) => t.stop());
-        void recognizeAndJudge(blob);
-      };
-      // 传 timeslice：iOS Safari 无参 start() 有时 stop() flush 出空 blob，每 250ms emit 一次稳
-      mr.start(250);
-      setPhase('recording');
-    } catch (e) {
-      const { key, params } = parseErrorKey(describeMicError(e));
-      setErr(t(key, lang, params));
-      setPhase('idle');
-    }
+    setPhase('recording');
+    void mic.start();
   };
 
   const stopRecording = () => {
-    // 停止后走 mr.onstop → recognizeAndJudge；先切到 judging 避免按钮闪回「开始录音」
-    const mr = mediaRecRef.current;
-    if (mr && mr.state !== 'inactive') {
-      setPhase('judging');
-      // stop 前 flush 尾片：timeslice(250ms) 下说完立刻点停会丢掉最后不满一片的尾音
-      try { mr.requestData(); } catch { /* inactive 时忽略 */ }
-      mr.stop();
-    } else {
-      setPhase('idle');
-    }
+    // 切到 judging 避免按钮闪回「开始录音」；hook 内部完成 ASR 后经 onResult → judge
+    setPhase('judging');
+    void mic.stop();
   };
 
   const playMine = () => {
     const a = mineAudioRef.current;
     if (!a) return;
     if (!a.paused) { a.pause(); return; }
-    a.play().then(() => setPlayingMine(true)).catch(() => {});
+    unlockAudioContext();
+    a.play().then(() => setPlayingMine(true)).catch(() => { setPlayingMine(false); });
   };
 
   const handleSaveMine = async () => {
     if (!myBlobRef.current) return;
     const id = await saveRecording({
       blob: myBlobRef.current,
-      durationMs: Date.now() - recStartRef.current,
+      durationMs: durationRef.current,
       type: 'shadowing',
       sourceType: 'reading',
       korean: ko,
@@ -440,9 +386,12 @@ export default function ArticleReaderClient({ article: initialArticle }: { artic
   const [speedMenuOpen, setSpeedMenuOpen] = useState(false);
   const [quizIdx, setQuizIdx] = useState(0);
   const [quizAnswers, setQuizAnswers] = useState<Record<string, string>>({});
+  const quizAnsweredRef = useRef<Set<string>>(new Set()); // 同步锁，挡同帧双击重复计分
   const [quizRevealed, setQuizRevealed] = useState<Record<string, boolean>>({});
   const [quizCorrect, setQuizCorrect] = useState(0);
   const [outputValue, setOutputValue] = useState('');
+  const isDesktop = useIsDesktop();
+  const [showKeyboard, setShowKeyboard] = useState(false);
   const [sentenceToast, setSentenceToast] = useState(false);
   const [outputDone, setOutputDone] = useState(false);
   const [outputScoring, setOutputScoring] = useState(false);
@@ -452,15 +401,26 @@ export default function ArticleReaderClient({ article: initialArticle }: { artic
   const enterTimeRef = useRef(Date.now());
   const [selectedWord, setSelectedWord] = useState<ArticleWord | null>(null);
   const [aiLookupWord, setAiLookupWord] = useState<string | null>(null);
+  // 手写批注：模式开关 + 笔迹 + 画笔状态。笔迹按 article.id 存一行，走 CloudTable 云同步。
+  const [annotateMode, setAnnotateMode] = useState(false);
+  const [annStrokes, setAnnStrokes] = useState<AnnotationStroke[]>([]);
+  const annStrokesRef = useRef(annStrokes); // 供 unmount flush 读取最新值
+  annStrokesRef.current = annStrokes;
+  const [penColor, setPenColor] = useState<AnnotationStroke['color']>('yellow');
+  const [eraser, setEraser] = useState(false);
+  const annBoxRef = useRef<HTMLDivElement | null>(null);
+  const annBaseRef = useRef<{ w: number; h: number }>({ w: 0, h: 0 });
+  const annSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const mountedRef = useRef(true);
+  const sentenceToastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const outputScrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [activeHighlight, setActiveHighlight] = useState<string | null>(null);
   const [shadowIdx, setShadowIdx] = useState<number | null>(null); // 当前打开跟读弹窗的句索引
   const [quizTransShown, setQuizTransShown] = useState<Record<string, boolean>>({}); // quiz 题目：已展开中文翻译的题 id
   const [revealedPoints, setRevealedPoints] = useState(1); // 重点句型页：已揭示的语法点卡片数（逐个出现）
   const [grammarCards, setGrammarCards] = useState<GrammarCard[]>([]); // 关联语法课（异步加载）
-  const sentenceRefs = useRef<Record<string, HTMLElement | null>>({}); // 精读区（逐句拆解）
-  const bodyRefs = useRef<Record<string, HTMLElement | null>>({}); // 正文区（全文高亮/滚动目标）
   const completedRef = useRef(false);
-  const { success: feedbackSuccess, complete: feedbackComplete, click: feedbackClick } = useFeedback();
+  const { success: feedbackSuccess, complete: feedbackComplete, click: feedbackClick, error: feedbackError } = useFeedback();
 
   const SESSION_KEY = `reading-progress-${articleId}-${user?.id ?? 'guest'}`;
 
@@ -487,6 +447,47 @@ export default function ArticleReaderClient({ article: initialArticle }: { artic
     saveProgress(SESSION_KEY, { s: step, qi: quizIdx, qa: quizAnswers, qr: quizRevealed, qc: quizCorrect, ov: outputValue, t0: enterTimeRef.current }, TTL_FLASHCARD);
   }, [step, quizIdx, quizAnswers, quizRevealed, quizCorrect, outputValue, SESSION_KEY]);
 
+  // 载入本文已保存的手写批注(一文章一行，id=article.id)
+  useEffect(() => {
+    if (!article) return;
+    let alive = true;
+    (async () => {
+      try {
+        const row = await db.articleAnnotations.get(article.id);
+        if (alive && row?.strokes && Array.isArray(row.strokes)) setAnnStrokes(row.strokes);
+      } catch { /* 读失败保持空，不打断阅读 */ }
+    })();
+    return () => { alive = false; };
+  }, [article]);
+
+  // 批注变更：本地即时更新 + 防抖 400ms 写库(失败静默，不影响画布)
+  const handleAnnChange = useCallback((next: AnnotationStroke[]) => {
+    setAnnStrokes(next);
+    if (!article) return;
+    if (annSaveTimer.current) clearTimeout(annSaveTimer.current);
+    annSaveTimer.current = setTimeout(() => {
+      const now = Date.now();
+      db.articleAnnotations.put({
+        id: article.id, articleId: article.id, strokes: next,
+        baseW: annBaseRef.current.w, baseH: annBaseRef.current.h,
+        createdAt: now, updatedAt: now,
+      }).catch(() => { /* 写失败静默：本地画布已更新，下次变更会重试 */ });
+    }, 400);
+  }, [article]);
+
+  useEffect(() => () => {
+    if (annSaveTimer.current) { clearTimeout(annSaveTimer.current); annSaveTimer.current = null; }
+    // 卸载前同步落盘，避免最后 400ms 批注丢失
+    if (annStrokesRef.current.length > 0 && article) {
+      const now = Date.now();
+      db.articleAnnotations.put({
+        id: article.id, articleId: article.id, strokes: annStrokesRef.current,
+        baseW: annBaseRef.current.w, baseH: annBaseRef.current.h,
+        createdAt: now, updatedAt: now,
+      }).catch(() => {});
+    }
+  }, [article]);
+
   useEffect(() => {
     if (!article || completedRef.current) return;
     // Record view event
@@ -512,9 +513,13 @@ export default function ArticleReaderClient({ article: initialArticle }: { artic
             lastReadAt: now, updatedAt: now,
           });
         }
-      } catch {}
+      } catch { console.error('[reading] view_event write error'); }
     })();
-    return () => { playAllRef.current = false; cancelSpeech(); };
+    return () => {
+      playAllRef.current = false; mountedRef.current = false; cancelSpeech();
+      if (sentenceToastTimer.current) { clearTimeout(sentenceToastTimer.current); sentenceToastTimer.current = null; }
+      if (outputScrollTimer.current) { clearTimeout(outputScrollTimer.current); outputScrollTimer.current = null; }
+    };
   }, [article]);
 
   // 离开阅读步骤时停止全文播放（内联停止逻辑，避免引用后置声明的 const 函数触发 TDZ）
@@ -552,13 +557,13 @@ export default function ArticleReaderClient({ article: initialArticle }: { artic
       if (next.has(sId)) next.delete(sId); else next.add(sId);
       db.userArticleProgress.update(article!.id, {
         readSentenceIds: [...next], updatedAt: Date.now(),
-      }).catch(() => {});
+      }).catch((e) => { console.error('ArticleReader: update readSentenceIds failed', e); });
       return next;
     });
     db.articleLearningEvents.put({
       id: crypto.randomUUID(), articleId: article?.id ?? '', sentenceId: sId,
       action: 'reveal_translation', createdAt: Date.now(),
-    }).catch(() => {});
+    }).catch((e) => { console.error('ArticleReader: log reveal_translation failed', e); });
   }, [article?.id]);
 
   const handleFullTextClick = useCallback((sId: string) => {
@@ -629,7 +634,7 @@ export default function ArticleReaderClient({ article: initialArticle }: { artic
     setSpeakingId(sId);
     try {
       await speak(text);
-    } catch {} finally {
+    } catch { console.error('[reading] speakSentence error', text); } finally {
       setSpeakingId(null);
     }
   };
@@ -669,8 +674,9 @@ export default function ArticleReaderClient({ article: initialArticle }: { artic
     stopPlayAll();
     cancelSpeech();
     if (a.paused) {
+      unlockAudioContext();
       a.playbackRate = audioSpeed;
-      a.play().catch(() => {});
+      a.play().catch(() => { setPlayingAll(false); });
     } else {
       a.pause();
     }
@@ -768,7 +774,7 @@ export default function ArticleReaderClient({ article: initialArticle }: { artic
       return next;
     });
     feedbackClick();
-    if (!wasSaved) { feedbackSuccess(t('reading.saved_sentence', lang)); setSentenceToast(true); setTimeout(() => setSentenceToast(false), 3000); }
+    if (!wasSaved) { feedbackSuccess(t('reading.saved_sentence', lang)); setSentenceToast(true); if (sentenceToastTimer.current) clearTimeout(sentenceToastTimer.current); sentenceToastTimer.current = setTimeout(() => { if (mountedRef.current) setSentenceToast(false); }, 3000); }
     try {
       const p = await db.userArticleProgress.get(article.id);
       const ids = new Set(p?.savedSentenceIds || []);
@@ -795,7 +801,15 @@ export default function ArticleReaderClient({ article: initialArticle }: { artic
           }
         }
       }
-    } catch {}
+    } catch {
+      // 写库失败：回滚乐观更新，避免"显示已收藏但重开就没了"的假象
+      setSavedSentences((prev) => {
+        const next = new Set(prev);
+        if (wasSaved) next.add(sId); else next.delete(sId);
+        return next;
+      });
+      feedbackError(t('reading.save_failed', lang));
+    }
   };
 
   const toggleSaveWord = async (word: string) => {
@@ -842,10 +856,22 @@ export default function ArticleReaderClient({ article: initialArticle }: { artic
           }
         }
       }
-    } catch {}
+    } catch {
+      // 写库失败：回滚乐观更新
+      setSavedWords((prev) => {
+        const next = new Set(prev);
+        if (wasSaved) next.add(word); else next.delete(word);
+        return next;
+      });
+      feedbackError(t('reading.save_failed', lang));
+    }
   };
 
   const handleQuizAnswer = (q: ArticleQuestion, idx: number, answer: string) => {
+    // 已答过直接返回：disabled/quizAnswers 是异步 state 挡不住同帧双击，
+    // 用 ref 做同步锁，否则 quizCorrect 会重复 +1 导致得分虚高甚至超 100
+    if (quizAnsweredRef.current.has(q.id)) return;
+    quizAnsweredRef.current.add(q.id);
     setQuizAnswers((prev) => ({ ...prev, [q.id]: answer }));
     if (answer === (q.options?.[q.answer] ?? '')) setQuizCorrect((prev) => prev + 1);
     setQuizRevealed((prev) => ({ ...prev, [q.id]: true }));
@@ -855,7 +881,7 @@ export default function ArticleReaderClient({ article: initialArticle }: { artic
       id: crypto.randomUUID(), articleId: article.id,
       action: 'answer_question', payload: { questionId: q.id, answer, correct: answer === (q.options?.[q.answer] ?? '') },
       createdAt: Date.now(),
-    }).catch(() => {});
+    }).catch((e) => { console.error('ArticleReader: log answer_question failed', e); });
   };
 
   const handleOutputSubmit = async () => {
@@ -899,15 +925,15 @@ export default function ArticleReaderClient({ article: initialArticle }: { artic
       id: crypto.randomUUID(), articleId: article.id,
       action: 'complete_output', payload: { answer: text },
       createdAt: Date.now(),
-    }).catch(() => {});
+    }).catch((e) => { console.error('ArticleReader: log complete_output failed', e); });
   };
 
   const handleSaveExpression = async () => {
     const expr = outputFeedback?.saveExpression;
     if (!expr || exprSaved || !user) return;
     try {
-      await db.sentences.put({
-        id: `reading-expr-${Date.now()}`,
+      await db.sentences.add({
+        id: crypto.randomUUID(),
         userId: user.id,
         korean: expr.split('—')[0]?.trim() || expr,
         chinese: expr.split('—')[1]?.trim() || '',
@@ -918,7 +944,7 @@ export default function ArticleReaderClient({ article: initialArticle }: { artic
       });
       setExprSaved(true);
       feedbackComplete(t('reading.saved_to_wordbook', lang));
-    } catch {}
+    } catch { feedbackComplete(t('reading.save_failed', lang)); }
   };
 
   const handleComplete = async () => {
@@ -941,6 +967,7 @@ export default function ArticleReaderClient({ article: initialArticle }: { artic
       });
       // 落库成功才锁定，防落库失败后 ref 锁死无法重试（原来先置位再落库=失败即假完成）
       completedRef.current = true;
+      incrementTodayLog('articlesRead').catch((e) => { console.error('ArticleReader: incrementTodayLog failed', e); });
       // XP：难度基础分 × 表现系数(保底 50%) + output 加成
       const BASE: Record<string, number> = { A1: 8, A2: 10, B1: 12, B2: 14, C1: 16, C2: 18 };
       const base = BASE[article.level] ?? 10;
@@ -989,8 +1016,8 @@ export default function ArticleReaderClient({ article: initialArticle }: { artic
     <div className={`lib-scope lib-reader${dark ? ' lib-dark' : ''}`}>
       {/* 主题切换 */}
       <div className={`lib-theme-toggle${drawerOpen ? ' drawer-open' : ''}`}>
-        <button className={`lib-theme-btn${!dark ? ' active' : ''}`} onClick={() => setDark(false)}><Sun size={13} /> 밝게</button>
-        <button className={`lib-theme-btn${dark ? ' active' : ''}`} onClick={() => setDark(true)}><Moon size={13} /> 어둡게</button>
+        <button className={`lib-theme-btn${!dark ? ' active' : ''}`} onClick={() => { setDark(false); document.documentElement.setAttribute('data-theme', 'light'); }}><Sun size={13} /> 밝게</button>
+        <button className={`lib-theme-btn${dark ? ' active' : ''}`} onClick={() => { setDark(true); document.documentElement.setAttribute('data-theme', 'dark'); }}><Moon size={13} /> 어둡게</button>
       </div>
       <div className="lib-shell">
         <LibrarySidebar
@@ -1230,8 +1257,19 @@ export default function ArticleReaderClient({ article: initialArticle }: { artic
                     </div>
                   </div>
                 </div>
-                {/* 翻译总开关：整段中文显示在每段下方 */}
-                <div className="px-5 pt-4 flex items-center justify-end">
+                {/* 翻译总开关 + 批注开关 */}
+                <div className="px-5 pt-4 flex items-center justify-end gap-2">
+                  <button
+                    onClick={() => { setAnnotateMode((v) => !v); setEraser(false); }}
+                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-colors ${
+                      annotateMode
+                        ? 'bg-[var(--peach-soft)] text-white'
+                        : 'bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--text-primary)]'
+                    }`}
+                    aria-pressed={annotateMode}
+                  >
+                    <PenLine size={13} /> {t('reading.annotate', lang)}
+                  </button>
                   <button
                     onClick={() => setShowParaTrans((v) => !v)}
                     className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-colors ${
@@ -1243,7 +1281,8 @@ export default function ArticleReaderClient({ article: initialArticle }: { artic
                     <Languages size={13} /> {t(showParaTrans ? 'reading.hide_translation' : 'reading.show_translation', lang)}
                   </button>
                 </div>
-                {/* 正文：流式杂志排版（17px / 1.85），点词查释义、点句展译文 */}
+                {/* 正文：流式杂志排版（17px / 1.85），点词查释义、点句展译文。批注模式叠 canvas 层 */}
+                <div ref={annBoxRef} style={{ position: 'relative' }}>
                 <div className="lib-article-content">
                   {splitParagraphs(article.sentences).map((para, pi) => (
                     <div key={pi}>
@@ -1251,7 +1290,6 @@ export default function ArticleReaderClient({ article: initialArticle }: { artic
                         {para.map((s) => (
                           <span
                             key={s.id}
-                            ref={(el) => { if (el) bodyRefs.current[s.id] = el; }}
                             className={`lib-sentence${activeHighlight === s.id ? ' active' : ''}`}
                             onClick={() => handleFullTextClick(s.id)}
                           >
@@ -1268,10 +1306,22 @@ export default function ArticleReaderClient({ article: initialArticle }: { artic
                     </div>
                   ))}
                 </div>
+                  <AnnotationLayer
+                    containerRef={annBoxRef}
+                    active={annotateMode}
+                    dark={dark}
+                    strokes={annStrokes}
+                    onChange={handleAnnChange}
+                    penColor={penColor}
+                    setPenColor={setPenColor}
+                    eraser={eraser}
+                    setEraser={setEraser}
+                  />
+                </div>
                 {/* 正文提示 */}
                 <div className="px-5 pb-4 flex items-center gap-1.5">
                   <Lightbulb size={12} className="text-[var(--peach-soft)] shrink-0" />
-                  <p className="text-[11px] text-[var(--text-muted)]">{t('reading.body_hint', lang)}</p>
+                  <p className="text-[11px] text-[var(--text-muted)]">{annotateMode ? t('reading.annotate_hint', lang) : t('reading.body_hint', lang)}</p>
                 </div>
               </div>
 
@@ -1286,7 +1336,6 @@ export default function ArticleReaderClient({ article: initialArticle }: { artic
                   {article.sentences.map((s, idx) => (
                     <div
                       key={s.id}
-                      ref={(el) => { if (el) sentenceRefs.current[s.id] = el; }}
                       style={{
                         borderLeft: revealedZh.has(s.id) ? '3px solid var(--mint-soft)' : '3px solid transparent',
                         transition: 'border-color 0.2s',
@@ -1373,6 +1422,7 @@ export default function ArticleReaderClient({ article: initialArticle }: { artic
                         <div className="flex items-center gap-0.5 shrink-0">
                           <button
                             onClick={() => speakSentence(s.id, s.ko)}
+                            aria-label={t('reading.speak_sentence', lang)}
                             className={`p-1.5 rounded-lg transition-colors ${
                               speakingId === s.id ? 'text-[var(--mint-soft)]' : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                             }`}
@@ -1536,7 +1586,7 @@ export default function ArticleReaderClient({ article: initialArticle }: { artic
                   db.userArticleProgress.update(article.id, {
                     readSentenceIds: [...revealedZh],
                     updatedAt: Date.now(),
-                  }).catch(() => {});
+                  }).catch((e) => { console.error('ArticleReader: update progress (back_to_vocab) failed', e); });
                 }
                 setStep('vocab');
               }} className="flex-1 py-3 bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-primary)] rounded-2xl font-medium text-sm">
@@ -1548,7 +1598,7 @@ export default function ArticleReaderClient({ article: initialArticle }: { artic
                   db.userArticleProgress.update(article.id, {
                     readSentenceIds: [...revealedZh],
                     updatedAt: Date.now(),
-                  }).catch(() => {});
+                  }).catch((e) => { console.error('ArticleReader: update progress (continue) failed', e); });
                 }
                 // 故事无重点句型（轻流），直接进测验，不显示空的重点句型页
                 setStep(article.keySentence ? 'key_sentence' : 'quiz');
@@ -1831,10 +1881,19 @@ export default function ArticleReaderClient({ article: initialArticle }: { artic
                 type="text"
                 value={outputValue}
                 onChange={(e) => setOutputValue(e.target.value)}
-                onFocus={(e) => setTimeout(() => e.target.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 300)}
+                onKeyDown={(e) => { if (e.key === 'Enter' && !outputDone) handleOutputSubmit(); }}
+                onFocus={(e) => { if (outputScrollTimer.current) clearTimeout(outputScrollTimer.current); outputScrollTimer.current = setTimeout(() => { if (mountedRef.current) e.target.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 300); }}
                 placeholder={t('reading.output_placeholder', lang)}
                 className="w-full bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl px-4 py-3 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)] focus:outline-none focus:border-[var(--mint-soft)]/50"
               />
+              {isDesktop && !outputDone && (
+                <button
+                  onClick={() => setShowKeyboard(v => !v)}
+                  className="mt-2 mx-auto flex items-center gap-1.5 h-9 px-3.5 rounded-xl text-[13px] font-medium bg-[var(--bg-card)] text-[var(--text-secondary)] border border-[var(--border-color)]"
+                >
+                  <Keyboard size={14} /> {t('keyboard.toggle', lang)}
+                </button>
+              )}
             </div>
 
             {outputDone && outputFeedback && (
@@ -1903,6 +1962,14 @@ export default function ArticleReaderClient({ article: initialArticle }: { artic
             >
               {t('reading.complete_output', lang)} <Trophy size={18} />
             </button>
+          )}
+          {isDesktop && !outputDone && (
+            <FloatingKoreanKeyboard
+              value={outputValue}
+              onChange={setOutputValue}
+              visible={showKeyboard}
+              onClose={() => setShowKeyboard(false)}
+            />
           )}
         </div>
       )}
@@ -1974,6 +2041,7 @@ export default function ArticleReaderClient({ article: initialArticle }: { artic
                 setQuizAnswers({});
                 setQuizRevealed({});
                 setQuizCorrect(0);
+                quizAnsweredRef.current = new Set();
                 setOutputValue('');
                 setOutputDone(false);
                 setStep('goals');

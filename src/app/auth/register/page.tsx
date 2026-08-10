@@ -38,8 +38,8 @@ function RegisterContent() {
     } catch { /* ignore */ }
   }
 
-  // 海外站默认邮箱 tab；国内手机/邮箱暂未上线，默认用户名 tab
-  const [method, setMethod] = useState<Method>(IS_OVERSEAS ? 'email' : 'username');
+  // 海外站默认邮箱 tab；国内默认邮箱 tab（手机暂未上线）
+  const [method, setMethod] = useState<Method>(IS_OVERSEAS ? 'email' : 'email');
 
   // 用户名注册（现有真实逻辑）
   const [username, setUsername] = useState('');
@@ -60,8 +60,8 @@ function RegisterContent() {
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   useEffect(() => () => { if (timerRef.current) clearInterval(timerRef.current); }, []);
 
-  // 国内站手机/邮箱注册尚未上线，仅用户名可用
-  const soonMethod = (m: Method) => !IS_OVERSEAS && m !== 'username';
+  // 国内站仅手机暂未上线
+  const soonMethod = (m: Method) => !IS_OVERSEAS && m === 'phone';
 
   const switchMethod = (m: Method) => {
     if (soonMethod(m)) return;
@@ -194,7 +194,6 @@ function RegisterContent() {
         { id: 'username', label: t('auth.tab_username', lang) },
       ]
     : [
-        { id: 'phone', label: t('auth.tab_phone', lang) },
         { id: 'email', label: t('auth.tab_email', lang) },
         { id: 'username', label: t('auth.tab_username', lang) },
       ];
@@ -262,6 +261,7 @@ function RegisterContent() {
           <form onSubmit={handleSubmit} className="auth-fields" style={{ ['--i' as string]: 4 }}>
             {method === 'phone' && (
               <>
+                {!IS_OVERSEAS && <p className="auth-notice">{t('auth.register_notice_soon', lang)}</p>}
                 <div className="auth-field">
                   <label htmlFor="au-phone">{t('auth.phone', lang)}</label>
                   <div className="auth-phone-row">
@@ -370,6 +370,7 @@ function RegisterContent() {
                       {countdown > 0 ? t('auth.code_resend', lang, { n: String(countdown) }) : t('auth.code_send', lang)}
                     </button>
                   </div>
+                  <p className="auth-code-hint">{t('auth.code_spam_hint', lang)}</p>
                 </div>
               </>
             )}
@@ -442,10 +443,16 @@ function RegisterContent() {
             <button
               type="submit"
               className="auth-submit"
-              disabled={submitting}
+              disabled={submitting || soonMethod(method)}
             >
               {submitting ? t('auth.register_submitting', lang) : t('auth.register_submit', lang)}
             </button>
+            <p className="auth-consent">
+              {t('auth.register_consent_pre', lang)}
+              <Link href="/privacy">{t('auth.register_consent_privacy', lang)}</Link>
+              {t('auth.register_consent_and', lang)}
+              <Link href="/terms">{t('auth.register_consent_terms', lang)}</Link>
+            </p>
           </form>
 
           <p className="auth-switch" style={{ ['--i' as string]: 5 }}>

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSmartBack } from '@/lib/useSmartBack';
-import { ArrowLeft, User, Sliders, Save, Loader2, Volume2, VolumeX, Zap, Palette, LogOut, Moon, Sun, Flame, Camera, Map as MapIcon, Mail, ShieldCheck, MessageSquare } from 'lucide-react';
+import { ArrowLeft, User, Sliders, Save, Loader2, Volume2, VolumeX, Zap, Palette, LogOut, Moon, Sun, Monitor, Flame, Camera, Map as MapIcon, Mail, ShieldCheck, MessageSquare } from 'lucide-react';
 import { useMapEntryHidden } from '@/lib/mapEntryPref';
 import { useAuth } from '@/components/AuthProvider';
 import { getProfile, updateProfile } from '@/lib/gamification';
@@ -110,7 +110,7 @@ export default function SettingsPage() {
   const router = useRouter();
   const smartBack = useSmartBack('/mine');
   const { user, loading: authLoading, logout, refreshUser } = useAuth();
-  const { theme, toggle: toggleTheme } = useTheme();
+  const { mode: themeMode, setMode: setThemeMode } = useTheme();
   const { showToast } = useToast();
   const { lang, setLang } = useLang();
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -125,6 +125,7 @@ export default function SettingsPage() {
   const [avatarUploading, setAvatarUploading] = useState(false);
   const [feedbackOpen, setFeedbackOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const profileLoadedRef = useRef(false);
 
   // 邮箱绑定
   const [bindSheetOpen, setBindSheetOpen] = useState(false);
@@ -142,6 +143,7 @@ export default function SettingsPage() {
   }, []);
 
   const sendBindCode = async () => {
+    console.log('[settings] sendBindCode called, countdown=', bindCountdown, 'email=', bindEmail);
     if (bindCountdown > 0) return;
     if (!bindEmail) { setBindError(t('auth.err_email_format', lang)); return; }
     setBindError('');
@@ -151,13 +153,14 @@ export default function SettingsPage() {
         body: JSON.stringify({ email: bindEmail, lang }),
       });
       const data = await res.json().catch(() => ({}));
+      console.log('[settings] sendBindCode response:', res.status, data);
       if (!res.ok) { setBindError(data.error || t('auth.err_network', lang)); return; }
       setBindStep('code');
       setBindCountdown(60);
       bindTimerRef.current = setInterval(() => {
         setBindCountdown(prev => { if (prev <= 1) { if (bindTimerRef.current) clearInterval(bindTimerRef.current); return 0; } return prev - 1; });
       }, 1000);
-    } catch { setBindError(t('auth.err_network', lang)); }
+    } catch (e) { console.error('[settings] sendBindCode fetch error:', e); setBindError(t('auth.err_network', lang)); }
   };
 
   const doBindEmail = async () => {
@@ -253,6 +256,10 @@ export default function SettingsPage() {
       return;
     }
     if (!user) return;
+    // 只在首次加载时构建 profile。保存后 refreshUser 会改变 user 引用，
+    // 若不守卫会重跑 getProfile() 用 IndexedDB 旧昵称覆盖刚输入的新值（改名被重置的根因）。
+    if (profileLoadedRef.current) return;
+    profileLoadedRef.current = true;
     const loadLocalPrefs = () => {
       try {
         const raw = localStorage.getItem(`tori_settings_prefs_${user?.id ?? 'guest'}`);
@@ -266,6 +273,7 @@ export default function SettingsPage() {
         const prefs = loadLocalPrefs();
         setProfile({
           ...p,
+          nickname: user?.nickname || user?.username || p.nickname || '学习者',
           ttsSpeed: prefs.ttsSpeed ?? getSpeechRate(),
         });
         setSoundOn(isSoundEnabled());
@@ -274,7 +282,8 @@ export default function SettingsPage() {
       } catch {
         const prefs = loadLocalPrefs();
         setProfile({
-          nickname: '', dailyGoalMinutes: 30, dailyGoalWords: 10, targetLevel: 'beginner',
+          nickname: user?.nickname || user?.username || '',
+          dailyGoalMinutes: 30, dailyGoalWords: 10, targetLevel: 'beginner',
           ttsSpeed: prefs.ttsSpeed ?? getSpeechRate(),
         } as UserProfile);
       } finally {
@@ -300,12 +309,11 @@ export default function SettingsPage() {
           const data = await res.json().catch(() => ({}));
           throw new Error(data.error || '保存失败');
         }
+        // 先写本地 IndexedDB 画像，再 refreshUser，避免读回旧昵称
+        await updateProfile({ nickname: nicknameTrimmed });
+        setProfile(prev => (prev ? { ...prev, nickname: nicknameTrimmed } : prev));
         await refreshUser();
       }
-      // 本地画像 IndexedDB 保存其余字段（服务器 users 表不存这些）
-      await updateProfile({
-        nickname: profile.nickname,
-      });
       // 本地偏好写 localStorage per-user（合并写，勿覆盖 /review 管理的 spellingStrictness）：
       try {
         const prefKey = `tori_settings_prefs_${user?.id ?? 'guest'}`;
@@ -644,14 +652,42 @@ export default function SettingsPage() {
               onChange={() => { const v = !reduceMotion; setReduceMotionState(v); setReduceMotion(v); }}
             />
 
-            <ToggleRow
-              Icon={theme === 'dark' ? Moon : Sun}
-              label={t('settings.dark_mode', lang)}
-              desc={t(theme === 'dark' ? 'settings.dark_dark' : 'settings.dark_light', lang)}
-              on={theme === 'dark'}
-              tone="purple"
-              onChange={toggleTheme}
-            />
+            <div>
+              <label style={labelStyle}>{t('settings.dark_mode', lang)}</label>
+              <p style={{ fontSize: 11, color: 'var(--color-ink-3)', margin: '-2px 0 8px' }}>
+                {t('settings.theme_mode_desc', lang)}
+              </p>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+                {([
+                  { v: 'light', key: 'settings.theme_light', Icon: Sun },
+                  { v: 'dark', key: 'settings.theme_dark', Icon: Moon },
+                  { v: 'system', key: 'settings.theme_system', Icon: Monitor },
+                ] as const).map((opt) => {
+                  const active = themeMode === opt.v;
+                  const OptIcon = opt.Icon;
+                  return (
+                    <button
+                      key={opt.v}
+                      onClick={() => setThemeMode(opt.v)}
+                      aria-pressed={active}
+                      style={{
+                        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
+                        padding: '12px 6px', borderRadius: 'var(--radius-md)',
+                        textAlign: 'center', cursor: 'pointer',
+                        border: active ? '1px solid var(--color-purple-base)' : '1px solid var(--color-border-2)',
+                        background: active ? 'var(--color-purple-soft)' : 'var(--color-surface-2)',
+                        transition: 'all var(--dur-fast) var(--ease-soft)',
+                      }}
+                    >
+                      <OptIcon size={18} color={active ? 'var(--color-purple-strong)' : 'var(--color-ink-3)'} />
+                      <span style={{ fontSize: 12, fontWeight: 700, color: active ? 'var(--color-purple-strong)' : 'var(--color-ink-1)' }}>
+                        {t(opt.key, lang)}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
 
             <ToggleRow
               Icon={MapIcon}
@@ -796,14 +832,16 @@ export default function SettingsPage() {
       {/* 邮箱绑定弹窗 */}
       {bindSheetOpen && (
         <div style={{
-          position: 'fixed', inset: 0, zIndex: 200, display: 'flex', alignItems: 'flex-end', justifyContent: 'center',
-          background: 'rgba(0,0,0,0.35)', backdropFilter: 'blur(2px)',
+          position: 'fixed', inset: 0, zIndex: 200, display: 'flex', alignItems: 'center', justifyContent: 'center',
+          background: 'rgba(0,0,0,0.35)', backdropFilter: 'blur(2px)', padding: '20px',
         }} onClick={() => setBindSheetOpen(false)}>
           <div style={{
-            background: 'var(--color-surface-0)', borderRadius: '20px 20px 0 0', padding: '24px 20px 32px',
-            maxWidth: 480, width: '100%', maxHeight: '80vh', overflow: 'auto',
+            background: 'var(--color-surface-2)', borderRadius: 20,
+            padding: '28px 24px 24px',
+            maxWidth: 420, width: '100%', maxHeight: '80vh', overflow: 'auto',
+            boxShadow: '0 16px 48px rgba(0,0,0,0.15)',
           }} onClick={(e) => e.stopPropagation()}>
-            <h3 style={{ fontSize: 18, fontWeight: 700, margin: '0 0 16px', color: 'var(--color-ink-1)' }}>
+            <h3 style={{ fontSize: 18, fontWeight: 700, margin: '0 0 20px', color: 'var(--color-ink-1)', textAlign: 'center' }}>
               {t('settings.bind_email', lang)}
             </h3>
             {bindStep === 'email' ? (
@@ -864,6 +902,7 @@ export default function SettingsPage() {
                     </button>
                   </div>
                 </div>
+                <p style={{ fontSize: 12, color: '#b3a49c', margin: '-4px 0 12px' }}>{t('auth.code_spam_hint', lang)}</p>
                 {bindError && <p style={{ fontSize: 13, color: 'var(--color-status-danger)', margin: '0 0 12px' }}>{bindError}</p>}
                 <button
                   onClick={doBindEmail} disabled={bindSubmitting || !bindCode}

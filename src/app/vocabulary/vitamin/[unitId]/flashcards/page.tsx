@@ -3,13 +3,15 @@
 import { useEffect, useState, useCallback, useRef, Suspense } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Volume2, ChevronLeft, ChevronRight, Loader2, CheckCircle, RotateCcw, Shuffle, Star, ArrowLeftRight } from 'lucide-react';
+import { ArrowLeft, Volume2, ChevronLeft, ChevronRight, Loader2, CheckCircle, RotateCcw, Star, SlidersHorizontal, Repeat } from 'lucide-react';
 
 const DIRECTION_KEY = 'flashcards-direction';
 type FlashDirection = 'ko-zh' | 'zh-ko';
 import { db, ensureFavoritesBook, FAVORITES_BOOK_ID } from '@/lib/db';
 import { speakWord, speakWordRepeated, speak, cancelSpeech } from '@/lib/tts';
 import type { YonseiUnit, YonseiWord } from '@/data/yonsei-books';
+import { ChoiceQuiz, type QuizItem } from '@/components/vocabulary/ChoiceQuiz';
+import { FlashcardStartScreen } from '@/components/vocabulary/FlashcardStartScreen';
 import { loadVitaminUnit } from '@/lib/dataLoader';
 import { TappableText } from '@/components/TappableText';
 import { saveProgress, loadProgress, TTL_FLASHCARD } from '@/lib/progress-storage';
@@ -17,12 +19,13 @@ import { useToast } from '@/hooks/useToast';
 import GrammarExplainBubble from '@/components/GrammarExplainBubble';
 import { TracePad } from '@/components/vocabulary/TracePad';
 import { RepeatToggleButton } from '@/components/vocabulary/RepeatToggleButton';
+import { useAutoAudio, AutoAudioToggle } from '@/components/vocabulary/AutoAudioToggle';
 import { SentenceBookmarkButton } from '@/components/vocabulary/SentenceBookmarkButton';
 import { t } from '@/lib/i18n';
 import { getFlashcardTheme, applyFlashcardTheme } from '@/lib/flashcardTheme';
 import { useLang } from '@/components/LangProvider';
 
-type CardWord = YonseiWord & { mastery: 'new' | 'learning' | 'reviewing' | 'mastered' };
+type CardWord = YonseiWord & { mastery: 'new' | 'learning' | 'reviewing' | 'mastered'; srsLevel?: number; interval?: number; id?: string; easeFactor?: number };
 
 function VitaminFlashcardsContent() {
   const { lang } = useLang();
@@ -40,24 +43,31 @@ function VitaminFlashcardsContent() {
   const [displayWords, setDisplayWords] = useState<typeof words>([]);
   const [revealed, setRevealed] = useState(false);
   const [direction, setDirection] = useState<FlashDirection>('ko-zh');
+  const [studyMode, setStudyMode] = useState<'flip' | 'quiz'>('flip');
+  const [autoAdvance, setAutoAdvance] = useState(true);
+  const [quizRound, setQuizRound] = useState(0);
+  const [started, setStarted] = useState(false);
+  const MIN_QUIZ_WORDS = 4;
+  const [autoAudio, toggleAutoAudio] = useAutoAudio();
 
   useEffect(() => {
     try {
       applyFlashcardTheme(getFlashcardTheme()); // 兜底重贴闪卡配色，防 FOUC 脚本竞态/SPA 导航丢失导致回退默认蓝色
       const v = localStorage.getItem(DIRECTION_KEY);
       if (v === 'zh-ko') setDirection('zh-ko');
+      if (localStorage.getItem('flashcards-study-mode') === 'quiz') setStudyMode('quiz');
+      if (localStorage.getItem('flashcards-quiz-pace') === 'manual') setAutoAdvance(false);
     } catch { /* ignore */ }
   }, []);
 
-  const toggleDirection = () => {
-    setDirection(prev => {
-      const next: FlashDirection = prev === 'ko-zh' ? 'zh-ko' : 'ko-zh';
-      try { localStorage.setItem(DIRECTION_KEY, next); } catch { /* ignore */ }
-      setRevealed(false);
-      return next;
-    });
-  };
+  // 教材词（CardWord，无 id/无多义）→ 中立 QuizItem（用 word 当 id）
+  const toQuizItem = (w: CardWord): QuizItem => ({
+    id: w.word, word: w.word, pronunciation: w.pronunciation, meaning: w.meaning,
+    partOfSpeech: w.partOfSpeech, examples: w.examples.map(ex => ({ text: ex.text, translation: ex.translation })),
+  });
+
   const [swipeOffset, setSwipeOffset] = useState(0);
+
   const dirLockRef = useRef<'h' | 'v' | null>(null);
   const swipeOffsetRef = useRef(0);
   const [isSwiping, setIsSwiping] = useState(false);
@@ -86,7 +96,7 @@ function VitaminFlashcardsContent() {
 
   useEffect(() => {
     if (unit === undefined) return;
-    if (unit === null) { router.replace('/vocabulary/library?tab=yonsei'); return; }
+    if (unit === null) { router.replace('/vocabulary/library?tab=vitamin'); return; }
 
     (async () => {
       try {
@@ -108,6 +118,9 @@ function VitaminFlashcardsContent() {
         let filtered = sorted;
         if (filterNew) filtered = sorted.filter(w => (masteryMap.get(w.word) ?? 'new') !== 'mastered');
         setWords(filtered.map(w => ({ ...w, mastery: (masteryMap.get(w.word) ?? 'new') as CardWord['mastery'] })));
+      } catch (e) {
+        console.error('Failed to load flashcards', e);
+        setLoading(false);
       } finally {
         setLoading(false);
       }
@@ -159,35 +172,47 @@ function VitaminFlashcardsContent() {
   // auto-play audio when card changes (also fires on shuffle-from-index-0)
   const currentWordText = displayWords[currentIdx]?.word ?? '';
   useEffect(() => {
-    if (loading || !currentWordText) return;
+    if (!autoAudio || loading || !currentWordText || !started || (studyMode === 'quiz' && displayWords.length >= MIN_QUIZ_WORDS)) return;
     const raf = requestAnimationFrame(() => playAudioRef.current?.());
-    return () => cancelAnimationFrame(raf);
+    // 翻卡瞬间同步打断上一张的连读(含 gap 等待中的),不等下一帧 rAF——否则第二张会听到第一张的读音
+    return () => { cancelAnimationFrame(raf); cancelSpeech(); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentIdx, loading, currentWordText]);
+  }, [autoAudio, currentIdx, loading, currentWordText, started, studyMode]);
 
   playAudioRef.current = () => {
+    if (!autoAudio) return;
     const w = displayWords[currentIdx];
     if (!w) return;
     cancelSpeech();
     speakWordRepeated(w.word, 0.85).catch(() => {});
   };
 
-  const toggleShuffle = () => {
-    if (shuffled) {
-      setDisplayWords([...words]);
-      showToast(t('vocab.fc_restore_order', lang), 'info');
-    } else {
+  const handleStart = (cfg: { mode: 'flip' | 'quiz'; direction: FlashDirection; autoAdvance: boolean; shuffle: boolean }) => {
+    setDirection(cfg.direction);
+    setStudyMode(cfg.mode);
+    setAutoAdvance(cfg.autoAdvance);
+    try {
+      localStorage.setItem(DIRECTION_KEY, cfg.direction);
+      localStorage.setItem('flashcards-study-mode', cfg.mode);
+      localStorage.setItem('flashcards-quiz-pace', cfg.autoAdvance ? 'auto' : 'manual');
+    } catch { /* ignore */ }
+    if (cfg.shuffle) {
       const arr = [...words];
       for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [arr[i], arr[j]] = [arr[j], arr[i]];
       }
       setDisplayWords(arr);
-      showToast(t('vocab.fc_shuffled', lang), 'info');
+      setShuffled(true);
+    } else {
+      setDisplayWords([...words]);
+      setShuffled(false);
     }
-    setShuffled(v => !v);
     setCurrentIdx(0);
     setRevealed(false);
+    setCompleted(false);
+    setQuizRound(r => r + 1);
+    setStarted(true);
   };
 
   const goTo = useCallback((idx: number) => {
@@ -200,6 +225,15 @@ function VitaminFlashcardsContent() {
     setCurrentIdx(idx);
     if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [displayWords.length, completed]);
+
+  // 翻卡模式自动翻页：翻到背面后停留 2.5s 自动进入下一张（切卡/翻回/卸载即清除）
+  // 用 effectiveMode 等价判断：studyMode=quiz 但词数不足回落成翻卡时也算 flip
+  const isFlipMode = !(studyMode === 'quiz' && displayWords.length >= MIN_QUIZ_WORDS);
+  useEffect(() => {
+    if (!started || !isFlipMode || !autoAdvance || !revealed || completed) return;
+    const timer = setTimeout(() => goTo(currentIdx + 1), 2500);
+    return () => clearTimeout(timer);
+  }, [started, isFlipMode, autoAdvance, revealed, completed, currentIdx, goTo]);
 
   // Load favorites —— 收藏本存的是 word.id，回读时映射回韩文用于星标显示
   useEffect(() => {
@@ -241,19 +275,23 @@ function VitaminFlashcardsContent() {
   const favQueueRef = useRef<Promise<unknown>>(Promise.resolve());
   const toggleFavorite = (w: CardWord) => {
     const next = favQueueRef.current.then(async () => {
-      const bookId = await ensureFavoritesBook();
-      const favBook = await db.wordBooks.get(bookId);
-      if (!favBook) return;
-      const now = Date.now();
-      const existing = await db.words.where('word').equals(w.word).first();
-      const rowId = existing?.id;
-      if (rowId && favBook.wordIds.includes(rowId)) {
-        await db.wordBooks.update(bookId, { wordIds: favBook.wordIds.filter(id => id !== rowId), updatedAt: now });
-        setFavoritedIds(prev => { const s = new Set(prev); s.delete(w.word); return s; });
-      } else {
-        const id = rowId ?? await ensureFavRow(w);
-        await db.wordBooks.update(bookId, { wordIds: [...new Set([...favBook.wordIds, id])], updatedAt: now });
-        setFavoritedIds(prev => new Set(prev).add(w.word));
+      try {
+        const bookId = await ensureFavoritesBook();
+        const favBook = await db.wordBooks.get(bookId);
+        if (!favBook) return;
+        const now = Date.now();
+        const existing = await db.words.where('word').equals(w.word).first();
+        const rowId = existing?.id;
+        if (rowId && favBook.wordIds.includes(rowId)) {
+          await db.wordBooks.update(bookId, { wordIds: favBook.wordIds.filter(id => id !== rowId), updatedAt: now });
+          setFavoritedIds(prev => { const s = new Set(prev); s.delete(w.word); return s; });
+        } else {
+          const id = rowId ?? await ensureFavRow(w);
+          await db.wordBooks.update(bookId, { wordIds: [...new Set([...favBook.wordIds, id])], updatedAt: now });
+          setFavoritedIds(prev => new Set(prev).add(w.word));
+        }
+      } catch {
+        showToast(t('vocab.fc_fav_failed', lang), 'error');
       }
     });
     favQueueRef.current = next.catch(() => {});
@@ -283,6 +321,7 @@ function VitaminFlashcardsContent() {
   };
 
   useEffect(() => {
+    if (!started || (studyMode === 'quiz' && displayWords.length >= MIN_QUIZ_WORDS)) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft') goTo(currentIdx - 1);
       else if (e.key === 'ArrowRight') goTo(currentIdx + 1);
@@ -290,7 +329,8 @@ function VitaminFlashcardsContent() {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [currentIdx, goTo]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentIdx, goTo, started, studyMode, displayWords.length]);
 
   const toggleMastered = async (w: CardWord) => {
     const now = Date.now();
@@ -335,6 +375,31 @@ function VitaminFlashcardsContent() {
     } catch {
       alert(t('vocab.fc_save_failed', lang));
     }
+  };
+
+  // 重新学：标记 learning 并把当前词移到本轮牌堆末尾稍后再练
+  // currentIdx 不变——抽走当前词后同位置自然落到下一张；末尾词留在末尾即再练一次
+  const relearnWord = (w: CardWord) => {
+    if (w.mastery === 'new') {
+      (async () => {
+        try {
+          const id = await ensureFavRow(w);
+          await db.words.update(id, { mastery: 'learning', srsLevel: 1, interval: 1, nextReview: Date.now() });
+          setWords(prev => prev.map(c => c.word === w.word ? { ...c, mastery: 'learning' } : c));
+        } catch { /* ignore：仅学习态提升，失败不阻断翻页 */ }
+      })();
+    }
+    setRevealed(false);
+    setDisplayWords(prev => {
+      if (prev.length <= 1) return prev;
+      const idx = prev.findIndex(c => c.word === w.word);
+      if (idx === -1) return prev;
+      const next = [...prev];
+      const [moved] = next.splice(idx, 1);
+      next.push(moved);
+      return next;
+    });
+    if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -439,6 +504,7 @@ function VitaminFlashcardsContent() {
   const isMastered = masteredSet.has(word.word);
   const progress = ((currentIdx + 1) / displayWords.length) * 100;
   const masteredCount = masteredSet.size;
+  const effectiveMode = studyMode === 'quiz' && displayWords.length >= MIN_QUIZ_WORDS ? 'quiz' : 'flip';
 
   return (
     <div
@@ -458,45 +524,81 @@ function VitaminFlashcardsContent() {
             {t('vocab.fc_mastered_of', lang, { mastered: masteredCount, total: words.length })}
           </p>
         </div>
+        {started && (<>
         <button
-          onClick={toggleDirection}
+          onClick={() => setStarted(false)}
           className="h-8 px-2.5 rounded-full flex items-center gap-1 text-[11px] font-bold transition-colors"
-          style={{ border: '1px solid var(--fc-nav-border)', background: direction === 'zh-ko' ? 'var(--fc-dot-active)' : 'var(--fc-nav-bg)', color: direction === 'zh-ko' ? '#fff' : 'var(--fc-nav-color)' }}
-          title={direction === 'ko-zh' ? t('vocab.fc_to_zh_kr', lang) : t('vocab.fc_to_kr_zh', lang)}
+          style={{ border: '1px solid var(--fc-nav-border)', background: 'var(--fc-nav-bg)', color: 'var(--fc-nav-color)' }}
         >
-          <ArrowLeftRight size={12} />
-          {direction === 'ko-zh' ? t('vocab.fc_kr_zh', lang) : t('vocab.fc_zh_kr', lang)}
-        </button>
-        <button
-          onClick={toggleShuffle}
-          className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
-          style={{ border: '1px solid var(--fc-nav-border)', background: shuffled ? 'var(--fc-dot-active)' : 'var(--fc-nav-bg)', color: shuffled ? '#fff' : 'var(--fc-nav-color)' }}
-          title={shuffled ? t('vocab.fc_cancel_shuffle', lang) : t('vocab.fc_shuffle', lang)}
-        >
-          <Shuffle size={14} />
+          <SlidersHorizontal size={12} />
+          {t('vocab.fc_reselect', lang)}
         </button>
         <button
           onClick={e => { e.stopPropagation(); toggleFavorite(word); }}
           className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
           style={{ border: '1px solid var(--fc-card-border)', color: favoritedIds.has(word.word) ? 'var(--color-gold-base)' : 'var(--text-muted)', background: favoritedIds.has(word.word) ? 'var(--color-gold-soft)' : 'transparent' }}
-          title={favoritedIds.has(word.word) ? t('vocab.fc_cancel_fav', lang) : t('vocab.fc_fav', lang)}
         >
           <Star size={14} fill={favoritedIds.has(word.word) ? 'var(--color-gold-base)' : 'none'} />
         </button>
         <span className="text-[12px] font-black tabular-nums" style={{ color: 'var(--color-ink-3)' }}>
           {currentIdx + 1} / {displayWords.length}
         </span>
+        </>)}
       </div>
 
+      {/* 开始配置屏 */}
+      {!started && (
+        <FlashcardStartScreen
+          wordCount={words.length}
+          initial={{ mode: studyMode, direction, autoAdvance, shuffle: shuffled }}
+          onStart={handleStart}
+        />
+      )}
+
       {/* Progress bar */}
+      {started && (
       <div className="h-[5px] rounded-full mb-5 shrink-0 overflow-hidden" style={{ background: 'var(--fc-progress-bg)' }}>
         <div
           className="h-full rounded-full transition-all duration-500"
           style={{ width: `${progress}%`, background: 'linear-gradient(90deg, var(--color-mint-base), var(--color-pink-base))' }}
         />
       </div>
+      )}
 
-      {/* Card */}
+      {/* 选词义测验模式 */}
+      {started && effectiveMode === 'quiz' && (
+        <ChoiceQuiz
+          key={`${direction}-${quizRound}-${displayWords.map(w => w.word).join(',')}`}
+          words={displayWords.map(toQuizItem)}
+          bookWords={words.map(toQuizItem)}
+          direction={direction}
+          autoAdvance={autoAdvance}
+          bookName={unit.title}
+          sourceId={`vitamin-${unitId}`}
+          onProgress={setCurrentIdx}
+          onWrong={(qi) => { const real = words.find(x => x.word === qi.id); if (real && real.mastery === 'new') { (async () => { try { const rid = await ensureFavRow(real); await db.words.update(rid, { mastery: 'learning', srsLevel: 1, interval: 1, nextReview: Date.now() }); setWords(prev => prev.map(w => w.word === real.word ? { ...w, mastery: 'learning' } : w)); } catch { /* ignore */ } })(); } }}
+          onComplete={(correct, total) => {
+            const now = Date.now();
+            for (const dw of displayWords) {
+              const real = words.find(x => x.word === dw.word);
+              if (!real || !real.id) continue;
+              try {
+                const newSrs = Math.min(5, (real.srsLevel ?? 0) + 1);
+                const newInt = Math.max(1, (real.interval ?? 1) * 2);
+                db.words.update(real.id, {
+                  srsLevel: newSrs, interval: newInt, easeFactor: 2.5,
+                  nextReview: now + newInt * 86400000, lastReviewed: now,
+                  mastery: newSrs >= 5 ? 'mastered' as const : 'reviewing' as const,
+                }).catch(() => {});
+              } catch { /* ignore */ }
+            }
+            setCompleted(true);
+          }}
+        />
+      )}
+
+      {/* Card（翻卡） */}
+      {started && effectiveMode === 'flip' && (<>
       <div className="flex justify-center">
         <div
           className="w-full max-w-sm md:max-w-2xl"
@@ -528,13 +630,16 @@ function VitaminFlashcardsContent() {
                   <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full" style={{ background: 'var(--fc-badge-bg)', color: 'var(--fc-badge-color)' }}>{t('vocab.mastered', lang)}</span>
                 )}
               </div>
-              <button
-                onClick={e => { e.stopPropagation(); speakWord(word.word); }}
-                className="w-8 h-8 rounded-full flex items-center justify-center"
-                style={{ border: '1px solid var(--fc-audio-border)', color: 'var(--fc-audio-color)' }}
-              >
-                <Volume2 size={14} />
-              </button>
+              <div className="flex items-center gap-2">
+                <AutoAudioToggle autoAudio={autoAudio} onToggle={toggleAutoAudio} className="w-8 h-8 rounded-full flex items-center justify-center" style={{ border: '1px solid var(--fc-audio-border)', color: 'var(--fc-audio-color)' }} />
+                <button
+                  onClick={e => { e.stopPropagation(); speakWord(word.word); }}
+                  className="w-8 h-8 rounded-full flex items-center justify-center"
+                  style={{ border: '1px solid var(--fc-audio-border)', color: 'var(--fc-audio-color)' }}
+                >
+                  <Volume2 size={14} />
+                </button>
+              </div>
             </div>
 
             {/* Front */}
@@ -609,16 +714,30 @@ function VitaminFlashcardsContent() {
                 <TracePad word={word.word} />
 
                 <div className="flex gap-2 mt-1">
-                  <button
-                    onClick={e => { e.stopPropagation(); toggleMastered(word); }}
-                    className="flex items-center justify-center gap-2 py-2.5 rounded-[14px] font-semibold text-[14px] transition-colors w-full"
-                    style={isMastered
-                      ? { background: 'var(--fc-badge-bg)', color: 'var(--fc-badge-color)', border: '1.5px solid var(--fc-btn-mastered-border)' }
-                      : { background: 'var(--fc-roman-bg)', color: 'var(--fc-roman-color)', border: '1.5px solid var(--fc-btn-unmastered-border)' }
-                    }
-                  >
-                    {isMastered ? <><RotateCcw size={15} /> {t('vocab.unmaster', lang)}</> : <><CheckCircle size={15} /> {t('vocab.mark_mastered', lang)}</>}
-                  </button>
+                  {isMastered ? (
+                    <button
+                      onClick={e => { e.stopPropagation(); toggleMastered(word); }}
+                      className="flex items-center justify-center gap-2 py-2.5 rounded-[14px] font-semibold text-[14px] transition-colors w-full"
+                      style={{ background: 'var(--fc-badge-bg)', color: 'var(--fc-badge-color)', border: '1.5px solid var(--fc-btn-mastered-border)' }}
+                    >
+                      <RotateCcw size={15} /> {t('vocab.unmaster', lang)}
+                    </button>
+                  ) : (<>
+                    <button
+                      onClick={e => { e.stopPropagation(); relearnWord(word); }}
+                      className="flex items-center justify-center gap-2 py-2.5 rounded-[14px] font-semibold text-[14px] transition-colors flex-1"
+                      style={{ background: 'var(--fc-nav-bg)', color: 'var(--fc-nav-color)', border: '1.5px solid var(--fc-nav-border)' }}
+                    >
+                      <Repeat size={15} /> {t('vocab.fc_relearn', lang)}
+                    </button>
+                    <button
+                      onClick={e => { e.stopPropagation(); toggleMastered(word); }}
+                      className="flex items-center justify-center gap-2 py-2.5 rounded-[14px] font-semibold text-[14px] transition-colors flex-1"
+                      style={{ background: 'var(--fc-roman-bg)', color: 'var(--fc-roman-color)', border: '1.5px solid var(--fc-btn-unmastered-border)' }}
+                    >
+                      <CheckCircle size={15} /> {t('vocab.mark_mastered', lang)}
+                    </button>
+                  </>)}
                 </div>
               </div>
             )}
@@ -679,6 +798,7 @@ function VitaminFlashcardsContent() {
           {currentIdx === displayWords.length - 1 ? <CheckCircle size={20} /> : <ChevronRight size={20} />}
         </button>
       </div>
+      </>)}
 
       {completed && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, background: 'rgba(0,0,0,.4)' }}>
@@ -690,7 +810,7 @@ function VitaminFlashcardsContent() {
               {unit?.title || t('vocab.fc_textbook_default', lang)} · {t('vocab.mastered', lang)} {masteredSet.size}
             </p>
             <div style={{ display: 'flex', gap: 10 }}>
-              <button onClick={() => { setCompleted(false); setCurrentIdx(0); setRevealed(false); }} style={{ flex: 1, padding: '12px 0', borderRadius: 999, border: '1px solid var(--color-border-2)', background: 'transparent', color: 'var(--color-ink-2)', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
+              <button onClick={() => { setCompleted(false); setCurrentIdx(0); setRevealed(false); setQuizRound(r => r + 1); setStarted(false); }} style={{ flex: 1, padding: '12px 0', borderRadius: 999, border: '1px solid var(--color-border-2)', background: 'transparent', color: 'var(--color-ink-2)', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
                 <RotateCcw size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} />{t('vocab.fc_again', lang)}
               </button>
               <button onClick={() => router.push(`/vocabulary/vitamin/${unitId}`)} style={{ flex: 1, padding: '12px 0', borderRadius: 999, border: 'none', background: 'var(--color-pink-base)', color: '#fff', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>

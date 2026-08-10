@@ -1,12 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { Check, Crown, ArrowLeft, Infinity as InfinityIcon, ShieldCheck, RotateCcw, Smartphone, ArrowRight, X, Gift, Truck, Sparkles } from 'lucide-react';
+import QRCode from 'qrcode';
+import { Check, Crown, ArrowLeft, Infinity as InfinityIcon, ShieldCheck, RotateCcw, Smartphone, ArrowRight, X, Gift, Truck, Sparkles, Loader2 } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
 import { useLang } from '@/components/LangProvider';
+import { useIsMobile } from '@/lib/useIsMobile';
 import { t, type Lang } from '@/lib/i18n';
 import {
   CURRENCY_SYMBOL, EDITION, MEMBERSHIP_PAUSED, translateBenefitText,
@@ -15,7 +17,6 @@ import {
 import { MEMBERSHIP_CSS } from './membership.css';
 
 interface BenefitsResponse {
-  [k: string]: unknown;
   groups: BenefitGroup[];
   tiers: Tier[];
   tierLabels: Record<Tier, string>;
@@ -105,11 +106,85 @@ function monthlyEquiv(p: TierPricing, lang: Lang): string | null {
   return t('membership.monthly_equiv', lang, { amount: `${CURRENCY_SYMBOL}${fmtMoney(Math.round(yearly / 12))}` });
 }
 
+// 桌面扫码支付弹窗：把网关返回的支付链接渲染成二维码，轮询订单直到支付成功。
+function QrPayModal({
+  qrData, orderId, amount, tierLabel, lang, onClose, onPaid,
+}: {
+  qrData: string; orderId: string; amount: number; tierLabel: string;
+  lang: Lang; onClose: () => void; onPaid: () => void;
+}) {
+  const [qrImg, setQrImg] = useState<string>('');
+  const [qrError, setQrError] = useState(false);
+  const [pollFailures, setPollFailures] = useState(0);
+  const pollRef = useRef(false);
+
+  useEffect(() => {
+    QRCode.toDataURL(qrData, { width: 220, margin: 1 })
+      .then((img) => { setQrImg(img); setQrError(false); })
+      .catch(() => { setQrError(true); });
+  }, [qrData]);
+
+  // 轮询订单状态：支付成功后回调 onPaid
+  useEffect(() => {
+    pollRef.current = true;
+    const timer = setInterval(async () => {
+      if (!pollRef.current) return;
+      try {
+        const res = await fetch(`/api/membership/order/${orderId}`, { cache: 'no-store' });
+        if (res.ok) {
+          const d = await res.json();
+          if (d.status === 'paid') { pollRef.current = false; clearInterval(timer); onPaid(); }
+        } else {
+          setPollFailures((n) => { if (n >= 20) { pollRef.current = false; clearInterval(timer); } return n + 1; });
+        }
+      } catch { /* 网络抖动，下次轮询继续 */ }
+    }, 3000);
+    return () => { pollRef.current = false; clearInterval(timer); };
+  }, [orderId, onPaid]);
+
+  // body scroll lock
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = prev; };
+  }, []);
+
+  // Escape 关闭
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [onClose]);
+
+  return (
+    <div className="mb-qr-overlay" onClick={onClose}>
+      <div className="mb-qr-modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label={t('membership.qr_scan_title', lang)}>
+        <button className="mb-qr-close" onClick={onClose} aria-label={t('membership.cancel', lang)}><X size={20} /></button>
+        <h3 className="mb-qr-title">{t('membership.qr_scan_title', lang)}</h3>
+        <p className="mb-qr-tier">{t('membership.checkout_tier_title', lang, { tier: tierLabel })}</p>
+        <div className="mb-qr-amount">{CURRENCY_SYMBOL}{fmtMoney(amount)}</div>
+        <div className="mb-qr-img-wrap">
+          {qrError
+            ? <div className="mb-qr-loading" style={{ color: 'var(--au-ink-2)' }}>{t('membership.qr_failed', lang)}</div>
+            : qrImg
+              ? <Image src={qrImg} alt="" width={220} height={220} unoptimized />
+              : <div className="mb-qr-loading"><Loader2 size={20} className="mb-spin" /> {t('membership.qr_loading', lang)}</div>}
+        </div>
+        <p className="mb-qr-hint">{t('membership.qr_scan_hint', lang)}</p>
+        <p className="mb-qr-waiting" role="status" aria-live="polite">
+          <Loader2 size={13} className="mb-spin" aria-hidden /> {pollFailures >= 20 ? t('membership.qr_timeout', lang) : t('membership.qr_waiting', lang)}
+        </p>
+      </div>
+      <style dangerouslySetInnerHTML={{ __html: `@keyframes mb-spin{to{transform:rotate(360deg)}}.mb-spin{animation:mb-spin .8s linear infinite}` }} />
+    </div>
+  );
+}
 
 export default function MembershipPricingPage() {
   const router = useRouter();
   const { user } = useAuth();
   const { lang } = useLang();
+  const isMobile = useIsMobile();
   const [data, setData] = useState<BenefitsResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
@@ -143,6 +218,10 @@ export default function MembershipPricingPage() {
 
   const [choosing, setChoosing] = useState<Tier | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  // 桌面扫码支付弹窗数据（qrData 由渠道返回；null=不显示）
+  const [qrPay, setQrPay] = useState<{ qrData: string; orderId: string; amount: number; tier: Tier } | null>(null);
+  // 海外站「支付即将上线」提示弹窗（点订阅后浮现，非整页占位）
+  const [showComingSoon, setShowComingSoon] = useState(false);
 
   // 该档卡片相对当前档的状态（未登录一律 normal，引导登录购买）
   const cardStateOf = (tier: Tier): CardState => {
@@ -155,8 +234,38 @@ export default function MembershipPricingPage() {
   // 试用用户（月付 + 到期 ≤4 天）：当前月付卡仍显示升级引导而非续费
   const isTrial = curTier === 'monthly' && curExpiry != null && curExpiry - Date.now() <= 4 * 24 * 60 * 60 * 1000;
 
+  // 稳定 onPaid 引用，避免轮询 effect 反复重建
+  const handlePaid = useCallback(() => { setQrPay(null); router.replace('/mine/membership?paid=1'); }, [router]);
+
+  // 弹窗 body scroll lock（qrPay / showComingSoon 任一是 true 时锁）
+  useEffect(() => {
+    if (qrPay || showComingSoon) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => { document.body.style.overflow = prev; };
+    }
+  }, [qrPay, showComingSoon]);
+
+  // Escape 关闭弹窗
+  useEffect(() => {
+    if (!qrPay && !showComingSoon) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') { setQrPay(null); setShowComingSoon(false); }
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [qrPay, showComingSoon]);
+
   const handleChoose = async (tier: Tier) => {
     if (tier === 'free') { router.push('/daily'); return; }
+    // 海外站支付通道开通中：任何用户（含未登录的支付渠道审核方）点订阅都直接弹
+    // 「即将上线」提示，不跳登录、不发起下单。放在登录检查之前，确保审核方能看到
+    // 「价格 → 点击 → 即将上线说明」完整闭环。定价/条款/隐私页面本就正常展示。
+    if (EDITION === 'overseas') {
+      setNotice(null);
+      setShowComingSoon(true);
+      return;
+    }
     if (!user) { router.push(`/auth/login?redirect=${encodeURIComponent('/membership')}`); return; }
     if (choosing) return;
 
@@ -173,19 +282,40 @@ export default function MembershipPricingPage() {
     }
 
     setNotice(null);
+    // 国内站只用支付宝：微信个人商户无 H5 能力，普通浏览器无法唤起微信 App，故直接走支付宝。
+    startCheckout(tier, 'alipay');
+  };
+
+  // 真正发起下单。payMethod 仅国内 XorPay 用（海外忽略）。
+  const startCheckout = async (tier: Tier, payMethod?: 'alipay' | 'wechat') => {
+    if (choosing) return;
+    setNotice(null);
     setChoosing(tier);
     try {
       const res = await fetch('/api/membership/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tier }),
+        body: JSON.stringify({ tier, ...(payMethod ? { payMethod } : {}) }),
       });
       if (res.ok) {
-        const { checkoutUrl } = await res.json();
-        // Stripe 等外部收银台是绝对 URL，用整页跳转；mock 是站内路由
-        if (/^https?:\/\//.test(checkoutUrl)) {
+        const { orderId, checkoutUrl, qrData } = await res.json();
+        // XorPay 国内站：支付宝/微信都返回 https 链接。
+        // 手机直接跳转（支付宝唤起 App / 微信进收银台页面），桌面弹二维码扫码。
+        // 海外站（Stripe/Creem）：HTTPS 收银台链接，直接跳转。
+        // mock：内部路由，router.push 进入模拟收银台。
+        if (qrData && isMobile) {
+          // 手机：直接跳转（支付宝唤起App / 微信进收银台）
+          setChoosing(null);
           window.location.href = checkoutUrl;
-        } else {
+        } else if (qrData) {
+          // 桌面：弹二维码扫码
+          const p = data?.pricing?.[tier];
+          const amount = p?.promo ?? p?.price ?? 0;
+          setQrPay({ qrData, orderId, amount, tier });
+          setChoosing(null);
+        } else if (/^https?:\/\//.test(checkoutUrl)) {
+          window.location.href = checkoutUrl;
+        } else if (checkoutUrl) {
           router.push(checkoutUrl);
         }
       } else {
@@ -200,7 +330,8 @@ export default function MembershipPricingPage() {
     }
   };
 
-  // 会员暂停期：普通用户看占位页；管理员绕过，进入真实会员入口测试
+  // 国内会员暂停期：普通用户看整页占位（海外站不再整页占位——改为点订阅后弹提示，
+  // 让定价表/服务条款/隐私政策正常展示，供 Creem/Stripe 等支付渠道合规审查）
   if (MEMBERSHIP_PAUSED && user?.role !== 'admin') {
     return (
       <div className="mb-scope">
@@ -482,8 +613,41 @@ export default function MembershipPricingPage() {
           <footer className="mb-foot">
             <p>{t('membership.foot_upgrade', lang)}</p>
             <p className="mb-foot-wechat">{t('membership.foot_contact', lang)} <strong>13817498530</strong></p>
+            <p className="mb-foot-legal">
+              <Link href="/privacy">{t('home.foot_privacy', lang)}</Link>
+              {' · '}
+              <Link href="/terms">{t('home.foot_terms', lang)}</Link>
+              {' · '}
+              <a href="mailto:929989569@qq.com">929989569@qq.com</a>
+            </p>
           </footer>
         </>
+      )}
+
+
+      {qrPay && (
+        <QrPayModal
+          qrData={qrPay.qrData}
+          orderId={qrPay.orderId}
+          amount={qrPay.amount}
+          tierLabel={data?.tierLabels?.[qrPay.tier] ?? ''}
+          lang={lang}
+          onClose={() => setQrPay(null)}
+          onPaid={handlePaid}
+        />
+      )}
+
+      {showComingSoon && (
+        <div className="mb-qr-overlay" onClick={() => setShowComingSoon(false)}>
+          <div className="mb-paused-card" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label={t('membership.overseas_paused_title', lang)}>
+            <span className="mb-paused-emoji" aria-hidden>🐰</span>
+            <h2 className="mb-paused-title">{t('membership.overseas_paused_title', lang)}</h2>
+            <p className="mb-paused-desc">{t('membership.overseas_paused_desc', lang)}</p>
+            <button className="mb-paused-cta" onClick={() => setShowComingSoon(false)}>
+              {t('membership.overseas_paused_cta', lang)}
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );

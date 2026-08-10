@@ -6,13 +6,13 @@ import Link from 'next/link';
 import {
   ArrowLeft, BookOpen, Target, Volume2, ChevronDown,
   Loader2, BarChart3, BookmarkPlus, Layers, Check, Trash2, CheckSquare, Square, ListChecks, CheckCircle,
-  Eye, EyeOff, MoreHorizontal,
+  Eye, EyeOff, MoreHorizontal, Languages,
 } from 'lucide-react';
 import { DropdownMenu } from '@/components/ui/DropdownMenu';
 import { db, deleteWordsByText } from '@/lib/db';
 import { getLevel, getLevelWords } from '@/data/vocabulary';
 import type { WordEntry, LevelWordList } from '@/types';
-import { speak, speakWord } from '@/lib/tts';
+import { speakWord } from '@/lib/tts';
 import { displayRomanHyphen } from '@/lib/dictionary';
 import { useAuth } from '@/components/AuthProvider';
 import { TappableText } from '@/components/TappableText';
@@ -42,6 +42,7 @@ export default function LevelDetailPage() {
   const [masteredSet, setMasteredSet] = useState<Set<string>>(new Set());
   const [learningSet, setLearningSet] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [partFilter, setPartFilter] = useState<string>('全部');
   const [displayCount, setDisplayCount] = useState(PAGE_SIZE);
@@ -131,7 +132,7 @@ export default function LevelDetailPage() {
         } catch {
           // db error — show words without mastery state
         }
-      } catch { /* ignore */ } finally {
+      } catch { setLoadError(true); } finally {
         setLoading(false);
       }
     })();
@@ -142,7 +143,7 @@ export default function LevelDetailPage() {
     if (savedSentenceIds.has(korean)) return;
     const existing = await db.sentences.where('korean').equals(korean).first().catch(() => null);
     if (!existing) {
-      await db.sentences.add({ id: crypto.randomUUID(), korean, chinese, source_type: 'vocabulary', source_id: 'level-' + level, source_title: sourceTitle, created_at: Date.now() }).catch(() => {});
+      await db.sentences.add({ id: crypto.randomUUID(), korean, chinese, source_type: 'vocabulary', source_id: 'level-' + level, source_title: sourceTitle, created_at: Date.now() }).catch((e) => { console.error('saveSentence: failed to add sentence', korean, e); });
     }
     setSavedSentenceIds((prev) => new Set(prev).add(korean));
   };
@@ -163,6 +164,20 @@ export default function LevelDetailPage() {
     setShowCn(prev => {
       const next = !prev;
       try { localStorage.setItem('vocab_show_cn', next ? '1' : '0'); } catch { /* ignore */ }
+      return next;
+    });
+  };
+
+  const [showRn, setShowRn] = useState(true);
+
+  useEffect(() => {
+    try { if (localStorage.getItem('vocab_show_rn') === '0') setShowRn(false); } catch { /* ignore */ }
+  }, []);
+
+  const toggleRn = () => {
+    setShowRn(prev => {
+      const next = !prev;
+      try { localStorage.setItem('vocab_show_rn', next ? '1' : '0'); } catch { /* ignore */ }
       return next;
     });
   };
@@ -379,7 +394,7 @@ export default function LevelDetailPage() {
         setLearningSet(prev => { const s = new Set(prev); s.delete(entry.korean); return s; });
       } else {
         setMasteredSet(prev => { const s = new Set(prev); s.delete(entry.korean); return s; });
-        setLearningSet(prev => { const s = new Set(prev); s.delete(entry.korean); return s; });
+        setLearningSet(prev => new Set(prev).add(entry.korean));
       }
     }
   };
@@ -434,7 +449,13 @@ export default function LevelDetailPage() {
   };
 
   const batchDelete = async () => {
-    await deleteWordsByText(selectedWords); // 删词 + 从收藏本剔除孤儿 id
+    try {
+      await deleteWordsByText(selectedWords); // 删词 + 从收藏本剔除孤儿 id
+    } catch {
+      alert(t('vocab.err_check_login', lang));
+      exitManage();
+      return;
+    }
     setMasteredSet(prev => { const s = new Set(prev); selectedWords.forEach(w => s.delete(w)); return s; });
     setLearningSet(prev => { const s = new Set(prev); selectedWords.forEach(w => s.delete(w)); return s; });
     exitManage();
@@ -444,6 +465,17 @@ export default function LevelDetailPage() {
     return (
       <div className="flex items-center justify-center py-32">
         <Loader2 size={32} className="animate-spin text-[var(--text-secondary)]" />
+      </div>
+    );
+  }
+
+  if (loadError) {
+    return (
+      <div className="flex flex-col items-center justify-center py-32 gap-4">
+        <p className="text-sm text-[var(--text-muted)]">{t('common.error', lang)}</p>
+        <button onClick={() => window.location.reload()} className="text-sm text-[var(--pink-primary)] underline underline-offset-2">
+          {t('common.retry', lang)}
+        </button>
       </div>
     );
   }
@@ -585,7 +617,14 @@ export default function LevelDetailPage() {
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-colors ${showCn ? 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)]' : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:border-[var(--pink-primary)]/30'}`}
               >
                 {showCn ? <Eye size={12} /> : <EyeOff size={12} />}
-                {showCn ? t('vocab.show_cn', lang) : t('vocab.hide_cn', lang)}
+                {showCn ? t('vocab.hide_cn', lang) : t('vocab.show_cn', lang)}
+              </button>
+              <button
+                onClick={toggleRn}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-colors ${showRn ? 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)]' : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:border-[var(--pink-primary)]/30'}`}
+              >
+                <Languages size={12} />
+                {showRn ? t('vocab.hide_rn', lang) : t('vocab.show_rn', lang)}
               </button>
               <button
                 onClick={() => { if (authLoading) return; if (!user) { router.push('/auth/login?redirect=' + window.location.pathname); return; } setAddAllBook(true); }}
@@ -700,7 +739,7 @@ export default function LevelDetailPage() {
                 onTouchEnd={isDesktop || managing ? undefined : (e) => handleTouchEnd(e, entry.id)}
               >
                 <div className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-[var(--bg-card-hover)] transition-colors">
-                  {managing && !isMastered && (
+                  {managing && (
                     <div
                       className={`w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-colors cursor-pointer ${isSelected ? 'bg-[var(--mint-soft)] border-[var(--mint-soft)]' : 'border-[var(--border-color)] bg-white'}`}
                       onClick={() => toggleSelect(entry.korean)}
@@ -709,15 +748,15 @@ export default function LevelDetailPage() {
                     </div>
                   )}
                   <button
-                    onClick={() => { if (managing && !isMastered) { toggleSelect(entry.korean); return; } closeAllSwipes(); setExpandedId(isExpanded ? null : entry.id); }}
+                    onClick={() => { if (managing) { toggleSelect(entry.korean); return; } closeAllSwipes(); setExpandedId(isExpanded ? null : entry.id); }}
                     className="flex-1 flex items-center gap-3 min-w-0 text-left"
                   >
                     <div className="flex-1 min-w-0">
                       <div className="flex items-baseline gap-2.5 min-w-0">
                         <span className="ko-text font-bold text-[var(--text-primary)] text-[19px] leading-tight whitespace-nowrap">{entry.korean}</span>
-                        <span className="min-w-0 truncate text-[12.5px] font-semibold tracking-wide text-[var(--pink-primary)]">
+                        {showRn && <span className="min-w-0 truncate text-[12.5px] font-semibold tracking-wide text-[var(--pink-primary)]">
                           [{displayRomanHyphen(entry.romanization, entry.korean)}]
-                        </span>
+                        </span>}
                       </div>
                       <div className="flex items-center gap-2 mt-2 min-w-0">
                         {entry.partOfSpeech && (
@@ -763,9 +802,6 @@ export default function LevelDetailPage() {
                           <BookmarkPlus size={17} />
                         </button>
                       </>
-                    )}
-                    {managing && isMastered && (
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--mint-soft)]/10 text-[var(--mint-soft)]">{t('vocab.mastered', lang)}</span>
                     )}
                   </div>
                 </div>
@@ -887,7 +923,7 @@ export default function LevelDetailPage() {
                 <button onClick={() => setDeletePending(false)} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[var(--bg-input)] text-[var(--text-secondary)] text-sm font-semibold">
                   {t('common.cancel', lang)}
                 </button>
-                <button onClick={batchDelete} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-red-500 text-white text-sm font-semibold">
+                <button onClick={batchDelete} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[var(--color-danger)] text-white text-sm font-semibold">
                   <Trash2 size={14} /> {t('vocab.confirm_delete_n', lang, { n: selectedWords.size })}
                 </button>
               </>
@@ -896,7 +932,7 @@ export default function LevelDetailPage() {
                 <button onClick={() => setMasterPending(true)} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[var(--mint-soft)]/15 text-[var(--mint-soft)] text-sm font-semibold hover:bg-[var(--mint-soft)]/25 transition-colors">
                   <CheckCircle size={14} /> {t('vocab.mark_mastered_n', lang, { n: selectedWords.size })}
                 </button>
-                <button onClick={() => setDeletePending(true)} className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-red-50 text-red-500 text-sm font-semibold hover:bg-red-100 transition-colors">
+                <button onClick={() => setDeletePending(true)} className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-[var(--color-danger-bg)] text-[var(--color-danger)] text-sm font-semibold hover:brightness-95 transition-colors">
                   <Trash2 size={14} />
                 </button>
               </>

@@ -3,6 +3,7 @@
 import { SITE_URL } from '@/lib/seo';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
 import { useLang } from '@/components/LangProvider';
 import { t as tr } from '@/lib/i18n';
@@ -54,6 +55,9 @@ export default function InviteMinePage() {
     <div className="auth-scope">
       <div style={{ width: '100%', minHeight: '100dvh', background: 'var(--au-bg)', color: 'var(--au-ink-1)', padding: '36px 20px', boxSizing: 'border-box' }}>
         <div style={{ maxWidth: 480, margin: '0 auto' }}>
+          <Link href="/membership" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 14, color: 'var(--au-ink-2)', textDecoration: 'none', marginBottom: 16 }}>
+            <ArrowLeft size={16} /> {tr('invite.back', lang)}
+          </Link>
           <h1 style={{ fontFamily: 'var(--au-serif)', fontSize: 25, margin: '0 0 6px' }}>{tr('invite.mine_title', lang)}</h1>
           <p style={{ fontSize: 14, color: 'var(--au-ink-2)', margin: '0 0 16px', lineHeight: 1.6 }}>
             {tr('invite.mine_sub', lang)}
@@ -92,7 +96,7 @@ export default function InviteMinePage() {
 
               {data.pendingDays > 0 && (
                 <div style={{ ...card, background: 'var(--au-pink-soft)', fontSize: 13, color: 'var(--au-ink-2)', lineHeight: 1.6 }}
-                  dangerouslySetInnerHTML={{ __html: tr('invite.pending_days', lang, { days: `<b style="color:var(--au-pink-deep)">${data.pendingDays}</b>` }) }}
+                  dangerouslySetInnerHTML={{ __html: tr('invite.pending_days', lang, { days: data.pendingDays }) }}
                 />
               )}
 

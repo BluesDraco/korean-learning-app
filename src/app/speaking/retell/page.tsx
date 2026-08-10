@@ -17,15 +17,15 @@ import { useMicRecorder } from '@/lib/audio/useMicRecorder';
 import { saveRecording } from '@/lib/audio/saveRecording';
 import { playCorrectSound, playWrongSound } from '@/lib/audio/sfx';
 import { speak, speakWord } from '@/lib/tts';
-import { awardXp, updateStreak } from '@/lib/gamification';
+import { awardXp, updateStreak, recordElapsedMinutes } from '@/lib/gamification';
 import { pushSpeakingHistory } from '@/lib/practice/aggregate';
+import { saveProgress, loadProgress, clearProgress, TTL_FLASHCARD } from '@/lib/progress-storage';
 import { loadRetellPassages, type RetellPassage, type RetellSource } from '@/data/retellPassages';
 
 const READING_LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1'];
 const PASSAGES_PER_SESSION = 5;
 
 interface RetellVerdict {
-  [k: string]: unknown;
   score: number;
   coverage: number;
   coveredPoints: string[];
@@ -96,8 +96,10 @@ export default function SpeakingRetellPage() {
           setPhase('session');
         }}
         onBack={smartBack}
+        railMode="listening"
+        railChip="speak"
         ctaLabel={passages && passages.length > 0 ? t('sp.start', lang) : (loadError ? t('sp.change_source', lang) : t('sp.preparing', lang))}
-        ctaDisabled={(!passages || passages.length === 0) && !loadError}
+        ctaDisabled={!passages || passages.length === 0}
         extra={
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, width: '100%', maxWidth: 420 }}>
             <div style={{ display: 'flex', gap: 8, width: '100%' }}>
@@ -108,7 +110,7 @@ export default function SpeakingRetellPage() {
                   style={{
                     flex: 1, padding: '11px 0', borderRadius: 12, fontSize: 13, fontWeight: 700, border: 'none', cursor: 'pointer',
                     background: source === s ? 'var(--hr-mint-strong)' : 'var(--hr-surface-3)',
-                    color: source === s ? '#fff' : 'var(--hr-ink-2)',
+                    color: source === s ? 'var(--hr-on-accent)' : 'var(--hr-ink-2)',
                   }}
                 >{t(s === 'dialogue' ? 'sp.retell_scene' : 'sp.retell_article', lang)}</button>
               ))}
@@ -122,7 +124,7 @@ export default function SpeakingRetellPage() {
                     style={{
                       padding: '7px 14px', borderRadius: 999, fontSize: 12.5, fontWeight: 700, border: 'none', cursor: 'pointer',
                       background: level === lv ? 'var(--hr-mint-base)' : 'var(--hr-surface-3)',
-                      color: level === lv ? '#fff' : 'var(--hr-ink-2)',
+                      color: level === lv ? 'var(--hr-on-accent)' : 'var(--hr-ink-2)',
                     }}
                   >{lv}</button>
                 ))}
@@ -145,9 +147,24 @@ export default function SpeakingRetellPage() {
 
   if (!passages) {
     return (
-      <PracticeSessionShell tone="mint" modeName={t('sp.retell_mode', lang)} modeKr="요약 말하기" onBack={smartBack}>
+      <PracticeSessionShell tone="mint" modeName={t('sp.retell_mode', lang)} modeKr="요약 말하기" onBack={smartBack} railMode="listening" railChip="speak">
         <div className="pr-ss-card" style={{ textAlign: 'center' }}>
-          <p style={{ fontSize: 14, color: 'var(--hr-ink-3)', margin: 0 }}>{t('sp.loading', lang)}</p>
+          {loadError ? (
+            <>
+              <p style={{ fontSize: 14, color: 'var(--hr-pink-strong)', margin: '0 0 12px' }}>{t('sp.source_empty', lang)}</p>
+              <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
+                {(['dialogue', 'reading'] as const).map(s => (
+                  <button key={s} onClick={() => { setSource(s); load(s, level); }}
+                    style={{ padding: '8px 18px', borderRadius: 10, fontSize: 13, fontWeight: 600, border: 'none', cursor: 'pointer',
+                      background: source === s ? 'var(--hr-mint-strong)' : 'var(--hr-surface-3)',
+                      color: source === s ? 'var(--hr-on-accent)' : 'var(--hr-ink-2)' }}
+                  >{t(s === 'dialogue' ? 'sp.retell_scene' : 'sp.retell_article', lang)}</button>
+                ))}
+              </div>
+            </>
+          ) : (
+            <p style={{ fontSize: 14, color: 'var(--hr-ink-3)', margin: 0 }}>{t('sp.loading', lang)}</p>
+          )}
         </div>
       </PracticeSessionShell>
     );
@@ -174,9 +191,26 @@ function RetellShell({ passages, onBack, router, uid }: { passages: RetellPassag
   const indexRef = useRef(0);
   const blobRef = useRef<Blob | null>(null);
   const durRef = useRef(0);
+  const sessionStartRef = useRef(Date.now());
+  const timeRecordedRef = useRef(false);
 
   const current = passages[index];
   indexRef.current = index;
+  const posKey = `retell-pos-${uid}-${passages.map(p => p.title).join('|')}`;
+
+  // 恢复进度
+  useEffect(() => {
+    const saved = loadProgress<{ idx: number }>(posKey);
+    if (saved && saved.idx > 0 && saved.idx < passages.length) {
+      setIndex(saved.idx);
+    }
+  }, []);
+
+  // 保存进度
+  useEffect(() => {
+    if (finished) return;
+    saveProgress(posKey, { idx: index }, TTL_FLASHCARD);
+  }, [index, finished]);
 
   // 进入新段自动播一次
   useEffect(() => {
@@ -194,7 +228,8 @@ function RetellShell({ passages, onBack, router, uid }: { passages: RetellPassag
     let jr: RetellVerdict;
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 15000);
+      // 前端超时须大于后端(retell-judge 后端 20s),否则长内容前端先 abort,白白降级本地判分
+      const timeoutId = setTimeout(() => controller.abort(), 23000);
       const res = await fetch('/api/ai/retell-judge', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -249,6 +284,11 @@ function RetellShell({ passages, onBack, router, uid }: { passages: RetellPassag
     if (index + 1 >= passages.length) {
       pushSpeakingHistory(uid, correctCount + acceptableCount, passages.length);
       updateStreak().catch(e => console.error('[speaking-retell] updateStreak failed', e));
+      if (!timeRecordedRef.current) {
+        timeRecordedRef.current = true;
+        recordElapsedMinutes(sessionStartRef.current, 30).catch(e => console.error('[retell] recordElapsedMinutes failed', e));
+      }
+      clearProgress(posKey);
       setFinished(true);
     } else {
       mic.cancel();
@@ -270,6 +310,7 @@ function RetellShell({ passages, onBack, router, uid }: { passages: RetellPassag
     autoPlayedRef.current.clear();
     setIndex(0); setCorrectCount(0); setAcceptableCount(0); setXpTotal(0);
     setFinished(false); setPhase('prompt'); setSpokenText(''); setResult(null); setError(null); setShowText(false);
+    clearProgress(posKey);
   }
 
   if (finished) {
@@ -310,8 +351,10 @@ function RetellShell({ passages, onBack, router, uid }: { passages: RetellPassag
       current={finished ? undefined : index + 1}
       total={finished ? undefined : passages.length}
       onBack={onBack}
+      railMode="listening"
+      railChip="speak"
     >
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 720, margin: '0 auto', paddingBottom: 20 }}>
+      <div className="pr-focus">
         {/* 听 · 段落卡 */}
         <div style={{
           background: 'var(--hr-surface-2)', border: '1.5px solid var(--hr-border-2)',
@@ -324,7 +367,7 @@ function RetellShell({ passages, onBack, router, uid }: { passages: RetellPassag
             onClick={() => speak(current.fullKo)}
             style={{
               display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 24px', borderRadius: 999,
-              border: '1.5px solid var(--hr-mint-base)', background: 'var(--hr-mint-strong)', color: '#fff',
+              border: '1.5px solid var(--hr-mint-base)', background: 'var(--hr-mint-strong)', color: 'var(--hr-on-accent)',
               fontSize: 14, fontWeight: 700, cursor: 'pointer', minHeight: 44,
             }}
           >
@@ -431,7 +474,7 @@ function RetellShell({ passages, onBack, router, uid }: { passages: RetellPassag
               <>
                 {error && <p style={{ fontSize: 13, color: 'var(--hr-pink-strong)', textAlign: 'center', margin: 0 }}>{error}</p>}
                 <button onClick={startRec} style={{ width: 88, height: 88, borderRadius: '50%', background: 'var(--hr-mint-base)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 8px 24px rgba(125,198,179,.35)' }}>
-                  <Mic size={34} style={{ color: '#fff' }} />
+                  <Mic size={34} style={{ color: 'var(--hr-on-accent)' }} />
                 </button>
                 <p style={{ fontSize: 13, color: 'var(--hr-ink-3)', margin: 0 }}>{t('sp.retell_tap_mic', lang)}</p>
                 <button onClick={handleSkip} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--hr-ink-3)', fontSize: 12, textDecoration: 'underline', textDecorationStyle: 'dashed', textUnderlineOffset: 3, padding: '4px 8px' }}>{t('sp.retell_skip', lang)}</button>
@@ -440,7 +483,7 @@ function RetellShell({ passages, onBack, router, uid }: { passages: RetellPassag
             {phase === 'recording' && (
               <>
                 <button onClick={stopRec} style={{ width: 88, height: 88, borderRadius: '50%', background: 'var(--hr-pink-strong)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'retell-pulse 1.2s infinite', boxShadow: '0 8px 24px rgba(229,90,135,.35)' }}>
-                  <MicOff size={34} style={{ color: '#fff' }} />
+                  <MicOff size={34} style={{ color: 'var(--hr-on-accent)' }} />
                 </button>
                 <p style={{ fontSize: 13, color: 'var(--hr-ink-3)', margin: 0 }}>{t('sp.recording_stop', lang)}</p>
               </>

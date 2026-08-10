@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { SITE_URL } from '@/lib/seo';
 import { ArrowLeftRight, Keyboard, UserRoundPen } from 'lucide-react';
 import { useLang } from '@/components/LangProvider';
-import { t } from '@/lib/i18n';
+import { t, type Lang } from '@/lib/i18n';
 
 const TOOLS = [
   { slug: 'korean-name', seoName: 'Korean Name Generator', nameKey: 'tools.name_korean_name', descKey: 'tools.desc_korean_name', Icon: UserRoundPen, tone: 'pink' },
@@ -12,26 +12,29 @@ const TOOLS = [
   { slug: 'keyboard', seoName: 'Online Korean Keyboard', nameKey: 'tools.name_keyboard', descKey: 'tools.desc_keyboard', Icon: Keyboard, tone: 'peach' },
 ];
 
-const BREADCRUMB_JSONLD = {
-  '@context': 'https://schema.org',
-  '@type': 'BreadcrumbList',
-  itemListElement: [
-    { '@type': 'ListItem', position: 1, name: '首页', item: `${SITE_URL}` },
-    { '@type': 'ListItem', position: 2, name: '免费韩语工具', item: `${SITE_URL}/tools` },
-  ],
-};
-
-const ITEMLIST_JSONLD = {
-  '@context': 'https://schema.org',
-  '@type': 'ItemList',
-  name: '兔莉韩语工具箱',
-  itemListElement: TOOLS.map((t, i) => ({
-    '@type': 'ListItem',
-    position: i + 1,
-    url: `${SITE_URL}/tools/${t.slug}`,
-    name: t.seoName,
-  })),
-};
+function buildJsonLd(lang: Lang) {
+  const isEn = lang === 'en';
+  const breadcrumb = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: isEn ? 'Home' : '首页', item: `${SITE_URL}` },
+      { '@type': 'ListItem', position: 2, name: isEn ? 'Free Korean Tools' : '免费韩语工具', item: `${SITE_URL}/tools` },
+    ],
+  };
+  const itemList = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: isEn ? 'Tori Korean Toolbox' : '兔莉韩语工具箱',
+    itemListElement: TOOLS.map((t, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: `${SITE_URL}/tools/${t.slug}`,
+      name: t.seoName,
+    })),
+  };
+  return [breadcrumb, itemList];
+}
 
 export default function ToolsHubPage() {
   const { lang } = useLang();
@@ -39,7 +42,7 @@ export default function ToolsHubPage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify([BREADCRUMB_JSONLD, ITEMLIST_JSONLD]) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildJsonLd(lang)) }}
       />
       <div className="py-4 max-w-2xl md:max-w-3xl mx-auto">
         <header style={{ padding: '4px 12px 20px' }}>

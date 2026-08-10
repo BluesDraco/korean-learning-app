@@ -1,321 +1,467 @@
 'use client';
 
-import { useState, useEffect, useCallback, useMemo, useRef, Suspense } from 'react';
-import { useSmartBack } from '@/lib/useSmartBack';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { ArrowLeft, Volume2 } from 'lucide-react';
-import { PROGRESSIVE_STAGES, type ProgressiveLetter } from '@/data/phonetics-progressive';
-import { unlockAudioContext } from '@/lib/tts';
-import { playPhoneticAudio } from '@/lib/audio/phoneticsPlayer';
-import {
-  getDueMistakes,
-  getDueSrsItems,
-  markMistakePassed,
-  updatePhoneticSrs,
-} from '@/lib/phonetics/srs';
-import type { PhoneticMistake, PhoneticSrsItem } from '@/types';
-import { playSuccess, playError, playComplete } from '@/lib/soundManager';
-import FlashCard from '@/components/phonetics/step/FlashCard';
-import { iconBtn } from '@/components/phonetics/step/shared';
+import { useState, useCallback, useEffect } from 'react';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import { ArrowLeft } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
-import { Clock3, Target } from 'lucide-react';
+import { useSmartBack } from '@/lib/useSmartBack';
+import { readAll, fmtTime, type PracticeMode, type PracticeStats, type PracticeRow } from '@/lib/practice/aggregate';
+import { useTheme } from '@/components/ThemeProvider';
 import { useLang } from '@/components/LangProvider';
-import { t } from '@/lib/i18n';
-import '@/components/phonetics/step/step-rail.css';
+import { t, type Lang } from '@/lib/i18n';
+import PlaceIntro from '@/components/PlaceIntro';
+import { MobileRedirect } from '@/components/practice/MobileRedirect';
+import './practice-redesign.css';
 
-type Mode = 'mistakes' | 'srs';
+type Tab = 'mode' | 'mistakes';
 
-function flatLetters(): Array<ProgressiveLetter & { stage: number }> {
-  const out: Array<ProgressiveLetter & { stage: number }> = [];
-  for (const s of PROGRESSIVE_STAGES) {
-    for (const l of s.letters) out.push({ ...l, stage: s.id });
-  }
-  return out;
+interface ModeMeta {
+  key: PracticeMode;
+  name: string;
+  kr: string;
+  desc: string;
+  tone: 'speak' | 'dict' | 'write' | 'type';
+  href: string;
 }
 
-function PracticeInner() {
-  const { lang } = useLang();
+const MODES: ModeMeta[] = [
+  { key: 'listening', name: 'practice.short_speaking',  kr: '말하기',    desc: 'practice.hub_speaking_desc',  tone: 'speak', href: '/speaking' },
+  { key: 'dictation', name: 'practice.short_dictation', kr: '받아쓰기',  desc: 'practice.hub_dictation_desc', tone: 'dict',  href: '/dictation' },
+  { key: 'writing',   name: 'practice.short_writing',   kr: '쓰기',      desc: 'practice.hub_writing_desc',   tone: 'write', href: '/writing' },
+  { key: 'typing',    name: 'practice.short_typing',    kr: '타자 연습', desc: 'practice.hub_typing_desc',    tone: 'type',  href: '/typing' },
+];
+
+export default function PracticePage() {
+  const smartBack = useSmartBack('/learning');
+  const searchParams = useSearchParams();
   const { user } = useAuth();
-  const params = useSearchParams();
-  const router = useRouter();
-  const smartBack = useSmartBack('/phonetics');
-  const mode = (params.get('mode') === 'srs' ? 'srs' : 'mistakes') as Mode;
-  const [loading, setLoading] = useState(true);
-  const [mistakeQueue, setMistakeQueue] = useState<PhoneticMistake[]>([]);
-  const [srsQueue, setSrsQueue] = useState<PhoneticSrsItem[]>([]);
-  const consecutiveRef = useRef<Map<string, number>>(new Map());
-  const all = flatLetters();
+  const { theme } = useTheme();
+  const { lang } = useLang();
+  const initialTab = (searchParams.get('tab') as Tab) || 'mode';
+  const [tab, setTab] = useState<Tab>(initialTab === 'mistakes' ? 'mistakes' : 'mode');
+
+  const [stats, setStats] = useState<PracticeStats | null>(null);
+  const [recent, setRecent] = useState<PracticeRow[]>([]);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    let alive = true;
-    (async () => {
-      if (mode === 'mistakes') {
-        const items = await getDueMistakes(user?.id);
-        // 每条错题重复 2 次，错开排列（确保两次出现不相邻）
-        const interleaved: PhoneticMistake[] = [];
-        for (let i = 0; i < items.length; i++) interleaved.push(items[i]);
-        for (let i = 0; i < items.length; i++) interleaved.push(items[i]);
-        // 第二轮 Fisher-Yates 洗牌
-        const second = interleaved.slice(items.length);
-        for (let i = second.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [second[i], second[j]] = [second[j], second[i]];
-        }
-        const final = [...interleaved.slice(0, items.length), ...second];
-        if (alive) setMistakeQueue(final);
-      } else {
-        const items = await getDueSrsItems(20, user?.id);
-        if (alive) setSrsQueue(items);
-      }
-      if (alive) setLoading(false);
-    })();
-    return () => { alive = false; };
-  }, [mode]);
+    let cancelled = false;
+    setLoaded(false);
+    readAll(user?.id, 8, lang)
+      .then(({ stats: s, recent: r }) => {
+        if (cancelled) return;
+        setStats(s);
+        setRecent(r);
+        setLoaded(true);
+      })
+      .catch(e => {
+        if (!cancelled) { console.error('[practice hub] readAll failed', e); setStats(null); setRecent([]); setLoaded(true); }
+      });
+    return () => { cancelled = true; };
+  }, [user?.id, lang]);
 
-  // ─── 错题模式 ───
-  const [mIdx, setMIdx] = useState(0);
-  const [mPicked, setMPicked] = useState<string | null>(null);
+  const switchTab = useCallback((next: Tab) => {
+    setTab(next);
+    const url = new URL(window.location.href);
+    if (next === 'mode') url.searchParams.delete('tab'); else url.searchParams.set('tab', next);
+    window.history.replaceState({}, '', url.toString());
+  }, []);
 
-  const mCurrent = mistakeQueue[mIdx];
-  const mTarget = mCurrent ? all.find((l) => l.jamo === mCurrent.targetJamo) : null;
-  const mWrong = mCurrent ? all.find((l) => l.jamo === mCurrent.wrongJamo) : null;
-  // 锁定到 mCurrent.id：同一道题选项不变，避免点错后干扰项跳变
-  const mOptions = useMemo(() => {
-    if (!mTarget || !mWrong) return [] as Array<ProgressiveLetter & { stage: number }>;
-    // 干扰项限制：同 stage（target 所属阶段），避免拿到未学过的字母
-    // 例如：错题在 stage 2 的 ㅐ vs ㅔ，干扰项只能从 stage 2 的复合元音里抽
-    const stageScoped = all.filter((l) => l.stage === mTarget.stage && l.jamo !== mTarget.jamo && l.jamo !== mWrong.jamo);
-    const shuffled = [...stageScoped].sort(() => Math.random() - 0.5);
-    const pool = [mTarget, mWrong, shuffled[0], shuffled[1]].filter((x): x is ProgressiveLetter & { stage: number } => !!x);
-    return [...pool].sort(() => Math.random() - 0.5);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mCurrent?.id]);
+  const modesDone = stats?.modesDoneToday ?? 0;
+  const goal = 4;
+  const remaining = Math.max(0, goal - modesDone);
+  const pct = Math.min(100, Math.round((modesDone / goal) * 100));
+  const streak = stats?.streak ?? 0;
+  const weeklyTotal = stats?.weekly?.reduce((a, b) => a + b, 0) ?? 0;
 
-  const onPlayMistake = useCallback(() => {
-    if (!mTarget) return;
-    unlockAudioContext();
-    playPhoneticAudio(mTarget.syllable);
-  }, [mTarget]);
+  // Ring chart
+  const r = 33;
+  const circumference = 2 * Math.PI * r;
+  const dashoffset = circumference * (1 - pct / 100);
 
-  // 自动播放新题：仅当 target 切换时播一次，避免 onPlayMistake 函数引用变化引发重复
-  const lastPlayedTargetRef = useRef<string | null>(null);
-  useEffect(() => {
-    if (mode !== 'mistakes' || !mTarget) return;
-    const key = mTarget.syllable;
-    if (lastPlayedTargetRef.current === key) return;
-    lastPlayedTargetRef.current = key;
-    setMPicked(null);
-    onPlayMistake();
-  }, [mode, mTarget, onPlayMistake]);
-
-  const handleMistakePick = async (jamo: string) => {
-    if (!mCurrent || mPicked) return;
-    setMPicked(jamo);
-    const correct = jamo === mCurrent.targetJamo;
-    if (correct) playSuccess(); else playError();
-    const key = mCurrent.id;
-    const cur = consecutiveRef.current.get(key) ?? 0;
-    const next = correct ? cur + 1 : 0;
-    consecutiveRef.current.set(key, next);
-    if (correct) await markMistakePassed(mCurrent.id, next, user?.id);
-  };
-
-  const handleMistakeNext = () => {
-    if (mIdx + 1 >= mistakeQueue.length) {
-      playComplete();
-      router.push('/phonetics');
-      return;
-    }
-    setMIdx(mIdx + 1);
-    setMPicked(null);
-  };
-
-  // ─── SRS 模式 ───
-  const [sIdx, setSIdx] = useState(0);
-  const sCurrent = srsQueue[sIdx];
-  const sLetter = sCurrent ? all.find((l) => l.jamo === sCurrent.jamo) : null;
-
-  const handleSrsRate = async (quality: 0 | 3 | 5) => {
-    if (!sCurrent) return;
-    await updatePhoneticSrs(sCurrent.jamo, quality, user?.id);
-    if (sIdx + 1 >= srsQueue.length) {
-      playComplete();
-      router.push('/phonetics');
-      return;
-    }
-    setSIdx(sIdx + 1);
-  };
-
-  // ─── 渲染 ───
-
-  const queue = mode === 'mistakes' ? mistakeQueue : srsQueue;
-  const queueIdx = mode === 'mistakes' ? mIdx : sIdx;
-  const queueTotal = queue.length;
-  const donePct = queueTotal > 0 ? Math.round((queueIdx / queueTotal) * 100) : 0;
+  // Push card: most recent practice item
+  const pushItem = recent.length > 0 ? recent[0] : null;
+  const pushMeta = pushItem ? MODES.find(m => m.key === pushItem.mode) : null;
 
   return (
-    <div className="sr-shell">
-    <div className="sr-main">
-    <div style={{ maxWidth: 640, margin: '0 auto', padding: '0 16px 96px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 0' }}>
-        <button onClick={smartBack} aria-label={t('phonetics.review_exit_aria', lang)} style={iconBtn}><ArrowLeft size={18} /></button>
-        <div style={{ fontFamily: 'ui-monospace, monospace', fontSize: 11, letterSpacing: '.2em', textTransform: 'uppercase', color: 'var(--color-ink-3)' }}>
-          {mode === 'mistakes' ? t('phonetics.review_mode_mistakes', lang) : t('phonetics.review_mode_srs', lang)}
+    <div className="pr-scope">
+      <MobileRedirect to="/practice-v2" />
+      <PlaceIntro place="practice" dark={theme === 'dark'} />
+      <div className="hr-stage">
+        <div className="hr-mobile-back">
+          <button className="hr-mobile-back-btn" onClick={smartBack} aria-label={t('practice.back', lang)}>
+            <ArrowLeft size={14} /> {t('practice.back', lang)}
+          </button>
         </div>
-        <div style={{ width: 44 }} />
-      </div>
 
-      {loading ? (
-        <div style={{ textAlign: 'center', padding: 48, color: 'var(--color-ink-3)' }}>{t('phonetics.review_loading', lang)}</div>
-      ) : mode === 'mistakes' ? (
-        mistakeQueue.length === 0 ? (
-          <EmptyState text={t('phonetics.review_empty_mistakes', lang)} />
-        ) : !mTarget ? <EmptyState text={t('phonetics.review_bad_mistake_data', lang)} /> : (
-          <div>
-            <ProgressBar cur={mIdx + 1} total={mistakeQueue.length} />
-            <div style={{ textAlign: 'center', marginBottom: 16, fontSize: 13, color: 'var(--color-ink-3)' }}>
-              {t('phonetics.review_mistake_recap_1', lang)} <b style={{ color: 'var(--color-status-danger)' }}>{mCurrent.targetJamo}</b> {t('phonetics.review_mistake_recap_2', lang)} <b style={{ color: 'var(--color-ink-1)' }}>{mCurrent.wrongJamo}</b> {t('phonetics.review_mistake_recap_3', lang, { n: mCurrent.wrongCount })}
+        {/* ── 品牌抬头 ── */}
+        <header className="hr-page-head">
+          <div className="hr-brand">
+            <div className="hr-brand-mark">Tori</div>
+            <div className="hr-brand-kr">연습</div>
+            <div className="hr-brand-sub">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2c1 4-2 5-2 8a2 2 0 0 0 4 0c0-1 1-2 1-2 2 2 3 4 3 6a6 6 0 0 1-12 0c0-4 4-6 6-12Z" />
+              </svg>
+              {t('practice.streak_n_days', lang, { n: streak })}
+            </div>
+          </div>
+          <div className="hr-brand-sub" data-md-show>{t('practice.brand_tagline', lang)}</div>
+        </header>
+
+        {/* ── 分段控件 ── */}
+        <div className="pr-seg" role="tablist" aria-label={t('practice.center', lang)}>
+          <button
+            role="tab"
+            aria-selected={tab === 'mode'}
+            className={tab === 'mode' ? 'on' : ''}
+            onClick={() => switchTab('mode')}
+          >
+            {t('practice.tab_today', lang)}
+          </button>
+          <button
+            role="tab"
+            aria-selected={tab === 'mistakes'}
+            className={tab === 'mistakes' ? 'on' : ''}
+            onClick={() => switchTab('mistakes')}
+          >
+            {t('practice.tab_mistakes', lang)}
+          </button>
+        </div>
+
+        {/* ── 今日训练 ── */}
+        {tab === 'mode' && !loaded && <SkeletonBlock rows={4} />}
+
+        {tab === 'mode' && loaded && (
+          <div className="pr-hub-layout">
+            <div className="pr-hub-col">
+          <div className="pr-screen">
+            {/* Ring chart hero */}
+            <div className="pr-dash">
+              <div className="pr-ring">
+                <svg width="80" height="80" viewBox="0 0 80 80">
+                  <circle cx="40" cy="40" r={r} fill="none" stroke="var(--hr-border-1)" strokeWidth="8" />
+                  <circle
+                    cx="40" cy="40" r={r} fill="none"
+                    stroke={pct >= 100 ? 'var(--hr-good)' : 'var(--hr-coral)'}
+                    strokeWidth="8"
+                    strokeDasharray={circumference}
+                    strokeDashoffset={dashoffset}
+                    strokeLinecap="round"
+                    transform="rotate(-90 40 40)"
+                    style={{ transition: 'stroke-dashoffset .6s cubic-bezier(.22,1,.36,1), stroke .4s' }}
+                  />
+                </svg>
+                <div className="pr-ring-txt">
+                  <b>{modesDone}</b><s>/{goal}</s>
+                </div>
+              </div>
+              <div className="pr-dash-body">
+                <div className="pr-dash-hi">{t('practice.trained_n_today', lang, { n: modesDone })}</div>
+                <div className="pr-dash-line">
+                  {pct >= 100
+                    ? t('practice.goal_all_done', lang)
+                    : t('practice.goal_n_remain', lang, { n: remaining })}
+                </div>
+                <div className="pr-dash-stats">
+                  <div className="pr-dash-stat">
+                    <b className="fire">{streak}</b>
+                    <s>{t('practice.stat_streak', lang)}</s>
+                  </div>
+                  <div className="pr-dash-stat">
+                    <b>{weeklyTotal}</b>
+                    <s>{t('practice.stat_week', lang)}</s>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div style={{ marginBottom: 24, textAlign: 'center' }}>
-              <button onClick={onPlayMistake} aria-label={t('phonetics.review_play_audio_aria', lang)} style={{
-                width: 88, height: 88, borderRadius: '50%', border: 'none',
-                background: 'linear-gradient(135deg, var(--color-pink-base), var(--color-peach-base))',
-                color: '#fff', cursor: 'pointer',
-                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: '0 6px 20px rgba(255,127,168,.3)',
-              }}><Volume2 size={32} /></button>
-            </div>
+            {/* Push card · 接着练下去 */}
+            {pushItem && pushMeta && (
+              <Link href={pushItem.href} className={`pr-push ${pushMeta.tone}`}>
+                <div className="pr-push-ico">
+                  <ModeIcon mode={pushMeta.key} />
+                </div>
+                <div className="pr-push-tag">{t('practice.last_half_done', lang)}</div>
+                <div className="pr-push-t">{t(pushMeta.name, lang)}<span className="kr">{pushMeta.kr}</span></div>
+                <div className="pr-push-d">{t('practice.resume_hint', lang, { meta: pushItem.meta })}</div>
+                <div className="pr-push-cta">
+                  {t('practice.continue_btn', lang)}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
+                  </svg>
+                </div>
+              </Link>
+            )}
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, maxWidth: 420, margin: '0 auto' }}>
-              {mOptions.map((opt) => {
-                const isCorrect = opt.jamo === mCurrent.targetJamo;
-                const isPicked = mPicked === opt.jamo;
-                let bg = 'var(--color-surface-2)';
-                let border = '2px solid var(--color-border-2)';
-                if (mPicked) {
-                  if (isCorrect) { bg = 'var(--color-mint-soft)'; border = '2px solid var(--color-status-success)'; }
-                  else if (isPicked) { bg = 'var(--color-pink-soft)'; border = '2px solid var(--color-status-danger)'; }
-                }
+            {/* 全部练习 */}
+            <div className="pr-sec">
+              <div className="pr-sec-t">{t('practice.all_modes', lang)}</div>
+            </div>
+            <div className="pr-rows">
+              {MODES.map(m => {
+                const done = doneOf(m.key, stats);
+                const metric = modeMetric(m.key, stats, lang);
                 return (
-                  <button key={opt.jamo} onClick={() => handleMistakePick(opt.jamo)} disabled={!!mPicked} style={{
-                    fontWeight: 700, fontSize: 42, padding: '20px 16px',
-                    background: bg, border, borderRadius: 16,
-                    color: 'var(--color-ink-1)',
-                    cursor: mPicked ? 'default' : 'pointer',
-                    transition: 'all .2s',
-                  }}>{opt.jamo}</button>
+                  <Link key={m.key} href={m.href} className={`pr-row ${m.tone}`}>
+                    <div className="pr-row-ico">
+                      <ModeIcon mode={m.key} />
+                    </div>
+                    <div className="pr-row-body">
+                      <div className="pr-row-t">{t(m.name, lang)}<span className="kr">{m.kr}</span></div>
+                      <div className="pr-row-d">{t(m.desc, lang)}</div>
+                    </div>
+                    {!done && metric && (
+                      <div className="pr-row-meta">
+                        <b>{metric.value}</b>
+                        <s>{metric.label}</s>
+                      </div>
+                    )}
+                    {done && (
+                      <div className="pr-row-done">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="m5 13 4 4L19 7" />
+                        </svg>
+                      </div>
+                    )}
+                  </Link>
                 );
               })}
             </div>
+          </div>
+            </div>
+            <HubRail stats={stats} recent={recent} loggedIn={!!user?.id} lang={lang} />
+          </div>
+        )}
 
-            {mPicked && (
-              <div style={{ marginTop: 20, textAlign: 'center' }}>
-                <button onClick={handleMistakeNext} style={{
-                  padding: '12px 24px', fontSize: 15, fontWeight: 500,
-                  borderRadius: 12, border: 'none', cursor: 'pointer',
-                  background: 'var(--color-pink-base)', color: '#fff',
-                }}>{mIdx + 1 >= mistakeQueue.length ? t('phonetics.review_done_to_overview', lang) : t('phonetics.review_next', lang)}</button>
+        {/* ── 错题本 ── */}
+        {tab === 'mistakes' && (
+          <div className="pr-hub-layout">
+            <div className="pr-hub-col">
+              <div className="pr-screen">
+                <MistakesTab loggedIn={!!user?.id} lang={lang} />
               </div>
-            )}
+            </div>
+            <HubRail stats={stats} recent={recent} loggedIn={!!user?.id} lang={lang} />
           </div>
-        )
-      ) : (
-        srsQueue.length === 0 ? (
-          <EmptyState text={t('phonetics.review_empty_srs', lang)} />
-        ) : !sLetter ? <EmptyState text={t('phonetics.review_bad_letter_data', lang)} /> : (
-          <div>
-            <ProgressBar cur={sIdx + 1} total={srsQueue.length} />
-            <FlashCard letter={sLetter} stage={sCurrent.stage} onRate={handleSrsRate} />
-          </div>
-        )
-      )}
+        )}
+      </div>
     </div>
-    </div>
+  );
+}
 
-    {/* ── 桌面专属右栏（复习速览，非 stage 流程） ── */}
-    <aside className="sr-rail" aria-label={t('phonetics.review_rail_aria', lang)}>
-      <div className="sr-card">
-        <div className="sr-card-title"><Clock3 size={13} className="sr-ico" /> {t('phonetics.review_rail_this_session', lang)}</div>
-        <div className="sr-ring-wrap" style={{ marginTop: 4 }}>
-          <div className="sr-ring">
-            <svg width="76" height="76" viewBox="0 0 76 76">
-              <circle className="sr-ring-track" cx="38" cy="38" r="32" fill="none" strokeWidth="6" />
-              <circle className="sr-ring-fill" cx="38" cy="38" r="32" fill="none" strokeWidth="6"
-                strokeDasharray={2 * Math.PI * 32} strokeDashoffset={2 * Math.PI * 32 * (1 - donePct / 100)} />
-            </svg>
-            <div className="sr-ring-num">{donePct}%</div>
-          </div>
-          <div className="sr-ring-meta">
-            {queueTotal > 0 ? <>{t('phonetics.review_ring_done', lang)} <b>{Math.min(queueIdx + 1, queueTotal)}</b> / {queueTotal}<br />{mode === 'mistakes' ? t('phonetics.review_ring_unit_mistakes', lang) : t('phonetics.review_ring_unit_srs', lang)}</> : t('phonetics.review_ring_empty', lang)}
-          </div>
+/* ═════ HELPERS ═════ */
+
+function doneOf(key: PracticeMode, stats: PracticeStats | null): boolean {
+  if (!stats) return false;
+  return stats[key].doneToday;
+}
+
+function modeMetric(key: PracticeMode, stats: PracticeStats | null, _lang: Lang): { value: string; label: string } | null {
+  if (!stats) return null;
+  switch (key) {
+    case 'listening':
+      if (!stats.listening.today && !stats.listening.total) return null;
+      return { value: String(stats.listening.total), label: _lang === 'zh' ? '次' : 'times' };
+    case 'dictation':
+      return { value: stats.dictation.total ? `${stats.dictation.accuracy}%` : '–', label: _lang === 'zh' ? '准确率' : 'accuracy' };
+    case 'writing':
+      if (!stats.writing.total) return null;
+      return { value: String(stats.writing.total), label: _lang === 'zh' ? '篇' : 'pieces' };
+    case 'typing':
+      if (!stats.typing.bestWpm) return null;
+      return { value: String(stats.typing.bestWpm), label: 'WPM' };
+  }
+}
+
+/* ═════ INLINE SVG ICONS ═════ */
+
+function ModeIcon({ mode }: { mode: PracticeMode }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" style={{ width: '100%', height: '100%' }}>
+      {mode === 'listening' && (
+        <>
+          <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+          <path d="M12 19v3" />
+        </>
+      )}
+      {mode === 'dictation' && (
+        <>
+          <path d="M11 5 6 9H2v6h4l5 4V5Z" />
+          <path d="M15.5 8.5a5 5 0 0 1 0 7" />
+        </>
+      )}
+      {mode === 'writing' && (
+        <>
+          <path d="M12 20h9" />
+          <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
+        </>
+      )}
+      {mode === 'typing' && (
+        <>
+          <rect x="2" y="6" width="20" height="12" rx="2" />
+          <path d="M6 10h.01M10 10h.01M14 10h.01M8 14h8" />
+        </>
+      )}
+    </svg>
+  );
+}
+
+/* ═════ DESKTOP RAIL ═════ */
+
+const RAIL_MODES: { key: PracticeMode; name: string; kr: string; tone: string; href: string }[] = [
+  { key: 'listening', name: 'practice.short_speaking',  kr: '말하기',    tone: 'speak', href: '/speaking' },
+  { key: 'dictation', name: 'practice.short_dictation', kr: '받아쓰기',  tone: 'dict',  href: '/dictation' },
+  { key: 'writing',   name: 'practice.short_writing',   kr: '쓰기',      tone: 'write', href: '/writing' },
+  { key: 'typing',    name: 'practice.short_typing',    kr: '타자',      tone: 'type',  href: '/typing' },
+];
+
+function HubRail({ stats, recent, loggedIn, lang }: { stats: PracticeStats | null; recent: PracticeRow[]; loggedIn: boolean; lang: Lang }) {
+  return (
+    <aside className="pr-hub-rail" aria-label={t('practice.rail_aria', lang)}>
+      <div className="pr-hub-card">
+        <div className="pr-hub-card-title">{t('practice.today_checkin', lang)}</div>
+        <div className="pr-hub-tasks">
+          {RAIL_MODES.map(m => {
+            const done = stats ? stats[m.key].doneToday : false;
+            return (
+              <Link key={m.key} href={m.href} className={`pr-hub-task${done ? ' done' : ''}`}>
+                <span className="pr-hub-task-ico" aria-hidden>
+                  {done ? (
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m5 13 4 4L19 7"/></svg>
+                  ) : (
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/></svg>
+                  )}
+                </span>
+                <span className="pr-hub-task-name">{t(m.name, lang)}</span>
+                <span className="pr-hub-task-kr">{m.kr}</span>
+                <span className="pr-hub-task-state">{done ? t('practice.done', lang) : t('practice.todo', lang)}</span>
+              </Link>
+            );
+          })}
         </div>
       </div>
 
-      <div className="sr-card">
-        <div className="sr-card-title"><Target size={13} className="sr-ico" /> {t('phonetics.review_switch_mode', lang)}</div>
-        <div className="sr-mode-tabs">
-          <button className={`sr-mode-tab${mode === 'mistakes' ? ' active' : ''}`}
-            onClick={() => { if (mode !== 'mistakes') router.push('/phonetics/step/practice?mode=mistakes'); }}>
-            {t('phonetics.review_mode_mistakes', lang)}<span className="sr-mode-en">Mistakes</span>
-          </button>
-          <button className={`sr-mode-tab${mode === 'srs' ? ' active' : ''}`}
-            onClick={() => { if (mode !== 'srs') router.push('/phonetics/step/practice?mode=srs'); }}>
-            {t('phonetics.review_mode_srs', lang)}<span className="sr-mode-en">Review</span>
-          </button>
-        </div>
+      <div className="pr-hub-card pr-hub-recent-card">
+        <div className="pr-hub-card-title">{t('practice.recent', lang)}</div>
+        {!loggedIn ? (
+          <div className="pr-hub-empty">{t('practice.rail_login', lang)}</div>
+        ) : recent.length === 0 ? (
+          <div className="pr-hub-empty">{t('practice.rail_empty', lang)}</div>
+        ) : (
+          <div className="pr-hub-recent">
+            {recent.map(r => {
+              const meta = RAIL_MODES.find(m => m.key === r.mode);
+              return (
+                <Link key={r.id} href={r.href} className="pr-hub-recent-row">
+                  <span className={`pr-hub-recent-chip ${meta?.tone ?? 'type'}`}>{meta ? t(meta.name, lang) : t('practice.generic', lang)}</span>
+                  <div className="pr-hub-recent-body">
+                    <div className="pr-hub-recent-meta">{r.meta}</div>
+                    <div className="pr-hub-recent-time">{fmtTime(r.timestamp, lang)}</div>
+                  </div>
+                  <span className="pr-hub-recent-score">{r.scoreText}</span>
+                </Link>
+              );
+            })}
+          </div>
+        )}
       </div>
     </aside>
+  );
+}
+
+/* ═════ MISTAKES TAB ═════ */
+
+interface MistakeGroup { korean: string; meaning: string; wrongCount: number; lastWrongAt: number; }
+
+function MistakesTab({ loggedIn, lang }: { loggedIn: boolean; lang: Lang }) {
+  const [mistakes, setMistakes] = useState<MistakeGroup[] | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!loggedIn) { setLoading(false); return; }
+    let cancelled = false;
+    (async () => {
+      try {
+        const { db } = await import('@/lib/db');
+        const wrong = await db.dictationRecords.filter(r => !r.correct);
+        const grouped: Record<string, MistakeGroup> = {};
+        for (const r of wrong) {
+          const key = r.wordId;
+          if (!grouped[key]) grouped[key] = { korean: key, meaning: r.meaning || '', wrongCount: 0, lastWrongAt: 0 };
+          grouped[key].wrongCount += 1;
+          if (r.date > grouped[key].lastWrongAt) grouped[key].lastWrongAt = r.date;
+        }
+        const sorted = Object.values(grouped).sort((a, b) => b.wrongCount - a.wrongCount);
+        if (!cancelled) setMistakes(sorted);
+      } catch {
+        if (!cancelled) setMistakes([]);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [loggedIn]);
+
+  if (!loggedIn) {
+    return (
+      <div className="pr-empty">
+        <div className="pr-empty-icon">🔒</div>
+        <div className="pr-empty-title">{t('practice.mistakes_login_title', lang)}</div>
+        <div className="pr-empty-desc">{t('practice.mistakes_login_desc', lang)}</div>
+        <Link href="/auth/login?redirect=/practice?tab=mistakes" className="pr-empty-cta">{t('practice.go_login', lang)}</Link>
+      </div>
+    );
+  }
+  if (loading) return <SkeletonBlock rows={5} />;
+  if (!mistakes || mistakes.length === 0) {
+    return (
+      <div className="pr-empty">
+        <div className="pr-empty-icon">🎉</div>
+        <div className="pr-empty-title">{t('practice.no_mistakes', lang)}</div>
+        <div className="pr-empty-desc">{t('practice.no_mistakes_desc', lang)}</div>
+        <Link href="/dictation" className="pr-empty-cta">{t('practice.go_dictation', lang)}</Link>
+      </div>
+    );
+  }
+
+  return (
+    <div className="pr-recent-list">
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+        <div style={{ fontFamily: 'var(--hr-mono)', fontSize: 10.5, letterSpacing: '.16em', color: 'var(--hr-ink-3)', textTransform: 'uppercase' }}>
+          {t('practice.words_need_work', lang, { n: mistakes.length })}
+        </div>
+        <Link href="/mine/mistakes?tab=dictation" style={{ fontFamily: 'var(--hr-sans)', fontSize: 12, color: 'var(--hr-write)', textDecoration: 'none', fontWeight: 600 }}>
+          {t('practice.mistake_practice', lang)} ›
+        </Link>
+      </div>
+      {mistakes.slice(0, 30).map(m => (
+        <Link key={m.korean} href="/mine/mistakes?tab=dictation" className="pr-recent-row">
+          <span className="pr-recent-chip dict">{t('practice.short_dictation', lang)}</span>
+          <div className="pr-recent-body">
+            <div className="pr-recent-title" style={{ fontFamily: 'var(--hr-hangul)', fontSize: 15 }}>{m.korean}</div>
+            <div className="pr-recent-meta">{m.meaning || '—'}</div>
+          </div>
+          <div className="pr-recent-score">×{m.wrongCount}</div>
+        </Link>
+      ))}
     </div>
   );
 }
 
-function EmptyState({ text }: { text: string }) {
-  const { lang } = useLang();
-  const smartBack = useSmartBack('/phonetics');
-  return (
-    <div style={{
-      background: 'var(--color-surface-2)',
-      border: '1px solid var(--color-border-1)',
-      borderRadius: 'var(--radius-md)',
-      padding: 32, textAlign: 'center',
-      color: 'var(--color-ink-3)', fontSize: 14, lineHeight: 1.6,
-    }}>
-      {text}
-      <div style={{ marginTop: 16 }}>
-        <button onClick={smartBack} style={{
-          display: 'inline-block', padding: '10px 20px',
-          background: 'var(--color-pink-base)', color: '#fff',
-          borderRadius: 10, textDecoration: 'none', fontSize: 14, fontWeight: 500,
-        }}>{t('phonetics.review_back_to_overview', lang)}</button>
-      </div>
-    </div>
-  );
-}
+/* ═════ SKELETON ═════ */
 
-function ProgressBar({ cur, total }: { cur: number; total: number }) {
-  const { lang } = useLang();
+function SkeletonBlock({ rows }: { rows: number }) {
   return (
-    <div style={{ marginBottom: 24 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: 'var(--color-ink-3)', fontFamily: 'ui-monospace, monospace', marginBottom: 6 }}>
-        <span>{t('phonetics.review_progress', lang, { cur, total })}</span>
-      </div>
-      <div style={{ height: 6, background: 'var(--color-surface-4)', borderRadius: 3, overflow: 'hidden' }}>
-        <div style={{
-          height: '100%', width: `${(cur / total) * 100}%`,
-          background: 'linear-gradient(90deg, var(--color-pink-base), var(--color-peach-base))',
-          transition: 'width .4s ease',
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      {Array.from({ length: rows }).map((_, i) => (
+        <div key={i} style={{
+          height: 60, borderRadius: 12, background: 'var(--hr-surface-3)',
+          border: '1px solid var(--hr-border-1)', opacity: .6,
         }} />
-      </div>
+      ))}
     </div>
-  );
-}
-
-export default function PracticePage() {
-  const { lang } = useLang();
-  return (
-    <Suspense fallback={<div style={{ padding: 24 }}>{t('phonetics.review_loading', lang)}</div>}>
-      <PracticeInner />
-    </Suspense>
   );
 }

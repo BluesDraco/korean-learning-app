@@ -6,23 +6,25 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
   LayoutDashboard, DollarSign, Users, FileText, Activity, Mail,
-  ShieldAlert, LogOut, Home, Menu, X, Music, MessageSquare, Video,
-  Crown, Package, Gift, BarChart2, Star,
+  ShieldAlert, LogOut, Home, Menu, X, BarChart2, BookOpen, Award, Images, Crown, Gift, Star, Beaker,
 } from 'lucide-react';
 
 const navItems = [
   { href: '/admin/dashboard', label: '仪表盘', icon: LayoutDashboard },
   { href: '/admin/revenue', label: '收入中心', icon: DollarSign },
   { href: '/admin/membership', label: '会员管理', icon: Crown },
-  { href: '/admin/lifetime-gifts', label: '永久礼盒', icon: Package },
   { href: '/admin/invite', label: '邀请裂变', icon: Gift },
   { href: '/admin/users', label: '用户管理', icon: Users },
   { href: '/admin/users/registrations', label: '注册分析', icon: BarChart2 },
   { href: '/admin/ambassadors', label: '学习大使', icon: Star },
   { href: '/admin/content', label: '内容管理', icon: FileText },
-  { href: '/admin/shadowing', label: '影子跟读', icon: Video },
-  { href: '/admin/feedback', label: '用户反馈', icon: MessageSquare },
+  { href: '/admin/diary-health', label: '日记数据健康', icon: BookOpen },
+  { href: '/admin/diary-images', label: '日记图片总览', icon: Images },
+  { href: '/admin/blog-images', label: '博客图片总览', icon: Images },
+  { href: '/admin/reading-images', label: '阅读主题图', icon: Images },
+  { href: '/admin/blog-review', label: '动物城评选', icon: Award },
   { href: '/admin/messages', label: '消息中心', icon: Mail },
+  { href: '/admin/v2-test', label: 'V2 测试入口', icon: Beaker },
   { href: '/admin/system', label: '系统监控', icon: Activity },
 ];
 
@@ -46,7 +48,7 @@ function SidebarContent({ pathname, onNavClick, onLogout }: { pathname: string; 
         <p className="text-xs text-[var(--text-muted)] mt-2">今天的数据都在这里，토리帮你看着 🐰</p>
       </div>
 
-      <nav className="flex-1 px-3 py-4 space-y-1">
+      <nav className="flex-1 min-h-0 overflow-y-auto px-3 py-4 space-y-1">
         {navItems.map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
           return (
@@ -129,7 +131,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     <div className="min-h-screen flex" style={{ background: 'var(--bg-soft)' }}>
       {/* Desktop sidebar */}
       <aside
-        className="hidden lg:flex flex-col w-56 bg-[var(--bg-card)] border-r border-[var(--border-color)] shrink-0 min-h-screen sticky top-0 left-0"
+        className="hidden lg:flex flex-col w-56 bg-[var(--bg-card)] border-r border-[var(--border-color)] shrink-0 h-screen sticky top-0 left-0 overflow-hidden"
         style={{ boxShadow: '2px 0 12px rgba(0,0,0,0.04)' }}
       >
         <SidebarContent pathname={pathname} onLogout={handleLogout} />

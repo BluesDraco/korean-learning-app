@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { ArrowLeft, Heart, Loader2 } from 'lucide-react';
 import { db } from '@/lib/db';
 import { getProfile } from '@/lib/gamification';
+import { useToast } from '@/hooks/useToast';
 import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
 import type { BuddyRelation, UserProfile } from '@/types';
@@ -13,6 +14,7 @@ import type { BuddyRelation, UserProfile } from '@/types';
 export default function BuddyDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { lang } = useLang();
+  const { showToast } = useToast();
   const [loading, setLoading] = useState(true);
   const [relation, setRelation] = useState<BuddyRelation | null>(null);
   const [myProfile, setMyProfile] = useState<UserProfile | null>(null);
@@ -65,7 +67,7 @@ export default function BuddyDetailPage() {
       details: relation.id,
       xpEarned: 0,
       createdAt: Date.now(),
-    } as any).catch(() => {});
+    } as any).catch(() => { console.error('buddy cheer log failed'); showToast('Failed to send cheer', 'error'); });
     setTimeout(() => setCheered(false), 2000);
   };
 

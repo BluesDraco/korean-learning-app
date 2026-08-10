@@ -6,7 +6,7 @@ import Link from 'next/link';
 import {
   ArrowLeft, BookOpen, Target, Volume2, ChevronDown,
   Loader2, BarChart3, BookmarkPlus, CheckCircle, Layers, Check, Trash2, CheckSquare, Square, ListChecks,
-  Eye, EyeOff, MoreHorizontal,
+  Eye, EyeOff, MoreHorizontal, Languages,
 } from 'lucide-react';
 import type { YonseiUnit } from '@/data/yonsei-books';
 import { loadSeoulUnit, loadSeoulIndex, type UnitMeta } from '@/lib/dataLoader';
@@ -58,6 +58,20 @@ export default function SeoulUnitPage() {
     });
   };
 
+  const [showRn, setShowRn] = useState(true);
+
+  useEffect(() => {
+    try { if (localStorage.getItem('vocab_show_rn') === '0') setShowRn(false); } catch { /* ignore */ }
+  }, []);
+
+  const toggleRn = () => {
+    setShowRn(prev => {
+      const next = !prev;
+      try { localStorage.setItem('vocab_show_rn', next ? '1' : '0'); } catch { /* ignore */ }
+      return next;
+    });
+  };
+
   useEffect(() => {
     if (managing) document.body.setAttribute('data-batch-managing', '1');
     else document.body.removeAttribute('data-batch-managing');
@@ -84,7 +98,7 @@ export default function SeoulUnitPage() {
         const lSet = new Set(userWords.filter(uw => uw.mastery !== 'mastered' && uw.mastery !== 'new').map(uw => uw.word));
         setMasteredSet(mSet);
         setLearningSet(lSet);
-      } catch {}
+      } catch (e) { console.error('Failed to load unit word mastery', e); }
       finally { setLoading(false); }
     })();
   }, [unitId]);
@@ -93,7 +107,9 @@ export default function SeoulUnitPage() {
     if (savedSentenceIds.has(korean)) return;
     const existing = await db.sentences.where('korean').equals(korean).first().catch(() => null);
     if (!existing) {
-      await db.sentences.add({ id: crypto.randomUUID(), korean, chinese, source_type: 'vocabulary', source_id: 'seoul-' + unitId, source_title: sourceTitle, created_at: Date.now() }).catch(() => {});
+      let addFailed = false;
+      await db.sentences.add({ id: crypto.randomUUID(), korean, chinese, source_type: 'vocabulary', source_id: 'seoul-' + unitId, source_title: sourceTitle, created_at: Date.now() }).catch((e) => { console.error('saveSentence: failed to add sentence', korean, e); addFailed = true; });
+      if (addFailed) return;
     }
     setSavedSentenceIds((prev) => new Set(prev).add(korean));
   };
@@ -117,6 +133,7 @@ export default function SeoulUnitPage() {
   const toggleMastered = async (word: string, pronunciation: string, meaning: string, partOfSpeech: string, examples: { text: string; translation: string }[]) => {
     const now = Date.now();
     const wasMastered = masteredSet.has(word);
+    const wasLearning = learningSet.has(word);
     // 乐观更新：先立即变色，DB 失败再回滚
     if (wasMastered) {
       setMasteredSet(prev => { const s = new Set(prev); s.delete(word); return s; });
@@ -161,12 +178,12 @@ export default function SeoulUnitPage() {
       // 回滚
       if (wasMastered) {
         setMasteredSet(prev => new Set(prev).add(word));
-        setLearningSet(prev => { const s = new Set(prev); s.delete(word); return s; });
+        setLearningSet(prev => { const s = new Set(prev); if (wasLearning) s.add(word); else s.delete(word); return s; });
       } else {
         setMasteredSet(prev => { const s = new Set(prev); s.delete(word); return s; });
-        setLearningSet(prev => { const s = new Set(prev); s.delete(word); return s; });
+        setLearningSet(prev => { const s = new Set(prev); if (wasLearning) s.add(word); else s.delete(word); return s; });
       }
-      alert(t('vocab.err_check_login', lang));
+      alert(t('vocab.err_save_failed', lang));
     }
   };
 
@@ -233,22 +250,30 @@ export default function SeoulUnitPage() {
   const batchMaster = async () => {
     const now = Date.now();
     const allWords = unit?.words ?? [];
+    const succeeded = new Set<string>();
     for (const w of allWords.filter(fw => selectedWords.has(fw.word))) {
-      const existing = await db.words.where('word').equals(w.word).first();
-      if (existing) {
-        await db.words.update(existing.id, { mastery: 'mastered', srsLevel: 5, interval: 21, nextReview: now + 21 * 86400000, lastReviewed: now }).catch(() => {});
-      } else {
-        await db.words.put({
-          id: crypto.randomUUID(), word: w.word, pronunciation: w.pronunciation,
-          meaning: w.meaning, partOfSpeech: w.partOfSpeech,
-          examples: w.examples.map(ex => ({ text: ex.text, translation: ex.translation, source: 'manual' as const })),
-          mastery: 'mastered', srsLevel: 5, easeFactor: 2.5, interval: 21,
-          nextReview: now + 21 * 86400000, createdAt: now, lastReviewed: now, source: 'seoul',
-        }).catch(() => {});
+      try {
+        const existing = await db.words.where('word').equals(w.word).first();
+        if (existing) {
+          await db.words.update(existing.id, { mastery: 'mastered', srsLevel: 5, interval: 21, nextReview: now + 21 * 86400000, lastReviewed: now });
+        } else {
+          await db.words.put({
+            id: crypto.randomUUID(), word: w.word, pronunciation: w.pronunciation,
+            meaning: w.meaning, partOfSpeech: w.partOfSpeech,
+            examples: w.examples.map(ex => ({ text: ex.text, translation: ex.translation, source: 'manual' as const })),
+            mastery: 'mastered', srsLevel: 5, easeFactor: 2.5, interval: 21,
+            nextReview: now + 21 * 86400000, createdAt: now, lastReviewed: now, source: 'seoul',
+          });
+        }
+        succeeded.add(w.word);
+      } catch (e) {
+        console.error('batchMaster: failed to master', w.word, e);
       }
     }
-    setMasteredSet(prev => { const s = new Set(prev); selectedWords.forEach(w => s.add(w)); return s; });
-    setLearningSet(prev => { const s = new Set(prev); selectedWords.forEach(w => s.delete(w)); return s; });
+    if (succeeded.size > 0) {
+      setMasteredSet(prev => { const s = new Set(prev); succeeded.forEach(w => s.add(w)); return s; });
+      setLearningSet(prev => { const s = new Set(prev); succeeded.forEach(w => s.delete(w)); return s; });
+    }
     exitManage();
   };
 
@@ -270,7 +295,7 @@ export default function SeoulUnitPage() {
   if (!unit) {
     return (
       <div className="py-4 space-y-4">
-        <Link href="/vocabulary/library?tab=yonsei" className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
+        <Link href="/vocabulary/library?tab=seoul" className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
           <ArrowLeft size={16} /> {t('common.back', lang)}
         </Link>
         <div className="text-center py-20 text-sm text-[var(--text-muted)]">{t('vocab.unit_not_found', lang)}</div>
@@ -288,7 +313,7 @@ export default function SeoulUnitPage() {
       {/* Header */}
       <div style={{ marginBottom: 20 }}>
         <Link
-          href="/vocabulary/library?tab=yonsei"
+          href="/vocabulary/library?tab=seoul"
           style={{
             display: 'inline-flex', alignItems: 'center', gap: 6,
             fontSize: 13, color: 'var(--color-ink-2)', textDecoration: 'none',
@@ -429,7 +454,14 @@ export default function SeoulUnitPage() {
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-colors ${showCn ? 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)]' : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:border-[var(--pink-primary)]/30'}`}
                 >
                   {showCn ? <Eye size={12} /> : <EyeOff size={12} />}
-                  {showCn ? t('vocab.show_cn', lang) : t('vocab.hide_cn', lang)}
+                  {showCn ? t('vocab.hide_cn', lang) : t('vocab.show_cn', lang)}
+                </button>
+                <button
+                  onClick={toggleRn}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-colors ${showRn ? 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)]' : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:border-[var(--pink-primary)]/30'}`}
+                >
+                  <Languages size={12} />
+                  {showRn ? t('vocab.hide_rn', lang) : t('vocab.show_rn', lang)}
                 </button>
                 <button
                   onClick={() => { if (authLoading) return; if (!user) { router.push('/auth/login?redirect=' + window.location.pathname); return; } setAddAllBook(true); }}
@@ -493,7 +525,7 @@ export default function SeoulUnitPage() {
                 className={`bg-[var(--bg-card)] border rounded-xl overflow-hidden transition-colors ${isSelected ? 'border-[var(--mint-soft)] bg-[var(--mint-soft)]/5' : 'border-[var(--border-color)]'}`}
               >
                 <div className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-[var(--bg-card-hover)] transition-colors">
-                  {managing && !isMastered && (
+                  {managing && (
                     <div
                       className={`w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-colors cursor-pointer ${isSelected ? 'bg-[var(--mint-soft)] border-[var(--mint-soft)]' : 'border-[var(--border-color)] bg-white'}`}
                       onClick={() => toggleSelect(w.word)}
@@ -502,15 +534,15 @@ export default function SeoulUnitPage() {
                     </div>
                   )}
                   <button
-                    onClick={() => { if (managing && !isMastered) { toggleSelect(w.word); return; } setExpandedId(isExpanded ? null : w.word); }}
+                    onClick={() => { if (managing) { toggleSelect(w.word); return; } setExpandedId(isExpanded ? null : w.word); }}
                     className="flex-1 flex items-center gap-3 min-w-0 text-left"
                   >
                     <div className="flex-1 min-w-0">
                       <div className="flex items-baseline gap-2.5 min-w-0">
                         <span className="ko-text font-bold text-[var(--text-primary)] text-[19px] leading-tight whitespace-nowrap">{w.word}</span>
-                        <span className="min-w-0 truncate text-[12.5px] font-semibold tracking-wide text-[var(--pink-primary)]">
+                        {showRn && <span className="min-w-0 truncate text-[12.5px] font-semibold tracking-wide text-[var(--pink-primary)]">
                           [{displayRomanHyphen(w.pronunciation, w.word)}]
-                        </span>
+                        </span>}
                       </div>
                       <div className="flex items-center gap-2 mt-2 min-w-0">
                         {w.partOfSpeech && (
@@ -560,9 +592,6 @@ export default function SeoulUnitPage() {
                           <BookmarkPlus size={17} />
                         </button>
                       </>
-                    )}
-                    {managing && isMastered && (
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--mint-soft)]/10 text-[var(--mint-soft)]">{t('vocab.mastered', lang)}</span>
                     )}
                   </div>
                 </div>
@@ -649,7 +678,7 @@ export default function SeoulUnitPage() {
                 <button onClick={() => setDeletePending(false)} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[var(--bg-input)] text-[var(--text-secondary)] text-sm font-semibold">
                   {t('common.cancel', lang)}
                 </button>
-                <button onClick={batchDelete} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-red-500 text-white text-sm font-semibold">
+                <button onClick={batchDelete} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[var(--color-danger)] text-white text-sm font-semibold">
                   <Trash2 size={14} /> {t('vocab.confirm_delete_n', lang, { n: selectedWords.size })}
                 </button>
               </>
@@ -658,7 +687,7 @@ export default function SeoulUnitPage() {
                 <button onClick={batchMaster} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[var(--mint-soft)]/15 text-[var(--mint-soft)] text-sm font-semibold hover:bg-[var(--mint-soft)]/25 transition-colors">
                   <CheckCircle size={14} /> {t('vocab.mark_mastered_n', lang, { n: selectedWords.size })}
                 </button>
-                <button onClick={() => setDeletePending(true)} className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-red-50 text-red-500 text-sm font-semibold hover:bg-red-100 transition-colors">
+                <button onClick={() => setDeletePending(true)} className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-[var(--color-danger-bg)] text-[var(--color-danger)] text-sm font-semibold hover:brightness-95 transition-colors">
                   <Trash2 size={14} />
                 </button>
               </>
@@ -704,7 +733,7 @@ export default function SeoulUnitPage() {
                     </Link>
                   )}
                   <Link
-                    href="/vocabulary/library?tab=yonsei"
+                    href="/vocabulary/library?tab=seoul"
                     className="px-4 py-2 rounded-xl text-sm font-semibold bg-[var(--bg-input)] text-[var(--text-secondary)]"
                   >
                     {t('vocab.unit_back_seoul', lang)}

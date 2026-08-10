@@ -148,6 +148,7 @@ export default function ResetPasswordPage() {
                         {countdown > 0 ? t('auth.code_resend', lang, { n: String(countdown) }) : t('auth.code_send', lang)}
                       </button>
                     </div>
+                    <p className="auth-code-hint">{t('auth.code_spam_hint', lang)}</p>
                   </div>
 
                   <div className="auth-field">

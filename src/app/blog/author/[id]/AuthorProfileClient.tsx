@@ -55,7 +55,7 @@ export default function AuthorProfileClient({
     const next = !following;
     setFollowing(next);
     setFollowers((n) => Math.max(0, n + (next ? 1 : -1)));
-    showToast(next ? '关注成功 ✓' : '已取消关注');
+    showToast(next ? t('blog.reader_followed', lang) : t('blog.reader_unfollowed', lang));
     try {
       const res = await fetch('/api/blog/follow', {
         method: 'POST',
@@ -73,20 +73,22 @@ export default function AuthorProfileClient({
     }
   }, [following, author.id, showToast, lang]);
 
-  // 点赞/收藏：乐观切换 + 落库 + 失败回滚（复用 feed 的 react 语义：快照整表回滚）
+  // 点赞/收藏：乐观切换 + 落库 + 失败回滚（定位回滚，不碰并发追加的新帖）
   const react = useCallback(
     async (postId: string, patch: { liked?: boolean } | { saved?: boolean }) => {
-      const prev = posts;
+      const key = 'liked' in patch ? 'liked' : 'saved';
+      const original = posts.find((p) => p.id === postId)?.[key];
       setPosts((cur) => cur.map((p) => (p.id === postId ? { ...p, ...patch } : p)));
+      const rollback = () => setPosts((cur) => cur.map((p) => (p.id === postId ? { ...p, [key]: original } : p)));
       try {
         const res = await fetch('/api/blog/react', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ postId, ...patch }),
         });
-        if (!res.ok) setPosts(prev);
+        if (!res.ok) rollback();
       } catch {
-        setPosts(prev);
+        rollback();
       }
     },
     [posts],
@@ -168,7 +170,7 @@ export default function AuthorProfileClient({
           )}
           {hasMore && (
             <button type="button" className="blog-author-more" onClick={() => void loadMore()} disabled={loadingMore}>
-              {loadingMore ? '加载中…' : '查看更多'}
+              {loadingMore ? t('blog.loading', lang) : t('blog.load_more', lang)}
             </button>
           )}
         </div>

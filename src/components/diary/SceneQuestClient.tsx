@@ -52,12 +52,15 @@ export default function SceneQuestClient({ data }: { data: SceneSubQuestData }) 
   const persist = usePersistResult(data.level, data.day, data.idx, data.kind);
 
   const [epoch, setEpoch] = useState(0);
-  // 按题型分组内乱序，保持"情景应答 → 对话填空 → 语境判断"能力递进
-  const shuffledTasks = useMemo(() => {
+  // 按题型分组内乱序，保持"情景应答 → 对话填空 → 语境判断"能力递进。
+  // 用 ref 渲染期缓存，仅在 epoch(重试信号) 变化时重洗一次。
+  // 不用 useMemo：缓存会被 React 丢弃重算，做题中途题目突变。
+  const shufRef = useRef<{ sig: number; src: typeof data.tasks; arr: typeof data.tasks } | null>(null);
+  if (!shufRef.current || shufRef.current.sig !== epoch || shufRef.current.src !== data.tasks) {
     const order: SceneTask['type'][] = ['situation', 'dialogue', 'context'];
-    return order.flatMap((tp) => shuffle(data.tasks.filter((tk) => tk.type === tp)));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data.tasks, epoch]);
+    shufRef.current = { sig: epoch, src: data.tasks, arr: order.flatMap((tp) => shuffle(data.tasks.filter((tk) => tk.type === tp))) };
+  }
+  const shuffledTasks = shufRef.current.arr;
 
   const carrots = Math.max(0, 3 - wrongCount);
   const xp = logs.filter(l => l.isCorrect).length * 10;
@@ -172,8 +175,6 @@ export default function SceneQuestClient({ data }: { data: SceneSubQuestData }) 
     setTaskIdx(target);
     setLockedChoice(null);
     setWrongAttempts(0);
-    setWrongCount(0);
-    setLogs([]);
     setDone(false);
     firstWrongRef.current = false;
     startRef.current = Date.now();
@@ -373,8 +374,14 @@ function TaskView({
         <div className="subquest-feedback" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 8 }}>
           <div style={{ display: 'flex', gap: 8 }}>
             <RotateCcw size={14} style={{ flexShrink: 0, marginTop: 2 }} />
-            <span>{t('diary.scene.outOfChances', lang, { answer: correctText })}{task.explain ? ` · ${task.explain}` : ''}</span>
+            <span>{t('diary.scene.outOfChances', lang, { answer: correctText })}</span>
           </div>
+          {task.explain && (
+            <div style={{ width: '100%', paddingTop: 8, borderTop: '1px dashed color-mix(in srgb, var(--stamp) 25%, transparent)' }}>
+              <div style={{ fontSize: 11, color: 'var(--ink-3)', letterSpacing: '.06em', marginBottom: 4 }}>💡 {t('diary.sqs.explainLabel', lang)}</div>
+              <div style={{ fontSize: 13, color: 'var(--ink-2)', lineHeight: 1.7 }}>{task.explain}</div>
+            </div>
+          )}
           <button className="subquest-retry-btn" style={{ alignSelf: 'flex-end' }} onClick={onContinueWrong}>
             {t('diary.scene.gotItContinue', lang)}
           </button>

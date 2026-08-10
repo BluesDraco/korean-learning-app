@@ -42,6 +42,7 @@ export default function ReadingPractice({ words, step }: { words: ReadingWord[];
     if (!passThreshold) return;
     addedRef.current = true;
     (async () => {
+      try {
       const now = Date.now();
       let count = 0;
       for (const w of words) {
@@ -70,6 +71,7 @@ export default function ReadingPractice({ words, step }: { words: ReadingWord[];
         }
       }
       setWordsAdded(count);
+      } catch { addedRef.current = false; }
     })();
   }, [practiceComplete, practiceCorrect, words]);
 

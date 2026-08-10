@@ -1,14 +1,14 @@
 'use client';
 
 import { useEffect, useState, useCallback, useRef, Suspense } from 'react';
-import { Loader2, ArrowLeft, Volume2, PenLine, ChevronRight, Shuffle, Eye, EyeOff, Undo2 } from 'lucide-react';
+import { Loader2, ArrowLeft, Volume2, PenLine, ChevronRight, Shuffle, Eye, EyeOff, Undo2, Keyboard } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useSmartBack } from '@/lib/useSmartBack';
 import { db } from '@/lib/db';
 import { calculateSRS } from '@/lib/srs';
-import { speak, speakBrowser, cancelSpeech, speakWord } from '@/lib/tts';
-import { getTodayLog, updateTodayLog, awardXp } from '@/lib/gamification';
+import { speak, speakBrowser, cancelSpeech, speakWord, playAudioUrl } from '@/lib/tts';
+import { getTodayLog, updateTodayLog, awardXp, recordElapsedMinutes, updateStreak } from '@/lib/gamification';
 import { useAuth } from '@/components/AuthProvider';
 import { useToast } from '@/hooks/useToast';
 
@@ -24,12 +24,12 @@ import { TappableText } from '@/components/TappableText';
 import { getEntry, getEntryByKorean } from '@/data/vocabulary/index';
 import { useLang } from '@/components/LangProvider';
 import { useIsDesktop } from '@/lib/useIsMobile';
+import { FloatingKoreanKeyboard } from '@/components/FloatingKoreanKeyboard';
 import { t } from '@/lib/i18n';
 import { saveProgress, loadProgress, clearProgress, TTL_EXAM } from '@/lib/progress-storage';
 import { normalizeKorean } from '@/lib/koreanDiff';
 import { displayRoman } from '@/lib/dictionary';
 import { playCorrectSound, playWrongSound, playComplete } from '@/lib/audio/sfx';
-import type { KoZh } from '@/types/inline';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -37,7 +37,6 @@ type CardType = 'word' | 'sentence' | 'grammar';
 type RatingType = 'forgot' | 'fuzzy' | 'remember';
 
 interface FlashCard {
-  [k: string]: unknown;
   id: string;
   type: CardType;
   typeLabel: string;
@@ -140,7 +139,7 @@ async function dbWordToCard(w: any): Promise<FlashCard> {
   let meaning = w.meaning || w.chinese || '';
   const normExample = (s: string) => s.replace(/[.。?？!！]+\s*$/g, '').trim();
   const validExamples = (w.examples ?? []).filter((ex: any) => ex.text && ex.text !== '[object Object]' && ex.text.trim());
-  const collected: KoZh[] = [];
+  const collected: { ko: string; zh: string }[] = [];
   const seen = new Set<string>();
   for (const ex of validExamples.slice(0, 2)) {
     const ko = String(ex.text);
@@ -234,6 +233,8 @@ function ReviewContent() {
   const { showToast } = useToast();
   // 复习结果落库失败收口：断网/500 时逐卡写入会失败，整轮只弹一次提示，避免每卡刷屏。
   const saveFailedNotifiedRef = useRef(false);
+  const sessionStartRef = useRef(Date.now());
+  const timeRecordedRef = useRef(false);
   const notifySaveFailed = useCallback(() => {
     if (saveFailedNotifiedRef.current) return;
     saveFailedNotifiedRef.current = true;
@@ -262,6 +263,7 @@ function ReviewContent() {
   const [spellingIdx, setSpellingIdx] = useState(0);
   const [spellingInput, setSpellingInput] = useState('');
   const [spellingMode, setSpellingMode] = useState<'type' | 'hand'>('type');
+  const [showKeyboard, setShowKeyboard] = useState(false);
   const [spellingSubmitted, setSpellingSubmitted] = useState(false);
   const [spellingCorrectCount, setSpellingCorrectCount] = useState(0);
   const [spellingJudging, setSpellingJudging] = useState(false);
@@ -284,8 +286,6 @@ function ReviewContent() {
   const [sentenceGenError, setSentenceGenError] = useState(false);
   const [showHint, setShowHint] = useState(true);
 
-
-
   const hintKey = `review-hint-enabled:${user?.id ?? 'anon'}`;
   const progressKey = `review-progress:${user?.id ?? 'anon'}`;
 
@@ -303,7 +303,6 @@ function ReviewContent() {
   // 保存每张卡评分前的快照，用于"上一个词"回退
   type MasteryLevel = 'new' | 'learning' | 'reviewing' | 'mastered';
   interface RatingSnapshot {
-    [k: string]: unknown;
     dbId: string | undefined;
     prevSrsLevel: number;
     prevEase: number;
@@ -512,7 +511,8 @@ function ReviewContent() {
     if (loading || !current) return;
     window.scrollTo(0, 0);
     const raf = requestAnimationFrame(() => playAudioRef.current?.());
-    return () => cancelAnimationFrame(raf);
+    // 翻卡瞬间同步打断上一张的连读(含 gap 等待中的),不等下一帧 rAF——否则第二张会听到第一张的读音
+    return () => { cancelAnimationFrame(raf); cancelSpeech(); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIdx, loading, current]);
 
@@ -532,7 +532,7 @@ function ReviewContent() {
           body: JSON.stringify({ action: 'generate', word: sw.front, meaning: sw.meaning }),
         });
         if (cancelled) return;
-        if (!res.ok) throw new Error('gen failed');
+        if (!res.ok) { if (res.status === 429) { try { const e = await res.json(); showToast(e?.error || t('review.sentence_ai_error', lang), 'error'); } catch { showToast(t('review.sentence_ai_error', lang), 'error'); } return; } throw new Error('gen failed'); }
         const data = await res.json();
         const blocks = Array.isArray(data.blocks) ? data.blocks : [];
         if (blocks.length < 2) {
@@ -565,11 +565,7 @@ function ReviewContent() {
     cancelSpeech();
     setPlayingAudio(true);
     if (cur.audioUrl) {
-      const a = new Audio(cur.audioUrl);
-      audioRef.current = a;
-      a.onended = () => setPlayingAudio(false);
-      a.onerror = () => setPlayingAudio(false);
-      a.play().catch(() => setPlayingAudio(false));
+      playAudioUrl(cur.audioUrl).finally(() => setPlayingAudio(false));
     } else {
       speak(cur.front).then(() => setPlayingAudio(false)).catch(() => setPlayingAudio(false));
     }
@@ -584,6 +580,10 @@ function ReviewContent() {
     setSentencePhase(false);
     setShowSpellingPrompt(false);
     setComplete(true);
+    if (!timeRecordedRef.current) {
+      timeRecordedRef.current = true;
+      recordElapsedMinutes(sessionStartRef.current, 45).catch(e => console.error('[review] recordElapsedMinutes failed', e));
+    }
     db.userProfiles.get('main').then(p => {
       if (p) { setStreak(p.streak ?? 0); setTotalXp(p.xp ?? 0); }
     }).catch(() => {});
@@ -660,6 +660,8 @@ function ReviewContent() {
         updateTodayLog({ wordsReviewed: next }).catch(notifySaveFailed);
         return next;
       });
+      // 复习也算"今天学过"，推进连击（updateStreak 当天已记会早退，多调无害）
+      updateStreak().catch(() => {});
     }
 
     setDone(d => d + 1);
@@ -722,7 +724,7 @@ function ReviewContent() {
           return;
         }
         const newExamples = valid.slice(0, 2).map((ex: { korean: string; chinese: string }) => ({ text: ex.korean, translation: ex.chinese, source: 'manual' as const }));
-        db.words.update(current.dbId!, { examples: newExamples }).catch(() => {});
+        db.words.update(current.dbId!, { examples: newExamples }).catch(() => { showToast(t('review.save_failed', lang), 'error'); });
         const exampleStr = newExamples.map((e: { text: string; translation: string }) => `${e.text}\n${e.translation}`).join('\n\n');
         setCards(prev => prev.map(c => c.id === cardId ? { ...c, example: exampleStr } : c));
         setExampleGenState({});
@@ -751,7 +753,7 @@ function ReviewContent() {
         interval: snap.prevInterval,
         nextReview: Date.now(),
         mastery: snap.prevMastery,
-      }).catch(() => {});
+      }).catch(() => { showToast(t('review.save_failed', lang), 'error'); });
     }
     // 回滚 newlyMastered
     if (snap.wasNewlyMastered) {
@@ -762,7 +764,7 @@ function ReviewContent() {
       correctWordIdsRef.current = correctWordIdsRef.current.filter(id => id !== snap.cardId);
       setTodayReviewed(snap.prevTodayReviewed);
       todayReviewedRef.current = snap.prevTodayReviewed;
-      updateTodayLog({ wordsReviewed: snap.prevTodayReviewed }).catch(() => {});
+      updateTodayLog({ wordsReviewed: snap.prevTodayReviewed }).catch((e) => { console.error('Review: updateTodayLog failed', e); });
     }
     // 回滚 XP（只回 UI 累计；awardXp 已经写进 profile.xp，就不回滚了）
     setXpEarnedThisRound(snap.prevXpEarned);
@@ -838,7 +840,7 @@ function ReviewContent() {
           body: JSON.stringify({ action: 'generate', word: spellingWords[0].front, meaning: spellingWords[0].meaning }),
           signal: sentenceController.signal,
         });
-        if (!res.ok) throw new Error('generate failed');
+        if (!res.ok) { if (res.status === 429) { try { const e = await res.json(); showToast(e?.error || t('review.sentence_ai_error', lang), 'error'); } catch { showToast(t('review.sentence_ai_error', lang), 'error'); } return; } throw new Error('generate failed'); }
         const data = await res.json();
         const blocks = data.blocks;
         if (!Array.isArray(blocks) || blocks.length < 2) setSentenceGenError(true);
@@ -1000,7 +1002,7 @@ function ReviewContent() {
         correctAnswer: sw.front,
         mistakeType: 'spelling',
         createdAt: Date.now(),
-      }).catch(() => {});
+      }).catch((e) => { console.error('Review: db.spellingMistakes.add failed', e); });
     };
 
     const goNextSpelling = () => {
@@ -1019,7 +1021,7 @@ function ReviewContent() {
 
     const handleSkip = async () => {
       if (sw.id) {
-        await db.words.update(sw.id as any, { nextReview: Date.now() + 4 * 3600 * 1000 }).catch(() => {});
+        await db.words.update(sw.id as any, { nextReview: Date.now() + 4 * 3600 * 1000 }).catch(() => { showToast(t('review.save_failed', lang), 'error'); });
       }
       // record spelling mistake
       db.spellingMistakes.add({
@@ -1031,7 +1033,7 @@ function ReviewContent() {
         correctAnswer: sw.front,
         mistakeType: 'spelling',
         createdAt: Date.now(),
-      }).catch(() => {});
+      }).catch(() => { console.error('recordSpellingMistake skip failed'); });
       goNextSpelling();
     };
 
@@ -1067,7 +1069,7 @@ function ReviewContent() {
               candidates.push(stem1.slice(0, -1));
             }
           }
-          let hit: KoZh | undefined;
+          let hit: { ko: string; zh: string } | undefined;
           let match = '';
           for (const c of candidates) {
             hit = pairs.find(p => p.ko && p.ko.includes(c));
@@ -1166,6 +1168,15 @@ function ReviewContent() {
                       background: 'var(--bg-card)',
                     }}
                   />
+                  )}
+                  {isDesktop && spellingMode === 'type' && (
+                    <button
+                      onClick={() => setShowKeyboard(v => !v)}
+                      className="self-center inline-flex items-center gap-1.5 h-9 px-3.5 rounded-xl text-[13px] font-medium"
+                      style={{ background: 'var(--bg-card)', color: 'var(--text-secondary)', border: '1px solid var(--border-default)' }}
+                    >
+                      <Keyboard size={14} /> {t('keyboard.toggle', lang)}
+                    </button>
                   )}
                   <button
                     onClick={handleSpellingSubmit}
@@ -1277,6 +1288,14 @@ function ReviewContent() {
             </div>
           );
         })()}
+        {isDesktop && spellingMode === 'type' && !spellingSubmitted && (
+          <FloatingKoreanKeyboard
+            value={spellingInput}
+            onChange={setSpellingInput}
+            visible={showKeyboard}
+            onClose={() => setShowKeyboard(false)}
+          />
+        )}
       </div>
     );
   }
@@ -1307,7 +1326,7 @@ function ReviewContent() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ action: 'generate', word: sentenceWords[next].front, meaning: sentenceWords[next].meaning }),
         });
-        if (!res.ok) throw new Error('gen failed');
+        if (!res.ok) { if (res.status === 429) { try { const e = await res.json(); showToast(e?.error || t('review.sentence_ai_error', lang), 'error'); } catch { showToast(t('review.sentence_ai_error', lang), 'error'); } return; } throw new Error('gen failed'); }
         const data = await res.json();
         const blocks = Array.isArray(data.blocks) ? data.blocks : [];
         if (blocks.length < 2) {
@@ -1331,7 +1350,7 @@ function ReviewContent() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ action: 'generate', word: sw.front, meaning: sw.meaning }),
         });
-        if (!res.ok) throw new Error('gen failed');
+        if (!res.ok) { if (res.status === 429) { try { const e = await res.json(); showToast(e?.error || t('review.sentence_ai_error', lang), 'error'); } catch { showToast(t('review.sentence_ai_error', lang), 'error'); } return; } throw new Error('gen failed'); }
         const data = await res.json();
         const blocks = Array.isArray(data.blocks) ? data.blocks : [];
         if (blocks.length < 2) {
@@ -1378,7 +1397,7 @@ function ReviewContent() {
             correctAnswer: data.betterWay || sw.front,
             mistakeType: 'sentence',
             createdAt: Date.now(),
-          }).catch(() => {});
+          }).catch(() => { console.error('recordSpellingMistake sentence failed'); });
         }
       } catch {
         setSentenceResult({ isCorrect: false, score: 0, wrongPart: '', correctPart: '', explanation: t('review.sentence_ai_error', lang), betterWay: '', userTranslation: '', betterTranslation: '', improvement: '' });
@@ -1743,7 +1762,7 @@ function ReviewContent() {
   }
 
   // ── Example lines (多段，\n\n 分隔；每段 韩\n中) ──
-  const examplePairs: KoZh[] = current.example
+  const examplePairs: { ko: string; zh: string }[] = current.example
     .split(/\n\s*\n/)
     .map((block) => {
       const [ko, zh] = block.split('\n');
@@ -1852,9 +1871,7 @@ function ReviewContent() {
           <div className="text-[44px] font-black leading-tight tracking-tight" style={{ wordBreak: 'keep-all', color: 'var(--text-primary)', fontFamily: "'Malgun Gothic','Apple SD Gothic Neo','Noto Sans KR',sans-serif" }}>
             {current.front}
           </div>
-          <div className="mt-3 text-[13px] font-black" style={{ color: 'var(--color-ink-3)' }}>
-            {displayRoman(current.sub, current.front)}
-          </div>
+          <div className="mt-3 text-[13px] font-black" style={{ color: 'var(--color-ink-3)' }}>{displayRoman(current.sub, current.front)}</div>
         </div>
 
         {/* Answer */}

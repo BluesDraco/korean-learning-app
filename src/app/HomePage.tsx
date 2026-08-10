@@ -20,6 +20,7 @@ const FEATURES = [
   { Icon: Layers,        tone: 'purple', titleKey: 'home.feat_themes',    descKey: 'home.feat_themes_desc',    href: '/vocabulary/library?tab=themes' },
   { Icon: FileCheck2,    tone: 'gold',   titleKey: 'home.feat_topik',     descKey: 'home.feat_topik_desc',     href: '/topik' },
   { Icon: Library,       tone: 'pink',   titleKey: 'home.feat_reading',   descKey: 'home.feat_reading_desc',   href: '/reading' },
+  { Icon: Sparkles,      tone: 'gold',   titleKey: 'home.feat_pricing',  descKey: 'home.feat_pricing_desc',  href: '/membership' },
 ] as const;
 
 const HIGHLIGHTS = [
@@ -391,6 +392,20 @@ const CSS = `
   letter-spacing: 0.02em;
 }
 .tk-lp2-beian a:hover { text-decoration: underline; }
+.tk-lp2-legal {
+  margin-top: 36px;
+  text-align: center;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+  gap: 4px 8px;
+  font-size: 12px;
+}
+.tk-lp2-legal a {
+  color: #89756e;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+.tk-lp2-legal a:hover { text-decoration: underline; }
+.tk-lp2-legal-sep { color: #c9b8ae; }
 `;
 
 export default function HomePage() {
@@ -474,6 +489,17 @@ export default function HomePage() {
           <Link href="/daily" className="tk-lp2-foot-cta">
             {t('home.foot_cta', lang)}
           </Link>
+        </div>
+
+        {/* 法务页脚：隐私政策 · 服务条款 · 联系邮箱（支付审核方 + 用户可见） */}
+        <div className="tk-lp2-legal">
+          <Link href="/privacy">{t('home.foot_privacy', lang)}</Link>
+          <span className="tk-lp2-legal-sep">·</span>
+          <Link href="/terms">{t('home.foot_terms', lang)}</Link>
+          <span className="tk-lp2-legal-sep">·</span>
+          <Link href="/membership">{t('home.foot_pricing', lang)}</Link>
+          <span className="tk-lp2-legal-sep">·</span>
+          <a href="mailto:929989569@qq.com">{t('home.foot_contact', lang)}: 929989569@qq.com</a>
         </div>
 
         {/* 备案号（工信部要求：首页可点击跳转 beian.miit.gov.cn） */}

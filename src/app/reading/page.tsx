@@ -61,6 +61,8 @@ export default function ReadingPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [introSignal, setIntroSignal] = useState(0);
   const [forbiddenShake, setForbiddenShake] = useState(false);
+  const shakeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [forbiddenToast, setForbiddenToast] = useState(false);
   const [view, setView] = useState<'library' | 'articles' | 'story' | 'knowledge' | 'picbooks'>('library');
   const [kCat, setKCat] = useState<'all' | 'culture' | 'food' | 'travel'>('all');
@@ -143,7 +145,13 @@ export default function ReadingPage() {
     try { if (!localStorage.getItem(FORBIDDEN_SEEN_KEY)) { localStorage.setItem(FORBIDDEN_SEEN_KEY, '1'); setForbiddenToast(true); } } catch { /* skip */ }
   }, [forbiddenUnlocked, forbiddenItems.length]);
 
-  const shakeForbidden = useCallback(() => { setForbiddenShake(true); setTimeout(() => setForbiddenShake(false), 450); }, []);
+  // clear timers on unmount
+  useEffect(() => () => {
+    if (shakeTimerRef.current) { clearTimeout(shakeTimerRef.current); shakeTimerRef.current = null; }
+    if (toastTimerRef.current) { clearTimeout(toastTimerRef.current); toastTimerRef.current = null; }
+  }, []);
+
+  const shakeForbidden = useCallback(() => { setForbiddenShake(true); if (shakeTimerRef.current) clearTimeout(shakeTimerRef.current); shakeTimerRef.current = setTimeout(() => setForbiddenShake(false), 450); }, []);
 
   const continueList = useMemo(() => {
     if (!articles) return [];
@@ -190,8 +198,8 @@ export default function ReadingPage() {
     <div ref={scopeRef} className={`lib-scope${dark ? ' lib-dark' : ''}`}>
       <PlaceIntro place="library" dark={dark} reopenSignal={introSignal} />
       <div className={`lib-theme-toggle${drawerOpen ? ' drawer-open' : ''}`}>
-        <button className={`lib-theme-btn${!dark ? ' active' : ''}`} onClick={() => setDark(false)}><Sun size={13} /> 밝게</button>
-        <button className={`lib-theme-btn${dark ? ' active' : ''}`} onClick={() => setDark(true)}><Moon size={13} /> 어둡게</button>
+        <button className={`lib-theme-btn${!dark ? ' active' : ''}`} onClick={() => { setDark(false); document.documentElement.setAttribute('data-theme', 'light'); }}><Sun size={13} /> 밝게</button>
+        <button className={`lib-theme-btn${dark ? ' active' : ''}`} onClick={() => { setDark(true); document.documentElement.setAttribute('data-theme', 'dark'); }}><Moon size={13} /> 어둡게</button>
       </div>
       <div className="lib-shell">
         <LibrarySidebar
@@ -321,7 +329,7 @@ export default function ReadingPage() {
                   <div className="stat-card"><div className="stat-label">{t('reading.stat_total', lang)}</div><div className="stat-value">{stats.total}<span className="stat-suffix">편</span></div></div>
                   <div className="stat-card"><div className="stat-label">{t('reading.stat_done', lang)}</div><div className="stat-value">{stats.done}<span className="stat-suffix">편</span></div></div>
                   <div className="stat-card"><div className="stat-label">{t('reading.stat_saved_words', lang)}</div><div className="stat-value">{stats.savedWords}<span className="stat-suffix">개</span></div></div>
-                  <div className="stat-card"><div className="stat-label">{t('reading.stat_saved_sentences', lang)}</div><div className="stat-value">{stats.savedSent}<span className="stat-suffix">句</span></div></div>
+                  <div className="stat-card"><div className="stat-label">{t('reading.stat_saved_sentences', lang)}</div><div className="stat-value">{stats.savedSent}<span className="stat-suffix">문장</span></div></div>
                 </div>
                 {continueList.length > 0 && (
                   <div className="content-section">
@@ -367,7 +375,7 @@ export default function ReadingPage() {
             <div className="forbidden-toast-icon">🕯️</div>
             <div className="forbidden-toast-title">금서가 열렸습니다 · {t('reading.forbidden_opened_zh', lang)}</div>
             <div className="forbidden-toast-sub">{t('reading.forbidden_opened_body', lang, { n: FORBIDDEN_UNLOCK_COUNT })}</div>
-            <button className="forbidden-toast-btn" onClick={() => { setForbiddenToast(false); setTimeout(() => { const el = document.querySelector('.forbidden-section'); if (el) { setView('story'); setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100); } }, 300); }}>들어가기 · {t('reading.enter_zh', lang)}</button>
+            <button className="forbidden-toast-btn" onClick={() => { setForbiddenToast(false); if (toastTimerRef.current) clearTimeout(toastTimerRef.current); toastTimerRef.current = setTimeout(() => { const el = document.querySelector('.forbidden-section'); if (el) { setView('story'); toastTimerRef.current = setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100); } }, 300); }}>들어가기 · {t('reading.enter_zh', lang)}</button>
           </div>
         </div>
       )}

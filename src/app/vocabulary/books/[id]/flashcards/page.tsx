@@ -5,16 +5,19 @@ import { TappableText } from '@/components/TappableText';
 import GrammarExplainBubble from '@/components/GrammarExplainBubble';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, Volume2, ChevronLeft, ChevronRight, Loader2, Star, Shuffle, Check, RotateCcw, ArrowLeftRight, BookmarkPlus } from 'lucide-react';
+import { ArrowLeft, Volume2, ChevronLeft, ChevronRight, Loader2, Star, Check, RotateCcw, BookmarkPlus, SlidersHorizontal } from 'lucide-react';
 import { AddToBookSheet } from '@/components/vocabulary/AddToBookSheet';
+import { ChoiceQuiz } from '@/components/vocabulary/ChoiceQuiz';
+import { FlashcardStartScreen } from '@/components/vocabulary/FlashcardStartScreen';
 import { TracePad } from '@/components/vocabulary/TracePad';
 import { RepeatToggleButton } from '@/components/vocabulary/RepeatToggleButton';
+import { useAutoAudio, AutoAudioToggle } from '@/components/vocabulary/AutoAudioToggle';
 import { SentenceBookmarkButton } from '@/components/vocabulary/SentenceBookmarkButton';
 
 const DIRECTION_KEY = 'flashcards-direction';
 type FlashDirection = 'ko-zh' | 'zh-ko';
 import { db, ensureFavoritesBook, FAVORITES_BOOK_ID } from '@/lib/db';
-import { speakWord, speakWordRepeated, speak, cancelSpeech } from '@/lib/tts';
+import { speakWord, speakWordRepeated, cancelSpeech } from '@/lib/tts';
 import { getEntryByKorean } from '@/data/vocabulary/index';
 import { displayRoman } from '@/lib/dictionary';
 import type { WordBook, Word, WordEntry } from '@/types';
@@ -32,29 +35,31 @@ export default function FlashcardStudyPage() {
   const [book, setBook] = useState<WordBook | null>(null);
   const [words, setWords] = useState<Word[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [shuffled, setShuffled] = useState(false);
   const [displayWords, setDisplayWords] = useState<typeof words>([]);
   const [revealed, setRevealed] = useState(false);
   const [direction, setDirection] = useState<FlashDirection>('ko-zh');
+  const [studyMode, setStudyMode] = useState<'flip' | 'quiz'>('flip');
+  const [autoAdvance, setAutoAdvance] = useState(true);
+  const [quizRound, setQuizRound] = useState(0);
+  const [started, setStarted] = useState(false);
   const [swipeOffset, setSwipeOffset] = useState(0);
 
   useEffect(() => {
     try {
-      applyFlashcardTheme(getFlashcardTheme()); // 兜底重贴闪卡配色，防 FOUC 脚本竞态/SPA 导航丢失导致回退默认蓝色
+      applyFlashcardTheme(getFlashcardTheme());
       const v = localStorage.getItem(DIRECTION_KEY);
       if (v === 'zh-ko') setDirection('zh-ko');
+      if (localStorage.getItem('flashcards-study-mode') === 'quiz') setStudyMode('quiz');
+      if (localStorage.getItem('flashcards-quiz-pace') === 'manual') setAutoAdvance(false);
     } catch { /* ignore */ }
   }, []);
 
-  const toggleDirection = () => {
-    setDirection(prev => {
-      const next: FlashDirection = prev === 'ko-zh' ? 'zh-ko' : 'ko-zh';
-      try { localStorage.setItem(DIRECTION_KEY, next); } catch { /* ignore */ }
-      setRevealed(false);
-      return next;
-    });
-  };
+  const MIN_QUIZ_WORDS = 4;
+  const [autoAudio, toggleAutoAudio] = useAutoAudio();
+
   const swipeOffsetRef = useRef(0);
   const [isSwiping, setIsSwiping] = useState(false);
   const isSwipingRef = useRef(false);
@@ -89,6 +94,8 @@ export default function FlashcardStudyPage() {
           const favSet = new Set(wordList.filter(w => favWordIds.has(w.id)).map(w => w.id));
           setFavoritedIds(favSet);
         }
+      } catch {
+        setLoadError(true);
       } finally {
         setLoading(false);
       }
@@ -142,35 +149,48 @@ export default function FlashcardStudyPage() {
   // auto-play audio when card changes (also fires on shuffle-from-index-0)
   const currentWordText = displayWords[currentIdx]?.word ?? '';
   useEffect(() => {
-    if (loading || !currentWordText) return;
+    const isQuiz = studyMode === 'quiz' && words.length >= MIN_QUIZ_WORDS;
+    if (!autoAudio || loading || !currentWordText || isQuiz || !started) return;
     const raf = requestAnimationFrame(() => playAudioRef.current?.());
-    return () => cancelAnimationFrame(raf);
+    // 翻卡瞬间同步打断上一张的连读(含 gap 等待中的),不等下一帧 rAF——否则第二张会听到第一张的读音
+    return () => { cancelAnimationFrame(raf); cancelSpeech(); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentIdx, loading, currentWordText]);
+  }, [autoAudio, currentIdx, loading, currentWordText, studyMode]);
 
   playAudioRef.current = () => {
+    if (!autoAudio) return;
     const w = displayWords[currentIdx];
     if (!w) return;
     cancelSpeech();
     speakWordRepeated(w.word, 0.85).catch(() => {});
   };
 
-  const toggleShuffle = () => {
-    if (shuffled) {
-      setDisplayWords([...words]);
-      showToast(t('vocab.fc_restore_order', lang), 'info');
-    } else {
+  const handleStart = (cfg: { mode: 'flip' | 'quiz'; direction: FlashDirection; autoAdvance: boolean; shuffle: boolean }) => {
+    setDirection(cfg.direction);
+    setStudyMode(cfg.mode);
+    setAutoAdvance(cfg.autoAdvance);
+    try {
+      localStorage.setItem(DIRECTION_KEY, cfg.direction);
+      localStorage.setItem('flashcards-study-mode', cfg.mode);
+      localStorage.setItem('flashcards-quiz-pace', cfg.autoAdvance ? 'auto' : 'manual');
+    } catch { /* ignore */ }
+    if (cfg.shuffle) {
       const arr = [...words];
       for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [arr[i], arr[j]] = [arr[j], arr[i]];
       }
       setDisplayWords(arr);
-      showToast(t('vocab.fc_shuffled', lang), 'info');
+      setShuffled(true);
+    } else {
+      setDisplayWords([...words]);
+      setShuffled(false);
     }
-    setShuffled(v => !v);
     setCurrentIdx(0);
     setRevealed(false);
+    setCompleted(false);
+    setQuizRound(r => r + 1);
+    setStarted(true);
   };
 
   const goTo = useCallback((idx: number, list: Word[]) => {
@@ -184,6 +204,14 @@ export default function FlashcardStudyPage() {
     setCurrentIdx(idx);
     if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
+
+  // 翻卡模式自动翻页：翻到背面后停留 2.5s 自动进入下一张（切卡/翻回/卸载即清除）
+  const isFlipMode = !(studyMode === 'quiz' && words.length >= MIN_QUIZ_WORDS);
+  useEffect(() => {
+    if (!started || !isFlipMode || !autoAdvance || !revealed || completed) return;
+    const timer = setTimeout(() => goTo(currentIdx + 1, displayWords), 2500);
+    return () => clearTimeout(timer);
+  }, [started, isFlipMode, autoAdvance, revealed, completed, currentIdx, goTo, displayWords]);
 
   // 收藏操作用 promise 队列串行化 + 基于 DB 最新数据判断 isFav，避免 read-modify-write 快点两次互相覆盖
   const favQueueRef = useRef<Promise<unknown>>(Promise.resolve());
@@ -210,7 +238,8 @@ export default function FlashcardStudyPage() {
     return next;
   }, [showToast]);
 
-  const setMastery = useCallback(async (w: Word, mastery: 'mastered' | 'learning') => {
+  // silent: quiz 答错标 learning 时不弹 toast（ChoiceQuiz 已有红色反馈，避免答错却弹绿色成功提示）
+  const setMastery = useCallback(async (w: Word, mastery: 'mastered' | 'learning', silent = false) => {
     // mastered: SRS 拉到 21 天后再来；learning: 立即 due
     // 若只写 mastery 字段，/review 依然按 nextReview <= now 拉出这个词，导致"已掌握"无效
     const now = Date.now();
@@ -221,11 +250,27 @@ export default function FlashcardStudyPage() {
       await db.words.update(w.id, patch);
       setWords(prev => prev.map(x => x.id === w.id ? { ...x, ...patch } : x));
       setDisplayWords(prev => prev.map(x => x.id === w.id ? { ...x, ...patch } : x));
-      showToast(mastery === 'mastered' ? `${t('vocab.mastered', lang)} ✓` : t('vocab.learning', lang), 'success');
+      if (!silent) showToast(mastery === 'mastered' ? `${t('vocab.mastered', lang)} ✓` : t('vocab.learning', lang), 'success');
     } catch {
-      showToast(t('vocab.fc_op_failed', lang), 'error');
+      if (!silent) showToast(t('vocab.fc_op_failed', lang), 'error');
     }
   }, [showToast]);
+
+  // 重新学：标 learning 并把当前词移到本轮牌堆末尾稍后再练（currentIdx 不变，抽走当前词后自然落到下一张）
+  const relearnWord = (w: Word) => {
+    setMastery(w, 'learning', true);
+    setRevealed(false);
+    setDisplayWords(prev => {
+      if (prev.length <= 1) return prev;
+      const idx = prev.findIndex(c => c.id === w.id);
+      if (idx === -1) return prev;
+      const next = [...prev];
+      const [moved] = next.splice(idx, 1);
+      next.push(moved);
+      return next;
+    });
+    if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   // Load dictionary entry for current word (fallback for examples)
   useEffect(() => {
@@ -251,6 +296,7 @@ export default function FlashcardStudyPage() {
 
   // Keyboard
   useEffect(() => {
+    if (studyMode === 'quiz' && words.length >= MIN_QUIZ_WORDS) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft') goTo(currentIdx - 1, displayWords);
       else if (e.key === 'ArrowRight') goTo(currentIdx + 1, displayWords);
@@ -258,7 +304,7 @@ export default function FlashcardStudyPage() {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [currentIdx, goTo, displayWords]);
+  }, [currentIdx, goTo, displayWords, studyMode, words.length]);
 
   const handleTouchStart = (e: React.TouchEvent) => {
     // 如果起点在按钮上，直接放弃 swipe 判定，把事件让给按钮
@@ -341,6 +387,15 @@ export default function FlashcardStudyPage() {
     );
   }
 
+  if (loadError) {
+    return (
+      <div className="flex flex-col items-center justify-center py-32 gap-4 px-4">
+        <p style={{ fontSize: 14, color: 'var(--color-ink-3)' }}>{t('vocab.hub_data_load_failed', lang)}</p>
+        <button onClick={() => { setLoadError(false); setLoading(true); window.location.reload(); }} style={{ fontSize: 14, fontWeight: 600, color: 'var(--color-pink-strong)', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline' }}>{t('vocab.hub_reload', lang)}</button>
+      </div>
+    );
+  }
+
   if (!book || words.length === 0) {
     return (
       <div className="py-4 space-y-4">
@@ -367,6 +422,8 @@ export default function FlashcardStudyPage() {
     );
   }
   const progress = ((currentIdx + 1) / displayWords.length) * 100;
+  // <4 词无法凑齐四选一，强制回退翻卡（覆盖 localStorage 恢复的 quiz 模式）
+  const effectiveMode = studyMode === 'quiz' && words.length >= MIN_QUIZ_WORDS ? 'quiz' : 'flip';
 
   const getTransform = () => {
     if (exiting === 'left') return 'translateX(-120%) rotate(-8deg)';
@@ -388,28 +445,20 @@ export default function FlashcardStudyPage() {
         <div className="flex-1 min-w-0">
           <h1 className="text-[15px] font-bold truncate" style={{ color: 'var(--fc-meaning-color)' }}>{book.name}</h1>
         </div>
+        {/* 学习中操作（仅开始后显示）：重选 / 收藏 / 加生词本 / 计数 */}
+        {started && (<>
         <button
-          onClick={toggleDirection}
+          onClick={() => setStarted(false)}
           className="h-8 px-2.5 rounded-full flex items-center gap-1 text-[11px] font-bold transition-colors"
-          style={{ border: '1px solid var(--fc-nav-border)', background: direction === 'zh-ko' ? 'var(--fc-dot-active)' : 'var(--fc-nav-bg)', color: direction === 'zh-ko' ? '#fff' : 'var(--fc-nav-color)' }}
-          title={direction === 'ko-zh' ? t('vocab.fc_to_zh_kr', lang) : t('vocab.fc_to_kr_zh', lang)}
+          style={{ border: '1px solid var(--fc-nav-border)', background: 'var(--fc-nav-bg)', color: 'var(--fc-nav-color)' }}
         >
-          <ArrowLeftRight size={12} />
-          {direction === 'ko-zh' ? t('vocab.fc_kr_zh', lang) : t('vocab.fc_zh_kr', lang)}
-        </button>
-        <button
-          onClick={toggleShuffle}
-          className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
-          style={{ border: '1px solid var(--fc-nav-border)', background: shuffled ? 'var(--fc-dot-active)' : 'var(--fc-nav-bg)', color: shuffled ? '#fff' : 'var(--fc-nav-color)' }}
-          title={shuffled ? t('vocab.fc_cancel_shuffle', lang) : t('vocab.fc_shuffle', lang)}
-        >
-          <Shuffle size={14} />
+          <SlidersHorizontal size={12} />
+          {t('vocab.fc_reselect', lang)}
         </button>
         <button
           onClick={e => { e.stopPropagation(); toggleFavorite(word); }}
           className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
           style={{ border: '1px solid var(--fc-card-border)', color: favoritedIds.has(word.id) ? 'var(--color-gold-base)' : 'var(--text-muted)', background: favoritedIds.has(word.id) ? 'var(--color-gold-soft)' : 'transparent' }}
-          title={favoritedIds.has(word.id) ? t('vocab.fc_cancel_fav', lang) : t('vocab.fc_fav', lang)}
         >
           <Star size={14} fill={favoritedIds.has(word.id) ? 'var(--color-gold-base)' : 'none'} />
         </button>
@@ -417,23 +466,68 @@ export default function FlashcardStudyPage() {
           onClick={e => { e.stopPropagation(); setAddToBookWord(word); }}
           className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
           style={{ border: '1px solid var(--fc-card-border)', color: 'var(--text-muted)', background: 'transparent' }}
-          title={t('vocab.fc_add_other_book', lang)}
         >
           <BookmarkPlus size={14} />
         </button>
         <span className="text-[12px] font-black tabular-nums" style={{ color: 'var(--color-ink-3)' }}>
           {currentIdx + 1} / {displayWords.length}
         </span>
+        </>)}
       </div>
 
-      {/* Progress bar */}
+      {/* 开始配置屏 */}
+      {!started && (
+        <FlashcardStartScreen
+          wordCount={words.length}
+          initial={{ mode: studyMode, direction, autoAdvance, shuffle: shuffled }}
+          onStart={handleStart}
+        />
+      )}
+
+      {/* Progress bar（两模式共用，保证顶部横线一致） */}
+      {started && (
       <div className="h-[5px] rounded-full mb-5 shrink-0 overflow-hidden" style={{ background: 'var(--fc-progress-bg)' }}>
         <div
           className="h-full rounded-full transition-all duration-500"
           style={{ width: `${progress}%`, background: 'linear-gradient(90deg, var(--color-mint-base), var(--color-pink-base))' }}
         />
       </div>
+      )}
 
+      {/* 选词义测验模式 */}
+      {started && effectiveMode === 'quiz' && (
+        <ChoiceQuiz
+          key={`${direction}-${quizRound}-${displayWords.map(w => w.id).join(',')}`}
+          words={displayWords}
+          bookWords={words}
+          direction={direction}
+          autoAdvance={autoAdvance}
+          bookName={book.name}
+          sourceId={`book-${id}`}
+          onProgress={setCurrentIdx}
+          onWrong={(w) => { const real = words.find(x => x.id === w.id); if (real) setMastery(real, 'learning', true); }}
+          onComplete={(correct, total) => {
+            const now = Date.now();
+            for (const dw of displayWords) {
+              const real = words.find(x => x.id === dw.id);
+              if (!real) continue;
+              try {
+                const newSrs = Math.min(5, (real.srsLevel ?? 0) + 1);
+                const newInt = Math.max(1, (real.interval ?? 1) * 2);
+                db.words.update(real.id, {
+                  srsLevel: newSrs, interval: newInt, easeFactor: 2.5,
+                  nextReview: now + newInt * 86400000, lastReviewed: now,
+                  mastery: newSrs >= 5 ? 'mastered' as const : 'reviewing' as const,
+                }).catch(() => {});
+              } catch { /* ignore */ }
+            }
+            setCompleted(true);
+          }}
+        />
+      )}
+
+      {/* 翻卡模式（card + nav） */}
+      {started && effectiveMode === 'flip' && (<>
       {/* Card */}
       <div className="flex justify-center">
         <div
@@ -466,13 +560,16 @@ export default function FlashcardStudyPage() {
                   <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full" style={{ background: 'var(--fc-badge-bg)', color: 'var(--fc-badge-color)' }}>{t('vocab.mastered', lang)}</span>
                 )}
               </div>
-              <button
-                onClick={e => { e.stopPropagation(); speakWord(word.word); }}
-                className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
-                style={{ border: '1px solid var(--fc-audio-border)', color: 'var(--fc-audio-color)' }}
-              >
-                <Volume2 size={14} />
-              </button>
+              <div className="flex items-center gap-2">
+                <AutoAudioToggle autoAudio={autoAudio} onToggle={toggleAutoAudio} className="w-8 h-8 rounded-full flex items-center justify-center transition-colors" style={{ border: '1px solid var(--fc-audio-border)', color: 'var(--fc-audio-color)' }} />
+                <button
+                  onClick={e => { e.stopPropagation(); speakWord(word.word); }}
+                  className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+                  style={{ border: '1px solid var(--fc-audio-border)', color: 'var(--fc-audio-color)' }}
+                >
+                  <Volume2 size={14} />
+                </button>
+              </div>
             </div>
 
             {/* Front */}
@@ -587,7 +684,7 @@ export default function FlashcardStudyPage() {
                     <Check size={13} /> {t('vocab.mastered', lang)}
                   </button>
                   <button
-                    onClick={e => { e.stopPropagation(); setMastery(word, 'learning'); }}
+                    onClick={e => { e.stopPropagation(); relearnWord(word); }}
                     className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold transition-colors"
                     style={{ background: 'var(--color-surface-3)', color: 'var(--color-ink-3)', border: '1px solid var(--color-border-2)' }}
                   >
@@ -653,6 +750,7 @@ export default function FlashcardStudyPage() {
           {currentIdx === displayWords.length - 1 ? <Check size={20} /> : <ChevronRight size={20} />}
         </button>
       </div>
+      </>)}
 
       {/* 完成态卡片 */}
       {completed && (
@@ -665,7 +763,7 @@ export default function FlashcardStudyPage() {
               {book?.name}
             </p>
             <div style={{ display: 'flex', gap: 10 }}>
-              <button onClick={() => { setCompleted(false); setCurrentIdx(0); setRevealed(false); setHasSeenHint(false); }} style={{ flex: 1, padding: '12px 0', borderRadius: 999, border: '1px solid var(--color-border-2)', background: 'transparent', color: 'var(--color-ink-2)', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
+              <button onClick={() => { setCompleted(false); setCurrentIdx(0); setRevealed(false); setHasSeenHint(false); setQuizRound(r => r + 1); }} style={{ flex: 1, padding: '12px 0', borderRadius: 999, border: '1px solid var(--color-border-2)', background: 'transparent', color: 'var(--color-ink-2)', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
                 <RotateCcw size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} />{t('vocab.fc_again', lang)}
               </button>
               <button onClick={() => router.push(`/vocabulary/books/${id}`)} style={{ flex: 1, padding: '12px 0', borderRadius: 999, border: 'none', background: 'var(--color-pink-base)', color: '#fff', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>

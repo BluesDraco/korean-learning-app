@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useMicRecorder } from '@/lib/audio/useMicRecorder';
 import { scorePronunciation, type PronunciationResult } from '@/lib/audio/pronunciationScore';
 import { useLang } from '@/components/LangProvider';
@@ -57,8 +57,24 @@ export default function RadioLineExtras({ ko, zh, start, end, onPlaySegment, dis
         body: JSON.stringify({ sentence: ko, translation: zh }),
       });
       if (res.status === 401) { setGramError({ msg: t('rlx.gram_login', lang), retriable: false }); return; }
-      const json = await res.json();
-      if (!res.ok) { setGramError({ msg: json.error || t('rlx.gram_unavailable', lang), retriable: true }); return; }
+      if (!res.ok) {
+        // 只对面向用户的中文错误（429 额度/400 校验）采用后端文案，其余（503/502/500 等内部状态）保持通用提示，
+        // 避免把 'API key not configured' 等英文/内部信息暴露给用户；额度类(429)不给"重试"
+        let msg = t('rlx.gram_unavailable', lang);
+        let retriable = true;
+        if (res.status === 429 || res.status === 400) {
+          try { const err = await res.json(); if (err?.error) { msg = String(err.error); if (res.status === 429) retriable = false; } } catch { /* 非 JSON，用通用提示 */ }
+        }
+        setGramError({ msg, retriable });
+        return;
+      }
+      let json: GrammarExplain;
+      try {
+        json = await res.json();
+      } catch {
+        setGramError({ msg: t('rlx.gram_unavailable', lang), retriable: true });
+        return;
+      }
       setGram(json);
     } catch {
       setGramError({ msg: t('rlx.gram_neterr', lang), retriable: true });
@@ -72,16 +88,10 @@ export default function RadioLineExtras({ ko, zh, start, end, onPlaySegment, dis
       setHeard(text);
       setResult(scorePronunciation(text, ko));
     },
-    onError: (msg) => {
-      setMicError(
-        msg === 'denied'
-          ? t('rlx.mic_denied', lang)
-          : msg === 'unavailable'
-            ? t('rlx.mic_unavailable', lang)
-            : t('rlx.mic_error', lang),
-      );
-    },
+    onError: (msg) => { setMicError(msg); },
   });
+  // 组件卸载或隐藏时取消录音（面板切换/行切换会把非活跃行 display:none，mic 不会自己停）
+  useEffect(() => () => { mic.cancel(); }, [mic]);
 
   const toggle = useCallback(
     (target: Panel) => {
@@ -124,6 +134,7 @@ export default function RadioLineExtras({ ko, zh, start, end, onPlaySegment, dis
           type="button"
           className={`radio-line-icon${panel === 'shadow' ? ' radio-active' : ''}`}
           onClick={() => toggle('shadow')}
+          disabled={disabled}
           aria-label={t('rlx.shadow_aria', lang)}
           aria-expanded={panel === 'shadow'}
         >

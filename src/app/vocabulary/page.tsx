@@ -34,7 +34,6 @@ const DesktopVocabularyPage = dynamic(
 );
 
 interface SavedSentence {
-  [k: string]: unknown;
   id: string;
   userId?: string;
   korean: string;
@@ -55,13 +54,6 @@ const SOURCE_LABEL_KEYS: Record<string, string> = {
   news_reading: 'vocab.src_news_reading',
   writing: 'vocab.src_writing',
   vocabulary: 'vocab.src_vocabulary',
-};
-
-const masteryColor: Record<MasteryLevel, string> = {
-  new: 'bg-[var(--text-muted)]',
-  learning: 'bg-[var(--peach-soft)]',
-  reviewing: 'bg-[var(--blue-soft)]',
-  mastered: 'bg-[var(--mint-soft)]',
 };
 
 const GOAL_OPTIONS = [5, 10, 15, 20, 25, 30, 40, 50];
@@ -219,7 +211,7 @@ function GoalWheelPicker({ current, unmastered, onClose, onConfirm }: {
       >
         <div className="flex items-center justify-between px-5 pt-5 pb-3">
           <h3 className="text-base font-black" style={{ color: 'var(--color-ink-1)' }}>{t('vocab.hub_review_plan_title', lang)}</h3>
-          <button onClick={onClose} style={{ color: 'var(--color-ink-3)' }}><X size={20} /></button>
+          <button onClick={onClose} aria-label={t('common.close', lang)} style={{ color: 'var(--color-ink-3)' }}><X size={20} /></button>
         </div>
         <p className="text-xs px-5 pb-4" style={{ color: 'var(--color-ink-3)' }}>
           {t('vocab.hub_plan_summary', lang, { total: unmastered, per: GOAL_OPTIONS[selectedIdx], days: days > 0 ? t('vocab.hub_plan_days', lang, { n: days }) : t('vocab.hub_plan_dash', lang) })}
@@ -369,7 +361,7 @@ function VocabularyContent() {
   // Lazy-load full word list only when library tab or due-words sheet needs it
   const loadAllWords = useCallback(async () => {
     if (allWordsLoaded) return;
-    const list = await db.words.orderBy('createdAt').reverse().limit(2000).toArray();
+    const list = await db.words.orderBy('createdAt').reverse().limit(2000).toArray().catch(() => []);
     setAllWords(list);
     setAllWordsLoaded(true);
   }, [allWordsLoaded]);
@@ -407,6 +399,8 @@ function VocabularyContent() {
       setAllWords(prev => prev.filter(w => !deletedIds.has(w.id)));
       setSelected(new Set());
       setManaging(false);
+    } catch (err) {
+      alert(t('vocab.err_delete_prefix', lang) + (err instanceof Error ? err.message : t('vocab.err_retry', lang)));
     } finally {
       setBatchLoading(false);
     }
@@ -417,11 +411,13 @@ function VocabularyContent() {
     setBatchLoading(true);
     try {
       await Promise.all([...selected].map(id =>
-        db.words.update(id, { mastery: 'learning' as MasteryLevel, srsLevel: 1, interval: 1 }).catch(() => {})
+        db.words.update(id, { mastery: 'learning' as MasteryLevel, srsLevel: 1, interval: 1, nextReview: Date.now() })
       ));
       setAllWords(prev => prev.map(w => selected.has(w.id) ? { ...w, mastery: 'learning' as MasteryLevel } : w));
       setSelected(new Set());
       setManaging(false);
+    } catch (err) {
+      alert(t('vocab.err_save_failed', lang) + (err instanceof Error ? ': ' + err.message : ''));
     } finally {
       setBatchLoading(false);
     }
@@ -441,6 +437,23 @@ function VocabularyContent() {
       }
     } catch (err) {
       alert(t('vocab.err_delete_prefix', lang) + (err instanceof Error ? err.message : t('vocab.err_retry', lang)));
+    }
+  };
+
+  const toggleWordMastery = async (w: Word) => {
+    const now = Date.now();
+    const isMastered = w.mastery === 'mastered';
+    const patch = isMastered
+      ? { mastery: 'learning' as MasteryLevel, srsLevel: 1, interval: 1, nextReview: now }
+      : { mastery: 'mastered' as MasteryLevel, srsLevel: 5, interval: 21, nextReview: now + 21 * 86400000, lastReviewed: now };
+    // 乐观更新
+    setAllWords(prev => prev.map(x => x.id === w.id ? { ...x, ...patch } : x));
+    try {
+      await db.words.update(w.id, patch);
+    } catch {
+      // 回滚
+      setAllWords(prev => prev.map(x => x.id === w.id ? { ...x, mastery: w.mastery } : x));
+      alert(t('vocab.err_save_failed', lang));
     }
   };
 
@@ -554,10 +567,16 @@ function VocabularyContent() {
                   </div>
                   {!managing && (
                     <div className="relative z-10 flex items-center gap-1 shrink-0">
-                      <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); speakWord(w.word); }} className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors">
+                      <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); speakWord(w.word); }} aria-label={t('vocab.play', lang)} className="p-1.5 rounded-lg hover:bg-[var(--bg-card-hover)] text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors">
                         <Volume2 size={14} />
                       </button>
-                      <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-[var(--mint-soft)]/10 text-[var(--mint-soft)] font-medium">{t('vocab.mastered', lang)}</span>
+                      <button
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleWordMastery(w); }}
+                        className="text-[10px] px-1.5 py-0.5 rounded-full bg-[var(--mint-soft)]/10 text-[var(--mint-soft)] font-medium hover:bg-[var(--mint-soft)]/20 transition-colors"
+                        title={t('vocab.bd_unmark_mastered', lang)}
+                      >
+                        {t('vocab.mastered', lang)}
+                      </button>
                     </div>
                   )}
                 </div>
@@ -572,7 +591,7 @@ function VocabularyContent() {
               )}
             </div>
             {managing && selected.size > 0 && (
-              <div className="fixed bottom-[calc(56px+env(safe-area-inset-bottom,0px))] left-0 right-0 z-[60] px-4 pb-3 md:left-[108px] md:bottom-0 md:pb-4">
+              <div className="fixed bottom-[calc(56px+env(safe-area-inset-bottom,0px))] left-0 right-0 z-[60] px-4 pb-3 lg:left-[108px] lg:bottom-0 lg:pb-4">
                 <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-3 shadow-lg flex items-center gap-2">
                   <span className="text-sm font-medium text-[var(--text-primary)] flex-1">{t('vocab.selected_n', lang, { n: selected.size })}</span>
                   <button onClick={handleBatchUnmaster} disabled={batchLoading} className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--mint-soft)]/10 text-[var(--mint-soft)] text-sm font-medium disabled:opacity-50">
@@ -652,6 +671,14 @@ function VocabularyContent() {
                         <Volume2 size={14} />
                       </button>
                       <button
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleWordMastery(w); }}
+                        className={`no-touch-min w-8 h-8 rounded-lg transition-colors flex items-center justify-center ${w.mastery === 'mastered' ? 'bg-[var(--mint-soft)]/15 text-[var(--mint-soft)]' : 'hover:bg-[var(--mint-soft)]/15 text-[var(--text-muted)] hover:text-[var(--mint-soft)]'}`}
+                        aria-label={w.mastery === 'mastered' ? t('vocab.bd_unmark_mastered', lang) : t('vocab.bd_mark_mastered', lang)}
+                        title={w.mastery === 'mastered' ? t('vocab.bd_unmark_mastered', lang) : t('vocab.bd_mark_mastered', lang)}
+                      >
+                        <Check size={14} />
+                      </button>
+                      <button
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
@@ -663,7 +690,6 @@ function VocabularyContent() {
                       >
                         <Trash2 size={13} />
                       </button>
-                      <span className={`w-2 h-2 rounded-full ml-1 ${masteryColor[w.mastery]}`} />
                     </div>
                   )}
                 </div>
@@ -679,7 +705,7 @@ function VocabularyContent() {
             </div>
 
             {managing && selected.size > 0 && (
-              <div className="fixed bottom-[calc(56px+env(safe-area-inset-bottom,0px))] left-0 right-0 z-[60] px-4 pb-3 md:left-[108px] md:bottom-0 md:pb-4">
+              <div className="fixed bottom-[calc(56px+env(safe-area-inset-bottom,0px))] left-0 right-0 z-[60] px-4 pb-3 lg:left-[108px] lg:bottom-0 lg:pb-4">
                 <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-3 shadow-lg flex items-center gap-2">
                   <span className="text-sm font-medium text-[var(--text-primary)] flex-1">{t('vocab.selected_n', lang, { n: selected.size })}</span>
                   <button onClick={() => setShowMoveSheet(true)} disabled={batchLoading} className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--bg-soft)] text-[var(--text-primary)] text-sm font-medium disabled:opacity-50">
@@ -886,7 +912,7 @@ function VocabularyContent() {
                               <p className="text-[10px] font-bold text-[var(--text-muted)] mb-1.5 tracking-wider">{t('vocab.sentences_grammar', lang)}</p>
                               <div className="space-y-2">
                                 {(analysis.grammar as any[]).map((g: any, i: number) => (
-                                  <div key={i} className="pl-2 border-l-2 border-[#aee3d8]">
+                                  <div key={i} className="pl-2 border-l-2 border-[var(--color-mint-base)]">
                                     <p className="text-[15px] font-bold text-[var(--text-primary)]">{g.pattern}</p>
                                     <p className="text-[14px] text-[var(--text-muted)] leading-relaxed">{g.usage}</p>
                                   </div>
@@ -1001,9 +1027,9 @@ function VocabularyContent() {
               setHomeLoadError(false);
               setLoading(true);
               fetch('/api/vocabulary/home', { cache: 'no-store' })
-                .then(r => r.json())
+                .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
                 .then(data => {
-                  setQuickStats(data?.stats ?? null);
+                  setQuickStats(data?.stats || { total: 0, mastered: 0, learning: 0, newWords: 0, dueReview: 0 });
                   setWordBooks(Array.isArray(data?.books) ? data.books : []);
                   if (data?.dailyGoalWords) setDailyGoal(data.dailyGoalWords);
                 })
@@ -1104,7 +1130,7 @@ function VocabularyContent() {
           onConfirm={async (n) => {
             setDailyGoal(n);
             setShowGoalPicker(false);
-            updateProfile({ dailyGoalWords: n }).catch(() => {});
+            updateProfile({ dailyGoalWords: n }).catch(() => { alert(t('vocab.err_save_failed', lang)); });
           }}
         />
       )}

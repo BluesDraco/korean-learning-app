@@ -14,6 +14,7 @@ import { getSceneCastById } from '@/data/sceneCast';
 import { buildCompanionSystemHint, type CompanionDifficulty } from '@/lib/companionPrompt';
 import { TappableText } from '@/components/TappableText';
 import { WordbookPanel } from '@/components/practice/WordbookPanel';
+import { UpgradePrompt } from '@/components/membership/UpgradePrompt';
 import { VoiceModeOverlay } from '@/components/practice/VoiceModeOverlay';
 import { VoiceBubble } from '@/components/practice/VoiceBubble';
 import { useMicRecorder, type MicResultMeta } from '@/lib/audio/useMicRecorder';
@@ -24,22 +25,19 @@ import { useIsDesktop } from '@/lib/useIsMobile';
 import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
 import './companion.css';
-import type { KoZh } from '@/types/inline';
 
 interface ChatMessage {
-  [k: string]: unknown;
   id: string;
   role: 'npc' | 'user' | 'divider';
   ko: string;
   cn?: string;
   feedback?: { natural?: string; grammarError?: string; wrongPart?: string; correctPart?: string; betterWay?: string; betterWayZh?: string };
-  suggestion?: KoZh;  // NPC 消息附带的「建议回应句」
+  suggestion?: { ko: string; zh: string };  // NPC 消息附带的「建议回应句」
   voice?: { durationMs: number };  // 语音消息：音频本体在本地 IDB(按 id 存)，此处只留时长元数据
   error?: boolean;
 }
 
 interface CompanionData {
-  [k: string]: unknown;
   id: string;
   companionName: string;
   companionNameZh: string;
@@ -53,7 +51,6 @@ interface CompanionData {
 }
 
 interface ContactItem {
-  [k: string]: unknown;
   id: string;
   companionName: string;
   avatarUrl: string;
@@ -98,6 +95,7 @@ export default function CompanionChatPage() {
   const [isTyping, setIsTyping] = useState(false);
   const [voiceOpen, setVoiceOpen] = useState(false);
   const [wordbookOpen, setWordbookOpen] = useState(false);
+  const [upgradeMsg, setUpgradeMsg] = useState<string | null>(null);
   const [sideOpen, setSideOpen] = useState(false); // 手机端联系人抽屉
   const [hintOpen, setHintOpen] = useState(false); // 「不知道怎么回」建议句展开
   const [openActionsId, setOpenActionsId] = useState<string | null>(null); // 点气泡展开的动作条（听/译/换说法）
@@ -106,7 +104,7 @@ export default function CompanionChatPage() {
   const rephraseAbortRef = useRef<AbortController | null>(null);
   const [toast, setToast] = useState<string | null>(null); // 语音错误提示
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const showToast = useCallback((m: string) => {
+  const showToast = useCallback((m: string, _type?: string) => {
     setToast(m);
     if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
     toastTimerRef.current = setTimeout(() => setToast(null), 2600);
@@ -183,7 +181,7 @@ export default function CompanionChatPage() {
         const res = await fetch(`/api/practice/session?slug=${encodeURIComponent(id)}`, { credentials: 'same-origin', cache: 'no-store' });
         const d = res.ok ? await res.json() : {};
         if (cancelled) return;
-        const restored = sanitizeMessages(d.messages);
+        const restored = sanitizeMessages(d.session?.messages);
         if (restored.length > 0) {
           setMessages(restored);
         } else {
@@ -212,7 +210,7 @@ export default function CompanionChatPage() {
         headers: { 'Content-Type': 'application/json' },
         credentials: 'same-origin',
         body: JSON.stringify({ slug: id, messages, hasSent: true }),
-      }).catch(e => console.error('[companion] session save failed', e));
+      }).catch(e => { console.error('[companion] session save failed', e); showToast('Failed to save session', 'error'); });
     }, 700);
     return () => { if (saveTimerRef.current) clearTimeout(saveTimerRef.current); };
   }, [messages, loadState, id]);
@@ -262,7 +260,13 @@ export default function CompanionChatPage() {
         }),
       });
       if (!res.ok) {
-        if (res.status === 429) { setIsTyping(false); setMessages((prev) => prev.map((m) => m.id === userMsgId ? { ...m, error: true } : m)); return; }
+        if (res.status === 429) {
+          // 额度用尽/档位不含：弹升级提示，不打 error 重试标（重试也没用）
+          const errData = await res.json().catch(() => ({}));
+          setIsTyping(false);
+          setUpgradeMsg(errData.error || t('practice.sc_ai_reply_failed', lang));
+          return;
+        }
         throw new Error('API failed');
       }
       const data = await res.json();
@@ -279,28 +283,32 @@ export default function CompanionChatPage() {
           grammarError: data.feedback.grammarError || '',
           reviewed: 0,
           createdAt: Date.now(),
-        }).catch(e => console.error('[companion] db.aiChatMistakes.add failed', e));
+        }).catch(e => { console.error('[companion] db.aiChatMistakes.add failed', e); showToast('Failed to save mistake record', 'error'); });
       }
-      // 新词落库
+      // 新词落库（按 word 去重，避免同词多次对话重复入库）
       if (data.newWords?.length) {
         for (const w of data.newWords) {
-          db.words.add({
-            id: crypto.randomUUID(),
-            word: stripParticle(w.ko),
-            pronunciation: '',
-            meaning: w.zh,
-            partOfSpeech: w.partOfSpeech || '',
-            examples: [],
-            source: 'companion-chat',
-            sourceDetail: companion.companionName,
-            mastery: 'new' as const,
-            srsLevel: 0,
-            nextReview: Date.now(),
-            easeFactor: 2.5,
-            interval: 1,
-            createdAt: Date.now(),
-            lastReviewed: null,
-          }).catch(e => console.error('[companion] db.words.add failed', e));
+          const key = stripParticle(w.ko);
+          db.words.where('word').equals(key).first().then((existing) => {
+            if (existing) return;
+            return db.words.add({
+              id: crypto.randomUUID(),
+              word: key,
+              pronunciation: '',
+              meaning: w.zh,
+              partOfSpeech: w.partOfSpeech || '',
+              examples: [],
+              source: 'companion-chat',
+              sourceDetail: companion.companionName,
+              mastery: 'new' as const,
+              srsLevel: 0,
+              nextReview: Date.now(),
+              easeFactor: 2.5,
+              interval: 1,
+              createdAt: Date.now(),
+              lastReviewed: null,
+            });
+          }).catch(e => { console.error('[companion] db.words.add failed', e); showToast('Failed to save new word', 'error'); });
         }
       }
       // 用户消息附 feedback
@@ -316,7 +324,7 @@ export default function CompanionChatPage() {
       setIsTyping(false);
       speak(aiKo).catch(e => console.error('[companion] TTS speak failed', e));
     } catch (err) {
-      if ((err as Error)?.name === 'AbortError') return;
+      if ((err as Error)?.name === 'AbortError') { setIsTyping(false); return; }
       setIsTyping(false);
       setMessages((prev) => prev.map((m) => m.id === userMsgId ? { ...m, error: true } : m));
     } finally {
@@ -346,6 +354,11 @@ export default function CompanionChatPage() {
           rephraseOf: npcKo,
         }),
       });
+      if (res.status === 429) {
+        const errData = await res.json().catch(() => ({}));
+        setUpgradeMsg(errData.error || t('practice.sc_rephrase_failed', lang));
+        return;
+      }
       if (!res.ok) throw new Error('rephrase failed');
       const data = await res.json();
       const newKo = data.aiResponse?.ko;
@@ -598,6 +611,7 @@ export default function CompanionChatPage() {
       {isDesktop && <FloatingKoreanKeyboard value={input} onChange={setInput} visible={showKeyboard} onClose={() => setShowKeyboard(false)} onSend={() => doSend(input)} />}
 
       <WordbookPanel open={wordbookOpen} onClose={() => setWordbookOpen(false)} onPick={(ko) => { setInput((v) => v + ko); setWordbookOpen(false); }} />
+      <UpgradePrompt open={!!upgradeMsg} message={upgradeMsg || ''} onClose={() => setUpgradeMsg(null)} />
       <VoiceModeOverlay
         open={voiceOpen}
         onClose={() => setVoiceOpen(false)}

@@ -1,24 +1,25 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import {
   ArrowLeft, Volume2,
   ChevronDown, ChevronUp, Loader2, BookmarkPlus, Check, Trash2, CheckSquare, Square, ListChecks, CheckCircle,
-  Eye, EyeOff, MoreHorizontal,
+  Eye, EyeOff, MoreHorizontal, Languages,
 } from 'lucide-react';
 import { DropdownMenu } from '@/components/ui/DropdownMenu';
 import { getTheme, getThemeWords } from '@/data/vocabulary';
 import { displayRomanHyphen } from '@/lib/dictionary';
 import { db, deleteWordsByText } from '@/lib/db';
 import type { WordEntry, ThemePack } from '@/types';
-import { speak, speakWord } from '@/lib/tts';
+import { speakWord } from '@/lib/tts';
 import { useAuth } from '@/components/AuthProvider';
 import { TappableText } from '@/components/TappableText';
 import { AddToBookSheet } from '@/components/vocabulary/AddToBookSheet';
 import { useIsDesktop } from '@/lib/useIsMobile';
 import { t } from '@/lib/i18n';
+import { pick } from '@/lib/content-lang';
 import { useLang } from '@/components/LangProvider';
 
 type TabKey = 'words' | 'dialogues' | 'pitfalls' | 'sentences';
@@ -39,7 +40,11 @@ export default function ThemeDetailPage() {
   const [masteredIds, setMasteredIds] = useState<Set<string>>(new Set());
   const [learningIds, setLearningIds] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [expandedSentence, setExpandedSentence] = useState<number | null>(null);
+  const [sentenceAnalysis, setSentenceAnalysis] = useState<Map<number, any>>(new Map());
+  const [analyzingSentence, setAnalyzingSentence] = useState<number | null>(null);
+  const analysisCache = useRef<Map<string, any>>(new Map());
   const [expandedWord, setExpandedWord] = useState<string | null>(null);
   const { user, loading: authLoading } = useAuth();
   const [sheetWord, setSheetWord] = useState<WordEntry | null>(null);
@@ -60,6 +65,20 @@ export default function ThemeDetailPage() {
     setShowCn(prev => {
       const next = !prev;
       try { localStorage.setItem('vocab_show_cn', next ? '1' : '0'); } catch { /* ignore */ }
+      return next;
+    });
+  };
+
+  const [showRn, setShowRn] = useState(true);
+
+  useEffect(() => {
+    try { if (localStorage.getItem('vocab_show_rn') === '0') setShowRn(false); } catch { /* ignore */ }
+  }, []);
+
+  const toggleRn = () => {
+    setShowRn(prev => {
+      const next = !prev;
+      try { localStorage.setItem('vocab_show_rn', next ? '1' : '0'); } catch { /* ignore */ }
       return next;
     });
   };
@@ -106,17 +125,53 @@ export default function ThemeDetailPage() {
         } catch {
           // db error — show words without mastery state
         }
-      } catch { /* ignore */ } finally {
+      } catch { setLoadError(true); } finally {
         setLoading(false);
       }
     })();
   }, [id, router]);
 
+  const toggleSentence = async (index: number, korean: string) => {
+    if (expandedSentence === index && sentenceAnalysis.get(index) !== 'error') {
+      setExpandedSentence(null);
+      return;
+    }
+    if (analyzingSentence !== null) return;
+    setExpandedSentence(index);
+    if (sentenceAnalysis.has(index) && sentenceAnalysis.get(index) !== 'error') return;
+    const cached = analysisCache.current.get(korean);
+    if (cached) {
+      setSentenceAnalysis(prev => new Map(prev).set(index, cached));
+      return;
+    }
+    // 游客未登录：AI 解析需登录，直接留空走静态 breakdown 兜底
+    if (!user) return;
+    setAnalyzingSentence(index);
+    try {
+      const res = await fetch('/api/ai/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sentence: korean, mode: 'learn' }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        analysisCache.current.set(korean, data);
+        setSentenceAnalysis(prev => new Map(prev).set(index, data));
+      } else {
+        setSentenceAnalysis(prev => new Map(prev).set(index, 'error'));
+      }
+    } catch {
+      setSentenceAnalysis(prev => new Map(prev).set(index, 'error'));
+    } finally {
+      setAnalyzingSentence(null);
+    }
+  };
+
   const saveSentence = async (korean: string, chinese: string, sourceTitle: string) => {
     if (savedSentenceIds.has(korean)) return;
     const existing = await db.sentences.where('korean').equals(korean).first().catch(() => null);
     if (!existing) {
-      await db.sentences.add({ id: crypto.randomUUID(), korean, chinese, source_type: 'vocabulary', source_id: 'theme-' + id, source_title: sourceTitle, created_at: Date.now() }).catch(() => {});
+      await db.sentences.add({ id: crypto.randomUUID(), korean, chinese, source_type: 'vocabulary', source_id: 'theme-' + id, source_title: sourceTitle, created_at: Date.now() }).catch((e) => { console.error('saveSentence: failed to add sentence', korean, e); });
     }
     setSavedSentenceIds((prev) => new Set(prev).add(korean));
   };
@@ -153,11 +208,13 @@ export default function ThemeDetailPage() {
         }
       }
       await Promise.all([
-        toInsert.length > 0 ? db.words.bulkPut(toInsert).catch(() => {}) : Promise.resolve(),
-        newWordIds.length > 0 ? db.wordBooks.update(bookId, { wordIds: [...book.wordIds, ...newWordIds], updatedAt: now }).catch(() => {}) : Promise.resolve(),
-      ]);
+        toInsert.length > 0 ? db.words.bulkPut(toInsert) : Promise.resolve(),
+        newWordIds.length > 0 ? db.wordBooks.update(bookId, { wordIds: [...book.wordIds, ...newWordIds], updatedAt: now }) : Promise.resolve(),
+      ].map(p => p.catch(() => { throw new Error('bulkPut or update failed'); })));
       setAddedAll(true);
       setTimeout(() => setAddedAll(false), 3000);
+    } catch {
+      alert(t('vocab.err_save_failed', lang));
     } finally {
       setAddingAll(false);
       setAddAllBook(false);
@@ -181,8 +238,8 @@ export default function ThemeDetailPage() {
   const toggleMastered = async (entry: WordEntry) => {
     const now = Date.now();
     const isMastered = masteredIds.has(entry.korean);
-    const rows = await db.words.where('word').equals(entry.korean).toArray();
     try {
+      const rows = await db.words.where('word').equals(entry.korean).toArray();
       if (isMastered) {
         if (rows.length) {
           await db.words.bulkUpdate(
@@ -217,25 +274,25 @@ export default function ThemeDetailPage() {
     const now = Date.now();
     const selected = words.filter(e => selectedWords.has(e.korean));
     const selectedKoreans = selected.map(e => e.korean);
-    const scopedUserWords = selectedKoreans.length ? await db.words.where('word').anyOf(selectedKoreans).toArray() : [];
-    const userWordMap = new Map(scopedUserWords.map(w => [w.word, w]));
-    const toUpdate: any[] = [];
-    const toInsert: any[] = [];
-    for (const entry of selected) {
-      const existing = userWordMap.get(entry.korean);
-      if (existing) {
-        toUpdate.push({ id: existing.id, mastery: 'mastered', srsLevel: 5, interval: 21, nextReview: now + 21 * 86400000, lastReviewed: now });
-      } else {
-        toInsert.push({
-          id: crypto.randomUUID(), word: entry.korean, pronunciation: entry.romanization,
-          meaning: entry.meanings[0]?.chinese || '', partOfSpeech: entry.partOfSpeech,
-          examples: entry.examples.map(ex => ({ text: ex.korean, translation: ex.chinese, source: 'dictionary' as const })),
-          sourceEntryId: entry.id, mastery: 'mastered', srsLevel: 5, easeFactor: 2.5, interval: 21,
-          nextReview: now + 21 * 86400000, createdAt: now, lastReviewed: now, source: 'library',
-        });
-      }
-    }
     try {
+      const scopedUserWords = selectedKoreans.length ? await db.words.where('word').anyOf(selectedKoreans).toArray() : [];
+      const userWordMap = new Map(scopedUserWords.map(w => [w.word, w]));
+      const toUpdate: any[] = [];
+      const toInsert: any[] = [];
+      for (const entry of selected) {
+        const existing = userWordMap.get(entry.korean);
+        if (existing) {
+          toUpdate.push({ id: existing.id, mastery: 'mastered', srsLevel: 5, interval: 21, nextReview: now + 21 * 86400000, lastReviewed: now });
+        } else {
+          toInsert.push({
+            id: crypto.randomUUID(), word: entry.korean, pronunciation: entry.romanization,
+            meaning: entry.meanings[0]?.chinese || '', partOfSpeech: entry.partOfSpeech,
+            examples: entry.examples.map(ex => ({ text: ex.korean, translation: ex.chinese, source: 'dictionary' as const })),
+            sourceEntryId: entry.id, mastery: 'mastered', srsLevel: 5, easeFactor: 2.5, interval: 21,
+            nextReview: now + 21 * 86400000, createdAt: now, lastReviewed: now, source: 'library',
+          });
+        }
+      }
       await Promise.all([
         toUpdate.length > 0 ? db.words.bulkUpdate(toUpdate) : Promise.resolve(),
         toInsert.length > 0 ? db.words.bulkPut(toInsert) : Promise.resolve(),
@@ -249,7 +306,13 @@ export default function ThemeDetailPage() {
   };
 
   const batchDelete = async () => {
-    await deleteWordsByText(selectedWords); // 删词 + 从收藏本剔除孤儿 id
+    try {
+      await deleteWordsByText(selectedWords); // 删词 + 从收藏本剔除孤儿 id
+    } catch {
+      alert(t('vocab.err_check_login', lang));
+      exitManage();
+      return;
+    }
     setMasteredIds(prev => { const s = new Set(prev); selectedWords.forEach(w => s.delete(w)); return s; });
     setLearningIds(prev => { const s = new Set(prev); selectedWords.forEach(w => s.delete(w)); return s; });
     exitManage();
@@ -259,6 +322,17 @@ export default function ThemeDetailPage() {
     return (
       <div className="flex items-center justify-center py-32">
         <Loader2 size={32} className="animate-spin text-[var(--text-secondary)]" />
+      </div>
+    );
+  }
+
+  if (loadError) {
+    return (
+      <div className="flex flex-col items-center justify-center py-32 gap-4">
+        <p className="text-sm text-[var(--text-muted)]">{t('common.error', lang)}</p>
+        <button onClick={() => window.location.reload()} className="text-sm text-[var(--pink-primary)] underline underline-offset-2">
+          {t('common.retry', lang)}
+        </button>
       </div>
     );
   }
@@ -468,7 +542,7 @@ export default function ThemeDetailPage() {
                             style={{ fontSize: 18, fontWeight: 600, color: 'var(--text-primary)', lineHeight: 1.5 }}
                             source="实景对话"
                           />
-                          <p style={{ fontSize: 14, color: 'var(--text-secondary)', margin: '6px 0 0', lineHeight: 1.6 }}>{turn.chinese}</p>
+                          <p style={{ fontSize: 14, color: 'var(--text-secondary)', margin: '6px 0 0', lineHeight: 1.6 }}>{pick(lang, turn.chinese, turn.english)}</p>
                           {turn.note && (
                             <p style={{
                               fontSize: 12, color: 'var(--text-muted)',
@@ -613,12 +687,15 @@ export default function ThemeDetailPage() {
           <div className="space-y-2">
             {theme.sentences.map((s, i) => {
               const isExpanded = expandedSentence === i;
+              const isAnalyzing = analyzingSentence === i;
+              const analysis = sentenceAnalysis.get(i);
+              const hasAiAnalysis = analysis && analysis !== 'error';
               const hasBreakdown = s.breakdown && s.breakdown.length > 0;
               return (
                 <div key={i} className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl overflow-hidden">
                   <div
                     className="p-3 flex items-start gap-3 group cursor-pointer"
-                    onClick={() => hasBreakdown && setExpandedSentence(isExpanded ? null : i)}
+                    onClick={() => toggleSentence(i, s.korean)}
                   >
                     <span className="text-xs font-bold text-[var(--text-muted)] w-5 shrink-0 mt-0.5">{i + 1}.</span>
                     <div className="flex-1 min-w-0">
@@ -636,7 +713,7 @@ export default function ThemeDetailPage() {
                         </div>
                       )}
                       <TappableText text={s.korean} className="break-words" style={{ fontSize: 18, fontWeight: 600, color: 'var(--text-primary)', lineHeight: 1.5 }} source="场景句型" />
-                      <p className="text-xs text-[var(--text-secondary)] mt-0.5">{s.chinese}</p>
+                      <p className="text-xs text-[var(--text-secondary)] mt-0.5">{pick(lang, s.chinese, s.english)}</p>
                     </div>
                     <div className="flex items-center gap-1 shrink-0">
                       <button
@@ -645,56 +722,104 @@ export default function ThemeDetailPage() {
                       >
                         <Volume2 size={14} />
                       </button>
-                      {hasBreakdown && (
-                        <span className="text-[var(--text-muted)]">
-                          {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-                        </span>
-                      )}
+                      <span className="text-[var(--text-muted)]">
+                        {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                      </span>
                     </div>
                   </div>
-                  {isExpanded && hasBreakdown && (
+                  {isExpanded && (
                     <div style={{ padding: '10px 14px 14px', borderTop: '1px solid var(--border-color)', background: 'var(--bg-input)' }}>
-                      <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.12em', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: 8 }}>
-                        {t('vocab.td_grammar', lang)}
-                      </p>
-                      <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        {s.breakdown!.map((b, j) => {
-                          const role = b.role || b.partOfSpeech || '';
-                          const note = b.note || b.meaning || '';
-                          return (
-                            <div
-                              key={j}
-                              style={{
-                                display: 'grid',
-                                gridTemplateColumns: '84px 1fr',
-                                gap: 12,
-                                alignItems: 'baseline',
-                                padding: '6px 0',
-                                borderBottom: j < s.breakdown!.length - 1 ? '1px dashed var(--border-color)' : 'none',
-                              }}
-                            >
-                              <span
-                                style={{
-                                  fontSize: 10,
-                                  fontWeight: 700,
-                                  letterSpacing: '.08em',
-                                  color: 'var(--pink-primary)',
-                                  textAlign: 'right',
-                                  wordBreak: 'keep-all',
-                                }}
-                              >
-                                {role}
-                              </span>
-                              <div style={{ minWidth: 0 }}>
-                                <TappableText text={b.text} className="text-[15px] font-semibold" source="语法拆解" />
-                                {note && (
-                                  <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 2, lineHeight: 1.5 }}>{note}</p>
-                                )}
+                      {isAnalyzing ? (
+                        <div className="flex items-center justify-center py-4">
+                          <Loader2 size={18} className="animate-spin" style={{ color: 'var(--pink-primary)' }} />
+                        </div>
+                      ) : hasAiAnalysis ? (
+                        <div className="space-y-3">
+                          {/* 点击查词 */}
+                          <div>
+                            <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.12em', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: 6 }}>{t('vocab.sentences_tap_word', lang)}</p>
+                            <TappableText
+                              text={s.korean}
+                              source="场景句型"
+                              style={{ fontSize: 17, lineHeight: 1.7, color: 'var(--text-primary)' }}
+                            />
+                          </div>
+                          {/* 语法点 */}
+                          {(analysis.grammar ?? []).length > 0 && (
+                            <div>
+                              <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.12em', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: 6 }}>{t('vocab.sentences_grammar', lang)}</p>
+                              <div className="space-y-2">
+                                {(analysis.grammar as any[]).map((g: any, j: number) => (
+                                  <div key={j} className="pl-2 border-l-2 border-[var(--mint-soft)]">
+                                    <p className="text-[15px] font-bold text-[var(--text-primary)]">{g.pattern}{g.title ? ` · ${g.title}` : ''}</p>
+                                    <p className="text-[13px] text-[var(--text-secondary)] leading-relaxed">{g.usage || g.explanation}</p>
+                                  </div>
+                                ))}
                               </div>
                             </div>
-                          );
-                        })}
-                      </div>
+                          )}
+                          {/* 助词 */}
+                          {(analysis.particles ?? []).length > 0 && (
+                            <div>
+                              <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.12em', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: 6 }}>{t('vocab.sentences_particles', lang)}</p>
+                              <div className="flex flex-wrap gap-x-4 gap-y-1">
+                                {(analysis.particles as any[]).map((p: any, j: number) => (
+                                  <span key={j} className="text-[14px]">
+                                    <span className="font-bold text-[var(--text-primary)]">{p.text}</span>
+                                    <span className="text-[var(--text-muted)] ml-1">{p.explanation}</span>
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      ) : hasBreakdown ? (
+                        <>
+                          <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.12em', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: 8 }}>
+                            {t('vocab.td_grammar', lang)}
+                          </p>
+                          <div style={{ display: 'flex', flexDirection: 'column' }}>
+                            {s.breakdown!.map((b, j) => {
+                              const role = b.role || b.partOfSpeech || '';
+                              const note = b.note || b.meaning || '';
+                              return (
+                                <div
+                                  key={j}
+                                  style={{
+                                    display: 'grid',
+                                    gridTemplateColumns: '84px 1fr',
+                                    gap: 12,
+                                    alignItems: 'baseline',
+                                    padding: '6px 0',
+                                    borderBottom: j < s.breakdown!.length - 1 ? '1px dashed var(--border-color)' : 'none',
+                                  }}
+                                >
+                                  <span
+                                    style={{
+                                      fontSize: 10,
+                                      fontWeight: 700,
+                                      letterSpacing: '.08em',
+                                      color: 'var(--pink-primary)',
+                                      textAlign: 'right',
+                                      wordBreak: 'keep-all',
+                                    }}
+                                  >
+                                    {role}
+                                  </span>
+                                  <div style={{ minWidth: 0 }}>
+                                    <TappableText text={b.text} className="text-[15px] font-semibold" source="语法拆解" />
+                                    {note && (
+                                      <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 2, lineHeight: 1.5 }}>{note}</p>
+                                    )}
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </>
+                      ) : (
+                        <p className="text-xs text-[var(--text-muted)] text-center py-2">{t('vocab.sentences_analyze_failed', lang)}</p>
+                      )}
                     </div>
                   )}
                 </div>
@@ -724,7 +849,14 @@ export default function ThemeDetailPage() {
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-colors ${showCn ? 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)]' : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:border-[var(--pink-primary)]/30'}`}
                 >
                   {showCn ? <Eye size={12} /> : <EyeOff size={12} />}
-                  {showCn ? t('vocab.show_cn', lang) : t('vocab.hide_cn', lang)}
+                  {showCn ? t('vocab.hide_cn', lang) : t('vocab.show_cn', lang)}
+                </button>
+                <button
+                  onClick={toggleRn}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-colors ${showRn ? 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)]' : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:border-[var(--pink-primary)]/30'}`}
+                >
+                  <Languages size={12} />
+                  {showRn ? t('vocab.hide_rn', lang) : t('vocab.show_rn', lang)}
                 </button>
                 <button
                   onClick={() => { if (authLoading) return; if (!user) { router.push('/auth/login?redirect=' + window.location.pathname); return; } setAddAllBook(true); }}
@@ -825,7 +957,7 @@ export default function ThemeDetailPage() {
               >
                 {/* Summary row */}
                 <div className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-[var(--bg-card-hover)] transition-colors">
-                  {managing && !isMastered && (
+                  {managing && (
                     <div
                       className={`w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-colors cursor-pointer ${isSelected ? 'bg-[var(--mint-soft)] border-[var(--mint-soft)]' : 'border-[var(--border-color)] bg-[var(--bg-card)]'}`}
                       onClick={() => toggleSelect(entry.korean)}
@@ -834,22 +966,22 @@ export default function ThemeDetailPage() {
                     </div>
                   )}
                   <button
-                    onClick={() => { if (managing && !isMastered) { toggleSelect(entry.korean); return; } setExpandedWord(isExpanded ? null : entry.id); }}
+                    onClick={() => { if (managing) { toggleSelect(entry.korean); return; } setExpandedWord(isExpanded ? null : entry.id); }}
                     className="flex-1 flex items-center gap-3 min-w-0 text-left"
                   >
                     <div className="flex-1 min-w-0">
                       <div className="flex items-baseline gap-2.5 min-w-0">
                         <span className="ko-text font-bold text-[var(--text-primary)] text-[19px] leading-tight whitespace-nowrap">{entry.korean}</span>
-                        <span className="min-w-0 truncate text-[12.5px] font-semibold tracking-wide text-[var(--pink-primary)]">
+                        {showRn && <span className="min-w-0 truncate text-[12.5px] font-semibold tracking-wide text-[var(--pink-primary)]">
                           [{displayRomanHyphen(entry.romanization, entry.korean)}]
-                        </span>
+                        </span>}
                       </div>
                       <div className="flex items-center gap-2 mt-2 min-w-0">
                         {entry.partOfSpeech && (
                           <span className="shrink-0 text-[10.5px] font-semibold px-1.5 py-0.5 rounded bg-[var(--bg-accent)] text-[var(--text-muted)]">{entry.partOfSpeech}</span>
                         )}
                         {showCn ? (
-                          <span className="text-sm text-[var(--text-primary)] leading-snug truncate">{entry.meanings.map((m) => m.chinese).join('；')}</span>
+                          <span className="text-sm text-[var(--text-primary)] leading-snug truncate">{entry.meanings.map((m) => pick(lang, m.chinese, m.english)).join('；')}</span>
                         ) : (
                           <span className="text-xs text-[var(--text-muted)] leading-snug truncate">{t('vocab.tap_reveal_cn', lang)}</span>
                         )}
@@ -909,7 +1041,7 @@ export default function ThemeDetailPage() {
                             {m.register}
                           </span>
                         </div>
-                        {!showCn && <p className="text-sm text-[var(--text-primary)]">{m.chinese}</p>}
+                        {!showCn && <p className="text-sm text-[var(--text-primary)]">{pick(lang, m.chinese, m.english)}</p>}
                       </div>
                     ))}
 
@@ -921,7 +1053,7 @@ export default function ThemeDetailPage() {
                           <div key={i} className="bg-[var(--bg-input)] rounded-lg p-3 flex items-start gap-2">
                             <div className="flex-1 min-w-0">
                               <TappableText text={ex.korean} className="text-[var(--text-primary)]" style={{ fontSize: 18, fontWeight: 600, lineHeight: 1.5 }} source="主题词库" highlightWord={entry.korean} />
-                              <p className="text-[13px] text-[var(--text-secondary)] mt-1 leading-snug">{ex.chinese}</p>
+                              <p className="text-[13px] text-[var(--text-secondary)] mt-1 leading-snug">{pick(lang, ex.chinese, ex.english)}</p>
                               {ex.scene && (
                                 <span className="inline-block text-[13px] text-[var(--text-muted)] mt-1 bg-[var(--bg-card)] px-1.5 py-0.5 rounded">
                                   {ex.scene}
@@ -1012,7 +1144,7 @@ export default function ThemeDetailPage() {
                 <button onClick={() => setDeletePending(false)} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[var(--bg-input)] text-[var(--text-secondary)] text-sm font-semibold">
                   {t('common.cancel', lang)}
                 </button>
-                <button onClick={batchDelete} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-red-500 text-white text-sm font-semibold">
+                <button onClick={batchDelete} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[var(--color-danger)] text-white text-sm font-semibold">
                   <Trash2 size={14} /> {t('vocab.confirm_delete_n', lang, { n: selectedWords.size })}
                 </button>
               </>
@@ -1021,7 +1153,7 @@ export default function ThemeDetailPage() {
                 <button onClick={batchMaster} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[var(--mint-soft)]/15 text-[var(--mint-soft)] text-sm font-semibold hover:bg-[var(--mint-soft)]/25 transition-colors">
                   <CheckCircle size={14} /> {t('vocab.mark_mastered_n', lang, { n: selectedWords.size })}
                 </button>
-                <button onClick={() => setDeletePending(true)} className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-red-50 text-red-500 text-sm font-semibold hover:bg-red-100 transition-colors">
+                <button onClick={() => setDeletePending(true)} className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-[var(--color-danger-bg)] text-[var(--color-danger)] text-sm font-semibold hover:brightness-95 transition-colors">
                   <Trash2 size={14} />
                 </button>
               </>

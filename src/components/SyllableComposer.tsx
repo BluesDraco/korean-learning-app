@@ -2,20 +2,25 @@
 
 import { useState, useCallback } from 'react';
 import { Volume2, Shuffle, X, Sparkles } from 'lucide-react';
-import { speak, speakWord } from '@/lib/tts';
+import { speakWord } from '@/lib/tts';
 import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
 
 const INITIALS = [
   { letter: 'ㄱ', name: '기역', rom: 'g' },
+  { letter: 'ㄲ', name: '쌍기역', rom: 'kk' },
   { letter: 'ㄴ', name: '니은', rom: 'n' },
   { letter: 'ㄷ', name: '디귿', rom: 'd' },
+  { letter: 'ㄸ', name: '쌍디귿', rom: 'tt' },
   { letter: 'ㄹ', name: '리을', rom: 'r/l' },
   { letter: 'ㅁ', name: '미음', rom: 'm' },
   { letter: 'ㅂ', name: '비읍', rom: 'b' },
+  { letter: 'ㅃ', name: '쌍비읍', rom: 'pp' },
   { letter: 'ㅅ', name: '시옷', rom: 's' },
+  { letter: 'ㅆ', name: '쌍시옷', rom: 'ss' },
   { letter: 'ㅇ', name: '이응', rom: '' },
   { letter: 'ㅈ', name: '지읒', rom: 'j' },
+  { letter: 'ㅉ', name: '쌍지읒', rom: 'jj' },
   { letter: 'ㅊ', name: '치읓', rom: 'ch' },
   { letter: 'ㅋ', name: '키읔', rom: 'k' },
   { letter: 'ㅌ', name: '티읕', rom: 't' },
@@ -25,26 +30,37 @@ const INITIALS = [
 
 const VOWELS = [
   { letter: 'ㅏ', name: '아', rom: 'a' },
+  { letter: 'ㅐ', name: '애', rom: 'ae' },
   { letter: 'ㅑ', name: '야', rom: 'ya' },
+  { letter: 'ㅒ', name: '얘', rom: 'yae' },
   { letter: 'ㅓ', name: '어', rom: 'eo' },
+  { letter: 'ㅔ', name: '에', rom: 'e' },
   { letter: 'ㅕ', name: '여', rom: 'yeo' },
+  { letter: 'ㅖ', name: '예', rom: 'ye' },
   { letter: 'ㅗ', name: '오', rom: 'o' },
+  { letter: 'ㅘ', name: '와', rom: 'wa' },
+  { letter: 'ㅙ', name: '왜', rom: 'wae' },
+  { letter: 'ㅚ', name: '외', rom: 'oe' },
   { letter: 'ㅛ', name: '요', rom: 'yo' },
   { letter: 'ㅜ', name: '우', rom: 'u' },
+  { letter: 'ㅝ', name: '워', rom: 'wo' },
+  { letter: 'ㅞ', name: '웨', rom: 'we' },
+  { letter: 'ㅟ', name: '위', rom: 'wi' },
   { letter: 'ㅠ', name: '유', rom: 'yu' },
   { letter: 'ㅡ', name: '으', rom: 'eu' },
+  { letter: 'ㅢ', name: '의', rom: 'ui' },
   { letter: 'ㅣ', name: '이', rom: 'i' },
 ];
 
 const FINALS = [
-  { letter: '없음', name: '无收音', rom: '' },
-  { letter: 'ㄱ', name: 'ㄱ收音', rom: 'k' },
-  { letter: 'ㄴ', name: 'ㄴ收音', rom: 'n' },
-  { letter: 'ㄷ', name: 'ㄷ收音', rom: 't' },
-  { letter: 'ㄹ', name: 'ㄹ收音', rom: 'l' },
-  { letter: 'ㅁ', name: 'ㅁ收音', rom: 'm' },
-  { letter: 'ㅂ', name: 'ㅂ收音', rom: 'p' },
-  { letter: 'ㅇ', name: 'ㅇ收音', rom: 'ng' },
+  { letter: '없음', rom: '' },
+  { letter: 'ㄱ', rom: 'k' },
+  { letter: 'ㄴ', rom: 'n' },
+  { letter: 'ㄷ', rom: 't' },
+  { letter: 'ㄹ', rom: 'l' },
+  { letter: 'ㅁ', rom: 'm' },
+  { letter: 'ㅂ', rom: 'p' },
+  { letter: 'ㅇ', rom: 'ng' },
 ];
 
 function composeSyllable(cho: string, jung: string, jong: string): string {

@@ -253,7 +253,7 @@ function injectBakedSpeakers(root: HTMLElement, lang: Lang): HTMLButtonElement[]
   return created;
 }
 
-const WBLOCK_ROLES = new Set(['subject', 'object', 'verb', 'place', 'time', 'plain']);
+const WBLOCK_ROLES = new Set(['subject', 'object', 'verb', 'place', 'time', 'adverb', 'noun', 'adjective', 'plain']);
 
 function WordBlockEl({ role, text }: { role: string; text: string }) {
   const cls = WBLOCK_ROLES.has(role) ? role : 'plain';
@@ -263,7 +263,7 @@ function WordBlockEl({ role, text }: { role: string; text: string }) {
 function TokenEl({ role }: { role: string }) {
   const { lang } = useLang();
   const roleLabel: Record<string, string> = {
-    subject: t('grammar.token_subject', lang), object: t('grammar.token_object', lang), verb: t('grammar.token_verb', lang), place: t('grammar.token_place', lang), time: t('grammar.token_time', lang),
+    subject: t('grammar.token_subject', lang), object: t('grammar.token_object', lang), verb: t('grammar.token_verb', lang), place: t('grammar.token_place', lang), time: t('grammar.token_time', lang), adverb: t('grammar.token_adverb', lang), noun: t('grammar.token_noun', lang), adjective: t('grammar.token_adjective', lang),
   };
   if (role === 'plain' || !roleLabel[role]) return null;
   return <span className={`gr-wtoken ${role}`}>{roleLabel[role]}</span>;
@@ -364,15 +364,24 @@ function CardSortStep({ examples }: { examples: GrammarCard['cardExamples'] }) {
 
 function CardJudgeStep({ mistakes }: { mistakes: GrammarCard['mistakes'] }) {
   const { lang } = useLang();
-  const judges = React.useMemo(() => mistakes.map(m => {
-    const swap = Math.random() < 0.5;
-    return {
-      A: swap ? m.wrong : m.correct,
-      B: swap ? m.correct : m.wrong,
-      ans: swap ? 'B' as const : 'A' as const,
-      why: m.note,
+  // 用 ref 渲染期缓存，仅在 mistakes 变化时重算一次。
+  // 不用 useMemo：其缓存可被 React 丢弃重算，Math.random 会重掷 → 已答题的 A/B 内容与正确答案对调（答对变答错）。
+  const judgesRef = React.useRef<{ src: typeof mistakes; arr: Array<{ A: string; B: string; ans: 'A' | 'B'; why: string }> } | null>(null);
+  if (!judgesRef.current || judgesRef.current.src !== mistakes) {
+    judgesRef.current = {
+      src: mistakes,
+      arr: mistakes.map(m => {
+        const swap = Math.random() < 0.5;
+        return {
+          A: swap ? m.wrong : m.correct,
+          B: swap ? m.correct : m.wrong,
+          ans: swap ? 'B' as const : 'A' as const,
+          why: m.note,
+        };
+      }),
     };
-  }), [mistakes]);
+  }
+  const judges = judgesRef.current.arr;
   const [states, setStates] = React.useState(() => judges.map(() => ({ done: false, ok: false, picked: '' })));
 
   const pick = (i: number, choice: string) => {
@@ -482,7 +491,7 @@ function SpecialQuizStep({ quiz, onScore }: { quiz: NonNullable<GrammarCard['spe
               <div className="gr-jq-result">
                 <div className={`gr-jq-verdict${s.ok ? ' ok' : ' ng'}`}>
                   {s.ok ? t('grammar.quiz_correct', lang) : t('grammar.quiz_wrong_answer', lang, { answer: q.options[q.answer] })}
-                  {!s.ok && <button onClick={() => speak(q.options[q.answer])} className="gr-card-play sm" aria-label={t('a11y.play_audio', lang)}><Volume2 size={12} /></button>}
+                  {!s.ok && quiz.type !== 'judge' && <button onClick={() => speak(q.options[q.answer])} className="gr-card-play sm" aria-label={t('a11y.play_audio', lang)}><Volume2 size={12} /></button>}
                 </div>
                 <div className="gr-jq-why">{q.explanation}</div>
               </div>
@@ -536,7 +545,7 @@ function GrammarCardView({
   React.useEffect(() => {
     if (!user?.id) return;
     let cancelled = false;
-    loadLessonMap().then(map => { if (!cancelled) setLessonStates(map); }).catch((e) => { console.warn('Failed to load lesson map:', e); });
+    loadLessonMap().then(map => { if (!cancelled) setLessonStates(map); }).catch((e) => { console.error('Failed to load lesson map:', e); });
     return () => { cancelled = true; };
   }, [user?.id]);
   // baked HTML 韩语句注入喇叭：每次换 step / 换课后重扫（dangerouslySetInnerHTML 内容 React 不管）
@@ -973,7 +982,6 @@ function GrammarCardView({
                         <div key={i} className="gr-rule-item">
                           <div className="gr-rule-num">{i + 1}</div>
                           <div style={{ flex: 1 }}><b>{rule.text}</b>{rule.examples ? ` — ${rule.examples}` : ''}</div>
-                          <button onClick={() => speak(rule.text)} className="gr-card-play sm" aria-label={t('a11y.play_audio', lang)}><Volume2 size={12} /></button>
                         </div>
                       );
                     })}
@@ -1021,7 +1029,7 @@ function GrammarCardView({
                                 <span className="gr-rule-text">{highlightKorean(item.text)}</span>
                                 {item.examples && <span className="gr-rule-eg">{highlightKorean(item.examples)}</span>}
                               </div>
-                              <button onClick={() => speak(item.examples ? (koreanSpeakText(item.examples) || item.examples) : item.text)} className="gr-card-play sm" aria-label={t('a11y.play_audio', lang)}><Volume2 size={12} /></button>
+                              {item.type === 'example' && <button onClick={() => speak(item.examples ? (koreanSpeakText(item.examples) || item.examples) : item.text)} className="gr-card-play sm" aria-label={t('a11y.play_audio', lang)}><Volume2 size={12} /></button>}
                             </div>
                           ))}
                         </div>
@@ -1292,10 +1300,11 @@ function GrammarCardView({
                         {card.connectionRules.map((rule, i) => {
                           const text = `${rule.text}${rule.examples ? '　' + rule.examples : ''}`;
                           const speakText = rule.examples || rule.text;
+                          const isExample = typeof rule !== 'string' && rule.type === 'example';
                           return (
                             <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                               <span style={{ flex: 1 }}>{text}</span>
-                              <button onClick={() => speak(speakText)} className="gr-card-play sm" aria-label={t('a11y.play_audio', lang)}><Volume2 size={11} /></button>
+                              {isExample && <button onClick={() => speak(speakText)} className="gr-card-play sm" aria-label={t('a11y.play_audio', lang)}><Volume2 size={11} /></button>}
                             </div>
                           );
                         })}
@@ -1566,18 +1575,18 @@ type ErrState = { revealed: boolean };
 type SortQState = { order: string[]; answers: string[]; used: number[]; checked: boolean; result: 'ok' | 'ng' | null };
 const mkSortStates = (data: { words: string[] }[]): SortQState[] => data.map(q => ({ order: shuffle(q.words), answers: [], used: [], checked: false, result: null }));
 
-function SortStep({ data = SORT_Q, onDone }: { data?: typeof SORT_Q; onDone: () => void }) {
+function SortStep({ data = SORT_Q, onScore }: { data?: typeof SORT_Q; onScore?: (s: { correct: number; total: number }) => void }) {
   const C = useC();
   const { lang } = useLang();
   const [qIdx, setQIdx] = React.useState(0);
   const [states, setStates] = React.useState<SortQState[]>(() => mkSortStates(data));
   const [allDone, setAllDone] = React.useState(false);
 
+  // Report score: count questions answered correctly so far
   React.useEffect(() => {
-    setStates(mkSortStates(data));
-    setQIdx(0);
-    setAllDone(false);
-  }, [data]);
+    const correct = states.filter(s => s.result === 'ok').length;
+    onScore?.({ correct, total: data.length });
+  }, [states, data.length, onScore]);
 
   const cur = states[qIdx];
   const patch = (upd: Partial<SortQState>) => setStates(s => s.map((st, i) => i === qIdx ? { ...st, ...upd } : st));
@@ -1807,12 +1816,19 @@ function JudgeStep({ data = JUDGE_DATA, onScore }: { data?: typeof JUDGE_DATA; o
   );
 }
 
-function ErrStep({ data = ERR_DATA }: { data?: typeof ERR_DATA }) {
+function ErrStep({ data = ERR_DATA, onScore }: { data?: typeof ERR_DATA; onScore?: (s: { correct: number; total: number }) => void }) {
   const C = useC();
   const { lang } = useLang();
   const [states, setStates] = React.useState<ErrState[]>(() => data.map(() => ({ revealed: false })));
 
-  const reveal = (i: number) => setStates(s => s.map((item, j) => j === i ? { revealed: true } : item));
+  const reveal = (i: number) => {
+    setStates(s => {
+      const next = s.map((item, j) => j === i ? { revealed: true } : item);
+      const correct = next.filter(st => st.revealed).length;
+      onScore?.({ correct, total: data.length });
+      return next;
+    });
+  };
 
   return (
     <div>
@@ -2163,20 +2179,27 @@ function ComprehensivePractice({ card, onBack, onComplete }: { card: GrammarCard
   const imitateStem = imitateSib?.cardExamples[0];
   const continueStem = continueSib?.scenarios[0];
 
+  // 仅记正确数；max 值从数据实时派生（避免 useState 初始化时数据未就绪导致分母恒 0）
   const [scores, setScores] = React.useState({
-    fill3: 0, fill3max: fill1Data?.length ?? 0,
-    fill4: 0, fill4max: fill2Data?.length ?? 0,
-    morph: 0, morphmax: morphData?.length ?? 0,
-    judge: 0, judgemax: judgeData?.length ?? 0,
-    scenario: 0, scenariomax: scenarioData?.length ?? 0,
-    cloze: 0, clozemax: clozeData?.length ?? 0,
-    quiz: 0, quizmax: card.specialQuiz?.questions.length ?? 0,
-    dictation: 0, dictationmax: dictationData?.length ?? 0,
-    // 仿写/续写 AI 题：各自独立记分槽，取值而非累加（回退重答幂等，不虚增分母）。
-    // 未答时 max=0 不计入总分；答过一次后 max=1。
+    sort: 0, fill3: 0, fill4: 0, morph: 0, judge: 0, err: 0,
+    scenario: 0, cloze: 0, quiz: 0, dictation: 0,
     imitate: 0, imitatemax: 0,
     continue: 0, continuemax: 0,
   });
+  const scoreMax = {
+    sort: sortData?.length ?? 0,
+    fill3: fill1Data?.length ?? 0,
+    fill4: fill2Data?.length ?? 0,
+    morph: morphData?.length ?? 0,
+    judge: judgeData?.length ?? 0,
+    err: errData?.length ?? 0,
+    scenario: scenarioData?.length ?? 0,
+    cloze: clozeData?.length ?? 0,
+    quiz: card.specialQuiz?.questions.length ?? 0,
+    dictation: dictationData?.length ?? 0,
+    imitate: scores.imitatemax,
+    continue: scores.continuemax,
+  };
 
   // 桌面详情页是 position:fixed 独立滚动容器，翻页要滚它自己（window 无效）
   const scopeRef = React.useRef<HTMLDivElement>(null);
@@ -2240,7 +2263,7 @@ function ComprehensivePractice({ card, onBack, onComplete }: { card: GrammarCard
     <>
       <h2 className="gr-card-h">{t('grammar.practice_sort_title', lang)}</h2>
       <p className="gr-card-lede">{t('grammar.practice_sort_desc', lang)}</p>
-      <SortStep data={sortData} onDone={() => {}} />
+      <SortStep data={sortData} onScore={s => setScores(prev => ({ ...prev, sort: s.correct }))} />
     </>
   ));
   if (clozeData?.length) pushStep(PS_CLOZE, () => (
@@ -2282,7 +2305,7 @@ function ComprehensivePractice({ card, onBack, onComplete }: { card: GrammarCard
     <>
       <h2 className="gr-card-h">{t('grammar.practice_error_title', lang)}</h2>
       <p className="gr-card-lede">{t('grammar.practice_error_desc', lang)}</p>
-      <ErrStep data={errData} />
+      <ErrStep data={errData} onScore={s => setScores(prev => ({ ...prev, err: s.correct }))} />
     </>
   ));
   if (scenarioData?.length) pushStep(PS_SCENARIO, () => (
@@ -2331,15 +2354,17 @@ function ComprehensivePractice({ card, onBack, onComplete }: { card: GrammarCard
     </>
   ));
   const scoreItems = [
-    { label: t('grammar.practice_score_cloze', lang), correct: scores.cloze, max: scores.clozemax },
-    { label: t('grammar.practice_score_fill1', lang), correct: scores.fill3, max: scores.fill3max },
-    { label: t('grammar.practice_score_fill2', lang), correct: scores.fill4, max: scores.fill4max },
-    { label: t('grammar.practice_score_morph', lang), correct: scores.morph, max: scores.morphmax },
-    { label: t('grammar.practice_score_judge', lang), correct: scores.judge, max: scores.judgemax },
-    { label: t('grammar.practice_score_scenario', lang), correct: scores.scenario, max: scores.scenariomax },
-    { label: t('grammar.practice_score_correct', lang), correct: scores.quiz, max: scores.quizmax },
-    { label: t('grammar.practice_score_dictation', lang), correct: scores.dictation, max: scores.dictationmax },
-    { label: t('grammar.practice_score_write', lang), correct: scores.imitate + scores.continue, max: scores.imitatemax + scores.continuemax },
+    { label: t('grammar.practice_score_sort', lang), correct: scores.sort, max: scoreMax.sort },
+    { label: t('grammar.practice_score_cloze', lang), correct: scores.cloze, max: scoreMax.cloze },
+    { label: t('grammar.practice_score_fill1', lang), correct: scores.fill3, max: scoreMax.fill3 },
+    { label: t('grammar.practice_score_fill2', lang), correct: scores.fill4, max: scoreMax.fill4 },
+    { label: t('grammar.practice_score_morph', lang), correct: scores.morph, max: scoreMax.morph },
+    { label: t('grammar.practice_score_judge', lang), correct: scores.judge, max: scoreMax.judge },
+    { label: t('grammar.practice_score_err', lang), correct: scores.err, max: scoreMax.err },
+    { label: t('grammar.practice_score_scenario', lang), correct: scores.scenario, max: scoreMax.scenario },
+    { label: t('grammar.practice_score_correct', lang), correct: scores.quiz, max: scoreMax.quiz },
+    { label: t('grammar.practice_score_dictation', lang), correct: scores.dictation, max: scoreMax.dictation },
+    { label: t('grammar.practice_score_write', lang), correct: scores.imitate + scores.continue, max: scoreMax.imitate + scoreMax.continue },
   ].filter(it => it.max > 0);
   const abilities = (isDerived && ruleCoverage.length > 0) || quizOnly
     ? coverage.map(([title]) => title)
@@ -2351,8 +2376,8 @@ function ComprehensivePractice({ card, onBack, onComplete }: { card: GrammarCard
   const cur = steps[safeStep];
   const isScore = safeStep === total - 1;
   const progress = ((safeStep + 1) / total) * 100;
-  const scoreTotal = scores.cloze + scores.fill3 + scores.fill4 + scores.morph + scores.judge + scores.scenario + scores.quiz + scores.dictation + scores.imitate + scores.continue;
-  const scoreMax = scores.clozemax + scores.fill3max + scores.fill4max + scores.morphmax + scores.judgemax + scores.scenariomax + scores.quizmax + scores.dictationmax + scores.imitatemax + scores.continuemax;
+  const scoreTotal = scores.sort + scores.cloze + scores.fill3 + scores.fill4 + scores.morph + scores.judge + scores.err + scores.scenario + scores.quiz + scores.dictation + scores.imitate + scores.continue;
+  const scoreTotalMax = scoreMax.sort + scoreMax.cloze + scoreMax.fill3 + scoreMax.fill4 + scoreMax.morph + scoreMax.judge + scoreMax.err + scoreMax.scenario + scoreMax.quiz + scoreMax.dictation + scoreMax.imitate + scoreMax.continue;
 
   return (
     <div ref={scopeRef} className={`gr-scope gr-card-scope${isScore ? ' is-done' : ''}`}>
@@ -2427,7 +2452,11 @@ function ComprehensivePractice({ card, onBack, onComplete }: { card: GrammarCard
           <span className="gr-card-badge">{cur.badge} {cur.label}</span>
 
           <div className="gr-card-panel">
-            {cur.render()}
+            {steps.map((s, i) => (
+              <div key={i} style={{ display: i === safeStep ? 'block' : 'none' }}>
+                {s.render()}
+              </div>
+            ))}
           </div>
 
           {/* 底部翻页导航 */}
@@ -2454,11 +2483,11 @@ function ComprehensivePractice({ card, onBack, onComplete }: { card: GrammarCard
               ))}
             </ul>
           </div>
-          {scoreMax > 0 && (
+          {scoreTotalMax > 0 && (
             <div className="gr-cheat-block">
               <div className="gr-cheat-head">{t('grammar.chapter_score', lang)}</div>
               <div className="gr-cheat-formula">
-                <span className="gr-cheat-formula-ko">{scoreTotal}<span style={{ fontSize: 15, color: 'var(--hr-ink-3)' }}> / {scoreMax}</span></span>
+                <span className="gr-cheat-formula-ko">{scoreTotal}<span style={{ fontSize: 15, color: 'var(--hr-ink-3)' }}> / {scoreTotalMax}</span></span>
               </div>
               <div className="gr-cheat-formula-zh">{t('grammar.chapter_correct_sofar', lang)}</div>
             </div>
@@ -2476,7 +2505,7 @@ function ChaptersTab({ onOpenCard, isAdmin, refreshTick }: { onOpenCard: (card: 
   const { user } = useAuth();
   const router = useRouter();
   const { showToast } = useToast();
-  const { tier, loading: memLoading } = useMembership();
+  const { tier, loading: memLoading, error: memError, retry: retryMembership } = useMembership();
   // 会员内容墙：免费档仅第一章（Part 1）。admin/付费档放行；加载中不锁避免闪。
   const memberLockedFromPart2 = !isAdmin && !memLoading && !isPaidTier(tier);
   const [lessonStates, setLessonStates] = useState<LessonMap>({});
@@ -2505,7 +2534,7 @@ function ChaptersTab({ onOpenCard, isAdmin, refreshTick }: { onOpenCard: (card: 
     let cancelled = false;
     loadLessonMap()
       .then(map => { if (!cancelled) setLessonStates(map); })
-      .catch((e) => { console.warn('Failed to load lesson map:', e); })
+      .catch((e) => { console.error('Failed to load lesson map:', e); })
       .finally(() => { if (!cancelled) setIsLoaded(true); });
     return () => { cancelled = true; };
   }, [user?.id, refreshTick]);
@@ -2528,15 +2557,14 @@ function ChaptersTab({ onOpenCard, isAdmin, refreshTick }: { onOpenCard: (card: 
     const lessonState = lessonStates[lesson.cardId];
     const status: 'done' | 'todo' | 'started' = isLessonDone(lessonState) ? 'done' : lessonState ? 'started' : 'todo';
     const isCurrent = continueCard?.id === lesson.cardId;
-    const isPracticeLesson = lesson.lessonNumber === 11;
-    const practiceUnavailable = isPracticeLesson && part.partNumber !== 1;
     // 会员墙：免费档 Part≥2 锁（点击去定价页），与「未开发 Part>6」的普通锁区分
     const memberLocked = memberLockedFromPart2 && part.partNumber > 1;
-    const isLocked = isAdmin ? false : (part.partNumber > 6 || practiceUnavailable);
+    const isLocked = false; // 全 30 章内容已上线；付费边界由 memberLocked 会员墙控制（2026-08-02）
     const isRowLoading = loadingId === lesson.cardId;
     const rowCls = ['gr-lesson-row', status === 'done' ? 'done' : '', isCurrent ? 'current' : '', (isLocked || memberLocked) ? 'locked' : '', isRowLoading ? 'loading' : ''].filter(Boolean).join(' ');
     const activate = () => {
       if (memberLocked) {
+        if (memError) { retryMembership(); return; }
         if (!canPurchaseMembership()) { showToast(t('membership.coming_soon_toast', lang)); return; }
         router.push('/membership');
         return;
@@ -2586,7 +2614,6 @@ function ChaptersTab({ onOpenCard, isAdmin, refreshTick }: { onOpenCard: (card: 
     const setCardWithPart = async (cardId: string): Promise<boolean> => {
       const part = grammarParts.find(p => p.lessons.some(l => l.cardId === cardId));
       if (!part) return false;
-      if (!isAdmin && part.partNumber > 6) return false;
       const card = await loadGrammarCard(cardId);
       if (!cancelled && card) {
         setContinueCard(card);
@@ -2606,7 +2633,6 @@ function ChaptersTab({ onOpenCard, isAdmin, refreshTick }: { onOpenCard: (card: 
       for (const part of grammarParts) {
         for (const lesson of part.lessons) {
           if (isLessonDone(lessonStates[lesson.cardId])) continue;
-          if (!isAdmin && lesson.lessonNumber === 11 && part.partNumber !== 1) continue;
           if (await setCardWithPart(lesson.cardId)) return;
         }
       }
@@ -2728,7 +2754,7 @@ function ChaptersTab({ onOpenCard, isAdmin, refreshTick }: { onOpenCard: (card: 
         if (activeLevel === 'intermediate') return part.partNumber >= 7 && part.partNumber <= 16;
         return part.partNumber >= 17;
       }).map((part, idx) => {
-        const isPartLocked = !isAdmin && part.partNumber >= 7;
+        const isPartLocked = false; // 全 30 章已上线，可自由展开；付费边界由课程行 memberLocked 控制（2026-08-02）
         const isOpen = !isPartLocked && expanded.has(part.partNumber);
         const doneInPart = part.lessons.filter(l => isLessonDone(lessonStates[l.cardId])).length;
         const isActive = doneInPart > 0 && doneInPart < part.lessons.length;
@@ -2817,7 +2843,7 @@ function ChaptersTab({ onOpenCard, isAdmin, refreshTick }: { onOpenCard: (card: 
             <div className="gr-hub-card-title">{t('grammar.sidebar_all_parts', lang, { n: grammarParts.length })}</div>
             <div className="gr-hub-parts-list">
               {grammarParts.map((part) => {
-                const locked = !isAdmin && part.partNumber >= 7;
+                const locked = false; // 全 30 章已上线（2026-08-02）
                 const doneN = part.lessons.filter(l => isLessonDone(lessonStates[l.cardId])).length;
                 const totalN = part.lessons.length;
                 const full = totalN > 0 && doneN === totalN;
@@ -3014,9 +3040,13 @@ function LibraryTab({ onStartGrammar }: { onStartGrammar: (gp: GrammarPoint) => 
       const isRemoving = prev.includes(id);
       const next = isRemoving ? prev.filter(x => x !== id) : [...prev, id];
       if (isRemoving) {
-        db.grammarFavorites.delete(id).catch(() => {});
+        db.grammarFavorites.delete(id).catch(() => {
+          setFavorites(p => p.includes(id) ? p : [...p, id]); // 回滚
+        });
       } else {
-        db.grammarFavorites.put({ id, createdAt: Date.now() }).catch(() => {});
+        db.grammarFavorites.put({ id, createdAt: Date.now() }).catch(() => {
+          setFavorites(p => p.filter(x => x !== id)); // 回滚
+        });
       }
       return next;
     });
@@ -3318,7 +3348,6 @@ function GrammarContent() {
   const [chaptersRefreshTick, setChaptersRefreshTick] = useState(0);
   const savedScrollY = useRef(0);
   const openCard = (card: GrammarCard) => {
-    if (card.isPractice && card.partNumber !== 1 && !isAdmin) return;
     savedScrollY.current = window.scrollY;
     try { localStorage.setItem('tori:grammar:lastCard', card.id); } catch {}
     setActiveCard(card);
@@ -3337,9 +3366,18 @@ function GrammarContent() {
       const map: Record<string, UserGrammarState> = {};
       for (const s of states) map[s.id] = s;
       setGrammarStates(map);
-    }).catch((err) => console.warn('IndexedDB error:', err));
+    }).catch((err) => console.error('IndexedDB error:', err));
     return () => { cancelled = true; };
   }, [user?.id]);
+
+  // 手机用户重定向到 v2（原生化版本）。桌面/平板横屏保留 v1。
+  useEffect(() => {
+    const isDesktop = window.innerWidth > window.innerHeight && window.innerWidth >= 1024;
+    if (!isDesktop) {
+      const qs = searchParams.toString();
+      router.replace(qs ? `/grammar-v2?${qs}` : '/grammar-v2');
+    }
+  }, []);
 
   useEffect(() => {
     const patternParam = searchParams.get('pattern');
@@ -3349,9 +3387,12 @@ function GrammarContent() {
     }
     const cardParam = searchParams.get('card');
     if (cardParam) {
+      let cancelled = false;
       loadGrammarCard(cardParam).then(card => {
-        if (card) { setTab('chapters'); openCard(card); }
+        if (cancelled || !card) return;
+        setTab('chapters'); openCard(card);
       });
+      return () => { cancelled = true; };
     }
   }, [searchParams]);
 
@@ -3380,7 +3421,7 @@ function GrammarContent() {
       const map: Record<string, UserGrammarState> = {};
       for (const s of states) map[s.id] = s;
       setGrammarStates(map);
-    }).catch((err) => console.warn('IndexedDB error:', err));
+    }).catch((err) => console.error('IndexedDB error:', err));
     setSessionGrammar(null);
     setReviewQueue([]);
   };
@@ -3401,15 +3442,12 @@ function GrammarContent() {
 
     try {
       const next = await loadNextCard(card.id);
-      if (next && (isAdmin || next.partNumber === 1)) {
+      if (next) {
         try { localStorage.setItem('tori:grammar:lastCard', next.id); } catch {}
         setActiveCard(next);
         window.scrollTo(0, 0);
       } else {
         setActiveCard(null);
-        if (!isAdmin && next && next.partNumber !== 1) {
-          setTimeout(() => showToast(t('grammar.part_coming_soon', lang, { n: String(next.partNumber) }), 'info'), 100);
-        }
       }
     } catch (e) {
       console.warn('Failed to load next card:', e);
@@ -3433,23 +3471,27 @@ function GrammarContent() {
     const part = grammarParts.find(p => p.partNumber === activeCard.partNumber);
     if (activeCard.isPractice) {
       return (
-        <ComprehensivePractice
-          card={activeCard}
-          onBack={closeCard}
-          onComplete={() => handleCompleteCard(activeCard)}
-        />
+        <ColorCtx.Provider value={C}>
+          <ComprehensivePractice
+            card={activeCard}
+            onBack={closeCard}
+            onComplete={() => handleCompleteCard(activeCard)}
+          />
+        </ColorCtx.Provider>
       );
     }
     return (
-      <GrammarCardView
-        key={activeCard.id}
-        card={activeCard}
-        partTitle={part ? t('grammar.part_and_title', lang, { part: partLabel(part.partNumber, lang), title: part.title }) : ''}
-        totalInPart={part?.lessons.length ?? 10}
-        onBack={closeCard}
-        onComplete={() => handleCompleteCard(activeCard)}
-        onStartGrammar={gp => { closeCard(); setSessionGrammar(gp); }}
-      />
+      <ColorCtx.Provider value={C}>
+        <GrammarCardView
+          key={activeCard.id}
+          card={activeCard}
+          partTitle={part ? t('grammar.part_and_title', lang, { part: partLabel(part.partNumber, lang), title: part.title }) : ''}
+          totalInPart={part?.lessons.length ?? 10}
+          onBack={closeCard}
+          onComplete={() => handleCompleteCard(activeCard)}
+          onStartGrammar={gp => { closeCard(); setSessionGrammar(gp); }}
+        />
+      </ColorCtx.Provider>
     );
   }
 

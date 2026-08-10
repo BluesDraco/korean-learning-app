@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { BossSubQuestData } from '@/types/tori-subquest';
 import {
@@ -33,9 +33,14 @@ export default function BossQuestClient({ data }: { data: BossSubQuestData }) {
   const { wrongCount, epoch, startRef, carrots, xp, recordLog, reset } = useSubQuestState();
   const persist = usePersistResult(data.level, data.day, data.idx, data.kind);
 
-  // shuffle tasks order within each label group — preserves capability progression
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const shuffledTasks = useMemo(() => shuffleWithinGroups(data.tasks), [data.tasks, epoch]);
+  // shuffle tasks order within each label group — preserves capability progression。
+  // 用 ref 渲染期缓存，仅在 data.tasks 或 epoch(重试信号) 变化时重洗一次。
+  // 不用 useMemo：缓存会被 React 丢弃重算，导致做题中途题目顺序突变（当前题变成另一道）。
+  const shuffledRef = useRef<{ epoch: number; src: typeof data.tasks; arr: typeof data.tasks } | null>(null);
+  if (!shuffledRef.current || shuffledRef.current.epoch !== epoch || shuffledRef.current.src !== data.tasks) {
+    shuffledRef.current = { epoch, src: data.tasks, arr: shuffleWithinGroups(data.tasks) };
+  }
+  const shuffledTasks = shuffledRef.current.arr;
 
   const isResult = done;
 
@@ -82,8 +87,7 @@ export default function BossQuestClient({ data }: { data: BossSubQuestData }) {
     if (target < 0) return;
     setTaskIdx(target);
     setDone(false);
-    reset();
-  }, [shuffledTasks, reset]);
+  }, [shuffledTasks]);
 
   return (
     <SubQuestFrame

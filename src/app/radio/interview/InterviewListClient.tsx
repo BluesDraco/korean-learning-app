@@ -3,7 +3,7 @@
 import '../radio.css';
 import './interview.css';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSmartBack } from '@/lib/useSmartBack';
 import type { RadioCard } from '@/types';
@@ -26,15 +26,18 @@ export default function InterviewListClient() {
 
   const [episodes, setEpisodes] = useState<RadioCard[]>([]);
   const [loading, setLoading] = useState(true);
-  useEffect(() => {
+  const [error, setError] = useState(false);
+  const fetchData = useCallback(() => {
     let alive = true;
+    setLoading(true);
+    setError(false);
     fetch('/api/radio/interview')
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => {
         if (!alive || !d) return;
         if (Array.isArray(d.episodes)) setEpisodes(d.episodes);
       })
-      .catch(() => {})
+      .catch(() => { if (alive) setError(true); })
       .finally(() => {
         if (alive) setLoading(false);
       });
@@ -42,6 +45,7 @@ export default function InterviewListClient() {
       alive = false;
     };
   }, []);
+  useEffect(() => fetchData(), [fetchData]);
 
   const open = (id: string) => router.push(`/radio/${id}`);
 
@@ -55,6 +59,29 @@ export default function InterviewListClient() {
           <div className="radio-sk-row" />
           <div className="radio-sk-row" />
         </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="radio-root itv-page">
+        <div className="radio-skeleton" style={{ textAlign: 'center', padding: '60px 24px' }}>
+          <p style={{ marginBottom: 16, fontSize: 15 }}>인터뷰를 불러올 수 없어요</p>
+          <button className="radio-mode-toggle" onClick={fetchData}>再次尝试</button>
+        </div>
+      </div>
+    );
+  }
+
+  if (episodes.length === 0) {
+    return (
+      <div className="radio-root itv-page">
+        <header className="itv-top">
+          <button className="itv-back" onClick={goBack} aria-label={t('radio.back', lang)}>←</button>
+          <span className="itv-top-tag">여우의 인터뷰 카페</span>
+        </header>
+        <div style={{ padding: 40, textAlign: 'center' }}>아직 인터뷰가 없어요</div>
       </div>
     );
   }

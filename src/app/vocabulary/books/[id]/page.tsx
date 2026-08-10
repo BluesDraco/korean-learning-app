@@ -4,10 +4,11 @@ import { useEffect, useState, useCallback } from 'react';
 import { useIsDesktop } from '@/lib/useIsMobile';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, BookOpen, Plus, Trash2, Volume2, Search, Loader2, CheckSquare, Square, FolderInput, X, ChevronDown, BookmarkPlus, Check, Eye, EyeOff } from 'lucide-react';
+import { ArrowLeft, BookOpen, Plus, Trash2, Volume2, Search, Loader2, CheckSquare, Square, FolderInput, X, ChevronDown, BookmarkPlus, Check, Eye, EyeOff, Printer } from 'lucide-react';
 import { db } from '@/lib/db';
 import { AddToBookModal } from '@/components/AddToBookModal';
-import { speak, speakWord } from '@/lib/tts';
+import { VocabExportModal } from '@/components/VocabExportModal';
+import { speakWord } from '@/lib/tts';
 import { TappableText } from '@/components/TappableText';
 import GrammarExplainBubble from '@/components/GrammarExplainBubble';
 import { getEntryByKorean } from '@/data/vocabulary/index';
@@ -24,9 +25,11 @@ export default function BookDetailPage() {
   const [book, setBook] = useState<WordBook | null>(null);
   const [words, setWords] = useState<Word[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
+  const [exportWords, setExportWords] = useState<Word[] | null>(null);
   const [managing, setManaging] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [allBooks, setAllBooks] = useState<{ id: string; name: string }[]>([]);
@@ -44,6 +47,20 @@ export default function BookDetailPage() {
     setShowCn(prev => {
       const next = !prev;
       try { localStorage.setItem('vocab_show_cn', next ? '1' : '0'); } catch { /* ignore */ }
+      return next;
+    });
+  };
+
+  const [showRn, setShowRn] = useState(true);
+
+  useEffect(() => {
+    try { if (localStorage.getItem('vocab_show_rn') === '0') setShowRn(false); } catch { /* ignore */ }
+  }, []);
+
+  const toggleRn = () => {
+    setShowRn(prev => {
+      const next = !prev;
+      try { localStorage.setItem('vocab_show_rn', next ? '1' : '0'); } catch { /* ignore */ }
       return next;
     });
   };
@@ -119,7 +136,7 @@ export default function BookDetailPage() {
     if (savedSentenceIds.has(korean)) return;
     const existing = await db.sentences.where('korean').equals(korean).first().catch(() => null);
     if (!existing) {
-      await db.sentences.add({ id: crypto.randomUUID(), korean, chinese, source_type: 'vocabulary', source_id: 'book-' + id, source_title: sourceTitle, created_at: Date.now() }).catch(() => {});
+      await db.sentences.add({ id: crypto.randomUUID(), korean, chinese, source_type: 'vocabulary', source_id: 'book-' + id, source_title: sourceTitle, created_at: Date.now() }).catch((e) => { console.error('saveSentence: failed to add sentence', korean, e); });
     }
     setSavedSentenceIds((prev) => new Set(prev).add(korean));
   };
@@ -134,7 +151,7 @@ export default function BookDetailPage() {
       const loaded = await db.words.where('id').anyOf(b.wordIds).toArray();
       setWords(loaded.filter((w): w is Word => w != null));
     } catch {
-      // db error — leave empty state
+      setLoadError(true);
     } finally {
       setLoading(false);
     }
@@ -202,15 +219,19 @@ export default function BookDetailPage() {
     await load();
   };
 
-  const markMastered = async (word: Word) => {
+  const toggleMastered = async (word: Word) => {
     const now = Date.now();
+    const isMastered = word.mastery === 'mastered';
+    const patch = isMastered
+      ? { mastery: 'learning' as const, srsLevel: 1, interval: 1, nextReview: now }
+      : { mastery: 'mastered' as const, srsLevel: 5, interval: 21, nextReview: now + 21 * 86400000, lastReviewed: now };
+    // 乐观更新
+    setWords(prev => prev.map(w => w.id === word.id ? { ...w, ...patch } : w));
     try {
-      await db.words.update(word.id, {
-        mastery: 'mastered', srsLevel: 5, interval: 21,
-        nextReview: now + 21 * 86400000, lastReviewed: now,
-      });
-      setWords(prev => prev.map(w => w.id === word.id ? { ...w, mastery: 'mastered' } : w));
+      await db.words.update(word.id, patch);
     } catch (err) {
+      // 回滚
+      setWords(prev => prev.map(w => w.id === word.id ? { ...w, mastery: word.mastery } : w));
       alert(t('vocab.err_mark_prefix', lang) + (err instanceof Error ? err.message : t('vocab.err_retry', lang)));
     }
   };
@@ -246,6 +267,17 @@ export default function BookDetailPage() {
     );
   }
 
+  if (loadError) {
+    return (
+      <div className="flex flex-col items-center justify-center py-32 gap-4">
+        <p className="text-sm text-[var(--text-muted)]">{t('vocab.err_load_failed', lang)}</p>
+        <button onClick={() => { setLoadError(false); setLoading(true); load(); }} className="text-sm text-[var(--pink-primary)] underline underline-offset-2">
+          {t('common.retry', lang)}
+        </button>
+      </div>
+    );
+  }
+
   if (!book) return null;
 
   return (
@@ -267,6 +299,14 @@ export default function BookDetailPage() {
             {book.description || t('vocab.bd_n_words', lang, { n: words.length })}
           </p>
         </div>
+        {words.length > 0 && !managing && (
+          <button
+            onClick={() => setExportWords(words)}
+            className="shrink-0 flex items-center gap-1.5 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl px-3 py-2 text-sm text-[var(--text-primary)] hover:border-[var(--pink-primary)] transition-colors"
+          >
+            <Printer size={16} />{t('vocab.export', lang)}
+          </button>
+        )}
       </div>
 
       {/* Flashcard entry */}
@@ -325,11 +365,21 @@ export default function BookDetailPage() {
         {!managing && (
           <button
             onClick={toggleCn}
-            aria-label={showCn ? t('vocab.show_cn', lang) : t('vocab.hide_cn', lang)}
-            title={showCn ? t('vocab.show_cn', lang) : t('vocab.hide_cn', lang)}
-            className={`shrink-0 w-[42px] h-[42px] rounded-xl flex items-center justify-center transition-colors ${showCn ? 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)]' : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-muted)]'}`}
+            title={showCn ? t('vocab.hide_cn', lang) : t('vocab.show_cn', lang)}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-colors ${showCn ? 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)]' : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:border-[var(--pink-primary)]/30'}`}
           >
-            {showCn ? <Eye size={17} /> : <EyeOff size={17} />}
+            {showCn ? <Eye size={12} /> : <EyeOff size={12} />}
+            <span className="whitespace-nowrap">zh</span>
+          </button>
+        )}
+        {!managing && (
+          <button
+            onClick={toggleRn}
+            title={showRn ? t('vocab.hide_rn', lang) : t('vocab.show_rn', lang)}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-colors ${showRn ? 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)]' : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:border-[var(--pink-primary)]/30'}`}
+          >
+            {showRn ? <Eye size={12} /> : <EyeOff size={12} />}
+            <span className="whitespace-nowrap">rm</span>
           </button>
         )}
         {!managing && (
@@ -396,9 +446,9 @@ export default function BookDetailPage() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-baseline gap-2.5 min-w-0">
                       <span className="ko-text font-bold text-[var(--text-primary)] text-[19px] leading-tight whitespace-nowrap">{word.word}</span>
-                      <span className="min-w-0 truncate text-[12.5px] font-semibold tracking-wide text-[var(--pink-primary)]">
+                      {showRn && <span className="min-w-0 truncate text-[12.5px] font-semibold tracking-wide text-[var(--pink-primary)]">
                         [{displayRomanHyphen(word.pronunciation, word.word)}]
-                      </span>
+                      </span>}
                     </div>
                     <div className="flex items-center gap-2 mt-2 min-w-0">
                       {word.partOfSpeech && (
@@ -425,16 +475,14 @@ export default function BookDetailPage() {
                       >
                         <Volume2 size={17} />
                       </button>
-                      {!isMastered && (
-                        <button
-                          onClick={(e) => { e.stopPropagation(); markMastered(word); }}
-                          className="no-touch-min w-9 h-9 rounded-lg hover:bg-[var(--mint-soft)]/15 text-[var(--text-muted)] hover:text-[var(--mint-soft)] transition-colors flex items-center justify-center"
-                          aria-label={t('vocab.bd_mark_mastered', lang)}
-                          title={t('vocab.bd_mark_mastered', lang)}
-                        >
-                          <Check size={17} />
-                        </button>
-                      )}
+                      <button
+                        onClick={(e) => { e.stopPropagation(); toggleMastered(word); }}
+                        className={`no-touch-min w-9 h-9 rounded-lg transition-colors flex items-center justify-center ${isMastered ? 'bg-[var(--mint-soft)]/15 text-[var(--mint-soft)]' : 'hover:bg-[var(--mint-soft)]/15 text-[var(--text-muted)] hover:text-[var(--mint-soft)]'}`}
+                        aria-label={isMastered ? t('vocab.bd_unmark_mastered', lang) : t('vocab.bd_mark_mastered', lang)}
+                        title={isMastered ? t('vocab.bd_unmark_mastered', lang) : t('vocab.bd_mark_mastered', lang)}
+                      >
+                        <Check size={17} />
+                      </button>
                       <button
                         onClick={(e) => { e.stopPropagation(); handleRemoveWord(word.id); }}
                         className="no-touch-min w-9 h-9 rounded-lg hover:bg-[var(--color-danger-bg)] text-[var(--text-muted)] hover:text-[var(--color-danger)] transition-colors flex items-center justify-center"
@@ -506,7 +554,7 @@ export default function BookDetailPage() {
                                 <p className="mt-1 ml-5 text-[11px] text-[var(--text-muted)] italic">{t('vocab.bd_no_example', lang)}</p>
                               )}
                               {exState === 'error' && (
-                                <p className="mt-1 ml-5 text-[11px] text-red-400">{t('vocab.bd_gen_failed', lang)}</p>
+                                <p className="mt-1 ml-5 text-[11px] text-[var(--color-danger)]">{t('vocab.bd_gen_failed', lang)}</p>
                               )}
                             </div>
                           );
@@ -572,11 +620,27 @@ export default function BookDetailPage() {
         />
       )}
 
+      {/* Export PDF modal */}
+      {exportWords && (
+        <VocabExportModal
+          bookName={book.name}
+          words={exportWords}
+          onClose={() => setExportWords(null)}
+        />
+      )}
+
       {/* Batch action bar */}
       {managing && selected.size > 0 && (
         <div className="fixed left-0 right-0 z-[60] flex items-center justify-center gap-3 px-4 md:left-[108px] md:bottom-3" style={{ bottom: 'calc(56px + env(safe-area-inset-bottom, 0px) + 12px)' }}>
           <div className="flex items-center gap-3 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl px-4 py-3 shadow-lg">
             <span className="text-xs text-[var(--text-secondary)]">{t('vocab.selected_n', lang, { n: selected.size })}</span>
+            <button
+              onClick={() => setExportWords(words.filter(w => selected.has(w.id)))}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--bg-input)] text-sm text-[var(--text-primary)] hover:border-[var(--pink-primary)]"
+            >
+              <Printer size={15} />
+              {t('vocab.export_selected_n', lang, { n: selected.size })}
+            </button>
             <button
               onClick={() => setShowMoveSheet(true)}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--bg-input)] text-sm text-[var(--text-primary)] hover:border-[var(--pink-primary)]"

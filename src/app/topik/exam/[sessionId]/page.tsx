@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Clock, Volume2, Check, X, ChevronRight, BookOpen, Flag, ListChecks } from 'lucide-react';
-import { cancelSpeech, speakDialog, unlockAudioContext } from '@/lib/tts';
+import { cancelSpeech, speakDialog, unlockAudioContext, playAudioUrl } from '@/lib/tts';
 import { db } from '@/lib/db';
 import type { TopikSession, TopikMistake, TopikTypeMastery } from '@/types';
 import type { TopikQuestion, TopikSection } from '@/data/topik-questions';
@@ -28,7 +28,6 @@ type Stage = 'listening' | 'reading';
 
 // 新版（来自考前说明页）
 interface RealExamState {
-  [k: string]: unknown;
   kind: 'real';
   examSetId: string;
   examRound: number;
@@ -49,7 +48,6 @@ interface RealExamState {
 
 // 旧版（专项/模拟/错题重练）
 interface LegacyState {
-  [k: string]: unknown;
   kind: 'legacy';
   sectionId: string;
   mode: LegacyMode;
@@ -129,6 +127,7 @@ export default function TopikExamPage() {
   const stageSwitchedRef = useRef(false);  // 防止"提前交卷"和"听力时间到"竞争触发双重切阶段
   const legacyTimeLeftInitRef = useRef<number>(0);
   const playingLockRef = useRef(false);  // 防止双击播放扣 2 次次数
+  const currentIdxRef = useRef(currentIdx);  // goNext 防闭包过期（快速连点"下一题"）
 
   // 当前题
   const currentQ = useMemo(() => {
@@ -223,9 +222,12 @@ export default function TopikExamPage() {
         setMarks(new Set(d.marks || []));
       }
       setLoaded(true);
-    })().catch(() => { if (alive) { setSessionGone(true); setLoaded(true); } });
+    })().catch((e) => { console.error('[topik] exam session load failed:', e); if (alive) { setSessionGone(true); setLoaded(true); } });
     return () => { alive = false; };
   }, [sessionId]);
+
+  // 卸载时停掉残留的 TTS 播放（浏览器后退/手势关闭/SPA 导航离开）
+  useEffect(() => () => { cancelSpeech(); }, []);
 
   // Timer — 只在 loaded/kind/stage/stageTransition 变化时重建。倒计时通过 functional update 避免闭包陈旧。
   // 阶段过渡浮层显示期间暂停计时，避免阅读段时间被白白消耗。
@@ -334,7 +336,7 @@ export default function TopikExamPage() {
     let dbWriteFailed = false;
     try {
       await db.topikSessions.add(session);
-      const existingMistakes = await db.topikMistakes.filter((m: TopikMistake) => wrongEntries.some(([qid]) => m.questionId === qid && m.mastered === 0)).catch(() => [] as TopikMistake[]);
+      const existingMistakes = await db.topikMistakes.filter((m: TopikMistake) => wrongEntries.some(([qid]) => m.questionId === qid && m.mastered === 0)).catch((e) => { console.error('[topik] failed to load existing mistakes:', e); return [] as TopikMistake[]; });
       const existingMap = new Map(existingMistakes.map((m: TopikMistake) => [m.questionId, m]));
       await Promise.all(wrongEntries.map(async ([qid]) => {
         const existing = existingMap.get(qid);
@@ -344,23 +346,6 @@ export default function TopikExamPage() {
           await db.topikMistakes.add({ id: `tm-${now}-${qid}`, userId: user?.id ?? '', questionId: qid, sessionId, wrongCount: 1, lastWrongAt: now, mastered: 0, createdAt: now });
         }
       }));
-
-      // 错题重练答对 → 自动标记为已掌握
-      // 前提：只有 mode='mistakes' 才把答对当"掌握"，其他模式答对不算（避免自出试卷答对一次就清空错题本）
-      if (mode === 'mistakes') {
-        const correctIds = Array.from(answers.entries())
-          .filter(([qid, sel]) => {
-            const q = allTargets.find(x => x.id === qid);
-            return q && sel === q.correctIdx;
-          })
-          .map(([qid]) => qid);
-        if (correctIds.length > 0) {
-          const toMaster = await db.topikMistakes
-            .filter((m: TopikMistake) => m.mastered === 0 && correctIds.includes(m.questionId))
-            .catch(() => [] as TopikMistake[]);
-          await Promise.all(toMaster.map(m => db.topikMistakes.update(m.id, { mastered: 1 })));
-        }
-      }
 
       // 题型掌握统计 upsert（每种 questionType 单行）
       if (user?.id && typeBuckets.size > 0) {
@@ -474,19 +459,32 @@ export default function TopikExamPage() {
       return { voice: 'sunhi', text: line };
     });
     try {
-      const validSegs = segments.filter(s => s.text);
-      if (validSegs.length > 0) {
-        await speakDialog(validSegs, 0.85);
+      // 优先用静态预生成音频（直出 nginx，避开 8800 实时合成）
+      const staticUrl = `/audio/topik/${currentQ.id}.mp3`;
+      let playedStatic = false;
+      try {
+        const check = await fetch(staticUrl, { method: 'HEAD' });
+        if (check.ok) {
+          await playAudioUrl(staticUrl);
+          playedStatic = true;
+        }
+      } catch { /* 静默回落 speakDialog */ }
+      if (!playedStatic) {
+        const validSegs = segments.filter(s => s.text);
+        if (validSegs.length > 0) {
+          await speakDialog(validSegs, 0.85);
+        }
       }
     } catch (e) {
       console.error('[TOPIK audio] speakDialog failed:', e);
       // Audio playback failed — show a brief visible hint instead of silent failure
       setAudioError(true);
       setTimeout(() => setAudioError(false), 3000);
-    }
+    } finally {
     setPlaying(false);
     playingLockRef.current = false;
-  }, [currentQ, playCounts, kind, examRound, mode]);
+    }
+  }, [currentQ, playCounts, kind, examRound, isRealMode]);
 
   // 听力播放改为手动：用户点击"播放"按钮才开始，不再自动触发
 
@@ -552,8 +550,9 @@ export default function TopikExamPage() {
   }
 
   function goNext() {
-    if (currentIdx + 1 < totalCount) {
-      gotoIdx(currentIdx + 1);
+    currentIdxRef.current = currentIdx;
+    if (currentIdxRef.current + 1 < totalCount) {
+      gotoIdx(currentIdxRef.current + 1);
       return;
     }
     // 阶段结束
@@ -723,7 +722,7 @@ export default function TopikExamPage() {
                 {!showTranslation ? (
                   <button onClick={() => setShowTranslation(true)} style={{ fontSize: 12, color: C.muted, background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', padding: 0 }}>{t('topik.ex_show_translation', lang)}</button>
                 ) : (
-                  <p style={{ fontSize: 12, color: C.muted, margin: '4px 0 0' }}>{currentQ.promptZh}</p>
+                  <p style={{ fontSize: 12, color: C.muted, margin: '4px 0 0', whiteSpace: 'pre-wrap' }}>{currentQ.promptZh}</p>
                 )}
               </div>
             )}
@@ -759,8 +758,25 @@ export default function TopikExamPage() {
             <div style={{ background: C.optionBg, borderRadius: 12, padding: 14, display: 'flex', flexDirection: 'column', gap: 10 }}>
               {isListening && currentQ.audioText && (
                 <div style={{ background: C.innerCard, borderRadius: 10, padding: 12, border: `1px solid ${C.line}` }}>
-                  <p style={{ fontSize: 12, fontWeight: 700, color: C.muted, margin: '0 0 4px' }}>{t('topik.ex_listen_script', lang)}</p>
-                  <p style={{ fontSize: 13, color: C.ink, margin: 0, lineHeight: 1.6 }}>{currentQ.audioText}</p>
+                  <p style={{ fontSize: 12, fontWeight: 700, color: C.muted, margin: '0 0 6px' }}>{t('topik.ex_listen_script', lang)}</p>
+                  {(() => {
+                    const ko = currentQ.audioText.split('\n');
+                    const zh = (currentQ.audioTextZh || '').split('\n');
+                    if (currentQ.audioTextZh && ko.length === zh.length) {
+                      return ko.map((line, i) => (
+                        <div key={i} style={{ marginBottom: i < ko.length - 1 ? 8 : 0 }}>
+                          <p className="ko-text" style={{ fontSize: 13, color: C.ink, margin: 0, lineHeight: 1.6 }}>{line}</p>
+                          {zh[i] && <p style={{ fontSize: 12, color: C.muted, margin: '2px 0 0', lineHeight: 1.6 }}>{zh[i]}</p>}
+                        </div>
+                      ));
+                    }
+                    return (
+                      <>
+                        <p className="ko-text" style={{ fontSize: 13, color: C.ink, margin: 0, lineHeight: 1.6, whiteSpace: 'pre-line' }}>{currentQ.audioText}</p>
+                        {currentQ.audioTextZh && <p style={{ fontSize: 12, color: C.muted, margin: '8px 0 0', lineHeight: 1.6, whiteSpace: 'pre-line' }}>{currentQ.audioTextZh}</p>}
+                      </>
+                    );
+                  })()}
                 </div>
               )}
               <p style={{ fontSize: 12, color: C.muted, margin: 0, lineHeight: 1.6 }}>{currentQ.explanation}</p>

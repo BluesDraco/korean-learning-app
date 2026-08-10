@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Modal, Button } from '@/components/ui';
 import { useTheme } from '@/components/ThemeProvider';
 import { LIGHT_C as _LIGHT_C, DARK_C as _DARK_C } from '@/lib/theme';
@@ -40,12 +40,16 @@ export default function GoalSettingModal({ open, initial, onClose, onSave }: Pro
   const [level, setLevel] = useState<'I' | 'II' | undefined>(initial.targetLevel);
   const [daily, setDaily] = useState<number>(initial.dailyQuestionCount || 10);
 
+  const wasOpen = useRef(false);
+
+  // 只在弹窗由关→开的边沿把草稿同步回 initial；打开期间父组件重渲不再清空用户编辑
   useEffect(() => {
-    if (open) {
+    if (open && !wasOpen.current) {
       setDateStr(toDateInput(initial.targetDate));
       setLevel(initial.targetLevel);
       setDaily(initial.dailyQuestionCount || 10);
     }
+    wasOpen.current = open;
   }, [open, initial]);
 
   function handleSave() {

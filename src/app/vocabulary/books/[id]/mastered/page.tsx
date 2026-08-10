@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, Volume2, Check, Trash2, CheckSquare, Square } from 'lucide-react';
+import { ArrowLeft, Volume2, Check, Trash2, CheckSquare, Square, Languages } from 'lucide-react';
 import { db } from '@/lib/db';
 import { speakWord } from '@/lib/tts';
 import { useIsDesktop } from '@/lib/useIsMobile';
@@ -23,6 +23,19 @@ export default function BookMasteredPage() {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [deletePending, setDeletePending] = useState(false);
+  const [showRn, setShowRn] = useState(true);
+
+  useEffect(() => {
+    try { if (localStorage.getItem('vocab_show_rn') === '0') setShowRn(false); } catch { /* ignore */ }
+  }, []);
+
+  const toggleRn = () => {
+    setShowRn(prev => {
+      const next = !prev;
+      try { localStorage.setItem('vocab_show_rn', next ? '1' : '0'); } catch { /* ignore */ }
+      return next;
+    });
+  };
 
   const load = useCallback(async () => {
     try {
@@ -31,7 +44,7 @@ export default function BookMasteredPage() {
       setBook(b);
       const loaded = await db.words.where('id').anyOf(b.wordIds).toArray();
       setMasteredWords(loaded.filter((w): w is Word => w != null && w.mastery === 'mastered'));
-    } catch { /* ignore */ }
+    } catch (e) { console.error('Failed to load mastered words', e); }
     finally { setLoading(false); }
   }, [id, router]);
 
@@ -51,7 +64,7 @@ export default function BookMasteredPage() {
     try {
       await db.words.update(w.id, { mastery: 'learning', srsLevel: 1, interval: 1, nextReview: now });
       setMasteredWords(prev => prev.filter(x => x.id !== w.id));
-    } catch { /* ignore */ }
+    } catch (e) { console.error('Failed to unmaster word', e); }
   };
 
   const batchUnmaster = async () => {
@@ -83,16 +96,25 @@ export default function BookMasteredPage() {
     <div className="min-h-screen pb-[calc(40px+env(safe-area-inset-bottom,0px))]" style={{ background: 'var(--color-surface-1)' }}>
       <div className="sticky top-0 z-10" style={{ background: 'var(--color-surface-1)', borderBottom: '1px solid var(--color-border-1)' }}>
         <div className={isDesktop ? 'max-w-5xl mx-auto' : ''} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px' }}>
-          <button onClick={() => router.push(`/vocabulary/books/${id}`)} style={{ padding: 6, background: 'transparent', border: 'none', color: 'var(--color-ink-3)', cursor: 'pointer' }}>
+          <button onClick={() => router.push(`/vocabulary/books/${id}`)} aria-label={t('common.back', lang)} style={{ padding: 6, background: 'transparent', border: 'none', color: 'var(--color-ink-3)', cursor: 'pointer' }}>
             <ArrowLeft size={20} />
           </button>
           <h1 style={{ fontSize: 16, fontWeight: 700, color: 'var(--color-ink-1)', flex: 1, margin: 0 }}>
             {t('vocab.bd_mastered_title', lang)}{book?.name ? ` · ${book.name}` : ''}
           </h1>
           {masteredWords.length > 0 && (
-            <button onClick={() => { setManaging(m => !m); setSelected(new Set()); setDeletePending(false); }} style={{ fontSize: 13, color: 'var(--color-ink-3)', background: 'transparent', border: 'none', cursor: 'pointer' }}>
-              {managing ? t('common.cancel', lang) : t('vocab.manage', lang)}
-            </button>
+            <>
+              <button
+                onClick={toggleRn}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '5px 10px', borderRadius: 10, fontSize: 12, fontWeight: 500, border: showRn ? 'none' : '1px solid var(--color-border-1)', background: showRn ? 'var(--color-pink-soft)' : 'transparent', color: showRn ? 'var(--color-pink-strong)' : 'var(--color-ink-3)', cursor: 'pointer' }}
+              >
+                <Languages size={12} />
+                {showRn ? t('vocab.hide_rn', lang) : t('vocab.show_rn', lang)}
+              </button>
+              <button onClick={() => { setManaging(m => !m); setSelected(new Set()); setDeletePending(false); }} style={{ fontSize: 13, color: 'var(--color-ink-3)', background: 'transparent', border: 'none', cursor: 'pointer' }}>
+                {managing ? t('common.cancel', lang) : t('vocab.manage', lang)}
+              </button>
+            </>
           )}
         </div>
       </div>
@@ -117,7 +139,7 @@ export default function BookMasteredPage() {
           ) : masteredWords.length === 0 ? (
             <div className="text-center py-16">
               <p className="text-sm text-[var(--text-muted)]">{t('vocab.no_mastered_yet', lang)}</p>
-              <button onClick={() => router.back()} className="mt-4 text-sm text-[var(--pink-primary)] underline underline-offset-2">{t('vocab.bd_back_to_book', lang)}</button>
+              <button onClick={() => router.push(`/vocabulary/books/${id}`)} className="mt-4 text-sm text-[var(--pink-primary)] underline underline-offset-2">{t('vocab.bd_back_to_book', lang)}</button>
             </div>
           ) : (
             masteredWords.map(w => {
@@ -135,7 +157,7 @@ export default function BookMasteredPage() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-baseline gap-2.5 min-w-0">
                         <span className="ko-text font-bold text-[19px] leading-tight whitespace-nowrap text-[var(--text-primary)]">{w.word}</span>
-                        <span className="min-w-0 truncate text-[12.5px] font-semibold tracking-wide text-[var(--pink-primary)]">[{displayRomanHyphen(w.pronunciation, w.word)}]</span>
+                        {showRn && <span className="min-w-0 truncate text-[12.5px] font-semibold tracking-wide text-[var(--pink-primary)]">[{displayRomanHyphen(w.pronunciation, w.word)}]</span>}
                       </div>
                       <div className="flex items-center gap-2 mt-2 min-w-0">
                         {w.partOfSpeech && (
@@ -146,7 +168,7 @@ export default function BookMasteredPage() {
                     </div>
                     {!managing && (
                       <div className="flex items-center gap-1 shrink-0">
-                        <button onClick={(e) => { e.stopPropagation(); speakWord(w.word); }} className="no-touch-min w-9 h-9 rounded-lg flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--pink-primary)] hover:bg-[var(--bg-card-hover)] transition-colors">
+                        <button onClick={(e) => { e.stopPropagation(); speakWord(w.word); }} aria-label={t('vocab.play', lang)} className="no-touch-min w-9 h-9 rounded-lg flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--pink-primary)] hover:bg-[var(--bg-card-hover)] transition-colors">
                           <Volume2 size={17} />
                         </button>
                         <button onClick={(e) => { e.stopPropagation(); unmaster(w); }} className="text-xs px-2.5 py-1.5 rounded-lg bg-[var(--mint-soft)]/12 text-[var(--mint-soft)] hover:bg-[var(--mint-soft)]/20 transition-colors shrink-0 font-medium">
@@ -163,7 +185,7 @@ export default function BookMasteredPage() {
                             <p className="text-[15px] leading-relaxed text-[var(--text-primary)]">{ex.text}</p>
                             <p className="text-[13px] text-[var(--text-muted)] mt-1 leading-snug">{ex.translation}</p>
                           </div>
-                          <button onClick={() => speakWord(ex.text)} className="w-8 h-8 rounded-lg flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors shrink-0">
+                          <button onClick={() => speakWord(ex.text)} aria-label={t('vocab.play', lang)} className="w-8 h-8 rounded-lg flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--pink-primary)] transition-colors shrink-0">
                             <Volume2 size={15} />
                           </button>
                         </div>
@@ -183,7 +205,7 @@ export default function BookMasteredPage() {
             {deletePending ? (
               <>
                 <button onClick={() => setDeletePending(false)} className="flex-1 py-2.5 rounded-xl bg-[var(--bg-accent)] text-[var(--text-muted)] text-sm font-medium">{t('common.cancel', lang)}</button>
-                <button onClick={batchRemoveFromBook} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-red-500 text-white text-sm font-medium">
+                <button onClick={batchRemoveFromBook} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[var(--color-danger)] text-white text-sm font-medium">
                   <Trash2 size={14} />{t('vocab.bd_remove_from_book_n', lang, { n: selected.size })}
                 </button>
               </>
@@ -192,7 +214,7 @@ export default function BookMasteredPage() {
                 <button onClick={batchUnmaster} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[var(--mint-soft)]/10 text-[var(--mint-soft)] text-sm font-medium">
                   <Check size={14} />{t('vocab.unmaster', lang)}
                 </button>
-                <button onClick={() => setDeletePending(true)} className="flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-red-50 text-red-500 text-sm font-medium">
+                <button onClick={() => setDeletePending(true)} className="flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-[var(--color-danger-bg)] text-[var(--color-danger)] text-sm font-medium">
                   <Trash2 size={14} />
                 </button>
               </>

@@ -38,7 +38,14 @@ export default function Onboarding({ onComplete }: Props) {
   const chooseLang = useCallback((code: Lang) => {
     setLang(code);
     setLangState(code);
-  }, []);
+    // 立即切 URL 前缀，否则 getLang() 的 URL 优先策略会让英文白选
+    const onEnPath = window.location.pathname.startsWith('/en/');
+    if (code === 'en' && !onEnPath) {
+      router.replace('/en/daily');
+    } else if (code === 'zh' && onEnPath) {
+      router.replace('/daily');
+    }
+  }, [router]);
 
   const finish = useCallback(async () => {
     try { await updateProfile({ onboardingComplete: true }); } catch { /* not critical */ }
@@ -48,7 +55,7 @@ export default function Onboarding({ onComplete }: Props) {
     try { await awardXp(10); } catch { /* not critical */ }
     try { await updateStreak(); } catch { /* not critical */ }
     onComplete();
-    router.replace('/daily');
+    router.replace(lang === 'en' ? '/en/daily' : '/daily');
   }, [onComplete, router, refreshUser]);
 
   const isLast = step === 2;

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { GrammarSubQuestData } from '@/types/tori-subquest';
 import {
@@ -30,11 +30,15 @@ export default function GrammarQuestClient({ data }: { data: GrammarSubQuestData
   const { wrongCount, epoch, startRef, carrots, xp, recordLog, reset } = useSubQuestState();
   const persist = usePersistResult(data.level, data.day, data.idx, data.kind);
 
-  /* eslint-disable react-hooks/exhaustive-deps */
-  const shuffledFix     = useMemo(() => shuffle(data.fix),     [data.fix, epoch]);
-  const shuffledCompose = useMemo(() => shuffle(data.compose), [data.compose, epoch]);
-  const shuffledRule    = useMemo(() => shuffle(data.rule),    [data.rule, epoch]);
-  /* eslint-enable react-hooks/exhaustive-deps */
+  // 用 ref 渲染期缓存，仅在 epoch(重试信号) 变化时重洗一次。data 是静态常量引用恒稳。
+  // 不用 useMemo：缓存会被 React 丢弃重算，做题中途题目顺序突变。
+  const shufRef = useRef<{ sig: number; src: typeof data.fix; fix: typeof data.fix; compose: typeof data.compose; rule: typeof data.rule } | null>(null);
+  if (!shufRef.current || shufRef.current.sig !== epoch || shufRef.current.src !== data.fix) {
+    shufRef.current = { sig: epoch, src: data.fix, fix: shuffle(data.fix), compose: shuffle(data.compose), rule: shuffle(data.rule) };
+  }
+  const shuffledFix     = shufRef.current.fix;
+  const shuffledCompose = shufRef.current.compose;
+  const shuffledRule    = shufRef.current.rule;
 
   const getShuffled = (p: Phase) => {
     if (p === 'fix')     return shuffledFix;
@@ -70,8 +74,7 @@ export default function GrammarQuestClient({ data }: { data: GrammarSubQuestData
 
   const handlePhaseJump = useCallback((key: string) => {
     setPhase(key as Phase); setTaskIdx(0);
-    reset();
-  }, [reset]);
+  }, []);
 
   const stepIdx = PHASE_ORDER.indexOf(phase);
   const isResult = phase === 'result';

@@ -12,11 +12,12 @@ import { useSmartBack } from '@/lib/useSmartBack';
 import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
 import { TappableText } from '@/components/TappableText';
-import { speakWord, speakViaMinimax, speakPreRecorded, cancelSpeech } from '@/lib/tts';
+import { speakWord, speakViaMinimax, speakPreRecorded, cancelSpeech, unlockAudioContext } from '@/lib/tts';
 import { stripEmoji } from '@/lib/blogText';
 import { saveProgress, loadProgress, TTL_FLASHCARD } from '@/lib/progress-storage';
 import PostGallery from '../PostGallery';
 import { AvatarFace } from '../AvatarFace';
+import BlogEditModal from '../BlogEditModal';
 
 // 波形柱高（%）——详情页 20 根
 const WAVE = [40, 70, 95, 55, 80, 35, 60, 90, 45, 75, 100, 50, 65, 40, 78, 42, 68, 52, 88, 48];
@@ -34,6 +35,12 @@ function formatTime(sec: number): string {
   const s = Math.floor(sec % 60);
   return `${m}:${pad2(s)}`;
 }
+function fmtDate(ts: number, lang: string): string {
+  const d = new Date(ts);
+  const m = d.getMonth() + 1;
+  const day = d.getDate();
+  return lang === 'zh' ? `${m}月${day}日` : `${m}/${day}`;
+}
 
 export default function BlogReaderClient({ post, userStats }: { post: BlogPost; userStats: BlogUserStats | null }) {
   const { lang } = useLang();
@@ -41,6 +48,7 @@ export default function BlogReaderClient({ post, userStats }: { post: BlogPost; 
   const router = useRouter();
   const audioRef = useRef<HTMLAudioElement>(null);
   const [deleting, setDeleting] = useState(false);
+  const [editing, setEditing] = useState(false);
   // 单句跳播：点某句时把整段播放器 seek 到该句起点、记下句末时刻，timeupdate 到点即停。
   // 整段播放时恒 null，不干扰。
   const segmentEndRef = useRef<number | null>(null);
@@ -185,8 +193,9 @@ export default function BlogReaderClient({ post, userStats }: { post: BlogPost; 
   const togglePlay = useCallback(() => {
     const el = audioRef.current;
     if (!el || !hasAudio) return;
-    segmentEndRef.current = null; // 整段播放：清掉单句限制，否则会被上次句末截断
+    segmentEndRef.current = null;
     if (el.paused) {
+      unlockAudioContext();
       const p = el.play();
       if (p && typeof p.catch === 'function') p.catch(() => setIsPlaying(false));
     } else {
@@ -200,6 +209,7 @@ export default function BlogReaderClient({ post, userStats }: { post: BlogPost; 
   const playSentence = useCallback((s: { ko: string; t?: [number, number] }) => {
     const el = audioRef.current;
     if (hasAudio && el && s.t) {
+      unlockAudioContext();
       segmentEndRef.current = s.t[1];
       el.currentTime = s.t[0];
       const p = el.play();
@@ -233,10 +243,15 @@ export default function BlogReaderClient({ post, userStats }: { post: BlogPost; 
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ postId: post.id, ...patch }),
         });
-        if (!res.ok) { setLiked(prevLiked); setSaved(prevSaved); }
+        if (!res.ok) {
+          // 只回滚本次操作的字段，避免并发 like→save 时覆盖另一个的成功结果
+          if ('liked' in patch) setLiked(prevLiked);
+          if ('saved' in patch) setSaved(prevSaved);
+          if (res.status === 401) showToast(t('blog.reader_login_to_interact', lang));
+        }
       } catch {
-        setLiked(prevLiked);
-        setSaved(prevSaved);
+        if ('liked' in patch) setLiked(prevLiked);
+        if ('saved' in patch) setSaved(prevSaved);
       }
     },
     [liked, saved, post.id],
@@ -354,6 +369,7 @@ export default function BlogReaderClient({ post, userStats }: { post: BlogPost; 
 
   // 组件卸载时清轮询定时器
   useEffect(() => () => { if (pollTimer.current) clearTimeout(pollTimer.current); }, []);
+  useEffect(() => () => { if (toastTimer.current) clearTimeout(toastTimer.current); }, []);
 
   // 轮询等待动物回复揭晓：15s/次、最多 ~90s（原 8s×100s=12+ 次请求过重）。
   // 命中即停并提示；超时不静默，提示稍后再来看，避免"typing 气泡永远转"的错觉。
@@ -484,7 +500,7 @@ export default function BlogReaderClient({ post, userStats }: { post: BlogPost; 
           <b>{formatTime(currentTime)}</b> / {formatTime(duration)}
         </div>
       </div>
-      <div className="blog-voice-caption">🎧 {author.name}의 목소리로 듣기</div>
+      <div className="blog-voice-caption">{t('blog.reader_tts_caption', lang, { name: author.name })}</div>
     </>
   ) : (
     <>
@@ -511,7 +527,7 @@ export default function BlogReaderClient({ post, userStats }: { post: BlogPost; 
   // 评论流 + 视觉版输入框（mobile + desktop 共用）
   const commentsBlock = (
     <div className="blog-comments" id="blog-comments">
-      <div className="blog-comments-title">💬 {t('blog.reader_comments_count', lang, { n: comments.length })}</div>
+      <h2 className="blog-comments-title">💬 {t('blog.reader_comments_count', lang, { n: comments.length })}</h2>
       {comments.map((c, i) => {
         const ca = getBlogAuthor(c.animalId);
         return (
@@ -548,7 +564,7 @@ export default function BlogReaderClient({ post, userStats }: { post: BlogPost; 
         <div className="blog-mine">
           <div className="blog-mine-head">
             <span className="blog-mine-title">{t('blog.reader_my_comment', lang)}</span>
-            <span className="blog-mine-sub">{author.name}에게 · 나만 볼 수 있어요</span>
+            <span className="blog-mine-sub">{t('blog.reader_mine_sub', lang, { name: author.name })}</span>
           </div>
 
           {myComments.map((c) => (
@@ -602,7 +618,7 @@ export default function BlogReaderClient({ post, userStats }: { post: BlogPost; 
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) { e.preventDefault(); void submitComment(); } }}
-              placeholder={`${author.name}에게 한국어로 댓글 남기기…`}
+              placeholder={t('blog.reader_comment_ph', lang, { name: author.name })}
               maxLength={300}
               disabled={sending}
             />
@@ -624,7 +640,7 @@ export default function BlogReaderClient({ post, userStats }: { post: BlogPost; 
   // 可选测验（仅当有数据时；复用 quiz 卡样式）
   const quizBlock = quiz.length > 0 && (
     <div className="blog-quiz">
-      <div className="blog-quiz-title">✏️ {t('blog.reader_quiz_title', lang)}</div>
+      <h2 className="blog-quiz-title">✏️ {t('blog.reader_quiz_title', lang)}</h2>
       {quiz.map((q, qi) => {
         const picked = quizPicks[qi];
         const answered = picked !== undefined;
@@ -706,17 +722,30 @@ export default function BlogReaderClient({ post, userStats }: { post: BlogPost; 
               </button>
             </div>
 
-            {/* 自己的帖：删除入口；否则装饰性更多 */}
+            {/* 自己的帖：编辑 + 删除入口（blocked 帖不给编辑，走重发）；否则装饰性更多 */}
             {isUserPost ? (
-              <button
-                type="button"
-                className="blog-topbar-del"
-                onClick={handleDelete}
-                disabled={deleting}
-                aria-label={t('blog.delete_post', lang)}
-              >
-                {t('blog.delete_post', lang)}
-              </button>
+              <div className="blog-topbar-acts">
+                {post.aiStatus !== 'blocked' && (
+                  <button
+                    type="button"
+                    className="blog-topbar-edit"
+                    onClick={() => setEditing(true)}
+                    disabled={deleting}
+                    aria-label={t('blog.edit_post', lang)}
+                  >
+                    {t('blog.edit_post', lang)}
+                  </button>
+                )}
+                <button
+                  type="button"
+                  className="blog-topbar-del"
+                  onClick={handleDelete}
+                  disabled={deleting}
+                  aria-label={t('blog.delete_post', lang)}
+                >
+                  {t('blog.delete_post', lang)}
+                </button>
+              </div>
             ) : (
               <div className="blog-topbar-more" aria-hidden="true">⋯</div>
             )}
@@ -771,6 +800,7 @@ export default function BlogReaderClient({ post, userStats }: { post: BlogPost; 
                 <div className="blog-meta-badges">
                   <span className="blog-meta-badge">{t('blog.reader_read_time', lang, { min: readMin })}</span>
                   <span className="blog-meta-badge">{t('blog.reader_word_count', lang, { n: wordCount })}</span>
+                  <span className="blog-meta-badge">{fmtDate(post.publishedAt, lang)}</span>
                 </div>
                 <button
                   type="button"
@@ -888,7 +918,7 @@ export default function BlogReaderClient({ post, userStats }: { post: BlogPost; 
             {/* 卡片 B — 이 글의 새 단어 */}
             {vocab.length > 0 && (
               <div className="blog-side-card">
-                <div className="blog-side-title">{t('blog.reader_vocab', lang)}</div>
+                <h3 className="blog-side-title">{t('blog.reader_vocab', lang)}</h3>
                 {vocab.map((v, i) => (
                   <div className="blog-vocab-row" key={i}>
                     <div className="blog-vocab-main">
@@ -914,7 +944,7 @@ export default function BlogReaderClient({ post, userStats }: { post: BlogPost; 
             {/* 卡片 B2 — 관련 글 추천 */}
             {related.length > 0 && (
               <div className="blog-side-card">
-                <div className="blog-side-title">📖 {t('blog.related_posts', lang)}</div>
+                <h3 className="blog-side-title">📖 {t('blog.related_posts', lang)}</h3>
                 <div className="blog-related-list">
                   {related.map((r) => {
                     const ra = getBlogAuthor(r.authorId);
@@ -941,7 +971,7 @@ export default function BlogReaderClient({ post, userStats }: { post: BlogPost; 
 
             {/* 卡片 C — 토리와 친구들 */}
             <div className="blog-side-card">
-              <div className="blog-side-title">🐾 {t('blog.cast_title', lang)}</div>
+              <h3 className="blog-side-title">🐾 {t('blog.cast_title', lang)}</h3>
               <div className="blog-cast-grid">
                 {BLOG_CAST.map((a) => (
                   <div className="blog-cast-item" key={a.id}>
@@ -958,6 +988,14 @@ export default function BlogReaderClient({ post, userStats }: { post: BlogPost; 
 
       {/* 真实 audio 元素 */}
       {hasAudio && <audio ref={audioRef} src={post.audioUrl} preload="metadata" />}
+
+      {editing && (
+        <BlogEditModal
+          post={post}
+          onClose={() => setEditing(false)}
+          onSaved={() => { setEditing(false); router.refresh(); }}
+        />
+      )}
     </div>
   );
 }

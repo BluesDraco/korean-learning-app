@@ -130,8 +130,9 @@ export default function DailyPage() {
   useEffect(() => {
     if (isDesktop) return;
     if (!user) return;
-    let cancelled = false;
+    let gen = 0;
     const refresh = async () => {
+      const cur = ++gen;
       try {
         const [vocab, diary, phonetic, grammar] = await Promise.all([
           getVocabProgress(),
@@ -139,7 +140,7 @@ export default function DailyPage() {
           getPhoneticProgress(user.id),
           getGrammarProgress(user.id),
         ]);
-        if (cancelled) return;
+        if (cur !== gen) return;
         const vocabHref = vocab.source && vocab.unitId
           ? `/vocabulary/${vocab.source}/${vocab.unitId}`
           : '/vocabulary';
@@ -154,7 +155,7 @@ export default function DailyPage() {
     refresh();
     const onVisible = () => { if (document.visibilityState === 'visible') refresh(); };
     document.addEventListener('visibilitychange', onVisible);
-    return () => { cancelled = true; document.removeEventListener('visibilitychange', onVisible); };
+    return () => { gen = -1; document.removeEventListener('visibilitychange', onVisible); };
   }, [user, isDesktop]);
 
   if (isDesktop) return <DesktopDailyPage />;
@@ -228,7 +229,7 @@ export default function DailyPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ announcementId: msg.id }),
         keepalive: true,
-      }).catch(() => {});
+      }).catch((e) => { console.error('Daily: markRead failed', e); });
     }
   };
 

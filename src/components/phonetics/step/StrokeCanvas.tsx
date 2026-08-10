@@ -4,6 +4,8 @@ import { matchStroke, findBestMatchIndex, parseSvgPath, samplePath, type Point }
 import type { ProgressiveStroke } from '@/data/phonetics-progressive';
 import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
+import { collectHandwriting } from '@/lib/handwriting/collect';
+import type { StrokePoint } from '@/lib/handwriting/types';
 
 export type StrokeFeedback =
   | { kind: 'ok'; distance: number }
@@ -32,17 +34,29 @@ export default function StrokeCanvas({ targetStrokeCount, ghostChar, idealStroke
   const drawingRef = useRef(false);
   const lastPtRef = useRef<Point | null>(null);
   const currentStrokePointsRef = useRef<Point[]>([]);
+  // 采集用：跨笔累积完整笔迹（带 t/pressure），写完一个字时提交给训练数据管道
+  const collectStrokesRef = useRef<StrokePoint[][]>([]);
+  const curCollectStrokeRef = useRef<StrokePoint[]>([]);
+  const collectedRef = useRef(false); // 防止同一字重复采集
   const coveredCellsRef = useRef<Set<string>>(new Set());    // 已覆盖网格 key，只增不重建
   const idealCellsRef = useRef<Set<string>>(new Set());      // ideal 点归并后的网格 key 集合
   const sizeRef = useRef<{ w: number; h: number }>({ w: 400, h: 260 });
   const rafRef = useRef<number | null>(null);                 // 节流 onCoverageChange
   const strokeCountRef = useRef(0);                            // 用于 finishStroke 读取最新值
   const winCleanupRef = useRef<((ev: PointerEvent) => void) | null>(null);     // window listener 清理函数
+  const activePointerIdRef = useRef<number | null>(null);                      // 多指防护：只认第一根手指/笔
   const setupCanvasRef = useRef<(() => void) | null>(null);                     // 供 clear() 主动触发 buffer 重建
   const [strokeCount, setStrokeCount] = useState(0);
   const [ghostOn, setGhostOn] = useState(true);
   // canvas 实际尺寸稳定时递增，用于触发 idealCells 重算（避免用默认 400x260 错算覆盖网格）
   const [sizeReady, setSizeReady] = useState(0);
+
+  // 目标字切换时重置采集状态（父组件可能不 clear 就换字）
+  useEffect(() => {
+    collectStrokesRef.current = [];
+    curCollectStrokeRef.current = [];
+    collectedRef.current = false;
+  }, [ghostChar]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -50,9 +64,14 @@ export default function StrokeCanvas({ targetStrokeCount, ghostChar, idealStroke
     const setupCanvas = () => {
       const rect = canvas.getBoundingClientRect();
       if (rect.width === 0) return;
+      // ⭐2026-08-07 画板坐标统一物理空间(治 iPad 横屏 body{zoom} 微信笔迹偏移,详见 HandwritingInput):
+      //   坐标用 offsetX(画板内物理偏移),故 sizeRef/buffer/判定基准全用物理尺寸 clientWidth×zoom。
+      const bz = parseFloat(getComputedStyle(document.body).zoom || '1') || 1;
+      const pw = canvas.clientWidth * bz, ph = canvas.clientHeight * bz;
+      if (pw === 0 || ph === 0) return;
       // 布局稳定后微小抖动（±1px）忽略，避免频繁重设导致画布被清空
       const prev = sizeRef.current;
-      if (ctxRef.current && Math.abs(prev.w - rect.width) < 1 && Math.abs(prev.h - rect.height) < 1) return;
+      if (ctxRef.current && Math.abs(prev.w - pw) < 1 && Math.abs(prev.h - ph) < 1) return;
 
       // 重设 buffer 前先 snapshot 旧画布到临时 canvas（如已存在内容），
       // 重设后再拉伸画回来 —— 转屏也不会丢笔画，同时消除坐标偏移。
@@ -68,13 +87,14 @@ export default function StrokeCanvas({ targetStrokeCount, ghostChar, idealStroke
         }
       }
 
-      sizeRef.current = { w: rect.width, h: rect.height };
+      sizeRef.current = { w: pw, h: ph };
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = Math.round(rect.width * dpr);
-      canvas.height = Math.round(rect.height * dpr);
+      canvas.width = Math.round(pw * dpr);
+      canvas.height = Math.round(ph * dpr);
       const ctx = canvas.getContext('2d', { alpha: true });
       if (!ctx) return;
-      ctx.scale(dpr, dpr);
+      // setTransform 用 buffer/物理宽,让 1 绘制单位=1 offset(物理)像素
+      ctx.setTransform(canvas.width / pw, 0, 0, canvas.height / ph, 0, 0);
       // 从 CSS token 读笔画色，暗色模式下自动切浅色墨
       const inkColor = getComputedStyle(document.documentElement).getPropertyValue('--color-ink-2').trim() || '#3a2e29';
       ctx.strokeStyle = inkColor;
@@ -84,8 +104,8 @@ export default function StrokeCanvas({ targetStrokeCount, ghostChar, idealStroke
       ctxRef.current = ctx;
 
       if (snapshot) {
-        // 拉伸到新的 CSS 尺寸（ctx 已 scale(dpr, dpr)，绘制走 CSS 坐标系）
-        ctx.drawImage(snapshot, 0, 0, rect.width, rect.height);
+        // 拉伸到新的物理尺寸（ctx 已 setTransform，绘制走物理 offset 坐标系）
+        ctx.drawImage(snapshot, 0, 0, pw, ph);
       }
 
       setSizeReady((n) => n + 1);
@@ -100,6 +120,14 @@ export default function StrokeCanvas({ targetStrokeCount, ghostChar, idealStroke
       setupCanvas();
     });
     ro.observe(canvas);
+    // 平板横竖屏旋转：iOS Safari 旋转后 ResizeObserver 时序不可靠，
+    // orientationchange 后延时强制重建 buffer，杜绝旋转后落笔偏移
+    let orientTimer: ReturnType<typeof setTimeout> | null = null;
+    const onOrient = () => {
+      if (orientTimer) clearTimeout(orientTimer);
+      orientTimer = setTimeout(() => { if (!drawingRef.current) setupCanvas(); }, 250);
+    };
+    window.addEventListener('orientationchange', onOrient);
     // iOS 选择放大镜(loupe)由原生 touch 手势触发，CSS user-select:none + React 事件的
     // stopPropagation 都拦不住；必须在非 passive 的 touchstart/touchmove 上 preventDefault。
     const stopTouch = (e: TouchEvent) => e.preventDefault();
@@ -109,6 +137,8 @@ export default function StrokeCanvas({ targetStrokeCount, ghostChar, idealStroke
       ro.disconnect();
       canvas.removeEventListener('touchstart', stopTouch);
       canvas.removeEventListener('touchmove', stopTouch);
+      window.removeEventListener('orientationchange', onOrient);
+      if (orientTimer) clearTimeout(orientTimer);
       setupCanvasRef.current = null;
     };
   }, []);
@@ -171,16 +201,23 @@ export default function StrokeCanvas({ targetStrokeCount, ghostChar, idealStroke
     });
   }, [onCoverageChange]);
 
-  // 用 offsetX/offsetY（元素内坐标），不用 clientX-rect：iPad 横屏 body{zoom:0.92} 下
-  // getBoundingClientRect 与 clientX 坐标空间不一致，相减错配→笔迹偏移+放大 1/zoom 倍。
-  // offsetX 与 sizeRef（CSS 尺寸）同坐标系，笔顺匹配/覆盖率网格不受影响；zoom=1 时等价。
-  const localPoint = useCallback((e: React.PointerEvent): Point => {
-    return { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
+  // ⭐2026-08-07 用 offsetX/offsetY(画板内物理偏移),微信/Safari 都对(详见 HandwritingInput 定案)。
+  // clientX-rect.left 在微信 body{zoom} 下是混合空间(clientX物理/rect布局)必偏。
+  // coalesced 子点 offsetX 恒 0,传主事件 shift=(offset-client) 平移校正。
+  const canvasLocal = useCallback((ev: PointerEvent, shift?: { x: number; y: number }): Point => {
+    if (shift) return { x: ev.clientX + shift.x, y: ev.clientY + shift.y };
+    return { x: ev.offsetX, y: ev.offsetY };
   }, []);
+
+  const localPoint = useCallback((e: React.PointerEvent): Point => {
+    return canvasLocal(e.nativeEvent as PointerEvent);
+  }, [canvasLocal]);
 
   const finishStroke = useCallback(() => {
     drawingRef.current = false;
     lastPtRef.current = null;
+    activePointerIdRef.current = null;
+    document.body.classList.remove('stroke-drawing');
     const userPoints = currentStrokePointsRef.current;
 
     // 先计算 feedback，不在 setState updater 内产生副作用
@@ -205,6 +242,18 @@ export default function StrokeCanvas({ targetStrokeCount, ghostChar, idealStroke
     setStrokeCount(next);
     onStrokeChange?.(next, feedback);
 
+    // 采集：提交当前完成的笔画到累积器
+    if (curCollectStrokeRef.current.length > 0) {
+      collectStrokesRef.current.push(curCollectStrokeRef.current);
+      curCollectStrokeRef.current = [];
+    }
+    // 写完整字（笔数达到目标）且有明确目标字（ghostChar）时采集一次
+    if (ghostChar && !collectedRef.current && next >= targetStrokeCount) {
+      collectedRef.current = true;
+      collectHandwriting(ghostChar, collectStrokesRef.current, sizeRef.current.w, sizeRef.current.h, 'ghost');
+      collectStrokesRef.current = [];
+    }
+
     // 增量覆盖：把当前笔画点加入覆盖网格，节流回调
     if (onCoverageChange && idealStrokes && idealStrokes.length > 0) {
       const cell = coverageThresholdPx;
@@ -213,35 +262,33 @@ export default function StrokeCanvas({ targetStrokeCount, ghostChar, idealStroke
       }
       scheduleCoverageUpdate();
     }
-  }, [onStrokeChange, idealStrokes, onCoverageChange, coverageThresholdPx, scheduleCoverageUpdate]);
+  }, [onStrokeChange, idealStrokes, onCoverageChange, coverageThresholdPx, scheduleCoverageUpdate, ghostChar, targetStrokeCount]);
 
   const onDown = useCallback((e: React.PointerEvent) => {
+    // 正在绘制时忽略第二根手指/手掌接触
+    if (drawingRef.current) return;
     // iPad/慢渲染场景：首笔前强制同步 buffer 尺寸，避免坐标偏移
     if (setupCanvasRef.current) setupCanvasRef.current();
     if (!ctxRef.current) return;
     e.preventDefault();
     const canvas = canvasRef.current;
-    // 捕获指针：确保 pointerup 在 canvas 外也能收到，避免 onLeave 提前打断笔画
     if (canvas && canvas.setPointerCapture) {
       try { canvas.setPointerCapture(e.pointerId); } catch { /* 极少数设备不支持，忽略 */ }
     } else if (canvas && (canvas as any).setCapture) {
       try { (canvas as any).setCapture(); } catch { /* ignore */ }
     }
-    // 落笔即禁止全页选中/长按/触摸滚动 · 手指滑出画板到正文也不会选中文字
     if (typeof document !== 'undefined') {
       document.body.classList.add('stroke-drawing');
     }
     // window 级指针释放兜底：不支持 capture 的设备也能正常结笔
     const pid = e.pointerId;
+    activePointerIdRef.current = pid;
     const onWinUp = (ev: PointerEvent) => {
       if (ev.pointerId !== pid) return;
       window.removeEventListener('pointerup', onWinUp);
       window.removeEventListener('pointercancel', onWinUp);
       if (winCleanupRef.current === onWinUp) winCleanupRef.current = null;
       if (drawingRef.current) finishStroke();
-      if (typeof document !== 'undefined') {
-        document.body.classList.remove('stroke-drawing');
-      }
     };
     window.addEventListener('pointerup', onWinUp);
     window.addEventListener('pointercancel', onWinUp);
@@ -251,23 +298,27 @@ export default function StrokeCanvas({ targetStrokeCount, ghostChar, idealStroke
     const p = localPoint(e);
     lastPtRef.current = p;
     currentStrokePointsRef.current = [p];
+    // 采集：开始新笔画（带 t/pressure）
+    const ne = e.nativeEvent as PointerEvent;
+    curCollectStrokeRef.current = [{ x: p.x, y: p.y, t: ne.timeStamp, pressure: ne.pressure ?? 0.5 }];
   }, [localPoint, finishStroke]);
 
   const onMove = useCallback((e: React.PointerEvent) => {
     if (!drawingRef.current || !ctxRef.current || !lastPtRef.current) return;
+    if (e.pointerId !== activePointerIdRef.current) return;
     e.preventDefault();
     const ctx = ctxRef.current;
-    // 高频事件（iPad 120Hz + coalescedEvents）：一次 pointermove 可能包含多个采样点
-    const events: PointerEvent[] = typeof (e.nativeEvent as PointerEvent).getCoalescedEvents === 'function'
-      ? (e.nativeEvent as PointerEvent).getCoalescedEvents()
+    const native = e.nativeEvent as PointerEvent;
+    // 高频事件（120Hz + coalescedEvents）：一次 pointermove 多个采样点，逐点取本地坐标。
+    // 主事件 native 用 offsetX/offsetY;coalesced 子点 offsetX 恒 0,用主事件 shift 平移校正。
+    const shift = { x: native.offsetX - native.clientX, y: native.offsetY - native.clientY };
+    const coalesced: PointerEvent[] = typeof native.getCoalescedEvents === 'function'
+      ? native.getCoalescedEvents()
       : [];
-    // 用 offsetX/offsetY（对 zoom 免疫，见 localPoint 注释）；coalesced 事件同样带 offset，
-    // 且省掉 getBoundingClientRect，避免 120Hz 下每点强制重排
-    const points: Point[] = events.length > 0
-      ? events.map((ev) => ({ x: ev.offsetX, y: ev.offsetY }))
-      : [{ x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY }];
+    const points: { p: Point; t: number; pressure: number }[] = (coalesced.length > 0 ? coalesced : [native])
+      .map(ev => ({ p: ev === native ? canvasLocal(ev) : canvasLocal(ev, shift), t: ev.timeStamp, pressure: ev.pressure ?? 0.5 }));
     // 每段单独 subpath：短路径 stroke 常数级开销，避免路径累积导致的越画越卡
-    for (const p of points) {
+    for (const { p, t: pt, pressure } of points) {
       const last = lastPtRef.current!;
       // 亚像素抖动过滤：<0.7px 位移才过滤（原来 1.18px 阈值在 120Hz 触控下会滤掉正常慢速点，导致视觉卡顿）
       const dx = p.x - last.x;
@@ -279,22 +330,21 @@ export default function StrokeCanvas({ targetStrokeCount, ghostChar, idealStroke
       ctx.stroke();
       lastPtRef.current = p;
       currentStrokePointsRef.current.push(p);
+      curCollectStrokeRef.current.push({ x: p.x, y: p.y, t: pt, pressure });
     }
-  }, []);
+  }, [canvasLocal]);
 
-  const onUp = useCallback(() => {
+  const onUp = useCallback((e: React.PointerEvent) => {
     // window listener 已经处理，避免双调
-    if (!drawingRef.current) return;
+    if (!drawingRef.current || e.pointerId !== activePointerIdRef.current) return;
     finishStroke();
   }, [finishStroke]);
 
   const onCancel = useCallback(() => {
-    if (typeof document !== 'undefined') {
-      document.body.classList.remove('stroke-drawing');
-    }
-    if (!drawingRef.current) return;
+    document.body.classList.remove('stroke-drawing');
     drawingRef.current = false;
     lastPtRef.current = null;
+    activePointerIdRef.current = null;
   }, []);
 
   const onLeave = useCallback(() => {
@@ -312,6 +362,9 @@ export default function StrokeCanvas({ targetStrokeCount, ghostChar, idealStroke
     strokeCountRef.current = 0;
     setStrokeCount(0);
     currentStrokePointsRef.current = [];
+    collectStrokesRef.current = [];
+    curCollectStrokeRef.current = [];
+    collectedRef.current = false;
     coveredCellsRef.current = new Set();
     if (rafRef.current) { cancelAnimationFrame(rafRef.current); rafRef.current = null; }
     onStrokeChange?.(0);

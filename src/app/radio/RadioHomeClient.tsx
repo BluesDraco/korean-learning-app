@@ -20,6 +20,8 @@ import {
   todayStr,
   getListenedSet,
   MODE_KEY,
+  computeRadioProgress,
+  groupArchiveByDay,
   type RadioStreak,
   type BroadcastMode,
 } from '@/lib/radioLocal';
@@ -157,8 +159,11 @@ export default function RadioHomeClient() {
   const [day, setDay] = useState(1);
   const [episodes, setEpisodes] = useState<RadioCard[]>([]);
   const [loading, setLoading] = useState(true);
-  useEffect(() => {
+  const [error, setError] = useState(false);
+  const fetchData = useCallback(() => {
     let alive = true;
+    setLoading(true);
+    setError(false);
     fetch('/api/radio/episodes')
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => {
@@ -166,7 +171,7 @@ export default function RadioHomeClient() {
         if (typeof d.day === 'number') setDay(d.day);
         if (Array.isArray(d.episodes)) setEpisodes(d.episodes);
       })
-      .catch(() => {})
+      .catch(() => { if (alive) setError(true); })
       .finally(() => {
         if (alive) setLoading(false);
       });
@@ -174,6 +179,7 @@ export default function RadioHomeClient() {
       alive = false;
     };
   }, []);
+  useEffect(() => fetchData(), [fetchData]);
 
   // 访谈专区特写（王炸门面）：独立于日播 Day 门控，取第一期做 hero
   const [interviewFeatured, setInterviewFeatured] = useState<RadioCard | null>(null);
@@ -329,7 +335,12 @@ export default function RadioHomeClient() {
     [episodes],
   );
 
-  // 本周打卡状态（월~일）
+  // 本周打卡状态（월~일），每 60s 刷新 today 判定以免跨午夜 stale
+  const [todayTick, setTodayTick] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => setTodayTick((n) => n + 1), 60_000);
+    return () => clearInterval(t);
+  }, []);
   const weekDays = useMemo(() => {
     const now = new Date();
     const dow = (now.getDay() + 6) % 7; // 周一=0
@@ -349,20 +360,10 @@ export default function RadioHomeClient() {
         isFuture: !isToday && d > now,
       };
     });
-  }, [streak]);
+  }, [streak, todayTick]);
 
   // 学习进度统计：听过总数 / 已解锁总数 / 各档进度
-  const progress = useMemo(() => {
-    const total = archive.length;
-    const done = archive.filter((e) => listened.has(e.id)).length;
-    const byProgram: Record<string, { done: number; total: number }> = {};
-    for (const e of archive) {
-      const p = (byProgram[e.program] ||= { done: 0, total: 0 });
-      p.total += 1;
-      if (listened.has(e.id)) p.done += 1;
-    }
-    return { total, done, byProgram };
-  }, [archive, listened]);
+  const progress = useMemo(() => computeRadioProgress(archive, listened), [archive, listened]);
 
   // 真·最近听过（archive 已按 Day 新→旧；过滤 listened，取前 6）
   const recentListened = useMemo(
@@ -371,15 +372,7 @@ export default function RadioHomeClient() {
   );
 
   // 往期按 Day 分组（新→旧），供左栏/手机往期列表
-  const archiveByDay = useMemo(() => {
-    const map = new Map<number, RadioCard[]>();
-    for (const e of archive) {
-      const arr = map.get(e.day) || [];
-      arr.push(e);
-      map.set(e.day, arr);
-    }
-    return [...map.entries()].sort((a, b) => b[0] - a[0]); // [day, eps][]
-  }, [archive]);
+  const archiveByDay = useMemo(() => groupArchiveByDay(archive), [archive]);
 
   const listenerAvatars = RADIO_LISTENERS.map((l, i) => (
     <span key={i} className={`radio-av radio-av-${AV_COLORS[i % 4]}`}>
@@ -406,7 +399,7 @@ export default function RadioHomeClient() {
             <span className="radio-pp-bar-label">{PROGRAM_LABELS[prog] || prog}</span>
             <span className="radio-pp-bar-track">
               <span
-                className={`radio-pp-bar-fill radio-bar-${archive.find((e) => e.program === prog)?.coverColor || 'pink'}`}
+                className={`radio-pp-bar-fill radio-bar-${s.color}`}
                 style={{ width: `${s.total ? (s.done / s.total) * 100 : 0}%` }}
               />
             </span>
@@ -453,8 +446,8 @@ export default function RadioHomeClient() {
     if (nowPlaying) openEpisode(nowPlaying.id);
   };
 
-  // 骨架屏：节目元数据 fetch 未回来前（含空态兜底），避免 nowPlaying 未定义
-  if (loading || !nowPlaying) {
+  // 骨架屏 / 错误页 / 空态
+  if (loading) {
     return (
       <div className="radio-root radio-home">
         <div className="radio-skeleton">
@@ -468,6 +461,19 @@ export default function RadioHomeClient() {
       </div>
     );
   }
+
+  if (error) {
+    return (
+      <div className="radio-root radio-home">
+        <div className="radio-skeleton" style={{ textAlign: 'center', padding: '60px 24px' }}>
+          <p style={{ marginBottom: 16, fontSize: 15 }}>라디오를 불러올 수 없어요</p>
+          <button className="radio-mode-toggle" onClick={fetchData}>再次尝试</button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!nowPlaying) return null;
 
   const streakGlow = streak.currentStreak >= 3;
 

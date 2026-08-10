@@ -19,6 +19,7 @@ import { t, type Lang } from '@/lib/i18n';
 
 // 每日热度榜条目（后台二审入选、公开安全字段）
 interface RankingEntry {
+  [k: string]: unknown;
   slug: string;
   rank: number;
   text: string;

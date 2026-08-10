@@ -4,7 +4,7 @@ import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, ChevronLeft, ChevronRight, Volume2, Play, Pause, Eye, EyeOff, Check, BookmarkPlus } from 'lucide-react';
+import { ArrowLeft, ChevronLeft, ChevronRight, Volume2, Play, Pause, Eye, EyeOff, Check, BookmarkPlus, Menu, Sun, Moon } from 'lucide-react';
 import { pictureBooks } from '@/data/pictureBooks';
 import type { PictureBookPage } from '@/data/pictureBooks';
 import { speak, cancelSpeech, speakPreRecorded } from '@/lib/tts';
@@ -16,10 +16,16 @@ import { canAccessBookIndex, isPaidTier } from '@/lib/membership-benefits';
 const bookLineAudioUrl = (bookId: string, pageIdx: number, lineIdx: number) =>
   `/audio/picture-books/${bookId}/p${pageIdx}-l${lineIdx}.mp3`;
 import { TappableText } from '@/components/TappableText';
-import { savePage, markComplete, getProgress, getChinesePref, setChinesePref, saveVocabWords } from '@/lib/pictureBookProgress';
+import { savePage, markComplete, getProgress, getChinesePref, setChinesePref, saveVocabWord } from '@/lib/pictureBookProgress';
 import { useLang } from '@/components/LangProvider';
+import { useSmartBack } from '@/lib/useSmartBack';
 import { t } from '@/lib/i18n';
-import './picture-book.css';
+import { db } from '@/lib/db';
+import type { UserArticleProgress } from '@/types';
+import LibrarySidebar, { type SidebarArticle } from '../../_components/LibrarySidebar';
+import { TOPIC_META } from '../../_components/topics';
+import '../../../learn/picture-books/[id]/picture-book.css';
+import '../../library.css';
 
 const FLIP_DURATION = 600;
 
@@ -69,14 +75,20 @@ function VocabSummaryPanel({ page, bookTitle, nextBookId }: { page: PictureBookP
   const { lang } = useLang();
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [saveErr, setSaveErr] = useState(false);
 
   const saveAll = async () => {
     if (saving || saved) return;
     setSaving(true);
+    setSaveErr(false);
     try {
-      await saveVocabWords(page.vocab, bookTitle);
+      for (const v of page.vocab) {
+        await saveVocabWord(v.word, v.meaning, bookTitle);
+      }
       setSaved(true);
-    } catch { /* ignore */ } finally { setSaving(false); }
+    } catch {
+      setSaveErr(true);
+    } finally { setSaving(false); }
   };
 
   return (
@@ -95,15 +107,16 @@ function VocabSummaryPanel({ page, bookTitle, nextBookId }: { page: PictureBookP
         ))}
       </div>
 
+      {saveErr && <p role="alert" className="pbr-sum-err">{t('pb.save_failed', lang)}</p>}
       <div className="pbr-controls" style={{ paddingLeft: 0, justifyContent: 'center', margin: 0 }}>
         <button className="pbr-play" onClick={saveAll} disabled={saving || saved}>
-          {saved ? <><Check size={15} /> {t('pb.saved_to_book', lang)}</> : <><BookmarkPlus size={15} /> {saving ? t('pb.saving', lang) : t('pb.save_all_to_book', lang)}</>}
+          {saved ? <><Check size={15} /> {t('pb.saved_to_book', lang)}</> : <><BookmarkPlus size={15} /> {saving ? t('pb.saving', lang) : (saveErr ? t('pb.retry', lang) : t('pb.save_all_to_book', lang))}</>}
         </button>
         <button className="pbr-toggle" onClick={() => speak(page.vocab.map((v) => v.word).join(', '), 0.7)}>
           <Volume2 size={13} /> {t('pb.read_all', lang)}
         </button>
         {nextBookId && (
-          <Link href={`/learn/picture-books/${nextBookId}`} className="pbr-toggle" style={{ textDecoration: 'none' }}>
+          <Link href={`/reading/picture-books/${nextBookId}`} className="pbr-toggle" style={{ textDecoration: 'none' }}>
             {t('pb.next_book', lang)} <ChevronRight size={14} />
           </Link>
         )}
@@ -130,6 +143,53 @@ function TextPanel({ page, bookId, pageIdx, bookTitle, nextBookId, showChinese, 
   const proLines = page.pronunciation.split('\n');
   const zhLines = page.chinese.split('\n');
 
+  // 把一行韩文按 page.vocab 生词拆分，命中词包 .word-lookup 高亮 span，其余走 TappableText
+  const renderVocabLine = (text: string, vocab: { word: string }[]) => {
+    if (!text.trim() || vocab.length === 0) {
+      return <TappableText text={text} source={`picture-book:${bookTitle}`} className="pbr-ko" />;
+    }
+    // 收集所有生词在文本中的位置，按起止排序
+    const matches: { start: number; end: number; word: string }[] = [];
+    for (const v of vocab) {
+      let pos = 0;
+      while ((pos = text.indexOf(v.word, pos)) !== -1) {
+        matches.push({ start: pos, end: pos + v.word.length, word: v.word });
+        pos += v.word.length;
+      }
+    }
+    if (matches.length === 0) {
+      return <TappableText text={text} source={`picture-book:${bookTitle}`} className="pbr-ko" />;
+    }
+    // 去重叠，按 start 排序
+    matches.sort((a, b) => a.start - b.start);
+    const merged: typeof matches = [];
+    for (const m of matches) {
+      if (merged.length === 0 || m.start >= merged[merged.length - 1].end) {
+        merged.push(m);
+      }
+    }
+    // 拆分渲染
+    const segments: React.ReactNode[] = [];
+    let cursor = 0;
+    merged.forEach((m, idx) => {
+      if (m.start > cursor) {
+        segments.push(
+          <TappableText key={`t${idx}`} text={text.slice(cursor, m.start)} source={`picture-book:${bookTitle}`} className="pbr-ko" />
+        );
+      }
+      segments.push(
+        <TappableText key={`h${idx}`} text={text.slice(m.start, m.end)} source={`picture-book:${bookTitle}`} className="pbr-ko word-lookup" />
+      );
+      cursor = m.end;
+    });
+    if (cursor < text.length) {
+      segments.push(
+        <TappableText key="end" text={text.slice(cursor)} source={`picture-book:${bookTitle}`} className="pbr-ko" />
+      );
+    }
+    return <span className="pbr-ko">{segments}</span>;
+  };
+
   return (
     <div className="pbr-read">
       <div className="pbr-lines">
@@ -140,11 +200,7 @@ function TextPanel({ page, bookId, pageIdx, bookTitle, nextBookId, showChinese, 
               <span className="pbr-num">{String(i + 1).padStart(2, '0')}</span>
               {showRoman && <div className="pbr-roman">{proLines[i] ?? '…'}</div>}
               <div className="pbr-ko-row">
-                <TappableText
-                  text={ko}
-                  source={`picture-book:${bookTitle}`}
-                  className="pbr-ko"
-                />
+                {renderVocabLine(ko, page.vocab ?? [])}
                 <button
                   className="pbr-speak"
                   onClick={(e) => { e.stopPropagation(); speakPreRecorded(bookLineAudioUrl(bookId, pageIdx, i), ko, 0.85); }}
@@ -190,9 +246,42 @@ export default function PictureBookReaderPage() {
   const { lang } = useLang();
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
+  const smartBack = useSmartBack('/reading');
   const book = pictureBooks.find((b) => b.id === id);
   const bookIndex = pictureBooks.findIndex((b) => b.id === id);
   const { tier, matrix, loading: memLoading } = useMembership();
+
+  // 阅览室侧栏
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [dark, setDark] = useState(false);
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      setDark(document.documentElement.getAttribute('data-theme') === 'dark');
+    }
+  }, []);
+  const [articles, setArticles] = useState<SidebarArticle[]>([]);
+  const [articleProgress, setArticleProgress] = useState<Map<string, UserArticleProgress>>(new Map());
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      // 侧栏精简清单走 API，避免把 27k 行文章全库打进本页 bundle。
+      try {
+        const res = await fetch('/api/reading/sidebar');
+        if (res.ok && !cancelled) {
+          const data = await res.json();
+          setArticles(data.articles ?? []);
+        }
+      } catch { /* skip */ }
+      try {
+        const all = await db.userArticleProgress.toArray();
+        if (cancelled) return;
+        const map = new Map<string, UserArticleProgress>();
+        for (const p of all) map.set(p.articleId, p);
+        setArticleProgress(map);
+      } catch { /* skip */ }
+    })();
+    return () => { cancelled = true; };
+  }, []);
 
   const [currentPage, setCurrentPage] = useState(0);
   const touchStartX = useRef(0);
@@ -240,12 +329,15 @@ export default function PictureBookReaderPage() {
   const canGoNext = currentPage < totalPages - 1;
   const canGoPrev = currentPage > 0;
 
-  // 存进度 + 末页标记完成
+  // 这本书对当前会员档是否被内容墙锁住（memLoading 时先按未锁算，副作用/渲染另用 memLoading 短路）
+  const bookLocked = !isPaidTier(tier) && bookIndex >= 0 && !canAccessBookIndex(matrix, tier, bookIndex);
+
+  // 存进度 + 末页标记完成（会员加载中或被锁的书不记进度，避免锁着的书被误标完成）
   useEffect(() => {
-    if (!book) return;
+    if (!book || memLoading || bookLocked) return;
     savePage(book.id, currentPage);
     if (currentPage === book.pages.length - 1) markComplete(book.id);
-  }, [book, currentPage]);
+  }, [book, currentPage, memLoading, bookLocked]);
 
   const toggleChinese = useCallback(() => {
     setShowChinese((v) => { setChinesePref(!v); return !v; });
@@ -354,8 +446,8 @@ export default function PictureBookReaderPage() {
     isSwipingRef.current = false;
     const offset = swipeOffsetRef.current;
     swipeOffsetRef.current = 0;
-    if (offset > 60) goPrev();
-    else if (offset < -60) goNext();
+    if (offset > 40) goPrev();
+    else if (offset < -40) goNext();
     setSwipeOffset(0);
   };
 
@@ -371,20 +463,35 @@ export default function PictureBookReaderPage() {
   // 卸载时停朗读
   useEffect(() => () => { playSeqRef.current++; cancelSpeech(); }, []);
 
+  // 把 WordTapSheet 弹窗里的韩文字体设成绘本衬线
+  useEffect(() => {
+    document.documentElement.style.setProperty('--font-ko-sheet', "'Gowun Batang', 'Noto Serif SC', serif");
+    return () => { document.documentElement.style.removeProperty('--font-ko-sheet'); };
+  }, []);
+
   if (!book) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center">
           <span className="text-6xl block mb-4">📖</span>
           <p className="text-[var(--text-secondary)] text-sm">{t('pb.not_found', lang)}</p>
-          <Link href="/learn/picture-books" className="text-[var(--pink-primary)] text-sm mt-2 inline-block">{t('pb.back_list', lang)}</Link>
+          <Link href="/reading" className="text-[var(--pink-primary)] text-sm mt-2 inline-block">{t('pb.back_list', lang)}</Link>
         </div>
       </div>
     );
   }
 
+  // 会员状态加载中：先出占位，避免付费绘本正文/插画在判墙前抢先渲染（内容闪现）
+  if (memLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <span className="text-4xl animate-pulse" aria-label={t('pb.loading', lang)}>📖</span>
+      </div>
+    );
+  }
+
   // 会员内容墙：免费档仅前 N 本（默认 3）
-  if (!memLoading && !isPaidTier(tier) && bookIndex >= 0 && !canAccessBookIndex(matrix, tier, bookIndex)) {
+  if (bookLocked) {
     return (
       <div className="flex items-center justify-center min-h-[60vh] px-6">
         <div className="text-center flex flex-col items-center gap-3">
@@ -400,7 +507,7 @@ export default function PictureBookReaderPage() {
           >
             {t('pb.unlock_hall', lang)}
           </button>
-          <Link href="/learn/picture-books" className="text-[var(--pink-primary)] text-sm inline-block">{t('pb.back_list', lang)}</Link>
+          <Link href="/reading" className="text-[var(--pink-primary)] text-sm inline-block">{t('pb.back_list', lang)}</Link>
         </div>
       </div>
     );
@@ -418,12 +525,39 @@ export default function PictureBookReaderPage() {
   const totalVocab = book.pages.reduce((n, p) => n + (p.vocab?.length ?? 0), 0);
 
   return (
+    <div className={`lib-scope lib-picbook${dark ? ' lib-dark' : ''}`}>
+      <div className={`lib-theme-toggle${drawerOpen ? ' drawer-open' : ''}`}>
+        <button className={`lib-theme-btn${!dark ? ' active' : ''}`} onClick={() => { setDark(false); document.documentElement.setAttribute('data-theme', 'light'); }}><Sun size={13} /> 밝게</button>
+        <button className={`lib-theme-btn${dark ? ' active' : ''}`} onClick={() => { setDark(true); document.documentElement.setAttribute('data-theme', 'dark'); }}><Moon size={13} /> 어둡게</button>
+      </div>
+      <div className="lib-shell">
+        <LibrarySidebar
+          articles={articles}
+          progress={articleProgress}
+          topics={TOPIC_META}
+          open={drawerOpen}
+          onClose={() => setDrawerOpen(false)}
+        />
+        <div className="home-screen" role="main">
+          <div className="main-topbar">
+            <div className="breadcrumb">
+              <button className="lib-menu-btn" onClick={() => setDrawerOpen(true)} aria-label="목록"><Menu size={17} /></button>
+              <button className="lib-back" onClick={smartBack} aria-label="뒤로"><ArrowLeft size={16} /></button>
+              <span>동물 도시 도서관</span>
+              <span>›</span>
+              <button className="kb-crumb-link" onClick={() => router.push('/reading')}>그림책관</button>
+              <span>›</span>
+              <span className="current">{book.title}</span>
+            </div>
+          </div>
+          <div className="main-content">
+            <div className="kb-reader-layout">
     <div className="pb-reader-root">
       <div className="pbr-shell">
 
         {/* Top bar */}
         <div className="pbr-top">
-          <Link href="/learn/picture-books" className="pbr-back">
+          <Link href="/reading" className="pbr-back">
             <ArrowLeft size={15} />
             <span>{t('pb.book_list', lang)}</span>
           </Link>
@@ -559,6 +693,50 @@ export default function PictureBookReaderPage() {
           <button className="pbr-fab" onClick={goNext} disabled={!canGoNext || !!flip} aria-label={t('pb.next_page', lang)}>
             <ChevronRight size={20} />
           </button>
+        </div>
+      </div>
+    </div>
+              <aside className="kb-reader-rail">
+                <div className="kb-rail-card">
+                  <h4 className="kb-rail-card-title">{t('reading.rail_toc', lang)}</h4>
+                  <div className="kb-rail-toc">
+                    {book.pages.map((_, i) => (
+                      <button
+                        key={i}
+                        className={`kb-rail-toc-item${i === currentPage ? ' active' : ''}${i < currentPage ? ' read' : ''}`}
+                        onClick={() => jumpToPage(i)}
+                        disabled={!!flip}
+                      >
+                        <span className="kb-rail-toc-emoji">{i < currentPage ? '✓' : String(i + 1)}</span>
+                        <span>{t('pb.page_n', lang, { n: i + 1 })}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                {page && page.vocab.length > 0 && (
+                  <div className="kb-rail-card">
+                    <h4 className="kb-rail-card-title">{t('reading.rail_page_vocab', lang)}</h4>
+                    <div className="kb-rail-vocab">
+                      {page.vocab.map((v) => (
+                        <div className="kb-rail-vocab-item" key={v.word}>
+                          <span className="kb-rail-vocab-ko">{v.word}</span>
+                          <span className="kb-rail-vocab-zh">{v.meaning}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                <div className="kb-rail-card">
+                  <h4 className="kb-rail-card-title">{t('reading.rail_info', lang)}</h4>
+                  <div className="kb-rail-info">
+                    <div className="kb-rail-info-row"><span>📖</span><span>{t('pb.total_pages', lang, { n: totalPages })}</span></div>
+                    <div className="kb-rail-info-row"><span>📝</span><span>{t('pb.book_vocab', lang)} {totalVocab}</span></div>
+                    <div className="kb-rail-info-row"><span>{book.emoji}</span><span>{book.title}</span></div>
+                  </div>
+                </div>
+              </aside>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -152,6 +152,7 @@ export default function MemberCenterPage() {
               <div>
                 <p className="mc-alert-title">{t('mine.mem_paid_title', lang)}</p>
                 <p className="mc-alert-sub">{t('mine.mem_paid_sub', lang)}</p>
+                <p className="mc-alert-wechat">{t(isLifetime ? 'mine.mem_paid_wechat_lifetime' : 'mine.mem_paid_wechat', lang)}</p>
               </div>
             </div>
           )}

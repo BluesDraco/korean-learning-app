@@ -2,8 +2,8 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, ChevronDown, ChevronUp, Lightbulb, Volume2, BookmarkPlus, CheckSquare, Square, ListChecks, X } from 'lucide-react';
-import { useState } from 'react';
+import { ArrowLeft, ArrowRight, ChevronDown, ChevronUp, Lightbulb, Volume2, BookmarkPlus, CheckSquare, Square, ListChecks, X, Eye, EyeOff, Languages } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { knowledgeCategories } from '@/data/knowledge';
 import type { KnowledgeWord } from '@/data/knowledge';
 import { knowledgeGroups, knowledgeThemeLinks } from '@/data/knowledge-groups';
@@ -27,6 +27,33 @@ export default function KnowledgeCategoryPage() {
   const [addedAll, setAddedAll] = useState(false);
   const [managing, setManaging] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [showCn, setShowCn] = useState(true);
+
+  useEffect(() => {
+    try { if (localStorage.getItem('vocab_show_cn') === '0') setShowCn(false); } catch { /* ignore */ }
+  }, []);
+
+  const toggleCn = () => {
+    setShowCn(prev => {
+      const next = !prev;
+      try { localStorage.setItem('vocab_show_cn', next ? '1' : '0'); } catch { /* ignore */ }
+      return next;
+    });
+  };
+
+  const [showRn, setShowRn] = useState(true);
+
+  useEffect(() => {
+    try { if (localStorage.getItem('vocab_show_rn') === '0') setShowRn(false); } catch { /* ignore */ }
+  }, []);
+
+  const toggleRn = () => {
+    setShowRn(prev => {
+      const next = !prev;
+      try { localStorage.setItem('vocab_show_rn', next ? '1' : '0'); } catch { /* ignore */ }
+      return next;
+    });
+  };
 
   const category = knowledgeCategories.find((c) => c.slug === slug);
 
@@ -96,9 +123,9 @@ export default function KnowledgeCategoryPage() {
       }
     }
     await Promise.all([
-      toInsert.length > 0 ? db.words.bulkPut(toInsert).catch(() => {}) : Promise.resolve(),
-      newWordIds.length > 0 ? db.wordBooks.update(bookId, { wordIds: [...book.wordIds, ...newWordIds], updatedAt: now }).catch(() => {}) : Promise.resolve(),
-    ]);
+      toInsert.length > 0 ? db.words.bulkPut(toInsert) : Promise.resolve(),
+      newWordIds.length > 0 ? db.wordBooks.update(bookId, { wordIds: [...book.wordIds, ...newWordIds], updatedAt: now }) : Promise.resolve(),
+    ].map(p => p.catch(() => { throw new Error('bulkPut or update failed'); })));
   };
 
   const handleAddAllToBook = async (bookId: string) => {
@@ -112,6 +139,8 @@ export default function KnowledgeCategoryPage() {
       setAddedAll(true);
       setTimeout(() => setAddedAll(false), 3000);
       exitManage();
+    } catch {
+      alert(t('vocab.err_save_failed', lang));
     } finally {
       setAddingAll(false);
       setAddAllBook(false);
@@ -146,14 +175,18 @@ export default function KnowledgeCategoryPage() {
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="font-bold text-[var(--text-primary)]" style={{ fontSize: 18 }}>{word.word}</span>
-                <span className="text-xs text-[var(--pink-primary)] bg-[var(--pink-primary)]/5 px-1.5 py-0.5 rounded">
+                {showRn && <span className="text-xs text-[var(--pink-primary)] bg-[var(--pink-primary)]/5 px-1.5 py-0.5 rounded">
                   [{word.pronunciation}]
-                </span>
+                </span>}
                 <span className="text-xs px-1.5 py-0.5 rounded bg-[var(--bg-accent)] text-[var(--text-secondary)]">
                   {word.partOfSpeech}
                 </span>
               </div>
-              <p className="text-xs text-[var(--text-secondary)] mt-0.5 truncate">{word.meaning}</p>
+              {showCn ? (
+                <p className="text-xs text-[var(--text-secondary)] mt-0.5 truncate">{word.meaning}</p>
+              ) : (
+                <span className="text-xs text-[var(--text-muted)] mt-0.5 block truncate">{t('vocab.tap_reveal_cn', lang)}</span>
+              )}
             </div>
           </button>
           {!managing && (
@@ -190,7 +223,7 @@ export default function KnowledgeCategoryPage() {
               <div className="flex-1 min-w-0">
                 <p className="text-[10px] text-[var(--text-muted)] mb-1.5 uppercase tracking-wider">{t('know.example', lang)}</p>
                 <TappableText text={word.example} className="text-sm text-[var(--text-primary)]" source="基础词汇" />
-                <p className="text-xs text-[var(--text-secondary)] mt-1">{word.exampleZh}</p>
+                {showCn && <p className="text-xs text-[var(--text-secondary)] mt-1">{word.exampleZh}</p>}
               </div>
               <button
                 onClick={() => speak(word.example)}
@@ -241,6 +274,20 @@ export default function KnowledgeCategoryPage() {
       <div className="flex items-center gap-2">
         {!managing ? (
           <>
+            <button
+              onClick={toggleCn}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-colors ${showCn ? 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)]' : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:border-[var(--pink-primary)]/30'}`}
+            >
+              {showCn ? <Eye size={12} /> : <EyeOff size={12} />}
+              {showCn ? t('vocab.hide_cn', lang) : t('vocab.show_cn', lang)}
+            </button>
+            <button
+              onClick={toggleRn}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-colors ${showRn ? 'bg-[var(--pink-primary)]/10 text-[var(--pink-primary)]' : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:border-[var(--pink-primary)]/30'}`}
+            >
+              <Languages size={12} />
+              {showRn ? t('vocab.hide_rn', lang) : t('vocab.show_rn', lang)}
+            </button>
             <button
               onClick={() => { if (requireAuth()) setAddAllBook(true); }}
               disabled={addingAll}

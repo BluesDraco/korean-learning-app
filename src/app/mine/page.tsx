@@ -11,12 +11,12 @@ import { getProfile } from '@/lib/gamification';
 import { checkAchievements } from '@/lib/achievements/check';
 import { ACHIEVEMENT_BY_ID } from '@/data/achievements';
 import UserAvatar from '@/components/UserAvatar';
+import DailyCheckIn from '@/components/mine/DailyCheckIn';
 import type { Tier } from '@/lib/membership-benefits';
 import type { AchievementProgress } from '@/types';
 import './mine-home.css';
 
 interface HomeData {
-  [k: string]: unknown;
   level: number;
   streak: number;
   unlocked: number;
@@ -156,6 +156,9 @@ export default function MineHomePage() {
             <div className="mine-mini-item"><div className="mine-mini-num purple">{data?.unlocked ?? 0}</div><div className="mine-mini-label">{t('minehome.stat_ach', lang)}</div></div>
           </div>
         </div>
+
+        {/* 今日学习 · 签到 */}
+        <DailyCheckIn />
 
         {/* 会员中心 */}
         <div className="mine-sec-head"><span className="mine-sec-title">{t('minehome.sec_membership', lang)}</span><span className="mine-sec-kr">멤버십</span></div>

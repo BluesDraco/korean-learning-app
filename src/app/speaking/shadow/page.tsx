@@ -20,8 +20,8 @@ import { saveRecording } from '@/lib/audio/saveRecording';
 import { scorePronunciation } from '@/lib/audio/pronunciationScore';
 import { getAlignedDiff } from '@/lib/koreanDiff';
 import { playCorrectSound, playWrongSound } from '@/lib/audio/sfx';
-import { speak } from '@/lib/tts';
-import { awardXp, updateStreak } from '@/lib/gamification';
+import { speak, cancelSpeech } from '@/lib/tts';
+import { awardXp, updateStreak, recordElapsedMinutes } from '@/lib/gamification';
 import { pushSpeakingHistory } from '@/lib/practice/aggregate';
 import { Volume2, Mic, MicOff, Bookmark, Check } from 'lucide-react';
 import { SourcePicker } from '@/components/practice/SourcePicker';
@@ -36,7 +36,6 @@ function shadowPosKey(uid: string, items: { korean: string }[]): string {
 }
 
 interface ShadowItem {
-  [k: string]: unknown;
   korean: string;
   meaning: string;
   type: 'word' | 'sentence';
@@ -138,8 +137,10 @@ export default function SpeakingShadowPage() {
           setPhase('session');
         }}
         onBack={smartBack}
+        railMode="listening"
+        railChip="speak"
         ctaLabel={items && items.length > 0 ? t('sp.start', lang) : (loadError ? t('sp.change_source', lang) : t('sp.preparing', lang))}
-        ctaDisabled={(!items || items.length === 0) && !loadError}
+        ctaDisabled={!items || items.length === 0}
         extra={
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, width: '100%' }}>
             <SourcePicker config={source} onChange={changeSource} tone="mint" />
@@ -162,9 +163,16 @@ export default function SpeakingShadowPage() {
 
   if (!items) {
     return (
-      <PracticeSessionShell tone="mint" modeName={t('sp.shadow_name', lang)} modeKr="섀도잉" onBack={smartBack}>
+      <PracticeSessionShell tone="mint" modeName={t('sp.shadow_name', lang)} modeKr="섀도잉" onBack={smartBack} railMode="listening" railChip="speak">
         <div className="pr-ss-card" style={{ textAlign: 'center' }}>
-          <p style={{ fontSize: 14, color: 'var(--hr-ink-3)', margin: 0 }}>{t('sp.loading', lang)}</p>
+          {loadError ? (
+            <>
+              <p style={{ fontSize: 14, color: 'var(--hr-pink-strong)', margin: 0 }}>{t('sp.source_empty', lang)}</p>
+              <SourcePicker config={source} onChange={changeSource} tone="mint" />
+            </>
+          ) : (
+            <p style={{ fontSize: 14, color: 'var(--hr-ink-3)', margin: 0 }}>{t('sp.loading', lang)}</p>
+          )}
         </div>
       </PracticeSessionShell>
     );
@@ -202,6 +210,8 @@ function ShadowShell({ items, onBack, router, uid }: { items: ShadowItem[]; onBa
   const indexRef = useRef(0);
   const blobRef = useRef<Blob | null>(null);
   const durRef = useRef(0);
+  const sessionStartRef = useRef(Date.now());
+  const timeRecordedRef = useRef(false);
 
   const current = items[index];
   indexRef.current = index;
@@ -278,6 +288,10 @@ function ShadowShell({ items, onBack, router, uid }: { items: ShadowItem[]; onBa
     if (index + 1 >= items.length) {
       pushSpeakingHistory(uid, correctCount + acceptableCount, items.length);
       updateStreak().catch(e => console.error('[speaking-shadow] updateStreak failed', e));
+      if (!timeRecordedRef.current) {
+        timeRecordedRef.current = true;
+        recordElapsedMinutes(sessionStartRef.current, 30).catch(e => console.error('[shadow] recordElapsedMinutes failed', e));
+      }
       setFinished(true);
     } else {
       mic.cancel();
@@ -294,6 +308,7 @@ function ShadowShell({ items, onBack, router, uid }: { items: ShadowItem[]; onBa
 
   function handleSkip() {
     mic.cancel();
+    cancelSpeech();
     setFinalText(t('sp.skipped', lang));
     setScore(0);
     setVerdict('wrong');
@@ -394,6 +409,7 @@ function ShadowShell({ items, onBack, router, uid }: { items: ShadowItem[]; onBa
           {error && <p style={{ fontSize: 13, color: 'var(--hr-pink-strong)', textAlign: 'center', margin: 0 }}>{error}</p>}
           <button
             onClick={startListening}
+            aria-label={t('sp.shadow_tap_mic', lang)}
             style={{
               width: 88, height: 88, borderRadius: '50%',
               background: 'var(--hr-mint-base)',
@@ -402,7 +418,7 @@ function ShadowShell({ items, onBack, router, uid }: { items: ShadowItem[]; onBa
               boxShadow: '0 8px 24px rgba(125,198,179,.35)',
             }}
           >
-            <Mic size={34} style={{ color: '#fff' }} />
+            <Mic size={34} style={{ color: 'var(--hr-on-accent)' }} />
           </button>
           <p style={{ fontSize: 13, color: 'var(--hr-ink-3)', margin: 0 }}>{t('sp.shadow_tap_mic', lang)}</p>
           <button
@@ -421,6 +437,7 @@ function ShadowShell({ items, onBack, router, uid }: { items: ShadowItem[]; onBa
         <>
           <button
             onClick={stopListening}
+            aria-label={t('sp.recording_stop', lang)}
             style={{
               width: 88, height: 88, borderRadius: '50%',
               background: 'var(--hr-pink-strong)', border: 'none', cursor: 'pointer',
@@ -429,7 +446,7 @@ function ShadowShell({ items, onBack, router, uid }: { items: ShadowItem[]; onBa
               boxShadow: '0 8px 24px rgba(229,90,135,.35)',
             }}
           >
-            <MicOff size={34} style={{ color: '#fff' }} />
+            <MicOff size={34} style={{ color: 'var(--hr-on-accent)' }} />
           </button>
           <p style={{ fontSize: 13, color: 'var(--hr-ink-3)', margin: 0 }}>{t('sp.recording_stop', lang)}</p>
         </>
@@ -451,8 +468,10 @@ function ShadowShell({ items, onBack, router, uid }: { items: ShadowItem[]; onBa
       current={finished ? undefined : index + 1}
       total={finished ? undefined : items.length}
       onBack={onBack}
+      railMode="listening"
+      railChip="speak"
     >
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 720, margin: '0 auto', paddingBottom: 20 }}>
+      <div className="pr-focus">
         <div style={{
           background: 'var(--hr-surface-2)', border: '1.5px solid var(--hr-border-2)',
           borderRadius: 16, padding: '36px 24px 28px',

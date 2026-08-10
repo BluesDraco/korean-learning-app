@@ -84,8 +84,8 @@ const BLEND_CSS = `
   .sl-result:hover { transform: scale(1.06); }
   @keyframes slResultPop { 0% { transform: scale(0); opacity: 0; } 60% { transform: scale(1.15); } 100% { transform: scale(1); opacity: 1; } }
 
-  .sl-options { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
-  @media (max-width: 640px) { .sl-options { grid-template-columns: 1fr 1fr; } }
+  .sl-options { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 24px; }
+  @media (max-width: 640px) { .sl-options { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
   .sl-opt { background: var(--color-surface-2); border: 2px solid var(--color-border-2);
     border-radius: 14px; padding: 20px 8px; cursor: pointer; transition: all .2s;
     font-family: ui-monospace, monospace; font-size: 20px; font-weight: 600;
@@ -206,11 +206,13 @@ export default function BlendPage({ params }: { params: Promise<{ stage: string 
 
   const playMain = useCallback(() => {
     if (!q) return;
+    if (autoPlayTimerRef.current) { clearTimeout(autoPlayTimerRef.current); autoPlayTimerRef.current = null; }
     unlockAudioContext();
     playPhoneticAudio(q.syllable);
   }, [q]);
 
   const playSlot = useCallback((slot: 'cho' | 'jung', jamo: string) => {
+    if (autoPlayTimerRef.current) { clearTimeout(autoPlayTimerRef.current); autoPlayTimerRef.current = null; }
     unlockAudioContext();
     playPhoneticAudio(slotPlaySyllable(slot, jamo));
   }, []);
@@ -227,7 +229,7 @@ export default function BlendPage({ params }: { params: Promise<{ stage: string 
       playError();
       wrongRef.current += 1;
       setCombo(0);
-      recordPhoneticMistake(q.targetJamo, opt.jamo, stageId, user?.id).catch(() => { /* ignore */ });
+      recordPhoneticMistake(q.targetJamo, opt.jamo, stageId, user?.id).catch((e) => { console.error('phonetics/blend: recordPhoneticMistake failed', e); });
       if (retryTimerRef.current) clearTimeout(retryTimerRef.current);
       retryTimerRef.current = setTimeout(() => { setPicked(null); }, WRONG_RETRY_DELAY_MS);
     }
@@ -280,7 +282,7 @@ export default function BlendPage({ params }: { params: Promise<{ stage: string 
             wrongCount: wrongRef.current,
             studyMinutes: 2,
           });
-        } catch { /* ignore */ }
+        } catch (e) { console.error('phonetics/blend: recordPhoneticStep failed — progress may not be saved, this step may be marked incomplete', e); }
       }
       router.push(`/phonetics/step/${stageId}/challenge`);
       return;

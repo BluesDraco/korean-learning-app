@@ -6,12 +6,14 @@ import { useParams, useRouter } from 'next/navigation';
 import { useSmartBack } from '@/lib/useSmartBack';
 import { useAuth } from '@/components/AuthProvider';
 import { db } from '@/lib/db';
+import { recordElapsedMinutes } from '@/lib/gamification';
 import { speak, speakWord, cancelSpeech } from '@/lib/tts';
 import { stripParticle } from '@/lib/koreanParticles';
 import { romanize } from '@/lib/dictionary';
 import { getSceneBySlug, sceneLocations, type SceneLocation, type PreviewVocabItem } from '@/data/sceneLocations';
 import { useMembership } from '@/lib/useMembership';
 import { canAccessSceneIndex, canUseVoice, isPaidTier } from '@/lib/membership-benefits';
+import { UpgradePrompt } from '@/components/membership/UpgradePrompt';
 import { getSceneCastById } from '@/data/sceneCast';
 import { buildCompanionSystemHint } from '@/lib/companionPrompt';
 import { scenarios as aiScenarios } from '@/data/aiScenarios';
@@ -27,16 +29,14 @@ import { useIsDesktop } from '@/lib/useIsMobile';
 import { useLang } from '@/components/LangProvider';
 import { t, type Lang } from '@/lib/i18n';
 import './scene.css';
-import type { KoZh } from '@/types/inline';
 
 interface ChatMessage {
-  [k: string]: unknown;
   id: string;
   role: 'npc' | 'user' | 'divider'; // divider 是 session 恢复的分割线，不参与对话
   ko: string;
   cn?: string;
   feedback?: { natural?: string; grammarError?: string; wrongPart?: string; correctPart?: string; betterWay?: string; betterWayZh?: string };
-  suggestion?: KoZh;  // NPC 消息附带的「建议回应句」
+  suggestion?: { ko: string; zh: string };  // NPC 消息附带的「建议回应句」
   voice?: { durationMs: number };  // 语音消息：音频本体在本地 IDB(按 id 存)，此处只留时长元数据
   error?: boolean;  // AI 调用失败标记
 }
@@ -66,7 +66,6 @@ interface CustomMiniPhrase { ko: string; cn: string }
 interface CustomMiniDialogue { speaker: 'npc' | 'user'; ko: string; cn: string }
 interface CustomMini { words: CustomMiniWord[]; phrases: CustomMiniPhrase[]; dialogue: CustomMiniDialogue[] }
 interface CustomMetaData {
-  [k: string]: unknown;
   place: string; situation: string; goal: string;
   difficulty: CustomDifficulty;
   characterNameKo: string; characterNameZh: string;
@@ -112,7 +111,6 @@ const MODE_PREF_KEY = 'tori-practice-mode-pref';
 
 // 左栏往期场景清单项（来自 /api/practice/custom GET）
 interface SceneListItem {
-  [k: string]: unknown;
   id: string;
   title: string;
   title_ko: string;
@@ -151,7 +149,7 @@ export default function PracticeScenePage() {
       key={slug}
       slug={slug}
       sceneList={sceneList}
-      onSwitchScene={(id) => { if (id !== slug) router.push(`/practice/${id}`); }}
+      onSwitchScene={(id) => { if (id !== slug) router.replace(`/practice/${id}`); }}
     />
   );
 }
@@ -397,6 +395,7 @@ function PracticeSceneInner({ slug, sceneList, onSwitchScene }: {
     const userMsgCount = currentMessages.filter((m) => m.role === 'user').length;
     const mistakes = currentMessages.filter((m) => m.role === 'user' && m.feedback?.wrongPart).length;
     const ctrl = new AbortController();
+    const scoreTimer = setTimeout(() => ctrl.abort(), 15000);
     let cancelled = false;
 
     fetch('/api/practice/score', {
@@ -424,6 +423,10 @@ function PracticeSceneInner({ slug, sceneList, onSwitchScene }: {
         if (cancelled) return;
         setScoreData(data);
         setScoreLoading(false);
+        if (!timeRecordedRef.current) {
+          timeRecordedRef.current = true;
+          recordElapsedMinutes(mountAtRef.current, 30).catch(e => console.error('[scene] recordElapsedMinutes failed', e));
+        }
         const completedAt = Date.now();
         db.practiceScores.put({
           id: `${user.id}:${scene.slug}:${completedAt}`,
@@ -440,7 +443,7 @@ function PracticeSceneInner({ slug, sceneList, onSwitchScene }: {
           msgCount: userMsgCount,
           mistakeCount: mistakes,
           createdAt: completedAt,
-        }).catch(e => console.error('[scene-practice] aiChatRecord.add failed', e));
+        }).catch(e => { console.error('[scene-practice] aiChatRecord.add failed', e); showToast(t('practice.sc_save_failed', lang), 2000); });
       })
       .catch((err: Error) => {
         if (cancelled || err.name === 'AbortError') return;
@@ -448,7 +451,7 @@ function PracticeSceneInner({ slug, sceneList, onSwitchScene }: {
         setScoreError(err.message || t('practice.sc_score_unavailable_short', lang));
       });
 
-    return () => { cancelled = true; ctrl.abort(); };
+    return () => { cancelled = true; ctrl.abort(); clearTimeout(scoreTimer); scoreTriggeredRef.current = false; };
   }, [completed, scene, user, chatTaskIdx]);
   const [guideMode, setGuideMode] = useState(() => {
     if (typeof window === 'undefined') return true;
@@ -487,6 +490,10 @@ function PracticeSceneInner({ slug, sceneList, onSwitchScene }: {
   modeRef.current = mode;
   const completedRef = useRef(false);
   completedRef.current = completed;
+  const timeRecordedRef = useRef(false);
+
+  // 会员额度用尽/档位不含 → 升级提示弹窗（后端返回 429 时触发）
+  const [upgradeMsg, setUpgradeMsg] = useState<string | null>(null);
 
   const showToast = (msg: string, ms = 2200) => {
     setToast(msg);
@@ -596,9 +603,12 @@ function PracticeSceneInner({ slug, sceneList, onSwitchScene }: {
     let cancelled = false;
     (async () => {
       try {
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), 10000);
         const res = await fetch(`/api/practice/session?slug=${encodeURIComponent(slug)}`, {
-          credentials: 'same-origin', cache: 'no-store',
+          credentials: 'same-origin', cache: 'no-store', signal: ctrl.signal,
         });
+        clearTimeout(timer);
         const data = await res.json().catch(() => null);
         if (cancelled) return;
         const sess = data?.session;
@@ -659,7 +669,7 @@ function PracticeSceneInner({ slug, sceneList, onSwitchScene }: {
         }),
       }).then((res) => {
         if (res.status === 413) showToast(t('practice.sc_session_too_long', lang), 2000);
-      }).catch(e => console.error('[scene-practice] session save failed', e));
+      }).catch(e => { console.error('[scene-practice] session save failed', e); showToast(t('practice.sc_save_failed', lang), 2000); });
     }, 600);
     return () => clearTimeout(timer);
   }, [messages, chatTaskIdx, completed, sessionRestored, scene, user, slug]);
@@ -675,7 +685,7 @@ function PracticeSceneInner({ slug, sceneList, onSwitchScene }: {
   // 发送消息（支持重试 retryFor: 已存在的用户 message id）
   const handleSend = async (overrideText?: string, retryFor?: string, voiceMeta?: { msgId: string; durationMs: number }) => {
     const text = (overrideText ?? input).trim();
-    if (!text || isTyping || !scene || completed) return;
+    if (!text || isTyping || !scene || completedRef.current) return;
     if (!overrideText) setInput('');
     hasSentRef.current = true;
     setHasSent(true);
@@ -745,6 +755,13 @@ function PracticeSceneInner({ slug, sceneList, onSwitchScene }: {
         }),
       });
 
+      if (res.status === 429) {
+        // 额度用尽/档位不含：保留用户消息但不打 error 重试标（重试也没用），弹升级提示
+        const errData = await res.json().catch(() => ({}));
+        setIsTyping(false);
+        setUpgradeMsg(errData.error || t('practice.sc_ai_reply_failed', lang));
+        return;
+      }
       if (!res.ok) throw new Error('API failed');
       const data = await res.json();
 
@@ -779,7 +796,7 @@ function PracticeSceneInner({ slug, sceneList, onSwitchScene }: {
           grammarError: data.feedback.grammarError || '',
           reviewed: 0,
           createdAt: Date.now(),
-        }).catch(e => console.error('[scene-practice] db.aiChatMistakes.add failed', e));
+        }).catch(e => { console.error('[scene-practice] db.aiChatMistakes.add failed', e); showToast(t('practice.sc_save_failed', lang), 2000); });
       }
 
       // 新词落库
@@ -801,7 +818,7 @@ function PracticeSceneInner({ slug, sceneList, onSwitchScene }: {
             interval: 1,
             createdAt: Date.now(),
             lastReviewed: null,
-          }).catch(e => console.error('[scene-practice] db.words.add failed', e));
+          }).catch(e => { console.error('[scene-practice] db.words.add failed', e); showToast(t('practice.sc_save_failed', lang), 2000); });
         }
       }
 
@@ -834,7 +851,7 @@ function PracticeSceneInner({ slug, sceneList, onSwitchScene }: {
       }
     } catch (err) {
       // AbortError：用户主动切场景/重开/卸载，静默返回不打 error 标
-      if ((err as Error)?.name === 'AbortError') return;
+      if ((err as Error)?.name === 'AbortError') { setIsTyping(false); return; }
       // 失败：给消息打 error 标，UI 展示重试按钮
       setIsTyping(false);
       setMessages((prev) => prev.map((m) => (m.id === userMsgId ? { ...m, error: true } : m)));
@@ -862,7 +879,7 @@ function PracticeSceneInner({ slug, sceneList, onSwitchScene }: {
   const [rephrasingMsgId, setRephrasingMsgId] = useState<string | null>(null);
   const rephraseAbortRef = useRef<AbortController | null>(null);
   const handleRephrase = async (msgId: string, npcKo: string) => {
-    if (!scene || rephrasingMsgId) return;
+    if (!scene || rephrasingMsgId || isTyping) return;
     // 并发保护：如果上一轮还没结束，abort 它
     if (rephraseAbortRef.current) rephraseAbortRef.current.abort();
     const ctrl = new AbortController();
@@ -1060,7 +1077,7 @@ function PracticeSceneInner({ slug, sceneList, onSwitchScene }: {
     // 清云端会话
     fetch(`/api/practice/session?slug=${encodeURIComponent(slug)}`, {
       method: 'DELETE', credentials: 'same-origin',
-    }).catch(e => console.error('[scene-practice] DELETE session failed', e));
+    }).catch(e => { console.error('[scene-practice] DELETE session failed', e); });
     if (recapTimerRef.current) { clearTimeout(recapTimerRef.current); recapTimerRef.current = null; }
     setRephrasingMsgId(null);
     setChatTaskIdx(0);
@@ -1911,6 +1928,8 @@ function PracticeSceneInner({ slug, sceneList, onSwitchScene }: {
 
       {toast && <div className="spr-toast">{toast}</div>}
 
+      <UpgradePrompt open={!!upgradeMsg} message={upgradeMsg || ''} onClose={() => setUpgradeMsg(null)} />
+
       {/* 进入对话：选文字 / 语音，可记住偏好 */}
       {showModePicker && (
         <div className="mode-picker-backdrop" role="dialog" aria-modal="true" aria-label={t('practice.sc_mode_pick_aria', lang)}>
@@ -2193,7 +2212,6 @@ function CustomMiniPreview({
 }
 
 interface PreviewPanelProps {
-  [k: string]: unknown;
   scene: SceneLocation;
   playingPreviewKey: string | null;
   playingDialogueIdx: number | null;
@@ -2259,24 +2277,29 @@ function PreviewPanel({
       return next;
     });
   };
-  const quizChoices = useMemo(() => {
-    if (!preview) return [] as { text: string; cn?: string; correct: boolean; note?: string }[];
-    const r = preview.responses[quizIdx];
-    if (!r) return [] as { text: string; cn?: string; correct: boolean; note?: string }[];
-    const dList = r.distractors ?? [];
-    const dCn = r.distractorCn ?? [];
-    const dNotes = r.distractorNotes ?? [];
-    const list: { text: string; cn?: string; correct: boolean; note?: string }[] = [
-      { text: r.userKo, cn: r.userCn, correct: true, note: r.correctNote },
-      ...dList.map((d, i) => ({ text: d, cn: dCn[i], correct: false, note: dNotes[i] })),
-    ];
-    // Fisher-Yates 真随机洗牌
-    for (let i = list.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [list[i], list[j]] = [list[j], list[i]];
+  // 用 ref 渲染期缓存，仅在 preview / quizIdx 变化时重洗一次。
+  // 不用 useMemo：其缓存可被 React 丢弃重算，重洗会使已锁定的 quizPicked 索引指向错位选项（答对变答错）。
+  type QuizChoice = { text: string; cn?: string; correct: boolean; note?: string };
+  const quizChoicesRef = useRef<{ preview: typeof preview; quizIdx: number; arr: QuizChoice[] } | null>(null);
+  if (!quizChoicesRef.current || quizChoicesRef.current.preview !== preview || quizChoicesRef.current.quizIdx !== quizIdx) {
+    let arr: QuizChoice[] = [];
+    const r = preview?.responses[quizIdx];
+    if (r) {
+      const dList = r.distractors ?? [];
+      const dCn = r.distractorCn ?? [];
+      const dNotes = r.distractorNotes ?? [];
+      arr = [
+        { text: r.userKo, cn: r.userCn, correct: true, note: r.correctNote },
+        ...dList.map((d, i) => ({ text: d, cn: dCn[i], correct: false, note: dNotes[i] })),
+      ];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
     }
-    return list;
-  }, [preview, quizIdx]);
+    quizChoicesRef.current = { preview, quizIdx, arr };
+  }
+  const quizChoices = quizChoicesRef.current.arr;
 
   if (!preview) return null;
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -20,7 +20,6 @@ import type { ToriSubQuestProgress } from '@/types/tori-subquest';
 import '@/components/diary/diary.css';
 
 interface ChapterDef {
-  [k: string]: unknown;
   num: string;
   romanNum: string;
   titleKey: string;
@@ -64,7 +63,6 @@ const LEVEL_BOOK_NAME: Record<ToriLevel, string> = {
 };
 
 interface SubQuestDef {
-  [k: string]: unknown;
   idx: 1 | 2 | 3 | 4 | 5;
   ko: string;
   zhKey: string;
@@ -83,7 +81,7 @@ const SUB_QUESTS: SubQuestDef[] = [
 // 内测期间：所有登录用户绕过冷却与等级锁，可自由进入任何 Day。
 // 正式上线前改为 false 并重新部署。
 const BETA_MODE = false;
-const MAX_DEVELOPED_DAY = 30;
+const MAX_DEVELOPED_DAY = 60;
 
 export default function DiaryPage() {
   const router = useRouter();
@@ -116,38 +114,48 @@ export default function DiaryPage() {
   const isDesktop = useIsDesktop();
 
   const [reloadTick, setReloadTick] = useState(0);
+  const reloadDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
     // 从子关卡回到列表页时刷新星级（visibilitychange + focus）
-    const bump = () => setReloadTick((t) => t + 1);
+    // 加 400ms 去抖：移动端 focus/visibility 可能密集触发（地址栏显隐等），
+    // 不加去抖会导致 [user,reloadTick,activeLevel] effect 反复取消重跑 → UI 锁死在空态。
+    const bump = () => {
+      if (reloadDebounceRef.current) clearTimeout(reloadDebounceRef.current);
+      reloadDebounceRef.current = setTimeout(() => setReloadTick((t) => t + 1), 400);
+    };
     const onVis = () => { if (document.visibilityState === 'visible') bump(); };
     window.addEventListener('focus', bump);
     document.addEventListener('visibilitychange', onVis);
     return () => {
       window.removeEventListener('focus', bump);
       document.removeEventListener('visibilitychange', onVis);
+      if (reloadDebounceRef.current) clearTimeout(reloadDebounceRef.current);
     };
   }, []);
 
   useEffect(() => {
     if (!user) { setLoaded(true); return; }
+    let cancelled = false;
     (async () => {
       try {
         const rows = await db.toriProgress.toArray();
+        if (cancelled) return;
         const userRows = rows.filter((r) => r.userId === user.id);
         const next: Record<ToriLevel, Set<number>> = { beginner: new Set(), intermediate: new Set(), advanced: new Set() };
         userRows.forEach((r) => {
           const lvl = (r.level ?? 'beginner') as ToriLevel;
-          // completedAt 存在即完成；磁盘满等故障可能导致漏写，modulesDone ≥6 也视为完成
           const doneModules = Array.isArray(r.modulesDone) ? r.modulesDone.length : 0;
           if (r.completedAt || doneModules >= 6) {
             next[lvl].add(r.day);
           }
         });
+        if (cancelled) return;
         setCompleted(next);
 
         // 子关卡星级
         try {
           const subRows = await db.toriSubQuestProgress.toArray() as ToriSubQuestProgress[];
+          if (cancelled) return;
           const map: Record<string, number> = {};
           subRows.filter((r) => r.userId === user.id).forEach((r) => {
             const lvl = (r.level ?? 'beginner') as ToriLevel;
@@ -157,11 +165,14 @@ export default function DiaryPage() {
         } catch { /* ignore */ }
 
         // 默认只展开最新完成的一天，其他 done 天折叠
-        const latestDone = Math.max(0, ...Array.from(next[activeLevel]));
-        if (latestDone > 0) setExpandedDays(new Set([latestDone]));
+        if (!cancelled) {
+          const latestDone = Math.max(0, ...Array.from(next[activeLevel]));
+          if (latestDone > 0) setExpandedDays(new Set([latestDone]));
+        }
       } catch { /* ignore */ }
-      finally { setLoaded(true); }
+      finally { if (!cancelled) setLoaded(true); }
     })();
+    return () => { cancelled = true; };
   }, [user, reloadTick, activeLevel]);
 
   // 内容开放门控：intermediate/advanced（Day 31–90）尚未上线，
