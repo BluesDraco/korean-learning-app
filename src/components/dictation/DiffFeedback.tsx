@@ -5,7 +5,6 @@ import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
 
 interface DiffFeedbackProps {
-  [k: string]: unknown;
   userInput: string;
   correct: string;
 }

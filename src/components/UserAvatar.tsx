@@ -1,7 +1,6 @@
 import type { CSSProperties } from 'react';
 
 interface Props {
-  [k: string]: unknown;
   avatarUrl?: string | null;
   name?: string;
   size?: number;

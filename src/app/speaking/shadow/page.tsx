@@ -36,7 +36,6 @@ function shadowPosKey(uid: string, items: { korean: string }[]): string {
 }
 
 interface ShadowItem {
-  [k: string]: unknown;
   korean: string;
   meaning: string;
   type: 'word' | 'sentence';

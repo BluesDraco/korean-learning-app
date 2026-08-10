@@ -4,7 +4,6 @@ import { useEffect, useState, createContext, useContext, type ReactNode } from '
 import { getFontSettings, saveFontSettings, applyFontSettings, type FontSettings, type FontPreset, type FontSize } from '@/lib/fontSettings';
 
 interface FontContextType {
-  [k: string]: unknown;
   settings: FontSettings;
   previewPreset: (p: FontPreset) => void;
   previewSize: (s: FontSize) => void;

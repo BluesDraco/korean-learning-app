@@ -12,18 +12,15 @@ const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
 const DEEPSEEK_MODEL = 'deepseek-v4-flash';
 
 interface GrammarParticle {
-  [k: string]: unknown;
   text: string;
   role: string;
 }
 interface GrammarEnding {
-  [k: string]: unknown;
   text: string;
   base: string;
   meaning: string;
 }
 interface GrammarExplain {
-  [k: string]: unknown;
   skeleton: { subject: string; predicate: string; object: string };
   translation: string;
   particles: GrammarParticle[];

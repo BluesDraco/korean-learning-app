@@ -11,7 +11,6 @@ import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
 
 interface Props {
-  [k: string]: unknown;
   ko: string;
   zh?: string;
   source: string;

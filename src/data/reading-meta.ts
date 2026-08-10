@@ -3,13 +3,13 @@ import type { Article } from '@/types';
 
 /** 等级标签 */
 export const levelLabel: Record<Article['level'], string> = {
-  A0: '零基础', A0En: 'Beginner',
-  A1: '入门', A1En: 'Beginner',
-  A2: '初级', A2En: 'Beginner',
-  B1: '进阶', B1En: 'Intermediate',
-  B2: '中高级', B2En: 'Upper-intermediate',
-  C1: '高级', C1En: 'Advanced',
-  C2: '精通', C2En: 'Advanced',
+  A0: '零基础',
+  A1: '入门',
+  A2: '初级',
+  B1: '进阶',
+  B2: '中高级',
+  C1: '高级',
+  C2: '精通',
   TOPIK: 'TOPIK',
 };
 

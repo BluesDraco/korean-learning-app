@@ -20,7 +20,6 @@ import {
 // 学习路线 = 动物城寻宝地图。手绘小路串起 7 个地标贴纸，配手账便签卡。
 // 手机单列（奇偶左右轻摆），桌面左右交替（小路走中线）。同一套 JSX，靠 CSS 切换。
 interface Step {
-  [k: string]: unknown;
   id: string;
   href: string;
   img: string;

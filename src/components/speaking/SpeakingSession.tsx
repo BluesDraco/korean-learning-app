@@ -27,7 +27,6 @@ function itemsPosKey(prefix: string, uid: string, items: { korean: string }[]): 
 }
 
 export interface SpeakingItem {
-  [k: string]: unknown;
   korean: string;
   meaning: string;
   type: 'word' | 'sentence';
@@ -37,7 +36,6 @@ export interface SpeakingItem {
 }
 
 interface SpeakingSessionProps {
-  [k: string]: unknown;
   items: SpeakingItem[];
   /** 通知外部当前进度 */
   onProgress?: (current: number, total: number) => void;
@@ -48,7 +46,6 @@ interface SpeakingSessionProps {
 }
 
 interface JudgeResult {
-  [k: string]: unknown;
   result: 'correct' | 'acceptable' | 'wrong';
   score: number;
   correctAnswer: string;

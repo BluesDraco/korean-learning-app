@@ -27,7 +27,6 @@ const TONE_FG: Record<'pink' | 'mint' | 'peach' | 'purple', string> = {
 };
 
 interface Stats {
-  [k: string]: unknown;
   total: number;
   mastered: number;
   learning: number;

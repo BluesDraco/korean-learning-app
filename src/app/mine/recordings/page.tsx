@@ -15,7 +15,6 @@ import { fmtDate } from '@/lib/datetime';
 import '../mine-home.css';
 
 interface Recording {
-  [k: string]: unknown;
   id: string;
   userId?: string;
   type?: string;

@@ -6,7 +6,6 @@ import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
 
 interface Flyout {
-  [k: string]: unknown;
   id: number;
   amount: number;
   x: number;

@@ -9,7 +9,6 @@ import { t } from '@/lib/i18n';
 type Tone = 'neutral' | 'pink' | 'mint' | 'peach' | 'purple';
 
 export interface PageHeaderProps {
-  [k: string]: unknown;
   /** Small label above title, e.g. "오늘" */
   eyebrow?: string;
   title: string;

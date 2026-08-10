@@ -20,7 +20,6 @@ const VALID_LEVELS = new Set<ToriLevel>(['beginner', 'intermediate', 'advanced']
 const MAX_DEVELOPED_DAY = 30;
 
 interface Props {
-  [k: string]: unknown;
   params: Promise<{ level: string; day: string }>;
 }
 

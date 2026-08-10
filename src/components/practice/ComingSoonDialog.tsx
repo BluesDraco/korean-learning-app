@@ -7,7 +7,6 @@ import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
 
 interface ComingSoonDialogProps {
-  [k: string]: unknown;
   open: boolean;
   title?: string;
   message?: string;

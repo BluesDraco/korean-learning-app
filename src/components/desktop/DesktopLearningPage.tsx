@@ -15,7 +15,6 @@ import { FloatingDecorations } from '@/components/FloatingDecorations';
 import './desktop-learning-redesign.css';
 
 interface LearningEntry {
-  [k: string]: unknown;
   labelKey: string;
   descKey: string;
   href: string;

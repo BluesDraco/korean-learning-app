@@ -8,12 +8,10 @@ import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
 
 interface Props {
-  [k: string]: unknown;
   userId: string;
 }
 
 interface AnnouncementItem {
-  [k: string]: unknown;
   id: string;
   title: string;
   content: string;

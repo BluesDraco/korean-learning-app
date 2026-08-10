@@ -1,5 +1,4 @@
 export interface PhoneticLetter {
-  [k: string]: unknown;
   id: string;
   letter: string;
   name: string;

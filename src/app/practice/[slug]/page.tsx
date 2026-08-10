@@ -27,16 +27,14 @@ import { useIsDesktop } from '@/lib/useIsMobile';
 import { useLang } from '@/components/LangProvider';
 import { t, type Lang } from '@/lib/i18n';
 import './scene.css';
-import type { KoZh } from '@/types/inline';
 
 interface ChatMessage {
-  [k: string]: unknown;
   id: string;
   role: 'npc' | 'user' | 'divider'; // divider 是 session 恢复的分割线，不参与对话
   ko: string;
   cn?: string;
   feedback?: { natural?: string; grammarError?: string; wrongPart?: string; correctPart?: string; betterWay?: string; betterWayZh?: string };
-  suggestion?: KoZh;  // NPC 消息附带的「建议回应句」
+  suggestion?: { ko: string; zh: string };  // NPC 消息附带的「建议回应句」
   voice?: { durationMs: number };  // 语音消息：音频本体在本地 IDB(按 id 存)，此处只留时长元数据
   error?: boolean;  // AI 调用失败标记
 }
@@ -66,7 +64,6 @@ interface CustomMiniPhrase { ko: string; cn: string }
 interface CustomMiniDialogue { speaker: 'npc' | 'user'; ko: string; cn: string }
 interface CustomMini { words: CustomMiniWord[]; phrases: CustomMiniPhrase[]; dialogue: CustomMiniDialogue[] }
 interface CustomMetaData {
-  [k: string]: unknown;
   place: string; situation: string; goal: string;
   difficulty: CustomDifficulty;
   characterNameKo: string; characterNameZh: string;
@@ -112,7 +109,6 @@ const MODE_PREF_KEY = 'tori-practice-mode-pref';
 
 // 左栏往期场景清单项（来自 /api/practice/custom GET）
 interface SceneListItem {
-  [k: string]: unknown;
   id: string;
   title: string;
   title_ko: string;
@@ -2193,7 +2189,6 @@ function CustomMiniPreview({
 }
 
 interface PreviewPanelProps {
-  [k: string]: unknown;
   scene: SceneLocation;
   playingPreviewKey: string | null;
   playingDialogueIdx: number | null;

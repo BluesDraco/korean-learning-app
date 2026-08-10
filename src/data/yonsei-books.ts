@@ -2,13 +2,11 @@
 // 实际数据已迁移到 public/data/yonsei/*.json，运行时走 @/lib/dataLoader 加载。
 
 export interface YonseiExample {
-  [k: string]: unknown;
   text: string;
   translation: string;
 }
 
 export interface YonseiWord {
-  [k: string]: unknown;
   word: string;
   pronunciation: string;
   meaning: string;
@@ -17,7 +15,6 @@ export interface YonseiWord {
 }
 
 export interface YonseiUnit {
-  [k: string]: unknown;
   id: string;
   bookTitle: string;
   unitNumber: number;

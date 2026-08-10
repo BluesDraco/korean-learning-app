@@ -959,5 +959,3 @@ export async function speakDialog(segments: DialogSegment[], rate?: number): Pro
   }
 }
 
-
-export async function playAudioUrl(url: string): Promise<void> { return new Promise((resolve, reject) => { const a = new Audio(url); a.onended = () => resolve(); a.onerror = () => reject(new Error('audio load failed')); a.play().catch(reject); }); }

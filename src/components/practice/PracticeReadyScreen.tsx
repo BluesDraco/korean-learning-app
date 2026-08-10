@@ -9,7 +9,6 @@ import '../../app/practice/practice-redesign.css';
 import '../../app/practice/practice-flow.css';
 
 interface PracticeReadyScreenProps {
-  [k: string]: unknown;
   tone: PracticeTone;
   /** 模式编号 · 01/02/03 */
   eyebrow: string;

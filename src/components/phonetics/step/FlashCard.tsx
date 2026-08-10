@@ -11,7 +11,6 @@ import { t } from '@/lib/i18n';
 // 点击翻面（CSS 3d transform）
 
 interface Props {
-  [k: string]: unknown;
   letter: ProgressiveLetter;
   stage?: number;
   onRate?: (quality: 0 | 3 | 5) => void;   // 自评：忘了 / 想起来 / 脱口而出

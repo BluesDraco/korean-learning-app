@@ -16,13 +16,11 @@ export type MicState = 'idle' | 'recording' | 'recognizing';
 
 // meta 携带原始音频（16k WAV）与时长，供"可回放语音条"存本地 IDB；只做转文字的调用方可忽略。
 export interface MicResultMeta {
-  [k: string]: unknown;
   wav: Blob;
   durationMs: number;
 }
 
 interface UseMicRecorderOpts {
-  [k: string]: unknown;
   onResult: (text: string, meta?: MicResultMeta) => void;
   onError: (msg: string) => void;
   maxMs?: number;
@@ -31,7 +29,6 @@ interface UseMicRecorderOpts {
 }
 
 export interface UseMicRecorder {
-  [k: string]: unknown;
   state: MicState;
   start: () => Promise<void>;
   stop: () => Promise<void>;

@@ -10,7 +10,6 @@ export const DICT_INDEX = ['ㄱ','ㄴ','ㄷ','ㄹ','ㅁ','ㅂ','ㅅ','ㅇ','ㅈ'
 export type DictInitial = (typeof DICT_INDEX)[number];
 
 interface Manifest {
-  [k: string]: unknown;
   total: number;
   withZhCount: number;
   onlyKoCount: number;

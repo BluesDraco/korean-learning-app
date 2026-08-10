@@ -24,7 +24,6 @@ const TONE_FG: Record<EntryTone, string> = {
 };
 
 export interface EntryCardProps {
-  [k: string]: unknown;
   label: string;
   detail?: string;
   href?: string;

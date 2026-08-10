@@ -24,22 +24,19 @@ import { useIsDesktop } from '@/lib/useIsMobile';
 import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
 import './companion.css';
-import type { KoZh } from '@/types/inline';
 
 interface ChatMessage {
-  [k: string]: unknown;
   id: string;
   role: 'npc' | 'user' | 'divider';
   ko: string;
   cn?: string;
   feedback?: { natural?: string; grammarError?: string; wrongPart?: string; correctPart?: string; betterWay?: string; betterWayZh?: string };
-  suggestion?: KoZh;  // NPC 消息附带的「建议回应句」
+  suggestion?: { ko: string; zh: string };  // NPC 消息附带的「建议回应句」
   voice?: { durationMs: number };  // 语音消息：音频本体在本地 IDB(按 id 存)，此处只留时长元数据
   error?: boolean;
 }
 
 interface CompanionData {
-  [k: string]: unknown;
   id: string;
   companionName: string;
   companionNameZh: string;
@@ -53,7 +50,6 @@ interface CompanionData {
 }
 
 interface ContactItem {
-  [k: string]: unknown;
   id: string;
   companionName: string;
   avatarUrl: string;

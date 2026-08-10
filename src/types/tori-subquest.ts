@@ -2,7 +2,6 @@
 // 每个 Day 5 个子关卡：1词汇 / 2听力 / 3语法 / 4情景 / 5Boss
 
 import type { ToriLevel } from './tori-diary';
-import type { KoZh, ZhChoice, TextChoice, KoZhChoice, SpeakerKoZh } from '@/types/inline';
 
 export type ToriSubQuestKind = 'vocab' | 'listen' | 'grammar' | 'scene' | 'boss';
 
@@ -12,7 +11,6 @@ export type ToriSubQuestStars = 0 | 1 | 2 | 3;
 
 /** 一条子关卡进度（一行 = 一个用户在某 level/day/idx 的最好成绩） */
 export interface ToriSubQuestProgress {
-  [k: string]: unknown;
   /** 形如 {userId}-{level}-{day}-{idx} */
   id: string;
   userId: string;
@@ -33,14 +31,13 @@ export interface ToriSubQuestProgress {
 
 /** 一个词的故事卡（Phase 1 语遇） */
 export interface VocabEncounterCard {
-  [k: string]: unknown;
   id: string;
   korean: string;
   hangul: string;
   zh: string;
   pos: string;
   /** 剧中例句（Day 1 主流程之外的补充语料） */
-  example: KoZh;
+  example: { ko: string; zh: string };
   /** 用法提示 / 文化补充 / 记忆口诀，可选 */
   tip?: string;
   /** 分层：core 进认词考察，ext 进拼写/听辨考察，emotion 只出现不考察 */
@@ -49,17 +46,15 @@ export interface VocabEncounterCard {
 
 /** Phase 2 认词题：韩→中四选一 */
 export interface VocabRecognizeTask {
-  [k: string]: unknown;
   id: string;
   korean: string;
   hangul: string;
   /** 4 个中文选项，正好 1 个 correct: true */
-  choices: Array<ZhChoice>;
+  choices: Array<{ zh: string; correct: boolean }>;
 }
 
 /** Phase 3 拼写题：中文提示 + 音节块拼词（非字母级） */
 export interface VocabSpellTask {
-  [k: string]: unknown;
   id: string;
   zhHint: string;
   /** 正确的音节顺序，如 ['당', '근'] */
@@ -70,17 +65,15 @@ export interface VocabSpellTask {
 
 /** Phase 4 听辨题：听音 → 选中文（不选韩文）· 已废弃，改用 dictation */
 export interface VocabListenTask {
-  [k: string]: unknown;
   id: string;
   /** 要播放的韩文词 */
   korean: string;
   /** 4 个中文选项 */
-  choices: Array<ZhChoice>;
+  choices: Array<{ zh: string; correct: boolean }>;
 }
 
 /** 手写题：一个音节字，走描红+覆盖率判定 */
 export interface VocabWriteTask {
-  [k: string]: unknown;
   id: string;
   /** 单音节字，如 '네' '한' '학' */
   korean: string;
@@ -92,7 +85,6 @@ export interface VocabWriteTask {
 
 /** 听写题：听音频 → 无描红手写 */
 export interface VocabDictationTask {
-  [k: string]: unknown;
   id: string;
   /** 完整词（1-3 音节），如 '네' '당근' '저기요' */
   korean: string;
@@ -105,7 +97,6 @@ export interface VocabDictationTask {
 
 /** Day X 的 1-1 词汇子关卡完整数据 */
 export interface VocabSubQuestData {
-  [k: string]: unknown;
   day: number;
   level: ToriLevel;
   idx: 1;
@@ -131,7 +122,6 @@ export interface VocabSubQuestData {
 
 /** 选择题通用单元：听句选意 / 认词 / 规则选择 / 听对话选回应 */
 export interface ChoiceQuizTask {
-  [k: string]: unknown;
   id: string;
   /** 有则该题带播放按钮（听力 / 听对话题） */
   audioKo?: string;
@@ -143,14 +133,13 @@ export interface ChoiceQuizTask {
   /** 听句填空：[挖空前, 挖空后]，中间是缺词 */
   clozeParts?: [string, string];
   /** 4 个选项，正好 1 个 correct，text 可中/韩 */
-  choices: Array<TextChoice>;
+  choices: Array<{ text: string; correct: boolean }>;
   /** 错时解析（可选） */
   explain?: string;
 }
 
 /** 组句题通用单元（含语法） */
 export interface ComposeQuizTask {
-  [k: string]: unknown;
   id: string;
   zhHint: string;
   audioKo?: string;
@@ -163,33 +152,30 @@ export interface ComposeQuizTask {
 
 /** 情景选择：给情景选正确韩文 */
 export interface SceneSituationTask {
-  [k: string]: unknown;
   type: 'situation';
   id: string;
   scenario: string;
-  choices: Array<KoZhChoice>;
+  choices: Array<{ ko: string; zh: string; correct: boolean }>;
   explain?: string;
 }
 
 /** 对话填空：补全对话中缺失的一句 */
 export interface SceneDialogueTask {
-  [k: string]: unknown;
   type: 'dialogue';
   id: string;
-  lines: Array<SpeakerKoZh>;
+  lines: Array<{ speaker: string; ko: string; zh: string }>;
   blankSpeaker: string;
-  choices: Array<KoZhChoice>;
+  choices: Array<{ ko: string; zh: string; correct: boolean }>;
   explain?: string;
 }
 
 /** 语境判断：句子适合哪个场景 */
 export interface SceneContextTask {
-  [k: string]: unknown;
   type: 'context';
   id: string;
   ko: string;
   promptZh: string;
-  choices: Array<ZhChoice>;
+  choices: Array<{ zh: string; correct: boolean }>;
   explain?: string;
 }
 
@@ -201,7 +187,6 @@ export type SceneTask = SceneSituationTask | SceneDialogueTask | SceneContextTas
 
 /** 1-2 听力 */
 export interface ListenSubQuestData {
-  [k: string]: unknown;
   day: number;
   level: ToriLevel;
   idx: 2;
@@ -218,7 +203,6 @@ export interface ListenSubQuestData {
 
 /** 1-3 语法 */
 export interface GrammarSubQuestData {
-  [k: string]: unknown;
   day: number;
   level: ToriLevel;
   idx: 3;
@@ -235,7 +219,6 @@ export interface GrammarSubQuestData {
 
 /** 1-4 情景 */
 export interface SceneSubQuestData {
-  [k: string]: unknown;
   day: number;
   level: ToriLevel;
   idx: 4;
@@ -252,7 +235,6 @@ export type BossTask =
 
 /** 1-5 Boss 战 */
 export interface BossSubQuestData {
-  [k: string]: unknown;
   day: number;
   level: ToriLevel;
   idx: 5;

@@ -1,7 +1,6 @@
 import React from 'react';
 
 interface DailyShellProps {
-  [k: string]: unknown;
   main: React.ReactNode;
   aside?: React.ReactNode;
 }

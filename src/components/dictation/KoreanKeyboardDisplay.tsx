@@ -51,7 +51,6 @@ function getHighlightedJamo(text: string): Set<string> {
 }
 
 interface KoreanKeyboardDisplayProps {
-  [k: string]: unknown;
   /** 当前组合中的文本 · 用于高亮"正在组合音节"的构成字母 */
   composingText: string;
   /** 传入则键盘可点击输入;不传=纯只读高亮显示 */

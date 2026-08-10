@@ -62,7 +62,6 @@ function renderWithSpeakers(text: string, speakAria: string) {
 }
 
 interface Props {
-  [k: string]: unknown;
   day: ToriDay;
   currentModule: ToriModuleKind;
   progress?: CarrotProgress;

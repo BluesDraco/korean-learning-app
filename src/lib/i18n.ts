@@ -36,13 +36,3 @@ export function t(key: string, lang: Lang, params?: Record<string, string | numb
   if (params) s = s.replace(/\{(\w+)\}/g, (m, k) => (k in params ? String(params[k]) : m));
   return s;
 }
-
-/** 从数据对象取字段值，英文模式下自动尝试 propEn 后缀，回落 prop。 */
-export function enVal(obj: Record<string, any> | null | undefined, prop: string, lang: Lang): string {
-  if (!obj) return '';
-  if (lang === 'en') {
-    const enKey = prop + 'En';
-    if (typeof obj[enKey] === 'string' && obj[enKey].length > 0) return obj[enKey];
-  }
-  return String(obj[prop] ?? '');
-}

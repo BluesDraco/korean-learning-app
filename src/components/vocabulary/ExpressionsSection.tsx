@@ -16,7 +16,6 @@ import type { Lang } from '@/lib/i18n';
 type SubTab = 'idioms' | 'slang' | 'loanword';
 
 interface SheetTarget {
-  [k: string]: unknown;
   id: string;
   korean: string;
   meaning: string;

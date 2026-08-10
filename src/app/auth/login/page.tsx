@@ -35,7 +35,7 @@ function LoginForm() {
   }
   const { login, loginWithEmail, sendPhoneCode, loginWithPhone } = useAuth();
 
-  // 默认用户名 tab
+  // 海外站默认邮箱 tab；国内手机/邮箱暂未上线，默认用户名 tab
   const [method, setMethod] = useState<Method>('username');
 
   const [username, setUsername] = useState('');
@@ -53,7 +53,9 @@ function LoginForm() {
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   useEffect(() => () => { if (timerRef.current) clearInterval(timerRef.current); }, []);
 
+
   const switchMethod = (m: Method) => {
+    
     setMethod(m);
     setError('');
   };
@@ -148,16 +150,11 @@ function LoginForm() {
 
   const registerHref = `/auth/register${redirect !== '/daily' ? `?redirect=${encodeURIComponent(redirect)}` : ''}`;
 
-  // 国内站：邮箱+用户名；海外站：邮箱+用户名
-  const TABS: { id: Method; label: string }[] = IS_OVERSEAS
-    ? [
-        { id: 'email', label: t('auth.tab_email', lang) },
-        { id: 'username', label: t('auth.tab_username', lang) },
-      ]
-    : [
-        { id: 'email', label: t('auth.tab_email', lang) },
-        { id: 'username', label: t('auth.tab_username', lang) },
-      ];
+  // 国内站：邮箱+用户名
+  const TABS: { id: Method; label: string }[] = [
+    { id: 'email', label: t('auth.tab_email', lang) },
+    { id: 'username', label: t('auth.tab_username', lang) },
+  ];
 
   return (
     <div className="auth-scope">

@@ -2,7 +2,6 @@
 import React from 'react';
 
 interface Props {
-  [k: string]: unknown;
   value: number;      // 0~100
   size?: number;
   stroke?: number;

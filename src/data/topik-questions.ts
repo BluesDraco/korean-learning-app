@@ -2,7 +2,6 @@
 // 实际数据已迁移到 public/data/topik/*.json，运行时走 @/lib/dataLoader 加载。
 
 export interface TopikExamSet {
-  [k: string]: unknown;
   id: string;
   year: number;
   round: number;
@@ -18,7 +17,6 @@ export interface TopikExamSet {
 }
 
 export interface TopikQuestion {
-  [k: string]: unknown;
   id: string;
   section: 'listening' | 'reading';
   level: 'beginner' | 'intermediate' | 'advanced';
@@ -42,7 +40,6 @@ export interface TopikQuestion {
 }
 
 export interface TopikSection {
-  [k: string]: unknown;
   id: string;
   title: string;
   titleKo: string;

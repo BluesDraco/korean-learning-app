@@ -92,7 +92,6 @@ function newComments(existing: BlogComment[], target: number): BlogComment[] {
 // 把「随时间涨到多少赞、哪只动物在何时来留言」在发帖那一刻就算好、冻结，
 // 之后每次读帖只按当前时间在内存里叠加展示值，GET 永不写库（根除刷新涨赞竞态）。
 export interface GrowthSchedule {
-  [k: string]: unknown;
   likes: { at: number; count: number }[];       // 到达 at(epoch ms) 后点赞至少为 count（递增）
   comments: { at: number; comment: BlogComment }[]; // 到达 at 后这条冻结的动物留言出现
 }

@@ -24,7 +24,6 @@ export type SourceKind =
 export type ContentFilter = 'word' | 'sentence' | 'both';
 
 export interface PracticeSourceConfig {
-  [k: string]: unknown;
   kind: SourceKind;
   contentFilter: ContentFilter;
   count: number;

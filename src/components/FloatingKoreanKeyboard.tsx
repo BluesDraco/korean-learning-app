@@ -14,7 +14,6 @@ import { t } from '@/lib/i18n';
 // 提示填入）时用 syncExternal 回灌 buffer，保证不脱节。手机端不用本组件（调用方按 isDesktop 门控）。
 
 interface Props {
-  [k: string]: unknown;
   value: string;
   onChange: (v: string) => void;
   visible: boolean;

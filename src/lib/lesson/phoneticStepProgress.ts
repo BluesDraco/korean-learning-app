@@ -3,7 +3,6 @@ import { db } from '@/lib/db';
 import { PROGRESSIVE_STAGES } from '@/data/phonetics-progressive';
 
 export interface StageProgress {
-  [k: string]: unknown;
   stageId: number;
   locked: boolean;
   lessons: { letter: boolean; quiz: boolean; write: boolean; blend: boolean };

@@ -2,7 +2,6 @@
  * SRT subtitle parser — parses SRT format into structured data.
  */
 export interface SrtEntry {
-  [k: string]: unknown;
   index: number;
   start: number; // seconds
   end: number;   // seconds

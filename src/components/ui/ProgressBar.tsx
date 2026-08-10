@@ -4,7 +4,6 @@ export type ProgressBarTone = 'pink' | 'mint' | 'gold' | 'peach' | 'purple';
 export type ProgressBarSize = 'sm' | 'md' | 'lg';
 
 export interface ProgressBarProps {
-  [k: string]: unknown;
   /** 0-100。indeterminate 时忽略 */
   value?: number;
   size?: ProgressBarSize;

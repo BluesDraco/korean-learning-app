@@ -6,7 +6,6 @@ export type TagPreset = 'level' | 'category' | 'feature' | 'status' | 'count';
 export type TagTone = 'pink' | 'purple' | 'mint' | 'peach' | 'gold' | 'neutral';
 
 export interface TagProps {
-  [k: string]: unknown;
   preset?: TagPreset;
   tone?: TagTone;
   children: ReactNode;

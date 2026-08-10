@@ -28,7 +28,6 @@ type Stage = 'listening' | 'reading';
 
 // 新版（来自考前说明页）
 interface RealExamState {
-  [k: string]: unknown;
   kind: 'real';
   examSetId: string;
   examRound: number;
@@ -49,7 +48,6 @@ interface RealExamState {
 
 // 旧版（专项/模拟/错题重练）
 interface LegacyState {
-  [k: string]: unknown;
   kind: 'legacy';
   sectionId: string;
   mode: LegacyMode;

@@ -1,4 +1,3 @@
-import type { KoZh, KoZhChoice, ChoiceOption } from '@/types/inline';
 // Tori 韩语日记 · 30 天养成手册类型定义
 // 主角中文名：兔莉（Tori）— 不复用 src/types DiaryEntry（已被用户写日记功能占用）
 
@@ -13,7 +12,6 @@ export type ToriImageKind = 'hero' | 'scene';
 
 /** 词汇卡 */
 export interface ToriWord {
-  [k: string]: unknown;
   /** 形如 d01-w1 */
   id: string;
   /** 韩文原型 */
@@ -25,7 +23,7 @@ export interface ToriWord {
   /** 词性中文标签 */
   pos: '名词' | '动词' | '形容词' | '副词' | '助词' | '感叹词' | '表达' | '代词';
   /** 例句（与剧情强绑定） */
-  example: KoZh;
+  example: { ko: string; zh: string };
   /** 可选记忆口诀或文化备注 */
   tip?: string;
   /** 可选预生成音频，缺则走 speak() TTS */
@@ -34,7 +32,6 @@ export interface ToriWord {
 
 /** 对话单行 */
 export interface ToriDialogueLine {
-  [k: string]: unknown;
   speaker: 'tori' | 'you' | 'npc';
   /** 当 speaker === 'npc' 时显示 */
   npcName?: string;
@@ -46,12 +43,11 @@ export interface ToriDialogueLine {
   /** 该行用户要做什么：仅听 / 跟读 / 选答 */
   practice?: 'listen' | 'shadow' | 'pick';
   /** practice === 'pick' 时的选项 */
-  choices?: Array<KoZhChoice>;
+  choices?: Array<{ ko: string; zh: string; correct: boolean }>;
 }
 
 /** 对话场景 */
 export interface ToriDialogue {
-  [k: string]: unknown;
   scene: string;
   setting: { time: string; place: string; npc?: string };
   lines: ToriDialogueLine[];
@@ -59,25 +55,23 @@ export interface ToriDialogue {
 
 /** 语法点 */
 export interface ToriGrammar {
-  [k: string]: unknown;
   title: string;
   pattern: string;
   whenToUse: string;
   rules: string[];
-  examples: Array<KoZhHighlight>;
+  examples: Array<{ ko: string; zh: string; highlight?: string; note?: string }>;
   pitfall?: string;
 }
 
 /** 输出任务（默写/录音/选择/填空/组词/听力/中韩/助词/连连） */
 export interface ToriOutputTask {
-  [k: string]: unknown;
   id: string;
   kind: ToriOutputKind;
   prompt?: string;
   zhHint?: string;
   answer?: string;
   /** 选择题通用（listen-choice / zh-to-ko / particle-error） */
-  choices?: Array<ChoiceOption>;
+  choices?: Array<{ ko?: string; zh?: string; text?: string; correct: boolean }>;
   /** 组词题 · 候选词卡（含 2-3 个干扰词，已打乱） */
   tokens?: string[];
   /** 组词题 · 正确顺序 */
@@ -87,7 +81,7 @@ export interface ToriOutputTask {
   /** 中→韩题 / 助词题 · 中文提示 */
   zhPrompt?: string;
   /** 连连看 · 4-5 对韩中词卡 */
-  pairs?: Array<KoZh>;
+  pairs?: Array<{ ko: string; zh: string }>;
   successMsg?: string;
   /** 已废弃字段，历史数据兼容用 */
   sceneContext?: string;
@@ -97,7 +91,6 @@ export interface ToriOutputTask {
 
 /** 日记开场 */
 export interface ToriOpening {
-  [k: string]: unknown;
   date: string;
   weather?: string;
   /** Tori pose 名称 — 当前阶段仅占位字段，组件不渲染图片 */
@@ -110,7 +103,6 @@ export interface ToriOpening {
 
 /** 日记收尾 */
 export interface ToriRecap {
-  [k: string]: unknown;
   toriPose?: string;
   praise: string;
   preview: string;
@@ -121,7 +113,6 @@ export interface ToriRecap {
 
 /** 贴纸 */
 export interface ToriSticker {
-  [k: string]: unknown;
   id: string;
   day: number;
   title: string;
@@ -131,7 +122,6 @@ export interface ToriSticker {
 
 /** 一天的完整内容 */
 export interface ToriDay {
-  [k: string]: unknown;
   day: number;
   level: ToriLevel;
   phase: ToriPhase;
@@ -152,7 +142,6 @@ export interface ToriDay {
 
 /** 每个模块的内部答题/翻卡进度（"小抄本"） */
 export interface ToriModuleState {
-  [k: string]: unknown;
   flashcard?: {
     phase?: 'review' | 'quiz';
     idx?: number;
@@ -168,7 +157,7 @@ export interface ToriModuleState {
   output?: {
     qIdx?: number;
     hearts?: number;
-    results?: Array<{ taskId: string; correct: boolean; userText?: string; [k: string]: unknown }>;
+    results?: Array<{ taskId: string; correct: boolean; userText?: string }>;
   };
   words?: {
     flippedIds?: string[];
@@ -177,7 +166,6 @@ export interface ToriModuleState {
 
 /** 用户进度（一天一条） */
 export interface ToriProgress {
-  [k: string]: unknown;
   /** 形如 {userId}-{level}-{day} */
   id: string;
   userId: string;
@@ -186,14 +174,13 @@ export interface ToriProgress {
   modulesDone: ToriModuleKind[];
   startedAt: number;
   completedAt?: number;
-  output: Array<{ taskId: string; correct: boolean; userText?: string; [k: string]: unknown }>;
+  output: Array<{ taskId: string; correct: boolean; userText?: string }>;
   /** 每个模块的内部状态，用于中途恢复。老记录可能没有这个字段。 */
   moduleState?: ToriModuleState;
 }
 
 /** 用户获得的贴纸 */
 export interface ToriStickerOwned {
-  [k: string]: unknown;
   /** 形如 {userId}-{stickerId} */
   id: string;
   userId: string;
@@ -203,7 +190,6 @@ export interface ToriStickerOwned {
 
 /** 勇气胡萝卜对话单条（仅 localStorage 持久化） */
 export interface ToriCarrotMessage {
-  [k: string]: unknown;
   role: 'user' | 'tori';
   text: string;
   ts: number;

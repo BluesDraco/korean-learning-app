@@ -10,14 +10,12 @@ import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
 
 interface ReadingWord {
-  [k: string]: unknown;
   korean: string;
   pronunciation: string;
   meaning: string;
 }
 
 interface ProgressiveStep {
-  [k: string]: unknown;
   id: string;
   title: string;
   titleKo: string;

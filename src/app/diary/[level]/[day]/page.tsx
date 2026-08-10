@@ -22,7 +22,6 @@ export async function generateMetadata({ params }: { params: Promise<{ level: st
 }
 
 interface Props {
-  [k: string]: unknown;
   params: Promise<{ level: string; day: string }>;
 }
 

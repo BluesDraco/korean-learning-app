@@ -5,7 +5,6 @@ import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
 
 interface Props {
-  [k: string]: unknown;
   target: ProgressiveLetter;
   isRight: boolean;
   buttonLabel: string;

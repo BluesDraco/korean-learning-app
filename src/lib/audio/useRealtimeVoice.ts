@@ -15,13 +15,11 @@ import { t } from '@/lib/i18n';
 export type VoiceState = 'idle' | 'loading' | 'listening' | 'thinking' | 'speaking';
 
 export interface VoiceTurnMsg {
-  [k: string]: unknown;
   role: 'ai' | 'user';
   content: string;
 }
 
 export interface VoiceMeta {
-  [k: string]: unknown;
   feedback?: {
     natural?: string; grammarError?: string;
     wrongPart?: string; correctPart?: string;
@@ -32,7 +30,6 @@ export interface VoiceMeta {
 }
 
 interface UseRealtimeVoiceOptions {
-  [k: string]: unknown;
   systemHint: string;
   getRate?: () => number;
   // 兔莉音色：每次播放前实时读取，用户中途切换下一句即生效

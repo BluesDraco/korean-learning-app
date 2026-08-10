@@ -7,7 +7,6 @@ import { useLang } from '@/components/LangProvider';
 export type QuizType = 'meaning' | 'cloze' | 'translate' | 'grammar';
 
 export interface QuizQuestion {
-  [k: string]: unknown;
   type: QuizType;
   question: string;
   options: string[];
@@ -17,7 +16,6 @@ export interface QuizQuestion {
 }
 
 interface Props {
-  [k: string]: unknown;
   questions: QuizQuestion[];
   onWrongAnswer?: (q: QuizQuestion, picked: number) => void;
   onComplete?: (score: number, total: number) => void;

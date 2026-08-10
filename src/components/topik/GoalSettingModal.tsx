@@ -11,14 +11,12 @@ const LIGHT_C = { ..._LIGHT_C, chipIdle: '#f9f5f2', chipActive: '#fff0f5', input
 const DARK_C  = { ..._DARK_C, chipIdle: '#252040', chipActive: '#3A2A50', inputBg: '#1E1B2E' };
 
 export interface GoalDraft {
-  [k: string]: unknown;
   targetDate?: number;
   targetLevel?: 'I' | 'II';
   dailyQuestionCount: number;
 }
 
 interface Props {
-  [k: string]: unknown;
   open: boolean;
   initial: GoalDraft;
   onClose: () => void;

@@ -12,13 +12,11 @@ const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
 const DEEPSEEK_MODEL = 'deepseek-v4-flash';
 
 interface CarrotMessage {
-  [k: string]: unknown;
   role: 'user' | 'tori';
   text: string;
 }
 
 interface CarrotContext {
-  [k: string]: unknown;
   day?: number;
   module?: string;
   dayTitle?: string;

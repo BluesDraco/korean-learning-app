@@ -7,7 +7,6 @@ const DEEPSEEK_MODEL = 'deepseek-v4-flash';
 export type AiModerationResult = { status: 'passed' | 'blocked'; reason: string };
 
 interface RawModeration {
-  [k: string]: unknown;
   safe: boolean;
   reason: string;
 }

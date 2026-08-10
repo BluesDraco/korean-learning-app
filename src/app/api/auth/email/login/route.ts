@@ -75,7 +75,7 @@ export async function POST(request: Request) {
     db.run('UPDATE users SET last_login_at = ? WHERE id = ?', [Date.now(), user.id]).catch(() => { /* 不影响登录 */ });
 
     const token = await signToken({ userId: user.id as string, username: user.username as string, role: (user.role as string) || 'user' });
-    const res = NextResponse.json({ success: true, token, user: { id: user.id, username: user.username, role: user.role } }, { headers: NO_STORE });
+    const res = NextResponse.json({ success: true, user: { id: user.id, username: user.username, role: user.role } }, { headers: NO_STORE });
     setTokenCookie(res, token);
     return res;
   } catch (err) {

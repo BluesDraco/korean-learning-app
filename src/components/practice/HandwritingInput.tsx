@@ -11,7 +11,6 @@ import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
 
 interface HandwritingInputProps {
-  [k: string]: unknown;
   /** 当前已识别拼出的韩文串（受控） */
   value: string;
   /** 每次识别/删除后回调最新串 */

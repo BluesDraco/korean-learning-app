@@ -7,7 +7,6 @@ const GUEST_KEYS = {
 };
 
 export interface GuestData {
-  [k: string]: unknown;
   words: unknown[];
   sentences: unknown[];
   recordingsMeta: unknown[];

@@ -5,10 +5,8 @@ import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
 import { HighlightedExample } from '@/components/vocabulary/HighlightedExample';
 import { stripParticle } from '@/lib/koreanParticles';
-import type { KoZh } from '@/types/inline';
 
 export interface AnalyzeWord {
-  [k: string]: unknown;
   text: string;
   romanization?: string;
   pronunciation?: string;
@@ -22,14 +20,13 @@ export interface AnalyzeWord {
 }
 
 interface Props {
-  [k: string]: unknown;
   word: AnalyzeWord;
   saved: boolean;
   onSave: () => void;
   onSpeak?: (text: string) => void;
 }
 
-function norm(ex: KoZh | string): KoZh {
+function norm(ex: { ko: string; zh: string } | string): { ko: string; zh: string } {
   return typeof ex === 'string' ? { ko: ex, zh: '' } : ex;
 }
 

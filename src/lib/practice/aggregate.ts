@@ -8,7 +8,6 @@ import { t, type Lang } from '@/lib/i18n';
 export type PracticeMode = 'listening' | 'dictation' | 'writing' | 'typing';
 
 export interface PracticeRow {
-  [k: string]: unknown;
   id: string;
   mode: PracticeMode;
   timestamp: number;
@@ -18,7 +17,6 @@ export interface PracticeRow {
 }
 
 export interface PracticeStats {
-  [k: string]: unknown;
   listening: { total: number; today: number; lastAt?: number; doneToday: boolean };
   dictation: { total: number; correct: number; accuracy: number; today: number; lastAt?: number; doneToday: boolean };
   writing:   { total: number; today: number; lastAt?: number; doneToday: boolean };
@@ -35,7 +33,6 @@ export interface PracticeStats {
 }
 
 export interface PracticeAggregate {
-  [k: string]: unknown;
   stats: PracticeStats;
   recent: PracticeRow[];
 }

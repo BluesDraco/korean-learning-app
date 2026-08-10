@@ -15,7 +15,6 @@ import { memoryHealthScore, retentionDistribution, generateCurvePoints, wordStab
 import type { Word, MasteryLevel, UserProfile } from '@/types';
 
 interface Stats {
-  [k: string]: unknown;
   totalWords: number;
   masteredWords: number;
   totalReviews: number;

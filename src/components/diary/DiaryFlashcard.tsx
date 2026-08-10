@@ -8,10 +8,8 @@ import { sfxCorrect, sfxWrong } from '@/lib/sfx';
 import { WordTapSheet } from '@/components/WordTapSheet';
 import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
-import type { ZhChoice } from '@/types/inline';
 
 interface Props {
-  [k: string]: unknown;
   day: ToriDay;
   onComplete: () => void;
   onBack?: () => void;
@@ -534,10 +532,9 @@ function FlashcardFace({
 
 /* ═══════ 速测题生成 ═══════ */
 interface QuizQ {
-  [k: string]: unknown;
   ko: string;
   hangul: string;
-  options: Array<ZhChoice>;
+  options: Array<{ zh: string; correct: boolean }>;
 }
 
 function buildQuiz(words: ToriWord[]): QuizQ[] {

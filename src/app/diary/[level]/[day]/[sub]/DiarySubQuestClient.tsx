@@ -21,7 +21,6 @@ import { t } from '@/lib/i18n';
 const VALID_LEVELS = new Set<ToriLevel>(['beginner', 'intermediate', 'advanced']);
 
 interface Props {
-  [k: string]: unknown;
   params: Promise<{ level: string; day: string; sub: string }>;
 }
 

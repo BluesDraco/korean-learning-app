@@ -8,7 +8,6 @@ import { TOTAL_DAYS_PER_LEVEL } from '@/data/diary';
 // SSR 安全：window 不存在直接返回兜底
 
 export interface VocabProgress {
-  [k: string]: unknown;
   /** 上次访问的词库分类 */
   source?: 'yonsei' | 'seoul' | 'vitamin' | 'levels' | 'themes' | 'books';
   /** 上次访问的 unit id */
@@ -22,7 +21,6 @@ export interface VocabProgress {
 }
 
 export interface DiaryProgress {
-  [k: string]: unknown;
   /** 当前应学的 day（1-30） */
   currentDay: number;
   /** 已完成 day 数 */
@@ -33,13 +31,11 @@ export interface DiaryProgress {
 }
 
 export interface PhoneticProgress {
-  [k: string]: unknown;
   completed: number;
   total: number;
 }
 
 export interface GrammarProgress {
-  [k: string]: unknown;
   completed: number;
   total: number;
 }

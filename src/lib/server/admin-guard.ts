@@ -4,7 +4,7 @@ import { getDb } from './db';
 
 export async function requireAdmin() {
   const auth = await getAuthFromCookie();
-  const forbidden = { authorized: false as const, response: NextResponse.json({ error: '无权限访问', errorEn: 'No Access Permission' }, { status: 403 }) };
+  const forbidden = { authorized: false as const, response: NextResponse.json({ error: '无权限访问' }, { status: 403 }) };
   if (!auth) return forbidden;
 
   // 实时查库校验 role，不信任 JWT 里的 role 声明：

@@ -14,13 +14,11 @@ import { t } from '@/lib/i18n';
 import '../topik-redesign.css';
 
 interface MistakeRow {
-  [k: string]: unknown;
   mistake: TopikMistake;
   question: TopikQuestion;
 }
 
 interface UndoState {
-  [k: string]: unknown;
   id: string;
   row: MistakeRow;
   timer: ReturnType<typeof setTimeout>;

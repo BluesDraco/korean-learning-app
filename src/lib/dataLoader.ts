@@ -8,7 +8,6 @@ import type { YonseiUnit } from '@/data/yonsei-books';
 import type { TopikSection, TopikExamSet, TopikQuestion } from '@/data/topik-questions';
 
 export interface UnitMeta {
-  [k: string]: unknown;
   id: string;
   bookId: number;
   bookTitle: string;
@@ -53,7 +52,6 @@ export const loadTopikSections = () => loadJson<TopikSection[]>('/data/topik/sec
 export const loadTopikExamSets = () => loadJson<TopikExamSet[]>('/data/topik/exam-sets.json');
 
 export interface TopikQuestionIndexItem {
-  [k: string]: unknown;
   id: string;
   section: 'listening' | 'reading';
   level: 'beginner' | 'intermediate' | 'advanced';

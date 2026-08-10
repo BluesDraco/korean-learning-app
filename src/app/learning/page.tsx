@@ -16,7 +16,6 @@ import { t } from '@/lib/i18n';
 import './learning-visual.css';
 
 interface LearningEntry {
-  [k: string]: unknown;
   labelKey: string;
   descKey: string;
   href: string;

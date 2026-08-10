@@ -25,7 +25,6 @@ const LESSON_KEY: Record<StepKey, 'letter' | 'write' | 'quiz' | 'blend' | null> 
 };
 
 interface StepRailProps {
-  [k: string]: unknown;
   stageId: number;
   current: StepKey;
   /** letter 页传入：当前字母下标 + 切换回调，令 chips 可交互 */

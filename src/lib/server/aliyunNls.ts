@@ -14,7 +14,6 @@ const WS_URL = 'wss://dashscope.aliyuncs.com/api-ws/v1/inference/';
 const MODEL = 'paraformer-realtime-v2';
 
 export interface RecognizeOptions {
-  [k: string]: unknown;
   /** 兼容旧签名，当前实现只吃裸 PCM，format 仅用于剥 WAV 头判断。默认 wav。 */
   format?: string;
   /** 默认 16000 */

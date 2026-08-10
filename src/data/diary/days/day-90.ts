@@ -13,14 +13,14 @@ export const day90: ToriDay = {
   level: 'advanced',
   day: 30,
   phase: 'mastery',
-  title: '毕业演讲 · "짐을 가져왔지만, 지금은 집이 있어요"', titleEn: 'Graduation speech · "짐을 가져왔지만, 지금은 집이 있어요"',
-  subtitle: '90天的最后一句——全场起立', subtitleEn: 'The last line of 90 days—the whole room stands up',
+  title: '毕业演讲 · "짐을 가져왔지만, 지금은 집이 있어요"',
+  subtitle: '90天的最后一句——全场起立',
   heroImageUrl: '/images/diary/day-90-hero.jpg',
   estimatedMin: 15,
 
   opening: {
     date: '12월 22일 · 일요일 오전',
-    weather: '兽尔 · 초겨울 맑음 · 마지막 날', weatherEn: 'Seoul · early winter, clear · last day',
+    weather: '兽尔 · 초겨울 맑음 · 마지막 날',
     toriPose: 'proud',
     diaryText: `12月22日，周日上午 10 点。
 
@@ -87,34 +87,34 @@ Day 90 我的回答，"집이 있어요"。
   },
 
   words: [
-    { id: 'd90-w1', korean: '졸업식', hangul: 'jo-reop-sik', zh: '毕业典礼', zhEn: 'Graduation ceremony', pos: '名词', posEn: 'Noun', example: { ko: '오늘이 졸업식이에요.', zh: '今天是毕业典礼。', zhEn: 'Today is the graduation ceremony.' }, tip: '卒(졸) + 業(업) + 式(식)', tipEn: 'Graduate (졸) + Work (업) + Ceremony (식)' },
-    { id: 'd90-w2', korean: '연단', hangul: 'yeon-dan', zh: '讲台', zhEn: 'podium', pos: '名词', posEn: 'Noun', example: { ko: '연단에 올라갔어요.', zh: '登上讲台。', zhEn: 'Step up to the podium.' }, tip: '演(연) + 坛(단)', tipEn: 'Act (연) + Stage (단)' },
-    { id: 'd90-w3', korean: '주인공', hangul: 'ju-in-gong', zh: '主人公', zhEn: 'protagonist', pos: '名词', posEn: 'Noun', example: { ko: '오늘의 주인공은 이 두 글자.', zh: '今天的主人公是这两个字。', zhEn: 'Today\'s protagonist is these two characters.' }, tip: '主(주) + 人(인) + 公(공)', tipEn: 'Main (주) + Character (인) + 公 (공)' },
-    { id: 'd90-w4', korean: '안정감', hangul: 'an-jeong-gam', zh: '安定感', zhEn: 'Sense of stability', pos: '名词', posEn: 'Noun', example: { ko: '완전한 안정감을 느꼈어요.', zh: '感到完全的安定感。', zhEn: 'Feels a complete sense of stability.' }, tip: '安(안) + 定(정) + 感(감)', tipEn: 'Stable (안) + Settled (정) + Feeling (감)' },
-    { id: 'd90-w5', korean: '전부', hangul: 'jeon-bu', zh: '全部', zhEn: 'Everything', pos: '名词', posEn: 'Noun', example: { ko: '그 작은 게 전부예요.', zh: '那小的就是全部。', zhEn: 'That small thing is everything.' }, tip: '全(전) + 部(부)', tipEn: 'All (전) + Part (부)' },
-    { id: 'd90-w6', korean: '삶', hangul: 'sam', zh: '生活/人生', zhEn: 'Life', pos: '名词', posEn: 'Noun', example: { ko: '이야기는 끝나지만 삶은 계속돼요.', zh: '故事结束但生活继续。', zhEn: 'The story ends, but life goes on.' }, tip: '한 글자 명사. 살다 → 삶' },
+    { id: 'd90-w1', korean: '졸업식', hangul: 'jo-reop-sik', zh: '毕业典礼', pos: '名词', example: { ko: '오늘이 졸업식이에요.', zh: '今天是毕业典礼。' }, tip: '卒(졸) + 業(업) + 式(식)' },
+    { id: 'd90-w2', korean: '연단', hangul: 'yeon-dan', zh: '讲台', pos: '名词', example: { ko: '연단에 올라갔어요.', zh: '登上讲台。' }, tip: '演(연) + 坛(단)' },
+    { id: 'd90-w3', korean: '주인공', hangul: 'ju-in-gong', zh: '主人公', pos: '名词', example: { ko: '오늘의 주인공은 이 두 글자.', zh: '今天的主人公是这两个字。' }, tip: '主(주) + 人(인) + 公(공)' },
+    { id: 'd90-w4', korean: '안정감', hangul: 'an-jeong-gam', zh: '安定感', pos: '名词', example: { ko: '완전한 안정감을 느꼈어요.', zh: '感到完全的安定感。' }, tip: '安(안) + 定(정) + 感(감)' },
+    { id: 'd90-w5', korean: '전부', hangul: 'jeon-bu', zh: '全部', pos: '名词', example: { ko: '그 작은 게 전부예요.', zh: '那小的就是全部。' }, tip: '全(전) + 部(부)' },
+    { id: 'd90-w6', korean: '삶', hangul: 'sam', zh: '生活/人生', pos: '名词', example: { ko: '이야기는 끝나지만 삶은 계속돼요.', zh: '故事结束但生活继续。' }, tip: '한 글자 명사. 살다 → 삶' },
   ],
 
   dialogue: {
     scene: '한빛대 대강당·졸업 연설·클라이맥스',
-    setting: { time: '周日 10:30', timeEn: 'Sunday 10:30', place: '한빛대 대강당', npc: '전 강당 500명 · 妈妈 · 4명 친구', npcEn: 'Whole auditorium 500 people · Mom · 4 friends' },
+    setting: { time: '周日 10:30', place: '한빛대 대강당', npc: '전 강당 500명 · 妈妈 · 4명 친구' },
     lines: [
-      { speaker: 'tori', ko: '안녕하세요. 저는 토리예요. 오늘은 90일의 이야기를 나눌게요.', hangul: 'an-nyeong-ha-se-yo. jeo-neun to-ri-ye-yo. o-neu-reun 90il-ui i-ya-gi-reul na-nul-ge-yo', zh: '大家好，我是兔莉。今天分享90天的故事。', zhEn: 'Hi everyone, I\'m Tori. Today I\'m sharing my 90-day story.', practice: 'shadow' },
-      { speaker: 'tori', ko: 'Day 1에 엄마가 이 당근에 "용기" 두 글자를 써주셨어요.', hangul: 'Day 1-e eom-ma-ga i dang-geun-e "yong-gi" du-geul-ja-reul sseo-ju-syeo-sseo-yo', zh: 'Day 1妈妈在这胡萝卜上写了"勇气"两个字。', zhEn: 'Day 1: Mom wrote the word "courage" on this carrot.', practice: 'shadow' },
-      { speaker: 'tori', ko: 'Day 3에 저는 "제 집이 너무 무거워요"라고 말했어요. 집과 짐을 헷갈렸어요.', hangul: 'Day 3-e jeo-neun "je ji-bi neo-mu mu-geo-wo-yo"-ra-go mal-hae-sseo-yo. jip-gwa ji-meul het-gal-lyeo-sseo-yo', zh: 'Day 3我说"我家太重了"。把집和짐搞混了。', zhEn: 'Day 3: I said "my house is too heavy." I mixed up 집 and 짐.', practice: 'shadow' },
-      { speaker: 'tori', ko: '저는 90일 전 이 짐을 가지고 왔어요.', hangul: 'jeo-neun 90il jeon i ji-meul ga-ji-go wa-sseo-yo', zh: '我90天前带来了这行李。', zhEn: 'I brought this luggage 90 days ago.', practice: 'shadow' },
-      { speaker: 'tori', ko: '근데 지금은… 집이 있어요.', hangul: 'geun-de ji-geu-meun… ji-bi i-sseo-yo', zh: '但现在……有了家。', zhEn: 'But now... I have a home.', practice: 'shadow' },
+      { speaker: 'tori', ko: '안녕하세요. 저는 토리예요. 오늘은 90일의 이야기를 나눌게요.', hangul: 'an-nyeong-ha-se-yo. jeo-neun to-ri-ye-yo. o-neu-reun 90il-ui i-ya-gi-reul na-nul-ge-yo', zh: '大家好，我是兔莉。今天分享90天的故事。', practice: 'shadow' },
+      { speaker: 'tori', ko: 'Day 1에 엄마가 이 당근에 "용기" 두 글자를 써주셨어요.', hangul: 'Day 1-e eom-ma-ga i dang-geun-e "yong-gi" du-geul-ja-reul sseo-ju-syeo-sseo-yo', zh: 'Day 1妈妈在这胡萝卜上写了"勇气"两个字。', practice: 'shadow' },
+      { speaker: 'tori', ko: 'Day 3에 저는 "제 집이 너무 무거워요"라고 말했어요. 집과 짐을 헷갈렸어요.', hangul: 'Day 3-e jeo-neun "je ji-bi neo-mu mu-geo-wo-yo"-ra-go mal-hae-sseo-yo. jip-gwa ji-meul het-gal-lyeo-sseo-yo', zh: 'Day 3我说"我家太重了"。把집和짐搞混了。', practice: 'shadow' },
+      { speaker: 'tori', ko: '저는 90일 전 이 짐을 가지고 왔어요.', hangul: 'jeo-neun 90il jeon i ji-meul ga-ji-go wa-sseo-yo', zh: '我90天前带来了这行李。', practice: 'shadow' },
+      { speaker: 'tori', ko: '근데 지금은… 집이 있어요.', hangul: 'geun-de ji-geu-meun… ji-bi i-sseo-yo', zh: '但现在……有了家。', practice: 'shadow' },
       { speaker: 'tori', ko: '?', hangul: '', zh: '기립 박수 후 연단 내려오기 전. Tori想真诚感谢. 合适的最后一句？', practice: 'pick',
         choices: [
-          { ko: '이 90일의 家에게 진심으로 감사합니다.', zh: '真心感谢这90天的家。', zhEn: 'I\'m truly grateful for this home of 90 days.', correct: true },
-          { ko: '이제 저 갈게요. 안녕히 계세요.', zh: '我走了。再见。', zhEn: 'I\'m leaving. Goodbye.', correct: false },
-          { ko: '90일 별거 아니었어요.', zh: '90天没什么。', zhEn: '90 days is nothing.', correct: false },
+          { ko: '이 90일의 家에게 진심으로 감사합니다.', zh: '真心感谢这90天的家。', correct: true },
+          { ko: '이제 저 갈게요. 안녕히 계세요.', zh: '我走了。再见。', correct: false },
+          { ko: '90일 별거 아니었어요.', zh: '90天没什么。', correct: false },
         ]},
     ],
   },
 
   grammar: {
-    title: '虽然带了行李，但现在有了家：~았/었지만 지금은 (Day 60·70·82 종합)', titleEn: 'I brought luggage, but now I have a home: ~았/었지만 지금은 (Days 60·70·82 combined)',
+    title: '虽然带了行李，但现在有了家：~았/었지만 지금은 (Day 60·70·82 종합)',
     pattern: '**~았/었지만 지금은 ~아/어요**',
     whenToUse: 'Day 60 초급 졸업, Day 90 총 졸업의 명제 프레임 완성. Day 60 "짐을 가져왔지만 지금은 집이 있어요"의 재현·확장. 시간 대비 성장 표현의 최고점.',
     rules: [
@@ -124,21 +124,21 @@ Day 90 我的回答，"집이 있어요"。
       '**개인 서사 클라이맥스 표현**: 발표/자서전/졸업 연설',
     ],
     examples: [
-      { ko: '저는 짐을 가지고 왔지만, 지금은 집이 있어요.', zh: '我带来行李，但现在有家。', zhEn: 'I brought luggage, but now I have a home.', highlight: '가지고 왔지만 ... 집이 있어요', note: 'Day 90 명제. 全 시리즈의 핵심 문장', noteEn: 'Day 90 thesis. The core sentence of the entire series.' },
-      { ko: '90일 전엔 두려웠지만, 지금은 안 두려워요.', zh: '90天前害怕，现在不怕。', zhEn: '90 days ago I was scared, now I\'m not.', highlight: '두려웠지만 ... 안 두려워요', note: 'Day 65·66·67 회고' },
-      { ko: '한국어를 몰랐지만, 지금은 말할 수 있어요.', zh: '不懂韩语但现在能说。', zhEn: 'I didn\'t know Korean, but now I can speak it.', highlight: '몰랐지만 ... 말할 수 있어요', note: '학습 성취' },
-      { ko: '외국인이었지만, 지금은 이 도시가 집이에요.', zh: '曾是外国人，现在这城是家。', zhEn: 'Once a foreigner, now this city is home.', highlight: '외국인이었지만 ... 집이에요', note: '정체성 변화' },
+      { ko: '저는 짐을 가지고 왔지만, 지금은 집이 있어요.', zh: '我带来行李，但现在有家。', highlight: '가지고 왔지만 ... 집이 있어요', note: 'Day 90 명제. 全 시리즈의 핵심 문장' },
+      { ko: '90일 전엔 두려웠지만, 지금은 안 두려워요.', zh: '90天前害怕，现在不怕。', highlight: '두려웠지만 ... 안 두려워요', note: 'Day 65·66·67 회고' },
+      { ko: '한국어를 몰랐지만, 지금은 말할 수 있어요.', zh: '不懂韩语但现在能说。', highlight: '몰랐지만 ... 말할 수 있어요', note: '학습 성취' },
+      { ko: '외국인이었지만, 지금은 이 도시가 집이에요.', zh: '曾是外国人，现在这城是家。', highlight: '외국인이었지만 ... 집이에요', note: '정체성 변화' },
     ],
     pitfall:
       '① Day 60 (초급 졸업) → Day 90 (전체 졸업) 반복 프레임. 문학적 원형. ② ~았/었지만 + 지금은 = 성장 서사의 왕도. ③ 90 이후 학습자는 이 프레임으로 자기 이야기를 완성할 수 있음.',
   },
 
   output: [
-    { id: 'd90-o1', kind: 'compose', zhHint: '我带来行李，但现在有家。', zhHintEn: 'I brought luggage, but now I have a home.', tokens: ['저는', '짐을 가지고 왔지만', '지금은 집이 있어요', '집을 가지고 왔어요', '지금은 짐이 있어요', '집이 없어요'], composeAnswer: ['저는', '짐을 가지고 왔지만', '지금은 집이 있어요'], successMsg: 'Day 90 최종 명제. 90일 이야기의 완성.' },
-    { id: 'd90-o2', kind: 'listen-choice', audioKo: '용기는 큰 게 아니에요. 작은 거예요.', successMsg: '✓ Day 84 재현. 90일 인생 명제.', choices: [{ zh: '勇气不是大的。是小的。', zhEn: 'Courage isn\'t big. It\'s small.', correct: true }, { zh: '勇气必须大。', zhEn: 'Courage must be big.', correct: false }, { zh: '大的才是勇气。', zhEn: 'Only big is courage.', correct: false }, { zh: '小的不是勇气。', zhEn: 'Small is not courage.', correct: false }] },
-    { id: 'd90-o3', kind: 'zh-to-ko', zhPrompt: '不懂韩语但现在能说。', zhPromptEn: 'I didn\'t know Korean, but now I can speak it.', successMsg: '"한국어를 몰랐지만, 지금은 말할 수 있어요."', choices: [{ ko: '한국어를 몰랐지만, 지금은 말할 수 있어요.', correct: true }, { ko: '한국어가 몰랐지만, 지금은 말할 수 있어요.', correct: false }, { ko: '한국어를 몰라지만, 지금은 말할 수 있어요.', correct: false }, { ko: '한국어를 안 알았지만, 지금은 말할 수 있어요.', correct: false }] },
-    { id: 'd90-o4', kind: 'particle-error', zhHint: '感到完全的安定感。', zhHintEn: 'Feels a complete sense of stability.', successMsg: '완전한 안정감 (관형+명사) + **을** + 느끼다.', choices: [{ ko: '완전한 안정감을 느꼈어요.', correct: true }, { ko: '완전한 안정감이 느꼈어요.', correct: false }, { ko: '완전한 안정감에 느꼈어요.', correct: false }, { ko: '완전이 안정감을 느꼈어요.', correct: false }] },
-    { id: 'd90-o5', kind: 'match-pair', successMsg: '✓ Day 90 全对. 90일의 이야기, 완성.', successMsgEn: '✓ Day 90 all correct. The 90-day story, complete.', pairs: [{ ko: '졸업식', zh: '毕业典礼', zhEn: 'Graduation ceremony' }, { ko: '연단', zh: '讲台', zhEn: 'podium' }, { ko: '주인공', zh: '主人公', zhEn: 'protagonist' }, { ko: '안정감', zh: '安定感', zhEn: 'Sense of stability' }, { ko: '삶', zh: '生活', zhEn: 'Life' }] },
+    { id: 'd90-o1', kind: 'compose', zhHint: '我带来行李，但现在有家。', tokens: ['저는', '짐을 가지고 왔지만', '지금은 집이 있어요', '집을 가지고 왔어요', '지금은 짐이 있어요', '집이 없어요'], composeAnswer: ['저는', '짐을 가지고 왔지만', '지금은 집이 있어요'], successMsg: 'Day 90 최종 명제. 90일 이야기의 완성.' },
+    { id: 'd90-o2', kind: 'listen-choice', audioKo: '용기는 큰 게 아니에요. 작은 거예요.', successMsg: '✓ Day 84 재현. 90일 인생 명제.', choices: [{ zh: '勇气不是大的。是小的。', correct: true }, { zh: '勇气必须大。', correct: false }, { zh: '大的才是勇气。', correct: false }, { zh: '小的不是勇气。', correct: false }] },
+    { id: 'd90-o3', kind: 'zh-to-ko', zhPrompt: '不懂韩语但现在能说。', successMsg: '"한국어를 몰랐지만, 지금은 말할 수 있어요."', choices: [{ ko: '한국어를 몰랐지만, 지금은 말할 수 있어요.', correct: true }, { ko: '한국어가 몰랐지만, 지금은 말할 수 있어요.', correct: false }, { ko: '한국어를 몰라지만, 지금은 말할 수 있어요.', correct: false }, { ko: '한국어를 안 알았지만, 지금은 말할 수 있어요.', correct: false }] },
+    { id: 'd90-o4', kind: 'particle-error', zhHint: '感到完全的安定感。', successMsg: '완전한 안정감 (관형+명사) + **을** + 느끼다.', choices: [{ ko: '완전한 안정감을 느꼈어요.', correct: true }, { ko: '완전한 안정감이 느꼈어요.', correct: false }, { ko: '완전한 안정감에 느꼈어요.', correct: false }, { ko: '완전이 안정감을 느꼈어요.', correct: false }] },
+    { id: 'd90-o5', kind: 'match-pair', successMsg: '✓ Day 90 全对. 90일의 이야기, 완성.', pairs: [{ ko: '졸업식', zh: '毕业典礼' }, { ko: '연단', zh: '讲台' }, { ko: '주인공', zh: '主人公' }, { ko: '안정감', zh: '安定感' }, { ko: '삶', zh: '生活' }] },
   ],
 
   recap: {
@@ -149,5 +149,5 @@ Day 90 我的回答，"집이 있어요"。
     sceneImageUrl: '/images/diary/day-90-scene.jpg',
   },
 
-  carrotHint: '今天的胡萝卜: 「Day 60과 Day 90의 프레임 어떻게 같고 다름?」「내 90일 이야기는 뭐?」', carrotHintEn: 'Today\'s carrot: 「How are Day 60 and Day 90\'s frames similar and different?」「What is my 90-day story?」',
+  carrotHint: '今天的胡萝卜: 「Day 60과 Day 90의 프레임 어떻게 같고 다름?」「내 90일 이야기는 뭐?」',
 };

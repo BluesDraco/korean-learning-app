@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import * as jose from 'jose';
-import { cookies, headers } from 'next/headers';
+import { cookies } from 'next/headers';
 
 const COOKIE_NAME = 'token';
 const DEV_JWT_SECRET = 'dev-only-korean-learning-app-secret-change-me';
@@ -100,11 +100,6 @@ export async function getAuthFromCookie(): Promise<{ userId: string; username: s
   if (BETA_NO_LOGIN && process.env.NODE_ENV === 'production') {
     throw new Error('BETA_NO_LOGIN 禁止在生产环境开启（会导致全站访客串号）');
   }
-  // 移动端 App 走 Authorization: Bearer；网页版走 httpOnly Cookie。先认 Bearer 再回落 Cookie。
-  const authHeader = (await headers()).get('authorization');
-  const bearer = authHeader?.startsWith('Bearer ') ? authHeader.slice(7).trim() : '';
-  if (bearer) return verifyToken(bearer);
-
   const cookieStore = await cookies();
   const token = cookieStore.get(COOKIE_NAME)?.value;
   if (!token) {

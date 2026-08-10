@@ -10,14 +10,14 @@ export const day85: ToriDay = {
   level: 'advanced',
   day: 25,
   phase: 'mastery',
-  title: '倒计时日历 · 每天撕一张', titleEn: 'Countdown calendar · tear one off each day',
-  subtitle: '"5→4→3" — 每张纸都藏着一个故事', subtitleEn: '"5→4→3" — every sheet hides a story',
+  title: '倒计时日历 · 每天撕一张',
+  subtitle: '"5→4→3" — 每张纸都藏着一个故事',
   heroImageUrl: '/images/diary/day-85-hero.jpg',
   estimatedMin: 12,
 
   opening: {
     date: '12월 17일 · 화요일 오전',
-    weather: '兽尔 · 초겨울 흐림', weatherEn: 'Beast · Early winter, cloudy',
+    weather: '兽尔 · 초겨울 흐림',
     toriPose: 'shy',
     diaryText: `12月17日，周二上午。
 
@@ -52,66 +52,66 @@ Day 44 江边 Haru 说过的那句话浮上心头：
   },
 
   words: [
-    { id: 'd85-w1', korean: '카운트다운', hangul: 'ka-un-teu-da-un', zh: '倒计时', zhEn: 'Countdown', pos: '名词', posEn: 'Noun', example: { ko: '카운트다운 캘린더예요.', zh: '倒计时日历。', zhEn: 'Countdown calendar.' }, tip: 'countdown 외래어' },
-    { id: 'd85-w2', korean: '뜯다', hangul: 'tteut-da', zh: '撕', zhEn: 'Tear', pos: '动词', posEn: 'Verb', example: { ko: '한 장씩 뜯어요.', zh: '一张一张撕。', zhEn: 'Tear them off one by one.' }, tip: '뜯다 → 뜯어요' },
-    { id: 'd85-w3', korean: '남다', hangul: 'nam-da', zh: '剩', zhEn: 'Remaining', pos: '动词', posEn: 'Verb', example: { ko: '5일 남았어요.', zh: '剩5天。', zhEn: '5 days left.' }, tip: '남다 → 남았어요' },
-    { id: 'd85-w4', korean: '받아주다', hangul: 'ba-da-ju-da', zh: '接纳', zhEn: 'Accept', pos: '动词', posEn: 'Verb', example: { ko: '반이 저를 받아줬어요.', zh: '班上接纳了我。', zhEn: 'The class accepted me.' }, tip: '받다(接) + 주다(给). 감정적 수용', tipEn: '받다 (receive) + 주다 (give). Emotional acceptance' },
-    { id: 'd85-w5', korean: '원래', hangul: 'won-lae', zh: '原来/本来', zhEn: 'Originally / as before', pos: '副词', posEn: 'Adverb', example: { ko: '원래대로 안 돌아가요.', zh: '不能回到原样。', zhEn: 'Can\'t go back to how it was.' }, tip: '原(원) + 来(래). 원래대로 = 恢复原样', tipEn: '原 (원) + 来 (래). 원래대로 = back to the original state' },
-    { id: 'd85-w6', korean: '기억해두다', hangul: 'gi-eo-kae-du-da', zh: '记住/记下来', zhEn: 'Remember / note it down', pos: '动词', posEn: 'Verb', example: { ko: '이 순간을 기억해둘게요.', zh: '记住这个瞬间。', zhEn: 'Remember this moment.' }, tip: '기억하다 + ~아/어 두다 (Day 67 pitfall 재활용)' },
+    { id: 'd85-w1', korean: '카운트다운', hangul: 'ka-un-teu-da-un', zh: '倒计时', pos: '名词', example: { ko: '카운트다운 캘린더예요.', zh: '倒计时日历。' }, tip: 'countdown 외래어' },
+    { id: 'd85-w2', korean: '뜯다', hangul: 'tteut-da', zh: '撕', pos: '动词', example: { ko: '한 장씩 뜯어요.', zh: '一张一张撕。' }, tip: '뜯다 → 뜯어요' },
+    { id: 'd85-w3', korean: '남다', hangul: 'nam-da', zh: '剩', pos: '动词', example: { ko: '5일 남았어요.', zh: '剩5天。' }, tip: '남다 → 남았어요' },
+    { id: 'd85-w4', korean: '받아주다', hangul: 'ba-da-ju-da', zh: '接纳', pos: '动词', example: { ko: '반이 저를 받아줬어요.', zh: '班上接纳了我。' }, tip: '받다(接) + 주다(给). 감정적 수용' },
+    { id: 'd85-w5', korean: '원래', hangul: 'won-lae', zh: '原来/本来', pos: '副词', example: { ko: '원래대로 안 돌아가요.', zh: '不能回到原样。' }, tip: '原(원) + 来(래). 원래대로 = 恢复原样' },
+    { id: 'd85-w6', korean: '기억해두다', hangul: 'gi-eo-kae-du-da', zh: '记住/记下来', pos: '动词', example: { ko: '이 순간을 기억해둘게요.', zh: '记住这个瞬间。' }, tip: '기억하다 + ~아/어 두다 (Day 67 pitfall 재활용)' },
   ],
 
   dialogue: {
     scene: '고급반 교실·카운트다운 캘린더',
-    setting: { time: '周二 09:20', timeEn: 'Tue 09:20', place: '한빛대 고급반', npc: 'Danielle / Junho' },
+    setting: { time: '周二 09:20', place: '한빛대 고급반', npc: 'Danielle / Junho' },
     lines: [
-      { speaker: 'npc', npcName: 'Danielle', ko: '오늘 5장 뜯을 사람? 오늘의 이야기를 하나 나누고 뜯자.', hangul: 'o-neul da-seot-jang tteu-deul sa-ram? o-neul-ui i-ya-gi-reul ha-na na-nu-go tteut-ja', zh: '今天谁撕5？分享一个故事再撕。', zhEn: 'Who\'s tearing off #5 today? Share a story before you tear.', practice: 'listen' },
-      { speaker: 'tori', ko: '제가 뜯을게요. Day 42 훠궈 발표 이야기 나눌게요.', hangul: 'je-ga tteu-deul-ge-yo. Day 42 hwo-gwo bal-pyo i-ya-gi na-nul-ge-yo', zh: '我撕。分享Day 42火锅发表的故事。', zhEn: 'I\'ll tear. Sharing the story from the Day 42 hotpot presentation.', practice: 'shadow' },
-      { speaker: 'tori', ko: '그날 반이 처음으로 저에게 박수쳐줬어요. 진짜 받아준 느낌이었어요.', hangul: 'geu-nal ba-ni cheo-eu-meu-ro jeo-e-ge bak-su-chyeo-jwo-sseo-yo. jin-jja ba-da-jun neu-kki-mi-eo-sseo-yo', zh: '那天班上第一次为我鼓掌。真被接纳的感觉。', zhEn: 'That day the class clapped for me for the first time. It really felt like being accepted.', practice: 'shadow' },
-      { speaker: 'npc', npcName: 'Danielle', ko: '고마워, 토리. 그 발표 나도 기억해.', hangul: 'go-ma-wo, to-ri. geu bal-pyo na-do gi-eo-kae', zh: '谢谢，兔莉。那发表我也记得。', zhEn: 'Thanks, Tori. I remember that presentation too.', practice: 'listen' },
-      { speaker: 'tori', isInnerVoice: true, ko: '4장의 종이가 뜯길 때마다, 같이 있는 시간도 뜯긴다.', hangul: 'ne-jang-ui jong-i-ga tteut-gil ttae-ma-da, ga-chi in-neun si-gan-do tteut-gin-da', zh: '每撕一张纸，一起的时间也被撕一张。', zhEn: 'Every time you tear off a paper, a piece of time together gets torn off too.', practice: 'listen' },
-      { speaker: 'tori', ko: '?', hangul: '', zh: 'Tori想让大家把这几天珍惜好. 合适的一句？', zhEn: 'Tori wants everyone to cherish these days. Which phrase fits?', practice: 'pick',
+      { speaker: 'npc', npcName: 'Danielle', ko: '오늘 5장 뜯을 사람? 오늘의 이야기를 하나 나누고 뜯자.', hangul: 'o-neul da-seot-jang tteu-deul sa-ram? o-neul-ui i-ya-gi-reul ha-na na-nu-go tteut-ja', zh: '今天谁撕5？分享一个故事再撕。', practice: 'listen' },
+      { speaker: 'tori', ko: '제가 뜯을게요. Day 42 훠궈 발표 이야기 나눌게요.', hangul: 'je-ga tteu-deul-ge-yo. Day 42 hwo-gwo bal-pyo i-ya-gi na-nul-ge-yo', zh: '我撕。分享Day 42火锅发表的故事。', practice: 'shadow' },
+      { speaker: 'tori', ko: '그날 반이 처음으로 저에게 박수쳐줬어요. 진짜 받아준 느낌이었어요.', hangul: 'geu-nal ba-ni cheo-eu-meu-ro jeo-e-ge bak-su-chyeo-jwo-sseo-yo. jin-jja ba-da-jun neu-kki-mi-eo-sseo-yo', zh: '那天班上第一次为我鼓掌。真被接纳的感觉。', practice: 'shadow' },
+      { speaker: 'npc', npcName: 'Danielle', ko: '고마워, 토리. 그 발표 나도 기억해.', hangul: 'go-ma-wo, to-ri. geu bal-pyo na-do gi-eo-kae', zh: '谢谢，兔莉。那发表我也记得。', practice: 'listen' },
+      { speaker: 'tori', isInnerVoice: true, ko: '4장의 종이가 뜯길 때마다, 같이 있는 시간도 뜯긴다.', hangul: 'ne-jang-ui jong-i-ga tteut-gil ttae-ma-da, ga-chi in-neun si-gan-do tteut-gin-da', zh: '每撕一张纸，一起的时间也被撕一张。', practice: 'listen' },
+      { speaker: 'tori', ko: '?', hangul: '', zh: 'Tori想让大家把这几天珍惜好. 合适的一句？', practice: 'pick',
         choices: [
-          { ko: '남은 5일, 소중하게 기억해두자.', zh: '剩下的5天，好好记住。', zhEn: 'Remember the last 5 days well.', correct: true },
-          { ko: '이제 지루해. 빨리 끝내자.', zh: '好无聊。快结束吧。', zhEn: 'So boring. Let it end soon.', correct: false },
-          { ko: '캘린더 그만 뜯자.', zh: '别撕日历了。', zhEn: 'Stop tearing the calendar.', correct: false },
+          { ko: '남은 5일, 소중하게 기억해두자.', zh: '剩下的5天，好好记住。', correct: true },
+          { ko: '이제 지루해. 빨리 끝내자.', zh: '好无聊。快结束吧。', correct: false },
+          { ko: '캘린더 그만 뜯자.', zh: '别撕日历了。', correct: false },
         ]},
     ],
   },
 
   grammar: {
-    title: '每当___的时候：~(으)ㄹ 때마다', titleEn: 'Whenever ___ : ~(으)ㄹ 때마다',
+    title: '每当___的时候：~(으)ㄹ 때마다',
     pattern: 'V + **(으)ㄹ 때마다**',
-    whenToUse: '「每次___的时候」的循环表达. Tori 说 「종이가 뜯**길 때마다** 시간도 뜯긴다」= 每撕一张纸，时间也撕一张. ~(으)ㄹ 때 + 마다 (每) = 循环/规律 표현. 시간 흐름/감정 반복 상황.', whenToUseEn: 'A repetitive expression for \'every time ___\'. Tori says \'종이가 뜯**길 때마다** 시간도 뜯긴다\' = every time a paper is torn, time is torn too. ~(으)ㄹ 때 + 마다 (each) = cyclic/regular expression. For repeated situations of time flow or emotions.',
+    whenToUse: '「每次___的时候」的循环表达. Tori 说 「종이가 뜯**길 때마다** 시간도 뜯긴다」= 每撕一张纸，时间也撕一张. ~(으)ㄹ 때 + 마다 (每) = 循环/规律 표현. 시간 흐름/감정 반복 상황.',
     rules: [
       '**~(으)ㄹ 때 + 마다 = 每当…时**: 갈 때마다 / 볼 때마다 / 먹을 때마다',
       '**과거 → ~았/었을 때마다**: 갔을 때마다 = 每次去的时候',
       '**~마다 vs ~(으)ㄹ 때마다**: 명사 뒤 마다 (day마다 = 每天) vs V + ~(으)ㄹ 때마다 (V할 때마다 = 每次V)',
     ],
     examples: [
-      { ko: '종이가 뜯길 때마다 시간도 뜯긴다.', zh: '每撕一张纸，时间也被撕一张。', zhEn: 'Every time you tear off a paper, time gets torn off too.', highlight: '뜯길 때마다 ... 뜯긴다', note: 'Day 85 시적 문장' },
-      { ko: '너를 볼 때마다 웃음이 나요.', zh: '每次看到你都笑。', zhEn: 'I smile every time I see you.', highlight: '볼 때마다', note: '보다 → 볼 때마다' },
-      { ko: '한국에 갈 때마다 뭔가 배워요.', zh: '每次去韩国都学到东西。', zhEn: 'Every time I go to Korea, I learn something.', highlight: '갈 때마다', note: '가다 → 갈 때마다' },
-      { ko: '이 노래를 들을 때마다 Day 25가 생각나요.', zh: '每次听这歌就想起Day 25。', zhEn: 'Every time I hear this song, I think of Day 25.', highlight: '들을 때마다', note: '듣다 → 들을 때마다 (ㄷ 불규칙)' },
+      { ko: '종이가 뜯길 때마다 시간도 뜯긴다.', zh: '每撕一张纸，时间也被撕一张。', highlight: '뜯길 때마다 ... 뜯긴다', note: 'Day 85 시적 문장' },
+      { ko: '너를 볼 때마다 웃음이 나요.', zh: '每次看到你都笑。', highlight: '볼 때마다', note: '보다 → 볼 때마다' },
+      { ko: '한국에 갈 때마다 뭔가 배워요.', zh: '每次去韩国都学到东西。', highlight: '갈 때마다', note: '가다 → 갈 때마다' },
+      { ko: '이 노래를 들을 때마다 Day 25가 생각나요.', zh: '每次听这歌就想起Day 25。', highlight: '들을 때마다', note: '듣다 → 들을 때마다 (ㄷ 불규칙)' },
     ],
     pitfall:
       '① ~(으)ㄹ 때마다 는 규칙적/반복 상황 전용. 1회성 상황엔 못 씀. ② ㄷ/ㅂ 불규칙 동사 접합: 듣다 → 들을 때마다, 돕다 → 도울 때마다. ③ 명사 + 마다 (每): 매일마다 (X, 매일 자체가 每) → 하루마다 (O) / 시간마다 (O).',
   },
 
   output: [
-    { id: 'd85-o1', kind: 'compose', zhHint: '每次看到你都笑。', zhHintEn: 'I smile every time I see you.', tokens: ['너를', '볼 때마다', '웃음이 나요', '볼 때', '웃어요', '볼 때에'], composeAnswer: ['너를', '볼 때마다', '웃음이 나요'], successMsg: '~(으)ㄹ 때마다 = 매번의 반복.' },
-    { id: 'd85-o2', kind: 'listen-choice', audioKo: '4장의 종이가 뜯길 때마다, 같이 있는 시간도 뜯긴다.', successMsg: '✓ Tori 시적 통찰. 시간과 종이의 은유.', choices: [{ zh: '每撕一张纸，一起的时间也被撕一张。', zhEn: 'Every time you tear off a paper, a piece of time together gets torn off too.', correct: true }, { zh: '4张纸没撕。', zhEn: '4 sheets of paper weren\'t torn.', correct: false }, { zh: '每天撕纸时间就多。', zhEn: 'Tearing paper every day takes more time.', correct: false }, { zh: '时间不会走。', zhEn: 'Time doesn\'t move.', correct: false }] },
-    { id: 'd85-o3', kind: 'zh-to-ko', zhPrompt: '每次去韩国都学到东西。', zhPromptEn: 'Every time I go to Korea, I learn something.', successMsg: '"한국에 갈 때마다 뭔가 배워요."', choices: [{ ko: '한국에 갈 때마다 뭔가 배워요.', correct: true }, { ko: '한국에 가면 뭔가 배워요.', correct: false }, { ko: '한국에 갔을 때 뭔가 배워요.', correct: false }, { ko: '한국을 갈 때마다 뭔가 배워요.', correct: false }] },
-    { id: 'd85-o4', kind: 'particle-error', zhHint: '剩5天。', zhHintEn: '5 days left.', successMsg: '5일 (일 有收音 ㄹ) + **이** + 남다.', successMsgEn: '5일 (일 has the final consonant ㄹ) + **이** + 남다.', choices: [{ ko: '5일이 남았어요.', correct: true }, { ko: '5일을 남았어요.', correct: false }, { ko: '5일이 남아요 있어요.', correct: false }, { ko: '5일에 남았어요.', correct: false }] },
-    { id: 'd85-o5', kind: 'match-pair', successMsg: '✓ Day 85 全对. 5장의 종이가 남았어요.', successMsgEn: '✓ Day 85 all correct. 5 sheets of paper remain.', pairs: [{ ko: '카운트다운', zh: '倒计时', zhEn: 'Countdown' }, { ko: '뜯다', zh: '撕', zhEn: 'Tear' }, { ko: '남다', zh: '剩', zhEn: 'Remaining' }, { ko: '받아주다', zh: '接纳', zhEn: 'Accept' }, { ko: '기억해두다', zh: '记下来', zhEn: 'Write it down' }] },
+    { id: 'd85-o1', kind: 'compose', zhHint: '每次看到你都笑。', tokens: ['너를', '볼 때마다', '웃음이 나요', '볼 때', '웃어요', '볼 때에'], composeAnswer: ['너를', '볼 때마다', '웃음이 나요'], successMsg: '~(으)ㄹ 때마다 = 매번의 반복.' },
+    { id: 'd85-o2', kind: 'listen-choice', audioKo: '4장의 종이가 뜯길 때마다, 같이 있는 시간도 뜯긴다.', successMsg: '✓ Tori 시적 통찰. 시간과 종이의 은유.', choices: [{ zh: '每撕一张纸，一起的时间也被撕一张。', correct: true }, { zh: '4张纸没撕。', correct: false }, { zh: '每天撕纸时间就多。', correct: false }, { zh: '时间不会走。', correct: false }] },
+    { id: 'd85-o3', kind: 'zh-to-ko', zhPrompt: '每次去韩国都学到东西。', successMsg: '"한국에 갈 때마다 뭔가 배워요."', choices: [{ ko: '한국에 갈 때마다 뭔가 배워요.', correct: true }, { ko: '한국에 가면 뭔가 배워요.', correct: false }, { ko: '한국에 갔을 때 뭔가 배워요.', correct: false }, { ko: '한국을 갈 때마다 뭔가 배워요.', correct: false }] },
+    { id: 'd85-o4', kind: 'particle-error', zhHint: '剩5天。', successMsg: '5일 (일 有收音 ㄹ) + **이** + 남다.', choices: [{ ko: '5일이 남았어요.', correct: true }, { ko: '5일을 남았어요.', correct: false }, { ko: '5일이 남아요 있어요.', correct: false }, { ko: '5일에 남았어요.', correct: false }] },
+    { id: 'd85-o5', kind: 'match-pair', successMsg: '✓ Day 85 全对. 5장의 종이가 남았어요.', pairs: [{ ko: '카운트다운', zh: '倒计时' }, { ko: '뜯다', zh: '撕' }, { ko: '남다', zh: '剩' }, { ko: '받아주다', zh: '接纳' }, { ko: '기억해두다', zh: '记下来' }] },
   ],
 
   recap: {
     toriPose: 'shy',
     praise: '5장의 종이. 매일 한 장. 매 장 뒤에 이야기가 있어요.',
-    preview: '明天 Tori 다시 Day 1-7의 길을 걸어봐요. 이번엔 마지막.', previewEn: 'Tomorrow, Tori, let\'s walk the path of Day 1-7 again. This time, it\'s the last.',
+    preview: '明天 Tori 다시 Day 1-7의 길을 걸어봐요. 이번엔 마지막.',
     stickerId: 'sticker-d85',
     sceneImageUrl: '/images/diary/day-85-scene.jpg',
   },
 
-  carrotHint: '今天的胡萝卜: 「~(으)ㄹ 때마다 어떻게?」「기억을 어떻게 남길까?」', carrotHintEn: 'Today\'s carrot: 「How about every time you ~(으)ㄹ 때마다?」「How to leave memories?」',
+  carrotHint: '今天的胡萝卜: 「~(으)ㄹ 때마다 어떻게?」「기억을 어떻게 남길까?」',
 };

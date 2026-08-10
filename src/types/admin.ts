@@ -6,7 +6,6 @@ export type AdminScope = 'domestic' | 'overseas' | 'combined';
 
 // ── Metric Cards ──
 export interface MetricCard {
-  [k: string]: unknown;
   value: number;
   change: number;          // percentage, positive = up
   yesterdayValue: number;
@@ -14,7 +13,6 @@ export interface MetricCard {
 }
 
 export interface DashboardOverview {
-  [k: string]: unknown;
   revenue: MetricCard;
   newUsers: MetricCard;
   conversionRate: MetricCard;
@@ -25,7 +23,6 @@ export interface DashboardOverview {
 export type TrendGranularity = 'day' | 'week' | 'month';
 
 export interface RevenueTrendPoint {
-  [k: string]: unknown;
   date: string;
   monthlySub: number;
   yearlySub: number;
@@ -34,7 +31,6 @@ export interface RevenueTrendPoint {
 
 // ── Server Realtime ──
 export interface ServerRealtime {
-  [k: string]: unknown;
   cpuPercent: number;
   memoryPercent: number;
   apiRequestsToday: number;
@@ -43,13 +39,11 @@ export interface ServerRealtime {
 
 // ── User Funnel ──
 export interface FunnelStage {
-  [k: string]: unknown;
   total: number;
   rate: number;            // percent of previous stage
 }
 
 export interface UserFunnel {
-  [k: string]: unknown;
   visitors: FunnelStage;
   registered: FunnelStage;
   paid: FunnelStage;
@@ -58,7 +52,6 @@ export interface UserFunnel {
 
 // ── Feature Usage ──
 export interface FeatureUsage {
-  [k: string]: unknown;
   feature: string;
   icon: string;
   count: number;
@@ -69,7 +62,6 @@ export interface FeatureUsage {
 export type ActivityType = 'register' | 'payment' | 'feedback' | 'ai_alert';
 
 export interface ActivityFeedItem {
-  [k: string]: unknown;
   id: string;
   type: ActivityType;
   message: string;
@@ -79,14 +71,12 @@ export interface ActivityFeedItem {
 
 // ── User Registration Stats ──
 export interface RegTrendPoint {
-  [k: string]: unknown;
   date: string;
   count: number;
   cumulative: number;
 }
 
 export interface RegUser {
-  [k: string]: unknown;
   id: string;
   username: string;
   createdAt: number;
@@ -94,7 +84,6 @@ export interface RegUser {
 
 // 注册分析页：用户明细（比 RegUser 多字段）
 export interface RegUserDetail {
-  [k: string]: unknown;
   id: string;
   username: string;
   nickname: string;
@@ -105,13 +94,11 @@ export interface RegUserDetail {
 }
 
 export interface DailyStat {
-  [k: string]: unknown;
   date: string; // YYYY-MM-DD (UTC+8)
   count: number;
 }
 
 export interface RegistrationsResponse {
-  [k: string]: unknown;
   users: RegUserDetail[];
   dailyStats: DailyStat[];
   total: number;
@@ -120,7 +107,6 @@ export interface RegistrationsResponse {
 }
 
 export interface ScopedRegistrationsResponse {
-  [k: string]: unknown;
   scope: AdminScope;
   self: RegistrationsResponse;
   peer: RegistrationsResponse | null;
@@ -129,13 +115,11 @@ export interface ScopedRegistrationsResponse {
 
 // 每日登录去重人数（含新增+老用户），来自 page_views 中 user_id 非空的去重
 export interface DailyCountPoint {
-  [k: string]: unknown;
   date: string;
   count: number;
 }
 
 export interface UserRegStats {
-  [k: string]: unknown;
   daily: RegTrendPoint[];
   allDaily: RegTrendPoint[];
   monthly: RegTrendPoint[];
@@ -147,7 +131,6 @@ export interface UserRegStats {
 
 // ── Dashboard Response ──
 export interface DashboardResponse {
-  [k: string]: unknown;
   overview: DashboardOverview;
   revenueTrend: RevenueTrendPoint[];
   serverRealtime: ServerRealtime;
@@ -160,7 +143,6 @@ export interface DashboardResponse {
 
 // scope 包装：domestic/overseas 时只有 self；combined 时带对方分段 + 可能的降级提示。
 export interface ScopedDashboardResponse {
-  [k: string]: unknown;
   scope: AdminScope;
   self: DashboardResponse;
   peer: DashboardResponse | null; // combined 时的对方站；overseas/domestic 为 null
@@ -170,7 +152,6 @@ export interface ScopedDashboardResponse {
 // ===== Revenue =====
 
 export interface RevenueSummary {
-  [k: string]: unknown;
   today: number;
   thisWeek: number;
   thisMonth: number;
@@ -178,7 +159,6 @@ export interface RevenueSummary {
 }
 
 export interface OrderRecord {
-  [k: string]: unknown;
   id: string;
   userId: string;
   username: string;
@@ -192,7 +172,6 @@ export interface OrderRecord {
 
 // 各档位收入构成（amount 单位=分）
 export interface TierRevenue {
-  [k: string]: unknown;
   tier: 'monthly' | 'yearly' | 'lifetime';
   label: string;
   payingUsers: number;   // 当前有效付费人数
@@ -203,7 +182,6 @@ export interface TierRevenue {
 
 // 经营指标 + 掉单/退款监控
 export interface RevenueInsights {
-  [k: string]: unknown;
   payingUsers: number;      // 当前有效付费用户总数
   totalPaidOrders: number;  // 累计已付订单数
   arpu: number;             // 客单价（分）= 累计收入 / 已付订单数
@@ -216,7 +194,6 @@ export interface RevenueInsights {
 }
 
 export interface RevenueResponse {
-  [k: string]: unknown;
   summary: RevenueSummary;
   summaryCurrency: 'CNY' | 'USD'; // 汇总/趋势/客单价的币种（本部署币种；跨币种不相加）
   insights: RevenueInsights;
@@ -229,7 +206,6 @@ export interface RevenueResponse {
 
 // scope 包装：domestic/overseas 时只有 self；combined 时带对方分段（¥/$ 分开列，绝不相加）。
 export interface ScopedRevenueResponse {
-  [k: string]: unknown;
   scope: AdminScope;
   self: RevenueResponse;
   peer: RevenueResponse | null;
@@ -238,7 +214,6 @@ export interface ScopedRevenueResponse {
 
 // 收入中心订单操作：退款 / 补单
 export interface OrderActionBody {
-  [k: string]: unknown;
   orderId: string;
   action: 'refund' | 'mark_paid';
 }
@@ -246,7 +221,6 @@ export interface OrderActionBody {
 // ===== Users =====
 
 export interface AdminUser {
-  [k: string]: unknown;
   id: string;
   username: string;
   nickname: string;
@@ -265,7 +239,6 @@ export interface AdminUser {
 }
 
 export interface AdminUsersResponse {
-  [k: string]: unknown;
   users: AdminUser[];
   total: number;
   page: number;
@@ -275,7 +248,6 @@ export interface AdminUsersResponse {
 // ===== User Detail =====
 
 export interface UserDetail {
-  [k: string]: unknown;
   id: string;
   username: string;
   nickname: string;
@@ -298,7 +270,6 @@ export interface UserDetail {
 }
 
 export interface UpdateUserBody {
-  [k: string]: unknown;
   membershipType?: 'free' | 'monthly' | 'yearly' | 'lifetime';
   membershipExpiry?: number | null;
   role?: 'user' | 'admin';
@@ -311,14 +282,12 @@ export interface UpdateUserBody {
 // ===== Content =====
 
 export interface ContentModuleStats {
-  [k: string]: unknown;
   module: string;
   icon: string;
   totalItems: number;
 }
 
 export interface FeedbackItem {
-  [k: string]: unknown;
   id: string;
   userId: string;
   username: string;
@@ -330,14 +299,12 @@ export interface FeedbackItem {
 }
 
 export interface ContentResponse {
-  [k: string]: unknown;
   moduleStats: ContentModuleStats[];
   feedbacks: FeedbackItem[];
   total: number;
 }
 
 export interface ResolveFeedbackBody {
-  [k: string]: unknown;
   status: 'resolved' | 'ignored';
   note?: string;
 }
@@ -345,7 +312,6 @@ export interface ResolveFeedbackBody {
 // ===== Ambassadors =====
 
 export interface AmbassadorEntry {
-  [k: string]: unknown;
   userId: string;
   username: string;
   nickname: string;
@@ -357,7 +323,6 @@ export interface AmbassadorEntry {
 }
 
 export interface AmbassadorCandidate {
-  [k: string]: unknown;
   userId: string;
   username: string;
   nickname: string;
@@ -367,13 +332,11 @@ export interface AmbassadorCandidate {
 }
 
 export interface AmbassadorsResponse {
-  [k: string]: unknown;
   ambassadors: AmbassadorEntry[];
   candidates: AmbassadorCandidate[];
 }
 
 export interface AmbassadorActionBody {
-  [k: string]: unknown;
   userId: string;
   action: 'grant' | 'revoke';
 }
@@ -381,13 +344,11 @@ export interface AmbassadorActionBody {
 // ===== System =====
 
 export interface AiUsageStats {
-  [k: string]: unknown;
   totalCallsThisMonth: number;
   dailyCalls: { date: string; calls: number }[];
 }
 
 export interface HighUsageUser {
-  [k: string]: unknown;
   userId: string;
   username: string;
   totalCalls: number;
@@ -395,7 +356,6 @@ export interface HighUsageUser {
 }
 
 export interface SystemResponse {
-  [k: string]: unknown;
   aiUsage: AiUsageStats;
   topUsers: HighUsageUser[];
 }
@@ -403,7 +363,6 @@ export interface SystemResponse {
 // ===== Error Logs =====
 
 export interface ErrorLogItem {
-  [k: string]: unknown;
   id: string;
   level: 'error' | 'warn' | 'critical';
   source: string;
@@ -414,7 +373,6 @@ export interface ErrorLogItem {
 }
 
 export interface ErrorLogsResponse {
-  [k: string]: unknown;
   logs: ErrorLogItem[];
   total: number;
   page: number;
@@ -430,7 +388,6 @@ export interface CampaignConfigDTO { enabled: boolean; tiers: CampaignTierCfg[];
 // ===== Invite Fraud Monitor =====
 
 export interface FraudIpGroup {
-  [k: string]: unknown;
   ip: string;
   count: number;       // 该 IP 下邀请条数
   inviters: number;    // 涉及的不同邀请人数
@@ -438,7 +395,6 @@ export interface FraudIpGroup {
 }
 
 export interface InviteFraudResponse {
-  [k: string]: unknown;
   threshold: number;
   groups: FraudIpGroup[];
 }

@@ -4,7 +4,6 @@ import type { ToriPose } from './ToriCardMascot';
 type Variant = 'warm' | 'blue' | 'green' | 'purple' | 'pink';
 
 interface Props {
-  [k: string]: unknown;
   title: string;
   description?: string;
   icon?: string;

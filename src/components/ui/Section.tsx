@@ -7,7 +7,6 @@ import type { ReactNode } from 'react';
 type Spacing = 'tight' | 'normal' | 'loose';
 
 export interface SectionProps {
-  [k: string]: unknown;
   title?: string;
   subtitle?: string;
   action?: { label: string; href: string };

@@ -13,7 +13,6 @@ import { useHangulIme } from '@/lib/useHangulIme';
 import { useIsDesktop } from '@/lib/useIsMobile';
 
 interface Props {
-  [k: string]: unknown;
   mode: 'imitate' | 'continue';
   grammarPoint: string;
   whatItDoes?: string;

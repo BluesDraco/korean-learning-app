@@ -3,7 +3,6 @@ import Image from 'next/image';
 export type ToriPose = 'peek' | 'side' | 'sit' | 'hot' | 'empty' | 'celebrate';
 
 interface Props {
-  [k: string]: unknown;
   pose?: ToriPose;
   customSrc?: string;
   size?: 'sm' | 'md' | 'lg';

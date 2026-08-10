@@ -10,7 +10,6 @@ export type RadioLevel = '초급' | '중급' | '고급';
 // 一句字幕：start/end 为秒，驱动播放器实时高亮
 // speaker 仅访谈档(fox-interview)使用：host=主持狐狸 / guest=嘉宾，驱动双人左右分栏
 export interface Subtitle {
-  [k: string]: unknown;
   start: number;
   end: number;
   ko: string;
@@ -20,7 +19,6 @@ export interface Subtitle {
 
 // 本期生词：품사=词性，zh=词义，example/exampleZh=例句对照
 export interface RadioVocab {
-  [k: string]: unknown;
   ko: string;
   pos: string;
   zh: string;
@@ -29,7 +27,6 @@ export interface RadioVocab {
 }
 
 export interface RadioEpisode {
-  [k: string]: unknown;
   id: string;           // {program}-d{day}，如 squirrel-morning-d1
   day: number;          // 电台第 N 期；内容独立于日记剧情，仅发布节奏按日记进度解锁
   program: string;      // 节目基 id：squirrel-morning / animal-news / bear-night / fox-cafe
@@ -50,7 +47,6 @@ export interface RadioEpisode {
 
 // "XX명이 함께 듣는 중" 社交条用的假听众
 export interface Listener {
-  [k: string]: unknown;
   name: string;
   emoji: string;
   reaction?: string;

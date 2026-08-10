@@ -15,7 +15,6 @@ import {
 import { MEMBERSHIP_CSS } from './membership.css';
 
 interface BenefitsResponse {
-  [k: string]: unknown;
   groups: BenefitGroup[];
   tiers: Tier[];
   tierLabels: Record<Tier, string>;

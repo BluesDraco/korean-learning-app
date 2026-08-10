@@ -29,7 +29,6 @@ import { saveProgress, loadProgress, clearProgress, TTL_EXAM } from '@/lib/progr
 import { normalizeKorean } from '@/lib/koreanDiff';
 import { displayRoman } from '@/lib/dictionary';
 import { playCorrectSound, playWrongSound, playComplete } from '@/lib/audio/sfx';
-import type { KoZh } from '@/types/inline';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -37,7 +36,6 @@ type CardType = 'word' | 'sentence' | 'grammar';
 type RatingType = 'forgot' | 'fuzzy' | 'remember';
 
 interface FlashCard {
-  [k: string]: unknown;
   id: string;
   type: CardType;
   typeLabel: string;
@@ -140,7 +138,7 @@ async function dbWordToCard(w: any): Promise<FlashCard> {
   let meaning = w.meaning || w.chinese || '';
   const normExample = (s: string) => s.replace(/[.。?？!！]+\s*$/g, '').trim();
   const validExamples = (w.examples ?? []).filter((ex: any) => ex.text && ex.text !== '[object Object]' && ex.text.trim());
-  const collected: KoZh[] = [];
+  const collected: { ko: string; zh: string }[] = [];
   const seen = new Set<string>();
   for (const ex of validExamples.slice(0, 2)) {
     const ko = String(ex.text);
@@ -303,7 +301,6 @@ function ReviewContent() {
   // 保存每张卡评分前的快照，用于"上一个词"回退
   type MasteryLevel = 'new' | 'learning' | 'reviewing' | 'mastered';
   interface RatingSnapshot {
-    [k: string]: unknown;
     dbId: string | undefined;
     prevSrsLevel: number;
     prevEase: number;
@@ -1067,7 +1064,7 @@ function ReviewContent() {
               candidates.push(stem1.slice(0, -1));
             }
           }
-          let hit: KoZh | undefined;
+          let hit: { ko: string; zh: string } | undefined;
           let match = '';
           for (const c of candidates) {
             hit = pairs.find(p => p.ko && p.ko.includes(c));
@@ -1743,7 +1740,7 @@ function ReviewContent() {
   }
 
   // ── Example lines (多段，\n\n 分隔；每段 韩\n中) ──
-  const examplePairs: KoZh[] = current.example
+  const examplePairs: { ko: string; zh: string }[] = current.example
     .split(/\n\s*\n/)
     .map((block) => {
       const [ko, zh] = block.split('\n');

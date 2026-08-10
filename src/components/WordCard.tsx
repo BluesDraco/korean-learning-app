@@ -7,7 +7,6 @@ import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
 
 export interface WordCardData {
-  [k: string]: unknown;
   originalText: string;
   dictionaryForm: string;
   conjugation: string;
@@ -19,7 +18,6 @@ export interface WordCardData {
 }
 
 interface WordCardProps {
-  [k: string]: unknown;
   data: WordCardData | null;
   loading: boolean;
   onClose: () => void;

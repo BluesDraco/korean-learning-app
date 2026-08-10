@@ -16,7 +16,6 @@ import type { AchievementProgress } from '@/types';
 import './mine-home.css';
 
 interface HomeData {
-  [k: string]: unknown;
   level: number;
   streak: number;
   unlocked: number;

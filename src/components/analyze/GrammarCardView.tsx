@@ -3,12 +3,10 @@
 import { speakWord } from '@/lib/tts';
 import { t } from '@/lib/i18n';
 import { useLang } from '@/components/LangProvider';
-import type { KoZh } from '@/types/inline';
 
 interface ConjugationItem { form: string; example: string }
 
 export interface AnalyzeGrammar {
-  [k: string]: unknown;
   pattern: string;
   title?: string;
   level?: string;
@@ -18,12 +16,12 @@ export interface AnalyzeGrammar {
   conjugation?: string | ConjugationItem[];
   contrast?: string;
   mistake?: string;
-  examples?: Array<KoZh> | string[];
+  examples?: Array<{ ko: string; zh: string }> | string[];
 }
 
 function norExamples(
   ex: AnalyzeGrammar['examples'],
-): Array<KoZh> {
+): Array<{ ko: string; zh: string }> {
   if (!ex || ex.length === 0) return [];
   return ex.map((e) =>
     typeof e === 'string' ? { ko: e, zh: '' } : { ko: e.ko, zh: e.zh || '' },

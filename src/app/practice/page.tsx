@@ -21,7 +21,6 @@ const TAB_META: { key: Tab; label: string; kr: string }[] = [
 ];
 
 interface ModeMeta {
-  [k: string]: unknown;
   key: PracticeMode;
   num: string;
   emoji: string;

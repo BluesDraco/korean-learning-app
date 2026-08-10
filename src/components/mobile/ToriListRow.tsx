@@ -2,7 +2,6 @@ import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 
 interface Props {
-  [k: string]: unknown;
   icon?: React.ReactNode;
   label: string;
   desc?: string;

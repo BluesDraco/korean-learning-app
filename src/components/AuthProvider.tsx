@@ -5,7 +5,6 @@ import { useLang } from '@/components/LangProvider';
 import { t } from '@/lib/i18n';
 
 interface User {
-  [k: string]: unknown;
   id: string;
   username: string;
   nickname?: string;
@@ -18,7 +17,6 @@ interface User {
 }
 
 interface AuthContextType {
-  [k: string]: unknown;
   user: User | null;
   loading: boolean;
   login: (username: string, password: string) => Promise<{ error?: string }>;

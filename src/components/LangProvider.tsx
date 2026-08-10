@@ -4,7 +4,6 @@ import { createContext, useContext, useState, useEffect, type ReactNode } from '
 import { type Lang, getLang, setLang as saveLang } from '@/lib/i18n';
 
 interface LangContextValue {
-  [k: string]: unknown;
   lang: Lang;
   setLang: (l: Lang) => void;
 }

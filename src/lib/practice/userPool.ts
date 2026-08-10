@@ -49,7 +49,6 @@ export type PoolOrigin = OriginKind;
 export type StudyLevel = 'beginner' | 'intermediate' | 'advanced';
 
 export interface PoolItem {
-  [k: string]: unknown;
   korean: string;
   meaning: string;
   type: 'word' | 'sentence';

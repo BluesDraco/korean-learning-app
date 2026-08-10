@@ -11,7 +11,6 @@ const DEEPSEEK_MODEL = 'deepseek-v4-flash';
 // 韩语回应由代码从安全短句池按类型选，杜绝喂错韩语。
 // vocab/quiz 里的韩语来自用户原文（提取，非生成），所以允许带韩语。
 interface RawScore {
-  [k: string]: unknown;
   grammar: number;
   vocabulary: number;
   expression: number;
@@ -83,14 +82,12 @@ function xpFor(overall: number, usedTargetGrammar: boolean, mode: 'fill' | 'free
 }
 
 interface ScoreInput {
-  [k: string]: unknown;
   text: string;                  // 用户写的韩语
   mode: 'fill' | 'free';         // 填空 / 自由
   targetGrammar?: string;        // 当天该用的句型（填空模式一定有）
 }
 
 export interface ScoreResult {
-  [k: string]: unknown;
   score: BlogPostScore;
   reply: BlogComment;
   vocab: BlogVocab[];

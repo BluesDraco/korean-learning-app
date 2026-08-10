@@ -4,20 +4,17 @@
  */
 
 import { fetchWithTimeout } from './fetch';
-import type { KoZh } from '@/types/inline';
 
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
 export const DEEPSEEK_MODEL = 'deepseek-v4-flash';
 const AI_TIMEOUT = 30_000; // 30 seconds for AI requests
 
 export interface DeepSeekConfig {
-  [k: string]: unknown;
   apiKey: string;
   model?: string;
 }
 
 interface CallOptions {
-  [k: string]: unknown;
   temperature?: number;
   maxTokens?: number;
   timeoutMs?: number;
@@ -166,9 +163,9 @@ export async function chatResponseDeepSeek(
   },
   apiKey: string
 ): Promise<{
-  aiResponse: KoZh;
+  aiResponse: { ko: string; zh: string };
   feedback: { natural: string; grammarError: string; betterWay: string; betterWayZh: string; wrongPart: string; correctPart: string };
-  suggestion: KoZh;  // 建议用户下一句怎么回（对话指引）
+  suggestion: { ko: string; zh: string };  // 建议用户下一句怎么回（对话指引）
   newWords: { ko: string; zh: string; partOfSpeech: string }[];
   taskCompleted?: boolean;
 }> {
@@ -277,13 +274,11 @@ export interface CustomSceneWord { ko: string; cn: string; ex_ko: string; ex_cn:
 export interface CustomScenePhrase { ko: string; cn: string }
 export interface CustomSceneDialogueLine { speaker: 'npc' | 'user'; ko: string; cn: string }
 export interface CustomSceneMiniPreview {
-  [k: string]: unknown;
   words: CustomSceneWord[];
   phrases: CustomScenePhrase[];
   dialogue: CustomSceneDialogueLine[];
 }
 export interface CustomSceneResult {
-  [k: string]: unknown;
   title: string;
   title_ko: string;
   icon: string;
@@ -296,7 +291,6 @@ export interface CustomSceneResult {
   mini_preview: CustomSceneMiniPreview;
 }
 export interface CustomSceneInput {
-  [k: string]: unknown;
   place: string;
   situation: string;
   goal: string;
@@ -309,9 +303,9 @@ export interface CustomSceneInput {
 }
 
 const DIFFICULTY_GUIDE: Record<CustomSceneDifficulty, string> = {
-  beginner: '초급：只用最基础的高频词和短句，语法简单，句子短。', beginnerEn: 'Beginner: Only use the most basic high-frequency words and short sentences, simple grammar, short sentences.',
-  intermediate: '중급：日常自然表达，适度使用连接词和常见语法。', intermediateEn: 'Intermediate: Natural everyday expressions, moderate use of connectors and common grammar.',
-  advanced: '고급：地道、丰富的表达，包含更复杂的句式和语法。', advancedEn: 'Advanced: Authentic, rich expressions, including more complex sentence patterns and grammar.',
+  beginner: '초급：只用最基础的高频词和短句，语法简单，句子短。',
+  intermediate: '중급：日常自然表达，适度使用连接词和常见语法。',
+  advanced: '고급：地道、丰富的表达，包含更复杂的句式和语法。',
 };
 
 // mini_preview 归一化（full 生成 + 部分重生 共用），缺字段安全兜底

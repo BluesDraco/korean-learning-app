@@ -4,7 +4,6 @@ export type FontPreset = 'cute' | 'clean' | 'classic';
 export type FontSize = 'small' | 'medium' | 'large' | 'xlarge';
 
 export interface FontSettings {
-  [k: string]: unknown;
   preset: FontPreset;
   size: FontSize;
 }
@@ -15,9 +14,9 @@ import { t } from './i18n';
 import type { Lang } from './i18n';
 
 export const FONT_PRESETS: { key: FontPreset; label: string; desc: string; preview: string }[] = [
-  { key: 'cute', label: '手账风', labelEn: 'Journal style', desc: '楷体中文 + 圆润韩文，手账手写感', descEn: 'Kai-style Chinese + rounded Korean, handwritten journal feel', preview: '안녕하세요 你好世界', previewEn: 'Hello, world' },
-  { key: 'clean', label: '清晰风', labelEn: 'Clean style', desc: '系统黑体，极简无衬线，干净利落', descEn: 'System sans-serif, minimal and crisp', preview: '안녕하세요 你好世界', previewEn: 'Hello, world' },
-  { key: 'classic', label: '经典风', labelEn: 'Classic style', desc: '衬线中文 + 韩文，温润典雅书卷气', descEn: 'Serif Chinese + Korean, elegant and scholarly', preview: '안녕하세요 你好世界', previewEn: 'Hello, world' },
+  { key: 'cute', label: '手账风', desc: '楷体中文 + 圆润韩文，手账手写感', preview: '안녕하세요 你好世界' },
+  { key: 'clean', label: '清晰风', desc: '系统黑体，极简无衬线，干净利落', preview: '안녕하세요 你好世界' },
+  { key: 'classic', label: '经典风', desc: '衬线中文 + 韩文，温润典雅书卷气', preview: '안녕하세요 你好世界' },
 ];
 
 export function getTranslatedFontPresets(lang: Lang) {
@@ -29,10 +28,10 @@ export function getTranslatedFontPresets(lang: Lang) {
 }
 
 export const FONT_SIZES: { key: FontSize; label: string; px: number }[] = [
-  { key: 'small', label: '小', labelEn: 'Small.', px: 15 },
-  { key: 'medium', label: '中', labelEn: 'Medium', px: 17 },
-  { key: 'large', label: '大', labelEn: 'big', px: 19 },
-  { key: 'xlarge', label: '特大', labelEn: 'Extra large', px: 21 },
+  { key: 'small', label: '小', px: 15 },
+  { key: 'medium', label: '中', px: 17 },
+  { key: 'large', label: '大', px: 19 },
+  { key: 'xlarge', label: '特大', px: 21 },
 ];
 
 export function getTranslatedFontSizes(lang: Lang) {

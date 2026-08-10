@@ -49,7 +49,6 @@ function sourceSummary(config: PracticeSourceConfig, lang: Lang): string {
 }
 
 interface SourcePickerProps {
-  [k: string]: unknown;
   config: PracticeSourceConfig;
   onChange: (c: PracticeSourceConfig) => void;
   tone?: 'mint' | 'peach' | 'purple' | 'pink';

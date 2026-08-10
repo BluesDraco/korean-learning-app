@@ -4,7 +4,6 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 
 interface DropdownMenuProps {
-  [k: string]: unknown;
   /** 触发按钮内容 */
   trigger: ReactNode;
   /** 触发按钮的 className */

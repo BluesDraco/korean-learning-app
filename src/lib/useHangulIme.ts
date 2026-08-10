@@ -13,7 +13,6 @@ import { composeBuffer, decomposeFull, qwertyKeyToJamo } from '@/lib/hangulCompo
  */
 
 interface UseHangulImeOptions {
-  [k: string]: unknown;
   /** buffer 变化后回调组合文本 · 消费方用它同步自己的 input state */
   onChange?: (text: string) => void;
   /** 按下 Enter 时触发(提交/下一题) */
@@ -23,7 +22,6 @@ interface UseHangulImeOptions {
 }
 
 export interface HangulIme {
-  [k: string]: unknown;
   /** 组合后的韩文(用于展示与判分) */
   text: string;
   /** 当前闪光的物理键(小写 qwerty 或 ' '),供虚拟键盘高亮 */

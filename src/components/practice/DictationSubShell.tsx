@@ -19,7 +19,6 @@ import {
 } from '@/lib/practice/sourceBuilder';
 
 interface DictationSubShellProps {
-  [k: string]: unknown;
   submodeKey: string; // "word" / "sentence" / "mistakes"
   eyebrow: string;    // "01 · Word"
   kr: string;         // "단어 받아쓰기"

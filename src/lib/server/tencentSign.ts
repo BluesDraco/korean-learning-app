@@ -12,7 +12,6 @@ function hmac(key: string | Buffer, data: string): Buffer {
 }
 
 export interface Tc3Options {
-  [k: string]: unknown;
   service: string;   // 'sms' | 'ses'
   host: string;      // 'sms.tencentcloudapi.com' | 'ses.tencentcloudapi.com'
   action: string;    // 'SendSms' | 'SendEmail'

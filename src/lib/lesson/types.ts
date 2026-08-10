@@ -2,7 +2,6 @@ export type MasteryStatus = 'new' | 'learning' | 'reviewing' | 'mastered';
 
 /** phonetics/40音 · 步骤掌握度写入 lessonMastery 表 */
 export interface LessonMastery {
-  [k: string]: unknown;
   id: string;
   dayNum: number;
   itemType: string;
@@ -24,7 +23,6 @@ export type EventAction = 'view' | 'reveal' | 'answer_correct' | 'answer_wrong' 
 
 /** phonetics/40音 · 完成事件写入 learningEvents 表 */
 export interface LearningEvent {
-  [k: string]: unknown;
   id: string;
   dayNum: number;
   cardType: CardType;

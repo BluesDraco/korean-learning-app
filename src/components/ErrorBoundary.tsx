@@ -5,13 +5,11 @@ import { RotateCcw, Bug } from 'lucide-react';
 import { getLang, t } from '@/lib/i18n';
 
 interface Props {
-  [k: string]: unknown;
   children: React.ReactNode;
   fallback?: React.ReactNode;
 }
 
 interface State {
-  [k: string]: unknown;
   error: Error | null;
 }
 

@@ -2,7 +2,6 @@
 // Reference: https://super-memory.com/english/ol/sm2.htm
 
 export interface SRSResult {
-  [k: string]: unknown;
   srsLevel: number;
   easeFactor: number;
   interval: number;

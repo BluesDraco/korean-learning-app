@@ -7,7 +7,6 @@ export type TopikLevel = 'I' | 'II';
 export type ExamMode = 'real' | 'practice';
 
 export interface SectionTiming {
-  [k: string]: unknown;
   listeningMinutes: number;
   readingMinutes: number;
   totalMinutes: number;

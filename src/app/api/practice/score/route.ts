@@ -11,7 +11,6 @@ const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
 const DEEPSEEK_MODEL = 'deepseek-v4-flash';
 
 interface ScoredResult {
-  [k: string]: unknown;
   natural: number;
   grammar: number;
   politeness: number;
@@ -59,13 +58,11 @@ highlight：一句 ≤ 20 字的中文正向点评。
 {"natural":0-100,"grammar":0-100,"politeness":0-100,"task":0-100,"overall":0-100,"tips":["...","..."],"highlight":"..."}`;
 
 interface IncomingMessage {
-  [k: string]: unknown;
   role: 'npc' | 'user' | 'divider';
   ko?: string;
 }
 
 interface IncomingTask {
-  [k: string]: unknown;
   label: string;
   hint?: string;
 }
