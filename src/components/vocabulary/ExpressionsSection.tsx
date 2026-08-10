@@ -7,14 +7,11 @@ import { romanize } from '@/lib/dictionary';
 import { speak } from '@/lib/tts';
 import { TappableText } from '@/components/TappableText';
 import { AddToBookSheet } from '@/components/vocabulary/AddToBookSheet';
-<<<<<<< HEAD
 import { db } from '@/lib/db';
 import { useAuth } from '@/components/AuthProvider';
 import { t } from '@/lib/i18n';
 import { useLang } from '@/components/LangProvider';
 import type { Lang } from '@/lib/i18n';
-=======
->>>>>>> recovery-branch
 
 type SubTab = 'idioms' | 'slang' | 'loanword';
 
@@ -26,7 +23,6 @@ interface SheetTarget {
   exampleZh: string;
 }
 
-<<<<<<< HEAD
 // 外来词按语言来源筛选顺序
 const loanOriginOrder = ['chinese', 'english', 'japanese', 'french', 'german', 'portuguese', 'spanish', 'russian', 'other'];
 
@@ -163,14 +159,11 @@ function EmptyState({ query, lang }: { query: string; lang: Lang }) {
   );
 }
 
-=======
->>>>>>> recovery-branch
 export function ExpressionsSection() {
   const { user } = useAuth();
   const { lang } = useLang();
   const [subTab, setSubTab] = useState<SubTab>('idioms');
   const [search, setSearch] = useState('');
-<<<<<<< HEAD
   const [filter, setFilter] = useState('all');
   const [addedExprIds, setAddedExprIds] = useState<Set<string>>(new Set());
   const [sheetTarget, setSheetTarget] = useState<SheetTarget | null>(null);
@@ -201,15 +194,15 @@ export function ExpressionsSection() {
   const markAdded = (id: string) => {
     setAddedExprIds(prev => {
       if (prev.has(id)) return prev;
-      const next = new Set(prev).add(id);
-      db.expressionAdded.put({ id, createdAt: Date.now() }).catch(() => {});
+      const next = new Set(prev);
+      next.add(id);
+      db.expressionAdded.put({ id, createdAt: Date.now() }).catch(() => {
+        // 回滚乐观更新
+        setAddedExprIds(p => { const s = new Set(p); s.delete(id); return s; });
+      });
       return next;
     });
   };
-=======
-  const [addedExprIds, setAddedExprIds] = useState<Set<string>>(new Set());
-  const [sheetTarget, setSheetTarget] = useState<SheetTarget | null>(null);
->>>>>>> recovery-branch
 
   const filteredIdioms = useMemo(() => {
     const list = filter === 'all' ? idioms : idioms.filter(i => i.tags.includes(filter));
@@ -243,11 +236,6 @@ export function ExpressionsSection() {
     { k: 'slang'    as const, l: t('vocab.ex_tab_slang', lang), count: slangs.length },
     { k: 'loanword' as const, l: t('vocab.ex_tab_loan', lang),  count: loanwords.length },
   ];
-
-  const handleSheetClose = () => {
-    if (sheetTarget) setAddedExprIds(prev => new Set(prev).add(sheetTarget.id));
-    setSheetTarget(null);
-  };
 
   return (
     <div className="space-y-4">
@@ -288,7 +276,6 @@ export function ExpressionsSection() {
 
       {/* 惯用语 */}
       {subTab === 'idioms' && (
-<<<<<<< HEAD
         <>
           <FilterChips options={idiomFilterOptions} active={filter} onChange={setFilter} lang={lang} />
           {filteredIdioms.length === 0 ? (
@@ -330,42 +317,10 @@ export function ExpressionsSection() {
           </div>
           )}
         </>
-=======
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {filteredIdioms.map((item) => {
-            const isAdded = addedExprIds.has(item.id);
-            return (
-            <div key={item.id} className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-4 hover:border-[var(--pink-pale)] transition-colors">
-              <div className="flex items-center justify-between mb-2">
-                <h4 className="font-bold text-[var(--text-primary)]">{item.expression}</h4>
-                <div className="flex items-center gap-1">
-                  <button
-                    onClick={() => !isAdded && setSheetTarget({ id: item.id, korean: item.expression, meaning: item.actualMeaning, example: item.example, exampleZh: item.exampleZh })}
-                    className={`p-1 rounded-lg transition-colors ${isAdded ? 'text-[var(--mint-soft)] bg-[var(--mint-soft)]/10' : 'text-[var(--text-muted)] hover:text-[var(--pink-primary)] hover:bg-[var(--bg-input)]'}`}
-                    title={isAdded ? '已添加' : '加入单词本'}
-                  >
-                    {isAdded ? <BookmarkCheck size={14} /> : <BookmarkPlus size={14} />}
-                  </button>
-                  <button onClick={() => speak(item.expression, 0.7)} className="p-1 rounded-lg hover:bg-[var(--bg-input)] text-[var(--text-muted)]"><Volume2 size={14} /></button>
-                </div>
-              </div>
-              <div className="bg-[var(--bg-input)] rounded-lg p-2.5 mb-2 text-sm">
-                <span className="text-[var(--text-muted)]">字面: </span>{item.literalMeaning}
-                <span className="text-[var(--pink-primary)] mx-2">→</span>
-                <span className="font-medium">{item.actualMeaning}</span>
-              </div>
-              <TappableText text={item.example} className="text-xs text-[var(--text-placeholder)]" source="表达用法" />
-              <p className="text-xs text-[var(--text-muted)] mt-0.5">{item.exampleZh}</p>
-            </div>
-            );
-          })}
-        </div>
->>>>>>> recovery-branch
       )}
 
       {/* 网络用语 */}
       {subTab === 'slang' && (
-<<<<<<< HEAD
         <>
           <FilterChips options={slangFilterOptions} active={filter} onChange={setFilter} lang={lang} />
           {filteredSlangs.length === 0 ? (
@@ -428,42 +383,10 @@ export function ExpressionsSection() {
           </div>
           )}
         </>
-=======
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {filteredSlangs.map((item) => {
-            const isAdded = addedExprIds.has(item.id);
-            return (
-            <div key={item.id} className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-4 hover:border-[var(--purple-soft)] transition-colors">
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2">
-                  <h4 className="font-bold text-[var(--text-primary)]">{item.expression}</h4>
-                  <span className="flex">{Array.from({ length: item.hotLevel }, (_, i) => <Flame key={i} size={11} className="text-[var(--pink-primary)] fill-[var(--pink-primary)]" />)}</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <button
-                    onClick={() => !isAdded && setSheetTarget({ id: item.id, korean: item.expression, meaning: item.meaning, example: item.example, exampleZh: item.exampleZh })}
-                    className={`p-1 rounded-lg transition-colors ${isAdded ? 'text-[var(--mint-soft)] bg-[var(--mint-soft)]/10' : 'text-[var(--text-muted)] hover:text-[var(--pink-primary)] hover:bg-[var(--bg-input)]'}`}
-                    title={isAdded ? '已添加' : '加入单词本'}
-                  >
-                    {isAdded ? <BookmarkCheck size={14} /> : <BookmarkPlus size={14} />}
-                  </button>
-                  <button onClick={() => speak(item.expression, 0.7)} className="p-1 rounded-lg hover:bg-[var(--bg-input)] text-[var(--text-muted)]"><Volume2 size={14} /></button>
-                </div>
-              </div>
-              <p className="text-sm text-[var(--text-primary)] mb-1.5">{item.meaning}</p>
-              <p className="text-xs text-[var(--text-secondary)] mb-2">{item.usage}</p>
-              <TappableText text={item.example} className="text-xs text-[var(--text-placeholder)]" source="表达用法" />
-              <p className="text-xs text-[var(--text-muted)] mt-0.5">{item.exampleZh}</p>
-            </div>
-            );
-          })}
-        </div>
->>>>>>> recovery-branch
       )}
 
       {/* 外来词 */}
       {subTab === 'loanword' && (
-<<<<<<< HEAD
         <>
           <FilterChips options={loanFilterOptions} active={filter} onChange={setFilter} labelMap={Object.fromEntries(Object.entries(originLabelKey).map(([k, key]) => [k, t(key, lang)]))} lang={lang} />
           {filteredLoanwords.length === 0 ? (
@@ -516,40 +439,6 @@ export function ExpressionsSection() {
           word={{ korean: sheetTarget.korean, pronunciation: '', meaning: sheetTarget.meaning, partOfSpeech: 'expression', examples: [{ text: sheetTarget.example, translation: sheetTarget.exampleZh }] }}
           onClose={() => setSheetTarget(null)}
           onAdded={() => { if (sheetTarget) markAdded(sheetTarget.id); }}
-        />
-=======
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {filteredLoanwords.map((item) => {
-            const isAdded = addedExprIds.has(item.id);
-            return (
-            <div key={item.id} className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-4 hover:border-[var(--blue-soft)] transition-colors">
-              <div className="flex items-center justify-between mb-2">
-                <h4 className="font-bold text-[var(--text-primary)]">{item.expression}</h4>
-                <div className="flex items-center gap-1">
-                  <button
-                    onClick={() => !isAdded && setSheetTarget({ id: item.id, korean: item.expression, meaning: item.meaning, example: item.example, exampleZh: item.exampleZh })}
-                    className={`p-1 rounded-lg transition-colors ${isAdded ? 'text-[var(--mint-soft)] bg-[var(--mint-soft)]/10' : 'text-[var(--text-muted)] hover:text-[var(--pink-primary)] hover:bg-[var(--bg-input)]'}`}
-                    title={isAdded ? '已添加' : '加入单词本'}
-                  >
-                    {isAdded ? <BookmarkCheck size={14} /> : <BookmarkPlus size={14} />}
-                  </button>
-                  <button onClick={() => speak(item.expression, 0.7)} className="p-1 rounded-lg hover:bg-[var(--bg-input)] text-[var(--text-muted)]"><Volume2 size={14} /></button>
-                </div>
-              </div>
-              <div className="text-sm mb-2"><span className="text-[var(--text-muted)]">{item.original}</span><span className="mx-2">→</span><span className="font-medium">{item.meaning}</span></div>
-              <TappableText text={item.example} className="text-xs text-[var(--text-placeholder)]" source="表达用法" />
-              <p className="text-xs text-[var(--text-muted)] mt-0.5">{item.exampleZh}</p>
-            </div>
-            );
-          })}
-        </div>
->>>>>>> recovery-branch
-      )}
-
-      {sheetTarget && (
-        <AddToBookSheet
-          word={{ korean: sheetTarget.korean, pronunciation: '', meaning: sheetTarget.meaning, partOfSpeech: 'expression', examples: [{ text: sheetTarget.example, translation: sheetTarget.exampleZh }] }}
-          onClose={handleSheetClose}
         />
       )}
     </div>
