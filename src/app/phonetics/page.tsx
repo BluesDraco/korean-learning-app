@@ -12,9 +12,6 @@ import { unlockAudioContext } from '@/lib/tts';
 import { playPhoneticAudio, playPhoneticAudioLiteral, getSpeakText } from '@/lib/audio/phoneticsPlayer';
 import { playSuccess, playError } from '@/lib/soundManager';
 import StepOverview from '@/components/phonetics/step/StepOverview';
-import ProgressivePhonetics from '@/components/ProgressivePhonetics';
-import SyllableComposer from '@/components/SyllableComposer';
-import PhoneticsWelcome, { hasSeenWelcome } from '@/components/PhoneticsWelcome';
 import { getPracticeCounts, recordPhoneticMistake } from '@/lib/phonetics/srs';
 import { useAuth } from '@/components/AuthProvider';
 import { useTheme } from '@/components/ThemeProvider';
@@ -637,12 +634,10 @@ export default function PhoneticsRedesignPage() {
   const { theme } = useTheme();
   const { lang } = useLang();
   const [mainTab, setMainTab] = useState<MainTab>('progressive');
-  const [showWelcome, setShowWelcome] = useState(!hasSeenWelcome());
 
   return (
     <div className="hr-scope">
       <PlaceIntro place="phonetics" dark={theme === 'dark'} />
-      {showWelcome && <PhoneticsWelcome onDone={() => setShowWelcome(false)} />}
       <div className="hr-stage">
 
         <div className="hr-mobile-back" style={{ position: 'sticky', top: 8, zIndex: 20, marginBottom: 20, background: 'var(--hr-bg, var(--bg-base))', paddingTop: 4, paddingBottom: 4 }}>
@@ -670,10 +665,10 @@ export default function PhoneticsRedesignPage() {
           <TabBtn label={t('phonetics.main_tab_practice', lang)} kr="연습" badge active={mainTab === 'practice'} onClick={() => setMainTab('practice')} />
         </nav>
 
-        {mainTab === 'progressive' && <ProgressivePhonetics />}
+        {mainTab === 'progressive' && <StepOverview />}
         {mainTab === 'alphabet' && <AlphabetScreen />}
         {mainTab === 'rules' && <RulesScreen />}
-        {mainTab === 'composer' && <SyllableComposer />}
+        {mainTab === 'composer' && <ComposerScreen />}
         {mainTab === 'practice' && <PracticeScreen />}
       </div>
     </div>

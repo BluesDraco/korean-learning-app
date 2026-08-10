@@ -35,8 +35,8 @@ function LoginForm() {
   }
   const { login, loginWithEmail, sendPhoneCode, loginWithPhone } = useAuth();
 
-  // 海外站默认邮箱 tab；国内手机/邮箱暂未上线，默认用户名 tab
-  const [method, setMethod] = useState<Method>(IS_OVERSEAS ? 'email' : 'username');
+  // 默认用户名 tab
+  const [method, setMethod] = useState<Method>('username');
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -53,11 +53,7 @@ function LoginForm() {
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   useEffect(() => () => { if (timerRef.current) clearInterval(timerRef.current); }, []);
 
-  // 国内站手机/邮箱登录尚未上线，仅用户名可用
-  const soonMethod = (m: Method) => !IS_OVERSEAS && m !== 'username';
-
   const switchMethod = (m: Method) => {
-    if (soonMethod(m)) return;
     setMethod(m);
     setError('');
   };
@@ -152,14 +148,13 @@ function LoginForm() {
 
   const registerHref = `/auth/register${redirect !== '/daily' ? `?redirect=${encodeURIComponent(redirect)}` : ''}`;
 
-  // 海外站：邮箱+用户名；国内：手机/邮箱（soon）+用户名
+  // 国内站：邮箱+用户名；海外站：邮箱+用户名
   const TABS: { id: Method; label: string }[] = IS_OVERSEAS
     ? [
         { id: 'email', label: t('auth.tab_email', lang) },
         { id: 'username', label: t('auth.tab_username', lang) },
       ]
     : [
-        { id: 'phone', label: t('auth.tab_phone', lang) },
         { id: 'email', label: t('auth.tab_email', lang) },
         { id: 'username', label: t('auth.tab_username', lang) },
       ];
@@ -204,26 +199,17 @@ function LoginForm() {
           </p>
 
           <div className="auth-tabs" style={{ ['--i' as string]: 3 }}>
-            {TABS.map(tab => {
-              const soon = soonMethod(tab.id);
-              return (
-                <button
-                  key={tab.id}
-                  type="button"
-                  className={'auth-tab' + (method === tab.id ? ' active' : '') + (soon ? ' soon' : '')}
-                  onClick={() => switchMethod(tab.id)}
-                  disabled={soon}
-                  aria-disabled={soon}
-                >
-                  {tab.label}
-                </button>
-              );
-            })}
+            {TABS.map(tab => (
+              <button
+                key={tab.id}
+                type="button"
+                className={'auth-tab' + (method === tab.id ? ' active' : '')}
+                onClick={() => switchMethod(tab.id)}
+              >
+                {tab.label}
+              </button>
+            ))}
           </div>
-
-          {!IS_OVERSEAS && (
-            <p className="auth-notice" style={{ ['--i' as string]: 3 }}>{t('auth.login_notice_soon', lang)}</p>
-          )}
 
           <form onSubmit={handleSubmit} className="auth-fields" style={{ ['--i' as string]: 4 }}>
             {method === 'phone' && (
